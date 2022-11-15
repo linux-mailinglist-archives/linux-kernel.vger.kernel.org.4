@@ -2,99 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58D2862A28B
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 21:10:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 659C262A28F
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 21:14:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231855AbiKOUKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 15:10:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56158 "EHLO
+        id S229651AbiKOUO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 15:14:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230236AbiKOUKt (ORCPT
+        with ESMTP id S231935AbiKOUNI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 15:10:49 -0500
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB45A17058
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 12:10:47 -0800 (PST)
-Received: by mail-il1-x136.google.com with SMTP id r2so7990232ilg.8
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 12:10:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rb7jBGXbzGyxffcDNwboMY2DzDKCBnatY7WqspaVRkI=;
-        b=A/6V3WqOc5LiuT2BWj4xJGbmK8TaNUt3i2Uzdh6QY0DvRyDxCX0R6k/xAOzrho0zgc
-         ih7j8ji5WWqxf0DYfUzXUPrF+uvGD8SqkqTQ6S5u9gM4/PuxRJhEDCSbomcaLoHXNLEP
-         OMEtcOhFBHOH7obD+S0hiUNgxoHY2IadZtJks=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rb7jBGXbzGyxffcDNwboMY2DzDKCBnatY7WqspaVRkI=;
-        b=sIIAojOxM79Rs+i3v530eT3oKmV7xzxWbCoXe+CacOCoxbRDtkf1mMBIcYGZgwnAbL
-         57+bNisP1wZuLE1GA1D50a3NPwQZ2LlCSqgd7WYCD2OwKe3AxTdV8gnIJrHrV2vVZnQM
-         5GbpP4i0OfDy/xDGHQh9dNFGiC2F5t1b1IRUltYfXQFxEQPwCk5kvA0AF4q3hXyOBcZ4
-         mYKtvbP2VmsrjKlU7At+9b6hPmr0pDBFyqMfUQKVSymj96hwPgTETE4q95a3hGQYgT41
-         R8dQO2vbh9xnneyfslatxwPo0gRJ1gcE+k3UimbLgxXD708jq3MoNj+7xi1fm8ggCgNX
-         Pj/A==
-X-Gm-Message-State: ANoB5plZTyhDHuQcxjd1CFjlH0FlmHdU7a1wLTb3kMWoww1xD8Ali0KH
-        qxk1dASVRi5TONgSsUTYzAcO9RvcthgZ1Q==
-X-Google-Smtp-Source: AA0mqf76lOK+KSl53+gEBcVW/o6FRM+XDnbBp6Wwh7l0FISCD1Nws+PS61elFQDW8Iq/xklmNwtcXw==
-X-Received: by 2002:a92:dd0d:0:b0:302:47e0:e08 with SMTP id n13-20020a92dd0d000000b0030247e00e08mr8376255ilm.83.1668543047194;
-        Tue, 15 Nov 2022 12:10:47 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id i11-20020a02cc4b000000b00375e136bf95sm5053681jaq.127.2022.11.15.12.10.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 12:10:46 -0800 (PST)
-Message-ID: <7b864479-e7c6-cabe-e363-a8268f7ce2f2@linuxfoundation.org>
-Date:   Tue, 15 Nov 2022 13:10:45 -0700
+        Tue, 15 Nov 2022 15:13:08 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440D52A97C;
+        Tue, 15 Nov 2022 12:13:04 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NBcmm2tMqz4xGH;
+        Wed, 16 Nov 2022 07:12:56 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1668543179;
+        bh=GLcwQC9Jey0b7v1gW6TupEgoQDbotOlF8RSjbbR1d54=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ijYmjipDyfjJii5jHIqg3BOxpP+mQU+n0YVoFAcE+i7JRhuLfwOLXPGJpX8iimsVd
+         ynzUw9hJ1YG3co9qe2qdqYZ3KhlId3Urs090BCdOcj2mAVHBMsBQv8357HL7jIQhj8
+         UInS7RscBiLR9FZKhIo7O+GwxidKtHkRRIc175VHX8JqYt1YFVBnAVGYbc8gp1h5yi
+         PlAuhie2ZvvUCcSgEEt0ivo5QYTCDb1ZQ69ljt/EpzFoEu7wwYmICdrienrD0z0541
+         gOeEXREvqbRFTVutoMywqPmsF8Lc5mkAjPzx0/xsJQawvpcVdvNY9VBFkdXLZffZo6
+         nh85A7f3H082Q==
+Date:   Wed, 16 Nov 2022 07:11:51 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>,
+        Jiri Olsa <olsajiri@gmail.com>, nick.alcock@oracle.com,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-modules@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        David Laight <David.Laight@aculab.com>
+Subject: Re: [PATCH v8 7/9] livepatch: Improve the search performance of
+ module_kallsyms_on_each_symbol()
+Message-ID: <20221116071151.3d756b1d@canb.auug.org.au>
+In-Reply-To: <Y3NFoLn/GOJybXoc@bombadil.infradead.org>
+References: <Y3HyrIwlZPYM8zYd@krava>
+        <050b7513-4a20-75c7-0574-185004770329@huawei.com>
+        <Y3IJ5GjrXBYDbfnA@krava>
+        <ad637488-930e-33c1-558c-fc03d848afa8@huawei.com>
+        <Y3IY6gzDtk1ze3u7@krava>
+        <955eebae-0b36-d13f-0199-2f1b32af7da6@huawei.com>
+        <Y3JB++KOXxMWWX35@krava>
+        <Y3JivLcvbHNcIcSB@bombadil.infradead.org>
+        <df46ad45-2de4-0300-4afa-5788463d712a@huawei.com>
+        <Y3NADwGUIvfwnGTp@krava>
+        <Y3NFoLn/GOJybXoc@bombadil.infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] selftests: rtc: skip when RTC is not present
-Content-Language: en-US
-To:     alexandre.belloni@bootlin.com,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Linux Kernel Functional Testing <lkft@linaro.org>,
-        Daniel Diaz <daniel.diaz@linaro.org>,
-        linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20221115200422.2306194-1-alexandre.belloni@bootlin.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20221115200422.2306194-1-alexandre.belloni@bootlin.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/Gi/v++55E.o/dC7HkZBlTma";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/15/22 13:04, alexandre.belloni@bootlin.com wrote:
-> From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> 
-> There is not point in failing the tests when there the RTC is not present,
-> simply skip the test.
-> 
-Could be rephrased to read:
+--Sig_/Gi/v++55E.o/dC7HkZBlTma
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-There is no point in failing the tests when RTC is not present.
+Hi Luis,
 
-I can fix them when I apply the patch or send me v2
+On Mon, 14 Nov 2022 23:54:08 -0800 Luis Chamberlain <mcgrof@kernel.org> wro=
+te:
+>
+> Stephen, you can drop your fix from linux-next, hopefully there should
+> no longer be any merge conflicts. The module requirement will stick for
+> now.
 
+OK, will do.
 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Tested-by:  Daniel Diaz <daniel.diaz@linaro.org>
-> ---
+--=20
+Cheers,
+Stephen Rothwell
 
-thanks,
--- Shuah
+--Sig_/Gi/v++55E.o/dC7HkZBlTma
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNz8ogACgkQAVBC80lX
+0GxJGwf7BBsfhz9nEHmmWNZAgDzaPYbx1GDkVoywaB9VsL3hB4P7PkYM2LlhRdqC
+KtKIZygES6z1csqToA1K6YMKbFz8xcBqFjFf0utVo+fBWMZN5RCjENuyB/XyIajC
+7MN7TsmH02ofGzUV9SEOrxE2pUqVFzuMbdT3Q6bVTzPeTXuSMxUhTObo0vyOUgya
+Mjh6Suw5PhkoMKw+pnsEjHXh35tL3ZqdTT99ggBWoXPI2caZ+/HXdE3b04S7Eyne
+UpxGUs03Q1ikplAZQyuLnPI9/oM/fZgjxImpRbz79EWznK7Qb4NURGEV93/2K919
+UvoYQiTV9DOTG1iyAWAZ6I9AG286NA==
+=hIYn
+-----END PGP SIGNATURE-----
+
+--Sig_/Gi/v++55E.o/dC7HkZBlTma--
