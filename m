@@ -2,262 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F8F16291C7
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 07:18:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C4186291CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 07:23:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230243AbiKOGS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 01:18:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49002 "EHLO
+        id S231215AbiKOGXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 01:23:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbiKOGSz (ORCPT
+        with ESMTP id S229685AbiKOGXn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 01:18:55 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D7115A0F
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 22:18:53 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id z139-20020a6bc991000000b006dac0d359edso6766019iof.2
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 22:18:53 -0800 (PST)
+        Tue, 15 Nov 2022 01:23:43 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DACF8D49
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 22:23:41 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id x102so5221504ede.0
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 22:23:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4LhxSgwXjP7zJAv04ZdpOaD1c6/nMz+SUHh4hsP5H2g=;
+        b=C+4j35jDEbsVTA4kIbANCTgP2J4fLEvYOhN1X1ls5VmnIRG+JMXbrRKnkSh+mpo9SX
+         cXP8+KdbFQ42QHA7psKhUDE5qE7cMtKoLg0wjsaz4O9uQXZBQUeEm2BKdXtZ0b92GCTn
+         0fkt3QMiPLaCoqE2TtsIyXrJAI7t/B4gPK11y4V+D8JnG4l9+Bu4iL5A0w0DG+dJatgv
+         ao5FjZPbwF1TOShFFjByz1mcZL60E8s3lbreuMZ7aPfLy6u9S4H8UmCWTBKuHv+zKfzS
+         Yxh47kArV3cUtBaNRB4JlfcmvHrrrjarJxduB9BM23CIrsh8tiyMhVjTnipNfcKBuCBk
+         NCRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dlLtc6w6HfHRQLFXd3GSj9ody/dyrqExLOMq4OTwn8Q=;
-        b=XfdhiMPrYtWqPnuhgTuAign/JrGL9AVgmwh7FbLbjWU/FfBa48GyZPN6DGB8Tfbto9
-         Sf4dITzQwIRDG35vzZdwUB8ixyd0su4foJKomGq+23L2CgvKykxU40wrpRugoIn5PTQA
-         z4dRVM0SKn30ij+J/iOc8xUpJT7tb65/pQmYwYU4jfkmwATz9wE9887TI3p3R+3A65mo
-         35PcZDXDDO4OGSSVkqPZ5q5+GVgGv9zBzVOXcU0AE1kW4rM9KWN9KkU5WWLliOY7XCmG
-         9smH4mQJz5VnLdhJgPAj2oWbYpJsVKbyn3KIJwBhmE7CHS8LTOu60kAh2CJDC2uKnk0s
-         N50Q==
-X-Gm-Message-State: ANoB5pnnHDb5W8UJm4c0TnGnXTVXuXDg1vOXwDFliP7yu8kx+H8cuc0O
-        SBoErlet8cuioi0c7nGOBkiJOYrsKunvS694ke7/lcRwxViY
-X-Google-Smtp-Source: AA0mqf7Mgc+43FsQw6SmHCygF9D6sWhl+yGLQjiUWmmI47ZN3STRi0XVvIwa7rTVsk+1HorAvt6fV5ERhFH9h3z4lfdy5tFMYupb
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4LhxSgwXjP7zJAv04ZdpOaD1c6/nMz+SUHh4hsP5H2g=;
+        b=CAQGBN9wOxioTDVIUktCbz3zKYRYWvKWKq/hzABbXhLaTNEUpequA0kX/V3BNHM+a8
+         /2G8zAg7DBgk5P0cq/5yCQXRGV8+OPzUXUfpZXQMZr+SID/TMbXKC0uYwntJmmurUhxG
+         eHh6f6zBGydLZ4S0Hw/Lto6xTT1+Y+iR6SX6ei9nUO7C48iJ0KQ0D7iF68/hofd8fduf
+         cIsmt/2rFjqf0TAkWd3/RPMigIdrSfn/cHL76t1lbH6yN7sep1wTrOqRM9E5TpuDm77R
+         tHj/Sz1yfb5A4MQlpxkxFgG2llXdXhE5G2rOrCuNLC/FZhIsQjwxPiR+NezQAipCMnTX
+         GDtA==
+X-Gm-Message-State: ANoB5pkPENOwG+dWn4bsVQdg/GB3ulmMnU8URqmMLOfUQdKQVQ8j86U4
+        ZHD0ZLl5s6PC/UXO0BVofz6UBB3xlYQ=
+X-Google-Smtp-Source: AA0mqf6MPOoddGY4z4236ZNbmPSIpvbI3Pg/N9lk7r2y22Kcec++BMuUaW1sFNC6IZRLqDz4bIPLlw==
+X-Received: by 2002:aa7:de82:0:b0:45c:a651:87f1 with SMTP id j2-20020aa7de82000000b0045ca65187f1mr13816632edv.359.1668493420299;
+        Mon, 14 Nov 2022 22:23:40 -0800 (PST)
+Received: from ?IPV6:2003:c7:8f35:4b10:ee5:496e:6b0a:20dc? (p200300c78f354b100ee5496e6b0a20dc.dip0.t-ipconnect.de. [2003:c7:8f35:4b10:ee5:496e:6b0a:20dc])
+        by smtp.gmail.com with ESMTPSA id ky14-20020a170907778e00b0078afe360800sm5012540ejc.199.2022.11.14.22.23.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Nov 2022 22:23:39 -0800 (PST)
+Message-ID: <ad5b7656-53fd-059f-ed77-8617a5320f2f@gmail.com>
+Date:   Tue, 15 Nov 2022 07:23:38 +0100
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:258b:b0:6c8:63c1:d8d3 with SMTP id
- p11-20020a056602258b00b006c863c1d8d3mr7362620ioo.114.1668493132325; Mon, 14
- Nov 2022 22:18:52 -0800 (PST)
-Date:   Mon, 14 Nov 2022 22:18:52 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000076699c05ed7c54a2@google.com>
-Subject: [syzbot] possible deadlock in btrfs_commit_transaction
-From:   syzbot <syzbot+52d708a0bca2efc4c9df@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3] staging: vt6655: change the function name
+ s_vFillRTSHead
+Content-Language: en-US
+To:     Tanju Brunostar <tanjubrunostar0@gmail.com>
+Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+References: <Y3KJBdUue5otWgOT@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
+ <480340b3-c1c1-74b5-1889-f49dcb644469@gmail.com>
+ <CAHJEyKWRm_wzUcz7wzcveLLGND9F3m3HM23mpwQ=zjeO5zh5FA@mail.gmail.com>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <CAHJEyKWRm_wzUcz7wzcveLLGND9F3m3HM23mpwQ=zjeO5zh5FA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 11/14/22 23:59, Tanju Brunostar wrote:
+> On Mon, Nov 14, 2022 at 9:19 PM Philipp Hortmann
+> <philipp.g.hortmann@gmail.com> wrote:
+>>
+>> On 11/14/22 19:29, Tanjuate Brunostar wrote:
+>>> Remove the use of Hungarian notation, which is not used in the Linux
+>>> kernel. Reported by checkpatch
+>>> Add indentation to the affected function to follow the Linux kernel
+>>> coding style. This improves visibility
+>>>
+>>> Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+>>> ---
+>>> v2: corrected confusing changlog message on this patch
+>>> v3: removed unnecessary function prototype
+>>>
+>>>    drivers/staging/vt6655/rxtx.c | 40 ++++++++++++-----------------------
+>>>    1 file changed, 13 insertions(+), 27 deletions(-)
+>>>
+>>> diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
+>>> index 31ae99b3cb35..715b323cd2a8 100644
+>>> --- a/drivers/staging/vt6655/rxtx.c
+>>> +++ b/drivers/staging/vt6655/rxtx.c
+>>> @@ -23,7 +23,7 @@
+>>>     *      s_uGetTxRsvTime- get frame reserved time
+>>>     *      s_vFillCTSHead- fulfill CTS ctl header
+>>>     *      s_vFillFragParameter- Set fragment ctl parameter.
+>>> - *      s_vFillRTSHead- fulfill RTS ctl header
+>>> + *      fill_rts_header- fulfill RTS ctl header
+>>>     *      s_vFillTxKey- fulfill tx encrypt key
+>>>     *      s_vSWencryption- Software encrypt header
+>>>     *      vDMA0_tx_80211- tx 802.11 frame via dma0
+>>> @@ -85,16 +85,6 @@ static const unsigned short fb_opt1[2][5] = {
+>>>    #define DATADUR_A_F1    13
+>>>
+>>>    /*---------------------  Static Functions  --------------------------*/
+>>> -static void s_vFillRTSHead(struct vnt_private *pDevice,
+>>> -                        unsigned char byPktType,
+>>> -                        void *pvRTS,
+>>> -                        unsigned int cbFrameLength,
+>>> -                        bool bNeedAck,
+>>> -                        bool bDisCRC,
+>>> -                        struct ieee80211_hdr *hdr,
+>>> -                        unsigned short wCurrentRate,
+>>> -                        unsigned char byFBOption);
+>>> -
+>>>    static void s_vGenerateTxParameter(struct vnt_private *pDevice,
+>>>                                   unsigned char byPktType,
+>>>                                   struct vnt_tx_fifo_head *,
+>>> @@ -555,19 +545,15 @@ s_uFillDataHead(
+>>>        return buf->duration;
+>>>    }
+>>>
+>>> -static
+>>> -void
+>>> -s_vFillRTSHead(
+>>> -     struct vnt_private *pDevice,
+>>> -     unsigned char byPktType,
+>>> -     void *pvRTS,
+>>> -     unsigned int cbFrameLength,
+>>> -     bool bNeedAck,
+>>> -     bool bDisCRC,
+>>> -     struct ieee80211_hdr *hdr,
+>>> -     unsigned short wCurrentRate,
+>>> -     unsigned char byFBOption
+>>> -)
+>>> +static void fill_rts_header(struct vnt_private *pDevice,
+>>> +                         unsigned char byPktType,
+>>> +                         void *pvRTS,
+>>> +                         unsigned int cbFrameLength,
+>>> +                         bool bNeedAck,
+>>> +                         bool bDisCRC,
+>>> +                         struct ieee80211_hdr *hdr,
+>>> +                         unsigned short wCurrentRate,
+>>> +                         unsigned char byFBOption)
+>>>    {
+>>>        unsigned int uRTSFrameLen = 20;
+>>>
+>>> @@ -912,7 +898,7 @@ s_vGenerateTxParameter(
+>>>                        buf->rrv_time_a = vnt_rxtx_rsvtime_le16(pDevice, byPktType, cbFrameSize, wCurrentRate, bNeedACK);
+>>>                        buf->rrv_time_b = vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11B, cbFrameSize, pDevice->byTopCCKBasicRate, bNeedACK);
+>>>
+>>> -                     s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+>>> +                     fill_rts_header(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+>>>                } else {/* RTS_needless, PCF mode */
+>>>                        struct vnt_rrv_time_cts *buf = pvRrvTime;
+>>>
+>>> @@ -931,7 +917,7 @@ s_vGenerateTxParameter(
+>>>                        buf->rrv_time = vnt_rxtx_rsvtime_le16(pDevice, byPktType, cbFrameSize, wCurrentRate, bNeedACK);
+>>>
+>>>                        /* Fill RTS */
+>>> -                     s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+>>> +                     fill_rts_header(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+>>>                } else if (!pvRTS) {/* RTS_needless, non PCF mode */
+>>>                        struct vnt_rrv_time_ab *buf = pvRrvTime;
+>>>
+>>> @@ -945,7 +931,7 @@ s_vGenerateTxParameter(
+>>>                        buf->rrv_time = vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11B, cbFrameSize, wCurrentRate, bNeedACK);
+>>>
+>>>                        /* Fill RTS */
+>>> -                     s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+>>> +                     fill_rts_header(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+>>>                } else { /* RTS_needless, non PCF mode */
+>>>                        struct vnt_rrv_time_ab *buf = pvRrvTime;
+>>>
+>>
+>> Hi,
+>>
+>> I cannot apply your patch.
+>>
+>> Here my git infos:
+>> git remote show origin
+>> * remote origin
+>>     Fetch URL:
+>> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git
+>> ...
+>> git branch -a
+>> my branch: staging-testing
+>>
+>> Bye Philipp
+> 
+> I was recently asked to rebase to the staging-next branch. I think
+> this is where there is conflict
 
-syzbot found the following issue on:
+I do not think so.
+between this commit:
+commit 335140116703920ddcbd9a09ae9edfb02902f3d1 (HEAD -> 
+staging-testing, origin/staging-testing)
+and this one:
+commit a614e753e8e7f3322b560dcf6eaf44468ec22b3a (origin/staging-next)
 
-HEAD commit:    e01d50cbd6ee Merge tag 'vfio-v6.1-rc6' of https://github.c..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=122bd401880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=47b0b2ecc119b39f
-dashboard link: https://syzkaller.appspot.com/bug?extid=52d708a0bca2efc4c9df
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=167dfbf5880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11558535880000
+are only 4 commits and non of them is regarding the vt6655.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/b48e4d485e7e/disk-e01d50cb.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/dc9ba558e055/vmlinux-e01d50cb.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/b766d9815123/bzImage-e01d50cb.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/ac6062c53b8d/mount_0.gz
+So this should work.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+52d708a0bca2efc4c9df@syzkaller.appspotmail.com
+kernel@matrix-ESPRIMO-P710:~/Documents/git/kernels/staging$ git status
+On branch staging-testing
+Your branch is up to date with 'origin/staging-testing'.
 
-======================================================
-WARNING: possible circular locking dependency detected
-6.1.0-rc5-syzkaller-00008-ge01d50cbd6ee #0 Not tainted
-------------------------------------------------------
-syz-executor110/3653 is trying to acquire lock:
-ffff88807e4a24d8 (btrfs-root-00){.+.+}-{3:3}, at: __btrfs_tree_read_lock fs/btrfs/locking.c:134 [inline]
-ffff88807e4a24d8 (btrfs-root-00){.+.+}-{3:3}, at: btrfs_tree_read_lock fs/btrfs/locking.c:140 [inline]
-ffff88807e4a24d8 (btrfs-root-00){.+.+}-{3:3}, at: btrfs_read_lock_root_node+0x2b4/0x400 fs/btrfs/locking.c:279
+nothing to commit, working tree clean
+kernel@matrix-ESPRIMO-P710:~/Documents/git/kernels/staging$ git pull
+Already up to date.
+kernel@matrix-ESPRIMO-P710:~/Documents/git/kernels/staging$ cat 
+~/Downloads/20221114-\[PATCH\ v3\]\ staging_\ vt6655_\ change\ the\ 
+function\ name\ s_vFillRTSHead-5397.txt | git am
+Applying: staging: vt6655: change the function name s_vFillRTSHead
+error: patch failed: drivers/staging/vt6655/rxtx.c:85
+error: drivers/staging/vt6655/rxtx.c: patch does not apply
+Patch failed at 0001 staging: vt6655: change the function name 
+s_vFillRTSHead
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+When you have resolved this problem, run "git am --continue".
+If you prefer to skip this patch, run "git am --skip" instead.
+To restore the original branch and stop patching, run "git am --abort".
+kernel@matrix-ESPRIMO-P710:~/Documents/git/kernels/staging$
 
-but task is already holding lock:
-ffff888027234cc0 (&fs_info->reloc_mutex){+.+.}-{3:3}, at: btrfs_commit_transaction+0x13e8/0x3760 fs/btrfs/transaction.c:2316
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #4 (&fs_info->reloc_mutex){+.+.}-{3:3}:
-       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
-       __mutex_lock_common+0x1bd/0x26e0 kernel/locking/mutex.c:603
-       __mutex_lock kernel/locking/mutex.c:747 [inline]
-       mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
-       btrfs_record_root_in_trans+0x153/0x180 fs/btrfs/transaction.c:484
-       start_transaction+0x3af/0x1180 fs/btrfs/transaction.c:721
-       btrfs_create_common+0x2c6/0x420 fs/btrfs/inode.c:6633
-       lookup_open fs/namei.c:3413 [inline]
-       open_last_lookups fs/namei.c:3481 [inline]
-       path_openat+0x12d0/0x2df0 fs/namei.c:3710
-       do_filp_open+0x264/0x4f0 fs/namei.c:3740
-       do_sys_openat2+0x124/0x4e0 fs/open.c:1310
-       do_sys_open fs/open.c:1326 [inline]
-       __do_sys_open fs/open.c:1334 [inline]
-       __se_sys_open fs/open.c:1330 [inline]
-       __x64_sys_open+0x221/0x270 fs/open.c:1330
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
--> #3 (btrfs_trans_num_extwriters){++++}-{0:0}:
-       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
-       join_transaction+0x19f/0xe60 fs/btrfs/transaction.c:299
-       start_transaction+0x6fb/0x1180 fs/btrfs/transaction.c:658
-       btrfs_create_common+0x2c6/0x420 fs/btrfs/inode.c:6633
-       lookup_open fs/namei.c:3413 [inline]
-       open_last_lookups fs/namei.c:3481 [inline]
-       path_openat+0x12d0/0x2df0 fs/namei.c:3710
-       do_filp_open+0x264/0x4f0 fs/namei.c:3740
-       do_sys_openat2+0x124/0x4e0 fs/open.c:1310
-       do_sys_open fs/open.c:1326 [inline]
-       __do_sys_open fs/open.c:1334 [inline]
-       __se_sys_open fs/open.c:1330 [inline]
-       __x64_sys_open+0x221/0x270 fs/open.c:1330
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
--> #2 (btrfs_trans_num_writers){++++}-{0:0}:
-       reacquire_held_locks+0x386/0x650 kernel/locking/lockdep.c:5193
-       __lock_release kernel/locking/lockdep.c:5382 [inline]
-       lock_release+0x2e2/0x820 kernel/locking/lockdep.c:5688
-       percpu_up_read include/linux/percpu-rwsem.h:99 [inline]
-       __sb_end_write include/linux/fs.h:1821 [inline]
-       sb_end_intwrite+0x1e/0x1a0 include/linux/fs.h:1877
-       __btrfs_end_transaction+0x388/0x790 fs/btrfs/transaction.c:995
-       btrfs_dirty_inode+0x177/0x1c0 fs/btrfs/inode.c:6099
-       inode_update_time fs/inode.c:1871 [inline]
-       touch_atime+0x315/0x630 fs/inode.c:1944
-       file_accessed include/linux/fs.h:2521 [inline]
-       btrfs_file_mmap+0xbb/0x120 fs/btrfs/file.c:2333
-       call_mmap include/linux/fs.h:2196 [inline]
-       mmap_region+0xfe6/0x1e20 mm/mmap.c:2625
-       do_mmap+0x8d9/0xf30 mm/mmap.c:1412
-       vm_mmap_pgoff+0x19e/0x2b0 mm/util.c:520
-       ksys_mmap_pgoff+0x48c/0x6d0 mm/mmap.c:1458
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
--> #1 (&mm->mmap_lock#2){++++}-{3:3}:
-       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
-       __might_fault+0xb2/0x110 mm/memory.c:5646
-       _copy_to_user+0x26/0x130 lib/usercopy.c:29
-       copy_to_user include/linux/uaccess.h:169 [inline]
-       btrfs_ioctl_get_subvol_rootref+0x8cf/0xa90 fs/btrfs/ioctl.c:3203
-       btrfs_ioctl+0xb7c/0xc10 fs/btrfs/ioctl.c:5556
-       vfs_ioctl fs/ioctl.c:51 [inline]
-       __do_sys_ioctl fs/ioctl.c:870 [inline]
-       __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
--> #0 (btrfs-root-00){.+.+}-{3:3}:
-       check_prev_add kernel/locking/lockdep.c:3097 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
-       validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
-       __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
-       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
-       down_read_nested+0x3c/0x50 kernel/locking/rwsem.c:1634
-       __btrfs_tree_read_lock fs/btrfs/locking.c:134 [inline]
-       btrfs_tree_read_lock fs/btrfs/locking.c:140 [inline]
-       btrfs_read_lock_root_node+0x2b4/0x400 fs/btrfs/locking.c:279
-       btrfs_search_slot_get_root fs/btrfs/ctree.c:1665 [inline]
-       btrfs_search_slot+0x495/0x2fe0 fs/btrfs/ctree.c:1985
-       btrfs_update_root+0xf0/0xc60 fs/btrfs/root-tree.c:132
-       commit_fs_roots+0x4d3/0x710 fs/btrfs/transaction.c:1441
-       btrfs_commit_transaction+0x147f/0x3760 fs/btrfs/transaction.c:2353
-       iterate_supers+0x137/0x1f0 fs/super.c:724
-       ksys_sync+0xd5/0x1c0 fs/sync.c:104
-       __do_sys_sync+0xa/0x10 fs/sync.c:113
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-other info that might help us debug this:
-
-Chain exists of:
-  btrfs-root-00 --> btrfs_trans_num_extwriters --> &fs_info->reloc_mutex
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(&fs_info->reloc_mutex);
-                               lock(btrfs_trans_num_extwriters);
-                               lock(&fs_info->reloc_mutex);
-  lock(btrfs-root-00);
-
- *** DEADLOCK ***
-
-5 locks held by syz-executor110/3653:
- #0: ffff8880264240e0 (&type->s_umount_key#42){++++}-{3:3}, at: iterate_supers+0xb0/0x1f0 fs/super.c:722
- #1: ffff8880272363f0 (btrfs_trans_completed){.+.+}-{0:0}, at: btrfs_commit_transaction+0x130f/0x3760 fs/btrfs/transaction.c:2295
- #2: ffff8880272363c8 (btrfs_trans_super_committed){.+.+}-{0:0}, at: btrfs_commit_transaction+0x133e/0x3760 fs/btrfs/transaction.c:2296
- #3: ffff8880272363a0 (btrfs_trans_unblocked){.+.+}-{0:0}, at: btrfs_commit_transaction+0x136d/0x3760 fs/btrfs/transaction.c:2297
- #4: ffff888027234cc0 (&fs_info->reloc_mutex){+.+.}-{3:3}, at: btrfs_commit_transaction+0x13e8/0x3760 fs/btrfs/transaction.c:2316
-
-stack backtrace:
-CPU: 1 PID: 3653 Comm: syz-executor110 Not tainted 6.1.0-rc5-syzkaller-00008-ge01d50cbd6ee #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
- check_noncircular+0x2cc/0x390 kernel/locking/lockdep.c:2177
- check_prev_add kernel/locking/lockdep.c:3097 [inline]
- check_prevs_add kernel/locking/lockdep.c:3216 [inline]
- validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
- __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
- lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
- down_read_nested+0x3c/0x50 kernel/locking/rwsem.c:1634
- __btrfs_tree_read_lock fs/btrfs/locking.c:134 [inline]
- btrfs_tree_read_lock fs/btrfs/locking.c:140 [inline]
- btrfs_read_lock_root_node+0x2b4/0x400 fs/btrfs/locking.c:279
- btrfs_search_slot_get_root fs/btrfs/ctree.c:1665 [inline]
- btrfs_search_slot+0x495/0x2fe0 fs/btrfs/ctree.c:1985
- btrfs_update_root+0xf0/0xc60 fs/btrfs/root-tree.c:132
- commit_fs_roots+0x4d3/0x710 fs/btrfs/transaction.c:1441
- btrfs_commit_transaction+0x147f/0x3760 fs/btrfs/transaction.c:2353
- iterate_supers+0x137/0x1f0 fs/super.c:724
- ksys_sync+0xd5/0x1c0 fs/sync.c:104
- __do_sys_sync+0xa/0x10 fs/sync.c:113
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fec18d5dc79
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffd705bc978 EFLAGS: 00000246 ORIG_RAX: 00000000000000a2
-RAX: ffffffffffffffda RBX: 00007fec18d9ea80 RCX: 00007fec18d5dc79
-RDX: 00007fec18d140c3 RSI: 0000000000000003 RDI: 0000000000004c00
-RBP: 00007fec18d9e938 R08: 00005555556912c0 R09: 0000000000000140
-R10: 00007ffd705bc680 R11: 0000000000000246 R12: 00007fec18d9e8d0
-R13: 00007fec18d9b838 R14: 431bde82d7b634db R15: 00007ffd705bc990
- </TASK>
+Bye Philipp
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
