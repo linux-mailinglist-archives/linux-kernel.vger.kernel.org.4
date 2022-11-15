@@ -2,159 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7975562978F
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 12:37:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 566EC6297A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 12:39:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbiKOLhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 06:37:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41790 "EHLO
+        id S229716AbiKOLj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 06:39:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbiKOLhf (ORCPT
+        with ESMTP id S232222AbiKOLjU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 06:37:35 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEFA17656
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 03:37:32 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id cl5so23756511wrb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 03:37:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YiLRB+no6Obv7jh7c1l04K32ySwQNOr1SFbZK57JYcE=;
-        b=Iud274mEKb6gZLmUkIMS0HEBSJoqBMdOKEfk8qwd2MtJLczLjJRzoaL8507alqoL3D
-         Ov+cYEcS0L3k3LmCx17JcRv/B0ThjUgCbfaVyFM4lj77nww8ID8Ub2JJEDSRF43PDVYm
-         GUPab/bDvGz/S+KHx2O9YWpKHqF/3mmrIzJydxoJW3zQmciG7vttQrlhepL07+p8+iHr
-         q+k6sgMxuo+ajcoNjwpOwEMi0wL3CqwP8zTBTZ3oh5PH1l2wxHZwcP5QMoaCGP3t4HpB
-         m67QPaxcrGiGeb3aEyZ4QVK4Fv7XfllRt14Nm1YzBk9ydpIXMzvX5LNDhOCmfBb28fYX
-         EzkA==
+        Tue, 15 Nov 2022 06:39:20 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16ECD7656
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 03:38:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668512299;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cBuz4dB8pKEl0Eik12rqRP7QJDFUdnfWL8rmGUmRMkk=;
+        b=KOSvYmpGYqToOyrXpZD8jSyW+ZzwuoT/BTOgHJi9BrSWlsTV2cE0XH0daUW5Ar02YVpCqi
+        RHZvHFtvQbvz2MuQK0PQGKo36KS70WXRVt+g239oTnuql/6j7pTWwkBU9g/+sN1piOPvNY
+        FI228Cm08jfBH/8k5/HIZuYHK19tiAo=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-635-1eG0Y-rqPMiIrXLxB8EwDw-1; Tue, 15 Nov 2022 06:38:18 -0500
+X-MC-Unique: 1eG0Y-rqPMiIrXLxB8EwDw-1
+Received: by mail-ed1-f72.google.com with SMTP id s15-20020a056402520f00b0046321fff42dso9723481edd.0
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 03:38:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YiLRB+no6Obv7jh7c1l04K32ySwQNOr1SFbZK57JYcE=;
-        b=TkX1nG2JbBLtkuQn4HLPGe3Pcxb+KG3D/Aj/J1fCDrHs/LVBAnLMLR3biIkGSS+hW4
-         Qel6vBcHaDntI6/RTOzO7c2G/oUIjPixyaa7K+R++b6K9K1TGLVJnNgprmnVAXoQr5Lx
-         GxZqG2i84emVRFUVRXCzvqtbIESoHxtPiQK9ikr52tll9wCEMFMt+fozpWC63eGZ2lWz
-         5NwhHV5YqksNu27QD3gND7/Z8gTddjMdftUfLEUSh53gW/b0L4ecVN2KPIehTBEdQbyl
-         Rw8+psD7KbvvhYtjK+D4dlk2uBYB9am1WnAHGL+tdjNtjrPWouJCDz2Zoc1d1DZ5qp3W
-         vtPA==
-X-Gm-Message-State: ANoB5plQSmKPO/b8dVDV5ucpR/os8yMZlCMODLg2q45R7aCLYeGDQmxw
-        m6j7NkSsscCJMTN9I+kmPiqdqQ==
-X-Google-Smtp-Source: AA0mqf5qQyE4X+bB4glzYTYH+BISGK/zPAZumkOCxi5PxxgM1BHiuI2Ydnt36gENgeklnQHyuR9VNQ==
-X-Received: by 2002:a5d:49c9:0:b0:236:73fa:c56e with SMTP id t9-20020a5d49c9000000b0023673fac56emr10351544wrs.432.1668512251354;
-        Tue, 15 Nov 2022 03:37:31 -0800 (PST)
-Received: from ?IPV6:2a02:578:8593:1200:765b:95ed:f124:a78a? ([2a02:578:8593:1200:765b:95ed:f124:a78a])
-        by smtp.gmail.com with ESMTPSA id u12-20020adfdb8c000000b002417ed67bfdsm9112478wri.5.2022.11.15.03.37.30
+        bh=cBuz4dB8pKEl0Eik12rqRP7QJDFUdnfWL8rmGUmRMkk=;
+        b=x1z7fk0RutrQe1FStHomUiYYcwztS3/gliJdClZl/7KSL/uhO3MZwWEBaRCoc+h7s1
+         +80+JJUSs4AoVb+S7X98EaJ9iMKntdw4/NyJAlw1asnfwe04gr3AEhKj/xXwg9AyD82X
+         c8a97uOJo3PYyjNXBgPREhLOx34bDQbufxVY/5SRUG2PdwHP1vpCmFu5a3E41fUiNxWF
+         eLzyZNiz5rVq2/kJRbNfQ/QYumKBt4QbHj9S+JQ3ktyuzpIs5zjIQMP/ggkm/DqqzYd1
+         7EVErV1YFEVEZyF+jBR7hS9AQ0f7FDUmQGnpbJGBkAVwICoR4mMm4bhFAJdGlOMD4CQL
+         WwIw==
+X-Gm-Message-State: ANoB5pmeOglsOR2eKTn9zzvrdasnAIIf1mjZ4a+9T4iidbfy6oq3TelD
+        1WmkLKGlc1+tp5ouwEuvzKxrP9hOEJeav6GQpQXbzY5LFqIalisQSWAewdYA31SaDJrjxZugqwj
+        OD/DqSvuwOBhQ3iD7LkKNYvBW
+X-Received: by 2002:a17:906:81da:b0:78d:a01b:b474 with SMTP id e26-20020a17090681da00b0078da01bb474mr13759811ejx.8.1668512297138;
+        Tue, 15 Nov 2022 03:38:17 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4wT12I4HXRTPwOUfdpoipCB1G2eQz/MycoS5CRqzbh4CrriFYMveBAuh7Af5AA11wxq9NXlA==
+X-Received: by 2002:a17:906:81da:b0:78d:a01b:b474 with SMTP id e26-20020a17090681da00b0078da01bb474mr13759801ejx.8.1668512296987;
+        Tue, 15 Nov 2022 03:38:16 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id z4-20020a1709063ac400b007acd04fcedcsm5404574ejd.46.2022.11.15.03.38.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 03:37:30 -0800 (PST)
-Message-ID: <f3765a0c-1f57-e244-002e-148c88407f31@tessares.net>
-Date:   Tue, 15 Nov 2022 12:37:29 +0100
+        Tue, 15 Nov 2022 03:38:16 -0800 (PST)
+Message-ID: <14f8fbd3-b1db-34af-d443-947bbdb21e37@redhat.com>
+Date:   Tue, 15 Nov 2022 12:38:15 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH net-next] tcp: Fix tcp_syn_flood_action() if CONFIG_IPV6=n
-Content-Language: en-GB
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Jamie Bainbridge <jamie.bainbridge@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Chris Down <chris@chrisdown.name>,
-        Stephen Hemminger <stephen@networkplumber.org>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <d1ecf500f07e063d4e8e34f4045ddca55416c686.1668507036.git.geert+renesas@glider.be>
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-In-Reply-To: <d1ecf500f07e063d4e8e34f4045ddca55416c686.1668507036.git.geert+renesas@glider.be>
+ Thunderbird/102.3.1
+Subject: Re: [PATCH 1/1] platform/x86/amd: Fix pmc compile dependency errors.
+Content-Language: en-US, nl
+To:     Borislav Petkov <bp@alien8.de>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>
+Cc:     Yupeng Li <liyupeng@zbhlos.com>,
+        "S-k, Shyam-sundar" <Shyam-sundar.S-k@amd.com>,
+        "markgross@kernel.org" <markgross@kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "caizp2008@163.com" <caizp2008@163.com>,
+        "smf-linux@virginmedia.com" <smf-linux@virginmedia.com>
+References: <20221026072531.346013-1-liyupeng@zbhlos.com>
+ <0910bcc4-d55f-6f3a-b2df-4e30d164aeeb@redhat.com>
+ <721f6a1a-1144-4fe4-e722-2ba2d7200680@amd.com> <Y25m8tPTtyfHOCfK@zn.tnic>
+ <MN0PR12MB6101AB9F2AD8A41CE3EC5650E2009@MN0PR12MB6101.namprd12.prod.outlook.com>
+ <Y25sohHGkdAn5OZD@zn.tnic>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <Y25sohHGkdAn5OZD@zn.tnic>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+Hi,
 
-On 15/11/2022 11:12, Geert Uytterhoeven wrote:
-> If CONFIG_IPV6=n:
+On 11/11/22 16:39, Borislav Petkov wrote:
+> On Fri, Nov 11, 2022 at 03:16:10PM +0000, Limonciello, Mario wrote:
+>> I sent up a patch for it, but Hans hasn't applied it.
+>> https://patchwork.kernel.org/project/platform-driver-x86/patch/20221108023323.19304-1-mario.limonciello@amd.com/
 > 
->     net/ipv4/tcp_input.c: In function ‘tcp_syn_flood_action’:
->     include/net/sock.h:387:37: error: ‘const struct sock_common’ has no member named ‘skc_v6_rcv_saddr’; did you mean ‘skc_rcv_saddr’?
->       387 | #define sk_v6_rcv_saddr __sk_common.skc_v6_rcv_saddr
-> 	  |                                     ^~~~~~~~~~~~~~~~
->     include/linux/printk.h:429:19: note: in definition of macro ‘printk_index_wrap’
->       429 |   _p_func(_fmt, ##__VA_ARGS__);    \
-> 	  |                   ^~~~~~~~~~~
->     include/linux/printk.h:530:2: note: in expansion of macro ‘printk’
->       530 |  printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
-> 	  |  ^~~~~~
->     include/linux/net.h:272:3: note: in expansion of macro ‘pr_info’
->       272 |   function(__VA_ARGS__);    \
-> 	  |   ^~~~~~~~
->     include/linux/net.h:288:2: note: in expansion of macro ‘net_ratelimited_function’
->       288 |  net_ratelimited_function(pr_info, fmt, ##__VA_ARGS__)
-> 	  |  ^~~~~~~~~~~~~~~~~~~~~~~~
->     include/linux/net.h:288:43: note: in expansion of macro ‘sk_v6_rcv_saddr’
->       288 |  net_ratelimited_function(pr_info, fmt, ##__VA_ARGS__)
-> 	  |                                           ^~~~~~~~~~~
->     net/ipv4/tcp_input.c:6847:4: note: in expansion of macro ‘net_info_ratelimited’
->      6847 |    net_info_ratelimited("%s: Possible SYN flooding on port [%pI6c]:%u. %s.\n",
-> 	  |    ^~~~~~~~~~~~~~~~~~~~
+> Yap, that fixes it.
 > 
-> Fix this by using "#if" instead of "if", like is done for all other
-> checks for CONFIG_IPV6.
+> So yeah, Hans, make sure to Cc: stable too when applying.
 
-Thank you for the patch!
+Done. I'll send this out in my next fixes pull-req to Linus
+before the end of this week.
 
-Our CI validating MPTCP also found the issue. I was going to suggest a
-similar one before I saw yours :)
+Regards,
 
-Everything is fixed on my side after having applied the patch!
+Hans
 
-Tested-by: Matthieu Baerts <matthieu.baerts@tessares.net>
 
-> Fixes: d9282e48c6088105 ("tcp: Add listening address to SYN flood message")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
->  net/ipv4/tcp_input.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-> index 94024fdc2da1b28a..e5d7a33fac6666bb 100644
-> --- a/net/ipv4/tcp_input.c
-> +++ b/net/ipv4/tcp_input.c
-> @@ -6843,11 +6843,14 @@ static bool tcp_syn_flood_action(const struct sock *sk, const char *proto)
->  
->  	if (!queue->synflood_warned && syncookies != 2 &&
->  	    xchg(&queue->synflood_warned, 1) == 0) {
-> -		if (IS_ENABLED(CONFIG_IPV6) && sk->sk_family == AF_INET6) {
-> +#if IS_ENABLED(CONFIG_IPV6)
-> +		if (sk->sk_family == AF_INET6) {
->  			net_info_ratelimited("%s: Possible SYN flooding on port [%pI6c]:%u. %s.\n",
->  					proto, &sk->sk_v6_rcv_saddr,
->  					sk->sk_num, msg);
-> -		} else {
-> +		} else
-> +#endif
-> +		{
-
-I was going to suggest to remove the unneeded braces here and just
-before + eventually fix the indentation under net_info_ratelimited()
-while at it but that's just some details not directly linked to the fix
-here.
-
-Cheers,
-Matt
--- 
-Tessares | Belgium | Hybrid Access Solutions
-www.tessares.net
