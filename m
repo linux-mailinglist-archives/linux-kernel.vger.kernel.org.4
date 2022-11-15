@@ -2,209 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D31CF62A457
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 22:41:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64DF162A46F
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 22:47:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238561AbiKOVlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 16:41:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33518 "EHLO
+        id S230438AbiKOVrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 16:47:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238808AbiKOVkt (ORCPT
+        with ESMTP id S230399AbiKOVqz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 16:40:49 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17085659D;
-        Tue, 15 Nov 2022 13:40:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1668548440; x=1700084440;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=nl98HcOSodJTwdzaq/n4NRjid0k79X3jiygrlPJKglg=;
-  b=1gl63uHMF++mFQQxE80M8koo7u9ZnpdeBMTMUfZyttQLFK9nU85mgbIV
-   R1PHd6oVYGlAPJ+M5/m0FZbgCXlIt1l4KaJdBtB9QpebBe0tgbhrvDEL7
-   c1spY5eS4VZj848W4Pm6yxPx+7i6SZTp4NMqoeQD2UmaQxC9McKHyEDQW
-   rApH/EmYM/FKz+lIyTWP3E1LiYlFHdYJl3v8ixeoFSsl43Fj5u+9NCPds
-   5b5g0vF2eWC6JGy662Qg4WFl6g/viT6JqjhGYWOCtlvKwZADclp1EPb8i
-   ez2VGF6Px1wbsPLjujsEZ0o5gLJTDuaSpOz5CGLt1ofsmZXlDOKxPw6Ep
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="123588545"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 Nov 2022 14:40:39 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 15 Nov 2022 14:40:36 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Tue, 15 Nov 2022 14:40:34 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <bpf@vger.kernel.org>
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <hawk@kernel.org>, <john.fastabend@gmail.com>,
-        <alexandr.lobakin@intel.com>, <UNGLinuxDriver@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH net-next v2 5/5] net: lan966x: Add support for XDP_REDIRECT
-Date:   Tue, 15 Nov 2022 22:44:56 +0100
-Message-ID: <20221115214456.1456856-6-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221115214456.1456856-1-horatiu.vultur@microchip.com>
-References: <20221115214456.1456856-1-horatiu.vultur@microchip.com>
+        Tue, 15 Nov 2022 16:46:55 -0500
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1AD2AE7A;
+        Tue, 15 Nov 2022 13:46:54 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.94.2)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1ov3lH-0005HO-0k; Tue, 15 Nov 2022 22:46:31 +0100
+Date:   Tue, 15 Nov 2022 21:45:05 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     Jens Axboe <axboe@kernel.dk>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Daniel Golle <daniel@makrotopia.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Michal Orzel <michalorzel.eng@gmail.com>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org
+Subject: [PATCH v5 0/4] partition parser for U-Boot's uImage.FIT
+Message-ID: <cover.1668548123.git.daniel@makrotopia.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,PDS_OTHER_BAD_TLD,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Extend lan966x XDP support with the action XDP_REDIRECT. This is similar
-with the XDP_TX, so a lot of functionality can be reused.
+Add uImage.FIT partition parser and wire it up to allow mounting
+filesystem sub-images from uImage.FIT in GPT partitions as well as
+mtdblock and ubiblock devices within Linux (e.g. as root filesystem).
 
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
- .../ethernet/microchip/lan966x/lan966x_fdma.c |  9 ++++++
- .../ethernet/microchip/lan966x/lan966x_main.c |  1 +
- .../ethernet/microchip/lan966x/lan966x_main.h |  6 ++++
- .../ethernet/microchip/lan966x/lan966x_xdp.c  | 28 +++++++++++++++++++
- 4 files changed, 44 insertions(+)
+Using uImage.FIT to store the root filesystem besides kernel and dtb has
+several obvious advantages which are hard to obtain in any other way:
+ * single image accross different storage types
+ * dynamically sized partitions for kernel and rootfs
+ * hash also for rootfs checked by U-Boot before launching kernel
+ * images may include additional filesystems e.g. for localization or
+   branding
 
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-index c2e56233a8da5..b863a5b50d4de 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0+
- 
- #include <linux/bpf.h>
-+#include <linux/filter.h>
- 
- #include "lan966x_main.h"
- 
-@@ -518,6 +519,7 @@ static int lan966x_fdma_napi_poll(struct napi_struct *napi, int weight)
- 	int dcb_reload = rx->dcb_index;
- 	struct lan966x_rx_dcb *old_dcb;
- 	struct lan966x_db *db;
-+	bool redirect = false;
- 	struct sk_buff *skb;
- 	struct page *page;
- 	int counter = 0;
-@@ -543,6 +545,10 @@ static int lan966x_fdma_napi_poll(struct napi_struct *napi, int weight)
- 		case FDMA_TX:
- 			lan966x_fdma_rx_advance_dcb(rx);
- 			continue;
-+		case FDMA_REDIRECT:
-+			lan966x_fdma_rx_advance_dcb(rx);
-+			redirect = true;
-+			continue;
- 		case FDMA_DROP:
- 			lan966x_fdma_rx_free_page(rx);
- 			lan966x_fdma_rx_advance_dcb(rx);
-@@ -579,6 +585,9 @@ static int lan966x_fdma_napi_poll(struct napi_struct *napi, int weight)
- 	if (counter < weight && napi_complete_done(napi, counter))
- 		lan_wr(0xff, lan966x, FDMA_INTR_DB_ENA);
- 
-+	if (redirect)
-+		xdp_do_flush();
-+
- 	return counter;
- }
- 
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-index 0b7707306da26..0aed244826d39 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-@@ -469,6 +469,7 @@ static const struct net_device_ops lan966x_port_netdev_ops = {
- 	.ndo_eth_ioctl			= lan966x_port_ioctl,
- 	.ndo_setup_tc			= lan966x_tc_setup,
- 	.ndo_bpf			= lan966x_xdp,
-+	.ndo_xdp_xmit			= lan966x_xdp_xmit,
- };
- 
- bool lan966x_netdevice_check(const struct net_device *dev)
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-index df7fec361962b..b73c5a6cc0beb 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-@@ -106,12 +106,14 @@ enum macaccess_entry_type {
-  * FDMA_ERROR, something went wrong, stop getting more frames
-  * FDMA_DROP, frame is dropped, but continue to get more frames
-  * FDMA_TX, frame is given to TX, but continue to get more frames
-+ * FDMA_REDIRECT, frame is given to TX, but continue to get more frames
-  */
- enum lan966x_fdma_action {
- 	FDMA_PASS = 0,
- 	FDMA_ERROR,
- 	FDMA_DROP,
- 	FDMA_TX,
-+	FDMA_REDIRECT,
- };
- 
- struct lan966x_port;
-@@ -564,6 +566,10 @@ int lan966x_xdp(struct net_device *dev, struct netdev_bpf *xdp);
- int lan966x_xdp_run(struct lan966x_port *port,
- 		    struct page *page,
- 		    u32 data_len);
-+int lan966x_xdp_xmit(struct net_device *dev,
-+		     int n,
-+		     struct xdp_frame **frames,
-+		     u32 flags);
- static inline bool lan966x_xdp_port_present(struct lan966x_port *port)
- {
- 	return !!port->xdp_prog;
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c b/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
-index 9b0ba3179df62..d2ecfe78382cf 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
-@@ -35,6 +35,29 @@ int lan966x_xdp(struct net_device *dev, struct netdev_bpf *xdp)
- 	}
- }
- 
-+int lan966x_xdp_xmit(struct net_device *dev,
-+		     int n,
-+		     struct xdp_frame **frames,
-+		     u32 flags)
-+{
-+	struct lan966x_port *port = netdev_priv(dev);
-+	int i, nxmit = 0;
-+
-+	for (i = 0; i < n; ++i) {
-+		struct xdp_frame *xdpf = frames[i];
-+		int err;
-+
-+		err = lan966x_fdma_xmit_xdpf(port, xdpf,
-+					     virt_to_head_page(xdpf->data));
-+		if (err)
-+			break;
-+
-+		nxmit++;
-+	}
-+
-+	return nxmit;
-+}
-+
- int lan966x_xdp_run(struct lan966x_port *port, struct page *page, u32 data_len)
- {
- 	struct bpf_prog *xdp_prog = port->xdp_prog;
-@@ -59,6 +82,11 @@ int lan966x_xdp_run(struct lan966x_port *port, struct page *page, u32 data_len)
- 
- 		return lan966x_fdma_xmit_xdpf(port, xdpf, page) ?
- 		       FDMA_DROP : FDMA_TX;
-+	case XDP_REDIRECT:
-+		if (xdp_do_redirect(port->dev, &xdp, xdp_prog))
-+			return FDMA_DROP;
-+
-+		return FDMA_REDIRECT;
- 	default:
- 		bpf_warn_invalid_xdp_action(port->dev, xdp_prog, act);
- 		fallthrough;
+For this to work, the image has to be created with external data and
+sub-images aligned to the system's memory page boundaries, ie.
+ mkimage -E -B 0x1000 -p 0x1000 ...
+
+Booting such images has been supported by U-Boot since v2018.01.
+
+A previous version of this partition parser is in production use on some
+OpenWrt devices, eg. the BananaPi R64 where using the FIT parser allows
+booting the very same image from eMMC, SD Card or SPI-NAND/UBI and also
+using it as a firmware-upgrade image at the same time.
+The Ubiquiti UniFi 6 LR access point served as a reference board with
+SPI-NOR flash and use of the partition parser on top of a mtdblock
+device.
+
+As U-Boot by now also passes down the selected configuration node name
+via device tree this allows the partition parser (or userspace process
+via sysfs) to identify the selected image configuration.
+
+Device Tree schema for that:
+https://github.com/devicetree-org/dt-schema/commit/a24d97d43491e55d4def006213213a6c4045b646
+
+In most cases this partition parser can be used without relying on the
+bootloader to pass-down the configuration node name. The default
+configuration node is used then.
+
+Changes since v4:
+ * use folio instead of page (requested by Matthew Wilcox)
+ * remove unneeded checks (requested by Matthew Wilcox)
+ * use strscpy instead of strlcpy (strlcpy is deprecated)
+ * fix off-by-one string size limit label_min (discovered during tests)
+ * use only a single config symbol MTD_BLOCK_PARTITION affecting both
+   ubiblock and mtdblock (requested by Richard Weinberger)
+
+Changes since v3:
+ * use min_t(size_t, ...)
+
+Changes since v2:
+ * use returned length to limit all strings read from fit/dt
+ * use __be32 type for 32-bit values read from fit/dt
+Reported-by: kernel test robot <lkp@intel.com>
+ * Kconfig: select LIBFDT for FIT_PARTITION
+Reported-by: kernel test robot <lkp@intel.com>
+
+Changes since v1:
+ * Use again #ifdef's in partitions/efi to only build against FIT
+   parser symbols if it is actually selected. Otherwise the efi/gpt
+   would unconditionally depend on the FTT parser to be present.
+
+Changes since RFC:
+ * fixed wrong variable used in error path
+ * introduced dedicated Kconfig options to enable partition
+   parsers on mtdblock and ubiblock
+ * drop #ifdef'ery, use IS_ENABLED(...) where needed
+
+Daniel Golle (4):
+  block: add new flag to add partitions read-only
+  block: add partition parser for U-Boot uImage.FIT
+  partitions/efi: add support for uImage.FIT sub-partitions
+  mtd: add option to enable scanning for partitions
+
+ MAINTAINERS               |   6 +
+ block/blk.h               |   1 +
+ block/partitions/Kconfig  |  15 ++
+ block/partitions/Makefile |   1 +
+ block/partitions/check.h  |   4 +
+ block/partitions/core.c   |   6 +
+ block/partitions/efi.c    |   9 +
+ block/partitions/efi.h    |   3 +
+ block/partitions/fit.c    | 346 ++++++++++++++++++++++++++++++++++++++
+ drivers/mtd/Kconfig       |  11 ++
+ drivers/mtd/mtd_blkdevs.c |   4 +-
+ drivers/mtd/ubi/block.c   |   5 +-
+ 12 files changed, 409 insertions(+), 2 deletions(-)
+ create mode 100644 block/partitions/fit.c
+
 -- 
-2.38.0
+2.38.1
 
