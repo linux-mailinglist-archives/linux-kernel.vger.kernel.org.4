@@ -2,50 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 071F162ADD4
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 23:10:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F294862ADD7
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 23:10:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbiKOWKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 17:10:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50386 "EHLO
+        id S231819AbiKOWKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 17:10:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbiKOWK2 (ORCPT
+        with ESMTP id S229478AbiKOWKr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 17:10:28 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DFE8E2FC37;
-        Tue, 15 Nov 2022 14:10:26 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EE50F13D5;
-        Tue, 15 Nov 2022 14:10:32 -0800 (PST)
-Received: from [10.57.6.31] (unknown [10.57.6.31])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C90D53F73B;
-        Tue, 15 Nov 2022 14:10:24 -0800 (PST)
-Message-ID: <20ab3aba-0f19-a5a5-1fe6-16f579879c28@arm.com>
-Date:   Tue, 15 Nov 2022 23:10:19 +0100
+        Tue, 15 Nov 2022 17:10:47 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BE4C30569;
+        Tue, 15 Nov 2022 14:10:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668550245; x=1700086245;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=uc5sP24YBpavzKtyWJtoabUUBoa+hAu1OnMqFJhT2cI=;
+  b=L3paLrCelRn0zqmSte58gXhosoitWYiZzKYrKqfDKc1UDZcECY0ywN6s
+   SbZ/UzgR3SGQapzQmlgPRhUN+eFtjpZQKXb3SmkEsVqDMJIS7dLzcbLAb
+   2jednWCbAIAPmBSfNNANCzGeC0Uy8297pNMq96iv50DTYl2oVS9yMXjme
+   r6eLgtPXc53Z43tbDxk5V7yGzzE+NCsRk3XplGbeYjODTj2jGiEkrr96g
+   vFmwF2wCNEqlaWrBBl3U5grEb7Iys77poBrHcR0aF3cmvVoes5A+QkLPP
+   FGs2Q7dUPEd/Q2W9onBuuOdh42huMaCLIP2qDxDqJQtP+3vJJu39uaTMJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="299906683"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="299906683"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 14:10:44 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="589950332"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="589950332"
+Received: from djiang5-mobl2.amr.corp.intel.com (HELO [10.212.7.249]) ([10.212.7.249])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 14:10:43 -0800
+Message-ID: <bb0a274c-ef6a-fea2-3f3c-344898e6cc24@intel.com>
+Date:   Tue, 15 Nov 2022 15:10:42 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] cacheinfo: Decrement refcount in cache_setup_of_node()
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.1
+Subject: Re: [PATCH 04/11] cxl/mem: Clear events on driver load
 Content-Language: en-US
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     linux-kernel@vger.kernel.org, Rob.Herring@arm.com,
-        sudeep.holla@arm.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-References: <20221026185954.991547-1-pierre.gondois@arm.com>
- <CAMuHMdV_rQcKVn73ywh_KcJS2uZ0xTdzGAYcTiQov4UzRouRvQ@mail.gmail.com>
- <CGME20221115193015eucas1p18c4b8ba131b72bc9017a14568a6a54bc@eucas1p1.samsung.com>
- <254cba04-0151-f7f1-1986-a8b763e940d1@samsung.com>
-From:   Pierre Gondois <pierre.gondois@arm.com>
-In-Reply-To: <254cba04-0151-f7f1-1986-a8b763e940d1@samsung.com>
+To:     ira.weiny@intel.com, Dan Williams <dan.j.williams@intel.com>
+Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org
+References: <20221110185758.879472-1-ira.weiny@intel.com>
+ <20221110185758.879472-5-ira.weiny@intel.com>
+From:   Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <20221110185758.879472-5-ira.weiny@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -54,29 +71,49 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 11/15/22 20:30, Marek Szyprowski wrote:
-> Hi Geert,
+On 11/10/2022 10:57 AM, ira.weiny@intel.com wrote:
+> From: Ira Weiny <ira.weiny@intel.com>
 > 
-> On 15.11.2022 14:06, Geert Uytterhoeven wrote:
->> On Wed, Oct 26, 2022 at 9:03 PM Pierre Gondois <pierre.gondois@arm.com> wrote:
->>> Refcounts to DT nodes are only incremented in the function
->>> and never decremented. Decrease the refcounts when necessary.
->>>
->>> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
->> Thanks for your patch, which is now commit 3da72e18371c41a6
->> ("cacheinfo: Decrement refcount in cache_setup_of_node()") in
->> driver-core-next.
->>
->> I have bisected a refcount underflow during s2ram to this commit:
+> The information contained in the events prior to the driver loading can
+> be queried at any time through other mailbox commands.
 > 
-> Similar issue can be reproduced with qemu/arm64 'virt' machine during boot:
+> Ensure a clean slate of events by reading and clearing the events.  The
+> events are sent to the trace buffer but it is not anticipated to have
+> anyone listening to it at driver load time.
 > 
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 
-Hello Geert, Marek,
+Reviewed-by: Dave Jiang <dave.jiang@intel.com>
 
-Thanks for reporting the issue. The patch at:
-https://lore.kernel.org/all/20221115220520.2076189-1-pierre.gondois@arm.com/
-should fix it,
-
-Regards,
-Pierre
+> ---
+>   drivers/cxl/pci.c            | 2 ++
+>   tools/testing/cxl/test/mem.c | 2 ++
+>   2 files changed, 4 insertions(+)
+> 
+> diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
+> index 62e560063e50..e0d511575b45 100644
+> --- a/drivers/cxl/pci.c
+> +++ b/drivers/cxl/pci.c
+> @@ -530,6 +530,8 @@ static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+>   	if (IS_ERR(cxlmd))
+>   		return PTR_ERR(cxlmd);
+>   
+> +	cxl_mem_get_event_records(cxlds);
+> +
+>   	if (resource_size(&cxlds->pmem_res) && IS_ENABLED(CONFIG_CXL_PMEM))
+>   		rc = devm_cxl_add_nvdimm(&pdev->dev, cxlmd);
+>   
+> diff --git a/tools/testing/cxl/test/mem.c b/tools/testing/cxl/test/mem.c
+> index aa2df3a15051..e2f5445d24ff 100644
+> --- a/tools/testing/cxl/test/mem.c
+> +++ b/tools/testing/cxl/test/mem.c
+> @@ -285,6 +285,8 @@ static int cxl_mock_mem_probe(struct platform_device *pdev)
+>   	if (IS_ERR(cxlmd))
+>   		return PTR_ERR(cxlmd);
+>   
+> +	cxl_mem_get_event_records(cxlds);
+> +
+>   	if (resource_size(&cxlds->pmem_res) && IS_ENABLED(CONFIG_CXL_PMEM))
+>   		rc = devm_cxl_add_nvdimm(dev, cxlmd);
+>   
