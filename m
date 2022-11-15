@@ -2,80 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04CA162A437
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 22:37:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBEA062A439
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 22:38:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238570AbiKOVgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 16:36:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58416 "EHLO
+        id S238782AbiKOVij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 16:38:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238752AbiKOVgq (ORCPT
+        with ESMTP id S232330AbiKOVih (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 16:36:46 -0500
-Received: from mail-vk1-xa2c.google.com (mail-vk1-xa2c.google.com [IPv6:2607:f8b0:4864:20::a2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76BA925C7B
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 13:36:44 -0800 (PST)
-Received: by mail-vk1-xa2c.google.com with SMTP id b81so7286075vkf.1
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 13:36:44 -0800 (PST)
+        Tue, 15 Nov 2022 16:38:37 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7770FDF
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 13:38:32 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id x2so23868447edd.2
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 13:38:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pDlpcIILa5fx8cswH9nfAAlvEyZn3HJEFSlkJ/GqnNE=;
-        b=oI0kzE1oJhnTbJiVua2J025SblkeNyYvyDsyU5rMvyfMFTqGFHmCWLQaA4hx30Yf88
-         NjwXCohNxFXK+dQICaCDLy/ZCwUZuwh3eSJwN1APP7gfTkoiY6zHYK/bm7w4jySpqmjG
-         rz0VjO8LcFP6HeWZxCi5iqaS/4qCeB0Uu6f3LMay65jdDlskkn3vn9BOl3qzxhGS+92X
-         Qicilg5LEkR/we6/31sfZxoj4MepqoYK6foSBdoL8BsS2qvo27UefibV81CjODRylJtz
-         vw7BotxVlC/eAqZctzIUOKdAsXVBls6MLCAm45xt+PXmPqBiQUOv9JwUxIbDiLRoJ2tY
-         Qtqw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=q0qqcluEnKDWuRRDz3pvE3cXQ8iH9uHWt3hqRxoLeo8=;
+        b=gJP6ZkyFtTpF18nmTzBe/C15w/ppBZ0izikt5RYF188kCgQHvCZ5gINPbDmtvBJ1k9
+         eaDAB3H4huNHELIlrinYLLWWvNTiNJBjjD9ssyMeD0zizbWoprs51Wgw3iGNcjKDvgP7
+         AxLGnxMxoSIaNzQc+JELR3+hYcODZQ/eKMpDUZfxLCaaPMy9X363aFAhFTBEGS1v31Ce
+         KiLDTWfZTjmlq1hLURSWnykEmfbe374SyJt9XXNI4oXpQQ1H2ZTQMvg4ThYH0i3xQ4km
+         bxFSJjPrrm2ps89EKqD6MyIM8ihjXwM0A8//PwC3lOISKjWi6qMiEAN4vYythSaNaeFh
+         iiBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pDlpcIILa5fx8cswH9nfAAlvEyZn3HJEFSlkJ/GqnNE=;
-        b=ADONA47ujAl2Dq5Qj7fI6NWyWCNeQVSFDx9ZiaFNbtdeFWmzMZ1UCLa6GDXm+NrbxO
-         VoXsa0aiI4U6ShMCzFXjGcNG3rvIhjZUQiv7BzcgJWoTvZCkR5jgaBAHMbuA6uHBpgVV
-         kVGP14Z+62RmAZs27uaumB8r/WbA37hGCjQQya9OTMM569wvk7DjiKEa8jagbmOyncGo
-         jdBi018DI1rVYte+4Wp5SHuadlQHKvDJ9YHeCeHOOolb1ZGS/4Bwa2sBb63ab4o0k7I5
-         l882ebv1IpabVVLQ2MyLYWlT5Xqc5IG9XswLlLWyWzm7ZfQ8OBlZJ3yv/sEsCbiuw28G
-         Yhaw==
-X-Gm-Message-State: ANoB5pl4zhcr+TIobNpw+yal7EGGO0Z4jYWplTfJTn4I9fXULMSLynPP
-        SBUv2YX29Td+6TSi4iKeFK0GBsoD5jLVP3ID/KxK
-X-Google-Smtp-Source: AA0mqf5bnOeWShl2aOSmrqSKSGiS1Lmk8PrBTlPI03gplX8cbkkzTJrABgcAuaR+Dig1PWMjS7scRHrvgAPiXNt+jN8=
-X-Received: by 2002:a05:6122:852:b0:3b8:68cc:1d1d with SMTP id
- 18-20020a056122085200b003b868cc1d1dmr10598452vkk.14.1668548203468; Tue, 15
- Nov 2022 13:36:43 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=q0qqcluEnKDWuRRDz3pvE3cXQ8iH9uHWt3hqRxoLeo8=;
+        b=f1tDkgUx9E2dNXHbPSz+In3xA1/MQaxX5wXzrn/v2wgGVj4qZ04ezpyiY2gSMYkSgD
+         komWO/SdAqPYimdODm8i8x+m3JSPvxAZobWt2y1IGwmUBDgTe5kwXZYAnH0YauWw9bTp
+         1nXWDhPpAYaQrtLYSjTgzjatJhHN1tx+Xy0P/zNnsKE+CeF0hXT0l4tZ8DeztyT9avp1
+         57CupyZ8q7JIZ04BAV0QHdcTTWv3xpqEcMQh+ggWE4HyJG+qKGCamUXdPKPqRQcZXab3
+         3LT3op/wgx3oo/FxKHMUhIUCWmvkLDPbF84K+6yEZNPGp8y+yTY3IMTM9DLr6AqCD4bA
+         UxjA==
+X-Gm-Message-State: ANoB5pnxX+S4PB1TzHIB/ZNcBjlqBYrmg7lAzDDB7wG7MWm3l8UNyfH1
+        2jKImPabtdNpC3HUdqZA2Gw=
+X-Google-Smtp-Source: AA0mqf7+GgVYuxL5xasn4VNMBRz2Sy90Pg6Fu+lL4brjmrxjY5GbT2MB3TR585xiHGp5XW6K6Q+wWw==
+X-Received: by 2002:a05:6402:360d:b0:461:b033:90ac with SMTP id el13-20020a056402360d00b00461b03390acmr16819244edb.257.1668548311172;
+        Tue, 15 Nov 2022 13:38:31 -0800 (PST)
+Received: from jernej-laptop.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
+        by smtp.gmail.com with ESMTPSA id 7-20020a170906310700b007389c5a45f0sm6082972ejx.148.2022.11.15.13.38.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 13:38:30 -0800 (PST)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>
+Cc:     Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev,
+        Andre Przywara <andre.przywara@arm.com>
+Subject: Re: [PATCH v3 3/3] bus: sunxi-rsb: Clear interrupt status before each transfer
+Date:   Tue, 15 Nov 2022 22:38:29 +0100
+Message-ID: <1910101.PYKUYFuaPT@jernej-laptop>
+In-Reply-To: <735349b0-6738-8ace-a7d3-aafae2a62501@sholland.org>
+References: <20221114015749.28490-1-samuel@sholland.org> <2170633.72vocr9iq0@jernej-laptop> <735349b0-6738-8ace-a7d3-aafae2a62501@sholland.org>
 MIME-Version: 1.0
-References: <20221003232033.3404802-1-jstultz@google.com> <20221003232033.3404802-3-jstultz@google.com>
- <Y1Q2YqUFSxADWWtS@google.com>
-In-Reply-To: <Y1Q2YqUFSxADWWtS@google.com>
-From:   John Stultz <jstultz@google.com>
-Date:   Tue, 15 Nov 2022 13:36:31 -0800
-Message-ID: <CANDhNCr5z+seg0Y=BVkJE0+xQLnjWfJuyFdv4i7yNdf57-yeSg@mail.gmail.com>
-Subject: Re: [RFC PATCH v4 2/3] sched: Avoid placing RT threads on cores
- handling long softirqs
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "Connor O'Brien" <connoro@google.com>,
-        John Dias <joaodias@google.com>, Rick Yiu <rickyiu@google.com>,
-        John Kacur <jkacur@redhat.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Chris Redpath <chris.redpath@arm.com>,
-        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>, kernel-team@android.com,
-        "J . Avila" <elavila@google.com>
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,131 +74,158 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 22, 2022 at 11:28 AM Joel Fernandes <joel@joelfernandes.org> wrote:
-> On Mon, Oct 03, 2022 at 11:20:32PM +0000, John Stultz wrote:
-> > diff --git a/include/linux/interrupt.h b/include/linux/interrupt.h
-> > index a749a8663841..e3a4add67e8c 100644
-> > --- a/include/linux/interrupt.h
-> > +++ b/include/linux/interrupt.h
-> > @@ -582,6 +582,11 @@ enum
-> >   * _ IRQ_POLL: irq_poll_cpu_dead() migrates the queue
-> >   */
-> >  #define SOFTIRQ_HOTPLUG_SAFE_MASK (BIT(RCU_SOFTIRQ) | BIT(IRQ_POLL_SOFTIRQ))
-> > +/* Softirq's where the handling might be long: */
-> > +#define LONG_SOFTIRQ_MASK (BIT(NET_TX_SOFTIRQ)    | \
-> > +                        BIT(NET_RX_SOFTIRQ)    | \
-> > +                        BIT(BLOCK_SOFTIRQ)     | \
-> > +                        BIT(IRQ_POLL_SOFTIRQ))
->
-> Instead of a mask, I wonder if a better approach is to have a heuristic based
-> on measurement of softirq load. There is already code to measure irq load
-> (see update_irq_load_avg). Perhaps, Vincent would be willing to add the
-> softirq load in it as well if asked nicely ;)
->
-> That's much better because:
-> 1. Any new softirqs added will also trigger this optimization.
-> 2. Systems where these softirqs are quiet will not unnecessarily trigger it.
-> 3. You can also include irq load so that things like IRQ storms also don't
-> cause RT issues (when there are better "uncompromised" idle CPU candidates).
-> 4. may not be need CONFIG option at all if the optimization makes
-> sense for everything. Think all the systems not running Android.
+Dne torek, 15. november 2022 ob 07:08:12 CET je Samuel Holland napisal(a):
+> On 11/14/22 15:00, Jernej =C5=A0krabec wrote:
+> > Hi Samuel,
+> >=20
+> > Dne ponedeljek, 14. november 2022 ob 02:57:49 CET je Samuel Holland
+> >=20
+> > napisal(a):
+> >> Currently, the driver clears the interrupt status bits after anything
+> >> could have set them. However, this requires duplicating the same logic
+> >> in several places.
+> >>=20
+> >> Instead of clearing the status flags in the interrupt handler, disable
+> >> all further interrupts by clearing the RSB_CTRL_GLOBAL_INT_ENB bit.
+> >=20
+> > where is this bit cleared?
+>=20
+> It is cleared by any write to RSB_CTRL that does not include it. I noted
+> it below with the "disable interrupts" comments.
 
-Hey Joel,
-  Thanks again for the feedback, and sorry to take awhile to get back to you.
+Right.
 
-I'll have to think about this some more, but I'm hesitant about
-switching to a load based hursitic approach. Mostly as responding to
-"load" feels a bit fuzzy to me.
-If we suddenly get a burst of softirqs preempting scheduling, we don't
-want to have to wait for the load tracking to recognize this, as the
-effect of the blocked audio processing will be immediate.
+>=20
+> >> Then we can delay the status register write until the start of the next
+> >> transfer, so it only has to be done in one place.
+> >>=20
+> >> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> >> ---
+> >>=20
+> >> Changes in v3:
+> >>  - Add a patch refactoring how the status bits are cleared
+> >> =20
+> >>  drivers/bus/sunxi-rsb.c | 20 +++++---------------
+> >>  1 file changed, 5 insertions(+), 15 deletions(-)
+> >>=20
+> >> diff --git a/drivers/bus/sunxi-rsb.c b/drivers/bus/sunxi-rsb.c
+> >> index 3aa91aed3bf7..cb622e60897b 100644
+> >> --- a/drivers/bus/sunxi-rsb.c
+> >> +++ b/drivers/bus/sunxi-rsb.c
+> >> @@ -279,6 +279,7 @@ static int _sunxi_rsb_run_xfer(struct sunxi_rsb *r=
+sb)
+> >>=20
+> >>  	int_mask =3D RSB_INTS_LOAD_BSY | RSB_INTS_TRANS_ERR |
+> >>  	RSB_INTS_TRANS_OVER;
+> >>  	writel(int_mask, rsb->regs + RSB_INTE);
+> >>=20
+> >> +	writel(int_mask, rsb->regs + RSB_INTS);
+> >=20
+> > Wouldn't be better to clear status before enabling interrupts? Unless
+> > global interrupt flag is cleared beforehand, but I don't see that
+> > anywhere.
+> Indeed the intention was that the global interrupt flag is cleared
+> beforehand, and only enabled on the next line below. However, I realize
+> I missed disabling it for the new atomic case.
+>=20
+> I'm not so sure anymore that this patch is an improvement. What do you
+> think? I can send a v4 with a fix, or I am fine with skipping this
+> patch. I would at least like the other two to be merged for -fixes.
 
-That's why this optimization just avoids scheduling rt tasks on cpus
-that are running potentially long-running softirqs, as we can't be
-sure in that instance we'll be able to run soon.
+Sure, first two patches will go in regardless. I'm not convinced of value o=
+f=20
+this patch either. I guess we can skip it.
+
+Best regards,
+Jernej
+
+>=20
+> Regards,
+> Samuel
+>=20
+> >>  	writel(RSB_CTRL_START_TRANS | RSB_CTRL_GLOBAL_INT_ENB,
+> >>  =09
+> >>  	       rsb->regs + RSB_CTRL);
+> >>=20
+> >> @@ -286,7 +287,6 @@ static int _sunxi_rsb_run_xfer(struct sunxi_rsb *r=
+sb)
+> >>=20
+> >>  		timeout =3D readl_poll_timeout_atomic(rsb->regs +=20
+RSB_INTS,
+> >>  	=09
+> >>  						   =20
+status, (status & int_mask),
+> >>  						    10,=20
+100000);
+> >>=20
+> >> -		writel(status, rsb->regs + RSB_INTS);
+> >>=20
+> >>  	} else {
+> >>  =09
+> >>  		timeout =3D !wait_for_completion_io_timeout(&rsb-
+> >>=20
+> >> complete,
+> >>=20
+> >>  						=09
+  msecs_to_jiffies(100));
+> >>=20
+> >> @@ -296,12 +296,9 @@ static int _sunxi_rsb_run_xfer(struct sunxi_rsb
+> >> *rsb)
+> >>=20
+> >>  	if (timeout) {
+> >>  =09
+> >>  		dev_dbg(rsb->dev, "RSB timeout\n");
+> >>=20
+> >> -		/* abort the transfer */
+> >> +		/* abort the transfer and disable interrupts */
+> >>=20
+> >>  		writel(RSB_CTRL_ABORT_TRANS, rsb->regs + RSB_CTRL);
+> >>=20
+> >> -		/* clear any interrupt flags */
+> >> -		writel(readl(rsb->regs + RSB_INTS), rsb->regs +=20
+RSB_INTS);
+> >> -
+> >>=20
+> >>  		return -ETIMEDOUT;
+> >>  =09
+> >>  	}
+> >>=20
+> >> @@ -503,15 +500,11 @@ EXPORT_SYMBOL_GPL(__devm_regmap_init_sunxi_rsb);
+> >>=20
+> >>  static irqreturn_t sunxi_rsb_irq(int irq, void *dev_id)
+> >>  {
+> >> =20
+> >>  	struct sunxi_rsb *rsb =3D dev_id;
+> >>=20
+> >> -	u32 status;
+> >>=20
+> >> -	status =3D readl(rsb->regs + RSB_INTS);
+> >> -	rsb->status =3D status;
+> >> +	/* disable interrupts */
+> >> +	writel(0, rsb->regs + RSB_CTRL);
+> >>=20
+> >> -	/* Clear interrupts */
+> >> -	status &=3D (RSB_INTS_LOAD_BSY | RSB_INTS_TRANS_ERR |
+> >> -		   RSB_INTS_TRANS_OVER);
+> >> -	writel(status, rsb->regs + RSB_INTS);
+> >> +	rsb->status =3D readl(rsb->regs + RSB_INTS);
+> >>=20
+> >>  	complete(&rsb->complete);
+> >>=20
+> >> @@ -532,9 +525,6 @@ static int sunxi_rsb_init_device_mode(struct
+> >> sunxi_rsb
+> >> *rsb) if (reg & RSB_DMCR_DEVICE_START)
+> >>=20
+> >>  		ret =3D -ETIMEDOUT;
+> >>=20
+> >> -	/* clear interrupt status bits */
+> >> -	writel(readl(rsb->regs + RSB_INTS), rsb->regs + RSB_INTS);
+> >> -
+> >>=20
+> >>  	return ret;
+> >> =20
+> >>  }
 
 
-> >  /* map softirq index to softirq name. update 'softirq_to_name' in
-> >   * kernel/softirq.c when adding a new softirq.
-> > @@ -617,6 +622,7 @@ extern void raise_softirq_irqoff(unsigned int nr);
-> >  extern void raise_softirq(unsigned int nr);
-> >
-> >  DECLARE_PER_CPU(struct task_struct *, ksoftirqd);
-> > +DECLARE_PER_CPU(u32, active_softirqs);
-> >
-> >  static inline struct task_struct *this_cpu_ksoftirqd(void)
-> >  {
-> > diff --git a/init/Kconfig b/init/Kconfig
-> > index 532362fcfe31..3d1de6edcfa1 100644
-> > --- a/init/Kconfig
-> > +++ b/init/Kconfig
-> > @@ -1284,6 +1284,16 @@ config SCHED_AUTOGROUP
-> >         desktop applications.  Task group autogeneration is currently based
-> >         upon task session.
-> >
-> > +config RT_SOFTIRQ_OPTIMIZATION
->
-> I much dislike this config option name because it does not self-explain what
-> the option is and it is too long. More so, any future such optimizations,
-> even if rare, will have to come up with another name causing more confusion.
-> Instead, CONFIG_RT_AVOID_SOFTIRQS seems cleaner, but I'll defer to scheduler
-> maintainers since they have to take the patch ultimately. Though I'll give my
-> tag for a rename / better name. More below:
-
-That's a fair point.  RT_SOFTIRQ_AWARE_SCHED maybe?
 
 
-> > diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-> > index 55f39c8f4203..3c628db807c8 100644
-> > --- a/kernel/sched/rt.c
-> > +++ b/kernel/sched/rt.c
-> > @@ -1599,6 +1599,44 @@ static void yield_task_rt(struct rq *rq)
-> >  #ifdef CONFIG_SMP
-> >  static int find_lowest_rq(struct task_struct *task);
-> >
-> > +#ifdef CONFIG_RT_SOFTIRQ_OPTIMIZATION
-> > +#define __use_softirq_opt 1
->
-> Why not just use IS_ENABLED(CONFIG_RT_SOFTIRQ_OPT..) instead of defining new
-> macros?
-
-Mostly for readability. The lines where its added are already fairly long, ie:
-  if (static_branch_unlikely(&sched_asym_cpucapacity)) {
-
-So it seemed nicer to have the shorter macro.  But I'm not strongly
-opinionated on this.
-
-> > + * Return whether the given cpu is currently non-preemptible
-> > + * while handling a potentially long softirq, or if the current
-> > + * task is likely to block preemptions soon because it is a
-> > + * ksoftirq thread that is handling slow softirq.
-> > + */
-> > +static bool cpu_busy_with_softirqs(int cpu)
-> > +{
-> > +     u32 softirqs = per_cpu(active_softirqs, cpu) |
-> > +                    __cpu_softirq_pending(cpu);
-> > +     struct task_struct *cpu_ksoftirqd = per_cpu(ksoftirqd, cpu);
-> > +     struct task_struct *curr;
-> > +     struct rq *rq = cpu_rq(cpu);
-> > +     int ret;
-> > +
-> > +     rcu_read_lock();
->
-> Could you clarify what is the RCU read-side critical section protecting?
->
-> > +     curr = READ_ONCE(rq->curr); /* unlocked access */
-> > +     ret = (softirqs & LONG_SOFTIRQ_MASK) &&
-> > +              (curr == cpu_ksoftirqd ||
-> > +               preempt_count() & SOFTIRQ_MASK);
->
-> If the goal is to avoid ksoftirqd when it is running an actual softirq,
-> doesn't ksoftirqd already run softirqs under local_bh_disable()? If so, then
-> SOFTIRQ_MASK should already be set. If ksoftirqd is in between softirqs (and
-> bh is enabled there), then scheduling the RT task on the CPU may preempt
-> ksoftirqd and give the RT task a chance to run anyway, right?.
-
-Yeah. I'm refactoring/simplifying this for v5, so hopefully it will be
-more straightforward.
-
-Thanks again for the feedback!
--john
