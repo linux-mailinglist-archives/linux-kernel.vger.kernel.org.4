@@ -2,50 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4763629C1D
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 15:28:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B39AC629C1F
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 15:29:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbiKOO21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 09:28:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50056 "EHLO
+        id S230346AbiKOO3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 09:29:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238102AbiKOO2N (ORCPT
+        with ESMTP id S229626AbiKOO3e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 09:28:13 -0500
-Received: from xry111.site (xry111.site [89.208.246.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28BC62CE3B
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 06:28:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-        s=default; t=1668522482;
-        bh=CeyaCZ4ZqESTcFuuIbk+8CdMbl4qa+2NQGZoRczkRVI=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=ZgxDus/XA3Zgnzv4ht07ANinJ+SQtjX1m6Ev/Jn0fF2NAkZHvFEen2OtnjUZ1qoYw
-         dJ6IKt0oTRWBEKQewWrsX5scbgQZDlFUiXrxnBEEKUJgCis6GnZS32izTShC0A2kiC
-         mcgdfwSXtAsI4dlPCnqT1oN7EYXNsZ56HtBVxoeI=
-Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@xry111.site)
-        by xry111.site (Postfix) with ESMTPSA id 4BE5D66876;
-        Tue, 15 Nov 2022 09:28:01 -0500 (EST)
-Message-ID: <7e606e2c3df5d727a6c69b74a803d9f2c8e717b0.camel@xry111.site>
-Subject: Re: [PATCH] LoongArch: Makefile: use "grep -E" instead of "egrep"
-From:   Xi Ruoyao <xry111@xry111.site>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>
-Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-Date:   Tue, 15 Nov 2022 22:27:59 +0800
-In-Reply-To: <1668506549-28261-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1668506549-28261-1-git-send-email-yangtiezhu@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.0 
+        Tue, 15 Nov 2022 09:29:34 -0500
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB453BCE;
+        Tue, 15 Nov 2022 06:29:33 -0800 (PST)
+Received: by mail-ot1-x336.google.com with SMTP id p27-20020a056830319b00b0066d7a348e20so4607565ots.8;
+        Tue, 15 Nov 2022 06:29:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YtBjd5U7Z4dTCeEF5mRs9dqAb2tBqOFIzxlotygUWsI=;
+        b=UbDmeL2Egx+Mh0V06TI5gyHyoopyFExt4xM+IivRUp8/PPz6WnNm1L0/uujCqzwEKl
+         6ZbA3pRjszKvVUXCNLcq9KYtUHVC3DgwzKJY0c5cAQ9Ec3xYzLBRI4z4fcw1Sgx92A9T
+         VHAewMwEzH7onmwHNXu+2NpyXeBGVL51i7M8zHkfI+knvg85jgHoOMFioxO8GjKTnuoy
+         7mAvE0aDMThpyyxpmurxQHnVsfeSDdbsujA8RlVy2AmvcYvqtqk1+zk7zaawjI0m54HV
+         O7uNpKRRyDUgg4Ks1erMvJ18as2WI/yj1QhzuMb/9tCP2UNaf7uPsqSgoDAsh1t/E/NB
+         ntRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YtBjd5U7Z4dTCeEF5mRs9dqAb2tBqOFIzxlotygUWsI=;
+        b=cr3YMMWbNvlENHecYJuDUF629Xr3aLcIIXgiGqq2r0fIh6xJFZM9oo/eTMRJfdF25r
+         6Xco344R+bcwy3E+ziS5YtU3vXcKYN63ebHmUmA5tnogb8efzOiSeqj8PHkQai7oMrRJ
+         MaihZUG78OzTXxsKqElfEV7TpZu/BB3Nic5ua7/RDDlZw0XRez9SVjWPQQuDaggAFNcB
+         roNM6HXr0ESMkWFEKRXIor/EE0mdEmR6tjzTPbNOWcJ2vzD0DS+J2xswT8dfHD87GByT
+         H3Nfu7DeW26tAgVvW+Ia+JfpyGxBzckgUpt7PCLg7JRZVzMQlqvxOxxBCDrZl8lMwgkL
+         9Ivw==
+X-Gm-Message-State: ANoB5pkqMT9lEdIYvWBuPcXux5Do4VgRlYJpqHdS4gC2UioHNVKPCFOp
+        jiP6cRHFEuX3CLdHLsjSMoy4PTWzJaG1ztgR0NI=
+X-Google-Smtp-Source: AA0mqf4oytRI4UtYdcHoBBqKQMpel6k+O4QaJylBxHl9qdx+9fAzQwD/KWuhlyO4SRWrNTanEsR3rFV6UbvC5l13RJ0=
+X-Received: by 2002:a05:6830:40af:b0:66c:6afa:5006 with SMTP id
+ x47-20020a05683040af00b0066c6afa5006mr8974706ott.233.1668522573087; Tue, 15
+ Nov 2022 06:29:33 -0800 (PST)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,SPF_HELO_PASS,SPF_PASS autolearn=no
+References: <Y3CgReK3e519a7bs@mail.google.com>
+In-Reply-To: <Y3CgReK3e519a7bs@mail.google.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Tue, 15 Nov 2022 09:29:21 -0500
+Message-ID: <CADnq5_PhL5DgHRrKbcniKuk064kJerT_Nau7kD2dGKCv3Mc3fQ@mail.gmail.com>
+Subject: Re: [PATCH] [next] drm/amdgpu: Replace one-elements array with
+ flex-array members
+To:     Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+Cc:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Slark Xiao <slark_xiao@163.com>,
+        Rongguang Wei <weirongguang@kylinos.cn>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,50 +78,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-11-15 at 18:02 +0800, Tiezhu Yang wrote:
-> The latest version of grep claims the egrep is now obsolete so the
-> build
-> now contains warnings that look like:
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0egrep: warning: egrep is =
-obsolescent; using grep -E
-> fix this up by moving the LoongArch Makefile to use "grep -E" instead.
+Applied.  Thanks.
 
-For future reference: this warning message is imprecise because on some
-non-POSIX platforms grep does not support -E (see "Limitations of Usual
-Tools" in autoconf info page).
+Alex
 
-However (1) we are already using -w, which is not guaranteed to be
-supported as well; (2) I don't think anyone will build LoongArch kernel
-on such an old non-POSIX system.
-
-So LGTM.
-
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+On Sun, Nov 13, 2022 at 2:44 AM Paulo Miguel Almeida
+<paulo.miguel.almeida.rodenas@gmail.com> wrote:
+>
+> One-element arrays are deprecated, and we are replacing them with
+> flexible array members instead. So, replace one-element array with
+> flexible-array member in structs ATOM_I2C_VOLTAGE_OBJECT_V3,
+> ATOM_ASIC_INTERNAL_SS_INFO_V2, ATOM_ASIC_INTERNAL_SS_INFO_V3,
+> and refactor the rest of the code accordingly.
+>
+> Important to mention is that doing a build before/after this patch
+> results in no functional binary output differences.
+>
+> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+> routines on memcpy() and help us make progress towards globally
+> enabling -fstrict-flex-arrays=3 [1].
+>
+> Link: https://github.com/KSPP/linux/issues/79
+> Link: https://github.com/KSPP/linux/issues/238
+> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101836 [1]
+>
+> Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
 > ---
-> =C2=A0arch/loongarch/Makefile | 2 +-
-> =C2=A01 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
-> index a0fc1f9..5232d8c 100644
-> --- a/arch/loongarch/Makefile
-> +++ b/arch/loongarch/Makefile
-> @@ -97,7 +97,7 @@ KBUILD_LDFLAGS=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0+=3D -m $(ld-emul)
-> =C2=A0
-> =C2=A0ifdef CONFIG_LOONGARCH
-> =C2=A0CHECKFLAGS +=3D $(shell $(CC) $(KBUILD_CFLAGS) -dM -E -x c /dev/nul=
-l |
-> \
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0egrep -vw '__GNUC_(MINOR_|PATC=
-HLEVEL_)?_' | \
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0grep -E -vw '__GNUC_(MINOR_|PA=
-TCHLEVEL_)?_' | \
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0sed -e "s/^\#define /-D'/=
-" -e "s/ /'=3D'/" -e "s/$$/'/" -e
-> 's/\$$/&&/g')
-> =C2=A0endif
-> =C2=A0
-
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
+> Binary difference findings:
+>
+>         Some changes took more than a single line which changed the line
+>         number parameter passed to the drm_dbg function (which leverages
+>         kernel's dynamic debugging). Functionally-wise, nothing changed
+>         after doing a before/after patch build.
+>
+> ---
+>  .../gpu/drm/amd/display/dc/bios/bios_parser.c | 22 ++++++++++++-------
+>  drivers/gpu/drm/amd/include/atombios.h        |  6 ++---
+>  2 files changed, 17 insertions(+), 11 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/display/dc/bios/bios_parser.c b/drivers/gpu/drm/amd/display/dc/bios/bios_parser.c
+> index 6b9e64cd4379..a1a00f432168 100644
+> --- a/drivers/gpu/drm/amd/display/dc/bios/bios_parser.c
+> +++ b/drivers/gpu/drm/amd/display/dc/bios/bios_parser.c
+> @@ -665,8 +665,9 @@ static enum bp_result get_ss_info_v3_1(
+>         if (!DATA_TABLES(ASIC_InternalSS_Info))
+>                 return BP_RESULT_UNSUPPORTED;
+>
+> -       ss_table_header_include = GET_IMAGE(ATOM_ASIC_INTERNAL_SS_INFO_V3,
+> -               DATA_TABLES(ASIC_InternalSS_Info));
+> +       ss_table_header_include = ((ATOM_ASIC_INTERNAL_SS_INFO_V3 *) bios_get_image(&bp->base,
+> +                               DATA_TABLES(ASIC_InternalSS_Info),
+> +                               struct_size(ss_table_header_include, asSpreadSpectrum, 1)));
+>         table_size =
+>                 (le16_to_cpu(ss_table_header_include->sHeader.usStructureSize)
+>                                 - sizeof(ATOM_COMMON_TABLE_HEADER))
+> @@ -1032,8 +1033,10 @@ static enum bp_result get_ss_info_from_internal_ss_info_tbl_V2_1(
+>         if (!DATA_TABLES(ASIC_InternalSS_Info))
+>                 return result;
+>
+> -       header = GET_IMAGE(ATOM_ASIC_INTERNAL_SS_INFO_V2,
+> -               DATA_TABLES(ASIC_InternalSS_Info));
+> +       header = ((ATOM_ASIC_INTERNAL_SS_INFO_V2 *) bios_get_image(
+> +                               &bp->base,
+> +                               DATA_TABLES(ASIC_InternalSS_Info),
+> +                               struct_size(header, asSpreadSpectrum, 1)));
+>
+>         memset(info, 0, sizeof(struct spread_spectrum_info));
+>
+> @@ -1712,8 +1715,10 @@ static uint32_t get_ss_entry_number_from_internal_ss_info_tbl_v2_1(
+>         if (!DATA_TABLES(ASIC_InternalSS_Info))
+>                 return 0;
+>
+> -       header_include = GET_IMAGE(ATOM_ASIC_INTERNAL_SS_INFO_V2,
+> -                       DATA_TABLES(ASIC_InternalSS_Info));
+> +       header_include = ((ATOM_ASIC_INTERNAL_SS_INFO_V2 *) bios_get_image(
+> +                               &bp->base,
+> +                               DATA_TABLES(ASIC_InternalSS_Info),
+> +                               struct_size(header_include, asSpreadSpectrum, 1)));
+>
+>         size = (le16_to_cpu(header_include->sHeader.usStructureSize)
+>                         - sizeof(ATOM_COMMON_TABLE_HEADER))
+> @@ -1749,8 +1754,9 @@ static uint32_t get_ss_entry_number_from_internal_ss_info_tbl_V3_1(
+>         if (!DATA_TABLES(ASIC_InternalSS_Info))
+>                 return number;
+>
+> -       header_include = GET_IMAGE(ATOM_ASIC_INTERNAL_SS_INFO_V3,
+> -                       DATA_TABLES(ASIC_InternalSS_Info));
+> +       header_include = ((ATOM_ASIC_INTERNAL_SS_INFO_V3 *) bios_get_image(&bp->base,
+> +                               DATA_TABLES(ASIC_InternalSS_Info),
+> +                               struct_size(header_include, asSpreadSpectrum, 1)));
+>         size = (le16_to_cpu(header_include->sHeader.usStructureSize) -
+>                         sizeof(ATOM_COMMON_TABLE_HEADER)) /
+>                                         sizeof(ATOM_ASIC_SS_ASSIGNMENT_V3);
+> diff --git a/drivers/gpu/drm/amd/include/atombios.h b/drivers/gpu/drm/amd/include/atombios.h
+> index 60c44a8a067f..4dc738c51771 100644
+> --- a/drivers/gpu/drm/amd/include/atombios.h
+> +++ b/drivers/gpu/drm/amd/include/atombios.h
+> @@ -5146,7 +5146,7 @@ typedef struct  _ATOM_I2C_VOLTAGE_OBJECT_V3
+>     UCHAR  ucVoltageControlOffset;
+>     UCHAR  ucVoltageControlFlag;              // Bit0: 0 - One byte data; 1 - Two byte data
+>     UCHAR  ulReserved[3];
+> -   VOLTAGE_LUT_ENTRY asVolI2cLut[1];         // end with 0xff
+> +   VOLTAGE_LUT_ENTRY asVolI2cLut[];         // end with 0xff
+>  }ATOM_I2C_VOLTAGE_OBJECT_V3;
+>
+>  // ATOM_I2C_VOLTAGE_OBJECT_V3.ucVoltageControlFlag
+> @@ -6679,7 +6679,7 @@ typedef struct _ATOM_ASIC_INTERNAL_SS_INFO
+>  typedef struct _ATOM_ASIC_INTERNAL_SS_INFO_V2
+>  {
+>    ATOM_COMMON_TABLE_HEADER         sHeader;
+> -  ATOM_ASIC_SS_ASSIGNMENT_V2        asSpreadSpectrum[1];      //this is point only.
+> +  ATOM_ASIC_SS_ASSIGNMENT_V2        asSpreadSpectrum[];      //this is point only.
+>  }ATOM_ASIC_INTERNAL_SS_INFO_V2;
+>
+>  typedef struct _ATOM_ASIC_SS_ASSIGNMENT_V3
+> @@ -6701,7 +6701,7 @@ typedef struct _ATOM_ASIC_SS_ASSIGNMENT_V3
+>  typedef struct _ATOM_ASIC_INTERNAL_SS_INFO_V3
+>  {
+>    ATOM_COMMON_TABLE_HEADER         sHeader;
+> -  ATOM_ASIC_SS_ASSIGNMENT_V3        asSpreadSpectrum[1];      //this is pointer only.
+> +  ATOM_ASIC_SS_ASSIGNMENT_V3        asSpreadSpectrum[];      //this is pointer only.
+>  }ATOM_ASIC_INTERNAL_SS_INFO_V3;
+>
+>
+> --
+> 2.37.3
+>
