@@ -2,130 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C63A662A3AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 22:02:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4C2462A3AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 22:03:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbiKOVCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 16:02:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36740 "EHLO
+        id S231322AbiKOVDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 16:03:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238576AbiKOVB6 (ORCPT
+        with ESMTP id S229973AbiKOVC7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 16:01:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CEB31357
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 13:00:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668546052;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qayv+b0uuecedAlRVGTipngS65XMONYqcoB5EKtgL3g=;
-        b=ffSyyO/Oo4ela01UDuJqgrIIBJ24LJZdeyrdgUIoZZTfP5djVylSyBmyRyvUsO31yhl5zI
-        9SESzBgWoXDCSY/SnL89Plkpvv7lQdRFX2ojrW/Hd/CEHPdmRFDZcpXciXR071vo7nA2a3
-        gfUfGtSP5HnJqzdN84eN8oZamvRc8mU=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-633-BeW2ak9FNVi_UP25xKnRIw-1; Tue, 15 Nov 2022 16:00:50 -0500
-X-MC-Unique: BeW2ak9FNVi_UP25xKnRIw-1
-Received: by mail-ed1-f71.google.com with SMTP id v18-20020a056402349200b004622e273bbbso10771260edc.14
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 13:00:50 -0800 (PST)
+        Tue, 15 Nov 2022 16:02:59 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D14240BC
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 13:02:58 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id d20so19191625ljc.12
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 13:02:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=oe1c7i8iQlKmhCbzQLnmtoa4F3nkS3hG3cn5OwmGmYc=;
+        b=jHcXSSxYAsVbBz4HlCYZuOlIpBaoMOvkA9BxPFmpHRjn6/yhCFnvBVbBFMlx3yC7oY
+         SojTvgG0RxshUbM7ZGiH+8Mm/gHrwYbYPTRXVgHlmOwzzPzFgO5c+/CkXZIUCpKRfGFV
+         eVWWu4ryIIrVw6ybBey13WjSCnM+rC/t2ja6OQLVypba33QV3gdAEzHXmMwfN6cGxeRb
+         HSSSd5rN0n6UeAygkOZUc2hm5fJC6SbWjyd0vy1YzEbV5oeVqiKdMiBEJYBItMF73TXw
+         tQWqxDK+C9v7uR68PNrdN0a/eAmxPiQq/ugFIGkStJ31cQ5OxI58I9kNX9CNvnNjXjAf
+         hVww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qayv+b0uuecedAlRVGTipngS65XMONYqcoB5EKtgL3g=;
-        b=aUiNZpwTCvvFQZNtgLBzPK2VAOG/HMyqy/dmSS4+qVJpDZ9tDQSNVpKCY44Jvnh472
-         wwUh1xvxFHYwvDacCoqnMLOShgIc65WqQLG1Oy5e/K6tmSLFZBzgrkHy81EOiQgK9J2f
-         tWskTMDX5/Yv/+Pon/hizpZaL+a9jUgWTQwUJ5rNz6jwQKMjy9YbjRksFiqfQuZGWuWn
-         ZFkA/N/CjGvXCJXGclpYaUX1tTMCWD74xC1jXfWk5CY4AZr+lr9pokXggOb1a7K7NyKK
-         JiyDSXl6weVnn1vzx+AVVbxOvjnU7R7jGCfRKlBI01DCWyMOqDKeVLZcyPRuSEUIfd9U
-         hBzA==
-X-Gm-Message-State: ANoB5pndB2IAXAqZR2uRd15pizIziR2TW8ok81nLQf+7cgcOawS566fp
-        puSTOulwudGULwE1b7E9nrvq3qv48V1AxCiNh1iexX7nqxRHh65VI2mmiL7bekcWOerbosLGdNn
-        CMvP9mvmNHmH4dM97kv1zxNFJ
-X-Received: by 2002:aa7:d759:0:b0:463:fec2:dfb1 with SMTP id a25-20020aa7d759000000b00463fec2dfb1mr16939548eds.303.1668546049697;
-        Tue, 15 Nov 2022 13:00:49 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7W8nUz5KKt4LOr3lxVyJlBMdv9+vKykTmiEnQsfFkRK8ms8y/lnAwUUPx3SXV5KTT3Bn+Oig==
-X-Received: by 2002:aa7:d759:0:b0:463:fec2:dfb1 with SMTP id a25-20020aa7d759000000b00463fec2dfb1mr16939536eds.303.1668546049505;
-        Tue, 15 Nov 2022 13:00:49 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id h7-20020a17090619c700b0078d4c72e2cesm5956786ejd.44.2022.11.15.13.00.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 13:00:49 -0800 (PST)
-Message-ID: <bb58d54a-446b-5f4e-4bca-aaddfad29927@redhat.com>
-Date:   Tue, 15 Nov 2022 22:00:48 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oe1c7i8iQlKmhCbzQLnmtoa4F3nkS3hG3cn5OwmGmYc=;
+        b=BsRVM86E54ZGxvYpL+wbhPIU2OsHhK9bEcQ+acV0qNtaqFmBYsuY80FXqdHutftPY4
+         fo+Up5g7SMURHR9mpaOfqqn92GpeFvKNBCPZA/6/mCScqNLvidpqem5GlpaKRh4m0cWa
+         BFwncNDV/Nt1uI6TdTpXMhf6+knXFZft4tK/rDFFL32Gk9pkOnl2hlZiD23Se+XuFYWG
+         jSTi7VpLvVk9N+b+9rxAoipZ7J8+H/3txtRv/p54kwBkbf2vZ8WBNbyIY1Nwbdx0dMSx
+         JRM93mEfhmZ969diQpoj2ItsHg/3G5neQpn46ebKxyMDKaWPskQSygVMUiB2HIchVkEo
+         b0PA==
+X-Gm-Message-State: ANoB5pmgwiMxXOa7ghNVrgeSeNWb/O7Mz4BPaMJ6fId+Bf315vmvtiqL
+        1IkjTNApL7raLEpQYrhaCgjdLEt2iyLu+1VZr6HS8g==
+X-Google-Smtp-Source: AA0mqf56Y1aqUrWgCUKz9IlmRzpyGNMlqe9QnHWfjWUy49bOaWTXrHFYv/1tc0cM1gd8NWMj/pwQ3Yri6jdD3HZSpZ4=
+X-Received: by 2002:a05:651c:3c4:b0:277:10b2:47e5 with SMTP id
+ f4-20020a05651c03c400b0027710b247e5mr6367989ljp.502.1668546176254; Tue, 15
+ Nov 2022 13:02:56 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v2 7/7] platform/x86: ideapad-laptop: Don't expose
- touchpad attr on IdeaPads with SYNA2B33
-Content-Language: en-US, nl
-To:     =?UTF-8?Q?Eray_Or=c3=a7unus?= <erayorcunus@gmail.com>,
-        platform-driver-x86@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        ike.pan@canonical.com, jikos@kernel.org,
-        benjamin.tissoires@redhat.com, dmitry.torokhov@gmail.com,
-        mgross@linux.intel.com, pobrn@protonmail.com
-References: <20221029120311.11152-1-erayorcunus@gmail.com>
- <20221029120311.11152-8-erayorcunus@gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20221029120311.11152-8-erayorcunus@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20221013121319.994170-1-vannapurve@google.com>
+ <20221013121319.994170-3-vannapurve@google.com> <20221013140056.a6nw7fouxp6yuqx2@kamzik>
+In-Reply-To: <20221013140056.a6nw7fouxp6yuqx2@kamzik>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Tue, 15 Nov 2022 14:02:44 -0700
+Message-ID: <CAMkAt6pPW=k=dQ2sf3pAdRy2AFGWscjs8sLQQq3Z0W5P=yri3g@mail.gmail.com>
+Subject: Re: [V3 PATCH 2/4] KVM: selftests: Add arch specific initialization
+To:     Andrew Jones <andrew.jones@linux.dev>
+Cc:     Vishal Annapurve <vannapurve@google.com>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        shuah@kernel.org, bgardon@google.com, seanjc@google.com,
+        oupton@google.com, peterx@redhat.com, vkuznets@redhat.com,
+        dmatlack@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Oct 13, 2022 at 8:03 AM Andrew Jones <andrew.jones@linux.dev> wrote:
+>
+> On Thu, Oct 13, 2022 at 12:13:17PM +0000, Vishal Annapurve wrote:
+> > Introduce arch specific API: kvm_selftest_arch_init to allow each arch to
+> > handle initialization before running any selftest logic.
+> >
+> > Suggested-by: Sean Christopherson <seanjc@google.com>
+> > Signed-off-by: Vishal Annapurve <vannapurve@google.com>
+> > ---
+> >  .../selftests/kvm/include/kvm_util_base.h      |  5 +++++
+> >  .../selftests/kvm/lib/aarch64/processor.c      | 18 +++++++++---------
+> >  tools/testing/selftests/kvm/lib/kvm_util.c     |  6 ++++++
+> >  3 files changed, 20 insertions(+), 9 deletions(-)
+> >
+>
+> Reviewed-by: Andrew Jones <andrew.jones@linux.dev>
 
-On 10/29/22 14:03, Eray Orçunus wrote:
-> My 520-15IKB (2017) with SYNA2B33 doesn't have working VPCCMD_W_TOUCHPAD command -
-> it's the touchpad program switches the touchpad instead on Windows. Considering
-> all IdeaPads with SYNA2B33 touchpad produced in 2017/2018, it's very likely that
-> none of the IdeaPads with SYNA2B33 support touchpad switching via EC. So let's
-> add SYNA2B33 to the touchpads not switchable via EC.
-> 
-> Signed-off-by: Eray Orçunus <erayorcunus@gmail.com>
-
-As already discussed in the other thread I'm not sure this is the best way to
-go about this, lets continue discussing this in the other thread.
-
-Regards,
-
-Hans
-
-
-> ---
->  drivers/platform/x86/ideapad-laptop.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/platform/x86/ideapad-laptop.c b/drivers/platform/x86/ideapad-laptop.c
-> index b34fbc4d741c..937126c62a14 100644
-> --- a/drivers/platform/x86/ideapad-laptop.c
-> +++ b/drivers/platform/x86/ideapad-laptop.c
-> @@ -1621,8 +1621,12 @@ static void ideapad_check_features(struct ideapad_private *priv)
->  				"Could not find PCI* node in the namespace\n");
->  	}
->  
-> -	/* Most ideapads with ELAN0634 touchpad don't use EC touchpad switch */
-> -	priv->features.touchpad_ctrl_via_ec = !acpi_dev_present("ELAN0634", NULL, -1);
-> +	/*
-> +	 * Most ideapads with ELAN0634 and SYNA2B33 touchpads don't use
-> +	 * EC touchpad switch
-> +	 */
-> +	priv->features.touchpad_ctrl_via_ec = !acpi_dev_present("ELAN0634", NULL, -1) &&
-> +					      !acpi_dev_present("SYNA2B33", NULL, -1);
->  
->  	if (!read_ec_data(handle, VPCCMD_R_FAN, &val))
->  		priv->features.fan_mode = true;
-
+Reviewed-by: Peter Gonda <pgonda@google.com>
