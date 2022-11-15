@@ -2,158 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB28A6293B2
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 09:57:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DA506293B4
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 09:58:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237343AbiKOI5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 03:57:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59836 "EHLO
+        id S232307AbiKOI6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 03:58:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232307AbiKOI4u (ORCPT
+        with ESMTP id S229998AbiKOI6j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 03:56:50 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE7341A07E;
-        Tue, 15 Nov 2022 00:56:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668502610; x=1700038610;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=pd9J1uveG+oppLVIuhPCTzyKg3autS+pjE5czy8gEW8=;
-  b=SZ5OB97u5RUjh3Y/VUWMdp2EA94T97C8pANzE2NnIAs9jaDywvcrerte
-   SGB4OkJHiG0gBl2hxvnQAOmSNQD/sDhRCANk2/ZWzPGH2ZwiBJztyXQlQ
-   VTvlI8+OUE7iWbqif8qqI+tasrvMoo8uHARqxUH5Y+dkvO6ykERtTNmZW
-   MT8XG7DChVxgwTTqFfL+gGlMWVxD3MXOmUJ8/g7vTtSekZ/LhaQuR039f
-   m7JXQRDxc25AXINO2RCD8GmidYqP+GTji9g9qjNEtIU5/1foenDSCv9jS
-   YjCYxemKcYVya6qRK+d+pNsQDbKWDczgBEX2tVjvze+Q2q0LBcvKqpnNU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="314010613"
-X-IronPort-AV: E=Sophos;i="5.96,165,1665471600"; 
-   d="scan'208";a="314010613"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 00:56:49 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="967918724"
-X-IronPort-AV: E=Sophos;i="5.96,165,1665471600"; 
-   d="scan'208";a="967918724"
-Received: from karenodx-mobl.ger.corp.intel.com ([10.249.45.214])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 00:56:45 -0800
-Date:   Tue, 15 Nov 2022 10:56:43 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Xu Yilun <yilun.xu@intel.com>
-cc:     Russ Weight <russell.h.weight@intel.com>,
-        linux-fpga@vger.kernel.org, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
-        Lee Jones <lee@kernel.org>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 02/12] mfd: intel-m10-bmc: Create m10bmc_platform_info
- for type specific info
-In-Reply-To: <Y3LxmUpqycBoZctF@yilunxu-OptiPlex-7050>
-Message-ID: <391c37d8-a9b6-e0cf-5bdc-2182826a33e0@linux.intel.com>
-References: <20221108144305.45424-1-ilpo.jarvinen@linux.intel.com> <20221108144305.45424-3-ilpo.jarvinen@linux.intel.com> <Y24gJ7fIsUPmhzY2@yilunxu-OptiPlex-7050> <752a1dc-fae6-4431-41cf-a6deaf157ad3@linux.intel.com> <Y3Gg29pGm4DwjOgI@yilunxu-OptiPlex-7050>
- <30c62175-e96f-3911-8176-cac3d4928eb5@intel.com> <Y3LxmUpqycBoZctF@yilunxu-OptiPlex-7050>
+        Tue, 15 Nov 2022 03:58:39 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A27641A;
+        Tue, 15 Nov 2022 00:58:37 -0800 (PST)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AF8Yntt002802;
+        Tue, 15 Nov 2022 08:58:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=y93H31PDnGNeHGJxuwKYXAQVout/WdMDytfWdJ6ezoA=;
+ b=HQpnLNnZllwnX+hl4ZYEzsnShG3HyGEFm/wa2AENztf46ImuKFu/6gdZqx0JQJ5SABiw
+ slsTuKXUHOrJVlfT4Mps2TO0gOqZeWmORu65p7shyg9dN2fORjOHu2BZkguE3PqS4Clx
+ DngSLmhsy+3Z4tjNMMu5fXadMSMnXrN9WITJxpwoGalt5MM2R5PbfSV34S7h/jJUajz6
+ zic8IFDaJNcSQ6Pwzko2ndqCrqfG9Fz6HeD2cB213M9NslxMjZDGB4MxXxFbWThMK5Ie
+ lJG5FjBg9LdXF/yXaAhSnm3pwM4W6tHEsTodNz6xq9JkUg6agBdoropFlb/NvruYRD9P YA== 
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kv7cj8kuc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Nov 2022 08:58:28 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AF8q5mC009305;
+        Tue, 15 Nov 2022 08:58:26 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma01fra.de.ibm.com with ESMTP id 3ktbd9jmxc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Nov 2022 08:58:26 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AF8wNsq32703074
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 15 Nov 2022 08:58:23 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2DBEC5204E;
+        Tue, 15 Nov 2022 08:58:23 +0000 (GMT)
+Received: from [9.171.35.73] (unknown [9.171.35.73])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id BDE3552051;
+        Tue, 15 Nov 2022 08:58:22 +0000 (GMT)
+Message-ID: <c1f8de28-1948-85b1-cd85-5bbd301e22bc@linux.ibm.com>
+Date:   Tue, 15 Nov 2022 09:58:22 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v2] perf list: Add PMU pai_ext event description for IBM
+ z16
+Content-Language: en-US
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Andreas Krebbel <krebbel@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        svens@linux.ibm.com, gor@linux.ibm.com, sumanthk@linux.ibm.com,
+        hca@linux.ibm.com, Ingo Molnar <mingo@kernel.org>
+References: <20221111135402.858623-1-tmricht@linux.ibm.com>
+ <Y3JnjmxPX+m7G9HL@kernel.org>
+From:   Thomas Richter <tmricht@linux.ibm.com>
+Organization: IBM
+In-Reply-To: <Y3JnjmxPX+m7G9HL@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: gLbghLxiKMVzY1OztwL0O3L8r9wUWTcp
+X-Proofpoint-GUID: gLbghLxiKMVzY1OztwL0O3L8r9wUWTcp
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1382684573-1668502609=:2268"
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-15_04,2022-11-11_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 clxscore=1011 priorityscore=1501 malwarescore=0
+ lowpriorityscore=0 suspectscore=0 adultscore=0 spamscore=0 bulkscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211150058
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-1382684573-1668502609=:2268
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8BIT
-
-On Tue, 15 Nov 2022, Xu Yilun wrote:
-
-> On 2022-11-14 at 17:17:06 -0800, Russ Weight wrote:
-> > 
-> > 
-> > On 11/13/22 17:58, Xu Yilun wrote:
-> > > On 2022-11-11 at 13:49:38 +0200, Ilpo J‰rvinen wrote:
-> > >> On Fri, 11 Nov 2022, Xu Yilun wrote:
-> > >>
-> > >>> On 2022-11-08 at 16:42:55 +0200, Ilpo J‰rvinen wrote:
-> > >>>> BMC type specific info is currently set by a switch/case block. The
-> > >>>> size of this info is expected to grow as more dev types and features
-> > >>>> are added which would have made the switch block bloaty.
-> > >>>>
-> > >>>> Store type specific info into struct and place them into .driver_data
-> > >>>> instead because it makes things a bit cleaner.
-> > >>>>
-> > >>>> Reviewed-by: Russ Weight <russell.h.weight@intel.com>
-> > >>>> Signed-off-by: Ilpo J‰rvinen <ilpo.jarvinen@linux.intel.com>
-> > >>>> ---
-> > >>>>  drivers/mfd/intel-m10-bmc.c       | 50 +++++++++++++++++--------------
-> > >>>>  include/linux/mfd/intel-m10-bmc.h | 14 +++++++++
-> > >>>>  2 files changed, 41 insertions(+), 23 deletions(-)
-> > >>>>
-> > >>>> diff --git a/drivers/mfd/intel-m10-bmc.c b/drivers/mfd/intel-m10-bmc.c
-> > >>>> index ee167c5dcd29..762808906380 100644
-> > >>>> --- a/drivers/mfd/intel-m10-bmc.c
-> > >>>> +++ b/drivers/mfd/intel-m10-bmc.c
-> > >>>> @@ -208,10 +194,28 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
-> > >>>>  	return ret;
-> > >>>>  }
-> > >>>>  
-> > >>>> +static const struct intel_m10bmc_platform_info m10bmc_m10_n3000 = {
-> > >>>> +	.type = M10_N3000,
-> > >>> Is the type enum still useful? Found no usage.
-> > >> There's no use within context of this patch series. However, I think there 
-> > >> might have been something depending on it in the changes that are not part 
-> > >> of this series so I left it in place for now.
-> > > I'm not sure how it would be used later. This patch is to eliminate the
-> > > "switch (board type) case" block, but similar code is still to be added
-> > > later?
-> > 
-> > Unfortunately, these will be needed later. Consider the following (future)
-> > function that has to account for a field that was moved from one register
-> > to another:
-> > 
-> >     static int
-> >     m10bmc_sec_status(struct m10bmc_sec *sec, u32 *status)
-> >     {
-> >     ††††††† u32 reg_offset, reg_value;
-> >     ††††††† int ret;
-> > 
-> >     ††††††† reg_offset = (sec->type == N6000BMC_SEC) ?
-> >     ††††††††††††††† auth_result_reg(sec->m10bmc) : doorbell_reg(sec->m10bmc);
-> > 
-> >     ††††††† ret = m10bmc_sys_read(sec->m10bmc, reg_offset, &reg_value);
-> >     ††††††† if (ret)
-> >     ††††††††††††††† return ret;
-> > 
-> >     ††††††† *status = rsu_stat(reg_value);
-> > 
-> >     ††††††† return 0;
-> >     }
-> > 
-> > With this patch-set, most conditionals are removed, but there will still
-> > be some cases where it is needed. If you prefer, we could wait and add
+On 11/14/22 17:06, Arnaldo Carvalho de Melo wrote:
+> Em Fri, Nov 11, 2022 at 02:54:02PM +0100, Thomas Richter escreveu:
+>> Add the event description for the IBM z16 pai_ext PMU released with
+>> commit c432fefe8e62 ("s390/pai: Add support for PAI Extension 1 NNPA counters")
+>>
+>> The document SA22-7832-13 "z/Architecture Principles of Operation",
+>> published May, 2022, contains the description of the
+>> Processor Activity Instrumentation Facility and the NNPA counter
+>> set., See Pages 5-113 to 5-116.
+>>
+>> Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
+>> ---
+>>  .../pmu-events/arch/s390/cf_z16/pai_ext.json  | 198 ++++++++++++++++++
+>>  tools/perf/pmu-events/jevents.py              |   1 +
+>>  2 files changed, 199 insertions(+)
+>>  create mode 100644 tools/perf/pmu-events/arch/s390/cf_z16/pai_ext.json
+>>
+>> diff --git a/tools/perf/pmu-events/arch/s390/cf_z16/pai_ext.json b/tools/perf/pmu-events/arch/s390/cf_z16/pai_ext.json
+>> new file mode 100644
+>> index 000000000000..8bee481f05d5
+>> --- /dev/null
+>> +++ b/tools/perf/pmu-events/arch/s390/cf_z16/pai_ext.json
+>> @@ -0,0 +1,198 @@
+>> +[
+>> +	{
+>> +		"Unit": "PAI-EXT",
+>> +		"EventCode": "6144",
+>> +		"EventName": "NNPA_ALL",
+>> +		"BriefDescription": "NNPA ALL",
+>> +		"PublicDescription": "Sum of all non zero NNPA counters"
+>> +	},
 > 
-> Why this condition can't be handled in the same manner? I actually hope
-> all board type difference been handled in the same way, either by the
-> core mfd driver or each subdev driver, but not a mix of the two.
+> Since the Brief description mentions NNPA, shouldn't the Public
+> Description expand on this "NNPA" acronym?, something like:
+> 
+> Oops, can't expand on that since there isn't a link to that SA22-7832-13
+> document.
+> 
+> Googling for it...
+> 
+> https://www-40.ibm.com/servers/resourcelink/svc03100.nsf/pages/zResourceLinkUrl?OpenDocument&url=http://www.ibm.com/servers/resourcelink/lib03010.nsf/0/B9DE5F05A9D57819852571C500428F9A/$file/SA22-7832-13.pdf
+> 
+> Ok, requires registration.
+> 
+> I wonder what is the value of these descriptions then :-\
+> 
+> I miss Ingo jumping into these discussions :-)
+> 
+> - Arnaldo
 
-I agree. It is already a TODO item on my list to make that oddity part of 
-CSR map.
+I added Andreas Krebbel to the discussion, he knows more than I on this counters.
 
-Also, this is anyway not the same type (mfd and sec have their own set of 
-types). I'll just drop the mfd type field for now and might end up doing 
-the same for the sec one too.
+NNPA stands for Neural Networks Processing Assist. This is a new feature in 
+the IBM z16. Here is a quote from Document SG2489-51 IBM z16 (3931) Technical Guide:
 
+<START-OF-QUOTE>
+  "The new IBM z16 microprocessor chip, also called the IBM Telum processor, integrates a
+   new AI accelerator. This innovation brings incredible value to applications and workloads that
+   are running on IBM Z platform.
+   Customers can benefit from the integrated AI accelerator by adding AI operations that are
+   used to perform fraud prevention and fraud detection, customer behavior predictions, and
+   supply chain operations. All of these operations are done in real time and fully integrated in
+   transactional workloads. As a result, valuable insights are gained from their data instantly.
+
+   ...
+   The AI accelerator is driven by the new Neural Networks Processing Assist (NNPA)
+   instruction.
+   NNPA is a new nonprivileged Complex Instruction Set Computer (CISC) memory-to-memory
+   instruction that operates on tensor objects that are in user program‚Äôs memory. AI functions
+   and macros are abstracted by NNPA."
+<END-OF-QUOTE>
+
+This intension of this patch is to give a small hint on what these NNPA counters are
+supposed to count and operate on. A full explanation is given in the document
+SA22-7832-13 "z/Architecture Principles of Operation", Chapter 26, pp 26-1 to 26-115.
+
+If you think this small description is not worth it, then we can drop the patch.
+
+Thanks for you help and directions.
 
 -- 
- i.
+Thomas Richter, Dept 3303, IBM s390 Linux Development, Boeblingen, Germany
+--
+Vorsitzender des Aufsichtsrats: Gregor Pillen
+Gesch√§ftsf√ºhrung: David Faller
+Sitz der Gesellschaft: B√∂blingen / Registergericht: Amtsgericht Stuttgart, HRB 243294
 
---8323329-1382684573-1668502609=:2268--
