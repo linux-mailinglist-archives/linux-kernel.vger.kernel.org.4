@@ -2,129 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AED3629156
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 06:03:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E35862915B
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 06:07:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbiKOFDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 00:03:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56642 "EHLO
+        id S229908AbiKOFHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 00:07:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiKOFDF (ORCPT
+        with ESMTP id S229437AbiKOFHt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 00:03:05 -0500
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171E72666;
-        Mon, 14 Nov 2022 21:03:04 -0800 (PST)
-Received: by mail-io1-xd31.google.com with SMTP id z3so9875512iof.3;
-        Mon, 14 Nov 2022 21:03:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=njB+FnoSdOLeQ9EyChO1haSbpwpNqat14jd6hJtDJXU=;
-        b=RV9Sg2Ncx5BD9igyPfIqhcmGmAYsqL+RnGMH8Y+0zpn4r5xX/pq28t72AUM7pSUk9u
-         RhignLonjhR2XEhwWcCy4mvb9PevndzK5H+fWUnCkUPBqQ9mtrqiC6kAelW8uIXI9hRf
-         BuHNNgNx34FP7wwapCpuF8MwP4lC0dnK8Xd5Y50zhVye6g7M1Sv2oWBpoJMUQChy/PtE
-         l8gpbaBbOztx02QaAsNzmiI50Awtvcy/DRws91Ew2H6q/r2SpQl2RHT9aiODDCz0HmnP
-         g6gtuHfKCk3/bbQ7J94ZZt791d/XsPPGYehOxUgxLdF7N/qTU3L6/NB3pYYCtAI979Ky
-         x7ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=njB+FnoSdOLeQ9EyChO1haSbpwpNqat14jd6hJtDJXU=;
-        b=feqEPd8AWbsdrPAearOVnhh56yfve+D4MDXxSONoGx5NBVxxBQ2hgKvT3onFo9E2bD
-         Fxo9KuHQjS5yVrfCEIiV+xCW89+j5wPLvZwS/l5ob9UGJNFhmltrbCKGi39MbO82eoxq
-         s/zmfGzlw5NhZu+j9BY81Zz1HlzgLvA+3WK+fnBhPfKZp1Vv8fqb4gnCfp12JExET17+
-         ufR5g3aSywzIsrPO7EKBEHRQHT+9EFe8gYhl3tyN26T2mgPuSTxTuYh8VeRfAmIX+RG2
-         k+917WGt9fXQ/Ek3MCZKJf9YK7rAvpIHwjAgGO+R61L5+W+JPd6VTwbMG+pOsWCLZENn
-         3FIQ==
-X-Gm-Message-State: ANoB5pkcevS21j1VZ3eFXsu7YiOMa/ZKEiV/1FYlpZb3tFwVN8sCnZSd
-        cKw4hTZLb56VpJiCjwxSnzo=
-X-Google-Smtp-Source: AA0mqf5qzeyb3mnolZkAoyCtET79ngSvZfhWvSwvRRtaU/I9QfDQvZt6rY+cDYn2Cb27bPm64VwB4w==
-X-Received: by 2002:a5e:9815:0:b0:6a0:f3aa:fab9 with SMTP id s21-20020a5e9815000000b006a0f3aafab9mr6784624ioj.122.1668488583341;
-        Mon, 14 Nov 2022 21:03:03 -0800 (PST)
-Received: from noodle.cs.purdue.edu (switch-lwsn2133-z1r11.cs.purdue.edu. [128.10.127.250])
-        by smtp.googlemail.com with ESMTPSA id k18-20020a92c9d2000000b00302632f0d20sm1752096ilq.67.2022.11.14.21.03.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 21:03:02 -0800 (PST)
-From:   Sungwoo Kim <happiness.sung.woo@gmail.com>
-X-Google-Original-From: Sungwoo Kim <git@sung-woo.kim>
-To:     luiz.dentz@gmail.com
-Cc:     davem@davemloft.net, edumazet@google.com, iam@sung-woo.kim,
-        johan.hedberg@gmail.com, kuba@kernel.org,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        marcel@holtmann.org, netdev@vger.kernel.org, pabeni@redhat.com
-Subject: Re: L2CAP: Spec violation
-Date:   Tue, 15 Nov 2022 00:02:57 -0500
-Message-Id: <20221115050257.3818178-1-git@sung-woo.kim>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <CABBYNZJ-BjuUcriLpNzs95SDqXP+_6-LJZ-t_00Q6ppy8qYg2Q@mail.gmail.com>
-References: <CABBYNZJ-BjuUcriLpNzs95SDqXP+_6-LJZ-t_00Q6ppy8qYg2Q@mail.gmail.com>
+        Tue, 15 Nov 2022 00:07:49 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E9871582B;
+        Mon, 14 Nov 2022 21:07:48 -0800 (PST)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NBDgy1cYFzmVvj;
+        Tue, 15 Nov 2022 13:07:26 +0800 (CST)
+Received: from kwepemm600005.china.huawei.com (7.193.23.191) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 15 Nov 2022 13:07:46 +0800
+Received: from ubuntu1804.huawei.com (10.67.175.30) by
+ kwepemm600005.china.huawei.com (7.193.23.191) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 15 Nov 2022 13:07:46 +0800
+From:   Hui Tang <tanghui20@huawei.com>
+To:     <ardb@kernel.org>
+CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yusongping@huawei.com>
+Subject: [PATCH] i2c: synquacer: fix missing clk_disable_unprepare() on error path
+Date:   Tue, 15 Nov 2022 13:04:29 +0800
+Message-ID: <20221115050429.184659-1-tanghui20@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.30]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600005.china.huawei.com (7.193.23.191)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sure,
+clk_disable_unprepare() should be invoked on error path after
+clk_prepare_enable() in synquacer_i2c_probe.
 
-btmon trace:
-(...)
+Fixes: 0d676a6c4390 ("2c: add support for Socionext SynQuacer I2C controller")
+Signed-off-by: Hui Tang <tanghui20@huawei.com>
+---
+ drivers/i2c/busses/i2c-synquacer.c | 24 +++++++++++++++++-------
+ 1 file changed, 17 insertions(+), 7 deletions(-)
 
-> ACL Data RX: Handle 200 flags 0x00 dlen 1033                                                                                                                                                                          #32 [hci0] 17.083174
-        invalid packet size (12 != 1033)
-        08 00 01 00 02 01 04 00 01 10 ff ff              ............
-@ MGMT Event: Device Connected (0x000b) plen 13                                                                                                                                                                    {0x0002} [hci0] 17.104462
-        BR/EDR Address: 10:AA:AA:AA:AA:AA (OUI 10-AA-AA)
-        Flags: 0x00000000
-        Data length: 0
-@ MGMT Event: Device Connected (0x000b) plen 13                                                                                                                                                                    {0x0001} [hci0] 17.104462
-        BR/EDR Address: 10:AA:AA:AA:AA:AA (OUI 10-AA-AA)
-        Flags: 0x00000000
-        Data length: 0
-< ACL Data TX: Handle 200 flags 0x02 dlen 16                                                                                                                                                                            #33 [hci0] 17.149691
-      L2CAP: Connection Response (0x03) ident 1 len 8
-        Destination CID: 64
-        Source CID: 65535
-        Result: Connection pending (0x0001)
-        Status: No further information available (0x0000)
-< ACL Data TX: Handle 200 flags 0x02 dlen 10                                                                                                                                                                            #34 [hci0] 17.154828
-      L2CAP: Information Request (0x0a) ident 2 len 2
-        Type: Extended features supported (0x0002)
-> ACL Data RX: Handle 200 flags 0x00 dlen 2061                                                                                                                                                                          #35 [hci0] 17.145762
-        invalid packet size (16 != 2061)
-        0c 00 01 00 04 01 08 00 40 00 00 00 01 02 00 00  ........@.......
-> ACL Data RX: Handle 200 flags 0x00 dlen 2061                                                                                                                                                                          #36 [hci0] 17.146654
-        invalid packet size (16 != 2061)
-        0c 00 01 00 03 01 08 00 00 00 00 00 00 00 00 00  ................
-> ACL Data RX: Handle 200 flags 0x00 dlen 2061                                                                                                                                                                          #37 [hci0] 17.147190
-        invalid packet size (16 != 2061)
-        0c 00 01 00 04 01 08 00 40 00 00 00 05 00 00 00  ........@.......
-> ACL Data RX: Handle 200 flags 0x00 dlen 1804                                                                                                                                                                          #38 [hci0] 17.148090
-        invalid packet size (15 != 1804)
-        0b 00 01 00 04 01 07 00 40 00 00 00 05 00 00     ........@......
-> ACL Data RX: Handle 200 flags 0x00 dlen 1547                                                                                                                                                                          #39 [hci0] 17.148708
-        invalid packet size (14 != 1547)
+diff --git a/drivers/i2c/busses/i2c-synquacer.c b/drivers/i2c/busses/i2c-synquacer.c
+index cba1145ddfac..73d9168573ec 100644
+--- a/drivers/i2c/busses/i2c-synquacer.c
++++ b/drivers/i2c/busses/i2c-synquacer.c
+@@ -569,22 +569,27 @@ static int synquacer_i2c_probe(struct platform_device *pdev)
+ 	    i2c->pclkrate > SYNQUACER_I2C_MAX_CLK_RATE) {
+ 		dev_err(&pdev->dev, "PCLK missing or out of range (%d)\n",
+ 			i2c->pclkrate);
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto clk_free;
+ 	}
+ 
+ 	i2c->base = devm_platform_ioremap_resource(pdev, 0);
+-	if (IS_ERR(i2c->base))
+-		return PTR_ERR(i2c->base);
++	if (IS_ERR(i2c->base)) {
++		ret = PTR_ERR(i2c->base);
++		goto clk_free;
++	}
+ 
+ 	i2c->irq = platform_get_irq(pdev, 0);
+-	if (i2c->irq < 0)
+-		return i2c->irq;
++	if (i2c->irq < 0) {
++		ret = i2c->irq;
++		goto clk_free;
++	}
+ 
+ 	ret = devm_request_irq(&pdev->dev, i2c->irq, synquacer_i2c_isr,
+ 			       0, dev_name(&pdev->dev), i2c);
+ 	if (ret < 0) {
+ 		dev_err(&pdev->dev, "cannot claim IRQ %d\n", i2c->irq);
+-		return ret;
++		goto clk_free;
+ 	}
+ 
+ 	i2c->state = STATE_IDLE;
+@@ -607,7 +612,7 @@ static int synquacer_i2c_probe(struct platform_device *pdev)
+ 	ret = i2c_add_numbered_adapter(&i2c->adapter);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "failed to add bus to i2c core\n");
+-		return ret;
++		goto clk_free;
+ 	}
+ 
+ 	platform_set_drvdata(pdev, i2c);
+@@ -616,6 +621,11 @@ static int synquacer_i2c_probe(struct platform_device *pdev)
+ 		 dev_name(&i2c->adapter.dev));
+ 
+ 	return 0;
++
++clk_free:
++	if (!IS_ERR(i2c->pclk))
++		clk_disable_unprepare(i2c->pclk);
++	return ret;
+ }
+ 
+ static int synquacer_i2c_remove(struct platform_device *pdev)
+-- 
+2.17.1
 
-(...)
-
-The last ACL data packet invokes:
-l2cap_bredr_sig_cmd
-l2cap_config_rsp
-l2cap_send_disconn_req
-l2cap_state_change_and_error
-Bluetooth: chan 00000000205763be BT_CONFIG -> BT_DISCONN
-
-This is the code and whole log:
-https://gist.github.com/swkim101/82bc694f9427f008c14e91307b3355b6
-
-Thanks.
