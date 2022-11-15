@@ -2,117 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B468262AF51
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 00:15:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0BBF62AF49
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 00:15:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238725AbiKOXPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 18:15:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60720 "EHLO
+        id S238698AbiKOXPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 18:15:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231821AbiKOXPR (ORCPT
+        with ESMTP id S229595AbiKOXOw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 18:15:17 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0E4FF02;
-        Tue, 15 Nov 2022 15:15:15 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id z18so24139030edb.9;
-        Tue, 15 Nov 2022 15:15:15 -0800 (PST)
+        Tue, 15 Nov 2022 18:14:52 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 746685F62
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 15:14:51 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id q1-20020a17090a750100b002139ec1e999so633207pjk.1
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 15:14:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GnIjaEyd7LaVSU757Qe++o4zl3QzVferzydv3y7XN8g=;
-        b=XfL3yPVLPfRfVJj+3bI0IZ/iNIElinuD5/rHDFvsUxS1H8Dz0FnrzffKZHhK5yBzce
-         gf6tiYldxJVlLr7TwkVicuivNbyR7CF5BcJpbF2HZ2E/gaZG43GtuXNVB+5MrgJ8O+hG
-         NT4h6/ogSCcha5Lnm8y0PKnjOrr7N1s8Zd7ovO6ziSQEXiib4QqZC378YwjiJnWyiEmh
-         V6z80osN96oNW+v23kn1qPQOcdMoKGuu43Ro/lBA3y4hHD+T99phLO0dn6wbrdLNF8UB
-         owsnGDZVrbF9qpPzn6lYfgcZWOA/ef0xm521CgU9omNdZDlODDkeQItCvT7ognp+sTkZ
-         iiOA==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uXteisCHfC2Jumrw0QvvayC/9D0lzkigAdFvBDLcATY=;
+        b=TAP0ZPmLYjiS8S4IxBaVRNgvn+VUdzCoHzzZErXsb4OpAFvPvrE0pr0QNqVfcoweNm
+         QPoVZjQVtsQFgcR1xUtl2IdFIvrni1wTZW56xQUBDAo4sxk8BMLk67DuBNpT3tykon41
+         UGNyiZjKWl0Da1Ghcw5okzrac1hx8Uf6uzzjZFtlL1heepoezJZ/VTW642ALYUh1vRTp
+         oOFueBcfiQoSkxVXKZgrFqu5dglDsFHR0LrGCbj1c85eOh8cGNVsVIKRGA8GaZTcUYHN
+         9rmwrxn5xz4IUArMorT1tjvAzmvYxT5QDBSivVqLHqDXL89M81kRmtRH5gq8jl4lge5e
+         1UOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GnIjaEyd7LaVSU757Qe++o4zl3QzVferzydv3y7XN8g=;
-        b=HyKYHO9k8uiAlDxVXn4s3rV53cDBkGhWUqp4LO5WjELh7YjrHZ9cqhKIsYwiAR6yNP
-         R0hOSRENlxibScFO+pKaokM/koqBNL/SVYDvTFAaNDiR5obRm1jGdvOEQqQsZ0U5C7CN
-         x0Xco8HS+SKfZW1glshGjyttc2johg8b+6qlyqb1QNO1BDm/9CtFpnjD9ArR2J1Md3J0
-         p83h1qr075/m1xT1mS8WYsCVizVcszG1ule/7vemA2cjFWGdXkCkUP/YBhmuO2pRo3qu
-         bPEXy5qcFUOBNG5Nm0niJliSwhQLVOmCect9Hsiet2M/oNz6mo/j9lktvyq9W9y2M2IZ
-         Evtw==
-X-Gm-Message-State: ANoB5pkBd4YFmvRVE2mpWfMsQN//ihAQtVwCta9OcpG7dr7sMkx97qQ2
-        jnPaX/aNO2Deyvi5PeZdoi8=
-X-Google-Smtp-Source: AA0mqf5gVgAxwiNiy5frJ2LdbxP0BXIuu5Pae9ceoKDptmpM+kSIoHdYKlHvkLQz9Jrry6Z3uahh5A==
-X-Received: by 2002:a05:6402:2943:b0:461:c3c9:38e6 with SMTP id ed3-20020a056402294300b00461c3c938e6mr17183988edb.350.1668554113630;
-        Tue, 15 Nov 2022 15:15:13 -0800 (PST)
-Received: from xws.localdomain ([37.120.217.162])
-        by smtp.gmail.com with ESMTPSA id b16-20020a17090630d000b00795bb7d64d8sm6122907ejb.217.2022.11.15.15.15.12
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uXteisCHfC2Jumrw0QvvayC/9D0lzkigAdFvBDLcATY=;
+        b=UPMt1wjFjNUMsQyXJawtzrk70o4bYH1GqHyisInPn/4v7bOs9COEcvxtmh+t7Zu7FA
+         ocTdCxHUG3jFr8F/anHGK3czey7Q7XFJbTcNf1qfiZqup1gzEcqgkB1FcWZCe5IrFsVr
+         cVHiCtEZijTdZbu9EI3170MdYeXjNP+nwVJFwnOHZ/dYPO6s35WTC3HMgXaQStRn7+VQ
+         n+2n8Rmxjbp70XPqc02W2NIk5+P+8ElElZIs76TbXRf/unV+z8N5436rfvS7wgIFqPEo
+         Io+pusdlLYHsFnIghFs8Cyxh3pbZC67X/UFR7aWGbl/g0SPwxlZPD/lKGbe8YazuXEkl
+         GfFQ==
+X-Gm-Message-State: ANoB5plBTsVQVLU61yOFBKQBI2But/VzeBd/lcPXb9MZugykdudsaA+N
+        z+UgNUbtjTwQyYSv9lzXPpeWrg==
+X-Google-Smtp-Source: AA0mqf7wU9j2Lqlq2FWr3yJ/1dcSF+lcDwpBE242qiy8AiCfTME1tF0OWckzDdpyHCfq1+0cQQj5Ew==
+X-Received: by 2002:a17:90a:990d:b0:212:d909:a41e with SMTP id b13-20020a17090a990d00b00212d909a41emr723629pjp.48.1668554090893;
+        Tue, 15 Nov 2022 15:14:50 -0800 (PST)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id h13-20020a170902f54d00b0017f7c4e2604sm10501404plf.296.2022.11.15.15.14.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 15:15:13 -0800 (PST)
-From:   Maximilian Luz <luzmaximilian@gmail.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Maximilian Luz <luzmaximilian@gmail.com>
-Subject: [PATCH] platform/surface: aggregator_registry: Add support for Surface Laptop 5
-Date:   Wed, 16 Nov 2022 00:14:40 +0100
-Message-Id: <20221115231440.1338142-1-luzmaximilian@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        Tue, 15 Nov 2022 15:14:50 -0800 (PST)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc:     GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        io-uring Mailing List <io-uring@vger.kernel.org>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Stefan Metzmacher <metze@samba.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+In-Reply-To: <20221115212614.1308132-1-ammar.faizi@intel.com>
+References: <20221115212614.1308132-1-ammar.faizi@intel.com>
+Subject: Re: (subset) [PATCH v1 0/2] io_uring uapi updates
+Message-Id: <166855408973.7702.1716032255757220554.b4-ty@kernel.dk>
+Date:   Tue, 15 Nov 2022 16:14:49 -0700
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Mailer: b4 0.11.0-dev-28747
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add device nodes to enable support for battery and charger status, the
-ACPI platform profile, as well as internal HID devices (including
-touchpad and keyboard) on the Surface Laptop 5.
+On Wed, 16 Nov 2022 04:29:51 +0700, Ammar Faizi wrote:
+> From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+> 
+> Hi Jens,
+> 
+> io_uring uapi updates:
+> 
+> 1) Don't force linux/time_types.h for userspace. Linux's io_uring.h is
+>    synced 1:1 into liburing's io_uring.h. liburing has a configure
+>    check to detect the need for linux/time_types.h (Stefan).
+> 
+> [...]
 
-Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
----
- .../surface/surface_aggregator_registry.c        | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+Applied, thanks!
 
-diff --git a/drivers/platform/surface/surface_aggregator_registry.c b/drivers/platform/surface/surface_aggregator_registry.c
-index db82c2a7c567..023f126121d7 100644
---- a/drivers/platform/surface/surface_aggregator_registry.c
-+++ b/drivers/platform/surface/surface_aggregator_registry.c
-@@ -234,6 +234,19 @@ static const struct software_node *ssam_node_group_sl3[] = {
- 	NULL,
- };
- 
-+/* Devices for Surface Laptop 5. */
-+static const struct software_node *ssam_node_group_sl5[] = {
-+	&ssam_node_root,
-+	&ssam_node_bat_ac,
-+	&ssam_node_bat_main,
-+	&ssam_node_tmp_pprof,
-+	&ssam_node_hid_main_keyboard,
-+	&ssam_node_hid_main_touchpad,
-+	&ssam_node_hid_main_iid5,
-+	&ssam_node_hid_sam_ucm_ucsi,
-+	NULL,
-+};
-+
- /* Devices for Surface Laptop Studio. */
- static const struct software_node *ssam_node_group_sls[] = {
- 	&ssam_node_root,
-@@ -345,6 +358,9 @@ static const struct acpi_device_id ssam_platform_hub_match[] = {
- 	/* Surface Laptop 4 (13", Intel) */
- 	{ "MSHW0250", (unsigned long)ssam_node_group_sl3 },
- 
-+	/* Surface Laptop 5 */
-+	{ "MSHW0350", (unsigned long)ssam_node_group_sl5 },
-+
- 	/* Surface Laptop Go 1 */
- 	{ "MSHW0118", (unsigned long)ssam_node_group_slg1 },
- 
+[1/2] io_uring: uapi: Don't force linux/time_types.h for userspace
+      commit: 958bfdd734b6074ba88ee3abc69d0053e26b7b9c
+
+Best regards,
 -- 
-2.38.1
+Jens Axboe
+
 
