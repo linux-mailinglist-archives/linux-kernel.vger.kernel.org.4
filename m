@@ -2,156 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FD056290E8
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 04:40:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B82436290EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 04:40:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237892AbiKODkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 22:40:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37038 "EHLO
+        id S237652AbiKODkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 22:40:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232508AbiKODkG (ORCPT
+        with ESMTP id S237888AbiKODkQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 22:40:06 -0500
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2050.outbound.protection.outlook.com [40.107.255.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5D53A19D
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 19:40:04 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PCbyrpXWEilydpGwgxL3a0xC1xpzdn4rHnReZ9A9JyQfeUm0PKQN1OmC1eQz9h7dk/8Nr8VgPKmBhIIdY8XJ507IpAacM27junD/z6R4tZMOdgjvTGp8FkhhDgTWnPFt0+Ntz4x1fG1UnPzL49NmPJA5MoeWIZnK4t72JOYtPT56y+MgO55DnuJQLkljdluJYh/5oEKPn1y9Jx389HXDg4EW8p11dg2vk/9p1TPDpW35rd54YiO1d8Osg8wKpztAYux/TmbHspBBD6rh2wJB6yX07HlAb54ZUMRSQMmUppGGywte00wfyrsPmD9C74aLEPwjuFSnRKg72HwbBa6zmA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dfBR5uwOGfoF9HrhjAem3/BaSxKANm7MNRT04A55fl8=;
- b=HikB20LBVY3HH0kBi7nCAUGeuEV0u5OYa2NXZ5s35vLKr97z3/xPXlqYBIBhR5UC2b1oFPXqTsxLDrcy5S5Gl9BPR9KPiN5IZA+/k19qPjsrqh6N+p/Exa8nf4HlRaeFiZZPgJ5tv/nYTWhXBdmDxCzlPH5ZtTjGFBQX/RxN2STjar69qyIfb8q5Y2ipiSjs0Wtl0eECmwScX4bI+cxtZb2U83zB2THagWgnm3KaVJVTvAAkzHKkzGiUAV76nizc9z8h5AB7EqlmXBfC6sxYlWNqID0ZmqM/19ZEDhmIA80UFI2Ssn0d8ZgO56Vu1G16txjtovwgmtAJxAJPWgRIjw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=jaguarmicro.com; dmarc=pass action=none
- header.from=jaguarmicro.com; dkim=pass header.d=jaguarmicro.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jaguarmicro.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dfBR5uwOGfoF9HrhjAem3/BaSxKANm7MNRT04A55fl8=;
- b=lFtG5/xLSn+oD89KuKGHsJf5PRJV1RKQnOdlQPAUB4RGcbJq8LJ/JuvyxtCKtC6NVHxrRuwfmiNAevJn8YvkwJglBssIxxas+61dYnt3rfmGhVza/iPGf/7iN43+YUPZ7/z8/fulkOudCWWmM2DTnS9SUK37zmfflB2fGfPPlD8dj1KkUuLa8FR+3jUpRna5XiD4OyVCZT7YlRJxFKFi4OX8EVq2GlfYrznZkP8YA2zVVVdISTozpB+/L1VZUxOkFxTjxM0Qbin/bFV0XY0TEf6vPkjZMb8G+jqDgAbZyTz1/qfcT+eWzu4s2NKFwBnDV9Czuc7EnnDxym/pf4mOeA==
-Received: from TY2PR06MB3424.apcprd06.prod.outlook.com (2603:1096:404:104::19)
- by SEZPR06MB5197.apcprd06.prod.outlook.com (2603:1096:101:70::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.18; Tue, 15 Nov
- 2022 03:40:02 +0000
-Received: from TY2PR06MB3424.apcprd06.prod.outlook.com
- ([fe80::3fde:75ae:e50a:7b24]) by TY2PR06MB3424.apcprd06.prod.outlook.com
- ([fe80::3fde:75ae:e50a:7b24%7]) with mapi id 15.20.5813.014; Tue, 15 Nov 2022
- 03:40:02 +0000
-From:   Angus Chen <angus.chen@jaguarmicro.com>
-To:     "tglx@linutronix.de" <tglx@linutronix.de>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Ming Lei <ming.lei@redhat.com>,
-        Jason Wang <jasowang@redhat.com>
-Subject: IRQ affinity problem from virtio_blk 
-Thread-Topic: IRQ affinity problem from virtio_blk 
-Thread-Index: Adj4GDwuFWHl+dEdQ1up6lA52hDITA==
-Date:   Tue, 15 Nov 2022 03:40:02 +0000
-Message-ID: <TY2PR06MB3424CB11DB57CA1FAA16F10D85049@TY2PR06MB3424.apcprd06.prod.outlook.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=jaguarmicro.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TY2PR06MB3424:EE_|SEZPR06MB5197:EE_
-x-ms-office365-filtering-correlation-id: a262edf2-516f-499a-d3b4-08dac6bb13e3
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: RbC6a+9IjOFcHvCxYlnHD4SphzSqdBq8/Hlw3cwiV7eWjOHOHueaegHuMovQ4skCnYkuecbVKDB3plDxM91iZnv5PhY39C4rEHEe9QE4TeXQ/U1GfvxoFWWhXpbyEFjDG8wiJpYG0xSEI4DRKuvejYCZ5Us8rIcyAG60GptJPZLpUbsVPoHqu0KkuxriLGaCWFSTADxJoSX+5Elocit9d7axQ1nqKFKmVaBo9VIr4/wFDChTUEw+luqOOa7Q7Y95fMbd0AIjvAfftJGuDQLGCUm1YwlvAl/RSIbArqJQXiYuy1SOMEqJgriyolwTqBVYUXn/JI6il9xqDgUP5leYll0cy8tjUSbZpwt2a2QQcm206V6WJdvXuC0KKqWBOn5QBrRumMRVxYK+PKVw49ACYvdFf/FdZkUSU31L05ZKmuUGv5fS5qa2UCK0GSDSzueZGIghhA74Tzt6bt9p152usY/CaLQ6T1/PVgXW4TauOF5tH4VWE3YY517xHKJ2OuYKWR5RBNQi7rMGjujyx+JoF85jaW+QlR4NAtXgBWXxofdAlTvS4/QTb6AOMo+YEOkgOsoTJD+Rm8N1+3K7eaZmzcGI4KOVhffEzW3ek0JkIxKQnhUWE/RuIHbjvGyudYAVUiNWPEDT6QLTo27bjf3WWv/a6ZWpGoTcMP4vaSKTBJAVmHKLLw1FGXN8FCB95bxRdxK5lfKWTVKSRsnrlrOd4lDKaDi8khk58skItPi+ErhMADPrYP1sPwlCVlwyOE54uMZIhRg9p9odQsognk4/EA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR06MB3424.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(39840400004)(376002)(346002)(366004)(396003)(451199015)(55016003)(86362001)(33656002)(122000001)(38100700002)(38070700005)(316002)(6506007)(54906003)(6916009)(7696005)(71200400001)(44832011)(26005)(8936002)(5660300002)(52536014)(478600001)(186003)(83380400001)(2906002)(4326008)(41300700001)(66556008)(66446008)(9686003)(4743002)(66476007)(64756008)(76116006)(66946007)(8676002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ME5mU3N6cGxUMUx4NDQyRHlLa1YvOXJHSThON0djOXg4M3Jxa3hNNW9tSWNi?=
- =?utf-8?B?NnY3Q0tZdUYrSVZadkIwaUdxSDViSVByYnl6Q0NTaGF6UWxqYjROSkM4c0JG?=
- =?utf-8?B?RlgxT2F1dCtlN0tiT0g3UG5HOXJsMDJOY2Z0Mzhka0puOCtwcStBaitHMnBj?=
- =?utf-8?B?bTRoNDR0UElJS2poODZLY2NDZXcxcVlyVzVLTlRjcUtZNHlxQml2R0FhY1ZW?=
- =?utf-8?B?U3RzNmswRzM5Smp5SzFEazJhdnllb1pKeWx1ZzZXN1N2TEUrbHhjaUtRelJJ?=
- =?utf-8?B?ZUl1OGcwOGJvUmVBc0dvV0p2UXVibmhGRUZvWXJzeDVwRnJOMnFhNlVZUmQ4?=
- =?utf-8?B?aEp6cGRtaWF3a014ZEFUN0ZKa2l2bkU3VzRGOWRYYmtKMS9RWWNBcWRaQmJz?=
- =?utf-8?B?NUJkREFYZWluMnVLNnBXRGhGNjNuWGJTbTZvVFgyOVJheVQ0MGZwWGNDSm9Z?=
- =?utf-8?B?NUE5aGE3aEJOTjZoZC9HNzM1cWtTaXJaZDVoZVVYcFoyTE1DMSt4TTNzOW5Q?=
- =?utf-8?B?NHhGdDdkN1NXVUN2N3RENGNveTZlczUzUEZhMjBpRExmRWg1THhPR1FKaUs0?=
- =?utf-8?B?Qk9Wcm92eDFOWGxtcnVpRWpQUG5QeDV3Mk0xb29IMk13cENJTThpdHJLZnR2?=
- =?utf-8?B?MjlvczdYQ2d4NGVnNjBtYzFJeWczMStPWithSHl6Y041S3JUTlhGN1FwN1Vz?=
- =?utf-8?B?bFphSUxQNDcwcmwvZXdlTnIxUnNnNStXdy96R1pPVzRRL2xYN1dpdVk4Y3hl?=
- =?utf-8?B?ZTRJNU9VNnM3TUFTYnErR0hqemgwTkRXSUlNMFNSNGU5KzhjZU9MVmJFVDV2?=
- =?utf-8?B?ZXR3aFlNYTBaaVp0S2dTd2JpRHFOMGNRMXgvS3VKdHlDek0wWDFDWFRIKzJj?=
- =?utf-8?B?OVIzWEFMMi9iN2ZmbVU1S2Exa0V5aDJkZURmMVUyYlVjMEFVeExMRDgwbHR0?=
- =?utf-8?B?Z0N6cFJRRlIvbEQ3ZGgrSkU0TElPUFR1aHRMNmNGQUxSRXN1L2xMVGtUZlV0?=
- =?utf-8?B?bGJZa1U4cUJvYmR4T1ZocmY1ZVBNUmV3TjhVaVVoRTFjUVNvd3o0akY5Y0Zk?=
- =?utf-8?B?aWRia0pIU1BxSjRxUzhaZzV0MURRK3pyU24yRlVTNmQ1VmZCT25BUWcxYVI0?=
- =?utf-8?B?aDZPMTFneDYrb1JsSHZhSVNjUHlnOFJGYjNnNjZRTlJ6RTBrQjMrZUFiQ1F2?=
- =?utf-8?B?WGtFUk90OVRzdFZiRGRSaWsra2F2TG5qc0hXUlhtdDVubFFHMTZ4N1lmTm12?=
- =?utf-8?B?TUlwS0NtMjVXOEcxNlh6dHlQN0hHL3JINVA2Qk1WWk5lZHFGR1hhZzhaRE5q?=
- =?utf-8?B?YmpqcHp6eGxaMWJRN0I1UHVMVEhjcy9qU01KRStVUm9oV2RmRGRIeUlXZ2lx?=
- =?utf-8?B?WXJZWXJHV3pIbkwvaVFEVjBCdGtFV3FkdzdNQnNYblZDQkgvcS8xdHR0aFRU?=
- =?utf-8?B?aXBFWGltaEt6cmp1SjV3MVNyOU1uQUZaOHhhNnFqYTQwQWI2SmZhb1dkU1Jo?=
- =?utf-8?B?TXJsWEswUHA0N3Z2bE9YancxeDhMa21KWlZwTHpEOUlsWjlIOEE1eDZTb0pI?=
- =?utf-8?B?Z1NEZWtOaFNXUEZYdTYxYUpyaVNKWWNMa2FEdHRtVUFsN3A4UlFNdk5EbC92?=
- =?utf-8?B?WHc5UzE5bnBqTHlSQXQzT0kyTWxFVXFVRnVpNkYzMG9rQjkrNnhvN0hpdkhM?=
- =?utf-8?B?R0g2M0Jac0R0YXJaR0ZOV1ZyTnRBZGVncmNhR0Z4WndrUEpOZW9GbWg1dEs4?=
- =?utf-8?B?MjZWY08xMUI3c0h6MnhEUStuaDBqTWlNRzhrayttRjh3NlFxbERSdFVBVTBt?=
- =?utf-8?B?Z2tnZlhVK3hJNUdwelZuQ1ZtaDBpQVNwQytaU1BTTktTcjdSK01IQi80Uk9V?=
- =?utf-8?B?cHpUUGl5cWlFSS8yaWNTWEZDbkQ3amRUcWRlV0IwUlVqelNNMzB6by9mSnNX?=
- =?utf-8?B?c2hDSENOQkdHM1QweS9QRVl5b01qSUJIcW8rVHp0WEpXcFMrZnM3UEthb0Nw?=
- =?utf-8?B?d09KMUwvbmRjY1dsVEJpUGV6c2V0ck9iUU1OZmJNMEdXYmUxWC9XOFJSU3Jz?=
- =?utf-8?B?c2lGTnhpU0ZuczFtY1dRSXRWcm9URlNBRnlHcFAvL3lIYzY0c1JSZmZpakZq?=
- =?utf-8?Q?RXXnQtOD3d3vEI+ow3LcmgSDj?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 14 Nov 2022 22:40:16 -0500
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33CA8A19D
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 19:40:14 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 9C0A25C020F;
+        Mon, 14 Nov 2022 22:40:11 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Mon, 14 Nov 2022 22:40:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1668483611; x=1668570011; bh=9P
+        VrHPKYYcYCXrIE3gNrsDWA5311mFLsY2+fOAxWt74=; b=jap4O8bsxOdwVziKSk
+        Xg4v+xdttQQvTus3LhaHf4KBHJPF7+5mMW70hfwMXhVrtOGEfC9dgnLhiinBBpYo
+        foNAhWxded8jDuyWS5sFVcKxnh6Y9jdhA5qojO9+uuF7+uW4I2L63aaMT0fPJVDm
+        rHBKLT4WFm86bTPyIXL5tTWb2eJ3Uiw/w9+SFV8bstGKZ8zUhR+1Nd8+4CacbmBg
+        Jy6GLye3dOi3NnKsh9mzR4R8wcdP3U9vVI0I4hKv95ACaZSvp0cIDFZ8D4dEkIKE
+        ZGsTwWYIxNcvOa1x5qwtFd/oq2BTtmCWL2gzwDdwuT5Ywz9NwjrTKwdzS+Ov4Nr/
+        20hA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1668483611; x=1668570011; bh=9PVrHPKYYcYCXrIE3gNrsDWA5311
+        mFLsY2+fOAxWt74=; b=vK0fJhHpZdINnyoLcZHEemLH59mzDRZvAOhLgiRV+9O5
+        OpKDm3ZWFVOQe4EA+eQgj1JVgl3EE3t3GzQrEsK7u/8M7shGFusRU1X6sGbnKsFS
+        6IvyE0EF0BZbGehvWsRmSC7aPnZYcfOWiDSxkIEQJfSPQC7YwZkL4shwD5YlhBT1
+        GUF9qcu6MnrrG8skIn9ZUooDsyEoDBsJKWvaqfPobSs29VLFuMENKJuEuJj7a2Rs
+        UGaYz05VzksrdJNREFzP9TYddjBiIcC0ib1oiSdkwz/D0MFA5vSFUa1dTXUpXF+E
+        VaVNWobBo1socU4n23EgjweNBy9UEsgRuO+mSy8LZg==
+X-ME-Sender: <xms:GwpzYzwpszokUsCpkUFEBYyDNonlCmltcxsllU8oNI4nq0IWYarByQ>
+    <xme:GwpzY7SSmkgxjEbAJYLYhUqXhA6kfzH4nA34BCJInSTe4hiLRfCzv8kFPaeYdzUnm
+    RabGDvxUf3GAnLyQrk>
+X-ME-Received: <xmr:GwpzY9WG7hZ69EZX2K8jtItx07ZWfwyeHuLsPcjImoYsYcJlT4a1gIs7y5bxrepbJSL5MA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgeefgdeivdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhirhhi
+    lhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrdhnrg
+    hmvgeqnecuggftrfgrthhtvghrnhephfeigefhtdefhedtfedthefghedutddvueehtedt
+    tdehjeeukeejgeeuiedvkedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:GwpzY9gy8ldFsBNYM5rPe2VET8mDUMJ6EBefdF2M9jiwnFoClFOEcw>
+    <xmx:GwpzY1B6MXdn1b_ehbnqWxR8p_j10Jj3c8G5npBnwlBCbz6eSiTZAQ>
+    <xmx:GwpzY2KQm9ZbPs5dhoAy1-zW3RQA8dnKMktugtgIbN9a9RhuoMJ_lg>
+    <xmx:GwpzY_AxXpB8NuWUJ84EsTXdB3IRyGjMfk9ge8P1jWV2ULHp9ymy7g>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 14 Nov 2022 22:40:10 -0500 (EST)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 4E503109875; Tue, 15 Nov 2022 06:40:07 +0300 (+03)
+Date:   Tue, 15 Nov 2022 06:40:07 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     kernel test robot <lkp@intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        x86@kernel.org, Dave Hansen <dave.hansen@linux.intel.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: Re: [tip:x86/mm 5/16] sound/core/hwdep.c:243:24: sparse: sparse:
+ incorrect type in assignment (different address spaces)
+Message-ID: <20221115034007.go64rirsoqazpks7@box.shutemov.name>
+References: <202211150551.T7mpZomP-lkp@intel.com>
+ <fdae3de9-db03-b04d-1992-bc8efd053053@intel.com>
 MIME-Version: 1.0
-X-OriginatorOrg: jaguarmicro.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TY2PR06MB3424.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a262edf2-516f-499a-d3b4-08dac6bb13e3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Nov 2022 03:40:02.0603
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 1e45a5c2-d3e1-46b3-a0e6-c5ebf6d8ba7b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: mftCEN1cY3JKbcwjJO476INZJ3ytGMIgjo7WjtIKPtlGeMwBWJnsa+lkDrjmI3IuxIfRr4ap4ab6Bi93latHa253yRHRcZfYA0fW8ATNb3Y=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB5197
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fdae3de9-db03-b04d-1992-bc8efd053053@intel.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgQWxsLg0KSSB0ZXN0IHRoZSBsaW51eCA2LjEgYW5kIGZvdW5kIHRoZSB2aXJ0aW9fYmxrIHVz
-ZSBpcnFfYWZmaW5pdHkgd2l0aCBJUlFEX0FGRklOSVRZX01BTkFHRUQuDQpUaGUgbWFjaGluZSBo
-YXMgODAgY3B1cyB3aXRoIHR3byBudW1hIG5vZGUuDQoNCkJlZm9yZSBwcm9iZSBvbmUgdmlydGlv
-X2Jsay4NCmNyYXNoX2N0cz4gcCAqdmVjdG9yX21hdHJpeA0KJDQ0ID0gew0KICBtYXRyaXhfYml0
-cyA9IDI1NiwNCiAgYWxsb2Nfc3RhcnQgPSAzMiwNCiAgYWxsb2NfZW5kID0gMjM2LA0KICBhbGxv
-Y19zaXplID0gMjA0LA0KICBnbG9iYWxfYXZhaWxhYmxlID0gMTUzNTQsDQogIGdsb2JhbF9yZXNl
-cnZlZCA9IDE1NCwNCiAgc3lzdGVtYml0c19pbmFsbG9jID0gMywNCiAgdG90YWxfYWxsb2NhdGVk
-ID0gNDExLA0KICBvbmxpbmVfbWFwcyA9IDgwLA0KICBtYXBzID0gMHg0NjEwMCwNCiAgc2NyYXRj
-aF9tYXAgPSB7MTE2MDkwODcyMzE5MTgwNywgMCwgMSwgMTg0MzUyMjI0OTc1MjA1MTcxMjB9LA0K
-ICBzeXN0ZW1fbWFwID0gezExMjU5MDQ3Mzk3Mjk0MDcsIDAsIDEsIDE4NDM1MjIxMTkxODUwNDU5
-MTM2fQ0KfQ0KQWZ0ZXIgcHJvYmUgb25lIHZpcnRpb19ibGsuDQpjcmFzaF9jdHM+IHAgKnZlY3Rv
-cl9tYXRyaXgNCiQ0NSA9IHsNCiAgbWF0cml4X2JpdHMgPSAyNTYsDQogIGFsbG9jX3N0YXJ0ID0g
-MzIsDQogIGFsbG9jX2VuZCA9IDIzNiwNCiAgYWxsb2Nfc2l6ZSA9IDIwNCwNCiAgZ2xvYmFsX2F2
-YWlsYWJsZSA9IDE1MjczLA0KICBnbG9iYWxfcmVzZXJ2ZWQgPSAxNTQsDQogIHN5c3RlbWJpdHNf
-aW5hbGxvYyA9IDMsDQogIHRvdGFsX2FsbG9jYXRlZCA9IDQxMywNCiAgb25saW5lX21hcHMgPSA4
-MCwNCiAgbWFwcyA9IDB4NDYxMDAsDQogIHNjcmF0Y2hfbWFwID0gezI1NzY5ODAzNzc2LCAwLCAw
-LCAxNDY4MDA2NH0sDQogIHN5c3RlbV9tYXAgPSB7MTEyNTkwNDczOTcyOTQwNywgMCwgMSwgMTg0
-MzUyMjExOTE4NTA0NTkxMzZ9DQp9DQoNCldlIGNhbiBzZWUgZ2xvYmFsX2F2YWlsYWJsZSBkcm9w
-IGZyb20gMTUzNTQgdG8gMTUyNzMsIGlzIDgxLg0KQW5kIHRoZSB0b3RhbF9hbGxvY2F0ZWQgaW5j
-cmVhc2UgZnJvbSA0MTEgdG8gNDEzLiBPbmUgY29uZmlnIGlycSxhbmQgb25lIHZxIGlycS4NCg0K
-SXQgaXMgZWFzeSB0byBleHBlbmQgdGhlIGlycSByZXNvdXJjZSAsYmVjYXVzZSB2aXJ0aW9fYmxr
-IGRldmljZSBjb3VsZCBiZSBtb3JlIHRoYW4gNTEyLg0KQW5kIEkgcmVhZCB0aGUgbWF0cml4IGNv
-ZGUgb2YgaXJxLHdpdGggSVJRRF9BRkZJTklUWV9NQU5BR0VEIGJlIHNldCAsaXQgaXMgYSBraW5k
-IG9mIGZlYXR1cmUuDQoNCklmIHdlIGNvc3VtZSBpcnEgZXhoYXVzdGVkLGl0IHdpbGwgYnJlYWsg
-cGVyX3ZxX3ZlY3RvcnMgLHNvIHRoZSAnIHZpcnRibGtfbWFwX3F1ZXVlcyAnIHdpbGwNCkZhbGwg
-YmFjayB0byBibGtfbXFfbWFwX3F1ZXVlcyBmaW5hbGx5Lg0KDQpPciBpZiB3ZSBkb27igJl0IGNv
-c3VtZSBpcnEgZXhoYXVzdGVkLHdlIGp1c3QgdXNlIGlycSBiaXRzIG9mIG9uZSBjcHUgbW9yZSB0
-aGFuIG90aGVycyBmb3IgZXhhbXBsZSwNCklSUURfQUZGSU5JVFlfTUFOQUdFRCB3aWxsIGZhaWwg
-dG9vLGJlY2F1c2UgaXQgbm90IGJhbGFuY2UuDQoNCkknbSBub3QgYSBuYXRpdmUgRW5nbGlzaCBz
-cGVha2VyLCBhbnkgc3VnZ2VzdGlvbiB3aWxsIGJlIGFwcHJlY2lhdGVkLg0K
+On Mon, Nov 14, 2022 at 02:55:46PM -0800, Dave Hansen wrote:
+> On 11/14/22 13:41, kernel test robot wrote:
+> >    sound/core/hwdep.c:243:24: sparse:     expected int [noderef] __user *__ptr_clean
+> >    sound/core/hwdep.c:243:24: sparse:     got int *
+> >    sound/core/hwdep.c:273:29: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+> >    sound/core/hwdep.c:273:29: sparse:     expected int [noderef] __user *__ptr_clean
+> >    sound/core/hwdep.c:273:29: sparse:     got int *
+> >    sound/core/hwdep.c:292:29: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+> >    sound/core/hwdep.c:292:29: sparse:     expected int [noderef] __user *__ptr_clean
+> >    sound/core/hwdep.c:292:29: sparse:     got int *
+> 
+> I think the sparse ends up throwing away all of its annotations once it
+> dereferences a pointer.  So, '*(int __user *)' boils down to a plain
+> 'int'.  Confusingly, a '*(int __user *) *' boils down to an 'int *'.
+> 
+> That's what happened here.  A __user-annotated point got dereferenced
+> down to an 'int' and then turned into a pointer again.
+> 
+> I think the trick in this case is to avoid dereferencing the pointer too
+> early by just moving the dereference outside of the casting, like the
+> attached patch.  But, it also feels kinda wrong.  I'd love a second
+> opinion on this one.
+> diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
+> index 0db6f5451854..b8947b623c72 100644
+> --- a/arch/x86/include/asm/uaccess.h
+> +++ b/arch/x86/include/asm/uaccess.h
+> @@ -39,7 +39,7 @@ static inline bool pagefault_disabled(void);
+>  #define untagged_ptr(mm, ptr)	({					\
+>  	u64 __ptrval = (__force u64)(ptr);				\
+>  	__ptrval = untagged_addr(mm, __ptrval);				\
+> -	(__force __typeof__(*(ptr)) *)__ptrval;				\
+> +	*(__force __typeof__((ptr)) *)__ptrval;				\
+
+It casts __ptrval to pointer to pointer and then dereferences it, so it
+gives a new value on the output. It breaks boot for me.
+
+We can drop all '*' here and get:
+
+	(__force __typeof__(ptr))__ptrval;				\
+
+It helps with sparse and streamlines the code. But it uncovers error in
+sg_scsi_ioctl():
+
+	error: cast specifies array type
+
+The line that triggers the error is:
+
+	if (get_user(opcode, sic->data))
+
+'sic->data' is an array. And it breaks get_user() contract:
+
+ * @ptr must have pointer-to-simple-variable type, and the result of
+ * dereferencing @ptr must be assignable to @x without a cast.
+
+Array is not pointer-to-simple-variable type. Let's cast it explicitly to
+(char __user *). It should match the current behaviour. But double check
+would be nice.
+
+With sg_scsi_ioctl() fixed, it builds and boots fine for me.
+
+I also looked again at get_user() and put_user() and I think we can
+simplify them. The variable just adds noise.
+
+The change below helps with the sparse complains. I didn't checked all of
+them, but what check looks good.
+
+If it looks okay, I will prepare 3 patches: scsi fix, sparse fix,
+get/put_user() cleanup.
+
+diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
+index 1d2c79246681..bd92e1ee1c1a 100644
+--- a/arch/x86/include/asm/uaccess.h
++++ b/arch/x86/include/asm/uaccess.h
+@@ -43,7 +43,7 @@ DECLARE_STATIC_KEY_FALSE(tagged_addr_key);
+ #define untagged_ptr(mm, ptr)	({					\
+ 	u64 __ptrval = (__force u64)(ptr);				\
+ 	__ptrval = untagged_addr(mm, __ptrval);				\
+-	(__force __typeof__(*(ptr)) *)__ptrval;				\
++	(__force __typeof__(ptr))__ptrval;				\
+ })
+ #else
+ #define untagged_addr(mm, addr)	(addr)
+@@ -158,10 +158,8 @@ extern int __get_user_bad(void);
+  */
+ #define get_user(x,ptr)							\
+ ({									\
+-	__typeof__(*(ptr)) __user *__ptr_clean;				\
+-	__ptr_clean = untagged_ptr(current->mm, ptr);			\
+ 	might_fault();							\
+-	do_get_user_call(get_user,x,__ptr_clean);			\
++	do_get_user_call(get_user,x,untagged_ptr(current->mm, ptr));	\
+ })
+ 
+ /**
+@@ -263,10 +261,8 @@ extern void __put_user_nocheck_8(void);
+  * Return: zero on success, or -EFAULT on error.
+  */
+ #define put_user(x, ptr) ({						\
+-	__typeof__(*(ptr)) __user *__ptr_clean;				\
+-	__ptr_clean = untagged_ptr(current->mm, ptr);			\
+ 	might_fault();							\
+-	do_put_user_call(put_user,x,__ptr_clean);			\
++	do_put_user_call(put_user,x,untagged_ptr(current->mm, ptr));	\
+ })
+ 
+ /**
+diff --git a/drivers/scsi/scsi_ioctl.c b/drivers/scsi/scsi_ioctl.c
+index 2d20da55fb64..c285502f5993 100644
+--- a/drivers/scsi/scsi_ioctl.c
++++ b/drivers/scsi/scsi_ioctl.c
+@@ -519,7 +519,7 @@ static int sg_scsi_ioctl(struct request_queue *q, fmode_t mode,
+ 		return -EFAULT;
+ 	if (in_len > PAGE_SIZE || out_len > PAGE_SIZE)
+ 		return -EINVAL;
+-	if (get_user(opcode, sic->data))
++	if (get_user(opcode, (char __user *)sic->data))
+ 		return -EFAULT;
+ 
+ 	bytes = max(in_len, out_len);
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
