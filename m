@@ -2,198 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90A6F62A45D
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 22:42:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18A0762A461
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 22:43:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231638AbiKOVmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 16:42:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33504 "EHLO
+        id S231232AbiKOVm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 16:42:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232694AbiKOVlx (ORCPT
+        with ESMTP id S238517AbiKOVme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 16:41:53 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C782317C0;
-        Tue, 15 Nov 2022 13:41:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668548477; x=1700084477;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=lJ9FAOEWNGpF/gfwGQHYQslkX4L7S9TxFwlifaibAf0=;
-  b=c69W3iqhvo1ijhuzV9ngQF0XiflQfOZd+2M8qM4Uztc9dI7Hivf5C6HU
-   Fk6irUUlMMaA9oiVRXrim3goQNVd54ug/WCNlrrdMAjxKW49fcQjDilPG
-   GrgvuFGBMJLwBrcjHv/H8JbPo2P3ei5TeW0qow8vO+qb/z39A7ProNypK
-   BuXAMjZX/3a48nAUl+eSu1PHvIvNQqIgmdq7LgGswnugluK2TvsEHTY2S
-   Ga1fDWMaD2DuR9Kj59SbaImdzYuaRm1qcO8RMpFg93lCGuqG7tzkkN0fn
-   9iIEuCjB5Rh11FEjl1B/QC0AhnuK3XqEi2CxInDy8gsRo1e76agZ0tcYl
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="398662952"
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="398662952"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 13:41:17 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="702596153"
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="702596153"
-Received: from djiang5-mobl2.amr.corp.intel.com (HELO [10.212.7.249]) ([10.212.7.249])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 13:41:16 -0800
-Message-ID: <176515c1-ecdb-7772-f2c4-521921295b20@intel.com>
-Date:   Tue, 15 Nov 2022 14:41:15 -0700
+        Tue, 15 Nov 2022 16:42:34 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F86D2E9D8
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 13:42:15 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id kt23so39490061ejc.7
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 13:42:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3Nl9X2dBBteRxXc88z+X5/Ev/rJGuG6QGv1Den2poAo=;
+        b=QwtGfdLExqGEA3JBttYR2zaNYjZe26Vt6/fFPWMuk54OnoMDs1FRgye8GpGvi457VX
+         Ehd3UvkUHaqnWVtNl5Yhok3ciBieqGeJ9smgarRrEGrMZD8wJ+RyK21O1kVfszahcKAQ
+         1JfCR6GMKLmQcAF9S1lxq4qq8ETCraVQ14j3eil805xRkwv8JB1xNJfzM70HMHId4Jt1
+         PnNeXtzsgQz4YFIlo84bs2XPdiyl8yg7hne1bsU55rk10UVgYx+/WPW3qNUlFy+MHL95
+         y6N/nWy8aDChycA4rZleL+UpFoFcldr4dg3+v8PTbq1siLVeRsRHll6eGEfTe1Mtm8Mc
+         kP6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3Nl9X2dBBteRxXc88z+X5/Ev/rJGuG6QGv1Den2poAo=;
+        b=ejRF+kEBeHt9F2ddRyE2KNflWHpApqgxrZl7UQmiiczPitSCZdwMG1gQjRPx0y9jxe
+         TJGz4yVILnHnpVdLS7odsg4tuJEP+A/1nNPBIHJ2pJKsY2B3bi5I/HWCbOnMbtonwRtW
+         7dYyHVsWvKjyDR4hTqzxIue7h+Jd+RhE/tZ9INJF1M7uoyN8yb4xClUGo2e8AnSg24jC
+         5QCSY+JdWZpyZmhIseFRHA8gh5pPy5CJ+kzvTi+GuAVJdNN0uQe2m+m0zzcl7U70loLE
+         1ElltUBmdQShWxPVXc54wwgQ4vWEc1ExUfTLA4mkggEDmcYfHvYlsOL0Y/C/N1bjzqV3
+         Il/Q==
+X-Gm-Message-State: ANoB5pnD4Zlsr4Gq+cJzD7tYITU7/HYReQM24bEFkXOf0W8b9fNw108c
+        rdCAOzZN6RdW6jg3yfvJsuJ0qoYBO+SBeLSTbP8iDw==
+X-Google-Smtp-Source: AA0mqf4Cv2JnITywTHhrkvL/GTP6vT4b3f6IswQJeiG7a8Mg9w83igu2bpdNd9+ZL4uYMG7Wi/gfCKeZ/s/hdK39c9A=
+X-Received: by 2002:a17:906:4911:b0:7ad:9891:8756 with SMTP id
+ b17-20020a170906491100b007ad98918756mr15884330ejq.203.1668548533646; Tue, 15
+ Nov 2022 13:42:13 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.1
-Subject: Re: [PATCH 01/11] cxl/pci: Add generic MSI-X/MSI irq support
-Content-Language: en-US
-To:     ira.weiny@intel.com, Dan Williams <dan.j.williams@intel.com>
-Cc:     Davidlohr Bueso <dave@stgolabs.net>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org
-References: <20221110185758.879472-1-ira.weiny@intel.com>
- <20221110185758.879472-2-ira.weiny@intel.com>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20221110185758.879472-2-ira.weiny@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <deab9696fc4000499470e7ccbca7c36fca17bd4e.1668458274.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <deab9696fc4000499470e7ccbca7c36fca17bd4e.1668458274.git.christophe.jaillet@wanadoo.fr>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 15 Nov 2022 22:42:02 +0100
+Message-ID: <CACRpkdY4+FtRc63GY_A2Gwr-cstMfsMvojHmQ_o2UQP0ymasig@mail.gmail.com>
+Subject: Re: [PATCH] usb: fotg210-udc: Remove a useless assignment
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Nov 14, 2022 at 9:38 PM Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
 
+> There is no need to use an intermediate array for these memory allocations,
+> so, axe it.
+>
+> While at it, turn a '== NULL' into a shorter '!' when testing memory
+> allocation failure.
+>
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-On 11/10/2022 10:57 AM, ira.weiny@intel.com wrote:
-> From: Davidlohr Bueso <dave@stgolabs.net>
-> 
-> Currently the only CXL features targeted for irq support require their
-> message numbers to be within the first 16 entries.  The device may
-> however support less than 16 entries depending on the support it
-> provides.
-> 
-> Attempt to allocate these 16 irq vectors.  If the device supports less
-> then the PCI infrastructure will allocate that number.  Store the number
-> of vectors actually allocated in the device state for later use
-> by individual functions.
-> 
-> Upon successful allocation, users can plug in their respective isr at
-> any point thereafter, for example, if the irq setup is not done in the
-> PCI driver, such as the case of the CXL-PMU.
-> 
-> Cc: Bjorn Helgaas <helgaas@kernel.org>
-> Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Co-developed-by: Ira Weiny <ira.weiny@intel.com>
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
+Fair enough!
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+I have sent some other cleanups to this code only
+yesterday, so they might collide and they you might have
+to rebase.
 
-> 
-> ---
-> Changes from Ira
-> 	Remove reviews
-> 	Allocate up to a static 16 vectors.
-> 	Change cover letter
-> ---
->   drivers/cxl/cxlmem.h |  3 +++
->   drivers/cxl/cxlpci.h |  6 ++++++
->   drivers/cxl/pci.c    | 32 ++++++++++++++++++++++++++++++++
->   3 files changed, 41 insertions(+)
-> 
-> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-> index 88e3a8e54b6a..b7b955ded3ac 100644
-> --- a/drivers/cxl/cxlmem.h
-> +++ b/drivers/cxl/cxlmem.h
-> @@ -211,6 +211,7 @@ struct cxl_endpoint_dvsec_info {
->    * @info: Cached DVSEC information about the device.
->    * @serial: PCIe Device Serial Number
->    * @doe_mbs: PCI DOE mailbox array
-> + * @nr_irq_vecs: Number of MSI-X/MSI vectors available
->    * @mbox_send: @dev specific transport for transmitting mailbox commands
->    *
->    * See section 8.2.9.5.2 Capacity Configuration and Label Storage for
-> @@ -247,6 +248,8 @@ struct cxl_dev_state {
->   
->   	struct xarray doe_mbs;
->   
-> +	int nr_irq_vecs;
-> +
->   	int (*mbox_send)(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *cmd);
->   };
->   
-> diff --git a/drivers/cxl/cxlpci.h b/drivers/cxl/cxlpci.h
-> index eec597dbe763..b7f4e2f417d3 100644
-> --- a/drivers/cxl/cxlpci.h
-> +++ b/drivers/cxl/cxlpci.h
-> @@ -53,6 +53,12 @@
->   #define	    CXL_DVSEC_REG_LOCATOR_BLOCK_ID_MASK			GENMASK(15, 8)
->   #define     CXL_DVSEC_REG_LOCATOR_BLOCK_OFF_LOW_MASK		GENMASK(31, 16)
->   
-> +/*
-> + * NOTE: Currently all the functions which are enabled for CXL require their
-> + * vectors to be in the first 16.  Use this as the max.
-> + */
-> +#define CXL_PCI_REQUIRED_VECTORS 16
-> +
->   /* Register Block Identifier (RBI) */
->   enum cxl_regloc_type {
->   	CXL_REGLOC_RBI_EMPTY = 0,
-> diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
-> index faeb5d9d7a7a..62e560063e50 100644
-> --- a/drivers/cxl/pci.c
-> +++ b/drivers/cxl/pci.c
-> @@ -428,6 +428,36 @@ static void devm_cxl_pci_create_doe(struct cxl_dev_state *cxlds)
->   	}
->   }
->   
-> +static void cxl_pci_free_irq_vectors(void *data)
-> +{
-> +	pci_free_irq_vectors(data);
-> +}
-> +
-> +static void cxl_pci_alloc_irq_vectors(struct cxl_dev_state *cxlds)
-> +{
-> +	struct device *dev = cxlds->dev;
-> +	struct pci_dev *pdev = to_pci_dev(dev);
-> +	int nvecs;
-> +	int rc;
-> +
-> +	nvecs = pci_alloc_irq_vectors(pdev, 1, CXL_PCI_REQUIRED_VECTORS,
-> +				   PCI_IRQ_MSIX | PCI_IRQ_MSI);
-> +	if (nvecs < 0) {
-> +		dev_dbg(dev, "Not enough interrupts; use polling instead.\n");
-> +		return;
-> +	}
-> +
-> +	rc = devm_add_action_or_reset(dev, cxl_pci_free_irq_vectors, pdev);
-> +	if (rc) {
-> +		dev_dbg(dev, "Device managed call failed; interrupts disabled.\n");
-> +		/* some got allocated, clean them up */
-> +		cxl_pci_free_irq_vectors(pdev);
-> +		return;
-> +	}
-> +
-> +	cxlds->nr_irq_vecs = nvecs;
-> +}
-> +
->   static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->   {
->   	struct cxl_register_map map;
-> @@ -494,6 +524,8 @@ static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->   	if (rc)
->   		return rc;
->   
-> +	cxl_pci_alloc_irq_vectors(cxlds);
-> +
->   	cxlmd = devm_cxl_add_memdev(cxlds);
->   	if (IS_ERR(cxlmd))
->   		return PTR_ERR(cxlmd);
+Yours,
+Linus Walleij
