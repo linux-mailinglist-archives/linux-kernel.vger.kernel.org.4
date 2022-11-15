@@ -2,109 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60894628E8F
+	by mail.lfdr.de (Postfix) with ESMTP id AC926628E90
 	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 01:42:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236334AbiKOAmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 19:42:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42582 "EHLO
+        id S236981AbiKOAmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 19:42:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236123AbiKOAmG (ORCPT
+        with ESMTP id S236375AbiKOAmG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 14 Nov 2022 19:42:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5844C1B1CC
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 16:41:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668472871;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kjYfp2hW5B/t44pYPHObfllFdrU8NC2GUrC2Ho+QsFY=;
-        b=eh7bihopSjCNIX/RQTaEoXB9zbLbaRvgm8vj3Wj+CswdxLvAE83rWMjfj+09nG71xc/VmY
-        0NDGAmzfXh7dKjqBi10rVF7VynWxcMFT5Y6eHpWVNVO8osjEVYanNqTKNDl74QpfqZQaou
-        +LRvfNT63d/bVehoeGc7KmVHfWXtU40=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-177-1FDKG86uNcGiCRr5tfa-9Q-1; Mon, 14 Nov 2022 19:41:08 -0500
-X-MC-Unique: 1FDKG86uNcGiCRr5tfa-9Q-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 900F51B1EE
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 16:41:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 791EC3814587;
-        Tue, 15 Nov 2022 00:41:07 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 75D27400DFD4;
-        Tue, 15 Nov 2022 00:41:05 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <Y3Lbul7FZncNVwVZ@codewreck.org>
-References: <Y3Lbul7FZncNVwVZ@codewreck.org> <166844174069.1124521.10890506360974169994.stgit@warthog.procyon.org.uk>
-To:     Dominique Martinet <asmadeus@codewreck.org>
-Cc:     dhowells@redhat.com, willy@infradead.org, dwysocha@redhat.com,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        Steve French <sfrench@samba.org>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Ilya Dryomov <idryomov@gmail.com>, linux-cachefs@redhat.com,
-        linux-cifs@vger.kernel.org, linux-afs@lists.infradead.org,
-        v9fs-developer@lists.sourceforge.net, ceph-devel@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v2] mm, netfs, fscache: Stop read optimisation when folio removed from pagecache
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1457984.1668472862.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Tue, 15 Nov 2022 00:41:02 +0000
-Message-ID: <1457985.1668472862@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        by ams.source.kernel.org (Postfix) with ESMTPS id 40202B810A0
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 00:41:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C97EC433D7;
+        Tue, 15 Nov 2022 00:41:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1668472891;
+        bh=lAVWfOrc/rwWjzqaYTXRp+1KDrw37nDH3kkVtQ7yHEo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=f66AIpfdCswCix6JxHdGCmi4C7k/cPTKbqbjTLjEkN0MGuHhK0ndDkX9w1PI/WlJv
+         a1FbyuVKd7Dq+DdS1gmqtpiPHjPORZM2rp5JywZpD+5J55mg32JQKNCcGc3xgkwXY8
+         6BOkrX2OJgbgwfxbdo5KcN/of5Sh1uHHl0uXEUa4=
+Date:   Mon, 14 Nov 2022 16:41:30 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     Minchan Kim <minchan@kernel.org>, Nitin Gupta <ngupta@vflare.org>,
+        Suleiman Souhlal <suleiman@google.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        coverity-bot <keescook+coverity-bot@chromium.org>
+Subject: Re: [PATCH] zram: explicitly limit prio_max for static analyzers
+Message-Id: <20221114164130.e45a95db4e8be2c3909bdba1@linux-foundation.org>
+In-Reply-To: <20221114021420.4060601-1-senozhatsky@chromium.org>
+References: <20221109115047.2921851-5-senozhatsky@chromium.org>
+        <20221114021420.4060601-1-senozhatsky@chromium.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dominique Martinet <asmadeus@codewreck.org> wrote:
+On Mon, 14 Nov 2022 11:14:20 +0900 Sergey Senozhatsky <senozhatsky@chromium.org> wrote:
 
-> any harm in setting this if netfs isn't enabled?
-> (just asking because you checked in fs/9p/cache.c above)
+> Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+> Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+> ---
+>  drivers/block/zram/zram_drv.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
+> index 9d33801e8ba8..e67a124f2e88 100644
+> --- a/drivers/block/zram/zram_drv.c
+> +++ b/drivers/block/zram/zram_drv.c
+> @@ -1706,6 +1706,7 @@ static int zram_recompress(struct zram *zram, u32 index, struct page *page,
+>  	 * Iterate the secondary comp algorithms list (in order of priority)
+>  	 * and try to recompress the page.
+>  	 */
+> +	prio_max = min(prio_max, ZRAM_MAX_COMPS);
+>  	for (; prio < prio_max; prio++) {
+>  		if (!zram->comps[prio])
+>  			continue;
 
-Well, it forces a call to ->release_folio() every time a folio is released=
-, if
-set, rather than just if PG_private/PG_private_2 is set.
+I'll queue this as a fix to "zram: introduce recompress sysfs knob".
 
-> > +static inline void mapping_clear_release_always(struct address_space =
-*mapping)
-> > +{
-> > +	set_bit(AS_RELEASE_ALWAYS, &mapping->flags);
-> =
-
-> clear_bit certainly?
-
-Bah.  Yes.
-
-> > -	if (folio_has_private(folio) && !filemap_release_folio(folio, 0))
-> > +	if (!filemap_release_folio(folio, 0))
-> =
-
-> should this (and all others) check for folio_needs_release instead of ha=
-s_private?
-> filemap_release_folio doesn't check as far as I can see, but perhaps
-> it's already fast and noop for another reason I didn't see.
-
-Willy suggested merging the checks from folio_has_private() into
-filemap_release_folio():
-
-	https://lore.kernel.org/r/Yk9V/03wgdYi65Lb@casper.infradead.org/
-
-David
+What's it do?  A little changelog would be nice, or at least a link to
+the coverity report?
 
