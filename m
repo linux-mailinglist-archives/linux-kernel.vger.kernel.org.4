@@ -2,118 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 482FC62A3A6
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 22:01:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C63A662A3AB
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 22:02:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238710AbiKOVBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 16:01:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36754 "EHLO
+        id S230168AbiKOVCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 16:02:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238704AbiKOVAv (ORCPT
+        with ESMTP id S238576AbiKOVB6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 16:00:51 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F6D82D1DB;
-        Tue, 15 Nov 2022 13:00:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668546050; x=1700082050;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=xNXRQeFXYRAOm6+Xp0IR39SUwaBcxozLGg7herY21Uw=;
-  b=lsMLP5YEmDLIiClnND4hhrp8X142NLIRYPufiX9WA9b534Zf0UmGZN49
-   mIWgyOnz/rynybLDAqg6KzIXLUAnUJu/751Cj1c3uZlZtQ3ir7fczBcGN
-   Z2vRCvdzgh2/I83jzrLhza50Of149TTYWeeyowHqINPUDHWl7AHXH6fe9
-   W8SZf0TOCAhq1NFIaKdVDypN5IrdWrF01AgA7aQdxizIwcqGjqscU/wHR
-   YpUc9f6UaX9qhvmrBemYy0m0dGQK4fBgEGReKXOZ1Ky00GiXJk/7lrA3O
-   8p2Aoqt/lRdxCjlt1PWfAWd+di8q0WhHjaqaVbVKNteOeLXAr5tMG8sMr
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="314181085"
-X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
-   d="scan'208";a="314181085"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 13:00:42 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="813821204"
-X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
-   d="scan'208";a="813821204"
-Received: from dn-intelpc-071822.amr.corp.intel.com (HELO [10.212.229.216]) ([10.212.229.216])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 13:00:40 -0800
-Message-ID: <93029063-4a68-d275-b437-12930e119347@intel.com>
-Date:   Tue, 15 Nov 2022 13:00:40 -0800
+        Tue, 15 Nov 2022 16:01:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CEB31357
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 13:00:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668546052;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qayv+b0uuecedAlRVGTipngS65XMONYqcoB5EKtgL3g=;
+        b=ffSyyO/Oo4ela01UDuJqgrIIBJ24LJZdeyrdgUIoZZTfP5djVylSyBmyRyvUsO31yhl5zI
+        9SESzBgWoXDCSY/SnL89Plkpvv7lQdRFX2ojrW/Hd/CEHPdmRFDZcpXciXR071vo7nA2a3
+        gfUfGtSP5HnJqzdN84eN8oZamvRc8mU=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-633-BeW2ak9FNVi_UP25xKnRIw-1; Tue, 15 Nov 2022 16:00:50 -0500
+X-MC-Unique: BeW2ak9FNVi_UP25xKnRIw-1
+Received: by mail-ed1-f71.google.com with SMTP id v18-20020a056402349200b004622e273bbbso10771260edc.14
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 13:00:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qayv+b0uuecedAlRVGTipngS65XMONYqcoB5EKtgL3g=;
+        b=aUiNZpwTCvvFQZNtgLBzPK2VAOG/HMyqy/dmSS4+qVJpDZ9tDQSNVpKCY44Jvnh472
+         wwUh1xvxFHYwvDacCoqnMLOShgIc65WqQLG1Oy5e/K6tmSLFZBzgrkHy81EOiQgK9J2f
+         tWskTMDX5/Yv/+Pon/hizpZaL+a9jUgWTQwUJ5rNz6jwQKMjy9YbjRksFiqfQuZGWuWn
+         ZFkA/N/CjGvXCJXGclpYaUX1tTMCWD74xC1jXfWk5CY4AZr+lr9pokXggOb1a7K7NyKK
+         JiyDSXl6weVnn1vzx+AVVbxOvjnU7R7jGCfRKlBI01DCWyMOqDKeVLZcyPRuSEUIfd9U
+         hBzA==
+X-Gm-Message-State: ANoB5pndB2IAXAqZR2uRd15pizIziR2TW8ok81nLQf+7cgcOawS566fp
+        puSTOulwudGULwE1b7E9nrvq3qv48V1AxCiNh1iexX7nqxRHh65VI2mmiL7bekcWOerbosLGdNn
+        CMvP9mvmNHmH4dM97kv1zxNFJ
+X-Received: by 2002:aa7:d759:0:b0:463:fec2:dfb1 with SMTP id a25-20020aa7d759000000b00463fec2dfb1mr16939548eds.303.1668546049697;
+        Tue, 15 Nov 2022 13:00:49 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7W8nUz5KKt4LOr3lxVyJlBMdv9+vKykTmiEnQsfFkRK8ms8y/lnAwUUPx3SXV5KTT3Bn+Oig==
+X-Received: by 2002:aa7:d759:0:b0:463:fec2:dfb1 with SMTP id a25-20020aa7d759000000b00463fec2dfb1mr16939536eds.303.1668546049505;
+        Tue, 15 Nov 2022 13:00:49 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id h7-20020a17090619c700b0078d4c72e2cesm5956786ejd.44.2022.11.15.13.00.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Nov 2022 13:00:49 -0800 (PST)
+Message-ID: <bb58d54a-446b-5f4e-4bca-aaddfad29927@redhat.com>
+Date:   Tue, 15 Nov 2022 22:00:48 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v3 36/37] x86/cet/shstk: Add ARCH_CET_UNLOCK
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "rppt@linux.ibm.com" <rppt@linux.ibm.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kcc@google.com" <kcc@google.com>, "bp@alien8.de" <bp@alien8.de>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "arnd@arndb.de" <arnd@arndb.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-References: <20221104223604.29615-1-rick.p.edgecombe@intel.com>
- <20221104223604.29615-37-rick.p.edgecombe@intel.com>
- <Y3OmaSjhCtjht1nS@hirez.programming.kicks-ass.net>
- <4273232513cd178be303d817b15e442703bda637.camel@intel.com>
- <Y3P9V1c0ytuC2/3g@hirez.programming.kicks-ass.net>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <Y3P9V1c0ytuC2/3g@hirez.programming.kicks-ass.net>
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v2 7/7] platform/x86: ideapad-laptop: Don't expose
+ touchpad attr on IdeaPads with SYNA2B33
+Content-Language: en-US, nl
+To:     =?UTF-8?Q?Eray_Or=c3=a7unus?= <erayorcunus@gmail.com>,
+        platform-driver-x86@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        ike.pan@canonical.com, jikos@kernel.org,
+        benjamin.tissoires@redhat.com, dmitry.torokhov@gmail.com,
+        mgross@linux.intel.com, pobrn@protonmail.com
+References: <20221029120311.11152-1-erayorcunus@gmail.com>
+ <20221029120311.11152-8-erayorcunus@gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20221029120311.11152-8-erayorcunus@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/15/22 12:57, Peter Zijlstra wrote:
-> On Tue, Nov 15, 2022 at 08:01:12PM +0000, Edgecombe, Rick P wrote:
->>>> +	if (task != current) {
->>>> +		if (option == ARCH_CET_UNLOCK &&
->>>> IS_ENABLED(CONFIG_CHECKPOINT_RESTORE)) {
->>> Why make this conditional on CRIU at all?
->> Kees asked for it, I think he was worried about attackers using it to
->> unlock and disable shadow stack. So wanted to lock it down to the
->> maximum.
-> Well, distros will all have this stuff enabled no? So not much
-> protection in practise.
+Hi,
 
-Yeah, that's true for the distros.
+On 10/29/22 14:03, Eray Orçunus wrote:
+> My 520-15IKB (2017) with SYNA2B33 doesn't have working VPCCMD_W_TOUCHPAD command -
+> it's the touchpad program switches the touchpad instead on Windows. Considering
+> all IdeaPads with SYNA2B33 touchpad produced in 2017/2018, it's very likely that
+> none of the IdeaPads with SYNA2B33 support touchpad switching via EC. So let's
+> add SYNA2B33 to the touchpads not switchable via EC.
+> 
+> Signed-off-by: Eray Orçunus <erayorcunus@gmail.com>
 
-But, I would imagine that our more paranoid friends like the ChromeOS
-folks might appreciate this.
+As already discussed in the other thread I'm not sure this is the best way to
+go about this, lets continue discussing this in the other thread.
+
+Regards,
+
+Hans
+
+
+> ---
+>  drivers/platform/x86/ideapad-laptop.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/ideapad-laptop.c b/drivers/platform/x86/ideapad-laptop.c
+> index b34fbc4d741c..937126c62a14 100644
+> --- a/drivers/platform/x86/ideapad-laptop.c
+> +++ b/drivers/platform/x86/ideapad-laptop.c
+> @@ -1621,8 +1621,12 @@ static void ideapad_check_features(struct ideapad_private *priv)
+>  				"Could not find PCI* node in the namespace\n");
+>  	}
+>  
+> -	/* Most ideapads with ELAN0634 touchpad don't use EC touchpad switch */
+> -	priv->features.touchpad_ctrl_via_ec = !acpi_dev_present("ELAN0634", NULL, -1);
+> +	/*
+> +	 * Most ideapads with ELAN0634 and SYNA2B33 touchpads don't use
+> +	 * EC touchpad switch
+> +	 */
+> +	priv->features.touchpad_ctrl_via_ec = !acpi_dev_present("ELAN0634", NULL, -1) &&
+> +					      !acpi_dev_present("SYNA2B33", NULL, -1);
+>  
+>  	if (!read_ec_data(handle, VPCCMD_R_FAN, &val))
+>  		priv->features.fan_mode = true;
+
