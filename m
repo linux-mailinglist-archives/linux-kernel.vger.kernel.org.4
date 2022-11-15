@@ -2,203 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CB27629258
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 08:18:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED01562925A
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 08:20:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231136AbiKOHSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 02:18:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42026 "EHLO
+        id S232114AbiKOHUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 02:20:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231993AbiKOHSZ (ORCPT
+        with ESMTP id S230033AbiKOHUD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 02:18:25 -0500
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7AB2037C
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 23:18:22 -0800 (PST)
-Received: by mail-il1-x136.google.com with SMTP id q5so6969753ilt.13
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 23:18:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dDOq5hHv6AVi/wyrBOv5M+hykVo3T4Nk4to/mUGyDKs=;
-        b=tegEvnzZulUoHKycows8UYUSa1Fr1t9i8JqMMRxEiyZGpKw44PbG7oNArutszNdjz5
-         QwhzWmCuAGffg2UpDQefgCp7+hN62skzDZQ8/xMRKAy4RhjAQkhhmnE2GQi/QEkM+0g0
-         4C6gXNHASDAVueKeUBXG9Z6QX4VncaxpRTe4lAUY1LzcByz38EKhBzCg6FoCF2V5cM1W
-         JXSG2vhSe9PMEx0O+ji0o32Ib7RY2B6N32vF+YSQQ8jgqOcydQpZjoK+LLZKb1Rh9+qs
-         SLkoDcMtebP0C9Dj9cSIn8MKJbqmgqDHxa4uHZ9x+COZPHHzHCBLh/l6S/aSZp2yPJSO
-         +QUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dDOq5hHv6AVi/wyrBOv5M+hykVo3T4Nk4to/mUGyDKs=;
-        b=bi/7dHVDFyo4cHeLeka9bf1LcPp1o3O+w9CrlImrI2xg2LjRx37zE5Vurm3WEuYPpl
-         IeVb5467oYtlpcIoeyueHXHK7tyl+qqEHfdwwF98PFL8XwTmeqeOxQo8vl0Xp4dhxumU
-         O5x0HpOrRhOR/3MjU3l/EIuAkCwks5MQNx9n0LXTCHr/1bsaJnZdI7EuH7y88jhQFu4g
-         QBN5ZyB5zCvzCv3J/pEG6fXVo7rU+tBYJO7jcvwJhabfaI72KG3HTT3j6RCYd2NqJgbC
-         oW6VwYbLTqhuvX8LjONIcCG1JRlcLRPqjCV++xOojKggJbLLLWfLC7OhJl8kGx1FlRlB
-         Grcg==
-X-Gm-Message-State: ANoB5pl10iStrs761yt/YwdGU4vfRjGAV8DNIMT1bAvBYlUe+7c8jzbV
-        IuY+1MFY1M9agmgb03JC91y+LVWozC67p12T2HxnJA==
-X-Google-Smtp-Source: AA0mqf4Sf29emJ35AtROAr+iIyOB/tVwFXqaeA8RmhHDmiRGXi1SiHL7tmyGBtYlosGaCQ0hefr1mtpb6FYSGqBXSTg=
-X-Received: by 2002:a05:6e02:cce:b0:300:cf38:174f with SMTP id
- c14-20020a056e020cce00b00300cf38174fmr8031185ilj.22.1668496701950; Mon, 14
- Nov 2022 23:18:21 -0800 (PST)
+        Tue, 15 Nov 2022 02:20:03 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2069.outbound.protection.outlook.com [40.107.244.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52123201A6
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 23:20:01 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UEdyknLonhkUkDc1Eu+AS+wzmoIJFYccUGjxUW1k82kWy7E2E4So+8QpJ+uMOzllpMTCIJmTkfpNM0FdiFdqRyuFVm5ZxPbINafBtQ2ov3G73FnFt9Rzz8bPz2Sk6p3a3aHVV7tPF8MYeoEgyjJlX8xgS6gKS4hg1piyhcHcODS6C0EKTjN4QNLvL1VZSjRkFw8A5FJG44WhfiWDvPaRkSXvFT99LdLMcwq1XsJFW+zmFGk+G96nT4E2xO1yRm4/M5zBb8DFbViw3Vj16AHzQ/Oa5NTiIEdHGSBtO9Mo8rsIUS+sGNkiO6c29jLMG8KVrHDIs+RXDfZG8m1VWjrWuw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3pgG9VSFuO6OG8GM/Y0pcfImjhIJDDUBwo/trrE3kRw=;
+ b=NqWgVSBv5tY0ZHk3b2iYM9cWa95annHlg16MncV+JHmkrfS7EIQT4+1uDOD9Q+H4PV2yTcuWQW19eTHzQRJ42ejmF/iTz8L87d18gLmkm4hcu4wVt3pVMEyhJlsLwDyU83PrfFhS91Ia/mhEETX+6KzsqwIoCUCfduwND0zD0q8Gtw7b9V3Tv+v4ZNx49a51K2yw6fSfgdCxC3wFCPyhx6qbwt2AUNDZpsd7GPxcBk2qQtSs2b3Ucgd2/ITg0xeVHSxelis743lTlqONcAIANUjjfdgLy8XM9boqQd2p6dyPXlPZxnRzCzDFB4PYGtRYAssMXGyJJMthlhiCXNttNQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3pgG9VSFuO6OG8GM/Y0pcfImjhIJDDUBwo/trrE3kRw=;
+ b=Ip+sE7+kAVorjS1DhJq110zwJp5u/GiiYk4HYcnH7Ht2CqXkRKwWKSaKzdilgHUcP28peMLn/DMI/5dZ4Wnfz7IZ+d4lG/XPYUshUq3x+FuaYTfS3w+HLvVHcWfX0pGTeuXPSWOE9I+0nMOwOXbBBGMwGbyFswRI8/g0t8iVHAU=
+Received: from BN7PR06CA0063.namprd06.prod.outlook.com (2603:10b6:408:34::40)
+ by SN7PR12MB7249.namprd12.prod.outlook.com (2603:10b6:806:2a9::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.13; Tue, 15 Nov
+ 2022 07:19:58 +0000
+Received: from BL02EPF0000EE3E.namprd05.prod.outlook.com
+ (2603:10b6:408:34:cafe::17) by BN7PR06CA0063.outlook.office365.com
+ (2603:10b6:408:34::40) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17 via Frontend
+ Transport; Tue, 15 Nov 2022 07:19:58 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL02EPF0000EE3E.mail.protection.outlook.com (10.167.241.135) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5813.11 via Frontend Transport; Tue, 15 Nov 2022 07:19:58 +0000
+Received: from SATLEXMB08.amd.com (10.181.40.132) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 15 Nov
+ 2022 01:19:53 -0600
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB08.amd.com
+ (10.181.40.132) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 14 Nov
+ 2022 23:19:49 -0800
+Received: from sof-System-Product-Name.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34
+ via Frontend Transport; Tue, 15 Nov 2022 01:19:44 -0600
+From:   V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>
+To:     <broonie@kernel.org>, <alsa-devel@alsa-project.org>
+CC:     <Vijendar.Mukunda@amd.com>, <Basavaraj.Hiregoudar@amd.com>,
+        <Sunil-kumar.Dommati@amd.com>, <venkataprasad.potturu@amd.com>,
+        <ssabakar@amd.com>,
+        V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        "Bard Liao" <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        "Ajit Kumar Pandey" <AjitKumar.Pandey@amd.com>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        "moderated list:SOUND - SOUND OPEN FIRMWARE (SOF) DRIVERS" 
+        <sound-open-firmware@alsa-project.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: [PATCH 1/4] ASoC: SOF: amd: Fix for reading position updates from stream box.
+Date:   Tue, 15 Nov 2022 12:49:53 +0530
+Message-ID: <20221115072001.1931617-1-Vsujithkumar.Reddy@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20221102035301.512892-1-zhangsong34@huawei.com>
- <CAKfTPtCcYySw2ZC_pr8=3KFPmAAVN=1h8=5jWkW5YXyy11sehg@mail.gmail.com>
- <b45f96b6-e0b2-22bb-eda1-2468d6fbe104@huawei.com> <CAKfTPtDrWCenxtVcunjS3pGD81TdLf2EkhO_YcdfxnUHXpVF3w@mail.gmail.com>
- <4bad43c0-40a4-dc39-7214-f2c3321a47ee@huawei.com> <CAKfTPtCwUvkqnzs9n0G+cyE5h5QdgwoKF-gNu+4A5g4NHNRe9w@mail.gmail.com>
- <7d887171-491a-1d36-0926-d0486aacc9c2@huawei.com> <CAKfTPtCHZm2AKemnpE1UvQPsgpB5ycFdjkJa1pHQS-=DYJ2-KA@mail.gmail.com>
-In-Reply-To: <CAKfTPtCHZm2AKemnpE1UvQPsgpB5ycFdjkJa1pHQS-=DYJ2-KA@mail.gmail.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Tue, 15 Nov 2022 08:18:10 +0100
-Message-ID: <CAKfTPtAMdQD9S-mbLszeu2pjB4YB2A+1OM5NUV_2xDzCTCc7Qw@mail.gmail.com>
-Subject: Re: [PATCH] sched/fair: Introduce priority load balance for CFS
-To:     Song Zhang <zhangsong34@huawei.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF0000EE3E:EE_|SN7PR12MB7249:EE_
+X-MS-Office365-Filtering-Correlation-Id: 507890a3-c8eb-41ed-5356-08dac6d9cd88
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: BvqL5Z+GirOquKgsGFfIYVWRBNHS/nbjN2L0uFJb5vFo8vcjHVGN9sX/1kw3WExVMGHMJVQv9d1x7dBq/C6cvl/7HDadNZunIFHTJoGw0X9w+KGHB3fS/+ZWvsd4Ms3DRuQ40+xF8zvXaNBDLnxjcNIfiIojM0G+sbnKqTl1F9LE11gKGaym8HGuGKLgwB0KSKJ0pH9ltjEYlBP4+pyUu+nIm2NdaA9B+jwVBuz7DrbNxd+er0YNLbFguhA7N43OX9qaMOng0FPcU8TvsXsJWI+mg4VCgNOoqmWWbyHuU53NZELm/a/T2TNfJhe9rnKDJZ9Kzr4WnLk/wI9HraLkAiaFpWztaRmMZDnb6OFJd83qpfGkH2OOveFSyu0DDgEfWwiAl5awbgWP/NRLkmRy4URAMEUNpYbYJws/KnKb0es7O3qNfsRgmZUcSatfHK6bO4MiuzLPIMTidUtntcJaDfSrulb0NHGeQsE8emMTh6fBbfaSScHfP7zeMWsggczgLPAe5FTAxLBdkPj52HII+hEl8d4DbtqJPgqAttQIYcymh45zuYTct1aS7ZJubWR43griyHno46iPtlca2vmjQUqD6RJ8Jp4tIGrnEGsSu0gXdvyFGJpHIL4ju0JdtyW3bvnK5N1zIt/7b8Bb4bb1zQeze8xUrUEmz2JvAa6OnGpkO4mKr5PFlG4BErFjeipZCKe5VH9/gKKP5+zOjRoKh0frbHXd/a13ZOlKOtIhxEsXetyjfhmZZe9QcrQme/HgD8H24Z471Fc7OwD4VTsDb1CFdZNlH+Eq9NW+yE0/w+3PPEIawVjHz/OefL7ONivm
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(396003)(39860400002)(136003)(451199015)(36840700001)(40470700004)(46966006)(81166007)(426003)(15650500001)(478600001)(1076003)(47076005)(356005)(2906002)(336012)(82310400005)(186003)(40460700003)(41300700001)(110136005)(83380400001)(6666004)(54906003)(40480700001)(7416002)(7696005)(36756003)(82740400003)(8936002)(4326008)(26005)(70586007)(86362001)(70206006)(8676002)(5660300002)(36860700001)(316002)(2616005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Nov 2022 07:19:58.4343
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 507890a3-c8eb-41ed-5356-08dac6d9cd88
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL02EPF0000EE3E.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7249
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Nov 2022 at 17:42, Vincent Guittot
-<vincent.guittot@linaro.org> wrote:
->
-> On Sat, 12 Nov 2022 at 03:51, Song Zhang <zhangsong34@huawei.com> wrote:
-> >
-> > Hi, Vincent
-> >
-> > On 2022/11/3 17:22, Vincent Guittot wrote:
-> > > On Thu, 3 Nov 2022 at 10:20, Song Zhang <zhangsong34@huawei.com> wrote:
-> > >>
-> > >>
-> > >>
-> > >> On 2022/11/3 16:33, Vincent Guittot wrote:
-> > >>> On Thu, 3 Nov 2022 at 04:01, Song Zhang <zhangsong34@huawei.com> wrote:
-> > >>>>
-> > >>>> Thanks for your reply!
-> > >>>>
-> > >>>> On 2022/11/3 2:01, Vincent Guittot wrote:
-> > >>>>> On Wed, 2 Nov 2022 at 04:54, Song Zhang <zhangsong34@huawei.com> wrote:
-> > >>>>>>
-> > >>>>>
-> > >>>>> This really looks like a v3 of
-> > >>>>> https://lore.kernel.org/all/20220810015636.3865248-1-zhangsong34@huawei.com/
-> > >>>>>
-> > >>>>> Please keep versioning.
-> > >>>>>
-> > >>>>>> Add a new sysctl interface:
-> > >>>>>> /proc/sys/kernel/sched_prio_load_balance_enabled
-> > >>>>>
-> > >>>>> We don't want to add more sysctl knobs for the scheduler, we even
-> > >>>>> removed some. Knob usually means that you want to fix your use case
-> > >>>>> but the solution doesn't make sense for all cases.
-> > >>>>>
-> > >>>>
-> > >>>> OK, I will remove this knobs later.
-> > >>>>
-> > >>>>>>
-> > >>>>>> 0: default behavior
-> > >>>>>> 1: enable priority load balance for CFS
-> > >>>>>>
-> > >>>>>> For co-location with idle and non-idle tasks, when CFS do load balance,
-> > >>>>>> it is reasonable to prefer migrating non-idle tasks and migrating idle
-> > >>>>>> tasks lastly. This will reduce the interference by SCHED_IDLE tasks
-> > >>>>>> as much as possible.
-> > >>>>>
-> > >>>>> I don't agree that it's always the best choice to migrate a non-idle task 1st.
-> > >>>>>
-> > >>>>> CPU0 has 1 non idle task and CPU1 has 1 non idle task and hundreds of
-> > >>>>> idle task and there is an imbalance between the 2 CPUS: migrating the
-> > >>>>> non idle task from CPU1 to CPU0 is not the best choice
-> > >>>>>
-> > >>>>
-> > >>>> If the non idle task on CPU1 is running or cache hot, it cannot be
-> > >>>> migrated and idle tasks can also be migrated from CPU1 to CPU0. So I
-> > >>>> think it does not matter.
-> > >>>
-> > >>> What I mean is that migrating non idle tasks first is not a universal
-> > >>> win and not always what we want.
-> > >>>
-> > >>
-> > >> But migrating online tasks first is mostly a trade-off that
-> > >> non-idle(Latency Sensitive) tasks can obtain more CPU time and minimize
-> > >> the interference caused by IDLE tasks. I think this makes sense in most
-> > >> cases, or you can point out what else I need to think about it ?
-> > >>
-> > >> Best regards.
-> > >>
-> > >>>>
-> > >>>>>>
-> > >>>>>> Testcase:
-> > >>>>>> - Spawn large number of idle(SCHED_IDLE) tasks occupy CPUs
-> > >>>>>
-> > >>>>> What do you mean by a large number ?
-> > >>>>>
-> > >>>>>> - Let non-idle tasks compete with idle tasks for CPU time.
-> > >>>>>>
-> > >>>>>> Using schbench to test non-idle tasks latency:
-> > >>>>>> $ ./schbench -m 1 -t 10 -r 30 -R 200
-> > >>>>>
-> > >>>>> How many CPUs do you have ?
-> > >>>>>
-> > >>>>
-> > >>>> OK, some details may not be mentioned.
-> > >>>> My virtual machine has 8 CPUs running with a schbench process and 5000
-> > >>>> idle tasks. The idle task is a while dead loop process below:
-> > >>>
-> > >>> How can you care about latency when you start 10 workers on 8 vCPUs
-> > >>> with 5000 non idle threads ?
-> > >>>
-> > >>
-> > >> No no no... spawn 5000 idle(SCHED_IDLE) processes not 5000 non-idle
-> > >> threads, and with 10 non-idle schbench workers on 8 vCPUs.
-> > >
-> > > yes spawn 5000 idle tasks but my point remains the same
-> > >
-> >
-> > I am so sorry that I have not received your reply for a long time, and I
-> > am still waiting for it anxiously. In fact, migrating non-idle tasks 1st
-> > works well in most scenarios, so it maybe possible to add a
-> > sched_feat(LB_PRIO) to enable or disable that. Finally, I really hope
-> > you can give me some better advice.
->
-> I have seen that you posted a v4 5 days ago which is on my list to be reviewed.
->
-> My concern here remains that selecting non idle task 1st is not always
-> the best choices as for example when you have 1 non idle task per cpu
-> and thousands of idle tasks moving around. Then regarding your use
-> case, the weight of the 5000 idle threads is around twice more than
-> the weight of your non idle bench: sum weight of idle threads is 15k
-> whereas the weight of your bench is around 6k IIUC how RPS run. This
-> also means that the idle threads will take a significant times of the
-> system: 5000 / 7000 ticks. I don't understand how you can care about
-> latency in such extreme case and I'm interested to get the real use
-> case where you can have such situation.
->
-> All that to say that idle task remains cfs task with a small but not
-> null weight and we should not make them special other than by not
-> preempting at wakeup.
+By default the position updates are read from dsp box when streambox
+size is not defined.if the streambox size is defined to some value
+then position updates can be read from the streambox.
 
-Also, as mentioned for a previous version, a task with nice prio 19
-has a weight of 15 so if you replace the 5k idle threads with 1k cfs
-w/ nice prio 19 threads, you will face a similar problem. So you can't
-really care only on the idle property of a task
+Signed-off-by: V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>
+---
+ sound/soc/sof/amd/acp-common.c |  1 +
+ sound/soc/sof/amd/acp-ipc.c    | 30 +++++++++++++++++++++++++++++-
+ sound/soc/sof/amd/acp.h        |  4 ++++
+ 3 files changed, 34 insertions(+), 1 deletion(-)
 
->
-> >
-> > Best regards.
-> >
-> > Song Zhang
+diff --git a/sound/soc/sof/amd/acp-common.c b/sound/soc/sof/amd/acp-common.c
+index 27b95187356e..150e042e4039 100644
+--- a/sound/soc/sof/amd/acp-common.c
++++ b/sound/soc/sof/amd/acp-common.c
+@@ -76,6 +76,7 @@ struct snd_sof_dsp_ops sof_acp_common_ops = {
+ 	/*IPC */
+ 	.send_msg		= acp_sof_ipc_send_msg,
+ 	.ipc_msg_data		= acp_sof_ipc_msg_data,
++	.set_stream_data_offset = acp_set_stream_data_offset,
+ 	.get_mailbox_offset	= acp_sof_ipc_get_mailbox_offset,
+ 	.get_window_offset      = acp_sof_ipc_get_window_offset,
+ 	.irq_thread		= acp_sof_ipc_irq_thread,
+diff --git a/sound/soc/sof/amd/acp-ipc.c b/sound/soc/sof/amd/acp-ipc.c
+index dd030566e372..dd6e53c63407 100644
+--- a/sound/soc/sof/amd/acp-ipc.c
++++ b/sound/soc/sof/amd/acp-ipc.c
+@@ -192,13 +192,41 @@ int acp_sof_ipc_msg_data(struct snd_sof_dev *sdev, struct snd_pcm_substream *sub
+ {
+ 	unsigned int offset = sdev->dsp_box.offset;
+ 
+-	if (!substream || !sdev->stream_box.size)
++	if (!substream || !sdev->stream_box.size) {
+ 		acp_mailbox_read(sdev, offset, p, sz);
++	} else {
++		struct acp_dsp_stream *stream = substream->runtime->private_data;
++
++		if (!stream)
++			return -ESTRPIPE;
++
++		acp_mailbox_read(sdev, stream->posn_offset, p, sz);
++	}
+ 
+ 	return 0;
+ }
+ EXPORT_SYMBOL_NS(acp_sof_ipc_msg_data, SND_SOC_SOF_AMD_COMMON);
+ 
++int acp_set_stream_data_offset(struct snd_sof_dev *sdev,
++			       struct snd_pcm_substream *substream,
++			       size_t posn_offset)
++{
++	struct acp_dsp_stream *stream = substream->runtime->private_data;
++
++	/* check for unaligned offset or overflow */
++	if (posn_offset > sdev->stream_box.size ||
++	    posn_offset % sizeof(struct sof_ipc_stream_posn) != 0)
++		return -EINVAL;
++
++	stream->posn_offset = sdev->stream_box.offset + posn_offset;
++
++	dev_dbg(sdev->dev, "pcm: stream dir %d, posn mailbox offset is %zu",
++		substream->stream, stream->posn_offset);
++
++	return 0;
++}
++EXPORT_SYMBOL_NS(acp_set_stream_data_offset, SND_SOC_SOF_AMD_COMMON);
++
+ int acp_sof_ipc_get_mailbox_offset(struct snd_sof_dev *sdev)
+ {
+ 	const struct sof_amd_acp_desc *desc = get_chip_info(sdev->pdata);
+diff --git a/sound/soc/sof/amd/acp.h b/sound/soc/sof/amd/acp.h
+index dd3c072d0172..1529c6d9bf9b 100644
+--- a/sound/soc/sof/amd/acp.h
++++ b/sound/soc/sof/amd/acp.h
+@@ -138,6 +138,7 @@ struct acp_dsp_stream {
+ 	int stream_tag;
+ 	int active;
+ 	unsigned int reg_offset;
++	size_t posn_offset;
+ };
+ 
+ struct sof_amd_acp_desc {
+@@ -199,6 +200,9 @@ int acp_dsp_block_read(struct snd_sof_dev *sdev, enum snd_sof_fw_blk_type blk_ty
+ irqreturn_t acp_sof_ipc_irq_thread(int irq, void *context);
+ int acp_sof_ipc_msg_data(struct snd_sof_dev *sdev, struct snd_pcm_substream *substream,
+ 			 void *p, size_t sz);
++int acp_set_stream_data_offset(struct snd_sof_dev *sdev,
++			       struct snd_pcm_substream *substream,
++			       size_t posn_offset);
+ int acp_sof_ipc_send_msg(struct snd_sof_dev *sdev,
+ 			 struct snd_sof_ipc_msg *msg);
+ int acp_sof_ipc_get_mailbox_offset(struct snd_sof_dev *sdev);
+-- 
+2.25.1
+
