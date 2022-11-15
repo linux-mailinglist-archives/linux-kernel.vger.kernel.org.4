@@ -2,37 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94C1E6296DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 12:11:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C00EB6296E2
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 12:11:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbiKOLLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 06:11:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48856 "EHLO
+        id S232114AbiKOLLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 06:11:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237577AbiKOLKn (ORCPT
+        with ESMTP id S238128AbiKOLKr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 06:10:43 -0500
+        Tue, 15 Nov 2022 06:10:47 -0500
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 664B85F6D;
-        Tue, 15 Nov 2022 03:10:25 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29367103C;
+        Tue, 15 Nov 2022 03:10:29 -0800 (PST)
 Received: from wf0498.dip.tu-dresden.de ([141.76.181.242] helo=phil.dip.tu-dresden.de)
         by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <heiko@sntech.de>)
-        id 1outpe-0007ai-MT; Tue, 15 Nov 2022 12:10:22 +0100
+        id 1outpf-0007ai-Ka; Tue, 15 Nov 2022 12:10:23 +0100
 From:   Heiko Stuebner <heiko@sntech.de>
-To:     Johan Jonker <jbx6244@gmail.com>
+To:     Chen-Yu Tsai <wens@kernel.org>
 Cc:     Heiko Stuebner <heiko@sntech.de>,
-        linux-arm-kernel@lists.infradead.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, Chen-Yu Tsai <wens@csie.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH v2] ARM: dts: rockchip: rk3xx: disable arm_global_timer
-Date:   Tue, 15 Nov 2022 12:10:17 +0100
-Message-Id: <166851058436.863884.13293855526499863813.b4-ty@sntech.de>
+Subject: Re: [PATCH] arm64: dts: rockchip: Fix Pine64 Quartz4-B PMIC interrupt
+Date:   Tue, 15 Nov 2022 12:10:20 +0100
+Message-Id: <166851058430.863884.3049189227884445450.b4-ty@sntech.de>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <f275ca8d-fd0a-26e5-b978-b7f3df815e0a@gmail.com>
-References: <f275ca8d-fd0a-26e5-b978-b7f3df815e0a@gmail.com>
+In-Reply-To: <20221106161513.4140-1-wens@kernel.org>
+References: <20221106161513.4140-1-wens@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -44,23 +43,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 30 Oct 2022 21:56:29 +0100, Johan Jonker wrote:
-> The clock source and the sched_clock provided by the arm_global_timer
-> on Rockchip rk3066a/rk3188 are quite unstable because their rates
-> depend on the CPU frequency.
+On Mon, 7 Nov 2022 00:15:13 +0800, Chen-Yu Tsai wrote:
+> From: Chen-Yu Tsai <wens@csie.org>
 > 
-> Recent changes to the arm_global_timer driver makes it impossible to use.
+> Ths PMIC's interrupt line is tied to GPIO0_A3. This is described
+> correctly for the pinmux setting, but incorrectly for the interrupt.
 > 
-> On the other side, the arm_global_timer has a higher rating than the
-> ROCKCHIP_TIMER, it will be selected by default by the time framework
-> while we want to use the stable Rockchip clock source.
+> Correct the interrupt setting so that interrupts from the PMIC get
+> delivered.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/1] ARM: dts: rockchip: rk3xx: disable arm_global_timer
-      commit: da74858a475782a3f16470907814c8cc5950ad68
+[1/1] arm64: dts: rockchip: Fix Pine64 Quartz4-B PMIC interrupt
+      commit: 562105c1b072411c71ac2202410d83ee79297624
 
 Best regards,
 -- 
