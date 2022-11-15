@@ -2,126 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED2B9629922
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 13:46:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86AB3629927
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 13:47:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229508AbiKOMqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 07:46:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56178 "EHLO
+        id S229979AbiKOMrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 07:47:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiKOMqI (ORCPT
+        with ESMTP id S229725AbiKOMrK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 07:46:08 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A2E027CFC
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 04:46:05 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id cl5so24055779wrb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 04:46:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mlZD0Z2uZ+ThYG4e4r6CMcbbN5g4YL6Nxz6PbfmS5NA=;
-        b=Yb7kmLhGhyYiM5Q8MgXeUnKQK4LE6+7zq57DqabdJ26qf7EizBpTbfxYyt6TRJRH7g
-         iMCvzoK2Hjfv9V7SD/2dgd+0NrOlZpVSIb+Zn3bOFrYEsCltvvivgOVnvZHW2Vddxaiv
-         yU0lMINmERm0Hi8UK3OClxCtltTXYgQXZ1argRqmb5aLQjZMBreAsiXddyMR/8RCYvBY
-         3fNB4/DBNErdX2p4BFu0nX1Vd777tDlL6VbsuFetwlpXVkLNDEN3bumcqizBZBBfFpIE
-         w3O/cx3oY8iFEFI1tbqApqu9NRxlKlB/MP05CIZN+Palc9NZo/G3fpcB0HUppPqPB/pz
-         hlVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mlZD0Z2uZ+ThYG4e4r6CMcbbN5g4YL6Nxz6PbfmS5NA=;
-        b=fjSOYKMeP+Zp7+yTvjUr+Vn7hhXdpe+50pt2uZn+Cfzh2F4c1GMT7UTI4S/Px9JyuJ
-         Seiqc5+ESgEDIIorPIJjtIscRFleFvYFTAgdKZ301ivB/WdGgKlk7zUMcGJPUYPXvPfE
-         4M1D5XxfTk/S4JzpR/idSEmd7s1acOl8ACL+QUHxBzjbyOw5C9slnx4R/XRVWPpeby19
-         1wbDoI6wzxx3+G5mATCi/QFqWW2QyUj4ToL5yhFXSM/rOegIy3MIqKOdm/XL/N8HUQnS
-         dJIUgz9yuHmTfm/GSVAcoWD17+p1uXDwJs3vM7rlIcDL4aFAljky+yP83sBIE8ZfagM7
-         kyzQ==
-X-Gm-Message-State: ANoB5pmZotfOSsDBgaPNte2mNWUy2jjG+LkRxSVTIURjkQaMbOyojZQU
-        7yeIwIXj8A/dtCZ3fSfQCU7lgA==
-X-Google-Smtp-Source: AA0mqf6vybVgZNApQBaGCsmb/WmoxQCxkT1rPljAJ3wbuzXcligL+cMP8YKndcURsBFb7hNRAA9EBg==
-X-Received: by 2002:adf:ec10:0:b0:22e:48ee:dc64 with SMTP id x16-20020adfec10000000b0022e48eedc64mr10465784wrn.319.1668516363574;
-        Tue, 15 Nov 2022 04:46:03 -0800 (PST)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id h5-20020a1ccc05000000b003cf7292c553sm15100857wmb.13.2022.11.15.04.46.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 04:46:03 -0800 (PST)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-To:     linux-amlogic@lists.infradead.org,
-        Jiucheng Xu <jiucheng.xu@amlogic.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org
-Cc:     Jianxin Pan <jianxin.pan@amlogic.com>,
-        Will Deacon <will@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chris Healy <healych@amzon.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Kelvin Zhang <kelvin.zhang@amlogic.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Chris Healy <cphealy@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-In-Reply-To: <20221109015818.194927-1-jiucheng.xu@amlogic.com>
-References: <20221109015818.194927-1-jiucheng.xu@amlogic.com>
-Subject: Re: (subset) [PATCH v9 1/4] perf/amlogic: Add support for Amlogic meson G12 SoC DDR PMU driver
-Message-Id: <166851636240.2706970.5044622392336607391.b4-ty@linaro.org>
-Date:   Tue, 15 Nov 2022 13:46:02 +0100
+        Tue, 15 Nov 2022 07:47:10 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D55ED27DC4;
+        Tue, 15 Nov 2022 04:47:05 -0800 (PST)
+X-UUID: 769bc245b5924426bf4b1b63377e16b4-20221115
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=M5TRJ92JPSujVV77tXKFEvHsZ6iHftmWR79uxeFROKU=;
+        b=tS4Ny40JlbmEW8uvBh/y4Y9Om/qp2ScQBGESjgKaKFephpBbuuOjeaSbHJdj+IOqfNY7O2xoIly5xzuZamcIyE9n1hF1SZDUKIxXXenF8VyXgi+Y4zGfRnx3c/ihN5CTE+mSH9Wro5bJVYtztvbB8yVBP+xoL1myXuHickckbeU=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.13,REQID:96f47c15-5c34-418d-93ff-7e6a7a9a096a,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:-25
+X-CID-META: VersionHash:d12e911,CLOUDID:8e7fbfac-70f0-4e5b-83e6-c0b7915231c3,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 769bc245b5924426bf4b1b63377e16b4-20221115
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <bayi.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1703265728; Tue, 15 Nov 2022 20:46:59 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
+ mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Tue, 15 Nov 2022 20:46:58 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs13n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Tue, 15 Nov 2022 20:46:57 +0800
+From:   Bayi Cheng <bayi.cheng@mediatek.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Ikjoon Jang <ikjn@chromium.org>
+CC:     <linux-spi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        bayi cheng <bayi.cheng@mediatek.com>
+Subject: [PATCH v1] spi: spi-mtk-nor: Unify write buffer on/off
+Date:   Tue, 15 Nov 2022 20:46:55 +0800
+Message-ID: <20221115124655.10124-1-bayi.cheng@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.1
+Content-Type: text/plain
+X-MTK:  N
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: bayi cheng <bayi.cheng@mediatek.com>
 
-On Wed, 9 Nov 2022 09:58:15 +0800, Jiucheng Xu wrote:
-> This patch adds support Amlogic meson G12 series SoC
-> DDR bandwidth PMU driver framework and interfaces.
-> 
-> The PMU not only can monitor the total DDR bandwidth,
-> but also the bandwidth which is from individual IP module.
-> 
-> Example usage:
-> 
-> [...]
+The logical structures of mtk_nor_write_buffer_enable and
+mtk_nor_write_buffer_disable are very similar, So it is necessary to
+combine them into one.
 
-Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v6.2/arm64-dt)
+Signed-off-by: bayi cheng <bayi.cheng@mediatek.com>
+---
+Change in v1:
+  -Delete mtk_nor_write_buffer_enable.
+  -Delete mtk_nor_write_buffer_disable.
+  -Add mtk_nor_setup_write_buffer.
+---
+---
+ drivers/spi/spi-mtk-nor.c | 40 ++++++++++++++++-----------------------
+ 1 file changed, 16 insertions(+), 24 deletions(-)
 
-[4/4] arm64: dts: meson: Add DDR PMU node
-      https://git.kernel.org/amlogic/c/90cf8e21016fa3864a311622f6162fde13aaaf23
-
-These changes has been applied on the intermediate git tree [1].
-
-The v6.2/arm64-dt branch will then be sent via a formal Pull Request to the Linux SoC maintainers
-for inclusion in their intermediate git branches in order to be sent to Linus during
-the next merge window, or sooner if it's a set of fixes.
-
-In the cases of fixes, those will be merged in the current release candidate
-kernel and as soon they appear on the Linux master branch they will be
-backported to the previous Stable and Long-Stable kernels [2].
-
-The intermediate git branches are merged daily in the linux-next tree [3],
-people are encouraged testing these pre-release kernels and report issues on the
-relevant mailing-lists.
-
-If problems are discovered on those changes, please submit a signed-off-by revert
-patch followed by a corrective changeset.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
-[3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-
+diff --git a/drivers/spi/spi-mtk-nor.c b/drivers/spi/spi-mtk-nor.c
+index d167699a1a96..e8b355f5be56 100644
+--- a/drivers/spi/spi-mtk-nor.c
++++ b/drivers/spi/spi-mtk-nor.c
+@@ -443,36 +443,28 @@ static int mtk_nor_read_pio(struct mtk_nor *sp, const struct spi_mem_op *op)
+ 	return ret;
+ }
+ 
+-static int mtk_nor_write_buffer_enable(struct mtk_nor *sp)
++static int mtk_nor_setup_write_buffer(struct mtk_nor *sp, bool on)
+ {
+ 	int ret;
+ 	u32 val;
+ 
+-	if (sp->wbuf_en)
++	if (!(sp->wbuf_en ^ on))
+ 		return 0;
+ 
+ 	val = readl(sp->base + MTK_NOR_REG_CFG2);
+-	writel(val | MTK_NOR_WR_BUF_EN, sp->base + MTK_NOR_REG_CFG2);
+-	ret = readl_poll_timeout(sp->base + MTK_NOR_REG_CFG2, val,
+-				 val & MTK_NOR_WR_BUF_EN, 0, 10000);
+-	if (!ret)
+-		sp->wbuf_en = true;
+-	return ret;
+-}
+-
+-static int mtk_nor_write_buffer_disable(struct mtk_nor *sp)
+-{
+-	int ret;
+-	u32 val;
++	if (on) {
++		writel(val | MTK_NOR_WR_BUF_EN, sp->base + MTK_NOR_REG_CFG2);
++		ret = readl_poll_timeout(sp->base + MTK_NOR_REG_CFG2, val,
++					 val & MTK_NOR_WR_BUF_EN, 0, 10000);
++	} else {
++		writel(val & ~MTK_NOR_WR_BUF_EN, sp->base + MTK_NOR_REG_CFG2);
++		ret = readl_poll_timeout(sp->base + MTK_NOR_REG_CFG2, val,
++					 !(val & MTK_NOR_WR_BUF_EN), 0, 10000);
++	}
+ 
+-	if (!sp->wbuf_en)
+-		return 0;
+-	val = readl(sp->base + MTK_NOR_REG_CFG2);
+-	writel(val & ~MTK_NOR_WR_BUF_EN, sp->base + MTK_NOR_REG_CFG2);
+-	ret = readl_poll_timeout(sp->base + MTK_NOR_REG_CFG2, val,
+-				 !(val & MTK_NOR_WR_BUF_EN), 0, 10000);
+ 	if (!ret)
+-		sp->wbuf_en = false;
++		sp->wbuf_en = on;
++
+ 	return ret;
+ }
+ 
+@@ -482,7 +474,7 @@ static int mtk_nor_pp_buffered(struct mtk_nor *sp, const struct spi_mem_op *op)
+ 	u32 val;
+ 	int ret, i;
+ 
+-	ret = mtk_nor_write_buffer_enable(sp);
++	ret = mtk_nor_setup_write_buffer(sp, true);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -501,7 +493,7 @@ static int mtk_nor_pp_unbuffered(struct mtk_nor *sp,
+ 	const u8 *buf = op->data.buf.out;
+ 	int ret;
+ 
+-	ret = mtk_nor_write_buffer_disable(sp);
++	ret = mtk_nor_setup_write_buffer(sp, false);
+ 	if (ret < 0)
+ 		return ret;
+ 	writeb(buf[0], sp->base + MTK_NOR_REG_WDATA);
+@@ -608,7 +600,7 @@ static int mtk_nor_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
+ 	}
+ 
+ 	if ((op->data.dir == SPI_MEM_DATA_IN) && mtk_nor_match_read(op)) {
+-		ret = mtk_nor_write_buffer_disable(sp);
++		ret = mtk_nor_setup_write_buffer(sp, false);
+ 		if (ret < 0)
+ 			return ret;
+ 		mtk_nor_setup_bus(sp, op);
 -- 
-Neil
+2.25.1
+
