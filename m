@@ -2,82 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32CC262A039
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 18:25:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA6CA62A038
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 18:25:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbiKORYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 12:24:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48590 "EHLO
+        id S231287AbiKORY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 12:24:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232763AbiKORPL (ORCPT
+        with ESMTP id S232578AbiKORPH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 12:15:11 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A49201A8;
-        Tue, 15 Nov 2022 09:15:10 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id f27so37783243eje.1;
-        Tue, 15 Nov 2022 09:15:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Im2il6wc9BflovIe/aH1N9vgxr8n3TsZYaH+KY9UDA4=;
-        b=pIhjLUU32YfsyNVXjXTZ6nX+4F6D6JJOJW5yP2Eqod8OMQp9HwTgzaFviHUnRya05K
-         CZkUiCg3a9CktHmLMnmNevBZvOOhXl6RkAgBu/6JZnllaUXiGfd5Sv8PTDLI7w8dUzuD
-         WL8qx6ka6X3R/8UsemBpENzJ5nlkHFQfel1hpgBtm2CsnfY+mnJAhz6DBfO3s/1uZIMJ
-         7stvI1fNMFlzOrFu0IzOHR11bY9TfZX4h/1d8U/rAXw4N9ibGOFRc62bJJ6LWUlpaJn0
-         aDfLyOHoY6tv7pPKRWKUqkaJ7UB7dtJeL+7RJlrYAB002jxYjFmo4/oZiD2rZoHH/+Gg
-         giWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Im2il6wc9BflovIe/aH1N9vgxr8n3TsZYaH+KY9UDA4=;
-        b=btfJJF86ljO5UY5VIUd8kVOKMUost07KmUwM4tFkopRTiA+HXLxHlum2iuEcKc51MS
-         wOxropb/WB1BXDyQId5CIhvbChjyFE2efjq+01Kxxc0W9z/VGxjfRW2vNM3xVB7vuNcF
-         mbj6DbZ/2pspBw+DRCrl54vqDioREqXvQREENKK43XIsWT5Ru85vd0I8yUpqxPdu9VWK
-         QCcHMMbaAnCnjE9O8SLE7FexMspWdDvm+xsG3kGWHUcPkLeLTtZ/etgyWS0ypPz/ljRY
-         vv7xgKDNShkN7O/MwR5kbbr/oTOhusMoEUoj5G992Tbjq4RIVhJI3Eu1Pj02/sru40eA
-         WIMg==
-X-Gm-Message-State: ANoB5pllrjRup/od2HHxRVxKnxjYZoUmQ3ndtpiCbyxykN3mQu61Y/L9
-        9eTA8OKDOIvUldW8i/gDDv1nUuNS7zcP4A==
-X-Google-Smtp-Source: AA0mqf7PKtZ1bQXNlA+kqCp9KC9S1CyIuyftTYgR4SCBTuYxTQRtILCjzr1HfgBjc/Mc+sa7IKcqlw==
-X-Received: by 2002:a17:907:206e:b0:78d:3c82:a875 with SMTP id qp14-20020a170907206e00b0078d3c82a875mr15170708ejb.465.1668532509461;
-        Tue, 15 Nov 2022 09:15:09 -0800 (PST)
-Received: from skbuf ([188.26.57.19])
-        by smtp.gmail.com with ESMTPSA id rn5-20020a170906d92500b0078dd4c89781sm5781331ejb.35.2022.11.15.09.15.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 09:15:09 -0800 (PST)
-Date:   Tue, 15 Nov 2022 19:15:06 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     netdev@kapio-technology.com
-Cc:     Ido Schimmel <idosch@idosch.org>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v8 net-next 0/2] mv88e6xxx: Add MAB offload support
-Message-ID: <20221115171506.74yztkivdqggelh6@skbuf>
-References: <20221115102833.ahwnahrqstcs2eug@skbuf>
- <7c02d4f14e59a6e26431c086a9bb9643@kapio-technology.com>
- <20221115111034.z5bggxqhdf7kbw64@skbuf>
- <0cd30d4517d548f35042a535fd994831@kapio-technology.com>
- <20221115122237.jfa5aqv6hauqid6l@skbuf>
- <fb1707b55bd8629770e77969affaa2f9@kapio-technology.com>
- <20221115145650.gs7crhkidbq5ko6v@skbuf>
- <551b958d6df4ee608a5da6064a2843db@kapio-technology.com>
- <20221115161528.nlshuexccymfkree@skbuf>
- <5cec856c6a1e1721dc75a74815dad4a7@kapio-technology.com>
+        Tue, 15 Nov 2022 12:15:07 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB971EC66
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 09:15:06 -0800 (PST)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1668532505;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Yybjy0PIYNskaP5faHqnthg9WIcdfrQS9ZzYuDsOR40=;
+        b=RcR7/OCp+pX+2ZBjJuvEpAejLUopOa3GAS6CXfhXrOwNyPFY9qRko+iEaCHw7SyJmNEuIU
+        cOOcaHx9j8LODvYIGJKpdwEKVLodgHsSBQ+/qpolBasgI8YHenioADiRSeSJyFneQ6dWQE
+        I8EFErSedz93x4HJFI6XpzBFU8DiDU/P4acdmGcRkVvkmoLIVjO2VVY2uwQ2GyYB7Ov1DJ
+        B7g+5ylUW8vWnznUuIQ4ZO0BGxa+kB0ivxyr7kxi9TZRu4IBVEigbX9xYVdZoCruMzsWoC
+        x807E0O6ElX5baV/QomA30FgR4YNnkzZNWm6CxwlgYQAA43TfcO1br3wOMSLrg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1668532505;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Yybjy0PIYNskaP5faHqnthg9WIcdfrQS9ZzYuDsOR40=;
+        b=grtvYJEi+TN+aVj2Y1xGMCHSC39yTXgDLSnZ49pqIKQnNBNS+PlrtEPQJBBA3XNVCEWxhs
+        5PfC6JkUvArjAHBw==
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: replay log: Re: [PATCH printk v4 38/39] printk: relieve
+ console_lock of list synchronization duties
+In-Reply-To: <Y3PBNJRvE6tU8ct+@alley>
+References: <20221114162932.141883-1-john.ogness@linutronix.de>
+ <20221114162932.141883-39-john.ogness@linutronix.de>
+ <Y3Oxck0/LAHFLYip@alley> <Y3PBNJRvE6tU8ct+@alley>
+Date:   Tue, 15 Nov 2022 18:21:34 +0106
+Message-ID: <87r0y4m955.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5cec856c6a1e1721dc75a74815dad4a7@kapio-technology.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,21 +60,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 06:11:08PM +0100, netdev@kapio-technology.com wrote:
-> On 2022-11-15 17:15, Vladimir Oltean wrote:
-> > On Tue, Nov 15, 2022 at 04:14:05PM +0100, netdev@kapio-technology.com
-> > wrote:
-> > > I think the violation log issue should be handled in a seperate
-> > > patch(set)?
-> > 
-> > idk, what do you plan to do about it?
-> 
-> When I think about it, I think that the messages should be disabled by default
-> and like one enables NO_LL_LEARN (echo 1 >/sys/class...), they can be activated
-> if one needs it. And of course the ethtool stats will still be there anyhow...
-> 
-> How does that sound?
+On 2022-11-15, Petr Mladek <pmladek@suse.com> wrote:
+>>> --- a/kernel/printk/printk.c
+>>> +++ b/kernel/printk/printk.c
+>>> @@ -3334,6 +3330,11 @@ void register_console(struct console *newcon)
+>>>  		 * boot console that is the furthest behind.
+>>>  		 */
+>>>  		if (bootcon_registered && !keep_bootcon) {
+>>> +			/*
+>>> +			 * Hold the console_lock to guarantee safe access to
+>>> +			 * console->seq.
+>>> +			 */
+>>> +			console_lock();
+>>>  			for_each_console(con) {
+>>>  				if ((con->flags & CON_BOOT) &&
+>>>  				    (con->flags & CON_ENABLED) &&
+>>> @@ -3341,6 +3342,7 @@ void register_console(struct console *newcon)
+>>>  					newcon->seq = con->seq;
+>>>  				}
+>>>  			}
+>>> +			console_unlock();
+>
+> So, without the above two hunks:
+>
+> Reviewed-by: Petr Mladek <pmladek@suse.com>
 
-Just make them trace points...
-If you don't know how to do that, just search for who has "#define TRACE_SYSTEM"
-in drivers/net/ethernet/ and steal from them...
+Note that we actually need those hunks to guarantee a consistent @seq
+value. The console_lock is the only synchronization mechanism available
+to read console->seq.
+
+John
