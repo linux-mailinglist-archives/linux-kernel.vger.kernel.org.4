@@ -2,160 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A9AC62A134
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 19:18:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A714362A136
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 19:21:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231317AbiKOSSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 13:18:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34110 "EHLO
+        id S230150AbiKOSVT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 13:21:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229948AbiKOSSn (ORCPT
+        with ESMTP id S229596AbiKOSVQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 13:18:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F8B92FC25
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 10:17:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668536267;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zM9NVAiHgjBvRccxutMAlz4UOKHMx1Iq+kM6b0m0gaI=;
-        b=b7i+rRpK0fHQOs4humFDMLHL75Js0Ex2cCe8140CvarSn4q4XyMRCXmceLGCesFI+uh0M1
-        nQuS2QLtOHbAVwGlseupPGcaN+i2jm8YDxM+W2GiS+IiY77p3/sdn+apLU3eoKzPIYeeID
-        K//La77kciverlKmP2nfrICzUl9SUAY=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-527-Xe-okTiRNR-nclKXrxPJZQ-1; Tue, 15 Nov 2022 13:17:46 -0500
-X-MC-Unique: Xe-okTiRNR-nclKXrxPJZQ-1
-Received: by mail-wm1-f69.google.com with SMTP id az40-20020a05600c602800b003cfa26c40easo1031284wmb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 10:17:46 -0800 (PST)
+        Tue, 15 Nov 2022 13:21:16 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED7E1740D
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 10:21:16 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id q1-20020a17090a750100b002139ec1e999so14620410pjk.1
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 10:21:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=microgate-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Pds9DPhUuKKKwvTuZXTljs6vTvJYl9KVSRCAhBrnBDU=;
+        b=XSJ48EZAmzrhON5KIzsx1sxTghHHiJCpHMvI6da5Y5nBSDzfo73ldS4p01NFCUzgec
+         Vvgu5l6g3X5QotkYlQnYyR4S8nBLUXi8edlKHPFwyeERuO9b8tvSJQnhUKAlK8GSuR7B
+         z3vJOw05/rZXMsjPnNPX3fXmNCymQGoHGQTsZyJZzzrKyxftL0C/yJuE2UHg8c4uv27X
+         eDANDl9Ibo9GBBKYU/Jtg7DMbFPzj89hlJcqHsW0WMK+wpNu6Vh8jVu525qdmSeBngma
+         dzBFyQAFHggoGJzuxTEoG592l2fgy2UMhHAZrMi87CPDeM6ywa8EOgMr14jpRDtzZQPQ
+         UvaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zM9NVAiHgjBvRccxutMAlz4UOKHMx1Iq+kM6b0m0gaI=;
-        b=T6b7UTQnm393EyyjLf+Ptiq/+vnB352aXq6waA5PAX73NC1MuSIB73sJhU3nFu8O0U
-         iUh4/Dbz9eBoZ+vnbjH7AQL0+Xj93yzzpSGhYG4V5i5ceQ3FazPtEzi5TuTPD2sTQC6k
-         13uGGFB4HsAtlkB+T8L0pbwfMdUg0aKBDRhhGco9nhbE3Y6xEwcmJqAvglbDmhl7Xf8r
-         WdJ3T3aM/6g3lfBGA1nwGG6njv7mlikYRsJCcwP0eV7g6cjodhaWNfXvH7gKRfou7Zxs
-         qQrPal2S64DzCOup9+TwpHlHuXU4nWXB14JV3CMnz5iFn2k0jzkPevfFimONQUsKLnYf
-         Ph5w==
-X-Gm-Message-State: ANoB5pk/gi+s4cKe4L3ZlmAvtJAKx/kDaZl7RncUTU/j2+ib3NTJwakW
-        081zMKOKPjUiADmfu/xS3IrFxgzgIAum7Ega6trpNjcOKXvKJ+gy2SoiguLF+9V8wuRfg3nAY00
-        ZgyKcP8dYYnFFD0/o+5JVEjn1
-X-Received: by 2002:a05:600c:4f06:b0:3cf:a323:bfe6 with SMTP id l6-20020a05600c4f0600b003cfa323bfe6mr2434587wmq.86.1668536265078;
-        Tue, 15 Nov 2022 10:17:45 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6FRbcS4vsa5azpDI/ImCO2GqAsz5ThBO9bUYJE/LjiknvN5Mt9qC3X8dURVYSCU/NMeS3Wdw==
-X-Received: by 2002:a05:600c:4f06:b0:3cf:a323:bfe6 with SMTP id l6-20020a05600c4f0600b003cfa323bfe6mr2434558wmq.86.1668536264756;
-        Tue, 15 Nov 2022 10:17:44 -0800 (PST)
-Received: from ?IPV6:2003:cb:c707:9d00:9303:90ce:6dcb:2bc9? (p200300cbc7079d00930390ce6dcb2bc9.dip0.t-ipconnect.de. [2003:cb:c707:9d00:9303:90ce:6dcb:2bc9])
-        by smtp.gmail.com with ESMTPSA id x11-20020a5d54cb000000b002415dd45320sm12973262wrv.112.2022.11.15.10.17.43
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Pds9DPhUuKKKwvTuZXTljs6vTvJYl9KVSRCAhBrnBDU=;
+        b=DrgCx1k/RtIiYCgUyytvrQRsT5A0NEwm5Gv+4yxLxtzUY4KM85/iy1DDObGeRb18TM
+         2nQKD0b5GYkAPun69PkvulMkboWwLG5cAAf0R3lZuHnoww1FX7SUT6DL9EaGEV4J73tD
+         CL7yPPs3SZBel/HP/PlB0R65gESpZOuVBLLWNhTGFQzjnfW6fvFq2NnvopSaoYV1FIUj
+         Wy6Y9VjUJlRjTqiZ0EqOmUohHYv8TaPNYoGBuZA5KUVO0nscrebpY/aZvKrhIhW+Yhop
+         /Hp+yRhpjBSUdQa9HQdHOppD5nHWs51M4hzdmEXQ/L5VWVEnjSkTvN3YUaiIBKsJOnnJ
+         6zTw==
+X-Gm-Message-State: ANoB5pkGrOtbiM7WSxN2re6e3+ETGd0Mij6u8R9Foo/9xnCR1uxZ82KT
+        SQ379JWGn2FVD7OEkiGryOoGFA==
+X-Google-Smtp-Source: AA0mqf7nJ3CZOrXfIX/cW9S5ogmqnJEH8YGX6wwT73ElcR3GtxQ942KYyw7unOjlxRnRMzb6o8QMVQ==
+X-Received: by 2002:a17:90b:3c11:b0:218:8f2:5af9 with SMTP id pb17-20020a17090b3c1100b0021808f25af9mr1749128pjb.65.1668536475613;
+        Tue, 15 Nov 2022 10:21:15 -0800 (PST)
+Received: from [192.168.1.86] (c-208-53-111-167.customer.broadstripe.net. [208.53.111.167])
+        by smtp.gmail.com with ESMTPSA id y18-20020a17090a8b1200b0020d39ffe987sm8645310pjn.50.2022.11.15.10.21.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 10:17:44 -0800 (PST)
-Message-ID: <5ddf1310-b49f-6e66-a22a-6de361602558@redhat.com>
-Date:   Tue, 15 Nov 2022 19:17:43 +0100
+        Tue, 15 Nov 2022 10:21:15 -0800 (PST)
+Message-ID: <2b501d50-6777-a34f-7373-6648ed418794@microgate.com>
+Date:   Tue, 15 Nov 2022 10:21:14 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v3 1/2] mm/migrate: Fix read-only page got writable when
- recover pte
+ Thunderbird/102.4.2
+Subject: [PATCH] tty: synclink_gt: unwind actions in error path of net device
+ open
 Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Cc:     Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Ives van Hoorne <ives@codesandbox.io>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Alistair Popple <apopple@nvidia.com>, stable@vger.kernel.org
-References: <20221114000447.1681003-1-peterx@redhat.com>
- <20221114000447.1681003-2-peterx@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20221114000447.1681003-2-peterx@redhat.com>
+To:     Zhengchao Shao <shaozhengchao@huawei.com>,
+        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org
+Cc:     akpm@linux-foundation.org, weiyongjun1@huawei.com,
+        yuehaibing@huawei.com
+References: <20221114010734.314910-1-shaozhengchao@huawei.com>
+From:   Paul Fulghum <paulkf@microgate.com>
+In-Reply-To: <20221114010734.314910-1-shaozhengchao@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14.11.22 01:04, Peter Xu wrote:
-> Ives van Hoorne from codesandbox.io reported an issue regarding possible
-> data loss of uffd-wp when applied to memfds on heavily loaded systems.  The
-> symptom is some read page got data mismatch from the snapshot child VMs.
-> 
-> Here I can also reproduce with a Rust reproducer that was provided by Ives
-> that keeps taking snapshot of a 256MB VM, on a 32G system when I initiate
-> 80 instances I can trigger the issues in ten minutes.
-> 
-> It turns out that we got some pages write-through even if uffd-wp is
-> applied to the pte.
-> 
-> The problem is, when removing migration entries, we didn't really worry
-> about write bit as long as we know it's not a write migration entry.  That
-> may not be true, for some memory types (e.g. writable shmem) mk_pte can
-> return a pte with write bit set, then to recover the migration entry to its
-> original state we need to explicit wr-protect the pte or it'll has the
-> write bit set if it's a read migration entry.  For uffd it can cause
-> write-through.
-> 
-> The relevant code on uffd was introduced in the anon support, which is
-> commit f45ec5ff16a7 ("userfaultfd: wp: support swap and page migration",
-> 2020-04-07).  However anon shouldn't suffer from this problem because anon
-> should already have the write bit cleared always, so that may not be a
-> proper Fixes target, while I'm adding the Fixes to be uffd shmem support.
-> 
-> Cc: Andrea Arcangeli <aarcange@redhat.com>
-> Cc: stable@vger.kernel.org
-> Fixes: b1f9e876862d ("mm/uffd: enable write protection for shmem & hugetlbfs")
-> Reported-by: Ives van Hoorne <ives@codesandbox.io>
-> Reviewed-by: Alistair Popple <apopple@nvidia.com>
-> Tested-by: Ives van Hoorne <ives@codesandbox.io>
-> Signed-off-by: Peter Xu <peterx@redhat.com>
-> ---
->   mm/migrate.c | 8 +++++++-
->   1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index dff333593a8a..8b6351c08c78 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -213,8 +213,14 @@ static bool remove_migration_pte(struct folio *folio,
->   			pte = pte_mkdirty(pte);
->   		if (is_writable_migration_entry(entry))
->   			pte = maybe_mkwrite(pte, vma);
-> -		else if (pte_swp_uffd_wp(*pvmw.pte))
-> +		else
-> +			/* NOTE: mk_pte can have write bit set */
-> +			pte = pte_wrprotect(pte);
-> +
-> +		if (pte_swp_uffd_wp(*pvmw.pte)) {
-> +			WARN_ON_ONCE(pte_write(pte));
->   			pte = pte_mkuffd_wp(pte);
-> +		}
->   
->   		if (folio_test_anon(folio) && !is_readable_migration_entry(entry))
->   			rmap_flags |= RMAP_EXCLUSIVE;
+hdlcdev_open() in synclink_gt.c did not fully unwind actions
+in the error path. The use of try_module_get()/module_put() is 
+unnecessary, potentially hazardous and is removed. The synclink_gt 
+driver is already pinned any point the net device is registered, a 
+requirement for calling this entry point.
 
-As raised, I don't agree to this generic non-uffd-wp change without 
-further, clear justification.
+The call hdlc_open() to init the generic HDLC layer is moved to
+after driver level init/checks and proper rollback of previous
+actions is added. This is a more sensible ordering as the
+most common error paths are at the driver level and the driver
+level rollbacks require less processing than
+hdlc_open()/hdlc_close().
 
-I won't nack it, but I won't ack it either.
+This has been tested with supported hardware.
 
--- 
-Thanks,
+Suggested-by: Zhengchao Shao <shaozhengchao@huawei.com>
+Signed-off-by: Paul Fulghum <paulkf@microgate.com>
 
-David / dhildenb
+diff --git a/drivers/tty/synclink_gt.c b/drivers/tty/synclink_gt.c
+index 25e9befdda3a..72b76cdde534 100644
+--- a/drivers/tty/synclink_gt.c
++++ b/drivers/tty/synclink_gt.c
+@@ -1433,16 +1433,8 @@ static int hdlcdev_open(struct net_device *dev)
+      int rc;
+      unsigned long flags;
+
+-    if (!try_module_get(THIS_MODULE))
+-        return -EBUSY;
+-
+      DBGINFO(("%s hdlcdev_open\n", dev->name));
+
+-    /* generic HDLC layer open processing */
+-    rc = hdlc_open(dev);
+-    if (rc)
+-        return rc;
+-
+      /* arbitrate between network and tty opens */
+      spin_lock_irqsave(&info->netlock, flags);
+      if (info->port.count != 0 || info->netcount != 0) {
+@@ -1461,6 +1453,16 @@ static int hdlcdev_open(struct net_device *dev)
+          return rc;
+      }
+
++    /* generic HDLC layer open processing */
++    rc = hdlc_open(dev);
++    if (rc) {
++        shutdown(info);
++        spin_lock_irqsave(&info->netlock, flags);
++        info->netcount = 0;
++        spin_unlock_irqrestore(&info->netlock, flags);
++        return rc;
++    }
++
+      /* assert RTS and DTR, apply hardware settings */
+      info->signals |= SerialSignal_RTS | SerialSignal_DTR;
+      program_hw(info);
+@@ -1506,7 +1508,6 @@ static int hdlcdev_close(struct net_device *dev)
+      info->netcount=0;
+      spin_unlock_irqrestore(&info->netlock, flags);
+
+-    module_put(THIS_MODULE);
+      return 0;
+  }
 
