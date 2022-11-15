@@ -2,341 +2,513 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 204B762A472
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 22:47:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7AA662A475
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 22:48:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230393AbiKOVru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 16:47:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38414 "EHLO
+        id S231345AbiKOVsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 16:48:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230392AbiKOVrr (ORCPT
+        with ESMTP id S231383AbiKOVsK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 16:47:47 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96800AE7A
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 13:47:45 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id d20so19336609ljc.12
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 13:47:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8wYriVbhdDAryCImUh8wp6Jt4QpKKT76pjTB4fav9Zo=;
-        b=ahE8i7IB5TYelYnA4IPv4Hus5tgmGMd8TzEiTM+QclT7cZL1y6bjRYdaYEjVnxWIBX
-         uZC0KFI09FmrtohL4fdFl+tEZCeoqckC8RzASIVkjLsCOX+3JVtMvD9gnc/y5f1wi6b5
-         m2XtSlazRWyE6lyJymMpDoDS39DYiyVCrhPu5ae5zRyYNtvQUMykXVoWAHtY/dGav0Dr
-         60G1knjYw1hGFQLyrFvyiBJSdCixkPM0rv052hClEq8LtjF4y9i6fHBm2B5BF7DXP11Y
-         FdNBJ9bkzTK/FbsIoQsqLopE+NCK090jDNA19ygBTdi8UEkJiKsQt3yNizGdM0NMdL28
-         Wh8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8wYriVbhdDAryCImUh8wp6Jt4QpKKT76pjTB4fav9Zo=;
-        b=1DuoGv6NwlgsmTYJ4Ru5V8gTO5249ECb4MrNoQrQv3Kixo9AzSImhvjpTaIpU4NT0C
-         EGtY20dIW8nwH1mNBm1v6mghmL/TFArZAuc46DL0A9MiJecQYLEJo+0QA+oaYu0Damku
-         TG9mM7UQEU617Mhy3jqCzVyh5Q68fp/j0Zyv6bfuWROYSqI4+D3VXFuWnfQJbYxMQ99j
-         dW7RnnBF8fJv/ZjtSLw1Vt43NHA+CCS/Kqp8tSLP1PmDPGjPvmA+csjpT/1dzAGeBse8
-         njYrQji/f57eoPwlDQm6Q1EUS4qZNfmKjqPkGipNnk29wlPWD0nXYYnt7Zi2pgEf7ykM
-         h7MA==
-X-Gm-Message-State: ANoB5pkWE2x8QerFw1JaqcnOb1zhh/5M+sMN+BxhYH35IjW1B5wKRpzT
-        +ucujq/6wXgKklbZdtDAsygMXfsV699IcnhEsAq2vw==
-X-Google-Smtp-Source: AA0mqf4kwDDVlD+HaJT/ayMjtDbKvbYGErMunUtD7QqTgfTKmANVFX38t5ZudTieBZd1A20EJ7xoEi5CGHin40T78wc=
-X-Received: by 2002:a2e:a41a:0:b0:278:ebb5:ddd2 with SMTP id
- p26-20020a2ea41a000000b00278ebb5ddd2mr6072753ljn.494.1668548863657; Tue, 15
- Nov 2022 13:47:43 -0800 (PST)
+        Tue, 15 Nov 2022 16:48:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B300B2B1B7
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 13:48:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 48B3261A32
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 21:48:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85B05C433B5;
+        Tue, 15 Nov 2022 21:48:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668548883;
+        bh=CG0dXhmknwCwA3hdVEQE9D8iMO7v+ojqxHnJ/bgzyQI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BJ+DDeaaNph2fnh/K8SKttJN93KgcH5TMqzK8YMGOvh/Bnju6oDFljc1HwjReyBPk
+         Z8rs5+oz8yQ4tyfqL3r3N/rIQoS33RinIXWr34GCHqbYaKHJmBeyeKzwkuvWWZPSbP
+         L4OIzOctSwo+/E+PN7YP7T+BESEz2IyZEJRryiCzwK1vKsVdX8V6lrt5jpb1iXUI2v
+         i9YfvpIiCZoTyHRxA4iuC5fsFDeigVRwhuh0T9P6HKT1DVrHHj40yi7PnPJg9r0pq2
+         6CG3id/7b48KTq3YUT1OYa36Flaet8mdRCt1BrT/KzmCxL7h/fl9IRQfCzXHQZ8t5v
+         q+jAEsX1UYzpw==
+Date:   Tue, 15 Nov 2022 13:48:01 -0800
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Sheng Yong <shengyong@oppo.com>
+Cc:     chao@kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] f2fs: fix to enable compress for newly created file
+ if extension matches
+Message-ID: <Y3QJERdXypeyIXeJ@google.com>
+References: <f508dea8-5dc3-e29e-0d8b-4d64735817ac@kernel.org>
+ <20221115160155.1037163-1-shengyong@oppo.com>
 MIME-Version: 1.0
-References: <20221103152318.88354-1-pgonda@google.com> <Y258U+8oF/eo14U+@zn.tnic>
-In-Reply-To: <Y258U+8oF/eo14U+@zn.tnic>
-From:   Peter Gonda <pgonda@google.com>
-Date:   Tue, 15 Nov 2022 14:47:31 -0700
-Message-ID: <CAMkAt6o-jcG7u1=zw4jJp5evrO4sFJR-iG_ApF7LhT+7c55_Wg@mail.gmail.com>
-Subject: Re: [PATCH V4] virt: sev: Prevent IV reuse in SNP guest driver
-To:     Borislav Petkov <bp@suse.de>
-Cc:     thomas.lendacky@amd.com, Dionna Glaze <dionnaglaze@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Haowen Bai <baihaowen@meizu.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Marc Orr <marcorr@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Ashish Kalra <Ashish.Kalra@amd.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221115160155.1037163-1-shengyong@oppo.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 9:46 AM Borislav Petkov <bp@suse.de> wrote:
->
-> On Thu, Nov 03, 2022 at 08:23:18AM -0700, Peter Gonda wrote:
-> > The ASP and an SNP guest use a series of AES-GCM keys called VMPCKs to
->
-> ASP?
->
-> That must be the AMD Secure Processor or so but pls write it out.
+On 11/16, Sheng Yong wrote:
+> If compress_extension is set, and a newly created file matches the
+> extension, the file could be marked as compression file. However,
+> if inline_data is also enabled, there is no chance to check its
+> extension since f2fs_should_compress() always returns false.
+> 
+> This patch moves set_compress_inode(), which do extension check, in
+> f2fs_should_compress() to check extensions before setting inline
+> data flag.
+> 
+> Fixes: 7165841d578e ("f2fs: fix to check inline_data during compressed inode conversion")
+> Signed-off-by: Sheng Yong <shengyong@oppo.com>
+> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+> ---
+>  fs/f2fs/f2fs.h  |   1 +
+>  fs/f2fs/namei.c | 336 ++++++++++++++++++++++++------------------------
+>  2 files changed, 171 insertions(+), 166 deletions(-)
+> ---
+> 
+> Hi, Jaegeuk, Chao,
+> 
+> How about adding a bool `may_compress' in set_compress_new_inode, set
+> `my_compress` according to several conditions. If it is false, clear
+> F2FS_COMPR_FL.
+> 
+> And set_compress_context is also changed to clear F2FS_NOCOMP_FL,
+> otherwise, if F2FS_NOCOMP_FL is inherited from parent and hit
+> compress_extension, both F2FS_NOCOMP_FL and F2FS_COMPR_FL are set.
+> 
+> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> index 6a8cbf5bb1871..a3420fbb29214 100644
+> --- a/fs/f2fs/f2fs.h
+> +++ b/fs/f2fs/f2fs.h
+> @@ -4355,6 +4355,7 @@ static inline int set_compress_context(struct inode *inode)
+>  		F2FS_I(inode)->i_compress_flag |=
+>  				F2FS_OPTION(sbi).compress_level <<
+>  				COMPRESS_LEVEL_OFFSET;
+> +	F2FS_I(inode)->i_flags &= ~F2FS_NOCOMP_FL;
+>  	F2FS_I(inode)->i_flags |= F2FS_COMPR_FL;
+>  	set_inode_flag(inode, FI_COMPRESSED_FILE);
+>  	stat_inc_compr_inode(inode);
+> diff --git a/fs/f2fs/namei.c b/fs/f2fs/namei.c
+> index e104409c3a0e5..36ec5cf7cf859 100644
+> --- a/fs/f2fs/namei.c
+> +++ b/fs/f2fs/namei.c
+> @@ -22,8 +22,170 @@
+>  #include "acl.h"
+>  #include <trace/events/f2fs.h>
+>  
+> +static inline int is_extension_exist(const unsigned char *s, const char *sub,
+> +						bool tmp_ext)
+> +{
+> +	size_t slen = strlen(s);
+> +	size_t sublen = strlen(sub);
+> +	int i;
+> +
+> +	if (sublen == 1 && *sub == '*')
+> +		return 1;
+> +
+> +	/*
+> +	 * filename format of multimedia file should be defined as:
+> +	 * "filename + '.' + extension + (optional: '.' + temp extension)".
+> +	 */
+> +	if (slen < sublen + 2)
+> +		return 0;
+> +
+> +	if (!tmp_ext) {
+> +		/* file has no temp extension */
+> +		if (s[slen - sublen - 1] != '.')
+> +			return 0;
+> +		return !strncasecmp(s + slen - sublen, sub, sublen);
+> +	}
+> +
+> +	for (i = 1; i < slen - sublen; i++) {
+> +		if (s[i] != '.')
+> +			continue;
+> +		if (!strncasecmp(s + i + 1, sub, sublen))
+> +			return 1;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +int f2fs_update_extension_list(struct f2fs_sb_info *sbi, const char *name,
+> +							bool hot, bool set)
+> +{
+> +	__u8 (*extlist)[F2FS_EXTENSION_LEN] = sbi->raw_super->extension_list;
+> +	int cold_count = le32_to_cpu(sbi->raw_super->extension_count);
+> +	int hot_count = sbi->raw_super->hot_ext_count;
+> +	int total_count = cold_count + hot_count;
+> +	int start, count;
+> +	int i;
+> +
+> +	if (set) {
+> +		if (total_count == F2FS_MAX_EXTENSION)
+> +			return -EINVAL;
+> +	} else {
+> +		if (!hot && !cold_count)
+> +			return -EINVAL;
+> +		if (hot && !hot_count)
+> +			return -EINVAL;
+> +	}
+> +
+> +	if (hot) {
+> +		start = cold_count;
+> +		count = total_count;
+> +	} else {
+> +		start = 0;
+> +		count = cold_count;
+> +	}
+> +
+> +	for (i = start; i < count; i++) {
+> +		if (strcmp(name, extlist[i]))
+> +			continue;
+> +
+> +		if (set)
+> +			return -EINVAL;
+> +
+> +		memcpy(extlist[i], extlist[i + 1],
+> +				F2FS_EXTENSION_LEN * (total_count - i - 1));
+> +		memset(extlist[total_count - 1], 0, F2FS_EXTENSION_LEN);
+> +		if (hot)
+> +			sbi->raw_super->hot_ext_count = hot_count - 1;
+> +		else
+> +			sbi->raw_super->extension_count =
+> +						cpu_to_le32(cold_count - 1);
+> +		return 0;
+> +	}
+> +
+> +	if (!set)
+> +		return -EINVAL;
+> +
+> +	if (hot) {
+> +		memcpy(extlist[count], name, strlen(name));
+> +		sbi->raw_super->hot_ext_count = hot_count + 1;
+> +	} else {
+> +		char buf[F2FS_MAX_EXTENSION][F2FS_EXTENSION_LEN];
+> +
+> +		memcpy(buf, &extlist[cold_count],
+> +				F2FS_EXTENSION_LEN * hot_count);
+> +		memset(extlist[cold_count], 0, F2FS_EXTENSION_LEN);
+> +		memcpy(extlist[cold_count], name, strlen(name));
+> +		memcpy(&extlist[cold_count + 1], buf,
+> +				F2FS_EXTENSION_LEN * hot_count);
+> +		sbi->raw_super->extension_count = cpu_to_le32(cold_count + 1);
+> +	}
+> +	return 0;
+> +}
+> +
+> +static void set_compress_new_inode(struct f2fs_sb_info *sbi, struct inode *dir,
+> +				struct inode *inode, const unsigned char *name)
+> +{
+> +	struct f2fs_inode_info *fi = F2FS_I(inode);
+> +	__u8 (*extlist)[F2FS_EXTENSION_LEN] = sbi->raw_super->extension_list;
+> +	unsigned char (*noext)[F2FS_EXTENSION_LEN] =
+> +						F2FS_OPTION(sbi).noextensions;
+> +	unsigned char (*ext)[F2FS_EXTENSION_LEN] = F2FS_OPTION(sbi).extensions;
+> +	unsigned char ext_cnt = F2FS_OPTION(sbi).compress_ext_cnt;
+> +	unsigned char noext_cnt = F2FS_OPTION(sbi).nocompress_ext_cnt;
+> +	bool may_compress = false;
+> +	int i, cold_count, hot_count;
+> +
+> +	if (!f2fs_sb_has_compression(sbi) || !name)
+> +		return;
+> +	if (!S_ISREG(inode->i_mode) && !S_ISDIR(inode->i_mode))
+> +		return;
+> +
+> +	/* Inherit the compression flag in directory */
+> +	if (fi->i_flags & FS_COMPR_FL)
+> +		may_compress = true;
+> +
+> +	/* Start to check extension list for regular file */
+> +	if ((!ext_cnt && !noext_cnt) || S_ISDIR(inode->i_mode))
 
-Yes I'll update to write out AMD Secure Processor (ASP). So that the
-acronym is clear through in each comment block.
+This doesn't address the Chao's point. It seems not much motivation to add
+may_compress. Let me try to combine some with the previous patch.
 
->
-> > communicate securely with each other. The IV to this scheme is a
-> > sequence number that both the ASP and the guest track. Currently this
-> > sequence number in a guest request must exactly match the sequence
-> > number tracked by the ASP. This means that if the guest sees an error
-> > from the host during a request it can only retry that exact request or
-> > disable the VMPCK to prevent an IV reuse. AES-GCM cannot tolerate IV
-> > reuse see:
-> > https://csrc.nist.gov/csrc/media/projects/block-cipher-techniques/docum=
-ents/bcm/comments/800-38-series-drafts/gcm/joux_comments.pdf
->
-> Right, how stable will that link be?
->
-> IOW, perhaps quote the paper name and authors so that people can find it
-> on their own.
-
-I will update to the title + authors.
-
->
-> > To handle userspace querying the cert_data length handle_guest_request(=
-)
-> > now: saves the number of pages required by the host, retries the reques=
-t
->
-> This needs to sound like this:
->
-> "In order to address this, save the number of pages ..."
->
-> IOW, as the docs say:
->
-> "Describe your changes in imperative mood, e.g. "make xyzzy do frotz"
-> instead of "[This patch] makes xyzzy do frotz" or "[I] changed xyzzy
-> to do frotz", as if you are giving orders to the codebase to change
-> its behaviour."
-
-Thanks I have updated the comments and description to this style for
-the next revision.
-
->
-> > without requesting the extended data, then returns the number of pages
-> > required.
-> >
-> > Fixes: fce96cf044308 ("virt: Add SEV-SNP guest driver")
->
-> I'm guessing this needs to go to stable?
-
-Yes this should go to stable.
-
->
-> > Signed-off-by: Peter Gonda <pgonda@google.com>
-> > Reported-by: Peter Gonda <pgonda@google.com>
-> > Cc: Dionna Glaze <dionnaglaze@google.com>
-> > Cc: Borislav Petkov <bp@suse.de>
-> > Cc: Tom Lendacky <thomas.lendacky@amd.com>
-> > Cc: Michael Roth <michael.roth@amd.com>
-> > Cc: Haowen Bai <baihaowen@meizu.com>
-> > Cc: Yang Yingliang <yangyingliang@huawei.com>
-> > Cc: Marc Orr <marcorr@google.com>
-> > Cc: David Rientjes <rientjes@google.com>
-> > Cc: Ashish Kalra <Ashish.Kalra@amd.com>
-> > Cc: linux-kernel@vger.kernel.org
-> > Cc: kvm@vger.kernel.org
-> > ---
-> > Tested by placing each of the guest requests: attestation quote,
-> > extended attestation quote, and get key. Then tested the extended
-> > attestation quote certificate length querying.
-> >
-> > V4
-> >  * As suggested by Dionna moved the extended request retry logic into
-> >    the driver.
-> >  * Due to big change in patch dropped any reviewed-by tags.
-> >
-> > ---
-> >  drivers/virt/coco/sev-guest/sev-guest.c | 70 +++++++++++++++++++------
-> >  1 file changed, 53 insertions(+), 17 deletions(-)
-> >
-> > diff --git a/drivers/virt/coco/sev-guest/sev-guest.c b/drivers/virt/coc=
-o/sev-guest/sev-guest.c
-> > index f422f9c58ba79..7dd6337ebdd5b 100644
-> > --- a/drivers/virt/coco/sev-guest/sev-guest.c
-> > +++ b/drivers/virt/coco/sev-guest/sev-guest.c
-> > @@ -41,7 +41,7 @@ struct snp_guest_dev {
-> >       struct device *dev;
-> >       struct miscdevice misc;
-> >
-> > -     void *certs_data;
-> > +     u8 (*certs_data)[SEV_FW_BLOB_MAX_SIZE];
-> >       struct snp_guest_crypto *crypto;
-> >       struct snp_guest_msg *request, *response;
-> >       struct snp_secrets_page_layout *layout;
-> > @@ -67,8 +67,27 @@ static bool is_vmpck_empty(struct snp_guest_dev *snp=
-_dev)
-> >       return true;
-> >  }
-> >
-> > +/*
-> > + * If we receive an error from the host or ASP we have two options. We=
- can
->
-> Please use passive voice in your commit message: no "we" or "I", etc,
-> and describe your changes in imperative mood.
->
-> Bottom line is: personal pronouns are ambiguous in text, especially with
-> so many parties/companies/etc developing the kernel so let's avoid them
-> please.
-
-I have removed the pronouns for the next revision.
-
->
-> > + * either retry the exact same encrypted request or we can discontinue=
- using the
-> > + * VMPCK.
-> > + *
-> > + * This is because in the current encryption scheme GHCB v2 uses AES-G=
-CM to
-> > + * encrypt the requests. The IV for this scheme is the sequence number=
-. GCM
-> > + * cannot tolerate IV reuse.
-> > + *
-> > + * The ASP FW v1.51 only increments the sequence numbers on a successf=
-ul
-> > + * guest<->ASP back and forth and only accepts messages at its exact s=
-equence
-> > + * number.
-> > + *
-> > + * So if we were to reuse the sequence number the encryption scheme is
-> > + * vulnerable. If we encrypt the sequence number for a fresh IV the AS=
-P will
-> > + * reject our request.
-> > + */
-> >  static void snp_disable_vmpck(struct snp_guest_dev *snp_dev)
-> >  {
-> > +     dev_alert(snp_dev->dev, "Disabling vmpck_id: %d to prevent IV reu=
-se.\n",
-> > +               vmpck_id);
-> >       memzero_explicit(snp_dev->vmpck, VMPCK_KEY_LEN);
-> >       snp_dev->vmpck =3D NULL;
-> >  }
-> > @@ -323,32 +342,49 @@ static int handle_guest_request(struct snp_guest_=
-dev *snp_dev, u64 exit_code, in
-> >
-> >       /* Call firmware to process the request */
-> >       rc =3D snp_issue_guest_request(exit_code, &snp_dev->input, &err);
-> > +
-> > +     /*
-> > +      * If the extended guest request fails due to having to small of =
-a
->
-> "... too small... "
->
-> > +      * certificate data buffer retry the same guest request without t=
-he
-> > +      * extended data request.
-> > +      */
-> > +     if (exit_code =3D=3D SVM_VMGEXIT_EXT_GUEST_REQUEST &&
-> > +         err =3D=3D SNP_GUEST_REQ_INVALID_LEN) {
-> > +             const unsigned int certs_npages =3D snp_dev->input.data_n=
-pages;
-> > +
-> > +             exit_code =3D SVM_VMGEXIT_GUEST_REQUEST;
-> > +             rc =3D snp_issue_guest_request(exit_code, &snp_dev->input=
-, &err);
-> > +
-> > +             err =3D SNP_GUEST_REQ_INVALID_LEN;
->
-> Huh, why are we overwriting err here?
-
-I have added a comment for the next revision.
-
-We are overwriting err here so that userspace is alerted that they
-supplied a buffer too small.
-
->
-> > +             snp_dev->input.data_npages =3D certs_npages;
-> > +     }
-> > +
-> >       if (fw_err)
-> >               *fw_err =3D err;
-> >
-> > -     if (rc)
-> > -             return rc;
-> > +     if (rc) {
-> > +             dev_alert(snp_dev->dev,
-> > +                       "Detected error from ASP request. rc: %d, fw_er=
-r: %llu\n",
-> > +                       rc, *fw_err);
-> > +             goto disable_vmpck;
-> > +     }
-> >
-> > -     /*
-> > -      * The verify_and_dec_payload() will fail only if the hypervisor =
-is
-> > -      * actively modifying the message header or corrupting the encryp=
-ted payload.
-> > -      * This hints that hypervisor is acting in a bad faith. Disable t=
-he VMPCK so that
-> > -      * the key cannot be used for any communication. The key is disab=
-led to ensure
-> > -      * that AES-GCM does not use the same IV while encrypting the req=
-uest payload.
-> > -      */
-> >       rc =3D verify_and_dec_payload(snp_dev, resp_buf, resp_sz);
-> >       if (rc) {
-> >               dev_alert(snp_dev->dev,
-> > -                       "Detected unexpected decode failure, disabling =
-the vmpck_id %d\n",
-> > -                       vmpck_id);
-> > -             snp_disable_vmpck(snp_dev);
-> > -             return rc;
-> > +                       "Detected unexpected decode failure from ASP. r=
-c: %d\n",
-> > +                       rc);
-> > +             goto disable_vmpck;
-> >       }
-> >
-> >       /* Increment to new message sequence after payload decryption was=
- successful. */
-> >       snp_inc_msg_seqno(snp_dev);
-> >
-> >       return 0;
-> > +
-> > +disable_vmpck:
-> > +     snp_disable_vmpck(snp_dev);
-> > +     return rc;
-> >  }
-> >
-> >  static int get_report(struct snp_guest_dev *snp_dev, struct snp_guest_=
-request_ioctl *arg)
-> > @@ -676,7 +712,7 @@ static int __init sev_guest_probe(struct platform_d=
-evice *pdev)
-> >       if (!snp_dev->response)
-> >               goto e_free_request;
-> >
-> > -     snp_dev->certs_data =3D alloc_shared_pages(dev, SEV_FW_BLOB_MAX_S=
-IZE);
-> > +     snp_dev->certs_data =3D alloc_shared_pages(dev, sizeof(*snp_dev->=
-certs_data));
->
-> What's that change for?
->
-> I went searching for that ->certs_data only ot realize that it is an
-> array of size of SEV_FW_BLOB_MAX_SIZE elems.
->
-> Thx.
->
-> --
-> Regards/Gruss,
->     Boris.
->
-> SUSE Software Solutions Germany GmbH
-> GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
-> (HRB 36809, AG N=C3=BCrnberg)
+> +		goto set_compress;
+> +
+> +	/* Don't compress hot files. */
+> +	f2fs_down_read(&sbi->sb_lock);
+> +	cold_count = le32_to_cpu(sbi->raw_super->extension_count);
+> +	hot_count = sbi->raw_super->hot_ext_count;
+> +	for (i = cold_count; i < cold_count + hot_count; i++)
+> +		if (is_extension_exist(name, extlist[i], false)) {
+> +			may_compress = false;
+> +			f2fs_up_read(&sbi->sb_lock);
+> +			goto set_compress;
+> +		}
+> +	f2fs_up_read(&sbi->sb_lock);
+> +
+> +	/* Don't compress unallowed extension. */
+> +	for (i = 0; i < noext_cnt; i++) {
+> +		if (is_extension_exist(name, noext[i], false)) {
+> +			may_compress = false;
+> +			goto set_compress;
+> +		}
+> +	}
+> +
+> +	/* Compress wanting extension. */
+> +	for (i = 0; i < ext_cnt; i++) {
+> +		if (is_extension_exist(name, ext[i], false)) {
+> +			may_compress = true;
+> +			goto set_compress;
+> +		}
+> +	}
+> +
+> +set_compress:
+> +	if (may_compress)
+> +		set_compress_context(inode);
+> +	else if (fi->i_flags & F2FS_COMPR_FL)
+> +		fi->i_flags &= ~F2FS_COMPR_FL;
+> +}
+> +
+>  static struct inode *f2fs_new_inode(struct user_namespace *mnt_userns,
+> -						struct inode *dir, umode_t mode)
+> +						struct inode *dir, umode_t mode,
+> +						const char *name)
+>  {
+>  	struct f2fs_sb_info *sbi = F2FS_I_SB(dir);
+>  	nid_t ino;
+> @@ -114,12 +276,8 @@ static struct inode *f2fs_new_inode(struct user_namespace *mnt_userns,
+>  	if (F2FS_I(inode)->i_flags & F2FS_PROJINHERIT_FL)
+>  		set_inode_flag(inode, FI_PROJ_INHERIT);
+>  
+> -	if (f2fs_sb_has_compression(sbi)) {
+> -		/* Inherit the compression flag in directory */
+> -		if ((F2FS_I(dir)->i_flags & F2FS_COMPR_FL) &&
+> -					f2fs_may_compress(inode))
+> -			set_compress_context(inode);
+> -	}
+> +	/* Check compression first. */
+> +	set_compress_new_inode(sbi, dir, inode, name);
+>  
+>  	/* Should enable inline_data after compression set */
+>  	if (test_opt(sbi, INLINE_DATA) && f2fs_may_inline_data(inode))
+> @@ -153,40 +311,6 @@ static struct inode *f2fs_new_inode(struct user_namespace *mnt_userns,
+>  	return ERR_PTR(err);
+>  }
+>  
+> -static inline int is_extension_exist(const unsigned char *s, const char *sub,
+> -						bool tmp_ext)
+> -{
+> -	size_t slen = strlen(s);
+> -	size_t sublen = strlen(sub);
+> -	int i;
+> -
+> -	if (sublen == 1 && *sub == '*')
+> -		return 1;
+> -
+> -	/*
+> -	 * filename format of multimedia file should be defined as:
+> -	 * "filename + '.' + extension + (optional: '.' + temp extension)".
+> -	 */
+> -	if (slen < sublen + 2)
+> -		return 0;
+> -
+> -	if (!tmp_ext) {
+> -		/* file has no temp extension */
+> -		if (s[slen - sublen - 1] != '.')
+> -			return 0;
+> -		return !strncasecmp(s + slen - sublen, sub, sublen);
+> -	}
+> -
+> -	for (i = 1; i < slen - sublen; i++) {
+> -		if (s[i] != '.')
+> -			continue;
+> -		if (!strncasecmp(s + i + 1, sub, sublen))
+> -			return 1;
+> -	}
+> -
+> -	return 0;
+> -}
+> -
+>  /*
+>   * Set file's temperature for hot/cold data separation
+>   */
+> @@ -217,124 +341,6 @@ static inline void set_file_temperature(struct f2fs_sb_info *sbi, struct inode *
+>  		file_set_hot(inode);
+>  }
+>  
+> -int f2fs_update_extension_list(struct f2fs_sb_info *sbi, const char *name,
+> -							bool hot, bool set)
+> -{
+> -	__u8 (*extlist)[F2FS_EXTENSION_LEN] = sbi->raw_super->extension_list;
+> -	int cold_count = le32_to_cpu(sbi->raw_super->extension_count);
+> -	int hot_count = sbi->raw_super->hot_ext_count;
+> -	int total_count = cold_count + hot_count;
+> -	int start, count;
+> -	int i;
+> -
+> -	if (set) {
+> -		if (total_count == F2FS_MAX_EXTENSION)
+> -			return -EINVAL;
+> -	} else {
+> -		if (!hot && !cold_count)
+> -			return -EINVAL;
+> -		if (hot && !hot_count)
+> -			return -EINVAL;
+> -	}
+> -
+> -	if (hot) {
+> -		start = cold_count;
+> -		count = total_count;
+> -	} else {
+> -		start = 0;
+> -		count = cold_count;
+> -	}
+> -
+> -	for (i = start; i < count; i++) {
+> -		if (strcmp(name, extlist[i]))
+> -			continue;
+> -
+> -		if (set)
+> -			return -EINVAL;
+> -
+> -		memcpy(extlist[i], extlist[i + 1],
+> -				F2FS_EXTENSION_LEN * (total_count - i - 1));
+> -		memset(extlist[total_count - 1], 0, F2FS_EXTENSION_LEN);
+> -		if (hot)
+> -			sbi->raw_super->hot_ext_count = hot_count - 1;
+> -		else
+> -			sbi->raw_super->extension_count =
+> -						cpu_to_le32(cold_count - 1);
+> -		return 0;
+> -	}
+> -
+> -	if (!set)
+> -		return -EINVAL;
+> -
+> -	if (hot) {
+> -		memcpy(extlist[count], name, strlen(name));
+> -		sbi->raw_super->hot_ext_count = hot_count + 1;
+> -	} else {
+> -		char buf[F2FS_MAX_EXTENSION][F2FS_EXTENSION_LEN];
+> -
+> -		memcpy(buf, &extlist[cold_count],
+> -				F2FS_EXTENSION_LEN * hot_count);
+> -		memset(extlist[cold_count], 0, F2FS_EXTENSION_LEN);
+> -		memcpy(extlist[cold_count], name, strlen(name));
+> -		memcpy(&extlist[cold_count + 1], buf,
+> -				F2FS_EXTENSION_LEN * hot_count);
+> -		sbi->raw_super->extension_count = cpu_to_le32(cold_count + 1);
+> -	}
+> -	return 0;
+> -}
+> -
+> -static void set_compress_inode(struct f2fs_sb_info *sbi, struct inode *inode,
+> -						const unsigned char *name)
+> -{
+> -	__u8 (*extlist)[F2FS_EXTENSION_LEN] = sbi->raw_super->extension_list;
+> -	unsigned char (*noext)[F2FS_EXTENSION_LEN] = F2FS_OPTION(sbi).noextensions;
+> -	unsigned char (*ext)[F2FS_EXTENSION_LEN] = F2FS_OPTION(sbi).extensions;
+> -	unsigned char ext_cnt = F2FS_OPTION(sbi).compress_ext_cnt;
+> -	unsigned char noext_cnt = F2FS_OPTION(sbi).nocompress_ext_cnt;
+> -	int i, cold_count, hot_count;
+> -
+> -	if (!f2fs_sb_has_compression(sbi) ||
+> -			F2FS_I(inode)->i_flags & F2FS_NOCOMP_FL ||
+> -			!f2fs_may_compress(inode) ||
+> -			(!ext_cnt && !noext_cnt))
+> -		return;
+> -
+> -	f2fs_down_read(&sbi->sb_lock);
+> -
+> -	cold_count = le32_to_cpu(sbi->raw_super->extension_count);
+> -	hot_count = sbi->raw_super->hot_ext_count;
+> -
+> -	for (i = cold_count; i < cold_count + hot_count; i++) {
+> -		if (is_extension_exist(name, extlist[i], false)) {
+> -			f2fs_up_read(&sbi->sb_lock);
+> -			return;
+> -		}
+> -	}
+> -
+> -	f2fs_up_read(&sbi->sb_lock);
+> -
+> -	for (i = 0; i < noext_cnt; i++) {
+> -		if (is_extension_exist(name, noext[i], false)) {
+> -			f2fs_disable_compressed_file(inode);
+> -			return;
+> -		}
+> -	}
+> -
+> -	if (is_inode_flag_set(inode, FI_COMPRESSED_FILE))
+> -		return;
+> -
+> -	for (i = 0; i < ext_cnt; i++) {
+> -		if (!is_extension_exist(name, ext[i], false))
+> -			continue;
+> -
+> -		/* Do not use inline_data with compression */
+> -		stat_dec_inline_inode(inode);
+> -		clear_inode_flag(inode, FI_INLINE_DATA);
+> -		set_compress_context(inode);
+> -		return;
+> -	}
+> -}
+> -
+>  static int f2fs_create(struct user_namespace *mnt_userns, struct inode *dir,
+>  		       struct dentry *dentry, umode_t mode, bool excl)
+>  {
+> @@ -352,15 +358,13 @@ static int f2fs_create(struct user_namespace *mnt_userns, struct inode *dir,
+>  	if (err)
+>  		return err;
+>  
+> -	inode = f2fs_new_inode(mnt_userns, dir, mode);
+> +	inode = f2fs_new_inode(mnt_userns, dir, mode, dentry->d_name.name);
+>  	if (IS_ERR(inode))
+>  		return PTR_ERR(inode);
+>  
+>  	if (!test_opt(sbi, DISABLE_EXT_IDENTIFY))
+>  		set_file_temperature(sbi, inode, dentry->d_name.name);
+>  
+> -	set_compress_inode(sbi, inode, dentry->d_name.name);
+> -
+>  	inode->i_op = &f2fs_file_inode_operations;
+>  	inode->i_fop = &f2fs_file_operations;
+>  	inode->i_mapping->a_ops = &f2fs_dblock_aops;
+> @@ -689,7 +693,7 @@ static int f2fs_symlink(struct user_namespace *mnt_userns, struct inode *dir,
+>  	if (err)
+>  		return err;
+>  
+> -	inode = f2fs_new_inode(mnt_userns, dir, S_IFLNK | S_IRWXUGO);
+> +	inode = f2fs_new_inode(mnt_userns, dir, S_IFLNK | S_IRWXUGO, NULL);
+>  	if (IS_ERR(inode))
+>  		return PTR_ERR(inode);
+>  
+> @@ -760,7 +764,7 @@ static int f2fs_mkdir(struct user_namespace *mnt_userns, struct inode *dir,
+>  	if (err)
+>  		return err;
+>  
+> -	inode = f2fs_new_inode(mnt_userns, dir, S_IFDIR | mode);
+> +	inode = f2fs_new_inode(mnt_userns, dir, S_IFDIR | mode, dentry->d_name.name);
+>  	if (IS_ERR(inode))
+>  		return PTR_ERR(inode);
+>  
+> @@ -817,7 +821,7 @@ static int f2fs_mknod(struct user_namespace *mnt_userns, struct inode *dir,
+>  	if (err)
+>  		return err;
+>  
+> -	inode = f2fs_new_inode(mnt_userns, dir, mode);
+> +	inode = f2fs_new_inode(mnt_userns, dir, mode, NULL);
+>  	if (IS_ERR(inode))
+>  		return PTR_ERR(inode);
+>  
+> @@ -856,7 +860,7 @@ static int __f2fs_tmpfile(struct user_namespace *mnt_userns, struct inode *dir,
+>  	if (err)
+>  		return err;
+>  
+> -	inode = f2fs_new_inode(mnt_userns, dir, mode);
+> +	inode = f2fs_new_inode(mnt_userns, dir, mode, NULL);
+>  	if (IS_ERR(inode))
+>  		return PTR_ERR(inode);
+>  
+> -- 
+> 2.25.1
