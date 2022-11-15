@@ -2,102 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B914629B38
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:53:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB444629B3E
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:54:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbiKONxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 08:53:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50106 "EHLO
+        id S231239AbiKONyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 08:54:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238528AbiKONwy (ORCPT
+        with ESMTP id S231197AbiKONyR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 08:52:54 -0500
-Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9853428E00
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 05:52:27 -0800 (PST)
-Received: by mail-ua1-x92a.google.com with SMTP id y18so3011618uae.8
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 05:52:27 -0800 (PST)
+        Tue, 15 Nov 2022 08:54:17 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA41F37
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 05:54:16 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id y14so36192059ejd.9
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 05:54:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=P+oLe8m4JsBwN5p0lAPR+5zPDiV75uMFdS4+LeqtzPM=;
-        b=hglPUSxYb8VugAgrBpcKiOxPSsVl2B87pO4L09Q1t2FXSTwVU5vtoweEsLguIUKVuE
-         WH56RT72py3vZfCq5BmkusmHK6S6j6uEf+1fdwuYz4JPUKS71LhCQ1caG1E/M1NmzVei
-         VN1gM5m+pLYim0QVnTZTAgKlwGlYflPsMRYhqsGhhjIjJhoqRf8GtvwStL9tP6iQoxx2
-         4YMI4noHZK5JwbCoJkcbYT7jSsIl8WizArNK/Dv5JPFzILEZ3LXtsAPfcTX+gGlFNfTA
-         SKy+cp7iQ9ig3SEkmnw9HnGTrDv+eQNxzdrFdT3x5zWsEUmT6IDob8jITY7ZFD6beiZ5
-         ZfNA==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R0sFkX+nbXodQt671NtDLbwnj/LAv7WU9JCGBKOzfpo=;
+        b=LCXNFQyj9iyDqZ0IoY/l3bCF9KVFvTQK/X31I9OveRprtKEzUCRvM8avrTYoCf6xR0
+         sZibGh7vNgog7H0X2Q+Fv0xpGCCnpZfbJTF/Q8J3MXrB6etR+Bv2rs256mCMkEjswuF/
+         epkHDYiuiyNEZmIHKIecEgnX8vGdb5rnfrm0irBH9Nl86aof8dyN6s4vYaOi8dGcu8k7
+         DNPJLlHBY+WHAqBxboGWbN49MfKxdl9C4hGyDmPP2hVLyhOm2ndxhvRJRb2yv6naEz9x
+         15+E27B/yeP0tR3/Jk36kZS2TR20ue0APo+lEHUq0fvCFQr9UKSjEJyvJ1Ob0szqjRpT
+         IrCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=P+oLe8m4JsBwN5p0lAPR+5zPDiV75uMFdS4+LeqtzPM=;
-        b=oyegWr1jniBltAGwh53MZpqd2OS0WXRaCeWzY7osNCSnkge+hkJBaX1KKrN49wP5T/
-         MOZOSbMBf1cc1AXujaXMJFwXbHnWe0272YpDUq0+aFzOpc+SBjd+zre9Jr4bnHKO3ykE
-         Fft4X2foyO9s4BvDws+uri6D4Q/ok55ONWXN1PA/i0do/A7DvcUTah72OuUdzldGSSM0
-         wpQBragmfBW0uB6GdVdFJ/XHZRXYxSskuzdBlSFhrB6Bi07VwUVnsE5Z7eBzhzfP1Z9A
-         9vjY6+C76qMs9i5zOiiYCqXYiy9gOCImV9QhxGRYTxNHzeyBKJCMTTUkMAoAHhy2F423
-         j64A==
-X-Gm-Message-State: ANoB5pkJb5y5HMlviVcPQdx0l/vacG2FOxGbwHexCIM5QUyTaYqBY1kW
-        u0D9iFBq6rSYu3nTlq3wDPRuJGKu1KfOqolcwB65ng==
-X-Google-Smtp-Source: AA0mqf5KtyZPTuevXaQKbRumSbUnofBE1AjlQJ8Tfiqj4nemFDG9ar99A+nJ1Lu4rJw4pQcf0Lz/ijjdyAgkYSKSq8w=
-X-Received: by 2002:ab0:250d:0:b0:406:b37e:55dc with SMTP id
- j13-20020ab0250d000000b00406b37e55dcmr9495551uan.63.1668520346579; Tue, 15
- Nov 2022 05:52:26 -0800 (PST)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=R0sFkX+nbXodQt671NtDLbwnj/LAv7WU9JCGBKOzfpo=;
+        b=QQTcceuH8XYTGYON6b0vmLes0tO/9Pus/8jb0TxtlmrxukoDhvpVXgDuBZ4xb4DycP
+         rZ6uihj0cCL9JBtDWSyJl0jLPIMHIZrVCHzF+5Klbpqcl/LJvxfSFzQZfa2EMRdRdiby
+         X6DbS5Cu/AyzPC+gVPN0lWuBQye5DR7wleu/HH1KWXlTCoJJBY/KF8aiMaSuTd0Y9xW9
+         ZYONQFM3kjM5JXf5MraS940cR0GVP263w9kJpRxUUrY3JxF8xC472PqWErijl6/Oa4se
+         ElOS0cp1mMCSJmrN+tp3VJxKO/6bWVdMiV6JQKsl45PdVOaOChtwCLOhzSrNC4ZFDmy4
+         Oxhw==
+X-Gm-Message-State: ANoB5pk50jrcSiDijrC8tFZpWXIsbfSNj+YWu4+ywo8aVtPMEKHQeJpr
+        HRJ2PQGRQDCc9vfVSyQrPxzXZCdswk9hNGYTz5rcRQ==
+X-Google-Smtp-Source: AA0mqf4WMyt4uB3gxvki+JAXsKJPJAU1cd1VDx3nBWsvAl7puGi2zyYQVi+2VHiXzUHT9ITHHgAIIdG2a5wj+RmSmso=
+X-Received: by 2002:a17:906:a1d9:b0:78d:b371:16e5 with SMTP id
+ bx25-20020a170906a1d900b0078db37116e5mr13497638ejb.456.1668520454765; Tue, 15
+ Nov 2022 05:54:14 -0800 (PST)
 MIME-Version: 1.0
-References: <20221115091138.51614-1-wupeng58@huawei.com>
-In-Reply-To: <20221115091138.51614-1-wupeng58@huawei.com>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Tue, 15 Nov 2022 05:52:15 -0800
-Message-ID: <CABXOdTcDuugW7t=MV_1Cy2cbe6GC4dUn_=4VmrYHobLzx1uscA@mail.gmail.com>
-Subject: Re: [PATCH -next] firmware: google: fix a NULL vs IS_ERR() check in cbmem_entry_probe()
-To:     Peng Wu <wupeng58@huawei.com>
-Cc:     jwerner@chromium.org, jrosenth@chromium.org,
-        gregkh@linuxfoundation.org, groeck@chromium.org,
-        linux-kernel@vger.kernel.org, liwei391@huawei.com
+References: <20221005-mt6357-support-v4-0-5d2bb58e6087@baylibre.com>
+ <20221005-mt6357-support-v4-5-5d2bb58e6087@baylibre.com> <fe898d24-54fa-56bb-8067-b422a3a52ff5@collabora.com>
+In-Reply-To: <fe898d24-54fa-56bb-8067-b422a3a52ff5@collabora.com>
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+Date:   Tue, 15 Nov 2022 14:54:03 +0100
+Message-ID: <CAFGrd9r70XRd=4Ogei+U2QXQny7LhWr9bDCRNYco+Bsy+2XqrA@mail.gmail.com>
+Subject: Re: [PATCH v4 5/9] dt-bindings: soc: mediatek: convert pwrap documentation
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Fabien Parent <fabien.parent@linaro.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Lee Jones <lee@kernel.org>,
+        Chen Zhong <chen.zhong@mediatek.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
+        Fabien Parent <fparent@baylibre.com>,
+        linux-rtc@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 1:14 AM Peng Wu <wupeng58@huawei.com> wrote:
->
-> The devm_memremap() function returns error pointers on error,
-> it doesn't return NULL.
->
-> Fixes: 19d54020883c ("firmware: google: Implement cbmem in sysfs driver")
-> Signed-off-by: Peng Wu <wupeng58@huawei.com>
+Hi Angelo,
 
-Reviewed-by: Guenter Roeck <groeck@chromium.org>
+Le mer. 9 nov. 2022 =C3=A0 10:55, AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> a =C3=A9crit :
+>
+> Il 08/11/22 19:43, Alexandre Mergnat ha scritto:
+> > +maintainers:
+> > +  - Alexandre Mergnat <amergnat@baylibre.com>
+>
+> I say that the maintainer for pwrap is Flora Fu <flora.fu@mediatek.com>..=
+..
 
-> ---
->  drivers/firmware/google/cbmem.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/firmware/google/cbmem.c b/drivers/firmware/google/cbmem.c
-> index 685f3070ce9d..88e587ba1e0d 100644
-> --- a/drivers/firmware/google/cbmem.c
-> +++ b/drivers/firmware/google/cbmem.c
-> @@ -106,8 +106,8 @@ static int cbmem_entry_probe(struct coreboot_device *dev)
->         entry->mem_file_buf = devm_memremap(&dev->dev, dev->cbmem_entry.address,
->                                             dev->cbmem_entry.entry_size,
->                                             MEMREMAP_WB);
-> -       if (!entry->mem_file_buf)
-> -               return -ENOMEM;
-> +       if (IS_ERR(entry->mem_file_buf))
-> +               return PTR_ERR(entry->mem_file_buf);
->
->         entry->size = dev->cbmem_entry.entry_size;
->
-> --
-> 2.17.1
->
+Flora Fu is the driver maintainer. As described in
+Documentation/devicetree/bindings/writing-schema.rst:
+maintainers
+  A DT specific property. Contains a list of email address(es)
+  for maintainers of this binding.
+
+My  understanding is this field is only for binding maintainers, but
+not related driver maintainers. Are we aligned ?
+
+Regards,
+Alex
