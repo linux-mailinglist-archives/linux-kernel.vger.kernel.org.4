@@ -2,482 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C6DB628F56
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 02:34:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B1BD628F65
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 02:37:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232135AbiKOBep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 20:34:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39240 "EHLO
+        id S236357AbiKOBgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 20:36:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231466AbiKOBeh (ORCPT
+        with ESMTP id S230131AbiKOBgm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 20:34:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA90A1A6
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 17:34:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F03EE614F6
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 01:34:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 633D1C433D7;
-        Tue, 15 Nov 2022 01:34:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668476074;
-        bh=t2dXoKdGKHUBGSyPy0NZzQmf4H3Wiwh4p1l93PuBjy8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=quIcArlEhuVK/g/FSGMs6mgHzKEApLTd4HHSxkBPQXDkhG8A28o2UBVSXgZo0ByV9
-         3FPQyCZEdU9RZZxnEo6KjZj/on3QlhdROb7JuFwlDCIxs+TYlHL8E4i9W/JptsIx3F
-         kgkpT+qPw9cmaGU2ttNoRbiO7m3qJf/R7iiXkid7ks1gZujUomwKEnlmxPpnSZQ5ta
-         d1PIG/DNQ/nm0eTLLFk651JRNJ5DwdPNEsQFES5C5yz+NnYvz60JFVzh70IFqtbXmK
-         aQr9LSWPMcjN0oz/ndptsfHBkfroXd+nnsa0runsBWC7C9on4gOAjtJ81kM8scKgAd
-         QpGaUbSuZ+3LQ==
-Message-ID: <ac327634-f35d-db6e-3b0f-3fbc8151a936@kernel.org>
-Date:   Tue, 15 Nov 2022 09:34:30 +0800
+        Mon, 14 Nov 2022 20:36:42 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E9114032
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 17:36:41 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id f5so32657305ejc.5
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 17:36:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=JGEQys0q+vn6kmmzyVuQOW7GVEeqdKy9lN8OIJWvOQs=;
+        b=PSrB/jmAglnUp28dEPhbOBEDVHtOyET03hzbsVCqEwMkZ54OJlNDXfWBCGnL86RVTW
+         gfwfg54OIdAw8qy5SXee3IO1bQ2tBYPOE4X13S4R8eKXqwvTeMzddt8p3/rSyBVx6Fks
+         a+4Q9XuWs3mL/JuLZKGdyZMYN38qX34Rk8UYLpFh/ox1Kxns5WRODVykYo6Iye4QVKYy
+         XorRzqemDyQsEh+6YJ9/InCSyoknBRZ3egXW4380pxN5HZnUVzggu3nNxPtlV5FD5zed
+         maf0oNgfFm4NREuJsoWujUue1x98cStxRmhb4jPVJrzgy+qpWewB3siMSOCHmom7MuwF
+         a6SQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JGEQys0q+vn6kmmzyVuQOW7GVEeqdKy9lN8OIJWvOQs=;
+        b=VP7Jkb0+fpwuzDcfNkG7aeTNNXq97zz/087MkEJBb4pwi474UZWddCzwYxcFnTyUhi
+         yGEgbJYoLwIDsMfApQJIf5TkXbJ++MI9lg/L/ZdrG/t6eViCCUZcnUneUpVAwftnIbpZ
+         I6WV7A8VPEQq2IXkgJe3dW/9KXFdnlvJvr+yLqNGufYavo+WX1r5QqgTkf2EXtQUODaZ
+         BMbj/jjSw6B19qGMFvVcCMPs/XzdJda++8dAWjCt+1ldLv9N+y8x+xO2OuwHroNkQIA7
+         yiIuU828awIJbKf4mCebotufABKu7GTHOOhjZopSKqtJzwjhV80dEz+Paq/d1rhGITKP
+         g9tA==
+X-Gm-Message-State: ANoB5pnHVyldijvCm8XQ+rti4A7rDlrK3dgq5xVQUjQweWUoCFK72gfT
+        P/tgD4xHZsIBz9syISXb4cj7igT67NImh/wJP2GOCw==
+X-Google-Smtp-Source: AA0mqf75DC8RdNO+mbVA7o32g73VCYLO9LhY3gD4QBJZqJA7NWCmXX2/B0rhkrxfFyJjRS5YAVI8c3ozjKH3IAVSkWg=
+X-Received: by 2002:a17:906:b10d:b0:7a3:fbfa:32e5 with SMTP id
+ u13-20020a170906b10d00b007a3fbfa32e5mr12420307ejy.7.1668476199923; Mon, 14
+ Nov 2022 17:36:39 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v2 1/2] f2fs: fix to enable compress for newly created
- file if extension matches
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, Sheng Yong <shengyong@oppo.com>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-References: <20221111100830.953733-1-shengyong@oppo.com>
- <Y3LDuezGylrrocsb@google.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <Y3LDuezGylrrocsb@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221107184715.3950621-1-pasha.tatashin@soleen.com>
+ <e94ac231-7137-010c-2f2b-6a309c941759@redhat.com> <CA+CK2bAbKMj8-crNCtmQ=DB5uRvQBJtFTLf5TH9=RWRGjfOGew@mail.gmail.com>
+ <70a8541b-6066-45ca-e2bc-3b7ecc0e7bb2@redhat.com>
+In-Reply-To: <70a8541b-6066-45ca-e2bc-3b7ecc0e7bb2@redhat.com>
+From:   Pasha Tatashin <pasha.tatashin@soleen.com>
+Date:   Mon, 14 Nov 2022 20:36:03 -0500
+Message-ID: <CA+CK2bAcoimT74mpQE=sa8fw+eZ5VVrAEkvPsB6=4Z6PKhG5vQ@mail.gmail.com>
+Subject: Re: [PATCH v2] mm: anonymous shared memory naming
+To:     David Hildenbrand <david@redhat.com>
+Cc:     corbet@lwn.net, akpm@linux-foundation.org, hughd@google.com,
+        hannes@cmpxchg.org, vincent.whitchurch@axis.com, seanjc@google.com,
+        rppt@kernel.org, shy828301@gmail.com, paul.gortmaker@windriver.com,
+        peterx@redhat.com, vbabka@suse.cz, Liam.Howlett@oracle.com,
+        ccross@google.com, willy@infradead.org, arnd@arndb.de,
+        cgel.zte@gmail.com, yuzhao@google.com,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        bagasdotme@gmail.com, kirill@shutemov.name
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/15 6:39, Jaegeuk Kim wrote:
-> If compress_extension is set, and a newly created file matches the
-> extension, the file could be marked as compression file. However,
-> if inline_data is also enabled, there is no chance to check its
-> extension since f2fs_should_compress() always returns false.
-> 
-> This patch moves set_compress_inode(), which do extension check, in
-> f2fs_should_compress() to check extensions before setting inline
-> data flag.
-> 
-> Fixes: 7165841d578e ("f2fs: fix to check inline_data during compressed inode conversion")
-> Signed-off-by: Sheng Yong <shengyong@oppo.com>
-> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
-> ---
->   fs/f2fs/namei.c | 326 ++++++++++++++++++++++++------------------------
->   1 file changed, 160 insertions(+), 166 deletions(-)
-> 
-> diff --git a/fs/f2fs/namei.c b/fs/f2fs/namei.c
-> index e104409c3a0e..43b721d8e491 100644
-> --- a/fs/f2fs/namei.c
-> +++ b/fs/f2fs/namei.c
-> @@ -22,8 +22,160 @@
->   #include "acl.h"
->   #include <trace/events/f2fs.h>
->   
-> +static inline int is_extension_exist(const unsigned char *s, const char *sub,
-> +						bool tmp_ext)
-> +{
-> +	size_t slen = strlen(s);
-> +	size_t sublen = strlen(sub);
-> +	int i;
-> +
-> +	if (sublen == 1 && *sub == '*')
-> +		return 1;
-> +
-> +	/*
-> +	 * filename format of multimedia file should be defined as:
-> +	 * "filename + '.' + extension + (optional: '.' + temp extension)".
-> +	 */
-> +	if (slen < sublen + 2)
-> +		return 0;
-> +
-> +	if (!tmp_ext) {
-> +		/* file has no temp extension */
-> +		if (s[slen - sublen - 1] != '.')
-> +			return 0;
-> +		return !strncasecmp(s + slen - sublen, sub, sublen);
-> +	}
-> +
-> +	for (i = 1; i < slen - sublen; i++) {
-> +		if (s[i] != '.')
-> +			continue;
-> +		if (!strncasecmp(s + i + 1, sub, sublen))
-> +			return 1;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +int f2fs_update_extension_list(struct f2fs_sb_info *sbi, const char *name,
-> +							bool hot, bool set)
-> +{
-> +	__u8 (*extlist)[F2FS_EXTENSION_LEN] = sbi->raw_super->extension_list;
-> +	int cold_count = le32_to_cpu(sbi->raw_super->extension_count);
-> +	int hot_count = sbi->raw_super->hot_ext_count;
-> +	int total_count = cold_count + hot_count;
-> +	int start, count;
-> +	int i;
-> +
-> +	if (set) {
-> +		if (total_count == F2FS_MAX_EXTENSION)
-> +			return -EINVAL;
-> +	} else {
-> +		if (!hot && !cold_count)
-> +			return -EINVAL;
-> +		if (hot && !hot_count)
-> +			return -EINVAL;
-> +	}
-> +
-> +	if (hot) {
-> +		start = cold_count;
-> +		count = total_count;
-> +	} else {
-> +		start = 0;
-> +		count = cold_count;
-> +	}
-> +
-> +	for (i = start; i < count; i++) {
-> +		if (strcmp(name, extlist[i]))
-> +			continue;
-> +
-> +		if (set)
-> +			return -EINVAL;
-> +
-> +		memcpy(extlist[i], extlist[i + 1],
-> +				F2FS_EXTENSION_LEN * (total_count - i - 1));
-> +		memset(extlist[total_count - 1], 0, F2FS_EXTENSION_LEN);
-> +		if (hot)
-> +			sbi->raw_super->hot_ext_count = hot_count - 1;
-> +		else
-> +			sbi->raw_super->extension_count =
-> +						cpu_to_le32(cold_count - 1);
-> +		return 0;
-> +	}
-> +
-> +	if (!set)
-> +		return -EINVAL;
-> +
-> +	if (hot) {
-> +		memcpy(extlist[count], name, strlen(name));
-> +		sbi->raw_super->hot_ext_count = hot_count + 1;
-> +	} else {
-> +		char buf[F2FS_MAX_EXTENSION][F2FS_EXTENSION_LEN];
-> +
-> +		memcpy(buf, &extlist[cold_count],
-> +				F2FS_EXTENSION_LEN * hot_count);
-> +		memset(extlist[cold_count], 0, F2FS_EXTENSION_LEN);
-> +		memcpy(extlist[cold_count], name, strlen(name));
-> +		memcpy(&extlist[cold_count + 1], buf,
-> +				F2FS_EXTENSION_LEN * hot_count);
-> +		sbi->raw_super->extension_count = cpu_to_le32(cold_count + 1);
-> +	}
-> +	return 0;
-> +}
-> +
-> +static void set_compress_new_inode(struct f2fs_sb_info *sbi, struct inode *dir,
-> +				struct inode *inode, const unsigned char *name)
-> +{
-> +	__u8 (*extlist)[F2FS_EXTENSION_LEN] = sbi->raw_super->extension_list;
-> +	unsigned char (*noext)[F2FS_EXTENSION_LEN] =
-> +						F2FS_OPTION(sbi).noextensions;
-> +	unsigned char (*ext)[F2FS_EXTENSION_LEN] = F2FS_OPTION(sbi).extensions;
-> +	unsigned char ext_cnt = F2FS_OPTION(sbi).compress_ext_cnt;
-> +	unsigned char noext_cnt = F2FS_OPTION(sbi).nocompress_ext_cnt;
-> +	int i, cold_count, hot_count;
-> +
-> +	if (!f2fs_sb_has_compression(sbi) || !name)
-> +		return;
-> +	if (!S_ISREG(inode->i_mode) && !S_ISDIR(inode->i_mode))
-> +		return;
-> +
-> +	/* Inherit the compression flag in directory */
-> +	if ((F2FS_I(dir)->i_flags & F2FS_COMPR_FL)) {
-> +		set_compress_context(inode);
-> +		return;
-> +	}
-> +
-> +	/* Start to check extension list */
-> +	if (!ext_cnt)
-> +		return;
-> +
-> +	/* Don't compress hot files. */
-> +	f2fs_down_read(&sbi->sb_lock);
-> +	cold_count = le32_to_cpu(sbi->raw_super->extension_count);
-> +	hot_count = sbi->raw_super->hot_ext_count;
-> +	for (i = cold_count; i < cold_count + hot_count; i++)
-> +		if (is_extension_exist(name, extlist[i], false))
-> +			break;
-> +	f2fs_up_read(&sbi->sb_lock);
-> +	if (i < (cold_count + hot_count))
-> +		return;
-> +
-> +	/* Don't compress unallowed extension. */
-> +	for (i = 0; i < noext_cnt; i++)
-> +		if (is_extension_exist(name, noext[i], false))
-> +			return;
+On Wed, Nov 9, 2022 at 5:11 AM David Hildenbrand <david@redhat.com> wrote:
+>
+> >>
+> >>>     anon_shmem = mmap(NULL, SIZE, PROT_READ | PROT_WRITE,
+> >>>                       MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+> >>>     /* Name the segment: "MY-NAME" */
+> >>>     rv = prctl(PR_SET_VMA, PR_SET_VMA_ANON_NAME,
+> >>>                anon_shmem, SIZE, "MY-NAME");
+> >>>
+> >>> cat /proc/<pid>/maps (and smaps):
+> >>> 7fc8e2b4c000-7fc8f2b4c000 rw-s 00000000 00:01 1024 [anon_shmem:MY-NAME]
+> >>
+> >> What would it have looked like before? Just no additional information?
+> >
+> > Before:
+> >
+> > 7fc8e2b4c000-7fc8f2b4c000 rw-s 00000000 00:01 1024 /dev/zero (deleted)
+>
+> Can we add that to the patch description?
+>
+> >>
+> >>>
+> >>> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+> >>> ---
+> >>
+> >>
+> >> [...]
+> >>
+> >>> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> >>> index 8bbcccbc5565..06b6fb3277ab 100644
+> >>> --- a/include/linux/mm.h
+> >>> +++ b/include/linux/mm.h
+> >>> @@ -699,8 +699,10 @@ static inline unsigned long vma_iter_addr(struct vma_iterator *vmi)
+> >>>     * paths in userfault.
+> >>>     */
+> >>>    bool vma_is_shmem(struct vm_area_struct *vma);
+> >>> +bool vma_is_anon_shmem(struct vm_area_struct *vma);
+> >>>    #else
+> >>>    static inline bool vma_is_shmem(struct vm_area_struct *vma) { return false; }
+> >>> +static inline bool vma_is_anon_shmem(struct vm_area_struct *vma) { return false; }
+> >>>    #endif
+> >>>
+> >>>    int vma_is_stack_for_current(struct vm_area_struct *vma);
+> >>> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+> >>> index 500e536796ca..08d8b973fb60 100644
+> >>> --- a/include/linux/mm_types.h
+> >>> +++ b/include/linux/mm_types.h
+> >>> @@ -461,21 +461,11 @@ struct vm_area_struct {
+> >>>         * For areas with an address space and backing store,
+> >>>         * linkage into the address_space->i_mmap interval tree.
+> >>>         *
+> >>> -      * For private anonymous mappings, a pointer to a null terminated string
+> >>> -      * containing the name given to the vma, or NULL if unnamed.
+> >>>         */
+> >>> -
+> >>> -     union {
+> >>> -             struct {
+> >>> -                     struct rb_node rb;
+> >>> -                     unsigned long rb_subtree_last;
+> >>> -             } shared;
+> >>> -             /*
+> >>> -              * Serialized by mmap_sem. Never use directly because it is
+> >>> -              * valid only when vm_file is NULL. Use anon_vma_name instead.
+> >>> -              */
+> >>> -             struct anon_vma_name *anon_name;
+> >>> -     };
+> >>> +     struct {
+> >>> +             struct rb_node rb;
+> >>> +             unsigned long rb_subtree_last;
+> >>> +     } shared;
+> >>>
+> >>
+> >> So that effectively grows the size of vm_area_struct. Hm. I'd really
+> >> prefer to keep this specific to actual anonymous memory, not extending
+> >> it to anonymous files.
+> >
+> > It grows only when CONFIG_ANON_VMA_NAME=y, otherwise it stays the same
+> > as before. Are you suggesting adding another config specifically for
+> > shared memory? I wonder if we could add a union for some other part of
+> > vm_area_struct where anon and file cannot be used together.
+>
+> In practice, all distributions will enable CONFIG_ANON_VMA_NAME in the
+> long term I guess. So if we could avoid increasing the VMA size, that
+> would be great.
+>
+> >
+> >> Do we have any *actual* users where we don't have an alternative? I
+> >> doubt that this is really required.
+> >>
+> >> The simplest approach seems to be to use memfd instead of MAP_SHARED |
+> >> MAP_ANONYMOUS. __NR_memfd_create can be passed a name and you get what
+> >> you propose here effectively already. Or does anything speak against it?
+> >
+> > For our use case the above does not work. We are working on highly
+> > paravirtualized virtual machines. The VMM maps VM memory as anonymous
+> > shared memory (not private because VMM is sandboxed and drivers are
+> > running in their own processes). However, the VM tells back to the VMM
+> > how parts of the memory are actually used by the guest, how each of
+> > the segments should be backed (i.e. 4K pages, 2M pages), and some
+> > other information about the segments. The naming allows us to monitor
+> > the effective memory footprint for each of these segments from the
+> > host without looking inside the guest.
+>
+> That's a reasonable use case, although naive me would worry about #VMA
+> limits etc.
+>
+> Can you add some condensed use-case explanation to the patch
+> description? (IOW, memfd cannot be used because parts of the memfd are
+> required to receive distinct names)
+>
+> I'd appreciate if we could avoid increasing the VMA size; but in any case
 
-Should check noext before inheritting F2FS_COMPR_FL?
+I've explored ways not to increase VMA size, but there are no obvious
+solutions here. Let's keep it as is for now, and in the future if
+there we are going to be adding some fields that are only used by
+anonymous memory, we can explore of adding a union for this field.
 
-Thanks,
+>
+> Acked-by: David Hildenbrand <david@redhat.com>
 
-> +
-> +	/* Compress wanting extension. */
-> +	for (i = 0; i < ext_cnt; i++) {
-> +		if (is_extension_exist(name, ext[i], false)) {
-> +			set_compress_context(inode);
-> +			return;
-> +		}
-> +	}
-> +}
-> +
->   static struct inode *f2fs_new_inode(struct user_namespace *mnt_userns,
-> -						struct inode *dir, umode_t mode)
-> +						struct inode *dir, umode_t mode,
-> +						const char *name)
->   {
->   	struct f2fs_sb_info *sbi = F2FS_I_SB(dir);
->   	nid_t ino;
-> @@ -114,12 +266,8 @@ static struct inode *f2fs_new_inode(struct user_namespace *mnt_userns,
->   	if (F2FS_I(inode)->i_flags & F2FS_PROJINHERIT_FL)
->   		set_inode_flag(inode, FI_PROJ_INHERIT);
->   
-> -	if (f2fs_sb_has_compression(sbi)) {
-> -		/* Inherit the compression flag in directory */
-> -		if ((F2FS_I(dir)->i_flags & F2FS_COMPR_FL) &&
-> -					f2fs_may_compress(inode))
-> -			set_compress_context(inode);
-> -	}
-> +	/* Check compression first. */
-> +	set_compress_new_inode(sbi, dir, inode, name);
->   
->   	/* Should enable inline_data after compression set */
->   	if (test_opt(sbi, INLINE_DATA) && f2fs_may_inline_data(inode))
-> @@ -153,40 +301,6 @@ static struct inode *f2fs_new_inode(struct user_namespace *mnt_userns,
->   	return ERR_PTR(err);
->   }
->   
-> -static inline int is_extension_exist(const unsigned char *s, const char *sub,
-> -						bool tmp_ext)
-> -{
-> -	size_t slen = strlen(s);
-> -	size_t sublen = strlen(sub);
-> -	int i;
-> -
-> -	if (sublen == 1 && *sub == '*')
-> -		return 1;
-> -
-> -	/*
-> -	 * filename format of multimedia file should be defined as:
-> -	 * "filename + '.' + extension + (optional: '.' + temp extension)".
-> -	 */
-> -	if (slen < sublen + 2)
-> -		return 0;
-> -
-> -	if (!tmp_ext) {
-> -		/* file has no temp extension */
-> -		if (s[slen - sublen - 1] != '.')
-> -			return 0;
-> -		return !strncasecmp(s + slen - sublen, sub, sublen);
-> -	}
-> -
-> -	for (i = 1; i < slen - sublen; i++) {
-> -		if (s[i] != '.')
-> -			continue;
-> -		if (!strncasecmp(s + i + 1, sub, sublen))
-> -			return 1;
-> -	}
-> -
-> -	return 0;
-> -}
-> -
->   /*
->    * Set file's temperature for hot/cold data separation
->    */
-> @@ -217,124 +331,6 @@ static inline void set_file_temperature(struct f2fs_sb_info *sbi, struct inode *
->   		file_set_hot(inode);
->   }
->   
-> -int f2fs_update_extension_list(struct f2fs_sb_info *sbi, const char *name,
-> -							bool hot, bool set)
-> -{
-> -	__u8 (*extlist)[F2FS_EXTENSION_LEN] = sbi->raw_super->extension_list;
-> -	int cold_count = le32_to_cpu(sbi->raw_super->extension_count);
-> -	int hot_count = sbi->raw_super->hot_ext_count;
-> -	int total_count = cold_count + hot_count;
-> -	int start, count;
-> -	int i;
-> -
-> -	if (set) {
-> -		if (total_count == F2FS_MAX_EXTENSION)
-> -			return -EINVAL;
-> -	} else {
-> -		if (!hot && !cold_count)
-> -			return -EINVAL;
-> -		if (hot && !hot_count)
-> -			return -EINVAL;
-> -	}
-> -
-> -	if (hot) {
-> -		start = cold_count;
-> -		count = total_count;
-> -	} else {
-> -		start = 0;
-> -		count = cold_count;
-> -	}
-> -
-> -	for (i = start; i < count; i++) {
-> -		if (strcmp(name, extlist[i]))
-> -			continue;
-> -
-> -		if (set)
-> -			return -EINVAL;
-> -
-> -		memcpy(extlist[i], extlist[i + 1],
-> -				F2FS_EXTENSION_LEN * (total_count - i - 1));
-> -		memset(extlist[total_count - 1], 0, F2FS_EXTENSION_LEN);
-> -		if (hot)
-> -			sbi->raw_super->hot_ext_count = hot_count - 1;
-> -		else
-> -			sbi->raw_super->extension_count =
-> -						cpu_to_le32(cold_count - 1);
-> -		return 0;
-> -	}
-> -
-> -	if (!set)
-> -		return -EINVAL;
-> -
-> -	if (hot) {
-> -		memcpy(extlist[count], name, strlen(name));
-> -		sbi->raw_super->hot_ext_count = hot_count + 1;
-> -	} else {
-> -		char buf[F2FS_MAX_EXTENSION][F2FS_EXTENSION_LEN];
-> -
-> -		memcpy(buf, &extlist[cold_count],
-> -				F2FS_EXTENSION_LEN * hot_count);
-> -		memset(extlist[cold_count], 0, F2FS_EXTENSION_LEN);
-> -		memcpy(extlist[cold_count], name, strlen(name));
-> -		memcpy(&extlist[cold_count + 1], buf,
-> -				F2FS_EXTENSION_LEN * hot_count);
-> -		sbi->raw_super->extension_count = cpu_to_le32(cold_count + 1);
-> -	}
-> -	return 0;
-> -}
-> -
-> -static void set_compress_inode(struct f2fs_sb_info *sbi, struct inode *inode,
-> -						const unsigned char *name)
-> -{
-> -	__u8 (*extlist)[F2FS_EXTENSION_LEN] = sbi->raw_super->extension_list;
-> -	unsigned char (*noext)[F2FS_EXTENSION_LEN] = F2FS_OPTION(sbi).noextensions;
-> -	unsigned char (*ext)[F2FS_EXTENSION_LEN] = F2FS_OPTION(sbi).extensions;
-> -	unsigned char ext_cnt = F2FS_OPTION(sbi).compress_ext_cnt;
-> -	unsigned char noext_cnt = F2FS_OPTION(sbi).nocompress_ext_cnt;
-> -	int i, cold_count, hot_count;
-> -
-> -	if (!f2fs_sb_has_compression(sbi) ||
-> -			F2FS_I(inode)->i_flags & F2FS_NOCOMP_FL ||
-> -			!f2fs_may_compress(inode) ||
-> -			(!ext_cnt && !noext_cnt))
-> -		return;
-> -
-> -	f2fs_down_read(&sbi->sb_lock);
-> -
-> -	cold_count = le32_to_cpu(sbi->raw_super->extension_count);
-> -	hot_count = sbi->raw_super->hot_ext_count;
-> -
-> -	for (i = cold_count; i < cold_count + hot_count; i++) {
-> -		if (is_extension_exist(name, extlist[i], false)) {
-> -			f2fs_up_read(&sbi->sb_lock);
-> -			return;
-> -		}
-> -	}
-> -
-> -	f2fs_up_read(&sbi->sb_lock);
-> -
-> -	for (i = 0; i < noext_cnt; i++) {
-> -		if (is_extension_exist(name, noext[i], false)) {
-> -			f2fs_disable_compressed_file(inode);
-> -			return;
-> -		}
-> -	}
-> -
-> -	if (is_inode_flag_set(inode, FI_COMPRESSED_FILE))
-> -		return;
-> -
-> -	for (i = 0; i < ext_cnt; i++) {
-> -		if (!is_extension_exist(name, ext[i], false))
-> -			continue;
-> -
-> -		/* Do not use inline_data with compression */
-> -		stat_dec_inline_inode(inode);
-> -		clear_inode_flag(inode, FI_INLINE_DATA);
-> -		set_compress_context(inode);
-> -		return;
-> -	}
-> -}
-> -
->   static int f2fs_create(struct user_namespace *mnt_userns, struct inode *dir,
->   		       struct dentry *dentry, umode_t mode, bool excl)
->   {
-> @@ -352,15 +348,13 @@ static int f2fs_create(struct user_namespace *mnt_userns, struct inode *dir,
->   	if (err)
->   		return err;
->   
-> -	inode = f2fs_new_inode(mnt_userns, dir, mode);
-> +	inode = f2fs_new_inode(mnt_userns, dir, mode, dentry->d_name.name);
->   	if (IS_ERR(inode))
->   		return PTR_ERR(inode);
->   
->   	if (!test_opt(sbi, DISABLE_EXT_IDENTIFY))
->   		set_file_temperature(sbi, inode, dentry->d_name.name);
->   
-> -	set_compress_inode(sbi, inode, dentry->d_name.name);
-> -
->   	inode->i_op = &f2fs_file_inode_operations;
->   	inode->i_fop = &f2fs_file_operations;
->   	inode->i_mapping->a_ops = &f2fs_dblock_aops;
-> @@ -689,7 +683,7 @@ static int f2fs_symlink(struct user_namespace *mnt_userns, struct inode *dir,
->   	if (err)
->   		return err;
->   
-> -	inode = f2fs_new_inode(mnt_userns, dir, S_IFLNK | S_IRWXUGO);
-> +	inode = f2fs_new_inode(mnt_userns, dir, S_IFLNK | S_IRWXUGO, NULL);
->   	if (IS_ERR(inode))
->   		return PTR_ERR(inode);
->   
-> @@ -760,7 +754,7 @@ static int f2fs_mkdir(struct user_namespace *mnt_userns, struct inode *dir,
->   	if (err)
->   		return err;
->   
-> -	inode = f2fs_new_inode(mnt_userns, dir, S_IFDIR | mode);
-> +	inode = f2fs_new_inode(mnt_userns, dir, S_IFDIR | mode, NULL);
->   	if (IS_ERR(inode))
->   		return PTR_ERR(inode);
->   
-> @@ -817,7 +811,7 @@ static int f2fs_mknod(struct user_namespace *mnt_userns, struct inode *dir,
->   	if (err)
->   		return err;
->   
-> -	inode = f2fs_new_inode(mnt_userns, dir, mode);
-> +	inode = f2fs_new_inode(mnt_userns, dir, mode, NULL);
->   	if (IS_ERR(inode))
->   		return PTR_ERR(inode);
->   
-> @@ -856,7 +850,7 @@ static int __f2fs_tmpfile(struct user_namespace *mnt_userns, struct inode *dir,
->   	if (err)
->   		return err;
->   
-> -	inode = f2fs_new_inode(mnt_userns, dir, mode);
-> +	inode = f2fs_new_inode(mnt_userns, dir, mode, NULL);
->   	if (IS_ERR(inode))
->   		return PTR_ERR(inode);
->   
+Thank you. I will soon send a new version with support for memfd anon
+memory as well.
+
+Pasha
