@@ -2,53 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4395B629B0D
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:49:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C855A629B17
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:49:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238391AbiKONti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 08:49:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49676 "EHLO
+        id S238481AbiKONto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 08:49:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230207AbiKONtg (ORCPT
+        with ESMTP id S230215AbiKONtg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 15 Nov 2022 08:49:36 -0500
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34F442497F;
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C1F624969;
         Tue, 15 Nov 2022 05:49:33 -0800 (PST)
 Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4NBSGG0jBXz4f41hZ;
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NBSGG3Cs4z4f3vdk;
         Tue, 15 Nov 2022 21:49:26 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP4 (Coremail) with SMTP id gCh0CgBni9jnmHNjrPFIAg--.61645S4;
+        by APP4 (Coremail) with SMTP id gCh0CgBni9jnmHNjrPFIAg--.61645S5;
         Tue, 15 Nov 2022 21:49:29 +0800 (CST)
 From:   Yu Kuai <yukuai1@huaweicloud.com>
 To:     hch@lst.de, axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
         dm-devel@redhat.com
 Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
         yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com
-Subject: [PATCH v3 00/10] fix delayed holder tracking
-Date:   Tue, 15 Nov 2022 22:10:44 +0800
-Message-Id: <20221115141054.1051801-1-yukuai1@huaweicloud.com>
+Subject: [PATCH v3 01/10] block: clear ->slave_dir when dropping the main slave_dir reference
+Date:   Tue, 15 Nov 2022 22:10:45 +0800
+Message-Id: <20221115141054.1051801-2-yukuai1@huaweicloud.com>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20221115141054.1051801-1-yukuai1@huaweicloud.com>
+References: <20221115141054.1051801-1-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgBni9jnmHNjrPFIAg--.61645S4
-X-Coremail-Antispam: 1UD129KBjvJXoWruFyUZr1fuw1DAw17Jw1rXrb_yoW8JF48pF
-        ZxWa4fKFyUurWIqa13Aw17XFyrGan7K3WxJry7Kr1Fqry5Cry5ZF1xtF18tFyUGrZ7trnr
-        Xry7t3yfGw4vk3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvY14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-        Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
-        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-        0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v2
-        6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0J
-        UdHUDUUUUU=
+X-CM-TRANSID: gCh0CgBni9jnmHNjrPFIAg--.61645S5
+X-Coremail-Antispam: 1UD129KBjvdXoWrtrykCw4kWry3Xw4rXr45GFg_yoWkZrcEka
+        s3C3Wkuws7Gw1ag3ZFkr1rZr40vw4YvayUuFZrXF9xGa4UJrn3J3WkWr4rAFn3GFWkK343
+        AF1qvFy7Crs7CjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb6AFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGwA2048vs2IY02
+        0Ec7CjxVAFwI0_JFI_Gr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM2
+        8EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AI
+        xVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20x
+        vE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xv
+        r2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04
+        v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_
+        Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x
+        0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8
+        JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIx
+        AIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbec_DUUUUU=
+        =
 X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
@@ -59,43 +62,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
+From: Christoph Hellwig <hch@lst.de>
 
-Hi all,
+Zero out the pointer to ->slave_dir so that the holder code doesn't
+incorrectly treat the object as alive when add_disk failed or after
+del_gendisk was called.
 
-this series tries to fix the delayed holder tracking that is only used by
-dm by moving it into dm, where we can track the lifetimes much better.
-v2 is from Christoph, here I send v3 with some additional fixes.
+Fixes: 89f871af1b26 ("dm: delay registering the gendisk")
+Reported-by: Yu Kuai <yukuai3@huawei.com>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+---
+ block/genhd.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Changes since v2:
- - add patch 5 8 and 10 to this series.
- - rewrite last cleanup patch from v2.
-Changes since v1:
- - don't blow away ->bd_holder_dir in del_gendisk or add_disk failure
-   as the holder unregistration references it
- - add an extra cleanup patch
-
-Christoph Hellwig (6):
-  block: clear ->slave_dir when dropping the main slave_dir reference
-  dm: remove free_table_devices
-  dm: cleanup open_table_device
-  dm: cleanup close_table_device
-  dm: track per-add_disk holder relations in DM
-  block: remove delayed holder registration
-
-Yu Kuai (4):
-  dm: make sure create and remove dm device won't race with open and
-    close table
-  block: fix use after free for bd_holder_dir
-  block: store the holder kobject in bd_holder_disk
-  block: don't allow a disk link holder to itself
-
- block/genhd.c          |   6 +-
- block/holder.c         | 103 +++++++++++++-----------------
- drivers/md/dm.c        | 138 ++++++++++++++++++++++++-----------------
- include/linux/blkdev.h |   5 --
- 4 files changed, 126 insertions(+), 126 deletions(-)
-
+diff --git a/block/genhd.c b/block/genhd.c
+index 74026ce31405..e9501c66ba4d 100644
+--- a/block/genhd.c
++++ b/block/genhd.c
+@@ -530,6 +530,7 @@ int __must_check device_add_disk(struct device *parent, struct gendisk *disk,
+ 	rq_qos_exit(disk->queue);
+ out_put_slave_dir:
+ 	kobject_put(disk->slave_dir);
++	disk->slave_dir = NULL;
+ out_put_holder_dir:
+ 	kobject_put(disk->part0->bd_holder_dir);
+ out_del_integrity:
+@@ -634,6 +635,7 @@ void del_gendisk(struct gendisk *disk)
+ 
+ 	kobject_put(disk->part0->bd_holder_dir);
+ 	kobject_put(disk->slave_dir);
++	disk->slave_dir = NULL;
+ 
+ 	part_stat_set_all(disk->part0, 0);
+ 	disk->part0->bd_stamp = 0;
 -- 
 2.31.1
 
