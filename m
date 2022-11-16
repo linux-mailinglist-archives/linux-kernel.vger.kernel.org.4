@@ -2,123 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4579862C1BD
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 16:04:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B439562C1C4
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 16:06:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233928AbiKPPEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 10:04:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55662 "EHLO
+        id S234066AbiKPPGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 10:06:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233356AbiKPPES (ORCPT
+        with ESMTP id S233955AbiKPPGJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 10:04:18 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2BDF616E
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 07:04:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668611057; x=1700147057;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Lc2im2WNuflvec4Il7akKcrjVAyNll8uTfelvJ8MY/I=;
-  b=h+7ynyVXejAPFB/GLD71yi3rNP6XItlhzFakG+ri7buKVXRHvjXc2zvH
-   PeGzAZurESv41E9rVRYmgBJ1/cZJou0GtKvQDwJs7cpATPYr7WjSG+Bri
-   Tnzfh6zpTgSRk1BMTmJGwGlztNQ9yDUJGWcucaLcPdKL1/dXSagjBQt4F
-   vsU/z8bma+fQtfPTwQ0nXUBSS2VhKOgUmW8tulP1LgGB+8U1jUsJmCC/X
-   HOeCF9q5QEsyhZbKz9BiFLOnbJjYThhn3zKOBl4idHnoXaTINVbt4xqjs
-   1+fElcLo8NLCj7O/lVtjteTom+JMI3nNwqoJfwfyZGKf/EOGFgKmgAOwU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="311270990"
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="311270990"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 07:04:12 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="639385030"
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="639385030"
-Received: from msureshb-mobl3.amr.corp.intel.com (HELO [10.212.45.114]) ([10.212.45.114])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 07:04:10 -0800
-Message-ID: <a8bc9284-c0c2-79aa-fee6-40101fc34f96@linux.intel.com>
-Date:   Wed, 16 Nov 2022 09:04:09 -0600
+        Wed, 16 Nov 2022 10:06:09 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B6072A977
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 07:06:07 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id fn7-20020a05600c688700b003b4fb113b86so1695256wmb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 07:06:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=N0oCOvRm1EK9AxTWCP4M9BHamp1imaGXhcVhBQlLE/I=;
+        b=Tfpg/KEk5Zv7mnqGj0ZgkiFXW/54J1Nx92o0nXLAdGLQIvVzqVDc0IV6Ird1vNZ4zD
+         ODxgB3YiSR5DseYPNjYTTeYNNoHCH3VZ3vf9a13LbZnUSONY1BiXi4elUMKwbeFmWw5I
+         Ir/JQSqiKQGdMj3A5YXlmdpwu6raDAXsQxbS8uWau8GqyEqAqs158S0+lYwp8dtYklIb
+         PJgDJTGiW1ZBUK6lBO1WWsD5Huqtsw4oIcixi8Tn91bvLJwyt1Uv3VrbhbgNHjOTiWOa
+         pjt7+GFVkyXReiJAplELl8i96u2qznoQwuB+3RS8kg5COZ/cidhd+VgKM90s+SmpFZtg
+         O6tQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=N0oCOvRm1EK9AxTWCP4M9BHamp1imaGXhcVhBQlLE/I=;
+        b=f3hvhYghRQo7cFkOONhKDbmHm/j20DzsyDH9R7UYwyoBF3S4NYWpzm7A94zPQFW4LB
+         CF62U8AJLyQIciQ+/U7KESLaM3XA39VWN1L9mQpGISYVTTiWvPIqD7QxVKqmV+VqMkUW
+         085yCl64RXAz7dVGy1Vmev94/7rFewiFdEVhcIXYEMZyTOX2Ll3efusy1TQ7EMkFFp61
+         BHoT83MJUtcu821Xg0FIRVYXyGjenn5AkzFRFDGjy3Oeyiy6CkJbzYN9nFqa4JLdWxYA
+         tjwJNXOB3umhBBrfnlv0c/87tudJ4e5SvYhUR5UbqncpKHmowfmDzR3DLyhgy9BwhPDq
+         sh6Q==
+X-Gm-Message-State: ANoB5pn+9113nxk+qvkrqM48rcFUejiOxpwVA9ST+p2F+7PySHv7+zwT
+        O9T5Lo9NgS03rP8OYM9k0WkXag==
+X-Google-Smtp-Source: AA0mqf5adF1AaQLjFwL8N1PwblL1LOFK81oGm1HDjWvOrcnHHBLZciTGXu5ZT+MUPW+g+uvuy/6k5g==
+X-Received: by 2002:a1c:7701:0:b0:3cf:6c2f:950c with SMTP id t1-20020a1c7701000000b003cf6c2f950cmr2433855wmi.146.1668611165768;
+        Wed, 16 Nov 2022 07:06:05 -0800 (PST)
+Received: from localhost.localdomain ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id s15-20020a7bc38f000000b003cf6a55d8e8sm2260038wmj.7.2022.11.16.07.06.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 07:06:05 -0800 (PST)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH] dt-bindings: usb: dwc3: Add SM8550 compatible
+Date:   Wed, 16 Nov 2022 17:06:00 +0200
+Message-Id: <20221116150600.3011160-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-Subject: Re: [Sound-open-firmware] [PATCH 3/4] ASoC: SOF: Adding amd HS
- functionality to the sof core
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>,
-        broonie@kernel.org, alsa-devel@alsa-project.org
-Cc:     Sunil-kumar.Dommati@amd.com, Vijendar.Mukunda@amd.com,
-        ssabakar@amd.com, Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        venkataprasad.potturu@amd.com,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Basavaraj.Hiregoudar@amd.com, Takashi Iwai <tiwai@suse.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        YC Hung <yc.hung@mediatek.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:SOUND - SOUND OPEN FIRMWARE (SOF) DRIVERS" 
-        <sound-open-firmware@alsa-project.org>
-References: <20220913144319.1055302-1-Vsujithkumar.Reddy@amd.com>
- <20220913144319.1055302-4-Vsujithkumar.Reddy@amd.com>
- <36a45c7a-820a-7675-d740-c0e83ae2c417@collabora.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <36a45c7a-820a-7675-d740-c0e83ae2c417@collabora.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Document the SM8550 dwc3 compatible.
 
->> diff --git a/include/sound/sof/dai.h b/include/sound/sof/dai.h
->> index 21d98f31a9ca..83fd81c82e4c 100644
->> --- a/include/sound/sof/dai.h
->> +++ b/include/sound/sof/dai.h
->> @@ -84,6 +84,7 @@ enum sof_ipc_dai_type {
->>       SOF_DAI_AMD_BT,            /**< AMD ACP BT*/
->>       SOF_DAI_AMD_SP,            /**< AMD ACP SP */
->>       SOF_DAI_AMD_DMIC,        /**< AMD ACP DMIC */
->> +    SOF_DAI_AMD_HS,            /**< Amd HS */
->>       SOF_DAI_MEDIATEK_AFE,        /**< Mediatek AFE */
-> 
-> Adding SOF_DAI_AMD_HS before SOF_DAI_MEDIATEK_AFE desynced this enumeration
-> so the DAI type is now 11 and not 10 anymore, leading to a failure in
-> firmware
-> at IPC3 helper function `dai_get()`, as when `dai_find_type()` is
-> called, the
-> DAI type that the firmware expects doesn't match with the one that gets
-> sent
-> in the request message from the kernel.
-> 
-> As a local test, I tried moving SOF_DAI_AMD_HS after
-> SOF_DAI_MEDIATEK_AFE and
-> this has restored full functionality on my MT8195 platform (Tomato
-> Chromebook).
-> 
-> If SOF is supposed to guarantee backwards compatibility (and I believe
-> it is),
-> this commit breaks that.
-> 
-> I would be tempted to send a commit that moves SOF_DAI_AMD_HS to the
-> end, but
-> that would break the already compiled firmware for AMD platforms, so I
-> am not
-> sure how to proceed.
+Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+---
+ Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-D'oh. Yes this breaks backwards-compatibility and this is a clear
-mistake. I think your suggestion to add the AMD_HS at the end is the
-only practical solution indeed - this would need to be done for both
-kernel and SOF version of dai.h.
+diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+index a6e6abb4dfa9..a3f8a3f49852 100644
+--- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
++++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+@@ -39,6 +39,7 @@ properties:
+           - qcom,sm8250-dwc3
+           - qcom,sm8350-dwc3
+           - qcom,sm8450-dwc3
++          - qcom,sm8550-dwc3
+       - const: qcom,dwc3
+ 
+   reg:
+@@ -301,6 +302,7 @@ allOf:
+               - qcom,sm8150-dwc3
+               - qcom,sm8250-dwc3
+               - qcom,sm8450-dwc3
++              - qcom,sm8550-dwc3
+     then:
+       properties:
+         clocks:
+@@ -358,6 +360,7 @@ allOf:
+               - qcom,sm8250-dwc3
+               - qcom,sm8350-dwc3
+               - qcom,sm8450-dwc3
++              - qcom,sm8550-dwc3
+     then:
+       properties:
+         interrupts:
+-- 
+2.34.1
 
