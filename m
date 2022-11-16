@@ -2,53 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF3E462C1B8
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 16:01:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D580862C1BA
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 16:01:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233890AbiKPPBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 10:01:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53452 "EHLO
+        id S234314AbiKPPBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 10:01:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233694AbiKPPBf (ORCPT
+        with ESMTP id S233746AbiKPPBj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 10:01:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8216FB22;
-        Wed, 16 Nov 2022 07:01:34 -0800 (PST)
+        Wed, 16 Nov 2022 10:01:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D6DB22
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 07:01:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CAFC61E65;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7C26EB81DB9
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 15:01:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C8CFC433D7;
         Wed, 16 Nov 2022 15:01:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 028CAC433D7;
-        Wed, 16 Nov 2022 15:01:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668610893;
-        bh=GCLTsKWd3l2oU79ad7ndCO0sGERp+hW9GVMLdBk7v+k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=E6oeGQT7ibMjTKUpuBJc/iLSrD/y8yIheNo+1A3Wl3g3cIXSnrXH8an5f9/qL4+T7
-         H1Ue8sXOWsXvTv3u0CAf/47KNbeyokRY07nH6hk/bAqzD3sZPbmIQFQHepipNxGzj2
-         p6ZJ+9TZje56oRJvdJO38EFN1kD9bqjMzCyVSRSLDGT3Y7GSTtqUBAu6FGZMJiQ60M
-         w9nTxOhsy5ulhI1N7aItOSnKRSpqFX0pE4vy30/lmYUUPQ/WO/laRhKdjTc32CI1aK
-         tdNMg4uDeOy5nJS2fjGV6DfFIRuN8YEqqoiZUB+xOk56dUsQsE6sTCHJ2ZFpjAG4NM
-         iW4ODprbIdsPQ==
-Date:   Wed, 16 Nov 2022 16:01:30 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
-Cc:     "paulmck@kernel.org" <paulmck@kernel.org>,
-        "joel@joelfernandes.org" <joel@joelfernandes.org>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] rcu: Avoid invalid wakeup for rcuc kthreads in
- RCU_KTHREAD_OFFCPU status
-Message-ID: <20221116150130.GD816333@lothringen>
-References: <20221115131926.3409974-1-qiang1.zhang@intel.com>
- <20221116124716.GA813995@lothringen>
- <PH0PR11MB5880FD7499114743BCE3E5A3DA079@PH0PR11MB5880.namprd11.prod.outlook.com>
+        s=k20201202; t=1668610895;
+        bh=dcP2x5CBch3DJrmGZJ+7f+29GSfFAgYzmRD/abQws/E=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=sDXNQYF9M6WwdwcIXcA4jA35AGQhYk2LJUH4cqiVg5csF4AmRBLuyJrSL+HzMMWsp
+         1tASUSW+XLcPpsyYHKRzcL5RJMBZUliQ4MvDA5iFo101jOHKQm+2XgYdF8H+6kdamA
+         29K8QUMxIZCmL4f2gQQ6ABbD6kZr8ZF1oatCIiNXU1P66E//Xz+xOD+xi1d5ycCwVQ
+         MjqSlNG/kbclazj1u6T4LbA9W/goAUkngHvmlGTjEy4f/nOx2K+XjEWPjz484C4lN0
+         qOx4O+2qduFwefuLL+U169T8n/dOgm65rGhVg1o0JVwRM7ybKDkJ44CrdmT7pU6Aqp
+         NZdzj6PbmxORw==
+From:   Mark Brown <broonie@kernel.org>
+To:     linux-kernel@vger.kernel.org,
+        Yang Yingliang <yangyingliang@huawei.com>
+Cc:     lgirdwood@gmail.com
+In-Reply-To: <20221116033706.3595812-1-yangyingliang@huawei.com>
+References: <20221116033706.3595812-1-yangyingliang@huawei.com>
+Subject: Re: [PATCH] regulator: core: fix UAF in destroy_regulator()
+Message-Id: <166861089393.540847.16213406405179822954.b4-ty@kernel.org>
+Date:   Wed, 16 Nov 2022 15:01:33 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH0PR11MB5880FD7499114743BCE3E5A3DA079@PH0PR11MB5880.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.11.0-dev-8af31
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -58,55 +54,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 02:07:28PM +0000, Zhang, Qiang1 wrote:
-> On Tue, Nov 15, 2022 at 09:19:26PM +0800, Zqiang wrote:
-> >And more important! On unpark time RCU_KTHREAD_OFFCPU isn't cleared. Only the
-> >rcuc kthread does it, and after your patch it couldn't be awaken to perform
-> >that, unless rcuc is lucky enough to have rcu_data.rcu_cpu_has_work = 1
-> >by the time it unparks and that isn't guaranteed. So rcuc may sleep forever.
+On Wed, 16 Nov 2022 11:37:06 +0800, Yang Yingliang wrote:
+> I got a UAF report as following:
 > 
-> Thanks for review, yes I should register an unpark function to clear RCU_KTHREAD_OFFCPU.
-> Is the following modification more appropriate?
+> ==================================================================
+> BUG: KASAN: use-after-free in __lock_acquire+0x935/0x2060
+> Read of size 8 at addr ffff88810e838220 by task python3/268
+> Call Trace:
+>  <TASK>
+>  dump_stack_lvl+0x67/0x83
+>  print_report+0x178/0x4b0
+>  kasan_report+0x90/0x190
+>  __lock_acquire+0x935/0x2060
+>  lock_acquire+0x156/0x400
+>  _raw_spin_lock+0x2a/0x40
+>  lockref_get+0x11/0x30
+>  simple_recursive_removal+0x41/0x440
+>  debugfs_remove.part.12+0x32/0x50
+>  debugfs_remove+0x29/0x30
+>  _regulator_put.cold.54+0x3e/0x27f
+>  regulator_put+0x1f/0x30
+>  release_nodes+0x6a/0xa0
+>  devres_release_all+0xf8/0x150
 > 
-> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> index 3ccad468887e..a2248af0ccda 100644
-> --- a/kernel/rcu/tree.c
-> +++ b/kernel/rcu/tree.c
-> @@ -2375,7 +2375,8 @@ static void rcu_wake_cond(struct task_struct *t, int status)
->          * If the thread is yielding, only wake it when this
->          * is invoked from idle
->          */
-> -       if (t && (status != RCU_KTHREAD_YIELDING || is_idle_task(current)))
-> +       if (t && (status != RCU_KTHREAD_YIELDING || is_idle_task(current)) &&
-> +                               status != RCU_KTHREAD_OFFCPU)
->                 wake_up_process(t);
->  }
-> 
-> @@ -2407,7 +2408,14 @@ static void invoke_rcu_core(void)
-> 
->  static void rcu_cpu_kthread_park(unsigned int cpu)
->  {
-> -       per_cpu(rcu_data.rcu_cpu_kthread_status, cpu) = RCU_KTHREAD_OFFCPU;
-> +       WARN_ON_ONCE(cpu != smp_processor_id());
-> +       __this_cpu_write(rcu_data.rcu_cpu_kthread_status, RCU_KTHREAD_OFFCPU);
-> +}
-> +
-> +static void rcu_cpu_kthread_unpark(unsigned int cpu)
-> +{
-> +       WARN_ON_ONCE(cpu != smp_processor_id());
-> +       __this_cpu_write(rcu_data.rcu_cpu_kthread_status, RCU_KTHREAD_ONCPU);
->  }
-> 
->  static int rcu_cpu_kthread_should_run(unsigned int cpu)
-> @@ -2460,6 +2468,7 @@ static struct smp_hotplug_thread rcu_cpu_thread_spec = {
->         .thread_comm            = "rcuc/%u",
->         .setup                  = rcu_cpu_kthread_setup,
->         .park                   = rcu_cpu_kthread_park,
-> +       .unpark                 = rcu_cpu_kthread_unpark,
+> [...]
 
-Well, personally I don't think it's worth the burden because wake_up_process()
-already does an early exit if it's not dealing with a TASK_[UN]INTERRUPTIBLE task and
-the window is so short and rare that it doesn't look like a good candidate for
-extra optimization;
+Applied to
 
-Thanks.
+   broonie/regulator.git for-next
+
+Thanks!
+
+[1/1] regulator: core: fix UAF in destroy_regulator()
+      commit: 1f386d6894d0f1b7de8ef640c41622ddd698e7ab
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
