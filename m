@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5807862B243
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 05:17:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48A8C62B241
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 05:16:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232682AbiKPEQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 23:16:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54206 "EHLO
+        id S232184AbiKPEQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 23:16:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232134AbiKPEO4 (ORCPT
+        with ESMTP id S232122AbiKPEO4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 15 Nov 2022 23:14:56 -0500
 Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A8C31ED3;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10B431EE3;
         Tue, 15 Nov 2022 20:14:29 -0800 (PST)
 Received: from pps.filterd (m0150241.ppops.net [127.0.0.1])
-        by mx0a-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AG31FuU027400;
-        Wed, 16 Nov 2022 04:14:21 GMT
+        by mx0a-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AG41wRm017677;
+        Wed, 16 Nov 2022 04:14:22 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pps0720;
- bh=fUEoWBalDn15t5cghIYwbOp4kr7w2eJcKg0SlIogXXk=;
- b=j/FVsITL3XCoJxa42FwyW4IUVUWbCaYUqCnslWOqvkZKz/uWmcMQjnbeMhGUDPVx1rfj
- WpqScT+88gC9OIempR+TuEiV3z6Z3Xcx7jIRmvCoO+yMwSF4lcDpAcHUX2A4VQyJKSv6
- mCkDwpLpdvYRRD97c91v5xDEajKIxb847PL/R/4IJkZIZr6ZoiO4O8fZpdZyDmlHhfyQ
- Tmr3I5zQalhn9zOhx82HadVFirJTkhccBSwjmGP/PlEL5VATDLEmh1WSulKre3AspVmK
- ps+nvZqqxSnNQpXQQ6v/3pCwPcos9R9hiilEspFwPL5edK7r2ovK8nh+3ob+Gc7Q7ZT3 Hw== 
-Received: from p1lg14878.it.hpe.com (p1lg14878.it.hpe.com [16.230.97.204])
-        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3kvqkbregk-1
+ bh=B/wYDw1cSUgG16tdEg26Rduz4xQRfTooo+shmZDe7Zs=;
+ b=BzId7/TthXq5b8M91Cl8rsjkrS3kAGNB+aBvte5zURpGAuSuH+++irmQ+lkgfo5QKeX/
+ bRN95Pd2vOwBUvvXuBE5aaAxInwoRnyUH3PKJeGiIsJs6agBdQSbY5egGFn4/0rdh6P+
+ PSbGxsNfOk/bPCda2vLzyulejsqZO6sDRMe0nP7KG0rlm1rYbOnozFjkwNdolphDVU3z
+ oLXJ92JxdaUEqVAHqS1ZQiPtEg7M2qjMCujj1CAMkopIZCzEKE9axnLenSRzqswohWsH
+ 0GeRJU/aVgsPLu7CqzgKiRyaN6pRM5VWlnIODyUbioB+h1OQmUnXD+fRAcdLu4coJ7mA zg== 
+Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
+        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3kvqkbregu-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Nov 2022 04:14:20 +0000
+        Wed, 16 Nov 2022 04:14:22 +0000
 Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by p1lg14878.it.hpe.com (Postfix) with ESMTPS id 318412EEEE;
-        Wed, 16 Nov 2022 04:14:20 +0000 (UTC)
+        by p1lg14879.it.hpe.com (Postfix) with ESMTPS id 6C8FD295AF;
+        Wed, 16 Nov 2022 04:14:21 +0000 (UTC)
 Received: from adevxp033-sys.us.rdlabs.hpecorp.net (unknown [16.231.227.36])
-        by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTP id B379180FE95;
-        Wed, 16 Nov 2022 04:14:19 +0000 (UTC)
+        by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTP id F174D802A17;
+        Wed, 16 Nov 2022 04:14:20 +0000 (UTC)
 From:   Robert Elliott <elliott@hpe.com>
 To:     herbert@gondor.apana.org.au, davem@davemloft.net,
         tim.c.chen@linux.intel.com, ap420073@gmail.com, ardb@kernel.org,
         Jason@zx2c4.com, David.Laight@ACULAB.COM, ebiggers@kernel.org,
         linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Robert Elliott <elliott@hpe.com>
-Subject: [PATCH v4 22/24] crypto: x86 - report missing CPU features via module parameters
-Date:   Tue, 15 Nov 2022 22:13:40 -0600
-Message-Id: <20221116041342.3841-23-elliott@hpe.com>
+Subject: [PATCH v4 23/24] crypto: x86 - report suboptimal CPUs via module parameters
+Date:   Tue, 15 Nov 2022 22:13:41 -0600
+Message-Id: <20221116041342.3841-24-elliott@hpe.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221116041342.3841-1-elliott@hpe.com>
 References: <20221103042740.6556-1-elliott@hpe.com>
  <20221116041342.3841-1-elliott@hpe.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: SFk6rY61usHRwlIC9RezUVnsIZGLCIrq
-X-Proofpoint-ORIG-GUID: SFk6rY61usHRwlIC9RezUVnsIZGLCIrq
+X-Proofpoint-GUID: bqSaqtYq4Ek-oxxDAz7wPD-x9ZVWMeIg
+X-Proofpoint-ORIG-GUID: bqSaqtYq4Ek-oxxDAz7wPD-x9ZVWMeIg
 X-HPE-SCL: -1
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
@@ -75,917 +75,295 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Don't refuse to load modules based on missing additional x86 features
-(e.g., OSXSAVE) or x86 XSAVE features (e.g., YMM). Instead, load the module,
-but don't register any crypto drivers. Report the fact that one or more
-features are missing in a new missing_x86_features module parameter
-(0 = no problems, 1 = something is missing; each module parameter
-description lists all the features that it wants).
+Don't refuse to load modules on certain CPUs and print a message
+to the console. Instead, load the module but don't register the
+crypto functions, and report this condition via a new module
+suboptimal_x86 module parameter with this description:
+	Crypto driver not registered because performance on this CPU would be suboptimal
 
-For the SHA functions that register up to four drivers based on CPU
-features, report separate module parameters for each set:
-	missing_x86_features_avx2
-	missing_x86_features_avx
+Reword the descriptions of the existing force module parameter
+to match this modified behavior:
+	force: Force crypto driver registration on suboptimal CPUs
+
+Make the new module parameters readable via sysfs:
+	/sys/module/blowfish_x86_64/parameters/suboptimal_x86:0
+	/sys/module/camellia_x86_64/parameters/suboptimal_x86:0
+	/sys/module/des3_ede_x86_64/parameters/suboptimal_x86:1
+	/sys/module/twofish_x86_64_3way/parameters/suboptimal_x86:1
+
+If the module has been loaded and is reporting suboptimal_x86=1,
+remove it to try loading again:
+	modprobe -r blowfish_x86_64
+	modprobe blowfish_x86_64 force=1
+
+or specify it on the kernel command line:
+	blowfish_x86_64.force=1
 
 Signed-off-by: Robert Elliott <elliott@hpe.com>
 ---
- arch/x86/crypto/aegis128-aesni-glue.c      | 15 ++++++++++---
- arch/x86/crypto/aria_aesni_avx_glue.c      | 24 +++++++++++---------
- arch/x86/crypto/camellia_aesni_avx2_glue.c | 25 ++++++++++++---------
- arch/x86/crypto/camellia_aesni_avx_glue.c  | 25 ++++++++++++---------
- arch/x86/crypto/cast5_avx_glue.c           | 20 ++++++++++-------
- arch/x86/crypto/cast6_avx_glue.c           | 20 ++++++++++-------
- arch/x86/crypto/curve25519-x86_64.c        | 12 ++++++++--
- arch/x86/crypto/nhpoly1305-avx2-glue.c     | 14 +++++++++---
- arch/x86/crypto/polyval-clmulni_glue.c     | 15 ++++++++++---
- arch/x86/crypto/serpent_avx2_glue.c        | 24 +++++++++++---------
- arch/x86/crypto/serpent_avx_glue.c         | 21 ++++++++++-------
- arch/x86/crypto/sha1_ssse3_glue.c          | 20 +++++++++++++----
- arch/x86/crypto/sha256_ssse3_glue.c        | 18 +++++++++++++--
- arch/x86/crypto/sha512_ssse3_glue.c        | 18 +++++++++++++--
- arch/x86/crypto/sm3_avx_glue.c             | 22 ++++++++++--------
- arch/x86/crypto/sm4_aesni_avx2_glue.c      | 26 +++++++++++++---------
- arch/x86/crypto/sm4_aesni_avx_glue.c       | 26 +++++++++++++---------
- arch/x86/crypto/twofish_avx_glue.c         | 19 ++++++++++------
- 18 files changed, 243 insertions(+), 121 deletions(-)
+ arch/x86/crypto/blowfish_glue.c     | 29 +++++++++++++++++------------
+ arch/x86/crypto/camellia_glue.c     | 27 ++++++++++++++++-----------
+ arch/x86/crypto/des3_ede_glue.c     | 26 +++++++++++++++++---------
+ arch/x86/crypto/twofish_glue_3way.c | 26 +++++++++++++++-----------
+ 4 files changed, 65 insertions(+), 43 deletions(-)
 
-diff --git a/arch/x86/crypto/aegis128-aesni-glue.c b/arch/x86/crypto/aegis128-aesni-glue.c
-index a3ebd018953c..e0312ecf34a8 100644
---- a/arch/x86/crypto/aegis128-aesni-glue.c
-+++ b/arch/x86/crypto/aegis128-aesni-glue.c
-@@ -288,6 +288,11 @@ static const struct x86_cpu_id module_cpu_ids[] = {
+diff --git a/arch/x86/crypto/blowfish_glue.c b/arch/x86/crypto/blowfish_glue.c
+index 4c0ead71b198..8e4de7859e34 100644
+--- a/arch/x86/crypto/blowfish_glue.c
++++ b/arch/x86/crypto/blowfish_glue.c
+@@ -283,7 +283,7 @@ static struct skcipher_alg bf_skcipher_algs[] = {
+ 	},
  };
- MODULE_DEVICE_TABLE(x86cpu, module_cpu_ids);
  
-+static int missing_x86_features;
-+module_param(missing_x86_features, int, 0444);
-+MODULE_PARM_DESC(missing_x86_features,
-+		 "Missing x86 instruction set extensions (SSE2) and/or XSAVE features (SSE)");
+-static bool is_blacklisted_cpu(void)
++static bool is_suboptimal_cpu(void)
+ {
+ 	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL)
+ 		return false;
+@@ -292,7 +292,7 @@ static bool is_blacklisted_cpu(void)
+ 		/*
+ 		 * On Pentium 4, blowfish-x86_64 is slower than generic C
+ 		 * implementation because use of 64bit rotates (which are really
+-		 * slow on P4). Therefore blacklist P4s.
++		 * slow on P4).
+ 		 */
+ 		return true;
+ 	}
+@@ -302,7 +302,12 @@ static bool is_blacklisted_cpu(void)
+ 
+ static int force;
+ module_param(force, int, 0);
+-MODULE_PARM_DESC(force, "Force module load, ignore CPU blacklist");
++MODULE_PARM_DESC(force, "Force crypto driver registration on suboptimal CPUs");
 +
- static struct simd_aead_alg *simd_alg;
++static int suboptimal_x86;
++module_param(suboptimal_x86, int, 0444);
++MODULE_PARM_DESC(suboptimal_x86,
++		 "Crypto driver not registered because performance on this CPU would be suboptimal");
  
- static int __init crypto_aegis128_aesni_module_init(void)
-@@ -296,8 +301,10 @@ static int __init crypto_aegis128_aesni_module_init(void)
+ static const struct x86_cpu_id module_cpu_ids[] = {
+ 	X86_MATCH_FEATURE(X86_FEATURE_ANY, NULL),
+@@ -317,12 +322,9 @@ static int __init blowfish_init(void)
+ 	if (!x86_match_cpu(module_cpu_ids))
  		return -ENODEV;
  
- 	if (!boot_cpu_has(X86_FEATURE_XMM2) ||
--	    !cpu_has_xfeatures(XFEATURE_MASK_SSE, NULL))
+-	if (!force && is_blacklisted_cpu()) {
+-		printk(KERN_INFO
+-			"blowfish-x86_64: performance on this CPU "
+-			"would be suboptimal: disabling "
+-			"blowfish-x86_64.\n");
 -		return -ENODEV;
-+	    !cpu_has_xfeatures(XFEATURE_MASK_SSE, NULL)) {
-+		missing_x86_features = 1;
++	if (!force && is_suboptimal_cpu()) {
++		suboptimal_x86 = 1;
 +		return 0;
+ 	}
+ 
+ 	err = crypto_register_alg(&bf_cipher_alg);
+@@ -339,9 +341,12 @@ static int __init blowfish_init(void)
+ 
+ static void __exit blowfish_fini(void)
+ {
+-	crypto_unregister_alg(&bf_cipher_alg);
+-	crypto_unregister_skciphers(bf_skcipher_algs,
+-				    ARRAY_SIZE(bf_skcipher_algs));
++	if (!suboptimal_x86) {
++		crypto_unregister_alg(&bf_cipher_alg);
++		crypto_unregister_skciphers(bf_skcipher_algs,
++					    ARRAY_SIZE(bf_skcipher_algs));
 +	}
- 
- 	return simd_register_aeads_compat(&crypto_aegis128_aesni_alg, 1,
- 					  &simd_alg);
-@@ -305,7 +312,9 @@ static int __init crypto_aegis128_aesni_module_init(void)
- 
- static void __exit crypto_aegis128_aesni_module_exit(void)
- {
--	simd_unregister_aeads(&crypto_aegis128_aesni_alg, 1, &simd_alg);
-+	if (!missing_x86_features)
-+		simd_unregister_aeads(&crypto_aegis128_aesni_alg, 1, &simd_alg);
-+	missing_x86_features = 0;
++	suboptimal_x86 = 0;
  }
  
- module_init(crypto_aegis128_aesni_module_init);
-diff --git a/arch/x86/crypto/aria_aesni_avx_glue.c b/arch/x86/crypto/aria_aesni_avx_glue.c
-index 9fd3d1fe1105..ebb9760967b5 100644
---- a/arch/x86/crypto/aria_aesni_avx_glue.c
-+++ b/arch/x86/crypto/aria_aesni_avx_glue.c
-@@ -176,23 +176,25 @@ static const struct x86_cpu_id module_cpu_ids[] = {
+ module_init(blowfish_init);
+diff --git a/arch/x86/crypto/camellia_glue.c b/arch/x86/crypto/camellia_glue.c
+index a3df1043ed73..2cb9b24d9437 100644
+--- a/arch/x86/crypto/camellia_glue.c
++++ b/arch/x86/crypto/camellia_glue.c
+@@ -1356,7 +1356,7 @@ static struct skcipher_alg camellia_skcipher_algs[] = {
+ 	}
  };
- MODULE_DEVICE_TABLE(x86cpu, module_cpu_ids);
  
-+static int missing_x86_features;
-+module_param(missing_x86_features, int, 0444);
-+MODULE_PARM_DESC(missing_x86_features,
-+		 "Missing x86 instruction set extensions (AES-NI, OSXSAVE) and/or XSAVE features (SSE, YMM)");
-+
- static int __init aria_avx_init(void)
+-static bool is_blacklisted_cpu(void)
++static bool is_suboptimal_cpu(void)
  {
--	const char *feature_name;
--
+ 	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL)
+ 		return false;
+@@ -1376,7 +1376,12 @@ static bool is_blacklisted_cpu(void)
+ 
+ static int force;
+ module_param(force, int, 0);
+-MODULE_PARM_DESC(force, "Force module load, ignore CPU blacklist");
++MODULE_PARM_DESC(force, "Force crypto driver registration on suboptimal CPUs");
++
++static int suboptimal_x86;
++module_param(suboptimal_x86, int, 0444);
++MODULE_PARM_DESC(suboptimal_x86,
++		 "Crypto driver not registered because performance on this CPU would be suboptimal");
+ 
+ static const struct x86_cpu_id module_cpu_ids[] = {
+ 	X86_MATCH_FEATURE(X86_FEATURE_ANY, NULL),
+@@ -1391,12 +1396,9 @@ static int __init camellia_init(void)
  	if (!x86_match_cpu(module_cpu_ids))
  		return -ENODEV;
  
- 	if (!boot_cpu_has(X86_FEATURE_AES) ||
- 	    !boot_cpu_has(X86_FEATURE_OSXSAVE)) {
--		pr_info("AES or OSXSAVE instructions are not detected.\n");
+-	if (!force && is_blacklisted_cpu()) {
+-		printk(KERN_INFO
+-			"camellia-x86_64: performance on this CPU "
+-			"would be suboptimal: disabling "
+-			"camellia-x86_64.\n");
 -		return -ENODEV;
-+		missing_x86_features = 1;
++	if (!force && is_suboptimal_cpu()) {
++		suboptimal_x86 = 1;
 +		return 0;
  	}
  
--	if (!cpu_has_xfeatures(XFEATURE_MASK_SSE | XFEATURE_MASK_YMM,
--				&feature_name)) {
--		pr_info("CPU feature '%s' is not supported.\n", feature_name);
--		return -ENODEV;
-+	if (!cpu_has_xfeatures(XFEATURE_MASK_SSE | XFEATURE_MASK_YMM, NULL)) {
-+		missing_x86_features = 1;
-+		return 0;
- 	}
+ 	err = crypto_register_alg(&camellia_cipher_alg);
+@@ -1413,9 +1415,12 @@ static int __init camellia_init(void)
  
- 	if (boot_cpu_has(X86_FEATURE_GFNI)) {
-@@ -213,8 +215,10 @@ static int __init aria_avx_init(void)
- 
- static void __exit aria_avx_exit(void)
+ static void __exit camellia_fini(void)
  {
--	simd_unregister_skciphers(aria_algs, ARRAY_SIZE(aria_algs),
--				  aria_simd_algs);
-+	if (!missing_x86_features)
-+		simd_unregister_skciphers(aria_algs, ARRAY_SIZE(aria_algs),
-+					  aria_simd_algs);
-+	missing_x86_features = 0;
- 	using_x86_gfni = 0;
- }
- 
-diff --git a/arch/x86/crypto/camellia_aesni_avx2_glue.c b/arch/x86/crypto/camellia_aesni_avx2_glue.c
-index 6c48fc9f3fde..e8ae1e1a801d 100644
---- a/arch/x86/crypto/camellia_aesni_avx2_glue.c
-+++ b/arch/x86/crypto/camellia_aesni_avx2_glue.c
-@@ -105,26 +105,28 @@ static const struct x86_cpu_id module_cpu_ids[] = {
- };
- MODULE_DEVICE_TABLE(x86cpu, module_cpu_ids);
- 
-+static int missing_x86_features;
-+module_param(missing_x86_features, int, 0444);
-+MODULE_PARM_DESC(missing_x86_features,
-+		 "Missing x86 instruction set extensions (AES-NI, AVX, OSXSAVE) and/or XSAVE features (SSE, YMM)");
-+
- static struct simd_skcipher_alg *camellia_simd_algs[ARRAY_SIZE(camellia_algs)];
- 
- static int __init camellia_aesni_init(void)
- {
--	const char *feature_name;
--
- 	if (!x86_match_cpu(module_cpu_ids))
- 		return -ENODEV;
- 
- 	if (!boot_cpu_has(X86_FEATURE_AES) ||
- 	    !boot_cpu_has(X86_FEATURE_AVX) ||
- 	    !boot_cpu_has(X86_FEATURE_OSXSAVE)) {
--		pr_info("AES-NI, AVX, or OSXSAVE instructions are not detected.\n");
--		return -ENODEV;
-+		missing_x86_features = 1;
-+		return 0;
- 	}
- 
--	if (!cpu_has_xfeatures(XFEATURE_MASK_SSE | XFEATURE_MASK_YMM,
--				&feature_name)) {
--		pr_info("CPU feature '%s' is not supported.\n", feature_name);
--		return -ENODEV;
-+	if (!cpu_has_xfeatures(XFEATURE_MASK_SSE | XFEATURE_MASK_YMM, NULL)) {
-+		missing_x86_features = 1;
-+		return 0;
- 	}
- 
- 	return simd_register_skciphers_compat(camellia_algs,
-@@ -134,8 +136,11 @@ static int __init camellia_aesni_init(void)
- 
- static void __exit camellia_aesni_fini(void)
- {
--	simd_unregister_skciphers(camellia_algs, ARRAY_SIZE(camellia_algs),
--				  camellia_simd_algs);
-+	if (!missing_x86_features)
-+		simd_unregister_skciphers(camellia_algs,
-+					  ARRAY_SIZE(camellia_algs),
-+					  camellia_simd_algs);
-+	missing_x86_features = 0;
- }
- 
- module_init(camellia_aesni_init);
-diff --git a/arch/x86/crypto/camellia_aesni_avx_glue.c b/arch/x86/crypto/camellia_aesni_avx_glue.c
-index 6d7fc96d242e..6784d631575c 100644
---- a/arch/x86/crypto/camellia_aesni_avx_glue.c
-+++ b/arch/x86/crypto/camellia_aesni_avx_glue.c
-@@ -105,25 +105,27 @@ static const struct x86_cpu_id module_cpu_ids[] = {
- };
- MODULE_DEVICE_TABLE(x86cpu, module_cpu_ids);
- 
-+static int missing_x86_features;
-+module_param(missing_x86_features, int, 0444);
-+MODULE_PARM_DESC(missing_x86_features,
-+		 "Missing x86 instruction set extensions (AES-NI, OSXSAVE) and/or XSAVE features (SSE, YMM)");
-+
- static struct simd_skcipher_alg *camellia_simd_algs[ARRAY_SIZE(camellia_algs)];
- 
- static int __init camellia_aesni_init(void)
- {
--	const char *feature_name;
--
- 	if (!x86_match_cpu(module_cpu_ids))
- 		return -ENODEV;
- 
- 	if (!boot_cpu_has(X86_FEATURE_AES) ||
- 	    !boot_cpu_has(X86_FEATURE_OSXSAVE)) {
--		pr_info("AES-NI or OSXSAVE instructions are not detected.\n");
--		return -ENODEV;
-+		missing_x86_features = 1;
-+		return 0;
- 	}
- 
--	if (!cpu_has_xfeatures(XFEATURE_MASK_SSE | XFEATURE_MASK_YMM,
--				&feature_name)) {
--		pr_info("CPU feature '%s' is not supported.\n", feature_name);
--		return -ENODEV;
-+	if (!cpu_has_xfeatures(XFEATURE_MASK_SSE | XFEATURE_MASK_YMM, NULL)) {
-+		missing_x86_features = 1;
-+		return 0;
- 	}
- 
- 	return simd_register_skciphers_compat(camellia_algs,
-@@ -133,8 +135,11 @@ static int __init camellia_aesni_init(void)
- 
- static void __exit camellia_aesni_fini(void)
- {
--	simd_unregister_skciphers(camellia_algs, ARRAY_SIZE(camellia_algs),
--				  camellia_simd_algs);
-+	if (!missing_x86_features)
-+		simd_unregister_skciphers(camellia_algs,
-+					  ARRAY_SIZE(camellia_algs),
-+					  camellia_simd_algs);
-+	missing_x86_features = 0;
- }
- 
- module_init(camellia_aesni_init);
-diff --git a/arch/x86/crypto/cast5_avx_glue.c b/arch/x86/crypto/cast5_avx_glue.c
-index bdc3c763334c..34ef032bb8d0 100644
---- a/arch/x86/crypto/cast5_avx_glue.c
-+++ b/arch/x86/crypto/cast5_avx_glue.c
-@@ -100,19 +100,21 @@ static const struct x86_cpu_id module_cpu_ids[] = {
- };
- MODULE_DEVICE_TABLE(x86cpu, module_cpu_ids);
- 
-+static int missing_x86_features;
-+module_param(missing_x86_features, int, 0444);
-+MODULE_PARM_DESC(missing_x86_features,
-+		 "Missing x86 XSAVE features (SSE, YMM)");
-+
- static struct simd_skcipher_alg *cast5_simd_algs[ARRAY_SIZE(cast5_algs)];
- 
- static int __init cast5_init(void)
- {
--	const char *feature_name;
--
- 	if (!x86_match_cpu(module_cpu_ids))
- 		return -ENODEV;
- 
--	if (!cpu_has_xfeatures(XFEATURE_MASK_SSE | XFEATURE_MASK_YMM,
--				&feature_name)) {
--		pr_info("CPU feature '%s' is not supported.\n", feature_name);
--		return -ENODEV;
-+	if (!cpu_has_xfeatures(XFEATURE_MASK_SSE | XFEATURE_MASK_YMM, NULL)) {
-+		missing_x86_features = 1;
-+		return 0;
- 	}
- 
- 	return simd_register_skciphers_compat(cast5_algs,
-@@ -122,8 +124,10 @@ static int __init cast5_init(void)
- 
- static void __exit cast5_exit(void)
- {
--	simd_unregister_skciphers(cast5_algs, ARRAY_SIZE(cast5_algs),
--				  cast5_simd_algs);
-+	if (!missing_x86_features)
-+		simd_unregister_skciphers(cast5_algs, ARRAY_SIZE(cast5_algs),
-+					  cast5_simd_algs);
-+	missing_x86_features = 0;
- }
- 
- module_init(cast5_init);
-diff --git a/arch/x86/crypto/cast6_avx_glue.c b/arch/x86/crypto/cast6_avx_glue.c
-index addca34b3511..71559fd3ea87 100644
---- a/arch/x86/crypto/cast6_avx_glue.c
-+++ b/arch/x86/crypto/cast6_avx_glue.c
-@@ -100,19 +100,21 @@ static const struct x86_cpu_id module_cpu_ids[] = {
- };
- MODULE_DEVICE_TABLE(x86cpu, module_cpu_ids);
- 
-+static int missing_x86_features;
-+module_param(missing_x86_features, int, 0444);
-+MODULE_PARM_DESC(missing_x86_features,
-+		 "Missing x86 XSAVE features (SSE, YMM)");
-+
- static struct simd_skcipher_alg *cast6_simd_algs[ARRAY_SIZE(cast6_algs)];
- 
- static int __init cast6_init(void)
- {
--	const char *feature_name;
--
- 	if (!x86_match_cpu(module_cpu_ids))
- 		return -ENODEV;
- 
--	if (!cpu_has_xfeatures(XFEATURE_MASK_SSE | XFEATURE_MASK_YMM,
--				&feature_name)) {
--		pr_info("CPU feature '%s' is not supported.\n", feature_name);
--		return -ENODEV;
-+	if (!cpu_has_xfeatures(XFEATURE_MASK_SSE | XFEATURE_MASK_YMM, NULL)) {
-+		missing_x86_features = 1;
-+		return 0;
- 	}
- 
- 	return simd_register_skciphers_compat(cast6_algs,
-@@ -122,8 +124,10 @@ static int __init cast6_init(void)
- 
- static void __exit cast6_exit(void)
- {
--	simd_unregister_skciphers(cast6_algs, ARRAY_SIZE(cast6_algs),
--				  cast6_simd_algs);
-+	if (!missing_x86_features)
-+		simd_unregister_skciphers(cast6_algs, ARRAY_SIZE(cast6_algs),
-+					  cast6_simd_algs);
-+	missing_x86_features = 0;
- }
- 
- module_init(cast6_init);
-diff --git a/arch/x86/crypto/curve25519-x86_64.c b/arch/x86/crypto/curve25519-x86_64.c
-index 6d222849e409..74672351e534 100644
---- a/arch/x86/crypto/curve25519-x86_64.c
-+++ b/arch/x86/crypto/curve25519-x86_64.c
-@@ -1706,13 +1706,20 @@ static const struct x86_cpu_id module_cpu_ids[] = {
- };
- MODULE_DEVICE_TABLE(x86cpu, module_cpu_ids);
- 
-+static int missing_x86_features;
-+module_param(missing_x86_features, int, 0444);
-+MODULE_PARM_DESC(missing_x86_features,
-+		 "Missing x86 instruction set extensions (BMI2)");
-+
- static int __init curve25519_mod_init(void)
- {
- 	if (!x86_match_cpu(module_cpu_ids))
- 		return -ENODEV;
- 
--	if (!boot_cpu_has(X86_FEATURE_BMI2))
--		return -ENODEV;
-+	if (!boot_cpu_has(X86_FEATURE_BMI2)) {
-+		missing_x86_features = 1;
-+		return 0;
+-	crypto_unregister_alg(&camellia_cipher_alg);
+-	crypto_unregister_skciphers(camellia_skcipher_algs,
+-				    ARRAY_SIZE(camellia_skcipher_algs));
++	if (!suboptimal_x86) {
++		crypto_unregister_alg(&camellia_cipher_alg);
++		crypto_unregister_skciphers(camellia_skcipher_algs,
++					    ARRAY_SIZE(camellia_skcipher_algs));
 +	}
- 
- 	static_branch_enable(&curve25519_use_bmi2_adx);
- 
-@@ -1725,6 +1732,7 @@ static void __exit curve25519_mod_exit(void)
- 	if (IS_REACHABLE(CONFIG_CRYPTO_KPP) &&
- 	    static_branch_likely(&curve25519_use_bmi2_adx))
- 		crypto_unregister_kpp(&curve25519_alg);
-+	missing_x86_features = 0;
++	suboptimal_x86 = 0;
  }
  
- module_init(curve25519_mod_init);
-diff --git a/arch/x86/crypto/nhpoly1305-avx2-glue.c b/arch/x86/crypto/nhpoly1305-avx2-glue.c
-index fa415fec5793..2e63947bc9fa 100644
---- a/arch/x86/crypto/nhpoly1305-avx2-glue.c
-+++ b/arch/x86/crypto/nhpoly1305-avx2-glue.c
-@@ -67,20 +67,28 @@ static const struct x86_cpu_id module_cpu_ids[] = {
+ module_init(camellia_init);
+diff --git a/arch/x86/crypto/des3_ede_glue.c b/arch/x86/crypto/des3_ede_glue.c
+index 168cac5c6ca6..a4cac5129148 100644
+--- a/arch/x86/crypto/des3_ede_glue.c
++++ b/arch/x86/crypto/des3_ede_glue.c
+@@ -334,7 +334,7 @@ static struct skcipher_alg des3_ede_skciphers[] = {
+ 	}
  };
- MODULE_DEVICE_TABLE(x86cpu, module_cpu_ids);
  
-+static int missing_x86_features;
-+module_param(missing_x86_features, int, 0444);
-+MODULE_PARM_DESC(missing_x86_features,
-+		 "Missing x86 instruction set extensions (OSXSAVE)");
-+
- static int __init nhpoly1305_mod_init(void)
+-static bool is_blacklisted_cpu(void)
++static bool is_suboptimal_cpu(void)
  {
+ 	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL)
+ 		return false;
+@@ -343,7 +343,7 @@ static bool is_blacklisted_cpu(void)
+ 		/*
+ 		 * On Pentium 4, des3_ede-x86_64 is slower than generic C
+ 		 * implementation because use of 64bit rotates (which are really
+-		 * slow on P4). Therefore blacklist P4s.
++		 * slow on P4).
+ 		 */
+ 		return true;
+ 	}
+@@ -353,7 +353,12 @@ static bool is_blacklisted_cpu(void)
+ 
+ static int force;
+ module_param(force, int, 0);
+-MODULE_PARM_DESC(force, "Force module load, ignore CPU blacklist");
++MODULE_PARM_DESC(force, "Force crypto driver registration on suboptimal CPUs");
++
++static int suboptimal_x86;
++module_param(suboptimal_x86, int, 0444);
++MODULE_PARM_DESC(suboptimal_x86,
++		 "Crypto driver not registered because performance on this CPU would be suboptimal");
+ 
+ static const struct x86_cpu_id module_cpu_ids[] = {
+ 	X86_MATCH_FEATURE(X86_FEATURE_ANY, NULL),
+@@ -368,9 +373,9 @@ static int __init des3_ede_x86_init(void)
  	if (!x86_match_cpu(module_cpu_ids))
  		return -ENODEV;
  
--	if (!boot_cpu_has(X86_FEATURE_OSXSAVE))
+-	if (!force && is_blacklisted_cpu()) {
+-		pr_info("des3_ede-x86_64: performance on this CPU would be suboptimal: disabling des3_ede-x86_64.\n");
 -		return -ENODEV;
-+	if (!boot_cpu_has(X86_FEATURE_OSXSAVE)) {
-+		missing_x86_features = 1;
++	if (!force && is_suboptimal_cpu()) {
++		suboptimal_x86 = 1;
 +		return 0;
+ 	}
+ 
+ 	err = crypto_register_alg(&des3_ede_cipher);
+@@ -387,9 +392,12 @@ static int __init des3_ede_x86_init(void)
+ 
+ static void __exit des3_ede_x86_fini(void)
+ {
+-	crypto_unregister_alg(&des3_ede_cipher);
+-	crypto_unregister_skciphers(des3_ede_skciphers,
+-				    ARRAY_SIZE(des3_ede_skciphers));
++	if (!suboptimal_x86) {
++		crypto_unregister_alg(&des3_ede_cipher);
++		crypto_unregister_skciphers(des3_ede_skciphers,
++					    ARRAY_SIZE(des3_ede_skciphers));
 +	}
- 
- 	return crypto_register_shash(&nhpoly1305_alg);
++	suboptimal_x86 = 0;
  }
  
- static void __exit nhpoly1305_mod_exit(void)
- {
--	crypto_unregister_shash(&nhpoly1305_alg);
-+	if (!missing_x86_features)
-+		crypto_unregister_shash(&nhpoly1305_alg);
- }
- 
- module_init(nhpoly1305_mod_init);
-diff --git a/arch/x86/crypto/polyval-clmulni_glue.c b/arch/x86/crypto/polyval-clmulni_glue.c
-index b98e32f8e2a4..20d4a68ec1d7 100644
---- a/arch/x86/crypto/polyval-clmulni_glue.c
-+++ b/arch/x86/crypto/polyval-clmulni_glue.c
-@@ -182,20 +182,29 @@ static const struct x86_cpu_id module_cpu_ids[] = {
+ module_init(des3_ede_x86_init);
+diff --git a/arch/x86/crypto/twofish_glue_3way.c b/arch/x86/crypto/twofish_glue_3way.c
+index 790e5a59a9a7..8db2f23b3056 100644
+--- a/arch/x86/crypto/twofish_glue_3way.c
++++ b/arch/x86/crypto/twofish_glue_3way.c
+@@ -103,7 +103,7 @@ static struct skcipher_alg tf_skciphers[] = {
+ 	},
  };
- MODULE_DEVICE_TABLE(x86cpu, module_cpu_ids);
  
-+static int missing_x86_features;
-+module_param(missing_x86_features, int, 0444);
-+MODULE_PARM_DESC(missing_x86_features,
-+		 "Missing x86 instruction set extensions (AVX)");
-+
- static int __init polyval_clmulni_mod_init(void)
+-static bool is_blacklisted_cpu(void)
++static bool is_suboptimal_cpu(void)
  {
+ 	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL)
+ 		return false;
+@@ -118,8 +118,7 @@ static bool is_blacklisted_cpu(void)
+ 		 * storing blocks in 64bit registers to allow three blocks to
+ 		 * be processed parallel. Parallel operation then allows gaining
+ 		 * more performance than was trade off, on out-of-order CPUs.
+-		 * However Atom does not benefit from this parallelism and
+-		 * should be blacklisted.
++		 * However Atom does not benefit from this parallelism.
+ 		 */
+ 		return true;
+ 	}
+@@ -139,7 +138,12 @@ static bool is_blacklisted_cpu(void)
+ 
+ static int force;
+ module_param(force, int, 0);
+-MODULE_PARM_DESC(force, "Force module load, ignore CPU blacklist");
++MODULE_PARM_DESC(force, "Force crypto driver registration on suboptimal CPUs");
++
++static int suboptimal_x86;
++module_param(suboptimal_x86, int, 0444);
++MODULE_PARM_DESC(suboptimal_x86,
++		 "Crypto driver not registered because performance on this CPU would be suboptimal");
+ 
+ static const struct x86_cpu_id module_cpu_ids[] = {
+ 	X86_MATCH_FEATURE(X86_FEATURE_ANY, NULL),
+@@ -152,12 +156,9 @@ static int __init twofish_3way_init(void)
  	if (!x86_match_cpu(module_cpu_ids))
  		return -ENODEV;
  
--	if (!boot_cpu_has(X86_FEATURE_AVX))
+-	if (!force && is_blacklisted_cpu()) {
+-		printk(KERN_INFO
+-			"twofish-x86_64-3way: performance on this CPU "
+-			"would be suboptimal: disabling "
+-			"twofish-x86_64-3way.\n");
 -		return -ENODEV;
-+	if (!boot_cpu_has(X86_FEATURE_AVX)) {
-+		missing_x86_features = 1;
++	if (!force && is_suboptimal_cpu()) {
++		suboptimal_x86 = 1;
 +		return 0;
-+	}
+ 	}
  
- 	return crypto_register_shash(&polyval_alg);
- }
+ 	return crypto_register_skciphers(tf_skciphers,
+@@ -166,7 +167,10 @@ static int __init twofish_3way_init(void)
  
- static void __exit polyval_clmulni_mod_exit(void)
+ static void __exit twofish_3way_fini(void)
  {
--	crypto_unregister_shash(&polyval_alg);
-+	if (!missing_x86_features)
-+		crypto_unregister_shash(&polyval_alg);
-+	missing_x86_features = 0;
- }
- 
- module_init(polyval_clmulni_mod_init);
-diff --git a/arch/x86/crypto/serpent_avx2_glue.c b/arch/x86/crypto/serpent_avx2_glue.c
-index bc18149fb928..2aa62c93a16f 100644
---- a/arch/x86/crypto/serpent_avx2_glue.c
-+++ b/arch/x86/crypto/serpent_avx2_glue.c
-@@ -101,23 +101,25 @@ static const struct x86_cpu_id module_cpu_ids[] = {
- };
- MODULE_DEVICE_TABLE(x86cpu, module_cpu_ids);
- 
-+static int missing_x86_features;
-+module_param(missing_x86_features, int, 0444);
-+MODULE_PARM_DESC(missing_x86_features,
-+		 "Missing x86 instruction set extensions (OSXSAVE) and/or XSAVE features (SSE, YMM)");
+-	crypto_unregister_skciphers(tf_skciphers, ARRAY_SIZE(tf_skciphers));
++	if (!suboptimal_x86)
++		crypto_unregister_skciphers(tf_skciphers, ARRAY_SIZE(tf_skciphers));
 +
- static struct simd_skcipher_alg *serpent_simd_algs[ARRAY_SIZE(serpent_algs)];
- 
- static int __init serpent_avx2_init(void)
- {
--	const char *feature_name;
--
- 	if (!x86_match_cpu(module_cpu_ids))
- 		return -ENODEV;
- 
- 	if (!boot_cpu_has(X86_FEATURE_OSXSAVE)) {
--		pr_info("OSXSAVE instructions are not detected.\n");
--		return -ENODEV;
-+		missing_x86_features = 1;
-+		return 0;
- 	}
--	if (!cpu_has_xfeatures(XFEATURE_MASK_SSE | XFEATURE_MASK_YMM,
--				&feature_name)) {
--		pr_info("CPU feature '%s' is not supported.\n", feature_name);
--		return -ENODEV;
-+	if (!cpu_has_xfeatures(XFEATURE_MASK_SSE | XFEATURE_MASK_YMM, NULL)) {
-+		missing_x86_features = 1;
-+		return 0;
- 	}
- 
- 	return simd_register_skciphers_compat(serpent_algs,
-@@ -127,8 +129,10 @@ static int __init serpent_avx2_init(void)
- 
- static void __exit serpent_avx2_fini(void)
- {
--	simd_unregister_skciphers(serpent_algs, ARRAY_SIZE(serpent_algs),
--				  serpent_simd_algs);
-+	if (!missing_x86_features)
-+		simd_unregister_skciphers(serpent_algs, ARRAY_SIZE(serpent_algs),
-+					  serpent_simd_algs);
-+	missing_x86_features = 0;
++	suboptimal_x86 = 0;
  }
  
- module_init(serpent_avx2_init);
-diff --git a/arch/x86/crypto/serpent_avx_glue.c b/arch/x86/crypto/serpent_avx_glue.c
-index 0db18d99da50..28ee9717df49 100644
---- a/arch/x86/crypto/serpent_avx_glue.c
-+++ b/arch/x86/crypto/serpent_avx_glue.c
-@@ -107,19 +107,21 @@ static const struct x86_cpu_id module_cpu_ids[] = {
- };
- MODULE_DEVICE_TABLE(x86cpu, module_cpu_ids);
- 
-+static int missing_x86_features;
-+module_param(missing_x86_features, int, 0444);
-+MODULE_PARM_DESC(missing_x86_features,
-+		 "Missing x86 XSAVE features (SSE, YMM)");
-+
- static struct simd_skcipher_alg *serpent_simd_algs[ARRAY_SIZE(serpent_algs)];
- 
- static int __init serpent_init(void)
- {
--	const char *feature_name;
--
- 	if (!x86_match_cpu(module_cpu_ids))
- 		return -ENODEV;
- 
--	if (!cpu_has_xfeatures(XFEATURE_MASK_SSE | XFEATURE_MASK_YMM,
--				&feature_name)) {
--		pr_info("CPU feature '%s' is not supported.\n", feature_name);
--		return -ENODEV;
-+	if (!cpu_has_xfeatures(XFEATURE_MASK_SSE | XFEATURE_MASK_YMM, NULL)) {
-+		missing_x86_features = 1;
-+		return 0;
- 	}
- 
- 	return simd_register_skciphers_compat(serpent_algs,
-@@ -129,8 +131,11 @@ static int __init serpent_init(void)
- 
- static void __exit serpent_exit(void)
- {
--	simd_unregister_skciphers(serpent_algs, ARRAY_SIZE(serpent_algs),
--				  serpent_simd_algs);
-+	if (!missing_x86_features)
-+		simd_unregister_skciphers(serpent_algs,
-+					  ARRAY_SIZE(serpent_algs),
-+					  serpent_simd_algs);
-+	missing_x86_features = 0;
- }
- 
- module_init(serpent_init);
-diff --git a/arch/x86/crypto/sha1_ssse3_glue.c b/arch/x86/crypto/sha1_ssse3_glue.c
-index 2445648cf234..405af5e14b67 100644
---- a/arch/x86/crypto/sha1_ssse3_glue.c
-+++ b/arch/x86/crypto/sha1_ssse3_glue.c
-@@ -351,9 +351,17 @@ static const struct x86_cpu_id module_cpu_ids[] = {
- };
- MODULE_DEVICE_TABLE(x86cpu, module_cpu_ids);
- 
-+static int missing_x86_features_avx2;
-+static int missing_x86_features_avx;
-+module_param(missing_x86_features_avx2, int, 0444);
-+module_param(missing_x86_features_avx, int, 0444);
-+MODULE_PARM_DESC(missing_x86_features_avx2,
-+		 "Missing x86 instruction set extensions (BMI1, BMI2) to support AVX2");
-+MODULE_PARM_DESC(missing_x86_features_avx,
-+		 "Missing x86 XSAVE features (SSE, YMM) to support AVX");
-+
- static int __init sha1_ssse3_mod_init(void)
- {
--	const char *feature_name;
- 	int ret;
- 
- 	if (!x86_match_cpu(module_cpu_ids))
-@@ -374,10 +382,11 @@ static int __init sha1_ssse3_mod_init(void)
- 
- 		if (boot_cpu_has(X86_FEATURE_BMI1) &&
- 		    boot_cpu_has(X86_FEATURE_BMI2)) {
--
- 			ret = crypto_register_shash(&sha1_avx2_alg);
- 			if (!ret)
- 				using_x86_avx2 = 1;
-+		} else {
-+			missing_x86_features_avx2 = 1;
- 		}
- 	}
- 
-@@ -385,11 +394,12 @@ static int __init sha1_ssse3_mod_init(void)
- 	if (boot_cpu_has(X86_FEATURE_AVX)) {
- 
- 		if (cpu_has_xfeatures(XFEATURE_MASK_SSE | XFEATURE_MASK_YMM,
--			       &feature_name)) {
--
-+				      NULL)) {
- 			ret = crypto_register_shash(&sha1_avx_alg);
- 			if (!ret)
- 				using_x86_avx = 1;
-+		} else {
-+			missing_x86_features_avx = 1;
- 		}
- 	}
- 
-@@ -415,6 +425,8 @@ static void __exit sha1_ssse3_mod_fini(void)
- 	unregister_sha1_avx2();
- 	unregister_sha1_avx();
- 	unregister_sha1_ssse3();
-+	missing_x86_features_avx2 = 0;
-+	missing_x86_features_avx = 0;
- }
- 
- module_init(sha1_ssse3_mod_init);
-diff --git a/arch/x86/crypto/sha256_ssse3_glue.c b/arch/x86/crypto/sha256_ssse3_glue.c
-index 1464e6ccf912..293cf7085dd3 100644
---- a/arch/x86/crypto/sha256_ssse3_glue.c
-+++ b/arch/x86/crypto/sha256_ssse3_glue.c
-@@ -413,9 +413,17 @@ static const struct x86_cpu_id module_cpu_ids[] = {
- };
- MODULE_DEVICE_TABLE(x86cpu, module_cpu_ids);
- 
-+static int missing_x86_features_avx2;
-+static int missing_x86_features_avx;
-+module_param(missing_x86_features_avx2, int, 0444);
-+module_param(missing_x86_features_avx, int, 0444);
-+MODULE_PARM_DESC(missing_x86_features_avx2,
-+		 "Missing x86 instruction set extensions (BMI2) to support AVX2");
-+MODULE_PARM_DESC(missing_x86_features_avx,
-+		 "Missing x86 XSAVE features (SSE, YMM) to support AVX");
-+
- static int __init sha256_ssse3_mod_init(void)
- {
--	const char *feature_name;
- 	int ret;
- 
- 	if (!x86_match_cpu(module_cpu_ids))
-@@ -440,6 +448,8 @@ static int __init sha256_ssse3_mod_init(void)
- 						ARRAY_SIZE(sha256_avx2_algs));
- 			if (!ret)
- 				using_x86_avx2 = 1;
-+		} else {
-+			missing_x86_features_avx2 = 1;
- 		}
- 	}
- 
-@@ -447,11 +457,13 @@ static int __init sha256_ssse3_mod_init(void)
- 	if (boot_cpu_has(X86_FEATURE_AVX)) {
- 
- 		if (cpu_has_xfeatures(XFEATURE_MASK_SSE | XFEATURE_MASK_YMM,
--			       &feature_name)) {
-+				      NULL)) {
- 			ret = crypto_register_shashes(sha256_avx_algs,
- 						ARRAY_SIZE(sha256_avx_algs));
- 			if (!ret)
- 				using_x86_avx = 1;
-+		} else {
-+			missing_x86_features_avx = 1;
- 		}
- 	}
- 
-@@ -478,6 +490,8 @@ static void __exit sha256_ssse3_mod_fini(void)
- 	unregister_sha256_avx2();
- 	unregister_sha256_avx();
- 	unregister_sha256_ssse3();
-+	missing_x86_features_avx2 = 0;
-+	missing_x86_features_avx = 0;
- }
- 
- module_init(sha256_ssse3_mod_init);
-diff --git a/arch/x86/crypto/sha512_ssse3_glue.c b/arch/x86/crypto/sha512_ssse3_glue.c
-index 04e2af951a3e..9f13baf7dda9 100644
---- a/arch/x86/crypto/sha512_ssse3_glue.c
-+++ b/arch/x86/crypto/sha512_ssse3_glue.c
-@@ -319,6 +319,15 @@ static const struct x86_cpu_id module_cpu_ids[] = {
- };
- MODULE_DEVICE_TABLE(x86cpu, module_cpu_ids);
- 
-+static int missing_x86_features_avx2;
-+static int missing_x86_features_avx;
-+module_param(missing_x86_features_avx2, int, 0444);
-+module_param(missing_x86_features_avx, int, 0444);
-+MODULE_PARM_DESC(missing_x86_features_avx2,
-+		 "Missing x86 instruction set extensions (BMI2) to support AVX2");
-+MODULE_PARM_DESC(missing_x86_features_avx,
-+		 "Missing x86 XSAVE features (SSE, YMM) to support AVX");
-+
- static void unregister_sha512_avx2(void)
- {
- 	if (using_x86_avx2) {
-@@ -330,7 +339,6 @@ static void unregister_sha512_avx2(void)
- 
- static int __init sha512_ssse3_mod_init(void)
- {
--	const char *feature_name;
- 	int ret;
- 
- 	if (!x86_match_cpu(module_cpu_ids))
-@@ -343,6 +351,8 @@ static int __init sha512_ssse3_mod_init(void)
- 					ARRAY_SIZE(sha512_avx2_algs));
- 			if (!ret)
- 				using_x86_avx2 = 1;
-+		} else {
-+			missing_x86_features_avx2 = 1;
- 		}
- 	}
- 
-@@ -350,11 +360,13 @@ static int __init sha512_ssse3_mod_init(void)
- 	if (boot_cpu_has(X86_FEATURE_AVX)) {
- 
- 		if (cpu_has_xfeatures(XFEATURE_MASK_SSE | XFEATURE_MASK_YMM,
--				       &feature_name)) {
-+				      NULL)) {
- 			ret = crypto_register_shashes(sha512_avx_algs,
- 					ARRAY_SIZE(sha512_avx_algs));
- 			if (!ret)
- 				using_x86_avx = 1;
-+		} else {
-+			missing_x86_features_avx = 1;
- 		}
- 	}
- 
-@@ -376,6 +388,8 @@ static void __exit sha512_ssse3_mod_fini(void)
- 	unregister_sha512_avx2();
- 	unregister_sha512_avx();
- 	unregister_sha512_ssse3();
-+	missing_x86_features_avx2 = 0;
-+	missing_x86_features_avx = 0;
- }
- 
- module_init(sha512_ssse3_mod_init);
-diff --git a/arch/x86/crypto/sm3_avx_glue.c b/arch/x86/crypto/sm3_avx_glue.c
-index c7786874319c..169ba6a2c806 100644
---- a/arch/x86/crypto/sm3_avx_glue.c
-+++ b/arch/x86/crypto/sm3_avx_glue.c
-@@ -126,22 +126,24 @@ static const struct x86_cpu_id module_cpu_ids[] = {
- };
- MODULE_DEVICE_TABLE(x86cpu, module_cpu_ids);
- 
-+static int missing_x86_features;
-+module_param(missing_x86_features, int, 0444);
-+MODULE_PARM_DESC(missing_x86_features,
-+		 "Missing x86 instruction set extensions (BMI2) and/or XSAVE features (SSE, YMM)");
-+
- static int __init sm3_avx_mod_init(void)
- {
--	const char *feature_name;
--
- 	if (!x86_match_cpu(module_cpu_ids))
- 		return -ENODEV;
- 
- 	if (!boot_cpu_has(X86_FEATURE_BMI2)) {
--		pr_info("BMI2 instruction are not detected.\n");
--		return -ENODEV;
-+		missing_x86_features = 1;
-+		return 0;
- 	}
- 
--	if (!cpu_has_xfeatures(XFEATURE_MASK_SSE | XFEATURE_MASK_YMM,
--				&feature_name)) {
--		pr_info("CPU feature '%s' is not supported.\n", feature_name);
--		return -ENODEV;
-+	if (!cpu_has_xfeatures(XFEATURE_MASK_SSE | XFEATURE_MASK_YMM, NULL)) {
-+		missing_x86_features = 1;
-+		return 0;
- 	}
- 
- 	return crypto_register_shash(&sm3_avx_alg);
-@@ -149,7 +151,9 @@ static int __init sm3_avx_mod_init(void)
- 
- static void __exit sm3_avx_mod_exit(void)
- {
--	crypto_unregister_shash(&sm3_avx_alg);
-+	if (!missing_x86_features)
-+		crypto_unregister_shash(&sm3_avx_alg);
-+	missing_x86_features = 0;
- }
- 
- module_init(sm3_avx_mod_init);
-diff --git a/arch/x86/crypto/sm4_aesni_avx2_glue.c b/arch/x86/crypto/sm4_aesni_avx2_glue.c
-index 125b00db89b1..6bcf78231888 100644
---- a/arch/x86/crypto/sm4_aesni_avx2_glue.c
-+++ b/arch/x86/crypto/sm4_aesni_avx2_glue.c
-@@ -133,27 +133,29 @@ static const struct x86_cpu_id module_cpu_ids[] = {
- };
- MODULE_DEVICE_TABLE(x86cpu, module_cpu_ids);
- 
-+static int missing_x86_features;
-+module_param(missing_x86_features, int, 0444);
-+MODULE_PARM_DESC(missing_x86_features,
-+		 "Missing x86 instruction set extensions (AES-NI, AVX, OSXSAVE) and/or XSAVE features (SSE, YMM)");
-+
- static struct simd_skcipher_alg *
- simd_sm4_aesni_avx2_skciphers[ARRAY_SIZE(sm4_aesni_avx2_skciphers)];
- 
- static int __init sm4_init(void)
- {
--	const char *feature_name;
--
- 	if (!x86_match_cpu(module_cpu_ids))
- 		return -ENODEV;
- 
- 	if (!boot_cpu_has(X86_FEATURE_AVX) ||
- 	    !boot_cpu_has(X86_FEATURE_AES) ||
- 	    !boot_cpu_has(X86_FEATURE_OSXSAVE)) {
--		pr_info("AVX, AES-NI, and/or OSXSAVE instructions are not detected.\n");
--		return -ENODEV;
-+		missing_x86_features = 1;
-+		return 0;
- 	}
- 
--	if (!cpu_has_xfeatures(XFEATURE_MASK_SSE | XFEATURE_MASK_YMM,
--				&feature_name)) {
--		pr_info("CPU feature '%s' is not supported.\n", feature_name);
--		return -ENODEV;
-+	if (!cpu_has_xfeatures(XFEATURE_MASK_SSE | XFEATURE_MASK_YMM, NULL)) {
-+		missing_x86_features = 1;
-+		return 0;
- 	}
- 
- 	return simd_register_skciphers_compat(sm4_aesni_avx2_skciphers,
-@@ -163,9 +165,11 @@ static int __init sm4_init(void)
- 
- static void __exit sm4_exit(void)
- {
--	simd_unregister_skciphers(sm4_aesni_avx2_skciphers,
--				ARRAY_SIZE(sm4_aesni_avx2_skciphers),
--				simd_sm4_aesni_avx2_skciphers);
-+	if (!missing_x86_features)
-+		simd_unregister_skciphers(sm4_aesni_avx2_skciphers,
-+					  ARRAY_SIZE(sm4_aesni_avx2_skciphers),
-+					  simd_sm4_aesni_avx2_skciphers);
-+	missing_x86_features = 0;
- }
- 
- module_init(sm4_init);
-diff --git a/arch/x86/crypto/sm4_aesni_avx_glue.c b/arch/x86/crypto/sm4_aesni_avx_glue.c
-index ac8182b197cf..03775b1079dc 100644
---- a/arch/x86/crypto/sm4_aesni_avx_glue.c
-+++ b/arch/x86/crypto/sm4_aesni_avx_glue.c
-@@ -452,26 +452,28 @@ static const struct x86_cpu_id module_cpu_ids[] = {
- };
- MODULE_DEVICE_TABLE(x86cpu, module_cpu_ids);
- 
-+static int missing_x86_features;
-+module_param(missing_x86_features, int, 0444);
-+MODULE_PARM_DESC(missing_x86_features,
-+		 "Missing x86 instruction set extensions (AES-NI, OSXSAVE) and/or XSAVE features (SSE, YMM)");
-+
- static struct simd_skcipher_alg *
- simd_sm4_aesni_avx_skciphers[ARRAY_SIZE(sm4_aesni_avx_skciphers)];
- 
- static int __init sm4_init(void)
- {
--	const char *feature_name;
--
- 	if (!x86_match_cpu(module_cpu_ids))
- 		return -ENODEV;
- 
- 	if (!boot_cpu_has(X86_FEATURE_AES) ||
- 	    !boot_cpu_has(X86_FEATURE_OSXSAVE)) {
--		pr_info("AES-NI or OSXSAVE instructions are not detected.\n");
--		return -ENODEV;
-+		missing_x86_features = 1;
-+		return 0;
- 	}
- 
--	if (!cpu_has_xfeatures(XFEATURE_MASK_SSE | XFEATURE_MASK_YMM,
--				&feature_name)) {
--		pr_info("CPU feature '%s' is not supported.\n", feature_name);
--		return -ENODEV;
-+	if (!cpu_has_xfeatures(XFEATURE_MASK_SSE | XFEATURE_MASK_YMM, NULL)) {
-+		missing_x86_features = 1;
-+		return 0;
- 	}
- 
- 	return simd_register_skciphers_compat(sm4_aesni_avx_skciphers,
-@@ -481,9 +483,11 @@ static int __init sm4_init(void)
- 
- static void __exit sm4_exit(void)
- {
--	simd_unregister_skciphers(sm4_aesni_avx_skciphers,
--					ARRAY_SIZE(sm4_aesni_avx_skciphers),
--					simd_sm4_aesni_avx_skciphers);
-+	if (!missing_x86_features)
-+		simd_unregister_skciphers(sm4_aesni_avx_skciphers,
-+					  ARRAY_SIZE(sm4_aesni_avx_skciphers),
-+					  simd_sm4_aesni_avx_skciphers);
-+	missing_x86_features = 0;
- }
- 
- module_init(sm4_init);
-diff --git a/arch/x86/crypto/twofish_avx_glue.c b/arch/x86/crypto/twofish_avx_glue.c
-index 4657e6efc35d..ae3cc4ad6f4f 100644
---- a/arch/x86/crypto/twofish_avx_glue.c
-+++ b/arch/x86/crypto/twofish_avx_glue.c
-@@ -110,18 +110,21 @@ static const struct x86_cpu_id module_cpu_ids[] = {
- };
- MODULE_DEVICE_TABLE(x86cpu, module_cpu_ids);
- 
-+static int missing_x86_features;
-+module_param(missing_x86_features, int, 0444);
-+MODULE_PARM_DESC(missing_x86_features,
-+		 "Missing x86 XSAVE features (SSE, YMM)");
-+
- static struct simd_skcipher_alg *twofish_simd_algs[ARRAY_SIZE(twofish_algs)];
- 
- static int __init twofish_init(void)
- {
--	const char *feature_name;
--
- 	if (!x86_match_cpu(module_cpu_ids))
- 		return -ENODEV;
- 
--	if (!cpu_has_xfeatures(XFEATURE_MASK_SSE | XFEATURE_MASK_YMM, &feature_name)) {
--		pr_info("CPU feature '%s' is not supported.\n", feature_name);
--		return -ENODEV;
-+	if (!cpu_has_xfeatures(XFEATURE_MASK_SSE | XFEATURE_MASK_YMM, NULL)) {
-+		missing_x86_features = 1;
-+		return 0;
- 	}
- 
- 	return simd_register_skciphers_compat(twofish_algs,
-@@ -131,8 +134,10 @@ static int __init twofish_init(void)
- 
- static void __exit twofish_exit(void)
- {
--	simd_unregister_skciphers(twofish_algs, ARRAY_SIZE(twofish_algs),
--				  twofish_simd_algs);
-+	if (!missing_x86_features)
-+		simd_unregister_skciphers(twofish_algs, ARRAY_SIZE(twofish_algs),
-+					  twofish_simd_algs);
-+	missing_x86_features = 0;
- }
- 
- module_init(twofish_init);
+ module_init(twofish_3way_init);
 -- 
 2.38.1
 
