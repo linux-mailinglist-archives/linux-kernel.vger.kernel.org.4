@@ -2,112 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4295462B416
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 08:39:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3369962B418
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 08:42:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232269AbiKPHjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 02:39:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52802 "EHLO
+        id S232243AbiKPHmy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 02:42:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiKPHjN (ORCPT
+        with ESMTP id S229456AbiKPHmv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 02:39:13 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EBC58C745;
-        Tue, 15 Nov 2022 23:39:11 -0800 (PST)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8BxLLaek3RjXa8HAA--.10868S3;
-        Wed, 16 Nov 2022 15:39:10 +0800 (CST)
-Received: from [10.180.13.64] (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axf+Cdk3Rjx5UUAA--.54799S2;
-        Wed, 16 Nov 2022 15:39:10 +0800 (CST)
-Subject: Re: [PATCH v10 1/2] pinctrl: pinctrl-loongson2: add pinctrl driver
- support
-To:     Rob Herring <robh@kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        zhanghongchen <zhanghongchen@loongson.cn>
-References: <20221114024942.8111-1-zhuyinbo@loongson.cn>
- <20221115133840.GA861387-robh@kernel.org>
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-Message-ID: <b6b09a89-0284-69ee-a858-84c2198f4177@loongson.cn>
-Date:   Wed, 16 Nov 2022 15:39:09 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Wed, 16 Nov 2022 02:42:51 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A205CE1C
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 23:42:50 -0800 (PST)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NBw4B1y9xzHw02;
+        Wed, 16 Nov 2022 15:42:18 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 16 Nov 2022 15:42:48 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 16 Nov
+ 2022 15:42:48 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <lee@kernel.org>, <krzysztof.kozlowski@canonical.com>
+Subject: [PATCH] mfd: core: fix UAF while using device of node
+Date:   Wed, 16 Nov 2022 15:41:16 +0800
+Message-ID: <20221116074116.1022139-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20221115133840.GA861387-robh@kernel.org>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Axf+Cdk3Rjx5UUAA--.54799S2
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7CrWrZr1ftFykAFy3XF1xGrg_yoW8Wr48pF
-        4fGa9YkFs8GF18Ga9xKryfZr95ZFZxJFnxtwsav342gryDAasa93yUKF1UCrykCFsxJF1x
-        ua45Gw1Uuay5CFDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bxkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487
-        Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-        IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-        Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l42xK82IY6x
-        8ErcxFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4l
-        x2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrw
-        CI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI
-        42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z2
-        80aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8c_-PUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+I got the following UAF report:
 
+  refcount_t: underflow; use-after-free.
+  WARNING: CPU: 1 PID: 270 at lib/refcount.c:29 refcount_warn_saturate+0x121/0x180
+  ...
+  OF: ERROR: memory leak, expected refcount 1 instead of -1073741824,
+  of_node_get()/of_node_put() unbalanced - destroy cset entry:
+  attach overlay node /i2c/pmic@62/powerkey
 
-ÔÚ 2022/11/15 ÏÂÎç9:38, Rob Herring Ð´µÀ:
-> On Mon, Nov 14, 2022 at 10:49:41AM +0800, Yinbo Zhu wrote:
->> From: zhanghongchen <zhanghongchen@loongson.cn>
->>
->> The Loongson-2 SoC has a few pins that can be used as GPIOs or take
->> multiple other functions. Add a driver for the pinmuxing.
->>
->> There is currently no support for GPIO pin pull-up and pull-down.
->>
->> Signed-off-by: zhanghongchen <zhanghongchen@loongson.cn>
->> Co-developed-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->> ---
->> Change in v10:
->> 		1. Remove lio/uart2/uart1/carmera/dvo1/dvo0 pins resue configuration.
->> 		2. Remove the castings about readl/writel/definition addr.
->> Change in v9:
->> 		1. Add zhanghongchen as patch author and add Co-developed-by tag
->> 		   for myself.
->> 		2. Keep entry in order in Kconfig and Makefile.
->> 		3. Keep it as a separate group after generic linux/* ones.
->> 		4. Use linux/io.h replace asm-generic/io.h.
->> 		5. Use PINCTRL_PINGROUP() and associated data structure.
->> 		6. Remove Redundant blank line after loongson2_pmx_groups.
->> 		7. Adjust gpio_groups.
->> 		8. Remove message printk after devm_platform_ioremap_resource.
->> 		9. Remove comma for the terminator line.
->> 		10. Add MODULE_LICENSE("GPL") in driver ending.
->> Change in v8:
->> 		1. Add #include <linux/pinctrl/pinctrl.h>.
->> 		2. Add #include <linux/seq_file.h>.
->> Change in v7:
->> 		1. Add all history change log information.
-> 
-> Linus applied v7 already. Additional changes need to be incremental
-> patches on top of it.
-> 
-> Rob
-okay, I got it.
-> 
+The of_node of device assigned in mfd_match_of_node_to_dev() need be
+get, and it will be put in platform_device_release().
+
+Fixes: 002be8114007 ("mfd: core: Add missing of_node_put for loop iteration")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/mfd/mfd-core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/mfd/mfd-core.c b/drivers/mfd/mfd-core.c
+index 16d1861e9682..8e57f67719cf 100644
+--- a/drivers/mfd/mfd-core.c
++++ b/drivers/mfd/mfd-core.c
+@@ -161,7 +161,7 @@ static int mfd_match_of_node_to_dev(struct platform_device *pdev,
+ 	of_entry->np = np;
+ 	list_add_tail(&of_entry->list, &mfd_of_node_list);
+ 
+-	pdev->dev.of_node = np;
++	pdev->dev.of_node = of_node_get(np);
+ 	pdev->dev.fwnode = &np->fwnode;
+ #endif
+ 	return 0;
+-- 
+2.25.1
 
