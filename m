@@ -2,124 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A08C62C749
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 19:11:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1BC762C74D
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 19:12:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234214AbiKPSLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 13:11:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50772 "EHLO
+        id S234350AbiKPSL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 13:11:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234028AbiKPSL0 (ORCPT
+        with ESMTP id S234613AbiKPSLy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 13:11:26 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24ACB6176A;
-        Wed, 16 Nov 2022 10:11:24 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id s5so11583157edc.12;
-        Wed, 16 Nov 2022 10:11:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z2yhRXVWHTwKqB0FAJ5JUXE/Hz7ioVpMavCshhyMXsA=;
-        b=RPE8BLJERTy3CP/G8HJ1kDaEpVIZsegVbKYnKx/AsCuLJM4ebPoHnNLJdGYsLQGA5j
-         HiQ1nbJMi6MP66u3GGqNocQJFZV42ApmRmmXLV5DlO5eRvjykAWwU7OZDzdORScHJMuy
-         0QBgsp73dq2+23N0GSicJ7YrVPGatFPWaSs6+4nMO0tdY0RICfRt4B4gJZPEN8l400ty
-         FGBphV6hwkp2pmtZyUcdj5qu+NDPEDhgAJQgUwcy7qXY3PRwZ9mQu/Xbbh7SYDMRHLjl
-         PsCqL6kUbodcXQpdoJmlD2YPZTKCO6gVkVtQGSoT7/4cNlg377eVFay+bUuWqdi9YDKv
-         Mf9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Z2yhRXVWHTwKqB0FAJ5JUXE/Hz7ioVpMavCshhyMXsA=;
-        b=dwhcihbE4eqjRnTY0u+OsAKaZFTKUYo8ybANvyI/K0zw1BLlu/OFThaJZwBUJYAKL4
-         ksxoZ49Kox3Gmu1CYYutZM4objBKLIOSle+EWlndabXO5MtMWytzvgxYd5QZwF8eODlS
-         LeeI1zhn3p6rVX/RSK/c6SkLU+ypdqvYzKtFboeduxZbXLlMD8eFD8LqbNfM1woannav
-         W8WDbVMGLchVFEg6R4U6Tn5/a6sZh4dSJPYcQC6QlxsGXBpPC1X5l9fu235//QvBN8Ey
-         gkWvQdul1WPvFUTDc5FeSevhE8IzAcprBOmsS/ZZTig+onkWdH1RE8vR/AKPXNbfvhQy
-         ErwQ==
-X-Gm-Message-State: ANoB5plIyzbQVjsVVKivOVZJCU8g/dMtbNg/FZmJS8X8TdH2StbLC5N3
-        iGEXB6Hd7spkQN0dYlbpN/it9sc0lrPtCrMKrXk=
-X-Google-Smtp-Source: AA0mqf6gDG3miNAiZS+xe0nj1OeHIg9P1WFIChg40NgZQaIuVQPE7S24TE+7gcWVGhg13lPy618bdkXQL5++ztKW7wg=
-X-Received: by 2002:a05:6402:f19:b0:461:a1c1:b667 with SMTP id
- i25-20020a0564020f1900b00461a1c1b667mr20586171eda.191.1668622283369; Wed, 16
- Nov 2022 10:11:23 -0800 (PST)
+        Wed, 16 Nov 2022 13:11:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBAF06175A;
+        Wed, 16 Nov 2022 10:11:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9BF40B81E4F;
+        Wed, 16 Nov 2022 18:11:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AEE4C433D6;
+        Wed, 16 Nov 2022 18:11:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668622311;
+        bh=w0UO98liO5fLCNnlMHd5BQufutT9Of+UoFv/uKbaByY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lAKPE3PSimsi0+eDiHvPD0qlee7GY738+lb4Z/kt+iyzopEL4vDLZBi2713YTl0LP
+         Kg1W0TOqgwruvLtNRIAZeZdf+tOwkqFXGYuZTkjeF8kYL4U+1HUrwiD9Z8zcdGm76R
+         4zwKh9CeSj8QWrYOZ7ll+7j7kTij7cCB7ulC/B/LXk1QAXeSP+tLmI1FHZRGW+jhY9
+         E0bNNr7YN82FOI/HOt/wUjgBmdSgcQxsTlc8wz8mijzDTZZbR9RAX9FVNzdimGvy8n
+         zD65CrnJ4UCifwzRNdMuOhc/yqHSdSW9A/RqKevSBiy5GSJZ2kleyAtIPxdW7Nz04i
+         mJo1QaKw6/5Sw==
+Date:   Wed, 16 Nov 2022 18:11:43 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Jerome Neanne <jneanne@baylibre.com>
+Cc:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
+        nm@ti.com, kristo@kernel.org, dmitry.torokhov@gmail.com,
+        krzysztof.kozlowski+dt@linaro.org, catalin.marinas@arm.com,
+        will@kernel.org, tony@atomide.com, vigneshr@ti.com,
+        shawnguo@kernel.org, geert+renesas@glider.be,
+        dmitry.baryshkov@linaro.org, marcel.ziswiler@toradex.com,
+        vkoul@kernel.org, biju.das.jz@bp.renesas.com, arnd@arndb.de,
+        jeff@labundy.com, afd@ti.com, khilman@baylibre.com,
+        narmstrong@baylibre.com, msp@baylibre.com, j-keerthy@ti.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
+        linux-omap@vger.kernel.org
+Subject: Re: [PATCH v7 4/6] mfd: tps65219: Add driver for TI TPS65219 PMIC
+Message-ID: <Y3Un36o/lACru9Kq@google.com>
+References: <20221104152311.1098603-1-jneanne@baylibre.com>
+ <20221104152311.1098603-5-jneanne@baylibre.com>
 MIME-Version: 1.0
-References: <20221111094238.1640-1-linux.amoon@gmail.com> <CAMdYzYp2wSrkOEh-v6Wye32TA9imfNF4CrUdKL7q8pOCQU307g@mail.gmail.com>
-In-Reply-To: <CAMdYzYp2wSrkOEh-v6Wye32TA9imfNF4CrUdKL7q8pOCQU307g@mail.gmail.com>
-From:   Anand Moon <linux.amoon@gmail.com>
-Date:   Wed, 16 Nov 2022 23:41:07 +0530
-Message-ID: <CANAwSgTNYDrkvUw_r_CQbgQ9KpzMqi9NP5Wfx5UvJeDvsyrTcQ@mail.gmail.com>
-Subject: Re: [linux-next-v1 1/3] arm64: dts: rockchip: Fix gmac phy mode to
- rgmii on Rock 3A sbc
-To:     Peter Geis <pgwipeout@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Chukun Pan <amadeus@jmu.edu.cn>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221104152311.1098603-5-jneanne@baylibre.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- Hi Petter / Michael.
+On Fri, 04 Nov 2022, Jerome Neanne wrote:
 
-Thanks for your review comments.
+> The TPS65219 is a power management IC PMIC designed to supply a wide
+> range of SoCs in both portable and stationary applications. Any SoC can
+> control TPS65219 over a standard I2C interface.
+> 
+> It contains the following components:
+> - Regulators.
+> - Over Temperature warning and Shut down.
+> - GPIOs
+> - Multi Function Pins (MFP)
+> - power-button
+> 
+> This patch adds support for tps65219 PMIC. At this time only
+> the functionalities listed below are made available:
+> 
+> - Regulators probe and functionalities
+> - warm and cold reset support
+> - SW shutdown support
+> - Regulator warnings via IRQs
+> - Power-button via IRQ
+> 
+> Signed-off-by: Jerome Neanne <jneanne@baylibre.com>
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Acked-for-mfd-by: Lee Jones <lee@kernel.org>
+> ---
+> 
+> Notes:
+>     Changes in v7:
+>     Lee Jones review
+>     - Kconfig nit: button that is
+>     - tps65219.c, nits: '\n' x2
+>     - tps65219.c, nit: { .name = "tps65219-gpios", },
+>     - tps65219.h, nit: Power Management IC
+>     - tps65219.h, rework header: struct tps65219
+>     - tps65219.h, remove Superflous " " /* MFD_TPS65219_H */
+>     - remove unused tps65219_soft_shutdown further to make W=1 check
+>     Biju Das review:
+>     - Remove all includes that are not mandatory
+>     - Remove container_of err check
+> 
+>  MAINTAINERS                  |   1 +
+>  drivers/mfd/Kconfig          |  14 ++
+>  drivers/mfd/Makefile         |   1 +
+>  drivers/mfd/tps65219.c       | 299 ++++++++++++++++++++++++++++++
+>  include/linux/mfd/tps65219.h | 345 +++++++++++++++++++++++++++++++++++
+>  5 files changed, 660 insertions(+)
+>  create mode 100644 drivers/mfd/tps65219.c
+>  create mode 100644 include/linux/mfd/tps65219.h
 
-On Fri, 11 Nov 2022 at 18:26, Peter Geis <pgwipeout@gmail.com> wrote:
->
-> On Fri, Nov 11, 2022 at 4:43 AM Anand Moon <linux.amoon@gmail.com> wrote:
-> >
-> > On rk356x ethernet phy support reduced media independent interface (RMII)
-> > and reduced gigabit media independent interface (RGMII).
-> > So set the phy mode to rgmii.
->
-> The RTL8211 supports rgmii-id just fine, you only need to go to rgmii
-> on these boards if you need to tune the delays manually.
+Applied, thanks.
 
-Ok rgmii supports internal rx and tx clock delay
-whereas rgmii-id does not supports internal clock delay.
-
->
-> >
-> > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
-> > ---
-> >  arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts b/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
-> > index ea74ba32fbbd..72e410e3aca8 100644
-> > --- a/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
-> > +++ b/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
-> > @@ -253,7 +253,7 @@ &gmac1 {
-> >         assigned-clock-rates = <0>, <125000000>;
-> >         clock_in_out = "output";
-> >         phy-handle = <&rgmii_phy1>;
-> > -       phy-mode = "rgmii-id";
-> > +       phy-mode = "rgmii";
->
-> You should be setting the delay tuning in this patch as well.
-
-I will try to fix this in the next version.
-
->
-> >         pinctrl-names = "default";
-> >         pinctrl-0 = <&gmac1m1_miim
-> >                      &gmac1m1_tx_bus2
-> > --
-> > 2.38.1
-Thanks
-
-
--Anand
+-- 
+Lee Jones [李琼斯]
