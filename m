@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42B9F62BBFA
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:31:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B23962BBFC
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:31:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233765AbiKPLbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 06:31:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51062 "EHLO
+        id S231360AbiKPLbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 06:31:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233647AbiKPLam (ORCPT
+        with ESMTP id S237931AbiKPLar (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 06:30:42 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A0900326D3;
-        Wed, 16 Nov 2022 03:19:34 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 785E61477;
-        Wed, 16 Nov 2022 03:19:40 -0800 (PST)
-Received: from [10.1.39.20] (e121896.cambridge.arm.com [10.1.39.20])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 597EF3F663;
-        Wed, 16 Nov 2022 03:19:30 -0800 (PST)
-Message-ID: <d6553087-9157-21e8-6980-31bc8e44f066@arm.com>
-Date:   Wed, 16 Nov 2022 11:19:28 +0000
+        Wed, 16 Nov 2022 06:30:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8D31033;
+        Wed, 16 Nov 2022 03:19:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A7EF161CCB;
+        Wed, 16 Nov 2022 11:19:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1722C433D6;
+        Wed, 16 Nov 2022 11:19:42 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="RYhLS4HY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1668597580;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6aTacRSOW2cWRX+axKPWZgBes5QK7CSYjTPlhqVOCO8=;
+        b=RYhLS4HYaHxihQYVM1R+CzqlOPL90sTaI7vmGV3QtXlWibp1bi8awrU+FuAA2eQdgS6KFl
+        XZ9rv7hWQ63Z3YQqQyY944TJgpvfbO6hddteDl+zJt34IPDprA4zN0NcVZ2ANML7h5MBRK
+        l9HZAKt7noEUSk0XtSj1eGNRy1C4/Gs=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 412042da (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Wed, 16 Nov 2022 11:19:40 +0000 (UTC)
+Date:   Wed, 16 Nov 2022 12:19:38 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Robert Elliott <elliott@hpe.com>
+Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
+        tim.c.chen@linux.intel.com, ap420073@gmail.com, ardb@kernel.org,
+        David.Laight@ACULAB.COM, ebiggers@kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 17/24] crypto: x86/poly - load based on CPU features
+Message-ID: <Y3THSmvuZlq2+hky@zx2c4.com>
+References: <20221103042740.6556-1-elliott@hpe.com>
+ <20221116041342.3841-1-elliott@hpe.com>
+ <20221116041342.3841-18-elliott@hpe.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH RFC 0/6] Add metrics for neoverse-n2
-Content-Language: en-US
-To:     Jing Zhang <renyu.zj@linux.alibaba.com>,
-        nick Forrington <Nick.Forrington@arm.com>,
-        Jumana MP <Jumana.MP@arm.com>,
-        John Garry <john.garry@huawei.com>
-Cc:     Will Deacon <will@kernel.org>, Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andrew Kilroy <andrew.kilroy@arm.com>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Zhuo Song <zhuo.song@linux.alibaba.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1667214694-89839-1-git-send-email-renyu.zj@linux.alibaba.com>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <1667214694-89839-1-git-send-email-renyu.zj@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221116041342.3841-18-elliott@hpe.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,104 +61,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Nov 15, 2022 at 10:13:35PM -0600, Robert Elliott wrote:
+> +static const struct x86_cpu_id module_cpu_ids[] = {
+> +	X86_MATCH_FEATURE(X86_FEATURE_ANY, NULL),
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(x86cpu, module_cpu_ids);
+> +
+>  static int __init poly1305_simd_mod_init(void)
+>  {
+> +	if (!x86_match_cpu(module_cpu_ids))
+> +		return -ENODEV;
 
+What exactly does this accomplish? Isn't this just a no-op?
 
-On 31/10/2022 11:11, Jing Zhang wrote:
-> This series add six metricgroups for neoverse-n2, among which, the
-> formula of topdown L1 is from the document:
-> https://documentation-service.arm.com/static/60250c7395978b529036da86?token=
-> 
-> Since neoverse-n2 does not yet support topdown L2, metricgroups such
-> as Cache, TLB, Branch, InstructionsMix, and PEutilization are added to
-> help further analysis of performance bottlenecks.
-> 
-
-Hi Jing,
-
-Thanks for working on this, these metrics look ok to me in general,
-although we're currently working on publishing standardised metrics
-across all new cores as part of a new project in Arm. This will include
-N2, and our ones are very similar (or almost identical) to yours,
-barring slightly different group names, metric names, and differences in
-things like outputting topdown metrics as percentages.
-
-We plan to publish our standard metrics some time in the next 2 months.
-Would you consider holding off on merging this change so that we have
-consistant group names and units going forward? Otherwise N2 would be
-the odd one out. I will send you the metrics when they are ready, and we
-will have a script to generate perf jsons from them, so you can review.
-
-We also have a slightly different forumula for one of the top down
-metrics which I think would be slightly more accurate. We don't have
-anything for your "PE utilization" metrics, which I can raise
-internally. It could always be added to perf on top of the standardised
-ones if we don't add it to our standard ones.
-
-Thanks
-James
-
-> with this series on neoverse-n2:
-> 
-> $./perf list metricgroup
-> 
-> List of pre-defined events (to be used in -e):
-> 
-> 
-> Metric Groups:
-> 
-> Branch
-> Cache
-> InstructionMix
-> PEutilization
-> TLB
-> TopDownL1
-> 
-> 
-> $./perf list
-> 
-> ...
-> Metric Groups:
-> 
-> Branch:
->   branch_miss_pred_rate
->        [The rate of branches mis-predited to the overall branches]
->   branch_mpki
->        [The rate of branches mis-predicted per kilo instructions]
->   branch_pki
->        [The rate of branches retired per kilo instructions]
-> Cache:
->   l1d_cache_miss_rate
->        [The rate of L1 D-Cache misses to the overall L1 D-Cache]
->   l1d_cache_mpki
->        [The rate of L1 D-Cache misses per kilo instructions]
-> ...
-> 
-> 
-> $sudo ./perf stat -a -M TLB sleep 1
-> 
->  Performance counter stats for 'system wide':
-> 
->         35,861,936      L1I_TLB                          #     0.00 itlb_walk_rate           (74.91%)
->              5,661      ITLB_WALK                                                            (74.91%)
->         97,279,240      INST_RETIRED                     #     0.07 itlb_mpki                (74.91%)
->              6,851      ITLB_WALK                                                            (74.91%)
->             26,391      DTLB_WALK                        #     0.00 dtlb_walk_rate           (75.07%)
->         35,585,545      L1D_TLB                                                              (75.07%)
->         85,923,244      INST_RETIRED                     #     0.35 dtlb_mpki                (75.11%)
->             29,992      DTLB_WALK                                                            (75.11%)
-> 
->        1.003450755 seconds time elapsed
->        
-> 
-> Jing Zhang (6):
->   perf vendor events arm64: Add topdown L1 metrics for neoverse-n2
->   perf vendor events arm64: Add TLB metrics for neoverse-n2
->   perf vendor events arm64: Add cache metrics for neoverse-n2
->   perf vendor events arm64: Add branch metrics for neoverse-n2
->   perf vendor events arm64: Add PE utilization metrics for neoverse-n2
->   perf vendor events arm64: Add instruction mix metrics for neoverse-n2
-> 
->  .../arch/arm64/arm/neoverse-n2/metrics.json        | 247 +++++++++++++++++++++
->  1 file changed, 247 insertions(+)
->  create mode 100644 tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
-> 
+Jason
