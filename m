@@ -2,88 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C606962B1A9
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 04:08:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C487262B1AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 04:09:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231811AbiKPDIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 22:08:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36162 "EHLO
+        id S231542AbiKPDJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 22:09:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230208AbiKPDIK (ORCPT
+        with ESMTP id S230244AbiKPDI4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 22:08:10 -0500
-Received: from cstnet.cn (smtp23.cstnet.cn [159.226.251.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D96471704C
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 19:08:07 -0800 (PST)
-Received: from localhost.localdomain (unknown [124.16.138.125])
-        by APP-03 (Coremail) with SMTP id rQCowACnWVkHVHRjpdQyCQ--.64513S2;
-        Wed, 16 Nov 2022 11:07:52 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, matthias.bgg@gmail.com
-Cc:     alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] ASoC: mediatek: mtk-btcvsd: Add checks for write and read of mtk_btcvsd_snd
-Date:   Wed, 16 Nov 2022 11:07:50 +0800
-Message-Id: <20221116030750.40500-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowACnWVkHVHRjpdQyCQ--.64513S2
-X-Coremail-Antispam: 1UD129KBjvdXoWruFy3Gr15AFyfAr1xZFy5urg_yoWDtFb_Zw
-        4kW3W7Zr98WFyfAr4UKrW5AFWUXFW3AF10gFy0qr45XrWUGrnaqw1qyF93urs8Zr4vv34f
-        Xr1IgFWvy3yxujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbxxFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
-        Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
-        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
-        8cxan2IY04v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-        8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8
-        ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-        0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-        Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUoO
-        J5UUUUU
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 15 Nov 2022 22:08:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F87D10056;
+        Tue, 15 Nov 2022 19:08:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EC941B818E0;
+        Wed, 16 Nov 2022 03:08:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F2B1C433D6;
+        Wed, 16 Nov 2022 03:08:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668568132;
+        bh=Zd6O46v+aOYouGnAna4jIIJwIb+cPMsXGDMUfy7dDc0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=n8zFaBT8FSrppdZnfPmFvvxlCBHBydmyVNfoo/OChYwOrnOBkjltj3DTJWd363Tv1
+         WSOhxfcntqPbc/cHA5UJfqPkm9SkDKTxgFDEZ0sLGP4alGnEcmCjNzcJhY8VdVxMSG
+         nd8wk6qhWl141iiJhkM3b5NJaFHrONNKYP//Wc2Qa3AhytabEUseOUWS+Wo78pmkSx
+         qB6f/F/eP0qziMdvYyDd4mPJ9rxVGM9zRt4ZSU0K5T1l2dJx/0m40HNs9oyxiHbaqN
+         SMniSji+W31VO0hskljfBfWd2m74AzVOnZ7BmpAgj3fGdNwgyV9bOsuTLXAbaMQOnt
+         celo2gvZygaLQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1ov8nC-006Lpn-4m;
+        Wed, 16 Nov 2022 03:08:50 +0000
+Date:   Wed, 16 Nov 2022 03:08:49 +0000
+Message-ID: <868rkbppdq.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Oliver Upton <oliver.upton@linux.dev>
+Cc:     James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, kvmarm@lists.linux.dev,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] KVM: arm64: Don't acquire RCU read lock for exclusive table walks
+In-Reply-To: <20221115225502.2240227-1-oliver.upton@linux.dev>
+References: <20221115225502.2240227-1-oliver.upton@linux.dev>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: oliver.upton@linux.dev, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, catalin.marinas@arm.com, will@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org, kvmarm@lists.linux.dev, m.szyprowski@samsung.com, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As the mtk_btcvsd_snd_write and mtk_btcvsd_snd_read may return error,
-it should be better to catch the exception.
+On Tue, 15 Nov 2022 22:55:02 +0000,
+Oliver Upton <oliver.upton@linux.dev> wrote:
+> 
+> Marek reported a BUG resulting from the recent parallel faults changes,
+> as the hyp stage-1 map walker attempted to allocate table memory while
+> holding the RCU read lock:
+> 
+>   BUG: sleeping function called from invalid context at
+>   include/linux/sched/mm.h:274
+>   in_atomic(): 0, irqs_disabled(): 0, non_block: 0, pid: 1, name: swapper/0
+>   preempt_count: 0, expected: 0
+>   RCU nest depth: 1, expected: 0
+>   2 locks held by swapper/0/1:
+>     #0: ffff80000a8a44d0 (kvm_hyp_pgd_mutex){+.+.}-{3:3}, at:
+>   __create_hyp_mappings+0x80/0xc4
+>     #1: ffff80000a927720 (rcu_read_lock){....}-{1:2}, at:
+>   kvm_pgtable_walk+0x0/0x1f4
+>   CPU: 2 PID: 1 Comm: swapper/0 Not tainted 6.1.0-rc3+ #5918
+>   Hardware name: Raspberry Pi 3 Model B (DT)
+>   Call trace:
+>     dump_backtrace.part.0+0xe4/0xf0
+>     show_stack+0x18/0x40
+>     dump_stack_lvl+0x8c/0xb8
+>     dump_stack+0x18/0x34
+>     __might_resched+0x178/0x220
+>     __might_sleep+0x48/0xa0
+>     prepare_alloc_pages+0x178/0x1a0
+>     __alloc_pages+0x9c/0x109c
+>     alloc_page_interleave+0x1c/0xc4
+>     alloc_pages+0xec/0x160
+>     get_zeroed_page+0x1c/0x44
+>     kvm_hyp_zalloc_page+0x14/0x20
+>     hyp_map_walker+0xd4/0x134
+>     kvm_pgtable_visitor_cb.isra.0+0x38/0x5c
+>     __kvm_pgtable_walk+0x1a4/0x220
+>     kvm_pgtable_walk+0x104/0x1f4
+>     kvm_pgtable_hyp_map+0x80/0xc4
+>     __create_hyp_mappings+0x9c/0xc4
+>     kvm_mmu_init+0x144/0x1cc
+>     kvm_arch_init+0xe4/0xef4
+>     kvm_init+0x3c/0x3d0
+>     arm_init+0x20/0x30
+>     do_one_initcall+0x74/0x400
+>     kernel_init_freeable+0x2e0/0x350
+>     kernel_init+0x24/0x130
+>     ret_from_fork+0x10/0x20
+> 
+> Since the hyp stage-1 table walkers are serialized by kvm_hyp_pgd_mutex,
+> RCU protection really doesn't add anything. Don't acquire the RCU read
+> lock for an exclusive walk. While at it, add a warning which codifies
+> the lack of support for shared walks in the hypervisor code.
+> 
+> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
+> ---
+> 
+> Applies on top of the parallel faults series that was picked up last
+> week. Tested with kvm-arm.mode={nvhe,protected} on an Ampere Altra
+> system.
+> 
+> v1 -> v2:
+>  - Took Will's suggestion of conditioning RCU on a flag, small tweak to
+>    use existing bit instead (Thanks!)
+> 
+>  arch/arm64/include/asm/kvm_pgtable.h | 22 ++++++++++++++++------
+>  arch/arm64/kvm/hyp/pgtable.c         |  5 +++--
+>  2 files changed, 19 insertions(+), 8 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/kvm_pgtable.h b/arch/arm64/include/asm/kvm_pgtable.h
+> index a874ce0ce7b5..d4c7321fa652 100644
+> --- a/arch/arm64/include/asm/kvm_pgtable.h
+> +++ b/arch/arm64/include/asm/kvm_pgtable.h
+> @@ -51,8 +51,16 @@ static inline kvm_pte_t *kvm_dereference_pteref(kvm_pteref_t pteref, bool shared
+>  	return pteref;
+>  }
+>  
+> -static inline void kvm_pgtable_walk_begin(void) {}
+> -static inline void kvm_pgtable_walk_end(void) {}
+> +static inline void kvm_pgtable_walk_begin(bool shared)
+> +{
+> +	/*
+> +	 * Due to the lack of RCU (or a similar protection scheme), only
+> +	 * non-shared table walkers are allowed in the hypervisor.
+> +	 */
+> +	WARN_ON(shared);
+> +}
+> +
+> +static inline void kvm_pgtable_walk_end(bool shared) {}
+>  
+>  static inline bool kvm_pgtable_walk_lock_held(void)
+>  {
+> @@ -68,14 +76,16 @@ static inline kvm_pte_t *kvm_dereference_pteref(kvm_pteref_t pteref, bool shared
+>  	return rcu_dereference_check(pteref, !shared);
+>  }
+>  
+> -static inline void kvm_pgtable_walk_begin(void)
+> +static inline void kvm_pgtable_walk_begin(bool shared)
 
-Fixes: 4bd8597dc36c ("ASoC: mediatek: add btcvsd driver")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- sound/soc/mediatek/common/mtk-btcvsd.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+I'm not crazy about this sort of parameters. I think it would make a
+lot more sense to pass a pointer to the walker structure and do the
+flag check inside the helper.
 
-diff --git a/sound/soc/mediatek/common/mtk-btcvsd.c b/sound/soc/mediatek/common/mtk-btcvsd.c
-index d884bb7c0fc7..1c28b41e4311 100644
---- a/sound/soc/mediatek/common/mtk-btcvsd.c
-+++ b/sound/soc/mediatek/common/mtk-btcvsd.c
-@@ -1038,11 +1038,9 @@ static int mtk_pcm_btcvsd_copy(struct snd_soc_component *component,
- 	struct mtk_btcvsd_snd *bt = snd_soc_component_get_drvdata(component);
- 
- 	if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
--		mtk_btcvsd_snd_write(bt, buf, count);
-+		return mtk_btcvsd_snd_write(bt, buf, count);
- 	else
--		mtk_btcvsd_snd_read(bt, buf, count);
--
--	return 0;
-+		return mtk_btcvsd_snd_read(bt, buf, count);
- }
- 
- /* kcontrol */
+That way, we avoid extra churn if/when we need extra state or
+bookkeeping around the walk.
+
+Thanks,
+
+	M.
+
 -- 
-2.25.1
-
+Without deviation from the norm, progress is not possible.
