@@ -2,74 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2637D62BF40
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 14:19:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81AE162BF46
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 14:20:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233721AbiKPNTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 08:19:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37072 "EHLO
+        id S233290AbiKPNUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 08:20:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230411AbiKPNTf (ORCPT
+        with ESMTP id S233652AbiKPNUc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 08:19:35 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03E017421;
-        Wed, 16 Nov 2022 05:19:33 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id p21so16393634plr.7;
-        Wed, 16 Nov 2022 05:19:33 -0800 (PST)
+        Wed, 16 Nov 2022 08:20:32 -0500
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91FDD27FF7
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 05:20:31 -0800 (PST)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-367b8adf788so167186747b3.2
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 05:20:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fpqKb4lhf4Ox3aXbS6ZVbIYbgJNdN32hGzbeNBKgyKo=;
-        b=H7X/Ph3K8hi9qxqMrkAU+OPdQ+wgInpmZ4tDynQUM1wiGAEqzDDX4ZyZrKtKdK7FSu
-         Aw3kgSlmvqJMBENX3K9foSEeXv2MSrXszIFk8b8THbmYibbVSudEtB+NSRzP6GGHZFai
-         w9khhfwcvwTpAvIsq2nPHJfZFDiV1neEASz1asDGoocEzXc8SyNi1UOPzA5Z2Hge6y+C
-         XL7dCVSEQWm+gCrMFCbGnb/yaTXp8uDRN9EeTnoav3UYBbApRq4tdv9da4ylrnykNQlm
-         oyFHamJyCLdWaqJFTsEYE++8a0qLxopgIQFC779jEVVcEOX8RG7KDu8zVlonDF5RuzzO
-         trfg==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vxKHoXY+iMzMLFmzEA3zKKda4HHbNhaI8yIydro4NOQ=;
+        b=lhFPWDuRoDRCeijubbdr/Y9pvTp9yAsFihpcTQlnUEYTDf8vu6z8gYbHkTM7meeaH/
+         7EMbbRuywzmQE/nT/gLSGWv0kgd/YWRH9teiIlKWBMMYbWgTcBg0Hocg3GAym/msyvxc
+         C9OZ4q55GJIH/324+/gJNnbYsEfTEo5/ut5ehVJvbw9u2l+FfFkSQ5h+5hmIkie7VeqQ
+         912s3/1G/1qN/MalciigbCPrPAm4aPxxr9n80jtc95Upjj3V4KaNOwemtfk66ZNrHgxK
+         y5CEhvDJhmnu7C/Ib9uvnLsbPf3ZE0cfB6qAGpPVNIHZJxOclz4f7tYq/pmC+RNTxip1
+         t3WA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fpqKb4lhf4Ox3aXbS6ZVbIYbgJNdN32hGzbeNBKgyKo=;
-        b=PRdyYVqUFTwBTy5tCiQ4HXDJ67Ek+i1YyOTMwq7TxW+PfkWSYbka7Q404RlXbfJrBl
-         7icN4yw3zjrUl/3E4azUKC8BjiINgzjP+i8T+HmdctZC0q+EFC7Nr0pH7Eo7mrQhhFhy
-         qdnhJZwP2sHuJgbi7l9pe3ddnxKFXEdx/VGUv0njf4zjdKKVENOoKd7Se4L0GqIpQJ7b
-         Pzoe96nG3Ev9ImLw8iy3o6M3Bdl3UTYMAfi+Vl06GO7nxSlOyivdjEAYAMsa9xGIkwZ4
-         +skP95UJIMcp42gdMXyeTG5u121cSq3E+bXEHLwy69wvdf8gai2kyZz/zF1EbLMSGigC
-         P55g==
-X-Gm-Message-State: ANoB5plF5rFL3yvFe1O+XEE+ZK9jh19JUGaltyuFlswH5thR8FD2cVSt
-        bTQknQ6YeydKsR3/NlLMepE=
-X-Google-Smtp-Source: AA0mqf5mGKgsBRp23LZ+hvij7pemhsMYWSfdR5H6yuc8o94A+nlAEuzXKU/INbG8bPLNjQnRZxtgKg==
-X-Received: by 2002:a17:902:a586:b0:188:5681:4dc7 with SMTP id az6-20020a170902a58600b0018856814dc7mr9117157plb.97.1668604773213;
-        Wed, 16 Nov 2022 05:19:33 -0800 (PST)
-Received: from ubuntu ([175.124.254.119])
-        by smtp.gmail.com with ESMTPSA id rj6-20020a17090b3e8600b00217cdc4b0a5sm1533616pjb.16.2022.11.16.05.19.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 05:19:32 -0800 (PST)
-Date:   Wed, 16 Nov 2022 05:19:28 -0800
-From:   Hyunwoo Kim <imv4bel@gmail.com>
-To:     Salvatore Bonaccorso <carnil@debian.org>
-Cc:     Takashi Iwai <tiwai@suse.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        imv4bel@gmail.com
-Subject: Re: [PATCH] media: dvb-core: Fix UAF due to refcount races at
- releasing
-Message-ID: <20221116131928.GA7144@ubuntu>
-References: <20220908132754.30532-1-tiwai@suse.de>
- <87sfklgozd.wl-tiwai@suse.de>
- <87k056dekm.wl-tiwai@suse.de>
- <Y3TEk7Nr3yAQIozQ@eldamar.lan>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vxKHoXY+iMzMLFmzEA3zKKda4HHbNhaI8yIydro4NOQ=;
+        b=reR2/6PB7X24cSOanh+0ImzkZTu250L6r8lsChkbo1UpQL/yVasXw6Q0XWvPudYZXp
+         gf8zjMtiK0qDM12bo1qpNupZeVHOUqfP1AX66OELuCz28Dz4qvk09QHJBhjiidbilK66
+         NNR7fEwMzb1wBDd+2RGNBAXNc3I2o1MNz4SRz/o5x4Om7VFzhFcxIvfW/AChSTbgw581
+         b9XghEMmOC7WjdGXJwkd1eqCWh0RHhV9bBOdWczu2s021odB2BWjupjZN4tHujTUgsCz
+         yGqWCvqW82/mCliFnkhxZe5ORcieJTnybUVZC4MivGtvWpczDBfdnSyZLe5AdXgZfv4G
+         zCyA==
+X-Gm-Message-State: ANoB5pnGYgaWTDwvK7CivLYCtCIu6YkJW08NLc1xMXZ+X6jUp6whR3G8
+        jPOWvESSNkGuoO1CZp8XWf3o5vhd84CG+/hEByT8PQ==
+X-Google-Smtp-Source: AA0mqf7fxhZX2Ti4VYrXYUNql55200Xi4FUdmmZSj+5XeSmW8WdRRiZEAc2N8Mc/qQYApnU5S48ByzdhifO2l9mfc5E=
+X-Received: by 2002:a05:690c:29e:b0:38b:fa10:cc71 with SMTP id
+ bf30-20020a05690c029e00b0038bfa10cc71mr1519614ywb.185.1668604830743; Wed, 16
+ Nov 2022 05:20:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y3TEk7Nr3yAQIozQ@eldamar.lan>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <CALPaoCj-zav4x6H3ffXo_O+RFan8Qb-uLy-DdtkaQTfuxY4a0w@mail.gmail.com>
+ <b2e020b1-f6b2-e236-a042-4eb2fd27d8b0@intel.com> <IA1PR11MB6097236CFF891041DBA42ECB9B5F9@IA1PR11MB6097.namprd11.prod.outlook.com>
+ <Y0BhzKkksSjSeE3W@agluck-desk3.sc.intel.com> <81a7b4f6-fbb5-380e-532d-f2c1fc49b515@intel.com>
+ <CALPaoCjdeRjyX5L6BBX688ZM21eMwetuL9QLF1+GEDUskGcU2w@mail.gmail.com>
+ <76bb4dc9-ab7c-4cb6-d1bf-26436c88c6e2@arm.com> <CALPaoCiKUQC+LxDwKQ0gE5AQniJi_nbzrXi_HA9ZBRtiXdw_dg@mail.gmail.com>
+ <835d769b-3662-7be5-dcdd-804cb1f3999a@arm.com> <09029c7a-489a-7054-1ab5-01fa879fb42f@intel.com>
+ <f80299a4-7eaf-46a0-89e6-b9f5385f183c@arm.com> <c227a0df-7ac8-91f3-cada-0ca5ec047579@intel.com>
+ <CALPaoCidd+WwGTyE3D74LhoL13ce+EvdTmOnyPrQN62j+zZ1fg@mail.gmail.com>
+ <bd52ec90-52e4-32c5-132a-5d82304650a4@intel.com> <39fe80dc-713d-9ed2-a5aa-5c84376917f3@arm.com>
+In-Reply-To: <39fe80dc-713d-9ed2-a5aa-5c84376917f3@arm.com>
+From:   Peter Newman <peternewman@google.com>
+Date:   Wed, 16 Nov 2022 14:20:19 +0100
+Message-ID: <CALPaoChyyi2DSWWHPT4vaj4e1Fb=CrsRpaaWqy9nrj6EXRM_Ug@mail.gmail.com>
+Subject: Re: [RFD] resctrl: reassigning a running container's CTRL_MON group
+To:     James Morse <james.morse@arm.com>
+Cc:     Reinette Chatre <reinette.chatre@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Babu Moger <Babu.Moger@amd.com>,
+        Gaurang Upasani <gupasani@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,67 +82,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi James,
 
-On Wed, Nov 16, 2022 at 12:08:03PM +0100, Salvatore Bonaccorso wrote:
-> Hi,
-> 
-> On Tue, Oct 11, 2022 at 09:06:33AM +0200, Takashi Iwai wrote:
-> > On Wed, 21 Sep 2022 09:34:30 +0200,
-> > Takashi Iwai wrote:
-> > > 
-> > > On Thu, 08 Sep 2022 15:27:54 +0200,
-> > > Takashi Iwai wrote:
-> > > > 
-> > > > The dvb-core tries to sync the releases of opened files at
-> > > > dvb_dmxdev_release() with two refcounts: dvbdev->users and
-> > > > dvr_dvbdev->users.  A problem is present in those two syncs: when yet
-> > > > another dvb_demux_open() is called during those sync waits,
-> > > > dvb_demux_open() continues to process even if the device is being
-> > > > closed.  This includes the increment of the former refcount, resulting
-> > > > in the leftover refcount after the sync of the latter refcount at
-> > > > dvb_dmxdev_release().  It ends up with use-after-free, since the
-> > > > function believes that all usages were gone and releases the
-> > > > resources.
-> > > > 
-> > > > This patch addresses the problem by adding the check of dmxdev->exit
-> > > > flag at dvb_demux_open(), just like dvb_dvr_open() already does.  With
-> > > > the exit flag check, the second call of dvb_demux_open() fails, hence
-> > > > the further corruption can be avoided.
-> > > > 
-> > > > Also for avoiding the races of the dmxdev->exit flag reference, this
-> > > > patch serializes the dmxdev->exit set up and the sync waits with the
-> > > > dmxdev->mutex lock at dvb_dmxdev_release().  Without the mutex lock,
-> > > > dvb_demux_open() (or dvb_dvr_open()) may run concurrently with
-> > > > dvb_dmxdev_release(), which allows to skip the exit flag check and
-> > > > continue the open process that is being closed.
-> > > > 
-> > > > Reported-by: Hyunwoo Kim <imv4bel@gmail.com>
-> > > > Cc: <stable@vger.kernel.org>
-> > > > Signed-off-by: Takashi Iwai <tiwai@suse.de>
-> > > 
-> > > Any review on this?
-> > > 
-> > > FWIW, now CVE-2022-41218 is assigned for those bugs as a security
-> > > issue.
-> > 
-> > A gentle ping again.
-> > 
-> > Or if any other fix for this security issue is already available,
-> > please let me know.
-> 
-> is this correct, the fix is yet missing (or was it fixed by other
-> means?).
+On Fri, Nov 11, 2022 at 7:38 PM James Morse <james.morse@arm.com> wrote:
+> On 09/11/2022 19:11, Reinette Chatre wrote:
+> > On 11/9/2022 1:50 AM, Peter Newman wrote:
+> >> Using this we can permanently pin RMIDs to CPUs and read the
+> >> counters on every task switch to implement MBM RMIDs in software.
+>
+> >> This has the caveats that evictions while one task is running could have
+> >> resulted from a previous task on the current CPU, but will be counted
+> >> against the new task's software-RMID, and that CMT doesn't work.
+>
+> (Sounds like the best thing to do in a bad situation)
+>
+>
+> >> I will propose making this available as a mount option for cloud container
+> >> use cases which need to monitor a large number of tasks on B/W counter-poor
+> >> systems, and of course don't need CMT.
+>
+> Why does it need to be a mount option?
+>
+> If this is the only way of using the counters on this platform, then the skid from the
+> counters is just a property of the platform. It can be advertised to user-space via some
+> file in 'info'.
 
-This patch has been re-send and has been missing for a long time:
-https://lore.kernel.org/linux-media/20221031100245.23702-1-tiwai@suse.de/
-
-However, I noticed yesterday that the status of the re-send patch 
-changed to 'accpet':
-https://patchwork.linuxtv.org/project/linux-media/patch/20221031100245.23702-1-tiwai@suse.de/
-
-But there was no other feedback.
+No, it's not the only way of using the counters. The limitation is much
+more problematic for users who monitor all tasks all the time. RMIDs
+would be more likely to remain in use on systems that only monitor
+select tasks, so they should be able to benefit from skid-free bandwidth
+counts and CMT, so I think the proposed mode should be opt-in.
 
 
-Regards,
-Hyunwoo Kim
+> Architecture specific mount options are a bad idea, platform specific ones are even worse!
+
+It is already the case today in resctrlfs that the platform's features
+will determine which mount options are available to the user. I believe
+the same implementation would work on Intel platforms, but it would just
+be silly to enable when these platforms have enough counters to back all
+their RMIDs.
+
+Also I believe it's fine for this option to be missing on MPAM until
+someone is interested in paying the tradeoffs to monitor more groups and
+is motivated enough to implement it.
+
+-Peter
