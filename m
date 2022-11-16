@@ -2,102 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B7FB62B6E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:48:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 628D162B6E2
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:49:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbiKPJsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 04:48:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33768 "EHLO
+        id S233332AbiKPJs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 04:48:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233072AbiKPJsI (ORCPT
+        with ESMTP id S233070AbiKPJs5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 04:48:08 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A8A616E
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:48:01 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id 205so5823358ybe.7
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:48:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=csie-ntu-edu-tw.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mTORVN+vb4ThEpVx7AxMit72NMXnsKSRAUOh1o/a8os=;
-        b=iu183/XFyyYXhzOM/zCv5oVLc0dNPc63N8nAumxBq/E9DEFMaXcMVFjPQ8RwSk95QN
-         qPwzLXSSx8g02xKSE2HH+0qsqSQCjwfSCzXWlPyjEt/GMuVRrUs4M66m6Cu0X5AQXy4f
-         grx1TUGxOlGHdm36mCX0F436ljRJmlrugQFJE/7SgB9QyklFPlaZwbUq3IlCTAOCpwd/
-         F26ekdEMZKT7QmX+J3Gkt/LyfFZI6fOtWtkqbWHCQT2Kj2v9bB/AlCunfzrwmdXqAIg4
-         Mej0KEH0pinOfwJGOzYHS5tFfxdnFPQchC2uhzzBaANzkXA5ZF/2zY6zPgpj5XzyFdX0
-         cc7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mTORVN+vb4ThEpVx7AxMit72NMXnsKSRAUOh1o/a8os=;
-        b=SJvyG0PV2hAuiHXay0cBbRQ0D5d0maErNGPvo3dlZMtg+VNTZumDk2+LMMmwTVBb25
-         eGj4mmPKTLhgZ0tOgpW/UMOZTQPIVoMC3Wt/9JLFBkiYsIof43sQlBl9nwMMfbX2xiEJ
-         /G2z1jL8BGRDSHmbhot/Q61RHSB7e7QVc9d/UjqtDIgfURPLqf/4QzWEtCiQr8N7DLJQ
-         UKzSRxxEzl8rMLXjndxNMo907FJTkxmjHqoGpkeOe+ydNayPZwLTN0jyZmyq63Uvkdc4
-         3RIiIpmrgH7P/PA702Buxtt4fNAUg1aygKjzONl/5WKqJi45gg/C0WyF7VXWxsWFs3xR
-         Ru5w==
-X-Gm-Message-State: ANoB5pmaOI0Q7rPDRmiKpkW2llom9CaBbGUaDwJu+XS0ofZQYx2Jsrmf
-        +XmVgfVuv1f0RWFWmX4kSBkNQcjQb/l+ThXzzfmQ08k+zzW5OKq8yk3P5hxynmnXtTjsjS4M0SD
-        UQCPd9nsCEBjz8DOaBcNfTG0RjXq//WPccNxvxO4s3uKc4BBMlER0m9qzKGmTR3HDGmkiF/Ek+A
-        XQhDPGBPyV2/JVhsfHOUY4DUcsYEb0TqOHogfZkITE25Q=
-X-Google-Smtp-Source: AA0mqf5LPJHOIlXR/n5HkFhpXmP9htXFS+/vEYllOxnCYgoAQzNsF/+mL8haFdY/qJv+WVKacahqx8L+Nyvl6l+bD2g=
-X-Received: by 2002:a25:7757:0:b0:6dd:ff71:f26c with SMTP id
- s84-20020a257757000000b006ddff71f26cmr20724110ybc.120.1668592081122; Wed, 16
- Nov 2022 01:48:01 -0800 (PST)
+        Wed, 16 Nov 2022 04:48:57 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D85B5F86
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:48:56 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 38811336E7;
+        Wed, 16 Nov 2022 09:48:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1668592135; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lwhjYbNBUd3PtUYV/XWub7bHHJtVJkMKjMJnNEBApUI=;
+        b=ezOrrIsACMJF3SEsu4t+uXp7G1RqSyq2yGm6afMXQCUfqtFimEI7nqhXkI2xe3TgjmOKon
+        QcQVaCAMN9P21/gntGR6j++HRI/YCCtIdD18K0t0VQJrMxUfQbwPvEGCeHJu2UUug80vsE
+        BJ6Ab/HTgbt7hx7wrateAGJ68zY2e8c=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id E87432C14F;
+        Wed, 16 Nov 2022 09:48:54 +0000 (UTC)
+Date:   Wed, 16 Nov 2022 10:48:54 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: replay log: Re: [PATCH printk v4 38/39] printk: relieve
+ console_lock of list synchronization duties
+Message-ID: <Y3SyBk1VPVVT3h0J@alley>
+References: <20221114162932.141883-1-john.ogness@linutronix.de>
+ <20221114162932.141883-39-john.ogness@linutronix.de>
+ <Y3Oxck0/LAHFLYip@alley>
+ <87tu30maqf.fsf@jogness.linutronix.de>
+ <Y3PZEbx+40ZyN/79@alley>
+ <87y1sbjn77.fsf@jogness.linutronix.de>
+ <87v8nfjn0d.fsf@jogness.linutronix.de>
+ <87sfijjmgc.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-References: <20221103053228.961591-1-r09922117@csie.ntu.edu.tw> <86fseppiqt.wl-maz@kernel.org>
-In-Reply-To: <86fseppiqt.wl-maz@kernel.org>
-From:   =?UTF-8?B?56ug55GL6bqf?= <r09922117@csie.ntu.edu.tw>
-Date:   Wed, 16 Nov 2022 17:48:00 +0800
-Message-ID: <CAM+=qvOKDeXcaxBUh9aAGbcQaLiiur=jui_EgwNzksopik_LzA@mail.gmail.com>
-Subject: Re: [PATCH] KVM: arm64: Update comment of create_hyp_mappings
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     james.morse@arm.com, alexandru.elisei@arm.com,
-        suzuki.poulose@arm.com, oliver.upton@linux.dev,
-        catalin.marinas@arm.com, will@kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Gm-Spam: 0
-X-Gm-Phishy: 0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SPF_TEMPERROR
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87sfijjmgc.fsf@jogness.linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 12, 2022 at 12:18 AM Marc Zyngier <maz@kernel.org> wrote:
-> My problem with this comment is that neither va_mask, tag_val, nor
-> tag_lsb mean anything in this context. All this is purely internal to
-> kvm_compute_layout(), and is unnecessary here.
->
-> I'd rather you have something along the lines of:
->
-> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-> index 60ee3d9f01f8..6d04818a1a5b 100644
-> --- a/arch/arm64/kvm/mmu.c
-> +++ b/arch/arm64/kvm/mmu.c
-> @@ -460,7 +460,7 @@ void kvm_unshare_hyp(void *from, void *to)
->   * @prot:      The protection to be applied to this range
->   *
->   * The same virtual address as the kernel virtual address is also used
-> - * in Hyp-mode mapping (modulo HYP_PAGE_OFFSET) to the same underlying
-> + * in Hyp-mode mapping (modulo a random offset) to the same underlying
->   * physical pages.
->   */
->  int create_hyp_mappings(void *from, void *to, enum kvm_pgtable_prot prot)
->
-> Whoever is interested in understanding the generation of the offset
-> can follow kern_hyp_va().
+On Wed 2022-11-16 10:14:35, John Ogness wrote:
+> Hi Petr,
+> 
+> Sorry, console_flush_all() only loses the console_lock if there was a
+> handover. Here is a new complete suggestion from me.
+> 
+> 	if (newcon->flags & (CON_PRINTBUFFER | CON_BOOT)) {
+> 		/* Get a consistent copy of @syslog_seq. */
+> 		mutex_lock(&syslog_lock);
+> 		newcon->seq = syslog_seq;
+> 		mutex_unlock(&syslog_lock);
+> 	} else {
+> 		/* Begin with next message added to ringbuffer. */
+> 		newcon->seq = prb_next_seq(prb);
+> 
+> 		/*
+> 		 * If any enabled boot consoles are due to be unregistered
+> 		 * shortly, some may not be caught up and may be the same
+> 		 * device as @newcon. Since it is not known which boot console
+> 		 * is the same device, flush all consoles and, if necessary,
+> 		 * start with the message of the enabled boot console that is
+> 		 * the furthest behind.
+> 		 */
+> 		if (bootcon_registered && !keep_bootcon) {
+> 			bool handover;
+> 
+> 			/*
+> 			 * Hold the console_lock to guarantee safe access to
+> 			 * console->seq.
+> 			 */
+> 			console_lock();
+> 
+> 			/*
+> 			 * Flush all consoles and set the console to start at
+> 			 * the next unprinted sequence number.
+> 			 */
+> 			if (!console_flush_all(true, &newcon->seq, &handover)) {
+> 				/*
+> 				 * Flushing failed. Just choose the lowest
+> 				 * sequence of the enabled boot consoles.
+> 				 */
+> 
+> 				/*
+> 				 * If there was a handover, this context no
+> 				 * longer holds the console_lock.
+> 				 */
+> 				if (handover)
+> 					console_lock();
+> 
+> 				newcon->seq = prb_next_seq(prb);
+> 				for_each_console(con) {
+> 					if ((con->flags & CON_BOOT) &&
+> 					    (con->flags & CON_ENABLED) &&
+> 					    con->seq < newcon->seq) {
+> 						newcon->seq = con->seq;
+> 					}
+> 				}
+> 			}
+> 
+> 			console_unlock();
+> 		}
 
-Yes I agree, thanks for the advice.
-I'll update the patch.
+It looks good to me.
 
-Wei-Lin Chang
+Now, we just need to agree how to add this into the patchset.
+My proposal is to:
+
+1. patch: hide the original code into a function, .e.g. console_init_seq()
+2. patch: move console_init_seq() and add the above trickery
+
+Do both before the 3rd patch in this patchset. It moved the code
+outside console_lock() guarded section.
+
+Best Regards,
+Petr
