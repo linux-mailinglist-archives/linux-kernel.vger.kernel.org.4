@@ -2,107 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF8FF62C0FE
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:34:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8202862C102
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:35:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbiKPOeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 09:34:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57312 "EHLO
+        id S231927AbiKPOfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 09:35:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232915AbiKPOeN (ORCPT
+        with ESMTP id S229931AbiKPOft (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 09:34:13 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F087CFE2
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 06:34:11 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id v3-20020a17090ac90300b00218441ac0f6so3855766pjt.0
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 06:34:11 -0800 (PST)
+        Wed, 16 Nov 2022 09:35:49 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17E6315A25
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 06:35:47 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id bs21so30234415wrb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 06:35:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Lhl1Yht7Jl4WGhfsN3KHnbxlZqqtqyTEjZ2u2REimHo=;
-        b=NQ/yAKYrWw5ryFKeCE0e7gFddbKS+fcQjrzAGvCCHJx7/OUhpC2Oc+B26Q8hkuNXKG
-         TZ46biv4Aj26yUpHbTmcsGXx3+wlGZLaf5iUs1YtpVHuzPFzWzdUCO1V7I+pJX1lTnVX
-         +RYT4mzGNjy6zz6klYzy0xiOAV3Be7OxM9wb+X774MAeaOBZTpJP79go/Y2mkHTukv9p
-         j0PrUqoNW5MDcAf76OszkkK3zzmY9rrotRmsAAqN1c+KcjtLeBIvas4E6Ev2hqpxnpv4
-         h5QUq+qaIc/qnKvh5ZtapY578Si6ijI024NofjRl7c5TKza/infaOmeZ1Psb1f11MBBi
-         Q1Ug==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z8czfhSUs3mWHeIfFdLH5/G0a3Uk3RSmYGgvVFUZjxw=;
+        b=WGzXTljvZSs2p0IjXnKub2fXvs+by26DaMNPHNseJK45SXzjN2mpHV2nhd5fKcEzUd
+         FxuC7mCyzPTDLpcs9+NvZw/9f3yKf5aMMPfu8xZ0EooP3sadwjoKmJQIu4kflQL6CSHm
+         3mmk+vdddaNM8D7JGuOalFOsbuiiNyj8JYnY6upvijkpjzOqH6D3L5M+I87kCYmwj6Qr
+         PDHcRDHRBVD9EhBevRNBQXWcMgSIyBCz23/yjiEgPggheZs0hqVzZAVRSOxz++e8HEEe
+         su8WM+SnpCoQWwhJnDVoUmTLsNLqMz2pBd+0Ixw/wVgwV1Dj+Mcpr39k4ZwAjv2ULZR0
+         fVuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Lhl1Yht7Jl4WGhfsN3KHnbxlZqqtqyTEjZ2u2REimHo=;
-        b=2EfhovkFutgOEIQT7aZsLlaL/RWafyiyvnB4WskaI3UMIBKMLEnITjLnu1gPcg9OJd
-         D1W41CJHJbydJh391WU49xZUAyJytE57ynW4AJu8XLC71V3EndJ0NKrpgH73uwXhNnE6
-         WR6fF07M1PZgY8HumviBkKYi1poSSNrxwSzCm4bgonClArxn8RW5msGGAU8UnwptAtXz
-         G1AJmE8VIwGsy319rOcJbh3F5DpuCaeWjjLIri1an28jW/Z7nVKQmrItnI8r2j8npaRg
-         NF/tSqhuuUxWEaAiYk91OQCr+nnno0u7ZS7NeuwuIXXJ+GzC/S3hWOZzE8XpGO6lWmZq
-         D9Og==
-X-Gm-Message-State: ANoB5plqSJWOz2q+fMc1crU5RbA72Q6XMOUTEO8GlgWCmrSDV02SIXOf
-        n6LgA5xq+KeqOLPRZgwpaf/5
-X-Google-Smtp-Source: AA0mqf7jrrj5npS2T7rtO8L5zePtZFKr1f2c6phSPRL0F+WKl76jwksE+P+kaHC4lT6Q1Edndg0T2Q==
-X-Received: by 2002:a17:902:76c4:b0:187:1c65:e208 with SMTP id j4-20020a17090276c400b001871c65e208mr9111929plt.173.1668609251468;
-        Wed, 16 Nov 2022 06:34:11 -0800 (PST)
-Received: from localhost.localdomain ([59.92.100.153])
-        by smtp.gmail.com with ESMTPSA id e8-20020a63e008000000b0043c732e1536sm9560974pgh.45.2022.11.16.06.34.07
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Z8czfhSUs3mWHeIfFdLH5/G0a3Uk3RSmYGgvVFUZjxw=;
+        b=erlXfSRMxM0DPlkaDFTEN2ns+OP+65A/zzXt0Oxy5MYACLnTpKxDEJ1epAw7IzdUK8
+         6gtaN+FOffC/T7edfqWFXiJSJOzut+GaoXteM7YYQukRL3OWl1a0fufK3PbHsEa9VP42
+         PoUyGtHjO1DYXKXSzd2g1EpBLghvVZENAgOLXz6nzHmjXtvfedxHWZs1nYYaZeG5ds7C
+         mRkpa8VevzVn7bPot3MJtnfGutywxzvJ/qLdiv5USP+y/DgYJLc6ESJUiirh5V1Kls0+
+         BcuiQ6H3JkvZzaa9vjxe7ATrl8RngSzWrQjJmHV/9ujNjYGYbTm1MG3oDlws+FPWZZoQ
+         mX+Q==
+X-Gm-Message-State: ANoB5pl13M2Ma0v+qk91PBZyUPP6sNcGIRJv73lZEvm7siZ4/xsZaY6M
+        gNapYoup3Cak6WdVxsZuv+s=
+X-Google-Smtp-Source: AA0mqf5598TxLDqy4tIWUpYjpY0aL3kt7HPLQgal2MvvcizUGXiBe1ztwx8Cofhygfbkrm1iEOsnCQ==
+X-Received: by 2002:a5d:658b:0:b0:22e:3397:2e96 with SMTP id q11-20020a5d658b000000b0022e33972e96mr13714180wru.535.1668609345451;
+        Wed, 16 Nov 2022 06:35:45 -0800 (PST)
+Received: from localhost.localdomain ([2a01:e0a:5da:d460:bf85:51f8:ca78:20c2])
+        by smtp.googlemail.com with ESMTPSA id x11-20020a5d54cb000000b002415dd45320sm15152354wrv.112.2022.11.16.06.35.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 06:34:10 -0800 (PST)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     bjorn.andersson@linaro.org, bp@alien8.de, mchehab@kernel.org
-Cc:     james.morse@arm.com, rric@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_saipraka@quicinc.com,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v4 2/2] EDAC/qcom: Remove extra error no assignment in qcom_llcc_core_setup()
-Date:   Wed, 16 Nov 2022 20:03:52 +0530
-Message-Id: <20221116143352.289303-3-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221116143352.289303-1-manivannan.sadhasivam@linaro.org>
-References: <20221116143352.289303-1-manivannan.sadhasivam@linaro.org>
+        Wed, 16 Nov 2022 06:35:44 -0800 (PST)
+From:   Guillaume BRUN <the.cheaterman@gmail.com>
+To:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-amlogic@lists.infradead.org
+Cc:     Guillaume BRUN <the.cheaterman@gmail.com>,
+        Christian Hewitt <christianshewitt@gmail.com>
+Subject: [PATCH] drm: bridge: dw_hdmi: fix preference of RGB modes over YUV420
+Date:   Wed, 16 Nov 2022 15:35:23 +0100
+Message-Id: <20221116143523.2126-1-the.cheaterman@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the ret variable is initialized with -EINVAL, then there is no need to
-assign it again in the default case of qcom_llcc_core_setup().
+Cheap monitors sometimes advertise YUV modes they don't really have
+(HDMI specification mandates YUV support so even monitors without actual
+support will often wrongfully advertise it) which results in YUV matches
+and user forum complaints of a red tint to light colour display areas in
+common desktop environments.
 
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Moving the default RGB fall-back before YUV selection results in RGB
+mode matching in most cases, reducing complaints.
+
+Fixes: 6c3c719936da ("drm/bridge: synopsys: dw-hdmi: add bus format negociation")
+Signed-off-by: Guillaume BRUN <the.cheaterman@gmail.com>
+Tested-by: Christian Hewitt <christianshewitt@gmail.com>
 ---
- drivers/edac/qcom_edac.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/edac/qcom_edac.c b/drivers/edac/qcom_edac.c
-index 04df70b7fea3..0b6ca1f20b51 100644
---- a/drivers/edac/qcom_edac.c
-+++ b/drivers/edac/qcom_edac.c
-@@ -126,7 +126,7 @@ static int qcom_llcc_core_setup(struct llcc_drv_data *drv, struct regmap *llcc_b
- static int
- qcom_llcc_clear_error_status(int err_type, struct llcc_drv_data *drv)
- {
--	int ret = 0;
-+	int ret = -EINVAL;
+diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+index 40d8ca37f5bc..aa51c61a78c7 100644
+--- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
++++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+@@ -2720,6 +2720,9 @@ static u32 *dw_hdmi_bridge_atomic_get_output_bus_fmts(struct drm_bridge *bridge,
+ 	 * if supported. In any case the default RGB888 format is added
+ 	 */
  
- 	switch (err_type) {
- 	case LLCC_DRAM_CE:
-@@ -158,7 +158,6 @@ qcom_llcc_clear_error_status(int err_type, struct llcc_drv_data *drv)
- 			return ret;
- 		break;
- 	default:
--		ret = -EINVAL;
- 		edac_printk(KERN_CRIT, EDAC_LLCC, "Unexpected error type: %d\n",
- 			    err_type);
- 	}
++	/* Default 8bit RGB fallback */
++	output_fmts[i++] = MEDIA_BUS_FMT_RGB888_1X24;
++
+ 	if (max_bpc >= 16 && info->bpc == 16) {
+ 		if (info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
+ 			output_fmts[i++] = MEDIA_BUS_FMT_YUV16_1X48;
+@@ -2753,9 +2756,6 @@ static u32 *dw_hdmi_bridge_atomic_get_output_bus_fmts(struct drm_bridge *bridge,
+ 	if (info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
+ 		output_fmts[i++] = MEDIA_BUS_FMT_YUV8_1X24;
+ 
+-	/* Default 8bit RGB fallback */
+-	output_fmts[i++] = MEDIA_BUS_FMT_RGB888_1X24;
+-
+ 	*num_output_fmts = i;
+ 
+ 	return output_fmts;
 -- 
-2.25.1
+2.37.3
 
