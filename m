@@ -2,70 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48DFE62BE94
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:48:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA49162BE8E
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:48:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233227AbiKPMsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 07:48:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38534 "EHLO
+        id S232580AbiKPMsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 07:48:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238704AbiKPMsP (ORCPT
+        with ESMTP id S239025AbiKPMrs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 07:48:15 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD9231F2D7
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 04:48:13 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id io19so16309701plb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 04:48:13 -0800 (PST)
+        Wed, 16 Nov 2022 07:47:48 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C0120BEA
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 04:47:47 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id u11so21619446ljk.6
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 04:47:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=eSzffJBrVCy3/z2tnTtbEHU2Kk87PZcwLcd/j4teoJk=;
-        b=eD1ioZZQaziEoFDL5ESBkSydCqoh9G9oa361VCF7qvpE3ci4+pwUEINbDg4TkxCDYd
-         sETTbrv/j5w0PP+oIFheiGFkgYgN8HLKuuQcaRgYMlAwGpfFz8CzFCl1Ah/ppAxOn6J4
-         DbxhwfjfZ5IqY8L2FT7qmh4ghbdgKRg3cI83G7kisvAGpCKts/cCUfQpCuxit5OiEiOl
-         JQYxnveRBEIYNR1+YfZIpFeC0aJSNAUzUzfXoIU83Vsa3HoO9pbXCmLXZj8eGVYZGUUL
-         GGItvK9kJ5EBX8BRLKsXtWwJ+yfthWXktUaKvSwagXaMYQC08RqUUE2eB+B2jEaGMIbZ
-         CCFQ==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ApBIfEwo885xQmDpuBZQZ4uu/5xCkclin3S53sCvBW0=;
+        b=lYKfDA6BG2sTTpH7gEBNo4cGkODqXpIzDwGoglpxZDVc5BpDyaNBj20ihPyKjg5E8K
+         JxVUw6D8O1Gc3dj0TYqv03DiDRf2bN88xe2SCGVMZf86/2F/jM5ixaiaexYwju2gobUt
+         sgdUqhxoNUzIRfp0ga2mzDRuAkjfv0FocGZQsdlc/MrDXZqUxZ7BGNArZJUPUJKqf21M
+         0OZMUOjSrpcfXoE46qsWzW85ORqL8Rjr7oajM135h9W8vbDU1KaexCyEBj+PwQU11HnX
+         3hUUZO6Wa/Bflef4xmf2tDWYq53v5KpVkziA2lhlMFIOXOMuaU6Es5DtQ8ylDArgzwFM
+         +dHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eSzffJBrVCy3/z2tnTtbEHU2Kk87PZcwLcd/j4teoJk=;
-        b=TrqLnlvv6codQSgMG03tK6y56cK1rmHtesF1IfvEJadl7vg+cPzuavS5PwTHcTtQq+
-         zRl9kH8lCAxvk9fDXlZrNVPiPn+DexmPT6Q344TJU1iQ788qHLtuczQnh52nPSu9WqNS
-         OvTMPh0sdpzxEQfi1CvzZJEiaie+XyI+1NzWyXoJgm2rbb3avwS4tB9OQxt6jL9fz30z
-         WYoWbk7w4PJ7pWZd09Ds4Ri8z47mGMdU9IdmcbNhmN5ZBuHIsIgoTVoVT6/g6sggK72r
-         D9lrO6L8ubmqP8F+unIqY92ga+LEybc228+Gc5h71GEJuMjHum7xDZGHfHtVG/FMtDn6
-         pXPg==
-X-Gm-Message-State: ANoB5pl5E5vhJ+H5yQLE70oj02osWanvINPDFhn81nwwTiGNrTuSm5Mx
-        JZbqMebSypp+715994LzDFQGA4HtPolFoOXAp9L3Ow==
-X-Google-Smtp-Source: AA0mqf5KENeqGQxFf+C610MaiXm0MBtK1RuUC3P9xWHLORKcjGEacy32+GzcOKr3LRHkSICCcxE1LctpchyL1JoFxLk=
-X-Received: by 2002:a17:90a:138a:b0:213:dce7:e12b with SMTP id
- i10-20020a17090a138a00b00213dce7e12bmr3638670pja.164.1668602893191; Wed, 16
- Nov 2022 04:48:13 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ApBIfEwo885xQmDpuBZQZ4uu/5xCkclin3S53sCvBW0=;
+        b=N+ljNPbb7VkLAQD5fzOxygOxoBJdEsPnokV8RBIhPwk/9dLk97hHi5yJhiJ8HMiFe6
+         txlAZPaSm1xoHSsx56tVy522rZOjflnTwq6c9vjkY+hvovYZJJ+E+cnYyhtGZhmWt5il
+         Z8DzW+mg0lgicqTijRLqWSXrWoa6mMQdHydfsa0CXrULaUg82ErVWaMtvufg6RjUcTTO
+         9B8ufz6e5vF7PTlFLePeERrLXgHrPDc8UhwoX+YwvjPTTLDYQMsqzIKnp6IERyci27ub
+         MfvgLEq2siQCNL0zsoSYgYvkIJNedIIoMaad91/2torW+0ieXef+DNrTj/CZwIdhJImm
+         aXPA==
+X-Gm-Message-State: ANoB5pm+i9GyLanQlb+PMNHiN99R9j/EVs9fp8oVbhxecC+KHg8pYfKh
+        HwD34mpikH9r19CiwBjkrUsH9w==
+X-Google-Smtp-Source: AA0mqf44eCR7hbsG78OJeZYWtRWIaFn9x1lu0KtuyV6erCUj4leLCb3kXt25JP97j/F6tV7KQq3ozA==
+X-Received: by 2002:a05:651c:198c:b0:26f:be44:5349 with SMTP id bx12-20020a05651c198c00b0026fbe445349mr7433580ljb.348.1668602865849;
+        Wed, 16 Nov 2022 04:47:45 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id o14-20020ac24e8e000000b004a93b8508edsm2584064lfr.181.2022.11.16.04.47.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Nov 2022 04:47:45 -0800 (PST)
+Message-ID: <b98026c7-4e54-025d-cf90-61054e887dd3@linaro.org>
+Date:   Wed, 16 Nov 2022 13:47:44 +0100
 MIME-Version: 1.0
-References: <20221115212543.1745498-1-abel.vesa@linaro.org>
-In-Reply-To: <20221115212543.1745498-1-abel.vesa@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 16 Nov 2022 13:47:36 +0100
-Message-ID: <CAPDyKFoTWrei3QdL27bAtUFOidZ7FsQ41CdY31vxh6NwNEEWWw@mail.gmail.com>
-Subject: Re: [PATCH v2] PM: domains: Reverse the order of performance and
- enabling ops
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3 3/4] dt-bindings: arm: rockchip: Add SOQuartz Model A
+Content-Language: en-US
+To:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221116115337.541601-1-frattaroli.nicolas@gmail.com>
+ <20221116115337.541601-4-frattaroli.nicolas@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221116115337.541601-4-frattaroli.nicolas@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,143 +78,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Nov 2022 at 22:25, Abel Vesa <abel.vesa@linaro.org> wrote:
->
-> The ->set_performance_state() needs to be called before ->power_on()
-> when a genpd is powered on, and after ->power_off() when a genpd is
-> powered off. Do this in order to let the provider know to which
-> performance state to power on the genpd, on the power on sequence, and
-> also to maintain the performance for that genpd until after powering off,
-> on power off sequence.
->
-> There is no scenario where a consumer would need its genpd enabled and
-> then its performance state increased. Instead, in every scenario, the
-> consumer needs the genpd to be enabled from the start at a specific
-> performance state.
->
-> And same logic applies to the powering down. No consumer would need its
-> genpd performance state dropped right before powering down.
->
-> Now, there are currently two vendors which use ->set_performance_state()
-> in their genpd providers. One of them is Tegra, but the only genpd provider
-> (PMC) that makes use of ->set_performance_state() doesn't implement the
-> ->power_on() or ->power_off(), and so it will not be affected by the ops
-> reversal.
->
-> The other vendor that uses it is Qualcomm, in multiple genpd providers
-> actually (RPM, RPMh and CPR). But all Qualcomm genpd providers that make
-> use of ->set_performance_state() need the order between enabling ops and
-> the performance setting op to be reversed. And the reason for that is that
-> it currently translates into two different voltages in order to power on
-> a genpd to a specific performance state. Basically, ->power_on() switches
-> to the minimum (enabling) voltage for that genpd, and then
-> ->set_performance_state() sets it to the voltage level required by the
-> consumer.
->
-> By reversing the call order, we rely on the provider to know what to do
-> on each call, but most popular usecase is to cache the performance state
-> and postpone the voltage setting until the ->power_on() gets called.
->
-> As for the reason of still needing the ->power_on() and ->power_off() for a
-> provider which could get away with just having ->set_performance_state()
-> implemented, there are consumers that do not (nor should) provide an
-> opp-table. For those consumers, ->set_performance_state() will not be
-> called, and so they will enable the genpd to its minimum performance state
-> by a ->power_on() call. Same logic goes for the disabling.
->
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-
-Kind regards
-Uffe
-
+On 16/11/2022 12:53, Nicolas Frattaroli wrote:
+> The SOQuartz Model A base board is a carrier board for the CM4
+> form factor, designed around the PINE64 SOQuartz CM4 SoM.
+> 
+> The board sports "Model A" dimensions like the Quartz64 Model A,
+> but is not to be confused with that.
+> 
+> As for I/O, it features USB 2 ports, Gigabit Ethernet, a PCIe 2
+> x1 slot, HDMI, a 40-pin GPIO header, CSI/DSI connectors, an eDP
+> flat-flex cable connector, a 12V DC barrel jack for power input
+> and power/reset buttons as well as a microSD card slot.
+> 
+> Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
 > ---
->
-> Changes since v1:
->  - Added performance state drop on power on failure, like Ulf suggested
->
->  drivers/base/power/domain.c | 36 +++++++++++++++++++++---------------
->  1 file changed, 21 insertions(+), 15 deletions(-)
->
-> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> index e5f4e5a2eb9e..967bcf9d415e 100644
-> --- a/drivers/base/power/domain.c
-> +++ b/drivers/base/power/domain.c
-> @@ -964,8 +964,8 @@ static int genpd_runtime_suspend(struct device *dev)
->                 return 0;
->
->         genpd_lock(genpd);
-> -       gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
->         genpd_power_off(genpd, true, 0);
-> +       gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
->         genpd_unlock(genpd);
->
->         return 0;
-> @@ -1003,9 +1003,8 @@ static int genpd_runtime_resume(struct device *dev)
->                 goto out;
->
->         genpd_lock(genpd);
-> +       genpd_restore_performance_state(dev, gpd_data->rpm_pstate);
->         ret = genpd_power_on(genpd, 0);
-> -       if (!ret)
-> -               genpd_restore_performance_state(dev, gpd_data->rpm_pstate);
->         genpd_unlock(genpd);
->
->         if (ret)
-> @@ -1043,8 +1042,8 @@ static int genpd_runtime_resume(struct device *dev)
->  err_poweroff:
->         if (!pm_runtime_is_irq_safe(dev) || genpd_is_irq_safe(genpd)) {
->                 genpd_lock(genpd);
-> -               gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
->                 genpd_power_off(genpd, true, 0);
-> +               gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
->                 genpd_unlock(genpd);
->         }
->
-> @@ -2733,17 +2732,6 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
->         dev->pm_domain->detach = genpd_dev_pm_detach;
->         dev->pm_domain->sync = genpd_dev_pm_sync;
->
-> -       if (power_on) {
-> -               genpd_lock(pd);
-> -               ret = genpd_power_on(pd, 0);
-> -               genpd_unlock(pd);
-> -       }
-> -
-> -       if (ret) {
-> -               genpd_remove_device(pd, dev);
-> -               return -EPROBE_DEFER;
-> -       }
-> -
->         /* Set the default performance state */
->         pstate = of_get_required_opp_performance_state(dev->of_node, index);
->         if (pstate < 0 && pstate != -ENODEV && pstate != -EOPNOTSUPP) {
-> @@ -2755,6 +2743,24 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
->                         goto err;
->                 dev_gpd_data(dev)->default_pstate = pstate;
->         }
-> +
-> +       if (power_on) {
-> +               genpd_lock(pd);
-> +               ret = genpd_power_on(pd, 0);
-> +               genpd_unlock(pd);
-> +       }
-> +
-> +       if (ret) {
-> +               /* Drop the default performance state */
-> +               if (dev_gpd_data(dev)->default_pstate) {
-> +                       dev_pm_genpd_set_performance_state(dev, 0);
-> +                       dev_gpd_data(dev)->default_pstate = 0;
-> +               }
-> +
-> +               genpd_remove_device(pd, dev);
-> +               return -EPROBE_DEFER;
-> +       }
-> +
->         return 1;
->
->  err:
-> --
-> 2.34.1
->
+
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
