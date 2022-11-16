@@ -2,50 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4887A62CDC1
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 23:35:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1479862CDC4
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 23:36:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233785AbiKPWfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 17:35:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53680 "EHLO
+        id S233716AbiKPWgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 17:36:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234491AbiKPWfN (ORCPT
+        with ESMTP id S231688AbiKPWgV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 17:35:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F076AEF4
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 14:35:12 -0800 (PST)
+        Wed, 16 Nov 2022 17:36:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 503726AEF4;
+        Wed, 16 Nov 2022 14:36:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 74C8362005
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 22:35:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96E4CC433D6;
-        Wed, 16 Nov 2022 22:35:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1668638111;
-        bh=6zDhB7wL4SPKZtbC2WEXqEMk7eAszkbEyIdhAeOwjx4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=gVxUM8M1xMfeMxKCX5rRWGYxdmYkvsccJxVPSaPAtqESKby12wTciX8a8V6zURGa5
-         deLs3XUy9jU4aC4tVQbiTOmXCeNMEK+1chD6wNPsn/gMD2YYD/B9Izu9zKHpDl9NY6
-         RtN93zZPfKOrfL5YzWw9F3irqBMxqh0BGhFUtvv0=
-Date:   Wed, 16 Nov 2022 14:35:10 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Gautam Menghani <gautammenghani201@gmail.com>
-Cc:     rostedt@goodmis.org, mhiramat@kernel.org, shy828301@gmail.com,
-        zokeefe@google.com, david@redhat.com, linux-mm@kvack.org,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DD0A161FF9;
+        Wed, 16 Nov 2022 22:36:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C82DC433C1;
+        Wed, 16 Nov 2022 22:36:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668638180;
+        bh=PBtBrhR6SnvnYI1/YyRvPYjE5wE5qScBBW+6ZtsQn3A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gcmbe9TPSgnloH0Xj5T7JSM1en4RAl/sPLhlLslHSATsbmeAYqb7kUZ5COZ3yBcyq
+         wnqbnvb9+DowAyBAzrLISSZPg2tPtduQFLddITss5ufGKMYuAShI1AQet08WoNyAD5
+         h/1MbJJHigEQoP19MBKvCQ2u0r1TINkJTvpIwq8fdV+wBKj2VGOXQH/mcN2Ajftm9a
+         sMP7pA2fLjSo7sA8yfZmjbM/lwC868Sh+L7juM1LPT4B9NcF+YE3m2C7p9vzuA4ir4
+         7nV3KLoZa9hk+0Sfz/1PpShtIMSuLNRuw8F8j7J5uWIw6onHqoD8sU0+D7DS0nAMnH
+         YqISmJDCbmW4w==
+Date:   Wed, 16 Nov 2022 14:36:19 -0800
+From:   Saeed Mahameed <saeed@kernel.org>
+To:     Zhang Changzhong <zhangchangzhong@huawei.com>
+Cc:     Francois Romieu <romieu@fr.zoreil.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/khugepaged: Refactor mm_khugepaged_scan_file
- tracepoint to remove filename from function call
-Message-Id: <20221116143510.3eeef9ea8dd4798ffb763812@linux-foundation.org>
-In-Reply-To: <20221026044524.54793-1-gautammenghani201@gmail.com>
-References: <20221026044524.54793-1-gautammenghani201@gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+Subject: Re: [PATCH net] net: nixge: fix potential memory leak in
+ nixge_start_xmit()
+Message-ID: <Y3Vl40BzsL9nFqQv@x130.lan>
+References: <1668416136-33530-1-git-send-email-zhangchangzhong@huawei.com>
+ <Y3IbBCioK1Clt/3a@electric-eye.fr.zoreil.com>
+ <21641ba0-3ce1-c409-b513-1bbbaeccaa51@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <21641ba0-3ce1-c409-b513-1bbbaeccaa51@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,20 +61,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 26 Oct 2022 10:15:24 +0530 Gautam Menghani <gautammenghani201@gmail.com> wrote:
+On 15 Nov 21:20, Zhang Changzhong wrote:
+>On 2022/11/14 18:40, Francois Romieu wrote:
+>> Zhang Changzhong <zhangchangzhong@huawei.com> :
+>>> The nixge_start_xmit() returns NETDEV_TX_OK but does not free skb on two
+>>> error handling cases, which can lead to memory leak.
+>>>
+>>> To fix this, return NETDEV_TX_BUSY in case of nixge_check_tx_bd_space()
+>>> fails and add dev_kfree_skb_any() in case of dma_map_single() fails.
+>>
+>> This patch merge two unrelated changes. Please split.
+>>
+>>> Fixes: 492caffa8a1a ("net: ethernet: nixge: Add support for National Instruments XGE netdev")
+>>> Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
+>>> ---
+>>>  drivers/net/ethernet/ni/nixge.c | 6 ++++--
+>>>  1 file changed, 4 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/net/ethernet/ni/nixge.c b/drivers/net/ethernet/ni/nixge.c
+>>> index 19d043b593cc..b9091f9bbc77 100644
+>>> --- a/drivers/net/ethernet/ni/nixge.c
+>>> +++ b/drivers/net/ethernet/ni/nixge.c
+>>> @@ -521,13 +521,15 @@ static netdev_tx_t nixge_start_xmit(struct sk_buff *skb,
+>>>  	if (nixge_check_tx_bd_space(priv, num_frag)) {
+>>>  		if (!netif_queue_stopped(ndev))
+>>>  			netif_stop_queue(ndev);
+>>> -		return NETDEV_TX_OK;
+>>> +		return NETDEV_TX_BUSY;
+>>>  	}
+>>
+>> The driver should probably check the available room before returning
+>> from hard_start_xmit and turn the check above unlikely().
+>>
+>> Btw there is no lock and the Tx completion is irq driven: the driver
+>> is racy. :o(
+>>
+>
+>Hi Francois,
+>
+>Thanks for you review. I'll make v2 according to your suggestion.
+>
 
-> Refactor the mm_khugepaged_scan_file tracepoint to move filename
-> dereference to the tracepoint definition, for maintaing consistency with
-> other tracepoints[1].
-> 
-> [1]:lore.kernel.org/lkml/20221024111621.3ba17e2c@gandalf.local.home/
-> 
-
-I just discovered by accident that this fixed an issue in a patch which
-we merged during this -rc cycle.  I'll move it from mm-unstable into
-mm-hotfixes-unstable so this fix is also merged during this cycle.
-
-Please do remember to flag such thnigs when perparing the changelogs. 
-Preferably with a Fixes: tag.
-
+you will probably need to check out: Transmit path guidelines:
+https://www.kernel.org/doc/Documentation/networking/driver.rst
 
