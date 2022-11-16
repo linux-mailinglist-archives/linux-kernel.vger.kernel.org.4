@@ -2,73 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50CE762CD51
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 23:04:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 418EA62CD53
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 23:04:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233802AbiKPWEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 17:04:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34018 "EHLO
+        id S233725AbiKPWEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 17:04:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233023AbiKPWES (ORCPT
+        with ESMTP id S233801AbiKPWEZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 17:04:18 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14010657C9
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 14:04:17 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id w23so11284344ply.12
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 14:04:17 -0800 (PST)
+        Wed, 16 Nov 2022 17:04:25 -0500
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF91657D6
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 14:04:24 -0800 (PST)
+Received: by mail-ot1-x331.google.com with SMTP id t19-20020a9d7753000000b0066d77a3d474so7451199otl.10
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 14:04:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VC1O7rMTvmBYyn1/bWjYQvHGFZmpsPJOUhWzFJ+UDKE=;
-        b=cU1BpRMccZjJWvhPtm4flkwG+K3w6bc1YRQscCaPiee03eI4FDk3Fo3AgHmFQyDtT4
-         ec26P+NTHvD1Ip1nMyiSiaj/XicJI5pgds9PrvbUr+tLRLNZwpp0ozW+CYxq3xz7qVCQ
-         lejMBtbs0AWGr3ApmLrjOFhxxTWjWvnfDPZCUyRyODysJNjbu/9zCAQR5bquDHfbnKHh
-         m+Ht5F9u7ozOEuN012dNaZ+CxCMRNQ3a8IAHI7QQ+KXUKLdbfDNb3/08okbxXRe1uDz2
-         IjS2PqgibVExxo7c2jeXgdgkHsI/vMNQ3z95d524hFGRBaTWye8XUkFoyy6GDQimGEdV
-         qbqg==
+        bh=lPb1mhfghgHUQcQg7inNeV6ybYa8W1PQXiBBzwZDsgA=;
+        b=doANZJWm+Z6t7mXUzdZGPsLtjlTZtRxnrE4PCISVrny7TpN2Z3l6X5s68v9bML+6MS
+         nlP/L5Bn1AiULXYH5EHMgb27jCw5f0LThsRc60FkIiNB8TMqeGxnyPns7oQqtDG/pogV
+         sIKWcFX4rVr43NHMBr5h7TahK15dpmWC7HVJzTQRxrQHwZ6DkyAtvl6PahNBKV2tyFXH
+         hSc4rAX6F5PuuiDibm5cXnEUyDz/3TDU52EDQoJkF8MsY8Xzob/TVjznOyfgulLSdmsI
+         rocSrUx6teBimLULEp/X6wTQeKyiQOlOLmxRzcALsUG30cNlQAfDqblHbqerXozoNVJg
+         njPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=VC1O7rMTvmBYyn1/bWjYQvHGFZmpsPJOUhWzFJ+UDKE=;
-        b=2WE1W99LE96rBxD+6UEWRxl6oLNUTOhewysHrA/yTYiPh/kGGhu3qH2MJ2DRAkZlot
-         smtfXTJRNK5nM2TGjnU/BI3/2++h1967Q4A4dYCPtgWQEM+DhUHaOBT3om1oEmd6xT4i
-         lS1EUGs2PfKvqtjvco2+eCjT0km3udzX9SH+IntH/srV2c++qvmqZoTh+MJVRI5lrpJZ
-         WGb54RS7ULAjacX/Bh3TG6a455QXzdcrJWXt2fq2bfL28xLLK4Da0jdi+fWXO40hctHz
-         5XYc4qpffwoJwWrkudFBzqv6Srola95tPdSWpiikzwZKa1RPNGFpv0O1BF4XilOpCC0K
-         T7xg==
-X-Gm-Message-State: ANoB5pl1xXZIZUvRdbM670UtZikiT97JtTzZYWTNdDJYdT1YSJPvzEfV
-        phefky9570+9iKVOnUlE6xkWNKgnlvCfJC+pUkvOuFVviw==
-X-Google-Smtp-Source: AA0mqf5oXxU0ECvnjTunMRmFWA1TxmhY0Ow0+3ziM4fHMNKpMBbH7TE9PAAThMh3ftz2zdNo1g0IW0mEOYT4tG7RXWc=
-X-Received: by 2002:a17:90a:4596:b0:1fd:5b5d:f09d with SMTP id
- v22-20020a17090a459600b001fd5b5df09dmr5820235pjg.69.1668636256527; Wed, 16
- Nov 2022 14:04:16 -0800 (PST)
+        bh=lPb1mhfghgHUQcQg7inNeV6ybYa8W1PQXiBBzwZDsgA=;
+        b=ciYNeewrlYxoVCgTZo9TsdRy5ghZKyw6wt2GerVk0ARVPrupmrG3ekkkd3+ZNHAotM
+         sEaeFMmrjdoQ3jznonWeBAJgMPttSSFvTj51KlH2Dba2WzX3S8v6hG/pyiXw8y6vWQeg
+         +8zvQtpY1cFQXBy7tkz6N3zk1rePe4xPIeDflgiKfWhAV/5PapFi8CZ25pfNwGbEBYA/
+         2Kqs+cvlPyP0n+FhAYSXKuFxo2p6LPieg/ZinRKJZWsZnEguXuCCCbre7RdIByqCAWri
+         ZZmJnnDHxObQ6KcRrWlFJO34emxyjXGXZZ9DU3IU2SA2cZYuGe76ML10Qe1uSwpJV02n
+         7qrg==
+X-Gm-Message-State: ANoB5plF2qn2VVVpyrbTPJPhQJbNP8li6IXsW60qGeP3ZRM2w6WMQHOj
+        cg96c8IE6yqIQfHgRzkzu76Fj5BWxUFJzo+QugeD/w==
+X-Google-Smtp-Source: AA0mqf49S23h7yf/ZtzScfRVAOAOqypNg0Fq/yypzoHwhrXeDB8nA7dtF8WOLun1Bnu4JEU0p4o40TR1I7/arwtK76g=
+X-Received: by 2002:a9d:1d7:0:b0:668:73ff:e96 with SMTP id e81-20020a9d01d7000000b0066873ff0e96mr55409ote.256.1668636263634;
+ Wed, 16 Nov 2022 14:04:23 -0800 (PST)
 MIME-Version: 1.0
-References: <20221115175652.3836811-1-roberto.sassu@huaweicloud.com>
- <20221115175652.3836811-4-roberto.sassu@huaweicloud.com> <CAHC9VhTA7SgFnTFGNxOGW38WSkWu7GSizBmNz=TuazUR4R_jUg@mail.gmail.com>
- <83cbff40f16a46e733a877d499b904cdf06949b6.camel@huaweicloud.com>
-In-Reply-To: <83cbff40f16a46e733a877d499b904cdf06949b6.camel@huaweicloud.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 16 Nov 2022 17:04:05 -0500
-Message-ID: <CAHC9VhRX0J8Z61_fH9T5O1ZpRQWSppQekxP8unJqStHuTwQkLQ@mail.gmail.com>
-Subject: Re: [RFC][PATCH 3/4] lsm: Redefine LSM_HOOK() macro to add return
- value flags as argument
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, revest@chromium.org,
-        jackmanb@chromium.org, jmorris@namei.org, serge@hallyn.com,
-        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org
+References: <20221104194705.3245738-1-rmoar@google.com> <20221104194705.3245738-2-rmoar@google.com>
+ <CABVgOS=eq0RnnP=MGMb-mZntA7+yZ=pe3U_dOq1gxoTPTeC8Bw@mail.gmail.com>
+ <CA+GJov7N0gU_a2xNkj_ex9EiuGtDq+7k2zVh4CQ259DL-YMA2Q@mail.gmail.com> <CAGS_qxpQVWs2RYX_+6FZS8a9-M1GocoMjHNrLBADtkGzxh8mHw@mail.gmail.com>
+In-Reply-To: <CAGS_qxpQVWs2RYX_+6FZS8a9-M1GocoMjHNrLBADtkGzxh8mHw@mail.gmail.com>
+From:   Rae Moar <rmoar@google.com>
+Date:   Wed, 16 Nov 2022 17:04:11 -0500
+Message-ID: <CA+GJov7A7OAZh0tPe3-VCw6j-kyQ9Re2rMBvxeZX0JezM=pwVg@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] kunit: tool: parse KTAP compliant test output
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     David Gow <davidgow@google.com>, brendanhiggins@google.com,
+        skhan@linuxfoundation.org, mauro.chehab@linux.intel.com,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,53 +71,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 3:11 AM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
-> On Tue, 2022-11-15 at 21:27 -0500, Paul Moore wrote:
-> > On Tue, Nov 15, 2022 at 12:58 PM Roberto Sassu
-> > <roberto.sassu@huaweicloud.com> wrote:
-> > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > >
-> > > Define four return value flags (LSM_RET_NEG, LSM_RET_ZERO, LSM_RET_ONE,
-> > > LSM_RET_GT_ONE), one for each interval of interest (< 0, = 0, = 1, > 1).
-> > >
-> > > Redefine the LSM_HOOK() macro to add return value flags as argument, and
-> > > set the correct flags for each LSM hook.
-> > >
-> > > Implementors of new LSM hooks should do the same as well.
-> > >
-> > > Cc: stable@vger.kernel.org # 5.7.x
-> > > Fixes: 9d3fdea789c8 ("bpf: lsm: Provide attachment points for BPF LSM programs")
-> > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > > ---
-> > >  include/linux/bpf_lsm.h       |   2 +-
-> > >  include/linux/lsm_hook_defs.h | 779 ++++++++++++++++++++--------------
-> > >  include/linux/lsm_hooks.h     |   9 +-
-> > >  kernel/bpf/bpf_lsm.c          |   5 +-
-> > >  security/bpf/hooks.c          |   2 +-
-> > >  security/security.c           |   4 +-
-> > >  6 files changed, 466 insertions(+), 335 deletions(-)
+On Tue, Nov 15, 2022 at 5:02 PM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> On Tue, Nov 15, 2022 at 12:46 PM Rae Moar <rmoar@google.com> wrote:
+> > > - As Daniel mentioned, can we think of a better placeholder name for
+> > > tests without Subtest lines? One thought is to just leave it as the
+> > > empty string?
 > >
-> > Just a quick note here that even if we wanted to do something like
-> > this, it is absolutely not -stable kernel material.  No way.
+> > I am definitely open to changing this placeholder name.
+> >
+> > The ideas I thought of are: "Test suite", just "Test", or just an
+> > empty string. "Test" or empty string may be less confusing. What do
+> > people prefer?
 >
-> I was unsure about that. We need a proper fix for this issue that needs
-> to be backported to some kernels. I saw this more like a dependency.
-> But I agree with you that it would be unlikely that this patch is
-> applied to stable kernels.
+> I'd prefer the empty string.
 >
-> For stable kernels, what it would be the proper way? We still need to
-> maintain an allow list of functions that allow a positive return value,
-> at least. Should it be in the eBPF code only?
+> So it would show up as something like
+> ===== (1 subtests) =====
+> [PASSED] case1
+> ====== suite1 ======
+>
+> Note: we'll just have to make sure to avoid a leading space (e.g.
+> we're currently doing message += f' (1 subtest)' )
+>
+> Daniel
 
-Ideally the fix for -stable is the same as what is done for Linus'
-kernel (ignoring backport fuzzing), so I would wait and see how that
-ends up first.  However, if the patchset for Linus' tree is
-particularly large and touches a lot of code, you may need to work on
-something a bit more targeted to the specific problem.  I tend to be
-more conservative than most kernel devs when it comes to -stable
-patches, but if you can't backport the main upstream patchset, smaller
-(both in terms of impact and lines changed) is almost always better.
-
--- 
-paul-moore.com
+This was discussed off the mailing list and seems like there was
+agreement that the empty string would be the best. Just wanted to
+update here. Will be changing this in v2.
