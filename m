@@ -2,129 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 670F162B47B
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 09:04:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEC4962B487
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 09:06:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232966AbiKPIEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 03:04:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39222 "EHLO
+        id S233076AbiKPIGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 03:06:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233027AbiKPIDz (ORCPT
+        with ESMTP id S233051AbiKPIGp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 03:03:55 -0500
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC1786448;
-        Wed, 16 Nov 2022 00:03:54 -0800 (PST)
-Received: by mail-qv1-f44.google.com with SMTP id j6so11406980qvn.12;
-        Wed, 16 Nov 2022 00:03:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lPiNEEPz3fwn9yX9FoJryScC2rMVAcwvbsIVAG/NCvQ=;
-        b=gJVKjN0JzIr2MRIUJu8zToHL6B332ddDzALsYB5D0I01nD2I1LuV9Oh7JSQmucg3dc
-         eaZH6IEB7+UMGnShlmY0jjAhn5DBNc0RjQCiaTSD6X7GJwIML0eDNHCkU1rmuwCkXF2f
-         feB5IKQ8CLzN2iOxeQKg6gUzBDmhOnMqHiH9gPDfMRJFuk1wziYpQVS7CoLx956Err18
-         jtKh24o233HocgoEF9u0R+4tU+HDiIgdq8vlS39JW/ZysMZ9jsYoOcpmi8KHu/wq/11b
-         h/fDdnLoAFpLwsC+u1AXICbRWmvM9MgUiffQCglVB2VfVHvfc9xgbdCY1bys/Cy3dlpt
-         0B8w==
-X-Gm-Message-State: ANoB5pndJY00D2eEDBz/s4Qt8OUlYHWZpsFY9gdb/jHSL2VqXWi2EQLb
-        u8b3zoGMSg24pAa8XPcdVDiNdtXhDAky2g==
-X-Google-Smtp-Source: AA0mqf5uouyK/PLj6C7AaZa1ct6llF4GQ5ATD4Bto13Jum5dL4sot51q/Ct2noOzhYv7gmaf/6jZfg==
-X-Received: by 2002:ad4:4f11:0:b0:4bb:7436:49de with SMTP id fb17-20020ad44f11000000b004bb743649demr19542930qvb.27.1668585833808;
-        Wed, 16 Nov 2022 00:03:53 -0800 (PST)
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
-        by smtp.gmail.com with ESMTPSA id v14-20020a05620a440e00b006fba0a389a4sm2224852qkp.88.2022.11.16.00.03.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 00:03:53 -0800 (PST)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-3691e040abaso160075747b3.9;
-        Wed, 16 Nov 2022 00:03:52 -0800 (PST)
-X-Received: by 2002:a0d:dd81:0:b0:373:6180:dae5 with SMTP id
- g123-20020a0ddd81000000b003736180dae5mr20337776ywe.283.1668585832484; Wed, 16
- Nov 2022 00:03:52 -0800 (PST)
-MIME-Version: 1.0
-References: <20221115220520.2076189-1-pierre.gondois@arm.com>
-In-Reply-To: <20221115220520.2076189-1-pierre.gondois@arm.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 16 Nov 2022 09:03:41 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWB_PZAL7dgWfYVVBQL2tkb92bg_tuvxeGrWFbGQD9fNw@mail.gmail.com>
-Message-ID: <CAMuHMdWB_PZAL7dgWfYVVBQL2tkb92bg_tuvxeGrWFbGQD9fNw@mail.gmail.com>
-Subject: Re: [PATCH -next] cacheinfo: Remove of_node_put() for fw_token
-To:     Pierre Gondois <pierre.gondois@arm.com>
-Cc:     linux-kernel@vger.kernel.org, Rob.Herring@arm.com,
-        sudeep.holla@arm.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
+        Wed, 16 Nov 2022 03:06:45 -0500
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84C485F52;
+        Wed, 16 Nov 2022 00:06:42 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4NBwST5Gp5z9xFQ5;
+        Wed, 16 Nov 2022 15:59:53 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwAXTPjumXRjdiBrAA--.15845S2;
+        Wed, 16 Nov 2022 09:06:18 +0100 (CET)
+Message-ID: <18e375adfe53f8ce5fb38a6a146ad06eaec71a5e.camel@huaweicloud.com>
+Subject: Re: [RFC][PATCH 1/4] lsm: Clarify documentation of vm_enough_memory
+ hook
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, revest@chromium.org,
+        jackmanb@chromium.org, jmorris@namei.org, serge@hallyn.com,
+        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Wed, 16 Nov 2022 09:06:02 +0100
+In-Reply-To: <CAHC9VhQjnwbFgAoFgTaLQP7YnNDNyP1i0i8H++HZWj930pW=-A@mail.gmail.com>
+References: <20221115175652.3836811-1-roberto.sassu@huaweicloud.com>
+         <20221115175652.3836811-2-roberto.sassu@huaweicloud.com>
+         <CAHC9VhQjnwbFgAoFgTaLQP7YnNDNyP1i0i8H++HZWj930pW=-A@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwAXTPjumXRjdiBrAA--.15845S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Ww4DWF4fAw18Ar4kZF4DXFb_yoW8XF43pF
+        WkGa15Gr1v9ry8CFs2k3Wa9345Gws5Gr1UJry7X3s8Zry7KrnIgr48Cr43Wr1Dtr4vka1Y
+        qFW3Ww1rCw1qvaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQASBF1jj4V8RQABsb
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 11:06 PM Pierre Gondois <pierre.gondois@arm.com> wrote:
-> fw_token is used for DT/ACPI systems to identify CPUs sharing caches.
-> For DT based systems, fw_token is set to a pointer to a DT node.
->
-> commit ("cacheinfo: Decrement refcount in cache_setup_of_node()")
-> doesn't increment the refcount of fw_token anymore in
-> cache_setup_of_node(). fw_token is indeed used as a token and not
-> as a (struct device_node*), so no reference to fw_token should be
-> kept.
->
-> However, [1] is triggered when hotplugging a CPU multiple times
-> since cache_shared_cpu_map_remove() decrements the refcount to
-> fw_token at each CPU unplugging, eventually reaching 0.
->
-> Remove of_node_put() for fw_token in cache_shared_cpu_map_remove().
->
-> [1]
-> [   53.651182] ------------[ cut here ]------------
-> [   53.651186] refcount_t: saturated; leaking memory.
-> [   53.651223] WARNING: CPU: 4 PID: 32 at lib/refcount.c:22 refcount_warn_saturate (lib/refcount.c:22 (discriminator 3))
-> [   53.651241] Modules linked in:
-> [   53.651249] CPU: 4 PID: 32 Comm: cpuhp/4 Tainted: G        W          6.1.0-rc1-14091-g9fdf2ca7b9c8 #76
-> [   53.651261] Hardware name: ARM LTD ARM Juno Development Platform/ARM Juno Development Platform, BIOS EDK II Oct 31 2022
-> [   53.651268] pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [   53.651279] pc : refcount_warn_saturate (lib/refcount.c:22 (discriminator 3))
-> [   53.651293] lr : refcount_warn_saturate (lib/refcount.c:22 (discriminator 3))
-> [...]
-> [   53.651513] Call trace:
-> [...]
-> [   53.651735] of_node_release (drivers/of/dynamic.c:335)
-> [   53.651750] kobject_put (lib/kobject.c:677 lib/kobject.c:704 ./include/linux/kref.h:65 lib/kobject.c:721)
-> [   53.651762] of_node_put (drivers/of/dynamic.c:49)
-> [   53.651776] free_cache_attributes.part.0 (drivers/base/cacheinfo.c:712)
-> [   53.651792] cacheinfo_cpu_pre_down (drivers/base/cacheinfo.c:718)
-> [   53.651807] cpuhp_invoke_callback (kernel/cpu.c:247 (discriminator 4))
-> [   53.651819] cpuhp_thread_fun (kernel/cpu.c:785)
-> [   53.651832] smpboot_thread_fn (kernel/smpboot.c:164 (discriminator 3))
-> [   53.651847] kthread (kernel/kthread.c:376)
-> [   53.651858] ret_from_fork (arch/arm64/kernel/entry.S:861)
-> [   53.651869] ---[ end trace 0000000000000000 ]---
->
-> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+On Tue, 2022-11-15 at 21:11 -0500, Paul Moore wrote:
+> On Tue, Nov 15, 2022 at 12:57 PM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > include/linux/lsm_hooks.h reports the result of the LSM infrastructure to
+> > the callers, not what LSMs should return to the LSM infrastructure.
+> > 
+> > Clarify that and add that returning 1 from the LSMs means calling
+> > __vm_enough_memory() with cap_sys_admin set, 0 without.
+> > 
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > Reviewed-by: KP Singh <kpsingh@kernel.org>
+> > ---
+> >  include/linux/lsm_hooks.h | 4 +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+> > index 4ec80b96c22e..f40b82ca91e7 100644
+> > --- a/include/linux/lsm_hooks.h
+> > +++ b/include/linux/lsm_hooks.h
+> > @@ -1411,7 +1411,9 @@
+> >   *     Check permissions for allocating a new virtual mapping.
+> >   *     @mm contains the mm struct it is being added to.
+> >   *     @pages contains the number of pages.
+> > - *     Return 0 if permission is granted.
+> > + *     Return 0 if permission is granted by LSMs to the caller. LSMs should
+> > + *     return 1 if __vm_enough_memory() should be called with
+> > + *     cap_sys_admin set, 0 if not.
+> 
+> I think this is a nice addition, but according to the code, any value
+> greater than zero will trigger the caller-should-have-CAP_SYS_ADMIN
+> behavior, not just 1.  I suggest updating the comment.
 
-Thanks, this fixes the issue for me!
+Ok, yes. Thanks.
 
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Roberto
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
