@@ -2,99 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D16ED62BAB1
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:02:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 225D962BAB6
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:03:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232755AbiKPLCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 06:02:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42698 "EHLO
+        id S233370AbiKPLDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 06:03:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238967AbiKPLBm (ORCPT
+        with ESMTP id S239062AbiKPLCE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 06:01:42 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 41F871FFA0;
-        Wed, 16 Nov 2022 02:49:38 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3A20C150C;
-        Wed, 16 Nov 2022 02:49:44 -0800 (PST)
-Received: from [10.57.40.76] (unknown [10.57.40.76])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E18253F663;
-        Wed, 16 Nov 2022 02:49:36 -0800 (PST)
-Message-ID: <774c9e6b-a8f4-66fe-aae0-d1cefedf7df3@arm.com>
-Date:   Wed, 16 Nov 2022 10:49:35 +0000
+        Wed, 16 Nov 2022 06:02:04 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E7EC2BD8
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:49:47 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id e13so16988211edj.7
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:49:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SB0xMxg7mb7arNhoP48cqWafxbk28Z1Lix7iS7Zkf4o=;
+        b=G+yH7gGM79Kur0Iop0CPPA+qhziqzAzwIurg983ubYb3WshrhUBjt115nMP15JVtFB
+         bCAGjPfacpREtOfp/xR/YX1SymsdQ1bgnCyPvMlgHC3mzRuO7K3B6poJkP/JWiUCmMWF
+         GisY2xBmQqATnhhXA26BG81FXfyHx1zsVnNWg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SB0xMxg7mb7arNhoP48cqWafxbk28Z1Lix7iS7Zkf4o=;
+        b=cN7+bEZoedNkVGfqmp7QZ3Hjea+rSKNfrhGJCukTZt4rISj9XXk2lvIrUrr53EC87W
+         FUGh9wKIdl+ALCcPTWKaBe3ZW1y1HoIlF3+lkWeohepIOy9QCBw68qsbf1uy8oksk7cn
+         ZEvDUK2vohvtPn/6MyG3fD1wDUVutdOPcik2Z9BpJoMEYuRUq4eURtHbEMWyPcc8kOqf
+         CPOd4HeVfWQoAYOCISckv9MMpo1kvfw/9lGwlyk3ZLG+EUnVt7brgW4mEBC9R29z3Fty
+         fMx3j6Sx4td4nyBZaquvKknfuazqak+U0yVskk9iIs26RtGehkrfj7R3ZYywfgRk+vKZ
+         DJ3Q==
+X-Gm-Message-State: ANoB5pkPMYEWVS1iTL/eYaOD8Rk/5nRdbhaTs+QVhLkBTF/o4vr0pZVJ
+        xp2B1uE/bOeHz2f/qihQfNP7Nw==
+X-Google-Smtp-Source: AA0mqf5eZw0lnDAfrqoVYz8ol539itw9JN3l4qV2Eir0Zt6pEgAkXKur5xarVrPRHlm5su04xf/hGA==
+X-Received: by 2002:a05:6402:3458:b0:458:b9f9:9fba with SMTP id l24-20020a056402345800b00458b9f99fbamr19055554edc.305.1668595786519;
+        Wed, 16 Nov 2022 02:49:46 -0800 (PST)
+Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
+        by smtp.gmail.com with ESMTPSA id kx13-20020a170907774d00b0078ba492db81sm6694451ejc.9.2022.11.16.02.49.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 02:49:46 -0800 (PST)
+Date:   Wed, 16 Nov 2022 11:49:43 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, etnaviv@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-samsung-soc@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-perf-users@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Peter Xu <peterx@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>
+Subject: Re: [PATCH mm-unstable v1 14/20] drm/etnaviv: remove FOLL_FORCE usage
+Message-ID: <Y3TAR7Ndmat+zYpJ@phenom.ffwll.local>
+Mail-Followup-To: David Hildenbrand <david@redhat.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, etnaviv@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-samsung-soc@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-perf-users@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
+        Peter Xu <peterx@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Shuah Khan <shuah@kernel.org>, Lucas Stach <l.stach@pengutronix.de>,
+        David Airlie <airlied@gmail.com>, Oded Gabbay <ogabbay@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>
+References: <20221116102659.70287-1-david@redhat.com>
+ <20221116102659.70287-15-david@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.2
-Subject: Re: linux-next: build failure after merge of the arm64 tree
-To:     Besar Wicaksono <bwicaksono@nvidia.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20221116090401.0cd5ccc7@canb.auug.org.au>
- <SJ0PR12MB56762CFC0B8D680B05828EF8A0049@SJ0PR12MB5676.namprd12.prod.outlook.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <SJ0PR12MB56762CFC0B8D680B05828EF8A0049@SJ0PR12MB5676.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221116102659.70287-15-david@redhat.com>
+X-Operating-System: Linux phenom 5.19.0-2-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/11/2022 23:52, Besar Wicaksono wrote:
+On Wed, Nov 16, 2022 at 11:26:53AM +0100, David Hildenbrand wrote:
+> GUP now supports reliable R/O long-term pinning in COW mappings, such
+> that we break COW early. MAP_SHARED VMAs only use the shared zeropage so
+> far in one corner case (DAXFS file with holes), which can be ignored
+> because GUP does not support long-term pinning in fsdax (see
+> check_vma_flags()).
 > 
+> commit cd5297b0855f ("drm/etnaviv: Use FOLL_FORCE for userptr")
+> documents that FOLL_FORCE | FOLL_WRITE was really only used for reliable
+> R/O pinning.
 > 
->> -----Original Message-----
->> From: Stephen Rothwell <sfr@canb.auug.org.au>
->> Sent: Tuesday, November 15, 2022 4:04 PM
->> To: Catalin Marinas <catalin.marinas@arm.com>; Will Deacon
->> <will@kernel.org>
->> Cc: Besar Wicaksono <bwicaksono@nvidia.com>; Linux Kernel Mailing List
->> <linux-kernel@vger.kernel.org>; Linux Next Mailing List <linux-
->> next@vger.kernel.org>
->> Subject: linux-next: build failure after merge of the arm64 tree
->>
->> Hi all,
->>
->> After merging the arm64 tree, today's linux-next build (x86_64
->> allmodconfig) failed like this:
->>
->> drivers/perf/arm_cspmu/arm_cspmu.c: In function 'arm_cspmu_get_cpus':
->> drivers/perf/arm_cspmu/arm_cspmu.c:1114:29: error: implicit declaration of
->> function 'get_acpi_id_for_cpu' [-Werror=implicit-function-declaration]
->>   1114 |                             get_acpi_id_for_cpu(cpu)) {
->>        |                             ^~~~~~~~~~~~~~~~~~~
->>
+> Consequently, FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM is no longer required
+> for reliable R/O long-term pinning: FOLL_LONGTERM is sufficient. So stop
+> using FOLL_FORCE, which is really only for ptrace access.
 > 
-> +CC Suzuki for awareness.
-> 
-> This function is used for searching CPU with matching ACPI Processor ID in PPTT.
-> I will check if adding PPTT dependency to arm_cspmu would resolve this issue.
+> Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
+> Cc: Lucas Stach <l.stach@pengutronix.de>
+> Cc: Russell King <linux+etnaviv@armlinux.org.uk>
+> Cc: Christian Gmeiner <christian.gmeiner@gmail.com>
+> Cc: David Airlie <airlied@gmail.com>
+> Signed-off-by: David Hildenbrand <david@redhat.com>
 
-Please make this dependent on ARM64. That should resolve the failure.
-As such the helper is available with ARM64 && ACPI.
+Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
 
-Suzuki
+Also ack for merging through whatever tree suits best, since I guess this
+should all land together.
+-Daniel
 
+> ---
+>  drivers/gpu/drm/etnaviv/etnaviv_gem.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
 > 
-> Regards,
-> Besar
+> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gem.c b/drivers/gpu/drm/etnaviv/etnaviv_gem.c
+> index cc386f8a7116..efe2240945d0 100644
+> --- a/drivers/gpu/drm/etnaviv/etnaviv_gem.c
+> +++ b/drivers/gpu/drm/etnaviv/etnaviv_gem.c
+> @@ -638,6 +638,7 @@ static int etnaviv_gem_userptr_get_pages(struct etnaviv_gem_object *etnaviv_obj)
+>  	struct page **pvec = NULL;
+>  	struct etnaviv_gem_userptr *userptr = &etnaviv_obj->userptr;
+>  	int ret, pinned = 0, npages = etnaviv_obj->base.size >> PAGE_SHIFT;
+> +	unsigned int gup_flags = FOLL_LONGTERM;
+>  
+>  	might_lock_read(&current->mm->mmap_lock);
+>  
+> @@ -648,14 +649,15 @@ static int etnaviv_gem_userptr_get_pages(struct etnaviv_gem_object *etnaviv_obj)
+>  	if (!pvec)
+>  		return -ENOMEM;
+>  
+> +	if (!userptr->ro)
+> +		gup_flags |= FOLL_WRITE;
+> +
+>  	do {
+>  		unsigned num_pages = npages - pinned;
+>  		uint64_t ptr = userptr->ptr + pinned * PAGE_SIZE;
+>  		struct page **pages = pvec + pinned;
+>  
+> -		ret = pin_user_pages_fast(ptr, num_pages,
+> -					  FOLL_WRITE | FOLL_FORCE | FOLL_LONGTERM,
+> -					  pages);
+> +		ret = pin_user_pages_fast(ptr, num_pages, gup_flags, pages);
+>  		if (ret < 0) {
+>  			unpin_user_pages(pvec, pinned);
+>  			kvfree(pvec);
+> -- 
+> 2.38.1
 > 
->> Caused by commit
->>
->>    e37dfd65731d ("perf: arm_cspmu: Add support for ARM CoreSight PMU
->> driver")
->>
->> I have used the arm64 tree from next-20221115 for today.
->>
->> --
->> Cheers,
->> Stephen Rothwell
 
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
