@@ -2,232 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3F4762C2AE
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 16:35:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36E6362C2B2
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 16:35:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231615AbiKPPfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 10:35:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50202 "EHLO
+        id S232138AbiKPPfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 10:35:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiKPPe7 (ORCPT
+        with ESMTP id S229489AbiKPPf2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 10:34:59 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74B71180B;
-        Wed, 16 Nov 2022 07:34:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668612898; x=1700148898;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Wj5K9Vlpjbs5N2B8PCfWrnygyNn/3oGRftL7tuGMhMM=;
-  b=ECg/2dNILWto8srrBJNIK5eLBDpiD4OPdb/e0W61WnV4rn5toJhfnOTl
-   nlp/BXtK6Z8op91wClOoaAOimZq5mZv2Q3jdCCGBUQTVYeCmWfjZCRM62
-   kRwu0EBRGo8fJEoUpwpHJMmvHhbiaSRnBeKhx7Xd8eDCDyp89kxtIvt9u
-   1WdR7IsudcQp1pefu0jWIHX5aHivKiJQOFAPuIgPmm7Tjxdd0s0yhJRCQ
-   i8K3zAZyClzOyEJIQ6AvfG9DLYQ0s4qFn3DpU/hM4SfLYOUo2qX229EQB
-   Cpea8RIYvPKPbsTNgggjqM7KlXNaeJnePOfA34tsCXtqPPdSh2m2j81aM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="398859749"
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="398859749"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 07:34:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="745093734"
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="745093734"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga002.fm.intel.com with ESMTP; 16 Nov 2022 07:34:55 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 2AGFYsEF029828;
-        Wed, 16 Nov 2022 15:34:54 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, ast@kernel.org,
-        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
-        UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH net-next v2 4/5] net: lan966x: Add support for XDP_TX
-Date:   Wed, 16 Nov 2022 16:34:18 +0100
-Message-Id: <20221116153418.3389630-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221115214456.1456856-5-horatiu.vultur@microchip.com>
-References: <20221115214456.1456856-1-horatiu.vultur@microchip.com> <20221115214456.1456856-5-horatiu.vultur@microchip.com>
+        Wed, 16 Nov 2022 10:35:28 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0F11180B;
+        Wed, 16 Nov 2022 07:35:27 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AGDFiDp027890;
+        Wed, 16 Nov 2022 15:35:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=4bgSVWe2DupxOwRr4EOFbsHDsofmk+PFg9oISOvq07w=;
+ b=AcC0d+H6Ykx45QyKTs91JvR5oMly//xnEMmuafbJ+4j5AFxQqRpBhfUI3lY3qBvo35U+
+ w2tVbt3T66tD+Ep+qW3ZkpgjSikFo66wyZtdYgGVaD8PwpvmkCCd336cOSdWyxZfnQ4M
+ Ar3WwuMqL9aOOQhxnO41GD6zp+hpdLrdriRjtnOdgSkQj4uC7LndSiM0kvzTHbMqXHzZ
+ XVR9iQerh42i3I0+TNT2BrflTvF4cOOEGaFDyOhGC8PPouo4Op2/OMHyryA6juE16+27
+ Vxnx1ZDH/LaQunuf9GW73GokZgHsU1esihFCQnR4bvRdhIBM/6n/Bcl6DxIl7L3kXSd1 Dw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kw03a8bcj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Nov 2022 15:35:24 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AGFZNNY015031
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Nov 2022 15:35:23 GMT
+Received: from [10.216.25.63] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 16 Nov
+ 2022 07:35:19 -0800
+Message-ID: <0dd3e096-84ac-da81-ad43-bf07485e7b65@quicinc.com>
+Date:   Wed, 16 Nov 2022 07:35:16 -0800
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v2 2/3] drm/msm/disp/dpu1: add helper to know if display
+ is pluggable
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Kalyan Thota <quic_kalyant@quicinc.com>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <freedreno@lists.freedesktop.org>, <devicetree@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <robdclark@chromium.org>,
+        <dianders@chromium.org>, <swboyd@chromium.org>,
+        <quic_vpolimer@quicinc.com>
+References: <1668609040-2549-1-git-send-email-quic_kalyant@quicinc.com>
+ <1668609040-2549-3-git-send-email-quic_kalyant@quicinc.com>
+ <e049f5b1-da41-6854-4731-b6697770ffde@linaro.org>
+ <6b1907db-3fdb-8fe0-e5e3-21ea17021925@quicinc.com>
+ <bf14540a-745c-c378-520a-f8edfd3e3adf@linaro.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <bf14540a-745c-c378-520a-f8edfd3e3adf@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: nvibYndKs-Sx2SNACmfVRs8TtFf1DTqK
+X-Proofpoint-ORIG-GUID: nvibYndKs-Sx2SNACmfVRs8TtFf1DTqK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-16_03,2022-11-16_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
+ lowpriorityscore=0 adultscore=0 phishscore=0 impostorscore=0
+ malwarescore=0 spamscore=0 mlxlogscore=999 bulkscore=0 suspectscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211160107
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Horatiu Vultur <horatiu.vultur@microchip.com>
-Date: Tue, 15 Nov 2022 22:44:55 +0100
 
-Extend lan966x XDP support with the action XDP_TX. In this case when the
-received buffer needs to execute XDP_TX, the buffer will be moved to the
-TX buffers. So a new RX buffer will be allocated.
-When the TX finish with the frame, it would release completely this
-buffer.
 
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
- .../ethernet/microchip/lan966x/lan966x_fdma.c | 78 +++++++++++++++++--
- .../ethernet/microchip/lan966x/lan966x_main.c |  4 +-
- .../ethernet/microchip/lan966x/lan966x_main.h |  8 ++
- .../ethernet/microchip/lan966x/lan966x_xdp.c  |  8 ++
- 4 files changed, 91 insertions(+), 7 deletions(-)
+On 11/16/2022 7:18 AM, Dmitry Baryshkov wrote:
+> On 16/11/2022 18:11, Abhinav Kumar wrote:
+>>
+>>
+>> On 11/16/2022 7:08 AM, Dmitry Baryshkov wrote:
+>>> On 16/11/2022 17:30, Kalyan Thota wrote:
+>>>> Since DRM encoder type for few encoders can be similar
+>>>> (like eDP and DP) find out if the interface supports HPD
+>>>> from encoder bridge to differentiate between builtin
+>>>> and pluggable displays.
+>>>>
+>>>> Changes in v1:
+>>>> - add connector type in the disp_info (Dmitry)
+>>>> - add helper functions to know encoder type
+>>>> - update commit text reflecting the change
+>>>>
+>>>> Changes in v2:
+>>>> - avoid hardcode of connector type for DSI as it may not be true 
+>>>> (Dmitry)
+>>>> - get the HPD information from encoder bridge
+>>>>
+>>>> Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
+>>>> ---
+>>>>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 16 ++++++++++++++++
+>>>>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h |  6 ++++++
+>>>>   2 files changed, 22 insertions(+)
+>>>>
+>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c 
+>>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+>>>> index 9c6817b..be93269 100644
+>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+>>>> @@ -15,6 +15,7 @@
+>>>>   #include <drm/drm_crtc.h>
+>>>>   #include <drm/drm_file.h>
+>>>>   #include <drm/drm_probe_helper.h>
+>>>> +#include <drm/drm_bridge.h>
+>>>>   #include "msm_drv.h"
+>>>>   #include "dpu_kms.h"
+>>>> @@ -217,6 +218,21 @@ static u32 dither_matrix[DITHER_MATRIX_SZ] = {
+>>>>       15, 7, 13, 5, 3, 11, 1, 9, 12, 4, 14, 6, 0, 8, 2, 10
+>>>>   };
+>>>> +bool dpu_encoder_is_pluggable(struct drm_encoder *encoder)
+>>>> +{
+>>>> +    struct drm_bridge *bridge;
+>>>> +    int ops = 0;
+>>>> +
+>>>> +    if (!encoder)
+>>>> +        return false;
+>>>> +
+>>>> +    /* Get last bridge in the chain to determine pluggable state */
+>>>> +    drm_for_each_bridge_in_chain(encoder, bridge)
+>>>> +        if (!drm_bridge_get_next_bridge(bridge))
+>>>> +            ops = bridge->ops;
+>>>> +
+>>>> +    return ops & DRM_BRIDGE_OP_HPD;
+>>>
+>>> No. This is not what you should be checking (hint: polled connectors 
+>>> also can be pluggable).
+>>>
+>>> Please check the type of the actual connector connected to this encoder.
+>>>
+>>
+>> Even if we check the connector type as DSI or eDP that does not 
+>> necessarily mean its built-in.
+>>
+>> We can even use DSI or eDP as a pluggable display.
+> 
+> Well, I don't think so. eDP and DSI connectors are not pluggable per 
+> design. One can use them so, but they are not thought to be used this 
+> way. Unlike e.g. HDMI, DP, VGA, etc.
+> 
 
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-index 384ed34197d58..c2e56233a8da5 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-@@ -394,13 +394,21 @@ static void lan966x_fdma_tx_clear_buf(struct lan966x *lan966x, int weight)
- 		dcb_buf->dev->stats.tx_bytes += dcb_buf->len;
- 
- 		dcb_buf->used = false;
--		dma_unmap_single(lan966x->dev,
--				 dcb_buf->dma_addr,
--				 dcb_buf->len,
--				 DMA_TO_DEVICE);
--		if (!dcb_buf->ptp)
-+		if (dcb_buf->skb)
-+			dma_unmap_single(lan966x->dev,
-+					 dcb_buf->dma_addr,
-+					 dcb_buf->len,
-+					 DMA_TO_DEVICE);
-+
-+		if (dcb_buf->skb && !dcb_buf->ptp)
- 			dev_kfree_skb_any(dcb_buf->skb);
- 
-+		if (dcb_buf->page) {
-+			page_pool_release_page(lan966x->rx.page_pool,
-+					       dcb_buf->page);
-+			put_page(dcb_buf->page);
-+		}
+We have had many products where we used HDMI as the primary display 
+where the HPD line was disconnected in the design, so now if we 
+generalize all HDMI connectors to be pluggable we can never enable color 
+management on those even though DSI is not even used in that product.
 
-Hmm, that's not really correct.
+Thats why I felt we should rely on the HPD_OPS as that way we know that 
+it will be set only if HPD will be used.
 
-For skb, you need to unmap + free, true (BPW, just use
-napi_consume_skb()).
-For %XDP_TX, as you use Page Pool, you don't need to unmap, but you
-need to do xdp_return_frame{,_bulk}. Plus, as Tx is being done here
-directly from an Rx NAPI polling cycle, xdp_return_frame_rx_napi()
-is usually used. Anyway, each of xdp_return_frame()'s variants will
-call page_pool_put_full_page() for you.
-For %XDP_REDIRECT, as you don't know the source of the XDP frame,
-you need to unmap it (as it was previously mapped in
-::ndo_xdp_xmit()), plus call xdp_return_frame{,_bulk} to free the
-XDP frame. Note that _rx_napi() variant is not applicable here.
+Wouldnt it be just better to also check polling displays to complete 
+this check? Is there a way to do it?
 
-That description might be confusing, so you can take a look at the
-already existing code[0] to get the idea. I think this piece shows
-the expected logics rather well.
-
-+
- 		clear = true;
- 	}
- 
-@@ -532,6 +540,9 @@ static int lan966x_fdma_napi_poll(struct napi_struct *napi, int weight)
- 			lan966x_fdma_rx_free_page(rx);
- 			lan966x_fdma_rx_advance_dcb(rx);
- 			goto allocate_new;
-+		case FDMA_TX:
-+			lan966x_fdma_rx_advance_dcb(rx);
-+			continue;
- 		case FDMA_DROP:
- 			lan966x_fdma_rx_free_page(rx);
- 			lan966x_fdma_rx_advance_dcb(rx);
-@@ -653,6 +664,62 @@ static void lan966x_fdma_tx_start(struct lan966x_tx *tx, int next_to_use)
- 	tx->last_in_use = next_to_use;
- }
- 
-+int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
-+			   struct xdp_frame *xdpf,
-+			   struct page *page)
-+{
-+	struct lan966x *lan966x = port->lan966x;
-+	struct lan966x_tx_dcb_buf *next_dcb_buf;
-+	struct lan966x_tx *tx = &lan966x->tx;
-+	dma_addr_t dma_addr;
-+	int next_to_use;
-+	__be32 *ifh;
-+	int ret = 0;
-+
-+	spin_lock(&lan966x->tx_lock);
-+
-+	/* Get next index */
-+	next_to_use = lan966x_fdma_get_next_dcb(tx);
-+	if (next_to_use < 0) {
-+		netif_stop_queue(port->dev);
-+		ret = NETDEV_TX_BUSY;
-+		goto out;
-+	}
-+
-+	/* Generate new IFH */
-+	ifh = page_address(page) + XDP_PACKET_HEADROOM;
-+	memset(ifh, 0x0, sizeof(__be32) * IFH_LEN);
-+	lan966x_ifh_set_bypass(ifh, 1);
-+	lan966x_ifh_set_port(ifh, BIT_ULL(port->chip_port));
-+
-+	dma_addr = page_pool_get_dma_addr(page);
-+	dma_sync_single_for_device(lan966x->dev, dma_addr + XDP_PACKET_HEADROOM,
-+				   xdpf->len + IFH_LEN_BYTES,
-+				   DMA_TO_DEVICE);
-
-Also not correct. This page was mapped with %DMA_FROM_DEVICE in the
-Rx code, now you sync it for the opposite.
-Most drivers in case of XDP enabled create Page Pools with ::dma_dir
-set to %DMA_BIDIRECTIONAL. Now you would need only to sync it here
-with the same direction (bidir) and that's it.
-
-+
-+	/* Setup next dcb */
-+	lan966x_fdma_tx_setup_dcb(tx, next_to_use, xdpf->len + IFH_LEN_BYTES,
-+				  dma_addr + XDP_PACKET_HEADROOM);
-+
-+	/* Fill up the buffer */
-+	next_dcb_buf = &tx->dcbs_buf[next_to_use];
-+	next_dcb_buf->skb = NULL;
-+	next_dcb_buf->page = page;
-+	next_dcb_buf->len = xdpf->len + IFH_LEN_BYTES;
-+	next_dcb_buf->dma_addr = dma_addr;
-+	next_dcb_buf->used = true;
-+	next_dcb_buf->ptp = false;
-+	next_dcb_buf->dev = port->dev;
-+
-+	/* Start the transmission */
-+	lan966x_fdma_tx_start(tx, next_to_use);
-+
-+out:
-+	spin_unlock(&lan966x->tx_lock);
-+
-+	return ret;
-+}
-+
- int lan966x_fdma_xmit(struct sk_buff *skb, __be32 *ifh, struct net_device *dev)
- {
- 	struct lan966x_port *port = netdev_priv(dev);
-@@ -709,6 +776,7 @@ int lan966x_fdma_xmit(struct sk_buff *skb, __be32 *ifh, struct net_device *dev)
- 	/* Fill up the buffer */
- 	next_dcb_buf = &tx->dcbs_buf[next_to_use];
- 	next_dcb_buf->skb = skb;
-+	next_dcb_buf->page = NULL;
- 	next_dcb_buf->len = skb->len;
- 	next_dcb_buf->dma_addr = dma_addr;
- 	next_dcb_buf->used = true;
-
-[...]
-
--- 
-2.38.0
-
-Thanks,
-Olek
+> I would say LVDS, eDP, DSI, DPI and SPI can be assumed to be constantly 
+> plugged.
+> 
+> Compare this with Composite, SVIDEO, 9PinDIN, TV. They can be assumed to 
+> be external even if they do not have the HPD (or even polling). And 
+> these connectors usually don't have it.
+> 
+>>
+>> Thats why we thought of this check.
+>>
