@@ -2,140 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66D9B62BA15
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 11:51:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53EE162BA19
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 11:51:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232745AbiKPKvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 05:51:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57706 "EHLO
+        id S237515AbiKPKvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 05:51:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232527AbiKPKup (ORCPT
+        with ESMTP id S229834AbiKPKuy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 05:50:45 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7356F4FF85
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:39:33 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id a15-20020a056e0208af00b00300806a52b6so13081747ilt.22
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:39:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Yad13G0UwAIaOqBVnUuYOEoa8gOaOv0aP3aWsZxgrFQ=;
-        b=nnmjVVkzjA3CX6Wem+sbnFSZZ6VMaDMh6LUCbqhlZIUVUdyduXyctk8h6ZWYfUxZry
-         31+QEdnIkcEuxwH2BS4GyzO9ojto36od3kewkHm72UiPHfRSmlVAjsr1DYPu2q3/X5z7
-         ZMLUQJSl85axQ4K1uP/GQp4EiW6gWO0kBQdnccLeEzyQy/vj79n2hO0gvpjfYaE8Xjkn
-         Fz/ty77qaLISp+267aah/qsqHZjn72hsI2eVoB6yiTyrIa5l7kwXQ4UcJzhq4JsdKrr8
-         EZ5j7S+KgQwrp/zUEB/jYij8lTF2EigjlFBV0whv38Pb58rt0IcB36ANc0f3WryoX8Tp
-         kq8g==
-X-Gm-Message-State: ANoB5pkCOCvtc7LkJPE/2fzsLC1pLWpJqOoT29ZVvT7UnNT2sXNa6P8m
-        8We8ixgMu8Dq0EwLG3PVQ4X3D/9s4FI7tnsQhuINSmB/Y2ug
-X-Google-Smtp-Source: AA0mqf7PGq8xeHitwffcE1R+01qDGwkc7YPc918oQ0R8lMpycxEx6snL3NypcT6K9ocShexmkb59SLZ/NeE6tXlPpTmsijwkvCyS
+        Wed, 16 Nov 2022 05:50:54 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234E54E43D;
+        Wed, 16 Nov 2022 02:39:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=jsN0Nhr1vnvrb51t6eKNZY0+CFnpdn/XZ7+QR7DX9s8=; b=EBCdiiAnOXF07kYoDrH66f//Ij
+        2uIWTl0SJZ9G9lybvILij454RhzCO1pdTBQu06PCCF+h3JxE0DlTOUrmGJxdBTAzSJZjR30QwDDXH
+        N4HTfKs/rX4HXWl+Si5Uxsik6awEdetJQFP7oDr2UJf7PD6lv1GpC5JqW6SuioZ1+/gnqVMJQf+Sp
+        x4bY8BlUPmNrsZwsc4CnFCqV1LpHUX1+9y5TBCaAGmsAxwUVxj1AVOB4Ks04mr3l/yv+I6z0yRhE1
+        weWL9Vl8Z8ufAICDubbtmrjlyf63VRbXhrlWTVQ0EdpZVqIJQnMQiHZ29FDgDd9AWmDcNehBIsssn
+        ziROuI/w==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ovFpR-001H3H-Vx; Wed, 16 Nov 2022 10:39:38 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8CC5E3008ED;
+        Wed, 16 Nov 2022 11:39:37 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 492C3200E4A18; Wed, 16 Nov 2022 11:39:37 +0100 (CET)
+Date:   Wed, 16 Nov 2022 11:39:37 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org,
+        Guo Jin <guoj17@chinatelecom.cn>,
+        Nathan Chancellor <nathan@kernel.org>, x86@kernel.org
+Subject: Re: [tip: locking/urgent] locking: Fix qspinlock/x86 inline asm error
+Message-ID: <Y3S96d8vrEEQe1XH@hirez.programming.kicks-ass.net>
+References: <20221108060126.2505-1-guoj17@chinatelecom.cn>
+ <166859051534.4906.7078966677789928700.tip-bot2@tip-bot2>
+ <64372250-a413-076e-3b6d-2d263ee9c7f2@suse.com>
 MIME-Version: 1.0
-X-Received: by 2002:a02:6383:0:b0:358:34d6:8528 with SMTP id
- j125-20020a026383000000b0035834d68528mr10517461jac.304.1668595171956; Wed, 16
- Nov 2022 02:39:31 -0800 (PST)
-Date:   Wed, 16 Nov 2022 02:39:31 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007fa14705ed941607@google.com>
-Subject: [syzbot] BUG: unable to handle kernel NULL pointer dereference in nilfs_segctor_do_construct
-From:   syzbot <syzbot+5afc832d6dbb2fd17538@syzkaller.appspotmail.com>
-To:     konishi.ryusuke@gmail.com, linux-kernel@vger.kernel.org,
-        linux-nilfs@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <64372250-a413-076e-3b6d-2d263ee9c7f2@suse.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Nov 16, 2022 at 10:40:10AM +0100, Juergen Gross wrote:
+> On 16.11.22 10:21, tip-bot2 for Guo Jin wrote:
+> > The following commit has been merged into the locking/urgent branch of tip:
+> > 
+> > Commit-ID:     23df39fc6a36183af5e6e4f47523f1ad2cdc1d30
+> > Gitweb:        https://git.kernel.org/tip/23df39fc6a36183af5e6e4f47523f1ad2cdc1d30
+> > Author:        Guo Jin <guoj17@chinatelecom.cn>
+> > AuthorDate:    Tue, 08 Nov 2022 14:01:26 +08:00
+> > Committer:     Peter Zijlstra <peterz@infradead.org>
+> > CommitterDate: Wed, 16 Nov 2022 10:18:09 +01:00
+> > 
+> > locking: Fix qspinlock/x86 inline asm error
+> > 
+> > When compiling linux 6.1.0-rc3 configured with CONFIG_64BIT=y and
+> > CONFIG_PARAVIRT_SPINLOCKS=y on x86_64 using LLVM 11.0, an error:
+> > "<inline asm> error: changed section flags for .spinlock.text,
+> > expected:: 0x6" occurred.
+> > 
+> > The reason is the .spinlock.text in kernel/locking/qspinlock.o
+> > is used many times, but its flags are omitted in subsequent use.
+> > 
+> > LLVM 11.0 assembler didn't permit to
+> > leave out flags in subsequent uses of the same sections.
+> > 
+> > So this patch adds the corresponding flags to avoid above error.
+> > 
+> > Fixes: 501f7f69bca1 ("locking: Add __lockfunc to slow path functions")
+> > Signed-off-by: Guo Jin <guoj17@chinatelecom.cn>
+> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> > Link: https://lore.kernel.org/r/20221108060126.2505-1-guoj17@chinatelecom.cn
+> 
+> Wouldn't it be better to take my more generic patch [1] instead?
+> 
+> [1]: https://lore.kernel.org/lkml/20221109134418.6516-1-jgross@suse.com/
 
-syzbot found the following issue on:
-
-HEAD commit:    1621b6eaebf7 Merge branch 'for-next/fixes' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=12ed633e880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=606e57fd25c5c6cc
-dashboard link: https://syzkaller.appspot.com/bug?extid=5afc832d6dbb2fd17538
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/82aa7741098d/disk-1621b6ea.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/f6be08c4e4c2/vmlinux-1621b6ea.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/296b6946258a/Image-1621b6ea.gz.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5afc832d6dbb2fd17538@syzkaller.appspotmail.com
-
-Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
-Mem abort info:
-  ESR = 0x0000000086000006
-  EC = 0x21: IABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x06: level 2 translation fault
-user pgtable: 4k pages, 48-bit VAs, pgdp=000000015174f000
-[0000000000000000] pgd=080000015c4bd003, p4d=080000015c4bd003, pud=080000015c4c1003, pmd=0000000000000000
-Internal error: Oops: 0000000086000006 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 1 PID: 12611 Comm: syz-executor.4 Not tainted 6.1.0-rc4-syzkaller-31872-g1621b6eaebf7 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : 0x0
-lr : nilfs_segctor_update_payload_blocknr+0x27c/0x3c8
-sp : ffff800014093840
-x29: ffff8000140938a0 x28: ffff000110709128 x27: 0000000000000000
-x26: ffff0000ca340a80 x25: 0000000000000000 x24: 0000000000000000
-x23: 0000000000000106 x22: ffff0000ca37ec38 x21: ffff000117008440
-x20: ffff0000ca340ac8 x19: 0000000000000106 x18: 00000000000000c0
-x17: ffff80000dcdc198 x16: ffff80000db1a158 x15: ffff000128253480
-x14: 0000000000000000 x13: 00000000ffffffff x12: ffff000128253480
-x11: ff80800008f8ace0 x10: 0000000000000000 x9 : ffff80000c188130
-x8 : 0000000000000000 x7 : ffff8000095f3074 x6 : 0000000000000000
-x5 : ffff000128253480 x4 : fffffbffeffe5720 x3 : 0000000000002491
-x2 : ffff800014093878 x1 : ffff800014093888 x0 : ffff000110d6f000
-Call trace:
- 0x0
- nilfs_segctor_assign fs/nilfs2/segment.c:1629 [inline]
- nilfs_segctor_do_construct+0x750/0xefc fs/nilfs2/segment.c:2056
- nilfs_construct_dsync_segment+0x21c/0x2ec fs/nilfs2/segment.c:2310
- nilfs_writepages+0x6c/0xa8 fs/nilfs2/inode.c:170
- do_writepages+0x144/0x27c mm/page-writeback.c:2469
- filemap_fdatawrite_wbc+0xac/0xd0 mm/filemap.c:388
- __filemap_fdatawrite_range mm/filemap.c:421 [inline]
- filemap_write_and_wait_range+0x84/0x1e8 mm/filemap.c:674
- __generic_file_write_iter+0x188/0x21c mm/filemap.c:3867
- generic_file_write_iter+0x6c/0x168 mm/filemap.c:3913
- call_write_iter include/linux/fs.h:2191 [inline]
- new_sync_write fs/read_write.c:491 [inline]
- vfs_write+0x2dc/0x46c fs/read_write.c:584
- ksys_write+0xb4/0x160 fs/read_write.c:637
- __do_sys_write fs/read_write.c:649 [inline]
- __se_sys_write fs/read_write.c:646 [inline]
- __arm64_sys_write+0x24/0x34 fs/read_write.c:646
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-Code: bad PC value
----[ end trace 0000000000000000 ]---
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Durr, I missed that, lemme go stare at it.
