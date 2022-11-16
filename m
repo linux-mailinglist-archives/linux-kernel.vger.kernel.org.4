@@ -2,88 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55FD062B58E
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 09:50:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EBDA62B593
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 09:51:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233149AbiKPIut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 03:50:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48360 "EHLO
+        id S233285AbiKPIvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 03:51:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232670AbiKPIuo (ORCPT
+        with ESMTP id S232234AbiKPIvO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 03:50:44 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF72A1A05D;
-        Wed, 16 Nov 2022 00:50:41 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3AFB16602A81;
-        Wed, 16 Nov 2022 08:50:39 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1668588640;
-        bh=UGw+5yUczjb2PkEG6B9/HaNrOcAqFKLMrvc6BAUVOP8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ketnzDti5gZW6WM7CNR0kWaRb7Q2Vy0mwisMLM49ofYe4ouHUz6q87GclgQr4HtPx
-         MPfcf5kwp1e0tk3kWE7q7TyNe8oxbadG0VDSgJ/aCvUEbZT7D/MayaXPAsL4Af4s/H
-         +Z0vjZ0/r68nbFU8lTeWNSACjwxRfqjSZLjd3F0vZ99twJE6G5nkiYV8I3qLcha62O
-         TpBiS+5ct101WFbr+Ah34I18N31WBni9kGpHHz4VMc0Wg1fJv/yd6dmG9p/wswZw54
-         p+DYkELOcQPs6jM97vbFZ9+FHLszsmEu15NXb7yHrx99GdmKgi8DIIz28+ss4EY79Q
-         PITEQUf5lBHvA==
-Message-ID: <1fac581e-ef02-4576-0dbf-67662a29f724@collabora.com>
-Date:   Wed, 16 Nov 2022 09:50:37 +0100
+        Wed, 16 Nov 2022 03:51:14 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA711A05D
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 00:51:13 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id d3so20947524ljl.1
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 00:51:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=16W+WhRYw2qO31HAZVLt3mv3/qC3AjEWZLnL5iEaKNw=;
+        b=E/eIyOzpn4tkTNxnGMFFoQYJH4B0F+2EkASmXoGGnp0TON6UlNT4E62dHdhJcPkyTl
+         gTsTfb4lslvmv9HrRS46q0wDd3YlWja541Jv7XiZo2sAm7pvnPWMBFeg/QFv34JOZ0I5
+         E3CGyZ4T45NkaNSS3ORtC/aHMfgf7gkreKrbYW0XWmCZxDtQ5js7ZGD3JdqzqvtPIubt
+         rxk8wlN52PBtx1bf1tn99wUhlLUw/yGzm56OH3KM7uxH+mBE0caeuoik58wWkIJoq3E/
+         CjSp9onVDgRefhG+vY8fgNEsfnBY2N4vYl4zljUul7jM66pHXgNhxzA/spMqzD5fzDV+
+         UhOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=16W+WhRYw2qO31HAZVLt3mv3/qC3AjEWZLnL5iEaKNw=;
+        b=7uCFq/jSFmxB/pEGIMWPoGMRD3di5l1BiL2F9Z93H7DcUZpjg/qhpP0Rkm2qRO6AU6
+         wjigBs+wUhq+1oiaSU8lKqncBsUBg8gHhcLnrZ9E2ci8Dph0xT1q4jWrDtKoiTaJ8Rbk
+         p0lM8IfCvIrE8iWaouPLA1z8IJ06TniDfF9FKN3om0LhVzTvbo9GVhIbDS5pijJhmXgd
+         xdNVIz/xL/gs/wEUOvBA5YhnilMBro0Pn00kd9tpoYXhLx7V956XNyxuMnC64yUgguxo
+         B0tjV+Js5ZcnLm3HxXLrlLourcF+BobLD+kutj3VYQ4B50EOwwUPtfZfPlVu+Mlnl9B4
+         GLnA==
+X-Gm-Message-State: ANoB5pnuZ9wGNwwVkkYVjg2VzYe06CBm5BIctVV8hIsTKzd1Ce3PE4lk
+        swneq4TdfECBXEThn6gXxewlKdsjYuaJytXd
+X-Google-Smtp-Source: AA0mqf4HK9tHUA7GTdHjmreR9R0RVHvQFj1mBQwdl6HN86KkMOofMEERzF1AQ7Y+70Nt//u6fsBn4A==
+X-Received: by 2002:a2e:b5b6:0:b0:277:394:34e with SMTP id f22-20020a2eb5b6000000b002770394034emr6798698ljn.18.1668588672098;
+        Wed, 16 Nov 2022 00:51:12 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id q9-20020a2e84c9000000b0026dced9840dsm2820895ljh.61.2022.11.16.00.51.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Nov 2022 00:51:11 -0800 (PST)
+Message-ID: <451f71d7-f921-e0ac-75bc-5e42db4bd200@linaro.org>
+Date:   Wed, 16 Nov 2022 09:51:10 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v2 02/11] dt-bindings: nvmem: Fix qcom,qfprom compatibles
- enum ordering
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 1/2] dtbindings: clock: Add bindings for Renesas PhiClock
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        agross@kernel.org
-Cc:     andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, jassisinghbrar@gmail.com,
-        srinivas.kandagatla@linaro.org, jic23@kernel.org, lars@metafoo.de,
-        keescook@chromium.org, tony.luck@intel.com, gpiccoli@igalia.com,
-        evgreen@chromium.org, gregkh@linuxfoundation.org,
-        a39.skl@gmail.com, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-hardening@vger.kernel.org,
-        marijn.suijten@somainline.org, kernel@collabora.com, luca@z3ntu.xyz
-References: <20221111120156.48040-1-angelogioacchino.delregno@collabora.com>
- <20221111120156.48040-3-angelogioacchino.delregno@collabora.com>
- <b611f647-c46f-3780-c6b4-3cfb4fe402e7@linaro.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <b611f647-c46f-3780-c6b4-3cfb4fe402e7@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Alex Helms <alexander.helms.jy@renesas.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, sboyd@kernel.org, mturquette@baylibre.com,
+        geert+renesas@glider.be
+References: <20221115192625.9410-1-alexander.helms.jy@renesas.com>
+ <20221115192625.9410-2-alexander.helms.jy@renesas.com>
+ <e9fd112f-0fd2-e833-8687-9a256c307842@linaro.org>
+ <CAMuHMdX-tziOhCLi-_s_MjPcHr4OW9=xA9xDVgf+fUya1R6TzA@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAMuHMdX-tziOhCLi-_s_MjPcHr4OW9=xA9xDVgf+fUya1R6TzA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 15/11/22 17:42, Krzysztof Kozlowski ha scritto:
-> On 11/11/2022 13:01, AngeloGioacchino Del Regno wrote:
->> Move qcom,msm8974-qfprom after qcom,msm8916-qfprom to respect
->> alphabetical ordering.
+On 16/11/2022 09:34, Geert Uytterhoeven wrote:
+> Hi Krzysztof,
+> 
+> On Wed, Nov 16, 2022 at 9:20 AM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>> On 15/11/2022 20:26, Alex Helms wrote:
+>>> Add dt bindings for the Renesas PhiClock clock generator.
+>>>
 >>
->> Fixes: c8b336bb1aeb ("dt-bindings: nvmem: Add soc qfprom compatible strings")
+>> Subject: drop second, redundant "bindings"
+>>
+>>> Signed-off-by: Alex Helms <alexander.helms.jy@renesas.com>
+>>> ---
+>>>  .../bindings/clock/renesas,phiclock.yaml      | 81 +++++++++++++++++++
+>>>  MAINTAINERS                                   |  5 ++
+>>>  2 files changed, 86 insertions(+)
+>>>  create mode 100644 Documentation/devicetree/bindings/clock/renesas,phiclock.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/clock/renesas,phiclock.yaml b/Documentation/devicetree/bindings/clock/renesas,phiclock.yaml
+>>> new file mode 100644
+>>> index 000000000..2b36534d3
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/clock/renesas,phiclock.yaml
+>>
+>> Filename based on compatible.
 > 
-> It's a style, code readability, but not a bug. I propose to drop the tag.
-> 
-> With that:
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> 
+> Looks like there are more of them, so I guess the family name is fine?
+>
 
-Should I send a v3, or is it possible to drop the tag while applying it?
+If you are sure, then yes. Can we add them now? If not, it's also fine.
 
-Thanks,
-Angelo
+Best regards,
+Krzysztof
 
