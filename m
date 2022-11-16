@@ -2,204 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 225D962BAB6
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:03:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B1A762BACB
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:05:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233370AbiKPLDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 06:03:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43080 "EHLO
+        id S233149AbiKPLFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 06:05:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239062AbiKPLCE (ORCPT
+        with ESMTP id S232971AbiKPLEY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 06:02:04 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E7EC2BD8
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:49:47 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id e13so16988211edj.7
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:49:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SB0xMxg7mb7arNhoP48cqWafxbk28Z1Lix7iS7Zkf4o=;
-        b=G+yH7gGM79Kur0Iop0CPPA+qhziqzAzwIurg983ubYb3WshrhUBjt115nMP15JVtFB
-         bCAGjPfacpREtOfp/xR/YX1SymsdQ1bgnCyPvMlgHC3mzRuO7K3B6poJkP/JWiUCmMWF
-         GisY2xBmQqATnhhXA26BG81FXfyHx1zsVnNWg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SB0xMxg7mb7arNhoP48cqWafxbk28Z1Lix7iS7Zkf4o=;
-        b=cN7+bEZoedNkVGfqmp7QZ3Hjea+rSKNfrhGJCukTZt4rISj9XXk2lvIrUrr53EC87W
-         FUGh9wKIdl+ALCcPTWKaBe3ZW1y1HoIlF3+lkWeohepIOy9QCBw68qsbf1uy8oksk7cn
-         ZEvDUK2vohvtPn/6MyG3fD1wDUVutdOPcik2Z9BpJoMEYuRUq4eURtHbEMWyPcc8kOqf
-         CPOd4HeVfWQoAYOCISckv9MMpo1kvfw/9lGwlyk3ZLG+EUnVt7brgW4mEBC9R29z3Fty
-         fMx3j6Sx4td4nyBZaquvKknfuazqak+U0yVskk9iIs26RtGehkrfj7R3ZYywfgRk+vKZ
-         DJ3Q==
-X-Gm-Message-State: ANoB5pkPMYEWVS1iTL/eYaOD8Rk/5nRdbhaTs+QVhLkBTF/o4vr0pZVJ
-        xp2B1uE/bOeHz2f/qihQfNP7Nw==
-X-Google-Smtp-Source: AA0mqf5eZw0lnDAfrqoVYz8ol539itw9JN3l4qV2Eir0Zt6pEgAkXKur5xarVrPRHlm5su04xf/hGA==
-X-Received: by 2002:a05:6402:3458:b0:458:b9f9:9fba with SMTP id l24-20020a056402345800b00458b9f99fbamr19055554edc.305.1668595786519;
-        Wed, 16 Nov 2022 02:49:46 -0800 (PST)
-Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
-        by smtp.gmail.com with ESMTPSA id kx13-20020a170907774d00b0078ba492db81sm6694451ejc.9.2022.11.16.02.49.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 02:49:46 -0800 (PST)
-Date:   Wed, 16 Nov 2022 11:49:43 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, etnaviv@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-samsung-soc@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-perf-users@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Peter Xu <peterx@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>
-Subject: Re: [PATCH mm-unstable v1 14/20] drm/etnaviv: remove FOLL_FORCE usage
-Message-ID: <Y3TAR7Ndmat+zYpJ@phenom.ffwll.local>
-Mail-Followup-To: David Hildenbrand <david@redhat.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, etnaviv@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-samsung-soc@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-perf-users@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
-        Peter Xu <peterx@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Shuah Khan <shuah@kernel.org>, Lucas Stach <l.stach@pengutronix.de>,
-        David Airlie <airlied@gmail.com>, Oded Gabbay <ogabbay@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>
-References: <20221116102659.70287-1-david@redhat.com>
- <20221116102659.70287-15-david@redhat.com>
+        Wed, 16 Nov 2022 06:04:24 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9063347329
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:50:50 -0800 (PST)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AGAQZM3019516;
+        Wed, 16 Nov 2022 10:50:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type :
+ content-transfer-encoding; s=qcppdkim1;
+ bh=kKTQWQ1O/GPqGpF+XeetAmZQG6IcDrdaTu4f6MMA+yA=;
+ b=RwdZFBMwwYfJnvwYKfY4kYqp6dRUsFTADxLQGmtszn8xhB2R/g3kEAFpNFOqiYQdrmDI
+ nVzDMdZ0f0OUmYQcaWKSEQFzE7AQmHd+FbKKleUVBrVCbXX2CW307P4rKc4F9smSCaT2
+ p5RmG6TRyX3pINlTVS/BZZ8kXc+Ca+19adyxrx9yMErxfHGbLINrCz7qJwSoWFSt5v5P
+ rgK1gqilTV5p9pni7DPh3dgP8VBtvYM6s9gc3tUDtUzWcbcA235l4Ga9fSq0WqmgXE4+
+ BJEd9udHrGy+PBzhaPaSMWW+ovdxbK4fx+BIqEZpKKpzVb7+NdWnob/kEJT3Dq/TSNwN fA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kvsq6rsfd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Nov 2022 10:50:48 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AGAolPo017102
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Nov 2022 10:50:47 GMT
+Received: from c-skakit-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Wed, 16 Nov 2022 02:50:45 -0800
+From:   Satya Priya <quic_c_skakit@quicinc.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <quic_c_skakit@quicinc.com>, <konrad.dybcio@linaro.org>
+Subject: [PATCH] mailmap: Update email address for Satya Priya
+Date:   Wed, 16 Nov 2022 16:20:17 +0530
+Message-ID: <20221116105017.3018971-1-quic_c_skakit@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221116102659.70287-15-david@redhat.com>
-X-Operating-System: Linux phenom 5.19.0-2-amd64 
+Content-Type: text/plain; charset="y"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: -pErDjbQgcVtvp2CbXDKD8hG60b19AsH
+X-Proofpoint-GUID: -pErDjbQgcVtvp2CbXDKD8hG60b19AsH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-16_01,2022-11-16_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ bulkscore=0 mlxlogscore=718 clxscore=1011 malwarescore=0 adultscore=0
+ lowpriorityscore=0 impostorscore=0 priorityscore=1501 phishscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211160076
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 11:26:53AM +0100, David Hildenbrand wrote:
-> GUP now supports reliable R/O long-term pinning in COW mappings, such
-> that we break COW early. MAP_SHARED VMAs only use the shared zeropage so
-> far in one corner case (DAXFS file with holes), which can be ignored
-> because GUP does not support long-term pinning in fsdax (see
-> check_vma_flags()).
-> 
-> commit cd5297b0855f ("drm/etnaviv: Use FOLL_FORCE for userptr")
-> documents that FOLL_FORCE | FOLL_WRITE was really only used for reliable
-> R/O pinning.
-> 
-> Consequently, FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM is no longer required
-> for reliable R/O long-term pinning: FOLL_LONGTERM is sufficient. So stop
-> using FOLL_FORCE, which is really only for ptrace access.
-> 
-> Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
-> Cc: Lucas Stach <l.stach@pengutronix.de>
-> Cc: Russell King <linux+etnaviv@armlinux.org.uk>
-> Cc: Christian Gmeiner <christian.gmeiner@gmail.com>
-> Cc: David Airlie <airlied@gmail.com>
-> Signed-off-by: David Hildenbrand <david@redhat.com>
+Add and also update email address, skakit@codeaurora.org
+is no longer active.
 
-Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
+---
+ .mailmap | 1 +
+ 1 file changed, 1 insertion(+)
 
-Also ack for merging through whatever tree suits best, since I guess this
-should all land together.
--Daniel
-
-> ---
->  drivers/gpu/drm/etnaviv/etnaviv_gem.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gem.c b/drivers/gpu/drm/etnaviv/etnaviv_gem.c
-> index cc386f8a7116..efe2240945d0 100644
-> --- a/drivers/gpu/drm/etnaviv/etnaviv_gem.c
-> +++ b/drivers/gpu/drm/etnaviv/etnaviv_gem.c
-> @@ -638,6 +638,7 @@ static int etnaviv_gem_userptr_get_pages(struct etnaviv_gem_object *etnaviv_obj)
->  	struct page **pvec = NULL;
->  	struct etnaviv_gem_userptr *userptr = &etnaviv_obj->userptr;
->  	int ret, pinned = 0, npages = etnaviv_obj->base.size >> PAGE_SHIFT;
-> +	unsigned int gup_flags = FOLL_LONGTERM;
->  
->  	might_lock_read(&current->mm->mmap_lock);
->  
-> @@ -648,14 +649,15 @@ static int etnaviv_gem_userptr_get_pages(struct etnaviv_gem_object *etnaviv_obj)
->  	if (!pvec)
->  		return -ENOMEM;
->  
-> +	if (!userptr->ro)
-> +		gup_flags |= FOLL_WRITE;
-> +
->  	do {
->  		unsigned num_pages = npages - pinned;
->  		uint64_t ptr = userptr->ptr + pinned * PAGE_SIZE;
->  		struct page **pages = pvec + pinned;
->  
-> -		ret = pin_user_pages_fast(ptr, num_pages,
-> -					  FOLL_WRITE | FOLL_FORCE | FOLL_LONGTERM,
-> -					  pages);
-> +		ret = pin_user_pages_fast(ptr, num_pages, gup_flags, pages);
->  		if (ret < 0) {
->  			unpin_user_pages(pvec, pinned);
->  			kvfree(pvec);
-> -- 
-> 2.38.1
-> 
-
+diff --git a/.mailmap b/.mailmap
+index 475418fc7e9d..4a14ece4cdb7 100644
+--- a/.mailmap
++++ b/.mailmap
+@@ -383,6 +383,7 @@ Santosh Shilimkar <santosh.shilimkar@oracle.org>
+ Santosh Shilimkar <ssantosh@kernel.org>
+ Sarangdhar Joshi <spjoshi@codeaurora.org>
+ Sascha Hauer <s.hauer@pengutronix.de>
++Satya Priya <quic_c_skakit@quicinc.com> <skakit@codeaurora.org>
+ S.Çağlar Onur <caglar@pardus.org.tr>
+ Sean Christopherson <seanjc@google.com> <sean.j.christopherson@intel.com>
+ Sean Nyekjaer <sean@geanix.com> <sean.nyekjaer@prevas.dk>
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.25.1
+
