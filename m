@@ -2,100 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D66C62B35C
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 07:36:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4081B62B358
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 07:35:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232715AbiKPGfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 01:35:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49424 "EHLO
+        id S232775AbiKPGfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 01:35:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232670AbiKPGfM (ORCPT
+        with ESMTP id S232615AbiKPGfC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 01:35:12 -0500
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46499F599;
-        Tue, 15 Nov 2022 22:35:11 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AG6Ywqp008932;
-        Wed, 16 Nov 2022 00:34:58 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1668580498;
-        bh=TMq2Zg7xGsqnRqLN7tOz5WB3RI0L2+bFG3U6rxb2x/E=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=r2PJEdIUFQfMLSvFp7KuTk2j/tJro/7eBdHyeTBE43JGA1Pf+vUsZwVknhDgXCXJd
-         ydC0ubMxTziGLRQfXvKVGzdK7HPpt732J7JNqZEvz+kaUZ4Cxxmfwpkkot5ag2nzHs
-         ae9R4One7auahTs77CQLeEK8ZI6wAETYnh8Aov4o=
-Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AG6YweF090091
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 16 Nov 2022 00:34:58 -0600
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Wed, 16
- Nov 2022 00:34:58 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 16 Nov 2022 00:34:58 -0600
-Received: from [172.24.145.60] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AG6YsKu050961;
-        Wed, 16 Nov 2022 00:34:55 -0600
-Message-ID: <952988dc-471b-ba2a-cad4-cf65d7290700@ti.com>
-Date:   Wed, 16 Nov 2022 12:04:54 +0530
+        Wed, 16 Nov 2022 01:35:02 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC59DEDE;
+        Tue, 15 Nov 2022 22:35:01 -0800 (PST)
+Received: from [192.168.88.87] (unknown [125.160.109.228])
+        by gnuweeb.org (Postfix) with ESMTPSA id B4C9D80BE8;
+        Wed, 16 Nov 2022 06:34:59 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1668580501;
+        bh=RTkIMOtf0HhfVfKBcaoF8pGYhOmFJpcuCVB8H/b0kAQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=A3gCFSFUVGNXHikFZY0Nkb3SgaZBlFoNnHwCBzgj5HiJOgBnRsjGkeDHg4l3mTnJx
+         YSuUW9OORLf+bUDg5/OJRf/Hid97VLux2HmdO4mcGW/QEcRKaL7bnmkdXCa9EvkBpX
+         TFDA2LNYI+t7Sydl1jT3o8uVDb95Oa40agzZrlvASyJLVpExmOqQPG4lSIGuWcdRPV
+         sKaZiSYLuV20v9MSfJwetdzZRN/vZX6JDZ1oiSRUzmdO87P2riLvGy9x2Ee3Hx1QOZ
+         pheBJK1xoFdSbvYNADGt+1MVLlig0ofBqipTr2JRyYyd/Qvg+OqGS0xMgFWZedE+ol
+         16UGA4axift+w==
+Message-ID: <61293423-8541-cb8b-32b4-9a4decb3544f@gnuweeb.org>
+Date:   Wed, 16 Nov 2022 13:34:57 +0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] arm64: dts: ti: j721e-common-proc-board: Fix sound
- node-name
+ Thunderbird/102.4.2
+Subject: Re: (subset) [PATCH v1 0/2] io_uring uapi updates
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        io-uring Mailing List <io-uring@vger.kernel.org>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Stefan Metzmacher <metze@samba.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20221115212614.1308132-1-ammar.faizi@intel.com>
+ <166855408973.7702.1716032255757220554.b4-ty@kernel.dk>
 Content-Language: en-US
-To:     Jayesh Choudhary <j-choudhary@ti.com>, <nm@ti.com>
-CC:     <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-References: <20220928122509.143342-1-j-choudhary@ti.com>
-From:   Jai Luthra <j-luthra@ti.com>
-In-Reply-To: <20220928122509.143342-1-j-choudhary@ti.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+In-Reply-To: <166855408973.7702.1716032255757220554.b4-ty@kernel.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SORBS_WEB,
+        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/09/22 17:55, Jayesh Choudhary wrote:
-> If root-node has no reg property, the unit-address should not
-> be appended at the end of node-name. sound node has no 'reg'
-> property, so remove the unit-address.
+On 11/16/22 6:14 AM, Jens Axboe wrote:
+> On Wed, 16 Nov 2022 04:29:51 +0700, Ammar Faizi wrote:
+>> From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+>>
+>> Hi Jens,
+>>
+>> io_uring uapi updates:
+>>
+>> 1) Don't force linux/time_types.h for userspace. Linux's io_uring.h is
+>>     synced 1:1 into liburing's io_uring.h. liburing has a configure
+>>     check to detect the need for linux/time_types.h (Stefan).
+>>
+>> [...]
 > 
-> Fixes: ed3aad5b8268 ('arm64: dts: ti: j721e-common-proc-board: Analog audio support')
-> Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
-
-Reviewed-by: Jai Luthra <j-luthra@ti.com>
-
-> ---
->   arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> Applied, thanks!
 > 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
-> index b1691ac3442d..4da3fcdc28e5 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
-> +++ b/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
-> @@ -96,7 +96,7 @@ vdd_sd_dv_alt: gpio-regulator-TLV71033 {
->   			 <3300000 0x1>;
->   	};
->   
-> -	sound0: sound@0 {
-> +	sound0: sound-0 {
->   		compatible = "ti,j721e-cpb-audio";
->   		model = "j721e-cpb";
->   
+> [1/2] io_uring: uapi: Don't force linux/time_types.h for userspace
+>        commit: 958bfdd734b6074ba88ee3abc69d0053e26b7b9c
 
-Thanks,
-Jai
+Jens, please drop this commit. It breaks the build:
+
+All errors (new ones prefixed by >>):
+
+    In file included from <command-line>:
+>> ./usr/include/linux/io_uring.h:654:41: error: field 'timeout' has incomplete type
+      654 |         struct __kernel_timespec        timeout;
+          |                                         ^~~~~~~
+
+-- 
+Ammar Faizi
+
