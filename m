@@ -2,112 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9F6162C7A2
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 19:29:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C10262C7A7
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 19:30:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233485AbiKPS3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 13:29:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36050 "EHLO
+        id S239204AbiKPSaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 13:30:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239173AbiKPS3g (ORCPT
+        with ESMTP id S239029AbiKPSaB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 13:29:36 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000684731C
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 10:29:34 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id v1so31294681wrt.11
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 10:29:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ERYyKyRjwjlGO/N6ix60VXwlsLrg64yLVcy7mpteO90=;
-        b=hqPr7d/V3fZKLMeVbutYZ0JtcE7oK+judWUHu7EAXUO33J8x+TOr/PUNxRipOtTso4
-         F2rCXw0i26gd8r+25CAvMKuBjYFjhl3CgWoz95kuftIAs0xqMZSfYPO64SvuGkgmePU7
-         6fKMCvTkNPGWf8iZK32rKZDTMLr2LwS7b4w909q+2QOb2wxbiv25z2kYlo5OsIsZm8id
-         bDzPJtNdu/WpfuccOio6k2CrwCDyfsKgWwWmwq1aK5gwQN4gUJO9wandBFHKDpp05IOD
-         +dgtjZGb/s8K1DM9zsT06gEXghL883cViavEMLLi301W7PLES17yxgM8OAT8Krf7g0Ow
-         vm4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ERYyKyRjwjlGO/N6ix60VXwlsLrg64yLVcy7mpteO90=;
-        b=i7jdla1XUHroSLqIVLqP92oLehgzuuGxGI9njEjIQ7ZmGsiqIycSCa74vFVbsmcp+n
-         fO77Wc+ZsEnmEM92VHlYFYKlA8nzKUsnOq3aSDbFBNazFrnXeIc8uVWTeWRRoUWvi0xE
-         hc51NRDcZiKvnTEBX0zypo8K7Ypxn5y+Dq4jiBc8hm8ACnOHGjiLQXyTq2w6JNXWFC8+
-         QvN9tN8PoFpCRJoC5Y54qF11jRBQqVyogtwlSBEuoqWpyFYxNXi0QeM66Z8NtJz9E+xw
-         Yy/WvLN+LMGp1pAkmrdvVGTw45YNzNHEEZdX2cG/fxjYu5W/MbBgl4umMArvgMALcG1H
-         KFLg==
-X-Gm-Message-State: ANoB5pn+2v+xlQzSmYs5r4mqYTeQXp5ylurTjWGbS7y3aQihUUyO+xzw
-        /WPJPpvODILNTOmVhxReJMw=
-X-Google-Smtp-Source: AA0mqf5cEs0Y3RtVt9snW109hI+LcRC0mRYfN9+j0PcJpB67W+6JFrMr4YfiTFsC7TYDDbq30EmHQg==
-X-Received: by 2002:a5d:4562:0:b0:241:8103:769e with SMTP id a2-20020a5d4562000000b002418103769emr11599566wrc.240.1668623373384;
-        Wed, 16 Nov 2022 10:29:33 -0800 (PST)
-Received: from kista.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
-        by smtp.gmail.com with ESMTPSA id co19-20020a0560000a1300b0022e66749437sm15843182wrb.93.2022.11.16.10.29.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 10:29:33 -0800 (PST)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>
-Cc:     Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev,
-        Andre Przywara <andre.przywara@arm.com>,
-        Samuel Holland <samuel@sholland.org>
-Subject: Re: [PATCH v3 0/3] bus: sunxi-rsb: Fix poweroff issues
-Date:   Wed, 16 Nov 2022 19:29:32 +0100
-Message-ID: <2654128.mvXUDI8C0e@kista>
-In-Reply-To: <20221114015749.28490-1-samuel@sholland.org>
-References: <20221114015749.28490-1-samuel@sholland.org>
+        Wed, 16 Nov 2022 13:30:01 -0500
+Received: from sonic310-30.consmr.mail.ne1.yahoo.com (sonic310-30.consmr.mail.ne1.yahoo.com [66.163.186.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F6F554CC
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 10:29:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1668623396; bh=NHUQvpQYr0Qj0gqXyR44REguG8S4rHXrKN2FlhJ3Ibw=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=E9n5D5y3lQXK9qB96r7bg+rGteM4O62mxo7zV8BSjLuHFSlUl6zMWCqVpHBBt77K09cphVqJxfIh8dd6eZ+RougMIpSnxad6z095Vy0l4AXMnm6M9OLrEZXfRAsvDCUe/YoCH6s/Y1o14SebKwa6G/xSOh1c7VsvRZLIPgG/1apvs852dkds0ApuHiTdWiY0zgWVZ9kQ61nuAUCd6+lr/FZ4Y5G8puuf/zzbFSCmOb17EL7SmCj95NYbfzXx/y75x2FkPUhoP1WkwUYbi33N7HzK9TAjBvRvnadbLMJYr3uFMJ1Ee8lcFbg9vE7Dq5tzcKSTASmXUIAIM4k3SdI84A==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1668623396; bh=VR63XfpKqSpEsPvTZ24jmEnVQNKDJhk27deLKbv2c6a=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=kOvD3JWgGztjdDIwK/3BjkPhya4lIHL35yL9f9P0aPOTzydLFYAaT5UnOmsoXvTkNh8NCymXBKSFkEoqzi/0QjD3ZeYadKrzjvY/CVuAy/sKfl8gcPm7PGzvLrk/ayNweh/BnGAaWHWhr9zEnrqK7o3QXgT7PIIc9HCydwBgAzIPpGrIlY+ZBMCmG43kw4p9BGMyQit5h5TSDQe1QmCbmWt4jgNRAPJ9XumYOXFqi3AJjRqgrjA7xlbN6SdzXz6GsizVRdmr6rQupzSwUHoWpY5vfrBluVVIyUEUl/gHvibR3wuK5VuyYnoXq930hxZPy3vnen3TEKN3M72o2qn4Fw==
+X-YMail-OSG: FL1LeRUVM1mGJlmn.3Gqb.MqyKlt0DARDUb7sDut53byJr6O3GT6lvxAQKddjS0
+ tG8iAc0jqqWsBGkzfHczm5OES0CSmrjiFjzXxXyhu7LiDUsMWvIS9ytoq9seb0ujiU6wjnH_kf4Z
+ ReU1ScAJCOWFAwgpILVEWaRLFAozVC98Zk3vwIbUXcZLBvxYdDDLaEE0uzENnxWKRLEZHZid_XAJ
+ 2T4Sv9Wm8f.BXi2M4K.xGt5Z55xTrbEW0b3ONWNAMV.SeW5ppBMP9gS3gtjFLJbBBg20IO5wLfZE
+ yUG8oiOKVzvLRYS4bgOb3TrGUKix9LAqGzceHor7WguGKxoN_bQtJtYKs0GGZ9t6uiSdrgXxAZ1v
+ RTG8Lo.SZbztTkBNI7Sttoc.iXPLe7E2x5zUYrTrKW8bXM6_UjFKP_fwVL2.OgukognTsbj1cRwI
+ uELnyRFDCC0qiEIWI.sy1tD1Ekq_OoMWDBRWL0hQqKSv95H.cwzWKH.WtM2qraHTaFDB9pvceaE.
+ CcI5.R1JjjazuPp16FTYZiFVFdVHSQuwiDrLAHJhf7WbH11LoNV962oO2H9tPebodraNv__67qoj
+ qHk5EHu9yhO33atU0RsW65GUj2jrgveQ5LnzGkTRh9YVCde4q9VXnDI2Cf_s7uh_SJniaRfQzctb
+ bsCHB5HcL6NkHVb8B266udCgKag4_1zjR8h1aQsLLzT1VnhPINfFf6LHJOknNArwjA5T_kyHto3D
+ 78Tp2xs2uD_Jj2gkZHeX1hwKnj2uzr87b8OhqjRogJFrdJCewQXvdPtTZERFPgcuV5g920QOakJn
+ sPeHqdE1VJotiF1fBCNM_6MQMWbmMXH67tsiL6H3S5Fbr49lMaLcG3PfibvF38fGUV.F3J2g9UHk
+ f0Gr9bWXWh38D1q8TO9kHyMHEgLvqxrQVY6IFIDL3jbjqRRULskyRKVg0wItNU1oQmCQOqCG9hbH
+ dnIduZZRbq3Fms3duSMKNmFX1ZWCV3ci1CO64_0fyx_zkkqbw4dCjr53Kfie2BuVcqf9kcJW27vl
+ 1.FUFmhFRPIYsgkEnRXlW6rds9chKOh92ii5jZvn.s9H0HMCCXxbPA1C0OL46WN_RaHCXc_LfQUp
+ 6ng9RntWtN2aPNt0v7J_cG888W1HuU1bDiPaqLmpl7ymKM54vKm3M2eB6HwLwN7efg_k4YutI7Wr
+ E.fEGBe9aq93S9NRr8SZITRVrEO5Dhp2W0jJrx0Ah_KhZ5SjQOVLjcSutxLBgXYS8Flii_JGxq0_
+ TTOQJLXqzUSBTmG_AEdGLdwGeXnSKX0vgG.vFx1d3YY3FguClAeiVF8Y8MKlbubPtIrZfY3tnTD8
+ 3wpuxn7k40cLZARZfsR.FfSXy.2nRg3JzW.0iYbuzoJ2qrSnDdNTjYQ_Qy7mA4wMC6yjMzzR8_xD
+ 9wlJRwkHyEqg1Lyo1orRiaJefE64KEkJBMdXRLyfWw4hROOLfSwydqnxhfWr07cS2OELvQh3QLdN
+ hasS.DaXNRLWYS.xV_aSmTHprMmAvzYgQhAyxanIFpaWV4QVWij3uJTROAxHfuvEPLHVCudy.0tN
+ JMIjHyEn5Fef7hs1lU9BaIg_4oFUC_N1rNA1ETlexuztJE6vxqnqC9mmwp00zLTR0Xvp0x95Yoga
+ rZoh0fnqJwXX0GxU.s2VXoNhjWfB557aN1Uxdu56h5bpu2PHFUiAo_4eI_aCI2vpQRnvT2XT1RSN
+ US7DHw7pj9TvN0.ei1GMtdLzkKR_XbWStOQzc956x.iv4p.iM0wY7FfhCQys9KEF6oQVHQGmiWfo
+ xkWsRYtPTQy9lly3W.l7qIZUgS4iLdPArGmuFVCvJVgU5n4WJ53iljn9AMFBjT.vkiW6RsBhDDD_
+ hjFz1jh6JyD7716Q2XM_JTtBaWWFSY5ug3e2H7CEiBGSnASw_O1tbiN3N3CqRy7iKJ9KXbgDlB5u
+ qgv9bhZ0dkQrbRAj4Uy6V.fC8FVNzdgoVtTf64mMEfwiEryUjqNbtnJHrxLYkjzb.RmNQBDdKbQQ
+ rs.n3EFOGqslWJwj8G4rvk8JICiPCA2HhTalrUqWYaugQNoYcL4cMs8ttZAQPMXbEoDpH2z_gKEN
+ is2gHS9Qkzb_X0qBxn62jc2Yx1ZDMzjC8ANhYVb1buRv5FKD0S94Bbp..QZ9F5yflFnDw88t9E7R
+ ZWUMD52PP8a.yVvVtd2aqxPePTVpJy5qcgNl7EMBqAzbOGgcsvcVuA7gQqsakLB9cab6x5_5wmPE
+ jmF50GAWnm9ziboScX49gdQK9YWZ5fvqLn59UFRj3LFAZSwPLrqoi1ZAnN7518fNWUA--
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.ne1.yahoo.com with HTTP; Wed, 16 Nov 2022 18:29:56 +0000
+Received: by hermes--production-bf1-5878955b5f-kkjj4 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 2101798ae56b406ede834f14ec72bf34;
+          Wed, 16 Nov 2022 18:29:55 +0000 (UTC)
+Message-ID: <2430b157-9ef9-2465-a9e4-d117d421566d@schaufler-ca.com>
+Date:   Wed, 16 Nov 2022 10:29:52 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PoC][PATCH] bpf: Call return value check function in the JITed
+ code
+Content-Language: en-US
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>, bpf <bpf@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        casey@schaufler-ca.com
+References: <700dffccdfeeb3d19c5385550e4c84f08c705e19.camel@huaweicloud.com>
+ <20221116154712.4115929-1-roberto.sassu@huaweicloud.com>
+ <CAADnVQLQswvu3oGyeevLrKMT200yD4hzCbkBUAs=1bKSDVaOQg@mail.gmail.com>
+ <05bf553f795ac93ea3032cfc1b56ca35fd6a920a.camel@huaweicloud.com>
+ <CAADnVQJu7isDCi4+f8s4LfiwcYJbN4kXkvgJ8+ZnsS+QGDVnMw@mail.gmail.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <CAADnVQJu7isDCi4+f8s4LfiwcYJbN4kXkvgJ8+ZnsS+QGDVnMw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.20863 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne ponedeljek, 14. november 2022 ob 02:57:46 CET je Samuel Holland 
-napisal(a):
-> This series fixes a couple of issues that occur when powering off a
-> board using a PMIC attached to the RSB bus.
-> 
-> These issues only affected 32-bit platforms, because 64-bit platforms
-> use PSCI for pm_power_off(), and the PSCI firmware reinitializes the
-> RSB controller.
-> 
-> Changes in v3:
->  - Adjust patch 1 commit message
->  - Clear the interrupt status register after polling
->  - Add a patch refactoring how the status bits are cleared
-> 
-> Changes in v2:
->  - Add Fixes tag to patch 2
->  - Only check for specific status bits when polling
-> 
-> Samuel Holland (3):
->   bus: sunxi-rsb: Remove the shutdown callback
->   bus: sunxi-rsb: Support atomic transfers
->   bus: sunxi-rsb: Clear interrupt status before each transfer
+On 11/16/2022 9:55 AM, Alexei Starovoitov wrote:
+> On Wed, Nov 16, 2022 at 8:41 AM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+>> On Wed, 2022-11-16 at 08:16 -0800, Alexei Starovoitov wrote:
+>>> On Wed, Nov 16, 2022 at 7:48 AM Roberto Sassu
+>>> <roberto.sassu@huaweicloud.com> wrote:
+>>>> +static bool is_ret_value_allowed(int ret, u32 ret_flags)
+>>>> +{
+>>>> +       if ((ret < 0 && !(ret_flags & LSM_RET_NEG)) ||
+>>>> +           (ret == 0 && !(ret_flags & LSM_RET_ZERO)) ||
+>>>> +           (ret == 1 && !(ret_flags & LSM_RET_ONE)) ||
+>>>> +           (ret > 1 && !(ret_flags & LSM_RET_GT_ONE)))
+>>>> +               return false;
+>>>> +
+>>>> +       return true;
+>>>> +}
+>>>> +
+>>>>  /* For every LSM hook that allows attachment of BPF programs, declare a nop
+>>>>   * function where a BPF program can be attached.
+>>>>   */
+>>>> @@ -30,6 +41,15 @@ noinline RET bpf_lsm_##NAME(__VA_ARGS__)     \
+>>>>  #include <linux/lsm_hook_defs.h>
+>>>>  #undef LSM_HOOK
+>>>>
+>>>> +#define LSM_HOOK(RET, DEFAULT, RET_FLAGS, NAME, ...)   \
+>>>> +noinline RET bpf_lsm_##NAME##_ret(int ret)     \
+>>>> +{                                              \
+>>>> +       return is_ret_value_allowed(ret, RET_FLAGS) ? ret : DEFAULT; \
+>>>> +}
+>>>> +
+>>>> +#include <linux/lsm_hook_defs.h>
+>>>> +#undef LSM_HOOK
+>>>> +
+>>> because lsm hooks is mess of undocumented return values your
+>>> "solution" is to add hundreds of noninline functions
+>>> and hack the call into them in JITs ?!
+>> I revisited the documentation and checked each LSM hook one by one.
+>> Hopefully, I completed it correctly, but I would review again (others
+>> are also welcome to do it).
+>>
+>> Not sure if there is a more efficient way. Do you have any idea?
+>> Maybe we find a way to use only one check function (by reusing the
+>> address of the attachment point?).
+>>
+>> Regarding the JIT approach, I didn't find a reliable solution for using
+>> just the verifier. As I wrote to you, there could be the case where the
+>> range can include positive values, despite the possible return values
+>> are zero and -EACCES.
+> Didn't you find that there are only 12 or so odd return cases.
+> Maybe refactor some of them to something that the verifier can enforce
+> and denylist the rest ?
 
-Applied patches 1 and 2.
+Changing security_mumble() often requires changes in either VFS, audit or
+networking code. Even simple changes can require extensive review and
+difficult to obtain Acked-by's. It may be the correct approach, but it
+won't be easy or quick.
 
-Best regards,
-Jernej
+> Also denylist those that Casey mentioned like security_secid_to_secctx ?
 
-> 
->  drivers/bus/sunxi-rsb.c | 56 ++++++++++++++++++-----------------------
->  1 file changed, 25 insertions(+), 31 deletions(-)
-> 
-> --
-> 2.37.3
-
+Identifying all the hooks that could be "dangerous" isn't an easy chore,
+and some of the "dangerous" hooks are key to implementing classes of policy
+and absolutely necessary for audit support.
 
