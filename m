@@ -2,137 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BBBB62CB56
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 21:46:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27AAB62CB5C
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 21:46:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233990AbiKPUqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 15:46:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59326 "EHLO
+        id S233262AbiKPUqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 15:46:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231221AbiKPUqC (ORCPT
+        with ESMTP id S234139AbiKPUq1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 15:46:02 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2077.outbound.protection.outlook.com [40.107.94.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6CA1CFE6;
-        Wed, 16 Nov 2022 12:45:58 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ohrbm9vmK640FhYnF/RPQufgQboEgBjILIgbk0iMhEWxvoLANF4Qsuuu4LpEMZsQN6angQ7d8QWpRwfInXP6NgbhiwFRQZXFptHsuRqKFM/9/RNsAn0lhQY5DCMBxsUfbleuWZ3ln54cuHcS0yfsjJlhAxL/t5wQskT7Pwoqs/9/f/4U9pGLBS/qQqRF8HynDN4MlQKVV9YbzEaZlaA1z5qypmLGb2jM9E+jaVVSWUbD5hn/PhM4YZBLUDtuG1/7kb1VA4bq0qBWuqZWLsb2qOZKrLo4Su2+6bJhJ/1mWgX7JcNCVg6j5O9LJaV3GS+8F8Jokkhc04xnXkBkwHJ3aw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CrjtNxLTW3jPW5PQgpeE33v+g8UUrFILnLj40R33c0c=;
- b=DS5EdhW7BsuY87cH73Z55Gd5htmhh45lqPIJZVt0hNJESyL1TA8nAn8Pii6IpkvpmOTd0Zeti1sd7/TLyzIXjsbJUiPfK3jRnBkrroB362P1Na4yEebmngW5CCVlFj6uIlT/vy5AjiETBlKG/nysoO6YTWTKywDbw8PlEaDpSa4ZX+qcEnt7e+/xynJ/EPEXagH7lABwERLPJRPTmUEwNrbJCh6olJa90JpPFQXJpwyMuVP1ZE+J2lSDwEx60DHzdkAFD/nAC3E6w7npOTsnskidUMdZDik6Ao+gEtfd5flhtwQOObx/MsaNE3Ozl0ywK5Tm4yi28chLK3ASDLQ3Xg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=bytedance.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CrjtNxLTW3jPW5PQgpeE33v+g8UUrFILnLj40R33c0c=;
- b=sorwRJA+fnoF1h2hKUyvzeqB9FamP+caDp9en3yh8hqxDr089/p9DajWCGOLqmUu8FkGyaMV1v7bwqNfqOexVn0d8+Lx0x26raOunTj9G0djqsGf5mX/zVHHDFPIdUWx4ZqhFnSNWbEslO5K+MRThihWXzSB+aG+LFGoTej9tq/MxDzqcfxtY5UpcHBfWdCBUxxYZc6az78Md/AMrq/ad/LH6mQXwAosSFFxNmZ3lW62rS64MsqNxgHEtIaUmELDZFg9KS4ET0CVTwk/mXQSLG5qPME9zSKjN5aHbvFxwBhD9Y5S7qtAgn5zheJuGpU6s/dmHxohT5UCO113PfAkHg==
-Received: from MW4PR04CA0174.namprd04.prod.outlook.com (2603:10b6:303:85::29)
- by MN0PR12MB6198.namprd12.prod.outlook.com (2603:10b6:208:3c5::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.18; Wed, 16 Nov
- 2022 20:45:57 +0000
-Received: from CO1NAM11FT064.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:85:cafe::e0) by MW4PR04CA0174.outlook.office365.com
- (2603:10b6:303:85::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.18 via Frontend
- Transport; Wed, 16 Nov 2022 20:45:56 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CO1NAM11FT064.mail.protection.outlook.com (10.13.175.77) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5834.8 via Frontend Transport; Wed, 16 Nov 2022 20:45:56 +0000
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 16 Nov
- 2022 12:45:44 -0800
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail202.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 16 Nov
- 2022 12:45:43 -0800
-Received: from blueforge.nvidia.com (10.127.8.13) by mail.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server id 15.2.986.36 via Frontend
- Transport; Wed, 16 Nov 2022 12:45:43 -0800
-From:   John Hubbard <jhubbard@nvidia.com>
-To:     <ligang.bdlg@bytedance.com>
-CC:     <linux-api@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        "Valentin Schneider" <vschneid@redhat.com>,
-        <linux-fsdevel@vger.kernel.org>, <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH v5 0/2] sched/numa: add per-process numa_balancing
-Date:   Wed, 16 Nov 2022 12:45:40 -0800
-Message-ID: <20221116204540.163222-1-jhubbard@nvidia.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221027025302.45766-1-ligang.bdlg@bytedance.com>
-References: <20221027025302.45766-1-ligang.bdlg@bytedance.com>
+        Wed, 16 Nov 2022 15:46:27 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7058A5D68C;
+        Wed, 16 Nov 2022 12:46:25 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id j15so32004644wrq.3;
+        Wed, 16 Nov 2022 12:46:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3OB7wrdvxiJFRvhmiue8jC5Fpuj0dFMnx5brAbEwXVA=;
+        b=pUKnaYduYgV1XUs2jZu2mdRajyGhoNshkA/qoMX6esDtu5Kqtpy768+SqB+HO0jnqj
+         L+m6wiKPXyyNfvVQSBgj1W8pAHury2R+0ytWYBC3WD0FLAyTbpcnd3biN7qULdrEpkd+
+         NE9mzT8sSo1tmoyo3p8eO7qwBobD3rJ2PQpkV9qbHQm1rW/eOhy92hhrjlNipEpAld/C
+         IvQ5PSHX7kC1tDc7w81UJEmSmv7Zq5pS95eGZEXx/U4S63fWvB7698yg2Is/1xxCPNb0
+         u3XlN6gC/bAKZr5pE/WZAGeTIzlfcZA/JYZZ4rjkFzWkKKwh47zlIZd5NFLLsVcb6xcP
+         NIUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3OB7wrdvxiJFRvhmiue8jC5Fpuj0dFMnx5brAbEwXVA=;
+        b=bSWUS9hDGEat1YdyrsudSfjNIMi0ijEqBmzA5c+/TrOeiwKS1l3DLP7vVR/dbMniy3
+         yF+0jVjoCizCLtS333qKfkc/cFUAH8ZoMtbMmD6rIufcKd0PXLzW9tubDkL/WlyTJoYb
+         tPqzclSzStqGXHjpe5zUn6vERsKGvIajnzd4si3pelxPkiC7Ju+kuH4eEbtAdqnQTgLM
+         L7dSzrr5kZbcIAPQALCb1sq4x8AvXYfZ21Cv1FQHBmfmhdfT+98HkGr31cekOrPhOhGr
+         JJh+ddNDYykjiLo6sPYXd3ajvIahuB116ix4qXljrx3IudusbRw8cuL0FvVwfexFQICY
+         KgOg==
+X-Gm-Message-State: ANoB5pnux5NaMToTxua8dcJmFuLMlVdlYtqe2Dxt4muK5qDQ2TmSURbe
+        MTb4BkFEOubMefNMXpyWgskVgRdgA7SBfj84oDaefXce
+X-Google-Smtp-Source: AA0mqf5V8tXQyCU5dBQqIqiDBcoHdqGQFIeI614+qSzsagnrGq2cT8NBNg6JJ8/wb6ovyMf0bPbapdaxs+ObqZxrr+Q=
+X-Received: by 2002:a5d:490a:0:b0:234:ee55:a8a8 with SMTP id
+ x10-20020a5d490a000000b00234ee55a8a8mr14595128wrq.689.1668631584012; Wed, 16
+ Nov 2022 12:46:24 -0800 (PST)
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT064:EE_|MN0PR12MB6198:EE_
-X-MS-Office365-Filtering-Correlation-Id: ea886a98-c424-4683-9720-08dac8138fa8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7j4CmThscefgrqEUCiwuylGOwQijgZS4guH8U3tudT4MW2t/pJuhbhxj/AhJpTAUL83upyFY8BpJ9ANoRodaPkjEE9zzcL3Gnj74gZpK4VTD98tR8mrFTz5VSiIvKxWiOHzdXkzsZHgqybj4wMnlDY5q4k+fb1SvocYfUohTwgPNaZXLJx/hgujRXX4Z5Zjv+xkfDXAGFSP7XBcQpWdBU0c5d6EgzfOdwRs/retwPPxSkpbsjHz8qt4Tbixs8wtN66T7V4Cle+2N4XnvMVA/KXX/DvXNdMdy1TPWMfIgraZocsoQQrLtSuEEStvso+mPAYoGvmSkwXWsDTJKgiMcB8pvzSaNEm/B2Mk+9FYf9RnKMnxtk0adecfbUa333P1EnZsJG5rIsYuKF3QBbfh6w1BjfmJCKuRKt7cEpHRSp2E2reC9W5Y2Scr50CCsFT7NlsLVcxxRDg5yxje+nHvLW6e6T3tnaugZbb29hlvmGdG6ypjPQGOB4pEKZ6Z95/f7/X1X9s3s1QBj6kGlEfSNQTafKlFI7Qz48pIpi/wyGDPWxpgSOZlrHUb6zRj9qFC+bBxwzGPuVOTSOP3+z9a+axAYlsQwbu4271Xmp3Wvvg9sRxwz3hs3PAnEzAhPvabeR6R9hh/a4ZN1RqU3MAgMUA0LvoDVLGksUsyq5MC8dyI6+bwFAcBtkfAQM6ZMMe5Q7Vo0WAjRxjL8US+SH7ohDouXHwnPHE9+seBCoykrL+dpcdZ+F8McyhofYWd9mhqSjB5xNSO3slOL6SW7f/JFwSJv744CXTvEhWdWVkpVK7JYRySi93FlRXIXzFg55/082+6+t/Fm3x4WTthhFxOquUgXFct8hqvMtn9RzWnNvG9ZlrxLoqqbPWUq6D7WTAif2MQ4YuhR96WTSN8JQKbmuA==
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(346002)(39860400002)(396003)(136003)(376002)(451199015)(46966006)(40470700004)(36840700001)(356005)(40460700003)(54906003)(426003)(36756003)(6916009)(7416002)(40480700001)(26005)(83380400001)(2906002)(41300700001)(4744005)(47076005)(336012)(82740400003)(7636003)(86362001)(478600001)(8936002)(2616005)(1076003)(316002)(36860700001)(70586007)(70206006)(82310400005)(5660300002)(4326008)(7696005)(8676002)(186003)(966005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Nov 2022 20:45:56.5533
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ea886a98-c424-4683-9720-08dac8138fa8
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT064.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6198
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20221116200150.4657-1-linux.amoon@gmail.com> <20221116200150.4657-7-linux.amoon@gmail.com>
+In-Reply-To: <20221116200150.4657-7-linux.amoon@gmail.com>
+From:   Peter Geis <pgwipeout@gmail.com>
+Date:   Wed, 16 Nov 2022 15:46:11 -0500
+Message-ID: <CAMdYzYo_DGiO0UxJEb3xues7Um=X9AgPvz+Xp_YWb9pp9HaScg@mail.gmail.com>
+Subject: Re: [linux-next-v2 5/5] arm64: dts: rockchip: Add missing of
+ ethernet-phy-id to reset the phy on Rock 3A SBC
+To:     Anand Moon <linux.amoon@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Chukun Pan <amadeus@jmu.edu.cn>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Gang Li,
+On Wed, Nov 16, 2022 at 3:02 PM Anand Moon <linux.amoon@gmail.com> wrote:
+>
+> Add MDIO description with ethernet-phy-id compatible string
+> which enable calling reset of the phy. The PHY will then be probed,
+> independent of if it can be found on the bus or not,
+> and that probing will enable the GPIO.
+>
+> ethernet-phy-id is read from ethenet register dump reg2 and reg3.
+>
+> Fix following warning.
+> [   12.323417] rk_gmac-dwmac fe010000.ethernet eth0: Register MEM_TYPE_PAGE_POOL RxQ-0
+> [   12.324078] rk_gmac-dwmac fe010000.ethernet eth0: no phy at addr -1
+> [   12.324099] rk_gmac-dwmac fe010000.ethernet eth0: __stmmac_open: Cannot attach to PHY (error: -19)
+>
+> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> ---
+> V2: new to the patch series.
+>
+> alarm@rock-3a:~$ sudo ethtool -d eth0
+> [sudo] password for alarm:
+> ST GMAC Registers
+> GMAC Registers
+> Reg0  0x08072203
+> Reg1  0x00000000
+> Reg2  0x00000404
+> Reg3  0x00000000
+> Reg4  0x00000002
+> ---
+>  arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts b/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
+> index 9f84a23a8789..fe36156a5017 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
+> +++ b/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
+> @@ -585,7 +585,7 @@ &i2s2_2ch {
+>
+>  &mdio1 {
+>         rgmii_phy1: ethernet-phy@0 {
+> -               compatible = "ethernet-phy-ieee802.3-c22";
+> +               compatible = "ethernet-phy-id0000.0404", "ethernet-phy-ieee802.3-c22";
+>                 reg = <0x0>;
+>                 pinctrl-names = "default";
+>                 pinctrl-0 = <&eth_phy_rst>, <&eth_phy_int>;
 
-If you want this to move forward, you'll likely need to include the
-original To: and Cc: people. And also, any new ones who responded with
-review comments. I've added here, those that I found in your v4 series
-[1].
+Have you tried instead moving the reset to the mdio bus? I've had
+success with this, though you'll need to change the reset assert and
+deassert timing handles, they are different for the bus.
 
-The message that I'm replying to appears to only be sent to a couple of
-generic lists, and so it's going to be invisible to most of those
-people.
-
-Also, I already acked this series separately [2], before I saw the
-missing Cc's.
-
-[1] https://lore.kernel.org/all/20220929064359.46932-1-ligang.bdlg@bytedance.com/
-
-[2] https://lore.kernel.org/all/49ed07b1-e167-7f94-9986-8e86fb60bb09@nvidia.com/
-
-thanks,
--- 
-John Hubbard
-NVIDIA
+> --
+> 2.38.1
+>
