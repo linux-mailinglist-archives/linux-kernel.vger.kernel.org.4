@@ -2,99 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE39962B63C
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:17:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82CB362B645
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:19:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233332AbiKPJRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 04:17:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40930 "EHLO
+        id S233408AbiKPJTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 04:19:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238581AbiKPJQ4 (ORCPT
+        with ESMTP id S233231AbiKPJS6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 04:16:56 -0500
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139F6DF12;
-        Wed, 16 Nov 2022 01:16:53 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AG9GfGg024520;
-        Wed, 16 Nov 2022 03:16:41 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1668590201;
-        bh=ICuUjo/GPVBR5jB6ykuDqxm43B+egfVXj21Q8bu9JD0=;
-        h=From:To:CC:Subject:Date;
-        b=x2wUmwc9PmN8pbvYxbBjR+TJuBOuf/BFUj/3UFq8VHAx3y6A3maYyPOP0zHLxDbyh
-         ySWYiFWO93AzlLk6GRfAb9fx8aY7eQ9kR75XmEW/m0az9WUgTl1kplIPt78xAA41FU
-         xYbKvloI6gfC6/Up4XeEN+jlxCkjRhp7tyk4ZGtA=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AG9Gfww095560
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 16 Nov 2022 03:16:41 -0600
-Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Wed, 16
- Nov 2022 03:16:41 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Wed, 16 Nov 2022 03:16:40 -0600
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AG9GeW5057725;
-        Wed, 16 Nov 2022 03:16:40 -0600
-From:   Bhavya Kapoor <b-kapoor@ti.com>
-To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>, <vigneshr@ti.com>,
-        <nm@ti.com>, <piyali_g@ti.com>
-Subject: [PATCH v2] arm64: dts: ti: k3-j721e-main: Remove ti,strobe-sel property
-Date:   Wed, 16 Nov 2022 14:46:52 +0530
-Message-ID: <20221116091652.112620-1-b-kapoor@ti.com>
-X-Mailer: git-send-email 2.20.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 16 Nov 2022 04:18:58 -0500
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D99DFF8
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:18:57 -0800 (PST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NByCg26Bzz4y0vn;
+        Wed, 16 Nov 2022 17:18:55 +0800 (CST)
+Received: from xaxapp01.zte.com.cn ([10.88.40.50])
+        by mse-fl2.zte.com.cn with SMTP id 2AG9IfA6055683;
+        Wed, 16 Nov 2022 17:18:41 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Wed, 16 Nov 2022 17:18:43 +0800 (CST)
+Date:   Wed, 16 Nov 2022 17:18:43 +0800 (CST)
+X-Zmail-TransId: 2af96374aaf337a94061
+X-Mailer: Zmail v1.0
+Message-ID: <202211161718436948912@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <seanjc@google.com>
+Cc:     <pbonzini@redhat.com>, <tglx@linutronix.de>, <mingo@redhat.com>,
+        <bp@alien8.de>, <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        <hpa@zytor.com>, <kvm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIEtWTTogeDg2OiBSZXBsYWNlIElTX0VSUigpIHdpdGggSVNfRVJSX1ZBTFVFKCk=?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 2AG9IfA6055683
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.251.13.novalocal with ID 6374AAFF.000 by FangMail milter!
+X-FangMail-Envelope: 1668590335/4NByCg26Bzz4y0vn/6374AAFF.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 6374AAFF.000/4NByCg26Bzz4y0vn
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to latest errata of J721e [1], HS400 mode is not supported
-in MMCSD0 subsystem (i2024) .  Speed modes supported has been already
-updated in commit eb8f6194e807 ("arm64: dts: ti: k3-j721e-main: Update the speed modes supported and their itap delay values for MMCSD subsystems")
-but it missed dropping 'ti,strobe-sel' property which is
-only required by HS400 speed mode.
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Thus, drop 'ti,strobe-sel' property from kernel dtsi for J721e SoC.
+Avoid type casts that are needed for IS_ERR() and use
+IS_ERR_VALUE() instead.
 
-[1] https://www.ti.com/lit/er/sprz455/sprz455.pdf
-
-Fixes: eb8f6194e807 ("arm64: dts: ti: k3-j721e-main: Update the speed modes supported and their itap delay values for MMCSD subsystems")
-Signed-off-by: Bhavya Kapoor <b-kapoor@ti.com>
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 ---
+ arch/x86/kvm/x86.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Changelog v1 -> v2 :
-	- Updated Commit Message based on what Nishanth Menon has told
-		in https://lore.kernel.org/all/20221115034324.6qpxl2774bzwbl3t@acorn/
-
- arch/arm64/boot/dts/ti/k3-j721e-main.dtsi | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
-index 917c9dc99efa..e4748a838d83 100644
---- a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
-@@ -1094,7 +1094,6 @@
- 		ti,itap-del-sel-mmc-hs = <0xa>;
- 		ti,itap-del-sel-ddr52 = <0x3>;
- 		ti,trm-icp = <0x8>;
--		ti,strobe-sel = <0x77>;
- 		dma-coherent;
- 	};
- 
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index aa39e6c2d1f1..c2eaa9b8d2cb 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -12483,7 +12483,7 @@ void __user * __x86_set_memory_region(struct kvm *kvm, int id, gpa_t gpa,
+ 		 */
+ 		hva = vm_mmap(NULL, 0, size, PROT_READ | PROT_WRITE,
+ 			      MAP_SHARED | MAP_ANONYMOUS, 0);
+-		if (IS_ERR((void *)hva))
++		if (IS_ERR_VALUE(hva))
+ 			return (void __user *)hva;
+ 	} else {
+ 		if (!slot || !slot->npages)
 -- 
-2.20.1
-
+2.25.1
