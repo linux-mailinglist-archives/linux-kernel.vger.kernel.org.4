@@ -2,96 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E49662BE5D
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:39:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0C9F62BE6A
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:41:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239040AbiKPMja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 07:39:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55688 "EHLO
+        id S232838AbiKPMlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 07:41:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239011AbiKPMjH (ORCPT
+        with ESMTP id S231838AbiKPMlM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 07:39:07 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A68391FCEA;
-        Wed, 16 Nov 2022 04:38:35 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 01AD4150C;
-        Wed, 16 Nov 2022 04:38:41 -0800 (PST)
-Received: from [10.57.70.190] (unknown [10.57.70.190])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2AD043F663;
-        Wed, 16 Nov 2022 04:38:31 -0800 (PST)
-Message-ID: <d63b59c3-f67d-e5ee-6cbf-9f97eec0aeaa@arm.com>
-Date:   Wed, 16 Nov 2022 12:38:19 +0000
+        Wed, 16 Nov 2022 07:41:12 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C690AB3C
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 04:41:10 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id o4so29579291wrq.6
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 04:41:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kj6hNhybTnNcaQ6fHwD5wQp+bSb1uN49o9Qhpb0mU/M=;
+        b=JXj4UKYDsUshc3XLgQ7MmVkB/P2oryJsLHPKCUIjCMT0YsKuK9+02NWyGvDlo52zW4
+         1Xy3pinI0Gnu4lyWrQ95s3ka6veCMJ26Nfmbj5mciBNEWEfObs1uU7bEqIsdFdeJ5NKA
+         VWP0tgHtYMOEvGq3dq7yqWS79BB7P4toRljT496asOfYMxhG4Jtn1d0vcdvPajWbag6b
+         preKi5InoXeEyd5O2+RM8EYkg14zVlgqHBbPVloIJHMwzbguZ4cWC+n+j8kgeSQpCUMa
+         0xJxwVLfa5efEx0qnxC+VW5ZUTwhIjPjV+2+hlgdpWncRGoCtJFo/6ZjD9H+blEa7LBi
+         3TSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kj6hNhybTnNcaQ6fHwD5wQp+bSb1uN49o9Qhpb0mU/M=;
+        b=g/5XbTxEb2UQkOP9uPiN8yoe8dAE8IKSimfXuu9K5h0yy9Vxhylgkw/V1R99ngJuyc
+         u8Bur5LCKWEOB4oy9ebc1tajgnXS+Rt0c70QAxl49rgrYAnPHrbpj0nZV6H4pcftoIlf
+         0tZR2T2XNTA3MBBaAwG5CEvkfchfWXIHHtQ6qF076J95vh/XEFKWgQuDPHNL2l0KI3Fg
+         OjeCMXjSmZ7PnNWW1rjWh8S3YAhYDflQIvAZioC6W30Hua/Rg8hoe00Ukkb1SSm6FOZr
+         BYBW/QWFEPIU1LinrOT6HaQ2KuEFLAHfKl1Vo7Mrd4CndJMS6jmphN3u5yFkvWA8r0RR
+         0X/w==
+X-Gm-Message-State: ANoB5plT4mCQhVwjZSytv5sfXzfupH/dFrcpkutI4bkdmWkxbb7MJDoz
+        ADGm/58px0vh82bUPTSzAILOHQ==
+X-Google-Smtp-Source: AA0mqf6wAPtBCIWUO7xTE+Ndf6MWifSBF9p4upBE+m3tekmqE8ZTbTipAhhpV91Uze9eu28Qj3VbQQ==
+X-Received: by 2002:adf:edc2:0:b0:236:774e:5b78 with SMTP id v2-20020adfedc2000000b00236774e5b78mr13970233wro.351.1668602469398;
+        Wed, 16 Nov 2022 04:41:09 -0800 (PST)
+Received: from localhost.localdomain ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id j6-20020a05600c1c0600b003a3170a7af9sm2231764wms.4.2022.11.16.04.41.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 04:41:09 -0800 (PST)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: [PATCH] dt-bindings: firmware: document Qualcomm SM8550 SCM
+Date:   Wed, 16 Nov 2022 14:40:38 +0200
+Message-Id: <20221116124038.2769028-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH] arm64: dts: fsd: Change the reg properties from 64-bit to
- 32-bit
-Content-Language: en-GB
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Vivek Yadav <vivek.2311@samsung.com>, rcsekar@samsung.com,
-        krzysztof.kozlowski+dt@linaro.org,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, pankaj.dubey@samsung.com,
-        ravi.patel@samsung.com, Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-fsd@tesla.com, Rob Herring <robh+dt@kernel.org>
-Cc:     linux-can@vger.kernel.org, Netdev <netdev@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        aswani.reddy@samsung.com, sriranjani.p@samsung.com,
-        ajaykumar.rs@samsung.com
-References: <CGME20221116090644epcas5p3a0fa6d51819a2b2a9570f236191748ea@epcas5p3.samsung.com>
- <20221116091247.52388-1-vivek.2311@samsung.com>
- <37d42235-1960-4001-9be9-20a85de54730@app.fastmail.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <37d42235-1960-4001-9be9-20a85de54730@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-11-16 11:16, Arnd Bergmann wrote:
-> On Wed, Nov 16, 2022, at 10:12, Vivek Yadav wrote:
->> Change the reg properties from 64-bit to 32-bit for all IPs, as none of
->> the nodes are above 32-bit range in the fsd SoC.
->>
->> Since dma-ranges length does not fit into 32-bit size, keep it 64-bit
->> and move it to specific node where it is used instead of SoC section.
-> 
-> I don't think that works, the dma-ranges property is part of the
-> bus, not a particular device:
-> 
->   		mdma0: dma-controller@10100000 {
->   			compatible = "arm,pl330", "arm,primecell";
-> -			reg = <0x0 0x10100000 0x0 0x1000>;
-> +			reg = <0x10100000 0x1000>;
->   			interrupts = <GIC_SPI 424 IRQ_TYPE_LEVEL_HIGH>;
->   			#dma-cells = <1>;
->   			clocks = <&clock_imem IMEM_DMA0_IPCLKPORT_ACLK>;
->   			clock-names = "apb_pclk";
->   			iommus = <&smmu_imem 0x800 0x0>;
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			dma-ranges = <0x0 0x0 0x0 0x10 0x0>;
->   		};
-> 
-> Since the dma-controller has no children, I don't see how this has
-> any effect. Also, translating a 36-bit address into a 32-bit
-> address just means it gets truncated anyway, so there is no
-> point in making it appear to have a larger address range.
+Document the compatible for Qualcomm SM8550 SCM.
 
-Yes, this is definitely bogus on both counts.
+Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+---
+ Documentation/devicetree/bindings/firmware/qcom,scm.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks,
-Robin.
+diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+index 25688571ee7c..7b753acb85d5 100644
+--- a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
++++ b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+@@ -53,6 +53,7 @@ properties:
+           - qcom,scm-sm8250
+           - qcom,scm-sm8350
+           - qcom,scm-sm8450
++          - qcom,scm-sm8550
+           - qcom,scm-qcs404
+       - const: qcom,scm
+ 
+-- 
+2.34.1
+
