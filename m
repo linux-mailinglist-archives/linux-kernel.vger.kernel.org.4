@@ -2,157 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5D5C62C631
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 18:19:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB14762C634
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 18:19:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234413AbiKPRTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 12:19:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35164 "EHLO
+        id S234451AbiKPRTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 12:19:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232778AbiKPRTZ (ORCPT
+        with ESMTP id S233809AbiKPRTi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 12:19:25 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54426383
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 09:19:22 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id a29so30589526lfj.9
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 09:19:22 -0800 (PST)
+        Wed, 16 Nov 2022 12:19:38 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3DA91E8
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 09:19:33 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id 140so16631387pfz.6
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 09:19:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UCpMqcRT8DeY5MXJCLiKIz5Im5PIOy+nnF0pses3NRo=;
-        b=gPP/YC7RcqXib2XtCBKhb344QqRcr2tCekCF3H6g0DbHMXM4BhF+AYi7kbOqwzduc1
-         3Nci/kOMGv5CP1o5EcR/uksu0p+DQ1m2pB/gPAPIJ41aKwBUyDOCxBpVgybBC/qaRQga
-         T3RREKedJitX+tZgbKXiRYFLTT+UhTcWyWU/SmhiHj57cdAf7pxa5HNvQ4I2SYeFTVPe
-         hwd9U5GXn3E2GS3Eakoa0GH8ZR3mS3C+DQkxZAzSXLcPeG/Pdzdn2nGBPyD2iT60PZDX
-         NIB8D8lpfsyt/RpG+EaZvK2Nv0GLHktVnskYmOD64WMfMkltDs0AtnMchbWTlVb+L9sT
-         fNuw==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=yd++ObN+WrxyzCV6eu+IuUH2K33aygMDqpLl7YqP9bQ=;
+        b=K5O1OhO9WbRzwyTmhYztgpVTLFrj0jLsQw/X0Y2COhlWg/KCpnb3BuQ/3DWYU/QUyy
+         yn6MmJVPG4DpxPGCodjTtHXveMagw2rprK5uLT+OwUN4vOCoVyvMx/lewpri+A2NUKw7
+         IATvHrc/GE8CCvbn/3FH8sh8WbpgcGvRCKKhDX9YmnXDsYO8cpZ4JyKmwtEMBqutYZ14
+         Ff2cuZRp8Ae8g/u5S2WKIjd493CjipYO/FbPKGh3i4ORxyz3HFK4UsZLQAkDnl2UWzVP
+         4w3mooHuX4QS++G0LYjLJnrSgQXT6koq357Hksp4BgysnMT4kd4YH7s6t6H6qB7ovrYS
+         2LaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UCpMqcRT8DeY5MXJCLiKIz5Im5PIOy+nnF0pses3NRo=;
-        b=U/zVTLOGiMWmFVAWcCkt5hsgjngg4RA13GBpWyD0ufL6k/RQLkadTL2OIBZzzQrpmn
-         CcmWLS1DPxyy/NOdbj8u0XmXG+5rRsin2P/m7ueWBhrVe5fFxlRO69MX8W1pwe1YN67K
-         5GG3cQ9MG4Uf40jQ/zoMOxyn04zEtQS/xJXEtHyKwZc7/tXNA6gMwWaGj71RwkvXCWJf
-         7PK1kCR+JnzDyL6DfX0j0es9jJEkm2qfBDdFXu0lPfy0kKRqOPThCgBzXkooJmcL6AUV
-         4SPqZTRbJ15aJbP/Bn1jBkUBqjw4nczTJ2WzuZFlZ7V37xdnRvFAooEJq23bEbkPEuRq
-         BPmQ==
-X-Gm-Message-State: ANoB5plIf7CEj57fJ4lNA3X988Ikwk3cW/J/pdfSvAPmRptJDo3iA5LX
-        MmB2+vixIVPm8yz+3MZxUwq06Q==
-X-Google-Smtp-Source: AA0mqf61LBMQcDDOdERra618Gul2RXMcG5LraXEgHjg7sKKHhpXJP2KJpVLUcPqjo1eEivEm8tnoHw==
-X-Received: by 2002:ac2:5093:0:b0:4b1:753b:e66f with SMTP id f19-20020ac25093000000b004b1753be66fmr8351806lfm.276.1668619160736;
-        Wed, 16 Nov 2022 09:19:20 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id 11-20020ac24d4b000000b004a62ff61b3dsm2676326lfp.252.2022.11.16.09.19.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 09:19:20 -0800 (PST)
-Message-ID: <891e51f0-af46-6150-ba4e-807f00cc8e63@linaro.org>
-Date:   Wed, 16 Nov 2022 18:19:18 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yd++ObN+WrxyzCV6eu+IuUH2K33aygMDqpLl7YqP9bQ=;
+        b=GR0Te3xljwpJBNyoonF70vsOaIM3LPNKLDBGHN3rj0xASyQUDF8ZR9kmrFwftG6GEw
+         45sFVP8vSi2H56zD2jp7TDmVMjXLh11WawrsravuMN33AVMDI8tkk4Zf6seRsLf0eRQo
+         63wcJpelw9i0Ajet7SIXzxMIinpnPXt4blPckuEBGwnzQiPof46ZgwAvic1kO8zDN9o9
+         kuqbv41+QYH4FiMZ4QAja6AwhJ38vPvTPPf0HWOEhOxjmsoD/ybumfyo7Embt8hfM7yO
+         frg17xikhMgM2FaNmjls6f2NhQw+Wnj5g3cttzIS+mg9LpyuZbqnTX5EGzmCmrES9lE6
+         +PBQ==
+X-Gm-Message-State: ANoB5plC/gudTEmwQIOvBS4lZ8uRzueR8pz5ntfJ/cYrYlb45YdzRwdm
+        UzjECzmgaiCxgQ6h3FEHk0w/2Q==
+X-Google-Smtp-Source: AA0mqf7vO0cqTPp+H1qbd2Dp5/UFD3iMJrWGOOmHhwF4ArV24KELQAGgbhwMNKl1+aZ5S+A+ooIaeA==
+X-Received: by 2002:a63:221a:0:b0:464:3985:3c63 with SMTP id i26-20020a63221a000000b0046439853c63mr21258516pgi.141.1668619173006;
+        Wed, 16 Nov 2022 09:19:33 -0800 (PST)
+Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
+        by smtp.gmail.com with ESMTPSA id k26-20020aa7999a000000b00561382a5a25sm11102299pfh.26.2022.11.16.09.19.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 09:19:32 -0800 (PST)
+Date:   Wed, 16 Nov 2022 09:19:28 -0800
+From:   David Matlack <dmatlack@google.com>
+To:     "wangyanan (Y)" <wangyanan55@huawei.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>, kvm <kvm@vger.kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        "Kernel Mailing List, Linux" <linux-kernel@vger.kernel.org>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        KVM ARM <kvmarm@lists.cs.columbia.edu>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Marc Zyngier <maz@kernel.org>, Joerg Roedel <joro@8bytes.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Jon Cargille <jcargill@google.com>,
+        kvm-ppc <kvm-ppc@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Jim Mattson <jmattson@google.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>
+Subject: Re: disabling halt polling broken? (was Re: [PATCH 00/14] KVM:
+ Halt-polling fixes, cleanups and a new stat)
+Message-ID: <Y3UboELxugwDJkIG@google.com>
+References: <20210925005528.1145584-1-seanjc@google.com>
+ <03f2f5ab-e809-2ba5-bd98-3393c3b843d2@de.ibm.com>
+ <YVHcY6y1GmvGJnMg@google.com>
+ <f37ab68c-61ce-b6fb-7a49-831bacfc7424@redhat.com>
+ <43e42f5c-9d9f-9e8b-3a61-9a053a818250@de.ibm.com>
+ <CABgObfYtS6wiQe=BhF3t5usr7J6q4PWE4=rwZMMukfC9wT_6fA@mail.gmail.com>
+ <YVIAdVxc+q2UWB+J@google.com>
+ <32810c89-44c6-6780-9d05-e49f6b897b6e@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 2/8] arm64: dts: qcom: sdm450: Add device tree for
- Motorola Moto G6
-Content-Language: en-US
-To:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Julian Braha <julianbraha@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kees Cook <keescook@chromium.org>,
-        Tony Luck <tony.luck@intel.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-References: <20221116145616.17884-1-luca@z3ntu.xyz>
- <20221116145616.17884-3-luca@z3ntu.xyz>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221116145616.17884-3-luca@z3ntu.xyz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <32810c89-44c6-6780-9d05-e49f6b897b6e@huawei.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URI_DOTEDU,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/11/2022 15:56, Luca Weiss wrote:
-> From: Julian Braha <julianbraha@gmail.com>
+On Tue, Nov 15, 2022 at 11:28:56AM +0800, wangyanan (Y) wrote:
+> Hi Sean, Paolo,
 > 
-> Add device tree for the Motorola Moto G6 (ali) smartphone. This device
-> is based on Snapdragon 450 (sdm450) SoC which is a variant of MSM8953.
+> I recently also notice the behavior change of param halt_poll_ns.
+> Now it loses the ability to:
+> 1) dynamically disable halt polling for all the running VMs
+> by `echo 0 > /sys`
+> 2) dynamically adjust the halt polling interval for all the
+> running VMs by `echo * > /sys`
 > 
-> Signed-off-by: Julian Braha <julianbraha@gmail.com>
+> While in our cases, we usually use above two abilities, and
+> KVM_CAP_HALT_POLL is not used yet.
 
-Missing SoB.
+I think the right path forward is to make KVM_CAP_HALT_POLL a pure
+override of halt_poll_ns, and restore the pre-existing behavior of
+halt_poll_ns whenever KVM_CAP_HALT_POLL is not used. e.g. see the patch
+below.
 
-Please run scripts/checkpatch.pl and fix reported warnings.
+That will fix issues (1) and (2) above for any VM not using
+KVM_CAP_HALT_POLL. If a VM is using KVM_CAP_HALT_POLL, it will ignore
+all changes to halt_poll_ns. If we truly need a mechanism for admins to
+disable halt-polling on VMs using KVM_CAP_HALT_POLL, we can introduce a
+separate module parameter for that. But IMO, any setup that is
+sophisticated enough to use KVM_CAP_HALT_POLL should also be able to use
+KVM_CAP_HALT_POLL to disable halt polling.
 
-> ---
->  arch/arm64/boot/dts/qcom/Makefile             |   1 +
->  .../boot/dts/qcom/sdm450-motorola-ali.dts     | 256 ++++++++++++++++++
->  2 files changed, 257 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/sdm450-motorola-ali.dts
+If everyone is happy with this approach I can test and send a real patch
+to the mailing list.
+
+diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+index e6e66c5e56f2..253ad055b6ad 100644
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -788,6 +788,7 @@ struct kvm {
+ 	struct srcu_struct srcu;
+ 	struct srcu_struct irq_srcu;
+ 	pid_t userspace_pid;
++	bool override_halt_poll_ns;
+ 	unsigned int max_halt_poll_ns;
+ 	u32 dirty_ring_size;
+ 	bool vm_bugged;
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 43bbe4fde078..479d0d0da0b5 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -1198,8 +1198,6 @@ static struct kvm *kvm_create_vm(unsigned long type, const char *fdname)
+ 			goto out_err_no_arch_destroy_vm;
+ 	}
+ 
+-	kvm->max_halt_poll_ns = halt_poll_ns;
+-
+ 	r = kvm_arch_init_vm(kvm, type);
+ 	if (r)
+ 		goto out_err_no_arch_destroy_vm;
+@@ -3371,7 +3369,7 @@ void kvm_sigset_deactivate(struct kvm_vcpu *vcpu)
+ 	sigemptyset(&current->real_blocked);
+ }
+ 
+-static void grow_halt_poll_ns(struct kvm_vcpu *vcpu)
++static void grow_halt_poll_ns(struct kvm_vcpu *vcpu, unsigned int max)
+ {
+ 	unsigned int old, val, grow, grow_start;
+ 
+@@ -3385,8 +3383,8 @@ static void grow_halt_poll_ns(struct kvm_vcpu *vcpu)
+ 	if (val < grow_start)
+ 		val = grow_start;
+ 
+-	if (val > vcpu->kvm->max_halt_poll_ns)
+-		val = vcpu->kvm->max_halt_poll_ns;
++	if (val > max)
++		val = max;
+ 
+ 	vcpu->halt_poll_ns = val;
+ out:
+@@ -3501,10 +3499,17 @@ void kvm_vcpu_halt(struct kvm_vcpu *vcpu)
+ {
+ 	bool halt_poll_allowed = !kvm_arch_no_poll(vcpu);
+ 	bool do_halt_poll = halt_poll_allowed && vcpu->halt_poll_ns;
++	unsigned int max_halt_poll_ns;
+ 	ktime_t start, cur, poll_end;
++	struct kvm *kvm = vcpu->kvm;
+ 	bool waited = false;
+ 	u64 halt_ns;
+ 
++	if (kvm->override_halt_poll_ns)
++		max_halt_poll_ns = kvm->max_halt_poll_ns;
++	else
++		max_halt_poll_ns = READ_ONCE(halt_poll_ns);
++
+ 	start = cur = poll_end = ktime_get();
+ 	if (do_halt_poll) {
+ 		ktime_t stop = ktime_add_ns(start, vcpu->halt_poll_ns);
+@@ -3545,17 +3550,16 @@ void kvm_vcpu_halt(struct kvm_vcpu *vcpu)
+ 	if (halt_poll_allowed) {
+ 		if (!vcpu_valid_wakeup(vcpu)) {
+ 			shrink_halt_poll_ns(vcpu);
+-		} else if (vcpu->kvm->max_halt_poll_ns) {
++		} else if (max_halt_poll_ns) {
+ 			if (halt_ns <= vcpu->halt_poll_ns)
+ 				;
+ 			/* we had a long block, shrink polling */
+-			else if (vcpu->halt_poll_ns &&
+-				 halt_ns > vcpu->kvm->max_halt_poll_ns)
++			else if (vcpu->halt_poll_ns && halt_ns > max_halt_poll_ns)
+ 				shrink_halt_poll_ns(vcpu);
+ 			/* we had a short halt and our poll time is too small */
+-			else if (vcpu->halt_poll_ns < vcpu->kvm->max_halt_poll_ns &&
+-				 halt_ns < vcpu->kvm->max_halt_poll_ns)
+-				grow_halt_poll_ns(vcpu);
++			else if (vcpu->halt_poll_ns < max_halt_poll_ns &&
++				 halt_ns < max_halt_poll_ns)
++				grow_halt_poll_ns(vcpu, max_halt_poll_ns);
+ 		} else {
+ 			vcpu->halt_poll_ns = 0;
+ 		}
+@@ -4588,6 +4592,7 @@ static int kvm_vm_ioctl_enable_cap_generic(struct kvm *kvm,
+ 		if (cap->flags || cap->args[0] != (unsigned int)cap->args[0])
+ 			return -EINVAL;
+ 
++		kvm->override_halt_poll_ns = true;
+ 		kvm->max_halt_poll_ns = cap->args[0];
+ 		return 0;
+ 	}
+
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> index d7669a7cee9f..a0b537414593 100644
-> --- a/arch/arm64/boot/dts/qcom/Makefile
-> +++ b/arch/arm64/boot/dts/qcom/Makefile
-> @@ -115,6 +115,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-crd-r3.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc8280xp-crd.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc8280xp-lenovo-thinkpad-x13s.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sda660-inforce-ifc6560.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= sdm450-motorola-ali.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sdm630-sony-xperia-ganges-kirin.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sdm630-sony-xperia-nile-discovery.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sdm630-sony-xperia-nile-pioneer.dtb
-> diff --git a/arch/arm64/boot/dts/qcom/sdm450-motorola-ali.dts b/arch/arm64/boot/dts/qcom/sdm450-motorola-ali.dts
-> new file mode 100644
-> index 000000000000..62874306fc24
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/sdm450-motorola-ali.dts
-> @@ -0,0 +1,256 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2020, The Linux Foundation. All rights reserved.
-> + */
-> +/dts-v1/;
-> +
-> +#include "msm8953.dtsi"
-> +#include "pm8953.dtsi"
-> +#include "pmi8950.dtsi"
-> +
-> +/ {
-> +	model = "Motorola Moto G6";
-> +	compatible = "motorola,ali", "qcom,sdm450";
-> +	chassis-type = "handset";
-> +	qcom,msm-id = <338 0>;
-> +	qcom,board-id = <0x41 0xb1a0>,
-> +			<0x42 0xb1a0>,
-> +			<0x43 0xc100>,
-> +			<0x42 0xb1b0>,
-> +			<0x43 0xc200>,
-> +			<0x44 0xc200>,
-> +			<0x42 0xb200>,
-> +			<0x43 0xb200>;
-
-Both properties are not allowed, unless exception list is extended.
-
-Does not look like you tested the DTS against bindings. Please run `make
-dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
-for instructions).
-
-
-Best regards,
-Krzysztof
-
+> On 2021/9/28 1:33, Sean Christopherson wrote:
+> > On Mon, Sep 27, 2021, Paolo Bonzini wrote:
+> > > On Mon, Sep 27, 2021 at 5:17 PM Christian Borntraeger
+> > > <borntraeger@de.ibm.com> wrote:
+> > > > > So I think there are two possibilities that makes sense:
+> > > > > 
+> > > > > * track what is using KVM_CAP_HALT_POLL, and make writes to halt_poll_ns follow that
+> > > > what about using halt_poll_ns for those VMs that did not uses KVM_CAP_HALT_POLL and the private number for those that did.
+> > > Yes, that's what I meant.  David pointed out that doesn't allow you to
+> > > disable halt polling altogether, but for that you can always ask each
+> > > VM's userspace one by one, or just not use KVM_CAP_HALT_POLL. (Also, I
+> > > don't know about Google's usecase, but mine was actually more about
+> > > using KVM_CAP_HALT_POLL to *disable* halt polling on some VMs!).
+> > I kinda like the idea if special-casing halt_poll_ns=0, e.g. for testing or
+> > in-the-field mitigation if halt-polling is broken.  It'd be trivial to support, e.g.
+> Do we have any plan to repost the diff as a fix?
+> I would be very nice that this issue can be solved.
+> 
+> Besides, I think we may need some Doc for users to describe
+> how halt_poll_ns works with KVM_CAP_HALT_POLL, like
+> "Documentation/virt/guest-halt-polling.rst".
+> > @@ -3304,19 +3304,23 @@ void kvm_vcpu_halt(struct kvm_vcpu *vcpu)
+> >                  update_halt_poll_stats(vcpu, start, poll_end, !waited);
+> > 
+> >          if (halt_poll_allowed) {
+> > +               max_halt_poll_ns = vcpu->kvm->max_halt_poll_ns;
+> > +               if (!max_halt_poll_ns || !halt_poll_ns)  <------ squish the max if halt_poll_ns==0
+> > +                       max_halt_poll_ns = halt_poll_ns;
+> > +
+> Does this mean that KVM_CAP_HALT_POLL will not be able to
+> disable halt polling for a VM individually when halt_poll_ns !=0?
+> >                  if (!vcpu_valid_wakeup(vcpu)) {
+> >                          shrink_halt_poll_ns(vcpu);
+> > -               } else if (vcpu->kvm->max_halt_poll_ns) {
+> > +               } else if (max_halt_poll_ns) {
+> >                          if (halt_ns <= vcpu->halt_poll_ns)
+> >                                  ;
+> >                          /* we had a long block, shrink polling */
+> >                          else if (vcpu->halt_poll_ns &&
+> > -                                halt_ns > vcpu->kvm->max_halt_poll_ns)
+> > +                                halt_ns > max_halt_poll_ns)
+> >                                  shrink_halt_poll_ns(vcpu);
+> >                          /* we had a short halt and our poll time is too small */
+> > -                       else if (vcpu->halt_poll_ns < vcpu->kvm->max_halt_poll_ns &&
+> > -                                halt_ns < vcpu->kvm->max_halt_poll_ns)
+> > -                               grow_halt_poll_ns(vcpu);
+> > +                       else if (vcpu->halt_poll_ns < max_halt_poll_ns &&
+> > +                                halt_ns < max_halt_poll_ns)
+> > +                               grow_halt_poll_ns(vcpu, max_halt_poll_ns);
+> >                  } else {
+> >                          vcpu->halt_poll_ns = 0;
+> >                  }
+> > _______________________________________________
+> > kvmarm mailing list
+> > kvmarm@lists.cs.columbia.edu
+> > https://lists.cs.columbia.edu/mailman/listinfo/kvmarm
+> > .
+> Thanks,
+> Yanan
