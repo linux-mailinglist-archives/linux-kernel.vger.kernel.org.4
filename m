@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69D8662CC90
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 22:19:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE7B562CC8E
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 22:19:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233762AbiKPVT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 16:19:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35764 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234002AbiKPVTY (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S234015AbiKPVTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 16 Nov 2022 16:19:24 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF45B6172
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 13:19:22 -0800 (PST)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35716 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233633AbiKPVTV (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 16 Nov 2022 16:19:21 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 253DD5B842
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 13:19:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668633562; x=1700169562;
+  t=1668633561; x=1700169561;
   h=date:from:to:cc:subject:message-id:mime-version:
    content-transfer-encoding;
-  bh=FfD7Y55epwVOfmMOz5s1pJaOjdTWeygbIKYNrbY/NZ0=;
-  b=HuCPjOfYuHtBMYu1c/66ctPsDuvnB5aksNj+M7yiCB0YFYvGFXEc6czP
-   YkvCxcVvylSfaRKOPk7a8USmeNNe8fUGfZJkdD8Jscy1SshMgdrDSBfz6
-   VP8mwHbul1W2Xv9152MQoDwfJqejGu+wrpSXZWYRHzCT0h254bz/+mQWc
-   CJ7b8XJ7iBEPGS6oLR8WPm8979TTrQf77L6HoED7RbUKEKDEoZ77h1+77
-   KKDOcUmB5nV8ShLcag4ZpdK3EiGx9krx15u8rlF/umBBP/LXI9cOYhRPC
-   gkaCO/ICmlTKTZyvMWk/5r4d2AcFbyBX1YKsNqiDVBGDfKuCAhTYBLt6/
+  bh=YaDlsdgPoRzdqcmZPFKIfX+zfD5k9W8bD6d3Sh9LJTM=;
+  b=mWOhbzsw06wkPDEeJ0NTUHMwEeVTcMlaXl2I547FltvB+uIKpQsGjiBF
+   m/tD+QXDWllviCw3Yj+7il8kBe86+v0WYdXDgDzgBwiacgsc3MWgjWAuJ
+   RymbFe5c4/0S80Z9sBCboXn13/pB7MS+uBEtAIFVuH4KnDgpYagzj0eAt
+   Na/cwUYWW6pKCace4v7ktk/nq1iHgzgUxSJ4Xi/4LKHP/brsrQSRUBYiJ
+   OVV0pfjPdcCH9J6fEG88LWH0bAsjUT81SxqInIMgcKDoJ/LtBRp8C6MP7
+   nIC493PD1xuPrwbn5r1ApPnsEsjDTt0Bns7WWAfbsBZm5QNfwN3rF1lOp
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="313821441"
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="339491336"
 X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
-   d="scan'208";a="313821441"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 13:19:21 -0800
+   d="scan'208";a="339491336"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 13:19:20 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="781928609"
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="670654280"
 X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
-   d="scan'208";a="781928609"
+   d="scan'208";a="670654280"
 Received: from lkp-server01.sh.intel.com (HELO ebd99836cbe0) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 16 Nov 2022 13:19:19 -0800
+  by orsmga008.jf.intel.com with ESMTP; 16 Nov 2022 13:19:19 -0800
 Received: from kbuild by ebd99836cbe0 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1ovPoU-0002kU-30;
+        id 1ovPoU-0002kP-2p;
         Wed, 16 Nov 2022 21:19:18 +0000
-Date:   Thu, 17 Nov 2022 05:18:45 +0800
+Date:   Thu, 17 Nov 2022 05:18:47 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     "x86-ml" <x86@kernel.org>
 Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:perf/core] BUILD SUCCESS WITH WARNING
- e8d7a90c08ce963c592fb49845f2ccc606a2ac21
-Message-ID: <637553b5.ebdZY+lvkXPfAk1E%lkp@intel.com>
+Subject: [tip:perf/urgent] BUILD SUCCESS
+ ce0d998be9274dd3a3d971cbeaa6fe28fd2c3062
+Message-ID: <637553b7.tu7NRqEvqGX3Z1qj%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,84 +64,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git perf/core
-branch HEAD: e8d7a90c08ce963c592fb49845f2ccc606a2ac21  perf: Fix possible memleak in pmu_dev_alloc()
-
-Warning: (recently discovered and may have been fixed)
-
-kernel/events/core.c:11274:4: warning: cast from 'int (*)(struct perf_cpu_pmu_context *)' to 'remote_function_f' (aka 'int (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
-
-Warning ids grouped by kconfigs:
-
-clang_recent_errors
-|-- hexagon-randconfig-r001-20221116
-|   `-- kernel-events-core.c:warning:cast-from-int-(-)(struct-perf_cpu_pmu_context-)-to-remote_function_f-(aka-int-(-)(void-)-)-converts-to-incompatible-function-type
-|-- hexagon-randconfig-r005-20221116
-|   `-- kernel-events-core.c:warning:cast-from-int-(-)(struct-perf_cpu_pmu_context-)-to-remote_function_f-(aka-int-(-)(void-)-)-converts-to-incompatible-function-type
-`-- s390-randconfig-r012-20221116
-    `-- kernel-events-core.c:warning:cast-from-int-(-)(struct-perf_cpu_pmu_context-)-to-remote_function_f-(aka-int-(-)(void-)-)-converts-to-incompatible-function-type
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git perf/urgent
+branch HEAD: ce0d998be9274dd3a3d971cbeaa6fe28fd2c3062  perf/x86/intel/pt: Fix sampling using single range output
 
 elapsed time: 722m
 
-configs tested: 53
-configs skipped: 2
+configs tested: 74
+configs skipped: 101
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
 gcc tested configs:
-arc                                 defconfig
-alpha                               defconfig
-s390                                defconfig
-s390                             allmodconfig
-arm                                 defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-x86_64                    rhel-8.3-kselftests
-arc                              allyesconfig
-x86_64                          rhel-8.3-func
-ia64                             allmodconfig
-alpha                            allyesconfig
-i386                                defconfig
-arm64                            allyesconfig
-powerpc                           allnoconfig
-i386                          randconfig-a012
-arm                              allyesconfig
-x86_64                              defconfig
-x86_64                           rhel-8.3-syz
-powerpc                          allmodconfig
 i386                          randconfig-a014
-x86_64                         rhel-8.3-kunit
-mips                             allyesconfig
-x86_64                        randconfig-a013
-x86_64                        randconfig-a002
-x86_64                        randconfig-a011
-x86_64                           rhel-8.3-kvm
-i386                             allyesconfig
+i386                          randconfig-a012
 i386                          randconfig-a016
-sh                               allmodconfig
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+i386                                defconfig
 x86_64                               rhel-8.3
-x86_64                        randconfig-a015
-x86_64                        randconfig-a004
 x86_64                           allyesconfig
-x86_64                        randconfig-a006
 i386                          randconfig-a001
 i386                          randconfig-a003
 i386                          randconfig-a005
-um                             i386_defconfig
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a013
+x86_64                        randconfig-a006
+x86_64                        randconfig-a011
+i386                             allyesconfig
+x86_64                        randconfig-a015
+x86_64                            allnoconfig
 um                           x86_64_defconfig
+um                             i386_defconfig
+s390                                defconfig
+s390                             allmodconfig
+arc                                 defconfig
+alpha                               defconfig
 s390                             allyesconfig
+sh                          r7785rp_defconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+ia64                             allmodconfig
+arm                        realview_defconfig
+powerpc                   currituck_defconfig
+xtensa                    xip_kc705_defconfig
+riscv                    nommu_k210_defconfig
+openrisc                            defconfig
+i386                          randconfig-c001
+arm                             ezx_defconfig
+arm                        oxnas_v6_defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+sh                            titan_defconfig
+powerpc                 mpc85xx_cds_defconfig
+mips                            ar7_defconfig
+arm                            zeus_defconfig
+microblaze                          defconfig
+sh                          rsk7203_defconfig
+sparc64                          alldefconfig
+powerpc                    amigaone_defconfig
+arc                     haps_hs_smp_defconfig
+sh                           se7705_defconfig
+arm                            qcom_defconfig
 
 clang tested configs:
 i386                          randconfig-a013
-i386                          randconfig-a011
-x86_64                        randconfig-a001
 i386                          randconfig-a015
-x86_64                        randconfig-a012
-x86_64                        randconfig-a003
-x86_64                        randconfig-a016
-x86_64                        randconfig-a005
-x86_64                        randconfig-a014
+i386                          randconfig-a011
 i386                          randconfig-a002
 i386                          randconfig-a004
 i386                          randconfig-a006
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+powerpc                     pseries_defconfig
+hexagon              randconfig-r041-20221117
+hexagon              randconfig-r045-20221117
 
 -- 
 0-DAY CI Kernel Test Service
