@@ -2,116 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E83C362C3BD
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 17:16:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D2C362C3C3
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 17:16:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234282AbiKPQQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 11:16:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53488 "EHLO
+        id S234022AbiKPQQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 11:16:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233991AbiKPQQ0 (ORCPT
+        with ESMTP id S234414AbiKPQQs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 11:16:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC32D135
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 08:16:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1CFD1B81DE0
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 16:16:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BB8EC433C1;
-        Wed, 16 Nov 2022 16:16:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1668615382;
-        bh=VuCtC4r5rO4v5LPmAf61/aocsA7ivweRS0+kvCJ2oIs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ODk9UlAYGLYxEAECTGQ6TqvD/DAIlHdnfrqVlqAgkVGEP6AAGubJ/A3oYNyjTMuIR
-         u4krZydeXlDCZg4OuGn9wz81a4H2RQ8sGt5CqVy7BbMBss22VWlhGBbCJui/Wrx2d3
-         IQS0qc5QeW7jGkLmNP2RqWol+w4K+2ulNSqZMJWQ=
-Date:   Wed, 16 Nov 2022 17:16:20 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, Fei Li <fei1.li@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v4 1/1] virt: acrn: Mark the uuid field as unused
-Message-ID: <Y3UM1PSJnr8xQ966@kroah.com>
-References: <20221116092254.66234-1-andriy.shevchenko@linux.intel.com>
- <Y3TMmDXEbGyDQrLF@kroah.com>
- <Y3Tlu0BjgMk3xNDQ@smile.fi.intel.com>
- <Y3T/qJalJ9H224Mu@kroah.com>
- <Y3UKFQJJI/02QDWU@smile.fi.intel.com>
+        Wed, 16 Nov 2022 11:16:48 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A074756EF9;
+        Wed, 16 Nov 2022 08:16:41 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id i21so27311334edj.10;
+        Wed, 16 Nov 2022 08:16:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=oyC+JG2j0IITo5qTGz+wgr7L9QvSOVg95WWnwiLkRlk=;
+        b=nu0f182GHr4/oXvVgfqPrTaVmMJY1kOkyoQNPJBEHeq/YTv4TnVqESuk44fa+dYSE6
+         zROnl8KWUxSyc5d3spKfj+etdFbteVZudbjwk13CZ41P8TIB8HdqgyYP+FaCwhOe/hMd
+         6d98SNTC604wKCD99u5v//MhwqU3kCXR9dwLLvZud4PTx1RAgD4R8hqM0pZeIbTbmN8t
+         beeORJtPNmg6YEX84PhhPXehB6QayOFKi8iAbaH407dkoEL5lv+E6JD7besihzkfoxjs
+         oO6S7ii7RRDDoPtCdngHJlxPA666lBxYnHmqwanJKulITwS8BoUIuTP+IFwym1yWT/Ee
+         rTSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oyC+JG2j0IITo5qTGz+wgr7L9QvSOVg95WWnwiLkRlk=;
+        b=j3I8OUfNRAkJWuPa9co9DDZ/sDVO9jjJKhz/lSPTnf9Vp+Sq51q+7tJln/tKb7Qpno
+         Hu+/o3MX9OXx/GKLcmM1kkX8e6ebegb4VLF97YXHrXZZAsiV5/nYS9+8+gwFaspO+Oq1
+         NThYAZqHHSFpVpI8YTcZeKJcRXZ6KVXy97r8HEVs81Lyy4DQLrPskrqy6aJ2EXD0BS1W
+         erBolebA901JQhdVU0JitZT19KMpY03znW+WOJwtXSkJInjCjLhLTczHIq92f2l/nfmS
+         Q0qLC8smpv8bdeKQhr+JaThlIFZBtCI2A5BM+SuKa9pWwvCC2NkN56/dJ320a+G5XL7X
+         dI8w==
+X-Gm-Message-State: ANoB5pn/XaWaCOMrz41e6oMB/69CRfA/lzg9ohqFLbA7zyBDmdFe04xM
+        Uj/hB/TzcJw6O6V7SN0tmxf0YRL9x2ssmD/EwUI=
+X-Google-Smtp-Source: AA0mqf5RzjDNrVdJ4jPbPIK4qWi/GaWjiVhjYKDAcBRL3/wrfTFxGQgHNmai2YxN5KZcYkypu2+WodYchj/bxoVWpRk=
+X-Received: by 2002:a05:6402:2424:b0:459:2515:b27b with SMTP id
+ t36-20020a056402242400b004592515b27bmr20048938eda.338.1668615400096; Wed, 16
+ Nov 2022 08:16:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y3UKFQJJI/02QDWU@smile.fi.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <700dffccdfeeb3d19c5385550e4c84f08c705e19.camel@huaweicloud.com> <20221116154712.4115929-1-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20221116154712.4115929-1-roberto.sassu@huaweicloud.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 16 Nov 2022 08:16:28 -0800
+Message-ID: <CAADnVQLQswvu3oGyeevLrKMT200yD4hzCbkBUAs=1bKSDVaOQg@mail.gmail.com>
+Subject: Re: [PoC][PATCH] bpf: Call return value check function in the JITed code
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>, bpf <bpf@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 06:04:37PM +0200, Andy Shevchenko wrote:
-> On Wed, Nov 16, 2022 at 04:20:08PM +0100, Greg Kroah-Hartman wrote:
-> > On Wed, Nov 16, 2022 at 03:29:31PM +0200, Andy Shevchenko wrote:
-> > > On Wed, Nov 16, 2022 at 12:42:16PM +0100, Greg Kroah-Hartman wrote:
-> > > > On Wed, Nov 16, 2022 at 11:22:54AM +0200, Andy Shevchenko wrote:
-> 
-> ...
-> 
-> > > > > - * @uuid:		UUID of the VM. Pass to hypervisor directly.
-> > > > > + * @uuid:		Reserved (used to be UUID of the VM)
-> > > > 
-> > > > If it's reserved, then don't you need to check for 0?
-> > > 
-> > > Reserved in a way that it may content something we just don't care about.
-> > 
-> > "reserved" in the kernel ioctls mean "must be 0 and we will test for it,
-> > otherwise this is an empty/useless field that can never be touched again
-> > in the future.
-> > 
-> > Please spell it out in detail as to if you can ever use this later on,
-> > and what the kernel will do (if anything) if it is set.
-> > 
-> > And if "the kernel ignores it" then that means these bytes are now
-> > "empty space never to be used again", right?
-> 
-> Right, I will fix this in v5.
-> 
-> ...
-> 
-> > > > > +	__u8	uuid[16];
-> > > > 
-> > > > You just changed the type here, so what is that going to break in
-> > > > userspace that depended on this being of a structure type and now it's
-> > > > an array?
-> > > 
-> > > It's the same. The previous was hidden behind additional type level.
-> > 
-> > Same size, yes.  Same C structure definition, no.
-> 
-> It doesn't matter, see below.
-> 
-> > > > And no other kernel changes needed?  Shouldn't you warn if this field is
-> > > > set?
-> > > 
-> > > No, as pointed out in the commit message kernel never ever used this.
-> > 
-> > That does not mean that userspace tools never did, right?  You are
-> > changing the structure definition, what tool just broke?
-> 
-> The only tool has been amended like a year ago, so the answer is none.
-> The commit message has links to the commits in question that made that
-> amendment.
-> 
-> Maybe I should remove Fixes tags? In such case we will very much know
-> that no old tools will be run on the new kernel.
+On Wed, Nov 16, 2022 at 7:48 AM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+> +static bool is_ret_value_allowed(int ret, u32 ret_flags)
+> +{
+> +       if ((ret < 0 && !(ret_flags & LSM_RET_NEG)) ||
+> +           (ret == 0 && !(ret_flags & LSM_RET_ZERO)) ||
+> +           (ret == 1 && !(ret_flags & LSM_RET_ONE)) ||
+> +           (ret > 1 && !(ret_flags & LSM_RET_GT_ONE)))
+> +               return false;
+> +
+> +       return true;
+> +}
+> +
+>  /* For every LSM hook that allows attachment of BPF programs, declare a nop
+>   * function where a BPF program can be attached.
+>   */
+> @@ -30,6 +41,15 @@ noinline RET bpf_lsm_##NAME(__VA_ARGS__)     \
+>  #include <linux/lsm_hook_defs.h>
+>  #undef LSM_HOOK
+>
+> +#define LSM_HOOK(RET, DEFAULT, RET_FLAGS, NAME, ...)   \
+> +noinline RET bpf_lsm_##NAME##_ret(int ret)     \
+> +{                                              \
+> +       return is_ret_value_allowed(ret, RET_FLAGS) ? ret : DEFAULT; \
+> +}
+> +
+> +#include <linux/lsm_hook_defs.h>
+> +#undef LSM_HOOK
+> +
 
-Please remove "fixes" as this doesn't "fix" anything.
-
-thanks,
-
-greg k-h
+because lsm hooks is mess of undocumented return values your
+"solution" is to add hundreds of noninline functions
+and hack the call into them in JITs ?!
+That's an obvious no-go. Not sure why you bothered to implement it.
