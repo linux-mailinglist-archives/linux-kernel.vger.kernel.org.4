@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8009162B3CE
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 08:13:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A678862B3CF
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 08:13:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232501AbiKPHNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 02:13:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41006 "EHLO
+        id S229531AbiKPHNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 02:13:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231594AbiKPHNE (ORCPT
+        with ESMTP id S230280AbiKPHNG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 02:13:04 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523491F9F2
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 23:13:04 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-37010fefe48so156384337b3.19
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 23:13:04 -0800 (PST)
+        Wed, 16 Nov 2022 02:13:06 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 468141F9C1
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 23:13:06 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id c188-20020a25c0c5000000b006d8eba07513so15519139ybf.17
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 23:13:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=WXJjn8PYB9SLY1j1q0EeB8Piy7lrBilE/8YOyXaTxKY=;
-        b=R9DPkR8U/JCqLAjy/iASbJFaNlfs13ciAt/+B1Xr6//ErVax+n55QLO+EUZuvA+VfB
-         2pVuOsgmRzil/fEpWYMoEcLPRglB0Ehzkq21mYEGqsPs4A4YF+E5RMmBAoLmjWsO1eWj
-         but174NBpm33mr/15kApu2yitVhNIprLILB8Msli2IKr+rakI4O7hv654m4STCOQAAJc
-         j2jVVZLhQ2z94499I6GSdUIptbgySnp9m6CvRAfNWmRGy1mh7TscKwNCD5HF9mVnwVa7
-         94KF1dMAsMJviEXYeH3Ov9KuR2HUPm0jDJuKWxYnX4ALW14ApmAgvLI4MN0HT5hMBeb0
-         RvKQ==
+        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rZhTm2sCwM0sd4mB+pucosVTiyv4zqlp4wWT/R2sU44=;
+        b=NeVYHzQSh9LPa95VeNyD2erJ5RST3qbDcp39rn2M+WV63VJbLXccHQe0jOp3281h//
+         /6QDJStsa5HeC5719ZaHB7dKPIFqJBqwDDDrFvy2JBQFdO9waPThCkNtqp/L8dsBc4Zl
+         je1aGmwz5ZpLRBYgX26Ln8BGYlh3RTzfhwGsIJO3BVaVIrYXzvr4K4LAAWJxYvGT5+sU
+         0oQCfAFtFchWmcggIp+rTz96cBrbRZVZUb/rV1zk2Wvp5T3s0OowWJ2KL+bqnDxJ3ky0
+         cex8DimvjWYivY/yPs+0ZEjDCc3R3QCmzuVRoMis6Igioz0Kmnwbd3NVzMGuYdsRoNg4
+         BfZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WXJjn8PYB9SLY1j1q0EeB8Piy7lrBilE/8YOyXaTxKY=;
-        b=2Uec/m0lZFCGPtDtAnBxLUQnMjnCaeNxj25PJG+zG8U9Z/SM1+S4stz9bFUPamHHUh
-         W/tvAC/bXAFxC2/i4t0T6we8MvG/IclVO5JNPB1lz4Lmh00gg2H55p9erWhVfeQsEY7Q
-         88Y5lDg7qqhQBLU2DiLvuD2Q51pkRp+o++XQY+tIGtJrUPV13YneW0Fhcw0tV1aQ6DM5
-         01O9U95uNbE6tTGhSAmXCAfGsZEh9BYwKGwALyQTX2ibo1cS+q3eMfOUxe/SdMalpz5F
-         w0OkT6nKuRJ6MjVc+1mHcTks6Cguf1uQ6pIh4hTYynO+XQXdxMFqLjXERb0fHoJpc2mi
-         a6yg==
-X-Gm-Message-State: ANoB5plYUaT9Casz8kQgqcPV8Q9tOewUGi3r6M8WaCo0CDlfreChAEko
-        sr4BVQxoKQJN/51Yt7qoBgiTnwe4J2VV
-X-Google-Smtp-Source: AA0mqf5xyH2ENNOTYNJSqYf1bFldRQd/ujUpLe2WBGMxK8gXwmldQunucYc1jZ8DurLzY459eLTt3lmSL+n1
+        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rZhTm2sCwM0sd4mB+pucosVTiyv4zqlp4wWT/R2sU44=;
+        b=MNGhNzzUTRxYLHGqy5PHz/M22tcexP944NxBqb9a6ivfmxbHsbWnz4C54jgv496h3v
+         BXZgBCVJk4eydSdSkOy1zdOTrf1yKmw22MdDgD5vcvqRrwDpmO4rCe82+0SS8u1FrwPZ
+         rkJUlKOrUo27IdCGA25vNmcztXmRnzvtUQ2o0Wu5jofcpmofstQ117dhZznuu+hxxDSj
+         6DNjwv24pPz+3FAouo9tLr1kGAhndcxCz6HQDRIv2+jnRn7dJALRoIJe0I2S0Dfdg7LH
+         Mli8l5BMewdga4KE+oU5ZH8cLYLxyRDbcml4m7VnZl7o+GMWYOtfEnB8eYa7pntNLaNE
+         Ib/g==
+X-Gm-Message-State: ANoB5pn3dGvkUzL46N17r62xJPM1e5C2gut7WNSgg4PH01Q1d9AwjxQ3
+        lL6abBi7PzPnfvIiWiqa53buiHV7fPDN
+X-Google-Smtp-Source: AA0mqf4LN7zMZJXkzIGBeqXaFaLoGtCJ64z/NuKcPfkUISn4se81/eXU9lqH0dIC9hkuM7/yCNFurBEsEak4
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:bf0f:58f3:342e:c1ec])
- (user=irogers job=sendgmr) by 2002:a25:d808:0:b0:6bd:d36:f096 with SMTP id
- p8-20020a25d808000000b006bd0d36f096mr20960547ybg.150.1668582783603; Tue, 15
- Nov 2022 23:13:03 -0800 (PST)
-Date:   Tue, 15 Nov 2022 23:12:55 -0800
-Message-Id: <20221116071259.2832681-1-irogers@google.com>
+ (user=irogers job=sendgmr) by 2002:a81:ad7:0:b0:36f:d14a:6158 with SMTP id
+ 206-20020a810ad7000000b0036fd14a6158mr19697123ywk.325.1668582785931; Tue, 15
+ Nov 2022 23:13:05 -0800 (PST)
+Date:   Tue, 15 Nov 2022 23:12:56 -0800
+In-Reply-To: <20221116071259.2832681-1-irogers@google.com>
+Message-Id: <20221116071259.2832681-2-irogers@google.com>
 Mime-Version: 1.0
+References: <20221116071259.2832681-1-irogers@google.com>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Subject: [PATCH v1 0/4] perf list libpfm support and other fixes
+Subject: [PATCH v1 1/4] perf list: Fix asan issue
 From:   Ian Rogers <irogers@google.com>
 To:     Weilin Wang <weilin.wang@intel.com>,
         Perry Taylor <perry.taylor@intel.com>,
@@ -84,21 +86,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix an asan issue and a a lack of libpfm support with the refactored
-perf list code. Add some improvements to wordwrap and the escape
-printing for json to aid this.
+Missed due to the void* being a valid cast.
 
-Ian Rogers (4):
-  perf list: Fix asan issue
-  perf list: Support newlines in wordwrap
-  perf list: Json escape encoding improvements
-  perf list: List callback support for libpfm
+Fixes: c9367a0658eb ("perf list: Add JSON output option")
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/builtin-list.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- tools/perf/builtin-list.c | 122 ++++++++++++++++++------------
- tools/perf/util/pfm.c     | 154 +++++++++++++++++---------------------
- tools/perf/util/pfm.h     |   6 +-
- 3 files changed, 145 insertions(+), 137 deletions(-)
-
+diff --git a/tools/perf/builtin-list.c b/tools/perf/builtin-list.c
+index aec139f7fbb2..0450fbfd0a5c 100644
+--- a/tools/perf/builtin-list.c
++++ b/tools/perf/builtin-list.c
+@@ -466,7 +466,7 @@ int cmd_list(int argc, const char **argv)
+ 				pr_warning("WARNING: hybrid cputype is not supported!\n");
+ 		}
+ 	}
+-	print_cb.print_start(&ps);
++	print_cb.print_start(ps);
+ 
+ 	if (argc == 0) {
+ 		default_ps.metrics = true;
 -- 
 2.38.1.431.g37b22c650d-goog
 
