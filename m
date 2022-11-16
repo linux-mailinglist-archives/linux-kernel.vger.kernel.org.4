@@ -2,170 +2,442 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D622C62C5A2
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 17:59:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C70862C5AC
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 18:00:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233430AbiKPQ7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 11:59:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45698 "EHLO
+        id S234496AbiKPRA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 12:00:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232548AbiKPQ73 (ORCPT
+        with ESMTP id S233835AbiKPRAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 11:59:29 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3602317419
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 08:59:28 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id z26so18046438pff.1
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 08:59:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TUFCsEixkdCGsIn+uhHCgHlafwcM3IPg0krVnDbhBBg=;
-        b=TzEQCV1NVEuLAi963h6vCc2pdKN4lL1UWqYKRzLv4KAu1eiKlZwDevKoEs+v4sYAxa
-         CGm5m8jomzNJdb8D2IpAsAcZFif8RL8b2NuYEkJP119O0O1d587uw6s2sNFczQ4QAfeE
-         Xp/WTUUq8mAoiIMGdUXbvua2ZwAosCrAKMeWjngjdnO1yuRMdcxuCUsK55Li5WpVzY7r
-         Vv5Zbft53B/vFSwJrwbSMWRPAsymwHhTkFkdlDsBQFdhuP80CMxMAM3fcOiLupKhIv4P
-         PoKsOmXSqxM51ypbdOfB0y1rusJ3SFBh2Em7LUUeATmr+fQXxCQT1wxI+Rb9Jks1eUjC
-         fDlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TUFCsEixkdCGsIn+uhHCgHlafwcM3IPg0krVnDbhBBg=;
-        b=Ewgpf4hYaZKOlEPTdLwNma07mhhie2Ran7yVi+ZSCG8AHQWw/9Ys4A0B1WG7E3czmK
-         IENBuOfHjgltfX0sF3V4rDQT5oKLNU04+GFc8muD87Bb/T0MwOuMurLwGK0XFO008JvM
-         /N81UYqVaWxoTw/3Pnk8IrQu+CL2YblaBETsDDgjGqnq0gCfn4Vh8OHlGWK5DGYwCaXV
-         MTLMbRfP1coBrA5pLwbhTy8e7Hcuzz3SNJt37NL21/CTb9W6eCLJJ7hwPh98eRwlqn//
-         tIzl8KGd+FD0W5w0eF558ZwH8fYqjlrU1F3JGZFGj5CHf6Z6QYliETAaFVmcrjaOu5pG
-         aVvw==
-X-Gm-Message-State: ANoB5pl48x88UufRp+h3AT9hx7I2u0T3rfzYeIHC2qZufVwbMIsx7F3m
-        IU2HligXmPZFLHTnsxf+JAX/aA==
-X-Google-Smtp-Source: AA0mqf4ymB4YFjGD+xqe9zHEWLq3eMShuRZgv3M345mvM68usLXq8ngFpesgZP6yeCjeiSFC7eGJcw==
-X-Received: by 2002:a63:555e:0:b0:46b:8e9:7d5f with SMTP id f30-20020a63555e000000b0046b08e97d5fmr21857090pgm.597.1668617967460;
-        Wed, 16 Nov 2022 08:59:27 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id m1-20020a1709026bc100b00186c9d17af2sm12348254plt.17.2022.11.16.08.59.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 08:59:26 -0800 (PST)
-Date:   Wed, 16 Nov 2022 16:59:23 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     Santosh Shukla <santosh.shukla@amd.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>, pbonzini@redhat.com,
-        jmattson@google.com, kvm@vger.kernel.org, joro@8bytes.org,
-        linux-kernel@vger.kernel.org, mail@maciej.szmigiero.name,
-        vkuznets@redhat.com
-Subject: Re: [PATCHv5 0/8] Virtual NMI feature
-Message-ID: <Y3UW672P8ruO48Ct@google.com>
-References: <20221027083831.2985-1-santosh.shukla@amd.com>
- <d109feb8-7d07-0bf1-f4ad-76d4230ed498@amd.com>
- <869d05b2ce0437efae1cf505cf4028ceb4920ce2.camel@redhat.com>
- <fc8813c6-0091-8571-d934-e33d7d56123d@amd.com>
- <f764c7a1eb4a9fe294f04ea48db2dae9c18116c8.camel@redhat.com>
- <ce8f06df-5c7a-e122-3eb7-0d20207cfd2c@amd.com>
- <bc7fd8db-88e6-ea9c-2266-d0e129025e6b@amd.com>
+        Wed, 16 Nov 2022 12:00:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23901FFA0;
+        Wed, 16 Nov 2022 09:00:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 636AC61F02;
+        Wed, 16 Nov 2022 17:00:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77E2DC433C1;
+        Wed, 16 Nov 2022 16:59:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668617999;
+        bh=RM87iRax6YasoVNTU8KATYtrXbRmGY23VRyag3h4hA4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=amVXm915Ms0QJV9fcP6kd5Ra6VsD/pIsFZsCWNhvcI+oE6sx5RPeLG9hxEJvMOtoQ
+         FCQDJGxCj9a8ObNZqkMIFrVWrEOPMEEZQO1U6qrzd6l2FKqctkLgrZpXGaWTwBacbC
+         r5iatckeg2Rxi99CQRTkixzz620Ky/CjEtqQ4RVf6oPQQkDRsZQATIwY6oV7nT2YJQ
+         50583HKMoB0JNZ/RQu3d6ftgiOKotbOeT9hHfcVHBOwnxiqfsGEqQANzU+wWkACzam
+         DNuM3bc/zAU6P3oT+c/fdelv436PEKS4lefFdrazZYP5Of7XPjfT/q/1szDqO/sE2d
+         KOww8RvZH7bBg==
+Date:   Wed, 16 Nov 2022 10:59:44 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Sudarsana Kalluru <skalluru@marvell.com>,
+        GR-Linux-NIC-Dev@marvell.com, Rasesh Mody <rmody@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kees Cook <keescook@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH v4][next] bna: Avoid clashing function prototypes
+Message-ID: <Y3UXABuDwOS8Jnxc@work>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <bc7fd8db-88e6-ea9c-2266-d0e129025e6b@amd.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022, Tom Lendacky wrote:
-> On 11/16/22 09:44, Santosh Shukla wrote:
-> > Hello Maxim,.
-> > 
-> > On 11/16/2022 2:51 PM, Maxim Levitsky wrote:
-> > > On Wed, 2022-11-16 at 11:10 +0530, Santosh Shukla wrote:
-> > > > Hi Maxim,
-> > > > 
-> > > > On 11/14/2022 8:01 PM, Maxim Levitsky wrote:
-> > > > > On Mon, 2022-11-14 at 13:32 +0530, Santosh Shukla wrote:
-> > > > > I started reviewing it today and I think there are still few issues,
-> > > > > and the biggest one is that if a NMI arrives while vNMI injection
-> > > > > is pending, current code just drops such NMI.
+When built with Control Flow Integrity, function prototypes between
+caller and function declaration must match. These mismatches are visible
+at compile time with the new -Wcast-function-type-strict in Clang[1].
 
-I don't think it gets dropped, just improperly delayed.
+Fix a total of 227 warnings like these:
 
-> > > > > We had a discussion about this, like forcing immeditate vm exit
-> > > > 
-> > > > I believe, We discussed above case in [1] i.e.. HW can handle
-> > > > the second (/pending)virtual NMI while the guest processing first virtual NMI w/o vmexit.
-> > > > is it same scenario or different one that you are mentioning?
-> > > > 
-> > > > [1] https://lore.kernel.org/lkml/1782cdbb-8274-8c3d-fa98-29147f1e5d1e@amd.com/>>
-> > > You misunderstood the issue.
-> > > 
-> > > Hardware can handle the case when a NMI is in service (that is V_NMI_MASK
-> > > is set) and another one is injected (V_NMI_PENDING can be set),
-> > > 
-> > > but it is not possible to handle the case when a NMI is already injected
-> > > (V_NMI_PENDING set) but and KVM wants to inject another one before the
-> > > first one went into the service (that is V_NMI_MASK is not set yet).
-> > 
-> > In this case, HW will collapse the NMI.
+drivers/net/ethernet/brocade/bna/bna_enet.c:519:3: warning: cast from 'void (*)(struct bna_ethport *, enum bna_ethport_event)' to 'bfa_fsm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                bfa_fsm_set_state(ethport, bna_ethport_sm_down);
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Yes, but practically speaking two NMIs can't arrive at the exact same instance on
-bare metal.  One NMI will always arrive first and get vectored, and then the second
-NMI will arrive and be pended.  In a virtual environment, two NMIs that are sent
-far apart can arrive together, e.g. if the vCPU is scheduled out for an extended
-period of time.  KVM mitigates this side effect by allowing two NMIs to be pending.
+The bna state machine code heavily overloads its state machine functions,
+so these have been separated into their own sets of structs, enums,
+typedefs, and helper functions. There are almost zero binary code changes,
+all seem to be related to header file line numbers changing, or the
+addition of the new stats helper.
 
-The problem here isn't that second the NMI is lost, it's that KVM can't get control
-when the first NMI completes (IRETs).  KVM can pend both NMIs and queue the first
-for injection/vectoring (set V_NMI_PENDING), but AIUI there is no mechanism (and no
-code) to force a VM-Exit on the IRET so that KVM can inject the second NMI.
+Important to mention is that while I was manually implementing this changes
+I was staring at this[2] patch from Kees Cook. Thanks, Kees. :)
 
-Santosh's response in v2[*] suggested that hardware would allow KVM to "post" an
-NMI while the vCPU is running, but I don't see any code in this series to actually
-do that.  svm_inject_nmi() is only called from the vCPU's run loop, i.e. requires
-a VM-Exit.
+Link: https://github.com/KSPP/linux/issues/240
+[1] https://reviews.llvm.org/D134831
+[2] https://lore.kernel.org/linux-hardening/20220929230334.2109344-1-keescook@chromium.org/
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+Changes in v4:
+ - Include KSPP issue ID.
+ - Split this patch out of a series:
+   https://lore.kernel.org/linux-hardening/cover.1667934775.git.gustavoars@kernel.org/
 
-[*] https://lore.kernel.org/all/1782cdbb-8274-8c3d-fa98-29147f1e5d1e@amd.com
+Changes in v3:
+ - Add RB tag from Kees.
+ - Update changelog text.
+ - Link: https://lore.kernel.org/linux-hardening/f813f239cd75c341e26909f59f153cb9b72b1267.1667934775.git.gustavoars@kernel.org/
 
-> > Note that the HW will take the pending NMI at the boundary of IRET instruction such that
-> > it will check for the V_NMI_PENDING and if its set then HW will *take* the NMI,
-> > HW will clear the V_NMI_PENDING bit and set the V_NMI_MASK w/o the VMEXIT!,.
-> > 
-> > 
-> > > Also same can happen when NMIs are blocked in SMM, since V_NMI_MASK is
-> > > set despite no NMI in service, we will be able to inject only one NMI by
-> > > setting the V_NMI_PENDING.
+Changes in v2:
+ - None. This patch is new in the series.
+ - Link: https://lore.kernel.org/linux-hardening/2812afc0de278b97413a142d39d939a08ac74025.1666894751.git.gustavoars@kernel.org/
 
-I believe this one is a non-issue.  Like bare metal, KVM only allows one NMI to
-be pending if NMIs are blocked.
+ drivers/net/ethernet/brocade/bna/bfa_cs.h    | 60 +++++++++++++-------
+ drivers/net/ethernet/brocade/bna/bfa_ioc.c   | 10 ++--
+ drivers/net/ethernet/brocade/bna/bfa_ioc.h   |  8 ++-
+ drivers/net/ethernet/brocade/bna/bfa_msgq.h  |  8 ++-
+ drivers/net/ethernet/brocade/bna/bna_enet.c  |  6 +-
+ drivers/net/ethernet/brocade/bna/bna_tx_rx.c |  6 +-
+ drivers/net/ethernet/brocade/bna/bna_types.h | 27 +++++++--
+ 7 files changed, 82 insertions(+), 43 deletions(-)
 
-  static void process_nmi(struct kvm_vcpu *vcpu)
-  {
-	unsigned limit = 2;
-
-	/*
-	 * x86 is limited to one NMI running, and one NMI pending after it.
-	 * If an NMI is already in progress, limit further NMIs to just one.
-	 * Otherwise, allow two (and we'll inject the first one immediately).
-	 */
-	if (static_call(kvm_x86_get_nmi_mask)(vcpu) || vcpu->arch.nmi_injected)
-		limit = 1;
-
-	vcpu->arch.nmi_pending += atomic_xchg(&vcpu->arch.nmi_queued, 0);
-	vcpu->arch.nmi_pending = min(vcpu->arch.nmi_pending, limit);
-	kvm_make_request(KVM_REQ_EVENT, vcpu);
-  }
-
-
-> > Ditto,. HW will collapse the NMI.
-> 
-> Note, this is how bare-metal NMIs are also handled. Multiple NMIs are
-> collapsed into a single NMI if they are received while an NMI is currently
-> being processed.
+diff --git a/drivers/net/ethernet/brocade/bna/bfa_cs.h b/drivers/net/ethernet/brocade/bna/bfa_cs.h
+index 8f0ac7b99973..858c92129451 100644
+--- a/drivers/net/ethernet/brocade/bna/bfa_cs.h
++++ b/drivers/net/ethernet/brocade/bna/bfa_cs.h
+@@ -18,15 +18,43 @@
+ 
+ /* BFA state machine interfaces */
+ 
+-typedef void (*bfa_sm_t)(void *sm, int event);
+-
+ /* For converting from state machine function to state encoding. */
+-struct bfa_sm_table {
+-	bfa_sm_t	sm;	/*!< state machine function	*/
+-	int		state;	/*!< state machine encoding	*/
+-	char		*name;	/*!< state name for display	*/
+-};
+-#define BFA_SM(_sm)		((bfa_sm_t)(_sm))
++#define BFA_SM_TABLE(n, s, e, t)				\
++struct s;							\
++enum e;								\
++typedef void (*t)(struct s *, enum e);				\
++								\
++struct n ## _sm_table_s {					\
++	t		sm;	/* state machine function */	\
++	int		state;	/* state machine encoding */	\
++	char		*name;	/* state name for display */	\
++};								\
++								\
++static inline int						\
++n ## _sm_to_state(struct n ## _sm_table_s *smt, t sm)		\
++{								\
++	int	i = 0;						\
++								\
++	while (smt[i].sm && smt[i].sm != sm)			\
++		i++;						\
++	return smt[i].state;					\
++}
++
++BFA_SM_TABLE(iocpf,	bfa_iocpf,	iocpf_event,	bfa_fsm_iocpf_t)
++BFA_SM_TABLE(ioc,	bfa_ioc,	ioc_event,	bfa_fsm_ioc_t)
++BFA_SM_TABLE(cmdq,	bfa_msgq_cmdq,	cmdq_event,	bfa_fsm_msgq_cmdq_t)
++BFA_SM_TABLE(rspq,	bfa_msgq_rspq,	rspq_event,	bfa_fsm_msgq_rspq_t)
++
++BFA_SM_TABLE(ioceth,	bna_ioceth,	bna_ioceth_event, bna_fsm_ioceth_t)
++BFA_SM_TABLE(enet,	bna_enet,	bna_enet_event, bna_fsm_enet_t)
++BFA_SM_TABLE(ethport,	bna_ethport,	bna_ethport_event, bna_fsm_ethport_t)
++BFA_SM_TABLE(tx,	bna_tx,		bna_tx_event,	bna_fsm_tx_t)
++BFA_SM_TABLE(rxf,	bna_rxf,	bna_rxf_event, bna_fsm_rxf_t)
++BFA_SM_TABLE(rx,	bna_rx,		bna_rx_event,	bna_fsm_rx_t)
++
++#undef BFA_SM_TABLE
++
++#define BFA_SM(_sm)	(_sm)
+ 
+ /* State machine with entry actions. */
+ typedef void (*bfa_fsm_t)(void *fsm, int event);
+@@ -41,24 +69,12 @@ typedef void (*bfa_fsm_t)(void *fsm, int event);
+ 	static void oc ## _sm_ ## st ## _entry(otype * fsm)
+ 
+ #define bfa_fsm_set_state(_fsm, _state) do {				\
+-	(_fsm)->fsm = (bfa_fsm_t)(_state);				\
++	(_fsm)->fsm = (_state);						\
+ 	_state ## _entry(_fsm);						\
+ } while (0)
+ 
+ #define bfa_fsm_send_event(_fsm, _event)	((_fsm)->fsm((_fsm), (_event)))
+-#define bfa_fsm_cmp_state(_fsm, _state)					\
+-	((_fsm)->fsm == (bfa_fsm_t)(_state))
+-
+-static inline int
+-bfa_sm_to_state(const struct bfa_sm_table *smt, bfa_sm_t sm)
+-{
+-	int	i = 0;
+-
+-	while (smt[i].sm && smt[i].sm != sm)
+-		i++;
+-	return smt[i].state;
+-}
+-
++#define bfa_fsm_cmp_state(_fsm, _state)		((_fsm)->fsm == (_state))
+ /* Generic wait counter. */
+ 
+ typedef void (*bfa_wc_resume_t) (void *cbarg);
+diff --git a/drivers/net/ethernet/brocade/bna/bfa_ioc.c b/drivers/net/ethernet/brocade/bna/bfa_ioc.c
+index cd933817a0b8..b07522ac3e74 100644
+--- a/drivers/net/ethernet/brocade/bna/bfa_ioc.c
++++ b/drivers/net/ethernet/brocade/bna/bfa_ioc.c
+@@ -114,7 +114,7 @@ bfa_fsm_state_decl(bfa_ioc, disabling, struct bfa_ioc, enum ioc_event);
+ bfa_fsm_state_decl(bfa_ioc, disabled, struct bfa_ioc, enum ioc_event);
+ bfa_fsm_state_decl(bfa_ioc, hwfail, struct bfa_ioc, enum ioc_event);
+ 
+-static struct bfa_sm_table ioc_sm_table[] = {
++static struct ioc_sm_table_s ioc_sm_table[] = {
+ 	{BFA_SM(bfa_ioc_sm_uninit), BFA_IOC_UNINIT},
+ 	{BFA_SM(bfa_ioc_sm_reset), BFA_IOC_RESET},
+ 	{BFA_SM(bfa_ioc_sm_enabling), BFA_IOC_ENABLING},
+@@ -183,7 +183,7 @@ bfa_fsm_state_decl(bfa_iocpf, disabling_sync, struct bfa_iocpf,
+ 						enum iocpf_event);
+ bfa_fsm_state_decl(bfa_iocpf, disabled, struct bfa_iocpf, enum iocpf_event);
+ 
+-static struct bfa_sm_table iocpf_sm_table[] = {
++static struct iocpf_sm_table_s iocpf_sm_table[] = {
+ 	{BFA_SM(bfa_iocpf_sm_reset), BFA_IOCPF_RESET},
+ 	{BFA_SM(bfa_iocpf_sm_fwcheck), BFA_IOCPF_FWMISMATCH},
+ 	{BFA_SM(bfa_iocpf_sm_mismatch), BFA_IOCPF_FWMISMATCH},
+@@ -2860,12 +2860,12 @@ static enum bfa_ioc_state
+ bfa_ioc_get_state(struct bfa_ioc *ioc)
+ {
+ 	enum bfa_iocpf_state iocpf_st;
+-	enum bfa_ioc_state ioc_st = bfa_sm_to_state(ioc_sm_table, ioc->fsm);
++	enum bfa_ioc_state ioc_st = ioc_sm_to_state(ioc_sm_table, ioc->fsm);
+ 
+ 	if (ioc_st == BFA_IOC_ENABLING ||
+ 		ioc_st == BFA_IOC_FAIL || ioc_st == BFA_IOC_INITFAIL) {
+ 
+-		iocpf_st = bfa_sm_to_state(iocpf_sm_table, ioc->iocpf.fsm);
++		iocpf_st = iocpf_sm_to_state(iocpf_sm_table, ioc->iocpf.fsm);
+ 
+ 		switch (iocpf_st) {
+ 		case BFA_IOCPF_SEMWAIT:
+@@ -2983,7 +2983,7 @@ bfa_nw_iocpf_timeout(struct bfa_ioc *ioc)
+ {
+ 	enum bfa_iocpf_state iocpf_st;
+ 
+-	iocpf_st = bfa_sm_to_state(iocpf_sm_table, ioc->iocpf.fsm);
++	iocpf_st = iocpf_sm_to_state(iocpf_sm_table, ioc->iocpf.fsm);
+ 
+ 	if (iocpf_st == BFA_IOCPF_HWINIT)
+ 		bfa_ioc_poll_fwinit(ioc);
+diff --git a/drivers/net/ethernet/brocade/bna/bfa_ioc.h b/drivers/net/ethernet/brocade/bna/bfa_ioc.h
+index edd0ed5b5332..f30d06ec4ffe 100644
+--- a/drivers/net/ethernet/brocade/bna/bfa_ioc.h
++++ b/drivers/net/ethernet/brocade/bna/bfa_ioc.h
+@@ -147,16 +147,20 @@ struct bfa_ioc_notify {
+ 	(__notify)->cbarg = (__cbarg);				\
+ } while (0)
+ 
++enum iocpf_event;
++
+ struct bfa_iocpf {
+-	bfa_fsm_t		fsm;
++	void (*fsm)(struct bfa_iocpf *s, enum iocpf_event e);
+ 	struct bfa_ioc		*ioc;
+ 	bool			fw_mismatch_notified;
+ 	bool			auto_recover;
+ 	u32			poll_time;
+ };
+ 
++enum ioc_event;
++
+ struct bfa_ioc {
+-	bfa_fsm_t		fsm;
++	void (*fsm)(struct bfa_ioc *s, enum ioc_event e);
+ 	struct bfa		*bfa;
+ 	struct bfa_pcidev	pcidev;
+ 	struct timer_list	ioc_timer;
+diff --git a/drivers/net/ethernet/brocade/bna/bfa_msgq.h b/drivers/net/ethernet/brocade/bna/bfa_msgq.h
+index 75343b535798..170a4b4bed96 100644
+--- a/drivers/net/ethernet/brocade/bna/bfa_msgq.h
++++ b/drivers/net/ethernet/brocade/bna/bfa_msgq.h
+@@ -55,8 +55,10 @@ enum bfa_msgq_cmdq_flags {
+ 	BFA_MSGQ_CMDQ_F_DB_UPDATE	= 1,
+ };
+ 
++enum cmdq_event;
++
+ struct bfa_msgq_cmdq {
+-	bfa_fsm_t			fsm;
++	void (*fsm)(struct bfa_msgq_cmdq *s, enum cmdq_event e);
+ 	enum bfa_msgq_cmdq_flags flags;
+ 
+ 	u16			producer_index;
+@@ -81,8 +83,10 @@ enum bfa_msgq_rspq_flags {
+ 
+ typedef void (*bfa_msgq_mcfunc_t)(void *cbarg, struct bfi_msgq_mhdr *mhdr);
+ 
++enum rspq_event;
++
+ struct bfa_msgq_rspq {
+-	bfa_fsm_t			fsm;
++	void (*fsm)(struct bfa_msgq_rspq *s, enum rspq_event e);
+ 	enum bfa_msgq_rspq_flags flags;
+ 
+ 	u16			producer_index;
+diff --git a/drivers/net/ethernet/brocade/bna/bna_enet.c b/drivers/net/ethernet/brocade/bna/bna_enet.c
+index a2c983f56b00..883de0ac8de4 100644
+--- a/drivers/net/ethernet/brocade/bna/bna_enet.c
++++ b/drivers/net/ethernet/brocade/bna/bna_enet.c
+@@ -1257,7 +1257,7 @@ bna_enet_mtu_get(struct bna_enet *enet)
+ void
+ bna_enet_enable(struct bna_enet *enet)
+ {
+-	if (enet->fsm != (bfa_sm_t)bna_enet_sm_stopped)
++	if (enet->fsm != bna_enet_sm_stopped)
+ 		return;
+ 
+ 	enet->flags |= BNA_ENET_F_ENABLED;
+@@ -1751,12 +1751,12 @@ bna_ioceth_uninit(struct bna_ioceth *ioceth)
+ void
+ bna_ioceth_enable(struct bna_ioceth *ioceth)
+ {
+-	if (ioceth->fsm == (bfa_fsm_t)bna_ioceth_sm_ready) {
++	if (ioceth->fsm == bna_ioceth_sm_ready) {
+ 		bnad_cb_ioceth_ready(ioceth->bna->bnad);
+ 		return;
+ 	}
+ 
+-	if (ioceth->fsm == (bfa_fsm_t)bna_ioceth_sm_stopped)
++	if (ioceth->fsm == bna_ioceth_sm_stopped)
+ 		bfa_fsm_send_event(ioceth, IOCETH_E_ENABLE);
+ }
+ 
+diff --git a/drivers/net/ethernet/brocade/bna/bna_tx_rx.c b/drivers/net/ethernet/brocade/bna/bna_tx_rx.c
+index 2623a0da4682..c05dc7a1c4a1 100644
+--- a/drivers/net/ethernet/brocade/bna/bna_tx_rx.c
++++ b/drivers/net/ethernet/brocade/bna/bna_tx_rx.c
+@@ -1956,7 +1956,7 @@ static void
+ bna_rx_stop(struct bna_rx *rx)
+ {
+ 	rx->rx_flags &= ~BNA_RX_F_ENET_STARTED;
+-	if (rx->fsm == (bfa_fsm_t) bna_rx_sm_stopped)
++	if (rx->fsm == bna_rx_sm_stopped)
+ 		bna_rx_mod_cb_rx_stopped(&rx->bna->rx_mod, rx);
+ 	else {
+ 		rx->stop_cbfn = bna_rx_mod_cb_rx_stopped;
+@@ -2535,7 +2535,7 @@ bna_rx_destroy(struct bna_rx *rx)
+ void
+ bna_rx_enable(struct bna_rx *rx)
+ {
+-	if (rx->fsm != (bfa_sm_t)bna_rx_sm_stopped)
++	if (rx->fsm != bna_rx_sm_stopped)
+ 		return;
+ 
+ 	rx->rx_flags |= BNA_RX_F_ENABLED;
+@@ -3523,7 +3523,7 @@ bna_tx_destroy(struct bna_tx *tx)
+ void
+ bna_tx_enable(struct bna_tx *tx)
+ {
+-	if (tx->fsm != (bfa_sm_t)bna_tx_sm_stopped)
++	if (tx->fsm != bna_tx_sm_stopped)
+ 		return;
+ 
+ 	tx->flags |= BNA_TX_F_ENABLED;
+diff --git a/drivers/net/ethernet/brocade/bna/bna_types.h b/drivers/net/ethernet/brocade/bna/bna_types.h
+index 666b6922e24d..a5ebd7110e07 100644
+--- a/drivers/net/ethernet/brocade/bna/bna_types.h
++++ b/drivers/net/ethernet/brocade/bna/bna_types.h
+@@ -312,8 +312,10 @@ struct bna_attr {
+ 
+ /* IOCEth */
+ 
++enum bna_ioceth_event;
++
+ struct bna_ioceth {
+-	bfa_fsm_t		fsm;
++	void (*fsm)(struct bna_ioceth *s, enum bna_ioceth_event e);
+ 	struct bfa_ioc ioc;
+ 
+ 	struct bna_attr attr;
+@@ -334,8 +336,10 @@ struct bna_pause_config {
+ 	enum bna_status rx_pause;
+ };
+ 
++enum bna_enet_event;
++
+ struct bna_enet {
+-	bfa_fsm_t		fsm;
++	void (*fsm)(struct bna_enet *s, enum bna_enet_event e);
+ 	enum bna_enet_flags flags;
+ 
+ 	enum bna_enet_type type;
+@@ -360,8 +364,10 @@ struct bna_enet {
+ 
+ /* Ethport */
+ 
++enum bna_ethport_event;
++
+ struct bna_ethport {
+-	bfa_fsm_t		fsm;
++	void (*fsm)(struct bna_ethport *s, enum bna_ethport_event e);
+ 	enum bna_ethport_flags flags;
+ 
+ 	enum bna_link_status link_status;
+@@ -454,13 +460,16 @@ struct bna_txq {
+ };
+ 
+ /* Tx object */
++
++enum bna_tx_event;
++
+ struct bna_tx {
+ 	/* This should be the first one */
+ 	struct list_head			qe;
+ 	int			rid;
+ 	int			hw_id;
+ 
+-	bfa_fsm_t		fsm;
++	void (*fsm)(struct bna_tx *s, enum bna_tx_event e);
+ 	enum bna_tx_flags flags;
+ 
+ 	enum bna_tx_type type;
+@@ -698,8 +707,11 @@ struct bna_rxp {
+ };
+ 
+ /* RxF structure (hardware Rx Function) */
++
++enum bna_rxf_event;
++
+ struct bna_rxf {
+-	bfa_fsm_t		fsm;
++	void (*fsm)(struct bna_rxf *s, enum bna_rxf_event e);
+ 
+ 	struct bfa_msgq_cmd_entry msgq_cmd;
+ 	union {
+@@ -769,13 +781,16 @@ struct bna_rxf {
+ };
+ 
+ /* Rx object */
++
++enum bna_rx_event;
++
+ struct bna_rx {
+ 	/* This should be the first one */
+ 	struct list_head			qe;
+ 	int			rid;
+ 	int			hw_id;
+ 
+-	bfa_fsm_t		fsm;
++	void (*fsm)(struct bna_rx *s, enum bna_rx_event e);
+ 
+ 	enum bna_rx_type type;
+ 
+-- 
+2.34.1
 
