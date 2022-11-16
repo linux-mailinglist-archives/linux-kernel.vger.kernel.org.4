@@ -2,110 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 793AC62B660
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:22:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0904462B663
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:23:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238745AbiKPJWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 04:22:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45176 "EHLO
+        id S230142AbiKPJXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 04:23:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231834AbiKPJWi (ORCPT
+        with ESMTP id S233546AbiKPJWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 04:22:38 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FFD027CF0;
-        Wed, 16 Nov 2022 01:22:28 -0800 (PST)
-Date:   Wed, 16 Nov 2022 09:22:25 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668590546;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MrCWOvdxapIC2FhJTIH20tHEZ3kAPRTBVFgIugO7JtY=;
-        b=dqAVZi9DRU2H/2zgIHGha9h8egSYldJesAtstY9tX5uKggePerVqA3mtNw40uQxeUrSZ2o
-        +jnR5eiXw1a2/hCvd8LbqUIno9TwC39bBOj3axYFm+yt+NaMGyIIlDvUgLrNs4LIeCdTGc
-        Pbj2PMLoeuGdrxR7jItxQ3fWxxNiJoHEv7fgvx7EqrioGF47/XWpyvzhgcgCm4QdbowPa8
-        qN/tIGn2SNFKWTGFNfWdaUZy8Pn1GAYP0Dyk7GXnLYZyFBvjF5E/h7LqVL3zaqIpXckcIy
-        Q0bW+NYpf3tAmWoe2HyUGsiOeK873c3Fif2caH2qNTnBgX5O/0udbelWL8k/oQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668590546;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MrCWOvdxapIC2FhJTIH20tHEZ3kAPRTBVFgIugO7JtY=;
-        b=XgxzFEQFK96juimMW4PuhXvjFoAbPhwmYA77SUhldLsbsdFjHdLWlEbWWASke7KVNVMJpY
-        UASbDZ/X5Vm9O7Dw==
-From:   "tip-bot2 for Sean Christopherson" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] x86/debug: Include percpu.h in debugreg.h to get
- DECLARE_PER_CPU() et al
-Cc:     Sean Christopherson <seanjc@google.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+        Wed, 16 Nov 2022 04:22:44 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1859D29C89
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:22:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668590560; x=1700126560;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=GTSmWM4/773jpiMFtu9dyGEa5/KxzthxxjZk9qHNbF0=;
+  b=c13AzyHPAXzFm4TqW504kPfXGLTzDuNzj0QKXveMWxPasMAdvlSP3vkf
+   fUcJdWCXlIfdkSMaE46jmjyy87IWpbs35U3Q/I9o3Hl3W+zSLgQnl4dvh
+   +qYpLNqrni8JPD6FKgd2pNSrENdyUaQfqr4wgV23bTF2wrNhaWyeq9Odi
+   dtwodWcMwATEqiR/ej1WzblNUO6Ke7IocmEdrEYTbDyhst853MEKZGiHY
+   YuHsSL9y+8/j5nwx2Bc/FhITSHoBMjqQOolu3V5A/LGuK9Q9U8PHBnBz2
+   16fmQSrWTcSM/AsGpUDh5VFiz1TDVi1oFMUGUw8cN0UU3aNPXWNUfW7f4
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="314310528"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="314310528"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 01:22:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="728297924"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="728297924"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by FMSMGA003.fm.intel.com with ESMTP; 16 Nov 2022 01:22:38 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id B3BD92F3; Wed, 16 Nov 2022 11:23:02 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20221110201707.1976032-1-seanjc@google.com>
-References: <20221110201707.1976032-1-seanjc@google.com>
+Cc:     Fei Li <fei1.li@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH v4 1/1] virt: acrn: Mark the uuid field as unused
+Date:   Wed, 16 Nov 2022 11:22:54 +0200
+Message-Id: <20221116092254.66234-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Message-ID: <166859054557.4906.8309714877801364722.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/core branch of tip:
+After the commits for userspace (see Link tags below) the uuid field is
+not being used in the ACRN code. Update kernel to reflect these changes.
+I.e. we do the following:
+- adding a comment explaining that it's not used anymore
+- replacing the specific type by a raw buffer
+- updating the example code accordingly
 
-Commit-ID:     2d08a893b87cf9b2f9dbb3afaff60ca4530d55a2
-Gitweb:        https://git.kernel.org/tip/2d08a893b87cf9b2f9dbb3afaff60ca4530=
-d55a2
-Author:        Sean Christopherson <seanjc@google.com>
-AuthorDate:    Thu, 10 Nov 2022 20:17:07=20
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Wed, 16 Nov 2022 10:12:56 +01:00
+The advertised field confused users and actually never been used. So
+the wrong part here is that kernel puts something which userspace never
+used and hence this may confuse a reader of this code.
 
-x86/debug: Include percpu.h in debugreg.h to get DECLARE_PER_CPU() et al
-
-Include percpu.h to pick up the definition of DECLARE_PER_CPU() and
-friends instead of relying on the parent to provide the #include.  E.g.
-swapping the order of includes in arch/x86/kvm/vmx/nested.c (simulating
-KVM code movement being done for other purposes) results in build errors:
-
-  In file included from arch/x86/kvm/vmx/nested.c:3:
-  arch/x86/include/asm/debugreg.h:9:32: error: unknown type name =C3=A2=C2=80=
-=C2=98cpu_dr7=C3=A2=C2=80=3D99
-      9 | DECLARE_PER_CPU(unsigned long, cpu_dr7);
-        |                                ^~~~~~~
-
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20221110201707.1976032-1-seanjc@google.com
+Link: https://github.com/projectacrn/acrn-hypervisor/commit/da0d24326ed6
+Link: https://github.com/projectacrn/acrn-hypervisor/commit/bb0327e70097
+Fixes: 5b06931d7f8b ("sample/acrn: Introduce a sample of HSM ioctl interface usage")
+Fixes: 9c5137aedd11 ("virt: acrn: Introduce VM management interfaces")
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
 ---
- arch/x86/include/asm/debugreg.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v4: added tag (Rafael), Cc'ed to Greg (missing in the previous version
+    by some reason)
+v3: converted to Link tags (Rafael), explained what was wrong (Rafael)
+v2: added tag (Fei)
 
-diff --git a/arch/x86/include/asm/debugreg.h b/arch/x86/include/asm/debugreg.h
-index cfdf307..b049d95 100644
---- a/arch/x86/include/asm/debugreg.h
-+++ b/arch/x86/include/asm/debugreg.h
-@@ -2,8 +2,8 @@
- #ifndef _ASM_X86_DEBUGREG_H
- #define _ASM_X86_DEBUGREG_H
-=20
--
- #include <linux/bug.h>
-+#include <linux/percpu.h>
- #include <uapi/asm/debugreg.h>
-=20
- DECLARE_PER_CPU(unsigned long, cpu_dr7);
+ include/uapi/linux/acrn.h | 5 ++---
+ samples/acrn/vm-sample.c  | 3 ---
+ 2 files changed, 2 insertions(+), 6 deletions(-)
+
+diff --git a/include/uapi/linux/acrn.h b/include/uapi/linux/acrn.h
+index ccf47ed92500..04fa83647ae5 100644
+--- a/include/uapi/linux/acrn.h
++++ b/include/uapi/linux/acrn.h
+@@ -12,7 +12,6 @@
+ #define _UAPI_ACRN_H
+ 
+ #include <linux/types.h>
+-#include <linux/uuid.h>
+ 
+ #define ACRN_IO_REQUEST_MAX		16
+ 
+@@ -186,7 +185,7 @@ struct acrn_ioreq_notify {
+  * @reserved0:		Reserved and must be 0
+  * @vcpu_num:		Number of vCPU in the VM. Return from hypervisor.
+  * @reserved1:		Reserved and must be 0
+- * @uuid:		UUID of the VM. Pass to hypervisor directly.
++ * @uuid:		Reserved (used to be UUID of the VM)
+  * @vm_flag:		Flag of the VM creating. Pass to hypervisor directly.
+  * @ioreq_buf:		Service VM GPA of I/O request buffer. Pass to
+  *			hypervisor directly.
+@@ -198,7 +197,7 @@ struct acrn_vm_creation {
+ 	__u16	reserved0;
+ 	__u16	vcpu_num;
+ 	__u16	reserved1;
+-	guid_t	uuid;
++	__u8	uuid[16];
+ 	__u64	vm_flag;
+ 	__u64	ioreq_buf;
+ 	__u64	cpu_affinity;
+diff --git a/samples/acrn/vm-sample.c b/samples/acrn/vm-sample.c
+index b2dad47a77a0..7abd68b20153 100644
+--- a/samples/acrn/vm-sample.c
++++ b/samples/acrn/vm-sample.c
+@@ -29,8 +29,6 @@ static struct acrn_io_request *io_req_buf = (struct acrn_io_request *)io_request
+ 
+ __u16 vcpu_num;
+ __u16 vmid;
+-/* POST_STANDARD_VM_UUID1, refer to https://github.com/projectacrn/acrn-hypervisor/blob/master/hypervisor/include/common/vm_uuids.h */
+-guid_t vm_uuid = GUID_INIT(0x385479d2, 0xd625, 0xe811, 0x86, 0x4e, 0xcb, 0x7a, 0x18, 0xb3, 0x46, 0x43);
+ 
+ int hsm_fd;
+ int is_running = 1;
+@@ -63,7 +61,6 @@ int main(int argc, char **argv)
+ 	}
+ 	hsm_fd = open("/dev/acrn_hsm", O_RDWR|O_CLOEXEC);
+ 
+-	memcpy(&create_vm.uuid, &vm_uuid, 16);
+ 	create_vm.ioreq_buf = (__u64)io_req_buf;
+ 	ret = ioctl(hsm_fd, ACRN_IOCTL_CREATE_VM, &create_vm);
+ 	printf("Created VM! [%d]\n", ret);
+-- 
+2.35.1
+
