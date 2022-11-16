@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 534D762BAF1
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:07:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F09C562BAEB
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:07:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233959AbiKPLH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 06:07:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47230 "EHLO
+        id S239172AbiKPLHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 06:07:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238984AbiKPLGP (ORCPT
+        with ESMTP id S232761AbiKPLG1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 06:06:15 -0500
+        Wed, 16 Nov 2022 06:06:27 -0500
 Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567BB4D5D6
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3FB54D5E8
         for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:52:38 -0800 (PST)
-Received: by mail-io1-f72.google.com with SMTP id z139-20020a6bc991000000b006dac0d359edso8403872iof.2
+Received: by mail-io1-f72.google.com with SMTP id n8-20020a6b4108000000b006de520dc5c9so1529794ioa.19
         for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:52:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=yggIWnBkrSgEc1TV4/3CeEkK1BsJZxCxqkdnT7XvUmc=;
-        b=ZFE3xWhb3BN5J6KZEhYLVtqeOGAIJ9wxZ6uCubDYee/YFFk31nc5ybwykXgVEz1Zgv
-         ICr55EaVLd5gEK3qol3bqecm4xqKlwEBYCX6q04o1rUe2YV7hmsQB93dhSF7TTMORYpm
-         Nvd+ZSv/K66YL0M25PzwSsmJjyg43yIvaTfofZFy0QB5/DRjHhUvoGYHmbPiXnxbPbBY
-         Ots4YMCiccpYesoMGsGW+cH6EMsBz9kFfrn0rl1l5UpJKq7iKrx1WDsKsNyM7N9zavW5
-         lgmGmtbK3vkeBYaolgRqxdVFGVUPb3vUTg0H+qG/5wSFh/iTGMW3jmbC9nA/ePS6rFxU
-         MUXg==
-X-Gm-Message-State: ANoB5plPg3agm5gHkS/DJl58e6eUASmj8W+IGM0Vb1sqKYnp15qyn5y+
-        eEAHzztrlu/bXaHjVXM9Rjj59qmqaRsM12h6a+JqxfadkuNM
-X-Google-Smtp-Source: AA0mqf75uVcSehIfVU98/8TD4pzAUjZPT8lQpls1p3DS6EygAguSetymOuAwv1SaVsU8xuWfLw6884517BwYVRMbePuQVomXJqI+
+        bh=y/RJPsEgy0Rt4EiS/uq3Zj3pIjH/+R3or2rXQIcNyLg=;
+        b=dZfBwzgWvvn51q8+f3dn+5WI+XWmIqBkevs+HRjvn3Dx6PJ78GB4ko6qJo6/D76Wb/
+         Azg2EVSSBnKTTLPxV5P/UJQiFBh+I1Eo3bLDsYOK7NQPfoQXHysh+kUfy57wsRWDC6AR
+         psFx7joAQcVS30zFjbEQ/pFLbdmj0H5i9dzZAcFzkKR2SdEg1ikSft2dFetSncuC/3+K
+         X5Aw7ukXSGrG0LBp2xe68q1qoGdcCRvj0DEfK4Ze0uduleC6NEYkTkIx5Vz+gXQcOuHi
+         Bo2LSmd0kAJ1xh1LwFFDJAs7q69fL2zNMSjvGlLa6zDzyn5XRwfOW2NflmNhcKZD7XlS
+         KPnA==
+X-Gm-Message-State: ANoB5plSDLLXDA9G6ctntV4DLRmVSR/slLyeUkBsSbBCLeo1J2SDgPJy
+        7cOa7oa6/oHPfM7fAzph+22Y9/Mq1NtjLeB+YTh9ucUYcfaS
+X-Google-Smtp-Source: AA0mqf762l6bpTs1z8M/zUr687r3QAwbb3QrIBWaUjqjxsm1qk+r15Dl1GrmCDeQ1rXDq7mKlM6Qcxy61tasg/GEbbVro3S7EJiQ
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:120e:b0:2fc:cea6:7d9f with SMTP id
- a14-20020a056e02120e00b002fccea67d9fmr10231418ilq.89.1668595957727; Wed, 16
- Nov 2022 02:52:37 -0800 (PST)
-Date:   Wed, 16 Nov 2022 02:52:37 -0800
+X-Received: by 2002:a6b:b343:0:b0:6d5:2f6e:834 with SMTP id
+ c64-20020a6bb343000000b006d52f6e0834mr9766145iof.181.1668595958115; Wed, 16
+ Nov 2022 02:52:38 -0800 (PST)
+Date:   Wed, 16 Nov 2022 02:52:38 -0800
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000055882e05ed9445a2@google.com>
-Subject: [syzbot] BUG: unable to handle kernel NULL pointer dereference in nci_cmd_timer
-From:   syzbot <syzbot+10257d01dd285b15170a@syzkaller.appspotmail.com>
+Message-ID: <0000000000005b7a8005ed94455b@google.com>
+Subject: [syzbot] WARNING in nci_send_cmd
+From:   syzbot <syzbot+43475bf3cfbd6e41f5b7@syzkaller.appspotmail.com>
 To:     davem@davemloft.net, edumazet@google.com,
         krzysztof.kozlowski@linaro.org, kuba@kernel.org, linma@zju.edu.cn,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
@@ -62,13 +62,13 @@ syzbot found the following issue on:
 
 HEAD commit:    9500fc6e9e60 Merge branch 'for-next/core' into for-kernelci
 git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=16cbf7a5880000
+console output: https://syzkaller.appspot.com/x/log.txt?x=16ebd49e880000
 kernel config:  https://syzkaller.appspot.com/x/.config?x=b25c9f218686dd5e
-dashboard link: https://syzkaller.appspot.com/bug?extid=10257d01dd285b15170a
+dashboard link: https://syzkaller.appspot.com/bug?extid=43475bf3cfbd6e41f5b7
 compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
 userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1354dce9880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10880a95880000
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=150027ae880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=141717ae880000
 
 Downloadable assets:
 disk image: https://storage.googleapis.com/syzbot-assets/1363e60652f7/disk-9500fc6e.raw.xz
@@ -76,76 +76,72 @@ vmlinux: https://storage.googleapis.com/syzbot-assets/fcc4da811bb6/vmlinux-9500f
 kernel image: https://storage.googleapis.com/syzbot-assets/0b554298f1fa/Image-9500fc6e.gz.xz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+10257d01dd285b15170a@syzkaller.appspotmail.com
+Reported-by: syzbot+43475bf3cfbd6e41f5b7@syzkaller.appspotmail.com
 
-Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
-Mem abort info:
-  ESR = 0x0000000096000004
-  EC = 0x25: DABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x04: level 0 translation fault
-Data abort info:
-  ISV = 0, ISS = 0x00000004
-  CM = 0, WnR = 0
-user pgtable: 4k pages, 48-bit VAs, pgdp=000000010c75b000
-[0000000000000000] pgd=0000000000000000, p4d=0000000000000000
-Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 3079 at kernel/workqueue.c:1438 is_chained_work kernel/workqueue.c:1382 [inline]
+WARNING: CPU: 1 PID: 3079 at kernel/workqueue.c:1438 __queue_work+0x878/0x8b4 kernel/workqueue.c:1438
 Modules linked in:
-CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.1.0-rc5-syzkaller-32269-g9500fc6e9e60 #0
+CPU: 1 PID: 3079 Comm: syz-executor103 Not tainted 6.1.0-rc5-syzkaller-32269-g9500fc6e9e60 #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-pstate: 004000c5 (nzcv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __queue_work+0x3c4/0x8b4
-lr : __queue_work+0x3c4/0x8b4 kernel/workqueue.c:1458
-sp : ffff800008003d60
-x29: ffff800008003d60 x28: 0000000000000000 x27: ffff80000d3a9000
-x26: ffff80000d3ad050 x25: ffff80000d2fe008 x24: ffff80000db54000
-x23: 0000000000000000 x22: 0000000000000023 x21: ffff0000c7a95400
-x20: 0000000000000008 x19: ffff0000cd0d20f8 x18: ffff80000db78158
-x17: ffff80000ddda198 x16: ffff80000dc18158 x15: ffff80000d3cbc80
-x14: 0000000000000000 x13: 00000000ffffffff x12: ffff80000d3cbc80
-x11: ff8080000c07dfe4 x10: 0000000000000000 x9 : ffff80000c07dfe4
-x8 : ffff80000d3cbc80 x7 : ffff80000813bae8 x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000000 x3 : 0000000000000002
-x2 : 0000000000000008 x1 : 0000000000000000 x0 : ffff0000c0014c00
+pstate: 804000c5 (Nzcv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __queue_work+0x878/0x8b4 kernel/workqueue.c:1382
+lr : is_chained_work kernel/workqueue.c:1382 [inline]
+lr : __queue_work+0x878/0x8b4 kernel/workqueue.c:1438
+sp : ffff80000ffcb710
+x29: ffff80000ffcb710 x28: ffff0000c22b8000 x27: 0000000000000000
+x26: ffff0000ca031a10 x25: ffff0000c22b8000 x24: 0000000000000100
+x23: 0000000100000000 x22: 00000000000f000a x21: ffff0000ca152400
+x20: 0000000000000008 x19: ffff0000cb1e20f8 x18: 00000000000001ac
+x17: 0000000000000000 x16: ffff80000dc18158 x15: ffff0000c22b8000
+x14: 00000000000000c0 x13: 00000000ffffffff x12: ffff0000c22b8000
+x11: ff808000081306bc x10: 0000000000000000 x9 : ffff8000081306bc
+x8 : ffff0000c22b8000 x7 : ffff80000b25d5e8 x6 : 0000000000000000
+x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : ffff0000cb1e20f8 x1 : 0000000000000000 x0 : 0000000000000000
 Call trace:
- __queue_work+0x3c4/0x8b4 kernel/workqueue.c:1458
+ is_chained_work kernel/workqueue.c:1382 [inline]
+ __queue_work+0x878/0x8b4 kernel/workqueue.c:1438
  queue_work_on+0xb0/0x15c kernel/workqueue.c:1545
  queue_work include/linux/workqueue.h:503 [inline]
- nci_cmd_timer+0x30/0x40 net/nfc/nci/core.c:615
- call_timer_fn+0x90/0x144 kernel/time/timer.c:1474
- expire_timers kernel/time/timer.c:1519 [inline]
- __run_timers+0x280/0x374 kernel/time/timer.c:1790
- run_timer_softirq+0x34/0x5c kernel/time/timer.c:1803
- _stext+0x168/0x37c
- ____do_softirq+0x14/0x20 arch/arm64/kernel/irq.c:79
- call_on_irq_stack+0x2c/0x54 arch/arm64/kernel/entry.S:892
- do_softirq_own_stack+0x20/0x2c arch/arm64/kernel/irq.c:84
- invoke_softirq+0x70/0xbc kernel/softirq.c:452
- __irq_exit_rcu+0xf0/0x140 kernel/softirq.c:650
- irq_exit_rcu+0x10/0x40 kernel/softirq.c:662
- __el1_irq arch/arm64/kernel/entry-common.c:472 [inline]
- el1_interrupt+0x38/0x68 arch/arm64/kernel/entry-common.c:486
- el1h_64_irq_handler+0x18/0x24 arch/arm64/kernel/entry-common.c:491
- el1h_64_irq+0x64/0x68 arch/arm64/kernel/entry.S:580
- arch_local_irq_enable+0xc/0x18 arch/arm64/include/asm/irqflags.h:35
- default_idle_call+0x48/0xb8 kernel/sched/idle.c:109
- cpuidle_idle_call kernel/sched/idle.c:191 [inline]
- do_idle+0x110/0x2d4 kernel/sched/idle.c:303
- cpu_startup_entry+0x24/0x28 kernel/sched/idle.c:400
- kernel_init+0x0/0x290 init/main.c:729
- start_kernel+0x0/0x620 init/main.c:890
- start_kernel+0x450/0x620 init/main.c:1145
- __primary_switched+0xb4/0xbc arch/arm64/kernel/head.S:471
-Code: 94001384 aa0003f7 aa1303e0 9400144a (f94002f8) 
+ nci_send_cmd+0xe8/0x154 net/nfc/nci/core.c:1376
+ nci_reset_req net/nfc/nci/core.c:166 [inline]
+ __nci_request net/nfc/nci/core.c:107 [inline]
+ nci_open_device+0x168/0x518 net/nfc/nci/core.c:502
+ nci_dev_up+0x20/0x30 net/nfc/nci/core.c:631
+ nfc_dev_up+0xcc/0x1b0 net/nfc/core.c:118
+ nfc_genl_dev_up+0x40/0x78 net/nfc/netlink.c:770
+ genl_family_rcv_msg_doit net/netlink/genetlink.c:756 [inline]
+ genl_family_rcv_msg net/netlink/genetlink.c:833 [inline]
+ genl_rcv_msg+0x458/0x4f4 net/netlink/genetlink.c:850
+ netlink_rcv_skb+0xe8/0x1d4 net/netlink/af_netlink.c:2540
+ genl_rcv+0x38/0x50 net/netlink/genetlink.c:861
+ netlink_unicast_kernel+0xfc/0x1dc net/netlink/af_netlink.c:1319
+ netlink_unicast+0x164/0x248 net/netlink/af_netlink.c:1345
+ netlink_sendmsg+0x484/0x584 net/netlink/af_netlink.c:1921
+ sock_sendmsg_nosec net/socket.c:714 [inline]
+ sock_sendmsg net/socket.c:734 [inline]
+ ____sys_sendmsg+0x2f8/0x440 net/socket.c:2482
+ ___sys_sendmsg net/socket.c:2536 [inline]
+ __sys_sendmsg+0x1ac/0x228 net/socket.c:2565
+ __do_sys_sendmsg net/socket.c:2574 [inline]
+ __se_sys_sendmsg net/socket.c:2572 [inline]
+ __arm64_sys_sendmsg+0x2c/0x3c net/socket.c:2572
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+irq event stamp: 42
+hardirqs last  enabled at (41): [<ffff80000c0b7c04>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
+hardirqs last  enabled at (41): [<ffff80000c0b7c04>] _raw_spin_unlock_irqrestore+0x48/0x8c kernel/locking/spinlock.c:194
+hardirqs last disabled at (42): [<ffff80000812fd60>] queue_work_on+0x78/0x15c kernel/workqueue.c:1542
+softirqs last  enabled at (8): [<ffff80000801c38c>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
+softirqs last disabled at (6): [<ffff80000801c358>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
 ---[ end trace 0000000000000000 ]---
-----------------
-Code disassembly (best guess):
-   0:	94001384 	bl	0x4e10
-   4:	aa0003f7 	mov	x23, x0
-   8:	aa1303e0 	mov	x0, x19
-   c:	9400144a 	bl	0x5134
-* 10:	f94002f8 	ldr	x24, [x23] <-- trapping instruction
+nci: __nci_request: wait_for_completion_interruptible_timeout failed 0
 
 
 ---
