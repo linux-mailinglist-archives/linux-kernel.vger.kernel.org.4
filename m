@@ -2,110 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C500362C107
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:37:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B55362C10A
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:37:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233309AbiKPOhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 09:37:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59270 "EHLO
+        id S233311AbiKPOhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 09:37:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233064AbiKPOhX (ORCPT
+        with ESMTP id S233452AbiKPOhh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 09:37:23 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 563CB2D1F2
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 06:36:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668609388;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=y+b7jSGWrVvTvS0TaC89xQ5xPfKD0DhOu05RjLAhcHw=;
-        b=URvikb3J+6/h3rbAaKaHikyH8803hpop1j0UpOi09Rt3OP4e5nYORviP3e1sggK3i/oVWv
-        PSFTcCXl0lIAhzqtQegWnuvoXe3hUayvWZCc62xwuYRWlZHOxcYMvbIfu+1swgR9FPycGk
-        iY7BvLw3ILxR0ZL8B+zwZbESoHQLxoM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-154-2SV1KXDzOeyx8FzG4eKnUg-1; Wed, 16 Nov 2022 09:36:23 -0500
-X-MC-Unique: 2SV1KXDzOeyx8FzG4eKnUg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B860A185A792;
-        Wed, 16 Nov 2022 14:36:22 +0000 (UTC)
-Received: from [10.22.10.207] (unknown [10.22.10.207])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 157441121325;
-        Wed, 16 Nov 2022 14:36:22 +0000 (UTC)
-Message-ID: <7eb8d6f9-b54c-aedc-982b-8ed2bddb948b@redhat.com>
-Date:   Wed, 16 Nov 2022 09:36:19 -0500
+        Wed, 16 Nov 2022 09:37:37 -0500
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6942871C;
+        Wed, 16 Nov 2022 06:37:27 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4NC57M42dnz9xFg4;
+        Wed, 16 Nov 2022 22:30:39 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwCXgm+C9XRjFB1tAA--.18710S2;
+        Wed, 16 Nov 2022 15:37:02 +0100 (CET)
+Message-ID: <700dffccdfeeb3d19c5385550e4c84f08c705e19.camel@huaweicloud.com>
+Subject: Re: [RFC][PATCH 4/4] security: Enforce limitations on return values
+ from LSMs
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, revest@chromium.org,
+        jackmanb@chromium.org, jmorris@namei.org, serge@hallyn.com,
+        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Wed, 16 Nov 2022 15:36:46 +0100
+In-Reply-To: <CAHC9VhQ+fUZfJwJ=oJ9ieszKeicnS7Z-QcJuJVL9HF5F0tcA7Q@mail.gmail.com>
+References: <20221115175652.3836811-1-roberto.sassu@huaweicloud.com>
+         <20221115175652.3836811-5-roberto.sassu@huaweicloud.com>
+         <CAHC9VhQ+fUZfJwJ=oJ9ieszKeicnS7Z-QcJuJVL9HF5F0tcA7Q@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH] cgroup/cpuset: Improve cpuset_css_alloc() description
-Content-Language: en-US
-To:     Kamalesh Babulal <kamalesh.babulal@oracle.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>
-Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tom Hromatka <tom.hromatka@oracle.com>
-References: <20221116054415.79157-1-kamalesh.babulal@oracle.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20221116054415.79157-1-kamalesh.babulal@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-CM-TRANSID: LxC2BwCXgm+C9XRjFB1tAA--.18710S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxurW8uFyUGw48XryUJw4rAFb_yoW5Gr4rpa
+        y5JFy5GF4v9r47AwnIyw43Zw1Fy393Gr4UJr9Iy347Zw15trZxKr40k3WY9FyUCr4S9w1j
+        yr4YqF93Ca4DA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgASBF1jj4GDggAAsl
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/16/22 00:44, Kamalesh Babulal wrote:
-> Change the function argument in the description of cpuset_css_alloc()
-> from 'struct cgroup' -> 'struct cgroup_subsys_state'.  The change to the
-> argument type was introduced by commit eb95419b023a ("cgroup: pass
-> around cgroup_subsys_state instead of cgroup in subsystem methods").
-> Also, add more information to its description.
->
-> Signed-off-by: Kamalesh Babulal <kamalesh.babulal@oracle.com>
-> ---
->   kernel/cgroup/cpuset.c | 11 ++++++++---
->   1 file changed, 8 insertions(+), 3 deletions(-)
->
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index b474289c15b8..aac790462e74 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -3046,9 +3046,14 @@ static struct cftype dfl_files[] = {
->   };
->   
->   
-> -/*
-> - *	cpuset_css_alloc - allocate a cpuset css
-> - *	cgrp:	control group that the new cpuset will be part of
-> +/**
-> + * cpuset_css_alloc - Allocate a cpuset css
-> + * @parent_css: Parent css of the control group that the new cpuset will be
-> + *              part of
-> + * Return: cpuset css on success, -ENOMEM on failure.
-> + *
-> + * Allocate and initialize a new cpuset css, for non-root cpuset or return the
-> + * top cpuset css for root cpuset.
-Strictly speaking, it returns the css of top cpuset set for NULL input 
-parameter.
->    */
->   
->   static struct cgroup_subsys_state *
+On Tue, 2022-11-15 at 21:35 -0500, Paul Moore wrote:
+> On Tue, Nov 15, 2022 at 12:58 PM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > LSMs should not be able to return arbitrary return values, as the callers
+> > of the LSM infrastructure might not be ready to handle unexpected values
+> > (e.g. positive values that are first converted to a pointer with ERR_PTR,
+> > and then evaluated with IS_ERR()).
+> > 
+> > Modify call_int_hook() to call is_ret_value_allowed(), so that the return
+> > value from each LSM for a given hook is checked. If for the interval the
+> > return value falls into the corresponding flag is not set, change the
+> > return value to the default value, just for the current LSM.
+> > 
+> > A misbehaving LSM would not have impact on the decision of other LSMs, as
+> > the loop terminates whenever the return value is not zero.
+> > 
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > ---
+> >  security/security.c | 34 ++++++++++++++++++++++++++++++++++
+> >  1 file changed, 34 insertions(+)
+> 
+> Casey touched on some of this in his reply to patch 0/4, but basically
+> I see this as a BPF LSM specific problem and not a generalized LSM
+> issue that should be addressed at the LSM layer.  Especially if the
+> solution involves incurring additional processing for every LSM hook
+> instantiation, regardless if a BPF LSM is present.  Reading your
+> overall patchset description I believe that you understand this too.
 
-While at it, could you also remove the blank line between the comment 
-and the function body.
+Yes, I had this concern too. Thanks Paul and Casey for taking the time
+to reply.
 
-Thanks,
-Longman
+I liked the fact that the fix is extremely simple, but nevertheless it
+should not impact the performance, if there are alternative ways. I
+thought maybe we look at non-zero values, since the check is already
+there. But it could be that there is an impact for it too (maybe for
+audit_rule_match?).
+
+> If you want to somehow instrument the LSM hook definitions (what I
+> believe to be the motivation behind patch 3/4) to indicate valid
+> return values for use by the BPF verifier, I think we could entertain
+> that, or at least discuss it further, but I'm not inclined to support
+> any runtime overhead at the LSM layer for a specific LSM.
+
+Ok, yes. Patches 1-3 would help to keep in sync the LSM infrastructure
+and eBPF, but it is not strictly needed. I could propose an eBPF-only
+alternative to declare sets of functions per interval.
+
+More or less, I developed an eBPF-based alternative also for patch 4.
+It is just a proof of concept. Will propose it, to validate the idea.
+
+Thanks
+
+Roberto
 
