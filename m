@@ -2,150 +2,372 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0186762C918
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 20:41:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA9D662C91D
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 20:42:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233706AbiKPTlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 14:41:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50822 "EHLO
+        id S233705AbiKPTmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 14:42:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231565AbiKPTk5 (ORCPT
+        with ESMTP id S232126AbiKPTmg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 14:40:57 -0500
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2077.outbound.protection.outlook.com [40.107.212.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F401183B8;
-        Wed, 16 Nov 2022 11:40:56 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HTz/3KlQTlfRJ0CPsvRegnhJxL71fWPpABonA6d645i4ZILyia4BL0ixp16Ug5WpDRktiVek2BMf8bd31E8mHFDdUTvJukeMghhpJvZTCwuMHhdb+HxZ+DynmM6mhr66ZcaFW3Rw6LnONHrYzRcsbJe6d8AVlQVvmU7cbE2e9RsX4S1n+mJm11ztFL8UpNJLyUnhUFEdNUi8CWmS8FHG2B6+Q6Rn0reHVAv9fzTpJPtsgevLGHLlyOARGVZY88vJ7rgqIK9dktfgGeM6sFEngh0IpUER9Yda2k6+otSwun4cA2yPILNaOI+31CGaZp7lm9ftUyu+J3oEjUQd/aBHuw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=U/pX60NupHqrYTvL5qQ7mGBXmjNFEEH3xaQEGirgFzE=;
- b=SO0L0w3GTx2ruRCgI3LYfWl3gyECG05E5atKuBtNG16Daca2okj/e6Ld2oJcF15FpZiNlu/N46W523JP/irxg0WFqx0PwWfylPrthds1Ojg1rNpviKepUXqjRUc68WFWeoB+SbU7xRuHDA6hnpv5oOh+ut1rL0kXXq7Q01xvFcFFbykPj+9n+dXFo/sgBibvXS88kztbRjgRsVhobFs4WN2mMM5Aysx2+snO3iAEQmLeUlEYRhz9JxbvS/n9PQRrMvi9mQn7wznHI12J80Hgr7DcmEQUng5uqQrqh5Jxx2OAA1Bo3/Iw2cqxQezNLzbGvhgnwlQvFR+pclPQx1Z1Tw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=U/pX60NupHqrYTvL5qQ7mGBXmjNFEEH3xaQEGirgFzE=;
- b=ljt3JRcNqycdz2ADuvEMEkRYWCNm3wEY0T8uPmYIWkuCSkoQLMH/fJw+i9xJ6Ap5v/mweRMACSnuZvfDdRtSBd59uk5DGeCLNB/FVt4GSMDK0QKuVoOyzj9924FqpWZKYZBI1mdalXq6YVKtdqHPw34olmlNkonG6Xsd8OIZ04/lY2NDWmvGAiYMSVcdC2/2JgcJfV5ONxRLaQwJ39EP94TJvJHrRYILynTDaOEOegoZa+xy0vd2oGtfR4LzQA05urt4K9wEeLxGnI9yvUsx7VUGtP3/YT9LbnlZIn9j4HE27xtNjep+ZGX4umwEScB15eRx2GsWE7uyvMPOWVNnWA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by CH0PR12MB5236.namprd12.prod.outlook.com (2603:10b6:610:d3::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.19; Wed, 16 Nov
- 2022 19:40:54 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f8b0:df13:5f8d:12a]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f8b0:df13:5f8d:12a%7]) with mapi id 15.20.5813.017; Wed, 16 Nov 2022
- 19:40:54 +0000
-Date:   Wed, 16 Nov 2022 15:40:53 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
-        Allen Hubbe <allenbh@gmail.com>,
-        "Ahmed S. Darwish" <darwi@linutronix.de>,
-        Reinette Chatre <reinette.chatre@intel.com>
-Subject: Re: [patch 24/33] PCI/MSI: Provide prepare_desc() MSI domain op
-Message-ID: <Y3U8xT+tF1IR7OF8@nvidia.com>
-References: <20221111133158.196269823@linutronix.de>
- <20221111135206.632756918@linutronix.de>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221111135206.632756918@linutronix.de>
-X-ClientProxiedBy: YT3PR01CA0124.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:83::33) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Wed, 16 Nov 2022 14:42:36 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9FBCDD
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 11:42:33 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id b29so18424904pfp.13
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 11:42:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KlWeHY37dk13pgneQQF09xyXNkcCF6rl/x3zODlH9RE=;
+        b=Oj4UqhJfRqo2qKRgU4WMPLYSfxFcmatpiZJ+WfpHYOc9ii2L5vU+VdHRw3z0vRFUOg
+         zJ8Lkxf95uy7YzDsvbjMKN2itsSfLteot3ADVAMoJqjfOZHcqK0oR6d+6LQUAtWkLJLh
+         RbIi2dt4zOYyieHE1CeqnciTN1OgNDj4HxdKHmy4d8gbvrpPxQySV4+o1w5V9wabH70d
+         ZHiGR/drmo0zMKvAVYdfNUWGnnNF4LDhCps16N4h2e3YizN0jnN6K6J+EeqTzP18MAh1
+         yuH1dqxkMz2gM1S9cdq+tu4ECSONqRn3T+eTGhrfs2GGlzRnbFnGdcOFbDNWrqHyrEI+
+         qspg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KlWeHY37dk13pgneQQF09xyXNkcCF6rl/x3zODlH9RE=;
+        b=tui/QtTriys9m3fAPAp0abH9z3iOefbXvOIaiL7iZawfI5jd5mkH+usNOIWBHvOjx2
+         9ww9gS5ZvVTVR3lFYN2sf/uW+7ARft+wAzYs4RXXrL/Inl/t/xY6Ke0UAJ8Kvtpb7LqX
+         6XehOc+micQjiXqY7yhNgtrJe/NWHaqvkRyqLAjXS9vjmLtTOMZ5BMBVuwakNhi6niHU
+         QID3gfkyqritG5+rFUtLTLBC66ikUPYsgEBAlRpbiaH3+bC9J0FTsxsyMMo8MqrvIEMQ
+         N7bsRdJBemtgYXhNZztQIapEpauoUwfevy/hHrcoOhmNosO+8FeS1f1DNRyT4t7Ptda3
+         lnGA==
+X-Gm-Message-State: ANoB5pmmnjW86H9kybYogq82WhFstUZw452LlV6e4FHl5cMfSjeMlVQU
+        a07/h5rimpMCfX6cIOnjEe9DCw==
+X-Google-Smtp-Source: AA0mqf4DKE/DXI0zn+3B84iiiR60cPYKjY+cVxa4rceL520VBxnAaVIFUNVUHCCrTVsBEewI4HaTpw==
+X-Received: by 2002:a63:d153:0:b0:46f:9193:467d with SMTP id c19-20020a63d153000000b0046f9193467dmr21924717pgj.479.1668627752567;
+        Wed, 16 Nov 2022 11:42:32 -0800 (PST)
+Received: from ?IPV6:2405:201:d02f:d899:2028:7962:400:43b6? ([2405:201:d02f:d899:2028:7962:400:43b6])
+        by smtp.gmail.com with ESMTPSA id 186-20020a6206c3000000b00553d573222fsm11219313pfg.199.2022.11.16.11.42.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Nov 2022 11:42:32 -0800 (PST)
+Message-ID: <187b21f4-8acc-5991-e534-0f48d0dda184@9elements.com>
+Date:   Thu, 17 Nov 2022 01:12:29 +0530
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|CH0PR12MB5236:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1ea7a309-9ddc-4419-e663-08dac80a799b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: hQY42IpupYEozmLxTf582xUMQSMv5J3U2B7aLZp2/IvwnaKq7wmuQl7H6f1ozZsZbVysAoB6vtRG9UfLMP83lum1iaUElMcNsmpyBwwCetJzD1IIN7In8PfBAykE8xbj/C362GaQpQfKgmFIOWIGvGqgEx42+WVIHZ/AmTTBRuKjQWQdzroMHql5LN2sAPdKwUtyi8K3PpQbwqdWhMOo46c5hv/kiNkfel20KoNqPXRb2U5pbIOmaoQhjyL0d+Exrmjjn7HUMwpd8+2SElIbLna0do6dlJxzYE+WYrDe84oyVqhR3v2jVADmBKxleyNHEctu3c7ozqe+nJXQPoM4gxFhyWvC/WKh3JOIAx/osUSCQyOGwq2Y5jfB1BRnP/7nzel6C24/WekrhyPayO+JtScvFVeVvZRDNadQQX8aotUB3tEBIZ9yfXe/f71HVZaEb4WH4mgfQ6UZ1VRd4LKXzMQgdYrhnsa55NhWPirdQr7zUl7XkF02bJG0LwPQFJFGZHuwJkR/VfKV8lxDl4xwkbmTPvmejMvlAbAIQ1G1p5cyot/T/etS00ybdyeR1mSaHagnsFubEaXxiXEguJygKWFU/U50P6jiYlPQ1D/dMNgNI13vglkkfgwVZXQiVwKfkWjH0J/Y7G1yREUoMT+ae6PrMh5sHW/l+Sc4BW/n+6fqGAW/oyUc9qUpmzv/srl466IoixVHCe87OblCgSNgRf7GBOVR4teycoxx8vd0/FDxY8HlVPl1gwDR2dPlqtBK
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(346002)(376002)(396003)(366004)(451199015)(86362001)(66476007)(38100700002)(478600001)(6486002)(66946007)(8676002)(6506007)(41300700001)(4326008)(66556008)(54906003)(2616005)(316002)(6916009)(186003)(6512007)(26005)(7416002)(8936002)(5660300002)(2906002)(36756003)(67856001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?UQ8YRYGJAGiEEnETUC3QXSR1XGrugGRK9BSor9qbooFhDYz3C6F/xoAUTlYZ?=
- =?us-ascii?Q?l5WJk/R8DIVMcahMd+hvkTC7c21EHkdG6gAFpEMYMWygJg/NOx4+7S+10WhV?=
- =?us-ascii?Q?EzHj2FLdP2rCFTwhVt9UyZXyTfqUDvkK/K3AmllJ6XLXf7IlG1Mx6/BfwlTf?=
- =?us-ascii?Q?F7a0laYgUJ0X5xWkdw6YVCav2afuWsKvWeJGp0MBrpheo9ZxXp/6pXsXiKvF?=
- =?us-ascii?Q?q92JQojOoESthSh7xpdJzDCXQPEC6y7i1yVV2zbZN1MqtYEOO3cgwUku23qk?=
- =?us-ascii?Q?/F+076xxILwcXnz+0srDyDKpF+xLBNTIO8qTQqaORnM2r1vcrZGPBYDQs7mF?=
- =?us-ascii?Q?RTPTvx7fWVxQ1oaFeQuWtWiFH90RdV7fkKjLeL6ha009uxNX+voM0KI08AvW?=
- =?us-ascii?Q?kbAxED9XyQnUJ02h8rLAWI5pwjeX2DdVVUQtznYlx3njxaG8N4dpYtnB+ZVa?=
- =?us-ascii?Q?/eLQZ3eWf8EFc0gVxT7slmlrG29r//2rHit9y7NLcJ4CdCbeO43FJcT/Mq4R?=
- =?us-ascii?Q?6GF3nKCKpf6vorX+oR0GVU3a0Xs1G2sbnLMu1f0Pdh4l/H+iwV39QuG/KP3w?=
- =?us-ascii?Q?/8WVdit2hqN1i7erfa8AKjQNpF4KWdO27loh3dWCllikNWwI+zEGAB9eQOLC?=
- =?us-ascii?Q?QBAgRMBkQEPefuR4H/j74kxLZjHvFroXnlqESgvOSNCPUTUzPKkhrLE9BL3F?=
- =?us-ascii?Q?3hepZcwuHGyeQFQHbxWDEsNzf4wZwMc/LPUNTbIPYk8WL/1QWI6A0boQ8UvX?=
- =?us-ascii?Q?sbRuMcCicNZ0E7UIGOd2frMMW38wy0gfp5YtlKgl5rtdlu4LJ/ZVL+aKXNpI?=
- =?us-ascii?Q?fPPY5iF2J6UJnlbhRkTpvhsRN+pQhbt3sdUD6ZMiUteYybda3vjA0CC+KYZj?=
- =?us-ascii?Q?RPh9okxnl9/2rZgwugqRzcZupZxoifehcv66QcUFHRJmd5dlNWM1qhV+bZ16?=
- =?us-ascii?Q?gtFL/spBqEDZrQjuuP0BSRTKP8DyxI1sOhkoux10yJUos8lvNZMlgAjccFzF?=
- =?us-ascii?Q?Zo1TEuOO9hmpCIWwM7KS3Y7eoCbhzHe3qyRxahDFlGy5jEEnw8B9JpCoTAsn?=
- =?us-ascii?Q?YpvYWgBsCxkzj5axIgAj88/bOa3hhAV/dP+fDPGLuhJHWGL+5KHYHZHG+7af?=
- =?us-ascii?Q?IX+XxNbmSjUs1+eiGBXcgoPY+fVsnWEWugMYN9OYJ9EmDkYhOL9e9Im46QjM?=
- =?us-ascii?Q?rwoIszo4U/4Nw/TTiiaTXdfAGPzk4+djGlAgFgiJ0vGvUaq1gnVnbFoyQWny?=
- =?us-ascii?Q?ODC8RMrUYypq5mIdRJAHNe28zaQTawX9trMsWDg6DetjUVU3iJmulC06D73z?=
- =?us-ascii?Q?e9fZGeqY+D72oCCQTI7grRvIdFbnNNyJorkYECnm+rufN8booa/+4x8fx3GB?=
- =?us-ascii?Q?Dj4BGhyiAVaUooNjABwVj9vawokddaqK+whujJVhmnCeFpTcfpCMvw0EVm1I?=
- =?us-ascii?Q?HRyjK462sJRKVO4C0kGN1hYvKIiLRCpdQk5AZPhTAk3k+OGF+fCm8Hop301w?=
- =?us-ascii?Q?tE1qtcS8SZAGMOu76C/bo1qhnNdtJnvTWd8wbDhTj6vc8dYEPoEZOG/G94Z8?=
- =?us-ascii?Q?SCZhGcpYnkcIovY1bQpHsedfqKEZd0KwMrH5OiiP?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1ea7a309-9ddc-4419-e663-08dac80a799b
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Nov 2022 19:40:54.3397
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 82H2wGUMfvT6Uocr1DcStbFVyclCOK2s64+qij8T2jFS95cMj6aqKK9iVfzyVG2I
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5236
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v9 2/2] mfd: max597x: Add support for MAX5970 and MAX5978
+Content-Language: en-US
+To:     Lee Jones <lee@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Marcello Sylvester Bauer <sylv@sylv.io>
+References: <20221114075739.4117439-1-Naresh.Solanki@9elements.com>
+ <20221114075739.4117439-3-Naresh.Solanki@9elements.com>
+ <Y3Ud+CfFwIURcs9R@google.com>
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+In-Reply-To: <Y3Ud+CfFwIURcs9R@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 02:58:49PM +0100, Thomas Gleixner wrote:
-> Dynamic MSI-X vector allocation post MSI-X allows to allocate vectors at a
-> given index or at any free index in the available table range. The latter
-> requires that the core code selects the index at descriptor allocation time.
-> 
-> This requires that the PCI/MSI-X specific setup of the MSI-X descriptor,
-> which is partially depending on the chosen index happens after allocation.
-> 
-> Implement the prepare_desc() op in the PCI/MSI-X specific msi_domain_ops
-> which is invoked before the core interrupt descriptor and the associated
-> Linux interrupt number is allocated. That callback is also provided for the
-> upcoming PCI/IMS implementations so the implementation specific interrupt
-> domain can do their domain specific initialization of the MSI descriptors.
-> 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> ---
->  drivers/pci/msi/irqdomain.c |    9 +++++++++
->  1 file changed, 9 insertions(+)
+Hi Lee,
 
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+On 16-11-2022 10:59 pm, Lee Jones wrote:
+> On Mon, 14 Nov 2022, Naresh Solanki wrote:
+> 
+>> From: Patrick Rudolph <patrick.rudolph@9elements.com>
+>>
+>> Implement a regulator driver with IRQ support for fault management.
+>> Written against documentation [1] and [2] and tested on real hardware.
+>>
+>> Every channel has its own regulator supplies nammed 'vss1-supply' and
+>> 'vss2-supply'. The regulator supply is used to determine the output
+>> voltage, as the smart switch provides no output regulation.
+>> The driver requires the 'shunt-resistor-micro-ohms' property to be
+>> present in Device Tree to properly calculate current related
+>> values.
+>>
+>> Datasheet links:
+>> 1: https://datasheets.maximintegrated.com/en/ds/MAX5970.pdf
+>> 2: https://datasheets.maximintegrated.com/en/ds/MAX5978.pdf
+>>
+>> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+>> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+>> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+>> ---
+>>   drivers/mfd/Kconfig         |  12 +++++
+>>   drivers/mfd/Makefile        |   1 +
+>>   drivers/mfd/max597x.c       |  92 ++++++++++++++++++++++++++++++++
+>>   include/linux/mfd/max597x.h | 103 ++++++++++++++++++++++++++++++++++++
+>>   4 files changed, 208 insertions(+)
+>>   create mode 100644 drivers/mfd/max597x.c
+>>   create mode 100644 include/linux/mfd/max597x.h
+>>
+>> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+>> index 8b93856de432..416fe7986b7b 100644
+>> --- a/drivers/mfd/Kconfig
+>> +++ b/drivers/mfd/Kconfig
+>> @@ -253,6 +253,18 @@ config MFD_MADERA_SPI
+>>   	  Support for the Cirrus Logic Madera platform audio SoC
+>>   	  core functionality controlled via SPI.
+>>   
+>> +config MFD_MAX597X
+>> +	tristate "Maxim 597x Power Switch and Monitor"
+>> +	depends on I2C
+>> +	depends on OF
+>> +	select MFD_CORE
+>> +	select REGMAP_I2C
+>> +	help
+>> +	  This driver controls a Maxim 5970/5978 switch via I2C bus.
+>> +	  The MAX5970/5978 is a smart switch with no output regulation, but
+>> +	  fault protection and voltage and current monitoring capabilities.
+>> +	  Also it supports upto 4 indication LEDs.
+>> +
+>>   config MFD_CS47L15
+>>   	bool "Cirrus Logic CS47L15"
+>>   	select PINCTRL_CS47L15
+>> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+>> index 7ed3ef4a698c..819d711fa748 100644
+>> --- a/drivers/mfd/Makefile
+>> +++ b/drivers/mfd/Makefile
+>> @@ -161,6 +161,7 @@ obj-$(CONFIG_MFD_DA9063)	+= da9063.o
+>>   obj-$(CONFIG_MFD_DA9150)	+= da9150-core.o
+>>   
+>>   obj-$(CONFIG_MFD_MAX14577)	+= max14577.o
+>> +obj-$(CONFIG_MFD_MAX597X)	+= max597x.o
+>>   obj-$(CONFIG_MFD_MAX77620)	+= max77620.o
+>>   obj-$(CONFIG_MFD_MAX77650)	+= max77650.o
+>>   obj-$(CONFIG_MFD_MAX77686)	+= max77686.o
+>> diff --git a/drivers/mfd/max597x.c b/drivers/mfd/max597x.c
+>> new file mode 100644
+>> index 000000000000..ae43d57cde26
+>> --- /dev/null
+>> +++ b/drivers/mfd/max597x.c
+>> @@ -0,0 +1,92 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Maxim MAX5970/MAX5978 Power Switch & Monitor
+>> + *
+>> + * Copyright (c) 2022 9elements GmbH
+>> + *
+>> + * Author: Patrick Rudolph <patrick.rudolph@9elements.com>
+>> + */
+>> +
+>> +#include <linux/i2c.h>
+>> +#include <linux/mfd/core.h>
+>> +#include <linux/mfd/max597x.h>
+>> +#include <linux/regmap.h>
+>> +
+>> +static const struct regmap_config max597x_regmap_config = {
+>> +	.reg_bits = 8,
+>> +	.val_bits = 8,
+>> +	.max_register = MAX_REGISTERS,
+>> +};
+>> +
+>> +static const struct mfd_cell max597x_cells[] = {
+>> +	{ .name = "max597x-regulator", },
+>> +	{ .name = "max597x-iio", },
+>> +	{ .name = "max597x-led", },
+>> +};
+>> +
+>> +static int max597x_probe(struct i2c_client *i2c, const struct i2c_device_id *id)
+>> +{
+>> +	struct max597x_data *ddata;
+>> +	enum max597x_chip_type chip = id->driver_data;
+>> +
+>> +	ddata = devm_kzalloc(&i2c->dev, sizeof(*ddata),	GFP_KERNEL);
+>> +	if (!ddata)
+>> +		return -ENOMEM;
+>> +
+>> +	/*
+>> +	 * Based on chip type, Initialize the number of switch. This is needed by
+>> +	 * regulator & iio cells.
+>> +	 */
+>> +	switch (chip) {
+>> +	case MAX597x_TYPE_MAX5970:
+>> +		ddata->num_switches = MAX5970_NUM_SWITCHES;
+>> +		break;
+>> +	case MAX597x_TYPE_MAX5978:
+>> +		ddata->num_switches = MAX5978_NUM_SWITCHES;
+>> +		break;
+>> +	}
+>> +
+>> +	ddata->regmap = devm_regmap_init_i2c(i2c, &max597x_regmap_config);
+>> +	if (IS_ERR(ddata->regmap)) {
+>> +		dev_err(&i2c->dev, "Failed to initialize regmap");
+>> +		return PTR_ERR(ddata->regmap);
+>> +	}
+>> +
+>> +	/* IRQ used by regulator cell */
+>> +	ddata->irq = i2c->irq;
+>> +	ddata->dev = &i2c->dev;
+> 
+> You won't need both.  You can derive one from the other.
+> 
+>> +	i2c_set_clientdata(i2c, ddata);
+>> +
+>> +	return devm_mfd_add_devices(ddata->dev, PLATFORM_DEVID_AUTO,
+>> +				    max597x_cells, ARRAY_SIZE(max597x_cells),
+>> +				    NULL, 0, NULL);
+>> +}
+>> +
+>> +static const struct i2c_device_id max597x_table[] = {
+>> +	{ .name = "max5970", MAX597x_TYPE_MAX5970 },
+>> +	{ .name = "max5978", MAX597x_TYPE_MAX5978 },
+>> +};
+>> +
+>> +MODULE_DEVICE_TABLE(i2c, max597x_table);
+>> +
+>> +static const struct of_device_id max597x_of_match[] = {
+>> +	{ .compatible = "maxim,max5970", .data = (void *)MAX597x_TYPE_MAX5970 },
+>> +	{ .compatible = "maxim,max5978", .data = (void *)MAX597x_TYPE_MAX5978 },
+>> +	{}
+>> +};
+>> +
+>> +MODULE_DEVICE_TABLE(of, max597x_of_match);
+>> +
+>> +static struct i2c_driver max597x_driver = {
+>> +	.id_table = max597x_table,
+>> +	.driver = {
+>> +		  .name = "max597x",
+>> +		  .of_match_table = of_match_ptr(max597x_of_match),
+>> +		  },
+>> +	.probe = max597x_probe,
+>> +};
+>> +module_i2c_driver(max597x_driver);
+>> +
+>> +MODULE_AUTHOR("Patrick Rudolph <patrick.rudolph@9elements.com>");
+>> +MODULE_DESCRIPTION("MAX597X Power Switch and Monitor");
+>> +MODULE_LICENSE("GPL v2");
+> 
+> This driver looks *very* simple.
+> 
+> Are you able to use simple-mfd-i2c.c instead?
+> 
+> I suspect the answer to that would be "yes".
+> 
+>> diff --git a/include/linux/mfd/max597x.h b/include/linux/mfd/max597x.h
+>> new file mode 100644
+>> index 000000000000..99a047e66b44
+>> --- /dev/null
+>> +++ b/include/linux/mfd/max597x.h
+>> @@ -0,0 +1,103 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +/*
+>> + * Maxim MAX5970/MAX5978 Power Switch & Monitor
+>> + *
+>> + * Copyright (c) 2022 9elements GmbH
+>> + *
+>> + * Author: Patrick Rudolph <patrick.rudolph@9elements.com>
+>> + */
+>> +
+>> +#ifndef MFD_MAX597X_H
+>> +#define MFD_MAX597X_H
+>> +
+>> +#include <linux/device.h>
+>> +#include <linux/regmap.h>
+>> +
+>> +/* Number of switch based on chip variant */
+>> +#define MAX5970_NUM_SWITCHES 2
+>> +#define MAX5978_NUM_SWITCHES 1
+>> +/* Both chip variant have 4 indication LEDs used by LED cell */
+>> +#define MAX597X_NUM_LEDS     4
+>> +
+>> +enum max597x_chip_type {
+>> +	MAX597x_TYPE_MAX5978 = 1,
+>> +	MAX597x_TYPE_MAX5970,
+>> +};
+>> +
+>> +#define MAX5970_REG_CURRENT_L(ch)		(0x01 + (ch) * 4)
+>> +#define MAX5970_REG_CURRENT_H(ch)		(0x00 + (ch) * 4)
+>> +#define MAX5970_REG_VOLTAGE_L(ch)		(0x03 + (ch) * 4)
+>> +#define MAX5970_REG_VOLTAGE_H(ch)		(0x02 + (ch) * 4)
+>> +#define MAX5970_REG_MON_RANGE			0x18
+>> +#define  MAX5970_MON_MASK				0x3
+>> +#define  MAX5970_MON(reg, ch)		(((reg) >> ((ch) * 2)) & MAX5970_MON_MASK)
+>> +#define  MAX5970_MON_MAX_RANGE_UV		16000000
+>> +
+>> +#define MAX5970_REG_CH_UV_WARN_H(ch)	(0x1A + (ch) * 10)
+>> +#define MAX5970_REG_CH_UV_WARN_L(ch)	(0x1B + (ch) * 10)
+>> +#define MAX5970_REG_CH_UV_CRIT_H(ch)	(0x1C + (ch) * 10)
+>> +#define MAX5970_REG_CH_UV_CRIT_L(ch)	(0x1D + (ch) * 10)
+>> +#define MAX5970_REG_CH_OV_WARN_H(ch)	(0x1E + (ch) * 10)
+>> +#define MAX5970_REG_CH_OV_WARN_L(ch)	(0x1F + (ch) * 10)
+>> +#define MAX5970_REG_CH_OV_CRIT_H(ch)	(0x20 + (ch) * 10)
+>> +#define MAX5970_REG_CH_OV_CRIT_L(ch)	(0x21 + (ch) * 10)
+>> +
+>> +#define  MAX5970_VAL2REG_H(x)			(((x) >> 2) & 0xFF)
+>> +#define  MAX5970_VAL2REG_L(x)			((x) & 0x3)
+>> +
+>> +#define MAX5970_REG_DAC_FAST(ch)		(0x2E + (ch))
+>> +
+>> +#define MAX5970_FAST2SLOW_RATIO			200
+>> +
+>> +#define MAX5970_REG_STATUS0				0x31
+>> +#define  MAX5970_CB_IFAULTF(ch)			(1 << (ch))
+>> +#define  MAX5970_CB_IFAULTS(ch)			(1 << ((ch) + 4))
+>> +
+>> +#define MAX5970_REG_STATUS1				0x32
+>> +#define  STATUS1_PROT_MASK				0x3
+>> +#define  STATUS1_PROT(reg) \
+>> +	(((reg) >> 6) & STATUS1_PROT_MASK)
+>> +#define  STATUS1_PROT_SHUTDOWN			0
+>> +#define  STATUS1_PROT_CLEAR_PG			1
+>> +#define  STATUS1_PROT_ALERT_ONLY		2
+>> +
+>> +#define MAX5970_REG_STATUS2				0x33
+>> +#define  MAX5970_IRNG_MASK				0x3
+>> +#define  MAX5970_IRNG(reg, ch)	\
+>> +						(((reg) >> ((ch) * 2)) & MAX5970_IRNG_MASK)
+>> +
+>> +#define MAX5970_REG_STATUS3				0x34
+>> +#define  MAX5970_STATUS3_ALERT			BIT(4)
+>> +#define  MAX5970_STATUS3_PG(ch)			BIT(ch)
+>> +
+>> +#define MAX5970_REG_FAULT0				0x35
+>> +#define  UV_STATUS_WARN(ch)				BIT(ch)
+>> +#define  UV_STATUS_CRIT(ch)				BIT(ch + 4)
+>> +
+>> +#define MAX5970_REG_FAULT1				0x36
+>> +#define  OV_STATUS_WARN(ch)				BIT(ch)
+>> +#define  OV_STATUS_CRIT(ch)				BIT(ch + 4)
+>> +
+>> +#define MAX5970_REG_FAULT2				0x37
+>> +#define  OC_STATUS_WARN(ch)				BIT(ch)
+>> +
+>> +#define MAX5970_REG_CHXEN				0x3b
+>> +#define  CHXEN(ch)						(3 << (ch * 2))
+>> +
+>> +#define MAX5970_REG_LED_FLASH			0x43
+>> +
+>> +#define MAX_REGISTERS					0x49
+>> +#define ADC_MASK						0x3FF
+>> +
+>> +struct max597x_data {
+>> +	struct device *dev;
+>> +	int irq;
+>> +	int num_switches;
+>> +	struct regmap *regmap;
+>> +	/* Chip specific parameters needed by regulator & iio cells */
+>> +	u32 irng[MAX5970_NUM_SWITCHES];
+>> +	u32 mon_rng[MAX5970_NUM_SWITCHES];
+>> +	u32 shunt_micro_ohms[MAX5970_NUM_SWITCHES];
+>> +};
+>> +
+>> +#endif
+> 
+>> \ No newline at end of file
+> 
+> ???
+> 
+Will clean up in next version.
 
-Jason
+Regards,
+Naresh
