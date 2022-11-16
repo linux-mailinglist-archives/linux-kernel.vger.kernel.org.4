@@ -2,169 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1724B62C910
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 20:38:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C0B562C912
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 20:39:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233711AbiKPTh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 14:37:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49146 "EHLO
+        id S233521AbiKPTjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 14:39:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiKPTh5 (ORCPT
+        with ESMTP id S229489AbiKPTjb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 14:37:57 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A63275E2;
-        Wed, 16 Nov 2022 11:37:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668627476; x=1700163476;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=sHa2BXm+wHW/cDcRaW/ETMsv3/mSAgHxu5zt1q9wFqo=;
-  b=laQOoXCrBs+uw5Z2cIdzOAa04v3KC58HgNXMpFylB4gzd+zwqx/a39sS
-   NPIEXbYq4QrY/4tjaymRz9ZWYMJ2vg0YX/RF95Em7EN5Wx62vqC8SKiju
-   9m1U67CaaFlaT03PKTadEmp6Ifz0/eHpVXHqnXMzb42ZMYBOKr0mGq0It
-   zoxxkL1rA15HKRfKECg8mFjM07BXV0SxG4ztwm62hVc8JGpUigIbj/nUK
-   qRAJp7QTYSax1OS2R8ugUnCbTAYqZ01szK4/UrbhEv0TQN6DPepSC3QhX
-   NtR+HD9UuqdWeM4zg4aKVJscQQy5IS6F0zIQsK2AnPj70L3d0JxVVckxm
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="300171753"
-X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
-   d="scan'208";a="300171753"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 11:37:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="968548855"
-X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
-   d="scan'208";a="968548855"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga005.fm.intel.com with ESMTP; 16 Nov 2022 11:37:48 -0800
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 16 Nov 2022 11:37:47 -0800
-Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 16 Nov 2022 11:37:48 -0800
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Wed, 16 Nov 2022 11:37:47 -0800
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.44) by
- edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Wed, 16 Nov 2022 11:37:47 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Z/M++sypOs8VKlIf2bonwMJvLIS2rB0JYl7UZEQMw7Lxtv7p06nwA58h9BCYxrNARlE0g1h3baJy+YLeO89Q3ZeYbIM/5dNckz47/Kbky5GHbHhQoipDCREkrWuxoOagMheid0ewOoDFXPmpp6GJ9xVFCl/NcJhMsyWy1b8Dy44VpkzB922SqzalaxTyUWiKu2d1Xc9N7nKOuD6MUDMCXrX2dDp/PbbveDkBPIkBVylURzr+graoCedGKS49BsO7cu+IRGNIOaeVXKiFqOI49wbCtshJW3TQ1ClNnjxwbFASHeuXkDBsU8X8+W/L9UK0EkBpnF1S/fvjD5RQYw1L/w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sHa2BXm+wHW/cDcRaW/ETMsv3/mSAgHxu5zt1q9wFqo=;
- b=Lv20ODyXAJUZJo7Igsjf8p6ID3iHVLxEmTQsurmVxHWILUhrsmCFdidhhqHVNBW9XbO4KY44M+o3DPxDQQ6WbztF8iaRorVGH5+x9VuryFeXyLCFTkhmmcBFlTHSywDnhs9ftftZWNm3IcQWBmEBXYMONxhtu1SbgQLlRTBwT3Nw9zaw7GfFTuVeJX5tJz1OBE+ySi0uTAvtjnkhnFZHoS0eDecHJ5pX0CppCgE/aly8lr2k8rEVY3gRuPgAXMrRywPbKEwcFvlKd4S91LwgrKL2JQQ3CaSuJMYZkP6A1ECMNGyh0JcLMKaFCbIu5rVIp/eYVAOnCNhl0CGk70KTtg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20) by SA2PR11MB5130.namprd11.prod.outlook.com
- (2603:10b6:806:11d::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.18; Wed, 16 Nov
- 2022 19:37:44 +0000
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::b058:673:c228:3e95]) by MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::b058:673:c228:3e95%9]) with mapi id 15.20.5813.019; Wed, 16 Nov 2022
- 19:37:44 +0000
-Date:   Wed, 16 Nov 2022 11:37:41 -0800
-From:   Dan Williams <dan.j.williams@intel.com>
-To:     Robert Richter <rrichter@amd.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        "Ira Weiny" <ira.weiny@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        "Dan Williams" <dan.j.williams@intel.com>
-CC:     <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        "Davidlohr Bueso" <dave@stgolabs.net>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Robert Richter <rrichter@amd.com>
-Subject: RE: [PATCH v3 7/9] cxl/pci: Factor out code in match_add_dports() to
- pci_dev_add_dport()
-Message-ID: <63753c05781cf_12cdff294b4@dwillia2-xfh.jf.intel.com.notmuch>
-References: <20221109104059.766720-1-rrichter@amd.com>
- <20221109104059.766720-8-rrichter@amd.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221109104059.766720-8-rrichter@amd.com>
-X-ClientProxiedBy: BYAPR02CA0045.namprd02.prod.outlook.com
- (2603:10b6:a03:54::22) To MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20)
+        Wed, 16 Nov 2022 14:39:31 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F2ACDD
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 11:39:30 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id l6so17481585pjj.0
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 11:39:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ivB+2nw033Stj2pVNCL0uKhxX5EdSjd5bX4qpd43T+Q=;
+        b=OBi9QbBGm9GR+xBwie9QsTtxqYrm4cGpPfjDQiKhJrF0dzHHvPfLt7y6jpRac0Q8ZJ
+         wGLXLRSts/oBDzvB5VzzP5GGFG6qSAtXxkRMdyW/nrWD4K1eopPud41+wT8ps7B5E/CB
+         9RgfCG6U7sBOqhQTwFkNA7uW4mpmwwHEv+uZX19Y/fLdO8Ujd2/RLpjiH0FbApjCt3hR
+         BWDk0l7IQ9bbooi0lj3Y97aGn+0Vl1cdUzPK2f7zqn3yta2ppTmsz9UuyZ8Xl06ZFRG9
+         G6dMROzGzoDgYgu7dacka+5ZHOdnHYI2GhM592ynYpvE9sxaeP41o91JqE+ShGG3vPxs
+         bNXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ivB+2nw033Stj2pVNCL0uKhxX5EdSjd5bX4qpd43T+Q=;
+        b=2hIsEq+HV/8A2hqtyadMXJOQ4aIvyS7BtVr8NdP6IgJHH4sj6EvYfzMZu9aSOQgDtv
+         hqkj+XEl/ztlo6Jy5mXjaB8dGMGTP/yUUK7lGiSAKpLW9LK6OBcj/1rpsxPE3RFlNgCa
+         fsGLhFl/gTOnhig1L54phE3Z9px3Mh7d5g+s+YikKPb3vz60Hnuc6wkpwMDKj8bh/bem
+         QgKo9HMXWKozdZ4oe6DrAv8XN6IHk7HIvkLpTBpe/BIHq0P3mea3T+spnAqfP4Sq7AQa
+         vwUhQKrX/+RylxCJ9KFKXLJ9Rvxepuakm40j35S8tX39NCVfkaFhqjpcg947e24VNDNn
+         Co+g==
+X-Gm-Message-State: ANoB5pkic3eBdZ7gLlkFIcKFi1YGIsTNGHYvkFMpPOBckYzFYoLasuag
+        z5FprbXuf2WFBagG2cSMxxsdpg==
+X-Google-Smtp-Source: AA0mqf7LImv8/sdfn2Xh27eqxhCzfTU//on3imITBz5F+89sbrfeN2y1RMh5ypY54/hFdAUe9+Al7Q==
+X-Received: by 2002:a17:902:6bcc:b0:176:c7d0:ecf0 with SMTP id m12-20020a1709026bcc00b00176c7d0ecf0mr10699599plt.43.1668627569554;
+        Wed, 16 Nov 2022 11:39:29 -0800 (PST)
+Received: from ?IPV6:2405:201:d02f:d899:2028:7962:400:43b6? ([2405:201:d02f:d899:2028:7962:400:43b6])
+        by smtp.gmail.com with ESMTPSA id k11-20020a170902d58b00b001868d4600b8sm12623969plh.158.2022.11.16.11.39.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Nov 2022 11:39:29 -0800 (PST)
+Message-ID: <0f812132-120e-ffb5-002e-3798854a3c8b@9elements.com>
+Date:   Thu, 17 Nov 2022 01:09:25 +0530
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1101MB2126:EE_|SA2PR11MB5130:EE_
-X-MS-Office365-Filtering-Correlation-Id: eb70897e-3ef6-4167-5b09-08dac80a082f
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yMcI5ggTc0lXJam9cTro70pwzrezISuGUqkvNYnIf4IsI58XxRuv+hCcTBhgxyNmkh1RxDAdZroGxd/K0N2T0jt9jfvPHl8MuvXVPxi/OIvEsh1KbtRf4HDEwfsLMmaob3qzOqAnRLJvzY2mo20lFMAw+1Il3J8pL9j4HxspICEpHXbyzpqxNWsvvlUS5xOpo2n/4dT5+MgbO8pApPOjw0JSvSO+wbKBm4DcbmNlm8B2mux+k5j6hC4WqK2GjaqzpufieRTRyZr40dkeosQJQEhQBCrkRxHp+RvTnfh3Js9QtYnN+ltKPn3zdkQ188isHCmGkLqc3Op1sTSJSnFp6xX3u/duh3A6h4yWq9Xhl0Zr4lToLdUCfBjmo2EmJUwvBFpXuSNEEVQpQHxuSEtSlGv20CoW2NSVHSWWOLZqxN5OIvUpNv/w2uiiFaDFzmSkqV1YZdSX3wAsjVSGrdJWb+jbIIEne+tIzn/O01BmzREya0umqaZRP8SDWd8EOObRpn2uUdGfZ6Y+tmc5ED7bjdZ299i9sH/bKtG67nJWlC8rauP6BCmWpAU5lu99LV/9hw2DrPbiC7P9CMByee8UZbCQXI3AYdJbo+7g5TiCGMb+PiKsVOXfuQcoVqAPNVaxiizwOy1xT7adXwdOcUmfpPsnc38U0+yjUcKSi9UOOe7HCmzpcYNSb4hEQN4+8FGGM1bqoLzF4rKM14hPuUnAfw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(136003)(366004)(376002)(39860400002)(346002)(451199015)(38100700002)(82960400001)(2906002)(41300700001)(558084003)(186003)(86362001)(8676002)(66556008)(66946007)(66476007)(316002)(4326008)(54906003)(6486002)(9686003)(6512007)(26005)(110136005)(5660300002)(8936002)(478600001)(6666004)(6506007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?MDYxH73KJOQVDa0CWsE1hRiWOO35YhGgy5vuWEZZYuSDcRgg/JjydoDR8ivK?=
- =?us-ascii?Q?GbVArcqIxsEApJzvLGC83s8BvXrE7v2ZK1djn6ht3vui/Z1/10F41cf8Qsbs?=
- =?us-ascii?Q?7ayMZrPfpIx0TKj/XZfBHJ2A9Ri3NmRwuygAxY/jbk/lcKc/buInXehsN9Vx?=
- =?us-ascii?Q?J/erAIj/yvFzxn8E8LAwoQb3Q31RSmFk782LosSDBx0zzC0dwmfsoPHk5r8Z?=
- =?us-ascii?Q?Fl8YV/q+sdSQagSrBz14CNfyhRxlJ/irYziWsLELjCARZPeDFEpgAL2zoJDA?=
- =?us-ascii?Q?gex3w9YsmBVVGu2gavB6OwIZEM0gBM+9B+yvKdbkgs/Bf6yJWTEYi929AQCe?=
- =?us-ascii?Q?heq/epKu2zvegqt9V/CKfEZxqSuVSezsfKVHmxvM9Z+1EP6kkTVwDhkCNmoK?=
- =?us-ascii?Q?o1hx/Qpl9D90JX6jyS+n8BuVS/LtLwkm52Awk8K929T5gN3YhyF4YlAuF94R?=
- =?us-ascii?Q?hYFK2Xq+6P1NdU/5qqi81KIk7jA9wd6Kf3hnaLVtCsSTLk2I5z278GHncreW?=
- =?us-ascii?Q?UFwZSnVz45tEDUjlbsfxsh+7x+Z/AIn5YxKCmOCjeHvm5MAG7DqLFHbCeChp?=
- =?us-ascii?Q?8XvI/64J2xn/YCXPph2CJ14ONJYYjhkzu7NmUqcT1PlqnOR9mwj2alMfDn60?=
- =?us-ascii?Q?z71UboRZvyFi8luK9mbfJiY5+oL5DYUZLIcJuUlpExnIqbaG4x0Xf1plSjoy?=
- =?us-ascii?Q?ZNdLCsnVV/E1smlC44SDYzyE5FFBK6/sUjRTsC4MF65tlhfpaXbmWL980Lmy?=
- =?us-ascii?Q?/HvtlFEJM+vHaqSr2SwfeXOf0XMMezfv3iYluqA8yfTSAc7a5tCuu5uiwStf?=
- =?us-ascii?Q?9Oq7KFPBnxdZLWB+tB63NN3M+xIpcpPZMqx6n4RLTL578wE/3ixAf7+BTycv?=
- =?us-ascii?Q?8nkDU8c5ML+Qozd7sM+x+fb3ezRdqY0OwaczkC93V6+wo7skCioDBMQcjOr+?=
- =?us-ascii?Q?YrR6OCUO//qiius4+9rG8GX4L56364xqC2dr7YOM2z5f3YSJqjrVBLggwN8f?=
- =?us-ascii?Q?ZI/m57wLWmti3QmXghxWHX05aGUw/UA58nwmkz90gJh2qT8MbesSQJBf767R?=
- =?us-ascii?Q?BsEW1s513igosXqM9v81eqogOmDtXOJKke9xo07a0ItwJFXsc0DyKCSWbGCe?=
- =?us-ascii?Q?vcFFhJgglm8n9rbLH5LRL9AGWjV//dy+wgrg81Is7j/lJ0EufNF4HBWeMsja?=
- =?us-ascii?Q?7TRgqSQypPa4P98l3X2wmIW6YE/ViCoMYWh6kEQhzAHnvsxEtPTejAnzZx+J?=
- =?us-ascii?Q?Yq+zU8AIUGPp2X3K1U51mEh9JjoUaUzLCs4HFqonmRE/FXsuhlff7hnMP7pU?=
- =?us-ascii?Q?Hl0s7GUMl+NfJju7dP27ySwecE72h1G+OWEONwm2HFNudfj6UiwIcXgXO0Sv?=
- =?us-ascii?Q?6Y0RiQFiVSYVctti94fp0Ka/yOTN7SbCdaW6QbZnme/yhvHUkiKg6V1btppi?=
- =?us-ascii?Q?cDAa+zkLzL/Y7QlcuRmRqsjbBJoj1gDpXEWmdrUR0lQLudSeaYewUfswKsHP?=
- =?us-ascii?Q?4DNIBNXYVK5cl/isOJokhS7CtjOCwUGVHgTGyJ5ttqKO5nruvqfl4CUcO1RW?=
- =?us-ascii?Q?PHr/KwLmzdOZBR2wGulMkOJkuG2WtK1V3rwS1mFvMKNQdV7CO+U83nb34VNy?=
- =?us-ascii?Q?7Q=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: eb70897e-3ef6-4167-5b09-08dac80a082f
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Nov 2022 19:37:44.0301
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FL8Fiys6wZWqtpRHzHAtLfTFx4RHQ/xRtnyRbnadvFHAsHbQyH5VyqOW0qnQCm2T3vbN453SzA/biRWqQXhefcF4oYb5fWr8is+BjtKM6CY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB5130
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v10 1/2] dt-bindings: mfd: Add MAX5970 and MAX5978
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>
+Cc:     Marcello Sylvester Bauer <sylv@sylv.io>
+References: <20221115110932.637091-1-Naresh.Solanki@9elements.com>
+ <20221115110932.637091-2-Naresh.Solanki@9elements.com>
+ <87ba1b05-5b10-1925-838e-0099dabe0703@linaro.org>
+ <d6be0d25-b7a2-fe6a-f653-d3b583c7202a@9elements.com>
+ <fd108794-5ba0-91c5-b3b6-4376226a6828@linaro.org>
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+In-Reply-To: <fd108794-5ba0-91c5-b3b6-4376226a6828@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Robert Richter wrote:
-> Factor out the code to register a PCI device's dport to a port. It
-> will be reused to implement RCD mode.
+Hi Krzystof,
 
-Per the comment on [PATCH v3 6/9] I am not seeing why this is needed.
+On 16-11-2022 01:24 pm, Krzysztof Kozlowski wrote:
+> On 15/11/2022 21:30, Naresh Solanki wrote:
+>> Hi Krzysztof,
+>>
+>> On 15-11-2022 07:34 pm, Krzysztof Kozlowski wrote:
+>>> On 15/11/2022 12:09, Naresh Solanki wrote:
+>>>> From: Marcello Sylvester Bauer <sylv@sylv.io>
+>>>>
+>>>> The MAX597x is a hot swap controller with configurable fault protection.
+>>>> It also has 10bit ADC for current & voltage measurements.
+>>>>
+>>>> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+>>>> Co-developed-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+>>>> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+>>>> Co-developed-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+>>>> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+>>>> ---
+>>>>    .../bindings/mfd/maxim,max5970.yaml           | 154 ++++++++++++++++++
+>>>>    1 file changed, 154 insertions(+)
+>>>>    create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max5970.yaml
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/mfd/maxim,max5970.yaml b/Documentation/devicetree/bindings/mfd/maxim,max5970.yaml
+>>>> new file mode 100644
+>>>> index 000000000000..edf0c23db4ca
+>>>> --- /dev/null
+>>>> +++ b/Documentation/devicetree/bindings/mfd/maxim,max5970.yaml
+>>>> @@ -0,0 +1,154 @@
+>>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>>>> +%YAML 1.2
+>>>> +---
+>>>> +$id: http://devicetree.org/schemas/mfd/maxim,max5970.yaml#
+>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>> +
+>>>> +title: Regulator for MAX5970 smart switch from Maxim Integrated.
+>>>> +
+>>>> +maintainers:
+>>>> +  - Patrick Rudolph <patrick.rudolph@9elements.com>
+>>>> +
+>>>> +description: |
+>>>> +  The smart switch provides no output regulation, but independent fault protection
+>>>> +  and voltage and current sensing.
+>>>> +  Programming is done through I2C bus.
+>>>> +
+>>>> +  Datasheets:
+>>>> +    https://datasheets.maximintegrated.com/en/ds/MAX5970.pdf
+>>>> +    https://datasheets.maximintegrated.com/en/ds/MAX5978.pdf
+>>>> +
+>>>> +properties:
+>>>> +  compatible:
+>>>> +    enum:
+>>>> +      - maxim,max5970
+>>>> +      - maxim,max5978
+>>>> +
+>>>> +  reg:
+>>>> +    maxItems: 1
+>>>> +
+>>>> +  interrupts:
+>>>> +    maxItems: 1
+>>>> +
+>>>> +  leds:
+>>>> +    type: object
+>>>> +    description:
+>>>> +      Properties for four LEDS.
+>>>> +
+>>>> +    properties:
+>>>> +      "#address-cells":
+>>>> +        const: 1
+>>>> +
+>>>> +      "#size-cells":
+>>>> +        const: 0
+>>>> +
+>>>> +    patternProperties:
+>>>> +      "^led@[0-3]$":
+>>>> +        $ref: /schemas/leds/common.yaml#
+>>>> +        type: object
+>>>> +
+>>>> +    additionalProperties: false
+>>>> +
+>>>> +  vss1-supply:
+>>>> +    description: Supply of the first channel.
+>>>> +
+>>>> +  vss2-supply:
+>>>> +    description: Supply of the second channel.
+>>>> +
+>>>> +  regulators:
+>>>> +    type: object
+>>>> +    description:
+>>>> +      Properties for both regulators. Also set value for shunt resistor used.
+>>>
+>>> You should explain not the syntax,  but what part of hardware this nodes
+>>> represents. Therefore "Also set value" does not fit at all. Hardware
+>>> sets value?
+>> You mean something like: Properties for power switch
+>>>
+>>> I looked at datasheets to figure it out but they do not refer to any
+>>> configurable regulator, LDO nor "sw0/sw1/sw2". Therefore I have no clue
+>>> what to expect here...
+>> Yes this is for power switch part of max5970/8
+> 
+> Nothing in max5970 datasheet about "power switch". "switch" fives two
+> results, not really related/explaining.
+In datasheet the term used is hot swap controller & uses external fet.
+Although it gives output 1:1 i.e., doesnt steps up/down the input supply.
+i.e., regulator driver is used here.
+> 
+> Bindings, your naming and explanation use terms not existing in
+> datasheet, so it does not look like you are describing hardware.
+> 
+>>>
+>>>> +
+>>>> +    patternProperties:
+>>>> +      "^sw[0-1]$":
+>>>> +        $ref: /schemas/regulator/regulator.yaml#
+>>>> +        type: object
+>>>> +        properties:
+>>>> +          shunt-resistor-micro-ohms:
+>>>> +            description: |
+>>>> +              The value of current sense resistor in microohms.
+>>>> +
+>>>> +        required:
+>>>> +          - shunt-resistor-micro-ohms
+>>>> +
+>>>> +      unevaluatedProperties: false
+>>>
+>>> I don't think it has proper indentation. Did you test the binding?
+>> Definitely tested the bindings before I push the patch.
+> 
+> Anyway it is wrong. It must be on the level of properties.
+Will update in next version.
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
+
+Regards,
+Naresh
