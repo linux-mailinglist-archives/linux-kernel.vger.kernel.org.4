@@ -2,153 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 244A662CBC0
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 21:57:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BECB62CBBF
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 21:57:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236796AbiKPU5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 15:57:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35214 "EHLO
+        id S234563AbiKPU5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 15:57:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234407AbiKPUyC (ORCPT
+        with ESMTP id S238665AbiKPUyB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 15:54:02 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D89D5FE0
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 12:53:36 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id a5so28422895edb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 12:53:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CeVee7WTu+MIVK7s97PRG5d4Tw3kKV6cU2vVtZ3DItQ=;
-        b=ofPkZh1sJHCSjcXBt5MSofHDe4685qhi1/Uc6LWnRd5EToxTmQIbpUn6ccrEQAQAns
-         SXavK0S2kbOubR/NRJ7cDZLF6RKWaQ4G757sspLKT7U2Nq1FQa21mr8+z+tgJN1JAHar
-         bAGuACN8zSgXgSFsxzahOcOiGZtZqtaI3ADgt8nVKKhB/xQ5NRUK8cjr9uuVpDjrECJG
-         ZIM8hXLVCMHjmTEFYN/pf8GLR66Zi1gz5BAhY62LqokcHeYn5zUnYo+GMZQSk9oRLSrz
-         5o59LVtNJfrNkQhOE//fxGY7XlXdPB/LDl9sjti2Spkq8u58gt9NoQCSLUs3GqyCorT1
-         nZKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CeVee7WTu+MIVK7s97PRG5d4Tw3kKV6cU2vVtZ3DItQ=;
-        b=0cg8XZD3zRCUtgcE4eiNPsS98XYX/ZX16E7fTGbMPOG/8CokZK2cKo+gknUyglhR89
-         jxjX6YTT77d+vcTwSlEaGwwWMdV5P4j5t8YiDhQzCJb4XJq8MTeQTRZMNWOc2cc8wdJM
-         6/n8ETZD/AFJ+Q/XuC8snkwlLTGytXiVLiL5V1UW+8UQgwGyihk8q2Wf63Tjo/zToR0r
-         xqAPlzxGl96v7DoE+bGQRa9kAtnX52WVI4ut2Srsv5rE+FiT79zZJ4SIcJaoWtz2OWb4
-         MayfroTyJO622nQ0Ys/suKtdLpo8vsBOQkltcmreruOnCmNOiauVoUoTwK3GUSd7eE0w
-         6qwA==
-X-Gm-Message-State: ANoB5pkUrLNcRy6MOtqdrw9mRrPsPryU664AgdyCx+YaBkDML2EoTmM9
-        aiqS1YW0OIEiRl5SoBUWo7ataP3KNEk3sg==
-X-Google-Smtp-Source: AA0mqf5j6sPxY2lkGgEc/UQ8QjGsma8Lta5ZRqNfdGt0PvRbt3fxbOhFaJmq6bYcUruYMVFEqjFqeA==
-X-Received: by 2002:a05:6402:17c2:b0:459:443a:faf4 with SMTP id s2-20020a05640217c200b00459443afaf4mr20696086edy.297.1668632016031;
-        Wed, 16 Nov 2022 12:53:36 -0800 (PST)
-Received: from blmsp.fritz.box ([2001:4090:a244:804b:353b:565:addf:3aa7])
-        by smtp.gmail.com with ESMTPSA id kv17-20020a17090778d100b007aece68483csm6782828ejc.193.2022.11.16.12.53.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 12:53:35 -0800 (PST)
-From:   Markus Schneider-Pargmann <msp@baylibre.com>
-To:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Markus Schneider-Pargmann <msp@baylibre.com>
-Subject: [PATCH 15/15] can: tcan4x5x: Specify separate read/write ranges
-Date:   Wed, 16 Nov 2022 21:53:08 +0100
-Message-Id: <20221116205308.2996556-16-msp@baylibre.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221116205308.2996556-1-msp@baylibre.com>
-References: <20221116205308.2996556-1-msp@baylibre.com>
+        Wed, 16 Nov 2022 15:54:01 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B6584658F
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 12:53:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1668631990; bh=ZvLzuZYQhb0dBMI/6Koc3Kv9Y7MzeAtBBXuasqXWyl4=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=SvNHkBxHsLhMOONKF9x2+UcxJ6qxlRNXdpeVxwBCis8v0LR1ExKwnClBajQAtDXOa
+         p+N+uybe+Mstj6Maxp0UPhuG41UBrn431WK+jE2Di2rV1qBZbQgzosDpYdlYsaCQad
+         KTGpQFsLv3gBCjA+tCl25KpIqPlRFAtA/4noLBFs3BXsWgC67rQfYPuwqLwK6KXDYn
+         KmhU8p/6jq1szmVspLDvf/AeAGcmres8a/EI2sf+4T8ktd2rLAXBMVKgR2yAZqPxB4
+         c2JdOe1MS6eRAzHDntgRszjxxxRrdYYmv/JUpIjjFWUtsPt026vwiOMDL75+wACuc6
+         sWLw3I12ARYhw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.60] ([92.116.139.0]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MryT9-1pGDPn20aD-00nvIz; Wed, 16
+ Nov 2022 21:53:10 +0100
+Message-ID: <8905cecd-e5e0-f7aa-59bf-7083c4859820@gmx.de>
+Date:   Wed, 16 Nov 2022 21:53:09 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: arch/parisc/kernel/setup.c:64 setup_cmdline() warn: inconsistent
+ indenting
+Content-Language: en-US
+To:     kernel test robot <lkp@intel.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <202211170149.PzIstxxm-lkp@intel.com>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <202211170149.PzIstxxm-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:ybDnp9L3YlIQVEqvwtlBXTSca7qVuSE29P17yiKInaD9Q/EISEW
+ NKS+oQldzcehchZ+3WnDAa2YydbDCcOmF4N8lI/qgR8LA4PjolJq9qOycdzkBUsqKpcJOl1
+ nLQOFyD5V/soPmnUlstuTEgMFwRJ701A8orBIYYcHJy+FytyRqAZo5G0jy38CsLTnX3SpAa
+ AyMvMoTJ1/DismKiVRitA==
+UI-OutboundReport: notjunk:1;M01:P0:8TAQAU2mX+A=;QOSEAzpijcPLmevRl3c2S6Qr3Dq
+ ceLa2mnwOphm+fEkzSyAV4a4AXDjdX06zSDiFjiwl0YXx18Y9hEXTvmPqqiag0q3+PIkJ5RTu
+ TDI3UpI8CYgDb5p225aGUzLdu3OKep7qmjyWZBYKR8vm9MT3KAz1v7NwtL/IGA4TSPu0KKzuW
+ jmzqUBOphp8FjSLnU9mvsMu08P1CQt+MyQdXQUvRL1KdjN2LbxYgp+BPYajo/Lf9Jg9JWJEc8
+ JPKEti9xLP/u/+RyVzue2Q0nZwWAR6Q3I1coQ8CVIpVs9zFajfbEDdIEKfRqUp2ZwEhhbUERI
+ qwkJA0z6sIz4ItOt/hVAAOTOCfCFHqP/XUFGC9If65H5KhQOdzuO7AgjbxKaru+jx5Wbkdodk
+ yZJhWE0AC9FR7rwZOEVVcNb9hDWfC6DiarTBUP6MOLcWOCwSqMPJJ758SY+LZrC4N86uaw/G2
+ CHV0yAAH4HTjqrzxtALn5qp63GXKQJ77lqUKmvR0mGXWczqhjisurZvZLlsFJBjIlmPeiwpWg
+ O6a+wKo8k0H3mUnWnMRorOz6VGSxX9H0nDKj16Ebovj6bi96oz1roMzcmVu9CW5mcwb0Us9P0
+ Y9BppesdYSH4anYTTbrg+s/HxYqCXmFod07MV+U3FDOCIcGVPYY8oGvRf0adbnhsASqWL9JBO
+ F9kuMadcZ1X4qLajdVCz86vLJwr1j7vJ+o4BO/TzcX39/WrE1neZVWQm4ftrU31SZg1RnO6vq
+ SPIb852VfjKYnEEw6G4GqCtg+0AAboSnntv77mJ1EEMNQVKCvXPC5stAk8r6ZrFyifOk/ACRT
+ naWrz96QOUL6Rn6OqOKjwsc2gr1+EI8bTasjMJdmDz4c8AXv8FwZiZ/cwelZj9r/lWQbD7U57
+ mrclP4sSrOdVNoo+ZXgafK5RutDsr7IwHEfsSlSr+y8MheZd+LqzMtr2eNWcpQOpvi1e9jqDW
+ jkKIMg==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Specify exactly which registers are read/writeable in the chip. This
-is supposed to help detect any violations in the future.
+On 11/16/22 18:48, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.g=
+it master
+> head:   59d0d52c30d4991ac4b329f049cc37118e00f5b0
+> commit: 5f7ee6e37a3cadefe45378c17c4285fa41141d92 parisc: Autodetect defa=
+ult output device and set console=3D kernel parameter
+> date:   10 months ago
+> config: parisc-randconfig-m041-20221116
+> compiler: hppa-linux-gcc (GCC) 12.1.0
+>
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+>
+> smatch warnings:
+> arch/parisc/kernel/setup.c:64 setup_cmdline() warn: inconsistent indenti=
+ng
 
-Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
----
- drivers/net/can/m_can/tcan4x5x-regmap.c | 43 +++++++++++++++++++++----
- 1 file changed, 37 insertions(+), 6 deletions(-)
+Fixed now in for-next.
 
-diff --git a/drivers/net/can/m_can/tcan4x5x-regmap.c b/drivers/net/can/m_can/tcan4x5x-regmap.c
-index d4b79d2d4598..19215c39cd5b 100644
---- a/drivers/net/can/m_can/tcan4x5x-regmap.c
-+++ b/drivers/net/can/m_can/tcan4x5x-regmap.c
-@@ -90,16 +90,47 @@ static int tcan4x5x_regmap_read(void *context,
- 	return 0;
- }
- 
--static const struct regmap_range tcan4x5x_reg_table_yes_range[] = {
-+static const struct regmap_range tcan4x5x_reg_table_wr_range[] = {
-+	/* Device ID and SPI Registers */
-+	regmap_reg_range(0x000c, 0x001c),
-+	/* Device configuration registers and Interrupt Flags*/
-+	regmap_reg_range(0x0800, 0x080c),
-+	regmap_reg_range(0x0814, 0x0814),
-+	regmap_reg_range(0x0820, 0x0820),
-+	regmap_reg_range(0x0830, 0x0830),
-+	/* M_CAN */
-+	regmap_reg_range(0x100c, 0x102c),
-+	regmap_reg_range(0x1048, 0x1048),
-+	regmap_reg_range(0x1050, 0x105c),
-+	regmap_reg_range(0x1080, 0x1088),
-+	regmap_reg_range(0x1090, 0x1090),
-+	regmap_reg_range(0x1098, 0x10a0),
-+	regmap_reg_range(0x10a8, 0x10b0),
-+	regmap_reg_range(0x10b8, 0x10c0),
-+	regmap_reg_range(0x10c8, 0x10c8),
-+	regmap_reg_range(0x10d0, 0x10d4),
-+	regmap_reg_range(0x10e0, 0x10e4),
-+	regmap_reg_range(0x10f0, 0x10f0),
-+	regmap_reg_range(0x10f8, 0x10f8),
-+	/* MRAM */
-+	regmap_reg_range(0x8000, 0x87fc),
-+};
-+
-+static const struct regmap_range tcan4x5x_reg_table_rd_range[] = {
- 	regmap_reg_range(0x0000, 0x001c),	/* Device ID and SPI Registers */
- 	regmap_reg_range(0x0800, 0x083c),	/* Device configuration registers and Interrupt Flags*/
- 	regmap_reg_range(0x1000, 0x10fc),	/* M_CAN */
- 	regmap_reg_range(0x8000, 0x87fc),	/* MRAM */
- };
- 
--static const struct regmap_access_table tcan4x5x_reg_table = {
--	.yes_ranges = tcan4x5x_reg_table_yes_range,
--	.n_yes_ranges = ARRAY_SIZE(tcan4x5x_reg_table_yes_range),
-+static const struct regmap_access_table tcan4x5x_reg_table_wr = {
-+	.yes_ranges = tcan4x5x_reg_table_wr_range,
-+	.n_yes_ranges = ARRAY_SIZE(tcan4x5x_reg_table_wr_range),
-+};
-+
-+static const struct regmap_access_table tcan4x5x_reg_table_rd = {
-+	.yes_ranges = tcan4x5x_reg_table_rd_range,
-+	.n_yes_ranges = ARRAY_SIZE(tcan4x5x_reg_table_rd_range),
- };
- 
- static const struct regmap_config tcan4x5x_regmap = {
-@@ -107,8 +138,8 @@ static const struct regmap_config tcan4x5x_regmap = {
- 	.reg_stride = 4,
- 	.pad_bits = 8,
- 	.val_bits = 32,
--	.wr_table = &tcan4x5x_reg_table,
--	.rd_table = &tcan4x5x_reg_table,
-+	.wr_table = &tcan4x5x_reg_table_wr,
-+	.rd_table = &tcan4x5x_reg_table_rd,
- 	.max_register = TCAN4X5X_MAX_REGISTER,
- 	.cache_type = REGCACHE_NONE,
- 	.read_flag_mask = (__force unsigned long)
--- 
-2.38.1
+Thanks.
+Helge
+
+
+> vim +64 arch/parisc/kernel/setup.c
+>
+>      47
+>      48	void __init setup_cmdline(char **cmdline_p)
+>      49	{
+>      50		extern unsigned int boot_args[];
+>      51		char *p;
+>      52
+>      53		/* Collect stuff passed in from the boot loader */
+>      54
+>      55		/* boot_args[0] is free-mem start, boot_args[1] is ptr to comma=
+nd line */
+>      56		if (boot_args[0] < 64) {
+>      57			/* called from hpux boot loader */
+>      58			boot_command_line[0] =3D '\0';
+>      59		} else {
+>      60			strscpy(boot_command_line, (char *)__va(boot_args[1]),
+>      61				COMMAND_LINE_SIZE);
+>      62
+>      63		/* autodetect console type (if not done by palo yet) */
+>    > 64		p =3D boot_command_line;
+>      65		if (!str_has_prefix(p, "console=3D") && !strstr(p, " console=3D=
+")) {
+>      66			strlcat(p, " console=3D", COMMAND_LINE_SIZE);
+>      67			if (PAGE0->mem_cons.cl_class =3D=3D CL_DUPLEX)
+>      68				strlcat(p, "ttyS0", COMMAND_LINE_SIZE);
+>      69			else
+>      70				strlcat(p, "tty0", COMMAND_LINE_SIZE);
+>      71		}
+>      72
+>
 
