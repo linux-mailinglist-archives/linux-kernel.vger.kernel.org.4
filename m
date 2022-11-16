@@ -2,56 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6EAA62BF4B
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 14:22:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 527A362BF4F
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 14:22:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233461AbiKPNWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 08:22:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39206 "EHLO
+        id S233725AbiKPNWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 08:22:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231185AbiKPNWN (ORCPT
+        with ESMTP id S233897AbiKPNWa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 08:22:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD4240917;
-        Wed, 16 Nov 2022 05:22:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 099DE61DD3;
-        Wed, 16 Nov 2022 13:22:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6D66C433D6;
-        Wed, 16 Nov 2022 13:22:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668604930;
-        bh=I4Vwe0lpAnBI7PZgQVeRvPX2Vqv4G/RdbfioTYLU9k4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eWXWtUwOrmGAXpvkGh1H54AphDsLoaT8fHR7GPa0YQOx5qK94rD6e4DdezcfyXqel
-         JXgPnqY2zZWRgP0bQ57AGluiS1tl36gApeQGw720YqBcXVkJnvBh4+nO1PKPPQU0qo
-         Tnyro4Byh4Ls5e6McmxduNq6hkf9D5DaSe8PHstIWU8bhOlsZohSYWYXLonvkFp09r
-         BjDJNGGHPHalr3LaQhFligsyFx1T4Djj0nQG25BQ2L8MMpwxwlpfPMhB6S1lxhCiDV
-         RfjZxmASXwtwTQ4+3RwkXZpO+b3TOkcJVtiFmk74DKrPRsMxch9LNGqI1rd6JB85/X
-         lBhJIlOkslF/g==
-Date:   Wed, 16 Nov 2022 15:22:04 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Ajit Khaparde <ajit.khaparde@broadcom.com>
-Cc:     andrew.gospodarek@broadcom.com, davem@davemloft.net,
-        edumazet@google.com, jgg@ziepe.ca, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        michael.chan@broadcom.com, netdev@vger.kernel.org,
-        pabeni@redhat.com, selvin.xavier@broadcom.com
-Subject: Re: [PATCH v4 0/6] Add Auxiliary driver support
-Message-ID: <Y3Tj/BrskSJPuTFw@unreal>
-References: <20221109184244.7032-1-ajit.khaparde@broadcom.com>
- <Y2zYPOUKgoArq7mM@unreal>
- <CACZ4nhu_2FoOTmXPuq+amRYAipusq1XcobavytN0cFK=TSE5mQ@mail.gmail.com>
+        Wed, 16 Nov 2022 08:22:30 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 639D943AFE
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 05:22:25 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id l14so29902401wrw.2
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 05:22:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KpUdJlnQfqKDJegMVjWAaP6n4Q/jt7E6huCsmrKl3/0=;
+        b=PYN056v8Qz3l77gju7ewP7oM4PTxqFHcJ+ZMk23X6YkN25AYQc+DG8TJdfPJ29ja47
+         hQTh0Lr6fdnKuNxrjOyNuMjq7vB1RFcF8guaiwl9rjkbGeN9GokD5yJLDNP7dCLI6OU+
+         0pjR5zNmft+qDVMTvCJAhv9taUNtOkKa2wXgS1lceZv3O0Ht8iGXye+sSu+Pa2n3PLKH
+         pPHQDNRijXzG1w1GS25eW+3b6ePpe9p3b9S/xE6wMmNDSivGq+fPdm8DOxF1mrYTzTJ/
+         Ve96BA8s8fqZYRhPjLddUtR3VnQnwmQ1YVXvcSuhxMJBA7+oys7oA/y+z6FpIWnSqf9I
+         VANg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KpUdJlnQfqKDJegMVjWAaP6n4Q/jt7E6huCsmrKl3/0=;
+        b=JCgc6cjZc0nMeV3qipEBkQy047wINu7A3vYpz4UYQKb/DG1PZEkjYbCTeiAp6fXH2e
+         +hL/v24odnAkxRL5Qg1T2foaL22Mq5kzBp+h5poUkkILApmld6LqyDMWkTQ0DAvVo2uH
+         ezT5Vt/wBqmdGfkyYpEcSqKbwLNgC78zKaeySTRAT9ksH1TQNWOoYg5Im9/E73nMnjFQ
+         P+wJ/hW5d3BmPLS0l49xOWnfkAm5Ik0DtOCd3unYo7qWJck+/P/1OQ72dxWgAie1fQRH
+         J5cAPYr0dQWw4dQkrYCaH2zjMScJFx8yauqsnXVi0brw3URldGcA8/T6IyURanCEovfK
+         QJJg==
+X-Gm-Message-State: ANoB5pmQC65YLQBlWtfs1SSyv2lazQIMWRhwLLlNN1yAeawoe1DWLSnG
+        ugCREV+fBcHpEAyX1em945P8FA==
+X-Google-Smtp-Source: AA0mqf6/T98a6RXhfPTEzVkebocc4zKcSbYrZB3T7qg+4fRARUqClVaHL+D2DeQffrwaUwKBlSoMHg==
+X-Received: by 2002:a5d:4352:0:b0:236:7a11:b061 with SMTP id u18-20020a5d4352000000b002367a11b061mr14636155wrr.292.1668604943929;
+        Wed, 16 Nov 2022 05:22:23 -0800 (PST)
+Received: from localhost.localdomain ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id e17-20020a05600c4e5100b003cfa81e2eb4sm2322074wmq.38.2022.11.16.05.22.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 05:22:23 -0800 (PST)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: [PATCH 0/2] arm64: dts: qcom: sm8550: Add USB HC and PHY support
+Date:   Wed, 16 Nov 2022 15:22:10 +0200
+Message-Id: <20221116132212.2842655-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACZ4nhu_2FoOTmXPuq+amRYAipusq1XcobavytN0cFK=TSE5mQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,143 +73,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 04:47:31PM -0800, Ajit Khaparde wrote:
-> Leon,
-> We appreciate your valuable feedback.
-> Please see inline.
-> 
-> On Thu, Nov 10, 2022 at 2:53 AM Leon Romanovsky <leon@kernel.org> wrote:
-> >
-> > On Wed, Nov 09, 2022 at 10:42:38AM -0800, Ajit Khaparde wrote:
-> > > Add auxiliary device driver for Broadcom devices.
-> > > The bnxt_en driver will register and initialize an aux device
-> > > if RDMA is enabled in the underlying device.
-> > > The bnxt_re driver will then probe and initialize the
-> > > RoCE interfaces with the infiniband stack.
-> > >
-> > > We got rid of the bnxt_en_ops which the bnxt_re driver used to
-> > > communicate with bnxt_en.
-> > > Similarly  We have tried to clean up most of the bnxt_ulp_ops.
-> > > In most of the cases we used the functions and entry points provided
-> > > by the auxiliary bus driver framework.
-> > > And now these are the minimal functions needed to support the functionality.
-> > >
-> > > We will try to work on getting rid of the remaining if we find any
-> > > other viable option in future.
-> >
-> > I still see extra checks for something that was already checked in upper
-> > functions, for example in bnxt_re_register_netdev() you check rdev, which
-> > you already checked before.
-> Sure. I will do another sweep and clean up.
-> 
-> >
-> > However, the most important part is still existence of bnxt_ulp_ops,
-> > which shows completely no-go thing - SR-IOV config in RDMA code.
-> >
-> >    302 static struct bnxt_ulp_ops bnxt_re_ulp_ops = {
-> >    303         .ulp_sriov_config = bnxt_re_sriov_config,
-> >    304         .ulp_irq_stop = bnxt_re_stop_irq,
-> >    305         .ulp_irq_restart = bnxt_re_start_irq
-> >    306 };
-> >
-> > All PCI management logic and interfaces are needed to be inside eth part
-> > of your driver and only that part should implement SR-IOV config. Once
-> > user enabled SR-IOV, the PCI driver should create auxiliary devices for
-> > each VF. These device will have RDMA capabilities and it will trigger RDMA
-> > driver to bind to them.
-> I agree and once the PF creates the auxiliary devices for the VF, the RoCE
-> Vf indeed get probed and created. But the twist in bnxt_en/bnxt_re
-> design is that
-> the RoCE driver is responsible for making adjustments to the RoCE resources.
+This patchset adds USB controller and PHYs support to SM8550 platform
+and enables them on the MTP board.
 
-You can still do these adjustments by checking type of function that
-called to RDMA .probe. PCI core exposes some functions to help distinguish between
-PF and VFs.
+This patchset depends following patchsets:
+[1] https://lore.kernel.org/all/20221116103146.2556846-1-abel.vesa@linaro.org/
+[2] https://lore.kernel.org/all/20221116114526.2679041-1-abel.vesa@linaro.org/
 
-> 
-> So once the VF's are created and the bnxt_en driver enables SRIOV adjusts the
-> NIC resources for the VF,  and such, it tries to call into the bnxt_re
-> driver for the
-> same purpose.
+Abel Vesa (2):
+  arm64: dts: qcom: sm8550: Add USB PHYs and controller nodes
+  arm64: dts: qcom: sm8550-mtp: Add USB PHYs and HC nodes
 
-If I read code correctly, all these resources are for one PCI function.
+ arch/arm64/boot/dts/qcom/sm8550-mtp.dts | 22 ++++++
+ arch/arm64/boot/dts/qcom/sm8550.dtsi    | 99 +++++++++++++++++++++++++
+ 2 files changed, 121 insertions(+)
 
-Something like this:
-
-bnxt_re_probe()
-{
-  ...
-	if (is_virtfn(p))
-		 bnxt_re_sriov_config(p);
-  ...
-}
-
-
-
-> 
-> 1. We do something like this to the auxiliary_device structure:
-> 
-> diff --git a/include/linux/auxiliary_bus.h b/include/linux/auxiliary_bus.h
-> index de21d9d24a95..4e581fbf458f 100644
-> --- a/include/linux/auxiliary_bus.h
-> +++ b/include/linux/auxiliary_bus.h
-> @@ -148,6 +148,7 @@ struct auxiliary_device {
->   * @shutdown: Called at shut-down time to quiesce the device.
->   * @suspend: Called to put the device to sleep mode. Usually to a power state.
->   * @resume: Called to bring a device from sleep mode.
-> + * @sriov_configure: Called to allow configuration of VFs .
->   * @name: Driver name.
->   * @driver: Core driver structure.
->   * @id_table: Table of devices this driver should match on the bus.
-> @@ -183,6 +184,7 @@ struct auxiliary_driver {
->         void (*shutdown)(struct auxiliary_device *auxdev);
->         int (*suspend)(struct auxiliary_device *auxdev, pm_message_t state);
->         int (*resume)(struct auxiliary_device *auxdev);
-> +       int (*sriov_configure)(struct auxiliary_device *auxdev, int
-> num_vfs); /* On PF */
->         const char *name;
->         struct device_driver driver;
->         const struct auxiliary_device_id *id_table;
-> 
-> Then the bnxt_en driver could call into bnxt_re via that interface.
-> 
-
-@sriov_configure callback is PCI specific and doesn't belong to aux
-devices.
-
-> Please let me know what you feel.
-> 
-> 2. While it may take care of the first function in the ulp_ops, it
-> leaves us with two.
-> And that is where I will need some input if we need to absolutely get
-> rid of the ops.
-> 
-> 2a. We may be able to use the auxiliary_device suspend & resume with a
-> private flag
-> in the driver's aux_dev pointer.
-> 2b. Or just like (1) above, add another hook to auxiliary_driver
-> void (*restart)(struct auxiliary_device *auxdev);
-> And then use the auxiliary_driver shutdown & restart with a private flag.
-> 
-> Note that we may get creative right now and get rid of the ulp_ops.
-> But the bnxt_en driver having a need to update the bnxt_re driver is a
-> part of the
-> design. So it will help if we can consider beyond the ulp_irq_stop,
-> ulp_irq_restart.
-> 2c. Maybe keep the bnxt_ulp_ops for that reason?
-
-It is nicer to get rid from bnxt_ulp_ops completely, but it is not must.
-To get rid from sriov_configure is the most important comment here.
-
-Thanks
-
-> 
-> Thank you for your time.
-> 
-> Thanks
-> Ajit
-> 
-> >
-> > Thanks
-
+-- 
+2.34.1
 
