@@ -2,109 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 991AA62CA7F
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 21:18:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81BDA62CA7B
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 21:17:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233114AbiKPUR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 15:17:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43134 "EHLO
+        id S230253AbiKPURR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 15:17:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232243AbiKPURy (ORCPT
+        with ESMTP id S230287AbiKPURL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 15:17:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3A453EC1
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 12:16:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668629815;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lJMb3PweKDaHiAjKMFZLERnJkKA8ghZTOfHaWwXAhIc=;
-        b=OSyL7Z+gG/1dUjMJmNfw6SgaLQ/D/oz88Ch7/65QUKMqZ3WXaCXh5xWbOJQjLh+jFgqtzP
-        Umw+E6DBYIbKizbSdoNaw8+lQXTICibBxAYEaB3TmqOlSH7JhcXGcuJmH0mSy3+84MByqH
-        F6Xx3KV6sa4jFzxluJvaSXodEaGgjqY=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-192-PlUXQi9bOo6YNTKXDRtVJQ-1; Wed, 16 Nov 2022 15:16:53 -0500
-X-MC-Unique: PlUXQi9bOo6YNTKXDRtVJQ-1
-Received: by mail-qk1-f200.google.com with SMTP id bs7-20020a05620a470700b006fac7447b1cso18579789qkb.17
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 12:16:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lJMb3PweKDaHiAjKMFZLERnJkKA8ghZTOfHaWwXAhIc=;
-        b=DhuQqSXZLxhB5k8Lo+cIxMaE2OdL2UAQ5Hg8+JM+AmxOzSdVmMLHIx2D+xXoY/8rl/
-         ad+gkY77j4bIHemI9WsTKz15DWgRoPxcL4N0xLS2rSsZ4WWxvF8P6IsWhbHKSK3kxMgT
-         Aa8m+Ltv8oZYr1Z8Y2f/1NkscppG4LNM+AL+qyy8XO2hY89xcooL3V2cntjIMh1sr3aB
-         miyLUH4g1Qrqj8sOQatlqymWEc6e63ybGoweq1Kg+VvvJd6uzQyGhivLcWfAsDZUdSlc
-         idQJnB01bZ5eh7ljx7v1OXPdMoimuXWrp/hqVOXRkzptX29OF5HB7r87gNyh8gL93JIw
-         XZWQ==
-X-Gm-Message-State: ANoB5pkk3skzmNTy4A4XupM0qEU1Q3dZrZS0dm/B0bNEcQMglE43kBEj
-        9jiYMoJb5kiKjRsIE+S0d9k6Ob1NxW/iDWuSixJkkcTVK/tf7HnuswiB9UdsItmRILwgiTMFPtZ
-        BRfweHMq7XgAQICmWvPR11oqG
-X-Received: by 2002:a0c:8170:0:b0:4bb:5935:55ca with SMTP id 103-20020a0c8170000000b004bb593555camr22407692qvc.79.1668629812703;
-        Wed, 16 Nov 2022 12:16:52 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5aRLGEaHlnWsaZ/VJekIk1mm/UMDqHcXYp/X4E3nS3hDkgOLuv6G5RvAMyDSIkxiDlejByjQ==
-X-Received: by 2002:a0c:8170:0:b0:4bb:5935:55ca with SMTP id 103-20020a0c8170000000b004bb593555camr22407663qvc.79.1668629812374;
-        Wed, 16 Nov 2022 12:16:52 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id c8-20020ac86608000000b0039d02911555sm9185919qtp.78.2022.11.16.12.16.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 12:16:51 -0800 (PST)
-Date:   Wed, 16 Nov 2022 15:16:50 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     James Houghton <jthoughton@google.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Zach O'Keefe <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v2 37/47] hugetlb: remove huge_pte_lock and
- huge_pte_lockptr
-Message-ID: <Y3VFMs3a6LQy1BnZ@x1n>
-References: <20221021163703.3218176-1-jthoughton@google.com>
- <20221021163703.3218176-38-jthoughton@google.com>
+        Wed, 16 Nov 2022 15:17:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FAC666C95;
+        Wed, 16 Nov 2022 12:17:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 03C9D61F8C;
+        Wed, 16 Nov 2022 20:17:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CAF6C433C1;
+        Wed, 16 Nov 2022 20:17:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668629829;
+        bh=JCMrWzNi17gtVdAgGb8ljLb3cjAgUw/SAysa1qozUjI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=SUASEvR/9cGSaHC1omhFU1BTdkOqIgpp/dvw74Pb1nG8IFwkdnUGBUPbxvhGw+ngW
+         5DtGKGAjd5WrzvHxvifvDV8xQBTISWT1fmUKBVTixbxMDDaShbohDQgl35MCOoN0xs
+         1nWFU9rBTw6ksa6Ka7FB1tJvF9yaZv2+KtwpR0TyncmnczLjJ86JdC+IDmm7goFSXd
+         ZzKDJY/esve5yc0NMPYBymqZW57+7C7fTmbHqu1Ot4+ZLYF2Hc6Qv+wU7EbTy9V+kW
+         DEQ1r9R6z66Y57k96Eggcl65oGrDgXw1mIo0wq2bHdIh3xiP1l3LTJkUHR7IRVHPZH
+         QvMjNaxmaUvmA==
+Date:   Wed, 16 Nov 2022 14:17:07 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
+        Allen Hubbe <allenbh@gmail.com>,
+        "Ahmed S. Darwish" <darwi@linutronix.de>,
+        Reinette Chatre <reinette.chatre@intel.com>
+Subject: Re: [patch 28/33] PCI/MSI: Provide IMS (Interrupt Message Store)
+ support
+Message-ID: <20221116201707.GA1133795@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221021163703.3218176-38-jthoughton@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221111135206.855773120@linutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 04:36:53PM +0000, James Houghton wrote:
-> They are replaced with hugetlb_pte_lock{,ptr}. All callers that haven't
-> already been replaced don't get called when using HGM, so we handle them
-> by populating hugetlb_ptes with the standard, hstate-sized huge PTEs.
+On Fri, Nov 11, 2022 at 02:58:55PM +0100, Thomas Gleixner wrote:
+> IMS (Interrupt Message Store) is a new specification which allows
+> implementation specific storage of MSI messages contrary to the
+> strict standard specified MSI and MSI-X message stores.
+> 
+> This requires new device specific interrupt domains to handle the
+> implementation defined storage which can be an array in device memory or
+> host/guest memory which is shared with hardware queues.
+> 
+> Add a function to create IMS domains for PCI devices. IMS domains are using
+> the new per device domain mechanism and are configured by the device driver
+> via a template. IMS domains are created as secondary device domains so they
+> work side on side with MSI[-X] on the same device.
+> 
+> The IMS domains have a few constraints:
+> 
+>   - The index space is managed by the core code.
+> 
+>     Device memory based IMS provides a storage array with a fixed size
+>     which obviously requires an index. But there is no association between
+>     index and functionality so the core can randomly allocate an index in
+>     the array.
+> 
+>     Queue memory based IMS does not have the concept of an index as the
+>     storage is somewhere in memory. In that case the index is purely
+>     software based to keep track of the allocations.
+> 
+>   - There is no requirement for consecutive index ranges
+> 
+>     This is currently a limitation of the MSI core and can be implemented
+>     if there is a justified use case by changing the internal storage from
+>     xarray to maple_tree. For now it's single vector allocation.
+> 
+>   - The interrupt chip must provide the following callbacks:
+> 
+>   	- irq_mask()
+> 	- irq_unmask()
+> 	- irq_write_msi_msg()
+> 
+>    - The interrupt chip must provide the following optional callbacks
+>      when the irq_mask(), irq_unmask() and irq_write_msi_msg() callbacks
+>      cannot operate directly on hardware, e.g. in the case that the
+>      interrupt message store is in queue memory:
+> 
+>      	- irq_bus_lock()
+> 	- irq_bus_unlock()
+> 
+>      These callbacks are invoked from preemptible task context and are
+>      allowed to sleep. In this case the mandatory callbacks above just
+>      store the information. The irq_bus_unlock() callback is supposed to
+>      make the change effective before returning.
+> 
+>    - Interrupt affinity setting is handled by the underlying parent
+>      interrupt domain and communicated to the IMS domain via
+>      irq_write_msi_msg(). IMS domains cannot have a irq_set_affinity()
+>      callback. That's a reasonable restriction similar to the PCI/MSI
+>      device domain implementations.
+> 
+> The domain is automatically destroyed when the PCI device is removed.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 
-I didn't yet check the rational at all, but just noticed there's one more
-of it for ppc code:
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>
 
-*** arch/powerpc/mm/pgtable.c:
-huge_ptep_set_access_flags[264] assert_spin_locked(huge_pte_lockptr(huge_page_shift(h),
+A couple typos below.
 
--- 
-Peter Xu
+> ---
+>  drivers/pci/msi/irqdomain.c |   59 ++++++++++++++++++++++++++++++++++++++++++++
+>  include/linux/pci.h         |    5 +++
+>  2 files changed, 64 insertions(+)
+> 
+> --- a/drivers/pci/msi/irqdomain.c
+> +++ b/drivers/pci/msi/irqdomain.c
+> @@ -355,6 +355,65 @@ bool pci_msi_domain_supports(struct pci_
+>  	return (supported & feature_mask) == feature_mask;
+>  }
+>  
+> +/**
+> + * pci_create_ims_domain - Create a secondary IMS domain for a PCI device
+> + * @pdev:	The PCI device to operate on
+> + * @template:	The MSI info template which describes the domain
+> + * @hwsize:	The size of the hardware entry table or 0 if the domain
+> + *		is purely software managed
+> + * @data:	Optional pointer to domain specific data to be stored
+> + *		in msi_domain_info::data
+> + *
+> + * Return: True on success, false otherwise
+> + *
+> + * A IMS domain is expected to have the following constraints:
 
+An IMS ...
+
+> + *	- The index space is managed by the core code
+> + *
+> + *	- There is no requirement for consecutive index ranges
+> + *
+> + *	- The interrupt chip must provide the following callbacks:
+> + *		- irq_mask()
+> + *		- irq_unmask()
+> + *		- irq_write_msi_msg()
+> + *
+> + *	- The interrupt chip must provide the following optional callbacks
+> + *	  when the irq_mask(), irq_unmask() and irq_write_msi_msg() callbacks
+> + *	  cannot operate directly on hardware, e.g. in the case that the
+> + *	  interrupt message store is in queue memory:
+> + *		- irq_bus_lock()
+> + *		- irq_bus_unlock()
+> + *
+> + *	  These callbacks are invoked from preemptible task context and are
+> + *	  allowed to sleep. In this case the mandatory callbacks above just
+> + *	  store the information. The irq_bus_unlock() callback is supposed
+> + *	  to make the change effective before returning.
+> + *
+> + *     - Interrupt affinity setting is handled by the underlying parent
+> + *	 interrupt domain and communicated to the IMS domain via
+> + *	 irq_write_msi_msg().
+
+Different indentation than the bullet items above.
+
+> + *
+> + * The domain is automatically destroyed when the PCI device is removed.
+> + */
+> +bool pci_create_ims_domain(struct pci_dev *pdev, const struct msi_domain_template *template,
+> +			   unsigned int hwsize, void *data)
+> +{
+> +	struct irq_domain *domain = dev_get_msi_domain(&pdev->dev);
+> +
+> +	if (!domain || !irq_domain_is_msi_parent(domain))
+> +		return -ENOTSUPP;
+> +
+> +	if (template->info.bus_token != DOMAIN_BUS_PCI_DEVICE_IMS ||
+> +	    !(template->info.flags & MSI_FLAG_ALLOC_SIMPLE_MSI_DESCS) ||
+> +	    !(template->info.flags & MSI_FLAG_FREE_MSI_DESCS) ||
+> +	    !template->chip.irq_mask || !template->chip.irq_unmask ||
+> +	    !template->chip.irq_write_msi_msg || template->chip.irq_set_affinity)
+> +		return -EINVAL;
+> +
+> +	return msi_create_device_irq_domain(&pdev->dev, MSI_SECONDARY_DOMAIN, template,
+> +					    hwsize, data, NULL);
+> +}
+> +EXPORT_SYMBOL_GPL(pci_create_ims_domain);
+> +
+>  /*
+>   * Users of the generic MSI infrastructure expect a device to have a single ID,
+>   * so with DMA aliases we have to pick the least-worst compromise. Devices with
+> --- a/include/linux/pci.h
+> +++ b/include/linux/pci.h
+> @@ -2481,6 +2481,11 @@ static inline bool pci_is_thunderbolt_at
+>  void pci_uevent_ers(struct pci_dev *pdev, enum  pci_ers_result err_type);
+>  #endif
+>  
+> +struct msi_domain_template;
+> +
+> +bool pci_create_ims_domain(struct pci_dev *pdev, const struct msi_domain_template *template,
+> +			   unsigned int hwsize, void *data);
+> +
+>  #include <linux/dma-mapping.h>
+>  
+>  #define pci_printk(level, pdev, fmt, arg...) \
+> 
