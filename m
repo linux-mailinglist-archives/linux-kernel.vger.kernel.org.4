@@ -2,222 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48BFE62CDB1
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 23:30:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6370B62CDB4
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 23:30:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234307AbiKPWa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 17:30:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50466 "EHLO
+        id S234382AbiKPWat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 17:30:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234335AbiKPWaW (ORCPT
+        with ESMTP id S232985AbiKPWaq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 17:30:22 -0500
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FEDC58BFB
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 14:30:13 -0800 (PST)
-Received: by mail-ot1-x32a.google.com with SMTP id p10-20020a9d76ca000000b0066d6c6bce58so8305891otl.7
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 14:30:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=SV3uKtw9a8vN8yUmKx3X+E8DjkwYVURzpTYzGnpG9LQ=;
-        b=O2WJQwZhVNsc9oob3fiv7On6XAXAzUk/x70nTp0Hz1tt/eRiQZ+k5+/0CTvE9qc9cQ
-         lFkxj8SLVSY4BP5YbC3CQVJQ4kdL8v0P1lgDdbhPNFQZRiRWZ7vBXhNyNz0kK4XoK1RT
-         3An4bCKdtoE6Y8q0Dpnpobw9RvwctbzQY1bWmc0mcKAcue2GDA6ne9GLIoifFtbbo8F+
-         B2jiwW0wzR78GuXoDnfGULLVq4OwkfIxP6wwLaEwggFYSmnIiUYg4qJe2QmBOqF63fNX
-         vdhfI0cyVOnfv+93Irx9eMG6g2v6Al0GNJyzfOip+go+TNbBVEpHejp854sMSCf60vCj
-         dLGQ==
+        Wed, 16 Nov 2022 17:30:46 -0500
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F7F25656E;
+        Wed, 16 Nov 2022 14:30:45 -0800 (PST)
+Received: by mail-oi1-f177.google.com with SMTP id v81so20208651oie.5;
+        Wed, 16 Nov 2022 14:30:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SV3uKtw9a8vN8yUmKx3X+E8DjkwYVURzpTYzGnpG9LQ=;
-        b=CAvxyXGZjsazsFXOjh6k7E2heV+8p73NuOK02OekOovuXKAMdCWL4G3SNAh2JgJzfY
-         Enb0gY0uZcx53vwSCVK2uphbSUNkkBCOvCARzHA+RLvTMv8++4YmiytoKsIKUuelg1X7
-         YC4sUZbar0HU3cMfwAsPHWzP3dbcFEGzBmPe+60F2Z61urCDwk3kd2TG8tDfzNeqAMd3
-         3MdgU/w9dJpzw56JJn+O9ne6avXc/2XgYoWp4nqoS+tguvKMBCsGpbFp8sZio7kgkgkR
-         GvjY4A5Ar75BevmFgWVFWrjNW7DQq8Gkb3bD4msL3Yw5QDaOz/R1zxDqj086WUYDPqCr
-         OX9Q==
-X-Gm-Message-State: ANoB5pnm5nRO+4vLgpVg91RF8BkXUWULV0GUnYBEV81WJaahQJnoZA+c
-        /3QD46vCwgMfi9/2tm1pxa0KzD+X0I0i9Oefduw8iA==
-X-Google-Smtp-Source: AA0mqf4kjRY9+AOr7lJMwpjgLCuJDtEo22o/x+DJmA14pLlViHfgrBHEyBmkTC5Y75tAqCDigjMAkX7tytffXyS3DzA=
-X-Received: by 2002:a9d:7344:0:b0:66c:3ca7:1e4f with SMTP id
- l4-20020a9d7344000000b0066c3ca71e4fmr91779otk.322.1668637812351; Wed, 16 Nov
- 2022 14:30:12 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hbpACnaXmrPREOrzmgwFDvqtUVn/DHRnFRgcTOhyLb8=;
+        b=Ia0Claf+K+ZMOHC6Gv+4kGq19jjgDXHzMLXaNSzalUIMMJ7taQ32jJFPWVE0347Dm1
+         f2KOGOQqk2NNfRJwhDeA1aceDHX4rLrXl7m838HuUbk+gAuNQ2YvS1YWpLMCZ5HxQaz6
+         FYnmIyxr4MpG2yPdUaHRR/4vFagpDAJ0CcTUrxkzDKI/KVeFiVdrBnapy4NAc8eg52kg
+         FWB3XMFDuqziPfQGKtJgM/KxzfCz1o/VZOtq/JIs535xydhs5f7jJUJZwAzhcWDbJhls
+         lMk1bj7fyCsKN7IasM96Unm2DYH4i5o9+p7KeiQvDZBv3YBc1FYd3W9z2p96M0I64L6b
+         O4/A==
+X-Gm-Message-State: ANoB5plRxL70LXj9A/MuHKIt4Om9LzS+NAL5dN3L3gFynWBlWBaRuuNo
+        DeAV44dnotPjf+c376If5Q==
+X-Google-Smtp-Source: AA0mqf697XFyAspx8GJWNLHGqzqrI1rGojs7MliM5qrGwGc7c97ydk3ctzaQesak540j/eDZCFheTw==
+X-Received: by 2002:a05:6808:17a6:b0:35b:13ca:23a0 with SMTP id bg38-20020a05680817a600b0035b13ca23a0mr2844923oib.12.1668637844468;
+        Wed, 16 Nov 2022 14:30:44 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id c25-20020a9d6c99000000b0066c73061d4bsm7074041otr.54.2022.11.16.14.30.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 14:30:43 -0800 (PST)
+Received: (nullmailer pid 1144141 invoked by uid 1000);
+        Wed, 16 Nov 2022 22:30:45 -0000
+Date:   Wed, 16 Nov 2022 16:30:45 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Brad Larson <brad@pensando.io>
+Cc:     krzysztof.kozlowski@linaro.org, adrian.hunter@intel.com,
+        alcooperx@gmail.com, andy.shevchenko@gmail.com, arnd@arndb.de,
+        blarson@amd.com, brijeshkumar.singh@amd.com, broonie@kernel.org,
+        catalin.marinas@arm.com, devicetree@vger.kernel.org,
+        fancer.lancer@gmail.com, gerg@linux-m68k.org, gsomlo@gmail.com,
+        krzk@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lee.jones@linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        p.yadav@ti.com, p.zabel@pengutronix.de, piotrs@cadence.com,
+        rdunlap@infradead.org, samuel@sholland.org,
+        suravee.suthikulpanit@amd.com, thomas.lendacky@amd.com,
+        ulf.hansson@linaro.org, will@kernel.org,
+        yamada.masahiro@socionext.com
+Subject: Re: [PATCH v8 06/17] dt-bindings: mfd: amd,pensando-elbasr: Add AMD
+ Pensando Elba System Resource chip
+Message-ID: <20221116223045.GA1130586-robh@kernel.org>
+References: <e9d8c14d-38b3-0401-7bfc-b2bd7ab36c52@linaro.org>
+ <20221116193940.67445-1-blarson@amd.com>
 MIME-Version: 1.0
-References: <20221104194705.3245738-1-rmoar@google.com> <CABVgOSnUDNvs6mYwVtzXq3+PmO62HG1pP=d_6EQiwOKF_9D6XA@mail.gmail.com>
- <CA+GJov4uUfp_a7FzCEMGivQJx3VGNOx=x+E_eN-9a46EsS2Ygg@mail.gmail.com> <CAGS_qxqa6NW5EKA0y3Szp_6rEMfam5urSVRHaGVRZUHgmab8SA@mail.gmail.com>
-In-Reply-To: <CAGS_qxqa6NW5EKA0y3Szp_6rEMfam5urSVRHaGVRZUHgmab8SA@mail.gmail.com>
-From:   Rae Moar <rmoar@google.com>
-Date:   Wed, 16 Nov 2022 17:30:00 -0500
-Message-ID: <CA+GJov6Ot9KeMtk_L_qX=k2rwFgpPZG7gLG6HFQ+uhnLjDEFVg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] kunit: improve KTAP compliance of KUnit test output
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     David Gow <davidgow@google.com>, brendanhiggins@google.com,
-        skhan@linuxfoundation.org, mauro.chehab@linux.intel.com,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Isabella Basso <isabbasso@riseup.net>,
-        Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221116193940.67445-1-blarson@amd.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 5:41 PM Daniel Latypov <dlatypov@google.com> wrote:
->
-> On Tue, Nov 15, 2022 at 12:18 PM Rae Moar <rmoar@google.com> wrote:
-> > Yes, I agree. I think it does make more sense to provide KTAP
-> > compatibility with the parser before changing the test output. This
-> > would also help to solve the issue that Daniel brought up on this
-> > patch about the "KTAP version 1" line and test plan being stored
-> > in the test.log as random kernel output. I will swap the patches in
-> > the v2 of this patch series.
-> >
-> > >
-> > > I'd also be curious to see if this is likely to break anyone else's
-> > > (K)TAP parsers.
-> > >
-> > > +Isabella, Anders: do these changes break the IGT or LKFT TAP/KTAP
-> > > parsing? From a quick look at [1] and [2], we're probably okay??
-> > >
-> > > [1]: https://gitlab.freedesktop.org/isinyaaa/igt-gpu-tools/-/commit/1a84306425e975377eb79c031bf1de147bd44e46
-> > > [2]: https://github.com/Linaro/test-definitions/blob/master/automated/linux/kunit/kunit.sh
-> > >
-> > > I also looked into the possibility of moving or removing the Subtest
-> > > line, but upon further thought (see below), it's probably best to keep
-> > > it as-is here for now. That should be the closest to the current spec,
-> > > and we can possibly find a better way to provide the name in KTAPv2.
-> > >
-> > > Reviewed-by: David Gow <davidgow@google.com>
-> > >
-> > > Cheers,
-> > > -- David
-> > >
-> > > >  lib/kunit/executor.c | 6 +++---
-> > > >  lib/kunit/test.c     | 5 +++--
-> > > >  2 files changed, 6 insertions(+), 5 deletions(-)
-> > > >
-> > > > diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-> > > > index 9bbc422c284b..74982b83707c 100644
-> > > > --- a/lib/kunit/executor.c
-> > > > +++ b/lib/kunit/executor.c
-> > > > @@ -166,7 +166,7 @@ static void kunit_exec_run_tests(struct suite_set *suite_set)
-> > > >  {
-> > > >         size_t num_suites = suite_set->end - suite_set->start;
-> > > >
-> > > > -       pr_info("TAP version 14\n");
-> > > > +       pr_info("KTAP version 1\n");
-> > > >         pr_info("1..%zu\n", num_suites);
-> > > >
-> > > >         __kunit_test_suites_init(suite_set->start, num_suites);
-> > > > @@ -177,8 +177,8 @@ static void kunit_exec_list_tests(struct suite_set *suite_set)
-> > > >         struct kunit_suite * const *suites;
-> > > >         struct kunit_case *test_case;
-> > > >
-> > > > -       /* Hack: print a tap header so kunit.py can find the start of KUnit output. */
-> > > > -       pr_info("TAP version 14\n");
-> > > > +       /* Hack: print a ktap header so kunit.py can find the start of KUnit output. */
-> > > > +       pr_info("KTAP version 1\n");
-> > > >
-> > > >         for (suites = suite_set->start; suites < suite_set->end; suites++)
-> > > >                 kunit_suite_for_each_test_case((*suites), test_case) {
-> > > > diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> > > > index 90640a43cf62..b541d59a05c3 100644
-> > > > --- a/lib/kunit/test.c
-> > > > +++ b/lib/kunit/test.c
-> > > > @@ -151,6 +151,7 @@ static void kunit_print_suite_start(struct kunit_suite *suite)
-> > > >  {
-> > > >         kunit_log(KERN_INFO, suite, KUNIT_SUBTEST_INDENT "# Subtest: %s",
-> > > >                   suite->name);
-> > > > +       kunit_log(KERN_INFO, suite, KUNIT_SUBTEST_INDENT "KTAP version 1\n");
-> > >
-> > > Would it make sense to have the Subtest line _after_ the KTAP line here?
-> > >
-> > > Given KTAP doesn't specify the "Subtest" line at all, I guess it doesn't matter.
-> > >
-> > > A part of me feels that the "KTAP version 1" line should be the
-> > > _first_ line of the subtest output, but that would introduce a line
-> > > between it and the test plan, which goes against the spec.
-> > >
-> > > We could also just get rid of the "Subtest" line, given it's not
-> > > technically required, though having the test name before the results
-> > > is really useful.
-> > >
-> > > Having tried all three options while writing this email, I think it's
-> > > probably best to leave this patch as is (with the Subtest line
-> > > followed by the KTAP line), and discuss standardising something
-> > > similar as part of the KTAP v2 spec.
-> > >
-> >
-> > I also struggle to decide how the "Subtest" line should be handled. Since
-> > the current KTAP v1 spec does not provide a way to declare the name of
-> > a test with subtests prior to the results, I think it is important to continue
-> > to include this Subtest line because it provides that functionality.
-> > Additionally,
-> > the line is not expected to be very disruptive for other parsers because it
-> > is read as a diagnostic line.
->
-> Yeah, since it's going to be ignored as a diagnostic line, I think
-> we're largely free to put it where we want?
->
-> I'm actually leaning towards making things more uniform e.g.
->
-> KTAP version 1
-> # Subtest: optionally set for the top-level test!
-> 1..2
->   KTAP version 1
->   # Subtest: suite1
->   1..1
->   ok 1 - test1
->  ok 1 -suite1
->  // etc.
->
-> Then we can simplify the parser by not differentiating (as much)
-> between the top-level test and subtests.
-> This also simplifies parsing multiple KTAP documents (e.g. for
-> supporting modules, etc.)
->
-> We'll probably talk about this offline soon, but I wanted to put this out there.
->
-> Daniel
->
+On Wed, Nov 16, 2022 at 11:39:40AM -0800, Brad Larson wrote:
+> Add support for the AMD Pensando Elba SoC System Resource chip
+> using the SPI interface.
+> 
+> Signed-off-by: Brad Larson <blarson@amd.com>
+> ---
+> 
+> v8:
+>  - Apply review request changes and picked the two unique examples
+>    for the 4 chip-selects as one has the reset control support and
+>    the other an interrupt.  Missed the --in-reply-to in git
+>    send-email for v7, included in this update.
 
+No, you haven't. By default in git, you don't have to do anything. See 
+--thread and --no-chain-reply-to options. If you are messing with 
+--in-reply-to, you are doing it wrong.
 
-This was partially discussed off the mailing list. I am still a bit
-wary to change the output to this format because it is not strictly
-compliant with the KTAP v1 spec which requires the test plan to be the
-line directly below the version line. However, I do think that this
-location makes much more sense for the "# Subtest" line and since this
-is a diagnostic line and likely won't break any existing parsers, I
-will be changing to this format in v2 as well as adjusting the parser
-to allow for this format instead.
+Please resend the whole series properly threaded.
 
-The optional top-level "# Subtest" line was also discussed off the
-mailing list. It was generally agreed that this could be useful in the
-future but not as an addition for this patch. However, the parser
-should be altered such that if the line is present, the parser will
-not crash but also not actively print the provided test name.
+> 
+> v7:
+>  - Use system-controller for the device with four chip-selects
+>    connected over spi.
+>  - Delete child by moving reset-controller into the parent.
+>  - Updated and used dtschema-2022.11 and yamllint-1.28.0
+> 
+> v6:
+>  - Expand description, rename nodes and change compatible usage
+> 
+> v5:
+>  - Change to AMD Pensando instead of Pensando
+> 
+> v4:
+>  - Change Maintained to Supported
+> 
+>  .../bindings/mfd/amd,pensando-elbasr.yaml     | 60 +++++++++++++++++++
+>  1 file changed, 60 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/amd,pensando-elbasr.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/amd,pensando-elbasr.yaml b/Documentation/devicetree/bindings/mfd/amd,pensando-elbasr.yaml
+> new file mode 100644
+> index 000000000000..622c93402a86
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mfd/amd,pensando-elbasr.yaml
+> @@ -0,0 +1,60 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mfd/amd,pensando-elbasr.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: AMD Pensando Elba SoC Resource Controller
+> +
+> +description: |
+> +  AMD Pensando Elba SoC Resource Controller functions are
+> +  accessed with four chip-selects.  Reset control is on CS0.
 
-As discussed previously in this patch series, a test name line could
-be helpful to propose for KTAP v2 as a replacement to this "# Subtest"
-line, which is present in the TAP version 14 spec.
+One device with 4 chip-selects? Then I'd expect 'reg = <0 1 2 3>;'
 
-Rae
+Hard to say more because I don't have the whole thread nor remember what 
+exactly we discussed before. That was 100s of bindings ago...
 
-
->
-> >
-> > The location of the "Subtest" line before the KTAP version line is potentially
-> > not the most optimal but it seems to be the best choice while ensuring
-> > compatibility with the current KTAP v1 spec. I recommend that we discuss
-> > a standardized replacement for this "Subtest" line in the KTAP v2 spec.
+> +
+> +maintainers:
+> +  - Brad Larson <blarson@amd.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - amd,pensando-elbasr
+> +
+> +  "#reset-cells":
+> +    const: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - spi-max-frequency
+> +
+> +allOf:
+> +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    spi {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +        num-cs = <4>;
+> +
+> +        system-controller@0 {
+> +            compatible = "amd,pensando-elbasr";
+> +            reg = <0>;
+> +            spi-max-frequency = <12000000>;
+> +            #reset-cells = <1>;
+> +        };
+> +
+> +        system-controller@2 {
+> +            compatible = "amd,pensando-elbasr";
+> +            reg = <2>;
+> +            spi-max-frequency = <12000000>;
+> +            interrupt-parent = <&porta>;
+> +            interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
+> +        };
+> +    };
+> -- 
+> 2.17.1
+> 
+> 
