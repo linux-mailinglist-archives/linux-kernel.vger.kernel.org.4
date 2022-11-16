@@ -2,53 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B911D62B5B7
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 09:56:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA2F462B5BA
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 09:56:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232936AbiKPI4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 03:56:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51758 "EHLO
+        id S233061AbiKPI4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 03:56:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230429AbiKPI4D (ORCPT
+        with ESMTP id S230429AbiKPI4j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 03:56:03 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8229C1142;
-        Wed, 16 Nov 2022 00:56:01 -0800 (PST)
-Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NBxhn1yD4zmW28;
-        Wed, 16 Nov 2022 16:55:37 +0800 (CST)
-Received: from dggpeml500006.china.huawei.com (7.185.36.76) by
- dggpeml500024.china.huawei.com (7.185.36.10) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 16 Nov 2022 16:55:59 +0800
-Received: from [10.174.178.240] (10.174.178.240) by
- dggpeml500006.china.huawei.com (7.185.36.76) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 16 Nov 2022 16:55:58 +0800
-Subject: Re: [PATCH net v2 3/3] net: nixge: fix tx queue handling
-To:     Francois Romieu <romieu@fr.zoreil.com>
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <mdf@kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1668525024-38409-1-git-send-email-zhangchangzhong@huawei.com>
- <1668525024-38409-4-git-send-email-zhangchangzhong@huawei.com>
- <Y3Qa/fjjMhctsE5w@electric-eye.fr.zoreil.com>
-From:   Zhang Changzhong <zhangchangzhong@huawei.com>
-Message-ID: <c476086a-14ce-6e47-8183-def31d569ec6@huawei.com>
-Date:   Wed, 16 Nov 2022 16:55:58 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+        Wed, 16 Nov 2022 03:56:39 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2AA51142
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 00:56:38 -0800 (PST)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1668588996;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FD6M9QY8iW9aXpGMda/ftERrCCP2hqP8/1sR46SwkDs=;
+        b=Pm+m88h862VmziM9o4LFN8RIoKlfl03dSyIa5vjp5tPUrpfTiF6dB+sq6gsSdM1ftq+6f/
+        rGP87F7Hwu/7JvReKDnRtCSBUQq6FKYRNQ5lLsE65Zyv2PTmL2qKkY6rqLmARqBSWMLjtI
+        tNSUo+mqFBWcMw4HUUOJjxPILpPOnHYvUKmx9OAD3UFYBcjHEOwlV2HS/1bDWBofHnMgKJ
+        26WonJw8CZwhWgpYJl0NP596cCGuhectIWrksiOS/c+aACZ67voTSUf+xbcN8C1mtTxmGi
+        0IK5rijsYleQKoMCPuB1e9s5GvIWsNYZuxLmcCwbnYoxTWjf7eOsBwQkK0j7yA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1668588996;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FD6M9QY8iW9aXpGMda/ftERrCCP2hqP8/1sR46SwkDs=;
+        b=m22c+CdGALHaAHSz4g430YNaNrE8SmdRINyPYAHMHQZF4ivHnWzRCRBqQOYRH14dpXzIgq
+        sV5KHnBIvfocgqDw==
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: replay log: Re: [PATCH printk v4 38/39] printk: relieve
+ console_lock of list synchronization duties
+In-Reply-To: <87y1sbjn77.fsf@jogness.linutronix.de>
+References: <20221114162932.141883-1-john.ogness@linutronix.de>
+ <20221114162932.141883-39-john.ogness@linutronix.de>
+ <Y3Oxck0/LAHFLYip@alley> <87tu30maqf.fsf@jogness.linutronix.de>
+ <Y3PZEbx+40ZyN/79@alley> <87y1sbjn77.fsf@jogness.linutronix.de>
+Date:   Wed, 16 Nov 2022 10:02:34 +0106
+Message-ID: <87v8nfjn0d.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <Y3Qa/fjjMhctsE5w@electric-eye.fr.zoreil.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.240]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500006.china.huawei.com (7.185.36.76)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
         RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,55 +61,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/16 7:04, Francois Romieu wrote:
-> Zhang Changzhong <zhangchangzhong@huawei.com> :
->> Currently the driver check for available space at the beginning of
->> nixge_start_xmit(), and when there is not enough space for this packet,
->> it returns NETDEV_TX_OK, which casues packet loss and memory leak.
->>
->> Instead the queue should be stopped after the packet is added to the BD
->> when there may not be enough space for next packet. In addition, the
->> queue should be wakeup only if there is enough space for a packet with
->> max frags.
->>
->> Fixes: 492caffa8a1a ("net: ethernet: nixge: Add support for National Instruments XGE netdev")
->> Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
->> ---
->>  drivers/net/ethernet/ni/nixge.c | 54 +++++++++++++++++++++++++++++------------
->>  1 file changed, 38 insertions(+), 16 deletions(-)
->>
->> diff --git a/drivers/net/ethernet/ni/nixge.c b/drivers/net/ethernet/ni/nixge.c
->> index 91b7ebc..3776a03 100644
->> --- a/drivers/net/ethernet/ni/nixge.c
->> +++ b/drivers/net/ethernet/ni/nixge.c
-> [...]
->>  static netdev_tx_t nixge_start_xmit(struct sk_buff *skb,
->> @@ -518,10 +523,15 @@ static netdev_tx_t nixge_start_xmit(struct sk_buff *skb,
->>  	cur_p = &priv->tx_bd_v[priv->tx_bd_tail];
->>  	tx_skb = &priv->tx_skb[priv->tx_bd_tail];
->>  
->> -	if (nixge_check_tx_bd_space(priv, num_frag + 1)) {
->> -		if (!netif_queue_stopped(ndev))
->> -			netif_stop_queue(ndev);
->> -		return NETDEV_TX_OK;
->> +	if (unlikely(nixge_check_tx_bd_space(priv, num_frag + 1))) {
->> +		/* Should not happen as last start_xmit call should have
->> +		 * checked for sufficient space and queue should only be
->> +		 * woken when sufficient space is available.
->> +		 */
-> 
-> Almost. IRQ triggering after nixge_start_xmit::netif_stop_queue and
-> before nixge_start_xmit::smp_mb may wrongly wake queue.
-> 
+Hi,
 
-I don't know what you mean by "wronly wake queue". The queue is woken
-only when there is sufficient for next packet.
+I forgot to re-lock the console... See below.
 
-> Call me timorous but I would feel more confortable if this code could
-> be tested on real hardware before being fed into -net.
-> 
+On 2022-11-16, John Ogness <john.ogness@linutronix.de> wrote:
+> 	if (newcon->flags & (CON_PRINTBUFFER | CON_BOOT)) {
+> 		/* Get a consistent copy of @syslog_seq. */
+> 		mutex_lock(&syslog_lock);
+> 		newcon->seq = syslog_seq;
+> 		mutex_unlock(&syslog_lock);
+> 	} else {
+> 		/* Begin with next message added to ringbuffer. */
+> 		newcon->seq = prb_next_seq(prb);
+>
+> 		/*
+> 		 * If any enabled boot consoles are due to be unregistered
+> 		 * shortly, some may not be caught up and may be the same
+> 		 * device as @newcon. Since it is not known which boot console
+> 		 * is the same device, flush all consoles and, if necessary,
+> 		 * start with the message of the enabled boot console that is
+> 		 * the furthest behind.
+> 		 */
+> 		if (bootcon_registered && !keep_bootcon) {
+> 			bool handover;
+>
+> 			/*
+> 			 * Hold the console_lock to guarantee safe access to
+> 			 * console->seq.
+> 			 */
+> 			console_lock();
+>
+> 			/*
+> 			 * Flush all consoles and set the console to start at
+> 			 * the next unprinted sequence number.
+> 			 */
+> 			if (!console_flush_all(true, &newcon->seq, &handover)) {
+> 				/*
+> 				 * Flushing failed. Just choose the lowest
+> 				 * sequence of the enabled boot consoles.
+> 				 */
 
-I agree with you, hope someone can test and correct it.
+Sorry. Here we lost the console_lock. Another acquire is needed here.
 
-Thanks,
-Changzhong
+				console_lock();
+
+> 				newcon->seq = prb_next_seq(prb);
+> 				for_each_console(con) {
+> 					if ((con->flags & CON_BOOT) &&
+> 					    (con->flags & CON_ENABLED) &&
+> 					    con->seq < newcon->seq) {
+> 						newcon->seq = con->seq;
+> 					}
+> 				}
+> 			}
+>
+> 			console_unlock();
+> 		}
+> 	}
+
+John Ogness
