@@ -2,164 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC14362BE74
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:42:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D77D62BE7A
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:45:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238940AbiKPMmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 07:42:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34966 "EHLO
+        id S230123AbiKPMpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 07:45:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233849AbiKPMmg (ORCPT
+        with ESMTP id S229666AbiKPMpA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 07:42:36 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02A8F6376
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 04:42:35 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id s8so12150727lfc.8
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 04:42:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RrPGeIjext5JNhSVxUCmWbpHHI7jtSW713ZjQuNCGds=;
-        b=WDh3HKx5Bbx3SNMUBfff+9Vn1uQRJCaKUyLSwYr0MaYWIgPJ3aia9Xr5zcIQYdHffi
-         hshDECtFkRmWXDDISQHxcyS+m3/vtKPZV2HKpbkqxR8ZRLyxycB2swacTLoQ38i04V3y
-         /oM6lEwjBr/KGyiULiiyHX8Pzv2f5tdwv23gYIgynjZJa+zAE8WNNdH16vJgK+mwWhoe
-         oNkbQub3hnkOiIzdlZoI3Pmvf4Dg5mZbLzufjPXA1eFuL7bHEaF506kWNYDCXbvMQKTz
-         eqSrDTKqQMNeoaP3PGeBZsLiHqx+mHn2Bz1+nkZ924CnIldtts1N7DYrF/1N1L71tHlS
-         O2TA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RrPGeIjext5JNhSVxUCmWbpHHI7jtSW713ZjQuNCGds=;
-        b=m0+7DXWuOi3eeO/qeFat5gzOXB9YE2yMwxLsw0sQrN1JttToqrN9hY9/RA9DjLGxOK
-         XNbkywYoH/Kqh/6W3zFSbYjWy2acrehRszqMWRC5YGyCtkCIEgHdThlpyjkT017fzG6i
-         ceGx+WU0zHgRS/FUNtsO6uHlt9yZWzrpW37bCjFr1rsRrFYqnLFY4wR1euV15+jAIkx2
-         efHWl5xkE/BxjA1mZ44BDjpoLCYrBOkKbDU7G79x55jJkHfSEnB/iDW2xpf8EYhNAs7c
-         zcYUUn8FtN/xCQ0ymJM0OPSCNozl07Spd6sA0HZOPDntppJ/AllkQm9/wN6hz7BmXbtd
-         ayqA==
-X-Gm-Message-State: ANoB5pn9+8zuzNDNs9WVwFDIWEDJxr0yFEZYlVACc7UqPUj1HBz1rzp6
-        wyyM6s87XcCTK3L0hmKWNeBb2w==
-X-Google-Smtp-Source: AA0mqf5GIerHpKxp4+yhreyljTRcuU66KevxYftRVwqsSVK/66JE2J4JF24GEpo2o7Oo+9BDksDG5w==
-X-Received: by 2002:ac2:530c:0:b0:4b4:aed7:4aa5 with SMTP id c12-20020ac2530c000000b004b4aed74aa5mr1169682lfh.447.1668602553331;
-        Wed, 16 Nov 2022 04:42:33 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id e2-20020a056512090200b004ac393ecc34sm2587943lft.302.2022.11.16.04.42.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 04:42:32 -0800 (PST)
-Message-ID: <aa3234a5-1beb-65ef-90fc-95d16d6730c9@linaro.org>
-Date:   Wed, 16 Nov 2022 13:42:31 +0100
+        Wed, 16 Nov 2022 07:45:00 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3F8725FF4;
+        Wed, 16 Nov 2022 04:44:59 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 47AEC1516;
+        Wed, 16 Nov 2022 04:45:05 -0800 (PST)
+Received: from [10.57.70.190] (unknown [10.57.70.190])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9F16B3F663;
+        Wed, 16 Nov 2022 04:44:55 -0800 (PST)
+Message-ID: <94af81ef-782a-9cf5-b656-f2c304a8e4ef@arm.com>
+Date:   Wed, 16 Nov 2022 12:44:50 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 2/3] arm64: dts: qcom: sm8450: add Soundwire and LPASS
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-References: <20221116101314.52887-1-krzysztof.kozlowski@linaro.org>
- <20221116101314.52887-3-krzysztof.kozlowski@linaro.org>
- <7605af5f-a828-5df7-48b8-b543edb0f9b1@linaro.org>
- <bde68c28-bf4c-405f-ef2a-f56db7654d25@linaro.org>
- <1ce84668-5f21-5e62-6a02-be7c6e79012e@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1ce84668-5f21-5e62-6a02-be7c6e79012e@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH] arm64: dts: fsd: Change the reg properties from 64-bit to
+ 32-bit
+Content-Language: en-GB
+From:   Robin Murphy <robin.murphy@arm.com>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Vivek Yadav <vivek.2311@samsung.com>, rcsekar@samsung.com,
+        krzysztof.kozlowski+dt@linaro.org,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, pankaj.dubey@samsung.com,
+        ravi.patel@samsung.com, Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-fsd@tesla.com, Rob Herring <robh+dt@kernel.org>
+Cc:     linux-can@vger.kernel.org, Netdev <netdev@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        aswani.reddy@samsung.com, sriranjani.p@samsung.com,
+        ajaykumar.rs@samsung.com
+References: <CGME20221116090644epcas5p3a0fa6d51819a2b2a9570f236191748ea@epcas5p3.samsung.com>
+ <20221116091247.52388-1-vivek.2311@samsung.com>
+ <37d42235-1960-4001-9be9-20a85de54730@app.fastmail.com>
+ <d63b59c3-f67d-e5ee-6cbf-9f97eec0aeaa@arm.com>
+In-Reply-To: <d63b59c3-f67d-e5ee-6cbf-9f97eec0aeaa@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/11/2022 12:17, Konrad Dybcio wrote:
-> 
-> 
-> On 16/11/2022 11:40, Krzysztof Kozlowski wrote:
->> On 16/11/2022 11:20, Konrad Dybcio wrote:
+On 2022-11-16 12:38, Robin Murphy wrote:
+> On 2022-11-16 11:16, Arnd Bergmann wrote:
+>> On Wed, Nov 16, 2022, at 10:12, Vivek Yadav wrote:
+>>> Change the reg properties from 64-bit to 32-bit for all IPs, as none of
+>>> the nodes are above 32-bit range in the fsd SoC.
 >>>
->>>
->>> On 16/11/2022 11:13, Krzysztof Kozlowski wrote:
->>>> From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
->>>>
->>>> Add Soundwire controllers, Low Power Audio SubSystem (LPASS) devices and
->>>> LPASS pin controller.
->>>>
->>>> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
->>>> Co-developed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>>
->>>> ---
->>>>
->>>> Changes since v2:
->>>> 1. Use lower-case hex.
->>>>
->>>> Changes since v1:
->>>> 1. Whitespace cleanups.
->>>> 2. Correct include - do not use deprecated one.
->>>> ---
->>>>    arch/arm64/boot/dts/qcom/sm8450.dtsi | 295 +++++++++++++++++++++++++++
->>>>    1 file changed, 295 insertions(+)
->>>>
->>>> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
->>>> index 4b0a1eee8bd9..747440d0445a 100644
->>>> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
->>>> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
->>>> @@ -15,6 +15,7 @@
->>>>    #include <dt-bindings/interconnect/qcom,sm8450.h>
->>>>    #include <dt-bindings/soc/qcom,gpr.h>
->>>>    #include <dt-bindings/soc/qcom,rpmh-rsc.h>
->>>> +#include <dt-bindings/sound/qcom,q6dsp-lpass-ports.h>
->>>>    #include <dt-bindings/thermal/thermal.h>
->>>>    
->>>>    / {
->>>> @@ -2097,6 +2098,212 @@ compute-cb@3 {
->>>>    			};
->>>>    		};
->>>>    
->>>> +		wsa2macro: codec@31e0000 {
->>>> +			compatible = "qcom,sm8450-lpass-wsa-macro";
->>>> +			reg = <0 0x031e0000 0 0x1000>;
->>>> +			clocks = <&q6prmcc LPASS_CLK_ID_WSA_CORE_TX_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
->>>> +				 <&q6prmcc LPASS_CLK_ID_RX_CORE_MCLK2_2X_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
->>>> +				 <&q6prmcc LPASS_HW_MACRO_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
->>>> +				 <&q6prmcc LPASS_HW_DCODEC_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
->>>> +				 <&vamacro>;
->>>> +			clock-names = "mclk", "npl", "macro", "dcodec", "fsgen";
->>>> +			assigned-clocks = <&q6prmcc LPASS_CLK_ID_WSA_CORE_TX_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
->>>> +					  <&q6prmcc LPASS_CLK_ID_RX_CORE_MCLK2_2X_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>;
->>>> +			assigned-clock-rates = <19200000>, <19200000>;
->>>> +
->>>> +			#clock-cells = <0>;
->>>> +			clock-output-names = "wsa2-mclk";
->>>> +			#sound-dai-cells = <1>;
->>> I think I'm being a bit too picky, but #-cells could go as the last
->>> bunch of properties.
+>>> Since dma-ranges length does not fit into 32-bit size, keep it 64-bit
+>>> and move it to specific node where it is used instead of SoC section.
 >>
->> I was thinking about this as well, but some of other codecs which are
->> very similar (also "macro") do not have pinctrls and this makes them
->> unified with additions at the end.
+>> I don't think that works, the dma-ranges property is part of the
+>> bus, not a particular device:
 >>
->> Are you sure you still prefer alphabetical order?
-> Thinking about it, IMO it makes sense to add things "roughly where they 
-> belong", a.k.a if there was a codec that for whatever reason also 
-> required a power domain, we would stick it somewhere in the middle and 
-> not at the end..
+>>           mdma0: dma-controller@10100000 {
+>>               compatible = "arm,pl330", "arm,primecell";
+>> -            reg = <0x0 0x10100000 0x0 0x1000>;
+>> +            reg = <0x10100000 0x1000>;
+>>               interrupts = <GIC_SPI 424 IRQ_TYPE_LEVEL_HIGH>;
+>>               #dma-cells = <1>;
+>>               clocks = <&clock_imem IMEM_DMA0_IPCLKPORT_ACLK>;
+>>               clock-names = "apb_pclk";
+>>               iommus = <&smmu_imem 0x800 0x0>;
+>> +            #address-cells = <2>;
+>> +            #size-cells = <2>;
+>> +            dma-ranges = <0x0 0x0 0x0 0x10 0x0>;
+>>           };
+>>
+>> Since the dma-controller has no children, I don't see how this has
+>> any effect. Also, translating a 36-bit address into a 32-bit
+>> address just means it gets truncated anyway, so there is no
+>> point in making it appear to have a larger address range.
+> 
+> Yes, this is definitely bogus on both counts.
 
-OK, I'll re-order these.
+Oh, and also that PL330 can only do 32-bit DMA anyway :)
 
-Best regards,
-Krzysztof
-
+Thanks,
+Robin.
