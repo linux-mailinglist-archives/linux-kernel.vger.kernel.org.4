@@ -2,112 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 093C662B15B
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 03:36:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7CA962B161
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 03:36:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231357AbiKPCf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 21:35:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49306 "EHLO
+        id S231464AbiKPCgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 21:36:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbiKPCf5 (ORCPT
+        with ESMTP id S229996AbiKPCgd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 21:35:57 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B75E24BE1
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 18:35:56 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id n17so7746815pgh.9
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 18:35:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LsUkQ9mUTtmbZUYtAJD3DaSoBhry/tgp9n6xBguz4lI=;
-        b=BCeqLLVGH2R8cvfyP4TzIQJp8FsuwwIaDb5fGlWXYWyEVoWZ4CecVwo/6hlZ0wvZMN
-         8lB+4IedPpag9pnDwUu3fp+CJiiyRKyRfgLgWZBq6lj5OYXr/GMQ/6PmrLoOHQfF5F2F
-         8JPKsCFZ2mp6UveVHoxNpH1BZrdNrYCH5iHsdmqHFkvPqarKWe3Q7LLEuojD5USAVfMj
-         yyBjNbC6D65G4sTN7czLTqdLrM4Ikx6MbVH8WtwwBi+3ICbpjQWQG9mmMD2Ji468yFPK
-         DL8QrJaSyUJEgplPEa2/dcuu4sVbqCCLEbNJDN0nLWJD+h+eIvwqsVlKbCuZAL7FP47K
-         IxCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LsUkQ9mUTtmbZUYtAJD3DaSoBhry/tgp9n6xBguz4lI=;
-        b=6yqa5EnMAiB9LF+5ttaAZw+5ILmkTqLqgT/J0/B3JCWX3Dr7meXQ/RPXtZi8+N+czs
-         LxYE5EBLf4vCYwT9yJxZfntDNV+B+YTHjXI9nuWn+G3hbygbdYxmIruiAuLTSiWnmnZ6
-         O4msAcdQlABMDoi544L4GDRCD9Z6tRz3nxB0nNGO+v56QzWmxySEdbslTS0n0k8Ndsdb
-         K6z4uOVGTJG5/CQQkvI4QbCkDxh7HGCcMV1tvgL37TSGZHZTn+fDPes7/VwuNQtIbbaT
-         HlEIo94/1i9NGm2WykG5Tdd7Oo3QP3jt+h3VgyiKU9CVGne7xOYEPoqBvED4Zc7BVd9b
-         aWrA==
-X-Gm-Message-State: ANoB5pl13Sn8yMpUTi5L25HlAHuLMdUP1rWhhpb9/bY7/ec3WGecW4ca
-        0+s3/Zui6TonXBzBpvNMO8xqUxjuwtKUYa+a32l7
-X-Google-Smtp-Source: AA0mqf5CJnhn5qnkSOJep/sQV/5oppCSnD92JqMIf6aCUDEsrMG3l9LTpaW0nNXIgzolcSBlOiuoKMQ31Wut3i9jIHY=
-X-Received: by 2002:a63:4087:0:b0:44e:46f9:7eeb with SMTP id
- n129-20020a634087000000b0044e46f97eebmr18693190pga.3.1668566155982; Tue, 15
- Nov 2022 18:35:55 -0800 (PST)
-MIME-Version: 1.0
-References: <20221115175652.3836811-1-roberto.sassu@huaweicloud.com> <20221115175652.3836811-5-roberto.sassu@huaweicloud.com>
-In-Reply-To: <20221115175652.3836811-5-roberto.sassu@huaweicloud.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 15 Nov 2022 21:35:44 -0500
-Message-ID: <CAHC9VhQ+fUZfJwJ=oJ9ieszKeicnS7Z-QcJuJVL9HF5F0tcA7Q@mail.gmail.com>
-Subject: Re: [RFC][PATCH 4/4] security: Enforce limitations on return values
- from LSMs
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, revest@chromium.org,
-        jackmanb@chromium.org, jmorris@namei.org, serge@hallyn.com,
-        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Tue, 15 Nov 2022 21:36:33 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DA4F627935
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 18:36:31 -0800 (PST)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8BxLtuuTHRjqo8HAA--.22244S3;
+        Wed, 16 Nov 2022 10:36:30 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dxd1etTHRjVk0UAA--.35869S2;
+        Wed, 16 Nov 2022 10:36:29 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/4] Add kprobe and kretprobe support for LoongArch
+Date:   Wed, 16 Nov 2022 10:36:25 +0800
+Message-Id: <1668566189-2056-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf8Dxd1etTHRjVk0UAA--.35869S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7WryxXr17Aw1DuFyfWr4kJFb_yoW8Gw1xpF
+        nrZrn5Gr4rGwn3Jr9xtw1Uur1rtw48C3y2ga13try8C3WxXryUArs3KrZxXa4vkwsIqr4S
+        qr1rX3yYgFWxJa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        b7AYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
+        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4U
+        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x0EwIxGrwCFx2
+        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
+        6r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
+        AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IY
+        s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr
+        0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8czVUUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 12:58 PM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
->
-> From: Roberto Sassu <roberto.sassu@huawei.com>
->
-> LSMs should not be able to return arbitrary return values, as the callers
-> of the LSM infrastructure might not be ready to handle unexpected values
-> (e.g. positive values that are first converted to a pointer with ERR_PTR,
-> and then evaluated with IS_ERR()).
->
-> Modify call_int_hook() to call is_ret_value_allowed(), so that the return
-> value from each LSM for a given hook is checked. If for the interval the
-> return value falls into the corresponding flag is not set, change the
-> return value to the default value, just for the current LSM.
->
-> A misbehaving LSM would not have impact on the decision of other LSMs, as
-> the loop terminates whenever the return value is not zero.
->
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->  security/security.c | 34 ++++++++++++++++++++++++++++++++++
->  1 file changed, 34 insertions(+)
+v3:
+  -- Rebase on the latest code
+  -- Check the alignment of PC in simu_branch() and simu_pc()
+  -- Add ibar in flush_insn_slot()
+  -- Rename kprobe_{pre,post}_handler() to {post_}kprobe_handler
+  -- Add preempt_disable() and preempt_enable_no_resched()
+  -- Remove r0 save/restore and do some minor changes
+     in kprobes_trampoline.S
+  -- Do not enable CONFIG_KPROBES by default
 
-Casey touched on some of this in his reply to patch 0/4, but basically
-I see this as a BPF LSM specific problem and not a generalized LSM
-issue that should be addressed at the LSM layer.  Especially if the
-solution involves incurring additional processing for every LSM hook
-instantiation, regardless if a BPF LSM is present.  Reading your
-overall patchset description I believe that you understand this too.
+v2:
+  -- Split simu_branch() and simu_pc() into a single patch
+  -- Call kprobe_page_fault() in do_page_fault()
+  -- Add kprobes_trampoline.S for kretprobe
 
-If you want to somehow instrument the LSM hook definitions (what I
-believe to be the motivation behind patch 3/4) to indicate valid
-return values for use by the BPF verifier, I think we could entertain
-that, or at least discuss it further, but I'm not inclined to support
-any runtime overhead at the LSM layer for a specific LSM.
+Tiezhu Yang (4):
+  LoongArch: Simulate branch and PC instructions
+  LoongArch: Add kprobe support
+  LoongArch: Add kretprobe support
+  samples/kprobes: Add LoongArch support
+
+ arch/loongarch/Kconfig                     |   2 +
+ arch/loongarch/include/asm/inst.h          |  22 ++
+ arch/loongarch/include/asm/kprobes.h       |  52 +++++
+ arch/loongarch/include/asm/ptrace.h        |   1 +
+ arch/loongarch/kernel/Makefile             |   2 +
+ arch/loongarch/kernel/inst.c               | 123 ++++++++++
+ arch/loongarch/kernel/kprobes.c            | 348 +++++++++++++++++++++++++++++
+ arch/loongarch/kernel/kprobes_trampoline.S |  96 ++++++++
+ arch/loongarch/mm/fault.c                  |   4 +
+ samples/kprobes/kprobe_example.c           |   8 +
+ 10 files changed, 658 insertions(+)
+ create mode 100644 arch/loongarch/include/asm/kprobes.h
+ create mode 100644 arch/loongarch/kernel/kprobes.c
+ create mode 100644 arch/loongarch/kernel/kprobes_trampoline.S
 
 -- 
-paul-moore.com
+2.1.0
+
