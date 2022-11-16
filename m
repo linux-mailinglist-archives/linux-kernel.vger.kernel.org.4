@@ -2,123 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7242362C0BD
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:26:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5A6262C0C3
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:28:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232057AbiKPO0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 09:26:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52430 "EHLO
+        id S232324AbiKPO2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 09:28:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbiKPO0t (ORCPT
+        with ESMTP id S229489AbiKPO2f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 09:26:49 -0500
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C96911C08;
-        Wed, 16 Nov 2022 06:26:47 -0800 (PST)
-Received: from [10.16.7.85] (hh-wlan-02.rz-berlin.mpg.de [141.14.51.18])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 0440461EA1931;
-        Wed, 16 Nov 2022 15:26:44 +0100 (CET)
-Message-ID: <aedc0972-1df9-6d65-f8a0-2f735469c27f@molgen.mpg.de>
-Date:   Wed, 16 Nov 2022 15:26:43 +0100
+        Wed, 16 Nov 2022 09:28:35 -0500
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D10FCB;
+        Wed, 16 Nov 2022 06:28:34 -0800 (PST)
+Received: by mail-oi1-f177.google.com with SMTP id l127so18673116oia.8;
+        Wed, 16 Nov 2022 06:28:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uJm4Khl2AqxNBL7jLr8tofG6XONtUSnDoYtCODWM95I=;
+        b=3jatdqJuwd8F0+iYb60QEL4RHKZTy1OQQm11ENV8QfDzhPsvFXjIEiTgVx8vd64Iz3
+         iePzzZUj6qzDbGtuHTTwP61bySTvpa/gJgASiaL0ott+G+SS+INu11TuSjPzl4EUGPxF
+         y6qUfcCL4OGO0YgYNjKxh4wms2CX6h5DTHhnD8iNpdB5jA0O6KGR9hgltSI7FBaBQL6U
+         cPQj1cA+1fSs5mb2Sbux6lyeS0f34r9Bq8CGNwwrX4dCYlqXHDTy1grRSSo0hBUv4K1l
+         tf2Yg658H5O4X/0tJZA6NReAjhrxYPr9B6cSZHx/aEdA85sg/GNWdoIKkauzV4dEZayX
+         SBvg==
+X-Gm-Message-State: ANoB5pmg2CX9bs6r0cVidks6d+gO/Ul84gQIB99CObiRUERXtA2qE28r
+        zv7l5F0oMf8SwUV1qvla6g==
+X-Google-Smtp-Source: AA0mqf4sINa2t2XydjWBN/1d75ne+X4d+3nvk2RXDH/iplrAJ1owmL/DpO9cHAVg+yGj7EE6duQ8+w==
+X-Received: by 2002:a05:6808:2d7:b0:35a:2325:7aff with SMTP id a23-20020a05680802d700b0035a23257affmr1668308oid.41.1668608914171;
+        Wed, 16 Nov 2022 06:28:34 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id l12-20020a4ae38c000000b0049f3bdd791esm5872269oov.26.2022.11.16.06.28.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 06:28:33 -0800 (PST)
+Received: (nullmailer pid 3804306 invoked by uid 1000);
+        Wed, 16 Nov 2022 14:28:35 -0000
+Date:   Wed, 16 Nov 2022 08:28:35 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     devicetree@vger.kernel.org, quic_srivasam@quicinc.com,
+        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
+        Andy Gross <agross@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        quic_plai@quicinc.com, Mark Brown <broonie@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: Re: [PATCH v2 01/11] ASoC: dt-bindings: qcom,apr: Add GLINK channel
+ name for SM8450
+Message-ID: <166860890990.3804146.6416157036563364508.robh@kernel.org>
+References: <20221115120235.167812-1-krzysztof.kozlowski@linaro.org>
+ <20221115120235.167812-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v1] Bluetooth: Add hci_nxp BT submodule with controller
- Power Save feature for NXP BT chipsets.
-Content-Language: en-US
-To:     Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
-Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        amitkumar.karwar@nxp.com, rohit.fule@nxp.com, sherry.sun@nxp.com,
-        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org
-References: <1668616931-21987-1-git-send-email-neeraj.sanjaykale@nxp.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <1668616931-21987-1-git-send-email-neeraj.sanjaykale@nxp.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221115120235.167812-2-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Neeraj,
 
-
-Thank you for your patch.
-
-
-Am 16.11.22 um 17:42 schrieb Neeraj Sanjay Kale:
-
-Please remove the dot/period at the end of the summary/subject line.
-
-> Added proprietary hci_uart driver code to the linux hci uart sub-system as
-
-Please use present tense: Add
-
-“proprietary … code” sounds strange, as Linux is FLOSS. Please clarify.
-
-> hci_nxp. This driver has Power Save feature that will put the NXP bluetooth
-> chip into sleep state, whenever there is no activity for certain duration
-> of time (2000ms), and will be woken up when any activity is to be
-> initiated.
+On Tue, 15 Nov 2022 13:02:25 +0100, Krzysztof Kozlowski wrote:
+> On SM8450 and SC8280XP with Qualcomm GPR, the GLINK channel name
+> (qcom,glink-channels) for ADSP is "adsp_apps".
 > 
-> This Power Save feature will be enabled by default and can be disabled and
-> re-enabled by the following set of commands:
-> hcitool -i hci0 cmd 3F 23 02 00 00    (disable Power Save)
-> hcitool -i hci0 cmd 3F 23 03 00 00    (enable Power Save)
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > 
-> The Power Save feature uses UART break signal by default as chip sleep and
-> wake-up source, and can be set with the following set of commands:
-> hcitool -i hci0 cmd 3F 53 03 14 01 FF    (set UART break method)
-> hcitool -i hci0 cmd 3F 53 03 14 02 15    (set chip's GPIO[20] method)
-
-Please mention the datasheet, and how you tested the driver.
-
-> Signed-off-by: Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
 > ---
->   MAINTAINERS                   |   6 +
->   drivers/bluetooth/Kconfig     |  10 +
->   drivers/bluetooth/Makefile    |   1 +
->   drivers/bluetooth/hci_ldisc.c |   6 +
->   drivers/bluetooth/hci_nxp.c   | 763 ++++++++++++++++++++++++++++++++++++++++++
->   drivers/bluetooth/hci_nxp.h   | 118 +++++++
->   drivers/bluetooth/hci_uart.h  |   8 +-
->   7 files changed, 911 insertions(+), 1 deletion(-)
->   create mode 100644 drivers/bluetooth/hci_nxp.c
->   create mode 100644 drivers/bluetooth/hci_nxp.h
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index e55a4d4..6b2c264 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -22591,6 +22591,12 @@ L:	linux-mm@kvack.org
->   S:	Maintained
->   F:	mm/zswap.c
->   
-> +NXP BLUETOOTH WIRELESS DRIVERS
-> +M:	amitkumar.karwar@nxp.com
-> +M:	neeraj.sanjaykale@nxp.com
+> Cc: quic_srivasam@quicinc.com
+> Cc: quic_plai@quicinc.com
+> ---
+>  .../devicetree/bindings/soc/qcom/qcom,apr.yaml        | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
+> 
 
-Mentioning a mailing list, and maybe setting up a functional address, 
-would be nice (nxp-bluetooth-wireless-linux-driver@nxp.com).
-
-> +S:	Maintained
-> +F:	drivers/bluetooth/hci_nxp*
-> +
->   THE REST
->   M:	Linus Torvalds <torvalds@linux-foundation.org>
->   L:	linux-kernel@vger.kernel.org
-
-[…]
-
-
-Kind regards,
-
-Paul
+Reviewed-by: Rob Herring <robh@kernel.org>
