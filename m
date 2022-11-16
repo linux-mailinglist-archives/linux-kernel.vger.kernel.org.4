@@ -2,73 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB17462C169
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:50:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C234C62C172
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:53:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbiKPOud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 09:50:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41294 "EHLO
+        id S233770AbiKPOxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 09:53:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233770AbiKPOtl (ORCPT
+        with ESMTP id S233247AbiKPOwz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 09:49:41 -0500
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBB9E17A9E;
-        Wed, 16 Nov 2022 06:49:31 -0800 (PST)
-Received: by mail-qv1-xf29.google.com with SMTP id u7so12003003qvn.13;
-        Wed, 16 Nov 2022 06:49:31 -0800 (PST)
+        Wed, 16 Nov 2022 09:52:55 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675DA391C2
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 06:51:21 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id l14so30314712wrw.2
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 06:51:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GsRGGaIiBoJlwl/45zB6BAECaPWQUSVeGqaE9kAVQrI=;
-        b=CqrrIl3uMqf9NCB5q4CLw/Pa8BCbWfgMrW1s9jDsDO0IemRCQGuS1bWJnczyJEz4yv
-         sSzpnT2kKzIrTl4xHRy6MuaGNn4SYXg5fPxuSXtaZvP4CPLvgFmhMtqi5ouDKYYD1Kyl
-         2QKrrtN/XU1QXctfCpfvsqxQxigLLro4miqSM0JVDHd5YDAlc5+DGPZUW96wJ1s85mE4
-         VjHj/3V8++CJPw5A3x660GYei74pQ8yyorgP79WHClIW00NWC3RH0on+zHo/JrT3nN/o
-         qaojdX1Rbi+azeYmSoA0e1fqTfQjq7Yd62hTSyTbb8yFapevogH9pQgQKjyXdK0NXWVA
-         leLg==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ypWNmDEaWeWuRqCSCZcnZ4g+Xufg4hTPZzYQMsRk2nI=;
+        b=XeISWKV7SOhRGH6DdiHyRtBpcYRw12w5Zb0poKvYNnWIAcKT4QCbYKg0NsWkgkXanZ
+         X3lbc9IRd7k60blzUhARtZVmxepqdrY2x9cpIOoDD8oeIRGGatG0+WY8YABtOwFCwXRX
+         54FQiMBL4L/ms9KK0jtz5KiBg+JYq71XEKtSitgPwNrTX/ovut2IMeax49lyY0+yCQyO
+         DkhNPGRlB+JzM9lsWHCUbXBpgSoOYmBvH+t+oTzHBsh8rgvBE9Jo9xbSSyZl8RRQzWRG
+         comfhFeuuIwnC3dMyvY9FDxNtBkyzipxJrt06BEvvZnGaTHYZvsGwnKKgVTXRpWPRyiD
+         0bsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GsRGGaIiBoJlwl/45zB6BAECaPWQUSVeGqaE9kAVQrI=;
-        b=tLrRNeCt9UajBy8AfNxCHY+kloSy50SQNXGINjpPnM1yyN0H9raTMATDkCAFgHSifQ
-         awGBs/WVIBRz768Tbd7CpUPTLpa2Me17Q6C+3MWd62lQ9Gls55iNO9Vx2tEWv1Ft9JCx
-         HrB19qufbgLyXLdhNTo9q+YWom1fdkjTNpGO9AqponmeQ1Kn1HbiOhz0xA32F7b/zH8m
-         3p02kt3HYoQ5LPvvHlFyHajPJcWcmaX+XH8Us0zISm9vYvdlLFbFDkNoNIghePGn9Yvf
-         vpocaDvxh3xOZdLj/Ij3BRevF+7E15xKD6p2aTKPigBKxRCBROJksRxK55k0XiTwakVV
-         VbEg==
-X-Gm-Message-State: ANoB5pk6zD7N1PLLHBaLnuegO/YRNDTBrx8dEFZZTbJI61tRi60MV4v8
-        fdaJtaNEisBzah7o704uxrKN0N5LKOZXtA==
-X-Google-Smtp-Source: AA0mqf7GNSwZZJNcB+oms94DY8nCWtNvbQUHc7BMFnPcrIxoh8m0VYjlpfke324iahugsfe/I0dNTQ==
-X-Received: by 2002:a05:6214:370c:b0:4bb:64f7:dce5 with SMTP id np12-20020a056214370c00b004bb64f7dce5mr20740663qvb.15.1668610170609;
-        Wed, 16 Nov 2022 06:49:30 -0800 (PST)
-Received: from glsvmlin.ini.cmu.edu (GLSVMLIN.INI.CMU.EDU. [128.2.16.9])
-        by smtp.gmail.com with ESMTPSA id g5-20020ac84805000000b0039a55f78792sm8729624qtq.89.2022.11.16.06.49.29
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ypWNmDEaWeWuRqCSCZcnZ4g+Xufg4hTPZzYQMsRk2nI=;
+        b=SMxuo7nDOPW2PpiSF5fgBT05VKwLMw7otG+O1V/YfWjmxhaL7RSOorXyUnz2niaDQp
+         fx6TnfHUJGB1LOq3Vnq+xAshOrd6CETpv4vKxMoXdyQHEIgTFadoOuuGy15Maw3S8a9V
+         uo7X/iQkG2+R2lXiFIYAUCgWHIOXeTxrA4T81SfLwd6YadWJtzxjLPFhw5RVaL1rPzzS
+         h7M/CoBoG5A/LL+pHuIcPoVwZ984caJ8CzdAQUuh5PWzZtL6hqmnVLdSIqWWVH+PJMJQ
+         6Gqx5W8R7Pl1llvUmJcXY7as3Rb7mEP4e3mjFdRaOYNnF9v/tuaVg5QZahitbsxfB6b5
+         m+1g==
+X-Gm-Message-State: ANoB5pn6i7+B5bSe5iikAP/PMfHyRBL+liQJKe/tESvynTP4IaMbMY6W
+        ocoUdtWR5X15ZQRcXPl7G6mHzAndfwAJbg==
+X-Google-Smtp-Source: AA0mqf5SxnDweVseR96Q9F3uj9J0fncsPkHDbQBVgv5tGAxpGPxpATuIBA7c+ptsc30GEwTaSjyZag==
+X-Received: by 2002:a5d:61cf:0:b0:236:6fd9:9efa with SMTP id q15-20020a5d61cf000000b002366fd99efamr13384850wrv.101.1668610279923;
+        Wed, 16 Nov 2022 06:51:19 -0800 (PST)
+Received: from nicolas-Precision-3551.home ([2001:861:5180:dcc0:3f99:5293:49fd:9c5b])
+        by smtp.gmail.com with ESMTPSA id k21-20020a05600c1c9500b003cfa3a12660sm8641789wms.1.2022.11.16.06.51.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 06:49:30 -0800 (PST)
-From:   Gabriel Somlo <gsomlo@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, kgugala@antmicro.com, mholenko@antmicro.com,
-        joel@jms.id.au, david.abdurachmanov@gmail.com,
-        florent@enjoy-digital.fr, geert@linux-m68k.org,
-        ilpo.jarvinen@linux.intel.com
-Subject: [PATCH v4 14/14] serial: liteuart: move polling putchar() function
-Date:   Wed, 16 Nov 2022 09:49:08 -0500
-Message-Id: <20221116144908.234154-15-gsomlo@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221116144908.234154-1-gsomlo@gmail.com>
-References: <20221116144908.234154-1-gsomlo@gmail.com>
+        Wed, 16 Nov 2022 06:51:19 -0800 (PST)
+From:   Nicolas Frayer <nfrayer@baylibre.com>
+To:     nm@ti.com, ssantosh@kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     khilman@baylibre.com, glaroque@baylibre.com, nfrayer@baylibre.com
+Subject: [PATCH v5 0/2] soc: ti: Add module build support to the k3 socinfo driver
+Date:   Wed, 16 Nov 2022 15:51:01 +0100
+Message-Id: <20221116145103.26744-1-nfrayer@baylibre.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,51 +68,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The polling liteuart_putchar() function is only called from methods
-conditionally enabled by CONFIG_SERIAL_LITEUART_CONSOLE. Move its
-definition closer to the console code where it is dependent on the
-same config option.
+In order for the TI K3 SoC info driver to be built as a module, the
+following changes have been made:
+- Converted memory allocations to devm and added the remove callback
+- Added necessary code to build the driver as a module
 
-Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- drivers/tty/serial/liteuart.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+v2->v3:
+dropped module conversion part of this series while other driver
+dependencies on socinfo are worked out.
+A dependency issue is introduced by changing subsys_initcall()
+to module_platform_driver(). Some drivers using the socinfo information
+probe before the socinfo driver itself and it makes their probe fail.
 
-diff --git a/drivers/tty/serial/liteuart.c b/drivers/tty/serial/liteuart.c
-index 977fc4349b47..238f615cb80e 100644
---- a/drivers/tty/serial/liteuart.c
-+++ b/drivers/tty/serial/liteuart.c
-@@ -70,14 +70,6 @@ static struct uart_driver liteuart_driver = {
- #endif
- };
- 
--static void liteuart_putchar(struct uart_port *port, unsigned char ch)
--{
--	while (litex_read8(port->membase + OFF_TXFULL))
--		cpu_relax();
--
--	litex_write8(port->membase + OFF_RXTX, ch);
--}
--
- static void liteuart_update_irq_reg(struct uart_port *port, bool set, u8 mask)
- {
- 	struct liteuart_port *uart = to_liteuart_port(port);
-@@ -372,6 +364,14 @@ static struct platform_driver liteuart_platform_driver = {
- 
- #ifdef CONFIG_SERIAL_LITEUART_CONSOLE
- 
-+static void liteuart_putchar(struct uart_port *port, unsigned char ch)
-+{
-+	while (litex_read8(port->membase + OFF_TXFULL))
-+		cpu_relax();
-+
-+	litex_write8(port->membase + OFF_RXTX, ch);
-+}
-+
- static void liteuart_console_write(struct console *co, const char *s,
- 	unsigned int count)
- {
+v3->v4:
+reintegrated the module build support and added patches for udma and mdio
+drivers to allow for deferred probe if socinfo hasn't probed yet.
+
+v4->v5:
+Remove the k3 udma and mdio patches from this series and sent them
+individually
+
+Nicolas Frayer (2):
+  soc: ti: Convert allocations to devm
+  soc: ti: Add module build support
+
+ arch/arm64/Kconfig.platforms |  1 -
+ drivers/soc/ti/Kconfig       |  3 ++-
+ drivers/soc/ti/k3-socinfo.c  | 47 +++++++++++++++++++++++-------------
+ 3 files changed, 32 insertions(+), 19 deletions(-)
+
 -- 
-2.38.1
+2.25.1
 
