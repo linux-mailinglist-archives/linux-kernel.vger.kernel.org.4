@@ -2,94 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD66162CECA
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 00:34:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20D9862CEC7
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 00:34:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234650AbiKPXea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 18:34:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57170 "EHLO
+        id S234544AbiKPXeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 18:34:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234457AbiKPXeK (ORCPT
+        with ESMTP id S234181AbiKPXd5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 18:34:10 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC0E69DCF
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 15:34:05 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id io19so17881947plb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 15:34:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9ud1y37qUMgCM/gxdvQMw6rjpiQr0rPzHkykb2T1TOw=;
-        b=jrbRsTzGFBtzJXH4NdouZxUiYyPKQAwY/xmJBh4NVbrtqvniX5UYfXIvowNG376O3f
-         eLwtZTd6ba3W1ujHY9KXiw+svILo/W9OFO1m0UalP4EKpmsMfepiy/i6aa86EHCqWKyv
-         qWDDUfVotm87pdBDO0Xfgi/+YAkeaCgX+rdo+EuhlYGYDIRpsDvKWmFauliHak4wVNLI
-         DckVU+/rox+Oi5exTkkDEUKV2Mxw/H1pKQZSwIgdYuS8DxVPCnV8ODquNjjbEQLd89Cy
-         sawoAYJG40gaeXZUtqg1vF9XmIjooLLPk2rc3kHLfhCY5MUl7GxaHbuv8P1UN8euweGp
-         hkOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9ud1y37qUMgCM/gxdvQMw6rjpiQr0rPzHkykb2T1TOw=;
-        b=TB9H+GQ8L7Ax/6PLibOae3djjw74OTWqL3GzFBNPsVBefEv1jQ1rwiRoPoDYaK+qp5
-         z3x60IIDl4gJGmez+KbPeJcVzk3XwXNTMgKerSbo25x9A9mqo8WU6B8UlsKSX1kxWvra
-         H/c7mh/JOXn68wHe/12PImRU2l2FgsiuJsXX9+6VuIbEBI4a71tqQR3ExtzbT1Jo0oq+
-         Hxys6Hxl6eTz6oGmCmn6wGlCdUxNoLr7/uSfChJiOvQg1kGF2E7oyEFpbhfpW7Pq9R0p
-         DjrFaqZaIkBoJMGTuJc2D1V/XEcAwuxmEoQYZ+3D3X1LOdvv9aJg+3HY8AkRUyn/2y8w
-         MuCw==
-X-Gm-Message-State: ANoB5pmIpqT9pVuYMbRA6x7cE3ZjNs5EJgbEIjQpSo6K8pwsyak5ZItE
-        Bg26jE4isJFkYaRRRAkn1KMyN3bhdUKFhY/EXUOi
-X-Google-Smtp-Source: AA0mqf6autHIA7b+foED8yvIyyGbA11Im+/0A/6tknTVjps8BtDl7zzp+NqROZqk5yDoHG6fU2SESmQwmeAn21G2aCE=
-X-Received: by 2002:a17:90b:2743:b0:20d:4173:faf9 with SMTP id
- qi3-20020a17090b274300b0020d4173faf9mr5961252pjb.147.1668641645195; Wed, 16
- Nov 2022 15:34:05 -0800 (PST)
+        Wed, 16 Nov 2022 18:33:57 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48C632B9C;
+        Wed, 16 Nov 2022 15:33:56 -0800 (PST)
+Date:   Wed, 16 Nov 2022 23:33:53 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1668641634;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=Rrwn3XiFQACWItqwB/rq8DEZB6S62a07vlj6rycE4sg=;
+        b=igKRZ4urK0SUk7PUglIhEmy+DBYKAVRCLlJXDAGbc3LXhNu0fIaInVhY3ghzijMVSs6KfM
+        HXnrmWZYgEpDhVLQerBILAVeyhFDAqWpePfzX8Ao06I+4owOemWe1uqN7KIjTqZpERoAet
+        i4n278nI+bBMFcxCkfEAVzvAD9b/ZWTbcaIHK4LsKLeoXw5DdxY7nCu8H4AKqW9oTQS+b6
+        hPEGly4bj5DDOc3tg2gqTOzCEX+gfBHbP1xThFK39NZIlbHEoddB/0X1IPsVBIjiy8w5X1
+        TSmFeD6s0jhIW18QnDYNCR3R6RgXQ/PrMvX46BWYJKhR5vUSBz2wHbuVbSnW4Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1668641634;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=Rrwn3XiFQACWItqwB/rq8DEZB6S62a07vlj6rycE4sg=;
+        b=Szud7kgtTdq3cvWh8KlA5MoYg6Uuk9Q/R6S1BQLUATmml/rhkwNW46WZwRU4zq3lXax95f
+        wIg7UM3Xvxzyw/DQ==
+From:   "tip-bot2 for Kyle Huey" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/fpu] x86/fpu: Add a pkru argument to
+ copy_uabi_from_kernel_to_xstate().
+Cc:     Kyle Huey <me@kylehuey.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-References: <20221025113101.41132-1-wangweiyang2@huawei.com>
-In-Reply-To: <20221025113101.41132-1-wangweiyang2@huawei.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 16 Nov 2022 18:33:53 -0500
-Message-ID: <CAHC9VhRa16htUXSN0AXrbUwadRa-qQv+UX8ZO_8W_z2eL=6trw@mail.gmail.com>
-Subject: Re: [PATCH] device_cgroup: Roll back to original exceptions after
- copy failure
-To:     Wang Weiyang <wangweiyang2@huawei.com>
-Cc:     jmorris@namei.org, serge@hallyn.com, serge.hallyn@canonical.com,
-        akpm@linux-foundation.org, aris@redhat.com,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <166864163317.4906.15150213496380358511.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 7:02 AM Wang Weiyang <wangweiyang2@huawei.com> wrote:
->
-> When add the 'a *:* rwm' entry to devcgroup A's whitelist, at first A's
-> exceptions will be cleaned and A's behavior is changed to
-> DEVCG_DEFAULT_ALLOW. Then parent's exceptions will be copyed to A's
-> whitelist. If copy failure occurs, just return leaving A to grant
-> permissions to all devices. And A may grant more permissions than
-> parent.
->
-> Backup A's whitelist and recover original exceptions after copy
-> failure.
->
-> Fixes: 4cef7299b478 ("device_cgroup: add proper checking when changing default behavior")
-> Signed-off-by: Wang Weiyang <wangweiyang2@huawei.com>
-> ---
->  security/device_cgroup.c | 33 +++++++++++++++++++++++++++++----
->  1 file changed, 29 insertions(+), 4 deletions(-)
+The following commit has been merged into the x86/fpu branch of tip:
 
-Merged into lsm/next, but with a stable@vger tag.  Normally I would
-merge something like this into lsm/stable-X.Y and send it up to Linus
-after a few days, but I'd really like this to spend some time in
-linux-next before going up to Linus.
+Commit-ID:     1c813ce0305571e1b2e4cc4acca451da9e6ad18f
+Gitweb:        https://git.kernel.org/tip/1c813ce0305571e1b2e4cc4acca451da9e6ad18f
+Author:        Kyle Huey <me@kylehuey.com>
+AuthorDate:    Tue, 15 Nov 2022 15:09:28 -08:00
+Committer:     Dave Hansen <dave.hansen@linux.intel.com>
+CommitterDate: Wed, 16 Nov 2022 15:03:01 -08:00
 
--- 
-paul-moore.com
+x86/fpu: Add a pkru argument to copy_uabi_from_kernel_to_xstate().
+
+Both KVM (through KVM_SET_XSTATE) and ptrace (through PTRACE_SETREGSET
+with NT_X86_XSTATE) ultimately call copy_uabi_from_kernel_to_xstate(),
+but the canonical locations for the current PKRU value for KVM guests
+and processes in a ptrace stop are different (in the kvm_vcpu_arch and
+the thread_state structs respectively).
+
+In preparation for eventually handling PKRU in
+copy_uabi_to_xstate, pass in a pointer to the PKRU location.
+
+Signed-off-by: Kyle Huey <me@kylehuey.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Link: https://lore.kernel.org/all/20221115230932.7126-3-khuey%40kylehuey.com
+---
+ arch/x86/kernel/fpu/core.c   | 2 +-
+ arch/x86/kernel/fpu/regset.c | 2 +-
+ arch/x86/kernel/fpu/xstate.c | 2 +-
+ arch/x86/kernel/fpu/xstate.h | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
+index 3b28c5b..5501576 100644
+--- a/arch/x86/kernel/fpu/core.c
++++ b/arch/x86/kernel/fpu/core.c
+@@ -406,7 +406,7 @@ int fpu_copy_uabi_to_guest_fpstate(struct fpu_guest *gfpu, const void *buf,
+ 	if (ustate->xsave.header.xfeatures & ~xcr0)
+ 		return -EINVAL;
+ 
+-	ret = copy_uabi_from_kernel_to_xstate(kstate, ustate);
++	ret = copy_uabi_from_kernel_to_xstate(kstate, ustate, vpkru);
+ 	if (ret)
+ 		return ret;
+ 
+diff --git a/arch/x86/kernel/fpu/regset.c b/arch/x86/kernel/fpu/regset.c
+index 75ffaef..6d056b6 100644
+--- a/arch/x86/kernel/fpu/regset.c
++++ b/arch/x86/kernel/fpu/regset.c
+@@ -167,7 +167,7 @@ int xstateregs_set(struct task_struct *target, const struct user_regset *regset,
+ 	}
+ 
+ 	fpu_force_restore(fpu);
+-	ret = copy_uabi_from_kernel_to_xstate(fpu->fpstate, kbuf ?: tmpbuf);
++	ret = copy_uabi_from_kernel_to_xstate(fpu->fpstate, kbuf ?: tmpbuf, &target->thread.pkru);
+ 
+ out:
+ 	vfree(tmpbuf);
+diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+index c88c60b..d6f414a 100644
+--- a/arch/x86/kernel/fpu/xstate.c
++++ b/arch/x86/kernel/fpu/xstate.c
+@@ -1268,7 +1268,7 @@ static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
+  * Convert from a ptrace standard-format kernel buffer to kernel XSAVE[S]
+  * format and copy to the target thread. Used by ptrace and KVM.
+  */
+-int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf)
++int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf, u32 *pkru)
+ {
+ 	return copy_uabi_to_xstate(fpstate, kbuf, NULL);
+ }
+diff --git a/arch/x86/kernel/fpu/xstate.h b/arch/x86/kernel/fpu/xstate.h
+index f08ee27..a4ecb04 100644
+--- a/arch/x86/kernel/fpu/xstate.h
++++ b/arch/x86/kernel/fpu/xstate.h
+@@ -46,7 +46,7 @@ extern void __copy_xstate_to_uabi_buf(struct membuf to, struct fpstate *fpstate,
+ 				      u32 pkru_val, enum xstate_copy_mode copy_mode);
+ extern void copy_xstate_to_uabi_buf(struct membuf to, struct task_struct *tsk,
+ 				    enum xstate_copy_mode mode);
+-extern int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf);
++extern int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf, u32 *pkru);
+ extern int copy_sigframe_from_user_to_xstate(struct task_struct *tsk, const void __user *ubuf);
+ 
+ 
