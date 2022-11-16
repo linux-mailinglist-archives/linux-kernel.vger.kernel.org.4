@@ -2,139 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AB1F62C4BB
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 17:37:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1D4B62C4BE
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 17:38:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233366AbiKPQhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 11:37:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48524 "EHLO
+        id S233895AbiKPQiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 11:38:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233132AbiKPQhd (ORCPT
+        with ESMTP id S233827AbiKPQhj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 11:37:33 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00FA65D69D
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 08:31:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668616274; x=1700152274;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pp2ejVg97Ir6mcl2h7T/qT/KmmJmIIspCaDwIEaxt1g=;
-  b=Cii6FchJwyaf0tyI9cbuLoeZot9TX5zTMMk2veXdvDVBrBUPHWcF/Wp9
-   QDs01u1M4anRIIxWiRW8fnW9gOXZ+n+sIYPKW1XGU+mIhaZm2wNQ8rbe5
-   PNfw5rdr0PZPLt8YXfysQISCvJ7EIXwizr4ILhCWVPaLKLYEdrFwRZx/H
-   uvtUN0yxdE/E4PLVgL9jB61xlwHX2A/pFMRFZxtU5jLclpqkfxUjjy4ay
-   qbU4Vgph6xoEeEXqzvcU+VSpHg3Q0pvvyMKZaZlewCoJZIv2wCY12FhuH
-   2pArXB/oae30BYJ+LeKlt+ZHFtkG1RC2cPVkCBKgLcvymtkHYJ4vq66lV
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="398877484"
-X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
-   d="scan'208";a="398877484"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 08:31:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="633683947"
-X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
-   d="scan'208";a="633683947"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga007.jf.intel.com with ESMTP; 16 Nov 2022 08:31:12 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ovLJf-00DDmn-0L;
-        Wed, 16 Nov 2022 18:31:11 +0200
-Date:   Wed, 16 Nov 2022 18:31:10 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, Fei Li <fei1.li@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v4 1/1] virt: acrn: Mark the uuid field as unused
-Message-ID: <Y3UQTnQB/lz9o3/e@smile.fi.intel.com>
-References: <20221116092254.66234-1-andriy.shevchenko@linux.intel.com>
- <Y3TMmDXEbGyDQrLF@kroah.com>
- <Y3Tlu0BjgMk3xNDQ@smile.fi.intel.com>
- <Y3T/qJalJ9H224Mu@kroah.com>
- <Y3UKFQJJI/02QDWU@smile.fi.intel.com>
- <Y3UM1PSJnr8xQ966@kroah.com>
+        Wed, 16 Nov 2022 11:37:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A56F5E3E1;
+        Wed, 16 Nov 2022 08:31:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1D787B81DB9;
+        Wed, 16 Nov 2022 16:31:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B8F9C43150;
+        Wed, 16 Nov 2022 16:31:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668616279;
+        bh=jmn/eepB0DIDFxOFu+/KtMmJJA+nW4C/Pt+OKJfWu1c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=F3if8fsPODhEgaNJWILnJb37FdgCXbeMFIjp54W0pwFKt5sT0Iw1UMp5TuHpYpit8
+         tOdLuWl/Z69WnTg8DcAxKqSXOlFylW4Kf178W06YC6KzQhKoNkfHR8eId8dsntQnI7
+         g51Cm5bcPIRA/z4LCRJnx/GvsBZoCZWIllysP2p2zlr1Qd0AQQW4WsYpxbs+9WnzkB
+         LbO7VqK8NEPnzll7xPECReCcVhZC8jWL66SsLBN1Hv9553Of1+WJwbbsjofzyMVh6j
+         fhMR7Lq9azFChp09TIyRnrFymHU9byRjcJNfw8LpBdrHr1WX15uv2beNKTFCDtZSaE
+         skG08ejR82xOw==
+Date:   Wed, 16 Nov 2022 10:31:18 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
+        Allen Hubbe <allenbh@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linuxppc-dev@lists.ozlabs.org,
+        "Ahmed S. Darwish" <darwi@linutronix.de>,
+        Reinette Chatre <reinette.chatre@intel.com>
+Subject: Re: [patch 34/39] PCI/MSI: Reject multi-MSI early
+Message-ID: <20221116163118.GA1116261@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y3UM1PSJnr8xQ966@kroah.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221111122015.574339988@linutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 05:16:20PM +0100, Greg Kroah-Hartman wrote:
-> On Wed, Nov 16, 2022 at 06:04:37PM +0200, Andy Shevchenko wrote:
-> > On Wed, Nov 16, 2022 at 04:20:08PM +0100, Greg Kroah-Hartman wrote:
-> > > On Wed, Nov 16, 2022 at 03:29:31PM +0200, Andy Shevchenko wrote:
-> > > > On Wed, Nov 16, 2022 at 12:42:16PM +0100, Greg Kroah-Hartman wrote:
-> > > > > On Wed, Nov 16, 2022 at 11:22:54AM +0200, Andy Shevchenko wrote:
-> > 
-> > ...
-> > 
-> > > > > > - * @uuid:		UUID of the VM. Pass to hypervisor directly.
-> > > > > > + * @uuid:		Reserved (used to be UUID of the VM)
-> > > > > 
-> > > > > If it's reserved, then don't you need to check for 0?
-> > > > 
-> > > > Reserved in a way that it may content something we just don't care about.
-> > > 
-> > > "reserved" in the kernel ioctls mean "must be 0 and we will test for it,
-> > > otherwise this is an empty/useless field that can never be touched again
-> > > in the future.
-> > > 
-> > > Please spell it out in detail as to if you can ever use this later on,
-> > > and what the kernel will do (if anything) if it is set.
-> > > 
-> > > And if "the kernel ignores it" then that means these bytes are now
-> > > "empty space never to be used again", right?
-> > 
-> > Right, I will fix this in v5.
-> > 
-> > ...
-> > 
-> > > > > > +	__u8	uuid[16];
-> > > > > 
-> > > > > You just changed the type here, so what is that going to break in
-> > > > > userspace that depended on this being of a structure type and now it's
-> > > > > an array?
-> > > > 
-> > > > It's the same. The previous was hidden behind additional type level.
-> > > 
-> > > Same size, yes.  Same C structure definition, no.
-> > 
-> > It doesn't matter, see below.
-> > 
-> > > > > And no other kernel changes needed?  Shouldn't you warn if this field is
-> > > > > set?
-> > > > 
-> > > > No, as pointed out in the commit message kernel never ever used this.
-> > > 
-> > > That does not mean that userspace tools never did, right?  You are
-> > > changing the structure definition, what tool just broke?
-> > 
-> > The only tool has been amended like a year ago, so the answer is none.
-> > The commit message has links to the commits in question that made that
-> > amendment.
-> > 
-> > Maybe I should remove Fixes tags? In such case we will very much know
-> > that no old tools will be run on the new kernel.
+On Fri, Nov 11, 2022 at 02:55:09PM +0100, Thomas Gleixner wrote:
+> When hierarchical MSI interrupt domains are enabled then there is no point
+> to do tons of work and detect the missing support for multi-MSI late in the
+> allocation path.
 > 
-> Please remove "fixes" as this doesn't "fix" anything.
+> Just query the domain feature flags right away. The query function is going
+> to be used for other purposes later and has a mode argument which influences
+> the result:
+> 
+>   ALLOW_LEGACY returns true when:
+>      - there is no irq domain attached (legacy support)
+>      - there is a irq domain attached which has the feature flag set
+> 
+>   DENY_LEGACY returns only true when:
+>      - there is a irq domain attached which has the feature flag set
+> 
+> This allows to use the function universally without ifdeffery in the
+> calling code.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 
-Done in v5.
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>
 
-Thank you for the thorough review!
+> ---
+>  drivers/pci/msi/irqdomain.c |   22 ++++++++++++++++++++++
+>  drivers/pci/msi/msi.c       |    4 ++++
+>  drivers/pci/msi/msi.h       |    9 +++++++++
+>  3 files changed, 35 insertions(+)
+> 
+> --- a/drivers/pci/msi/irqdomain.c
+> +++ b/drivers/pci/msi/irqdomain.c
+> @@ -187,6 +187,28 @@ struct irq_domain *pci_msi_create_irq_do
+>  }
+>  EXPORT_SYMBOL_GPL(pci_msi_create_irq_domain);
+>  
+> +/**
+> + * pci_msi_domain_supports - Check for support of a particular feature flag
+> + * @pdev:		The PCI device to operate on
+> + * @feature_mask:	The feature mask to check for (full match)
+> + * @mode:		If ALLOW_LEGACY this grants the feature when there is no irq domain
+> + *			associated to the device. If DENY_LEGACY the lack of an irq domain
+> + *			makes the feature unsupported
 
--- 
-With Best Regards,
-Andy Shevchenko
+Looks like some of these might be wider than 80 columns, which I think
+was the typical width of this file.
 
-
+> + */
+> +bool pci_msi_domain_supports(struct pci_dev *pdev, unsigned int feature_mask,
+> +			     enum support_mode mode)
+> +{
+> +	struct msi_domain_info *info;
+> +	struct irq_domain *domain;
+> +
+> +	domain = dev_get_msi_domain(&pdev->dev);
+> +
+> +	if (!domain || !irq_domain_is_hierarchy(domain))
+> +		return mode == ALLOW_LEGACY;
+> +	info = domain->host_data;
+> +	return (info->flags & feature_mask) == feature_mask;
+> +}
+> +
+>  /*
+>   * Users of the generic MSI infrastructure expect a device to have a single ID,
+>   * so with DMA aliases we have to pick the least-worst compromise. Devices with
+> --- a/drivers/pci/msi/msi.c
+> +++ b/drivers/pci/msi/msi.c
+> @@ -347,6 +347,10 @@ static int msi_capability_init(struct pc
+>  	struct msi_desc *entry;
+>  	int ret;
+>  
+> +	/* Reject multi-MSI early on irq domain enabled architectures */
+> +	if (nvec > 1 && !pci_msi_domain_supports(dev, MSI_FLAG_MULTI_PCI_MSI, ALLOW_LEGACY))
+> +		return 1;
+> +
+>  	/*
+>  	 * Disable MSI during setup in the hardware, but mark it enabled
+>  	 * so that setup code can evaluate it.
+> --- a/drivers/pci/msi/msi.h
+> +++ b/drivers/pci/msi/msi.h
+> @@ -97,6 +97,15 @@ int __pci_enable_msix_range(struct pci_d
+>  void __pci_restore_msi_state(struct pci_dev *dev);
+>  void __pci_restore_msix_state(struct pci_dev *dev);
+>  
+> +/* irq_domain related functionality */
+> +
+> +enum support_mode {
+> +	ALLOW_LEGACY,
+> +	DENY_LEGACY,
+> +};
+> +
+> +bool pci_msi_domain_supports(struct pci_dev *dev, unsigned int feature_mask, enum support_mode mode);
+> +
+>  /* Legacy (!IRQDOMAIN) fallbacks */
+>  
+>  #ifdef CONFIG_PCI_MSI_ARCH_FALLBACKS
+> 
