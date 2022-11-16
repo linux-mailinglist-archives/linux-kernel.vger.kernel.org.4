@@ -2,69 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0C3662BEE8
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 14:04:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2578762BEF7
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 14:05:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233075AbiKPNEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 08:04:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52802 "EHLO
+        id S237725AbiKPNFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 08:05:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233175AbiKPNEj (ORCPT
+        with ESMTP id S233451AbiKPNEy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 08:04:39 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 959DC1EC6E
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 05:04:38 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id fn7-20020a05600c688700b003b4fb113b86so1439809wmb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 05:04:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1vR3wIx7EW9hgDUtMcaNCRtPsUzU/Fsg80EDhgEd6Q8=;
-        b=wGC4cGVogRU1VqG2U4X/a7mtcOiMMwqfCZE/OkA/wGGshCGB9I/lyHNpoCVjLxg/vh
-         kiuFYRL7KYy+e+X/g/CAt5nQyPH+GonOCQgNl6LHva+VY0Xlb7Vk1zhNmvft70Du4pHM
-         FHin/N84wmHwQiG5IJxG6qujsZSj8V6zpCnVZHBVt+AOzyCzZDXX5OFdZdk8zKtTqAUw
-         VqMivzdGvpgtZGWYdbG+CAsD9VU+zc7ZZZWe1V8XgVC4epM7xTKiqtJlumuKUekOBBGq
-         8jmMultLupsYSi/VOM6ANxxleTrbBj9nwTIH84Qtx/+qBhe0HuvpJpBnR9Zvqp7UoLpi
-         Za7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1vR3wIx7EW9hgDUtMcaNCRtPsUzU/Fsg80EDhgEd6Q8=;
-        b=Vn+Elmx+IZIms09a1ldBCC1dP3cNKZJRDs//XRb7bSmzqWDCdtdDYPhm4hGk/wAFQC
-         606hvmeKfPQJ9C8N36QF6iSQWyKKvXC2w2UGLuQXKDbuwqNQqCLotUhseERvzn53DznX
-         SdX2DRDvyV/lpIyTlLR6UxhEqAuREtoXL4xtvasRygc5NqSAZPk2sumBDxHZHTChO1jT
-         pDsq9sorgSRyJugG0sEEgoSLJcWdA/LqLNFHQoX3uOrf/IJk8lMrBAK8q+Cjn7Nl0bP1
-         GTtTnuQSQZjkQjd+YznE+MKpI0bW5HNKpMGFOK1SXBMVz6NL3ts/X19Gv33MJcYeRKhJ
-         l/lw==
-X-Gm-Message-State: ANoB5pl02aLPTot8/pAhxtzgh0Bdfe4juRn+TJ8QVmFFbthd1hYQ1DcH
-        5bjl6l5iaHylCdC32bLwsdTIPA==
-X-Google-Smtp-Source: AA0mqf7vDcRFT363wHkUM9ckPoIHWYcfv3slKyse2PgZLDSURQcU+yDmZUC4MBgE8j990Mdo6c41zw==
-X-Received: by 2002:a05:600c:92a:b0:3cf:69d4:72ee with SMTP id m42-20020a05600c092a00b003cf69d472eemr2078055wmp.122.1668603877127;
-        Wed, 16 Nov 2022 05:04:37 -0800 (PST)
-Received: from localhost.localdomain ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id co19-20020a0560000a1300b0022e66749437sm15130613wrb.93.2022.11.16.05.04.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 05:04:36 -0800 (PST)
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Wed, 16 Nov 2022 08:04:54 -0500
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 300922FB;
+        Wed, 16 Nov 2022 05:04:53 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AGD4lLY060655;
+        Wed, 16 Nov 2022 07:04:47 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1668603887;
+        bh=igkbXPia3TALCYpXbhmuW7jnfZel4eCmgZ4nI718qhg=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=LHNxdSd+YlUTknoVO8PLaZBv/oeGgul5mNiOZoJWx4B+wHzrlaCUIlYoKNkePF9v+
+         pggj2QPeTN/otXkRkVuZHUSMMz+fIUMB29I5gb6Z0iK8rhxhUW6D+Ugsm5JY184OOd
+         ypnGWhNQivh+ZjeyGBIdEabS4OhbkfOxTgyvDBFk=
+Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AGD4lXm043625
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 16 Nov 2022 07:04:47 -0600
+Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Wed, 16
+ Nov 2022 07:04:47 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Wed, 16 Nov 2022 07:04:47 -0600
+Received: from LT5CD112GSQZ.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AGD4Tbd121231;
+        Wed, 16 Nov 2022 07:04:44 -0600
+From:   Apurva Nandan <a-nandan@ti.com>
+To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: [PATCH 0/2] arm64: dts: qcom: sm8550: Add PCIe HC and PHY support
-Date:   Wed, 16 Nov 2022 15:04:28 +0200
-Message-Id: <20221116130430.2812173-1-abel.vesa@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>
+CC:     Apurva Nandan <a-nandan@ti.com>, Hari Nagalla <hnagalla@ti.com>
+Subject: [PATCH v3 4/4] arm64: dts: ti: Add support for J784S4 EVM board
+Date:   Wed, 16 Nov 2022 18:34:28 +0530
+Message-ID: <20221116130428.161329-5-a-nandan@ti.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221116130428.161329-1-a-nandan@ti.com>
+References: <20221116130428.161329-1-a-nandan@ti.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,21 +69,252 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patchset adds PCIe controllers and PHYs support to SM8550 platform
-and enables them on the MTP board.
+J784S4 EVM board is designed for TI J784S4 SoC. It supports the following
+interfaces:
+* 32 GB DDR4 RAM
+* x2 Gigabit Ethernet interfaces capable of working in Switch and MAC mode
+* x1 Input Audio Jack, x1 Output Audio Jack
+* x1 USB2.0 Hub with two Type A host and x1 USB 3.1 Type-C Port
+* x2 4L PCIe connector
+* x1 UHS-1 capable micro-SD card slot
+* 512 Mbit OSPI flash, 1 Gbit Octal NAND flash, 512 Mbit QSPI flash,
+  UFS flash.
+* x6 UART through UART-USB bridge
+* XDS110 for onboard JTAG debug using USB
+* Temperature sensors, user push buttons and LEDs
+* 40-pin User Expansion Connector
+* x2 ENET Expansion Connector, x1 GESI expander, x2 Display connector
+* x1 15-pin CSI header
+* x6 MCAN instances
 
-This patchset depends following patchsets:
-[1] https://lore.kernel.org/all/20221116103146.2556846-1-abel.vesa@linaro.org/
-[2] https://lore.kernel.org/all/20221116114526.2679041-1-abel.vesa@linaro.org/
+Add basic support for J784S4-EVM.
 
-Abel Vesa (2):
-  arm64: dts: qcom: sm8550: Add PCIe PHYs and controllers nodes
-  arm64: dts: qcom: sm8550-mtp: Add PCIe PHYs and controllers nodes
+Schematics: https://www.ti.com/lit/zip/sprr458
 
- arch/arm64/boot/dts/qcom/sm8550-mtp.dts |  25 +++
- arch/arm64/boot/dts/qcom/sm8550.dtsi    | 245 ++++++++++++++++++++++++
- 2 files changed, 270 insertions(+)
+Signed-off-by: Hari Nagalla <hnagalla@ti.com>
+Signed-off-by: Nishanth Menon <nm@ti.com>
+Signed-off-by: Apurva Nandan <a-nandan@ti.com>
+---
+ arch/arm64/boot/dts/ti/Makefile          |   2 +
+ arch/arm64/boot/dts/ti/k3-j784s4-evm.dts | 197 +++++++++++++++++++++++
+ 2 files changed, 199 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
 
+diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
+index 4555a5be2257..67621b349e88 100644
+--- a/arch/arm64/boot/dts/ti/Makefile
++++ b/arch/arm64/boot/dts/ti/Makefile
+@@ -19,6 +19,8 @@ dtb-$(CONFIG_ARCH_K3) += k3-j7200-common-proc-board.dtb
+ 
+ dtb-$(CONFIG_ARCH_K3) += k3-j721s2-common-proc-board.dtb
+ 
++dtb-$(CONFIG_ARCH_K3) += k3-j784s4-evm.dtb
++
+ dtb-$(CONFIG_ARCH_K3) += k3-am642-evm.dtb
+ dtb-$(CONFIG_ARCH_K3) += k3-am642-sk.dtb
+ 
+diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
+new file mode 100644
+index 000000000000..53516fb2b346
+--- /dev/null
++++ b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
+@@ -0,0 +1,196 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2022 Texas Instruments Incorporated - https://www.ti.com/
++ *
++ * EVM Board Schematics: https://www.ti.com/lit/zip/sprr458
++ */
++
++/dts-v1/;
++
++#include <dt-bindings/net/ti-dp83867.h>
++#include <dt-bindings/gpio/gpio.h>
++#include "k3-j784s4.dtsi"
++
++/ {
++	compatible = "ti,j784s4-evm", "ti,j784s4";
++	model = "Texas Instruments J784S4 EVM";
++
++	chosen {
++		stdout-path = "serial2:115200n8";
++	};
++
++	aliases {
++		serial2 = &main_uart8;
++		mmc1 = &main_sdhci1;
++		i2c0 = &main_i2c0;
++	};
++
++	memory@80000000 {
++		device_type = "memory";
++		/* 32G RAM */
++		reg = <0x00 0x80000000 0x00 0x80000000>,
++		      <0x08 0x80000000 0x07 0x80000000>;
++	};
++
++	reserved_memory: reserved-memory {
++		#address-cells = <2>;
++		#size-cells = <2>;
++		ranges;
++
++		secure_ddr: optee@9e800000 {
++			reg = <0x00 0x9e800000 0x00 0x01800000>;
++			no-map;
++		};
++	};
++
++	evm_12v0: regulator-evm12v0 {
++		/* main supply */
++		compatible = "regulator-fixed";
++		regulator-name = "evm_12v0";
++		regulator-min-microvolt = <12000000>;
++		regulator-max-microvolt = <12000000>;
++		regulator-always-on;
++		regulator-boot-on;
++	};
++
++	vsys_3v3: regulator-vsys3v3 {
++		/* Output of LM5140 */
++		compatible = "regulator-fixed";
++		regulator-name = "vsys_3v3";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		vin-supply = <&evm_12v0>;
++		regulator-always-on;
++		regulator-boot-on;
++	};
++
++	vsys_5v0: regulator-vsys5v0 {
++		/* Output of LM5140 */
++		compatible = "regulator-fixed";
++		regulator-name = "vsys_5v0";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		vin-supply = <&evm_12v0>;
++		regulator-always-on;
++		regulator-boot-on;
++	};
++
++	vdd_mmc1: regulator-sd {
++		/* Output of TPS22918 */
++		compatible = "regulator-fixed";
++		regulator-name = "vdd_mmc1";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		regulator-boot-on;
++		enable-active-high;
++		vin-supply = <&vsys_3v3>;
++		gpio = <&exp2 2 GPIO_ACTIVE_HIGH>;
++	};
++
++	vdd_sd_dv: regulator-TLV71033 {
++		/* Output of TLV71033 */
++		compatible = "regulator-gpio";
++		regulator-name = "tlv71033";
++		pinctrl-names = "default";
++		pinctrl-0 = <&vdd_sd_dv_pins_default>;
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <3300000>;
++		regulator-boot-on;
++		vin-supply = <&vsys_5v0>;
++		gpios = <&main_gpio0 8 GPIO_ACTIVE_HIGH>;
++		states = <1800000 0x0>,
++			 <3300000 0x1>;
++	};
++};
++
++&main_pmx0 {
++	main_uart8_pins_default: main-uart8-pins-default {
++		pinctrl-single,pins = <
++			J784S4_IOPAD(0x040, PIN_INPUT, 14) /* (AF37) MCASP0_AXR0.UART8_CTSn */
++			J784S4_IOPAD(0x044, PIN_OUTPUT, 14) /* (AG37) MCASP0_AXR1.UART8_RTSn */
++			J784S4_IOPAD(0x0d0, PIN_INPUT, 11) /* (AP38) SPI0_CS1.UART8_RXD */
++			J784S4_IOPAD(0x0d4, PIN_OUTPUT, 11) /* (AN38) SPI0_CLK.UART8_TXD */
++		>;
++	};
++
++	main_i2c0_pins_default: main-i2c0-pins-default {
++		pinctrl-single,pins = <
++			J784S4_IOPAD(0x0e0, PIN_INPUT_PULLUP, 0) /* (AN36) I2C0_SCL */
++			J784S4_IOPAD(0x0e4, PIN_INPUT_PULLUP, 0) /* (AP37) I2C0_SDA */
++		>;
++	};
++
++	main_mmc1_pins_default: main-mmc1-pins-default {
++		pinctrl-single,pins = <
++			J784S4_IOPAD(0x104, PIN_INPUT, 0) /* (AB38) MMC1_CLK */
++			J784S4_IOPAD(0x108, PIN_INPUT, 0) /* (AB36) MMC1_CMD */
++			J784S4_IOPAD(0x100, PIN_INPUT, 0) /* (No Pin) MMC1_CLKLB */
++			J784S4_IOPAD(0x0fc, PIN_INPUT, 0) /* (AA33) MMC1_DAT0 */
++			J784S4_IOPAD(0x0f8, PIN_INPUT, 0) /* (AB34) MMC1_DAT1 */
++			J784S4_IOPAD(0x0f4, PIN_INPUT, 0) /* (AA32) MMC1_DAT2 */
++			J784S4_IOPAD(0x0f0, PIN_INPUT, 0) /* (AC38) MMC1_DAT3 */
++			J784S4_IOPAD(0x0e8, PIN_INPUT, 8) /* (AR38) TIMER_IO0.MMC1_SDCD */
++		>;
++	};
++
++	vdd_sd_dv_pins_default: vdd-sd-dv-pins-default {
++		pinctrl-single,pins = <
++			J784S4_IOPAD(0x020, PIN_INPUT, 7) /* (AJ35) MCAN15_RX.GPIO0_8 */
++		>;
++	};
++};
++
++&main_uart8 {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&main_uart8_pins_default>;
++};
++
++&main_i2c0 {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&main_i2c0_pins_default>;
++
++	clock-frequency = <400000>;
++
++	exp1: gpio@20 {
++		compatible = "ti,tca6416";
++		reg = <0x20>;
++		gpio-controller;
++		#gpio-cells = <2>;
++		gpio-line-names = "PCIE1_2L_MODE_SEL", "PCIE1_4L_PERSTZ", "PCIE1_2L_RC_RSTZ",
++				  "PCIE1_2L_EP_RST_EN", "PCIE0_4L_MODE_SEL", "PCIE0_4L_PERSTZ",
++				  "PCIE0_4L_RC_RSTZ", "PCIE0_4L_EP_RST_EN", "PCIE1_4L_PRSNT#",
++				  "PCIE0_4L_PRSNT#", "CDCI1_OE1/OE4", "CDCI1_OE2/OE3",
++				  "AUDIO_MUX_SEL", "EXP_MUX2", "EXP_MUX3", "GESI_EXP_PHY_RSTZ";
++	};
++
++	exp2: gpio@22 {
++		compatible = "ti,tca6424";
++		reg = <0x22>;
++		gpio-controller;
++		#gpio-cells = <2>;
++		gpio-line-names = "R_GPIO_RGMII1_RST", "ENET2_I2CMUX_SEL", "GPIO_USD_PWR_EN",
++				  "USBC_PWR_EN", "USBC_MODE_SEL1", "USBC_MODE_SEL0",
++				  "GPIO_LIN_EN", "R_CAN_STB", "CTRL_PM_I2C_OE#",
++				  "ENET2_EXP_PWRDN", "ENET2_EXP_SPARE2", "CDCI2_RSTZ",
++				  "USB2.0_MUX_SEL", "CANUART_MUX_SEL0", "CANUART_MUX2_SEL1",
++				  "CANUART_MUX1_SEL1", "ENET1_EXP_PWRDN", "ENET1_EXP_RESETZ",
++				  "ENET1_I2CMUX_SEL", "ENET1_EXP_SPARE2", "ENET2_EXP_RESETZ",
++				  "USER_INPUT1", "USER_LED1", "USER_LED2";
++	};
++};
++
++&main_sdhci1 {
++	/* SD card */
++	status = "okay";
++	pinctrl-0 = <&main_mmc1_pins_default>;
++	pinctrl-names = "default";
++	disable-wp;
++	vmmc-supply = <&vdd_mmc1>;
++	vqmmc-supply = <&vdd_sd_dv>;
++};
++
++&main_gpio0 {
++	status = "okay";
++};
 -- 
-2.34.1
+2.17.1
 
