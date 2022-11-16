@@ -2,173 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6144C62CEF7
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 00:43:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FDCD62CED6
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 00:39:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238722AbiKPXnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 18:43:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34234 "EHLO
+        id S233842AbiKPXjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 18:39:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238970AbiKPXmf (ORCPT
+        with ESMTP id S233694AbiKPXi7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 18:42:35 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 902C56DCC5;
-        Wed, 16 Nov 2022 15:41:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668642089; x=1700178089;
-  h=from:date:subject:mime-version:content-transfer-encoding:
-   message-id:references:in-reply-to:to;
-  bh=453B5mw51T7IX+AXE0lYBsFPvcN1QxhgkLQ4Y5mYFRM=;
-  b=OKZRT9+IUlLsVXavPhIOWtmaZl6HZv+qd3K0K9ReCmJ0sMzHtHW/kwHU
-   zXgMUe8dRQPDOmGWLeZcLNpD0MSrgXzW45ysdOUGnLTy7BI+Mn9lj7dsg
-   lZrH7lBreqGz7L6WYTW2Bn5ElW/x2K5R2iEf6hmNvduKQ3sv2P8LKIgdr
-   nrBomr0NSl9RkXr38lcdbpWNe3GVgKyrIvf+twK9SqBuOkvZ537m+EAhE
-   eOn9W4JhUReQrX+JR4cUob6WVqCugTgPJ82HXd5bDg+t8vlaNGYklxhBQ
-   mgCRxHx/LY6tb5+6esejV4rdc9AVhr811HJ5BYo/c6GLhxAIYZ0sVZirT
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="292405781"
-X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
-   d="scan'208";a="292405781"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 15:41:28 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="641848525"
-X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
-   d="scan'208";a="641848525"
-Received: from jjeyaram-mobl1.amr.corp.intel.com (HELO [192.168.1.28]) ([10.212.1.223])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 15:41:28 -0800
-From:   Vishal Verma <vishal.l.verma@intel.com>
-Date:   Wed, 16 Nov 2022 16:37:37 -0700
-Subject: [PATCH v2 2/2] ACPI: HMAT: Fix initiator registration for single-initiator
- systems
+        Wed, 16 Nov 2022 18:38:59 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44B02735;
+        Wed, 16 Nov 2022 15:38:58 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id c15-20020a17090a1d0f00b0021365864446so329467pjd.4;
+        Wed, 16 Nov 2022 15:38:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=Gdy3fEXtgXyoXwkPfALelVJoAp8iW4D1E4xvDfkIRRs=;
+        b=Z1XuwqNsMJiG/461z0tHAjvyJ1484KFa7iBAFXP6j/SS8cPeKn5D6z/HLPqrOfu0LH
+         z8ISXaOhxuBQc1MScEYVIrxZ5uR5KTdTj6GiGDDz0CAd/KEmq4FmHFncIclZ5RPDcvre
+         PLZjYjsLEyMjs1MpCpWZL60MOAnZLoMRNzDb2VhvRgtsFutfXlIn26gR0h6YKIS/aLQO
+         pzBRqXm1XxoFLTe5McYmJFe5S8zjtYswW4r6VInVJA/wxzI6UF8c+rNli21UxZ5LzN8K
+         trj/Tqfori4kSyqgXrG7uaACflqZZuvFL7Utca3ydn/ja7TZedvFA7cjOpVyqxZdDXyf
+         xOmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Gdy3fEXtgXyoXwkPfALelVJoAp8iW4D1E4xvDfkIRRs=;
+        b=bIwr71JbgD2V0U637m8ecs3MUCALTHNJMh8aLQHvflgeHJcrZvkVAF38vBZjL1VWaO
+         i6pieriqUVXMGd4xRTClHVIdJ59bX+jSishWbh/Bcn2hdD8wuhWKXOBuMWA/NQcrpmBq
+         5GtT6OuYVfV1EPZB6ehbQ6N6khqAQ1Q5JlbtZfE7ek1cRVjeTk7adS5x3Pz93wFL/LBW
+         TEpvChA57XOIP/5tMouTgtp01/mZHMWPq671iSKp2CUgrUDaEusoULx+dzu+xymtXkxo
+         XUqZQ5jgGlySETVZm06kA7f5QIR+/5hd/m5Zml4LBdUS4DrgBMwiwNO5yhZnjfc2a1l5
+         Jc2g==
+X-Gm-Message-State: ANoB5pk91qUeNDJLUfgTon5kGeR/aVa7sPiN0s7eQHKfay9HsnOBAq9I
+        QP9s6KyL0ixp78FcCuUTwR8=
+X-Google-Smtp-Source: AA0mqf5tsxVzsb1RRC5a9subudU8ELveHNpOe06mP98tByBEWZAJLviCi3xD+ggGe9+qubM204Q6CA==
+X-Received: by 2002:a17:90b:810:b0:200:6637:a9e3 with SMTP id bk16-20020a17090b081000b002006637a9e3mr34656pjb.176.1668641938258;
+        Wed, 16 Nov 2022 15:38:58 -0800 (PST)
+Received: from youngsil.svl.corp.google.com ([2620:15c:2d4:203:5b40:ce8c:1f7c:9acc])
+        by smtp.gmail.com with ESMTPSA id bc10-20020a170902930a00b00188ef3ea2b6sm95929plb.262.2022.11.16.15.38.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 15:38:57 -0800 (PST)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, Leo Yan <leo.yan@linaro.org>,
+        German Gomez <german.gomez@arm.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        James Clark <james.clark@arm.com>,
+        Athira Jajeev <atrajeev@linux.vnet.ibm.com>
+Subject: [PATCHSET 00/12] perf test: Add test workloads (v3)
+Date:   Wed, 16 Nov 2022 15:38:42 -0800
+Message-Id: <20221116233854.1596378-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20221116-acpi_hmat_fix-v2-2-3712569be691@intel.com>
-References: <20221116-acpi_hmat_fix-v2-0-3712569be691@intel.com>
-In-Reply-To: <20221116-acpi_hmat_fix-v2-0-3712569be691@intel.com>
-To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        linux-kernel@vger.kernel.org,
-        Chris Piper <chris.d.piper@intel.com>, nvdimm@lists.linux.dev,
-        linux-acpi@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Liu Shixin <liushixin2@huawei.com>, stable@vger.kernel.org
-X-Mailer: b4 0.11.0-dev-d1636
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3352;
- i=vishal.l.verma@intel.com; h=from:subject:message-id;
- bh=453B5mw51T7IX+AXE0lYBsFPvcN1QxhgkLQ4Y5mYFRM=;
- b=owGbwMvMwCXGf25diOft7jLG02pJDMmlpeqsYdp2c6xeZyWxh7anfNhvw1H+WbRO+Ayz2zwZr7Sk
- i787SlkYxLgYZMUUWf7u+ch4TG57Pk9ggiPMHFYmkCEMXJwCMJFb0gz/U172aH6qFWVgmvjmX+DGCo
- 6b/u//7ddaqnris2xwmIJqOcM/s9eXn8WKzOXZu3v/G7uVJ4siwiUDNFq8lde3/XYJcs7nBgA=
-X-Developer-Key: i=vishal.l.verma@intel.com; a=openpgp;
- fpr=F8682BE134C67A12332A2ED07AFA61BEA3B84DFF
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In a system with a single initiator node, and one or more memory-only
-'target' nodes, the memory-only node(s) would fail to register their
-initiator node correctly. i.e. in sysfs:
+Hello,
 
-  # ls /sys/devices/system/node/node0/access0/targets/
-  node0
+In the shell tests, it needs to run a custom test workload to verify
+the behaviors.  This requires a working compiler when it runs the
+tests.  However it's not available in some test environments, making
+hard to run those tests.
 
-Where as the correct behavior should be:
+changes in v3)
+ * update brstack to set num_loops  (James)
+ * fix a typo in the brstack test  (German)
+ * add tags rom German and James
 
-  # ls /sys/devices/system/node/node0/access0/targets/
-  node0 node1
+changes in v2)
+ * use sig_atomic_t  (Arnaldo)
+ * fix callgraph fp test  (Leo)
+ * fix bulid in sqrtloop  (German)
+ * add tags from Leo Yan
 
-This happened because hmat_register_target_initiators() uses list_sort()
-to sort the initiator list, but the sort comparision function
-(initiator_cmp()) is overloaded to also set the node mask's bits.
+So I've added the test workload to the perf binary directly, so that
+we can run them simply like:
 
-In a system with a single initiator, the list is singular, and list_sort
-elides the comparision helper call. Thus the node mask never gets set,
-and the subsequent search for the best initiator comes up empty.
+  $ perf test -w noploop
 
-Add a new helper to consume the sorted initiator list, and generate the
-nodemask, decoupling it from the overloaded initiator_cmp() comparision
-callback. This prevents the singular list corner case naturally, and
-makes the code easier to follow as well.
+And convert most of the shell tests need compilers with this workloads.
+The buildid test still requires a compiler since it needs to check
+different build options to generate different kind of build-IDs.
 
-Cc: <stable@vger.kernel.org>
-Cc: Rafael J. Wysocki <rafael@kernel.org>
-Cc: Liu Shixin <liushixin2@huawei.com>
-Cc: Dan Williams <dan.j.williams@intel.com>
-Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Reported-by: Chris Piper <chris.d.piper@intel.com>
-Signed-off-by: Vishal Verma <vishal.l.verma@intel.com>
----
- drivers/acpi/numa/hmat.c | 26 ++++++++++++++++++++------
- 1 file changed, 20 insertions(+), 6 deletions(-)
+I've checked perf test result after the changes but could not verify
+architecture-specific ones (e.g. for arm64).  It'd be nice if anyone
+can check it out.
 
-diff --git a/drivers/acpi/numa/hmat.c b/drivers/acpi/numa/hmat.c
-index 144a84f429ed..6cceca64a6bc 100644
---- a/drivers/acpi/numa/hmat.c
-+++ b/drivers/acpi/numa/hmat.c
-@@ -562,17 +562,26 @@ static int initiator_cmp(void *priv, const struct list_head *a,
- {
- 	struct memory_initiator *ia;
- 	struct memory_initiator *ib;
--	unsigned long *p_nodes = priv;
- 
- 	ia = list_entry(a, struct memory_initiator, node);
- 	ib = list_entry(b, struct memory_initiator, node);
- 
--	set_bit(ia->processor_pxm, p_nodes);
--	set_bit(ib->processor_pxm, p_nodes);
--
- 	return ia->processor_pxm - ib->processor_pxm;
- }
- 
-+static int initiators_to_nodemask(unsigned long *p_nodes)
-+{
-+	struct memory_initiator *initiator;
-+
-+	if (list_empty(&initiators))
-+		return -ENXIO;
-+
-+	list_for_each_entry(initiator, &initiators, node)
-+		set_bit(initiator->processor_pxm, p_nodes);
-+
-+	return 0;
-+}
-+
- static void hmat_register_target_initiators(struct memory_target *target)
- {
- 	static DECLARE_BITMAP(p_nodes, MAX_NUMNODES);
-@@ -609,7 +618,10 @@ static void hmat_register_target_initiators(struct memory_target *target)
- 	 * initiators.
- 	 */
- 	bitmap_zero(p_nodes, MAX_NUMNODES);
--	list_sort(p_nodes, &initiators, initiator_cmp);
-+	list_sort(NULL, &initiators, initiator_cmp);
-+	if (initiators_to_nodemask(p_nodes) < 0)
-+		return;
-+
- 	if (!access0done) {
- 		for (i = WRITE_LATENCY; i <= READ_BANDWIDTH; i++) {
- 			loc = localities_types[i];
-@@ -643,7 +655,9 @@ static void hmat_register_target_initiators(struct memory_target *target)
- 
- 	/* Access 1 ignores Generic Initiators */
- 	bitmap_zero(p_nodes, MAX_NUMNODES);
--	list_sort(p_nodes, &initiators, initiator_cmp);
-+	if (initiators_to_nodemask(p_nodes) < 0)
-+		return;
-+
- 	for (i = WRITE_LATENCY; i <= READ_BANDWIDTH; i++) {
- 		loc = localities_types[i];
- 		if (!loc)
+You can find it in 'perf/test-workload-v3' branch in
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
+
+Thanks,
+Namhyung
+
+Namhyung Kim (12):
+  perf test: Add -w/--workload option
+  perf test: Replace pipe test workload with noploop
+  perf test: Add 'thloop' test workload
+  perf test: Replace record test workload with thloop
+  perf test: Add 'leafloop' test workload
+  perf test: Replace arm callgraph fp test workload with leafloop
+  perf test: Add 'sqrtloop' test workload
+  perf test: Replace arm spe fork test workload with sqrtloop
+  perf test: Add 'brstack' test workload
+  perf test: Replace brstack test workload
+  perf test: Add 'datasym' test workload
+  perf test: Replace data symbol test workload with datasym
+
+ tools/perf/tests/Build                        |  2 +
+ tools/perf/tests/builtin-test.c               | 29 ++++++++
+ tools/perf/tests/shell/pipe_test.sh           | 55 +++-------------
+ tools/perf/tests/shell/record.sh              | 59 +----------------
+ .../perf/tests/shell/test_arm_callgraph_fp.sh | 34 +---------
+ tools/perf/tests/shell/test_arm_spe_fork.sh   | 44 +------------
+ tools/perf/tests/shell/test_brstack.sh        | 66 ++++---------------
+ tools/perf/tests/shell/test_data_symbol.sh    | 29 +-------
+ tools/perf/tests/tests.h                      | 27 ++++++++
+ tools/perf/tests/workloads/Build              | 12 ++++
+ tools/perf/tests/workloads/brstack.c          | 41 ++++++++++++
+ tools/perf/tests/workloads/datasym.c          | 24 +++++++
+ tools/perf/tests/workloads/leafloop.c         | 34 ++++++++++
+ tools/perf/tests/workloads/noploop.c          | 32 +++++++++
+ tools/perf/tests/workloads/sqrtloop.c         | 45 +++++++++++++
+ tools/perf/tests/workloads/thloop.c           | 53 +++++++++++++++
+ 16 files changed, 329 insertions(+), 257 deletions(-)
+ create mode 100644 tools/perf/tests/workloads/Build
+ create mode 100644 tools/perf/tests/workloads/brstack.c
+ create mode 100644 tools/perf/tests/workloads/datasym.c
+ create mode 100644 tools/perf/tests/workloads/leafloop.c
+ create mode 100644 tools/perf/tests/workloads/noploop.c
+ create mode 100644 tools/perf/tests/workloads/sqrtloop.c
+ create mode 100644 tools/perf/tests/workloads/thloop.c
+
+
+base-commit: 4dd7ff4a0311eee3ac946f0824442de94b34c42e
 -- 
-2.38.1
+2.38.1.584.g0f3c55d4c2-goog
+
