@@ -2,162 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E81562B014
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 01:36:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9839A62B01A
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 01:36:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229937AbiKPAgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 19:36:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59418 "EHLO
+        id S229478AbiKPAgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 19:36:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiKPAgK (ORCPT
+        with ESMTP id S230083AbiKPAgZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 19:36:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56AFA2A73F;
-        Tue, 15 Nov 2022 16:36:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E53426176B;
-        Wed, 16 Nov 2022 00:36:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32545C433C1;
-        Wed, 16 Nov 2022 00:36:06 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=fail reason="signature verification failed" (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="WadNeQqZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1668558963;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xxwhZ1JbZLEFT7v8XmPjo2GDV7ahuoimNewbxe4SHR4=;
-        b=WadNeQqZfpaaG7pOGoOZegG56N+tU7vmniNRsbAnAmvOFql3UgnmZlGF3jkwAg0KYUuJnl
-        vPO1x3/+Yd1mV8BLHiLJBtr7DWgWQX74GhaPD5R6gjrXeuQpkaV6S8JqLBhF8HcPiQAIeF
-        giEdXmUZGn2q93G/kA+FleaT4qgoh6w=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 151f81bc (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Wed, 16 Nov 2022 00:36:03 +0000 (UTC)
-Date:   Wed, 16 Nov 2022 01:36:00 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     dri-devel@lists.freedesktop.org, linux-api@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Daniel Vetter <daniel.vetter@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ilia Mirkin <imirkin@alum.mit.edu>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Michel =?utf-8?Q?D=C3=A4nzer?= <michel@daenzer.net>,
-        Alex Deucher <alexdeucher@gmail.com>,
-        Adam Jackson <ajax@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Rob Clark <robdclark@gmail.com>,
-        Sultan Alsawaf <sultan@kerneltoast.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: [PATCH] drm/atomic: do not branch based on the value of
- current->comm[0]
-Message-ID: <Y3QwcKEVTg8hu2WA@zx2c4.com>
-References: <20221105222012.4226-1-Jason@zx2c4.com>
+        Tue, 15 Nov 2022 19:36:25 -0500
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B82F2B617;
+        Tue, 15 Nov 2022 16:36:24 -0800 (PST)
+Received: by mail-pg1-f176.google.com with SMTP id q1so15142385pgl.11;
+        Tue, 15 Nov 2022 16:36:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VmjH6LSq2kE7ALavx/RIOD+BigRt6SH30zuIye218S4=;
+        b=41lRKqpziXCTLEMh0pYpvCUisZb/Ea0jepwxuYBzmg8WXZUq3RAlZR6P/7doGiSR0V
+         LK+PVVPn9iKXT7C5AT/negrFA89rJjTyyaMKcFFeY30Q7Eqs+3SOIdMCeWzci/3FR/2Q
+         QtK2uyWPdcSmR0xx6UxLk4Q0cIr7PdE8CzUXz7vsGNjT3pjRnKNlgLRaCqEDn6ztwPO2
+         I/roVTk5T2cYKyYli6kquLqDJwnLcoq43e+JOh3Xcf/01UvMBRosqcTUFGSEx+CWdk8Y
+         d+KMJDqV6tLdwuSm5QMKX9hFDMOTTrWOMC90DnsOmrrY/UwOoCs3X+EbGCpo8Bb3MLd4
+         raXw==
+X-Gm-Message-State: ANoB5pnyjNNKOO478Gz/vhr8CTnZQct6XiJlrm3bx1GH9DI5O5+FrcQJ
+        ST/rSv5aF+J6c/JKarsjJWpkYMNIcJMqpfActjc=
+X-Google-Smtp-Source: AA0mqf5pZF3P1iggGMNnzHa5qJNDY/DOYNEqVkMraql04R+FNJU5fkgcx1aKGq1uj6LorAxOvvt8bVkwNIBtZkqGxcY=
+X-Received: by 2002:a63:5b65:0:b0:46f:f740:3ff5 with SMTP id
+ l37-20020a635b65000000b0046ff7403ff5mr18377519pgm.70.1668558983900; Tue, 15
+ Nov 2022 16:36:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221105222012.4226-1-Jason@zx2c4.com>
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
+ <20221113040108.68249-1-mailhol.vincent@wanadoo.fr> <20221113040108.68249-3-mailhol.vincent@wanadoo.fr>
+ <Y3QW/ufhuYnHWcli@x130.lan>
+In-Reply-To: <Y3QW/ufhuYnHWcli@x130.lan>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Wed, 16 Nov 2022 09:36:12 +0900
+Message-ID: <CAMZ6RqKUKLUf1Y6yL=J6n+N2Uz+JuFnHXdfVDXTZaDQ89=9DzQ@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] can: etas_es58x: export firmware, bootloader and
+ hardware versions in sysfs
+To:     Saeed Mahameed <saeed@kernel.org>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
+On Wed. 16 Nov. 2022 at 07:50, Saeed Mahameed <saeed@kernel.org> wrote:
+> On 13 Nov 13:01, Vincent Mailhol wrote:
+> >ES58x devices report below information in their usb product info
+> >string:
+> >
+> >  * the firmware version
+> >  * the bootloader version
+> >  * the hardware revision
+> >
+> >Parse this string, store the results in struct es58x_dev and create
+> >three new sysfs entries.
+> >
+>
+> will this be the /sys/class/net/XXX sysfs  ?
 
-I'm a bit surprised that this patch was ignored. I had sort of assumed
-the response would be, "good god, I can't believe we're doing this.
-Applied to drm-next!" rather than crickets, but maybe it just got buried
-under a lot of other patches. So I thought I'd poke about this again.
-The original message is reproduced in full below.
+I am dropping the idea of using sysfs and I am now considering using
+devlink following Andrew's message:
+https://lore.kernel.org/linux-can/Y3Ef4K5lbilY3EQT@lunn.ch/
 
-Regards,
-Jason
+> We try to avoid adding device specific entries in there,
+>
+> Couldn't you just squeeze the firmware and hw version into the
+> ethtool->drvinfo->fw_version
+>
+> something like:
+> fw_version: %3u.%3u.%3u (%c.%3u.%3u)
 
-On Sat, Nov 05, 2022 at 11:20:12PM +0100, Jason A. Donenfeld wrote:
-> This reverts 26b1d3b527e7 ("drm/atomic: Take the atomic toys away from
-> X"), a rootkit-like kludge that has no business being inside of a
-> general purpose kernel. It's the type of debugging hack I'll use
-> momentarily but never commit, or a sort of babbies-first-process-hider
-> malware trick.
-> 
-> The backstory is that some userspace code -- xorg-server -- has a
-> modesetting DDX that isn't really coded right. With nobody wanting to
-> maintain X11 anymore, rather than fixing the buggy code, the kernel was
-> adjusted to avoid having to touch X11. A bummer, but fair enough: if the
-> kernel doesn't want to support some userspace API any more, the right
-> thing to do is to arrange for a graceful fallback where userspace thinks
-> it's not available in a manageable way.
-> 
-> However, the *way* it goes about doing that is just to check
-> `current->comm[0] == 'X'`, and disable it for only that case. So that
-> means it's *not* simply a matter of the kernel not wanting to support a
-> particular userspace API anymore, but rather it's the kernel not wanting
-> to support xorg-server, in theory, but actually, it turns out, that's
-> all processes that begin with 'X'.
-> 
-> Playing games with current->comm like this is obviously wrong, and it's
-> pretty shocking that this ever got committed.
-> 
-> Fortunately, since this was committed, somebody did actually disable
-> the userspace side by default in X11:
-> https://gitlab.freedesktop.org/xorg/xserver/-/merge_requests/180 and
-> this was three years ago. So userspace is mostly fine now for ordinary
-> default usage. And people who opt into this -- since it does actually
-> work fine for many use cases on i915 -- ostensibly know what they're
-> getting themselves into (my case).
-> 
-> So let's just revert this `comm[0] == 'X'` business entirely, but still
-> allow for `value == 2`, in case anybody actually started working on that
-> part elsewhere.
-> 
-> Fixes: 26b1d3b527e7 ("drm/atomic: Take the atomic toys away from X")
-> Cc: Daniel Vetter <daniel.vetter@intel.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Ilia Mirkin <imirkin@alum.mit.edu>
-> Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-> Cc: Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
-> Cc: Christian Brauner <brauner@kernel.org>
-> Cc: Michel Dänzer <michel@daenzer.net>
-> Cc: Alex Deucher <alexdeucher@gmail.com>
-> Cc: Adam Jackson <ajax@redhat.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Sean Paul <sean@poorly.run>
-> Cc: David Airlie <airlied@linux.ie>
-> Cc: Rob Clark <robdclark@gmail.com>
-> Cc: Sultan Alsawaf <sultan@kerneltoast.com>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
->  drivers/gpu/drm/drm_ioctl.c | 5 -----
->  1 file changed, 5 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/drm_ioctl.c b/drivers/gpu/drm/drm_ioctl.c
-> index ca2a6e6101dc..017f31e67179 100644
-> --- a/drivers/gpu/drm/drm_ioctl.c
-> +++ b/drivers/gpu/drm/drm_ioctl.c
-> @@ -336,11 +336,6 @@ drm_setclientcap(struct drm_device *dev, void *data, struct drm_file *file_priv)
->  	case DRM_CLIENT_CAP_ATOMIC:
->  		if (!drm_core_check_feature(dev, DRIVER_ATOMIC))
->  			return -EOPNOTSUPP;
-> -		/* The modesetting DDX has a totally broken idea of atomic. */
-> -		if (current->comm[0] == 'X' && req->value == 1) {
-> -			pr_info("broken atomic modeset userspace detected, disabling atomic\n");
-> -			return -EOPNOTSUPP;
-> -		}
->  		if (req->value > 2)
->  			return -EINVAL;
->  		file_priv->atomic = req->value;
-> -- 
-> 2.38.1
-> 
+This looks like a hack. There is no way for the end user to know, just
+from the ethtool output, what these in brackets values would mean.
+
+> and bootloader into ethtool->drvinfo->erom_version:
+>   * @erom_version: Expansion ROM version string; may be an empty string
+
+Same. I considered doing this in the early draft of this series and
+dropped the idea because an expansion ROM and a boot loader are two
+things different.
+
+I will continue to study devlink and only use the drvinfo only for the
+firmware version.
+
+
+Yours sincerely,
+Vincent Mailhol
