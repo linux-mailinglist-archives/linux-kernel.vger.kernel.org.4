@@ -2,58 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42D4962B31E
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 07:10:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C1C562B325
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 07:13:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231811AbiKPGKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 01:10:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39506 "EHLO
+        id S232500AbiKPGNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 01:13:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230417AbiKPGKg (ORCPT
+        with ESMTP id S232399AbiKPGNU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 01:10:36 -0500
-Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 954A45F4D;
-        Tue, 15 Nov 2022 22:10:35 -0800 (PST)
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 2AG6A8vE031772;
-        Wed, 16 Nov 2022 15:10:09 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 2AG6A8vE031772
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1668579009;
-        bh=HogbuWt6GLH1wU6Qo0cADstmt/2VA/cK7SuQhdbfOEc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=FJa7ICycpG33r/5ARL2tUoOR2Frto0TO6+iof7rgcbgZCwfVXWaR4cXn5AY/CBHM1
-         TAkfqGJAXO5pTq9ubbOUpZffwfzwI7D2aEd2gTAAfROzdjsVurEK1PQTdmM67sFOKt
-         l9PrDQ+mqX2mEObbfWrUchP62pr9cxCPMkTn6y5DH354O6+YTa/m9IZ/73zoDVQWsl
-         7Xk9JOluajE463111WRs7+GrVzpDMCT5MSiG3tcOhS3hI2ibYGiPy+KHzd2Tg0+D6g
-         hgj0DrJXLL1+YRm47xGnA73j9EWzd9O5nPr/UrQM2Z+Q6dHdb6Y+DeK6uRZszG1/g1
-         v/AtUV5F09TZg==
-X-Nifty-SrcIP: [209.85.167.172]
-Received: by mail-oi1-f172.google.com with SMTP id q186so17406931oia.9;
-        Tue, 15 Nov 2022 22:10:09 -0800 (PST)
-X-Gm-Message-State: ANoB5plK3ijT3gReSm8ud3ZeF/l0Sd5jX5DdQlHU9/LYrPXPCiTlkRQS
-        ydfaC7HMZqHAlnGg3pZU1pAuJQmHxKaYXr9uxHU=
-X-Google-Smtp-Source: AA0mqf4sdlAsDjBFboPZ6GUN5+M5FIEJDe9GHX4LSNiMXhP5K1fRigaf8Qw/JrTgtm6CoK8+lBfWE1MTy15jcIU+6vY=
-X-Received: by 2002:a05:6808:3009:b0:354:94a6:a721 with SMTP id
- ay9-20020a056808300900b0035494a6a721mr844011oib.194.1668579007968; Tue, 15
- Nov 2022 22:10:07 -0800 (PST)
+        Wed, 16 Nov 2022 01:13:20 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 369C3248C4;
+        Tue, 15 Nov 2022 22:13:18 -0800 (PST)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NBt4s3Vb6zHvwR;
+        Wed, 16 Nov 2022 14:12:45 +0800 (CST)
+Received: from kwepemm600005.china.huawei.com (7.193.23.191) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 16 Nov 2022 14:13:15 +0800
+Received: from [10.67.109.54] (10.67.109.54) by kwepemm600005.china.huawei.com
+ (7.193.23.191) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 16 Nov
+ 2022 14:13:15 +0800
+Subject: Re: [PATCH net v4] net: mvpp2: fix possible invalid pointer
+ dereference
+To:     Jakub Kicinski <kuba@kernel.org>
+References: <20221116020617.137247-1-tanghui20@huawei.com>
+ <20221116021437.145204-1-tanghui20@huawei.com>
+ <20221115202850.7beeea87@kernel.org>
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <mw@semihalf.com>,
+        <linux@armlinux.org.uk>, <leon@kernel.org>, <andrew@lunn.ch>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yusongping@huawei.com>
+From:   Hui Tang <tanghui20@huawei.com>
+Message-ID: <a061d870-d0ce-a580-636d-600a9a4b006f@huawei.com>
+Date:   Wed, 16 Nov 2022 14:13:14 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
 MIME-Version: 1.0
-References: <20221115220453.3463096-1-maz@kernel.org>
-In-Reply-To: <20221115220453.3463096-1-maz@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 16 Nov 2022 15:09:31 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASC6f_=ngS4NW0prvwcOribumeajW1r4q57u3LGZvuEdA@mail.gmail.com>
-Message-ID: <CAK7LNASC6f_=ngS4NW0prvwcOribumeajW1r4q57u3LGZvuEdA@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: Restore .version auto-increment behaviour for
- Debian packages
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+In-Reply-To: <20221115202850.7beeea87@kernel.org>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.109.54]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600005.china.huawei.com (7.193.23.191)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,85 +58,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 7:05 AM Marc Zyngier <maz@kernel.org> wrote:
+
+
+On 2022/11/16 12:28, Jakub Kicinski wrote:
+> On Wed, 16 Nov 2022 10:14:37 +0800 Hui Tang wrote:
+>> It will cause invalid pointer dereference to priv->cm3_base behind,
+>> if PTR_ERR(priv->cm3_base) in mvpp2_get_sram().
+>>
+>> Fixes: a59d354208a7 ("net: mvpp2: enable global flow control")
+>> Signed-off-by: Hui Tang <tanghui20@huawei.com>
 >
-> Since 2df8220cc511 ("kbuild: build init/built-in.a just once"),
-> generating Debian packages using 'make bindeb-pkg' results in
-> packages that are stuck to the same .version, leading to unexpected
-> behaviours (multiple packages with the same version).
+> Please do not repost new versions so often:
 >
-> That's because the mkdebian script samples the build version
-> before building the kernel, and forces the use of that version
-> number for the actual build.
+> https://www.kernel.org/doc/html/next/process/maintainer-netdev.html#tl-dr
 >
-> Restore the previous behaviour by calling init/build-version
-> instead of reading the .version file. This is likely to result
-> in too many .version bumps, but this is what was happening before
-> (although the bump was affecting builds made after the current one).
+> do not use --in-reply-to
 
+Thanks for pointing out, but should I resend it with [PATCH net v3]  or [PATCH net v5]?
 
-What do you mean by "too many .version bumps"?
-
-Every "make bindeb-pkg" increments the version by one.
-
-Is there any case where it increases more?
-
-
-
-
-
-> Eventually, this script should be turned into something that
-> is a bit less counter-intuitive (building the kernel first
-> and only then generating the packaging artefacts).
-
-
-How to achieve this?
-
-The version is recorded in debian/chanegelog.
-Without it, dpkg-buildpackage fails.
-
-In my understanding, the version must be fixed before building the kernel.
-
-
-
-
-
-
-
-
+>> diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+>> index d98f7e9a480e..efb582b63640 100644
+>> --- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+>> +++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+>> @@ -7349,6 +7349,7 @@ static int mvpp2_get_sram(struct platform_device *pdev,
+>>  			  struct mvpp2 *priv)
+>>  {
+>>  	struct resource *res;
+>> +	void __iomem *base;
+>>
+>>  	res = platform_get_resource(pdev, IORESOURCE_MEM, 2);
+>>  	if (!res) {
+>> @@ -7359,9 +7360,11 @@ static int mvpp2_get_sram(struct platform_device *pdev,
+>>  		return 0;
+>>  	}
+>>
+>> -	priv->cm3_base = devm_ioremap_resource(&pdev->dev, res);
+>> +	base = devm_ioremap_resource(&pdev->dev, res);
+>> +	if (!IS_ERR(base))
+>> +		priv->cm3_base = base;
+>>
+>> -	return PTR_ERR_OR_ZERO(priv->cm3_base);
+>> +	return PTR_ERR_OR_ZERO(base);
 >
-> Fixes: 2df8220cc511 ("kbuild: build init/built-in.a just once")
-> Signed-off-by: Marc Zyngier <maz@kernel.org>
-> Cc: Masahiro Yamada <masahiroy@kernel.org>
-> Cc: Michal Marek <michal.lkml@markovi.net>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> ---
+> Use the idiomatic error handling, keep success path un-indented:
 >
-> Notes:
->     v2: Drop the RPM version which was wrong, and make the path
->         relative to $srctree.
+> 	ptr = function();
+> 	if (IS_ERR(ptr))
+> 		return PTR_ERR(ptr);
 >
->  scripts/package/mkdebian | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> 	priv->bla = ptr;
+> 	return 0;
+> 	
 >
-> diff --git a/scripts/package/mkdebian b/scripts/package/mkdebian
-> index 60a2a63a5e90..a3ac5a716e9f 100755
-> --- a/scripts/package/mkdebian
-> +++ b/scripts/package/mkdebian
-> @@ -90,7 +90,7 @@ if [ -n "$KDEB_PKGVERSION" ]; then
->         packageversion=$KDEB_PKGVERSION
->         revision=${packageversion##*-}
->  else
-> -       revision=$(cat .version 2>/dev/null||echo 1)
-> +       revision=$($srctree/init/build-version)
->         packageversion=$version-$revision
->  fi
->  sourcename=$KDEB_SOURCENAME
-> --
-> 2.34.1
->
-
-
---
-Best Regards
-Masahiro Yamada
+Ok, I will fix it in next version
