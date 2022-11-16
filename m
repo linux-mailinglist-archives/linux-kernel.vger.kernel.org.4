@@ -2,51 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A665562BFF8
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 14:48:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56D6A62BFFF
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 14:49:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233016AbiKPNsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 08:48:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32974 "EHLO
+        id S233759AbiKPNtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 08:49:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233335AbiKPNr6 (ORCPT
+        with ESMTP id S233325AbiKPNs0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 08:47:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3ED14874D
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 05:47:53 -0800 (PST)
+        Wed, 16 Nov 2022 08:48:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 467183B9;
+        Wed, 16 Nov 2022 05:48:26 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C40C361DFB
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 13:47:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08655C433D6;
-        Wed, 16 Nov 2022 13:47:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 976A361E11;
+        Wed, 16 Nov 2022 13:48:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 013DFC433C1;
+        Wed, 16 Nov 2022 13:48:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668606472;
-        bh=kWOWTI+d+y31sf5/I44KmEK4Vgs9Vsix+AryQQ5pz9M=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=GeAFIY1rJw/KTbJHQ4DBU4pCsNdFyb0m9JyJUZCL3vMftqV0zG+cKuehS5drGlLlH
-         HjjHD0+07AN+R2A6Cq256rjnii226j1TEXnssQYYTbOzizDepeut3muSaqTc6WRMPw
-         fctFdLDTvAL9hxrAYSFCQryshGrWjG+XWmavT1NdMiEa5QYSwDgBiRFKS48OabWX3s
-         +XKU2WNeIssZCUWeKFWlkzxJMeN/8SiUWTNGIxIutn6OjHOzVJswEy1NHjIzjKD8XI
-         EjwVQF1shqIBNTtkm+gF86qgvosxjz5UqdehxVVuLxACvLmnTHCJ3eYiKVyeJ0sI8o
-         qzaiQ09ZG24Yg==
-From:   Mark Brown <broonie@kernel.org>
-To:     pierre-louis.bossart@linux.intel.com,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>, steve@sk2.org,
-        lgirdwood@gmail.com, ryan.lee.analog@gmail.com, perex@perex.cz,
-        tiwai@suse.com
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20221116082508.17418-1-jiasheng@iscas.ac.cn>
-References: <20221116082508.17418-1-jiasheng@iscas.ac.cn>
-Subject: Re: [PATCH] ASoC: max98373: Add checks for devm_kcalloc
-Message-Id: <166860646973.422565.7735553281079696974.b4-ty@kernel.org>
-Date:   Wed, 16 Nov 2022 13:47:49 +0000
+        s=k20201202; t=1668606505;
+        bh=ykLJzDbZ0kLjeXVlSh0iMDNUh5L05twFQdQJECK6oD4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kKplzgjgN7NEtioBogzf7iLbgGXq5f2YbUKP9+VfrxBALv9PWGXO/V26m4/YnCl3t
+         i0lqiSdjaBiBrahsvFOUFjIsAWHcmSm+C2TEYujcv//IBnbm22G+QRWMlb+qLfTdiS
+         jbmERyYDq/m9KS3Stl4iGfEz0xXMTvk5yrZwoV2Aqd5hjwlP+W2RZiJFV4o0kPYgX2
+         cU+bzbKMaHqz3wfZA9JUXh+zPI2BLIW9ghlLBjm7/DeJF5f18ZIq1yppNzhepQsFza
+         gxOMqd1Z9aELNQ9EAjmU42ehPpH1M0CiF+MhKzZffSmYPj0MvsEWTr8viCFfQCmJr3
+         7Ed2YEnFAgfnQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1ovIlf-0002kn-Fh; Wed, 16 Nov 2022 14:47:55 +0100
+Date:   Wed, 16 Nov 2022 14:47:55 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-phy@lists.infradead.org
+Subject: Re: [PATCH 06/10] dt-bindings: phy: qcom,qmp-pcie: Document SM8550
+ compatible
+Message-ID: <Y3TqCx2aQDswgFBb@hovoldconsulting.com>
+References: <20221116120157.2706810-1-abel.vesa@linaro.org>
+ <20221116120157.2706810-7-abel.vesa@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.11.0-dev-8af31
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221116120157.2706810-7-abel.vesa@linaro.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -56,37 +66,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Nov 2022 16:25:08 +0800, Jiasheng Jiang wrote:
-> As the devm_kcalloc may return NULL pointer,
-> it should be better to check the return value
-> in order to avoid NULL poineter dereference.
+On Wed, Nov 16, 2022 at 02:01:53PM +0200, Abel Vesa wrote:
+> Add SM8550 both G4 and G3 dual lane compatible strings, also add the
+> qref supply, the power domains, the reg entries and increase the number
+> of allowed clocks needed to support the mentioned platform.
 > 
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> ---
+>  .../phy/qcom,ipq8074-qmp-pcie-phy.yaml        | 38 +++++++++++++++++--
+>  1 file changed, 35 insertions(+), 3 deletions(-)
 > 
+> diff --git a/Documentation/devicetree/bindings/phy/qcom,ipq8074-qmp-pcie-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,ipq8074-qmp-pcie-phy.yaml
+> index 62045dcfb20c..e5752ad93f0a 100644
+> --- a/Documentation/devicetree/bindings/phy/qcom,ipq8074-qmp-pcie-phy.yaml
+> +++ b/Documentation/devicetree/bindings/phy/qcom,ipq8074-qmp-pcie-phy.yaml
+> @@ -32,6 +32,8 @@ properties:
+>        - qcom,sm8250-qmp-modem-pcie-phy
+>        - qcom,sm8450-qmp-gen3x1-pcie-phy
+>        - qcom,sm8450-qmp-gen4x2-pcie-phy
+> +      - qcom,sm8550-qmp-gen3x2-pcie-phy
+> +      - qcom,sm8550-qmp-gen4x2-pcie-phy
 
-Applied to
+Here too, don't add new compatibles to the legacy bindings, but rather
+base it on the sc8280xp binding.
 
-   broonie/sound.git for-next
-
-Thanks!
-
-[1/1] ASoC: max98373: Add checks for devm_kcalloc
-      commit: 60591bbf6d5eb44f275eb733943b7757325c1b60
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+Johan
