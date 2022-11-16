@@ -2,56 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC5A962B673
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:25:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DDBD62B677
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:26:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233000AbiKPJZK convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 16 Nov 2022 04:25:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47902 "EHLO
+        id S233147AbiKPJ0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 04:26:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232833AbiKPJZG (ORCPT
+        with ESMTP id S232401AbiKPJ0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 04:25:06 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E01D9FEE;
-        Wed, 16 Nov 2022 01:25:04 -0800 (PST)
-Received: from canpemm500007.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NByLL54f3zRpMX;
-        Wed, 16 Nov 2022 17:24:42 +0800 (CST)
-Received: from canpemm500005.china.huawei.com (7.192.104.229) by
- canpemm500007.china.huawei.com (7.192.104.62) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 16 Nov 2022 17:25:02 +0800
-Received: from canpemm500005.china.huawei.com ([7.192.104.229]) by
- canpemm500005.china.huawei.com ([7.192.104.229]) with mapi id 15.01.2375.031;
- Wed, 16 Nov 2022 17:25:02 +0800
-From:   zhaogongyi <zhaogongyi@huawei.com>
-To:     "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
-CC:     "keescook@chromium.org" <keescook@chromium.org>,
-        "luto@amacapital.net" <luto@amacapital.net>,
-        "wad@chromium.org" <wad@chromium.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "cristian.marussi@arm.com" <cristian.marussi@arm.com>,
-        Matthew Wilcox <willy@infradead.org>
-Subject: Re: [PATCH -next 2/2] selftests/mincore: Optimize
- TEST(check_file_mmap) accoring to filemap read around
-Thread-Topic: [PATCH -next 2/2] selftests/mincore: Optimize
- TEST(check_file_mmap) accoring to filemap read around
-Thread-Index: Adj5nOPwb4CsGeQMSgC5GXpGtKemnw==
-Date:   Wed, 16 Nov 2022 09:25:02 +0000
-Message-ID: <d221e784d1f84d1880cf88e556e9ff3a@huawei.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.67.110.209]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Wed, 16 Nov 2022 04:26:22 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920FD2FD
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:26:21 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id c1so28554642lfi.7
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:26:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gTk4m78nldGwz8/w+Qb5sMvmRKXadZx0hjAjuUwf6/o=;
+        b=z60N0Dy9E3BeooJoTOtRL56IDiWeKQ+CoxlqpTGqar5Zw8MHDklK0PQv0kGH9ADp0h
+         zYyf6lPNUX4d1fv+k/XMsdrFXzKgCmiu+8vmGTfl32PqtISLg0pYl/WP8QhQUwlS9Fke
+         GkrjbmJ5i1SAEFCbLQQPhY4YWw4wE0bhD7z6gmjBehCEb8TVY5kXGT83zJrOmJ31N/sd
+         CMqIbDGwZ1svvOiqctVq/5U8eCDYu16GWjgZdROT2CsByCi8/8YSarzGSN8QzAVe/s1g
+         +RJ+9VJb9NMKqarWUZ0FHep9wFLESgNLel6ADJ1xMkRiiyqHo8KhhI15eOXalliVPYeF
+         mtsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gTk4m78nldGwz8/w+Qb5sMvmRKXadZx0hjAjuUwf6/o=;
+        b=3owNIzLuq+4Wg8uwlSFa8tUMdebgMSExH4eHaaLPnxEv4k8BwJBjEPQXNuZNuYruKI
+         HJzsEtjosLvdm3CELUqaJNj/fBSHzGnEkBBWm2XUitjFr8kLvG3yLOpCRl5YXNhHlWpe
+         fZaKwzNYINPuesBjJzIRGWphPL/3lVewFTQh9yg1yKrvvSAmYTvJKWanhzr0ca4bDYY5
+         IjSm51vYK0Lev4QS11UcD2DZK04ryJgEL46oWbtQ5CwPjYx4QM528JH7zt8z3TZCDSuF
+         4DUypWDQMeEB/2bQw1IFNQ1DHbn+ihCsYJCW74BNQqLUXrFFbx689q9+Hq+O2dGwmqXW
+         kMyw==
+X-Gm-Message-State: ANoB5pmSID4sRkwyKLzWK2LdiI3Yi4w+PzsM9BmseclM17JuVPpAUSKb
+        P2bF+jjxFh1y/k+FPCqlSsHkPw==
+X-Google-Smtp-Source: AA0mqf5IBvXe4FG23QYgVQONrT+oErAGS1AxXK+RcSHC2Rp7oifietV2nk+4Pi5nCeTZTiDvDrvAZA==
+X-Received: by 2002:ac2:5d69:0:b0:4b4:1036:bbb with SMTP id h9-20020ac25d69000000b004b410360bbbmr6571649lft.65.1668590779965;
+        Wed, 16 Nov 2022 01:26:19 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id n20-20020a05651203f400b004a2511b8224sm2523150lfq.103.2022.11.16.01.26.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 01:26:19 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        linux-clk@vger.kernel.org, Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <snawrocki@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL] clk: samsung: Pull for v6.2
+Date:   Wed, 16 Nov 2022 10:26:16 +0100
+Message-Id: <20221116092616.17960-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,191 +75,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
 
-> 
-> TEST(check_file_mmap) will fail when we set the ra_pages through
-> blockdev like:
->   /sbin/blockdev --setra 8196 /dev/sda
-> 
-> And, for file mmap, kernel will read 'ra_pages/2' pages of the address on
-> the left hand or right hand. So, add a checking of ra_pages according to
-> the ra_pages setting of the block dev.
-> 
-> I have tested it on my system like:
->   i=0
->   while [ $i -lt 9000 ]
->   do
->         /sbin/blockdev --setra $i /dev/openeuler/*
->         ./mincore_selftest  || { echo "$i test failed"; exit 1; }
->         let i=$i+1
->   done
-> 
-> Signed-off-by: Zhao Gongyi <zhaogongyi@huawei.com>
-> ---
->  tools/testing/selftests/kselftest_harness.h   |  2 +
->  .../selftests/mincore/mincore_selftest.c      | 74 +++++++++++++++----
->  2 files changed, 62 insertions(+), 14 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kselftest_harness.h
-> b/tools/testing/selftests/kselftest_harness.h
-> index 25f4d54067c0..fa40c85a1099 100644
-> --- a/tools/testing/selftests/kselftest_harness.h
-> +++ b/tools/testing/selftests/kselftest_harness.h
-> @@ -781,6 +781,8 @@
->  	} \
->  }
-> 
-> +#define MIN(a, b)       ((a) < (b) ? (a) : (b))
-> +
->  struct __test_results {
->  	char reason[1024];	/* Reason for test result */
->  };
-> diff --git a/tools/testing/selftests/mincore/mincore_selftest.c
-> b/tools/testing/selftests/mincore/mincore_selftest.c
-> index 287351a599a2..5eace1750fef 100644
-> --- a/tools/testing/selftests/mincore/mincore_selftest.c
-> +++ b/tools/testing/selftests/mincore/mincore_selftest.c
-> @@ -17,6 +17,7 @@
->  #include <mntent.h>
->  #include <sys/stat.h>
->  #include <linux/fs.h>
-> +#include <sys/ioctl.h>
-> 
->  #include "../kselftest.h"
->  #include "../kselftest_harness.h"
-> @@ -218,11 +219,7 @@ static struct mntent* find_mount_point(const
-> char *name)
->   * Test mincore() behavior on a file-backed page.
->   * No pages should be loaded into memory right after the mapping. Then,
->   * accessing any address in the mapping range should load the page
-> - * containing the address and a number of subsequent pages
-> (readahead).
-> - *
-> - * The actual readahead settings depend on the test environment, so we
-> - * can't make a lot of assumptions about that. This test covers the most
-> - * general cases.
-> + * containing the address and a number of around pages (read around).
->   */
->  TEST(check_file_mmap)
->  {
-> @@ -236,6 +233,10 @@ TEST(check_file_mmap)
->  	int ra_pages = 0;
->  	struct stat s;
->  	struct mntent *mount_entry;
-> +	int ra_size;
-> +	int exp_ra_pages;
-> +	int odd = 0;
-> +	int dev_ra_pages;
-> 
->  	mount_entry = find_mount_point(".");
->  	ASSERT_NE(NULL, mount_entry) {
-> @@ -248,11 +249,29 @@ TEST(check_file_mmap)
->  			"test is not supported");
->  	}
-> 
-> +	errno = 0;
-> +	fd = open(mount_entry->mnt_fsname, O_RDONLY);
-> +	ASSERT_LT(0, fd) {
-> +		TH_LOG("Open %s failed: %s",
-> +			mount_entry->mnt_fsname, strerror(errno));
-> +	}
-> +
-> +	errno = 0;
-> +	retval = ioctl(fd, BLKRAGET, &ra_size);
-> +	ASSERT_EQ(0, retval) {
-> +		TH_LOG("Get block readahead size failed: %s", strerror(errno));
-> +	}
-> +
->  	page_size = sysconf(_SC_PAGESIZE);
->  	vec_size = FILE_SIZE / page_size;
->  	if (FILE_SIZE % page_size)
->  		vec_size++;
-> 
-> +	dev_ra_pages = (ra_size * 512) / page_size;
-> +	exp_ra_pages = MIN(vec_size / 2, dev_ra_pages / 2);
-> +	if (dev_ra_pages <= vec_size)
-> +		odd = dev_ra_pages % 2;
-> +
->  	vec = calloc(vec_size, sizeof(unsigned char));
->  	ASSERT_NE(NULL, vec) {
->  		TH_LOG("Can't allocate array");
-> @@ -296,7 +315,7 @@ TEST(check_file_mmap)
-> 
->  	/*
->  	 * Touch a page in the middle of the mapping. We expect the next
-> -	 * few pages (the readahead window) to be populated too.
-> +	 * few pages (the read around window) to be populated too.
->  	 */
->  	addr[FILE_SIZE / 2] = 1;
->  	retval = mincore(addr, FILE_SIZE, vec); @@ -310,22 +329,49 @@
-> TEST(check_file_mmap)
->  		ra_pages++;
->  		i++;
->  	}
-> -	EXPECT_GT(ra_pages, 0) {
-> -		TH_LOG("No read-ahead pages found in memory");
-> -	}
-> 
-> -	EXPECT_LT(i, vec_size) {
-> -		TH_LOG("Read-ahead pages reached the end of the file");
-> +	if (!exp_ra_pages) {
-> +		EXPECT_EQ(ra_pages, exp_ra_pages) {
-> +			TH_LOG("Check read-around pages failed");
-> +		}
-> +	} else {
-> +		EXPECT_EQ(ra_pages + (odd ? 0 : 1), exp_ra_pages) {
-> +			TH_LOG("Check read-around pages failed");
-> +		}
->  	}
-> +
->  	/*
-> -	 * End of the readahead window. The rest of the pages shouldn't
-> -	 * be in memory.
-> +	 * End of the read around window. The rest of the pages shouldn't
-> +	 * be in memory for the right hand.
->  	 */
->  	if (i < vec_size) {
->  		while (i < vec_size && !vec[i])
->  			i++;
->  		EXPECT_EQ(vec_size, i) {
-> -			TH_LOG("Unexpected page in memory beyond readahead
-> window");
-> +			TH_LOG("Unexpected page in memory beyond read around
-> window");
-> +		}
-> +	}
-> +
-> +	i = FILE_SIZE / 2 / page_size - 1;
-> +	ra_pages = 0;
-> +	while (i >= 0 && vec[i]) {
-> +		ra_pages++;
-> +		i--;
-> +	}
-> +
-> +	EXPECT_EQ(ra_pages, exp_ra_pages) {
-> +		TH_LOG("Check read-around pages failed");
-> +	}
-> +
-> +	/*
-> +	 * End of the read around window. The rest of the pages shouldn't
-> +	 * be in memory for the left hand.
-> +	 */
-> +	if (i >= 0) {
-> +		while (i >= 0 && !vec[i])
-> +			i--;
-> +		EXPECT_EQ(-1, i) {
-> +			TH_LOG("Unexpected page in memory beyond read around
-> window");
->  		}
->  	}
-> 
-> --
-> 2.17.1
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
 
+are available in the Git repository at:
 
-Gentele ping.
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-clk-6.2
 
-Regards,
-Gongyi
+for you to fetch changes up to 2bc5febd05abe86c3e3d4b4f18dff4bc4316c1be:
 
+  clk: samsung: Revert "clk: samsung: exynos-clkout: Use of_device_get_match_data()" (2022-11-15 10:36:54 +0100)
+
+----------------------------------------------------------------
+Samsung SoC clock drivers changes for 6.1
+
+1. Fix calling of_device_get_match_data() on wrong device (parent's) in
+   Exynos clock out driver.
+2. Correct clock name in bindings of ExynosAutov9 clocks.
+3. Correct parents of div4 clock on Exynos7885.
+
+----------------------------------------------------------------
+David Virag (1):
+      clk: samsung: exynos7885: Correct "div4" clock parents
+
+Inbaraj E (1):
+      dt-bindings: clock: exynosautov9: fix reference to CMU_FSYS1
+
+Marek Szyprowski (1):
+      clk: samsung: Revert "clk: samsung: exynos-clkout: Use of_device_get_match_data()"
+
+ .../devicetree/bindings/clock/samsung,exynosautov9-clock.yaml       | 2 +-
+ drivers/clk/samsung/clk-exynos-clkout.c                             | 6 ++++--
+ drivers/clk/samsung/clk-exynos7885.c                                | 4 ++--
+ 3 files changed, 7 insertions(+), 5 deletions(-)
