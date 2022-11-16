@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 591F062B65C
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:22:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B91362B658
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:22:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232845AbiKPJWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 04:22:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44256 "EHLO
+        id S233392AbiKPJWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 04:22:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233652AbiKPJWA (ORCPT
+        with ESMTP id S238019AbiKPJWB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 04:22:00 -0500
+        Wed, 16 Nov 2022 04:22:01 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C7427146;
-        Wed, 16 Nov 2022 01:21:59 -0800 (PST)
-Date:   Wed, 16 Nov 2022 09:21:56 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D2DA26496;
+        Wed, 16 Nov 2022 01:22:00 -0800 (PST)
+Date:   Wed, 16 Nov 2022 09:21:57 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668590517;
+        s=2020; t=1668590519;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=YA4CPPTUVtYwpqhvtLMRcFwGP6fQVGdvDsF0bj73KSA=;
-        b=VxmlUt0Rfc7jGSAI7OPLtXBB0F272IfyHu+aMj1kOvVlO84Fs6ubReh6wipUI8pjsWSOLk
-        Ab+CPw8tiJJQLU30OYACyETBV4Ucpo1r5vpnZA1hqPImlOo/4tGMQ74MkF3EmAZx2/CYci
-        pk/Hj1ztosTQQWfSv9uPp4x3/at5lFGZDc+osC0X6MT7/jDtvL5+U5rzvv6zFpl4B7BRrq
-        TCly7rIImcCKaq7kmWxxzbgGwmQeNnVoy7tQSUmUQJ9RXF+6YDEpk8+892YszFBFH4BkGn
-        hn1GOR6mD03KuMVILEsguEj0imM/xAtGuR8SJQe9puIWPCyGhpmbYa3oLECtCQ==
+        bh=y2QCi91rjS1KvSEfaQMdVz/AWN4dBQtHDsuiO7ZSipA=;
+        b=C63eBMnnuYI99bFSvUY2eh4q0nLt/5n1+H/GNtf6hMTZmHN3aRMrpmcjEyqDmwkz21AOWc
+        VHqxboe+8xVx0s7I2hMc+2wtSoKa5tV2LFcRojIOnjf9kwCnVaQx/wxu2Tv1f8zrWMVL19
+        iViZ/+LpuzElJLRmD8Gnvb0hpSxF7awhDO14XuNp+H9pqT4jPEZgv3k1Ws0AarWQdf3rVH
+        cZ4S6vqN/40JzX5sVBxqk8L5+UYYMFgK5y3RJudNbMLX0eQ6zPQEz5HCwJECgcusNuJF++
+        7a+0mUzTzjuk/q08dWHEOJPmplEJMEtKgN2ViUNu1Ri7xFKic62BCThQffDxzA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668590517;
+        s=2020e; t=1668590519;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=YA4CPPTUVtYwpqhvtLMRcFwGP6fQVGdvDsF0bj73KSA=;
-        b=mF5Ennni/19N9fRtmA1MwQPUMpq6OZaTAFlrt9sC3R/jXGLd7sWCcVg4L2z/HbulXszbWe
-        Ofoft4PSuldlt8CQ==
-From:   "tip-bot2 for Adrian Hunter" <tip-bot2@linutronix.de>
+        bh=y2QCi91rjS1KvSEfaQMdVz/AWN4dBQtHDsuiO7ZSipA=;
+        b=p1x8WBNvJdLjWVJBcHKXVBgibWqCYcBhHH/m3+N0d/qoKOdLF7OdAcItDU42TrMvUxSg4s
+        8dWWiq2SJSo/k7DQ==
+From:   "tip-bot2 for Ravi Bangoria" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/urgent] perf/x86/intel/pt: Fix sampling using single range output
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        stable@vger.kernel.org, x86@kernel.org,
+Subject: [tip: perf/urgent] perf/x86/amd: Fix crash due to race between
+ amd_pmu_enable_all, perf NMI and throttling
+Cc:     Linux Kernel Functional Testing <lkft@linaro.org>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20221112151508.13768-1-adrian.hunter@intel.com>
-References: <20221112151508.13768-1-adrian.hunter@intel.com>
+In-Reply-To: <20221114044029.373-1-ravi.bangoria@amd.com>
+References: <20221114044029.373-1-ravi.bangoria@amd.com>
 MIME-Version: 1.0
-Message-ID: <166859051658.4906.7352282169801138446.tip-bot2@tip-bot2>
+Message-ID: <166859051766.4906.13011883252870783939.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,45 +68,88 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the perf/urgent branch of tip:
 
-Commit-ID:     ce0d998be9274dd3a3d971cbeaa6fe28fd2c3062
-Gitweb:        https://git.kernel.org/tip/ce0d998be9274dd3a3d971cbeaa6fe28fd2c3062
-Author:        Adrian Hunter <adrian.hunter@intel.com>
-AuthorDate:    Sat, 12 Nov 2022 17:15:08 +02:00
+Commit-ID:     baa014b9543c8e5e94f5d15b66abfe60750b8284
+Gitweb:        https://git.kernel.org/tip/baa014b9543c8e5e94f5d15b66abfe60750b8284
+Author:        Ravi Bangoria <ravi.bangoria@amd.com>
+AuthorDate:    Mon, 14 Nov 2022 10:10:29 +05:30
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Wed, 16 Nov 2022 10:12:59 +01:00
+CommitterDate: Wed, 16 Nov 2022 10:12:58 +01:00
 
-perf/x86/intel/pt: Fix sampling using single range output
+perf/x86/amd: Fix crash due to race between amd_pmu_enable_all, perf NMI and throttling
 
-Deal with errata TGL052, ADL037 and RPL017 "Trace May Contain Incorrect
-Data When Configured With Single Range Output Larger Than 4KB" by
-disabling single range output whenever larger than 4KB.
+amd_pmu_enable_all() does:
 
-Fixes: 670638477aed ("perf/x86/intel/pt: Opportunistically use single range output mode")
-Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+      if (!test_bit(idx, cpuc->active_mask))
+              continue;
+
+      amd_pmu_enable_event(cpuc->events[idx]);
+
+A perf NMI of another event can come between these two steps. Perf NMI
+handler internally disables and enables _all_ events, including the one
+which nmi-intercepted amd_pmu_enable_all() was in process of enabling.
+If that unintentionally enabled event has very low sampling period and
+causes immediate successive NMI, causing the event to be throttled,
+cpuc->events[idx] and cpuc->active_mask gets cleared by x86_pmu_stop().
+This will result in amd_pmu_enable_event() getting called with event=NULL
+when amd_pmu_enable_all() resumes after handling the NMIs. This causes a
+kernel crash:
+
+  BUG: kernel NULL pointer dereference, address: 0000000000000198
+  #PF: supervisor read access in kernel mode
+  #PF: error_code(0x0000) - not-present page
+  [...]
+  Call Trace:
+   <TASK>
+   amd_pmu_enable_all+0x68/0xb0
+   ctx_resched+0xd9/0x150
+   event_function+0xb8/0x130
+   ? hrtimer_start_range_ns+0x141/0x4a0
+   ? perf_duration_warn+0x30/0x30
+   remote_function+0x4d/0x60
+   __flush_smp_call_function_queue+0xc4/0x500
+   flush_smp_call_function_queue+0x11d/0x1b0
+   do_idle+0x18f/0x2d0
+   cpu_startup_entry+0x19/0x20
+   start_secondary+0x121/0x160
+   secondary_startup_64_no_verify+0xe5/0xeb
+   </TASK>
+
+amd_pmu_disable_all()/amd_pmu_enable_all() calls inside perf NMI handler
+were recently added as part of BRS enablement but I'm not sure whether
+we really need them. We can just disable BRS in the beginning and enable
+it back while returning from NMI. This will solve the issue by not
+enabling those events whose active_masks are set but are not yet enabled
+in hw pmu.
+
+Fixes: ada543459cab ("perf/x86/amd: Add AMD Fam19h Branch Sampling support")
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Cc: stable@vger.kernel.org
-Link: https://lkml.kernel.org/r/20221112151508.13768-1-adrian.hunter@intel.com
+Link: https://lkml.kernel.org/r/20221114044029.373-1-ravi.bangoria@amd.com
 ---
- arch/x86/events/intel/pt.c |  9 +++++++++
- 1 file changed, 9 insertions(+)
+ arch/x86/events/amd/core.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/events/intel/pt.c b/arch/x86/events/intel/pt.c
-index 82ef87e..42a5579 100644
---- a/arch/x86/events/intel/pt.c
-+++ b/arch/x86/events/intel/pt.c
-@@ -1263,6 +1263,15 @@ static int pt_buffer_try_single(struct pt_buffer *buf, int nr_pages)
- 	if (1 << order != nr_pages)
- 		goto out;
+diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
+index 8b70237..d6f3703 100644
+--- a/arch/x86/events/amd/core.c
++++ b/arch/x86/events/amd/core.c
+@@ -861,8 +861,7 @@ static int amd_pmu_handle_irq(struct pt_regs *regs)
+ 	pmu_enabled = cpuc->enabled;
+ 	cpuc->enabled = 0;
  
-+	/*
-+	 * Some processors cannot always support single range for more than
-+	 * 4KB - refer errata TGL052, ADL037 and RPL017. Future processors might
-+	 * also be affected, so for now rather than trying to keep track of
-+	 * which ones, just disable it for all.
-+	 */
-+	if (nr_pages > 1)
-+		goto out;
-+
- 	buf->single = true;
- 	buf->nr_pages = nr_pages;
- 	ret = 0;
+-	/* stop everything (includes BRS) */
+-	amd_pmu_disable_all();
++	amd_brs_disable_all();
+ 
+ 	/* Drain BRS is in use (could be inactive) */
+ 	if (cpuc->lbr_users)
+@@ -873,7 +872,7 @@ static int amd_pmu_handle_irq(struct pt_regs *regs)
+ 
+ 	cpuc->enabled = pmu_enabled;
+ 	if (pmu_enabled)
+-		amd_pmu_enable_all(0);
++		amd_brs_enable_all();
+ 
+ 	return amd_pmu_adjust_nmi_window(handled);
+ }
