@@ -2,117 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C6F462B3A4
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 08:01:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 078F462B379
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 07:49:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232210AbiKPHBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 02:01:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34690 "EHLO
+        id S231431AbiKPGtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 01:49:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232138AbiKPHBi (ORCPT
+        with ESMTP id S230128AbiKPGtL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 02:01:38 -0500
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C0C19027;
-        Tue, 15 Nov 2022 23:01:36 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 106C95C05D1;
-        Wed, 16 Nov 2022 02:01:33 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Wed, 16 Nov 2022 02:01:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1668582093; x=1668668493; bh=nzD5q2NnrY
-        heETr7ybMU8uZJqqWF9hEOlEN7kCuh2Zk=; b=jdPkzlc0/jRhxtJ3E+u4UUofIs
-        y435r/VMELOxBMnPwSkLc1kZ2NOXdHqcG1LlTPNCkmN/FYk/VDIqsP0iHn9Mz4Fu
-        jvzo4NSBGs64pS9lwYOinRKt4rNZdYT3OFfBOv3dLKktid//naNKY6A4VISGw852
-        +cOfpC7wVTAefno+1MIfDfYRK8rE+gPdue/ZhzMjnG7/+hiZLqEwvbF17DWuzxda
-        MRK/ugXP1Yyv9CfYaBLiQm0DCfwkC5zC8UxANXGcCQsmKyrFWx4Sxd7INXURsBRb
-        OZK1xIKyDfLIxxLve0MBMxaqmWp1w0ga0WZDzOEVcUL7tkR1SL4g8iiH/avg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1668582093; x=1668668493; bh=nzD5q2NnrYheETr7ybMU8uZJqqWF
-        9hEOlEN7kCuh2Zk=; b=IzCFC7O9CQh2be5i5obyABQrbraUlKyKuX94VgmdsN5N
-        mAe7/5Q0dqrx3MIAARa5/CsNte+ZhWzx7vn8XU6xFG92WzLoO7tHUT6oKFlxZOwV
-        uZDvketZxVnsrBVuncr9EqINIzLZxRMRQ0lHUilvvlK0ph+iK8kKfEZL1GQ+rLq7
-        x8hCpm6SBNCsCU4iH2or/xetFOgbl/oK8WDQ4gj09ncnx+qerunILn/ODMO+VxrK
-        05Al8fU/kkLlaxxzlheoO4K/OQWzROrAK5SPMrxV68LB+3O8WJS8I1uQiHKhRV4K
-        v7EU0VO6ebkAKv7n8SRim1wcNXvinUOggatnb75l2A==
-X-ME-Sender: <xms:y4p0Y4GsaKA0STNDhEtqJjFGDkhuFWS_U0oTy5kQofCIjP-9aTkQ_g>
-    <xme:y4p0YxV1b4Rnrc59f-SiSH63Pu0QpfhmRe-x-EFfP3waCdrDAXKsmdMG6YHhajfRv
-    sfqT1a-9flDaISmTUE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgeehgddutddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:y4p0YyIQYqM87982VXIGCGCPgsP1T2fBjWcznpaJv9Y2TZbNerV2YQ>
-    <xmx:y4p0Y6HWekv9srmPb3_Fw3ntugUT5gJOvzQjH73MfYdsWoSaFlC-_Q>
-    <xmx:y4p0Y-XM0TbuR2_UczrcFYrkAHdC2dvs8CKf_vQ2y1gwWaAoLZsGDA>
-    <xmx:zYp0YwdWtWWwd73Z6vkzv9o_1T9iK3CB0wHTbHXut5ZX1ptvj5rb0g>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id AB79EB60086; Wed, 16 Nov 2022 02:01:31 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
-Mime-Version: 1.0
-Message-Id: <c5e8ab50-aacb-4651-8893-a6dd9edcd155@app.fastmail.com>
-In-Reply-To: <Y3QNzvAYo9y+yyTf@mail.local>
-References: <20220908115337.1604277-1-arnd@kernel.org>
- <Y3QNzvAYo9y+yyTf@mail.local>
-Date:   Wed, 16 Nov 2022 08:01:00 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
-        "Arnd Bergmann" <arnd@kernel.org>
-Cc:     "Alessandro Zummo" <a.zummo@towertech.it>,
-        "Reinier Kuipers" <kuipers.reinier@gmail.com>,
-        linux-rtc@vger.kernel.org, "Russell King" <linux@armlinux.org.uk>,
-        "Yang Yingliang" <yangyingliang@huawei.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] [RFC] rtc: y2038: remove broken RTC_HCTOSYS workaround
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 16 Nov 2022 01:49:11 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5F9D624F;
+        Tue, 15 Nov 2022 22:49:09 -0800 (PST)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NBtpR5zL9zqST6;
+        Wed, 16 Nov 2022 14:45:19 +0800 (CST)
+Received: from kwepemm600020.china.huawei.com (7.193.23.147) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 16 Nov 2022 14:49:07 +0800
+Received: from localhost.localdomain (10.175.112.125) by
+ kwepemm600020.china.huawei.com (7.193.23.147) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 16 Nov 2022 14:49:05 +0800
+From:   Peng Zhang <zhangpeng362@huawei.com>
+To:     <jikos@kernel.org>, <benjamin.tissoires@redhat.com>,
+        <gregkh@suse.de>, <marcel@holtmann.org>, <jkosina@suse.cz>,
+        <rdunlap@infradead.org>, <jirislaby@gmail.com>
+CC:     <linux-input@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        ZhangPeng <zhangpeng362@huawei.com>,
+        <syzbot+8b1641d2f14732407e23@syzkaller.appspotmail.com>
+Subject: [PATCH] HID: core: fix shift-out-of-bounds in hid_report_raw_event
+Date:   Wed, 16 Nov 2022 07:14:28 +0000
+Message-ID: <20221116071428.191437-1-zhangpeng362@huawei.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.125]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600020.china.huawei.com (7.193.23.147)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022, at 23:08, Alexandre Belloni wrote:
-> Hello,
->
-> I'm fine with the patch and I'll probably take it, 
+From: ZhangPeng <zhangpeng362@huawei.com>
 
-Ok, thanks!
+Syzbot reported shift-out-of-bounds in hid_report_raw_event.
 
-> I a an observation though:
->
-> On 08/09/2022 13:53:20+0200, Arnd Bergmann wrote:
->> +	 *
->> +	 * Since the kernel has no way of knowing what user space it runs,
->> +	 * warn here whenever the kernel is able to run it.
->> +	 * When CONFIG_COMPAT_32BIT_TIME is disabled, we know that the
->> +	 * system is safe, but unfortunately this this is currently not
->> +	 * supported by musl-1.2.x or most glibc based user space.
->
-> I was under the impression that musl never had a 32bit time_t nor used
-> the 32bit time APIs so it would not be affected by the bug.
-> So I guess the only affected userspace is glibc without _TIME_BITS=64
+microsoft 0003:045E:07DA.0001: hid_field_extract() called with n (128) >
+32! (swapper/0)
+======================================================================
+UBSAN: shift-out-of-bounds in drivers/hid/hid-core.c:1323:20
+shift exponent 127 is too large for 32-bit type 'int'
+CPU: 0 PID: 0 Comm: swapper/0 Not tainted
+6.1.0-rc4-syzkaller-00159-g4bbf3422df78 #0
+Hardware name: Google Compute Engine/Google Compute Engine, BIOS
+Google 10/26/2022
+Call Trace:
+ <IRQ>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e3/0x2cb lib/dump_stack.c:106
+ ubsan_epilogue lib/ubsan.c:151 [inline]
+ __ubsan_handle_shift_out_of_bounds+0x3a6/0x420 lib/ubsan.c:322
+ snto32 drivers/hid/hid-core.c:1323 [inline]
+ hid_input_fetch_field drivers/hid/hid-core.c:1572 [inline]
+ hid_process_report drivers/hid/hid-core.c:1665 [inline]
+ hid_report_raw_event+0xd56/0x18b0 drivers/hid/hid-core.c:1998
+ hid_input_report+0x408/0x4f0 drivers/hid/hid-core.c:2066
+ hid_irq_in+0x459/0x690 drivers/hid/usbhid/hid-core.c:284
+ __usb_hcd_giveback_urb+0x369/0x530 drivers/usb/core/hcd.c:1671
+ dummy_timer+0x86b/0x3110 drivers/usb/gadget/udc/dummy_hcd.c:1988
+ call_timer_fn+0xf5/0x210 kernel/time/timer.c:1474
+ expire_timers kernel/time/timer.c:1519 [inline]
+ __run_timers+0x76a/0x980 kernel/time/timer.c:1790
+ run_timer_softirq+0x63/0xf0 kernel/time/timer.c:1803
+ __do_softirq+0x277/0x75b kernel/softirq.c:571
+ __irq_exit_rcu+0xec/0x170 kernel/softirq.c:650
+ irq_exit_rcu+0x5/0x20 kernel/softirq.c:662
+ sysvec_apic_timer_interrupt+0x91/0xb0 arch/x86/kernel/apic/apic.c:1107
+======================================================================
 
-It's actually the opposite: while new versions of musl only allow
-building applications against the time64 interfaces, musl itself
-uses a mix of the time32 and time64 system calls, and the musl
-maintainer considers turning CONFIG_COMPAT_32BIT_TIME off a
-misfeature of the kernel that he does not want to support.
+If the size of the integer (unsigned n) is bigger than 32 in snto32(),
+shift exponent will be too large for 32-bit type 'int', resulting in a
+shift-out-of-bounds bug.
+Fix this by adding a check on the size of the integer (unsigned n) in
+snto32(). To add support for n greater than 32 bits, set n to 32, if n
+is greater than 32.
 
-      Arnd
+Reported-by: syzbot+8b1641d2f14732407e23@syzkaller.appspotmail.com
+Fixes: dde5845a529f ("[PATCH] Generic HID layer - code split")
+Signed-off-by: ZhangPeng <zhangpeng362@huawei.com>
+---
+ drivers/hid/hid-core.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
+index 9c1d31f63f85..bd47628da6be 100644
+--- a/drivers/hid/hid-core.c
++++ b/drivers/hid/hid-core.c
+@@ -1315,6 +1315,9 @@ static s32 snto32(__u32 value, unsigned n)
+ 	if (!value || !n)
+ 		return 0;
+ 
++	if (n > 32)
++		n = 32;
++
+ 	switch (n) {
+ 	case 8:  return ((__s8)value);
+ 	case 16: return ((__s16)value);
+-- 
+2.25.1
+
