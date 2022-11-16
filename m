@@ -2,156 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A262162C1A2
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:58:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1236262C19E
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:57:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234366AbiKPO5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 09:57:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48924 "EHLO
+        id S233991AbiKPO5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 09:57:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234223AbiKPO5X (ORCPT
+        with ESMTP id S233632AbiKPO5R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 09:57:23 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F413D2C13B
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 06:57:21 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id f18so11691301ejz.5
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 06:57:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=9/cpzKxny9lt7J2uqRZQx//vvzeNsc0OHeymfe7bFMI=;
-        b=XyQGsIU+A/TF0P2+MWJDH+mnscb8c+MyRIggIlVbCtneTaOkH7jFFxCB2HnX8TkS8n
-         KiLHRwmyOiQTnb95b1bZe6Yd4HsVZHvefljJb/PFENYgaz6yZoSPCVIx+wWl+J0shc0p
-         TFb5n9Ye4RBIgkY1OUpdS1Rbb5n0wqMC+53GTk1PWcxm89gJfYbHXUaq+0R954++/FBJ
-         Ney1cP1jstfWK+KO6OznWLSD7YJISeOZ94oBkHoQDzta9LbA1wOL7AvPKdRE/AyGhPPb
-         +qLpeOMPrtpW23M3Dp/ewdMQO81DAvJcGlJ4/HRo+Hf23Aa50dahe/Mgc/IO4ctXRfBU
-         usqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9/cpzKxny9lt7J2uqRZQx//vvzeNsc0OHeymfe7bFMI=;
-        b=oWkJvZMUPrheVI5hxoiOxLfbPycXei6e9ALjO43Ilv0da4uFk13oL4mu7WZNBs3udS
-         0PwAvAnvGuL26hpMRgQDQthA5nxM+9TbSifLvlNrtBGLFioUFzbIJkxZZ8ybcWgHbpeR
-         aQdZTwT6UdAVwHbmX+bWICOf3B0autHMVzJjzEAbVRDMEpOM9pzIcDlNt5TXaPBk2rMA
-         8uEc26zrIXr3k8e6q75FUf0UA4v/1gNCMLcy4QqfCuWhEKUALBfy1Hn9+diuH2PKqmPg
-         OPEj7MaVLjO/e+AmYVtwS1sGvigvgGSokIC3Kl6oOhtX37eEsPjQ8BXjfeREfSSau/Qt
-         jkoQ==
-X-Gm-Message-State: ANoB5pncOJE6WTAWUYWb5rvjSTsiIz3YnSF3r2/pEBI9VF/eGQp+c0zI
-        qDYZxtdY0xEOeQ16nPA6aIQpy2+j0Gj2AvLf/MoDag==
-X-Google-Smtp-Source: AA0mqf5JzpzScq/+SMh/iM+LwwBELp6t9A6aFL+klEI+TLdGcMxSO/hfrlQ/uktwuZWwC1qjhNu5jEGN4yAvs0PWsUs=
-X-Received: by 2002:a17:907:7889:b0:78e:11ea:8528 with SMTP id
- ku9-20020a170907788900b0078e11ea8528mr18161419ejc.190.1668610640528; Wed, 16
- Nov 2022 06:57:20 -0800 (PST)
+        Wed, 16 Nov 2022 09:57:17 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 138DCFADF;
+        Wed, 16 Nov 2022 06:57:16 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 98D361F94F;
+        Wed, 16 Nov 2022 14:57:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1668610635; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3vl4NdpO4irC1eRJoV821C0JFp7+4A15d5hSm1FQvTo=;
+        b=eqaB6EP2GKiw5QP6JiW0cWOM1NG4anZRyh1calWKdEwUX95RbEKck+SxlKqWruwGYlnjRW
+        InAsn8C+8XCSZZ23Mcg3b7PsV6E7utY9JOJX4lXDMQlPNUCOIwlxjZtQp2QRMW+DkxU1bQ
+        lzj7mbU+Msd0KWWV5/hZ7unfoL4q6B4=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7A24113480;
+        Wed, 16 Nov 2022 14:57:15 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id qwJoG0v6dGOYYgAAMHmgww
+        (envelope-from <mhocko@suse.com>); Wed, 16 Nov 2022 14:57:15 +0000
+Date:   Wed, 16 Nov 2022 15:57:14 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Zhongkun He <hezhongkun.hzk@bytedance.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, corbet@lwn.net,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [External] Re: [PATCH v2] mm: add new syscall
+ pidfd_set_mempolicy().
+Message-ID: <Y3T6SqZvAmSG5I6W@dhcp22.suse.cz>
+References: <20221111084051.2121029-1-hezhongkun.hzk@bytedance.com>
+ <20221111112732.30e1696bcd0d5b711c188a9a@linux-foundation.org>
+ <a44f794e-fe60-e261-3631-9107822d5c36@bytedance.com>
+ <Y3IqLzvduM6HqPJV@dhcp22.suse.cz>
+ <3a3b4f5b-14d1-27d8-7727-cf23da90988f@bytedance.com>
+ <Y3KFFfMFE55lVdNZ@dhcp22.suse.cz>
+ <82c9c89c-aee2-08a3-e562-359631bb0137@bytedance.com>
+ <0bd0b744-3d97-b4c3-a4fb-6040f8f8024a@bytedance.com>
 MIME-Version: 1.0
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 16 Nov 2022 15:57:09 +0100
-Message-ID: <CACRpkdaJy5hhrMfdZWtpoBUxBEc1QnxaX4pRzQVUBoEoKqrwzA@mail.gmail.com>
-Subject: [GIT PULL] pin control fixes for v6.1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0bd0b744-3d97-b4c3-a4fb-6040f8f8024a@bytedance.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Wed 16-11-22 19:28:10, Zhongkun He wrote:
+> Hi Michal, I've done the performance testing, please check it out.
+> 
+> > > Yes this is all understood but the level of the overhead is not really
+> > > clear. So the question is whether this will induce a visible overhead.
+> > > Because from the maintainability point of view it is much less costly to
+> > > have a clear life time model. Right now we have a mix of reference
+> > > counting and per-task requirements which is rather subtle and easy to
+> > > get wrong. In an ideal world we would have get_vma_policy always
+> > > returning a reference counted policy or NULL. If we really need to
+> > > optimize for cache line bouncing we can go with per cpu reference
+> > > counters (something that was not available at the time the mempolicy
+> > > code has been introduced).
+> > > 
+> > > So I am not saying that the task_work based solution is not possible I
+> > > just think that this looks like a good opportunity to get from the
+> > > existing subtle model.
+> 
+> Test tools:
+> numactl -m 0-3 ./run-mmtests.sh -n -c configs/config-workload-
+> aim9-pagealloc  test_name
+> 
+> Modification:
+> Get_vma_policy(), get_task_policy() always returning a reference
+> counted policy, except for the static policy(default_policy and
+> preferred_node_policy[nid]).
 
-here is a hopefully final round of pin control fixes.
-Nothing special, driver fixes and we caught a potential
-NULL pointer exception.
+It would be better to add the patch that has been tested.
 
-What took time for me was to figure out how to get the
-GPG password entry for signing the tag come up in
-curses on a remote machine instead of giving up when
-trying to open the secure little signing widget that locks
-the desktop UI which it doesn't have. Comes down to
-export PINENTRY_USER_DATA=USE_TTY=1
-then creating .gnupg/gpg-agent.conf setting up
-pinentry-program /usr/bin/pinentry-curses.
-Well that was not intuitive, especially not an
-environment variable containing an environment
-variable. GPG might need some UX polish (or maybe
-it's the distros that do this to us). Anyway here it is!
+> All vma manipulation is protected by a down_read, so mpol_get()
+> can be called directly to take a refcount on the mpol. but there
+> is no lock in task->mempolicy context.
+> so task->mempolicy should be protected by task_lock.
+> 
+> struct mempolicy *get_task_policy(struct task_struct *p)
+> {
+> 	struct mempolicy *pol;
+> 	int node;
+> 
+> 	if (p->mempolicy) {
+> 		task_lock(p);
+> 		pol = p->mempolicy;
+> 		mpol_get(pol);
+> 		task_unlock(p);
+> 		if (pol)
+> 			return pol;
+> 	}
 
-Yours,
-Linus Walleij
 
-The following changes since commit f0c4d9fc9cc9462659728d168387191387e903cc:
+One way to deal with that would be to use a similar model as css_tryget
 
-  Linux 6.1-rc4 (2022-11-06 15:07:11 -0800)
+Btw. have you tried to profile those slowdowns to identify hotspots?
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git
-tags/pinctrl-v6.1-4
-
-for you to fetch changes up to 2e35b25dd8e666b8619355fc3defb1b246a5dc02:
-
-  pinctrl: mediatek: Export debounce time tables (2022-11-15 09:13:59 +0100)
-
-----------------------------------------------------------------
-Pin control fixes for the v6.1 kernel:
-
-- Fix a potential NULL dereference in the core!
-
-- Fix all pin mux routes in the Rockchop PX30 driver.
-
-- Fix the UFS pins in the Qualcomm SC8280XP driver.
-
-- Fix bias disabling in the Mediatek driver.
-
-- Fix debounce time settings in the Mediatek driver.
-
-----------------------------------------------------------------
-AngeloGioacchino Del Regno (2):
-      pinctrl: mediatek: common-v2: Fix bias-disable for PULL_PU_PD_RSEL_TYPE
-      pinctrl: mediatek: Fix EINT pins input debounce time configuration
-
-Anjana Hari (1):
-      pinctrl: qcom: sc8280xp: Rectify UFS reset pins
-
-Linus Walleij (1):
-      pinctrl: mediatek: Export debounce time tables
-
-Quentin Schulz (1):
-      pinctrl: rockchip: list all pins in a possible mux route for PX30
-
-Zeng Heng (1):
-      pinctrl: devicetree: fix null pointer dereferencing in pinctrl_dt_to_map
-
- drivers/pinctrl/devicetree.c                     |  2 ++
- drivers/pinctrl/mediatek/mtk-eint.c              | 34 +++++++++++++++++---
- drivers/pinctrl/mediatek/mtk-eint.h              |  6 ++++
- drivers/pinctrl/mediatek/pinctrl-mt2701.c        |  1 +
- drivers/pinctrl/mediatek/pinctrl-mt2712.c        |  1 +
- drivers/pinctrl/mediatek/pinctrl-mt6765.c        |  1 +
- drivers/pinctrl/mediatek/pinctrl-mt6779.c        |  1 +
- drivers/pinctrl/mediatek/pinctrl-mt6795.c        |  1 +
- drivers/pinctrl/mediatek/pinctrl-mt7622.c        |  1 +
- drivers/pinctrl/mediatek/pinctrl-mt7623.c        |  1 +
- drivers/pinctrl/mediatek/pinctrl-mt7629.c        |  1 +
- drivers/pinctrl/mediatek/pinctrl-mt7986.c        |  2 ++
- drivers/pinctrl/mediatek/pinctrl-mt8127.c        |  1 +
- drivers/pinctrl/mediatek/pinctrl-mt8135.c        |  1 +
- drivers/pinctrl/mediatek/pinctrl-mt8167.c        |  1 +
- drivers/pinctrl/mediatek/pinctrl-mt8173.c        |  1 +
- drivers/pinctrl/mediatek/pinctrl-mt8183.c        |  1 +
- drivers/pinctrl/mediatek/pinctrl-mt8186.c        |  1 +
- drivers/pinctrl/mediatek/pinctrl-mt8188.c        |  1 +
- drivers/pinctrl/mediatek/pinctrl-mt8192.c        |  1 +
- drivers/pinctrl/mediatek/pinctrl-mt8195.c        |  1 +
- drivers/pinctrl/mediatek/pinctrl-mt8365.c        |  1 +
- drivers/pinctrl/mediatek/pinctrl-mt8516.c        |  1 +
- drivers/pinctrl/mediatek/pinctrl-mtk-common-v2.c |  3 ++
- drivers/pinctrl/pinctrl-rockchip.c               | 40 ++++++++++++++++++++++++
- drivers/pinctrl/qcom/pinctrl-sc8280xp.c          |  4 +--
- 26 files changed, 103 insertions(+), 7 deletions(-)
+Thanks
+-- 
+Michal Hocko
+SUSE Labs
