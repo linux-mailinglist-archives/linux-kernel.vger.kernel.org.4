@@ -2,229 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CD3862BD4F
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:16:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76D1562BD63
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:18:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238618AbiKPMQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 07:16:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34836 "EHLO
+        id S232680AbiKPMRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 07:17:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238559AbiKPMQY (ORCPT
+        with ESMTP id S233170AbiKPMQa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 07:16:24 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8A83F05A;
-        Wed, 16 Nov 2022 04:10:35 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id w3-20020a17090a460300b00218524e8877so2482801pjg.1;
-        Wed, 16 Nov 2022 04:10:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Xt1QsURs8dSzNQ+WHlj7oV4CqoPL0fiQE0UeKb8Zq/8=;
-        b=T/HxHqwRNJefXpFUOTtsaXE4BZnCfPpY3R2h3RXPbWTAgzvZPUOsIOnm8RyiAexkWg
-         YiS3nsV1WAvy3Va3Ik+A5JeXb3MnUOCauA8KJimmmzn0EWtVm9p4nMrlE/4xfPUKdvZd
-         +CUFnpT/pgaHBIlUBNkmyLKDWdAkbs+zE2qLj2d7QBT8ePqcmAS9it8WH/FzAD8Cihbh
-         8uXcWYvxTwVHnawTp6Y1/MG25gXRfH5Wbh+qgvEAwJVjboRALATGT2pIgDnkHIN6itLE
-         DVE4L7MaJn9/ru23TqYflCXPe/ckdP31JPREwlsfTyIMpfWRX0xiJ6m3eSU+LKFfcnBT
-         kFBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Xt1QsURs8dSzNQ+WHlj7oV4CqoPL0fiQE0UeKb8Zq/8=;
-        b=qbrguXCuA7opJkocKxLvArOe/uyu6m3X3o+yzqIn2i4+MVe+XqxlOD3BH0aWo5VyZJ
-         RLrXxQtFNewxQHklSWzS58FfdRpJkY05m28TMh1hZBNbmK+r1Ayt7ZB9Vi2/A2smytlM
-         NOXB88uqx2TC8C072IVfOMn+9TVPFK/u43QoL0trvP+acizTMzO9seyqXgmHe2/U3osB
-         Fc3dfrPY6auh1e8XRxZ7Dcjaa/1Hu6sXUlp1icUfrYQnsbfE8AmQP3ycHhohRK+LjSo3
-         wyNHAH05YyvC0QDObKA2CVmcgOGI85cLeNTIUZmBSy7EOvE8R0nEP4y4YcOl+TKdkLyn
-         ke/A==
-X-Gm-Message-State: ANoB5pm8v6kGcM1vVqmT5pWa+atB5gBUSyYNK9SSXsgdlRGBdEFbSxZY
-        nGizA847GVWEQ51R36txCTc=
-X-Google-Smtp-Source: AA0mqf6AxicNbrmQQOiMjHmkrqREXP7f4cqpC7FE0HOS5MwnsRlKv8MlI5QPM+jXrzOS3ggB7sLAjg==
-X-Received: by 2002:a17:902:e951:b0:177:e4c7:e8b7 with SMTP id b17-20020a170902e95100b00177e4c7e8b7mr8727198pll.118.1668600634751;
-        Wed, 16 Nov 2022 04:10:34 -0800 (PST)
-Received: from localhost ([114.254.0.245])
-        by smtp.gmail.com with ESMTPSA id k12-20020a17090a39cc00b0020d67a726easm1420084pjf.10.2022.11.16.04.10.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 04:10:34 -0800 (PST)
-From:   Hawkins Jiawei <yin31149@gmail.com>
-To:     kuba@kernel.org
-Cc:     18801353760@163.com, cong.wang@bytedance.com, davem@davemloft.net,
-        edumazet@google.com, jhs@mojatatu.com, jiri@resnulli.us,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com,
-        syzbot+232ebdbd36706c965ebf@syzkaller.appspotmail.com,
-        syzkaller-bugs@googlegroups.com, xiyou.wangcong@gmail.com,
-        yin31149@gmail.com
-Subject: Re: [PATCH v2] net: sched: fix memory leak in tcindex_set_parms
-Date:   Wed, 16 Nov 2022 20:10:10 +0800
-Message-Id: <20221116121010.101577-1-yin31149@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221115184442.272b6ea8@kernel.org>
-References: <20221115184442.272b6ea8@kernel.org>
+        Wed, 16 Nov 2022 07:16:30 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0FFC26DF;
+        Wed, 16 Nov 2022 04:10:57 -0800 (PST)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NC21k3B2Bz15Mgh;
+        Wed, 16 Nov 2022 20:10:34 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 16 Nov 2022 20:10:56 +0800
+Received: from thunder-town.china.huawei.com (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 16 Nov 2022 20:10:55 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>, <kexec@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>, <linux-doc@vger.kernel.org>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        "Chen Zhou" <dingguo.cz@antgroup.com>,
+        John Donnelly <John.p.donnelly@oracle.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>
+Subject: [PATCH v4 0/2] arm64: kdump: Function supplement and performance optimization
+Date:   Wed, 16 Nov 2022 20:10:42 +0800
+Message-ID: <20221116121044.1690-1-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.37.3.windows.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Nov 2022 at 10:44, Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Tue, 15 Nov 2022 19:57:10 +0100 Paolo Abeni wrote:
-> > This code confuses me more than a bit, and I don't follow ?!?
->
-> It's very confusing :S
->
-> For starters I don't know when r != old_r. I mean now it triggers
-> randomly after the RCU-ification, but in the original code when
-> it was just a memset(). When would old_r ever not be null and yet
-> point to a different entry?
+v3 --> v4:
+1. Set DEFAULT_CRASH_KERNEL_LOW_SIZE to a fixed 128M.
+2. Some lightweight code adjustments based on Catalin Marinas's comments
 
-I am also confused about the code when I tried to fix this bug.
+v2 --> v3:
+1. Discard patch 3 in v2, a cleanup patch.
 
-As for when `old_r != r`, according to the simplified
-code below, this should be probably true if `p->perfect` is true
-or `!p->perfect && !pc->h` is true(please correct me if I am wrong)
+v1 --> v2:
+1. Update the commit message of Patch 1, explicitly indicates that "crashkernel=X,high"
+   is specified but "crashkernel=Y,low" is not specified.
+2. Drop Patch 4-5. Currently, focus on function integrity, performance optimization
+   will be considered in later versions.
+3. Patch 3 is not mandatory, it's just a cleanup now, although it is a must for patch 4-5.
+   But to avoid subsequent duplication of effort, I'm glad it was accepted.
 
-        struct tcindex_filter_result new_filter_result, *old_r = r;
-        struct tcindex_data *cp = NULL, *oldp;
-        struct tcf_result cr = {};
+v1:
+After the basic functions of "support reserving crashkernel above 4G on arm64
+kdump"(see https://lkml.org/lkml/2022/5/6/428) are implemented, we still have
+three features to be improved.
+1. When crashkernel=X,high is specified but crashkernel=Y,low is not specified,
+   the default crash low memory size is provided.
+2. For crashkernel=X without '@offset', if the low memory fails to be allocated,
+   fall back to reserve region from high memory(above DMA zones).
+3. If crashkernel=X,high is used, page mapping is performed only for the crash
+   high memory, and block mapping is still used for other linear address spaces.
+   Compared to the previous version:
+   (1) For crashkernel=X[@offset], the memory above 4G is not changed to block
+       mapping, leave it to the next time.
+   (2) The implementation method is modified. Now the implementation is simpler
+       and clearer.
 
-        /* tcindex_data attributes must look atomic to classifier/lookup so
-         * allocate new tcindex data and RCU assign it onto root. Keeping
-         * perfect hash and hash pointers from old data.
-         */
-        cp = kzalloc(sizeof(*cp), GFP_KERNEL);
+Zhen Lei (2):
+  arm64: kdump: Provide default size when crashkernel=Y,low is not
+    specified
+  arm64: kdump: Support crashkernel=X fall back to reserve region above
+    DMA zones
 
-        if (p->perfect) {
-                if (tcindex_alloc_perfect_hash(net, cp) < 0)
-                        goto errout;
-                ...
-        }
-        cp->h = p->h;
+ .../admin-guide/kernel-parameters.txt         | 15 +++++------
+ arch/arm64/mm/init.c                          | 25 ++++++++++++++++---
+ 2 files changed, 28 insertions(+), 12 deletions(-)
 
-        if (!cp->perfect && !cp->h) {
-                if (valid_perfect_hash(cp)) {
-                        if (tcindex_alloc_perfect_hash(net, cp) < 0)
-                                goto errout_alloc;
+-- 
+2.25.1
 
-                } else {
-                        struct tcindex_filter __rcu **hash;
-
-                        hash = kcalloc(cp->hash,
-                                       sizeof(struct tcindex_filter *),
-                                       GFP_KERNEL);
-
-                        if (!hash)
-                                goto errout_alloc;
-
-                        cp->h = hash;
-                }
-        }
-        ...
-
-        if (cp->perfect)
-                r = cp->perfect + handle;
-        else
-                r = tcindex_lookup(cp, handle) ? : &new_filter_result;
-
-        if (old_r && old_r != r) {
-                err = tcindex_filter_result_init(old_r, cp, net);
-                if (err < 0) {
-                        kfree(f);
-                        goto errout_alloc;
-                }
-        }
-
-* If `p->perfect` is true, tcindex_alloc_perfect_hash() newly
-alloctes cp->perfect.
-
-* If `!p->perfect && !p->h` is true, cp->perfect or cp->h is
-newly allocated.
-
-In either case, r probably points to the newly allocated memory,
-which should not equals to the old_r.
-
->
-> > it looks like that at this point:
-> >
-> > * the data path could access 'old_r->exts' contents via 'p' just before
-> > the previous 'tcindex_filter_result_init(old_r, cp, net);' but still
-> > potentially within the same RCU grace period
-> >
-> > * 'tcindex_filter_result_init(old_r, cp, net);' has 'unlinked' the old
-> > exts from 'p'  so that will not be freed by later
-> > tcindex_partial_destroy_work()
-> >
-> > Overall it looks to me that we need some somewhat wait for the RCU
-> > grace period,
->
-> Isn't it better to make @cp a deeper copy of @p ?
-> I thought it already is but we don't seem to be cloning p->h.
-> Also the cloning of p->perfect looks quite lossy.
-
-Yes, I also think @cp should be a deeper copy of @p.
-
-But it seems that in tcindex_alloc_perfect_hash(),
-each @cp ->exts will be initialized by tcf_exts_init()
-as below, and tcindex_set_parms() forgets to free the
-old ->exts content, triggering this memory leak.(Please
-correct me if I am wrong)
-
-        static int tcindex_alloc_perfect_hash(struct net *net,
-                                              struct tcindex_data *cp)
-        {
-        	int i, err = 0;
-        
-        	cp->perfect = kcalloc(cp->hash, sizeof(struct tcindex_filter_result),
-        			      GFP_KERNEL | __GFP_NOWARN);
-        
-        	for (i = 0; i < cp->hash; i++) {
-        		err = tcf_exts_init(&cp->perfect[i].exts, net,
-        				    TCA_TCINDEX_ACT, TCA_TCINDEX_POLICE);
-        		if (err < 0)
-        			goto errout;
-        		cp->perfect[i].p = cp;
-        	}
-        }
-
-        static inline int tcf_exts_init(struct tcf_exts *exts, struct net *net,
-        				int action, int police)
-        {
-        #ifdef CONFIG_NET_CLS_ACT
-        	exts->type = 0;
-        	exts->nr_actions = 0;
-        	/* Note: we do not own yet a reference on net.
-        	 * This reference might be taken later from tcf_exts_get_net().
-        	 */
-        	exts->net = net;
-        	exts->actions = kcalloc(TCA_ACT_MAX_PRIO, sizeof(struct tc_action *),
-        				GFP_KERNEL);
-        	if (!exts->actions)
-        		return -ENOMEM;
-        #endif
-        	exts->action = action;
-        	exts->police = police;
-        	return 0;
-        }
-
->
-> > Somewhat side question: it looks like that the 'perfect hashing' usage
-> > is the root cause of the issue addressed here, and very likely is
-> > afflicted by other problems, e.g. the data curruption in 'err =
-> > tcindex_filter_result_init(old_r, cp, net);'.
-> >
-> > AFAICS 'perfect hashing' usage is a sort of optimization that the user-
-> > space may trigger with some combination of the tcindex arguments. I'm
-> > wondering if we could drop all perfect hashing related code?
->
-> The thought of "how much of this can we delete" did cross my mind :)
