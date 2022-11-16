@@ -2,130 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07CBD62C6E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 18:52:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EE4E62C6E3
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 18:53:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238857AbiKPRw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 12:52:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35396 "EHLO
+        id S238874AbiKPRxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 12:53:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232855AbiKPRw0 (ORCPT
+        with ESMTP id S233023AbiKPRxm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 12:52:26 -0500
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7429061745
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 09:52:25 -0800 (PST)
-Received: by mail-qk1-x72c.google.com with SMTP id i9so12145082qki.10
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 09:52:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1rQlgFzU2D6ccCofT8yfeItGDtrcH6vIuVi43kZTTr8=;
-        b=Rqi9C17fStbxaE75fZDvem3v2dLunYE4NE3tLK28TY10XqKeNf3Xz1E7cNS6OeKABY
-         65XciY/3lUHieUdDbDB5CibqglDw7GoDSg59vGUg9ul1GxVmTB/tpic1yFlzTIDUWcvb
-         BtKVUF4ZBsYaHfnluSbyDfJ0PASTdJPickmoI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1rQlgFzU2D6ccCofT8yfeItGDtrcH6vIuVi43kZTTr8=;
-        b=TJxvrCNhrwsRps3LV1Xsmc3W3YFd/MzmcnpyO59Fm+152j7SicVJPu+JyMMQYzEJFB
-         S7ufyZYHqXNlwGTQD8XtX74MCGam/D3l8WhmRc37G1rC7TJrYmuCn74m88SOdr6RKJSh
-         WlhlOuEjWr0MAmxzFkLcWK4634U9KePawolHkHBCmcir0YXEncD14ne0DST/tE8s8Zt3
-         6kU/WwqN3OCQujrN+jaVHPCE3xbA5F2oHjYi6fruKCDZSuAQ+GBRz9q4fi7Wd+uSRlom
-         u/QTQVCfkrfY4yFyg6mwNfjxZyBfCW8ywwG8Wywe0Gf0aNAuBm6hcuOB4NhtXUS0vZQm
-         tJLg==
-X-Gm-Message-State: ANoB5pkYjSy7ovJYczk/ryALyQUy/ooTkyPKUPkTAi/Mot7EyY9Ckbp5
-        g1VqEKNTbTSOQTolcSKS8j59WL0xb8TPBg==
-X-Google-Smtp-Source: AA0mqf7LXZVtM/myRqMAeNG/wCicqlDPpxkN834kMZIeRMJfM693mgZsviKZIgue3k/NqcK+c9nuYA==
-X-Received: by 2002:a05:620a:1d0d:b0:6f9:c2be:a89 with SMTP id dl13-20020a05620a1d0d00b006f9c2be0a89mr20403028qkb.437.1668621144311;
-        Wed, 16 Nov 2022 09:52:24 -0800 (PST)
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com. [209.85.160.173])
-        by smtp.gmail.com with ESMTPSA id s8-20020a05620a254800b006fa16fe93bbsm10465663qko.15.2022.11.16.09.52.22
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 09:52:23 -0800 (PST)
-Received: by mail-qt1-f173.google.com with SMTP id s4so11179528qtx.6
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 09:52:22 -0800 (PST)
-X-Received: by 2002:ac8:718a:0:b0:3a5:122:fb79 with SMTP id
- w10-20020ac8718a000000b003a50122fb79mr21752516qto.452.1668621142404; Wed, 16
- Nov 2022 09:52:22 -0800 (PST)
+        Wed, 16 Nov 2022 12:53:42 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2057.outbound.protection.outlook.com [40.107.243.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107682ED74;
+        Wed, 16 Nov 2022 09:53:39 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YMtZYShkRvr5wsrPJaCnxJUgel4k1n4d+0eW3y70KhFJFx83ppwPbbHTJ3J4ixFnlH4JLww/pckFQPHyxblQc2HvwXSQq0p5hCFGpx2g4ada+Ro7PSYXOVfaddrm2WT3DAzxm/hjbil8gGh7i7hNvxm976H8snRBn8ZLwPp/U7Txf4k86duzd4v28y3NwUML7Kt/lkT56PLxJ9RUoEWi4LC4Z//rvz1S+bS2liE1llImwSVPDaohHe5eJqLfLpzbAZx0p344HUIHnEJFRr/9jmybpPWVL04YH5B24NxEqqvaCbtFufksI10lzZn8Mf/UTNwEIlZWEA4z/RD5UtQrYg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=s4PfyU6965SxkVjigx4XetlKhbhIVzcq2U3xAZ7zqBk=;
+ b=RcCizxyC2eK8465jco9x7wGLtOkXV6q1AOGuKXlrXyJ3aGBS6rlxbSKdyQpyKtheaO1ah0C2gFzjtxzUo2aXfOuqXsK+P+AOCWMMITwolaj4tpEZ1matfKfrN34Ro7XJL2dLn+6g8hRyJ2UoxlpxzX3E61WX6A9uc40JNXKVEgB90aL7cGkg+NoJGiKUZkjqOdVfTdUiEylDfHwM7lumsx54TvJoHK1JfLN6bjFTRlYTMHIG3aLsnssG8LyAZRiWJ5SjwoRIxfonHUgizio540uA1reYbLz7TCVVfb+Pj579B9pj7Hi6xKPD6PyV3bB3IogLJdbtoGD+Pg7N6b9OIg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=s4PfyU6965SxkVjigx4XetlKhbhIVzcq2U3xAZ7zqBk=;
+ b=t1RnZJSXTkpqG3PNhUvjJFcU4mrPAh2VLkD64LWTZ4Ydyej67vHkuqNj/zGd7LkaQpRU4E5AxVSk7frKyBCzvvt9M8PnE5cRF2pw8zHmy9KnnsYJKOVNZs3W0PU/DcWUpVKYH2/rKZsjBSQ1rLQphuLA8ZpRYtlqRGRJyuq6F/iQ1ipKKJgJk6ZyF+RVMNZ7E7fzD1xMm6PUVqUqD3T5mNtUdF3iee+aGhKrt+1ibGi1oOodFjplkmspjdFSTfqKcQdSMyjsrYKZRi5o30P9nn2PNP55Kpbqc5BlMGisAkvpUR64a1an8RtPu8vallNXarsdAJhj4RP9YDQ5wT8X5Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by DS0PR12MB7946.namprd12.prod.outlook.com (2603:10b6:8:151::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.18; Wed, 16 Nov
+ 2022 17:53:38 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f8b0:df13:5f8d:12a]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f8b0:df13:5f8d:12a%7]) with mapi id 15.20.5813.017; Wed, 16 Nov 2022
+ 17:53:38 +0000
+Date:   Wed, 16 Nov 2022 13:53:37 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
+        Allen Hubbe <allenbh@gmail.com>,
+        "Ahmed S. Darwish" <darwi@linutronix.de>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [patch 14/39] PCI/MSI: Let the MSI core free descriptors
+Message-ID: <Y3UjofjdGh0TyP5o@nvidia.com>
+References: <20221111120501.026511281@linutronix.de>
+ <20221111122014.409654736@linutronix.de>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221111122014.409654736@linutronix.de>
+X-ClientProxiedBy: MN2PR01CA0001.prod.exchangelabs.com (2603:10b6:208:10c::14)
+ To LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
 MIME-Version: 1.0
-References: <20221109203051.1835763-1-torvalds@linux-foundation.org>
- <20221109203051.1835763-4-torvalds@linux-foundation.org> <CAHk-=wjf+gN25grUT3o3XK8-B-b2jhBuN8YMLQvq-=AXTcuFXg@mail.gmail.com>
- <CAHk-=wiFmm+X92Ghkz_LDG53djReK=idAj0uvSdES+yeG1X=Dw@mail.gmail.com>
- <Y3SVqePHGXRUagyF@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com> <Y3SWTXMotahiqvBO@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
-In-Reply-To: <Y3SWTXMotahiqvBO@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 16 Nov 2022 09:52:06 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wh-oBpkN8AKALDkeTcVRzkUqqUyFevCNcCy3F76ogGonA@mail.gmail.com>
-Message-ID: <CAHk-=wh-oBpkN8AKALDkeTcVRzkUqqUyFevCNcCy3F76ogGonA@mail.gmail.com>
-Subject: Re: mm: mmu_gather: do not define delayed_rmap if not used
-To:     Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     Hugh Dickins <hughd@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Nick Piggin <npiggin@gmail.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DS0PR12MB7946:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4c1c8dac-b1df-458e-03b3-08dac7fb7d7a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: or0G6ZKF82Im5oJpkzZj5JphJXHI0tD4bMuoBqeD7BJTKXj4TKsCKU2OVMr+vWfdFtK1dIPUU+NAjO90BtQiK5nEpM5iNxy6Tl1VLYDcjm85GYsI+8lY9YoBBPg6OUWID7Pz0OnQslkdSDrlvyRJ8jYGYraeqxiZnFRuY7K9bYYHnJiavyjRG4bulkKe6/lM/MRlMYdPqvKPWEtbbhQ2CvbpebgmN/UbOOEfqg++0VVdiArSnnhLsFCMv/rpecolqAD9QmZ2iOyqaIMIlYBGrLs58Kt8mp0GXDXAytbzLXMfOnfx3enbBWBYcWmqwrUr8WSx6XjOkzEJPTFzbWDD0snuXyE/QkGzxxczVspkSNT38+GdZRS+XZn7R3t5nlgMDbEnZGO4PGUunS2ymYMrz9kt/qIgXGevxQBuq5ImQGkKNT/Kdh5EPgdx2tMOxaweGR35rMtnD72MRPlmOzJg5CXbqiuoyNGKoexBxrV/sP25IjwVqAHjIJyGDFzjc0T5cguqR5Sy6UDM9U0cphmLfgQlHBzr7VIe9T2VY5qbs/KRKOJ+iN2+9/cupgiJCf1VWqPOY2+Pxz6FZBSduVr6EWTHS6FpSFpfVtUMQF7dRQoA4/EgRDSpjGz/f9rks0jbEcsJhhz5iFja5BG7Zno66pfFk3gNdTmm2wV02TgrQTUXBInkE9+fu8t49SYhl50THxOZBFcHFT5oNZQJhrgGGQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(396003)(376002)(346002)(366004)(451199015)(6486002)(86362001)(38100700002)(83380400001)(5660300002)(8936002)(7416002)(8676002)(66476007)(4326008)(66556008)(41300700001)(66946007)(26005)(6506007)(6512007)(316002)(186003)(2616005)(54906003)(2906002)(478600001)(36756003)(6916009);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0MnaQPUruXXbrorVlmyqj2p0fmL0lLXgfb42mZyPf56SfHOJd0pqu68VPpFe?=
+ =?us-ascii?Q?mbSVus+rS+v/aFW63BauXdjdsRYCK922COrGGBN9T8MjQEsm58PY5DR1vBJu?=
+ =?us-ascii?Q?lPYS/4BOJDW6uuLanBEC3fYH01tD7Ygn24XTQlirgso4NtOz5ITCYV067AGS?=
+ =?us-ascii?Q?zcxl6r2/3VAcNmzbGl/yLDn6ljpQDW9TnU+7NbQQRxoW2YKxFYOraBDZxoV4?=
+ =?us-ascii?Q?5zovMsKZmtyKmjlg+vhUPlqSIhgunZHdSBDNFh8gQq1JSrVgJwMKkhQnliDu?=
+ =?us-ascii?Q?jrnMeled3OL80Gj/qpRqHnwYs+YEOsPyJ/MC0hyHYW60lbeUWiX81StSSxsS?=
+ =?us-ascii?Q?u6krAdH4eiNJw4vecXOW/NmuFZaW4GAAvu+6rmaNi6uRqpOWubdgvnRfEtnY?=
+ =?us-ascii?Q?dEwQMuilEAMzyrlCkE+o7N3dNYymHHGGjjNkKL069Y2L80XUZ9t3ArPcWDrg?=
+ =?us-ascii?Q?uc9Ozme2WtVh5t5PrgBkfg67GNrc0pYQ6qH12F1C+swJOE0FDzrRTwCO+Rd5?=
+ =?us-ascii?Q?mzcNXpxT48i0VBeDGrBbtSF1eC33Et/YCkuKEJTOBzNAeRz6hhMwpH/0M4ar?=
+ =?us-ascii?Q?MgwpEum1mdPGj8suReXLr7sjFYmr8qwpMMrkxOdQolYzcMijK2arNbtLieA+?=
+ =?us-ascii?Q?JhaX6+BbNABe7ETrfXB1mG4XMz82NNrp2QI4VEMqm45SepHAD403bPl5d/6Q?=
+ =?us-ascii?Q?EELeps2zYe3xnnzRxB3Yk1FSN2xyK7m/wAwvT0zdM+L20k4FZtZodQ98umGB?=
+ =?us-ascii?Q?3Dn3u5788s35Ve1I0PuXGIhXVeJPTCEDDhMDX7A8fb4txiUKH5sD1FMUXeL1?=
+ =?us-ascii?Q?C19A07uU/iglzirnBAMIJj4NA/s5GvoT+oj44FMrW6ids/LqDIKtRRRWtb8k?=
+ =?us-ascii?Q?TEEidGxmfFcGojTIDcECz/WiF37J3q4tSulCyjW1g8T9U0OYUzJrzLl3ME1p?=
+ =?us-ascii?Q?tW+h6LF/6lRFWliF7fgxe5Tf95W05v2nBBZejk1WG6r9qnYrFKPp9aHfk8hh?=
+ =?us-ascii?Q?r+/02S5MwCl5UQksU+eSJFy45myKzze1sPDq75SNzIZ/eHklUOk44bCMi2fU?=
+ =?us-ascii?Q?kIupCkkpEGJjXlnhrk5oVTyE2fsJ48ct36348k1IqaBPVzWMq6/sR/raDIP5?=
+ =?us-ascii?Q?vlnxtb+hhHJmJWgcA0emH89JI+tvoWTfTRqh/4onkrcuCsjIH0g4wQunM9gT?=
+ =?us-ascii?Q?B+i4xVUpp5XYY4uji6BZ8AuY5xXB/Xd/pmkZWnNH61gPFn+oqPJv48t7CkS+?=
+ =?us-ascii?Q?6bBDpuvZDlL7bp3mLBrv/cSUJ56xIpaffWnGwDf2E+3y3EiHikcioQjdPDsz?=
+ =?us-ascii?Q?NxSBbMZ7u/CaONKkh8SPJdME1srJwFEbWYFZhuFfgLQvOUMfajWBKZg3zjif?=
+ =?us-ascii?Q?oXmcJxMNaDe32YFreohdSn6baIgVofIc15ZXxQ2nceYRHS/gez48Z0NFtQSu?=
+ =?us-ascii?Q?+UedPyi1Hz5VI2zGj+JExmiPG5RvVfVdp9cC2Ju/Mqrlo163Va3k5VOeVcug?=
+ =?us-ascii?Q?d/0AOtosiOjVQsnHjOu1kqO43oFICpa6HbR969p6FIdal6rTYd/lxhclGtv5?=
+ =?us-ascii?Q?4cA93vbAY1a2b7LQIlrtRCgDIrQFeVjPGrJAuFuW?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4c1c8dac-b1df-458e-03b3-08dac7fb7d7a
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Nov 2022 17:53:38.4379
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: u2X2BSZRbLY7S1HBX4mQWcq4cSM0hU7ZPq6n3daG574/XdGsnyeptHG7xKqZUOQN
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7946
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 11:51 PM Alexander Gordeev
-<agordeev@linux.ibm.com> wrote:
->
-> In cases the delayed rmap removal is not used (which are
-> currently UP and s390) skip delayed_rmap flag and make
-> the related code paths no-op.
+On Fri, Nov 11, 2022 at 02:54:37PM +0100, Thomas Gleixner wrote:
+> From: Ahmed S. Darwish <darwi@linutronix.de>
+> 
+> Let the core do the freeing of descriptors and just keep it around for the
+> legacy case.
+> 
+> Signed-off-by: Ahmed S. Darwish <darwi@linutronix.de>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> ---
+>  drivers/pci/msi/irqdomain.c |   10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
+> 
+> --- a/drivers/pci/msi/irqdomain.c
+> +++ b/drivers/pci/msi/irqdomain.c
+> @@ -24,11 +24,12 @@ void pci_msi_teardown_msi_irqs(struct pc
+>  	struct irq_domain *domain;
+>  
+>  	domain = dev_get_msi_domain(&dev->dev);
+> -	if (domain && irq_domain_is_hierarchy(domain))
+> +	if (domain && irq_domain_is_hierarchy(domain)) {
+>  		msi_domain_free_irqs_descs_locked(domain, &dev->dev);
+> -	else
+> +	} else {
+>  		pci_msi_legacy_teardown_msi_irqs(dev);
+> -	msi_free_msi_descs(&dev->dev);
+> +		msi_free_msi_descs(&dev->dev);
+> +	}
+>  }
+>  
+>  /**
+> @@ -170,6 +171,9 @@ struct irq_domain *pci_msi_create_irq_do
+>  	if (info->flags & MSI_FLAG_USE_DEF_CHIP_OPS)
+>  		pci_msi_domain_update_chip_ops(info);
+>  
+> +	/* Let the core code free MSI descriptors when freeing interrupts */
+> +	info->flags |= MSI_FLAG_FREE_MSI_DESCS;
 
-So I'm not convinced about this patch.
+Comment repeats the one on the enum declaration?
 
-I particularly dislike adding even more #ifdef's around the data
-structure - it already is pretty nasty, and it was hard to see where
-things were initialized.
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 
-The only actual code impact of this is in tlb_next_batch(), which
-tests for "do I have delayed rmaps pending, in which case I won't add
-new batches". Everything else is already either optimized away, or
-just "one bit declared in a structure that already has bitfields and
-has room for several extra bits":
-
-And that "I need to allocate new batches" case really doesn't matter
-anyway - it's not even build at all on s390, and on UP where it's
-there but technically pointless to have the test it really isn't
-noticeable.
-
-So the previous patch I was "this shouldn't actually _matter_, but it
-does seem cleaner to do it this way".
-
-But _this_ patch makes me go "it still doesn't matter, but now this
-patch is actually adding extra infrastructure for the 'not-mattering'
-case".
-
-So I don't _hate_ this patch, but I think this actually makes the
-current mess wrt our 'struct mmu_gather' worse rather than better.
-
-That structure is already a pain, with horrendous initialization and
-different bit-fields having different lifetimes. I'd rather have one
-unconditional simple bitfield, than have another bitfield that has
-conditional complications.
-
-              Linus
+Jason
