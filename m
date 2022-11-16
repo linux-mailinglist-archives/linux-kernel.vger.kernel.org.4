@@ -2,460 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DFDE62B632
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:16:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9212B62B63B
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:17:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233460AbiKPJQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 04:16:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40064 "EHLO
+        id S232991AbiKPJRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 04:17:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233532AbiKPJPv (ORCPT
+        with ESMTP id S238176AbiKPJQw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 04:15:51 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABCA76412;
-        Wed, 16 Nov 2022 01:15:49 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AG63WRa008731;
-        Wed, 16 Nov 2022 09:15:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id; s=qcppdkim1;
- bh=Y73lOZrC3pYXjgFZDWMiK7VON+FJYRpTWB+d3cHWqBc=;
- b=d7ly+qt1+aTVYPDeNOd8mfS+zFsD9Y5O6RfWNbs7kjpHoHL2Ik++b0zeffE9bPQ4RguN
- nM3LpOxMBvbq3L4J3G4BDnoxuu9F7Rl8EcD1vzmM+c3agloyffF5WpnE902EpERh7FNT
- MN5RQzCSFqcTmXcQLNlNb4uRWrN2ivoRRYpHOdVexk1EaU0DaYr/lyL/GNTa4rmoQF+7
- wnZEpUpqMP+rbCxEuoZQJwjn5Smp94/s0dYT0kAkQ5z2OFzVUNSIfPuEafqOyO6kxAbd
- pvDp3ePFqxUyO1G0AW3u6W2pTpv+CHE2eQ4huvLUtWhMdGfNt4mXYHBVJSH3nPTORqct QQ== 
-Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kvt8g8gm5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Nov 2022 09:15:44 +0000
-Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2AG9Fems010023;
-        Wed, 16 Nov 2022 09:15:40 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 3kt4jkffh1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Wed, 16 Nov 2022 09:15:40 +0000
-Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AG9FeTg010015;
-        Wed, 16 Nov 2022 09:15:40 GMT
-Received: from hu-sgudaval-hyd.qualcomm.com (hu-vnivarth-hyd.qualcomm.com [10.213.111.166])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 2AG9FeRG010014;
-        Wed, 16 Nov 2022 09:15:40 +0000
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3994820)
-        id 94845DF3; Wed, 16 Nov 2022 14:45:39 +0530 (+0530)
-From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        broonie@kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     quic_msavaliy@quicinc.com, dianders@chromium.org, mka@chromium.org,
-        swboyd@chromium.org, quic_vtanuku@quicinc.com, vkoul@kernel.org,
-        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-Subject: [PATCH] spi: spi-geni-qcom: Add support for SE DMA mode
-Date:   Wed, 16 Nov 2022 14:45:35 +0530
-Message-Id: <1668590135-7725-1-git-send-email-quic_vnivarth@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Dp6NTm_l2kRU_MSfqomPfHMKse0krlrA
-X-Proofpoint-GUID: Dp6NTm_l2kRU_MSfqomPfHMKse0krlrA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-15_08,2022-11-15_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1011
- lowpriorityscore=0 suspectscore=0 malwarescore=0 bulkscore=0 spamscore=0
- mlxscore=0 priorityscore=1501 impostorscore=0 phishscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2211160065
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+        Wed, 16 Nov 2022 04:16:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C5F63A4
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:15:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668590155;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lXB7geeDOHGl0xlPBQdCp9G9AIuT+xoszozZAW+zE8Q=;
+        b=fVDz5n9h4FfwTD2VpYIKPhPIrtueu7p00eXLJ9uNHU+RvtsJ+X4l5VxDWinbh7zGzFb1UZ
+        dBPuge7Io3mFUgd3mnZCa68LEZNTKl+ZfUf3t7NxHSIQ01PSFaAbU1mxOY1H2c8YJfADRq
+        8OYz9sQYybF4RJ6UK/66M3qONrF8Gqc=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-642-dIuxcO3vOyWzUZUknMUIHw-1; Wed, 16 Nov 2022 04:15:52 -0500
+X-MC-Unique: dIuxcO3vOyWzUZUknMUIHw-1
+Received: by mail-wr1-f72.google.com with SMTP id i12-20020adfaacc000000b0023cd08e3b56so3488269wrc.12
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:15:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lXB7geeDOHGl0xlPBQdCp9G9AIuT+xoszozZAW+zE8Q=;
+        b=794dkbuBsZ+XmaUAzcfyr9VAOr8fD9pX1XowENchqafrcNoRa0r4oee6nchmgfKWkU
+         2f/Xljkke8s1F5TXNeM/GMnfDcjI/wfjoJ+tVjELwbmbV+xIAgJ51JJPDH1Vt3uv68yh
+         Q415MFqRyUABuXWXAb3zcVRsgHJL30X8c4oCFcW4MfYngOyZWGSAZbm66Bos5f0lY/7k
+         BZrRS4GNwSblzPV489dd9J4FhM4ikhnTyxhwu2jw/nN/Y1uqDcSl6JzHU5LjYbNNt82p
+         4Lg/4eSau1+wy4oxINgpI5tkXySomve9hIO6xVY0G/l1yGPLCvVlthuFWxVmmDQ1uqGt
+         GKBw==
+X-Gm-Message-State: ANoB5pmd1Rts8JhU021Rq3FjZNjf8puglEURFJsPmY4T12hOoRdLy6Tl
+        5/A4c8Qid6OmtSB/rZIWpfvJcaw38r50MMvgHhBOexfXlF1AzbkaJ7kO/ojRf3B/rB/6Ud2xPFH
+        xwYGrFsx28sM2bhXKxdRXOhw8
+X-Received: by 2002:adf:ba8a:0:b0:241:a825:205c with SMTP id p10-20020adfba8a000000b00241a825205cmr723883wrg.40.1668590151410;
+        Wed, 16 Nov 2022 01:15:51 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5q1YiQuRZuDh0m/3hidhum4BE2NmI2J9RofCm2nmoGqmv7HNMCAG+OXViUb83JQKL/H5aWnA==
+X-Received: by 2002:adf:ba8a:0:b0:241:a825:205c with SMTP id p10-20020adfba8a000000b00241a825205cmr723867wrg.40.1668590151028;
+        Wed, 16 Nov 2022 01:15:51 -0800 (PST)
+Received: from ?IPV6:2003:cb:c704:9f00:a98d:4026:7c44:40fd? (p200300cbc7049f00a98d40267c4440fd.dip0.t-ipconnect.de. [2003:cb:c704:9f00:a98d:4026:7c44:40fd])
+        by smtp.gmail.com with ESMTPSA id n126-20020a1c2784000000b003b95ed78275sm1350756wmn.20.2022.11.16.01.15.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Nov 2022 01:15:50 -0800 (PST)
+Message-ID: <bf27a35f-e568-f8e3-6aa9-45b129db0b09@redhat.com>
+Date:   Wed, 16 Nov 2022 10:15:49 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 1/4] mm: introduce 'encoded' page pointers with embedded
+ extra bits
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+References: <20221109203051.1835763-1-torvalds@linux-foundation.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20221109203051.1835763-1-torvalds@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SE DMA mode can be used for larger transfers and FIFO mode
-for smaller transfers.
+On 09.11.22 21:30, Linus Torvalds wrote:
+> We already have this notion in parts of the MM code (see the mlock code
+> with the LRU_PAGE and NEW_PAGE bits), but I'm going to introduce a new
+> case, and I refuse to do the same thing we've done before where we just
+> put bits in the raw pointer and say it's still a normal pointer.
+> 
+> So this introduces a 'struct encoded_page' pointer that cannot be used
+> for anything else than to encode a real page pointer and a couple of
+> extra bits in the low bits.  That way the compiler can trivially track
+> the state of the pointer and you just explicitly encode and decode the
+> extra bits.
+> 
+> Note that this makes the alignment of 'struct page' explicit even for
+> the case where CONFIG_HAVE_ALIGNED_STRUCT_PAGE is not set.  That is
+> entirely redundant in almost all cases, since the page structure already
+> contains several word-sized entries.
+> 
+> However, on m68k, the alignment of even 32-bit data is just 16 bits, and
+> as such in theory the alignment of 'struct page' could be too.  So let's
+> just make it very very explicit that the alignment needs to be at least
+> 32 bits, giving us a guarantee of two unused low bits in the pointer.
+> 
+> Now, in practice, our page struct array is aligned much more than that
+> anyway, even on m68k, and our existing code in mm/mlock.c obviously
+> already depended on that.  But since the whole point of this change is
+> to be careful about the type system when hiding extra bits in the
+> pointer, let's also be explicit about the assumptions we make.
+> 
+> NOTE! This is being very careful in another way too: it has a build-time
+> assertion that the 'flags' added to the page pointer actually fit in the
+> two bits.  That means that this helper must be inlined, and can only be
+> used in contexts where the compiler can statically determine that the
+> value fits in the available bits.
+> 
+> Link: https://lore.kernel.org/all/Y2tKixpO4RO6DgW5@tuxmaker.boeblingen.de.ibm.com/
+> Cc: Alexander Gordeev <agordeev@linux.ibm.com>
+> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+> Acked-by: Hugh Dickins <hughd@google.com>
+> Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 
-Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
----
- drivers/spi/spi-geni-qcom.c | 218 +++++++++++++++++++++++++++++++++-----------
- 1 file changed, 165 insertions(+), 53 deletions(-)
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
-index 4e83cc5..d3ba1af 100644
---- a/drivers/spi/spi-geni-qcom.c
-+++ b/drivers/spi/spi-geni-qcom.c
-@@ -87,6 +87,8 @@ struct spi_geni_master {
- 	struct completion cs_done;
- 	struct completion cancel_done;
- 	struct completion abort_done;
-+	struct completion tx_reset_done;
-+	struct completion rx_reset_done;
- 	unsigned int oversampling;
- 	spinlock_t lock;
- 	int irq;
-@@ -95,6 +97,7 @@ struct spi_geni_master {
- 	struct dma_chan *tx;
- 	struct dma_chan *rx;
- 	int cur_xfer_mode;
-+	u32 cur_m_cmd;
- };
- 
- static int get_spi_clk_cfg(unsigned int speed_hz,
-@@ -129,23 +132,27 @@ static int get_spi_clk_cfg(unsigned int speed_hz,
- 	return ret;
- }
- 
--static void handle_fifo_timeout(struct spi_master *spi,
-+static void handle_se_timeout(struct spi_master *spi,
- 				struct spi_message *msg)
- {
- 	struct spi_geni_master *mas = spi_master_get_devdata(spi);
- 	unsigned long time_left;
- 	struct geni_se *se = &mas->se;
-+	const struct spi_transfer *xfer;
- 
- 	spin_lock_irq(&mas->lock);
- 	reinit_completion(&mas->cancel_done);
--	writel(0, se->base + SE_GENI_TX_WATERMARK_REG);
-+	if (mas->cur_xfer_mode == GENI_SE_FIFO)
-+		writel(0, se->base + SE_GENI_TX_WATERMARK_REG);
-+	if (mas->cur_xfer_mode == GENI_SE_DMA)
-+		xfer = mas->cur_xfer;
- 	mas->cur_xfer = NULL;
- 	geni_se_cancel_m_cmd(se);
- 	spin_unlock_irq(&mas->lock);
- 
- 	time_left = wait_for_completion_timeout(&mas->cancel_done, HZ);
- 	if (time_left)
--		return;
-+		goto unmap_if_dma;
- 
- 	spin_lock_irq(&mas->lock);
- 	reinit_completion(&mas->abort_done);
-@@ -162,6 +169,44 @@ static void handle_fifo_timeout(struct spi_master *spi,
- 		 */
- 		mas->abort_failed = true;
- 	}
-+
-+unmap_if_dma:
-+	if (mas->cur_xfer_mode == GENI_SE_DMA) {
-+		if (xfer) {
-+			if (xfer->tx_buf && xfer->tx_dma)
-+				geni_se_tx_dma_unprep(se, xfer->tx_dma, xfer->len);
-+			if (xfer->rx_buf && xfer->rx_dma)
-+				geni_se_rx_dma_unprep(se, xfer->rx_dma, xfer->len);
-+		} else {
-+			/*
-+			 * This can happen if a timeout happened and we had to wait
-+			 * for lock in this function because isr was holding the lock
-+			 * and handling transfer completion at that time.
-+			 * Unnecessary error but cannot be helped.
-+			 * Only do reset, dma_unprep is already done by isr.
-+			 */
-+			dev_err(mas->dev, "Cancel/Abort on completed SPI transfer\n");
-+		}
-+
-+		if (mas->cur_m_cmd & SPI_TX_ONLY) {
-+			spin_lock_irq(&mas->lock);
-+			reinit_completion(&mas->tx_reset_done);
-+			writel_relaxed(1, se->base + SE_DMA_TX_FSM_RST);
-+			spin_unlock_irq(&mas->lock);
-+			time_left = wait_for_completion_timeout(&mas->tx_reset_done, HZ);
-+			if (!time_left)
-+				dev_err(mas->dev, "DMA TX RESET failed\n");
-+		}
-+		if (mas->cur_m_cmd & SPI_RX_ONLY) {
-+			spin_lock_irq(&mas->lock);
-+			reinit_completion(&mas->rx_reset_done);
-+			writel_relaxed(1, se->base + SE_DMA_RX_FSM_RST);
-+			spin_unlock_irq(&mas->lock);
-+			time_left = wait_for_completion_timeout(&mas->rx_reset_done, HZ);
-+			if (!time_left)
-+				dev_err(mas->dev, "DMA RX RESET failed\n");
-+		}
-+	}
- }
- 
- static void handle_gpi_timeout(struct spi_master *spi, struct spi_message *msg)
-@@ -178,7 +223,8 @@ static void spi_geni_handle_err(struct spi_master *spi, struct spi_message *msg)
- 
- 	switch (mas->cur_xfer_mode) {
- 	case GENI_SE_FIFO:
--		handle_fifo_timeout(spi, msg);
-+	case GENI_SE_DMA:
-+		handle_se_timeout(spi, msg);
- 		break;
- 	case GENI_GPI_DMA:
- 		handle_gpi_timeout(spi, msg);
-@@ -260,7 +306,7 @@ static void spi_geni_set_cs(struct spi_device *slv, bool set_flag)
- 	time_left = wait_for_completion_timeout(&mas->cs_done, HZ);
- 	if (!time_left) {
- 		dev_warn(mas->dev, "Timeout setting chip select\n");
--		handle_fifo_timeout(spi, NULL);
-+		handle_se_timeout(spi, NULL);
- 	}
- 
- exit:
-@@ -482,8 +528,11 @@ static bool geni_can_dma(struct spi_controller *ctlr,
- {
- 	struct spi_geni_master *mas = spi_master_get_devdata(slv->master);
- 
--	/* check if dma is supported */
--	return mas->cur_xfer_mode != GENI_SE_FIFO;
-+	/*
-+	 * return true if transfer needs to be mapped prior to
-+	 * calling transfer_one which is the case only for GPI_DMA
-+	 */
-+	return mas->cur_xfer_mode == GENI_GPI_DMA;
- }
- 
- static int spi_geni_prepare_message(struct spi_master *spi,
-@@ -494,6 +543,7 @@ static int spi_geni_prepare_message(struct spi_master *spi,
- 
- 	switch (mas->cur_xfer_mode) {
- 	case GENI_SE_FIFO:
-+	case GENI_SE_DMA:
- 		if (spi_geni_is_abort_still_pending(mas))
- 			return -EBUSY;
- 		ret = setup_fifo_params(spi_msg->spi, spi);
-@@ -604,8 +654,8 @@ static int spi_geni_init(struct spi_geni_master *mas)
- 		fallthrough;
- 
- 	case 0:
--		mas->cur_xfer_mode = GENI_SE_FIFO;
--		geni_se_select_mode(se, GENI_SE_FIFO);
-+		mas->cur_xfer_mode = GENI_SE_DMA;
-+		geni_se_select_mode(se, GENI_SE_DMA);
- 		ret = 0;
- 		break;
- 	}
-@@ -716,14 +766,14 @@ static void geni_spi_handle_rx(struct spi_geni_master *mas)
- 	mas->rx_rem_bytes -= rx_bytes;
- }
- 
--static void setup_fifo_xfer(struct spi_transfer *xfer,
-+static int setup_se_xfer(struct spi_transfer *xfer,
- 				struct spi_geni_master *mas,
- 				u16 mode, struct spi_master *spi)
- {
- 	u32 m_cmd = 0;
--	u32 len;
-+	u32 len, fifo_size = 0;
- 	struct geni_se *se = &mas->se;
--	int ret;
-+	int ret = 0;
- 
- 	/*
- 	 * Ensure that our interrupt handler isn't still running from some
-@@ -748,7 +798,7 @@ static void setup_fifo_xfer(struct spi_transfer *xfer,
- 	/* Speed and bits per word can be overridden per transfer */
- 	ret = geni_spi_set_clock_and_bw(mas, xfer->speed_hz);
- 	if (ret)
--		return;
-+		return ret;
- 
- 	mas->tx_rem_bytes = 0;
- 	mas->rx_rem_bytes = 0;
-@@ -771,6 +821,13 @@ static void setup_fifo_xfer(struct spi_transfer *xfer,
- 		writel(len, se->base + SE_SPI_RX_TRANS_LEN);
- 		mas->rx_rem_bytes = xfer->len;
- 	}
-+	mas->cur_m_cmd = m_cmd;
-+
-+	/* Select transfer mode based on transfer length */
-+	fifo_size =
-+		(mas->tx_fifo_depth * mas->fifo_width_bits / mas->cur_bits_per_word);
-+	mas->cur_xfer_mode = (len <= fifo_size) ? GENI_SE_FIFO : GENI_SE_DMA;
-+	geni_se_select_mode(se, mas->cur_xfer_mode);
- 
- 	/*
- 	 * Lock around right before we start the transfer since our
-@@ -778,11 +835,36 @@ static void setup_fifo_xfer(struct spi_transfer *xfer,
- 	 */
- 	spin_lock_irq(&mas->lock);
- 	geni_se_setup_m_cmd(se, m_cmd, FRAGMENTATION);
--	if (m_cmd & SPI_TX_ONLY) {
-+
-+	if (mas->cur_xfer_mode == GENI_SE_DMA) {
-+		if (m_cmd & SPI_RX_ONLY) {
-+			ret =  geni_se_rx_dma_prep(se, xfer->rx_buf,
-+				xfer->len, &xfer->rx_dma);
-+			if (ret || !xfer->rx_buf) {
-+				dev_err(mas->dev, "Failed to setup Rx dma %d\n", ret);
-+				xfer->rx_dma = 0;
-+				goto unlock_and_return;
-+			}
-+		}
-+		if (m_cmd & SPI_TX_ONLY) {
-+			ret =  geni_se_tx_dma_prep(se, (void *)xfer->tx_buf,
-+				xfer->len, &xfer->tx_dma);
-+			if (ret || !xfer->tx_buf) {
-+				dev_err(mas->dev, "Failed to setup Tx dma %d\n", ret);
-+				xfer->tx_dma = 0;
-+				goto unlock_and_return;
-+			}
-+		}
-+	} else if (m_cmd & SPI_TX_ONLY) {
- 		if (geni_spi_handle_tx(mas))
- 			writel(mas->tx_wm, se->base + SE_GENI_TX_WATERMARK_REG);
- 	}
-+
-+unlock_and_return:
- 	spin_unlock_irq(&mas->lock);
-+	if (!ret)
-+		ret = 1;
-+	return ret;
- }
- 
- static int spi_geni_transfer_one(struct spi_master *spi,
-@@ -790,6 +872,7 @@ static int spi_geni_transfer_one(struct spi_master *spi,
- 				struct spi_transfer *xfer)
- {
- 	struct spi_geni_master *mas = spi_master_get_devdata(spi);
-+	int ret;
- 
- 	if (spi_geni_is_abort_still_pending(mas))
- 		return -EBUSY;
-@@ -798,9 +881,9 @@ static int spi_geni_transfer_one(struct spi_master *spi,
- 	if (!xfer->len)
- 		return 0;
- 
--	if (mas->cur_xfer_mode == GENI_SE_FIFO) {
--		setup_fifo_xfer(xfer, mas, slv->mode, spi);
--		return 1;
-+	if (mas->cur_xfer_mode == GENI_SE_FIFO || mas->cur_xfer_mode == GENI_SE_DMA) {
-+		ret = setup_se_xfer(xfer, mas, slv->mode, spi);
-+		return ret;
- 	}
- 	return setup_gsi_xfer(xfer, mas, slv, spi);
- }
-@@ -816,46 +899,73 @@ static irqreturn_t geni_spi_isr(int irq, void *data)
- 	if (!m_irq)
- 		return IRQ_NONE;
- 
--	if (m_irq & (M_CMD_OVERRUN_EN | M_ILLEGAL_CMD_EN | M_CMD_FAILURE_EN |
--		     M_RX_FIFO_RD_ERR_EN | M_RX_FIFO_WR_ERR_EN |
--		     M_TX_FIFO_RD_ERR_EN | M_TX_FIFO_WR_ERR_EN))
--		dev_warn(mas->dev, "Unexpected IRQ err status %#010x\n", m_irq);
--
- 	spin_lock(&mas->lock);
- 
--	if ((m_irq & M_RX_FIFO_WATERMARK_EN) || (m_irq & M_RX_FIFO_LAST_EN))
--		geni_spi_handle_rx(mas);
--
--	if (m_irq & M_TX_FIFO_WATERMARK_EN)
--		geni_spi_handle_tx(mas);
--
--	if (m_irq & M_CMD_DONE_EN) {
--		if (mas->cur_xfer) {
-+	if (mas->cur_xfer_mode == GENI_SE_FIFO) {
-+		if (m_irq & (M_CMD_OVERRUN_EN | M_ILLEGAL_CMD_EN | M_CMD_FAILURE_EN |
-+				 M_RX_FIFO_RD_ERR_EN | M_RX_FIFO_WR_ERR_EN |
-+				 M_TX_FIFO_RD_ERR_EN | M_TX_FIFO_WR_ERR_EN))
-+			dev_warn(mas->dev, "Unexpected IRQ err status %#010x\n", m_irq);
-+
-+		if ((m_irq & M_RX_FIFO_WATERMARK_EN) || (m_irq & M_RX_FIFO_LAST_EN))
-+			geni_spi_handle_rx(mas);
-+
-+		if (m_irq & M_TX_FIFO_WATERMARK_EN)
-+			geni_spi_handle_tx(mas);
-+
-+		if (m_irq & M_CMD_DONE_EN) {
-+			if (mas->cur_xfer) {
-+				spi_finalize_current_transfer(spi);
-+				mas->cur_xfer = NULL;
-+				/*
-+				 * If this happens, then a CMD_DONE came before all the
-+				 * Tx buffer bytes were sent out. This is unusual, log
-+				 * this condition and disable the WM interrupt to
-+				 * prevent the system from stalling due an interrupt
-+				 * storm.
-+				 *
-+				 * If this happens when all Rx bytes haven't been
-+				 * received, log the condition. The only known time
-+				 * this can happen is if bits_per_word != 8 and some
-+				 * registers that expect xfer lengths in num spi_words
-+				 * weren't written correctly.
-+				 */
-+				if (mas->tx_rem_bytes) {
-+					writel(0, se->base + SE_GENI_TX_WATERMARK_REG);
-+					dev_err(mas->dev, "Premature done. tx_rem = %d bpw%d\n",
-+						mas->tx_rem_bytes, mas->cur_bits_per_word);
-+				}
-+				if (mas->rx_rem_bytes)
-+					dev_err(mas->dev, "Premature done. rx_rem = %d bpw%d\n",
-+						mas->rx_rem_bytes, mas->cur_bits_per_word);
-+			} else {
-+				complete(&mas->cs_done);
-+			}
-+		}
-+	} else if (mas->cur_xfer_mode == GENI_SE_DMA) {
-+		const struct spi_transfer *xfer = mas->cur_xfer;
-+		u32 dma_tx_status = readl_relaxed(se->base + SE_DMA_TX_IRQ_STAT);
-+		u32 dma_rx_status = readl_relaxed(se->base + SE_DMA_RX_IRQ_STAT);
-+
-+		if (dma_tx_status)
-+			writel(dma_tx_status, se->base + SE_DMA_TX_IRQ_CLR);
-+		if (dma_rx_status)
-+			writel(dma_rx_status, se->base + SE_DMA_RX_IRQ_CLR);
-+		if (dma_tx_status & TX_DMA_DONE)
-+			mas->tx_rem_bytes = 0;
-+		if (dma_rx_status & RX_DMA_DONE)
-+			mas->rx_rem_bytes = 0;
-+		if (dma_tx_status & TX_RESET_DONE)
-+			complete(&mas->tx_reset_done);
-+		if (dma_rx_status & RX_RESET_DONE)
-+			complete(&mas->rx_reset_done);
-+		if (!mas->tx_rem_bytes && !mas->rx_rem_bytes && xfer) {
-+			if (xfer->tx_buf && xfer->tx_dma)
-+				geni_se_tx_dma_unprep(se, xfer->tx_dma, xfer->len);
-+			if (xfer->rx_buf && xfer->rx_dma)
-+				geni_se_rx_dma_unprep(se, xfer->rx_dma, xfer->len);
- 			spi_finalize_current_transfer(spi);
- 			mas->cur_xfer = NULL;
--			/*
--			 * If this happens, then a CMD_DONE came before all the
--			 * Tx buffer bytes were sent out. This is unusual, log
--			 * this condition and disable the WM interrupt to
--			 * prevent the system from stalling due an interrupt
--			 * storm.
--			 *
--			 * If this happens when all Rx bytes haven't been
--			 * received, log the condition. The only known time
--			 * this can happen is if bits_per_word != 8 and some
--			 * registers that expect xfer lengths in num spi_words
--			 * weren't written correctly.
--			 */
--			if (mas->tx_rem_bytes) {
--				writel(0, se->base + SE_GENI_TX_WATERMARK_REG);
--				dev_err(mas->dev, "Premature done. tx_rem = %d bpw%d\n",
--					mas->tx_rem_bytes, mas->cur_bits_per_word);
--			}
--			if (mas->rx_rem_bytes)
--				dev_err(mas->dev, "Premature done. rx_rem = %d bpw%d\n",
--					mas->rx_rem_bytes, mas->cur_bits_per_word);
--		} else {
--			complete(&mas->cs_done);
- 		}
- 	}
- 
-@@ -949,6 +1059,8 @@ static int spi_geni_probe(struct platform_device *pdev)
- 	init_completion(&mas->cs_done);
- 	init_completion(&mas->cancel_done);
- 	init_completion(&mas->abort_done);
-+	init_completion(&mas->tx_reset_done);
-+	init_completion(&mas->rx_reset_done);
- 	spin_lock_init(&mas->lock);
- 	pm_runtime_use_autosuspend(&pdev->dev);
- 	pm_runtime_set_autosuspend_delay(&pdev->dev, 250);
 -- 
-Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, hosted by the Linux Foundation.
+Thanks,
+
+David / dhildenb
 
