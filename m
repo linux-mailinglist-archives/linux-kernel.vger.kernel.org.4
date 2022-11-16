@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8890562B2D4
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 06:38:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6E4D62B2D5
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 06:38:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231863AbiKPFis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 00:38:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54080 "EHLO
+        id S231887AbiKPFiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 00:38:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230343AbiKPFi3 (ORCPT
+        with ESMTP id S231668AbiKPFid (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 00:38:29 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB151025
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 21:38:28 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id gw22so15564851pjb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 21:38:28 -0800 (PST)
+        Wed, 16 Nov 2022 00:38:33 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 393FA100B
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 21:38:30 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id c2so15427937plz.11
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 21:38:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sFQW6v1diH1VyW+sL8lBdAoomh7zxMpXfwnkxl/32zA=;
-        b=naf7hHO3UWHjpNpfDT7zWp+/pfz24/zpiVMv5vvpOmtsjD71TdXVOQuWTrXQlGW3DT
-         k6OQyzXbC33xTJ4vWRBVu9j4bmDx6F7NtWWOnhPf1MyyzqTcFrH8M3c7v3m1bpJmKh15
-         gL9KA6gm3URmDKumwfAsxlyem/35OjO3zoRfYkjUdt1JcHyccj00Eyx9Bi9uSIWdF7ZT
-         +Wr5OWMJKXnCwh7W+QWb/80dPzmO5u+N6SqhYvU0Q3tpeaFNhACn2zodPNtlWRQxqwEk
-         vdXf+yZqTNcpyU304fRnPyvbpukwqcaJt1vFvtUYIM7XdVNYYbPvJ1oGfq6acSrI+9hU
-         43MQ==
+        bh=r01ypcYo+LtD9fhypz7U4KPnsRobXTNuGoo4vyNF/vc=;
+        b=Hdfcb6sJtZK0d4iSfc/c+K5+0PYEPfETP19Nve63ggNiKTbV6nRrj4Vb4GfGLphU77
+         JL9fPjFGZN+xuLVLnY9F8MtLwtXD10i7AxQh0kdt+xCvJCzv0IxzCLnwB3CiEO0++qQ8
+         cvbX71x5YS4YX4MOl3W89daY6QxvCAdYtGF2kIJTH8YFYBTDBvWd+yEE59Z1oqf5Mgsu
+         MswmnkG/O1rW5lzeLp9bQUxKADGJ05ftzgyMVFqGQ75+4mK2VU9l4bxqOZ08fz/LaIAO
+         rXeBGl4jU92zG9ChdWwmYbEGZZtcxAdlkg4m7CV+U61qWVVU26rLYvH2PbRXwv+fCFMV
+         dacQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=sFQW6v1diH1VyW+sL8lBdAoomh7zxMpXfwnkxl/32zA=;
-        b=eTujegalUN94Owi/VeROpFV8483WUVr6PXo0zKVDRtTAnZs+pVTZt3q4fOhbrLlWWn
-         wPl81HOl88eArrEocwkbAOoD2ANXpE5r/v1C0jgvMs9E8Bjau9dZhmsU576JUeHi4Riz
-         N4MGp/2Umjp9sYxlZyIxsb+YnuGDCuR91WWMjwIRq1NXtwzPtx89ciGCFgj2yxBMNFBi
-         96W5pHIEUphMQ3iY9p2dfueEWn41FziwCeZ1/RJM3IJcuJgbuCmVG2oAUVkqsHEepX79
-         AD1APByJKf5uV5N4unkIK6MVIl4SJrOehOxW9D01KrYwfNtHoPHP+1eKbNPeze+lyCoo
-         spLw==
-X-Gm-Message-State: ANoB5pmDmf6jf9wFqNfynyeVUH2AGfbwbzDmIc2TXd4OJvOY2zaJGo/o
-        uVnPMfQRa9FG26nBP/zIbwE=
-X-Google-Smtp-Source: AA0mqf4eBMXcBzdwJ5mtVoL0fxjZ7psKH+U4U0xM8+RXDkiJthcyDXK7qNiV0gPyIWmCuY6dETT4gA==
-X-Received: by 2002:a17:902:e546:b0:188:4ea8:a685 with SMTP id n6-20020a170902e54600b001884ea8a685mr7509296plf.71.1668577107897;
-        Tue, 15 Nov 2022 21:38:27 -0800 (PST)
+        bh=r01ypcYo+LtD9fhypz7U4KPnsRobXTNuGoo4vyNF/vc=;
+        b=V4NOJNrxECk87eZ9Wm9hdgy2+dGEke6DaxeVSbI2WgHVhsuwQAdQztj2iEytnlQH2W
+         4WKoscdGxkAA6HXfEnF8UftEdw//9Y2dWZsyxorGdTfGpWbFKk0ShRrWHaFziRU4MW5V
+         K3GNH3WxkLjAE+I5jeLaD6tescLjxZJ7kTLngI99CnAb9ZvfZWUxEt3mbDMSIZ1xjb6L
+         va3pFBaHKoOFEt1+XxzaL8lbPU186v2CwpbU2d/4nXslQXW81YtX/q9AKH0wc5btfBIL
+         QP/1ezxkDGBXzQcyRxhYxGi7/FYfMEWpq0EiTlvrPa1B4K+Ulr2e7HBEGqBBfisVZVE8
+         OvUw==
+X-Gm-Message-State: ANoB5pmAx+xKG8o0XGDRrGAJlOAaXp0/5yh9cHR8N/S6qL/ygRuWsz6t
+        z5pYGqFDP9oxQPgZIV6jZA0=
+X-Google-Smtp-Source: AA0mqf6LzBMQD9KXFyMAhXpG5nVIjWO4CGNYGngv2AR+5vF/Q88oiCVvIcdaMKPNZkqy9cGqtNtfAQ==
+X-Received: by 2002:a17:903:2789:b0:186:9b19:1dbb with SMTP id jw9-20020a170903278900b001869b191dbbmr7643358plb.59.1668577109573;
+        Tue, 15 Nov 2022 21:38:29 -0800 (PST)
 Received: from dtor-ws.mtv.corp.google.com ([2620:15c:9d:2:2d36:e9a0:170b:669f])
-        by smtp.gmail.com with ESMTPSA id ik13-20020a170902ab0d00b0017834a6966csm10881038plb.176.2022.11.15.21.38.26
+        by smtp.gmail.com with ESMTPSA id ik13-20020a170902ab0d00b0017834a6966csm10881038plb.176.2022.11.15.21.38.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 21:38:27 -0800 (PST)
+        Tue, 15 Nov 2022 21:38:28 -0800 (PST)
 From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
 To:     Mark Brown <broonie@kernel.org>,
         Liam Girdwood <lgirdwood@gmail.com>
 Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: [PATCH 04/11] ASoC: tpa6130a2: remove support for platform data
-Date:   Tue, 15 Nov 2022 21:38:10 -0800
-Message-Id: <20221116053817.2929810-4-dmitry.torokhov@gmail.com>
+Subject: [PATCH 05/11] ASoC: tpa6130a2: switch to using gpiod API
+Date:   Tue, 15 Nov 2022 21:38:11 -0800
+Message-Id: <20221116053817.2929810-5-dmitry.torokhov@gmail.com>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
 In-Reply-To: <20221116053817.2929810-1-dmitry.torokhov@gmail.com>
 References: <20221116053817.2929810-1-dmitry.torokhov@gmail.com>
@@ -72,88 +72,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are no users of tpa6130a2_platform_data in the mainline kernel,
-remove it.
+Switch the driver from legacy gpio API that is deprecated to the newer
+gpiod API that respects line polarities described in ACPI/DT.
 
 Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 ---
- include/sound/tpa6130a2-plat.h | 17 -----------------
- sound/soc/codecs/tpa6130a2.c   | 18 ++++--------------
- 2 files changed, 4 insertions(+), 31 deletions(-)
- delete mode 100644 include/sound/tpa6130a2-plat.h
+ sound/soc/codecs/tpa6130a2.c | 42 +++++++++++++++---------------------
+ 1 file changed, 17 insertions(+), 25 deletions(-)
 
-diff --git a/include/sound/tpa6130a2-plat.h b/include/sound/tpa6130a2-plat.h
-deleted file mode 100644
-index a60930e36e93..000000000000
---- a/include/sound/tpa6130a2-plat.h
-+++ /dev/null
-@@ -1,17 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only */
--/*
-- * TPA6130A2 driver platform header
-- *
-- * Copyright (C) Nokia Corporation
-- *
-- * Author: Peter Ujfalusi <peter.ujfalusi@ti.com>
-- */
--
--#ifndef TPA6130A2_PLAT_H
--#define TPA6130A2_PLAT_H
--
--struct tpa6130a2_platform_data {
--	int power_gpio;
--};
--
--#endif
 diff --git a/sound/soc/codecs/tpa6130a2.c b/sound/soc/codecs/tpa6130a2.c
-index 8c00db32996b..5f00bfc32917 100644
+index 5f00bfc32917..696a27b472aa 100644
 --- a/sound/soc/codecs/tpa6130a2.c
 +++ b/sound/soc/codecs/tpa6130a2.c
-@@ -14,7 +14,6 @@
- #include <linux/gpio.h>
+@@ -9,15 +9,15 @@
+ 
+ #include <linux/module.h>
+ #include <linux/errno.h>
++#include <linux/err.h>
+ #include <linux/device.h>
+ #include <linux/i2c.h>
+-#include <linux/gpio.h>
++#include <linux/gpio/consumer.h>
  #include <linux/regulator/consumer.h>
  #include <linux/slab.h>
--#include <sound/tpa6130a2-plat.h>
  #include <sound/soc.h>
  #include <sound/tlv.h>
  #include <linux/of.h>
-@@ -218,16 +217,15 @@ MODULE_DEVICE_TABLE(i2c, tpa6130a2_id);
+-#include <linux/of_gpio.h>
+ #include <linux/regmap.h>
  
- static int tpa6130a2_probe(struct i2c_client *client)
- {
--	struct device *dev;
-+	struct device *dev = &client->dev;
- 	struct tpa6130a2_data *data;
--	struct tpa6130a2_platform_data *pdata = client->dev.platform_data;
--	struct device_node *np = client->dev.of_node;
- 	const struct i2c_device_id *id;
- 	const char *regulator;
+ #include "tpa6130a2.h"
+@@ -32,7 +32,7 @@ struct tpa6130a2_data {
+ 	struct device *dev;
+ 	struct regmap *regmap;
+ 	struct regulator *supply;
+-	int power_gpio;
++	struct gpio_desc *power_gpio;
+ 	enum tpa_model id;
+ };
+ 
+@@ -48,8 +48,8 @@ static int tpa6130a2_power(struct tpa6130a2_data *data, bool enable)
+ 			return ret;
+ 		}
+ 		/* Power on */
+-		if (data->power_gpio >= 0)
+-			gpio_set_value(data->power_gpio, 1);
++		if (data->power_gpio)
++			gpiod_set_value(data->power_gpio, 1);
+ 
+ 		/* Sync registers */
+ 		regcache_cache_only(data->regmap, false);
+@@ -58,8 +58,8 @@ static int tpa6130a2_power(struct tpa6130a2_data *data, bool enable)
+ 			dev_err(data->dev,
+ 				"Failed to sync registers: %d\n", ret);
+ 			regcache_cache_only(data->regmap, true);
+-			if (data->power_gpio >= 0)
+-				gpio_set_value(data->power_gpio, 0);
++			if (data->power_gpio)
++				gpiod_set_value(data->power_gpio, 0);
+ 			ret2 = regulator_disable(data->supply);
+ 			if (ret2 != 0)
+ 				dev_err(data->dev,
+@@ -75,8 +75,8 @@ static int tpa6130a2_power(struct tpa6130a2_data *data, bool enable)
+ 		regcache_cache_only(data->regmap, true);
+ 
+ 		/* Power off */
+-		if (data->power_gpio >= 0)
+-			gpio_set_value(data->power_gpio, 0);
++		if (data->power_gpio)
++			gpiod_set_value(data->power_gpio, 0);
+ 
+ 		ret = regulator_disable(data->supply);
+ 		if (ret != 0) {
+@@ -224,37 +224,29 @@ static int tpa6130a2_probe(struct i2c_client *client)
  	unsigned int version;
  	int ret;
  
--	dev = &client->dev;
-+	if (!dev->of_node)
-+		return -ENODEV;
- 
+-	if (!dev->of_node)
+-		return -ENODEV;
+-
  	data = devm_kzalloc(&client->dev, sizeof(*data), GFP_KERNEL);
  	if (!data)
-@@ -239,15 +237,7 @@ static int tpa6130a2_probe(struct i2c_client *client)
+ 		return -ENOMEM;
+ 
++	i2c_set_clientdata(client, data);
+ 	data->dev = dev;
+ 
+ 	data->regmap = devm_regmap_init_i2c(client, &tpa6130a2_regmap_config);
  	if (IS_ERR(data->regmap))
  		return PTR_ERR(data->regmap);
  
--	if (pdata) {
--		data->power_gpio = pdata->power_gpio;
--	} else if (np) {
--		data->power_gpio = of_get_named_gpio(np, "power-gpio", 0);
--	} else {
--		dev_err(dev, "Platform data not set\n");
--		dump_stack();
--		return -ENODEV;
+-	data->power_gpio = of_get_named_gpio(dev->of_node, "power-gpio", 0);
++	data->power_gpio = devm_gpiod_get_optional(dev, "power", GPIOD_OUT_LOW);
++	ret = PTR_ERR_OR_ZERO(data->power_gpio);
++	if (ret) {
++		dev_err(dev, "Failed to request power GPIO: %d\n", ret);
++		return ret;
++	}
+ 
+-	i2c_set_clientdata(client, data);
++	gpiod_set_consumer_name(data->power_gpio, "tpa6130a2 enable");
+ 
+ 	id = i2c_match_id(tpa6130a2_id, client);
+ 	data->id = id->driver_data;
+ 
+-	if (data->power_gpio >= 0) {
+-		ret = devm_gpio_request(dev, data->power_gpio,
+-					"tpa6130a2 enable");
+-		if (ret < 0) {
+-			dev_err(dev, "Failed to request power GPIO (%d)\n",
+-				data->power_gpio);
+-			return ret;
+-		}
+-		gpio_direction_output(data->power_gpio, 0);
 -	}
-+	data->power_gpio = of_get_named_gpio(dev->of_node, "power-gpio", 0);
- 
- 	i2c_set_clientdata(client, data);
- 
+-
+ 	switch (data->id) {
+ 	default:
+ 		dev_warn(dev, "Unknown TPA model (%d). Assuming 6130A2\n",
 -- 
 2.38.1.431.g37b22c650d-goog
 
