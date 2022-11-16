@@ -2,76 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C179962C4D5
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 17:39:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A34562C4D6
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 17:39:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238529AbiKPQju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 11:39:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48032 "EHLO
+        id S233914AbiKPQjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 11:39:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233480AbiKPQjP (ORCPT
+        with ESMTP id S234211AbiKPQjZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 11:39:15 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33F3156544
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 08:34:10 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id a5so27347854edb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 08:34:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gPFrCMXv81mTTBcEeoWVKjKNP4QouYmge2x3DesP/20=;
-        b=Hg3buutBjQqRZdaCsrNVeVgH0sh3OQyiFlLtSR75O2nMgmOqXit9nrGKkrCT6Vj1ZT
-         fr9eKFku+2K8VDjLypWWezSUyJbj21ADDg7LRa9x/EgdMl+ANvT1Pia+KrCb9DpWyOoa
-         pVw4BbfHQSbrpTOC+w3OKpjgxUxP3ICi3ccpg4FNUXHJTkzypjSGa+WOu9vodqpHpAFg
-         N0hE0QCccSmnwJsN+rhlm7CswoOKtxZiulyET2g4x5Juh50rdFyaHlzImSIw66rtigWv
-         55F9bkQPkiOJvYoeSsCWa09qb6oVYrlUKW5MU20eQE7I83EY277xRGqUs7PuIqVBqpkw
-         GXOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=gPFrCMXv81mTTBcEeoWVKjKNP4QouYmge2x3DesP/20=;
-        b=khlhVxC3QT78owZoosnnocegpHAuQEBuIBPBkDXJ5zFFUcsvDgRXZruJQwW/3604Ax
-         oJVAp+6j6PYcUH29NqbLEZTy5S7FSP1a1njm2urLdzAwtLBMIQAjOsi0N+8Ug7mpsggW
-         VpZIDefA3lG8D2k6UdR+S4O94Xc5kg8Z76iAKIb4F6pUZn3xAEXi+yaj2PtfeuYe18Ap
-         PQlCRD710ElMF0rVFXsGw3YXLynS+gF06OK58xx6gONGGjZQq3W8K4SC2fEe2IMk9eab
-         p9IwaK9KjoJx6knA6MyitXANqR8vxPnmiwjizpb+OGgeCULiziBdIbUhD/U0pExoGZ/o
-         KQmw==
-X-Gm-Message-State: ANoB5pksaqEVCp35sLd7GJCcoFO7cmSZaTu6UMF2wh1cro49ZbYqn/0Y
-        NJeka+kwAv1EinbYr7TwLhIA9A==
-X-Google-Smtp-Source: AA0mqf4xwUOrbHG5btJi83vesthDiDX1WKSxfps8LHn3WT/qtvfjSF3uGB6yWmZ5Oz/WCr2pzwT7nw==
-X-Received: by 2002:a05:6402:64c:b0:461:96ba:b9c with SMTP id u12-20020a056402064c00b0046196ba0b9cmr19597775edx.353.1668616448803;
-        Wed, 16 Nov 2022 08:34:08 -0800 (PST)
-Received: from [192.168.31.208] ([194.29.137.22])
-        by smtp.gmail.com with ESMTPSA id f12-20020a17090631cc00b0078d46aa3b82sm6959967ejf.21.2022.11.16.08.34.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 08:34:08 -0800 (PST)
-Message-ID: <8d9c6187-64d0-a320-8ec6-e9ae51ce93db@linaro.org>
-Date:   Wed, 16 Nov 2022 17:34:01 +0100
+        Wed, 16 Nov 2022 11:39:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477A556577;
+        Wed, 16 Nov 2022 08:34:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D7E3261ED9;
+        Wed, 16 Nov 2022 16:34:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDE45C433C1;
+        Wed, 16 Nov 2022 16:34:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668616459;
+        bh=uKdi6p36V3LxvyJcPehYkuLKJyY4N3pQgjmLWMWFgaY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=stK5Sq+XYQnGDmF0ajQ0dsc8W0wzIBD35x1fFSV0rFbwn3x6rOntrYG8t7nCRryTB
+         oSmX9yd3we8Imo2kf09h7MUSTamtcY+snYZRFnzJ9pMkmTIhShomfvA4C1+o5R5a18
+         Ant1oFcyahAFgVtaRECkY8b98GkZBG9Z7sVCPbvPcWaCr7Sw2bqk7BRb+jmb/lcYwW
+         YuHmF8va9UIWfhEuWlYUJkaNsInbBuvpXfptMMan4tfRgz3URO2U3cy/KQotTcm6fp
+         GkIg2q9DWmlDdAhWOALLHl3v9gbl/fIhngvLE4nWGxS/4DiqtV8/PjAFOyu0XJ+mnl
+         QGQMuVkTDlXZA==
+Date:   Wed, 16 Nov 2022 10:34:17 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
+        Allen Hubbe <allenbh@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linuxppc-dev@lists.ozlabs.org,
+        "Ahmed S. Darwish" <darwi@linutronix.de>,
+        Reinette Chatre <reinette.chatre@intel.com>
+Subject: Re: [patch 37/39] PCI/MSI: Remove redundant msi_check() callback
+Message-ID: <20221116163417.GA1116723@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.2
-Subject: Re: [PATCH] arm64: dts: qcom: sm8150: use defines for RPMh power
- domains
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221116154935.163810-1-krzysztof.kozlowski@linaro.org>
- <92993d1d-e7b0-199c-5652-5158988a65b9@linaro.org>
- <CAGE=qrpAUcGwS5EQgMA9oA0c56=1C+2X5TjyyEFrf4xd5r7k+Q@mail.gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <CAGE=qrpAUcGwS5EQgMA9oA0c56=1C+2X5TjyyEFrf4xd5r7k+Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221111122015.749446904@linutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,18 +69,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 16/11/2022 17:30, Krzysztof Kozlowski wrote:
-> On Wed, 16 Nov 2022 at 16:58, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->> On 16/11/2022 16:49, Krzysztof Kozlowski wrote:
->>> Use defines for RPMh power domains instead of hard-coding numbers.
->>>
->>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>> ---
->> I sent exactly the same patch yesterday.
+On Fri, Nov 11, 2022 at 02:55:14PM +0100, Thomas Gleixner wrote:
+> All these sanity checks are now done _before_ any allocation work
+> happens. No point in doing it twice.
 > 
-> Then the same as me I think you miss remoteproc@4080000. :)
-Uh.. unless I don't get what you mean, I think we both covered it.
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 
-Konrad
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+
+> ---
+>  drivers/pci/msi/irqdomain.c |   48 --------------------------------------------
+>  1 file changed, 48 deletions(-)
+> 
+> --- a/drivers/pci/msi/irqdomain.c
+> +++ b/drivers/pci/msi/irqdomain.c
+> @@ -64,51 +64,6 @@ static irq_hw_number_t pci_msi_domain_ca
+>  		(pci_domain_nr(dev->bus) & 0xFFFFFFFF) << 27;
+>  }
+>  
+> -static inline bool pci_msi_desc_is_multi_msi(struct msi_desc *desc)
+> -{
+> -	return !desc->pci.msi_attrib.is_msix && desc->nvec_used > 1;
+> -}
+> -
+> -/**
+> - * pci_msi_domain_check_cap - Verify that @domain supports the capabilities
+> - *			      for @dev
+> - * @domain:	The interrupt domain to check
+> - * @info:	The domain info for verification
+> - * @dev:	The device to check
+> - *
+> - * Returns:
+> - *  0 if the functionality is supported
+> - *  1 if Multi MSI is requested, but the domain does not support it
+> - *  -ENOTSUPP otherwise
+> - */
+> -static int pci_msi_domain_check_cap(struct irq_domain *domain,
+> -				    struct msi_domain_info *info,
+> -				    struct device *dev)
+> -{
+> -	struct msi_desc *desc = msi_first_desc(dev, MSI_DESC_ALL);
+> -
+> -	/* Special handling to support __pci_enable_msi_range() */
+> -	if (pci_msi_desc_is_multi_msi(desc) &&
+> -	    !(info->flags & MSI_FLAG_MULTI_PCI_MSI))
+> -		return 1;
+> -
+> -	if (desc->pci.msi_attrib.is_msix) {
+> -		if (!(info->flags & MSI_FLAG_PCI_MSIX))
+> -			return -ENOTSUPP;
+> -
+> -		if (info->flags & MSI_FLAG_MSIX_CONTIGUOUS) {
+> -			unsigned int idx = 0;
+> -
+> -			/* Check for gaps in the entry indices */
+> -			msi_for_each_desc(desc, dev, MSI_DESC_ALL) {
+> -				if (desc->msi_index != idx++)
+> -					return -ENOTSUPP;
+> -			}
+> -		}
+> -	}
+> -	return 0;
+> -}
+> -
+>  static void pci_msi_domain_set_desc(msi_alloc_info_t *arg,
+>  				    struct msi_desc *desc)
+>  {
+> @@ -118,7 +73,6 @@ static void pci_msi_domain_set_desc(msi_
+>  
+>  static struct msi_domain_ops pci_msi_domain_ops_default = {
+>  	.set_desc	= pci_msi_domain_set_desc,
+> -	.msi_check	= pci_msi_domain_check_cap,
+>  };
+>  
+>  static void pci_msi_domain_update_dom_ops(struct msi_domain_info *info)
+> @@ -130,8 +84,6 @@ static void pci_msi_domain_update_dom_op
+>  	} else {
+>  		if (ops->set_desc == NULL)
+>  			ops->set_desc = pci_msi_domain_set_desc;
+> -		if (ops->msi_check == NULL)
+> -			ops->msi_check = pci_msi_domain_check_cap;
+>  	}
+>  }
+>  
+> 
