@@ -2,19 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BF9862C42C
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 17:23:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6270562C42F
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 17:23:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238660AbiKPQXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 11:23:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58660 "EHLO
+        id S238693AbiKPQXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 11:23:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234426AbiKPQWI (ORCPT
+        with ESMTP id S233991AbiKPQWc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 11:22:08 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC2747311
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 08:22:06 -0800 (PST)
+        Wed, 16 Nov 2022 11:22:32 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F42226495
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 08:22:07 -0800 (PST)
 From:   John Ogness <john.ogness@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1668615725;
@@ -22,29 +22,29 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=nhhJ4NEYDrYYk962PRI1KO7CTDJYZ90BsmoX/yxQ/gI=;
-        b=lRDydq5FRZTnwLjVZHwb0EFCh4BnmAql/o3iD/Qhwm+z4zzC7IEwqkBDf2PopO8HzRgRB9
-        rYWm/6nGUKDvhLD52VVku54Wzv3n+RpLJ1VYDeXtDYnm81qg/kqn67NNDxXntUC4ZqHj5T
-        76kg6Qu3zH/jNH7WI5zmxvWp96rFCt2IpIJ+lqpcQXLaI32egKpudioKS2bXTKJOOFx/kM
-        l5yZrET/CWXg6D0NcF1jzBUJuVzPtFCyqGSgcctEYxK5uPOnTXkovYxcy0G++vcVykd5DO
-        sYa/WzWP4KKm77GyhziPCSDqiwU5LZi+ZHnuBvk8ZXMJoicHCDGCmFB3idMIEw==
+        bh=q0qlTUKV9y3QSw09vgZHZ2kx/Yss2JifrQdnD+gXn68=;
+        b=t2HcoKXheo/9cKQLAg3L3ksvZhwzlBHB2iUjivKMmeWAOQ7QYzUhxH0EMOGkmJplEeP8ff
+        QoHLhCiF1him5w0dcj2u5w5ITkU6WbgMgYFCnwAJ1gaVBXmySBijfFa785IKlScZO6tXDX
+        BO64psIYULhP5UmnTGw0coO85633ZdhTBSwVCGdTVuUYZslepqLX74AFjsPLG5reOMZ3Af
+        hpFQpyhG1VlwJ1qzZBxERmW/0f9SDEkLmpCIC8cHCxFwS7fGh9TAxtogF8RDu/kvUBab91
+        yOHJJWCSqJ6VvXlFsMqtFhCHwH3PGzLYWoN4lI2OIba8zID69cevqUb4/kBXDQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1668615725;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=nhhJ4NEYDrYYk962PRI1KO7CTDJYZ90BsmoX/yxQ/gI=;
-        b=bY0sIjstLLp8P/5/imQZ/AMuPiIf5JzcDLwL9jC+9b1Sxa18frPcCl9+jZamwRBFbekt5C
-        rWE6Za9htWGPuTAw==
+        bh=q0qlTUKV9y3QSw09vgZHZ2kx/Yss2JifrQdnD+gXn68=;
+        b=x9m2gRFmDedx3teMkiLLQUfM2cC+aisawOZm8nNBomlUsbehXNe4+5wP2d+xmXJ6jYL8NO
+        oQ8q1WuUnKc8UiAQ==
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH printk v5 17/40] printk: console_is_usable: use console_srcu_read_flags
-Date:   Wed, 16 Nov 2022 17:27:29 +0106
-Message-Id: <20221116162152.193147-18-john.ogness@linutronix.de>
+Subject: [PATCH printk v5 18/40] printk: console_unblank: use srcu console list iterator
+Date:   Wed, 16 Nov 2022 17:27:30 +0106
+Message-Id: <20221116162152.193147-19-john.ogness@linutronix.de>
 In-Reply-To: <20221116162152.193147-1-john.ogness@linutronix.de>
 References: <20221116162152.193147-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
@@ -59,45 +59,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All users of console_is_usable() are SRCU iterators. Use the
-appropriate wrapper function to locklessly read the flags.
+Use srcu console list iteration for console list traversal.
+
+Document why the console_lock is still necessary. Note that this
+is a preparatory change for when console_lock no longer provides
+synchronization for the console list.
 
 Signed-off-by: John Ogness <john.ogness@linutronix.de>
 Reviewed-by: Petr Mladek <pmladek@suse.com>
 ---
- kernel/printk/printk.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ kernel/printk/printk.c | 17 +++++++++++++----
+ 1 file changed, 13 insertions(+), 4 deletions(-)
 
 diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index 6666cc27a014..75951c4bda05 100644
+index 75951c4bda05..b4be3b08d909 100644
 --- a/kernel/printk/printk.c
 +++ b/kernel/printk/printk.c
-@@ -2708,11 +2708,13 @@ static bool abandon_console_lock_in_panic(void)
-  * Check if the given console is currently capable and allowed to print
-  * records.
-  *
-- * Requires the console_lock.
-+ * Requires the console_srcu_read_lock.
-  */
- static inline bool console_is_usable(struct console *con)
+@@ -2999,10 +2999,14 @@ EXPORT_SYMBOL(console_conditional_schedule);
+ void console_unblank(void)
  {
--	if (!(con->flags & CON_ENABLED))
-+	short flags = console_srcu_read_flags(con);
-+
-+	if (!(flags & CON_ENABLED))
- 		return false;
+ 	struct console *c;
++	int cookie;
  
- 	if (!con->write)
-@@ -2723,8 +2725,7 @@ static inline bool console_is_usable(struct console *con)
- 	 * allocated. So unless they're explicitly marked as being able to
- 	 * cope (CON_ANYTIME) don't call them until this CPU is officially up.
+ 	/*
+-	 * console_unblank can no longer be called in interrupt context unless
+-	 * oops_in_progress is set to 1..
++	 * Stop console printing because the unblank() callback may
++	 * assume the console is not within its write() callback.
++	 *
++	 * If @oops_in_progress is set, this may be an atomic context.
++	 * In that case, attempt a trylock as best-effort.
  	 */
--	if (!cpu_online(raw_smp_processor_id()) &&
--	    !(con->flags & CON_ANYTIME))
-+	if (!cpu_online(raw_smp_processor_id()) && !(flags & CON_ANYTIME))
- 		return false;
+ 	if (oops_in_progress) {
+ 		if (down_trylock_console_sem() != 0)
+@@ -3012,9 +3016,14 @@ void console_unblank(void)
  
- 	return true;
+ 	console_locked = 1;
+ 	console_may_schedule = 0;
+-	for_each_console(c)
+-		if ((c->flags & CON_ENABLED) && c->unblank)
++
++	cookie = console_srcu_read_lock();
++	for_each_console_srcu(c) {
++		if ((console_srcu_read_flags(c) & CON_ENABLED) && c->unblank)
+ 			c->unblank();
++	}
++	console_srcu_read_unlock(cookie);
++
+ 	console_unlock();
+ 
+ 	if (!oops_in_progress)
 -- 
 2.30.2
 
