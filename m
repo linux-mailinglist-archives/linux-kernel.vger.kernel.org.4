@@ -2,119 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E834B62BA4F
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 11:55:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8728562BA53
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 11:55:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238663AbiKPKzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 05:55:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36876 "EHLO
+        id S238871AbiKPKzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 05:55:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238552AbiKPKy3 (ORCPT
+        with ESMTP id S238649AbiKPKyb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 05:54:29 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E04BF2D
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:43:16 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id j15so29247326wrq.3
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:43:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xjfAlgkUXxYtzoLU7VIB+TYqOioSKKQPDA1pUqCpVu0=;
-        b=cU1vl1wb9/+TR+df56vzBSep6BtCgw/w1ou/y4xJ01/kIfP781OY1I1bx2P3rCOEPT
-         KRP5pITCwoBCJUnyMlUKvSiM0D4tk5qzZzm+Kwb29saYC58u7vCPsNYcqyyGhKLl4zkb
-         ecJj0gF9PHuETu3hBnE/odbCda01pwpkCa2OcRD4TBbTwL4M4K5a316eY6NqAuc7Qx69
-         gIS5gDNd4M/BDthkDa7y6oxG2Aqi6dDhrqWfih4kmiwMs7JySUpb47mmPmBU632jmZFi
-         srcpsV+qm5P+fWDDXVOS1wPHcNvXVqkLbSPsWIvSljncS9BUOaNKfAO5r0vHVLFhmDFx
-         fgCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xjfAlgkUXxYtzoLU7VIB+TYqOioSKKQPDA1pUqCpVu0=;
-        b=tX+pWqNzzS/ZmHzoFx142hg7GhEcuIBUFmDnkxizVjqjie5wvApYEt8hZhBqtLTotv
-         2uYSBcBqPYcVnAq3B1MjJhGaYXqXv9J6FgpvWS94DXe2kwQmtDjj6vD/yCqyqjOUEcVG
-         qjy0253FdZVgUb9y93lci5uxVUmvwdaZBgFJRiTFGjap74bR1zWf8ktzxgxUeRQPa6jw
-         MaVJYNKnpbyCcErpT28QCwSzTGl74EGZGdsT+XsvyQFYacXYvU35HmjBIc8E7c0ygmXl
-         4V0qtXnJcJQRE3PUjidiXWpAL/J7v53GAVkT9Y0Cl4JXOeZCoLwwj09ufZHza8KQXGw6
-         +KXg==
-X-Gm-Message-State: ANoB5pkYCASWCQ5nPvEYRSDiNAaOEAkHiKPnds4gw0m5eUN+DbNE88FC
-        V5YyyvZuxK6Vydr+ie1zCmuIjQ==
-X-Google-Smtp-Source: AA0mqf7CV+Kqd4WkRCfWQMJorXUGaiEDIGHXzxMqiN1OWEBRsS2gYX0FVGNL8cOqVh1s/xZtDg3+Qg==
-X-Received: by 2002:adf:e444:0:b0:236:489b:8c81 with SMTP id t4-20020adfe444000000b00236489b8c81mr13518978wrm.649.1668595394849;
-        Wed, 16 Nov 2022 02:43:14 -0800 (PST)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id t8-20020adff048000000b002238ea5750csm18010846wro.72.2022.11.16.02.43.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 02:43:14 -0800 (PST)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Wed, 16 Nov 2022 11:43:12 +0100
-Subject: [PATCH 3/3] arm64: dts: qcom: sm8550-mtp: enable adsp, cdsp & mdss
+        Wed, 16 Nov 2022 05:54:31 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D069DCDA
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:43:26 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1668595405;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QX2SKCrid73QyxVgZp3pXrhrbHc1mgUmMeIiTTjDIJ8=;
+        b=Lhlt6L0xF38lo/Id90Tb6KyW2KU0rhGNz7/AFj/bhP6vIB4tWw+GgjHaijmqEXtLJEnGSg
+        wxNKyc8vzxmn4KmezESnUk8vYrGQDJ9rd01W2U1fXJ1EINL75wEXtxMpDi4t5hPjrwXWdY
+        D+NIx5LS+1K+nNNkM5CLQWy47gbypYptGF4RGW39g+ZuIBzKA9MR2qPRyOY8ufajzPEDHd
+        3vd+AbR7EpjIZK4bWd/aOfC6vWwiIaY9l4HXoSkU5CR+sgomimoU7T6EwYfg27uAHgf6aU
+        VhMZ5mE4hd0AXg32zbq3LDgQyzgZkbReHEXKAeKYrrjBTtXvpEHWs/13byeQIg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1668595405;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QX2SKCrid73QyxVgZp3pXrhrbHc1mgUmMeIiTTjDIJ8=;
+        b=YMNl0EUQ4vnNNkN/qmrs64zL+FbqgwsjdyiNF7NJ+oRf/5XOqxVL3RM+Hgd8eqh+r4nvYN
+        wC3etXsLenLQosAQ==
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Angus Chen <angus.chen@jaguarmicro.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Ming Lei <ming.lei@redhat.com>,
+        Jason Wang <jasowang@redhat.com>
+Subject: Re: IRQ affinity problem from virtio_blk
+In-Reply-To: <20221115183339-mutt-send-email-mst@kernel.org>
+References: <TY2PR06MB3424CB11DB57CA1FAA16F10D85049@TY2PR06MB3424.apcprd06.prod.outlook.com>
+ <87v8nfrhbw.ffs@tglx> <20221115174152-mutt-send-email-mst@kernel.org>
+ <87sfijrf9o.ffs@tglx> <87o7t7rec7.ffs@tglx>
+ <20221115183339-mutt-send-email-mst@kernel.org>
+Date:   Wed, 16 Nov 2022 11:43:24 +0100
+Message-ID: <87leobqiwj.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20221115-topic-sm8550-upstream-dts-remoteproc-v1-3-379eec11d841@linaro.org>
-References: <20221115-topic-sm8550-upstream-dts-remoteproc-v1-0-379eec11d841@linaro.org>
-In-Reply-To: <20221115-topic-sm8550-upstream-dts-remoteproc-v1-0-379eec11d841@linaro.org>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     linux-arm-msm@vger.kernel.org, Abel Vesa <abel.vesa@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-X-Mailer: b4 0.10.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the aDSP, cDSP and MPSS firmware and "Devicetree" firmware paths
-for the SM8550 MTP platform.
+On Tue, Nov 15 2022 at 18:36, Michael S. Tsirkin wrote:
+> On Wed, Nov 16, 2022 at 12:24:24AM +0100, Thomas Gleixner wrote:
+>> I just checked on a random VM. The PCI device as advertised to the guest
+>> does not expose that many vectors. One has 2 and the other 4.
+>> 
+>> But as the interrupts are requested 'managed' the core ends up setting
+>> the vectors aside. That's a fundamental property of managed interrupts.
+>> 
+>> Assume you have less queues than CPUs, which is the case with 2 vectors
+>> and tons of CPUs, i.e. one ends up for config and the other for the
+>> actual queue. So the affinity spreading code will end up having the full
+>> cpumask for the queue vector, which is marked managed. And managed means
+>> that it's guaranteed e.g. in the CPU hotplug case that the interrupt can
+>> be migrated to a still online CPU.
+>> 
+>> So we end up setting 79 vectors aside (one per CPU) in the case that the
+>> virtio device only provides two vectors.
+>> 
+>> But that's not the end of the world as you really would need ~200 such
+>> devices to exhaust the vector space...
+>
+> Let's say we have 20 queues - then just 10 devices will exhaust the
+> vector space right?
 
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8550-mtp.dts | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+No.
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-index d4c8d5b2497e..be06e25409c3 100644
---- a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-@@ -376,6 +376,24 @@ &qupv3_id_0 {
- 	status = "okay";
- };
- 
-+&remoteproc_adsp {
-+	status = "okay";
-+	firmware-name = "qcom/sm8550/adsp.mbn";
-+	qcom,dtb-firmware-name = "qcom/sm8550/adsp_dtb.mbn";
-+};
-+
-+&remoteproc_cdsp {
-+	status = "okay";
-+	firmware-name = "qcom/sm8550/cdsp.mbn";
-+	qcom,dtb-firmware-name = "qcom/sm8550/cdsp_dtb.mbn";
-+};
-+
-+&remoteproc_mpss {
-+	status = "okay";
-+	firmware-name = "qcom/sm8550/modem.mbn";
-+	qcom,dtb-firmware-name = "qcom/sm8550/modem_dtb.mbn";
-+};
-+
- &sdhc_2 {
- 	status = "okay";
- 
+If you have 20 queues then the queues are spread out over the
+CPUs. Assume 80 CPUs:
 
--- 
-b4 0.10.1
+Then each queue is associated to 80/20 = 4 CPUs and the resulting
+affinity mask of each queue contains exactly 4 CPUs:
+
+q0:      0 -  3
+q1:      4 -  7
+...
+q19:    76 - 79
+
+So this puts exactly 80 vectors aside, one per CPU.
+
+As long as at least one CPU of a queue mask is online the queue is
+enabled. If the last CPU of a queue mask goes offline then the queue is
+shutdown which means the interrupt associated to the queue is shut down
+too. That's all handled by the block MQ and the interrupt core. If a CPU
+of a queue mask comes back online then the guaranteed vector is
+allocated again.
+
+So it does not matter how many queues per device you have it will
+reserve exactly ONE interrupt per CPU.
+
+Ergo you need 200 devices to exhaust the vector space.
+
+Thanks,
+
+        tglx
+
+
+
+
+
+
+
