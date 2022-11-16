@@ -2,93 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 000A162B190
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 03:54:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6945B62B195
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 03:55:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231812AbiKPCyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 21:54:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58192 "EHLO
+        id S232210AbiKPCzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 21:55:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231834AbiKPCxm (ORCPT
+        with ESMTP id S231939AbiKPCzT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 21:53:42 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3407AB7ED
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 18:53:36 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8Cx7NivUHRjwpEHAA--.22202S3;
-        Wed, 16 Nov 2022 10:53:35 +0800 (CST)
-Received: from localhost.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx9VakUHRjO1MUAA--.35612S11;
-        Wed, 16 Nov 2022 10:53:35 +0800 (CST)
-From:   Qing Zhang <zhangqing@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>
-Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v7 9/9] LoongArch: Enable CONFIG_KALLSYMS_ALL and CONFIG_DEBUG_FS
-Date:   Wed, 16 Nov 2022 10:53:24 +0800
-Message-Id: <20221116025324.1624-10-zhangqing@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221116025324.1624-1-zhangqing@loongson.cn>
-References: <20221116025324.1624-1-zhangqing@loongson.cn>
+        Tue, 15 Nov 2022 21:55:19 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A3B1261B;
+        Tue, 15 Nov 2022 18:54:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668567265; x=1700103265;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=hiUBpViMiMZ1GDXtqT+dOQIXeDtwXLX9aMXKnoRYsNA=;
+  b=TDDkV1ByrD0fE6AiNHgu0k7x3TPn/J2cMK5iW4CfxsNc5q8cJLFRnCBA
+   mWgI5nN9//m+3crM3bx1YunrgvsnBP9IMwTxif6mPF1PUHG/Gz/+3MMwU
+   Iew49x5tQwFc5GtgEMK6gJCS+sxoZ0l2HtXJq5CVJA64Td+hEBIgzHUUA
+   bfV71reNHXPbeHxmBFXxqJf0Wg2pLVEYK46tKcNHtANphh12FwYHr/J3X
+   zN/tToUioXrV3gqTDBV5NoK8wjQbmaSGG+iq7L8Z/jPM+YBqvkmF//stJ
+   Oksk1rKHxZjavOxhJ2fI+iQ2QOG+GjgqK7E8Nz5zwFajKm/UV6XCGCc91
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="292138217"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="292138217"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 18:54:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="633466006"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="633466006"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by orsmga007.jf.intel.com with ESMTP; 15 Nov 2022 18:54:24 -0800
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Subject: [PATCH RESEND 1/2] thermal: intel: Prevent accidental clearing of HFI status
+Date:   Tue, 15 Nov 2022 18:54:16 -0800
+Message-Id: <20221116025417.2590275-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Dx9VakUHRjO1MUAA--.35612S11
-X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvdXoW7JryrGFW5Gw1kGF15WF1Dtrb_yoWDGrb_Ja
-        1agw1Dur48J397uFn7Xw48W3yDA3WUXF1FkFnrXryxZa12gr13GrWDJw15C3WYga4UWrWY
-        vaykAasxCr18tjkaLaAFLSUrUUUU8b8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
-        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
-        v7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
-        AFIxvE14AKwVWUAVWUZwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
-        6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26rWY6Fy7McIj6I8E
-        87Iv67AKxVWxJVW8Jr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw2
-        8IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1Y6r17MI8I
-        3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxV
-        WUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26F1j6w1UMIIF0xvE2Ix0cI8I
-        cVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aV
-        AFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZE
-        Xa7IU0ec_3UUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Defaults enable CONFIG_KALLSYMS_ALL and CONFIG_DEBUG_FS to convenient
-ftrace tests.
+When there is a package thermal interrupt with PROCHOT log, it will be
+processed and cleared. It is possible that there is an active HFI event
+status, which is about to get processed or getting processed. While
+clearing PROCHOT log bit, it will also clear HFI status bit. This means
+that hardware is free to update HFI memory.
 
-Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+When clearing a package thermal interrupt, some processors will generate
+a "general protection fault" when any of the read only bit is set to 1.
+The driver maintains a mask of all read-write bits which can be set.
+This mask doesn't include HFI status bit. This bit will also be cleared,
+as it will be assumed read-only bit. So, add HFI status bit 26 to the
+mask.
+
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Reviewed-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 ---
- arch/loongarch/configs/loongson3_defconfig | 2 ++
- 1 file changed, 2 insertions(+)
+Email address was wrong, so sending again.
 
-diff --git a/arch/loongarch/configs/loongson3_defconfig b/arch/loongarch/configs/loongson3_defconfig
-index 2d4678e6189a..0bbab17609b0 100644
---- a/arch/loongarch/configs/loongson3_defconfig
-+++ b/arch/loongarch/configs/loongson3_defconfig
-@@ -34,6 +34,7 @@ CONFIG_SYSFS_DEPRECATED=y
- CONFIG_RELAY=y
- CONFIG_BLK_DEV_INITRD=y
- CONFIG_EXPERT=y
-+CONFIG_KALLSYMS_ALL=y
- CONFIG_USERFAULTFD=y
- CONFIG_PERF_EVENTS=y
- # CONFIG_COMPAT_BRK is not set
-@@ -845,6 +846,7 @@ CONFIG_CRYPTO_DEV_VIRTIO=m
- CONFIG_PRINTK_TIME=y
- CONFIG_STRIP_ASM_SYMS=y
- CONFIG_MAGIC_SYSRQ=y
-+CONFIG_DEBUG_FS=y
- # CONFIG_SCHED_DEBUG is not set
- CONFIG_SCHEDSTATS=y
- # CONFIG_DEBUG_PREEMPT is not set
+ drivers/thermal/intel/therm_throt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/thermal/intel/therm_throt.c b/drivers/thermal/intel/therm_throt.c
+index 8352083b87c7..9e8ab31d756e 100644
+--- a/drivers/thermal/intel/therm_throt.c
++++ b/drivers/thermal/intel/therm_throt.c
+@@ -197,7 +197,7 @@ static const struct attribute_group thermal_attr_group = {
+ #define THERM_STATUS_PROCHOT_LOG	BIT(1)
+ 
+ #define THERM_STATUS_CLEAR_CORE_MASK (BIT(1) | BIT(3) | BIT(5) | BIT(7) | BIT(9) | BIT(11) | BIT(13) | BIT(15))
+-#define THERM_STATUS_CLEAR_PKG_MASK  (BIT(1) | BIT(3) | BIT(5) | BIT(7) | BIT(9) | BIT(11))
++#define THERM_STATUS_CLEAR_PKG_MASK  (BIT(1) | BIT(3) | BIT(5) | BIT(7) | BIT(9) | BIT(11) | BIT(26))
+ 
+ static void clear_therm_status_log(int level)
+ {
 -- 
-2.36.0
+2.31.1
 
