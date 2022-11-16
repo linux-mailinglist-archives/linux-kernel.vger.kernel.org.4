@@ -2,118 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D83FD62C2ED
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 16:46:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 316CA62C2EA
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 16:45:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233026AbiKPPqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 10:46:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57508 "EHLO
+        id S233143AbiKPPpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 10:45:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233016AbiKPPqA (ORCPT
+        with ESMTP id S230115AbiKPPpt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 10:46:00 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAAD827917;
-        Wed, 16 Nov 2022 07:45:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668613558; x=1700149558;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=1/gkxejWIA7ingIPW/2Fo+kxpItp23dI6rVvmXK6vEs=;
-  b=XC08bUuMhTnfnU2IKwr/m0M+YcRuBG0cxPZCEZiXJ7A6KOi0mhySistE
-   KVB03LAn6+CZb0Y7998scwIABgw70GZxrzKWdl+7F2waOxr0TdT5uywXi
-   tDN7us5xeaM84hQX0IuJrVAuxxvhMqsVUO51jFI2PMiNQyLDmARgwfohO
-   yteXm5ZGKbEteO8CLFp2Jjv4pB8CslyyQ9qBjuMOhqEaeZwNSHRJw9L5d
-   9rmIHK6+TLBTn+049SfpdSCo+TVc+4mbgLe504M+mKW8IJS2oAeXM34IC
-   KARUeIamPL2pyrHr6cWj4AXXvYItX1Ci0iIVd90DE/kGR4+bQToWu9QFp
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="311282694"
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="311282694"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 07:45:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="814125429"
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="814125429"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga005.jf.intel.com with ESMTP; 16 Nov 2022 07:45:55 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 2AGFjstk031345;
-        Wed, 16 Nov 2022 15:45:54 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, ast@kernel.org,
-        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
-        UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH net-next v2 1/5] net: lan966x: Add XDP_PACKET_HEADROOM
-Date:   Wed, 16 Nov 2022 16:45:28 +0100
-Message-Id: <20221116154528.3390307-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221115214456.1456856-2-horatiu.vultur@microchip.com>
-References: <20221115214456.1456856-1-horatiu.vultur@microchip.com> <20221115214456.1456856-2-horatiu.vultur@microchip.com>
+        Wed, 16 Nov 2022 10:45:49 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A2232613E;
+        Wed, 16 Nov 2022 07:45:47 -0800 (PST)
+Received: from fraeml739-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NC6hd0VM5z67KvJ;
+        Wed, 16 Nov 2022 23:41:05 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml739-chm.china.huawei.com (10.206.15.220) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 16 Nov 2022 16:45:44 +0100
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 16 Nov
+ 2022 15:45:44 +0000
+Date:   Wed, 16 Nov 2022 15:45:43 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     <ira.weiny@intel.com>
+CC:     Dan Williams <dan.j.williams@intel.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        "Ben Widawsky" <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
+Subject: Re: [PATCH 03/11] cxl/mem: Implement Clear Event Records command
+Message-ID: <20221116154543.00003c6a@Huawei.com>
+In-Reply-To: <20221116152426.0000626b@Huawei.com>
+References: <20221110185758.879472-1-ira.weiny@intel.com>
+        <20221110185758.879472-4-ira.weiny@intel.com>
+        <20221116152426.0000626b@Huawei.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Horatiu Vultur <horatiu.vultur@microchip.com>
-Date: Tue, 15 Nov 2022 22:44:52 +0100
+On Wed, 16 Nov 2022 15:24:26 +0000
+Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
 
-> Update the page_pool params to allocate XDP_PACKET_HEADROOM space as
-> headroom for all received frames.
-> This is needed for when the XDP_TX and XDP_REDIRECT are implemented.
+> On Thu, 10 Nov 2022 10:57:50 -0800
+> ira.weiny@intel.com wrote:
 > 
-> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> > From: Ira Weiny <ira.weiny@intel.com>
+> > 
+> > CXL rev 3.0 section 8.2.9.2.3 defines the Clear Event Records mailbox
+> > command.  After an event record is read it needs to be cleared from the
+> > event log.
+> > 
+> > Implement cxl_clear_event_record() and call it for each record retrieved
+> > from the device.
+> > 
+> > Each record is cleared individually.  A clear all bit is specified but
+> > events could arrive between a get and the final clear all operation.
+> > Therefore each event is cleared specifically.
+> > 
+> > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> >   
+> Some follow through comment updates needed from changes in earlier patches +
+> one comment you can ignore if you prefer to keep it as is.
+> 
+> >  static void cxl_mem_get_records_log(struct cxl_dev_state *cxlds,
+> >  				    enum cxl_event_log_type type)
+> >  {
+> > @@ -728,14 +750,23 @@ static void cxl_mem_get_records_log(struct cxl_dev_state *cxlds,
+> >  		}
+> >  
+> >  		pl_nr = le16_to_cpu(payload.record_count);
+> > -		if (trace_cxl_generic_event_enabled()) {  
+> 
+> To simplify this patch, maybe push this check down in the previous patch so this
+> one doesn't move code around?  It'll look a tiny bit odd there of course..
+> 
+> > +		if (pl_nr > 0) {
+> >  			u16 nr_rec = min_t(u16, pl_nr, CXL_GET_EVENT_NR_RECORDS);
+> >  			int i;
+> >  
+> > -			for (i = 0; i < nr_rec; i++)
+> > -				trace_cxl_generic_event(dev_name(cxlds->dev),
+> > -							type,
+> > -							&payload.record[i]);
+> > +			if (trace_cxl_generic_event_enabled()) {
+> > +				for (i = 0; i < nr_rec; i++)
+> > +					trace_cxl_generic_event(dev_name(cxlds->dev),
+> > +								type,
+> > +								&payload.record[i]);
+> > +			}
+> > +
+> > +			rc = cxl_clear_event_record(cxlds, type, &payload, nr_rec);
+> > +			if (rc) {
+> > +				dev_err(cxlds->dev, "Event log '%s': Failed to clear events : %d",
+> > +					cxl_event_log_type_str(type), rc);
+> > +				return;
+> > +			}
+> >  		}
+> >    
+> 
+> > diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
+> > index da64ba0f156b..28a114c7cf69 100644
+> > --- a/drivers/cxl/cxlmem.h
+> > +++ b/drivers/cxl/cxlmem.h  
+> 
+> >  
+> > +/*
+> > + * Clear Event Records input payload
+> > + * CXL rev 3.0 section 8.2.9.2.3; Table 8-51
+> > + *
+> > + * Space given for 1 record  
+> 
+> Nope...
+> 
+> 
+> > + */
+> > +struct cxl_mbox_clear_event_payload {
+> > +	u8 event_log;		/* enum cxl_event_log_type */
+> > +	u8 clear_flags;
+> > +	u8 nr_recs;		/* 1 for this struct */  
+> Nope :)  Delete the comments so they can't be wrong if this changes in future!
+Ah. You only use one. So should hard code that in the array size below.
 
-[...]
+> 
+> > +	u8 reserved[3];
+> > +	__le16 handle[CXL_GET_EVENT_NR_RECORDS];
+> > +};
+> > +  
+> 
 
-> @@ -466,6 +470,7 @@ static struct sk_buff *lan966x_fdma_rx_get_frame(struct lan966x_rx *rx,
->  
->  	skb_mark_for_recycle(skb);
->  
-> +	skb_reserve(skb, XDP_PACKET_HEADROOM);
-
-Oh, forgot to ask previously. Just curious, which platforms do
-usually have this NIC? Do those platforms have
-CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS set?
-If no, then adding %NET_SKB_PAD to the headroom can significantly
-improve performance, as currently you have 28 bytes of IFH + 14
-bytes of Eth header, so IP header is not aligned to 4 bytes
-boundary. Kernel and other drivers often expect IP header to be
-aligned. Adding %NET_SKB_PAD to the headroom addresses that.
-...but be careful, I've just realized that you have IFH in front
-of Eth header, that means that it will also become unaligned after
-that change, so make sure you don't access it with words bigger
-than 2 bytes. Just test all the variants and pick the best :D
-
->  	skb_put(skb, FDMA_DCB_STATUS_BLOCKL(db->status));
->  
->  	lan966x_ifh_get_timestamp(skb->data, &timestamp);
-> @@ -786,7 +791,8 @@ static int lan966x_fdma_get_max_frame(struct lan966x *lan966x)
->  	return lan966x_fdma_get_max_mtu(lan966x) +
->  	       IFH_LEN_BYTES +
->  	       SKB_DATA_ALIGN(sizeof(struct skb_shared_info)) +
-> -	       VLAN_HLEN * 2;
-> +	       VLAN_HLEN * 2 +
-> +	       XDP_PACKET_HEADROOM;
->  }
-
-[...]
-
-> -- 
-> 2.38.0
-
-Thanks,
-Olek
