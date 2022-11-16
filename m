@@ -2,70 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59A5162C65D
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 18:29:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EB1662C660
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 18:30:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234583AbiKPR3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 12:29:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44738 "EHLO
+        id S235013AbiKPRak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 12:30:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234509AbiKPR3x (ORCPT
+        with ESMTP id S234286AbiKPRah (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 12:29:53 -0500
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 208AA32BA9;
-        Wed, 16 Nov 2022 09:29:52 -0800 (PST)
-Received: by mail-oo1-f42.google.com with SMTP id e11-20020a4ab14b000000b0049be568062bso2597673ooo.4;
-        Wed, 16 Nov 2022 09:29:52 -0800 (PST)
+        Wed, 16 Nov 2022 12:30:37 -0500
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3628A32B9D;
+        Wed, 16 Nov 2022 09:30:37 -0800 (PST)
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-13c2cfd1126so20855294fac.10;
+        Wed, 16 Nov 2022 09:30:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=TiZRwJ+mJX0JujaVc55ipnODAd5lXgBHhurRBqfzsSI=;
-        b=Ms/WI9NodAlZpc9LmcOBz5PPrLXeodij50uPU0jWoVElbLMTMCINKayCWcsuopM8/T
-         f1EdfWGWNTVGksb2mVluYgAeOduRHX08YrNnR/nxbHfqGn0AXfb7AMXfHR4+ZUyJZ8YD
-         LF5iqKG3Ww4PU24Eie7d473YySRyrahhFu2Tu/hGFwGssYqUkbJXqbzd7SFG95/PzeNl
-         WaXXk8rkxhUvtvxVZCID2dLBxKxfHrIpfTq5TQVmvW7FNJfz7Ljgu+LPnIYlL86FwZCR
-         mN9R3sq2VX1PDK2onjjaIozdLjwxOX0C7gZ1K1eDnU7SR+/59SdVHgNS/xhQLjK6JNKr
-         nurA==
-X-Gm-Message-State: ANoB5pmupij2vTa7+WFsXwAHDQzhEIFOI/5ELhwhJDODqs2bKg2yzn/Z
-        42Jruu9XeHoQeQPH/Wjy3Q==
-X-Google-Smtp-Source: AA0mqf7cJeNBtZVp0MmQORg/6QiAJfJWHo09p0aiOG4XwqyXKGRbJY+74MdCHUSoYXUWALOVHDxhQw==
-X-Received: by 2002:a4a:c298:0:b0:49e:a604:b053 with SMTP id b24-20020a4ac298000000b0049ea604b053mr10169038ooq.85.1668619790882;
-        Wed, 16 Nov 2022 09:29:50 -0800 (PST)
+        bh=d94m8A4mnC43bFCgCMyqlrhWiu3NByipxHjP5JFmrF8=;
+        b=M9zvtOWURcE5oFPDm2eaQvKS9seyj8/RWrCO7Li6pIOFRh/BdbEOqe+Z96AA0YGnqz
+         z6+5bDMG0z3X8s7kDDfKXce7Fxm2oqKqEFyU+sUgq6nElN5evXSRaxrKWk6oAcq8sYbL
+         aR/kcq4SBHcPzQxzomqeeF9pNPmz7jcE0EAYzgQW8VWM+9loUdqWG+BpCDHBF4UMav1J
+         0EVqZb2YuR02zui5/W9fjIhKDvDfp/mDhCNLLGAdD6lz1R5RjDp8n9KZhmv3mgx5owjI
+         IX1+m2GbShEFm9BejZ0Jqa5k8T4YgQkcLw8DjALZhVV0w+SFt3vZ+LlazJwGBN/2F52C
+         Ojrg==
+X-Gm-Message-State: ANoB5pnScmTvfY5qWp5SjCUzOVXaDlMk9YGxos8TTQsfRXkG+ikRBFq/
+        4miyz+6OXazf6QX0vpjRTw==
+X-Google-Smtp-Source: AA0mqf4W9ic8trKFbcLCupIweHpywnpJAlbo74qba9pJnN/1t1QeCfL5Lgix9ZRfDFycFgC2Pz6D9Q==
+X-Received: by 2002:a05:6870:b40d:b0:136:b625:9d4b with SMTP id x13-20020a056870b40d00b00136b6259d4bmr2234868oap.247.1668619836444;
+        Wed, 16 Nov 2022 09:30:36 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id z9-20020a4ade49000000b0049eedb106e2sm6289417oot.15.2022.11.16.09.29.49
+        by smtp.gmail.com with ESMTPSA id o2-20020a4aa802000000b0047537233dfasm6208359oom.21.2022.11.16.09.30.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 09:29:50 -0800 (PST)
-Received: (nullmailer pid 554417 invoked by uid 1000);
-        Wed, 16 Nov 2022 17:29:52 -0000
-Date:   Wed, 16 Nov 2022 11:29:52 -0600
+        Wed, 16 Nov 2022 09:30:35 -0800 (PST)
+Received: (nullmailer pid 555476 invoked by uid 1000);
+        Wed, 16 Nov 2022 17:30:38 -0000
+Date:   Wed, 16 Nov 2022 11:30:38 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Yunfei Dong <yunfei.dong@mediatek.com>
-Cc:     Chen-Yu Tsai <wenst@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     linux-kernel@vger.kernel.org,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        linux-mediatek@lists.infradead.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
         Daniel Vetter <daniel@ffwll.ch>,
-        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v2,1/3] media: dt-bindings: media: mediatek: vcodec: Fix
- clock num not correctly
-Message-ID: <20221116172952.GA461876-robh@kernel.org>
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Steve Cho <stevecho@chromium.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2,2/3] media: dt-bindings: media: mediatek: vcodec:
+ Adding racing control register base
+Message-ID: <166861983726.555415.9641697136442986438.robh@kernel.org>
 References: <20221110102834.8946-1-yunfei.dong@mediatek.com>
+ <20221110102834.8946-2-yunfei.dong@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221110102834.8946-1-yunfei.dong@mediatek.com>
+In-Reply-To: <20221110102834.8946-2-yunfei.dong@mediatek.com>
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
@@ -77,96 +79,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 06:28:32PM +0800, Yunfei Dong wrote:
-> mt8195 and mt8192 have different clock numbers, can't write 'clocks' and
-> 'clock-names' with const value.
 
-Not a compatible change. Explain why that is okay if it is.
-
+On Thu, 10 Nov 2022 18:28:33 +0800, Yunfei Dong wrote:
+> Need to add racing control register base in device node for mt8195 support
+> inner racing mode. Removing 'maxItems' and adding 'minItems'.
 > 
-> Move 'assigned-clocks' and 'assigned-clock-parents' to parent node.
+> Adding description for each reg.
 > 
 > Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 > ---
->  .../media/mediatek,vcodec-subdev-decoder.yaml | 119 +++++++++++-------
->  1 file changed, 72 insertions(+), 47 deletions(-)
+> compared with v1:
+> - add description for 'VDEC_SYS'
+> - add description for 'VDEC_RACING_CTRL'
+> - add description for 'VDEC_MISC'
+> - change maxItems -> minItems according to AngeloGioacchino's suggestion
+> - Fix dt_binding_check fail
+> ---
+>  .../bindings/media/mediatek,vcodec-subdev-decoder.yaml    | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
-> index c4f20acdc1f8..794012853834 100644
-> --- a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
-> +++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
-> @@ -89,23 +89,33 @@ properties:
->  
->    ranges: true
->  
-> +  clocks:
-> +    minItems: 1
-> +    maxItems: 5
-> +
-> +  clock-names:
-> +    minItems: 1
-> +    maxItems: 5
 
-Why do both the parent and child have clocks?
-
-> +
-> +  assigned-clocks:
-> +    maxItems: 1
-> +
-> +  assigned-clock-parents:
-> +    maxItems: 1
-
-You can just drop assigned-clock properties. They are allowed in any 
-node with 'clocks'.
-
-> +
->  # Required child node:
->  patternProperties:
-> -  '^vcodec-lat@[0-9a-f]+$':
-> +  '^vcodec-lat-soc@[0-9a-f]+$':
->      type: object
->  
->      properties:
->        compatible:
->          enum:
-> -          - mediatek,mtk-vcodec-lat
->            - mediatek,mtk-vcodec-lat-soc
->  
->        reg:
->          maxItems: 1
->  
-> -      interrupts:
-> -        maxItems: 1
-> -
-
-Dropping interrupts? Not explained in the commit msg (why?).
-
->        iommus:
->          minItems: 1
->          maxItems: 32
-> @@ -114,22 +124,55 @@ patternProperties:
->            Refer to bindings/iommu/mediatek,iommu.yaml.
->  
->        clocks:
-> +        minItems: 1
->          maxItems: 5
->  
->        clock-names:
-> -        items:
-> -          - const: sel
-> -          - const: soc-vdec
-> -          - const: soc-lat
-> -          - const: vdec
-> -          - const: top
-> +        minItems: 1
-> +        maxItems: 5
-
-We had names defined and now we don't. That's a step backwards.
-
->  
-> -      assigned-clocks:
-> +      power-domains:
-
-Adding power-domains?
-
-Rob
+Reviewed-by: Rob Herring <robh@kernel.org>
