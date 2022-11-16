@@ -2,129 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00AEE62BDCE
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:29:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53A9A62BDD3
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:29:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233757AbiKPM3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 07:29:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46076 "EHLO
+        id S230115AbiKPM3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 07:29:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233212AbiKPM2h (ORCPT
+        with ESMTP id S238592AbiKPM30 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 07:28:37 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A46C00;
-        Wed, 16 Nov 2022 04:27:08 -0800 (PST)
-Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx105
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1MBDnC-1ooAV80JrC-00ChQs; Wed, 16
- Nov 2022 13:26:52 +0100
-Message-ID: <7b2ac1a3-4556-1a37-8442-6b7a51b2dc84@gmx.com>
-Date:   Wed, 16 Nov 2022 20:26:46 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v4 1/3] btrfs: add might_sleep() to some places in
- update_qgroup_limit_item()
-Content-Language: en-US
-To:     dsterba@suse.cz
-Cc:     ChenXiaoSong <chenxiaosong2@huawei.com>, clm@fb.com,
-        josef@toxicpanda.com, dsterba@suse.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhangxiaoxu5@huawei.com, yanaijie@huawei.com, wqu@suse.com
-References: <20221115171709.3774614-1-chenxiaosong2@huawei.com>
- <20221115171709.3774614-2-chenxiaosong2@huawei.com>
- <9b47b291-b1a0-ac0c-2049-b7de6545c26b@gmx.com>
- <e058c1b9-7f57-11da-6ad1-6387604813c5@huawei.com>
- <3918175e-dddd-2a55-32c4-c07de78ff4cb@gmx.com>
- <20221116122440.GN5824@suse.cz>
-From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
-In-Reply-To: <20221116122440.GN5824@suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:6tbCdH+7KgUB7+/d7Dd/K+e2XPQPlo7x3eubLzLl1+f0iDniRvG
- iB1n8D0xAKlIorr3HdYjLQPBJfJcFntOlZW1sQ906XpLRcYTjCIGXh22v1ns7kEGCrBiD0F
- jAXKZrgwRNA2QTMZyfi9lJDIReRhJvOsAwrh4DHeKPmhZdHl62UnhrdaHYoJmUwmMsT19p8
- 0Je7eX6N3PRbhdnxzvP1Q==
-UI-OutboundReport: notjunk:1;M01:P0:/Igt7b7tEYs=;7SSw3lK/XhJAAsRb8y4dFUVx6dW
- F9YtIcz4FX3zziQ0S9x8lQmnIGVMYvyx3B+ZNEtQIX1LIVU53xkadzipPzu2H790Krxvzc52n
- 6aqnhVvr+oAVBqbOAk9mcVy7BTz9NQSym8rO0V6VCGnfg4AmWPqKB8eLYVEtgKdR4w2Wyw3eY
- keF8xCF9C0vzbwfU2lOBtsK+Ylk7pMPJasCsUr2jQDOucWfsEgpoWwaU6cvYj24PEbFyBjgjj
- Vhgig3l3XygdiSB4Eqm/qLxws5HcgQMbejsdEEwFXjlJK2SAePw14cZPlXnYEqZWn9NWPPM3n
- Ub7SneXWEjpXyGCivPU3GGMUyg5mkLKfdsKdMzLMFSSRkCrwJhXZ6XaouHqzyMas465JBhsIP
- BPKuPj6Y8Bfhl+zxAwPZGnrvopcUfQKJ7RHTfA+JIZ75oYU+xhTVuCtyhJMnY3g8AWOkQsQVm
- FARuKkoFtRgRGjsm2CxIQwjrCkrlPbIKWnTPT0buCoSMqUdXfjmxPjBosYc29izMPHZC2kurP
- YSpzSM3RGUDCfzy3v2+wq5UAmDSZECTIMT6uhOZ8t/xZm6aD1Fb/YAfgm3Dd1FUk/xLkzgaww
- JcmcsjRhm5j1ANTpSchwLtb3SSqqaa7+Z/vM0yiuolX+Xnq2TYkxJy3E/sQ/mYFUZYvTRXXUm
- Etidz4NP0caxqx+IjgUcayYX4U5q4L/Vj7JC7bOl6MtqR75P/L8O4wovwH1FBOAPnv2vIvGtY
- FtEsj7YOaBwVjVhDDAl8iULxqbBugqCcoe4fQt2fFDemXqDMBcXdo/XWkmJyTgjHn1vNQqiwK
- 51iWgeUuqNRXK/k0OnokPjXFIcBROMrZ5oILMNd29SpOX++EgjyMatwI7Nw01xJS17BW9yw6/
- IRnbVrTzXB2JtMPRSCtgFLqWqb3j+6re6NmGGvp7FB6rTA8T7mc2Z+xxBpAS9p5kug4yTD3ak
- q//4y9YPmb3JyTIkCxirEpWoXlk=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,FREEMAIL_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 16 Nov 2022 07:29:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B510B2726;
+        Wed, 16 Nov 2022 04:28:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 48E43B81D15;
+        Wed, 16 Nov 2022 12:28:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2DC7C433C1;
+        Wed, 16 Nov 2022 12:28:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668601687;
+        bh=fCADGpCnNSduAjZpwwhnl/VWGoiGxCTIfyNUkjbyXYA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=vBmmcyXH8Xef3CyE6rurA4/xuYUqHdzVPKFwLBgIlbH2Hrh2WEyBI1CZtUR6DJ57S
+         RiTY3qv6iehQxa4Bg6zejv52Bm0U4g+/9EQh2JMqpOI/eXE4Y2hUZ/tyBlL7Nv8hr8
+         Is5usA/z/WUIqw3VJNRNczcglLu5n5JcfOEXizmWuoEj5P9EA4vbkqv+yH+QizWChr
+         cFOF1LjCmhxwUQTxIVKhlXx4Q5qhmJUGZvk2xPlmkXOEZRgzsOv9426lxuKDm9HHoI
+         Vk4fEGT9N9TjL+Z6jq0wUeIaI4JjQO1RJ0JlVNPTR5qg7dlOK8OX4xXYb1KpGV+HSe
+         Zj1k1CTUVJ5qQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1ovHWO-006S50-NO;
+        Wed, 16 Nov 2022 12:28:04 +0000
+Date:   Wed, 16 Nov 2022 12:28:04 +0000
+Message-ID: <867czvozhn.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [PATCH] kbuild: Restore .version auto-increment behaviour for Debian packages
+In-Reply-To: <CAK7LNASC6f_=ngS4NW0prvwcOribumeajW1r4q57u3LGZvuEdA@mail.gmail.com>
+References: <20221115220453.3463096-1-maz@kernel.org>
+        <CAK7LNASC6f_=ngS4NW0prvwcOribumeajW1r4q57u3LGZvuEdA@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: masahiroy@kernel.org, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, michal.lkml@markovi.net, ndesaulniers@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/11/16 20:24, David Sterba wrote:
-> On Wed, Nov 16, 2022 at 04:43:50PM +0800, Qu Wenruo wrote:
->>
->>
->> On 2022/11/16 16:09, ChenXiaoSong wrote:
->>> 在 2022/11/16 6:48, Qu Wenruo 写道:
->>>> Looks good.
->>>>
->>>> We may want to add more in other locations, but this is really a good
->>>> start.
->>>>
->>>> Reviewed-by: Qu Wenruo <wqu@suse.com>
->>>>
->>>> Thanks,
->>>> Qu
->>>
->>> If I just add might_sleep() in btrfs_alloc_path() and
->>> btrfs_search_slot(), is it reasonable?
->>
->> Adding it to btrfs_search_slot() is definitely correct.
->>
->> But why for btrfs_alloc_path()? Wouldn't kmem_cache_zalloc() itself
->> already do the might_sleep_if() somewhere?
->>
->> I just looked the call chain, and indeed it is doing the check already:
->>
->> btrfs_alloc_path()
->> |- kmem_cache_zalloc()
->>      |- kmem_cache_alloc()
->>         |- __kmem_cache_alloc_lru()
->>            |- slab_alloc()
->>               |- slab_alloc_node()
->>                  |- slab_pre_alloc_hook()
->>                     |- might_alloc()
->>                        |- might_sleep_if()
+On Wed, 16 Nov 2022 06:09:31 +0000,
+Masahiro Yamada <masahiroy@kernel.org> wrote:
 > 
-> The call chaing is unconditional so the check will always happen but the
-> condition itself in might_sleep_if does not recognize GFP_NOFS:
+> On Wed, Nov 16, 2022 at 7:05 AM Marc Zyngier <maz@kernel.org> wrote:
+> >
+> > Since 2df8220cc511 ("kbuild: build init/built-in.a just once"),
+> > generating Debian packages using 'make bindeb-pkg' results in
+> > packages that are stuck to the same .version, leading to unexpected
+> > behaviours (multiple packages with the same version).
+> >
+> > That's because the mkdebian script samples the build version
+> > before building the kernel, and forces the use of that version
+> > number for the actual build.
+> >
+> > Restore the previous behaviour by calling init/build-version
+> > instead of reading the .version file. This is likely to result
+> > in too many .version bumps, but this is what was happening before
+> > (although the bump was affecting builds made after the current one).
 > 
->   34 static inline bool gfpflags_allow_blocking(const gfp_t gfp_flags)
->   35 {
->   36         return !!(gfp_flags & __GFP_DIRECT_RECLAIM);
->   37 }
 > 
-> #define GFP_NOFS        (__GFP_RECLAIM | __GFP_IO)
+> What do you mean by "too many .version bumps"?
 > 
-> And I think the qgroup limit was exactly a spin lock over btrfs_path_alloc so
-> it did not help. An might_sleep() inside btrfs_path_alloc() is a very minimal
-> but reliable check we could add, the paths are used in many places so it would
-> increase the coverage.
+> Every "make bindeb-pkg" increments the version by one.
 
-OK, then it makes sense now for btrfs_alloc_path().
+And isn't that a problem? We increase the build number pointlessly,
+even if there is *nothing* to change.
 
-But I still believe this looks like a bug in gfpflags_allow_blocking()...
+> 
+> Is there any case where it increases more?
 
-Thanks,
-Qu
+No, but that's bad enough IMHO.
+
+> > Eventually, this script should be turned into something that
+> > is a bit less counter-intuitive (building the kernel first
+> > and only then generating the packaging artefacts).
+> 
+> 
+> How to achieve this?
+
+
+By building the kernel *before* sampling the version number, just like
+RPM does.
+
+> 
+> The version is recorded in debian/chanegelog.
+> Without it, dpkg-buildpackage fails.
+
+And again, nothing forces us to do it in that order.
+
+> In my understanding, the version must be fixed before building the kernel.
+
+Can't immediately see what mandates it, but I'm sure you know better.
+
+Anyway, the current situation needs fixing. If you're unhappy with the
+patch, feel free to replace it with something that you consider more
+appropriate.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
