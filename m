@@ -2,181 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A82962C278
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 16:26:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7743E62C279
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 16:27:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233931AbiKPP0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 10:26:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45118 "EHLO
+        id S234659AbiKPP1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 10:27:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231403AbiKPP0p (ORCPT
+        with ESMTP id S236124AbiKPP1G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 10:26:45 -0500
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66923218;
-        Wed, 16 Nov 2022 07:26:43 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0VUyHU7C_1668612396;
-Received: from 30.39.64.129(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VUyHU7C_1668612396)
-          by smtp.aliyun-inc.com;
-          Wed, 16 Nov 2022 23:26:38 +0800
-Message-ID: <d334a33c-b171-8381-3f75-e47392b6cba5@linux.alibaba.com>
-Date:   Wed, 16 Nov 2022 23:26:36 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.1
-Subject: Re: [PATCH RFC 0/6] Add metrics for neoverse-n2
-To:     James Clark <james.clark@arm.com>,
-        nick Forrington <Nick.Forrington@arm.com>,
-        Jumana MP <Jumana.MP@arm.com>,
-        John Garry <john.garry@huawei.com>
-Cc:     Will Deacon <will@kernel.org>, Mike Leach <mike.leach@linaro.org>,
+        Wed, 16 Nov 2022 10:27:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1636218;
+        Wed, 16 Nov 2022 07:27:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B9EC1B81DD9;
+        Wed, 16 Nov 2022 15:27:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C455C433D6;
+        Wed, 16 Nov 2022 15:27:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668612423;
+        bh=L6GbtZxCf5VqA/hILI0topC4Tv6j0OCw5gX8PuzWtR0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uPLgwsKelBv8+G6m3s6+6CN39OSO8+own0i9k1HT/xT8foVVmG4Szdbr1uIkS1tRr
+         pP82m7xFo660YGRva7UDCdK9IupML14nL5kbVV7dwv94KrqDYisNLyH56YYKIrv/lt
+         mXrb8dQEu1tqT77SNZkbZBseGKZtvZ8upcGbOnTpHOztenoZ/Vpgi2+qPbwku/mSIr
+         gm0Ur8Wd1wTHoo7/2GYJw8g/2txt9JXn3xTePld6QhZz8JnAqC0rG5HGfnVoljy74e
+         LdiAvIrMKAB60aZzVDB5YR9B2DWlysWKLa1ABqeTv9svn3NJYpo6XxP/LgyFe11lT5
+         SJ3LWtr2SNuXQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 7F8654034E; Wed, 16 Nov 2022 12:27:00 -0300 (-03)
+Date:   Wed, 16 Nov 2022 12:27:00 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Weilin Wang <weilin.wang@intel.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>,
         Leo Yan <leo.yan@linaro.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
         Jiri Olsa <jolsa@kernel.org>,
         Namhyung Kim <namhyung@kernel.org>,
-        Andrew Kilroy <andrew.kilroy@arm.com>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Zhuo Song <zhuo.song@linux.alibaba.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1667214694-89839-1-git-send-email-renyu.zj@linux.alibaba.com>
- <d6553087-9157-21e8-6980-31bc8e44f066@arm.com>
-From:   Jing Zhang <renyu.zj@linux.alibaba.com>
-In-Reply-To: <d6553087-9157-21e8-6980-31bc8e44f066@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Sandipan Das <sandipan.das@amd.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Xin Gao <gaoxin@cdjrlc.com>, Rob Herring <robh@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v1 0/4] perf list libpfm support and other fixes
+Message-ID: <Y3UBRI5o1XDK6Zmg@kernel.org>
+References: <20221116071259.2832681-1-irogers@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221116071259.2832681-1-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2022/11/16 下午7:19, James Clark 写道:
+Em Tue, Nov 15, 2022 at 11:12:55PM -0800, Ian Rogers escreveu:
+> Fix an asan issue and a a lack of libpfm support with the refactored
+> perf list code. Add some improvements to wordwrap and the escape
+> printing for json to aid this.
 > 
-> 
-> On 31/10/2022 11:11, Jing Zhang wrote:
->> This series add six metricgroups for neoverse-n2, among which, the
->> formula of topdown L1 is from the document:
->> https://documentation-service.arm.com/static/60250c7395978b529036da86?token=
->>
->> Since neoverse-n2 does not yet support topdown L2, metricgroups such
->> as Cache, TLB, Branch, InstructionsMix, and PEutilization are added to
->> help further analysis of performance bottlenecks.
->>
-> 
-> Hi Jing,
-> 
-> Thanks for working on this, these metrics look ok to me in general,
-> although we're currently working on publishing standardised metrics
-> across all new cores as part of a new project in Arm. This will include
-> N2, and our ones are very similar (or almost identical) to yours,
-> barring slightly different group names, metric names, and differences in
-> things like outputting topdown metrics as percentages.
-> 
-> We plan to publish our standard metrics some time in the next 2 months.
-> Would you consider holding off on merging this change so that we have
-> consistant group names and units going forward? Otherwise N2 would be> the odd one out. I will send you the metrics when they are ready, and we
-> will have a script to generate perf jsons from them, so you can review.
-> 
+> Ian Rogers (4):
+>   perf list: Fix asan issue
+>   perf list: Support newlines in wordwrap
+>   perf list: Json escape encoding improvements
+>   perf list: List callback support for libpfm
 
-Do you mean that after you release the new standard metrics, I remake my
-patch referring to them, such as consistent group names and unit?
+Please take a look at my reports, the patch just before the one having
+fixes in this series has some problems, so please check and fold the
+fixes for the JSON one.
 
+I thought I hadn't published that part, but realized I did and force
+pushed without the last two patches, to avoid breaking bisection before
+it hits upstream.
 
-> We also have a slightly different forumula for one of the top down
-> metrics which I think would be slightly more accurate. We don't have
-
-
-The v2 version of the patchset updated the formula of topdown L1.
-Link: https://lore.kernel.org/all/1668411720-3581-1-git-send-email-renyu.zj@linux.alibaba.com/
-
-The formula of the v2 version is more accurate than v1, and it has been
-verified in our test environment. Can you share your formula first and we
-can discuss it together? :)
-
-Thanks,
-Jing
-
-
-> anything for your "PE utilization" metrics, which I can raise
-> internally. It could always be added to perf on top of the standardised
-> ones if we don't add it to our standard ones.
-> 
-> Thanks
-> James
-> 
->> with this series on neoverse-n2:
->>
->> $./perf list metricgroup
->>
->> List of pre-defined events (to be used in -e):
->>
->>
->> Metric Groups:
->>
->> Branch
->> Cache
->> InstructionMix
->> PEutilization
->> TLB
->> TopDownL1
->>
->>
->> $./perf list
->>
->> ...
->> Metric Groups:
->>
->> Branch:
->>   branch_miss_pred_rate
->>        [The rate of branches mis-predited to the overall branches]
->>   branch_mpki
->>        [The rate of branches mis-predicted per kilo instructions]
->>   branch_pki
->>        [The rate of branches retired per kilo instructions]
->> Cache:
->>   l1d_cache_miss_rate
->>        [The rate of L1 D-Cache misses to the overall L1 D-Cache]
->>   l1d_cache_mpki
->>        [The rate of L1 D-Cache misses per kilo instructions]
->> ...
->>
->>
->> $sudo ./perf stat -a -M TLB sleep 1
->>
->>  Performance counter stats for 'system wide':
->>
->>         35,861,936      L1I_TLB                          #     0.00 itlb_walk_rate           (74.91%)
->>              5,661      ITLB_WALK                                                            (74.91%)
->>         97,279,240      INST_RETIRED                     #     0.07 itlb_mpki                (74.91%)
->>              6,851      ITLB_WALK                                                            (74.91%)
->>             26,391      DTLB_WALK                        #     0.00 dtlb_walk_rate           (75.07%)
->>         35,585,545      L1D_TLB                                                              (75.07%)
->>         85,923,244      INST_RETIRED                     #     0.35 dtlb_mpki                (75.11%)
->>             29,992      DTLB_WALK                                                            (75.11%)
->>
->>        1.003450755 seconds time elapsed
->>        
->>
->> Jing Zhang (6):
->>   perf vendor events arm64: Add topdown L1 metrics for neoverse-n2
->>   perf vendor events arm64: Add TLB metrics for neoverse-n2
->>   perf vendor events arm64: Add cache metrics for neoverse-n2
->>   perf vendor events arm64: Add branch metrics for neoverse-n2
->>   perf vendor events arm64: Add PE utilization metrics for neoverse-n2
->>   perf vendor events arm64: Add instruction mix metrics for neoverse-n2
->>
->>  .../arch/arm64/arm/neoverse-n2/metrics.json        | 247 +++++++++++++++++++++
->>  1 file changed, 247 insertions(+)
->>  create mode 100644 tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
->>
+- Arnaldo
