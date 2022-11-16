@@ -2,196 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAFAD62B00A
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 01:32:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5361462B012
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 01:33:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230343AbiKPAct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 19:32:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57658 "EHLO
+        id S230288AbiKPAda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 19:33:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiKPAcp (ORCPT
+        with ESMTP id S229478AbiKPAd1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 19:32:45 -0500
-Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D5AA24BD4
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 16:31:50 -0800 (PST)
-Received: from droid01-xa.amlogic.com (10.88.11.200) by mail-sh.amlogic.com
- (10.18.11.5) with Microsoft SMTP Server id 15.1.2507.13; Wed, 16 Nov 2022
- 08:31:43 +0800
-From:   Jiucheng Xu <jiucheng.xu@amlogic.com>
-To:     <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     Jonathan Corbet <corbet@lwn.net>, Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        John Garry <john.garry@huawei.com>,
-        Wan Jiabing <wanjiabing@vivo.com>,
-        Chris Healy <cphealy@gmail.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Kelvin Zhang <kelvin.zhang@amlogic.com>,
-        Jiucheng Xu <jiucheng.xu@amlogic.com>,
-        Chris Healy <healych@amazon.com>
-Subject: [PATCH v10 2/2] docs/perf: Add documentation for the Amlogic G12 DDR PMU
-Date:   Wed, 16 Nov 2022 08:31:33 +0800
-Message-ID: <20221116003133.1049346-2-jiucheng.xu@amlogic.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221116003133.1049346-1-jiucheng.xu@amlogic.com>
-References: <20221116003133.1049346-1-jiucheng.xu@amlogic.com>
+        Tue, 15 Nov 2022 19:33:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C99BBF;
+        Tue, 15 Nov 2022 16:33:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EDD6360E65;
+        Wed, 16 Nov 2022 00:33:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09D87C433D6;
+        Wed, 16 Nov 2022 00:33:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668558805;
+        bh=iJTS8EkzL0qvGTxZzjMwXMPRiR5MYwHdPFSOBGvjoIA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dFUB4eL5N8849Ih8QW0Damnjjrx1Z4QyyXiWEzgbuU53ZMCcg61Stj4psKEJv7njf
+         703IBe5xj0D65WE4M36vYzhjr+8Tqrv5Lx006hqZ0EadVYSZeh9NM+AdT2jbfEjNl6
+         2klBpa0hchPyHkt7bNXss3SNeNZ6M1Ubt3cbTSeco2RA7W0N1NBfnMi8rK6CS+cBuo
+         vZgrmDtEQ0CMZW8qx1ecqN5vgbTmF9ela3pehhFuU9IDp5e2uS1REejfJ+xOujAQAH
+         JJxktQ9nkP23xybzooA+tNMhOK3LfyFFK+sTGPfHTgccbTDZ6cacIZWVt0sxVNijXT
+         bhKBG3XnWlkew==
+Date:   Wed, 16 Nov 2022 02:33:22 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     keyrings@vger.kernel.org, jejb@linux.ibm.com, zohar@linux.ibm.com,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jerome Forissier <jerome.forissier@linaro.org>
+Subject: Re: [PATCH] KEYS: trusted: tee: Make registered shm dependency
+ explicit
+Message-ID: <Y3Qv0hehr/yKNvy4@kernel.org>
+References: <20221110111140.1999538-1-sumit.garg@linaro.org>
+ <CAFA6WYMKSjvgNgbf=cJXiTE3LitS-whtRbqJW1cdkHMJ1TsdUg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.88.11.200]
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFA6WYMKSjvgNgbf=cJXiTE3LitS-whtRbqJW1cdkHMJ1TsdUg@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a user guide to show how to use DDR PMU to
-monitor DDR bandwidth on Amlogic G12 SoC
+On Thu, Nov 10, 2022 at 04:44:20PM +0530, Sumit Garg wrote:
+> + Jarkko (Apologies I accidently missed you while sending the original patch).
+> 
+> On Thu, 10 Nov 2022 at 16:42, Sumit Garg <sumit.garg@linaro.org> wrote:
+> >
+> > TEE trusted keys support depends on registered shared memory support
+> > since the key buffers are needed to be registered with OP-TEE. So make
+> > that dependency explicit to not register trusted keys support if
+> > underlying implementation doesn't support registered shared memory.
+> >
+> > Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
+> > Tested-by: Jerome Forissier <jerome.forissier@linaro.org>
+> > ---
+> >  security/keys/trusted-keys/trusted_tee.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/security/keys/trusted-keys/trusted_tee.c b/security/keys/trusted-keys/trusted_tee.c
+> > index c8626686ee1b..ac3e270ade69 100644
+> > --- a/security/keys/trusted-keys/trusted_tee.c
+> > +++ b/security/keys/trusted-keys/trusted_tee.c
+> > @@ -219,7 +219,8 @@ static int trusted_tee_get_random(unsigned char *key, size_t key_len)
+> >
+> >  static int optee_ctx_match(struct tee_ioctl_version_data *ver, const void *data)
+> >  {
+> > -       if (ver->impl_id == TEE_IMPL_ID_OPTEE)
+> > +       if (ver->impl_id == TEE_IMPL_ID_OPTEE &&
+> > +           ver->gen_caps & TEE_GEN_CAP_REG_MEM)
+> >                 return 1;
+> >         else
+> >                 return 0;
+> > --
+> > 2.34.1
+> >
 
-Signed-off-by: Jiucheng Xu <jiucheng.xu@amlogic.com>
-Reviewed-by: Chris Healy <healych@amazon.com>
----
-Changes v9 -> v10:
-  - Rebase code
-  - Add "Reviewed-by" tag
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-Changes v8 -> v9:
-  - No change
-
-Changes v7 -> v8:
-  - No change
-
-Changes v6 -> v7:
-  - Drop the Reported-by tag
-  - Fix spelling error
-
-Changes v5 -> v6:
-  - No change
-
-Changes v4 -> v5:
-  - Fix building warning
-
-Changes v3 -> v4:
-  - No change
-
-Changes v2 -> v3:
-  - Rename doc name from aml-ddr-pmu.rst to meson-ddr-pmu.rst
-
-Changes v1 -> v2:
-  - Nothing was changed
----
- Documentation/admin-guide/perf/index.rst      |  1 +
- .../admin-guide/perf/meson-ddr-pmu.rst        | 70 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 3 files changed, 72 insertions(+)
- create mode 100644 Documentation/admin-guide/perf/meson-ddr-pmu.rst
-
-diff --git a/Documentation/admin-guide/perf/index.rst b/Documentation/admin-guide/perf/index.rst
-index 793e1970bc05..c767e03e4d34 100644
---- a/Documentation/admin-guide/perf/index.rst
-+++ b/Documentation/admin-guide/perf/index.rst
-@@ -19,3 +19,4 @@ Performance monitor support
-    arm_dsu_pmu
-    thunderx2-pmu
-    alibaba_pmu
-+   meson-ddr-pmu
-diff --git a/Documentation/admin-guide/perf/meson-ddr-pmu.rst b/Documentation/admin-guide/perf/meson-ddr-pmu.rst
-new file mode 100644
-index 000000000000..15e93a751ced
---- /dev/null
-+++ b/Documentation/admin-guide/perf/meson-ddr-pmu.rst
-@@ -0,0 +1,70 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+===========================================================
-+Amlogic SoC DDR Bandwidth Performance Monitoring Unit (PMU)
-+===========================================================
-+
-+There is a bandwidth monitor inside the DRAM controller. The monitor includes
-+4 channels which can count the read/write request of accessing DRAM individually.
-+It can be helpful to show if the performance bottleneck is on DDR bandwidth.
-+
-+Currently, this driver supports the following 5 Perf events:
-+
-++ meson_ddr_bw/total_rw_bytes/
-++ meson_ddr_bw/chan_1_rw_bytes/
-++ meson_ddr_bw/chan_2_rw_bytes/
-++ meson_ddr_bw/chan_3_rw_bytes/
-++ meson_ddr_bw/chan_4_rw_bytes/
-+
-+meson_ddr_bw/chan_{1,2,3,4}_rw_bytes/ events are the channel related events.
-+Each channel support using keywords as filter, which can let the channel
-+to monitor the individual IP module in SoC.
-+
-+The following keywords are the filter:
-+
-++ arm             - DDR access request from CPU
-++ vpu_read1       - DDR access request from OSD + VPP read
-++ gpu             - DDR access request from 3D GPU
-++ pcie            - DDR access request from PCIe controller
-++ hdcp            - DDR access request from HDCP controller
-++ hevc_front      - DDR access request from HEVC codec front end
-++ usb3_0          - DDR access request from USB3.0 controller
-++ hevc_back       - DDR access request from HEVC codec back end
-++ h265enc         - DDR access request from HEVC encoder
-++ vpu_read2       - DDR access request from DI read
-++ vpu_write1      - DDR access request from VDIN write
-++ vpu_write2      - DDR access request from di write
-++ vdec            - DDR access request from legacy codec video decoder
-++ hcodec          - DDR access request from H264 encoder
-++ ge2d            - DDR access request from ge2d
-++ spicc1          - DDR access request from SPI controller 1
-++ usb0            - DDR access request from USB2.0 controller 0
-++ dma             - DDR access request from system DMA controller 1
-++ arb0            - DDR access request from arb0
-++ sd_emmc_b       - DDR access request from SD eMMC b controller
-++ usb1            - DDR access request from USB2.0 controller 1
-++ audio           - DDR access request from Audio module
-++ sd_emmc_c       - DDR access request from SD eMMC c controller
-++ spicc2          - DDR access request from SPI controller 2
-++ ethernet        - DDR access request from Ethernet controller
-+
-+
-+The following command is to show the total DDR bandwidth:
-+
-+  .. code-block:: bash
-+
-+      perf stat -a -e meson_ddr_bw/total_rw_bytes/ -I 1000 sleep 10
-+
-+This command will print the total DDR bandwidth per second.
-+
-+The following commands are to show how to use filter parameters:
-+
-+  .. code-block:: bash
-+
-+      perf stat -a -e meson_ddr_bw/chan_1_rw_bytes,arm=1/ -I 1000 sleep 10
-+      perf stat -a -e meson_ddr_bw/chan_2_rw_bytes,gpu=1/ -I 1000 sleep 10
-+      perf stat -a -e meson_ddr_bw/chan_3_rw_bytes,arm=1,gpu=1/ -I 1000 sleep 10
-+
-+The 1st command show how to use channel 1 to monitor the DDR bandwidth from ARM.
-+The 2nd command show using channel 2 to get the DDR bandwidth of GPU.
-+The 3rd command show using channel 3 to monitor the sum of ARM and GPU.
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 415eaa30c523..b76c4deddf22 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1098,6 +1098,7 @@ M:	Jiucheng Xu <jiucheng.xu@amlogic.com>
- L:	linux-amlogic@lists.infradead.org
- S:	Supported
- W:	http://www.amlogic.com
-+F:	Documentation/admin-guide/perf/meson-ddr-pmu.rst
- F:	drivers/perf/amlogic/
- F:	include/soc/amlogic/
- 
--- 
-2.25.1
-
+BR, Jarkko
