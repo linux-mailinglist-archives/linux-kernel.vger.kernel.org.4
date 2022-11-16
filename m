@@ -2,98 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAFB162CD6B
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 23:12:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F2AA62CD6E
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 23:12:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234384AbiKPWMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 17:12:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38538 "EHLO
+        id S234443AbiKPWMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 17:12:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234407AbiKPWLz (ORCPT
+        with ESMTP id S234403AbiKPWMs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 17:11:55 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 681246A6B0
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 14:10:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668636655;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7vamPlcLskGy2JvIhU266turZK2l7Sx2cyKxaPLx7j8=;
-        b=UCl8KVLM0z2MK4xQK7FM95cw1drlb8V4IZB/uL46vzdOUgVXrE0ebR9LNT07nr8UtnVr9p
-        DWNz2yHF9E0DLt+IrF/pWSz9dLLZ/odiYGl+J8PJx+TbxbIDtEvcNjywFYupdT+YTS4rZ/
-        RnNOG8WjIDThScRhmU8692OIciiq6X0=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-554-ialSBMN9OgOxk9dWf5hm7g-1; Wed, 16 Nov 2022 17:10:54 -0500
-X-MC-Unique: ialSBMN9OgOxk9dWf5hm7g-1
-Received: by mail-qk1-f200.google.com with SMTP id bj1-20020a05620a190100b006fa12a05188so50135qkb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 14:10:54 -0800 (PST)
+        Wed, 16 Nov 2022 17:12:48 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D3E36A6B0
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 14:12:47 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id q197-20020a6b8ece000000b006de79f67604so11190iod.13
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 14:12:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7vamPlcLskGy2JvIhU266turZK2l7Sx2cyKxaPLx7j8=;
-        b=63pgw862SWro080J6qosUut+YUJM373jS97IfISImY0rmI02+OAVmLmGyR9iPhMRc8
-         S7oSTj9Eq1IBy4fPFHOY9giB+dJYoQcAJ1J9Ww2tHJxVSaCodvAO8q+g0c21UIX3u1ig
-         /QkYfhB3fpP9/K6CX/6FoTDQO1F2o7bJufM658O/PyxwAh9jCC715xM72xksRqpyaXsG
-         qsqK0Da05A/stw/UbUd/i/XTQYvxjUA+zfGD4H8rn4Rh2MNICVhu6uZWqxVbM9Qo+TY0
-         MDt3cP4Pgjtba1cAno6E7L1CLIwuA2GPrbOH75RPg+sYvxfCP4n3RjA+ORY07UxQ+HuW
-         ESpg==
-X-Gm-Message-State: ANoB5pnqQUHNxks6zc+FBNTiZI77QdYEZaZiRZ/b8omyk5s9Gz8pcaz8
-        EMu2yXI4KVVixGj/7DZikk9hVEUXeeXhZGHFAy8tXri/FasAgN6CiokLXc/ZL09Ab2DVCHutL9/
-        IF3KS9c5GzgiNOyUD/eeqzlQ=
-X-Received: by 2002:a0c:f4cd:0:b0:4b1:8ec4:4464 with SMTP id o13-20020a0cf4cd000000b004b18ec44464mr173723qvm.16.1668636654006;
-        Wed, 16 Nov 2022 14:10:54 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4znPzbOMmRcBIPotkDkuJjcA84kJF/jJYUJhZDK9rm9yXJQWV/5W2Fydvh5O0bt2+81eunGg==
-X-Received: by 2002:a0c:f4cd:0:b0:4b1:8ec4:4464 with SMTP id o13-20020a0cf4cd000000b004b18ec44464mr173707qvm.16.1668636653766;
-        Wed, 16 Nov 2022 14:10:53 -0800 (PST)
-Received: from localhost (pool-68-160-173-162.bstnma.fios.verizon.net. [68.160.173.162])
-        by smtp.gmail.com with ESMTPSA id bq40-20020a05620a46a800b006f7ee901674sm10691245qkb.2.2022.11.16.14.10.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 14:10:53 -0800 (PST)
-Date:   Wed, 16 Nov 2022 17:10:52 -0500
-From:   Mike Snitzer <snitzer@redhat.com>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     hch@lst.de, axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
-        dm-devel@redhat.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
-        yi.zhang@huawei.com
-Subject: Re: [PATCH v3 01/10] block: clear ->slave_dir when dropping the main
- slave_dir reference
-Message-ID: <Y3Vf7LYexIXiUeOE@redhat.com>
-References: <20221115141054.1051801-1-yukuai1@huaweicloud.com>
- <20221115141054.1051801-2-yukuai1@huaweicloud.com>
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wwkn7rTXlAk99V4Ga9mjelyFQlUTwFAAzOyAoCfQ2Rw=;
+        b=CnnbRzE93GA82Fou8wd83RqLUBgVw1q7EblBmMvMm0OegaW/xKNFIGAdraMTfqHL4R
+         nCcvLjrgJqpe8WBq/Hik1ivK1a8RqRML5DkQlc/7T55SGGk2UN+ZZnOMwx7o7HmoeWKQ
+         dCZaKUXmW+JcUf/8Cu36ai4QwGCa6UaobA2hSnRqOBWQy9/wxfoMBg4nqoK8Gjy2RFi4
+         u5vBxG7HPZT9XnGkDAHiT0tjpdK6Ne7jP/HcgdZ0dg8sTklqZHUwUzF4RzlkdGqPYgDg
+         cFWOS9fjLEnikFc7ZJGajAJdd8ZUm0e6LzqIeh4jOJhVio3UbgkVyBzIOPV3hbjKjEbP
+         +kBA==
+X-Gm-Message-State: ANoB5pkbSbxA+yiATJmaMNFTQJyO4mfN2n/K0IlseVgg4iiEh/f/Vq3q
+        5myPHRS5Ldz48haJ7nnFenNlFLGEO1VW6pID7mOdAbnk4/G8
+X-Google-Smtp-Source: AA0mqf4G7sIom4lHW741nUPeSJyHWsaJ6nR/WSmbUjLrYfInseYIPZNSJiZOpXEsIuEWGtv5+o+FD/LSr6dTsak6bI3HSUEqscw5
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221115141054.1051801-2-yukuai1@huaweicloud.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:33a0:b0:373:83fe:19c0 with SMTP id
+ h32-20020a05663833a000b0037383fe19c0mr11173076jav.156.1668636767019; Wed, 16
+ Nov 2022 14:12:47 -0800 (PST)
+Date:   Wed, 16 Nov 2022 14:12:47 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c1e64305ed9dc5e8@google.com>
+Subject: [syzbot] BUG: MAX_LOCKDEP_ENTRIES too low! (3)
+From:   syzbot <syzbot+b04c9ffbbd2f303d00d9@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com, jhs@mojatatu.com,
+        jiri@resnulli.us, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com, xiyou.wangcong@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15 2022 at  9:10P -0500,
-Yu Kuai <yukuai1@huaweicloud.com> wrote:
+Hello,
 
-> From: Christoph Hellwig <hch@lst.de>
-> 
-> Zero out the pointer to ->slave_dir so that the holder code doesn't
-> incorrectly treat the object as alive when add_disk failed or after
-> del_gendisk was called.
-> 
-> Fixes: 89f871af1b26 ("dm: delay registering the gendisk")
-> Reported-by: Yu Kuai <yukuai3@huawei.com>
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+syzbot found the following issue on:
 
-Reviewed-by: Mike Snitzer <snitzer@kernel.org>
+HEAD commit:    094226ad94f4 Linux 6.1-rc5
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=10b21801880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e9039cbe1d7613aa
+dashboard link: https://syzkaller.appspot.com/bug?extid=b04c9ffbbd2f303d00d9
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/655851ef7ce3/disk-094226ad.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/f1e7de729009/vmlinux-094226ad.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/849adc218fa0/bzImage-094226ad.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+b04c9ffbbd2f303d00d9@syzkaller.appspotmail.com
+
+BUG: MAX_LOCKDEP_ENTRIES too low!
+turning off the locking correctness validator.
+CPU: 1 PID: 26581 Comm: syz-executor.4 Not tainted 6.1.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ alloc_list_entry.cold+0x11/0x18 kernel/locking/lockdep.c:1402
+ add_lock_to_list kernel/locking/lockdep.c:1423 [inline]
+ check_prev_add kernel/locking/lockdep.c:3167 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+ validate_chain kernel/locking/lockdep.c:3831 [inline]
+ __lock_acquire+0x3626/0x56d0 kernel/locking/lockdep.c:5055
+ lock_acquire kernel/locking/lockdep.c:5668 [inline]
+ lock_acquire+0x1df/0x630 kernel/locking/lockdep.c:5633
+ local_lock_acquire include/linux/local_lock_internal.h:29 [inline]
+ ___slab_alloc+0xe1/0x1400 mm/slub.c:3099
+ __slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3279
+ slab_alloc_node mm/slub.c:3364 [inline]
+ __kmem_cache_alloc_node+0x191/0x3e0 mm/slub.c:3437
+ kmalloc_trace+0x22/0x60 mm/slab_common.c:1045
+ kmalloc include/linux/slab.h:553 [inline]
+ kzalloc include/linux/slab.h:689 [inline]
+ ref_tracker_alloc+0x14c/0x550 lib/ref_tracker.c:85
+ __netdev_tracker_alloc include/linux/netdevice.h:3995 [inline]
+ netdev_hold include/linux/netdevice.h:4024 [inline]
+ netdev_hold include/linux/netdevice.h:4019 [inline]
+ qdisc_alloc+0x7b2/0xb00 net/sched/sch_generic.c:974
+ qdisc_create_dflt+0x75/0x540 net/sched/sch_generic.c:996
+ attach_one_default_qdisc net/sched/sch_generic.c:1151 [inline]
+ netdev_for_each_tx_queue include/linux/netdevice.h:2440 [inline]
+ attach_default_qdiscs net/sched/sch_generic.c:1169 [inline]
+ dev_activate+0x760/0xcd0 net/sched/sch_generic.c:1228
+ __dev_open+0x393/0x4d0 net/core/dev.c:1441
+ dev_open net/core/dev.c:1468 [inline]
+ dev_open+0xe8/0x150 net/core/dev.c:1461
+ team_port_add drivers/net/team/team.c:1215 [inline]
+ team_add_slave+0x9ff/0x1b80 drivers/net/team/team.c:1984
+ do_set_master+0x1c8/0x220 net/core/rtnetlink.c:2578
+ rtnl_newlink_create net/core/rtnetlink.c:3381 [inline]
+ __rtnl_newlink+0x13ac/0x17e0 net/core/rtnetlink.c:3581
+ rtnl_newlink+0x64/0xa0 net/core/rtnetlink.c:3594
+ rtnetlink_rcv_msg+0x43a/0xca0 net/core/rtnetlink.c:6091
+ netlink_rcv_skb+0x153/0x420 net/netlink/af_netlink.c:2540
+ netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+ netlink_unicast+0x543/0x7f0 net/netlink/af_netlink.c:1345
+ netlink_sendmsg+0x917/0xe10 net/netlink/af_netlink.c:1921
+ sock_sendmsg_nosec net/socket.c:714 [inline]
+ sock_sendmsg+0xcf/0x120 net/socket.c:734
+ ____sys_sendmsg+0x712/0x8c0 net/socket.c:2482
+ ___sys_sendmsg+0x110/0x1b0 net/socket.c:2536
+ __sys_sendmsg+0xf3/0x1c0 net/socket.c:2565
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fe8c728b639
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fe8c7f81168 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 00007fe8c73ac120 RCX: 00007fe8c728b639
+RDX: 0000000000000000 RSI: 0000000020000300 RDI: 0000000000000004
+RBP: 00007fe8c72e6ae9 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fe8c74cfb1f R14: 00007fe8c7f81300 R15: 0000000000022000
+ </TASK>
+8021q: adding VLAN 0 to HW filter on device batadv159
+device batadv159 entered promiscuous mode
+team83: Port device batadv159 added
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
