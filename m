@@ -2,185 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6D8F62B34B
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 07:29:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA1DE62B346
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 07:26:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232308AbiKPG3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 01:29:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44380 "EHLO
+        id S232716AbiKPG0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 01:26:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232532AbiKPGZH (ORCPT
+        with ESMTP id S232938AbiKPGZx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 01:25:07 -0500
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E04301DA6F
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 22:25:04 -0800 (PST)
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20221116062503epoutp03299dcdbe11a3b812cf3f5aa83310199f~n-JTnt5FK3211132111epoutp03r
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 06:25:03 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20221116062503epoutp03299dcdbe11a3b812cf3f5aa83310199f~n-JTnt5FK3211132111epoutp03r
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1668579903;
-        bh=5NRup8vgLkTmA5HFv9gMOga2SlWSziLFncqMmJU/jGg=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=PAeDSBhEjs7syzlvfqUnT08Lbi/YmfmCQvNjq2+erI1h85aSJ40LTvgSrVBHEFkbm
-         aosaOeMCKevxM5vjR+81rrfkbQ6SykBIrycXQMGOv4IDI9vZ5DBFetNV0xc0YbINGY
-         hd1PDbr4Lmk+EJ1CTkQdlmDo7nSaPjeCLwj6I1xE=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-        20221116062502epcas5p4ec6c1cb2db6cb395a5480e8088a8583f~n-JTJXL4J1136511365epcas5p41;
-        Wed, 16 Nov 2022 06:25:02 +0000 (GMT)
-Received: from epsmges5p2new.samsung.com (unknown [182.195.38.178]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4NBtM14tVnz4x9Q3; Wed, 16 Nov
-        2022 06:25:01 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        76.AD.39477.D3284736; Wed, 16 Nov 2022 15:25:01 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-        20221116062454epcas5p4d4a3d30fd84046e5ecc05e09ec38edd9~n-JLFx8L41136611366epcas5p4q;
-        Wed, 16 Nov 2022 06:24:54 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20221116062454epsmtrp26c5977ea8543e5493471b593368151f5~n-JLEdZc-2917829178epsmtrp2T;
-        Wed, 16 Nov 2022 06:24:54 +0000 (GMT)
-X-AuditID: b6c32a4a-259fb70000019a35-b2-6374823dbc22
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        36.2E.18644.63284736; Wed, 16 Nov 2022 15:24:54 +0900 (KST)
-Received: from FDSFTE302 (unknown [107.122.81.78]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20221116062451epsmtip1f9ebf1b6636ea6de6b12105d4ca3d264~n-JIVjmBN0771307713epsmtip1w;
-        Wed, 16 Nov 2022 06:24:51 +0000 (GMT)
-From:   "Sriranjani P" <sriranjani.p@samsung.com>
-To:     "'Andrew Lunn'" <andrew@lunn.ch>
-Cc:     <peppe.cavallaro@st.com>, <alexandre.torgue@foss.st.com>,
-        <joabreu@synopsys.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <mcoquelin.stm32@gmail.com>, <richardcochran@gmail.com>,
-        <netdev@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        "'Chandrasekar R'" <rcsekar@samsung.com>,
-        "'Suresh Siddha'" <ssiddha@tesla.com>, <ravi.patel@samsung.com>,
-        "'Pankaj Dubey'" <pankaj.dubey@samsung.com>
-In-Reply-To: <Y2Uu16RSF9Py5AdC@lunn.ch>
-Subject: RE: [PATCH 2/4] net: stmmac: dwc-qos: Add FSD EQoS support
-Date:   Wed, 16 Nov 2022 11:54:47 +0530
-Message-ID: <04b001d8f984$23e921b0$6bbb6510$@samsung.com>
+        Wed, 16 Nov 2022 01:25:53 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A452C1D0EA;
+        Tue, 15 Nov 2022 22:25:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668579952; x=1700115952;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=fB7JiWADb0P2b2t+ebguTg5N8FbI6r37biHOj8DMLS4=;
+  b=eAGBzGmHzssbMdcUjYIAK92rlUAlDUhb9OfIuq8VVlgMSnHQlWojwbsN
+   /l13RAwojlJyqAzAEzkcDLfwTtLhIXBECS9P1UFf9jdKIs3DxnRUVtTmS
+   QUNLhAfJ3F1hgvH3wImdxQCXG3iVeMoTIwWFGk4UgsxI3jrsSRHnUOiJd
+   Zn6/my6nK547++Q652G8diqR7rwsY8jrj7fM33GdvU+wYkl9Hs5LrGNBM
+   kdugl48pY4st2giPyGbkfnkEg1cVH9RfDxlNFLMdZSnJt0aq7p9HkIx3X
+   8AyxHZDcLhdYfw/6N17dppYI31daktXzAQ9qtDeKtR2SEn3htTB88draj
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="311170456"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="311170456"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 22:25:52 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="641508622"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="641508622"
+Received: from gsavithr-mobl.amr.corp.intel.com (HELO [10.209.85.47]) ([10.209.85.47])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 22:25:51 -0800
+Message-ID: <556a2475-f0e1-d1cf-1c46-bbe052e5ef40@linux.intel.com>
+Date:   Tue, 15 Nov 2022 22:25:50 -0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.2.2
+Subject: Re: [PATCH v17 1/3] x86/tdx: Add a wrapper to get TDREPORT from the
+ TDX Module
+Content-Language: en-US
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20221104032355.227814-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20221104032355.227814-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <115a87d7-144a-2828-8e4f-9c1f156b73ae@intel.com>
+ <8d5f8a74-f864-3cd9-dac2-7650d83a8b90@linux.intel.com>
+ <e7147e03-705e-d2a8-9c9c-b4243ed5b451@intel.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <e7147e03-705e-d2a8-9c9c-b4243ed5b451@intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQHa0oM14/tprCIIIJ9eaP02I486nwFlYCwxA2F8WH0BdTEg364Lglhg
-Content-Language: en-in
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Te1AbVRTGe7PZJOCErinaW5Q2XYQCI4/UEDYVii0M7PiYYdrOUHUq7oQ1
-        MCSbmIeiY0cetQVGWyh9kBgg0qAWpz4CVEB52lJp1SCU4KMgRGJVKiCUlugQTLNp5b/fPfc7
-        9zvfvXMFiGiFFyYoYAy0jqFUOC+Ye/6rmOi41FKDInHEEUJ4/jgFCMd4P0JYHIe4hHvAxScm
-        GmdRYuj8UZSw/+pEiZFOC4+odE6jRP3KOZQYsD5I3LpyAxCNbTf5xOpMGyCm5r/kE+ahdpS4
-        8M3vCNE4aUWfEJGtZ3/kkO5jbXyywzzOJ612I2lvruCRLbY3yY72RQ451z3KI4+2NgOyr1tC
-        upe7ELK1ZxGQ3tI6Prlo35wd8lxhSj5N5dE6Mc0oNHkFjDIVf2pvbnpukixREieRE8m4mKHU
-        dCqe8XR2XGaByhcTF79CqYy+Ujal1+MJO1N0GqOBFudr9IZUnNbmqbRSbbyeUuuNjDKeoQ07
-        JImJ25N8whcL84dqjvC09pCimWvlaDG4dl8lCBJATAr7XAOgEgQLRNgXAB7528VjFwsAtvX/
-        zGUXiwBOzk3y7rV4SxB2oxPAyxZLoOU6gN75Kr+KhyXAmQ8b/ByKPQLr605w7ogQzMSFbxXP
-        cu9sBGHb4A2Hy88bsHQ4+p3Hz1wsEjrcPX4WYnLo+HoBZfl+OGia9tcRbAv8/C8Lwo4khh73
-        +yhrlgk7xzwIq9kIL3re9o8KsYYg6B67HciQAVc+quGwvAH+eamVz3IYXJztCmiUsOVCC8qy
-        CpaXlgXM0mDvVYtvCIHPIAZ+0pnAlsPhycsfc1jfEPjOv9OB44Wwvf4uR8EzrooAPwzPuRbQ
-        KoCb10Qzr4lmXhPB/L+bFXCbwSZaq1craX2SdjtDv3rvyRUatR34/0Hsk+1ganI+vh9wBKAf
-        QAGChwqbig0KkTCPeu11WqfJ1RlVtL4fJPnuuxoJe0Ch8X0kxpArkcoTpTKZTCp/TCbBNwrP
-        1MYqRJiSMtCFNK2ldXf7OIKgsGJORFT8G/QL25oKfsFEzfv3LwXZb1+Et9Lrzl45eCx5vdgy
-        fjzFOaAekWcnlR0+9VnqBzLnycczxsKLtuLlezhK0575gfBh/u7lXaveHE58xOnG1ZJNwcOn
-        s8t6e1d6fsgafkZgdfY91NH57pbasYmRZ4979s3nDes9SznR4r0y2/UTlEOCV9jmmKGFbhs5
-        6BqdaqpNkBbv8mZZIk1ZaYKYCJXneW/hP9XB1ih8UFfUZSsxmX5rfG/3SxO5NesvMbZ1DslM
-        8g5Mxey7GXo4Q7Yueol5eVQurjr0fdMB2876zUKi+qdMPm+suy/HQaHfHvg001iepp45OPRo
-        w3JkqUB8Fefq8ylJLKLTU/8B7nOlv5AEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0xSYRjHe3nPOVwKOoLZm5kZZTkqjVbt7bpa1k6rtqx1czUjPKlLiAFm
-        2IfsXlTqsNUiTTN1abUaSmFLmFROVomX6LLU2YV57UprUmlNqM1vvz3/y/4fHh4Ue4lwXppa
-        z2rVinQpJSDuPpRGzl5wRK+c87RxNPb3XADY3e6EuMB9jMDe+ndc3FHyicRNd3NIbHn/gsSt
-        9wsobHzxgcRXBm+RuL44DP940g9wifU7F//pswL89ssDLjY32Uj86Gk3xCWdxeRyMVNd8ZrD
-        eHOtXKbG3M5lii0ZjKXyNMVUlR5iamw+DvPZ7qGYnOpKwNTZ5Yx3oBYy1Q4fYIaOFHIZnyVy
-        gyhRsCSZTU/bz2rjlu0SpDbln6Q0FtGBvrZTZDZoG20EfB6i56G6ocPQCAQ8MW0DyGkvgkEh
-        Ark6S/+xBFUMdXGDJi9Anq5OYlig6DjUd72IGuZQehq6UnieM2yCdAWBrpnMRDDRBtBgx69A
-        gk/PQP3udwGW0CuRp9EfYIKORm6vI8BCeiFyN3wjgxyCXJc+BO6QjkW3bxeAIE9G9z4W/JsX
-        hfzecjK4YjW6/9IPg57x6LH/LMwDEvOIKvOIKvOIKvOISDEgKsEEVqNTpah0cs1cNZsZq1Oo
-        dBnqlFjlPpUFBD5BJrOBB5VfYp2AwwNOgHhQGiosy9YrxcJkhSGL1e5L0makszonmMgjpOOF
-        TUZXkphOUejZvSyrYbX/VQ6PH57NiXtU3tL/ZpwH8uO7bmqS+nP98JzLIEkRlW15te78tFER
-        G6sOGhziwstb4ZOpm01puSEGV7N1fTybeHHVspmdHSsda1Whve3zo5oTImIMooXRiZu7s7I9
-        A2t6laHHC12vn93oEVFTl85dnJXrcGV1qRWZP/QL7HecqZNUxpqf7QmG2t3UCj3eJqnK+R7N
-        JDROWf75bPK5x9OFjaV7zjRP/iqa2N1ji9ld0SA3ZT70js3fFK/aCTasvxjda1cJau0m+UkZ
-        jBwjM1C6CF9e2Q45N6r+xPY3SqtvzawVspJNpjDPYPpVcc7XsAbhe37RorE3n0NXeP5Aa8LA
-        772r4NEWKaFLVchlUKtT/AUU/Fu8eAMAAA==
-X-CMS-MailID: 20221116062454epcas5p4d4a3d30fd84046e5ecc05e09ec38edd9
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20221104115854epcas5p4ca280f9c4cc4d1fa564d80016e9f0061
-References: <20221104120517.77980-1-sriranjani.p@samsung.com>
-        <CGME20221104115854epcas5p4ca280f9c4cc4d1fa564d80016e9f0061@epcas5p4.samsung.com>
-        <20221104120517.77980-3-sriranjani.p@samsung.com> <Y2Uu16RSF9Py5AdC@lunn.ch>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Dave,
+
+On 11/14/22 4:54 PM, Dave Hansen wrote:
+>> In both the commit log and the comments, I can highlight the "subtype 0"
+>> information. Will that work for you, or do you prefer that this wrapper
+>> take the "subtype" option as argument and we pass 0 for the subtype value
+>> from the TDX guest driver?
+> I actually think it's a *lot* more clear if the User<->Kernel ABI just
+> takes the subtype.  But, I also heard Greg's concerns about making the
+> ABI _too_ open-ended.
+> 
+> So, I really don't care.  Just make it clear that, as is, this ABI is
+> not the "TDREPORT ABI".
+> 
+
+Are you fine with the following version?
+
++/* TDX Module call error codes */
++#define TDCALL_RETURN_CODE(a)  ((a) >> 32)
++#define TDCALL_INVALID_OPERAND 0xc0000100
++
++#define TDREPORT_SUBTYPE_0     0
++ 
++/**
++ * tdx_mcall_get_report0() - Wrapper to get TDREPORT0 (a.k.a. TDREPORT
++ *                           subtype 0) using TDG.MR.REPORT TDCALL.
++ * @reportdata: Address of the input buffer which contains user-defined
++ *              REPORTDATA to be included into TDREPORT.
++ * @tdreport: Address of the output buffer to store TDREPORT.
++ *
++ * Refer to section titled "TDG.MR.REPORT leaf" in the TDX Module
++ * v1.0 specification for more information on TDG.MR.REPORT TDCALL.
++ * It is used in the TDX guest driver module to get the TDREPORT0.
++ *
++ * Return 0 on success, -EINVAL for invalid operands, or -EIO on
++ * other TDCALL failures.
++ */
++int tdx_mcall_get_report0(u8 *reportdata, u8 *tdreport)
++{
++       u64 ret;
++
++       ret = __tdx_module_call(TDX_GET_REPORT, virt_to_phys(tdreport),
++                               virt_to_phys(reportdata), TDREPORT_SUBTYPE_0,
++                               0, NULL);
++       if (ret) {
++               if (TDCALL_RETURN_CODE(ret) == TDCALL_INVALID_OPERAND)
++                       return -EINVAL;
++               return -EIO;
++       }
++
++       return 0;
++}
++EXPORT_SYMBOL_GPL(tdx_mcall_get_report0);
 
 
-> -----Original Message-----
-> From: Andrew Lunn [mailto:andrew@lunn.ch]
-> Sent: 04 November 2022 20:55
-> To: Sriranjani P <sriranjani.p@samsung.com>
-> Cc: peppe.cavallaro@st.com; alexandre.torgue@foss.st.com;
-> joabreu@synopsys.com; davem@davemloft.net; edumazet@google.com;
-> kuba@kernel.org; pabeni@redhat.com; mcoquelin.stm32@gmail.com;
-> richardcochran@gmail.com; netdev@vger.kernel.org; linux-stm32@st-md-
-> mailman.stormreply.com; linux-arm-kernel@lists.infradead.org; linux-
-> kernel@vger.kernel.org; Chandrasekar R <rcsekar@samsung.com>; Suresh
-> Siddha <ssiddha@tesla.com>
-> Subject: Re: [PATCH 2/4] net: stmmac: dwc-qos: Add FSD EQoS support
-> 
-> > +static int dwc_eqos_setup_rxclock(struct platform_device *pdev) {
-> > +	struct device_node *np = pdev->dev.of_node;
-> > +
-> > +	if (np && of_property_read_bool(np, "rx-clock-mux")) {
-> > +		unsigned int reg, val;
-> > +		struct regmap *syscon =
-> syscon_regmap_lookup_by_phandle(np,
-> > +			"rx-clock-mux");
-> > +
-> > +		if (IS_ERR(syscon)) {
-> > +			dev_err(&pdev->dev, "couldn't get the rx-clock-mux
-> syscon!\n");
-> > +			return PTR_ERR(syscon);
-> > +		}
-> > +
-> > +		if (of_property_read_u32_index(np, "rx-clock-mux", 1,
-> &reg)) {
-> > +			dev_err(&pdev->dev, "couldn't get the rx-clock-mux
-> reg. offset!\n");
-> > +			return -EINVAL;
-> > +		}
-> > +
-> > +		if (of_property_read_u32_index(np, "rx-clock-mux", 2,
-> &val)) {
-> > +			dev_err(&pdev->dev, "couldn't get the rx-clock-mux
-> reg. val!\n");
-> > +			return -EINVAL;
-> > +		}
-> > +
-> > +		regmap_write(syscon, reg, val);
-> 
-> This appears to be one of those binds which allows any magic value to be
-> placed into any register. That is not how DT should be used.
-[Sriranjani P] Will fix in the next version.
-> 
->    Andrew
-[Sriranjani P] Thank you for the review comment.
-
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
