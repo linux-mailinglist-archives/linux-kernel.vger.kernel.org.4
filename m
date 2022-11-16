@@ -2,160 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EC9D62B4A4
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 09:09:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E32562B49B
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 09:08:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238722AbiKPIJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 03:09:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41238 "EHLO
+        id S238619AbiKPIIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 03:08:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237906AbiKPIIM (ORCPT
+        with ESMTP id S238149AbiKPIHx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 03:08:12 -0500
-Received: from nbd.name (nbd.name [46.4.11.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7633810078;
-        Wed, 16 Nov 2022 00:07:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
-        s=20160729; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=/rqSZTPHTzjvgQiKEtydX5Kmlo97LMyPbAHh98dxziY=; b=IHKEi+x1IeuEkWQS7m9NqfaN3q
-        wc08qd1B9wBog4jiYNK7qOXolv4wZCbqonW70c0/LRI4fV1ZPi6V1o7LYrzA29oVEdbgM2BAr/64u
-        /jMC26kbnmbS4LCuroJ9IPINEoxCdLBlELwMHF1XNRfN+nCMQau3C/l+1IgVSiWUBt7A=;
-Received: from p200300daa72ee10015f07c5633889601.dip0.t-ipconnect.de ([2003:da:a72e:e100:15f0:7c56:3388:9601] helo=Maecks.lan)
-        by ds12 with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256
-        (Exim 4.94.2)
-        (envelope-from <nbd@nbd.name>)
-        id 1ovDSN-002Xoe-9c; Wed, 16 Nov 2022 09:07:39 +0100
-From:   Felix Fietkau <nbd@nbd.name>
-To:     netdev@vger.kernel.org, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 6/6] net: ethernet: mediatek: ppe: assign per-port queues for offloaded traffic
-Date:   Wed, 16 Nov 2022 09:07:34 +0100
-Message-Id: <20221116080734.44013-7-nbd@nbd.name>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221116080734.44013-1-nbd@nbd.name>
-References: <20221116080734.44013-1-nbd@nbd.name>
+        Wed, 16 Nov 2022 03:07:53 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC4BC756;
+        Wed, 16 Nov 2022 00:07:51 -0800 (PST)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NBwcv58NdzHvqw;
+        Wed, 16 Nov 2022 16:07:11 +0800 (CST)
+Received: from [10.67.111.192] (10.67.111.192) by
+ kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 16 Nov 2022 16:07:41 +0800
+Message-ID: <fd1e6d2d-f7a2-21d2-f0ff-3e3d8b2ba9eb@huawei.com>
+Date:   Wed, 16 Nov 2022 16:07:41 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH bpf 1/2] bpf: Do not copy spin lock field from user in
+ bpf_selem_alloc
+Content-Language: en-US
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+CC:     bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+References: <20221114134720.1057939-1-xukuohai@huawei.com>
+ <20221114134720.1057939-2-xukuohai@huawei.com>
+ <CAADnVQLEzrqjuF+qYh2kJz0Q=9G8PySJ6ZwXD2EGoZsBUdwsog@mail.gmail.com>
+From:   Xu Kuohai <xukuohai@huawei.com>
+In-Reply-To: <CAADnVQLEzrqjuF+qYh2kJz0Q=9G8PySJ6ZwXD2EGoZsBUdwsog@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.111.192]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Keeps traffic sent to the switch within link speed limits
+On 11/16/2022 1:27 PM, Alexei Starovoitov wrote:
+> On Mon, Nov 14, 2022 at 5:31 AM Xu Kuohai <xukuohai@huawei.com> wrote:
+>>
+>> bpf_selem_alloc function is used by inode_storage, sk_storage and
+>> task_storage maps to set map value, for these map types, there may
+>> be a spin lock in the map value, so if we use memcpy to copy the whole
+>> map value from user, the spin lock field may be initialized incorrectly.
+>>
+>> Since the spin lock field is zeroed by kzalloc, call copy_map_value
+>> instead of memcpy to skip copying the spin lock field to fix it.
+>>
+>> Fixes: 6ac99e8f23d4 ("bpf: Introduce bpf sk local storage")
+> 
+> The tag is wrong. When local storage was introduced it was not
+> possible to use spin_locks there.
+> Pls resubmit.
+> .
 
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
----
- drivers/net/ethernet/mediatek/mtk_ppe.c        | 18 ++++++++++++++++++
- drivers/net/ethernet/mediatek/mtk_ppe.h        |  4 ++++
- .../net/ethernet/mediatek/mtk_ppe_offload.c    | 12 +++++++++---
- 3 files changed, 31 insertions(+), 3 deletions(-)
+No, spin_lock was introduced by d83525ca62cf ("bpf: introduce bpf_spin_lock"),
+before 6ac99e8f23d4 ("bpf: Introduce bpf sk local storage").
 
-diff --git a/drivers/net/ethernet/mediatek/mtk_ppe.c b/drivers/net/ethernet/mediatek/mtk_ppe.c
-index 3ee2bf53f9e5..96ad0a9b79b4 100644
---- a/drivers/net/ethernet/mediatek/mtk_ppe.c
-+++ b/drivers/net/ethernet/mediatek/mtk_ppe.c
-@@ -399,6 +399,24 @@ int mtk_foe_entry_set_wdma(struct mtk_eth *eth, struct mtk_foe_entry *entry,
- 	return 0;
- }
- 
-+int mtk_foe_entry_set_queue(struct mtk_eth *eth, struct mtk_foe_entry *entry,
-+			    unsigned int queue)
-+{
-+	u32 *ib2 = mtk_foe_entry_ib2(eth, entry);
-+
-+	if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2)) {
-+		*ib2 &= ~MTK_FOE_IB2_QID_V2;
-+		*ib2 |= FIELD_PREP(MTK_FOE_IB2_QID_V2, queue);
-+		*ib2 |= MTK_FOE_IB2_PSE_QOS_V2;
-+	} else {
-+		*ib2 &= ~MTK_FOE_IB2_QID;
-+		*ib2 |= FIELD_PREP(MTK_FOE_IB2_QID, queue);
-+		*ib2 |= MTK_FOE_IB2_PSE_QOS;
-+	}
-+
-+	return 0;
-+}
-+
- static bool
- mtk_flow_entry_match(struct mtk_eth *eth, struct mtk_flow_entry *entry,
- 		     struct mtk_foe_entry *data)
-diff --git a/drivers/net/ethernet/mediatek/mtk_ppe.h b/drivers/net/ethernet/mediatek/mtk_ppe.h
-index 0b7a67a958e4..be635864bb96 100644
---- a/drivers/net/ethernet/mediatek/mtk_ppe.h
-+++ b/drivers/net/ethernet/mediatek/mtk_ppe.h
-@@ -68,7 +68,9 @@ enum {
- #define MTK_FOE_IB2_DSCP		GENMASK(31, 24)
- 
- /* CONFIG_MEDIATEK_NETSYS_V2 */
-+#define MTK_FOE_IB2_QID_V2			GENMASK(6, 0)
- #define MTK_FOE_IB2_PORT_MG_V2		BIT(7)
-+#define MTK_FOE_IB2_PSE_QOS_V2		BIT(8)
- #define MTK_FOE_IB2_DEST_PORT_V2	GENMASK(12, 9)
- #define MTK_FOE_IB2_MULTICAST_V2	BIT(13)
- #define MTK_FOE_IB2_WDMA_WINFO_V2	BIT(19)
-@@ -350,6 +352,8 @@ int mtk_foe_entry_set_pppoe(struct mtk_eth *eth, struct mtk_foe_entry *entry,
- 			    int sid);
- int mtk_foe_entry_set_wdma(struct mtk_eth *eth, struct mtk_foe_entry *entry,
- 			   int wdma_idx, int txq, int bss, int wcid);
-+int mtk_foe_entry_set_queue(struct mtk_eth *eth, struct mtk_foe_entry *entry,
-+			    unsigned int queue);
- int mtk_foe_entry_commit(struct mtk_ppe *ppe, struct mtk_flow_entry *entry);
- void mtk_foe_entry_clear(struct mtk_ppe *ppe, struct mtk_flow_entry *entry);
- int mtk_foe_entry_idle_time(struct mtk_ppe *ppe, struct mtk_flow_entry *entry);
-diff --git a/drivers/net/ethernet/mediatek/mtk_ppe_offload.c b/drivers/net/ethernet/mediatek/mtk_ppe_offload.c
-index 28bbd1df3e30..81afd5ee3fbf 100644
---- a/drivers/net/ethernet/mediatek/mtk_ppe_offload.c
-+++ b/drivers/net/ethernet/mediatek/mtk_ppe_offload.c
-@@ -188,7 +188,7 @@ mtk_flow_set_output_device(struct mtk_eth *eth, struct mtk_foe_entry *foe,
- 			   int *wed_index)
- {
- 	struct mtk_wdma_info info = {};
--	int pse_port, dsa_port;
-+	int pse_port, dsa_port, queue;
- 
- 	if (mtk_flow_get_wdma_info(dev, dest_mac, &info) == 0) {
- 		mtk_foe_entry_set_wdma(eth, foe, info.wdma_idx, info.queue,
-@@ -212,8 +212,6 @@ mtk_flow_set_output_device(struct mtk_eth *eth, struct mtk_foe_entry *foe,
- 	}
- 
- 	dsa_port = mtk_flow_get_dsa_port(&dev);
--	if (dsa_port >= 0)
--		mtk_foe_entry_set_dsa(eth, foe, dsa_port);
- 
- 	if (dev == eth->netdev[0])
- 		pse_port = 1;
-@@ -222,6 +220,14 @@ mtk_flow_set_output_device(struct mtk_eth *eth, struct mtk_foe_entry *foe,
- 	else
- 		return -EOPNOTSUPP;
- 
-+	if (dsa_port >= 0) {
-+		mtk_foe_entry_set_dsa(eth, foe, dsa_port);
-+		queue = 3 + dsa_port;
-+	} else {
-+		queue = pse_port - 1;
-+	}
-+	mtk_foe_entry_set_queue(eth, foe, queue);
-+
- out:
- 	mtk_foe_entry_set_pse_port(eth, foe, pse_port);
- 
--- 
-2.38.1
-
+To confirm this, I built a kernel image on comit 6ac99e8f23d4 ("bpf: Introduce bpf sk local storage")
+and run test case posted in patch 2, a softlockup was triggered. Then I picked
+this patch and tried again, nothing failed.
