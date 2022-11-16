@@ -2,101 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCC1362B61A
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:10:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2BB162B61E
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:12:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233106AbiKPJKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 04:10:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35910 "EHLO
+        id S229942AbiKPJM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 04:12:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232775AbiKPJKe (ORCPT
+        with ESMTP id S233540AbiKPJMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 04:10:34 -0500
-Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CEA3384;
-        Wed, 16 Nov 2022 01:10:33 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id BB80DDFE60;
-        Wed, 16 Nov 2022 01:10:32 -0800 (PST)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id vwPmCZ4RRr4h; Wed, 16 Nov 2022 01:10:31 -0800 (PST)
-Message-ID: <a1e854995fbeaf49e6cbdc8020574ac991da2b25.camel@puri.sm>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
-        t=1668589831; bh=I1CW3yeKCOsz2l81RMgsbGEjAHtcj+ErrbCvsdHHU54=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=roFt/u8MbYMccm6i8kirKiRPUqvwDxdsPC+Bx2vawtupBQppC4LUwDv63A6KnDyVB
-         szHOnTaeW9uSlLg6+zr79OJXoEx0GsagbKolgi/3iWqKW0wUz5vvrvEy4fqeZ5Nz/Q
-         9puD60PAdsBfqyxFWf16y1jMxT/NSzpSxzb+TCrUOcY4lXIvmWXO185N7du3ut4UxH
-         v2HPUaItuuPMad5KDMt7Hufg01LUJRnFnUOHfXfbi/MsQ2AOqnCyIInPX+z1r+RoRb
-         Jm1fwOQhabL082GcAp54ICoA/yHNXXz5cUK8swynsOD4ZXML5YlhWHMx8uEextwQgf
-         pwCKejJ1xO+fA==
-Subject: Re: [PATCH] arm64: dts: imx8mq: fix dtschema warning for imx7-csi
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-To:     robh@kernel.org, krzysztof.kozlowski@linaro.org,
-        shawnguo@kernel.org, festevam@gmail.com
-Cc:     kernel@pengutronix.de, linux-imx@nxp.com, kernel@puri.sm,
-        dev@lynxeye.de, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Date:   Wed, 16 Nov 2022 10:10:25 +0100
-In-Reply-To: <20220909083940.1554887-1-martin.kepplinger@puri.sm>
-References: <20220909083940.1554887-1-martin.kepplinger@puri.sm>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        Wed, 16 Nov 2022 04:12:41 -0500
+X-Greylist: delayed 122 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 16 Nov 2022 01:12:39 PST
+Received: from mx6.didiglobal.com (mx6.didiglobal.com [111.202.70.123])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 96FE32B2
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:12:39 -0800 (PST)
+Received: from mail.didiglobal.com (unknown [10.79.64.13])
+        by mx6.didiglobal.com (Maildata Gateway V2.8) with ESMTPS id 3DB59110243202;
+        Wed, 16 Nov 2022 17:10:35 +0800 (CST)
+Received: from localhost.localdomain (10.79.64.101) by
+ ZJY01-ACTMBX-03.didichuxing.com (10.79.64.13) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 16 Nov 2022 17:10:34 +0800
+X-MD-Sfrom: wanghonglei@didiglobal.com
+X-MD-SrcIP: 10.79.64.13
+From:   Honglei Wang <wanghonglei@didiglobal.com>
+To:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        <linux-kernel@vger.kernel.org>
+CC:     Honglei Wang <wanghonglei@didiglobal.com>
+Subject: [PATCH] sched/core: use correct cpu_capacity in wake_affine_weight()
+Date:   Wed, 16 Nov 2022 17:10:27 +0800
+Message-ID: <20221116091027.78906-1-wanghonglei@didiglobal.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.79.64.101]
+X-ClientProxiedBy: ZJY03-PUBMBX-01.didichuxing.com (10.79.71.12) To
+ ZJY01-ACTMBX-03.didichuxing.com (10.79.64.13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Freitag, dem 09.09.2022 um 10:39 +0200 schrieb Martin Kepplinger:
-> According to dtschema for the csi bridge, compatible is an enum and
-> only one must be used. Fixing this removes the following warning:
-> 
-> compatible: 'oneOf' conditional failed, one must be fixed
-> 
-> Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-> ---
->  arch/arm64/boot/dts/freescale/imx8mq.dtsi | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-> b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-> index e9f0cdd10ab62..a348169c40f15 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-> @@ -1184,7 +1184,7 @@ csi1_mipi_ep: endpoint {
->                         };
->  
->                         csi1: csi@30a90000 {
-> -                               compatible = "fsl,imx8mq-csi",
-> "fsl,imx7-csi";
-> +                               compatible = "fsl,imx8mq-csi";
->                                 reg = <0x30a90000 0x10000>;
->                                 interrupts = <GIC_SPI 42
-> IRQ_TYPE_LEVEL_HIGH>;
->                                 clocks = <&clk IMX8MQ_CLK_CSI1_ROOT>;
-> @@ -1236,7 +1236,7 @@ csi2_mipi_ep: endpoint {
->                         };
->  
->                         csi2: csi@30b80000 {
-> -                               compatible = "fsl,imx8mq-csi",
-> "fsl,imx7-csi";
-> +                               compatible = "fsl,imx8mq-csi";
->                                 reg = <0x30b80000 0x10000>;
->                                 interrupts = <GIC_SPI 43
-> IRQ_TYPE_LEVEL_HIGH>;
->                                 clocks = <&clk IMX8MQ_CLK_CSI2_ROOT>;
+It seems make more sense to do the load weight calculation with
+respective cpu_capacity.
 
-hi Shawn and all interested in DTC warnings,
+Signed-off-by: Honglei Wang <wanghonglei@didiglobal.com>
+---
+ kernel/sched/fair.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-does this look ok to you? it should still apply. thank you,
-
-                       martin
-
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index e4a0b8bd941c..a9f75040969b 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -6262,13 +6262,13 @@ wake_affine_weight(struct sched_domain *sd, struct task_struct *p,
+ 	this_eff_load += task_load;
+ 	if (sched_feat(WA_BIAS))
+ 		this_eff_load *= 100;
+-	this_eff_load *= capacity_of(prev_cpu);
++	this_eff_load *= capacity_of(this_cpu);
+ 
+ 	prev_eff_load = cpu_load(cpu_rq(prev_cpu));
+ 	prev_eff_load -= task_load;
+ 	if (sched_feat(WA_BIAS))
+ 		prev_eff_load *= 100 + (sd->imbalance_pct - 100) / 2;
+-	prev_eff_load *= capacity_of(this_cpu);
++	prev_eff_load *= capacity_of(prev_cpu);
+ 
+ 	/*
+ 	 * If sync, adjust the weight of prev_eff_load such that if
+-- 
+2.14.1
 
