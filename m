@@ -2,45 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4DA362C1B5
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 16:01:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 013C562C1B9
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 16:01:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233632AbiKPPBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 10:01:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53420 "EHLO
+        id S233866AbiKPPBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 10:01:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233009AbiKPPBc (ORCPT
+        with ESMTP id S233774AbiKPPBi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 10:01:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EED6FC4
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 07:01:31 -0800 (PST)
+        Wed, 16 Nov 2022 10:01:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F41123;
+        Wed, 16 Nov 2022 07:01:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 42CCB61E31
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 15:01:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5D38C433D7;
-        Wed, 16 Nov 2022 15:01:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3A5BBB81DC0;
+        Wed, 16 Nov 2022 15:01:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A2DBC433C1;
+        Wed, 16 Nov 2022 15:01:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668610890;
-        bh=2wYCfr+v/AvwHLYVneY8nOtgsL+06z3uFqYRVDKCRow=;
+        s=k20201202; t=1668610893;
+        bh=fW6w1idZxb4pYL1tbNrDvO8loV3/4f3FgP5oo/YyO6M=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=GHcpmxt0r4pM7GI8GUBe8DVbzTOJX/A/l8UZPCQbHU/VD13Ec3WqaUzccOEln++sk
-         ekj+GC85dRuIKpON2d/IVjHYlFntOt7tVYeMIXm9zR1UIIidBTUAwzWwmO5fW82VMa
-         Smue2ux1/2wypIPIz7t/T17g2EfSu5eWwMGZCLVDOxdHv822SU1R9dDYC3fu1mPEHI
-         Vub2/7/1lgGPR8hd3txqExbNBaCV1pPuiF1pBwro3QVXgDIQ252JGFfGwRYAfClpr8
-         cUoV0vqpVUhM1eXctd0TOPYS9w4hEd+RtAKPNdzoPCEUar3U59vqmeHDogE8gbx2zD
-         RHagJ0782cGXA==
+        b=JSJe6RakS/RPXPxgiSMPkYUBiJScY9c29XGPMrvHoW8P7kbElGJzqyvuwpEnMgkpH
+         q1DP4iVi91j4L2/j+DcbyhdwgZYm3usqMrlNMysi9ew1zzywExVElPCP7Tu3T164Ri
+         dzKnmjtTgq2cejT1M9jSYvw2hGxzTzAC2/DvoscV0oDEUed8vHHN2JcXiARwe6+ZPg
+         75L6Cyu8xFMxZOtytnFYO69g0rrjlcC045SRQbKx7vW/uXIp8Gdz8IkH4SRTvtBp2H
+         kIe7Xa2Ii5y2so0zZElZeCpctGytnGaVWymG+l3zvm9ZVPcNFb/XUXRt9DbCwOwdGj
+         JTLkyg5iTxbRg==
 From:   Mark Brown <broonie@kernel.org>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     linux-kernel@vger.kernel.org
-In-Reply-To: <Y3R13IRrs+x5PcZ4@dc75zzyyyyyyyyyyyyydt-3.rev.dnainternet.fi>
-References: <Y3R13IRrs+x5PcZ4@dc75zzyyyyyyyyyyyyydt-3.rev.dnainternet.fi>
-Subject: Re: [PATCH RESEND] lib/test_linear_ranges: Use LINEAR_RANGE()
-Message-Id: <166861088942.540847.6108812744052381919.b4-ty@kernel.org>
-Date:   Wed, 16 Nov 2022 15:01:29 +0000
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Johan Hovold <johan+linaro@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        devicetree@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+        linux-arm-msm@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Parikshit Pareek <quic_ppareek@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>
+In-Reply-To: <20221116102054.4673-1-johan+linaro@kernel.org>
+References: <20221116102054.4673-1-johan+linaro@kernel.org>
+Subject: Re: (subset) [PATCH 0/2] arm64: dts: qcom: clean up 'regulator-allowed-modes' indentation
+Message-Id: <166861089087.540847.301727183033006932.b4-ty@kernel.org>
+Date:   Wed, 16 Nov 2022 15:01:30 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -54,13 +62,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Nov 2022 07:32:12 +0200, Matti Vaittinen wrote:
-> New initialization macro for linear ranges was added. Slightly simplify
-> the test code by using this macro - and at the same time also verify the
-> macro is working as intended.
+On Wed, 16 Nov 2022 11:20:52 +0100, Johan Hovold wrote:
+> When reviewing a new devicetree for sa8540p-ride I noticed that the
+> indentation for the 'regulator-allowed-modes' properties was off and
+> realised that this had been copied from the recent patches adding the
+> missing modes properties.
 > 
-> Use the newly added LINEAR_RANGE() initialization macro for linear range
-> test.
+> Let's clean up the binding example and current devicetree sources to
+> avoid this pattern being reproduced further.
 > 
 > [...]
 
@@ -70,8 +79,8 @@ Applied to
 
 Thanks!
 
-[1/1] lib/test_linear_ranges: Use LINEAR_RANGE()
-      commit: bc64f30eb9a5edb299ee0a1a05cc21e4079fd9f3
+[1/2] regulator: dt-bindings: qcom,rpmh: clean up example indentation
+      commit: b8dfb3bed5524589052dafa0e4d6c4e25ae11544
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
