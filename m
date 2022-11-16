@@ -2,98 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ABCA62C64B
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 18:23:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06BB262C62A
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 18:18:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234249AbiKPRXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 12:23:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40118 "EHLO
+        id S238421AbiKPRSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 12:18:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233262AbiKPRXC (ORCPT
+        with ESMTP id S238258AbiKPRRu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 12:23:02 -0500
-X-Greylist: delayed 301 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 16 Nov 2022 09:22:56 PST
-Received: from abi149hd127.arn1.oracleemaildelivery.com (abi149hd127.arn1.oracleemaildelivery.com [129.149.84.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7575559871
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 09:22:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=oci-arn1-20220924;
- d=augustwikerfors.se;
- h=Date:To:From:Subject:Message-Id:MIME-Version:Sender;
- bh=LpcpAH4zxrcMxDLOPMA5F656Hw2TrxzTLadot3yE8cA=;
- b=vbCP7qhK75aPjwVaVVnjK9avPEKVW8DQTky20IKg23NM1BRDoEtaSMbscBQj/zKwoOPm3WbDLt1A
-   LE1tT4s4sbnbe49Ak5JhgjfZ84JLs19DdSmL5CpyzoglRYPvbQjOqNIPZZ9ZTBb/yyEZsEsxZIZq
-   kqNGxth1PEL9V1wde1yYZOccazC550JgZ9s9xvC4z8y6qVdJR7XV2VtEWuRNCxs1u29MbpjAOR3t
-   LwVzwuzWU9dQFyZzhZ2xwmyJpPqt7Yj8LuCBh04pclR77SSq3umYvF6qWAfwD6lujF2QLtfAGPlC
-   RSeLNIQw6xxA/6E9xt3I5MZTMZDxfsiTKYyh+A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=prod-arn-20211201;
- d=arn1.rp.oracleemaildelivery.com;
- h=Date:To:From:Subject:Message-Id:MIME-Version:Sender;
- bh=LpcpAH4zxrcMxDLOPMA5F656Hw2TrxzTLadot3yE8cA=;
- b=QDdPe5/aq6cOV5ywHAns7uvVq8CuwohXDRB5cyV3d1jP5FDz4/n9sqU9Vqh57CtCNNzmnzflOJIt
-   Y9DDByKpiot8WfJzBW4Rf2EotLCdkcnYfgog2DlPoRZ1tlO6cGdqMDrXW26lP/kDvom3Gqm02ntr
-   /kFQcBAsRP4eq6sJXykQ2tOivncCLeTpxouAc0wPFjvuIKQF9VH9EpIagcNoul+ZLeON5D+cUJwL
-   si3ZGrB9rbnbeQ+Dl1btQ7VttXN4XF5p+K/vOMAAGK4BzpLJedV40hGiXrQlezK5HPEnU6W43XCp
-   AlJiFLjou5ORUtoP0Iat8JHcgWY2Y3ozlr4m1Q==
-Received: by omta-ad1-fd2-101-eu-stockholm-1.omtaad1.vcndparn.oraclevcn.com
- (Oracle Communications Messaging Server 8.1.0.1.20221104 64bit (built Nov  4
- 2022))
- with ESMTPS id <0RLG0063MAPTE900@omta-ad1-fd2-101-eu-stockholm-1.omtaad1.vcndparn.oraclevcn.com>
- for linux-kernel@vger.kernel.org; Wed, 16 Nov 2022 17:17:53 +0000 (GMT)
-From:   August Wikerfors <git@augustwikerfors.se>
-To:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>
-Cc:     linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
-        August Wikerfors <git@augustwikerfors.se>
-Subject: [PATCH] nvme-pci: add NVME_QUIRK_BOGUS_NID for Samsung PM9B1 256G and
- 512G
-Date:   Wed, 16 Nov 2022 18:17:27 +0100
-Message-id: <20221116171727.4083-1-git@augustwikerfors.se>
-MIME-version: 1.0
-Content-transfer-encoding: 8bit
-Reporting-Meta: AAEu+0BrTkHBsWLOK63HjpEKIIURzBrIK56dK+jBm3s0DHlxjT4P2/MBeqUBNrmp
- VCVIkws4O2zsNXnjRWGkS5823k/tfg+rw6l4Necjg9kJztS2KXqUh3Xg4rRuERuF
- y59v90MLW5ID7raGwICLysCyEOWQFMjDZS+hM9eFde+qXMfhxSbKKfe8wIYyRSR3
- rou9S/44Ely2QnM4WpJzVcsC5zLhHEXBOWIjc8cJ8O5OOoeiHXB18/OjMw6c3JMb
- j9M1ky8eXkYB7Bl4XksHK/T/GaJCCwYpjnVY3REKJc2mqcoJ0FAU22aJbAZ8hlxG
- BVYpiSO02rAebKgxWgoAVYXOHg22qaejwn6h+htz/Jkbn/DJSNCQMOkNj8q3PBtI
- y8n2CqiJnEzOSq+2GCP7fqYcZhBPFMfqS2DKAWvqRlFpU3IslFJw3VPLL8Zw4P/a aBEiRg==
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Wed, 16 Nov 2022 12:17:50 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C6505B589
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 09:17:42 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id j16so30530849lfe.12
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 09:17:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=alqzp5129GtCh9bfVu6PcgTAJMBaIsGH0ackHVO6iH4=;
+        b=qZWZIXfg5ZtVsKnQJEm1i+qCEHB5ZZR3oxuzQzrKnTBhySsPuP9nPu/gv+d1b2GGaI
+         wv8fqDNDVAHGaKX8vmyM/Pt0EAv+9ecr+Gu9MRMP4oXQ+cnQfPNgjahAfatb+Me/P70f
+         X2Ac+9ee8/x6z7z9GIj46tTnXTGUnWvz888h5MvOKaQMgRo66lG/pPrAlCDeukhXVL/W
+         CAlG+PepnPBUOx2WngwDKe6IvgJzqOmINKMM5tk9nBJxtoQjveOXugCyAXFJmlqv68xt
+         yITI4w6Xm5IckeErkPbymu6W12DsgaH8VMpH+ziNO5DAvJRmo79kd1iwlVJzHJw6Zk+X
+         GlgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=alqzp5129GtCh9bfVu6PcgTAJMBaIsGH0ackHVO6iH4=;
+        b=w31xudU5gFYFil9qOt/ykSmfC5fxx4DKIvd9lyvgmcG1ad+v4i+f9ak95Jbac8ZnDz
+         sK3KfY738So7JrjCoqy/l7I4AUqZMBi1FLCNJpbfiJ8PFIUa1RtZSDPvENddPvj4Mpvc
+         mWTgXEnrCMA4mofDz3P0QijerTN3bVTt4bTiI+b4Pm4LBCi/A+JUPH/bj5lV00R6Y2NS
+         XK7/47iQAUIeQw0jLA+aqayi1c4rTIDTLOllp4cLgWIhxqpt6DzPQe67UkPsV9V6eZ+Z
+         nkZ246q75pHN/VBDHPCqZG8JXmnsaqkOebJKGIrmzy+UIbtz5Dd25Okka2EFi0hlJyxI
+         xm1g==
+X-Gm-Message-State: ANoB5pme/uWZZEwPCIi7dwsz/LMSJSuUupjyikRvHDT3VMCd1ctpXIxF
+        NPJWVIZbxvYyWOThNnL3vQeh6w==
+X-Google-Smtp-Source: AA0mqf4mfYWXPJm86CEx1/xbuui/eMMe7ixvXSC7/8Z4o78CunYpWzPT5PCGccvvhS3LhXyLaSTjIg==
+X-Received: by 2002:a05:6512:1dc:b0:4a2:8836:c07d with SMTP id f28-20020a05651201dc00b004a28836c07dmr7123987lfp.661.1668619060360;
+        Wed, 16 Nov 2022 09:17:40 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id s8-20020ac25fe8000000b00492b0d23d24sm2678048lfg.247.2022.11.16.09.17.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Nov 2022 09:17:39 -0800 (PST)
+Message-ID: <e91a904b-6c86-5904-0c5e-030bed2ed533@linaro.org>
+Date:   Wed, 16 Nov 2022 18:17:38 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 1/8] dt-bindings: arm: qcom: document new msm8953-family
+ devices
+Content-Language: en-US
+To:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221116145616.17884-1-luca@z3ntu.xyz>
+ <20221116145616.17884-2-luca@z3ntu.xyz>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221116145616.17884-2-luca@z3ntu.xyz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Samsung PM9B1 512G SSD found in some Lenovo Yoga 7 14ARB7 laptop units
-reports eui as 0001000200030004 when resuming from s2idle, causing the
-device to be removed with this error in dmesg:
+On 16/11/2022 15:56, Luca Weiss wrote:
+> Document the various phones added in upcoming patches.
+> 
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> ---
+>  Documentation/devicetree/bindings/arm/qcom.yaml | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
 
-nvme nvme0: identifiers changed for nsid 1
 
-To fix this, add a quirk to ignore namespace identifiers for this device.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Signed-off-by: August Wikerfors <git@augustwikerfors.se>
----
- drivers/nvme/host/pci.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+... but you miss to update the list of exceptions for board-id and msm-id.
 
-diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
-index f4335519399d..0af51b85c323 100644
---- a/drivers/nvme/host/pci.c
-+++ b/drivers/nvme/host/pci.c
-@@ -3500,7 +3500,8 @@ static const struct pci_device_id nvme_id_table[] = {
- 	{ PCI_DEVICE(0x1d97, 0x2263),   /* SPCC */
- 		.driver_data = NVME_QUIRK_DISABLE_WRITE_ZEROES, },
- 	{ PCI_DEVICE(0x144d, 0xa80b),   /* Samsung PM9B1 256G and 512G */
--		.driver_data = NVME_QUIRK_DISABLE_WRITE_ZEROES, },
-+		.driver_data = NVME_QUIRK_DISABLE_WRITE_ZEROES |
-+				NVME_QUIRK_BOGUS_NID, },
- 	{ PCI_DEVICE(0x144d, 0xa809),   /* Samsung MZALQ256HBJD 256G */
- 		.driver_data = NVME_QUIRK_DISABLE_WRITE_ZEROES, },
- 	{ PCI_DEVICE(0x1cc4, 0x6303),   /* UMIS RPJTJ512MGE1QDY 512G */
--- 
-2.38.1
+Best regards,
+Krzysztof
 
