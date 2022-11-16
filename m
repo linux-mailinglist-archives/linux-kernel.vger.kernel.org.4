@@ -2,105 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5189562B145
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 03:27:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0CDC62B147
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 03:27:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbiKPC1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 21:27:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45716 "EHLO
+        id S229643AbiKPC1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 21:27:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbiKPC1P (ORCPT
+        with ESMTP id S229923AbiKPC1h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 21:27:15 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A5827B31
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 18:27:14 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id q1-20020a17090a750100b002139ec1e999so1032085pjk.1
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 18:27:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ahZz9AJmzGlJIQIWPIPRIoLfIVWlXjpHEZJmoMH+xOc=;
-        b=gGDZf0rtUePdblahow2E25VxQTPgN7jbIs+awl+TPpQNdPWanNp680Xf0nzQ7ZL+Ot
-         pavAPVefaCJKXta+Y2M8VoiD75BMMdqL/nc6y3Yqu8UwQA1u6qmGuuFK0fY+nLsSH8Lv
-         4roikcbwV07w5YhUXsWDMXrCohpJH7hktpUdLVjXRv7d5HQGPloCu2jKkH/ynM3gk50w
-         h8zf6xWphdiQfuoWFN4iMPRILF10kWYXSXI11LOTIWcFzwHeIcSv1L8dXgpqEKnCy0x6
-         7F+DA+dujgDJl1VAuzCRA5O4PpI8PiHDtP+PbEAhCa2VYjLRh7PxPQ5GU2Ty5bSEaJQ5
-         EriQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ahZz9AJmzGlJIQIWPIPRIoLfIVWlXjpHEZJmoMH+xOc=;
-        b=UuKr88/deKPWZcdrlJJDVEy9W6bQHJ7apbwtftNUBGg0RPwMtXdn1W68bd4n4PZrql
-         M1XGIQQAZ/dhoB3tvpvkOan/5qxzsAcTA6qecQBEa+2SkLaAgDx0TsDcIApeFjBE8hi/
-         apkG5ibItctO/Lr2NC9EIxlnsZTPihncpMkYCv0bnfX40QXK+TRTYhpkpLMEEzjG6gUM
-         pWgcaXVAa478uDKhdCIBY7I0dhhLXF8A2mqbBnIkngVpXGIMLKS/mtYsu64Tg9eMMHYA
-         Dl1qaHZuwIdmFMyOlbfvAa/d6QgNptT5vY9QWgtRIQXFSZAUYtsOYJQJqnAC31zxIV+7
-         LiHg==
-X-Gm-Message-State: ANoB5plsoq7z2FP22HJyB3ceEC4iM9bI4YB+qp85NBV89WP2k4ULJgqb
-        aNAQaiuQ7WbDy773lKoA0g9n2ekv3AtCyEpXVtUL
-X-Google-Smtp-Source: AA0mqf4YV8pgzBiL96jyU49MeQd2r/aiOKiYHCrbMrG+E2Fkmtbk+xgzRFLez6ziTJjdzAaOlAYcvbYh3pAWRbHWEqM=
-X-Received: by 2002:a17:90a:2b8c:b0:212:f4f1:96ee with SMTP id
- u12-20020a17090a2b8c00b00212f4f196eemr1447232pjd.72.1668565634126; Tue, 15
- Nov 2022 18:27:14 -0800 (PST)
+        Tue, 15 Nov 2022 21:27:37 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DAFF27B31;
+        Tue, 15 Nov 2022 18:27:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668565657; x=1700101657;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=JkCXtmekIJ3sgsQAhAIWJfyZ4ZqLSy43OZmKF1Syvak=;
+  b=kn3++aoDA5g8FiDk7B+GXe86CinwDy1+ZF832rEVoDTjtdu2zbosumQi
+   mUA6HY9RjFQfv4aSnFR8u+0NlgiEhtSlDM4tJZPHWJT6TgbdPfRCXmv4g
+   CYoufzaUoZBv0DRmjxgVq/YJRpKHtRzcY1XHYV1GeAyf4HEmGYfafWvlZ
+   dp5kUdX45KQZBe7iy4tT5Jy4DaOunaldBqDT5TeiPzhUHs0/+AymWbXc4
+   9TAPXkL1sTOfqfRTi0Ie43/AVhD/U+RD/pCRTZEpVrB7MG9QADG6HV9a3
+   FloDiedWmaAIYdm5hVeDftAVX2qpEyt6cP9Xz0CecLtMNTtEsH3Cce9QP
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="314240422"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="314240422"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 18:27:26 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="616987547"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="616987547"
+Received: from jiaxiche-mobl.ccr.corp.intel.com (HELO [10.238.3.45]) ([10.238.3.45])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 18:27:21 -0800
+Message-ID: <286ff53b-e81c-0409-f344-81e2d2d7d8e2@linux.intel.com>
+Date:   Wed, 16 Nov 2022 10:27:19 +0800
 MIME-Version: 1.0
-References: <20221115175652.3836811-1-roberto.sassu@huaweicloud.com> <20221115175652.3836811-4-roberto.sassu@huaweicloud.com>
-In-Reply-To: <20221115175652.3836811-4-roberto.sassu@huaweicloud.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 15 Nov 2022 21:27:02 -0500
-Message-ID: <CAHC9VhTA7SgFnTFGNxOGW38WSkWu7GSizBmNz=TuazUR4R_jUg@mail.gmail.com>
-Subject: Re: [RFC][PATCH 3/4] lsm: Redefine LSM_HOOK() macro to add return
- value flags as argument
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, revest@chromium.org,
-        jackmanb@chromium.org, jmorris@namei.org, serge@hallyn.com,
-        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3 1/7] x86: KVM: Move existing x86 CPUID leaf
+ [CPUID_7_1_EAX] to kvm-only leaf
+To:     Borislav Petkov <bp@alien8.de>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Xiaoyao Li <xiaoyao.li@intel.com>, kvm@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, pbonzini@redhat.com,
+        ndesaulniers@google.com, alexandre.belloni@bootlin.com,
+        peterz@infradead.org, jpoimboe@kernel.org,
+        chang.seok.bae@intel.com, pawan.kumar.gupta@linux.intel.com,
+        babu.moger@amd.com, jmattson@google.com, sandipan.das@amd.com,
+        tony.luck@intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+        fenghua.yu@intel.com, keescook@chromium.org, nathan@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221110015252.202566-1-jiaxi.chen@linux.intel.com>
+ <20221110015252.202566-2-jiaxi.chen@linux.intel.com>
+ <f8607d23-afaa-2670-dd03-2ae8ec1e79a0@intel.com>
+ <Y3OwaRBzVFqJ4KEs@google.com> <Y3O7UYWfOLfJkwM/@zn.tnic>
+From:   Jiaxi Chen <jiaxi.chen@linux.intel.com>
+In-Reply-To: <Y3O7UYWfOLfJkwM/@zn.tnic>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 12:58 PM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
->
-> From: Roberto Sassu <roberto.sassu@huawei.com>
->
-> Define four return value flags (LSM_RET_NEG, LSM_RET_ZERO, LSM_RET_ONE,
-> LSM_RET_GT_ONE), one for each interval of interest (< 0, = 0, = 1, > 1).
->
-> Redefine the LSM_HOOK() macro to add return value flags as argument, and
-> set the correct flags for each LSM hook.
->
-> Implementors of new LSM hooks should do the same as well.
->
-> Cc: stable@vger.kernel.org # 5.7.x
-> Fixes: 9d3fdea789c8 ("bpf: lsm: Provide attachment points for BPF LSM programs")
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->  include/linux/bpf_lsm.h       |   2 +-
->  include/linux/lsm_hook_defs.h | 779 ++++++++++++++++++++--------------
->  include/linux/lsm_hooks.h     |   9 +-
->  kernel/bpf/bpf_lsm.c          |   5 +-
->  security/bpf/hooks.c          |   2 +-
->  security/security.c           |   4 +-
->  6 files changed, 466 insertions(+), 335 deletions(-)
 
-Just a quick note here that even if we wanted to do something like
-this, it is absolutely not -stable kernel material.  No way.
+
+On 11/16/2022 12:16 AM, Borislav Petkov wrote:
+> On Tue, Nov 15, 2022 at 03:29:45PM +0000, Sean Christopherson wrote:
+>> Heh, are any of the bits you believe Intel will add publicly documented?  :-)
+>>
+>> LAM could be scattered, but if more bits are expected that's probably a waste of
+>> time and effort.
+> 
+> I'm being told the bigger part of that word is going to be used for
+> either kernel or KVM bits so we might as well use it the "normal" way
+> instead of doing KVM-only or scattered bits after all.
+> 
+> Thx.
+> 
+Intel published ISE spec
+[https://cdrdv2.intel.com/v1/dl/getContent/671368] has documented 11
+instructions for this leaf CPUID.7.1.EAX by now. Given that more bits
+are going to be defined, I will enable these bits in the patch series as
+v1 did and will not move them to kvm-only leaves.
+
+By the way, Boris, what about CPUID.7.1.EDX, whether bigger part of it
+is expected to be used? In intel ISE, 3 bits are defined for this word.
+For now, I think put them in kvm-only subleaves as this patch series did
+is a better choice. What's your opinion?
 
 -- 
-paul-moore.com
+Regards,
+Jiaxi
