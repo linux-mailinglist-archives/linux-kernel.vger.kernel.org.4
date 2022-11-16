@@ -2,184 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5D1E62B4D6
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 09:17:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5643462B4E6
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 09:19:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231733AbiKPIRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 03:17:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51294 "EHLO
+        id S231907AbiKPITF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 03:19:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229937AbiKPIQy (ORCPT
+        with ESMTP id S232115AbiKPISN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 03:16:54 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73313BD6
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 00:16:52 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id t25so42152898ejb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 00:16:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=eVDWCbwUloYH7tkRZwkH26cFTCBcLJuC57YrsOYdkkM=;
-        b=Dq3EtISqJ2KUEd/SkKnOpMPCeJB4xDLNCNdG+3wTBDNBAEuUG7gE4eYXB0cfgPFsdS
-         AVvGsvJruSvy8b2uLwSAxW6hr3DhN1hgkAFvrYOfOSzU+R8kUz6mKEZgzPpZm1o6X0VD
-         FoEhHanTwJ7BBBRrtrSWeY+PDK65Yj8KBErsRrU7TPwXOUlySYCSbeB02B4q8oPYR+qN
-         QF5Yw4CEt9kdCfazp5np8D8Og87eVHnVqFjt9TUIUqMh2jH7gObGWwnOxeixMloGv3CL
-         eHc5Ic1j1vysW6rQjSvoR3eYa3tVE9Aw05tIqRmIvNwmiOuW3ODVkuVDfAI5WFvdGXUN
-         ndaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eVDWCbwUloYH7tkRZwkH26cFTCBcLJuC57YrsOYdkkM=;
-        b=nXZp5dI2BJ6EvUEYaIi7YZVir9bxvSSkDvt9fxLLMXam6YPw1JptcSGrFu/Bx9a/UZ
-         tntPupPLjysboh1XcnzKLJjCIUCzJU+bYuYoFZ0MQD6+Asb4XamxzgyJ9h+58hKYGlzX
-         LYvXL0BYYVLjV1K5boCyWapYseYpDg1lCzVc8YOaP4QU68sMKHVHCszAgetjZFulOBkt
-         GZ3WlaR0AZMbVwJu+s4xSs0x/NTAuvyuFR/adUSzIIymKCicTe0slfEv5dne3nhC/kuC
-         RmDY7pGx9DRAIjP888d+cX8sot93KhTc0BIi2eFZv4ClJDIW9Lgib30u1Qc/Gyz8vDmN
-         H2Mg==
-X-Gm-Message-State: ANoB5pm0n1gMWBtRYNaKgFRQZChriqst1xP9p/cRWJWV9zZthCSVgyf1
-        +Y1CHgr0P0eU+u3egFX81IVhGw==
-X-Google-Smtp-Source: AA0mqf4ShcdTDjjMd2AhCS5aBhkJ6kWeWe6hMUt0/PkA7HWkOb6S/WaLjdraNSoI1HutrBLtl5NtcA==
-X-Received: by 2002:a17:907:7854:b0:78b:5182:7ffa with SMTP id lb20-20020a170907785400b0078b51827ffamr16491710ejc.244.1668586610971;
-        Wed, 16 Nov 2022 00:16:50 -0800 (PST)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id o5-20020a056402038500b004619f024864sm7140898edv.81.2022.11.16.00.16.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 00:16:50 -0800 (PST)
-Date:   Wed, 16 Nov 2022 09:16:49 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Deepak Gupta <debug@rivosinc.com>
-Cc:     conor.dooley@microchip.com, aou@eecs.berkeley.edu,
-        jan.kiszka@siemens.com, kbingham@kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        palmer@dabbelt.com, paul.walmsley@sifive.com
-Subject: Re: [PATCH v5] scripts/gdb: add lx_current support for riscv
-Message-ID: <20221116081649.yq7cy7isxj3nmzr3@kamzik>
-References: <d65bddf3-c58a-1420-bff9-8333c10edb56@microchip.com>
- <20221115221051.1871569-1-debug@rivosinc.com>
+        Wed, 16 Nov 2022 03:18:13 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A6A60CF
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 00:17:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668586631;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UjChVR3JL0IE4M+ycBoVPEnLs7suZyUWAlBSRhFsres=;
+        b=BNnYwN8YyQ0KHG+vz0+XxJuR3w8BsmMCg9QQV9D/M4H3NVBtXRQ0gV+ZOiINFqnWRA3JYi
+        tBosOIPbzzARekDPVTesTdJvq8Zg2de8+ci1gq9RZffchirJ5aRUNk5fctT5y741ILuyDp
+        sy+7GUPbImhSNAw48oxWg8NsfTjgVgA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-389-D4sxpjaUPC-sqN_MCLADiw-1; Wed, 16 Nov 2022 03:16:52 -0500
+X-MC-Unique: D4sxpjaUPC-sqN_MCLADiw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 911C9101A528;
+        Wed, 16 Nov 2022 08:16:52 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1088140C2086;
+        Wed, 16 Nov 2022 08:16:51 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH net-next 2/3] rxrpc: Fix oops from calling udpv6_sendmsg() on
+ AF_INET socket
+From:   David Howells <dhowells@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     dhowells@redhat.com, linux-afs@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 16 Nov 2022 08:16:49 +0000
+Message-ID: <166858660930.2154965.8554587152080422824.stgit@warthog.procyon.org.uk>
+In-Reply-To: <166858659236.2154965.18023032361364343888.stgit@warthog.procyon.org.uk>
+References: <166858659236.2154965.18023032361364343888.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.5
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221115221051.1871569-1-debug@rivosinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 02:10:51PM -0800, Deepak Gupta wrote:
-> csr_sscratch CSR holds current task_struct address when hart is in
-> user space. Trap handler on entry spills csr_sscratch into "tp" (x2)
-> register and zeroes out csr_sscratch CSR. Trap handler on exit reloads
-> "tp" with expected user mode value and place current task_struct address
-> again in csr_sscratch CSR.
-> 
-> This patch assumes "tp" is pointing to task_struct. If value in
-> csr_sscratch is numerically greater than "tp" then it assumes csr_sscratch
-> is correct address of current task_struct. This logic holds when
->    - hart is in user space, "tp" will be less than csr_sscratch.
->    - hart is in kernel space but not in trap handler, "tp" will be more
->      than csr_sscratch (csr_sscratch being equal to 0).
->    - hart is executing trap handler
->        - "tp" is still pointing to user mode but csr_sscratch contains
->           ptr to task_struct. Thus numerically higher.
->        - "tp" is  pointing to task_struct but csr_sscratch now contains
->           either 0 or numerically smaller value (transiently holds
->           user mode tp)
-> 
-> Patch also adds new cached type "ulong" in scripts/gdb/linux/utils.py
-> 
-> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> 
-> ---
-> Since patch has changed a little bit from v1 and I didn't include
-> changelog earlier, here it is.
-> 
-> v1 --> v2:
->  - added logic to locate task_struct irrespective of priv
->  - made locating task_struct agnostic to bitness(32 vs 64).
->  - added caching of ulong type in scripts/gdb/linux/utils.py
->  - added more descriptive commit message
-> 
-> v2 --> v3:
->  - amended commit message and source line to fit column width
-> 
-> v3 --> v4:
->  - amended commit message and remove whitespace in source
->  - added Reviewed-by for reviewers
-> 
-> v4 --> v5:
->  - changing the order of changelog and sign off/review tags in commit
-> ---
-> ---
+If rxrpc sees an IPv6 address, it assumes it can call udpv6_sendmsg() on it
+- even if it got it on an IPv4 socket.  Fix do_udp_sendmsg() to give an
+error in such a case.
 
-Everything looks good, but you've got extra ---'s here. They don't hurt,
-but if you're still ironing out your workflow you may want to keep in
-mind that you don't need them. You only need one, which goes above the
-changelog.
+general protection fault, probably for non-canonical address
+0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
+...
+RIP: 0010:ipv6_addr_v4mapped include/net/ipv6.h:749 [inline]
+RIP: 0010:udpv6_sendmsg+0xd0a/0x2c70 net/ipv6/udp.c:1361
+...
+Call Trace:
+do_udp_sendmsg net/rxrpc/output.c:27 [inline]
+do_udp_sendmsg net/rxrpc/output.c:21 [inline]
+rxrpc_send_abort_packet+0x73b/0x860 net/rxrpc/output.c:367
+rxrpc_release_calls_on_socket+0x211/0x300 net/rxrpc/call_object.c:595
+rxrpc_release_sock net/rxrpc/af_rxrpc.c:886 [inline]
+rxrpc_release+0x263/0x5a0 net/rxrpc/af_rxrpc.c:917
+__sock_release+0xcd/0x280 net/socket.c:650
+sock_close+0x18/0x20 net/socket.c:1365
+__fput+0x27c/0xa90 fs/file_table.c:320
+task_work_run+0x16b/0x270 kernel/task_work.c:179
+exit_task_work include/linux/task_work.h:38 [inline]
+do_exit+0xb35/0x2a20 kernel/exit.c:820
+do_group_exit+0xd0/0x2a0 kernel/exit.c:950
+__do_sys_exit_group kernel/exit.c:961 [inline]
+__se_sys_exit_group kernel/exit.c:959 [inline]
+__x64_sys_exit_group+0x3a/0x50 kernel/exit.c:959
 
-Thanks,
-drew
+Fixes: ed472b0c8783 ("rxrpc: Call udp_sendmsg() directly")
+Reported-by: Eric Dumazet <edumazet@google.com>
+Suggested-by: Eric Dumazet <edumazet@google.com>
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Marc Dionne <marc.dionne@auristor.com>
+cc: linux-afs@lists.infradead.org
+---
 
->  scripts/gdb/linux/cpus.py  | 15 +++++++++++++++
->  scripts/gdb/linux/utils.py |  5 +++++
->  2 files changed, 20 insertions(+)
-> 
-> diff --git a/scripts/gdb/linux/cpus.py b/scripts/gdb/linux/cpus.py
-> index 15fc4626d236..14c22f82449b 100644
-> --- a/scripts/gdb/linux/cpus.py
-> +++ b/scripts/gdb/linux/cpus.py
-> @@ -173,6 +173,21 @@ def get_current_task(cpu):
->           else:
->               raise gdb.GdbError("Sorry, obtaining the current task is not allowed "
->                                  "while running in userspace(EL0)")
-> +    elif utils.is_target_arch("riscv"):
-> +         current_tp = gdb.parse_and_eval("$tp")
-> +         scratch_reg = gdb.parse_and_eval("$sscratch")
-> +
-> +         # by default tp points to current task
-> +         current_task = current_tp.cast(task_ptr_type)
-> +
-> +         # scratch register is set 0 in trap handler after entering kernel.
-> +         # When hart is in user mode, scratch register is pointing to task_struct.
-> +         # and tp is used by user mode. So when scratch register holds larger value
-> +         # (negative address as ulong is larger value) than tp, then use scratch register.
-> +         if (scratch_reg.cast(utils.get_ulong_type()) > current_tp.cast(utils.get_ulong_type())):
-> +             current_task = scratch_reg.cast(task_ptr_type)
-> +
-> +         return current_task.dereference()
->      else:
->          raise gdb.GdbError("Sorry, obtaining the current task is not yet "
->                             "supported with this arch")
-> diff --git a/scripts/gdb/linux/utils.py b/scripts/gdb/linux/utils.py
-> index 1553f68716cc..ddaf3089170d 100644
-> --- a/scripts/gdb/linux/utils.py
-> +++ b/scripts/gdb/linux/utils.py
-> @@ -35,12 +35,17 @@ class CachedType:
->  
->  
->  long_type = CachedType("long")
-> +ulong_type = CachedType("ulong")
->  atomic_long_type = CachedType("atomic_long_t")
->  
->  def get_long_type():
->      global long_type
->      return long_type.get_type()
->  
-> +def get_ulong_type():
-> +    global ulong_type
-> +    return ulong_type.get_type()
-> +
->  def offset_of(typeobj, field):
->      element = gdb.Value(0).cast(typeobj)
->      return int(str(element[field].address).split()[0], 16)
-> -- 
-> 2.25.1
-> 
+ net/rxrpc/output.c |   18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
+
+diff --git a/net/rxrpc/output.c b/net/rxrpc/output.c
+index 46432e70a16b..a2fe1a262f8a 100644
+--- a/net/rxrpc/output.c
++++ b/net/rxrpc/output.c
+@@ -18,15 +18,21 @@
+ 
+ extern int udpv6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len);
+ 
+-static ssize_t do_udp_sendmsg(struct socket *sk, struct msghdr *msg, size_t len)
++static ssize_t do_udp_sendmsg(struct socket *socket, struct msghdr *msg, size_t len)
+ {
+-#if IS_ENABLED(CONFIG_AF_RXRPC_IPV6)
+ 	struct sockaddr *sa = msg->msg_name;
++	struct sock *sk = socket->sk;
+ 
+-	if (sa->sa_family == AF_INET6)
+-		return udpv6_sendmsg(sk->sk, msg, len);
+-#endif
+-	return udp_sendmsg(sk->sk, msg, len);
++	if (IS_ENABLED(CONFIG_AF_RXRPC_IPV6)) {
++		if (sa->sa_family == AF_INET6) {
++			if (sk->sk_family != AF_INET6) {
++				pr_warn("AF_INET6 address on AF_INET socket\n");
++				return -ENOPROTOOPT;
++			}
++			return udpv6_sendmsg(sk, msg, len);
++		}
++	}
++	return udp_sendmsg(sk, msg, len);
+ }
+ 
+ struct rxrpc_abort_buffer {
+
+
