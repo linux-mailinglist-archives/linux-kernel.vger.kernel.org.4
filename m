@@ -2,144 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34B2C62B6AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:38:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C14662B6B2
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:39:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232614AbiKPJiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 04:38:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55696 "EHLO
+        id S233411AbiKPJjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 04:39:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238008AbiKPJiR (ORCPT
+        with ESMTP id S232019AbiKPJjo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 04:38:17 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FD2423EBA
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:38:16 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id b11so16044897pjp.2
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:38:16 -0800 (PST)
+        Wed, 16 Nov 2022 04:39:44 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E90126489
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:39:43 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id bp15so28538857lfb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:39:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ED3dVZVhTXurH9uVn9Km9+qzSuteSy+hO2CW2MEdWTU=;
-        b=I/7hBPwo37uWwdiPvScqp5Wub/IybcuswDPzUWm8rPIFGRsJNEuTVzrGQec8Ow/l/d
-         aKnmhZEjWitb73ekE3JC0wqz1Oep1X0J2fzqil9JzjWCl3ue1ogO8l8x0Nrp0Y3vebvA
-         HFfs+KKvymqM4vfSpUHJQ/C8Ga7T3aTpHhqukRCmkCDrYDZFBuCnjK0du8NuQRg+alzJ
-         i5tjHe9Y5bMNOUAwOjs+QWG+c2OtcYzs4E09M+1P90Lg3JgRx2+/lIppdhPFqVVL/HLg
-         hiOawDrc9p4LqIRHMEKakCa77RJmZq5YG8kly2mNrLV/9e74LnZ6CGCWYdbcJoyX0ZsG
-         BzDA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=j+gl7l2sUM+JuRSjFTkzINmsvGZarBZozPSoW/pkC8U=;
+        b=nabZ7U2yFQENwR0B6rx2HYg/E2viR3SDwxtWZnvqTTcgpiKsO/7THHEB0/1bWDQZas
+         /9LJ2x5bQ+FKQpsuQPEma6+eJbo6EmC7g/3RZaRAS20WLqDj03LolJ/lBCtLeBH/cZn0
+         g4qxE6F2YmmvkV5dO7SRs3EnnDvffOAM0JE3FTPz5tMe5ymLKVwA+HcntK4sFKsPF9/i
+         +PcyUwaVWV72eEYFmrZVmcQMyncNjHvdbICJ9q8h2NJLwgatMVH7JA77qqRmKYeRCFix
+         3IrAnSfLYo0MRStXuBTRyRaHVIiI4GfjLCCEm++UXHATgL2WFkefy60VCmsIgzkc8ImQ
+         54pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ED3dVZVhTXurH9uVn9Km9+qzSuteSy+hO2CW2MEdWTU=;
-        b=MWe/NSiCS/UDpKoRTYeywljVqwBy9znwJU3u3mXjk4WCzFsfnaw1dDKMsVhAK59IaE
-         aQDmcnxOA0xKO8v2BuSEDjDGcpAZ0J2Q33elpJ9ubIrzH2aTmBZji2jQL/ErzwgZrK74
-         YQk22ACKZx8v9LEeSwJ4/hIonVqgoKWUgSKoBrZCUyULNUkM4Mk5zAMiLmjCErtBvxAw
-         GPvil17dAfVvSjDAz77V3CrnQF5sA+3wi1jHANVffi9vFDV6pk8TbefTM0MpjqEt67ph
-         lnDn3pyngeR3R8CunDcjAdTVU8GrzKn9MbRfglD+Mc/A/EUtZ2OXhln3Kewj6Gu8AwtR
-         lSVQ==
-X-Gm-Message-State: ANoB5pnU0D7hsGnAi+WwKJePkqOvyKdNXg63ooK1J1RUbP8TSzmdJdmh
-        IR+Q+x77OOQVEoHc/ZK3/rKoQw==
-X-Google-Smtp-Source: AA0mqf6mO/o9kgca96vOeZ6qwUazWfcWU/RyXDHE4Gy+8A40ZFbYqCJCwRW5uzjdX4dDB5SHOuDr3A==
-X-Received: by 2002:a17:902:b694:b0:187:337a:b2a1 with SMTP id c20-20020a170902b69400b00187337ab2a1mr8336586pls.96.1668591495172;
-        Wed, 16 Nov 2022 01:38:15 -0800 (PST)
-Received: from [10.68.76.92] ([139.177.225.229])
-        by smtp.gmail.com with ESMTPSA id e24-20020a63f558000000b00470275c8d6dsm9012484pgk.10.2022.11.16.01.38.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 01:38:14 -0800 (PST)
-Message-ID: <0445de39-15a4-f645-b380-39f20abb6524@bytedance.com>
-Date:   Wed, 16 Nov 2022 17:38:09 +0800
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=j+gl7l2sUM+JuRSjFTkzINmsvGZarBZozPSoW/pkC8U=;
+        b=UH3JWdlP93ZEAtPVpcOaXursWjOrowt+Pyi6EiveValkSGyCbhjyyt0+n2fOjbjJHb
+         m6UaS+vouwSsoaQJEQlhgUZWXy64m4hzA1/CIJSsK9rSIU+YW2Ll1aXRWFgHwkpDxfAA
+         /zwb1JwINj4gEn6X3gUgYssnoY2GxSCF3CS54rwIsDyjw3xHSdJMZIafvGx33DZQjeJ5
+         MGLY3TNViBTWNDQJDRy2YWaatkyoALbp9EO7g7kg0vZ0pJxxkocj36Pw5wtpVVywQyfK
+         QB3XpFBoeVn17d0sPExIwCsxRyYO2qYL6grO+5DOzC9QYwfTwFPT+ptKL2KQKPKn1N+e
+         S9OQ==
+X-Gm-Message-State: ANoB5pkvaoGMxh1UuqdTRkfHc/e+5KJGS0IyMm57W178IBepskD2IwqE
+        9E4fHO+AZbBZGIiZFyJgNG9IHg==
+X-Google-Smtp-Source: AA0mqf4mB5/tmsVdj0UfaSGVIV3XOkNlkt4gjuroY+HB7oemrLuFblk2sOHVkDC2mg0gfIwsEcqaEg==
+X-Received: by 2002:a05:6512:1597:b0:4a2:676e:cf68 with SMTP id bp23-20020a056512159700b004a2676ecf68mr6846656lfb.546.1668591581632;
+        Wed, 16 Nov 2022 01:39:41 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id c8-20020ac24148000000b00492c663bba2sm2511151lfi.124.2022.11.16.01.39.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 01:39:41 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL] pinctrl: dt-bindings: qcom: Second convertions for v6.2
+Date:   Wed, 16 Nov 2022 10:39:39 +0100
+Message-Id: <20221116093939.20111-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [External] Re: [PATCH v2] mm: add new syscall
- pidfd_set_mempolicy().
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     corbet@lwn.net, mhocko@suse.com, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org
-References: <20221111084051.2121029-1-hezhongkun.hzk@bytedance.com>
- <87zgcrwfac.fsf@yhuang6-desk2.ccr.corp.intel.com>
-From:   Zhongkun He <hezhongkun.hzk@bytedance.com>
-In-Reply-To: <87zgcrwfac.fsf@yhuang6-desk2.ccr.corp.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ying, thanks for your replay and suggestions.
+Hi,
 
-> 
-> I suggest to move the flags in "mode" parameter (MPOL_F_STATIC_NODES,
-> MPOL_F_RELATIVE_NODES, MPOL_F_NUMA_BALANCING, etc.) to "flags"
-> parameter, otherwise, why add it?
+Continuation of my cleanups - second, last round based on previous pull request.
 
-The "flags" is used for future extension if any, just like
-process_madvise() and set_mempolicy_home_node().
-Maybe it should be removed.
-
-> 
-> And, how about add a "home_node" parameter?  I don't think that it's a
-> good idea to add another new syscall for pidfd_set_mempolicy_home_node()
-> in the future.
-> 
-
-Good idea, but "home_node" is used for vma policy, not task policy.
-It is possible to use it in pidfd_mbind() in the future.
-
-> 
-> IMHO, "The first four APIS" and "The last one" isn't easy to be
-> understood.  How about
-> 
-> "sys_pidfd_set_mempolicy sets the mempolicy of task specified in the
-> pidfd, the others affect only the calling task, ...".
-> 
-
-Got it.
-
-> 
-> Why add "sys_"?  I fount that there's no "sys_" before set_mempolicy()/mbind() etc.
-> 
-
-Got it.
-
->> +void mpol_put_async(struct task_struct *task, struct mempolicy *p)
-> 
-> How about change __mpol_put() directly?
-
-> 
-> Why can we fall back to freeing directly if task_work_add() failed?
-> Should we check the return code and fall back only if -ESRCH and WARN
-> for other cases?
-> 
-
-A task_work based solution has not been accepted yet, it will be 
-considered later if needed.
+Best regards,
+Krzysztof
 
 
->> +	}
-> 
-> Why do we need to write lock mmap_sem?  IIUC, we don't touch vma.
-> 
+The following changes since commit 1b6b54ef7c4a1f482a2a6d33a769e89877beba4e:
 
-Yes, it should be removed.
+  dt-bindings: pinctrl: qcom,sc7180: convert to dtschema (2022-10-19 11:55:58 -0400)
 
->>   /*
-> 
-> Because we will change task_struct->mempolicy in another task, we need
-> to use kind of "load acquire" / "store release" memory order.  For
-> example, rcu_dereference() / rcu_assign_pointer(), etc.
-> 
-Thanks again for your suggestion.
+are available in the Git repository at:
 
-Best Regards,
-Zhongkun
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git tags/qcom-pinctrl-6.2-2
+
+for you to fetch changes up to 86bfee318b546c03d954e863fc1af43960cb06e2:
+
+  dt-bindings: pinctrl: qcom,msm8976: convert to dtschema (2022-11-16 08:56:02 +0100)
+
+----------------------------------------------------------------
+Qualcomm pinctrl Devicetree bindings changes for v6.2, part two
+
+Continuation of refactoring and improving Qualcomm pin controller bindings:
+1. Narrow compatible combinations in PMIC MPP.
+2. Convert several bindings from TXT to DT schema format: QCS404,
+   IPQ8074, MSM8660, MSM8916, MSM8960 and MSM8976.
+
+----------------------------------------------------------------
+Krzysztof Kozlowski (7):
+      dt-bindings: pinctrl: qcom,pmic-mpp: make compatible fallbacks specific
+      dt-bindings: pinctrl: qcom,msm8916: convert to dtschema
+      dt-bindings: pinctrl: qcom,qcs404: convert to dtschema
+      dt-bindings: pinctrl: qcom,msm8660: convert to dtschema
+      dt-bindings: pinctrl: qcom,ipq8074: convert to dtschema
+      dt-bindings: pinctrl: qcom,msm8960: convert to dtschema
+      dt-bindings: pinctrl: qcom,msm8976: convert to dtschema
+
+ .../bindings/pinctrl/qcom,ipq8074-pinctrl.txt      | 181 -------------------
+ .../bindings/pinctrl/qcom,ipq8074-pinctrl.yaml     | 135 ++++++++++++++
+ .../bindings/pinctrl/qcom,msm8660-pinctrl.txt      |  96 ----------
+ .../bindings/pinctrl/qcom,msm8660-pinctrl.yaml     | 125 +++++++++++++
+ .../bindings/pinctrl/qcom,msm8916-pinctrl.txt      | 195 --------------------
+ .../bindings/pinctrl/qcom,msm8916-pinctrl.yaml     | 166 +++++++++++++++++
+ .../bindings/pinctrl/qcom,msm8960-pinctrl.txt      | 190 --------------------
+ .../bindings/pinctrl/qcom,msm8960-pinctrl.yaml     | 164 +++++++++++++++++
+ .../bindings/pinctrl/qcom,msm8976-pinctrl.txt      | 183 -------------------
+ .../bindings/pinctrl/qcom,msm8976-pinctrl.yaml     | 136 ++++++++++++++
+ .../devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml |  45 ++---
+ .../bindings/pinctrl/qcom,qcs404-pinctrl.txt       | 199 ---------------------
+ .../bindings/pinctrl/qcom,qcs404-pinctrl.yaml      | 176 ++++++++++++++++++
+ 13 files changed, 925 insertions(+), 1066 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,ipq8074-pinctrl.txt
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,ipq8074-pinctrl.yaml
+ delete mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,msm8660-pinctrl.txt
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,msm8660-pinctrl.yaml
+ delete mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,msm8916-pinctrl.txt
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,msm8916-pinctrl.yaml
+ delete mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,msm8960-pinctrl.txt
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,msm8960-pinctrl.yaml
+ delete mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,msm8976-pinctrl.txt
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,msm8976-pinctrl.yaml
+ delete mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,qcs404-pinctrl.txt
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,qcs404-pinctrl.yaml
