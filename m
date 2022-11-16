@@ -2,101 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1063C62B338
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 07:24:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CA4162B340
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 07:25:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232243AbiKPGYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 01:24:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43392 "EHLO
+        id S231617AbiKPGZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 01:25:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232802AbiKPGXH (ORCPT
+        with ESMTP id S231685AbiKPGZN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 01:23:07 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70B921582D;
-        Tue, 15 Nov 2022 22:23:06 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id b3so27980027lfv.2;
-        Tue, 15 Nov 2022 22:23:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Dsr7OsB8wB98rNVEI9QRhf9lR0zwcVT6qNdfdodmdlw=;
-        b=mfFlllbzPTyEVyif9qC2QIPaMpl/raWnKGEqr6DAtzKsGd1nv8m9sjTqdFOG40jo0K
-         dgwz3yBugrdHu1TDYzpVyGtURkhUSdhi14BRZj6HLjhoUzi+PO+FuAFrr2qDZ7M/9hrf
-         Ue7U+4591f3hhlewOHxulJsPuoF+PDz/W9opqmaH52zhZln1l9s5jlta+SrjzQO/lm9N
-         8820F719epsY1B3vX+cfYiucNQOhTIYlTovlgRGGnAX5Ba3uwjKcQguq47Sso+2lMeOj
-         fOJFUMG/lTzg/Owh/oMf24+0/HcuVjFoHYCE0HyAlX+m/M/n0BLmV0r//IeV57KgVyd3
-         DnBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Dsr7OsB8wB98rNVEI9QRhf9lR0zwcVT6qNdfdodmdlw=;
-        b=LyXUSBmtMGXtuJPHRCECQJ2tCXyF49JwdYkpkhtCvUiD/SZycApIz7MK1F73qHDJaR
-         bTlKdyGppeJ5YfWEqLfmn0V3EnVGs41c7m+Z5ThoQeMk6RD9doH4NVJRJ/ABMTPWz3Uw
-         MAqthXSIs84lqgfETduiqZsfbS1zsLnqAlG1kc8ybD6ovh9wfiT6fipGRUSVE9YJCr1L
-         389a8DedF0rHbE/9Y4Vhi28LQPYSUeLBXs+3+ztPM6G+14P7tvVaq5Zm+Fwy0AT9MD4w
-         3yulsS5b5NUfUXSMMEeTWyxu33Vk2U3DVIF84WqKK85yXAdNmP9iW5ukjacmdSZqKVl5
-         st0A==
-X-Gm-Message-State: ANoB5pnkfD7gkd3TGUyk9WWq2P3D8wnAmkqYG+Gf5IEhA3fkgYGus5zB
-        qn3xSS7RZyp3yc87ve6T44qHleuBDcTMTDL0oE0=
-X-Google-Smtp-Source: AA0mqf5hlPGejSK5eNDPIzypAZth5+Edami5qB75CSiwQJvI62yZWoxUrqui61+XJGYexg2ogWzR3m8Bno+az1U18a0=
-X-Received: by 2002:a05:6512:1115:b0:4a2:3924:de36 with SMTP id
- l21-20020a056512111500b004a23924de36mr6620878lfg.663.1668579784635; Tue, 15
- Nov 2022 22:23:04 -0800 (PST)
+        Wed, 16 Nov 2022 01:25:13 -0500
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8BC51D0FB
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 22:25:11 -0800 (PST)
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20221116062510epoutp0434fe111d61816f594f159416bae73583~n-JZ96CuP1687016870epoutp04f
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 06:25:10 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20221116062510epoutp0434fe111d61816f594f159416bae73583~n-JZ96CuP1687016870epoutp04f
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1668579910;
+        bh=zf66idLn0GPjGtmgOtoFxT+lBmEiKwgjMd3fFNtoODw=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=Yh2FJNUSa/WS0SIDrnLQycUaYGTwg8hep3Nimct67gIu4i8Yrezl9ru+kXbWYAjdn
+         GtBY1ctDkGwoaXB2Nw0OCHzkSgbYTDLnqdE7GkA8Y9st77TM4f1l00MI3DAQF4OHGr
+         HB2T4v8Yh04/17CM4Q/npPQIragbj3SMls5Bv3GE=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+        20221116062509epcas5p46ac6c455373f8603ffe0deb8a1548ca0~n-JZa9I0m1137011370epcas5p4H;
+        Wed, 16 Nov 2022 06:25:09 +0000 (GMT)
+Received: from epsmges5p1new.samsung.com (unknown [182.195.38.183]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4NBtM807Kvz4x9Q6; Wed, 16 Nov
+        2022 06:25:08 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        66.27.01710.34284736; Wed, 16 Nov 2022 15:25:07 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+        20221116062303epcas5p4bfe30b12fd2dd8d1f72a696b3adf09ec~n-HjzO1GV1582115821epcas5p47;
+        Wed, 16 Nov 2022 06:23:03 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20221116062303epsmtrp2e30a21cd04628f816b9f9f0408312e42~n-HjyRL0B2801628016epsmtrp2F;
+        Wed, 16 Nov 2022 06:23:03 +0000 (GMT)
+X-AuditID: b6c32a49-c9ffa700000006ae-92-6374824320d9
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        15.FD.18644.7C184736; Wed, 16 Nov 2022 15:23:03 +0900 (KST)
+Received: from FDSFTE302 (unknown [107.122.81.78]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20221116062300epsmtip2b8056a60950e6c0e858bdf0a38c3f56f~n-HhNE6UN2731527315epsmtip2f;
+        Wed, 16 Nov 2022 06:23:00 +0000 (GMT)
+From:   "Sriranjani P" <sriranjani.p@samsung.com>
+To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
+        <peppe.cavallaro@st.com>, <alexandre.torgue@foss.st.com>,
+        <joabreu@synopsys.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <mcoquelin.stm32@gmail.com>, <richardcochran@gmail.com>
+Cc:     <netdev@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        "'Rob Herring'" <robh+dt@kernel.org>,
+        "'Krzysztof Kozlowski'" <krzysztof.kozlowski+dt@linaro.org>,
+        <devicetree@vger.kernel.org>,
+        "'Pankaj Dubey'" <pankaj.dubey@samsung.com>,
+        "'Jayati Sahu'" <jayati.sahu@samsung.com>, <ravi.patel@samsung.com>
+In-Reply-To: <9fca87df-c879-828c-84c3-a870bbd87038@linaro.org>
+Subject: RE: [PATCH 3/4] arm64: dts: fsd: Add Ethernet support for FSYS0
+ Block of FSD SoC
+Date:   Wed, 16 Nov 2022 11:52:57 +0530
+Message-ID: <04af01d8f983$e1d08200$a5718600$@samsung.com>
 MIME-Version: 1.0
-References: <20221116074146.6e7cbce9@canb.auug.org.au>
-In-Reply-To: <20221116074146.6e7cbce9@canb.auug.org.au>
-From:   Steve French <smfrench@gmail.com>
-Date:   Wed, 16 Nov 2022 00:22:52 -0600
-Message-ID: <CAH2r5muADC_ow81cGPppTQ2zuMHvB_7aadb2WAbyZFFD7ELi0g@mail.gmail.com>
-Subject: Re: linux-next: Fixes tag needs some work in the cifs tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
-        Zhang Xiaoxu <zhangxiaoxu5@huawei.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQHa0oM14/tprCIIIJ9eaP02I486nwLBJP4AAR97iHwCzoEZZ64H6WWQ
+Content-Language: en-in
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Te0xTVxzO6b29LcSaK3R6RgCbO3CA41Et7ELATTB4HW7pxhImaMpduQNG
+        e9v1McSYyZDhIAMUo0BhynipMF1SHiKvjeciA6aCTLKyjJc4EORhcOiIK72w8d/3/c73+32/
+        75wcIeKQJnASJrIGRsfSKgKzR+s7PD28w9IMSr/0h/7kyl8XAVn8azpKXu7s55OT3WMCsrOn
+        nEf+UTrHJ3MejSJky0ydgLxTn8MnzeNDfHKgsRgjs4Ym+OSl1et8srtkO7n8y2NAltY9FZAv
+        Z+oAOTrfbB3S+wghv2rpFLwtpmqvDfOoydw6AXXLNCKgSsxGylyViVGWoWaMqik/RT1pvY9R
+        ObVVgGprlVKTf7cgVO2PS4BaMrvKRdFJwQkMHcfoJAyr1MQlsvEhRESkIkzhH+An9ZYGkm8S
+        EpZWMyHEgcNy7/BElTUrIfmcVhmtJTmt1xO++4J1GqOBkSRo9IYQgtHGqbQyrY+eVuuNbLwP
+        yxiCpH5+e/ytwtikhH8ahlDt3NbjzzuKQCro2ZIF7IQQl0HLlBnLAvZCB7wJwIWz84AjiwB2
+        XLmLcGQJwKJ7g8hGy8v09PWDRgD7+vNRjkwBeD9vEF1TYbgvnLl62TZYjFfwYHXOdzaC4NkI
+        /O1KHlhT2eH7YMH0l7a5jngMLG7O5WUBoRDF3WFrW8xaWYQHwqfDqwIOb4O3CydsBgi+E96c
+        LV5fSQJXJiv5a1iMh8P20up1zQ7YtfKNbVWIV9vBxtVllGs4AJ839AAOO8Lpn2sFHHaCS3Mt
+        GIfjYU1nDZ/DKvh12ul1s7fgT4PF6NqeCO4Jf2j05cou8ELPDR7nuxVmv5jgcXURbLi0gXfB
+        srHMdewMr48t8s8CwrQpmmlTNNOmCKb/3UoAWgVeZbR6dTyj99dKWSb5vydXatRmYPsMXoca
+        wMif8z7tgCcE7QAKEUIsqkg1KB1EcXTKCUanUeiMKkbfDvyt130OcXpFqbH+JtagkMoC/WQB
+        AQGywL0BUmKHqKzAS+mAx9MGJolhtIxuo48ntHNK5ZUBj+XZD4KMTx5QtfY+bpUN4zsLXjwz
+        n0lufyCi0eyUPK2o2RSGph2s+F5Zvavv9MEjEblt4SMei929A6N5XX0xTm5le2U1WJR49sy3
+        A3TEp3cVv0/fPmo5dDEudk916BfRHi2FVezDz1y2H19QRD/rn7oBHYddxcGf3DwH6z8ctpQ7
+        Frju9i2M1L72+nkq+eQ4bFrFPspgG09apMH33suMvaZO8z6cv+KcknpUmih3D9FlHpMrXd7w
+        0iV37+drI3mW9FOeUbG9+8e3XI1638t9tutYUzadoL6zO+gdNyyDTAot0ugkRZnyjHdZ78fn
+        t4Uu5B+55eYcdEJkQUYdKgs/JlB9Ai31QnR6+l/wiv5mlQQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0hTYRjHeXfO2TnOVsfN8m2J1aQoy5lm9RZmN5DTBUnID1pkQ09e2o1d
+        ukFkoFQzVqJJzZWyNHUR1nKmpkabrlwro0gRspuuvJcpolZWUwO//Z7L/8fz4aEwQS8uotIV
+        WlatkMrEXB5e7RAvDX16Tpu8zpwlQBO9BQCZWrNwVNT0kkAe52cSNblKOOi9eYhAhp5PGGro
+        t5HoVbWBQNauNgK9qTNxkb6tm0A3f98lkLN4ERp7PgCQ2TZKoj/9NoA+fa//J3H3YCi7oYnc
+        7s9UVXRwGM9lG8nUGjtJptiqY6yWi1zmXVs9l3lQcpb51viWyxiqLIB50hjOeMYbMKbq8Qhg
+        RqxB+/mJvKgUVpZ+nFWHRR/hpf2qacNVQ/NPTjoKQSZwzdMDHwrSkfBPVhamBzxKQNcAaL9h
+        wGYGgbDlY8ksC2HF1FfSywLaA2DO+FEvc+kw2F9exPWG/elKDvxyKZ/wFhh9FYPuF3pyRjsC
+        oOFnznTch46G1/rOTWuFdAJ0lA5w9ICicHoFbHxy0Nvm05vhaMdvcob9YMv1btzLGL0Gejo8
+        s7wUPhw0zV63DE54bhNe9qdjoN18Z3YnADZPXMKuAKFxjso4R2WcozLOiRQD3AIWsyqNPFWu
+        CVdFKNgTEo1UrtEpUiXJSrkVTH9DSEgNqLd8l9gBhwJ2AClM7M8vzdQmC/gp0lOnWbUySa2T
+        sRo7WELh4gD+K31LkoBOlWrZYyyrYtX/pxzKR5TJEakszi3Jz3J/YEGWvneigrUbenxTjjk3
+        Bh9wFN7bZOwsHDdtzTcMJZZHnTmo17rJ47Wt+z8sH3Pv1jrvb5Tvzdi5vbIkqawr0WfVEBze
+        u7LodZNCtER3vrbdsV55RzL+ZsHuXS5d563SQ/aEBRd78LhHheaCF4tvHGGV89dHdJr9eHvy
+        Lo+GKbEL5bGyVeFM6Y7gOHdCa8ZUUG6icFDS+3Obb7b9V+jrgIjhebviM967zhB1gbEKGT3Z
+        XN4+1T2o9ysbS392OKKyfqo5pth1Ly2qa5KqtAXGty7clOcbPSn9XKdMehi6+u7tATLbJaxA
+        1UyZ6ZZxuH1ffvzynDh3pBjXpEnDQzC1RvoXlow423wDAAA=
+X-CMS-MailID: 20221116062303epcas5p4bfe30b12fd2dd8d1f72a696b3adf09ec
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20221104115902epcas5p209442971ba9f4cb001a933bda3c50b25
+References: <20221104120517.77980-1-sriranjani.p@samsung.com>
+        <CGME20221104115902epcas5p209442971ba9f4cb001a933bda3c50b25@epcas5p2.samsung.com>
+        <20221104120517.77980-4-sriranjani.p@samsung.com>
+        <9fca87df-c879-828c-84c3-a870bbd87038@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-updated Fixes tag for that commit in cifs-2.6.git for-next
-
-On Tue, Nov 15, 2022 at 2:41 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> In commit
->
->   9898f0456aa3 ("cifs: Fix wrong return value checking when GETFLAGS")
->
-> Fixes tag
->
->   Fixes: 64a5cfa6db9 ("Allow setting per-file compression via SMB2/3")
->
-> has these problem(s):
->
->   - SHA1 should be at least 12 digits long
->     This can be fixed for the future by setting core.abbrev to 12 (or
->     more) or (for git v2.11 or later) just making sure it is not set
->     (or set to "auto").
->
-> --
-> Cheers,
-> Stephen Rothwell
 
 
+> -----Original Message-----
+> From: Krzysztof Kozlowski [mailto:krzysztof.kozlowski@linaro.org]
+> Sent: 04 November 2022 18:17
+> To: Sriranjani P <sriranjani.p@samsung.com>; peppe.cavallaro@st.com;
+> alexandre.torgue@foss.st.com; joabreu@synopsys.com;
+> davem@davemloft.net; edumazet@google.com; kuba@kernel.org;
+> pabeni@redhat.com; mcoquelin.stm32@gmail.com;
+> richardcochran@gmail.com
+> Cc: netdev@vger.kernel.org; linux-stm32@st-md-mailman.stormreply.com;
+> linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org; Rob
+> Herring <robh+dt@kernel.org>; Krzysztof Kozlowski
+> <krzysztof.kozlowski+dt@linaro.org>; devicetree@vger.kernel.org; Pankaj
+> Dubey <pankaj.dubey@samsung.com>; Jayati Sahu
+> <jayati.sahu@samsung.com>
+> Subject: Re: [PATCH 3/4] arm64: dts: fsd: Add Ethernet support for FSYS0
+> Block of FSD SoC
+> 
+> On 04/11/2022 08:05, Sriranjani P wrote:
+> > The FSD SoC contains two instances of Synopsys DWC QoS Ethernet IP,
+> > one in FSYS0 block and other in PERIC block.
+> >
+> > Adds device tree node for Ethernet in FSYS0 Block and enables the same
+> > for FSD platform.
+> >
+> > Cc: Rob Herring <robh+dt@kernel.org>
+> > Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> > Cc: Richard Cochran <richardcochran@gmail.com>
+> > Cc: devicetree@vger.kernel.org
+> > Signed-off-by: Pankaj Dubey <pankaj.dubey@samsung.com>
+> > Signed-off-by: Jayati Sahu <jayati.sahu@samsung.com>
+> > Signed-off-by: Sriranjani P <sriranjani.p@samsung.com>
+> > ---
+> 
+> Please use scripts/get_maintainers.pl to get a list of necessary people and
+> lists to CC.  It might happen, that command when run on an older kernel,
+> gives you outdated entries.  Therefore please be sure you base your patches
+> on recent Linux kernel.
+[Sriranjani P] Sure. Will update CC list in the next version.
+> 
+> Best regards,
+> Krzysztof
+[Sriranjani P] Thank you.
 
--- 
-Thanks,
 
-Steve
