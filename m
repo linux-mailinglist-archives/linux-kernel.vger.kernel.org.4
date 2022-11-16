@@ -2,140 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C47B62B67B
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:27:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDCF162B67C
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:27:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233214AbiKPJ05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 04:26:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49320 "EHLO
+        id S232401AbiKPJ1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 04:27:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231622AbiKPJ0x (ORCPT
+        with ESMTP id S231622AbiKPJ1u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 04:26:53 -0500
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1126389;
-        Wed, 16 Nov 2022 01:26:51 -0800 (PST)
-Received: by mail-qv1-f41.google.com with SMTP id j6so11506015qvn.12;
-        Wed, 16 Nov 2022 01:26:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EGSh9ezbCO5Cs+0MRBpsxP1k4L0kzxgW9LPRl1yAGr0=;
-        b=aM9QqSWGeOYDmyN8URcMvMR54HYgT1P0VvS7/MjVpF9mtIvl2J8j/YVV7pRwStmXzD
-         5x/vuh63SElEqPyxY1dP9w/wY4+OmVGxiW/JjNScbLluVLIZQL6mZYcFLhE1p8ks4Opw
-         vExf2bbMMEyQcSWllO2Dmhw75zvw2JdM22IiyUv3tlvkfeBnFs61kEj/TNhrwhFwRdeg
-         nS58D86MGBXpZjajwn6CaBT+fVeZPYqkfsgwctKHUPQDoRJd75XAgxLpuGoO4fXI7B39
-         q7ZXuGxUa1hLgcdhS0nYTysal14THY4mJtaJBKlOlS0Dg1+O8TnznIKyobvv4hk3M1OW
-         EevQ==
-X-Gm-Message-State: ANoB5pljt6Uvqx/DGS+SyXLVM3JU/fjadLxY/bPw3Zd7fA/ccV5n5yVe
-        o+56g0EhSlWcSBi7/0GT1U3MGXMb98JxyA==
-X-Google-Smtp-Source: AA0mqf6fBAwvGqt56oKbe3Lz4ohnPt2TdWkor/DN4WZjNpawqRlRfRgXloX01JLyjKy/pv73ajKMQw==
-X-Received: by 2002:a05:6214:10c1:b0:4bb:e74a:f640 with SMTP id r1-20020a05621410c100b004bbe74af640mr20131742qvs.36.1668590809921;
-        Wed, 16 Nov 2022 01:26:49 -0800 (PST)
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
-        by smtp.gmail.com with ESMTPSA id k1-20020ac81401000000b0035cf31005e2sm8431011qtj.73.2022.11.16.01.26.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 01:26:49 -0800 (PST)
-Received: by mail-yb1-f170.google.com with SMTP id 63so20278654ybq.4;
-        Wed, 16 Nov 2022 01:26:48 -0800 (PST)
-X-Received: by 2002:a25:844b:0:b0:6de:6c43:3991 with SMTP id
- r11-20020a25844b000000b006de6c433991mr19268568ybm.604.1668590808744; Wed, 16
- Nov 2022 01:26:48 -0800 (PST)
+        Wed, 16 Nov 2022 04:27:50 -0500
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5658A1CC
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:27:49 -0800 (PST)
+Received: from fsav312.sakura.ne.jp (fsav312.sakura.ne.jp [153.120.85.143])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 2AG9RkBP048011;
+        Wed, 16 Nov 2022 18:27:47 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav312.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav312.sakura.ne.jp);
+ Wed, 16 Nov 2022 18:27:46 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav312.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 2AG9RkVe048008
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Wed, 16 Nov 2022 18:27:46 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <8a3964bd-41fa-5179-1916-565decd11f50@I-love.SAKURA.ne.jp>
+Date:   Wed, 16 Nov 2022 18:27:45 +0900
 MIME-Version: 1.0
-References: <20221115105135.1180490-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <Y3OgSAnst0qt5WSk@wendy> <CA+V-a8vL5r-xMeCiYRax-dM2Uo0ghgzRiyY99nNn089CjJwoBg@mail.gmail.com>
-In-Reply-To: <CA+V-a8vL5r-xMeCiYRax-dM2Uo0ghgzRiyY99nNn089CjJwoBg@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 16 Nov 2022 10:26:37 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXquU632vu37WkewmashjSxV8f8J6WGawAD4uL3B=6pHA@mail.gmail.com>
-Message-ID: <CAMuHMdXquU632vu37WkewmashjSxV8f8J6WGawAD4uL3B=6pHA@mail.gmail.com>
-Subject: Re: [PATCH 0/3] RZ/Five: Enable ADC/CANFD/I2C/OPP/Thermal Zones/TSU
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [syzbot] INFO: task hung in rfkill_global_led_trigger_worker (2)
+Content-Language: en-US
+To:     Hillf Danton <hdanton@sina.com>,
+        syzbot <syzbot+2e39bc6569d281acbcfb@syzkaller.appspotmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com
+References: <20221116041716.2797-1-hdanton@sina.com>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <20221116041716.2797-1-hdanton@sina.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 7:23 PM Lad, Prabhakar
-<prabhakar.csengg@gmail.com> wrote:
-> On Tue, Nov 15, 2022 at 2:21 PM Conor Dooley <conor.dooley@microchip.com> wrote:
-> > On Tue, Nov 15, 2022 at 10:51:32AM +0000, Prabhakar wrote:
-> > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > >
-> > > Hi All,
-> > >
-> > > This patch series aims to enable support for below blocks
-> > > on RZ/Five SoC/SMARC EVK:
-> > > - ADC
-> > > - CANFD
-> > > - I2C
-> > > - OPP
-> > > - Thermal Zones
-> > > - TSU
-> > >
-> > > Note, patches apply on top of [0].
-> > >
-> > > [0] https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git/log/?h=renesas-riscv-dt-for-v6.2
-> > >
-> > > Cheers,
-> > > Prabhakar
-> > >
-> > > Lad Prabhakar (3):
-> > >   riscv: Kconfig: Enable cpufreq kconfig menu
-> > >   riscv: dts: renesas: r9a07g043f/rzfive-smarc-som: Enable
-> > >     ADC/OPP/Thermal Zones/TSU
-> > >   riscv: dts: renesas: rzfive-smarc: Enable CANFD/I2C
-> >
-> > I know ~nothing about your SoC so idk if the values are correct, but I
-> > did give it a go earlier to see if it did anything warning wise. Seeing
-> > that it didn't cause any I am curious - how come these didn't land in
-> > the original dts? Just waiting for driver stuff to land to support it?
-> >
-> I wanted bare minimal stuff in the initial patchset.
->
-> > Anyway, no new warnings which is what I care about - I suppose that
-> > makes it an acked-by?
-> > Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> > Can include that tag if you like. Either way, nice to see some of the
-> > /delete-node/s etc being removed.
-> >
-> Thanks, Geert should pick the tag while picking the DTS/I patches.
->
-> For the Kconfig patch it needs to go via the RISCV tree or can that be
-> picked by Geert too with the rest of the other patches?
+On 2022/11/16 13:17, Hillf Danton wrote:
+> No deadlock was reported for syz-executor145/4505 and syz-executor145/4516.
+> Why?
 
-IMHO the Kconfig patch (or Conor's earlier version) should go through
-the RISCV tree, as there is no hard dependency.
+Lockdep should be able to report this real deadlock case. But unfortunately,
 
-Yes, I can take it with an Acked-by, if all else fails, but the soc deadline
-is near.
+>> INFO: task syz-executor145:4505 blocked for more than 143 seconds.
+>>       Not tainted 6.1.0-rc5-syzkaller-00008-ge01d50cbd6ee #0
+>> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+>> task:syz-executor145 state:D stack:21896 pid:4505  ppid:3645   flags:0x00004002
+>> 
+>> 2 locks held by syz-executor145/4505:
+>>  #0: ffff88807268e100 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:835 [inline]
+>>  #0: ffff88807268e100 (&dev->mutex){....}-{3:3}, at: nfc_unregister_device+0x87/0x290 net/nfc/core.c:1165
+>>  #1: ffffffff8e787b08 (rfkill_global_mutex){+.+.}-{3:3}, at: rfkill_unregister+0xcb/0x220 net/rfkill/core.c:1130
+>> 
+>> INFO: task syz-executor145:4516 blocked for more than 144 seconds.
+>>       Not tainted 6.1.0-rc5-syzkaller-00008-ge01d50cbd6ee #0
+>> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+>> task:syz-executor145 state:D stack:23096 pid:4516  ppid:3647   flags:0x00004004
+>> 
+>> 2 locks held by syz-executor145/4516:
+>>  #0: ffffffff8e787b08 (rfkill_global_mutex){+.+.}-{3:3}, at: rfkill_fop_write+0x1b3/0x790 net/rfkill/core.c:1278
+>>  #1: ffff88807268e100 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:835 [inline]
+>>  #1: ffff88807268e100 (&dev->mutex){....}-{3:3}, at: nfc_dev_down+0x33/0x260 net/nfc/core.c:143
 
-Gr{oetje,eeting}s,
+device_initialize() hides dev->mutex from lockdep tests; explained at
+https://groups.google.com/g/syzkaller-bugs/c/Uj9LqEUCwac/m/BhdTjWhNAQAJ .
 
-                        Geert
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
