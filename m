@@ -2,74 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEAEA62BC39
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:41:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14C9362BC3E
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:43:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232869AbiKPLlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 06:41:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57092 "EHLO
+        id S238948AbiKPLnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 06:43:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232075AbiKPLlA (ORCPT
+        with ESMTP id S238266AbiKPLmj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 06:41:00 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E827948745
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 03:27:24 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id f7so26085818edc.6
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 03:27:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kBEe6J/PNu7It6u01bJ/j5wrzz9A2Et9pPRKKdqF238=;
-        b=wKRqf5aMNm9bNCbdu6eaIgZgIoh1yCNvlLEhQH230lh5vVDTcpKmcZCOKjEecVjtn2
-         khlY8Rs5d9ss4PsaaGgvMX/Yq2bBtEBuKN+fN6eEgrDSMj4Fwsjs7mHaxlRNZHtTo7PY
-         gfJrFY+oc8Tu8m8wfiR5ZUZ4hMYup7jAZ6PKBlr569E4C+jZmcDMPPOSovnioAJ4Cmmm
-         6o6uUg1dVF+XETc4hnC7fXWyztMAleTleTj0iEZjCNisH3AZCNF7yBbUIWlFq5UgZQyO
-         SLN3HeEM34EESrM7//Q0YbRiVdTnJBeGmUNTqL1bUq+2SZnX6qG47Tq2J0sJiOEOcVkB
-         yekQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=kBEe6J/PNu7It6u01bJ/j5wrzz9A2Et9pPRKKdqF238=;
-        b=ZcgTYAs8fWcs0zUssrxSuAoJzq9ArbiwAwAU+5aakZh8OExVZBARdsqYlhmPNhqymu
-         j24ei9ejfuS5+Rp5liaIgLCTfIANcxbgxBf6PCyIx1kH59VUxZfOo71scej33ijazCEM
-         A2+Q7yuuZQkgtLahKQRwMMj4Ov9OsfupQFqWIW667HvRs1jTzlpJIpuUqufp9+vjGCGX
-         tWIJUpztqHmYzQWG3eeRJZmSJS4itYDIPYjM6ifUl54PYyoUGCvrwPpAc4qdYVcEVMfV
-         Vk98i9eQ/tVzorqIFpNN+89K1iI3+uhJgWLXbaKymnMXuTbUDtubtybE8B5xQLalLH8Z
-         3XmQ==
-X-Gm-Message-State: ANoB5pmS1SgpmCIe7qTH6xp4FzXfKGN9kuDGjcVunSGuzKHC0vF4Nsf1
-        ggAtgoQQEG0g1oxzg0XDddOU9g==
-X-Google-Smtp-Source: AA0mqf6HxpF68fsaUTd4I97V3xidhV6ZuecVnv28Mbb39lbNCcDmXflPXkGeCQzMqVNNDO261WBWxQ==
-X-Received: by 2002:a05:6402:4501:b0:461:ca0f:affc with SMTP id ez1-20020a056402450100b00461ca0faffcmr18234521edb.169.1668598043519;
-        Wed, 16 Nov 2022 03:27:23 -0800 (PST)
-Received: from [192.168.31.208] ([194.29.137.22])
-        by smtp.gmail.com with ESMTPSA id y22-20020a056402171600b0046776f98d0csm6130593edu.79.2022.11.16.03.27.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 03:27:22 -0800 (PST)
-Message-ID: <010238f2-f520-41b8-c2cf-d65e9c12160d@linaro.org>
-Date:   Wed, 16 Nov 2022 12:27:16 +0100
+        Wed, 16 Nov 2022 06:42:39 -0500
+Received: from us-smtp-delivery-115.mimecast.com (us-smtp-delivery-115.mimecast.com [170.10.133.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BFEA5CD1B
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 03:27:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maxlinear.com;
+        s=selector; t=1668598061;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hEuE3CJDaQfluGDDO8Jzwt+RjFUAFltayvSVQj5nhqc=;
+        b=kUBT3ctQrhxjlqoZlVVa8LvxzQuPJgjH53LlIqzV1w5VUkN8w0FG/SdjWzMyYA0IKXe/S2
+        iU3PYTSnhNEsuXRYQMGWsIqaWrIUT1CIDHAYoVbdtC0uBs7StQsgL2BiQY2DST65IS2tBJ
+        QQFRMA7+00ULfphvFh6lG4cAYdsZDD9NJVutdp0vL6x09J5AkSyerO2DaSQ/wZjn6OQ11k
+        DOBW41ucRw4dkqTIFYKrmJG57PwSCemtpuV0ex4fImxhokzVf7g1nxN1JH3XMskChASg7q
+        /mtRSy79mmuoug1pARnBuAQPv1EhrdC0oAxBZeArWS5pL9aQMUpmp4uWw4SLBQ==
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com
+ (mail-bn8nam04lp2044.outbound.protection.outlook.com [104.47.74.44]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-534-88278trJNPiCERzFa9N-yQ-1; Wed, 16 Nov 2022 06:27:40 -0500
+X-MC-Unique: 88278trJNPiCERzFa9N-yQ-1
+Received: from MN2PR19MB3693.namprd19.prod.outlook.com (2603:10b6:208:18a::19)
+ by BLAPR19MB4276.namprd19.prod.outlook.com (2603:10b6:208:27c::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.12; Wed, 16 Nov
+ 2022 11:27:38 +0000
+Received: from MN2PR19MB3693.namprd19.prod.outlook.com
+ ([fe80::3696:7b21:2a3f:1503]) by MN2PR19MB3693.namprd19.prod.outlook.com
+ ([fe80::3696:7b21:2a3f:1503%7]) with mapi id 15.20.5813.018; Wed, 16 Nov 2022
+ 11:27:38 +0000
+From:   Rahul Tanwar <rtanwar@maxlinear.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "robh@kernel.org" <robh@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "alan@lxorguk.ukuu.org.uk" <alan@lxorguk.ukuu.org.uk>,
+        "dirk.brandewie@gmail.com" <dirk.brandewie@gmail.com>,
+        "grant.likely@secretlab.ca" <grant.likely@secretlab.ca>,
+        "sodaville@linutronix.de" <sodaville@linutronix.de>,
+        "devicetree-discuss@lists.ozlabs.org" 
+        <devicetree-discuss@lists.ozlabs.org>,
+        linux-lgm-soc <linux-lgm-soc@maxlinear.com>
+Subject: Re: [PATCH v2 1/2] x86/of: Add support for boot time interrupt
+ delivery mode configuration
+Thread-Topic: [PATCH v2 1/2] x86/of: Add support for boot time interrupt
+ delivery mode configuration
+Thread-Index: AQHY+aYwfQQe9+ocpUuq5OloShaUDK5BXPEAgAAMnwA=
+Date:   Wed, 16 Nov 2022 11:27:38 +0000
+Message-ID: <94efde88-ba30-8155-4561-c6b335fec1a2@maxlinear.com>
+References: <cover.1668589253.git.rtanwar@maxlinear.com>
+ <9114810c7af7fbaf9d0b2823752afcef865bdda0.1668589253.git.rtanwar@maxlinear.com>
+ <Y3S+lLzcmytKHLRq@smile.fi.intel.com>
+In-Reply-To: <Y3S+lLzcmytKHLRq@smile.fi.intel.com>
+Accept-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MN2PR19MB3693:EE_|BLAPR19MB4276:EE_
+x-ms-office365-filtering-correlation-id: 99dfcf94-1160-4afd-f1f1-08dac7c59169
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0
+x-microsoft-antispam-message-info: +NgvzIrW6F6oeDz3nLrw1iq+w9si0ODkT1/D9pwYb3DyORfp1JWBMLQcP3uEJH3OWFCF8cuWQ7gNm704V/4HhfLk7r2TDQiYOqiCO7wNgMvTOSN1xlZfCczG52LuE0Tqxt/kWQIgg/b3fpcluSyqjkph8AT/URkCYATgaKC/jBP9KwwUC9Gzo3zrpORR6IXPZsFvEPHJVfrNmfqLC8T30SFqi+NGm2YjsON7JibHAdUvlDf2W4f+T+gxrpPwvnoVrs1W/GeFU7lgeAndsOMVcBXGuUQshBsqojHFWvHXC+Pm7ntmYy1QsvEc9jmJj0iU2HH9iOn1DiNJscDIjFfDbcoJieG4WNNa8HDbllfRjqef7RnKtMDrPiLZV4WJoJi3pse9yaap4rrurJL5jbbL/zm+QGVQcthU0vNMnrlUdxy7Qm253hgM+N8KXupMMXQnvl+EJV+JFMMi6QXaVfzV8KvuAtK7xGgrQqZ9IdhI67bqbp4vxV4eCstHgGouiaAxio5S3EjycI8sU9RMDz3Exfb4AhsVJZBmgbkbiFvbVUVBHohGJOaaM5fOQZLR0GnzEi5skcrMZxDCf504Y8gIjZkWOxyYGHKzzFg/+aI0PG+0xv1y3D5wLkyBhYaJXd6S3D093NaNd6EJHu4AzpESYk4YjR9yt3G8U5aaLrUmcW/ValhdBndTvLr4989ZZRYcyXcLphBFcK7M1hJ8MitOW4i00CUTQY2TpN8/UlRltbdbiWPtaacDHafWae0Sp7zf0fxgO/Q/sVVc+lSHwePflYIDNln5UsrBstLK0BWxAKhzFv9dYUEGGp6K3ow3V6EQcnbEP8piDnWoPVK0KC84WAnxvAswR0AOUrlw0UTl7d8=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR19MB3693.namprd19.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(376002)(396003)(39850400004)(366004)(451199015)(31686004)(122000001)(38100700002)(36756003)(478600001)(6486002)(966005)(71200400001)(38070700005)(83380400001)(76116006)(31696002)(86362001)(7416002)(107886003)(8936002)(53546011)(5660300002)(186003)(2906002)(66556008)(4326008)(66946007)(8676002)(66446008)(66476007)(64756008)(6506007)(91956017)(26005)(2616005)(6512007)(41300700001)(54906003)(316002)(6916009)(43740500002)(45980500001);DIR:OUT;SFP:1102
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?QnBCQnphQldQQUpGM0dGOE9sWWhMbHI3cG53QnNOL2U3Q1d5Z3NZVHVRSCt3?=
+ =?utf-8?B?UWVDUW00WVJjQURWNFVVWmJQNHlIWTNYYW10RHlMRTlHOFhTZmtjMUpwdmI2?=
+ =?utf-8?B?N3k4a2lHd1NkTUJSVXQrc0NVbVNrRVFnbEwwRTh6OGgyeGJ0YkRGTlpCOWN2?=
+ =?utf-8?B?S0ZNRjhLWUYxenlxakhjcUZqNnJrOWtteCtLMWdxRWg1RTM4aE5XbWdNdmpk?=
+ =?utf-8?B?MzA4M1dQS2RtWkowTE1MVzlDaWN3MmpTaGJCL0o1Q3lwZlphV1BaT21yalV2?=
+ =?utf-8?B?TG4weHpSTGszaVM0NGpDYlBsc1prVldOaEpIMVM1T2dJTjBHelkyVklTWExD?=
+ =?utf-8?B?T0lGNVB2b1o1WnBDeDRCS0twZTh4M2prT0Nnbm1PYW5SNmRXRyttUlhrRWVt?=
+ =?utf-8?B?VXROdnVlaGU3Vyt0bDZxMFc5ZEowdkVMZTV4WXZoNnFyamNORDlmKzNHeW1U?=
+ =?utf-8?B?bHBhQWJLdS95MXVJOUJPRjJKdFptY3NDTUpSVGJ0aXVMMkpQaGZ6R3NjVU9M?=
+ =?utf-8?B?VVEyUDVFSjVpLzRyNCtIK3hQeDZxTm0wNXdPQnVReW9CNFkyVEJOV3hHUSs2?=
+ =?utf-8?B?YldOOENXV2VKOU1RNzFXMlJLVFhuanFmRnk2MDMzWWE5TzdBUnRySlFiTGRF?=
+ =?utf-8?B?N1I2K2tiRmxSVlBEWFowTG55M21xTjdiYnF3cHJWTkVxMHF6eWNPZXpGMUV4?=
+ =?utf-8?B?Y1VPbVhPa0FzSXJTdEtSYy9ITXhwRFRDaysyc1NUdWNqbzJ3Y1ZyME5tbkEr?=
+ =?utf-8?B?ek9ESjlybE9sd0lIOE1BVnhyMzk0WDNxNjdzYjVGM1g0RGZZTksxQ3VSajBK?=
+ =?utf-8?B?a2p5aFoyakg0a1IySTcweVpxekNFb2wxN1NtRCtVMWkwSFpSVGRRV2hHN0VV?=
+ =?utf-8?B?S1lUbDF5NU1JMTl3dlMvWVQweUV0U2xFdXhwS0J4TDQ5NTY1ZG1jemxtVFhx?=
+ =?utf-8?B?SjJacFZsZkJFTk5xL0YyL2dKdkViNUpkYkVaazRKZEwwMCtndUtVa2lySHpN?=
+ =?utf-8?B?VlBoYWk3QVNBZkRFYU9tcytydGxML240bFhZRXNmNW9lb29PakhBZDI4UXVz?=
+ =?utf-8?B?cHFqWHFjRnoyNjFGN29xK0hRRXRDenNHTTYvUTh5cVFtV08zUWloMEJhZEQ0?=
+ =?utf-8?B?c1BEcGovOUpjTkZvN3l6Tkl2TzJTSXNXYkJmR2JwZDdUNVhYZEQ3b09aOUVP?=
+ =?utf-8?B?ZzlJVHRKQ3BDUnF2enhkd2NMNlFKVDlQMnBjZDJhcXhESUMybi9DWDh4enho?=
+ =?utf-8?B?alRzQVBmeUNJMnJEZmM5SWJvbEZxMnNyc0pLc2JHRW1zSnlqTGRBWHRHUnI2?=
+ =?utf-8?B?MW9hMWg5ZXJCK29UYmg2RjdwVGM4QllhclJkd0lUQUZraUt3WFJRVkZ4cVN5?=
+ =?utf-8?B?RjNnZWdVTTJSUFhIWm9wK1o5MWJ4YmhhanZOU2VMaExlbGVGTnRQS25VNU9M?=
+ =?utf-8?B?ODE0VFg4eElqc1lxZW9CcGYzNXFHdmpNaXdRdTl3V2FjNEtjN04rM3R5czQ2?=
+ =?utf-8?B?RGlFdFNDdENRcXhTcmxjSUNpVGpFSkdUUEk2clVMUmFLQ1AvRXp0UExjdi9W?=
+ =?utf-8?B?M0FvOVFQcW1YRndFSEYzZGxsaEw5amRJbUxuK01vcEh6dFNCM3RRenFTTC9x?=
+ =?utf-8?B?bUx5SkhUZlZoMTJKNWU1cGtsbEZMMHJNalZWZTA2aHNWT2FwWGUxVTZxZlhL?=
+ =?utf-8?B?RmJoSDNsNzNsOHpHS2pVUjRMaUVLY1hHdEJqd0RzVUVjMTIzWGxOY3ZRdDRx?=
+ =?utf-8?B?QzU1allBQ2U5Kzd1UUZOSjc2TUZyZ1FNWHFSYUhZbVNqQk5DUXg1WXZndWxW?=
+ =?utf-8?B?Qzl2cXRoQWFvVXg2N1pBZWlhVEFFQVRxbXR4V2NIeHNXNWJNRVJSTHlJNDlj?=
+ =?utf-8?B?U1BMMmNhaExzQm5Vb1FuazNGOWRGWDlQWWEvS2xMUzlReWovcWtCcHpZNmtx?=
+ =?utf-8?B?SnZEblQ0SE44WnlYUnpEZmRzOGVldTYva0s1Y29jWXZZZTZJRXRWL1RNeEY3?=
+ =?utf-8?B?SWYzQ3pLRG9CTGZOa1E1VHFYbm55dlBnZXduZWhhTi85UEN4cVNsTnBlcVp1?=
+ =?utf-8?B?ZjFKSGdVUnhFM3U4cFFHM3QrZ2NVSG9Hc2crWi9lZnBNb0FFSFhxeVJtZ1FL?=
+ =?utf-8?B?b2x0ZGJGZ0psSmxqQStMaXl1UTBBc1h6dFR2U2NOYVNkNXprRmhVTm9aS0V0?=
+ =?utf-8?B?YVE9PQ==?=
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.2
-Subject: Re: [PATCH 7/9] clk: qcom: rpmh: Add support for SM8550 rpmh clocks
-To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org
-References: <20221116104716.2583320-1-abel.vesa@linaro.org>
- <20221116104716.2583320-8-abel.vesa@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221116104716.2583320-8-abel.vesa@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: maxlinear.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR19MB3693.namprd19.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 99dfcf94-1160-4afd-f1f1-08dac7c59169
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Nov 2022 11:27:38.8002
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: dac28005-13e0-41b8-8280-7663835f2b1d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: hDmGFJy+tD8icj2COfFvT83GXQs6nwyc+y6wqwW6NMuZW0GIZzpW3caGLHUN8YTqSjnG59oJ5FGrc7qhMoTrBQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR19MB4276
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: maxlinear.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-ID: <7F3A50DB1B8F7144B68A85DF99893410@namprd19.prod.outlook.com>
+Content-Transfer-Encoding: base64
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -79,155 +149,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+T24gMTYvMTEvMjAyMiA2OjQyIHBtLCBBbmR5IFNoZXZjaGVua28gd3JvdGU6DQo+IFRoaXMgZW1h
+aWwgd2FzIHNlbnQgZnJvbSBvdXRzaWRlIG9mIE1heExpbmVhci4NCj4gDQo+IE9uIFdlZCwgTm92
+IDE2LCAyMDIyIGF0IDA2OjI4OjIwUE0gKzA4MDAsIFJhaHVsIFRhbndhciB3cm90ZToNCj4gID4g
+UHJlc2VudGx5LCBpbml0L2Jvb3QgdGltZSBpbnRlcnJ1cHQgZGVsaXZlcnkgbW9kZSBpcyBlbnVt
+ZXJhdGVkDQo+ICA+IG9ubHkgZm9yIEFDUEkgZW5hYmxlZCBzeXN0ZW1zIGJ5IHBhcnNpbmcgTUFE
+VCB0YWJsZSBvciBmb3Igb2xkZXINCj4gID4gc3lzdGVtcyBieSBwYXJzaW5nIE1QIHRhYmxlLiBC
+dXQgZm9yIE9GIGJhc2VkIHg4NiBzeXN0ZW1zLCBpdCBpcw0KPiAgPiBhc3N1bWVkICYgaGFyZGNv
+ZGVkIHRvIGxlZ2FjeSBQSUMgbW9kZS4gVGhpcyBpcyBhIGJ1ZyBmb3INCj4gID4gcGxhdGZvcm1z
+IHdoaWNoIGFyZSBPRiBiYXNlZCBidXQgZG8gbm90IHVzZSA4MjU5IGNvbXBsaWFudCBsZWdhY3kN
+Cj4gID4gUElDIGludGVycnVwdCBjb250cm9sbGVyLiBTdWNoIHBsYXRmb3JtcyBjYW4gbm90IGV2
+ZW4gYm9vdCBiZWNhdXNlDQo+ICA+IG9mIHRoaXMgYnVnL2hhcmRjb2RpbmcuDQo+ICA+DQo+ICA+
+IEZpeCB0aGlzIGJ1ZyBieSBhZGRpbmcgc3VwcG9ydCBmb3IgY29uZmlndXJhdGlvbiBvZiBpbml0
+IHRpbWUNCj4gID4gaW50ZXJydXB0IGRlbGl2ZXJ5IG1vZGUgZm9yIHg4NiBPRiBiYXNlZCBzeXN0
+ZW1zIGJ5IGludHJvZHVjaW5nIGENCj4gID4gbmV3IG9wdGlvbmFsIGJvb2xlYW4gcHJvcGVydHkg
+J2ludGVsLHZpcnR1YWwtd2lyZS1tb2RlJyBmb3INCj4gID4gaW50ZXJydXB0LWNvbnRyb2xsZXIg
+bm9kZSBvZiBsb2NhbCBBUElDLiBUaGlzIHByb3BlcnR5IGVtdWxhdGVzDQo+ICA+IElNQ1JQIEJp
+dCA3IG9mIE1QIGZlYXR1cmUgaW5mbyBieXRlIDIgb2YgTVAgZmxvYXRpbmcgcG9pbnRlcg0KPiAg
+PiBzdHJ1Y3R1cmUgWzFdLg0KPiAgPg0KPiAgPiBEZWZhdWx0cyB0byBsZWdhY3kgUElDIG1vZGUg
+aWYgYWJzZW50LiBDb25maWd1cmVzIGl0IHRvIHZpcnR1YWwNCj4gID4gd2lyZSBjb21wYXRpYmls
+aXR5IG1vZGUgaWYgcHJlc2VudC4NCj4gDQo+ICA+IFsxXSANCj4gaHR0cHM6Ly93d3cubWFudWFs
+c2xpYi5jb20vbWFudWFsLzc3NzMzL0ludGVsLU11bHRpcHJvY2Vzc29yLmh0bWw/cGFnZT00MCNt
+YW51YWwgPGh0dHBzOi8vd3d3Lm1hbnVhbHNsaWIuY29tL21hbnVhbC83NzczMy9JbnRlbC1NdWx0
+aXByb2Nlc3Nvci5odG1sP3BhZ2U9NDAjbWFudWFsPg0KPiANCj4gTGluazogPw0KPiANCj4gLi4u
+DQo+IA0KPiAgPiArIGlmIChvZl9wcm9wZXJ0eV9yZWFkX2Jvb2woZG4sICJpbnRlbCx2aXJ0dWFs
+LXdpcmUtbW9kZSIpKSB7DQo+IA0KPiBZb3UgbmVlZCBhIHNlcGFyYXRlIHBhdGNoIHRvIHNob3cg
+dGhpcyBwcm9wZXJ0eSBiZWluZyBhZGRlZCAoeWVzLA0KPiBJIGhhdmUganVzdCBjb21tZW50ZWQg
+b24geW91ciBwYXRjaCAyKS4NCj4NCg0KV2VsbCBub3RlZCBhYm91dCBpdC4gV2lsbCB1cGRhdGUu
+IFRoYW5rcy4NCg0KUmVnYXJkcywNClJhaHVsDQoNCg0KPiAgPiArIHByaW50ayhLRVJOX05PVElD
+RSAiVmlydHVhbCBXaXJlIGNvbXBhdGliaWxpdHkgbW9kZS5cbiIpOw0KPiAgPiArIHBpY19tb2Rl
+ID0gMDsNCj4gID4gKyB9IGVsc2Ugew0KPiAgPiArIHByaW50ayhLRVJOX05PVElDRSAiSU1DUiBh
+bmQgUElDIGNvbXBhdGliaWxpdHkgbW9kZS5cbiIpOw0KPiAgPiArIHBpY19tb2RlID0gMTsNCj4g
+DQo+IFdoeSBub3QgcHJfbm90aWNlKCkgaW4gYm90aCBjYXNlcz8NCj4gDQo+ICA+ICsgfQ0KPiAN
+Cj4gLS0gDQo+IFdpdGggQmVzdCBSZWdhcmRzLA0KPiBBbmR5IFNoZXZjaGVua28NCj4gDQoNCg==
 
-
-On 16/11/2022 11:47, Abel Vesa wrote:
-> Adds the RPMH clocks present in SM8550 SoC.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
->   drivers/clk/qcom/clk-rpmh.c | 110 +++++++++++++++++++++++++++++-------
->   1 file changed, 90 insertions(+), 20 deletions(-)
-> 
-> diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
-> index 1da45a6e2f29..63975490ab54 100644
-> --- a/drivers/clk/qcom/clk-rpmh.c
-> +++ b/drivers/clk/qcom/clk-rpmh.c
-> @@ -579,6 +579,73 @@ static const struct clk_rpmh_desc clk_rpmh_sm8450 = {
->   	.num_clks = ARRAY_SIZE(sm8450_rpmh_clocks),
->   };
->   
-> +#define DEFINE_CLK_RPMH_FIXED(_platform, _name, _name_active,	\
-> +				  _parent_name, _name_active_parent,	\
-> +				  _div)					\
-> +	static struct clk_fixed_factor _platform##_##_name = {		\
-> +		.mult = 1,						\
-> +		.div = _div,						\
-> +		.hw.init = &(struct clk_init_data){			\
-> +			.ops = &clk_fixed_factor_ops,			\
-> +			.name = #_name,					\
-> +			.parent_data =  &(const struct clk_parent_data){ \
-> +					.fw_name = #_parent_name,	\
-> +					.name = #_parent_name,		\
-No need to introduce .name if we do DT properly from the get-go, I think
-
-
-Konrad
-> +			},						\
-> +			.num_parents = 1,				\
-> +		},							\
-> +	};								\
-> +	static struct clk_fixed_factor _platform##_##_name_active = {	\
-> +		.mult = 1,						\
-> +		.div = _div,						\
-> +		.hw.init = &(struct clk_init_data){			\
-> +			.ops = &clk_fixed_factor_ops,			\
-> +			.name = #_name_active,				\
-> +			.parent_data =  &(const struct clk_parent_data){ \
-> +					.fw_name = #_name_active_parent,\
-> +					.name = #_name_active_parent,	\
-> +			},						\
-> +			.num_parents = 1,				\
-> +		},							\
-> +	}
-> +
-> +DEFINE_CLK_RPMH_ARC(sm8550, xo_pad, xo_pad_ao, "xo.lvl", 0x03, 2);
-> +DEFINE_CLK_RPMH_FIXED(sm8550, bi_tcxo, bi_tcxo_ao, xo_pad, xo_pad_ao, 2);
-> +DEFINE_CLK_RPMH_VRM(sm8550, rf_clk1, rf_clk1_ao, "clka1", 1);
-> +DEFINE_CLK_RPMH_VRM(sm8550, rf_clk2, rf_clk2_ao, "clka2", 1);
-> +DEFINE_CLK_RPMH_VRM(sm8550, rf_clk3, rf_clk3_ao, "clka3", 1);
-> +DEFINE_CLK_RPMH_VRM(sm8550, rf_clk4, rf_clk4_ao, "clka4", 1);
-> +DEFINE_CLK_RPMH_VRM(sm8550, ln_bb_clk1, ln_bb_clk1_ao, "clka6", 2);
-> +DEFINE_CLK_RPMH_VRM(sm8550, ln_bb_clk2, ln_bb_clk2_ao, "clka7", 2);
-> +DEFINE_CLK_RPMH_VRM(sm8550, ln_bb_clk3, ln_bb_clk3_ao, "clka8", 2);
-> +
-> +static struct clk_hw *sm8550_rpmh_clocks[] = {
-> +	[RPMH_CXO_PAD_CLK]      = &sm8550_xo_pad.hw,
-> +	[RPMH_CXO_PAD_CLK_A]    = &sm8550_xo_pad_ao.hw,
-> +	[RPMH_CXO_CLK]		= &sm8550_bi_tcxo.hw,
-> +	[RPMH_CXO_CLK_A]	= &sm8550_bi_tcxo_ao.hw,
-> +	[RPMH_LN_BB_CLK1]	= &sm8550_ln_bb_clk1.hw,
-> +	[RPMH_LN_BB_CLK1_A]	= &sm8550_ln_bb_clk1_ao.hw,
-> +	[RPMH_LN_BB_CLK2]	= &sm8550_ln_bb_clk2.hw,
-> +	[RPMH_LN_BB_CLK2_A]	= &sm8550_ln_bb_clk2_ao.hw,
-> +	[RPMH_LN_BB_CLK3]	= &sm8550_ln_bb_clk3.hw,
-> +	[RPMH_LN_BB_CLK3_A]	= &sm8550_ln_bb_clk3_ao.hw,
-> +	[RPMH_RF_CLK1]		= &sm8550_rf_clk1.hw,
-> +	[RPMH_RF_CLK1_A]	= &sm8550_rf_clk1_ao.hw,
-> +	[RPMH_RF_CLK2]		= &sm8550_rf_clk2.hw,
-> +	[RPMH_RF_CLK2_A]	= &sm8550_rf_clk2_ao.hw,
-> +	[RPMH_RF_CLK3]		= &sm8550_rf_clk3.hw,
-> +	[RPMH_RF_CLK3_A]	= &sm8550_rf_clk3_ao.hw,
-> +	[RPMH_RF_CLK4]		= &sm8550_rf_clk4.hw,
-> +	[RPMH_RF_CLK4_A]	= &sm8550_rf_clk4_ao.hw,
-> +	[RPMH_IPA_CLK]		= &sdm845_ipa.hw,
-> +};
-> +
-> +static const struct clk_rpmh_desc clk_rpmh_sm8550 = {
-> +	.clks = sm8550_rpmh_clocks,
-> +	.num_clks = ARRAY_SIZE(sm8550_rpmh_clocks),
-> +};
-> +
->   static struct clk_hw *sc7280_rpmh_clocks[] = {
->   	[RPMH_CXO_CLK]      = &sc7280_bi_tcxo.hw,
->   	[RPMH_CXO_CLK_A]    = &sc7280_bi_tcxo_ao.hw,
-> @@ -694,29 +761,31 @@ static int clk_rpmh_probe(struct platform_device *pdev)
->   
->   		name = hw_clks[i]->init->name;
->   
-> -		rpmh_clk = to_clk_rpmh(hw_clks[i]);
-> -		res_addr = cmd_db_read_addr(rpmh_clk->res_name);
-> -		if (!res_addr) {
-> -			dev_err(&pdev->dev, "missing RPMh resource address for %s\n",
-> -				rpmh_clk->res_name);
-> -			return -ENODEV;
-> -		}
-> +		if (hw_clks[i]->init->ops != &clk_fixed_factor_ops) {
-> +			rpmh_clk = to_clk_rpmh(hw_clks[i]);
-> +			res_addr = cmd_db_read_addr(rpmh_clk->res_name);
-> +			if (!res_addr) {
-> +				dev_err(&pdev->dev, "missing RPMh resource address for %s\n",
-> +					rpmh_clk->res_name);
-> +				return -ENODEV;
-> +			}
->   
-> -		data = cmd_db_read_aux_data(rpmh_clk->res_name, &aux_data_len);
-> -		if (IS_ERR(data)) {
-> -			ret = PTR_ERR(data);
-> -			dev_err(&pdev->dev,
-> -				"error reading RPMh aux data for %s (%d)\n",
-> -				rpmh_clk->res_name, ret);
-> -			return ret;
-> -		}
-> +			data = cmd_db_read_aux_data(rpmh_clk->res_name, &aux_data_len);
-> +			if (IS_ERR(data)) {
-> +				ret = PTR_ERR(data);
-> +				dev_err(&pdev->dev,
-> +					"error reading RPMh aux data for %s (%d)\n",
-> +					rpmh_clk->res_name, ret);
-> +				return ret;
-> +			}
->   
-> -		/* Convert unit from Khz to Hz */
-> -		if (aux_data_len == sizeof(*data))
-> -			rpmh_clk->unit = le32_to_cpu(data->unit) * 1000ULL;
-> +			/* Convert unit from Khz to Hz */
-> +			if (aux_data_len == sizeof(*data))
-> +				rpmh_clk->unit = le32_to_cpu(data->unit) * 1000ULL;
->   
-> -		rpmh_clk->res_addr += res_addr;
-> -		rpmh_clk->dev = &pdev->dev;
-> +			rpmh_clk->res_addr += res_addr;
-> +			rpmh_clk->dev = &pdev->dev;
-> +		}
->   
->   		ret = devm_clk_hw_register(&pdev->dev, hw_clks[i]);
->   		if (ret) {
-> @@ -752,6 +821,7 @@ static const struct of_device_id clk_rpmh_match_table[] = {
->   	{ .compatible = "qcom,sm8250-rpmh-clk", .data = &clk_rpmh_sm8250},
->   	{ .compatible = "qcom,sm8350-rpmh-clk", .data = &clk_rpmh_sm8350},
->   	{ .compatible = "qcom,sm8450-rpmh-clk", .data = &clk_rpmh_sm8450},
-> +	{ .compatible = "qcom,sm8550-rpmh-clk", .data = &clk_rpmh_sm8550},
->   	{ .compatible = "qcom,sc7280-rpmh-clk", .data = &clk_rpmh_sc7280},
->   	{ }
->   };
