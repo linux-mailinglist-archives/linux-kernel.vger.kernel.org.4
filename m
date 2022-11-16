@@ -2,75 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7274362B6AA
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:38:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34B2C62B6AD
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:38:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233682AbiKPJiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 04:38:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55604 "EHLO
+        id S232614AbiKPJiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 04:38:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232614AbiKPJiE (ORCPT
+        with ESMTP id S238008AbiKPJiR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 04:38:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBCA3D13B;
-        Wed, 16 Nov 2022 01:38:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 82B1661B3C;
-        Wed, 16 Nov 2022 09:38:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC770C433C1;
-        Wed, 16 Nov 2022 09:38:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668591482;
-        bh=jq4Sq7lYxlLmxmVfQimbqudfPqziyGm+FvZJ7JxXJPk=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=KqHMfkzskEESogcbsk1/87DM90Ae/VvO7LsB/sjJ5f6xpLRdgYoJ/QB+OyNJux2MM
-         4imwQBOLj817FtgWEVMyPoFyiFINfdFP7DrUr6txzphU40ZFPjhVW/IZ6V7lGP7vd4
-         25mFE40bst9zU6OSj42i59jIYXGa01an9G5aKDsEOie6pqbHKA/+koRnFU3NQR/bpT
-         lAWqYBRHoXtrn1Demz8FVK9YI/02trDns7hcEJPb/zHv1tSLovnCoxwfElri6jUpSS
-         jCq7V/W8hjmRIAFw/byd+m0REIJ/0FYatzlLLhASWvQO1BARoChKfXt/9eioL/hEkt
-         Z0dOtfi/u7MMg==
-Content-Type: text/plain; charset="utf-8"
+        Wed, 16 Nov 2022 04:38:17 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FD2423EBA
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:38:16 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id b11so16044897pjp.2
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:38:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ED3dVZVhTXurH9uVn9Km9+qzSuteSy+hO2CW2MEdWTU=;
+        b=I/7hBPwo37uWwdiPvScqp5Wub/IybcuswDPzUWm8rPIFGRsJNEuTVzrGQec8Ow/l/d
+         aKnmhZEjWitb73ekE3JC0wqz1Oep1X0J2fzqil9JzjWCl3ue1ogO8l8x0Nrp0Y3vebvA
+         HFfs+KKvymqM4vfSpUHJQ/C8Ga7T3aTpHhqukRCmkCDrYDZFBuCnjK0du8NuQRg+alzJ
+         i5tjHe9Y5bMNOUAwOjs+QWG+c2OtcYzs4E09M+1P90Lg3JgRx2+/lIppdhPFqVVL/HLg
+         hiOawDrc9p4LqIRHMEKakCa77RJmZq5YG8kly2mNrLV/9e74LnZ6CGCWYdbcJoyX0ZsG
+         BzDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ED3dVZVhTXurH9uVn9Km9+qzSuteSy+hO2CW2MEdWTU=;
+        b=MWe/NSiCS/UDpKoRTYeywljVqwBy9znwJU3u3mXjk4WCzFsfnaw1dDKMsVhAK59IaE
+         aQDmcnxOA0xKO8v2BuSEDjDGcpAZ0J2Q33elpJ9ubIrzH2aTmBZji2jQL/ErzwgZrK74
+         YQk22ACKZx8v9LEeSwJ4/hIonVqgoKWUgSKoBrZCUyULNUkM4Mk5zAMiLmjCErtBvxAw
+         GPvil17dAfVvSjDAz77V3CrnQF5sA+3wi1jHANVffi9vFDV6pk8TbefTM0MpjqEt67ph
+         lnDn3pyngeR3R8CunDcjAdTVU8GrzKn9MbRfglD+Mc/A/EUtZ2OXhln3Kewj6Gu8AwtR
+         lSVQ==
+X-Gm-Message-State: ANoB5pnU0D7hsGnAi+WwKJePkqOvyKdNXg63ooK1J1RUbP8TSzmdJdmh
+        IR+Q+x77OOQVEoHc/ZK3/rKoQw==
+X-Google-Smtp-Source: AA0mqf6mO/o9kgca96vOeZ6qwUazWfcWU/RyXDHE4Gy+8A40ZFbYqCJCwRW5uzjdX4dDB5SHOuDr3A==
+X-Received: by 2002:a17:902:b694:b0:187:337a:b2a1 with SMTP id c20-20020a170902b69400b00187337ab2a1mr8336586pls.96.1668591495172;
+        Wed, 16 Nov 2022 01:38:15 -0800 (PST)
+Received: from [10.68.76.92] ([139.177.225.229])
+        by smtp.gmail.com with ESMTPSA id e24-20020a63f558000000b00470275c8d6dsm9012484pgk.10.2022.11.16.01.38.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Nov 2022 01:38:14 -0800 (PST)
+Message-ID: <0445de39-15a4-f645-b380-39f20abb6524@bytedance.com>
+Date:   Wed, 16 Nov 2022 17:38:09 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [External] Re: [PATCH v2] mm: add new syscall
+ pidfd_set_mempolicy().
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     corbet@lwn.net, mhocko@suse.com, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org
+References: <20221111084051.2121029-1-hezhongkun.hzk@bytedance.com>
+ <87zgcrwfac.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   Zhongkun He <hezhongkun.hzk@bytedance.com>
+In-Reply-To: <87zgcrwfac.fsf@yhuang6-desk2.ccr.corp.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v2 1/3] ARM: OMAP2+: pdata-quirks: stop including wl12xx.h
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20221109224250.2885119-1-dmitry.torokhov@gmail.com>
-References: <20221109224250.2885119-1-dmitry.torokhov@gmail.com>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Tony Lindgren <tony@atomide.com>, linux-wireless@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <166859147683.17701.10193347639724464036.kvalo@kernel.org>
-Date:   Wed, 16 Nov 2022 09:38:01 +0000 (UTC)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dmitry Torokhov <dmitry.torokhov@gmail.com> wrote:
+Hi Ying, thanks for your replay and suggestions.
 
-> As of commit 2398c41d6432 ("omap: pdata-quirks: remove openpandora
-> quirks for mmc3 and wl1251") the code no longer creates an instance of
-> wl1251_platform_data, so there is no need for including this header.
 > 
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Acked-by: Tony Lindgren <tony@atomide.com>
+> I suggest to move the flags in "mode" parameter (MPOL_F_STATIC_NODES,
+> MPOL_F_RELATIVE_NODES, MPOL_F_NUMA_BALANCING, etc.) to "flags"
+> parameter, otherwise, why add it?
 
-3 patches applied to wireless-next.git, thanks.
+The "flags" is used for future extension if any, just like
+process_madvise() and set_mempolicy_home_node().
+Maybe it should be removed.
 
-e14e4c933e00 ARM: OMAP2+: pdata-quirks: stop including wl12xx.h
-06463f6e98df wifi: wl1251: drop support for platform data
-a1d0b9535cd8 wifi: wl1251: switch to using gpiod API
+> 
+> And, how about add a "home_node" parameter?  I don't think that it's a
+> good idea to add another new syscall for pidfd_set_mempolicy_home_node()
+> in the future.
+> 
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20221109224250.2885119-1-dmitry.torokhov@gmail.com/
+Good idea, but "home_node" is used for vma policy, not task policy.
+It is possible to use it in pidfd_mbind() in the future.
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+> 
+> IMHO, "The first four APIS" and "The last one" isn't easy to be
+> understood.  How about
+> 
+> "sys_pidfd_set_mempolicy sets the mempolicy of task specified in the
+> pidfd, the others affect only the calling task, ...".
+> 
 
+Got it.
+
+> 
+> Why add "sys_"?  I fount that there's no "sys_" before set_mempolicy()/mbind() etc.
+> 
+
+Got it.
+
+>> +void mpol_put_async(struct task_struct *task, struct mempolicy *p)
+> 
+> How about change __mpol_put() directly?
+
+> 
+> Why can we fall back to freeing directly if task_work_add() failed?
+> Should we check the return code and fall back only if -ESRCH and WARN
+> for other cases?
+> 
+
+A task_work based solution has not been accepted yet, it will be 
+considered later if needed.
+
+
+>> +	}
+> 
+> Why do we need to write lock mmap_sem?  IIUC, we don't touch vma.
+> 
+
+Yes, it should be removed.
+
+>>   /*
+> 
+> Because we will change task_struct->mempolicy in another task, we need
+> to use kind of "load acquire" / "store release" memory order.  For
+> example, rcu_dereference() / rcu_assign_pointer(), etc.
+> 
+Thanks again for your suggestion.
+
+Best Regards,
+Zhongkun
