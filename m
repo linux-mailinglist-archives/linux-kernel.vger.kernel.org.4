@@ -2,103 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CD2662C579
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 17:54:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17E0762C586
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 17:55:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234356AbiKPQyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 11:54:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35670 "EHLO
+        id S234445AbiKPQzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 11:55:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234599AbiKPQxf (ORCPT
+        with ESMTP id S234881AbiKPQzR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 11:53:35 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9ACC1172
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 08:51:52 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id ud5so45605074ejc.4
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 08:51:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NvbONARSsIDwCwSEYkMMo3k5hneuUpgwVcRn4D9nR5g=;
-        b=ciFME/0QGrxCsZv8RfK4lRHAp9GK4NlACjARkh4aKKI1x0jFQaIdqYgQ6/x20tKuul
-         3NHLAuroG6YC3hCdeWpMMIcts9K7avaIFFv8x/nCfHkGnnLsCJ2LP/69YQJTqSMPOwLV
-         bf13ujJuuX4J2w9Gw7MzG+DziM5T5Jr2z0eEs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NvbONARSsIDwCwSEYkMMo3k5hneuUpgwVcRn4D9nR5g=;
-        b=XqCxTyaVCeji780G+1BtcUGP934b4Jk2q7qJ3BKjqW9mIsjkMAW+/5UyGADdqw5DhJ
-         HxDyXNcUc/MDiNq2dN+IfZCJvhQBeGiND6OBnv4R0m3Xr9owiINHG5DArmsJDFFMK1JG
-         uAOq61A48e2PTDvkCytVNkL7gNvX3dPzod1U8UhIVUUbo6EmWO77iIVTlEtt3kiCN4PM
-         c6x0RoGa4jk/qbbzvXMaIXsN9C9aDyPLpiAbw7XabyDe7TVql0Pm1TK3O6/2PEI+h87F
-         IWDiyGX/Es/rNuqlFmG1gSC7lL/ZlU1dRclB0QIraeN2MPRJzBxrypJktiKA58q6vZYM
-         vv+g==
-X-Gm-Message-State: ANoB5pkV0IkM8bsh2aZOl4ePUZCEF4gNFeNbVbcH9+qo6N4j1W2dQsUs
-        Wu30Unp2PW/UUGwy9OSt9DrBMwKDEma4OMp6
-X-Google-Smtp-Source: AA0mqf4Bw8nw8n1HooeSBCjX6J6DyDddKuc56g3OVBpVk/T7PpKJfA5L5vRui4alxqO6eBuh/aQ1Ng==
-X-Received: by 2002:a17:907:8b0d:b0:78d:857d:b4a8 with SMTP id sz13-20020a1709078b0d00b0078d857db4a8mr17435356ejc.495.1668617511012;
-        Wed, 16 Nov 2022 08:51:51 -0800 (PST)
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com. [209.85.128.51])
-        by smtp.gmail.com with ESMTPSA id jz22-20020a17090775f600b0073dc4385d3bsm7045645ejc.105.2022.11.16.08.51.41
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 08:51:45 -0800 (PST)
-Received: by mail-wm1-f51.google.com with SMTP id 5so12329942wmo.1
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 08:51:41 -0800 (PST)
-X-Received: by 2002:a05:600c:4148:b0:3cf:7716:8954 with SMTP id
- h8-20020a05600c414800b003cf77168954mr2774825wmm.57.1668617501480; Wed, 16 Nov
- 2022 08:51:41 -0800 (PST)
-MIME-Version: 1.0
-References: <1668591184-21099-1-git-send-email-quic_srivasam@quicinc.com>
-In-Reply-To: <1668591184-21099-1-git-send-email-quic_srivasam@quicinc.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 16 Nov 2022 08:51:29 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=Uzky4uxs+qwSH9d7MBBWbXe8sMdvB_-Lqkq+6jbTCciQ@mail.gmail.com>
-Message-ID: <CAD=FV=Uzky4uxs+qwSH9d7MBBWbXe8sMdvB_-Lqkq+6jbTCciQ@mail.gmail.com>
-Subject: Re: [PATCH v2] arm64: dts: qcom: sc7280: Remove unused sleep pin
- control nodes
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Cc:     vkoul@kernel.org, agross@kernel.org, andersson@kernel.org,
-        robh+dt@kernel.org, broonie@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_rohkumar@quicinc.com, srinivas.kandagatla@linaro.org,
-        swboyd@chromium.org, judyhsiao@chromium.org,
-        alsa-devel@alsa-project.org, quic_rjendra@quicinc.com,
-        konrad.dybcio@somainline.org, mka@chromium.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Wed, 16 Nov 2022 11:55:17 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD6574C275;
+        Wed, 16 Nov 2022 08:54:29 -0800 (PST)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AGGfGtg010470;
+        Wed, 16 Nov 2022 16:54:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=aqZW4skJIW0nfSiVSoLe7Vw4B/k5hMwSdTc7CX1lIx4=;
+ b=WvYphjuJzgjqxvZmmJyexhMUD6m9YnZUScjSyxB/poWro2tDYvpvCCJfgXT3sH7OVqkv
+ 9+w+tENqabf4OjK3CiGtuU+aMx2d1EBh1Y5K5jcVAaD8VpVLYqfKHBu3b1T29JnhMCK+
+ /CN6cn6JhHs0xQ9GTDo1GU3Gma+rFTjp++TWjm50t7mEdTfc0FW6/86Di930qWxR9VOM
+ is77L63aigE4mGrwF63jaw5vttEDIzczenaQhXnnWZjB6zuixta6dP41g97RV6PMDfD9
+ AoWl9CHuP0b5928Dl+axY/h7DHtWtTl98wfQEf0u6hn+6UfrMKO9GJnDt7FyOSzLISiA DA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kw3ktgbdx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Nov 2022 16:54:10 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AGGgbu7018969;
+        Wed, 16 Nov 2022 16:54:09 GMT
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kw3ktgbdc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Nov 2022 16:54:09 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AGGokPB007689;
+        Wed, 16 Nov 2022 16:54:09 GMT
+Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
+        by ppma03wdc.us.ibm.com with ESMTP id 3kt34abppg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Nov 2022 16:54:09 +0000
+Received: from smtpav01.wdc07v.mail.ibm.com ([9.208.128.113])
+        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AGGs7M458982778
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 16 Nov 2022 16:54:08 GMT
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C44625804B;
+        Wed, 16 Nov 2022 16:54:07 +0000 (GMT)
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BF1D858065;
+        Wed, 16 Nov 2022 16:54:06 +0000 (GMT)
+Received: from sig-9-77-134-48.ibm.com (unknown [9.77.134.48])
+        by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 16 Nov 2022 16:54:06 +0000 (GMT)
+Message-ID: <a50ddd918933b1a5b181aeb6b30301f78eefa192.camel@linux.ibm.com>
+Subject: Re: [PATCH v2] integrity: Fix memory leakage in keyring allocation
+ error path
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     GUO Zihua <guozihua@huawei.com>, dmitry.kasatkin@gmail.com
+Cc:     paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 16 Nov 2022 11:53:56 -0500
+In-Reply-To: <20221111101317.5468-1-guozihua@huawei.com>
+References: <20221111101317.5468-1-guozihua@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: GMLEYYsFpfuBDeyNhtve6gYEKzz-Ktp4
+X-Proofpoint-ORIG-GUID: FHy31tJ5l9TrBVxrpO2_F_ep6KoAdHKv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-16_03,2022-11-16_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ impostorscore=0 adultscore=0 mlxlogscore=849 lowpriorityscore=0
+ spamscore=0 phishscore=0 suspectscore=0 clxscore=1015 bulkscore=0
+ mlxscore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2210170000 definitions=main-2211160115
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, 2022-11-11 at 18:13 +0800, GUO Zihua wrote:
+> Key restriction is alloced in integrity_init_keyring(). However, if
+> keyring allocation failed, it is not freed, causing memory leaks.
+> 
+> Fixes: 2b6aa412ff23 ("KEYS: Use structure to capture key restriction function and data")
+> Signed-off-by: GUO Zihua <guozihua@huawei.com>
 
-On Wed, Nov 16, 2022 at 1:33 AM Srinivasa Rao Mandadapu
-<quic_srivasam@quicinc.com> wrote:
->
-> Remove unused and redundant sleep pin control entries as they are
-> not referenced anywhere in sc7280 based platform's device tree variants.
->
-> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> ---
-> Chnges Since v1:
->     -- Update subject prefixes and commit message.
->
->  .../qcom/sc7280-herobrine-audio-rt5682-3mic.dtsi   |  8 -----
->  .../dts/qcom/sc7280-herobrine-audio-wcd9385.dtsi   | 20 -----------
->  arch/arm64/boot/dts/qcom/sc7280-idp.dtsi           | 20 -----------
->  arch/arm64/boot/dts/qcom/sc7280.dtsi               | 40 ----------------------
->  4 files changed, 88 deletions(-)
+Thanks, applied.
 
-Reported-by: Douglas Anderson <dianders@chromium.org>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Mimi
+
