@@ -2,188 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E13962CD94
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 23:24:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 106D462CD97
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 23:24:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234524AbiKPWYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 17:24:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46150 "EHLO
+        id S234554AbiKPWYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 17:24:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238781AbiKPWYV (ORCPT
+        with ESMTP id S234852AbiKPWYY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 17:24:21 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE326AEF2
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 14:24:16 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id q71so229421pgq.8
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 14:24:16 -0800 (PST)
+        Wed, 16 Nov 2022 17:24:24 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23AB205E7
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 14:24:22 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id p21so17757218plr.7
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 14:24:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QGkcU8bsAXTracYvItbCwnniUSLgMtAC897scf+9ddo=;
-        b=Yb4wKwuTq8SDmbVGc+P7ahM8KCEiEG3EeQYJnIBy43Yu4s+iC+yGjvQgmVRoCCNQD4
-         bFiXa2DlOoj+M6COODORifyN82jIJfcy0aF0ZJtT8PTph1kJcj2QMeh/X+0txTmE1L9e
-         vjCm/+n4/Ca01rOL6VyR5fbnbwtckm/wl6rnzgA+2U9G86s1X+WQKo3mRqwdqt/NZj4i
-         P3BxQwhuIeyDfA8UssWFkeXvKFbx/BZ4epGrEEpau+te7+rSV+HSw5cBzmIPmEEBr4ge
-         1bl1xkBDMVGhMoLkvC/hKl/ZnG4RNCOpP9NsjFm/3oC6Zxx7zYxZx28Lz46N2hnBOT/Z
-         8NoA==
+        bh=uMDsmZ/IUw7ru/rt5ERiFe4h7p8p+vkqkxTomonVF6U=;
+        b=Ix1YKinoAhe3dCxswHWHCc1RxI3t4TMEkO/tpVvs6L1nHRzFVWJ1jiWjP+mJCbVw6D
+         6cdZn99JYKZn/qPn/eEwTN9HCAqccYjxeioI/WFfk+JSo4sCnlXfSewPaqlEEaXBjLo6
+         KH5nh8tZtaLN1LjwEUxtUFA5hkxqW/aIU0kVQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QGkcU8bsAXTracYvItbCwnniUSLgMtAC897scf+9ddo=;
-        b=iPdrOmJ+ESGL8+WqpjRq1F1OwJSSyVA/pz5pnUD4hy6qswuh0Yi03v4wlOmJEPV1Ed
-         UKYgivybGFt3CFvU7TdWyuDf9nguNlWCnqddI/CYtbevniZFdTPd9kcT0fpELVuAFacM
-         iWhpOIjv5bU3YnYMy8z2BnA3q7qVIlLVhZF3iy8ctiAA7y76owTXverV1pPHA9F0ea75
-         snp01Bce++qDdVx1bCdyXgkye22OQAeKvfppzOEVeBKFdbNO8zV22tPcPtstZWr7VC6A
-         MZsd2fSosMWNDRLuxEK/NzeV2CcKQvFnn3CPn1eB8SrsIEvLYLiQ0qC2DDw18bVltKhn
-         E2Jg==
-X-Gm-Message-State: ANoB5pk1dD9hHgSX4h7l4u/+2ydHX8wSkK0EXojbADmO8beyEfmtrThk
-        P+llvIUiAzCgR5B7lMz6u+1nfA==
-X-Google-Smtp-Source: AA0mqf57GusGHy4fGdIdCCD+ypBDi3fwzFhsJUW/Qb2DW/M9r1lO66W8ccdVhRkSLbzOP4I6svKevg==
-X-Received: by 2002:a63:560c:0:b0:476:9983:b4b5 with SMTP id k12-20020a63560c000000b004769983b4b5mr12164723pgb.516.1668637455542;
-        Wed, 16 Nov 2022 14:24:15 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id k15-20020aa7972f000000b0056bbba4302dsm11324389pfg.119.2022.11.16.14.24.14
+        bh=uMDsmZ/IUw7ru/rt5ERiFe4h7p8p+vkqkxTomonVF6U=;
+        b=JB3dYLKQfmM6yjEqFs+RjJNddKxPkTUbc80nGhSCHVtHEdpjFzrQ3laE8g1ZtFdmSC
+         R87HErgjYjik7j9VtJi7jfwU8x9YIzrTQ4k3mziTuexQU1sDtghXxX7GMUYaJ2daopN/
+         LU3W7E6cjaJ2b1Mi42YxVE6U3QYGyeZaTLYBsgXXDR+QJDFeZ8hbCC4rqHwlQ+XQlMtG
+         TG/6MkoU3WG78zQmoFNmRElqRmK6N49r4qzsjH+VbGVF2lIJ059EnMafMkJ9g1W5K/zS
+         RvPu6XMQsQRVpE81Wb8FeDqJyOM5tWY88hp8Bxz9DJJMSjxNo0xtb9rsPahhQyLa2W5T
+         G2jw==
+X-Gm-Message-State: ANoB5pkUZVHoATxBj2fTLetFllN/UBRN+Lfb3OLHr0vbQniqFFLmrnzs
+        96r1x43ZGy+KCmC6UiY3wrr/eQ==
+X-Google-Smtp-Source: AA0mqf6t/39Bdq//9MoHoTR+aiQxctk6tP7YwkRq4P+AN17UObmeRm1pYSv4/YXRFLoty1P9m9tztw==
+X-Received: by 2002:a17:902:7881:b0:186:fe2d:f3cb with SMTP id q1-20020a170902788100b00186fe2df3cbmr10674351pll.132.1668637462348;
+        Wed, 16 Nov 2022 14:24:22 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id s15-20020aa78bcf000000b0056b3c863950sm11407534pfd.8.2022.11.16.14.24.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 14:24:15 -0800 (PST)
-Date:   Wed, 16 Nov 2022 22:24:11 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
-Subject: Re: [PATCH v9 5/8] KVM: Register/unregister the guest private memory
- regions
-Message-ID: <Y3VjCxCiujCOLP7x@google.com>
-References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
- <20221025151344.3784230-6-chao.p.peng@linux.intel.com>
+        Wed, 16 Nov 2022 14:24:21 -0800 (PST)
+Date:   Wed, 16 Nov 2022 14:24:21 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Namjae Jeon <linkinjeon@kernel.org>,
+        Steve French <sfrench@samba.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Tom Talpey <tom@talpey.com>, linux-cifs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH][next] ksmbd: replace one-element arrays with
+ flexible-array members
+Message-ID: <202211161424.642BCD6@keescook>
+References: <Y3OxronfaPYv9qGP@work>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221025151344.3784230-6-chao.p.peng@linux.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y3OxronfaPYv9qGP@work>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022, Chao Peng wrote:
-> +static int kvm_vm_ioctl_set_mem_attr(struct kvm *kvm, gpa_t gpa, gpa_t size,
-> +				     bool is_private)
-> +{
-> +	gfn_t start, end;
-> +	unsigned long i;
-> +	void *entry;
-> +	int idx;
-> +	int r = 0;
-> +
-> +	if (size == 0 || gpa + size < gpa)
-> +		return -EINVAL;
-> +	if (gpa & (PAGE_SIZE - 1) || size & (PAGE_SIZE - 1))
-> +		return -EINVAL;
-> +
-> +	start = gpa >> PAGE_SHIFT;
-> +	end = (gpa + size - 1 + PAGE_SIZE) >> PAGE_SHIFT;
-> +
-> +	/*
-> +	 * Guest memory defaults to private, kvm->mem_attr_array only stores
-> +	 * shared memory.
-> +	 */
-> +	entry = is_private ? NULL : xa_mk_value(KVM_MEM_ATTR_SHARED);
-> +
-> +	idx = srcu_read_lock(&kvm->srcu);
-> +	KVM_MMU_LOCK(kvm);
-> +	kvm_mmu_invalidate_begin(kvm, start, end);
-> +
-> +	for (i = start; i < end; i++) {
-> +		r = xa_err(xa_store(&kvm->mem_attr_array, i, entry,
-> +				    GFP_KERNEL_ACCOUNT));
-> +		if (r)
-> +			goto err;
-> +	}
-> +
-> +	kvm_unmap_mem_range(kvm, start, end);
-> +
-> +	goto ret;
-> +err:
-> +	for (; i > start; i--)
-> +		xa_erase(&kvm->mem_attr_array, i);
+On Tue, Nov 15, 2022 at 09:35:10AM -0600, Gustavo A. R. Silva wrote:
+> One-element arrays are deprecated, and we are replacing them with flexible
+> array members instead. So, replace one-element arrays with flexible-array
+> members in multiple structs in fs/ksmbd/smb_common.h and one in
+> fs/ksmbd/smb2pdu.h.
+> 
+> Important to mention is that doing a build before/after this patch results
+> in no binary output differences.
+> 
+> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE routines
+> on memcpy() and help us make progress towards globally enabling
+> -fstrict-flex-arrays=3 [1].
+> 
+> Link: https://github.com/KSPP/linux/issues/242
+> Link: https://github.com/KSPP/linux/issues/79
+> Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-I don't think deleting previous entries is correct.  To unwind, the correct thing
-to do is restore the original values.  E.g. if userspace space is mapping a large
-range as shared, and some of the previous entries were shared, deleting them would
-incorrectly "convert" those entries to private.
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-Tracking the previous state likely isn't the best approach, e.g. it would require
-speculatively allocating extra memory for a rare condition that is likely going to
-lead to OOM anyways.
-
-Instead of trying to unwind, what about updating the ioctl() params such that
-retrying with the updated addr+size would Just Work?  E.g.
-
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 55b07aae67cc..f1de592a1a06 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -1015,15 +1015,12 @@ static int kvm_vm_ioctl_set_mem_attr(struct kvm *kvm, gpa_t gpa, gpa_t size,
- 
-        kvm_unmap_mem_range(kvm, start, end, attr);
- 
--       goto ret;
--err:
--       for (; i > start; i--)
--               xa_erase(&kvm->mem_attr_array, i);
--ret:
-        kvm_mmu_invalidate_end(kvm, start, end);
-        KVM_MMU_UNLOCK(kvm);
-        srcu_read_unlock(&kvm->srcu, idx);
- 
-+       <update gpa and size>
-+
-        return r;
- }
- #endif /* CONFIG_KVM_GENERIC_PRIVATE_MEM */
-@@ -4989,6 +4986,8 @@ static long kvm_vm_ioctl(struct file *filp,
- 
-                r = kvm_vm_ioctl_set_mem_attr(kvm, region.addr,
-                                              region.size, set);
-+               if (copy_to_user(argp, &region, sizeof(region)) && !r)
-+                       r = -EFAULT
-                break;
-        }
- #endif
+-- 
+Kees Cook
