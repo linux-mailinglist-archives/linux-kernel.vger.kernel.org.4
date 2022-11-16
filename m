@@ -2,203 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C5E862CE79
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 00:05:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB80762CE82
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 00:07:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233727AbiKPXFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 18:05:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43142 "EHLO
+        id S234184AbiKPXH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 18:07:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbiKPXFF (ORCPT
+        with ESMTP id S234299AbiKPXHT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 18:05:05 -0500
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B926317CD;
-        Wed, 16 Nov 2022 15:05:05 -0800 (PST)
-Received: by mail-ot1-f51.google.com with SMTP id db10-20020a0568306b0a00b0066d43e80118so32697otb.1;
-        Wed, 16 Nov 2022 15:05:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sch7gU4JnEJeZm0TBzlZLEZhC+3AQoj3+UVYWjWRf4Y=;
-        b=VWxEk9L4tyQ8ZIkHG3Eat02HjroRu2diUWrcuAAa26m82dYJ9p7O1D9jLG8DJ1gp98
-         2SGOaysvYYk5VsZy1lTsVF5gBAjAFR8w0Y7AaxX6webhD1H9wasdunPprxoOsF6nYEHM
-         Upw4sCmes+DX3Vf3IwhyZG5xJuYZzFa1UnNRoxDUNfWhXwhrnJYIQyeLAb55FyHycMZe
-         5ZiebClQRbfxm9mC53Fc1swB5G694C6tDx32TGtH7lO+zakIHRxmbpWQev6z1CC6iNou
-         V8aGUEIYVLk3XQVAMt8VLRCOZ6nUy55QC1irQawLJA4WgVKDzo52uufxq7sCags1zpSK
-         xlvg==
-X-Gm-Message-State: ANoB5pnv0XPJpYSC8bJsQ5evv+TdKnHirhbiU9KscrC6IcREh4g9bHfu
-        uqNAZWKsHg4banNCl52UQTBCGSphGtiuwggbuaXCOUsC
-X-Google-Smtp-Source: AA0mqf7TtJVP83TCvzFw7lohwMhWEajHyRUN2mHS1nCyxot6jnARFVNR6lxYPj/Vz0BYXz65jqK06TvbSxJFTIxBW0g=
-X-Received: by 2002:a05:6830:1215:b0:66d:78b8:7b1a with SMTP id
- r21-20020a056830121500b0066d78b87b1amr175243otp.206.1668639904228; Wed, 16
- Nov 2022 15:05:04 -0800 (PST)
+        Wed, 16 Nov 2022 18:07:19 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7536D3FBBC
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 15:06:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668639982;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fWNz/QE0hFws1BC7T/rZzODjo9Sug+sYTjrv+WWI+bk=;
+        b=Vcp2G9QuRqAMVFkfQ6Pf/qM3FTnlWuGTerNqq9aBGNcgEzWlZQn4N4pUW3Q8AnG/ZohdJN
+        yAK9RZBOLe60KoVh0GTibTO1qG4KmSFOq47ma4kbrwPKK2ECgI0P5hoSkZ/W9LVURXDCXZ
+        qJ0wQhhK7MmGvqrAXQNslJFEjBDtjB0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-321-Kh4_YGnwNsCefQGPtUsbUA-1; Wed, 16 Nov 2022 18:06:16 -0500
+X-MC-Unique: Kh4_YGnwNsCefQGPtUsbUA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id ED237811E67;
+        Wed, 16 Nov 2022 23:06:15 +0000 (UTC)
+Received: from [10.22.10.207] (unknown [10.22.10.207])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 35079C1908A;
+        Wed, 16 Nov 2022 23:06:15 +0000 (UTC)
+Message-ID: <4b5142be-6a47-9dfd-a238-5b9d29b296b8@redhat.com>
+Date:   Wed, 16 Nov 2022 18:06:13 -0500
 MIME-Version: 1.0
-References: <20221114210723.2749751-1-irogers@google.com> <20221114210723.2749751-11-irogers@google.com>
- <Y3OX1pcclKCgbpeT@kernel.org>
-In-Reply-To: <Y3OX1pcclKCgbpeT@kernel.org>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 16 Nov 2022 15:04:52 -0800
-Message-ID: <CAM9d7ch3SkBzjXUsGXKTqQzAkvCpm1jOmf5YEf609t1v=4v0wg@mail.gmail.com>
-Subject: Re: [PATCH v3 10/10] perf list: Add json output option
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Ian Rogers <irogers@google.com>,
-        Weilin Wang <weilin.wang@intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Caleb Biggers <caleb.biggers@intel.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Xin Gao <gaoxin@cdjrlc.com>, Rob Herring <robh@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v10 0/3] blk-cgroup: Optimize blkcg_rstat_flush()
+Content-Language: en-US
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ming Lei <ming.lei@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        Hillf Danton <hdanton@sina.com>, Tejun Heo <tj@kernel.org>
+References: <20221105005902.407297-1-longman@redhat.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20221105005902.407297-1-longman@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 11/4/22 20:58, Waiman Long wrote:
+>   v10:
+>    - Update patch 3 to rename the rstat function to
+>      cgroup_rstat_css_cpu_flush().
+>
+>   v9:
+>    - Remove patch "llist: Allow optional sentinel node terminated lockless
+>      list" for now. This will be done as a follow-up patch.
+>    - Add a new lqueued field to blkg_iostat_set to store the status of
+>      whether lnode is in a lockless list.
+>    - Add a new patch 3 to speed up the freeing of blkcg by flushing out
+>      the rstat lockless lists at blkcg offline time.
+>
+>   v8:
+>    - Update the llist patch to make existing llist functions and macros
+>      work for both NULL and sentinel terminated lockless list as much
+>      as possible and leave only the initialization and removal functions
+>      to have a sentinel terminated llist variants.
+>
+> This patch series improves blkcg_rstat_flush() performance by eliminating
+> unnecessary blkg enumeration and flush operations for those blkg's and
+> blkg_iostat_set's that haven't been updated since the last flush.
+>
+> Waiman Long (3):
+>    blk-cgroup: Return -ENOMEM directly in blkcg_css_alloc() error path
+>    blk-cgroup: Optimize blkcg_rstat_flush()
+>    blk-cgroup: Flush stats at blkgs destruction path
+>
+>   block/blk-cgroup.c     | 103 +++++++++++++++++++++++++++++++++++------
+>   block/blk-cgroup.h     |  10 ++++
+>   include/linux/cgroup.h |   1 +
+>   kernel/cgroup/rstat.c  |  20 ++++++++
+>   4 files changed, 119 insertions(+), 15 deletions(-)
 
-On Tue, Nov 15, 2022 at 5:44 AM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
->
-> Em Mon, Nov 14, 2022 at 01:07:23PM -0800, Ian Rogers escreveu:
-> > Output events and metrics in a json format by overriding the print
-> > callbacks. Currently other command line options aren't supported and
-> > metrics are repeated once per metric group.
->
-> Applied the patch with a few fixes and added this to the last cset:
->
-> commit c9367a0658ebcfe8ab0bc4af2648f144c64b53a4
-> Author: Ian Rogers <irogers@google.com>
-> Date:   Mon Nov 14 13:07:23 2022 -0800
->
->     perf list: Add JSON output option
->
->     Output events and metrics in a JSON format by overriding the print
->     callbacks. Currently other command line options aren't supported and
->     metrics are repeated once per metric group.
->
->     Committer testing:
->
->       $ perf list cache
->
->       List of pre-defined events (to be used in -e or -M):
->
->         L1-dcache-load-misses                              [Hardware cache event]
->         L1-dcache-loads                                    [Hardware cache event]
->         L1-dcache-prefetches                               [Hardware cache event]
->         L1-icache-load-misses                              [Hardware cache event]
->         L1-icache-loads                                    [Hardware cache event]
->         branch-load-misses                                 [Hardware cache event]
->         branch-loads                                       [Hardware cache event]
->         dTLB-load-misses                                   [Hardware cache event]
->         dTLB-loads                                         [Hardware cache event]
->         iTLB-load-misses                                   [Hardware cache event]
->         iTLB-loads                                         [Hardware cache event]
->       $ perf list --json cache
->       [
->       {
->               "Unit": "cache",
+Jens, do you have any further comment on this patchset? Is it possible 
+to queue it for the next Linux version?
 
-It's confusing to call it 'unit', but we have it in the JSON metrics, sigh..
+Cheers,
+Longman
 
-Thanks,
-Namhyung
-
-
->               "EventName": "L1-dcache-load-misses",
->               "EventType": "Hardware cache event"
->       },
->       {
->               "Unit": "cache",
->               "EventName": "L1-dcache-loads",
->               "EventType": "Hardware cache event"
->       },
->       {
->               "Unit": "cache",
->               "EventName": "L1-dcache-prefetches",
->               "EventType": "Hardware cache event"
->       },
->       {
->               "Unit": "cache",
->               "EventName": "L1-icache-load-misses",
->               "EventType": "Hardware cache event"
->       },
->       {
->               "Unit": "cache",
->               "EventName": "L1-icache-loads",
->               "EventType": "Hardware cache event"
->       },
->       {
->               "Unit": "cache",
->               "EventName": "branch-load-misses",
->               "EventType": "Hardware cache event"
->       },
->       {
->               "Unit": "cache",
->               "EventName": "branch-loads",
->               "EventType": "Hardware cache event"
->       },
->       {
->               "Unit": "cache",
->               "EventName": "dTLB-load-misses",
->               "EventType": "Hardware cache event"
->       },
->       {
->               "Unit": "cache",
->               "EventName": "dTLB-loads",
->               "EventType": "Hardware cache event"
->       },
->       {
->               "Unit": "cache",
->               "EventName": "iTLB-load-misses",
->               "EventType": "Hardware cache event"
->       },
->       {
->               "Unit": "cache",
->               "EventName": "iTLB-loads",
->               "EventType": "Hardware cache event"
->       }
->       ]
->       $
->
->     Signed-off-by: Ian Rogers <irogers@google.com>
->     Tested-by: Arnaldo Carvalho de Melo <acme@redhat.com>
->     Cc: Adrian Hunter <adrian.hunter@intel.com>
->     Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
->     Cc: Caleb Biggers <caleb.biggers@intel.com>
->     Cc: Jiri Olsa <jolsa@kernel.org>
->     Cc: Kajol Jain <kjain@linux.ibm.com>
->     Cc: Kan Liang <kan.liang@linux.intel.com>
->     Cc: Leo Yan <leo.yan@linaro.org>
->     Cc: Mark Rutland <mark.rutland@arm.com>
->     Cc: Namhyung Kim <namhyung@kernel.org>
->     Cc: Perry Taylor <perry.taylor@intel.com>
->     Cc: Peter Zijlstra <peterz@infradead.org>
->     Cc: Ravi Bangoria <ravi.bangoria@amd.com>
->     Cc: Rob Herring <robh@kernel.org>
->     Cc: Sandipan Das <sandipan.das@amd.com>
->     Cc: Stephane Eranian <eranian@google.com>
->     Cc: Weilin Wang <weilin.wang@intel.com>
->     Cc: Xin Gao <gaoxin@cdjrlc.com>
->     Cc: Xing Zhengjun <zhengjun.xing@linux.intel.com>
->     Link: http://lore.kernel.org/lkml/20221114210723.2749751-11-irogers@google.com
->     Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
