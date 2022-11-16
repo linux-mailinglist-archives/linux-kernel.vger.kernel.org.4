@@ -2,97 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6329562BFE3
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 14:45:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7293262BFED
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 14:46:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231197AbiKPNo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 08:44:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58910 "EHLO
+        id S232869AbiKPNqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 08:46:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232009AbiKPNou (ORCPT
+        with ESMTP id S231838AbiKPNqj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 08:44:50 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70FAA17063
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 05:44:49 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id r12so29567314lfp.1
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 05:44:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OtRPgI0hPTXIZ3YSyjqLr0O5f9pH5O1PPXUqg324a9M=;
-        b=RAZe8L5Sc3K3kbuBdwhHlHTAzGECl3wpYNKJvGTewdAq1TGLJ+Qi0gA4TLERj1mpo0
-         DkMEQbgitJvpZ949P4FahoJheUx/i1l4wO6dV6k9lhFRlxezhzk2nOVr9UVohSx4SJSv
-         gjsbJ82Hf7tL8u1MqPhCPN+tC+yNaug7ysT4AT7USIXPlOWVkJtPAGC3h4/n0CYxSAN4
-         uSXpGJpB9qGbqSNShSb03vitD7w6L+6+Wkvxinrc/Aqom+KJRWaofzaPnqNokYKdGp4R
-         058bUa0iH2agFyp+m0MUgzLTcDDy9qVTenjQk610OLKwpnPqIJo1NmWlcDtnLMV6y+wC
-         mIZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OtRPgI0hPTXIZ3YSyjqLr0O5f9pH5O1PPXUqg324a9M=;
-        b=cUSr2/2+T5BsfABiJ9uQJ9q+uoQ0xOpfvKzNMiJW7iYDarHsc5Rl1KXQokMesmZIPD
-         0dscUmcjLLgMDMPR7tiHTPIhQcIZAytvRQlmPB8SpFsxGN8yQToJ+nZhCuj4t0l27WgL
-         uGLAJcW8KVE5j4eR6PkQKwVVhBpHsveU5kllwN7T+cNLdci9TBRoWRpakAlove70Th95
-         yp1M8yPI54F6TeyYZtymH6QRfeuNTtauulfEXllDrscssFblzYaVwZz0IfZApXBOTw4R
-         H+hNZMFrN1D9da3A2ZihGa0chqFP5lTPTMzNbfJbgHHXaQJRsbBEx20xCgivjS0kFzsS
-         jhHA==
-X-Gm-Message-State: ANoB5pnVanEOpNoXfqkbv1jBhPuq7bUHyeM6y3EJ7HSapARXBUaNLaQO
-        xaDVF3LOn4hWV2+kPreIk+CHfw==
-X-Google-Smtp-Source: AA0mqf66GIdI3xUDmN8RUOnND9di3YfQxPlSmBq4FTYOcrQK43KraobsvCgrjdbs1xu1lfXpbC1wfA==
-X-Received: by 2002:a05:6512:3195:b0:4a4:43e4:9cc1 with SMTP id i21-20020a056512319500b004a443e49cc1mr7257334lfe.512.1668606287844;
-        Wed, 16 Nov 2022 05:44:47 -0800 (PST)
-Received: from [10.10.15.130] ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id 11-20020a05651c128b00b0027754bdd667sm2114795ljc.109.2022.11.16.05.44.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 05:44:47 -0800 (PST)
-Message-ID: <ef2057cb-8de8-4d65-2749-cfc205833eb4@linaro.org>
-Date:   Wed, 16 Nov 2022 16:44:46 +0300
+        Wed, 16 Nov 2022 08:46:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D1C1054E;
+        Wed, 16 Nov 2022 05:46:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 79445B81D84;
+        Wed, 16 Nov 2022 13:46:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 257E3C433B5;
+        Wed, 16 Nov 2022 13:46:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668606396;
+        bh=4Eyz0S2R9mU+xNSyb0CBshZrLiG7Ysc6IhA8sbgt8kI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TYjYp3XLfit7zRxym2OFPG+NAwT2U+ECLor5O6cLRm0sJ5iqHL3umzzj0VMWd9tfg
+         pmfXOghfTiRu7hmUe01VNMiSn5zOOosBUml4Bb9jSn+4Tc59avtYlZkgIJStcqKC09
+         X7JzvO63NETaRXF6dn9mgqX86K7mfQtePZvEhcOnMryBH07M+/XsHzazHMikZJc86N
+         Jx6MUTQmbp+1co4jYoKZdoMixq1Bf+YYnRqkwmo+HMoGBe+pp/aQrGJ6A309YBZVw6
+         q9zkLkxjNuoTJOA2Lc7RD0DmhCm2349mHfvRIOxaSBxAK9B2rqGqHV1tlNIWTh7Gqx
+         ejySq7W6fZGhQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1ovIju-0002jH-G0; Wed, 16 Nov 2022 14:46:06 +0100
+Date:   Wed, 16 Nov 2022 14:46:06 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-phy@lists.infradead.org
+Subject: Re: [PATCH 02/10] dt-bindings: phy: Add QMP UFS PHY comptible for
+ SM8550
+Message-ID: <Y3Tpnsqh5qd8b8R6@hovoldconsulting.com>
+References: <20221116120157.2706810-1-abel.vesa@linaro.org>
+ <20221116120157.2706810-3-abel.vesa@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH 2/2] arm64: dts: qcom: sm8150: Use defines for power
- domain indices
-Content-Language: en-GB
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     patches@linaro.org, Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221115130936.6830-1-konrad.dybcio@linaro.org>
- <20221115130936.6830-2-konrad.dybcio@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221115130936.6830-2-konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221116120157.2706810-3-abel.vesa@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/11/2022 16:09, Konrad Dybcio wrote:
-> Use the defines from qcom-rpmpd.h instead of bare numbers for
-> readability.
+On Wed, Nov 16, 2022 at 02:01:49PM +0200, Abel Vesa wrote:
+> Document the QMP UFS PHY compatible for SM8550.
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 > ---
->   arch/arm64/boot/dts/qcom/sm8150.dtsi | 12 ++++++------
->   1 file changed, 6 insertions(+), 6 deletions(-)
+>  .../phy/qcom,msm8996-qmp-ufs-phy.yaml         | 24 +++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-ufs-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-ufs-phy.yaml
+> index be41acbd3b6c..1ea5fcd4a59e 100644
+> --- a/Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-ufs-phy.yaml
+> +++ b/Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-ufs-phy.yaml
+> @@ -29,6 +29,7 @@ properties:
+>        - qcom,sm8250-qmp-ufs-phy
+>        - qcom,sm8350-qmp-ufs-phy
+>        - qcom,sm8450-qmp-ufs-phy
+> +      - qcom,sm8550-qmp-ufs-phy
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+As I mentioned in my comment to the dts changes, you should base the
+binding on sc8280xp instead. The older ones will probably be converted
+too eventually.
 
--- 
-With best wishes
-Dmitry
-
+Johan
