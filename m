@@ -2,79 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AA5462C1F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 16:11:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BDF262C1F9
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 16:11:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233205AbiKPPLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 10:11:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60228 "EHLO
+        id S232584AbiKPPLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 10:11:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232990AbiKPPKx (ORCPT
+        with ESMTP id S229536AbiKPPLb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 10:10:53 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB6E742F4E
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 07:10:51 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id ft34so44719670ejc.12
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 07:10:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0brBV+aNc25BP0Dg0H7hvJ4GG7kd5dDtU1dPveJx/xA=;
-        b=HT+bqVCUacMQvbynW96YuRiYbeCmbevZE19cQH7dDCL0s+hHeFYWWzEd+ygrx0r5zk
-         oEknLOj15hIQuLHOnCO/bp+5xWXRiHvfQXYLI42i2ZT7Tap/lbJyhFKWQL5e+laKvacf
-         dfNB9IDNiaRCuz8VEVlkPuZoyjnvpmgSlt+VsHTYMpv1j7NRaoTMWhCInOm6pZOQx3oF
-         35ffCBaCEZd/iOVECXn91Ls2O0gTBQIE3LpDXod7lko0wTqeCMvakXD4R45MHug6njtA
-         u4M13435C9A7kIxYU+8KQGrPnPyQMxeqONWiRHVrW5fGdeuaWgaakcIwOTHpS/2oqdYt
-         KW7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=0brBV+aNc25BP0Dg0H7hvJ4GG7kd5dDtU1dPveJx/xA=;
-        b=et54a4QC66syFXWbwXZtenqluyCiyIaiWW1D0FW8UTFiS/W9vVt4WmGjHoGwYTM8V/
-         9LgBv7o28uRluBpusI8N9KVNHA1MCnrMsN+Cln0XAlpNsV6Ha8vGK+U9YtCQ9nnFRqjg
-         OJN76raYczh8k7C2ZNT1IOkNKuSZJEfZfd0a4vdOoTDIYOpP43s4ISHWlvRhyAazcreH
-         8pIqZeazdGsnzEvKG9/iuI3FyFq0qAFUxJYvNvb6Uhb5uI2z/ddFkfL0GbZizeIiSf+8
-         dKgLfDPxoDE5anSr8oEe/jOv6KdeGMPoEX99pSgJt0FGhRwVIq3MXnWCLSjRnRhTyta5
-         OYqQ==
-X-Gm-Message-State: ANoB5pltre/lP2VyHjSUDMPSNzfL24VzwyPRX2x8woZoGHtAdzjVQREH
-        uJJQ66WdBrpoklAVTKxPfOMYbg==
-X-Google-Smtp-Source: AA0mqf45Lm1EHubZA8sV1l1+PyI8Ch4aKulzmN8LdptkNlLZsJIcRSv/w+zFDP6haJF+ZSHvRSr9Cg==
-X-Received: by 2002:a17:906:61b:b0:7ae:3684:84b0 with SMTP id s27-20020a170906061b00b007ae368484b0mr17573989ejb.622.1668611450269;
-        Wed, 16 Nov 2022 07:10:50 -0800 (PST)
-Received: from [192.168.31.208] ([194.29.137.22])
-        by smtp.gmail.com with ESMTPSA id r10-20020a17090609ca00b0078d3f96d293sm6969403eje.30.2022.11.16.07.10.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 07:10:49 -0800 (PST)
-Message-ID: <fabf801f-0897-2436-74fb-4f48fe1b8a21@linaro.org>
-Date:   Wed, 16 Nov 2022 16:10:42 +0100
+        Wed, 16 Nov 2022 10:11:31 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2CA43AE9;
+        Wed, 16 Nov 2022 07:11:30 -0800 (PST)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AGEneeX005649;
+        Wed, 16 Nov 2022 15:11:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=pIhDvtdkQeKfm95d4eKSzt0UrUR7I+3ffypY3ZTOQ4g=;
+ b=LJoG9sepYOAXCfCEtp0040/XH84kCeyHBSNmoKTwqPGF286zqsxVM4ocOzF/T61JrmOj
+ Dd9la9T9lcM7o7h3iOmV4aBDGf4/n4sg0S33xAcc7MoIdNXgj3i7Tm6KVgorOJULDKfJ
+ XQfGQ4BSKPRZytag/LPew2t7WdiIZIXaSoI2NwALCA5UGaXumaBNHKIHFrtxUtWRoHBi
+ 6mVdKF3IlCZ75geiLefSo2ovkfCGJAnkvhixGJE4wxQU9frlNFGigYEvGZfQfS9OzyJz
+ FjMgN+BjpTNUICOC6OaQti1s/7riArDbcPaMnxKM4ho4f9BPYYXk2LbiyhfLpxL+nKqh vw== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kvyh2gb4h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Nov 2022 15:11:26 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AGFBOhL019728
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Nov 2022 15:11:24 GMT
+Received: from [10.216.25.63] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 16 Nov
+ 2022 07:11:20 -0800
+Message-ID: <6b1907db-3fdb-8fe0-e5e3-21ea17021925@quicinc.com>
+Date:   Wed, 16 Nov 2022 07:11:16 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.2
-Subject: Re: [PATCH 2/8] arm64: dts: qcom: sdm450: Add device tree for
- Motorola Moto G6
-To:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Julian Braha <julianbraha@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kees Cook <keescook@chromium.org>,
-        Tony Luck <tony.luck@intel.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-References: <20221116145616.17884-1-luca@z3ntu.xyz>
- <20221116145616.17884-3-luca@z3ntu.xyz>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221116145616.17884-3-luca@z3ntu.xyz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v2 2/3] drm/msm/disp/dpu1: add helper to know if display
+ is pluggable
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Kalyan Thota <quic_kalyant@quicinc.com>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <freedreno@lists.freedesktop.org>, <devicetree@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <robdclark@chromium.org>,
+        <dianders@chromium.org>, <swboyd@chromium.org>,
+        <quic_vpolimer@quicinc.com>
+References: <1668609040-2549-1-git-send-email-quic_kalyant@quicinc.com>
+ <1668609040-2549-3-git-send-email-quic_kalyant@quicinc.com>
+ <e049f5b1-da41-6854-4731-b6697770ffde@linaro.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <e049f5b1-da41-6854-4731-b6697770ffde@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: D7LkRPspLYV_7_l_M4Das6kBg83zrcoa
+X-Proofpoint-ORIG-GUID: D7LkRPspLYV_7_l_M4Das6kBg83zrcoa
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-16_03,2022-11-16_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 mlxlogscore=999 adultscore=0 malwarescore=0 bulkscore=0
+ clxscore=1011 mlxscore=0 phishscore=0 spamscore=0 lowpriorityscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211160106
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -86,298 +87,88 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 16/11/2022 15:56, Luca Weiss wrote:
-> From: Julian Braha <julianbraha@gmail.com>
+On 11/16/2022 7:08 AM, Dmitry Baryshkov wrote:
+> On 16/11/2022 17:30, Kalyan Thota wrote:
+>> Since DRM encoder type for few encoders can be similar
+>> (like eDP and DP) find out if the interface supports HPD
+>> from encoder bridge to differentiate between builtin
+>> and pluggable displays.
+>>
+>> Changes in v1:
+>> - add connector type in the disp_info (Dmitry)
+>> - add helper functions to know encoder type
+>> - update commit text reflecting the change
+>>
+>> Changes in v2:
+>> - avoid hardcode of connector type for DSI as it may not be true (Dmitry)
+>> - get the HPD information from encoder bridge
+>>
+>> Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
+>> ---
+>>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 16 ++++++++++++++++
+>>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h |  6 ++++++
+>>   2 files changed, 22 insertions(+)
+>>
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c 
+>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+>> index 9c6817b..be93269 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+>> @@ -15,6 +15,7 @@
+>>   #include <drm/drm_crtc.h>
+>>   #include <drm/drm_file.h>
+>>   #include <drm/drm_probe_helper.h>
+>> +#include <drm/drm_bridge.h>
+>>   #include "msm_drv.h"
+>>   #include "dpu_kms.h"
+>> @@ -217,6 +218,21 @@ static u32 dither_matrix[DITHER_MATRIX_SZ] = {
+>>       15, 7, 13, 5, 3, 11, 1, 9, 12, 4, 14, 6, 0, 8, 2, 10
+>>   };
+>> +bool dpu_encoder_is_pluggable(struct drm_encoder *encoder)
+>> +{
+>> +    struct drm_bridge *bridge;
+>> +    int ops = 0;
+>> +
+>> +    if (!encoder)
+>> +        return false;
+>> +
+>> +    /* Get last bridge in the chain to determine pluggable state */
+>> +    drm_for_each_bridge_in_chain(encoder, bridge)
+>> +        if (!drm_bridge_get_next_bridge(bridge))
+>> +            ops = bridge->ops;
+>> +
+>> +    return ops & DRM_BRIDGE_OP_HPD;
 > 
-> Add device tree for the Motorola Moto G6 (ali) smartphone. This device
-> is based on Snapdragon 450 (sdm450) SoC which is a variant of MSM8953.
+> No. This is not what you should be checking (hint: polled connectors 
+> also can be pluggable).
 > 
-> Signed-off-by: Julian Braha <julianbraha@gmail.com>
-> ---
->   arch/arm64/boot/dts/qcom/Makefile             |   1 +
->   .../boot/dts/qcom/sdm450-motorola-ali.dts     | 256 ++++++++++++++++++
->   2 files changed, 257 insertions(+)
->   create mode 100644 arch/arm64/boot/dts/qcom/sdm450-motorola-ali.dts
+> Please check the type of the actual connector connected to this encoder.
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> index d7669a7cee9f..a0b537414593 100644
-> --- a/arch/arm64/boot/dts/qcom/Makefile
-> +++ b/arch/arm64/boot/dts/qcom/Makefile
-> @@ -115,6 +115,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-crd-r3.dtb
->   dtb-$(CONFIG_ARCH_QCOM)	+= sc8280xp-crd.dtb
->   dtb-$(CONFIG_ARCH_QCOM)	+= sc8280xp-lenovo-thinkpad-x13s.dtb
->   dtb-$(CONFIG_ARCH_QCOM)	+= sda660-inforce-ifc6560.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= sdm450-motorola-ali.dtb
->   dtb-$(CONFIG_ARCH_QCOM)	+= sdm630-sony-xperia-ganges-kirin.dtb
->   dtb-$(CONFIG_ARCH_QCOM)	+= sdm630-sony-xperia-nile-discovery.dtb
->   dtb-$(CONFIG_ARCH_QCOM)	+= sdm630-sony-xperia-nile-pioneer.dtb
-> diff --git a/arch/arm64/boot/dts/qcom/sdm450-motorola-ali.dts b/arch/arm64/boot/dts/qcom/sdm450-motorola-ali.dts
-> new file mode 100644
-> index 000000000000..62874306fc24
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/sdm450-motorola-ali.dts
-> @@ -0,0 +1,256 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2020, The Linux Foundation. All rights reserved.
-> + */
-> +/dts-v1/;
-> +
-> +#include "msm8953.dtsi"
-> +#include "pm8953.dtsi"
-> +#include "pmi8950.dtsi"
-> +
-> +/ {
-> +	model = "Motorola Moto G6";
-> +	compatible = "motorola,ali", "qcom,sdm450";
-> +	chassis-type = "handset";
-> +	qcom,msm-id = <338 0>;
-> +	qcom,board-id = <0x41 0xb1a0>,
-> +			<0x42 0xb1a0>,
-> +			<0x43 0xc100>,
-> +			<0x42 0xb1b0>,
-> +			<0x43 0xc200>,
-> +			<0x44 0xc200>,
-> +			<0x42 0xb200>,
-> +			<0x43 0xb200>;
-> +
-> +	gpio-keys {
-> +		compatible = "gpio-keys";
-> +
-> +		key-volume-up {
-> +			label = "volume_up";
-> +			gpios = <&tlmm 85 GPIO_ACTIVE_LOW>;
-> +			linux,code = <KEY_VOLUMEUP>;
-> +		};
-> +	};
-> +
-> +	reserved-memory {
-> +		/delete-node/ memory@85b00000;
-Please assign it a label and delete the node by referencing it, 
-otherwise we don't know what you're removing.
 
-> +		memory@84300000 {
-> +			no-map;
-> +			reg = <0x0 0x84300000 0x0 0x2000000>;
-reg first, please.
+Even if we check the connector type as DSI or eDP that does not 
+necessarily mean its built-in.
 
-> +		};
-> +
-> +		ramoops@ef000000 {
-> +			compatible = "ramoops";
-> +			reg = <0x0 0xef000000 0x0 0xC0000>;
-No uppsercase hex, please.
+We can even use DSI or eDP as a pluggable display.
 
-Konrad
-> +			console-size = <0x40000>;
-> +		};
-> +	};
-> +
-> +	vph_pwr: vph-pwr-regulator {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vph_pwr";
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +	};
-> +};
-> +
-> +&hsusb_phy {
-> +	vdd-supply = <&pm8953_l3>;
-> +	vdda-pll-supply = <&pm8953_l7>;
-> +	vdda-phy-dpdm-supply = <&pm8953_l13>;
-> +
-> +	status = "okay";
-> +};
-> +
-> +&i2c_3 {
-> +	status = "okay";
-> +
-> +	touchscreen@38 {
-> +		compatible = "edt,edt-ft5406";
-> +		reg = <0x38>;
-> +		interrupt-parent = <&tlmm>;
-> +		interrupts = <65 IRQ_TYPE_EDGE_FALLING>;
-> +		vcc-supply = <&pm8953_l10>;
-> +
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&ts_int_active &ts_reset_active>;
-> +
-> +		reset-gpios = <&tlmm 64 GPIO_ACTIVE_LOW>;
-> +		touchscreen-size-x = <1080>;
-> +		touchscreen-size-y = <2160>;
-> +	};
-> +};
-> +
-> +&pm8953_resin {
-> +	linux,code = <KEY_VOLUMEDOWN>;
-> +	status = "okay";
-> +};
-> +
-> +&pmi8950_wled {
-> +	qcom,num-strings = <3>;
-> +	qcom,external-pfet;
-> +	qcom,cabc;
-> +
-> +	status = "okay";
-> +};
-> +
-> +&rpm_requests {
-> +	regulators {
-> +		compatible = "qcom,rpm-pm8953-regulators";
-> +
-> +		vdd_s1-supply = <&vph_pwr>;
-> +		vdd_s2-supply = <&vph_pwr>;
-> +		vdd_s3-supply = <&vph_pwr>;
-> +		vdd_s4-supply = <&vph_pwr>;
-> +		vdd_s5-supply = <&vph_pwr>;
-> +		vdd_s6-supply = <&vph_pwr>;
-> +		vdd_s7-supply = <&vph_pwr>;
-> +		vdd_l1-supply = <&pm8953_s3>;
-> +		vdd_l2_l3-supply = <&pm8953_s3>;
-> +		vdd_l4_l5_l6_l7_l16_l19-supply = <&pm8953_s4>;
-> +		vdd_l8_l11_l12_l13_l14_l15-supply = <&vph_pwr>;
-> +		vdd_l9_l10_l17_l18_l22-supply = <&vph_pwr>;
-> +
-> +		pm8953_s1: s1 {
-> +			regulator-min-microvolt = <795000>;
-> +			regulator-max-microvolt = <1081000>;
-> +		};
-> +
-> +		pm8953_s3: s3 {
-> +			regulator-min-microvolt = <1224000>;
-> +			regulator-max-microvolt = <1224000>;
-> +		};
-> +
-> +		pm8953_s4: s4 {
-> +			regulator-min-microvolt = <1900000>;
-> +			regulator-max-microvolt = <2050000>;
-> +		};
-> +
-> +		pm8953_l1: l1 {
-> +			regulator-min-microvolt = <1000000>;
-> +			regulator-max-microvolt = <1100000>;
-> +		};
-> +
-> +		pm8953_l2: l2 {
-> +			regulator-min-microvolt = <975000>;
-> +			regulator-max-microvolt = <1225000>;
-> +		};
-> +
-> +		pm8953_l3: l3 {
-> +			regulator-min-microvolt = <925000>;
-> +			regulator-max-microvolt = <925000>;
-> +		};
-> +
-> +		pm8953_l5: l5 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1800000>;
-> +		};
-> +
-> +		pm8953_l6: l6 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1800000>;
-> +		};
-> +
-> +		pm8953_l7: l7 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1900000>;
-> +		};
-> +
-> +		pm8953_l8: l8 {
-> +			regulator-min-microvolt = <2900000>;
-> +			regulator-max-microvolt = <2900000>;
-> +		};
-> +
-> +		pm8953_l9: l9 {
-> +			regulator-min-microvolt = <3000000>;
-> +			regulator-max-microvolt = <3300000>;
-> +		};
-> +
-> +		pm8953_l10: l10 {
-> +			regulator-min-microvolt = <2850000>;
-> +			regulator-max-microvolt = <2850000>;
-> +		};
-> +
-> +		pm8953_l11: l11 {
-> +			regulator-min-microvolt = <2950000>;
-> +			regulator-max-microvolt = <2950000>;
-> +		};
-> +
-> +		pm8953_l12: l12 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <2950000>;
-> +		};
-> +
-> +		pm8953_l13: l13 {
-> +			regulator-min-microvolt = <3125000>;
-> +			regulator-max-microvolt = <3125000>;
-> +		};
-> +
-> +		pm8953_l16: l16 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1800000>;
-> +		};
-> +
-> +		pm8953_l17: l17 {
-> +			regulator-min-microvolt = <2850000>;
-> +			regulator-max-microvolt = <2850000>;
-> +		};
-> +
-> +		pm8953_l19: l19 {
-> +			regulator-min-microvolt = <1200000>;
-> +			regulator-max-microvolt = <1350000>;
-> +		};
-> +
-> +		pm8953_l22: l22 {
-> +			regulator-min-microvolt = <2800000>;
-> +			regulator-max-microvolt = <2850000>;
-> +		};
-> +
-> +		pm8953_l23: l23 {
-> +			regulator-min-microvolt = <975000>;
-> +			regulator-max-microvolt = <1225000>;
-> +		};
-> +	};
-> +};
-> +
-> +&sdhc_1 {
-> +	pinctrl-names = "default", "sleep";
-> +	pinctrl-0 = <&sdc1_clk_on &sdc1_cmd_on &sdc1_data_on  &sdc1_rclk_on>;
-> +	pinctrl-1 = <&sdc1_clk_off &sdc1_cmd_off &sdc1_data_off &sdc1_rclk_off>;
-> +
-> +	status = "okay";
-> +};
-> +
-> +&sdhc_2 {
-> +	pinctrl-names = "default", "sleep";
-> +	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdc2_cd_off>;
-> +	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdc2_cd_off>;
-> +
-> +	status = "okay";
-> +};
-> +
-> +&tlmm {
-> +	gpio-reserved-ranges = <95 5>, <111 1>, <126 1>;
-> +
-> +	ts_int_active: ts-int-active-state {
-> +		pins = "gpio65";
-> +		function = "gpio";
-> +		drive-strength = <8>;
-> +		bias-pull-up;
-> +	};
-> +
-> +	ts_reset_active: ts-reset-active-state {
-> +		pins = "gpio64";
-> +		function = "gpio";
-> +		drive-strength = <0x08>;
-> +		bias-pull-up;
-> +	};
-> +};
-> +
-> +&usb3 {
-> +	status = "okay";
-> +};
-> +
-> +&usb3_dwc3 {
-> +	dr_mode = "peripheral";
-> +};
+Thats why we thought of this check.
+
+>> +}
+>>   bool dpu_encoder_is_widebus_enabled(const struct drm_encoder *drm_enc)
+>>   {
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h 
+>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
+>> index 9e7236e..691ab57 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
+>> @@ -224,4 +224,10 @@ void dpu_encoder_cleanup_wb_job(struct 
+>> drm_encoder *drm_enc,
+>>    */
+>>   bool dpu_encoder_is_valid_for_commit(struct drm_encoder *drm_enc);
+>> +/**
+>> + * dpu_encoder_is_pluggable - find if the encoder is of type pluggable
+>> + * @drm_enc:    Pointer to previously created drm encoder structure
+>> + */
+>> +bool dpu_encoder_is_pluggable(struct drm_encoder *drm_enc);
+>> +
+>>   #endif /* __DPU_ENCODER_H__ */
+> 
