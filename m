@@ -2,108 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEC4962B487
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 09:06:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7518062B484
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 09:06:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233076AbiKPIGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 03:06:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40244 "EHLO
+        id S232964AbiKPIGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 03:06:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233051AbiKPIGp (ORCPT
+        with ESMTP id S232936AbiKPIGm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 03:06:45 -0500
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84C485F52;
-        Wed, 16 Nov 2022 00:06:42 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4NBwST5Gp5z9xFQ5;
-        Wed, 16 Nov 2022 15:59:53 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwAXTPjumXRjdiBrAA--.15845S2;
-        Wed, 16 Nov 2022 09:06:18 +0100 (CET)
-Message-ID: <18e375adfe53f8ce5fb38a6a146ad06eaec71a5e.camel@huaweicloud.com>
-Subject: Re: [RFC][PATCH 1/4] lsm: Clarify documentation of vm_enough_memory
- hook
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, revest@chromium.org,
-        jackmanb@chromium.org, jmorris@namei.org, serge@hallyn.com,
-        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Wed, 16 Nov 2022 09:06:02 +0100
-In-Reply-To: <CAHC9VhQjnwbFgAoFgTaLQP7YnNDNyP1i0i8H++HZWj930pW=-A@mail.gmail.com>
-References: <20221115175652.3836811-1-roberto.sassu@huaweicloud.com>
-         <20221115175652.3836811-2-roberto.sassu@huaweicloud.com>
-         <CAHC9VhQjnwbFgAoFgTaLQP7YnNDNyP1i0i8H++HZWj930pW=-A@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Wed, 16 Nov 2022 03:06:42 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439D960CF
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 00:06:40 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id a29so28279013lfj.9
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 00:06:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fKd7Yo84i9pn2aBsrALEMa4PQZQFgzR1vfN2JTI7Ycc=;
+        b=Lp3snV8gK9HjD6M78egcBQyDsmDvDETQHE5heDqcQ4G2m0tFvjvViRsqhz5kb3FEVC
+         uE5j25kEIRDBGnlBKsHP0fB9VpqKTeveXGKlUjAUxdXP+GePMbwrnbdAQzGycvMZRvdX
+         S1JQ5Z9QhsCqnmmH9VNrgxHR/9ZziQYL5m8i4Od5/kLVQNViGLq1YTbl5Gjg205ApzHi
+         IH01DGpQhEiaHtcQmmhYoEt+vw9c8u6X2WNWXAoNxhv86T28T8OIdxvvDRyWUL1miIlS
+         pafoPeSHSk5HZZMKUXi4HZiIvFagbOvpfhjeV1yRsLRTRc6E9gjbRYQXzr4adf7UON9L
+         tkRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fKd7Yo84i9pn2aBsrALEMa4PQZQFgzR1vfN2JTI7Ycc=;
+        b=RkrkpH+HhOuqL0riNTRrv0Rm/XikR+FG1iutEI1HA2ZglljwOBSvM3Y9bYs99IyCnh
+         UjMQG9FKBeZ3on7OKYvAmuL2/MkydttViMaldTmhSncpBx3yYsV+WUEvvY+++nEs6lOP
+         zL6y/djoxwGLzHjSGL1BdrNflP9uE/fluO/AXEeQKtB0gqx7/o4Kl6B2wBnzu8DfF3ma
+         CnOpIVLSYFCDa5W1XNJx4oTv6dPS/hMmScRmEGDFdACMnHrm+GOmgaNOBMU8gBNI3msB
+         y6uj5ymJEn0RI16YdOeIj5UHKyc65vLmmi9lcpfZZmelaX4ptgRMSgwN9lUSeNk7MR4V
+         HnIg==
+X-Gm-Message-State: ANoB5pl1gi4g4XozqaCzqaN335ev9ERDN45MkPDFGU7wUrJHQcZEyheO
+        am0zSgt3nuBaQVg2Vl3hm6cGlA==
+X-Google-Smtp-Source: AA0mqf4PP9jpnoyfyQrubk8wnkL8+vckpPhEMFj9DwEB5+RDGUZdh1rLLJz+EYhnUZRLRhGryhkaKQ==
+X-Received: by 2002:a19:4902:0:b0:4ac:e5ff:d1d8 with SMTP id w2-20020a194902000000b004ace5ffd1d8mr6488238lfa.304.1668585998598;
+        Wed, 16 Nov 2022 00:06:38 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id m4-20020a056512358400b0048b003c4bf7sm2484353lfr.169.2022.11.16.00.06.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Nov 2022 00:06:38 -0800 (PST)
+Message-ID: <9055fbf4-3bc3-bd44-6081-f422c75f11f1@linaro.org>
+Date:   Wed, 16 Nov 2022 09:06:37 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 1/3] arm64: dts: qcom: sc8280xp/sa8540p: add gpr node
+Content-Language: en-US
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        agross@kernel.org, andersson@kernel.org
+Cc:     konrad.dybcio@somainline.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221115170242.150246-1-srinivas.kandagatla@linaro.org>
+ <20221115170242.150246-2-srinivas.kandagatla@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221115170242.150246-2-srinivas.kandagatla@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwAXTPjumXRjdiBrAA--.15845S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Ww4DWF4fAw18Ar4kZF4DXFb_yoW8XF43pF
-        WkGa15Gr1v9ry8CFs2k3Wa9345Gws5Gr1UJry7X3s8Zry7KrnIgr48Cr43Wr1Dtr4vka1Y
-        qFW3Ww1rCw1qvaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQASBF1jj4V8RQABsb
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-11-15 at 21:11 -0500, Paul Moore wrote:
-> On Tue, Nov 15, 2022 at 12:57 PM Roberto Sassu
-> <roberto.sassu@huaweicloud.com> wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > 
-> > include/linux/lsm_hooks.h reports the result of the LSM infrastructure to
-> > the callers, not what LSMs should return to the LSM infrastructure.
-> > 
-> > Clarify that and add that returning 1 from the LSMs means calling
-> > __vm_enough_memory() with cap_sys_admin set, 0 without.
-> > 
-> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > Reviewed-by: KP Singh <kpsingh@kernel.org>
-> > ---
-> >  include/linux/lsm_hooks.h | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-> > index 4ec80b96c22e..f40b82ca91e7 100644
-> > --- a/include/linux/lsm_hooks.h
-> > +++ b/include/linux/lsm_hooks.h
-> > @@ -1411,7 +1411,9 @@
-> >   *     Check permissions for allocating a new virtual mapping.
-> >   *     @mm contains the mm struct it is being added to.
-> >   *     @pages contains the number of pages.
-> > - *     Return 0 if permission is granted.
-> > + *     Return 0 if permission is granted by LSMs to the caller. LSMs should
-> > + *     return 1 if __vm_enough_memory() should be called with
-> > + *     cap_sys_admin set, 0 if not.
+On 15/11/2022 18:02, Srinivas Kandagatla wrote:
+> Add GPR node along with APM(Audio Process Manager) and PRM(Proxy
+> resource Manager) audio services.
 > 
-> I think this is a nice addition, but according to the code, any value
-> greater than zero will trigger the caller-should-have-CAP_SYS_ADMIN
-> behavior, not just 1.  I suggest updating the comment.
+> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 40 ++++++++++++++++++++++++++
+>  1 file changed, 40 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> index c32bcded2aef..e3cdd8bccb0c 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> @@ -12,6 +12,7 @@
+>  #include <dt-bindings/power/qcom-rpmpd.h>
+>  #include <dt-bindings/soc/qcom,rpmh-rsc.h>
+>  #include <dt-bindings/thermal/thermal.h>
+> +#include <dt-bindings/soc/qcom,gpr.h>
+>  
+>  / {
+>  	interrupt-parent = <&intc>;
+> @@ -1152,6 +1153,45 @@ IPCC_MPROC_SIGNAL_GLINK_QMP
+>  
+>  				label = "lpass";
+>  				qcom,remote-pid = <2>;
+> +
+> +				gpr {
+> +					compatible = "qcom,gpr";
+> +					qcom,glink-channels = "adsp_apps";
+> +					qcom,domain = <GPR_DOMAIN_ID_ADSP>;
+> +					#address-cells = <1>;
+> +					#size-cells = <0>;
+> +					qcom,intents = <512 20>;
+> +
+> +					q6apm: q6apm {
+> +						reg = <GPR_APM_MODULE_IID>;
+> +						compatible = "qcom,q6apm";
+> +						#sound-dai-cells = <0>;
+> +						qcom,protection-domain = "avs/audio", "msm/adsp/audio_pd";
+> +						q6apmdai: dais {
+> +							compatible = "qcom,q6apm-dais";
+> +							#sound-dai-cells = <1>;
 
-Ok, yes. Thanks.
+DAI cells are not allowed by binding, so either drop it or update binding.
 
-Roberto
+> +							iommus = <&apps_smmu 0x0c01 0x0>;
+> +						};
+> +
+> +						q6apmbedai: bedais {
+> +							compatible = "qcom,q6apm-lpass-dais";
+> +							#sound-dai-cells = <1>;
+> +						};
+> +					};
+> +
+> +					q6prm: q6prm {
+> +						reg = <GPR_PRM_MODULE_IID>;
+> +						compatible = "qcom,q6prm";
+> +						#clock-cells = <2>;
+
+Not allowed by binding.
+
+> +						qcom,protection-domain = "avs/audio", "msm/adsp/audio_pd";
+> +						q6prmcc: cc {
+
+This should be "clock-controller".
+
+> +							compatible = "qcom,q6prm-lpass-clocks";
+> +							#clock-cells = <2>;
+> +						};
+> +					};
+> +
+
+Drop empty line
+
+> +				};
+> +
+
+Ditto
+
+>  			};
+>  		};
+>  
+
+Best regards,
+Krzysztof
 
