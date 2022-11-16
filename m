@@ -2,183 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 804DB62BAD1
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:05:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37E7F62BADD
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:06:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238966AbiKPLFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 06:05:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49434 "EHLO
+        id S238815AbiKPLGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 06:06:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233482AbiKPLE0 (ORCPT
+        with ESMTP id S233759AbiKPLFY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 06:04:26 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A19C64AF13
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:51:01 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id s5so9738968edc.12
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:51:01 -0800 (PST)
+        Wed, 16 Nov 2022 06:05:24 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 429B52EF4B
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:52:01 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id e13so16996049edj.7
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:52:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NMt8HjKxItO2J6bIbRsCvEdSlAZpP8uC48lcisou+nI=;
-        b=eLnGvKK+w1XqLxzowLTo19VxBdUCyRC3jZCwBMpKaUWXXlLi4fs0Axmuul/wRN/I3k
-         Ls2daX/AS8NBqlkGiJqqxb0gEFzgn6n0a6+XnpTDtipAc3J5NayuL7HDBO33beS0D75x
-         K2gRZhVXeM0+lA+7zcbmJS/RVo1YdOeZ/sxms=
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=jmDzdOcJCZVFEJz0cGwp78BZmKtS5/OHvJ4gcqeQ22U=;
+        b=EPRG7osZR2L/3rHtV1b9dGX3T17rHFXmQU4zzbKNX42jRXbXowHCVomW9FwUGaM2r7
+         LYIaZDA+k7YlaBCM8mr1imuYBEqlTmhT94UfgxNUlF6CpZnysa9lDUTQEDM2pTqyBukU
+         qg38moV/kYoxcYAHoehRSCis7Bkuu42chBmryhv4yZjqtCGquzjMUF6QW4ilLCqDoqBu
+         K2cU8PYsJItfRVia9c9Nrmqbj7+yqvqJzvrAm8FwazSKl2BQacUDhjza8CWDHqEn0f5I
+         rl5+CYTiHV4BcqwbmjrWj7WJQyPOn1rqbndhF/6JKTrY1cGYOkQT3yHB9H4U6gKPh5e/
+         /thQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NMt8HjKxItO2J6bIbRsCvEdSlAZpP8uC48lcisou+nI=;
-        b=Oaf4WZtGKtNCX2KAfsx7Oh6/l18LxJ6VeHl3J8aXRsyERii8gFQkEBbrSsCVduMrNd
-         4mQBfAVi4WQ0WKdsS7zy3+0076Hsrs5QupjivjxC2HKp8+Lf1OPbvYv3MFIbZzk23rnP
-         bnBBct2m59KVWUgwso2k0pGDMOvBb4ntIJr2qxR6meS0nvLtYxj6vrM1f1sOfGbjMn4f
-         BmkNfPlaQ3weaGJrEbZKoyX6Gua0EyZtMERTXT0UU5U0QjxYYjeGJ3dCfV1/V62tWKt/
-         wq3T3NUw1UDzMgowPBJLU75rBJxljgwq6Om2i2qpAd/D5+NBlweJjiP9Rn1C5eFUZx8l
-         wbAw==
-X-Gm-Message-State: ANoB5pk8Zo2tOqiF/0qfaK62TkwNFIvFuVG931nmTgg5PMjx+MHTX+P8
-        TyQlj61hswaTwwC7FThJUvOlYw==
-X-Google-Smtp-Source: AA0mqf4Z9KF9DYfdJQdqGvbtRloYOPQXnN3MkKcJxdOs80iDic7Ysg9e6qfGKtqJuC+1emfUPfQ+gw==
-X-Received: by 2002:a50:ff04:0:b0:462:709:9f7b with SMTP id a4-20020a50ff04000000b0046207099f7bmr19331341edu.263.1668595860175;
-        Wed, 16 Nov 2022 02:51:00 -0800 (PST)
-Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
-        by smtp.gmail.com with ESMTPSA id s6-20020a170906bc4600b007aed2057eaesm6056420ejv.161.2022.11.16.02.50.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 02:50:59 -0800 (PST)
-Date:   Wed, 16 Nov 2022 11:50:57 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, etnaviv@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-samsung-soc@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-perf-users@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Peter Xu <peterx@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Inki Dae <inki.dae@samsung.com>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH mm-unstable v1 17/20] drm/exynos: remove FOLL_FORCE usage
-Message-ID: <Y3TAkWy/xXfX1cIv@phenom.ffwll.local>
-Mail-Followup-To: David Hildenbrand <david@redhat.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, etnaviv@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-samsung-soc@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-perf-users@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
-        Peter Xu <peterx@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Shuah Khan <shuah@kernel.org>, Lucas Stach <l.stach@pengutronix.de>,
-        David Airlie <airlied@gmail.com>, Oded Gabbay <ogabbay@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Inki Dae <inki.dae@samsung.com>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20221116102659.70287-1-david@redhat.com>
- <20221116102659.70287-18-david@redhat.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jmDzdOcJCZVFEJz0cGwp78BZmKtS5/OHvJ4gcqeQ22U=;
+        b=SGkm/4Dq9N6Q3u39T2NS4scyrVPEWGQMmuvbREfSMo91OQffGplsHfZ8bVHpMazS8k
+         lDfB+Jx9wQX5nBYEzK0aQD1bT2TOYc/Ctwqu/syLzcrhx3Ll48HU9Daga1fjqeDwF8dE
+         ZQbj7GJ9mFXYdmq7lgcEXQcLhsWQ4RC/rNc8A3cFQxPpH4yUnTb6P04wcVYtcdmOE77Y
+         gV9paqlmNO2sCwSnaQjTRq+6aGL/hbOOuXN9yG20pN7WJats0s87O64vGxfDpIcEZmdU
+         Z6p9jiWUlupyf2ffM+/kr6rMB7bX15uLPGyo/DdzocAYLfEYo/1yAN6jCSDWwEriEyAc
+         4Dfw==
+X-Gm-Message-State: ANoB5pnYQo1Wl6+FrJPkviACtwScb2qHNYjaOoSJ1SFODpNGC07UWNIX
+        KbxAYU6vdiVJde2qWKHSSstOn0W9Kzwhyyh93iYLxdzxUM58gA==
+X-Google-Smtp-Source: AA0mqf64irImFpuxWfnuQVwe5pGIad2p0If0h7oh7065tcZjwfzMlUBDf1yRl9o/jLlSJRaOIU8hV7LxOrNP3Ko2F7I=
+X-Received: by 2002:a05:6402:b7b:b0:463:ab08:2bc6 with SMTP id
+ cb27-20020a0564020b7b00b00463ab082bc6mr18384756edb.143.1668595919878; Wed, 16
+ Nov 2022 02:51:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221116102659.70287-18-david@redhat.com>
-X-Operating-System: Linux phenom 5.19.0-2-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221021084708.1109986-1-bchihi@baylibre.com> <CACRpkdYdmG5cFenESg36BwVpJ7FDJunPH1Z8dJjHwmu+NW-etA@mail.gmail.com>
+In-Reply-To: <CACRpkdYdmG5cFenESg36BwVpJ7FDJunPH1Z8dJjHwmu+NW-etA@mail.gmail.com>
+From:   Balsam CHIHI <bchihi@baylibre.com>
+Date:   Wed, 16 Nov 2022 11:51:23 +0100
+Message-ID: <CAGuA+oq8XrvNrDdW6JZS7UyhM4ZCk-RvpMUnw-bht9d6nJr3jw@mail.gmail.com>
+Subject: Re: [v2, 0/2] Fix broken SET/CLR mode of a certain number of pins for
+ MediaTek MT8385 SoC
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     sean.wang@kernel.org, matthias.bgg@gmail.com,
+        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 11:26:56AM +0100, David Hildenbrand wrote:
-> FOLL_FORCE is really only for ptrace access. As we unpin the pinned pages
-> using unpin_user_pages_dirty_lock(true), the assumption is that all these
-> pages are writable.
-> 
-> FOLL_FORCE in this case seems to be a legacy leftover. Let's just remove
-> it.
-> 
-> Cc: Inki Dae <inki.dae@samsung.com>
-> Cc: Seung-Woo Kim <sw0312.kim@samsung.com>
-> Cc: Kyungmin Park <kyungmin.park@samsung.com>
-> Cc: David Airlie <airlied@gmail.com>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: David Hildenbrand <david@redhat.com>
+On Mon, Nov 7, 2022 at 3:44 PM Linus Walleij <linus.walleij@linaro.org> wrote:
+>
+> On Fri, Oct 21, 2022 at 10:47 AM <bchihi@baylibre.com> wrote:
+>
+> > From: Balsam CHIHI <bchihi@baylibre.com>
+> >
+> > On MT8365, the SET/CLR of the mode is broken and some pins won't set or clear the modes correctly.
+> > To fix this issue, we add a specific callback mt8365_set_clr_mode() for this specific SoC.
+> > This callback uses the main R/W register to read/update/write the modes instead of using the SET/CLR register.
+> >
+> > This is the original patch series proposed by Fabien Parent <fparent@baylibre.com>.
+> > "https://lore.kernel.org/linux-arm-kernel/20220530123425.689459-1-fparent@baylibre.com/"
+> >
+> > Changelog:
+> > Changes in v2 :
+> >         - Rebase on top of 6.1.0-rc1-next-20221020
+> >         - Delete MTK_PINCTRL_MODE_SET_CLR_BROKEN quirk
+> >         - Add mt8365_set_clr_mode() callback
+>
+> Patches applied, no need to resend for small issues.
+>
+> Sorry for taking so long, I wanted some feedback from the Mediatek
+> maintainers but haven't heard anything, so I just applied them.
+>
 
-Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+Hi Linus,
 
-Plus ack for merging through the appropriate non-drm tree.
--Daniel
+I'm sorry for the delay.
+Thank you very much.
 
-> ---
->  drivers/gpu/drm/exynos/exynos_drm_g2d.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/exynos/exynos_drm_g2d.c b/drivers/gpu/drm/exynos/exynos_drm_g2d.c
-> index 471fd6c8135f..e19c2ceb3759 100644
-> --- a/drivers/gpu/drm/exynos/exynos_drm_g2d.c
-> +++ b/drivers/gpu/drm/exynos/exynos_drm_g2d.c
-> @@ -477,7 +477,7 @@ static dma_addr_t *g2d_userptr_get_dma_addr(struct g2d_data *g2d,
->  	}
->  
->  	ret = pin_user_pages_fast(start, npages,
-> -				  FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM,
-> +				  FOLL_WRITE | FOLL_LONGTERM,
->  				  g2d_userptr->pages);
->  	if (ret != npages) {
->  		DRM_DEV_ERROR(g2d->dev,
-> -- 
-> 2.38.1
-> 
+Best regards,
+Balsam.
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+> Yours,
+> Linus Walleij
