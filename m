@@ -2,148 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F91062BE49
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:37:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1092162BE4E
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:38:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238989AbiKPMhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 07:37:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53954 "EHLO
+        id S239019AbiKPMiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 07:38:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239112AbiKPMhA (ORCPT
+        with ESMTP id S238998AbiKPMhm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 07:37:00 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE13178B8
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 04:36:28 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id s5so10120210edc.12
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 04:36:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9knGLouoTps4CKpPqceRV5XIDseNqgQ7sZc1gE16638=;
-        b=qjmi7EO0Q3ZK0wLJ26bcXUy3mpm2LA3KcypW1YTD2x+H1Gyl+KnVa29/K4vNKe44JD
-         tj+7r69AyCovNdl8StLXox3u0lXGRljnwbBDzXrdYTvslvuw7iEe6f11nXlIXkm2R/7M
-         hoRiEk3FclmBC1AAzg48O3A3yzYc7kgOED3dwR8P62dppPJdbuA2OrYtAm3FxPQwH3sZ
-         hHk4Utj7VTKcwlAWFZR0w9RFpjH0d2cpaZX6/3euuove650ZnQjYzo9DG2i6k7o/uV5x
-         UpPqL7dg0Sr4gYrdqVI/NKx+QvS1kQKR3QL9E0CdD1PSW5R4XlWKKpBlkAy4oqF0zuwc
-         QP9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9knGLouoTps4CKpPqceRV5XIDseNqgQ7sZc1gE16638=;
-        b=aODdI/QPhE91RGwtE36Q0GOHJBcjVueaIFDyrY5FBoJzw+DSIDz8ya7GIdo9Yh4RVj
-         7AlQjAkm9CBIehKcABmA7yKea942T+FlBeC8xGMWMGFZDupg76MAZ3AxdcPllF0oWYz4
-         QrUoqq3Cn3ddkoeBvlItwt4y+nCi6LLFCb+IgQuZXKkKUOZwCmQb+kW3f2u2nsyF85jr
-         b9o53NtT3eSypm02IFcoA8/f0yNEGA9f48s+pv3XBKq1t+dZ17Kcry+2Rty2pS5Ry+i4
-         y3ML7dDNPkqtRcJDZ6qdWsNlrtEr1WRYNBPxotWv6R0Rx9/y2yMVhmSlf9REUHjbYk5f
-         V2SA==
-X-Gm-Message-State: ANoB5pnsL3bfUeHCOlsL703ancIteXa9LPzyjf6kOI8DbX6TGf51dAkw
-        gRvIzu+hjTVlZLsopWhLC5Bgmw==
-X-Google-Smtp-Source: AA0mqf5f2OOBISSSop2/aD8oGQWUikOqaakhD27e00BH0r1sbmwrW9N3WTpKVPPyH6eOAClfCJt9ug==
-X-Received: by 2002:aa7:c405:0:b0:461:4f34:d8f4 with SMTP id j5-20020aa7c405000000b004614f34d8f4mr19536298edq.144.1668602186978;
-        Wed, 16 Nov 2022 04:36:26 -0800 (PST)
-Received: from localhost.localdomain ([194.29.137.22])
-        by smtp.gmail.com with ESMTPSA id cb13-20020a170906a44d00b007abafe43c3bsm6773346ejb.86.2022.11.16.04.36.25
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 16 Nov 2022 04:36:26 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     patches@linaro.org, Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Subject: [PATCH v2 4/4] arm64: dts: qcom: sm8350-sagami: Wire up SDHCI2
-Date:   Wed, 16 Nov 2022 13:36:12 +0100
-Message-Id: <20221116123612.34302-4-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
-In-Reply-To: <20221116123612.34302-1-konrad.dybcio@linaro.org>
-References: <20221116123612.34302-1-konrad.dybcio@linaro.org>
+        Wed, 16 Nov 2022 07:37:42 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D215014D39;
+        Wed, 16 Nov 2022 04:37:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668602240; x=1700138240;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oGL1Yrskd/4Uu+QY6jG0ey36GZ59SJOBtdPf971QTPY=;
+  b=GK7r0bdOXjKtEAaI9H7vKKevHPds/osMv8p3Bg2dLRNZRCqGztDzrORh
+   6fgPl31s0PoMGe5PoRJhhcbYHB/KkaErJceXMdvUCEitre2IQhO8xdTfU
+   cAsa42Lw65y85U+PrFEesn2V9LcYUjybV3bDpbOUGjqZPc0ZjuDtQ+8yc
+   fzRO9VmjZ3cxV9s8c3VSpDHoojvPYw/Irosud8DfFcA2mqN1iRWtK0laa
+   U7D3BJh+ek6kQDYik0dqzIvjHdzJZbM1z5VKYizttGq0+m/TgFQjXH/a9
+   HcBXK3lojlQ56BTZUbh4LTfX4ZmKsE58OfkOblRsJtFTUzsu27X7o5Ure
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="376801379"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="376801379"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 04:37:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="781751953"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="781751953"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 16 Nov 2022 04:37:10 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 16 Nov 2022 14:37:10 +0200
+Date:   Wed, 16 Nov 2022 14:37:10 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Wayne Chang <waynec@nvidia.com>
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, treding@nvidia.com,
+        jonathanh@nvidia.com, thierry.reding@gmail.com, ajayg@nvidia.com,
+        vkoul@kernel.org, p.zabel@pengutronix.de, balbi@kernel.org,
+        mathias.nyman@intel.com, jckuo@nvidia.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, singhanc@nvidia.com,
+        linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v3 05/13] usb: typec: ucsi_ccg: Add OF support
+Message-ID: <Y3TZdkdIltobUcb3@kuha.fi.intel.com>
+References: <20221114124053.1873316-1-waynec@nvidia.com>
+ <20221114124053.1873316-6-waynec@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221114124053.1873316-6-waynec@nvidia.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adjust regulators, add required pin setup and finally enable SDHCI2
-to get the SD Card slot going on Sagami Xperias.
+On Mon, Nov 14, 2022 at 08:40:45PM +0800, Wayne Chang wrote:
+> The change enables the device tree infrastructure support.
+> 
+> Signed-off-by: Wayne Chang <waynec@nvidia.com>
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
-Changes in v2:
-- drop stray newline
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
- .../dts/qcom/sm8350-sony-xperia-sagami.dtsi   | 29 ++++++++++++++++++-
- 1 file changed, 28 insertions(+), 1 deletion(-)
+> ---
+> V2 -> V3:nothing has changed
+> V1 -> V2:nothing has changed
+>  drivers/usb/typec/ucsi/ucsi_ccg.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> index 835f1c4372ba..139707a2f3d6 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> @@ -643,7 +643,7 @@ static int ccg_request_irq(struct ucsi_ccg *uc)
+>  {
+>  	unsigned long flags = IRQF_ONESHOT;
+>  
+> -	if (!has_acpi_companion(uc->dev))
+> +	if (!dev_fwnode(uc->dev))
+>  		flags |= IRQF_TRIGGER_HIGH;
+>  
+>  	return request_threaded_irq(uc->irq, NULL, ccg_irq_handler, flags, dev_name(uc->dev), uc);
+> @@ -1427,6 +1427,12 @@ static void ucsi_ccg_remove(struct i2c_client *client)
+>  	free_irq(uc->irq, uc);
+>  }
+>  
+> +static const struct of_device_id ucsi_ccg_of_match_table[] = {
+> +		{ .compatible = "cypress,cypd4226", },
+> +		{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, ucsi_ccg_of_match_table);
+> +
+>  static const struct i2c_device_id ucsi_ccg_device_id[] = {
+>  	{"ccgx-ucsi", 0},
+>  	{}
+> @@ -1481,6 +1487,7 @@ static struct i2c_driver ucsi_ccg_driver = {
+>  		.pm = &ucsi_ccg_pm,
+>  		.dev_groups = ucsi_ccg_groups,
+>  		.acpi_match_table = amd_i2c_ucsi_match,
+> +		.of_match_table = ucsi_ccg_of_match_table,
+>  	},
+>  	.probe = ucsi_ccg_probe,
+>  	.remove = ucsi_ccg_remove,
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
-index a428ce31ab4e..6ae700e72d1e 100644
---- a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
-@@ -312,7 +312,8 @@ pm8350c_l8: ldo8 {
- 		pm8350c_l9: ldo9 {
- 			regulator-name = "pm8350c_l9";
- 			regulator-min-microvolt = <2960000>;
--			regulator-max-microvolt = <3008000>;
-+			/* Originally max = 3008000 but SDHCI expects 2960000 */
-+			regulator-max-microvolt = <2960000>;
- 			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
- 		};
- 
-@@ -558,6 +559,18 @@ &qupv3_id_2 {
- 	status = "okay";
- };
- 
-+&sdhc_2 {
-+	cd-gpios = <&tlmm 92 GPIO_ACTIVE_HIGH>;
-+	pinctrl-names = "default", "sleep";
-+	pinctrl-0 = <&sdc2_default_state &sdc2_card_det_active>;
-+	pinctrl-1 = <&sdc2_sleep_state &sdc2_card_det_sleep>;
-+	vmmc-supply = <&pm8350c_l9>;
-+	vqmmc-supply = <&pm8350c_l6>;
-+	no-sdio;
-+	no-mmc;
-+	status = "okay";
-+};
-+
- &slpi {
- 	status = "okay";
- 	firmware-name = "qcom/sm8350/Sony/sagami/slpi.mbn";
-@@ -782,6 +795,20 @@ ts_int_default: ts-int-default-state {
- 		bias-disable;
- 		input-enable;
- 	};
-+
-+	sdc2_card_det_active: sd-card-det-active-state {
-+		pins = "gpio92";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-pull-up;
-+	};
-+
-+	sdc2_card_det_sleep: sd-card-det-sleep-state {
-+		pins = "gpio92";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
- };
- 
- /* BIG WARNING! DO NOT TOUCH UFS, YOUR DEVICE WILL DIE! */
+thanks,
+
 -- 
-2.38.1
-
+heikki
