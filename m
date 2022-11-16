@@ -2,84 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34E4C62BC81
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:50:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF0D162BC84
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:51:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233399AbiKPLul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 06:50:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60782 "EHLO
+        id S233038AbiKPLvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 06:51:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238853AbiKPLt4 (ORCPT
+        with ESMTP id S231620AbiKPLuc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 06:49:56 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E822D12094;
-        Wed, 16 Nov 2022 03:37:43 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AGBFuUn019569;
-        Wed, 16 Nov 2022 11:37:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=mYWyqR0JxIsWxTN/dLRBhftkgrfE7nEPqDROuKX2JFc=;
- b=hBdyAQ6dnjo8Zl+K64QGFAFnAZYNUqp94/AWYghy62X3zJ+odz7CEnbD2SgirMJkaWV5
- jkEimyOOC0uSDsdwRaadmutn9EhTwqQXE7PhVWUwU0R8UJRIEYrNMRBk6CGeseJJSkGT
- WI0cmBZsicKvuhgKxpRrNZd1ua4V9qKthe7p9ukLdAjdKASMt74QVybCIE+5SMbcxy/8
- MhwkP8i+avFPqHiaYK3RW7os5L7UYJQp82ohskeUTNK1BGvLpFgWdroPJ6m5k8RODrlL
- Av9c28P/HSb41PNFmkXBD2V6gLHDdCMYCaGkk3nbgB7EwK3YmgRoaEUbjiBX8XxED6dZ 7Q== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kvwwg84sd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Nov 2022 11:37:35 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AGBbYr8025278
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Nov 2022 11:37:34 GMT
-Received: from [10.216.25.63] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 16 Nov
- 2022 03:37:28 -0800
-Message-ID: <4f872825-e646-8a8c-dbd0-112328b9b5f2@quicinc.com>
-Date:   Wed, 16 Nov 2022 03:37:25 -0800
+        Wed, 16 Nov 2022 06:50:32 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB393D69
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 03:38:12 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id z18so26108429edb.9
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 03:38:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=akqu6xTjLAKVzAh95j3xNOPZ5btLhn/0APMDXshXYxc=;
+        b=Js10U3aUg4PyK5p4fvjfKjQji79An0gmFIGAmh57/w5aXE4LKvRjHC9r5uwnM/boPJ
+         Q9rzeG8fILuJ0UdH6UYxnsBMlYVI8561KbHfUPNDLTsj2Nb0JtA97EsUO6I1bAKNp4tX
+         VsZWixZtYsxKUdPsv09at5rLt9GRzFvuwO/sTe33RcAQVVYFplsbRtIoQlpJ+GqqEzVF
+         Zx233gzcnwzbqMp326x4QSvNlM4SdpuvatdsfodLHeyV7OanLMm2hQFFIGu5kjEAQO98
+         t88sWbdFQBnogpT8KqdtXgkjZLICVSfg23Kc9cC94m6HE3WYT5auVoOvmwqD2vaRtPTS
+         r/yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=akqu6xTjLAKVzAh95j3xNOPZ5btLhn/0APMDXshXYxc=;
+        b=m9VgP7DRiLHsLjifCSd2upQ0YHQX3UJIIxAGp4u2UTFUNXN0pySexrEd4P9VO8VzbN
+         QIfGbHVrqWpnGTIFmBKA22XBubvncuJVjbbdc6lHcSBM0Mfg4WFnz1ZMPTjK+dPB5ezO
+         qg3rnpruJOBFGavN2Wwhk37928E6FpHjvvxv/skXpIOkkcm1xiXSpgOMC14fM+vFnOF+
+         pHVw9KWQWGRh2aExuCCDCFAGn0f6e+5+Dqd7UPwjAMTBm0LB8vAvnmtHIrnISXV4QLwD
+         kzN1ADFmaDudm6x9EtaTy9nd25wq4Zs60k/49zefgM40fykxzxopwN5Yqr7lUDBRou1g
+         C3dQ==
+X-Gm-Message-State: ANoB5pkKE3/jgizqZc8P7/RmCvUGT13KMAIpl7cIJQ8tGsbFEbt/WON6
+        8zPuoSvxis7ssBrdSPqktHBXig==
+X-Google-Smtp-Source: AA0mqf5q7lATwX9WC9MhCKUl2GXNzmOlUCph4bJ4ZaEnsbvmMc1JlUPpRA+qVVyMGYZ/Y8zqI/WGpA==
+X-Received: by 2002:aa7:db85:0:b0:463:f3a:32ce with SMTP id u5-20020aa7db85000000b004630f3a32cemr18976664edt.366.1668598691246;
+        Wed, 16 Nov 2022 03:38:11 -0800 (PST)
+Received: from [192.168.31.208] ([194.29.137.22])
+        by smtp.gmail.com with ESMTPSA id c1-20020a17090618a100b0077d6f628e14sm6684136ejf.83.2022.11.16.03.38.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Nov 2022 03:38:10 -0800 (PST)
+Message-ID: <e9f08af0-4360-1b92-5dcd-f1b8f3a8a4ee@linaro.org>
+Date:   Wed, 16 Nov 2022 12:38:04 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH] drm/msm/dpu1: Remove INTF4 IRQ from SDM845 IRQ mask
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <andersson@kernel.org>,
-        <agross@kernel.org>
-CC:     <patches@linaro.org>, Konrad Dybcio <konrad.dybcio@somainline.org>,
-        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kalyan Thota <quic_kalyant@quicinc.com>,
-        "AngeloGioacchino Del Regno" 
-        <angelogioacchino.delregno@somainline.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-References: <20221107103739.8993-1-konrad.dybcio@linaro.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20221107103739.8993-1-konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.2
+Subject: Re: [PATCH 2/2] regulator: qcom-rpmh: Add support for PM8550
+ regulators
+To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <20221116110515.2612515-1-abel.vesa@linaro.org>
+ <20221116110515.2612515-3-abel.vesa@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221116110515.2612515-3-abel.vesa@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: pn3OuoK3orfG4eeic5NRvt8rfaiM8CS_
-X-Proofpoint-ORIG-GUID: pn3OuoK3orfG4eeic5NRvt8rfaiM8CS_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-16_03,2022-11-16_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 spamscore=0 impostorscore=0 clxscore=1011 adultscore=0
- bulkscore=0 mlxscore=0 suspectscore=0 priorityscore=1501 phishscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211160082
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -91,40 +81,125 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 11/7/2022 2:37 AM, Konrad Dybcio wrote:
-> From: Konrad Dybcio <konrad.dybcio@somainline.org>
+On 16/11/2022 12:05, Abel Vesa wrote:
+> Add the rpmh regulators found in PM8550 PMIC.
+It's a bit more than just PM8550..
+
+The changes look good though, so with the commit message rectified:
+
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+> They contain FT-SMPS 525s, so add their configuration as well.
 > 
-> SDM845 only has INTF0-3 and has no business caring about the INTF4 irq.
-> 
-> Suggested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-It is true that SDM845 doesnt have INTF4. I was a bit concerned whether 
-this would impact SM8150 as that re-uses the IRQ_SDM845_MASK but even 
-SM8150 doesnt have INTF4.
-
-A minor nit, the subject convention in this file seems to be drm/msm/dpu 
-and not drm/msm/dpu1.
-
-Other than that,
-
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-
-
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 > ---
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 1 -
->   1 file changed, 1 deletion(-)
+>   drivers/regulator/qcom-rpmh-regulator.c | 81 +++++++++++++++++++++++++
+>   1 file changed, 81 insertions(+)
 > 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> index 27f029fdc682..06897a497eb7 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> @@ -86,7 +86,6 @@
->   			 BIT(MDP_INTF1_INTR) | \
->   			 BIT(MDP_INTF2_INTR) | \
->   			 BIT(MDP_INTF3_INTR) | \
-> -			 BIT(MDP_INTF4_INTR) | \
->   			 BIT(MDP_AD4_0_INTR) | \
->   			 BIT(MDP_AD4_1_INTR))
+> diff --git a/drivers/regulator/qcom-rpmh-regulator.c b/drivers/regulator/qcom-rpmh-regulator.c
+> index 4158ff126a67..42c42d17335b 100644
+> --- a/drivers/regulator/qcom-rpmh-regulator.c
+> +++ b/drivers/regulator/qcom-rpmh-regulator.c
+> @@ -731,6 +731,24 @@ static const struct rpmh_vreg_hw_data pmic5_ftsmps520 = {
+>   	.of_map_mode = rpmh_regulator_pmic4_smps_of_map_mode,
+>   };
 >   
+> +static const struct rpmh_vreg_hw_data pmic5_ftsmps525_lv = {
+> +	.regulator_type = VRM,
+> +	.ops = &rpmh_regulator_vrm_ops,
+> +	.voltage_range = REGULATOR_LINEAR_RANGE(300000, 0, 267, 4000),
+> +	.n_voltages = 268,
+> +	.pmic_mode_map = pmic_mode_map_pmic5_smps,
+> +	.of_map_mode = rpmh_regulator_pmic4_smps_of_map_mode,
+> +};
+> +
+> +static const struct rpmh_vreg_hw_data pmic5_ftsmps525_mv = {
+> +	.regulator_type = VRM,
+> +	.ops = &rpmh_regulator_vrm_ops,
+> +	.voltage_range = REGULATOR_LINEAR_RANGE(600000, 0, 267, 8000),
+> +	.n_voltages = 268,
+> +	.pmic_mode_map = pmic_mode_map_pmic5_smps,
+> +	.of_map_mode = rpmh_regulator_pmic4_smps_of_map_mode,
+> +};
+> +
+>   static const struct rpmh_vreg_hw_data pmic5_hfsmps515 = {
+>   	.regulator_type = VRM,
+>   	.ops = &rpmh_regulator_vrm_ops,
+> @@ -987,6 +1005,57 @@ static const struct rpmh_vreg_init_data pm8450_vreg_data[] = {
+>   	{}
+>   };
+>   
+> +static const struct rpmh_vreg_init_data pm8550_vreg_data[] = {
+> +	RPMH_VREG("ldo1",   "ldo%s1",  &pmic5_pldo,    "vdd-l1-l4-l10"),
+> +	RPMH_VREG("ldo2",   "ldo%s2",  &pmic5_pldo,    "vdd-l2-l13-l14"),
+> +	RPMH_VREG("ldo3",   "ldo%s3",  &pmic5_nldo,    "vdd-l3"),
+> +	RPMH_VREG("ldo4",   "ldo%s4",  &pmic5_nldo,    "vdd-l1-l4-l10"),
+> +	RPMH_VREG("ldo5",   "ldo%s5",  &pmic5_pldo,    "vdd-l5-l16"),
+> +	RPMH_VREG("ldo6",   "ldo%s6",  &pmic5_pldo_lv, "vdd-l6-l7"),
+> +	RPMH_VREG("ldo7",   "ldo%s7",  &pmic5_pldo_lv, "vdd-l6-l7"),
+> +	RPMH_VREG("ldo8",   "ldo%s8",  &pmic5_pldo_lv, "vdd-l8-l9"),
+> +	RPMH_VREG("ldo9",   "ldo%s9",  &pmic5_pldo,    "vdd-l8-l9"),
+> +	RPMH_VREG("ldo10",  "ldo%s10", &pmic5_nldo,    "vdd-l1-l4-l10"),
+> +	RPMH_VREG("ldo11",  "ldo%s11", &pmic5_pldo,    "vdd-l11"),
+> +	RPMH_VREG("ldo12",  "ldo%s12", &pmic5_pldo,    "vdd-l12"),
+> +	RPMH_VREG("ldo13",  "ldo%s13", &pmic5_pldo,    "vdd-l2-l13-l14"),
+> +	RPMH_VREG("ldo14",  "ldo%s14", &pmic5_pldo,    "vdd-l2-l13-l14"),
+> +	RPMH_VREG("ldo15",  "ldo%s15", &pmic5_pldo,    "vdd-l15"),
+> +	RPMH_VREG("ldo16",  "ldo%s16", &pmic5_pldo,    "vdd-l5-l16"),
+> +	RPMH_VREG("ldo17",  "ldo%s17", &pmic5_pldo,    "vdd-l17"),
+> +	RPMH_VREG("bob1",   "bob%s1",  &pmic5_bob,     "vdd-bob1"),
+> +	RPMH_VREG("bob2",   "bob%s2",  &pmic5_bob,     "vdd-bob2"),
+> +	{}
+> +};
+> +
+> +static const struct rpmh_vreg_init_data pm8550vs_vreg_data[] = {
+> +	RPMH_VREG("smps1",  "smp%s1",  &pmic5_ftsmps525_lv, "vdd-s1"),
+> +	RPMH_VREG("smps2",  "smp%s2",  &pmic5_ftsmps525_lv, "vdd-s2"),
+> +	RPMH_VREG("smps3",  "smp%s3",  &pmic5_ftsmps525_lv, "vdd-s3"),
+> +	RPMH_VREG("smps4",  "smp%s4",  &pmic5_ftsmps525_lv, "vdd-s4"),
+> +	RPMH_VREG("smps5",  "smp%s5",  &pmic5_ftsmps525_lv, "vdd-s5"),
+> +	RPMH_VREG("smps6",  "smp%s6",  &pmic5_ftsmps525_mv, "vdd-s6"),
+> +	RPMH_VREG("ldo1",   "ldo%s1",  &pmic5_nldo,   "vdd-l1"),
+> +	RPMH_VREG("ldo2",   "ldo%s2",  &pmic5_nldo,   "vdd-l2"),
+> +	RPMH_VREG("ldo3",   "ldo%s3",  &pmic5_nldo,   "vdd-l3"),
+> +	{}
+> +};
+> +
+> +static const struct rpmh_vreg_init_data pm8550ve_vreg_data[] = {
+> +	RPMH_VREG("smps1", "smp%s1", &pmic5_ftsmps525_lv, "vdd-s1"),
+> +	RPMH_VREG("smps2", "smp%s2", &pmic5_ftsmps525_lv, "vdd-s2"),
+> +	RPMH_VREG("smps3", "smp%s3", &pmic5_ftsmps525_lv, "vdd-s3"),
+> +	RPMH_VREG("smps4", "smp%s4", &pmic5_ftsmps525_lv, "vdd-s4"),
+> +	RPMH_VREG("smps5", "smp%s5", &pmic5_ftsmps525_lv, "vdd-s5"),
+> +	RPMH_VREG("smps6", "smp%s6", &pmic5_ftsmps525_lv, "vdd-s6"),
+> +	RPMH_VREG("smps7", "smp%s7", &pmic5_ftsmps525_lv, "vdd-s7"),
+> +	RPMH_VREG("smps8", "smp%s8", &pmic5_ftsmps525_lv, "vdd-s8"),
+> +	RPMH_VREG("ldo1",  "ldo%s1", &pmic5_nldo,   "vdd-l1"),
+> +	RPMH_VREG("ldo2",  "ldo%s2", &pmic5_nldo,   "vdd-l2"),
+> +	RPMH_VREG("ldo3",  "ldo%s3", &pmic5_nldo,   "vdd-l3"),
+> +	{}
+> +};
+> +
+>   static const struct rpmh_vreg_init_data pm8009_vreg_data[] = {
+>   	RPMH_VREG("smps1",  "smp%s1",  &pmic5_hfsmps510, "vdd-s1"),
+>   	RPMH_VREG("smps2",  "smp%s2",  &pmic5_hfsmps515, "vdd-s2"),
+> @@ -1314,6 +1383,18 @@ static const struct of_device_id __maybe_unused rpmh_regulator_match_table[] = {
+>   		.compatible = "qcom,pm8450-rpmh-regulators",
+>   		.data = pm8450_vreg_data,
+>   	},
+> +	{
+> +		.compatible = "qcom,pm8550-rpmh-regulators",
+> +		.data = pm8550_vreg_data,
+> +	},
+> +	{
+> +		.compatible = "qcom,pm8550ve-rpmh-regulators",
+> +		.data = pm8550ve_vreg_data,
+> +	},
+> +	{
+> +		.compatible = "qcom,pm8550vs-rpmh-regulators",
+> +		.data = pm8550vs_vreg_data,
+> +	},
+>   	{
+>   		.compatible = "qcom,pm8998-rpmh-regulators",
+>   		.data = pm8998_vreg_data,
