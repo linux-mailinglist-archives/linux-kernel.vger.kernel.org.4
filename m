@@ -2,193 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE07562CCC7
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 22:37:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0714862CCBC
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 22:36:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238806AbiKPVg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 16:36:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42068 "EHLO
+        id S234384AbiKPVgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 16:36:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234560AbiKPVga (ORCPT
+        with ESMTP id S234372AbiKPVgR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 16:36:30 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E87F12AC5
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 13:36:24 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id a14so32249965wru.5
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 13:36:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LXBfYsOqYyi9DKVQGkMLwQ+xTrxC76f34l8uPcGALOo=;
-        b=eiQbC6iHeXf5Xfg/Q269SQ1ztubRIN/H3QkCewoUo/3ya5CJA6JsU9uD/8uzlAjuOb
-         0tE0+TxRv4/J/noCDni/4id4fZJ6nt1/zgduLscE9NBDJONySDUJ+O02J0muh/kjvUAT
-         IVflkNnETAHiEZX+Bsidlb1MLJThs+DEarvwIsCwN3yd63b7CFw9MyQ1Hf+tAuQWaByx
-         i4xuyJUPVxLWInNm+8kDS+ep3uUuJkEcBgT84dQjNTp1ytJQJxtUzMZxi36Thlhgspy6
-         dhjX4kj/MeTRLXihoYQfVeAPYe6NemsqHub3iXKmXWj1fMBbjhE71ZB5P29oP8dnUsh5
-         F0ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LXBfYsOqYyi9DKVQGkMLwQ+xTrxC76f34l8uPcGALOo=;
-        b=wBir0VLA+8hZ2aWoHxX0NbjsfzqPPr1YBiGD+Ir85Pq+HbFMRaQk22KcFsbHfn+HWm
-         UINmGWGHBE9Uqq3bDif4N7G/+7RZS5h8NpF2yeWYbmFyLGegXW0EWT312Wstke13+1L/
-         ZOO2iK08aS4nPRmV2sU0qCGRxUKqC6iyhH7uGz42yPNaU4SjfqzNwjhPPABlGf73t+8R
-         FFTcspIpy3F5wpu0aYeaiWcSFOEi8bPY4IwT9NlSMnvpLm1iGypmginkvYwUvLsjgAmh
-         gMS5OMS4I/t3xB2Ilh9cjvDzbVjGacCIRTIx+u1znbN7sHsVv7624WE6PzM/e5FP+nEx
-         QtKQ==
-X-Gm-Message-State: ANoB5pnl2GSGsZIhHRSKyIylCDxzNpHnxlvzEzg65wX3uM7AGRes2qQ9
-        Bnn5w3Cnt4hPFGinyd+rFEaH3Q==
-X-Google-Smtp-Source: AA0mqf78cAxaZbPsm+4fk/nmj7g0AofRhKfQCRZd15qxzJmqtMiho6IdJhwudQuHghLARqH06m2/cA==
-X-Received: by 2002:a5d:40d1:0:b0:235:8867:50bf with SMTP id b17-20020a5d40d1000000b00235886750bfmr14919596wrq.193.1668634583032;
-        Wed, 16 Nov 2022 13:36:23 -0800 (PST)
-Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id fn15-20020a05600c688f00b003b47ff307e1sm3133045wmb.31.2022.11.16.13.36.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 13:36:22 -0800 (PST)
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
-To:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Roland Stigge <stigge@antcom.de>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Marcello Sylvester Bauer <sylv@sylv.io>,
-        Naresh Solanki <Naresh.Solanki@9elements.com>
-Subject: [PATCH v6 2/3] dt-bindings: hwmon: Add binding for max6639
-Date:   Wed, 16 Nov 2022 22:36:14 +0100
-Message-Id: <20221116213615.1256297-3-Naresh.Solanki@9elements.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221116213615.1256297-1-Naresh.Solanki@9elements.com>
-References: <20221116213615.1256297-1-Naresh.Solanki@9elements.com>
+        Wed, 16 Nov 2022 16:36:17 -0500
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B3E9EE0D
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 13:36:16 -0800 (PST)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 8A90392009D; Wed, 16 Nov 2022 22:36:15 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 8610A92009C;
+        Wed, 16 Nov 2022 21:36:15 +0000 (GMT)
+Date:   Wed, 16 Nov 2022 21:36:15 +0000 (GMT)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH 6/6] parport_pc: Set up mode and ECR masks for Oxford
+ Semiconductor devices
+In-Reply-To: <alpine.DEB.2.21.2211152336240.54611@angie.orcam.me.uk>
+Message-ID: <alpine.DEB.2.21.2211160018240.54611@angie.orcam.me.uk>
+References: <alpine.DEB.2.21.2211152336240.54611@angie.orcam.me.uk>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marcello Sylvester Bauer <sylv@sylv.io>
+No Oxford Semiconductor PCI or PCIe parallel port device supports the 
+Parallel Port FIFO mode.  All support the PS/2 Parallel Port mode and 
+the Enhanced Parallel Port mode via the ECR register.  The original 5V 
+PCI OX16PCI954 device does not support the Extended Capabilities Port 
+mode, the Test mode or the Configuration mode, but all the other OxSemi 
+devices do, including in particular the 3.3V PCI OXmPCI954 device and 
+the universal voltage PCI OXuPCI954 device.  All the unsupported modes 
+are marked reserved in the relevant datasheets.
 
-Add Devicetree binding documentation for Maxim MAX6639 temperature
-monitor with PWM fan-speed controller.
+Accordingly enable the `base_hi' BAR for the 954 devices to enable PS2 
+and EPP mode support via the ECR register, however mask the COMPAT mode 
+and, until we have a way to determine what chip variant it is that we 
+poke at, also the ECP mode, and mask the COMPAT mode only for all the 
+remaining OxSemi devices, fixing errors like:
 
-Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
-Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+parport0: FIFO is stuck
+FIFO write timed out
+
+and a non-functional port when the Parallel Port FIFO mode is selected.
+
+Complementing the fix apply an ECR mask for all these devices, which are 
+documented to only permit writing to the mode field of the ECR register 
+with a bit pattern of 00001 required to be written to bits 4:0 on mode 
+field writes.  No nFault or service interrupts are implemented, which 
+will therefore never have to be enabled, though bit 2 does report the 
+FIFO threshold status to be polled for in the ECP mode where supported.
+
+We have a documented case of writing 1 to bit 2 causing a lock-up with 
+at least one OX12PCI840 device (from old drivers/parport/ChangeLog):
+
+2001-10-10  Tim Waugh  <twaugh@redhat.com>
+
+	* parport_pc.c: Support for OX12PCI840 PCI card (reported by
+	mk@daveg.com).  Lock-ups diagnosed by Ronnie Arosa (and now we
+	just don't trust its ECR).
+
+which commit adbd321a17cc ("parport_pc: add base_hi BAR for oxsemi_840") 
+must have broken and by applying an ECR mask here we prevent the lock-up 
+from triggering.  This could have been the reason for requiring 00001 to 
+be written to bits 4:0 of ECR.
+
+Update the inline comment accordingly; it has come from Linux 2.4.12 
+back in 2001 and predates the introduction of OXmPCI954 and OXuPCI954 
+devices that do support ECP.
+
+References:
+
+[1] "OX16PCI954 Integrated Quad UART and PCI interface", Oxford 
+    Semiconductor Ltd., Data Sheet Revision 1.3, Feb. 1999, Chapter 9 
+    "Bidirectional Parallel Port", pp. 53-55
+
+[2] "OX16PCI952 Data Sheet, Integrated High Performance Dual UARTs,
+    Parallel Port and 5.0v PCI interface", Oxford Semiconductor Ltd., 
+    DS_B008A_00, Datasheet rev 1.1, June 2001, Chapter 8 "Bi-directional 
+    Parallel Port", pp. 52-56
+
+[3] "OXmPCI954 DATA SHEET Integrated High Performance Quad UARTs, 8-bit 
+    Local Bus/Parallel Port. 3.3v PCI/miniPCI interface.", Oxford 
+    Semiconductor Ltd., DS-0019, June 2005, Chapter 10 "Bidirectional 
+    Parallel Port", pp. 86-90
+
+[4] "OXmPCI952 Data Sheet, Integrated High Performance Dual UARTs, 8-bit 
+    Local Bus/Parallel Port. 3.3v PCI/miniPCI interface.", Oxford 
+    Semiconductor Ltd., DS-0020, June 2005, Chapter 8 "Bidirectional 
+    Parallel Port", pp. 73-77
+
+[5] "OX12PCI840 Integrated Parallel Port and PCI interface", Oxford
+    Semiconductor Ltd., DS-0021, Jun 2005, Chapter 5 "Bi-directional
+    Parallel Port", pp. 18-21
+
+[6] "OXPCIe952 PCI Express Bridge to Dual Serial & Parallel Port",
+    Oxford Semiconductor, Inc., DS-0046, Mar 06 08, Chapter "Parallel
+    Port Function", pp. 59-62
+
+[7] "OXPCIe840 PCI Express Bridge to Parallel Port", Oxford 
+    Semiconductor, Inc., DS-0049, Mar 06 08, Chapter "Parallel Port 
+    Function", pp. 15-18
+
+[8] "OXuPCI954 Data Sheet, Integrated High Performance Quad UARTs, 8-bit 
+    Local Bus/Parallel Port, 3.3 V and 5 V (Universal Voltage) PCI 
+    Interface.", Oxford Semiconductor, Inc., DS-0058, 26 Jan 2009, 
+    Chapter 8 "Bidirectional Parallel Port", pp. 62-65
+
+[9] "OXuPCI952 Data Sheet, Integrated High Performance Dual UARTs, 8-bit 
+    Local Bus/Parallel Port, 3.3 V and 5.0 V Universal Voltage PCI 
+    Interface.", Oxford Semiconductor, Inc., DS-0059, Sep 2007, Chapter 
+    8 "Bidirectional Parallel Port", pp. 61-64
+
+Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
 ---
- .../bindings/hwmon/maxim,max6639.yaml         | 93 +++++++++++++++++++
- 1 file changed, 93 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+ drivers/parport/parport_pc.c |   19 +++++++++++++------
+ 1 file changed, 13 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
-new file mode 100644
-index 000000000000..da040b11d2ab
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
-@@ -0,0 +1,93 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+
-+$id: http://devicetree.org/schemas/hwmon/maxim,max6639.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Maxim max6639
-+
-+maintainers:
-+  - Roland Stigge <stigge@antcom.de>
-+
-+description: |
-+  The MAX6639 is a 2-channel temperature monitor with dual, automatic, PWM
-+  fan-speed controller.  It monitors its own temperature and one external
-+  diode-connected transistor or the temperatures of two external diode-connected
-+  transistors, typically available in CPUs, FPGAs, or GPUs.
-+
-+  Datasheets:
-+    https://datasheets.maximintegrated.com/en/ds/MAX6639-MAX6639F.pdf
-+
-+properties:
-+  compatible:
-+    enum:
-+      - maxim,max6639
-+
-+  reg:
-+    maxItems: 1
-+
-+  '#address-cells':
-+    const: 1
-+
-+  '#size-cells':
-+    const: 0
-+
-+  '#pwm-cells':
-+    const: 3
-+
-+required:
-+  - compatible
-+  - reg
-+
-+patternProperties:
-+  "^fan@[0-1]$":
-+    type: object
-+    description: |
-+      Represents the two fans and their specific configuration.
-+
-+    $ref: fan-common.yaml#
-+
-+    properties:
-+      reg:
-+        description: |
-+          The fan number.
-+        items:
-+          minimum: 0
-+          maximum: 1
-+
-+    required:
-+      - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        fan1: fan-controller@10 {
-+            compatible = "maxim,max6639";
-+            reg = <0x10>;
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+            #pwm-cells = <3>;
-+
-+            fan@0 {
-+                reg = <0x0>;
-+                pulses-per-revolution = <2>;
-+                max-rpm = <4000>;
-+                target-rpm = <1000>;
-+                pwms = <&fan1 0 25000 0>;
-+            };
-+
-+            fan@1 {
-+                reg = <0x1>;
-+                pulses-per-revolution = <2>;
-+                max-rpm = <8000>;
-+                pwms = <&fan1 1 25000 0>;
-+            };
-+            };
-+    };
-+...
--- 
-2.37.3
-
+linux-parport-pc-pci-oxsemi-modes.diff
+Index: linux-macro/drivers/parport/parport_pc.c
+===================================================================
+--- linux-macro.orig/drivers/parport/parport_pc.c
++++ linux-macro/drivers/parport/parport_pc.c
+@@ -2696,12 +2696,19 @@ static struct parport_pc_pci {
+ 	/* titan_010l */		{ 1, { { 3, -1 }, } },
+ 	/* avlab_1p		*/	{ 1, { { 0, 1}, } },
+ 	/* avlab_2p		*/	{ 2, { { 0, 1}, { 2, 3 },} },
+-	/* The Oxford Semi cards are unusual: 954 doesn't support ECP,
+-	 * and 840 locks up if you write 1 to bit 2! */
+-	/* oxsemi_952 */		{ 1, { { 0, 1 }, } },
+-	/* oxsemi_954 */		{ 1, { { 0, -1 }, } },
+-	/* oxsemi_840 */		{ 1, { { 0, 1 }, } },
+-	/* oxsemi_pcie_pport */		{ 1, { { 0, 1 }, } },
++	/* The Oxford Semi cards are unusual: older variants of 954 don't
++	 * support ECP, and 840 locks up if you write 1 to bit 2!  None
++	 * implement nFault or service interrupts and all require 00001
++	 * bit pattern to be used for bits 4:0 with ECR writes. */
++	/* oxsemi_952 */		{ 1, { { 0, 1 }, },
++					  PARPORT_MODE_COMPAT, ECR_MODE_MASK },
++	/* oxsemi_954 */		{ 1, { { 0, 1 }, },
++					  PARPORT_MODE_ECP |
++					  PARPORT_MODE_COMPAT, ECR_MODE_MASK },
++	/* oxsemi_840 */		{ 1, { { 0, 1 }, },
++					  PARPORT_MODE_COMPAT, ECR_MODE_MASK },
++	/* oxsemi_pcie_pport */		{ 1, { { 0, 1 }, },
++					  PARPORT_MODE_COMPAT, ECR_MODE_MASK },
+ 	/* aks_0100 */                  { 1, { { 0, -1 }, } },
+ 	/* mobility_pp */		{ 1, { { 0, 1 }, } },
+ 	/* netmos_9900 */		{ 1, { { 0, -1 }, } },
