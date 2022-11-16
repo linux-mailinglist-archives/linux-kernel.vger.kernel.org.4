@@ -2,79 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B9FD62B861
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 11:30:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 115FF62B878
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 11:31:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231394AbiKPKag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 05:30:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37356 "EHLO
+        id S229924AbiKPKbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 05:31:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236814AbiKPK3p (ORCPT
+        with ESMTP id S229868AbiKPKbd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 05:29:45 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A014F10F9;
-        Wed, 16 Nov 2022 02:26:38 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id n20so22362334ejh.0;
-        Wed, 16 Nov 2022 02:26:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wZZMUhbKy7ynmOXNWH4kaH5VmBJFo340pscy2ibaMNA=;
-        b=HZ1wSriRfPZJmhfe7cRemFo0WYY/MWcqYreV3FKi50VCEeB2EUUYTJ8Tp+2HzYhq8p
-         haaa/NG86zlsNy8C1hIGIOac28ezcy2vsEzyidHCq0qvdNb2+b87pc30KgKeAhYP4Ewg
-         Z7Lb8rTeBdU2Uiz4iyjvFWcz+Fi6fxB0frQbWeI74t0V7U3W+RcDcpDOtgW8JLKQ75ic
-         BsxuDQmVirB8Yj+rGPht9o+LEIE4PfQzzfJLVw3QypdCzaCUZUzLEUaKTyk/N7FN2qr2
-         5b55RoLkOkLRtb1SS37lsl5y+z0LtWhgS++aExDsxYMPoBm2CK00Qnqsh3c7xfAKIUvc
-         op3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wZZMUhbKy7ynmOXNWH4kaH5VmBJFo340pscy2ibaMNA=;
-        b=ADMYATEAdV4hVGI2bbAZ+7zlA4lC1K9MW2SW290+10H+g11aQNJdqYtnSFzaH6QMfs
-         ADqExvwIa4HHOeTI8ZzJmxaPAd/hJFHkZnsEKG3q0ffCqmk9trC2nG0w85WUVqXqHCLi
-         XAh2lc7CW3tetKgWwGUwwRDixn/V1JtZB6T4KPg1LgyvI4J2WtEJx6OdnH38lZPyGB2J
-         El0V+bDaqZraQ5a2AuMYgwSVwmtTrWJ6HDkkTIEsJFweFYwqOxeqO1tSJfNJyMhhvs7T
-         50mD7bYx3wFgSEj6PmOx+mi0jnq3hhvC9extX6GiqbmiYFH6cU1GkzL9B360a53IMIT+
-         rnlw==
-X-Gm-Message-State: ANoB5pndN135zj4ddiwDnkvux/KvWMquU0/qPKI/l0sxMmmaL7082/IM
-        rTmqiyNB3cSfw6H5vStC6eo=
-X-Google-Smtp-Source: AA0mqf74VbIVWmlTNuSozK+5PNnszZ7A8uhH/Gk+C9mUxD3bAKfJuDEgae0qq76KE9yfDnkHPHE4NQ==
-X-Received: by 2002:a17:906:269a:b0:7ad:84cc:fb33 with SMTP id t26-20020a170906269a00b007ad84ccfb33mr17430651ejc.380.1668594397130;
-        Wed, 16 Nov 2022 02:26:37 -0800 (PST)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id r18-20020a1709061bb200b0077d37a5d401sm6710292ejg.33.2022.11.16.02.26.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 02:26:36 -0800 (PST)
-Date:   Wed, 16 Nov 2022 11:26:34 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     Brian Masney <bmasney@redhat.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wed, 16 Nov 2022 05:31:33 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F5A31FA3
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:27:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668594447;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=/1/81f1bc3wgoHEbP5M1Zz0wSDu9jba91U8WGSjmQ70=;
+        b=cB58a1xu0zkDW6lrsnC26uPab7ol+rQisFQQtOzIpYe7O5kCr/QOE7+qoX/7XPLFwKinBR
+        7GcHG5dd9Tng6gLpYmkoZKyWpVp4m3QpU93ubJyq0NMqTHdfby4UiBFiwLBP5uinhSwgnj
+        0pmfg/rJXAuOprJ/4HOLlOIj3uTazSI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-634-ZOxGenHbOYKZhsRLkhfmqA-1; Wed, 16 Nov 2022 05:27:25 -0500
+X-MC-Unique: ZOxGenHbOYKZhsRLkhfmqA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 71CBB833AED;
+        Wed, 16 Nov 2022 10:27:23 +0000 (UTC)
+Received: from t480s.fritz.box (unknown [10.39.193.216])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6687D2024CCA;
+        Wed, 16 Nov 2022 10:27:02 +0000 (UTC)
+From:   David Hildenbrand <david@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     x86@kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Peter Xu <peterx@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Walls <awalls@md.metrocast.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christian Benvenuti <benve@cisco.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Inki Dae <inki.dae@samsung.com>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        James Morris <jmorris@namei.org>, Jiri Olsa <jolsa@kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Kees Cook <keescook@chromium.org>,
+        Kentaro Takeda <takedakn@nttdata.co.jp>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Leon Romanovsky <leonro@nvidia.com>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: Re: [PATCH] gpiolib: of: Use correct fwnode for DT-probed chips
-Message-ID: <Y3S62i7OzocP5QrT@orome>
-References: <20221111113732.461881-1-thierry.reding@gmail.com>
- <Y3Kv7XoBytwwy9pC@x1>
- <20221115111800.t6i6fuszhuasvgka@SoMainline.org>
+        Mark Rutland <mark.rutland@arm.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Richard Weinberger <richard@nod.at>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tomasz Figa <tfiga@chromium.org>, Will Deacon <will@kernel.org>
+Subject: [PATCH mm-unstable v1 00/20] mm/gup: remove FOLL_FORCE usage from drivers (reliable R/O long-term pinning)
+Date:   Wed, 16 Nov 2022 11:26:39 +0100
+Message-Id: <20221116102659.70287-1-david@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="t/QMyFVa0+ws/Ltf"
-Content-Disposition: inline
-In-Reply-To: <20221115111800.t6i6fuszhuasvgka@SoMainline.org>
-User-Agent: Mutt/2.2.8 (2022-11-05)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,115 +134,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+For now, we did not support reliable R/O long-term pinning in COW mappings.
+That means, if we would trigger R/O long-term pinning in MAP_PRIVATE
+mapping, we could end up pinning the (R/O-mapped) shared zeropage or a
+pagecache page.
 
---t/QMyFVa0+ws/Ltf
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The next write access would trigger a write fault and replace the pinned
+page by an exclusive anonymous page in the process page table; whatever the
+process would write to that private page copy would not be visible by the
+owner of the previous page pin: for example, RDMA could read stale data.
+The end result is essentially an unexpected and hard-to-debug memory
+corruption.
 
-On Tue, Nov 15, 2022 at 12:18:00PM +0100, Marijn Suijten wrote:
-> On 2022-11-14 16:15:25, Brian Masney wrote:
-> > On Fri, Nov 11, 2022 at 12:37:32PM +0100, Thierry Reding wrote:
-> > > From: Thierry Reding <treding@nvidia.com>
-> > >=20
-> > > The OF node store in chip->fwnode is used to explicitly override the =
-FW
-> > > node for a GPIO chip. For chips that use the default FW node (i.e. th=
-at
-> > > of their parent device), this will be NULL and cause the chip not to =
-be
-> > > fully registered.
-> > >=20
-> > > Instead, use the GPIO device's FW node, which is set to either the no=
-de
-> > > of the parent device or the explicit override in chip->fwnode.
-> > >=20
-> > > Fixes: 8afe82550240 ("gpiolib: of: Prepare of_gpiochip_add() / of_gpi=
-ochip_remove() for fwnode")
-> > > Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> > > Signed-off-by: Thierry Reding <treding@nvidia.com>
-> >=20
-> > Reviewed-by: Brian Masney <bmasney@redhat.com>
-> > Tested-by: Brian Masney <bmasney@redhat.com>
-> >=20
-> > I separately sent a similar type of patch to fix the same issue today:
-> > https://lore.kernel.org/linux-arm-msm/20221114202943.2389489-1-bmasney@=
-redhat.com/T/#u
->=20
-> For completeness, your linked patch fixes a synchronous external abort
-> on multiple Qualcomm platforms pointed out in [1].  This patch however
-> does not, are you sure they fix the exact same issue?
->=20
-> [1]: https://lore.kernel.org/linux-arm-msm/20221115110800.35gl3j43lmbxm3j=
-b@SoMainline.org/
+Some drivers tried working around that limitation by using
+"FOLL_FORCE|FOLL_WRITE|FOLL_LONGTERM" for R/O long-term pinning for now.
+FOLL_WRITE would trigger a write fault, if required, and break COW before
+pinning the page. FOLL_FORCE is required because the VMA might lack write
+permissions, and drivers wanted to make that working as well, just like
+one would expect (no write access, but still triggering a write access to
+break COW).
 
-Can you check if the below fixes the MSM issue that you're seeing
-(applied on top of my earlier patch, though with Brian's reverted
-temporarily)?
+However, that is not a practical solution, because
+(1) Drivers that don't stick to that undocumented and debatable pattern
+    would still run into that issue. For example, VFIO only uses
+    FOLL_LONGTERM for R/O long-term pinning.
+(2) Using FOLL_WRITE just to work around a COW mapping + page pinning
+    limitation is unintuitive. FOLL_WRITE would, for example, mark the
+    page softdirty or trigger uffd-wp, even though, there actually isn't
+    going to be any write access.
+(3) The purpose of FOLL_FORCE is debug access, not access without lack of
+    VMA permissions by arbitrarty drivers.
 
-Thanks,
-Thierry
+So instead, make R/O long-term pinning work as expected, by breaking COW
+in a COW mapping early, such that we can remove any FOLL_FORCE usage from
+drivers and make FOLL_FORCE ptrace-specific (renaming it to FOLL_PTRACE).
+More details in patch #8.
 
---- >8 ---
-diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-index 11fb7ec883e9..d692ad5c5a27 100644
---- a/drivers/gpio/gpiolib.c
-+++ b/drivers/gpio/gpiolib.c
-@@ -447,10 +447,11 @@ static unsigned long *gpiochip_allocate_mask(struct g=
-pio_chip *gc)
-=20
- static unsigned int gpiochip_count_reserved_ranges(struct gpio_chip *gc)
- {
-+	struct fwnode_handle *fwnode =3D dev_fwnode(&gc->gpiodev->dev);
- 	int size;
-=20
- 	/* Format is "start, count, ..." */
--	size =3D fwnode_property_count_u32(gc->fwnode, "gpio-reserved-ranges");
-+	size =3D fwnode_property_count_u32(fwnode, "gpio-reserved-ranges");
- 	if (size > 0 && size % 2 =3D=3D 0)
- 		return size;
-=20
-@@ -471,6 +472,7 @@ static int gpiochip_alloc_valid_mask(struct gpio_chip *=
-gc)
-=20
- static int gpiochip_apply_reserved_ranges(struct gpio_chip *gc)
- {
-+	struct fwnode_handle *fwnode =3D dev_fwnode(&gc->gpiodev->dev);
- 	unsigned int size;
- 	u32 *ranges;
- 	int ret;
-@@ -483,7 +485,7 @@ static int gpiochip_apply_reserved_ranges(struct gpio_c=
-hip *gc)
- 	if (!ranges)
- 		return -ENOMEM;
-=20
--	ret =3D fwnode_property_read_u32_array(gc->fwnode, "gpio-reserved-ranges"=
-, ranges, size);
-+	ret =3D fwnode_property_read_u32_array(fwnode, "gpio-reserved-ranges", ra=
-nges, size);
- 	if (ret) {
- 		kfree(ranges);
- 		return ret;
---- >8 ---
+Patches #1--#3 add COW tests for non-anonymous pages.
+Patches #4--#7 prepare core MM for extended FAULT_FLAG_UNSHARE support in
+COW mappings.
+Patch #8 implements reliable R/O long-term pinning in COW mappings
+Patches #9--#19 remove any FOLL_FORCE usage from drivers.
+Patch #20 renames FOLL_FORCE to FOLL_PTRACE.
 
---t/QMyFVa0+ws/Ltf
-Content-Type: application/pgp-signature; name="signature.asc"
+I'm refraining from CCing all driver/arch maintainers on the whole patch
+set, but only CC them on the cover letter and the applicable patch
+(I know, I know, someone is always unhappy ... sorry).
 
------BEGIN PGP SIGNATURE-----
+RFC -> v1:
+* Use term "ptrace" instead of "debuggers" in patch descriptions
+* Added ACK/Tested-by
+* "mm/frame-vector: remove FOLL_FORCE usage"
+ -> Adjust description
+* "mm: rename FOLL_FORCE to FOLL_PTRACE"
+ -> Added
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmN0utoACgkQ3SOs138+
-s6HY+w/9FPuWzbA0QDSng/u8HNj0vDTsWe/g5Yf3zW0pdt8x3f9eIL3hivFA7aT8
-qEMPLl8JbcoK0VX8Jx6/i6VviJthgKxwjT0ET39uwHMEac7e0P5zNPLoY3T6L6Nq
-EFYUYoiHecionPiKK5DxG6+W08BIVmSM0XnwDvK2INRUQGemxE5qPq35v9NK62Ep
-nyFZeL2goKpea3F2wUMqFcUHJqVzCaNc7/bgmnrHaAkJpS0kcupkwM4qjPTp3VHl
-Ey+M/BsS+NB7Eu45xHSOnwwL0jRhj4LGsmM/q0sYS1tQ9aHiO75x/y0S7pqdIyM6
-V0zopPZttwy0OLGfZQcMgiSLVj0rpVXVxH50O+w+GbycibQBKpY3PNt+se9G5foK
-FxsDZcyQuRJwEHYnrLqO+Nlne2795YAQbO4OFakg1DU+DQ3zsL8byWwMKBVCpqdy
-R0vfwRcC/Bh8CdCs9n0A6//BZhfnsiyXFqyqHxay9QI83/egha4ek8TPEtA6mgMp
-vxu4mLJJ+XHCU3HkE6t1/IKsCjXcJgFoWs+HcDoq1N0r0u9cIS0wC+ncti6JyEoN
-r1HmQ4anutzfYz8jATxAR1feMYhtKd3iFWwpmWFbnpMDuj8q6JbGaQVaqmhvbQoU
-SFGNbDvpzUCUTfEBUKaHRtoNoox6SBu+gzCwpvpIUa9Ml0/v4aw=
-=XuqC
------END PGP SIGNATURE-----
+David Hildenbrand (20):
+  selftests/vm: anon_cow: prepare for non-anonymous COW tests
+  selftests/vm: cow: basic COW tests for non-anonymous pages
+  selftests/vm: cow: R/O long-term pinning reliability tests for
+    non-anon pages
+  mm: add early FAULT_FLAG_UNSHARE consistency checks
+  mm: add early FAULT_FLAG_WRITE consistency checks
+  mm: rework handling in do_wp_page() based on private vs. shared
+    mappings
+  mm: don't call vm_ops->huge_fault() in wp_huge_pmd()/wp_huge_pud() for
+    private mappings
+  mm: extend FAULT_FLAG_UNSHARE support to anything in a COW mapping
+  mm/gup: reliable R/O long-term pinning in COW mappings
+  RDMA/umem: remove FOLL_FORCE usage
+  RDMA/usnic: remove FOLL_FORCE usage
+  RDMA/siw: remove FOLL_FORCE usage
+  media: videobuf-dma-sg: remove FOLL_FORCE usage
+  drm/etnaviv: remove FOLL_FORCE usage
+  media: pci/ivtv: remove FOLL_FORCE usage
+  mm/frame-vector: remove FOLL_FORCE usage
+  drm/exynos: remove FOLL_FORCE usage
+  RDMA/hw/qib/qib_user_pages: remove FOLL_FORCE usage
+  habanalabs: remove FOLL_FORCE usage
+  mm: rename FOLL_FORCE to FOLL_PTRACE
 
---t/QMyFVa0+ws/Ltf--
+ arch/alpha/kernel/ptrace.c                    |   6 +-
+ arch/arm64/kernel/mte.c                       |   2 +-
+ arch/ia64/kernel/ptrace.c                     |  10 +-
+ arch/mips/kernel/ptrace32.c                   |   4 +-
+ arch/mips/math-emu/dsemul.c                   |   2 +-
+ arch/powerpc/kernel/ptrace/ptrace32.c         |   4 +-
+ arch/sparc/kernel/ptrace_32.c                 |   4 +-
+ arch/sparc/kernel/ptrace_64.c                 |   8 +-
+ arch/x86/kernel/step.c                        |   2 +-
+ arch/x86/um/ptrace_32.c                       |   2 +-
+ arch/x86/um/ptrace_64.c                       |   2 +-
+ drivers/gpu/drm/etnaviv/etnaviv_gem.c         |   8 +-
+ drivers/gpu/drm/exynos/exynos_drm_g2d.c       |   2 +-
+ drivers/infiniband/core/umem.c                |   8 +-
+ drivers/infiniband/hw/qib/qib_user_pages.c    |   2 +-
+ drivers/infiniband/hw/usnic/usnic_uiom.c      |   9 +-
+ drivers/infiniband/sw/siw/siw_mem.c           |   9 +-
+ drivers/media/common/videobuf2/frame_vector.c |   2 +-
+ drivers/media/pci/ivtv/ivtv-udma.c            |   2 +-
+ drivers/media/pci/ivtv/ivtv-yuv.c             |   5 +-
+ drivers/media/v4l2-core/videobuf-dma-sg.c     |  14 +-
+ drivers/misc/habanalabs/common/memory.c       |   3 +-
+ fs/exec.c                                     |   2 +-
+ fs/proc/base.c                                |   2 +-
+ include/linux/mm.h                            |  35 +-
+ include/linux/mm_types.h                      |   8 +-
+ kernel/events/uprobes.c                       |   4 +-
+ kernel/ptrace.c                               |  12 +-
+ mm/gup.c                                      |  38 +-
+ mm/huge_memory.c                              |  13 +-
+ mm/hugetlb.c                                  |  14 +-
+ mm/memory.c                                   |  97 +++--
+ mm/util.c                                     |   4 +-
+ security/tomoyo/domain.c                      |   2 +-
+ tools/testing/selftests/vm/.gitignore         |   2 +-
+ tools/testing/selftests/vm/Makefile           |  10 +-
+ tools/testing/selftests/vm/check_config.sh    |   4 +-
+ .../selftests/vm/{anon_cow.c => cow.c}        | 387 +++++++++++++++++-
+ tools/testing/selftests/vm/run_vmtests.sh     |   8 +-
+ 39 files changed, 575 insertions(+), 177 deletions(-)
+ rename tools/testing/selftests/vm/{anon_cow.c => cow.c} (75%)
+
+-- 
+2.38.1
+
