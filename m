@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A678862B3CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 08:13:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20CC262B3D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 08:13:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229531AbiKPHNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 02:13:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41014 "EHLO
+        id S231890AbiKPHNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 02:13:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230280AbiKPHNG (ORCPT
+        with ESMTP id S232716AbiKPHNJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 02:13:06 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 468141F9C1
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 23:13:06 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id c188-20020a25c0c5000000b006d8eba07513so15519139ybf.17
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 23:13:06 -0800 (PST)
+        Wed, 16 Nov 2022 02:13:09 -0500
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C335920181
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 23:13:08 -0800 (PST)
+Received: by mail-pf1-x449.google.com with SMTP id bw25-20020a056a00409900b0056bdd4f8818so9216923pfb.15
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 23:13:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rZhTm2sCwM0sd4mB+pucosVTiyv4zqlp4wWT/R2sU44=;
-        b=NeVYHzQSh9LPa95VeNyD2erJ5RST3qbDcp39rn2M+WV63VJbLXccHQe0jOp3281h//
-         /6QDJStsa5HeC5719ZaHB7dKPIFqJBqwDDDrFvy2JBQFdO9waPThCkNtqp/L8dsBc4Zl
-         je1aGmwz5ZpLRBYgX26Ln8BGYlh3RTzfhwGsIJO3BVaVIrYXzvr4K4LAAWJxYvGT5+sU
-         0oQCfAFtFchWmcggIp+rTz96cBrbRZVZUb/rV1zk2Wvp5T3s0OowWJ2KL+bqnDxJ3ky0
-         cex8DimvjWYivY/yPs+0ZEjDCc3R3QCmzuVRoMis6Igioz0Kmnwbd3NVzMGuYdsRoNg4
-         BfZg==
+        bh=NVCMLdIaGKYl515v9BSPBB+0JzpaXzttaEc2YraX+wA=;
+        b=YBypCi/EgROQraVH/pC6M9CYoxe2JUhU33fWhx/1ZIT2+vPvTKkBb3E6wsNNiCtmO1
+         T52/NNdz/qmL4tHIZzdA8Jid+rFwh5E1mxSJU/rQe9N2flMehzZ5+KYViypk9Gap8Ipa
+         ycW4RH5w/HD9PtSzaCepkSW4ZQV7kGaS4pxw5rhdoJZNASDkmL2H1ZcUo5iquj78GHh2
+         o32wRcdJS1LgBhX475WE6YVdIPvjqSmKdEM4XEe4Gw8d9rPMCqH3ZZWU31bxu+0yAGXw
+         G79ILt8QsdeDMgoSGREhRNzYWZF4Kmu5qJAZih6OttXSgEePNViLoSm9Om/k5GdcSuqS
+         sGKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rZhTm2sCwM0sd4mB+pucosVTiyv4zqlp4wWT/R2sU44=;
-        b=MNGhNzzUTRxYLHGqy5PHz/M22tcexP944NxBqb9a6ivfmxbHsbWnz4C54jgv496h3v
-         BXZgBCVJk4eydSdSkOy1zdOTrf1yKmw22MdDgD5vcvqRrwDpmO4rCe82+0SS8u1FrwPZ
-         rkJUlKOrUo27IdCGA25vNmcztXmRnzvtUQ2o0Wu5jofcpmofstQ117dhZznuu+hxxDSj
-         6DNjwv24pPz+3FAouo9tLr1kGAhndcxCz6HQDRIv2+jnRn7dJALRoIJe0I2S0Dfdg7LH
-         Mli8l5BMewdga4KE+oU5ZH8cLYLxyRDbcml4m7VnZl7o+GMWYOtfEnB8eYa7pntNLaNE
-         Ib/g==
-X-Gm-Message-State: ANoB5pn3dGvkUzL46N17r62xJPM1e5C2gut7WNSgg4PH01Q1d9AwjxQ3
-        lL6abBi7PzPnfvIiWiqa53buiHV7fPDN
-X-Google-Smtp-Source: AA0mqf4LN7zMZJXkzIGBeqXaFaLoGtCJ64z/NuKcPfkUISn4se81/eXU9lqH0dIC9hkuM7/yCNFurBEsEak4
+        bh=NVCMLdIaGKYl515v9BSPBB+0JzpaXzttaEc2YraX+wA=;
+        b=wjqaU66biaWvauV7+EbDm2kmMWfOw2bl83pLCkAumyZ88+5dxgWJ6F/ooW40En11c1
+         TmC9nMVVkGdgmPhfxZMdGu6Bqs6Ddnn0LvlXMGh5X3Mmr0E+gbSiRz1woj28iKiJ4Xzu
+         Uw5nACMfi0ARrDRR6ggfqkiJwCU9BjJ/Wi/3vRvx0BIg+3Ecw3xkgqcV5yPoQZuU4pYa
+         AXgigD3+AaKrEaxap+PtU1l0GX1CKB9W+GIoj8NqXryerOKqSUu6wMU6kmkPePEmEz5R
+         WFhjf9mWsOSWmOuNJXdQJHV0h9HpVTvZWNBgWuvZbJeAsmhJwvHM1sUrbSKQ6V1hIos3
+         yf3w==
+X-Gm-Message-State: ANoB5pmiyR1+oDdUeubbAGUUG5jQ+YObSYSunzmn/NP37Iz/6hHQD4D6
+        MaZCsUTNYos4rzS5HttlEP7ChZmABTzs
+X-Google-Smtp-Source: AA0mqf5yOlyfg23shcD/S8pZEuV65Yr6XU4+Cu8EefLfLGvQd24JxozE1zWMO4ySuQt8AswjPsOipUHBRcJt
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:bf0f:58f3:342e:c1ec])
- (user=irogers job=sendgmr) by 2002:a81:ad7:0:b0:36f:d14a:6158 with SMTP id
- 206-20020a810ad7000000b0036fd14a6158mr19697123ywk.325.1668582785931; Tue, 15
- Nov 2022 23:13:05 -0800 (PST)
-Date:   Tue, 15 Nov 2022 23:12:56 -0800
+ (user=irogers job=sendgmr) by 2002:aa7:8f0d:0:b0:56b:d738:9b with SMTP id
+ x13-20020aa78f0d000000b0056bd738009bmr21882110pfr.61.1668582788294; Tue, 15
+ Nov 2022 23:13:08 -0800 (PST)
+Date:   Tue, 15 Nov 2022 23:12:57 -0800
 In-Reply-To: <20221116071259.2832681-1-irogers@google.com>
-Message-Id: <20221116071259.2832681-2-irogers@google.com>
+Message-Id: <20221116071259.2832681-3-irogers@google.com>
 Mime-Version: 1.0
 References: <20221116071259.2832681-1-irogers@google.com>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Subject: [PATCH v1 1/4] perf list: Fix asan issue
+Subject: [PATCH v1 2/4] perf list: Support newlines in wordwrap
 From:   Ian Rogers <irogers@google.com>
 To:     Weilin Wang <weilin.wang@intel.com>,
         Perry Taylor <perry.taylor@intel.com>,
@@ -78,7 +78,7 @@ Cc:     Stephane Eranian <eranian@google.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,27 +86,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Missed due to the void* being a valid cast.
+Rather than a newline starting from column 0, record a newline was
+seen and then add the newline and space before the next word.
 
-Fixes: c9367a0658eb ("perf list: Add JSON output option")
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-list.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/perf/builtin-list.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
 diff --git a/tools/perf/builtin-list.c b/tools/perf/builtin-list.c
-index aec139f7fbb2..0450fbfd0a5c 100644
+index 0450fbfd0a5c..43c635d58627 100644
 --- a/tools/perf/builtin-list.c
 +++ b/tools/perf/builtin-list.c
-@@ -466,7 +466,7 @@ int cmd_list(int argc, const char **argv)
- 				pr_warning("WARNING: hybrid cputype is not supported!\n");
- 		}
- 	}
--	print_cb.print_start(&ps);
-+	print_cb.print_start(ps);
+@@ -73,17 +73,19 @@ static void wordwrap(const char *s, int start, int max, int corr)
+ {
+ 	int column = start;
+ 	int n;
++	bool saw_newline = false;
  
- 	if (argc == 0) {
- 		default_ps.metrics = true;
+ 	while (*s) {
+-		int wlen = strcspn(s, " \t");
++		int wlen = strcspn(s, " \t\n");
+ 
+-		if (column + wlen >= max && column > start) {
++		if ((column + wlen >= max && column > start) || saw_newline) {
+ 			printf("\n%*s", start, "");
+ 			column = start + corr;
+ 		}
+ 		n = printf("%s%.*s", column > start ? " " : "", wlen, s);
+ 		if (n <= 0)
+ 			break;
++		saw_newline = s[wlen] == '\n';
+ 		s += wlen;
+ 		column += n;
+ 		s = skip_spaces(s);
+@@ -145,7 +147,7 @@ static void default_print_event(void *ps, const char *pmu_name, const char *topi
+ 		wordwrap(desc, 8, pager_get_columns(), 0);
+ 		printf("]\n");
+ 	}
+-
++	long_desc = long_desc ?: desc;
+ 	if (long_desc && print_state->long_desc) {
+ 		printf("%*s", 8, "[");
+ 		wordwrap(long_desc, 8, pager_get_columns(), 0);
+@@ -153,7 +155,8 @@ static void default_print_event(void *ps, const char *pmu_name, const char *topi
+ 	}
+ 
+ 	if (print_state->detailed && encoding_desc) {
+-		printf("%*s%s", 8, "", encoding_desc);
++		printf("%*s", 8, "");
++		wordwrap(encoding_desc, 8, pager_get_columns(), 0);
+ 		if (metric_name)
+ 			printf(" MetricName: %s", metric_name);
+ 		if (metric_expr)
 -- 
 2.38.1.431.g37b22c650d-goog
 
