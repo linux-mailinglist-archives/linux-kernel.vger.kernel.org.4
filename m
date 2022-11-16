@@ -2,694 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA46662B5DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:01:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85CCD62B5CF
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:00:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238819AbiKPJBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 04:01:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53048 "EHLO
+        id S231547AbiKPJA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 04:00:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238803AbiKPI7L (ORCPT
+        with ESMTP id S233059AbiKPI74 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 03:59:11 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D4721261;
-        Wed, 16 Nov 2022 00:58:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1668589106; x=1700125106;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=iVH/PqfzZKBepLCZktTRIsGNrPMDiyPZGBuRb+whZ8g=;
-  b=GdxpQrqJc91zYAUIrp3tB41MALJgASA4QSsAS170CnAPCUGKEzylhg36
-   fEm0tCVyMrz7S2seDRo/l1RDvOzt9rzCwcoX/m4gfYwXvX3XUpCo2hzZG
-   dZTbjKJI1eBWXB8ME/yU42qlPovecElG3KwwLunUtMl/wJlRk/trs1ExJ
-   /vG9hMbUmBI/FdHmfVDl/mAc7TvdGi45sMTPvtGSydaCaKY/vrq8bpooO
-   PIUqhosLy+jgj+cDYnB0Zp+3MD9baySD3UHUU4J6vzNvywrDx40DxmCyR
-   3wQFH2quXr6Q0VHzGuIY4TO/6tTdckSOVf81nn2nGDS3npVRii6W9GnLv
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="187219779"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Nov 2022 01:58:25 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 16 Nov 2022 01:58:24 -0700
-Received: from den-dk-m31857.microchip.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Wed, 16 Nov 2022 01:58:20 -0700
-From:   Steen Hegelund <steen.hegelund@microchip.com>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-CC:     Steen Hegelund <steen.hegelund@microchip.com>,
-        <UNGLinuxDriver@microchip.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Casper Andersson" <casper.casan@gmail.com>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Wan Jiabing <wanjiabing@vivo.com>,
-        "Nathan Huckleberry" <nhuck@google.com>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        "Steen Hegelund" <Steen.Hegelund@microchip.com>,
-        Daniel Machon <daniel.machon@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>
-Subject: [PATCH net-next 8/8] net: microchip: sparx5: Add VCAP debugfs KUNIT test
-Date:   Wed, 16 Nov 2022 09:57:47 +0100
-Message-ID: <20221116085747.3810427-9-steen.hegelund@microchip.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221116085747.3810427-1-steen.hegelund@microchip.com>
-References: <20221116085747.3810427-1-steen.hegelund@microchip.com>
+        Wed, 16 Nov 2022 03:59:56 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90EEF2610D
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 00:59:00 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id d20so20921188ljc.12
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 00:59:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=I4IfNeC1Qcq4fPLdPB19ZJ1fa7AFFBmM6/Rey4bmXio=;
+        b=OGoju5uX3y8iIKX9U8A6GzDLoWbtUcScchGeoye14nl6MlB84bERq48ZRCd+yfeLTZ
+         MgNKXX80x9CfJFl06epbK2NwP25K4YRyHPc5SdsEnb4ZqIra2mLPmgdgPHgKf93TQP8C
+         EIt9KV1sY3mdjCMTO8pPcGHc1pK3yMuv8lsrsEnyVfBwC73+llrHxJFRGDqHsTGkeMH4
+         6e/A6f3TBKcrR8d0L0pQk6QXu0rQumEy6wtiHW29Mo6jnJ9wnT9RvGklmNcE+q3ObsXX
+         m0Y+iCKdts5XqyR6TTLnrNiQGLQOoI1SZV+YEIRjRjrqFUiuZakH5ODsdv5vbMOBY6zl
+         LnDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=I4IfNeC1Qcq4fPLdPB19ZJ1fa7AFFBmM6/Rey4bmXio=;
+        b=T0Ak6vvTxahTuVq5sZn36sjkD2pUBLiOfUuqVmBjd9DrDbqZQxtnWgwb6VXxyInopB
+         o/sZtzC57y7ihe2/sBsPjbRriKQLjJbKsta/SFYoD9qv5994PSk1EJ++pYDaOVr9GlQ2
+         T0cA82/hefxydMtsr2SyEoM4hJOKNJQZXm4ThYEfVQ5DgLCXjNpXINtMLJmzCy5Ngxtl
+         XwSFaIjGxnZ9/WeFuZBpHiI48U6IprNovHTtyKhGLCLx7Q+bv5t24sDPWLV5RnWaBpD2
+         uHOdycDwa5POzzgtxxuGFGbas25cT/1SyQbySqPe+iuZ5jU9hgw+dMuDut0qL3LVeUj6
+         F5Kw==
+X-Gm-Message-State: ANoB5pl+8YH0eURebvMFBZF8u/jHPn+SswegWTLSL94FPViq8pFQS4+6
+        Iah3O+Eb06R2g5MEFPclINsEMQ==
+X-Google-Smtp-Source: AA0mqf702DWyhH86Tvlj4FTgeDoZA52uJlESfzCus0o2RqxEEzZNDQ5Cnm1E4Zu/AO72TkjpWZH2Xw==
+X-Received: by 2002:a2e:99ce:0:b0:279:1349:b2e2 with SMTP id l14-20020a2e99ce000000b002791349b2e2mr2454667ljj.382.1668589138928;
+        Wed, 16 Nov 2022 00:58:58 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id q26-20020a2eb4ba000000b0026e0434eb1esm2806109ljm.67.2022.11.16.00.58.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Nov 2022 00:58:58 -0800 (PST)
+Message-ID: <c1745278-9ae1-81a4-7775-0289e9ce5b76@linaro.org>
+Date:   Wed, 16 Nov 2022 09:58:57 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] dt-bindings: gpio: gpio-davinci: Increase maxItems in
+ gpio-line-names
+Content-Language: en-US
+To:     Nishanth Menon <nm@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Keerthy <j-keerthy@ti.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org, Robert Nelson <robertcnelson@gmail.com>
+References: <20221115231021.2389-1-nm@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221115231021.2389-1-nm@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This tests the functionality of the debugFS support:
+On 16/11/2022 00:10, Nishanth Menon wrote:
+> gpio-line-names really depends on ti,ngpios. However, the maximum value
+> we have seen across the board is on K2G and da850 platforms where it can
+> be upto 144.
+> 
+> Link: https://lore.kernel.org/linux-arm-kernel/20221115200357.qa2rvw3clbz7unzq@symptom/T/#u
+> Fixes: c830b87a761b ("dt-bindings: gpio: gpio-davinci: Convert to json-schema")
+> Reported-by: Robert Nelson <robertcnelson@gmail.com>
+> Signed-off-by: Nishanth Menon <nm@ti.com>
+> ---
 
-- finding valid keyset on an address
-- raw VCAP output
-- full rule VCAP output
 
-Signed-off-by: Steen Hegelund <steen.hegelund@microchip.com>
----
- drivers/net/ethernet/microchip/vcap/Kconfig   |   1 +
- .../microchip/vcap/vcap_api_debugfs.c         |   4 +
- .../microchip/vcap/vcap_api_debugfs_kunit.c   | 539 ++++++++++++++++++
- .../ethernet/microchip/vcap/vcap_api_kunit.c  |   6 +-
- 4 files changed, 547 insertions(+), 3 deletions(-)
- create mode 100644 drivers/net/ethernet/microchip/vcap/vcap_api_debugfs_kunit.c
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-diff --git a/drivers/net/ethernet/microchip/vcap/Kconfig b/drivers/net/ethernet/microchip/vcap/Kconfig
-index 1af30a358a15..97f43fd4473f 100644
---- a/drivers/net/ethernet/microchip/vcap/Kconfig
-+++ b/drivers/net/ethernet/microchip/vcap/Kconfig
-@@ -40,6 +40,7 @@ config VCAP_KUNIT_TEST
- 	bool "KUnit test for VCAP library" if !KUNIT_ALL_TESTS
- 	depends on KUNIT
- 	depends on KUNIT=y && VCAP=y && y
-+	select DEBUG_FS
- 	default KUNIT_ALL_TESTS
- 	help
- 	  This builds unit tests for the VCAP library.
-diff --git a/drivers/net/ethernet/microchip/vcap/vcap_api_debugfs.c b/drivers/net/ethernet/microchip/vcap/vcap_api_debugfs.c
-index 534c51f2ec4f..c57a82f97205 100644
---- a/drivers/net/ethernet/microchip/vcap/vcap_api_debugfs.c
-+++ b/drivers/net/ethernet/microchip/vcap/vcap_api_debugfs.c
-@@ -767,3 +767,7 @@ struct dentry *vcap_debugfs(struct device *dev, struct dentry *parent,
- 	return dir;
- }
- EXPORT_SYMBOL_GPL(vcap_debugfs);
-+
-+#ifdef CONFIG_VCAP_KUNIT_TEST
-+#include "vcap_api_debugfs_kunit.c"
-+#endif
-diff --git a/drivers/net/ethernet/microchip/vcap/vcap_api_debugfs_kunit.c b/drivers/net/ethernet/microchip/vcap/vcap_api_debugfs_kunit.c
-new file mode 100644
-index 000000000000..ac5637caac64
---- /dev/null
-+++ b/drivers/net/ethernet/microchip/vcap/vcap_api_debugfs_kunit.c
-@@ -0,0 +1,539 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/* Copyright (C) 2022 Microchip Technology Inc. and its subsidiaries.
-+ * Microchip VCAP API kunit test suite
-+ */
-+
-+#include <kunit/test.h>
-+#include "vcap_api.h"
-+#include "vcap_api_client.h"
-+#include "vcap_api_debugfs.h"
-+#include "vcap_model_kunit.h"
-+
-+/* First we have the test infrastructure that emulates the platform
-+ * implementation
-+ */
-+#define TEST_BUF_CNT 100
-+#define TEST_BUF_SZ  350
-+#define STREAMWSIZE 64
-+
-+static u32 test_updateaddr[STREAMWSIZE] = {};
-+static int test_updateaddridx;
-+static int test_cache_erase_count;
-+static u32 test_init_start;
-+static u32 test_init_count;
-+static u32 test_hw_counter_id;
-+static struct vcap_cache_data test_hw_cache;
-+static struct net_device test_netdev = {};
-+static int test_move_addr;
-+static int test_move_offset;
-+static int test_move_count;
-+static char test_pr_buffer[TEST_BUF_CNT][TEST_BUF_SZ];
-+static int test_pr_bufferidx;
-+static int test_pr_idx;
-+
-+/* Callback used by the VCAP API */
-+static enum vcap_keyfield_set test_val_keyset(struct net_device *ndev,
-+					      struct vcap_admin *admin,
-+					      struct vcap_rule *rule,
-+					      struct vcap_keyset_list *kslist,
-+					      u16 l3_proto)
-+{
-+	int idx;
-+
-+	if (kslist->cnt > 0) {
-+		switch (admin->vtype) {
-+		case VCAP_TYPE_IS0:
-+			for (idx = 0; idx < kslist->cnt; idx++) {
-+				if (kslist->keysets[idx] == VCAP_KFS_ETAG)
-+					return kslist->keysets[idx];
-+				if (kslist->keysets[idx] == VCAP_KFS_PURE_5TUPLE_IP4)
-+					return kslist->keysets[idx];
-+				if (kslist->keysets[idx] == VCAP_KFS_NORMAL_5TUPLE_IP4)
-+					return kslist->keysets[idx];
-+				if (kslist->keysets[idx] == VCAP_KFS_NORMAL_7TUPLE)
-+					return kslist->keysets[idx];
-+			}
-+			break;
-+		case VCAP_TYPE_IS2:
-+			for (idx = 0; idx < kslist->cnt; idx++) {
-+				if (kslist->keysets[idx] == VCAP_KFS_MAC_ETYPE)
-+					return kslist->keysets[idx];
-+				if (kslist->keysets[idx] == VCAP_KFS_ARP)
-+					return kslist->keysets[idx];
-+				if (kslist->keysets[idx] == VCAP_KFS_IP_7TUPLE)
-+					return kslist->keysets[idx];
-+			}
-+			break;
-+		default:
-+			pr_info("%s:%d: no validation for VCAP %d\n",
-+				__func__, __LINE__, admin->vtype);
-+			break;
-+		}
-+	}
-+	return -EINVAL;
-+}
-+
-+/* Callback used by the VCAP API */
-+static void test_add_def_fields(struct net_device *ndev,
-+				struct vcap_admin *admin,
-+				struct vcap_rule *rule)
-+{
-+	if (admin->vinst == 0 || admin->vinst == 2)
-+		vcap_rule_add_key_bit(rule, VCAP_KF_LOOKUP_FIRST_IS, VCAP_BIT_1);
-+	else
-+		vcap_rule_add_key_bit(rule, VCAP_KF_LOOKUP_FIRST_IS, VCAP_BIT_0);
-+}
-+
-+/* Callback used by the VCAP API */
-+static void test_cache_erase(struct vcap_admin *admin)
-+{
-+	if (test_cache_erase_count) {
-+		memset(admin->cache.keystream, 0, test_cache_erase_count);
-+		memset(admin->cache.maskstream, 0, test_cache_erase_count);
-+		memset(admin->cache.actionstream, 0, test_cache_erase_count);
-+		test_cache_erase_count = 0;
-+	}
-+}
-+
-+/* Callback used by the VCAP API */
-+static void test_cache_init(struct net_device *ndev, struct vcap_admin *admin,
-+			    u32 start, u32 count)
-+{
-+	test_init_start = start;
-+	test_init_count = count;
-+}
-+
-+/* Callback used by the VCAP API */
-+static void test_cache_read(struct net_device *ndev, struct vcap_admin *admin,
-+			    enum vcap_selection sel, u32 start, u32 count)
-+{
-+	u32 *keystr, *mskstr, *actstr;
-+	int idx;
-+
-+	pr_debug("%s:%d: %d %d\n", __func__, __LINE__, start, count);
-+	switch (sel) {
-+	case VCAP_SEL_ENTRY:
-+		keystr = &admin->cache.keystream[start];
-+		mskstr = &admin->cache.maskstream[start];
-+		for (idx = 0; idx < count; ++idx) {
-+			pr_debug("%s:%d: keydata[%02d]: 0x%08x\n", __func__,
-+				 __LINE__, start + idx, keystr[idx]);
-+		}
-+		for (idx = 0; idx < count; ++idx) {
-+			/* Invert the mask before decoding starts */
-+			mskstr[idx] = ~mskstr[idx];
-+			pr_debug("%s:%d: mskdata[%02d]: 0x%08x\n", __func__,
-+				 __LINE__, start + idx, mskstr[idx]);
-+		}
-+		break;
-+	case VCAP_SEL_ACTION:
-+		actstr = &admin->cache.actionstream[start];
-+		for (idx = 0; idx < count; ++idx) {
-+			pr_debug("%s:%d: actdata[%02d]: 0x%08x\n", __func__,
-+				 __LINE__, start + idx, actstr[idx]);
-+		}
-+		break;
-+	case VCAP_SEL_COUNTER:
-+		pr_debug("%s:%d\n", __func__, __LINE__);
-+		test_hw_counter_id = start;
-+		admin->cache.counter = test_hw_cache.counter;
-+		admin->cache.sticky = test_hw_cache.sticky;
-+		break;
-+	case VCAP_SEL_ALL:
-+		pr_debug("%s:%d\n", __func__, __LINE__);
-+		break;
-+	}
-+}
-+
-+/* Callback used by the VCAP API */
-+static void test_cache_write(struct net_device *ndev, struct vcap_admin *admin,
-+			     enum vcap_selection sel, u32 start, u32 count)
-+{
-+	u32 *keystr, *mskstr, *actstr;
-+	int idx;
-+
-+	switch (sel) {
-+	case VCAP_SEL_ENTRY:
-+		keystr = &admin->cache.keystream[start];
-+		mskstr = &admin->cache.maskstream[start];
-+		for (idx = 0; idx < count; ++idx) {
-+			pr_debug("%s:%d: keydata[%02d]: 0x%08x\n", __func__,
-+				 __LINE__, start + idx, keystr[idx]);
-+		}
-+		for (idx = 0; idx < count; ++idx) {
-+			/* Invert the mask before encoding starts */
-+			mskstr[idx] = ~mskstr[idx];
-+			pr_debug("%s:%d: mskdata[%02d]: 0x%08x\n", __func__,
-+				 __LINE__, start + idx, mskstr[idx]);
-+		}
-+		break;
-+	case VCAP_SEL_ACTION:
-+		actstr = &admin->cache.actionstream[start];
-+		for (idx = 0; idx < count; ++idx) {
-+			pr_debug("%s:%d: actdata[%02d]: 0x%08x\n", __func__,
-+				 __LINE__, start + idx, actstr[idx]);
-+		}
-+		break;
-+	case VCAP_SEL_COUNTER:
-+		pr_debug("%s:%d\n", __func__, __LINE__);
-+		test_hw_counter_id = start;
-+		test_hw_cache.counter = admin->cache.counter;
-+		test_hw_cache.sticky = admin->cache.sticky;
-+		break;
-+	case VCAP_SEL_ALL:
-+		pr_err("%s:%d: cannot write all streams at once\n",
-+		       __func__, __LINE__);
-+		break;
-+	}
-+}
-+
-+/* Callback used by the VCAP API */
-+static void test_cache_update(struct net_device *ndev, struct vcap_admin *admin,
-+			      enum vcap_command cmd,
-+			      enum vcap_selection sel, u32 addr)
-+{
-+	if (test_updateaddridx < ARRAY_SIZE(test_updateaddr))
-+		test_updateaddr[test_updateaddridx] = addr;
-+	else
-+		pr_err("%s:%d: overflow: %d\n", __func__, __LINE__, test_updateaddridx);
-+	test_updateaddridx++;
-+}
-+
-+static void test_cache_move(struct net_device *ndev, struct vcap_admin *admin,
-+			    u32 addr, int offset, int count)
-+{
-+	test_move_addr = addr;
-+	test_move_offset = offset;
-+	test_move_count = count;
-+}
-+
-+/* Provide port information via a callback interface */
-+static int vcap_test_port_info(struct net_device *ndev,
-+			       struct vcap_admin *admin,
-+			       struct vcap_output_print *out)
-+{
-+	return 0;
-+}
-+
-+static int vcap_test_enable(struct net_device *ndev,
-+			    struct vcap_admin *admin,
-+			    bool enable)
-+{
-+	return 0;
-+}
-+
-+static struct vcap_operations test_callbacks = {
-+	.validate_keyset = test_val_keyset,
-+	.add_default_fields = test_add_def_fields,
-+	.cache_erase = test_cache_erase,
-+	.cache_write = test_cache_write,
-+	.cache_read = test_cache_read,
-+	.init = test_cache_init,
-+	.update = test_cache_update,
-+	.move = test_cache_move,
-+	.port_info = vcap_test_port_info,
-+	.enable = vcap_test_enable,
-+};
-+
-+static struct vcap_control test_vctrl = {
-+	.vcaps = kunit_test_vcaps,
-+	.stats = &kunit_test_vcap_stats,
-+	.ops = &test_callbacks,
-+};
-+
-+static void vcap_test_api_init(struct vcap_admin *admin)
-+{
-+	/* Initialize the shared objects */
-+	INIT_LIST_HEAD(&test_vctrl.list);
-+	INIT_LIST_HEAD(&admin->list);
-+	INIT_LIST_HEAD(&admin->rules);
-+	list_add_tail(&admin->list, &test_vctrl.list);
-+	memset(test_updateaddr, 0, sizeof(test_updateaddr));
-+	test_updateaddridx = 0;
-+	test_pr_bufferidx = 0;
-+	test_pr_idx = 0;
-+}
-+
-+/* callback used by the show_admin function */
-+static __printf(2, 3)
-+int test_prf(void *out, const char *fmt, ...)
-+{
-+	static char test_buffer[TEST_BUF_SZ];
-+	va_list args;
-+	int idx, cnt;
-+
-+	if (test_pr_bufferidx >= TEST_BUF_CNT) {
-+		pr_err("%s:%d: overflow: %d\n", __func__, __LINE__,
-+		       test_pr_bufferidx);
-+		return 0;
-+	}
-+
-+	va_start(args, fmt);
-+	cnt = vscnprintf(test_buffer, TEST_BUF_SZ, fmt, args);
-+	va_end(args);
-+
-+	for (idx = 0; idx < cnt; ++idx) {
-+		test_pr_buffer[test_pr_bufferidx][test_pr_idx] =
-+			test_buffer[idx];
-+		if (test_buffer[idx] == '\n') {
-+			test_pr_buffer[test_pr_bufferidx][++test_pr_idx] = 0;
-+			test_pr_idx = 0;
-+			test_pr_bufferidx++;
-+		} else {
-+			++test_pr_idx;
-+		}
-+	}
-+
-+	return cnt;
-+}
-+
-+/* Define the test cases. */
-+
-+static void vcap_api_addr_keyset_test(struct kunit *test)
-+{
-+	u32 keydata[12] = {
-+		0x40450042, 0x000feaf3, 0x00000003, 0x00050600,
-+		0x10203040, 0x00075880, 0x633c6864, 0x00040003,
-+		0x00000020, 0x00000008, 0x00000240, 0x00000000,
-+	};
-+	u32 mskdata[12] = {
-+		0x0030ff80, 0xfff00000, 0xfffffffc, 0xfff000ff,
-+		0x00000000, 0xfff00000, 0x00000000, 0xfff3fffc,
-+		0xffffffc0, 0xffffffff, 0xfffffc03, 0xffffffff,
-+	};
-+	u32 actdata[12] = {};
-+	struct vcap_admin admin = {
-+		.vtype = VCAP_TYPE_IS2,
-+		.cache = {
-+			.keystream = keydata,
-+			.maskstream = mskdata,
-+			.actionstream = actdata,
-+		},
-+	};
-+	int ret, idx, addr;
-+
-+	vcap_test_api_init(&admin);
-+
-+	/* Go from higher to lower addresses searching for a keyset */
-+	for (idx = ARRAY_SIZE(keydata) - 1, addr = 799; idx > 0;
-+	     --idx, --addr) {
-+		admin.cache.keystream = &keydata[idx];
-+		admin.cache.maskstream = &mskdata[idx];
-+		ret = vcap_addr_keyset(&test_vctrl, &test_netdev, &admin,  addr);
-+		KUNIT_EXPECT_EQ(test, -EINVAL, ret);
-+	}
-+
-+	/* Finally we hit the start of the rule */
-+	admin.cache.keystream = &keydata[idx];
-+	admin.cache.maskstream = &mskdata[idx];
-+	ret = vcap_addr_keyset(&test_vctrl, &test_netdev, &admin,  addr);
-+	KUNIT_EXPECT_EQ(test, VCAP_KFS_MAC_ETYPE, ret);
-+}
-+
-+static void vcap_api_show_admin_raw_test(struct kunit *test)
-+{
-+	u32 keydata[4] = {
-+		0x40450042, 0x000feaf3, 0x00000003, 0x00050600,
-+	};
-+	u32 mskdata[4] = {
-+		0x0030ff80, 0xfff00000, 0xfffffffc, 0xfff000ff,
-+	};
-+	u32 actdata[12] = {};
-+	struct vcap_admin admin = {
-+		.vtype = VCAP_TYPE_IS2,
-+		.cache = {
-+			.keystream = keydata,
-+			.maskstream = mskdata,
-+			.actionstream = actdata,
-+		},
-+		.first_valid_addr = 786,
-+		.last_valid_addr = 788,
-+	};
-+	struct vcap_rule_internal ri = {
-+		.ndev = &test_netdev,
-+	};
-+	struct vcap_output_print out = {
-+		.prf = (void *)test_prf,
-+	};
-+	const char *test_expected =
-+		"  addr: 786, X6 rule, keyset: VCAP_KFS_MAC_ETYPE\n";
-+	int ret;
-+
-+	vcap_test_api_init(&admin);
-+	list_add_tail(&ri.list, &admin.rules);
-+
-+	ret = vcap_show_admin_raw(&test_vctrl, &admin, &out);
-+	KUNIT_EXPECT_EQ(test, 0, ret);
-+	KUNIT_EXPECT_STREQ(test, test_expected, test_pr_buffer[0]);
-+}
-+
-+static const char * const test_admin_info_expect[] = {
-+	"name: is2\n",
-+	"rows: 256\n",
-+	"sw_count: 12\n",
-+	"sw_width: 52\n",
-+	"sticky_width: 1\n",
-+	"act_width: 110\n",
-+	"default_cnt: 73\n",
-+	"require_cnt_dis: 0\n",
-+	"version: 1\n",
-+	"vtype: 2\n",
-+	"vinst: 0\n",
-+	"first_cid: 10000\n",
-+	"last_cid: 19999\n",
-+	"lookups: 4\n",
-+	"first_valid_addr: 0\n",
-+	"last_valid_addr: 3071\n",
-+	"last_used_addr: 794\n",
-+};
-+
-+static void vcap_api_show_admin_test(struct kunit *test)
-+{
-+	struct vcap_admin admin = {
-+		.vtype = VCAP_TYPE_IS2,
-+		.first_cid = 10000,
-+		.last_cid = 19999,
-+		.lookups = 4,
-+		.last_valid_addr = 3071,
-+		.first_valid_addr = 0,
-+		.last_used_addr = 794,
-+	};
-+	struct vcap_output_print out = {
-+		.prf = (void *)test_prf,
-+	};
-+	int idx;
-+
-+	vcap_test_api_init(&admin);
-+
-+	vcap_show_admin_info(&test_vctrl, &admin, &out);
-+	for (idx = 0; idx < test_pr_bufferidx; ++idx) {
-+		/* pr_info("log[%02d]: %s", idx, test_pr_buffer[idx]); */
-+		KUNIT_EXPECT_STREQ(test, test_admin_info_expect[idx],
-+				   test_pr_buffer[idx]);
-+	}
-+}
-+
-+static const char * const test_admin_expect[] = {
-+	"name: is2\n",
-+	"rows: 256\n",
-+	"sw_count: 12\n",
-+	"sw_width: 52\n",
-+	"sticky_width: 1\n",
-+	"act_width: 110\n",
-+	"default_cnt: 73\n",
-+	"require_cnt_dis: 0\n",
-+	"version: 1\n",
-+	"vtype: 2\n",
-+	"vinst: 0\n",
-+	"first_cid: 8000000\n",
-+	"last_cid: 8199999\n",
-+	"lookups: 4\n",
-+	"first_valid_addr: 0\n",
-+	"last_valid_addr: 3071\n",
-+	"last_used_addr: 794\n",
-+	"\n",
-+	"rule: 100, addr: [794,799], X6, ctr[0]: 0, hit: 0\n",
-+	"  chain_id: 0\n",
-+	"  user: 0\n",
-+	"  priority: 0\n",
-+	"  keyset: VCAP_KFS_MAC_ETYPE\n",
-+	"  keyset_sw: 6\n",
-+	"  keyset_sw_regs: 2\n",
-+	"    ETYPE_LEN_IS: W1: 1/1\n",
-+	"    IF_IGR_PORT_MASK: W32: 0xffabcd01/0xffffffff\n",
-+	"    IF_IGR_PORT_MASK_RNG: W4: 5/15\n",
-+	"    L2_DMAC: W48: 01:02:03:04:05:06/ff:ff:ff:ff:ff:ff\n",
-+	"    L2_PAYLOAD_ETYPE: W64: 0x9000002000000081/0xff000000000000ff\n",
-+	"    L2_SMAC: W48: b1:9e:34:32:75:88/ff:ff:ff:ff:ff:ff\n",
-+	"    LOOKUP_FIRST_IS: W1: 1/1\n",
-+	"    TYPE: W4: 0/15\n",
-+	"  actionset: VCAP_AFS_BASE_TYPE\n",
-+	"  actionset_sw: 3\n",
-+	"  actionset_sw_regs: 4\n",
-+	"    CNT_ID: W12: 100\n",
-+	"    MATCH_ID: W16: 1\n",
-+	"    MATCH_ID_MASK: W16: 1\n",
-+	"    POLICE_ENA: W1: 1\n",
-+	"    PORT_MASK: W68: 0x0514670115f3324589\n",
-+};
-+
-+static void vcap_api_show_admin_rule_test(struct kunit *test)
-+{
-+	u32 keydata[] = {
-+		0x40450042, 0x000feaf3, 0x00000003, 0x00050600,
-+		0x10203040, 0x00075880, 0x633c6864, 0x00040003,
-+		0x00000020, 0x00000008, 0x00000240, 0x00000000,
-+	};
-+	u32 mskdata[] = {
-+		0x0030ff80, 0xfff00000, 0xfffffffc, 0xfff000ff,
-+		0x00000000, 0xfff00000, 0x00000000, 0xfff3fffc,
-+		0xffffffc0, 0xffffffff, 0xfffffc03, 0xffffffff,
-+	};
-+	u32 actdata[] = {
-+		0x00040002, 0xf3324589, 0x14670115, 0x00000005,
-+		0x00000000, 0x00100000, 0x06400010, 0x00000000,
-+		0x00000000, 0x00000000, 0x00000000, 0x00000000,
-+		0x00000000, 0x00000000, 0x00000000, 0x00000000,
-+		0x00000000, 0x00000000, 0x00000000, 0x00000000,
-+		0x00000000, 0x00000000, 0x00000000, 0x00000000,
-+	};
-+	struct vcap_admin admin = {
-+		.vtype = VCAP_TYPE_IS2,
-+		.first_cid = 8000000,
-+		.last_cid = 8199999,
-+		.lookups = 4,
-+		.last_valid_addr = 3071,
-+		.first_valid_addr = 0,
-+		.last_used_addr = 794,
-+		.cache = {
-+			.keystream = keydata,
-+			.maskstream = mskdata,
-+			.actionstream = actdata,
-+		},
-+	};
-+	struct vcap_rule_internal ri = {
-+		.admin = &admin,
-+		.data = {
-+			.id = 100,
-+			.keyset = VCAP_KFS_MAC_ETYPE,
-+			.actionset = VCAP_AFS_BASE_TYPE,
-+		},
-+		.size = 6,
-+		.keyset_sw = 6,
-+		.keyset_sw_regs = 2,
-+		.actionset_sw = 3,
-+		.actionset_sw_regs = 4,
-+		.addr = 794,
-+		.vctrl = &test_vctrl,
-+	};
-+	struct vcap_output_print out = {
-+		.prf = (void *)test_prf,
-+	};
-+	int ret, idx;
-+
-+	vcap_test_api_init(&admin);
-+	list_add_tail(&ri.list, &admin.rules);
-+
-+	ret = vcap_show_admin(&test_vctrl, &admin, &out);
-+	KUNIT_EXPECT_EQ(test, 0, ret);
-+	for (idx = 0; idx < test_pr_bufferidx; ++idx) {
-+		/* pr_info("log[%02d]: %s", idx, test_pr_buffer[idx]); */
-+		KUNIT_EXPECT_STREQ(test, test_admin_expect[idx],
-+				   test_pr_buffer[idx]);
-+	}
-+}
-+
-+static struct kunit_case vcap_api_debugfs_test_cases[] = {
-+	KUNIT_CASE(vcap_api_addr_keyset_test),
-+	KUNIT_CASE(vcap_api_show_admin_raw_test),
-+	KUNIT_CASE(vcap_api_show_admin_test),
-+	KUNIT_CASE(vcap_api_show_admin_rule_test),
-+	{}
-+};
-+
-+static struct kunit_suite vcap_api_debugfs_test_suite = {
-+	.name = "VCAP_API_DebugFS_Testsuite",
-+	.test_cases = vcap_api_debugfs_test_cases,
-+};
-+
-+kunit_test_suite(vcap_api_debugfs_test_suite);
-diff --git a/drivers/net/ethernet/microchip/vcap/vcap_api_kunit.c b/drivers/net/ethernet/microchip/vcap/vcap_api_kunit.c
-index a3dc1b2d029c..ec910e1c4c00 100644
---- a/drivers/net/ethernet/microchip/vcap/vcap_api_kunit.c
-+++ b/drivers/net/ethernet/microchip/vcap/vcap_api_kunit.c
-@@ -1691,7 +1691,7 @@ static void vcap_api_rule_remove_at_end_test(struct kunit *test)
- 	KUNIT_EXPECT_EQ(test, 0, test_move_count);
- 	KUNIT_EXPECT_EQ(test, 780, test_init_start);
- 	KUNIT_EXPECT_EQ(test, 12, test_init_count);
--	KUNIT_EXPECT_EQ(test, 3071, admin.last_used_addr);
-+	KUNIT_EXPECT_EQ(test, 3072, admin.last_used_addr);
- }
- 
- static void vcap_api_rule_remove_in_middle_test(struct kunit *test)
-@@ -1766,7 +1766,7 @@ static void vcap_api_rule_remove_in_middle_test(struct kunit *test)
- 	KUNIT_EXPECT_EQ(test, 0, test_move_count);
- 	KUNIT_EXPECT_EQ(test, 798, test_init_start);
- 	KUNIT_EXPECT_EQ(test, 2, test_init_count);
--	KUNIT_EXPECT_EQ(test, 799, admin.last_used_addr);
-+	KUNIT_EXPECT_EQ(test, 800, admin.last_used_addr);
- }
- 
- static void vcap_api_rule_remove_in_front_test(struct kunit *test)
-@@ -1805,7 +1805,7 @@ static void vcap_api_rule_remove_in_front_test(struct kunit *test)
- 	KUNIT_EXPECT_EQ(test, 0, test_move_count);
- 	KUNIT_EXPECT_EQ(test, 780, test_init_start);
- 	KUNIT_EXPECT_EQ(test, 12, test_init_count);
--	KUNIT_EXPECT_EQ(test, 799, admin.last_used_addr);
-+	KUNIT_EXPECT_EQ(test, 800, admin.last_used_addr);
- 
- 	test_vcap_xn_rule_creator(test, 10000, VCAP_USER_QOS, 20, 400, 6, 792);
- 	test_vcap_xn_rule_creator(test, 10000, VCAP_USER_QOS, 30, 300, 3, 789);
--- 
-2.38.1
+Best regards,
+Krzysztof
 
