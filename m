@@ -2,150 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A9D462C6EF
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 18:55:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8B0562C6F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 18:56:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234881AbiKPRzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 12:55:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37578 "EHLO
+        id S239008AbiKPRz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 12:55:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238978AbiKPRzQ (ORCPT
+        with ESMTP id S233555AbiKPRzy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 12:55:16 -0500
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2084.outbound.protection.outlook.com [40.107.101.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C98761B85;
-        Wed, 16 Nov 2022 09:55:11 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=j+u2IjXXBGA3BSb4z21GqqG94zKb91iC86ZCGrJUjTHXkGhYL0LPlINGy6NshCNRQZ5E8FNJ1IJFwZIwUIPglEGH1P3clBMAd2ZXmtQVgE4LMqedD5GgLZoi1b0Z09ZfEP84+oVdnvMAgHZerHzu1telLI+Xyi3zgIIbbKUbShp3vrktq57RpYOLK1jh5vpdxQaAqaZ7oNiDWje26fiDM5UvP+Uq8vFO8hRYnzVyvoerikahl9ajcvgGiMgpZ5W24QRZQ5FdR4CJWrWTdPoPKi9I9vR8pPJSYffNdFqca6BCKxGgN29vKF+paATNm+xztV2NRRQDDQb0zi7navXUTw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OhatKLz74FrY9w7mpa42VUj1UORwop18O/usowy+doo=;
- b=CdyionKAjXxiFFX7VuHB+Iid/dL0li08UNFvLNvCTMakY7c/Op+PGY43kIClKzGIOE5ojgAl4+OvNEglR+wSkq0yqwJj1epU3DdCSirSzC1p9jOVPRvthuB/NMIj8TpXoyFAEaSGQ3JZbSmMqS3rVG4jrLcnxKmkH+TuepyttCiA8YEAPJD3k8BVhK0OJvdW8gClE6SffZYHaU3jKdD86m4mihODP5s8IakqF1MtfBG7c5Ixj36CzpBe2JLKLWVnjZ2YcRiVOnm1hv9wqMwliYMjAj7aZT0X9+aT1eEctK3RC52xzbe9DCA2ztl0SAsz8MmLBZoEtUsgIHypn//nRQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OhatKLz74FrY9w7mpa42VUj1UORwop18O/usowy+doo=;
- b=ShEPFWuRLFv/sVOs6HDj+hxCcQY1oV04LsUcLOe55IVkVTKrymTmJsl8fRtDGxtZ898fEikRMvD4v+oHJ9LN3lNmtZvLkmslASjclsfgX6XYwGXMyLdG1fxrh1p4SCGWWyuLmIq5SCO9dP2rfc7d3bOOmrn6EFp3/kWX0K8ShEW81sKa3cqQG/Fr9b8JzOCzqUbehm+D1ApTpsjLDhxk4ea6JG/iOl0weC07TQTwXwMOAWcaA2TBuQhFvouqCITd/UJTgwBadEsoGez4HayU/g4g7eQPHjstNQFBWvUwHats96xCjT4yVOt9Uu4E0af2NSQMw2RPjHoSdHzScsUNuQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by CH2PR12MB4200.namprd12.prod.outlook.com (2603:10b6:610:ac::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.18; Wed, 16 Nov
- 2022 17:55:09 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f8b0:df13:5f8d:12a]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f8b0:df13:5f8d:12a%7]) with mapi id 15.20.5813.017; Wed, 16 Nov 2022
- 17:55:09 +0000
-Date:   Wed, 16 Nov 2022 13:55:08 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
-        Allen Hubbe <allenbh@gmail.com>,
-        "Ahmed S. Darwish" <darwi@linutronix.de>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [patch 18/39] PCI/MSI: Move mask and unmask helpers to msi.h
-Message-ID: <Y3Uj/L7fWkSvDi3f@nvidia.com>
-References: <20221111120501.026511281@linutronix.de>
- <20221111122014.640052354@linutronix.de>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221111122014.640052354@linutronix.de>
-X-ClientProxiedBy: YT4P288CA0014.CANP288.PROD.OUTLOOK.COM
- (2603:10b6:b01:d4::17) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Wed, 16 Nov 2022 12:55:54 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3750660EBD;
+        Wed, 16 Nov 2022 09:55:53 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id gv23so13278494ejb.3;
+        Wed, 16 Nov 2022 09:55:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=65ksdtcKynE1zhhoUikCdWdh4bSAwSW8JPUcRDfF/As=;
+        b=jU4mgg/doGrH3jjl9Q5bnWetaR90nJuTY5kFi5JvvD4WtC/ucUNy2NnMz3T1jGAgc0
+         T4GiLKhhID4sbK6sGwz2QHcU4rmciwch0lpTI+vj/Mpa3GlHHhDatThPRmV3BfSGM4NR
+         9dNJEKX8HaoXTkiVFd2+RBNr2SSAlofmiNUw2/5nDepQoY/009pQrnfkkYJlED2VLZ5z
+         VbHVq8HZC6RuAG2/sPnTJ1gABXrru7iL1nCZrbkrkXIFaHnOuIh4WEgZGcJy8GH8fpSJ
+         nCZKncigpVdN/GuKCBnrFkWxpQRAeDtpIlXZYVWX26mGzDTkEDcvHWZbmt2t4sZbYR2T
+         Fhfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=65ksdtcKynE1zhhoUikCdWdh4bSAwSW8JPUcRDfF/As=;
+        b=Wi7BR4V6WPy3pqwpvdopMryyInSqJyUdTFk1mJ/Wkj8g4OZ0cGBn7NQnd8E9UVFado
+         MVrghVJ+VZkFW4KBVnY1m6/Yxp5BlBR+zdVugDZxgQMjutNcxGKzln3XoE69djtEwag7
+         +Vba1kUrNJ1xIDlszO07Jl3rKm100Jmi/8oMmUWccU8HY15lMUhWiFxf7VDNLSxgWXQd
+         S3udhMys7tJL5HXWZk81ydHmV0HJTrW1V1DTpB/BVPuLwlpahxLY+VSNGlaAp7NRvwcA
+         bfDw7H9wpWr7YvEQt+/5zf2Jf8Mdk2Zc5ysbZL2oCI4Ve9xhg34Z8dNpSIlL2nJI0P8v
+         bQbw==
+X-Gm-Message-State: ANoB5plyPEHxGTgvTdhGowAOWmwjZEnSDdUHFAhvw/t2iF0D8F1asdLh
+        JHupFO4N04FBOE4e827e1/Bk5DLrF/9tVggoofY=
+X-Google-Smtp-Source: AA0mqf4+TwxxmQ2zlWxdT8/WmEyJUv2nrxwPqS6GdTTzuGmZe3wYv55MDIG23ubBgWdeiXJbwSX2IP6mZjWJVXNxNeI=
+X-Received: by 2002:a17:906:9c93:b0:7ae:dc58:ffe7 with SMTP id
+ fj19-20020a1709069c9300b007aedc58ffe7mr14935642ejc.58.1668621351668; Wed, 16
+ Nov 2022 09:55:51 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|CH2PR12MB4200:EE_
-X-MS-Office365-Filtering-Correlation-Id: 88b3da43-a37e-4940-839c-08dac7fbb3ea
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: niZ6RlljTPFi+CUtiFNpBBwZImbz+qJGRAAa8C0KuE0PQZyC8zP5uKs831COiB8aZtkk1MtaUmKUhGMwPWvYELA50/sijEXJtf0z7USFeQqCJckxyvHr9asW/p+NgM+hw8X/aiwJG1Fo979Y45On9jS13hCoKbp74UgNiHMR3pXyZzSKVywK7Li1N6CEf3m78zgoX7ooV/Jwb7BG1wZReZPynwt5t58UybYhXTHsm3rtRjBlew4h+iJI1qL+t4jl6BIWyPkU2V1OVagpz8nmb/ottzVkEhKdTi752Hz1A5RYsjSBitfowFW7o41uRZE0+ntJUfY5Mve/ATepMt9RkGH7MCdhvWli4H0jxjr720ccb2OilcHlVeo3uT6cEp8F7h5UsAIKcGgFylc2Fw3KOWVC5uxlue8wjD0f8I7F+S1ArN52GLTp47rZJBw+e3/Mn2VO46YReZZlpDvSW0kiceiFWQKTtJJipmiESFgzMlVBIgMfsVvUAisKkoU+M++Dq8EZ7m3liR0oEJaLPsFOX/hV+grQ6HQZSmrnoxSR1iPvktMaJ70cB1DXOb8xWKCXygSmf/Eza4QsN4LrLbQ9NQyDLuReMM6QFR6Tk9kKZDs6nTW2+sMUd3eEpgcg/3oNCYYZXxrAoNWT7ZDNJkQq1p7d1Y3uQLIMiZHY0P4/iB/1rPpR6f38ANmepj2CVJbZPmF3wDfB1GHkhXlLUwAhEw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(396003)(136003)(366004)(346002)(376002)(451199015)(38100700002)(86362001)(6486002)(5660300002)(478600001)(41300700001)(6506007)(8936002)(7416002)(4326008)(66476007)(316002)(66556008)(8676002)(66946007)(4744005)(6916009)(54906003)(186003)(2616005)(83380400001)(2906002)(6512007)(36756003)(26005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Od8AltB29hGi3eHcgcbL/VpDco9K774hv6sHDUg1b2wXhVGpMp0uJ1haOu+a?=
- =?us-ascii?Q?bfgmH+x7ROaAEnAOr/4ORfMnRYReZH/67JU1MdA9lFfy8icimV71z9R/V6Bd?=
- =?us-ascii?Q?iW/Ldzm4EDnPH43VSpSrsRtNrrRSZu9FsYDtujqAq2uqKHBndGldfY6cdSCv?=
- =?us-ascii?Q?7dxyGoYgUYu0xXvJiw9xM5z3qdozBDq0FTR/ynxYtMprIUzWvnQRPeSvKPvE?=
- =?us-ascii?Q?JH2EkEy4AZc3GsrkmxgjvaTc3GppApDek1HaSycrEepeyCqBgXADf0ZYhBW6?=
- =?us-ascii?Q?8xKRT8E3IKVqVM1CpYuYFyoeij+vW57p45jDdJ1raEy9T+Edf29yO2bdPeeC?=
- =?us-ascii?Q?aFrOCeMsJZYM4Y6+DcT65DyQSrfY2VDJjfOfLZGjG7FTAMahOqYecVpMiUmT?=
- =?us-ascii?Q?VSp2bTwrUKg8Pfp630rdiLDPBNsY7ggWQSAs+xVJnERNduwP0EzMkR5YF7nT?=
- =?us-ascii?Q?nyWERsJBARh6ZC5Yh/7ub+7GNn7ptH0iZdT8uWYvV/PxnoSjXhhPdMksna69?=
- =?us-ascii?Q?10IfKCXrrRlLmBwfMJAKT69pJ8M1HbhYRUMrgvNBl1vAs/DXFexFH/WjsM3c?=
- =?us-ascii?Q?IGgmFj8ERl3SLqkhGiuVQLQHceudD8ws9+vscV/NYAwWMHL1+/39/xBEvFsf?=
- =?us-ascii?Q?ILt6UOc3SF/zZOuA5XOrcNCoVyxFl6fQT9fYNY+tJ3yhqn7dka0WIfBCVnpC?=
- =?us-ascii?Q?ofT9G7K9gM9gfXSvnL5WNZpfz12wKowDWouiXmr7Ld+UNUY3qNBIMjE6wcR2?=
- =?us-ascii?Q?xvLlhoreeyeN7vYkwYWYFE+hl3RgK8yV4nYUqBfHvXwau5Sqknd0vnQWLcMS?=
- =?us-ascii?Q?kVsm3oJ+Yo7CUyO2x+FzbBQJoMptEsksFxRJmIhHRL4ysORmYvKQQaUebK1F?=
- =?us-ascii?Q?arALLzOVTrWZE1YAKoLVCgzybrY0ID5gD/IP/EaTL+xartLcANYz1cwKoiK7?=
- =?us-ascii?Q?9N2PwDsmoaZoZfvs8kuYJUs2CGwcpkFGnCaSbnEhc5vuJraHRVfHu2QNvY0t?=
- =?us-ascii?Q?ehdEgi7uF73S2tNRzmMJMgUHBFZQ0I9At813Gc9ftb2WVUpBo99tK0+sZwWU?=
- =?us-ascii?Q?1PBRZ18hoBtMzMQ/Jo18mVXbEVkHZcANaNzyFUw4euxl4bQtXjzfUKw2BIai?=
- =?us-ascii?Q?WiRpUOMCKjYkmvhOmfp0GPswqgpGU0q3jYowVXDRdCzugkkwiK6HHMvRzA9z?=
- =?us-ascii?Q?EDbZFh+sXtlH0IWS22Os7snWh+7rh4y/kNmEONPr9YRKxWBd1NVHqn7478Vb?=
- =?us-ascii?Q?6TNoEQInVQTBJvamNb1Nf0vsVbqgXBtDLcjnpaJbrtp1pTHPbZEjdKxuAkr6?=
- =?us-ascii?Q?K/Qf04vTKFLPovoZH+lJrnFTHozJduu8kiIe/mdS2u07ltni6szvNoalFgJr?=
- =?us-ascii?Q?Xw6JeQd8Epi7C1490RnCj9AI5k4KcJUsPG9GwRCXW2sAK9jJUBsWsKuYcgGO?=
- =?us-ascii?Q?F0D9FbpthB18oCvjnHljYByNzCVzRdV805QZ7e6SktlxFro++iVWJT8nDhmf?=
- =?us-ascii?Q?RMT2zqKWnyKc1Js6NnZzgMLJUW48rs8SWpbUuT2N//eGrttL5ZA5flNQMqjH?=
- =?us-ascii?Q?DKbn03VfImaEsqhTL+ZXEKEfOZtOHNdGyP0r/peO?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 88b3da43-a37e-4940-839c-08dac7fbb3ea
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Nov 2022 17:55:09.7586
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: M7n+5oFe9rLU3sdWTKmvhFjJIsCzTJr/6KX0lRi2ru0g5IoEJaxhhhvsUbrJ2SOB
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4200
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <700dffccdfeeb3d19c5385550e4c84f08c705e19.camel@huaweicloud.com>
+ <20221116154712.4115929-1-roberto.sassu@huaweicloud.com> <CAADnVQLQswvu3oGyeevLrKMT200yD4hzCbkBUAs=1bKSDVaOQg@mail.gmail.com>
+ <05bf553f795ac93ea3032cfc1b56ca35fd6a920a.camel@huaweicloud.com>
+In-Reply-To: <05bf553f795ac93ea3032cfc1b56ca35fd6a920a.camel@huaweicloud.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 16 Nov 2022 09:55:40 -0800
+Message-ID: <CAADnVQJu7isDCi4+f8s4LfiwcYJbN4kXkvgJ8+ZnsS+QGDVnMw@mail.gmail.com>
+Subject: Re: [PoC][PATCH] bpf: Call return value check function in the JITed code
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>, bpf <bpf@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 02:54:43PM +0100, Thomas Gleixner wrote:
-> From: Ahmed S. Darwish <darwi@linutronix.de>
-> 
-> The upcoming support for per device MSI interrupt domains needs to share
-> some of the inline helpers with the MSI implementation.
-> 
-> Move them to the header file.
-> 
-> Signed-off-by: Ahmed S. Darwish <darwi@linutronix.de>
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> 
-> ---
->  drivers/pci/msi/msi.c | 61 +--------------------------------------
->  drivers/pci/msi/msi.h | 83 +++++++++++++++++++++++++++++++++++++++++++++-------
->  2 files changed, 74 insertions(+), 70 deletions(-)
+On Wed, Nov 16, 2022 at 8:41 AM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+>
+> On Wed, 2022-11-16 at 08:16 -0800, Alexei Starovoitov wrote:
+> > On Wed, Nov 16, 2022 at 7:48 AM Roberto Sassu
+> > <roberto.sassu@huaweicloud.com> wrote:
+> > > +static bool is_ret_value_allowed(int ret, u32 ret_flags)
+> > > +{
+> > > +       if ((ret < 0 && !(ret_flags & LSM_RET_NEG)) ||
+> > > +           (ret == 0 && !(ret_flags & LSM_RET_ZERO)) ||
+> > > +           (ret == 1 && !(ret_flags & LSM_RET_ONE)) ||
+> > > +           (ret > 1 && !(ret_flags & LSM_RET_GT_ONE)))
+> > > +               return false;
+> > > +
+> > > +       return true;
+> > > +}
+> > > +
+> > >  /* For every LSM hook that allows attachment of BPF programs, declare a nop
+> > >   * function where a BPF program can be attached.
+> > >   */
+> > > @@ -30,6 +41,15 @@ noinline RET bpf_lsm_##NAME(__VA_ARGS__)     \
+> > >  #include <linux/lsm_hook_defs.h>
+> > >  #undef LSM_HOOK
+> > >
+> > > +#define LSM_HOOK(RET, DEFAULT, RET_FLAGS, NAME, ...)   \
+> > > +noinline RET bpf_lsm_##NAME##_ret(int ret)     \
+> > > +{                                              \
+> > > +       return is_ret_value_allowed(ret, RET_FLAGS) ? ret : DEFAULT; \
+> > > +}
+> > > +
+> > > +#include <linux/lsm_hook_defs.h>
+> > > +#undef LSM_HOOK
+> > > +
+> >
+> > because lsm hooks is mess of undocumented return values your
+> > "solution" is to add hundreds of noninline functions
+> > and hack the call into them in JITs ?!
+>
+> I revisited the documentation and checked each LSM hook one by one.
+> Hopefully, I completed it correctly, but I would review again (others
+> are also welcome to do it).
+>
+> Not sure if there is a more efficient way. Do you have any idea?
+> Maybe we find a way to use only one check function (by reusing the
+> address of the attachment point?).
+>
+> Regarding the JIT approach, I didn't find a reliable solution for using
+> just the verifier. As I wrote to you, there could be the case where the
+> range can include positive values, despite the possible return values
+> are zero and -EACCES.
 
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+Didn't you find that there are only 12 or so odd return cases.
+Maybe refactor some of them to something that the verifier can enforce
+and denylist the rest ?
 
-Jason
+Also denylist those that Casey mentioned like security_secid_to_secctx ?
