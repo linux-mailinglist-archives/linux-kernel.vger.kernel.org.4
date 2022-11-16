@@ -2,117 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D2C362C3C3
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 17:16:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A814162C3C0
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 17:16:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234022AbiKPQQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 11:16:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53766 "EHLO
+        id S234379AbiKPQQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 11:16:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234414AbiKPQQs (ORCPT
+        with ESMTP id S233672AbiKPQQi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 11:16:48 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A074756EF9;
-        Wed, 16 Nov 2022 08:16:41 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id i21so27311334edj.10;
-        Wed, 16 Nov 2022 08:16:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=oyC+JG2j0IITo5qTGz+wgr7L9QvSOVg95WWnwiLkRlk=;
-        b=nu0f182GHr4/oXvVgfqPrTaVmMJY1kOkyoQNPJBEHeq/YTv4TnVqESuk44fa+dYSE6
-         zROnl8KWUxSyc5d3spKfj+etdFbteVZudbjwk13CZ41P8TIB8HdqgyYP+FaCwhOe/hMd
-         6d98SNTC604wKCD99u5v//MhwqU3kCXR9dwLLvZud4PTx1RAgD4R8hqM0pZeIbTbmN8t
-         beeORJtPNmg6YEX84PhhPXehB6QayOFKi8iAbaH407dkoEL5lv+E6JD7besihzkfoxjs
-         oO6S7ii7RRDDoPtCdngHJlxPA666lBxYnHmqwanJKulITwS8BoUIuTP+IFwym1yWT/Ee
-         rTSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oyC+JG2j0IITo5qTGz+wgr7L9QvSOVg95WWnwiLkRlk=;
-        b=j3I8OUfNRAkJWuPa9co9DDZ/sDVO9jjJKhz/lSPTnf9Vp+Sq51q+7tJln/tKb7Qpno
-         Hu+/o3MX9OXx/GKLcmM1kkX8e6ebegb4VLF97YXHrXZZAsiV5/nYS9+8+gwFaspO+Oq1
-         NThYAZqHHSFpVpI8YTcZeKJcRXZ6KVXy97r8HEVs81Lyy4DQLrPskrqy6aJ2EXD0BS1W
-         erBolebA901JQhdVU0JitZT19KMpY03znW+WOJwtXSkJInjCjLhLTczHIq92f2l/nfmS
-         Q0qLC8smpv8bdeKQhr+JaThlIFZBtCI2A5BM+SuKa9pWwvCC2NkN56/dJ320a+G5XL7X
-         dI8w==
-X-Gm-Message-State: ANoB5pn/XaWaCOMrz41e6oMB/69CRfA/lzg9ohqFLbA7zyBDmdFe04xM
-        Uj/hB/TzcJw6O6V7SN0tmxf0YRL9x2ssmD/EwUI=
-X-Google-Smtp-Source: AA0mqf5RzjDNrVdJ4jPbPIK4qWi/GaWjiVhjYKDAcBRL3/wrfTFxGQgHNmai2YxN5KZcYkypu2+WodYchj/bxoVWpRk=
-X-Received: by 2002:a05:6402:2424:b0:459:2515:b27b with SMTP id
- t36-20020a056402242400b004592515b27bmr20048938eda.338.1668615400096; Wed, 16
- Nov 2022 08:16:40 -0800 (PST)
+        Wed, 16 Nov 2022 11:16:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D0BD135;
+        Wed, 16 Nov 2022 08:16:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F0A29B81DD9;
+        Wed, 16 Nov 2022 16:16:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 710E8C433D7;
+        Wed, 16 Nov 2022 16:16:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668615393;
+        bh=HKxr8zLYChmpKmEgFK/DS1349l9alJF5Gnf+RtqbRKw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=O/1bOW6slARzGBe4GQp+TzNVY6L56EyLiI0ViADp2jaoacrXpxpkmK8BvSkc6a6DD
+         komJ5b5YgoHY+8w27O/8+kHsHbZ0CYCkKs5ObR0fwjL8KPPCFl5Mtf3ARaV+FA8cIw
+         C1ntKsyZbajZglguIu6z4RHwyHdBfRoRNzJSjN+4aCmuqPl3BVklSR2V7CxoebxHr4
+         yvJ4GlAgtNM7OCtUo3gbdPpreYYY2NA/oBmoJX4VxYvGLqepn2gINYz2+ekvu+b/pI
+         S5qu5deYE0FW5MSqBwzhv5eY/qPzf9oXdY83wugY8PVBFFNoNr10qaTbwe2fJ8j5XS
+         fXsfH9fcXqkCg==
+Date:   Wed, 16 Nov 2022 10:16:32 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
+        Allen Hubbe <allenbh@gmail.com>,
+        "Ahmed S. Darwish" <darwi@linutronix.de>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [patch 19/39] PCI/MSI: Move pci_disable_msi() to api.c
+Message-ID: <20221116161632.GA1114946@bhelgaas>
 MIME-Version: 1.0
-References: <700dffccdfeeb3d19c5385550e4c84f08c705e19.camel@huaweicloud.com> <20221116154712.4115929-1-roberto.sassu@huaweicloud.com>
-In-Reply-To: <20221116154712.4115929-1-roberto.sassu@huaweicloud.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 16 Nov 2022 08:16:28 -0800
-Message-ID: <CAADnVQLQswvu3oGyeevLrKMT200yD4hzCbkBUAs=1bKSDVaOQg@mail.gmail.com>
-Subject: Re: [PoC][PATCH] bpf: Call return value check function in the JITed code
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Florent Revest <revest@chromium.org>,
-        Brendan Jackman <jackmanb@chromium.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>, bpf <bpf@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221111122014.696798036@linutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 7:48 AM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
-> +static bool is_ret_value_allowed(int ret, u32 ret_flags)
-> +{
-> +       if ((ret < 0 && !(ret_flags & LSM_RET_NEG)) ||
-> +           (ret == 0 && !(ret_flags & LSM_RET_ZERO)) ||
-> +           (ret == 1 && !(ret_flags & LSM_RET_ONE)) ||
-> +           (ret > 1 && !(ret_flags & LSM_RET_GT_ONE)))
-> +               return false;
-> +
-> +       return true;
-> +}
-> +
->  /* For every LSM hook that allows attachment of BPF programs, declare a nop
->   * function where a BPF program can be attached.
->   */
-> @@ -30,6 +41,15 @@ noinline RET bpf_lsm_##NAME(__VA_ARGS__)     \
->  #include <linux/lsm_hook_defs.h>
->  #undef LSM_HOOK
->
-> +#define LSM_HOOK(RET, DEFAULT, RET_FLAGS, NAME, ...)   \
-> +noinline RET bpf_lsm_##NAME##_ret(int ret)     \
-> +{                                              \
-> +       return is_ret_value_allowed(ret, RET_FLAGS) ? ret : DEFAULT; \
-> +}
-> +
-> +#include <linux/lsm_hook_defs.h>
-> +#undef LSM_HOOK
-> +
+On Fri, Nov 11, 2022 at 02:54:45PM +0100, Thomas Gleixner wrote:
+> From: Ahmed S. Darwish <darwi@linutronix.de>
+> 
+> msi.c is a maze of randomly sorted functions which makes the code
+> unreadable. As a first step split the driver visible API and the internal
+> implementation which also allows proper API documentation via one file.
+> 
+> Create drivers/pci/msi/api.c to group all exported device-driver PCI/MSI
+> APIs in one C file.
+> 
+> Begin by moving pci_disable_msi() there and add kernel-doc for the function
+> as appropriate.
+> 
+> Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+> Signed-off-by: Ahmed S. Darwish <darwi@linutronix.de>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 
-because lsm hooks is mess of undocumented return values your
-"solution" is to add hundreds of noninline functions
-and hack the call into them in JITs ?!
-That's an obvious no-go. Not sure why you bothered to implement it.
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+
+> ---
+>  drivers/pci/msi/Makefile |  3 +--
+>  drivers/pci/msi/api.c    | 37 +++++++++++++++++++++++++++++++++++++
+>  drivers/pci/msi/msi.c    | 22 +++++-----------------
+>  drivers/pci/msi/msi.h    |  4 ++++
+>  4 files changed, 47 insertions(+), 19 deletions(-)
+>  create mode 100644 drivers/pci/msi/api.c
+> ---
+> diff --git a/drivers/pci/msi/Makefile b/drivers/pci/msi/Makefile
+> index 4e0a7e07965e..839ff72d72a8 100644
+> --- a/drivers/pci/msi/Makefile
+> +++ b/drivers/pci/msi/Makefile
+> @@ -2,6 +2,5 @@
+>  #
+>  # Makefile for the PCI/MSI
+>  obj-$(CONFIG_PCI)			+= pcidev_msi.o
+> -obj-$(CONFIG_PCI_MSI)			+= msi.o
+> -obj-$(CONFIG_PCI_MSI)			+= irqdomain.o
+> +obj-$(CONFIG_PCI_MSI)			+= api.o msi.o irqdomain.o
+>  obj-$(CONFIG_PCI_MSI_ARCH_FALLBACKS)	+= legacy.o
+> diff --git a/drivers/pci/msi/api.c b/drivers/pci/msi/api.c
+> new file mode 100644
+> index 000000000000..7485942cbe5d
+> --- /dev/null
+> +++ b/drivers/pci/msi/api.c
+> @@ -0,0 +1,37 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * PCI MSI/MSI-X — Exported APIs for device drivers
+> + *
+> + * Copyright (C) 2003-2004 Intel
+> + * Copyright (C) Tom Long Nguyen (tom.l.nguyen@intel.com)
+> + * Copyright (C) 2016 Christoph Hellwig.
+> + * Copyright (C) 2022 Linutronix GmbH
+> + */
+> +
+> +#include <linux/export.h>
+> +
+> +#include "msi.h"
+> +
+> +/**
+> + * pci_disable_msi() - Disable MSI interrupt mode on device
+> + * @dev: the PCI device to operate on
+> + *
+> + * Legacy device driver API to disable MSI interrupt mode on device,
+> + * free earlier allocated interrupt vectors, and restore INTx emulation.
+> + * The PCI device Linux IRQ (@dev->irq) is restored to its default
+> + * pin-assertion IRQ. This is the cleanup pair of pci_enable_msi().
+> + *
+> + * NOTE: The newer pci_alloc_irq_vectors() / pci_free_irq_vectors() API
+> + * pair should, in general, be used instead.
+> + */
+> +void pci_disable_msi(struct pci_dev *dev)
+> +{
+> +	if (!pci_msi_enabled() || !dev || !dev->msi_enabled)
+> +		return;
+> +
+> +	msi_lock_descs(&dev->dev);
+> +	pci_msi_shutdown(dev);
+> +	pci_free_msi_irqs(dev);
+> +	msi_unlock_descs(&dev->dev);
+> +}
+> +EXPORT_SYMBOL(pci_disable_msi);
+> diff --git a/drivers/pci/msi/msi.c b/drivers/pci/msi/msi.c
+> index 5c310df55d0d..4a1300b74518 100644
+> --- a/drivers/pci/msi/msi.c
+> +++ b/drivers/pci/msi/msi.c
+> @@ -163,7 +163,7 @@ void pci_write_msi_msg(unsigned int irq, struct msi_msg *msg)
+>  }
+>  EXPORT_SYMBOL_GPL(pci_write_msi_msg);
+>  
+> -static void free_msi_irqs(struct pci_dev *dev)
+> +void pci_free_msi_irqs(struct pci_dev *dev)
+>  {
+>  	pci_msi_teardown_msi_irqs(dev);
+>  
+> @@ -413,7 +413,7 @@ static int msi_capability_init(struct pci_dev *dev, int nvec,
+>  
+>  err:
+>  	pci_msi_unmask(entry, msi_multi_mask(entry));
+> -	free_msi_irqs(dev);
+> +	pci_free_msi_irqs(dev);
+>  fail:
+>  	dev->msi_enabled = 0;
+>  unlock:
+> @@ -531,7 +531,7 @@ static int msix_setup_interrupts(struct pci_dev *dev, void __iomem *base,
+>  	goto out_unlock;
+>  
+>  out_free:
+> -	free_msi_irqs(dev);
+> +	pci_free_msi_irqs(dev);
+>  out_unlock:
+>  	msi_unlock_descs(&dev->dev);
+>  	kfree(masks);
+> @@ -680,7 +680,7 @@ int pci_msi_vec_count(struct pci_dev *dev)
+>  }
+>  EXPORT_SYMBOL(pci_msi_vec_count);
+>  
+> -static void pci_msi_shutdown(struct pci_dev *dev)
+> +void pci_msi_shutdown(struct pci_dev *dev)
+>  {
+>  	struct msi_desc *desc;
+>  
+> @@ -701,18 +701,6 @@ static void pci_msi_shutdown(struct pci_dev *dev)
+>  	pcibios_alloc_irq(dev);
+>  }
+>  
+> -void pci_disable_msi(struct pci_dev *dev)
+> -{
+> -	if (!pci_msi_enable || !dev || !dev->msi_enabled)
+> -		return;
+> -
+> -	msi_lock_descs(&dev->dev);
+> -	pci_msi_shutdown(dev);
+> -	free_msi_irqs(dev);
+> -	msi_unlock_descs(&dev->dev);
+> -}
+> -EXPORT_SYMBOL(pci_disable_msi);
+> -
+>  /**
+>   * pci_msix_vec_count - return the number of device's MSI-X table entries
+>   * @dev: pointer to the pci_dev data structure of MSI-X device function
+> @@ -797,7 +785,7 @@ void pci_disable_msix(struct pci_dev *dev)
+>  
+>  	msi_lock_descs(&dev->dev);
+>  	pci_msix_shutdown(dev);
+> -	free_msi_irqs(dev);
+> +	pci_free_msi_irqs(dev);
+>  	msi_unlock_descs(&dev->dev);
+>  }
+>  EXPORT_SYMBOL(pci_disable_msix);
+> diff --git a/drivers/pci/msi/msi.h b/drivers/pci/msi/msi.h
+> index d8f62d911f08..634879277349 100644
+> --- a/drivers/pci/msi/msi.h
+> +++ b/drivers/pci/msi/msi.h
+> @@ -84,6 +84,10 @@ static inline __attribute_const__ u32 msi_multi_mask(struct msi_desc *desc)
+>  	return (1 << (1 << desc->pci.msi_attrib.multi_cap)) - 1;
+>  }
+>  
+> +/* MSI internal functions invoked from the public APIs */
+> +void pci_msi_shutdown(struct pci_dev *dev);
+> +void pci_free_msi_irqs(struct pci_dev *dev);
+> +
+>  /* Legacy (!IRQDOMAIN) fallbacks */
+>  #ifdef CONFIG_PCI_MSI_ARCH_FALLBACKS
+>  int pci_msi_legacy_setup_msi_irqs(struct pci_dev *dev, int nvec, int type);
+> 
