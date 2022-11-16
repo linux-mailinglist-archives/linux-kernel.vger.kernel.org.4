@@ -2,150 +2,367 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE1CF62BF20
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 14:11:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 253FF62BF26
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 14:13:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233777AbiKPNLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 08:11:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60060 "EHLO
+        id S232097AbiKPNNU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 08:13:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238085AbiKPNLc (ORCPT
+        with ESMTP id S230343AbiKPNNR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 08:11:32 -0500
-Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E5BEA209BB;
-        Wed, 16 Nov 2022 05:11:29 -0800 (PST)
-Received: by ajax-webmail-mail-app2 (Coremail) ; Wed, 16 Nov 2022 21:11:16
- +0800 (GMT+08:00)
-X-Originating-IP: [10.192.27.165]
-Date:   Wed, 16 Nov 2022 21:11:16 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   "Lin Ma" <linma@zju.edu.cn>
-To:     syzbot <syzbot+10257d01dd285b15170a@syzkaller.appspotmail.com>
-Cc:     davem@davemloft.net, edumazet@google.com,
-        krzysztof.kozlowski@linaro.org, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] BUG: unable to handle kernel NULL pointer dereference
- in nci_cmd_timer
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <00000000000055882e05ed9445a2@google.com>
-References: <00000000000055882e05ed9445a2@google.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Wed, 16 Nov 2022 08:13:17 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9129F3FB82
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 05:13:15 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id ft34so43877985ejc.12
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 05:13:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1aVpr67nkvgGNhxaceuuhsEtIRCHf7EhQZe5/KHUx4I=;
+        b=bwZFyV7TShFxQa26cIZ5w6gJxDKIyv4b6l09CuArTXd4+hr8vyguKmxnrG54mfPvrY
+         2qNTjcqjLQ1oF+lHE9PfmeGnPkOBeHBm7Ys6Rmq4xWZCzZdLpSZVAYkgV27zBsFeQ7If
+         UVgbbQcP0PQS6N/wSyjr4Z3zPdQoytIIiH2mWbUL6EpZP2vuwH6NHpRseGs9rXfDzC/+
+         abv1mQJ75vqasW8N+NQs1xXcwqbnD9ls8lUJqNaGMd/Ms2R3CDKSEH4zArGD0hHzPztn
+         3NTNeYF8GqDnF7NOd53S5gx/1MmN5V9D7FZ8jwfP/jogvtexf880MHa4gdHxf0kWvVya
+         0OJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=1aVpr67nkvgGNhxaceuuhsEtIRCHf7EhQZe5/KHUx4I=;
+        b=18sRb1FiNmPQXm9cCgEs4kcZ63Tr93lOC800kWmkBMmEhi090PR0JIBdkQq2X+7DW4
+         F6GMdg9Xkm6UdflRhmbqBaTzLkU+aDQubqacpaJs0y+N1z7LPHtTQj2WAEp6dN5qfktW
+         QUhO5VtRnHyFg4v9nt7BJZV4P7IRjAV3DrERxm6EeF5shm4EvOHrHQaDE7nfWe7DPsY8
+         h4kl5nMg2IH5zMURpuWnBUdvQZ7eQobkk4lsR9dNEchV4JTHJ+tmP+x5RJjk05VJK3h+
+         dUnHqbF6ZML4PylZYJ9Uhu2yk09SUHPz3T8vJ3dzZfHlO5ZcV7zWQENLNXGZhi+vFFPo
+         LIjA==
+X-Gm-Message-State: ANoB5pkovX/ZwNwuvXyr2fCvrFpn9KryYJTI/0iyhH9L7+ctHV0ei1Lg
+        VDohDacmZr3XxygD97f1QeqJvntagxiDIyog
+X-Google-Smtp-Source: AA0mqf4Zd80kII6SgxOHcrWHz9gvuwLNLDQHcycKT6kqdTeJh/Bz0XSVV5xJTgs5PWpyfFd3FFklGw==
+X-Received: by 2002:a17:907:9d05:b0:7ae:3684:2118 with SMTP id kt5-20020a1709079d0500b007ae36842118mr18145603ejc.127.1668604394013;
+        Wed, 16 Nov 2022 05:13:14 -0800 (PST)
+Received: from [192.168.31.208] ([194.29.137.22])
+        by smtp.gmail.com with ESMTPSA id 2-20020a170906218200b007aed2057ea1sm6262737eju.167.2022.11.16.05.13.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Nov 2022 05:13:13 -0800 (PST)
+Message-ID: <20acabbd-6de9-c0d3-98fe-9a4c4a5ec2dc@linaro.org>
+Date:   Wed, 16 Nov 2022 14:13:06 +0100
 MIME-Version: 1.0
-Message-ID: <a700b13.191985.1848090ad97.Coremail.linma@zju.edu.cn>
-X-Coremail-Locale: en_US
-X-CM-TRANSID: by_KCgBHC7F04XRj+Km2Bw--.4599W
-X-CM-SenderInfo: qtrwiiyqvtljo62m3hxhgxhubq/1tbiAwMQElNG3I6jmQACs9
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,SORTED_RECIPS,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.2
+Subject: Re: [PATCH 1/2] arm64: dts: qcom: sm8550: Add PCIe PHYs and
+ controllers nodes
+To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <20221116130430.2812173-1-abel.vesa@linaro.org>
+ <20221116130430.2812173-2-abel.vesa@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221116130430.2812173-2-abel.vesa@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBGcm9tOiBzeXpib3QgPHN5emJvdCsxMDI1N2QwMWRkMjg1YjE1MTcwYUBzeXprYWxsZXIuYXBw
-c3BvdG1haWwuY29tPgo+IFNlbnQgVGltZTogMjAyMi0xMS0xNiAxODo1MjozNyAoV2VkbmVzZGF5
-KQo+IFRvOiBkYXZlbUBkYXZlbWxvZnQubmV0LCBlZHVtYXpldEBnb29nbGUuY29tLCBrcnp5c3p0
-b2Yua296bG93c2tpQGxpbmFyby5vcmcsIGt1YmFAa2VybmVsLm9yZywgbGlubWFAemp1LmVkdS5j
-biwgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZywgbmV0ZGV2QHZnZXIua2VybmVsLm9yZywg
-cGFiZW5pQHJlZGhhdC5jb20sIHN5emthbGxlci1idWdzQGdvb2dsZWdyb3Vwcy5jb20KPiBDYzog
-Cj4gU3ViamVjdDogW3N5emJvdF0gQlVHOiB1bmFibGUgdG8gaGFuZGxlIGtlcm5lbCBOVUxMIHBv
-aW50ZXIgZGVyZWZlcmVuY2UgaW4gbmNpX2NtZF90aW1lcgo+IAo+IEhlbGxvLAo+IAo+IHN5emJv
-dCBmb3VuZCB0aGUgZm9sbG93aW5nIGlzc3VlIG9uOgo+IAo+IEhFQUQgY29tbWl0OiAgICA5NTAw
-ZmM2ZTllNjAgTWVyZ2UgYnJhbmNoICdmb3ItbmV4dC9jb3JlJyBpbnRvIGZvci1rZXJuZWxjaQo+
-IGdpdCB0cmVlOiAgICAgICBnaXQ6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5l
-bC9naXQvYXJtNjQvbGludXguZ2l0IGZvci1rZXJuZWxjaQo+IGNvbnNvbGUgb3V0cHV0OiBodHRw
-czovL3N5emthbGxlci5hcHBzcG90LmNvbS94L2xvZy50eHQ/eD0xNmNiZjdhNTg4MDAwMAo+IGtl
-cm5lbCBjb25maWc6ICBodHRwczovL3N5emthbGxlci5hcHBzcG90LmNvbS94Ly5jb25maWc/eD1i
-MjVjOWYyMTg2ODZkZDVlCj4gZGFzaGJvYXJkIGxpbms6IGh0dHBzOi8vc3l6a2FsbGVyLmFwcHNw
-b3QuY29tL2J1Zz9leHRpZD0xMDI1N2QwMWRkMjg1YjE1MTcwYQo+IGNvbXBpbGVyOiAgICAgICBE
-ZWJpYW4gY2xhbmcgdmVyc2lvbiAxMy4wLjEtKysyMDIyMDEyNjA5MjAzMys3NWUzM2Y3MWMyZGEt
-MX5leHAxfjIwMjIwMTI2MjEyMTEyLjYzLCBHTlUgbGQgKEdOVSBCaW51dGlscyBmb3IgRGViaWFu
-KSAyLjM1LjIKPiB1c2Vyc3BhY2UgYXJjaDogYXJtNjQKPiBzeXogcmVwcm86ICAgICAgaHR0cHM6
-Ly9zeXprYWxsZXIuYXBwc3BvdC5jb20veC9yZXByby5zeXo/eD0xMzU0ZGNlOTg4MDAwMAo+IEMg
-cmVwcm9kdWNlcjogICBodHRwczovL3N5emthbGxlci5hcHBzcG90LmNvbS94L3JlcHJvLmM/eD0x
-MDg4MGE5NTg4MDAwMAo+IAo+IERvd25sb2FkYWJsZSBhc3NldHM6Cj4gZGlzayBpbWFnZTogaHR0
-cHM6Ly9zdG9yYWdlLmdvb2dsZWFwaXMuY29tL3N5emJvdC1hc3NldHMvMTM2M2U2MDY1MmY3L2Rp
-c2stOTUwMGZjNmUucmF3Lnh6Cj4gdm1saW51eDogaHR0cHM6Ly9zdG9yYWdlLmdvb2dsZWFwaXMu
-Y29tL3N5emJvdC1hc3NldHMvZmNjNGRhODExYmI2L3ZtbGludXgtOTUwMGZjNmUueHoKPiBrZXJu
-ZWwgaW1hZ2U6IGh0dHBzOi8vc3RvcmFnZS5nb29nbGVhcGlzLmNvbS9zeXpib3QtYXNzZXRzLzBi
-NTU0Mjk4ZjFmYS9JbWFnZS05NTAwZmM2ZS5nei54ego+IAo+IElNUE9SVEFOVDogaWYgeW91IGZp
-eCB0aGUgaXNzdWUsIHBsZWFzZSBhZGQgdGhlIGZvbGxvd2luZyB0YWcgdG8gdGhlIGNvbW1pdDoK
-PiBSZXBvcnRlZC1ieTogc3l6Ym90KzEwMjU3ZDAxZGQyODViMTUxNzBhQHN5emthbGxlci5hcHBz
-cG90bWFpbC5jb20KPiAKPiBVbmFibGUgdG8gaGFuZGxlIGtlcm5lbCBOVUxMIHBvaW50ZXIgZGVy
-ZWZlcmVuY2UgYXQgdmlydHVhbCBhZGRyZXNzIDAwMDAwMDAwMDAwMDAwMDAKPiBNZW0gYWJvcnQg
-aW5mbzoKPiAgIEVTUiA9IDB4MDAwMDAwMDA5NjAwMDAwNAo+ICAgRUMgPSAweDI1OiBEQUJUIChj
-dXJyZW50IEVMKSwgSUwgPSAzMiBiaXRzCj4gICBTRVQgPSAwLCBGblYgPSAwCj4gICBFQSA9IDAs
-IFMxUFRXID0gMAo+ICAgRlNDID0gMHgwNDogbGV2ZWwgMCB0cmFuc2xhdGlvbiBmYXVsdAo+IERh
-dGEgYWJvcnQgaW5mbzoKPiAgIElTViA9IDAsIElTUyA9IDB4MDAwMDAwMDQKPiAgIENNID0gMCwg
-V25SID0gMAo+IHVzZXIgcGd0YWJsZTogNGsgcGFnZXMsIDQ4LWJpdCBWQXMsIHBnZHA9MDAwMDAw
-MDEwYzc1YjAwMAo+IFswMDAwMDAwMDAwMDAwMDAwXSBwZ2Q9MDAwMDAwMDAwMDAwMDAwMCwgcDRk
-PTAwMDAwMDAwMDAwMDAwMDAKPiBJbnRlcm5hbCBlcnJvcjogT29wczogMDAwMDAwMDA5NjAwMDAw
-NCBbIzFdIFBSRUVNUFQgU01QCj4gTW9kdWxlcyBsaW5rZWQgaW46Cj4gQ1BVOiAwIFBJRDogMCBD
-b21tOiBzd2FwcGVyLzAgTm90IHRhaW50ZWQgNi4xLjAtcmM1LXN5emthbGxlci0zMjI2OS1nOTUw
-MGZjNmU5ZTYwICMwCj4gSGFyZHdhcmUgbmFtZTogR29vZ2xlIEdvb2dsZSBDb21wdXRlIEVuZ2lu
-ZS9Hb29nbGUgQ29tcHV0ZSBFbmdpbmUsIEJJT1MgR29vZ2xlIDA5LzMwLzIwMjIKPiBwc3RhdGU6
-IDAwNDAwMGM1IChuemN2IGRhSUYgK1BBTiAtVUFPIC1UQ08gLURJVCAtU1NCUyBCVFlQRT0tLSkK
-PiBwYyA6IF9fcXVldWVfd29yaysweDNjNC8weDhiNAo+IGxyIDogX19xdWV1ZV93b3JrKzB4M2M0
-LzB4OGI0IGtlcm5lbC93b3JrcXVldWUuYzoxNDU4Cj4gc3AgOiBmZmZmODAwMDA4MDAzZDYwCj4g
-eDI5OiBmZmZmODAwMDA4MDAzZDYwIHgyODogMDAwMDAwMDAwMDAwMDAwMCB4Mjc6IGZmZmY4MDAw
-MGQzYTkwMDAKPiB4MjY6IGZmZmY4MDAwMGQzYWQwNTAgeDI1OiBmZmZmODAwMDBkMmZlMDA4IHgy
-NDogZmZmZjgwMDAwZGI1NDAwMAo+IHgyMzogMDAwMDAwMDAwMDAwMDAwMCB4MjI6IDAwMDAwMDAw
-MDAwMDAwMjMgeDIxOiBmZmZmMDAwMGM3YTk1NDAwCj4geDIwOiAwMDAwMDAwMDAwMDAwMDA4IHgx
-OTogZmZmZjAwMDBjZDBkMjBmOCB4MTg6IGZmZmY4MDAwMGRiNzgxNTgKPiB4MTc6IGZmZmY4MDAw
-MGRkZGExOTggeDE2OiBmZmZmODAwMDBkYzE4MTU4IHgxNTogZmZmZjgwMDAwZDNjYmM4MAo+IHgx
-NDogMDAwMDAwMDAwMDAwMDAwMCB4MTM6IDAwMDAwMDAwZmZmZmZmZmYgeDEyOiBmZmZmODAwMDBk
-M2NiYzgwCj4geDExOiBmZjgwODAwMDBjMDdkZmU0IHgxMDogMDAwMDAwMDAwMDAwMDAwMCB4OSA6
-IGZmZmY4MDAwMGMwN2RmZTQKPiB4OCA6IGZmZmY4MDAwMGQzY2JjODAgeDcgOiBmZmZmODAwMDA4
-MTNiYWU4IHg2IDogMDAwMDAwMDAwMDAwMDAwMAo+IHg1IDogMDAwMDAwMDAwMDAwMDA4MCB4NCA6
-IDAwMDAwMDAwMDAwMDAwMDAgeDMgOiAwMDAwMDAwMDAwMDAwMDAyCj4geDIgOiAwMDAwMDAwMDAw
-MDAwMDA4IHgxIDogMDAwMDAwMDAwMDAwMDAwMCB4MCA6IGZmZmYwMDAwYzAwMTRjMDAKPiBDYWxs
-IHRyYWNlOgo+ICBfX3F1ZXVlX3dvcmsrMHgzYzQvMHg4YjQga2VybmVsL3dvcmtxdWV1ZS5jOjE0
-NTgKPiAgcXVldWVfd29ya19vbisweGIwLzB4MTVjIGtlcm5lbC93b3JrcXVldWUuYzoxNTQ1Cj4g
-IHF1ZXVlX3dvcmsgaW5jbHVkZS9saW51eC93b3JrcXVldWUuaDo1MDMgW2lubGluZV0KPiAgbmNp
-X2NtZF90aW1lcisweDMwLzB4NDAgbmV0L25mYy9uY2kvY29yZS5jOjYxNQo+ICBjYWxsX3RpbWVy
-X2ZuKzB4OTAvMHgxNDQga2VybmVsL3RpbWUvdGltZXIuYzoxNDc0Cj4gIGV4cGlyZV90aW1lcnMg
-a2VybmVsL3RpbWUvdGltZXIuYzoxNTE5IFtpbmxpbmVdCj4gIF9fcnVuX3RpbWVycysweDI4MC8w
-eDM3NCBrZXJuZWwvdGltZS90aW1lci5jOjE3OTAKPiAgcnVuX3RpbWVyX3NvZnRpcnErMHgzNC8w
-eDVjIGtlcm5lbC90aW1lL3RpbWVyLmM6MTgwMwo+ICBfc3RleHQrMHgxNjgvMHgzN2MKPiAgX19f
-X2RvX3NvZnRpcnErMHgxNC8weDIwIGFyY2gvYXJtNjQva2VybmVsL2lycS5jOjc5Cj4gIGNhbGxf
-b25faXJxX3N0YWNrKzB4MmMvMHg1NCBhcmNoL2FybTY0L2tlcm5lbC9lbnRyeS5TOjg5Mgo+ICBk
-b19zb2Z0aXJxX293bl9zdGFjaysweDIwLzB4MmMgYXJjaC9hcm02NC9rZXJuZWwvaXJxLmM6ODQK
-PiAgaW52b2tlX3NvZnRpcnErMHg3MC8weGJjIGtlcm5lbC9zb2Z0aXJxLmM6NDUyCj4gIF9faXJx
-X2V4aXRfcmN1KzB4ZjAvMHgxNDAga2VybmVsL3NvZnRpcnEuYzo2NTAKPiAgaXJxX2V4aXRfcmN1
-KzB4MTAvMHg0MCBrZXJuZWwvc29mdGlycS5jOjY2Mgo+ICBfX2VsMV9pcnEgYXJjaC9hcm02NC9r
-ZXJuZWwvZW50cnktY29tbW9uLmM6NDcyIFtpbmxpbmVdCj4gIGVsMV9pbnRlcnJ1cHQrMHgzOC8w
-eDY4IGFyY2gvYXJtNjQva2VybmVsL2VudHJ5LWNvbW1vbi5jOjQ4Ngo+ICBlbDFoXzY0X2lycV9o
-YW5kbGVyKzB4MTgvMHgyNCBhcmNoL2FybTY0L2tlcm5lbC9lbnRyeS1jb21tb24uYzo0OTEKPiAg
-ZWwxaF82NF9pcnErMHg2NC8weDY4IGFyY2gvYXJtNjQva2VybmVsL2VudHJ5LlM6NTgwCj4gIGFy
-Y2hfbG9jYWxfaXJxX2VuYWJsZSsweGMvMHgxOCBhcmNoL2FybTY0L2luY2x1ZGUvYXNtL2lycWZs
-YWdzLmg6MzUKPiAgZGVmYXVsdF9pZGxlX2NhbGwrMHg0OC8weGI4IGtlcm5lbC9zY2hlZC9pZGxl
-LmM6MTA5Cj4gIGNwdWlkbGVfaWRsZV9jYWxsIGtlcm5lbC9zY2hlZC9pZGxlLmM6MTkxIFtpbmxp
-bmVdCj4gIGRvX2lkbGUrMHgxMTAvMHgyZDQga2VybmVsL3NjaGVkL2lkbGUuYzozMDMKPiAgY3B1
-X3N0YXJ0dXBfZW50cnkrMHgyNC8weDI4IGtlcm5lbC9zY2hlZC9pZGxlLmM6NDAwCj4gIGtlcm5l
-bF9pbml0KzB4MC8weDI5MCBpbml0L21haW4uYzo3MjkKPiAgc3RhcnRfa2VybmVsKzB4MC8weDYy
-MCBpbml0L21haW4uYzo4OTAKPiAgc3RhcnRfa2VybmVsKzB4NDUwLzB4NjIwIGluaXQvbWFpbi5j
-OjExNDUKPiAgX19wcmltYXJ5X3N3aXRjaGVkKzB4YjQvMHhiYyBhcmNoL2FybTY0L2tlcm5lbC9o
-ZWFkLlM6NDcxCj4gQ29kZTogOTQwMDEzODQgYWEwMDAzZjcgYWExMzAzZTAgOTQwMDE0NGEgKGY5
-NDAwMmY4KSAKPiAtLS1bIGVuZCB0cmFjZSAwMDAwMDAwMDAwMDAwMDAwIF0tLS0KPiAtLS0tLS0t
-LS0tLS0tLS0tCj4gQ29kZSBkaXNhc3NlbWJseSAoYmVzdCBndWVzcyk6Cj4gICAgMDoJOTQwMDEz
-ODQgCWJsCTB4NGUxMAo+ICAgIDQ6CWFhMDAwM2Y3IAltb3YJeDIzLCB4MAo+ICAgIDg6CWFhMTMw
-M2UwIAltb3YJeDAsIHgxOQo+ICAgIGM6CTk0MDAxNDRhIAlibAkweDUxMzQKPiAqIDEwOglmOTQw
-MDJmOCAJbGRyCXgyNCwgW3gyM10gPC0tIHRyYXBwaW5nIGluc3RydWN0aW9uCj4gCj4gCj4gLS0t
-Cj4gVGhpcyByZXBvcnQgaXMgZ2VuZXJhdGVkIGJ5IGEgYm90LiBJdCBtYXkgY29udGFpbiBlcnJv
-cnMuCj4gU2VlIGh0dHBzOi8vZ29vLmdsL3Rwc21FSiBmb3IgbW9yZSBpbmZvcm1hdGlvbiBhYm91
-dCBzeXpib3QuCj4gc3l6Ym90IGVuZ2luZWVycyBjYW4gYmUgcmVhY2hlZCBhdCBzeXprYWxsZXJA
-Z29vZ2xlZ3JvdXBzLmNvbS4KPiAKPiBzeXpib3Qgd2lsbCBrZWVwIHRyYWNrIG9mIHRoaXMgaXNz
-dWUuIFNlZToKPiBodHRwczovL2dvby5nbC90cHNtRUojc3RhdHVzIGZvciBob3cgdG8gY29tbXVu
-aWNhdGUgd2l0aCBzeXpib3QuCj4gc3l6Ym90IGNhbiB0ZXN0IHBhdGNoZXMgZm9yIHRoaXMgaXNz
-dWUsIGZvciBkZXRhaWxzIHNlZToKPiBodHRwczovL2dvby5nbC90cHNtRUojdGVzdGluZy1wYXRj
-aGVzCgojc3l6IHRlc3Q6IGh0dHBzOi8vZ2l0aHViLmNvbS9mMHJtMmwxbi9saW51eC1maXguZ2l0
-IG1hc3Rlcg==
+
+
+On 16/11/2022 14:04, Abel Vesa wrote:
+> Add PCIe controllers and PHY nodes.
+> 
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> ---
+>   arch/arm64/boot/dts/qcom/sm8550.dtsi | 245 +++++++++++++++++++++++++++
+>   1 file changed, 245 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> index 07ba709ca35f..5c274d0372ad 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> @@ -648,12 +648,16 @@ gcc: clock-controller@100000 {
+>   			#reset-cells = <1>;
+>   			#power-domain-cells = <1>;
+>   			clock-names = "bi_tcxo", "sleep_clk",
+> +				      "pcie_0_pipe_clk",
+> +				      "pcie_1_pipe_clk",
+>   				      "pcie_1_phy_aux_clk",
+>   				      "ufs_phy_rx_symbol_0_clk",
+>   				      "ufs_phy_rx_symbol_1_clk",
+>   				      "ufs_phy_tx_symbol_0_clk",
+>   				      "usb3_phy_wrapper_gcc_usb30_pipe_clk";
+Is gcc not going to use index-based matching? clock-names is redundant 
+in that case.
+
+>   			clocks = <&rpmhcc RPMH_CXO_CLK>, <&sleep_clk>,
+> +				 <&pcie0_lane>,
+> +				 <&pcie1_lane>,
+>   				 <&pcie_1_phy_aux_clk>,
+>   				 <&ufs_phy_rx_symbol_0_clk>,
+>   				 <&ufs_phy_rx_symbol_1_clk>,
+> @@ -1372,6 +1376,247 @@ mmss_noc: interconnect@1780000 {
+>   			qcom,bcm-voters = <&apps_bcm_voter>;
+>   		};
+>   
+> +		pcie0: pci@1c00000 {
+> +			compatible = "qcom,pcie-sm8550-pcie0";
+> +			reg = <0 0x01c00000 0 0x3000>,
+> +			      <0 0x60000000 0 0xf1d>,
+> +			      <0 0x60000f20 0 0xa8>,
+> +			      <0 0x60001000 0 0x1000>,
+> +			      <0 0x60100000 0 0x100000>;
+> +			reg-names = "parf", "dbi", "elbi", "atu", "config";
+> +			device_type = "pci";
+> +			linux,pci-domain = <0>;
+> +			bus-range = <0x00 0xff>;
+> +			num-lanes = <2>;
+> +
+> +			#address-cells = <3>;
+> +			#size-cells = <2>;
+> +
+> +			ranges = <0x01000000 0x0 0x60200000 0 0x60200000 0x0 0x100000>,
+> +				 <0x02000000 0x0 0x60300000 0 0x60300000 0x0 0x3d00000>;
+> +
+> +			interrupts = <GIC_SPI 141 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-names = "msi";
+> +			#interrupt-cells = <1>;
+> +			interrupt-map-mask = <0 0 0 0x7>;
+> +			interrupt-map = <0 0 0 1 &intc 0 0 0 149 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
+> +					<0 0 0 2 &intc 0 0 0 150 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
+> +					<0 0 0 3 &intc 0 0 0 151 IRQ_TYPE_LEVEL_HIGH>, /* int_c */
+> +					<0 0 0 4 &intc 0 0 0 152 IRQ_TYPE_LEVEL_HIGH>; /* int_d */
+> +
+> +			interconnect-names = "icc_path";
+> +			interconnects = <&pcie_noc MASTER_PCIE_0 0 &mc_virt SLAVE_EBI1 0>;
+> +
+> +			clocks = <&gcc GCC_PCIE_0_PIPE_CLK>,
+> +				 <&gcc GCC_PCIE_0_PIPE_CLK_SRC>,
+> +				 <&pcie0_lane>,
+> +				 <&rpmhcc RPMH_CXO_CLK>,
+> +				 <&gcc GCC_PCIE_0_AUX_CLK>,
+> +				 <&gcc GCC_PCIE_0_CFG_AHB_CLK>,
+> +				 <&gcc GCC_PCIE_0_MSTR_AXI_CLK>,
+> +				 <&gcc GCC_PCIE_0_SLV_AXI_CLK>,
+> +				 <&gcc GCC_PCIE_0_SLV_Q2A_AXI_CLK>,
+> +				 <&gcc GCC_DDRSS_PCIE_SF_QTB_CLK>,
+> +				 <&gcc GCC_AGGRE_NOC_PCIE_AXI_CLK>;
+> +			clock-names = "pipe",
+> +					"pipe_mux",
+> +					"phy_pipe",
+> +					"ref",
+> +					"aux",
+> +					"cfg",
+> +					"bus_master",
+> +					"bus_slave",
+> +					"slave_q2a",
+> +					"ddrss_sf_tbu",
+> +					"aggre0";
+> +
+> +			iommus = <&apps_smmu 0x1400 0x7f>;
+> +			iommu-map = <0x0   &apps_smmu 0x1400 0x1>,
+> +				    <0x100 &apps_smmu 0x1401 0x1>;
+> +
+> +			resets = <&gcc GCC_PCIE_0_BCR>;
+> +			reset-names = "pci";
+> +
+> +			power-domains = <&gcc PCIE_0_GDSC>;
+> +			power-domain-names = "gdsc";
+> +
+> +			phys = <&pcie0_lane>;
+> +			phy-names = "pciephy";
+> +
+> +			perst-gpios = <&tlmm 94 GPIO_ACTIVE_LOW>;
+> +			wake-gpios = <&tlmm 96 GPIO_ACTIVE_HIGH>;
+> +
+> +			pinctrl-names = "default";
+> +			pinctrl-0 = <&pcie0_default_state>;
+> +
+> +			status = "disabled";
+> +		};
+> +
+> +		pcie0_phy: phy@1c06000 {
+> +			compatible = "qcom,sm8550-qmp-gen3x2-pcie-phy";
+> +			reg = <0 0x01c06000 0 0x200>;
+> +			#address-cells = <2>;
+> +			#size-cells = <2>;
+> +			ranges;
+> +			clocks = <&gcc GCC_PCIE_0_AUX_CLK>,
+> +				 <&gcc GCC_PCIE_0_CFG_AHB_CLK>,
+> +				 <&tcsr TCSR_PCIE_0_CLKREF_EN>,
+> +				 <&gcc GCC_PCIE_0_PHY_RCHNG_CLK>;
+> +			clock-names = "aux", "cfg_ahb", "ref", "refgen";
+> +
+> +			resets = <&gcc GCC_PCIE_0_PHY_BCR>;
+> +			reset-names = "phy";
+> +
+> +			assigned-clocks = <&gcc GCC_PCIE_0_PHY_RCHNG_CLK>;
+> +			assigned-clock-rates = <100000000>;
+> +
+> +			power-domains = <&gcc PCIE_0_PHY_GDSC>;
+> +			power-domain-names = "gdsc";
+> +
+> +			status = "disabled";
+> +
+> +			pcie0_lane: phy@1c06200 {
+> +				reg = <0 0x1c06e00 0 0x200>, /* tx0 */
+> +				      <0 0x1c07000 0 0x200>, /* rx0 */
+> +				      <0 0x1c06200 0 0x200>, /* pcs */
+> +				      <0 0x1c07600 0 0x200>, /* tx1 */
+> +				      <0 0x1c07800 0 0x200>, /* rx1 */
+> +				      <0 0x1c06600 0 0x200>; /* pcs_pcie */
+> +				clocks = <&gcc GCC_PCIE_0_PIPE_CLK>;
+> +				clock-names = "pipe0";
+> +
+> +				#clock-cells = <0>;
+> +				#phy-cells = <0>;
+> +				clock-output-names = "pcie_0_pipe_clk";
+> +			};
+> +		};
+> +
+> +		pcie1: pci@1c08000 {
+> +			compatible = "qcom,pcie-sm8550-pcie1";
+> +			reg = <0x0 0x01c08000 0x0 0x3000>,
+> +			      <0x0 0x40000000 0x0 0xf1d>,
+> +			      <0x0 0x40000f20 0x0 0xa8>,
+> +			      <0x0 0x40001000 0x0 0x1000>,
+> +			      <0x0 0x40100000 0x0 0x100000>;
+> +			reg-names = "parf", "dbi", "elbi", "atu", "config";
+> +			device_type = "pci";
+> +			linux,pci-domain = <1>;
+> +			bus-range = <0x00 0xff>;
+> +			num-lanes = <2>;
+> +
+> +			#address-cells = <3>;
+> +			#size-cells = <2>;
+> +
+> +			ranges = <0x01000000 0x0 0x40200000 0 0x40200000 0x0 0x100000>,
+> +				 <0x02000000 0x0 0x40300000 0 0x40300000 0x0 0x1fd00000>;
+> +
+> +			interrupts = <GIC_SPI 307 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-names = "msi";
+> +			#interrupt-cells = <1>;
+> +			interrupt-map-mask = <0 0 0 0x7>;
+> +			interrupt-map = <0 0 0 1 &intc 0 0 0 434 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
+> +					<0 0 0 2 &intc 0 0 0 435 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
+> +					<0 0 0 3 &intc 0 0 0 438 IRQ_TYPE_LEVEL_HIGH>, /* int_c */
+> +					<0 0 0 4 &intc 0 0 0 439 IRQ_TYPE_LEVEL_HIGH>; /* int_d */
+> +
+> +			clocks = <&gcc GCC_PCIE_1_PIPE_CLK>,
+> +				 <&gcc GCC_PCIE_1_PIPE_CLK_SRC>,
+> +				 <&pcie1_lane>,
+> +				 <&rpmhcc RPMH_CXO_CLK>,
+> +				 <&gcc GCC_PCIE_1_AUX_CLK>,
+> +				 <&gcc GCC_PCIE_1_CFG_AHB_CLK>,
+> +				 <&gcc GCC_PCIE_1_MSTR_AXI_CLK>,
+> +				 <&gcc GCC_PCIE_1_SLV_AXI_CLK>,
+> +				 <&gcc GCC_PCIE_1_SLV_Q2A_AXI_CLK>,
+> +				 <&gcc GCC_DDRSS_PCIE_SF_QTB_CLK>,
+> +				 <&gcc GCC_AGGRE_NOC_PCIE_AXI_CLK>,
+> +				 <&gcc GCC_CNOC_PCIE_SF_AXI_CLK>;
+> +			clock-names = "pipe",
+> +					"pipe_mux",
+> +					"phy_pipe",
+> +					"ref",
+> +					"aux",
+> +					"cfg",
+> +					"bus_master",
+> +					"bus_slave",
+> +					"slave_q2a",
+> +					"ddrss_sf_tbu",
+> +					"aggre1",
+> +					"cnoc_pcie_sf_axi";
+> +
+> +			interconnect-names = "icc_path";
+> +			interconnects = <&pcie_noc MASTER_PCIE_1 0 &mc_virt SLAVE_EBI1 0>;
+> +
+> +			iommus = <&apps_smmu 0x1480 0x7f>;
+> +			iommu-map = <0x0   &apps_smmu 0x1480 0x1>,
+> +				    <0x100 &apps_smmu 0x1481 0x1>;
+> +
+> +			resets = <&gcc GCC_PCIE_1_BCR>,
+> +				<&gcc GCC_PCIE_1_LINK_DOWN_BCR>;
+> +			reset-names = "pci",
+> +				"pcie_1_link_down_reset";
+> +
+> +			power-domains = <&gcc PCIE_1_GDSC>;
+> +			power-domain-names = "gdsc";
+> +
+> +			phys = <&pcie1_lane>;
+> +			phy-names = "pciephy";
+> +
+> +			perst-gpios = <&tlmm 97 GPIO_ACTIVE_LOW>;
+> +			enable-gpios = <&tlmm 99 GPIO_ACTIVE_HIGH>;
+> +
+> +			pinctrl-names = "default";
+> +			pinctrl-0 = <&pcie1_default_state>;
+> +
+> +			assigned-clocks = <&gcc GCC_PCIE_1_AUX_CLK>;
+> +			assigned-clock-rates = <19200000>;
+> +
+> +			status = "disabled";
+> +		};
+> +
+> +		pcie1_phy: phy@1c0f000 {
+> +			compatible = "qcom,sm8550-qmp-gen4x2-pcie-phy";
+> +			reg = <0x0 0x01c0f000 0x0 0x200>;
+> +			#address-cells = <2>;
+> +			#size-cells = <2>;
+> +			ranges;
+> +			clocks = <&gcc GCC_PCIE_1_AUX_CLK>,
+> +				 <&gcc GCC_PCIE_1_PHY_AUX_CLK>,
+> +				 <&gcc GCC_PCIE_1_CFG_AHB_CLK>,
+> +				 <&tcsr TCSR_PCIE_1_CLKREF_EN>,
+> +				 <&gcc GCC_PCIE_1_PHY_RCHNG_CLK>;
+> +			clock-names = "aux", "aux_phy", "cfg_ahb", "ref", "refgen";
+> +
+> +			resets = <&gcc GCC_PCIE_1_PHY_BCR>,
+> +				<&gcc GCC_PCIE_1_NOCSR_COM_PHY_BCR>;
+Indentation seems off.
+
+> +			reset-names = "phy",
+> +				"pcie_1_nocsr_com_phy_reset";
+Identation is off. Won't these two fit in a single 100char line?
+
+Konrad
+> +
+> +			assigned-clocks = <&gcc GCC_PCIE_1_PHY_RCHNG_CLK>;
+> +			assigned-clock-rates = <100000000>;
+> +
+> +			power-domains = <&gcc PCIE_1_PHY_GDSC>;
+> +			power-domain-names = "phy_gdsc";
+> +
+> +			status = "disabled";
+> +
+> +			pcie1_lane: phy@1c0e000 {
+> +				reg = <0x0 0x1c0e000 0x0 0x200>, /* tx */
+> +				      <0x0 0x1c0e200 0x0 0x300>, /* rx */
+> +				      <0x0 0x1c0f200 0x0 0x200>, /* pcs */
+> +				      <0x0 0x1c0e800 0x0 0x200>, /* tx */
+> +				      <0x0 0x1c0ea00 0x0 0x300>, /* rx */
+> +				      <0x0 0x1c0f400 0x0 0xc00>, /* pcs_pcie */
+> +				      <0x0 0x1c0ee00 0x0 0x0a0>; /* ln_shrd */
+> +				clocks = <&gcc GCC_PCIE_1_PIPE_CLK>;
+> +				clock-names = "pipe0";
+> +
+> +				#clock-cells = <0>;
+> +				#phy-cells = <0>;
+> +				clock-output-names = "pcie_1_pipe_clk";
+> +			};
+> +		};
+> +
+>   		tcsr_mutex: hwlock@1f40000 {
+>   			compatible = "qcom,tcsr-mutex";
+>   			reg = <0x0 0x01f40000 0x0 0x20000>;
