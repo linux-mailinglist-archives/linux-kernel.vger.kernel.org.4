@@ -2,107 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D580862C1BA
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 16:01:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4579862C1BD
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 16:04:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234314AbiKPPBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 10:01:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53482 "EHLO
+        id S233928AbiKPPEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 10:04:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233746AbiKPPBj (ORCPT
+        with ESMTP id S233356AbiKPPES (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 10:01:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D6DB22
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 07:01:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7C26EB81DB9
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 15:01:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C8CFC433D7;
-        Wed, 16 Nov 2022 15:01:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668610895;
-        bh=dcP2x5CBch3DJrmGZJ+7f+29GSfFAgYzmRD/abQws/E=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=sDXNQYF9M6WwdwcIXcA4jA35AGQhYk2LJUH4cqiVg5csF4AmRBLuyJrSL+HzMMWsp
-         1tASUSW+XLcPpsyYHKRzcL5RJMBZUliQ4MvDA5iFo101jOHKQm+2XgYdF8H+6kdamA
-         29K8QUMxIZCmL4f2gQQ6ABbD6kZr8ZF1oatCIiNXU1P66E//Xz+xOD+xi1d5ycCwVQ
-         MjqSlNG/kbclazj1u6T4LbA9W/goAUkngHvmlGTjEy4f/nOx2K+XjEWPjz484C4lN0
-         qOx4O+2qduFwefuLL+U169T8n/dOgm65rGhVg1o0JVwRM7ybKDkJ44CrdmT7pU6Aqp
-         NZdzj6PbmxORw==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-kernel@vger.kernel.org,
-        Yang Yingliang <yangyingliang@huawei.com>
-Cc:     lgirdwood@gmail.com
-In-Reply-To: <20221116033706.3595812-1-yangyingliang@huawei.com>
-References: <20221116033706.3595812-1-yangyingliang@huawei.com>
-Subject: Re: [PATCH] regulator: core: fix UAF in destroy_regulator()
-Message-Id: <166861089393.540847.16213406405179822954.b4-ty@kernel.org>
-Date:   Wed, 16 Nov 2022 15:01:33 +0000
+        Wed, 16 Nov 2022 10:04:18 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2BDF616E
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 07:04:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668611057; x=1700147057;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Lc2im2WNuflvec4Il7akKcrjVAyNll8uTfelvJ8MY/I=;
+  b=h+7ynyVXejAPFB/GLD71yi3rNP6XItlhzFakG+ri7buKVXRHvjXc2zvH
+   PeGzAZurESv41E9rVRYmgBJ1/cZJou0GtKvQDwJs7cpATPYr7WjSG+Bri
+   Tnzfh6zpTgSRk1BMTmJGwGlztNQ9yDUJGWcucaLcPdKL1/dXSagjBQt4F
+   vsU/z8bma+fQtfPTwQ0nXUBSS2VhKOgUmW8tulP1LgGB+8U1jUsJmCC/X
+   HOeCF9q5QEsyhZbKz9BiFLOnbJjYThhn3zKOBl4idHnoXaTINVbt4xqjs
+   1+fElcLo8NLCj7O/lVtjteTom+JMI3nNwqoJfwfyZGKf/EOGFgKmgAOwU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="311270990"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="311270990"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 07:04:12 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="639385030"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="639385030"
+Received: from msureshb-mobl3.amr.corp.intel.com (HELO [10.212.45.114]) ([10.212.45.114])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 07:04:10 -0800
+Message-ID: <a8bc9284-c0c2-79aa-fee6-40101fc34f96@linux.intel.com>
+Date:   Wed, 16 Nov 2022 09:04:09 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [Sound-open-firmware] [PATCH 3/4] ASoC: SOF: Adding amd HS
+ functionality to the sof core
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>,
+        broonie@kernel.org, alsa-devel@alsa-project.org
+Cc:     Sunil-kumar.Dommati@amd.com, Vijendar.Mukunda@amd.com,
+        ssabakar@amd.com, Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        venkataprasad.potturu@amd.com,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Basavaraj.Hiregoudar@amd.com, Takashi Iwai <tiwai@suse.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        YC Hung <yc.hung@mediatek.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:SOUND - SOUND OPEN FIRMWARE (SOF) DRIVERS" 
+        <sound-open-firmware@alsa-project.org>
+References: <20220913144319.1055302-1-Vsujithkumar.Reddy@amd.com>
+ <20220913144319.1055302-4-Vsujithkumar.Reddy@amd.com>
+ <36a45c7a-820a-7675-d740-c0e83ae2c417@collabora.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <36a45c7a-820a-7675-d740-c0e83ae2c417@collabora.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.11.0-dev-8af31
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Nov 2022 11:37:06 +0800, Yang Yingliang wrote:
-> I got a UAF report as following:
+
+>> diff --git a/include/sound/sof/dai.h b/include/sound/sof/dai.h
+>> index 21d98f31a9ca..83fd81c82e4c 100644
+>> --- a/include/sound/sof/dai.h
+>> +++ b/include/sound/sof/dai.h
+>> @@ -84,6 +84,7 @@ enum sof_ipc_dai_type {
+>>       SOF_DAI_AMD_BT,            /**< AMD ACP BT*/
+>>       SOF_DAI_AMD_SP,            /**< AMD ACP SP */
+>>       SOF_DAI_AMD_DMIC,        /**< AMD ACP DMIC */
+>> +    SOF_DAI_AMD_HS,            /**< Amd HS */
+>>       SOF_DAI_MEDIATEK_AFE,        /**< Mediatek AFE */
 > 
-> ==================================================================
-> BUG: KASAN: use-after-free in __lock_acquire+0x935/0x2060
-> Read of size 8 at addr ffff88810e838220 by task python3/268
-> Call Trace:
->  <TASK>
->  dump_stack_lvl+0x67/0x83
->  print_report+0x178/0x4b0
->  kasan_report+0x90/0x190
->  __lock_acquire+0x935/0x2060
->  lock_acquire+0x156/0x400
->  _raw_spin_lock+0x2a/0x40
->  lockref_get+0x11/0x30
->  simple_recursive_removal+0x41/0x440
->  debugfs_remove.part.12+0x32/0x50
->  debugfs_remove+0x29/0x30
->  _regulator_put.cold.54+0x3e/0x27f
->  regulator_put+0x1f/0x30
->  release_nodes+0x6a/0xa0
->  devres_release_all+0xf8/0x150
+> Adding SOF_DAI_AMD_HS before SOF_DAI_MEDIATEK_AFE desynced this enumeration
+> so the DAI type is now 11 and not 10 anymore, leading to a failure in
+> firmware
+> at IPC3 helper function `dai_get()`, as when `dai_find_type()` is
+> called, the
+> DAI type that the firmware expects doesn't match with the one that gets
+> sent
+> in the request message from the kernel.
 > 
-> [...]
+> As a local test, I tried moving SOF_DAI_AMD_HS after
+> SOF_DAI_MEDIATEK_AFE and
+> this has restored full functionality on my MT8195 platform (Tomato
+> Chromebook).
+> 
+> If SOF is supposed to guarantee backwards compatibility (and I believe
+> it is),
+> this commit breaks that.
+> 
+> I would be tempted to send a commit that moves SOF_DAI_AMD_HS to the
+> end, but
+> that would break the already compiled firmware for AMD platforms, so I
+> am not
+> sure how to proceed.
 
-Applied to
+D'oh. Yes this breaks backwards-compatibility and this is a clear
+mistake. I think your suggestion to add the AMD_HS at the end is the
+only practical solution indeed - this would need to be done for both
+kernel and SOF version of dai.h.
 
-   broonie/regulator.git for-next
-
-Thanks!
-
-[1/1] regulator: core: fix UAF in destroy_regulator()
-      commit: 1f386d6894d0f1b7de8ef640c41622ddd698e7ab
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
