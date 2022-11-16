@@ -2,86 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82D2E62CD75
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 23:13:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A56862CD77
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 23:14:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238294AbiKPWNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 17:13:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39862 "EHLO
+        id S238754AbiKPWOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 17:14:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234469AbiKPWNY (ORCPT
+        with ESMTP id S238665AbiKPWNq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 17:13:24 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB0D6B391
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 14:13:12 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id s196so225819pgs.3
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 14:13:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LEALi84Ium1ZlWZzXz+cwmcGDIY43dRDsmFo60UxT98=;
-        b=ahJ8bsoBVgCCr8jscmazuErp1mcQI1GMVSN2Oxb3HpXUz+ero20SbhLgGY9RN/H+xD
-         tFV3t/zAOJii91OWn9GYaKLEyrD3W909tKm2iGNsxzCbCGxYeFicSe43FkMw3GrxNaZ4
-         QEGWUsO8rKh/1aRQGDInDmRqtr1Uh9x4T4xE6Uyjgq8L1s43VxjHes14Oqogismgc+Hz
-         hM+9p0PlJEfu2Vm2j+80XeoERr1jltAIVvqBvqBzdoq18EHFXEu2PM8hqeKwoj0zSd5c
-         QktiEetb5wdRlA9m0xLmXCpLd9EkKJQux+HW3MyXNOrVpvVh4V4725vD5tPgEwbYQN7X
-         nxHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LEALi84Ium1ZlWZzXz+cwmcGDIY43dRDsmFo60UxT98=;
-        b=cXQWCOT7Ru88eE/UOwMYmQ3bhsLMvZssVGvg5PjZGoJ/krfdtv1YJYl/yv27djRYD/
-         o8qSjs8Y+ucvsXwJcRpHP08qzEuKJK2T+GtNHITEDHjm32A081Iu+N+5yu3GQFZHf9vV
-         T0Rpm0YgGL6aibLg/1EAC7wEM4SpKaOs5TEL+6cdrJtT/9IepnZV2Sz8qU8Mva2B+ZR0
-         V1WERnreK1j8KXpuTqCR+KI3MLf7z1YveDJA74nNAAKnoIPrXNOcNQ/38k9YzLRb8ZL1
-         5iHpxVgLF/jO1fpTjKuJ1Jw53zuvPY8Ao/SoEI9t1Q3q9n10i+85pG0XvkMDmifZYIC6
-         4IXg==
-X-Gm-Message-State: ANoB5pmFvJ/BCKnRDQHSXgcQNu6jtAvdQpYW6DlJKAHU84xFjjhNMG6n
-        FpE6653qJjypqHorGc0UrMdATg==
-X-Google-Smtp-Source: AA0mqf6tUAmTqse/Fkst1piL5RNn0zRmV8+vRAL9N/G2uaYzEal3MxGusaZa1JYBear3ieq3f8Blvg==
-X-Received: by 2002:a63:454e:0:b0:476:cdb8:28fd with SMTP id u14-20020a63454e000000b00476cdb828fdmr7485375pgk.358.1668636791454;
-        Wed, 16 Nov 2022 14:13:11 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id h4-20020a170902680400b0017b264a2d4asm12676465plk.44.2022.11.16.14.13.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 14:13:11 -0800 (PST)
-Date:   Wed, 16 Nov 2022 22:13:07 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Ackerley Tng <ackerleytng@google.com>
-Cc:     chao.p.peng@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, akpm@linux-foundation.org,
-        bfields@fieldses.org, bp@alien8.de, corbet@lwn.net,
-        dave.hansen@intel.com, david@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, hpa@zytor.com, hughd@google.com,
-        jlayton@kernel.org, jmattson@google.com, joro@8bytes.org,
-        jun.nakajima@intel.com, kirill.shutemov@linux.intel.com,
-        kvm@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, luto@kernel.org, mail@maciej.szmigiero.name,
-        mhocko@suse.com, michael.roth@amd.com, mingo@redhat.com,
-        pbonzini@redhat.com, qemu-devel@nongnu.org, qperret@google.com,
-        rppt@kernel.org, shuah@kernel.org, songmuchun@bytedance.com,
-        steven.price@arm.com, tabba@google.com, tglx@linutronix.de,
-        vannapurve@google.com, vbabka@suse.cz, vkuznets@redhat.com,
-        wanpengli@tencent.com, wei.w.wang@intel.com, x86@kernel.org,
-        yu.c.zhang@linux.intel.com
-Subject: Re: [PATCH v9 7/8] KVM: Handle page fault for private memory
-Message-ID: <Y3Vgc5KrNRA8r6vh@google.com>
-References: <20221025151344.3784230-8-chao.p.peng@linux.intel.com>
- <20221116205025.1510291-1-ackerleytng@google.com>
+        Wed, 16 Nov 2022 17:13:46 -0500
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1081F24080;
+        Wed, 16 Nov 2022 14:13:43 -0800 (PST)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id A6EB6100004;
+        Wed, 16 Nov 2022 22:13:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1668636822;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HbsJ+Y08EQLASOdtyUuuzbvV1Ei3Wpv7tnXwmPZNGP8=;
+        b=bSvBBzuizOa9e+soJ3rOHJjqMKnQRexFw8pyqST2Lqk+wL39xGKdFEwdO/v8IiNdkM/oWK
+        ga1XBaBIWxx5oL6m9tIedWSaKkTwew9CVosQLA0mfPWZsBVSa1tV3lSoDTZ83mFVxynP+Q
+        xM5P4xDhE674nWwkiFFJkKh2fx/VCF1jfUr7TW7cA7xS4x23CnBfF0YKMcZ/NzjL21m0gh
+        eXzkFtszS12DBTQFvZ07Fi2EpoDy0gRsV6DpXwEto/ZHdZcOSHR2Xf/pbMOXuMcWEZEPE7
+        pFnHBhDGnn+2XkIqXa2rZzEI52bVnWJRy0OBnWBYEwGU2HcX6gKVdD9OAvWhYw==
+Date:   Wed, 16 Nov 2022 23:13:41 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Alessandro Zummo <a.zummo@towertech.it>
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@axis.com
+Subject: Re: [PATCH] rtc: pcf8563: clear RTC_FEATURE_ALARM if no irq
+Message-ID: <166863678725.2504087.10277347266415780715.b4-ty@bootlin.com>
+References: <20220301131220.4011810-1-vincent.whitchurch@axis.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221116205025.1510291-1-ackerleytng@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+In-Reply-To: <20220301131220.4011810-1-vincent.whitchurch@axis.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,117 +52,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022, Ackerley Tng wrote:
-> >@@ -4173,6 +4203,22 @@ static int kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
-> > 			return RET_PF_EMULATE;
-> > 	}
-> >
-> >+	if (kvm_slot_can_be_private(slot) &&
-> >+	    fault->is_private != kvm_mem_is_private(vcpu->kvm, fault->gfn)) {
-> >+		vcpu->run->exit_reason = KVM_EXIT_MEMORY_FAULT;
-> >+		if (fault->is_private)
-> >+			vcpu->run->memory.flags = KVM_MEMORY_EXIT_FLAG_PRIVATE;
-> >+		else
-> >+			vcpu->run->memory.flags = 0;
-> >+		vcpu->run->memory.padding = 0;
-> >+		vcpu->run->memory.gpa = fault->gfn << PAGE_SHIFT;
-> >+		vcpu->run->memory.size = PAGE_SIZE;
-> >+		return RET_PF_USER;
-> >+	}
-> >+
-> >+	if (fault->is_private)
-> >+		return kvm_faultin_pfn_private(fault);
-> >+
+On Tue, 1 Mar 2022 14:12:20 +0100, Vincent Whitchurch wrote:
+> If there is no IRQ hooked up, clear RTC_FEATURE_ALARM to make the core
+> ensure that userspace is made aware that alarms are not supported.
 > 
-> Since each memslot may also not be backed by restricted memory, we
-> should also check if the memslot has been set up for private memory
-> with
 > 
-> 	if (fault->is_private && kvm_slot_can_be_private(slot))
-> 		return kvm_faultin_pfn_private(fault);
-> 
-> Without this check, restrictedmem_get_page will get called with NULL
-> in slot->restricted_file, which causes a NULL pointer dereference.
 
-Hmm, silently skipping the faultin would result in KVM faulting in the shared
-portion of the memslot, and I believe would end up mapping that pfn as private,
-i.e. would map a non-UPM PFN as a private mapping.  For TDX and SNP, that would
-be double ungood as it would let the host access memory that is mapped private,
-i.e. lead to #MC or #PF(RMP) in the host.
+Applied, thanks!
 
-I believe the correct solution is to drop the "can be private" check from the
-above check, and instead handle that in kvm_faultin_pfn_private().  That would fix
-another bug, e.g. if the fault is shared, the slot can't be private, but for
-whatever reason userspace marked the gfn as private.  Even though KVM might be
-able service the fault, the correct thing to do in that case is to exit to userspace.
+[1/1] rtc: pcf8563: clear RTC_FEATURE_ALARM if no irq
+      commit: 60cfac17d0a1c28cd41959e95ba1e0ecc47165e7
 
-E.g.
+Best regards,
 
----
- arch/x86/kvm/mmu/mmu.c | 36 ++++++++++++++++++++++--------------
- 1 file changed, 22 insertions(+), 14 deletions(-)
-
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 10017a9f26ee..e2ac8873938e 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -4158,11 +4158,29 @@ static inline u8 order_to_level(int order)
- 	return PG_LEVEL_4K;
- }
- 
--static int kvm_faultin_pfn_private(struct kvm_page_fault *fault)
-+static int kvm_do_memory_fault_exit(struct kvm_vcpu *vcpu,
-+					struct kvm_page_fault *fault)
-+{
-+	vcpu->run->exit_reason = KVM_EXIT_MEMORY_FAULT;
-+	if (fault->is_private)
-+		vcpu->run->memory.flags = KVM_MEMORY_EXIT_FLAG_PRIVATE;
-+	else
-+		vcpu->run->memory.flags = 0;
-+	vcpu->run->memory.padding = 0;
-+	vcpu->run->memory.gpa = fault->gfn << PAGE_SHIFT;
-+	vcpu->run->memory.size = PAGE_SIZE;
-+	return RET_PF_USER;
-+}
-+
-+static int kvm_faultin_pfn_private(struct kvm_vcpu *vcpu,
-+				   struct kvm_page_fault *fault)
- {
- 	int order;
- 	struct kvm_memory_slot *slot = fault->slot;
- 
-+	if (kvm_slot_can_be_private(slot))
-+		return kvm_do_memory_fault_exit(vcpu, fault);
-+
- 	if (kvm_restricted_mem_get_pfn(slot, fault->gfn, &fault->pfn, &order))
- 		return RET_PF_RETRY;
- 
-@@ -4203,21 +4221,11 @@ static int kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
- 			return RET_PF_EMULATE;
- 	}
- 
--	if (kvm_slot_can_be_private(slot) &&
--	    fault->is_private != kvm_mem_is_private(vcpu->kvm, fault->gfn)) {
--		vcpu->run->exit_reason = KVM_EXIT_MEMORY_FAULT;
--		if (fault->is_private)
--			vcpu->run->memory.flags = KVM_MEMORY_EXIT_FLAG_PRIVATE;
--		else
--			vcpu->run->memory.flags = 0;
--		vcpu->run->memory.padding = 0;
--		vcpu->run->memory.gpa = fault->gfn << PAGE_SHIFT;
--		vcpu->run->memory.size = PAGE_SIZE;
--		return RET_PF_USER;
--	}
-+	if (fault->is_private != kvm_mem_is_private(vcpu->kvm, fault->gfn))
-+		return kvm_do_memory_fault_exit(vcpu, fault);
- 
- 	if (fault->is_private)
--		return kvm_faultin_pfn_private(fault);
-+		return kvm_faultin_pfn_private(vcpu, fault);
- 
- 	async = false;
- 	fault->pfn = __gfn_to_pfn_memslot(slot, fault->gfn, false, &async,
-
-base-commit: 969d761bb7b8654605937f31ae76123dcb7f15a3
 -- 
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
