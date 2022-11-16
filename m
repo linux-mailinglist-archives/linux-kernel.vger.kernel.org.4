@@ -2,144 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C60D62CEB5
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 00:28:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C230162CEB8
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 00:30:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233694AbiKPX2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 18:28:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54432 "EHLO
+        id S233802AbiKPXaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 18:30:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbiKPX2o (ORCPT
+        with ESMTP id S231634AbiKPXaN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 18:28:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B89959FC2;
-        Wed, 16 Nov 2022 15:28:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1AB95B81F2E;
-        Wed, 16 Nov 2022 23:28:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 996AEC433B5;
-        Wed, 16 Nov 2022 23:28:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668641319;
-        bh=1zBpfGyr9uizob8bMvX0NxzH7tfCiWb/ipmk6cC1kgQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=bYtSabnYqm/WvoU9MYqsHKIoeQLBGZCnaff2fP/BFlz66dHeMs9tLxjF5ILTr8Dn/
-         lEH2aWsd+uBxVnycPs6uUQZpzJrKIRg4/4qysBrTaDN/qaUwuaTNsL4PN6hkkAthDz
-         hfiN9C0jm6iyPUss8FAJyTcYfjs/4wblV1HZ8aVV6qpWXGMeWWNxEmumqotgZ/1nFj
-         DyeFsl7mEYBDXfDL6t1sm2ubwO8mZUGiT4M8rFUqhIJ/AnTlbl9zWVj56ou4XnO+Zu
-         e+5+MoIW/bN5SdPBQ9aURVrvmbrnLW9KaOsDu4GjwmIUqmJ3M60jXJgY+56d2oKYpA
-         MlSsvafVu/JvQ==
-Date:   Wed, 16 Nov 2022 17:28:38 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Limonciello, Mario" <mario.limonciello@amd.com>,
-        Len Brown <lenb@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mehta Sanju <Sanju.Mehta@amd.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5] PCI/ACPI: PCI/ACPI: Validate devices with power
- resources support D3
-Message-ID: <20221116232838.GA1140883@bhelgaas>
+        Wed, 16 Nov 2022 18:30:13 -0500
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B7468299
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 15:30:12 -0800 (PST)
+Received: by mail-yb1-xb31.google.com with SMTP id 205so8394079ybe.7
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 15:30:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=a2sf9AhIyxwq3f7k04xbxV/djLKynzQPlhmCrV1ud2M=;
+        b=Qo93yHrO/cjY0wFuD2EmAVOKPCsf6ZPhGey4RKIkCNkiGFyxwZxmS/00l1hMtoGOD0
+         U7ZJUzKaZnStQ3IBcuGbDogIr4AcCA1i66bIXX7P4OVW9AegLXaNnDveWZZqOFul6ZQe
+         e+D3KRM5TdZZ4L1y8xCyexo972WrN4hK89Gc43LeEjwSIVKNuFN2w607uQeozB6KZp8H
+         qm6Kki0qt7dtAjDS+4qPMRrBBfL4ursRZ1ZkVbhiK7RafVaRtELV32mKv+3wICMC8bW+
+         /Vr1lIPw74pG891UsMSHGRdh7uWMfi6kW0kzCHZ/lPbILUgK6pP/NRBTiSQOydfGAfS1
+         QMlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=a2sf9AhIyxwq3f7k04xbxV/djLKynzQPlhmCrV1ud2M=;
+        b=kw49hohnpzYe/1IpT6uLbM5OcyhWccr6OR8jY7383EIgC3MopvTkjJem/x2EviMQW7
+         gIfDiIiuzhZYhpBoaEiR6VPmB73mrZMrs5GEKyxelrdHDfxWqT/EUmXo5sJr3rxKkOqC
+         6rY9CClNrV1go+5com+CscvWQg1CGfFgmpOxFC28viWT4lUkNlsLov3KACSLRoSDM5im
+         rH1GruHq8+nVHlW6NzyLnzwcTyfQP40GiufGFk7cYNQ3fbKRT0bX1v4O75kNop6EhcGT
+         nwwDAcpJnjupop0MU9VwJinHMG7r1lWDXQIFR5G34wyIUPDCQpLIxxd5JxZ7ApRmBX1d
+         No3A==
+X-Gm-Message-State: ANoB5pllanQpOKAK5ITCIjCXqUoplEcLzq/pbeK3yB18dVEZ0vCHekaw
+        gUUyx1lJAHQmv8FtjnV5pdrqE5Wjom1/tZRuyj5cAg==
+X-Google-Smtp-Source: AA0mqf7bMhtWNzeLubNMtXbobUmsjuWfRrz+dR3YatVt5qGdk3EPTgP/Uo7EWjEg3KGlOYv382zPgQUp5FnoXWdjlkM=
+X-Received: by 2002:a25:bfcf:0:b0:6b9:616:6994 with SMTP id
+ q15-20020a25bfcf000000b006b906166994mr6881ybm.126.1668641411295; Wed, 16 Nov
+ 2022 15:30:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0gyVq0AOM1_kd3QWHj+jihL-vxBv=fcEJ_Zcp8QiOymcg@mail.gmail.com>
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URI_TRY_3LD autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20221021163703.3218176-1-jthoughton@google.com>
+ <20221021163703.3218176-34-jthoughton@google.com> <Y3VkIdVKRuq+fO0N@x1n>
+In-Reply-To: <Y3VkIdVKRuq+fO0N@x1n>
+From:   James Houghton <jthoughton@google.com>
+Date:   Wed, 16 Nov 2022 15:30:00 -0800
+Message-ID: <CADrL8HXixUPyTVmYMiwc11Ot5sDMsA3x7VhgXQjimJ93MSZihA@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 33/47] userfaultfd: add UFFD_FEATURE_MINOR_HUGETLBFS_HGM
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        "Zach O'Keefe" <zokeefe@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 01:00:36PM +0100, Rafael J. Wysocki wrote:
-> On Wed, Nov 16, 2022 at 1:37 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > On Mon, Nov 14, 2022 at 04:33:52PM +0100, Rafael J. Wysocki wrote:
-> > > On Fri, Nov 11, 2022 at 10:42 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > >
-> > > > On Fri, Nov 11, 2022 at 12:58:28PM -0600, Limonciello, Mario wrote:
-> > > > > On 11/11/2022 11:41, Bjorn Helgaas wrote:
-> > > > > > On Mon, Oct 31, 2022 at 05:33:55PM -0500, Mario Limonciello wrote:
-> > > > > > > Firmware typically advertises that ACPI devices that represent PCIe
-> > > > > > > devices can support D3 by a combination of the value returned by
-> > > > > > > _S0W as well as the HotPlugSupportInD3 _DSD [1].
-> > > > > > >
-> > > > > > > `acpi_pci_bridge_d3` looks for this combination but also contains
-> > > > > > > an assumption that if an ACPI device contains power resources the PCIe
-> > > > > > > device it's associated with can support D3.  This was introduced
-> > > > > > > from commit c6e331312ebf ("PCI/ACPI: Whitelist hotplug ports for
-> > > > > > > D3 if power managed by ACPI").
-> > > > > > >
-> > > > > > > Some firmware configurations for "AMD Pink Sardine" do not support
-> > > > > > > wake from D3 in _S0W for the ACPI device representing the PCIe root
-> > > > > > > port used for tunneling. The PCIe device will still be opted into
-> > > > > > > runtime PM in the kernel [2] because of the logic within
-> > > > > > > `acpi_pci_bridge_d3`. This currently happens because the ACPI
-> > > > > > > device contains power resources.
-> > > >
-> > > > Wait.  Is this as simple as just recognizing that:
-> > > >
-> > > >   _PS0 means the OS has a knob to put the device in D0, but it doesn't
-> > > >   mean the device can wake itself from a low-power state.  The OS has
-> > > >   to use _S0W to learn the device's ability to wake itself.
-> > >
-> > > It is.
+On Wed, Nov 16, 2022 at 2:28 PM Peter Xu <peterx@redhat.com> wrote:
+>
+> On Fri, Oct 21, 2022 at 04:36:49PM +0000, James Houghton wrote:
+> > Userspace must provide this new feature when it calls UFFDIO_API to
+> > enable HGM. Userspace can check if the feature exists in
+> > uffdio_api.features, and if it does not exist, the kernel does not
+> > support and therefore did not enable HGM.
 > >
-> > Now I'm confused again about what "HotPlugSupportInD3" means.  The MS
-> > web page [1] says it identifies Root Ports capable of handling hot
-> > plug events while in D3.  That sounds kind of related to _S0W: If _S0W
-> > says "I can wake myself from D3hot and D3cold", how is that different
-> > from "I can handle hotplug events in D3"?
-> 
-> For native PME/hot-plug signaling there is no difference.  This is the
-> same interrupt by the spec after all IIRC.
-> 
-> For GPE-based signaling, though, there is a difference, because GPEs
-> can only be used directly for wake signaling (this is related to
-> _PRW).  In particular, the only provision in the ACPI spec for device
-> hot-add are the Bus Check and Device Check notification values (0 and
-> 1) which require AML to run and evaluate Notify() on specific AML
-> objects.
-> 
-> Hence, there is no spec-defined way to tell the OS that "something can
-> be hot-added under this device while in D3 and you will get notified
-> about that".
+> > Signed-off-by: James Houghton <jthoughton@google.com>
+>
+> It's still slightly a pity that this can only be enabled by an uffd context
+> plus a minor fault, so generic hugetlb users cannot directly leverage this.
 
-So I guess acpi_pci_bridge_d3() looks for:
+The idea here is that, for applications that can conceivably benefit
+from HGM, we have a mechanism for enabling it for that application. So
+this patch creates that mechanism for userfaultfd/UFFDIO_CONTINUE. I
+prefer this approach over something more general like MADV_ENABLE_HGM
+or something.
 
-  - "wake signaling while in D3" (_S0W) and
-  - "notification of hotplug while in D3" ("HotPlugSupportInD3")
+For hwpoison, HGM will be automatically enabled, but that isn't
+implemented in this series. We could also extend MADV_DONTNEED to do
+high-granularity unmapping in some way, but that also isn't attempted
+here. I'm sure that if there are other cases where HGM may be useful,
+we can add/change some uapi to make it possible to take advantage HGM.
 
-For Root Ports with both those abilities (or bridges below such Root
-Ports), we allow D3, and this patch doesn't change that.
+- James
 
-What this patch *does* change is that all bridges with _PS0 or _PR0
-previously could use D3, but now will only be able to use D3 if they
-are also (or are below) a Root Port that can signal wakeup
-(wakeup.flags.valid) and can wakeup from D3hot or D3cold (_S0W).
-
-And this fixes the Pink Sardine because it has Root Ports that do
-Thunderbolt tunneling, and they have _PS0 or _PR0 but their _S0W says
-they cannot wake from D3.  Previously we put those in D3, but they
-couldn't wake up.  Now we won't put them in D3.
-
-I guess there's a possibility that this could break or cause higher
-power consumption on systems that were fixed by c6e331312ebf
-("PCI/ACPI: Whitelist hotplug ports for D3 if power managed by ACPI").
-I don't know enough about that scenario.  Maybe Lukas will chime in.
-
-> > This patch says that if dev's Root Port has "HotPlugSupportInD3", we
-> > don't need _PS0 or _PR0 for dev.  I guess that must be true, because
-> > previously the fact that we checked for "HotPlugSupportInD3" meant the
-> > device did NOT have _PS0 or _PR0.
-> >
-> > [1] https://learn.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports#identifying-pcie-root-ports-supporting-hot-plug-in-d3
+>
+> The patch itself looks good.
+>
+> --
+> Peter Xu
+>
