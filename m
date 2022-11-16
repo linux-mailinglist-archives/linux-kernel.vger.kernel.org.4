@@ -2,117 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B782562BEAC
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:51:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93ACD62BEAD
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:52:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233110AbiKPMvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 07:51:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42494 "EHLO
+        id S232774AbiKPMwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 07:52:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233205AbiKPMvi (ORCPT
+        with ESMTP id S233719AbiKPMvx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 07:51:38 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 625171AF0B
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 04:51:37 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id v7so11840045wmn.0
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 04:51:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=H2H1d5sAZJ+t9NwoF1iOHgYCETQzv/jXX7CIaFm3b3E=;
-        b=gGxjSUZpAml1aIyqHw3VVmLjwPSVVASQetUasiWHCeAesZswbx+yYG2gYgnO4+3WqF
-         rODtwr/NO5kVFQQBcZfxlOe56Wi9hWxGXuAEe6RNhHS47BlNaDIvZj5KFlSF4VWWdD6k
-         XsqcQyzTl3KryVtnlovRE5RlktX5W7UmqLt+Y/AGIijJ7j4PvNzA/nlEJsX8lmSw+v9Q
-         2bZ1nc46gKq9Q639tmsMTWiEmfy3JiphjugAX6sLrqFc4JqOMD9NCT4xvWdolKMuk2T0
-         eNupuvbpBoCqju2TFAynQQX5pk11MeDw0uW/2TYMIBb268xjoWaL/2MOgxUxzKaO4JET
-         iL/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=H2H1d5sAZJ+t9NwoF1iOHgYCETQzv/jXX7CIaFm3b3E=;
-        b=Mttww/Uyq/c580kQeNGJQn4KOigXPypYEUSXOvSkI1DXOyEaMvX9AetLF6LQEgFDXs
-         gr1INg6jEr53xecvVsYwUE+F5nROYVYw2POtomlRkshuoXu0SAtzTSfuoov16fnTVeKh
-         6heKoeEI9yOba3Bk51R5PscvvcrCEVaVGSVT2i8lD+KelQNdGjFljAz4+ZnGqM1NE05R
-         Jjmi2pTEGIm0gMddKLLmgkBrOMSd49X03LwFN6n3cbKLo+owP+KGnzDqQK0fxrfTa3B6
-         xcnLj1ZnbqiAYvdcOJiEojGL0zPrp6GUypSv7+TbHIlG7jXtef1rlWYH5B2zdGCtPwy0
-         9G4Q==
-X-Gm-Message-State: ANoB5pkicLh7XR/Vd8WCzPAGg+y5rvaApejh5PLl1D/cZ0TNZVwORP4L
-        iwcfES+oU/JLLU/9DEg9Bui8/qcex3Umtw==
-X-Google-Smtp-Source: AA0mqf6ZCGHBWAq3ypZIp2xmZ7qCZ6qMlmTRzbjQrzJx1q0F7LLrgc+J+/K0e5AsgXDRTCr013tlSA==
-X-Received: by 2002:a05:600c:17cf:b0:3cf:608b:1b6a with SMTP id y15-20020a05600c17cf00b003cf608b1b6amr2077711wmo.20.1668603095928;
-        Wed, 16 Nov 2022 04:51:35 -0800 (PST)
-Received: from localhost.localdomain ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id d16-20020a5d6450000000b0022cc0a2cbecsm15386776wrw.15.2022.11.16.04.51.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 04:51:35 -0800 (PST)
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: [PATCH 2/2] arm64: dts: qcom: sm8550-mtp: Add UFS host controller and PHY node
-Date:   Wed, 16 Nov 2022 14:51:12 +0200
-Message-Id: <20221116125112.2788318-3-abel.vesa@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221116125112.2788318-1-abel.vesa@linaro.org>
-References: <20221116125112.2788318-1-abel.vesa@linaro.org>
+        Wed, 16 Nov 2022 07:51:53 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6252D24092;
+        Wed, 16 Nov 2022 04:51:49 -0800 (PST)
+Received: from frapeml100004.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NC2qv4cPSz687rH;
+        Wed, 16 Nov 2022 20:47:07 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ frapeml100004.china.huawei.com (7.182.85.167) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 16 Nov 2022 13:51:47 +0100
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 16 Nov
+ 2022 12:51:46 +0000
+Date:   Wed, 16 Nov 2022 12:51:45 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     <alison.schofield@intel.com>
+CC:     Dan Williams <dan.j.williams@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, <linux-cxl@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 5/6] tools/testing/cxl: Mock the max err records
+ field of Identify cmd
+Message-ID: <20221116125145.000009c2@Huawei.com>
+In-Reply-To: <14b883bd220ff388cc3a287cf104d83d53a2f520.1668115235.git.alison.schofield@intel.com>
+References: <cover.1668115235.git.alison.schofield@intel.com>
+        <14b883bd220ff388cc3a287cf104d83d53a2f520.1668115235.git.alison.schofield@intel.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100004.china.huawei.com (7.191.162.219) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable UFS host controller and PHY node on SM8550 MTP board.
+On Thu, 10 Nov 2022 19:12:43 -0800
+alison.schofield@intel.com wrote:
 
-Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8550-mtp.dts | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+> From: Alison Schofield <alison.schofield@intel.com>
+> 
+> The CXL mbox command Identify reports the maximum media error
+> records that a device will report. Mock it here for testing
+> the GET POISON LIST mbox command.
+> 
+> Signed-off-by: Alison Schofield <alison.schofield@intel.com>
+> ---
+>  tools/testing/cxl/test/mem.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/tools/testing/cxl/test/mem.c b/tools/testing/cxl/test/mem.c
+> index aa2df3a15051..f0704d090073 100644
+> --- a/tools/testing/cxl/test/mem.c
+> +++ b/tools/testing/cxl/test/mem.c
+> @@ -111,6 +111,10 @@ static int mock_id(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *cmd)
+>  			cpu_to_le64(DEV_SIZE / CXL_CAPACITY_MULTIPLIER),
+>  	};
+>  
+> +	__le32 val = cpu_to_le32(SZ_64);
+> +
+> +	memcpy(id.poison_list_max_mer, &val, 3);
+As in other direction, can we do this with a buffer of the right size if
+we can't do a put_unaligned_le24() directly.
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-index d4c8d5b2497e..fef7793a7dec 100644
---- a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-@@ -417,3 +417,25 @@ data-pins {
- &uart7 {
- 	status = "okay";
- };
-+
-+&ufs_mem_hc {
-+	status = "okay";
-+
-+	reset-gpios = <&tlmm 210 GPIO_ACTIVE_LOW>;
-+
-+	vcc-supply = <&vreg_l17b_2p5>;
-+	vcc-max-microamp = <1300000>;
-+	vccq-supply = <&vreg_l1g_1p2>;
-+	vccq-max-microamp = <1200000>;
-+	vccq2-supply = <&vreg_l3g_1p2>;
-+	vccq2-max-microamp = <100>;
-+};
-+
-+&ufs_mem_phy {
-+	status = "okay";
-+
-+	vdda-phy-supply = <&vreg_l1d_0p88>;
-+	vdda-phy-max-microamp = <188000>;
-+	vdda-pll-supply = <&vreg_l3e_1p2>;
-+	vdda-pll-max-microamp = <18300>;
-+};
--- 
-2.34.1
+> +
+>  	if (cmd->size_out < sizeof(id))
+>  		return -EINVAL;
+>  
 
