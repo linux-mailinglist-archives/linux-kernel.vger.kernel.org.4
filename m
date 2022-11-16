@@ -2,105 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9839A62B01A
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 01:36:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E6762B028
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 01:39:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229478AbiKPAgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 19:36:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59598 "EHLO
+        id S231248AbiKPAjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 19:39:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230083AbiKPAgZ (ORCPT
+        with ESMTP id S231150AbiKPAjP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 19:36:25 -0500
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B82F2B617;
-        Tue, 15 Nov 2022 16:36:24 -0800 (PST)
-Received: by mail-pg1-f176.google.com with SMTP id q1so15142385pgl.11;
-        Tue, 15 Nov 2022 16:36:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VmjH6LSq2kE7ALavx/RIOD+BigRt6SH30zuIye218S4=;
-        b=41lRKqpziXCTLEMh0pYpvCUisZb/Ea0jepwxuYBzmg8WXZUq3RAlZR6P/7doGiSR0V
-         LK+PVVPn9iKXT7C5AT/negrFA89rJjTyyaMKcFFeY30Q7Eqs+3SOIdMCeWzci/3FR/2Q
-         QtK2uyWPdcSmR0xx6UxLk4Q0cIr7PdE8CzUXz7vsGNjT3pjRnKNlgLRaCqEDn6ztwPO2
-         I/roVTk5T2cYKyYli6kquLqDJwnLcoq43e+JOh3Xcf/01UvMBRosqcTUFGSEx+CWdk8Y
-         d+KMJDqV6tLdwuSm5QMKX9hFDMOTTrWOMC90DnsOmrrY/UwOoCs3X+EbGCpo8Bb3MLd4
-         raXw==
-X-Gm-Message-State: ANoB5pnyjNNKOO478Gz/vhr8CTnZQct6XiJlrm3bx1GH9DI5O5+FrcQJ
-        ST/rSv5aF+J6c/JKarsjJWpkYMNIcJMqpfActjc=
-X-Google-Smtp-Source: AA0mqf5pZF3P1iggGMNnzHa5qJNDY/DOYNEqVkMraql04R+FNJU5fkgcx1aKGq1uj6LorAxOvvt8bVkwNIBtZkqGxcY=
-X-Received: by 2002:a63:5b65:0:b0:46f:f740:3ff5 with SMTP id
- l37-20020a635b65000000b0046ff7403ff5mr18377519pgm.70.1668558983900; Tue, 15
- Nov 2022 16:36:23 -0800 (PST)
-MIME-Version: 1.0
-References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
- <20221113040108.68249-1-mailhol.vincent@wanadoo.fr> <20221113040108.68249-3-mailhol.vincent@wanadoo.fr>
- <Y3QW/ufhuYnHWcli@x130.lan>
-In-Reply-To: <Y3QW/ufhuYnHWcli@x130.lan>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Wed, 16 Nov 2022 09:36:12 +0900
-Message-ID: <CAMZ6RqKUKLUf1Y6yL=J6n+N2Uz+JuFnHXdfVDXTZaDQ89=9DzQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] can: etas_es58x: export firmware, bootloader and
- hardware versions in sysfs
-To:     Saeed Mahameed <saeed@kernel.org>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Tue, 15 Nov 2022 19:39:15 -0500
+Received: from mx0a-00190b01.pphosted.com (mx0a-00190b01.pphosted.com [IPv6:2620:100:9001:583::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72F402C660;
+        Tue, 15 Nov 2022 16:39:11 -0800 (PST)
+Received: from pps.filterd (m0050095.ppops.net [127.0.0.1])
+        by m0050095.ppops.net-00190b01. (8.17.1.19/8.17.1.19) with ESMTP id 2AG09sL0014656;
+        Wed, 16 Nov 2022 00:38:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akamai.com; h=from : to : cc :
+ subject : date : message-id; s=jan2016.eng;
+ bh=1iS3lrEK+tv0cCqy+H0HiSOeS346CRjJ8p8wkeyh3RI=;
+ b=K1Fw+0Bb/Bu0Pg7Rqlj3v7rM3u21n5liBVKlF2RBXevI/2PmBgiUwlEz6gllcMIToPAV
+ Lk1U8FHZR60C5rMhPVOaxj0ybDMzRdQb3nWF4eivNySg397SPrM2sKdUwE2/FBxlr8xs
+ eJZIR0BW7SgMRNiooFodn0Ro4T+urI+voHVJVjqH5zwuhaHKjYi+ZUhSnCM4TPcN5H8K
+ p3eQmi65T5OF37Stx/eRaTbW/cyqS2umVVjhIQN/7B7iMCKHOgUTf7E4q9BA4ZwuHrUG
+ vW18r+Qmozx7cZUDBTWNigtdldmaRaOzkQoPNTyIeH4duBMpjOcpw1PnmLdePV7Oa3Dv OA== 
+Received: from prod-mail-ppoint4 (a72-247-45-32.deploy.static.akamaitechnologies.com [72.247.45.32] (may be forged))
+        by m0050095.ppops.net-00190b01. (PPS) with ESMTPS id 3kvn2u0qm4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Nov 2022 00:38:46 +0000
+Received: from pps.filterd (prod-mail-ppoint4.akamai.com [127.0.0.1])
+        by prod-mail-ppoint4.akamai.com (8.17.1.5/8.17.1.5) with ESMTP id 2AG0bPo8011542;
+        Tue, 15 Nov 2022 19:38:45 -0500
+Received: from prod-mail-relay19.dfw02.corp.akamai.com ([172.27.165.173])
+        by prod-mail-ppoint4.akamai.com (PPS) with ESMTP id 3kt7q44b6f-1;
+        Tue, 15 Nov 2022 19:38:45 -0500
+Received: from bos-lhv9ol.bos01.corp.akamai.com (bos-lhv9ol.bos01.corp.akamai.com [172.28.222.101])
+        by prod-mail-relay19.dfw02.corp.akamai.com (Postfix) with ESMTP id DFE0D60246;
+        Wed, 16 Nov 2022 00:38:44 +0000 (GMT)
+From:   Jason Baron <jbaron@akamai.com>
+To:     bp@alien8.de
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Shuai Xue <xueshuai@linux.alibaba.com>, stable@vger.kernel.org
+Subject: [PATCH] EDAC/edac_module: order edac_init() before ghes_edac_register()
+Date:   Tue, 15 Nov 2022 19:37:29 -0500
+Message-Id: <20221116003729.194802-1-jbaron@akamai.com>
+X-Mailer: git-send-email 2.17.1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-15_08,2022-11-15_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 phishscore=0 suspectscore=0
+ bulkscore=0 malwarescore=0 spamscore=0 mlxlogscore=990 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211160002
+X-Proofpoint-GUID: h6FjdD_WwI_joBIgADWM-Ow_K8zJZBOr
+X-Proofpoint-ORIG-GUID: h6FjdD_WwI_joBIgADWM-Ow_K8zJZBOr
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-15_08,2022-11-15_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 adultscore=0
+ priorityscore=1501 suspectscore=0 mlxscore=0 mlxlogscore=893 bulkscore=0
+ clxscore=1011 spamscore=0 impostorscore=0 phishscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211160001
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed. 16 Nov. 2022 at 07:50, Saeed Mahameed <saeed@kernel.org> wrote:
-> On 13 Nov 13:01, Vincent Mailhol wrote:
-> >ES58x devices report below information in their usb product info
-> >string:
-> >
-> >  * the firmware version
-> >  * the bootloader version
-> >  * the hardware revision
-> >
-> >Parse this string, store the results in struct es58x_dev and create
-> >three new sysfs entries.
-> >
->
-> will this be the /sys/class/net/XXX sysfs  ?
+Currently, ghes_edac_register() is called via ghes_init() from acpi_init()
+at the subsys_initcall() level. However, edac_init() is also called from
+the subsys_initcall(), leaving the ordering ambiguous.
 
-I am dropping the idea of using sysfs and I am now considering using
-devlink following Andrew's message:
-https://lore.kernel.org/linux-can/Y3Ef4K5lbilY3EQT@lunn.ch/
+If ghes_edac_register() is called first, then 'mc0' ends up at:
+/sys/devices/mc0/, instead of the expected:
+/sys/devices/system/edac/mc/mc0.
 
-> We try to avoid adding device specific entries in there,
->
-> Couldn't you just squeeze the firmware and hw version into the
-> ethtool->drvinfo->fw_version
->
-> something like:
-> fw_version: %3u.%3u.%3u (%c.%3u.%3u)
+So while everything seems ok, other than the unexpected sysfs location, it
+seems like 'edac_init()' should be called before any drivers start
+registering. So have 'edac_init()' called earlier via arch_initcall().
 
-This looks like a hack. There is no way for the end user to know, just
-from the ethtool output, what these in brackets values would mean.
+However, this moves edac_pci_clear_parity_errors() up as well. Seems like
+this wants to be called after pci bus scan, so keep
+edac_pci_clear_parity_errors() at subsys_init(). That said, it seems like
+pci bus scan happens at subsys_init() level, so really the parity clearing
+should be moved later. But that can be left as a separate patch.
 
-> and bootloader into ethtool->drvinfo->erom_version:
->   * @erom_version: Expansion ROM version string; may be an empty string
+Fixes: dc4e8c07e9e2 ("ACPI: APEI: explicit init of HEST and GHES in apci_init()")
+Signed-off-by: Jason Baron <jbaron@akamai.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Tony Luck <tony.luck@intel.com>
+Cc: James Morse <james.morse@arm.com>
+Cc: Robert Richter <rric@kernel.org>
+Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Cc: Shuai Xue <xueshuai@linux.alibaba.com>
+Cc: stable@vger.kernel.org
+---
+ drivers/edac/edac_module.c | 33 +++++++++++++++++++++++----------
+ 1 file changed, 23 insertions(+), 10 deletions(-)
 
-Same. I considered doing this in the early draft of this series and
-dropped the idea because an expansion ROM and a boot loader are two
-things different.
+diff --git a/drivers/edac/edac_module.c b/drivers/edac/edac_module.c
+index 32a931d0cb71..407d4a5fce7a 100644
+--- a/drivers/edac/edac_module.c
++++ b/drivers/edac/edac_module.c
+@@ -109,15 +109,6 @@ static int __init edac_init(void)
+ 	if (err)
+ 		return err;
+ 
+-	/*
+-	 * Harvest and clear any boot/initialization PCI parity errors
+-	 *
+-	 * FIXME: This only clears errors logged by devices present at time of
+-	 *      module initialization.  We should also do an initial clear
+-	 *      of each newly hotplugged device.
+-	 */
+-	edac_pci_clear_parity_errors();
+-
+ 	err = edac_mc_sysfs_init();
+ 	if (err)
+ 		goto err_sysfs;
+@@ -157,12 +148,34 @@ static void __exit edac_exit(void)
+ 	edac_subsys_exit();
+ }
+ 
++static void __init edac_init_clear_parity_errors(void)
++{
++	/*
++	 * Harvest and clear any boot/initialization PCI parity errors
++	 *
++	 * FIXME: This only clears errors logged by devices present at time of
++	 *      module initialization.  We should also do an initial clear
++	 *      of each newly hotplugged device.
++	 */
++	edac_pci_clear_parity_errors();
++
++	return 0;
++}
++
+ /*
+  * Inform the kernel of our entry and exit points
++ *
++ * ghes_edac_register() is call via acpi_init() -> ghes_init()
++ * at the subsys_initcall level so edac_init() must come first
+  */
+-subsys_initcall(edac_init);
++arch_initcall(edac_init);
+ module_exit(edac_exit);
+ 
++/*
++ * Clear parity errors after PCI subsys is initialized
++ */
++subsys_initcall(edac_init_clear_parity_errors);
++
+ MODULE_LICENSE("GPL");
+ MODULE_AUTHOR("Doug Thompson www.softwarebitmaker.com, et al");
+ MODULE_DESCRIPTION("Core library routines for EDAC reporting");
+-- 
+2.17.1
 
-I will continue to study devlink and only use the drvinfo only for the
-firmware version.
-
-
-Yours sincerely,
-Vincent Mailhol
