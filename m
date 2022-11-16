@@ -2,156 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 477D662CDFB
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 23:45:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C09D62CDFE
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 23:46:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234549AbiKPWpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 17:45:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60746 "EHLO
+        id S238786AbiKPWqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 17:46:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234303AbiKPWoa (ORCPT
+        with ESMTP id S238781AbiKPWpd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 17:44:30 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9DD062F4
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 14:44:29 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id j15so32592700wrq.3
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 14:44:29 -0800 (PST)
+        Wed, 16 Nov 2022 17:45:33 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B2306C739
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 14:45:31 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-37f0f3e59b2so2468517b3.0
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 14:45:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kRxksnFA86+EN227UVABkfWLW0/VetsRVg3/grhnVYQ=;
-        b=tAuxEW+h+XIdry5tJCylxmmKwcdk3lrynLVXVNyDNl9biFUIwCoujPerXSHCCjgFM2
-         M2qinH76hgn6+T697Cwbulu/QxBGdUieOqawYbVX1lD860bdFQCmfb1t1soRIJ1Xl7xk
-         sm4qPqULVaeqUDobhQaGHtN6NK5foYsISBpTvpDLwx6521DkgySeGiNpMlK8cRdWZFoo
-         xs3LKyW6D8EVSO1Ts4yTGB9dPklE5iWNZ935Fkt/7loSaxtejgMVeUIF/AqYfc+Pp2sn
-         Q91HMxkLDy9o7BCVsqqrWoUh/ZpJujpcAgr+43XuT7h4RRi2sRNwO9ZR/z1Vd8RAGAbI
-         9/aw==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=9fahfTN7gQdYGghMf/BqQFGqnV5aYRbsgDQfX2spz1M=;
+        b=J7ejO2+4pPwjvYasRYxGqprxcZToIIQir/+zCv8XJOXAMoIEz5oHnj13Y8NijHrFhl
+         omJb9OhW/gqGpL1NLmRkpbxYcnrraM5LGPZJwFksGnOgQ/DzMb5BTrVy7kM1SmnB7TOZ
+         ochF4Ipzbw6mYxgQRV+7WVG35O5xbVpFHMM+lIfNW2uizI14ZHcnEN6muh/uPbnLch2U
+         wUcrjLJXXvi1Rf2bjwAzb608dtEh7Nn3O+4LPDUG0pKk52Bx7ZPJeXV6kxRD5SRH/AiW
+         37sWLNgegGpwsAPiqmGDEPYburNB4KofqnCAOFjBpivk2rXIBmw7axJX5G0D+ZbvwZ0p
+         z1Ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kRxksnFA86+EN227UVABkfWLW0/VetsRVg3/grhnVYQ=;
-        b=K1S9GeQMWZti1o3o6obhzHYNVcWzgpxSROp8QH519ZtMq+NH+5RqyQCZNUwJPquOZK
-         w098ol79f+Tp/3YAxmBxHy+JDiseRmSBrTmDq5rXzpTCjRwhjAjCU+kM2G4ZCSNskjhr
-         CVatQDSTA/P4vbq3u61LucuvoEpYEbQStN/GmSt+noA1x1Ox/KinMl0GKqvzXATXyI+A
-         PXt9PAWz6C/izBeJUGp22vVj7b7pmmCz5442w6qi15sQrrh6APsVC1V6TNIdrhj8u2Pc
-         r0Mk+yS7Qd4CRjdDMEIczCkKpFto8v87T/LnlQoLHBNz4nxb4D+YZGdFAypB5Y2OP+uk
-         lLmg==
-X-Gm-Message-State: ANoB5plZPnkZuzk+JUKq+3tNRZAOPVpucv0ey3GE7tBlaboOJeUuP0lk
-        1wneL7uU0sWPflD3l5A5UQHpuQa+v0669Q==
-X-Google-Smtp-Source: AA0mqf7MSFvQaTYnmCJP6JzGSmABB2sfc4sCIDg8p0Pjg7/qmy8fVBGg4A8E2yUQsr6MbZaLd3ig/g==
-X-Received: by 2002:a5d:52c6:0:b0:236:754e:f8b4 with SMTP id r6-20020a5d52c6000000b00236754ef8b4mr14939207wrv.478.1668638668347;
-        Wed, 16 Nov 2022 14:44:28 -0800 (PST)
-Received: from [192.168.22.132] ([167.98.215.174])
-        by smtp.googlemail.com with ESMTPSA id t8-20020adff048000000b002238ea5750csm19765783wro.72.2022.11.16.14.44.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 14:44:27 -0800 (PST)
-Message-ID: <aba64f1d-043e-4dc5-f70a-e8a6ab99fabf@linaro.org>
-Date:   Wed, 16 Nov 2022 22:44:26 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v4 3/5] dt-bindings: nvmem: add YAML schema for the sl28
- vpd layout
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        devicetree@vger.kernel.org, Robert Marko <robert.marko@sartura.hr>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Michael Walle <michael@walle.cc>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-kernel@vger.kernel.org
-References: <20221114085659.847611-1-miquel.raynal@bootlin.com>
- <20221114085659.847611-4-miquel.raynal@bootlin.com>
- <20221116205203.GA846642-robh@kernel.org> <20221116222812.45dbbcf9@xps-13>
-Content-Language: en-US
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20221116222812.45dbbcf9@xps-13>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9fahfTN7gQdYGghMf/BqQFGqnV5aYRbsgDQfX2spz1M=;
+        b=3+j49SxJMOMcAyos38CfMQET/8k/tfXOLbq9HP7XKj2q6c3+VOu8028WFMK/rIplAj
+         h/gLYCNBy8tnZjK5TTh3D5Gs4sxWp6xzuTbZ2TupY0vnwtIUgpeiT77y5SbIzO/0SB/j
+         8dKqPaLxaaW34UKev4ZhSOdY+3q+5iee3kpohqpYVLgtRdnmWISa/J+UBqL375bFtcGP
+         pi9XuHTS4G/+QDD543VKrFdnNrKZ16hFLlXbQc5DVawYieh7j9FjymUsRSW3TnD5eR3J
+         00Nfd/XVP+tjr4SXm1wz0u5TAF3rK00krXLnBFFhrRUE/1gZYbOauPlzX/i7p5bw/Kv/
+         K3aA==
+X-Gm-Message-State: ANoB5pklu7UCjAOkGmOHxQb5RYzfrbqBHlMocvoTafKslMdyAB5ITOIM
+        5pKavgv/w+nzHtn7wrLRqa4xW+XUVonm
+X-Google-Smtp-Source: AA0mqf4Nb9ngGN3qX4fMKqqiImwtvR4v0w2iedkDOCXier2Uk2gOkfn2P+l1BjX+RTvpu1mgdn+Sr0cKx7BR
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:c14c:6035:5882:8faa])
+ (user=irogers job=sendgmr) by 2002:a25:55d4:0:b0:6ca:363a:9a1b with SMTP id
+ j203-20020a2555d4000000b006ca363a9a1bmr23754825ybb.1.1668638730427; Wed, 16
+ Nov 2022 14:45:30 -0800 (PST)
+Date:   Wed, 16 Nov 2022 14:45:11 -0800
+Message-Id: <20221116224511.207235-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
+Subject: [PATCH] perf build: Fix LIBTRACEEVENT_DYNAMIC
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        bpf@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Stephane Eranian <eranian@google.com>,
+        Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The tools/lib includes fixes break LIBTRACEVENT_DYNAMIC as the
+makefile erroneously had depdendencies on building libtraceevent even
+when not linking with it. This change fixes the issues with
+LIBTRACEEVENT_DYNAMIC by making the built files optional.
+---
+ tools/perf/Makefile.perf | 25 ++++++++++++++++++++++---
+ tools/perf/util/setup.py |  3 ++-
+ 2 files changed, 24 insertions(+), 4 deletions(-)
 
+diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+index dd096aba4430..59c4e8f9b014 100644
+--- a/tools/perf/Makefile.perf
++++ b/tools/perf/Makefile.perf
+@@ -242,8 +242,10 @@ sub-make: fixdep
+ else # force_fixdep
+ 
+ LIBAPI_DIR      = $(srctree)/tools/lib/api/
++ifndef LIBTRACEEVENT_DYNAMIC
+ LIBTRACEEVENT_DIR = $(srctree)/tools/lib/traceevent/
+ LIBTRACEEVENT_PLUGINS_DIR = $(LIBTRACEEVENT_DIR)/plugins
++endif
+ LIBBPF_DIR      = $(srctree)/tools/lib/bpf/
+ LIBSUBCMD_DIR   = $(srctree)/tools/lib/subcmd/
+ LIBSYMBOL_DIR   = $(srctree)/tools/lib/symbol/
+@@ -293,6 +295,7 @@ SCRIPT_SH += perf-iostat.sh
+ grep-libs = $(filter -l%,$(1))
+ strip-libs = $(filter-out -l%,$(1))
+ 
++ifndef LIBTRACEEVENT_DYNAMIC
+ ifneq ($(OUTPUT),)
+   LIBTRACEEVENT_OUTPUT = $(abspath $(OUTPUT))/libtraceevent
+ else
+@@ -306,13 +309,16 @@ LIBTRACEEVENT = $(LIBTRACEEVENT_OUTPUT)/libtraceevent.a
+ export LIBTRACEEVENT
+ LIBTRACEEVENT_DYNAMIC_LIST = $(LIBTRACEEVENT_PLUGINS_OUTPUT)/libtraceevent-dynamic-list
+ CFLAGS += -I$(LIBTRACEEVENT_OUTPUT)/include
+-
+ #
+ # The static build has no dynsym table, so this does not work for
+ # static build. Looks like linker starts to scream about that now
+ # (in Fedora 26) so we need to switch it off for static build.
+ DYNAMIC_LIST_LDFLAGS               = -Xlinker --dynamic-list=$(LIBTRACEEVENT_DYNAMIC_LIST)
+ LIBTRACEEVENT_DYNAMIC_LIST_LDFLAGS = $(if $(findstring -static,$(LDFLAGS)),,$(DYNAMIC_LIST_LDFLAGS))
++else
++LIBTRACEEVENT_DYNAMIC_LIST =
++LIBTRACEEVENT_DYNAMIC_LIST_LDFLAGS =
++endif
+ 
+ ifneq ($(OUTPUT),)
+   LIBAPI_OUTPUT = $(abspath $(OUTPUT))/libapi
+@@ -375,7 +381,11 @@ export PYTHON_EXTBUILD_LIB PYTHON_EXTBUILD_TMP
+ python-clean := $(call QUIET_CLEAN, python) $(RM) -r $(PYTHON_EXTBUILD) $(OUTPUT)python/perf*.so
+ 
+ PYTHON_EXT_SRCS := $(shell grep -v ^\# util/python-ext-sources)
++ifndef LIBTRACEEVENT_DYNAMIC
+ PYTHON_EXT_DEPS := util/python-ext-sources util/setup.py $(LIBTRACEEVENT) $(LIBAPI)
++else
++PYTHON_EXT_DEPS := util/python-ext-sources util/setup.py $(LIBAPI)
++endif
+ 
+ SCRIPTS = $(patsubst %.sh,%,$(SCRIPT_SH))
+ 
+@@ -785,9 +795,12 @@ prepare: $(OUTPUT)PERF-VERSION-FILE $(OUTPUT)common-cmds.h archheaders $(drm_ioc
+ 	$(LIBPERF) \
+ 	$(LIBSUBCMD) \
+ 	$(LIBSYMBOL) \
+-	$(LIBTRACEEVENT) \
+ 	bpf-skel
+ 
++ifndef LIBTRACEEVENT_DYNAMIC
++prepare: $(LIBTRACEEVENT)
++endif
++
+ $(OUTPUT)%.o: %.c prepare FORCE
+ 	$(Q)$(MAKE) -f $(srctree)/tools/build/Makefile.build dir=$(build-dir) $@
+ 
+@@ -843,6 +856,7 @@ endif
+ 
+ $(patsubst perf-%,%.o,$(PROGRAMS)): $(wildcard */*.h)
+ 
++ifndef LIBTRACEEVENT_DYNAMIC
+ LIBTRACEEVENT_FLAGS += plugin_dir=$(plugindir_SQ) 'EXTRA_CFLAGS=$(EXTRA_CFLAGS)' 'LDFLAGS=$(filter-out -static,$(LDFLAGS))'
+ 
+ $(LIBTRACEEVENT): FORCE | $(LIBTRACEEVENT_OUTPUT)
+@@ -872,6 +886,7 @@ install-traceevent-plugins: libtraceevent_plugins
+ 	$(Q)$(MAKE) -C $(LIBTRACEEVENT_PLUGINS_DIR) O=$(LIBTRACEEVENT_PLUGINS_OUTPUT) \
+ 		DESTDIR=$(LIBTRACEEVENT_PLUGINS_DESTDIR) prefix= \
+ 		$(LIBTRACEEVENT_FLAGS) install
++endif
+ 
+ $(LIBAPI): FORCE | $(LIBAPI_OUTPUT)
+ 	$(Q)$(MAKE) -C $(LIBAPI_DIR) O=$(LIBAPI_OUTPUT) \
+@@ -1152,7 +1167,7 @@ endif # BUILD_BPF_SKEL
+ bpf-skel-clean:
+ 	$(call QUIET_CLEAN, bpf-skel) $(RM) -r $(SKEL_TMP_OUT) $(SKELETONS)
+ 
+-clean:: $(LIBTRACEEVENT)-clean $(LIBAPI)-clean $(LIBBPF)-clean $(LIBSUBCMD)-clean $(LIBSYMBOL)-clean $(LIBPERF)-clean fixdep-clean python-clean bpf-skel-clean tests-coresight-targets-clean libtraceevent_plugins-clean
++clean:: $(LIBAPI)-clean $(LIBBPF)-clean $(LIBSUBCMD)-clean $(LIBSYMBOL)-clean $(LIBPERF)-clean fixdep-clean python-clean bpf-skel-clean tests-coresight-targets-clean
+ 	$(call QUIET_CLEAN, core-objs)  $(RM) $(LIBPERF_A) $(OUTPUT)perf-archive $(OUTPUT)perf-iostat $(LANG_BINDINGS)
+ 	$(Q)find $(or $(OUTPUT),.) -name '*.o' -delete -o -name '\.*.cmd' -delete -o -name '\.*.d' -delete
+ 	$(Q)$(RM) $(OUTPUT).config-detected
+@@ -1192,6 +1207,10 @@ clean:: $(LIBTRACEEVENT)-clean $(LIBAPI)-clean $(LIBBPF)-clean $(LIBSUBCMD)-clea
+ 	$(call QUIET_CLEAN, Documentation) \
+ 	$(MAKE) -C $(DOC_DIR) O=$(OUTPUT) clean >/dev/null
+ 
++ifndef LIBTRACEEVENT_DYNAMIC
++clean:: $(LIBTRACEEVENT)-clean libtraceevent_plugins-clean
++endif
++
+ #
+ # To provide FEATURE-DUMP into $(FEATURE_DUMP_COPY)
+ # file if defined, with no further action.
+diff --git a/tools/perf/util/setup.py b/tools/perf/util/setup.py
+index 5b1e6468d5e8..43e7ca40b2ec 100644
+--- a/tools/perf/util/setup.py
++++ b/tools/perf/util/setup.py
+@@ -77,7 +77,8 @@ perf = Extension('perf',
+ 		  include_dirs = ['util/include'],
+ 		  libraries = extra_libraries,
+ 		  extra_compile_args = cflags,
+-		  extra_objects = [libtraceevent, libapikfs, libperf],
++		  extra_objects = [ x for x in [libtraceevent, libapikfs, libperf]
++                                    if x is not None],
+                  )
+ 
+ setup(name='perf',
+-- 
+2.38.1.431.g37b22c650d-goog
 
-On 16/11/2022 21:28, Miquel Raynal wrote:
-> Hi Rob, Srinivas,
-> 
-> robh@kernel.org wrote on Wed, 16 Nov 2022 14:52:03 -0600:
-> 
->> On Mon, Nov 14, 2022 at 09:56:57AM +0100, Miquel Raynal wrote:
->>> From: Michael Walle <michael@walle.cc>
->>>
->>> Add a schema for the NVMEM layout on Kontron's sl28 boards.
->>>
->>> Signed-off-by: Michael Walle <michael@walle.cc>
->>> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
->>> ---
->>>   .../nvmem/layouts/kontron,sl28-vpd.yaml       | 62 +++++++++++++++++++
->>>   .../bindings/nvmem/layouts/nvmem-layout.yaml  |  3 +
->>>   2 files changed, 65 insertions(+)
->>>   create mode 100644 Documentation/devicetree/bindings/nvmem/layouts/kontron,sl28-vpd.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/nvmem/layouts/kontron,sl28-vpd.yaml b/Documentation/devicetree/bindings/nvmem/layouts/kontron,sl28-vpd.yaml
->>> new file mode 100644
->>> index 000000000000..fef795e79c36
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/nvmem/layouts/kontron,sl28-vpd.yaml
->>> @@ -0,0 +1,62 @@
->>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/nvmem/layouts/kontron,sl28-vpd.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: NVMEM layout of the Kontron SMARC-sAL28 vital product data
->>> +
->>> +maintainers:
->>> +  - Michael Walle <michael@walle.cc>
->>> +
->>> +description:
->>> +  The vital product data (VPD) of the sl28 boards contains a serial
->>> +  number and a base MAC address. The actual MAC addresses for the
->>> +  on-board ethernet devices are derived from this base MAC address by
->>> +  adding an offset.
->>> +
->>> +select: false
->>> +
->>> +properties:
->>> +  compatible:
->>> +    const: kontron,sl28-vpd
->>> +
->>> +  serial-number:
->>> +    type: object
->>
->>         additionalProperties: false
-> 
-> Right, I missed that one.
-> 
->> With that,
->>
->> Reviewed-by: Rob Herring <robh@kernel.org>
-> 
-> Thanks for all the reviews!
-> 
-> Srinivas, would you add the above property while applying or do you
-> prefer me to send a v5?
-
-Applied the series after adding the property.
-
---srini
-> 
-> Thanks,
-> Miquèl
