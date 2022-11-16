@@ -2,146 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0703162BB36
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:16:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BE9F62BB3B
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:17:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239100AbiKPLQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 06:16:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59366 "EHLO
+        id S239174AbiKPLRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 06:17:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238938AbiKPLQW (ORCPT
+        with ESMTP id S239232AbiKPLRE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 06:16:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8637713D5F;
-        Wed, 16 Nov 2022 03:04:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2D18BB81CD3;
-        Wed, 16 Nov 2022 11:04:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4EF2C433D6;
-        Wed, 16 Nov 2022 11:04:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668596642;
-        bh=f9cz4x++pwxP/IsN9a6YZJDb1JLe80UCfjGruxH/j6o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oRXEvAznRVrzEUAMN+WnD0RqJ/MIm6KP11GoMbGXkObMHjq0VHkI82HwIt2vniBZL
-         V1m27Wij7U/J/iPABmteT/l3B3F8ny3Q7w/mGP2OhCxEifkzTIyVZ5AyjJkV3bzga2
-         nK5CSfY7xwM1gCzz1oU1aoj0tMEsWMGUZ7jOK7ceuGifczZs7pC0FXooPKwxR2Xf8S
-         ja19Qj2dfIoWYh0Ymy2p6IjjrUAgdhcZ7JHKvEM3ClqJEBiKilZdCE+k7EVNTX+MVO
-         9R2hRkdb5V8qp9okOGXeXO3cF0W0OY2ODn8q2ES4K9WhPypWtA6KrymfkQUul2XgAH
-         xiiNDwrZcXouw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1ovGCa-0006dh-NH; Wed, 16 Nov 2022 12:03:32 +0100
-Date:   Wed, 16 Nov 2022 12:03:32 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@somainline.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] arm64: dts: qcom: sc8280xp/sa8540p: add gpr node
-Message-ID: <Y3TDhB+QcdAcFfaB@hovoldconsulting.com>
-References: <20221115170242.150246-1-srinivas.kandagatla@linaro.org>
- <20221115170242.150246-2-srinivas.kandagatla@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221115170242.150246-2-srinivas.kandagatla@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 16 Nov 2022 06:17:04 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0553549B6F;
+        Wed, 16 Nov 2022 03:05:09 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id m7-20020a05600c090700b003cf8a105d9eso1185512wmp.5;
+        Wed, 16 Nov 2022 03:05:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Nt8q54IUjG8fYZGllQ5PibnFEuFeXBcb2ZdQ9kqflsc=;
+        b=NqMS/k9x7OCLXkiVB/M6SRtzbLqnvSefXDCcNF4681VtRicjMHUZdDb467XItyzKPk
+         AfpTcuAuyapgKR057L39vb4DCZz+QOOv4bQ0ZrX4Agj09RArmsW+JgMURhqP08BrcHY8
+         +29zTda1y5S8FNUH0rznaNQfBMeb0oyicLmRQ+Aw0U4rpxgldnPoPmejkJv2K2QZnACX
+         yhsv7x5BuWkuaFwiChUcjETiF/V4JS3WcEZYltst/i6C3FAe82B4z59yTWC8grfewC0w
+         lZgBpAzZx5YHxUiTJFfrNEpPMmddA+0vp22AHYfQd97mwSiX5Y2ePbDm2PZnJt42C9gY
+         qhOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Nt8q54IUjG8fYZGllQ5PibnFEuFeXBcb2ZdQ9kqflsc=;
+        b=huCkGSZsAJ3w+Df09756gYhtUheAuDtg9PoNd9t9lgmYw/JWXuCt4OkXGzmhRJ+emI
+         BZS1S3F3PFPzdsi2HRQtrmqE4Whkl08U86yggXye3nR0foafDQ/M8E7Bol01dxPGwryW
+         x2tOQD0oOpIc5T/ZR5/XbMzmfz01qiIP1NxWBbEZfSgjBtIxUWk9JRCgnkzPEzZeSLKh
+         JEM5bZsuZB84m+DibmbZf+lBdobwyxoomg1q0Mj5faFWDZ1gNbDL4zexT7AdD9gjfOGR
+         fn402nOXGjefB+dsoi7QRcSa3GYFMLAodo6iKeoowZ+TfHUMonkuPB4rAabanF8rB79J
+         yHNA==
+X-Gm-Message-State: ANoB5pmYFKw15Pi+nLB3PlkuXr7oVHE5v+dHFmfG0ghA9Vl3JKSHUAfK
+        gR+tqY8jIqtkV7MZ+VZAsJyni+xkiHQ=
+X-Google-Smtp-Source: AA0mqf5vxmmcTH1fH17jwPxcH/8LGgjrFM8xrkw7QSUdiXmyDyzdHIII54vZlYmnyQVMhLrZrl/2cQ==
+X-Received: by 2002:a1c:29c5:0:b0:3cf:6263:bfc5 with SMTP id p188-20020a1c29c5000000b003cf6263bfc5mr1807409wmp.137.1668596707374;
+        Wed, 16 Nov 2022 03:05:07 -0800 (PST)
+Received: from felia.fritz.box (200116b826c55000c59461cca0b9a159.dip.versatel-1u1.de. [2001:16b8:26c5:5000:c594:61cc:a0b9:a159])
+        by smtp.gmail.com with ESMTPSA id h14-20020a05600c2cae00b003cfd0bd8c0asm1841370wmc.30.2022.11.16.03.05.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 03:05:06 -0800 (PST)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] usb: dwc3: improve the config dependency of USB_DWC3_XILINX
+Date:   Wed, 16 Nov 2022 12:04:44 +0100
+Message-Id: <20221116110444.8340-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 05:02:40PM +0000, Srinivas Kandagatla wrote:
-> Add GPR node along with APM(Audio Process Manager) and PRM(Proxy
+A request to Manish Narani (see Link) asked for clarification of the
+reference to the config ARCH_VERSAL in the support of Xilinx SoCs with
+DesignWare Core USB3 IP.
 
-Perhaps spell out GPR as well.
+As there is no response, clean up the reference to the non-existing config
+symbol. While at it, follow up on Felipe Balbi's request to add the
+alternative COMPILE_TEST dependency.
 
-> resource Manager) audio services.
-> 
-> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 40 ++++++++++++++++++++++++++
->  1 file changed, 40 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> index c32bcded2aef..e3cdd8bccb0c 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> @@ -12,6 +12,7 @@
->  #include <dt-bindings/power/qcom-rpmpd.h>
->  #include <dt-bindings/soc/qcom,rpmh-rsc.h>
->  #include <dt-bindings/thermal/thermal.h>
-> +#include <dt-bindings/soc/qcom,gpr.h>
+Link: https://lore.kernel.org/all/CAKXUXMwgWfX8+OvY0aCwRNukencwJERAZzU7p4eOLXQ2zv6rAg@mail.gmail.com/
 
-Please keep the include directives sorted.
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+ drivers/usb/dwc3/Kconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
->  
->  / {
->  	interrupt-parent = <&intc>;
-> @@ -1152,6 +1153,45 @@ IPCC_MPROC_SIGNAL_GLINK_QMP
->  
->  				label = "lpass";
->  				qcom,remote-pid = <2>;
-> +
-> +				gpr {
-> +					compatible = "qcom,gpr";
-> +					qcom,glink-channels = "adsp_apps";
-> +					qcom,domain = <GPR_DOMAIN_ID_ADSP>;
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
+diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
+index 03ededa86da1..b2f72b0e75c6 100644
+--- a/drivers/usb/dwc3/Kconfig
++++ b/drivers/usb/dwc3/Kconfig
+@@ -152,11 +152,11 @@ config USB_DWC3_IMX8MP
+ 
+ config USB_DWC3_XILINX
+ 	tristate "Xilinx Platforms"
+-	depends on (ARCH_ZYNQMP || ARCH_VERSAL) && OF
++	depends on (ARCH_ZYNQMP || COMPILE_TEST) && OF
+ 	default USB_DWC3
+ 	help
+ 	  Support Xilinx SoCs with DesignWare Core USB3 IP.
+-	  This driver handles both ZynqMP and Versal SoC operations.
++	  This driver handles ZynqMP SoC operations.
+ 	  Say 'Y' or 'M' if you have one such device.
+ 
+ config USB_DWC3_AM62
+-- 
+2.17.1
 
-I'd move the address and size cells properties above the vendor ones.
-
-> +					qcom,intents = <512 20>;
-> +
-> +					q6apm: q6apm {
-> +						reg = <GPR_APM_MODULE_IID>;
-> +						compatible = "qcom,q6apm";
-
-Please move compatible before reg throughout.
-
-> +						#sound-dai-cells = <0>;
-> +						qcom,protection-domain = "avs/audio", "msm/adsp/audio_pd";
-> +						q6apmdai: dais {
-> +							compatible = "qcom,q6apm-dais";
-> +							#sound-dai-cells = <1>;
-> +							iommus = <&apps_smmu 0x0c01 0x0>;
-> +						};
-> +
-> +						q6apmbedai: bedais {
-> +							compatible = "qcom,q6apm-lpass-dais";
-> +							#sound-dai-cells = <1>;
-> +						};
-> +					};
-> +
-> +					q6prm: q6prm {
-> +						reg = <GPR_PRM_MODULE_IID>;
-> +						compatible = "qcom,q6prm";
-> +						#clock-cells = <2>;
-> +						qcom,protection-domain = "avs/audio", "msm/adsp/audio_pd";
-> +						q6prmcc: cc {
-> +							compatible = "qcom,q6prm-lpass-clocks";
-> +							#clock-cells = <2>;
-> +						};
-> +					};
-> +
-
-Stray new line.
-
-> +				};
-> +
-
-Same here.
-
->  			};
->  		};
-
-Johan
