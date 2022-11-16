@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E0E962BE9E
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:49:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7979A62BEA1
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:50:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231712AbiKPMt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 07:49:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39556 "EHLO
+        id S232931AbiKPMub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 07:50:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233205AbiKPMth (ORCPT
+        with ESMTP id S230115AbiKPMu0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 07:49:37 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7072E1740A;
-        Wed, 16 Nov 2022 04:49:36 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id c1so29314248lfi.7;
-        Wed, 16 Nov 2022 04:49:36 -0800 (PST)
+        Wed, 16 Nov 2022 07:50:26 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B61E0B3D;
+        Wed, 16 Nov 2022 04:50:23 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id 21so26418664edv.3;
+        Wed, 16 Nov 2022 04:50:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=v/ZEkkFoZNu6RnKy8matJeXDIgkx3kAaQOPRGjjYlqM=;
-        b=Cp/SARYYvehei0mJeJSPv/kEkzMtef9ODZxBz5mhI7AgieoOdp/GnQqo28vU7+W973
-         eRqld0eSF6F2ilJGKYMRALZXsVym2lIx7masmoUoOCdrf0ymTxECYNTlNGq9jlsKqmoB
-         TlFxCoaN/Lkwj3rDOKjVuCnKZOPFWSJfztDpL39CYfMsehkSbdp0drZgZ2qiqS7e96sN
-         HSMOblV5G8BrFN7lmwH51NcCATsnRgx372RVJxvY6p+ZtfMwdchrRvvL+LxO7VawOXHd
-         H9zXUzByDQUcGtQo+6kYO+pN0r/gZKfk2dO9r53qv1yYoqcEn4TwA+wEDgKRMASaTjGB
-         dcqA==
+        bh=hiGro6ozvASLxm710qclktaIhbfsoyOS4Qzb18JkaHI=;
+        b=fxTvvyRqzMF0aRrGwb85R8pbPp8jXrXXb0R6XLrj8JyUCHFjzuH4cFvn7e/Yk6zCXC
+         jZvmUvnw5aTeS7TxqqcuuZrOtw32WjuGWv1CbhgjO7+oX/T3vv3Mb+f4sjwyO6xrQeB/
+         HtcGdu/X5ymbvMURCshBldUlfq8NMGizmrbNDieUqyPI/5hHFC5/xDgBtAtS/J//MR9E
+         iJnjhVtjhYdj7+48rfKLqhf1xoNa1jFwdGCBD9US1CZtp6+Iuh4uCJFDyzEFeuQQn4r0
+         asJHsNYLaF013MWBt19AYQm7bQIU/L3I4ysLGT9/c26IozYuZ41TjuqvYsTdNu6iw+wS
+         jbEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=v/ZEkkFoZNu6RnKy8matJeXDIgkx3kAaQOPRGjjYlqM=;
-        b=aO833KxOlGOoXE5I5A/jfKW81tjhNnCVZP9swdb7sf0o1fyQDBlX3Lf+rflezlGv7m
-         UabrNmccoxXBys9i+Jr6FsyYQGKN5tqhxeWp8Att/E1ZogXo5ow/qqVCqR4vASTw5A5I
-         FuUENXBXUwd1a0lKoi/7dOQRb8bfJiAhbmKNso9idRWlakrUPKOxBI/CeR+vXutlGC8p
-         RkvPfqxNdkBsmEJkBNgai6oTxPNZI6mZ0z8rV8XJXt4lu4eTpNroMESHLLTPAVTMi4AT
-         NvkxD2DdWcmEUpN9l0Fgqp8QkuUAMebO7G7A/Yq1Mh1FmhLWyuIy88AH6OwIbIbj1C3P
-         APaQ==
-X-Gm-Message-State: ANoB5plzSHvZA2z2jM62KFC6T3gmEetph4OI+yLM9sS3Fr5/GzkbqAdp
-        MWzUEy4NF8H/sqay+IEC7+RoAS15dzmG33rcmjU=
-X-Google-Smtp-Source: AA0mqf6ctDeOsVzraRVQs3yfqcRABVSBaaW3jWPDzBpQr1sfElUwVUZFFhqzZxSrULLq2kBPZB+b+9wUukS73y0On9k=
-X-Received: by 2002:ac2:4bcb:0:b0:4b4:210d:7d2e with SMTP id
- o11-20020ac24bcb000000b004b4210d7d2emr7518271lfq.450.1668602974707; Wed, 16
- Nov 2022 04:49:34 -0800 (PST)
-MIME-Version: 1.0
-References: <1668141030-2-1-git-send-email-lizhijian@fujitsu.com> <1668141030-2-5-git-send-email-lizhijian@fujitsu.com>
-In-Reply-To: <1668141030-2-5-git-send-email-lizhijian@fujitsu.com>
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Date:   Wed, 16 Nov 2022 13:49:18 +0100
-Message-ID: <CAPj211sEjccp41cq=gsEkmc-5X_oYEoN8G6kHOQWKy95ysOY0Q@mail.gmail.com>
-Subject: Re: [for-next PATCH 4/5] RDMA/rxe: refactor iova_to_vaddr
-To:     Li Zhijian <lizhijian@fujitsu.com>
-Cc:     Zhu Yanjun <zyjzyj2000@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ira.weiny@intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        bh=hiGro6ozvASLxm710qclktaIhbfsoyOS4Qzb18JkaHI=;
+        b=MEyKzVsF4ZJ10fJWlPWjLQd9SMogV01Nnec8gc5iaGOr7KN3iDcwyOmWjsH8sRczun
+         NuY3Vq3LfmwdXNhW0S6kKU7EzaGyNuwPicmu3wrtxc4nnuNOY3xnuGjCX6BrHLM7DMqH
+         eR+qUQbSUNBrNYg2EczF3OZRH8oJlvdTC93sR8z2e6fcQSRAPvq1upKFIxLjeVwrgGKJ
+         amjHT9DK5wMwsZwvxGKG00K+AUpQwDcfrSPl4uX4wxBfGKPO1qsHg58vv9rrekyRljEZ
+         qNnV9Phhk6GX67XQGFrYv8wzCioxLd/jUXU3AAKePL7pCJ4RnWJnFamF1nCKEmExdD2d
+         +DMQ==
+X-Gm-Message-State: ANoB5pmF+qfLoVKwTHC4wS6Sq+wzEYFPPdTY3rdJgim7vaX1KMcpM42O
+        vh8o42hBAcw4e8ge7CxivK8=
+X-Google-Smtp-Source: AA0mqf7lyRizo8KsR7noBHMDFnXAq2zDiXHyiUBLhzcX3gG3UHIlwai5NPf2VPyY9Fuy7wP6zehjXQ==
+X-Received: by 2002:a05:6402:413:b0:463:a83c:e019 with SMTP id q19-20020a056402041300b00463a83ce019mr19078409edv.253.1668603022157;
+        Wed, 16 Nov 2022 04:50:22 -0800 (PST)
+Received: from felia.fritz.box (200116b826c55000c59461cca0b9a159.dip.versatel-1u1.de. [2001:16b8:26c5:5000:c594:61cc:a0b9:a159])
+        by smtp.gmail.com with ESMTPSA id b12-20020a17090630cc00b00780b1979adesm6833452ejb.218.2022.11.16.04.50.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 04:50:21 -0800 (PST)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
+        linux-mtd@lists.infradead.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] mtd: parsers: refer to ARCH_BCMBCA instead of ARCH_BCM4908
+Date:   Wed, 16 Nov 2022 13:49:32 +0100
+Message-Id: <20221116124932.4748-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -70,196 +70,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On venerd=C3=AC 11 novembre 2022 05:30:29 CET Li Zhijian wrote:
-> For IB_MR_TYPE_USER MR, iova_to_vaddr() will call kmap_local_page() to
-> map page.
->
-> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
-> ---
->  drivers/infiniband/sw/rxe/rxe_loc.h   |  1 +
->  drivers/infiniband/sw/rxe/rxe_mr.c    | 38 +++++++++++++++------------
->  drivers/infiniband/sw/rxe/rxe_resp.c  |  1 +
->  drivers/infiniband/sw/rxe/rxe_verbs.h |  5 +++-
->  4 files changed, 27 insertions(+), 18 deletions(-)
->
-> diff --git a/drivers/infiniband/sw/rxe/rxe_loc.h
-> b/drivers/infiniband/sw/rxe/rxe_loc.h index c2a5c8814a48..22a8c44d39c8
-100644
-> --- a/drivers/infiniband/sw/rxe/rxe_loc.h
-> +++ b/drivers/infiniband/sw/rxe/rxe_loc.h
-> @@ -73,6 +73,7 @@ int rxe_mr_copy(struct rxe_mr *mr, u64 iova, void *addr=
-,
-int
-> length, int copy_data(struct rxe_pd *pd, int access, struct rxe_dma_info
-> *dma, void *addr, int length, enum rxe_mr_copy_dir dir);
->  void *iova_to_vaddr(struct rxe_mr *mr, u64 iova, int length);
-> +void rxe_unmap_vaddr(struct rxe_mr *mr, void *vaddr);
->  struct rxe_mr *lookup_mr(struct rxe_pd *pd, int access, u32 key,
->                        enum rxe_mr_lookup_type type);
->  int mr_check_range(struct rxe_mr *mr, u64 iova, size_t length);
-> diff --git a/drivers/infiniband/sw/rxe/rxe_mr.c
-> b/drivers/infiniband/sw/rxe/rxe_mr.c index a4e786b657b7..d26a4a33119c 100=
-644
-> --- a/drivers/infiniband/sw/rxe/rxe_mr.c
-> +++ b/drivers/infiniband/sw/rxe/rxe_mr.c
-> @@ -120,9 +120,7 @@ int rxe_mr_init_user(struct rxe_dev *rxe, u64 start, =
-u64
-> length, u64 iova, struct ib_umem              *umem;
->       struct sg_page_iter     sg_iter;
->       int                     num_buf;
-> -     void                    *vaddr;
->       int err;
-> -     int i;
->
->       umem =3D ib_umem_get(&rxe->ib_dev, start, length, access);
->       if (IS_ERR(umem)) {
-> @@ -159,18 +157,9 @@ int rxe_mr_init_user(struct rxe_dev *rxe, u64 start,
-u64
-> length, u64 iova, num_buf =3D 0;
->                       }
->
-> -                     vaddr =3D
-page_address(sg_page_iter_page(&sg_iter));
-> -                     if (!vaddr) {
-> -                             pr_warn("%s: Unable to get virtual
-address\n",
-> -                                             __func__);
-> -                             err =3D -ENOMEM;
-> -                             goto err_cleanup_map;
-> -                     }
-> -
-> -                     buf->addr =3D (uintptr_t)vaddr;
-> +                     buf->page =3D sg_page_iter_page(&sg_iter);
->                       num_buf++;
->                       buf++;
-> -
->               }
->       }
->
-> @@ -182,10 +171,6 @@ int rxe_mr_init_user(struct rxe_dev *rxe, u64 start,
-u64
-> length, u64 iova,
->
->       return 0;
->
-> -err_cleanup_map:
-> -     for (i =3D 0; i < mr->num_map; i++)
-> -             kfree(mr->map[i]);
-> -     kfree(mr->map);
->  err_release_umem:
->       ib_umem_release(umem);
->  err_out:
-> @@ -246,6 +231,12 @@ static void lookup_iova(struct rxe_mr *mr, u64 iova,
-int
-> *m_out, int *n_out, }
->  }
->
-> +void rxe_unmap_vaddr(struct rxe_mr *mr, void *vaddr)
-> +{
-> +     if (mr->ibmr.type =3D=3D IB_MR_TYPE_USER)
-> +             kunmap_local(vaddr);
-> +}
-> +
->  static void *__iova_to_vaddr(struct rxe_mr *mr, u64 iova, int length)
->  {
->       size_t offset;
-> @@ -258,9 +249,21 @@ static void *__iova_to_vaddr(struct rxe_mr *mr, u64
-iova,
-> int length) return NULL;
->       }
->
-> -     return (void *)(uintptr_t)mr->map[m]->buf[n].addr + offset;
-> +     if (mr->ibmr.type =3D=3D IB_MR_TYPE_USER) {
-> +             char *paddr;
-> +             struct page *pg =3D mr->map[m]->buf[n].page;
-> +
-> +             paddr =3D kmap_local_page(pg);
-> +             if (paddr =3D=3D NULL) {
-> +                     pr_warn("Failed to map page");
-> +                     return NULL;
-> +             }
+Commit dd5c672d7ca9 ("arm64: bcmbca: Merge ARCH_BCM4908 to ARCH_BCMBCA")
+removes config ARCH_BCM4908 as config ARCH_BCMBCA has the same intent.
 
-I know nothing about this code but I am here as a result of regular checks =
-for
-changes to HIGHMEM mappings across the entire kernel. So please forgive me =
-if
-I'm objecting on correct changes.
+Probably due to concurrent development, commit 002181f5b150 ("mtd: parsers:
+add Broadcom's U-Boot parser") introduces 'Broadcom's U-Boot partition
+parser' that depends on ARCH_BCM4908, but this use was not visible during
+the config refactoring from the commit above. Hence, these two changes
+create a reference to a non-existing config symbol.
 
-1) It looks like this code had a call to page_address() and you converted i=
-t
-to mapping with kmap_local_page().
+Adjust the MTD_BRCM_U_BOOT definition to refer to ARCH_BCMBCA instead of
+ARCH_BCM4908 to remove the reference to the non-existing config symbol
+ARCH_BCM4908.
 
-If page_address() is related and it used to work properly, the page you are
-mapping cannot come from ZONE_HIGHMEM. Therefore, kmap_local_page() looks l=
-ike
-an overkill.
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+ drivers/mtd/parsers/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I'm probably missing something...
+diff --git a/drivers/mtd/parsers/Kconfig b/drivers/mtd/parsers/Kconfig
+index c258ba2a3a6f..daeae79e64f9 100644
+--- a/drivers/mtd/parsers/Kconfig
++++ b/drivers/mtd/parsers/Kconfig
+@@ -22,7 +22,7 @@ config MTD_BCM63XX_PARTS
+ 
+ config MTD_BRCM_U_BOOT
+ 	tristate "Broadcom's U-Boot partition parser"
+-	depends on ARCH_BCM4908 || COMPILE_TEST
++	depends on ARCH_BCMBCA || COMPILE_TEST
+ 	help
+ 	  Broadcom uses a custom way of storing U-Boot environment variables.
+ 	  They are placed inside U-Boot partition itself at unspecified offset.
+-- 
+2.17.1
 
-2) What made you think that kmap_local_page() might fail and return NULL?
-AFAIK, kmap_local_page() won't ever return NULL, therefore there is no need=
- to
-check.
-
-Regards,
-
-Fabio
-
-P.S.: I just noticed that the second entry in my list was missing from the
-other email which should be discarded.
-
-
-
-> +             return paddr + offset;
-> +     } else
-> +             return (void *)(uintptr_t)mr->map[m]->buf[n].addr +
-offset;
->  }
->
-> +/* must call rxe_unmap_vaddr to unmap vaddr */
->  void *iova_to_vaddr(struct rxe_mr *mr, u64 iova, int length)
->  {
->       if (mr->state !=3D RXE_MR_STATE_VALID) {
-> @@ -326,6 +329,7 @@ int rxe_mr_copy(struct rxe_mr *mr, u64 iova, void *ad=
-dr,
-> int length, dest =3D (dir =3D=3D RXE_TO_MR_OBJ) ? va : addr;
->
->               memcpy(dest, src, bytes);
-> +             rxe_unmap_vaddr(mr, va);
->
->               length  -=3D bytes;
->               addr    +=3D bytes;
-> diff --git a/drivers/infiniband/sw/rxe/rxe_resp.c
-> b/drivers/infiniband/sw/rxe/rxe_resp.c index 483043dc4e89..765cb9f8538a
-> 100644
-> --- a/drivers/infiniband/sw/rxe/rxe_resp.c
-> +++ b/drivers/infiniband/sw/rxe/rxe_resp.c
-> @@ -636,6 +636,7 @@ static enum resp_states atomic_reply(struct rxe_qp *q=
-p,
->
->               *vaddr =3D value;
->               spin_unlock_bh(&atomic_ops_lock);
-> +             rxe_unmap_vaddr(mr, vaddr);
->
->               qp->resp.msn++;
->
-> diff --git a/drivers/infiniband/sw/rxe/rxe_verbs.h
-> b/drivers/infiniband/sw/rxe/rxe_verbs.h index acab785ba7e2..6080a4b32f09
-> 100644
-> --- a/drivers/infiniband/sw/rxe/rxe_verbs.h
-> +++ b/drivers/infiniband/sw/rxe/rxe_verbs.h
-> @@ -280,7 +280,10 @@ enum rxe_mr_lookup_type {
->  #define RXE_BUF_PER_MAP              (PAGE_SIZE / sizeof(struct
-rxe_phys_buf))
->
->  struct rxe_phys_buf {
-> -     u64      addr;
-> +     union {
-> +             u64 addr; /* IB_MR_TYPE_MEM_REG */
-> +             struct page *page; /* IB_MR_TYPE_USER */
-> +     };
->  };
->
->  struct rxe_map {
-> --
-> 2.31.1
