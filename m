@@ -2,66 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A998F62C398
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 17:10:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6261762C399
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 17:10:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234040AbiKPQKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 11:10:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48508 "EHLO
+        id S233880AbiKPQKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 11:10:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234075AbiKPQJs (ORCPT
+        with ESMTP id S233839AbiKPQKM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 11:09:48 -0500
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54E7A56EC7;
-        Wed, 16 Nov 2022 08:09:47 -0800 (PST)
-Received: by mail-ot1-f42.google.com with SMTP id m7-20020a9d6447000000b0066da0504b5eso4353899otl.13;
-        Wed, 16 Nov 2022 08:09:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/+pQLTJDyany4akW+PaBhrVtLiRkHQTFMc51rgLCGdE=;
-        b=NBIMCMOgv9SZu6Ma78SOb4s5P1ECYc3UTIk7gfUiK/oHCbPzaP04cA1eqbd6ExE7Es
-         HKgQRDgSPi/3w940lhuzvr6Db/Ni4RioSsCVnAr7o+JXwfRv/ZW7HYcuBmBLm728UgI1
-         Hu+Q9lR4S/qW9BcS8PBsDZVE/cbIpFrxB2T0wzZKRH5jh4PnawYfKxwe9NLpAv8x+O81
-         OssljI1dIXXLKkYhkZ5hD5Ysrc8M/yv69pr/IWW9kVxcWUFGDFudCbHcF4GIfXerz6eC
-         WnpwME7xHIeqIuvsv5d1dadTN+4o573PkNooP/kdBEUJh63TcG7Vzc0iKHzzLSIT+iUL
-         Wn+w==
-X-Gm-Message-State: ANoB5pk2FllhqsQrWPXEQI2okYEU5WiOc+HvOHHTrgYlD5t4WkDrVCo5
-        ugOOZMKzWpWIdfERf8w4zw==
-X-Google-Smtp-Source: AA0mqf4OznSLbOeIc6lNTE63nxdYlw3lA+2jVJt8wh+vbSgDsrvWW02+YGXOmIbRh6PjRFSHOst4Bw==
-X-Received: by 2002:a9d:480f:0:b0:66c:6cf1:7967 with SMTP id c15-20020a9d480f000000b0066c6cf17967mr11384658otf.139.1668614986560;
-        Wed, 16 Nov 2022 08:09:46 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id v4-20020acade04000000b00359ba124b07sm6165743oig.36.2022.11.16.08.09.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 08:09:46 -0800 (PST)
-Received: (nullmailer pid 170698 invoked by uid 1000);
-        Wed, 16 Nov 2022 16:09:48 -0000
-Date:   Wed, 16 Nov 2022 10:09:48 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     MD Danish Anwar <danishanwar@ti.com>
-Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Suman Anna <s-anna@ti.com>, Roger Quadros <rogerq@kernel.org>,
-        "Andrew F . Davis" <afd@ti.com>, nm@ti.com, vigneshr@ti.com,
-        srk@ti.com, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v8 1/6] dt-bindings: remoteproc: Add PRU consumer bindings
-Message-ID: <20221116160948.GA169555-robh@kernel.org>
-References: <20221116121634.2901265-1-danishanwar@ti.com>
- <20221116121634.2901265-2-danishanwar@ti.com>
+        Wed, 16 Nov 2022 11:10:12 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5E14C279;
+        Wed, 16 Nov 2022 08:10:11 -0800 (PST)
+Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NC7Dn50JNz687hk;
+        Thu, 17 Nov 2022 00:05:29 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 16 Nov 2022 17:10:09 +0100
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 16 Nov
+ 2022 16:10:08 +0000
+Date:   Wed, 16 Nov 2022 16:10:08 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     <ira.weiny@intel.com>
+CC:     Dan Williams <dan.j.williams@intel.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        "Ben Widawsky" <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
+Subject: Re: [PATCH 11/11] cxl/test: Simulate event log overflow
+Message-ID: <20221116161008.00004f71@Huawei.com>
+In-Reply-To: <20221110185758.879472-12-ira.weiny@intel.com>
+References: <20221110185758.879472-1-ira.weiny@intel.com>
+        <20221110185758.879472-12-ira.weiny@intel.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221116121634.2901265-2-danishanwar@ti.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,28 +59,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 05:46:29PM +0530, MD Danish Anwar wrote:
-> From: Suman Anna <s-anna@ti.com>
-> 
-> Add DT schema binding for PRU consumers. The binding includes
-> all the common properties that can be used by different PRU consumer
-> or application nodes and supported by the PRU remoteproc driver.
-> These are used to configure the PRU hardware for specific user
-> applications.
-> 
-> The application nodes themselves should define their own bindings.
-> 
-> Co-developed-by: Tero Kristo <t-kristo@ti.com>
-> Co-developed-by: Suman Anna <s-anna@ti.com>
-> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-> Co-developed-by: Puranjay Mohan <p-mohan@ti.com>
-> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
+On Thu, 10 Nov 2022 10:57:58 -0800
+ira.weiny@intel.com wrote:
 
-Run checkpatch.pl and fix the warnings with the tags.
+> From: Ira Weiny <ira.weiny@intel.com>
+> 
+> Log overflow is marked by a separate trace message.
+> 
+> Simulate a log with lots of messages and flag overflow until it is
+> drained a bit.
+> 
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+Looks fine to me
 
-You didn't add review/ack tags either.
-
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> 
 > ---
->  .../bindings/remoteproc/ti,pru-consumer.yaml  | 60 +++++++++++++++++++
->  1 file changed, 60 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
+> Changes from RFC
+> 	Adjust for new struct changes
+> ---
+>  tools/testing/cxl/test/events.c | 37 +++++++++++++++++++++++++++++++++
+>  1 file changed, 37 insertions(+)
+> 
+> diff --git a/tools/testing/cxl/test/events.c b/tools/testing/cxl/test/events.c
+> index 8693f3fb9cbb..5ce257114f4e 100644
+> --- a/tools/testing/cxl/test/events.c
+> +++ b/tools/testing/cxl/test/events.c
+> @@ -69,11 +69,21 @@ static void event_store_add_event(struct mock_event_store *mes,
+>  	log->nr_events++;
+>  }
+>  
+> +static u16 log_overflow(struct mock_event_log *log)
+> +{
+> +	int cnt = log_rec_left(log) - 5;
+> +
+> +	if (cnt < 0)
+> +		return 0;
+> +	return cnt;
+> +}
+> +
+>  int mock_get_event(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *cmd)
+>  {
+>  	struct cxl_get_event_payload *pl;
+>  	struct mock_event_log *log;
+>  	u8 log_type;
+> +	u16 nr_overflow;
+>  
+>  	/* Valid request? */
+>  	if (cmd->size_in != sizeof(log_type))
+> @@ -95,6 +105,20 @@ int mock_get_event(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *cmd)
+>  	if (log_rec_left(log) > 1)
+>  		pl->flags |= CXL_GET_EVENT_FLAG_MORE_RECORDS;
+>  
+> +	nr_overflow = log_overflow(log);
+> +	if (nr_overflow) {
+> +		u64 ns;
+> +
+> +		pl->flags |= CXL_GET_EVENT_FLAG_OVERFLOW;
+> +		pl->overflow_err_count = cpu_to_le16(nr_overflow);
+> +		ns = ktime_get_real_ns();
+> +		ns -= 5000000000; /* 5s ago */
+> +		pl->first_overflow_timestamp = cpu_to_le64(ns);
+> +		ns = ktime_get_real_ns();
+> +		ns -= 1000000000; /* 1s ago */
+> +		pl->last_overflow_timestamp = cpu_to_le64(ns);
+> +	}
+> +
+>  	memcpy(&pl->record[0], get_cur_event(log), sizeof(pl->record[0]));
+>  	pl->record[0].hdr.handle = get_cur_event_handle(log);
+>  	return 0;
+> @@ -274,6 +298,19 @@ u32 cxl_mock_add_event_logs(struct cxl_dev_state *cxlds)
+>  			      (struct cxl_event_record_raw *)&mem_module);
+>  	mes->ev_status |= CXLDEV_EVENT_STATUS_INFO;
+>  
+> +	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL, &maint_needed);
+> +	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
+> +	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL,
+> +			      (struct cxl_event_record_raw *)&dram);
+> +	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL,
+> +			      (struct cxl_event_record_raw *)&gen_media);
+> +	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL,
+> +			      (struct cxl_event_record_raw *)&mem_module);
+> +	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
+> +	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL,
+> +			      (struct cxl_event_record_raw *)&dram);
+> +	mes->ev_status |= CXLDEV_EVENT_STATUS_FAIL;
+> +
+>  	event_store_add_event(mes, CXL_EVENT_TYPE_FATAL, &hardware_replace);
+>  	event_store_add_event(mes, CXL_EVENT_TYPE_FATAL,
+>  			      (struct cxl_event_record_raw *)&dram);
+
