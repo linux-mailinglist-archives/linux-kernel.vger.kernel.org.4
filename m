@@ -2,73 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B4F962C12F
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:42:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E184262C130
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:42:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbiKPOmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 09:42:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35816 "EHLO
+        id S233677AbiKPOmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 09:42:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233841AbiKPOl7 (ORCPT
+        with ESMTP id S233895AbiKPOmE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 09:41:59 -0500
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51BB63F04D;
-        Wed, 16 Nov 2022 06:41:58 -0800 (PST)
-Received: by mail-ot1-f48.google.com with SMTP id g51-20020a9d12b6000000b0066dbea0d203so489444otg.6;
-        Wed, 16 Nov 2022 06:41:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hmTmOBiujjJzMOC34NULLqzGRaBRcGqq+M/PlxPI0qg=;
-        b=z978liilT2RAwIoFmc1uvIHwUMgrs8vJjMt0ioB8LTBtIJxfxnWEpLrSXE62rPkUTL
-         VQm1+FEkLQ/O7ZbgLaOLlczswlfjrSb/FSALexe8CmPLKiD6PFKTHM7V/CBvLzHGThY0
-         2e0Y1uR3sJF/lC4MsDRgt99eD0B4wAKkTsrGE7RIqyOGaD74lzkFVj+NhLTQ/U5UD7bO
-         w26MFJEXUQhMvTwy9kDluWf5FoYKKgFQArlGAVwjGfgVK4RVX+bby3YNiywQlKfhpFfO
-         smSNTmzXgWgjsLRRqlXBJw45DkPLVRkTVIeFTugV7LUuSNKVELFO4ehlmMej/fNGuUje
-         A+yA==
-X-Gm-Message-State: ANoB5pltFQ2LsEVMtyMpUMlXyV1Ge6ibXMU+xykjwhSFFAmRkwupD/IB
-        MNlySF35HVOPqwBJDP4UoQ==
-X-Google-Smtp-Source: AA0mqf6yczlqz0ixYCplthhhPxfTsROjnYiGuRO6OYi37eGwpih3pykOrdiorPCJqKBhxfSpfvob4w==
-X-Received: by 2002:a05:6830:6089:b0:66d:8b98:683f with SMTP id by9-20020a056830608900b0066d8b98683fmr7259700otb.40.1668609717543;
-        Wed, 16 Nov 2022 06:41:57 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id l6-20020a056870204600b00136c20b1c59sm8057852oad.43.2022.11.16.06.41.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 06:41:56 -0800 (PST)
-Received: (nullmailer pid 3820928 invoked by uid 1000);
-        Wed, 16 Nov 2022 14:41:58 -0000
-Date:   Wed, 16 Nov 2022 08:41:58 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mark Brown <broonie@kernel.org>, quic_plai@quicinc.com,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        alsa-devel@alsa-project.org, quic_srivasam@quicinc.com,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: Re: [PATCH v2 07/11] ASoC: dt-bindings: qcom,q6asm: Split to
- separate schema
-Message-ID: <166860971788.3820869.2449332152697837525.robh@kernel.org>
-References: <20221115120235.167812-1-krzysztof.kozlowski@linaro.org>
- <20221115120235.167812-8-krzysztof.kozlowski@linaro.org>
+        Wed, 16 Nov 2022 09:42:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F693F05A;
+        Wed, 16 Nov 2022 06:42:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F57961D94;
+        Wed, 16 Nov 2022 14:42:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE9E8C433C1;
+        Wed, 16 Nov 2022 14:42:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668609722;
+        bh=lckJV3myNE/M/+AoXSQVsJhxmoy51aieZjb0GpOhuiM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JpLJUlG3L55lqEmxr/ON6OFL0v3u/BY5CSPeJ0+ZB5uEHDTke5edbsmu3RVg+Vr2w
+         xm94C9/gTTv3vsrcrLtoDy+23ua3FEMN01MuNiv/oIZoZ+vJ5yrQ9S51g2blgruZAk
+         Vl1voX3WyluyQgbtUWPTuBo8BOrqnOYwDg+ZMDX8N3pASIdOVqZycoMh7nTckXPiYl
+         ysnDg2b1hPCCswYevZx35nlcyk+dPx4W6IwgGKBuWkTuomx0VL/+yIZsNPD1hkWpKG
+         aWoyVDwTOeXqjrPUCzJs2d7qHxgP82mOvbEjnOUkhasgpSU99iY98XPb0Y9/boQYtT
+         91uyFGEQxRFfw==
+Date:   Wed, 16 Nov 2022 14:41:58 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, Shuah Khan <shuah@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: Re: selftests: arm64: sve-ptrace # TIMEOUT 45 seconds
+Message-ID: <Y3T2ts+7I8g62hOM@sirena.org.uk>
+References: <CA+G9fYu8grBstgXDsC_g5tmEg0nVwaQ+p0d6vD+mN7UsTvMCSQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bGEcD6Gx1CBrCGx+"
 Content-Disposition: inline
-In-Reply-To: <20221115120235.167812-8-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CA+G9fYu8grBstgXDsC_g5tmEg0nVwaQ+p0d6vD+mN7UsTvMCSQ@mail.gmail.com>
+X-Cookie: Ego sum ens omnipotens.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -76,23 +60,48 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Tue, 15 Nov 2022 13:02:31 +0100, Krzysztof Kozlowski wrote:
-> The APR/GPR bindings with services got complicated so move out the Q6ASM
-> service to its own binding.  Previously the compatible was documented in
-> qcom,apr.yaml.  Move most of the examples from its children to this new
-> file.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Cc: quic_srivasam@quicinc.com
-> Cc: quic_plai@quicinc.com
-> ---
->  .../bindings/sound/qcom,q6asm-dais.yaml       | 48 +++++--------
->  .../devicetree/bindings/sound/qcom,q6asm.yaml | 68 +++++++++++++++++++
->  2 files changed, 84 insertions(+), 32 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/sound/qcom,q6asm.yaml
-> 
+--bGEcD6Gx1CBrCGx+
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+On Wed, Nov 16, 2022 at 05:25:37PM +0530, Naresh Kamboju wrote:
+> While doing selftests: arm64 tests validations following test failed
+> due to shorter
+> timeout value.
+>=20
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>=20
+> not ok 28 selftests: arm64: sve-ptrace # TIMEOUT 45 seconds
+> not ok 35 selftests: arm64: check_gcr_el1_cswitch # TIMEOUT 45 seconds
+> not ok 40 selftests: arm64: check_user_mem # TIMEOUT 45 seconds
+
+> and
+> https://lkft.validation.linaro.org/scheduler/job/5847406
+
+This appears to be the default timeout hard coded into the
+kselftest runner, though that limit appears to be configurable.
+Given that this report is for an emulated run on qemu rather than
+a physical system I'd suggest you should be configuring a larger
+limit, there does appear to be some support for that.
+
+I do note that your system appears to be unusually slow even for
+an emulated one, when I run sve-ptrace in qemu on my laptop I'm
+seeing it taking about 10s which is vastly faster than 45s.
+
+--bGEcD6Gx1CBrCGx+
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmN09rYACgkQJNaLcl1U
+h9AaNgf+Ls7sZ+OSIBRrmT9RrrhCfAXcmMlbJ58fqfLju+UDvU8V3Dm6PUTThung
+DahcdFgUD9MnSitri1qemCLUcgEJNMZDRx7Ew4zZr2WExuRg74xppGVFm1rQVi9a
+d8x/qQZ7FZ/JjSWB690tnrTNfY7CnSXA4esIYeRA3IgsAaB/c49N48N/sbpmojJ6
+gnfaMFVFvJUM7h8IRvGe5ADvlxIrLMI5ucP12PLCsGciLSn3buiX8FjgSZY6DzeR
+shj4NK3ndwmoc/7ZDkNt201FLm4VBjAh0Sj+tn7GHUY6MbAyNs0il5LZtZfo/ygL
+giV0KehyOcYGCnlcF1zzVt12nw8UxA==
+=OFyz
+-----END PGP SIGNATURE-----
+
+--bGEcD6Gx1CBrCGx+--
