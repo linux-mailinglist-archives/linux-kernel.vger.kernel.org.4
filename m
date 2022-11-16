@@ -2,127 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D5BC62B154
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 03:32:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3037F62B151
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 03:32:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231327AbiKPCcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 21:32:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47924 "EHLO
+        id S230288AbiKPCb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 21:31:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231184AbiKPCcI (ORCPT
+        with ESMTP id S230142AbiKPCbz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 21:32:08 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2068.outbound.protection.outlook.com [40.107.220.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D290729811;
-        Tue, 15 Nov 2022 18:32:06 -0800 (PST)
+        Tue, 15 Nov 2022 21:31:55 -0500
+Received: from EUR02-DB5-obe.outbound.protection.outlook.com (mail-db5eur02on2055.outbound.protection.outlook.com [40.107.249.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD0B29811
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 18:31:53 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HCD9smEeQo7vBSyyUfFRoxIHqSkBIJdEw7rRZLBcMxHj9q87fM3zHvirgllAmC3AMGROEV1AW3rbnVITAT55esDd/6jPXDnGSvKe0Z2csXgsMTu2pe4m+6EVMB/MwI+F93bZB2saHlRODoR5hUOnaiwtVkx3GiDCHkA2xu6mI7SYt2lX1ozJ7hT4wgeMJY1rlWcb/dOSGhzm4BmFwaXU1c1tGHrFlkUlBzLhAO/pGWzWxfXuJG1GaMzchetMLRzOQI2wZmssjnCuq2HtBaHLogf+L592pJ+PxIoKz1T9wCD5//+iRb2L/ZrmHSfpFNEhZkcCFm3gX60kUY6wHNDHSg==
+ b=NB58SEdA1Yv1yi1fKhevbcfhoSCtHLCQE+dlKTn2a9l3fg5byrJ5cq7lkBkRl2hRN4Y/IWzrpQoXaAFgH/g2SQcqLMn7KLcU5ih3R/ATx4TuyhK8HEDMft/SfjZDBJbuZ0l/s8G9IrqWbfX94WJgSf9AEh5QqK+3c5Eb247LM1ST6nOL8AKWfjCkmu9EqCnqLjTIGlKQj6lQ3VDR7c0y1h41lYt0mdt8L7Y0jYFrvymoAEIYwY6eqxiKEAl12E+9RVPbT9GjCpuCDH8/SAiXH4CDXglPnb6q7h9qHtUKVA1FDmdgj/m46KchkEsxLH/z45MRFPV+JN4zEhQcA7v5kw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=19Sd/HYVfRK/vOVxOW1CuJXiy+MU0JJyjrDDxzUrNOo=;
- b=mWJAqutMdf9ENzHoFs0GpLoYSG7j5u+9E4XTuWk9rkAGbiq5DC/JU0IiQHGn19cQVjtX1k4ftmWqnhkc+L65356SxkXShctZpCMWYn8MVrJCDLXAhY4GbsrJvJZTCRD7r/A2dmRck/a9E49iSiL9Z8UNsK5KqnuibV37U5i4xIG8iGtdkg02P78y8vq33OnlYZNvBnhFT95ZnurrmyaSoIztCY+RZLg4Z1EQNt8vyfnYRpp6nqq2Qi53kn4bv5FEA3rMUlgJ+mlgdMgsa7zqsOgyb4FHO2795rwZR680km6Ircv+ivsLvxJbbvTKYDO/sncTFj60pNA9pNyH76eV8A==
+ bh=juEKoyPwCFQLMcdl9Lu34KeIl7OHnXF3JTDWKFaiX3U=;
+ b=fIbc2Y29tHXsLEbkQS1mXPmPUC2oLjXeP58MNJR5tAepbWXqdc8PIyQIzTOSdzXiS7zU7zjMgU+jhyfel61PxOhCRYUXF+s+s0RpWbcJNdD5DIZ5fj5Zq/WNKkMuaK+obpELDA3/YjbvGO/paQFki2tYLQD+3IQ2Noi93pc+b8mwrc9MdSvK/ytIvn1wez7/S4iV9uIvYlxUyb7aFmXCPVV9AeZOeUhF5K8QakZKz/nGRuY5Qza98Nx9Hbfi/mhPfLDyyjztCwHXIT+EGTgSPW8HUl+Y330SmR8e7cfREBjuS9MHraRlnlmMuzIm4v9AmEDtO8bN2BEVEdHZCpwaTA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=19Sd/HYVfRK/vOVxOW1CuJXiy+MU0JJyjrDDxzUrNOo=;
- b=i7oSnaWdJuH41BUqblmRnxGftWTBp/BOhqJ4mSFMtuzqn6FMEOW0yp+QWO/4G1BlQoP2epjoO8Z6qXEn/jr6vrt93bsYQdTKQmtPBX6Jueztnrb02LPQMcRK5HP+9QVMFJKUiOaDZTFYwbtvFu6wLaFAu7bQjgzNS90jGrLPK28=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by MW5PR12MB5624.namprd12.prod.outlook.com (2603:10b6:303:19d::19) with
+ bh=juEKoyPwCFQLMcdl9Lu34KeIl7OHnXF3JTDWKFaiX3U=;
+ b=LnLs2psI0AWNa2tDeb5/Fanl/03GezbhSj5uQcs+mmWZZ8A+z5x0U8Fuf4ytRGAXGoCn9ENexmuyh6iEpZGMYtjean8Nx/4aWiKzYdml99FJygD/4ZQPWqjIRaE0ezCpTqCODV3P4IfpgUd1TTSbrp5DcjyuoG6bCMZaQRGTye0=
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by PA4PR04MB7535.eurprd04.prod.outlook.com (2603:10a6:102:e2::15) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.18; Wed, 16 Nov
- 2022 02:32:05 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::44a:a337:ac31:d657]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::44a:a337:ac31:d657%4]) with mapi id 15.20.5813.018; Wed, 16 Nov 2022
- 02:32:04 +0000
-Message-ID: <d2d5e368-abbf-e420-7027-27ba412251e7@amd.com>
-Date:   Tue, 15 Nov 2022 20:31:48 -0600
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v5] PCI/ACPI: PCI/ACPI: Validate devices with power
- resources support D3
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.13; Wed, 16 Nov
+ 2022 02:31:49 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::ac6c:bcb8:674c:35d0]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::ac6c:bcb8:674c:35d0%4]) with mapi id 15.20.5813.013; Wed, 16 Nov 2022
+ 02:31:49 +0000
+From:   Peng Fan <peng.fan@nxp.com>
+To:     Marco Felsch <m.felsch@pengutronix.de>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+CC:     "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: RE: [PATCH V5 07/12] arm64: dts: imx8mn-evk: update vdd_soc dvs
+ voltage
+Thread-Topic: [PATCH V5 07/12] arm64: dts: imx8mn-evk: update vdd_soc dvs
+ voltage
+Thread-Index: AQHY+NLkMsIJTWCTDE+Rd0hYrBnN864/wTKAgAETwlA=
+Date:   Wed, 16 Nov 2022 02:31:49 +0000
+Message-ID: <DU0PR04MB941782A4B6323FB9405808B588079@DU0PR04MB9417.eurprd04.prod.outlook.com>
+References: <20221115091709.2865997-1-peng.fan@oss.nxp.com>
+ <20221115091709.2865997-8-peng.fan@oss.nxp.com>
+ <20221115100251.7hwpnodgxzirgpw6@pengutronix.de>
+In-Reply-To: <20221115100251.7hwpnodgxzirgpw6@pengutronix.de>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Len Brown <lenb@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mehta Sanju <Sanju.Mehta@amd.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221116003739.GA1061657@bhelgaas>
-From:   "Limonciello, Mario" <mario.limonciello@amd.com>
-In-Reply-To: <20221116003739.GA1061657@bhelgaas>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BL1PR13CA0169.namprd13.prod.outlook.com
- (2603:10b6:208:2bd::24) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DU0PR04MB9417:EE_|PA4PR04MB7535:EE_
+x-ms-office365-filtering-correlation-id: ed43bd97-f14e-4b7e-74ec-08dac77ab718
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: guxdSY8RZWt/SPiEDCcP1VdPsqPExiHGu0SKbMxf9wvp8bJcybM/Z9Fzv7eipmMEWqvJq71gIn63RRNx6VvSY+2n5aVy2LC4QddGMBF08/LsGdkAR2r50TLMMovudmiNYMd56uCAoY8hZq/RVG84stWQz0nZRQQXedOwPW2gOnuIHINtdQ81Am71R9KPXSX5xawxLqvDK0wPP8WUnWco5T/00ChblYWbW65QfS2F/b0E6PteJjLp9T39BdwQdmoSrN1Hy3BnSEysA9wHwGY5SWZtFFLwkGvw10O6NE2HO8NxnSJ8AJo1oDWxr3toGjfbJEz1Lo6VMq+BbEDn8V2Md0oMV99j/alK+VfDp7j3be6FWev0vxPgh/FIINqv44UbmrO/umD0jk4eQid8e+4XawNFEDGk+MAhz8ydzjB1ziMTYbIVvnbFK3Rb1av2rLQGzAeSwUJrx4ddTAuTv7MV9oYJ4sb+n+RgmI0xAurR20BJGIOSbJyNx+1rL774e+fNHoe/B/r9PtXES5twcMEYahfCUDbRVj+OfXClfOPEHICgDrpUps7M+zzy1WFZf4kkxYEnfE/lcrk0mq2tOUk8fmcmLigr5xRGDDRn4BuK6q6sZqk7nSFf5LChrKPLPTTIyI8fUZs/JSVVTKUU1J3nklKNYkbmlYa8q7cDb4J64DqRK7TVZJ8zpfrHle/U9E13GuzEVdn+C01UKatPPEFot/iYAekvWjAfsmfLgZXLyVQnyh4/SNC6jO1RBBjlXRHXO9r5wGsceHHcbRe06WpAR1nkoS9PGbTRwXv7B1tIENk=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(366004)(376002)(39860400002)(346002)(451199015)(316002)(66476007)(2906002)(6506007)(66446008)(7696005)(26005)(66946007)(9686003)(54906003)(66556008)(71200400001)(110136005)(8676002)(4326008)(52536014)(8936002)(5660300002)(186003)(478600001)(15650500001)(76116006)(44832011)(41300700001)(64756008)(83380400001)(55016003)(86362001)(38070700005)(33656002)(122000001)(38100700002)(32563001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?tWGUR7++aULAmHU4vjXR/TaqW8EqlLnHy+5cSHvjo4fXtkTgcFudm+k0mBdS?=
+ =?us-ascii?Q?0R2rgl5+yG8QEffXvRRjuoWQEV95HT7zxSxNKhHVpyYuLdXc9ojywIvU/ulF?=
+ =?us-ascii?Q?S/ITVQ2QJNonH/4qdiw5IepSOrV/2WFnDtriwaUwwKkOITIUIh6sgJiT/OmQ?=
+ =?us-ascii?Q?4bYLTw8MpasUMwKkHJiGOpIx/KiD5hPY8hmeQmgk4oyZkSxrfJDVCDsWXbIO?=
+ =?us-ascii?Q?izz2FByksUB+/y1LslgMoCV0lbfPuaS35bMyFJpylEHhQUEvfQ0QXOQUdpie?=
+ =?us-ascii?Q?xZg69LEkv4C+a7UzzpgdrDr0HKsf4spEOtqTP8glECrX01pmEM9wpEqL8/KA?=
+ =?us-ascii?Q?qJsT4o7bwQX9yk2ueYrsGmab/23ClOyTxu0VBzGUqChM1TfO6so7fGQObVGO?=
+ =?us-ascii?Q?tqXcvYQaHtc2RLU70VVBI8VD3kA9zYFKMRFiaDwfkAMFlq4k8JqEZfqw68CT?=
+ =?us-ascii?Q?wRQwd/IwCtl6T14fS167JTGE9aenOYx/trva8QNCerlh7OvnzRHmypxioy1a?=
+ =?us-ascii?Q?DjwJftL1p00Q42toj+SX2LS0yOaiKd2dywoKyRw0QlfiDbe+LjfWS1T/sP5T?=
+ =?us-ascii?Q?oMMnD2TVy8gD6u5YbsM3aAwX0kouoePKV2cPowGKv2H3ANkYGN3KR9R3mPmv?=
+ =?us-ascii?Q?tWSfoLWglPqCqC6Je1yo+6iQZ8A/BezGJA7rTl9F1PDBLo8idZZMBm4gIsxJ?=
+ =?us-ascii?Q?6YCZT3ey0VANMYH3Ae72idMi+JgTeclL2zNJP0ZMp6okfdW+DPhAbP71xv7r?=
+ =?us-ascii?Q?ncAcyO9vU67NgKCxa4T93u47qn7a4lhNPHxZNCrPcRHIs+i0+1OiTh2klKlf?=
+ =?us-ascii?Q?7VikY9IAHDlDYIzfYiPRJGDG4QRENP8uxGZy49F5oo62aiRtTxHjCIzRC9kF?=
+ =?us-ascii?Q?2EQJ+IKOcwkqg6V+4xBzo9yANoF05D/Uo+HV4sQWM9FUynxUHlYwYTYNvXXJ?=
+ =?us-ascii?Q?LkPbV0jx/TD4aftFcEvAKp74ZVyEbxZA19lF8QN7Fm7hF7seTb2oNvntaSAM?=
+ =?us-ascii?Q?GViEVVPdtQtZngvpiQS4SpcCt5iywsK54eqod0IS1ddvzlVoXEat8+bO7gL0?=
+ =?us-ascii?Q?6JSZZ3At99avgpfe4+ToJB0PxW0w2VVzO2XE81fSKCHVgesAquOpHwGgs7ha?=
+ =?us-ascii?Q?3cEJrQLtSYWFQGom71Wlfk+g3OwsmsL3PpWm11W57u0h8MmfQinfX6lpkFIw?=
+ =?us-ascii?Q?ipRTdWdWwcuxfI97aeHrlR9CnJidnDu0dkjaPkMgktBU1k4MEqSbz0+tHpar?=
+ =?us-ascii?Q?642Fx4HLhOFEz02SyNughFTMr2Jn+veF+VUtTCuZdCy6CdE+NTv+tL7E9buH?=
+ =?us-ascii?Q?S4PUDIYzMfM5NI50DyypcVFXudK6qS6K6oBAlNkGGccpP7lKyP+IwC6YBlbH?=
+ =?us-ascii?Q?mI2gAqJUm2Dwgn+jt0teCvMJi2Y4+ZMOjGLwdg7dnlj71eXhon7orlPY9l25?=
+ =?us-ascii?Q?5/+LaCdoripD5L3Gy9hYARzdwWGRwmHgOrbLMJTyY/sOMjjxKyqQtRCfLVqV?=
+ =?us-ascii?Q?ksqGEl/aXuIUa7zCrnDX2UtDijM/5oGF22Yh7WFtlObYz/EMF/rdvP0OMGoh?=
+ =?us-ascii?Q?Lfwo9BN3GBMHaxigIxM=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|MW5PR12MB5624:EE_
-X-MS-Office365-Filtering-Correlation-Id: ac078a07-1627-4cd6-db4e-08dac77ab778
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2yilGFSbSB8clEpGkmY+vNPYz7GHNiKgncPPatdvVq1M0mLvsaGlFm9EmJzwHvEjzjwUbTbMxghwxSJTt7R1s9EL5MWN6d/cdqf+VQw1pP1ZNinMQztQrO2K1E9tXnx8O/qCNa/fUVZ87MMwILhI0Wab7VFzltp8vOQKhhYQ7x1cyTeAOcNDWAN2CQCg8ceTUx90Phbxoqxfk2GBUslvjEByS3yMLo1I2lUMjKnDbYay3jVgDf78Q445lvXCbqD4cTzE7uVn4CfOektsDZ/ETpZ/KOMMEwzuorroSOaBtBQ/cX/nBEk616uBoR/9HpCLPXpIjh2P5KlEPqfwg7nuQg+1PBk+brGX4/w3oCPh2mnTXmwjmoh7HUlzaC1k1ilrG9LeYpYx43vA1JzEIf5NXeFrLMVXy5fhFpYIKCbS00CXSIVUZIhxlxZ/hMB90B72PjDlovXVLLfDfBnYvrK+Rmd7N2GVoHxasP6tLQRrBw1nbGa3l59UszpeXVSpmMbSKcFqLIhAMVa31X/0XxDUDF7F9Zv/TlwPY9ruESMAEVsr143BaCviS7SAaXdHDUHcE1YYLYrl+003dQAPJcv0NYJDwjXf6KA4Kl08EOcQn/08kEJOrZuDmJ+XSYsEIzskqcdEnpGuU3AuMAQoAyn6+GSl/vIKWMKcxCKPlJwDzievwOekoD2G3jxgJ4HgWCnUfqa0BQI6HIkcrCFX99LuTG7YwAymTHUZeDceAvBeG06AgIJERn1jEki2KJSHXJ39BSdzPO6Tr22Gu6QI/NoUpg11nvx/qf8hERoCasOw0OamZx2HWLLvXI5+ls9IUKBc8rOIYSROQ5/t1Jsh2wneeg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(396003)(39860400002)(346002)(366004)(451199015)(316002)(6512007)(26005)(4326008)(66946007)(19627235002)(8676002)(66476007)(53546011)(66556008)(5660300002)(8936002)(186003)(2616005)(7416002)(41300700001)(36756003)(54906003)(110136005)(6506007)(2906002)(31696002)(86362001)(38100700002)(31686004)(478600001)(6486002)(966005)(6666004)(45080400002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZUhqT1MxbjZTaFpQQWNYb3cvWCs1NFNEUmVwSlU4NHpBZEt1d0FJWFp0UEFH?=
- =?utf-8?B?b1YrRyszNEJGM0loNWgzbzhsYy9xRUhIUFd1cW9kM1VabXVxenF4RDNQSmN0?=
- =?utf-8?B?dmlndmhMcGtBVXlGSGxDV2kwdjNLVHlmR2RaemlnOVFpVk4yb0JBWmNvejJY?=
- =?utf-8?B?MTlHRFdQYXFmVFZhaWVROFVjY3ZjSnAwdTMraGs3Y3VlbG1abm5Kb2dYcVB1?=
- =?utf-8?B?TVp0WFZFMXhhZDdUR09nQ210VWU2OHNJZHBaQkdHS0FFRkhOQm5STHlnbXB4?=
- =?utf-8?B?Y1JiTG5OdkM1dHZYU2ljVVA5OXQwcVdsQ21HVzF3TUZnc1d4OFNGN1NrWWg4?=
- =?utf-8?B?VXdOaTRRUSs1UEgwcHplYzA3RDA1TThDb3FjaGx1ZUtWTlQ3WjVDeDNrME4r?=
- =?utf-8?B?Mk54cVA3RVBKU2xkRUdTbE43YWlNL3FIK0RFMmh1ajVPbEhKUTBtaGJYYVlt?=
- =?utf-8?B?QXduck13MDFVcDl5TUd6TTIyOEpXaGtDRVVibVRWcnhZSngvNktzTFBPVVlu?=
- =?utf-8?B?UHpnVFQzWjlKWnJOSHk0TVBNd0RuY0hCbExsakVaMnR0WVR3Zm4rVWRCY3RJ?=
- =?utf-8?B?dmhyR3F4TmtIZTVBTlF4NXFvWkUvZ2hodTI5ZTd3RWhYbVZXQjVOWk1xNlE1?=
- =?utf-8?B?ak9XdXNlUzZXT24ycFNBeTh1QlA3bTZlc0pHdDJ5Z3Q0dmFiOENBTHB4QmtL?=
- =?utf-8?B?c0VjTzZvK3g0aVFyNHVWdVhiSWNUNnFzczNiZ1dDbm51YkJUMUxuUy9HM3FC?=
- =?utf-8?B?Z0M0UmFZblAvdDFUTFZoeElLZ1JUZlcwOWczc0VyeTk5aW1FUzd1V3ZVQ3BT?=
- =?utf-8?B?allwSzRMYzBjT2dTOWs5L1BsdlR1Yzh3U0V6R0RZaElRakxiWmQ1c2N6aUt5?=
- =?utf-8?B?QXc4Sm1qbW1keDdCUVUwelZOU1hLV3ZQZXVwbHdYMk1oaS9VMlVDTUJ3WkVC?=
- =?utf-8?B?aUdDREQ5ZzAzQUJuQmh6dTV4ZSs0eFBHMjJYcUVZYytCbWlmejhzUkZxYlN3?=
- =?utf-8?B?ZTNaeS9JTXFhc2ovb1dUSGZ3UUNQTDFWRyswMzNMTDc0NDRMOHl1c1p1SDFL?=
- =?utf-8?B?c1MrdlZvekVUNmVKbk1ZZk9aM2lKYlZ3Y0xnd3VVcm1JLzFCbUtGT1ZpSEdK?=
- =?utf-8?B?UFZJWk85dTNCTDN0dGxMcjJra1JvVmlKZWlXZ3NVSWRReEwwU0NvZ0JZTVAv?=
- =?utf-8?B?bGh5WVo1NVdwRWxpSXpqdi9FTVZTdjdzdFM0eUo2MHYrU3BSUXYzem5PRGVi?=
- =?utf-8?B?ZDI4OUo3U1VZdUo2RllGUlpmM3kxcGpKb3M1NTNjamlsOGhjOVpYZEp2aVFO?=
- =?utf-8?B?NUpqMGhFQWVmbzYyeXJZTUlxY2RzbHl6NGNBTUd2b3FWV3EyMHAxV0czR04y?=
- =?utf-8?B?Smo0NWZoSzFvUTdZUGlvZ3dkVG12VVl2clh3VHNBUENJek42RVdWcFNiUjB2?=
- =?utf-8?B?OXYrYXM4VWdZQ3lmZ09TZVZHbFliRzAwTCtId1VPODhtOVY3S05pNnRVMUpV?=
- =?utf-8?B?Y3RLSG1NU044ckcyYVZVMGhCTTlBeTFoYkV0TytqZ3VnL1poTTZFN3BFdTdw?=
- =?utf-8?B?c3hXM2NQTTYrTUJrdkgvVWZmYnd5ZnltM2Y4SjVWeHM3TTNYSFJ3UVpNZjFZ?=
- =?utf-8?B?ellzcDg1UHE0ek1SdC9TRXdmb2llSzFkRFIxYVU0a1I2a1ZFSUZ1TnRKQ2Er?=
- =?utf-8?B?cTJuRC9DY28xVUEwQUQvQ202cnRYdTRlKzZFQnlzTWJtZjZ5NExVaVRBMGJF?=
- =?utf-8?B?bVg2eHhJRjVIVTA3SlF1azhnbG1FUDFZUHUxWU1TK3NIbzd6UXhLRXZ2NXQ3?=
- =?utf-8?B?MHdvRWQ4NktqRzdScGluRWdteFZVMzJQdVFCM2ROZmpxSHQ1aTM5NnBmbHRT?=
- =?utf-8?B?dHVXNGZ0VHhUYitINnhVbjNQci9lTXZHazZLeCtpTURkU0FhQWpCLzR3L25B?=
- =?utf-8?B?dUwxdkVaazhrcng1MmdueVJCUTJZWkJhNEJRd2xvcUhUQ2V4NTFTNzJsZG8v?=
- =?utf-8?B?dzd1WUhiUFBGWi9qcFFVZmVaU3d6bVZHSVhOZ3dGTk0vVWtRb2JoWHhyK3Zz?=
- =?utf-8?B?bmhjS3QwdVkxM0EyelZQZjVWeTJHNzNBeHZHYmp5dmcwVG1SSnJ1NGdUQ2Nq?=
- =?utf-8?Q?MQNz0sC64hmWVLDdxEHJxibF2?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ac078a07-1627-4cd6-db4e-08dac77ab778
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Nov 2022 02:32:04.8538
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ed43bd97-f14e-4b7e-74ec-08dac77ab718
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Nov 2022 02:31:49.7492
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Wk9AiP6NjivgY936wftxxLFGOtQThPVA//0bgJ2w0qmyp80L4sVo6RD7KV8VqiaAhU0ea63LlqsUxtG4FXDHIg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR12MB5624
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: jMdyVmhINwZYiWbsg7TuWxEr6S8QZEpFCNq42r9OG+RWBPzV0QI8be+lZSYk/BJCHYr8AgM+a3zhEUXi9D87PA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7535
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -131,61 +126,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/15/2022 18:37, Bjorn Helgaas wrote:
-> On Mon, Nov 14, 2022 at 04:33:52PM +0100, Rafael J. Wysocki wrote:
->> On Fri, Nov 11, 2022 at 10:42 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->>>
->>> On Fri, Nov 11, 2022 at 12:58:28PM -0600, Limonciello, Mario wrote:
->>>> On 11/11/2022 11:41, Bjorn Helgaas wrote:
->>>>> On Mon, Oct 31, 2022 at 05:33:55PM -0500, Mario Limonciello wrote:
->>>>>> Firmware typically advertises that ACPI devices that represent PCIe
->>>>>> devices can support D3 by a combination of the value returned by
->>>>>> _S0W as well as the HotPlugSupportInD3 _DSD [1].
->>>>>>
->>>>>> `acpi_pci_bridge_d3` looks for this combination but also contains
->>>>>> an assumption that if an ACPI device contains power resources the PCIe
->>>>>> device it's associated with can support D3.  This was introduced
->>>>>> from commit c6e331312ebf ("PCI/ACPI: Whitelist hotplug ports for
->>>>>> D3 if power managed by ACPI").
->>>>>>
->>>>>> Some firmware configurations for "AMD Pink Sardine" do not support
->>>>>> wake from D3 in _S0W for the ACPI device representing the PCIe root
->>>>>> port used for tunneling. The PCIe device will still be opted into
->>>>>> runtime PM in the kernel [2] because of the logic within
->>>>>> `acpi_pci_bridge_d3`. This currently happens because the ACPI
->>>>>> device contains power resources.
->>>
->>> Wait.  Is this as simple as just recognizing that:
->>>
->>>    _PS0 means the OS has a knob to put the device in D0, but it doesn't
->>>    mean the device can wake itself from a low-power state.  The OS has
->>>    to use _S0W to learn the device's ability to wake itself.
->>
->> It is.
-> 
-> Now I'm confused again about what "HotPlugSupportInD3" means.  The MS
-> web page [1] says it identifies Root Ports capable of handling hot
-> plug events while in D3.  That sounds kind of related to _S0W: If _S0W
-> says "I can wake myself from D3hot and D3cold", how is that different
-> from "I can handle hotplug events in D3"?
+> Subject: Re: [PATCH V5 07/12] arm64: dts: imx8mn-evk: update vdd_soc dvs
+> voltage
+>=20
+> Hi Peng,
+>=20
+> On 22-11-15, Peng Fan (OSS) wrote:
+> > From: Peng Fan <peng.fan@nxp.com>
+> >
+> > Per schematic, BUCK1 is for VDD_SOC&DRAM&PU_0V9. The
+> > nxp,dvs-run-voltage and nxp,dvs-standby-voltage need set for BUCK1, not
+> BUCK2.
+> > BUCK2 is for A53, which is handled by DVFS, so no need dvs property.
+> >
+> > Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> > ---
+> >  arch/arm64/boot/dts/freescale/imx8mn-evk.dts | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/arch/arm64/boot/dts/freescale/imx8mn-evk.dts
+> > b/arch/arm64/boot/dts/freescale/imx8mn-evk.dts
+> > index 4eb467df5ba7..a5a7d74ec1d5 100644
+> > --- a/arch/arm64/boot/dts/freescale/imx8mn-evk.dts
+> > +++ b/arch/arm64/boot/dts/freescale/imx8mn-evk.dts
+> > @@ -47,6 +47,8 @@ buck1: BUCK1{
+> >  				regulator-boot-on;
+> >  				regulator-always-on;
+> >  				regulator-ramp-delay =3D <3125>;
+> > +				nxp,dvs-run-voltage =3D <950000>;
+>=20
+> One last question on this. According the schematic the max should be
+> 0.88/0.945V and you are going to set it to 0.950V.
 
+No, my schematic shows the TYP voltage is 0.85/0.95V.
+>=20
+> According the driver the nxp,dvs-run-voltage is just the same as the norm=
+al
+> regulator voltage. So I would suggest to just use the nxp,dvs-standby-
+> voltage property to enable the DVS feature since the run voltage is alrea=
+dy
+> handled by the regulator-min-microvolt/regulator-max-microvolt. So it
+> would be just:
+It should be fine to not set nxp,dvs-run-voltage, because bootloader alread=
+y
+set that.
 
-It's impossible to know for sure the logic in Windows, but from all the 
-discussion and patches that have flowed related to it my inference is 
-the logic for Windows must only examine and use the "HotPlugSupportInD3" 
-property if the device also has _S0W.
-
-> 
-> This patch says that if dev's Root Port has "HotPlugSupportInD3", we
-> don't need _PS0 or _PR0 for dev.  I guess that must be true, because
-> previously the fact that we checked for "HotPlugSupportInD3" meant the
-> device did NOT have _PS0 or _PR0.
-> 
-
-A lot of this confusion and this patch of mine stem from c6e331312ebfb 
-being too broad to start out with IMO.  Wouldn't it have made more sense 
-to only match and allowlist that specific topology combination (dGPU 
-connected to hotplug port and missing those properties)?
-
-> [1] https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flearn.microsoft.com%2Fen-us%2Fwindows-hardware%2Fdrivers%2Fpci%2Fdsd-for-pcie-root-ports%23identifying-pcie-root-ports-supporting-hot-plug-in-d3&amp;data=05%7C01%7Cmario.limonciello%40amd.com%7Cc883ba6351534df445f408dac76ac5e5%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638041558659543898%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=5Qv3wUYB%2FXJhbeu%2Fh3A0swvgRaB8afjyEYzu9SpHK%2Bo%3D&amp;reserved=0
-
+Thanks,
+Peng.
+>=20
+> > +				nxp,dvs-standby-voltage =3D <750000>;
+>=20
+> Regards,
+>   Marco
+>=20
+> >  			};
+> >
+> >  			buck2: BUCK2 {
+> > @@ -56,8 +58,6 @@ buck2: BUCK2 {
+> >  				regulator-boot-on;
+> >  				regulator-always-on;
+> >  				regulator-ramp-delay =3D <3125>;
+> > -				nxp,dvs-run-voltage =3D <950000>;
+> > -				nxp,dvs-standby-voltage =3D <850000>;
+> >  			};
+> >
+> >  			buck4: BUCK4{
+> > --
+> > 2.37.1
+> >
+> >
+> >
