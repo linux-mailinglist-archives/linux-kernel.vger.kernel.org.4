@@ -2,70 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B14CA62CCFA
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 22:49:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60A4162CD06
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 22:49:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234852AbiKPVtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 16:49:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51296 "EHLO
+        id S238294AbiKPVtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 16:49:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234379AbiKPVtS (ORCPT
+        with ESMTP id S238577AbiKPVtV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 16:49:18 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8692427B0A
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 13:48:35 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id k7so17676445pll.6
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 13:48:35 -0800 (PST)
+        Wed, 16 Nov 2022 16:49:21 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE1B623B3;
+        Wed, 16 Nov 2022 13:48:46 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id f27so450871eje.1;
+        Wed, 16 Nov 2022 13:48:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bLDVzacsp5WUVnn/fUxAK3n5BZ6pZUKtQ8LTVvJ8eu4=;
-        b=cb58RpNMwEz6ZoBaRnpesyUZGx3Ix6kEKUp+mwPXcZUnfwcHlbPCFKw5VrP4jWPtbn
-         aTfXfgsYb3fhCpOMSNk2218Ontd8Z1HodFvP4KlBDysmOS4Md6j8y//Qs1ri7g0Ej0kC
-         l+xbe+MTHBn25DMAzr1bXE3835j1eDdf4LLPdOIzqlXELXO5vAfkPGVXwMb6b3iU04OQ
-         gNXXttgafiNIEUrux/XLlJ6AhE5M16Tc21wTlyKa+MgXVxNGUrHFPph7gzXlrCsb08YC
-         yw1j2LXZDOaKrDju09Hf2W+FJGPE5KZUropkv8Zwr0nvp3kwUVmNKvt5q/boh7JYbNAp
-         Zd5g==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4IVGXMtPYSMA+UPtByWaNjM4ICyi94eVWXqaBEQoY40=;
+        b=QUQHMkopSuXeB2TzlkJM9ohIeMlxgnTox/jLzWwWhgsxVzj4Wz7gXr3r3uqFbj2HwU
+         cZLAxzpF4VQK6ABEdtyQGJDsNCmoRTnDFk++cWa7dtprGufW2d27O18CjzQWaryNsFut
+         R0xVsc8Q34X29Rv8QEilFa7VBgzWffAsjRpvNCgmYKGvd9FqIrwNe8efHS0aDRgXWaq0
+         hq1ISQhVigLh1y3i0C5LIIKtzvwfwoV6khOeHyey/e1phgT57IhhBFN5JLRVIqB7zIzm
+         sHHMMq+1ZDY1wIRkXttT3Jm23Ib7ZzcPgQOlJlCxrGLEjOVY0M5SWi2V5IVwYf4n9HcK
+         oHFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=bLDVzacsp5WUVnn/fUxAK3n5BZ6pZUKtQ8LTVvJ8eu4=;
-        b=w86hykjx2nHXyubJuy+n/+zAyyWIPs88na7T0ZB6rV3VPjM54zSoDkKz8DWIt1ZF4y
-         Yui3H0CoaLsQbYQXt3UvTAA3DQgz9y7RdCJiUr/QZes1M5lDwHobyPu5NmFADPzEbTkr
-         U0G1U0PUN17YmKoKSthJUM3QJFebUkrfvso9zDNuEgy4YfA2hP2cjFHGy4MHy9CfoXL6
-         6E06paNvA7/hzEUCaQoQ5nxdYy3FsJIMKGPvlEmPEjllL88WSPxVq5MQ2DtjST7NR2dW
-         qwTF1Hdmm9wqPtRosg49VlIKgu/f2UK/38qz9HJWz5lo54x87VM/Qbie7bIx2ud6M3pg
-         PZng==
-X-Gm-Message-State: ANoB5pkOr80rvFLdIS+Fcl3i50nn30V8s4rc/7uPUvz97K+3hfb+Cw+Q
-        LT9vFZX0hJkWE5AoNYL19a6yJvPg0Brg1A==
-X-Google-Smtp-Source: AA0mqf4mJDrqKOCVXdv6icsZVqfuN6+g5yOMMyUYoWuDMP1SflKJVDIsdApXgd+ULVBTe0ruYY5fBA==
-X-Received: by 2002:a17:902:6a8c:b0:188:b840:deec with SMTP id n12-20020a1709026a8c00b00188b840deecmr11044412plk.15.1668635314939;
-        Wed, 16 Nov 2022 13:48:34 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id c1-20020a170902d48100b00178a9b193cfsm12910372plg.140.2022.11.16.13.48.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 13:48:34 -0800 (PST)
-Message-ID: <fe18ed06-12f1-1dcb-71ee-aec5a5d656ea@gmail.com>
-Date:   Wed, 16 Nov 2022 13:48:28 -0800
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4IVGXMtPYSMA+UPtByWaNjM4ICyi94eVWXqaBEQoY40=;
+        b=xb1Wtcx4qkB+g+WrSxXIleqgJ+SmK0WMpyYJYw0vAcO5II/YkrZPDxZHX4eGj/Xixe
+         cv2BUnYKpZSYWUPRdBeIe2SomlCY+t0P/iZvw9hrJUCKFtz8wkezqtNrrxtXMFfs3nq6
+         TMXgHBgeoiR84ATE+oLaPWNw0UkHofFWic6iDA3F2MK54xbps6Ir+0t00E/W1LFfiRmB
+         rldlExddD/urHOQ+IXmf97w0ymKfV2lAdut0StuwNNwX2xnuf/BW2rWH4tK0fZDP5Dyk
+         06UyZKJtp/BAx18hY1ddBBJ9TBAuIDikirr0F0FX6F6HUrEyPcSgYQ6rhuVKsNPa+/p0
+         1wEQ==
+X-Gm-Message-State: ANoB5pnRAyZUrld9h0mjiNycy1KdoO7AsMp/LEresfFTCNLnN0T2Y4qD
+        wYAK6GQd3J2/gEvQuJdfu5A=
+X-Google-Smtp-Source: AA0mqf4gmyDBFFr9+aiyhdhMvqgDms3n+9Y48UvNXNTuI4hNYWAln/gD0HZjt6jh2xsE5DAvH5XgAA==
+X-Received: by 2002:a17:906:7f92:b0:78d:4e5b:ffaa with SMTP id f18-20020a1709067f9200b0078d4e5bffaamr18365714ejr.455.1668635324556;
+        Wed, 16 Nov 2022 13:48:44 -0800 (PST)
+Received: from fedora.. (dh207-99-145.xnet.hr. [88.207.99.145])
+        by smtp.googlemail.com with ESMTPSA id b14-20020aa7dc0e000000b00462e1d8e914sm7931341edu.68.2022.11.16.13.48.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 13:48:44 -0800 (PST)
+From:   Robert Marko <robimarko@gmail.com>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        bhelgaas@google.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mani@kernel.org,
+        lpieralisi@kernel.org, kw@linux.com, svarbanov@mm-sol.com,
+        shawn.guo@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Robert Marko <robimarko@gmail.com>
+Subject: [PATCH 1/9] arm64: dts: qcom: ipq8074: fix Gen2 PCIe QMP PHY
+Date:   Wed, 16 Nov 2022 22:48:33 +0100
+Message-Id: <20221116214841.1116735-1-robimarko@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Subject: Re: kbuild: check the minimum compiler version in Kconfig
-Cc:     Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Nathan Chancellor <natechancellor@gmail.com>, ojeda@kernel.org,
-        sedat.dilek@gmail.com
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -76,52 +74,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Masahiro, Nick,
+Serdes register space sizes are incorrect, update them to match the
+actual sizes from downstream QCA 5.4 kernel.
 
-The compiler version check performed with 
-aec6c60a01d3a3170242d6a99372a388e1136dc6 ("kbuild: check the minimum 
-compiler version in Kconfig") can be defeated and prevent running the 
-*config targets if specifying LLVM=1 on the command line, in that way:
+Fixes: 942bcd33ed45 ("arm64: dts: qcom: Fix IPQ8074 PCIe PHY nodes")
+Signed-off-by: Robert Marko <robimarko@gmail.com>
+---
+ arch/arm64/boot/dts/qcom/ipq8074.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-BR_BINARIES_DIR=/local/users/fainelli/buildroot-llvm/output/arm64/images 
-LLVM=1 LLVM_IAS=1 PKG_CONFIG_PATH="" /usr/bin/make -j49 -C 
-/local/users/fainelli/buildroot-llvm/output/arm64/build/linux-custom 
-HOSTCC="/usr/bin/gcc" 
-HOSTCC="/local/users/fainelli/buildroot-llvm/output/arm64/host/bin/ccache 
-/usr/bin/gcc -O2 
--I/local/users/fainelli/buildroot-llvm/output/arm64/host/include 
--DNDEBUG -L/local/users/fainelli/buildroot-llvm/output/arm64/host/lib 
--Wl,-rpath,/local/users/fainelli/buildroot-llvm/output/arm64/host/lib" 
-ARCH=arm64 
-INSTALL_MOD_PATH=/local/users/fainelli/buildroot-llvm/output/arm64/target 
-CROSS_COMPILE="/local/users/fainelli/buildroot-llvm/output/arm64/host/bin/aarch64-linux-" 
-WERROR=0 
-DEPMOD=/local/users/fainelli/buildroot-llvm/output/arm64/host/sbin/depmod 
-INSTALL_MOD_STRIP=1 HOSTCC="/usr/bin/gcc" menuconfig
-   UPD     scripts/kconfig/mconf-cfg
-   HOSTCC  scripts/kconfig/mconf.o
-   HOSTCC  scripts/kconfig/lxdialog/checklist.o
-   HOSTCC  scripts/kconfig/lxdialog/inputbox.o
-   HOSTCC  scripts/kconfig/lxdialog/menubox.o
-   HOSTCC  scripts/kconfig/lxdialog/textbox.o
-   HOSTCC  scripts/kconfig/lxdialog/util.o
-   HOSTCC  scripts/kconfig/lxdialog/yesno.o
-   HOSTLD  scripts/kconfig/mconf
-***
-*** Compiler is too old.
-***   Your Clang version:    10.0.0
-***   Minimum Clang version: 10.0.1
-***
-scripts/Kconfig.include:44: Sorry, this compiler is not supported.
-
-Here, the compiler check is actually checking the host compiler clang 
-version installed on my Ubuntu 20.04 system, as opposed to the cross 
-compiler clang version that is being used.
-
-It is not clear to me how to best address that, short of not specifying 
-LLVM=1 on the kernel *config targets, but IMHO there is still an actual 
-issue where we do not check the compiler that we would want to check.
-
-Thanks!
+diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+index 4b4cd3eaf6c8..6649a758d8df 100644
+--- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
++++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+@@ -277,9 +277,9 @@ pcie_qmp1: phy@8e000 {
+ 			status = "disabled";
+ 
+ 			pcie_phy1: phy@8e200 {
+-				reg = <0x8e200 0x16c>,
++				reg = <0x8e200 0x130>,
+ 				      <0x8e400 0x200>,
+-				      <0x8e800 0x4f4>;
++				      <0x8e800 0x1f8>;
+ 				#phy-cells = <0>;
+ 				#clock-cells = <0>;
+ 				clocks = <&gcc GCC_PCIE1_PIPE_CLK>;
 -- 
-Florian
+2.38.1
+
