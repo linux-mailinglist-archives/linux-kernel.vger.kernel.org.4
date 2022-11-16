@@ -2,77 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B42262BFC5
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 14:42:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A164B62BFD1
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 14:43:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232974AbiKPNlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 08:41:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54546 "EHLO
+        id S238660AbiKPNnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 08:43:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237884AbiKPNll (ORCPT
+        with ESMTP id S233130AbiKPNmw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 08:41:41 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ACF81E3FC;
-        Wed, 16 Nov 2022 05:41:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=tdYQjrHuPTnZ+b2rbFm8ma7ka8KQeTwqY1MzgMyZJek=; b=eGp+bnP82D3YVfldKwUDMhxqhd
-        KXuhDF/g7fPDia59s5hS5ObQl9hrwD80Z86dhKTO/h4XdtBXYuDSgoCAwXbefnV5NmiKKr/iVFvJe
-        oN4SrJFs2DbHFqX9CoOCM6LsdUK6ZRhqFRnNy5rp5Zt3eZoXnBF6S11Tq1pRo1uiqdvU=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1ovIfW-002ZUr-HD; Wed, 16 Nov 2022 14:41:34 +0100
-Date:   Wed, 16 Nov 2022 14:41:34 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] net: dsa: use NET_NAME_PREDICTABLE for user ports
- with name given in DT
-Message-ID: <Y3TojrwSOlDxl3Gc@lunn.ch>
-References: <20221115074356.998747-1-linux@rasmusvillemoes.dk>
- <20221116105205.1127843-1-linux@rasmusvillemoes.dk>
- <20221116105205.1127843-3-linux@rasmusvillemoes.dk>
+        Wed, 16 Nov 2022 08:42:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F6E1E3FC
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 05:41:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668606113;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Hthprm1ypSC4H9RqIYyAtXvnaUxVWoTWmoLjvcjOG60=;
+        b=CGWZq7lEj1Ygr7kTa4/yIczxGXBa5kiigPxUBk/WB9syRbal4KqMwN4JWxjrdCiXinYYyB
+        4lx1LY3mcuTilEtrqqEnNHWgkDmXFkzmZG62zC5U6aY8Jh847s/eaasxouVzLRlp/YKmX4
+        INMNOLzkKViEa8vS3v2o4CRLeg8tKZo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-529-OEYROdlKO_qh-fNyr-TMBw-1; Wed, 16 Nov 2022 08:41:46 -0500
+X-MC-Unique: OEYROdlKO_qh-fNyr-TMBw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B0D6A101CC6D;
+        Wed, 16 Nov 2022 13:41:45 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 723EE140EBF3;
+        Wed, 16 Nov 2022 13:41:44 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <2b595b62f6ecd28298a860fcdc5b4941dcafd9eb.camel@kernel.org>
+References: <2b595b62f6ecd28298a860fcdc5b4941dcafd9eb.camel@kernel.org> <20221116104502.107431-1-jefflexu@linux.alibaba.com> <20221116104502.107431-2-jefflexu@linux.alibaba.com>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     dhowells@redhat.com, Jingbo Xu <jefflexu@linux.alibaba.com>,
+        xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        linux-cachefs@redhat.com, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] fscache,cachefiles: add prepare_ondemand_read() callback
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221116105205.1127843-3-linux@rasmusvillemoes.dk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2968418.1668606101.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Wed, 16 Nov 2022 13:41:41 +0000
+Message-ID: <2968419.1668606101@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 11:52:03AM +0100, Rasmus Villemoes wrote:
-> When a user port has a label in device tree, the corresponding
-> netdevice is, to quote include/uapi/linux/netdevice.h, "predictably
-> named by the kernel". This is also explicitly one of the intended use
-> cases for NET_NAME_PREDICTABLE, quoting 685343fc3ba6 ("net: add
-> name_assign_type netdev attribute"):
-> 
->   NET_NAME_PREDICTABLE:
->     The ifname has been assigned by the kernel in a predictable way
->     [...] Examples include [...] and names deduced from hardware
->     properties (including being given explicitly by the firmware).
-> 
-> Expose that information properly for the benefit of userspace tools
-> that make decisions based on the name_assign_type attribute,
-> e.g. a systemd-udev rule with "kernel" in NamePolicy.
-> 
-> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Jeff Layton <jlayton@kernel.org> wrote:
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+> > +static enum netfs_io_source cachefiles_do_prepare_read(struct netfs_c=
+ache_resources *cres,
+> > +					loff_t *_start, size_t *_len,
+> > +					unsigned long *_flags, loff_t i_size)
+>
+> _start is never changed, so it should be passed by value instead of by
+> pointer.
 
-    Andrew
+Hmmm.  The intention was that the start pointer should be able to be moved
+backwards by the cache - but that's not necessary in ->prepare_read() and
+->expand_readahead() is provided for that now.  So yes, the start pointer
+shouldn't get changed at this point.
+
+> I'd also reverse the position of the arguments for _flags and i_size.
+> Otherwise, the CPU/compiler have to shuffle things around more in
+> cachefiles_prepare_ondemand_read before they call this.
+
+Better to pass the flags in and then ignore them.  That way it can tail ca=
+ll,
+or just call cachefiles_do_prepare_read() directly from erofs.  If you're
+going to have a wrapper, then you might be just as well create a
+netfs_io_subrequest struct on the stack.
+
+David
+
