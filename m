@@ -2,89 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E5A262B64A
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:20:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F205F62B651
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:20:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233545AbiKPJUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 04:20:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42876 "EHLO
+        id S232981AbiKPJUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 04:20:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233506AbiKPJT5 (ORCPT
+        with ESMTP id S233392AbiKPJUm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 04:19:57 -0500
-Received: from mail-vk1-xa33.google.com (mail-vk1-xa33.google.com [IPv6:2607:f8b0:4864:20::a33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82233264AE
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:19:55 -0800 (PST)
-Received: by mail-vk1-xa33.google.com with SMTP id g26so7923654vkm.12
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:19:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=BUN7/4LmlekQxxQ0sXdskXPaxAf94LKcc0d3rUx3r1s=;
-        b=ollJLf1Jg84MwsEVRPIA1MT5NBd3ypjsOlaGQ207JHRbhdjzkHoFfiQx92AWNggo2V
-         QgMGD1QD4VAQBMRj8H5/VYcEydoicYj1Xs9a6N+NfrJ0mwFD5FRbbKdoaGnEwpMS5iMb
-         fzIIrztJL6OSYXKV/GqjONxsR2UW77qeGrMlXPMloN1WRJHEoXg2NPDXEZN/uIJ9145F
-         Al5uQWpW0TciAT0ts4kI8t3E94rjOqkJPS1TWj55VoxR6ODuMy3vPj7viBjy/CakP+AP
-         rTwg1VUwGcGjyQ840KTq/qXQiVAyFWXw7Wo+bXX5hhtWZr2AZfI6bFsLWhAKHzS6HgkI
-         D9kA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BUN7/4LmlekQxxQ0sXdskXPaxAf94LKcc0d3rUx3r1s=;
-        b=VRrjojQir4ztzvOddOGlt2cJkhXipy66JIScWYhr9dV0KIgK5zlRRAEFRxQyxD3W+Z
-         gF+k5DCvHiRatKbbVMPKuaZF79ZfOksrHn905KKzqjImdweP4QLG4kjk5ddzxY7neTa2
-         qyUCKY7Re9uTHoIsIKnRydnQGmTs+aZku92oc7rieAYahz7zrd6J0SXQvGCugMKf3hLU
-         DfkwOBvm4idvAPiZPZnD64VI81r8NXB2fdISBt8SCpcnMzm8oNCr9wUPvE9xdY/cM5YJ
-         bPMHpLOJQ58Gr11AdHvAjS2z8qD2It+v8fuqOogTHcCjbFVEubN5w/5rGqdJ4WgmTWtG
-         Ktsg==
-X-Gm-Message-State: ANoB5plML8XZao8R+epuX84HYwJiy8yAp/q6P4HgvtboXrj/wujczSEG
-        LBMdhxxhMOvd65LqSug9rSIE4Up6cd4JtAuH6eBilg==
-X-Google-Smtp-Source: AA0mqf7+38km0i0PCChmHH1AegbkOQf6ZutAJR2EMP69gRCuIpgWSEbF2mCWmGSmCboGG1wAk2yrP6aQ8HZB1Ou4rGc=
-X-Received: by 2002:a05:6122:2209:b0:3b7:3aca:9868 with SMTP id
- bb9-20020a056122220900b003b73aca9868mr11918281vkb.33.1668590394633; Wed, 16
- Nov 2022 01:19:54 -0800 (PST)
+        Wed, 16 Nov 2022 04:20:42 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3980626127;
+        Wed, 16 Nov 2022 01:20:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1668590441; x=1700126441;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PBvpl/LIIC4KatBxSf7OTdZHj1uA/ufQHvck22uMENM=;
+  b=pp+TfWhU2y+NWgdhKx3W2JYDDrJjYKZ3o5XKcybHLDZGQ89pHSrveuYn
+   wDqcKvAsofQI4Ha+X667Jj8DWXJY6OaaBDX78mU5KeRb1X69XWKgr9nz5
+   myboTlvLj6jiIOSlBMpFOEsY4wfLwFkiiZIbD//MyDfSaK0wQGsK4gIjH
+   guIsAdPKjorSQG6lcLRb+aqPMTrd+FUErV5xlg5P2oG+ojrhRxZgFA/wC
+   qd5pxC2d6RPKNdHWw8c8TedpVXTOx05dkkZnMQtz4jyePCRP5kRupYeBJ
+   SogEwuvzYsUYXXgrT8HBtr8z8YREgqzzfczu89Ru00+k0qkS+v1UICsTg
+   A==;
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="123666759"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Nov 2022 02:20:40 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 16 Nov 2022 02:20:40 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
+ Transport; Wed, 16 Nov 2022 02:20:37 -0700
+Date:   Wed, 16 Nov 2022 09:20:20 +0000
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     Conor Dooley <conor@kernel.org>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+Subject: Re: [PATCH 4/9] dt-bindings: Add RISC-V incoming MSI controller
+ bindings
+Message-ID: <Y3SrVMYjkWEx4wYw@wendy>
+References: <20221111044207.1478350-1-apatel@ventanamicro.com>
+ <20221111044207.1478350-5-apatel@ventanamicro.com>
+ <Y3EDuaW0zQSSfiQ/@spud>
+ <CAK9=C2WDQCnVnxKR6SFspdwope2KffyASLJDF_Ygo_417ekJ5w@mail.gmail.com>
+ <Y3QT5Vy3RnIXobHz@spud>
+ <3037b4f9-268d-df03-380c-393a5d01f3ba@linaro.org>
 MIME-Version: 1.0
-References: <20221114202943.2389489-1-bmasney@redhat.com> <7420da17-d6d6-10e6-c87e-d3dc37d17ffb@linaro.org>
- <CAKXuJqgckbmikXwFi0g3P3Db5jvyst+xhQBcPoV7mA2XStVVzA@mail.gmail.com>
-In-Reply-To: <CAKXuJqgckbmikXwFi0g3P3Db5jvyst+xhQBcPoV7mA2XStVVzA@mail.gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Wed, 16 Nov 2022 10:19:43 +0100
-Message-ID: <CAMRc=McxHpm98eeq3jBdVKjqG1w2jhrPFe-5GuabwBaW1pTAUA@mail.gmail.com>
-Subject: Re: [PATCH RFC] gpiolib: ensure that fwnode is properly set
-To:     Steev Klimaszewski <steev@kali.org>
-Cc:     "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
-        Brian Masney <bmasney@redhat.com>, linus.walleij@linaro.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, psodagud@quicinc.com,
-        quic_shazhuss@quicinc.com, quic_ppareek@quicinc.com,
-        ahalaney@redhat.com, echanude@redhat.com,
-        nicolas.dechesne@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <3037b4f9-268d-df03-380c-393a5d01f3ba@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 11:02 PM Steev Klimaszewski <steev@kali.org> wrote:
->
-> Hi,
->
-> Others in the thread pointed to Thierry's patch, but on the Lenovo
-> Thinkpad X13s, that patch did *not* fix the issue, and with it
-> applied, the X13s still immediately reboots as soon as exiting EFI
-> services.  With this patch applied, the X13s does *not* reboot after
-> exiting EFI services, so thank you for this patch.
->
-> Tested-by: Steev Klimaszewski <steev@kali.org> #Lenovo Thinkpad X13s
+On Wed, Nov 16, 2022 at 10:00:27AM +0100, Krzysztof Kozlowski wrote:
+> On 15/11/2022 23:34, Conor Dooley wrote:
+> > On Mon, Nov 14, 2022 at 05:59:00PM +0530, Anup Patel wrote:
+> >> On Sun, Nov 13, 2022 at 8:18 PM Conor Dooley <conor@kernel.org> wrote:
+> > 
+> >>> Also, the file name says "riscv,imsic", the description says "IMSIC" but
+> >>> you've used "imsics" in the compatible. Is this a typo, or a plural?
+> >>
+> >> Yes, the file name should be consistent. I will update the file name.
+> > 
+> > Is there a reason why the compatible is plural when all of the other
+> > mentions etc do not have an "s"? It really did look like a typo to me.
+> > 
+> > It's the "incoming MSI controller", so I am unsure as to where the "s"
+> > actually even comes from. Why not just use "riscv,imsic"?
+> 
+> Yep, should be rather consistent with all others, and IMSIC stands for
+> Integrated Circuit?
 
-My bad, I was under the impression that Thierry's patch fixed this
-issue too. Now applied.
-
-Bart
+Incoming Message Signalled Interrupts Controller, no?
