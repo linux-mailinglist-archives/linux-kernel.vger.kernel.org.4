@@ -2,78 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ED8062CC54
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 22:10:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 027F362CC57
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 22:13:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233801AbiKPVKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 16:10:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55756 "EHLO
+        id S231565AbiKPVM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 16:12:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239228AbiKPVKH (ORCPT
+        with ESMTP id S229536AbiKPVM4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 16:10:07 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFAA6F25;
-        Wed, 16 Nov 2022 13:09:51 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id n21so22149ejb.9;
-        Wed, 16 Nov 2022 13:09:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8ns1LjN7LDOisfItghrtwfAVBSGRle5+9Se4Swypp1g=;
-        b=M8uEQNFgXgozUQo4QSSqKH8obmhXwRnk0caYpEaYa1iwX6nbAK8kV3ibaRQ6xY24or
-         uQFVF40LwzRx+JbPh42rUtxZ26ROM0dAvHR0AjAD375f+cd+I7caz9QQZK8N+n0wBcZp
-         84vEs3d64vJVTKeJvOmPBcElLYQdmYFaXJSP+jkDk15xJWcennQLTX9sA2hiQfYZFas4
-         YhTdTe91TeZq7nZsXH/nxftykYXMtl/Wik69Sopcx8VFia7ki3kKcHLSlFjHP2oRr2m3
-         AVmGpJJifwFjDtQAOHfkJ3hwzhQi9gxdpMiSKBqu54mUliJ4lVxt5Uzc10+mKtil+TbW
-         A93Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8ns1LjN7LDOisfItghrtwfAVBSGRle5+9Se4Swypp1g=;
-        b=iNG4zcmpFKwdej1NoHJYjhqqxeXOblV96BsMJjWphAWPcO2BdZdoLJ4b1RZ+DEDsT3
-         WpmwmhrlnVmVll7mZyEBF02F02gLiVFzszBpKRl3krxaze1oqYweE2SBD/b+HqyxwTsK
-         dyUVZsESUdrx0IZM9oUqa9Bc95OuYTWwPutgvLimSnHKJVeadpCaEuzII26AGu3mZGMn
-         mJQpYrKadHMO7hZyq6gVffnAru3RXts2GMyGjVk7kN3eKukTB8nzXxKJr+xR5xMct24b
-         bJVj11+rnL5t04HHU1Z8IvfAxIMyAsAulZOErhnJIcMNzeKzTorgeCYZYRvv7CJ1fRqU
-         0xpw==
-X-Gm-Message-State: ANoB5pmUAFUyojmrkkmnZXzTSi6V/k306tER7USVrRN8cUQtQagNeh4U
-        Q+TaaIqvy6Tvnza2kbdNyEgY3kcaKPQ=
-X-Google-Smtp-Source: AA0mqf4BjVjZFroaSuB8MBzrMoVmm84KlFri1SoXR5d2638IsydqP4mwAwGlZTkxC/i8Conf1OoYpQ==
-X-Received: by 2002:a17:906:6893:b0:7ad:14f8:7583 with SMTP id n19-20020a170906689300b007ad14f87583mr20075501ejr.185.1668632990289;
-        Wed, 16 Nov 2022 13:09:50 -0800 (PST)
-Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id c2-20020a17090618a200b007ad96726c42sm4786736ejf.91.2022.11.16.13.09.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 13:09:49 -0800 (PST)
-Message-ID: <51383b41-6b02-df0f-797a-5336799fd097@gmail.com>
-Date:   Wed, 16 Nov 2022 22:09:48 +0100
+        Wed, 16 Nov 2022 16:12:56 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE60AB38;
+        Wed, 16 Nov 2022 13:12:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668633175; x=1700169175;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=hc62a3YbyVykYm3ypsZM37ybDaJk80NqUI/J0nopgEk=;
+  b=l4Py173Sq1wzdZO7IMwCefcctyV8MYO66/VofxKZwdhb2eaV+R6QMCCY
+   ziws7DnOeEC7YLFgmobIDsMF+Zf8WbFFp6fbJNVReMDaj1Ih7VM+essg/
+   WineNGSXTDqFivGL6zN0isgeBHw26q/zVPjGgpabLq1Mp0Jpc6DH48/0T
+   ri2TCIoDqt9cGCpUDORmOtufk+f3GF7Sljs39lN+cYyfaiCg2Wxlm4kIW
+   HaYW7CxzPjZKFzeBvL6SAyDQWds13gL74MUzkmIZ9aiMC8tGsW2IvAoU5
+   O8Z7zh+e+90KFm1E1gNB1BdKeuBj+guK+1wPxP5OqtIwpsWbriCRpUu9G
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="313819938"
+X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
+   d="scan'208";a="313819938"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 13:10:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="708330419"
+X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
+   d="scan'208";a="708330419"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by fmsmga004.fm.intel.com with ESMTP; 16 Nov 2022 13:10:55 -0800
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 16 Nov 2022 13:10:54 -0800
+Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
+ ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 16 Nov 2022 13:10:54 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Wed, 16 Nov 2022 13:10:54 -0800
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.42) by
+ edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Wed, 16 Nov 2022 13:10:54 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GmY9Ba26K3i3owoGnX9KTQkm6/YX8+A360w80gQp+pQhddI5/92kMy8QLv5FknyTdT8K0wI8N6nlkNhZDW4hKyDHuqdx5s8reAMCUQeBXbApLiyN3AGjVW2uMG8bUv/1d7t661gPoEImAk7SrAwOAONs+bB/puJ7IR1X3O74qXOLaZuByZ2g/IltnFv1Y54+tCjw0Smnq/kzDUAq5MaC4qZngpxocRAvmLpRMdEVvjys1xTTFCH0WDTKha8Q9szUD8AC/a7ebtuGaT9ThN6k7qfy3saTMM8zmUEjcaGKRcwRRXRCMNJy+zuY2cBl4L/2UfjQfm8v9zuHHBuof9Rhmg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=46jm7zCPUvnu7MsigCuPScqbdDbO5qqAoRK+yqxclKQ=;
+ b=C9T9qYWCFOXlVHl7GdUAhlPjCUw4OWAhQHZMBdytCkgermHeXELy2wwFr9iuuvH2OpHDfGInlOCvPHhCEXXxO2ppvG/8ztuZ2SjgKSUwRrkqFDpw26K9/pBpIe4KOnAHkp+COozERq7RwoHH9b+bXIhWruNbdc14ISwaMk0F8q8xC8l825txTFr1YXYrjt2Pdy4qLRs9v8VtaWCXBl5rRWn27N/patwrdHB2BImCZqwwj2Q2eiNMRU5Vcs9dXC9WiP5JFh1GzuE2aONeUS2PmGYqexWJTpc0Yf8IRxNgHsnkbK6uXwANlRUpHJEE39MjTl26ab3nRTcPZ9jrF1unUA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
+ (2603:10b6:301:50::20) by SA0PR11MB4624.namprd11.prod.outlook.com
+ (2603:10b6:806:98::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.18; Wed, 16 Nov
+ 2022 21:10:51 +0000
+Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
+ ([fe80::b058:673:c228:3e95]) by MWHPR1101MB2126.namprd11.prod.outlook.com
+ ([fe80::b058:673:c228:3e95%9]) with mapi id 15.20.5813.019; Wed, 16 Nov 2022
+ 21:10:51 +0000
+Date:   Wed, 16 Nov 2022 13:10:49 -0800
+From:   Dan Williams <dan.j.williams@intel.com>
+To:     Ira Weiny <ira.weiny@intel.com>, Bjorn Helgaas <helgaas@kernel.org>
+CC:     Lukas Wunner <lukas@wunner.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Gregory Price <gregory.price@memverge.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH] PCI/doe: Fix work struct declaration
+Message-ID: <637551d941799_12cdff294f6@dwillia2-xfh.jf.intel.com.notmuch>
+References: <20221116100939.GA32050@wunner.de>
+ <20221116182037.GA1127308@bhelgaas>
+ <Y3VO07WbMI5EYAUD@iweiny-mobl>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <Y3VO07WbMI5EYAUD@iweiny-mobl>
+X-ClientProxiedBy: SJ0P220CA0027.NAMP220.PROD.OUTLOOK.COM
+ (2603:10b6:a03:41b::18) To MWHPR1101MB2126.namprd11.prod.outlook.com
+ (2603:10b6:301:50::20)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCHv2 4/5] arm64: dts: rockchip: Add rk3588-evb1 board
-Content-Language: en-US
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Kever Yang <kever.yang@rock-chips.com>, kernel@collabora.com
-References: <20221115161702.163057-1-sebastian.reichel@collabora.com>
- <20221115161702.163057-5-sebastian.reichel@collabora.com>
-From:   Johan Jonker <jbx6244@gmail.com>
-In-Reply-To: <20221115161702.163057-5-sebastian.reichel@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWHPR1101MB2126:EE_|SA0PR11MB4624:EE_
+X-MS-Office365-Filtering-Correlation-Id: 55534dc3-dac7-4421-b71e-08dac8170a99
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: x5BRjQ/ptBDLfyd/XI1IWMMEsngQKUhpkgPDWSkX6nzrPGjBRtGMSh+Pf8MLh3Xxi381YEaHJhAT3LwwwLCt9tXtLOj2GRQFxb+alJEskop8QOEtLMofNiwQ5kH7tYtZY4wovTgj+5ZHqkHQj9s3XqQsNJCUWyU66Io0lD2cxL9wk71lZQe2JJejhnmKMmAkHYZ1aeVAKQmh+FIrtmbeSmeL5eipknV/3TOmHFUqdrwukVAU9E41XqdFRjd7H0h6NZr10cO8cFwViK5hQj0Uk7Yj/6lS3II8/LZ/jh72kH8Be1GXHHixaR4fTWqLi0StN/bZ9Q80fXF+ijfkmUG2WQM1Sf86raFdOGuXpWnB46qPnVnhV4BJL86uq1qXtam1hesvQSD3UhrwIlTjQqbqz0T5X0th9R1i7ySpmcBfgaxKxE0XxxlGloJbR/Ay1pu8mmv1S3r1ug9fqEfYbDxFiDWEKtnEJgdaryAAKeVpKrApYg1IqPYrHzWnMCRX/CqdI4FY8qKgT5HBO6NhCXZx++vWG8F1zsr13jA2U3Jp5PbtJ5kBsipk/A87y1zov34iuA6XFHE9hshMmAVkyfWpksWZbFILM8/QdaGS35r1m2xcaa5DXn1q01IQ51gvguwRpQSwggskbm1CaQdGLJ8iMGSeAvSg0Gsee/jIycgIlpZjCW4xQu/RvFheloIaE+3HuczfK/QMhi4XnzMaYEtFwGZJVH4QIgv/LfP3rsPrtamt1uqTx4XsPggyldxJ2qnQK0xWiGOLp2kJXkXU4ZoiLtPSL6Ug5bSTlHYOGnB6W8o=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(346002)(136003)(366004)(396003)(376002)(451199015)(54906003)(316002)(38100700002)(110136005)(66946007)(8676002)(66476007)(66556008)(4326008)(6506007)(966005)(6486002)(478600001)(41300700001)(82960400001)(6512007)(5660300002)(26005)(8936002)(9686003)(86362001)(2906002)(186003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Z+8nQYdLiP91+t7p8v1pyqfuKckJCOcPpQOr2pG0s6Xve0MxHjrC4hlTuNM6?=
+ =?us-ascii?Q?pwADVoDwFuP2WULWQdZrjMMRTAcqqzpD4K4m5wGokOr39iSWANg3ky4SYry6?=
+ =?us-ascii?Q?S6xRAyuH2Se7d4UJa7GskXMbitUEuu48q4PtVKeXkmm9PEdQVS2rPKhySZ6/?=
+ =?us-ascii?Q?cO0tjsYW1kFVkPr4MR9wQeQGuUiICQDCDSVKK68zNmVSLKAYHhXKX2e2KMAh?=
+ =?us-ascii?Q?3sXx9gHw0+/BFv5oCy2SGMienPdUNT1BPcZD9MtT/4+kyRDdZGDSX2Ne+QBz?=
+ =?us-ascii?Q?ckE7oNvcJgTShYQIvCRY2n40txXQdxbmHIAtsXvG8eBWmRr83Jwed9q607qQ?=
+ =?us-ascii?Q?FhHGejk7BD7TNZlo8035nxT9XKuI+z9xnJeaNaq8GkFElV9qCNC+4Glgy73f?=
+ =?us-ascii?Q?Kfl3AIMdVpF2sWjge/zOY2c5ln5usTAstLWVVEjtLE7guW5RNX20iyJxOTi2?=
+ =?us-ascii?Q?05rsV7y+BjrgriGW20LZ6LB72rhmMAIMDiNDFOQQ1cgzUUpa0I2cXJh6eObb?=
+ =?us-ascii?Q?9BZPMpE/GjKZ8IDq/xF0fa39eK3v3QOInfvmHC6OdOZ42wj7A386iWLpueLX?=
+ =?us-ascii?Q?6Ip9Kh8sXASPIRhyiyBzPmScNCI72u14w7TAjTxDkomRRfAmPg9ypjiwqgF0?=
+ =?us-ascii?Q?RhNpEmV02cMf9JLu4/BVaV0sbtGuB6DUCV8AWH67u22JmRkKmS3ht6LSj17N?=
+ =?us-ascii?Q?Wk9XbBDNwXQvzLjZF7j+sXFE6f1UaHf7Oz+hGVN89LAfvlekb0mcyOqPEF8L?=
+ =?us-ascii?Q?dDsE8QcCfiQcI7CnFhoKISwFTbGmmzvw/Oq2xF3Kyh1bIQAo83GyuxYj/LH6?=
+ =?us-ascii?Q?41Ym4V7t65rVQRaWDbE9HRKgS/ZW/GjRN3rzZaJ5llMIvT/HlRaqOXn/nho5?=
+ =?us-ascii?Q?iXT02sk2GE1WciK7pLaDhMY2zaVTroGvahcnUC1D8AJ6LS8mxNr04SDzssX0?=
+ =?us-ascii?Q?7/qVR66TtjnGM41gmildtIzTxraRoIZMWVvftJddfN4pEMYVEx0R5U26hYl3?=
+ =?us-ascii?Q?s0+ZT0nuIkOV3X5pTn02dTPUndeUF+NFsO5T3jsIs2wXTR+T37IW+YNnP7pv?=
+ =?us-ascii?Q?vNkb9h7vwlBCBf+ZJ1wVWsPlUlghzdqVEtifmo7dOgk3FpSpgvE29yvLuTE0?=
+ =?us-ascii?Q?m8D7vhX1N6UAqX7N9IhIDfmdWTxrgdbw18r8Te8OjMkzHmGHJKMpQVfcIxjN?=
+ =?us-ascii?Q?iA4zUOaXgUHh4xBM4WZVWACLUEnclxVMLTE9Ff19zH6YVY6hNjWYjrYdxOut?=
+ =?us-ascii?Q?jOtd8O3bK6bMwtUi4HRgSlfYjTjBptbR334MkoACYO9HL7u06+WYSHDDmCQS?=
+ =?us-ascii?Q?+k19PyCBazZCeXc/MOVXeXxnMk0Nco+MJ2LJ2IJHRuSMVReUSeRhRcETi3BJ?=
+ =?us-ascii?Q?tIOC2NV7RZQUnJ6MzEw2mco/hhY4BKNoCJOBQzR4ac5JNTBSPcfnEOvQ49yw?=
+ =?us-ascii?Q?6EQOhUcjuP7wDZvTpd6kBPrnE6dbnHCssWiK843AuthSDPeC/5rRPT6OIiII?=
+ =?us-ascii?Q?qi0z9MJk5pmi1fp8zyJdKOp2DkURxfIKvbVk2dYrk24TKrD0LtGSIE0m8vuq?=
+ =?us-ascii?Q?BW3yyfhiFY5aAWASyzjqC6N2OqeiRlIa5ID65UFWz8Mb64qtWnb8BmrhPPrQ?=
+ =?us-ascii?Q?Jw=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 55534dc3-dac7-4421-b71e-08dac8170a99
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Nov 2022 21:10:51.5401
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9OXSXPE37zuCdrzQdVV/Ehpx/TShMbKKkM8JFcRNYlf8bYgTFPJXkyjWerkIX+rNPNrY6UccWLaaEls9DL2U1VFb7n79mEltc1XjFSD/t9k=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR11MB4624
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,258 +160,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-Some more comments.
-Have a look if it's useful...
-
-On 11/15/22 17:17, Sebastian Reichel wrote:
-> From: Kever Yang <kever.yang@rock-chips.com>
+Ira Weiny wrote:
+> On Wed, Nov 16, 2022 at 12:20:37PM -0600, Bjorn Helgaas wrote:
+> > On Wed, Nov 16, 2022 at 11:09:39AM +0100, Lukas Wunner wrote:
+> > > On Mon, Nov 14, 2022 at 05:19:43PM -0800, ira.weiny@intel.com wrote:
+> > > > From: Ira Weiny <ira.weiny@intel.com>
+> > > > 
+> > > > The callers of pci_doe_submit_task() allocate the pci_doe_task on the
+> > > > stack.  This causes the work structure to be allocated on the stack
+> > > > without pci_doe_submit_task() knowing.  Work item initialization needs
+> > > > to be done with either INIT_WORK_ONSTACK() or INIT_WORK() depending on
+> > > > how the work item is allocated.
+> > > > 
+> > > > Jonathan suggested creating doe task allocation macros such as
+> > > > DECLARE_CDAT_DOE_TASK_ONSTACK().[1]  The issue with this is the work
+> > > > function is not known to the callers and must be initialized correctly.
+> > > > 
+> > > > A follow up suggestion was to have an internal 'pci_doe_work' item
+> > > > allocated by pci_doe_submit_task().[2]  This requires an allocation which
+> > > > could restrict the context where tasks are used.
+> > > > 
+> > > > Compromise with an intermediate step to initialize the task struct with
+> > > > a new call pci_doe_init_task() which must be called prior to submit
+> > > > task.
+> > > > 
+> > > > [1] https://lore.kernel.org/linux-cxl/20221014151045.24781-1-Jonathan.Cameron@huawei.com/T/#m88a7f50dcce52f30c8bf5c3dcc06fa9843b54a2d
+> > > > [2] https://lore.kernel.org/linux-cxl/20221014151045.24781-1-Jonathan.Cameron@huawei.com/T/#m63c636c5135f304480370924f4d03c00357be667
+> > > 
+> > > We have object_is_on_stack(), included from <linux/sched/task_stack.h>.
+> > > 
+> > > So you could just autosense in pci_doe_submit_task() whether
+> > > pci_doe_task is on the stack and call the appropriate INIT_WORK
+> > > variant.
+> > 
+> > Nifty, I had no idea object_is_on_stack() existed, thank you!
 > 
-> Add board file for the RK3588 evaluation board. While the hardware
-> offers plenty of peripherals and connectivity this basic implementation
-> just handles things required to successfully boot Linux from eMMC,
-> connect via UART or Ethernet.
+> Indeed!  Neither did I!  thanks!
 > 
-> Signed-off-by: Kever Yang <kever.yang@rock-chips.com>
-> [rebase, update commit message, use EVB1 for SoC bringup]
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> ---
->  .../devicetree/bindings/arm/rockchip.yaml     |   5 +
->  arch/arm64/boot/dts/rockchip/Makefile         |   1 +
->  .../boot/dts/rockchip/rk3588-evb1-v10.dts     | 156 ++++++++++++++++++
->  3 files changed, 162 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/rockchip/rk3588-evb1-v10.dts
+> > 
+> > I wonder if there's an opportunity to use object_is_on_stack()
+> > somewhere in the INIT_WORK() path to find usage mistakes.
 > 
-> diff --git a/Documentation/devicetree/bindings/arm/rockchip.yaml b/Documentation/devicetree/bindings/arm/rockchip.yaml
-> index c6c69a4e3777..4230881371fa 100644
-> --- a/Documentation/devicetree/bindings/arm/rockchip.yaml
-> +++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
-> @@ -739,6 +739,11 @@ properties:
->            - const: rockchip,rk3568-bpi-r2pro
->            - const: rockchip,rk3568
->  
+> I'm thinking we could make INIT_WORK do the right thing all the time.  Not sure
+> what the overhead of object_is_on_stack() is.
+> 
+> > 
+> > Adding it in pci_doe_submit_task() would add some complexity, so I'm
+> > not sure whether it's worth adding it unless we actually have uses for
+> > both cases.
+> 
+> I think if we don't do something we have to document that
+> pci_doe_submit_task() only works with tasks on the stack.
+> 
+> I would rather just make pci_doe_submit_task() correct and not complicate the
+> callers.  object_is_on_stack() can't be enough overhead to be worried about in
+> this call path can it?
+> 
+> Actually after writing all that I wonder if we can't push the use of
+> object_is_on_stack() into the debug code?  Something like below (completely
+> untested)?  I think this could be pushed even further down but I'd like to get
+> opinions before attempting a change which will have a wider blast radius.
 
-> +      - description: Rockchip RK3588 Evaluation board
-
-This list used to be sort on description.
-Since rk3566/rk3568 it's out of order. Heiko?
-
-> +        items:
-> +          - const: rockchip,rk3588-evb1-v10
-> +          - const: rockchip,rk3588
-> +
->  additionalProperties: true
->  
->  ...
-> diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
-> index 8c15593c0ca4..12ed53de11eb 100644
-> --- a/arch/arm64/boot/dts/rockchip/Makefile
-> +++ b/arch/arm64/boot/dts/rockchip/Makefile
-> @@ -72,3 +72,4 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-soquartz-cm4.dtb
->  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-bpi-r2-pro.dtb
->  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-evb1-v10.dtb
->  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-rock-3a.dtb
-> +dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588-evb1-v10.dtb
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3588-evb1-v10.dts b/arch/arm64/boot/dts/rockchip/rk3588-evb1-v10.dts
-> new file mode 100644
-> index 000000000000..38413517f2eb
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/rockchip/rk3588-evb1-v10.dts
-> @@ -0,0 +1,156 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Copyright (c) 2021 Rockchip Electronics Co., Ltd.
-> + *
-> + */
-> +
-> +/dts-v1/;
-> +
-
-> +#include <dt-bindings/pinctrl/rockchip.h>
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include "rk3588.dtsi"
-
-sort includes
-
-> +
-> +/ {
-> +	model = "Rockchip RK3588 EVB1 V10 Board";
-> +	compatible = "rockchip,rk3588-evb1-v10", "rockchip,rk3588";
-> +
-
-alias for i2c2, uart2, gmac0
-
-> +	chosen {
-> +		stdout-path = "serial2:1500000n8";
-> +	};
-> +
-> +	vcc12v_dcin: regulator-vcc12v-dcin {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vcc12v_dcin";
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +		regulator-min-microvolt = <12000000>;
-> +		regulator-max-microvolt = <12000000>;
-> +	};
-> +
-> +	vcc5v0_sys: regulator-vcc5v0-sys {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vcc5v0_sys";
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +		regulator-min-microvolt = <5000000>;
-> +		regulator-max-microvolt = <5000000>;
-> +		vin-supply = <&vcc12v_dcin>;
-> +	};
-> +
-> +	backlight: backlight {
-> +		compatible = "pwm-backlight";
-> +		brightness-levels = <
-> +			  0  20  20  21  21  22  22  23
-> +			 23  24  24  25  25  26  26  27
-> +			 27  28  28  29  29  30  30  31
-> +			 31  32  32  33  33  34  34  35
-> +			 35  36  36  37  37  38  38  39
-> +			 40  41  42  43  44  45  46  47
-> +			 48  49  50  51  52  53  54  55
-> +			 56  57  58  59  60  61  62  63
-> +			 64  65  66  67  68  69  70  71
-> +			 72  73  74  75  76  77  78  79
-> +			 80  81  82  83  84  85  86  87
-> +			 88  89  90  91  92  93  94  95
-> +			 96  97  98  99 100 101 102 103
-> +			104 105 106 107 108 109 110 111
-> +			112 113 114 115 116 117 118 119
-> +			120 121 122 123 124 125 126 127
-> +			128 129 130 131 132 133 134 135
-> +			136 137 138 139 140 141 142 143
-> +			144 145 146 147 148 149 150 151
-> +			152 153 154 155 156 157 158 159
-> +			160 161 162 163 164 165 166 167
-> +			168 169 170 171 172 173 174 175
-> +			176 177 178 179 180 181 182 183
-> +			184 185 186 187 188 189 190 191
-> +			192 193 194 195 196 197 198 199
-> +			200 201 202 203 204 205 206 207
-> +			208 209 210 211 212 213 214 215
-> +			216 217 218 219 220 221 222 223
-> +			224 225 226 227 228 229 230 231
-> +			232 233 234 235 236 237 238 239
-> +			240 241 242 243 244 245 246 247
-> +			248 249 250 251 252 253 254 255
-> +		>;
-> +		default-brightness-level = <200>;
-> +
-> +		pwms = <&pwm2 0 25000 0>;
-> +		power-supply = <&vcc12v_dcin>;
-> +	};
-> +};
-> +
-> +&gmac0 {
-> +	phy-mode = "rgmii-rxid";
-> +	clock_in_out = "output";
-> +
-> +	snps,reset-gpio = <&gpio4 RK_PB3 GPIO_ACTIVE_LOW>;
-> +	snps,reset-active-low;
-> +	/* Reset time is 20ms, 100ms for rtl8211f */
-> +	snps,reset-delays-us = <0 20000 100000>;
-> +
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&gmac0_miim
-> +		     &gmac0_tx_bus2
-> +		     &gmac0_rx_bus2
-> +		     &gmac0_rgmii_clk
-> +		     &gmac0_rgmii_bus>;
-> +
-> +	tx_delay = <0x43>;
-> +	rx_delay = <0x00>;
-> +
-> +	phy-handle = <&rgmii_phy>;
-> +	status = "okay";
-> +};
-> +
-> +&mdio0 {
-
-> +	rgmii_phy: phy@1 {
-
-rgmii_phy: ethernet-phy@1 {
-
-From phy-provider.yaml:
-
-properties:
-  $nodename:
-    pattern: "^(|usb-|usb2-|usb3-|pci-|pcie-|sata-)phy(@[0-9a-f,]+)*$"
-
-The phy nodename is used by a phy-handle.
-The parent node is compatible with "snps,dwmac-mdio",
-so change nodename to 'ethernet-phy', for which '#phy-cells'
-is not a required property
-
-> +		compatible = "ethernet-phy-ieee802.3-c22";
-> +		reg = <0x1>;
-
-> +		#phy-cells = <0>;
-
-remove
-
-Also for rock-5a board.
-
-> +	};
-> +};
-> +
-> +&sdhci {
-> +	bus-width = <8>;
-> +	no-sdio;
-> +	no-sd;
-> +	non-removable;
-> +	max-frequency = <200000000>;
-> +	mmc-hs400-1_8v;
-> +	mmc-hs400-enhanced-strobe;
-> +	status = "okay";
-> +};
-> +
-> +&uart2 {
-> +	pinctrl-0 = <&uart2m0_xfer>;
-> +	status = "okay";
-> +};
-> +
-
-> +&i2c2 {
-
-sort node name
-
-> +	status = "okay";
-> +
-> +	hym8563: rtc@51 {
-> +		compatible = "haoyu,hym8563";
-> +		reg = <0x51>;
-> +		#clock-cells = <0>;
-> +		clock-output-names = "hym8563";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&hym8563_int>;
-> +		interrupt-parent = <&gpio0>;
-> +		interrupts = <RK_PD4 IRQ_TYPE_LEVEL_LOW>;
-> +		wakeup-source;
-> +	};
-> +};
-> +
-
-> +&pinctrl {
-
-sort node name
-
-> +	hym8563 {
-> +		hym8563_int: hym8563-int {
-> +			rockchip,pins = <0 RK_PD4 RK_FUNC_GPIO &pcfg_pull_up>;
-> +		};
-> +	};
-> +};
-> +
-
-> +&pwm2 {
-
-sort node name
-
-> +	status = "okay";
-> +};
+This looks reasonable, but I would do it after and independently of
+introducing the autosensing version of pci_doe_submit_task(). Then you
+can pursue this line of thinking and come back to simplify
+pci_doe_submit_task() if it indeed moves forward.
