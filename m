@@ -2,141 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 148B962C359
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 17:03:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CA4562C355
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 17:02:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbiKPQDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 11:03:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42730 "EHLO
+        id S233774AbiKPQCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 11:02:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233888AbiKPQDN (ORCPT
+        with ESMTP id S233700AbiKPQC3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 11:03:13 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509C1554DD;
-        Wed, 16 Nov 2022 08:03:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668614592; x=1700150592;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=lW3NzBq/Ii+Agn3S+Dz3HjWB+SGRuGzzSqo90mBPD+E=;
-  b=GLtdMgE9cn7mHqxHrproI1kIGMnbkT63xovzw1KoMZiGiIrCmGAKpI1d
-   0Bke5CVrNJzZZ4majB5gCJdlPk93jjAox2LSsgXnEvsx7GzGE9ReoTJG9
-   DO3EF/cWpVfWZO85VjQ17QTAugbO4N74F83Zbcz/Rp2eBe6uAsHYA6WWq
-   5N7T2DokIsdOUwFm+Sq5zxZRjiCGWivVd3qFCKq4qtccxUQecwg09T18v
-   0Gw43OooHxi/H5wrko8TEJyGwK9ulbizmImc6XQaJoYCv9iUb8Vpkth+B
-   1c9aZndajRLWYVyVc1hwih1oxn17icUZ4l6kI877CH4XDiKBCOb6ZOZgR
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="398867789"
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="398867789"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 08:02:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="633673629"
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="633673629"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga007.jf.intel.com with ESMTP; 16 Nov 2022 08:02:36 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 2AGG2YS1001458;
-        Wed, 16 Nov 2022 16:02:34 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Shenwei Wang <shenwei.wang@nxp.com>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        imx@lists.linux.dev, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v5 2/3] net: fec: add xdp statistics
-Date:   Wed, 16 Nov 2022 17:02:15 +0100
-Message-Id: <20221116160215.3391284-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221115204951.370217-3-shenwei.wang@nxp.com>
-References: <20221115204951.370217-1-shenwei.wang@nxp.com> <20221115204951.370217-3-shenwei.wang@nxp.com>
+        Wed, 16 Nov 2022 11:02:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C440854B03;
+        Wed, 16 Nov 2022 08:02:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E23461EBF;
+        Wed, 16 Nov 2022 16:02:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40FA9C433D7;
+        Wed, 16 Nov 2022 16:02:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668614547;
+        bh=TcEbmGJjNsv4Ftednt9yZC3FbP7kzskTZo9SDvFCzHo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=r9MpqF0z9M9S/v1+qR0ItdXQrRLG3fNlaPd5eD/p/f2LbrF+IMS5n36jljF1asxn6
+         c7Te7M0CPQqHptjmDFyAU0hVJhBuifLj5RZJdhvOVXmyEKJW/pTcU0s3r+yXTK/wtK
+         xhMTyvcJXSUrRHxAYZivCXGMfTh7kW96UW3FHBna8dcuKkJi9RH9IY/1nBmVejGVd5
+         1dlRyednE7m34wPkEkqG+9YfB7TmkWNUkyCQ6oDkRakwQenweDmPRAynZ1q+ewxjRF
+         Ex67aOxMwuU6VWkhEb8YBv/gMp5rF28QJFpdi4Mn7lOBJrEeP08uEoB+5YFze9+eoI
+         eVkNhHkC0R8+A==
+Date:   Wed, 16 Nov 2022 16:02:23 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, lkft-triage@lists.linaro.org,
+        Shuah Khan <shuah@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Remi Duraffort <remi.duraffort@linaro.org>
+Subject: Re: kselftest: Bad test result: from results parsing in LAVA
+Message-ID: <Y3UJj6v8xv2rvMp5@sirena.org.uk>
+References: <CA+G9fYu0p4cFdkrkQyV4OC-iPpY18asV0VTP=O_sysLNaJJAQw@mail.gmail.com>
+ <Y3TlVAgo9XSWKm1h@sirena.org.uk>
+ <CA+G9fYuckvzw_t4iSQ5Kj_FvRb-bfWaT66DazEejrKXePaDGuA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="QuIAI3jeL4BDw//t"
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYuckvzw_t4iSQ5Kj_FvRb-bfWaT66DazEejrKXePaDGuA@mail.gmail.com>
+X-Cookie: Ego sum ens omnipotens.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shenwei Wang <shenwei.wang@nxp.com>
-Date: Tue, 15 Nov 2022 14:49:50 -0600
 
-> Add xdp statistics for ethtool stats and using u64 to record the xdp counters.
-> 
-> Signed-off-by: Shenwei Wang <shenwei.wang@nxp.com>
-> Reported-by: kernel test robot <lkp@intel.com>
+--QuIAI3jeL4BDw//t
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Nit: would be nice if you Cc me for the next submissions as I was
-commenting on the previous ones. Just to make sure reviewers won't
-miss anything.
+On Wed, Nov 16, 2022 at 07:36:10PM +0530, Naresh Kamboju wrote:
+> On Wed, 16 Nov 2022 at 18:57, Mark Brown <broonie@kernel.org> wrote:
+> > On Wed, Nov 16, 2022 at 05:46:33PM +0530, Naresh Kamboju wrote:
 
-> ---
->  drivers/net/ethernet/freescale/fec.h      | 15 +++++
->  drivers/net/ethernet/freescale/fec_main.c | 74 +++++++++++++++++++++--
->  2 files changed, 83 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/freescale/fec.h b/drivers/net/ethernet/freescale/fec.h
-> index 61e847b18343..adbe661552be 100644
-> --- a/drivers/net/ethernet/freescale/fec.h
-> +++ b/drivers/net/ethernet/freescale/fec.h
-> @@ -526,6 +526,19 @@ struct fec_enet_priv_txrx_info {
->  	struct  sk_buff *skb;
->  };
->  
-> +enum {
-> +	RX_XDP_REDIRECT = 0,
-> +	RX_XDP_PASS,
-> +	RX_XDP_DROP,
-> +	RX_XDP_TX,
-> +	RX_XDP_TX_ERRORS,
-> +	TX_XDP_XMIT,
-> +	TX_XDP_XMIT_ERRORS,
-> +
-> +	/* The following must be the last one */
-> +	XDP_STATS_TOTAL,
-> +};
-> +
->  struct fec_enet_priv_tx_q {
->  	struct bufdesc_prop bd;
->  	unsigned char *tx_bounce[TX_RING_SIZE];
-> @@ -546,6 +559,8 @@ struct fec_enet_priv_rx_q {
->  	/* page_pool */
->  	struct page_pool *page_pool;
->  	struct xdp_rxq_info xdp_rxq;
-> +	struct u64_stats_sync syncp;
-> +	u64 stats[XDP_STATS_TOTAL];
+> > > Test results parser showing =E2=80=9CBad test results: =E2=80=9C,
 
-Why `u64`? u64_stats infra declares `u64_stat_t` type and a bunch of
-helpers like u64_stats_add(), u64_stats_read() and so on, they will
-be solved then by the compiler to the most appropriate ops for the
-architecture. So they're more "generic" if you prefer.
-Sure, if you show some numbers where `u64_stat_t` is slower than
-`u64` on your machine, then okay, but otherwise...
+> > When reporting an issue can you please try to provide some
+> > analysis which goes beyond the level of "I saw an error message"
+> > - for example here it's hard to tell if you think you're seeing
+> > an issue somewhere in your test automation system or if you're
+> > trying to report something in the tests.
 
->  
->  	/* rx queue number, in the range 0-7 */
->  	u8 id;
+> Let me add more information about this,
 
-[...]
+> Kees Cook, has done the work of a kselftest results parser in perl
+> which is in the test-definitions repository. which was working well
+> for two years now. please refer to the below commit log and link to
+> the kselftest test-definitions [3].
 
-> -- 
-> 2.34.1
+> The new test cases output is not coping up with the old results parser
+> and both KernelCI [1] and LKFT [2] using LAVA have noticed.
+> Kselftest results parser problem [4].
 
-Thanks,
-Olek
+I'm still not clear if you believe there is an issue in the tests
+or in your test infrastructure here.  I can't identify any
+problem with the test output, everything appears to be within the
+KTAP spec:
+
+   https://www.kernel.org/doc/html/latest/dev-tools/ktap.html#test-case-res=
+ult-lines
+
+My best guess is that either this script which the infrastructure
+is using or something else that uses the results of the script is
+broken when the test description includes spaces.  The KTAP spec
+says that each test case result is a line in the form:
+
+   <result> <number> [<description>][ # [<directive>] [<diagnostic data>]]
+
+where
+
+   The description is a description of the test, generally the
+   name of the test, and can be any string of words (can=E2=80=99t include =
+#).
+   The description is optional, but recommended.
+
+ie, anything after the space following the test number up to a #
+or the end of the line is a valid test description (it's not the
+intent but it does appear that the # needs to have a space before
+it).  You could argue that non-alphabetic characters are out of
+spec for the description since any separators between words
+aren't themselves words but realistically that'd invalidate a
+fairly large subset of the selftests which probably isn't
+constructive.
+
+--QuIAI3jeL4BDw//t
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmN1CY8ACgkQJNaLcl1U
+h9D+Hwf/WcLRCEFjVXwxjSQevEenU/4QXRyju/vgjjnV5cmJ973j+KnguN17ofSy
+bwcuSBrmx1AhtsCSg5qT+DSpBCQ89rBEA2qG07nn4qknOP6ISZCJ18rOWNjlHkIL
+Fa9IbAsPRlvDIdVd0R8IZpT3k+A0CpLPr6Mv1JCLGeZM2wYfOu8TQXTsvgYgCH6I
+nslVd9O4QrQdKgweQ/HZkdJES+mzFhgMkg4d+ZEzRfn0c+/WEz2vREojyLnfwjkx
+7sUeelLSGDQJvAMX0oJE+r7wRkKr4+t/OiAFXkfNucm/Yam8HLBg5yxwgZ5EVCx5
+TtcsIv1230xO/vKLsLJ1C2gi3UymUA==
+=4vqB
+-----END PGP SIGNATURE-----
+
+--QuIAI3jeL4BDw//t--
