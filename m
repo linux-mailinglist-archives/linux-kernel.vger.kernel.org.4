@@ -2,231 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22CA162CBD4
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 22:01:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4CED62CB75
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 21:51:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238454AbiKPVBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 16:01:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44184 "EHLO
+        id S234222AbiKPUvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 15:51:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239128AbiKPVA7 (ORCPT
+        with ESMTP id S234009AbiKPUvM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 16:00:59 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC0E68282;
-        Wed, 16 Nov 2022 13:00:04 -0800 (PST)
+        Wed, 16 Nov 2022 15:51:12 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C45176239C;
+        Wed, 16 Nov 2022 12:51:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668632404; x=1700168404;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1668631871; x=1700167871;
   h=date:from:to:cc:subject:message-id:references:
-   content-transfer-encoding:in-reply-to:mime-version;
-  bh=Mgz8yh17Sr0AEeC4DwjXm8hyqGsithSnoSATj6+ucCk=;
-  b=jqooZtm220vg0VZ2iTzFBm+2aoGSaavzC/xWg03VqJY0GQcWPWg0mhIG
-   u58iG82ViLccXRywWxGKf2D1BOao+GzchAsqQ3m4BK9SvlEsKm9tTuMbF
-   LqtsbiUg2bUnUSYIgqyGgu+0r0caKV+dhvlbUs00XyGk3wdSjjGNkll3F
-   JL9UCchxyTGHYXHU4XWAyhfiD9iqxEoIfhRC/nODojCL/v6EwgXlATqvM
-   lVXBpfJ7SndEps5l8xIdMEtBsASYB4yNxX/xkOyCcLWvP7jdOy7fYASiH
-   bPQAwi83ek0XghnZJvju1sjNqEQC5/vmC8axLM0spcP7n5E1pR9fjzAQ0
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="293057425"
+   mime-version:in-reply-to;
+  bh=UDnbWDn1Suvfq7/a1/IelPvg33/zJoDKzvhhwvyK76c=;
+  b=ueVyv/m2WAoA0ar4ssZqWR2AzynFMzIPMYsK4/bZqHlIfNufKQcsFDgh
+   /lOxGkdBLGjdecunplyT/baGg6TAp5Ohn2bh9HSVgDdmzujPDCAV09SFx
+   ebHQh70/Y/B9CYG5fAICD0emsF9xzU+L1u5ZGPIpOSe2c/BZQdi3urhAN
+   6qK8rEA5xMZ+8/HnjomZ3snFVBJjUJV7idFKnXshlbAwTz/ObgOV5if+a
+   vRP7qm2i08zXbbSim0I+6/gp0/GRBiD1xBJRdFVrwROCwkkFFZIu1F/6y
+   vdrsMTUtgW8P8oqXjkor0UnXIqccicaNwzOT8Qn72MWGyYb5VCzabHB9/
+   g==;
 X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
-   d="scan'208";a="293057425"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 12:55:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="617320382"
-X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
-   d="scan'208";a="617320382"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by orsmga006.jf.intel.com with ESMTP; 16 Nov 2022 12:55:23 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+   d="scan'208";a="189277080"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Nov 2022 13:51:10 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 16 Nov 2022 12:55:23 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 16 Nov 2022 12:55:22 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Wed, 16 Nov 2022 12:55:22 -0800
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.42) by
- edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Wed, 16 Nov 2022 12:55:22 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QgEJQVKULE6NQRK2peMqPRKve2GsY8h/AYHhZdKjc+IduTDUCfSqTahgXWrMSdvga1/gN05aX4TdSsLlu42vXgdomzBV2bgDXnuOlo2waRCtCQWH9FwBplb77NrA5PimbBIKzZV78xgQdp9aclaMg3U/zur4ZzZ0lekJUZnvhzPxqaYvTvaCPU48P6XhtSYCwVBXf65EiLLLHO2Yug8sHGVkGPVAXTegIMW7+ePxTUOfEoWgRIwyQWtFkQQriU/VuKq1GNYOYM/i75TjWvbTc9BcVMd/84dzfEvU5PB4BIPq2CIRhx4CDBz9VJeF72P90ANTPBaGAIXPdQ0w7uCdvg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7LFftE9290v1EWbDQyVF8du3dUF7b3DespcESpT7v4I=;
- b=C66Rfbtm0P8dxeeJNjpDjyi0MJsLdFdkRmns5i0p5GtKw2EC/akzJW3Px4MZijkCWM3kEF1utFBaJZPmHXd/3zxXfpMgbzO5AIowAqYvrhXv5y9Z5YB6DDcpwJm3o7vPrHekK6XMDC+DMxg1pyslTjAVWYCePYepehvMEEMkS0TbodhbTdllyiZ19lStzWHudrQU7HWh/NlsYskeDpZJtZ2HIOJ+1c6bBzr9qVIwOnSy9ZuBoWl8e/Hde/lIcfCLuMXOWkox8bqokeSvC/58QwpQssUhr6NQjxoiSqcHdEKBmVtFccwYgCcc1cgtRANQ/nKDJ9XKjp0h7620LRbIJQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20) by PH7PR11MB5817.namprd11.prod.outlook.com
- (2603:10b6:510:13a::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.18; Wed, 16 Nov
- 2022 20:55:19 +0000
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::b058:673:c228:3e95]) by MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::b058:673:c228:3e95%9]) with mapi id 15.20.5813.019; Wed, 16 Nov 2022
- 20:55:19 +0000
-Date:   Wed, 16 Nov 2022 12:55:16 -0800
-From:   Dan Williams <dan.j.williams@intel.com>
-To:     Robert Richter <rrichter@amd.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        "Ira Weiny" <ira.weiny@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        "Dan Williams" <dan.j.williams@intel.com>
-CC:     <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        "Davidlohr Bueso" <dave@stgolabs.net>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Robert Richter <rrichter@amd.com>
-Subject: RE: [PATCH v3 8/9] cxl/pci: Extend devm_cxl_port_enumerate_dports()
- to support restricted hosts (RCH)
-Message-ID: <63754e3472a4f_12cdff2949@dwillia2-xfh.jf.intel.com.notmuch>
-References: <20221109104059.766720-1-rrichter@amd.com>
- <20221109104059.766720-9-rrichter@amd.com>
+ 15.1.2507.12; Wed, 16 Nov 2022 13:51:09 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Wed, 16 Nov 2022 13:51:09 -0700
+Date:   Wed, 16 Nov 2022 21:55:57 +0100
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <ast@kernel.org>, <daniel@iogearbox.net>, <hawk@kernel.org>,
+        <john.fastabend@gmail.com>, <UNGLinuxDriver@microchip.com>
+Subject: Re: [PATCH net-next v2 4/5] net: lan966x: Add support for XDP_TX
+Message-ID: <20221116205557.2syftn3jqx357myg@soft-dev3-1>
+References: <20221115214456.1456856-1-horatiu.vultur@microchip.com>
+ <20221115214456.1456856-5-horatiu.vultur@microchip.com>
+ <20221116153418.3389630-1-alexandr.lobakin@intel.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221109104059.766720-9-rrichter@amd.com>
-X-ClientProxiedBy: SJ0PR05CA0152.namprd05.prod.outlook.com
- (2603:10b6:a03:339::7) To MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1101MB2126:EE_|PH7PR11MB5817:EE_
-X-MS-Office365-Filtering-Correlation-Id: 833a7ee9-3bf2-49bb-1984-08dac814debd
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yKshuamMP5JKpdkSnBImivyQzK5zBPc1kzyVespdJ4LF7MNAhx3tOPCLiIbYGlcEuBVh/GONQHiSzIZJr3yx2nmm2qy9e3ZjP4PXomPRzy2jjKQ9yNPNgA8dQzMVnFw5vZza3rWDAl938IKjOAKs7N+AeYVwos1hke2kZFTgSm/27SRVmFB5/JtXl7PaB9EoHlqod3ydquNwJDjh237Ud50F/QGXtmD+6uolte9HZbaFIQsYRbxRnwgOY1WM21jT1WK9oEhrqcso1BlUnrtAtp/XbjAQKJ9dm5gdk4rgDcaB6e7ShjohMVuiB2W8Kh4foZ8SUVuDcSqTFrU5qX7jD1cVK8G6AD1TlkA2z7bzpcOmFPhpoFEQkwWuSIwFjw0AIS7yhQ6IuHb2APKCdbnsgs6nQDzCxs8kQdJ3lbJFVc2x7cN6KBhFqh5la98J2DczOqNrltfhQNstSSk/8LuAx4fKaRoLVoUNO/gZWuSylj1EO3U+KBNqvxtXHRWRKDNynwfvvBD33X4wp375rHBIoute2yvhbrfVkGp9h8Eok9MobLUQmo2l1K+pRINo+0vkYEUVfqUuijqw5tM9mzaGc9lCY7tj/huA3i0ZBJmtg7YSL8IchzHfO4m80RlSMnF9ZZJJbemicRYG3OuHNTRfBQy6I+njuhjv4z7quGtARdm6R6A5a50kiAWgM3AgC71KkUGAzte7t3xC0EjoLrLUEg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(376002)(39860400002)(136003)(396003)(346002)(451199015)(2906002)(82960400001)(38100700002)(8936002)(5660300002)(9686003)(6486002)(86362001)(186003)(66476007)(8676002)(66556008)(4326008)(66946007)(41300700001)(478600001)(83380400001)(54906003)(6512007)(6666004)(110136005)(316002)(26005)(6506007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RE9WYUxpeEFWK1BqNjQyeklWeVNzc3cxbHVoVWpEcHN6VmNOam5GaUZNVnh5?=
- =?utf-8?B?bTBJQ1ZIdlpqMEJ0emtpV3RXbU5DUWk1bWVnYkgzL1crdHBRZ3ZiTUhkOEpu?=
- =?utf-8?B?cnFVNkpGelB0ZlVpVndrYk82S1B0N1dwNnd4OUY1WTlsVlRVQlh4NEdTZkZQ?=
- =?utf-8?B?RVZLcTFHQW9OTXAvTzFPUmIzazdudkcxejV3cWVaZkRTcTBvZmJ5SXN4eTRQ?=
- =?utf-8?B?Vktma1MvcUwyT0pEdlBEQmdCbVgwUEV3eU1lWk1ZTzZSRkFNWG1ESUhFRy9M?=
- =?utf-8?B?VEcveG5OL2VYOVpSQXpnU2dmUXlpMU10SFdKaVBOOG5kMWZ6bGo1L3N6WFhk?=
- =?utf-8?B?VktVczZDbERRSnNyZVVwTldrMjk4UXNFM1A4M2NQN0tYRDJBQ285bVhHOS9C?=
- =?utf-8?B?VE1ta2dKalYrWHdDVG5qNitMVEhpTjFEQkFkRE1iNU95VjQ0TStVcWx3clk0?=
- =?utf-8?B?czdqdGRBNHVudnZNVG5sckpFa0tjd0JQaHNITS9NdnY4RVZaSS9KNlRWQm5G?=
- =?utf-8?B?UHRNc0RhTmppMmxXQkpuV2NkL1ErM3YrNW51c3BrMzFTUkZhVjhWTUt6L2Qx?=
- =?utf-8?B?QWt0RTRycHhqbW9TdlhRRFh3Tm9FVUp4MWcyU2dEcWd6UnVPcDA2Rjl5b1pk?=
- =?utf-8?B?eGhoUERxQitRWDhSYXpEblllNGx3VExXdW0wVG9mSlRoL1cyNUU4NFRwMUxt?=
- =?utf-8?B?Ukc2dGdLc3g2WjBoNloxWk02Q0ovM0l1SWxCQzlKSkY2Y3JOSjBSWnRCclRI?=
- =?utf-8?B?T1hPTTIwQ0JIWGpoS0ozaXduVWpldTJtbDJFamhFUHNXZHBSbzcxc1B2MXov?=
- =?utf-8?B?Ykt5ZnFkaXo4aDYvT3JDcmMwcWVCdUhTTDYxYWoxL2VBSCs1dmJpYnY3TWNp?=
- =?utf-8?B?enYwT0o1MVJPT2tWeVJvc0NqejQ1SGFUUjJROHZ1ay9iTzdILzB4RE5raDJy?=
- =?utf-8?B?bE5RWmlMOEtFTjZ1UGJDck5VV0JwN24vQWJuWEk3TmwwbXZYTzg1NDR3TmNM?=
- =?utf-8?B?emJrYXRoM2tNSlkydERMRTlIVUw3Z01HYTd4UjltalBqbFFhYkdhQjc1SlBs?=
- =?utf-8?B?blRXYzc0SlMxRFdCdHNRMGdJZ1RkMlM4WGFTYWlkSU01bForKzZOU0Vxa21N?=
- =?utf-8?B?WXlJWUhic3NBK08xM29WOStsL0IwcVBOaVdmRmlrVTdjWi9VbjdNRW5VNWd4?=
- =?utf-8?B?UFBHWDM0cUt2NndIZWg5UzdyQTliaEEvMnJMQkF0dUlTTytER0JwRHlNYzkr?=
- =?utf-8?B?dGVNMFNGeXVDM2dsejc3NkZFWFBUeUI3VTNwUm5WZjJnaFVWeU1YSGxmUEpM?=
- =?utf-8?B?eVVrblE2OHQ0MUcrMWVuUE5Ed2VNcXJ4V1h0REN5d1BJUWFaYkNyM29EanMw?=
- =?utf-8?B?aGprbTc4dytOdzk1eTU0NzZTK0Y5akJnbXU0a1ZGR2hwTElUVHBLa1FWR2ZT?=
- =?utf-8?B?OXdjMVUrNzViS2VhSHl5Rm5XbDNuMWdCUFAxTjhUUHBiNU5DemtLaXdHc0JF?=
- =?utf-8?B?dWVqUnZiYXNiejFIVDNoYU84cXFzSG9sUGNzd2RsRjlxeG03OHRLSmNqYzVh?=
- =?utf-8?B?cUhmd3A2S0NMRnk1Umh5WmxWTVViVGZ3THlOYStrK1NIbk9CSDVaY0pzWnJv?=
- =?utf-8?B?SmNzekZyYmppTS9PVWpoU3ROcVZwVVNsQ2dQVDg0ck1wUXEyZE5NTk1ZbWVO?=
- =?utf-8?B?YXI5dHBqTzFIRUpXQVNKRDd6SVpKQk83ZWVxVXJDZ2NzaWFzQ2hmQlRJNldm?=
- =?utf-8?B?MkVOSy9FY2VVMDlVbFl5c2VkRnhPSVZuQlFFQzNIeG5QUitDSEZpeG11eHNn?=
- =?utf-8?B?dmdnTi9GZHIzVDE2NXVWVXRpOGdqUm80Tm82RS9Hb3lkejBlUHI2Y1p0K1J3?=
- =?utf-8?B?RnhCM3pWTjllRFB0WURiVTl1T3E1eExKenZRZk0wbWlGSjFtTDhxelJVN2l5?=
- =?utf-8?B?VjdNMHloYmhaQ0hxMkVibTNmZ1Nudzczd0RhbkZ1T1RNSzkyVzQ5VFJXQnhU?=
- =?utf-8?B?SXFyRTRuOGR1SkhZR0NCSlRpbFRRK3FmdEV4U1BueXM5YllFWm5laUlkWnRO?=
- =?utf-8?B?T25jeUh1OG0rVWtVZ2lvL1dYR01PUnE2Q2JBakhZMm5GaUgwSDZlYXlyY0o3?=
- =?utf-8?B?V2ZvS0RWY2FpQWcxd21LajgxVUZKZ1FhQmtKUEdRZ1ExS3BNSC9EbEpXQWdB?=
- =?utf-8?B?YWc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 833a7ee9-3bf2-49bb-1984-08dac814debd
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Nov 2022 20:55:18.9588
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 67sLo5CYE2wlpOLMGnYgnul74yI9Fim6cX5+uOuhgOhDG/tZZaYjDxDE+8kTtFx0EAgSwfPDFxCx5xs6x8pCOq6fdC0DsQ4+uTZ664kXYM0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB5817
-X-OriginatorOrg: intel.com
+In-Reply-To: <20221116153418.3389630-1-alexandr.lobakin@intel.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Robert Richter wrote:
-> The PCIe Software View of an RCH and RCD is different to VH mode. An
-> RCD is paired with an RCH and shows up as RCiEP. Its downstream and
-> upstream ports are hidden to the PCI hierarchy. This different PCI
-> topology requires a different handling of RCHs.
+The 11/16/2022 16:34, Alexander Lobakin wrote:
 > 
-> Extend devm_cxl_port_enumerate_dports() to support restricted hosts
-> (RCH). If an RCH is detected, register its port as dport to the
-> device. An RCH is found if the host's dev 0 func 0 devices is an RCiEP
-> with an existing PCIe DVSEC for CXL Devices (ID 0000h).
+> From: Horatiu Vultur <horatiu.vultur@microchip.com>
+> Date: Tue, 15 Nov 2022 22:44:55 +0100
 
-It is not clear to me what this extra dport represents. Here are the
-Linux CXL objects I see in a VH vs an RCH topology:
+Hi Olek,
 
-               VH
-          ┌──────────┐
-          │ ACPI0017 │
-          │  root0   │
-          └─────┬────┘
-                │
-          ┌─────┴────┐
-          │  dport0  │
-    ┌─────┤ ACPI0016 ├─────┐
-    │     │  port1   │     │
-    │     └────┬─────┘     │
-    │          │           │
- ┌──┴───┐   ┌──┴───┐   ┌───┴──┐
- │dport0│   │dport1│   │dport2│
- │ RP0  │   │ RP1  │   │ RP2  │
- └──────┘   └──┬───┘   └──────┘
-               │
-           ┌───┴─────┐
-           │endpoint0│
-           │  port2  │
-           └─────────┘
+> 
+> Extend lan966x XDP support with the action XDP_TX. In this case when the
+> received buffer needs to execute XDP_TX, the buffer will be moved to the
+> TX buffers. So a new RX buffer will be allocated.
+> When the TX finish with the frame, it would release completely this
+> buffer.
+> 
+> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> ---
+>  .../ethernet/microchip/lan966x/lan966x_fdma.c | 78 +++++++++++++++++--
+>  .../ethernet/microchip/lan966x/lan966x_main.c |  4 +-
+>  .../ethernet/microchip/lan966x/lan966x_main.h |  8 ++
+>  .../ethernet/microchip/lan966x/lan966x_xdp.c  |  8 ++
+>  4 files changed, 91 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+> index 384ed34197d58..c2e56233a8da5 100644
+> --- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+> +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+> @@ -394,13 +394,21 @@ static void lan966x_fdma_tx_clear_buf(struct lan966x *lan966x, int weight)
+>                 dcb_buf->dev->stats.tx_bytes += dcb_buf->len;
+> 
+>                 dcb_buf->used = false;
+> -               dma_unmap_single(lan966x->dev,
+> -                                dcb_buf->dma_addr,
+> -                                dcb_buf->len,
+> -                                DMA_TO_DEVICE);
+> -               if (!dcb_buf->ptp)
+> +               if (dcb_buf->skb)
+> +                       dma_unmap_single(lan966x->dev,
+> +                                        dcb_buf->dma_addr,
+> +                                        dcb_buf->len,
+> +                                        DMA_TO_DEVICE);
+> +
+> +               if (dcb_buf->skb && !dcb_buf->ptp)
+>                         dev_kfree_skb_any(dcb_buf->skb);
+> 
+> +               if (dcb_buf->page) {
+> +                       page_pool_release_page(lan966x->rx.page_pool,
+> +                                              dcb_buf->page);
+> +                       put_page(dcb_buf->page);
+> +               }
+> 
+> Hmm, that's not really correct.
+> 
+> For skb, you need to unmap + free, true (BPW, just use
+> napi_consume_skb()).
 
+What does BPW stand for?
+Yes, I can use napi_consume_skb instead of dev_kfree_skb_any();
 
-              RCH
-          ┌──────────┐
-          │ ACPI0017 │
-          │  root0   │
-          └────┬─────┘
-               │
-           ┌───┴────┐
-           │ dport0 │
-           │ACPI0016│
-           └───┬────┘
-               │
-          ┌────┴─────┐
-          │endpoint0 │
-          │  port1   │
-          └──────────┘
+> For %XDP_TX, as you use Page Pool, you don't need to unmap, but you
+> need to do xdp_return_frame{,_bulk}. Plus, as Tx is being done here
+> directly from an Rx NAPI polling cycle, xdp_return_frame_rx_napi()
+> is usually used. Anyway, each of xdp_return_frame()'s variants will
+> call page_pool_put_full_page() for you.
 
-So in the RCH case the only dport is the dport that root0 targets, and
-then that dport is directly connected to the RCIEP endpoint-port.
+If I understand correctly this part that you describe, the page will
+be added back in the page_pool cache. While in my case, I am giving
+back the page to the page allocator. In this way the page_pool needs
+to allocate more pages every time when the action XDP_TX is happening.
 
-In the VH case another level of dports are needed to route from root0 to
-the fan out across the CXL root ports.
+BTW, this shows that there is a missing xdp_rxq_info_reg_mem_model call,
+because when calling xdp_return_frame_rx_napi, the frame was not going
+to page_pool but the was simply freed because xdp_mem_info was the wrong
+type.
+
+> For %XDP_REDIRECT, as you don't know the source of the XDP frame,
+
+Why I don't know the source?
+Will it not be from an RX page that is allocated by Page Pool?
+
+> you need to unmap it (as it was previously mapped in
+> ::ndo_xdp_xmit()), plus call xdp_return_frame{,_bulk} to free the
+> XDP frame. Note that _rx_napi() variant is not applicable here.
+> 
+> That description might be confusing, so you can take a look at the
+> already existing code[0] to get the idea. I think this piece shows
+> the expected logics rather well.
+
+I think you forgot to write the link to the code.
+I looked also at different drivers but I didn't figure it out why the
+frame needed to be mapped and where is happening that.
+
+> 
+> +
+>                 clear = true;
+>         }
+> 
+> @@ -532,6 +540,9 @@ static int lan966x_fdma_napi_poll(struct napi_struct *napi, int weight)
+>                         lan966x_fdma_rx_free_page(rx);
+>                         lan966x_fdma_rx_advance_dcb(rx);
+>                         goto allocate_new;
+> +               case FDMA_TX:
+> +                       lan966x_fdma_rx_advance_dcb(rx);
+> +                       continue;
+>                 case FDMA_DROP:
+>                         lan966x_fdma_rx_free_page(rx);
+>                         lan966x_fdma_rx_advance_dcb(rx);
+> @@ -653,6 +664,62 @@ static void lan966x_fdma_tx_start(struct lan966x_tx *tx, int next_to_use)
+>         tx->last_in_use = next_to_use;
+>  }
+> 
+> +int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
+> +                          struct xdp_frame *xdpf,
+> +                          struct page *page)
+> +{
+> +       struct lan966x *lan966x = port->lan966x;
+> +       struct lan966x_tx_dcb_buf *next_dcb_buf;
+> +       struct lan966x_tx *tx = &lan966x->tx;
+> +       dma_addr_t dma_addr;
+> +       int next_to_use;
+> +       __be32 *ifh;
+> +       int ret = 0;
+> +
+> +       spin_lock(&lan966x->tx_lock);
+> +
+> +       /* Get next index */
+> +       next_to_use = lan966x_fdma_get_next_dcb(tx);
+> +       if (next_to_use < 0) {
+> +               netif_stop_queue(port->dev);
+> +               ret = NETDEV_TX_BUSY;
+> +               goto out;
+> +       }
+> +
+> +       /* Generate new IFH */
+> +       ifh = page_address(page) + XDP_PACKET_HEADROOM;
+> +       memset(ifh, 0x0, sizeof(__be32) * IFH_LEN);
+> +       lan966x_ifh_set_bypass(ifh, 1);
+> +       lan966x_ifh_set_port(ifh, BIT_ULL(port->chip_port));
+> +
+> +       dma_addr = page_pool_get_dma_addr(page);
+> +       dma_sync_single_for_device(lan966x->dev, dma_addr + XDP_PACKET_HEADROOM,
+> +                                  xdpf->len + IFH_LEN_BYTES,
+> +                                  DMA_TO_DEVICE);
+> 
+> Also not correct. This page was mapped with %DMA_FROM_DEVICE in the
+> Rx code, now you sync it for the opposite.
+> Most drivers in case of XDP enabled create Page Pools with ::dma_dir
+> set to %DMA_BIDIRECTIONAL. Now you would need only to sync it here
+> with the same direction (bidir) and that's it.
+
+That is a really good catch!
+I was wondering why the things were working when I tested this. Because
+definitely, I can see the right behaviour.
+
+> 
+> +
+> +       /* Setup next dcb */
+> +       lan966x_fdma_tx_setup_dcb(tx, next_to_use, xdpf->len + IFH_LEN_BYTES,
+> +                                 dma_addr + XDP_PACKET_HEADROOM);
+> +
+> +       /* Fill up the buffer */
+> +       next_dcb_buf = &tx->dcbs_buf[next_to_use];
+> +       next_dcb_buf->skb = NULL;
+> +       next_dcb_buf->page = page;
+> +       next_dcb_buf->len = xdpf->len + IFH_LEN_BYTES;
+> +       next_dcb_buf->dma_addr = dma_addr;
+> +       next_dcb_buf->used = true;
+> +       next_dcb_buf->ptp = false;
+> +       next_dcb_buf->dev = port->dev;
+> +
+> +       /* Start the transmission */
+> +       lan966x_fdma_tx_start(tx, next_to_use);
+> +
+> +out:
+> +       spin_unlock(&lan966x->tx_lock);
+> +
+> +       return ret;
+> +}
+> +
+>  int lan966x_fdma_xmit(struct sk_buff *skb, __be32 *ifh, struct net_device *dev)
+>  {
+>         struct lan966x_port *port = netdev_priv(dev);
+> @@ -709,6 +776,7 @@ int lan966x_fdma_xmit(struct sk_buff *skb, __be32 *ifh, struct net_device *dev)
+>         /* Fill up the buffer */
+>         next_dcb_buf = &tx->dcbs_buf[next_to_use];
+>         next_dcb_buf->skb = skb;
+> +       next_dcb_buf->page = NULL;
+>         next_dcb_buf->len = skb->len;
+>         next_dcb_buf->dma_addr = dma_addr;
+>         next_dcb_buf->used = true;
+> 
+> [...]
+> 
+> --
+> 2.38.0
+> 
+> Thanks,
+> Olek
+
+-- 
+/Horatiu
