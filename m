@@ -2,89 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 879EA62CE85
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 00:08:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D01162CE87
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 00:11:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234457AbiKPXHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 18:07:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44408 "EHLO
+        id S233702AbiKPXLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 18:11:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234649AbiKPXHc (ORCPT
+        with ESMTP id S233551AbiKPXLM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 18:07:32 -0500
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FDB1627F0;
-        Wed, 16 Nov 2022 15:07:29 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 6FDCF320030E;
-        Wed, 16 Nov 2022 18:07:28 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Wed, 16 Nov 2022 18:07:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1668640048; x=
-        1668726448; bh=CTK8JJ2X3iARzZavmcqrT5kZXZiFN9cO54tuAX+WwP0=; b=w
-        MjxU47ygntfL2uLwwO96KHj2ryftnccEek0ic33VGITOu2YAygihCctuZfDCj/ve
-        OX/+wmdTQfGjTfJrWzLYI/DFBWYKYTT4CZ3//7Pi+Hy+q1+6MDU5EZEtU4LAIRdx
-        1EhdFZxcgv9mu7NhOtvV0+Ot4e1RfeoyNyCdFbDzN6g/YeXGxSJ6nQ2vNaIV35pt
-        UYX9BOi+1UB9hoF9ylrov0gKCo6QmNO+xapUmEgFQkjrzpnFp3KgnVE1h12cptU6
-        Oq4edlJqZdyUYLC8TDXAtDDusBg2Bv750F0XuaSeHjdJVj/WOqD6DLAvqgLTL+nd
-        mfk8IBU5jZx2HlLzJPl3Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1668640048; x=
-        1668726448; bh=CTK8JJ2X3iARzZavmcqrT5kZXZiFN9cO54tuAX+WwP0=; b=f
-        PLm5UKpuoPZTMhzVLI2cGmO4u00ugA5fqPkREuBvzgGNeeKVSFD1urbhD23WiBWJ
-        8mrh4gWYSTGnBl1em5zbEeHrBfe/mRYQeRbDdW/SApUMofCyvLzqLcMEfsmNsK0t
-        gh6xj7n+UK+KBbKZenIvpKsJtrzG6FYEBDe9S5uvJjnlxPI/DlDvNdkB6a6GvX1C
-        YMCGfvLDSoLmhOGFnSP3Fv0HGuzUMrH9TSKh48Xf98yQEoqbd9fVr+3dQq4IsEGn
-        9pewMzMOwpd2sFYC/KqR459nT3TfcQpKtMpSUxym4jSJC+MCTI0JdA/g3nL3p894
-        lSioiq+TLU5T1nQd0l83w==
-X-ME-Sender: <xms:L211Y9nROomX0u8gAI6k37TFA4uMKnb2wj7yCS9HXFh8oBwUVmIDiA>
-    <xme:L211Y41rljCSkGpmAJnH3rtm1jj_aM72az00bINl8pNHaJ5va-oOc8Z01na2bFGDL
-    oDAFoIofppvE5LcBw>
-X-ME-Received: <xmr:L211YzrRCDh8aU8VtTnpAL4mYVMopvZSB2rXvxWxAk8TJsMsEDZgX5GlC2wl2Qq3VFo4usLLLySACqFGpZVCkMQXaanrY0d57n5QrCLU8h8Tr8BnbvWouUHXqQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgeejgddtjecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefkffggfgfuvfevfhfhjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepkeejleelfeeitdfhtdfgkeeghedufeduueegffdvhfdukeelleef
-    tdetjeehuddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:L211Y9mdFjpKUk-3nCHmOT-pTHvCvdpuUJVnez9o9_-jeKyj1ENm0g>
-    <xmx:L211Y73vwfvkEhBNVDdviENT25S5h3dT6zkVXh3Tt5gcTjXfdtKK9Q>
-    <xmx:L211Y8t9GdhtnJd7hrgu-_-OdqjUT9xx9_wifMLzT98UN4DBicsxaA>
-    <xmx:MG11Y0J81hF7RawiCii8YyDb5A-COHtVK0obJA0dA3mU3mMIphDlbg>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 16 Nov 2022 18:07:27 -0500 (EST)
-Message-ID: <26d409bb-3936-6458-243e-067b99f76041@sholland.org>
-Date:   Wed, 16 Nov 2022 17:07:26 -0600
+        Wed, 16 Nov 2022 18:11:12 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0AF48759
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 15:11:11 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id b11so67915pjp.2
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 15:11:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=6/uZ+ThofFLV0o5Tr1f+GtX311JSydF+TNhDZdXxL+Y=;
+        b=sw25RevSzPxyBTlqYrV7fZBs1zlbP4R/PRdnjJiozTdyYdVEgfjiN6sq3QvpQnKmYb
+         A9KrAmO8LUSsUg9QWILrOJIZQgbJD3EVfVq/OTKCiRW+0hMAAfGBQS+8d8bOwO5P86A9
+         cQ+ULosSAcn8mGQ7oWXdMyc5kh+hHkbH5qY/aMafHKvBy6BYXeV7TWVZ0YbdBFnu8PKV
+         7mBB3IvjzV9Xx6ODVxqv8/Lhkl55Bke5K7MmTUJUiC8vbHuU/oqeWqf+TjU6T/zkzr3e
+         ztN78L8GLBHOc2ZDEo2a2Vhq0gUVbwv0fiQChVobCObCzPTMp+YcuufmUN0GBPORipUS
+         /1pQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6/uZ+ThofFLV0o5Tr1f+GtX311JSydF+TNhDZdXxL+Y=;
+        b=loCKSqrnI87H/RuA5nXgdQC39yad6eYgHgPHqyXsPXkk6uZuMNhZPSR+OiJJa3MzIf
+         4V6xkbuwvmUHHecjubttfci35twNaXfXJXs2r+IDjUO/NkmCrR/Gq1YPiyAI4YL/3Qwm
+         eIBldvn23ywH00bV5WO5WdG8QhunT7QJCQKgyWuNshDf3rO8dMIbBcE1wRSii679FxjH
+         AAeEBfge7wtLH/g/pESzNVDAdMj0Qc+LZIjQjr5gV3U+QSqDbGYVcoR4fuj40t9wknFT
+         /VIabnOEAJrn8VIhApWPI6VXXeDt0ajuWCoXvVL05v8/fN5LAzeg2dKJNkWU/rOA0INm
+         iPLQ==
+X-Gm-Message-State: ANoB5pmK4u3EZVRNuxtKIxocipR6hx9WrsGCMtumQR8Js7zksNfsB65v
+        mJcP956iaEAyAAi3fpxFX4xk/e2H0apIYC2bOi3Kd1RzMktHYw==
+X-Google-Smtp-Source: AA0mqf48zuVhwaeoLsQEIGf5w3oJzTf0ujy22FczYj0b6cnG2AKtGbnjwBM+ICv/7pf79Sub2eMPb5g2VP+rcm7A7SY=
+X-Received: by 2002:a17:902:7086:b0:186:de87:7ffd with SMTP id
+ z6-20020a170902708600b00186de877ffdmr34381plk.94.1668640270546; Wed, 16 Nov
+ 2022 15:11:10 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH 2/2] arm64: dts: allwinner: h6: Fix Cedrus IOMMU channels
-Content-Language: en-US
-To:     Jernej Skrabec <jernej.skrabec@gmail.com>, mchehab@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        wens@csie.org
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <20221116193105.363297-1-jernej.skrabec@gmail.com>
- <20221116193105.363297-3-jernej.skrabec@gmail.com>
-From:   Samuel Holland <samuel@sholland.org>
-In-Reply-To: <20221116193105.363297-3-jernej.skrabec@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <fe18ed06-12f1-1dcb-71ee-aec5a5d656ea@gmail.com>
+ <CAKwvOdnx_hyf=3DZtU_P8icWa07jf1+baNgM9MBh_ojE-EK5=A@mail.gmail.com> <d7e0fbca-7e9d-fbe2-6f8c-6e60a78f56df@gmail.com>
+In-Reply-To: <d7e0fbca-7e9d-fbe2-6f8c-6e60a78f56df@gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Wed, 16 Nov 2022 15:10:59 -0800
+Message-ID: <CAKwvOdnNA7pFGNuord-yiArE55oPNCCwCOHdrVQiRiATtYC23g@mail.gmail.com>
+Subject: Re: kbuild: check the minimum compiler version in Kconfig
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Paul Gortmaker <paul.gortmaker@windriver.com>,
+        Nathan Chancellor <natechancellor@gmail.com>, ojeda@kernel.org,
+        sedat.dilek@gmail.com, clang-built-linux <llvm@lists.linux.dev>,
+        Manoj Gupta <manojgupta@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,19 +73,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/16/22 13:31, Jernej Skrabec wrote:
-> Cedrus H6 actually uses two IOMMU channels. During development page
-> faults from both were observed. Documentation also lists both of them
-> to be connected to Cedrus, but it doesn't make clear which is used for
-> what.
-> 
-> Add second IOMMU channel.
-> 
-> Fixes: 62a8ccf3a248 ("arm64: dts: allwinner: h6: Fix Cedrus IOMMU usage")
-> Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-> ---
->  arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, Nov 16, 2022 at 2:56 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+>
+> On 11/16/22 14:48, Nick Desaulniers wrote:
+> > On Wed, Nov 16, 2022 at 1:48 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+> >>
+> >> Hi Masahiro, Nick,
+> >>
+> >> The compiler version check performed with
+> >> aec6c60a01d3a3170242d6a99372a388e1136dc6 ("kbuild: check the minimum
+> >> compiler version in Kconfig") can be defeated and prevent running the
+> >> *config targets if specifying LLVM=1 on the command line, in that way:
+> >>
+> >> BR_BINARIES_DIR=/local/users/fainelli/buildroot-llvm/output/arm64/images
+> >> LLVM=1 LLVM_IAS=1 PKG_CONFIG_PATH="" /usr/bin/make -j49 -C
+> >> /local/users/fainelli/buildroot-llvm/output/arm64/build/linux-custom
+> >> HOSTCC="/usr/bin/gcc"
+> >> HOSTCC="/local/users/fainelli/buildroot-llvm/output/arm64/host/bin/ccache
+> >> /usr/bin/gcc -O2
+> >> -I/local/users/fainelli/buildroot-llvm/output/arm64/host/include
+> >> -DNDEBUG -L/local/users/fainelli/buildroot-llvm/output/arm64/host/lib
+> >> -Wl,-rpath,/local/users/fainelli/buildroot-llvm/output/arm64/host/lib"
+> >> ARCH=arm64
+> >> INSTALL_MOD_PATH=/local/users/fainelli/buildroot-llvm/output/arm64/target
+> >> CROSS_COMPILE="/local/users/fainelli/buildroot-llvm/output/arm64/host/bin/aarch64-linux-"
+> >> WERROR=0
+> >> DEPMOD=/local/users/fainelli/buildroot-llvm/output/arm64/host/sbin/depmod
+> >> INSTALL_MOD_STRIP=1 HOSTCC="/usr/bin/gcc" menuconfig
+> >>     UPD     scripts/kconfig/mconf-cfg
+> >>     HOSTCC  scripts/kconfig/mconf.o
+> >>     HOSTCC  scripts/kconfig/lxdialog/checklist.o
+> >>     HOSTCC  scripts/kconfig/lxdialog/inputbox.o
+> >>     HOSTCC  scripts/kconfig/lxdialog/menubox.o
+> >>     HOSTCC  scripts/kconfig/lxdialog/textbox.o
+> >>     HOSTCC  scripts/kconfig/lxdialog/util.o
+> >>     HOSTCC  scripts/kconfig/lxdialog/yesno.o
+> >>     HOSTLD  scripts/kconfig/mconf
+> >> ***
+> >> *** Compiler is too old.
+> >> ***   Your Clang version:    10.0.0
+> >> ***   Minimum Clang version: 10.0.1
+> >> ***
+> >> scripts/Kconfig.include:44: Sorry, this compiler is not supported.
+> >>
+> >> Here, the compiler check is actually checking the host compiler clang
+> >> version installed on my Ubuntu 20.04 system, as opposed to the cross
+> >> compiler clang version that is being used.
+> >
+> > LLVM=1 will use `clang` as found by your $PATH.  Where did you express
+> > to make what the "cross compiler clang version" is? (And why do you
+> > set HOSTCC three times)
+>
+> We are setting CROSS_COMPILE to express the cross compiler clang prefix
+> to use.
 
-Reviewed-by: Samuel Holland <samuel@sholland.org>
+Can you try setting CLANG_PREFIX rather than CROSS_COMPILE (to the same value)?
 
+CLANG_PREFIX=/local/users/fainelli/buildroot-llvm/output/arm64/host/bin/aarch64-linux-
+
+
+>
+> Setting HOSTCC three times is done by buildroot, it does it through make
+> flags, and then variables passed to make etc. clearly we could change
+> that, but that's out of scope is not it?
+> --
+> Florian
+>
+
+
+--
+Thanks,
+~Nick Desaulniers
