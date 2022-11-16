@@ -2,114 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25E5562B0C9
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 02:51:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA40562B0D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 02:52:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231441AbiKPBvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 20:51:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59226 "EHLO
+        id S231521AbiKPBwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 20:52:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiKPBvD (ORCPT
+        with ESMTP id S231487AbiKPBwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 20:51:03 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0719225E9D;
-        Tue, 15 Nov 2022 17:51:01 -0800 (PST)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NBmGP6h74z15Mgc;
-        Wed, 16 Nov 2022 09:50:37 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 16 Nov 2022 09:50:58 +0800
-CC:     <yangyicong@hisilicon.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>, X86 ML <x86@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "punit.agrawal@bytedance.com" <punit.agrawal@bytedance.com>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        "darren@os.amperecomputing.com" <darren@os.amperecomputing.com>,
-        "huzhanyuan@oppo.com" <huzhanyuan@oppo.com>,
-        "lipeifeng@oppo.com" <lipeifeng@oppo.com>,
-        "zhangshiming@oppo.com" <zhangshiming@oppo.com>,
-        "guojian@oppo.com" <guojian@oppo.com>,
-        "realmz6@gmail.com" <realmz6@gmail.com>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Barry Song <21cnbao@gmail.com>,
-        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
-        haoxin <xhao@linux.alibaba.com>,
-        "prime.zeng@hisilicon.com" <prime.zeng@hisilicon.com>,
-        Barry Song <v-songbaohua@oppo.com>,
-        Mel Gorman <mgorman@suse.de>
-Subject: Re: [PATCH v6 2/2] arm64: support batched/deferred tlb shootdown
- during page reclamation
-To:     Nadav Amit <namit@vmware.com>
-References: <20221115031425.44640-1-yangyicong@huawei.com>
- <20221115031425.44640-3-yangyicong@huawei.com>
- <0D3A45FE-5367-40CD-A035-37F6EE98B25E@vmware.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <91e4804d-cb99-fd22-dafd-2f418f5c7ba9@huawei.com>
-Date:   Wed, 16 Nov 2022 09:50:58 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Tue, 15 Nov 2022 20:52:03 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8903D25E9D;
+        Tue, 15 Nov 2022 17:52:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=Kuh/N0Wx2kjpMO629JuP6BcKFcPo/nef5LQjffP+jxk=; b=sxjxv8L6ye11bItWDh5pYym26x
+        4zn1UO3NmgBWEaKA6PHD4xgqMZlvSNiTA9Kf/1tm08wE52/R2mdNoHl5veW6ZldZkkAxe5JqI3zeI
+        xaEuy8d9U6iVak7VssTEME0+wdtAH2U7CVFG/jtamNJSQYsMu2UoPuMKBgQEZanmAEcw=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1ov7aF-002WAO-AZ; Wed, 16 Nov 2022 02:51:23 +0100
+Date:   Wed, 16 Nov 2022 02:51:23 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Corentin Labbe <clabbe@baylibre.com>
+Cc:     broonie@kernel.org, calvin.johnson@oss.nxp.com,
+        davem@davemloft.net, edumazet@google.com, hkallweit1@gmail.com,
+        jernej.skrabec@gmail.com, krzysztof.kozlowski+dt@linaro.org,
+        kuba@kernel.org, lgirdwood@gmail.com, linux@armlinux.org.uk,
+        pabeni@redhat.com, robh+dt@kernel.org, samuel@sholland.org,
+        wens@csie.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, netdev@vger.kernel.org,
+        linux-sunxi@googlegroups.com
+Subject: Re: [PATCH v4 2/3] phy: handle optional regulator for PHY
+Message-ID: <Y3RCG/Xt4y3OfisD@lunn.ch>
+References: <20221115073603.3425396-1-clabbe@baylibre.com>
+ <20221115073603.3425396-3-clabbe@baylibre.com>
 MIME-Version: 1.0
-In-Reply-To: <0D3A45FE-5367-40CD-A035-37F6EE98B25E@vmware.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221115073603.3425396-3-clabbe@baylibre.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/16 7:38, Nadav Amit wrote:
-> On Nov 14, 2022, at 7:14 PM, Yicong Yang <yangyicong@huawei.com> wrote:
+On Tue, Nov 15, 2022 at 07:36:02AM +0000, Corentin Labbe wrote:
+> Add handling of optional regulators for PHY.
+> Regulators need to be enabled before PHY scanning, so MDIO bus
+> initiate this task.
 > 
->> diff --git a/arch/x86/include/asm/tlbflush.h b/arch/x86/include/asm/tlbflush.h
->> index 8a497d902c16..5bd78ae55cd4 100644
->> --- a/arch/x86/include/asm/tlbflush.h
->> +++ b/arch/x86/include/asm/tlbflush.h
->> @@ -264,7 +264,8 @@ static inline u64 inc_mm_tlb_gen(struct mm_struct *mm)
->> }
->>
->> static inline void arch_tlbbatch_add_mm(struct arch_tlbflush_unmap_batch *batch,
->> -					struct mm_struct *mm)
->> +					struct mm_struct *mm,
->> +					unsigned long uaddr)
+> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> ---
+>  drivers/net/mdio/fwnode_mdio.c | 31 ++++++++++++++++++++++++++++++-
+>  drivers/net/phy/phy_device.c   | 10 ++++++++++
+>  include/linux/phy.h            |  3 +++
+>  3 files changed, 43 insertions(+), 1 deletion(-)
 > 
-> Logic-wise it looks fine. I notice the “v6", and it should not be blocking,
-> but I would note that the name "arch_tlbbatch_add_mm()” does not make much
-> sense once the function also takes an address.
-> 
+> diff --git a/drivers/net/mdio/fwnode_mdio.c b/drivers/net/mdio/fwnode_mdio.c
+> index 689e728345ce..19a16072d4ca 100644
+> --- a/drivers/net/mdio/fwnode_mdio.c
+> +++ b/drivers/net/mdio/fwnode_mdio.c
+> @@ -10,6 +10,7 @@
+>  #include <linux/fwnode_mdio.h>
+>  #include <linux/of.h>
+>  #include <linux/phy.h>
+> +#include <linux/regulator/consumer.h>
+>  #include <linux/pse-pd/pse.h>
 
-ok the add_mm should still apply to x86 since the address is not used, but not for arm64.
+These headers are sorted, so please add regulator after pse.
 
-> It could’ve been something like arch_set_tlb_ubc_flush_pending() but that’s
-> too long. I’m not very good with naming, but the current name is not great.
-> 
+>  
+>  MODULE_AUTHOR("Calvin Johnson <calvin.johnson@oss.nxp.com>");
+> @@ -116,7 +117,9 @@ int fwnode_mdiobus_register_phy(struct mii_bus *bus,
+>  	struct phy_device *phy;
+>  	bool is_c45 = false;
+>  	u32 phy_id;
+> -	int rc;
+> +	int rc, reg_cnt = 0;
+> +	struct regulator_bulk_data *consumers = NULL;
+> +	struct device_node __maybe_unused *nchild = NULL;
 
-What about arch_tlbbatch_add_pending()? Considering the x86 is pending the flush operation
-while arm64 is pending the sychronization operation, arch_tlbbatch_add_pending() should
-make sense to both.
+Reverse Christmas tree.
 
-Thanks.
+>  
+>  	psec = fwnode_find_pse_control(child);
+>  	if (IS_ERR(psec))
+> @@ -133,6 +136,26 @@ int fwnode_mdiobus_register_phy(struct mii_bus *bus,
+>  	if (rc >= 0)
+>  		is_c45 = true;
+>  
+> +#ifdef CONFIG_OF
 
+Do you need this #ifdef ? Generally, all of_* functions should have
+stubs if CONFIG_OF is not enabled. It would be nice to remove this, so
+we get compile testing. And the __maybe_unused above is then probably
+not needed.
+
+> +	for_each_child_of_node(bus->dev.of_node, nchild) {
+> +		u32 reg;
+> +
+> +		of_property_read_u32(nchild, "reg", &reg);
+> +		if (reg != addr)
+> +			continue;
+> +		reg_cnt = of_regulator_bulk_get_all(&bus->dev, nchild, &consumers);
+> +		if (reg_cnt > 0) {
+> +			rc = regulator_bulk_enable(reg_cnt, consumers);
+> +			if (rc)
+> +				return rc;
+> +		}
+> +		if (reg_cnt < 0) {
+> +			dev_err(&bus->dev, "Fail to regulator_bulk_get_all err=%d\n", reg_cnt);
+> +			return reg_cnt;
+> +		}
+> +	}
+> +#endif
+> +
+
+	Andrew
