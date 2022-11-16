@@ -2,117 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1A4662B082
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 02:25:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5123E62B085
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 02:26:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230452AbiKPBZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 20:25:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48708 "EHLO
+        id S231665AbiKPB0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 20:26:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231633AbiKPBZg (ORCPT
+        with ESMTP id S231194AbiKPB0u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 20:25:36 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 45F212611B;
-        Tue, 15 Nov 2022 17:25:30 -0800 (PST)
-Received: from [192.168.0.5] (71-212-113-106.tukw.qwest.net [71.212.113.106])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 8260320B717A;
-        Tue, 15 Nov 2022 17:25:29 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8260320B717A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1668561929;
-        bh=VDLo8zbPXioYWN/SStu6qUVWfBLk1lWDQR3U6RnVois=;
+        Tue, 15 Nov 2022 20:26:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF5F55B5
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 17:26:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 26A87B81B7B
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:26:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B277C433D7;
+        Wed, 16 Nov 2022 01:26:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668562006;
+        bh=8gnSm96akCzktmabmash2hbT3a601dNz5cAtgTHwthU=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=s+7UOMAfiepeCPyCHW5IlDj7xGLqR8CdM/K1zb4urLoy7cQQhxHbuXZze2NgODi9W
-         Ul1J73OByj210UGEbHSpMYLdM6tA3QazVQFWgQ1Q0G2r1pqXXMBH4XlXJaLlOYvrHh
-         wnfpKdRAuNO4m3mRoR3vjATUIb9veVLlwg0+K1Zw=
-Message-ID: <fd31c242-e510-cba3-4057-8040eab8f41f@linux.microsoft.com>
-Date:   Tue, 15 Nov 2022 17:25:29 -0800
+        b=FuKynyaFpGbbG4DOHpx2l/UyYjujbgBFGIxzOcv5cU6Xp9HEyzPpU+pEGClW1PLBJ
+         p5ea9WwOXtEXCUlxtykaPgd966aqFglE0Imu+zi3zfAagU4FQKAketgpB8bNNHMnt4
+         GNfJBKQRXESJ8rO8sGmbwW5eQ7qdxpmX1sAhlLXgQNmCCUlsYE82OsmbkfecLfJTzy
+         kjitsB5u1+ixzkmhaFodGuqfPJP1aE1PYNCnxxvf55oGahv5hC4Pw2i5pQA4/KUZbM
+         HaqGUMpllloz69zSvVHPXsu767Gvw3TC4T9MQp1KiW+61N0BFX1HmeGd/gQZoQNxV3
+         3JvJUM80orTxA==
+Message-ID: <cec4aa23-37b0-18af-5217-e524ad45bbb4@kernel.org>
+Date:   Wed, 16 Nov 2022 09:26:42 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] iommu/hyper-v: Allow hyperv irq remapping without x2apic
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v2 1/3] f2fs: fix to alloc_mode changed after remount on a
+ small volume device
 Content-Language: en-US
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>
-Cc:     Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        Sunil Muthuswamy <sunilmut@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        "dwmw2@infradead.org" <dwmw2@infradead.org>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "will@kernel.org" <will@kernel.org>
-References: <1668020853-23950-1-git-send-email-nunodasneves@linux.microsoft.com>
- <Y255HhDbwbI/z5bJ@liuwe-devbox-debian-v2>
- <BYAPR21MB1688800D35F86D766567C1FAD7009@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y26F+H1SuJrad3Ra@liuwe-devbox-debian-v2>
- <BYAPR21MB168819214A20DF2E4835E763D7009@BYAPR21MB1688.namprd21.prod.outlook.com>
- <2f721208-d169-2baa-fa1f-b8450e80ddd7@linux.microsoft.com>
- <Y3JJpyvCcrRZfJkV@liuwe-devbox-debian-v2>
- <BYAPR21MB1688FA95BE87E9D1B607B050D7059@BYAPR21MB1688.namprd21.prod.outlook.com>
-From:   Nuno Das Neves <nunodasneves@linux.microsoft.com>
-In-Reply-To: <BYAPR21MB1688FA95BE87E9D1B607B050D7059@BYAPR21MB1688.namprd21.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Yuwei Guan <ssawgyw@gmail.com>, jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Yuwei.Guan@zeekrlife.com
+References: <20221115063537.59023-1-Yuwei.Guan@zeekrlife.com>
+ <20221115063537.59023-2-Yuwei.Guan@zeekrlife.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20221115063537.59023-2-Yuwei.Guan@zeekrlife.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/14/2022 11:09 AM, Michael Kelley (LINUX) wrote:
-> From: Wei Liu <wei.liu@kernel.org> Sent: Monday, November 14, 2022 5:59 AM
->>
->> On Fri, Nov 11, 2022 at 02:53:59PM -0800, Nuno Das Neves wrote:
->>> On 11/11/2022 9:58 AM, Michael Kelley (LINUX) wrote:
->>>> From: Wei Liu <wei.liu@kernel.org> Sent: Friday, November 11, 2022 9:27 AM
->> [...]
->>>
->>> I've tested this patch on these Azure SKUs:
->>> - Standard_D2S_v2 (intel xapic)
->>> - Standard_D4ds_v4 (intel xapic)
->>> - Standard_D4ds_v5 (intel x2apic)
->>> - Standard_D4ads_v5 (amd xapic)
->>>
->>> I've tested with linux Dom0 (nested hyperv root partition) and as a
->>> regular L1 guest.
->>>
->>
->> Okay. I think your tests are good.
->>
->> Michael, do you have any further concern?
->>
+On 2022/11/15 14:35, Yuwei Guan wrote:
+> The commit 84b89e5d943d8 ("f2fs: add auto tuning for small devices") add
+> tuning for small volume device, now support to tune alloce_mode to 'reuse'
+> if it's small size. But the alloc_mode will change to 'default' when do
+> remount on this small size dievce. This patch fo fix alloc_mode changed
+> when do remount for a small volume device.
 > 
-> If ms_hyperv_msi_ext_dest_id() returns "true", then
-> hyperv_prepare_irq_remapping() will still return -ENODEV and you
-> won't get interrupt remapping because it isn't needed, at least not
-> for guest VMs.  Is that what we want for the root partition?  Or does
-> ms_hyperv_msi_ext_dest_id() only return true in a guest partition,
-> and not in the root partition?  See commit d981059e13ff.
-> 
+> Signed-off-by: Yuwei Guan <Yuwei.Guan@zeekrlife.com>
 
-I did some digging, and I *think* this function will always return "false"
-in the root partition.
+Reviewed-by: Chao Yu <chao@kernel.org>
 
-The cpuids (HYPERV_CPUID_VIRT_STACK_*) that determine the result of
-ms_hyperv_msi_ext_dest_id() are implemented by the virtualization stack
-in Azure, so for L1 guests it depends on that.
-
-But, for nested root, the nested hypervisor controls which cpuids the
-root partition sees, and VIRTUALIZATION_STACK_CPUID_INTERFACE is not in
-that list.
-
-I tested this too; if I boot the kernel with an L1 guest, I can see that
-the HYPERV_CPUID_VIRT_STACK_INTERFACE contains the "VS#1" signature.
-If I boot as L2 Root, the signature is not present.
-
-I'm reasonably certain, but if I'm wrong we'll see the same breakage for
-the same reason and we can fix it I guess.
+Thanks,
