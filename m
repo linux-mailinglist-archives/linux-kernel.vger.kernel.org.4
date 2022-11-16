@@ -2,102 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA84262B6C0
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:40:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04B6E62B6BD
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:40:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238867AbiKPJks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 04:40:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57474 "EHLO
+        id S238763AbiKPJkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 04:40:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238756AbiKPJk2 (ORCPT
+        with ESMTP id S238619AbiKPJkP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 04:40:28 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C9702A26A;
-        Wed, 16 Nov 2022 01:40:27 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id ja4-20020a05600c556400b003cf6e77f89cso2715518wmb.0;
-        Wed, 16 Nov 2022 01:40:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bRVEplC+7j6A14IZcqWB9f97UNzmakJtqB171khWs5c=;
-        b=hrtIVynRsFTFAfwFj68ESejr8oNfwyFLMiOUQWmxyZ7gARsphmolR5UEOref/f8sA0
-         hD/ikkxUruJf/IkSGsWzmzf7U3uRj23YfiSKt1zzI4u7KN9B6SnyJLyCYz1VU6M35rCy
-         CAa3WKWdBlF50kpVZu1fAjSLXMaqA/9of20hrSubL7kbMXwMeQ+XGWLIAkKqIWcC5YzJ
-         UDlqOE3XT//98ZqARV0eKNkxHoKkanLQ0VbOdWA31yHkYtJpgzWJiXL3cmctF7PkqMpC
-         NbmjZ5FmdSgwsXo+zjpFEow4j8U3TUY3pJJE9K8UZGYr8Ltu0aRhmyawa+ooHXbax/Zd
-         92yQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bRVEplC+7j6A14IZcqWB9f97UNzmakJtqB171khWs5c=;
-        b=4UxVk/BUiHoKxF5nZXYe0xVQUG9BvVLvNdZPYCUnePkJT2VSBgZTAfPk5IXY4yVHVc
-         c2INSxRJRDnLh1GbTlBkqtj8Liay2LQSENGg+A2ZJD/t9hPrk8mpB2uuq/DYJUomP74A
-         kZLlnEgP/Dm8hZ+UkmMGaiQESinyVyL5bvel39uQDT/jm1kXf1jAOUjxxAp1YQB95P6w
-         BrT/x2uEKycEkKt+zmcomrKkFx/Rv7w1Ct8p5EbHSMDX3Gbgv+/wfhbuS22ObyAvr5DR
-         dx/sHCU1MP1SZUoXGBdaG5Eu3e4ZUk5XdVzDjm1kh/+oV7QajgJDfWs8RfSv7QucWofs
-         +tzA==
-X-Gm-Message-State: ANoB5plpH2ysAF0nPYw/0d0iE51HP4flnQfF4Srnvq6gjbGDdUsLI7hv
-        S4CJVnzG+o3GMk10gfgS0EQ=
-X-Google-Smtp-Source: AA0mqf4RcK2BTsxFpnj9xspSpvctbxaD3ERJeZpeXbiOGYQZpl50PSOp6G+zqMd6zdzjw6/ulmZdPQ==
-X-Received: by 2002:a05:600c:19d1:b0:3cf:ca1a:332a with SMTP id u17-20020a05600c19d100b003cfca1a332amr1538043wmq.118.1668591625860;
-        Wed, 16 Nov 2022 01:40:25 -0800 (PST)
-Received: from felia.fritz.box (200116b826c55000c59461cca0b9a159.dip.versatel-1u1.de. [2001:16b8:26c5:5000:c594:61cc:a0b9:a159])
-        by smtp.gmail.com with ESMTPSA id l13-20020a5d674d000000b0022e3538d305sm17223547wrw.117.2022.11.16.01.40.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 01:40:25 -0800 (PST)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Shawn Tu <shawnx.tu@intel.com>,
-        Jason Chen <jason.z.chen@intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] media: i2c: refer to config VIDEO_DEV to make ov08x40 image sensor driver usable
-Date:   Wed, 16 Nov 2022 10:40:06 +0100
-Message-Id: <20221116094006.16054-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 16 Nov 2022 04:40:15 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38E802A72D;
+        Wed, 16 Nov 2022 01:40:12 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id E4276336F0;
+        Wed, 16 Nov 2022 09:40:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1668591610; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4/X2nK8ikBpvrCgNSRXtJgM86JjBV4/Rkx2QajeAFT0=;
+        b=UBFvbD+agRHbD91x8CSH3dzjUQJeCTCdayzd/DQ85O/z0Omkg8hpry9jhbv1zkywLywP/I
+        obBy1voKhPnzLlLTkfZ95/OtcYRE4UmGdWwkKuA0Ovf8BQTIdXO1g8GMN41xPcuxZ/13ix
+        UWT7Bnt5ln817vnXocdrae0hO5Cal+U=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B67B0134CE;
+        Wed, 16 Nov 2022 09:40:10 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id xNQzK/qvdGN+OwAAMHmgww
+        (envelope-from <jgross@suse.com>); Wed, 16 Nov 2022 09:40:10 +0000
+Message-ID: <64372250-a413-076e-3b6d-2d263ee9c7f2@suse.com>
+Date:   Wed, 16 Nov 2022 10:40:10 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [tip: locking/urgent] locking: Fix qspinlock/x86 inline asm error
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org
+Cc:     Guo Jin <guoj17@chinatelecom.cn>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Nathan Chancellor <nathan@kernel.org>, x86@kernel.org
+References: <20221108060126.2505-1-guoj17@chinatelecom.cn>
+ <166859051534.4906.7078966677789928700.tip-bot2@tip-bot2>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <166859051534.4906.7078966677789928700.tip-bot2@tip-bot2>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------5fG1cFs5K7SeC2tABgH3Dx7Z"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 9958d30f38b9 ("media: Kconfig: cleanup VIDEO_DEV dependencies")
-removes the config VIDEO_V4L2 as it is merged with config VIDEO_DEV.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------5fG1cFs5K7SeC2tABgH3Dx7Z
+Content-Type: multipart/mixed; boundary="------------NrKot2iyKhMn0dxG5T3hepPx";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org
+Cc: Guo Jin <guoj17@chinatelecom.cn>,
+ "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+ Nathan Chancellor <nathan@kernel.org>, x86@kernel.org
+Message-ID: <64372250-a413-076e-3b6d-2d263ee9c7f2@suse.com>
+Subject: Re: [tip: locking/urgent] locking: Fix qspinlock/x86 inline asm error
+References: <20221108060126.2505-1-guoj17@chinatelecom.cn>
+ <166859051534.4906.7078966677789928700.tip-bot2@tip-bot2>
+In-Reply-To: <166859051534.4906.7078966677789928700.tip-bot2@tip-bot2>
 
-Long after this change, commit 38fc5136ac16 ("media: i2c: Add ov08x40 image
-sensor driver") introduces and refers to the removed config VIDEO_V4L2,
-basically making this driver impossible to build, test and use due to
-dependencies that cannot be met.
+--------------NrKot2iyKhMn0dxG5T3hepPx
+Content-Type: multipart/mixed; boundary="------------ZKO1DIAyjWE0K2QT6D1hu5lX"
 
-Refer to config VIDEO_DEV instead to make this driver usable.
+--------------ZKO1DIAyjWE0K2QT6D1hu5lX
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- drivers/media/i2c/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+T24gMTYuMTEuMjIgMTA6MjEsIHRpcC1ib3QyIGZvciBHdW8gSmluIHdyb3RlOg0KPiBUaGUg
+Zm9sbG93aW5nIGNvbW1pdCBoYXMgYmVlbiBtZXJnZWQgaW50byB0aGUgbG9ja2luZy91cmdl
+bnQgYnJhbmNoIG9mIHRpcDoNCj4gDQo+IENvbW1pdC1JRDogICAgIDIzZGYzOWZjNmEzNjE4
+M2FmNWU2ZTRmNDc1MjNmMWFkMmNkYzFkMzANCj4gR2l0d2ViOiAgICAgICAgaHR0cHM6Ly9n
+aXQua2VybmVsLm9yZy90aXAvMjNkZjM5ZmM2YTM2MTgzYWY1ZTZlNGY0NzUyM2YxYWQyY2Rj
+MWQzMA0KPiBBdXRob3I6ICAgICAgICBHdW8gSmluIDxndW9qMTdAY2hpbmF0ZWxlY29tLmNu
+Pg0KPiBBdXRob3JEYXRlOiAgICBUdWUsIDA4IE5vdiAyMDIyIDE0OjAxOjI2ICswODowMA0K
+PiBDb21taXR0ZXI6ICAgICBQZXRlciBaaWpsc3RyYSA8cGV0ZXJ6QGluZnJhZGVhZC5vcmc+
+DQo+IENvbW1pdHRlckRhdGU6IFdlZCwgMTYgTm92IDIwMjIgMTA6MTg6MDkgKzAxOjAwDQo+
+IA0KPiBsb2NraW5nOiBGaXggcXNwaW5sb2NrL3g4NiBpbmxpbmUgYXNtIGVycm9yDQo+IA0K
+PiBXaGVuIGNvbXBpbGluZyBsaW51eCA2LjEuMC1yYzMgY29uZmlndXJlZCB3aXRoIENPTkZJ
+R182NEJJVD15IGFuZA0KPiBDT05GSUdfUEFSQVZJUlRfU1BJTkxPQ0tTPXkgb24geDg2XzY0
+IHVzaW5nIExMVk0gMTEuMCwgYW4gZXJyb3I6DQo+ICI8aW5saW5lIGFzbT4gZXJyb3I6IGNo
+YW5nZWQgc2VjdGlvbiBmbGFncyBmb3IgLnNwaW5sb2NrLnRleHQsDQo+IGV4cGVjdGVkOjog
+MHg2IiBvY2N1cnJlZC4NCj4gDQo+IFRoZSByZWFzb24gaXMgdGhlIC5zcGlubG9jay50ZXh0
+IGluIGtlcm5lbC9sb2NraW5nL3FzcGlubG9jay5vDQo+IGlzIHVzZWQgbWFueSB0aW1lcywg
+YnV0IGl0cyBmbGFncyBhcmUgb21pdHRlZCBpbiBzdWJzZXF1ZW50IHVzZS4NCj4gDQo+IExM
+Vk0gMTEuMCBhc3NlbWJsZXIgZGlkbid0IHBlcm1pdCB0bw0KPiBsZWF2ZSBvdXQgZmxhZ3Mg
+aW4gc3Vic2VxdWVudCB1c2VzIG9mIHRoZSBzYW1lIHNlY3Rpb25zLg0KPiANCj4gU28gdGhp
+cyBwYXRjaCBhZGRzIHRoZSBjb3JyZXNwb25kaW5nIGZsYWdzIHRvIGF2b2lkIGFib3ZlIGVy
+cm9yLg0KPiANCj4gRml4ZXM6IDUwMWY3ZjY5YmNhMSAoImxvY2tpbmc6IEFkZCBfX2xvY2tm
+dW5jIHRvIHNsb3cgcGF0aCBmdW5jdGlvbnMiKQ0KPiBTaWduZWQtb2ZmLWJ5OiBHdW8gSmlu
+IDxndW9qMTdAY2hpbmF0ZWxlY29tLmNuPg0KPiBTaWduZWQtb2ZmLWJ5OiBQZXRlciBaaWps
+c3RyYSAoSW50ZWwpIDxwZXRlcnpAaW5mcmFkZWFkLm9yZz4NCj4gUmV2aWV3ZWQtYnk6IE5h
+dGhhbiBDaGFuY2VsbG9yIDxuYXRoYW5Aa2VybmVsLm9yZz4NCj4gTGluazogaHR0cHM6Ly9s
+b3JlLmtlcm5lbC5vcmcvci8yMDIyMTEwODA2MDEyNi4yNTA1LTEtZ3VvajE3QGNoaW5hdGVs
+ZWNvbS5jbg0KDQpXb3VsZG4ndCBpdCBiZSBiZXR0ZXIgdG8gdGFrZSBteSBtb3JlIGdlbmVy
+aWMgcGF0Y2ggWzFdIGluc3RlYWQ/DQoNClsxXTogaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcv
+bGttbC8yMDIyMTEwOTEzNDQxOC42NTE2LTEtamdyb3NzQHN1c2UuY29tLw0KDQoNCkp1ZXJn
+ZW4NCg0K
+--------------ZKO1DIAyjWE0K2QT6D1hu5lX
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-index 49c1c27afdc1..4a4ae9c20119 100644
---- a/drivers/media/i2c/Kconfig
-+++ b/drivers/media/i2c/Kconfig
-@@ -366,7 +366,7 @@ config VIDEO_OV08D10
- 
- config VIDEO_OV08X40
- 	tristate "OmniVision OV08X40 sensor support"
--	depends on VIDEO_V4L2 && I2C
-+	depends on VIDEO_DEV && I2C
- 	select MEDIA_CONTROLLER
- 	select VIDEO_V4L2_SUBDEV_API
- 	select V4L2_FWNODE
--- 
-2.17.1
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
+xsBNBFOMcBYBCACgGjqjoGvbEouQZw/ToiBg9W98AlM2QHV+iNHsEs7kxWhKMjri
+oyspZKOBycWxw3ie3j9uvg9EOB3aN4xiTv4qbnGiTr3oJhkB1gsb6ToJQZ8uxGq2
+kaV2KL9650I1SJvedYm8Of8Zd621lSmoKOwlNClALZNew72NjJLEzTalU1OdT7/i
+1TXkH09XSSI8mEQ/ouNcMvIJNwQpd369y9bfIhWUiVXEK7MlRgUG6MvIj6Y3Am/B
+BLUVbDa4+gmzDC9ezlZkTZG2t14zWPvxXP3FAp2pkW0xqG7/377qptDmrk42GlSK
+N4z76ELnLxussxc7I2hx18NUcbP8+uty4bMxABEBAAHNHEp1ZXJnZW4gR3Jvc3Mg
+PGpnQHBmdXBmLm5ldD7CwHkEEwECACMFAlOMcBYCGwMHCwkIBwMCAQYVCAIJCgsE
+FgIDAQIeAQIXgAAKCRCw3p3WKL8TL0KdB/93FcIZ3GCNwFU0u3EjNbNjmXBKDY4F
+UGNQH2lvWAUy+dnyThpwdtF/jQ6j9RwE8VP0+NXcYpGJDWlNb9/JmYqLiX2Q3Tye
+vpB0CA3dbBQp0OW0fgCetToGIQrg0MbD1C/sEOv8Mr4NAfbauXjZlvTj30H2jO0u
++6WGM6nHwbh2l5O8ZiHkH32iaSTfN7Eu5RnNVUJbvoPHZ8SlM4KWm8rG+lIkGurq
+qu5gu8q8ZMKdsdGC4bBxdQKDKHEFExLJK/nRPFmAuGlId1E3fe10v5QL+qHI3EIP
+tyfE7i9Hz6rVwi7lWKgh7pe0ZvatAudZ+JNIlBKptb64FaiIOAWDCx1SzR9KdWVy
+Z2VuIEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+wsB5BBMBAgAjBQJTjHCvAhsDBwsJ
+CAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/Ey/HmQf/RtI7kv5A2PS4
+RF7HoZhPVPogNVbC4YA6lW7DrWf0teC0RR3MzXfy6pJ+7KLgkqMlrAbN/8Dvjoz7
+8X+5vhH/rDLa9BuZQlhFmvcGtCF8eR0T1v0nC/nuAFVGy+67q2DH8As3KPu0344T
+BDpAvr2uYM4tSqxK4DURx5INz4ZZ0WNFHcqsfvlGJALDeE0LhITTd9jLzdDad1pQ
+SToCnLl6SBJZjDOX9QQcyUigZFtCXFst4dlsvddrxyqT1f17+2cFSdu7+ynLmXBK
+7abQ3rwJY8SbRO2iRulogc5vr/RLMMlscDAiDkaFQWLoqHHOdfO9rURssHNN8WkM
+nQfvUewRz80hSnVlcmdlbiBHcm9zcyA8amdyb3NzQG5vdmVsbC5jb20+wsB5BBMB
+AgAjBQJTjHDXAhsDBwsJCAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/
+Ey8PUQf/ehmgCI9jB9hlgexLvgOtf7PJnFOXgMLdBQgBlVPO3/D9R8LtF9DBAFPN
+hlrsfIG/SqICoRCqUcJ96Pn3P7UUinFG/I0ECGF4EvTE1jnDkfJZr6jrbjgyoZHi
+w/4BNwSTL9rWASyLgqlA8u1mf+c2yUwcGhgkRAd1gOwungxcwzwqgljf0N51N5Jf
+VRHRtyfwq/ge+YEkDGcTU6Y0sPOuj4Dyfm8fJzdfHNQsWq3PnczLVELStJNdapwP
+OoE+lotufe3AM2vAEYJ9rTz3Cki4JFUsgLkHFqGZarrPGi1eyQcXeluldO3m91NK
+/1xMI3/+8jbO0tsn1tqSEUGIJi7ox80eSnVlcmdlbiBHcm9zcyA8amdyb3NzQHN1
+c2UuZGU+wsB5BBMBAgAjBQJTjHDrAhsDBwsJCAcDAgEGFQgCCQoLBBYCAwECHgEC
+F4AACgkQsN6d1ii/Ey+LhQf9GL45eU5vOowA2u5N3g3OZUEBmDHVVbqMtzwlmNC4
+k9Kx39r5s2vcFl4tXqW7g9/ViXYuiDXb0RfUpZiIUW89siKrkzmQ5dM7wRqzgJpJ
+wK8Bn2MIxAKArekWpiCKvBOB/Cc+3EXE78XdlxLyOi/NrmSGRIov0karw2RzMNOu
+5D+jLRZQd1Sv27AR+IP3I8U4aqnhLpwhK7MEy9oCILlgZ1QZe49kpcumcZKORmzB
+TNh30FVKK1EvmV2xAKDoaEOgQB4iFQLhJCdP1I5aSgM5IVFdn7v5YgEYuJYx37Io
+N1EblHI//x/e2AaIHpzK5h88NEawQsaNRpNSrcfbFmAg987ATQRTjHAWAQgAyzH6
+AOODMBjgfWE9VeCgsrwH3exNAU32gLq2xvjpWnHIs98ndPUDpnoxWQugJ6MpMncr
+0xSwFmHEgnSEjK/PAjppgmyc57BwKII3sV4on+gDVFJR6Y8ZRwgnBC5mVM6JjQ5x
+Dk8WRXljExRfUX9pNhdE5eBOZJrDRoLUmmjDtKzWaDhIg/+1Hzz93X4fCQkNVbVF
+LELU9bMaLPBG/x5q4iYZ2k2ex6d47YE1ZFdMm6YBYMOljGkZKwYde5ldM9mo45mm
+we0icXKLkpEdIXKTZeKDO+Hdv1aqFuAcccTg9RXDQjmwhC3yEmrmcfl0+rPghO0I
+v3OOImwTEe4co3c1mwARAQABwsBfBBgBAgAJBQJTjHAWAhsMAAoJELDendYovxMv
+Q/gH/1ha96vm4P/L+bQpJwrZ/dneZcmEwTbe8YFsw2V/Buv6Z4Mysln3nQK5ZadD
+534CF7TDVft7fC4tU4PONxF5D+/tvgkPfDAfF77zy2AH1vJzQ1fOU8lYFpZXTXIH
+b+559UqvIB8AdgR3SAJGHHt4RKA0F7f5ipYBBrC6cyXJyyoprT10EMvU8VGiwXvT
+yJz3fjoYsdFzpWPlJEBRMedCot60g5dmbdrZ5DWClAr0yau47zpWj3enf1tLWaqc
+suylWsviuGjKGw7KHQd3bxALOknAp4dN3QwBYCKuZ7AddY9yjynVaD5X7nF9nO5B
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------ZKO1DIAyjWE0K2QT6D1hu5lX--
+
+--------------NrKot2iyKhMn0dxG5T3hepPx--
+
+--------------5fG1cFs5K7SeC2tABgH3Dx7Z
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmN0r/oFAwAAAAAACgkQsN6d1ii/Ey+w
+Owf/fr5JgHNLFiR4anCtHSieh8aJyvdFS1/X32DINUSfOR2+fLM4wvZmbZDZrdl+IRdMcDLg1E8F
+rTOMZMv9KWtqvyndxPzxfWPcUmQF5JRhrtNtRP5BHKw+uGVPyXHWapb7EWKh8a28ffWcOSEc4Ixp
+8wH5gesyPn9hMxRbSO8tA9z3W3ojM0MWJ+zdStUwYThkxm9EkVLx7KOP0LRlGDpOr0FIw2wy4lVJ
+5t2PGcd5S2S8KTm3MA158HT0pmzSxISjvVUBKHHIY3nhalyueTEmB6Z3AaG62rxMfcWnVeb1nUxL
+m2dxdHpP3oAbm41vuJ68m9TXv+Kx/vGr726XUlWD3A==
+=SE6t
+-----END PGP SIGNATURE-----
+
+--------------5fG1cFs5K7SeC2tABgH3Dx7Z--
