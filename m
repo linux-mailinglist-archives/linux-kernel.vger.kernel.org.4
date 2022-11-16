@@ -2,151 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8501062C0B5
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:17:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EEF962C0BA
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:22:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232915AbiKPOR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 09:17:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49504 "EHLO
+        id S231688AbiKPOWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 09:22:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233009AbiKPORZ (ORCPT
+        with ESMTP id S229892AbiKPOWe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 09:17:25 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955B422BD4;
-        Wed, 16 Nov 2022 06:17:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668608244; x=1700144244;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=OQO0TWqVhuXOlBW2yi+Jiv/ulHMt3UHPh/srl3YFKp4=;
-  b=LHBV7vuUmUYSx4yRMnOzzQVU3j7pYAC3VemtCqQD9p99Y7vCGIhMEhBa
-   Vs558Ev/sWMqYs2Tdm/nFQRs3CeLH7DpXE+ug0SDP1Bym9buG9ZR0xHqm
-   OTycJMCcGUJp9/PBOY40BDHZ6zN/GNsdAyQLKLR3PjZCS/vH5ZYueCqrU
-   lUlz9c9JCvfBpbtOD6FyRla3Y4FHOEwHZ0Ax9dQDVm+z8e7/TpIRJXVHs
-   Xva779XWHOXzrvqp4+xm/+v+iqFe7/M9QdwdwdcbeBVGzFBkkJR0oPhft
-   uZUtdRkWkoBI/SHwPmNoeNV3Dz/pb0CBlmEWf3wElOxwF7/dSseYV6tFl
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="311258687"
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="311258687"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 06:17:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="641658846"
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="641658846"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga007.fm.intel.com with ESMTP; 16 Nov 2022 06:17:21 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 617522F3; Wed, 16 Nov 2022 16:17:46 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Brian Masney <bmasney@redhat.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-Subject: [PATCH v1 1/1] gpiolib: Unify access to the device properties
-Date:   Wed, 16 Nov 2022 16:17:28 +0200
-Message-Id: <20221116141728.72491-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 16 Nov 2022 09:22:34 -0500
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F1A1A800;
+        Wed, 16 Nov 2022 06:22:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+        s=42; h=From:Cc:To:Date:Message-ID;
+        bh=hQAQ00JXMUtGRyGvyK4AFpzBdAYd3Lkl8MOymPp0Gng=; b=rRWkH4/bswHwaQZESok/d4RFW7
+        ad50LJK5O1aZhT9+6wjvGGF+mOcw05lYWKmxNS0RWoGksc3W3RJ9MWcsZnIj2+RDMHdLQgwSrxGHG
+        n85QePIDyyT8CPo2SlHOxkJWKzelkB+JjVAfEFXAfKNNsBtv2i9fD2cLWLMXu8JM0x+0Nd5KjSE76
+        GtQjmNZvcrjZJrthdiqbfs5zVVxbmoLg07jc1LjxN239LebUtNZxQHo/sK7Sv6IYXtTwKjKd8TAJt
+        WE3WhJ3bDpcdOBgn9grlopUPdKrhxgyub4Wj8ggIaN5DOPEPju2lsT0DPg/m9pLcXT9LQ23pvdVus
+        Wr7KqCeBmgb7+Wa5NSOiQ49So30b0EiNwGG/Q6VCFn7K+d5aN+EfhI6N+1yYguOxbLc9F73sGrwJD
+        LU0gita8MboMgogWjlZVNl59L1daGzh1IVAokojcxRr2/7V4IROQ/RnpCwNhnbK06KOF8R4H4ojdR
+        gZ0jGx4vNuN4KLC+hwE3Y3ye;
+Received: from [127.0.0.2] (localhost [127.0.0.1])
+        by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
+        (Exim)
+        id 1ovJJ9-008tFt-4z; Wed, 16 Nov 2022 14:22:31 +0000
+Message-ID: <69d39e98-71fb-c765-e8b9-b02933c524a9@samba.org>
+Date:   Wed, 16 Nov 2022 15:22:30 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: (subset) [PATCH v1 0/2] io_uring uapi updates
+Content-Language: en-US, de-DE
+To:     Jens Axboe <axboe@kernel.dk>, Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc:     GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        io-uring Mailing List <io-uring@vger.kernel.org>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20221115212614.1308132-1-ammar.faizi@intel.com>
+ <166855408973.7702.1716032255757220554.b4-ty@kernel.dk>
+ <61293423-8541-cb8b-32b4-9a4decb3544f@gnuweeb.org>
+ <fe9b695d-7d64-9894-b142-2228f4ba7ae5@kernel.dk>
+From:   Stefan Metzmacher <metze@samba.org>
+In-Reply-To: <fe9b695d-7d64-9894-b142-2228f4ba7ae5@kernel.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some of the functions are using struct fwnode_handle, some struct device
-pointer. In the GPIO library the firmware node of the GPIO device is the
-same as GPIO node of the GPIO chip. Due to this fact we may use former
-to access properties everywhere in the code.
-
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/gpio/gpiolib.c | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-index 51afdc6ac919..c163b354e727 100644
---- a/drivers/gpio/gpiolib.c
-+++ b/drivers/gpio/gpiolib.c
-@@ -367,12 +367,12 @@ static int gpiochip_set_desc_names(struct gpio_chip *gc)
- static int devprop_gpiochip_set_names(struct gpio_chip *chip)
- {
- 	struct gpio_device *gdev = chip->gpiodev;
--	const struct fwnode_handle *fwnode = dev_fwnode(&gdev->dev);
-+	struct device *dev = &gdev->dev;
- 	const char **names;
- 	int ret, i;
- 	int count;
- 
--	count = fwnode_property_string_array_count(fwnode, "gpio-line-names");
-+	count = device_property_string_array_count(dev, "gpio-line-names");
- 	if (count < 0)
- 		return 0;
- 
-@@ -385,7 +385,7 @@ static int devprop_gpiochip_set_names(struct gpio_chip *chip)
- 	 * gpiochips.
- 	 */
- 	if (count <= chip->offset) {
--		dev_warn(&gdev->dev, "gpio-line-names too short (length %d), cannot map names for the gpiochip at offset %u\n",
-+		dev_warn(dev, "gpio-line-names too short (length %d), cannot map names for the gpiochip at offset %u\n",
- 			 count, chip->offset);
- 		return 0;
- 	}
-@@ -394,10 +394,9 @@ static int devprop_gpiochip_set_names(struct gpio_chip *chip)
- 	if (!names)
- 		return -ENOMEM;
- 
--	ret = fwnode_property_read_string_array(fwnode, "gpio-line-names",
--						names, count);
-+	ret = device_property_read_string_array(dev, "gpio-line-names", names, count);
- 	if (ret < 0) {
--		dev_warn(&gdev->dev, "failed to read GPIO line names\n");
-+		dev_warn(dev, "failed to read GPIO line names\n");
- 		kfree(names);
- 		return ret;
- 	}
-@@ -448,10 +447,11 @@ static unsigned long *gpiochip_allocate_mask(struct gpio_chip *gc)
- 
- static unsigned int gpiochip_count_reserved_ranges(struct gpio_chip *gc)
- {
-+	struct device *dev = &gc->gpiodev->dev;
- 	int size;
- 
- 	/* Format is "start, count, ..." */
--	size = fwnode_property_count_u32(gc->fwnode, "gpio-reserved-ranges");
-+	size = device_property_count_u32(dev, "gpio-reserved-ranges");
- 	if (size > 0 && size % 2 == 0)
- 		return size;
- 
-@@ -472,6 +472,7 @@ static int gpiochip_alloc_valid_mask(struct gpio_chip *gc)
- 
- static int gpiochip_apply_reserved_ranges(struct gpio_chip *gc)
- {
-+	struct device *dev = &gc->gpiodev->dev;
- 	unsigned int size;
- 	u32 *ranges;
- 	int ret;
-@@ -484,7 +485,7 @@ static int gpiochip_apply_reserved_ranges(struct gpio_chip *gc)
- 	if (!ranges)
- 		return -ENOMEM;
- 
--	ret = fwnode_property_read_u32_array(gc->fwnode, "gpio-reserved-ranges", ranges, size);
-+	ret = device_property_read_u32_array(dev, "gpio-reserved-ranges", ranges, size);
- 	if (ret) {
- 		kfree(ranges);
- 		return ret;
-
-base-commit: 40059212f99c31f26c69763e560325e59eac02c6
--- 
-2.35.1
-
+QW0gMTYuMTEuMjIgdW0gMTQ6NTAgc2NocmllYiBKZW5zIEF4Ym9lOg0KPiBPbiAxMS8xNS8y
+MiAxMTozNCBQTSwgQW1tYXIgRmFpemkgd3JvdGU6DQo+PiBPbiAxMS8xNi8yMiA2OjE0IEFN
+LCBKZW5zIEF4Ym9lIHdyb3RlOg0KPj4+IE9uIFdlZCwgMTYgTm92IDIwMjIgMDQ6Mjk6NTEg
+KzA3MDAsIEFtbWFyIEZhaXppIHdyb3RlOg0KPj4+PiBGcm9tOiBBbW1hciBGYWl6aSA8YW1t
+YXJmYWl6aTJAZ251d2VlYi5vcmc+DQo+Pj4+DQo+Pj4+IEhpIEplbnMsDQo+Pj4+DQo+Pj4+
+IGlvX3VyaW5nIHVhcGkgdXBkYXRlczoNCj4+Pj4NCj4+Pj4gMSkgRG9uJ3QgZm9yY2UgbGlu
+dXgvdGltZV90eXBlcy5oIGZvciB1c2Vyc3BhY2UuIExpbnV4J3MgaW9fdXJpbmcuaCBpcw0K
+Pj4+PiAgwqDCoMKgIHN5bmNlZCAxOjEgaW50byBsaWJ1cmluZydzIGlvX3VyaW5nLmguIGxp
+YnVyaW5nIGhhcyBhIGNvbmZpZ3VyZQ0KPj4+PiAgwqDCoMKgIGNoZWNrIHRvIGRldGVjdCB0
+aGUgbmVlZCBmb3IgbGludXgvdGltZV90eXBlcy5oIChTdGVmYW4pLg0KPj4+Pg0KPj4+PiBb
+Li4uXQ0KPj4+DQo+Pj4gQXBwbGllZCwgdGhhbmtzIQ0KPj4+DQo+Pj4gWzEvMl0gaW9fdXJp
+bmc6IHVhcGk6IERvbid0IGZvcmNlIGxpbnV4L3RpbWVfdHlwZXMuaCBmb3IgdXNlcnNwYWNl
+DQo+Pj4gIMKgwqDCoMKgwqDCoCBjb21taXQ6IDk1OGJmZGQ3MzRiNjA3NGJhODhlZTNhYmM2
+OWQwMDUzZTI2YjdiOWMNCj4+DQo+PiBKZW5zLCBwbGVhc2UgZHJvcCB0aGlzIGNvbW1pdC4g
+SXQgYnJlYWtzIHRoZSBidWlsZDoNCj4gDQo+IERyb3BwZWQgLSBwbGVhc2UgYWN0dWFsbHkg
+YnVpbGQgeW91ciBwYXRjaGVzLCBvciBtYWtlIGl0IGNsZWFyIHRoYXQNCj4gdGhleSB3ZXJl
+IG5vdCBidWlsdCBhdCBhbGwuIE5vbmUgb2YgdGhlc2UgMiBwYXRjaGVzIHdlcmUgYW55IGdv
+b2QuDQoNCklzIGl0IHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL25ldC9pb191cmluZ196ZXJv
+Y29weV90eC5jIHRoYXQgZG9lc24ndCBidWlsZD8NCmFuZCBuZWVkcyBhICcjZGVmaW5lIEhB
+VkVfTElOVVhfVElNRV9UWVBFU19IIDEnDQoNCkJUVywgdGhlIG9yaWdpbmFsIGNvbW1pdCBJ
+IHBvc3RlZCB3YXMgaGVyZToNCmh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2lvLXVyaW5nL2M3
+NzgyOTIzZGVlYjQwMTZmMmFjMjMzNGJjNTU4OTIxZThkOTFhNjcuMTY2NjYwNTQ0Ni5naXQu
+bWV0emVAc2FtYmEub3JnLw0KDQpXaGF0J3MgdGhlIG1hZ2ljIHRvIGNvbXBpbGUgdG9vbHMv
+dGVzdGluZy9zZWxmdGVzdHMvbmV0L2lvX3VyaW5nX3plcm9jb3B5X3R4LmMgPw0KDQpNeSBu
+YWl2ZSB0cmllcyBib3RoIGZhaWwgKGV2ZW4gd2l0aG91dCBteSBwYXRjaCk6DQpBbGwgb3Ro
+ZXIgZmlsZXMgaW5jbHVkaW5nIGFueSBpb191cmluZy5oIGJ1aWxkIGFuZCB0aGUgcGF0Y2gg
+d2FzIGFsc28gaW5jbHVkZWQNCmluIGEgYnJhbmNoIHdoZXJlIEkgYnVpbGQgYSBjb21wbGV0
+ZSB3b3JraW5nIGtlcm5lbCB3aXRoICdtYWtlIC1qMzMgYmluZGViLXBrZycNCg0KbWV0emVA
+U0VSTk9YMTk6fi9kZXZlbC9rZXJuZWwvbGludXgtNC40JCBMQU5HPUMgbWFrZSAkKGZpbmQg
+aW9fdXJpbmcvKi5jIGZzL2ZpbGVfdGFibGUuYyBmcy9leGVjLmMga2VybmVsL2V4aXQuYyBr
+ZXJuZWwvZm9yay5jIG5ldC9zb2NrZXQuYyAgbmV0L3VuaXgvc2NtLmMgDQpzZWN1cml0eS9z
+ZWxpbnV4L2hvb2tzLmMgc2VjdXJpdHkvc21hY2svc21hY2tfbHNtLmMgdG9vbHMvdGVzdGlu
+Zy9zZWxmdGVzdHMvbmV0L2lvX3VyaW5nX3plcm9jb3B5X3R4LmMgfCBzZWQgLWUgJ3MhXC5j
+JCEubyEnKSBFWFRSQV9DRkxBR1M9Ii1XZmF0YWwtZXJyb3JzIg0KICAgVVBEICAgICBpbmNs
+dWRlL2NvbmZpZy9rZXJuZWwucmVsZWFzZQ0KICAgVVBEICAgICBpbmNsdWRlL2dlbmVyYXRl
+ZC91dHNyZWxlYXNlLmgNCiAgIENBTEwgICAgc2NyaXB0cy9jaGVja3N5c2NhbGxzLnNoDQog
+ICBERVNDRU5EIG9ianRvb2wNCiAgIERFU0NFTkQgYnBmL3Jlc29sdmVfYnRmaWRzDQogICBD
+QyAgICAgIGZzL2ZpbGVfdGFibGUubw0KICAgQ0MgICAgICBmcy9leGVjLm8NCiAgIENDICAg
+ICAgaW9fdXJpbmcvYWR2aXNlLm8NCiAgIENDICAgICAgaW9fdXJpbmcvY2FuY2VsLm8NCiAg
+IENDICAgICAgaW9fdXJpbmcvZXBvbGwubw0KICAgQ0MgICAgICBpb191cmluZy9mZGluZm8u
+bw0KICAgQ0MgICAgICBpb191cmluZy9maWxldGFibGUubw0KICAgQ0MgICAgICBpb191cmlu
+Zy9mcy5vDQogICBDQyAgICAgIGlvX3VyaW5nL2lvX3VyaW5nLm8NCiAgIENDICAgICAgaW9f
+dXJpbmcvaW8td3Eubw0KICAgQ0MgICAgICBpb191cmluZy9rYnVmLm8NCiAgIENDICAgICAg
+aW9fdXJpbmcvbXNnX3Jpbmcubw0KICAgQ0MgICAgICBpb191cmluZy9uZXQubw0KICAgQ0Mg
+ICAgICBpb191cmluZy9ub3Aubw0KICAgQ0MgICAgICBpb191cmluZy9ub3RpZi5vDQogICBD
+QyAgICAgIGlvX3VyaW5nL29wZGVmLm8NCiAgIENDICAgICAgaW9fdXJpbmcvb3BlbmNsb3Nl
+Lm8NCiAgIENDICAgICAgaW9fdXJpbmcvcG9sbC5vDQogICBDQyAgICAgIGlvX3VyaW5nL3Jz
+cmMubw0KICAgQ0MgICAgICBpb191cmluZy9ydy5vDQogICBDQyAgICAgIGlvX3VyaW5nL3Nw
+bGljZS5vDQogICBDQyAgICAgIGlvX3VyaW5nL3NxcG9sbC5vDQogICBDQyAgICAgIGlvX3Vy
+aW5nL3N0YXR4Lm8NCiAgIENDICAgICAgaW9fdXJpbmcvc3luYy5vDQogICBDQyAgICAgIGlv
+X3VyaW5nL3RjdHgubw0KICAgQ0MgICAgICBpb191cmluZy90aW1lb3V0Lm8NCiAgIENDICAg
+ICAgaW9fdXJpbmcvdXJpbmdfY21kLm8NCiAgIENDICAgICAgaW9fdXJpbmcveGF0dHIubw0K
+ICAgQ0MgICAgICBrZXJuZWwvZXhpdC5vDQogICBDQyAgICAgIGtlcm5lbC9mb3JrLm8NCiAg
+IENDICAgICAgbmV0L3NvY2tldC5vDQogICBDQyAgICAgIG5ldC91bml4L3NjbS5vDQogICBD
+QyAgICAgIHNlY3VyaXR5L3NlbGludXgvaG9va3Mubw0KICAgQ0MgICAgICBzZWN1cml0eS9z
+bWFjay9zbWFja19sc20ubw0KICAgQ0MgICAgICB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9u
+ZXQvaW9fdXJpbmdfemVyb2NvcHlfdHgubw0KdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvbmV0
+L2lvX3VyaW5nX3plcm9jb3B5X3R4LmM6MzoxMDogZmF0YWwgZXJyb3I6IGFzc2VydC5oOiBO
+byBzdWNoIGZpbGUgb3IgZGlyZWN0b3J5DQogICAgIDMgfCAjaW5jbHVkZSA8YXNzZXJ0Lmg+
+DQogICAgICAgfCAgICAgICAgICBefn5+fn5+fn5+DQpjb21waWxhdGlvbiB0ZXJtaW5hdGVk
+Lg0KbWFrZVsxXTogKioqIFtzY3JpcHRzL01ha2VmaWxlLmJ1aWxkOjI1ODogdG9vbHMvdGVz
+dGluZy9zZWxmdGVzdHMvbmV0L2lvX3VyaW5nX3plcm9jb3B5X3R4Lm9dIEVycm9yIDENCm1h
+a2U6ICoqKiBbTWFrZWZpbGU6MTk5NzogLl0gRXJyb3IgMg0KDQoNCm1ldHplQFNFUk5PWDE5
+On4vZGV2ZWwva2VybmVsL2xpbnV4LTQuNC90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9uZXQk
+IG1ha2UgaW9fdXJpbmdfemVyb2NvcHlfdHgubw0KZ2NjIC1XYWxsIC1XbCwtLW5vLWFzLW5l
+ZWRlZCAtTzIgLWcgLUkuLi8uLi8uLi8uLi91c3IvaW5jbHVkZS8gLWlzeXN0ZW0gL2hvbWUv
+bWV0emUvZGV2ZWwva2VybmVsL2xpbnV4LTQuNC90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy8u
+Li8uLi8uLi91c3IvaW5jbHVkZSAgIC1jIC1vIA0KaW9fdXJpbmdfemVyb2NvcHlfdHgubyBp
+b191cmluZ196ZXJvY29weV90eC5jDQppb191cmluZ196ZXJvY29weV90eC5jOiBJbiBmdW5j
+dGlvbiDigJhpb191cmluZ19wcmVwX3NlbmR6Y+KAmToNCmlvX3VyaW5nX3plcm9jb3B5X3R4
+LmM6Mjg3OjMwOiBlcnJvcjog4oCYSU9SSU5HX09QX1NFTkRfWkPigJkgdW5kZWNsYXJlZCAo
+Zmlyc3QgdXNlIGluIHRoaXMgZnVuY3Rpb24pOyBkaWQgeW91IG1lYW4g4oCYSU9SSU5HX09Q
+X1NFTkTigJk/DQogICAyODcgfCAgICAgICAgIHNxZS0+b3Bjb2RlID0gKF9fdTgpIElPUklO
+R19PUF9TRU5EX1pDOw0KICAgICAgIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBe
+fn5+fn5+fn5+fn5+fn5+fg0KICAgICAgIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICBJT1JJTkdfT1BfU0VORA0KaW9fdXJpbmdfemVyb2NvcHlfdHguYzoyODc6MzA6IG5vdGU6
+IGVhY2ggdW5kZWNsYXJlZCBpZGVudGlmaWVyIGlzIHJlcG9ydGVkIG9ubHkgb25jZSBmb3Ig
+ZWFjaCBmdW5jdGlvbiBpdCBhcHBlYXJzIGluDQppb191cmluZ196ZXJvY29weV90eC5jOiBJ
+biBmdW5jdGlvbiDigJhkb190eOKAmToNCmlvX3VyaW5nX3plcm9jb3B5X3R4LmM6NDA3OjU2
+OiBlcnJvcjog4oCYSU9SSU5HX1JFQ1ZTRU5EX0ZJWEVEX0JVRuKAmSB1bmRlY2xhcmVkIChm
+aXJzdCB1c2UgaW4gdGhpcyBmdW5jdGlvbikNCiAgIDQwNyB8ICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICBzcWUtPmlvcHJpbyB8PSBJT1JJTkdfUkVDVlNFTkRf
+RklYRURfQlVGOw0KICAgICAgIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgIF5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn4NCmlvX3Vy
+aW5nX3plcm9jb3B5X3R4LmM6NDI5OjQyOiBlcnJvcjog4oCYSU9SSU5HX0NRRV9GX05PVElG
+4oCZIHVuZGVjbGFyZWQgKGZpcnN0IHVzZSBpbiB0aGlzIGZ1bmN0aW9uKTsgZGlkIHlvdSBt
+ZWFuIOKAmElPUklOR19DUUVfRl9NT1JF4oCZPw0KICAgNDI5IHwgICAgICAgICAgICAgICAg
+ICAgICAgICAgaWYgKGNxZS0+ZmxhZ3MgJiBJT1JJTkdfQ1FFX0ZfTk9USUYpIHsNCiAgICAg
+ICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXn5+fn5+fn5+
+fn5+fn5+fn5+DQogICAgICAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIElPUklOR19DUUVfRl9NT1JFDQptYWtlOiAqKiogWzxlaW5nZWJhdXQ+OiBpb191
+cmluZ196ZXJvY29weV90eC5vXSBGZWhsZXIgMQ0KDQoNCg0K
