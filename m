@@ -2,76 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 295DC62CCE7
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 22:45:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE9EE62CCF5
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 22:48:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233687AbiKPVpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 16:45:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48690 "EHLO
+        id S234630AbiKPVsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 16:48:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232774AbiKPVpp (ORCPT
+        with ESMTP id S231688AbiKPVri (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 16:45:45 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6E813DDD
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 13:45:44 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id g12so31791726lfh.3
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 13:45:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DwbDYoWggCopBBuTSq6VaQowU8is6PoXgXYL4Y8gLWg=;
-        b=c10/3GfACFFJD16rXSQxqWquhSKoCgWsrJ80bqbsD9M5pdSRFavbGK+uWam1DWWNId
-         RdmYrp0bOwkP17L0UJt8TbC58BkWsnqJmNX0RvLGZuDvgKYSqHA+NYnauZOv/GxkNHWM
-         aAedjK/524gncwJnb/kKA+oGng5TmNipvvEsuzUUaU3tsa+gLFi9jrJA5Kj/qcsvYfZP
-         CEWU1MbTZc5LN0eOr1BdHHCTg3BjVJ6T/iJgpsjg9J5LsaKZi6nnojcADKiDR7k15JJI
-         PenojtM7GF4YQso0bmrDug87IPSxmewpvbhHEVF8nq4jvOWkthjKU50pl00UjqlOm+7n
-         3hTw==
+        Wed, 16 Nov 2022 16:47:38 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1853113F78
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 13:46:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668635199;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zqBOrG9rli2QJrkKNVbeBDdgpPeZ5Pcyt9IVG+ltwAM=;
+        b=hFmqqLwuP9o3QncISRoyYVDCyzkEA6EgdWahz6bSJmfbWVDiL5dScwLg4nTMNzuN7MTYM0
+        TJYHsYeqyzEbKFVbipKMKrp1yr9UGN9HppFngHQQrXeAdzxiA8RkLxFZTIbQnfDdH0oDXU
+        jSv6gNyS3mlNpht7cWHPAVG1/5f3qtM=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-57-EPk6YXnKMBCnwqJ9RYBGFA-1; Wed, 16 Nov 2022 16:46:37 -0500
+X-MC-Unique: EPk6YXnKMBCnwqJ9RYBGFA-1
+Received: by mail-qv1-f71.google.com with SMTP id l6-20020ad44446000000b004bb60364075so14465707qvt.13
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 13:46:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DwbDYoWggCopBBuTSq6VaQowU8is6PoXgXYL4Y8gLWg=;
-        b=TFycY9ixmsrUP8bR7HI3b6YudsPVcePrl0L+XUYfHegx3wn4hXopVUhEwYxSZPcK8K
-         M9A3u6+IJt0V4hUqE5eqg+VwzLR+rwfiJ2ebh58rWWgJHrA60idDHzg/v0YOgSTfBYHp
-         vO5iRzCAR7asXehLcEmd/P5lRPBiQpvpxaa5vr25RwxYvWCI/jpm5B2I3Cc/tfU9MSoW
-         73TJksI3+CbxScUaf/Li2mompAiyho8Xur+fVqRNN1mTdQr1Puc/11CB+DuWx3vV4E9o
-         w9fTBcmFtUOQMiAwnxyVnyPpI7o57jD7VUKgIT40LgftPNw+psaQeWf2I1xp1h06B/Ui
-         NNCg==
-X-Gm-Message-State: ANoB5pnWnkDunRQLYTDSLd/MbxkERwNIGt6CXbjGpH2M6vXsxVwA6Ci4
-        HQnsKWajWXb9GXZXviprW+qCtTj7BOxJSm/CJYhxcQ==
-X-Google-Smtp-Source: AA0mqf6NNtW92evCT66KPNN2FpFyakWsPczHiopGr3Ls+clKwkr7Ddp1alryox8XWn43OhW3WD2PAawS7DYvUP8pitc=
-X-Received: by 2002:a05:6512:1597:b0:4a2:676e:cf68 with SMTP id
- bp23-20020a056512159700b004a2676ecf68mr7693565lfb.546.1668635143174; Wed, 16
- Nov 2022 13:45:43 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zqBOrG9rli2QJrkKNVbeBDdgpPeZ5Pcyt9IVG+ltwAM=;
+        b=F6pb99JyyY4GRO1T4kKy7YikK6RZnM2ihe9t/ksT7up6ilrJ9w99IS/w21+gyildq0
+         azWl5/7hFhtgTeQ2mZ7iW/E/zlPaQgKmpwK6txiM69dHA/8zDjAX4mdZTwWIvf6RXGhw
+         x/WS4wstyjaDvgKsZURU9FYS9TKzdai222+xR34kytJwg54vB8BGalccaDs/O60zc/1+
+         WAUfOJGXblv7T2Xu+wJHVVUaZ3EXiYa8pgcbIiCMfZiDnocEdEHD69I4997fkTeT3Y1w
+         fW7MK1tlYiDun7/WvPXltwd4BgWeGwcjrd6sLRF1DhuM+D9wrrhT/8D7lF03q5/pTcPV
+         hC/g==
+X-Gm-Message-State: ANoB5ploR7qmSv9IQyuwVDoztK+F2p6GJJNCq7cY9WLCwA+8aAK9r9+Y
+        MweuOtf4HnOksxMgrPj3+3YOd2XPMqK5MQTB1UaWvLNgIqyZ0tdmDPoGLAdcuah/R8N3k7+0jRw
+        akoYwtefgajyXYWHusQQd8c8=
+X-Received: by 2002:a05:620a:439c:b0:6f9:9833:1e21 with SMTP id a28-20020a05620a439c00b006f998331e21mr20998702qkp.715.1668635197045;
+        Wed, 16 Nov 2022 13:46:37 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5CNustigt3HWzBTGO59Iu4TDYZJeRnveeOzDy21Xv1w6GMw4lyGw6Oe0HN/e1q0sFig+Vh+Q==
+X-Received: by 2002:a05:620a:439c:b0:6f9:9833:1e21 with SMTP id a28-20020a05620a439c00b006f998331e21mr20998686qkp.715.1668635196850;
+        Wed, 16 Nov 2022 13:46:36 -0800 (PST)
+Received: from localhost (pool-68-160-173-162.bstnma.fios.verizon.net. [68.160.173.162])
+        by smtp.gmail.com with ESMTPSA id f16-20020a05620a409000b006bb78d095c5sm10888736qko.79.2022.11.16.13.46.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 13:46:36 -0800 (PST)
+Date:   Wed, 16 Nov 2022 16:46:35 -0500
+From:   Mike Snitzer <snitzer@redhat.com>
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     hch@lst.de, axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
+        dm-devel@redhat.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
+        yi.zhang@huawei.com
+Subject: Re: [PATCH v3 04/10] dm: cleanup close_table_device
+Message-ID: <Y3VaO4PQo4rRIRBR@redhat.com>
+References: <20221115141054.1051801-1-yukuai1@huaweicloud.com>
+ <20221115141054.1051801-5-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
-References: <20221026224449.214839-1-joshdon@google.com> <20221102165922.GA31833@blackbody.suse.cz>
- <CABk29Nvw8XMrc2_9CAUZb=rO_vddGjsfZ1s3mRQyShANDhtZnw@mail.gmail.com> <20221116095740.GA29859@blackbody.suse.cz>
-In-Reply-To: <20221116095740.GA29859@blackbody.suse.cz>
-From:   Josh Don <joshdon@google.com>
-Date:   Wed, 16 Nov 2022 13:45:31 -0800
-Message-ID: <CABk29Nu0-oKggR3MyfzJotznvrvFL-wpiSqBKyG1jhqy-wRXEw@mail.gmail.com>
-Subject: Re: [PATCH v2] sched: async unthrottling for cfs bandwidth
-To:     =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221115141054.1051801-5-yukuai1@huaweicloud.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,24 +80,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 1:57 AM Michal Koutn=C3=BD <mkoutny@suse.com> wrote=
-:
->
-> What does it mean for SCHED_WARN_ON in __unthrottle_cfs_rq_async()?
->
-> IIUC, if the concurrency of cfs_b->throttled_cfs_rq list is
-> expected (hence I'm not sure about the SCHED_WARN_ON), then it may
-> happen that __unthrottle_cfs_rq_async is called on cfs_rq that's already
-> on rq->cfsb_csd_list (there's still rq lock but it's only help inside
-> cfs_b->throttled_cfs_rq iteration).
+On Tue, Nov 15 2022 at  9:10P -0500,
+Yu Kuai <yukuai1@huaweicloud.com> wrote:
 
-It catches a case where we call unthrottle_cfs_rq_async() on a given
-cfs_rq again before we have a chance to process the previous call.
-This should never happen, because currently we only call this from the
-distribution handler, and we skip entities already queued for
-unthrottle (this is the check for if
-(!list_empty(&cfs_rq->throttled_csd_list))).
+> From: Christoph Hellwig <hch@lst.de>
+> 
+> Take the list unlink and free into close_table_device so that no half
+> torn down table_devices exist.  Also remove the check for a NULL bdev
+> as that can't happen - open_table_device never adds a table_device to
+> the list that does not have a valid block_device.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 
->
-> Thanks,
-> Michal
+Reviewed-by: Mike Snitzer <snitzer@kernel.org>
+
