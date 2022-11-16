@@ -2,143 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA3D62BB96
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:25:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3000A62BB9A
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:25:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239226AbiKPLZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 06:25:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40580 "EHLO
+        id S231360AbiKPLZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 06:25:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239237AbiKPLYk (ORCPT
+        with ESMTP id S233610AbiKPLZB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 06:24:40 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E3AF45EEC;
-        Wed, 16 Nov 2022 03:14:45 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id l22-20020a17090a3f1600b00212fbbcfb78so1956004pjc.3;
-        Wed, 16 Nov 2022 03:14:45 -0800 (PST)
+        Wed, 16 Nov 2022 06:25:01 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 538031263D
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 03:15:15 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id k19so21392472lji.2
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 03:15:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:content-disposition:mime-version:message-id:subject:to
-         :from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nyC+yDLSk48NJUeZiMOPIOe4ZUnpBcxh3+f3W/dMNhk=;
-        b=F8cMBQRGmA7UbL/PbV3eIPwM+8lhBL3rkfuqTpNMjpbaBWgDF7PTr++FdWTUw9krKg
-         KI4GEjGZk5QUGvDFGED9XEwDhm8xRb1X5KhVf2C7GCTC2/YDz/8rvX4nTLmKutT5c5jk
-         1XrWaFRBgdQvVUhB/1Qe+3cnQIlIoJNYDhmTLiK7VjCjspEvgzNBP21iQ5aN65Yva2e6
-         T9jvHyQn9I5tRE/u3pJuKdw8f/s2hoNPlReiYFF9s36gZ1hapteOeg4JgN24PD/DGu/4
-         U0DghUrKY0x3mhfFZWP4nt7ykYBajM0IeM6OWeL3ZSX+9p0YGT/7P1tPA4pvmt3VMiJ7
-         Dm2Q==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BPTBK4i32JE74oeyl2w5naP6xdf7gqgsnorC/95qyaA=;
+        b=zjMU9q7O8ibiI5n7mv4RqLHUoTHaF51bmWPW8hydg0L9brVyaGjH+GgOYSeXoQREBb
+         c36Jftu0NYWEYQ4hBs0vRZf6frfcH53mmGfJx7W9Eh5+ruyuAamhG8rabO/ihOmOjTPE
+         +a0xsAFYjyzXUHAuyRINXpcTvfEmAeADDMXSOQeOxvgPfKZDzfDCiSVrAloH6nb+/YHt
+         DajaeR1Dje/GyQye89rfCpZ4YUbL6ttYQjt/IqIsmLzEOeyBLodTWmcit8GO7Q+sxD/+
+         65it1R+sytXWOTfxFUKkdz+f0ufI37SSupgy0RwiX25zxfRQN6eTp497yLNUy18tuOmL
+         WF+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:content-disposition:mime-version:message-id:subject:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nyC+yDLSk48NJUeZiMOPIOe4ZUnpBcxh3+f3W/dMNhk=;
-        b=52I4gcPlRYTOk1bI4CUtEp7rrUir9wF+Cv/oms9eGktJN+2sif/G9jDFoQHCJ0qdal
-         h+3eRpn6/zAwp2DVyB0w3Hk1i3p8bCw3eaa0/PDfNx4AdSDACB0QzotRp7vCMu6C9lRR
-         3tyNJ5+BuIUCqemdoUqn2ldhaS4BDaCndvMzoDa2PbZVlXiVEEqvvn+pa6tnk1PdS0Om
-         /L1RF7ejvh10dqTGhH+DrGCUbSUagdq1HmAclyLmbDihVl6NhcJmhoBTMyCxmsvkbb2G
-         dUkUwmEexzItHW0hW/DpN3PbDTtoXwYisdYXjhuPtxCA0CtHqvZqro4PJNezNTT2lhFi
-         Uxpg==
-X-Gm-Message-State: ANoB5pnfK7ZNjLGLIvZ1dGmRprBuDVMyvkMuPsO+6+jZnl/P7QDj8Lj9
-        dYLwh3AuOO6/SwD0DFXSYA4=
-X-Google-Smtp-Source: AA0mqf7w7C3XTM72ib/KnsNNsPX5J+DD22f1WSN/EZuW6n6yMcf+Zifxo6jiMnwqJySegYDIxLfz8A==
-X-Received: by 2002:a17:902:ce8b:b0:186:a3a0:601c with SMTP id f11-20020a170902ce8b00b00186a3a0601cmr8419673plg.105.1668597285062;
-        Wed, 16 Nov 2022 03:14:45 -0800 (PST)
-Received: from hcl-ThinkPad-T495 ([2409:4072:707:8c4c:69fe:3231:5395:4d2f])
-        by smtp.gmail.com with ESMTPSA id f21-20020aa79695000000b00561dcfa700asm10594330pfk.107.2022.11.16.03.14.39
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 16 Nov 2022 03:14:44 -0800 (PST)
-Date:   Wed, 16 Nov 2022 16:44:35 +0530
-From:   Karthikeyan Pasupathi <pkarthikeyan1509@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        openbmc@lists.ozlabs.org
-Subject: [PATCH v1] ARM: dts: aspeed: Yosemite V2: Add GPIO line names
-Message-ID: <20221116111435.GA27359@hcl-ThinkPad-T495>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BPTBK4i32JE74oeyl2w5naP6xdf7gqgsnorC/95qyaA=;
+        b=vwiD/EDKsurSJWIBHYJHLLnbLhxacPvZa4sETKkyn/VxcL7W3O/L3UaxlwgNA1ciOy
+         LnLIG0GmLRz+ReufjDcPftKWpEZUHwtG96z3H9GPSVHT+QIsaugDFUQ15iKHOMttL10o
+         DxPhUFT/KB4W2fELoadIVyx6Br/U4teCLb/6JgZ03Ihw8RFgAP4lgZ+LHnj6QviGy8tc
+         X2l5Fa74aDML4vomEhVFKhAal64mjDhLyGeQPl5lG9hL+1eDxZLQd80MVSFnR/uZQoBH
+         YzQJFOrhijNXs28l/YHDevgUJz82fA57o5xEVFC54ED4DrKZYZF7cVPLUNbEi9+qjjD1
+         RIGw==
+X-Gm-Message-State: ANoB5plr2L2Z2wUr0YCIFPbFFbf4Hof6JnyRUn5wobkiarJH/ArX8F3z
+        fIZYVzdu8qLM1vUvQF0zjBHzbA==
+X-Google-Smtp-Source: AA0mqf5ihjyvkIyifw8CFqqU5Orm4NFCaoiopIgkbXL26iq+HaS37xWbhgfUGb7eWmnfVKl7UEAXxg==
+X-Received: by 2002:a2e:9d8b:0:b0:26f:bfd1:cc14 with SMTP id c11-20020a2e9d8b000000b0026fbfd1cc14mr7652383ljj.256.1668597313694;
+        Wed, 16 Nov 2022 03:15:13 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id h7-20020a2ea487000000b002770a9ed61bsm2844322lji.66.2022.11.16.03.15.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Nov 2022 03:15:13 -0800 (PST)
+Message-ID: <6ada48f1-a39c-23a7-9422-c44dfe403254@linaro.org>
+Date:   Wed, 16 Nov 2022 12:15:12 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,WEIRD_QUOTING
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 1/7] dt-bindings: mfd: qcom,spmi-pmic: document pm8550,
+ pm8550b, pm8550ve, pm8550vs & pmk8550
+Content-Language: en-US
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Lee Jones <lee@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org
+References: <20221114-narmstrong-sm8550-upstream-spmi-v1-0-6338a2b4b241@linaro.org>
+ <20221114-narmstrong-sm8550-upstream-spmi-v1-1-6338a2b4b241@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221114-narmstrong-sm8550-upstream-spmi-v1-1-6338a2b4b241@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Name the GPIOs to help userspace work with them. The names describe
-the functionality the lines provide, it makes easier to share
-userspace code across different system.
+On 16/11/2022 11:11, Neil Armstrong wrote:
+> Document compatible for the pm8550, pm8550b, pm8550ve, pm8550vs & pmk8550 SPMI PMICs
 
-Signed-off-by: Karthikeyan Pasupathi <pkarthikeyan1509@gmail.com>
+Please wrap commit message according to Linux coding style / submission
+process:
+https://elixir.bootlin.com/linux/v5.18-rc4/source/Documentation/process/submitting-patches.rst#L586
 
----
---- v1 - Initial draft
----
----
- .../dts/aspeed-bmc-facebook-yosemitev2.dts    | 41 +++++++++++++++++++
- 1 file changed, 41 insertions(+)
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
 
-diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts b/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts
-index 8864e9c312a8..f84e2eeb9fd1 100644
---- a/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts
-+++ b/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts
-@@ -119,6 +119,47 @@
- 			&pinctrl_adc15_default>;
- };
- 
-+&gpio {
-+	status = "okay";
-+	gpio-line-names =
-+	/*A0-A7*/	"","","","","","","","",
-+	/*B0-B7*/	"","","","","","","","",
-+	/*C0-C7*/	"","","","","","","","",
-+	/*D0-D7*/	"POWER_BUTTON","POWER_OUT1","","POWER_OUT2","","POWER_OUT3","",
-+			"POWER_OUT4",
-+	/*E0-E7*/	"DEBUG_UART_SEL0","DEBUG_UART_SEL1","DEBUG_UART_SEL2",
-+			"DEBUG_UART_RX_SEL_N","","","","",
-+	/*F0-F7*/	"","","","","","","","",
-+	/*G0-G7*/	"LED_POST_CODE_0","LED_POST_CODE_1","LED_POST_CODE_2",
-+			"LED_POST_CODE_3","","","","",
-+	/*H0-H7*/	"","","","","","","","",
-+	/*I0-I7*/	"SLOT1_POWER_OK","SLOT2_POWER_OK","SLOT3_POWER_OK","SLOT4_POWER_OK",
-+			"","","","",
-+	/*J0-J7*/	"","","","","","","","",
-+	/*K0-K7*/	"","","","","","","","",
-+	/*L0-L7*/	"","","","","","","","",
-+	/*M0-M7*/	"","","","","","","","",
-+	/*N0-N7*/	"","","I2C_SLOT1","I2C_SLOT2","I2C_SLOT3","I2C_SLOT4","","",
-+	/*O0-O7*/	"","","","SELECTOR_BUTTON","SLOT1_POWER","SLOT2_POWER","SLOT3_POWER",
-+			"SLOT4_POWER",
-+	/*P0-P7*/	"","","","","LED_POST_CODE_4","LED_POST_CODE_5","LED_POST_CODE_6",
-+			"LED_POST_CODE_7",
-+	/*Q0-Q7*/	"","","","","","","","",
-+	/*R0-R7*/	"","","","GPIO_DBG_CARD_PRSNT","","","","",
-+	/*S0-S7*/	"RESET_OUT1","RESET_OUT2","RESET_OUT3","RESET_OUT4","","","","",
-+	/*T0-T7*/	"","","","","","","","",
-+	/*U0-U7*/	"","","","","","","","",
-+	/*V0-V7*/	"","","","","","","","",
-+	/*W0-W7*/	"","","","","","","","",
-+	/*X0-X7*/	"","","","","","","","",
-+	/*Y0-Y7*/	"","","","","","","","",
-+	/*Z0-Z7*/	"POST_COMPLETE","POST_COMPLETE2","POST_COMPLETE3","POST_COMPLETE4",
-+			"","","","",
-+	/*AA0-AA7*/	"","","","","HAND_SW1","HAND_SW2","HAND_SW3","HAND_SW4",
-+	/*AB0-AB7*/	"RESET_BUTTON","","","","","","","",
-+	/*AC0-AC7*/	"","","","","","","","";
-+};
-+
- &i2c1 {
- 	//Host1 IPMB bus
- 	status = "okay";
--- 
-2.17.1
+With commit msg fixed:
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
 
