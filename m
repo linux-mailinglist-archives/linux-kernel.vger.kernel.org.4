@@ -2,181 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9282762B15E
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 03:36:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 093C662B15B
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 03:36:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231417AbiKPCgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 21:36:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49458 "EHLO
+        id S231357AbiKPCf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 21:35:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231492AbiKPCgG (ORCPT
+        with ESMTP id S229826AbiKPCf5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 21:36:06 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E86B31EE3;
-        Tue, 15 Nov 2022 18:36:04 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AG2M3LR006378;
-        Wed, 16 Nov 2022 02:35:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=/wZDpuE91CllGHxN7CVleKANvN3PHHDtLtCAsPlzH90=;
- b=aY5CljOJzHuRN56luzluHbZ+wA/pyiwHsO8GmTGCDKkQ4xhffnwRo+BtVoZxuYh8U+V8
- 4GolIPVeqUoNT19cuUWnWUhL94jWvD/zwAiWIynv5Zv0Ms4JERDZGKQLteS/rlgkWy9Z
- N5jyYlzi/Ky7FrAHVSuNsUnP8RKo+HSI6nYr/J2hySvcGJ4chH7oCHGy5XcXQo6RATnO
- tBUVBDFUzsBXanNBdQMHyGzQIi98WSk2hRqeaDE3/Xgm55Zo4bhqlrfq2Yhux9UdTxr8
- H2xsBJHOYJLYybppy07Jk5Mx4kTxBWb03g8Zc43VaNZ/SOJ0mlyf1uh4xCVgo/t7+UuH 1Q== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kvkw1rc9a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Nov 2022 02:35:58 +0000
-Received: from pps.filterd (NALASPPMTA03.qualcomm.com [127.0.0.1])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2AG2UUFT008128;
-        Wed, 16 Nov 2022 02:35:57 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by NALASPPMTA03.qualcomm.com (PPS) with ESMTPS id 3kt4jm6d6j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Nov 2022 02:35:57 +0000
-Received: from NALASPPMTA03.qualcomm.com (NALASPPMTA03.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AG2Zte5013677;
-        Wed, 16 Nov 2022 02:35:57 GMT
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA03.qualcomm.com (PPS) with ESMTPS id 2AG2ZvUt013698
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Nov 2022 02:35:57 +0000
-Received: from [10.216.30.230] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 15 Nov
- 2022 18:35:52 -0800
-Message-ID: <4a27136e-a6e3-a932-a063-cbcdebb9485e@quicinc.com>
-Date:   Wed, 16 Nov 2022 08:05:28 +0530
+        Tue, 15 Nov 2022 21:35:57 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B75E24BE1
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 18:35:56 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id n17so7746815pgh.9
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 18:35:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=LsUkQ9mUTtmbZUYtAJD3DaSoBhry/tgp9n6xBguz4lI=;
+        b=BCeqLLVGH2R8cvfyP4TzIQJp8FsuwwIaDb5fGlWXYWyEVoWZ4CecVwo/6hlZ0wvZMN
+         8lB+4IedPpag9pnDwUu3fp+CJiiyRKyRfgLgWZBq6lj5OYXr/GMQ/6PmrLoOHQfF5F2F
+         8JPKsCFZ2mp6UveVHoxNpH1BZrdNrYCH5iHsdmqHFkvPqarKWe3Q7LLEuojD5USAVfMj
+         yyBjNbC6D65G4sTN7czLTqdLrM4Ikx6MbVH8WtwwBi+3ICbpjQWQG9mmMD2Ji468yFPK
+         DL8QrJaSyUJEgplPEa2/dcuu4sVbqCCLEbNJDN0nLWJD+h+eIvwqsVlKbCuZAL7FP47K
+         IxCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LsUkQ9mUTtmbZUYtAJD3DaSoBhry/tgp9n6xBguz4lI=;
+        b=6yqa5EnMAiB9LF+5ttaAZw+5ILmkTqLqgT/J0/B3JCWX3Dr7meXQ/RPXtZi8+N+czs
+         LxYE5EBLf4vCYwT9yJxZfntDNV+B+YTHjXI9nuWn+G3hbygbdYxmIruiAuLTSiWnmnZ6
+         O4msAcdQlABMDoi544L4GDRCD9Z6tRz3nxB0nNGO+v56QzWmxySEdbslTS0n0k8Ndsdb
+         K6z4uOVGTJG5/CQQkvI4QbCkDxh7HGCcMV1tvgL37TSGZHZTn+fDPes7/VwuNQtIbbaT
+         HlEIo94/1i9NGm2WykG5Tdd7Oo3QP3jt+h3VgyiKU9CVGne7xOYEPoqBvED4Zc7BVd9b
+         aWrA==
+X-Gm-Message-State: ANoB5pl13Sn8yMpUTi5L25HlAHuLMdUP1rWhhpb9/bY7/ec3WGecW4ca
+        0+s3/Zui6TonXBzBpvNMO8xqUxjuwtKUYa+a32l7
+X-Google-Smtp-Source: AA0mqf5CJnhn5qnkSOJep/sQV/5oppCSnD92JqMIf6aCUDEsrMG3l9LTpaW0nNXIgzolcSBlOiuoKMQ31Wut3i9jIHY=
+X-Received: by 2002:a63:4087:0:b0:44e:46f9:7eeb with SMTP id
+ n129-20020a634087000000b0044e46f97eebmr18693190pga.3.1668566155982; Tue, 15
+ Nov 2022 18:35:55 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v3] clk: qcom: gcc-sc8280xp: add cxo as parent for three
- ufs ref clks
-To:     Bjorn Andersson <andersson@kernel.org>, <sboyd@kernel.org>
-CC:     <johan@kernel.org>, <bmasney@redhat.com>, <agross@kernel.org>,
-        <mturquette@baylibre.com>, <ahalaney@redhat.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20221115152956.21677-1-quic_shazhuss@quicinc.com>
- <20221115171342.v37vq4cqe7pxatlk@builder.lan>
-Content-Language: en-US
-From:   Shazad Hussain <quic_shazhuss@quicinc.com>
-In-Reply-To: <20221115171342.v37vq4cqe7pxatlk@builder.lan>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 815sP-xyYAK5Pw4MOzQBRd_D8Savvjm3
-X-Proofpoint-GUID: 815sP-xyYAK5Pw4MOzQBRd_D8Savvjm3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-15_08,2022-11-15_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
- malwarescore=0 clxscore=1015 spamscore=0 adultscore=0 phishscore=0
- lowpriorityscore=0 impostorscore=0 suspectscore=0 mlxlogscore=999
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211160016
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221115175652.3836811-1-roberto.sassu@huaweicloud.com> <20221115175652.3836811-5-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20221115175652.3836811-5-roberto.sassu@huaweicloud.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 15 Nov 2022 21:35:44 -0500
+Message-ID: <CAHC9VhQ+fUZfJwJ=oJ9ieszKeicnS7Z-QcJuJVL9HF5F0tcA7Q@mail.gmail.com>
+Subject: Re: [RFC][PATCH 4/4] security: Enforce limitations on return values
+ from LSMs
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, revest@chromium.org,
+        jackmanb@chromium.org, jmorris@namei.org, serge@hallyn.com,
+        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Nov 15, 2022 at 12:58 PM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+>
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+>
+> LSMs should not be able to return arbitrary return values, as the callers
+> of the LSM infrastructure might not be ready to handle unexpected values
+> (e.g. positive values that are first converted to a pointer with ERR_PTR,
+> and then evaluated with IS_ERR()).
+>
+> Modify call_int_hook() to call is_ret_value_allowed(), so that the return
+> value from each LSM for a given hook is checked. If for the interval the
+> return value falls into the corresponding flag is not set, change the
+> return value to the default value, just for the current LSM.
+>
+> A misbehaving LSM would not have impact on the decision of other LSMs, as
+> the loop terminates whenever the return value is not zero.
+>
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  security/security.c | 34 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 34 insertions(+)
 
+Casey touched on some of this in his reply to patch 0/4, but basically
+I see this as a BPF LSM specific problem and not a generalized LSM
+issue that should be addressed at the LSM layer.  Especially if the
+solution involves incurring additional processing for every LSM hook
+instantiation, regardless if a BPF LSM is present.  Reading your
+overall patchset description I believe that you understand this too.
 
-On 11/15/2022 10:43 PM, Bjorn Andersson wrote:
-> On Tue, Nov 15, 2022 at 08:59:56PM +0530, Shazad Hussain wrote:
->> The three UFS reference clocks, gcc_ufs_ref_clkref_clk for external
->> UFS devices, gcc_ufs_card_clkref_clk and gcc_ufs_1_card_clkref_clk for
->> two PHYs are all sourced from CXO.
->>
->> Added parent_data for all three reference clocks described above to
->> reflect that all three clocks are sourced from CXO to have valid
->> frequency for the ref clock needed by UFS controller driver.
->>
->> Fixes: d65d005f9a6c ("clk: qcom: add sc8280xp GCC driver")
->> Link: https://lore.kernel.org/lkml/Y2Tber39cHuOSR%2FW@hovoldconsulting.com/
->> Signed-off-by: Shazad Hussain <quic_shazhuss@quicinc.com>
->> Tested-by: Johan Hovold <johan+linaro@kernel.org>
->> Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
->> Tested-by: Andrew Halaney <ahalaney@redhat.com>
->> Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
->> Reviewed-by: Reviewed-by: Brian Masney <bmasney@redhat.com>
-> 
-> Really-really-reviewed-by?  >
-My bad, thanks for pointing it Bjorn :)
-> 
-> Reviewed-by: Bjorn Andersson <andersson@kernel.org>
-> 
-> 
-> @Stephen, could you please pick this for clk-fixes?
-> 
-> Thanks,
-> Bjorn
-> 
->> ---
->> Changes since v2:
->> -  Tweaked commit message and added R-b T-b from v2
->>
->> v2 of this patch can be found at
->> https://lore.kernel.org/all/20221115102217.6381-1-quic_shazhuss@quicinc.com/
->>
->> v1 of this patch can be found at
->> https://lore.kernel.org/all/20221030142333.31019-1-quic_shazhuss@quicinc.com/
->>
->> used below patches for verification on next-20221114
->> https://lore.kernel.org/lkml/20221104092045.17410-2-johan+linaro@kernel.org/
->> https://lore.kernel.org/lkml/20221104092045.17410-3-johan+linaro@kernel.org/
->> https://lore.kernel.org/lkml/20221111113732.461881-1-thierry.reding@gmail.com/
->>
->>   drivers/clk/qcom/gcc-sc8280xp.c | 6 ++++++
->>   1 file changed, 6 insertions(+)
->>
->> diff --git a/drivers/clk/qcom/gcc-sc8280xp.c b/drivers/clk/qcom/gcc-sc8280xp.c
->> index a18ed88f3b82..b3198784e1c3 100644
->> --- a/drivers/clk/qcom/gcc-sc8280xp.c
->> +++ b/drivers/clk/qcom/gcc-sc8280xp.c
->> @@ -5364,6 +5364,8 @@ static struct clk_branch gcc_ufs_1_card_clkref_clk = {
->>   		.enable_mask = BIT(0),
->>   		.hw.init = &(const struct clk_init_data) {
->>   			.name = "gcc_ufs_1_card_clkref_clk",
->> +			.parent_data = &gcc_parent_data_tcxo,
->> +			.num_parents = 1,
->>   			.ops = &clk_branch2_ops,
->>   		},
->>   	},
->> @@ -5432,6 +5434,8 @@ static struct clk_branch gcc_ufs_card_clkref_clk = {
->>   		.enable_mask = BIT(0),
->>   		.hw.init = &(const struct clk_init_data) {
->>   			.name = "gcc_ufs_card_clkref_clk",
->> +			.parent_data = &gcc_parent_data_tcxo,
->> +			.num_parents = 1,
->>   			.ops = &clk_branch2_ops,
->>   		},
->>   	},
->> @@ -5848,6 +5852,8 @@ static struct clk_branch gcc_ufs_ref_clkref_clk = {
->>   		.enable_mask = BIT(0),
->>   		.hw.init = &(const struct clk_init_data) {
->>   			.name = "gcc_ufs_ref_clkref_clk",
->> +			.parent_data = &gcc_parent_data_tcxo,
->> +			.num_parents = 1,
->>   			.ops = &clk_branch2_ops,
->>   		},
->>   	},
->> -- 
->> 2.38.0
->>
+If you want to somehow instrument the LSM hook definitions (what I
+believe to be the motivation behind patch 3/4) to indicate valid
+return values for use by the BPF verifier, I think we could entertain
+that, or at least discuss it further, but I'm not inclined to support
+any runtime overhead at the LSM layer for a specific LSM.
+
+-- 
+paul-moore.com
