@@ -2,183 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD80962C377
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 17:08:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 364DD62C38C
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 17:09:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233835AbiKPQI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 11:08:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47630 "EHLO
+        id S233914AbiKPQJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 11:09:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233678AbiKPQIw (ORCPT
+        with ESMTP id S234049AbiKPQJ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 11:08:52 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3ACFD32;
-        Wed, 16 Nov 2022 08:08:50 -0800 (PST)
-Received: from fraeml734-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NC7Fr5fk3z6HJG7;
-        Thu, 17 Nov 2022 00:06:24 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml734-chm.china.huawei.com (10.206.15.215) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 16 Nov 2022 17:08:49 +0100
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 16 Nov
- 2022 16:08:48 +0000
-Date:   Wed, 16 Nov 2022 16:08:47 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     <ira.weiny@intel.com>
-CC:     Dan Williams <dan.j.williams@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        "Ben Widawsky" <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
-Subject: Re: [PATCH 10/11] cxl/test: Add specific events
-Message-ID: <20221116160847.00004ed7@Huawei.com>
-In-Reply-To: <20221110185758.879472-11-ira.weiny@intel.com>
-References: <20221110185758.879472-1-ira.weiny@intel.com>
-        <20221110185758.879472-11-ira.weiny@intel.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Wed, 16 Nov 2022 11:09:29 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2137048751;
+        Wed, 16 Nov 2022 08:09:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=VmgAragsKad3DYDyPDvmvr2wQDM0kWOdioTveI4D4l0=; b=IzmhQ/hf+Y2l47FEm5QYxzZ+KY
+        hhl4Bq66giceiIZQUcJiz7IUC6+T1QgfP1Jks1Cng+Sf+jYxbLU+jFrg0vxrzLsLNW46loRXx0Dgn
+        slbyu9YZGav8WaHGFiZ56JbD1jyAjQgmV8NobnvKGcN+U/q4nweqwwFN49SHOWl61pciS9c9EkxjD
+        N0bnwD1Ammq7ZSlSWIsWzU1aYMghlMHA0ELu7aSadGhJFDNZHR6rPYAv4y4pNyqSIwzpL2wsukH5l
+        1zAC10TII8GMRRn5re5EW5gjLuLaswQXXA+WipDsK0+vtyrA3VVRmXGJhhMBJ4UiZ7Ww0961AtqVA
+        9MCtLhNw==;
+Received: from [2601:1c2:d80:3110::a2e7]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ovKyW-005iVS-Em; Wed, 16 Nov 2022 16:09:20 +0000
+Message-ID: <a314cfc6-3d3a-7f45-55cd-187d9e575ab4@infradead.org>
+Date:   Wed, 16 Nov 2022 08:09:15 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 3/4] driver core: Add fw_devlink.timeout param to stop
+ waiting for devlinks
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        linux-arm-msm@vger.kernel.org, John Stultz <jstultz@google.com>,
+        Peter Robinson <pbrobinson@redhat.com>,
+        Steev Klimaszewski <steev@kali.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Enric Balletbo i Serra <eballetbo@redhat.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Brian Masney <bmasney@redhat.com>,
+        Rob Herring <robh@kernel.org>
+References: <20221116115348.517599-1-javierm@redhat.com>
+ <20221116120159.519908-1-javierm@redhat.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20221116120159.519908-1-javierm@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Nov 2022 10:57:57 -0800
-ira.weiny@intel.com wrote:
+Hi--
 
-> From: Ira Weiny <ira.weiny@intel.com>
-> 
-> Each type of event has different trace point outputs.
-> 
-> Add mock General Media Event, DRAM event, and Memory Module Event
-> records to the mock list of events returned.
-> 
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-A few trivial things inline. Otherwise
-
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
-> 
-> ---
-> Changes from RFC:
-> 	Adjust for struct changes
-> 	adjust for unaligned fields
-> ---
->  tools/testing/cxl/test/events.c | 70 +++++++++++++++++++++++++++++++++
->  1 file changed, 70 insertions(+)
-> 
-> diff --git a/tools/testing/cxl/test/events.c b/tools/testing/cxl/test/events.c
-> index a4816f230bb5..8693f3fb9cbb 100644
-> --- a/tools/testing/cxl/test/events.c
-> +++ b/tools/testing/cxl/test/events.c
-> @@ -186,6 +186,70 @@ struct cxl_event_record_raw hardware_replace = {
->  	.data = { 0xDE, 0xAD, 0xBE, 0xEF },
->  };
+On 11/16/22 04:01, Javier Martinez Canillas wrote:
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index a465d5242774..38138a44d5ed 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -1581,6 +1581,13 @@
+>  			dependencies. This only applies for fw_devlink=on|rpm.
+>  			Format: <bool>
 >  
-> +struct cxl_event_gen_media gen_media = {
-> +	.hdr = {
-> +		.id = UUID_INIT(0xfbcd0a77, 0xc260, 0x417f,
-> +				0x85, 0xa9, 0x08, 0x8b, 0x16, 0x21, 0xeb, 0xa6),
-> +		.length = sizeof(struct cxl_event_gen_media),
-> +		.flags[0] = CXL_EVENT_RECORD_FLAG_PERMANENT,
-> +		/* .handle = Set dynamically */
-> +		.related_handle = cpu_to_le16(0),
-> +	},
-> +	.phys_addr = cpu_to_le64(0x2000),
-> +	.descriptor = CXL_GMER_EVT_DESC_UNCORECTABLE_EVENT,
-> +	.type = CXL_GMER_MEM_EVT_TYPE_DATA_PATH_ERROR,
-> +	.transaction_type = CXL_GMER_TRANS_HOST_WRITE,
-> +	.validity_flags = { CXL_GMER_VALID_CHANNEL |
-> +			    CXL_GMER_VALID_RANK, 0 },
-put_unaligned_le16()
+> +	fw_devlink.timeout=
+> +			[KNL] Debugging option to set a timeout in seconds for
+> +			drivers to give up waiting on dependencies and to probe
+> +			these are optional. A timeout of 0 will timeout at the
+> +			end of initcalls. If the time out hasn't expired, it'll
 
-> +	.channel = 1,
-> +	.rank = 30
-> +};
-> +
-> +struct cxl_event_dram dram = {
-> +	.hdr = {
-> +		.id = UUID_INIT(0x601dcbb3, 0x9c06, 0x4eab,
-> +				0xb8, 0xaf, 0x4e, 0x9b, 0xfb, 0x5c, 0x96, 0x24),
-> +		.length = sizeof(struct cxl_event_dram),
-> +		.flags[0] = CXL_EVENT_RECORD_FLAG_PERF_DEGRADED,
-> +		/* .handle = Set dynamically */
-> +		.related_handle = cpu_to_le16(0),
-> +	},
-> +	.phys_addr = cpu_to_le64(0x8000),
-> +	.descriptor = CXL_GMER_EVT_DESC_THRESHOLD_EVENT,
-> +	.type = CXL_GMER_MEM_EVT_TYPE_INV_ADDR,
-> +	.transaction_type = CXL_GMER_TRANS_INTERNAL_MEDIA_SCRUB,
-> +	.validity_flags = { CXL_DER_VALID_CHANNEL |
-> +			    CXL_DER_VALID_BANK_GROUP |
-> +			    CXL_DER_VALID_BANK |
-> +			    CXL_DER_VALID_COLUMN, 0 },
+			                         timeout
 
-put_unaligned_le16() etc
+> +			be restarted by each successful driver registration.
 
-> +	.channel = 1,
-> +	.bank_group = 5,
-> +	.bank = 2,
-> +	.column = { 0xDE, 0xAD},
-spacing
-
-> +};
-> +
-> +struct cxl_event_mem_module mem_module = {
-> +	.hdr = {
-> +		.id = UUID_INIT(0xfe927475, 0xdd59, 0x4339,
-> +				0xa5, 0x86, 0x79, 0xba, 0xb1, 0x13, 0xb7, 0x74),
-> +		.length = sizeof(struct cxl_event_mem_module),
-> +		/* .handle = Set dynamically */
-> +		.related_handle = cpu_to_le16(0),
-> +	},
-> +	.event_type = CXL_MMER_TEMP_CHANGE,
-> +	.info = {
-> +		.health_status = CXL_DHI_HS_PERFORMANCE_DEGRADED,
-> +		.media_status = CXL_DHI_MS_ALL_DATA_LOST,
-> +		.add_status = (CXL_DHI_AS_CRITICAL << 2) |
-> +			      (CXL_DHI_AS_WARNING << 4) |
-> +			      (CXL_DHI_AS_WARNING << 5),
-> +		.device_temp = { 0xDE, 0xAD},
-> +		.dirty_shutdown_cnt = { 0xde, 0xad, 0xbe, 0xef },
-> +		.cor_vol_err_cnt = { 0xde, 0xad, 0xbe, 0xef },
-> +		.cor_per_err_cnt = { 0xde, 0xad, 0xbe, 0xef },
-> +	}
-> +};
-> +
->  u32 cxl_mock_add_event_logs(struct cxl_dev_state *cxlds)
->  {
->  	struct device *dev = cxlds->dev;
-> @@ -204,9 +268,15 @@ u32 cxl_mock_add_event_logs(struct cxl_dev_state *cxlds)
->  	}
->  
->  	event_store_add_event(mes, CXL_EVENT_TYPE_INFO, &maint_needed);
-> +	event_store_add_event(mes, CXL_EVENT_TYPE_INFO,
-> +			      (struct cxl_event_record_raw *)&gen_media);
-> +	event_store_add_event(mes, CXL_EVENT_TYPE_INFO,
-> +			      (struct cxl_event_record_raw *)&mem_module);
->  	mes->ev_status |= CXLDEV_EVENT_STATUS_INFO;
->  
->  	event_store_add_event(mes, CXL_EVENT_TYPE_FATAL, &hardware_replace);
-> +	event_store_add_event(mes, CXL_EVENT_TYPE_FATAL,
-> +			      (struct cxl_event_record_raw *)&dram);
->  	mes->ev_status |= CXLDEV_EVENT_STATUS_FATAL;
->  
->  	return mes->ev_status;
-
+-- 
+~Randy
