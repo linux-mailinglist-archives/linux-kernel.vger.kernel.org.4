@@ -2,131 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B203262BDC8
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:28:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C443D62BD98
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:22:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238900AbiKPM2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 07:28:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46944 "EHLO
+        id S238833AbiKPMWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 07:22:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232934AbiKPM2Q (ORCPT
+        with ESMTP id S233881AbiKPMVE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 07:28:16 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4674B6464;
-        Wed, 16 Nov 2022 04:25:08 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id F171E1F917;
-        Wed, 16 Nov 2022 12:25:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1668601506;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=t364W5skI1j7pC0w2AvM+QLo/wdtr/H5Ea49+U8AtMc=;
-        b=VrJh+encNcOBAIl3/cjFZK9Nocs0SXz/AOGoRvqvdmM1mWu1WK7/VOZszqpXeTNKWf2EsQ
-        zNt3gJhvrgihspuRdUuBVkUUvpiY18odfvRJdL6prEVSLjlGDcNTKpIclBiOK9O0c6GHPR
-        I+gcLso5Qbj2Eq90+rbRHXL4ZF4nM9s=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1668601506;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=t364W5skI1j7pC0w2AvM+QLo/wdtr/H5Ea49+U8AtMc=;
-        b=bxHtpW1dOm4kIsRe4Tr0SSD09ophd578bUhdYwWBQIPIp6nVSbTG/DGqQsyTz4rmY7CUkV
-        1xzoOU46gtgs0mCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AF69213480;
-        Wed, 16 Nov 2022 12:25:06 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id v5LxKaLWdGOiFgAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Wed, 16 Nov 2022 12:25:06 +0000
-Date:   Wed, 16 Nov 2022 13:24:40 +0100
-From:   David Sterba <dsterba@suse.cz>
-To:     Qu Wenruo <quwenruo.btrfs@gmx.com>
-Cc:     ChenXiaoSong <chenxiaosong2@huawei.com>, clm@fb.com,
-        josef@toxicpanda.com, dsterba@suse.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhangxiaoxu5@huawei.com, yanaijie@huawei.com, wqu@suse.com
-Subject: Re: [PATCH v4 1/3] btrfs: add might_sleep() to some places in
- update_qgroup_limit_item()
-Message-ID: <20221116122440.GN5824@suse.cz>
-Reply-To: dsterba@suse.cz
-References: <20221115171709.3774614-1-chenxiaosong2@huawei.com>
- <20221115171709.3774614-2-chenxiaosong2@huawei.com>
- <9b47b291-b1a0-ac0c-2049-b7de6545c26b@gmx.com>
- <e058c1b9-7f57-11da-6ad1-6387604813c5@huawei.com>
- <3918175e-dddd-2a55-32c4-c07de78ff4cb@gmx.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3918175e-dddd-2a55-32c4-c07de78ff4cb@gmx.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 16 Nov 2022 07:21:04 -0500
+Received: from 189.cn (ptr.189.cn [183.61.185.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EB7DDDF3A;
+        Wed, 16 Nov 2022 04:18:40 -0800 (PST)
+HMM_SOURCE_IP: 10.64.8.31:38868.356041977
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-123.150.8.42 (unknown [10.64.8.31])
+        by 189.cn (HERMES) with SMTP id 259981001DC;
+        Wed, 16 Nov 2022 20:18:38 +0800 (CST)
+Received: from  ([123.150.8.42])
+        by gateway-153622-dep-787c977d48-v8sdr with ESMTP id 480ed0d3e1eb4dac8d5ec0ae97e24f34 for rostedt@goodmis.org;
+        Wed, 16 Nov 2022 20:18:39 CST
+X-Transaction-ID: 480ed0d3e1eb4dac8d5ec0ae97e24f34
+X-Real-From: chensong_2000@189.cn
+X-Receive-IP: 123.150.8.42
+X-MEDUSA-Status: 0
+Sender: chensong_2000@189.cn
+From:   Song Chen <chensong_2000@189.cn>
+To:     rostedt@goodmis.org, mhiramat@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        Song Chen <chensong_2000@189.cn>
+Subject: [PATCH 0/4] move functions in trace_probe_tmpl.h to trace_probe.c
+Date:   Wed, 16 Nov 2022 20:24:52 +0800
+Message-Id: <1668601492-4242-1-git-send-email-chensong_2000@189.cn>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 04:43:50PM +0800, Qu Wenruo wrote:
-> 
-> 
-> On 2022/11/16 16:09, ChenXiaoSong wrote:
-> > 在 2022/11/16 6:48, Qu Wenruo 写道:
-> >> Looks good.
-> >>
-> >> We may want to add more in other locations, but this is really a good 
-> >> start.
-> >>
-> >> Reviewed-by: Qu Wenruo <wqu@suse.com>
-> >>
-> >> Thanks,
-> >> Qu
-> > 
-> > If I just add might_sleep() in btrfs_alloc_path() and 
-> > btrfs_search_slot(), is it reasonable?
-> 
-> Adding it to btrfs_search_slot() is definitely correct.
-> 
-> But why for btrfs_alloc_path()? Wouldn't kmem_cache_zalloc() itself 
-> already do the might_sleep_if() somewhere?
-> 
-> I just looked the call chain, and indeed it is doing the check already:
-> 
-> btrfs_alloc_path()
-> |- kmem_cache_zalloc()
->     |- kmem_cache_alloc()
->        |- __kmem_cache_alloc_lru()
->           |- slab_alloc()
->              |- slab_alloc_node()
->                 |- slab_pre_alloc_hook()
->                    |- might_alloc()
->                       |- might_sleep_if()
+Below fucntions are defined and implemented in kprobe/eprobe/uprobe
+respectively:
 
-The call chaing is unconditional so the check will always happen but the
-condition itself in might_sleep_if does not recognize GFP_NOFS:
+1. store_trace_args
+2. print_probe_args
+3. __get_data_size
+4. process_fetch_insn
+5. process_fetch_insn_bottom
+6. fetch_store_*
+7. probe_mem_*
 
- 34 static inline bool gfpflags_allow_blocking(const gfp_t gfp_flags)
- 35 {
- 36         return !!(gfp_flags & __GFP_DIRECT_RECLAIM);
- 37 }
+...
 
-#define GFP_NOFS        (__GFP_RECLAIM | __GFP_IO)
+They are either identical or similar, which means there is some space to
+optimize code organization.
 
-And I think the qgroup limit was exactly a spin lock over btrfs_path_alloc so
-it did not help. An might_sleep() inside btrfs_path_alloc() is a very minimal
-but reliable check we could add, the paths are used in many places so it would
-increase the coverage.
+This patchset would like to move them into trace_probe.c as new APIs to
+serve those probes and the differences will be merged at the same time.
+
+It improves readability and avoid involving errors while adding a new
+feature.
+
+Song Chen (4):
+  kernel/trace: Introduce new APIs to process probe arguments
+  kernel/trace/kprobe: Use new APIs to process kprobe arguments
+  kernel/trace/eprobe: Use new APIs to process eprobe arguments
+  kernel/trace/uprobe: Use new APIs to process uprobe arguments
+
+ kernel/trace/trace_eprobe.c       | 194 +------------------
+ kernel/trace/trace_kprobe.c       | 125 +-----------
+ kernel/trace/trace_probe.c        | 310 ++++++++++++++++++++++++++++++
+ kernel/trace/trace_probe.h        |  11 ++
+ kernel/trace/trace_probe_common.h |  69 +++++++
+ kernel/trace/trace_probe_user.h   | 108 +++++++++++
+ kernel/trace/trace_uprobe.c       | 177 +----------------
+ 7 files changed, 518 insertions(+), 476 deletions(-)
+ create mode 100644 kernel/trace/trace_probe_common.h
+ create mode 100644 kernel/trace/trace_probe_user.h
+
+-- 
+2.25.1
+
