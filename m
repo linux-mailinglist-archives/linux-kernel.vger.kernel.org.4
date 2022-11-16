@@ -2,68 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B11E62C171
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:53:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C466362C174
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:54:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233936AbiKPOxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 09:53:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43558 "EHLO
+        id S230343AbiKPOyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 09:54:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233406AbiKPOwz (ORCPT
+        with ESMTP id S232035AbiKPOyK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 09:52:55 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D673E0A0
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 06:51:22 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id c3-20020a1c3503000000b003bd21e3dd7aso1806204wma.1
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 06:51:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MIxl+dyuDxJf/KHK5mOk1YlQ1ePtA/R5q7N29MhOEr8=;
-        b=hsyTLKcjJMtC2XIlo46Q4n/wHg0xvqCJltw/e9GWAGSXeqYTbN+AeeOyqDOILQDPRJ
-         VlZPOxei0RyrtZSYQA3/nUxXlLpcmc102QNJPY1zMruofp6isA8A+OthiNqB7h+WTL61
-         eaYz2Wwmkn0jPyo0z8kloe6eMbP62hjiMFuogEyTt7hQoVPBs+aZaRYnIfuEl8UnrfpH
-         cwpERayw3L2AS8oaa1ZoU+nfs08uXf4umcLLsBRfDM4R4LqY5gkEAlmEpQRknVyGwIxE
-         fdc4YkvXRrGn8kGkQ0sl6ZLDt7qQHJqRMoSMwdl+T1DGuG7RRtnyY/Vg71PItFDfNWVV
-         LAZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MIxl+dyuDxJf/KHK5mOk1YlQ1ePtA/R5q7N29MhOEr8=;
-        b=DXMgYVIiSQWuAQDA+yPUBrGnHI1YDoByrBiGN6Xrf+D1x7MInef96L/jtAc/MIvbnQ
-         4VjbpeFZj1OeugQ7yVCKEQxUWtkfS0GO9wSwy3eAc6szWsWNnAJT7RrdSkSQrZ0UxfI4
-         1CwoJ0tWqvPsKuAUauKyYRqdLtgPeysnK2Rfl90KxagoLYPmzbbnAM49x/DHr34gukQD
-         84BPTYl3aiFoMu0Cft5gdGf9rOiqP/SmkVOMLqmpF5JoqpJr/xMMs9OM9aQzcTljYgWI
-         Uceb8AeRPLCVMIUN0CUDbDd6NXp3AVw1AJy4jHoUvHx7ZeWz+v9h6b9O/mk5dj/U8A4C
-         ++fw==
-X-Gm-Message-State: ANoB5pnW1t7mDCsopM+j9gUrczDVxCZ421WeB3rD/ESb+wzlN1FUFQbb
-        ezz4s16+w8xAjqPYuAWsQ5XBtg==
-X-Google-Smtp-Source: AA0mqf6knMjrYErEYhVRUW3wV7V1cB4HPC7OVJP7YkKtfqykl2aqt1oHvkMg0/AJ124bPHwgFb3NWw==
-X-Received: by 2002:a1c:541c:0:b0:3cf:774b:ce5a with SMTP id i28-20020a1c541c000000b003cf774bce5amr2520965wmb.0.1668610281465;
-        Wed, 16 Nov 2022 06:51:21 -0800 (PST)
-Received: from nicolas-Precision-3551.home ([2001:861:5180:dcc0:3f99:5293:49fd:9c5b])
-        by smtp.gmail.com with ESMTPSA id k21-20020a05600c1c9500b003cfa3a12660sm8641789wms.1.2022.11.16.06.51.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 06:51:21 -0800 (PST)
-From:   Nicolas Frayer <nfrayer@baylibre.com>
-To:     nm@ti.com, ssantosh@kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     khilman@baylibre.com, glaroque@baylibre.com, nfrayer@baylibre.com
-Subject: [PATCH v5 2/2] soc: ti: Add module build support
-Date:   Wed, 16 Nov 2022 15:51:03 +0100
-Message-Id: <20221116145103.26744-3-nfrayer@baylibre.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221116145103.26744-1-nfrayer@baylibre.com>
-References: <20221116145103.26744-1-nfrayer@baylibre.com>
+        Wed, 16 Nov 2022 09:54:10 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544861057C;
+        Wed, 16 Nov 2022 06:53:45 -0800 (PST)
+Received: from fraeml701-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NC5bC0LnHz6HJVM;
+        Wed, 16 Nov 2022 22:51:19 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml701-chm.china.huawei.com (10.206.15.50) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.31; Wed, 16 Nov 2022 15:53:42 +0100
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 16 Nov
+ 2022 14:53:42 +0000
+Date:   Wed, 16 Nov 2022 14:53:41 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     <ira.weiny@intel.com>
+CC:     Dan Williams <dan.j.williams@intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        "Ben Widawsky" <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
+Subject: Re: [PATCH 01/11] cxl/pci: Add generic MSI-X/MSI irq support
+Message-ID: <20221116145341.00006411@Huawei.com>
+In-Reply-To: <20221110185758.879472-2-ira.weiny@intel.com>
+References: <20221110185758.879472-1-ira.weiny@intel.com>
+        <20221110185758.879472-2-ira.weiny@intel.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,74 +60,162 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Added module build support for the TI K3 SoC info driver.
+On Thu, 10 Nov 2022 10:57:48 -0800
+ira.weiny@intel.com wrote:
 
-Signed-off-by: Nicolas Frayer <nfrayer@baylibre.com>
----
- arch/arm64/Kconfig.platforms |  1 -
- drivers/soc/ti/Kconfig       |  3 ++-
- drivers/soc/ti/k3-socinfo.c  | 11 +++++++++++
- 3 files changed, 13 insertions(+), 2 deletions(-)
+> From: Davidlohr Bueso <dave@stgolabs.net>
+> 
+> Currently the only CXL features targeted for irq support require their
+> message numbers to be within the first 16 entries.  The device may
+> however support less than 16 entries depending on the support it
+> provides.
+> 
+> Attempt to allocate these 16 irq vectors.  If the device supports less
+> then the PCI infrastructure will allocate that number.  Store the number
+> of vectors actually allocated in the device state for later use
+> by individual functions.
+See later patch review, but I don't think we need to store the number
+allocated because any vector is guaranteed to be below that point
+(QEMU code is wrong on this at the momemt, but there are very few vectors
+ so it hasn't mattered yet).
 
-diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
-index d1970adf80ab..912529ac58b3 100644
---- a/arch/arm64/Kconfig.platforms
-+++ b/arch/arm64/Kconfig.platforms
-@@ -130,7 +130,6 @@ config ARCH_K3
- 	select TI_SCI_PROTOCOL
- 	select TI_SCI_INTR_IRQCHIP
- 	select TI_SCI_INTA_IRQCHIP
--	select TI_K3_SOCINFO
- 	help
- 	  This enables support for Texas Instruments' K3 multicore SoC
- 	  architecture.
-diff --git a/drivers/soc/ti/Kconfig b/drivers/soc/ti/Kconfig
-index e009d9589af4..b944e8bd3a8b 100644
---- a/drivers/soc/ti/Kconfig
-+++ b/drivers/soc/ti/Kconfig
-@@ -74,7 +74,8 @@ config TI_K3_RINGACC
- 	  If unsure, say N.
- 
- config TI_K3_SOCINFO
--	bool
-+	tristate "TI K3 SoC info driver"
-+	default ARCH_K3
- 	depends on ARCH_K3 || COMPILE_TEST
- 	select SOC_BUS
- 	select MFD_SYSCON
-diff --git a/drivers/soc/ti/k3-socinfo.c b/drivers/soc/ti/k3-socinfo.c
-index 19f3e74f5376..98348f998e0f 100644
---- a/drivers/soc/ti/k3-socinfo.c
-+++ b/drivers/soc/ti/k3-socinfo.c
-@@ -13,6 +13,7 @@
- #include <linux/slab.h>
- #include <linux/string.h>
- #include <linux/sys_soc.h>
-+#include <linux/module.h>
- 
- #define CTRLMMR_WKUP_JTAGID_REG		0
- /*
-@@ -141,6 +142,7 @@ static const struct of_device_id k3_chipinfo_of_match[] = {
- 	{ .compatible = "ti,am654-chipid", },
- 	{ /* sentinel */ },
- };
-+MODULE_DEVICE_TABLE(of, k3_chipinfo_of_match);
- 
- static struct platform_driver k3_chipinfo_driver = {
- 	.driver = {
-@@ -156,3 +158,12 @@ static int __init k3_chipinfo_init(void)
- 	return platform_driver_register(&k3_chipinfo_driver);
- }
- subsys_initcall(k3_chipinfo_init);
-+
-+static void __exit k3_chipinfo_exit(void)
-+{
-+	platform_driver_unregister(&k3_chipinfo_driver);
-+}
-+module_exit(k3_chipinfo_exit);
-+
-+MODULE_DESCRIPTION("TI K3 SoC info driver");
-+MODULE_LICENSE("GPL");
--- 
-2.25.1
+Otherwise, pcim fun deals with some of the cleanup you are doing again
+here for us so can simplify this somewhat. See inline.
+
+Jonathan
+
+
+
+> 
+> Upon successful allocation, users can plug in their respective isr at
+> any point thereafter, for example, if the irq setup is not done in the
+> PCI driver, such as the case of the CXL-PMU.
+> 
+> Cc: Bjorn Helgaas <helgaas@kernel.org>
+> Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Co-developed-by: Ira Weiny <ira.weiny@intel.com>
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
+> 
+> ---
+> Changes from Ira
+> 	Remove reviews
+> 	Allocate up to a static 16 vectors.
+> 	Change cover letter
+> ---
+>  drivers/cxl/cxlmem.h |  3 +++
+>  drivers/cxl/cxlpci.h |  6 ++++++
+>  drivers/cxl/pci.c    | 32 ++++++++++++++++++++++++++++++++
+>  3 files changed, 41 insertions(+)
+> 
+> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
+> index 88e3a8e54b6a..b7b955ded3ac 100644
+> --- a/drivers/cxl/cxlmem.h
+> +++ b/drivers/cxl/cxlmem.h
+> @@ -211,6 +211,7 @@ struct cxl_endpoint_dvsec_info {
+>   * @info: Cached DVSEC information about the device.
+>   * @serial: PCIe Device Serial Number
+>   * @doe_mbs: PCI DOE mailbox array
+> + * @nr_irq_vecs: Number of MSI-X/MSI vectors available
+>   * @mbox_send: @dev specific transport for transmitting mailbox commands
+>   *
+>   * See section 8.2.9.5.2 Capacity Configuration and Label Storage for
+> @@ -247,6 +248,8 @@ struct cxl_dev_state {
+>  
+>  	struct xarray doe_mbs;
+>  
+> +	int nr_irq_vecs;
+> +
+>  	int (*mbox_send)(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *cmd);
+>  };
+>  
+> diff --git a/drivers/cxl/cxlpci.h b/drivers/cxl/cxlpci.h
+> index eec597dbe763..b7f4e2f417d3 100644
+> --- a/drivers/cxl/cxlpci.h
+> +++ b/drivers/cxl/cxlpci.h
+> @@ -53,6 +53,12 @@
+>  #define	    CXL_DVSEC_REG_LOCATOR_BLOCK_ID_MASK			GENMASK(15, 8)
+>  #define     CXL_DVSEC_REG_LOCATOR_BLOCK_OFF_LOW_MASK		GENMASK(31, 16)
+>  
+> +/*
+> + * NOTE: Currently all the functions which are enabled for CXL require their
+> + * vectors to be in the first 16.  Use this as the max.
+> + */
+> +#define CXL_PCI_REQUIRED_VECTORS 16
+> +
+>  /* Register Block Identifier (RBI) */
+>  enum cxl_regloc_type {
+>  	CXL_REGLOC_RBI_EMPTY = 0,
+> diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
+> index faeb5d9d7a7a..62e560063e50 100644
+> --- a/drivers/cxl/pci.c
+> +++ b/drivers/cxl/pci.c
+> @@ -428,6 +428,36 @@ static void devm_cxl_pci_create_doe(struct cxl_dev_state *cxlds)
+>  	}
+>  }
+>  
+> +static void cxl_pci_free_irq_vectors(void *data)
+> +{
+> +	pci_free_irq_vectors(data);
+> +}
+> +
+> +static void cxl_pci_alloc_irq_vectors(struct cxl_dev_state *cxlds)
+> +{
+> +	struct device *dev = cxlds->dev;
+> +	struct pci_dev *pdev = to_pci_dev(dev);
+> +	int nvecs;
+> +	int rc;
+> +
+> +	nvecs = pci_alloc_irq_vectors(pdev, 1, CXL_PCI_REQUIRED_VECTORS,
+> +				   PCI_IRQ_MSIX | PCI_IRQ_MSI);
+> +	if (nvecs < 0) {
+> +		dev_dbg(dev, "Not enough interrupts; use polling instead.\n");
+> +		return;
+> +	}
+> +
+> +	rc = devm_add_action_or_reset(dev, cxl_pci_free_irq_vectors, pdev);
+The pci managed code always gives me a headache because there is a lot of magic
+under the hood if you ever called pcim_enable_device() which we did.
+
+Chasing through
+
+pci_alloc_irq_vectors_affinity()->
+either
+	__pci_enable_msix_range()
+or
+	__pci_enable_msi_range()
+
+they are similar
+	pci_setup_msi_context()
+		pci_setup_msi_release()
+			adds pcmi_msi_release devm action.
+and that frees the vectors for us.
+So we don't need to do it here.
+
+
+> +	if (rc) {
+> +		dev_dbg(dev, "Device managed call failed; interrupts disabled.\n");
+> +		/* some got allocated, clean them up */
+> +		cxl_pci_free_irq_vectors(pdev);
+We could just leave them lying around for devm cleanup to sweep up eventually
+or free them as you have done here.
+
+> +		return;
+> +	}
+> +
+> +	cxlds->nr_irq_vecs = nvecs;
+> +}
+> +
+>  static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+>  {
+>  	struct cxl_register_map map;
+> @@ -494,6 +524,8 @@ static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+>  	if (rc)
+>  		return rc;
+>  
+> +	cxl_pci_alloc_irq_vectors(cxlds);
+> +
+>  	cxlmd = devm_cxl_add_memdev(cxlds);
+>  	if (IS_ERR(cxlmd))
+>  		return PTR_ERR(cxlmd);
 
