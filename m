@@ -2,188 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 057BC62BAB0
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:02:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1014762BAA8
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:02:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231803AbiKPLCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 06:02:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41464 "EHLO
+        id S238586AbiKPLBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 06:01:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233460AbiKPLBd (ORCPT
+        with ESMTP id S238461AbiKPLBD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 06:01:33 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338CB450B1
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:48:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668595698;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=actXV8V/4HNDVBL7ZEvrJbHCudo+/TOoQCTQnP3PDcQ=;
-        b=SFM53fQHBcb3XASC2GdbpW3vWIHFL6NP/szeFhyavLG+0w1QMRyuLBVLvUbVM05GOvgoCI
-        o7qynrsJsC/ECY03Ohlf8j6VbIZbky86qBP5bSHlDkjbsFJn9GzWxYjokXg3QeoVc5NH8v
-        cOwBLialCT106NuS87rU5ozHrh05kH4=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-449-clpFUp2AMxSlrMYUe6BqUA-1; Wed, 16 Nov 2022 05:48:15 -0500
-X-MC-Unique: clpFUp2AMxSlrMYUe6BqUA-1
-Received: by mail-ej1-f69.google.com with SMTP id xh12-20020a170906da8c00b007413144e87fso9531317ejb.14
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:48:15 -0800 (PST)
+        Wed, 16 Nov 2022 06:01:03 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA91445EE8
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:49:00 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id m22so43022257eji.10
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:49:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OSCwvxDUrivspPm0mWYSEKkrMB19obOv39RUwyA0PH0=;
+        b=VJ17UkTNHUXDMc38lOye7y2paGd4FOYHBRYpe2vgelPuC55Z4g5rnX+xNi0NFRGTrN
+         mdMUVKijrbkJJfn3y8Tm8vf3pLdF4omxIOM6UM8S6CVz2p3NrVUPvz4FNRN3RF3rQ/lN
+         9z9ibLXy5LDPJfO5cF7QIpPDKsW5E+659K7gg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=actXV8V/4HNDVBL7ZEvrJbHCudo+/TOoQCTQnP3PDcQ=;
-        b=cMKUo3jtdypPRm29iqNqBpb0T30Y+bM7aFg5Izh4whoOJz/nyltVQqKEeTJMy+0eaR
-         EuSUkNL8IOjXffb1i//xCEHx8VX8kTUDOYqeKWTQgup75mpXyw1c71fgi5gerZeTUpEH
-         TycF4xroGK1FolxbMCAxnzV1qDgCFvjhZZvaKdCvd2g5aPFe+EXpkEK4inFPEMpQQRoI
-         xPEk6o97OdGohkqXIga2ExpA9+/NZtnOb3zqm89G12z23Q/vsgIOdrht50uoGyyQs5vX
-         UNHSy3dO/a1jREg1mMUIrRjb31nJLCa2m0LztSynk2GQc+69Lo2dNW5BKvrAySSYfCB8
-         +lcg==
-X-Gm-Message-State: ANoB5pl+xbUYZebzjCv3dRLpbREoBrdWYi9E3koQ3QXerO7na9OM4T+C
-        GhVWHkxFxPt9URFPdSEQxSmOSEOG6ikfVINflvfsY1xvLfZIzIEgubzhrrR616KUvfVLxGZAicp
-        y8oZkExqCc9VAACnCUjWTXwhP
-X-Received: by 2002:a17:906:b046:b0:7ae:50c6:453a with SMTP id bj6-20020a170906b04600b007ae50c6453amr17306079ejb.596.1668595693653;
-        Wed, 16 Nov 2022 02:48:13 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5Qqw6Edkg9M9z4WOBmEeBBINk3jGmghVcVxARQQw1FpxITl3iaW+gro9yRTHhbZ3vlSsggIw==
-X-Received: by 2002:a17:906:b046:b0:7ae:50c6:453a with SMTP id bj6-20020a170906b04600b007ae50c6453amr17306068ejb.596.1668595693457;
-        Wed, 16 Nov 2022 02:48:13 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id a2-20020aa7d742000000b004623028c594sm7333413eds.49.2022.11.16.02.48.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 02:48:12 -0800 (PST)
-Message-ID: <5e425476-5f04-23e2-03e0-1f8ea57c1a55@redhat.com>
-Date:   Wed, 16 Nov 2022 11:48:12 +0100
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OSCwvxDUrivspPm0mWYSEKkrMB19obOv39RUwyA0PH0=;
+        b=i2EzIOxD4jD6h1R+SNFD7iAkAc//XjYlvwdlz1BV0e3Vj5Kkpkky/1X991NOfBNd2w
+         Ib9tYIzltknfmog13p3ElVVTseEveP3Dnngoyb1K3uixD053qU+B21C/LT1godCNVHRn
+         1YeJ92jM4XWpuI9DtE+NMs8NopMfaDENoHdCRtDw0qb5Hh89Z5Od3vmPnRrU3+imvxL0
+         h6U0rSlfItp6Us8ViUMRWDfxSgnUpeZOGAwpNsVeeW3kHdPvl1Oap/OX8hklor/F+UJz
+         35hu9qMwB6HFR+lxkc/44Xu6JLG/bg9uxifHb9VLYbzSPeS42srXi5H4tMIAU568dwbx
+         xWSQ==
+X-Gm-Message-State: ANoB5pk+TbL8y/1iRFKot6AeebT0MYzb0JtPRP7uJ42xmKwRtqiEkUkK
+        xhOa7aCEhYnF8UP8jGXZjpqUXQ==
+X-Google-Smtp-Source: AA0mqf6lc5lrEzUlEqYgu67h96R4r19JtBnDlqqKBl9ey0VuIf1EYIOTKVPSxvCTipQmxuaB88n35Q==
+X-Received: by 2002:a17:906:970e:b0:7ad:ccae:a30d with SMTP id k14-20020a170906970e00b007adccaea30dmr18079730ejx.704.1668595739329;
+        Wed, 16 Nov 2022 02:48:59 -0800 (PST)
+Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
+        by smtp.gmail.com with ESMTPSA id g13-20020a50ec0d000000b0045b3853c4b7sm7352935edr.51.2022.11.16.02.48.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 02:48:58 -0800 (PST)
+Date:   Wed, 16 Nov 2022 11:48:56 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
+        Nadav Amit <namit@vmware.com>, linux-kselftest@vger.kernel.org,
+        sparclinux@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
+        x86@kernel.org, Hugh Dickins <hughd@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-media@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        John Hubbard <jhubbard@nvidia.com>,
+        linux-um@lists.infradead.org, etnaviv@lists.freedesktop.org,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, Oded Gabbay <ogabbay@kernel.org>,
+        linux-mips@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>
+Subject: Re: [PATCH mm-unstable v1 13/20] media: videobuf-dma-sg: remove
+ FOLL_FORCE usage
+Message-ID: <Y3TAGAUIo/IR+tAa@phenom.ffwll.local>
+Mail-Followup-To: David Hildenbrand <david@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
+        Nadav Amit <namit@vmware.com>, linux-kselftest@vger.kernel.org,
+        sparclinux@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
+        x86@kernel.org, Hugh Dickins <hughd@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@suse.cz>,
+        linux-media@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        John Hubbard <jhubbard@nvidia.com>, linux-um@lists.infradead.org,
+        etnaviv@lists.freedesktop.org,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        Oded Gabbay <ogabbay@kernel.org>, linux-mips@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>
+References: <20221116102659.70287-1-david@redhat.com>
+ <20221116102659.70287-14-david@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-From:   Hans de Goede <hdegoede@redhat.com>
-Subject: [GIT PULL] platform-drivers-x86 for 6.1-4
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Mark Gross <mgross@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        platform-driver-x86@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Content-Language: en-US, nl
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221116102659.70287-14-david@redhat.com>
+X-Operating-System: Linux phenom 5.19.0-2-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Wed, Nov 16, 2022 at 11:26:52AM +0100, David Hildenbrand wrote:
+> GUP now supports reliable R/O long-term pinning in COW mappings, such
+> that we break COW early. MAP_SHARED VMAs only use the shared zeropage so
+> far in one corner case (DAXFS file with holes), which can be ignored
+> because GUP does not support long-term pinning in fsdax (see
+> check_vma_flags()).
+> 
+> Consequently, FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM is no longer required
+> for reliable R/O long-term pinning: FOLL_LONGTERM is sufficient. So stop
+> using FOLL_FORCE, which is really only for ptrace access.
+> 
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Signed-off-by: David Hildenbrand <david@redhat.com>
 
-Here is the third round of fixes for platform-drivers-x86 for 6.1:
+I looked at this a while ago when going through some of the follow_pfn
+stuff, so
 
- -  Surface Pro 9 and Surface Laptop 5 kbd, battery, etc. support
-    (this is just a few hw-id additions)
- -  A couple of other hw-id / DMI-quirk additions
- -  A few small bug fixes + 1 build fix
+Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
 
-Regards,
+> ---
+>  drivers/media/v4l2-core/videobuf-dma-sg.c | 14 +++++---------
+>  1 file changed, 5 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/media/v4l2-core/videobuf-dma-sg.c b/drivers/media/v4l2-core/videobuf-dma-sg.c
+> index f75e5eedeee0..234e9f647c96 100644
+> --- a/drivers/media/v4l2-core/videobuf-dma-sg.c
+> +++ b/drivers/media/v4l2-core/videobuf-dma-sg.c
+> @@ -151,17 +151,16 @@ static void videobuf_dma_init(struct videobuf_dmabuf *dma)
+>  static int videobuf_dma_init_user_locked(struct videobuf_dmabuf *dma,
+>  			int direction, unsigned long data, unsigned long size)
+>  {
+> +	unsigned int gup_flags = FOLL_LONGTERM;
+>  	unsigned long first, last;
+> -	int err, rw = 0;
+> -	unsigned int flags = FOLL_FORCE;
+> +	int err;
+>  
+>  	dma->direction = direction;
+>  	switch (dma->direction) {
+>  	case DMA_FROM_DEVICE:
+> -		rw = READ;
+> +		gup_flags |= FOLL_WRITE;
+>  		break;
+>  	case DMA_TO_DEVICE:
+> -		rw = WRITE;
+>  		break;
+>  	default:
+>  		BUG();
+> @@ -177,14 +176,11 @@ static int videobuf_dma_init_user_locked(struct videobuf_dmabuf *dma,
+>  	if (NULL == dma->pages)
+>  		return -ENOMEM;
+>  
+> -	if (rw == READ)
+> -		flags |= FOLL_WRITE;
+> -
+>  	dprintk(1, "init user [0x%lx+0x%lx => %lu pages]\n",
+>  		data, size, dma->nr_pages);
+>  
+> -	err = pin_user_pages(data & PAGE_MASK, dma->nr_pages,
+> -			     flags | FOLL_LONGTERM, dma->pages, NULL);
+> +	err = pin_user_pages(data & PAGE_MASK, dma->nr_pages, gup_flags,
+> +			     dma->pages, NULL);
+>  
+>  	if (err != dma->nr_pages) {
+>  		dma->nr_pages = (err >= 0) ? err : 0;
+> -- 
+> 2.38.1
+> 
 
-Hans
-
-
-The following changes since commit 53eb64c88f17b14b324fbdfd417f56c5d3fa6fee:
-
-  platform/x86: p2sb: Don't fail if unknown CPU is found (2022-11-07 12:33:49 +0100)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-v6.1-4
-
-for you to fetch changes up to b44fd994e45112b58b6c1dec4451d9a925784589:
-
-  platform/x86: ideapad-laptop: Add module parameters to match DMI quirk tables (2022-11-16 08:47:08 +0100)
-
-----------------------------------------------------------------
-platform-drivers-x86 for v6.1-4
-
-Highlights:
- -  Surface Pro 9 and Surface Laptop 5 kbd, battery, etc. support
-    (this is just a few hw-id additions)
- -  A couple of other hw-id / DMI-quirk additions
- -  A few small bug fixes + 1 build fix
-
-The following is an automated git shortlog grouped by driver:
-
-acer-wmi:
- -  Enable SW_TABLET_MODE on Switch V 10 (SW5-017)
-
-asus-wmi:
- -  add missing pci_dev_put() in asus_wmi_set_xusb2pr()
-
-hp-wmi:
- -  Ignore Smart Experience App event
-
-ideapad-laptop:
- -  Add module parameters to match DMI quirk tables
- -  Fix interrupt storm on fn-lock toggle on some Yoga laptops
-
-platform/surface:
- -  aggregator_registry: Add support for Surface Laptop 5
- -  aggregator_registry: Add support for Surface Pro 9
- -  aggregator: Do not check for repeated unsequenced packets
-
-platform/x86/amd:
- -  pmc: Add new ACPI ID AMDI0009
- -  pmc: Remove more CONFIG_DEBUG_FS checks
-
-platform/x86/intel:
- -  pmc: Don't unconditionally attach Intel PMC when virtualized
-
-thinkpad_acpi:
- -  Enable s2idle quirk for 21A1 machine type
-
-----------------------------------------------------------------
-Arnav Rawat (1):
-      platform/x86: ideapad-laptop: Fix interrupt storm on fn-lock toggle on some Yoga laptops
-
-Hans de Goede (2):
-      platform/x86: acer-wmi: Enable SW_TABLET_MODE on Switch V 10 (SW5-017)
-      platform/x86: ideapad-laptop: Add module parameters to match DMI quirk tables
-
-Kai-Heng Feng (1):
-      platform/x86: hp-wmi: Ignore Smart Experience App event
-
-Lennard Gäher (1):
-      platform/x86: thinkpad_acpi: Enable s2idle quirk for 21A1 machine type
-
-Mario Limonciello (1):
-      platform/x86/amd: pmc: Remove more CONFIG_DEBUG_FS checks
-
-Maximilian Luz (3):
-      platform/surface: aggregator: Do not check for repeated unsequenced packets
-      platform/surface: aggregator_registry: Add support for Surface Pro 9
-      platform/surface: aggregator_registry: Add support for Surface Laptop 5
-
-Roger Pau Monné (1):
-      platform/x86/intel: pmc: Don't unconditionally attach Intel PMC when virtualized
-
-Shyam Sundar S K (1):
-      platform/x86/amd: pmc: Add new ACPI ID AMDI0009
-
-Xiongfeng Wang (1):
-      platform/x86: asus-wmi: add missing pci_dev_put() in asus_wmi_set_xusb2pr()
-
- .../platform/surface/aggregator/ssh_packet_layer.c | 24 +++++++++++---
- .../platform/surface/surface_aggregator_registry.c | 37 ++++++++++++++++++++++
- drivers/platform/x86/acer-wmi.c                    |  9 ++++++
- drivers/platform/x86/amd/pmc.c                     |  3 +-
- drivers/platform/x86/asus-wmi.c                    |  2 ++
- drivers/platform/x86/hp-wmi.c                      |  3 ++
- drivers/platform/x86/ideapad-laptop.c              | 37 ++++++++++++++++++++--
- drivers/platform/x86/intel/pmc/pltdrv.c            |  9 ++++++
- drivers/platform/x86/thinkpad_acpi.c               |  8 +++++
- 9 files changed, 124 insertions(+), 8 deletions(-)
-
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
