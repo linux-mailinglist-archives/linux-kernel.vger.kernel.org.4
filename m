@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7D8662B3F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 08:33:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD05662B3F7
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 08:33:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232688AbiKPHdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 02:33:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47952 "EHLO
+        id S232833AbiKPHdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 02:33:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232501AbiKPHdD (ORCPT
+        with ESMTP id S232587AbiKPHdF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 02:33:03 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF94F7
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 23:33:02 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id y16so28438254wrt.12
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 23:33:02 -0800 (PST)
+        Wed, 16 Nov 2022 02:33:05 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5035BF7
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 23:33:04 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id o30so11280219wms.2
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 23:33:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gVVk4rPqVJ+nI9+Wk7suoLY9Sdv75O8vEmrQasB0XMM=;
-        b=ezU1MOhuwcskDPEe2bAhdvR+saE8yzF7v50He6N3NYDA1e9oyfiK0xPq/mtJzqf6zo
-         hV3LIOzYgJ+2LZlLEk3wlsgHkCYlPabAM7ejHya7guA8ZshDLICtfFxKM4yrLtRZq4uD
-         j38fLLpxY20S+xJ3DHEGn1kCYmVZWlu0QPjNEyxYCQ4ecRCiwQLryn153Ovy0t6Y0Ig0
-         uQ28ddCIkeDEAWhkqWiSezzs98gD2fGopOKA+jM++ODFnhHLL9W3XnWOtF6pGZC3Qo9f
-         danLss66FfMq0m2B3K+UzXK8FxXcU64qZhuwzodNH2l7NTEaJ8FPhTEOeyfNRUe5mG5G
-         427w==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iPPeUQlF89WuMuKsE4L6h0ih48TI+X2n9tqxiV2tD4Q=;
+        b=ImY4GLY1t/Rm4yER2CBeMhVxYLKVOewt7gDiUzCuRDac1mKXRnEUWXCfS1gwlytz7I
+         VDfuGN4n7HXiRl/9Zbc6+zM84UufF2LthkeMQHDmuG+tSfpe1WJFzuzAizwDjnTxUCNf
+         Ymfx4+iAlaYQu36is8mVx7V2LtE2lYkJotNVGb6+bR75g9/YFyXxD4AeoJfa2RK0j2a/
+         HbgSrIi1RSTXYlD1h7hl32fv4HPw1h/notcrUL1W0yXX9c0Dol0K3kURGIjr9mKZLLxO
+         CS+CtPWcItnQ+nBh0pRZ9Ok7Mwvz165GboELNavCxm/no/pptFlJBCdJNawb4mN5Z8MF
+         47BQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gVVk4rPqVJ+nI9+Wk7suoLY9Sdv75O8vEmrQasB0XMM=;
-        b=VptkX+qs370w0o9BeXxhK6DCNlrmX1nxFjIX/AljQU30I05DX7b2K7s9ashV5USpc/
-         GXgMSut+YVk+VRBcfO5fqchxRUXcg3cUSHRpKVY3S1RcdxfyuKva+VNCjnLZptJgF5Hs
-         8kmhmd3qJBj2PeBOigq/dMoM2OYtXjacpxf0wDxaQ+RxKpYvpINRIYTknY8xnfU5Vqt0
-         /59Qz5oQHNrduodAVZHfU7j8YvlUtlRT0QkZImr4ZKfCVsQRBVhBxBLejSpOX/Fkid78
-         xlPZ8bY9VGDdnE3af/OM97cpTPdP0rv2O1jFUgv+nIA3p2Ey0B/x1JK69KGCcb9QdHzD
-         ZDzA==
-X-Gm-Message-State: ANoB5pmpQsnR3W4q6u2Ly+aZ2VsFIIMyo8A1tXOvaQT9jOCWParzWefP
-        4yXk7/+1i7k3rSlL50mPKf0vBw==
-X-Google-Smtp-Source: AA0mqf5x3z6lTJoUgZpWStT49LW4IwwLma+kYAXJ24eaiJV/S+x5T+thpkd8IXxjYf33veA4Ud8BIQ==
-X-Received: by 2002:a05:6000:24f:b0:232:eb2:6a33 with SMTP id m15-20020a056000024f00b002320eb26a33mr13198010wrz.325.1668583981057;
-        Tue, 15 Nov 2022 23:33:01 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iPPeUQlF89WuMuKsE4L6h0ih48TI+X2n9tqxiV2tD4Q=;
+        b=3KOLj74qN2x0piwzplmt25/iXHjQE+macGQVO4hfuXC9pDKusrgDKN0dS0KatEByz8
+         rv9OSG4ZqGNWFQhoix+QKzCOnFP4+7FwOBkV4BBB5J6tiDtHSosjGbvrbaf3p0sEnh75
+         FZlAK6PXXyqfaB5l3y6Za1FxpdPleNigg7eXXG829ftA8wFcR02nSE4bR6XI+miTSlcB
+         F6ie6T41z9McqcH+FSYAUp9Vs+8UIpF8KuPKLoiUY2CGguywr5uZcuurKExFRBPjHxuc
+         Murfm8GE772MriYNRNEjupeVGVUe2zzXoSthsxvazjkxwIJwLstnJTS9np/x+kQ9DBab
+         vb2w==
+X-Gm-Message-State: ANoB5pnUl4wpxfgU96KlwwayRf0ZR9OsXeP/GfYmM82oD/ILiKRxuc7U
+        xnmw19Y1jZ6jGdxL5whF5H7YsMaortosWG5prqg=
+X-Google-Smtp-Source: AA0mqf61rSZif5wCcHsiohgfj7pbnGS/nsbqaryTioIkwNHJgCdkyYmo/qVHdZu7ODJRNJ2O/KmieQ==
+X-Received: by 2002:a05:600c:3046:b0:3cf:cb16:f242 with SMTP id n6-20020a05600c304600b003cfcb16f242mr1205354wmh.82.1668583982753;
+        Tue, 15 Nov 2022 23:33:02 -0800 (PST)
 Received: from zoltan.localdomain ([167.98.215.174])
-        by smtp.gmail.com with ESMTPSA id g34-20020a05600c4ca200b003cfd4e6400csm1058823wmp.19.2022.11.15.23.32.59
+        by smtp.gmail.com with ESMTPSA id g34-20020a05600c4ca200b003cfd4e6400csm1058823wmp.19.2022.11.15.23.33.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 23:32:59 -0800 (PST)
+        Tue, 15 Nov 2022 23:33:01 -0800 (PST)
 From:   Alex Elder <elder@linaro.org>
 To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
@@ -56,11 +57,14 @@ To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
 Cc:     andersson@kernel.org, konrad.dybcio@linaro.org, agross@kernel.org,
         elder@kernel.org, linux-arm-msm@vger.kernel.org,
         netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v3 0/5] net: ipa: change GSI firmware load specification
-Date:   Wed, 16 Nov 2022 01:32:51 -0600
-Message-Id: <20221116073257.34010-1-elder@linaro.org>
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH net-next v3 1/5] dt-bindings: net: qcom,ipa: deprecate modem-init
+Date:   Wed, 16 Nov 2022 01:32:52 -0600
+Message-Id: <20221116073257.34010-2-elder@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221116073257.34010-1-elder@linaro.org>
+References: <20221116073257.34010-1-elder@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,42 +76,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Version 3 just adds reviewed-by tags for Krzysztof Kozlowski.
+GSI firmware for IPA must be loaded during initialization, either by
+the AP or by the modem.  The loader is currently specified based on
+whether the Boolean modem-init property is present.
 
-Version 2 of this series modifies the first patch only.  One section
-in the description is reworded, and the example now consistenly
-describes the SC7180 SoC, both as suggested by Krzysztof.
+Instead, use a new property with an enumerated value to indicate
+explicitly how GSI firmware gets loaded.  With this in place, a
+third approach can be added in an upcoming patch.
 
-Currently, GSI firmware must be loaded for IPA before it can be
-used--either by the modem, or by the AP.  New hardware supports a
-third option, with the bootloader taking responsibility for loading
-GSI firmware.  In that case, neither the AP nor the modem needs to
-do that.
+The new qcom,gsi-loader property has two defined values:
+  - self:   The AP loads GSI firmware
+  - modem:  The modem loads GSI firmware
+The modem-init property must still be supported, but is now marked
+deprecated.
 
-The first patch in this series deprecates the "modem-init" Device
-Tree property in the IPA binding, using a new "qcom,gsi-loader"
-property instead.  The second and third implement logic in the code
-to support either the "old" or the "new" way of specifying how GSI
-firmware is loaded.
+Update the example so it represents the SC7180 SoC, and provide
+examples for the qcom,gsi-loader, memory-region, and firmware-name
+properties.
 
-The last two patches implement a new value for the "qcom,gsi-loader"
-property.  If the value is "skip", neither the AP nor modem needs to
-load the GSI firmware.  The first of these patches implements the
-change in the IPA binding; the second implements it in the code.
+Signed-off-by: Alex Elder <elder@linaro.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+v3:  Added Krzysztof's reviewed-by tag.
+v2:  Updated description, switched example completely to SC7180.
 
-					-Alex
+ .../devicetree/bindings/net/qcom,ipa.yaml     | 76 ++++++++++++++-----
+ 1 file changed, 55 insertions(+), 21 deletions(-)
 
-Alex Elder (5):
-  dt-bindings: net: qcom,ipa: deprecate modem-init
-  net: ipa: encapsulate decision about firmware load
-  net: ipa: introduce "qcom,gsi-loader" property
-  dt-bindings: net: qcom,ipa: support skipping GSI firmware load
-  net: ipa: permit GSI firmware loading to be skipped
-
- .../devicetree/bindings/net/qcom,ipa.yaml     | 78 +++++++++++----
- drivers/net/ipa/ipa_main.c                    | 95 +++++++++++++++----
- 2 files changed, 135 insertions(+), 38 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/net/qcom,ipa.yaml b/Documentation/devicetree/bindings/net/qcom,ipa.yaml
+index e752b76192df0..d0f34763b9383 100644
+--- a/Documentation/devicetree/bindings/net/qcom,ipa.yaml
++++ b/Documentation/devicetree/bindings/net/qcom,ipa.yaml
+@@ -124,19 +124,29 @@ properties:
+       - const: ipa-clock-enabled-valid
+       - const: ipa-clock-enabled
+ 
++  qcom,gsi-loader:
++    enum:
++      - self
++      - modem
++    description:
++      Indicates how GSI firmware should be loaded.  If the AP loads
++      and validates GSI firmware, this property has value "self".
++      If the modem does this, this property has value "modem".
++
+   modem-init:
++    deprecated: true
+     type: boolean
+     description:
+-      If present, it indicates that the modem is responsible for
+-      performing early IPA initialization, including loading and
+-      validating firwmare used by the GSI.
++      This is the older (deprecated) way of indicating how GSI firmware
++      should be loaded.  If present, the modem loads GSI firmware; if
++      absent, the AP loads GSI firmware.
+ 
+   memory-region:
+     maxItems: 1
+     description:
+       If present, a phandle for a reserved memory area that holds
+       the firmware passed to Trust Zone for authentication.  Required
+-      when Trust Zone (not the modem) performs early initialization.
++      when the AP (not the modem) performs early initialization.
+ 
+   firmware-name:
+     $ref: /schemas/types.yaml#/definitions/string
+@@ -155,15 +165,36 @@ required:
+   - interconnects
+   - qcom,smem-states
+ 
+-# If modem-init is not present, the AP loads GSI firmware, and
+-# memory-region must be specified
+-if:
+-  not:
+-    required:
+-      - modem-init
+-then:
+-  required:
+-    - memory-region
++allOf:
++  # If qcom,gsi-loader is present, modem-init must not be present
++  - if:
++      required:
++        - qcom,gsi-loader
++    then:
++      properties:
++        modem-init: false
++
++      # If qcom,gsi-loader is "self", the AP loads GSI firmware, and
++      # memory-region must be specified
++      if:
++        properties:
++          qcom,gsi-loader:
++            contains:
++              const: self
++      then:
++        required:
++          - memory-region
++    else:
++      # If qcom,gsi-loader is not present, we use deprecated behavior.
++      # If modem-init is not present, the AP loads GSI firmware, and
++      # memory-region must be specified.
++      if:
++        not:
++          required:
++            - modem-init
++      then:
++        required:
++          - memory-region
+ 
+ additionalProperties: false
+ 
+@@ -194,14 +225,17 @@ examples:
+         };
+ 
+         ipa@1e40000 {
+-                compatible = "qcom,sdm845-ipa";
++                compatible = "qcom,sc7180-ipa";
+ 
+-                modem-init;
++                qcom,gsi-loader = "self";
++                memory-region = <&ipa_fw_mem>;
++                firmware-name = "qcom/sc7180-trogdor/modem/modem.mdt";
+ 
+-                iommus = <&apps_smmu 0x720 0x3>;
++                iommus = <&apps_smmu 0x440 0x0>,
++                         <&apps_smmu 0x442 0x0>;
+                 reg = <0x1e40000 0x7000>,
+-                        <0x1e47000 0x2000>,
+-                        <0x1e04000 0x2c000>;
++                      <0x1e47000 0x2000>,
++                      <0x1e04000 0x2c000>;
+                 reg-names = "ipa-reg",
+                             "ipa-shared",
+                             "gsi";
+@@ -219,9 +253,9 @@ examples:
+                 clock-names = "core";
+ 
+                 interconnects =
+-                        <&rsc_hlos MASTER_IPA &rsc_hlos SLAVE_EBI1>,
+-                        <&rsc_hlos MASTER_IPA &rsc_hlos SLAVE_IMEM>,
+-                        <&rsc_hlos MASTER_APPSS_PROC &rsc_hlos SLAVE_IPA_CFG>;
++                        <&aggre2_noc MASTER_IPA 0 &mc_virt SLAVE_EBI1 0>,
++                        <&aggre2_noc MASTER_IPA 0 &system_noc SLAVE_IMEM 0>,
++                        <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_IPA_CFG 0>;
+                 interconnect-names = "memory",
+                                      "imem",
+                                      "config";
 -- 
 2.34.1
 
