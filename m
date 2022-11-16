@@ -2,19 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 024BD62C446
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 17:25:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5E0262C449
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 17:25:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238552AbiKPQZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 11:25:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58672 "EHLO
+        id S236124AbiKPQZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 11:25:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237567AbiKPQWw (ORCPT
+        with ESMTP id S237725AbiKPQWx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 11:22:52 -0500
+        Wed, 16 Nov 2022 11:22:53 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9596057B5D;
-        Wed, 16 Nov 2022 08:22:12 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FCB558025;
+        Wed, 16 Nov 2022 08:22:13 -0800 (PST)
 From:   John Ogness <john.ogness@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1668615731;
@@ -22,33 +22,33 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=n0N6+oqs8YDesp1N8syBA/TOKLtd+9UFIcKPgI5bch8=;
-        b=wPgQxX1oQOVhnIHx4abeauz5e7rEg0cwq5AOSReGNyVI0GuDMJ6kOxzMqgo1hBiby93eiw
-        5hBeCrKYPerk7JvYO8vosiWvKyDPP4cAvtIpw/1zVg+gGlgIShIO0DOXM0NlWFYl5WeH1w
-        WA8DgdazYTIbRMqodAkgxFBB3+Mm0uDgTkJf3dn5f46ZjCd5kn97toOZnVj/equ7JrSvUO
-        r/4XzPjW/bQmnrL64Or8kzA5/4EVeUCgg1O+2wDvVFNd9QBb1iSKtJUbwpkRHjvnQ/F/U4
-        G0cFr/34shXiB9Hei+AMjQk4UsbqUF58IDPWuUFjW50qPwjkdAmfQ9w5cU+LXQ==
+        bh=pqonCTPpfZXjo2LPJFdK8fQ8y1w5Fa/kW7qM4AbVqk0=;
+        b=OgkpFCVaiSeO+LQ/j6+zQtq0n6iDywSpXysWk+wGMxn5NY8Lpi6yEZG29Hs13yIGUGGf7R
+        IovDJ3VKpFrFu0ZT3784+ms4boN8yY81gPMPLxy5VLgxm9VswgG4LDSV6RwpCD6M18PPQ3
+        DyvuO05Uo5p96U8R2Agq2vPpwEMV8YpJCMOK2BdOpY5PZsYXMaM19hhfMKY/s3owD+3a5k
+        O/HcKUBHgAWTZQjptpPfbkxfcF3tdywNkKIjcDhE2kwOn6GOZFG+EbEt0l4AsvopEYk96q
+        N4BTImkK5B+on64cfPxFCgcXeQozIy0aoaIyDk++6N4dgk7GQcfgKy1so48+ng==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1668615731;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=n0N6+oqs8YDesp1N8syBA/TOKLtd+9UFIcKPgI5bch8=;
-        b=MyQecpelV/Y/Ej5hHdh0TQTK+n3Ui1E7BQDeR9U4wt14VpwlS8pr/VUvxnyUuEshVddrWN
-        FzYp4/jEDqsa0BBg==
+        bh=pqonCTPpfZXjo2LPJFdK8fQ8y1w5Fa/kW7qM4AbVqk0=;
+        b=JV6AAcU+EGEfeBSOpHE/d0qAz6Prk9Itjm/unhVn8fP0nUKjQJimz54c1dr/2zk1crSuUF
+        XRu1eOSeIs9uzyBw==
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         linux-kernel@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH printk v5 29/40] tty: serial: xilinx_uartps: use console_is_registered()
-Date:   Wed, 16 Nov 2022 17:27:41 +0106
-Message-Id: <20221116162152.193147-30-john.ogness@linutronix.de>
+        Peter Zijlstra <peterz@infradead.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        linux-usb@vger.kernel.org
+Subject: [PATCH printk v5 30/40] usb: early: xhci-dbc: use console_is_registered()
+Date:   Wed, 16 Nov 2022 17:27:42 +0106
+Message-Id: <20221116162152.193147-31-john.ogness@linutronix.de>
 In-Reply-To: <20221116162152.193147-1-john.ogness@linutronix.de>
 References: <20221116162152.193147-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
@@ -69,22 +69,22 @@ console is registered. Use console_is_registered() instead.
 Signed-off-by: John Ogness <john.ogness@linutronix.de>
 Reviewed-by: Petr Mladek <pmladek@suse.com>
 ---
- drivers/tty/serial/xilinx_uartps.c | 2 +-
+ drivers/usb/early/xhci-dbc.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/xilinx_uartps.c b/drivers/tty/serial/xilinx_uartps.c
-index 2eff7cff57c4..0cbd1892c53b 100644
---- a/drivers/tty/serial/xilinx_uartps.c
-+++ b/drivers/tty/serial/xilinx_uartps.c
-@@ -1631,7 +1631,7 @@ static int cdns_uart_probe(struct platform_device *pdev)
- #ifdef CONFIG_SERIAL_XILINX_PS_UART_CONSOLE
- 	/* This is not port which is used for console that's why clean it up */
- 	if (console_port == port &&
--	    !(cdns_uart_uart_driver.cons->flags & CON_ENABLED)) {
-+	    !console_is_registered(cdns_uart_uart_driver.cons)) {
- 		console_port = NULL;
- 		cdns_uart_console.index = -1;
- 	}
+diff --git a/drivers/usb/early/xhci-dbc.c b/drivers/usb/early/xhci-dbc.c
+index bfb7e2b85299..797047154820 100644
+--- a/drivers/usb/early/xhci-dbc.c
++++ b/drivers/usb/early/xhci-dbc.c
+@@ -927,7 +927,7 @@ void __init early_xdbc_register_console(void)
+ 
+ static void xdbc_unregister_console(void)
+ {
+-	if (early_xdbc_console.flags & CON_ENABLED)
++	if (console_is_registered(&early_xdbc_console))
+ 		unregister_console(&early_xdbc_console);
+ }
+ 
 -- 
 2.30.2
 
