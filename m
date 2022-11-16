@@ -2,156 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F2BD62C481
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 17:33:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFB3762C487
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 17:34:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235013AbiKPQd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 11:33:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46156 "EHLO
+        id S233707AbiKPQe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 11:34:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233488AbiKPQdA (ORCPT
+        with ESMTP id S233706AbiKPQee (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 11:33:00 -0500
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE3659867;
-        Wed, 16 Nov 2022 08:25:43 -0800 (PST)
-Received: by mail-oi1-f177.google.com with SMTP id h132so19074136oif.2;
-        Wed, 16 Nov 2022 08:25:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=59o3Mlg3Bt4WsmBYPeaPa7JMIRGNco3k9zIgaMmG37k=;
-        b=djCPK2VSBfqwTbgOMQSRSsNCIisUTEdniPKjVD7Ji5ezcP7hb+jRTXU5qWcr32BcW/
-         5ko0WPP5KZR80utNukjtXBsriZb1XpWZfXl417/gtosOpeJzR0pq+pY8Pb9puD8nhmDb
-         ez1Fhzbw4L3dm6dLDkoepE+RKBFB3SUfJzqN25+q/JXuYOHfDtQEcade72WPczOu5N3c
-         FdsBXZaSfsw45wnQuIqHZ/+HWc76nPKnKz65rQORMSXsec/WDkXXFR0sAEEOupxJy6h5
-         g9BGWI/uhbDHAQEePUDmAZfxYNk17YYcEyyAsDprVFQdK8vWfDEYN2ZblP4WS4x9KL3x
-         9fcw==
-X-Gm-Message-State: ANoB5plO01VErlQP9kTspb6XPjFG0P/VLCxCcKSKUVO9p5QkznDfhH3+
-        d+cvPJTdntlk3PF7HhKVJg==
-X-Google-Smtp-Source: AA0mqf4IlcgAmzvLCHRHAVt7/LkJvqiP7OkXi3KiD6BfWcE1SyNP3xSxg6GNLTLHKGjFi1iLqbQAow==
-X-Received: by 2002:a05:6808:18a8:b0:35a:79fd:fc8b with SMTP id bi40-20020a05680818a800b0035a79fdfc8bmr2040722oib.231.1668615942969;
-        Wed, 16 Nov 2022 08:25:42 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id u38-20020a05687100a600b00141e56210b2sm3750550oaa.57.2022.11.16.08.25.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 08:25:42 -0800 (PST)
-Received: (nullmailer pid 195051 invoked by uid 1000);
-        Wed, 16 Nov 2022 16:25:44 -0000
-Date:   Wed, 16 Nov 2022 10:25:44 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Sandor Yu <Sandor.yu@nxp.com>
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, andrzej.hajda@intel.com,
-        neil.armstrong@linaro.org, robert.foss@linaro.org,
-        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, vkoul@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, linux-imx@nxp.com,
-        tzimmermann@suse.de, lyude@redhat.com, javierm@redhat.com,
-        ville.syrjala@linux.intel.com, sam@ravnborg.org,
-        jani.nikula@intel.com, maxime@cerno.tech,
-        penguin-kernel@i-love.sakura.ne.jp, oliver.brown@nxp.com
-Subject: Re: [PATCH v3 02/10] dt-bindings: display: bridge: Add MHDP HDMI for
- i.MX8MQ
-Message-ID: <20221116162544.GA193163-robh@kernel.org>
-References: <cover.1667911321.git.Sandor.yu@nxp.com>
- <9ccf53cad7f735f985f4ca37b3b0159ef78a2103.1667911321.git.Sandor.yu@nxp.com>
+        Wed, 16 Nov 2022 11:34:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFA1F682A4;
+        Wed, 16 Nov 2022 08:26:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E3C27B81DED;
+        Wed, 16 Nov 2022 16:26:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 557FBC433D6;
+        Wed, 16 Nov 2022 16:26:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668615979;
+        bh=73LMr939EWHPt+TPzYln4/nGtq+P1TBpXelJNWyyGSw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=epxWFDk7HPFmaZbjDCJ/ydB3mEoQMH2j2yq0y0yM+vh4Ncs5Axxm3vHFp/z0m8QO6
+         +h5qF/vT2V3jfzyKyhJErOVm5EzgpAv/iAcbfQEBLr9kpS8GvqamucPk5Ck9uYNS32
+         QhA/pgN8B8KBzNYipQnqqdIrni5bENZVQugvGtmj+tanFnlbZqD5t9dxthWSNiI85n
+         +OHTEvmWILrt4VKS0LCh4ka9s9FD9PdCar5liUHDakWYHaVQGkspn6xbd2LyoaYD5J
+         r2MMCspMk/5CkyNDskzxCPUfhro4JgY3PryiLpoYF8kczw9WLBRxHWI+CbN2aI/3rj
+         MGQB7KX2ICXeQ==
+Date:   Wed, 16 Nov 2022 10:26:17 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
+        Allen Hubbe <allenbh@gmail.com>,
+        "Ahmed S. Darwish" <darwi@linutronix.de>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [patch 27/39] PCI/MSI: Move pci_disable_msix() to api.c
+Message-ID: <20221116162617.GA1115753@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9ccf53cad7f735f985f4ca37b3b0159ef78a2103.1667911321.git.Sandor.yu@nxp.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20221111122015.156785224@linutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 09:00:05PM +0800, Sandor Yu wrote:
-> Add bindings for i.MX8MQ MHDP HDMI.
+On Fri, Nov 11, 2022 at 02:54:58PM +0100, Thomas Gleixner wrote:
+> From: Ahmed S. Darwish <darwi@linutronix.de>
 > 
-> Signed-off-by: Sandor Yu <Sandor.yu@nxp.com>
+> To distangle the maze in msi.c, all exported device-driver MSI APIs are
+> now to be grouped in one file, api.c.
+> 
+> Move pci_disable_msix() and make its kernel-doc comprehensive.
+> 
+> Signed-off-by: Ahmed S. Darwish <darwi@linutronix.de>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+
+Trivial question below.
+
 > ---
->  .../display/bridge/cdns,mhdp-imx8mq-hdmi.yaml | 59 +++++++++++++++++++
->  1 file changed, 59 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/display/bridge/cdns,mhdp-imx8mq-hdmi.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/display/bridge/cdns,mhdp-imx8mq-hdmi.yaml b/Documentation/devicetree/bindings/display/bridge/cdns,mhdp-imx8mq-hdmi.yaml
-> new file mode 100644
-> index 000000000000..8c0afef157aa
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/display/bridge/cdns,mhdp-imx8mq-hdmi.yaml
-> @@ -0,0 +1,59 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/display/bridge/cdns,mhdp-imx8mq-hdmi.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Cadence MHDP HDMI bridge
-> +
-> +maintainers:
-> +  - Sandor Yu <Sandor.yu@nxp.com>
-> +
-> +description:
-> +  The Cadence MHDP TX HDMI interface.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - cdns,mhdp-imx8mq-hdmi
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  phys:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    items:
-> +      - description: Hotplug detect interrupter for cable plugin event.
-> +      - description: Hotplug detect interrupter for cable plugout event.
-> +
-> +  interrupt-names:
-> +    items:
-> +      - const: plug_in
-> +      - const: plug_out
-> +
-> +  port:
-> +    $ref: /schemas/graph.yaml#/properties/port
-> +    description:
-> +      A port node pointing to the output port of a display controller.
+>  drivers/pci/msi/api.c | 24 ++++++++++++++++++++++++
+>  drivers/pci/msi/msi.c | 14 +-------------
+>  drivers/pci/msi/msi.h |  1 +
+>  3 files changed, 26 insertions(+), 13 deletions(-)
+> ---
+> diff --git a/drivers/pci/msi/api.c b/drivers/pci/msi/api.c
+> index 83ea38ffa116..653a61868ae6 100644
+> --- a/drivers/pci/msi/api.c
+> +++ b/drivers/pci/msi/api.c
+> @@ -112,6 +112,30 @@ int pci_enable_msix_range(struct pci_dev *dev, struct msix_entry *entries,
+>  EXPORT_SYMBOL(pci_enable_msix_range);
+>  
+>  /**
+> + * pci_disable_msix() - Disable MSI-X interrupt mode on device
+> + * @dev: the PCI device to operate on
+> + *
+> + * Legacy device driver API to disable MSI-X interrupt mode on device,
+> + * free earlier-allocated interrupt vectors, and restore INTx emulation.
 
-You also need an output port to an HDMI connector node.
+Isn't INTx *emulation* a PCIe implementation detail?  Doesn't seem
+relevant to callers that it's emulated.
 
+> + * The PCI device Linux IRQ (@dev->irq) is restored to its default pin
+> + * assertion IRQ. This is the cleanup pair of pci_enable_msix_range().
+> + *
+> + * NOTE: The newer pci_alloc_irq_vectors() / pci_free_irq_vectors() API
+> + * pair should, in general, be used instead.
+> + */
+> +void pci_disable_msix(struct pci_dev *dev)
+> +{
+> +	if (!pci_msi_enabled() || !dev || !dev->msix_enabled)
+> +		return;
 > +
-> +additionalProperties: false
+> +	msi_lock_descs(&dev->dev);
+> +	pci_msix_shutdown(dev);
+> +	pci_free_msi_irqs(dev);
+> +	msi_unlock_descs(&dev->dev);
+> +}
+> +EXPORT_SYMBOL(pci_disable_msix);
 > +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    mhdp_hdmi: hdmi-bridge@32c00000 {
-> +        compatible = "cdns,mhdp-imx8mq-hdmi";
-> +        reg = <0x32c00000 0x100000>;
-> +        interrupts = <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>,
-> +                <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
-> +        interrupt-names = "plug_in", "plug_out";
-> +        phys = <&hdmi_phy>;
-> +
-> +        port {
-> +            mhdp_in: endpoint {
-> +                remote-endpoint = <&dcss_out>;
-> +            };
-> +        };
-> +    };
-> -- 
-> 2.34.1
-> 
+> +/**
+>   * pci_alloc_irq_vectors() - Allocate multiple device interrupt vectors
+>   * @dev:      the PCI device to operate on
+>   * @min_vecs: minimum required number of vectors (must be >= 1)
+> diff --git a/drivers/pci/msi/msi.c b/drivers/pci/msi/msi.c
+> index 1226d66da992..6fa90d07d2e4 100644
+> --- a/drivers/pci/msi/msi.c
+> +++ b/drivers/pci/msi/msi.c
+> @@ -736,7 +736,7 @@ static int __pci_enable_msix(struct pci_dev *dev, struct msix_entry *entries,
+>  	return msix_capability_init(dev, entries, nvec, affd);
+>  }
+>  
+> -static void pci_msix_shutdown(struct pci_dev *dev)
+> +void pci_msix_shutdown(struct pci_dev *dev)
+>  {
+>  	struct msi_desc *desc;
+>  
+> @@ -758,18 +758,6 @@ static void pci_msix_shutdown(struct pci_dev *dev)
+>  	pcibios_alloc_irq(dev);
+>  }
+>  
+> -void pci_disable_msix(struct pci_dev *dev)
+> -{
+> -	if (!pci_msi_enable || !dev || !dev->msix_enabled)
+> -		return;
+> -
+> -	msi_lock_descs(&dev->dev);
+> -	pci_msix_shutdown(dev);
+> -	pci_free_msi_irqs(dev);
+> -	msi_unlock_descs(&dev->dev);
+> -}
+> -EXPORT_SYMBOL(pci_disable_msix);
+> -
+>  int __pci_enable_msi_range(struct pci_dev *dev, int minvec, int maxvec,
+>  			   struct irq_affinity *affd)
+>  {
+> diff --git a/drivers/pci/msi/msi.h b/drivers/pci/msi/msi.h
+> index 8c4a5289432d..77e2587f7e4f 100644
+> --- a/drivers/pci/msi/msi.h
+> +++ b/drivers/pci/msi/msi.h
+> @@ -86,6 +86,7 @@ static inline __attribute_const__ u32 msi_multi_mask(struct msi_desc *desc)
+>  
+>  /* MSI internal functions invoked from the public APIs */
+>  void pci_msi_shutdown(struct pci_dev *dev);
+> +void pci_msix_shutdown(struct pci_dev *dev);
+>  void pci_free_msi_irqs(struct pci_dev *dev);
+>  int __pci_enable_msi_range(struct pci_dev *dev, int minvec, int maxvec, struct irq_affinity *affd);
+>  int __pci_enable_msix_range(struct pci_dev *dev, struct msix_entry *entries, int minvec,
 > 
