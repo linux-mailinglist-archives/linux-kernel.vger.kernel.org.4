@@ -2,130 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9786662B545
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 09:32:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CCEB62B54F
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 09:33:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238819AbiKPIcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 03:32:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34206 "EHLO
+        id S231907AbiKPIdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 03:33:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238935AbiKPIbp (ORCPT
+        with ESMTP id S229942AbiKPIdi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 03:31:45 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEA3B2A70E
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 00:29:05 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id a29so28354028lfj.9
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 00:29:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hOjQ8ZqJCJ4XjyB8rqTKWkM81Yey0vtzEtDeEu0P90I=;
-        b=ddQzH/c2j2Si8AIuiK1A0Rq1ixXSilknotZ052ApAz7qYx9AV+DoM07IK4rHpZFrUy
-         sy/B8x0Y38ioefWRDHtuYSuioS2LzeZqfFeob32keLihp0F/Xy3RzMo7BIuq2Wx2pBhk
-         XkjbdberdCUJXyB5BgWf1HuPpVnRI0mpNcmCll6Uvjk2X4xO1QY/IpvH3r++aa7pev12
-         Juh57ArZguG+lA8VDe/w4FPfAGN+p8oILuuU5n950cCaVi1muIXyZ1QCmr3b/vwsHR0J
-         SnL/Zmme82PHBh2IHfi9g5a7ZgmDwvkx08SxceQEIDe/xMa9JubBjjt5QIaOSW7nfXT3
-         sTtQ==
+        Wed, 16 Nov 2022 03:33:38 -0500
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E544DE31
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 00:33:36 -0800 (PST)
+Received: by mail-lj1-f177.google.com with SMTP id x21so20858249ljg.10
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 00:33:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hOjQ8ZqJCJ4XjyB8rqTKWkM81Yey0vtzEtDeEu0P90I=;
-        b=mfKDM4OcjcSSZMOVLUEe3k5QIkNoKb6e4K0BUPd65k42p7+v22Q16n1qzWyTilJ3Mn
-         f+5zbDQDsv7KhuuQAEWUA57kjRvXokS/U2EYbQgtB1kHlI2aPRz3gETK3W5FGJsL3QjD
-         mx4JgZRFTn7GyFRrCZsoLaPhrpNZODB1Wig1QerCtLCPQJj+z4vQdSr+Pz5JT22/0o3V
-         Pl6z2U+XbIhLrKHCq/2pi80fcVpruPVXoq+Jfj+/GVtdM3OoKvy1DMjoRjdLXnQcpoLB
-         Yo9Vf2TqFW2WsCZgK20pXtOzFOuYjdM/1sDvc/uO7drWia+BOwnejpu6oUvmrJnT5tt+
-         9tqw==
-X-Gm-Message-State: ANoB5pmwlCwWfR/+/LNbUe6Yyg0mWy6EfLTnBrsoJh/7V9SqiJK80s9w
-        8dxzMyTVcpygrd25LyBUTColCA==
-X-Google-Smtp-Source: AA0mqf7rULVHcsf3HCvYdqj87GhYFRO63xMUx9uE9UbMvF2N35rMtDdJ3PniuUJlyYcTUYRDVJUddw==
-X-Received: by 2002:a19:5051:0:b0:499:8e29:2763 with SMTP id z17-20020a195051000000b004998e292763mr7780310lfj.137.1668587344089;
-        Wed, 16 Nov 2022 00:29:04 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id w26-20020ac254ba000000b0049c29389b98sm2490272lfk.151.2022.11.16.00.29.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 00:29:03 -0800 (PST)
-Message-ID: <7083614f-578c-7ed9-5f6b-c64718747dea@linaro.org>
-Date:   Wed, 16 Nov 2022 09:29:02 +0100
+        bh=TKlOC+omeE7Fbq3sEW7T1SZBevKbc2ofi3hDZZa2pfk=;
+        b=mpw6Q413Yi4X65VWu+UbiJXiCg78Mj7R3h0QyEx1FdneT/deiGn9+ylHYPUjqtPN3d
+         LC4HPH3hIK5uzSDDtww/qRTCrp29r1NEGvHAeloM2VRPQPykfj6njWtv3PvGpm+d80yw
+         +FXLk66k9Y0jTM4jx6CquKiNavkv7C+1RactX440xl5L3BLJZs+8E++ZWQdaYF2Zqghx
+         Fd5n/2deFP6I4RicnaSxgwL0tFfEh/jmp8hxIQwnY/4f9yhRhFpbee0Fuym5YmWzZrj/
+         VWfEVnb8cU+ZDqcftiMKO3oW47+ie26ksa6UuC5fESGsy+KW5xDvN5jyfhSsp8CiizP1
+         VpYA==
+X-Gm-Message-State: ANoB5pl59hfCB0bmejrhzSTpH1II94R7gJ8bUaNvoSGTxZjKhl/3fMBw
+        LPqLVR73ag2DyQ4+q5LZF1s=
+X-Google-Smtp-Source: AA0mqf6SE77eBndDoLF4RFu17/e3c4fPtP6W3PQJiKheVp+BmKOheBJr+IXOwJrgVP5irbyc8KTK4g==
+X-Received: by 2002:a05:651c:88f:b0:26f:c160:6dde with SMTP id d15-20020a05651c088f00b0026fc1606ddemr6990991ljq.20.1668587615176;
+        Wed, 16 Nov 2022 00:33:35 -0800 (PST)
+Received: from dc75zzyyyyyyyyyyyyydt-3.rev.dnainternet.fi (dc75zzyyyyyyyyyyyyydt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::7])
+        by smtp.gmail.com with ESMTPSA id y14-20020ac2420e000000b004a9b9ccfbe6sm2503115lfh.51.2022.11.16.00.33.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 00:33:34 -0800 (PST)
+Date:   Wed, 16 Nov 2022 10:33:25 +0200
+From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Prashant Laddha <prladdha@cisco.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND] fixp-arith: do not require users to include bug.h
+Message-ID: <Y3SgVdVey9legtX+@dc75zzyyyyyyyyyyyyydt-3.rev.dnainternet.fi>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 4/4] arm64: dts: qcom: sm8350-sagami: Wire up SDHCI2
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     patches@linaro.org, Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-References: <20221115172828.14372-1-konrad.dybcio@linaro.org>
- <20221115172828.14372-4-konrad.dybcio@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221115172828.14372-4-konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="GS8yxXAiYW45aPhR"
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/11/2022 18:28, Konrad Dybcio wrote:
-> Adjust regulators, add required pin setup and finally enable SDHCI2
-> to get the SD Card slot going on Sagami Xperias.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  .../dts/qcom/sm8350-sony-xperia-sagami.dtsi   | 30 ++++++++++++++++++-
->  1 file changed, 29 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
-> index a428ce31ab4e..fdf95b763cf4 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
-> @@ -312,7 +312,8 @@ pm8350c_l8: ldo8 {
->  		pm8350c_l9: ldo9 {
->  			regulator-name = "pm8350c_l9";
->  			regulator-min-microvolt = <2960000>;
-> -			regulator-max-microvolt = <3008000>;
-> +			/* Originally max = 3008000 but SDHCI expects 2960000 */
-> +			regulator-max-microvolt = <2960000>;
->  			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
->  		};
->  
-> @@ -558,6 +559,19 @@ &qupv3_id_2 {
->  	status = "okay";
->  };
->  
-> +&sdhc_2 {
-> +	cd-gpios = <&tlmm 92 GPIO_ACTIVE_HIGH>;
-> +	pinctrl-names = "default", "sleep";
-> +	pinctrl-0 = <&sdc2_default_state &sdc2_card_det_active>;
-> +	pinctrl-1 = <&sdc2_sleep_state &sdc2_card_det_sleep>;
-> +	vmmc-supply = <&pm8350c_l9>;
-> +	vqmmc-supply = <&pm8350c_l6>;
-> +	no-sdio;
-> +	no-mmc;
-> +	status = "okay";
-> +};
-> +
-> +
 
-Only one blank line.
+--GS8yxXAiYW45aPhR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best regards,
-Krzysztof
+The fixp_sin32_rad()() contains a call to BUG_ON(). If users of
+fixp-arith.h have not included the bug.h prior including the fixp-arith.h
+the compiler will not find the BUG_ON. Thus every user of fixp-arith.h
+must also include bug.h (or roll own variant of BUG_ON()).
 
+Include bug.h from fixp-arith.h so every user of fixp-arith.h does not
+need to include the bug.h prior inclusion of fixp-arith.h
+
+Fixes: 559addc25b00 ("[media] fixp-arith: replace sin/cos table by a better=
+ precision one")
+Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+---
+
+Another forgotten patch I encountered while cleaning up my local git.
+Seems like this has fell through the cracks.
+
+ include/linux/fixp-arith.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/include/linux/fixp-arith.h b/include/linux/fixp-arith.h
+index 281cb4f83dbe..e485fb0c1201 100644
+--- a/include/linux/fixp-arith.h
++++ b/include/linux/fixp-arith.h
+@@ -2,6 +2,7 @@
+ #ifndef _FIXP_ARITH_H
+ #define _FIXP_ARITH_H
+=20
++#include <linux/bug.h>
+ #include <linux/math64.h>
+=20
+ /*
+
+base-commit: 094226ad94f471a9f19e8f8e7140a09c2625abaa
+--=20
+2.38.1
+
+
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--GS8yxXAiYW45aPhR
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmN0oD8ACgkQeFA3/03a
+ocV2+Qf9HvZLfrZRdoKiCqyVHwRqTvI2GyScR/J1uuxQktJOG5+qTFFINQZkasI+
+y4SzW3QdXpSoOGBjrXicGHtYmcqXcJ2L3degaQAWAUqSNb6WpOH4urnXUVya5m6d
+VzIughhGC+hX/R3C9kM7OqbVnVyHsiO/qh3I/z/zhFGQtZzazcFxYa9HdKFLB4kl
+26szvWxQ6KAYM00rHuuRQS326BDNUQU3xFjIGm1zKVvOTrfTdvTV1WY25JeGGttt
+BRx2yG0CP+RweilIPoi9uhV0TaZQZdmeQqmnGKlSDoC7t1jhmUYa1DEMwiENCxfe
+jcvf9JeuzglfzxTnCzqRYJG7n7Bj7w==
+=3eFE
+-----END PGP SIGNATURE-----
+
+--GS8yxXAiYW45aPhR--
