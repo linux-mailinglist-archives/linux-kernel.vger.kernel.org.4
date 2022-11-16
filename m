@@ -2,80 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF33D62CAE4
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 21:32:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F2F162CAE8
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 21:34:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234068AbiKPUcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 15:32:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51392 "EHLO
+        id S234131AbiKPUd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 15:33:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231221AbiKPUcr (ORCPT
+        with ESMTP id S231565AbiKPUd4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 15:32:47 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E395C2126B;
-        Wed, 16 Nov 2022 12:32:45 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id fn7-20020a05600c688700b003b4fb113b86so2379690wmb.0;
-        Wed, 16 Nov 2022 12:32:45 -0800 (PST)
+        Wed, 16 Nov 2022 15:33:56 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603885FD9;
+        Wed, 16 Nov 2022 12:33:55 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id 4so17562145pli.0;
+        Wed, 16 Nov 2022 12:33:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ql6gbryNV6i+XAhsM2xarVLT5+wQUPTj9o9nHmrg+nY=;
-        b=le2Nk+1YX0V3rbtkeWSMh+Tb4D8AeX7uVpJxfN3brmkxEg+L1kKg+Sw//N2ca6COt5
-         q3VKfjF0Fll2OdKSo4fVkpdQ/frOckQyuZR0Zy+v4AGTzkr+z1nLAOP7orqfZiwZ4zZf
-         iqFUF0VSsg9fG1CfSvLv5sEemyG8Lkw1uhmfezdeZZE8KUM1qjIIoIkoeXEOFt0dfn4e
-         LQcrw3rh2NlwvMMiT+3J1NjVMm5sV8YLpPC5BJef8j/YgK7V6n1Wc9RcuhY1C8luYxJp
-         vmHKfDCaRhLluJu+S5E2D9lfcmkRy5gTqukTR5YBgwkWaYUl9yuAE6qihj1K3wH4uJo1
-         1Qag==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=EpUbAI4uL54jT1VZCkuoylkPFVjPgLoBwqqkPGEZ5rQ=;
+        b=mPoTCyN2tv62LXRH6cDZRrJsNLj2noBCQlryjEuyR0cyrPvYcvmgomQddDwbIVtRPX
+         OLdvfZpwr3m26cFqePgEYPhrGhQDAWXHRrN+FGkHk5TuP0o1T8wm09FEKVchKUQIs0tf
+         29IkAjLWIZC6qxEdHo1O7BTy6xj77DIQcyp8VBBvGRQ+lgY86VxaHZlkxEAOb0/Uro3l
+         5V+5AOJOxR4hEjRZhm3C/B5uapmI40h/F4CAsI72c76gOVs7ysrAz4z4GmrigrBQfDS1
+         fnpo394ecuzIKhWpnxSVDVVgEhvq3kD2lvj8fC/DIA8ITmaTQxwDy+bwf7NJ1WLL/nUh
+         bkdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ql6gbryNV6i+XAhsM2xarVLT5+wQUPTj9o9nHmrg+nY=;
-        b=J9VscXy3kVhqmwQA1OQgPQRKBXYZJ9SxwOD/i88/z5MzKJVG2EN4bLhGLhQ21U5WVC
-         5DjMdx2UP/Cl/fYtMS+0LmUuZTO7awpTX6eltJCxk+b2aPAYL8I2T5irEOsOsEzz+AHl
-         JQDmcbAlgKdVTdqCXe0hoW/QOmrAV3YhoUV+yXjylPdIADeVuI1wQhkGGJwJ1FEZctKw
-         /syNqfigHjrDNHpmv7WGC1gWu6ULLnRzG9twSsBblO1VlGX+XQZPgRMofLjL/kVqLffT
-         YfgkQ+wT1I51NJ96DEiNrYp0u8VRvJejsD6QPqZ+RVy1EuPEgNk1gHuqy1kFzvW6hszy
-         SOdg==
-X-Gm-Message-State: ANoB5pnHHOuKQYudNvelG5mGZZgkjzhf9zdgXVuXciVKjZRS7aymohvi
-        /L2evdSCs5DJJzTvPwYUYBrDHxXcUhc=
-X-Google-Smtp-Source: AA0mqf7GoI/Zfiv9uvNENFG8wBBY2Nofa+SH0Dyyn6XyuUnUMgsJYqt4myTwIPtTcsnMn0h1Wsk9KA==
-X-Received: by 2002:a05:600c:35c7:b0:3cf:7dc1:f432 with SMTP id r7-20020a05600c35c700b003cf7dc1f432mr3176438wmq.148.1668630764380;
-        Wed, 16 Nov 2022 12:32:44 -0800 (PST)
-Received: from [192.168.8.100] (188.28.224.148.threembb.co.uk. [188.28.224.148])
-        by smtp.gmail.com with ESMTPSA id j7-20020adfb307000000b0023c8026841csm16096891wrd.23.2022.11.16.12.32.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 12:32:44 -0800 (PST)
-Message-ID: <2ca5622b-88e6-4271-0986-9c9a07bc0148@gmail.com>
-Date:   Wed, 16 Nov 2022 20:31:32 +0000
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EpUbAI4uL54jT1VZCkuoylkPFVjPgLoBwqqkPGEZ5rQ=;
+        b=aOo5b9ygaM7CamfuwRdU8mbUbeyLNFMm84nLf252tH14O07pAmKbB7sfl6H4g0/0ZK
+         oasWGffHvHu47y+qYzlgCYfswYOYeU/0C37fNgrVTNPk3TxRycEQvCuCKmAiugE93t5t
+         iM05SfmnESIdIywCzCFnFAEztw6MpaizlMnBu9ZqsB60w9e7ZHwy0/jwZsXBAIjEydve
+         25T24mlRUx5pt97RzO++OeAqisehqQ+QzHrTE9FWNFkpuuDJnYV2rMjRI0JIBIA5tOuj
+         /29Pa42H9VH63saH2Mlz5dLNnpjgPZ6++3GSsPqUxLsnw62/4WikM/oWnm4Zk9W6CNOQ
+         TB9w==
+X-Gm-Message-State: ANoB5pkigFitMiz8A/tjIrFI22ejikVwQnlPgdKVkXNQROUGxaM4Hj94
+        kMynWFnCzG6WyC6TuQgCzeQ=
+X-Google-Smtp-Source: AA0mqf6gZEfpw/MZ3nfZ2C+BlmxjQlwMp58NAu8vm7GhmSs74FWFgfhId8ZzbuG8+efKjUNOjgqt6A==
+X-Received: by 2002:a17:903:2d0:b0:186:c372:8e09 with SMTP id s16-20020a17090302d000b00186c3728e09mr10634958plk.74.1668630834726;
+        Wed, 16 Nov 2022 12:33:54 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:fb51:2ecd:7287:8649])
+        by smtp.gmail.com with ESMTPSA id c2-20020a170902c1c200b0017fe9b038fdsm12668992plc.14.2022.11.16.12.33.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 12:33:53 -0800 (PST)
+Date:   Wed, 16 Nov 2022 12:33:50 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Vincent Knecht <vincent.knecht@mailoo.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, w.david0@protonmail.com,
+        stephan@gerhold.net, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+Subject: Re: [PATCH v5 2/2] Input: msg2638 - Add support for msg2138 key
+ events
+Message-ID: <Y3VJLtY27h/YrBWa@google.com>
+References: <20221116181715.2118436-1-vincent.knecht@mailoo.org>
+ <20221116181715.2118436-3-vincent.knecht@mailoo.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: (subset) [PATCH v1 0/2] io_uring uapi updates
-To:     Stefan Metzmacher <metze@samba.org>, Jens Axboe <axboe@kernel.dk>,
-        Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Cc:     GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        io-uring Mailing List <io-uring@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-References: <20221115212614.1308132-1-ammar.faizi@intel.com>
- <166855408973.7702.1716032255757220554.b4-ty@kernel.dk>
- <61293423-8541-cb8b-32b4-9a4decb3544f@gnuweeb.org>
- <fe9b695d-7d64-9894-b142-2228f4ba7ae5@kernel.dk>
- <69d39e98-71fb-c765-e8b9-b02933c524a9@samba.org>
- <b46b01a1-ed6e-6824-9b4b-c6af82bb60f0@kernel.dk>
- <b57ad090-c84d-d650-d847-cd7fdda5e951@samba.org>
-Content-Language: en-US
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <b57ad090-c84d-d650-d847-cd7fdda5e951@samba.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221116181715.2118436-3-vincent.knecht@mailoo.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -84,80 +77,157 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/16/22 20:03, Stefan Metzmacher wrote:
-> Am 16.11.22 um 20:46 schrieb Jens Axboe:
->> On 11/16/22 7:22 AM, Stefan Metzmacher wrote:
->>> Am 16.11.22 um 14:50 schrieb Jens Axboe:
->>>> On 11/15/22 11:34 PM, Ammar Faizi wrote:
->>>>> On 11/16/22 6:14 AM, Jens Axboe wrote:
->>>>>> On Wed, 16 Nov 2022 04:29:51 +0700, Ammar Faizi wrote:
->>>>>>> From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
->>>>>>>
->>>>>>> Hi Jens,
->>>>>>>
->>>>>>> io_uring uapi updates:
->>>>>>>
->>>>>>> 1) Don't force linux/time_types.h for userspace. Linux's io_uring.h is
->>>>>>> ???? synced 1:1 into liburing's io_uring.h. liburing has a configure
->>>>>>> ???? check to detect the need for linux/time_types.h (Stefan).
->>>>>>>
->>>>>>> [...]
->>>>>>
->>>>>> Applied, thanks!
->>>>>>
->>>>>> [1/2] io_uring: uapi: Don't force linux/time_types.h for userspace
->>>>>> ??????? commit: 958bfdd734b6074ba88ee3abc69d0053e26b7b9c
->>>>>
->>>>> Jens, please drop this commit. It breaks the build:
->>>>
->>>> Dropped - please actually build your patches, or make it clear that
->>>> they were not built at all. None of these 2 patches were any good.
->>>
->>> Is it tools/testing/selftests/net/io_uring_zerocopy_tx.c that doesn't build?
->>
->> Honestly not sure, but saw a few reports come in. Here's the one from
->> linux-next:
->>
->> https://lore.kernel.org/all/20221116123556.79a7bbd8@canb.auug.org.au/
+On Wed, Nov 16, 2022 at 07:17:12PM +0100, Vincent Knecht wrote:
+> Some devices with msg2138 have back/menu/home keys.
+> Add support for them.
 > 
-> Yes, but the output is pretty useless as it doesn't show what
-> .c file and what command is failing.
+> Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
+> ---
+>  drivers/input/touchscreen/msg2638.c | 57 +++++++++++++++++++++++++++--
+>  1 file changed, 53 insertions(+), 4 deletions(-)
 > 
->>> and needs a '#define HAVE_LINUX_TIME_TYPES_H 1'
-> 
-> Just guessing, but adding this into the commit has a chance to work...
-> 
-> --- a/tools/testing/selftests/net/io_uring_zerocopy_tx.c
-> +++ b/tools/testing/selftests/net/io_uring_zerocopy_tx.c
-> @@ -15,6 +15,7 @@
->   #include <arpa/inet.h>
->   #include <linux/errqueue.h>
->   #include <linux/if_packet.h>
-> +#define HAVE_LINUX_TIME_TYPES_H 1
->   #include <linux/io_uring.h>
->   #include <linux/ipv6.h>
->   #include <linux/socket.h>
-> 
->>> BTW, the original commit I posted was here:
->>> https://lore.kernel.org/io-uring/c7782923deeb4016f2ac2334bc558921e8d91a67.1666605446.git.metze@samba.org/
->>>
->>> What's the magic to compile tools/testing/selftests/net/io_uring_zerocopy_tx.c ?
->>
->> Some variant of make kselftests-foo?
->>
->>> My naive tries both fail (even without my patch):
->>
->> Mine does too, in various other tests. Stephen?
-> 
-> Pavel, as you created that file, do you remember how you build it?
+> diff --git a/drivers/input/touchscreen/msg2638.c b/drivers/input/touchscreen/msg2638.c
+> index 95b18563326a..a0f5e1ecd612 100644
+> --- a/drivers/input/touchscreen/msg2638.c
+> +++ b/drivers/input/touchscreen/msg2638.c
+> @@ -21,6 +21,7 @@
+>  #include <linux/kernel.h>
+>  #include <linux/mod_devicetable.h>
+>  #include <linux/module.h>
+> +#include <linux/property.h>
+>  #include <linux/regulator/consumer.h>
+>  #include <linux/slab.h>
+>  
+> @@ -29,6 +30,8 @@
+>  #define MSG2138_MAX_FINGERS		2
+>  #define MSG2638_MAX_FINGERS		5
+>  
+> +#define MAX_BUTTONS			4
+> +
+>  #define CHIP_ON_DELAY_MS		15
+>  #define FIRMWARE_ON_DELAY_MS		50
+>  #define RESET_DELAY_MIN_US		10000
+> @@ -72,6 +75,8 @@ struct msg2638_ts_data {
+>  	struct regulator_bulk_data supplies[2];
+>  	struct gpio_desc *reset_gpiod;
+>  	int max_fingers;
+> +	u32 keycodes[MAX_BUTTONS];
+> +	int num_keycodes;
+>  };
+>  
+>  static u8 msg2638_checksum(u8 *data, u32 length)
+> @@ -85,6 +90,18 @@ static u8 msg2638_checksum(u8 *data, u32 length)
+>  	return (u8)((-sum) & 0xFF);
+>  }
+>  
+> +static void msg2138_report_keys(struct msg2638_ts_data *msg2638, u8 keys)
+> +{
+> +	int i;
+> +
+> +	/* keys can be 0x00 or 0xff when all keys have been released */
+> +	if (keys == 0xff)
+> +		keys = 0;
+> +
+> +	for (i = 0; i < msg2638->num_keycodes; ++i)
+> +		input_report_key(msg2638->input_dev, msg2638->keycodes[i], keys & BIT(i));
+> +}
+> +
+>  static irqreturn_t msg2138_ts_irq_handler(int irq, void *msg2638_handler)
+>  {
+>  	struct msg2638_ts_data *msg2638 = msg2638_handler;
+> @@ -121,9 +138,12 @@ static irqreturn_t msg2138_ts_irq_handler(int irq, void *msg2638_handler)
+>  	p0 = &touch_event.pkt[0];
+>  	p1 = &touch_event.pkt[1];
+>  
+> -	/* Ignore non-pressed finger data */
+> -	if (p0->xy_hi == 0xFF && p0->x_low == 0xFF && p0->y_low == 0xFF)
+> +	/* Ignore non-pressed finger data, but check for key code */
+> +	if (p0->xy_hi == 0xFF && p0->x_low == 0xFF && p0->y_low == 0xFF) {
+> +		if (p1->xy_hi == 0xFF && p1->y_low == 0xFF)
+> +			msg2138_report_keys(msg2638, p1->x_low);
+>  		goto report;
+> +	}
+>  
+>  	x = ((p0->xy_hi & 0xF0) << 4) | p0->x_low;
+>  	y = ((p0->xy_hi & 0x0F) << 8) | p0->y_low;
+> @@ -283,6 +303,7 @@ static int msg2638_init_input_dev(struct msg2638_ts_data *msg2638)
+>  	struct device *dev = &msg2638->client->dev;
+>  	struct input_dev *input_dev;
+>  	int error;
+> +	int i;
+>  
+>  	input_dev = devm_input_allocate_device(dev);
+>  	if (!input_dev) {
+> @@ -299,6 +320,14 @@ static int msg2638_init_input_dev(struct msg2638_ts_data *msg2638)
+>  	input_dev->open = msg2638_input_open;
+>  	input_dev->close = msg2638_input_close;
+>  
+> +	if (msg2638->num_keycodes) {
+> +		input_dev->keycode = msg2638->keycodes;
+> +		input_dev->keycodemax = msg2638->num_keycodes;
+> +		input_dev->keycodesize = sizeof(msg2638->keycodes[0]);
+> +		for (i = 0; i < msg2638->num_keycodes; i++)
+> +			input_set_capability(input_dev, EV_KEY, msg2638->keycodes[i]);
+> +	}
+> +
+>  	input_set_capability(input_dev, EV_ABS, ABS_MT_POSITION_X);
+>  	input_set_capability(input_dev, EV_ABS, ABS_MT_POSITION_Y);
+>  
+> @@ -367,9 +396,23 @@ static int msg2638_ts_probe(struct i2c_client *client)
+>  		return error;
+>  	}
+>  
+> -	error = msg2638_init_input_dev(msg2638);
+> +	msg2638->num_keycodes = fwnode_property_count_u32(dev->fwnode, "linux,keycodes");
 
-make headers_install
-make -C tools/testing/selftests/net/
+Please use device_property_count_u32().
 
+> +	if (msg2638->num_keycodes == -EINVAL) {
+> +		msg2638->num_keycodes = 0;
+> +	} else if (msg2638->num_keycodes < 0) {
+> +		dev_err(dev, "Unable to parse linux,keycodes property: %d\n",
+> +			msg2638->num_keycodes);
+> +		return msg2638->num_keycodes;
+> +	} else if (msg2638->num_keycodes > ARRAY_SIZE(msg2638->keycodes)) {
+> +		dev_warn(dev, "Found %d linux,keycodes but max is %ld, ignoring the rest\n",
+> +			 msg2638->num_keycodes, ARRAY_SIZE(msg2638->keycodes));
 
-IIRC, it uses system uapi headers and apparently yours don't have
-IORING_CQE_F_NOTIF, etc. And I don't think it uses the right Makefile,
-so -C executes it from the selftest/net folder.
+I think you want "%zd" in place of "%ld".
+
+> +		msg2638->num_keycodes = ARRAY_SIZE(msg2638->keycodes);
+> +	}
+> +
+> +	error = fwnode_property_read_u32_array(dev->fwnode, "linux,keycodes",
+> +					       msg2638->keycodes, msg2638->num_keycodes);
+
+Please use device_property_read_u32_array().
+
+>  	if (error) {
+> -		dev_err(dev, "Failed to initialize input device: %d\n", error);
+> +		dev_err(dev, "Unable to read linux,keycodes values: %d\n", error);
+>  		return error;
+>  	}
+>  
+> @@ -382,6 +425,12 @@ static int msg2638_ts_probe(struct i2c_client *client)
+>  		return error;
+>  	}
+>  
+> +	error = msg2638_init_input_dev(msg2638);
+> +	if (error) {
+> +		dev_err(dev, "Failed to initialize input device: %d\n", error);
+> +		return error;
+> +	}
+> +
+>  	return 0;
+>  }
+>  
+> -- 
+> 2.38.1
+> 
+> 
+> 
+
+Thanks.
 
 -- 
-Pavel Begunkov
+Dmitry
