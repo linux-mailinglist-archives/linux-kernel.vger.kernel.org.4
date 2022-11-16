@@ -2,58 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47DB862BD95
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:21:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EA0C62BD9C
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:22:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238704AbiKPMVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 07:21:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35212 "EHLO
+        id S233807AbiKPMWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 07:22:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233234AbiKPMVB (ORCPT
+        with ESMTP id S238848AbiKPMWG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 07:21:01 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE83BC94;
-        Wed, 16 Nov 2022 04:18:38 -0800 (PST)
-Received: from [192.168.2.228] (109-252-117-140.nat.spd-mgts.ru [109.252.117.140])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3BBA36602A87;
-        Wed, 16 Nov 2022 12:18:35 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1668601116;
-        bh=mTiboSp+831cUtpvB29HPDE6adi+m8S+qn1F7FX8nDo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=RiT7vESzO/zNl7nY7KcaUMuVpOD97IZLlL4pZ/aXDYwhwxWu9ptkCHZ6uugsI67mP
-         JKIgPxl2GMHn8ECaHu55ar/rdm4R5ta4zK5S2fRuZ62jDNP+/p2x2cjJQkRedG85dr
-         1rtbisZcZOvWt7pVtPfU+ayK0xxAHKvTeUahLNYpNdud4pd/NxCiQggi767yj+e8J5
-         RbLpFuDsxjXzMvaBLK4NrIiSTkjKPdODVyblisSgHgW7VYQkggimPLUvzs/FOv7kcK
-         4wMpVmBzXVFZoWmGqS5d8IUtSZox5L8QTLVzWLUaBIUfLbuw3T7lAquKiO31j7KnBF
-         J79eHjyqU3XzQ==
-Message-ID: <4f92e95f-a0dc-4eac-4c08-0df85de78ae7@collabora.com>
-Date:   Wed, 16 Nov 2022 15:18:31 +0300
+        Wed, 16 Nov 2022 07:22:06 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2EC12ACD;
+        Wed, 16 Nov 2022 04:19:08 -0800 (PST)
+Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx104
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1N5VD8-1p2Fdg01Oc-016y61; Wed, 16
+ Nov 2022 13:18:42 +0100
+Message-ID: <89c0d7bd-713b-dd3a-7a18-75371f967561@gmx.com>
+Date:   Wed, 16 Nov 2022 20:18:36 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v3] udmabuf: add vmap and vunmap methods to udmabuf_ops
-To:     Lukasz Wiecaszek <lukasz.wiecaszek@googlemail.com>,
-        Gerd Hoffmann <kraxel@redhat.com>
-Cc:     Lukasz Wiecaszek <lukasz.wiecaszek@gmail.com>,
-        kernel test robot <lkp@intel.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-References: <20221115200426.4801-1-lukasz.wiecaszek@gmail.com>
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v5 2/2] btrfs: qgroup: fix sleep from invalid context bug
+ in update_qgroup_limit_item()
 Content-Language: en-US
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <20221115200426.4801-1-lukasz.wiecaszek@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     ChenXiaoSong <chenxiaosong2@huawei.com>, clm@fb.com,
+        josef@toxicpanda.com, dsterba@suse.com
+Cc:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhangxiaoxu5@huawei.com, yanaijie@huawei.com, wqu@suse.com
+References: <20221116130716.991901-1-chenxiaosong2@huawei.com>
+ <20221116130716.991901-3-chenxiaosong2@huawei.com>
+From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
+In-Reply-To: <20221116130716.991901-3-chenxiaosong2@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+X-Provags-ID: V03:K1:0AWTmC124QyQ+RiTmfM6ZaC2tofSr+Yv2Yc80aRPZ/y6x7NwrTt
+ X9wlBP4XVMaVElOe5THqaHZ1A5o7xfWFDyTF4E3HPq+r2byj0LXFE2DrMPoojQeIfWgcNEL
+ bIzznedP1bTRyI7mZKsBzAg3yIvoQuTEsbJYYIOlnTvTGyHcG+9rJBziGSijQlUpEzGGaVx
+ Un/lV5dtk9Vku+87gCryQ==
+UI-OutboundReport: notjunk:1;M01:P0:b3gYyPzCAFY=;vN3i3/i/DTUVD4hGlmS47usbDKC
+ JFFJDNOopWIjb0PTvnn5SV2jnVZOtibEfnwMMwjf6DCBSi/zj+RzMHxgyUj/qve4MOmbQ2BY1
+ lBjm8zPw6T0ixXdoLKX2r7PO0T5vONb+kqX980WPGmJWrswsKMZOXCxLuyUeILOgu9Pr3pJ8d
+ Gj//RP6tcqobtNSxUjCWplIrhJMI7FXLXanbsCMhj0r/CiZgP2EuS4QmFAE0anwOzEAhbcjqd
+ 8ZSmU4DO1ezxOJOAbSyfOR+SLEl/OMsctTlhQGeyL38KM3lYlZV0GA4cDbwGXRcKyhTWtj0wx
+ sZQ+pBWqunJk0+2pUw8iuy6iz3qUQWSTPGfYtqEBL7qSX9b6Kp5BdnO2d1UafEEmSi6Khmd3k
+ 4JWVUnNjuxpBqeyjw6VGZ9VRVEgXHqT0PQl8R3HmAOI89rDOyFpIjyhvWYBZlKnWpr2OdzCIB
+ iiTN/a/6seZG/dmfuaosUkXEqTsmGWnvsSkacf1g7Hs4Kh5p8UzXhum4mpIas7PSfNcJ5ITmI
+ nNlQc1vxJVf0ZyVKaOT1ri0ghPMdJ4AkeZTFz2ASnJnH3+iNtZQsNvyseiG39ndCG8/rXDKZb
+ ecgaunEZyBMNhcRoqg908wRGF8WhCqG3iC22OsHzMPwaL4i5dXEhAkeqNqya6bDbNjEao2tr3
+ g3MJEmOT+TYlcXYHT145EkCLnYuSrGQ8G4gfUSUlJYW/a/zyP2FN3GsyPDWeYid1f3Bknqzoc
+ ztR1m4W33hfxWoHng98TfhRzq+9brYSqQcMD8UIp4ii39qQEbk2E9JYtWj4yW/icD4d/PXmDh
+ OpfT+cWXArkQjFJ9GOQPiwPSBJ+exjc0KFXsFSfnhKQbaZswnTNZwToTAWebtRIxNKm1bvN6l
+ xw+jqUNPbajUluXKtpDJyG971bDacnXDexRr91VnMKC3OKaBvJwBejk9iH2sMdRnz38IEd71o
+ Hr4tFCBA9BFOWgzi229tgp7YZ2c=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,FREEMAIL_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,98 +64,162 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/15/22 23:04, Lukasz Wiecaszek wrote:
-> The reason behind that patch is associated with videobuf2 subsystem
-> (or more genrally with v4l2 framework) and user created
-> dma buffers (udmabuf). In some circumstances
-> when dealing with V4L2_MEMORY_DMABUF buffers videobuf2 subsystem
-> wants to use dma_buf_vmap() method on the attached dma buffer.
-> As udmabuf does not have .vmap operation implemented,
-> such dma_buf_vmap() natually fails.
+
+
+On 2022/11/16 21:07, ChenXiaoSong wrote:
+> Syzkaller reported BUG as follows:
 > 
-> videobuf2_common: __vb2_queue_alloc: allocated 3 buffers, 1 plane(s) each
-> videobuf2_common: __prepare_dmabuf: buffer for plane 0 changed
-> videobuf2_common: __prepare_dmabuf: failed to map dmabuf for plane 0
-> videobuf2_common: __buf_prepare: buffer preparation failed: -14
+>    BUG: sleeping function called from invalid context at
+>         include/linux/sched/mm.h:274
+>    Call Trace:
+>     <TASK>
+>     dump_stack_lvl+0xcd/0x134
+>     __might_resched.cold+0x222/0x26b
+>     kmem_cache_alloc+0x2e7/0x3c0
+>     update_qgroup_limit_item+0xe1/0x390
+>     btrfs_qgroup_inherit+0x147b/0x1ee0
+>     create_subvol+0x4eb/0x1710
+>     btrfs_mksubvol+0xfe5/0x13f0
+>     __btrfs_ioctl_snap_create+0x2b0/0x430
+>     btrfs_ioctl_snap_create_v2+0x25a/0x520
+>     btrfs_ioctl+0x2a1c/0x5ce0
+>     __x64_sys_ioctl+0x193/0x200
+>     do_syscall_64+0x35/0x80
 > 
-> The patch itself seems to be strighforward.
-> It adds implementation of .vmap and .vunmap methods
-> to 'struct dma_buf_ops udmabuf_ops'.
-> .vmap method itself uses vm_map_ram() to map pages linearly
-> into the kernel virtual address space.
-> .vunmap removes mapping created earlier by .vmap.
-> All locking and 'vmapping counting' is done in dma_buf.c
-> so it seems to be redundant/unnecessary in .vmap/.vunmap.
+> Fix this by calling qgroup_dirty() on @dstqgroup, and update limit item in
+> btrfs_run_qgroups() later.
 > 
-> Signed-off-by: Lukasz Wiecaszek <lukasz.wiecaszek@gmail.com>
-> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
 > ---
-> v1: https://lore.kernel.org/linux-media/202211120352.G7WPASoP-lkp@intel.com/T/#t
-> v2: https://lore.kernel.org/linux-media/20221114052944.GA7264@thinkpad-p72/T/#t
+>   fs/btrfs/qgroup.c | 29 ++++++++++++-----------------
+>   1 file changed, 12 insertions(+), 17 deletions(-)
 > 
-> v2 -> v3: Added .vunmap to 'struct dma_buf_ops udmabuf_ops'
-> v1 -> v2: Patch prepared and tested against 6.1.0-rc2+
-> 
->  drivers/dma-buf/udmabuf.c | 28 ++++++++++++++++++++++++++++
->  1 file changed, 28 insertions(+)
-> 
-> diff --git a/drivers/dma-buf/udmabuf.c b/drivers/dma-buf/udmabuf.c
-> index 283816fbd72f..740d6e426ee9 100644
-> --- a/drivers/dma-buf/udmabuf.c
-> +++ b/drivers/dma-buf/udmabuf.c
-> @@ -13,6 +13,8 @@
->  #include <linux/slab.h>
->  #include <linux/udmabuf.h>
->  #include <linux/hugetlb.h>
-> +#include <linux/vmalloc.h>
-> +#include <linux/iosys-map.h>
->  
->  static int list_limit = 1024;
->  module_param(list_limit, int, 0644);
-> @@ -60,6 +62,30 @@ static int mmap_udmabuf(struct dma_buf *buf, struct vm_area_struct *vma)
->  	return 0;
->  }
->  
-> +static int vmap_udmabuf(struct dma_buf *buf, struct iosys_map *map)
-> +{
-> +	struct udmabuf *ubuf = buf->priv;
-> +	void *vaddr;
-> +
-> +	dma_resv_assert_held(buf->resv);
-> +
-> +	vaddr = vm_map_ram(ubuf->pages, ubuf->pagecount, -1);
-> +	if (!vaddr)
-> +		return -EINVAL;
-> +
-> +	iosys_map_set_vaddr(map, vaddr);
-> +	return 0;
-> +}
-> +
-> +static void vunmap_udmabuf(struct dma_buf *buf, struct iosys_map *map)
-> +{
-> +	struct udmabuf *ubuf = buf->priv;
-> +
-> +	dma_resv_assert_held(buf->resv);
-> +
-> +	vm_unmap_ram(map->vaddr, ubuf->pagecount);
-> +}
-> +
->  static struct sg_table *get_sg_table(struct device *dev, struct dma_buf *buf,
->  				     enum dma_data_direction direction)
->  {
-> @@ -162,6 +188,8 @@ static const struct dma_buf_ops udmabuf_ops = {
->  	.unmap_dma_buf	   = unmap_udmabuf,
->  	.release	   = release_udmabuf,
->  	.mmap		   = mmap_udmabuf,
-> +	.vmap		   = vmap_udmabuf,
-> +	.vunmap		   = vunmap_udmabuf,
->  	.begin_cpu_access  = begin_cpu_udmabuf,
->  	.end_cpu_access    = end_cpu_udmabuf,
->  };
+> diff --git a/fs/btrfs/qgroup.c b/fs/btrfs/qgroup.c
+> index 9334c3157c22..8f5c52e24430 100644
+> --- a/fs/btrfs/qgroup.c
+> +++ b/fs/btrfs/qgroup.c
+> @@ -2860,6 +2860,7 @@ int btrfs_qgroup_inherit(struct btrfs_trans_handle *trans, u64 srcid,
+>   	bool need_rescan = false;
+>   	u32 level_size = 0;
+>   	u64 nums;
+> +	bool dirty_dstgrp = false;
 
-Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+I don't know why you insist on such bool (and the extra lable).
 
--- 
-Best regards,
-Dmitry
+I have mentioned how qgroup_dirty() works, it can be called how ever 
+many times, and the qgroup code will handle it without problem.
 
+So the whole patch can be just as simple as:
+
+diff --git a/fs/btrfs/qgroup.c b/fs/btrfs/qgroup.c
+index 05e79f7b4433..e0522c6c0d67 100644
+--- a/fs/btrfs/qgroup.c
++++ b/fs/btrfs/qgroup.c
+@@ -2965,14 +2965,7 @@ int btrfs_qgroup_inherit(struct 
+btrfs_trans_handle *trans, u64 srcid,
+                 dstgroup->rsv_rfer = inherit->lim.rsv_rfer;
+                 dstgroup->rsv_excl = inherit->lim.rsv_excl;
+
+-               ret = update_qgroup_limit_item(trans, dstgroup);
+-               if (ret) {
+-                       qgroup_mark_inconsistent(fs_info);
+-                       btrfs_info(fs_info,
+-                                  "unable to update quota limit for %llu",
+-                                  dstgroup->qgroupid);
+-                       goto unlock;
+-               }
++               qgroup_dirty(fs_info, dstgroup);
+         }
+
+         if (srcid) {
+
+
+>   
+>   	/*
+>   	 * There are only two callers of this function.
+> @@ -2941,7 +2942,7 @@ int btrfs_qgroup_inherit(struct btrfs_trans_handle *trans, u64 srcid,
+>   	dstgroup = add_qgroup_rb(fs_info, objectid);
+>   	if (IS_ERR(dstgroup)) {
+>   		ret = PTR_ERR(dstgroup);
+> -		goto unlock;
+> +		goto dirty;
+>   	}
+>   
+>   	if (inherit && inherit->flags & BTRFS_QGROUP_INHERIT_SET_LIMITS) {
+> @@ -2950,21 +2951,13 @@ int btrfs_qgroup_inherit(struct btrfs_trans_handle *trans, u64 srcid,
+>   		dstgroup->max_excl = inherit->lim.max_excl;
+>   		dstgroup->rsv_rfer = inherit->lim.rsv_rfer;
+>   		dstgroup->rsv_excl = inherit->lim.rsv_excl;
+> -
+> -		ret = update_qgroup_limit_item(trans, dstgroup);
+> -		if (ret) {
+> -			qgroup_mark_inconsistent(fs_info);
+> -			btrfs_info(fs_info,
+> -				   "unable to update quota limit for %llu",
+> -				   dstgroup->qgroupid);
+> -			goto unlock;
+> -		}
+> +		dirty_dstgrp = true;
+>   	}
+>   
+>   	if (srcid) {
+>   		srcgroup = find_qgroup_rb(fs_info, srcid);
+>   		if (!srcgroup)
+> -			goto unlock;
+> +			goto dirty;
+>   
+>   		/*
+>   		 * We call inherit after we clone the root in order to make sure
+> @@ -2985,20 +2978,20 @@ int btrfs_qgroup_inherit(struct btrfs_trans_handle *trans, u64 srcid,
+>   		dstgroup->max_excl = srcgroup->max_excl;
+>   		dstgroup->rsv_rfer = srcgroup->rsv_rfer;
+>   		dstgroup->rsv_excl = srcgroup->rsv_excl;
+> +		dirty_dstgrp = true;
+>   
+> -		qgroup_dirty(fs_info, dstgroup);
+>   		qgroup_dirty(fs_info, srcgroup);
+>   	}
+>   
+>   	if (!inherit)
+> -		goto unlock;
+> +		goto dirty;
+>   
+>   	i_qgroups = (u64 *)(inherit + 1);
+>   	for (i = 0; i < inherit->num_qgroups; ++i) {
+>   		if (*i_qgroups) {
+>   			ret = add_relation_rb(fs_info, objectid, *i_qgroups);
+>   			if (ret)
+> -				goto unlock;
+> +				goto dirty;
+>   		}
+>   		++i_qgroups;
+>   
+> @@ -3022,7 +3015,7 @@ int btrfs_qgroup_inherit(struct btrfs_trans_handle *trans, u64 srcid,
+>   
+>   		if (!src || !dst) {
+>   			ret = -EINVAL;
+> -			goto unlock;
+> +			goto dirty;
+>   		}
+>   
+>   		dst->rfer = src->rfer - level_size;
+> @@ -3043,15 +3036,17 @@ int btrfs_qgroup_inherit(struct btrfs_trans_handle *trans, u64 srcid,
+>   
+>   		if (!src || !dst) {
+>   			ret = -EINVAL;
+> -			goto unlock;
+> +			goto dirty;
+>   		}
+>   
+>   		dst->excl = src->excl + level_size;
+>   		dst->excl_cmpr = src->excl_cmpr + level_size;
+>   		need_rescan = true;
+>   	}
+> +dirty:
+> +	if (dirty_dstgrp)
+> +		qgroup_dirty(fs_info, dstgroup);
+>   
+> -unlock:
+>   	spin_unlock(&fs_info->qgroup_lock);
+>   	if (!ret)
+>   		ret = btrfs_sysfs_add_one_qgroup(fs_info, dstgroup);
