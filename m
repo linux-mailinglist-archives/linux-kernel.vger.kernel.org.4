@@ -2,109 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67BD662B043
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 01:53:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4787A62B047
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 01:55:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231417AbiKPAw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 19:52:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38604 "EHLO
+        id S231443AbiKPAzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 19:55:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiKPAw5 (ORCPT
+        with ESMTP id S229973AbiKPAzh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 19:52:57 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42E932F670
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 16:52:56 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id 140so14520555pfz.6
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 16:52:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xb7zxmPf+ONVcQfpx029D/sCIkvuG5jR1+Y0BJgF2PM=;
-        b=blnaeTtTyzXnpZLcVwA0S+muYWw5gbA6AuneyeHjS5EHufk8lvDIW+5DEyky6sjS0I
-         SOZM6SUqaeoldKZsm7NXvK7xrMyhmTNRglHT9uMqaatqMEWVXPIqhXHfU/XZiVUoimRX
-         DxV966vq8/IKmmmH2Lzw+0wYedFI+IEpZF9ww=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xb7zxmPf+ONVcQfpx029D/sCIkvuG5jR1+Y0BJgF2PM=;
-        b=nFnsSXHXIjwl6HWaQUN7YLtSR/pro86NxVRQ14Wlk5p6arcVaVrfq2UEFye7oQNuvm
-         c+0COVnNNrzAS1DVNXBsQ7lgcSbyDCTD/sAw6gbi2NNro8VRLUDETE9Sr4tvTZwYnKEA
-         gKqfiEB/4dqnUMkS1n9SseGEej+ZpCtqcRFd8QfSRitQOhK1hjkpklnzkgaghQ+ztlcx
-         wE+E0RtQoAU2OXtBlTYdYs2zgVQ8l9heTKzqhEUH3TNYdoSMB6u1ZsvPn+Pe4Pro4W5l
-         /4bPS7Bzlp4fqiG97opeRV/Vs6aNuq4ZqxQJRjnoU1OesH/gIWtel/hGVyZ/hBTKUhhk
-         SMoQ==
-X-Gm-Message-State: ANoB5pmhe0EQo+XFlxlMlP00rakU61lhqK+x0bORJ1wh5ffF6Y4Piofr
-        REKVa7B6VkIztKDWeX3zP2gNiOA+Q+ZD/Q==
-X-Google-Smtp-Source: AA0mqf48PAGcMUFTmYQmJSHT+lbl25BuF1R+3JiN++qxnGv41DmnIxEBd4aKybk+oJEp/VKmrJvylw==
-X-Received: by 2002:a63:5d46:0:b0:46f:9c0b:1e86 with SMTP id o6-20020a635d46000000b0046f9c0b1e86mr17621582pgm.508.1668559975565;
-        Tue, 15 Nov 2022 16:52:55 -0800 (PST)
-Received: from google.com ([240f:75:7537:3187:9603:e3e0:aec4:58d5])
-        by smtp.gmail.com with ESMTPSA id a11-20020aa7970b000000b00562664d5027sm9473087pfg.61.2022.11.15.16.52.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 16:52:54 -0800 (PST)
-Date:   Wed, 16 Nov 2022 09:52:50 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCHv4 0/9] zsmalloc/zram: configurable zspage size
-Message-ID: <Y3Q0YnpX7jBOHKqp@google.com>
-References: <20221031054108.541190-1-senozhatsky@chromium.org>
- <Y21+xp52OQYi/qjQ@google.com>
- <Y22dxEcs2g5mjuQ7@google.com>
- <Y26AbHxhPBJdWZQE@google.com>
- <Y3MrHsaLc8wth00E@google.com>
- <Y3NG4fsjxHGrnbDp@google.com>
- <Y3QfdyKNrZjx5FR8@google.com>
+        Tue, 15 Nov 2022 19:55:37 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D80DB31FBC
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 16:55:36 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 46D8D5C012B;
+        Tue, 15 Nov 2022 19:55:33 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Tue, 15 Nov 2022 19:55:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1668560133; x=1668646533; bh=Qh
+        DC3vubTMLLJXtQAaerSanqb3r7hzP34nANkvJxyO8=; b=FUqjYAcF66Mu1MA/dA
+        cvyflZirZ0isF1CzwptnLVJ+iMIZF+SHD8UhG4CjjIJ7XAOLCW+w3nUjbim2TgLW
+        tNVUD50WdBe5jkUrVVWx8BHsSWJw7eb5+cEtIYhfO3Qg7642T7V1watQA3VmfQIR
+        Za7MKkZFigM125Ig0wjjLQkGOf3m0BYZWeSgyK3NnjzatbojKXn9+h6bYETo5FIE
+        25Y+vnz8k2wsBjejCvd0R8/LcW4GBYfFk2kbYZtFiDu/tSUUUNRNO+IDc61g+hWU
+        jGbLoh/ufJ2OxJknBy81YPet1cY3Vp2GGopGiTk4OIOOa4luVR1toCnMQSvM32RE
+        dnRw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1668560133; x=1668646533; bh=QhDC3vubTMLLJXtQAaerSanqb3r7
+        hzP34nANkvJxyO8=; b=fKq9O/nFkGoDOaCdZJ/yb6ft57hQ1g7/cqKzmqeG/Fc9
+        vIyeUMhjoNrcYrgkxUs8vO2fPPs6BdPS2YdNTFW/Ndy4r/pWh8CJFnao89pS1fzc
+        2b5Eo4VUN/A9bwJ8+P5rdt35ezn8jVGWc/HyNUiDjCurXiajXiL2B5o94T6SmuBv
+        gko3ulSTgF1bkI+mjepzAdj5qa9sqh6erk8yiyr6vgdKPC2BvAZmDsAgYWabYPEY
+        +OopqN8Dujsxfb1NgEi9L+ULwrGR5BANeSSDe8BiXBzdwRK0W/uVRnU/ScInfqAi
+        QCJMVknn1hkPr/KohEbht6x6j+rxBodVNJpNUyfK4w==
+X-ME-Sender: <xms:BDV0Y28ExTVW02DpaBqeHqhX4wxhzkQ7MlLL8Y1zWEVIIq1GRV3zyw>
+    <xme:BDV0Y2u5KId5DfB4wfrvncZF1OpT3OqDNCkvipSqahgfKL317My-SxXdSSXuMSrh2
+    JCXVzT3VpBtqJJbv4Y>
+X-ME-Received: <xmr:BDV0Y8Bs8dJN6b1hQvhEBzgbIKf87GUtrFxOgdJYmKQ7bqF-BLMJYWxEEOYM1UR6Zb7BnA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgeehgddvkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpehkihhrihhl
+    lhesshhhuhhtvghmohhvrdhnrghmvgenucggtffrrghtthgvrhhnpeehleevveejudejke
+    evueevteevfffhkeejgfehleethefhueejvdehieejgffhhfenucevlhhushhtvghrufhi
+    iigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmoh
+    hvrdhnrghmvg
+X-ME-Proxy: <xmx:BTV0Y-c5Y77TYtg98kVi0O4rXlkdRRg43iNZAt_QR3nf1Cm2Y3YQIQ>
+    <xmx:BTV0Y7P1fCUQk2E1-sflwDoQAJNB7z-gERYIyth3eMlUo54GUZ15ng>
+    <xmx:BTV0Y4kL3najpUR2Lrr1H5pegHjs4SmtKhlDF1yMu4f05MDDCZv-Fw>
+    <xmx:BTV0Y2d0r7mdICZ7U_CLHwrDw-5YgUwdKtBZ1Dm4-fLJv9_eL-C4Iw>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 15 Nov 2022 19:55:32 -0500 (EST)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 10F0A10446E; Wed, 16 Nov 2022 03:55:29 +0300 (+03)
+Date:   Wed, 16 Nov 2022 03:55:29 +0300
+From:   kirill@shutemov.name
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        dave.hansen@linux.intel.com, jejb@linux.ibm.com,
+        linux-kernel@vger.kernel.org, lkp@intel.com,
+        martin.petersen@oracle.com, oe-kbuild-all@lists.linux.dev,
+        x86@kernel.org
+Subject: Re: [PATCH 1/2] scsi: Fix get_user() in call sg_scsi_ioctl()
+Message-ID: <20221116005529.uh4uol2qgcfnkfma@box.shutemov.name>
+References: <20221115155802.p3vjnk7eqqcyskt3@box.shutemov.name>
+ <20221116004353.15052-1-kirill.shutemov@linux.intel.com>
+ <20221116004353.15052-2-kirill.shutemov@linux.intel.com>
+ <9c96f82e-000b-88f8-fa37-753ed6723119@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y3QfdyKNrZjx5FR8@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <9c96f82e-000b-88f8-fa37-753ed6723119@intel.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/11/15 15:23), Minchan Kim wrote:
-> Sure, if we start talking about battery, that would have a lot of things
-> we need to consider not only from zram-direct but also other indirect-stuffs
-> caused caused by memory pressure and workload patterns. That's not what we
-> can control and would consume much more battery. I understand your concern
-> but also think sysfs per-konb can solve the issue since workload is too
-> dynamic even in the same swap file/fs, too. I'd like to try finding a
-> sweet spot in general. If it's too hard to have, then, we need to introduce
-> the knob with reasonable guideline how we could find it.
+On Tue, Nov 15, 2022 at 04:48:40PM -0800, Dave Hansen wrote:
+> On 11/15/22 16:43, Kirill A. Shutemov wrote:
+> > get_user() expects the pointer to be pointer-to-simple-variable type,
+> > but sic->data is array of 'unsigned char'. It violates get_user()
+> > contracts.
+> > 
+> > Cast it explicitly to 'unsigned char __user *'. It matches current
+> > behaviour.
+> > 
+> > This is preparation for fixing sparse warnings caused by Linear Address
+> > Masking patchset.
 > 
-> Let me try to see the data under Android workload how much just increase
-> the ZS_MAX_PAGES_PER_ZSPAGE blindly will change the data.
+> What's the side-effect if this isn't applied?  Is it worse than sparse
+> warnings?
 
-I don't want to push for sysfs knob.
+Build will fail if 2/2 applied without this one:
 
-What I like about sysfs knob vs KConfig is that sysfs is opt-in. We can
-ask folks to try things out, people will know what to look at and they
-will keep an eye on metrics, then they come back to us. So we can sit
-down, look at the numbers and draw some conclusions. KConfig is not
-opt-in. It'll happen for everyone, as a policy, transparently and then
-we rely on
-a) people tracking metrics that they were not asked to track
-b) people noticing changes (positive or negative) in metrics that they
-   don't keep an eye on
-c) people figuring out that change in metrics is related to zsmalloc
-   Kconfig (and that's a very non-obvious conclusion)
-d) people reaching out to us
+arch/x86/include/asm/uaccess.h:46:9: error: cast specifies array type
 
-That's way too much to rely on. Chances are we will never hear back.
-
-I understand that you don't like sysfs, and it's not the best thing
-probably, but KConfig is not better. I like the opt-in nature of
-sysfs - if you change it then you know what you are doing.
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
