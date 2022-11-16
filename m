@@ -2,194 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A173262C17E
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:56:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 446F962C1A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:57:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233009AbiKPO4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 09:56:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47296 "EHLO
+        id S234126AbiKPO5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 09:57:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233206AbiKPOz4 (ORCPT
+        with ESMTP id S233959AbiKPO5T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 09:55:56 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A641EBE3
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 06:55:53 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E340E660038D;
-        Wed, 16 Nov 2022 14:55:50 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1668610551;
-        bh=QlP42Fx/JuwOmRdSTtwWZ3hAH4WFE+BQsR2c4PKpqZY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Q1owE4mjt4uoDXCVZqesuCU329WJhBtJfFeWuRjzkBwtbVWTFbs8PXXL3EA0G+rM3
-         NvQ0SFmYZb5WmEMhglFUuNvxJfHzFrnND6Vw9gJjfDFEncvRofsxNavdcI+ZZSu6rt
-         4YR0rTeYAqz4Tkl/SCWgOarlDfHdRwvEfBAVgOgpsoO2B3d91d4D4U7mIin9g56Flr
-         F/j9NuPyoav8G+9VdH6GluMig2+Souuo3z7ODtXzWgm1pbgGGBpbujt90Zv3VHXtOv
-         2OfDhRtVJLCC8rgvaWGr9mcJGyHLIv/QQqUsfLbR44L0M6EvNTI68OGSKoVvq0jObN
-         kH6cZNLOS8dwQ==
-Message-ID: <36a45c7a-820a-7675-d740-c0e83ae2c417@collabora.com>
-Date:   Wed, 16 Nov 2022 15:55:48 +0100
+        Wed, 16 Nov 2022 09:57:19 -0500
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432B428E03;
+        Wed, 16 Nov 2022 06:57:18 -0800 (PST)
+Received: from g550jk.arnhem.chello.nl (unknown [62.108.10.64])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 7572EC4128;
+        Wed, 16 Nov 2022 14:56:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1668610606; bh=KsW+8ENBtu4UJFdA+5lLI+Dz/2DZB+GaYC01A1U7Lcw=;
+        h=From:To:Cc:Subject:Date;
+        b=XxUwPzofsEE7PuNWDE1ZT9obfxoeFh5cK+KEr/pUwMq2MVWJ6DjnSIg1ZOZGTcnpn
+         kHx7zp7fZXR1fp52oH1HOd9dqnCxDT+xh0t+kHf2/fZj6jYtJs+Dkha0D1bHDyBtk4
+         po2A1SEohZck7zotkdGTXiSsqOV9XS5Wq/bz70hw=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Luca Weiss <luca@z3ntu.xyz>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Tony Luck <tony.luck@intel.com>, devicetree@vger.kernel.org,
+        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/8] Add a bunch of msm8953 dts files
+Date:   Wed, 16 Nov 2022 15:56:01 +0100
+Message-Id: <20221116145616.17884-1-luca@z3ntu.xyz>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH 3/4] ASoC: SOF: Adding amd HS functionality to the sof
- core
-Content-Language: en-US
-To:     V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>,
-        broonie@kernel.org, alsa-devel@alsa-project.org
-Cc:     Daniel Baluta <daniel.baluta@nxp.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Sunil-kumar.Dommati@amd.com, ssabakar@amd.com,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        venkataprasad.potturu@amd.com,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Basavaraj.Hiregoudar@amd.com, YC Hung <yc.hung@mediatek.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Vijendar.Mukunda@amd.com,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:SOUND - SOUND OPEN FIRMWARE (SOF) DRIVERS" 
-        <sound-open-firmware@alsa-project.org>,
-        Chen-Yu Tsai <wenst@chromium.org>
-References: <20220913144319.1055302-1-Vsujithkumar.Reddy@amd.com>
- <20220913144319.1055302-4-Vsujithkumar.Reddy@amd.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220913144319.1055302-4-Vsujithkumar.Reddy@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        FROM_SUSPICIOUS_NTLD_FP,PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 13/09/22 16:43, V sujith kumar Reddy ha scritto:
-> Add I2S HS control instance to the sof core.
-> This will help the amd topology to use the I2S HS Dai.
-> 
-> Signed-off-by: V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>
+The following patches add a bunch of msm8953-based devices that have
+been created in the msm8953-mainline[0] repository, which includes
+Snapdragon 450 (SDM450), Snapdragon 625 (msm8953) and Snapdragon 632
+(SDM632) devices.
+The dts files are trimmed down to what is currently supported upstream,
+as a way to also minimizing diff for further patches.
 
-Hello,
+I've tried my best in keeping all the relevant author tags based on the
+git info I could find there.
 
-Since this patch was merged, SoundOpenFirmware stopped working on MediaTek MT8195,
-as it fails on DAI component creation (firmware side)... check below...
+*This series depends on pmi8950.dtsi patches[1]*
 
-> ---
->   include/sound/sof/dai.h       |  2 ++
->   sound/soc/sof/ipc3-pcm.c      |  9 +++++++++
->   sound/soc/sof/ipc3-topology.c | 33 +++++++++++++++++++++++++++++++++
->   sound/soc/sof/topology.c      |  1 +
->   4 files changed, 45 insertions(+)
-> 
-> diff --git a/include/sound/sof/dai.h b/include/sound/sof/dai.h
-> index 21d98f31a9ca..83fd81c82e4c 100644
-> --- a/include/sound/sof/dai.h
-> +++ b/include/sound/sof/dai.h
-> @@ -84,6 +84,7 @@ enum sof_ipc_dai_type {
->   	SOF_DAI_AMD_BT,			/**< AMD ACP BT*/
->   	SOF_DAI_AMD_SP,			/**< AMD ACP SP */
->   	SOF_DAI_AMD_DMIC,		/**< AMD ACP DMIC */
-> +	SOF_DAI_AMD_HS,			/**< Amd HS */
->   	SOF_DAI_MEDIATEK_AFE,		/**< Mediatek AFE */
+[0] https://github.com/msm8953-mainline/linux
+[1] https://lore.kernel.org/linux-arm-msm/20221101161801.1058969-2-luca@z3ntu.xyz/
 
-Adding SOF_DAI_AMD_HS before SOF_DAI_MEDIATEK_AFE desynced this enumeration
-so the DAI type is now 11 and not 10 anymore, leading to a failure in firmware
-at IPC3 helper function `dai_get()`, as when `dai_find_type()` is called, the
-DAI type that the firmware expects doesn't match with the one that gets sent
-in the request message from the kernel.
+Adam Skladowski (1):
+  arm64: dts: qcom: msm8953: Add device tree for Xiaomi Redmi Note 4X
 
-As a local test, I tried moving SOF_DAI_AMD_HS after SOF_DAI_MEDIATEK_AFE and
-this has restored full functionality on my MT8195 platform (Tomato Chromebook).
+Alejandro Tafalla (1):
+  arm64: dts: qcom: msm8953: Add device tree for Xiaomi Mi A2 Lite
 
-If SOF is supposed to guarantee backwards compatibility (and I believe it is),
-this commit breaks that.
+Danila Tikhonov (1):
+  arm64: dts: qcom: msm8953: Add device tree for Xiaomi Mi A1
 
-I would be tempted to send a commit that moves SOF_DAI_AMD_HS to the end, but
-that would break the already compiled firmware for AMD platforms, so I am not
-sure how to proceed.
+Eugene Lepshy (1):
+  arm64: dts: qcom: msm8953: Add device tree for Xiaomi Redmi 5 Plus
 
-So... how can we solve that?
-Any ideas?
+Gabriela David (1):
+  arm64: dts: qcom: sdm632: Add device tree for Motorola G7 Power
 
-P.S.: Sharing some logs at the end of this email, just for completeness.
+Julian Braha (1):
+  arm64: dts: qcom: sdm450: Add device tree for Motorola Moto G6
 
-Best regards,
-Angelo
+Luca Weiss (1):
+  dt-bindings: arm: qcom: document new msm8953-family devices
 
+Sireesh Kodali (1):
+  arm64: dts: qcom: msm8953: Add device tree for Motorola G5 Plus
 
+ .../devicetree/bindings/arm/qcom.yaml         |  17 +
+ arch/arm64/boot/dts/qcom/Makefile             |   7 +
+ .../boot/dts/qcom/msm8953-motorola-potter.dts | 306 ++++++++++++++++
+ .../boot/dts/qcom/msm8953-xiaomi-daisy.dts    | 316 +++++++++++++++++
+ .../boot/dts/qcom/msm8953-xiaomi-mido.dts     | 331 ++++++++++++++++++
+ .../boot/dts/qcom/msm8953-xiaomi-tissot.dts   | 317 +++++++++++++++++
+ .../boot/dts/qcom/msm8953-xiaomi-vince.dts    | 330 +++++++++++++++++
+ .../boot/dts/qcom/sdm450-motorola-ali.dts     | 256 ++++++++++++++
+ .../boot/dts/qcom/sdm632-motorola-ocean.dts   | 287 +++++++++++++++
+ 9 files changed, 2167 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8953-motorola-potter.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8953-xiaomi-daisy.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8953-xiaomi-mido.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8953-xiaomi-tissot.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8953-xiaomi-vince.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sdm450-motorola-ali.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sdm632-motorola-ocean.dts
 
+-- 
+2.38.1
 
-.. Relevant firmware and kernel trace/debug log lines ..
-
-Log from Xtensa DSP:
-[      828266.737921] (           3.125000) c0 ipc 
-src/ipc/ipc3/handler.c:1579 INFO ipc: new cmd 0x30010000
-[      828273.404587] (           6.666667) c0 component 
-src/ipc/ipc3/helper.c:296  INFO comp new dai <c2b00d27-ffbc-4150-a51a-245c79c5e54b> 
-type 2 id 4.22
-[      828284.342087] (          10.937500) c0 dai 
-src/audio/dai.c:177  ERROR dai_new(): dai_get() failed to create DAI.
-[      828291.321253] (           6.979167) c0 dai 
-src/ipc/ipc3/helper.c:303  ERROR comp_new(): unable to create the new component
-[      828295.383753] (           4.062500) c0 ipc 
-src/ipc/ipc3/helper.c:624  ERROR ipc_comp_new(): component cd = NULL
-[      828299.654586] (           4.270833) c0 ipc 
-src/ipc/ipc3/handler.c:1248 ERROR ipc: pipe 4 comp 22 creation failed -22
-
-
-Kernel log:
-[   15.011677] sof-audio-of-mt8195 10803000.dsp: request_firmware 
-mediatek/sof/sof-mt8195.ri successful
-...............
-[   15.021452] sof-audio-of-mt8195 10803000.dsp: Firmware info: version 2:0:0-df141
-[   15.039661] sof-audio-of-mt8195 10803000.dsp: Firmware: ABI 3:21:0 Kernel ABI 3:23:0
-[   15.039663] sof-audio-of-mt8195 10803000.dsp: found sof_ext_man header type 2 
-size 0x70
-[   15.039665] sof-audio-of-mt8195 10803000.dsp: Firmware info: used compiler XCC 
-12:0:8 <RI-2019.1-linux> used optimization flags -O2
-
-...........
-
-[   15.107660] sof-audio-of-mt8195 10803000.dsp: Firmware: DBG_ABI 5:3:0
-[   15.292019] sof-audio-of-mt8195 10803000.dsp: booting DSP firmware
-[   15.292025] sof-audio-of-mt8195 10803000.dsp: HIFIxDSP boot from base : 0x40000000
-[   15.297257] sof-audio-of-mt8195 10803000.dsp: ipc rx: 0x70000000: FW_READY
-[   15.363305] sof-audio-of-mt8195 10803000.dsp: DSP is ready 0x70000000 offset 
-0x800000
-[   15.363319] sof-audio-of-mt8195 10803000.dsp: Firmware info: version 2:0:0-df141
-[   15.383651] sof-audio-of-mt8195 10803000.dsp: Firmware: ABI 3:21:0 Kernel ABI 3:23:0
-
-............
-
-[   16.336460] sof-audio-of-mt8195 10803000.dsp: loaded host PCM16P
-[   16.336461] sof-audio-of-mt8195 10803000.dsp:  config: periods snk 2 src 0 fmt 0
-[   16.336466] sof-audio-of-mt8195 10803000.dsp: ipc tx: 0x30100000: GLB_TPLG_MSG: 
-PIPE_NEW
-[   16.336603] sof-audio-of-mt8195 10803000.dsp: widget PIPELINE.4.AFE3.IN setup 
-complete
-[   16.336607] sof-audio-of-mt8195 10803000.dsp: ipc tx: 0x30010000: GLB_TPLG_MSG: 
-COMP_NEW
-[   16.336663] sof-audio-of-mt8195 10803000.dsp: ipc tx error for 0x30010000 
-(msg/reply size: 96/20): -22
-[   16.336665] sof-audio-of-mt8195 10803000.dsp: Failed to setup widget AFE3.IN
-[   16.336670] sof-audio-of-mt8195 10803000.dsp: ipc tx: 0x30110000: GLB_TPLG_MSG: 
-PIPE_FREE
-[   16.336778] sof-audio-of-mt8195 10803000.dsp: widget PIPELINE.4.AFE3.IN freed
-[   16.336887] sof-audio-of-mt8195 10803000.dsp: error: tplg component load failed -22
-[   16.336899] sof-audio-of-mt8195 10803000.dsp: error: failed to load DSP topology -22
-[   16.336900] sof-audio-of-mt8195 10803000.dsp: ASoC: error at 
-snd_soc_component_probe on 10803000.dsp: -22
-[   16.336983] mt8195_mt6359 mt8195-sound: ASoC: failed to instantiate card -22
-[   16.340339] mt8195_mt6359: probe of mt8195-sound failed with error -22
