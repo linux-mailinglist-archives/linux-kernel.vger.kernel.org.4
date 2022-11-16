@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BBBF62C41E
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 17:22:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BF9862C42C
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 17:23:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237845AbiKPQWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 11:22:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58636 "EHLO
+        id S238660AbiKPQXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 11:23:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234420AbiKPQWH (ORCPT
+        with ESMTP id S234426AbiKPQWI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 11:22:07 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B0C953EE9
+        Wed, 16 Nov 2022 11:22:08 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC2747311
         for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 08:22:06 -0800 (PST)
 From:   John Ogness <john.ogness@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
@@ -22,29 +22,29 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=gtH4yW3JeyI4F3eGTioeuhi1fpVcHx73Hw0G9i8hSSU=;
-        b=kayQnh7l4s1491kWSKsE/fOVnX9St78ObnsuaLA1l80ClxwMsYALUbty4DW6fqOiG5YVUa
-        lg4IoP9w8yOjeLX4z39itvhtah+ckgU060CVoM7oO6lzA0XOWohgesE7+MLAwzzUJK/9JF
-        McJBvjt14QhEPdiWLpuZ2QRn5X3tI4qkl6flh3vUgYemOXjw+A7Nn1pEGjBPY1b4VcBawz
-        2Z5IFC9i4PVN4C+bUtIZNOF368QeWu3VNuuCp2Ld/5LafIGNTU41lOfmP3m3JDB9I1pgXb
-        avVBlbxv32SlYFsQFcml1Ss+YxWCCDK3kqlG/eEGkZdBzvGBB3Vovt0cuvdKmQ==
+        bh=nhhJ4NEYDrYYk962PRI1KO7CTDJYZ90BsmoX/yxQ/gI=;
+        b=lRDydq5FRZTnwLjVZHwb0EFCh4BnmAql/o3iD/Qhwm+z4zzC7IEwqkBDf2PopO8HzRgRB9
+        rYWm/6nGUKDvhLD52VVku54Wzv3n+RpLJ1VYDeXtDYnm81qg/kqn67NNDxXntUC4ZqHj5T
+        76kg6Qu3zH/jNH7WI5zmxvWp96rFCt2IpIJ+lqpcQXLaI32egKpudioKS2bXTKJOOFx/kM
+        l5yZrET/CWXg6D0NcF1jzBUJuVzPtFCyqGSgcctEYxK5uPOnTXkovYxcy0G++vcVykd5DO
+        sYa/WzWP4KKm77GyhziPCSDqiwU5LZi+ZHnuBvk8ZXMJoicHCDGCmFB3idMIEw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1668615725;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=gtH4yW3JeyI4F3eGTioeuhi1fpVcHx73Hw0G9i8hSSU=;
-        b=p+tlMt2fKLrSZ7uozDnyug3YD7ymR7gPSP52ARH76IKRuFjFDWwCw/QeQIfwzypdQBhSZB
-        c2vSgXnuvgiNAuDQ==
+        bh=nhhJ4NEYDrYYk962PRI1KO7CTDJYZ90BsmoX/yxQ/gI=;
+        b=bY0sIjstLLp8P/5/imQZ/AMuPiIf5JzcDLwL9jC+9b1Sxa18frPcCl9+jZamwRBFbekt5C
+        rWE6Za9htWGPuTAw==
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH printk v5 16/40] printk: __pr_flush: use srcu console list iterator
-Date:   Wed, 16 Nov 2022 17:27:28 +0106
-Message-Id: <20221116162152.193147-17-john.ogness@linutronix.de>
+Subject: [PATCH printk v5 17/40] printk: console_is_usable: use console_srcu_read_flags
+Date:   Wed, 16 Nov 2022 17:27:29 +0106
+Message-Id: <20221116162152.193147-18-john.ogness@linutronix.de>
 In-Reply-To: <20221116162152.193147-1-john.ogness@linutronix.de>
 References: <20221116162152.193147-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
@@ -59,55 +59,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use srcu console list iteration for console list traversal.
-
-Document why the console_lock is still necessary. Note that this
-is a preparatory change for when console_lock no longer provides
-synchronization for the console list.
+All users of console_is_usable() are SRCU iterators. Use the
+appropriate wrapper function to locklessly read the flags.
 
 Signed-off-by: John Ogness <john.ogness@linutronix.de>
 Reviewed-by: Petr Mladek <pmladek@suse.com>
 ---
- kernel/printk/printk.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ kernel/printk/printk.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
 diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index 3a7b1931b7c9..6666cc27a014 100644
+index 6666cc27a014..75951c4bda05 100644
 --- a/kernel/printk/printk.c
 +++ b/kernel/printk/printk.c
-@@ -3560,6 +3560,7 @@ static bool __pr_flush(struct console *con, int timeout_ms, bool reset_on_progre
- 	struct console *c;
- 	u64 last_diff = 0;
- 	u64 printk_seq;
-+	int cookie;
- 	u64 diff;
- 	u64 seq;
+@@ -2708,11 +2708,13 @@ static bool abandon_console_lock_in_panic(void)
+  * Check if the given console is currently capable and allowed to print
+  * records.
+  *
+- * Requires the console_lock.
++ * Requires the console_srcu_read_lock.
+  */
+ static inline bool console_is_usable(struct console *con)
+ {
+-	if (!(con->flags & CON_ENABLED))
++	short flags = console_srcu_read_flags(con);
++
++	if (!(flags & CON_ENABLED))
+ 		return false;
  
-@@ -3570,9 +3571,15 @@ static bool __pr_flush(struct console *con, int timeout_ms, bool reset_on_progre
- 	for (;;) {
- 		diff = 0;
+ 	if (!con->write)
+@@ -2723,8 +2725,7 @@ static inline bool console_is_usable(struct console *con)
+ 	 * allocated. So unless they're explicitly marked as being able to
+ 	 * cope (CON_ANYTIME) don't call them until this CPU is officially up.
+ 	 */
+-	if (!cpu_online(raw_smp_processor_id()) &&
+-	    !(con->flags & CON_ANYTIME))
++	if (!cpu_online(raw_smp_processor_id()) && !(flags & CON_ANYTIME))
+ 		return false;
  
-+		/*
-+		 * Hold the console_lock to guarantee safe access to
-+		 * console->seq and to prevent changes to @console_suspended
-+		 * until all consoles have been processed.
-+		 */
- 		console_lock();
- 
--		for_each_console(c) {
-+		cookie = console_srcu_read_lock();
-+		for_each_console_srcu(c) {
- 			if (con && con != c)
- 				continue;
- 			if (!console_is_usable(c))
-@@ -3581,6 +3588,7 @@ static bool __pr_flush(struct console *con, int timeout_ms, bool reset_on_progre
- 			if (printk_seq < seq)
- 				diff += seq - printk_seq;
- 		}
-+		console_srcu_read_unlock(cookie);
- 
- 		/*
- 		 * If consoles are suspended, it cannot be expected that they
+ 	return true;
 -- 
 2.30.2
 
