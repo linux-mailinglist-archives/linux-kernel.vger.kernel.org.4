@@ -2,153 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15C9D62CB82
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 21:52:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25AED62CB88
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 21:53:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234549AbiKPUwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 15:52:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34390 "EHLO
+        id S237359AbiKPUxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 15:53:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234634AbiKPUwP (ORCPT
+        with ESMTP id S234275AbiKPUwa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 15:52:15 -0500
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACDA4663C5;
-        Wed, 16 Nov 2022 12:52:08 -0800 (PST)
-Received: by mail-ot1-f50.google.com with SMTP id l42-20020a9d1b2d000000b0066c6366fbc3so11201763otl.3;
-        Wed, 16 Nov 2022 12:52:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M0mkEMmmiC29yXQhLvhp9TRUn2+MyHtG1TRf6rjXKQ0=;
-        b=6JXRplDVliPAReEEhgpDiRwnlEABJxoGeB5WbfUHoBoKNSQRv5HNxlhaTcn0vZ5K12
-         6mRXr/BZmxZ5UPYpCYSPebx/AjnY3HKJN/S/9Kixg8G1Z71JMIfsYI9h1Uky7L9P302/
-         b9yXh8bx/OdOfrvQwhrOEflyO1hBbHHxAa8A28KEAGfJMWngCtLB3D3hBD8O/YfkrQGu
-         qIiw2IZ/zf4m1pD9cd08ngc6JW2LjGL289ZVUupnJhUOP5hyIjGPX1WoFrsVvDep5vqj
-         0Gv4Yl0iB7+tQfOfc1P+GRP+1W/sondBUqM9AL/PtRk6hjZ2fo8HXOV2d4QlofSW0NmK
-         No8Q==
-X-Gm-Message-State: ANoB5plPMen3ArtYcbqcweTGNzim8ei6N1j2b1TjgEuDR+GqLpd0zHD0
-        fqJbsaeyeTkUe/foWzg2qiiTtln7PQ==
-X-Google-Smtp-Source: AA0mqf6+KijdVSSY5FeKZl6llvtsCVws/IxK5+nchwW3Qu3zwekNStsmTRD2l3k/9xh4TdriciNhYA==
-X-Received: by 2002:a05:6830:18f2:b0:66d:aba2:a8e4 with SMTP id d18-20020a05683018f200b0066daba2a8e4mr4035707otf.257.1668631927947;
-        Wed, 16 Nov 2022 12:52:07 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id s15-20020a4ae48f000000b0049ded99501bsm6452664oov.40.2022.11.16.12.52.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 12:52:07 -0800 (PST)
-Received: (nullmailer pid 861740 invoked by uid 1000);
-        Wed, 16 Nov 2022 20:52:09 -0000
-Date:   Wed, 16 Nov 2022 14:52:09 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     linux-kernel@vger.kernel.org, Luka Perkov <luka.perkov@sartura.hr>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Michael Walle <michael@walle.cc>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: Re: [PATCH v4 1/5] dt-bindings: nvmem: Introduce the nvmem-layout
- container
-Message-ID: <166863192845.861669.10779520962009282400.robh@kernel.org>
-References: <20221114085659.847611-1-miquel.raynal@bootlin.com>
- <20221114085659.847611-2-miquel.raynal@bootlin.com>
+        Wed, 16 Nov 2022 15:52:30 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD0963B9D;
+        Wed, 16 Nov 2022 12:52:29 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1668631947;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=33J5BD3tpOzz0XsMXF5A2OumpToZnyzGEePA9xQwZn0=;
+        b=EpyHVR7gyrCyXJL9CcGKJOYB/RjC+W7AlH8xKC/vcZ5wVNqtlBANLmpDqMo0ZtjIGnmWLY
+        pTd9r9HxGoOT/EEwE5Ybgaeg8bJRfal78kY+2GhEJjtPzbdRLZTbiFOYuIz+nBczEUcvzs
+        vcvwqwSs7UK0SiG1oo2q4/f79jAa94nTQxXBVJMQR+hgrU9ouX5de4MIpPVMqKRuyrtfnk
+        /Jtf/dDxJW3HbGYwg/bw3P8/pcPa15unfLj0S2PbwpiSpn+s1o7HGWMu9bJqcb7HgO1pB0
+        ZJXwk9iB2jQbgHfWHcE0WbTz+GuNFSbyE5yW2287jMulsr1Ry1BD14f3A24+sw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1668631947;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=33J5BD3tpOzz0XsMXF5A2OumpToZnyzGEePA9xQwZn0=;
+        b=bQ/iiX/xd+FgZdfYSqeEeN1dFeG+IhxZkOFIV4csii4NpB/tP5VT53rLO4YKXZO4pPwy0v
+        cLDBgbpcfIAJVuAA==
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: RE: [PATCH] clocksource/drivers/hyper-v: Include asm/hyperv-tlfs.h
+ not asm/mshyperv.h
+In-Reply-To: <87fsemtut0.ffs@tglx>
+References: <87zgcwt2qg.ffs@tglx>
+ <BYAPR21MB1688C5BCDF3269BA070DB884D7039@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <87wn7ztc89.ffs@tglx> <87sfinta8q.ffs@tglx> <87leoft9w1.ffs@tglx>
+ <87fsemtut0.ffs@tglx>
+Date:   Wed, 16 Nov 2022 21:52:26 +0100
+Message-ID: <8735aipqph.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221114085659.847611-2-miquel.raynal@bootlin.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Michael!
 
-On Mon, 14 Nov 2022 09:56:55 +0100, Miquel Raynal wrote:
-> The nvmem devices description works like this:
-> 
-> * Most cases (EEPROM & co):
-> 
-> eeprom@x {
-> 	 compatible = "<eeprom-compatible>";
-> 	 ...
-> };
-> 
-> * MTD case:
-> 
-> flash@y {
-> 	compatible = "<flash-compatible>";
-> 	...
-> 	otp {
-> 		compatible = "user-otp"; /* or "factory-otp" */
-> 		...
-> 	};
-> };
-> 
-> In the former case, the nvmem device is "eeprom@x", while in the latter
-> case the nvmem device is "otp".
-> 
-> Nvmem devices can produce nvmem cells. The current way to describe nvmem
-> cells is to locate them by providing their static byte and bit offset
-> and length. These information are stored in subnodes of the nvmem
-> device.
-> 
-> It is now a fact that such description does not fit more advanced use
-> cases where the location or the size of the cells may vary. There are
-> currently three known situations which require being described
-> differently: Kontron's SL28 VPD, ONIE's TLV table and U-Boot's
-> environment variables.
-> 
-> Hence, we need a way to describe the parsers that must be used in order
-> to make the dynamic discovery of the nvmem cells. This new description
-> must fit both use cases (the generic situation and the MTD case).
-> 
-> Let's create in both cases a container node named nvmem-layout whose
-> content will depend on the parser. Right now nvmem-layout.yaml is
-> "empty", but references to additional layout parser bindings will be
-> inserted in the near future. The final goal being something that looks
-> like:
-> 
-> * Most cases (EEPROM & co):
-> 
-> eeprom@x {
-> 	compatible = "<eeprom-compatible>";
-> 	...
-> 	nvmem-layout {
-> 		compatible = "<parser-compatible>";
-> 		...
-> 	};
-> };
-> 
-> * MTD case:
-> 
-> flash@y {
-> 	compatible = "<flash-compatible>";
-> 	...
-> 	otp {
-> 		compatible = "user-otp"; /* or "factory-otp" */
-> 		...
-> 		nvmem-layout {
-> 			compatible = "<parser-compatible>";
-> 			...
-> 		};
-> 	};
-> };
-> 
-> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+On Sun, Nov 13 2022 at 22:21, Thomas Gleixner wrote:
+> Subject: clocksource/drivers/hyper-v: Include asm/hyperv-tlfs.h not asm/mshyperv.h
+> From: Thomas Gleixner <tglx@linutronix.de>
+> Date: Sat, 12 Nov 2022 19:08:15 +0100
+>
+> clocksource/hyperv_timer.h is included into the VDSO build. It includes
+> asm/mshyperv.h which in turn includes the world and some more. This worked
+> so far by chance, but any subtle change in the include chain results in a
+> build breakage because VDSO builds are building user space libraries.
+>
+> Include asm/hyperv-tlfs.h instead which contains everything what the VDSO
+> build needs and move the hv_get_raw_timer() define into the header file.
+>
+> Fixup drivers/hv/vmbus_drv.c which relies on the indirect include of
+> asm/mshyperv.h.
+
+Any comments on this latest version?
+
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 > ---
->  .../bindings/nvmem/layouts/nvmem-layout.yaml  | 30 +++++++++++++++++++
->  .../devicetree/bindings/nvmem/nvmem.yaml      |  7 +++++
->  2 files changed, 37 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.yaml
-> 
-
-Reviewed-by: Rob Herring <robh@kernel.org>
+>  arch/x86/include/asm/hyperv_timer.h |    9 +++++++++
+>  arch/x86/include/asm/mshyperv.h     |    2 --
+>  drivers/hv/vmbus_drv.c              |    1 +
+>  include/clocksource/hyperv_timer.h  |    4 +++-
+>  4 files changed, 13 insertions(+), 3 deletions(-)
+>
+> --- /dev/null
+> +++ b/arch/x86/include/asm/hyperv_timer.h
+> @@ -0,0 +1,9 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _ASM_X86_HYPERV_TIMER_H
+> +#define _ASM_X86_HYPERV_TIMER_H
+> +
+> +#include <asm/msr.h>
+> +
+> +#define hv_get_raw_timer() rdtsc_ordered()
+> +
+> +#endif
+> --- a/arch/x86/include/asm/mshyperv.h
+> +++ b/arch/x86/include/asm/mshyperv.h
+> @@ -19,8 +19,6 @@ typedef int (*hyperv_fill_flush_list_fun
+>  		struct hv_guest_mapping_flush_list *flush,
+>  		void *data);
+>  
+> -#define hv_get_raw_timer() rdtsc_ordered()
+> -
+>  void hyperv_vector_handler(struct pt_regs *regs);
+>  
+>  #if IS_ENABLED(CONFIG_HYPERV)
+> --- a/drivers/hv/vmbus_drv.c
+> +++ b/drivers/hv/vmbus_drv.c
+> @@ -37,6 +37,7 @@
+>  #include <linux/dma-map-ops.h>
+>  #include <linux/pci.h>
+>  #include <clocksource/hyperv_timer.h>
+> +#include <asm/mshyperv.h>
+>  #include "hyperv_vmbus.h"
+>  
+>  struct vmbus_dynid {
+> --- a/include/clocksource/hyperv_timer.h
+> +++ b/include/clocksource/hyperv_timer.h
+> @@ -15,13 +15,15 @@
+>  
+>  #include <linux/clocksource.h>
+>  #include <linux/math64.h>
+> -#include <asm/mshyperv.h>
+> +#include <asm/hyperv-tlfs.h>
+>  
+>  #define HV_MAX_MAX_DELTA_TICKS 0xffffffff
+>  #define HV_MIN_DELTA_TICKS 1
+>  
+>  #ifdef CONFIG_HYPERV_TIMER
+>  
+> +#include <asm/hyperv_timer.h>
+> +
+>  /* Routines called by the VMbus driver */
+>  extern int hv_stimer_alloc(bool have_percpu_irqs);
+>  extern int hv_stimer_cleanup(unsigned int cpu);
