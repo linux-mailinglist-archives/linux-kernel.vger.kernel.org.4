@@ -2,207 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2FE162BFA5
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 14:38:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A91B962BFA7
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 14:38:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233926AbiKPNiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 08:38:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51746 "EHLO
+        id S238495AbiKPNiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 08:38:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233816AbiKPNiH (ORCPT
+        with ESMTP id S237831AbiKPNiQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 08:38:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C828064EA;
-        Wed, 16 Nov 2022 05:38:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6748561DF7;
-        Wed, 16 Nov 2022 13:38:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0649C433D6;
-        Wed, 16 Nov 2022 13:38:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668605885;
-        bh=o/L5hTRc+UROCPzDc8twMJIeoNJhL9dYAFN5gGbF/ys=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hrtvOzGSvYBUFutZQ+KypZZeCpGv/fPgPfPcvp/TkSik12NueTES6wZAI4hc90+J7
-         rImtebSIpqDL79fuJMoZ5WhFXFaVgWjSjCpMcy+HYwOuxfFM0yUffCFy6+0CL0cKOD
-         PGI8L+CVmQYSvFSzSgCeeOL3tcNDEb9UbqU5Jxbon/rAPfi/E69VIvKiKS3ijr/zkm
-         xtA5a8m91OJ1yLTX96YW6Wo6M4+qWDkgOgRpnB04Q9+RpjaQaIKRNBppzieCY6rOri
-         tQ4y8oFfkt5MqfZmE2X9jLfn+M5XNXtn8LYyLKle7TmKkPPxUack3AC+dXToHuoYMO
-         FZSZfg3ML8m2g==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1ovIbg-0002eD-9g; Wed, 16 Nov 2022 14:37:36 +0100
-Date:   Wed, 16 Nov 2022 14:37:36 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 1/2] arm64: dts: qcom: sm8550: Add PCIe PHYs and
- controllers nodes
-Message-ID: <Y3TnoIqXSSimqySN@hovoldconsulting.com>
-References: <20221116130430.2812173-1-abel.vesa@linaro.org>
- <20221116130430.2812173-2-abel.vesa@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221116130430.2812173-2-abel.vesa@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 16 Nov 2022 08:38:16 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA734429AA;
+        Wed, 16 Nov 2022 05:38:14 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id ft34so44045390ejc.12;
+        Wed, 16 Nov 2022 05:38:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4wIDFtoQcxM4v9BSbkXANKUxT6C+d890LN3a0zTsJxA=;
+        b=Vr3x0gTvOeZDCKekWYV9fzA8t5IzU6556bd+oUIKmGCAYwjc4GLIlYpkxHKU0vti4h
+         2zxxSV3A09jjeFsBVAMlhjk4ftpNNJ4qnbQwCO+rK0vIgmXHz9D4KqhUxw85jhDC0mMR
+         eO157reViF9/Hg/c6tgdHtiecbTJw3YA4/ySoBAbm96hSahWOQWH0Fpu+WofM3HkhVHo
+         oG24UOx5pPpOrlrCmCngtboRMTcG4mCHSHIj/RpiVhUCgAToGHIgVcKW1bj7v5cZE5/9
+         uLSk/ZrcwTExiPKqYtcOCmyAlCRg3Hr+QlpSRuyjztIZQqh9DCW0FF86ELPdqZSl+64f
+         evDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4wIDFtoQcxM4v9BSbkXANKUxT6C+d890LN3a0zTsJxA=;
+        b=vKo4019M5/8N1jAXmasiJNcwnI3U6GqrU2xObxwBBeo62bUqMMOPwYirK8G6TEHekp
+         gKw9TMVXwZV4EchxfpD2VMXUvvWA8cJO1U+7efst6YCEma/Qof3FyIilDaFypQxIzAFJ
+         1OxmCABlLDu8AMOoomXlWbnXe9G+QkTDUFz995642l2jS/ayNCAlojzoGDjVM9dkrBIw
+         0qjPbDH/lmd0P2XdEtosFa6FZ1QFVE1ZJsGxjykEArw1ZTKNxnqsBxA59VkJf0n7i/3c
+         q62hf+Ip8bbbP+Uc19vHnueqAIEa70+o2F5wwJxSKJ6g8shXeCZibSaeLHJx5jGCZDze
+         B80A==
+X-Gm-Message-State: ANoB5pm8QJJd/eBx316/bygKVe1stywDykewDttn54kWTv8iLuGyyKlF
+        b78u4lqn1ciUOcUbk/UhwOc=
+X-Google-Smtp-Source: AA0mqf6pqA6SMZnHgw4Ph5CBksVUnO0C2CJ2/eWeAQKHc9RvBitMa9WSOVlLbeDTf8kSJrqH0Z0tVA==
+X-Received: by 2002:a17:907:6f17:b0:791:9801:e48a with SMTP id sy23-20020a1709076f1700b007919801e48amr16926157ejc.738.1668605893180;
+        Wed, 16 Nov 2022 05:38:13 -0800 (PST)
+Received: from felia.fritz.box (200116b826c55000c59461cca0b9a159.dip.versatel-1u1.de. [2001:16b8:26c5:5000:c594:61cc:a0b9:a159])
+        by smtp.gmail.com with ESMTPSA id c1-20020a17090618a100b0078b03d57fa7sm6869628ejf.34.2022.11.16.05.38.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 05:38:12 -0800 (PST)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH v2] x86: make config X86_FEATURE_NAMES visible with EXPERT
+Date:   Wed, 16 Nov 2022 14:37:53 +0100
+Message-Id: <20221116133753.5615-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 03:04:29PM +0200, Abel Vesa wrote:
-> Add PCIe controllers and PHY nodes.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/sm8550.dtsi | 245 +++++++++++++++++++++++++++
->  1 file changed, 245 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-> index 07ba709ca35f..5c274d0372ad 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
- 				 <&ufs_phy_rx_symbol_1_clk>,
-> @@ -1372,6 +1376,247 @@ mmss_noc: interconnect@1780000 {
->  			qcom,bcm-voters = <&apps_bcm_voter>;
->  		};
->  
-> +		pcie0: pci@1c00000 {
-> +			compatible = "qcom,pcie-sm8550-pcie0";
-> +			reg = <0 0x01c00000 0 0x3000>,
-> +			      <0 0x60000000 0 0xf1d>,
-> +			      <0 0x60000f20 0 0xa8>,
-> +			      <0 0x60001000 0 0x1000>,
-> +			      <0 0x60100000 0 0x100000>;
-> +			reg-names = "parf", "dbi", "elbi", "atu", "config";
-> +			device_type = "pci";
-> +			linux,pci-domain = <0>;
-> +			bus-range = <0x00 0xff>;
-> +			num-lanes = <2>;
-> +
-> +			#address-cells = <3>;
-> +			#size-cells = <2>;
-> +
-> +			ranges = <0x01000000 0x0 0x60200000 0 0x60200000 0x0 0x100000>,
-> +				 <0x02000000 0x0 0x60300000 0 0x60300000 0x0 0x3d00000>;
-> +
-> +			interrupts = <GIC_SPI 141 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupt-names = "msi";
-> +			#interrupt-cells = <1>;
-> +			interrupt-map-mask = <0 0 0 0x7>;
-> +			interrupt-map = <0 0 0 1 &intc 0 0 0 149 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
-> +					<0 0 0 2 &intc 0 0 0 150 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
-> +					<0 0 0 3 &intc 0 0 0 151 IRQ_TYPE_LEVEL_HIGH>, /* int_c */
-> +					<0 0 0 4 &intc 0 0 0 152 IRQ_TYPE_LEVEL_HIGH>; /* int_d */
-> +
-> +			interconnect-names = "icc_path";
-> +			interconnects = <&pcie_noc MASTER_PCIE_0 0 &mc_virt SLAVE_EBI1 0>;
-> +
-> +			clocks = <&gcc GCC_PCIE_0_PIPE_CLK>,
-> +				 <&gcc GCC_PCIE_0_PIPE_CLK_SRC>,
-> +				 <&pcie0_lane>,
-> +				 <&rpmhcc RPMH_CXO_CLK>,
+Commit 6a108a14fa35 ("kconfig: rename CONFIG_EMBEDDED to CONFIG_EXPERT")
+introduces CONFIG_EXPERT to carry the previous intent of CONFIG_EMBEDDED
+and just gives that intent a much better name. That has been clearly a good
+and long overdue renaming, and it is clearly an improvement to the kernel
+build configuration that has shown to help managing the kernel build
+configuration in the last decade.
 
-As I mentioned in my comment to the binding, the above three clocks
-should not be here but rather be handled by the clock driver.
+However, rather than bravely and radically just deleting CONFIG_EMBEDDED,
+this commit gives CONFIG_EMBEDDED a new intended semantics, but keeps it
+open for future contributors to implement that intended semantics:
 
-> +				 <&gcc GCC_PCIE_0_AUX_CLK>,
-> +				 <&gcc GCC_PCIE_0_CFG_AHB_CLK>,
-> +				 <&gcc GCC_PCIE_0_MSTR_AXI_CLK>,
-> +				 <&gcc GCC_PCIE_0_SLV_AXI_CLK>,
-> +				 <&gcc GCC_PCIE_0_SLV_Q2A_AXI_CLK>,
-> +				 <&gcc GCC_DDRSS_PCIE_SF_QTB_CLK>,
-> +				 <&gcc GCC_AGGRE_NOC_PCIE_AXI_CLK>;
-> +			clock-names = "pipe",
-> +					"pipe_mux",
-> +					"phy_pipe",
-> +					"ref",
-> +					"aux",
-> +					"cfg",
-> +					"bus_master",
-> +					"bus_slave",
-> +					"slave_q2a",
-> +					"ddrss_sf_tbu",
-> +					"aggre0";
-> +
-> +			iommus = <&apps_smmu 0x1400 0x7f>;
-> +			iommu-map = <0x0   &apps_smmu 0x1400 0x1>,
-> +				    <0x100 &apps_smmu 0x1401 0x1>;
-> +
-> +			resets = <&gcc GCC_PCIE_0_BCR>;
-> +			reset-names = "pci";
-> +
-> +			power-domains = <&gcc PCIE_0_GDSC>;
-> +			power-domain-names = "gdsc";
-> +
-> +			phys = <&pcie0_lane>;
-> +			phy-names = "pciephy";
-> +
-> +			perst-gpios = <&tlmm 94 GPIO_ACTIVE_LOW>;
-> +			wake-gpios = <&tlmm 96 GPIO_ACTIVE_HIGH>;
-> +
-> +			pinctrl-names = "default";
-> +			pinctrl-0 = <&pcie0_default_state>;
-> +
-> +			status = "disabled";
-> +		};
-> +
-> +		pcie0_phy: phy@1c06000 {
-> +			compatible = "qcom,sm8550-qmp-gen3x2-pcie-phy";
+    A new CONFIG_EMBEDDED option is added that automatically selects
+    CONFIG_EXPERT when enabled and can be used in the future to isolate
+    options that should only be considered for embedded systems (RISC
+    architectures, SLOB, etc).
 
-Where's the corresponding binding update?
+Since then, this CONFIG_EMBEDDED implicitly had two purposes:
 
-> +			reg = <0 0x01c06000 0 0x200>;
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			ranges;
-> +			clocks = <&gcc GCC_PCIE_0_AUX_CLK>,
-> +				 <&gcc GCC_PCIE_0_CFG_AHB_CLK>,
-> +				 <&tcsr TCSR_PCIE_0_CLKREF_EN>,
-> +				 <&gcc GCC_PCIE_0_PHY_RCHNG_CLK>;
-> +			clock-names = "aux", "cfg_ahb", "ref", "refgen";
-> +
-> +			resets = <&gcc GCC_PCIE_0_PHY_BCR>;
-> +			reset-names = "phy";
-> +
-> +			assigned-clocks = <&gcc GCC_PCIE_0_PHY_RCHNG_CLK>;
-> +			assigned-clock-rates = <100000000>;
-> +
-> +			power-domains = <&gcc PCIE_0_PHY_GDSC>;
-> +			power-domain-names = "gdsc";
-> +
-> +			status = "disabled";
-> +
-> +			pcie0_lane: phy@1c06200 {
-> +				reg = <0 0x1c06e00 0 0x200>, /* tx0 */
-> +				      <0 0x1c07000 0 0x200>, /* rx0 */
-> +				      <0 0x1c06200 0 0x200>, /* pcs */
-> +				      <0 0x1c07600 0 0x200>, /* tx1 */
-> +				      <0 0x1c07800 0 0x200>, /* rx1 */
-> +				      <0 0x1c06600 0 0x200>; /* pcs_pcie */
-> +				clocks = <&gcc GCC_PCIE_0_PIPE_CLK>;
-> +				clock-names = "pipe0";
-> +
-> +				#clock-cells = <0>;
-> +				#phy-cells = <0>;
-> +				clock-output-names = "pcie_0_pipe_clk";
-> +			};
+  - It can make even more options visible beyond what CONFIG_EXPERT makes
+    visible. In other words, it may introduce another level of enabling the
+    visibility of configuration options: always visible, visible with
+    CONFIG_EXPERT and visible with CONFIG_EMBEDDED.
 
-These PHY nodes should also be updated to the new binding scheme which
-drops the child node and individual register descriptions (cf.
-sc8280xp).
+  - Set certain default values of some configurations differently,
+    following the assumption that configuring a kernel build for an
+    embedded system generally starts with a different set of default values
+    compared to kernel builds for all other kind of systems.
 
-Johan
+Considering the first purpose, at the point in time where CONFIG_EMBEDDED
+was renamed to CONFIG_EXPERT, CONFIG_EXPERT already made 130 more options
+become visible throughout all different menus for the kernel configuration.
+Over the last decade, this has gradually increased, so that currently, with
+CONFIG_EXPERT, roughly 170 more options become visible throughout all
+different menus for the kernel configuration. In comparison, currently with
+CONFIG_EMBEDDED enabled, just seven more options are visible, one in x86,
+one in arm, and five for the ChipIdea Highspeed Dual Role Controller.
+
+As the numbers suggest, these two levels of enabling the visibility of even
+more configuration options---beyond what CONFIG_EXPERT enables---never
+evolved to a good solution in the last decade. In other words, this
+additional level of visibility of configuration option with CONFIG_EMBEDDED
+compared to CONFIG_EXPERT has since its introduction never become really
+valuable. It requires quite some investigation to actually understand what
+is additionally visible and it does not differ significantly in complexity
+compared to just enabling CONFIG_EXPERT. This CONFIG_EMBEDDED---or any
+other config to show more detailed options beyond CONFIG_EXPERT---is
+unlikely to be valuable unless somebody puts significant effort in
+identifying how such visibility options can be properly split and creating
+clear criteria, when some config option is visible with CONFIG_EXPERT and
+when some config option is visible only with some further option enabled
+beyond CONFIG_EXPERT, such as CONFIG_EMBEDDED attempted to do. For now, it
+is much more reasonable to simply make those additional seven options that
+are visible with CONFIG_EMBEDDED visible with CONFIG_EXPERT, and then
+remove CONFIG_EMBEDDED. If anyone spends significant effort in structuring
+the visibility of config options, they may re-introduce suitable new
+config options simply as they see fit.
+
+Make the config X86_FEATURE_NAMES visible when CONFIG_EXPERT is enabled.
+
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
+Acked-by: Arnd Bergmann <arnd@arndb.de>
+---
+v1:
+  https://lore.kernel.org/lkml/20220908104337.11940-3-lukas.bulwahn@gmail.com/
+v1 -> v2:
+  - fixed some omitted words in the commit message
+  - added tags from Masahiro-san and Arnd
+
+ arch/x86/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index cef0107e4260..4555ca4601e3 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -439,7 +439,7 @@ config SMP
+ 	  If you don't know what to do here, say N.
+ 
+ config X86_FEATURE_NAMES
+-	bool "Processor feature human-readable names" if EMBEDDED
++	bool "Processor feature human-readable names" if EXPERT
+ 	default y
+ 	help
+ 	  This option compiles in a table of x86 feature bits and corresponding
+-- 
+2.17.1
+
