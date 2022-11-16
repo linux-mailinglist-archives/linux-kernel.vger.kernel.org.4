@@ -2,650 +2,324 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2816C62C540
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 17:46:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AE0362C548
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 17:47:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239175AbiKPQqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 11:46:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59174 "EHLO
+        id S238358AbiKPQrX convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 16 Nov 2022 11:47:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233652AbiKPQqP (ORCPT
+        with ESMTP id S231221AbiKPQqi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 11:46:15 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0CFB55B869;
-        Wed, 16 Nov 2022 08:42:28 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EBA941477;
-        Wed, 16 Nov 2022 08:42:33 -0800 (PST)
-Received: from [10.1.37.28] (e121896.cambridge.arm.com [10.1.37.28])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C34973F587;
-        Wed, 16 Nov 2022 08:42:24 -0800 (PST)
-Message-ID: <1d06f05c-0e7f-7648-6b1b-b78e999bc65f@arm.com>
-Date:   Wed, 16 Nov 2022 16:42:22 +0000
+        Wed, 16 Nov 2022 11:46:38 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DA5A5C763
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 08:43:19 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id x21-20020a5d9455000000b006bc1172e639so9040990ior.18
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 08:43:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:from:subject:message-id:in-reply-to
+         :date:mime-version:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=80cOLj3p9gwIm0aIYBRwI7P4/kgv5BMdbqsCYwBmRQo=;
+        b=LhRTukrVMP/t+SuYWjSqzZ+G2pc8ifr0ve/4YdLSYvCZlOtVLIq8Ve9wI1x3xfeS11
+         tBUIrkqi2K+J+UmGPOtDuykTR44ff6tJbeWwoSH5Q/NQJbH4d8ov3ri5tK9ryJuL1+qN
+         kK4qhkZwytSfqkCj4J/3Dg1b2Tl/ES1ldv/dfF6p2ijD148k6u1IJqZyVSTvlbzGksIw
+         h/LELneNwfh0Fxwq2DsYcRJpQPSgHQC2+rl3+jcmYRYUwh03QUGomzrTELW3YuKgP8yQ
+         S27CA9KjGpzoZjih5YQ0ex+JeC/4B60JQm2TB1+0H5X5T4P5FtIjnNi7gxY1rU58Yy6O
+         txbA==
+X-Gm-Message-State: ANoB5pnlGVpMLdvh54oUxODiWu4HPb9P0oYjIF3dGUa1Y8SkbshQM/9L
+        BOfuCSHyA+n0XMM4h1mHwOVF5/ydi7nkfpkQ6nx/xTQ3dzYQ
+X-Google-Smtp-Source: AA0mqf7VdaUIAHmH53NN6LSbC3dF24OUUKi4Edxt+Is+1n9HZ+cNbN0OnSg5ImejH7ES2uTulQyiNaHLOruP7WIXBqEViWquEUPO
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH V5 6/7] arm64/perf: Add BRBE driver
-Content-Language: en-US
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, peterz@infradead.org,
-        acme@kernel.org, mark.rutland@arm.com, will@kernel.org,
-        catalin.marinas@arm.com
-References: <20221107062514.2851047-1-anshuman.khandual@arm.com>
- <20221107062514.2851047-7-anshuman.khandual@arm.com>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <20221107062514.2851047-7-anshuman.khandual@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:ccf1:0:b0:375:ab48:de95 with SMTP id
+ l17-20020a02ccf1000000b00375ab48de95mr10434153jaq.14.1668616998524; Wed, 16
+ Nov 2022 08:43:18 -0800 (PST)
+Date:   Wed, 16 Nov 2022 08:43:18 -0800
+In-Reply-To: <20221116084731.3123-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000076a1d305ed992bfc@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in netdev_core_pick_tx
+From:   syzbot <syzbot+10a7a8ca6e94600110ec@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
+
+syzbot tried to test the proposed patch but the build/boot failed:
+
+ice registered as radio22
+[    9.280484][    T1] vivid-011: V4L2 transmitter device registered as radio23
+[    9.281637][    T1] vivid-011: V4L2 metadata capture device registered as video53
+[    9.282665][    T1] vivid-011: V4L2 metadata output device registered as video54
+[    9.283695][    T1] vivid-011: V4L2 touch capture device registered as v4l-touch11
+[    9.284749][    T1] vivid-012: using single planar format API
+[    9.313834][    T1] vivid-012: CEC adapter cec24 registered for HDMI input 0
+[    9.314750][    T1] vivid-012: V4L2 capture device registered as video55
+[    9.315693][    T1] vivid-012: CEC adapter cec25 registered for HDMI output 0
+[    9.316677][    T1] vivid-012: V4L2 output device registered as video56
+[    9.317646][    T1] vivid-012: V4L2 capture device registered as vbi24, supports raw and sliced VBI
+[    9.318291][    T1] vivid-012: V4L2 output device registered as vbi25, supports raw and sliced VBI
+[    9.320037][    T1] vivid-012: V4L2 capture device registered as swradio12
+[    9.321192][    T1] vivid-012: V4L2 receiver device registered as radio24
+[    9.322138][    T1] vivid-012: V4L2 transmitter device registered as radio25
+[    9.323120][    T1] vivid-012: V4L2 metadata capture device registered as video57
+[    9.324128][    T1] vivid-012: V4L2 metadata output device registered as video58
+[    9.325064][    T1] vivid-012: V4L2 touch capture device registered as v4l-touch12
+[    9.326045][    T1] vivid-013: using multiplanar format API
+[    9.353487][    T1] vivid-013: CEC adapter cec26 registered for HDMI input 0
+[    9.354582][    T1] vivid-013: V4L2 capture device registered as video59
+[    9.355753][    T1] vivid-013: CEC adapter cec27 registered for HDMI output 0
+[    9.357436][    T1] vivid-013: V4L2 output device registered as video60
+[    9.358424][    T1] vivid-013: V4L2 capture device registered as vbi26, supports raw and sliced VBI
+[    9.359083][    T1] vivid-013: V4L2 output device registered as vbi27, supports raw and sliced VBI
+[    9.359853][    T1] vivid-013: V4L2 capture device registered as swradio13
+[    9.362214][    T1] vivid-013: V4L2 receiver device registered as radio26
+[    9.363251][    T1] vivid-013: V4L2 transmitter device registered as radio27
+[    9.364242][    T1] vivid-013: V4L2 metadata capture device registered as video61
+[    9.365221][    T1] vivid-013: V4L2 metadata output device registered as video62
+[    9.366272][    T1] vivid-013: V4L2 touch capture device registered as v4l-touch13
+[    9.367776][    T1] vivid-014: using single planar format API
+[    9.395970][    T1] vivid-014: CEC adapter cec28 registered for HDMI input 0
+[    9.397055][    T1] vivid-014: V4L2 capture device registered as video63
+[    9.398170][    T1] vivid-014: CEC adapter cec29 registered for HDMI output 0
+[    9.399246][    T1] vivid-014: V4L2 output device registered as video64
+[    9.400190][    T1] vivid-014: V4L2 capture device registered as vbi28, supports raw and sliced VBI
+[    9.400893][    T1] vivid-014: V4L2 output device registered as vbi29, supports raw and sliced VBI
+[    9.402605][    T1] vivid-014: V4L2 capture device registered as swradio14
+[    9.403517][    T1] vivid-014: V4L2 receiver device registered as radio28
+[    9.404644][    T1] vivid-014: V4L2 transmitter device registered as radio29
+[    9.406460][    T1] vivid-014: V4L2 metadata capture device registered as video65
+[    9.407559][    T1] vivid-014: V4L2 metadata output device registered as video66
+[    9.408605][    T1] vivid-014: V4L2 touch capture device registered as v4l-touch14
+[    9.409611][    T1] vivid-015: using multiplanar format API
+[    9.438655][    T1] vivid-015: CEC adapter cec30 registered for HDMI input 0
+[    9.439767][    T1] vivid-015: V4L2 capture device registered as video67
+[    9.440915][    T1] vivid-015: CEC adapter cec31 registered for HDMI output 0
+[    9.442045][    T1] vivid-015: V4L2 output device registered as video68
+[    9.443006][    T1] vivid-015: V4L2 capture device registered as vbi30, supports raw and sliced VBI
+[    9.443770][    T1] vivid-015: V4L2 output device registered as vbi31, supports raw and sliced VBI
+[    9.445343][    T1] vivid-015: V4L2 capture device registered as swradio15
+[    9.446659][    T1] vivid-015: V4L2 receiver device registered as radio30
+[    9.447727][    T1] vivid-015: V4L2 transmitter device registered as radio31
+[    9.449013][    T1] vivid-015: V4L2 metadata capture device registered as video69
+[    9.450180][    T1] vivid-015: V4L2 metadata output device registered as video70
+[    9.451250][    T1] vivid-015: V4L2 touch capture device registered as v4l-touch15
+[    9.453925][    T1] usbcore: registered new interface driver radioshark2
+[    9.454577][    T1] usbcore: registered new interface driver radioshark
+[    9.455355][    T1] usbcore: registered new interface driver radio-si470x
+[    9.456610][    T1] usbcore: registered new interface driver radio-usb-si4713
+[    9.457292][    T1] usbcore: registered new interface driver dsbr100
+[    9.462150][    T8] floppy0: no floppy controllers found
+[    9.462792][    T8] work still pending
+[    9.463392][  T983] floppy0: floppy_shutdown: timeout handler died.  
+[    9.475753][    T1] usbcore: registered new interface driver radio-keene
+[    9.476503][    T1] usbcore: registered new interface driver radio-ma901
+[    9.477112][    T1] usbcore: registered new interface driver radio-mr800
+[    9.477798][    T1] usbcore: registered new interface driver radio-raremono
+[    9.481027][    T1] usbcore: registered new interface driver pcwd_usb
+[    9.494826][    T1] device-mapper: core: CONFIG_IMA_DISABLE_HTABLE is disabled. Duplicate IMA measurements will not be recorded in the IMA log.
+[    9.495376][    T1] device-mapper: uevent: version 1.0.3
+[    9.497645][    T1] device-mapper: ioctl: 4.46.0-ioctl (2022-02-22) initialised: dm-devel@redhat.com
+[    9.501149][    T1] device-mapper: multipath round-robin: version 1.2.0 loaded
+[    9.501167][    T1] device-mapper: multipath queue-length: version 0.2.0 loaded
+[    9.501181][    T1] device-mapper: multipath service-time: version 0.3.0 loaded
+[    9.502267][    T1] device-mapper: raid: Loading target version 1.15.1
+[    9.505124][    T1] Bluetooth: HCI UART driver ver 2.3
+[    9.505144][    T1] Bluetooth: HCI UART protocol H4 registered
+[    9.505152][    T1] Bluetooth: HCI UART protocol BCSP registered
+[    9.505633][    T1] Bluetooth: HCI UART protocol LL registered
+[    9.506139][    T1] Bluetooth: HCI UART protocol Three-wire (H5) registered
+[    9.506647][    T1] Bluetooth: HCI UART protocol QCA registered
+[    9.506658][    T1] Bluetooth: HCI UART protocol AG6XX registered
+[    9.507116][    T1] Bluetooth: HCI UART protocol Marvell registered
+[    9.507954][    T1] usbcore: registered new interface driver bcm203x
+[    9.508662][    T1] usbcore: registered new interface driver bpa10x
+[    9.509399][    T1] usbcore: registered new interface driver bfusb
+[    9.510131][    T1] usbcore: registered new interface driver btusb
+[    9.511709][    T1] usbcore: registered new interface driver ath3k
+[    9.513851][    T1] CAPI 2.0 started up with major 68 (middleware)
+[    9.513866][    T1] Modular ISDN core version 1.1.29
+[    9.515537][    T1] NET: Registered PF_ISDN protocol family
+[    9.515549][    T1] DSP module 2.0
+[    9.515556][    T1] mISDN_dsp: DSP clocks every 80 samples. This equals 1 jiffies.
+[    9.522655][    T1] mISDN: Layer-1-over-IP driver Rev. 2.00
+[    9.523481][    T1] 0 virtual devices registered
+[    9.524502][    T1] usbcore: registered new interface driver HFC-S_USB
+[    9.524519][    T1] intel_pstate: CPU model not supported
+[    9.524530][    T1] VUB300 Driver rom wait states = 1C irqpoll timeout = 0400
+[    9.537137][    T1] usbcore: registered new interface driver vub300
+[    9.537472][    T1] usbcore: registered new interface driver ushc
+[    9.552092][    T1] iscsi: registered transport (iser)
+[    9.555962][    T1] SoftiWARP attached
+[    9.556710][    T1] Driver 'memconsole' was unable to register with bus_type 'coreboot' because the bus was not initialized.
+[    9.556724][    T1] Driver 'vpd' was unable to register with bus_type 'coreboot' because the bus was not initialized.
+[    9.577857][    T1] hid: raw HID events driver (C) Jiri Kosina
+[    9.659663][    T1] usbcore: registered new interface driver usbhid
+[    9.659678][    T1] usbhid: USB HID core driver
+[    9.670996][    T1] usbcore: registered new interface driver es2_ap_driver
+[    9.671013][    T1] comedi: version 0.7.76 - http://www.comedi.org
+[    9.672407][    T1] usbcore: registered new interface driver dt9812
+[    9.673045][    T1] usbcore: registered new interface driver ni6501
+[    9.673705][    T1] usbcore: registered new interface driver usbdux
+[    9.674341][    T1] usbcore: registered new interface driver usbduxfast
+[    9.675032][    T1] usbcore: registered new interface driver usbduxsigma
+[    9.675723][    T1] usbcore: registered new interface driver vmk80xx
+[    9.676478][    T1] usbcore: registered new interface driver prism2_usb
+[    9.677979][    T1] usbcore: registered new interface driver r8712u
+[    9.678861][    T1] greybus: registered new driver hid
+[    9.679716][    T1] greybus: registered new driver gbphy
+[    9.681416][    T1] gb_gbphy: registered new driver usb
+[    9.681426][    T1] asus_wmi: ASUS WMI generic driver loaded
+[    9.810733][ T1233] CPU: 0 PID: 1233 Comm: aoe_tx0 Not tainted 5.18.0-rc7-syzkaller-dirty #0
+[    9.810733][ T1233] Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+[    9.810733][ T1233] Call Trace:
+[    9.810733][ T1233]  <TASK>
+[    9.810733][ T1233]  dump_stack_lvl+0x1e3/0x2cb
+[    9.810733][ T1233]  ? bfq_pos_tree_add_move+0x436/0x436
+[    9.810733][ T1233]  ? panic+0x76e/0x76e
+[    9.810733][ T1233]  ? vscnprintf+0x59/0x80
+[    9.810733][ T1233]  ? refcount_warn_saturate+0x120/0x1a0
+[    9.810733][ T1233]  panic+0x312/0x76e
+[    9.810733][ T1233]  ? __warn+0x131/0x220
+[    9.810733][ T1233]  ? fb_is_primary_device+0xcc/0xcc
+[    9.810733][ T1233]  ? ret_from_fork+0x1f/0x30
+[    9.810733][ T1233]  ? refcount_warn_saturate+0x17c/0x1a0
+[    9.810733][ T1233]  __warn+0x1fa/0x220
+[    9.810733][ T1233]  ? refcount_warn_saturate+0x17c/0x1a0
+[    9.845860][    T1] usbcore: registered new interface driver snd-usb-audio
+[    9.846654][    T1] usbcore: registered new interface driver snd-ua101
+[    9.847409][    T1] usbcore: registered new interface driver snd-usb-usx2y
+[    9.848855][    T1] usbcore: registered new interface driver snd-usb-us122l
+[    9.853684][    T1] usbcore: registered new interface driver snd-usb-caiaq
+[    9.856046][    T1] usbcore: registered new interface driver snd-usb-6fire
+[    9.860384][    T1] usbcore: registered new interface driver snd-usb-hiface
+[    9.863557][    T1] usbcore: registered new interface driver snd-bcd2000
+[    9.864161][    T1] usbcore: registered new interface driver snd_usb_pod
+[    9.864962][    T1] usbcore: registered new interface driver snd_usb_podhd
+[    9.865647][    T1] usbcore: registered new interface driver snd_usb_toneport
+[    9.866260][    T1] usbcore: registered new interface driver snd_usb_variax
+[    9.867610][    T1] drop_monitor: Initializing network drop monitor service
+[    9.868126][    T1] NET: Registered PF_LLC protocol family
+[    9.868421][    T1] GACT probability on
+[    9.868478][    T1] Mirror/redirect action on
+[    9.868814][    T1] Simple TC action Loaded
+[    9.860705][ T1233]  report_bug+0x1b1/0x2e0
+[    9.860705][ T1233]  handle_bug+0x3d/0x70
+[    9.860705][ T1233]  exc_invalid_op+0x16/0x40
+[    9.860705][ T1233]  asm_exc_invalid_op+0x12/0x20
+[    9.860705][ T1233] RIP: 0010:refcount_warn_saturate+0x17c/0x1a0
+[    9.860705][ T1233] Code: e8 8a 31 c0 e8 65 80 26 fd 0f 0b e9 64 ff ff ff e8 b9 14 5d fd c6 05 bc 02 c5 09 01 48 c7 c7 80 4b e8 8a 31 c0 e8 44 80 26 fd <0f> 0b e9 43 ff ff ff 89 d9 80 e1 07 80 c1 03 38 c1 0f 8c a2 fe ff
+[    9.860705][ T1233] RSP: 0000:ffffc900050afc28 EFLAGS: 00010246
+[    9.860705][ T1233] RAX: f57a10d46fd60000 RBX: 0000000000000004 RCX: ffff88801e663b00
+[    9.860705][ T1233] RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
+[    9.860705][ T1233] RBP: 0000000000000004 R08: ffffffff816ad552 R09: fffff52000a15ed5
+[    9.860705][ T1233] R10: fffff52000a15ed5 R11: 1ffff92000a15ed4 R12: ffff8881459f05b8
+[    9.860705][ T1233] R13: 1ffff92000a15f8c R14: ffff8881459f0600 R15: dffffc0000000000
+[    9.860705][ T1233]  ? wake_up_klogd+0xb2/0xf0
+[    9.860705][ T1233]  ? refcount_warn_saturate+0x17c/0x1a0
+[    9.860705][ T1233]  ref_tracker_free+0x659/0x7a0
+[    9.860705][ T1233]  ? refcount_inc+0x80/0x80
+[    9.860705][ T1233]  ? do_raw_spin_unlock+0x134/0x8a0
+[    9.860705][ T1233]  ? _raw_spin_unlock_irq+0x1f/0x40
+[    9.860705][ T1233]  ? lockdep_hardirqs_on+0x95/0x140
+[    9.860705][ T1233]  tx+0xc9/0x190
+[    9.860705][ T1233]  ? aoenet_xmit+0x1a0/0x1a0
+[    9.860705][ T1233]  kthread+0x241/0x450
+[    9.860705][ T1233]  ? aoe_ktstart+0x130/0x130
+[    9.860705][ T1233]  ? do_task_dead+0xc0/0xc0
+[    9.860705][ T1233]  ? _raw_spin_unlock+0x40/0x40
+[    9.860705][ T1233]  ? lockdep_hardirqs_on_prepare+0x448/0x7b0
+[    9.860705][ T1233]  ? __kthread_parkme+0x166/0x1c0
+[    9.860705][ T1233]  kthread+0x266/0x300
+[    9.860705][ T1233]  ? aoe_ktstart+0x130/0x130
+[    9.860705][ T1233]  ? kthread_blkcg+0xd0/0xd0
+[    9.860705][ T1233]  ret_from_fork+0x1f/0x30
+[    9.860705][ T1233]  </TASK>
+[    9.860705][ T1233] Kernel Offset: disabled
+[    9.860705][ T1233] Rebooting in 86400 seconds..
 
 
-On 07/11/2022 06:25, Anshuman Khandual wrote:
-[...]
+syzkaller build log:
+go env (err=<nil>)
+GO111MODULE="auto"
+GOARCH="amd64"
+GOBIN=""
+GOCACHE="/syzkaller/.cache/go-build"
+GOENV="/syzkaller/.config/go/env"
+GOEXE=""
+GOEXPERIMENT=""
+GOFLAGS=""
+GOHOSTARCH="amd64"
+GOHOSTOS="linux"
+GOINSECURE=""
+GOMODCACHE="/syzkaller/jobs/linux/gopath/pkg/mod"
+GONOPROXY=""
+GONOSUMDB=""
+GOOS="linux"
+GOPATH="/syzkaller/jobs/linux/gopath"
+GOPRIVATE=""
+GOPROXY="https://proxy.golang.org,direct"
+GOROOT="/usr/local/go"
+GOSUMDB="sum.golang.org"
+GOTMPDIR=""
+GOTOOLDIR="/usr/local/go/pkg/tool/linux_amd64"
+GOVCS=""
+GOVERSION="go1.17"
+GCCGO="gccgo"
+AR="ar"
+CC="gcc"
+CXX="g++"
+CGO_ENABLED="1"
+GOMOD="/syzkaller/jobs/linux/gopath/src/github.com/google/syzkaller/go.mod"
+CGO_CFLAGS="-g -O2"
+CGO_CPPFLAGS=""
+CGO_CXXFLAGS="-g -O2"
+CGO_FFLAGS="-g -O2"
+CGO_LDFLAGS="-g -O2"
+PKG_CONFIG="pkg-config"
+GOGCCFLAGS="-fPIC -m64 -pthread -fmessage-length=0 -fdebug-prefix-map=/tmp/go-build3020494642=/tmp/go-build -gno-record-gcc-switches"
 
-> +static void perf_branch_to_brbcr(struct pmu_hw_events *cpuc, int branch_type)
-> +{
-> +	cpuc->brbcr = (BRBCR_EL1_CC | BRBCR_EL1_MPRED);
-> +
-> +	if (branch_type & PERF_SAMPLE_BRANCH_USER)
-> +		cpuc->brbcr |= BRBCR_EL1_E0BRE;
-> +
-> +	if (branch_type & PERF_SAMPLE_BRANCH_NO_CYCLES)
-> +		cpuc->brbcr &= ~BRBCR_EL1_CC;
-> +
-> +	if (branch_type & PERF_SAMPLE_BRANCH_NO_FLAGS)
-> +		cpuc->brbcr &= ~BRBCR_EL1_MPRED;
-> +
-> +	if (branch_type & PERF_SAMPLE_BRANCH_KERNEL)
-> +		cpuc->brbcr |= BRBCR_EL1_E1BRE;
-> +	else
-> +		return;
-> +
-> +	/*
-> +	 * The exception and exception return branches could be
-> +	 * captured only when the event has necessary privilege
-> +	 * indicated via branch type PERF_SAMPLE_BRANCH_KERNEL,
-> +	 * which has been ascertained in generic perf. Please
-> +	 * refer perf_copy_attr() for more details.
-> +	 */
-> +	if (branch_type & PERF_SAMPLE_BRANCH_ANY) {
-> +		cpuc->brbcr |= BRBCR_EL1_EXCEPTION;
-> +		cpuc->brbcr |= BRBCR_EL1_ERTN;
+git status (err=<nil>)
+HEAD detached at 744a39e22
+nothing to commit, working tree clean
 
-Because this comes after the PERF_SAMPLE_BRANCH_KERNEL check, it's
-impossible to get syscall records from userspace. When you enable kernel
-branch records, the buffer always fills up before it gets to userspace.
 
-Can you move this to the top so that it can be set if either
-PERF_SAMPLE_BRANCH_USER or PERF_SAMPLE_BRANCH_KERNEL is set. The
-hardware already handles the security by giving partial records with the
-kernel part zeroed out so I don't think the driver needs to add any
-additional rules other than setting BRBCR_EL1_E1BRE or BRBCR_EL1_E0BRE.
+go list -f '{{.Stale}}' ./sys/syz-sysgen | grep -q false || go install ./sys/syz-sysgen
+make .descriptions
+bin/syz-sysgen
+touch .descriptions
+GOOS=linux GOARCH=amd64 go build "-ldflags=-s -w -X github.com/google/syzkaller/prog.GitRevision=744a39e220cece33e207035facce6c5ae161b775 -X 'github.com/google/syzkaller/prog.gitRevisionDate=20220514-093120'" "-tags=syz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-fuzzer github.com/google/syzkaller/syz-fuzzer
+GOOS=linux GOARCH=amd64 go build "-ldflags=-s -w -X github.com/google/syzkaller/prog.GitRevision=744a39e220cece33e207035facce6c5ae161b775 -X 'github.com/google/syzkaller/prog.gitRevisionDate=20220514-093120'" "-tags=syz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-execprog github.com/google/syzkaller/tools/syz-execprog
+GOOS=linux GOARCH=amd64 go build "-ldflags=-s -w -X github.com/google/syzkaller/prog.GitRevision=744a39e220cece33e207035facce6c5ae161b775 -X 'github.com/google/syzkaller/prog.gitRevisionDate=20220514-093120'" "-tags=syz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-stress github.com/google/syzkaller/tools/syz-stress
+mkdir -p ./bin/linux_amd64
+gcc -o ./bin/linux_amd64/syz-executor executor/executor.cc \
+	-m64 -O2 -pthread -Wall -Werror -Wparentheses -Wunused-const-variable -Wframe-larger-than=16384 -Wno-stringop-overflow -Wno-array-bounds -Wno-format-overflow -static-pie -fpermissive -w -DGOOS_linux=1 -DGOARCH_amd64=1 \
+	-DHOSTGOOS_linux=1 -DGIT_REVISION=\"744a39e220cece33e207035facce6c5ae161b775\"
 
-For example I moved it to the top, removed the return below and then I
-get syscall partial records:
 
-....  5: 0000000000745d0c -> 0000000000000000 0 cycles  P   9fbfbfbf SYSCALL
+Error text is too large and was truncated, full error text is at:
+https://syzkaller.appspot.com/x/error.txt?x=125fadbe880000
 
-I also get ERETS but with only the userspace part set:
 
-.....  4: 0000000000000000 -> 0000000000745d10 0 cycles  P   9fbfbfbf ERET
+Tested on:
 
-> +		return;
-> +	}
-> +
-> +	if (branch_type & PERF_SAMPLE_BRANCH_ANY_CALL)
-> +		cpuc->brbcr |= BRBCR_EL1_EXCEPTION;
-> +
-> +	if (branch_type & PERF_SAMPLE_BRANCH_ANY_RETURN)
-> +		cpuc->brbcr |= BRBCR_EL1_ERTN;
-> +}
-> +
-> +
-> +void arm64_pmu_brbe_filter(struct pmu_hw_events *cpuc, struct perf_event *event)
-> +{
-> +	u64 branch_type = event->attr.branch_sample_type;
-> +
-> +	if (brbe_disabled(cpuc))
-> +		return;
-> +
-> +	perf_branch_to_brbfcr(cpuc, branch_type);
-> +	perf_branch_to_brbcr(cpuc, branch_type);
-> +}
-> +
-> +static int brbe_fetch_perf_type(u64 brbinf, bool *new_branch_type)
-> +{
-> +	int brbe_type = brbe_fetch_type(brbinf);
-> +	*new_branch_type = false;
-> +
-> +	switch (brbe_type) {
-> +	case BRBINF_EL1_TYPE_UNCOND_DIR:
-> +		return PERF_BR_UNCOND;
-> +	case BRBINF_EL1_TYPE_INDIR:
-> +		return PERF_BR_IND;
-> +	case BRBINF_EL1_TYPE_DIR_LINK:
-> +		return PERF_BR_CALL;
-> +	case BRBINF_EL1_TYPE_INDIR_LINK:
-> +		return PERF_BR_IND_CALL;
-> +	case BRBINF_EL1_TYPE_RET_SUB:
-> +		return PERF_BR_RET;
-> +	case BRBINF_EL1_TYPE_COND_DIR:
-> +		return PERF_BR_COND;
-> +	case BRBINF_EL1_TYPE_CALL:
-> +		return PERF_BR_CALL;
-> +	case BRBINF_EL1_TYPE_TRAP:
-> +		return PERF_BR_SYSCALL;
-> +	case BRBINF_EL1_TYPE_RET_EXCPT:
-> +		return PERF_BR_ERET;
-> +	case BRBINF_EL1_TYPE_IRQ:
-> +		return PERF_BR_IRQ;
-> +	case BRBINF_EL1_TYPE_DEBUG_HALT:
-> +		*new_branch_type = true;
-> +		return PERF_BR_ARM64_DEBUG_HALT;
-> +	case BRBINF_EL1_TYPE_SERROR:
-> +		return PERF_BR_SERROR;
-> +	case BRBINF_EL1_TYPE_INST_DEBUG:
-> +		*new_branch_type = true;
-> +		return PERF_BR_ARM64_DEBUG_INST;
-> +	case BRBINF_EL1_TYPE_DATA_DEBUG:
-> +		*new_branch_type = true;
-> +		return PERF_BR_ARM64_DEBUG_DATA;
-> +	case BRBINF_EL1_TYPE_ALGN_FAULT:
-> +		*new_branch_type = true;
-> +		return PERF_BR_NEW_FAULT_ALGN;
-> +	case BRBINF_EL1_TYPE_INST_FAULT:
-> +		*new_branch_type = true;
-> +		return PERF_BR_NEW_FAULT_INST;
-> +	case BRBINF_EL1_TYPE_DATA_FAULT:
-> +		*new_branch_type = true;
-> +		return PERF_BR_NEW_FAULT_DATA;
-> +	case BRBINF_EL1_TYPE_FIQ:
-> +		*new_branch_type = true;
-> +		return PERF_BR_ARM64_FIQ;
-> +	case BRBINF_EL1_TYPE_DEBUG_EXIT:
-> +		*new_branch_type = true;
-> +		return PERF_BR_ARM64_DEBUG_EXIT;
-> +	default:
-> +		pr_warn("unknown branch type captured\n");
-> +		return PERF_BR_UNKNOWN;
-> +	}
-> +}
-> +
-> +static int brbe_fetch_perf_priv(u64 brbinf)
-> +{
-> +	int brbe_el = brbe_fetch_el(brbinf);
-> +
-> +	switch (brbe_el) {
-> +	case BRBINF_EL1_EL_EL0:
-> +		return PERF_BR_PRIV_USER;
-> +	case BRBINF_EL1_EL_EL1:
-> +		return PERF_BR_PRIV_KERNEL;
-> +	case BRBINF_EL1_EL_EL2:
-> +		if (is_kernel_in_hyp_mode())
-> +			return PERF_BR_PRIV_KERNEL;
-> +		return PERF_BR_PRIV_HV;
-> +	default:
-> +		pr_warn("unknown branch privilege captured\n");
-> +		return PERF_BR_PRIV_UNKNOWN;
-> +       }
-> +}
-> +
-> +static void capture_brbe_flags(struct pmu_hw_events *cpuc, struct perf_event *event,
-> +			       u64 brbinf, int idx)
-> +{
-> +	int branch_type, type = brbe_record_valid(brbinf);
-> +	bool new_branch_type;
-> +
-> +	if (!branch_sample_no_cycles(event))
-> +		cpuc->branches->brbe_entries[idx].cycles = brbe_fetch_cycles(brbinf);
-> +
-> +	if (branch_sample_type(event)) {
-> +		branch_type = brbe_fetch_perf_type(brbinf, &new_branch_type);
-> +		if (new_branch_type) {
-> +			cpuc->branches->brbe_entries[idx].type = PERF_BR_EXTEND_ABI;
-> +			cpuc->branches->brbe_entries[idx].new_type = branch_type;
-> +		} else {
-> +			cpuc->branches->brbe_entries[idx].type = branch_type;
-> +		}
-> +	}
-> +
-> +	if (!branch_sample_no_flags(event)) {
-> +		/*
-> +		 * BRBINF_LASTFAILED does not indicate that the last transaction
-> +		 * got failed or aborted during the current branch record itself.
-> +		 * Rather, this indicates that all the branch records which were
-> +		 * in transaction until the curret branch record have failed. So
-> +		 * the entire BRBE buffer needs to be processed later on to find
-> +		 * all branch records which might have failed.
-> +		 */
-> +		cpuc->branches->brbe_entries[idx].abort = brbinf & BRBINF_EL1_LASTFAILED;
-> +
-> +		/*
-> +		 * All these information (i.e transaction state and mispredicts)
-> +		 * are not available for target only branch records.
-> +		 */
-> +		if (type != BRBINF_EL1_VALID_TARGET) {
-> +			cpuc->branches->brbe_entries[idx].mispred = brbinf & BRBINF_EL1_MPRED;
-> +			cpuc->branches->brbe_entries[idx].predicted = !(brbinf & BRBINF_EL1_MPRED);
-> +			cpuc->branches->brbe_entries[idx].in_tx = brbinf & BRBINF_EL1_T;
-> +		}
-> +	}
-> +
-> +	if (branch_sample_priv(event)) {
-> +		/*
-> +		 * All these information (i.e branch privilege level) are not
-> +		 * available for source only branch records.
-> +		 */
-> +		if (type != BRBINF_EL1_VALID_SOURCE)
-> +			cpuc->branches->brbe_entries[idx].priv = brbe_fetch_perf_priv(brbinf);
-> +	}
-> +}
-> +
-> +/*
-> + * A branch record with BRBINF_EL1.LASTFAILED set, implies that all
-> + * preceding consecutive branch records, that were in a transaction
-> + * (i.e their BRBINF_EL1.TX set) have been aborted.
-> + *
-> + * Similarly BRBFCR_EL1.LASTFAILED set, indicate that all preceding
-> + * consecutive branch records upto the last record, which were in a
-> + * transaction (i.e their BRBINF_EL1.TX set) have been aborted.
-> + *
-> + * --------------------------------- -------------------
-> + * | 00 | BRBSRC | BRBTGT | BRBINF | | TX = 1 | LF = 0 | [TX success]
-> + * --------------------------------- -------------------
-> + * | 01 | BRBSRC | BRBTGT | BRBINF | | TX = 1 | LF = 0 | [TX success]
-> + * --------------------------------- -------------------
-> + * | 02 | BRBSRC | BRBTGT | BRBINF | | TX = 0 | LF = 0 |
-> + * --------------------------------- -------------------
-> + * | 03 | BRBSRC | BRBTGT | BRBINF | | TX = 1 | LF = 0 | [TX failed]
-> + * --------------------------------- -------------------
-> + * | 04 | BRBSRC | BRBTGT | BRBINF | | TX = 1 | LF = 0 | [TX failed]
-> + * --------------------------------- -------------------
-> + * | 05 | BRBSRC | BRBTGT | BRBINF | | TX = 0 | LF = 1 |
-> + * --------------------------------- -------------------
-> + * | .. | BRBSRC | BRBTGT | BRBINF | | TX = 0 | LF = 0 |
-> + * --------------------------------- -------------------
-> + * | 61 | BRBSRC | BRBTGT | BRBINF | | TX = 1 | LF = 0 | [TX failed]
-> + * --------------------------------- -------------------
-> + * | 62 | BRBSRC | BRBTGT | BRBINF | | TX = 1 | LF = 0 | [TX failed]
-> + * --------------------------------- -------------------
-> + * | 63 | BRBSRC | BRBTGT | BRBINF | | TX = 1 | LF = 0 | [TX failed]
-> + * --------------------------------- -------------------
-> + *
-> + * BRBFCR_EL1.LASTFAILED == 1
-> + *
-> + * Here BRBFCR_EL1.LASTFAILED failes all those consecutive and also
-> + * in transaction branches near the end of the BRBE buffer.
-> + */
-> +static void process_branch_aborts(struct pmu_hw_events *cpuc)
-> +{
-> +	u64 brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
-> +	bool lastfailed = !!(brbfcr & BRBFCR_EL1_LASTFAILED);
-> +	int idx = cpuc->brbe_nr - 1;
-> +
-> +	do {
-> +		if (cpuc->branches->brbe_entries[idx].in_tx) {
-> +			cpuc->branches->brbe_entries[idx].abort = lastfailed;
-> +		} else {
-> +			lastfailed = cpuc->branches->brbe_entries[idx].abort;
-> +			cpuc->branches->brbe_entries[idx].abort = false;
-> +		}
-> +	} while (idx--, idx >= 0);
-> +}
-> +
-> +void arm64_pmu_brbe_read(struct pmu_hw_events *cpuc, struct perf_event *event)
-> +{
-> +	u64 brbinf;
-> +	int idx;
-> +
-> +	if (brbe_disabled(cpuc))
-> +		return;
-> +
-> +	set_brbe_paused();
-> +	for (idx = 0; idx < cpuc->brbe_nr; idx++) {
-> +		select_brbe_bank_index(idx);
-> +		brbinf = get_brbinf_reg(idx);
-> +		/*
-> +		 * There are no valid entries anymore on the buffer.
-> +		 * Abort the branch record processing to save some
-> +		 * cycles and also reduce the capture/process load
-> +		 * for the user space as well.
-> +		 */
-> +		if (brbe_invalid(brbinf))
-> +			break;
-> +
-> +		if (brbe_valid(brbinf)) {
-> +			cpuc->branches->brbe_entries[idx].from =  get_brbsrc_reg(idx);
-> +			cpuc->branches->brbe_entries[idx].to =  get_brbtgt_reg(idx);
-> +		} else if (brbe_source(brbinf)) {
-> +			cpuc->branches->brbe_entries[idx].from =  get_brbsrc_reg(idx);
-> +			cpuc->branches->brbe_entries[idx].to = 0;
-> +		} else if (brbe_target(brbinf)) {
-> +			cpuc->branches->brbe_entries[idx].from = 0;
-> +			cpuc->branches->brbe_entries[idx].to =  get_brbtgt_reg(idx);
-> +		}
-> +		capture_brbe_flags(cpuc, event, brbinf, idx);
-> +	}
-> +	cpuc->branches->brbe_stack.nr = idx;
-> +	cpuc->branches->brbe_stack.hw_idx = -1ULL;
-> +	process_branch_aborts(cpuc);
-> +}
-> +
-> +void arm64_pmu_brbe_reset(struct pmu_hw_events *cpuc)
-> +{
-> +	if (brbe_disabled(cpuc))
-> +		return;
-> +
-> +	asm volatile(BRB_IALL);
-> +	isb();
-> +}
-> diff --git a/drivers/perf/arm_pmu_brbe.h b/drivers/perf/arm_pmu_brbe.h
-> new file mode 100644
-> index 000000000000..22c4b25b1777
-> --- /dev/null
-> +++ b/drivers/perf/arm_pmu_brbe.h
-> @@ -0,0 +1,259 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Branch Record Buffer Extension Helpers.
-> + *
-> + * Copyright (C) 2021 ARM Limited
-> + *
-> + * Author: Anshuman Khandual <anshuman.khandual@arm.com>
-> + */
-> +#define pr_fmt(fmt) "brbe: " fmt
-> +
-> +#include <linux/perf/arm_pmu.h>
-> +
-> +/*
-> + * BRBE Instructions
-> + *
-> + * BRB_IALL : Invalidate the entire buffer
-> + * BRB_INJ  : Inject latest branch record derived from [BRBSRCINJ, BRBTGTINJ, BRBINFINJ]
-> + */
-> +#define BRB_IALL __emit_inst(0xD5000000 | sys_insn(1, 1, 7, 2, 4) | (0x1f))
-> +#define BRB_INJ  __emit_inst(0xD5000000 | sys_insn(1, 1, 7, 2, 5) | (0x1f))
-> +
-> +/*
-> + * BRBE Buffer Organization
-> + *
-> + * BRBE buffer is arranged as multiple banks of 32 branch record
-> + * entries each. An indivdial branch record in a given bank could
-> + * be accessedi, after selecting the bank in BRBFCR_EL1.BANK and
-> + * accessing the registers i.e [BRBSRC, BRBTGT, BRBINF] set with
-> + * indices [0..31].
-> + *
-> + * Bank 0
-> + *
-> + *	---------------------------------	------
-> + *	| 00 | BRBSRC | BRBTGT | BRBINF |	| 00 |
-> + *	---------------------------------	------
-> + *	| 01 | BRBSRC | BRBTGT | BRBINF |	| 01 |
-> + *	---------------------------------	------
-> + *	| .. | BRBSRC | BRBTGT | BRBINF |	| .. |
-> + *	---------------------------------	------
-> + *	| 31 | BRBSRC | BRBTGT | BRBINF |	| 31 |
-> + *	---------------------------------	------
-> + *
-> + * Bank 1
-> + *
-> + *	---------------------------------	------
-> + *	| 32 | BRBSRC | BRBTGT | BRBINF |	| 00 |
-> + *	---------------------------------	------
-> + *	| 33 | BRBSRC | BRBTGT | BRBINF |	| 01 |
-> + *	---------------------------------	------
-> + *	| .. | BRBSRC | BRBTGT | BRBINF |	| .. |
-> + *	---------------------------------	------
-> + *	| 63 | BRBSRC | BRBTGT | BRBINF |	| 31 |
-> + *	---------------------------------	------
-> + */
-> +#define BRBE_BANK0_IDX_MIN 0
-> +#define BRBE_BANK0_IDX_MAX 31
-> +#define BRBE_BANK1_IDX_MIN 32
-> +#define BRBE_BANK1_IDX_MAX 63
-> +
-> +#define RETURN_READ_BRBSRCN(n) \
-> +	read_sysreg_s(SYS_BRBSRC##n##_EL1)
-> +
-> +#define RETURN_READ_BRBTGTN(n) \
-> +	read_sysreg_s(SYS_BRBTGT##n##_EL1)
-> +
-> +#define RETURN_READ_BRBINFN(n) \
-> +	read_sysreg_s(SYS_BRBINF##n##_EL1)
-> +
-> +#define BRBE_REGN_CASE(n, case_macro) \
-> +	case n: return case_macro(n); break
-> +
-> +#define BRBE_REGN_SWITCH(x, case_macro)				\
-> +	do {							\
-> +		switch (x) {					\
-> +		BRBE_REGN_CASE(0, case_macro);			\
-> +		BRBE_REGN_CASE(1, case_macro);			\
-> +		BRBE_REGN_CASE(2, case_macro);			\
-> +		BRBE_REGN_CASE(3, case_macro);			\
-> +		BRBE_REGN_CASE(4, case_macro);			\
-> +		BRBE_REGN_CASE(5, case_macro);			\
-> +		BRBE_REGN_CASE(6, case_macro);			\
-> +		BRBE_REGN_CASE(7, case_macro);			\
-> +		BRBE_REGN_CASE(8, case_macro);			\
-> +		BRBE_REGN_CASE(9, case_macro);			\
-> +		BRBE_REGN_CASE(10, case_macro);			\
-> +		BRBE_REGN_CASE(11, case_macro);			\
-> +		BRBE_REGN_CASE(12, case_macro);			\
-> +		BRBE_REGN_CASE(13, case_macro);			\
-> +		BRBE_REGN_CASE(14, case_macro);			\
-> +		BRBE_REGN_CASE(15, case_macro);			\
-> +		BRBE_REGN_CASE(16, case_macro);			\
-> +		BRBE_REGN_CASE(17, case_macro);			\
-> +		BRBE_REGN_CASE(18, case_macro);			\
-> +		BRBE_REGN_CASE(19, case_macro);			\
-> +		BRBE_REGN_CASE(20, case_macro);			\
-> +		BRBE_REGN_CASE(21, case_macro);			\
-> +		BRBE_REGN_CASE(22, case_macro);			\
-> +		BRBE_REGN_CASE(23, case_macro);			\
-> +		BRBE_REGN_CASE(24, case_macro);			\
-> +		BRBE_REGN_CASE(25, case_macro);			\
-> +		BRBE_REGN_CASE(26, case_macro);			\
-> +		BRBE_REGN_CASE(27, case_macro);			\
-> +		BRBE_REGN_CASE(28, case_macro);			\
-> +		BRBE_REGN_CASE(29, case_macro);			\
-> +		BRBE_REGN_CASE(30, case_macro);			\
-> +		BRBE_REGN_CASE(31, case_macro);			\
-> +		default:					\
-> +			pr_warn("unknown register index\n");	\
-> +			return -1;				\
-> +		}						\
-> +	} while (0)
-> +
-> +static inline int buffer_to_brbe_idx(int buffer_idx)
-> +{
-> +	return buffer_idx % 32;
-> +}
-> +
-> +static inline u64 get_brbsrc_reg(int buffer_idx)
-> +{
-> +	int brbe_idx = buffer_to_brbe_idx(buffer_idx);
-> +
-> +	BRBE_REGN_SWITCH(brbe_idx, RETURN_READ_BRBSRCN);
-> +}
-> +
-> +static inline u64 get_brbtgt_reg(int buffer_idx)
-> +{
-> +	int brbe_idx = buffer_to_brbe_idx(buffer_idx);
-> +
-> +	BRBE_REGN_SWITCH(brbe_idx, RETURN_READ_BRBTGTN);
-> +}
-> +
-> +static inline u64 get_brbinf_reg(int buffer_idx)
-> +{
-> +	int brbe_idx = buffer_to_brbe_idx(buffer_idx);
-> +
-> +	BRBE_REGN_SWITCH(brbe_idx, RETURN_READ_BRBINFN);
-> +}
-> +
-> +static inline u64 brbe_record_valid(u64 brbinf)
-> +{
-> +	return (brbinf & BRBINF_EL1_VALID_MASK) >> BRBINF_EL1_VALID_SHIFT;
-> +}
-> +
-> +static inline bool brbe_invalid(u64 brbinf)
-> +{
-> +	return brbe_record_valid(brbinf) == BRBINF_EL1_VALID_NONE;
-> +}
-> +
-> +static inline bool brbe_valid(u64 brbinf)
-> +{
-> +	return brbe_record_valid(brbinf) == BRBINF_EL1_VALID_FULL;
-> +}
-> +
-> +static inline bool brbe_source(u64 brbinf)
-> +{
-> +	return brbe_record_valid(brbinf) == BRBINF_EL1_VALID_SOURCE;
-> +}
-> +
-> +static inline bool brbe_target(u64 brbinf)
-> +{
-> +	return brbe_record_valid(brbinf) == BRBINF_EL1_VALID_TARGET;
-> +}
-> +
-> +static inline int brbe_fetch_cycles(u64 brbinf)
-> +{
-> +	/*
-> +	 * Captured cycle count is unknown and hence
-> +	 * should not be passed on the user space.
-> +	 */
-> +	if (brbinf & BRBINF_EL1_CCU)
-> +		return 0;
-> +
-> +	return (brbinf & BRBINF_EL1_CC_MASK) >> BRBINF_EL1_CC_SHIFT;
-> +}
-> +
-> +static inline int brbe_fetch_type(u64 brbinf)
-> +{
-> +	return (brbinf & BRBINF_EL1_TYPE_MASK) >> BRBINF_EL1_TYPE_SHIFT;
-> +}
-> +
-> +static inline int brbe_fetch_el(u64 brbinf)
-> +{
-> +	return (brbinf & BRBINF_EL1_EL_MASK) >> BRBINF_EL1_EL_SHIFT;
-> +}
-> +
-> +static inline int brbe_fetch_numrec(u64 brbidr)
-> +{
-> +	return (brbidr & BRBIDR0_EL1_NUMREC_MASK) >> BRBIDR0_EL1_NUMREC_SHIFT;
-> +}
-> +
-> +static inline int brbe_fetch_format(u64 brbidr)
-> +{
-> +	return (brbidr & BRBIDR0_EL1_FORMAT_MASK) >> BRBIDR0_EL1_FORMAT_SHIFT;
-> +}
-> +
-> +static inline int brbe_fetch_cc_bits(u64 brbidr)
-> +{
-> +	return (brbidr & BRBIDR0_EL1_CC_MASK) >> BRBIDR0_EL1_CC_SHIFT;
-> +}
-> +
-> +static inline void select_brbe_bank(int bank)
-> +{
-> +	static int brbe_current_bank = -1;
-> +	u64 brbfcr;
-> +
-> +	if (brbe_current_bank == bank)
-> +		return;
-> +
-> +	WARN_ON(bank > 1);
-> +	brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
-> +	brbfcr &= ~BRBFCR_EL1_BANK_MASK;
-> +	brbfcr |= ((bank << BRBFCR_EL1_BANK_SHIFT) & BRBFCR_EL1_BANK_MASK);
-> +	write_sysreg_s(brbfcr, SYS_BRBFCR_EL1);
-> +	isb();
-> +	brbe_current_bank = bank;
-> +}
-> +
-> +static inline void select_brbe_bank_index(int buffer_idx)
-> +{
-> +	switch (buffer_idx) {
-> +	case BRBE_BANK0_IDX_MIN ... BRBE_BANK0_IDX_MAX:
-> +		select_brbe_bank(0);
-> +		break;
-> +	case BRBE_BANK1_IDX_MIN ... BRBE_BANK1_IDX_MAX:
-> +		select_brbe_bank(1);
-> +		break;
-> +	default:
-> +		pr_warn("unsupported BRBE index\n");
-> +	}
-> +}
-> +
-> +static inline bool valid_brbe_nr(int brbe_nr)
-> +{
-> +	switch (brbe_nr) {
-> +	case BRBIDR0_EL1_NUMREC_8:
-> +	case BRBIDR0_EL1_NUMREC_16:
-> +	case BRBIDR0_EL1_NUMREC_32:
-> +	case BRBIDR0_EL1_NUMREC_64:
-> +		return true;
-> +	default:
-> +		pr_warn("unsupported BRBE entries\n");
-> +		return false;
-> +	}
-> +}
-> +
-> +static inline bool brbe_paused(void)
-> +{
-> +	u64 brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
-> +
-> +	return brbfcr & BRBFCR_EL1_PAUSED;
-> +}
-> +
-> +static inline void set_brbe_paused(void)
-> +{
-> +	u64 brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
-> +
-> +	write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
-> +	isb();
-> +}
-> diff --git a/include/linux/perf/arm_pmu.h b/include/linux/perf/arm_pmu.h
-> index bda0d9984a98..9c23b2b58b3d 100644
-> --- a/include/linux/perf/arm_pmu.h
-> +++ b/include/linux/perf/arm_pmu.h
-> @@ -168,6 +168,26 @@ struct arm_pmu {
->  	unsigned long acpi_cpuid;
->  };
->  
-> +#ifdef CONFIG_ARM_BRBE_PMU
-> +void arm64_pmu_brbe_filter(struct pmu_hw_events *hw_events, struct perf_event *event);
-> +void arm64_pmu_brbe_read(struct pmu_hw_events *cpuc, struct perf_event *event);
-> +void arm64_pmu_brbe_disable(struct pmu_hw_events *cpuc);
-> +void arm64_pmu_brbe_enable(struct pmu_hw_events *cpuc);
-> +void arm64_pmu_brbe_probe(struct pmu_hw_events *cpuc);
-> +void arm64_pmu_brbe_reset(struct pmu_hw_events *cpuc);
-> +bool arm64_pmu_brbe_supported(struct perf_event *event);
-> +#else
-> +static inline void arm64_pmu_brbe_filter(struct pmu_hw_events *hw_events, struct perf_event *event)
-> +{
-> +}
-> +static inline void arm64_pmu_brbe_read(struct pmu_hw_events *cpuc, struct perf_event *event) { }
-> +static inline void arm64_pmu_brbe_disable(struct pmu_hw_events *cpuc) { }
-> +static inline void arm64_pmu_brbe_enable(struct pmu_hw_events *cpuc) { }
-> +static inline void arm64_pmu_brbe_probe(struct pmu_hw_events *cpuc) { }
-> +static inline void arm64_pmu_brbe_reset(struct pmu_hw_events *cpuc) { }
-> +static inline bool arm64_pmu_brbe_supported(struct perf_event *event) {return false; }
-> +#endif
-> +
->  #define to_arm_pmu(p) (container_of(p, struct arm_pmu, pmu))
->  
->  u64 armpmu_event_update(struct perf_event *event);
+commit:         42226c98 Linux 5.18-rc7
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d84df8e1a4c4d5a4
+dashboard link: https://syzkaller.appspot.com/bug?extid=10a7a8ca6e94600110ec
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=161ac065880000
+
