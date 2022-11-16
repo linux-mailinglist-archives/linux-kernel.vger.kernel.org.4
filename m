@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 068E262CBA3
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 21:54:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61A3C62CBA1
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 21:54:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238934AbiKPUy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 15:54:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36306 "EHLO
+        id S238846AbiKPUyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 15:54:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234223AbiKPUxq (ORCPT
+        with ESMTP id S234379AbiKPUxr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 15:53:46 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44037E37
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 12:53:27 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id ud5so47209917ejc.4
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 12:53:27 -0800 (PST)
+        Wed, 16 Nov 2022 15:53:47 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B2DF25
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 12:53:28 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id t25so47115074ejb.8
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 12:53:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ymKWfG3hBUHC+wOiiQxZhyFHyJiOcWTWeXnW4/XpvSQ=;
-        b=uBIdtaeGMMK0etaJ10sYW6BxgNAyYojLXCGy0W42C+OfWLPOupay7/r0gtDdbrusfx
-         UMGtFFUhGTNuo62g/z04us3xcWWsJylHgFAzaLUOKDz4nkF7I6lR5JYF1XR+1z9PCcMO
-         SWZ5+W2N46uWnqy/y4Iec02er6vZlbge75TGJyzfM44ovW2lte7VHobLp4A7N+P1kHiE
-         hSV2cRdrnkUqf3fhiHpB7Ya2OHa2borOYj/kxMXgVL392o4f21DoNWSwft4nNhJSLfM6
-         O54h8A2SVNF+4tTC6/YQnzgL/WfzCj9ZIJUkJ3wnyAi1hCo1xrSRnjhVaINTIrKp94SE
-         Jm3g==
+        bh=WAaUVMJZwNldvM6e6aFGn3ObvVWSf2L0v/SEyFHK/I4=;
+        b=ltqQnT0EMFXwbpNbg9tdXI3avhCvHSr0oRUgU1tqw7+Unw0j+hl2GIavNu3ounoJDP
+         nvNUC7Rd2dmnkcoByRgHQMhN2Jt4l1/KXgNv0sSJb+TiuAeuqfAnAJz5atJAXnGg99H8
+         UpdwG2F5AtucQXp6D8/Scz6aeCIdU8MXHn8EVGBz5ESYLLQRzTAbbP/gp6ksMxMJbCts
+         Gs6tbhKZub13E96iZdU3qWuiP2WpqlcvYHSxlnDAJkidA4ULgmmj2hDHWbdq79H5FxsM
+         g7iR8wYul79Lf08h1AekXk82Zcmmsk6LgHF6aSPOCqsOPbaSii3ag97VLOF4Qql2/YYp
+         uN1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ymKWfG3hBUHC+wOiiQxZhyFHyJiOcWTWeXnW4/XpvSQ=;
-        b=NK4SjOOtoAS/VfW8pLmgus5qW5eeliR10SOVxy2J0SHvWTMwYmiKL5nFoHBKJiqFzs
-         ENyJ1+8xq11Z/vMGVrjE668sFxnNYzyWpM+A1tfrdf/xrJUtKFT17LGNgrZ4/Je6SNwI
-         Rez9hfnCbk/0yKD3sLsuY1HUFeCPiJIgZEtaWib4+4iFfcGy7Or8JBKl6gdwWtXUjUFC
-         GyaBtDLuCzHclTgcj6gCHAEymjQJ4KAKWBEQnG60p7bGwt68Q5pOwvZKxX8HSUgDMIO9
-         HTZOc0bhqKkJhYOHotT8LmDnI2voyfn67UQvHQPM15CJ41aZLzs4D8H9yxc9ZEYDlFEd
-         /Frw==
-X-Gm-Message-State: ANoB5plv2nei1JTjp52HTFgXZ3CeWLmW/o/65ykqf3xFKL5n2e97RLVS
-        nXU4Vp4iwCtRXaCmAMRa+1AlrBdZh11lbA==
-X-Google-Smtp-Source: AA0mqf5RtmC4SVdyOxL7UJ+lPNbAvIxVBnVYZ5yvegJySAd+TTMaVLm+yOWD7L+39PITwJrZLo3yag==
-X-Received: by 2002:a17:906:49c2:b0:79f:e0b3:3b9b with SMTP id w2-20020a17090649c200b0079fe0b33b9bmr18729246ejv.378.1668632006474;
-        Wed, 16 Nov 2022 12:53:26 -0800 (PST)
+        bh=WAaUVMJZwNldvM6e6aFGn3ObvVWSf2L0v/SEyFHK/I4=;
+        b=4Hj8FQgeoP6aly7cUz2CQd8ahT7sl6aqUbXIXmrHMp5JXllP6lGvqLLB1csBJ2ju91
+         0p9r3YaMSmJsks7KnlGz9ADiTr210vj+6TGIorj/IfC0+LdPFL1qQUuQ32hcXPFBE7Vu
+         7qq7CsSnlj9B96Dg3Z1XqjOdch9W9NC1UcZaz4DD4tSZdItZ6pVF11LROuPtfPPX3e2q
+         J2rqRwCZjl9ZYUn2HNeVpw2iZRNUGiWmz8hZWwxx3DwcEnfTxqw9bogpldxiGCSV1JYR
+         u2tUBUzinqFwsxF4EfNNf6uEcQiMI2MSpEK2r/vQxOeL3T0JuuTTNKnpjS7tfjo3VPPM
+         5udA==
+X-Gm-Message-State: ANoB5pmU/pLG/1lSqd5HQMJ/VQfjnGoJ5RI/tMxyXEuk2ViyXYep6sz/
+        kjwYvB/34Rn+6y7XeSVCLTBFQA==
+X-Google-Smtp-Source: AA0mqf7xLFzXunaORvAE8arlr2EHMF5IL/TxTAZ+Eb4AFkrbZOZnz+40iVztVdNYmE1kGgvIA1QyhQ==
+X-Received: by 2002:a17:906:33da:b0:78d:b046:aaae with SMTP id w26-20020a17090633da00b0078db046aaaemr18417533eja.218.1668632007251;
+        Wed, 16 Nov 2022 12:53:27 -0800 (PST)
 Received: from blmsp.fritz.box ([2001:4090:a244:804b:353b:565:addf:3aa7])
-        by smtp.gmail.com with ESMTPSA id kv17-20020a17090778d100b007aece68483csm6782828ejc.193.2022.11.16.12.53.25
+        by smtp.gmail.com with ESMTPSA id kv17-20020a17090778d100b007aece68483csm6782828ejc.193.2022.11.16.12.53.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 16 Nov 2022 12:53:26 -0800 (PST)
 From:   Markus Schneider-Pargmann <msp@baylibre.com>
@@ -57,130 +57,112 @@ To:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
 Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Markus Schneider-Pargmann <msp@baylibre.com>
-Subject: [PATCH 03/15] can: m_can: Cache tx putidx and transmits in flight
-Date:   Wed, 16 Nov 2022 21:52:56 +0100
-Message-Id: <20221116205308.2996556-4-msp@baylibre.com>
+Subject: [PATCH 04/15] can: m_can: Use transmit event FIFO watermark level interrupt
+Date:   Wed, 16 Nov 2022 21:52:57 +0100
+Message-Id: <20221116205308.2996556-5-msp@baylibre.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221116205308.2996556-1-msp@baylibre.com>
 References: <20221116205308.2996556-1-msp@baylibre.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On peripheral chips every read/write can be costly. Avoid reading easily
-trackable information and cache them internally. This saves multiple
-reads.
+Currently the only mode of operation is an interrupt for every transmit
+event. This is inefficient for peripheral chips. Use the transmit FIFO
+event watermark interrupt instead if the FIFO size is more than 2. Use
+FIFOsize - 1 for the watermark so the interrupt is triggered early
+enough to not stop transmitting.
 
-Transmit FIFO put index is cached, this is increased for every time we
-enqueue a transmit request.
-
-The transmits in flight is cached as well. With each transmit request it
-is increased when reading the finished transmit event it is decreased.
-
-A submit limit is cached to avoid submitting too many transmits at once,
-either because the TX FIFO or the TXE FIFO is limited. This is currently
-done very conservatively as the minimum of the fifo sizes. This means we
-can reach FIFO full events but won't drop anything.
+Note that if the number of transmits is less than the watermark level,
+the transmit events will not be processed until there is any other
+interrupt. This will only affect statistic counters. Also there is an
+interrupt every time the timestamp wraps around.
 
 Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
 ---
- drivers/net/can/m_can/m_can.c | 21 +++++++++++++++------
- drivers/net/can/m_can/m_can.h |  5 +++++
- 2 files changed, 20 insertions(+), 6 deletions(-)
+ drivers/net/can/m_can/m_can.c | 27 ++++++++++++++++++---------
+ 1 file changed, 18 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index 4adf03111782..f5bba848bd56 100644
+index f5bba848bd56..4a6972c8bacd 100644
 --- a/drivers/net/can/m_can/m_can.c
 +++ b/drivers/net/can/m_can/m_can.c
-@@ -1041,6 +1041,7 @@ static int m_can_echo_tx_event(struct net_device *dev)
- 		/* ack txe element */
- 		m_can_write(cdev, M_CAN_TXEFA, FIELD_PREP(TXEFA_EFAI_MASK,
- 							  fgi));
-+		--cdev->tx_fifo_in_flight;
+@@ -254,6 +254,7 @@ enum m_can_reg {
+ #define TXESC_TBDS_64B		0x7
  
- 		/* update stats */
- 		m_can_tx_update_stats(cdev, msg_mark, timestamp);
-@@ -1376,6 +1377,14 @@ static void m_can_start(struct net_device *dev)
- 	cdev->can.state = CAN_STATE_ERROR_ACTIVE;
+ /* Tx Event FIFO Configuration (TXEFC) */
++#define TXEFC_EFWM_MASK		GENMASK(29, 24)
+ #define TXEFC_EFS_MASK		GENMASK(21, 16)
  
- 	m_can_enable_all_interrupts(cdev);
-+
-+	if (cdev->version > 30) {
-+		cdev->tx_fifo_putidx = FIELD_GET(TXFQS_TFQPI_MASK,
-+						 m_can_read(cdev, M_CAN_TXFQS));
-+		cdev->tx_fifo_in_flight = 0;
-+		cdev->tx_fifo_submit_limit = min(cdev->mcfg[MRAM_TXE].num,
-+						 cdev->mcfg[MRAM_TXB].num);
-+	}
- }
- 
- static int m_can_set_mode(struct net_device *dev, enum can_mode mode)
-@@ -1589,7 +1598,6 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
- 	struct sk_buff *skb = cdev->tx_skb;
- 	struct id_and_dlc fifo_header;
- 	u32 cccr, fdflags;
--	u32 txfqs;
- 	int err;
- 	int putidx;
- 
-@@ -1646,10 +1654,8 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
- 	} else {
- 		/* Transmit routine for version >= v3.1.x */
- 
--		txfqs = m_can_read(cdev, M_CAN_TXFQS);
--
- 		/* Check if FIFO full */
--		if (_m_can_tx_fifo_full(txfqs)) {
-+		if (cdev->tx_fifo_in_flight >= cdev->tx_fifo_submit_limit) {
- 			/* This shouldn't happen */
- 			netif_stop_queue(dev);
- 			netdev_warn(dev,
-@@ -1665,7 +1671,7 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
+ /* Tx Event FIFO Status (TXEFS) */
+@@ -1094,8 +1095,8 @@ static irqreturn_t m_can_isr(int irq, void *dev_id)
+ 			netif_wake_queue(dev);
  		}
+ 	} else  {
+-		if (ir & IR_TEFN) {
+-			/* New TX FIFO Element arrived */
++		if (ir & (IR_TEFN | IR_TEFW)) {
++			/* New TX FIFO Element arrived or watermark reached */
+ 			if (m_can_echo_tx_event(dev) != 0)
+ 				goto out_fail;
+ 			if (!cdev->tx_skb && netif_queue_stopped(dev))
+@@ -1242,6 +1243,7 @@ static void m_can_chip_config(struct net_device *dev)
+ {
+ 	struct m_can_classdev *cdev = netdev_priv(dev);
+ 	u32 cccr, test;
++	u32 interrupts = IR_ALL_INT;
  
- 		/* get put index for frame */
--		putidx = FIELD_GET(TXFQS_TFQPI_MASK, txfqs);
-+		putidx = cdev->tx_fifo_putidx;
+ 	m_can_config_endisable(cdev, true);
  
- 		/* Construct DLC Field, with CAN-FD configuration.
- 		 * Use the put index of the fifo as the message marker,
-@@ -1699,9 +1705,12 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
- 
- 		/* Enable TX FIFO element to start transfer  */
- 		m_can_write(cdev, M_CAN_TXBAR, (1 << putidx));
-+		++cdev->tx_fifo_in_flight;
-+		cdev->tx_fifo_putidx = (++cdev->tx_fifo_putidx >= cdev->can.echo_skb_max ?
-+					0 : cdev->tx_fifo_putidx);
- 
- 		/* stop network queue if fifo full */
--		if (m_can_tx_fifo_full(cdev) ||
-+		if (cdev->tx_fifo_in_flight >= cdev->tx_fifo_submit_limit ||
- 		    m_can_next_echo_skb_occupied(dev, putidx))
- 			netif_stop_queue(dev);
- 		else if (cdev->is_peripheral && !cdev->tx_skb && netif_queue_stopped(dev))
-diff --git a/drivers/net/can/m_can/m_can.h b/drivers/net/can/m_can/m_can.h
-index 4c0267f9f297..7464ce56753a 100644
---- a/drivers/net/can/m_can/m_can.h
-+++ b/drivers/net/can/m_can/m_can.h
-@@ -92,6 +92,11 @@ struct m_can_classdev {
- 	int pm_clock_support;
- 	int is_peripheral;
- 
-+	// Store this internally to avoid fetch delays on peripheral chips
-+	int tx_fifo_putidx;
-+	int tx_fifo_in_flight;
-+	int tx_fifo_submit_limit;
+@@ -1276,11 +1278,20 @@ static void m_can_chip_config(struct net_device *dev)
+ 			    FIELD_PREP(TXEFC_EFS_MASK, 1) |
+ 			    cdev->mcfg[MRAM_TXE].off);
+ 	} else {
++		u32 txe_watermark;
 +
- 	struct mram_cfg mcfg[MRAM_CFG_NUM];
- };
++		txe_watermark = cdev->mcfg[MRAM_TXE].num - 1;
+ 		/* Full TX Event FIFO is used */
+ 		m_can_write(cdev, M_CAN_TXEFC,
++			    FIELD_PREP(TXEFC_EFWM_MASK,
++				       txe_watermark) |
+ 			    FIELD_PREP(TXEFC_EFS_MASK,
+ 				       cdev->mcfg[MRAM_TXE].num) |
+ 			    cdev->mcfg[MRAM_TXE].off);
++
++		/* Watermark interrupt mode */
++		if (txe_watermark)
++			interrupts &= ~IR_TEFN;
+ 	}
  
+ 	/* rx fifo configuration, blocking mode, fifo size 1 */
+@@ -1338,15 +1349,13 @@ static void m_can_chip_config(struct net_device *dev)
+ 
+ 	/* Enable interrupts */
+ 	m_can_write(cdev, M_CAN_IR, IR_ALL_INT);
+-	if (!(cdev->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING))
++	if (!(cdev->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING)) {
+ 		if (cdev->version == 30)
+-			m_can_write(cdev, M_CAN_IE, IR_ALL_INT &
+-				    ~(IR_ERR_LEC_30X));
++			interrupts &= ~(IR_ERR_LEC_30X);
+ 		else
+-			m_can_write(cdev, M_CAN_IE, IR_ALL_INT &
+-				    ~(IR_ERR_LEC_31X));
+-	else
+-		m_can_write(cdev, M_CAN_IE, IR_ALL_INT);
++			interrupts &= ~(IR_ERR_LEC_31X);
++	}
++	m_can_write(cdev, M_CAN_IE, interrupts);
+ 
+ 	/* route all interrupts to INT0 */
+ 	m_can_write(cdev, M_CAN_ILS, ILS_ALL_INT0);
 -- 
 2.38.1
 
