@@ -2,95 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0F2062BD7F
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:20:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AF1562BDC0
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:27:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238814AbiKPMUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 07:20:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35256 "EHLO
+        id S238117AbiKPM0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 07:26:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233610AbiKPMTN (ORCPT
+        with ESMTP id S233846AbiKPM02 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 07:19:13 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D20E824D
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 04:15:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668600903;
+        Wed, 16 Nov 2022 07:26:28 -0500
+X-Greylist: delayed 406 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 16 Nov 2022 04:22:47 PST
+Received: from mx.swemel.ru (mx.swemel.ru [95.143.211.150])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51982100B;
+        Wed, 16 Nov 2022 04:22:45 -0800 (PST)
+From:   Denis Arefev <arefev@swemel.ru>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=swemel.ru; s=mail;
+        t=1668600957;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=M5xy5cnF/duk7VrcsTyDcdzn9i/3nmmpMTSFAVYO+a0=;
-        b=GTQgBm0RcHOLa/XzfqYnbEwOPd0Qk9ddL8iPTYLi7PDeHyKlcCR5uRbJXTY4qoMZIcE0zh
-        0JH98b0Cc3Wc1wXDYcm+ygI3A4e7IO89JGQXoS33S6cxrckBXvZ9JziJul2b5T0pkjYahu
-        iuTdmP2kWIjsXx+LIoxIcyfy4+5b9gk=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-563-Di9W9ovmOXC8d3Aj66WJ7Q-1; Wed, 16 Nov 2022 07:14:56 -0500
-X-MC-Unique: Di9W9ovmOXC8d3Aj66WJ7Q-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 09E9D2999B45;
-        Wed, 16 Nov 2022 12:14:56 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D40E12166B29;
-        Wed, 16 Nov 2022 12:14:54 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <88b441af-d6ae-4d46-aae5-0b649e76031d@samba.org>
-References: <88b441af-d6ae-4d46-aae5-0b649e76031d@samba.org> <3609b064-175c-fc18-cd1a-e177d0349c58@samba.org> <166855224228.1998592.2212551359609792175.stgit@warthog.procyon.org.uk> <2147870.1668582019@warthog.procyon.org.uk>
-To:     Stefan Metzmacher <metze@samba.org>
-Cc:     dhowells@redhat.com, smfrench@gmail.com, tom@talpey.com,
-        Long Li <longli@microsoft.com>,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        linux-cifs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cifs: Fix problem with encrypted RDMA data read
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=blRdAMFznuYVK4JcJGOwO8LzBNymOBAcYfVJJpwIUoM=;
+        b=gBzlcTI6nym7tJE9ExdbmDk6+b/hkc3Wpxh6xroiQC4/E0QRvzFYJlwulGbiQWQqe6DfOb
+        oYx5fk/5wkXfwQUDcg6d/nF8oPgHcXtFUF2Xvr5ORQ4/Lek29rQGa1Sbl8PugFNFMk8j2P
+        UY3Qxh5RmBn2lRjeVJ/FZM81YLns7cU=
+To:     Trond Myklebust <trond.myklebust@hammerspace.com>
+Cc:     Anna Schumaker <anna.schumaker@netapp.com>,
+        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        trufanov@swemel.ru, vfh@swemel.ru
+Subject: [PATCH] fs: nfs: Added pointer check
+Date:   Wed, 16 Nov 2022 15:15:34 +0300
+Message-Id: <20221116121556.91060-1-arefev@swemel.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2780585.1668600891.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Wed, 16 Nov 2022 12:14:51 +0000
-Message-ID: <2780586.1668600891@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Stefan Metzmacher <metze@samba.org> wrote:
+Return value of a function 'xdr_inline_decode' is dereferenced at
+nfs4xdr.c:5540 without checking for null,
+ut it is usually checked for this function
 
-> > Stefan Metzmacher <metze@samba.org> wrote:
-> > =
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-> >> I'm not sure I understand why this would fix anything when encryption=
- is
-> >> enabled.
-> >>
-> >> Is the payload still be offloaded as plaintext? Otherwise we wouldn't=
- have
-> >> use_rdma_mr...  So this rather looks like a fix for the non encrypted=
- case.
-> > The "inline"[*] PDUs are encrypted, but the direct RDMA data transmiss=
-ion is
-> > not.  I'm not sure if this is a bug in ksmbd.
-> =
+Signed-off-by: Denis Arefev <arefev@swemel.ru>
+---
+ fs/nfs/nfs4xdr.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> It's a bug in the client!
-
-Well, if you can fix it the right way, I can test the patch.  I'm not sure
-what that would be if not what I suggested.
-
-David
+diff --git a/fs/nfs/nfs4xdr.c b/fs/nfs/nfs4xdr.c
+index c6dbfcae7517..571cc63ecb61 100644
+--- a/fs/nfs/nfs4xdr.c
++++ b/fs/nfs/nfs4xdr.c
+@@ -5533,6 +5533,8 @@ static int decode_op_map(struct xdr_stream *xdr, struct nfs4_op_map *op_map)
+ 	if (bitmap_words > NFS4_OP_MAP_NUM_WORDS)
+ 		return -EIO;
+ 	p = xdr_inline_decode(xdr, 4 * bitmap_words);
++	if (!p)
++		return -EIO;
+ 	for (i = 0; i < bitmap_words; i++)
+ 		op_map->u.words[i] = be32_to_cpup(p++);
+ 
+-- 
+2.25.1
 
