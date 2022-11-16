@@ -2,77 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D976562C8DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 20:19:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D66FD62C8E6
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 20:23:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233680AbiKPTTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 14:19:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40056 "EHLO
+        id S233959AbiKPTXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 14:23:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiKPTTp (ORCPT
+        with ESMTP id S233358AbiKPTXe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 14:19:45 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59429B25;
-        Wed, 16 Nov 2022 11:19:44 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id t25so46501796ejb.8;
-        Wed, 16 Nov 2022 11:19:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=fOujtQz6+wf4Ba1lHWvXdamxzz2aNedCzblkE++nYRk=;
-        b=HXSKG6b3l6HULugaEkTF6TMsg5atCZTF/2XckaIFfNcWwupWj0uKZ5KKkHoMBMZYtP
-         xCLS+I12xE69rto/YcnH+vMVQhB02/6mJodELZdMuF7QO40zcY7JpTSD14CRsZfFJVks
-         DZnIaO2TzyiuzCwQsjIdddpcNmN7Tg2WVptiUyILCokzfaJvdEFQAFxFmHGb5eI+ZYPF
-         VsRrM1fS99DtcQwvVDcLETDqcpiVqR1L3KRBBfiuhwEmIVvSPZRQKivLxjS5CAC2bapg
-         95TwJvYvx1gyFMsQuUB1ibNvxh64lYV6GZXIML3Ux1pBXQKCYbPzEVK/4ku+pHgMcnv7
-         5qOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fOujtQz6+wf4Ba1lHWvXdamxzz2aNedCzblkE++nYRk=;
-        b=Ct9SWBHxrbzVVjZyNPU731XsxYMDsWdy/ZLRT9O1aU553aosqxIegZeUpGNnVHYN1q
-         MUVlGkF7kUFxfysABsqa9ghZXBklsmgK9zoowomB9F2UFzzf942lZHJeYAiPaMkTrTO4
-         1pGlGSGZJaTeNJD6Y0NxNPR4Cf+wNufJZQNBUPfFGXq0Nq/jvCR4Looq2Zg3rarchIsX
-         x3Xy5LulCHr+wAVWXpn3Hnizwwn6yuCwWhzrUKYayZlNNLetuntcNS8CB0X5QOB1vZ9d
-         Bl6t885d14mdVd7tGLEXgubOJChB8D5BKKWGkRfePT4aL5I1fwt0F8BrbUSnxZ9LiTkn
-         cXxg==
-X-Gm-Message-State: ANoB5pmK7ed7C1h8R7um/E/RnGMrzevgJgnt6TvN1sBn25k2EMTGIymC
-        ml7Rb2lnrJItszLMVQJ03YY=
-X-Google-Smtp-Source: AA0mqf4lbvIX7I0gLMXIWCUI8WEpWpEChOC4VWnGgRkK0xXoBZPPj+NzjGwIlJ73jxI68h990rKLZw==
-X-Received: by 2002:a17:906:a181:b0:79b:f7d6:c2aa with SMTP id s1-20020a170906a18100b0079bf7d6c2aamr18552104ejy.310.1668626382762;
-        Wed, 16 Nov 2022 11:19:42 -0800 (PST)
-Received: from pc638.lan ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id d12-20020a056402516c00b004589da5e5cesm7902090ede.41.2022.11.16.11.19.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 11:19:42 -0800 (PST)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc638.lan>
-Date:   Wed, 16 Nov 2022 20:19:40 +0100
-To:     paulmck@kernel.org, Joel Fernandes <joel@joelfernandes.org>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, paulmck@kernel.org,
-        rcu@vger.kernel.org
-Subject: Re: [PATCH v2] rcu/kfree: Do not request RCU when not needed
-Message-ID: <Y3U3zPzLMux8fpVY@pc638.lan>
-References: <20221109024758.2644936-1-joel@joelfernandes.org>
- <Y2z3Mb3u8bFZ12wY@pc636>
- <CAEXW_YSq89xzgyQ9Tdt1tCqz8VAfzb7kSXVZmnxDuJ65U0UZ3w@mail.gmail.com>
- <Y20EOinwcLSZHmXg@pc638.lan>
- <Y22ry4Q2OY2zovco@google.com>
- <Y3Iyka86FlUh9D1P@pc636>
- <CAEXW_YR8ycdF0Y80p2qKXQm3Qc+XA441jQZ3uiHk=TbaXngNkQ@mail.gmail.com>
- <Y3OPI/pWZ5jf4X9y@pc636>
+        Wed, 16 Nov 2022 14:23:34 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2071.outbound.protection.outlook.com [40.107.223.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05635F0B;
+        Wed, 16 Nov 2022 11:23:32 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Q71WwSuTEjgv9upXNXcJ6m47tjD/a6iOBhB90yNokAJDYLKbt4WTbsg8sdrD7HY/tGt/7nWl2kybiSQp/ZVefuQmJvgGTN59Z1i5mPsxkZvLhLSa1vvifFAShag1rmTdStTfg7NRDQG5pMFNoPxdlqQXfGMcLE/EQjr5eZQ84AHF2dvmVyt17zD+oBCZW0yQ7vicLZZGCZizScFzXsZCw4PPXWxkTKpb8/XlgupJUS4x2DA+N6RltGKgt5hWbTKpWBY0t/OVuBnNn/4JWnnS+Qp2ufBFGkEMqmjaFWdoGMD9E5voNPYZcYk67cRbjzLeh+Epx6spJ4WEvNytnkhuIA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DwRgLh0QIe+YimCwD6XlgHHT1WTGbVLveWajkaG5KNA=;
+ b=GsQoDBgCOIxSla19irR+D7Rm9Cw7pXPBEFdmy+kUi4s+G6EEGQzv7UYTZreUdk5z6OrRnX6GZ0/PbKpCT8V1iTzSo6OZIrIzlyg8coMdqtDSmftFZGG5wTmp9K490ekvBjC5hLq+6B4raDeskIhjx4sZjpBKO3VcX5ekJyhEhJJn/L82opL00PuRCCnoi3TULMnRc8tUtMlmrwujLTXG45l+F/DJDMLuCTncSbuF6gQwZB1Ph/Kgx2jCq0AKB5FR4+WdA/ksDpn+FKMyYrXDp1Te9Zpb6Y2E59cPbFA9nJkzsj/aWaAQWTWpw9XF8RiX4U7s8e4vDE2BXG7/rFIrfg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DwRgLh0QIe+YimCwD6XlgHHT1WTGbVLveWajkaG5KNA=;
+ b=jwtBvgo+RP/pK2iJOLiDrxrRTHtZt5QjYgKA4vSZGbln8FvtgyFqsoetT6f0RMUcLrHlP+wresPclqZxNQ/FCsIsY/jo2T3VEwMHwb4SSc4GXOA4GgpumbvLG0ZuY8VWj/ppl11bfxKhzsfWOFCwq/Rp9wQn9sakq+BSvItRoJE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from SN6PR12MB2767.namprd12.prod.outlook.com (2603:10b6:805:75::23)
+ by BL3PR12MB6524.namprd12.prod.outlook.com (2603:10b6:208:38c::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17; Wed, 16 Nov
+ 2022 19:23:29 +0000
+Received: from SN6PR12MB2767.namprd12.prod.outlook.com
+ ([fe80::395:21e6:abfd:7894]) by SN6PR12MB2767.namprd12.prod.outlook.com
+ ([fe80::395:21e6:abfd:7894%6]) with mapi id 15.20.5813.018; Wed, 16 Nov 2022
+ 19:23:29 +0000
+Message-ID: <a7b3ddb5-73ff-0560-1fa5-beb05864feee@amd.com>
+Date:   Wed, 16 Nov 2022 13:23:23 -0600
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+Subject: Re: [PATCH Part2 v6 14/49] crypto: ccp: Handle the legacy TMR
+ allocation when SNP is enabled
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Vlastimil Babka <vbabka@suse.cz>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
+        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
+        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
+        michael.roth@amd.com, kirill@shutemov.name, ak@linux.intel.com,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, jarkko@kernel.org,
+        "Kaplan, David" <David.Kaplan@amd.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Oscar Salvador <osalvador@suse.de>
+References: <c2ce6317-aa51-2a2b-2d75-ad1fd269f3fa@amd.com>
+ <7882353e-2b13-d35a-b462-cef35ee56f51@suse.cz>
+ <5b27a05e-09ad-9139-67b1-77b90731419f@amd.com>
+ <9d9f1afe-c981-4df9-f012-89c4cb783cc3@amd.com>
+ <973c6f79-38ad-aa30-bfec-c2a1c7db5d70@suse.cz>
+ <8692e736-7518-d6d2-ae83-720e42e7a059@amd.com>
+ <41b8c83e-2a1a-1dda-945e-99329ca8e7e9@suse.cz>
+ <711e6027-1b4f-4aed-47a6-305396d05893@amd.com> <Y3Us9wSX9DrWqCyq@zn.tnic>
+ <834d41e7-44f8-53f9-a1fa-0cdb5aaff30f@amd.com> <Y3U1VJdC77CfniJj@zn.tnic>
+From:   "Kalra, Ashish" <ashish.kalra@amd.com>
+In-Reply-To: <Y3U1VJdC77CfniJj@zn.tnic>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CH2PR05CA0072.namprd05.prod.outlook.com
+ (2603:10b6:610:38::49) To SN6PR12MB2767.namprd12.prod.outlook.com
+ (2603:10b6:805:75::23)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y3OPI/pWZ5jf4X9y@pc636>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR12MB2767:EE_|BL3PR12MB6524:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5e03829a-03c4-4353-1832-08dac8080ad4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: WSzAwKJk0jRm+idy4ex6OXJBCnwu5sPfF7wAl8HgmXNMhLKxLy/ARKiT3P0VDx0PS+oM4ySe4neBeDPLpvOSOmudpZ3EnHBCsV0nh3NlHv9NQ149GlYySil/BNCxkWb0S7AHc/kFc2NKQ9BPXo64YluTqwzb9rgpQb1FuIL5igAsYQWR7hNseVBewbrP6KY7Pqi5CODGHG0cFn/eO4nKAhREn+eL34jWRhiKmtF9IoTizf7aYDWgcTBiDrgTx/2WpSrdIIB5Cro8CfeuImRXoKsjXliZU01M7JLWmIto5qH4BdGhP4I9KPPHJnqG+DcVbyozMnVdEFIOdFzsMPj4ujoh6zEktSLzMQjpRt0ejYN0vxduxJqkQhMsra0PgZ6vaoHgrjra/WDe6zeCvZ3OkFGLCoHRMjw+uLSiZLEJuNzc3bhyFFzHdWF1jeNZkH5SdLSSnIfAaxYhvb8q805PBGdy20ImlxThvG30DoOqX68LjFQMbEPunJnoyzvuyVHkR4Hp+mo5c3KYIwAQqEGMaCMlxodiAba7byLxz+RaNecmzrJiWsNTSmtBnInfBTsx30POFBncDrVrHrPm3fJnPtkBw9Fd2QPqCiNnJ9/QCUWJ8TUBMu6uGxrqmx3pacZg2eNwp85oLq7PdPRHJyTXsktPZ/IMi+5GiQDXJySRB3+E7MTSx8tnIC/D94tgbtPoD+TyeYv7liFRhJKy8XV/Mlzga7aQ1hwf6NOMjm8xyMOqguZvF2qH/2miVjcGMHK4oaQxBT6dWa4lKqiBHFxaNhSVINOnLvLUGZ4d1D/ncEI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2767.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(366004)(346002)(396003)(39860400002)(376002)(451199015)(38100700002)(86362001)(41300700001)(6512007)(31696002)(4744005)(6486002)(478600001)(7416002)(316002)(66476007)(66946007)(4326008)(8676002)(8936002)(54906003)(6666004)(7406005)(6916009)(66556008)(186003)(53546011)(2616005)(6506007)(2906002)(5660300002)(26005)(36756003)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?em5qQ2gzVnMzUWJvSXBUNjRGNXdhSTEvYkJ4MVo3Q05rK2M3VC9qY2Zsb0lt?=
+ =?utf-8?B?MkN1S0lsTlQ0eERzMmtRS2xydzdjN1NWOHY0YXFYb0JXdEpZVnpPREtNQUNF?=
+ =?utf-8?B?MTlIbFJLZ0pTQ3lhbjV4aTlESVYrc0NQUzhmSmJ5b2I4ajJiSjkwT1dDdFND?=
+ =?utf-8?B?eElVU3k0ZGdQc2dSLzJHb1JvblJNOWk5TTlGbE1saGFSYndMa2c3cGtlVDdN?=
+ =?utf-8?B?R0wxZkNaKzg5YS9vMndiUS9hSCtBTUN5WEFMWFZ3aFBoaHZjMEtQUEpPRFBF?=
+ =?utf-8?B?cEZ3dHRGeGkxb0NGMVZ0OFBoMUVZcWpKZzNhSEJSajY0eXBOVVBXdlNMQkYw?=
+ =?utf-8?B?SXJLdm1HQUpFckp2NkdGYUpIQ1pxVHRWZmVIeDN4bTRndnhwMXNRbkxCZ2Ra?=
+ =?utf-8?B?TWY3SmRiNnZCeExoN3JVUG1oMFRERExUTEhaRGxDbmxieHlHQnpGeUlPNkhD?=
+ =?utf-8?B?NVRCaWJmNDRUTEcvN29uU1h4S2RPeWdnV2FOaS91SGRKTllxWEdxWTkzZk1y?=
+ =?utf-8?B?aWVyVlhna2RmcGQrbmp6UzIzR3htQ1g1R05EbFBsc1BGT2grY0U0ZFhZVUxG?=
+ =?utf-8?B?NERGcVVHWU83L2Qyd2YycDFHNFdoZjZpRXlpMW1FV2JFMFJkekJqeWtCZkVv?=
+ =?utf-8?B?WWxLK3NpVkVXVlFPSXpoT2VtYU5mc0d0S0RLUHFGV3c4MWdDc0o0eVgwZk15?=
+ =?utf-8?B?ay9xODdSaVVYNXRMM1VrV0dlaGhZQWU5QVVERkpzWldqL0dKbGdReVJJZXFG?=
+ =?utf-8?B?cEIrMWhqaVZLUVp0UWdaaUlvK05aRXZBc1l6V2hVQ2NiSGxyWW9VY3Eyc05C?=
+ =?utf-8?B?VnEzWE80c1ZzaFUveG5Md0doaG82OWdwaTB4YzBIeU9YMCs5TkxDVUtHMUYr?=
+ =?utf-8?B?S3NyV3FGL2hBWHFHcWpwZnUydS93YlhuS3VLT2oxNVJ2S20wRE9mQlFLV250?=
+ =?utf-8?B?VnVNS3dqajg4TmV6Z2t3ZFV4UUZOalI1ck1EOEN0TE5SM0NVWHRtYk1TdTM5?=
+ =?utf-8?B?UG5hQlgzbGR6c2VkMFk5OGZEc2VCekxURlZiRGwyc3lvUklEaXIvb0pnRGU2?=
+ =?utf-8?B?aWR1c1RiMTJxei94ZXJXM0ppdy9EZ0VzYytiazR6T0V1YzYwekRvZ1lGK3JP?=
+ =?utf-8?B?UzZxSXNJaDlLMGErQnpVOTl4N2NpejRDbllDSVNrVTJBT2c5OG9GYXNGWGdo?=
+ =?utf-8?B?UUE1VnJhTUxoTGxuYW5lVzFFYmdSZi9xeENDeGcwQUF3SzRyWU04RVRzQU43?=
+ =?utf-8?B?ZStVNUN1UXF6NDlhYjl5QVZEdVkwZVUxT2lweDJIN0NMSWcranMzK1pDUW53?=
+ =?utf-8?B?dTNsMzM1Wi9kajdMalEyeTN4OFBjalZ6WGpCUElBYXJCZ005MjZuNHNlNVhq?=
+ =?utf-8?B?NFpBRTdnZkxFUHNENHFGOFhHL25mV2N4L2VRb1F0ZzVwV0NvWStKRmI0ZWpm?=
+ =?utf-8?B?TklMSXlqUzFxVExteTRhc2cxeS9yNDBUMktLc0U1REk4cXBHL1cwdDBLT1BG?=
+ =?utf-8?B?dkpJcXhGVElhOVRoOEFvRWZWUmUzRm9Pb05HcnZYWU1WYjREaDhmalpCYU00?=
+ =?utf-8?B?VUZOWFU2UmVieUlrZm1haUhwaUZDZEM2dUVlOFdqMEtUanRrMW9TR3J4bDdD?=
+ =?utf-8?B?WVJ4NXErM0l2STM3NHNlc0J2a3VhVXpwNXlTSnpqaXhsWEgxb2d0MXEvK2I5?=
+ =?utf-8?B?N0t4YjExSWUvTEZ3WTFNWFBkc3FCc1JYZVFjSkNsRHQ1WlZ6L21kMUZwc1p1?=
+ =?utf-8?B?YVR1MlZJbjI2SVhPcVlVSlhYN1laTDBPQTJzLytPZ1VmMkt3WUNVMXFHTi9o?=
+ =?utf-8?B?YW5GWGMxeXR5UUd0NGlWSWowMjFKKzRtZlZ4cFlCR0N1SGhMdmJqU3p2VDFa?=
+ =?utf-8?B?MHJNYzdkTWIvVVJvYjJXZEEyQ2JsN2Vza1lydmZPN0phQU1tSHJBcitYSi96?=
+ =?utf-8?B?ZXUrSTg5akJDTzFPQ1VPVG9VUTA3M0xpYWRheU53MDM2NjZESFRDSWl4K1Zk?=
+ =?utf-8?B?Q0JuS3pZdEM4czhQbXkzcURJZ1BxeEE2UXZrdFhtK2lYZ2JCWkFHMVRYT1dV?=
+ =?utf-8?B?SnJsbldVT1NHS0VyNktkNldsZkNXSEpjWG1VT0xYYjc0UTgxdEpPdlRMTFRa?=
+ =?utf-8?Q?RDCtLt1wQZLYYMNA5qXTrA//G?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5e03829a-03c4-4353-1832-08dac8080ad4
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2767.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Nov 2022 19:23:29.5655
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /5zC6vTiGpS7u5pOu774azGJg/w1tNGLoEko0u7HVGpWcmqup0Xck+TutkdXs8+1MCTbrUJVeUGW9oqoNAqgbA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6524
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,374 +149,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, Paul, Joel.
-
-> > 
-> > Yes sure, I am doing a run now with my patch. However, I have a
-> > question -- why do you feel blocking in the kworker is not an issue?
-> > You are taking a snapshot before queuing the normal kwork and then
-> > reading the snapshot when the normal kwork runs. Considering it is a
-> > high priority queue, the delay between when you are taking the
-> > snapshot, and reading it is likely small so there is a bigger chance
-> > of blocking in cond_synchronize_rcu(). Did I miss something?
-> > 
-> We can wait indeed in the reclaim worker. But the worker does not do any
-> nasty or extra work here. If there is a need we block and wait. After a
-> grace period, we are awoken and proceed.
+On 11/16/2022 1:09 PM, Borislav Petkov wrote:
+> On Wed, Nov 16, 2022 at 12:53:36PM -0600, Kalra, Ashish wrote:
+>> Actually, these host allocated pages would have already been removed from
+>> the kernel direct map,
 > 
-> Therefore i do not see the reason in handling two cases:
-> 
-> if (gp_done)
->     queue_work();
-> else
->     queue_rcu_work();
-> 
-> it is the same if we just queue the work and check on entry. The current
-> scenario is: queue the work after a grace period. This is the difference.
-> 
-> Right if the reclaimer was a high prio kthread a time would be shorter. 
-> 
-> In your scenario the time seems even shorter(i have not checked) because
-> you update a snapshot of krcp each time a kvfree_rcu() is invoked. So
-> basically even though you have objects whose grace period is passed you
-> do not separate it anyhow. Because you update the:
-> 
-> krcp->gp_snap = get_state_synchronize_rcu();
-> 
-> too often.
-> 
-Once upon a time we discussed that it is worth to keep track of GP
-per-a-page in order to reduce a memory footprint. Below patch addresses
-it:
+> And, as I said above, it would be a lot easier to handle any potential
+> faults resulting from the host touching them by having it raise a *RMP*
+> fault instead of normal *PF* fault where the latter code is a crazy mess.
 
-<snip>
-From 76fc6a1398f22341758edcd9aa911127e0cf5129 Mon Sep 17 00:00:00 2001
-From: "Uladzislau Rezki (Sony)" <urezki@gmail.com>
-Date: Wed, 2 Nov 2022 19:26:27 +0100
-Subject: [PATCH v3 1/1] rcu: kvfree_rcu: Reduce a memory footptint by using
- polling APIs
+Just to reiterate here, we won't be getting a *RMP* fault but will 
+instead get a normal (not-present) #PF fault when the host touches these 
+pages.
 
-Total time taken by all kfree'ers: 6564718459 ns, loops: 10000, batches: 1110, memory footprint: 5057MB
-Total time taken by all kfree'ers: 8431051895 ns, loops: 10000, batches: 1109, memory footprint: 2749MB
-Total time taken by all kfree'ers: 9477830789 ns, loops: 10000, batches: 1158, memory footprint: 2934MB
-Total time taken by all kfree'ers: 9950211144 ns, loops: 10000, batches: 981, memory footprint: 2704MB
+Sorry for any confusion about the fault signaled, earlier i mentioned we 
+will get a RMP violation #PF, but actually as these pages are also 
+removed from the kernel direct-map, therefore, we will get the 
+not-present #PF and not the RMP #PF (core will check and signal 
+not-present #PF before it performs the RMP checks).
 
-with a patch:
+Thanks,
+Ashish
 
-Total time taken by all kfree'ers: 7712110118 ns, loops: 10000, batches: 1660, memory footprint: 91MB
-Total time taken by all kfree'ers: 7002403664 ns, loops: 10000, batches: 1482, memory footprint: 86MB
-Total time taken by all kfree'ers: 7842282319 ns, loops: 10000, batches: 1738, memory footprint: 86MB
-Total time taken by all kfree'ers: 7230161977 ns, loops: 10000, batches: 1542, memory footprint: 72MB
-
-Tested with NOCB option, all offloading CPUs:
-
-kvm.sh --memory 10G --torture rcuscale --allcpus --duration 1 \
-  --kconfig CONFIG_NR_CPUS=64 \
-  --kconfig CONFIG_RCU_NOCB_CPU=y \
-  --kconfig CONFIG_RCU_NOCB_CPU_DEFAULT_ALL=y \
-  --bootargs "rcuscale.kfree_rcu_test=1 rcuscale.kfree_nthreads=16 \
-  rcuscale.holdoff=20 rcuscale.kfree_loops=10000 torture.disable_onoff_at_boot" --trust-make
-
-According to data there is a big gain in memory footprint with a patch.
-It is because of call_rcu() and call_rcu_flush() take more effort and
-time to queue a callback and then wait for a gp.
-
-With polling API:
-  a) we do not need to queue any callback;
-  b) we might not even need wait for a GP completion.
-
-Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
----
- kernel/rcu/tree.c | 115 +++++++++++++++++++++++++++-------------------
- 1 file changed, 67 insertions(+), 48 deletions(-)
-
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index 76973d716921..6a1f66dd5f09 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -2900,13 +2900,16 @@ EXPORT_SYMBOL_GPL(call_rcu);
- 
- /**
-  * struct kvfree_rcu_bulk_data - single block to store kvfree_rcu() pointers
-+ * @gp_snap: Snapshot of current GP for objects in a page
-  * @nr_records: Number of active pointers in the array
-+ * @list: Page list
-  * @next: Next bulk object in the block chain
-  * @records: Array of the kvfree_rcu() pointers
-  */
- struct kvfree_rcu_bulk_data {
-+	unsigned long gp_snap;
- 	unsigned long nr_records;
--	struct kvfree_rcu_bulk_data *next;
-+	struct list_head list;
- 	void *records[];
- };
- 
-@@ -2919,24 +2922,26 @@ struct kvfree_rcu_bulk_data {
- 	((PAGE_SIZE - sizeof(struct kvfree_rcu_bulk_data)) / sizeof(void *))
- 
- /**
-+ * @rcu_work: A work to reclaim a memory after a grace period
-  * struct kfree_rcu_cpu_work - single batch of kfree_rcu() requests
-- * @rcu_work: Let queue_rcu_work() invoke workqueue handler after grace period
-  * @head_free: List of kfree_rcu() objects waiting for a grace period
-- * @bkvhead_free: Bulk-List of kvfree_rcu() objects waiting for a grace period
-+ * @head_free_gp_snap: Snapshot of current GP for "@head_free" objects
-  * @krcp: Pointer to @kfree_rcu_cpu structure
-  */
- 
- struct kfree_rcu_cpu_work {
--	struct rcu_work rcu_work;
-+	struct work_struct rcu_work;
- 	struct rcu_head *head_free;
--	struct kvfree_rcu_bulk_data *bkvhead_free[FREE_N_CHANNELS];
-+	unsigned long head_free_gp_snap;
-+
-+	struct list_head page_free_head[FREE_N_CHANNELS];
- 	struct kfree_rcu_cpu *krcp;
- };
- 
- /**
-  * struct kfree_rcu_cpu - batch up kfree_rcu() requests for RCU grace period
-  * @head: List of kfree_rcu() objects not yet waiting for a grace period
-- * @bkvhead: Bulk-List of kvfree_rcu() objects not yet waiting for a grace period
-+ * @page_head: Bulk-List of kvfree_rcu() objects not yet waiting for a grace period
-  * @krw_arr: Array of batches of kfree_rcu() objects waiting for a grace period
-  * @lock: Synchronize access to this structure
-  * @monitor_work: Promote @head to @head_free after KFREE_DRAIN_JIFFIES
-@@ -2960,7 +2965,7 @@ struct kfree_rcu_cpu_work {
-  */
- struct kfree_rcu_cpu {
- 	struct rcu_head *head;
--	struct kvfree_rcu_bulk_data *bkvhead[FREE_N_CHANNELS];
-+	struct list_head page_head[FREE_N_CHANNELS];
- 	struct kfree_rcu_cpu_work krw_arr[KFREE_N_BATCHES];
- 	raw_spinlock_t lock;
- 	struct delayed_work monitor_work;
-@@ -3060,60 +3065,62 @@ drain_page_cache(struct kfree_rcu_cpu *krcp)
- static void kfree_rcu_work(struct work_struct *work)
- {
- 	unsigned long flags;
--	struct kvfree_rcu_bulk_data *bkvhead[FREE_N_CHANNELS], *bnext;
-+	struct kvfree_rcu_bulk_data *page, *n;
-+	struct list_head local_page_head[FREE_N_CHANNELS];
- 	struct rcu_head *head, *next;
- 	struct kfree_rcu_cpu *krcp;
- 	struct kfree_rcu_cpu_work *krwp;
-+	unsigned long head_free_gp_snap;
- 	int i, j;
- 
--	krwp = container_of(to_rcu_work(work),
--			    struct kfree_rcu_cpu_work, rcu_work);
-+	krwp = container_of(work,
-+		struct kfree_rcu_cpu_work, rcu_work);
- 	krcp = krwp->krcp;
- 
- 	raw_spin_lock_irqsave(&krcp->lock, flags);
- 	// Channels 1 and 2.
--	for (i = 0; i < FREE_N_CHANNELS; i++) {
--		bkvhead[i] = krwp->bkvhead_free[i];
--		krwp->bkvhead_free[i] = NULL;
--	}
-+	for (i = 0; i < FREE_N_CHANNELS; i++)
-+		// Initialized or empty it does not matter just replace.
-+		list_replace_init(&krwp->page_free_head[i], &local_page_head[i]);
- 
- 	// Channel 3.
- 	head = krwp->head_free;
- 	krwp->head_free = NULL;
-+
-+	head_free_gp_snap = krwp->head_free_gp_snap;
- 	raw_spin_unlock_irqrestore(&krcp->lock, flags);
- 
- 	// Handle the first two channels.
- 	for (i = 0; i < FREE_N_CHANNELS; i++) {
--		for (; bkvhead[i]; bkvhead[i] = bnext) {
--			bnext = bkvhead[i]->next;
--			debug_rcu_bhead_unqueue(bkvhead[i]);
-+		// Start from the tail page, so a GP is likely passed for it.
-+		list_for_each_entry_safe_reverse(page, n, &local_page_head[i], list) {
-+			cond_synchronize_rcu(page->gp_snap);
-+			debug_rcu_bhead_unqueue(page);
- 
- 			rcu_lock_acquire(&rcu_callback_map);
- 			if (i == 0) { // kmalloc() / kfree().
- 				trace_rcu_invoke_kfree_bulk_callback(
--					rcu_state.name, bkvhead[i]->nr_records,
--					bkvhead[i]->records);
-+					rcu_state.name, page->nr_records,
-+					page->records);
- 
--				kfree_bulk(bkvhead[i]->nr_records,
--					bkvhead[i]->records);
-+				kfree_bulk(page->nr_records, page->records);
- 			} else { // vmalloc() / vfree().
--				for (j = 0; j < bkvhead[i]->nr_records; j++) {
-+				for (j = 0; j < page->nr_records; j++) {
- 					trace_rcu_invoke_kvfree_callback(
--						rcu_state.name,
--						bkvhead[i]->records[j], 0);
-+						rcu_state.name, page->records[j], 0);
- 
--					vfree(bkvhead[i]->records[j]);
-+					vfree(page->records[j]);
- 				}
- 			}
- 			rcu_lock_release(&rcu_callback_map);
- 
- 			raw_spin_lock_irqsave(&krcp->lock, flags);
--			if (put_cached_bnode(krcp, bkvhead[i]))
--				bkvhead[i] = NULL;
-+			if (put_cached_bnode(krcp, page))
-+				page = NULL;
- 			raw_spin_unlock_irqrestore(&krcp->lock, flags);
- 
--			if (bkvhead[i])
--				free_page((unsigned long) bkvhead[i]);
-+			if (page)
-+				free_page((unsigned long) page);
- 
- 			cond_resched_tasks_rcu_qs();
- 		}
-@@ -3126,6 +3133,9 @@ static void kfree_rcu_work(struct work_struct *work)
- 	 * queued on a linked list through their rcu_head structures.
- 	 * This list is named "Channel 3".
- 	 */
-+	if (head)
-+		cond_synchronize_rcu(head_free_gp_snap);
-+
- 	for (; head; head = next) {
- 		unsigned long offset = (unsigned long)head->func;
- 		void *ptr = (void *)head - offset;
-@@ -3149,7 +3159,7 @@ need_offload_krc(struct kfree_rcu_cpu *krcp)
- 	int i;
- 
- 	for (i = 0; i < FREE_N_CHANNELS; i++)
--		if (krcp->bkvhead[i])
-+		if (!list_empty(&krcp->page_head[i]))
- 			return true;
- 
- 	return !!krcp->head;
-@@ -3191,16 +3201,15 @@ static void kfree_rcu_monitor(struct work_struct *work)
- 		// a previous RCU batch is in progress, it means that
- 		// immediately to queue another one is not possible so
- 		// in that case the monitor work is rearmed.
--		if ((krcp->bkvhead[0] && !krwp->bkvhead_free[0]) ||
--			(krcp->bkvhead[1] && !krwp->bkvhead_free[1]) ||
-+		if ((!list_empty(&krcp->page_head[0]) && list_empty(&krwp->page_free_head[0])) ||
-+			(!list_empty(&krcp->page_head[1]) && list_empty(&krwp->page_free_head[1])) ||
- 				(krcp->head && !krwp->head_free)) {
-+
- 			// Channel 1 corresponds to the SLAB-pointer bulk path.
- 			// Channel 2 corresponds to vmalloc-pointer bulk path.
- 			for (j = 0; j < FREE_N_CHANNELS; j++) {
--				if (!krwp->bkvhead_free[j]) {
--					krwp->bkvhead_free[j] = krcp->bkvhead[j];
--					krcp->bkvhead[j] = NULL;
--				}
-+				if (list_empty(&krwp->page_free_head[j]))
-+					list_replace_init(&krcp->page_head[j], &krwp->page_free_head[j]);
- 			}
- 
- 			// Channel 3 corresponds to both SLAB and vmalloc
-@@ -3208,6 +3217,11 @@ static void kfree_rcu_monitor(struct work_struct *work)
- 			if (!krwp->head_free) {
- 				krwp->head_free = krcp->head;
- 				krcp->head = NULL;
-+
-+				// Take a snapshot for this krwp. Please note no more
-+				// any objects can be added to attached head_free channel
-+				// therefore fixate a GP for it here.
-+				krwp->head_free_gp_snap = get_state_synchronize_rcu();
- 			}
- 
- 			WRITE_ONCE(krcp->count, 0);
-@@ -3217,7 +3231,7 @@ static void kfree_rcu_monitor(struct work_struct *work)
- 			// be that the work is in the pending state when
- 			// channels have been detached following by each
- 			// other.
--			queue_rcu_work(system_wq, &krwp->rcu_work);
-+			queue_work(system_wq, &krwp->rcu_work);
- 		}
- 	}
- 
-@@ -3312,10 +3326,11 @@ add_ptr_to_bulk_krc_lock(struct kfree_rcu_cpu **krcp,
- 		return false;
- 
- 	idx = !!is_vmalloc_addr(ptr);
-+	bnode = list_first_entry_or_null(&(*krcp)->page_head[idx],
-+		struct kvfree_rcu_bulk_data, list);
- 
- 	/* Check if a new block is required. */
--	if (!(*krcp)->bkvhead[idx] ||
--			(*krcp)->bkvhead[idx]->nr_records == KVFREE_BULK_MAX_ENTR) {
-+	if (!bnode || bnode->nr_records == KVFREE_BULK_MAX_ENTR) {
- 		bnode = get_cached_bnode(*krcp);
- 		if (!bnode && can_alloc) {
- 			krc_this_cpu_unlock(*krcp, *flags);
-@@ -3339,18 +3354,16 @@ add_ptr_to_bulk_krc_lock(struct kfree_rcu_cpu **krcp,
- 		if (!bnode)
- 			return false;
- 
--		/* Initialize the new block. */
-+		/* Initialize a new block. */
- 		bnode->nr_records = 0;
--		bnode->next = (*krcp)->bkvhead[idx];
--
--		/* Attach it to the head. */
--		(*krcp)->bkvhead[idx] = bnode;
-+		list_add(&bnode->list, &(*krcp)->page_head[idx]);
- 	}
- 
- 	/* Finally insert. */
--	(*krcp)->bkvhead[idx]->records
--		[(*krcp)->bkvhead[idx]->nr_records++] = ptr;
-+	bnode->records[bnode->nr_records++] = ptr;
- 
-+	/* Keep updated a GP status of this page. */
-+	bnode->gp_snap = get_state_synchronize_rcu();
- 	return true;
- }
- 
-@@ -4790,7 +4803,7 @@ struct workqueue_struct *rcu_gp_wq;
- static void __init kfree_rcu_batch_init(void)
- {
- 	int cpu;
--	int i;
-+	int i, j;
- 
- 	/* Clamp it to [0:100] seconds interval. */
- 	if (rcu_delay_page_cache_fill_msec < 0 ||
-@@ -4808,10 +4821,16 @@ static void __init kfree_rcu_batch_init(void)
- 		struct kfree_rcu_cpu *krcp = per_cpu_ptr(&krc, cpu);
- 
- 		for (i = 0; i < KFREE_N_BATCHES; i++) {
--			INIT_RCU_WORK(&krcp->krw_arr[i].rcu_work, kfree_rcu_work);
-+			INIT_WORK(&krcp->krw_arr[i].rcu_work, kfree_rcu_work);
- 			krcp->krw_arr[i].krcp = krcp;
-+
-+			for (j = 0; j < FREE_N_CHANNELS; j++)
-+				INIT_LIST_HEAD(&krcp->krw_arr[i].page_free_head[j]);
- 		}
- 
-+		for (i = 0; i < FREE_N_CHANNELS; i++)
-+			INIT_LIST_HEAD(&krcp->page_head[i]);
-+
- 		INIT_DELAYED_WORK(&krcp->monitor_work, kfree_rcu_monitor);
- 		INIT_DELAYED_WORK(&krcp->page_cache_work, fill_page_cache_func);
- 		krcp->initialized = true;
--- 
-2.30.2
-<snip>
-
-it is pretty simple. It does the following:
-
-1) A GP status is sampled per a page that drives pointers;
-2) Reclaim is done in reverse order because an oldest page more likely passed its GP;
-3) Returning a memory occurs faster thus it reduces a memory footprint;
-4) Improves readability of the code.
-
-Any inputs? I will test and check on our devices with real workloads.
-
---
-Uladzislau Rezki
