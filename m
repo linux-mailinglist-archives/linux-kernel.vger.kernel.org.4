@@ -2,159 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 102F562B70E
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:58:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0AD662B70D
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:58:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232053AbiKPJ6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 04:58:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40036 "EHLO
+        id S232019AbiKPJ56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 04:57:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231345AbiKPJ5w (ORCPT
+        with ESMTP id S230113AbiKPJ5u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 04:57:52 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6B38723BD5;
-        Wed, 16 Nov 2022 01:57:50 -0800 (PST)
-Received: from loongson.cn (unknown [10.20.42.77])
-        by gateway (Coremail) with SMTP id _____8DxndodtHRjwb0HAA--.22737S3;
-        Wed, 16 Nov 2022 17:57:49 +0800 (CST)
-Received: from [10.20.42.77] (unknown [10.20.42.77])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxLeAatHRjIcAUAA--.54855S3;
-        Wed, 16 Nov 2022 17:57:47 +0800 (CST)
-Subject: Re: [PATCH V5] PCI: loongson: Skip scanning unavailable child devices
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>,
-        wanghongliang <wanghongliang@loongson.cn>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221114171103.GA917836@bhelgaas>
-From:   Liu Peibao <liupeibao@loongson.cn>
-Message-ID: <bdf78e6a-3be9-2b5c-ac57-9df8341a2fcc@loongson.cn>
-Date:   Wed, 16 Nov 2022 17:57:46 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Wed, 16 Nov 2022 04:57:50 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6699175B0;
+        Wed, 16 Nov 2022 01:57:49 -0800 (PST)
+Date:   Wed, 16 Nov 2022 09:57:46 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1668592667;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/BB+ucvWV0kFUPadADn4TTS4/yULan76KkzlFoRsm0Q=;
+        b=4RFgpdOVjQRrzw5QqeItJWa3vp+Jl952HXbXFQBRDbwHwvpSQyZPlzBOvK0AdcIBD5sRWm
+        A2vlpVGcjqRDNNCjtgtmEwwq2DcMbv3U+1xWWrn5+1L4HcvyDv8ygq+gUO3BOZU78vjwDk
+        3X2rA+Uh+APDdC2INPI+8qkOQggQTFWW5NGe4PKy3ruoI81OfnZJZjIFBbmbD6T4WPbXi8
+        KizvqU4O6dkACs6ZtfqESpc/nDEzvmFlpuAC+OHTOzdpVL3PjwMEpu2BCFR8BnDnc46bIu
+        /FQXzFOMncUPeERYaV16LM/VtLixeIfATbtrFjaLFWknkmlMU8DmBcDES85fHQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1668592667;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/BB+ucvWV0kFUPadADn4TTS4/yULan76KkzlFoRsm0Q=;
+        b=z+1dUe97sEOWLw/cegGzba+3BTH6AeeymeXuLjEC06H5XKj65i4zOAyqUoxihVZIoifen3
+        o6paqU+yJCdKh3AA==
+From:   "tip-bot2 for Srikar Dronamraju" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: objtool/urgent] scripts/faddr2line: Fix regression in name
+ resolution on ppc64le
+Cc:     Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220927075211.897152-1-srikar@linux.vnet.ibm.com>
+References: <20220927075211.897152-1-srikar@linux.vnet.ibm.com>
 MIME-Version: 1.0
-In-Reply-To: <20221114171103.GA917836@bhelgaas>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Message-ID: <166859266638.4906.8897216149530448372.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8DxLeAatHRjIcAUAA--.54855S3
-X-CM-SenderInfo: xolx1vpled0qxorr0wxvrqhubq/1tbiAQAMCmNzgWVJUwAAsp
-X-Coremail-Antispam: 1Uk129KBjvJXoWxZF15uw17XFW5Zr4DCw4DArb_yoW5ZF1xpF
-        W3KFW8tr1DGr929wnFgw43ury7Aws7Zws5Gr1kCr12k3Z8WryaqrWxJF15Xay3XF1fXFWa
-        vFWjqryktay5ZaUanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bDAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kK
-        e7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
-        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280
-        aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2
-        xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC
-        6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
-        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF
-        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0x
-        vE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
-        6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jOiSdUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/15/22 1:11 AM, Bjorn Helgaas wrote:
-> Hi Liu,
-> 
-> On Mon, Nov 14, 2022 at 03:43:46PM +0800, Liu Peibao wrote:
->> The PCI Controller of 2K1000 could not mask devices by setting vender ID or
->> device ID in configuration space header as invalid values.
-> 
-> I don't think this 2K1000 information is really relevant.  I
-> understand that some chipsets might support this, and they might use
-> that to avoid this issue, but there's no PCI requirement that the
-> Vendor/Device ID be writable by anything.
-> 
+The following commit has been merged into the objtool/urgent branch of tip:
 
-OK, I think I got it.
+Commit-ID:     2d77de1581bb5b470486edaf17a7d70151131afd
+Gitweb:        https://git.kernel.org/tip/2d77de1581bb5b470486edaf17a7d70151131afd
+Author:        Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+AuthorDate:    Tue, 27 Sep 2022 13:22:11 +05:30
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Wed, 16 Nov 2022 10:42:10 +01:00
 
->> When there are
->> pins shareable between the platform device and the on chip PCI device, if
-> 
-> What does "pins shareable between the platform device and the on chip
-> PCI device" mean?
-> 
-> I assume there's a single device in the hardware, and both the
-> "platform device" and the PCI device" refer to that single device?
-> 
-> And there's some reason you prefer to use the platform device
-> interface to enumerate that device?
-> 
+scripts/faddr2line: Fix regression in name resolution on ppc64le
 
-No, they are not the same device. For example, GMAC1(on chip PCI device) and
-GPIO(platform device, not PCI device) 14 use the same pin. The function for
-this pin can be configured by one bit in general register, eg, 0 for GPIO 14,
-1 for GMAC1. Sometimes, GPIO 14 is preferred, so configure the pin with
-function GPIO 14 and disable GMAC1.
+Commit 1d1a0e7c5100 ("scripts/faddr2line: Fix overlapping text section
+failures") can cause faddr2line to fail on ppc64le on some
+distributions, while it works fine on other distributions. The failure
+can be attributed to differences in the readelf output.
 
->> the platform device is preferred, we should not scan this PCI device. In
->> the above scene, add `status = "disabled"` property in DT node of this PCI
->> device.
->>
->> Before this patch, to solve the above problem, we treat the on chip PCI
->> devices as platform devices with fixed address assigned by the BIOS.
-> 
-> This says "before this patch".  But the rest of the sentence sounds
-> like what happens *after* this patch.
-> 
+  $ ./scripts/faddr2line vmlinux find_busiest_group+0x00
+  no match for find_busiest_group+0x00
 
-In fact, I want to describe an solution. But it seems that I described a
-little confusing and please check the refactored commit log in the
-following comments.
+On ppc64le, readelf adds the localentry tag before the symbol name on
+some distributions, and adds the localentry tag after the symbol name on
+other distributions. This problem has been discussed previously:
 
->> When
->> there is device not preferred, add the `status = "disabled"` property in DT
->> node.
-> 
->> In kernel, the PCI host bridge only scans slot 9/A/B/C/D/E that are
->> bridges.
-> 
-> I guess this has something to do with pdev_may_exist() [1], but why do
-> you mention it here?  Do you intend to remove pdev_may_exist() and use
-> this DT mechanism instead?
-> 
-> Bjorn
-> 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/pci/controller/pci-loongson.c?id=v6.0#n168
-> 
+  https://lore.kernel.org/bpf/20191211160133.GB4580@calabresa/
 
-You are right and I did something ugly in pdev_may_exist() in my kernel. I
-really don't want to continue doing this, so I am developing this patch.
+This problem can be overcome by filtering out the localentry tags in the
+readelf output. Similar fixes are already present in the kernel by way
+of the following commits:
 
-Also I don't want to remove pdev_may_exist(). This patch could replace
-pdev_may_exist() only in DT, but pdev_may_exist() matters in both ACPI and DT.
+  1fd6cee127e2 ("libbpf: Fix VERSIONED_SYM_COUNT number parsing")
+  aa915931ac3e ("libbpf: Fix readelf output parsing for Fedora")
 
-Overall, how about the following refactored commit log:
+[jpoimboe: rework commit log]
 
-"This patch adds a mechanism to disable on chip PCI devices by DT. Typically,
-when there are pins shareable between the platform device and the on chip PCI
-device, if the PCI device is not preferred, add `status = "disabled"` property
-to this PCI device DT node.
+Fixes: 1d1a0e7c5100 ("scripts/faddr2line: Fix overlapping text section failures")
+Signed-off-by: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+Acked-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+Reviewed-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Link: https://lore.kernel.org/r/20220927075211.897152-1-srikar@linux.vnet.ibm.com
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Signed-off-by: Peter Zijlstra <peterz@infradead.org>
+---
+ scripts/faddr2line | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-For example, on LS2K1000, GMAC1(on chip PCI device) and GPIO(platform device,
-not PCI device) 14 share the same pin. If GMAC1 is not preferred, add
-`status = "disabled"` property in GMAC1 DT node."
-
-BR,
-Peibao
-
+diff --git a/scripts/faddr2line b/scripts/faddr2line
+index 5514c23..0e73aca 100755
+--- a/scripts/faddr2line
++++ b/scripts/faddr2line
+@@ -74,7 +74,8 @@ command -v ${ADDR2LINE} >/dev/null 2>&1 || die "${ADDR2LINE} isn't installed"
+ find_dir_prefix() {
+ 	local objfile=$1
+ 
+-	local start_kernel_addr=$(${READELF} --symbols --wide $objfile | ${AWK} '$8 == "start_kernel" {printf "0x%s", $2}')
++	local start_kernel_addr=$(${READELF} --symbols --wide $objfile | sed 's/\[.*\]//' |
++		${AWK} '$8 == "start_kernel" {printf "0x%s", $2}')
+ 	[[ -z $start_kernel_addr ]] && return
+ 
+ 	local file_line=$(${ADDR2LINE} -e $objfile $start_kernel_addr)
+@@ -178,7 +179,7 @@ __faddr2line() {
+ 				found=2
+ 				break
+ 			fi
+-		done < <(${READELF} --symbols --wide $objfile | ${AWK} -v sec=$sym_sec '$7 == sec' | sort --key=2)
++		done < <(${READELF} --symbols --wide $objfile | sed 's/\[.*\]//' | ${AWK} -v sec=$sym_sec '$7 == sec' | sort --key=2)
+ 
+ 		if [[ $found = 0 ]]; then
+ 			warn "can't find symbol: sym_name: $sym_name sym_sec: $sym_sec sym_addr: $sym_addr sym_elf_size: $sym_elf_size"
+@@ -259,7 +260,7 @@ __faddr2line() {
+ 
+ 		DONE=1
+ 
+-	done < <(${READELF} --symbols --wide $objfile | ${AWK} -v fn=$sym_name '$4 == "FUNC" && $8 == fn')
++	done < <(${READELF} --symbols --wide $objfile | sed 's/\[.*\]//' | ${AWK} -v fn=$sym_name '$4 == "FUNC" && $8 == fn')
+ }
+ 
+ [[ $# -lt 2 ]] && usage
