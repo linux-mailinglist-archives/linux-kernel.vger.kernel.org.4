@@ -2,119 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A541562CEB2
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 00:27:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C60D62CEB5
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 00:28:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233179AbiKPX1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 18:27:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53714 "EHLO
+        id S233694AbiKPX2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 18:28:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbiKPX1t (ORCPT
+        with ESMTP id S229703AbiKPX2o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 18:27:49 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A68467F75;
-        Wed, 16 Nov 2022 15:27:49 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id d59-20020a17090a6f4100b00213202d77e1so3833138pjk.2;
-        Wed, 16 Nov 2022 15:27:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2a/iI0oa5cBCopIhIhM2fR5QThEYXCGWU4iGbV6dAqI=;
-        b=EZKH+Gu9u3UXBzi9tvk+O+r9JVp9dbm7tyYCio/+zbGH7qI1psI0x9mCiBM92AsnKS
-         F4ex0F5TGUuBOmo4MU+6pITPFgGvoyus/aB+9HKZbOd6TKeX0GFpAGKlmWbHitBcsd5e
-         5Yjr8xWu5XQTop928x9qN3McdahpGIaZOITaPDJvytuFh9sxk5X77/BYI5Hc04B9FHUR
-         UMQeePeigqZGdhm4vasPvmd1tfXhes/NP+NakNnLEs2cqQqhYWdatQKVUkIvP6a5MnKV
-         N23m20rDahzBvE76DJcLpsWWvqsMHSAClmZjZ1TasTAig5AfRh59v8J25P0J3z4N9fyl
-         GrUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2a/iI0oa5cBCopIhIhM2fR5QThEYXCGWU4iGbV6dAqI=;
-        b=oDwjv/ul1S/6j61pguRiLr+uHg63o+HoYrwCaNJ1rQQ56/gCjEFJ4gK+KuGJnOVPFp
-         tO+gvlE/4eFwHfTprcxu8+jXtEY0ug9ck419H8Hm7QeV9eWYK3KSpbQkhsZTfiCNSDr1
-         dxtMp1PHJy2mh16M8XJOV67vegPanAZVPmQDRhOPWKJiC5SAS4ijau91cFowvcVgU+h6
-         U4A6PAayzdki3Zf9/R/UUEC2bDT9Eil2Nzw6RlxBI1HX9OoTozMRKk7FhDKKpumBKdYQ
-         ar/AU36eX1A9TIa6XW272WPyvEfZiZdqhT+ELK9/1oEKhm9mUvmjlK3SbEPCsu87Xwbb
-         su+Q==
-X-Gm-Message-State: ANoB5plO3vqXVMTg1u1xCJXU7BZZFbVtpLfCJw+jps78sm3CUDpYqG2Y
-        FBu7ow5fNxv83HSs9Xl7YmA=
-X-Google-Smtp-Source: AA0mqf7HqBsVW9+1F48OIURtAiK3KXCIie6/+wK2RJWPiYZeRBkSSdF0lpquCoWN2I5XTTdkdkB07Q==
-X-Received: by 2002:a17:90a:4a85:b0:20a:dba9:ebe2 with SMTP id f5-20020a17090a4a8500b0020adba9ebe2mr6182701pjh.136.1668641268400;
-        Wed, 16 Nov 2022 15:27:48 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id c65-20020a621c44000000b005624e2e0508sm11323822pfc.207.2022.11.16.15.27.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 15:27:47 -0800 (PST)
-Message-ID: <355a8611-b60e-1166-0f7b-87a194debd07@gmail.com>
-Date:   Wed, 16 Nov 2022 15:27:39 -0800
+        Wed, 16 Nov 2022 18:28:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B89959FC2;
+        Wed, 16 Nov 2022 15:28:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1AB95B81F2E;
+        Wed, 16 Nov 2022 23:28:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 996AEC433B5;
+        Wed, 16 Nov 2022 23:28:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668641319;
+        bh=1zBpfGyr9uizob8bMvX0NxzH7tfCiWb/ipmk6cC1kgQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=bYtSabnYqm/WvoU9MYqsHKIoeQLBGZCnaff2fP/BFlz66dHeMs9tLxjF5ILTr8Dn/
+         lEH2aWsd+uBxVnycPs6uUQZpzJrKIRg4/4qysBrTaDN/qaUwuaTNsL4PN6hkkAthDz
+         hfiN9C0jm6iyPUss8FAJyTcYfjs/4wblV1HZ8aVV6qpWXGMeWWNxEmumqotgZ/1nFj
+         DyeFsl7mEYBDXfDL6t1sm2ubwO8mZUGiT4M8rFUqhIJ/AnTlbl9zWVj56ou4XnO+Zu
+         e+5+MoIW/bN5SdPBQ9aURVrvmbrnLW9KaOsDu4GjwmIUqmJ3M60jXJgY+56d2oKYpA
+         MlSsvafVu/JvQ==
+Date:   Wed, 16 Nov 2022 17:28:38 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Limonciello, Mario" <mario.limonciello@amd.com>,
+        Len Brown <lenb@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mehta Sanju <Sanju.Mehta@amd.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5] PCI/ACPI: PCI/ACPI: Validate devices with power
+ resources support D3
+Message-ID: <20221116232838.GA1140883@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 2/2] net: fec: Create device link between phy dev and mac
- dev
-Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Xiaolei Wang <xiaolei.wang@windriver.com>
-Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221116144305.2317573-1-xiaolei.wang@windriver.com>
- <20221116144305.2317573-3-xiaolei.wang@windriver.com>
- <Y3T8wliAKdl/paS6@lunn.ch>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <Y3T8wliAKdl/paS6@lunn.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0gyVq0AOM1_kd3QWHj+jihL-vxBv=fcEJ_Zcp8QiOymcg@mail.gmail.com>
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URI_TRY_3LD autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/16/22 07:07, Andrew Lunn wrote:
-> On Wed, Nov 16, 2022 at 10:43:05PM +0800, Xiaolei Wang wrote:
->> On imx6sx, there are two fec interfaces, but the external
->> phys can only be configured by fec0 mii_bus. That means
->> the fec1 can't work independently, it only work when the
->> fec0 is active. It is alright in the normal boot since the
->> fec0 will be probed first. But then the fec0 maybe moved
->> behind of fec1 in the dpm_list due to various device link.
+On Wed, Nov 16, 2022 at 01:00:36PM +0100, Rafael J. Wysocki wrote:
+> On Wed, Nov 16, 2022 at 1:37 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > On Mon, Nov 14, 2022 at 04:33:52PM +0100, Rafael J. Wysocki wrote:
+> > > On Fri, Nov 11, 2022 at 10:42 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > >
+> > > > On Fri, Nov 11, 2022 at 12:58:28PM -0600, Limonciello, Mario wrote:
+> > > > > On 11/11/2022 11:41, Bjorn Helgaas wrote:
+> > > > > > On Mon, Oct 31, 2022 at 05:33:55PM -0500, Mario Limonciello wrote:
+> > > > > > > Firmware typically advertises that ACPI devices that represent PCIe
+> > > > > > > devices can support D3 by a combination of the value returned by
+> > > > > > > _S0W as well as the HotPlugSupportInD3 _DSD [1].
+> > > > > > >
+> > > > > > > `acpi_pci_bridge_d3` looks for this combination but also contains
+> > > > > > > an assumption that if an ACPI device contains power resources the PCIe
+> > > > > > > device it's associated with can support D3.  This was introduced
+> > > > > > > from commit c6e331312ebf ("PCI/ACPI: Whitelist hotplug ports for
+> > > > > > > D3 if power managed by ACPI").
+> > > > > > >
+> > > > > > > Some firmware configurations for "AMD Pink Sardine" do not support
+> > > > > > > wake from D3 in _S0W for the ACPI device representing the PCIe root
+> > > > > > > port used for tunneling. The PCIe device will still be opted into
+> > > > > > > runtime PM in the kernel [2] because of the logic within
+> > > > > > > `acpi_pci_bridge_d3`. This currently happens because the ACPI
+> > > > > > > device contains power resources.
+> > > >
+> > > > Wait.  Is this as simple as just recognizing that:
+> > > >
+> > > >   _PS0 means the OS has a knob to put the device in D0, but it doesn't
+> > > >   mean the device can wake itself from a low-power state.  The OS has
+> > > >   to use _S0W to learn the device's ability to wake itself.
+> > >
+> > > It is.
+> >
+> > Now I'm confused again about what "HotPlugSupportInD3" means.  The MS
+> > web page [1] says it identifies Root Ports capable of handling hot
+> > plug events while in D3.  That sounds kind of related to _S0W: If _S0W
+> > says "I can wake myself from D3hot and D3cold", how is that different
+> > from "I can handle hotplug events in D3"?
+> 
+> For native PME/hot-plug signaling there is no difference.  This is the
+> same interrupt by the spec after all IIRC.
+> 
+> For GPE-based signaling, though, there is a difference, because GPEs
+> can only be used directly for wake signaling (this is related to
+> _PRW).  In particular, the only provision in the ACPI spec for device
+> hot-add are the Bus Check and Device Check notification values (0 and
+> 1) which require AML to run and evaluate Notify() on specific AML
+> objects.
+> 
+> Hence, there is no spec-defined way to tell the OS that "something can
+> be hot-added under this device while in D3 and you will get notified
+> about that".
 
-Humm, but if FEC1 depends upon its PHY to be available by the FEC0 MDIO 
-bus provider, then surely we will need to make sure that FEC0's MDIO bus 
-is always functional, and that includes surviving re-ordering as well as 
-any sort of run-time power management that can occur.
+So I guess acpi_pci_bridge_d3() looks for:
 
->> So in system suspend and resume, we would get the following
->> warning when configuring the external phy of fec1 via the
->> fec0 mii_bus due to the inactive of fec0. In order to fix
->> this issue, we create a device link between phy dev and fec0.
->> This will make sure that fec0 is always active when fec1
->> is in active mode.
+  - "wake signaling while in D3" (_S0W) and
+  - "notification of hotplug while in D3" ("HotPlugSupportInD3")
 
-Still not clear to me how the proposed fix works, let alone how it does 
-not leak device links since there is no device_link_del(), also you are 
-going to be creating guaranteed regressions by putting that change in 
-the PHY library.
+For Root Ports with both those abilities (or bridges below such Root
+Ports), we allow D3, and this patch doesn't change that.
 
-It seems to me that you need to address a more fundamental issue within 
-the FEC driver and how it registers its internal MDIO busses.
+What this patch *does* change is that all bridges with _PS0 or _PR0
+previously could use D3, but now will only be able to use D3 if they
+are also (or are below) a Root Port that can signal wakeup
+(wakeup.flags.valid) and can wakeup from D3hot or D3cold (_S0W).
 
-The device link between the PHY and MAC does have the MDIO bus in 
-between as a device.
+And this fixes the Pink Sardine because it has Root Ports that do
+Thunderbolt tunneling, and they have _PS0 or _PR0 but their _S0W says
+they cannot wake from D3.  Previously we put those in D3, but they
+couldn't wake up.  Now we won't put them in D3.
 
-Have you verified your patch is still needed even with 
-557d5dc83f6831b4e54d141e9b121850406f9a60 ("net: fec: use mac-managed PHY 
-PM")?
--- 
-Florian
+I guess there's a possibility that this could break or cause higher
+power consumption on systems that were fixed by c6e331312ebf
+("PCI/ACPI: Whitelist hotplug ports for D3 if power managed by ACPI").
+I don't know enough about that scenario.  Maybe Lukas will chime in.
 
+> > This patch says that if dev's Root Port has "HotPlugSupportInD3", we
+> > don't need _PS0 or _PR0 for dev.  I guess that must be true, because
+> > previously the fact that we checked for "HotPlugSupportInD3" meant the
+> > device did NOT have _PS0 or _PR0.
+> >
+> > [1] https://learn.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports#identifying-pcie-root-ports-supporting-hot-plug-in-d3
