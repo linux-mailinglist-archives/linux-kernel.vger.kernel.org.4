@@ -2,92 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A42162BCA6
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:54:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EB9062BCAF
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:54:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233662AbiKPLyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 06:54:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37964 "EHLO
+        id S231622AbiKPLyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 06:54:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233578AbiKPLxu (ORCPT
+        with ESMTP id S233433AbiKPLyA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 06:53:50 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 993D2264A0
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 03:45:10 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id g12so29126573lfh.3
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 03:45:10 -0800 (PST)
+        Wed, 16 Nov 2022 06:54:00 -0500
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B17F27F;
+        Wed, 16 Nov 2022 03:45:50 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id 7so8972196ilg.11;
+        Wed, 16 Nov 2022 03:45:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=E2JjCc/5EES6LZTOK2We5DetzE6F9MpGe75nT0iWuBQ=;
-        b=RJ6T6OqI3HXczmrWaJbQ2lphPIvFwXBlce7VWh08eIUhTSOybaH5/tNNg1V6xEg/VD
-         XTUIWw7aem1+Da8xntjEEMWA5ct4WZn9BfsTcSw4VazDOynieR0olWOsp/seM3F1nGIG
-         ZHE4janbhY02W7CKjInbc7KVxKoPu8LmKj2LSbHJ4jXTziU9yFjdstKzKKyYV1QC2qWh
-         iKlQHAmsB6BzucmgWDcVP5csA71RyT/nvja6nkEQASmoeUPTTq8nessn9K0Bi6kSXkht
-         7xo3J4NYwIQj+J78CjfBc5jp1GhUlXvxjPME1G0oQzob/ahlrTlaUixSnDohhXJjFo2q
-         z8wg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RA8QY4hcuCySzouxhlTWv2Sr+QGglcv1Fl/GC5Stgwo=;
+        b=ffBCCeybrB1movsmUCLvuoqewLP6ltVc5PHtJkyu55VMe4jGHOCSlpGqjvXFV1mpvf
+         fH33RPKAq70ZeS7v7DF31UnAcFKOtgd4qtsIq1IsWfPYjWmRBHmLN+4+3aublIxjFaNg
+         D+4AIStJFv0QN0lX5uR1/MmHWim6jLN3jFMDcw3BX59Q9V0a6inaNQc264PzYtKGuOUE
+         DK7Hj0rkG5CWkJ2W5/02/FoTgXfuByQubepk27EEHaK75VM9iNVfNjQS19z29bnJ6WAz
+         TtNOLS9D59mRYYjliYpOeUhWZ0uiMq8mo1L3NGzywaIJSyyqUOV9kCo20/6c8XnckHXz
+         6bPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=E2JjCc/5EES6LZTOK2We5DetzE6F9MpGe75nT0iWuBQ=;
-        b=fu1LeVfK618AP5/5YzDbHRl2+pqbWaKfXtMCqwNNFdyfEGPP4cYRFe9xH7O+vV/4M4
-         8uK1Fk4oDhDRmPa1pg6n4/cfwRm68qsrjwNXTbREGdRzWXnF5EHtyxhQRQQbrmzqC+JL
-         wsyA/hK7xrV6OVTr/h+/hHIWi5o9WQcIkhB3G6QtIjHNsWJuwTD32BbioiDo35V3aTrS
-         mozx6Toxsd3nMg7z5VuyAToJY+aik0cUDlsrnOaS/1OwdF8PQvxlqeuCLjWYQbnY6L73
-         kSvekXzu0vePsqsEQw6oMsermNcqzN+4iXN3PHOKvSvqyk0hCNdUjwKkILK82YqYx33D
-         NCbA==
-X-Gm-Message-State: ANoB5pm0HeN1Hu9Lwbb9sUg/zST39jnS9TJcY9cFR8pPQGKeP0vVXY18
-        bgv54yN+1qgzCKzT3rdDgtT4pA==
-X-Google-Smtp-Source: AA0mqf5CjGonoP+vodq7tkxE9y0nn93sgEfKDyLHguvTOpwpqNT03KEAzY9e16cuLBxa6gRAmaZ1jQ==
-X-Received: by 2002:a19:ca04:0:b0:4b1:a34f:580c with SMTP id a4-20020a19ca04000000b004b1a34f580cmr8150977lfg.430.1668599108998;
-        Wed, 16 Nov 2022 03:45:08 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id w8-20020a05651234c800b004b19f766b07sm2576739lfr.91.2022.11.16.03.45.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 03:45:08 -0800 (PST)
-Message-ID: <f406361f-4008-34aa-2376-4fb776873d1f@linaro.org>
-Date:   Wed, 16 Nov 2022 12:45:07 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RA8QY4hcuCySzouxhlTWv2Sr+QGglcv1Fl/GC5Stgwo=;
+        b=DrZm3RkhVp7nZOz7xkyoJ3s4oOSAWliXt+D+HP585arSAU2wsMpqZQu4APCzTVyRSM
+         EYaKCfZLzmF7XhvGthtmoQiemQfMNbYCRJD3xeJa7N6Yw5CjIvI4oFmPnmgGbAd6oiMu
+         yW+DgodyCcVl2KHpgtkHp/9D19HBKVqUxjoHomjqSw1fKDh83Jk9gniuIbOv85HN+mdw
+         QKPyLyNBIr3VJ2B7LNMxhgjzInFbtAafjF+0cpF7BnsCKpkhT4gRBZ/A4ILy9DDmwOyZ
+         933AmwiKSNnVSA6F2yJaUDLg+kk5AmXWPqY/0BzNXug9fiQM2hwDPxtCZWHRYa6DGZ7T
+         Ffww==
+X-Gm-Message-State: ANoB5pllRGJpn3rcHffOxvLK3z6NOf03HVi1L6OOtniz6bJmcntQR3xI
+        f3QA7iXaqzuA2tqTFsRjv9kuNdVcmcMXAw==
+X-Google-Smtp-Source: AA0mqf765SOct2ze3FbYeMfJ5903EuLlT3KbTmyulPtv76sjpXeNAca5Vf6vuM3y6EAVQZzgqm0XEA==
+X-Received: by 2002:a05:6e02:109:b0:300:1f82:73e5 with SMTP id t9-20020a056e02010900b003001f8273e5mr9900263ilm.85.1668599149339;
+        Wed, 16 Nov 2022 03:45:49 -0800 (PST)
+Received: from MBP.lan (ec2-18-117-95-84.us-east-2.compute.amazonaws.com. [18.117.95.84])
+        by smtp.gmail.com with ESMTPSA id g94-20020a028567000000b00374fa5b600csm5689973jai.0.2022.11.16.03.45.44
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 16 Nov 2022 03:45:48 -0800 (PST)
+From:   Schspa Shi <schspa@gmail.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     Jason@zx2c4.com, djwong@kernel.org, jack@suse.cz,
+        hca@linux.ibm.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Schspa Shi <schspa@gmail.com>,
+        syzbot+6fd64001c20aa99e34a4@syzkaller.appspotmail.com
+Subject: [PATCH] mrp: introduce active flags to prevent UAF when applicant uninit
+Date:   Wed, 16 Nov 2022 19:45:11 +0800
+Message-Id: <20221116114511.7720-1-schspa@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 1/2] dt-bindings: power: rpmpd: Add SM8550 to rpmpd
- binding
-Content-Language: en-US
-To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <20221116111745.2633074-1-abel.vesa@linaro.org>
- <20221116111745.2633074-2-abel.vesa@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221116111745.2633074-2-abel.vesa@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/11/2022 12:17, Abel Vesa wrote:
-> Add compatible and constants for the power domains exposed by the RPMH
-> in the Qualcomm SM8550 platform.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+The caller of del_timer_sync must prevent restarting of the timer, If
+we have no this synchronization, there is a small probability that the
+cancellation will not be successful.
 
+And syzbot report the fellowing crash:
+==================================================================
+BUG: KASAN: use-after-free in hlist_add_head include/linux/list.h:929 [inline]
+BUG: KASAN: use-after-free in enqueue_timer+0x18/0xa4 kernel/time/timer.c:605
+Write at addr f9ff000024df6058 by task syz-fuzzer/2256
+Pointer tag: [f9], memory tag: [fe]
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CPU: 1 PID: 2256 Comm: syz-fuzzer Not tainted 6.1.0-rc5-syzkaller-00008-
+ge01d50cbd6ee #0
+Hardware name: linux,dummy-virt (DT)
+Call trace:
+ dump_backtrace.part.0+0xe0/0xf0 arch/arm64/kernel/stacktrace.c:156
+ dump_backtrace arch/arm64/kernel/stacktrace.c:162 [inline]
+ show_stack+0x18/0x40 arch/arm64/kernel/stacktrace.c:163
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x68/0x84 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:284 [inline]
+ print_report+0x1a8/0x4a0 mm/kasan/report.c:395
+ kasan_report+0x94/0xb4 mm/kasan/report.c:495
+ __do_kernel_fault+0x164/0x1e0 arch/arm64/mm/fault.c:320
+ do_bad_area arch/arm64/mm/fault.c:473 [inline]
+ do_tag_check_fault+0x78/0x8c arch/arm64/mm/fault.c:749
+ do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:825
+ el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:367
+ el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:427
+ el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:576
+ hlist_add_head include/linux/list.h:929 [inline]
+ enqueue_timer+0x18/0xa4 kernel/time/timer.c:605
+ mod_timer+0x14/0x20 kernel/time/timer.c:1161
+ mrp_periodic_timer_arm net/802/mrp.c:614 [inline]
+ mrp_periodic_timer+0xa0/0xc0 net/802/mrp.c:627
+ call_timer_fn.constprop.0+0x24/0x80 kernel/time/timer.c:1474
+ expire_timers+0x98/0xc4 kernel/time/timer.c:1519
 
-Best regards,
-Krzysztof
+To fix it, we can introduce a new active flags to make sure the timer will
+not restart.
+
+Reported-by: syzbot+6fd64001c20aa99e34a4@syzkaller.appspotmail.com
+
+Signed-off-by: Schspa Shi <schspa@gmail.com>
+---
+ include/net/mrp.h |  1 +
+ net/802/mrp.c     | 18 +++++++++++++-----
+ 2 files changed, 14 insertions(+), 5 deletions(-)
+
+diff --git a/include/net/mrp.h b/include/net/mrp.h
+index 92cd3fb6cf9d..b28915ffea28 100644
+--- a/include/net/mrp.h
++++ b/include/net/mrp.h
+@@ -124,6 +124,7 @@ struct mrp_applicant {
+ 	struct sk_buff		*pdu;
+ 	struct rb_root		mad;
+ 	struct rcu_head		rcu;
++	bool			active;
+ };
+ 
+ struct mrp_port {
+diff --git a/net/802/mrp.c b/net/802/mrp.c
+index 155f74d8b14f..6c927d4b35f0 100644
+--- a/net/802/mrp.c
++++ b/net/802/mrp.c
+@@ -606,7 +606,10 @@ static void mrp_join_timer(struct timer_list *t)
+ 	spin_unlock(&app->lock);
+ 
+ 	mrp_queue_xmit(app);
+-	mrp_join_timer_arm(app);
++	spin_lock(&app->lock);
++	if (likely(app->active))
++		mrp_join_timer_arm(app);
++	spin_unlock(&app->lock);
+ }
+ 
+ static void mrp_periodic_timer_arm(struct mrp_applicant *app)
+@@ -620,11 +623,12 @@ static void mrp_periodic_timer(struct timer_list *t)
+ 	struct mrp_applicant *app = from_timer(app, t, periodic_timer);
+ 
+ 	spin_lock(&app->lock);
+-	mrp_mad_event(app, MRP_EVENT_PERIODIC);
+-	mrp_pdu_queue(app);
++	if (likely(app->active)) {
++		mrp_mad_event(app, MRP_EVENT_PERIODIC);
++		mrp_pdu_queue(app);
++		mrp_periodic_timer_arm(app);
++	}
+ 	spin_unlock(&app->lock);
+-
+-	mrp_periodic_timer_arm(app);
+ }
+ 
+ static int mrp_pdu_parse_end_mark(struct sk_buff *skb, int *offset)
+@@ -872,6 +876,7 @@ int mrp_init_applicant(struct net_device *dev, struct mrp_application *appl)
+ 	app->dev = dev;
+ 	app->app = appl;
+ 	app->mad = RB_ROOT;
++	app->active = true;
+ 	spin_lock_init(&app->lock);
+ 	skb_queue_head_init(&app->queue);
+ 	rcu_assign_pointer(dev->mrp_port->applicants[appl->type], app);
+@@ -900,6 +905,9 @@ void mrp_uninit_applicant(struct net_device *dev, struct mrp_application *appl)
+ 
+ 	RCU_INIT_POINTER(port->applicants[appl->type], NULL);
+ 
++	spin_lock_bh(&app->lock);
++	app->active = false;
++	spin_unlock_bh(&app->lock);
+ 	/* Delete timer and generate a final TX event to flush out
+ 	 * all pending messages before the applicant is gone.
+ 	 */
+-- 
+2.37.3
 
