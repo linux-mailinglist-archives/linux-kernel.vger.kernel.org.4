@@ -2,253 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EE8A62C7C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 19:38:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E811062C7CE
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 19:41:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbiKPSiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 13:38:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40908 "EHLO
+        id S233572AbiKPSlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 13:41:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234541AbiKPSiS (ORCPT
+        with ESMTP id S229617AbiKPSlL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 13:38:18 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ADA560370
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 10:38:17 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id b185so18263834pfb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 10:38:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GUX+eoqhaobDYypHKDLNxQx2E4TU2UsOgUeGPD8Shhc=;
-        b=cJggep3WypiFu97uTiQxi27LSCrirnxyXHR1b0Tlq9UyjOTwsrqeyXyPRiyKmMpKaz
-         JVyruvxvHL05x4mz2fqb5ehUfzKfEZzYlqcnDt7m2BWt5G4qYSDeNTbreUG8gLmCU2PB
-         7h8b1/gWj8FwFgM8b3qo3oeUpQ+txGN7/MW/lnAPtdwyrHjnQU2iG6F8PF8jBvweM9+1
-         S2aNIjnsuzPzFKd5Jtqx+ERaqvI5dGpE2MYS+dfw+vHfrJnuSEco7cVn5WccChzFMKg5
-         z31bFFxHxVzcsuGo/ug+1PVmQefish/hxuw4hJCr0Gw+fxy6aOobzyrCozx/LME2j/6A
-         DdPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GUX+eoqhaobDYypHKDLNxQx2E4TU2UsOgUeGPD8Shhc=;
-        b=q0QVJKOs1p5TbfZ1q+AyZMY3PydK3Z/dRqZCBXr7i6wWcwjoqCQ0rJe8jMFeIeAL3b
-         MwUMHd1zxtnu/tZv2I522kI+3HkiFF5qQbwJYd76APXP++o9iTvB1tijvCZvlBU5TSJS
-         SVt/vUWbMMCbPrZ3AXoYJYPA/JauUXFM3opa14BTwi7/e2nHCe+tg5Sau7CVY3l675Nj
-         6O0iAHfJRSvuWquAW5lcnM4KVCxpffU+ywbKZMK8kRw59wmmXhmLjjTTP48vL3VoUsL2
-         Mjs4o7s9JNX936cB8ZjFsj8D80mztAribfo4toEdTmTkRf3bZ5ledTD6L+s4KdN+IW5X
-         8hTQ==
-X-Gm-Message-State: ANoB5pnjBvV1lmB/gl4f3oaGltafW1Q6L/sgzzdZtT7Umjvvop3LMcKA
-        0OKskwdWRAFcLN1LRaSAJohrAQ==
-X-Google-Smtp-Source: AA0mqf47iRel6QWfF50NzK+cnQ+XtaZ1PjHo+WHMwlTuydaoRwswg2/AfVXLliBE1pkTGYoPzsupIg==
-X-Received: by 2002:a63:1348:0:b0:46e:96b9:ed63 with SMTP id 8-20020a631348000000b0046e96b9ed63mr22003555pgt.258.1668623897065;
-        Wed, 16 Nov 2022 10:38:17 -0800 (PST)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id f15-20020a62380f000000b0056c360af4e3sm11169963pfa.9.2022.11.16.10.38.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 10:38:16 -0800 (PST)
-Date:   Wed, 16 Nov 2022 11:38:14 -0700
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Tanmay Shah <tanmay.shah@amd.com>
-Cc:     andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, michal.simek@amd.com,
-        bill.mills@linaro.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v11 0/6] Add Xilinx RPU subsystem support
-Message-ID: <20221116183814.GD61935@p14s>
-References: <20221114233940.2096237-1-tanmay.shah@amd.com>
-MIME-Version: 1.0
+        Wed, 16 Nov 2022 13:41:11 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2075.outbound.protection.outlook.com [40.107.237.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1788918F;
+        Wed, 16 Nov 2022 10:41:10 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lOXRvwLfbDUZ8DEym/aXPoYgt4OKD8I3R7MNxcGPGB/65iq4IGxf8B8GNM5YKLndFvRB6sFZuI9/9QY+WY+FkxnLAkR/f/hSyCAUrFo1rkSHqpFd8nwnllq20sShqYK5hrMLRvFFgo3rJm3kymrCCcA6oh2/ungNa22D3mNhq/szflUII/1ZjwJQNmDezIWEBj5kxVBcbm/TtoryvbR4jXV3sFzFKhjNBQB3TfCiL/4jW9j7fZjtL9juJVp1CJ6NBTvGiSCSdncSdTqHRUDTUFN4M47UqnVtel5FBcAlROP9kdEeloqkga9sfrtFCTjXmX8D0FLJ86ZdqR0ad1s8vg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+1bNPKrMnTVc+l9U5thADIqK+XsJ6YE693MOdEsA0LI=;
+ b=EMk4mFltJib3zd2F+bhVt0nYOYitPBMn27aWa53E8SnIsxD1VmC7ExtM7maHOHnixev87YJrpY75Ues71JQ+a426eqODMP+1CenYzfQ6i3qbEDwlRU9jf5RdvY9NIzBkoXsCkYAjN2E46gqNkSYy4PCUncRI4dbw4LAl8SF82+RHQLoxWQvGOIYgbD9OMOVC+/ZpP9TqWLhzluD4+IZwzqceR8jtob8xuDn3kSzGEgsKffy1Up6t992H0uw9LoB5TPwgRN13hU4UJ0hYx+w7556SuLKmHHI57cquvmDC8zYbKbwkJXc3YFDZf8gzHLYftNe98tE/1GCnsetCuZCiRw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+1bNPKrMnTVc+l9U5thADIqK+XsJ6YE693MOdEsA0LI=;
+ b=OMMyWbRxeMr8O3fMk1Rf/FVmTCl2WAOd/R5P4QXnWtVIEczFHewk/EUnabWjVhfeY9/K1JegocHLICNLmVyom4LeXh5a6zt9M5Eawg9RIUkKMJ96e3Q2mjG3hefuHKXPb6ris4KL7k0wdyzokmyrq32Rgil71NF2P5lb1BpilmGDAywHE674PyyfzZqVVo9oMol9WzB4ZqTl0WnCeBUUW5cObuUWCXzQqt/lejlp1CCWJvkgBVyj0xteb81LJ0jr/29aLZtzHoUPdTY6Ve4/ZFgKGhGvN+sXQtMqhRmPzixuZvGN8ezURvn7VgaW9i8C6xSkO6PVDIZkIefAspUcAA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by CY8PR12MB7609.namprd12.prod.outlook.com (2603:10b6:930:99::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.19; Wed, 16 Nov
+ 2022 18:41:07 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f8b0:df13:5f8d:12a]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f8b0:df13:5f8d:12a%7]) with mapi id 15.20.5813.017; Wed, 16 Nov 2022
+ 18:41:07 +0000
+Date:   Wed, 16 Nov 2022 14:41:04 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
+        Allen Hubbe <allenbh@gmail.com>,
+        "Ahmed S. Darwish" <darwi@linutronix.de>,
+        Reinette Chatre <reinette.chatre@intel.com>
+Subject: Re: [patch 01/33] genirq/msi: Rearrange MSI domain flags
+Message-ID: <Y3UuwHuyT0lq+zvg@nvidia.com>
+References: <20221111133158.196269823@linutronix.de>
+ <20221111135205.309731052@linutronix.de>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221114233940.2096237-1-tanmay.shah@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221111135205.309731052@linutronix.de>
+X-ClientProxiedBy: BY5PR17CA0065.namprd17.prod.outlook.com
+ (2603:10b6:a03:167::42) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|CY8PR12MB7609:EE_
+X-MS-Office365-Filtering-Correlation-Id: c5bf3f6c-bbc1-40ad-61b8-08dac8021fac
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: lEsn++Cw0JpkmP3HLyYtHMwy5lExvbbDnPX+Mg+G/5GZH/lEyyc7o9gLUfiasGqoqVlS8HMI5cCi4+MKSVEiS9tRrp9cablX86JzHSg8aM9PrRL4byV92+5wj3WRg+evqEI+SNsMIZnCzZVh57GNwSMG8upHTjGzn6jNdtuqPBCXvkbDddbTJC2vX2/H3qn/ltZQPnkxEYR/NmxJZ9WiG0LG1gKR6PxLlrxBzK1Th+lrtEWG4fW6F6I/XDdHxRwty5SYbhlSi/yMeCjkEoKtfP8s5aXPen422B9GAav3f6oH4VwjF05ytm+A9th9YkOi1hkbbsrvjkQJxAoQxM1JrOoBTqyjJsvM2MIgOLZAi3ymucamkMaUlvpuKPdWAnUr9YtsZGEoiz1qb+dqUrTCozum88mKhpgX/PgcI1nF4f41LzY0LimpsVi5fyN94WWNdkAC7E9DnYE6KqcPOAjKIlL9seW42Uyu/KKxVYd4YEAnfILVq5BD10hbgSqW9vknK4puzKUoUykuXv9Sn5CpjxgOFjtg7/cVjFk2USGDvPQpHfrf5fT3mmOYRonr3Vg5Wb7AritPC8W7xtLun7JlX+8PP+ini5GGVTY7H2srmnfGyrvxP3zwmwDkw4eC3QpL+eGAGWLNcHj0TbntfR47HnYnLZ0dfl0DlQq43dnObJuXUNT12DJDpeqjO68KeQVYkWzcIg08FbIT5NgG7rL1JbxCc+246kY5SrnP6gdqjJecAHg7b/91GgjhZvNFGtUu
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(396003)(346002)(376002)(366004)(451199015)(2906002)(8936002)(7416002)(5660300002)(4744005)(41300700001)(4326008)(83380400001)(66946007)(8676002)(66476007)(66556008)(86362001)(36756003)(316002)(6666004)(6916009)(54906003)(186003)(38100700002)(26005)(6512007)(6506007)(2616005)(478600001)(6486002)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?wq8nS/qmdvtIPuwQPSSP0ebjJ47Wa6yJ3Vq5PyQF3d17E4io+iHVNSNVwvYw?=
+ =?us-ascii?Q?VLsOk7Zxa44YlEk6yIT+LfB9SVE7MATKglgP74woCVBw3T+BJYRBvGrWGkIK?=
+ =?us-ascii?Q?oEhkiy+qJGHQv6BImoBNDD1fBdXurbGggyOfH77W5lGFNIQHit68HkkS2QdP?=
+ =?us-ascii?Q?7qmLJfh99hE2ar3f9Y6hzmegiwXE3+XxBnW4RG2x8n0sya7y2wSXP5b/jCDT?=
+ =?us-ascii?Q?jobbc/IH8jN5WY0mBFAIwQE2sFBBxM4upO7gdj8Z78odjjS/LvxbKqBVB4B3?=
+ =?us-ascii?Q?Pga712KzuDRpzL7h3XfnI3uO7PZOKt4+dNtux48UGF6tCNBYva2+fC109xPs?=
+ =?us-ascii?Q?dG2KBV7eOsgk+BipJ5NZ3oaFjJ+MdBGy5QGeFrPqQxDjXnFHyV+Mg+U3qXcJ?=
+ =?us-ascii?Q?LZQvnGlPvgvYXWF7KsIpM99idlu8koBMJ/10TkjvN1Rjqw0h3/lfD4jRni1r?=
+ =?us-ascii?Q?RaLNXvGYjRLKFUcJmxVBYOEVmzOMRTGtmmb+xyDpQG8tE34qfVKyTt+72hfc?=
+ =?us-ascii?Q?OYYzZjPRvAbrVUzBVDA44Ll2ijnqI7pwfeRH7R09wlxzXYTc/s1CUUqzKmvO?=
+ =?us-ascii?Q?6HTKAb87aMJsqZkhgMflyVOVGajQ0ow7vE/Ndswh0Jorc7wJMbsAkPDmkHko?=
+ =?us-ascii?Q?w6CCcmOTK9nQXx8TKPk6Wb/iDNVRQcS5+05RUYon98FC9wE+dle73ux4s9+8?=
+ =?us-ascii?Q?8N/UF/nwSmStV6B+Vn11XLxBPSqNFRUmyW6hgJ6M0noOuUgGfd2ik+HKTC87?=
+ =?us-ascii?Q?VzFqm+TPlo/0FC+xmMnxaBiHxQK6L50jhJgNFVPV3eUrarR8f8OHC9xMvBHI?=
+ =?us-ascii?Q?txZxMVSXOJyVdgxGWT6WeSycY1Jc+05ksA4B3c59n/NSGYv+qNGXefp7mK9Y?=
+ =?us-ascii?Q?+k4Vu+fkGGeBsEfE+SD2WMAEP1bkrLgFCteX7zE3G6VCMgcOaczBFZPGb7Le?=
+ =?us-ascii?Q?Ui1ffHx6BOpjZCcEmS+biya0y4HlIC7Sfx3yvApIr2yOHOP/j2agtDA2Cu11?=
+ =?us-ascii?Q?anzAGe6lOM8puIcXg2wR+LAB2KfqvBMdzU0a8ovBGDiU8CDQpYYZ81tOFSac?=
+ =?us-ascii?Q?PWuIR9mKT+ydZTnY0lL+JG/iOEtCPi/ruidnyZf+5ZBD8QusLp6ijDPu1yhJ?=
+ =?us-ascii?Q?/no8nfZNigvLildH+8Dbuy9Hfc790zFZjcaBRX+b2xJSUmx70TfxuBiLx0b5?=
+ =?us-ascii?Q?1r1kNLjFBSfcHkxoN8qQZE+ULxHXkDoWe+pDDkE6JO+YtktQo/y54cLDNZ+2?=
+ =?us-ascii?Q?ASJ6wbaq4Byna0VTQ3RhnVkczeh47nTRkfzRzvT28UTNPnnghmpvSN77rdLv?=
+ =?us-ascii?Q?JCIjdBP1h9mkGHyM3YYNYDZwD3SsCMZsg8WdusuQx5PcRBx/IvjLW/bQ4M33?=
+ =?us-ascii?Q?IWH9GL+QE9K6x7fiB6Ofbkvpl/1NjOG4BJC/kAD5h4p+pqg5aoX2WDwbiqnW?=
+ =?us-ascii?Q?uY7I36pgw1T97bfktNarrYe45YSgXYVcHAghrXJjyJJkEsGYKm13ls/3/9Ns?=
+ =?us-ascii?Q?EML/+uRmOFgNeYbIskrLEECTGg035wEgt1kgdPZIepjVZ8zYEXPSU+77U7Se?=
+ =?us-ascii?Q?FMnZl9YFJKF2XRgJba4KHS8fvMvwViL5lrFVPpNV?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c5bf3f6c-bbc1-40ad-61b8-08dac8021fac
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Nov 2022 18:41:07.5570
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: oYaS3Fn8gm9IHtIVCZ4frBTawhBiCrcSkOxMNL8QQa0f8aGQO7iyuxDgVRaiDQI3
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7609
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tanmay,
-
-I think this patchset is ready to be merged.  Two things are missing though:
-
-Patches 1 and 2: We are missing a tag from one of the fellow in the DT brigade.
-They handle a lot of patches so let's give them time.
-
-Patches 4 and 5: Michal's ack.  He already reviewed that code in the previous
-iteration but it wasn't added to this set, probably because you did some
-modification to get the patches to apply.  In that case it is usually fine to
-carry the tag since there isn't any modification to the code you are
-introducing.  But you aired on the side of caution and that is also fine.
-Please reach out to him again for another review.
-
-Thanks,
-Mathieu
-
-
-On Mon, Nov 14, 2022 at 03:39:34PM -0800, Tanmay Shah wrote:
-> This patch series adds bindings document for RPU subsystem found on Xilinx
-> ZynqMP platforms. It also adds device nodes and driver to enable RPU
-> subsystem in split mode and lockstep mode.
+On Fri, Nov 11, 2022 at 02:58:12PM +0100, Thomas Gleixner wrote:
+> These flags got added as necessary and have no obvious structure. For
+> feature support checks and masking it's convenient to have two blocks of
+> flags:
 > 
-> Xilinx ZynqMP platform contains Remote Processing Unit(RPU). RPU subsystem
-> contains two arm cortex r5f cores. RPU subsystem can be configured in
-> split mode, lockstep mode and single-cpu mode.
+>    1) Flags to control the internal behaviour like allocating/freeing
+>       MSI descriptors. Those flags do not need any support from the
+>       underlying MSI parent domain. They are mostly under the control
+>       of the outermost domain which implements the actual MSI support.
 > 
-> RPU subsystem also contains 4 Tightly Coupled Memory(TCM) banks.
-> In lockstep mode, all 4 banks are combined and total of 256KB memory is
-> made available to r5 core0. In split mode, both cores can access two
-> TCM banks i.e. 128 KB.
+>    2) Flags to expose features, e.g. PCI multi-MSI or requirements
+>       which can depend on a underlying domain.
 > 
-> RPU can also fetch data and execute instructions from DDR memory along with
-> TCM memory.
+> No functional change.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 > ---
-> 
-> Changes in v11:
->   - rename binding filename to match with compatible string
->   - change $id: value accordingly as well
->   - Rebase on latest rproc-next branch and resolve merge conflicts
->   - remove redundant < 0 check for function of_get_available_child_count()
->   - return 'ret' variable rather than masking the real error code when
->     parsing "xlnx,cluster-mode" property fails
->   - remove redundant use of devm_free()
->   - call  of_reserved_mem_device_release() to release reserved memory
->     in case driver probe fails or driver is removed.
-> 
-> Changes in v10:
->   - bindings: rename example node to remoteproc
->   - dts: Rename node name to remoteproc
->   - switch to AMD email ID 
->   - fix Kconfig unmet dependecy error reported by kernel test robot
->   - fix r5_rproc object mem leak in function zynqmp_r5_add_rproc_core
->   - add explanation of hardcoded TCM nodes
->   - remove redundant ToDo comment
->   - remove redundant check of tcm_bank_count and rmem_count
->   - remove explicit free reserved_mem in zynqmp_r5_get_mem_region_node
->   - fix leaked reference of child_dev during zynqmp_r5_cluster_init
->     Also fix possible crash in exit path release_r5_cores 
->   - do not remove mem-region and tcm carveouts explicitly in case of failure.
->     It will be deleted as part of rproc_del. This also simplifies logic to
->     use rproc_add_carveout
->   - fix documentation all over the driver
-> 
-> Changes in v9:
->   - bindings: remove power-domains property description
->   - bindings: fix nitpicks in description of properties
->   - dts: remove unused labels
->   - replace devm_rproc_alloc with rproc_alloc
->   - %s/until/while/r
->   - %s/i > -1/i >=0/r
->   - fix type of tcm_mode from int to enum rpu_tcm_comb
->   - release &child_pdev->dev references
->   - remove zynqmp_r5_core_exit()
->   - undefined memory-region property isn't failure
->   - remove tcm bank count check from ops
->   - fix tcm bank turn-off sequence
->   - fix parse_fw function documentation
->   - do not use rproc_mem_entry_init on vdev0buffers
->   - check tcm banks shouldn't be 0
->   - declare variabls in reverse xmas tree order
->   - remove extra line
-> 
-> Changes in v8:
->   - add 'items:' for sram property
-> 
-> Changes in v7:
->   - Add minItems in sram property
-> 
-> Changes in v6:
->   - Add maxItems to sram and memory-region property
-> 
-> Changes in v5:
->   - Add constraints of the possible values of xlnx,cluster-mode property
->   - fix description of power-domains property for r5 core
->   - Remove reg, address-cells and size-cells properties as it is not required
->   - Fix description of mboxes property
->   - Add description of each memory-region and remove old .txt binding link
->     reference in the description
->   - Remove optional reg property from r5fss node
->   - Move r5fss node out of axi node
-> 
-> Changes in v4:
->   - Add memory-region, mboxes and mbox-names properties in dt-bindings example
->   - Add reserved memory region node and use it in Xilinx dt RPU subsystem node
->   - Remove redundant header files
->   - use dev_err_probe() to report errors during probe
->   - Fix missing check on error code returned by zynqmp_r5_add_rproc_core()
->   - Fix memory leaks all over the driver when resource allocation fails for any core
->   - make cluster mode check only at one place
->   - remove redundant initialization of variable
->   - remove redundant use of of_node_put() 
->   - Fix Comment format problem
->   - Assign offset of zynqmp_tcm_banks instead of duplicating it
->   - Add tcm and memory regions rproc carveouts during prepare instead of parse_fw
->   - Remove rproc_mem_entry object from r5_core
->   - Use put_device() and rproc_del() APIs to fix memory leaks
->   - Replace pr_* with dev_*. This was missed in v3, fix now.
->   - Use "GPL" instead of "GPL v2" in MODULE_LICENSE macro. This was reported by checkpatch script.
-> 
-> Changes in v3:
->   - Fix checkpatch script indentation warning
->   - Remove unused variable from xilinx remoteproc driver
->   - use C style comments, i.e /*...*/
->   - Remove redundant debug information which can be derived using /proc/device-tree
->   - Fix multiline comment format
->   - s/"final fot TCM"/"final for TCM"
->   - Function devm_kzalloc() does not return an code on error, just NULL.
->     Remove redundant error check for this function throughout the driver.
->   - Fix RPU mode configuration and add documentation accordingly
->   - Get rid of the indentations to match function documentation style with rest of the driver
->   - Fix memory leak by only using r5_rproc->priv and not replace it with new instance
->   - Use 'i' for the outer loop and 'j' for the inner one as per convention
->   - Remove redundant error and NULL checks throughout the driver
->   - Use devm_kcalloc() when more than one element is required
->   - Add memory-regions carveouts during driver probe instead of parse_fw call
->     This removes redundant copy of reserved_mem object in r5_core structure.
->   - Fix memory leak by using of_node_put()
->   - Fix indentation of tcm_mem_map function args
->   - Remove redundant init of variables
->   - Initialize tcm bank size variable for lockstep mode
->   - Replace u32 with phys_addr_t for variable stroing memory bank address
->   - Add documentation of TCM behavior in lockstep mode
->   - Use dev_get_drvdata instead of platform driver API
->   - Remove info level messages
->   - Fix checkpatch.pl warnings
->   - Add documentation for the Xilinx r5f platform to understand driver design
-> 
-> Changes in v2:
->   - Remove proprietary copyright footer from cover letter
-> 
-> Ben Levinsky (3):
->   firmware: xilinx: Add ZynqMP firmware ioctl enums for RPU
->     configuration.
->   firmware: xilinx: Add shutdown/wakeup APIs
->   firmware: xilinx: Add RPU configuration APIs
-> 
-> Tanmay Shah (3):
->   dt-bindings: remoteproc: Add Xilinx RPU subsystem bindings
->   arm64: dts: xilinx: zynqmp: Add RPU subsystem device node
->   drivers: remoteproc: Add Xilinx r5 remoteproc driver
-> 
->  .../remoteproc/xlnx,zynqmp-r5fss.yaml         |  135 +++
->  arch/arm64/boot/dts/xilinx/zynqmp.dtsi        |   33 +
->  drivers/firmware/xilinx/zynqmp.c              |   97 ++
->  drivers/remoteproc/Kconfig                    |   13 +
->  drivers/remoteproc/Makefile                   |    1 +
->  drivers/remoteproc/xlnx_r5_remoteproc.c       | 1067 +++++++++++++++++
->  include/dt-bindings/power/xlnx-zynqmp-power.h |    6 +
->  include/linux/firmware/xlnx-zynqmp.h          |   60 +
->  8 files changed, 1412 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/remoteproc/xlnx,zynqmp-r5fss.yaml
->  create mode 100644 drivers/remoteproc/xlnx_r5_remoteproc.c
-> 
-> 
-> base-commit: 6eed169c7fefd9cdbbccb5ba7a98470cc0c09c63
-> -- 
-> 2.25.1
-> 
+>  include/linux/msi.h |   49 ++++++++++++++++++++++++++++++++++---------------
+>  1 file changed, 34 insertions(+), 15 deletions(-)
+
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+
+Jason
