@@ -2,181 +2,452 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FD4062C8DA
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 20:18:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D976562C8DB
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 20:19:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233413AbiKPTS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 14:18:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38994 "EHLO
+        id S233680AbiKPTTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 14:19:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233559AbiKPTSU (ORCPT
+        with ESMTP id S229536AbiKPTTp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 14:18:20 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2063.outbound.protection.outlook.com [40.107.223.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20816554ED;
-        Wed, 16 Nov 2022 11:18:19 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=c5yn54IHAUbaws4WYyQwF0e7WwQLCqPInoBo37tgey5bncMYJIuxCh/Jc0lqSqQ2JbEtpYSGVKzdrAYi1BGwJXibCIDQIPpA6nPH/DMMGZgj9uiXZarg33+lVN+vpl65rk4iDKpVtWJzhgTr5gi22S5zfSIfWRUDPry7w6wczGjZ5/k2tc99Pch2Fbz4ajmi88dQk4FcEveMnYD9JwyXwFqEbvIdCzsrXs+rcY5HdYF0zZilMr9AIaLVhAoHKhPRRmus9OzISYKzLwf40zJ5H+iivJiJjK1iCSNBpQjq5P2vpg7suOtRUv2X0ZuYhzbKHYpFjXeGoIo6eSGLme7SYg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5yMnwRQ1UARMUELDEK6pJJoXxoXQGVPncpm8DUfVUW8=;
- b=b6oRcXH38xYnaYD1uV/jlJvSmUOHul95/3ogESZHOG4J4NGCrH5pDL1lVtUqdC+60utr4HpVccLLBRsIuM3swMBCTDctxSe9eb/TWbPWu0N1BWxGSLYeDSV38mG8KCXGD9f2N9MkR+yR7V09lQmqUaDYZ4xrvOmEwdm+6G3Gk3Kj4xut88nbfxjIuFZaMRkMu+01KPpJGh2Sz2l+3thJgUkZov5gY7K7ssYj54z5guw6wMSHsmKMptsB1/ZlSGPjgwu064Iw/X88KL7b5vWOSwHVbifb2HZKH6CPu8aT1MxYo27QtXDQXHOUfdKO4sa7mMFkFsrsclEe3yCfePmqDQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5yMnwRQ1UARMUELDEK6pJJoXxoXQGVPncpm8DUfVUW8=;
- b=nvOSi3D1IzwqSdAYOwaDvjfuYUPyw5oknloZNAotjH5CsjzK1vLKvhDR76/DUJAaWVHqEwUtOlLYAQ7boby+0jnLRqZ2r7vwK9hBUnEZA4zP8e3LbO8adXoByenNlTPFFPWso270KKmBIwxKTopS+YyRQJxTPCoD4C0QiDxLPhfORWuGA1N4HTT5Fue6MjinTQaVtd/DgKg7vdS6uzU0jEJP4Vi13FBVVzOHeRLGdKRm81D+yY7J5zQhMdW1TPkczC9mpr/89cVo8qLOHGS0cHOgR5xhQAP2k0Eja+H1cOrVCDrBq720Pa/iHCjup9wgMDbZXzzK54GNGFmkGC9EWQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by SN7PR12MB6885.namprd12.prod.outlook.com (2603:10b6:806:263::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.16; Wed, 16 Nov
- 2022 19:18:17 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f8b0:df13:5f8d:12a]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f8b0:df13:5f8d:12a%7]) with mapi id 15.20.5813.017; Wed, 16 Nov 2022
- 19:18:17 +0000
-Date:   Wed, 16 Nov 2022 15:18:13 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
-        Allen Hubbe <allenbh@gmail.com>,
-        "Ahmed S. Darwish" <darwi@linutronix.de>,
-        Reinette Chatre <reinette.chatre@intel.com>
-Subject: Re: [patch 13/33] x86/apic/vector: Provide MSI parent domain
-Message-ID: <Y3U3dQhVCYF0on6v@nvidia.com>
-References: <20221111133158.196269823@linutronix.de>
- <20221111135206.007864377@linutronix.de>
+        Wed, 16 Nov 2022 14:19:45 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59429B25;
+        Wed, 16 Nov 2022 11:19:44 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id t25so46501796ejb.8;
+        Wed, 16 Nov 2022 11:19:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fOujtQz6+wf4Ba1lHWvXdamxzz2aNedCzblkE++nYRk=;
+        b=HXSKG6b3l6HULugaEkTF6TMsg5atCZTF/2XckaIFfNcWwupWj0uKZ5KKkHoMBMZYtP
+         xCLS+I12xE69rto/YcnH+vMVQhB02/6mJodELZdMuF7QO40zcY7JpTSD14CRsZfFJVks
+         DZnIaO2TzyiuzCwQsjIdddpcNmN7Tg2WVptiUyILCokzfaJvdEFQAFxFmHGb5eI+ZYPF
+         VsRrM1fS99DtcQwvVDcLETDqcpiVqR1L3KRBBfiuhwEmIVvSPZRQKivLxjS5CAC2bapg
+         95TwJvYvx1gyFMsQuUB1ibNvxh64lYV6GZXIML3Ux1pBXQKCYbPzEVK/4ku+pHgMcnv7
+         5qOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fOujtQz6+wf4Ba1lHWvXdamxzz2aNedCzblkE++nYRk=;
+        b=Ct9SWBHxrbzVVjZyNPU731XsxYMDsWdy/ZLRT9O1aU553aosqxIegZeUpGNnVHYN1q
+         MUVlGkF7kUFxfysABsqa9ghZXBklsmgK9zoowomB9F2UFzzf942lZHJeYAiPaMkTrTO4
+         1pGlGSGZJaTeNJD6Y0NxNPR4Cf+wNufJZQNBUPfFGXq0Nq/jvCR4Looq2Zg3rarchIsX
+         x3Xy5LulCHr+wAVWXpn3Hnizwwn6yuCwWhzrUKYayZlNNLetuntcNS8CB0X5QOB1vZ9d
+         Bl6t885d14mdVd7tGLEXgubOJChB8D5BKKWGkRfePT4aL5I1fwt0F8BrbUSnxZ9LiTkn
+         cXxg==
+X-Gm-Message-State: ANoB5pmK7ed7C1h8R7um/E/RnGMrzevgJgnt6TvN1sBn25k2EMTGIymC
+        ml7Rb2lnrJItszLMVQJ03YY=
+X-Google-Smtp-Source: AA0mqf4lbvIX7I0gLMXIWCUI8WEpWpEChOC4VWnGgRkK0xXoBZPPj+NzjGwIlJ73jxI68h990rKLZw==
+X-Received: by 2002:a17:906:a181:b0:79b:f7d6:c2aa with SMTP id s1-20020a170906a18100b0079bf7d6c2aamr18552104ejy.310.1668626382762;
+        Wed, 16 Nov 2022 11:19:42 -0800 (PST)
+Received: from pc638.lan ([155.137.26.201])
+        by smtp.gmail.com with ESMTPSA id d12-20020a056402516c00b004589da5e5cesm7902090ede.41.2022.11.16.11.19.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 11:19:42 -0800 (PST)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc638.lan>
+Date:   Wed, 16 Nov 2022 20:19:40 +0100
+To:     paulmck@kernel.org, Joel Fernandes <joel@joelfernandes.org>
+Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, paulmck@kernel.org,
+        rcu@vger.kernel.org
+Subject: Re: [PATCH v2] rcu/kfree: Do not request RCU when not needed
+Message-ID: <Y3U3zPzLMux8fpVY@pc638.lan>
+References: <20221109024758.2644936-1-joel@joelfernandes.org>
+ <Y2z3Mb3u8bFZ12wY@pc636>
+ <CAEXW_YSq89xzgyQ9Tdt1tCqz8VAfzb7kSXVZmnxDuJ65U0UZ3w@mail.gmail.com>
+ <Y20EOinwcLSZHmXg@pc638.lan>
+ <Y22ry4Q2OY2zovco@google.com>
+ <Y3Iyka86FlUh9D1P@pc636>
+ <CAEXW_YR8ycdF0Y80p2qKXQm3Qc+XA441jQZ3uiHk=TbaXngNkQ@mail.gmail.com>
+ <Y3OPI/pWZ5jf4X9y@pc636>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221111135206.007864377@linutronix.de>
-X-ClientProxiedBy: SJ0PR05CA0097.namprd05.prod.outlook.com
- (2603:10b6:a03:334::12) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SN7PR12MB6885:EE_
-X-MS-Office365-Filtering-Correlation-Id: 68832f0c-da19-4f57-646f-08dac80750e1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BOdQ1Ntchl4TNRgBqxfXG43gXN4Nczoo3PWdIaHwBluYjumZ7BQk8fUpNAh3xfzfLJKPpyV4k9PcQE4PN1018VZOqqD4L4ldFi0Xlr/byW2ZDpWAZxsSu/8xSAxfbuYT2i7TPA3ZgbEyIyog4WZqRCREVuztd9o4fDCwhJQcqBtNrQiOkzhNbiu/JfDYpzs8q2rGaboIUsCn1iE1pQ768bxUOK/cJXWhqpgKTiK8Un2N/4J2XIYPWcpJpMq1Jg1mhiALguG/duX7cNT7hzjkK574KoaGTOadbaF+J47HIFXoswLrysZYcWbtjC2D6RQ3q9OLy4EJRaRsdNOjVZclX/TN56u5sD+hizNRon1guvOx6PuSPIuEhbps0zXPq09UJXQc5RNNKzsRsPf9hW2geHn3IFrSxv6B7XgrGokB3ySA59LPNjNArI8e+Q/qW63C3xeD3Gz1NrkcPrp1/AmX7JKpQHPpHn7Z8TcGBUGl485mvrlx35FYAojgNfWG6rKRyvA1DKaZ+g7c11/qbqAQ5zg1kuhnyp7gXOE405K2rKsjDo/vyKZfN+J2JYK5akbAemAlmHI20DS3QQDvMHypDNDBTRNEfC3tCS8InADLLaQUaZCJ8T1jQspc39fU3uxA8tuR3hak1nBB7wMqQDGoniOb9AJWVNpB3efiYy02TFk3+wWaexu/InMh714s29Hne8gsMM5hiYfJzxRXebY8hg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(136003)(376002)(39860400002)(346002)(396003)(451199015)(2906002)(66476007)(66946007)(6916009)(316002)(66556008)(5660300002)(36756003)(8936002)(86362001)(7416002)(54906003)(4326008)(41300700001)(38100700002)(8676002)(6506007)(6486002)(6666004)(6512007)(26005)(186003)(2616005)(478600001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?XgiSsCPq9XRSyvDxOHog/qWhW0j+f3xZwSYBtEM+hwg/MrNWPwJ3NpHVySwr?=
- =?us-ascii?Q?s1cvfAaaF5jBsiYdSY8PelGIv+GvpAyBcCOaon1lVnexD3L5BFirVlXs7AAs?=
- =?us-ascii?Q?drH4cowci9La5jQg99Nptl9FdJ921+0QCOtqEqpvBBQj5kUXXqy7MDFwJ9sk?=
- =?us-ascii?Q?CAjd/JWx2LIrHTV4aO3tQ5iWG/RbxX8uT0oM77XD2fXX+C6AcL49N3qcVUk4?=
- =?us-ascii?Q?XQI/t/uITfScuxd8kIVwovikarNZ9bq9jWuodsBmKM2Dr62Jbl7wXuKKjKid?=
- =?us-ascii?Q?WDqzPZs5k628YRG8/VFDbrslCde/xmoEUlrzbCPKMg9kVXiv1kmesr8brcMY?=
- =?us-ascii?Q?CLzaN7/plFDex4KwowCQtPR78kkuqtHyL9Sfgjxqkz19lelIRruYR3gle6AZ?=
- =?us-ascii?Q?gcaNckGIBlLCuj/Vrj6gkzTBwVMEObeC8ULq+aWIKNi8qbrTDI4C4h+W5koF?=
- =?us-ascii?Q?0Qav11NyjrQ0szhyEWMmnPHGUT06WDTtpafxGvOmqdX47H84vmalHx/TOeAR?=
- =?us-ascii?Q?57GcaU5qSuC3zam6ov0mgLAcx/6EoTRNgzYeYtFiVMPTXUP3jhTFQPE6TP10?=
- =?us-ascii?Q?ZAG7eeWdDoAirqPt7HuC6h2Dw9ex/7yqliD+/iR1zYopAUJcNfoqj1kVYf3n?=
- =?us-ascii?Q?T2caLiOdnb7DGvM6wbUD/ma9ql5bypNsxpGwyopYzFn2XsMFYko42Y+KGHAt?=
- =?us-ascii?Q?VEs4fHlglHR9a7OZKF71MMqBiiGqzg8h3+DZQpNq4fxoeJRUxgXK20Zdoxi/?=
- =?us-ascii?Q?zJreJWg3KyXB52kJR8kDV4V8oMrU0QK3LcWhdxUxZtFqG/vMDA/NVUOI5dj1?=
- =?us-ascii?Q?3lMWz9TRLrmSuud91/QZMsVf3aRLoxxYItlwGZFiVZn1CxWLgp910i87K1B4?=
- =?us-ascii?Q?Hf5BoxouuwJU8BOfMj6XRo3MClMDFjtoBo/iaT6UD+RnnNrTdsnCO3MCw366?=
- =?us-ascii?Q?LwPdjRuKWEc+Q2PNlrC7D5mK0RDbJBF2A6CMBda0owncQWYqeTPyEcmzt6K4?=
- =?us-ascii?Q?/sj8Zu6JTbCISz7WXnhw7+iweYpgrM+1mcZvdIGi9VAxLijJ0QR6bxSMbIt9?=
- =?us-ascii?Q?DTduZxphC9ZGueaxV6eQ5RJaRnwvy44HVTC9ifFpYT+qXU4GTcj91/uuCU/0?=
- =?us-ascii?Q?VQWgvrRaTW3lW27xRdiwa182QYmuUcF2u+F8BeO5VJStJB3ECfekIGyBi29U?=
- =?us-ascii?Q?9hRWz+5YkfKLp9qLXNnfqCZuW5D19NuNmFVwVE7CBNCkLV0CaKL4Yff9gbft?=
- =?us-ascii?Q?MEnxIAN6xSplwUQcXEwITB3OX1uxpwOW1J3V0DzuQIVy85tK/qic+bFJS7vc?=
- =?us-ascii?Q?gg+yTpWbsgFHzPKQiOZLmYQTV1j7Y/Hn2NO3KuOaei9R9fCoShswGdxZaGsx?=
- =?us-ascii?Q?XvMPWtNKZFEDVv+6rLVr02uAXin2aPwdOm9/BUj2UsqAIxQGOtVqdkOQRfN8?=
- =?us-ascii?Q?E1hTzASf/vtm2LxQ5xNXSUxBCJsOoEr1TmKsAW96PD97x91+fJr9YkQWNvCp?=
- =?us-ascii?Q?tufi9hgYBpspvYEF120rpyBcPfS7W1C15Hy/K6UW7J7iEwPzcdbnNTnWCncP?=
- =?us-ascii?Q?WQjYQ9v4jK8JzvDceHI3aPSyjBfdFxDX5SNZ6Ae7?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 68832f0c-da19-4f57-646f-08dac80750e1
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Nov 2022 19:18:17.5183
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vFwGaVka1JwG0H5HbG1dIkBCL2CFeaBDDWj8zaqq0lzH4IJiDHGYmBxKV+IghIjb
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6885
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Y3OPI/pWZ5jf4X9y@pc636>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 02:58:31PM +0100, Thomas Gleixner wrote:
+Hello, Paul, Joel.
 
-> +/**
-> + * x86_vector_init_dev_msi_info - Domain info setup for MSI domains
-> + * @dev:		The device for which the domain should be created
-> + * @domain:		The (root) domain providing this callback
-> + * @real_parent:	The real parent domain of the to initialize domain
-> + * @info:		The domain info for the to initialize domain
-> + *
-> + * This function is to be used for all types of MSI domains above the x86
-> + * vector domain and any intermediates. The domain specific functionality
-> + * is determined via the @real_parent.
-> + */
-> +static bool x86_init_dev_msi_info(struct device *dev, struct irq_domain *domain,
-> +				  struct irq_domain *real_parent, struct msi_domain_info *info)
-> +{
-> +	const struct msi_parent_ops *pops = real_parent->msi_parent_ops;
-> +
-> +	/* MSI parent domain specific settings */
-> +	switch (real_parent->bus_token) {
-> +	case DOMAIN_BUS_ANY:
-> +		/* Only the vector domain can have the ANY token */
-> +		if (WARN_ON_ONCE(domain != real_parent))
-> +			return false;
-> +		info->chip->irq_set_affinity = msi_set_affinity;
-> +		/* See msi_set_affinity() for the gory details */
-> +		info->flags |= MSI_FLAG_NOMASK_QUIRK;
-> +		break;
-> +	default:
-> +		WARN_ON_ONCE(1);
-> +		return false;
-> +	}
-> +
-> +	/* Is the target supported? */
-> +	switch(info->bus_token) {
-> +	case DOMAIN_BUS_PCI_DEVICE_MSI:
-> +	case DOMAIN_BUS_PCI_DEVICE_MSIX:
-> +		break;
-> +	default:
-> +		WARN_ON_ONCE(1);
-> +		return false;
+> > 
+> > Yes sure, I am doing a run now with my patch. However, I have a
+> > question -- why do you feel blocking in the kworker is not an issue?
+> > You are taking a snapshot before queuing the normal kwork and then
+> > reading the snapshot when the normal kwork runs. Considering it is a
+> > high priority queue, the delay between when you are taking the
+> > snapshot, and reading it is likely small so there is a bigger chance
+> > of blocking in cond_synchronize_rcu(). Did I miss something?
+> > 
+> We can wait indeed in the reclaim worker. But the worker does not do any
+> nasty or extra work here. If there is a need we block and wait. After a
+> grace period, we are awoken and proceed.
+> 
+> Therefore i do not see the reason in handling two cases:
+> 
+> if (gp_done)
+>     queue_work();
+> else
+>     queue_rcu_work();
+> 
+> it is the same if we just queue the work and check on entry. The current
+> scenario is: queue the work after a grace period. This is the difference.
+> 
+> Right if the reclaimer was a high prio kthread a time would be shorter. 
+> 
+> In your scenario the time seems even shorter(i have not checked) because
+> you update a snapshot of krcp each time a kvfree_rcu() is invoked. So
+> basically even though you have objects whose grace period is passed you
+> do not separate it anyhow. Because you update the:
+> 
+> krcp->gp_snap = get_state_synchronize_rcu();
+> 
+> too often.
+> 
+Once upon a time we discussed that it is worth to keep track of GP
+per-a-page in order to reduce a memory footprint. Below patch addresses
+it:
 
-Why does x86 care how the vector is ultimately programmed into the
-device?
+<snip>
+From 76fc6a1398f22341758edcd9aa911127e0cf5129 Mon Sep 17 00:00:00 2001
+From: "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+Date: Wed, 2 Nov 2022 19:26:27 +0100
+Subject: [PATCH v3 1/1] rcu: kvfree_rcu: Reduce a memory footptint by using
+ polling APIs
 
-The leaking of the MSI programming model into the irq implementations
-seems like there is still a troubled modularity.
+Total time taken by all kfree'ers: 6564718459 ns, loops: 10000, batches: 1110, memory footprint: 5057MB
+Total time taken by all kfree'ers: 8431051895 ns, loops: 10000, batches: 1109, memory footprint: 2749MB
+Total time taken by all kfree'ers: 9477830789 ns, loops: 10000, batches: 1158, memory footprint: 2934MB
+Total time taken by all kfree'ers: 9950211144 ns, loops: 10000, batches: 981, memory footprint: 2704MB
 
-I understand that some implementations rely on a hypercall/trap or
-whatever and must know MSI vs MSI-X, but I'm surprised to see this
-here.
+with a patch:
 
-Jason
+Total time taken by all kfree'ers: 7712110118 ns, loops: 10000, batches: 1660, memory footprint: 91MB
+Total time taken by all kfree'ers: 7002403664 ns, loops: 10000, batches: 1482, memory footprint: 86MB
+Total time taken by all kfree'ers: 7842282319 ns, loops: 10000, batches: 1738, memory footprint: 86MB
+Total time taken by all kfree'ers: 7230161977 ns, loops: 10000, batches: 1542, memory footprint: 72MB
+
+Tested with NOCB option, all offloading CPUs:
+
+kvm.sh --memory 10G --torture rcuscale --allcpus --duration 1 \
+  --kconfig CONFIG_NR_CPUS=64 \
+  --kconfig CONFIG_RCU_NOCB_CPU=y \
+  --kconfig CONFIG_RCU_NOCB_CPU_DEFAULT_ALL=y \
+  --bootargs "rcuscale.kfree_rcu_test=1 rcuscale.kfree_nthreads=16 \
+  rcuscale.holdoff=20 rcuscale.kfree_loops=10000 torture.disable_onoff_at_boot" --trust-make
+
+According to data there is a big gain in memory footprint with a patch.
+It is because of call_rcu() and call_rcu_flush() take more effort and
+time to queue a callback and then wait for a gp.
+
+With polling API:
+  a) we do not need to queue any callback;
+  b) we might not even need wait for a GP completion.
+
+Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+---
+ kernel/rcu/tree.c | 115 +++++++++++++++++++++++++++-------------------
+ 1 file changed, 67 insertions(+), 48 deletions(-)
+
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index 76973d716921..6a1f66dd5f09 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -2900,13 +2900,16 @@ EXPORT_SYMBOL_GPL(call_rcu);
+ 
+ /**
+  * struct kvfree_rcu_bulk_data - single block to store kvfree_rcu() pointers
++ * @gp_snap: Snapshot of current GP for objects in a page
+  * @nr_records: Number of active pointers in the array
++ * @list: Page list
+  * @next: Next bulk object in the block chain
+  * @records: Array of the kvfree_rcu() pointers
+  */
+ struct kvfree_rcu_bulk_data {
++	unsigned long gp_snap;
+ 	unsigned long nr_records;
+-	struct kvfree_rcu_bulk_data *next;
++	struct list_head list;
+ 	void *records[];
+ };
+ 
+@@ -2919,24 +2922,26 @@ struct kvfree_rcu_bulk_data {
+ 	((PAGE_SIZE - sizeof(struct kvfree_rcu_bulk_data)) / sizeof(void *))
+ 
+ /**
++ * @rcu_work: A work to reclaim a memory after a grace period
+  * struct kfree_rcu_cpu_work - single batch of kfree_rcu() requests
+- * @rcu_work: Let queue_rcu_work() invoke workqueue handler after grace period
+  * @head_free: List of kfree_rcu() objects waiting for a grace period
+- * @bkvhead_free: Bulk-List of kvfree_rcu() objects waiting for a grace period
++ * @head_free_gp_snap: Snapshot of current GP for "@head_free" objects
+  * @krcp: Pointer to @kfree_rcu_cpu structure
+  */
+ 
+ struct kfree_rcu_cpu_work {
+-	struct rcu_work rcu_work;
++	struct work_struct rcu_work;
+ 	struct rcu_head *head_free;
+-	struct kvfree_rcu_bulk_data *bkvhead_free[FREE_N_CHANNELS];
++	unsigned long head_free_gp_snap;
++
++	struct list_head page_free_head[FREE_N_CHANNELS];
+ 	struct kfree_rcu_cpu *krcp;
+ };
+ 
+ /**
+  * struct kfree_rcu_cpu - batch up kfree_rcu() requests for RCU grace period
+  * @head: List of kfree_rcu() objects not yet waiting for a grace period
+- * @bkvhead: Bulk-List of kvfree_rcu() objects not yet waiting for a grace period
++ * @page_head: Bulk-List of kvfree_rcu() objects not yet waiting for a grace period
+  * @krw_arr: Array of batches of kfree_rcu() objects waiting for a grace period
+  * @lock: Synchronize access to this structure
+  * @monitor_work: Promote @head to @head_free after KFREE_DRAIN_JIFFIES
+@@ -2960,7 +2965,7 @@ struct kfree_rcu_cpu_work {
+  */
+ struct kfree_rcu_cpu {
+ 	struct rcu_head *head;
+-	struct kvfree_rcu_bulk_data *bkvhead[FREE_N_CHANNELS];
++	struct list_head page_head[FREE_N_CHANNELS];
+ 	struct kfree_rcu_cpu_work krw_arr[KFREE_N_BATCHES];
+ 	raw_spinlock_t lock;
+ 	struct delayed_work monitor_work;
+@@ -3060,60 +3065,62 @@ drain_page_cache(struct kfree_rcu_cpu *krcp)
+ static void kfree_rcu_work(struct work_struct *work)
+ {
+ 	unsigned long flags;
+-	struct kvfree_rcu_bulk_data *bkvhead[FREE_N_CHANNELS], *bnext;
++	struct kvfree_rcu_bulk_data *page, *n;
++	struct list_head local_page_head[FREE_N_CHANNELS];
+ 	struct rcu_head *head, *next;
+ 	struct kfree_rcu_cpu *krcp;
+ 	struct kfree_rcu_cpu_work *krwp;
++	unsigned long head_free_gp_snap;
+ 	int i, j;
+ 
+-	krwp = container_of(to_rcu_work(work),
+-			    struct kfree_rcu_cpu_work, rcu_work);
++	krwp = container_of(work,
++		struct kfree_rcu_cpu_work, rcu_work);
+ 	krcp = krwp->krcp;
+ 
+ 	raw_spin_lock_irqsave(&krcp->lock, flags);
+ 	// Channels 1 and 2.
+-	for (i = 0; i < FREE_N_CHANNELS; i++) {
+-		bkvhead[i] = krwp->bkvhead_free[i];
+-		krwp->bkvhead_free[i] = NULL;
+-	}
++	for (i = 0; i < FREE_N_CHANNELS; i++)
++		// Initialized or empty it does not matter just replace.
++		list_replace_init(&krwp->page_free_head[i], &local_page_head[i]);
+ 
+ 	// Channel 3.
+ 	head = krwp->head_free;
+ 	krwp->head_free = NULL;
++
++	head_free_gp_snap = krwp->head_free_gp_snap;
+ 	raw_spin_unlock_irqrestore(&krcp->lock, flags);
+ 
+ 	// Handle the first two channels.
+ 	for (i = 0; i < FREE_N_CHANNELS; i++) {
+-		for (; bkvhead[i]; bkvhead[i] = bnext) {
+-			bnext = bkvhead[i]->next;
+-			debug_rcu_bhead_unqueue(bkvhead[i]);
++		// Start from the tail page, so a GP is likely passed for it.
++		list_for_each_entry_safe_reverse(page, n, &local_page_head[i], list) {
++			cond_synchronize_rcu(page->gp_snap);
++			debug_rcu_bhead_unqueue(page);
+ 
+ 			rcu_lock_acquire(&rcu_callback_map);
+ 			if (i == 0) { // kmalloc() / kfree().
+ 				trace_rcu_invoke_kfree_bulk_callback(
+-					rcu_state.name, bkvhead[i]->nr_records,
+-					bkvhead[i]->records);
++					rcu_state.name, page->nr_records,
++					page->records);
+ 
+-				kfree_bulk(bkvhead[i]->nr_records,
+-					bkvhead[i]->records);
++				kfree_bulk(page->nr_records, page->records);
+ 			} else { // vmalloc() / vfree().
+-				for (j = 0; j < bkvhead[i]->nr_records; j++) {
++				for (j = 0; j < page->nr_records; j++) {
+ 					trace_rcu_invoke_kvfree_callback(
+-						rcu_state.name,
+-						bkvhead[i]->records[j], 0);
++						rcu_state.name, page->records[j], 0);
+ 
+-					vfree(bkvhead[i]->records[j]);
++					vfree(page->records[j]);
+ 				}
+ 			}
+ 			rcu_lock_release(&rcu_callback_map);
+ 
+ 			raw_spin_lock_irqsave(&krcp->lock, flags);
+-			if (put_cached_bnode(krcp, bkvhead[i]))
+-				bkvhead[i] = NULL;
++			if (put_cached_bnode(krcp, page))
++				page = NULL;
+ 			raw_spin_unlock_irqrestore(&krcp->lock, flags);
+ 
+-			if (bkvhead[i])
+-				free_page((unsigned long) bkvhead[i]);
++			if (page)
++				free_page((unsigned long) page);
+ 
+ 			cond_resched_tasks_rcu_qs();
+ 		}
+@@ -3126,6 +3133,9 @@ static void kfree_rcu_work(struct work_struct *work)
+ 	 * queued on a linked list through their rcu_head structures.
+ 	 * This list is named "Channel 3".
+ 	 */
++	if (head)
++		cond_synchronize_rcu(head_free_gp_snap);
++
+ 	for (; head; head = next) {
+ 		unsigned long offset = (unsigned long)head->func;
+ 		void *ptr = (void *)head - offset;
+@@ -3149,7 +3159,7 @@ need_offload_krc(struct kfree_rcu_cpu *krcp)
+ 	int i;
+ 
+ 	for (i = 0; i < FREE_N_CHANNELS; i++)
+-		if (krcp->bkvhead[i])
++		if (!list_empty(&krcp->page_head[i]))
+ 			return true;
+ 
+ 	return !!krcp->head;
+@@ -3191,16 +3201,15 @@ static void kfree_rcu_monitor(struct work_struct *work)
+ 		// a previous RCU batch is in progress, it means that
+ 		// immediately to queue another one is not possible so
+ 		// in that case the monitor work is rearmed.
+-		if ((krcp->bkvhead[0] && !krwp->bkvhead_free[0]) ||
+-			(krcp->bkvhead[1] && !krwp->bkvhead_free[1]) ||
++		if ((!list_empty(&krcp->page_head[0]) && list_empty(&krwp->page_free_head[0])) ||
++			(!list_empty(&krcp->page_head[1]) && list_empty(&krwp->page_free_head[1])) ||
+ 				(krcp->head && !krwp->head_free)) {
++
+ 			// Channel 1 corresponds to the SLAB-pointer bulk path.
+ 			// Channel 2 corresponds to vmalloc-pointer bulk path.
+ 			for (j = 0; j < FREE_N_CHANNELS; j++) {
+-				if (!krwp->bkvhead_free[j]) {
+-					krwp->bkvhead_free[j] = krcp->bkvhead[j];
+-					krcp->bkvhead[j] = NULL;
+-				}
++				if (list_empty(&krwp->page_free_head[j]))
++					list_replace_init(&krcp->page_head[j], &krwp->page_free_head[j]);
+ 			}
+ 
+ 			// Channel 3 corresponds to both SLAB and vmalloc
+@@ -3208,6 +3217,11 @@ static void kfree_rcu_monitor(struct work_struct *work)
+ 			if (!krwp->head_free) {
+ 				krwp->head_free = krcp->head;
+ 				krcp->head = NULL;
++
++				// Take a snapshot for this krwp. Please note no more
++				// any objects can be added to attached head_free channel
++				// therefore fixate a GP for it here.
++				krwp->head_free_gp_snap = get_state_synchronize_rcu();
+ 			}
+ 
+ 			WRITE_ONCE(krcp->count, 0);
+@@ -3217,7 +3231,7 @@ static void kfree_rcu_monitor(struct work_struct *work)
+ 			// be that the work is in the pending state when
+ 			// channels have been detached following by each
+ 			// other.
+-			queue_rcu_work(system_wq, &krwp->rcu_work);
++			queue_work(system_wq, &krwp->rcu_work);
+ 		}
+ 	}
+ 
+@@ -3312,10 +3326,11 @@ add_ptr_to_bulk_krc_lock(struct kfree_rcu_cpu **krcp,
+ 		return false;
+ 
+ 	idx = !!is_vmalloc_addr(ptr);
++	bnode = list_first_entry_or_null(&(*krcp)->page_head[idx],
++		struct kvfree_rcu_bulk_data, list);
+ 
+ 	/* Check if a new block is required. */
+-	if (!(*krcp)->bkvhead[idx] ||
+-			(*krcp)->bkvhead[idx]->nr_records == KVFREE_BULK_MAX_ENTR) {
++	if (!bnode || bnode->nr_records == KVFREE_BULK_MAX_ENTR) {
+ 		bnode = get_cached_bnode(*krcp);
+ 		if (!bnode && can_alloc) {
+ 			krc_this_cpu_unlock(*krcp, *flags);
+@@ -3339,18 +3354,16 @@ add_ptr_to_bulk_krc_lock(struct kfree_rcu_cpu **krcp,
+ 		if (!bnode)
+ 			return false;
+ 
+-		/* Initialize the new block. */
++		/* Initialize a new block. */
+ 		bnode->nr_records = 0;
+-		bnode->next = (*krcp)->bkvhead[idx];
+-
+-		/* Attach it to the head. */
+-		(*krcp)->bkvhead[idx] = bnode;
++		list_add(&bnode->list, &(*krcp)->page_head[idx]);
+ 	}
+ 
+ 	/* Finally insert. */
+-	(*krcp)->bkvhead[idx]->records
+-		[(*krcp)->bkvhead[idx]->nr_records++] = ptr;
++	bnode->records[bnode->nr_records++] = ptr;
+ 
++	/* Keep updated a GP status of this page. */
++	bnode->gp_snap = get_state_synchronize_rcu();
+ 	return true;
+ }
+ 
+@@ -4790,7 +4803,7 @@ struct workqueue_struct *rcu_gp_wq;
+ static void __init kfree_rcu_batch_init(void)
+ {
+ 	int cpu;
+-	int i;
++	int i, j;
+ 
+ 	/* Clamp it to [0:100] seconds interval. */
+ 	if (rcu_delay_page_cache_fill_msec < 0 ||
+@@ -4808,10 +4821,16 @@ static void __init kfree_rcu_batch_init(void)
+ 		struct kfree_rcu_cpu *krcp = per_cpu_ptr(&krc, cpu);
+ 
+ 		for (i = 0; i < KFREE_N_BATCHES; i++) {
+-			INIT_RCU_WORK(&krcp->krw_arr[i].rcu_work, kfree_rcu_work);
++			INIT_WORK(&krcp->krw_arr[i].rcu_work, kfree_rcu_work);
+ 			krcp->krw_arr[i].krcp = krcp;
++
++			for (j = 0; j < FREE_N_CHANNELS; j++)
++				INIT_LIST_HEAD(&krcp->krw_arr[i].page_free_head[j]);
+ 		}
+ 
++		for (i = 0; i < FREE_N_CHANNELS; i++)
++			INIT_LIST_HEAD(&krcp->page_head[i]);
++
+ 		INIT_DELAYED_WORK(&krcp->monitor_work, kfree_rcu_monitor);
+ 		INIT_DELAYED_WORK(&krcp->page_cache_work, fill_page_cache_func);
+ 		krcp->initialized = true;
+-- 
+2.30.2
+<snip>
+
+it is pretty simple. It does the following:
+
+1) A GP status is sampled per a page that drives pointers;
+2) Reclaim is done in reverse order because an oldest page more likely passed its GP;
+3) Returning a memory occurs faster thus it reduces a memory footprint;
+4) Improves readability of the code.
+
+Any inputs? I will test and check on our devices with real workloads.
+
+--
+Uladzislau Rezki
