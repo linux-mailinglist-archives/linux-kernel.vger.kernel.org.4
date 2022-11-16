@@ -2,104 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BBEA62CEFB
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 00:43:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 738DF62CF14
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 00:48:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233825AbiKPXne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 18:43:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33836 "EHLO
+        id S233859AbiKPXsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 18:48:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234363AbiKPXmo (ORCPT
+        with ESMTP id S233325AbiKPXsJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 18:42:44 -0500
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20AA5686B9;
-        Wed, 16 Nov 2022 15:42:22 -0800 (PST)
-Received: by mail-oi1-f180.google.com with SMTP id h132so155507oif.2;
-        Wed, 16 Nov 2022 15:42:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=5LdKOGlH65lOSoImyTv5F76TVsoyOjJ93aGKFHERCSs=;
-        b=EQsSr8LdDDVDrlPDdDAswEBYh6O9Fpn5eD76wTEQm0fV8/QF2UAfQtIXpj6K8qtJh5
-         IEKkg2D7lXHdwzUYRs6NMTzLgVJgPpPGs0QHLVXq4sCht1tF4iz5UgI4uaPDhieQy16X
-         gPF3DPPafTH5BiRxP0J+Jw7j23P5Tlbs5X6+MKk/fkEL89j2p+2dkgbXIv20Gr3jCBUl
-         El+U6u4A5CJUsnH7/QtbNssZ8s4TAcQxKEPfKzC8zn/2MLc/L5DEcducHxS6PGPvszK3
-         w24nnktv57V7nSdPu9QTdFJ3RMbrjVQRW3B1NKAkFmYz9GWyVxP5Ihl4RgsKgnVydzRO
-         NM3w==
-X-Gm-Message-State: ANoB5pl83nFu1xDeL5TGAK7oEDS0bjtzNhXosL7cOTsE8uRiS9svlVrr
-        FuI89WZjDxEPzIWXHlI+7euB/rUktg==
-X-Google-Smtp-Source: AA0mqf6FgriVlXfvMJ9LHdjfinowMEqzwwe+lERbtwJvX0bDChLkPIPUTIL+nJTeLRlM0Zj9da+qXg==
-X-Received: by 2002:a05:6808:ec9:b0:34d:d3a5:b2d with SMTP id q9-20020a0568080ec900b0034dd3a50b2dmr2771547oiv.224.1668642141339;
-        Wed, 16 Nov 2022 15:42:21 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id w13-20020a9d450d000000b00661948e6119sm7300245ote.47.2022.11.16.15.42.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 15:42:20 -0800 (PST)
-Received: (nullmailer pid 1236701 invoked by uid 1000);
-        Wed, 16 Nov 2022 23:42:22 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Wed, 16 Nov 2022 18:48:09 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F586C60
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 15:48:08 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1668642486;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xg0hDSqtEw8J2eI5+nleZ6Zt6UOU2aYCgIJUROS4AcY=;
+        b=jSTQgzJc0OonCSH3pyL48eXHQ/qI7Pwp0eIMSlvWd8TNgzQOchVpuZCrNaDWLg6u37OzoN
+        JRlrssDFMOZiUg1WUShADMmlzfZHh11UtcMrXrE0psCg6DqE1/VdqcMt3fDBOZmk/49Zfm
+        /yZ9ZhZH3oU9AHSWqrVFI1tV8fNM9LTL6hkO33TZvyNMX/1IV77nKNGs05DDRDtmGJonOR
+        xjHegykTRruplFrNLt9691TAz7iP6an+EWedR2k8QXLigLp15xLp5z1Vdpzae9otPd72DA
+        334KF2G8jt4y1Cakw7baH4QMKv5YuEILwneiAGAFd3zBfLlsSAsSEd58QnkArg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1668642486;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xg0hDSqtEw8J2eI5+nleZ6Zt6UOU2aYCgIJUROS4AcY=;
+        b=mAdkuYGutvulBNUqtXkMNNY8QvTT8yV+iPC1IaiPuk/clfnA8P0RB8Tv3cXA3ZHMkRs7Xw
+        9LjP4B3BNMIvcuCw==
+To:     Frederic Weisbecker <frederic@kernel.org>,
+        "Zhou, Yun" <Yun.Zhou@windriver.com>
+Cc:     "jstultz@google.com" <jstultz@google.com>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] timers: fix LVL_START macro
+In-Reply-To: <20221115224042.GA722789@lothringen>
+References: <20221115025614.79537-1-yun.zhou@windriver.com>
+ <20221115120239.GA721394@lothringen>
+ <SN6PR11MB300812CA336B497C40E93CA19F049@SN6PR11MB3008.namprd11.prod.outlook.com>
+ <20221115224042.GA722789@lothringen>
+Date:   Thu, 17 Nov 2022 00:48:05 +0100
+Message-ID: <877czuo40a.ffs@tglx>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        samuel@sholland.org, linux-media@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, mchehab@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, wens@csie.org
-In-Reply-To: <20221116193105.363297-2-jernej.skrabec@gmail.com>
-References: <20221116193105.363297-1-jernej.skrabec@gmail.com>
- <20221116193105.363297-2-jernej.skrabec@gmail.com>
-Message-Id: <166864203895.1233471.6009951127753236678.robh@kernel.org>
-Subject: Re: [PATCH 1/2] media: dt-bindings: allwinner: video-engine: Fix
- number of IOMMU channels
-Date:   Wed, 16 Nov 2022 17:42:22 -0600
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Nov 15 2022 at 23:40, Frederic Weisbecker wrote:
+> On Tue, Nov 15, 2022 at 01:15:11PM +0000, Zhou, Yun wrote:
+>> Hi Frederic,
+>> 
+>> The issue now is that a timer may be thrown into the upper level bucket. For example, expires 4090 and 1000 HZ, it should be in level 2, but now it will be placed in the level 3. Is this expected?
+>> 
+>>  * HZ 1000 steps
+>>  * Level Offset  Granularity            Range
+>>  *  0      0         1 ms                0 ms -         63 ms
+>>  *  1     64         8 ms               64 ms -        511 ms
+>>  *  2    128        64 ms              512 ms -       4095 ms (512ms - ~4s)
+>>  *  3    192       512 ms             4096 ms -      32767 ms (~4s - ~32s)
+>>  *  4    256      4096 ms (~4s)      32768 ms -     262143 ms (~32s - ~4m)
+>
+> The rule is that a timer is not allowed to expire too early. But it can expire
+> a bit late. Hence why it is always rounded up. So in the case of 4090, we have
+> the choice between:
+>
+> 1) expiring at bucket 2 after 4096 - 64 = 4032 ms
+> 2) expiring at bucket 3 after 4096 ms
+>
+> The 1) rounds down and expires too early. The 2) rounds up and expires a bit
+> late. So the second solution is preferred.
 
-On Wed, 16 Nov 2022 20:31:04 +0100, Jernej Skrabec wrote:
-> Cedrus (video engine) on Allwinner H6 actually uses two IOMMU channel,
-> not just one. However, Cedrus on SoCs like D1 only uses one channel.
-> 
-> Allow up to 2 IOMMU channels.
-> 
-> Fixes: 62a8ccf3a248 ("arm64: dts: allwinner: h6: Fix Cedrus IOMMU usage")
-> Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-> ---
->  .../bindings/media/allwinner,sun4i-a10-video-engine.yaml        | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
+It's not only preferred, it's required simply because the timer wheel
+has only one guarantee: Not to expire early.
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
+Timer wheel based timers are fundamentaly not precise unless the timeout
+is short and hits the first level.
 
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
+But even hrtimers which are designed to be precise have only one real
+guarantee: Not to expire early.
 
-Full log is available here: https://patchwork.ozlabs.org/patch/
+hrtimers do not have the side effect of batching on long timeouts like
+timer wheel based timer have, but that's it.
 
+Timers in the kernel come with a choice:
 
-video-codec@1c0e000: iommus: [[10, 3]] is too short
-	arch/arm64/boot/dts/allwinner/sun50i-h6-orangepi-lite2.dtb
-	arch/arm64/boot/dts/allwinner/sun50i-h6-orangepi-one-plus.dtb
+  -  Imprecise and inexpensive to arm and cancel (timer_list)
+  -  Precise and expensive to arm and cancel (hrtimer)
 
-video-codec@1c0e000: iommus: [[12, 3]] is too short
-	arch/arm64/boot/dts/allwinner/sun50i-h6-beelink-gs1.dtb
-	arch/arm64/boot/dts/allwinner/sun50i-h6-orangepi-3.dtb
-	arch/arm64/boot/dts/allwinner/sun50i-h6-pine-h64.dtb
-	arch/arm64/boot/dts/allwinner/sun50i-h6-pine-h64-model-b.dtb
-	arch/arm64/boot/dts/allwinner/sun50i-h6-tanix-tx6.dtb
-	arch/arm64/boot/dts/allwinner/sun50i-h6-tanix-tx6-mini.dtb
+You can't have both. That's well documented.
 
+Thanks,
+
+        tglx
