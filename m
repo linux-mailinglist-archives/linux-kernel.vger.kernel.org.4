@@ -2,114 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DE7A62BD93
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:21:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A71C62BD87
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:20:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238605AbiKPMVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 07:21:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35810 "EHLO
+        id S233430AbiKPMUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 07:20:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238693AbiKPMUm (ORCPT
+        with ESMTP id S238704AbiKPMTy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 07:20:42 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9AA22667
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 04:18:26 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id cl5so29612153wrb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 04:18:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fJEtub8V1LnQBPuC/j+4CZ4Uf34CBafwgkOL5JcKXZs=;
-        b=QP2wtvzqTHk70Ufy5qLlZu444lFQPCngrbtt3UAP/WOtUufcT4lYsanK04d99j0W18
-         IytzeaelnkfTxcirY1rOxyK6ElTHtQePUIrXG15F8PBNQR0g0eIZ2D1zQcblSRcs1FFl
-         u10n4OA14EsUM83rPrWDVvRWiONkXnF9ujCgD0tIN9K+ML6rr1n5bKedVcsyq2R3j1LG
-         GAK8PF3v5rErB3h3p7rlklRfTf18+0ziSY83PlKKdBu9pqBqhMe9HAjf08M/8b5QHmtb
-         oWU7AmGFR7nEmQNKDVhYitTYHvlMStj4zjOgW7LF1Pu78/wSP0LBO2tVRrnuKcdttdkO
-         mJ1A==
+        Wed, 16 Nov 2022 07:19:54 -0500
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB460DFA6;
+        Wed, 16 Nov 2022 04:17:59 -0800 (PST)
+Received: by mail-qk1-f175.google.com with SMTP id v8so11422783qkg.12;
+        Wed, 16 Nov 2022 04:17:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fJEtub8V1LnQBPuC/j+4CZ4Uf34CBafwgkOL5JcKXZs=;
-        b=sv1yDqW+yb8wQ/Ddkln/V7qiBsQ4XCeSPVXrssB11NPOrcgIB+NpxMjyfAaENFJc1B
-         bTDD3v0gFByFCJoJTCKSPu6Mu9b3EUZd7KnSTQwk9GCRmz19YdrQAxj1YGdni04WpXFD
-         5D54cxaQb8YK/WnZa7fmzObbwlAqQHA0giVhx8Jf/vYFdFWyv1hlOjd1+LgFqD6CNh6K
-         o6OXqvFxAYwD118VnpB1aSeNEHs5pCKya7Eoj2k8qnWhWYa+IRLja5rsZ4oxXcLjSkvK
-         oZ5z5K1Fc+a0MGjtYPJ+p+ZNIKKycRxT6tNPyfNR8WdVTfkmmQHRUQLuSRbXOxZnAG9n
-         z48g==
-X-Gm-Message-State: ANoB5pnit/rE2jVXtiDOjTOGL9pEYKfokE2Tp4JpGurQs9mxOMzRhhN3
-        wWjuMdTqS/Ckr++wP6dPwg0i0g==
-X-Google-Smtp-Source: AA0mqf5j/ZQT6HbQ/iuTie2i710FZ8rhLlrvaUCCfCkCR6ERkMaYmLNVizqEGUg4ksc2+8M/DsZN+w==
-X-Received: by 2002:a5d:6086:0:b0:22e:71db:47ba with SMTP id w6-20020a5d6086000000b0022e71db47bamr14186962wrt.359.1668601105326;
-        Wed, 16 Nov 2022 04:18:25 -0800 (PST)
-Received: from localhost.localdomain ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id t14-20020a5d42ce000000b00241a8a5bc11sm1090359wrr.80.2022.11.16.04.18.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 04:18:24 -0800 (PST)
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH 2/2] dt-bindings: ufs: qcom: Add SM8550 compatible string
-Date:   Wed, 16 Nov 2022 14:17:32 +0200
-Message-Id: <20221116121732.2731448-3-abel.vesa@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221116121732.2731448-1-abel.vesa@linaro.org>
-References: <20221116121732.2731448-1-abel.vesa@linaro.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vIWijkKIIG3mmZeimTFZ3ib2SY8A+L/da/B2JGwwAfI=;
+        b=IzOBQCP3BwuT1fObM5IXUBjRAuVvWWf7hZ2Yjye1Anz1hZTHEtzx76WSUQC6F8Kp41
+         h0EUdrirpEPyYrPq9fsVSUy6pCiuU+bTozffw2HoDW7FEifs0fywAl6wL65A5AV3v2do
+         UlwMUzU7bnEgeo2DEOAWZkQ2ZYjbceTGfdAImEMfJUVl4BUe4UnT0eb8Xazvh+UTjVYw
+         oOFEzHBihJtXKZp7QU7mLGdwYv6A8VuwVn97POvLsL88MdMKqpkdiFLBfAM1Mg3O7K3v
+         B2DBlEGr82jbGwrpX28fdsLqMuVseflO6yUzErjD64B/Fzh1KRgL2ybPUQridkKdecD0
+         krMw==
+X-Gm-Message-State: ANoB5pmnWoFhNDlYke5fFTEjXxUeIF3cR+tyoihdTyc3bvrPw+fzmMBB
+        anvD6TR3ZMubHMkmrrM4NdNFqIjTdsGm19zduOo=
+X-Google-Smtp-Source: AA0mqf7K3C/o1DUvfHnSMEjjLphPhRxKiD7X7ByAz7w+sygk5m+oeteM5ukh2P167QSsx4go5gPPbAr97gf9PXgb/Z4=
+X-Received: by 2002:a05:620a:f0f:b0:6fa:df0:f326 with SMTP id
+ v15-20020a05620a0f0f00b006fa0df0f326mr19212259qkl.23.1668601078911; Wed, 16
+ Nov 2022 04:17:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221110195732.1382314-1-wusamuel@google.com> <CAGETcx_aAynvykDSL4aue3zf5Pv7+hELUHQ=MWOzBbyZBPySDA@mail.gmail.com>
+ <880b7332-562c-4934-4e92-493b112568c9@arm.com>
+In-Reply-To: <880b7332-562c-4934-4e92-493b112568c9@arm.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 16 Nov 2022 13:17:47 +0100
+Message-ID: <CAJZ5v0hpDiQUoWZO7YzhU2ymyyNK4uwZrS8nuwyrs2rjNOO4SA@mail.gmail.com>
+Subject: Re: [PATCH v1] Revert "cpufreq: schedutil: Move max CPU capacity to sugov_policy"
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        Sam Wu <wusamuel@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        "Isaac J . Manjarres" <isaacmanjarres@google.com>,
+        kernel-team@android.com,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document the compatible for the UFS found on SM8550.
+On Wed, Nov 16, 2022 at 12:43 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>
+>
+>
+> On 11/15/22 22:35, Saravana Kannan wrote:
+> > On Thu, Nov 10, 2022 at 11:57 AM Sam Wu <wusamuel@google.com> wrote:
+> >>
+> >> This reverts commit 6d5afdc97ea71958287364a1f1d07e59ef151b11.
+> >>
+> >> On a Pixel 6 device, it is observed that this commit increases
+> >> latency by approximately 50ms, or 20%, in migrating a task
+> >> that requires full CPU utilization from a LITTLE CPU to Fmax
+> >> on a big CPU. Reverting this change restores the latency back
+> >> to its original baseline value.
+> >>
+> >> Fixes: 6d5afdc97ea7 ("cpufreq: schedutil: Move max CPU capacity to sugov_policy")
+> >> Cc: Lukasz Luba <lukasz.luba@arm.com>
+> >> Cc: Saravana Kannan <saravanak@google.com>
+> >> Cc: Isaac J. Manjarres <isaacmanjarres@google.com>
+> >> Signed-off-by: Sam Wu <wusamuel@google.com>
+> >
+> > Rafael, can we pick this up please?
+> >
+> > Lukasz, no objections to the idea itself, but it's causing regression
+> > and we'd like to revert and then fix it.
+>
+> If you see this in mainline kernel, then I'm fine with reverting it.
 
-Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
----
- Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+OK, I'll wait for the confirmation of this.
 
-diff --git a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-index f2d6298d926c..66554adeb515 100644
---- a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-+++ b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-@@ -33,6 +33,7 @@ properties:
-           - qcom,sm8250-ufshc
-           - qcom,sm8350-ufshc
-           - qcom,sm8450-ufshc
-+          - qcom,sm8550-ufshc
-       - const: qcom,ufshc
-       - const: jedec,ufs-2.0
- 
-@@ -103,6 +104,7 @@ allOf:
-               - qcom,sm8250-ufshc
-               - qcom,sm8350-ufshc
-               - qcom,sm8450-ufshc
-+              - qcom,sm8550-ufshc
-     then:
-       properties:
-         clocks:
--- 
-2.34.1
-
+> Then I will have to trace why this CPU capacity value can change over
+> time in mainline kernel (while it shouldn't, because we register the
+> cpufreq policy and the governor later, after we calculate the capacity
+> in arch_topology.c). Maybe something has changed in mainline in the
+> meantime in this CPU capacity setup code, which caused this side effect.
+>
+> I know that android-mainline has some different setup code for those
+> custom vendor governors. I just want to eliminate this bit and be on the
+> same page.
