@@ -2,86 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F2462B762
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 11:13:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2362862B730
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 11:09:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232951AbiKPKNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 05:13:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46714 "EHLO
+        id S232099AbiKPKJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 05:09:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233002AbiKPKL4 (ORCPT
+        with ESMTP id S229703AbiKPKJm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 05:11:56 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02DA42A240
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:11:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668593515; x=1700129515;
-  h=from:to:subject:in-reply-to:references:date:message-id:
-   mime-version;
-  bh=GvNypQu57pyaZ739Rd5mWa7coT5VRJmIkuNoPDwdLRU=;
-  b=ECk366PG2bHfSrhOBj3Fn6qGQlR8kfGkkrS/2tYgP/qDFsG57+8dKAeV
-   S8Xu9XxKY/r7yiJlWkpsAIRrT+6rD3AoZ5YiG2IpqLv9xa+NfuNpd9PG8
-   NURskrQqaj7KPmnJEE1NPBsMLs6dkmAhoJIfekfIFeGy0djHzABMAWUQu
-   tHbaC4oKgCsrNUBLqo2jBtQYI1Y86Vxdzp4YYq9SJrHU31tOEQOTUu2c3
-   n0UzqfGKAmMt5UvwAOmd9tkNutDV1aUztfD/0Mz8+xSA6plNijjfSNCfx
-   AunpDEhwsi6e6NlyWawY0Ppb8BE0RvCgymQFd23knsjNDeWgCvj6frdoR
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="374640198"
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="374640198"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 02:08:31 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="633576261"
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="633576261"
-Received: from dariofax-mobl.amr.corp.intel.com (HELO localhost) ([10.252.59.5])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 02:08:30 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [Intel-gfx] How is the progress for removing
- flush_scheduled_work() callers?
-In-Reply-To: <e170edc2-e5b9-4c8b-4ed3-7e2d7a2850dc@I-love.SAKURA.ne.jp>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <e170edc2-e5b9-4c8b-4ed3-7e2d7a2850dc@I-love.SAKURA.ne.jp>
-Date:   Wed, 16 Nov 2022 12:08:27 +0200
-Message-ID: <877czv2ov8.fsf@intel.com>
+        Wed, 16 Nov 2022 05:09:42 -0500
+Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [IPv6:2a01:37:1000::53df:5f64:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D0F1DDC0;
+        Wed, 16 Nov 2022 02:09:40 -0800 (PST)
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by bmailout1.hostsharing.net (Postfix) with ESMTPS id 390A13000BA01;
+        Wed, 16 Nov 2022 11:09:39 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id 269184378B; Wed, 16 Nov 2022 11:09:39 +0100 (CET)
+Date:   Wed, 16 Nov 2022 11:09:39 +0100
+From:   Lukas Wunner <lukas@wunner.de>
+To:     ira.weiny@intel.com
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Gregory Price <gregory.price@memverge.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>, linux-cxl@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: Re: [PATCH] PCI/doe: Fix work struct declaration
+Message-ID: <20221116100939.GA32050@wunner.de>
+References: <20221115011943.1051039-1-ira.weiny@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221115011943.1051039-1-ira.weiny@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 06 Nov 2022, Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp> wrote:
-> Like commit c4f135d643823a86 ("workqueue: Wrap flush_workqueue() using a
-> macro") says, flush_scheduled_work() is dangerous and will be forbidden.
-> We are on the way for removing all flush_scheduled_work() callers from
-> the kernel, and there are only 4 callers remaining as of linux-20221104.
->
->   drivers/gpu/drm/i915/display/intel_display.c:8997:      flush_scheduled_work();
+On Mon, Nov 14, 2022 at 05:19:43PM -0800, ira.weiny@intel.com wrote:
+> From: Ira Weiny <ira.weiny@intel.com>
+> 
+> The callers of pci_doe_submit_task() allocate the pci_doe_task on the
+> stack.  This causes the work structure to be allocated on the stack
+> without pci_doe_submit_task() knowing.  Work item initialization needs
+> to be done with either INIT_WORK_ONSTACK() or INIT_WORK() depending on
+> how the work item is allocated.
+> 
+> Jonathan suggested creating doe task allocation macros such as
+> DECLARE_CDAT_DOE_TASK_ONSTACK().[1]  The issue with this is the work
+> function is not known to the callers and must be initialized correctly.
+> 
+> A follow up suggestion was to have an internal 'pci_doe_work' item
+> allocated by pci_doe_submit_task().[2]  This requires an allocation which
+> could restrict the context where tasks are used.
+> 
+> Compromise with an intermediate step to initialize the task struct with
+> a new call pci_doe_init_task() which must be called prior to submit
+> task.
+> 
+> [1] https://lore.kernel.org/linux-cxl/20221014151045.24781-1-Jonathan.Cameron@huawei.com/T/#m88a7f50dcce52f30c8bf5c3dcc06fa9843b54a2d
+> [2] https://lore.kernel.org/linux-cxl/20221014151045.24781-1-Jonathan.Cameron@huawei.com/T/#m63c636c5135f304480370924f4d03c00357be667
 
-Thanks for the reminder, I've pinged folks to get someone working on
-this. We do schedule quite a bunch of work, so it's not immediately
-obvious (at least to me) what exactly needs flushing.
+We have object_is_on_stack(), included from <linux/sched/task_stack.h>.
 
-https://gitlab.freedesktop.org/drm/intel/-/issues/7546
+So you could just autosense in pci_doe_submit_task() whether
+pci_doe_task is on the stack and call the appropriate INIT_WORK
+variant.
 
->   drivers/gpu/drm/i915/gt/selftest_execlists.c:88:        flush_scheduled_work();
+Any reason not to do that?
 
-Removed by commit 7d33fd02dd94 ("drm/i915/selftests: Remove
-flush_scheduled_work() from live_execlists") in drm-next.
+Thanks,
 
-BR,
-Jani.
-
--- 
-Jani Nikula, Intel Open Source Graphics Center
+Lukas
