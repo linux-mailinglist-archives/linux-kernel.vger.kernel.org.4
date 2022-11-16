@@ -2,104 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0183062B042
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 01:52:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67BD662B043
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 01:53:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231296AbiKPAwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 19:52:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38308 "EHLO
+        id S231417AbiKPAw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 19:52:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiKPAwe (ORCPT
+        with ESMTP id S229531AbiKPAw5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 19:52:34 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32952CDCC;
-        Tue, 15 Nov 2022 16:52:32 -0800 (PST)
-Received: from kwepemi100025.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NBkyw4TSvzmVx6;
-        Wed, 16 Nov 2022 08:52:08 +0800 (CST)
-Received: from [10.174.148.223] (10.174.148.223) by
- kwepemi100025.china.huawei.com (7.221.188.158) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 16 Nov 2022 08:52:29 +0800
-Message-ID: <726934f2-ded0-317f-2082-bf5ee08cf39d@huawei.com>
-Date:   Wed, 16 Nov 2022 08:52:28 +0800
+        Tue, 15 Nov 2022 19:52:57 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42E932F670
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 16:52:56 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id 140so14520555pfz.6
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 16:52:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xb7zxmPf+ONVcQfpx029D/sCIkvuG5jR1+Y0BJgF2PM=;
+        b=blnaeTtTyzXnpZLcVwA0S+muYWw5gbA6AuneyeHjS5EHufk8lvDIW+5DEyky6sjS0I
+         SOZM6SUqaeoldKZsm7NXvK7xrMyhmTNRglHT9uMqaatqMEWVXPIqhXHfU/XZiVUoimRX
+         DxV966vq8/IKmmmH2Lzw+0wYedFI+IEpZF9ww=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xb7zxmPf+ONVcQfpx029D/sCIkvuG5jR1+Y0BJgF2PM=;
+        b=nFnsSXHXIjwl6HWaQUN7YLtSR/pro86NxVRQ14Wlk5p6arcVaVrfq2UEFye7oQNuvm
+         c+0COVnNNrzAS1DVNXBsQ7lgcSbyDCTD/sAw6gbi2NNro8VRLUDETE9Sr4tvTZwYnKEA
+         gKqfiEB/4dqnUMkS1n9SseGEej+ZpCtqcRFd8QfSRitQOhK1hjkpklnzkgaghQ+ztlcx
+         wE+E0RtQoAU2OXtBlTYdYs2zgVQ8l9heTKzqhEUH3TNYdoSMB6u1ZsvPn+Pe4Pro4W5l
+         /4bPS7Bzlp4fqiG97opeRV/Vs6aNuq4ZqxQJRjnoU1OesH/gIWtel/hGVyZ/hBTKUhhk
+         SMoQ==
+X-Gm-Message-State: ANoB5pmhe0EQo+XFlxlMlP00rakU61lhqK+x0bORJ1wh5ffF6Y4Piofr
+        REKVa7B6VkIztKDWeX3zP2gNiOA+Q+ZD/Q==
+X-Google-Smtp-Source: AA0mqf48PAGcMUFTmYQmJSHT+lbl25BuF1R+3JiN++qxnGv41DmnIxEBd4aKybk+oJEp/VKmrJvylw==
+X-Received: by 2002:a63:5d46:0:b0:46f:9c0b:1e86 with SMTP id o6-20020a635d46000000b0046f9c0b1e86mr17621582pgm.508.1668559975565;
+        Tue, 15 Nov 2022 16:52:55 -0800 (PST)
+Received: from google.com ([240f:75:7537:3187:9603:e3e0:aec4:58d5])
+        by smtp.gmail.com with ESMTPSA id a11-20020aa7970b000000b00562664d5027sm9473087pfg.61.2022.11.15.16.52.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 16:52:54 -0800 (PST)
+Date:   Wed, 16 Nov 2022 09:52:50 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Minchan Kim <minchan@kernel.org>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCHv4 0/9] zsmalloc/zram: configurable zspage size
+Message-ID: <Y3Q0YnpX7jBOHKqp@google.com>
+References: <20221031054108.541190-1-senozhatsky@chromium.org>
+ <Y21+xp52OQYi/qjQ@google.com>
+ <Y22dxEcs2g5mjuQ7@google.com>
+ <Y26AbHxhPBJdWZQE@google.com>
+ <Y3MrHsaLc8wth00E@google.com>
+ <Y3NG4fsjxHGrnbDp@google.com>
+ <Y3QfdyKNrZjx5FR8@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC 0/4] pci/sriov: support VFs dynamic addition
-To:     Oliver O'Halloran <oohall@gmail.com>
-CC:     Leon Romanovsky <leon@kernel.org>, <bhelgaas@google.com>,
-        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <jianjay.zhou@huawei.com>, <zhuangshengen@huawei.com>,
-        <arei.gonglei@huawei.com>, <yechuan@huawei.com>,
-        <huangzhichao@huawei.com>, <xiehong@huawei.com>
-References: <20221111142722.1172-1-longpeng2@huawei.com>
- <Y256ty6xGyUpkFn9@unreal> <0b2202bf-18d3-b288-9605-279208165080@huawei.com>
- <Y3Hoi4zGFY4Fz1l4@unreal> <d7327d46-deb5-dc75-21c3-1f351d7da108@huawei.com>
- <Y3I+Fs0/dXH/hnpL@unreal> <3a8efc92-eda8-9c61-50c5-5ec97e2e2342@huawei.com>
- <CAOSf1CFAG7FMjm0uzKCNMxB=0Q41JoNz7vr7mHNqEP0rr124Ug@mail.gmail.com>
-From:   "Longpeng (Mike, Cloud Infrastructure Service Product Dept.)" 
-        <longpeng2@huawei.com>
-In-Reply-To: <CAOSf1CFAG7FMjm0uzKCNMxB=0Q41JoNz7vr7mHNqEP0rr124Ug@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.148.223]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemi100025.china.huawei.com (7.221.188.158)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3QfdyKNrZjx5FR8@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Oliver,
-
-在 2022/11/15 10:06, Oliver O'Halloran 写道:
-> On Tue, Nov 15, 2022 at 1:08 AM Longpeng (Mike, Cloud Infrastructure
-> Service Product Dept.) <longpeng2@huawei.com> wrote:
->>
->> *snip*
->>
->> Adding 2K+ VFs to the sysfs need too much time.
->>
->> Look at the bottomhalf of the hypervisor live update:
->> kexec --> add 2K VFs --> restore VMs
->>
->> The downtime can be reduced if the sequence is:
->> kexec --> add 100 VFs（the VMs used） --> resotre VMs --> add 1.9K VFs
+On (22/11/15 15:23), Minchan Kim wrote:
+> Sure, if we start talking about battery, that would have a lot of things
+> we need to consider not only from zram-direct but also other indirect-stuffs
+> caused caused by memory pressure and workload patterns. That's not what we
+> can control and would consume much more battery. I understand your concern
+> but also think sysfs per-konb can solve the issue since workload is too
+> dynamic even in the same swap file/fs, too. I'd like to try finding a
+> sweet spot in general. If it's too hard to have, then, we need to introduce
+> the knob with reasonable guideline how we could find it.
 > 
-> Right, so you want to add VFs in batches rather than all at once.
-> Personally I think the bitmap approach is error prone since it renders
-> the meaning of pf_dev->sriov->num_VFs unclear and there's some hairy
-> code in arch/powerpc/ that approach will likely break. A better
+> Let me try to see the data under Android workload how much just increase
+> the ZS_MAX_PAGES_PER_ZSPAGE blindly will change the data.
 
-I ran a quick search in the arch/powerpc/, do you mean the 
-pseries_call_allow_unfreeze ? Or would you please point the code?
+I don't want to push for sysfs knob.
 
-> approach would be to add an attribute to control the number of VFs
-> enabled in hardware and allowing sriov_numvfs to accept any number
-> between the current value and sriov_hw_numvfs. e.g. your HV setup
+What I like about sysfs knob vs KConfig is that sysfs is opt-in. We can
+ask folks to try things out, people will know what to look at and they
+will keep an eye on metrics, then they come back to us. So we can sit
+down, look at the numbers and draw some conclusions. KConfig is not
+opt-in. It'll happen for everyone, as a policy, transparently and then
+we rely on
+a) people tracking metrics that they were not asked to track
+b) people noticing changes (positive or negative) in metrics that they
+   don't keep an eye on
+c) people figuring out that change in metrics is related to zsmalloc
+   Kconfig (and that's a very non-obvious conclusion)
+d) people reaching out to us
 
-Oh, this is a constructive suggestion, I'll try in the next step.
+That's way too much to rely on. Chances are we will never hear back.
 
-> would look something like:
->
-> echo 2048 > sriov_hw_numvfs
-> echo 100 > sriov_numvfs
-> 
-It's fixed to add the first 100 VFs first, maybe providing an interface 
-that users can specify which id or which range of ids to be added first 
-would be better?
-
-> # time passes
-> echo 2048 > sriov_numvfs
-> 
-> This would be fairly simple to implement and you can make it backwards
-> compatible by having writes to sriov_numvfs retain their current
-> semantics if sriov_hw_numvfs is zero.
-> .
+I understand that you don't like sysfs, and it's not the best thing
+probably, but KConfig is not better. I like the opt-in nature of
+sysfs - if you change it then you know what you are doing.
