@@ -2,245 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C527762BA06
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 11:49:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA11E62BA0C
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 11:49:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238483AbiKPKtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 05:49:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56866 "EHLO
+        id S233205AbiKPKt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 05:49:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238885AbiKPKtX (ORCPT
+        with ESMTP id S232689AbiKPKtY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 05:49:23 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 771812C12A
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:38:13 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id bp15so28752133lfb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:38:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LqCc/GOgSVJZ5AurbG5SzvEMTnpnV++hf1m1Zs8crF4=;
-        b=wrwFH1SyiJKUYiqgDrci0/DfqgYLKXKWCtZuFhUGdVy5Wpz52Gq0+3AjBV2Lgf44Gl
-         uao7HjQbNLdEFFb1wBUxrWJt2SLwWuSE0NJdHcNZ4l0EsiGMx1Lqneme/HZB98+ObvSE
-         xdAzSVB1AIH9y2bTYjOrlh111umaQafeuNat9J2A/Rzpq5ILaxx8ki4YASlq5OeNp2Du
-         8TW8hFDJWxnxglhkMr39HA4SEhSF5ENPur0dyQGVJw+cGYhrZZixRAsQT3CwAz0ODRYi
-         Esg/tJQZ7PjGlIKeqhXMTL/1GbnLY+fOygQpJBODZWqbDlxumTO/GHPQjCGAyYqkJXgx
-         u7iA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=LqCc/GOgSVJZ5AurbG5SzvEMTnpnV++hf1m1Zs8crF4=;
-        b=bDS6AsbI3UO9mzSzTE8qyXlL9RN+gG9IkTJkZogYd5iQLjcbeDmzA41UexHxbHdih2
-         jH1btDDESo7YMgSPkzRHLfe+lPNrglodCh7SXXbyRrEtOjZg2wE4EJEaqi1D5oiJvV9C
-         BqZyM88DoBlVWG0CUNcgC/nXbKgH0yF348Hh2bWondCxfUEjSj1U9DX8tePciJUaXWFD
-         UuZVrSLSgpGt/JknI8lfF2Xqj+vDZ+/veKQdKJVbQrmpT/AgUlSpI1zHy9u38VDdvAj1
-         dPMkCRZ7TpshKN+ZStH85C0QPTxOsSRS8/YEdFLuLaN/Eus18EoAJ4MmfyL8CMnDoyqi
-         xSyw==
-X-Gm-Message-State: ANoB5pnc+j5oQhtkfmb2xGuq8qqzAFm82apkOY+gfhr6gMfDDAJ2S0dO
-        aFdhmhhjbwDF3xuStVpCXeUM5A==
-X-Google-Smtp-Source: AA0mqf7v4ql1my2L29OuYX6RCZqNvFLQrc4yTzeJ9zjilyuGHO0KOUdc0oA5P2JzUFg65NIsJ0GoYw==
-X-Received: by 2002:a05:6512:2a87:b0:4ac:5faa:654d with SMTP id dt7-20020a0565122a8700b004ac5faa654dmr6412409lfb.684.1668595091820;
-        Wed, 16 Nov 2022 02:38:11 -0800 (PST)
-Received: from [192.168.31.208] ([194.29.137.22])
-        by smtp.gmail.com with ESMTPSA id t12-20020a2e8e6c000000b0027755f52a94sm2938078ljk.80.2022.11.16.02.38.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 02:38:11 -0800 (PST)
-Message-ID: <56d54377-aa0d-8e2f-cf8e-5b3a3a414534@linaro.org>
-Date:   Wed, 16 Nov 2022 11:38:04 +0100
+        Wed, 16 Nov 2022 05:49:24 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E5D2705;
+        Wed, 16 Nov 2022 02:38:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668595110; x=1700131110;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KNw1ffHFpGMeiSvbhl5OVj8Sum6H6sXuAz+LjPT1Npc=;
+  b=jKALuSkTNyDctHEHmLy0oV6FI91cv2fHT3kRU1LY6X1AzW+NqFktbp3H
+   mFOXv8B+PWfxPfpQSRUKhX1klddIeVzjdhu3l8Dg7ZskJa0qv7+zR06/I
+   3KLhXJ1Go5v8VT1aMXn+lv5jaIPgBtff2GkGM92V1F7qccxaaND7Olg16
+   vNRuetFNuHiWvq2JCAO3br/PvlZtL9IFIM9+E5TJ6yPt6KXtIvNWbxpg8
+   Fko1cYkGSBiIQFu39vfuE80gewosPN0CY+Kb7f9PzW/F4ej6kQbKe2OfU
+   32TBxjLt7IoahJ0T6mlzbWZkckd5qVNgqbFifb8FIccgkVb0Rb6LgYbNo
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="310141030"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="310141030"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 02:38:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="814041739"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="814041739"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005.jf.intel.com with ESMTP; 16 Nov 2022 02:38:27 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ovFoH-00D5ej-04;
+        Wed, 16 Nov 2022 12:38:25 +0200
+Date:   Wed, 16 Nov 2022 12:38:24 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Brian Masney <bmasney@redhat.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: Re: [PATCH] gpiolib: of: Use correct fwnode for DT-probed chips
+Message-ID: <Y3S9oEw6qfLVgGhR@smile.fi.intel.com>
+References: <20221111113732.461881-1-thierry.reding@gmail.com>
+ <Y3Kv7XoBytwwy9pC@x1>
+ <20221115111800.t6i6fuszhuasvgka@SoMainline.org>
+ <Y3S62i7OzocP5QrT@orome>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.2
-Subject: Re: [PATCH 5/6] i2c: qcom-geni: add desc struct to prepare support
- for I2C Master Hub variant
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20221114-narmstrong-sm8550-upstream-i2c-master-hub-v1-0-64449106a148@linaro.org>
- <20221114-narmstrong-sm8550-upstream-i2c-master-hub-v1-5-64449106a148@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221114-narmstrong-sm8550-upstream-i2c-master-hub-v1-5-64449106a148@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3S62i7OzocP5QrT@orome>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Nov 16, 2022 at 11:26:34AM +0100, Thierry Reding wrote:
+> On Tue, Nov 15, 2022 at 12:18:00PM +0100, Marijn Suijten wrote:
+> > On 2022-11-14 16:15:25, Brian Masney wrote:
+> > > On Fri, Nov 11, 2022 at 12:37:32PM +0100, Thierry Reding wrote:
+> > > > From: Thierry Reding <treding@nvidia.com>
+> > > > 
+> > > > The OF node store in chip->fwnode is used to explicitly override the FW
+> > > > node for a GPIO chip. For chips that use the default FW node (i.e. that
+> > > > of their parent device), this will be NULL and cause the chip not to be
+> > > > fully registered.
+> > > > 
+> > > > Instead, use the GPIO device's FW node, which is set to either the node
+> > > > of the parent device or the explicit override in chip->fwnode.
+> > > > 
+> > > > Fixes: 8afe82550240 ("gpiolib: of: Prepare of_gpiochip_add() / of_gpiochip_remove() for fwnode")
+> > > > Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> > > > Signed-off-by: Thierry Reding <treding@nvidia.com>
+> > > 
+> > > Reviewed-by: Brian Masney <bmasney@redhat.com>
+> > > Tested-by: Brian Masney <bmasney@redhat.com>
+> > > 
+> > > I separately sent a similar type of patch to fix the same issue today:
+> > > https://lore.kernel.org/linux-arm-msm/20221114202943.2389489-1-bmasney@redhat.com/T/#u
+> > 
+> > For completeness, your linked patch fixes a synchronous external abort
+> > on multiple Qualcomm platforms pointed out in [1].  This patch however
+> > does not, are you sure they fix the exact same issue?
+
+Yes, they fix the same issue.
+
+> > [1]: https://lore.kernel.org/linux-arm-msm/20221115110800.35gl3j43lmbxm3jb@SoMainline.org/
+> 
+> Can you check if the below fixes the MSM issue that you're seeing
+> (applied on top of my earlier patch, though with Brian's reverted
+> temporarily)?
+
+I don't know why we would need this. Brian's patch (already applied into
+GPIO tree) is correct, no? (Moreover, it makes yours unneeded, but I'm fine
+with having it anyway.)
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-On 16/11/2022 11:21, Neil Armstrong wrote:
-> The I2C Master Hub is a stripped down version of the GENI Serial Engine
-> QUP Wrapper Controller but only supporting I2C serial engines without
-> DMA support.
-> 
-> Those I2C serial engines variants have some requirements:
-> - a separate "core" clock
-> - doesn't support DMA, thus no memory interconnect path
-> - fixed FIFO size not discoverable in the HW_PARAM_0 register
-> 
-> This adds a desc struct specifying all those requirements which
-> will be used in a next change when adding the I2C Master Hub
-> serial engine compatible.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
->   drivers/i2c/busses/i2c-qcom-geni.c | 50 +++++++++++++++++++++++++++++++++++---
->   1 file changed, 47 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-> index 84a77512614d..75dd0718c5a1 100644
-> --- a/drivers/i2c/busses/i2c-qcom-geni.c
-> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
-> @@ -88,6 +88,7 @@ struct geni_i2c_dev {
->   	int cur_wr;
->   	int cur_rd;
->   	spinlock_t lock;
-> +	struct clk *core_clk;
->   	u32 clk_freq_out;
->   	const struct geni_i2c_clk_fld *clk_fld;
->   	int suspended;
-> @@ -100,6 +101,13 @@ struct geni_i2c_dev {
->   	bool abort_done;
->   };
->   
-> +struct geni_i2c_desc {
-> +	bool has_core_clk;
-> +	char *icc_ddr;
-> +	bool no_dma_support;
-> +	unsigned int tx_fifo_depth;
-> +};
-> +
->   struct geni_i2c_err_log {
->   	int err;
->   	const char *msg;
-> @@ -764,6 +772,7 @@ static int geni_i2c_probe(struct platform_device *pdev)
->   	u32 proto, tx_depth, fifo_disable;
->   	int ret;
->   	struct device *dev = &pdev->dev;
-> +	const struct geni_i2c_desc *desc = NULL;
->   
->   	gi2c = devm_kzalloc(dev, sizeof(*gi2c), GFP_KERNEL);
->   	if (!gi2c)
-> @@ -776,6 +785,14 @@ static int geni_i2c_probe(struct platform_device *pdev)
->   	if (IS_ERR(gi2c->se.base))
->   		return PTR_ERR(gi2c->se.base);
->   
-> +	desc = device_get_match_data(&pdev->dev);
-> +
-> +	if (desc && desc->has_core_clk) {
-> +		gi2c->core_clk = devm_clk_get(dev, "core");
-> +		if (IS_ERR(gi2c->core_clk))
-> +			return PTR_ERR(gi2c->core_clk);
-> +	}
-> +
->   	gi2c->se.clk = devm_clk_get(dev, "se");
->   	if (IS_ERR(gi2c->se.clk) && !has_acpi_companion(dev))
->   		return PTR_ERR(gi2c->se.clk);
-> @@ -819,7 +836,7 @@ static int geni_i2c_probe(struct platform_device *pdev)
->   	gi2c->adap.dev.of_node = dev->of_node;
->   	strscpy(gi2c->adap.name, "Geni-I2C", sizeof(gi2c->adap.name));
->   
-> -	ret = geni_icc_get(&gi2c->se, "qup-memory");
-> +	ret = geni_icc_get(&gi2c->se, desc ? desc->icc_ddr : "qup-memory");
->   	if (ret)
->   		return ret;
->   	/*
-> @@ -829,12 +846,17 @@ static int geni_i2c_probe(struct platform_device *pdev)
->   	 */
->   	gi2c->se.icc_paths[GENI_TO_CORE].avg_bw = GENI_DEFAULT_BW;
->   	gi2c->se.icc_paths[CPU_TO_GENI].avg_bw = GENI_DEFAULT_BW;
-> -	gi2c->se.icc_paths[GENI_TO_DDR].avg_bw = Bps_to_icc(gi2c->clk_freq_out);
-> +	if (!desc || desc->icc_ddr)
-> +		gi2c->se.icc_paths[GENI_TO_DDR].avg_bw = Bps_to_icc(gi2c->clk_freq_out);
->   
->   	ret = geni_icc_set_bw(&gi2c->se);
->   	if (ret)
->   		return ret;
->   
-> +	ret = clk_prepare_enable(gi2c->core_clk);
-> +	if (ret)
-> +		return ret;
-> +
->   	ret = geni_se_resources_on(&gi2c->se);
->   	if (ret) {
->   		dev_err(dev, "Error turning on resources %d\n", ret);
-> @@ -844,10 +866,15 @@ static int geni_i2c_probe(struct platform_device *pdev)
->   	if (proto != GENI_SE_I2C) {
->   		dev_err(dev, "Invalid proto %d\n", proto);
->   		geni_se_resources_off(&gi2c->se);
-> +		clk_disable_unprepare(gi2c->core_clk);
->   		return -ENXIO;
->   	}
->   
-> -	fifo_disable = readl_relaxed(gi2c->se.base + GENI_IF_DISABLE_RO) & FIFO_IF_DISABLE;
-> +	if (desc && desc->no_dma_support)
-> +		fifo_disable = false;
-> +	else
-> +		fifo_disable = readl_relaxed(gi2c->se.base + GENI_IF_DISABLE_RO) & FIFO_IF_DISABLE;
-> +
->   	if (fifo_disable) {
->   		/* FIFO is disabled, so we can only use GPI DMA */
->   		gi2c->gpi_mode = true;
-> @@ -859,6 +886,16 @@ static int geni_i2c_probe(struct platform_device *pdev)
->   	} else {
->   		gi2c->gpi_mode = false;
->   		tx_depth = geni_se_get_tx_fifo_depth(&gi2c->se);
-> +
-> +		/* I2C Master Hub Serial Elements doesn't have the HW_PARAM_0 register */
-> +		if (!tx_depth && desc)
-> +			tx_depth = desc->tx_fifo_depth;
-> +
-> +		if (!tx_depth) {
-> +			dev_err(dev, "Invalid TX FIFO depth\n");
-> +			return -EINVAL;
-> +		}
-> +
->   		gi2c->tx_wm = tx_depth - 1;
->   		geni_se_init(&gi2c->se, gi2c->tx_wm, tx_depth);
->   		geni_se_config_packing(&gi2c->se, BITS_PER_BYTE,
-> @@ -867,6 +904,7 @@ static int geni_i2c_probe(struct platform_device *pdev)
->   		dev_dbg(dev, "i2c fifo/se-dma mode. fifo depth:%d\n", tx_depth);
->   	}
->   
-> +	clk_disable_unprepare(gi2c->core_clk);
->   	ret = geni_se_resources_off(&gi2c->se);
->   	if (ret) {
->   		dev_err(dev, "Error turning off resources %d\n", ret);
-> @@ -932,6 +970,8 @@ static int __maybe_unused geni_i2c_runtime_suspend(struct device *dev)
->   		gi2c->suspended = 1;
->   	}
->   
-> +	clk_disable_unprepare(gi2c->core_clk);
-> +
->   	return geni_icc_disable(&gi2c->se);
->   }
->   
-> @@ -944,6 +984,10 @@ static int __maybe_unused geni_i2c_runtime_resume(struct device *dev)
->   	if (ret)
->   		return ret;
->   
-> +	ret = clk_prepare_enable(gi2c->core_clk);
-> +	if (ret)
-> +		return ret;
-> +
->   	ret = geni_se_resources_on(&gi2c->se);
->   	if (ret)
->   		return ret;
-> 
