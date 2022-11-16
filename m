@@ -2,73 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A781A62B39C
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 07:59:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51C9062B3A1
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 08:01:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232022AbiKPG7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 01:59:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34022 "EHLO
+        id S232110AbiKPHB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 02:01:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231547AbiKPG7u (ORCPT
+        with ESMTP id S231547AbiKPHBX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 01:59:50 -0500
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB6E51400B;
-        Tue, 15 Nov 2022 22:59:47 -0800 (PST)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id E4E3814C1;
-        Wed, 16 Nov 2022 07:59:44 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1668581985;
+        Wed, 16 Nov 2022 02:01:23 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C7CD1409A
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 23:00:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668582028;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=pf6648sW4+rH+5/eipmGEYTOz7XOSfx5Z+DwMk6HmxU=;
-        b=I65156MeWDaq3unC5oNISuKARcrsS8wuMQzzhLT+tCqr3Z/fQ5cU8gnxpLiA6gT7hhgRaJ
-        TzGtuuianvrmaoea+V2XbX8Dxjrve1LVs0uC10FuooJyczeWED019vdY0uOqHyl+KOqbz3
-        1BG6zbl20uBRBjgYZEvIOjlJMRkJE1QjkhKufjEiwqtxx+Lq3FP5IwSrD1Kt39KYT0Wcm9
-        K+o0JbB6YUgcqknZJlSgwnwoBKZOzlmAm8oMdP5G9khk+IjAIXiGXWWA66WpRayqBjUkKW
-        /WzeLStyVpKbpwBbiP9nsiiV3q/FAAsTExK0WeDcdtNmQVerCSqPwqvOLwc9Ww==
+        bh=6OIcgGNpadwxLbIdYcGcd+Dz1Vbz9BtruCXW1wedl5c=;
+        b=hF5rEcV0nM4/8Nryd+Bx7xR7mX1bzZ2zUPwDz4zY+rg3LUt2d1pSrAwHMcIqg5tkYZVBzM
+        oE+ZFPe1eTghsAlaVT/8cyU6lJ0NaYn5gR8qh2Gyj2Un1QwoKa2ITio0jaCmQkrtphDutD
+        zN7op86NbirKgeoTtEgPjPaP9hxeoFU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-300-zRSdwYDdOdWwS3fYJIStDw-1; Wed, 16 Nov 2022 02:00:24 -0500
+X-MC-Unique: zRSdwYDdOdWwS3fYJIStDw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5C798805AC8;
+        Wed, 16 Nov 2022 07:00:24 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DFEF5C1908B;
+        Wed, 16 Nov 2022 07:00:22 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <3609b064-175c-fc18-cd1a-e177d0349c58@samba.org>
+References: <3609b064-175c-fc18-cd1a-e177d0349c58@samba.org> <166855224228.1998592.2212551359609792175.stgit@warthog.procyon.org.uk>
+To:     Stefan Metzmacher <metze@samba.org>
+Cc:     dhowells@redhat.com, smfrench@gmail.com, tom@talpey.com,
+        Long Li <longli@microsoft.com>,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        linux-cifs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cifs: Fix problem with encrypted RDMA data read
 MIME-Version: 1.0
-Date:   Wed, 16 Nov 2022 07:59:44 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] gpio: sl28cpld: Replace irqchip mask_invert with
- unmask_base
-In-Reply-To: <20221112152928.42204-1-aidanmacdonald.0x0@gmail.com>
-References: <20221112152928.42204-1-aidanmacdonald.0x0@gmail.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <74de8367627d4e84f34089e03722c24d@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2147869.1668582019.1@warthog.procyon.org.uk>
+Date:   Wed, 16 Nov 2022 07:00:19 +0000
+Message-ID: <2147870.1668582019@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-11-12 16:29, schrieb Aidan MacDonald:
-> Remove use of the deprecated mask_invert flag. Inverted mask
-> registers (where a '1' bit enables an IRQ) can be described more
-> directly as an unmask register.
+Stefan Metzmacher <metze@samba.org> wrote:
+
+> I'm not sure I understand why this would fix anything when encryption is
+> enabled.
 > 
-> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> Is the payload still be offloaded as plaintext? Otherwise we wouldn't have
+> use_rdma_mr...  So this rather looks like a fix for the non encrypted case.
 
-Sorry for the late response, I was on vacation.
+The "inline"[*] PDUs are encrypted, but the direct RDMA data transmission is
+not.  I'm not sure if this is a bug in ksmbd.  As I understand it, encrypting
+and decrypting the directly transferred data would need to be done by the NIC,
+not the cifs driver.
 
-I see that it was already applied, so just for the record:
-Acked-by: Michael Walle <michael@walle.cc>
+David
 
-Thanks for taking care,
--michael
+[*] I don't know the correct RDMA terminology for these things.
+
