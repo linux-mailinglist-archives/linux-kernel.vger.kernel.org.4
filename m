@@ -2,149 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A287562CDC8
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 23:37:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2306A62CDD3
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 23:38:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231688AbiKPWh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 17:37:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54934 "EHLO
+        id S238592AbiKPWif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 17:38:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbiKPWhY (ORCPT
+        with ESMTP id S233785AbiKPWi2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 17:37:24 -0500
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E046B386
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 14:37:23 -0800 (PST)
-Received: by mail-wm1-x343.google.com with SMTP id t1so13040124wmi.4
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 14:37:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=DdCi7i53M7SdmWJENVuu2u1iCBwoHAK4ArwaATMNUTk=;
-        b=IXpqH5PJjyVvfTaPA2+sTXPEZNNLJ5rfd1SD13n0pu91n5YCewPqfqhTjdLizA4SWH
-         mCgW/ut2XejvFczESAw6Z99Tqq5keSSXypILyUOazGBliBZdkNQYXro90nXVung2q6bb
-         4HIPuDX6ZDJmFesxzpFL89/pZpWT+Z8c1Nc+H3S3KF3wwJeyzWgeJvEWtKeqrea/9R1M
-         ccz9vSWZS1904qymqkRvoXup5dzGpXgAJaKBkSDxl6T/AU+LCrsVADf6y9NmDdCr51QH
-         oxpQqPZ9Hgm6fNrjtaytErXsqPtlVUET3+kxv6Z8GmM8U8+zaHdVFuh5W55LehLTHJt+
-         qcNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DdCi7i53M7SdmWJENVuu2u1iCBwoHAK4ArwaATMNUTk=;
-        b=iqqd5jK+MPR+fFVtUTUs+8+IJN6qgtoolAs6ToLk9vMf6VCISMAAHs5AsdFLSKPjMC
-         m5zX0cd+dAS0lxb4O6s+9rgP7H83N2nvLLoHkgu2CbqKWpIpsyJJFhj8V4e/9oUyeM0k
-         mVAPuB6hugiy4tYoIjJ9ICQVZMCV6bf+MWo7anj49GdIfYWMfkhE08VmMYm7OE9Isa4u
-         UuE0E5VgVglOvr3IGgoefvGvBkQ3CTlLDcyP4UoWwcxoD9K3fj1PZ9qYVuv5wIjdck/8
-         05hqAFQIh9LmNUsiggJptitHAL3bGZSF8c5ZW01AGn44SctEMCCtv1cw0kfuSc1TZ0Dc
-         p0Wg==
-X-Gm-Message-State: ANoB5pmAaaSRoFd533VIHRwp4muG9956UUWJy/dd136Rz67emiNdcTFX
-        pcfETP8r+NTL7IzMbVSEvf1YnA==
-X-Google-Smtp-Source: AA0mqf7nQtnAf+wahmKfpwsx+1U4sa/29Y2YebNZUFFmC+4pwsUWTz2lMlpIxzeSD5v15yhQTsRC+w==
-X-Received: by 2002:a05:600c:4f04:b0:3cf:9881:e9d9 with SMTP id l4-20020a05600c4f0400b003cf9881e9d9mr3570378wmq.6.1668638241510;
-        Wed, 16 Nov 2022 14:37:21 -0800 (PST)
-Received: from zoltan.localdomain ([167.98.215.174])
-        by smtp.gmail.com with ESMTPSA id f4-20020adff984000000b0024194bba380sm7598297wrr.22.2022.11.16.14.37.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 14:37:20 -0800 (PST)
-From:   Alex Elder <elder@linaro.org>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     error27@gmail.com, caleb.connolly@linaro.com, elder@kernel.org,
-        kernel-janitors@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next] net: ipa: avoid a null pointer dereference
-Date:   Wed, 16 Nov 2022 16:37:18 -0600
-Message-Id: <20221116223718.137175-1-elder@linaro.org>
+        Wed, 16 Nov 2022 17:38:28 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DBCF14013;
+        Wed, 16 Nov 2022 14:38:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668638307; x=1700174307;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=NRMsF2GzNxJbS/1EDuibTDtQAzC/aTBbwrI1jU8kKgM=;
+  b=B5YYnnbIgINFCO4tjBcki+ul5eJBOPdf0jkj+Gz5TJuj89POdU4q9yJ+
+   I3RjxiMWRe8PDvFV5FuPK+24aLxKfnYxoTUosklk+/2GI9j5p2iTJtcqC
+   XRylP/A52U4j3+j1hN/NOwTLKmIr1/rHRE+QbiA3cXY+iSLBpMEV4Mp6G
+   VoY+Krk6ZZLSkK2794F9RNRFHrQ8acvmxBzXth/boFO089NnoHC3wuD05
+   i2RoIw8JzIYl86iBZlIUj96zDeTm6tgaPgDgqlwgO4DbMMk2MY0+7QLaX
+   6K27CZQjmZ7l4w7GGV3P83+ZLkeofmg00lTS9c1UlUOKdzrsqTunSrDjt
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="398972921"
+X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
+   d="scan'208";a="398972921"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 14:38:27 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="670674999"
+X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
+   d="scan'208";a="670674999"
+Received: from swetasha-mobl2.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.209.58.91])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 14:38:26 -0800
+From:   Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: [PATCH v18 0/3] Add TDX Guest Attestation support
+Date:   Wed, 16 Nov 2022 14:38:17 -0800
+Message-Id: <20221116223820.819090-1-sathyanarayanan.kuppuswamy@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dan Carpenter reported that Smatch found an instance where a pointer
-which had previously been assumed could be null (as indicated by a
-null check) was later dereferenced without a similar check.
+Hi All,
 
-In practice this doesn't lead to a problem because currently the
-pointers used are all non-null.  Nevertheless this patch addresses
-the reported problem.
+Intel's Trust Domain Extensions (TDX) protect guest VMs from malicious
+hosts and some physical attacks. VM guest with TDX support is called
+as a TDX Guest.
 
-In addition, I spotted another bug that arose in the same commit.
-When the command to initialize a routing table memory region was
-added, the number of entries computed for the non-hashed table
-was wrong (it ended up being a Boolean rather than the count
-intended).  This bug is fixed here as well.
+In TDX guest, the attestation process is used to verify the TDX guest
+trustworthiness to other entities before provisioning secrets to the
+guest. For example, a key server may request for attestation before
+releasing the encryption keys to mount the encrypted rootfs or
+secondary drive.
 
-Reported-by: Dan Carpenter <error27@gmail.com>
-Link: https://lore.kernel.org/kernel-janitors/Y3OOP9dXK6oEydkf@kili
-Tested-by: Caleb Connolly <caleb.connolly@linaro.com>
-Fixes: 5cb76899fb47 ("net: ipa: reduce arguments to ipa_table_init_add()")
-Signed-off-by: Alex Elder <elder@linaro.org>
----
-Note:  This does *not* need to be back-ported (it applies to net-next).
+This patch set adds attestation support for the TDX guest. Details
+about the TDX attestation process and the steps involved are explained
+in Documentation/x86/tdx.rst (added by patch 2/3).
 
- drivers/net/ipa/ipa_table.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+Following are the details of the patch set:
 
-diff --git a/drivers/net/ipa/ipa_table.c b/drivers/net/ipa/ipa_table.c
-index cc9349a1d4df9..b81e27b613549 100644
---- a/drivers/net/ipa/ipa_table.c
-+++ b/drivers/net/ipa/ipa_table.c
-@@ -382,6 +382,7 @@ static void ipa_table_init_add(struct gsi_trans *trans, bool filter, bool ipv6)
- 	const struct ipa_mem *mem;
- 	dma_addr_t hash_addr;
- 	dma_addr_t addr;
-+	u32 hash_offset;
- 	u32 zero_offset;
- 	u16 hash_count;
- 	u32 zero_size;
-@@ -394,8 +395,10 @@ static void ipa_table_init_add(struct gsi_trans *trans, bool filter, bool ipv6)
- 			: ipv6 ? IPA_CMD_IP_V6_ROUTING_INIT
- 			       : IPA_CMD_IP_V4_ROUTING_INIT;
- 
-+	/* The non-hashed region will exist (see ipa_table_mem_valid()) */
- 	mem = ipa_table_mem(ipa, filter, false, ipv6);
- 	hash_mem = ipa_table_mem(ipa, filter, true, ipv6);
-+	hash_offset = hash_mem ? hash_mem->offset : 0;
- 
- 	/* Compute the number of table entries to initialize */
- 	if (filter) {
-@@ -411,7 +414,7 @@ static void ipa_table_init_add(struct gsi_trans *trans, bool filter, bool ipv6)
- 		 * of entries it has.
- 		 */
- 		count = mem->size / sizeof(__le64);
--		hash_count = hash_mem && hash_mem->size / sizeof(__le64);
-+		hash_count = hash_mem ? hash_mem->size / sizeof(__le64) : 0;
- 	}
- 	size = count * sizeof(__le64);
- 	hash_size = hash_count * sizeof(__le64);
-@@ -420,7 +423,7 @@ static void ipa_table_init_add(struct gsi_trans *trans, bool filter, bool ipv6)
- 	hash_addr = ipa_table_addr(ipa, filter, hash_count);
- 
- 	ipa_cmd_table_init_add(trans, opcode, size, mem->offset, addr,
--			       hash_size, hash_mem->offset, hash_addr);
-+			       hash_size, hash_offset, hash_addr);
- 	if (!filter)
- 		return;
- 
-@@ -433,7 +436,7 @@ static void ipa_table_init_add(struct gsi_trans *trans, bool filter, bool ipv6)
- 		return;
- 
- 	/* Zero the unused space in the hashed filter table */
--	zero_offset = hash_mem->offset + hash_size;
-+	zero_offset = hash_offset + hash_size;
- 	zero_size = hash_mem->size - hash_size;
- 	ipa_cmd_dma_shared_mem_add(trans, zero_offset, zero_size,
- 				   ipa->zero_addr, true);
+Patch 1/3 -> Preparatory patch for adding attestation support.
+Patch 2/3 -> Adds user interface driver to support attestation.
+Patch 3/3 -> Adds selftest support for TDREPORT feature.
+
+Commit log history is maintained in the individual patches.
+
+Current overall status of this series is, it has no pending issues
+and can be considered for the upcoming merge cycle.
+
+Kuppuswamy Sathyanarayanan (3):
+  x86/tdx: Add a wrapper to get TDREPORT0 from the TDX Module
+  virt: Add TDX guest driver
+  selftests: tdx: Test TDX attestation GetReport support
+
+ Documentation/virt/coco/tdx-guest.rst        |  52 ++++++
+ Documentation/virt/index.rst                 |   1 +
+ Documentation/x86/tdx.rst                    |  43 +++++
+ arch/x86/coco/tdx/tdx.c                      |  40 +++++
+ arch/x86/include/asm/tdx.h                   |   2 +
+ drivers/virt/Kconfig                         |   2 +
+ drivers/virt/Makefile                        |   1 +
+ drivers/virt/coco/tdx-guest/Kconfig          |  10 ++
+ drivers/virt/coco/tdx-guest/Makefile         |   2 +
+ drivers/virt/coco/tdx-guest/tdx-guest.c      | 102 ++++++++++++
+ include/uapi/linux/tdx-guest.h               |  42 +++++
+ tools/testing/selftests/Makefile             |   1 +
+ tools/testing/selftests/tdx/Makefile         |   7 +
+ tools/testing/selftests/tdx/config           |   1 +
+ tools/testing/selftests/tdx/tdx_guest_test.c | 163 +++++++++++++++++++
+ 15 files changed, 469 insertions(+)
+ create mode 100644 Documentation/virt/coco/tdx-guest.rst
+ create mode 100644 drivers/virt/coco/tdx-guest/Kconfig
+ create mode 100644 drivers/virt/coco/tdx-guest/Makefile
+ create mode 100644 drivers/virt/coco/tdx-guest/tdx-guest.c
+ create mode 100644 include/uapi/linux/tdx-guest.h
+ create mode 100644 tools/testing/selftests/tdx/Makefile
+ create mode 100644 tools/testing/selftests/tdx/config
+ create mode 100644 tools/testing/selftests/tdx/tdx_guest_test.c
+
 -- 
 2.34.1
 
