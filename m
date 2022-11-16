@@ -2,98 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B98D62B4DF
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 09:18:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59E8B62B4D7
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 09:17:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233230AbiKPISA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 03:18:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51256 "EHLO
+        id S232022AbiKPIRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 03:17:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238639AbiKPIRj (ORCPT
+        with ESMTP id S233226AbiKPIRG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 03:17:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B260EC
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 00:16:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668586599;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=087ZN7fM4BBvE3rd8DvckRX1ZjaoCStvIBq7UhC86nc=;
-        b=UK1ioRIezAn0iOuM9GZDU/F6FT/KJwYd8DyNtZDCJStupZRbnYTp7MTJbXSzOBfaPkzQIt
-        e/YEVuKIM/cY/ATFgdNFIfoCQJLoU73kQBzVKy/V+2d5OMWmsP/b2WBRz1cAVsbYjkE2QE
-        4dVUGJTnkkrVBMSeBGLoTPPNsVheioo=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-669-2yqOg0J7NeGIlF3gYgtXew-1; Wed, 16 Nov 2022 03:16:36 -0500
-X-MC-Unique: 2yqOg0J7NeGIlF3gYgtXew-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 16 Nov 2022 03:17:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F391082;
+        Wed, 16 Nov 2022 00:17:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id ABCF13814957;
-        Wed, 16 Nov 2022 08:16:35 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2C51A140006B;
-        Wed, 16 Nov 2022 08:16:35 +0000 (UTC)
-Subject: [PATCH 0/3] rxrpc: Fix oops and missing config conditionals
-From:   David Howells <dhowells@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     dhowells@redhat.com, linux-afs@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 16 Nov 2022 08:16:32 +0000
-Message-ID: <166858659236.2154965.18023032361364343888.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.5
+        by ams.source.kernel.org (Postfix) with ESMTPS id 815A1B81C11;
+        Wed, 16 Nov 2022 08:17:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15712C433C1;
+        Wed, 16 Nov 2022 08:17:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668586623;
+        bh=Er2R0OHPCu/SqHwwGlC8AZqdFAugjR46KzS+F4no2fU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DxQaJ7phIKEIzxuweMu6HVT5HJv75OXYS9qyFvdKA11dLNya/mb911JqIOwgsfstp
+         qUBQV2+dcZkmHukSuv8OliobCkZaVz8ixtpnOUvYiqj3Jeunkxgg2gKdYEE67U9+Tx
+         v20ir3igWk21ZlWHUBq7+9ianukRkAW+QB73G3dvYygWegE9AHLpuFgQrZWT1EQCN8
+         UZQoPQ0VX4ZT0IIKwGu1dZeHpfmZwdI1CpZ5zmZdcyH1qBv9j6cwoSzicN0AE/Y3HQ
+         HxLEyzn6z2mu9m84rWLwCR7PGiSTRp3yZxna0HgaA2A1sCXe6McnjHPCVFZMTfejdF
+         dkAysmw4FPTyA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1ovDay-0003vU-JY; Wed, 16 Nov 2022 09:16:32 +0100
+Date:   Wed, 16 Nov 2022 09:16:32 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Parikshit Pareek <quic_ppareek@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Andrew Halaney <ahalaney@redhat.com>,
+        Shazad Hussain <quic_shazhuss@quicinc.com>,
+        Brian Masney <bmasney@redhat.com>
+Subject: Re: [PATCH v8 2/2] arm64: dts: qcom: add SA8540P ride(Qdrive-3)
+Message-ID: <Y3ScYKVYIVyj/mG0@hovoldconsulting.com>
+References: <20221116075207.32363-1-quic_ppareek@quicinc.com>
+ <20221116075207.32363-3-quic_ppareek@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221116075207.32363-3-quic_ppareek@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Nov 16, 2022 at 01:22:07PM +0530, Parikshit Pareek wrote:
+> Introduce the Qualcomm SA8540P ride automotive platform, also known as
+> Qdrive-3 development board.
+> 
+> This initial contribution supports SMP, CPUFreq, cluster idle, UFS, RPMh
+> regulators, debug UART, PMICs, remoteprocs and USB.
+> 
+> The SA8540P ride contains four PM8450 PMICs. A separate DTSI file has
+> been created for PMIC, so that it can be used for future SA8540P based
+> boards.
+> 
+> Signed-off-by: Parikshit Pareek <quic_ppareek@quicinc.com>
 
-The patches that were pulled into net-next previously[1] had some issues
-that this patchset fixes:
+> +&ufs_mem_hc {
+> +	reset-gpios = <&tlmm 228 GPIO_ACTIVE_LOW>;
+> +
+> +	vcc-supply = <&vreg_l17c>;
+> +	vcc-max-microamp = <800000>;
+> +	vccq-supply = <&vreg_l6c>;
+> +	vccq-max-microamp = <900000>;
+> +
+> +	status = "disabled";
+> +};
+> +
+> +&ufs_mem_phy {
+> +	vdda-phy-supply = <&vreg_l8g>;
+> +	vdda-pll-supply = <&vreg_l3g>;
+> +
+> +	status = "disabled";
+> +};
 
- (1) Fix missing IPV6 config conditionals.
+Why are these disabled? This should be mentioned somewhere (e.g. commit
+message and/or comment) or you can drop the nodes until support is in
+place.
 
- (2) Fix an oops caused by calling udpv6_sendmsg() directly on an AF_INET
-     socket.
-
- (3) Fix the validation of network addresses on entry to socket functions
-     so that we don't allow an AF_INET6 address if we've selected an
-     AF_INET transport socket.
-
-Link: https://lore.kernel.org/r/166794587113.2389296.16484814996876530222.stgit@warthog.procyon.org.uk/ [1]
-
----
-The patches are tagged here:
-
-	git://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git tags/rxrpc-next-20221116
-
-And can be found on this branch:
-
-	http://git.kernel.org/cgit/linux/kernel/git/dhowells/linux-fs.git/log/?h=rxrpc-next
-
-David
----
-David Howells (3):
-      rxrpc: Fix missing IPV6 #ifdef
-      rxrpc: Fix oops from calling udpv6_sendmsg() on AF_INET socket
-      rxrpc: Fix network address validation
-
-
- net/rxrpc/af_rxrpc.c     |  9 +++++----
- net/rxrpc/local_object.c |  3 ++-
- net/rxrpc/output.c       | 18 ++++++++++++------
- 3 files changed, 19 insertions(+), 11 deletions(-)
-
-
+Johan
