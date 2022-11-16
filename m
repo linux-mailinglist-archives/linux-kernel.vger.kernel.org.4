@@ -2,121 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9A0B62BFC4
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 14:41:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E894362BFD2
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 14:43:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238422AbiKPNlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 08:41:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54532 "EHLO
+        id S238734AbiKPNnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 08:43:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238662AbiKPNlT (ORCPT
+        with ESMTP id S229923AbiKPNmw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 08:41:19 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4EB1E3FC;
-        Wed, 16 Nov 2022 05:41:16 -0800 (PST)
-Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id BF5B049C;
-        Wed, 16 Nov 2022 14:41:14 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1668606074;
-        bh=7kjV9XaHGlcIvSJMo1l48yxddcL5QyvUynUQIQE/utQ=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=PiSQRbxCpnhfvhLOvIlPUw+8d+v/T/vnY2kITjyVbbBRPRnaI26+x6KjSeEJAkFiE
-         R/4WIZXhHw0F1vbQABp1Wn2bdozEEwXuxGS45peSlO4RxQUTFRRahTtr9S6UAmjYat
-         S/H9lzSD7Uf3qXQDbCCMFxxR29ESVlnrcRDsinKk=
-Content-Type: text/plain; charset="utf-8"
+        Wed, 16 Nov 2022 08:42:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE9B1D30B
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 05:41:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668606111;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=SRrq0eBv0OrNigOniBgODL/kOmcDxSd8eLVyeuecC14=;
+        b=QRoHys9guuZBjTYoS2uncY4aCAUdIN/K34S4eSkK41x4vLZSC1scjArKhIAK1bwzs4YwlU
+        HAzuE6BpkZDvDkYezU8RJ1KC+I3Qy1HmR6r3Eqsu24hW08MdtTRv/kfV8YTIgc2FAzgS7+
+        cYXNyftWCh/9tAl/ScI1/oR/7BVTGJo=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-166-qM1GFLr3O-iGejYGAfBjXg-1; Wed, 16 Nov 2022 08:41:50 -0500
+X-MC-Unique: qM1GFLr3O-iGejYGAfBjXg-1
+Received: by mail-qv1-f70.google.com with SMTP id ng1-20020a0562143bc100b004bb706b3a27so13433159qvb.20
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 05:41:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SRrq0eBv0OrNigOniBgODL/kOmcDxSd8eLVyeuecC14=;
+        b=BCDWO8+6wtv4KYwAh2Afyd8LjaOMNe3VJauG5BG6O45WcoSe89us8vCng5/otuBeJT
+         WDiMTxto4+mpB+ZoYbWM2JCbEdE8WW7m4EzAyNsMG8O7/3unuJ3wpV1AH03jNlBCN7a8
+         apwqAMdZjX1SEMeJI26BLkwXlUb/ZAtU3V6QnuA068dfVoGYLMBqDr4s58D1mV35lgyC
+         pL1WKuk9Gva+Vus5cIJkqlQjg7jpMnxFtoReehx4GqH0L0i0YuHDkBUkPXWTfl7dkz5I
+         GcrnvHVgBOheyhjitqmsDAtAzQa0Jo0q0E+YkDTmS7zFMIaXhtQPD5WwRlwauhWA9ONN
+         LaAw==
+X-Gm-Message-State: ANoB5plauTUzljE5FjxMMCG2NH+hRldEltsTbWsFkDg3Nqxs71Bz55I9
+        QXc13XWns7xVruwOO/67Y6/MB3Gy+E9r4JyS5KN/IjyE9Yn9ehSCuUgxEnosBgDl7Kx3EZntuSC
+        DEceAt+ImBZke6qOGKSNye5U=
+X-Received: by 2002:a0c:fb0f:0:b0:4bb:5ac4:126d with SMTP id c15-20020a0cfb0f000000b004bb5ac4126dmr20923420qvp.108.1668606109601;
+        Wed, 16 Nov 2022 05:41:49 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7vRYrhSARaqPwsQs6rT3Xr/jfGf2KQue/iDTxcO1L2lxZr5UoFKscXeWN4TkLQICT5cQ8AfA==
+X-Received: by 2002:a0c:fb0f:0:b0:4bb:5ac4:126d with SMTP id c15-20020a0cfb0f000000b004bb5ac4126dmr20923405qvp.108.1668606109386;
+        Wed, 16 Nov 2022 05:41:49 -0800 (PST)
+Received: from klayman.redhat.com (net-2-34-31-29.cust.vodafonedsl.it. [2.34.31.29])
+        by smtp.gmail.com with ESMTPSA id i20-20020ac85e54000000b0039ccbf75f92sm8801342qtx.11.2022.11.16.05.41.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 05:41:48 -0800 (PST)
+From:   Marco Pagani <marpagan@redhat.com>
+To:     Oded Gabbay <ogabbay@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>
+Cc:     Marco Pagani <marpagan@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: [PATCH] habanalabs: added return value check for hl_fw_dynamic_send_clear_cmd()
+Date:   Wed, 16 Nov 2022 14:41:25 +0100
+Message-Id: <20221116134126.199087-1-marpagan@redhat.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20221107175256.360839-7-paul@crapouillou.net>
-References: <20221107175106.360578-1-paul@crapouillou.net> <20221107175256.360839-1-paul@crapouillou.net> <20221107175256.360839-7-paul@crapouillou.net>
-Subject: Re: [PATCH 17/26] drm: rcar-du: Remove #ifdef guards for PM related functions
-From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Paul Cercueil <paul@crapouillou.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-renesas-soc@vger.kernel.org
-To:     Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Date:   Wed, 16 Nov 2022 13:41:12 +0000
-Message-ID: <166860607235.50677.11372324946195607108@Monstersaurus>
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Paul Cercueil (2022-11-07 17:52:47)
-> Use the DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr() macros to handle
-> the .suspend/.resume callbacks.
->=20
-> These macros allow the suspend and resume functions to be automatically
-> dropped by the compiler when CONFIG_SUSPEND is disabled, without having
-> to use #ifdef guards.
->=20
-> This has the advantage of always compiling these functions in,
-> independently of any Kconfig option. Thanks to that, bugs and other
-> regressions are subsequently easier to catch.
->=20
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+The clang-analyzer reported a warning: "Value stored to 'rc' is never
+read".
 
-Seems reasonable to me.
+The return value check for the first hl_fw_dynamic_send_clear_cmd() call
+in hl_fw_dynamic_send_protocol_cmd() appears to be missing.
 
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Signed-off-by: Marco Pagani <marpagan@redhat.com>
+---
+ drivers/misc/habanalabs/common/firmware_if.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> ---
-> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Cc: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-> Cc: linux-renesas-soc@vger.kernel.org
-> ---
->  drivers/gpu/drm/rcar-du/rcar_du_drv.c | 9 +++------
->  1 file changed, 3 insertions(+), 6 deletions(-)
->=20
-> diff --git a/drivers/gpu/drm/rcar-du/rcar_du_drv.c b/drivers/gpu/drm/rcar=
--du/rcar_du_drv.c
-> index a2776f1d6f2c..0a89094461cc 100644
-> --- a/drivers/gpu/drm/rcar-du/rcar_du_drv.c
-> +++ b/drivers/gpu/drm/rcar-du/rcar_du_drv.c
-> @@ -599,7 +599,6 @@ static const struct drm_driver rcar_du_driver =3D {
->   * Power management
->   */
-> =20
-> -#ifdef CONFIG_PM_SLEEP
->  static int rcar_du_pm_suspend(struct device *dev)
->  {
->         struct rcar_du_device *rcdu =3D dev_get_drvdata(dev);
-> @@ -613,11 +612,9 @@ static int rcar_du_pm_resume(struct device *dev)
-> =20
->         return drm_mode_config_helper_resume(&rcdu->ddev);
->  }
-> -#endif
-> =20
-> -static const struct dev_pm_ops rcar_du_pm_ops =3D {
-> -       SET_SYSTEM_SLEEP_PM_OPS(rcar_du_pm_suspend, rcar_du_pm_resume)
-> -};
-> +static DEFINE_SIMPLE_DEV_PM_OPS(rcar_du_pm_ops,
-> +                               rcar_du_pm_suspend, rcar_du_pm_resume);
-> =20
->  /* ---------------------------------------------------------------------=
---------
->   * Platform driver
-> @@ -712,7 +709,7 @@ static struct platform_driver rcar_du_platform_driver=
- =3D {
->         .shutdown       =3D rcar_du_shutdown,
->         .driver         =3D {
->                 .name   =3D "rcar-du",
-> -               .pm     =3D &rcar_du_pm_ops,
-> +               .pm     =3D pm_sleep_ptr(&rcar_du_pm_ops),
->                 .of_match_table =3D rcar_du_of_table,
->         },
->  };
-> --=20
-> 2.35.1
->
+diff --git a/drivers/misc/habanalabs/common/firmware_if.c b/drivers/misc/habanalabs/common/firmware_if.c
+index 2de6a9bd564d..311942108dbc 100644
+--- a/drivers/misc/habanalabs/common/firmware_if.c
++++ b/drivers/misc/habanalabs/common/firmware_if.c
+@@ -1782,6 +1782,8 @@ int hl_fw_dynamic_send_protocol_cmd(struct hl_device *hdev,
+ 
+ 	/* first send clear command to clean former commands */
+ 	rc = hl_fw_dynamic_send_clear_cmd(hdev, fw_loader);
++	if (rc)
++		return rc;
+ 
+ 	/* send the actual command */
+ 	hl_fw_dynamic_send_cmd(hdev, fw_loader, cmd, size);
+-- 
+2.38.1
+
