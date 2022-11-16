@@ -2,128 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ACBF62CC32
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 22:06:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D3FD62CC2A
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 22:05:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239211AbiKPVGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 16:06:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47342 "EHLO
+        id S233308AbiKPVFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 16:05:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239142AbiKPVFb (ORCPT
+        with ESMTP id S233325AbiKPVFJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 16:05:31 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3139B45A02;
-        Wed, 16 Nov 2022 13:04:35 -0800 (PST)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AGKLQi0037116;
-        Wed, 16 Nov 2022 21:03:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=Hm6PNSbhq9LhjwmrseFl2/g4hvgBcTxn6rmb+SYDL5c=;
- b=bNf/hxDYWOMp2O92YGnU7xVy3OwLgzGKpoVrHxy71bXWxTVCuL3T4OjnGMiRmoNWY5jc
- 4neXymNU7N3SWSRlsGuvGqlLNTBzshBiwOpW/ti3Yeao0Y5IqkCjTqkJXa41qNSOpBs0
- rFMtoeJgl7zqed+Ygvs9Z+93uf39ebgpUeCkvgGVQQg35HV7qvK2yRg8JHyOrk2joV2c
- iPliU5nmIm9OCIWNTJpJOAu/vR436Y4qwsCFhDhGcoPRXohNoRqje2nfof3tHjpvWPPD
- BTFQK24dmOHGygvTHBtfoETW2mlXR3yu9EBiJKpZR7UygS4xSvq9nGhybFtp0XqV6elX WA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kw6u08xt3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Nov 2022 21:03:51 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AGKT2Xv025076;
-        Wed, 16 Nov 2022 21:03:50 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kw6u08xsn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Nov 2022 21:03:50 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AGKpQCr014409;
-        Wed, 16 Nov 2022 21:03:49 GMT
-Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
-        by ppma02dal.us.ibm.com with ESMTP id 3kt34a43pj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Nov 2022 21:03:49 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com ([9.208.128.114])
-        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AGL3mdB7143996
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 16 Nov 2022 21:03:48 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 327935805E;
-        Wed, 16 Nov 2022 21:03:48 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 182395805D;
-        Wed, 16 Nov 2022 21:03:46 +0000 (GMT)
-Received: from sig-9-77-134-48.ibm.com (unknown [9.77.134.48])
-        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 16 Nov 2022 21:03:45 +0000 (GMT)
-Message-ID: <e46fb092970bd12a8461a513f1cf8b63e4f54714.camel@linux.ibm.com>
-Subject: Re: [PATCH v4 1/5] reiserfs: Add missing calls to
- reiserfs_security_free()
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, casey@schaufler-ca.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        keescook@chromium.org, nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org, Jeff Mahoney <jeffm@suse.com>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Date:   Wed, 16 Nov 2022 16:03:45 -0500
-In-Reply-To: <20221110094639.3086409-2-roberto.sassu@huaweicloud.com>
-References: <20221110094639.3086409-1-roberto.sassu@huaweicloud.com>
-         <20221110094639.3086409-2-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        Wed, 16 Nov 2022 16:05:09 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F5DFE5;
+        Wed, 16 Nov 2022 13:04:23 -0800 (PST)
+Received: from [192.168.1.90] (unknown [188.27.33.151])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: cristicc)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C468966028E7;
+        Wed, 16 Nov 2022 21:04:06 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1668632647;
+        bh=tiAa/p8KzV3n6K1lJ9/iA6qi8H8A6tMn2pTryJbY0x4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=TKggDaOE9bBTxwTCEwcJ2SQncpcY06Lit5md6A2SdlZX1/mtfc39lR026QGfzWeoX
+         3VXjjHQtVn9oA5XUbpMKHkBZKd3COm9ymc7jWo/P70YgiyfvNDJgXV9VnBBLqC/qUP
+         BO9eyGe5+jGHMmEmvPALYfBF4UPfvyMN7KY7G7nC3HD66W7ZYaj3eYy5l9J8Ewi8Lk
+         1VGtR9zx7DaWaz/3/ru1Jj5k2eGx8IKerdxiSuefnHo/M4DIjAYBUNiFk526CapOvg
+         lxWTuk5nW5oU0VXm3zR7HsVZqeFQ7O/XDtOqrYV3V5mnjuOc4wTQtPGBhpV4FTKcdS
+         bFf0bTBNZ5rfA==
+Message-ID: <3b4b8aef-a06d-36b5-a143-78f0ce30eb77@collabora.com>
+Date:   Wed, 16 Nov 2022 23:04:03 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v4 0/3] Enable initial support for StarFive VisionFive V1
+ SBC
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Michael Zhu <michael.zhu@starfivetech.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+References: <20221017210542.979051-1-cristian.ciocaltea@collabora.com>
+ <Y3Ui9mmcvuWMw2AL@spud>
+Content-Language: en-US
+From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+In-Reply-To: <Y3Ui9mmcvuWMw2AL@spud>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 4WI5dW9j1NtENgHLvVqyis6bif4IMoub
-X-Proofpoint-ORIG-GUID: oHtKRpgB1VOFGdykFp3diWuPuAl-uBcg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-16_03,2022-11-16_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
- bulkscore=0 malwarescore=0 spamscore=0 priorityscore=1501 mlxlogscore=316
- suspectscore=0 clxscore=1011 impostorscore=0 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211160144
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-11-10 at 10:46 +0100, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
+On 11/16/22 19:50, Conor Dooley wrote:
+> On Tue, Oct 18, 2022 at 12:05:39AM +0300, Cristian Ciocaltea wrote:
+>> The StarFive VisionFive V1 SBC [1] is similar with the already supported
+>> BeagleV Starlight Beta board, both being based on the StarFive JH7100 SoC.
+>>
+>> In addition to documenting the necessary compatibles, this patch series
+>> moves most of the content from jh7100-beaglev-starlight.dts to a new file
+>> jh7100-common.dtsi, to be shared between the two boards.
+>>
+>> No other changes are required in order to successfully boot the board.
+>>
+>> [1] https://github.com/starfive-tech/VisionFive
 > 
-> Commit 57fe60df6241 ("reiserfs: add atomic addition of selinux attributes
-> during inode creation") defined reiserfs_security_free() to free the name
-> and value of a security xattr allocated by the active LSM through
-> security_old_inode_init_security(). However, this function is not called
-> in the reiserfs code.
+> Hey Cristian,
 > 
-> Thus, add a call to reiserfs_security_free() whenever
-> reiserfs_security_init() is called, and initialize value to NULL, to avoid
-> to call kfree() on an uninitialized pointer.
-> 
-> Finally, remove the kfree() for the xattr name, as it is not allocated
-> anymore.
-> 
-> Fixes: 57fe60df6241 ("reiserfs: add atomic addition of selinux attributes during inode creation")
-> Cc: stable@vger.kernel.org
-> Cc: Jeff Mahoney <jeffm@suse.com>
-> Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-> Reported-by: Mimi Zohar <zohar@linux.ibm.com>
-> Reported-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Apologies for the delay here, we've been sorting out re-routing RISC-V
+> DT stuff via the SoC tree. That should be sorted now, so I have picked
+> the series up. Should be at:
+> https://git.kernel.org/conor/c/a3fe69160c7328a284ebc711ccb689f3beec42dc
 
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+Hi Conor,
 
+No problem, thanks for taking care of this!
+
+Regards,
+Cristian
+
+> Thanks,
+> Conor.
+> 
+>>
+>> Changes in v4:
+>>   - Rebased onto v6.1.0-rc1
+>>   - Fixed a conflict in patch 2/3 as pinctrl-starfive.h has been renamed
+>>     to pinctrl-starfive-jh7100.h
+>>
+>> Changes in v3:
+>>   - Added Reviewed-by tag from Krzysztof in patch 1/3
+>>   - Optimized patch 2/3 by enabling copy detection on "git format-patch",
+>>     as indicated by Krzysztof
+>>
+>> Changes in v2:
+>>   - Simplified documentation by using 'enum' instead of 'const' in
+>>     patch 1/3, according to Conor's review
+>>   - Added Reviewed-by tags from Conor
+>>
+>> Cristian Ciocaltea (3):
+>>    dt-bindings: riscv: starfive: Add StarFive VisionFive V1 board
+>>    riscv: dts: starfive: Add common DT for JH7100 based boards
+>>    riscv: dts: starfive: Add StarFive VisionFive V1 device tree
+>>
+>>   .../devicetree/bindings/riscv/starfive.yaml   |   4 +-
+>>   arch/riscv/boot/dts/starfive/Makefile         |   2 +-
+>>   .../dts/starfive/jh7100-beaglev-starlight.dts | 153 +-----------------
+>>   ...aglev-starlight.dts => jh7100-common.dtsi} |   3 -
+>>   .../jh7100-starfive-visionfive-v1.dts         |  20 +++
+>>   5 files changed, 25 insertions(+), 157 deletions(-)
+>>   copy arch/riscv/boot/dts/starfive/{jh7100-beaglev-starlight.dts => jh7100-common.dtsi} (96%)
+>>   create mode 100644 arch/riscv/boot/dts/starfive/jh7100-starfive-visionfive-v1.dts
+>>
+>>
+>> base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
+>> -- 
+>> 2.38.0
+>>
