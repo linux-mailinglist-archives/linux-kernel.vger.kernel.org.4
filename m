@@ -2,144 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25AED62CB88
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 21:53:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B4A962CB89
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 21:53:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237359AbiKPUxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 15:53:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34594 "EHLO
+        id S238402AbiKPUxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 15:53:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234275AbiKPUwa (ORCPT
+        with ESMTP id S234571AbiKPUwm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 15:52:30 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD0963B9D;
-        Wed, 16 Nov 2022 12:52:29 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668631947;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=33J5BD3tpOzz0XsMXF5A2OumpToZnyzGEePA9xQwZn0=;
-        b=EpyHVR7gyrCyXJL9CcGKJOYB/RjC+W7AlH8xKC/vcZ5wVNqtlBANLmpDqMo0ZtjIGnmWLY
-        pTd9r9HxGoOT/EEwE5Ybgaeg8bJRfal78kY+2GhEJjtPzbdRLZTbiFOYuIz+nBczEUcvzs
-        vcvwqwSs7UK0SiG1oo2q4/f79jAa94nTQxXBVJMQR+hgrU9ouX5de4MIpPVMqKRuyrtfnk
-        /Jtf/dDxJW3HbGYwg/bw3P8/pcPa15unfLj0S2PbwpiSpn+s1o7HGWMu9bJqcb7HgO1pB0
-        ZJXwk9iB2jQbgHfWHcE0WbTz+GuNFSbyE5yW2287jMulsr1Ry1BD14f3A24+sw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668631947;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=33J5BD3tpOzz0XsMXF5A2OumpToZnyzGEePA9xQwZn0=;
-        b=bQ/iiX/xd+FgZdfYSqeEeN1dFeG+IhxZkOFIV4csii4NpB/tP5VT53rLO4YKXZO4pPwy0v
-        cLDBgbpcfIAJVuAA==
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: RE: [PATCH] clocksource/drivers/hyper-v: Include asm/hyperv-tlfs.h
- not asm/mshyperv.h
-In-Reply-To: <87fsemtut0.ffs@tglx>
-References: <87zgcwt2qg.ffs@tglx>
- <BYAPR21MB1688C5BCDF3269BA070DB884D7039@BYAPR21MB1688.namprd21.prod.outlook.com>
- <87wn7ztc89.ffs@tglx> <87sfinta8q.ffs@tglx> <87leoft9w1.ffs@tglx>
- <87fsemtut0.ffs@tglx>
-Date:   Wed, 16 Nov 2022 21:52:26 +0100
-Message-ID: <8735aipqph.ffs@tglx>
+        Wed, 16 Nov 2022 15:52:42 -0500
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1BFB65869;
+        Wed, 16 Nov 2022 12:52:41 -0800 (PST)
+Received: by mail-ot1-f44.google.com with SMTP id db10-20020a0568306b0a00b0066d43e80118so11046272otb.1;
+        Wed, 16 Nov 2022 12:52:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wDywA0KDoxA4q9xlgxQNU19XoltQxhbezIPsKTrlTvQ=;
+        b=PW8sFuG9jNSQCBVs2vGsriDJx8He9YrmHAKtOiPt4tKNb7YTdkqVH8Mcn78s5i3Zuv
+         ipr7rXlIuWQTUXCzgdYlDIsdO5eAHapVGm0opKfScHlRPoVQWFv6MwKOWYZ2AQcoaj7e
+         8pXLpzJ/+2iE6r64Lns9VIj8BXq9Nf7uWy7LgQc3YN5y/LoGEHMsiGFQM7y0VTQd8+V5
+         ePe+7EMv98bCjLGZQ9LxaKf80vCby21oagYV2IoNMfBZldMTsFRFZBnBl2Sozw/0w3U4
+         OJ+TWTz+kYLkxAViVmOW06n/u1Ihdv5rrNSCV9+4WPLN7i8C6+PIDd4iEO0iRhIgjxA8
+         iITw==
+X-Gm-Message-State: ANoB5pnQE3BNeUKBROLpH5s9d4T3GyJ865VMKAnTQqV6Md2iDOHJM4lR
+        uosLQlaiJNoBawe8fdEN/Q==
+X-Google-Smtp-Source: AA0mqf6UwXoHR+Cq780mOlw4cFFEJrWbD2/F4pKg9asCduIoCMZ997M8D2kS6lpzSZ5vvqwaXXi4Ew==
+X-Received: by 2002:a05:6830:1212:b0:663:c55e:c5ac with SMTP id r18-20020a056830121200b00663c55ec5acmr11659729otp.196.1668631961011;
+        Wed, 16 Nov 2022 12:52:41 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id a97-20020a9d266a000000b0066c2e241a4csm7097395otb.20.2022.11.16.12.52.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 12:52:40 -0800 (PST)
+Received: (nullmailer pid 862564 invoked by uid 1000);
+        Wed, 16 Nov 2022 20:52:42 -0000
+Date:   Wed, 16 Nov 2022 14:52:42 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Robert Marko <robert.marko@sartura.hr>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Michael Walle <michael@walle.cc>,
+        Luka Perkov <luka.perkov@sartura.hr>
+Subject: Re: [PATCH v4 2/5] dt-bindings: eeprom: Inherit from nvmem.yaml
+Message-ID: <166863196213.862502.10335665514418760279.robh@kernel.org>
+References: <20221114085659.847611-1-miquel.raynal@bootlin.com>
+ <20221114085659.847611-3-miquel.raynal@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221114085659.847611-3-miquel.raynal@bootlin.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Michael!
 
-On Sun, Nov 13 2022 at 22:21, Thomas Gleixner wrote:
-> Subject: clocksource/drivers/hyper-v: Include asm/hyperv-tlfs.h not asm/mshyperv.h
-> From: Thomas Gleixner <tglx@linutronix.de>
-> Date: Sat, 12 Nov 2022 19:08:15 +0100
->
-> clocksource/hyperv_timer.h is included into the VDSO build. It includes
-> asm/mshyperv.h which in turn includes the world and some more. This worked
-> so far by chance, but any subtle change in the include chain results in a
-> build breakage because VDSO builds are building user space libraries.
->
-> Include asm/hyperv-tlfs.h instead which contains everything what the VDSO
-> build needs and move the hv_get_raw_timer() define into the header file.
->
-> Fixup drivers/hv/vmbus_drv.c which relies on the indirect include of
-> asm/mshyperv.h.
-
-Any comments on this latest version?
-
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+On Mon, 14 Nov 2022 09:56:56 +0100, Miquel Raynal wrote:
+> EEPROMs can be nvmem providers. Let's make all EEPROM bindings
+> reference nvmem.yaml as they should, so that nvmem cells and layout
+> parsers can be safely described within the EEPROM nodes.
+> 
+> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 > ---
->  arch/x86/include/asm/hyperv_timer.h |    9 +++++++++
->  arch/x86/include/asm/mshyperv.h     |    2 --
->  drivers/hv/vmbus_drv.c              |    1 +
->  include/clocksource/hyperv_timer.h  |    4 +++-
->  4 files changed, 13 insertions(+), 3 deletions(-)
->
-> --- /dev/null
-> +++ b/arch/x86/include/asm/hyperv_timer.h
-> @@ -0,0 +1,9 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _ASM_X86_HYPERV_TIMER_H
-> +#define _ASM_X86_HYPERV_TIMER_H
-> +
-> +#include <asm/msr.h>
-> +
-> +#define hv_get_raw_timer() rdtsc_ordered()
-> +
-> +#endif
-> --- a/arch/x86/include/asm/mshyperv.h
-> +++ b/arch/x86/include/asm/mshyperv.h
-> @@ -19,8 +19,6 @@ typedef int (*hyperv_fill_flush_list_fun
->  		struct hv_guest_mapping_flush_list *flush,
->  		void *data);
->  
-> -#define hv_get_raw_timer() rdtsc_ordered()
-> -
->  void hyperv_vector_handler(struct pt_regs *regs);
->  
->  #if IS_ENABLED(CONFIG_HYPERV)
-> --- a/drivers/hv/vmbus_drv.c
-> +++ b/drivers/hv/vmbus_drv.c
-> @@ -37,6 +37,7 @@
->  #include <linux/dma-map-ops.h>
->  #include <linux/pci.h>
->  #include <clocksource/hyperv_timer.h>
-> +#include <asm/mshyperv.h>
->  #include "hyperv_vmbus.h"
->  
->  struct vmbus_dynid {
-> --- a/include/clocksource/hyperv_timer.h
-> +++ b/include/clocksource/hyperv_timer.h
-> @@ -15,13 +15,15 @@
->  
->  #include <linux/clocksource.h>
->  #include <linux/math64.h>
-> -#include <asm/mshyperv.h>
-> +#include <asm/hyperv-tlfs.h>
->  
->  #define HV_MAX_MAX_DELTA_TICKS 0xffffffff
->  #define HV_MIN_DELTA_TICKS 1
->  
->  #ifdef CONFIG_HYPERV_TIMER
->  
-> +#include <asm/hyperv_timer.h>
-> +
->  /* Routines called by the VMbus driver */
->  extern int hv_stimer_alloc(bool have_percpu_irqs);
->  extern int hv_stimer_cleanup(unsigned int cpu);
+>  Documentation/devicetree/bindings/eeprom/at24.yaml           | 5 ++++-
+>  Documentation/devicetree/bindings/eeprom/at25.yaml           | 1 +
+>  .../devicetree/bindings/eeprom/microchip,93lc46b.yaml        | 1 +
+>  3 files changed, 6 insertions(+), 1 deletion(-)
+> 
+
+Reviewed-by: Rob Herring <robh@kernel.org>
