@@ -2,86 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45A0162B92B
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 11:39:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F267762B981
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 11:42:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233193AbiKPKjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 05:39:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43718 "EHLO
+        id S233806AbiKPKma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 05:42:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233729AbiKPKhF (ORCPT
+        with ESMTP id S233397AbiKPKlp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 05:37:05 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC3F248C4;
-        Wed, 16 Nov 2022 02:29:04 -0800 (PST)
-Received: from [10.7.7.5] (unknown [182.253.183.240])
-        by gnuweeb.org (Postfix) with ESMTPSA id DF66781608;
-        Wed, 16 Nov 2022 10:29:01 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1668594544;
-        bh=kv9K+eAhAgOOw0umGQi03iVhUmWyfNCkW9m4Mftth3g=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=trQ9/M+3ji+3a/I+q60BkllYOjDYTF9KUHB879BeU/UdHMv27SKOgecsxicPh2qMW
-         AqCPYREloFoWHfrdNc7rXVz5K50OtbtOIY2iG+Xu2+rN0+lshWVf/wgraPoBLGwYa+
-         vVoMKEhhgJExkiVpW4/0QYhkvdMqDW+N/zdr2Kq/bowPsRn3CTAFLna5O5nyYC/34J
-         BtEeNtxJaaP64WmIT/uQf8vPhctUFncFCMFHgmUHApiF3pnPshb7MW8Rof1AH2mmE3
-         eV10CZzp0P5JBK3TH/4l9nC7JFIqRIyjNPqoS3gPSKWiS3W6IXiWtkDvzzVSU8koW6
-         Li+rtFiU2VnuQ==
-Message-ID: <cd9642a2-3f09-46c8-51bc-2c359b8b3f0b@gnuweeb.org>
-Date:   Wed, 16 Nov 2022 17:28:58 +0700
+        Wed, 16 Nov 2022 05:41:45 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A99B44046C
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:29:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668594599; x=1700130599;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=qHaY1k9/440h7Ozk3wkx+/ThLOKlts/6OCB+AvN1sSk=;
+  b=iz0Ezs1VKdgvGB4dZfhAoOaNSkVcnd0x09RvcRQata5yWVPSRqGYNeCh
+   070kizeiQvm3Jg2ZVzlOvCCsytxqn+KRh6XuikHOm5k0UQZgz6LmWc/55
+   BHZIZGFWBHv+TscrfelAyUoUq8G7XzBAkqTgxFTiBRO2Y/vy47sRd8iEg
+   wk2TrQ2ia7MZKE9ZP/jluqmyopYvtHqiHuzoaGvGmqFdgHWCVAPcJfAin
+   040dAAh+s+gu7zQ4WrqECRxt4lHW1R/+r7cjUYiQOTuz7DdTc3ihBxbfs
+   DKzC/blCPZHdsSdvMeQw+mMg13sc/9aeRVLlbBjRp4lfNPEPD5IkRG1/f
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="398798092"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="398798092"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 02:29:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="884347401"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="884347401"
+Received: from lkp-server01.sh.intel.com (HELO ebd99836cbe0) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 16 Nov 2022 02:29:58 -0800
+Received: from kbuild by ebd99836cbe0 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ovFg5-0002Fn-2R;
+        Wed, 16 Nov 2022 10:29:57 +0000
+Date:   Wed, 16 Nov 2022 18:29:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/mm] BUILD SUCCESS
+ f2089aa0cd8e52564240a93ea1e4bb643c0ed34c
+Message-ID: <6374bb9f.ZDXNCo/BqA/ZQK2A%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
-To:     Pavel Begunkov <asml.silence@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     Stefan Metzmacher <metze@samba.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        io-uring Mailing List <io-uring@vger.kernel.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
-References: <20221115212614.1308132-1-ammar.faizi@intel.com>
- <20221115212614.1308132-3-ammar.faizi@intel.com>
- <63a47e31-6d30-6dad-7b8d-1f14a7bd8fd5@gmail.com>
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Subject: Re: [PATCH v1 2/2] io_uring: uapi: Don't use a zero-size array
-In-Reply-To: <63a47e31-6d30-6dad-7b8d-1f14a7bd8fd5@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/16/22 5:14 PM, Pavel Begunkov wrote:
-> On 11/15/22 21:29, Ammar Faizi wrote:
->> From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
->>
->> Don't use a zero-size array because it doesn't allow the user to
->> compile an app that uses liburing with the `-pedantic-errors` flag:
-> 
-> Ammar, I'd strongly encourage you to at least compile your
-> patches or even better actually test them. There is an explicit
-> BUILD_BUG_ON() violated by this change.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/mm
+branch HEAD: f2089aa0cd8e52564240a93ea1e4bb643c0ed34c  x86/kasan: Populate shadow for shared chunk of the CPU entry area
 
-Oh yeah, I didn't realize that. This patch breaks this assertion:
+elapsed time: 721m
 
-   BUILD_BUG_ON failed: sizeof_field(struct io_uring_sqe, cmd) != 0
+configs tested: 38
+configs skipped: 74
 
-This assertion wants the size of cmd[] to be zero. Which is obviously
-violated in this patch.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-I only tested a liburing app that uses this header and validated
-that the struct size is the same, but not its field. That's my
-mistake.
+gcc tested configs:
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+i386                          randconfig-a001
+x86_64                           rhel-8.3-syz
+i386                          randconfig-a003
+x86_64                        randconfig-a004
+x86_64                           rhel-8.3-kvm
+x86_64                        randconfig-a002
+x86_64                         rhel-8.3-kunit
+x86_64                        randconfig-a006
+x86_64                          rhel-8.3-func
+x86_64                               rhel-8.3
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+i386                          randconfig-a005
+x86_64                           allyesconfig
+i386                                defconfig
+i386                             allyesconfig
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                            allnoconfig
+ia64                             allmodconfig
 
-I'm *not* going to send a v2 per Jens' comment.
+clang tested configs:
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+x86_64                        randconfig-a005
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
 
 -- 
-Ammar Faizi
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
