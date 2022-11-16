@@ -2,128 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B01262B4ED
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 09:19:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6715762B4FF
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 09:20:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbiKPITu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 03:19:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52078 "EHLO
+        id S238650AbiKPIUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 03:20:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232280AbiKPITb (ORCPT
+        with ESMTP id S232403AbiKPIUY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 03:19:31 -0500
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8EB1DF3E
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 00:19:29 -0800 (PST)
-Received: by mail-lj1-f180.google.com with SMTP id z24so20844261ljn.4
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 00:19:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Oi4wQyO0sHcfINTeu+zblHyjJ7A67cfqXg4Mjzz9Gzg=;
-        b=tZuuuxalXr8wTFz3VlmnK1hJmUlv8ABRV9tYuyMw5cvwctIaHAV+tHbhTadS8wGaQ/
-         gt3ZXTc1/eeW3jrELU0BsV+u/AnHtCbJdkh8be1XSIn3m9bUzr4RgXXagefIjt6iO4sK
-         nPNUYL7ayW1f3va8iyx/XNk0YU9D+ppotavgu1gPnOJjhXKJc3gtL2EfvksWYojGWN4e
-         PXfYdHMNTA05CPbQhoIAiVq9WZdHcs7chDFZRGKBDijIWJfQBfjrgF9ZmOXjLt2Akusp
-         zi9TVRc8EsXUtEjP3ivJjMKFIRkJi5PYqAqflCTRD7QNtvyIWVXXiqGP1of6e0d3G1XA
-         GJyg==
-X-Gm-Message-State: ANoB5pnVxfH/t/DHwTejP2/n5lGRRbPxK4VJlHQ4s8g+rrGXASj6nz0C
-        ZMsYyeOE4tCx/96dc2dpF4M=
-X-Google-Smtp-Source: AA0mqf7oVWRkEE8oTzZx67Y+WvcKAoZQiC6/6UowkTZkgdlNGSdd0+S5qXrk9TvylaxWrxPqEtX46Q==
-X-Received: by 2002:a05:651c:1a13:b0:277:113d:1c38 with SMTP id by19-20020a05651c1a1300b00277113d1c38mr8185470ljb.238.1668586767728;
-        Wed, 16 Nov 2022 00:19:27 -0800 (PST)
-Received: from dc75zzyyyyyyyyyyyyydt-3.rev.dnainternet.fi (dc75zzyyyyyyyyyyyyydt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::7])
-        by smtp.gmail.com with ESMTPSA id i13-20020ac25d2d000000b004b0b2212315sm2487672lfb.121.2022.11.16.00.19.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 00:19:26 -0800 (PST)
-Date:   Wed, 16 Nov 2022 10:19:21 +0200
-From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Lee Jones <lee@kernel.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND] mfd: bd957x: Fix Kconfig dependency
-Message-ID: <Y3SdCWkRr1L64SWK@dc75zzyyyyyyyyyyyyydt-3.rev.dnainternet.fi>
+        Wed, 16 Nov 2022 03:20:24 -0500
+Received: from esa5.hc1455-7.c3s2.iphmx.com (esa5.hc1455-7.c3s2.iphmx.com [68.232.139.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64EB8C2F;
+        Wed, 16 Nov 2022 00:20:22 -0800 (PST)
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="95718099"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665414000"; 
+   d="scan'208";a="95718099"
+Received: from unknown (HELO oym-r3.gw.nic.fujitsu.com) ([210.162.30.91])
+  by esa5.hc1455-7.c3s2.iphmx.com with ESMTP; 16 Nov 2022 17:20:20 +0900
+Received: from oym-m2.gw.nic.fujitsu.com (oym-nat-oym-m2.gw.nic.fujitsu.com [192.168.87.59])
+        by oym-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id 96692D6478;
+        Wed, 16 Nov 2022 17:20:18 +0900 (JST)
+Received: from kws-ab2.gw.nic.fujitsu.com (kws-ab2.gw.nic.fujitsu.com [192.51.206.12])
+        by oym-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id C2A06BCB68;
+        Wed, 16 Nov 2022 17:20:17 +0900 (JST)
+Received: from FNSTPC.g08.fujitsu.local (unknown [10.167.226.45])
+        by kws-ab2.gw.nic.fujitsu.com (Postfix) with ESMTP id 4ECE723401D1;
+        Wed, 16 Nov 2022 17:20:16 +0900 (JST)
+From:   Li Zhijian <lizhijian@fujitsu.com>
+To:     zyjzyj2000@gmail.com, jgg@ziepe.ca, leon@kernel.org,
+        Bob Pearson <rpearsonhpe@gmail.com>, linux-rdma@vger.kernel.org
+Cc:     Mark Bloch <mbloch@nvidia.com>, Tom Talpey <tom@talpey.com>,
+        tomasz.gromadzki@intel.com,
+        Dan Williams <dan.j.williams@intel.com>,
+        Xiao Yang <yangx.jy@fujitsu.com>, y-goto@fujitsu.com,
+        linux-kernel@vger.kernel.org, Li Zhijian <lizhijian@fujitsu.com>
+Subject: [for-next PATCH v6 00/10] RDMA/rxe: Add RDMA FLUSH operation
+Date:   Wed, 16 Nov 2022 16:19:41 +0800
+Message-Id: <20221116081951.32750-1-lizhijian@fujitsu.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ByRB43tndDwb3EJ0"
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-TM-AS-Product-Ver: IMSS-9.1.0.1408-9.0.0.1002-27266.006
+X-TM-AS-User-Approved-Sender: Yes
+X-TMASE-Version: IMSS-9.1.0.1408-9.0.1002-27266.006
+X-TMASE-Result: 10--19.334500-10.000000
+X-TMASE-MatchedRID: iooG+Wyw6IMtKcX/Bb98eqoXHZz/dXlxXs5nqGvDCfPfghYDxv+lXaJf
+        gPmvd/XOMlTzREHxnco2l9wtp/y6ssIRMxauaS3UPKN38CLPK0FzNCdGumZsSeCbuVI7hVbLmPM
+        vFiO40LDP253/19/EzfQ6JrmXjZ0m5VojSP95QA8pDEdiwJzEaVvh1cEykiSGagYFlT7hblHEBp
+        jowVhUR8txEIgX3T5MEbtwIm1ojqUf0H3tYJmWPTBgCmbnj9JmxZpjHSMI6w6kob0Y35+HFB6sb
+        AY1dG02b+SLxu/s2gUUIrvjaprIPeC1b7ItfNpSLG6gc1cSnZyhHrZE2+S86xEwRXB+SwEtSikP
+        5EIJEGTE7gW9Nmz5nELIYTs8DylFcAD14WP1J9ieAiCmPx4NwJuJ+Pb8n/VxvCaAzkS8BHs4BrA
+        Twm8horxAi7jPoeEQftwZ3X11IV0=
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hey folks,
 
---ByRB43tndDwb3EJ0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Changes in V6:
+- rebase to for-next(v6.1-rc1)
+- add Yanjun's reviewed-by except "Allow registering persistent flag for pmem MR only"
+- minimize pmem checking side effect # Jason
+- return EOPNOSUPP if HCA doesn't support flush operation
 
-The bd957x driver uses regmap-IRQ but does not SELECT ot depend on it.
-This can cause build failure.
+These patches are going to implement a *NEW* RDMA opcode "RDMA FLUSH".
+In IB SPEC 1.5[1], 2 new opcodes, ATOMIC WRITE and RDMA FLUSH were
+added in the MEMORY PLACEMENT EXTENSIONS section.
 
-SELECT the regmap-IRQ for BD957X from Kconfig.
+This patchset makes SoftRoCE support new RDMA FLUSH on RC service.
 
-Fixes: 0e9692607f94 ("mfd: bd9576: Add IRQ support")
-Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
----
-Oh, found this forgotten treasure while cleaning old branches from my
-local git. It seems to me this is still valid but has fallen through the
-cracks.
+You can verify the patchset by building and running the rdma_flush example[2].
+server:
+$ ./rdma_flush_server -s [server_address] -p [port_number]
+client:
+$ ./rdma_flush_client -s [server_address] -p [port_number]
 
- drivers/mfd/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+Corresponding pyverbs and tests(tests.test_qpex.QpExTestCase.test_qp_ex_rc_rdma_flush)
+are also added to rdma-core
 
-diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-index 8b93856de432..9940e2724c05 100644
---- a/drivers/mfd/Kconfig
-+++ b/drivers/mfd/Kconfig
-@@ -2027,6 +2027,7 @@ config MFD_ROHM_BD957XMUF
- 	depends on I2C=3Dy
- 	depends on OF
- 	select REGMAP_I2C
-+	select REGMAP_IRQ
- 	select MFD_CORE
- 	help
- 	  Select this option to get support for the ROHM BD9576MUF and
+[1]: https://www.infinibandta.org/wp-content/uploads/2021/08/IBTA-Overview-of-IBTA-Volume-1-Release-1.5-and-MPE-2021-08-17-Secure.pptx
+[2]: https://github.com/zhijianli88/rdma-core/tree/rdma-flush-v5
 
-base-commit: 094226ad94f471a9f19e8f8e7140a09c2625abaa
---=20
-2.38.1
+CC: Xiao Yang <yangx.jy@fujitsu.com>
+CC: "Gotou, Yasunori" <y-goto@fujitsu.com>
+CC: Jason Gunthorpe <jgg@ziepe.ca>
+CC: Zhu Yanjun <zyjzyj2000@gmail.com>
+CC: Leon Romanovsky <leon@kernel.org>
+CC: Bob Pearson <rpearsonhpe@gmail.com>
+CC: Mark Bloch <mbloch@nvidia.com>
+CC: Tom Talpey <tom@talpey.com>
+CC: "Gromadzki, Tomasz" <tomasz.gromadzki@intel.com>
+CC: Dan Williams <dan.j.williams@intel.com>
+CC: linux-rdma@vger.kernel.org
+CC: linux-kernel@vger.kernel.org
 
+Can also access the kernel source in:
+https://github.com/zhijianli88/linux/tree/rdma-flush-v6
+Changes log
+V5: https://lore.kernel.org/lkml/20220927055337.22630-12-lizhijian@fujitsu.com/t/
+V4:
+- rework responder process
+- rebase to v5.19+
+- remove [7/7]: RDMA/rxe: Add RD FLUSH service support since RD is not really supported
 
---=20
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
+V3:
+- Just rebase and commit log and comment updates
+- delete patch-1: "RDMA: mr: Introduce is_pmem", which will be combined into "Allow registering persistent flag for pmem MR only"
+- delete patch-7
 
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =3D]=20
+V2:
+RDMA: mr: Introduce is_pmem
+   check 1st byte to avoid crossing page boundary
+   new scheme to check is_pmem # Dan
 
---ByRB43tndDwb3EJ0
-Content-Type: application/pgp-signature; name="signature.asc"
+RDMA: Allow registering MR with flush access flags
+   combine with [03/10] RDMA/rxe: Allow registering FLUSH flags for supported device only to this patch # Jason
+   split RDMA_FLUSH to 2 capabilities
 
------BEGIN PGP SIGNATURE-----
+RDMA/rxe: Allow registering persistent flag for pmem MR only
+   update commit message, get rid of confusing ib_check_flush_access_flags() # Tom
 
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmN0nN0ACgkQeFA3/03a
-ocVreggAlY6wbyeLHAltIyZTQHRUD8fFO13oFPmC1cPJuoox3l+AuqOJAtv9ndzz
-Lit6bOCcJv6cjaXJqG+Km9lzQL5quutwIKQhjEDcOMBP8tw12v7OxHOQNAXBkWPS
-SKPzEhzVdeyOCbY0DnOQLYQaPNIA8NkvxdxnxiyRZ7Rzl4CvfVY99tbGuUzgIXUe
-XSV2EMy7/FSJLEovYInZL0IYJKsAzUavfT7bfkacKvYdk0gae18X9hsNHP+z5cnk
-TvyzCwOms4y9V3ng/okEpzFLRwl6XGjZ14CyKdHWwv0RF7i7FkRhlwF5MZxH06QJ
-EvKCiSVGmYUWfPbdvwTJpem4aqj9dQ==
-=gYZl
------END PGP SIGNATURE-----
+RDMA/rxe: Implement RC RDMA FLUSH service in requester side
+   extend flush to include length field. # Tom and Tomasz
 
---ByRB43tndDwb3EJ0--
+RDMA/rxe: Implement flush execution in responder side
+   adjust start for WHOLE MR level # Tom
+   don't support DMA mr for flush # Tom
+   check flush return value
+
+RDMA/rxe: Enable RDMA FLUSH capability for rxe device
+   adjust patch's order. move it here from [04/10]
+
+Li Zhijian (10):
+  RDMA: Extend RDMA user ABI to support flush
+  RDMA: Extend RDMA kernel verbs ABI to support flush
+  RDMA/rxe: Extend rxe user ABI to support flush
+  RDMA/rxe: Allow registering persistent flag for pmem MR only
+  RDMA/rxe: Extend rxe packet format to support flush
+  RDMA/rxe: Implement RC RDMA FLUSH service in requester side
+  RDMA/rxe: Implement flush execution in responder side
+  RDMA/rxe: Implement flush completion
+  RDMA/cm: Make QP FLUSHABLE
+  RDMA/rxe: Enable RDMA FLUSH capability for rxe device
+
+ drivers/infiniband/core/cm.c            |   3 +-
+ drivers/infiniband/sw/rxe/rxe_comp.c    |   4 +-
+ drivers/infiniband/sw/rxe/rxe_hdr.h     |  47 +++++++
+ drivers/infiniband/sw/rxe/rxe_loc.h     |   1 +
+ drivers/infiniband/sw/rxe/rxe_mr.c      |  58 +++++++-
+ drivers/infiniband/sw/rxe/rxe_opcode.c  |  17 +++
+ drivers/infiniband/sw/rxe/rxe_opcode.h  |  16 ++-
+ drivers/infiniband/sw/rxe/rxe_param.h   |   4 +-
+ drivers/infiniband/sw/rxe/rxe_req.c     |  15 +-
+ drivers/infiniband/sw/rxe/rxe_resp.c    | 176 +++++++++++++++++++++---
+ drivers/infiniband/sw/rxe/rxe_verbs.h   |   6 +
+ include/rdma/ib_pack.h                  |   3 +
+ include/rdma/ib_verbs.h                 |  20 ++-
+ include/uapi/rdma/ib_user_ioctl_verbs.h |   2 +
+ include/uapi/rdma/ib_user_verbs.h       |  16 +++
+ include/uapi/rdma/rdma_user_rxe.h       |   7 +
+ 16 files changed, 362 insertions(+), 33 deletions(-)
+
+-- 
+2.31.1
+
