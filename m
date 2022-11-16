@@ -2,57 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CCEB62B54F
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 09:33:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C869962B553
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 09:34:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231907AbiKPIdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 03:33:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39632 "EHLO
+        id S232477AbiKPIes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 03:34:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbiKPIdi (ORCPT
+        with ESMTP id S229942AbiKPIeo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 03:33:38 -0500
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E544DE31
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 00:33:36 -0800 (PST)
-Received: by mail-lj1-f177.google.com with SMTP id x21so20858249ljg.10
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 00:33:36 -0800 (PST)
+        Wed, 16 Nov 2022 03:34:44 -0500
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 386EEF29;
+        Wed, 16 Nov 2022 00:34:43 -0800 (PST)
+Received: by mail-qv1-f42.google.com with SMTP id mi9so11453889qvb.8;
+        Wed, 16 Nov 2022 00:34:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TKlOC+omeE7Fbq3sEW7T1SZBevKbc2ofi3hDZZa2pfk=;
-        b=mpw6Q413Yi4X65VWu+UbiJXiCg78Mj7R3h0QyEx1FdneT/deiGn9+ylHYPUjqtPN3d
-         LC4HPH3hIK5uzSDDtww/qRTCrp29r1NEGvHAeloM2VRPQPykfj6njWtv3PvGpm+d80yw
-         +FXLk66k9Y0jTM4jx6CquKiNavkv7C+1RactX440xl5L3BLJZs+8E++ZWQdaYF2Zqghx
-         Fd5n/2deFP6I4RicnaSxgwL0tFfEh/jmp8hxIQwnY/4f9yhRhFpbee0Fuym5YmWzZrj/
-         VWfEVnb8cU+ZDqcftiMKO3oW47+ie26ksa6UuC5fESGsy+KW5xDvN5jyfhSsp8CiizP1
-         VpYA==
-X-Gm-Message-State: ANoB5pl59hfCB0bmejrhzSTpH1II94R7gJ8bUaNvoSGTxZjKhl/3fMBw
-        LPqLVR73ag2DyQ4+q5LZF1s=
-X-Google-Smtp-Source: AA0mqf6SE77eBndDoLF4RFu17/e3c4fPtP6W3PQJiKheVp+BmKOheBJr+IXOwJrgVP5irbyc8KTK4g==
-X-Received: by 2002:a05:651c:88f:b0:26f:c160:6dde with SMTP id d15-20020a05651c088f00b0026fc1606ddemr6990991ljq.20.1668587615176;
-        Wed, 16 Nov 2022 00:33:35 -0800 (PST)
-Received: from dc75zzyyyyyyyyyyyyydt-3.rev.dnainternet.fi (dc75zzyyyyyyyyyyyyydt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::7])
-        by smtp.gmail.com with ESMTPSA id y14-20020ac2420e000000b004a9b9ccfbe6sm2503115lfh.51.2022.11.16.00.33.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 00:33:34 -0800 (PST)
-Date:   Wed, 16 Nov 2022 10:33:25 +0200
-From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Prashant Laddha <prladdha@cisco.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND] fixp-arith: do not require users to include bug.h
-Message-ID: <Y3SgVdVey9legtX+@dc75zzyyyyyyyyyyyyydt-3.rev.dnainternet.fi>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wJK9b4B7NWAtgof3K5gbwAvDcs0xP62iIN8fCNsFCJk=;
+        b=8RxxdvuBGtbhM2CGKbUq5wQQcC40IGXjF6b3nzQpm9ooy0hXhxNtOA+DvrvefL6ijf
+         Vc8E/xx5kHuQAom2y98UPbi0G3YngvJGY3k8Nl8LUj+bbfNzeXKVmas/vmUamcV8Enhw
+         jL2DHaUfFA9iZJUyFQr8eZodESmDgeRLtjTmE/rMpL179Kt5fPV0GNM5TOMtJFISW/Wc
+         LmiB5vO4T0FTGSc1qIGovyOa+8qSfKYscncs1F3ui8Q+GLZoy1vHArJYAFvaC7IGeVeA
+         zPpJzo90148YFaHJSpBKmsOrcyFXleYTWY6ijrE/bdAiO7mar6OQd5xtQ5kXiFxNDaZE
+         UBzA==
+X-Gm-Message-State: ANoB5pl0cuK7e/OnMF3aGzYiBf4uPXpncKJbLg70W+lpKGsqiAFC+1rz
+        ITn8jjye+/kFnZZ+yjiTFC4l9vxHjXx/eQ==
+X-Google-Smtp-Source: AA0mqf5aSw1ewdDDHXoaTchUWFQNPxoquCEmartcZ11rgaNikOEntsuHw/7C/GsDditnMKitGI2Yhw==
+X-Received: by 2002:a0c:9042:0:b0:4bb:e74a:f63b with SMTP id o60-20020a0c9042000000b004bbe74af63bmr20387656qvo.15.1668587682148;
+        Wed, 16 Nov 2022 00:34:42 -0800 (PST)
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com. [209.85.219.180])
+        by smtp.gmail.com with ESMTPSA id w8-20020a05620a444800b006fb7f94a65bsm4985318qkp.44.2022.11.16.00.34.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Nov 2022 00:34:41 -0800 (PST)
+Received: by mail-yb1-f180.google.com with SMTP id 136so4485957ybn.1;
+        Wed, 16 Nov 2022 00:34:41 -0800 (PST)
+X-Received: by 2002:a25:cb4a:0:b0:6dd:b521:a8f2 with SMTP id
+ b71-20020a25cb4a000000b006ddb521a8f2mr19813619ybg.380.1668587681340; Wed, 16
+ Nov 2022 00:34:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="GS8yxXAiYW45aPhR"
-Content-Disposition: inline
+References: <20221115192625.9410-1-alexander.helms.jy@renesas.com>
+ <20221115192625.9410-2-alexander.helms.jy@renesas.com> <e9fd112f-0fd2-e833-8687-9a256c307842@linaro.org>
+In-Reply-To: <e9fd112f-0fd2-e833-8687-9a256c307842@linaro.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 16 Nov 2022 09:34:30 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdX-tziOhCLi-_s_MjPcHr4OW9=xA9xDVgf+fUya1R6TzA@mail.gmail.com>
+Message-ID: <CAMuHMdX-tziOhCLi-_s_MjPcHr4OW9=xA9xDVgf+fUya1R6TzA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dtbindings: clock: Add bindings for Renesas PhiClock
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Alex Helms <alexander.helms.jy@renesas.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, sboyd@kernel.org, mturquette@baylibre.com,
+        geert+renesas@glider.be
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
@@ -63,74 +69,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Krzysztof,
 
---GS8yxXAiYW45aPhR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Wed, Nov 16, 2022 at 9:20 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+> On 15/11/2022 20:26, Alex Helms wrote:
+> > Add dt bindings for the Renesas PhiClock clock generator.
+> >
+>
+> Subject: drop second, redundant "bindings"
+>
+> > Signed-off-by: Alex Helms <alexander.helms.jy@renesas.com>
+> > ---
+> >  .../bindings/clock/renesas,phiclock.yaml      | 81 +++++++++++++++++++
+> >  MAINTAINERS                                   |  5 ++
+> >  2 files changed, 86 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/clock/renesas,phiclock.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/clock/renesas,phiclock.yaml b/Documentation/devicetree/bindings/clock/renesas,phiclock.yaml
+> > new file mode 100644
+> > index 000000000..2b36534d3
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/clock/renesas,phiclock.yaml
+>
+> Filename based on compatible.
 
-The fixp_sin32_rad()() contains a call to BUG_ON(). If users of
-fixp-arith.h have not included the bug.h prior including the fixp-arith.h
-the compiler will not find the BUG_ON. Thus every user of fixp-arith.h
-must also include bug.h (or roll own variant of BUG_ON()).
+Looks like there are more of them, so I guess the family name is fine?
 
-Include bug.h from fixp-arith.h so every user of fixp-arith.h does not
-need to include the bug.h prior inclusion of fixp-arith.h
+Gr{oetje,eeting}s,
 
-Fixes: 559addc25b00 ("[media] fixp-arith: replace sin/cos table by a better=
- precision one")
-Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
----
+                        Geert
 
-Another forgotten patch I encountered while cleaning up my local git.
-Seems like this has fell through the cracks.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
- include/linux/fixp-arith.h | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/include/linux/fixp-arith.h b/include/linux/fixp-arith.h
-index 281cb4f83dbe..e485fb0c1201 100644
---- a/include/linux/fixp-arith.h
-+++ b/include/linux/fixp-arith.h
-@@ -2,6 +2,7 @@
- #ifndef _FIXP_ARITH_H
- #define _FIXP_ARITH_H
-=20
-+#include <linux/bug.h>
- #include <linux/math64.h>
-=20
- /*
-
-base-commit: 094226ad94f471a9f19e8f8e7140a09c2625abaa
---=20
-2.38.1
-
-
---=20
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =3D]=20
-
---GS8yxXAiYW45aPhR
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmN0oD8ACgkQeFA3/03a
-ocV2+Qf9HvZLfrZRdoKiCqyVHwRqTvI2GyScR/J1uuxQktJOG5+qTFFINQZkasI+
-y4SzW3QdXpSoOGBjrXicGHtYmcqXcJ2L3degaQAWAUqSNb6WpOH4urnXUVya5m6d
-VzIughhGC+hX/R3C9kM7OqbVnVyHsiO/qh3I/z/zhFGQtZzazcFxYa9HdKFLB4kl
-26szvWxQ6KAYM00rHuuRQS326BDNUQU3xFjIGm1zKVvOTrfTdvTV1WY25JeGGttt
-BRx2yG0CP+RweilIPoi9uhV0TaZQZdmeQqmnGKlSDoC7t1jhmUYa1DEMwiENCxfe
-jcvf9JeuzglfzxTnCzqRYJG7n7Bj7w==
-=3eFE
------END PGP SIGNATURE-----
-
---GS8yxXAiYW45aPhR--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
