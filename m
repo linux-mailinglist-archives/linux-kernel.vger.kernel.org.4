@@ -2,114 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4787A62B047
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 01:55:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F25F62B04A
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 01:57:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231443AbiKPAzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 19:55:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39890 "EHLO
+        id S231504AbiKPA5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 19:57:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229973AbiKPAzh (ORCPT
+        with ESMTP id S229790AbiKPA5N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 19:55:37 -0500
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D80DB31FBC
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 16:55:36 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 46D8D5C012B;
-        Tue, 15 Nov 2022 19:55:33 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Tue, 15 Nov 2022 19:55:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1668560133; x=1668646533; bh=Qh
-        DC3vubTMLLJXtQAaerSanqb3r7hzP34nANkvJxyO8=; b=FUqjYAcF66Mu1MA/dA
-        cvyflZirZ0isF1CzwptnLVJ+iMIZF+SHD8UhG4CjjIJ7XAOLCW+w3nUjbim2TgLW
-        tNVUD50WdBe5jkUrVVWx8BHsSWJw7eb5+cEtIYhfO3Qg7642T7V1watQA3VmfQIR
-        Za7MKkZFigM125Ig0wjjLQkGOf3m0BYZWeSgyK3NnjzatbojKXn9+h6bYETo5FIE
-        25Y+vnz8k2wsBjejCvd0R8/LcW4GBYfFk2kbYZtFiDu/tSUUUNRNO+IDc61g+hWU
-        jGbLoh/ufJ2OxJknBy81YPet1cY3Vp2GGopGiTk4OIOOa4luVR1toCnMQSvM32RE
-        dnRw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1668560133; x=1668646533; bh=QhDC3vubTMLLJXtQAaerSanqb3r7
-        hzP34nANkvJxyO8=; b=fKq9O/nFkGoDOaCdZJ/yb6ft57hQ1g7/cqKzmqeG/Fc9
-        vIyeUMhjoNrcYrgkxUs8vO2fPPs6BdPS2YdNTFW/Ndy4r/pWh8CJFnao89pS1fzc
-        2b5Eo4VUN/A9bwJ8+P5rdt35ezn8jVGWc/HyNUiDjCurXiajXiL2B5o94T6SmuBv
-        gko3ulSTgF1bkI+mjepzAdj5qa9sqh6erk8yiyr6vgdKPC2BvAZmDsAgYWabYPEY
-        +OopqN8Dujsxfb1NgEi9L+ULwrGR5BANeSSDe8BiXBzdwRK0W/uVRnU/ScInfqAi
-        QCJMVknn1hkPr/KohEbht6x6j+rxBodVNJpNUyfK4w==
-X-ME-Sender: <xms:BDV0Y28ExTVW02DpaBqeHqhX4wxhzkQ7MlLL8Y1zWEVIIq1GRV3zyw>
-    <xme:BDV0Y2u5KId5DfB4wfrvncZF1OpT3OqDNCkvipSqahgfKL317My-SxXdSSXuMSrh2
-    JCXVzT3VpBtqJJbv4Y>
-X-ME-Received: <xmr:BDV0Y8Bs8dJN6b1hQvhEBzgbIKf87GUtrFxOgdJYmKQ7bqF-BLMJYWxEEOYM1UR6Zb7BnA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgeehgddvkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpehkihhrihhl
-    lhesshhhuhhtvghmohhvrdhnrghmvgenucggtffrrghtthgvrhhnpeehleevveejudejke
-    evueevteevfffhkeejgfehleethefhueejvdehieejgffhhfenucevlhhushhtvghrufhi
-    iigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmoh
-    hvrdhnrghmvg
-X-ME-Proxy: <xmx:BTV0Y-c5Y77TYtg98kVi0O4rXlkdRRg43iNZAt_QR3nf1Cm2Y3YQIQ>
-    <xmx:BTV0Y7P1fCUQk2E1-sflwDoQAJNB7z-gERYIyth3eMlUo54GUZ15ng>
-    <xmx:BTV0Y4kL3najpUR2Lrr1H5pegHjs4SmtKhlDF1yMu4f05MDDCZv-Fw>
-    <xmx:BTV0Y2d0r7mdICZ7U_CLHwrDw-5YgUwdKtBZ1Dm4-fLJv9_eL-C4Iw>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 15 Nov 2022 19:55:32 -0500 (EST)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 10F0A10446E; Wed, 16 Nov 2022 03:55:29 +0300 (+03)
-Date:   Wed, 16 Nov 2022 03:55:29 +0300
-From:   kirill@shutemov.name
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        dave.hansen@linux.intel.com, jejb@linux.ibm.com,
-        linux-kernel@vger.kernel.org, lkp@intel.com,
-        martin.petersen@oracle.com, oe-kbuild-all@lists.linux.dev,
-        x86@kernel.org
-Subject: Re: [PATCH 1/2] scsi: Fix get_user() in call sg_scsi_ioctl()
-Message-ID: <20221116005529.uh4uol2qgcfnkfma@box.shutemov.name>
-References: <20221115155802.p3vjnk7eqqcyskt3@box.shutemov.name>
- <20221116004353.15052-1-kirill.shutemov@linux.intel.com>
- <20221116004353.15052-2-kirill.shutemov@linux.intel.com>
- <9c96f82e-000b-88f8-fa37-753ed6723119@intel.com>
+        Tue, 15 Nov 2022 19:57:13 -0500
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74C992FFED;
+        Tue, 15 Nov 2022 16:57:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+        s=42; h=From:Cc:To:Date:Message-ID;
+        bh=h6LDOkE4F3jh6WWfsdhzELVK6aXoBJDVXJXXM0KDKpM=; b=UPHhsJznUb0Eh/YazapU8tbety
+        ncVk9mYqt1t4xtQkgxCb8iKYtGFc8PTq/F6dCpZ9TjiF8LqV4fdgmcTkwm2Fo9GruzH8gYgVvACuG
+        Z9a/8rPTsNM4bRw3wi3QmkuYvrXUVy0Bp7upjl/CHD4ftyoN3h8tcln1wAMHITdjtPkM2oUEQombN
+        BVpsaA+k/qXG9i1JRGMQutXq+LvKogqoV8KdMlmnA8bke+Y/Dg4vxRHHwzjhk32ezRwCgVE1qK5I9
+        anaA/e/1yKVghoIubHWWvuxhec++wFp6eUenpI5qozguZsrN15uW/XzXAFo+Vc3UG3wlCoO/M0J40
+        cAnnkzULUsrW10bBxuHBGxjC7BsemmT71hW8M6qP4mtCe2KR2C/QmdYLvMdun3Dtf1+Bnt8IS589Y
+        4NLNB5zQAIFlTTTPGHsNy7i792kaXewveMcTiCBxxJ6NK3tB2mlVpTflJmItHwC1RN/Z8doIL4p8v
+        UElYd8/7gQAHxuQxkQHJlJLP;
+Received: from [127.0.0.2] (localhost [127.0.0.1])
+        by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
+        (Exim)
+        id 1ov6jl-008mxT-Hh; Wed, 16 Nov 2022 00:57:09 +0000
+Message-ID: <3609b064-175c-fc18-cd1a-e177d0349c58@samba.org>
+Date:   Wed, 16 Nov 2022 01:57:09 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9c96f82e-000b-88f8-fa37-753ed6723119@intel.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] cifs: Fix problem with encrypted RDMA data read
+Content-Language: en-US, de-DE
+To:     David Howells <dhowells@redhat.com>, smfrench@gmail.com,
+        tom@talpey.com
+Cc:     Long Li <longli@microsoft.com>,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        linux-cifs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <166855224228.1998592.2212551359609792175.stgit@warthog.procyon.org.uk>
+From:   Stefan Metzmacher <metze@samba.org>
+In-Reply-To: <166855224228.1998592.2212551359609792175.stgit@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 04:48:40PM -0800, Dave Hansen wrote:
-> On 11/15/22 16:43, Kirill A. Shutemov wrote:
-> > get_user() expects the pointer to be pointer-to-simple-variable type,
-> > but sic->data is array of 'unsigned char'. It violates get_user()
-> > contracts.
-> > 
-> > Cast it explicitly to 'unsigned char __user *'. It matches current
-> > behaviour.
-> > 
-> > This is preparation for fixing sparse warnings caused by Linear Address
-> > Masking patchset.
+Hi David,
+
+see below...
+
+> When the cifs client is talking to the ksmbd server by RDMA and the ksmbd
+> server has "smb3 encryption = yes" in its config file, the normal PDU
+> stream is encrypted, but the directly-delivered data isn't in the stream
+> (and isn't encrypted), but is rather delivered by DDP/RDMA packets (at
+> least with IWarp).
 > 
-> What's the side-effect if this isn't applied?  Is it worse than sparse
-> warnings?
+> Currently, the direct delivery fails with:
+> 
+>     buf can not contain only a part of read data
+>     WARNING: CPU: 0 PID: 4619 at fs/cifs/smb2ops.c:4731 handle_read_data+0x393/0x405
+>     ...
+>     RIP: 0010:handle_read_data+0x393/0x405
+>     ...
+>      smb3_handle_read_data+0x30/0x37
+>      receive_encrypted_standard+0x141/0x224
+>      cifs_demultiplex_thread+0x21a/0x63b
+>      kthread+0xe7/0xef
+>      ret_from_fork+0x22/0x30
+> 
+> The problem apparently stemming from the fact that it's trying to manage
+> the decryption, but the data isn't in the smallbuf, the bigbuf or the page
+> array).
+> 
+> This can be fixed simply by inserting an extra case into handle_read_data()
+> that checks to see if use_rdma_mr is true, and if it is, just setting
+> rdata->got_bytes to the length of data delivered and allowing normal
+> continuation.
+> 
+> This can be seen in an IWarp packet trace.  With the upstream code, it does
+> a DDP/RDMA packet, which produces the warning above and then retries,
+> retrieving the data inline, spread across several SMBDirect messages that
+> get glued together into a single PDU.  With the patch applied, only the
+> DDP/RDMA packet is seen.
+> 
+> Note that this doesn't happen if the server isn't told to encrypt stuff and
+> it does also happen with softRoCE.
+> 
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: Steve French <smfrench@gmail.com>
+> cc: Tom Talpey <tom@talpey.com>
+> cc: Long Li <longli@microsoft.com>
+> cc: Namjae Jeon <linkinjeon@kernel.org>
+> cc: Stefan Metzmacher <metze@samba.org>
+> cc: linux-cifs@vger.kernel.org
+> ---
+> 
+>   fs/cifs/smb2ops.c |    3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
+> index 880cd494afea..8d459f60f27b 100644
+> --- a/fs/cifs/smb2ops.c
+> +++ b/fs/cifs/smb2ops.c
+> @@ -4726,6 +4726,9 @@ handle_read_data(struct TCP_Server_Info *server, struct mid_q_entry *mid,
+>   		iov.iov_base = buf + data_offset;
+>   		iov.iov_len = data_len;
+>   		iov_iter_kvec(&iter, WRITE, &iov, 1, data_len);
+> +	} else if (use_rdma_mr) {
+> +		/* The data was delivered directly by RDMA. */
+> +		rdata->got_bytes = data_len;
+>   	} else {
+>   		/* read response payload cannot be in both buf and pages */
+>   		WARN_ONCE(1, "buf can not contain only a part of read data");
 
-Build will fail if 2/2 applied without this one:
+I'm not sure I understand why this would fix anything when encryption is enabled.
 
-arch/x86/include/asm/uaccess.h:46:9: error: cast specifies array type
+Is the payload still be offloaded as plaintext? Otherwise we wouldn't have use_rdma_mr...
+So this rather looks like a fix for the non encrypted case.
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Before smbd_register_mr() is called we typically have a check like this:
+
+       if (server->rdma && !server->sign && wdata->bytes >=
+               server->smbd_conn->rdma_readwrite_threshold) {
+
+I'm wondering if server->sign is true for the encryption case, otherwise
+we would have to add a !encrypt check in addition as we should never use
+RDMA offload for encrypted connections.
+
+Latest Windows servers allow encrypted/signed offload, but that needs to be
+negotiated via MS-SMB2 2.2.3.1.6 SMB2_RDMA_TRANSFORM_CAPABILITIES, see
+https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-smb2/52b74a74-9838-4f51-b2b0-efeb23bd79d6
+And SMB2_READFLAG_RESPONSE_RDMA_TRANSFORM in MS-SMB2 2.2.20 SMB2 READ Response
+https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-smb2/3e3d2f2c-0e2f-41ea-ad07-fbca6ffdfd90
+As well as SMB2_CHANNEL_RDMA_TRANSFORM in 2.2.21 SMB2 WRITE Request
+https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-smb2/e7046961-3318-4350-be2a-a8d69bb59ce8
+But none of this is implemented in Linux yet.
+
+metze
