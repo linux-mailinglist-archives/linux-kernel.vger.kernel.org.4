@@ -2,89 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EE4B62BF9D
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 14:35:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3FC062BF9F
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 14:37:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233869AbiKPNfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 08:35:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50236 "EHLO
+        id S233952AbiKPNhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 08:37:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238294AbiKPNf2 (ORCPT
+        with ESMTP id S233955AbiKPNgx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 08:35:28 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B8D3F07E;
-        Wed, 16 Nov 2022 05:35:16 -0800 (PST)
-Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C274749C;
-        Wed, 16 Nov 2022 14:35:14 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1668605714;
-        bh=Sys0rARy8J8jP/a46/LNXBCNgBu8UjwvelC2PQ7N1z4=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=CMucZLEkB7PjzR3s2w/0Moz6WaXvsCfSbDbnEMYdJDs6B1RpB+vqWMFWPhPodBAU7
-         naMnG1Bpkpr4F7ZbK3KSP9zv/uIs5Ei3cOxQUw8IyN/sIAb39HxtIxUlZI/Adn1rUC
-         zO3IzpQLHz00jaelSiu/Xe/clZXSdilgXTfvJ+pE=
-Content-Type: text/plain; charset="utf-8"
+        Wed, 16 Nov 2022 08:36:53 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E710564EA;
+        Wed, 16 Nov 2022 05:36:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668605813; x=1700141813;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JELkfQUrNNjTFHvCmopSzT6F8rwD4FHhQPiEyR2Qkz0=;
+  b=fiRd22VUhcPlY+LYsrYNBJDYtHtrC5Nh2hArsGJuSV6n2wAiWN3vN4u3
+   CXArsMogFjGFBqprITbvHdiyteCJVMq8wSkETrIXt5X8Dabb9hrQKV4P7
+   OpEy81KoHLOImPO6K4lMC2dqBvNNvL393oDC+D27FfYzv0JfwOHD1viEW
+   i98ixEhWce1v22tBNoL3oClxvjoeseoD3+wBVhZj0Et4gmQlRkR9zhEkC
+   fsHYjMpVWkCbbjthWbGkZVjyQsXYr7ZTq8OcwDVnI34iFlzoeTa5dSI8/
+   KY82FdnVW/bRuZdRXh3h1wpx5LeQPGIQxymkNqiHLePfOh2UQc0adRCeu
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="312549354"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="312549354"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 05:36:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="968424218"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="968424218"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga005.fm.intel.com with ESMTP; 16 Nov 2022 05:36:40 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ovIak-00D90f-0E;
+        Wed, 16 Nov 2022 15:36:38 +0200
+Date:   Wed, 16 Nov 2022 15:36:37 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Rahul Tanwar <rtanwar@maxlinear.com>
+Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "robh@kernel.org" <robh@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "alan@lxorguk.ukuu.org.uk" <alan@lxorguk.ukuu.org.uk>,
+        "dirk.brandewie@gmail.com" <dirk.brandewie@gmail.com>,
+        "grant.likely@secretlab.ca" <grant.likely@secretlab.ca>,
+        "sodaville@linutronix.de" <sodaville@linutronix.de>,
+        "devicetree-discuss@lists.ozlabs.org" 
+        <devicetree-discuss@lists.ozlabs.org>,
+        linux-lgm-soc <linux-lgm-soc@maxlinear.com>
+Subject: Re: [PATCH v2 2/2] x86/of: Convert & update Intel's APIC related
+ binding schemas
+Message-ID: <Y3TnZYjD9fZ74wOK@smile.fi.intel.com>
+References: <cover.1668589253.git.rtanwar@maxlinear.com>
+ <5ba7963fbd82a859ffd99c6d8edb4d717fce0e6c.1668589253.git.rtanwar@maxlinear.com>
+ <Y3S+cgOm1vHq/kv9@smile.fi.intel.com>
+ <db4c2ec5-d4ac-c2b8-0b6f-89ae926ac1ee@maxlinear.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20221116094006.16054-1-lukas.bulwahn@gmail.com>
-References: <20221116094006.16054-1-lukas.bulwahn@gmail.com>
-Subject: Re: [PATCH] media: i2c: refer to config VIDEO_DEV to make ov08x40 image sensor driver usable
-From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Jason Chen <jason.z.chen@intel.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Shawn Tu <shawnx.tu@intel.com>, linux-media@vger.kernel.org
-Date:   Wed, 16 Nov 2022 13:35:12 +0000
-Message-ID: <166860571228.50677.2036444260575403904@Monstersaurus>
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <db4c2ec5-d4ac-c2b8-0b6f-89ae926ac1ee@maxlinear.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Lukas Bulwahn (2022-11-16 09:40:06)
-> Commit 9958d30f38b9 ("media: Kconfig: cleanup VIDEO_DEV dependencies")
-> removes the config VIDEO_V4L2 as it is merged with config VIDEO_DEV.
->=20
-> Long after this change, commit 38fc5136ac16 ("media: i2c: Add ov08x40 ima=
-ge
-> sensor driver") introduces and refers to the removed config VIDEO_V4L2,
-> basically making this driver impossible to build, test and use due to
-> dependencies that cannot be met.
->=20
-> Refer to config VIDEO_DEV instead to make this driver usable.
+On Wed, Nov 16, 2022 at 10:52:59AM +0000, Rahul Tanwar wrote:
+> On 16/11/2022 6:42 pm, Andy Shevchenko wrote:
+> > On Wed, Nov 16, 2022 at 06:28:21PM +0800, Rahul Tanwar wrote:
+> >> Intel's APIC family of interrupt controllers support local APIC
+> >> (lapic) & I/O APIC (ioapic). Convert existing bindings for lapic
+> >> & ioapic from text to YAML schema. Separate lapic & ioapic schemas.
+> >>
+> >> Also, update more info and newly introduced optional property for
+> >> lapic to choose legacy PIC or virtual wire compatibility interrupt
+> >> delivery mode.
+> > 
+> > Conversion should be split from a new property addition.
+> > 
+> 
+> Do you mean, i first update older text file with new property addition
+> and then later convert it into YAML i.e. for now i just update existing 
+> text file with new addition and later convert them to YAML schema ? Thanks.
+
+Patch 1: Convert to YAML (no content changes except its format)
+Patch 2: Introducing a new property
+Patch 3: Updating code in x86
+
+First two must be send to the DT people and have their Acks/Rb after all.
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-Fixes: 38fc5136ac16 ("media: i2c: Add ov08x40 image sensor driver")
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
->  drivers/media/i2c/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-> index 49c1c27afdc1..4a4ae9c20119 100644
-> --- a/drivers/media/i2c/Kconfig
-> +++ b/drivers/media/i2c/Kconfig
-> @@ -366,7 +366,7 @@ config VIDEO_OV08D10
-> =20
->  config VIDEO_OV08X40
->         tristate "OmniVision OV08X40 sensor support"
-> -       depends on VIDEO_V4L2 && I2C
-> +       depends on VIDEO_DEV && I2C
->         select MEDIA_CONTROLLER
->         select VIDEO_V4L2_SUBDEV_API
->         select V4L2_FWNODE
-> --=20
-> 2.17.1
->
