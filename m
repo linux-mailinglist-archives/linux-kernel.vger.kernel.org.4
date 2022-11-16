@@ -2,291 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 829C362C10D
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:38:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A08D62C116
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:39:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233265AbiKPOi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 09:38:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59818 "EHLO
+        id S233132AbiKPOjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 09:39:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231221AbiKPOiT (ORCPT
+        with ESMTP id S229638AbiKPOjp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 09:38:19 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 830A52ED51
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 06:38:18 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id r81so13340445iod.2
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 06:38:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=c4nW3VJI1lfeD4fySwB9DzBzi1swDIer5Gyl0OAqvGE=;
-        b=OaL/LEF0d+5PYrXpA+O3Qqc74mnM0KjMdinxbvepma7nRVQizJz/IXFf7UjEzzI1Ox
-         N6u9b1DkOtyQvHshQ0oRC1uQG8A4edQ/rTh0nDSgcEteUlIvYoNSCSjhU91DUL6gQOvu
-         K8IS51aZmzsWPjeunquUg0ZfjOW3sjnqZcFB8kQ/RngtuORk7L+BnIgpi/ZtFmY+xs0n
-         UegouY38awN0u8WNa4dMq6Lb9O/vrkCgssy+MBSKoEH5OHvnvqbNXNzUr7rbQ7OF2Iim
-         zDdW7DbI0YYSEgzZ5dXF5Tbfk/4Vzz9VPCyyNsJ2LcTg10Xnux14TOE+iocMf6LN6sGt
-         v2MQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=c4nW3VJI1lfeD4fySwB9DzBzi1swDIer5Gyl0OAqvGE=;
-        b=yeXzHqARXaqmp3JjQHLKAR/6cRRU9Xc6/MELN2PUusibR3bJ1bN6GFpnQQ2nFnZBZW
-         4dPlnFDWCBFV5mYIBGfNhyHeXREgiTkxrU2vDHtWH2jXIU2bNPf9SaWxB4ZDL3RRpawk
-         rIqyWp67hGyZyIRgBggGZ2Ne/n3Pvc1FqFyRh2BRMfq1en5lpmz60Ig6EsSWSenPydgy
-         OSmGiWhhPv/0it2Ip2s0VS9XeQgqd/NLS7qKcG+ocQ0XrCqwYlAoSI46c2eG3CLPiGzj
-         5ge25l+4/HASWEePY4l04oMZHSBDmclmyQX0daxgaaMgLsy7KjVy+VbrurW+7015uJVc
-         ltOA==
-X-Gm-Message-State: ANoB5pmpL1Mmjvcb23qm89v6Ddj7jgbLerAZJ+WsszWxl5ZMglCrQhDt
-        ZPqQlo3RVLAx6mmmCMtgjhv+X6z9mqEVyHhP0qx67g==
-X-Google-Smtp-Source: AA0mqf6USQf14kRtWcVjc7+0+jhF4sesd5MnF+iPpoCjeAxGmqwWMavbJVlnKVm5Mde5BZ1wB1JNwjn4iAEpIFfBN+Q=
-X-Received: by 2002:a6b:6401:0:b0:6bc:a758:9546 with SMTP id
- t1-20020a6b6401000000b006bca7589546mr9935308iog.78.1668609497766; Wed, 16 Nov
- 2022 06:38:17 -0800 (PST)
+        Wed, 16 Nov 2022 09:39:45 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB6B410D7;
+        Wed, 16 Nov 2022 06:39:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668609584; x=1700145584;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dMJUjykNKADStdZo7f5j0sBe1wB738x6p9hf/XRGPRM=;
+  b=RihTZkHiaswqBM+GSm0dwlJr2YNTA8CUxPPk1fmskCZWTSNH5QCRarnv
+   g13/VkwUkjr693yYiY0rNdeTsP6EFQAAhXWI8hfGtxoPksUqPccMbbywj
+   ykoKhQUOciEyg4qrsyj/Ew+sUkPAwjhRJa7jRcdrd2aW3MzzpEdwWb4oR
+   UbejcpmbqxixAs3t2KYA37CC7LMLr049Qc1BZAMlW6TnIej44lCixpqVP
+   UDOQ6c48aPw9r+SH8ByHbHD7HdNKS6NOhc4laxKrsT7M9LFJxNT/kulir
+   A70qGjSbmD86AumwXxo88FKRyMOTe6mAo9D4P/pafenQDYjFEwicN8v2S
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="398844897"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="398844897"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 06:39:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="708189680"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="708189680"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga004.fm.intel.com with ESMTP; 16 Nov 2022 06:39:28 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ovJZW-00DAJe-28;
+        Wed, 16 Nov 2022 16:39:26 +0200
+Date:   Wed, 16 Nov 2022 16:39:26 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Thierry Reding <treding@nvidia.com>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: Re: [rft, PATCH v3 1/1] gpiolib: Get rid of not used of_node member
+Message-ID: <Y3T2HolVIeHQR8Kz@smile.fi.intel.com>
+References: <20221116091859.64725-1-andriy.shevchenko@linux.intel.com>
+ <Y3Tp2y9U8PcDh1r/@orome>
+ <Y3TvKJAejVAZEVPJ@smile.fi.intel.com>
 MIME-Version: 1.0
-References: <20221102035301.512892-1-zhangsong34@huawei.com>
- <CAKfTPtCcYySw2ZC_pr8=3KFPmAAVN=1h8=5jWkW5YXyy11sehg@mail.gmail.com>
- <b45f96b6-e0b2-22bb-eda1-2468d6fbe104@huawei.com> <CAKfTPtDrWCenxtVcunjS3pGD81TdLf2EkhO_YcdfxnUHXpVF3w@mail.gmail.com>
- <4bad43c0-40a4-dc39-7214-f2c3321a47ee@huawei.com> <CAKfTPtCwUvkqnzs9n0G+cyE5h5QdgwoKF-gNu+4A5g4NHNRe9w@mail.gmail.com>
- <7d887171-491a-1d36-0926-d0486aacc9c2@huawei.com> <CAKfTPtCHZm2AKemnpE1UvQPsgpB5ycFdjkJa1pHQS-=DYJ2-KA@mail.gmail.com>
- <CAKfTPtAMdQD9S-mbLszeu2pjB4YB2A+1OM5NUV_2xDzCTCc7Qw@mail.gmail.com> <241e837b-056a-4fde-0673-205bd7400e82@huawei.com>
-In-Reply-To: <241e837b-056a-4fde-0673-205bd7400e82@huawei.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Wed, 16 Nov 2022 15:38:06 +0100
-Message-ID: <CAKfTPtCGSSmN+GBFf7F1sXvQKAxQbXm3rS3dXvdA4ERFs9h3hQ@mail.gmail.com>
-Subject: Re: [PATCH] sched/fair: Introduce priority load balance for CFS
-To:     Song Zhang <zhangsong34@huawei.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3TvKJAejVAZEVPJ@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Nov 2022 at 08:37, Song Zhang <zhangsong34@huawei.com> wrote:
->
->
->
-> On 2022/11/15 15:18, Vincent Guittot wrote:
-> > On Mon, 14 Nov 2022 at 17:42, Vincent Guittot
-> > <vincent.guittot@linaro.org> wrote:
-> >>
-> >> On Sat, 12 Nov 2022 at 03:51, Song Zhang <zhangsong34@huawei.com> wrote:
-> >>>
-> >>> Hi, Vincent
-> >>>
-> >>> On 2022/11/3 17:22, Vincent Guittot wrote:
-> >>>> On Thu, 3 Nov 2022 at 10:20, Song Zhang <zhangsong34@huawei.com> wrote:
-> >>>>>
-> >>>>>
-> >>>>>
-> >>>>> On 2022/11/3 16:33, Vincent Guittot wrote:
-> >>>>>> On Thu, 3 Nov 2022 at 04:01, Song Zhang <zhangsong34@huawei.com> wrote:
-> >>>>>>>
-> >>>>>>> Thanks for your reply!
-> >>>>>>>
-> >>>>>>> On 2022/11/3 2:01, Vincent Guittot wrote:
-> >>>>>>>> On Wed, 2 Nov 2022 at 04:54, Song Zhang <zhangsong34@huawei.com> wrote:
-> >>>>>>>>>
-> >>>>>>>>
-> >>>>>>>> This really looks like a v3 of
-> >>>>>>>> https://lore.kernel.org/all/20220810015636.3865248-1-zhangsong34@huawei.com/
-> >>>>>>>>
-> >>>>>>>> Please keep versioning.
-> >>>>>>>>
-> >>>>>>>>> Add a new sysctl interface:
-> >>>>>>>>> /proc/sys/kernel/sched_prio_load_balance_enabled
-> >>>>>>>>
-> >>>>>>>> We don't want to add more sysctl knobs for the scheduler, we even
-> >>>>>>>> removed some. Knob usually means that you want to fix your use case
-> >>>>>>>> but the solution doesn't make sense for all cases.
-> >>>>>>>>
-> >>>>>>>
-> >>>>>>> OK, I will remove this knobs later.
-> >>>>>>>
-> >>>>>>>>>
-> >>>>>>>>> 0: default behavior
-> >>>>>>>>> 1: enable priority load balance for CFS
-> >>>>>>>>>
-> >>>>>>>>> For co-location with idle and non-idle tasks, when CFS do load balance,
-> >>>>>>>>> it is reasonable to prefer migrating non-idle tasks and migrating idle
-> >>>>>>>>> tasks lastly. This will reduce the interference by SCHED_IDLE tasks
-> >>>>>>>>> as much as possible.
-> >>>>>>>>
-> >>>>>>>> I don't agree that it's always the best choice to migrate a non-idle task 1st.
-> >>>>>>>>
-> >>>>>>>> CPU0 has 1 non idle task and CPU1 has 1 non idle task and hundreds of
-> >>>>>>>> idle task and there is an imbalance between the 2 CPUS: migrating the
-> >>>>>>>> non idle task from CPU1 to CPU0 is not the best choice
-> >>>>>>>>
-> >>>>>>>
-> >>>>>>> If the non idle task on CPU1 is running or cache hot, it cannot be
-> >>>>>>> migrated and idle tasks can also be migrated from CPU1 to CPU0. So I
-> >>>>>>> think it does not matter.
-> >>>>>>
-> >>>>>> What I mean is that migrating non idle tasks first is not a universal
-> >>>>>> win and not always what we want.
-> >>>>>>
-> >>>>>
-> >>>>> But migrating online tasks first is mostly a trade-off that
-> >>>>> non-idle(Latency Sensitive) tasks can obtain more CPU time and minimize
-> >>>>> the interference caused by IDLE tasks. I think this makes sense in most
-> >>>>> cases, or you can point out what else I need to think about it ?
-> >>>>>
-> >>>>> Best regards.
-> >>>>>
-> >>>>>>>
-> >>>>>>>>>
-> >>>>>>>>> Testcase:
-> >>>>>>>>> - Spawn large number of idle(SCHED_IDLE) tasks occupy CPUs
-> >>>>>>>>
-> >>>>>>>> What do you mean by a large number ?
-> >>>>>>>>
-> >>>>>>>>> - Let non-idle tasks compete with idle tasks for CPU time.
-> >>>>>>>>>
-> >>>>>>>>> Using schbench to test non-idle tasks latency:
-> >>>>>>>>> $ ./schbench -m 1 -t 10 -r 30 -R 200
-> >>>>>>>>
-> >>>>>>>> How many CPUs do you have ?
-> >>>>>>>>
-> >>>>>>>
-> >>>>>>> OK, some details may not be mentioned.
-> >>>>>>> My virtual machine has 8 CPUs running with a schbench process and 5000
-> >>>>>>> idle tasks. The idle task is a while dead loop process below:
-> >>>>>>
-> >>>>>> How can you care about latency when you start 10 workers on 8 vCPUs
-> >>>>>> with 5000 non idle threads ?
-> >>>>>>
-> >>>>>
-> >>>>> No no no... spawn 5000 idle(SCHED_IDLE) processes not 5000 non-idle
-> >>>>> threads, and with 10 non-idle schbench workers on 8 vCPUs.
-> >>>>
-> >>>> yes spawn 5000 idle tasks but my point remains the same
-> >>>>
-> >>>
-> >>> I am so sorry that I have not received your reply for a long time, and I
-> >>> am still waiting for it anxiously. In fact, migrating non-idle tasks 1st
-> >>> works well in most scenarios, so it maybe possible to add a
-> >>> sched_feat(LB_PRIO) to enable or disable that. Finally, I really hope
-> >>> you can give me some better advice.
-> >>
-> >> I have seen that you posted a v4 5 days ago which is on my list to be reviewed.
-> >>
-> >> My concern here remains that selecting non idle task 1st is not always
-> >> the best choices as for example when you have 1 non idle task per cpu
-> >> and thousands of idle tasks moving around. Then regarding your use
-> >> case, the weight of the 5000 idle threads is around twice more than
-> >> the weight of your non idle bench: sum weight of idle threads is 15k
-> >> whereas the weight of your bench is around 6k IIUC how RPS run. This
-> >> also means that the idle threads will take a significant times of the
-> >> system: 5000 / 7000 ticks. I don't understand how you can care about
-> >> latency in such extreme case and I'm interested to get the real use
-> >> case where you can have such situation.
-> >>
-> >> All that to say that idle task remains cfs task with a small but not
-> >> null weight and we should not make them special other than by not
-> >> preempting at wakeup.
-> >
-> > Also, as mentioned for a previous version, a task with nice prio 19
-> > has a weight of 15 so if you replace the 5k idle threads with 1k cfs
-> > w/ nice prio 19 threads, you will face a similar problem. So you can't
-> > really care only on the idle property of a task
-> >
->
-> Well, my original idea was to consider interference between tasks of
-> different priorities when doing CFS load balancing to ensure that
-> non-idle tasks get more CPU scheduler time without changing the native
-> CFS load balancing policy.
->
-> Consider a simple scenario. Assume that CPU 0 has two non-idle tasks
-> whose weight is 1024 * 2 = 2048, also CPU 0 has 1000 idle tasks whose
-> weight is 1K x 15 = 15K. CPU 1 is idle. Therefore, IDLE load balance is
+On Wed, Nov 16, 2022 at 04:09:44PM +0200, Andy Shevchenko wrote:
+> On Wed, Nov 16, 2022 at 02:47:07PM +0100, Thierry Reding wrote:
+> > On Wed, Nov 16, 2022 at 11:18:59AM +0200, Andy Shevchenko wrote:
 
-weight of cfs idle thread is 3, the weight of cfs nice 19 thread is 15
+...
 
-> triggered. CPU 1 needs to pull a certain number of tasks from CPU 0. If
-> we do not considerate task priorities and interference between tasks,
-> more than 600 idle tasks on CPU 0 may be migrated to CPU 1. As a result,
-> two non-idle tasks still compete on CPU 0. However, CPU 1 is running
-> with all idle but not non-idle tasks.
->
-> Let's calculate the percentage of CPU time gained by non-idle tasks in a
-> scheduling period:
->
-> CPU 1: time_percent(non-idle tasks) = 0
-> CPU 0: time_percent(non-idle tasks) = 2048 * 2 / (2048 + 15000) = 24%
+> > > +	/* If the calling driver did not initialize firmware node, do it here */
+> > >  	if (gc->fwnode)
+> > >  		fwnode = gc->fwnode;
+> > >  	else if (gc->parent)
+> > >  		fwnode = dev_fwnode(gc->parent);
+> > > +	gc->fwnode = fwnode;
+> > 
+> > I'm not sure we want to set this one. We recently discussed this in
+> > another thread and my reading is that gc->fwnode is supposed to be used
+> > only to explicitly override which fwnode to use if the default isn't
+> > appropriate. Right now the standard way to access the device's fwnode
+> > seems to be dev_fwnode(&gdev->dev), with only very few exceptions, so
+> > it'd be great if we could settle on that, rather than introduce a second
+> > field that contains the same value and use them interchangeably.
+> > 
+> > One way we could enforce this is by setting gc->fwnode to NULL here
+> > instead of fwnode. That should cause a crash anywhere it's used after
+> > this, so we should be able to easily weed out any abuses.
+> > 
+> > Of course if people prefer to use gc->fwnode instead, then we may want
+> > to remove all uses of gdev->dev.fwnode. There's simply no point in
+> > keeping the same value in two different place, it's just going to lead
+> > to a big mess.
+> 
+> I prefer that we explicitly use GPIO device firmware node.
+> Independently on this message I came up with another patch
+> (I'm just about to sent it right away) which I think it
+> the best to have in current case.
+> 
+> Ideally I would like to see const struct gpio_chip *gc to be a parameter
+> to the GPIO chip add(). But it may happen in distant future.
 
-2 cfs task nice 0 with 1000 cfs idle tasks on 2 CPUs. The weight of
-the system is:
+I have updated this patch locally to use dev_of_node() instead of
+to_of_node(chip->fwnode), and also relying on the patch I just sent.
 
-2*1024 + 1000*3 = 5048 or  2524 per CPU
+Nevertheless, for of_gpiochip_add()/of_gpiochip_remove() and
+of_mm_gpiochip_add_data() I still left use of fwnode, because it feels
+the right thing to do: we are taking reference on the input data in
+such cases.
 
-This means that the cfs nice 0 task should get 1024/(5048) = 20% of
-system time which means 40% of CPUs time.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-This also means that the 2 cfs tasks on CPU0 is a valid configuration
-as they will both have their 40% of CPUs
 
-cfs idle threads have a small weight to be negligible compared to
-"normal" threads so they can't normally balance a system by themself
-but by spawning 1000+ cfs idle threads, you make them not negligible
-anymore. That's the root of your problem. A CPU with only cfs idle
-tasks should be seen unbalanced compared to other CPUs with non idle
-tasks and this is what is happening with small/normal number of cfs
-idle threads
-
->
-> On the other hand, if we consider the interference between different
-> task priorities, we change the migration policy to firstly migrate an
-> non-idle task on CPU 0 to CPU 1. Migrating idle tasks on CPU 0 maybe
-> interfered with the non-idle task on CPU 1. So we decide to migrate idle
-> tasks on CPU 0 after non-idle tasks on CPU 1 are completed or exited.
->
-> Now the percentage of the CPU time obtained by the non-idle tasks in a
-> scheduling period is as follows:
->
-> CPU 1: time_percent(non-idle tasks) = 1024 / 1024 = 100%
-> CPU 0: time_percent(non-idle tasks) = 1024 / (1024 + 15000) = 6.4%
-
-But this is unfair for one cfs nice 0 thread and all cfs idle threads
-
->
-> Obviously, if load balance migration tasks prefer migrate non-idle tasks
-> and suppress the interference of idle tasks migration on non-idle tasks,
-> the latency of non-idle tasks can be significantly reduced. Although
-> this will cause some idle tasks imbalance between different CPUs and
-> reduce throughput of idle tasks., I think this strategy is feasible in
-> some real-time business scenarios for latency tasks.
-
-But idle cfs ask remains cfs task and we keep cfs fairness for all threads
-
-Have you tried to :
-- Increase nice priority of the non idle cfs task so the sum of the
-weight of idle tasks remain a small portion of the total weight ?
-- to put your thousands idle tasks in a cgroup and set cpu.idle for
-this cgroup. This should also ensure that the weight of idle threads
-remains negligible compared to others.
-
-I have tried both setup in my local system and I have 1 non idle task per CPU
-
-Regards,
-Vincent
-
->
-> >>
-> >>>
-> >>> Best regards.
-> >>>
-> >>> Song Zhang
-> > .
