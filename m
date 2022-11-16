@@ -2,194 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF6B462B500
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 09:21:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3119762B50B
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 09:23:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238684AbiKPIUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 03:20:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55462 "EHLO
+        id S232775AbiKPIX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 03:23:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236982AbiKPIU0 (ORCPT
+        with ESMTP id S238835AbiKPIXC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 03:20:26 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0735521BE
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 00:20:25 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id r12so28335952lfp.1
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 00:20:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=20QIWTDhxs5zpxfjzQDwrXucngPgVQ+JOvZAayYi6hk=;
-        b=ddqPFfDM59WUbI9URyKo7Wu9Vum3BpFnaox+hRouL9QzJqOse+muzQwkNGtVMlZ5Zs
-         wxElcJ87TL+rGlJ73eCySG5L4L9VBc9asBWfuy/rfOgkkHWrPqbRH/BESzcX51Mj1xoG
-         BclxmopYl0NXcYviJ9ogHWuvf80+psdHS8TUSzN6d+dDX/sKSrcDpp9rjzl1gWQ0yF2Q
-         bnRxatjHV7HgjKNp3lhDacF8O9SNnoyyEke2jZeDhcOtRMuTwR6xyKtR7/lmDwoqBNJp
-         E42sIi/PYUnzUulpPUoVshXgVheNlYOClOs6YSF+l/ndAZE5Ilq6VP9kEj33+/VK9ngm
-         Zy4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=20QIWTDhxs5zpxfjzQDwrXucngPgVQ+JOvZAayYi6hk=;
-        b=n9X2ZpX6lQyjLPEH/rnRgx9USLUZ7c7tSoliQxd+Yihcz3iFV1QUoZj8qihNWcE1jS
-         +UIVpj8MLKrgIl/Sj1mTDc6cm+y/yeyvxlgY07GWr6aFq0QCGMc3rsdmyqFnmWlG36eE
-         U1y4Hq22t9eam7D+YnVidO+NeVTLhPq/v8McqvkJ99d7vN3lku9jFyPe3IJBiIwIn6ej
-         B85AvdVVKopnF8yjqUNFCORVI3ZzGb1LTTP2KAtKQNGH+HR2Ntu43PflGGD8qmppIJCZ
-         KOwO513oq9buTlOTckG27R080HmHH2ekQvEbhKgsifE9GMHbuLujHX8dWvj8luHstUwH
-         w2bA==
-X-Gm-Message-State: ANoB5pl8wkmJwwVR5qRd4qqFEv6JLOwa+KLOQvlxMAwXhXy1I/YeZK4X
-        uZvf0daV4G4JP7E2CmdmQSepgA==
-X-Google-Smtp-Source: AA0mqf6Z7C14uz2nU+dWtpSFYMdf+a93HGeoSotCFIFvFrqMsbC8WgrVJY+5FdIxsakJ8XPLIIzwQQ==
-X-Received: by 2002:ac2:4ac9:0:b0:4ac:102e:5c93 with SMTP id m9-20020ac24ac9000000b004ac102e5c93mr7889381lfp.352.1668586823210;
-        Wed, 16 Nov 2022 00:20:23 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id g16-20020a19e050000000b00494a11c5f52sm2503698lfj.256.2022.11.16.00.20.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 00:20:22 -0800 (PST)
-Message-ID: <e9fd112f-0fd2-e833-8687-9a256c307842@linaro.org>
-Date:   Wed, 16 Nov 2022 09:20:21 +0100
+        Wed, 16 Nov 2022 03:23:02 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1970D2A711;
+        Wed, 16 Nov 2022 00:21:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668586884; x=1700122884;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=6GA/Ve3243TSWaPP1ihLZxseiyBNLkJksN7iaHLvPsw=;
+  b=n5XcS0d8ezXPvDQQnJKUEc0pgJTcQdZet6MZDiZMd8wChNibowT9fG1x
+   5tmx/yaXDFuhmvYFREO6S3NdJjuC7aTRJKJIxR1mywFLXXHYrMCBB0NdV
+   wNaEmWEKk0PSH4QdCtseEJPZ0hwsLhAe9uHmkA98gA18mbjb1zz8CSmCH
+   FToj/1c+o3+xzklj9eG7HyaE1bC32EKXmchy3wlv2qpWzKuzzd/p2pNY6
+   CEH69qA2+PJ9szSNBsz3bW1oPn64v2U4K4xS00O1fMl2B3zguufTpPzW7
+   1lTBbDrw/juIEDVQUwelPmUOTSakqdrLrJ2BhRxQR9dkQvkHsRWPcnj0f
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="310112136"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="310112136"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 00:21:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="708070099"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="708070099"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga004.fm.intel.com with ESMTP; 16 Nov 2022 00:21:07 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ovDfO-00D2WJ-0G;
+        Wed, 16 Nov 2022 10:21:06 +0200
+Date:   Wed, 16 Nov 2022 10:21:05 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: Re: [PATCH 4/4] pwm: Don't initialize list head before calling
+ list_add()
+Message-ID: <Y3SdcQFRDySk3+9f@smile.fi.intel.com>
+References: <20221115211515.3750209-1-u.kleine-koenig@pengutronix.de>
+ <20221115211515.3750209-5-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 1/2] dtbindings: clock: Add bindings for Renesas PhiClock
-Content-Language: en-US
-To:     Alex Helms <alexander.helms.jy@renesas.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Cc:     krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        sboyd@kernel.org, mturquette@baylibre.com, geert+renesas@glider.be
-References: <20221115192625.9410-1-alexander.helms.jy@renesas.com>
- <20221115192625.9410-2-alexander.helms.jy@renesas.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221115192625.9410-2-alexander.helms.jy@renesas.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221115211515.3750209-5-u.kleine-koenig@pengutronix.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/11/2022 20:26, Alex Helms wrote:
-> Add dt bindings for the Renesas PhiClock clock generator.
-> 
+On Tue, Nov 15, 2022 at 10:15:15PM +0100, Uwe Kleine-König wrote:
+> list_add() just overwrites the members of the element to add (here:
+> chip->list) without any checks, even in the DEBUG_LIST case. So save the
+> effort to initialize the list.
 
-Subject: drop second, redundant "bindings"
+This is good patch. I agree with it.
 
-> Signed-off-by: Alex Helms <alexander.helms.jy@renesas.com>
+The cause of this code appearing either some older changes, or cargo cult
+of the trick similar to when list_del_init() is used against a list node.
+(FYI: that trick is useful to simplify the check if the node in question
+ belongs to any list, by calling list_empty() against _node_ pointer)
+
+The _add_ case with initialization makes no sense to me,
+
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 > ---
->  .../bindings/clock/renesas,phiclock.yaml      | 81 +++++++++++++++++++
->  MAINTAINERS                                   |  5 ++
->  2 files changed, 86 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/renesas,phiclock.yaml
+> Hello,
 > 
-> diff --git a/Documentation/devicetree/bindings/clock/renesas,phiclock.yaml b/Documentation/devicetree/bindings/clock/renesas,phiclock.yaml
-> new file mode 100644
-> index 000000000..2b36534d3
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/renesas,phiclock.yaml
+> this patch I'm not sure about. A quick grep shows there are (only?) 40
+> more code locations that call INIT_LIST_HEAD just before list_add().
+> In my understanding INIT_LIST_HEAD is only to initialize lists, but
+> chip->list is not a list, but the data needed to track chip as a list
+> member.
+> 
+> Best regards
+> Uwe
+> 
+>  drivers/pwm/core.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/pwm/core.c b/drivers/pwm/core.c
+> index b43b24bd3c9f..61bacd8d9b44 100644
+> --- a/drivers/pwm/core.c
+> +++ b/drivers/pwm/core.c
+> @@ -299,7 +299,6 @@ int pwmchip_add(struct pwm_chip *chip)
+>  		radix_tree_insert(&pwm_tree, pwm->pwm, pwm);
+>  	}
+>  
+> -	INIT_LIST_HEAD(&chip->list);
+>  	list_add(&chip->list, &pwm_chips);
+>  
+>  	mutex_unlock(&pwm_lock);
+> -- 
+> 2.38.1
+> 
 
-Filename based on compatible.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-> @@ -0,0 +1,81 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/renesas,phiclock.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Renesas PhiClock Clock Generator Device Tree Bindings
-
-Drop "Device Tree Bindings"
-
-> +
-> +maintainers:
-> +  - Alex Helms <alexander.helms.jy@renesas.com>
-> +
-> +description: |
-> +  The Renesas PhiClock is a programmable I2C clock generator that provides
-> +  1 reference output and 2 clock outputs.
-> +
-> +  The driver supports spread spectrum but only if all configurations use the
-
-Driver as in Linux driver? Drop entire paragraph. Bindings are about
-hardware, not driver.
-
-> +  same spread spectrum parameters. If your configuration uses spread spectrum,
-> +  you must include renesas,ss-amount-percent, renesas,ss-modulation-hz, and
-> +  renesas,ss-direction in the device tree.
-> +
-> +properties:
-
-compatible goes always first. Start your schema from example-schema.yaml.
-
-> +  '#clock-cells':
-> +    const: 1
-> +
-> +  clock-names:
-> +    items:
-> +      - const: xin-clkin
-
-Just "xin" or entirely drop.
-
-> +
-> +  clocks:
-> +    const: 1
-> +
-> +  compatible:
-> +    enum:
-> +      - renesas,9fgv1006
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  renesas,ss-amount-percent:
-> +    description: Spread spectrum absolute amount as hundredths of a percent, e.g. 150 is 1.50%.
-
-What? If this is percent then it cannot be hundreds of percent. Percent
-is percent. Use appropriate units.
-https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/property-units.yaml
-
-> +    minimum: 0
-> +    maximum: 500
-> +
-> +  renesas,ss-modulation-hz:
-> +    description: Spread spectrum modulation rate in Hz
-> +    minimum: 30000
-> +    maximum: 63000
-> +
-> +  renesas,ss-direction:
-> +    $ref: /schemas/types.yaml#/definitions/string
-> +    description: Spread spectrum direction
-> +    enum: [ down, center ]
-> +
-> +required:
-> +  - clock-names
-> +  - '#clock-cells'
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    ref25: ref25m {
-> +      compatible = "fixed-clock";
-> +      #clock-cells = <0>;
-> +      clock-frequency = <25000000>;
-> +    };
-
-Drop, it's obvious, isn't it?
-
-> +
-
-Best regards,
-Krzysztof
 
