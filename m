@@ -2,187 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18C5E62B3CC
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 08:12:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8009162B3CE
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 08:13:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232170AbiKPHMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 02:12:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40650 "EHLO
+        id S232501AbiKPHNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 02:13:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232035AbiKPHMK (ORCPT
+        with ESMTP id S231594AbiKPHNE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 02:12:10 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9963E1F9F2;
-        Tue, 15 Nov 2022 23:12:09 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id f18so8853529ejz.5;
-        Tue, 15 Nov 2022 23:12:09 -0800 (PST)
+        Wed, 16 Nov 2022 02:13:04 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523491F9F2
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 23:13:04 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-37010fefe48so156384337b3.19
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 23:13:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:references:cc:to:from:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=64PHYzAaFNNc1OQHFrqI08dbrqVbheTU+HNpi6jOPKE=;
-        b=K8fjKo3b50WStXGX7mS7x584mtPrnFCscjiMqZtbdNDvs+EUWuEpagbvbzQeuVR/99
-         PozQqpXhxBTKv8iku5Qm5IdJzCo1d4boLB5pX3D6apTHqgdO++mRtU/TgAA3+5llB89V
-         JNJOjttYkFoRTzyTJnFCNq48vaFLT7zdSTG6ARV/QPL5nI5YzlHA8eWCnYpy0752JLQZ
-         40Wypbu41/Kz9WyxVdAYkAVJIRY63iuHWBeY8d9P/Dg6Jomi1l0yNanXgQJlHNnxdLns
-         C0XLnaBM/INZ00UDm64e+4JGO0VLWlkjxxe30IHarlO1OlLf0DUX4xevrO9Q5I1u7Xw1
-         vN3g==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=WXJjn8PYB9SLY1j1q0EeB8Piy7lrBilE/8YOyXaTxKY=;
+        b=R9DPkR8U/JCqLAjy/iASbJFaNlfs13ciAt/+B1Xr6//ErVax+n55QLO+EUZuvA+VfB
+         2pVuOsgmRzil/fEpWYMoEcLPRglB0Ehzkq21mYEGqsPs4A4YF+E5RMmBAoLmjWsO1eWj
+         but174NBpm33mr/15kApu2yitVhNIprLILB8Msli2IKr+rakI4O7hv654m4STCOQAAJc
+         j2jVVZLhQ2z94499I6GSdUIptbgySnp9m6CvRAfNWmRGy1mh7TscKwNCD5HF9mVnwVa7
+         94KF1dMAsMJviEXYeH3Ov9KuR2HUPm0jDJuKWxYnX4ALW14ApmAgvLI4MN0HT5hMBeb0
+         RvKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:references:cc:to:from:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=64PHYzAaFNNc1OQHFrqI08dbrqVbheTU+HNpi6jOPKE=;
-        b=hhXFD6GmY/Hf/PuKDTftuHsGvdeEezDCQfXSmIDu2zYBt1BySpw3InSGgXvO3guion
-         nyaXRb92mwrGeeATuQjHccX/eOUMGwsU6wixpDEEBFtuNPgDEByRtU+9dS9wfmxYS1l1
-         4i/fBoVshQNm18Y0Z5hFY3c9sjIWjDInlepBNX0ebiQ82rp0/T+ukxjEBI3olD5TNEek
-         2N+1XkrEhNW0Ol7WGbu874Pak7prtWA/rJQ/m3+uRijl6pzejqJzgmwyZDXaf+6lZlZB
-         1EdBpuYsg6wnmH7C1jJeoXQJEg7p0oBuHYrmGJLvCPPjQKdGJlYUtl1ERsKQD2HzSU39
-         Yagw==
-X-Gm-Message-State: ANoB5pmZ2t6jyLhkj/0jqJzb2nLUG97tcd4wl6Pt7/sciajIPbu2jWAm
-        IFJEsEIIJ9cp6R63ReX8vUohFY3nXw0=
-X-Google-Smtp-Source: AA0mqf5bmMmMPcgQR1q13tr41JJouzX6gBWCVH/gNDDtSaMBVebkyEaMWaIi1BQWCaW+B94NTJN2QQ==
-X-Received: by 2002:a17:907:1010:b0:78d:cd84:9a40 with SMTP id ox16-20020a170907101000b0078dcd849a40mr17044375ejb.167.1668582728066;
-        Tue, 15 Nov 2022 23:12:08 -0800 (PST)
-Received: from [192.168.1.10] ([46.249.74.23])
-        by smtp.googlemail.com with ESMTPSA id j17-20020a17090623f100b0078d76ee7543sm6454091ejg.222.2022.11.15.23.12.06
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 15 Nov 2022 23:12:07 -0800 (PST)
-Subject: Re: [PATCH] usb: phy: add dedicated notifier for charger events
-From:   Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
-To:     Greg KH <gregkh@linuxfoundation.org>, felipe.balbi@linux.intel.com
-Cc:     sre@kernel.org, orsonzhai@gmail.com, baolin.wang@linux.alibaba.com,
-        zhang.lyra@gmail.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@opensource.cirrus.com,
-        linux-usb@vger.kernel.org, tony@atomide.com
-References: <1668430562-27114-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
- <Y3JpfDU7T2Ks/H4m@kroah.com> <ec4edd51-3915-a798-2310-8ceadcd8152f@gmail.com>
-Message-ID: <590de096-5843-eab2-a48c-ca2742cb329b@gmail.com>
-Date:   Wed, 16 Nov 2022 09:11:58 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Firefox/60.0 Thunderbird/60.6.1
-MIME-Version: 1.0
-In-Reply-To: <ec4edd51-3915-a798-2310-8ceadcd8152f@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WXJjn8PYB9SLY1j1q0EeB8Piy7lrBilE/8YOyXaTxKY=;
+        b=2Uec/m0lZFCGPtDtAnBxLUQnMjnCaeNxj25PJG+zG8U9Z/SM1+S4stz9bFUPamHHUh
+         W/tvAC/bXAFxC2/i4t0T6we8MvG/IclVO5JNPB1lz4Lmh00gg2H55p9erWhVfeQsEY7Q
+         88Y5lDg7qqhQBLU2DiLvuD2Q51pkRp+o++XQY+tIGtJrUPV13YneW0Fhcw0tV1aQ6DM5
+         01O9U95uNbE6tTGhSAmXCAfGsZEh9BYwKGwALyQTX2ibo1cS+q3eMfOUxe/SdMalpz5F
+         w0OkT6nKuRJ6MjVc+1mHcTks6Cguf1uQ6pIh4hTYynO+XQXdxMFqLjXERb0fHoJpc2mi
+         a6yg==
+X-Gm-Message-State: ANoB5plYUaT9Casz8kQgqcPV8Q9tOewUGi3r6M8WaCo0CDlfreChAEko
+        sr4BVQxoKQJN/51Yt7qoBgiTnwe4J2VV
+X-Google-Smtp-Source: AA0mqf5xyH2ENNOTYNJSqYf1bFldRQd/ujUpLe2WBGMxK8gXwmldQunucYc1jZ8DurLzY459eLTt3lmSL+n1
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:bf0f:58f3:342e:c1ec])
+ (user=irogers job=sendgmr) by 2002:a25:d808:0:b0:6bd:d36:f096 with SMTP id
+ p8-20020a25d808000000b006bd0d36f096mr20960547ybg.150.1668582783603; Tue, 15
+ Nov 2022 23:13:03 -0800 (PST)
+Date:   Tue, 15 Nov 2022 23:12:55 -0800
+Message-Id: <20221116071259.2832681-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
+Subject: [PATCH v1 0/4] perf list libpfm support and other fixes
+From:   Ian Rogers <irogers@google.com>
+To:     Weilin Wang <weilin.wang@intel.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Sandipan Das <sandipan.das@amd.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Xin Gao <gaoxin@cdjrlc.com>, Rob Herring <robh@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Cc:     Stephane Eranian <eranian@google.com>,
+        Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Fix an asan issue and a a lack of libpfm support with the refactored
+perf list code. Add some improvements to wordwrap and the escape
+printing for json to aid this.
 
+Ian Rogers (4):
+  perf list: Fix asan issue
+  perf list: Support newlines in wordwrap
+  perf list: Json escape encoding improvements
+  perf list: List callback support for libpfm
 
-On 14.11.22 г. 18:46 ч., Ivaylo Dimitrov wrote:
-> Hi,
-> 
-> On 14.11.22 г. 18:14 ч., Greg KH wrote:
->> On Mon, Nov 14, 2022 at 02:56:02PM +0200, Ivaylo Dimitrov wrote:
->>> usb_phy::notifier is already used by various PHY drivers (including
->>> phy_generic) to report VBUS status changes and its usage conflicts with
->>> charger current limit changes reporting.
->>
->> How exactly does it conflict?
->>
-> 
-> see below
-> 
->>> Fix that by introducing a second notifier that is dedicated to usb 
->>> charger
->>> notifications. Add usb_charger_XXX_notifier functions. Fix charger 
->>> drivers
->>> that currently (ab)use usb_XXX_notifier() to use the new API.
->>
->> Why not just set the notifier type to be a new one instead of adding a
->> whole new notifier list?  Or use a real callback?  notifier lists are
->> really horrid and should be avoided whenever possible.
->>
-> 
-> Not sure what you mean by "notifier type', but if that is that val 
-> parameter of atomic_notifier_call_chain(), the way it is used by usb 
-> charger FW:
-> 
-> https://elixir.bootlin.com/linux/latest/source/drivers/usb/phy/phy.c#L132
-> 
-> is not compatible with:
-> 
-> https://elixir.bootlin.com/linux/latest/source/drivers/usb/phy/phy-generic.c#L185 
-> 
-> 
-> for example, IIUC.
-> 
-> The former wants to send max current as val, while latter sends event 
-> type as val. Sure, I may create some kind of hack, like using the MSB to 
-> denote charger events, but that doesn't feel right.
-> 
-> Or, shall I do something else and fix the usage all over the place? 
-> Please elaborate.
-> 
+ tools/perf/builtin-list.c | 122 ++++++++++++++++++------------
+ tools/perf/util/pfm.c     | 154 +++++++++++++++++---------------------
+ tools/perf/util/pfm.h     |   6 +-
+ 3 files changed, 145 insertions(+), 137 deletions(-)
 
-Digging further into that, it seems phy-ab8500-usb.c is also using 
-usb_phy::notifier in non-standard way, it sends events from 
-ux500_musb_vbus_id_status instead of usb_phy_events. I don't know the 
-history behind, but right now we have at least 3 incompatible usages of 
-usb_phy::notifier:
+-- 
+2.38.1.431.g37b22c650d-goog
 
-1. Most of the phy and charger drivers use usb_phy_events as notifier type
-
-2. phy-ab8500-usb.c uses ux500_musb_vbus_id_status as notifier type, I 
-am not the only one to hit that it seems 
-https://elixir.bootlin.com/linux/v6.1-rc5/source/drivers/power/supply/ab8500_charger.c#L3191
-
-3. USB charger framework uses max charging current as notifier type.
-
-Moreover, a charger driver in a system that has gadget drivers support 
-and phy that has extcon charger cable detection support and registers to 
-phy notifier, will inevitably receive (1) and (3) types of 
-notifications, without any way to distinguish I was able to find.
-
-I don't really see how those can be merged to use one notifier only, 
-without fixing most of USB phy and gadget drivers and half of charger 
-drivers. Not that I like adding the second notifier, I just don;t see 
-other way.
-
-Regards,
-Ivo
-
-> In regards to callback - I didn't want to come-up with a whole new API, 
-> but just fix the current one. Also, a single callback will not be enough 
-> - imagine a case with 2 batteries that have to be charged by a single 
-> USB port, so 2 separate charger devices, most-probably. We will have to 
-> keep a list of callback functions somehow. I admit my lack of knowledge, 
-> but, do we already have such API to use?
-> 
->>> Fixes: a9081a008f84 ("usb: phy: Add USB charger support")
->>>
->>> Signed-off-by: Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
->>
->> You can't have a blank line between there, checkpatch.pl should have
->> complained.
->>
-> 
-> it didn't:
-> 
-> ./scripts/checkpatch.pl 
-> 0001-usb-phy-add-dedicated-notifier-for-charger-events.patch
-> total: 0 errors, 0 warnings, 90 lines checked
-> 
-> 0001-usb-phy-add-dedicated-notifier-for-charger-events.patch has no 
-> obvious style problems and is ready for submission.
-> 
-> Will fix, if I am to send v2
-> 
-> Thanks,
-> Ivo
-> 
->> thanks,
->>
->> greg k-h
->>
