@@ -2,76 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43A8862B75F
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 11:12:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F4D762B769
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 11:14:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233400AbiKPKMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 05:12:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46528 "EHLO
+        id S233433AbiKPKOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 05:14:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233033AbiKPKLu (ORCPT
+        with ESMTP id S233713AbiKPKOC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 05:11:50 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA2127B3E
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:11:49 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id w14so29065030wru.8
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:11:49 -0800 (PST)
+        Wed, 16 Nov 2022 05:14:02 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB562C124
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:13:20 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id g7so28764437lfv.5
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:13:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VBLFfpuYzGwgHiIgmRksJJfjyWbMcIkXPEI0JtdHAgc=;
-        b=E9OGNwlxBGugaTZ7cl1i+RM4u7NF8JNxQAcVNkYohJjc1dGfLkXj0IsPcGsTvqnbao
-         z3aD3MBh41ssAllpNEb4BmNlP98uuyL+MSvYHewAylnGeC3Co7QlOPO3D6XeIweyblq9
-         cO7TcpFa7Ym7LG87mixQonkX7mSKeuDrIGrmYpqtQoB9vS7fJRjgGnxHdXDf3va8lR/+
-         mTKDUljTUxlmos6TuAHeNA2PsolL9f7bEbTM/mKDfo3DOJIR6HIdNWKx85yFoKnntZwo
-         ohMRILZ8o/tF1SDkOa5wNF1eb7TZUzBFjMbL8CBdjwdcrrBYZ7P8ah9W9jqnZF7lcmHV
-         unVg==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=caVQe8sb8fBoXN87dmyVLgqXfxe1FLCTw1IH8TSlw4E=;
+        b=DmRkH8EyJsNESuTklewZXHDIhTT1Jx6p62G6EgAjaSAE3EljVc7YkcOzNPbH0Gn0cE
+         n0sRbjr9qiIw3gFasdrxEjtgcOP4VT/s+lju0jYRpHPA9cOB52KNWXi3hxTnIUvAdGJ/
+         zH6ehjrPO+JfLxL9XxRTRcea+M4pqEioiSAu12ROLMBF55AQqsQjOyCmpEF9PDNyaL4E
+         AIB8stwKdkSmClKVA3OuBqgRlRe32Elx8xoUITMs0r8TbSOz0OkXJBUITGh3b3449gVF
+         YzDhkm8/IlvBwvXdY6Opo75ZlTftALPIwu5Zz19F2nKujyvHC48Sz4pOTGuzW1iVNPjE
+         OvRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VBLFfpuYzGwgHiIgmRksJJfjyWbMcIkXPEI0JtdHAgc=;
-        b=lYlGjm4uJT6Ko+aFyKhPsQqe9Wv5NBSrIMTslRQg6yE5uGP258kohdmkBTef1ldyAN
-         iwThJjb7Sr+tdJWt9dPDgO7A+BpIHmp/3kuOPvFMNdv+a7Ivh2241XYYzpfKp3OeSqxp
-         glsExWggK4Tel5uehF0yBzqNWYuH7OqfU6X26kmQ3fb4mEBSmpjVZ4nV3wZnOnPcOw0z
-         tLybn5XG7ZxgsK87shMHlZDMMxZ5G9ss6lIF3KDDwQ4LT6jmzosppfy2iSJTXst6jLbG
-         Tsvd9dfwg9AdEJSjlHF+h3VI1Vf70mx/wgYIV7SwVDt6nJlsdY+rGmtgXH5Iqoh96EYE
-         NPOw==
-X-Gm-Message-State: ANoB5pmD/ZH9hiNPTod+ygu4idXZLiPYZtS4iyw9beDmnrYOhyZm/JVM
-        UE9HV+Hq8oH7Xa/x+C580r5hrg==
-X-Google-Smtp-Source: AA0mqf67BDpZ8h0XiJsmLizFY7Aa6egS8/MBdPM5GdJT1i1IHJ4mldiWcZ+Dm2j07ccNTRbLfW9bVQ==
-X-Received: by 2002:a05:6000:12d1:b0:236:6e2a:ac17 with SMTP id l17-20020a05600012d100b002366e2aac17mr13307315wrx.345.1668593508782;
-        Wed, 16 Nov 2022 02:11:48 -0800 (PST)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id h12-20020a05600c350c00b003c6bd91caa5sm1741752wmq.17.2022.11.16.02.11.48
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=caVQe8sb8fBoXN87dmyVLgqXfxe1FLCTw1IH8TSlw4E=;
+        b=NdH2AAkRg6ttqtMPcH0i6Kx2r4vu0YchWppvr3IYRpxfQF4bz1R2WzQRr1E8pHAofl
+         RXHX5dJwk3aOvV+kSlxrASYJFjoDRZSIbhUfSwwVZO0Byo9v9FtQ7IojYtxZE38j0szg
+         d4CYkvdcR/Xl2qnS/xqYrsg5GUdGD6VBPK5DwAdkVXPwuic518BkhT9+3xHLvQiS0foA
+         w1PvuWPNK7G3dSwqb0uFR/uez+Xs24iWZmhUJfTY6PaQAMJKWxFQU8g/LW5MWDIDmuQb
+         Ermxd7cPV2VzrqYC6JFSWGZ45uz6I6L/2SvBPU1YZBfH8kZ93mrmJBLAwwQCY+zJPbvl
+         PLbg==
+X-Gm-Message-State: ANoB5pmgiMOHH3Nbue2dj1Xrk2QTjrymtgaKGlTejXIsFZg1xp/aYFSt
+        eBpg5eajqUmNefM9GtKudW+dbw==
+X-Google-Smtp-Source: AA0mqf5o6+aSJXLMf+bLzzXhkJ6jTRB4QWfrXkkgAEn5F/5x56+zcmZYD5nUxEomk+v4PLbl/sRZmg==
+X-Received: by 2002:ac2:558c:0:b0:4a2:7692:3a0a with SMTP id v12-20020ac2558c000000b004a276923a0amr7301293lfg.71.1668593599094;
+        Wed, 16 Nov 2022 02:13:19 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id a10-20020a056512020a00b004a45f2e49b1sm2514432lfo.273.2022.11.16.02.13.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 02:11:48 -0800 (PST)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Wed, 16 Nov 2022 11:11:36 +0100
-Subject: [PATCH 7/7] pinctrl: qcom: spmi-gpio: add support for pmr735d gpio
- control
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20221114-narmstrong-sm8550-upstream-spmi-v1-7-6338a2b4b241@linaro.org>
-References: <20221114-narmstrong-sm8550-upstream-spmi-v1-0-6338a2b4b241@linaro.org>
-In-Reply-To: <20221114-narmstrong-sm8550-upstream-spmi-v1-0-6338a2b4b241@linaro.org>
-To:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Wed, 16 Nov 2022 02:13:18 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Lee Jones <lee@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        linux-gpio@vger.kernel.org
-X-Mailer: b4 0.10.1
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH v3 0/3] arm64: dts: qcom: sm8450-hdk: add sound support
+Date:   Wed, 16 Nov 2022 11:13:11 +0100
+Message-Id: <20221116101314.52887-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -82,25 +75,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the pmr735d gpio controller providing GPIO control over SPMI.
+Hi,
 
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- drivers/pinctrl/qcom/pinctrl-spmi-gpio.c | 1 +
- 1 file changed, 1 insertion(+)
+Changes since v2
+================
+1. Patch 2: Use lower-case hex.
+2. Patch 3: Use ACTIVE_LOW for qcom,wcd9380-codec reset-gpios.
+   https://lore.kernel.org/all/20221116053817.2929810-11-dmitry.torokhov@gmail.com
+3. Add Rb tags.
 
-diff --git a/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c b/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
-index f758522d035e..66d6d7ffbd43 100644
---- a/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
-+++ b/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
-@@ -1242,6 +1242,7 @@ static const struct of_device_id pmic_gpio_of_match[] = {
- 	{ .compatible = "qcom,pmp8074-gpio", .data = (void *) 12 },
- 	{ .compatible = "qcom,pmr735a-gpio", .data = (void *) 4 },
- 	{ .compatible = "qcom,pmr735b-gpio", .data = (void *) 4 },
-+	{ .compatible = "qcom,pmr735d-gpio", .data = (void *) 2 },
- 	/* pms405 has 12 GPIOs with holes on 1, 9, and 10 */
- 	{ .compatible = "qcom,pms405-gpio", .data = (void *) 12 },
- 	/* pmx55 has 11 GPIOs with holes on 3, 7, 10, 11 */
+Changes since v1
+================
+1. Patch 2:
+   - Whitespace cleanups.
+   - Correct include - do not use deprecated one.
+2. Patch 3:
+   - Sort.
+   - Add Rb tag.
+   - Correct include - do not use deprecated one and drop q6asm.h (not used).
+
+Description
+===========
+Initial work (still partially in progress) adding audio to HDK8450 board.
+
+Working/tested:
+ - speakers
+ - one channel of headset
+
+The DTS patches do not have particular dependencies, however they:
+1. Use updated ASoC bindings:
+   https://lore.kernel.org/linux-arm-msm/20221111113547.100442-1-krzysztof.kozlowski@linaro.org/T/#t
+
+2. For full operation need changes in Soundwire and Qualcomm ASoC drivers, not
+   yet upstreamed:
+   https://github.com/krzk/linux/commits/wip/sm8450
+   Booting remoteproc without these changes will report errors, but these are
+   expected at this stage.
+
+Best regards,
+Krzysztof
+
+Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+
+Srinivas Kandagatla (3):
+  arm64: dts: qcom: sm8450: add GPR node
+  arm64: dts: qcom: sm8450: add Soundwire and LPASS
+  arm64: dts: qcom: sm8450-hdk: add sound support
+
+ arch/arm64/boot/dts/qcom/sm8450-hdk.dts | 160 +++++++++++
+ arch/arm64/boot/dts/qcom/sm8450.dtsi    | 335 ++++++++++++++++++++++++
+ 2 files changed, 495 insertions(+)
 
 -- 
-b4 0.10.1
+2.34.1
+
