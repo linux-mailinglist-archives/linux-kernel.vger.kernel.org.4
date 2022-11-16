@@ -2,78 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D53462BA24
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 11:52:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A88C62BA32
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 11:53:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233052AbiKPKwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 05:52:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59080 "EHLO
+        id S238757AbiKPKxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 05:53:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232277AbiKPKvr (ORCPT
+        with ESMTP id S238753AbiKPKxI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 05:51:47 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08A253EC0
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:40:35 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id d6so28801105lfs.10
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:40:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IrEmjsTbAyDmmBQzrCearRz15mEY8+dkhhS8wuiqwIc=;
-        b=oSPKtTYfLJybeX72768VldvDuwzRqmwegGx3Q/jvM4rkT8co9OSV8XP1mfBHMzuUlY
-         +eGzAuWYXDhYvUbqo01ynO7+8PpciToTFiNkT/QNIWB2ObZDbP1/dIEwmFySUJVjxhcz
-         jjrSGQh8o+mlJOQtlkfO6BJRqVSxK5grVINXAtOUm+iue4wfzKp35C2KEwc4+yhQWD+t
-         6J71QxRe4Q49zrHO+QaX6n0siUuAyp8JefBkky73ppwVhvgL/1eGG3pmxjPJ5z5DL5Rv
-         I9MhKS1ssVKEfAJKV2ZC+dx+B5c2OgyEcLID+XtlVFMBfJFdHyhUEZxVpkmw0YnB7GrS
-         CO+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IrEmjsTbAyDmmBQzrCearRz15mEY8+dkhhS8wuiqwIc=;
-        b=H210lbgOFmK4EhfsIWvpg2rxRhp4ge07u1GWrKKGEzunrVEQnqxJ+TitpQN3KMNLHW
-         +0/pV5Mg7JSNVNBeAX20zo7QQtH6XrBdqM7LG4lvEaGw/NNj2WT3JmPx+sLl6+dEDt8i
-         +lrVCS9WW4pbQTGN1OvE3RQk/8wjhWJfHIbzeS6X7tns+9jgc3RHfwScqVauFdBZzSYa
-         7Z/jbHDwNI3WFwn/aC9ITp1ue1V5xoGuGcQpDa7fqoJM8+lSrQTIegEwdAevTOsPpaFC
-         CqHp49PKs+SnnQK7rqtcaZUNGj9BhGUx9T6PJyAU2Tu4Xsn1CWFUfpquUrjSGNfe9o51
-         Lftg==
-X-Gm-Message-State: ANoB5pkwUaP1DWLNyy3rcs01jg/f1TfTqu3E7FXK58LC64YV6SAJeDQZ
-        B87RVE+vTFFlUv+CaB756wd6CSaZFV5QIHDx
-X-Google-Smtp-Source: AA0mqf6kAVPGcxhQm2lTBQE3ixDmuOtL3+QW0/MU0REJATG9RTcN14q9xz0kF+rwktinT6xgfQfQXg==
-X-Received: by 2002:a19:911a:0:b0:4a2:7e2a:d2e1 with SMTP id t26-20020a19911a000000b004a27e2ad2e1mr7921522lfd.641.1668595234329;
-        Wed, 16 Nov 2022 02:40:34 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id o20-20020ac25e34000000b004b40c2fccfdsm2542042lfg.59.2022.11.16.02.40.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 02:40:33 -0800 (PST)
-Message-ID: <bde68c28-bf4c-405f-ef2a-f56db7654d25@linaro.org>
-Date:   Wed, 16 Nov 2022 11:40:32 +0100
+        Wed, 16 Nov 2022 05:53:08 -0500
+Received: from us-smtp-delivery-115.mimecast.com (us-smtp-delivery-115.mimecast.com [170.10.129.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CF4C554D1
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:41:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maxlinear.com;
+        s=selector; t=1668595272;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=IMVM2YiTG2iDsFSmW+XV66q1v8bk48GDDU5GN/L+sZM=;
+        b=ZxhL5+nQ3Cmro08fHrMBFi6kfc1sZ8OWQsaX3mVhqTOMQa0KpMDP5Rb4atK2T7l3yZc78l
+        3ATf49wkJU0byh1SuCG3WbtLOgZQGSJKW+LO6yuias0/4dbljnqReS/c0yYLXvfmYs8ba0
+        6UGcCkFAYf8PobHWMfyA7tAyjH4ALic/xFdz1qIZv4BMypWF8CPKYks7F0briBYdGLTS/w
+        QpOUeTM/Ij4K8I3GkxiaV8Ob9qRGfDLTsSLZoqsYEOWmY07VyghJcy288mDdD0zyUaQDSG
+        2nqjb/X2SMrOBuSO8RZxDjZiFqyMn2mOj2A8ePuIt0S55FllfYj0qh6n3nLAWQ==
+Received: from mail.maxlinear.com (174-47-1-83.static.ctl.one [174.47.1.83])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ us-mta-53-bUUDQ6BsMlerbOpDYg5uAw-1; Wed, 16 Nov 2022 05:41:11 -0500
+X-MC-Unique: bUUDQ6BsMlerbOpDYg5uAw-1
+Received: from sgsxdev001.isng.phoenix.local (10.226.81.111) by
+ mail.maxlinear.com (10.23.38.120) with Microsoft SMTP Server id 15.1.2375.24;
+ Wed, 16 Nov 2022 02:41:04 -0800
+From:   Rahul Tanwar <rtanwar@maxlinear.com>
+To:     <bigeasy@linutronix.de>, <devicetree@vger.kernel.org>,
+        <robh@kernel.org>, <andriy.shevchenko@linux.intel.com>,
+        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <dave.hansen@linux.intel.com>, <x86@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <hpa@zytor.com>,
+        <alan@lxorguk.ukuu.org.uk>, <dirk.brandewie@gmail.com>,
+        <grant.likely@secretlab.ca>, <sodaville@linutronix.de>,
+        <devicetree-discuss@lists.ozlabs.org>,
+        <linux-lgm-soc@maxlinear.com>,
+        "Rahul Tanwar" <rtanwar@maxlinear.com>
+Subject: [PATCH v2 0/2]  x86/of: Fix a bug in x86 arch OF support
+Date:   Wed, 16 Nov 2022 18:41:00 +0800
+Message-ID: <cover.1668589253.git.rtanwar@maxlinear.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 2/3] arm64: dts: qcom: sm8450: add Soundwire and LPASS
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-References: <20221116101314.52887-1-krzysztof.kozlowski@linaro.org>
- <20221116101314.52887-3-krzysztof.kozlowski@linaro.org>
- <7605af5f-a828-5df7-48b8-b543edb0f9b1@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <7605af5f-a828-5df7-48b8-b543edb0f9b1@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: maxlinear.com
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,160 +64,191 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/11/2022 11:20, Konrad Dybcio wrote:
-> 
-> 
-> On 16/11/2022 11:13, Krzysztof Kozlowski wrote:
->> From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
->>
->> Add Soundwire controllers, Low Power Audio SubSystem (LPASS) devices and
->> LPASS pin controller.
->>
->> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
->> Co-developed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>
->> ---
->>
->> Changes since v2:
->> 1. Use lower-case hex.
->>
->> Changes since v1:
->> 1. Whitespace cleanups.
->> 2. Correct include - do not use deprecated one.
->> ---
->>   arch/arm64/boot/dts/qcom/sm8450.dtsi | 295 +++++++++++++++++++++++++++
->>   1 file changed, 295 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
->> index 4b0a1eee8bd9..747440d0445a 100644
->> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
->> @@ -15,6 +15,7 @@
->>   #include <dt-bindings/interconnect/qcom,sm8450.h>
->>   #include <dt-bindings/soc/qcom,gpr.h>
->>   #include <dt-bindings/soc/qcom,rpmh-rsc.h>
->> +#include <dt-bindings/sound/qcom,q6dsp-lpass-ports.h>
->>   #include <dt-bindings/thermal/thermal.h>
->>   
->>   / {
->> @@ -2097,6 +2098,212 @@ compute-cb@3 {
->>   			};
->>   		};
->>   
->> +		wsa2macro: codec@31e0000 {
->> +			compatible = "qcom,sm8450-lpass-wsa-macro";
->> +			reg = <0 0x031e0000 0 0x1000>;
->> +			clocks = <&q6prmcc LPASS_CLK_ID_WSA_CORE_TX_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
->> +				 <&q6prmcc LPASS_CLK_ID_RX_CORE_MCLK2_2X_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
->> +				 <&q6prmcc LPASS_HW_MACRO_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
->> +				 <&q6prmcc LPASS_HW_DCODEC_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
->> +				 <&vamacro>;
->> +			clock-names = "mclk", "npl", "macro", "dcodec", "fsgen";
->> +			assigned-clocks = <&q6prmcc LPASS_CLK_ID_WSA_CORE_TX_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
->> +					  <&q6prmcc LPASS_CLK_ID_RX_CORE_MCLK2_2X_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>;
->> +			assigned-clock-rates = <19200000>, <19200000>;
->> +
->> +			#clock-cells = <0>;
->> +			clock-output-names = "wsa2-mclk";
->> +			#sound-dai-cells = <1>;
-> I think I'm being a bit too picky, but #-cells could go as the last 
-> bunch of properties.
+[Resend] as i missed to include Sebastian who changes this patch
+modifies.
 
-I was thinking about this as well, but some of other codecs which are
-very similar (also "macro") do not have pinctrls and this makes them
-unified with additions at the end.
++ devicetree@vger.kernel.org
 
-Are you sure you still prefer alphabetical order?
+Hi Sebastian,
 
-> 
-> 
->> +
->> +			pinctrl-names = "default";
->> +			pinctrl-0 = <&wsa2_swr_active>;
->> +		};
->> +
->> +		/* WSA2 */
->> +		swr4: soundwire-controller@31f0000 {
->> +			reg = <0 0x031f0000 0 0x2000>;
->> +			compatible = "qcom,soundwire-v1.7.0";
->> +			interrupts = <GIC_SPI 171 IRQ_TYPE_LEVEL_HIGH>;
->> +			clocks = <&wsa2macro>;
->> +			clock-names = "iface";
->> +
->> +			qcom,din-ports = <2>;
->> +			qcom,dout-ports = <6>;
->> +
->> +			qcom,ports-sinterval-low =	/bits/ 8 <0x07 0x1f 0x3f 0x07 0x1f 0x3f 0x0f 0x0f>;
->> +			qcom,ports-offset1 =		/bits/ 8 <0x01 0x02 0x0c 0x06 0x12 0x0d 0x07 0x0a>;
->> +			qcom,ports-offset2 =		/bits/ 8 <0xff 0x00 0x1f 0xff 0x00 0x1f 0x00 0x00>;
->> +			qcom,ports-hstart =		/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff>;
->> +			qcom,ports-hstop =		/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff>;
->> +			qcom,ports-word-length =	/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff>;
->> +			qcom,ports-block-pack-mode =	/bits/ 8 <0xff 0xff 0x01 0xff 0xff 0x01 0xff 0xff>;
->> +			qcom,ports-block-group-count =	/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff>;
->> +			qcom,ports-lane-control =	/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff>;
->> +
->> +			#sound-dai-cells = <1>;
->> +			#address-cells = <2>;
->> +			#size-cells = <0>;
->> +		};
->> +
->> +		rxmacro: codec@3200000 {
->> +			compatible = "qcom,sm8450-lpass-rx-macro";
->> +			reg = <0 0x3200000 0 0x1000>;
->> +			clocks = <&q6prmcc LPASS_CLK_ID_RX_CORE_TX_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
->> +				 <&q6prmcc LPASS_CLK_ID_RX_CORE_MCLK2_2X_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
->> +				 <&q6prmcc LPASS_HW_MACRO_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
->> +				 <&q6prmcc LPASS_HW_DCODEC_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
->> +				 <&vamacro>;
->> +			clock-names = "mclk", "npl", "macro", "dcodec", "fsgen";
->> +
->> +			assigned-clocks = <&q6prmcc LPASS_CLK_ID_RX_CORE_TX_MCLK  LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
->> +				 <&q6prmcc LPASS_CLK_ID_RX_CORE_MCLK2_2X_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>;
->> +			assigned-clock-rates = <19200000>, <19200000>;
->> +
->> +			#clock-cells = <0>;
->> +			clock-output-names = "mclk";
->> +			#sound-dai-cells = <1>;
->> +
->> +			pinctrl-names = "default";
->> +			pinctrl-0 = <&rx_swr_active>;
->> +		};
->> +
->> +		swr1: soundwire-controller@3210000 {
->> +			reg = <0 0x3210000 0 0x2000>;
->> +			compatible = "qcom,soundwire-v1.7.0";
-> Some nodes have reg and compatible flipped.
+All touched part in this patch series was added by you. Hoping for
+concerns/comments or best case ACK, reviewed-by tag from you.
+I have CCed all others who were involved with you when you added
+this changes.
 
-Ack
+Hi devicetree@vger.kernel.org, Rob,
 
-> 
->> +			interrupts = <GIC_SPI 155 IRQ_TYPE_LEVEL_HIGH>;
->> +			clocks = <&rxmacro>;
->> +			clock-names = "iface";
->> +			label = "RX";
->> +			qcom,din-ports = <0>;
->> +			qcom,dout-ports = <5>;
->> +
+Since this appears to be entrirely in devicetree domain. Hoping
+for feedback, concerns, mistakes or improvement feedbacks from
+you.
+
+Hi Andy,
+
+Hoping for a reviewed-by tag from you once you think it is ready
+to go. Thanks.
 
 
-(...)
+Hi Thomas, Ingo, Boris, Andy, Dave & all x86@kernel.org maintainers,
 
->>   		apps_smmu: iommu@15000000 {
->>   			compatible = "qcom,sm8450-smmu-500", "arm,mmu-500";
->>   			reg = <0 0x15000000 0 0x100000>;
->> @@ -3507,6 +3799,9 @@ lpass_ag_noc: interconnect@3c40000 {
->>   		};
->>   	};
->>   
->> +	sound: sound {
->> +	};
-> You asked another folk working on sa8540p to not include sound in the 
-> SoC dtsi.
+Resending below details hoping to figure out if the changes are
+logically aligned with your understanding & that it will not break
+any x86/arch concerns that you might have. Shooting on any mistakes
+welcomed :-).
 
-I asked not to put it in soc node. It can be in DTSI, but not under soc.
 
-Best regards,
-Krzysztof
+I sent this patch 3 times but for some reasons, never got any response or
+attention from anybody so far. Hence, resending with a cover letter to
+explain the rationale behind it in detail & to justify the need to add
+this fix. Also, hoping to get some feedback in-case i am mistaken in my
+understanding which might be the reason why i never got any response.
+
+Background (baseline understanding - pls correct if mistaken anywhere):
+
+References [1], [2] & [6]
+
+For SMP systems, Intel defines three (logically four) interrupt modes
+during boot/init time while BIOS/bootloader boots & switches to linux
+kernel.
+
+  1. PIC mode - Legacy 8259 PIC interrupt controller.
+  2. Virtual wire mode via Local APIC - uses local APIC as virtual wire
+  3. Virtual wire mode via I/O APIC - uses I/O APIC as virtual wire
+  4. Symmetric I/O mode - final one used by linux for SMP systems.=20
+
+BIOS/bootloaders are supposed to boot in either #1 or #2 or #3 and then
+switch to #4 in linux for SMP systems.
+
+For our platform, we use #2.
+
+Detection of which interrupt mode the system is booting in is made by using
+below global variable in apic.c
+
+int pic_mode __ro_after_init;=20
+
+Here pic_mode =3D 1 means #1 (PIC mode) above.
+And pic_mode =3D 0 means #2 or #3 (basically virtual wire mode via apic).
+
+And apic.c while doing setup_local_APIC() uses below code [3]:
+
+        value =3D apic_read(APIC_LVT0) & APIC_LVT_MASKED;
+        if (!cpu && (pic_mode || !value || skip_ioapic_setup)) {
+                value =3D APIC_DM_EXTINT;
+                apic_printk(APIC_VERBOSE, "enabled ExtINT on CPU#%d\n", cpu=
+);
+        } else {
+                value =3D APIC_DM_EXTINT | APIC_LVT_MASKED;
+                apic_printk(APIC_VERBOSE, "masked ExtINT on CPU#%d\n", cpu)=
+;
+        }
+        apic_write(APIC_LVT0, value);
+
+What i understand from above is that if at this point of time, as long as
+it is cpu0 & pic_mode=3D1, it will set delivery mode to ExtINT (causes the
+processor to respond to the interrupt as if the interrupt originated in an
+externally connected (8259A-compatible) interrupt controller) and enables/
+unmask the interrupts.
+
+pic_mode is presently set/populated/initialized at only two places:
+ 1. In  mpparse.c [4]
+ 2. In devicetree.c [7]
+
+For #1 MPPARSE Kconfig definition is as below:
+
+=09config X86_MPPARSE
+        =09bool "Enable MPS table" if ACPI
+        =09default y
+        =09depends on X86_LOCAL_APIC
+        =09help
+          =09For old smp systems that do not have proper acpi support. Newe=
+r systems
+          =09(esp with 64bit cpus) with acpi support, MADT and DSDT will ov=
+erride it
+
+As seen above, if ACPI is not enabled, then mpparse by default is always
+enabled. Presently, there is no way to disable MPPARSE (if ACPI is not
+enabled). This to me appears to be another bug which needs fixing. As per
+theory, MPPARSE was to support MPS spec [1] as a temporary solution to
+support SMP systems until a final ACPI standard was added. But now if ACPI
+is not enabled, it will rely on MPPARSE driver to read MP floating pointer
+structure's IMCRP Bit 7 of MP feature info byte 2 [5] to figure out if it
+supports PIC mode or virtual wire mode and initialize pic_mode variable
+accordingly. If ACPI is enabled, the ACPI code overrides it by using the
+MADT table spec'ed in ACPI spec [2].=20
+
+For #2 devicetree.c presently hardcodes pic_mode =3D 1 (PIC Mode). There is
+no support to configure virtual wire mode via devicetree path for OF based
+systems.
+
+Now we have a platform which is OF based & does not use legacy 8259 PIC
+interrupt controller. Non ACPI compliant as well as non MPPARSE compliant.
+
+For such platforms, it appears to me that hardcoding pic_mode =3D 1 (PIC Mo=
+de)
+and giving no other choice to choose virtual wire mode is a bug for OF
+based x86 platforms.=20
+
+Just like mpparse relies on IMCRP bit 7 of MP feature info byte2 [5] to
+select pic_mode to PIC mode or virtual wire mode. arch/x86/kernel/devicetre=
+e.c
+should also provide some similar configurability to choose interrupt
+delivery mode & not hardcode it to PIC mode.
+
+This patch is to fix above explained bug in x86/of support for interrupt
+delivery mode configuration. Please let me know if you find any mistake
+in above understanding or if you have a alternative better suggestion to
+solve it or if you find anything odd here in our platform/system. TIA.
+
+The patch is baselined on below git tree:
+git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/core
+
+[1] https://pdos.csail.mit.edu/6.828/2008/readings/ia32/MPspec.pdf
+[2] https://uefi.org/sites/default/files/resources/ACPI_6_3_final_Jan30.pdf
+[3] https://elixir.bootlin.com/linux/v6.1-rc5/source/arch/x86/kernel/apic/a=
+pic.c#L1691
+[4] https://elixir.bootlin.com/linux/v6.1-rc5/source/arch/x86/kernel/mppars=
+e.c#L517
+[5] https://www.manualslib.com/manual/77733/Intel-Multiprocessor.html?page=
+=3D40#manual
+[6] https://www.intel.com/content/www/us/en/developer/articles/technical/in=
+tel-sdm.html
+[7] https://elixir.bootlin.com/linux/v6.1-rc5/source/arch/x86/kernel/device=
+tree.c#L170
+
+v2:
+- Address review concern from Andy - rename property name to make
+  it a bit more positive & self explanatory.
+- Found that the bindings document for these HW's (APIC) are a bit
+  off/obsolete and still in text format. Created new YAML schemas
+  one for each - lapic & ioapic. Updated these schemas with latest
+  info and add in new optional property details in the updated
+  schema for lapic. Delete/let go of the text binding doc.
+- CC devicetree@vger.kernel.org as these changes appear to be
+  mainly targeted for devicetree maintainers review & approval.
+- Increase CCed list to include all possible people who touched
+  and were involved this part of code/feature addition.
+
+v1:
+- Initial draft
+
+
+
+Rahul Tanwar (2):
+  x86/of: Add support for boot time interrupt delivery mode
+    configuration
+  x86/of: Convert & update Intel's APIC related binding schemas
+
+ .../intel,ce4100-ioapic.txt                   | 26 --------
+ .../intel,ce4100-ioapic.yaml                  | 62 ++++++++++++++++++
+ .../intel,ce4100-lapic.yaml                   | 63 +++++++++++++++++++
+ arch/x86/kernel/devicetree.c                  |  9 ++-
+ 4 files changed, 133 insertions(+), 27 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/=
+intel,ce4100-ioapic.txt
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/=
+intel,ce4100-ioapic.yaml
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/=
+intel,ce4100-lapic.yaml
+
+--=20
+2.17.1
 
