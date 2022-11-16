@@ -2,118 +2,362 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFD6262C644
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 18:22:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71AD062C643
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 18:21:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235013AbiKPRVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 12:21:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38080 "EHLO
+        id S234037AbiKPRVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 12:21:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234348AbiKPRVq (ORCPT
+        with ESMTP id S230253AbiKPRVn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 12:21:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06EE4E020
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 09:20:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668619247;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fWWN9OGwNuMYO3D60HWCUrbCelzJvBP0Z8bqEe/19V0=;
-        b=ANmQ9Ud3bpYhax6bhGsUFWHFeNILbayneenYnS/Uks6+xwi7XfYr3wmcTZBlJQtV3mPwxw
-        ARzwMI4/iS2lkLSoD7USeV3jM5TXbfp4kDB5q+prDP55a3/kgqK1iKSb3J6knukwt66oVw
-        osrJM39gclK6HTOF5JWVK0YYqzHddK8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-17-3VtoqoLbOSWbO0fk-2uOVQ-1; Wed, 16 Nov 2022 12:20:42 -0500
-X-MC-Unique: 3VtoqoLbOSWbO0fk-2uOVQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 16 Nov 2022 12:21:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1748DCD3;
+        Wed, 16 Nov 2022 09:21:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 020E0811E75;
-        Wed, 16 Nov 2022 17:20:42 +0000 (UTC)
-Received: from [10.22.10.207] (unknown [10.22.10.207])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6AF5849BB60;
-        Wed, 16 Nov 2022 17:20:41 +0000 (UTC)
-Message-ID: <4691d845-ae91-0cff-e66f-2662188b50b6@redhat.com>
-Date:   Wed, 16 Nov 2022 12:20:39 -0500
+        by ams.source.kernel.org (Postfix) with ESMTPS id 81E77B81E08;
+        Wed, 16 Nov 2022 17:21:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD638C433D6;
+        Wed, 16 Nov 2022 17:21:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668619299;
+        bh=epFRrstzquLlrXcdt7Js4FmWpA8kUko8z4cgrxQhQUQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=byIiFmrGa1ZSWA8jSos6wGQ33RccisNtkiB0oJ5ccUFEcNvpmBqJTB+46JLLpFJip
+         kjIy1WmKRraESYPppHt90DfTmeM7hAt9zODW/l/1VyMbZNFx5HdK9zhoUk5v/LAohB
+         G9xiT0Va1aiNnWBT65FnBZJpNXdsYn3dw05Y5nCeBb9EdN3qWWpnXTlr9/TIIZqukM
+         08ZTvlrpCw4Pj5BhZA4FlCYIKyKe8OB805nCrMF8G4JMlCm6ZTfkEW4k4SYbVrvigL
+         hmYMTtFb4ImqPkW+zPrCF/Tch5Z8C/xC9SVqIVfAoq+DLTeMR7wARUyOYgTIWoiBqg
+         6RXa4B1PXbf+A==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 2B91F4034E; Wed, 16 Nov 2022 14:21:36 -0300 (-03)
+Date:   Wed, 16 Nov 2022 14:21:36 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        bpf@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH 0/1] Fix perf tools/lib includes
+Message-ID: <Y3UcILLB2qsm4x7x@kernel.org>
+References: <20221116072211.2837834-1-irogers@google.com>
+ <Y3T/fxPOvZgePIEz@kernel.org>
+ <Y3UAX3U/cpszMFE7@kernel.org>
+ <CAP-5=fWu2Ywz9rC3fq9GSnASbJu4hyiF4bqyrSDi34Rz6A8y+A@mail.gmail.com>
+ <CAP-5=fX5X8=-jbj7wo7LZpNhgYzJqPJ1duJbdf2zH3HtPhcdsA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH] cgroup/cpuset: Improve cpuset_css_alloc() description
-Content-Language: en-US
-To:     Kamalesh Babulal <kamalesh.babulal@oracle.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>
-Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tom Hromatka <tom.hromatka@oracle.com>
-References: <20221116054415.79157-1-kamalesh.babulal@oracle.com>
- <7eb8d6f9-b54c-aedc-982b-8ed2bddb948b@redhat.com>
- <c1c5910c-8f5d-1eea-8bd7-7d79f5b5ee87@oracle.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <c1c5910c-8f5d-1eea-8bd7-7d79f5b5ee87@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAP-5=fX5X8=-jbj7wo7LZpNhgYzJqPJ1duJbdf2zH3HtPhcdsA@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/16/22 10:40, Kamalesh Babulal wrote:
->
-> On 11/16/22 20:06, Waiman Long wrote:
->> On 11/16/22 00:44, Kamalesh Babulal wrote:
->>> Change the function argument in the description of cpuset_css_alloc()
->>> from 'struct cgroup' -> 'struct cgroup_subsys_state'.  The change to the
->>> argument type was introduced by commit eb95419b023a ("cgroup: pass
->>> around cgroup_subsys_state instead of cgroup in subsystem methods").
->>> Also, add more information to its description.
->>>
->>> Signed-off-by: Kamalesh Babulal <kamalesh.babulal@oracle.com>
->>> ---
->>>    kernel/cgroup/cpuset.c | 11 ++++++++---
->>>    1 file changed, 8 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
->>> index b474289c15b8..aac790462e74 100644
->>> --- a/kernel/cgroup/cpuset.c
->>> +++ b/kernel/cgroup/cpuset.c
->>> @@ -3046,9 +3046,14 @@ static struct cftype dfl_files[] = {
->>>    };
->>>      -/*
->>> - *    cpuset_css_alloc - allocate a cpuset css
->>> - *    cgrp:    control group that the new cpuset will be part of
->>> +/**
->>> + * cpuset_css_alloc - Allocate a cpuset css
->>> + * @parent_css: Parent css of the control group that the new cpuset will be
->>> + *              part of
->>> + * Return: cpuset css on success, -ENOMEM on failure.
->>> + *
->>> + * Allocate and initialize a new cpuset css, for non-root cpuset or return the
->>> + * top cpuset css for root cpuset.
->> Strictly speaking, it returns the css of top cpuset set for NULL input parameter.
-> Thank you for reviewing the patch. Does the following, rephrase, sound right:
->
-> Allocate and initialize a new cpuset css, for non-NULL @parent_css, return
-> top cpuset css otherwise.
+Em Wed, Nov 16, 2022 at 08:47:51AM -0800, Ian Rogers escreveu:
+> On Wed, Nov 16, 2022 at 8:45 AM Ian Rogers <irogers@google.com> wrote:
+> >
+> > On Wed, Nov 16, 2022 at 7:23 AM Arnaldo Carvalho de Melo
+> > <acme@kernel.org> wrote:
+> > >
+> > > Em Wed, Nov 16, 2022 at 12:19:27PM -0300, Arnaldo Carvalho de Melo escreveu:
+> > > > Em Tue, Nov 15, 2022 at 11:22:10PM -0800, Ian Rogers escreveu:
+> > > > > This patch replaces the last on kernel/git/acme/linux.git branch
+> > > > > perf/tools-libs-includes and fixes the race issue by using the prepare
+> > > > > dependency. pmu-events.c needs this dependency too, as the header
+> > > > > files it includes also include libperf - using perpare as a dependency
+> > > > > rather than $(LIBPERF) is more consistent with the rest of the makefile.
+> > > > >
+> > > > > Ian Rogers (1):
+> > > > >   perf build: Use tools/lib headers from install path
+> > > >
+> > > > Testing.
+> > >
+> > > ⬢[acme@toolbox perf]$ git log acme/perf/core.. --oneline
+> > > 0a1e208afdccce71 (HEAD -> perf/tools-libs-includes) perf build: Use tools/lib headers from install path
+> > > 17ca352f2aff834e perf cpumap: Tidy libperf includes
+> > > fd3f518fc1140622 perf thread_map: Reduce exposure of libperf internal API
+> > > bd560973c5d3b2a3 perf expr: Tidy hashmap dependency
+> > > 84bec6f0b31fb2ac perf build: Install libsymbol locally when building
+> > > 160be157eaba2a37 tool lib symbol: Add Makefile/Build
+> > > a6e8caf5db2e1db8 tools lib perf: Add missing install headers
+> > > 8d1f68bd76a6517c tools lib api: Add missing install headers
+> > > ef019df01e207971 perf build: Install libtraceevent locally when building
+> > > 91009a3a9913f275 perf build: Install libperf locally when building
+> > > 00314c9bca8faad4 perf build: Install libapi locally when building
+> > > 911920b06e6be3fa perf build: Install libsubcmd locally when building
+> > > 630ae80ea1dd2536 tools lib subcmd: Add install target
+> > > a6efaa2c89bf35c3 tools lib api: Add install target
+> > > ⬢[acme@toolbox perf]$
+> > >
+> > > ⬢[acme@toolbox perf]$ git show
+> > > commit 0a1e208afdccce7193cbe4031dfd255c89c425d6
+> > > Author: Ian Rogers <irogers@google.com>
+> > > Date:   Tue Nov 15 23:22:11 2022 -0800
+> > >
+> > >     perf build: Use tools/lib headers from install path
+> > >
+> > >     Switch -I from tools/lib to the install path for the tools/lib
+> > >     libraries. Add the include_headers build targets to prepare target, as
+> > >     well as pmu-events.c compilation that dependes on libperf.
+> > >
+> > >     Signed-off-by: Ian Rogers <irogers@google.com>
+> > >     Acked-by: Namhyung Kim <namhyung@kernel.org>
+> > >     Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+> > >     Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+> > >     Cc: Jiri Olsa <jolsa@kernel.org>
+> > >     Cc: Mark Rutland <mark.rutland@arm.com>
+> > >     Cc: Masahiro Yamada <masahiroy@kernel.org>
+> > >     Cc: Nick Desaulniers <ndesaulniers@google.com>
+> > >     Cc: Nicolas Schier <nicolas@fjasle.eu>
+> > >     Cc: Peter Zijlstra <peterz@infradead.org>
+> > >     Cc: Stephane Eranian <eranian@google.com>
+> > >     Cc: bpf@vger.kernel.org
+> > >     Link: http://lore.kernel.org/lkml/20221109184914.1357295-15-irogers@google.com
+> > >     Link: http://lore.kernel.org/lkml/20221116072211.2837834-2-irogers@google.com
+> > >     Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+> > >
+> > > diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+> > > index a7f6c0669fae4d24..9cc3c48f32881c8b 100644
+> > > --- a/tools/perf/Makefile.config
+> > > +++ b/tools/perf/Makefile.config
+> > > @@ -349,7 +349,6 @@ ifeq ($(DEBUG),0)
+> > >    endif
+> > >  endif
+> > >
+> > > -INC_FLAGS += -I$(srctree)/tools/lib/perf/include
+> > >  INC_FLAGS += -I$(src-perf)/util/include
+> > >  INC_FLAGS += -I$(src-perf)/arch/$(SRCARCH)/include
+> > >  INC_FLAGS += -I$(srctree)/tools/include/
+> > > @@ -367,7 +366,6 @@ endif
+> > >
+> > >  INC_FLAGS += -I$(src-perf)/util
+> > >  INC_FLAGS += -I$(src-perf)
+> > > -INC_FLAGS += -I$(srctree)/tools/lib/
+> > >
+> > >  CORE_CFLAGS += -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE
+> > >
+> > > diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+> > > index 6c1a2a3ccc38195f..dd096aba4430e3e4 100644
+> > > --- a/tools/perf/Makefile.perf
+> > > +++ b/tools/perf/Makefile.perf
+> > > @@ -305,6 +305,7 @@ LIBTRACEEVENT_INCLUDE = $(LIBTRACEEVENT_DESTDIR)/include
+> > >  LIBTRACEEVENT = $(LIBTRACEEVENT_OUTPUT)/libtraceevent.a
+> > >  export LIBTRACEEVENT
+> > >  LIBTRACEEVENT_DYNAMIC_LIST = $(LIBTRACEEVENT_PLUGINS_OUTPUT)/libtraceevent-dynamic-list
+> > > +CFLAGS += -I$(LIBTRACEEVENT_OUTPUT)/include
+> > >
+> > >  #
+> > >  # The static build has no dynsym table, so this does not work for
+> > > @@ -322,6 +323,7 @@ LIBAPI_DESTDIR = $(LIBAPI_OUTPUT)
+> > >  LIBAPI_INCLUDE = $(LIBAPI_DESTDIR)/include
+> > >  LIBAPI = $(LIBAPI_OUTPUT)/libapi.a
+> > >  export LIBAPI
+> > > +CFLAGS += -I$(LIBAPI_OUTPUT)/include
+> > >
+> > >  ifneq ($(OUTPUT),)
+> > >    LIBBPF_OUTPUT = $(abspath $(OUTPUT))/libbpf
+> > > @@ -331,6 +333,7 @@ endif
+> > >  LIBBPF_DESTDIR = $(LIBBPF_OUTPUT)
+> > >  LIBBPF_INCLUDE = $(LIBBPF_DESTDIR)/include
+> > >  LIBBPF = $(LIBBPF_OUTPUT)/libbpf.a
+> > > +CFLAGS += -I$(LIBBPF_OUTPUT)/include
+> > >
+> > >  ifneq ($(OUTPUT),)
+> > >    LIBSUBCMD_OUTPUT = $(abspath $(OUTPUT))/libsubcmd
+> > > @@ -340,6 +343,7 @@ endif
+> > >  LIBSUBCMD_DESTDIR = $(LIBSUBCMD_OUTPUT)
+> > >  LIBSUBCMD_INCLUDE = $(LIBSUBCMD_DESTDIR)/include
+> > >  LIBSUBCMD = $(LIBSUBCMD_OUTPUT)/libsubcmd.a
+> > > +CFLAGS += -I$(LIBSUBCMD_OUTPUT)/include
+> > >
+> > >  ifneq ($(OUTPUT),)
+> > >    LIBSYMBOL_OUTPUT = $(abspath $(OUTPUT))/libsymbol
+> > > @@ -349,6 +353,7 @@ endif
+> > >  LIBSYMBOL_DESTDIR = $(LIBSYMBOL_OUTPUT)
+> > >  LIBSYMBOL_INCLUDE = $(LIBSYMBOL_DESTDIR)/include
+> > >  LIBSYMBOL = $(LIBSYMBOL_OUTPUT)/libsymbol.a
+> > > +CFLAGS += -I$(LIBSYMBOL_OUTPUT)/include
+> > >
+> > >  ifneq ($(OUTPUT),)
+> > >    LIBPERF_OUTPUT = $(abspath $(OUTPUT))/libperf
+> > > @@ -359,6 +364,7 @@ LIBPERF_DESTDIR = $(LIBPERF_OUTPUT)
+> > >  LIBPERF_INCLUDE = $(LIBPERF_DESTDIR)/include
+> > >  LIBPERF = $(LIBPERF_OUTPUT)/libperf.a
+> > >  export LIBPERF
+> > > +CFLAGS += -I$(LIBPERF_OUTPUT)/include
+> > >
+> > >  # python extension build directories
+> > >  PYTHON_EXTBUILD     := $(OUTPUT)python_ext_build/
+> > > @@ -691,7 +697,7 @@ build := -f $(srctree)/tools/build/Makefile.build dir=. obj
+> > >  $(PERF_IN): prepare FORCE
+> > >         $(Q)$(MAKE) $(build)=perf
+> > >
+> > > -$(PMU_EVENTS_IN): FORCE
+> > > +$(PMU_EVENTS_IN): FORCE prepare
+> > >         $(Q)$(MAKE) -f $(srctree)/tools/build/Makefile.build dir=pmu-events obj=pmu-events
+> > >
+> > >  $(OUTPUT)perf: $(PERFLIBS) $(PERF_IN) $(PMU_EVENTS_IN) $(LIBTRACEEVENT_DYNAMIC_LIST)
+> > > @@ -774,6 +780,12 @@ prepare: $(OUTPUT)PERF-VERSION-FILE $(OUTPUT)common-cmds.h archheaders $(drm_ioc
+> > >         $(rename_flags_array) \
+> > >         $(arch_errno_name_array) \
+> > >         $(sync_file_range_arrays) \
+> > > +       $(LIBAPI) \
+> > > +       $(LIBBPF) \
+> > > +       $(LIBPERF) \
+> > > +       $(LIBSUBCMD) \
+> > > +       $(LIBSYMBOL) \
+> > > +       $(LIBTRACEEVENT) \
+> > >         bpf-skel
+> > >
+> > >  $(OUTPUT)%.o: %.c prepare FORCE
+> > >
+> > > ⬢[acme@toolbox perf]$ git log --oneline -1 ; time make -C tools/perf build-test
+> > > 0a1e208afdccce71 (HEAD -> perf/tools-libs-includes) perf build: Use tools/lib headers from install path
+> > > make: Entering directory '/var/home/acme/git/perf/tools/perf'
+> > > - tarpkg: ./tests/perf-targz-src-pkg .
+> > >                  make_static: cd . && make LDFLAGS=-static NO_PERF_READ_VDSO32=1 NO_PERF_READ_VDSOX32=1 NO_JVMTI=1 -j32  DESTDIR=/tmp/tmp.YueDE1rSyh
+> > >               make_with_gtk2: cd . && make GTK2=1 -j32  DESTDIR=/tmp/tmp.YuHTyobvdL
+> > > cd . && make GTK2=1 -j32 DESTDIR=/tmp/tmp.YuHTyobvdL
+> > >   BUILD:   Doing 'make -j32' parallel build
+> > >   HOSTCC  fixdep.o
+> > >   HOSTLD  fixdep-in.o
+> > >   LINK    fixdep
+> > > Warning: Kernel ABI header at 'tools/arch/arm64/include/uapi/asm/perf_regs.h' differs from latest version at 'arch/arm64/include/uapi/asm/perf_regs.h'
+> > > diff -u tools/arch/arm64/include/uapi/asm/perf_regs.h arch/arm64/include/uapi/asm/perf_regs.h
+> > > Warning: Kernel ABI header at 'tools/arch/arm64/include/asm/cputype.h' differs from latest version at 'arch/arm64/include/asm/cputype.h'
+> > > diff -u tools/arch/arm64/include/asm/cputype.h arch/arm64/include/asm/cputype.h
+> > > Warning: Kernel ABI header at 'tools/perf/arch/powerpc/entry/syscalls/syscall.tbl' differs from latest version at 'arch/powerpc/kernel/syscalls/syscall.tbl'
+> > > diff -u tools/perf/arch/powerpc/entry/syscalls/syscall.tbl arch/powerpc/kernel/syscalls/syscall.tbl
+> > >
+> > > Auto-detecting system features:
+> > > ...                                   dwarf: [ on  ]
+> > > ...                      dwarf_getlocations: [ on  ]
+> > > ...                                   glibc: [ on  ]
+> > > ...                                  libbfd: [ on  ]
+> > > ...                          libbfd-buildid: [ on  ]
+> > > ...                                  libcap: [ on  ]
+> > > ...                                  libelf: [ on  ]
+> > > ...                                 libnuma: [ on  ]
+> > > ...                  numa_num_possible_cpus: [ on  ]
+> > > ...                                 libperl: [ on  ]
+> > > ...                               libpython: [ on  ]
+> > > ...                               libcrypto: [ on  ]
+> > > ...                               libunwind: [ on  ]
+> > > ...                      libdw-dwarf-unwind: [ on  ]
+> > > ...                                    zlib: [ on  ]
+> > > ...                                    lzma: [ on  ]
+> > > ...                               get_cpuid: [ on  ]
+> > > ...                                     bpf: [ on  ]
+> > > ...                                  libaio: [ on  ]
+> > > ...                                 libzstd: [ on  ]
+> > >
+> > >   GEN     common-cmds.h
+> > >   CC      perf-read-vdso32
+> > >   CC      dlfilters/dlfilter-test-api-v0.o
+> > >   CC      dlfilters/dlfilter-show-cycles.o
+> > >   CC      jvmti/libjvmti.o
+> > >   CC      jvmti/jvmti_agent.o
+> > >   CC      jvmti/libstring.o
+> > >   CC      jvmti/libctype.o
+> > >   CC      ui/gtk/browser.o
+> > >   CC      ui/gtk/hists.o
+> > >   CC      ui/gtk/setup.o
+> > >   CC      ui/gtk/util.o
+> > >   CC      ui/gtk/helpline.o
+> > >   CC      ui/gtk/progress.o
+> > >   CC      ui/gtk/annotate.o
+> > >   LINK    dlfilters/dlfilter-show-cycles.so
+> > >   CC      ui/gtk/zalloc.o
+> > >   LINK    dlfilters/dlfilter-test-api-v0.so
+> > >   INSTALL headers
+> > >   CC      /var/home/acme/git/perf/tools/perf/libsubcmd/exec-cmd.o
+> > >   CC      /var/home/acme/git/perf/tools/perf/libsubcmd/help.o
+> > >   CC      /var/home/acme/git/perf/tools/perf/libsubcmd/pager.o
+> > >   CC      /var/home/acme/git/perf/tools/perf/libsubcmd/parse-options.o
+> > >   CC      /var/home/acme/git/perf/tools/perf/libsubcmd/run-command.o
+> > >   CC      /var/home/acme/git/perf/tools/perf/libsubcmd/sigchain.o
+> > >   CC      /var/home/acme/git/perf/tools/perf/libsubcmd/subcmd-config.o
+> > >   LD      jvmti/jvmti-in.o
+> > >   INSTALL headers
+> > > In file included from ui/gtk/hists.c:2:
+> > > /var/home/acme/git/perf/tools/perf/util/include/../evlist.h:9:10: fatal error: api/fd/array.h: No such file or directory
+> > >     9 | #include <api/fd/array.h>
+> > >       |          ^~~~~~~~~~~~~~~~
+> > > compilation terminated.
+> > > make[6]: *** [/var/home/acme/git/perf/tools/build/Makefile.build:97: ui/gtk/hists.o] Error 1
+> > > make[6]: *** Waiting for unfinished jobs....
+> > > In file included from ui/gtk/browser.c:2:
+> > > /var/home/acme/git/perf/tools/perf/util/include/../evsel.h:10:10: fatal error: internal/evsel.h: No such file or directory
+> > >    10 | #include <internal/evsel.h>
+> > >       |          ^~~~~~~~~~~~~~~~~~
+> > > compilation terminated.
+> > > make[6]: *** [/var/home/acme/git/perf/tools/build/Makefile.build:97: ui/gtk/browser.o] Error 1
+> > > make -f /var/home/acme/git/perf/tools/build/Makefile.build dir=. obj=libsymbol V=1
+> > >   CC      /var/home/acme/git/perf/tools/perf/libtraceevent/event-parse.o
+> > >   CC      /var/home/acme/git/perf/tools/perf/libtraceevent_plugins/plugin_jbd2.o
+> > >   CC      /var/home/acme/git/perf/tools/perf/libtraceevent_plugins/plugin_hrtimer.o
+> > >   INSTALL headers
+> > >   CC      /var/home/acme/git/perf/tools/perf/libtraceevent_plugins/plugin_kmem.o
+> > >   CC      /var/home/acme/git/perf/tools/perf/libtraceevent_plugins/plugin_kvm.o
+> > >   CC      /var/home/acme/git/perf/tools/perf/libtraceevent_plugins/plugin_mac80211.o
+> > >   CC      /var/home/acme/git/perf/tools/perf/libperf/core.o
+> > >   CC      /var/home/acme/git/perf/tools/perf/libperf/cpumap.o
+> > >   CC      /var/home/acme/git/perf/tools/perf/libperf/threadmap.o
+> > >   INSTALL headers
+> > >   gcc -Wp,-MD,/var/home/acme/git/perf/tools/perf/libsymbol/.kallsyms.o.d -Wp,-MT,/var/home/acme/git/perf/tools/perf/libsymbol/kallsyms.o -Wbad-function-cast -Wdeclaration-after-statement -Wformat-security -Wformat-y2k -Winit-self -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-system-headers -Wold-style-definition -Wpacked -Wredundant-decls -Wstrict-prototypes -Wswitch-default -Wswitch-enum -Wundef -Wwrite-strings -Wformat -Wno-type-limits -Wstrict-aliasing=3 -Wshadow -ggdb3 -Wall -Wextra -std=gnu11 -U_FORTIFY_SOURCE -fPIC -Werror -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I/var/home/acme/git/perf/tools/lib -I/var/home/acme/git/perf/tools/include -D"BUILD_STR(s)=#s" -c -o /var/home/acme/git/perf/tools/perf/libsymbol/kallsyms.o kallsyms.c
+> > >   CC      /var/home/acme/git/perf/tools/perf/libperf/evsel.o
+> > >   LINK    libperf-jvmti.so
+> > >   CC      /var/home/acme/git/perf/tools/perf/libperf/evlist.o
+> > >   CC      /var/home/acme/git/perf/tools/perf/libperf/mmap.o
+> > >   MKDIR   /var/home/acme/git/perf/tools/perf/libapi/fd/
+> > >   LD      /var/home/acme/git/perf/tools/perf/libsubcmd/libsubcmd-in.o
+> > >   PERF_VERSION = 6.1.rc5.g0a1e208afdcc
+> > >   CC      /var/home/acme/git/perf/tools/perf/libperf/zalloc.o
+> > >   LD      /var/home/acme/git/perf/tools/perf/libtraceevent_plugins/plugin_jbd2-in.o
+> > >   CC      /var/home/acme/git/perf/tools/perf/libperf/xyarray.o
+> > >   LD      /var/home/acme/git/perf/tools/perf/libtraceevent_plugins/plugin_hrtimer-in.o
+> > >   CC      /var/home/acme/git/perf/tools/perf/libapi/fd/array.o
+> > >   GEN     /var/home/acme/git/perf/tools/perf/libbpf/bpf_helper_defs.h
+> > >   LD      /var/home/acme/git/perf/tools/perf/libtraceevent_plugins/plugin_kmem-in.o
+> > >   LD      /var/home/acme/git/perf/tools/perf/libtraceevent_plugins/plugin_mac80211-in.o
+> > >   LD      /var/home/acme/git/perf/tools/perf/libtraceevent_plugins/plugin_kvm-in.o
+> > >   INSTALL /var/home/acme/git/perf/tools/perf/libbpf/include/bpf/bpf.h
+> > >
+> >
+> > Looks like the GTK part of the build isn't depending on the prepare
+> > step. I'll take a look.
+> >
+> > Thanks,
+> > Ian
+> 
+> Yep. The target:
+> 
+> $(GTK_IN): FORCE
+> 
+> should be:
+> 
+> $(GTK_IN): FORCE prepare
+> 
+> Could you try this, or do you want me to resend?
 
-That looks fine to me.
-
-Cheers,
-Longman
-
->>>     */
->>>      static struct cgroup_subsys_state *
->> While at it, could you also remove the blank line between the comment and the function body.
-> Sure, will remove it.
->
-
+I'll try it, thanks
+ 
+- Arnaldo
