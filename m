@@ -2,81 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2695F62C79B
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 19:27:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 702EB62C79E
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 19:28:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239182AbiKPS1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 13:27:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34540 "EHLO
+        id S230203AbiKPS2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 13:28:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233984AbiKPS0u (ORCPT
+        with ESMTP id S233205AbiKPS2l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 13:26:50 -0500
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396472A415;
-        Wed, 16 Nov 2022 10:26:48 -0800 (PST)
-Received: by mail-qk1-x72f.google.com with SMTP id d7so9847186qkk.3;
-        Wed, 16 Nov 2022 10:26:48 -0800 (PST)
+        Wed, 16 Nov 2022 13:28:41 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30022391E2;
+        Wed, 16 Nov 2022 10:28:40 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id s8so13769685lfc.8;
+        Wed, 16 Nov 2022 10:28:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=J6IVpnek7jp7RQNs0vIif8yhh7QCajs41fZS8TKx6p0=;
-        b=h1qkaXFxcj98WnQoGy/PtLTyHKGmkvuMbnDfgO5LBZfcK0V831Al4rsNV3cGUNNLrY
-         WGUAVyJEckfwatgwNiwuAcVIjSLufaTfSe14kj5G/QN4zlXUYVmBkJfPQgz+7VE0/mVf
-         2Z8QYszEBNZa5kS+o8tpcRPTs1Qa0wgtxT9g0Ke4aR6CM/3PoWNelOqZ1kF9XqfJeW6e
-         7zj/2gQcIDUR4gtTF/I1MbVxGIH9iap1yRfoh+FV9ySicHqPIJD3dEruBWQDBLFE1BwS
-         S/wXPsTZlWw3VvIt+3me5p7VO5ZxwhHK3XDMrVuCtLb1gti16n7jXE+zyGjwVYq5p+Pu
-         8utA==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=SaUwZWGzJJ1Lp4N1+t6rbLaZmBRDQDLgc44MZWkfSlA=;
+        b=PvwaWTcGbS+vSRmoDoFJEVax8j5icW23HNgH4TXBKd348S7cJZtyYQCgOIlypt1bJb
+         +Amq0mHuuHfvyomxOCHoDZBF53tiairPCihc0spc8jdR8wjfGLu9+HBmjXo9UmVBCuYE
+         VyNmUvxMFEDnoFZEsdD0BwypFrTJpQ2fWfPQah/wOPWdN1eP1Lmubf8KHJXetc1/p3nN
+         uErQO+uWLr2LRlDzlzAFYP7fPCqSposoRjuglQvJ5mZqSLId2FpGVCgejoF1z6aqKsNP
+         es6n1AHY7ZXO974JB3HqHyDk3cENtI3tDsB0nbugIX9HePrGaO8C3JQUXHr8TFOZ9nmA
+         UvTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=J6IVpnek7jp7RQNs0vIif8yhh7QCajs41fZS8TKx6p0=;
-        b=h/O3/X1SzhAAT5BSnUz0Rw962bj/wpv5v9ezfKwxtQDuil5xoJq77WpTJdJLzx8HcI
-         5H1SI/Iwcg5DnS+g14HB6Ptjh4DevTC9URyf7JUL/wG/FCgFvtLhpMYwhmpcezajN5z7
-         LeMdEj16dZ2pvOwfujTvAZWGyi8wztnXHSq8/oQk2wKjlCfXVesE40MTDirxcS+ffdjz
-         yI43Ir665q6wybQNTSpxpTY+skMr9gIlxyJkjghaAAYDfQkKWI65GKQGi4MargoKsb5M
-         yStjz6BG1pUeLhp/bxepyvtrIELjaOoIkpQiHy31sTaUsUI2yIFJGQvJGYlmlPJ/LASf
-         jIQQ==
-X-Gm-Message-State: ANoB5plX+dxvktfj7veNh57Qi68/LhUxob87yMVfbWcbmU85sYrxP7Lo
-        oNaByBbd42p41GkxnZCXQbg=
-X-Google-Smtp-Source: AA0mqf53yxUvhGGS5Xx6pm5ju9mEcwGhd4nEqXg+sOyj8VWQ8fxrID1w4+NG5cvcE8lwWIQ2enh/rg==
-X-Received: by 2002:ae9:ed81:0:b0:6fb:9f9c:fb1d with SMTP id c123-20020ae9ed81000000b006fb9f9cfb1dmr7126989qkg.499.1668623207254;
-        Wed, 16 Nov 2022 10:26:47 -0800 (PST)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id cm26-20020a05622a251a00b0039cc82a319asm9126221qtb.76.2022.11.16.10.26.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 10:26:46 -0800 (PST)
-Message-ID: <623b0d5d-98b7-0ef0-6622-69686ea49269@gmail.com>
-Date:   Wed, 16 Nov 2022 10:26:43 -0800
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SaUwZWGzJJ1Lp4N1+t6rbLaZmBRDQDLgc44MZWkfSlA=;
+        b=UHDjKIqD+LzzvPidzlQ9KJ7i4SEeAuHIre38ROSiis85dZaMImHoPfhmafoCiprHeK
+         kXVgU7QnEADM0UQuuAJipUHj/szwbDyLQj5hgo7mUEOAiT7utRwKaobrzQrZWEmoT6ZC
+         w0wGrac7xPBn0Josq63ZrU+NjDL62Ga3n/Sturpcdvyk6uKsUdNnhX9s9j7E9ft/mdGH
+         LCMF95NKHB5dc2/O0hG2y/A4dwlSB7YhORYD/ZD71YrwrmX6sX0lETY1HuV6+o7m9G/0
+         o0zrQTJsrzIZT4IbY301S3k7yWA5xbyLi5rOOGew9+KtWH3K1gM9nqbbxNWCY8jJE1At
+         SYig==
+X-Gm-Message-State: ANoB5pmZE/8bLsv1SrB2gw4XJ//yAqGQb+pmB1pdL25gb70L2cm9lLPk
+        YB/fvQYZc1eeYxBhBDOat91ds5TuVd14GYoNWpM=
+X-Google-Smtp-Source: AA0mqf4XAj8KhiMXEUh3kTVoZTHiB6PysvJJIUmhvFuRbnqAPxGcPIr/D7q1zdvmFUDba6t+gl/bVLhJ1Fc4aHjtEII=
+X-Received: by 2002:a05:6512:3910:b0:4b0:a51e:2b3 with SMTP id
+ a16-20020a056512391000b004b0a51e02b3mr8760830lfu.636.1668623318329; Wed, 16
+ Nov 2022 10:28:38 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH net-next 5/6] net: dsa: tag_mtk: assign per-port queues
-Content-Language: en-US
-To:     Felix Fietkau <nbd@nbd.name>, netdev@vger.kernel.org,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221116080734.44013-1-nbd@nbd.name>
- <20221116080734.44013-6-nbd@nbd.name>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20221116080734.44013-6-nbd@nbd.name>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20221116141027.10947-1-abelova@astralinux.ru>
+In-Reply-To: <20221116141027.10947-1-abelova@astralinux.ru>
+From:   Steve French <smfrench@gmail.com>
+Date:   Wed, 16 Nov 2022 12:28:26 -0600
+Message-ID: <CAH2r5murCb6icxS4YbguNbhKLsrrw9FR-p6vW-3njCtMDw3yrw@mail.gmail.com>
+Subject: Re: [PATCH] cifs: add check for returning value of SMB2_set_info_init
+To:     Anastasia Belova <abelova@astralinux.ru>
+Cc:     Steve French <sfrench@samba.org>, Paulo Alcantara <pc@cjr.nz>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Shyam Prasad N <sprasad@microsoft.com>,
+        Tom Talpey <tom@talpey.com>, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org, linux-kernel@vger.kernel.org,
+        lvc-project@linuxtesting.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -85,13 +71,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+merged into cifs-2.6.git for-next
+
+On Wed, Nov 16, 2022 at 8:26 AM Anastasia Belova <abelova@astralinux.ru> wrote:
+>
+> If the returning value of SMB2_set_info_init is an error-value,
+> exit the function.
+>
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+>
+> Fixes: 0967e5457954 ("cifs: use a compound for setting an xattr")
+>
+> Signed-off-by: Anastasia Belova <abelova@astralinux.ru>
+> ---
+>  fs/cifs/smb2ops.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
+> index 880cd494afea..c77e49b3fcc6 100644
+> --- a/fs/cifs/smb2ops.c
+> +++ b/fs/cifs/smb2ops.c
+> @@ -1116,6 +1116,8 @@ smb2_set_ea(const unsigned int xid, struct cifs_tcon *tcon,
+>                                 COMPOUND_FID, current->tgid,
+>                                 FILE_FULL_EA_INFORMATION,
+>                                 SMB2_O_INFO_FILE, 0, data, size);
+> +       if (rc)
+> +               goto sea_exit;
+>         smb2_set_next_command(tcon, &rqst[1]);
+>         smb2_set_related(&rqst[1]);
+>
+> --
+> 2.30.2
+>
 
 
-On 11/16/2022 12:07 AM, Felix Fietkau wrote:
-> Keeps traffic sent to the switch within link speed limits
-> 
-> Signed-off-by: Felix Fietkau <nbd@nbd.name>
-
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-Florian
+Thanks,
+
+Steve
