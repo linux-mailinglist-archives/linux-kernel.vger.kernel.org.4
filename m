@@ -2,122 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1092162BE4E
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:38:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 263A762BE51
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:38:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239019AbiKPMiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 07:38:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53070 "EHLO
+        id S239093AbiKPMi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 07:38:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238998AbiKPMhm (ORCPT
+        with ESMTP id S239015AbiKPMiC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 07:37:42 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D215014D39;
-        Wed, 16 Nov 2022 04:37:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668602240; x=1700138240;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=oGL1Yrskd/4Uu+QY6jG0ey36GZ59SJOBtdPf971QTPY=;
-  b=GK7r0bdOXjKtEAaI9H7vKKevHPds/osMv8p3Bg2dLRNZRCqGztDzrORh
-   6fgPl31s0PoMGe5PoRJhhcbYHB/KkaErJceXMdvUCEitre2IQhO8xdTfU
-   cAsa42Lw65y85U+PrFEesn2V9LcYUjybV3bDpbOUGjqZPc0ZjuDtQ+8yc
-   fzRO9VmjZ3cxV9s8c3VSpDHoojvPYw/Irosud8DfFcA2mqN1iRWtK0laa
-   U7D3BJh+ek6kQDYik0dqzIvjHdzJZbM1z5VKYizttGq0+m/TgFQjXH/a9
-   HcBXK3lojlQ56BTZUbh4LTfX4ZmKsE58OfkOblRsJtFTUzsu27X7o5Ure
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="376801379"
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="376801379"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 04:37:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="781751953"
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="781751953"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 16 Nov 2022 04:37:10 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 16 Nov 2022 14:37:10 +0200
-Date:   Wed, 16 Nov 2022 14:37:10 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Wayne Chang <waynec@nvidia.com>
-Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, treding@nvidia.com,
-        jonathanh@nvidia.com, thierry.reding@gmail.com, ajayg@nvidia.com,
-        vkoul@kernel.org, p.zabel@pengutronix.de, balbi@kernel.org,
-        mathias.nyman@intel.com, jckuo@nvidia.com,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, singhanc@nvidia.com,
-        linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v3 05/13] usb: typec: ucsi_ccg: Add OF support
-Message-ID: <Y3TZdkdIltobUcb3@kuha.fi.intel.com>
-References: <20221114124053.1873316-1-waynec@nvidia.com>
- <20221114124053.1873316-6-waynec@nvidia.com>
+        Wed, 16 Nov 2022 07:38:02 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C631248D6;
+        Wed, 16 Nov 2022 04:37:33 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id h12so21649920ljg.9;
+        Wed, 16 Nov 2022 04:37:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eT/6csOSu7SFpZHBsgunlrQMZeMZnaIM2b4OlHql6Ps=;
+        b=Z3k0EOmSnjchLvQlVuICpdEqdcJERXsU2Nptii3E8Rl2oNGnJt5nYBROlwreVEg/dn
+         qsnUjbn5HjrL2YMW+lOK0F4uKVBhtD0o8L76GWy6gHRt1Vkrx/UfKHt6E2OYv7Ll4F6L
+         lFfpARGnAs8YDxHS0zg+oUk73FwEUH+cTDScmNu6DpKtYMS/efv+iKkeyeuuHbY5/gCX
+         GOGJ4BvmZLsvpVKDoSGNBvaMuaZazd7aEoS38dl2mPffw/atTYDuKI4dQN/+iIj98f0W
+         ESvaA+MBlU1QYMi/owdMJJ7VlSat2EIjFnPJ74eH5zL+5esnYROLAIg61vvJ/fx7zaU/
+         vyNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eT/6csOSu7SFpZHBsgunlrQMZeMZnaIM2b4OlHql6Ps=;
+        b=sx9gkNSemzqV2LK+jsMJLiQtfX3EDgsGCkXNPRO4N7DNDc4ZtFdrJQ7CiK6jht06I0
+         mXcz9GIIVwUuR+0T2fkUBvwl1sH90ENbP+eTNfyVvNC9tbzQcwBc1B3qppiGJUS+efj8
+         TEqh/XgpR/iGIbYbQHhezlw69s+jynp8frdth6tdK4nCqiFc+zpi1vCqDFNXonaZ8Gmi
+         p41n7TV0W1eignNJEY6+a09GksD3S6IIYG0ZR3tEnZHN6GCPu41p37KzGFdk+v8U6EqK
+         uPr+ROurDQwxSatJYaPUTfaaNm7dycZytZWKK3Ox5NUT3iWXIg7dwmWr1B/n3MBONxkn
+         pVSA==
+X-Gm-Message-State: ANoB5plwOKNBoz98eMQlY1KWbWR5R0KYGAZ5cPmniMVL3fih0ujLsLQL
+        zfl7CIPzWf7XLyKXeE2rnqcids8iRgwnDdmOJfd6+lEF
+X-Google-Smtp-Source: AA0mqf5+prrRRdpvi7dqyUu7jOKyZt4c3aH6aM7ebF9USDpV5syKrMqn5fHBibnZ0YBEY3VIborXGBCRX+4ttxea3wU=
+X-Received: by 2002:a2e:b0ef:0:b0:26d:ee99:93b4 with SMTP id
+ h15-20020a2eb0ef000000b0026dee9993b4mr7987691ljl.329.1668602251220; Wed, 16
+ Nov 2022 04:37:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221114124053.1873316-6-waynec@nvidia.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <1668141030-2-1-git-send-email-lizhijian@fujitsu.com> <1668141030-2-5-git-send-email-lizhijian@fujitsu.com>
+In-Reply-To: <1668141030-2-5-git-send-email-lizhijian@fujitsu.com>
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Date:   Wed, 16 Nov 2022 13:37:14 +0100
+Message-ID: <CAPj211to20yHUy8o-Lg6TMjB5rpwrfPCUtQqxfeDFHUDR4+wJw@mail.gmail.com>
+Subject: Re: [for-next PATCH 4/5] RDMA/rxe: refactor iova_to_vaddr
+To:     Li Zhijian <lizhijian@fujitsu.com>
+Cc:     Zhu Yanjun <zyjzyj2000@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 08:40:45PM +0800, Wayne Chang wrote:
-> The change enables the device tree infrastructure support.
-> 
-> Signed-off-by: Wayne Chang <waynec@nvidia.com>
-
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
+On venerd=C3=AC 11 novembre 2022 05:30:29 CET Li Zhijian wrote:
+> For IB_MR_TYPE_USER MR, iova_to_vaddr() will call kmap_local_page() to
+> map page.
+>
+> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
 > ---
-> V2 -> V3:nothing has changed
-> V1 -> V2:nothing has changed
->  drivers/usb/typec/ucsi/ucsi_ccg.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> index 835f1c4372ba..139707a2f3d6 100644
-> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> @@ -643,7 +643,7 @@ static int ccg_request_irq(struct ucsi_ccg *uc)
->  {
->  	unsigned long flags = IRQF_ONESHOT;
->  
-> -	if (!has_acpi_companion(uc->dev))
-> +	if (!dev_fwnode(uc->dev))
->  		flags |= IRQF_TRIGGER_HIGH;
->  
->  	return request_threaded_irq(uc->irq, NULL, ccg_irq_handler, flags, dev_name(uc->dev), uc);
-> @@ -1427,6 +1427,12 @@ static void ucsi_ccg_remove(struct i2c_client *client)
->  	free_irq(uc->irq, uc);
+>  drivers/infiniband/sw/rxe/rxe_loc.h   |  1 +
+>  drivers/infiniband/sw/rxe/rxe_mr.c    | 38 +++++++++++++++------------
+>  drivers/infiniband/sw/rxe/rxe_resp.c  |  1 +
+>  drivers/infiniband/sw/rxe/rxe_verbs.h |  5 +++-
+>  4 files changed, 27 insertions(+), 18 deletions(-)
+>
+> diff --git a/drivers/infiniband/sw/rxe/rxe_loc.h
+> b/drivers/infiniband/sw/rxe/rxe_loc.h index c2a5c8814a48..22a8c44d39c8
+100644
+> --- a/drivers/infiniband/sw/rxe/rxe_loc.h
+> +++ b/drivers/infiniband/sw/rxe/rxe_loc.h
+> @@ -73,6 +73,7 @@ int rxe_mr_copy(struct rxe_mr *mr, u64 iova, void *addr=
+,
+int
+> length, int copy_data(struct rxe_pd *pd, int access, struct rxe_dma_info
+> *dma, void *addr, int length, enum rxe_mr_copy_dir dir);
+>  void *iova_to_vaddr(struct rxe_mr *mr, u64 iova, int length);
+> +void rxe_unmap_vaddr(struct rxe_mr *mr, void *vaddr);
+>  struct rxe_mr *lookup_mr(struct rxe_pd *pd, int access, u32 key,
+>                        enum rxe_mr_lookup_type type);
+>  int mr_check_range(struct rxe_mr *mr, u64 iova, size_t length);
+> diff --git a/drivers/infiniband/sw/rxe/rxe_mr.c
+> b/drivers/infiniband/sw/rxe/rxe_mr.c index a4e786b657b7..d26a4a33119c 100=
+644
+> --- a/drivers/infiniband/sw/rxe/rxe_mr.c
+> +++ b/drivers/infiniband/sw/rxe/rxe_mr.c
+> @@ -120,9 +120,7 @@ int rxe_mr_init_user(struct rxe_dev *rxe, u64 start, =
+u64
+> length, u64 iova, struct ib_umem              *umem;
+>       struct sg_page_iter     sg_iter;
+>       int                     num_buf;
+> -     void                    *vaddr;
+>       int err;
+> -     int i;
+>
+>       umem =3D ib_umem_get(&rxe->ib_dev, start, length, access);
+>       if (IS_ERR(umem)) {
+> @@ -159,18 +157,9 @@ int rxe_mr_init_user(struct rxe_dev *rxe, u64 start,
+u64
+> length, u64 iova, num_buf =3D 0;
+>                       }
+>
+> -                     vaddr =3D
+page_address(sg_page_iter_page(&sg_iter));
+> -                     if (!vaddr) {
+> -                             pr_warn("%s: Unable to get virtual
+address\n",
+> -                                             __func__);
+> -                             err =3D -ENOMEM;
+> -                             goto err_cleanup_map;
+> -                     }
+> -
+> -                     buf->addr =3D (uintptr_t)vaddr;
+> +                     buf->page =3D sg_page_iter_page(&sg_iter);
+>                       num_buf++;
+>                       buf++;
+> -
+>               }
+>       }
+>
+> @@ -182,10 +171,6 @@ int rxe_mr_init_user(struct rxe_dev *rxe, u64 start,
+u64
+> length, u64 iova,
+>
+>       return 0;
+>
+> -err_cleanup_map:
+> -     for (i =3D 0; i < mr->num_map; i++)
+> -             kfree(mr->map[i]);
+> -     kfree(mr->map);
+>  err_release_umem:
+>       ib_umem_release(umem);
+>  err_out:
+> @@ -246,6 +231,12 @@ static void lookup_iova(struct rxe_mr *mr, u64 iova,
+int
+> *m_out, int *n_out, }
 >  }
->  
-> +static const struct of_device_id ucsi_ccg_of_match_table[] = {
-> +		{ .compatible = "cypress,cypd4226", },
-> +		{ /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, ucsi_ccg_of_match_table);
+>
+> +void rxe_unmap_vaddr(struct rxe_mr *mr, void *vaddr)
+> +{
+> +     if (mr->ibmr.type =3D=3D IB_MR_TYPE_USER)
+> +             kunmap_local(vaddr);
+> +}
 > +
->  static const struct i2c_device_id ucsi_ccg_device_id[] = {
->  	{"ccgx-ucsi", 0},
->  	{}
-> @@ -1481,6 +1487,7 @@ static struct i2c_driver ucsi_ccg_driver = {
->  		.pm = &ucsi_ccg_pm,
->  		.dev_groups = ucsi_ccg_groups,
->  		.acpi_match_table = amd_i2c_ucsi_match,
-> +		.of_match_table = ucsi_ccg_of_match_table,
->  	},
->  	.probe = ucsi_ccg_probe,
->  	.remove = ucsi_ccg_remove,
+>  static void *__iova_to_vaddr(struct rxe_mr *mr, u64 iova, int length)
+>  {
+>       size_t offset;
+> @@ -258,9 +249,21 @@ static void *__iova_to_vaddr(struct rxe_mr *mr, u64
+iova,
+> int length) return NULL;
+>       }
+>
+> -     return (void *)(uintptr_t)mr->map[m]->buf[n].addr + offset;
+> +     if (mr->ibmr.type =3D=3D IB_MR_TYPE_USER) {
+> +             char *paddr;
+> +             struct page *pg =3D mr->map[m]->buf[n].page;
+> +
+> +             paddr =3D kmap_local_page(pg);
+> +             if (paddr =3D=3D NULL) {
+> +                     pr_warn("Failed to map page");
+> +                     return NULL;
+> +             }
 
-thanks,
+I know nothing about this code but I am here as a result of regular checks =
+for
+changes to HIGHMEM mappings across the entire kernel. So please forgive me =
+if
+I'm objecting to the correct changes.
 
--- 
-heikki
+1) It looks like this code had a call to page_address() and you converted i=
+t
+to mapping with kmap_local_page().
+
+If page_address() is related and it used to work properly, the page you are
+mapping cannot come from ZONE_HIGHMEM. Therefore, kmap_local_page() looks l=
+ike
+an overkill.
+
+I'm probably missing something...
+
+> +             return paddr + offset;
+> +     } else
+> +             return (void *)(uintptr_t)mr->map[m]->buf[n].addr +
+offset;
+>  }
+>
+> +/* must call rxe_unmap_vaddr to unmap vaddr */
+>  void *iova_to_vaddr(struct rxe_mr *mr, u64 iova, int length)
+>  {
+>       if (mr->state !=3D RXE_MR_STATE_VALID) {
+> @@ -326,6 +329,7 @@ int rxe_mr_copy(struct rxe_mr *mr, u64 iova, void *ad=
+dr,
+> int length, dest =3D (dir =3D=3D RXE_TO_MR_OBJ) ? va : addr;
+>
+>               memcpy(dest, src, bytes);
+> +             rxe_unmap_vaddr(mr, va);
+>
+>               length  -=3D bytes;
+>               addr    +=3D bytes;
+> diff --git a/drivers/infiniband/sw/rxe/rxe_resp.c
+> b/drivers/infiniband/sw/rxe/rxe_resp.c index 483043dc4e89..765cb9f8538a
+> 100644
+> --- a/drivers/infiniband/sw/rxe/rxe_resp.c
+> +++ b/drivers/infiniband/sw/rxe/rxe_resp.c
+> @@ -636,6 +636,7 @@ static enum resp_states atomic_reply(struct rxe_qp *q=
+p,
+>
+>               *vaddr =3D value;
+>               spin_unlock_bh(&atomic_ops_lock);
+> +             rxe_unmap_vaddr(mr, vaddr);
+>
+>               qp->resp.msn++;
+>
+> diff --git a/drivers/infiniband/sw/rxe/rxe_verbs.h
+> b/drivers/infiniband/sw/rxe/rxe_verbs.h index acab785ba7e2..6080a4b32f09
+> 100644
+> --- a/drivers/infiniband/sw/rxe/rxe_verbs.h
+> +++ b/drivers/infiniband/sw/rxe/rxe_verbs.h
+> @@ -280,7 +280,10 @@ enum rxe_mr_lookup_type {
+>  #define RXE_BUF_PER_MAP              (PAGE_SIZE / sizeof(struct
+rxe_phys_buf))
+>
+>  struct rxe_phys_buf {
+> -     u64      addr;
+> +     union {
+> +             u64 addr; /* IB_MR_TYPE_MEM_REG */
+> +             struct page *page; /* IB_MR_TYPE_USER */
+> +     };
+>  };
+>
+>  struct rxe_map {
+> --
+> 2.31.1
