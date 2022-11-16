@@ -2,53 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A1F362CCDF
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 22:40:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0374C62CCE4
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 22:44:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234363AbiKPVkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 16:40:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46582 "EHLO
+        id S233825AbiKPVoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 16:44:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234016AbiKPVkR (ORCPT
+        with ESMTP id S233048AbiKPVo2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 16:40:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA87A64D8;
-        Wed, 16 Nov 2022 13:40:16 -0800 (PST)
+        Wed, 16 Nov 2022 16:44:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1626C13DD6
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 13:44:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 76FD261FE0;
-        Wed, 16 Nov 2022 21:40:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D9B23C433D7;
-        Wed, 16 Nov 2022 21:40:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B8DE3B81EBF
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 21:44:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B42FC433C1;
+        Wed, 16 Nov 2022 21:44:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668634815;
-        bh=kj8ADXYtV7/FQq+a3FDgaZPiX27KXWwGGYAGWoz10JI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=JQbSArbX7a/8qfmG0JDjqgbuRpQGDufdczmQ7pgvTEsgly4Ln5aVP/P7xDcADT0ws
-         G1HxezspSE4wvnlGXkkdDQFpSaJtVuFfUa6aa1u7Suncb0BvjTxQZFz1r81PydQU74
-         Btd6ykBHl4yfUw5uA/wiIjqgInZ7iYQP8AhwRHXPShmw+9LT/+S3b8/PQ9ip1i7KaA
-         SxBuv73KZGJ7e3uzgiooPH9tv3B5zvGs4OfPMgzfNkMWvyqAkYGp2F6Y1D/CPZjzcG
-         NZsv51HGZL+GYwcH7oQTeF+KW0BPwhiL+4loRT/y5+Uo8fgAlQ2+ORV46YHjEZzu/O
-         BO8c2zQhiXy2w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BE447E270D5;
-        Wed, 16 Nov 2022 21:40:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] Bluetooth: silence a dmesg error message in hci_request.c
-From:   patchwork-bot+bluetooth@kernel.org
-Message-Id: <166863481577.13601.1517745268400800639.git-patchwork-notify@kernel.org>
-Date:   Wed, 16 Nov 2022 21:40:15 +0000
-References: <20221116202856.55847-1-mat.jonczyk@o2.pl>
-In-Reply-To: <20221116202856.55847-1-mat.jonczyk@o2.pl>
-To:     =?utf-8?b?TWF0ZXVzeiBKb8WEY3p5ayA8bWF0LmpvbmN6eWtAbzIucGw+?=@ci.codeaurora.org
-Cc:     linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, brian.gix@intel.com,
-        luiz.von.dentz@intel.com, marcel@holtmann.org,
-        johan.hedberg@gmail.com
+        s=k20201202; t=1668635065;
+        bh=mKB0fm95W/C1vBCwKjpF1qxvEcV7IEdOBK2bmBqg9xY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=EhcX+jJiGqqhj5nYT3n9ZNnuOrmrBHgI9NV+WDZ7QEKQ4zE5KLqOrIAw9N93Kcw30
+         pbJdt7CndCptuSWg7arpIu5z4ori0KKXXufPMBycgj4g4EklCn+O6w6LxE7gp4+AWX
+         Zg4zav2RFy+qhDoxjG5RS5rmas+S7/tFgnCuj62UEX+7HCLQs6V7mr7S+w6Av89QXb
+         If2rhFXjKMn10GUyStPe/SMRg9vHd/oCSKI5pCxwAtKG8AyhUd/qJEHIYg9ewj2lRP
+         rPsLQUHvepx5xKvQZj8eAchPyzzGTdZzlh+CVgY8/xo2QnIU/7Vw0hX0Tqr1vbkYZ4
+         C8OhT5Sr/OHaw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1ovQCl-006ZrV-3M;
+        Wed, 16 Nov 2022 21:44:23 +0000
+Date:   Wed, 16 Nov 2022 21:44:22 +0000
+Message-ID: <864juypoax.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Nicolas Frayer <nfrayer@baylibre.com>
+Cc:     tglx@linutronix.de, linux-kernel@vger.kernel.org,
+        khilman@baylibre.com, glaroque@baylibre.com
+Subject: Re: [PATCH 0/2] irqchip: Kconfig: Add module support for TI inta/intr
+In-Reply-To: <20221116185500.40431-1-nfrayer@baylibre.com>
+References: <20221116185500.40431-1-nfrayer@baylibre.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: nfrayer@baylibre.com, tglx@linutronix.de, linux-kernel@vger.kernel.org, khilman@baylibre.com, glaroque@baylibre.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -58,34 +65,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to bluetooth/bluetooth-next.git (master)
-by Luiz Augusto von Dentz <luiz.von.dentz@intel.com>:
-
-On Wed, 16 Nov 2022 21:28:56 +0100 you wrote:
-> On kernel 6.1-rcX, I have been getting the following dmesg error message
-> on every boot, resume from suspend and rfkill unblock of the Bluetooth
-> device:
+On Wed, 16 Nov 2022 18:54:58 +0000,
+Nicolas Frayer <nfrayer@baylibre.com> wrote:
 > 
-> 	Bluetooth: hci0: HCI_REQ-0xfcf0
+> Added module support for TI interrupt aggregator and interrupt router
 > 
-> After some investigation, it turned out to be caused by
-> commit dd50a864ffae ("Bluetooth: Delete unreferenced hci_request code")
-> which modified hci_req_add() in net/bluetooth/hci_request.c to always
-> print an error message when it is executed. In my case, the function was
-> executed by msft_set_filter_enable() in net/bluetooth/msft.c, which
-> provides support for Microsoft vendor opcodes.
+> Nicolas Frayer (2):
+>   irqchip: Kconfig: module build support for the TI interrupt router
+>     driver
+>   irqchip: Kconfig: Added module build support for the TI interrupt
+>     aggregator
 > 
-> [...]
+>  arch/arm64/Kconfig.platforms |  2 --
+>  drivers/irqchip/Kconfig      | 12 +++++++-----
+>  2 files changed, 7 insertions(+), 7 deletions(-)
 
-Here is the summary with links:
-  - Bluetooth: silence a dmesg error message in hci_request.c
-    https://git.kernel.org/bluetooth/bluetooth-next/c/c3fd63f7fe5a
+How did you test that it doesn't introduce any regression due to
+implicit ordering requirements that are now voided?
 
-You are awesome, thank you!
+Please Cc the TI folks so that they can at least check this.
+
+	M.
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Without deviation from the norm, progress is not possible.
