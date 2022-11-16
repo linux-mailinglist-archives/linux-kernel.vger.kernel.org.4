@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AAC662CEDF
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 00:39:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0C9B62CEE2
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 00:39:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233688AbiKPXj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 18:39:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60758 "EHLO
+        id S238833AbiKPXjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 18:39:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234379AbiKPXjI (ORCPT
+        with ESMTP id S234083AbiKPXjS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 18:39:08 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0DA45EFA;
-        Wed, 16 Nov 2022 15:39:08 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id d59-20020a17090a6f4100b00213202d77e1so3852823pjk.2;
-        Wed, 16 Nov 2022 15:39:08 -0800 (PST)
+        Wed, 16 Nov 2022 18:39:18 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD5E5E9F3;
+        Wed, 16 Nov 2022 15:39:09 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id n17so399578pgh.9;
+        Wed, 16 Nov 2022 15:39:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=TA+6dbtIStadvAuHvkrtYwI6bvKg5btHy1tHp0RwTqg=;
-        b=HlsotV8aYsxQD2uYpIDy78RWOA0mzRu/W+zWyjxi3barQ6sK+PrklVvZwCCq//9Sqf
-         2QRwLW9mKrg7cPawjIgx+WjS8CBpEYZrnfkD3N6IkDmd3kmxeX63m25lEl1c+RlF354d
-         tj/4oHywEqQtiGOj3Xmd9NQypUbG3JLFq0fxQ6918Z/FPslJN1JLMPk7x8NpYss9p4p9
-         pvzuO+6g8ms2JUU7fHeEKCQUOq5FuLfPr6lTYcJk1lnTZ62Kki+pTdiyC/cQZ+/Yee9G
-         HnxgYcqxFQWzWKnUu2j0gfrwa8KL19IZ2Ihex65+MgRNDkzXMOZxmcOQnnDGNZqizgta
-         P6zA==
+        bh=5B0JQCucRHYT7xdR8VvGZSXNFmNKxBu//apj1OM/otI=;
+        b=RM9X4ZhuxQE0eTgHt6Bkzsehc3s28N9CD6mk3dzLOwMBSxOEFpVaMq2T1PaSydFzi4
+         uwQaIJR1oAqGr5m+NPxZKn8PdLgSZIUxDTYYEaPkv2AYdzUtnyGZ6bw7o4TSz194c3md
+         NNJp0XaOJCghD+5VOA/a1SX/lRT/B1QrLvDNS5bg84DCfjEoMcVokjieODSY6d861ghY
+         6eJZJBD6fEs5ne+qj8ul9wzzrYQaC0Iob6Zpuv2Ppr8Nu+PgjsLFh04ncZPCrwa0GNLc
+         Z3Hush6NSte7PvwFzenbk0Gr2YlyTIMI6jm1+RH9eL9K82ujF1p5RYJx7BxX2uZkvvGB
+         dtew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=TA+6dbtIStadvAuHvkrtYwI6bvKg5btHy1tHp0RwTqg=;
-        b=x+q/tY5tWY1lfL5RxKyFamCXdiuJXzPXvNPbvYwy2BG2g8qBJPtG9b6cy/BsOwqR1d
-         Xs0PqlOt5iXeJXZoXIJlySeGt3dV+Z/wKlaCil/roUud+0Cikr9oPJO7dpQMszUCuHet
-         +DrKpz89bxOw6CQ4ia7BXyOJGC0R2ZCq+oanuTi6fKtRv0OgWd1zxSrDvYoHrVMY/nzp
-         UwDfwkDkU0HnJSSv9B5wmbMC2s6TAVYs6NhJK+frSl4zYH3JORFBKg2m9pJTxRSa+rww
-         NjROxbyFSqo5VWu+FnZiQaeNGIVayJdTpXAZAw0cleluwcsfR0FoywNrsyd/ebWHWhM6
-         gBsw==
-X-Gm-Message-State: ANoB5pmx0iUl4c8QC3uJ0N9MhL+VmrjPcyPPTI24vulzaXPBH1h3m539
-        gqdvWblSbtOWCqAGZvOsnd4=
-X-Google-Smtp-Source: AA0mqf7Vn6lesHlX0cQkbSy3rKJXFx8OOkBflWz2AiejVIHJ0I0kNsZ0M8uLlR4oAh8HllPyEBpVhQ==
-X-Received: by 2002:a17:90b:3c45:b0:20a:db08:8a8a with SMTP id pm5-20020a17090b3c4500b0020adb088a8amr5991480pjb.141.1668641947510;
-        Wed, 16 Nov 2022 15:39:07 -0800 (PST)
+        bh=5B0JQCucRHYT7xdR8VvGZSXNFmNKxBu//apj1OM/otI=;
+        b=p4y1T8AgjvQD7CrrBA9WLYYMLBVfuYH5bSyddgKl1eLmN8Fxk2TcOClZHpHPMFrEU8
+         WEJTCSiXNC56T0JcPZ0fB5RZyyjg0Pgzlivm4I4mxaHjKjsw0m2vHc4bYLtyWiafUD2z
+         DNr2+sTMiYAchZgRBzGOUPUv6LsbEQF/4FjcV2m+uXuUl/az0hKaZb9wWCVfOj+KhWCv
+         JH6xS4t9zQ9U41ngTfzzceHyUQP8wx2GUIZDM+fD5rrZsmlanI5taYY7L+/BqAy26bDV
+         aRC820djhBknfBYG7jNbtmELiiQ3+0AmpmaRyhC1vE2CKkeBucSiuws1Br3yPawzATtY
+         JUMw==
+X-Gm-Message-State: ANoB5pl9k9+gAKUNR2bm+DYaFx0VbuC4hDdrL86P0C/aNCrgPbmz7qr4
+        2y/nfaAlapkd+48g/EIiNrU=
+X-Google-Smtp-Source: AA0mqf4rkSX0yP0Q9MUnbXbIcS72kUIGIXcnYqKWa9WtQDB/ko8FE2i3jvZG3GFzLtf3TDTFBR1WOg==
+X-Received: by 2002:a63:d611:0:b0:439:3ca9:94a with SMTP id q17-20020a63d611000000b004393ca9094amr22401064pgg.107.1668641948807;
+        Wed, 16 Nov 2022 15:39:08 -0800 (PST)
 Received: from youngsil.svl.corp.google.com ([2620:15c:2d4:203:5b40:ce8c:1f7c:9acc])
-        by smtp.gmail.com with ESMTPSA id bc10-20020a170902930a00b00188ef3ea2b6sm95929plb.262.2022.11.16.15.39.06
+        by smtp.gmail.com with ESMTPSA id bc10-20020a170902930a00b00188ef3ea2b6sm95929plb.262.2022.11.16.15.39.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 15:39:07 -0800 (PST)
+        Wed, 16 Nov 2022 15:39:08 -0800 (PST)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -64,9 +64,9 @@ Cc:     Ingo Molnar <mingo@kernel.org>,
         Zhengjun Xing <zhengjun.xing@linux.intel.com>,
         James Clark <james.clark@arm.com>,
         Athira Jajeev <atrajeev@linux.vnet.ibm.com>
-Subject: [PATCH 07/12] perf test: Add 'sqrtloop' test workload
-Date:   Wed, 16 Nov 2022 15:38:49 -0800
-Message-Id: <20221116233854.1596378-8-namhyung@kernel.org>
+Subject: [PATCH 08/12] perf test: Replace arm spe fork test workload with sqrtloop
+Date:   Wed, 16 Nov 2022 15:38:50 -0800
+Message-Id: <20221116233854.1596378-9-namhyung@kernel.org>
 X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
 In-Reply-To: <20221116233854.1596378-1-namhyung@kernel.org>
 References: <20221116233854.1596378-1-namhyung@kernel.org>
@@ -82,108 +82,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The sqrtloop creates a child process to run an infinite loop calling
-sqrt() with rand().  This is needed for ARM SPE fork test.
+So that it can get rid of requirement of a compiler.  I've also removed
+killall as it'll kill perf process now and run the test workload for 10
+sec instead.
 
-  $ perf test -w sqrtloop
-
-It can take an optional argument to specify how long it will run in
-seconds (default: 1).
-
+Tested-by: Leo Yan <leo.yan@linaro.org>
+Tested-by: James Clark <james.clark@arm.com>
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- tools/perf/tests/builtin-test.c       |  1 +
- tools/perf/tests/tests.h              |  1 +
- tools/perf/tests/workloads/Build      |  1 +
- tools/perf/tests/workloads/sqrtloop.c | 45 +++++++++++++++++++++++++++
- 4 files changed, 48 insertions(+)
- create mode 100644 tools/perf/tests/workloads/sqrtloop.c
+ tools/perf/tests/shell/test_arm_spe_fork.sh | 44 +--------------------
+ 1 file changed, 1 insertion(+), 43 deletions(-)
 
-diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
-index 0ed5ac452f6e..9acb7a93eeb9 100644
---- a/tools/perf/tests/builtin-test.c
-+++ b/tools/perf/tests/builtin-test.c
-@@ -122,6 +122,7 @@ static struct test_workload *workloads[] = {
- 	&workload__noploop,
- 	&workload__thloop,
- 	&workload__leafloop,
-+	&workload__sqrtloop,
- };
+diff --git a/tools/perf/tests/shell/test_arm_spe_fork.sh b/tools/perf/tests/shell/test_arm_spe_fork.sh
+index c920d3583d30..da810e1b2b9e 100755
+--- a/tools/perf/tests/shell/test_arm_spe_fork.sh
++++ b/tools/perf/tests/shell/test_arm_spe_fork.sh
+@@ -11,14 +11,7 @@ skip_if_no_arm_spe_event() {
  
- static int num_subtests(const struct test_suite *t)
-diff --git a/tools/perf/tests/tests.h b/tools/perf/tests/tests.h
-index 86804dd6452b..18c40319e67c 100644
---- a/tools/perf/tests/tests.h
-+++ b/tools/perf/tests/tests.h
-@@ -203,5 +203,6 @@ struct test_workload workload__##work = {	\
- DECLARE_WORKLOAD(noploop);
- DECLARE_WORKLOAD(thloop);
- DECLARE_WORKLOAD(leafloop);
-+DECLARE_WORKLOAD(sqrtloop);
+ skip_if_no_arm_spe_event || exit 2
  
- #endif /* TESTS_H */
-diff --git a/tools/perf/tests/workloads/Build b/tools/perf/tests/workloads/Build
-index 631596bdb2b3..1ca95cb0fdb5 100644
---- a/tools/perf/tests/workloads/Build
-+++ b/tools/perf/tests/workloads/Build
-@@ -3,5 +3,6 @@
- perf-y += noploop.o
- perf-y += thloop.o
- perf-y += leafloop.o
-+perf-y += sqrtloop.o
+-# skip if there's no compiler
+-if ! [ -x "$(command -v cc)" ]; then
+-	echo "failed: no compiler, install gcc"
+-	exit 2
+-fi
+-
+-TEST_PROGRAM_SOURCE=$(mktemp /tmp/__perf_test.program.XXXXX.c)
+-TEST_PROGRAM=$(mktemp /tmp/__perf_test.program.XXXXX)
++TEST_PROGRAM="perf test -w sqrtloop 10"
+ PERF_DATA=$(mktemp /tmp/__perf_test.perf.data.XXXXX)
+ PERF_RECORD_LOG=$(mktemp /tmp/__perf_test.log.XXXXX)
  
- CFLAGS_leafloop.o         = -g -O0 -fno-inline -fno-omit-frame-pointer
-diff --git a/tools/perf/tests/workloads/sqrtloop.c b/tools/perf/tests/workloads/sqrtloop.c
-new file mode 100644
-index 000000000000..1e44d541d737
---- /dev/null
-+++ b/tools/perf/tests/workloads/sqrtloop.c
-@@ -0,0 +1,45 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#include <math.h>
-+#include <signal.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <linux/compiler.h>
-+#include <sys/wait.h>
-+#include "../tests.h"
-+
-+static volatile sig_atomic_t done;
-+
-+static void sighandler(int sig __maybe_unused)
-+{
-+	done = 1;
-+}
-+
-+static int __sqrtloop(int sec)
-+{
-+	signal(SIGALRM, sighandler);
-+	alarm(sec);
-+
-+	while (!done)
-+		sqrt(rand());
-+	return 0;
-+}
-+
-+static int sqrtloop(int argc, const char **argv)
-+{
-+	int sec = 1;
-+
-+	if (argc > 0)
-+		sec = atoi(argv[0]);
-+
-+	switch (fork()) {
-+	case 0:
-+		return __sqrtloop(sec);
-+	case -1:
-+		return -1;
-+	default:
-+		wait(NULL);
-+	}
-+	return 0;
-+}
-+
-+DEFINE_WORKLOAD(sqrtloop);
+@@ -27,43 +20,10 @@ cleanup_files()
+ 	echo "Cleaning up files..."
+ 	rm -f ${PERF_RECORD_LOG}
+ 	rm -f ${PERF_DATA}
+-	rm -f ${TEST_PROGRAM_SOURCE}
+-	rm -f ${TEST_PROGRAM}
+ }
+ 
+ trap cleanup_files exit term int
+ 
+-# compile test program
+-cat << EOF > $TEST_PROGRAM_SOURCE
+-#include <math.h>
+-#include <stdio.h>
+-#include <stdlib.h>
+-#include <unistd.h>
+-#include <sys/wait.h>
+-
+-int workload() {
+-  while (1)
+-    sqrt(rand());
+-  return 0;
+-}
+-
+-int main() {
+-  switch (fork()) {
+-    case 0:
+-      return workload();
+-    case -1:
+-      return 1;
+-    default:
+-      wait(NULL);
+-  }
+-  return 0;
+-}
+-EOF
+-
+-echo "Compiling test program..."
+-CFLAGS="-lm"
+-cc $TEST_PROGRAM_SOURCE $CFLAGS -o $TEST_PROGRAM || exit 1
+-
+ echo "Recording workload..."
+ perf record -o ${PERF_DATA} -e arm_spe/period=65536/ -vvv -- $TEST_PROGRAM > ${PERF_RECORD_LOG} 2>&1 &
+ PERFPID=$!
+@@ -78,8 +38,6 @@ echo Log lines after 1 second = $log1
+ 
+ kill $PERFPID
+ wait $PERFPID
+-# test program may leave an orphan process running the workload
+-killall $(basename $TEST_PROGRAM)
+ 
+ if [ "$log0" = "$log1" ];
+ then
 -- 
 2.38.1.584.g0f3c55d4c2-goog
 
