@@ -2,42 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6730862BDCB
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:28:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 846DA62BDC1
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:27:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233753AbiKPM2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 07:28:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46616 "EHLO
+        id S232099AbiKPM1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 07:27:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233379AbiKPM2T (ORCPT
+        with ESMTP id S235900AbiKPM0o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 07:28:19 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44BA7B31;
-        Wed, 16 Nov 2022 04:25:47 -0800 (PST)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NC2Ls6pPSzRpG4;
-        Wed, 16 Nov 2022 20:25:25 +0800 (CST)
-Received: from ubuntu1804.huawei.com (10.67.174.58) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 16 Nov 2022 20:25:45 +0800
-From:   Xiu Jianfeng <xiujianfeng@huawei.com>
-To:     <linkinjeon@kernel.org>, <sfrench@samba.org>,
-        <senozhatsky@chromium.org>, <tom@talpey.com>, <hyc.lee@gmail.com>,
-        <lsahlber@redhat.com>
-CC:     <linux-cifs@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] ksmbd: Fix resource leak in ksmbd_session_rpc_open()
-Date:   Wed, 16 Nov 2022 20:22:37 +0800
-Message-ID: <20221116122237.227736-1-xiujianfeng@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 16 Nov 2022 07:26:44 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0C704D5D5
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 04:23:03 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id t4so11768776wmj.5
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 04:23:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=NCcvrWSluZ6xWxoxMrbOrq+h9iD8NIFWt/ldX0zWuhg=;
+        b=y5/L+vS0fpgfHuv4SUDaU3im4zKnqVUZqAewsrm2yL1im0aOMqkrOFCAeyfCFuHKFk
+         i3pG4dsMgGdOYxJzSRV47RSETvRsCIcJMvuVa5Y6RgUUgGS6gi5RiE9sIpSzhLxwZxkj
+         owMv+z+wewK/mGatUMqLf3Z064KooAQ/4W+xYnmJ+Y0IAyu3sCjotY9kaqY3oYeHGDzf
+         pb9XrrAhk+gjDwe+KnWjk2wDITh5g+q8OQVIlxies5+Zt3Nw0xoVTXGF/pDiuCJoNzV0
+         PvxBapPwuDzv6N3AyIEQA2ktOz/xzYSBKVyzmO6mD2e7dnrtF3nORH8a7YGB91Rq5n9x
+         dTag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NCcvrWSluZ6xWxoxMrbOrq+h9iD8NIFWt/ldX0zWuhg=;
+        b=Sj4UPBAKdI5fNyZ+dQWhJdF+THejVXwzdlytjhlhP28aTxdRQlj3olFmY+3iY29JV/
+         0CMIUaT7/MKjD0i4u9JSEdDPjU6f6tCa6aKZpXFcoAbuxTPfXe0CWTfF9BZnOOg2kDvn
+         av5OZ/i9HgQPKAz5NTSm8Jy4n5FxUxMnNNo1GXZv73GoiTaMqz0Uatr73dFt4+SJINVB
+         JLHfI/IToujESBW+4ok560ZB8eAoJALWJ2lt5UhRCRic+KQZLVTRSgrhwFESxGq0TCHA
+         K3CDhNbIpXgWGxtgs4vqBhP54uPJoEfCSWxWuQV6ZON3POtHVccqeYiHK+k5+xQYseXf
+         bzAw==
+X-Gm-Message-State: ANoB5plgHzlHT3hOWAo21dYyOuXpqtcWPvE1MIqQofipht0hOiv8sS/v
+        9OBVWNJVqgB6W4mhWy32oTM0tw==
+X-Google-Smtp-Source: AA0mqf5IwVD4rl/ORoKYsGl8D8jAfmH8GhkGCPt7qRpoPNnSYVvMMs/Qz7TOI1ONBlHx5rk8KVrHcw==
+X-Received: by 2002:a05:600c:354d:b0:3cf:6b14:1033 with SMTP id i13-20020a05600c354d00b003cf6b141033mr1995260wmq.103.1668601382220;
+        Wed, 16 Nov 2022 04:23:02 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:2a03:71a6:7a9d:9c71? ([2a01:e0a:982:cbb0:2a03:71a6:7a9d:9c71])
+        by smtp.gmail.com with ESMTPSA id c17-20020a5d63d1000000b002322bff5b3bsm18299131wrw.54.2022.11.16.04.23.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Nov 2022 04:23:01 -0800 (PST)
+Message-ID: <1fdd6b67-c7c4-b927-8d01-485ce8ee645f@linaro.org>
+Date:   Wed, 16 Nov 2022 13:23:00 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.58]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+From:   "neil.armstrong@linaro.org" <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v4 1/4] gpu: drm: meson: Use devm_regulator_*get_enable*()
+Content-Language: en-US
+To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-amlogic@lists.infradead.org" 
+        <linux-amlogic@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+References: <cover.1666357434.git.mazziesaccount@gmail.com>
+ <c14058c4b7018556a78455ffef484a7ebe4d8ea2.1666357434.git.mazziesaccount@gmail.com>
+ <Y1K0h4De8UsZJE7W@pendragon.ideasonboard.com>
+ <00d90039-c38a-ad8a-80a1-5a654a528756@linaro.org>
+ <12f645b5-2820-0618-1271-6c254425099c@fi.rohmeurope.com>
+Organization: Linaro Developer Services
+In-Reply-To: <12f645b5-2820-0618-1271-6c254425099c@fi.rohmeurope.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,40 +102,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When ksmbd_rpc_open() fails then it must call ksmbd_rpc_id_free() to
-undo the result of ksmbd_ipc_id_alloc().
+On 16/11/2022 13:02, Vaittinen, Matti wrote:
+> Hi dee Ho Laurent & All,
+> 
+> On 10/21/22 18:29, Neil Armstrong wrote:
+>> Hi,
+>>
+>> On 21/10/2022 17:02, Laurent Pinchart wrote:
+>>> Hi Matti,
+>>>
+>>> On Fri, Oct 21, 2022 at 04:18:01PM +0300, Matti Vaittinen wrote:
+>>>> Simplify using the devm_regulator_get_enable_optional(). Also drop the
+>>>> seemingly unused struct member 'hdmi_supply'.
+>>>>
+>>>> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+>>>>
+>>>> ---
+>>>> v3 => v4:
+>>>> - split meson part to own patch
+>>>>
+>>>> RFCv1 => v2:
+>>>> - Change also sii902x to use devm_regulator_bulk_get_enable()
+>>>>
+>>>> Please note - this is only compile-tested due to the lack of HW. Careful
+>>>> review and testing is _highly_ appreciated.
+>>>> ---
+>>>>    drivers/gpu/drm/meson/meson_dw_hdmi.c | 23 +++--------------------
+>>>>    1 file changed, 3 insertions(+), 20 deletions(-)
+>>>>
+>>>> diff --git a/drivers/gpu/drm/meson/meson_dw_hdmi.c
+>>>> b/drivers/gpu/drm/meson/meson_dw_hdmi.c
+>>>> index 5cd2b2ebbbd3..7642f740272b 100644
+>>>> --- a/drivers/gpu/drm/meson/meson_dw_hdmi.c
+>>>> +++ b/drivers/gpu/drm/meson/meson_dw_hdmi.c
+>>>> @@ -140,7 +140,6 @@ struct meson_dw_hdmi {
+>>>>        struct reset_control *hdmitx_apb;
+>>>>        struct reset_control *hdmitx_ctrl;
+>>>>        struct reset_control *hdmitx_phy;
+>>>> -    struct regulator *hdmi_supply;
+>>>>        u32 irq_stat;
+>>>>        struct dw_hdmi *hdmi;
+>>>>        struct drm_bridge *bridge;
+>>>> @@ -665,11 +664,6 @@ static void meson_dw_hdmi_init(struct
+>>>> meson_dw_hdmi *meson_dw_hdmi)
+>>>>    }
+>>>> -static void meson_disable_regulator(void *data)
+>>>> -{
+>>>> -    regulator_disable(data);
+>>>> -}
+>>>> -
+>>>>    static void meson_disable_clk(void *data)
+>>>>    {
+>>>>        clk_disable_unprepare(data);
+>>>> @@ -723,20 +717,9 @@ static int meson_dw_hdmi_bind(struct device
+>>>> *dev, struct device *master,
+>>>>        meson_dw_hdmi->data = match;
+>>>>        dw_plat_data = &meson_dw_hdmi->dw_plat_data;
+>>>> -    meson_dw_hdmi->hdmi_supply = devm_regulator_get_optional(dev,
+>>>> "hdmi");
+>>>> -    if (IS_ERR(meson_dw_hdmi->hdmi_supply)) {
+>>>> -        if (PTR_ERR(meson_dw_hdmi->hdmi_supply) == -EPROBE_DEFER)
+>>>> -            return -EPROBE_DEFER;
+>>>> -        meson_dw_hdmi->hdmi_supply = NULL;
+>>>> -    } else {
+>>>> -        ret = regulator_enable(meson_dw_hdmi->hdmi_supply);
+>>>> -        if (ret)
+>>>> -            return ret;
+>>>> -        ret = devm_add_action_or_reset(dev, meson_disable_regulator,
+>>>> -                           meson_dw_hdmi->hdmi_supply);
+>>>> -        if (ret)
+>>>> -            return ret;
+>>>> -    }
+>>>> +    ret = devm_regulator_get_enable_optional(dev, "hdmi");
+>>>> +    if (ret != -ENODEV)
+>>>> +        return ret;
+>>>
+>>> As noted in the review of the series that introduced
+>>> devm_regulator_get_enable_optional(), the right thing to do is to
+>>> implement runtime PM in this driver to avoid wasting power.
+>>
+>> While I agree, it's not really the same level of effort as this patch
+>> should be functionally equivalent.
+> 
+> While we all agree that power savings gained by runtime PM would be
+> great - I don't think we should stop minor improvements while waiting
+> for that to magically happen ;)
+> 
+> I like the saying I first heard from Jonathan Cameron - "Don't let the
+> perfect be an enemy of good".
+> 
+> After that being said, should I re-spin this or just drop it? (I am
+> cleaning up my local git from old stuff, and these are about to vanish
+> from my books).
 
-Fixes: e2f34481b24d ("cifsd: add server-side procedures for SMB3")
-Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
----
- fs/ksmbd/mgmt/user_session.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+I'm ok with you, please re-spin it.
 
-diff --git a/fs/ksmbd/mgmt/user_session.c b/fs/ksmbd/mgmt/user_session.c
-index 3fa2139a0b30..92b1603b5abe 100644
---- a/fs/ksmbd/mgmt/user_session.c
-+++ b/fs/ksmbd/mgmt/user_session.c
-@@ -108,15 +108,17 @@ int ksmbd_session_rpc_open(struct ksmbd_session *sess, char *rpc_name)
- 	entry->method = method;
- 	entry->id = ksmbd_ipc_id_alloc();
- 	if (entry->id < 0)
--		goto error;
-+		goto free_entry;
- 
- 	resp = ksmbd_rpc_open(sess, entry->id);
- 	if (!resp)
--		goto error;
-+		goto free_id;
- 
- 	kvfree(resp);
- 	return entry->id;
--error:
-+free_id:
-+	ksmbd_rpc_id_free(entry->id);
-+free_entry:
- 	list_del(&entry->list);
- 	kfree(entry);
- 	return -EINVAL;
--- 
-2.17.1
+Neil
+
+> 
+> Yours,
+> 	-- Matti
+> 
 
