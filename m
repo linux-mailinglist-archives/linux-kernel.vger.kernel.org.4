@@ -2,127 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1236262C19E
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:57:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0F2C62C1B1
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 16:00:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233991AbiKPO5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 09:57:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48704 "EHLO
+        id S234003AbiKPPAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 10:00:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233632AbiKPO5R (ORCPT
+        with ESMTP id S234423AbiKPPAG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 09:57:17 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 138DCFADF;
-        Wed, 16 Nov 2022 06:57:16 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 98D361F94F;
-        Wed, 16 Nov 2022 14:57:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1668610635; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3vl4NdpO4irC1eRJoV821C0JFp7+4A15d5hSm1FQvTo=;
-        b=eqaB6EP2GKiw5QP6JiW0cWOM1NG4anZRyh1calWKdEwUX95RbEKck+SxlKqWruwGYlnjRW
-        InAsn8C+8XCSZZ23Mcg3b7PsV6E7utY9JOJX4lXDMQlPNUCOIwlxjZtQp2QRMW+DkxU1bQ
-        lzj7mbU+Msd0KWWV5/hZ7unfoL4q6B4=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7A24113480;
-        Wed, 16 Nov 2022 14:57:15 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id qwJoG0v6dGOYYgAAMHmgww
-        (envelope-from <mhocko@suse.com>); Wed, 16 Nov 2022 14:57:15 +0000
-Date:   Wed, 16 Nov 2022 15:57:14 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Zhongkun He <hezhongkun.hzk@bytedance.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, corbet@lwn.net,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [External] Re: [PATCH v2] mm: add new syscall
- pidfd_set_mempolicy().
-Message-ID: <Y3T6SqZvAmSG5I6W@dhcp22.suse.cz>
-References: <20221111084051.2121029-1-hezhongkun.hzk@bytedance.com>
- <20221111112732.30e1696bcd0d5b711c188a9a@linux-foundation.org>
- <a44f794e-fe60-e261-3631-9107822d5c36@bytedance.com>
- <Y3IqLzvduM6HqPJV@dhcp22.suse.cz>
- <3a3b4f5b-14d1-27d8-7727-cf23da90988f@bytedance.com>
- <Y3KFFfMFE55lVdNZ@dhcp22.suse.cz>
- <82c9c89c-aee2-08a3-e562-359631bb0137@bytedance.com>
- <0bd0b744-3d97-b4c3-a4fb-6040f8f8024a@bytedance.com>
+        Wed, 16 Nov 2022 10:00:06 -0500
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B4BC4FF9B;
+        Wed, 16 Nov 2022 06:59:12 -0800 (PST)
+Received: by mail-ot1-f49.google.com with SMTP id p8-20020a056830130800b0066bb73cf3bcso10535673otq.11;
+        Wed, 16 Nov 2022 06:59:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GG2Tq6+Rxp6EDqdTHOj4cP+DRbjq8GgFfl9nEQ/66eA=;
+        b=RMCvW2/2vAzxUisgM6R9wZ/Sg6AjeCxl+dlYDQq9atGKiF94z4vjoFY9cadue/yDkk
+         PmTBBgbfPX+MlUfZZIezy7+ulPjJJS3xs+diz7kMyIYGmAozqock/kqlcyh4J/cB0sak
+         jJ0nTun/Y713YTWbmI5XIrizLvAVhWzkZbrmfStFskwf4ssJX3koWPuNesrQXK+zmm8r
+         /FmGkFJLdfB7Cor36rsT1gRk0hufT3u4eGmU5mBLOS85jX13jVFrkRg1Fk8GAkYLjpld
+         lkOPD4YEMADGZYgg/ToT3/J9a7uBHi8B4SRf71PcbQcn7CSfMKNy+dflMhT0Nqu7GgWT
+         miPQ==
+X-Gm-Message-State: ANoB5pm1EPAPt3vCnyQYZv/BkFD5PrK8+szm2sJjS4dbv50avd+SPb6s
+        ZOjCLBrSB07S608qQZVl/g==
+X-Google-Smtp-Source: AA0mqf48FvjuD+IAwK/1wfbeBhUiVH98RSb0f3PIpqZwv0iDrLwWktAN4jSPD17kbnAnznZU+hLEoA==
+X-Received: by 2002:a05:6830:1d90:b0:663:bd3a:2e4b with SMTP id y16-20020a0568301d9000b00663bd3a2e4bmr11237196oti.157.1668610751657;
+        Wed, 16 Nov 2022 06:59:11 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id j21-20020a544815000000b0035aa617156bsm6135435oij.17.2022.11.16.06.59.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 06:59:11 -0800 (PST)
+Received: (nullmailer pid 3849197 invoked by uid 1000);
+        Wed, 16 Nov 2022 14:59:12 -0000
+Date:   Wed, 16 Nov 2022 08:59:12 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Robert Foss <robert.foss@linaro.org>
+Cc:     loic.poulain@linaro.org, krzysztof.kozlowski+dt@linaro.org,
+        quic_jesszhan@quicinc.com, vinod.koul@linaro.org, sean@poorly.run,
+        linux-kernel@vger.kernel.org, quic_kalyant@quicinc.com,
+        dmitry.baryshkov@linaro.org, freedreno@lists.freedesktop.org,
+        quic_abhinavk@quicinc.com, airlied@linux.ie, andersson@kernel.org,
+        konrad.dybcio@somainline.org,
+        angelogioacchino.delregno@somainline.org, swboyd@chromium.org,
+        quic_vpolimer@quicinc.com, quic_khsieh@quicinc.com,
+        linux-arm-msm@vger.kernel.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, daniel@ffwll.ch,
+        Jonathan Marek <jonathan@marek.ca>,
+        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        agross@kernel.org, dianders@chromium.org,
+        bjorn.andersson@linaro.org, vkoul@kernel.org
+Subject: Re: [PATCH v2 01/12] dt-bindings: display: msm: Add qcom,sm8350-dpu
+ binding
+Message-ID: <166861075192.3849132.17933292251888324677.robh@kernel.org>
+References: <20221115133105.980877-1-robert.foss@linaro.org>
+ <20221115133105.980877-2-robert.foss@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0bd0b744-3d97-b4c3-a4fb-6040f8f8024a@bytedance.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221115133105.980877-2-robert.foss@linaro.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 16-11-22 19:28:10, Zhongkun He wrote:
-> Hi Michal, I've done the performance testing, please check it out.
+
+On Tue, 15 Nov 2022 14:30:54 +0100, Robert Foss wrote:
+> Mobile Display Subsystem (MDSS) encapsulates sub-blocks
+> like DPU display controller, DSI etc. Add YAML schema for DPU device
+> tree bindings
 > 
-> > > Yes this is all understood but the level of the overhead is not really
-> > > clear. So the question is whether this will induce a visible overhead.
-> > > Because from the maintainability point of view it is much less costly to
-> > > have a clear life time model. Right now we have a mix of reference
-> > > counting and per-task requirements which is rather subtle and easy to
-> > > get wrong. In an ideal world we would have get_vma_policy always
-> > > returning a reference counted policy or NULL. If we really need to
-> > > optimize for cache line bouncing we can go with per cpu reference
-> > > counters (something that was not available at the time the mempolicy
-> > > code has been introduced).
-> > > 
-> > > So I am not saying that the task_work based solution is not possible I
-> > > just think that this looks like a good opportunity to get from the
-> > > existing subtle model.
+> Signed-off-by: Robert Foss <robert.foss@linaro.org>
+> ---
+>  .../bindings/display/msm/qcom,sm8350-dpu.yaml | 120 ++++++++++++++++++
+>  1 file changed, 120 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/msm/qcom,sm8350-dpu.yaml
 > 
-> Test tools:
-> numactl -m 0-3 ./run-mmtests.sh -n -c configs/config-workload-
-> aim9-pagealloc  test_name
-> 
-> Modification:
-> Get_vma_policy(), get_task_policy() always returning a reference
-> counted policy, except for the static policy(default_policy and
-> preferred_node_policy[nid]).
 
-It would be better to add the patch that has been tested.
-
-> All vma manipulation is protected by a down_read, so mpol_get()
-> can be called directly to take a refcount on the mpol. but there
-> is no lock in task->mempolicy context.
-> so task->mempolicy should be protected by task_lock.
-> 
-> struct mempolicy *get_task_policy(struct task_struct *p)
-> {
-> 	struct mempolicy *pol;
-> 	int node;
-> 
-> 	if (p->mempolicy) {
-> 		task_lock(p);
-> 		pol = p->mempolicy;
-> 		mpol_get(pol);
-> 		task_unlock(p);
-> 		if (pol)
-> 			return pol;
-> 	}
-
-
-One way to deal with that would be to use a similar model as css_tryget
-
-Btw. have you tried to profile those slowdowns to identify hotspots?
-
-Thanks
--- 
-Michal Hocko
-SUSE Labs
+Reviewed-by: Rob Herring <robh@kernel.org>
