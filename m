@@ -2,152 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36AA662BB33
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:16:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DDFC62BB1C
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:12:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239117AbiKPLQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 06:16:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58826 "EHLO
+        id S237845AbiKPLMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 06:12:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239114AbiKPLQD (ORCPT
+        with ESMTP id S233287AbiKPLLw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 06:16:03 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2041.outbound.protection.outlook.com [40.107.223.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F8962C4
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 03:03:30 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hIQkJrwOQKyUVoDfoylVU3w19FE7XsIOx9xVd/u6hhvPS+D783OoC2AJSuUVO8B5CNid0+hmfwd3sah+OckZUZ0ByMLXNHGhbr0EDNazQUqMPuATiMie7ffDSZQUKyo/eItoZDEuUFBzd7pAuE6AaZT5bubM5XHhSW90Gy2grwpSn/o5HLLo/GrL2asmII97sZm5uv8ho4QlafPc05NiPEFg3t4wVTKscmy35npFKZ3fle2qXOrnL9QolannfnS0P7bbIA6fWFZR/gxwm4KtFpXhJcQTRnghWUUzvKfmDT5ecsRi2xjzd1B01i2HiVCFbe2RGzsphH/vpgTINb+1iQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LVBoVLeBzE5AGTOglpZA92Z+2QbA4+A6zEZciZQz9Ns=;
- b=Cqo+VZm9bZwkhg6ebNcp94mm5SU5pZGOr5RMX0iHk2lcfSIrKA4As3WEexZztMTeIaFlhyXHAgrPbnZVQ7TNekvKsWrXWFpnIxB++FTyUoccB7XtE7zh9pgauKtU7Bszt1hKgdPPW7Mg/Ww7TzquebNWeEC211AItZKc77Hc9N9HMJzHjEx1W3bIVb1HWvUJdiMOY4Ts9VvYvtczYEBhAciZYDp0i6GmBkhGSCeMukrWLqj05LH6FA/JwvJKsbtYc8nDcdyS3/2uPBiVFJmp3r0foy/PIRhiV+ZsgcEarmWChVaJrJA7npg5AaH9403OksNVyWZPTZtsxbIehQGdJw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LVBoVLeBzE5AGTOglpZA92Z+2QbA4+A6zEZciZQz9Ns=;
- b=WzGwdwHO5L/kew1v734dfwj9rF2BCAdafVOJuVIW4G0oAdBXe4wBs48pr/R+4LNIgXJOQyb3/0HNwDMNVtFa5bmfVPP+tr7kEQzwj+URdAgFa8w2mOrMYtxRxIxyWaJy45C0Z43myEB8/cyPX+Wm2EYC4mQk4P+4VGGpD7HKpLU=
-Received: from MW4PR04CA0094.namprd04.prod.outlook.com (2603:10b6:303:83::9)
- by DM6PR12MB4172.namprd12.prod.outlook.com (2603:10b6:5:212::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.18; Wed, 16 Nov
- 2022 11:03:28 +0000
-Received: from CO1NAM11FT028.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:83:cafe::f0) by MW4PR04CA0094.outlook.office365.com
- (2603:10b6:303:83::9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17 via Frontend
- Transport; Wed, 16 Nov 2022 11:03:28 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT028.mail.protection.outlook.com (10.13.175.214) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5834.8 via Frontend Transport; Wed, 16 Nov 2022 11:03:28 +0000
-Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 16 Nov
- 2022 05:03:26 -0600
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB06.amd.com
- (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 16 Nov
- 2022 05:03:14 -0600
-Received: from amd-B450M-DS3H.amd.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
- Transport; Wed, 16 Nov 2022 05:03:10 -0600
-From:   Syed Saba Kareem <Syed.SabaKareem@amd.com>
-To:     <broonie@kernel.org>, <alsa-devel@alsa-project.org>
-CC:     <Vijendar.Mukunda@amd.com>, <Basavaraj.Hiregoudar@amd.com>,
-        <Sunil-kumar.Dommati@amd.com>, <mario.limonciello@amd.com>,
-        Syed Saba Kareem <Syed.SabaKareem@amd.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        "Jaroslav Kysela" <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH 2/2] ASoC: amd: ps: Move acp63_dev_data strcture from PCI driver
-Date:   Wed, 16 Nov 2022 16:29:23 +0530
-Message-ID: <20221116105938.762550-2-Syed.SabaKareem@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221116105938.762550-1-Syed.SabaKareem@amd.com>
-References: <20221116105938.762550-1-Syed.SabaKareem@amd.com>
+        Wed, 16 Nov 2022 06:11:52 -0500
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8825320F55
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:59:33 -0800 (PST)
+Received: by mail-io1-f72.google.com with SMTP id w16-20020a6b4a10000000b006a5454c789eso8576718iob.20
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:59:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Nuts0lcwPyxvF4DAGG7Mgpx+hVNgtwsa5HVMxORklmg=;
+        b=igxNyJ6PeTLbkK8RN5A9174k/GiCxTMQkU2DoUK5rdfYxkU30AdYMNhF3yEIzodX7h
+         pvgHWNFJ1fvFGcAkXMCZ3cwgo51Xc3PsDTrOHivkgIp7eBu7G4l++R23qjTn1wQCIJWB
+         CczWXqt6pSEsUjnexf2dAfgN7rbOiu/DyyZHFdGPzmlzfKmifb50ZfXejASfltMc6nhV
+         8K0J4mtFZsbM5eDmlHwZ3swVu48F25GarSU5aNn6Gj1Go34VZ3hTnRd53i1RmfgDqOAl
+         vyJhL+s7DaJ65ejF1hL6yCMMMGoG1cJeYqPtcSVmuUrv1CSMFgide9LUipgC7/TItM9y
+         xq+Q==
+X-Gm-Message-State: ANoB5pk5brIQDK5+YvdvdHogWD9qzBkyiYVBpzrxW9AyDncm4yTUEGKP
+        XXHD29XKHanlQvg5F1phGd85pPBcuOYGWr9rkHypcGlVB1gG
+X-Google-Smtp-Source: AA0mqf4kGc/wfmGwv5FZvEzO7K9yFXvWedfhW8LxIqXtKcK+ZYOpn/AqREfY3xWCqzQgFWnYLDbw10W03o0NDPY6JQJpHPaQy7qW
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT028:EE_|DM6PR12MB4172:EE_
-X-MS-Office365-Filtering-Correlation-Id: 30fa151f-f454-4d06-c260-08dac7c230c8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dy7j6zPx33EICAEjU3o6KAEc17UtYc1rwYBnSy0kYW/KddwDNBQaD0E2wxqqMmOz4Tcq78T6RAP34Rb1M1D/WQaz/ZSqy/HQfZRydUk1T4ae8+z2fJrxAHurrUu6DjFsCj/Biti/Z+P0ZebxOGhqRK+TwWZb8KL8gCK74hIWwMHYEgO9KAuPJb17Z/AaQdPkc7xsslIQaJZH0cqjdYpzUEm85QzhQKQHlSVwmMFadxSAFvd4zLHxWOrX1apENm3SW+shchXDJbgzq44ZUEbuOPSan/+W2bDM1bV4CwUxZLIjGSbqh5BgAOm5xUAIjwHDDxIyc5ghq6f+WCe2ZFqg8dQlMGSSSxIGYoxALYEU80OPBeJcjSd37h6jBJ4ongeJly3MPgyZ0ArVwFw+ge0ndfSeHNXzv3Q8PIgTlmbSm/StjSLjy8Fqx+zRVeO1UHmmtsVe7gPpqLiC8b6q2Ppqn9CUgsChA6xW6IWl1OJbC6XfSvcinxCF1CnLtoKgq/+gHxFguiDSAavs4E1MHbLkxnfWfW/f4/s8pZhjqASpjN8x3NwGHreLy/YF7BExVfjj+2+Hkawpy3T3dv2oRDrj6zTZL6GPQi6D+x76eCyHGBMdyaMJAon/4iVikpFLKPyMeUm8YYTSGyZYgPOMKv5WyyinfxVpp4IvBqLDCcdYS4p0aHYlXJHQ1xw6tVmfLk3bh+nSWMb9dllASon9F2Hsvo81FiBTEMb0p1Vf/uWO3IL8UmfoJ+ZmHgZOY+n8JbZd+XDCitraAiv4mZi+KHQhPcyOzIBO9+xrFeDmKIuTxmaAoaiBgGpMVdtQtrKheCmD
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(39860400002)(136003)(396003)(451199015)(36840700001)(46966006)(40470700004)(7696005)(26005)(36860700001)(86362001)(40460700003)(83380400001)(478600001)(40480700001)(36756003)(82740400003)(6666004)(5660300002)(70206006)(70586007)(2616005)(82310400005)(41300700001)(336012)(1076003)(186003)(8676002)(4326008)(2906002)(81166007)(54906003)(426003)(47076005)(356005)(8936002)(316002)(110136005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Nov 2022 11:03:28.0674
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 30fa151f-f454-4d06-c260-08dac7c230c8
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT028.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4172
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a6b:600d:0:b0:6de:18b2:1025 with SMTP id
+ r13-20020a6b600d000000b006de18b21025mr5840702iog.102.1668596372959; Wed, 16
+ Nov 2022 02:59:32 -0800 (PST)
+Date:   Wed, 16 Nov 2022 02:59:32 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000015791c05ed945e13@google.com>
+Subject: [syzbot] WARNING: ODEBUG bug in virtual_ncidev_close
+From:   syzbot <syzbot+4bf62ccd820c794f1292@syzkaller.appspotmail.com>
+To:     bongsu.jeon@samsung.com, krzysztof.kozlowski@linaro.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move acp63_dev_data structure from PCI driver to acp header file.
+Hello,
 
-Signed-off-by: Syed Saba Kareem <Syed.SabaKareem@amd.com>
+syzbot found the following issue on:
+
+HEAD commit:    81e7cfa3a9eb Merge tag 'erofs-for-6.1-rc6-fixes' of git://..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=11d19759880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a2318f9a4fc31ad
+dashboard link: https://syzkaller.appspot.com/bug?extid=4bf62ccd820c794f1292
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/54f7533927a5/disk-81e7cfa3.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/f3861072b476/vmlinux-81e7cfa3.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/c36747ab66fe/bzImage-81e7cfa3.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+4bf62ccd820c794f1292@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+ODEBUG: free active (active state 0) object type: timer_list hint: nci_cmd_timer+0x0/0xb0 net/nfc/nci/core.c:624
+WARNING: CPU: 1 PID: 8272 at lib/debugobjects.c:502 debug_print_object+0x16e/0x250 lib/debugobjects.c:502
+Modules linked in:
+CPU: 1 PID: 8272 Comm: syz-executor.4 Not tainted 6.1.0-rc5-syzkaller-00015-g81e7cfa3a9eb #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:debug_print_object+0x16e/0x250 lib/debugobjects.c:502
+Code: ff df 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 af 00 00 00 48 8b 14 dd 40 0f a8 8a 4c 89 ee 48 c7 c7 20 03 a8 8a e8 df 66 9c 05 <0f> 0b 83 05 15 f4 44 0a 01 48 83 c4 18 5b 5d 41 5c 41 5d 41 5e c3
+RSP: 0018:ffffc9001655fc60 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
+RDX: ffff888027c0ba80 RSI: ffffffff816574fc RDI: fffff52002cabf7e
+RBP: 0000000000000001 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000080000000 R11: 0000000000000000 R12: ffffffff8a4e9be0
+R13: ffffffff8aa80800 R14: ffffffff816ec8f0 R15: dffffc0000000000
+FS:  00005555562f3400(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00005555574a7708 CR3: 0000000071e8c000 CR4: 0000000000350ee0
+Call Trace:
+ <TASK>
+ __debug_check_no_obj_freed lib/debugobjects.c:989 [inline]
+ debug_check_no_obj_freed+0x305/0x420 lib/debugobjects.c:1020
+ slab_free_hook mm/slub.c:1699 [inline]
+ slab_free_freelist_hook+0xeb/0x1c0 mm/slub.c:1750
+ slab_free mm/slub.c:3661 [inline]
+ __kmem_cache_free+0xaf/0x3b0 mm/slub.c:3674
+ virtual_ncidev_close+0x7d/0x90 drivers/nfc/virtual_ncidev.c:167
+ __fput+0x27c/0xa90 fs/file_table.c:320
+ task_work_run+0x16f/0x270 kernel/task_work.c:179
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
+ exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:203
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+ syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:296
+ do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fc7e6a3d40b
+Code: 0f 05 48 3d 00 f0 ff ff 77 45 c3 0f 1f 40 00 48 83 ec 18 89 7c 24 0c e8 63 fc ff ff 8b 7c 24 0c 41 89 c0 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 35 44 89 c7 89 44 24 0c e8 a1 fc ff ff 8b 44
+RSP: 002b:00007ffd62541350 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
+RAX: 0000000000000000 RBX: 0000000000000004 RCX: 00007fc7e6a3d40b
+RDX: 0000001b30720000 RSI: 0000000000000000 RDI: 0000000000000003
+RBP: 00007fc7e6bad980 R08: 0000000000000000 R09: 00007ffd62566080
+R10: 00007ffd62566090 R11: 0000000000000293 R12: 00000000001c58e2
+R13: 00007fc7e6600d80 R14: 00007fc7e6bac120 R15: 0000000000000002
+ </TASK>
+
+
 ---
- sound/soc/amd/ps/acp63.h  | 7 +++++++
- sound/soc/amd/ps/pci-ps.c | 7 -------
- 2 files changed, 7 insertions(+), 7 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/sound/soc/amd/ps/acp63.h b/sound/soc/amd/ps/acp63.h
-index a90ba3b20dc7..5e7f9c1c1b0e 100644
---- a/sound/soc/amd/ps/acp63.h
-+++ b/sound/soc/amd/ps/acp63.h
-@@ -96,3 +96,10 @@ static inline void acp63_writel(u32 val, void __iomem *base_addr)
- {
- 	writel(val, base_addr);
- }
-+
-+struct acp63_dev_data {
-+	void __iomem *acp63_base;
-+	struct resource *res;
-+	bool acp63_audio_mode;
-+	struct platform_device *pdev[ACP63_DEVS];
-+};
-diff --git a/sound/soc/amd/ps/pci-ps.c b/sound/soc/amd/ps/pci-ps.c
-index 98dddd1a0cf4..489f01a20699 100644
---- a/sound/soc/amd/ps/pci-ps.c
-+++ b/sound/soc/amd/ps/pci-ps.c
-@@ -17,13 +17,6 @@
- 
- #include "acp63.h"
- 
--struct acp63_dev_data {
--	void __iomem *acp63_base;
--	struct resource *res;
--	bool acp63_audio_mode;
--	struct platform_device *pdev[ACP63_DEVS];
--};
--
- static int acp63_power_on(void __iomem *acp_base)
- {
- 	u32 val;
--- 
-2.25.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
