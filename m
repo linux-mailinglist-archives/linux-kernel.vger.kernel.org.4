@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EADEA62B7A2
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 11:20:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6AA762B7A5
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 11:20:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233428AbiKPKUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 05:20:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55958 "EHLO
+        id S235900AbiKPKU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 05:20:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233286AbiKPKUJ (ORCPT
+        with ESMTP id S233389AbiKPKUK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 05:20:09 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E61912A9D
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:20:08 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id 5so11556193wmo.1
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:20:08 -0800 (PST)
+        Wed, 16 Nov 2022 05:20:10 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6276A2126B
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:20:09 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id o4so28983976wrq.6
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:20:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=abLnCQfmT+XQT6aD06ckoOE5xV2tdrjNEbUU00A7GbU=;
-        b=uS7ki5F34mhuwfL0SfdXPitiKSVZkMAIG7y611sNMJi6qXzh6/BTOuMINJQRLMJIyU
-         QUwLURyU7Vw6Bxo7JaOSPYdBszqOdWabEau/5fZPFDbE5TFXS2ztTF/4RiPI2ohPNQWM
-         jPU6mjdbhRu82oOrRcOB4urwV7n+kdnJozJ2rWBwbEjI7M9gfNt2a7PlHu6GGcXkaS5i
-         4qNfDomQp8jdSMowJrj6AV08ZsuVjnUYmR+B92OTXFrf0BXnyHBo1YjPK+q9Ohw+fmQu
-         r0Gq2kpd/h9Gk/mHER2m2kOuQ1b56u5xBpsmQBvTxZovoJlWCmnECpJ7OsJwKf/L+157
-         5PDQ==
+        bh=pcm4FzP5Zqll4vx+qLC4Zs+d3QrWbatabIiC6u6r60g=;
+        b=kxws/zHmdiQFoJ0eF54UCY9nbuWQ9mbC4IGNSA5IcisVZ6M5MY0eJjRgoKDOYUZGym
+         iIzr9SUaDi695Pbvz8Xy1rfbUY1tVLVTefUErWMIspw50cwFD4WhuhFcsaARZcEcI2Xd
+         98iyUzINb+keCA5Tbb/0AIL55TNLylh/2WX9HlzpXZ9vZaQZnnfMSoGHHIVzRQw+hdU4
+         Su5B1NdY+FtUfKFRqZ5VhPNPd+o1roQm5b5kIwarQ6/CwDbDp8iOUuwF8VW+F+SWWxso
+         yUKgjQVt9IDuI0qW2Akh36oX87ER3t2Yv+wy6WD/C1y4+Mjmh4hJ0tvCV/DfHI04Mqcz
+         am+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=abLnCQfmT+XQT6aD06ckoOE5xV2tdrjNEbUU00A7GbU=;
-        b=XO8DLln31v0qkAbYjPM7Bd+9cG12eo9Em6I+LlbF2JW//brB3GLYHO+lHAH1j+aBxF
-         3ZifOYSbxN4uWIqvql8NkS7/Y3N3gp1eTgOLipgm2dcCDarTc2PKL1XLwCLmA/DSf+zT
-         Bt7ZqBoeTBuoPu+ZA6VOOXyO/q4+dgq84ykpNZm3DWy3+1o1ltDKijgX1lOH1Tut0dah
-         SkwdBQqa7nz6eG/egp6B+pMtlJFmCCX+yX4IX+Zwqe71D6t2HzECTj7hzizKUSRDbKOp
-         XahesR04n8MDTWz72Q3xRITkfmcUcWVb/UXc9F5MX7/ZTSbHEI4Q6s8ykBiPq9tklOIX
-         x4eA==
-X-Gm-Message-State: ANoB5pmRksBr7L9Ff436Okpt4iZx4fADY+FPwZd1oP8djBpIQrUPnEIf
-        g8GhCBlo8WhJgLqterenh6g9Hg==
-X-Google-Smtp-Source: AA0mqf5gF84ZE8euD1zwPwjPj7xUiFfdK2JpKCMpW1Ikx2XVN8KYsocbCrdhtuQEUP6hNGg1Fmiswg==
-X-Received: by 2002:a05:600c:524a:b0:3cf:6a41:9aec with SMTP id fc10-20020a05600c524a00b003cf6a419aecmr1644226wmb.159.1668594006964;
-        Wed, 16 Nov 2022 02:20:06 -0800 (PST)
+        bh=pcm4FzP5Zqll4vx+qLC4Zs+d3QrWbatabIiC6u6r60g=;
+        b=ey0ZFzqDlQd9XYR7JyKArj+4KXbLhkWmxhRu8UEwwrgoRiPv4l3VYRP8imr8PyRdqo
+         JwnxTXvEH/chZsRhizpeWPCBgTYgzhP3pXBmhRv35BL7XSA3BScc1N/sWU5T5jxvXoQ0
+         gRNWrjXreYwr2832HaZHt5wZZ5HQ0+HL3m5JZpCykktm9kTnfWIrqdN4dmNDClykhPsw
+         GwmnK3l6aryWR/it+/OXJGoP9MleDL8gPlhIv3/UQQEdjQYgPiZAzuau/lTfayVHv499
+         25KVZFVIzfrynxanlaFrF6kT9qlj5ZP9VLeGmJ5Yi8+g5eozF9qC3j01ZG4gpTmSqSYT
+         i5Yw==
+X-Gm-Message-State: ANoB5plGNjDPamZAzVinmNMsetin5IrF9AfIYpvkPsmkwabtMxybHF6V
+        ahe2A5I7xDsTp3UxObJIne3qOA==
+X-Google-Smtp-Source: AA0mqf7OyflAEmqc6dCA8VV2BTVg5hL8XYlI7G/+OCSqOxDy+T3BLdadJXZXgwOKDU/Y47R45OBB4A==
+X-Received: by 2002:adf:fbcd:0:b0:22e:304b:cf66 with SMTP id d13-20020adffbcd000000b0022e304bcf66mr13304375wrs.308.1668594007976;
+        Wed, 16 Nov 2022 02:20:07 -0800 (PST)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id l18-20020a05600c4f1200b003c6f3f6675bsm1709900wmq.26.2022.11.16.02.20.06
+        by smtp.gmail.com with ESMTPSA id l18-20020a05600c4f1200b003c6f3f6675bsm1709900wmq.26.2022.11.16.02.20.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 02:20:06 -0800 (PST)
+        Wed, 16 Nov 2022 02:20:07 -0800 (PST)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Wed, 16 Nov 2022 11:20:04 +0100
-Subject: [PATCH 1/4] dt-bindings: remoteproc: qcom: adsp: document sm8550 adsp,
- cdsp & mpss compatible
+Date:   Wed, 16 Nov 2022 11:20:05 +0100
+Subject: [PATCH 2/4] dt-bindings: misc: qcom,fastrpc: increase allowed iommus
+ entries
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20221114-narmstrong-sm8550-upstream-remoteproc-v1-1-104c34cb3b91@linaro.org>
+Message-Id: <20221114-narmstrong-sm8550-upstream-remoteproc-v1-2-104c34cb3b91@linaro.org>
 References: <20221114-narmstrong-sm8550-upstream-remoteproc-v1-0-104c34cb3b91@linaro.org>
 In-Reply-To: <20221114-narmstrong-sm8550-upstream-remoteproc-v1-0-104c34cb3b91@linaro.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -76,153 +76,38 @@ Cc:     devicetree@vger.kernel.org, Abel Vesa <abel.vesa@linaro.org>,
 X-Mailer: b4 0.10.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This documents the compatible for the component used to boot the
-aDSP, cDSP and MPSS on the SM8550 SoC.
+From: Abel Vesa <abel.vesa@linaro.org>
 
-The SM8550 boot process on SM8550 now requires a secondary "Devicetree"
-firmware to be passed along the main Firmware, and the cDSP a new power
-domain named "NSP".
+The fastrpc components on the SM8550 SoC can require up to 3 IOMMU
+entries, this bumps the maxItems to 3 for this purpose.
 
+Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- .../devicetree/bindings/remoteproc/qcom,adsp.yaml  | 60 +++++++++++++++++++++-
- 1 file changed, 59 insertions(+), 1 deletion(-)
+ Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
-index db9e0f0c2bea..678cb73f10de 100644
---- a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
-+++ b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
-@@ -55,6 +55,9 @@ properties:
-       - qcom,sm8450-cdsp-pas
-       - qcom,sm8450-mpss-pas
-       - qcom,sm8450-slpi-pas
-+      - qcom,sm8550-adsp-pas
-+      - qcom,sm8550-cdsp-pas
-+      - qcom,sm8550-mpss-pas
+diff --git a/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml b/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
+index d7576f8ac94b..1ab9588cdd89 100644
+--- a/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
++++ b/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
+@@ -79,7 +79,7 @@ patternProperties:
  
-   reg:
-     maxItems: 1
-@@ -116,8 +119,13 @@ properties:
-     $ref: /schemas/types.yaml#/definitions/string
-     description: Firmware name for the Hexagon core
+       iommus:
+         minItems: 1
+-        maxItems: 2
++        maxItems: 3
  
-+  qcom,dtb-firmware-name:
-+    $ref: /schemas/types.yaml#/definitions/string
-+    description: Devicetree Firmware name for the Hexagon core
-+
-   memory-region:
--    maxItems: 1
-+    minItems: 1
-+    maxItems: 2
-     description: Reference to the reserved-memory for the Hexagon core
- 
-   qcom,qmp:
-@@ -212,6 +220,9 @@ allOf:
-               - qcom,sm8450-cdsp-pas
-               - qcom,sm8450-slpi-pas
-               - qcom,sm8450-mpss-pas
-+              - qcom,sm8550-adsp-pas
-+              - qcom,sm8550-cdsp-pas
-+              - qcom,sm8550-mpss-pas
-     then:
-       properties:
-         clocks:
-@@ -327,6 +338,8 @@ allOf:
-               - qcom,sm8450-adsp-pas
-               - qcom,sm8450-cdsp-pas
-               - qcom,sm8450-slpi-pas
-+              - qcom,sm8550-adsp-pas
-+              - qcom,sm8550-cdsp-pas
-     then:
-       properties:
-         interrupts:
-@@ -347,6 +360,7 @@ allOf:
-               - qcom,sm8150-mpss-pas
-               - qcom,sm8350-mpss-pas
-               - qcom,sm8450-mpss-pas
-+              - qcom,sm8550-mpss-pas
-     then:
-       properties:
-         interrupts:
-@@ -448,6 +462,7 @@ allOf:
-               - qcom,sm8150-mpss-pas
-               - qcom,sm8350-mpss-pas
-               - qcom,sm8450-mpss-pas
-+              - qcom,sm8550-mpss-pas
-     then:
-       properties:
-         power-domains:
-@@ -475,6 +490,7 @@ allOf:
-               - qcom,sm8350-slpi-pas
-               - qcom,sm8450-adsp-pas
-               - qcom,sm8450-slpi-pas
-+              - qcom,sm8550-adsp-pas
-     then:
-       properties:
-         power-domains:
-@@ -504,6 +520,25 @@ allOf:
-             - const: cx
-             - const: mxc
- 
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,sm8550-cdsp-pas
-+    then:
-+      properties:
-+        power-domains:
-+          items:
-+            - description: CX power domain
-+            - description: MXC power domain
-+            - description: NSP power domain
-+        power-domain-names:
-+          items:
-+            - const: cx
-+            - const: mxc
-+            - const: nsp
-+
-   - if:
-       properties:
-         compatible:
-@@ -573,6 +608,29 @@ allOf:
-       properties:
-         qcom,qmp: false
- 
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,sm8550-adsp-pas
-+              - qcom,sm8550-cdsp-pas
-+              - qcom,sm8550-mpss-pas
-+    then:
-+      properties:
-+        memory-region:
-+          minItems: 2
-+          description:
-+            First entry is a phandle for a reserved memory area that holds
-+            the main Firmware for authentication, and second entry a phandle for a
-+            reserved memory area that holds the Devicetree Firmware for authentication.
-+    else:
-+      properties:
-+        qcom,dtb-firmware-name: false
-+
-+        memory-region:
-+          maxItems: 1
-+
- examples:
-   - |
-     #include <dt-bindings/clock/qcom,rpmcc.h>
+       qcom,nsessions:
+         $ref: /schemas/types.yaml#/definitions/uint32
 
 -- 
 b4 0.10.1
