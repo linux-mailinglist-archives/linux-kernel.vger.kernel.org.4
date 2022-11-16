@@ -2,250 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 263A762BE51
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:38:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF8A762BE55
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:38:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239093AbiKPMi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 07:38:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53136 "EHLO
+        id S236861AbiKPMin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 07:38:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239015AbiKPMiC (ORCPT
+        with ESMTP id S233374AbiKPMiT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 07:38:02 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C631248D6;
-        Wed, 16 Nov 2022 04:37:33 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id h12so21649920ljg.9;
-        Wed, 16 Nov 2022 04:37:33 -0800 (PST)
+        Wed, 16 Nov 2022 07:38:19 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5FB432B9E
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 04:37:38 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id ft34so43650586ejc.12
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 04:37:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=eT/6csOSu7SFpZHBsgunlrQMZeMZnaIM2b4OlHql6Ps=;
-        b=Z3k0EOmSnjchLvQlVuICpdEqdcJERXsU2Nptii3E8Rl2oNGnJt5nYBROlwreVEg/dn
-         qsnUjbn5HjrL2YMW+lOK0F4uKVBhtD0o8L76GWy6gHRt1Vkrx/UfKHt6E2OYv7Ll4F6L
-         lFfpARGnAs8YDxHS0zg+oUk73FwEUH+cTDScmNu6DpKtYMS/efv+iKkeyeuuHbY5/gCX
-         GOGJ4BvmZLsvpVKDoSGNBvaMuaZazd7aEoS38dl2mPffw/atTYDuKI4dQN/+iIj98f0W
-         ESvaA+MBlU1QYMi/owdMJJ7VlSat2EIjFnPJ74eH5zL+5esnYROLAIg61vvJ/fx7zaU/
-         vyNw==
+        bh=sG8aXwwXTrlTiireQd/5Nkj9uhT107ZgWJJJycGU3AE=;
+        b=TH3tUkEdmg1uHSwBV1pgw2U5d9r9XG3uQS8x6DgVsjcd8CmwAS2xO+YY7H2UMlE0c6
+         0dcLHmZcrJK5o9XUJf5uDr02asp3DyySsu3h93Kw+mmx00e63eh696MWS0WDYXqY99uJ
+         DQJ4xF6Yfw8PTsOQQ7kkI9QiIXY5824lCDwfPeP8yeff+fLGfeiArz9cGvv9aaAnnxd2
+         lBIXLeTzRPGFzbdqTu0A4EFJmGvWGuATEwCPv69zddJi406vQvLCgt0Esidv6MHGsrYb
+         Z+AMWS31/IDdclq83nejuBNxUZgHeIjt9Xq896IUSSIjoYyRTe2Qgb0RTg+zjqWBJ+Su
+         P2HA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eT/6csOSu7SFpZHBsgunlrQMZeMZnaIM2b4OlHql6Ps=;
-        b=sx9gkNSemzqV2LK+jsMJLiQtfX3EDgsGCkXNPRO4N7DNDc4ZtFdrJQ7CiK6jht06I0
-         mXcz9GIIVwUuR+0T2fkUBvwl1sH90ENbP+eTNfyVvNC9tbzQcwBc1B3qppiGJUS+efj8
-         TEqh/XgpR/iGIbYbQHhezlw69s+jynp8frdth6tdK4nCqiFc+zpi1vCqDFNXonaZ8Gmi
-         p41n7TV0W1eignNJEY6+a09GksD3S6IIYG0ZR3tEnZHN6GCPu41p37KzGFdk+v8U6EqK
-         uPr+ROurDQwxSatJYaPUTfaaNm7dycZytZWKK3Ox5NUT3iWXIg7dwmWr1B/n3MBONxkn
-         pVSA==
-X-Gm-Message-State: ANoB5plwOKNBoz98eMQlY1KWbWR5R0KYGAZ5cPmniMVL3fih0ujLsLQL
-        zfl7CIPzWf7XLyKXeE2rnqcids8iRgwnDdmOJfd6+lEF
-X-Google-Smtp-Source: AA0mqf5+prrRRdpvi7dqyUu7jOKyZt4c3aH6aM7ebF9USDpV5syKrMqn5fHBibnZ0YBEY3VIborXGBCRX+4ttxea3wU=
-X-Received: by 2002:a2e:b0ef:0:b0:26d:ee99:93b4 with SMTP id
- h15-20020a2eb0ef000000b0026dee9993b4mr7987691ljl.329.1668602251220; Wed, 16
- Nov 2022 04:37:31 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=sG8aXwwXTrlTiireQd/5Nkj9uhT107ZgWJJJycGU3AE=;
+        b=vn37MtJRXKqsrlKdXT66HK7h+Aq4J7aK/P41IZkicQ/kg3L1j1j49emPaUex8OrGDx
+         LhzDss5LdvzAButeO4R81efpEZwkzyHfTK92XoYF0NIWdd6QcvswuYMZVABKijM1ijpf
+         AGNe2KJwD2tJEIgMC+i+4USZJZWH8QCAjPK7MNyCz/x7OEvJfv89YuWAoAstL/LXnvgX
+         OTiVIMwIqAEstB6G5J5kk5/fA6PwmjQvT/yjAxAyOg1oshRpjbCTHRy9ECEWIAl02Jfu
+         /hjcTqt92oFWugUiVRmKSCzF5+BGiNNLmf7Ktelki+jsvrUAtAY5Cl1ZHFV8y/RmRw4j
+         QnCA==
+X-Gm-Message-State: ANoB5pm+E7pcKcqt3KdlOFGPN/mLVYS0hsj1A4YqsCJ6OI3wL9n7zMDm
+        1quIcaorx/9h7An4JsdOtOzwzw==
+X-Google-Smtp-Source: AA0mqf5W9ovV9Nz22Di4u2kR0NrvDSBgZ0VGms3FIWeDcppWEDAF5peTHSI8BFQsKpudz9q9CDC59A==
+X-Received: by 2002:a17:907:7672:b0:7ad:c35a:ad76 with SMTP id kk18-20020a170907767200b007adc35aad76mr17761284ejc.705.1668602256869;
+        Wed, 16 Nov 2022 04:37:36 -0800 (PST)
+Received: from [192.168.31.208] ([194.29.137.22])
+        by smtp.gmail.com with ESMTPSA id lb17-20020a170907785100b00734bfab4d59sm6930763ejc.170.2022.11.16.04.37.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Nov 2022 04:37:36 -0800 (PST)
+Message-ID: <6205c5eb-5f16-1a43-ac32-a1da61c99e50@linaro.org>
+Date:   Wed, 16 Nov 2022 13:37:29 +0100
 MIME-Version: 1.0
-References: <1668141030-2-1-git-send-email-lizhijian@fujitsu.com> <1668141030-2-5-git-send-email-lizhijian@fujitsu.com>
-In-Reply-To: <1668141030-2-5-git-send-email-lizhijian@fujitsu.com>
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Date:   Wed, 16 Nov 2022 13:37:14 +0100
-Message-ID: <CAPj211to20yHUy8o-Lg6TMjB5rpwrfPCUtQqxfeDFHUDR4+wJw@mail.gmail.com>
-Subject: Re: [for-next PATCH 4/5] RDMA/rxe: refactor iova_to_vaddr
-To:     Li Zhijian <lizhijian@fujitsu.com>
-Cc:     Zhu Yanjun <zyjzyj2000@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.2
+Subject: Re: [PATCH 2/2] pci: dwc: pcie-qcom: Add support for SM8550 PCIEs
+To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, kw@linux.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pci@vger.kernel.org
+References: <20221116123505.2760397-1-abel.vesa@linaro.org>
+ <20221116123505.2760397-2-abel.vesa@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221116123505.2760397-2-abel.vesa@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On venerd=C3=AC 11 novembre 2022 05:30:29 CET Li Zhijian wrote:
-> For IB_MR_TYPE_USER MR, iova_to_vaddr() will call kmap_local_page() to
-> map page.
->
-> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
+
+
+On 16/11/2022 13:35, Abel Vesa wrote:
+> Add compatibles for both PCIe G4 and G3 found on SM8550.
+> Also add the cnoc_pcie_sf_axi clock needed by the SM8550.
+> 
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 > ---
->  drivers/infiniband/sw/rxe/rxe_loc.h   |  1 +
->  drivers/infiniband/sw/rxe/rxe_mr.c    | 38 +++++++++++++++------------
->  drivers/infiniband/sw/rxe/rxe_resp.c  |  1 +
->  drivers/infiniband/sw/rxe/rxe_verbs.h |  5 +++-
->  4 files changed, 27 insertions(+), 18 deletions(-)
->
-> diff --git a/drivers/infiniband/sw/rxe/rxe_loc.h
-> b/drivers/infiniband/sw/rxe/rxe_loc.h index c2a5c8814a48..22a8c44d39c8
-100644
-> --- a/drivers/infiniband/sw/rxe/rxe_loc.h
-> +++ b/drivers/infiniband/sw/rxe/rxe_loc.h
-> @@ -73,6 +73,7 @@ int rxe_mr_copy(struct rxe_mr *mr, u64 iova, void *addr=
-,
-int
-> length, int copy_data(struct rxe_pd *pd, int access, struct rxe_dma_info
-> *dma, void *addr, int length, enum rxe_mr_copy_dir dir);
->  void *iova_to_vaddr(struct rxe_mr *mr, u64 iova, int length);
-> +void rxe_unmap_vaddr(struct rxe_mr *mr, void *vaddr);
->  struct rxe_mr *lookup_mr(struct rxe_pd *pd, int access, u32 key,
->                        enum rxe_mr_lookup_type type);
->  int mr_check_range(struct rxe_mr *mr, u64 iova, size_t length);
-> diff --git a/drivers/infiniband/sw/rxe/rxe_mr.c
-> b/drivers/infiniband/sw/rxe/rxe_mr.c index a4e786b657b7..d26a4a33119c 100=
-644
-> --- a/drivers/infiniband/sw/rxe/rxe_mr.c
-> +++ b/drivers/infiniband/sw/rxe/rxe_mr.c
-> @@ -120,9 +120,7 @@ int rxe_mr_init_user(struct rxe_dev *rxe, u64 start, =
-u64
-> length, u64 iova, struct ib_umem              *umem;
->       struct sg_page_iter     sg_iter;
->       int                     num_buf;
-> -     void                    *vaddr;
->       int err;
-> -     int i;
->
->       umem =3D ib_umem_get(&rxe->ib_dev, start, length, access);
->       if (IS_ERR(umem)) {
-> @@ -159,18 +157,9 @@ int rxe_mr_init_user(struct rxe_dev *rxe, u64 start,
-u64
-> length, u64 iova, num_buf =3D 0;
->                       }
->
-> -                     vaddr =3D
-page_address(sg_page_iter_page(&sg_iter));
-> -                     if (!vaddr) {
-> -                             pr_warn("%s: Unable to get virtual
-address\n",
-> -                                             __func__);
-> -                             err =3D -ENOMEM;
-> -                             goto err_cleanup_map;
-> -                     }
-> -
-> -                     buf->addr =3D (uintptr_t)vaddr;
-> +                     buf->page =3D sg_page_iter_page(&sg_iter);
->                       num_buf++;
->                       buf++;
-> -
->               }
->       }
->
-> @@ -182,10 +171,6 @@ int rxe_mr_init_user(struct rxe_dev *rxe, u64 start,
-u64
-> length, u64 iova,
->
->       return 0;
->
-> -err_cleanup_map:
-> -     for (i =3D 0; i < mr->num_map; i++)
-> -             kfree(mr->map[i]);
-> -     kfree(mr->map);
->  err_release_umem:
->       ib_umem_release(umem);
->  err_out:
-> @@ -246,6 +231,12 @@ static void lookup_iova(struct rxe_mr *mr, u64 iova,
-int
-> *m_out, int *n_out, }
->  }
->
-> +void rxe_unmap_vaddr(struct rxe_mr *mr, void *vaddr)
-> +{
-> +     if (mr->ibmr.type =3D=3D IB_MR_TYPE_USER)
-> +             kunmap_local(vaddr);
-> +}
-> +
->  static void *__iova_to_vaddr(struct rxe_mr *mr, u64 iova, int length)
->  {
->       size_t offset;
-> @@ -258,9 +249,21 @@ static void *__iova_to_vaddr(struct rxe_mr *mr, u64
-iova,
-> int length) return NULL;
->       }
->
-> -     return (void *)(uintptr_t)mr->map[m]->buf[n].addr + offset;
-> +     if (mr->ibmr.type =3D=3D IB_MR_TYPE_USER) {
-> +             char *paddr;
-> +             struct page *pg =3D mr->map[m]->buf[n].page;
-> +
-> +             paddr =3D kmap_local_page(pg);
-> +             if (paddr =3D=3D NULL) {
-> +                     pr_warn("Failed to map page");
-> +                     return NULL;
-> +             }
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-I know nothing about this code but I am here as a result of regular checks =
-for
-changes to HIGHMEM mappings across the entire kernel. So please forgive me =
-if
-I'm objecting to the correct changes.
-
-1) It looks like this code had a call to page_address() and you converted i=
-t
-to mapping with kmap_local_page().
-
-If page_address() is related and it used to work properly, the page you are
-mapping cannot come from ZONE_HIGHMEM. Therefore, kmap_local_page() looks l=
-ike
-an overkill.
-
-I'm probably missing something...
-
-> +             return paddr + offset;
-> +     } else
-> +             return (void *)(uintptr_t)mr->map[m]->buf[n].addr +
-offset;
->  }
->
-> +/* must call rxe_unmap_vaddr to unmap vaddr */
->  void *iova_to_vaddr(struct rxe_mr *mr, u64 iova, int length)
->  {
->       if (mr->state !=3D RXE_MR_STATE_VALID) {
-> @@ -326,6 +329,7 @@ int rxe_mr_copy(struct rxe_mr *mr, u64 iova, void *ad=
-dr,
-> int length, dest =3D (dir =3D=3D RXE_TO_MR_OBJ) ? va : addr;
->
->               memcpy(dest, src, bytes);
-> +             rxe_unmap_vaddr(mr, va);
->
->               length  -=3D bytes;
->               addr    +=3D bytes;
-> diff --git a/drivers/infiniband/sw/rxe/rxe_resp.c
-> b/drivers/infiniband/sw/rxe/rxe_resp.c index 483043dc4e89..765cb9f8538a
-> 100644
-> --- a/drivers/infiniband/sw/rxe/rxe_resp.c
-> +++ b/drivers/infiniband/sw/rxe/rxe_resp.c
-> @@ -636,6 +636,7 @@ static enum resp_states atomic_reply(struct rxe_qp *q=
-p,
->
->               *vaddr =3D value;
->               spin_unlock_bh(&atomic_ops_lock);
-> +             rxe_unmap_vaddr(mr, vaddr);
->
->               qp->resp.msn++;
->
-> diff --git a/drivers/infiniband/sw/rxe/rxe_verbs.h
-> b/drivers/infiniband/sw/rxe/rxe_verbs.h index acab785ba7e2..6080a4b32f09
-> 100644
-> --- a/drivers/infiniband/sw/rxe/rxe_verbs.h
-> +++ b/drivers/infiniband/sw/rxe/rxe_verbs.h
-> @@ -280,7 +280,10 @@ enum rxe_mr_lookup_type {
->  #define RXE_BUF_PER_MAP              (PAGE_SIZE / sizeof(struct
-rxe_phys_buf))
->
->  struct rxe_phys_buf {
-> -     u64      addr;
-> +     union {
-> +             u64 addr; /* IB_MR_TYPE_MEM_REG */
-> +             struct page *page; /* IB_MR_TYPE_USER */
-> +     };
->  };
->
->  struct rxe_map {
-> --
-> 2.31.1
+Konrad
+>   drivers/pci/controller/dwc/pcie-qcom.c | 5 ++++-
+>   1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> index 6ac28ea8d67d..4a62b2500c1d 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -181,7 +181,7 @@ struct qcom_pcie_resources_2_3_3 {
+>   
+>   /* 6 clocks typically, 7 for sm8250 */
+>   struct qcom_pcie_resources_2_7_0 {
+> -	struct clk_bulk_data clks[12];
+> +	struct clk_bulk_data clks[13];
+>   	int num_clks;
+>   	struct regulator_bulk_data supplies[2];
+>   	struct reset_control *pci_reset;
+> @@ -1206,6 +1206,7 @@ static int qcom_pcie_get_resources_2_7_0(struct qcom_pcie *pcie)
+>   	res->clks[idx++].id = "noc_aggr_4";
+>   	res->clks[idx++].id = "noc_aggr_south_sf";
+>   	res->clks[idx++].id = "cnoc_qx";
+> +	res->clks[idx++].id = "cnoc_pcie_sf_axi";
+>   
+>   	num_opt_clks = idx - num_clks;
+>   	res->num_clks = idx;
+> @@ -1752,6 +1753,8 @@ static const struct of_device_id qcom_pcie_match[] = {
+>   	{ .compatible = "qcom,pcie-sm8250", .data = &cfg_1_9_0 },
+>   	{ .compatible = "qcom,pcie-sm8450-pcie0", .data = &cfg_1_9_0 },
+>   	{ .compatible = "qcom,pcie-sm8450-pcie1", .data = &cfg_1_9_0 },
+> +	{ .compatible = "qcom,pcie-sm8550-pcie0", .data = &cfg_1_9_0 },
+> +	{ .compatible = "qcom,pcie-sm8550-pcie1", .data = &cfg_1_9_0 },
+>   	{ }
+>   };
+>   
