@@ -2,188 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 448EA62C8A5
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 20:03:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD3D962C8BE
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 20:07:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234322AbiKPTDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 14:03:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60154 "EHLO
+        id S233785AbiKPTHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 14:07:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbiKPTDI (ORCPT
+        with ESMTP id S233756AbiKPTHJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 14:03:08 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D3265801D;
-        Wed, 16 Nov 2022 11:03:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668625387; x=1700161387;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=5dn9p/wNvWgbsKlig7x3CLNWa97vhk8SHYNzurSnV2I=;
-  b=PZp2Gth72LCCDYDJ2vievawsXiQNZjJmOUs7IC2Qfv1FqJr/H/QY2sRa
-   UxGhIvpQJjXgyCSECvxtqiByy4/h677Tgw27+7v/3AB7VFYopUhpD/4J/
-   xr0eOd0WIPejD5EI9PyNqdfytC14HqdPBqOCbcsQeia1XQ940u8c7HXBu
-   ufcyHzJZZew6FqOoNBcpJ4kjmpfG0KJoTqwwZfIvbXo9OSsv84P5jTBZH
-   Ks2V2lnozLggIzuSoJfl3s08M3qv52sbUbm6hnETQMGSh0y3IA0xJ51gh
-   zRfsOO/nD/+xmEV0I6+VIsCHDWS4wfqD8JgQKmBybsjGAjUnmeJATiIua
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="376901458"
-X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
-   d="scan'208";a="376901458"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 11:03:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="633738353"
-X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
-   d="scan'208";a="633738353"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga007.jf.intel.com with ESMTP; 16 Nov 2022 11:03:06 -0800
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 16 Nov 2022 11:03:05 -0800
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 16 Nov 2022 11:03:05 -0800
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Wed, 16 Nov 2022 11:03:04 -0800
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Wed, 16 Nov 2022 11:03:04 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WyHUKumoCPm1+wBZ2yISBvfj56WqKx/oFaWHzR5QxtJt0VceRVWsOcfUaCmo4lMK8BXNV3kjHrNsysPZmVelGh8nt+8vlDCa/V/+O5z1wG8w5BoFIDfHErZ7unoaT8FWii/qWyJ5Qh324SpwgaoJyUeXg/YJDUHPRmXJlvrDv2M8w/tRNHFSYozJcdwceWY+2UZqMPzGG3aKdkxcEdilkffkQ4CRvLfCHGz4cWHgSayTcp6CXHb+Vzi8pkE7KS/brDs2N9rR0ssLkmppCAH2oUUJSedexTpAkpGVnS5aIATKFKBb+hx3qA4HXfsU1casq8CxDytkRJUGfnRGV2eoFg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5dn9p/wNvWgbsKlig7x3CLNWa97vhk8SHYNzurSnV2I=;
- b=AgtCQMQRSxf48XGWQHQpcIKQda2UdoZ9+gUlmFWnGezElIFvYhs8CQVk0in1YxXgfM8P5+pixrLJQaGj0U2n/VjS3Y9SGVjJI7Z3+7vxrcJI6IVp+60LqwwG0PNtUWIdL9AkZnhVwFa00uVAkRv4J7oxz4C8xvSPqOEF8mbcB2JACOOi1rQ/jGE7xC+k84tRX+6CYpEZwNFjoHCRNg8HKegwlW36QK6USD3abtn25g6w5XK9QVaPe6E8spToO3SWbP5K4l8fxd/A/ARqnXLUezIzUNpGimHCh9r8pzNoXJbS1nxHmrSZg83UTB+s2OBkUR8paUmh2MOUroupKKVnng==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com (2603:10b6:a03:48a::9)
- by MW4PR11MB5872.namprd11.prod.outlook.com (2603:10b6:303:169::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.19; Wed, 16 Nov
- 2022 19:02:59 +0000
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::4eea:7bf0:e6b0:5014]) by SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::4eea:7bf0:e6b0:5014%4]) with mapi id 15.20.5813.012; Wed, 16 Nov 2022
- 19:02:59 +0000
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-CC:     "Joseph, Jithu" <jithu.joseph@intel.com>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "markgross@kernel.org" <markgross@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "Macieira, Thiago" <thiago.macieira@intel.com>,
-        "Jimenez Gonzalez, Athenas" <athenas.jimenez.gonzalez@intel.com>,
-        "Mehta, Sohil" <sohil.mehta@intel.com>
-Subject: RE: [PATCH v2 09/14] platform/x86/intel/ifs: Use generic microcode
- headers and functions
-Thread-Topic: [PATCH v2 09/14] platform/x86/intel/ifs: Use generic microcode
- headers and functions
-Thread-Index: AQHY8vvyIqLlAIN/nk2Y48Ur1ZJbHq457fwAgAgFtj2AAAHwQA==
-Date:   Wed, 16 Nov 2022 19:02:59 +0000
-Message-ID: <SJ1PR11MB6083B59A7551D79D49B928B9FC079@SJ1PR11MB6083.namprd11.prod.outlook.com>
-References: <20221021203413.1220137-1-jithu.joseph@intel.com>
- <20221107225323.2733518-1-jithu.joseph@intel.com>
- <20221107225323.2733518-10-jithu.joseph@intel.com> <Y253FKtLnmV3r7Kj@zn.tnic>
- <Y3UdO8/oaEnlEk7s@agluck-desk3.sc.intel.com> <Y3UxvAD+rKKQBsYs@zn.tnic>
-In-Reply-To: <Y3UxvAD+rKKQBsYs@zn.tnic>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SJ1PR11MB6083:EE_|MW4PR11MB5872:EE_
-x-ms-office365-filtering-correlation-id: 3efc4c5b-baf7-4b8f-ba6e-08dac8052dac
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: JaHY7ZrAQ3pxKr4dHJ2s4KK8riUKZS11L5HneQ7SePHRN++8pf9nO1+0uyWau3p4kptWrYqWeFUPGkK/MawLMK6lkSGB08G4ZwyZdrbsSgRPlUzUZjZZgcwVs1Uh3pTM09AHOU6aHr2OdQFYDeRjRDkAuNlq1kIY2fXfakbvjeMoJtUPbRdsM40fAkFMgmuc0mJn2mOt8iuzk3ctzPVcOL0zLT0x+SrkiHTHX8SIMn4Gdy1+uJ4U6RnhHB8TejnvjJ6gT8QKrpLFVVDhjzsbFcyWg1y2IphYSc0/MDNKtquYr7F08FD00tEjTXYzWOq7XoA/R0qz0/sFp7xJEuKLDE2SnrqDozV67E1ER51+8EO830dgYDqZfgCLs3Rpa6SMmd2AiC4URZe9eSeiMTGjJ1ljSl9gqzXja56jGtv7uKyewSjT6f0dGyKyTiLr7LSC/15bpiq9xEJK8HOEak7fyaBh4mL5ofjRADr+3oszYvYhKeryCUHOhS/E+cFhwibj9WEY0rXU0mFmflDiCZVXFcBhBTf440PFC9DDTxoxY8ryWGwkrECvZkWsBOojHOoAubVfxt22EApyJtgZuhFhjSabRBaaPeEW9J5zkOWAl/d43Bu9Z4StNe1zLmYffTxNfWlOXk3/ZKbdMsw1eOCjbhcCFkbGZHD9QRAjaE6toIT6NYLOUqnH+7TvjPkXojNblUulz5DVZKhFd/jvBJjnTdAG5+uVc09PGPsWqB4WlhfBAFvbQ2nzzPS/D5v9PZouFgyKCGqTgKrlUALhTkTNT8yBM8cNc5J+2HD3Xrwm8CE=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6083.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(346002)(396003)(39860400002)(136003)(366004)(451199015)(4744005)(52536014)(5660300002)(41300700001)(4326008)(64756008)(66946007)(66556008)(66446008)(66476007)(66899015)(8676002)(76116006)(316002)(6916009)(38070700005)(71200400001)(55016003)(86362001)(2906002)(54906003)(478600001)(33656002)(6506007)(82960400001)(186003)(26005)(8936002)(7416002)(38100700002)(122000001)(7696005)(9686003)(41533002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UmlSNTloTmh0UWhnWUZXV2U3T3huUUZrNEFiNUUyeitLcjRKZHduRnl3LzN6?=
- =?utf-8?B?akJDQXJ2Q1dTMEZtZWdCcDUvMG9aYzF0OUZWV0NUNHJVc3lTeFMyUGhRc2li?=
- =?utf-8?B?TjhTajFIcE1lTXkvc2hrQmpRSzJuQ3RiUW9BR1Bsa0REWlJDMUdEQ2JhcDU4?=
- =?utf-8?B?RU8yR1NzT1ExZ0x1S1Q1RUIxZStUVUNwUjhUT3JwR2RwcGhaa3FsSStlajha?=
- =?utf-8?B?K0hjL0UyeEdaU3VRb1dqbEoxbWlEb0NjelR2UXJad2NTcDRBQWtHVVFyeWJG?=
- =?utf-8?B?OTRrLzc1RjlUbEgxSDhJNFQrNnFiNW5QREk5dHhoQjl1OW5pYmRUemZGYnZS?=
- =?utf-8?B?cHVsOFZ4Q2JIdVRUQ3ljUTRzUEJqNmN4eXJhWDlxVGdYeXU0b0FKQURVcnFU?=
- =?utf-8?B?eENGbUdRSEpGOVFhc1ovOUIwRXkzcG1Cem5zSnhHOFM0RVJEdm1Zd0E2ZXYw?=
- =?utf-8?B?djd1aHEydmI1dTJxYWlReTlua2xqQVN4bnBBL2dHR0xVS2JNZEV2WVEvcEhX?=
- =?utf-8?B?NVV5anVTdFlyYVU0S0pVQ0Fqd0ExeGtLdXdTam5VV0V2YndVMWxYb1R4d0Vi?=
- =?utf-8?B?YVc0V2FtdVVkWXA5SUlCY2gvM0lUb2pzb3RNV0tYSnhYNUpzSThTUHhoQlhn?=
- =?utf-8?B?bGZ3OEdWS1R4UGtWbGtXYW81Nk5QR0l3dysrNE9tM2NTaGs0NXYzUkhWeTIx?=
- =?utf-8?B?UG1Lc3Rnb2R4NFJvRk92TitlRExWcVlad0N4bFUrdU5EM0Z1L1hySTJpdTAy?=
- =?utf-8?B?M0pmV1BKeUdodXNFOFo4MGtnSHlQVnE3S3VLSzJXdDRObXVRekl4THQ0aXFZ?=
- =?utf-8?B?VFc4UHg0KzVBY2ZmRzAvV1FBOFVZSHN2TzNpNnlLSXdXbThJSGlueEZxTEZ1?=
- =?utf-8?B?VnlTQ2VveVd0T1ZMVVRnNTNiM2xoR2dKdXcvL2srbWV4WkFTc0N2bjhCTWhT?=
- =?utf-8?B?UWtQZjN3TldPZ2R4a0dyM1ZUTkRqK3VrS0hUUy9vVFduc1kzQmdBOGNpdSs3?=
- =?utf-8?B?UEhjK0F3MnExYkpKRUFuMEJHY2xhQzRSd0RGWWNuMlJGY0NFYUpTUElvcXEx?=
- =?utf-8?B?eFpFdHl6SlNDS0RESWRBNE1tNlVKc0x1UUhhck5BYmNJS3k4V0Z0WlVnd2Fp?=
- =?utf-8?B?ajROMmNhLzYzTFpDN24wa2NBSDFDZUo1RFZQa1cyTFluV3ZTK2ZtZC9EQkFF?=
- =?utf-8?B?OEcrdGlsTFNuVjlIdVhlNVQ4bnRrdTVvTEttVWlYQzIya0NSS0FOajlTSHdI?=
- =?utf-8?B?THhYMTZtWFoxQ0lrQ0VBRmQ0ZWFEU25jMTFQQXd0UHlhNmpXV09aM2tMV1Z5?=
- =?utf-8?B?Mk1jVFZ3VmlWZ24zOFR1dkx0L241d1lTTXJreGFqZ1ZyVDNhYll4N0FKWTI1?=
- =?utf-8?B?VXExVWh2TGQ0UkFQQzV5dVRmOXdmUVRHRjdoNW9GY0g5akNGR3dMN0VoRS8x?=
- =?utf-8?B?MElqUmtTV0UzOGVyUi9ZUTAwckpZYVcvUE9ycU01bG8zemwvT3c4N3lMUnBI?=
- =?utf-8?B?NkJ1R1dNTVVRN3ZYdlI2WkJIS2p4Mi9TZmdaZHN0eTVtVW9rakwybnRxTTAv?=
- =?utf-8?B?Ym9URUNyaEc1eU96WFFMZHZXRWQvUHdQVWF6KzZxbE1hbm5mWHkzNWxySXU2?=
- =?utf-8?B?Ym5ORXR6WjgyWi8rSXdOdC9oT1JyNmZDVXB6a3FLVkZ1WmFrREcrSldZUTls?=
- =?utf-8?B?R3VmdFJYcEl3TTZzcnNsY2Y2RlVBTXJXZ3JTNWxZT2VDRjNYeVl1WHVDeFo1?=
- =?utf-8?B?ZXBBS0F3UEhpazJueUFQUTdBd2F1c09GMHYvN2ZQeFF3Z1M0U09LUnpFQ1lr?=
- =?utf-8?B?a24yQVNUa0ZnM0pKem5UVkdkNm5IZjJqMFpHVCtCbURQODhVZTFnOXJTK0Zs?=
- =?utf-8?B?UXRpVUtlMzREK0kwNUExZlpCZDVuVzU3T2t0SnlibGxIcm55WTZkRFZzZDha?=
- =?utf-8?B?cGQvLzhucHdjeWFuanQvSmVva1gxTXc3cnA2TmVXZGw2VmlLMnVYbi90NEJq?=
- =?utf-8?B?Y2c3Z2dmOVhlblUyV3FnakZJdC9RUmxLdW9RRWk4MUY3NDc0eW5vLytWZFJ5?=
- =?utf-8?B?VFdHQVFWVzhIRElOL2pYN1hxUFdDdjl5VTRRM05FTmhpb01RS0ZzdjhQWmtq?=
- =?utf-8?Q?Kn6Qse8jrX6SOLKwBeYSkjObD?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 16 Nov 2022 14:07:09 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73BD26316A
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 11:07:02 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id c3-20020a1c3503000000b003bd21e3dd7aso2405332wma.1
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 11:07:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RrIEWhRQRlR3NVC7xZs7jfrYAvxywp8v6T2LfNTij+Q=;
+        b=Jx3yqn06j6rS5Fs5NvtNZW3afRbtKDAjyYZ/cbyT5J0fw+x5DSiBa34zecJ2zXBEP6
+         dXVq49aZkpeYNlw8FZCjejz+X8sYE98oXGoc760qT01ItS+LpGXs0KR6luYi6XidGGnJ
+         izQy2tFtJsUmRdujni2tPVUtXn9CPZshGLwHnmOZlDGECGPB/n+QnPoJLt8dAH9evwNe
+         fhOCmkSkLWIbZ04JJ1cM5aaZNcxxY3L6QunV484wNTFteoVmyskDXedR8UqBBpqCdgYP
+         ARhbe6kOrZMHvVRuGOwhLHdlqHzOAwDs9awbU2PksEIQB6p43e6EtlScRKP2mnLQYKXa
+         PFRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=RrIEWhRQRlR3NVC7xZs7jfrYAvxywp8v6T2LfNTij+Q=;
+        b=A1Vo9WNuzbqIWmTg4MSP8E5b5+pY75CotQs0ugKxjez6Vhe95bu5kt+CWDTKp8+AMg
+         zPto3T6P/hTcs3Oc0yYOfEw5Iz2KLoOWy2nW9F6YtPCvfqzTmJbCewMrBZSh65oArgkm
+         Lh4r3SQxWHJ9AzwiYhxrYQtOo1tURn8f660J76lVlvmtSTPmG94jQW+IkVcUwRNbxixN
+         dhHfv4lM/FyVZOIgdEgas0wxL9pobzSjgOZMv7VKOn+7+jyysnTOFNVWdqg+7wp5n7aC
+         jW7WrjC450tk+m3avgm09y/7W9NjdlzZvZasTjUkFSIh2zgiwJVqa1DlDZIN/ueD8Sjt
+         Udpg==
+X-Gm-Message-State: ANoB5pkujKfD+0fRWzEE8gdyOGMOnN4OcDNVWEtFmYw1Wnm1vwDb/BW/
+        tcwde8g/7n4qBoMQzB0TvxWdGQ==
+X-Google-Smtp-Source: AA0mqf5UxIGeoP/5D5Yx/z21S7fh+uGiPqn06sMVoycK8I50cpSvwpmmKvt4/Ece9ChnPUGalp4tAQ==
+X-Received: by 2002:a05:600c:3d0c:b0:3cf:f66c:9246 with SMTP id bh12-20020a05600c3d0c00b003cff66c9246mr2115368wmb.27.1668625620910;
+        Wed, 16 Nov 2022 11:07:00 -0800 (PST)
+Received: from zen.linaroharston ([185.81.254.11])
+        by smtp.gmail.com with ESMTPSA id p13-20020adfe60d000000b00236e9755c02sm15976702wrm.111.2022.11.16.11.07.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 11:07:00 -0800 (PST)
+Received: from zen (localhost [127.0.0.1])
+        by zen.linaroharston (Postfix) with ESMTP id BDA921FFB7;
+        Wed, 16 Nov 2022 19:06:59 +0000 (GMT)
+References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
+ <20221025151344.3784230-4-chao.p.peng@linux.intel.com>
+ <87cz9o9mr8.fsf@linaro.org> <20221116031441.GA364614@chaop.bj.intel.com>
+User-agent: mu4e 1.9.2; emacs 28.2.50
+From:   Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Subject: Re: [PATCH v9 3/8] KVM: Add KVM_EXIT_MEMORY_FAULT exit
+Date:   Wed, 16 Nov 2022 19:03:49 +0000
+In-reply-to: <20221116031441.GA364614@chaop.bj.intel.com>
+Message-ID: <87mt8q90rw.fsf@linaro.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6083.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3efc4c5b-baf7-4b8f-ba6e-08dac8052dac
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Nov 2022 19:02:59.2720
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: lEPOpPr/QKvV0J5SiEuEYPdLDl4zPZ+yIU/+TT77ktFek4CY0xeETEsUQYut0LB+Xrvmenj/Hr3S52WfPwzVdQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB5872
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBIb3cgYWJvdXQgeW91IHN0aWxsIGFsbG9jYXRlIGJ1dCBhdCBkcml2ZXIgaW5pdCB0aW1lLCBp
-ZnNfaW5pdCgpIG9yIHNvPw0KPg0KPiBBbmQgZGVhbGxvY2F0ZSBpdCBhdCBkcml2ZXIgcmVtb3Zh
-bCBzbyB0aGF0IGl0cyBhbHdheXMgcHJlc2VudCBkdXJpbmcNCj4gdGhlIGRyaXZlcidzIGxpZmV0
-aW1lIGFuZCBjYW4gYmUgcmV1c2VkIGVhY2ggdGltZSB0aGUgc2FuaXR5IGNoZWNrIGlzDQo+IGNh
-bGxlZC4NCg0KVGhhdCB3b3Jrcy4gTm93IHdlIGhhdmUgbXVsdGlwbGUgZmlsZXMgd2Uga25vdyB0
-aGF0IHdlJ2xsIHRha2UgdGhpcw0KcGF0aCBldmVyeSB0aW1lIHVzZXIgc3dpdGNoZXMgdG8gYSBu
-ZXcgZmlsZS4NCg0KLVRvbnkNCg==
+
+Chao Peng <chao.p.peng@linux.intel.com> writes:
+
+> On Tue, Nov 15, 2022 at 04:56:12PM +0000, Alex Benn=C3=A9e wrote:
+>>=20
+>> Chao Peng <chao.p.peng@linux.intel.com> writes:
+>>=20
+>> > This new KVM exit allows userspace to handle memory-related errors. It
+>> > indicates an error happens in KVM at guest memory range [gpa, gpa+size=
+).
+>> > The flags includes additional information for userspace to handle the
+>> > error. Currently bit 0 is defined as 'private memory' where '1'
+>> > indicates error happens due to private memory access and '0' indicates
+>> > error happens due to shared memory access.
+>> >
+>> > When private memory is enabled, this new exit will be used for KVM to
+>> > exit to userspace for shared <-> private memory conversion in memory
+>> > encryption usage. In such usage, typically there are two kind of memory
+>> > conversions:
+>> >   - explicit conversion: happens when guest explicitly calls into KVM
+>> >     to map a range (as private or shared), KVM then exits to userspace
+>> >     to perform the map/unmap operations.
+>> >   - implicit conversion: happens in KVM page fault handler where KVM
+>> >     exits to userspace for an implicit conversion when the page is in a
+>> >     different state than requested (private or shared).
+>> >
+>> > Suggested-by: Sean Christopherson <seanjc@google.com>
+>> > Co-developed-by: Yu Zhang <yu.c.zhang@linux.intel.com>
+>> > Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
+>> > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+>> > ---
+>> >  Documentation/virt/kvm/api.rst | 23 +++++++++++++++++++++++
+>> >  include/uapi/linux/kvm.h       |  9 +++++++++
+>> >  2 files changed, 32 insertions(+)
+>> >
+>> > diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/a=
+pi.rst
+>> > index f3fa75649a78..975688912b8c 100644
+>> > --- a/Documentation/virt/kvm/api.rst
+>> > +++ b/Documentation/virt/kvm/api.rst
+>> > @@ -6537,6 +6537,29 @@ array field represents return values. The users=
+pace should update the return
+>> >  values of SBI call before resuming the VCPU. For more details on RISC=
+-V SBI
+>> >  spec refer, https://github.com/riscv/riscv-sbi-doc.
+>> >=20=20
+>> > +::
+>> > +
+>> > +		/* KVM_EXIT_MEMORY_FAULT */
+>> > +		struct {
+>> > +  #define KVM_MEMORY_EXIT_FLAG_PRIVATE	(1 << 0)
+>> > +			__u32 flags;
+>> > +			__u32 padding;
+>> > +			__u64 gpa;
+>> > +			__u64 size;
+>> > +		} memory;
+>> > +
+>> > +If exit reason is KVM_EXIT_MEMORY_FAULT then it indicates that the VC=
+PU has
+>> > +encountered a memory error which is not handled by KVM kernel module =
+and
+>> > +userspace may choose to handle it. The 'flags' field indicates the me=
+mory
+>> > +properties of the exit.
+>> > +
+>> > + - KVM_MEMORY_EXIT_FLAG_PRIVATE - indicates the memory error is cause=
+d by
+>> > +   private memory access when the bit is set. Otherwise the memory er=
+ror is
+>> > +   caused by shared memory access when the bit is clear.
+>>=20
+>> What does a shared memory access failure entail?
+>
+> In the context of confidential computing usages, guest can issue a
+> shared memory access while the memory is actually private from the host
+> point of view. This exit with bit 0 cleared gives userspace a chance to
+> convert the private memory to shared memory on host.
+
+I think this should be explicit rather than implied by the absence of
+another flag. Sean suggested you might want flags for RWX failures so
+maybe something like:
+
+	KVM_MEMORY_EXIT_SHARED_FLAG_READ	(1 << 0)
+	KVM_MEMORY_EXIT_SHARED_FLAG_WRITE	(1 << 1)
+	KVM_MEMORY_EXIT_SHARED_FLAG_EXECUTE	(1 << 2)
+        KVM_MEMORY_EXIT_FLAG_PRIVATE            (1 << 3)
+
+which would allow you to signal the various failure modes of the shared
+region, or that you had accessed private memory.
+
+>
+>>=20
+>> If you envision any other failure modes it might be worth making it
+>> explicit with additional flags.
+>
+> Sean mentioned some more usages[1][]2] other than the memory conversion
+> for confidential usage. But I would leave those flags being added in the
+> future after those usages being well discussed.
+>
+> [1] https://lkml.kernel.org/r/20200617230052.GB27751@linux.intel.com
+> [2] https://lore.kernel.org/all/YKxJLcg%2FWomPE422@google.com
+>
+>> I also wonder if a bitmask makes sense if
+>> there can only be one reason for a failure? Maybe all that is needed is
+>> a reason enum?
+>
+> Tough we only have one reason right now but we still want to leave room
+> for future extension. Enum can express a single value at once well but
+> bitmask makes it possible to express multiple orthogonal flags.
+
+I agree if multiple orthogonal failures can occur at once a bitmask is
+the right choice.
+
+>
+> Chao
+>>=20
+>> > +
+>> > +'gpa' and 'size' indicate the memory range the error occurs at. The u=
+serspace
+>> > +may handle the error and return to KVM to retry the previous memory a=
+ccess.
+>> > +
+>> >  ::
+>> >=20=20
+>> >      /* KVM_EXIT_NOTIFY */
+>> > diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+>> > index f1ae45c10c94..fa60b032a405 100644
+>> > --- a/include/uapi/linux/kvm.h
+>> > +++ b/include/uapi/linux/kvm.h
+>> > @@ -300,6 +300,7 @@ struct kvm_xen_exit {
+>> >  #define KVM_EXIT_RISCV_SBI        35
+>> >  #define KVM_EXIT_RISCV_CSR        36
+>> >  #define KVM_EXIT_NOTIFY           37
+>> > +#define KVM_EXIT_MEMORY_FAULT     38
+>> >=20=20
+>> >  /* For KVM_EXIT_INTERNAL_ERROR */
+>> >  /* Emulate instruction failed. */
+>> > @@ -538,6 +539,14 @@ struct kvm_run {
+>> >  #define KVM_NOTIFY_CONTEXT_INVALID	(1 << 0)
+>> >  			__u32 flags;
+>> >  		} notify;
+>> > +		/* KVM_EXIT_MEMORY_FAULT */
+>> > +		struct {
+>> > +#define KVM_MEMORY_EXIT_FLAG_PRIVATE	(1 << 0)
+>> > +			__u32 flags;
+>> > +			__u32 padding;
+>> > +			__u64 gpa;
+>> > +			__u64 size;
+>> > +		} memory;
+>> >  		/* Fix the size of the union. */
+>> >  		char padding[256];
+>> >  	};
+>>=20
+>>=20
+>> --=20
+>> Alex Benn=C3=A9e
+
+
+--=20
+Alex Benn=C3=A9e
