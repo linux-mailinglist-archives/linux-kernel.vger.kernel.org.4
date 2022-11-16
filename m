@@ -2,88 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF36B62AFFA
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 01:21:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3D7762AFFE
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 01:25:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230216AbiKPAVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 19:21:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54966 "EHLO
+        id S229790AbiKPAZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 19:25:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbiKPAV1 (ORCPT
+        with ESMTP id S229509AbiKPAZY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 19:21:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E4A22A726;
-        Tue, 15 Nov 2022 16:21:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 15 Nov 2022 19:25:24 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CC028E04;
+        Tue, 15 Nov 2022 16:25:22 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B08BD60E65;
-        Wed, 16 Nov 2022 00:21:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18E42C433D6;
-        Wed, 16 Nov 2022 00:21:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668558086;
-        bh=hwUOc/FCJNlwMvzC8ps/UK4ePUya28SQYKY1V9Te5Ek=;
-        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
-        b=MOyQfLkgUboBUhoax1FFM3j8JxTYQqCIqrLPZHit1GbcD9tr+UUvOcnMfbJ5BKyC9
-         tO+c04mcakviQC+8F5HZ0VV3g2ID9BjaLWOIP7v7yFUuBNcvb9BXMyb+AdgX6Wz6od
-         BSFVgLrdtSUlHPcuQo3F6Lzto1IdFt1WSbUtvzZxIBC2wo/eEpN6jeKUoaaYvD3D3G
-         PsgMVQ+XuPNJj+d4jLjoexPbVY0eNVGYzKsfaCbXjUkCjkXD7eIshMtbuehbyqDxzO
-         yETkmF/5PoApznpM6ZHM/u634RfZZnSQQTlfA6NefZjkfvFIhXNW374Z0O6Ot4wuYB
-         ML9FE+PKKqxCg==
-Received: by mail-oi1-f180.google.com with SMTP id s206so16750514oie.3;
-        Tue, 15 Nov 2022 16:21:26 -0800 (PST)
-X-Gm-Message-State: ANoB5pkXM1AZVXSeRBvy84XG2V6NZjvjNJKwEydBZoQLq/DmYBTY4sgK
-        sZcvbS0wFtjsuFe1y1S9hviZZnUbCGApeHv6mKY=
-X-Google-Smtp-Source: AA0mqf4mdSSC3UAEYBUd+P0Z6luz95XKyNOxCm8IWo4hHdxZbcKdV3WWPlBD8NHhTuekkl7Ac6go5tjCouAf1VDaF70=
-X-Received: by 2002:aca:b9c4:0:b0:34f:63a5:a654 with SMTP id
- j187-20020acab9c4000000b0034f63a5a654mr386110oif.257.1668558085274; Tue, 15
- Nov 2022 16:21:25 -0800 (PST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NBkMx2zQKz4xYV;
+        Wed, 16 Nov 2022 11:25:17 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1668558317;
+        bh=TdQclqV/GxQxmzjoq+seDxRYSbFQNh0oghMNSOC4DRc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=pt9vpjbIZc/Qt7JzGdhuYK9vsoQ7zDkdQJR2fZ6m2BW1JGYO2jVs8bftpEERuhgsi
+         nZeKj3DmSnNX12QR6IhvJVAjLv/0yJCbb1UpzunRJ+OcMBHnAzuwkfrutwb25fPSlz
+         pBfuTXoOidWN4GPdtpsYzWYVSXb9flSr+D3VRsA8QTvqwMQZ+WQ6DHjXdLh17cbAxL
+         znPicgM3hQiNdmHUlAUBce3EMDvBCXtAgQnhmfrc3M19d/rd46LRsBlEnGD3opevs+
+         GQ0gI1zN5h3+oC4Of4U+5YL+EdYdintDMPOOB8v2Ib/bmxjDkXUzFBKh0oHcrigtta
+         mc2KeiDKMT9ag==
+Date:   Wed, 16 Nov 2022 11:25:15 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the drm-misc tree with the
+ drm-misc-fixes tree
+Message-ID: <20221116112515.3f01531b@canb.auug.org.au>
+In-Reply-To: <20221116104752.4c64495a@canb.auug.org.au>
+References: <20221116104752.4c64495a@canb.auug.org.au>
 MIME-Version: 1.0
-Received: by 2002:a05:6839:1a4e:0:0:0:0 with HTTP; Tue, 15 Nov 2022 16:21:24
- -0800 (PST)
-In-Reply-To: <Y3OxronfaPYv9qGP@work>
-References: <Y3OxronfaPYv9qGP@work>
-From:   Namjae Jeon <linkinjeon@kernel.org>
-Date:   Wed, 16 Nov 2022 09:21:24 +0900
-X-Gmail-Original-Message-ID: <CAKYAXd-evHBWbXbfa4tg9LEGVv6f=y9PBbDaBSySmsN0LuCCMQ@mail.gmail.com>
-Message-ID: <CAKYAXd-evHBWbXbfa4tg9LEGVv6f=y9PBbDaBSySmsN0LuCCMQ@mail.gmail.com>
-Subject: Re: [PATCH][next] ksmbd: replace one-element arrays with
- flexible-array members
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     Steve French <sfrench@samba.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Tom Talpey <tom@talpey.com>, linux-cifs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/c7RRuG4mWy0.E5ybru8QUfJ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2022-11-16 0:35 GMT+09:00, Gustavo A. R. Silva <gustavoars@kernel.org>:
-> One-element arrays are deprecated, and we are replacing them with flexible
-> array members instead. So, replace one-element arrays with flexible-array
-> members in multiple structs in fs/ksmbd/smb_common.h and one in
-> fs/ksmbd/smb2pdu.h.
->
-> Important to mention is that doing a build before/after this patch results
-> in no binary output differences.
->
-> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE routines
-> on memcpy() and help us make progress towards globally enabling
-> -fstrict-flex-arrays=3 [1].
->
-> Link: https://github.com/KSPP/linux/issues/242
-> Link: https://github.com/KSPP/linux/issues/79
-> Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html
-> [1]
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-Acked-by: Namjae Jeon <linkinjeon@kernel.org>
+--Sig_/c7RRuG4mWy0.E5ybru8QUfJ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for your patch!
+Hi all,
+
+On Wed, 16 Nov 2022 10:47:52 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>=20
+> Today's linux-next merge of the drm-misc tree got a conflict in:
+>=20
+>   drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+>=20
+> between commit:
+>=20
+>   eca13f3c67b6 ("drm/amdgpu: use the last IB as gang leader v2")
+>=20
+> from the drm-misc-fixes tree and commit:
+>=20
+>   1728baa7e4e6 ("drm/amdgpu: use scheduler dependencies for CS")
+>=20
+> from the drm-misc tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> --=20
+> Cheers,
+> Stephen Rothwell
+>=20
+> diff --cc drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+> index de5cb056c9ad,0528c2b1db6e..000000000000
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+> @@@ -1197,10 -1201,7 +1203,10 @@@ static int amdgpu_cs_sync_rings(struct=
+=20
+>   	}
+>  =20
+>   	for (i =3D 0; i < p->gang_size; ++i) {
+>  +		if (p->jobs[i] =3D=3D leader)
+>  +			continue;
+>  +
+> - 		r =3D amdgpu_sync_clone(&leader->sync, &p->jobs[i]->sync);
+> + 		r =3D amdgpu_sync_push_to_job(&p->sync, p->jobs[i]);
+>   		if (r)
+>   			return r;
+>   	}
+> @@@ -1241,14 -1243,11 +1247,14 @@@ static int amdgpu_cs_submit(struct amdg
+>   	for (i =3D 0; i < p->gang_size; ++i)
+>   		drm_sched_job_arm(&p->jobs[i]->base);
+>  =20
+>  -	for (i =3D 0; i < (p->gang_size - 1); ++i) {
+>  +	for (i =3D 0; i < p->gang_size; ++i) {
+>   		struct dma_fence *fence;
+>  =20
+>  +		if (p->jobs[i] =3D=3D leader)
+>  +			continue;
+>  +
+>   		fence =3D &p->jobs[i]->base.s_fence->scheduled;
+> - 		r =3D amdgpu_sync_fence(&leader->sync, fence);
+> + 		r =3D drm_sched_job_add_dependency(&leader->base, fence);
+>   		if (r)
+>   			goto error_cleanup;
+>   	}
+
+Note that I had to keep the declaration of "leader" in amdgpu_cs_sync_rings=
+().
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/c7RRuG4mWy0.E5ybru8QUfJ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmN0LesACgkQAVBC80lX
+0Gw0/Qf/RUcE8uXqZXS+I8FAM+PzcSOeembp4BtTZRPi66xV7YhCONtlqTTkLTB4
+JAf1fShC67V3+95bUPJBrfzNaH3we2+AztN4H9N98nurIQ1Vau0WOOUW0Qr2mr5m
+AoaoLwLP5CwO7rEsTy1nOj72zjnaZCVnHg3vvX2+JMTGHDkD7hv16Bl8a4WUKxZY
+r0LSw1My//57cEPA/hPu9TzgymxtQotOJUz7oWQWKdnhfOpzA3zJWERd3bNGDsjM
+OyU1+AnmROKEQ7LD1l9gLkhecfrwVfmjbSowJi/cQHOyXqa98j++243LYWl9743h
+twIdwG8fW17DpXxGva20FN0FabG1Rg==
+=3ggI
+-----END PGP SIGNATURE-----
+
+--Sig_/c7RRuG4mWy0.E5ybru8QUfJ--
