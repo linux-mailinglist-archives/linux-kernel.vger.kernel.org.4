@@ -2,162 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C423F62B78E
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 11:18:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB22262B794
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 11:19:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232971AbiKPKR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 05:17:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53814 "EHLO
+        id S233134AbiKPKTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 05:19:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232990AbiKPKR4 (ORCPT
+        with ESMTP id S229826AbiKPKTL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 05:17:56 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC66D120B4;
-        Wed, 16 Nov 2022 02:17:54 -0800 (PST)
-Received: from frapeml100005.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NBzQK2zl8z6H6tk;
-        Wed, 16 Nov 2022 18:13:13 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- frapeml100005.china.huawei.com (7.182.85.132) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 16 Nov 2022 11:17:52 +0100
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 16 Nov
- 2022 10:17:52 +0000
-Date:   Wed, 16 Nov 2022 10:17:51 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Rob Herring <robh+dt@kernel.org>
-CC:     Cosmin Tanislav <demonsingur@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/2] dt-bindings: iio: addac: add AD74115
-Message-ID: <20221116101751.000059ea@Huawei.com>
-In-Reply-To: <CAL_JsqLt6B73XSE8dMHMGuw1N9m1v1xwr3sOEEHonGgLAYya=A@mail.gmail.com>
-References: <20221103094436.2136698-1-demonsingur@gmail.com>
-        <20221103094436.2136698-2-demonsingur@gmail.com>
-        <20221106154634.2286faf3@jic23-huawei>
-        <c01b0e56563b2b6f8ef48ad90977646706a2c933.camel@gmail.com>
-        <20221112154040.54dc5cf2@jic23-huawei>
-        <c54200fb70d638c572a0596a78d956d9f61d89a4.camel@gmail.com>
-        <20221115160724.00007460@Huawei.com>
-        <CAL_JsqLt6B73XSE8dMHMGuw1N9m1v1xwr3sOEEHonGgLAYya=A@mail.gmail.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Wed, 16 Nov 2022 05:19:11 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400CF12A9D;
+        Wed, 16 Nov 2022 02:19:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=fPq7tV/2QrdcGUCtPsVdOGkEWJNB5jMtOAqK/xzSNP8=; b=mvTcBioZ2ydT6zOL0WsZpRiqLF
+        /wNmPcS0dCzbIc8xSMuf4oMHZxucJGQhaR/T9uhRjFOZCDLwEV0Zuq27CGInXJkU6AWm9+BEcAHwY
+        Z4e0QXqjjJ5nAPfZUU+p4EQna7WqevLJawCiETQtneHLHaIsH5e4Ni83er9A0DqZdmhfCvPgd2c30
+        SztwgIhn9KcuN7CHQErI6KbJD5wBii8MmqIp8lw30qV3OjCRZHKf+fBlqzkGLde5LQwQA4dIsx4Rt
+        elgCnfTFqNY26L82GW+9Ye5fCTCJHz+MMqlwt99lsBJbOT8AWUEK1nuizoTiWA1hSfnTnZNNw81BQ
+        Dx91JRnA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ovFVB-001GgG-63; Wed, 16 Nov 2022 10:18:41 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6A303300129;
+        Wed, 16 Nov 2022 11:18:40 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 50A762B5E019F; Wed, 16 Nov 2022 11:18:40 +0100 (CET)
+Date:   Wed, 16 Nov 2022 11:18:40 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Subject: Re: [PATCH v3 27/37] x86/shstk: Introduce routines modifying shstk
+Message-ID: <Y3S5AKhLaU+YuUpQ@hirez.programming.kicks-ass.net>
+References: <20221104223604.29615-1-rick.p.edgecombe@intel.com>
+ <20221104223604.29615-28-rick.p.edgecombe@intel.com>
+ <Y3OfsZI0jFRoUw02@hirez.programming.kicks-ass.net>
+ <be65a66baf94cebf0bc8d726a704238787195837.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <be65a66baf94cebf0bc8d726a704238787195837.camel@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Nov 2022 12:16:41 -0600
-Rob Herring <robh+dt@kernel.org> wrote:
-
-> On Tue, Nov 15, 2022 at 10:07 AM Jonathan Cameron
-> <Jonathan.Cameron@huawei.com> wrote:
-> >
-> > On Tue, 15 Nov 2022 14:43:53 +0200
-> > Cosmin Tanislav <demonsingur@gmail.com> wrote:
-> >  
-> > > On Sat, 2022-11-12 at 15:40 +0000, Jonathan Cameron wrote:  
-> > > > > >  
-> > > > > > > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > > > > > > +    description: |
-> > > > > > > +      Conversion range for ADC conversion 2.
-> > > > > > > +      0 - 0V to 12V
-> > > > > > > +      1 - -12V to +12V
-> > > > > > > +      2 - -2.5V to +2.5V
-> > > > > > > +      3 - -2.5V to 0V
-> > > > > > > +      4 - 0V to 2.5V
-> > > > > > > +      5 - 0V to 0.625V
-> > > > > > > +      6 - -104mV to +104mV
-> > > > > > > +      7 - 0V to 12V  
-> > > > > >
-> > > > > > For a lot of similar cases we handle these numerically to give
-> > > > > > a human readable dts.  Is there a strong reason not to do so here (in mv)
-> > > > > >  
-> > > > >
-> > > > > I used this approach mostly because it maps dirrectly to register values
-> > > > > and because it's easier to parse. dts isn't exactly nice at handling
-> > > > > negative values. I can switch it to mv array if you insist.  
-> > > >
-> > > > We have quite a few existing cases of
-> > > > adi,[output-]range-microvolt so it would be good to copy that style here.
-> > > >  
-> > >
-> > > With this:
-> > >
-> > >   adi,conv2-range-microvolt:
-> > >     description: Conversion range for ADC conversion 2.
-> > >     oneOf:
-> > >       - items:
-> > >           - enum: [-2500000, 0]
-> > >           - const: 2500000
-> > >       - items:
-> > >           - enum: [-12000000, 0]
-> > >           - const: 12000000
-> > >       - items:
-> > >           - const: -2500000
-> > >           - const: 0
-> > >       - items:
-> > >           - const: -104000
-> > >           - const: 104000
-> > >       - items:
-> > >           - const: 0
-> > >           - const: 625000
-> > >
-> > > And this:
-> > >
-> > > adi,conv2-range-microvolt = <(-12000000) 12000000>;
-> > >
-> > > I get this:
-> > >
-> > > Documentation/devicetree/bindings/iio/addac/adi,ad74115.example.dtb:
-> > > addac@0: adi,conv2-range-microvolt: 'oneOf' conditional failed,
-> > > one must be fixed:
-> > >         4282967296 is not one of [-2500000, 0]
-> > >         4282967296 is not one of [-12000000, 0]
-> > >         -2500000 was expected
-> > >         -104000 was expected
-> > >         625000 was expected
-> > >         From schema: Documentation/devicetree/bindings/iio/addac/adi,ad74115.yaml
-> > >
-> > > As I said, negative numbers don't play too nice...  
-> >
-> > From what I recall we just ignore those warnings :)
-> >
-> > Rob, do I remember correctly that there was a plan to make this work longer term?  
+On Tue, Nov 15, 2022 at 11:42:46PM +0000, Edgecombe, Rick P wrote:
+> On Tue, 2022-11-15 at 15:18 +0100, Peter Zijlstra wrote:
+> > On Fri, Nov 04, 2022 at 03:35:54PM -0700, Rick Edgecombe wrote:
+> > 
+> > > +#ifdef CONFIG_X86_USER_SHADOW_STACK
+> > > +static inline int write_user_shstk_64(u64 __user *addr, u64 val)
+> > > +{
+> > > +     asm_volatile_goto("1: wrussq %[val], (%[addr])\n"
+> > > +                       _ASM_EXTABLE(1b, %l[fail])
+> > > +                       :: [addr] "r" (addr), [val] "r" (val)
+> > > +                       :: fail);
+> > > +     return 0;
+> > > +fail:
+> > > +     return -EFAULT;
+> > > +}
+> > > +#endif /* CONFIG_X86_USER_SHADOW_STACK */
+> > 
+> > Why isn't this modelled after put_user() ?
 > 
-> Yes, but handling signed types is working now (since the move to
-> validating dtbs directly).
+> You mean as far as supporting multiple sizes? It just isn't really
+> needed yet. We are only writing single frames. I suppose it might make
+> more sense with the alt shadow stack support, but that is dropped for
+> now.
 > 
-> The issue here is -microvolt is defined as unsigned. IIRC, I had some
-> issue changing it, but I think that was just with the YAML encoding
-> which I intend to remove. I'll give it another look and update the
-> type if there's no issues.
-
-Thanks!
-
-Jonathan
-
+> The other difference here is that WRUSS is a weird instruction that is
+> treated as a user access even if it comes from the kernel mode. So it's
+> doesn't need to stac/clac.
 > 
-> Rob
+> > 
+> > Should you write a 64bit value even if the task receiving a signal is
+> > 32bit ?
+> 
+> 32 bit support was also dropped.
 
+How? Task could start life as 64bit, frob LDT to set up 32bit code
+segment and jump into it and start doing 32bit syscalls, then what?
+
+AFAICT those 32bit syscalls will end up doing SA_IA32_ABI sigframes.
