@@ -2,91 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE15462B77E
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 11:16:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F60B62B77A
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 11:16:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231417AbiKPKQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 05:16:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52286 "EHLO
+        id S233134AbiKPKP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 05:15:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbiKPKQa (ORCPT
+        with ESMTP id S236891AbiKPKPd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 05:16:30 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7B07FFF;
-        Wed, 16 Nov 2022 02:16:29 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id z18so25810455edb.9;
-        Wed, 16 Nov 2022 02:16:29 -0800 (PST)
+        Wed, 16 Nov 2022 05:15:33 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A2E2B276
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:15:27 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id j15so29125757wrq.3
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:15:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Gront7ejJFmCvDtHzemtnvgSrNkCJlQgBPYtxrNuErM=;
-        b=CqYAmlo8LG1ueo1v4Xey3jPaqxwJYlcXnVA7TMlNT6fNjRlVllMaE4Y1LzDdMULOhe
-         0Pbrm6zSbUfK7DZx3YttJHEPpq8NvEfIbM3n56oplvsOQaVdCi0y+RMX3QVTNr5/gg5Q
-         ywVHzEnzHbf8DvwUUPTKYG2OcH+uY7Hdp5/9O6rSXnSKCr93Q9M/+jJuTxsTt7CTBE5f
-         gijZbZriBLuDXKOZ6MGgZevTV1qTTt6QBalQhQYHuyRcIsN7HAzgNH4z05Z6i9XnLZux
-         pJeauYqGFeNKKwn29qYYw0UX6EFG6vA4UkFTRWBZ1f422oYVUd8rpAmCR3TiwGcGQEoq
-         qNAA==
+        d=linaro.org; s=google;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JFNBqUbq7QtJBrTFvdvHZDXMUJZQ6lA9hFG9lR0t9+Q=;
+        b=EronlhrHxpZss+/Nij6KcTtyp8A6x7b6YP/pXKReUcgy4hEcDUH2YkNvOH4YPIInVa
+         bcMaf87KToLk8RI8N9e4YCVGWkcotshZZjYgHvb5Qs1ABk3gXGbGNuxkWGKsHr2F/yAv
+         vQ8HVsYfTnfRUYxp5C77jmE7w+WddGZwUP3NI+HI2STQWv1DtJgDPZhAZHLGVNtLlxiF
+         B7klhlWB8ZxhqstTZr2hY3mslv1kipyOeaXiHVlU5Rn5Fmbx1Rky/Q7lTzLYCQ7oWFkx
+         T3z9rIlPcNiDyfaWTKyE9q9GTO6JUhtTEdqe8eY5A39Fy05eFUMzJ0kX0gJzLFdPqaNE
+         5zYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Gront7ejJFmCvDtHzemtnvgSrNkCJlQgBPYtxrNuErM=;
-        b=8IkqFo83t+1qi33ziaji6jjzIHwA6sf5wE3wV9HGVSIJ+uNvgHqfZijaCxt6pP3/ej
-         O/FJBczKb5FMU/JffeiCxb2+K6jS+EuWWWqPjgLi0CFDWHa3DNlx2KQPy2CORd2AYAN5
-         M3L4O4WNqqX+DyR2D7LWOCtyTfkaJfYcyVpTbmRKdAHcIbTtVTKIRI4h7Vgiib0AHLNn
-         VcvpGHXT8kmjzo9rkOswet4VSJwmRZKAxMtYeA/9wYVem4HiBJJJImwXT4Lu1fBEn/s6
-         YBuIn+NFJ8Jb6s6o0KXfPjMg8TI2Xkl1cnIEmbsYas7QiMbB0XgKMA8yjUovg1F+ZWXb
-         weww==
-X-Gm-Message-State: ANoB5pmc4d8VcEgxfsa/lD3tw83mbxpZPaWB+CP2uvfEjD3SBhUIlaMe
-        wyMGVUnGFhS3yfF+oYxt3iQNwoVG/RI=
-X-Google-Smtp-Source: AA0mqf7EVhi/8vWrRzeKojerj0WOo9vffdXq2qvZyaOpaigkUPmD6gcx++ZyuVweWBj+pLYVU4JyGw==
-X-Received: by 2002:a05:6402:414e:b0:463:1a0c:4dd1 with SMTP id x14-20020a056402414e00b004631a0c4dd1mr18860162eda.137.1668593788078;
-        Wed, 16 Nov 2022 02:16:28 -0800 (PST)
-Received: from ?IPV6:2620:10d:c096:310::2eef? ([2620:10d:c092:600::2:79d5])
-        by smtp.gmail.com with ESMTPSA id u1-20020a1709064ac100b0078d424e8c09sm6597039ejt.77.2022.11.16.02.16.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 02:16:27 -0800 (PST)
-Message-ID: <63a47e31-6d30-6dad-7b8d-1f14a7bd8fd5@gmail.com>
-Date:   Wed, 16 Nov 2022 10:14:55 +0000
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JFNBqUbq7QtJBrTFvdvHZDXMUJZQ6lA9hFG9lR0t9+Q=;
+        b=6T2CST7gypTpERBf9slWWydAgv+ETzrU5KXPAzBHXm7OyyOkTRPyum1Qx3wgLV7yRq
+         t3kOkJABG6ydUibZC43sjKDVrtiAeivPMfiJUmOVZHf1YTsJ+OuiW9VKZlHm3NIkr1Ub
+         WCe7xMp1+zTTD4igYowne575773YdUP9g6a+hlqd50v/E7YGhlstwzxdPiA07P6NRINJ
+         hROwbaWAUFxxQ1XFgo0N9gcVDfKidDSauyrQIiertwzGV52RkOWy/SNzKha+YjQBeFtD
+         vrgbRSLAJmQCXtVTpbmTunCx80a/FvPxEc5WXqaT8rHr6mHEQTyag6K6HnCnBje2RzxO
+         PErA==
+X-Gm-Message-State: ANoB5pmxt1oSNTBjaqeHENRrPUtpn1lrhpOV1AwsLS+gXQwIU3hBXUL2
+        cuxZy6Ba0qREeicNXz34zxE3lQ==
+X-Google-Smtp-Source: AA0mqf7lEtfuHhZttiInCJa3i7vFKG84cjr+0N93WM/sR9X8A3fops/U1IJS2YSJlTTFA38xzfW7qw==
+X-Received: by 2002:adf:dc09:0:b0:236:7180:6ccc with SMTP id t9-20020adfdc09000000b0023671806cccmr13581889wri.573.1668593726318;
+        Wed, 16 Nov 2022 02:15:26 -0800 (PST)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id e17-20020a05600c4e5100b003cfa81e2eb4sm1718366wmq.38.2022.11.16.02.15.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 02:15:25 -0800 (PST)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Date:   Wed, 16 Nov 2022 11:15:24 +0100
+Subject: [PATCH] dt-bindings: mmc: sdhci-msm: Document the SM8550 compatible
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v1 2/2] io_uring: uapi: Don't use a zero-size array
-Content-Language: en-US
-To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>, Jens Axboe <axboe@kernel.dk>
-Cc:     Stefan Metzmacher <metze@samba.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        io-uring Mailing List <io-uring@vger.kernel.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
-References: <20221115212614.1308132-1-ammar.faizi@intel.com>
- <20221115212614.1308132-3-ammar.faizi@intel.com>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20221115212614.1308132-3-ammar.faizi@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20221114-narmstrong-sm8550-upstream-sdhci-v1-0-797864a30e71@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Abel Vesa <abel.vesa@linaro.org>
+X-Mailer: b4 0.10.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/15/22 21:29, Ammar Faizi wrote:
-> From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-> 
-> Don't use a zero-size array because it doesn't allow the user to
-> compile an app that uses liburing with the `-pedantic-errors` flag:
+From: Abel Vesa <abel.vesa@linaro.org>
 
-Ammar, I'd strongly encourage you to at least compile your
-patches or even better actually test them. There is an explicit
-BUILD_BUG_ON() violated by this change.
+Document the compatible for SDHCI on SM8550.
 
+Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+To: Ulf Hansson <ulf.hansson@linaro.org>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+To: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc: linux-mmc@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Abel Vesa <abel.vesa@linaro.org>
+---
+ Documentation/devicetree/bindings/mmc/sdhci-msm.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml b/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
+index fc8a6b345d97..f0b7e6d0ecbf 100644
+--- a/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
++++ b/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
+@@ -49,6 +49,7 @@ properties:
+               - qcom,sm8150-sdhci
+               - qcom,sm8250-sdhci
+               - qcom,sm8450-sdhci
++              - qcom,sm8550-sdhci
+           - const: qcom,sdhci-msm-v5 # for sdcc version 5.0
+ 
+   reg:
+
+---
+base-commit: 3c1f24109dfc4fb1a3730ed237e50183c6bb26b3
+change-id: 20221114-narmstrong-sm8550-upstream-sdhci-1ae5ac4924e5
+
+Best regards,
 -- 
-Pavel Begunkov
+Neil Armstrong <neil.armstrong@linaro.org>
