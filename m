@@ -2,212 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D79662B9EF
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 11:48:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C771762B9F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 11:48:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238960AbiKPKs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 05:48:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59078 "EHLO
+        id S233764AbiKPKsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 05:48:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238974AbiKPKsF (ORCPT
+        with ESMTP id S238992AbiKPKsH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 05:48:05 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5058848772;
-        Wed, 16 Nov 2022 02:35:42 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id bj12so42926905ejb.13;
-        Wed, 16 Nov 2022 02:35:42 -0800 (PST)
+        Wed, 16 Nov 2022 05:48:07 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2131.outbound.protection.outlook.com [40.107.92.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C593C49B70;
+        Wed, 16 Nov 2022 02:35:49 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nNZLJOV1FLRCgdAPNvMdOczNizM6nA9PKS7ZiYwEBxjvfOzy1zlxFWJw+1XaaPUUT6iTOB/QzJzBTwaXFzGujMjt1lVUOIu3fH/0pLBkg6LF/NFQodoSLmNsCD6hu0IXcTn82X3j2TcQIPSEo6/goZeevyRXUkiW145AAIVpRP2PAZapksdOTDM+D53EN8z4KZMbwm80wxiB/kb5mDXDB7JS+1tiX8UgFlDNknJMT8a0GWEpCEeI7UQBSwa/wvkWOs/VWJUWfgQGwnUFZZH1ATva8zsg9OhnuUdeqVocMy5j5lsZdPOw3bbF5qj4kKAiy/mUfsBviCu9MuUDzXW/PQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0YoPxDSqpCwxopfyCL/FER4Xzrfp12u06/5AOevuC0A=;
+ b=Dh7es1UAaurlClCpeFSGwNNPqejKRn7cPTPun/8CXfv5zodkA9uCjTkxKwMTndu7VYC9Y1P4BtUEs252k1GlXkTTZTYRJW+PQgs9pUcnmIQzkMOD2MQ8ZXEhXkShE8deyHHMgoVa+qQaF2qbehXWuN7+aHwx4eqg7PL4Mdmgd4w1Io+RYTueejECm2yP0lqC83zN0G2HyvSrkg7ExH2v3ZXtsYGIYKuYcR5JkOzJkErI77CBLsZHHoW6Bd+MWg9SuGd2GM0jIPMUJ1Rc3WfCkNvie6+VL6mrN4Qg+Fxd2yJ2oJ9kHZaI9uUFPwXiJNdZ6OXkgpllQvVBKl/z+b3YCw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZfF5H7OlX+Ehk6ts6kc2Re3wIjyOZLFN9LUYQD5Q15M=;
-        b=U/uD1d/2Wjuu25fimzOIP49QGtcRNDST/oFYv+Z8ZhiJoE2vQrSrFxiLacjUKtAngb
-         SiGHZ8uzIl4O7IzY2x3J0UfFPhEG3aQY6H3YKDeeEy1U25zjaVR5gynDxWqvcQs3ZkFR
-         t8a3gygO+JVcD2x6p1xBgCzdYKH9snze/KSz2fOceABefkYcnnIPpyrjJI+wI+71cRMH
-         cYeAN9ZaSUN9yPm0DLwjoCxDoq1mZ/Epj+Q2K2LI2H4VjHg/ViNRuo2hWk6BTUWajeE5
-         LOvDsR9kwTqcxmEE5sytC0pHxhgEsNJ6GbUqtwZ5cmHd4xoZzxYuTXinbXEOqU/tiJ95
-         BtoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZfF5H7OlX+Ehk6ts6kc2Re3wIjyOZLFN9LUYQD5Q15M=;
-        b=o5M7zynh3RADkjMWl2W7IiQ8KL1ZE+3nGm/h2FfsLLdpcc3pmu/I9P7iQSg4LW0Tft
-         GhK7A1zQSWF69vlkJLw30VQ3bAdk/YiUyoxQWoBnegcC1ZMfsg68zV+JcuRnH01ko9U1
-         VpfK3Nj7Tpf1Kzwdb3UuIY+/yDD4Fs4qF7pKnj84uLbCon3i52VZzj4MH/9loHqSVX5m
-         Zki1Msl8M1O6/3c3CP0cySNCsRj39r9GTFVOgQszoFDxZv4HLQvuThq/SkQXlpiieX2Q
-         +buUlLin9ccHK89kbeLSy7PFOXVp11lwOUGHgLSFQ7sxfeE1Esr4p2/WDWtl+oP/4mnp
-         vpMA==
-X-Gm-Message-State: ANoB5pnGvde0YheynGbQyVpGXbXjST3SP87aV2WnYNGw3w5/tU15fJBT
-        KAlkL7o//lDBHNxGNhPOJghMI3zxZT0=
-X-Google-Smtp-Source: AA0mqf6kSY6gPS6yfpKaa5qoUDtPjmZS/yWQjgb6foff2z7DWFURXJ88wzapywoRgciG97yTxRRI9w==
-X-Received: by 2002:a17:907:2350:b0:78d:9c2f:bf78 with SMTP id we16-20020a170907235000b0078d9c2fbf78mr17153920ejb.594.1668594940541;
-        Wed, 16 Nov 2022 02:35:40 -0800 (PST)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id b14-20020aa7dc0e000000b00462e1d8e914sm7241163edu.68.2022.11.16.02.35.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 02:35:39 -0800 (PST)
-Date:   Wed, 16 Nov 2022 11:35:37 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Brian Masney <bmasney@redhat.com>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, psodagud@quicinc.com,
-        quic_shazhuss@quicinc.com, quic_ppareek@quicinc.com,
-        ahalaney@redhat.com, echanude@redhat.com,
-        nicolas.dechesne@linaro.org
-Subject: Re: [PATCH RFC] gpiolib: ensure that fwnode is properly set
-Message-ID: <Y3S8+cZO379Oiyce@orome>
-References: <20221114202943.2389489-1-bmasney@redhat.com>
- <Y3S5sZIVi2DPua0p@orome>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="cAHYK1Crg6nEop4T"
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0YoPxDSqpCwxopfyCL/FER4Xzrfp12u06/5AOevuC0A=;
+ b=rpjK43lTPMWZFKLVb4ijae80WLkeE2sUpGHbBOlWntSh9T/oxj3Zd8bO1yOkdfon184ib+xYMu0PkN80o6uvGcbuphuxwbADA+gdCmQfyRZ8hEWle8cwEeAzK+Y1EUGYDY7qRYwhaYV8pDiyrfSRxX0+zADdCT5cKpbbYxAFdwc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by MN2PR13MB3742.namprd13.prod.outlook.com (2603:10b6:208:1e7::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.18; Wed, 16 Nov
+ 2022 10:35:47 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::483b:9e84:fadc:da30]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::483b:9e84:fadc:da30%8]) with mapi id 15.20.5813.018; Wed, 16 Nov 2022
+ 10:35:47 +0000
+Date:   Wed, 16 Nov 2022 11:35:40 +0100
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Denis Arefev <arefev@swemel.ru>
+Cc:     Simon Horman <simon.horman@netronome.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>, oss-drivers@netronome.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lvc-patchest@linuxtesting.org, trufanov@swemel.ru, vfh@swemel.ru,
+        Yinjun Zhang <yinjun.zhang@corigine.com>
+Subject: Re: [PATCH v2] lag_conf: Added pointer check and continue
+Message-ID: <Y3S8/K40fBP05fAT@corigine.com>
+References: <20221116081336.83373-1-arefev@swemel.ru>
+ <Y3Sv6oZgi3k5VaLz@corigine.com>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y3S5sZIVi2DPua0p@orome>
-User-Agent: Mutt/2.2.8 (2022-11-05)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y3Sv6oZgi3k5VaLz@corigine.com>
+X-ClientProxiedBy: AM0PR02CA0107.eurprd02.prod.outlook.com
+ (2603:10a6:208:154::48) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|MN2PR13MB3742:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9913987b-610c-448e-69e7-08dac7be5219
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: YahLsPPPID2QxpzJ80dMTyGpd1aUo3Fg4yg1yE6du+osSovT8AVXJAMXRL3bJhsAbKQP0HEHd1cgHrrc5Nruqs0GH61+8+0aRTX3aR1pXBJcfrIeZ0sUJHFIYKEnWrzXBxSST7leYboo3m5G1QHdls2AbYNXxLrgKqFI3TNM4EGxLphRm9kOS57DPl2H4+HGgEkNX1fqxxK41cnSunREU23k+iF19pRBixxY/LFZLAZrpIURo867VP/ZhB3I+k3HM4UxnDwT6XQEcuAna93SzhIPZ+yLd9GOLNrP/wSdnWpHhQH/NRBkZFJMw7//6ZKFS0yUtOl4OyoKo39xVWg2DQK29mGjk2dN4zK1I0/ZFqG06qAH5kdI4I8fqLXRAdTsN+KcIXwDwqemSk7qqkWusNXav22wr//rTehCZRNfFTQP2+OQUP7Rst+IJ0Sipx9oxLRoEk8jC5kB/ywgQQ7Gz49o7TTbKQcyeQeFy6DI7XI3fVP56f5hBYJACWDYw+BUc4Y8XMyB7r5fMchQDR6B4k4J8e1Sma+9D3YLdSVzT0NvhzxONYbP0jppw6z07+44c1tU8ckKsCQPM7wLMuYiuqzfqRAQ65HfYcDKskg5Cx264S+ElYRbZ4G+J5s+dmCap2ckOHKFUlxmWjCqt8plZZvcRK0RBZPBuG5AaKzHbVBLQ68m2pEZNxCzgKBwsnXE7dksWw0NLAFhon0IiPAC/g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(39840400004)(396003)(376002)(346002)(366004)(451199015)(6666004)(2616005)(6506007)(6512007)(36756003)(107886003)(6916009)(478600001)(186003)(6486002)(83380400001)(8936002)(86362001)(54906003)(44832011)(2906002)(316002)(66946007)(5660300002)(38100700002)(7416002)(8676002)(4326008)(41300700001)(66476007)(66556008);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bWCtJsEK5HHWI9ejUaYavQNFUHTheJtQXYgIvXMiLrHxGJZa7tkV+Hv+Yf2n?=
+ =?us-ascii?Q?xl0AJMyZszV3DizgU4sb0P1lgXm554jqosNIrPC2bk0TjZTZhVhg7fxSS1nV?=
+ =?us-ascii?Q?SYzzRNRvW2tmkEp0X9Vgs6S9X+r5+4AVdUfMYOwZ08UtBpYu524GyDTuyUNs?=
+ =?us-ascii?Q?1G3FiiOnWK3EF4AFy5M7TvGnOSOxag+lDR0n6HmQVwQ+I5PNph8D8AErzvjZ?=
+ =?us-ascii?Q?nzC9is1lfOQ83rPGm/VliZu6QyJ6sK7tB9Wbo4FlVghmLaWP2121JDPP4zMi?=
+ =?us-ascii?Q?pnEoxNbfJcK9FSb2hVkX5XCWr9x4WdZZN7z3eMXRTpZwfktwgBNeFieNJV3v?=
+ =?us-ascii?Q?ZKTmFxLWD9T8as2WOinajSjapZcsXRg6pnuJNrp9KiCwMk0vbT+BtUUaz3yO?=
+ =?us-ascii?Q?erWPYKqwoS8Fs12+kry9tQe1kTCl12bNNkcAwQVxCAzkhkQvDoxtKkPAxvCu?=
+ =?us-ascii?Q?ea46AAB5pnx9XFXSjeqpnQFuN2tAi/soL6jQN0NuWNc2gYrCdxJnvNF8/wgB?=
+ =?us-ascii?Q?xT3lbYAjuCasMdeNBEO5LTJDQ1P2KiKBgkUZZtJAcTMEKYgajEeqg7zxjDDg?=
+ =?us-ascii?Q?6vFVxXdP7Z3V3RkQz6S9mROTIhaO8F9O0Z4a5chOce37vAprJDCEmKGiK5t1?=
+ =?us-ascii?Q?UwXnkP9U8Az860GaofBjeFTQGwZqw0NobzQahpz+fOxTMREyUfeCrplOOsGN?=
+ =?us-ascii?Q?WpPBVKuRBG+Gz4k3lSY+7otM1UAMeHMoyWYmv/zeWBJGv8U9F6/pZXerGN9v?=
+ =?us-ascii?Q?XZqoUjpMUDk8ENei/9X+9LwETOzAcoTXGiMl43F/SKvqMk28gS8S1H41QNHP?=
+ =?us-ascii?Q?wCARWT08c7R4F4YxpIwyWx2hGeFK0rXO3d2lTT/FqDYrrjAmD5Je516L4jDD?=
+ =?us-ascii?Q?Wv1Mwd4AejFciH5x3KplHJn7FJWGiBiUPV0ivZpxRg7bvxfALb6UvkNq3HK7?=
+ =?us-ascii?Q?Vc2QtWUYUD8/gE6Nd9KaJLymxQooMrQjCR3KZSm73u+CS4HGq00+7lEx/puQ?=
+ =?us-ascii?Q?O92uY91tTSPAwxqgnKAd1vLYxO38W9asKFUZUEWG413S69we78Qc74aaPQdC?=
+ =?us-ascii?Q?FjxrYLEVJPxJLHCWlIqJW4iKARWMNxi5fs/rIwywtX+NO6GMrfydKIxOCSXr?=
+ =?us-ascii?Q?XcHVU7SZP4GiJO+W0hhs3MI8W4TXN5kTmhYbZ1xb/nvTkdkHRifYMQddmzci?=
+ =?us-ascii?Q?S75WwIbQU1LYCp38fFyCxxsVe+nmejBtSlFDXylbBZ5r6qdx0DQzhoc9+Ndf?=
+ =?us-ascii?Q?UTMBOy0DTJ971y0RH65awIluL77Q8jZLPNnrLHdref+YsMQ7gGXTFj/TeRRT?=
+ =?us-ascii?Q?pojE9/yFccYr5qCtO2wBisq2OpWsd7ekTAWKIZy39f7UERfOo4JTPPeiiiYR?=
+ =?us-ascii?Q?MgESRGLPOmNMBxDvZtMTM6erYB2Uav4X5fR0UZjuV6jBuBPL7fR+WiHZx7Ns?=
+ =?us-ascii?Q?Tib21nHb8OHwR1q013RuzfG7/cmZL9EOmoAK4QbWZIN6JQCtumATgWNexqxp?=
+ =?us-ascii?Q?imlbkWIXtIlhufsxAFBpa/l8LZfe0gr7IetS/ZHhwmPBr5NKby8F/2yXh12t?=
+ =?us-ascii?Q?a2OUNMv9AXKac/SJYRyvkACW5TEDUbbRqstZyEnc+7COdOGzlbG5MJk3zxMJ?=
+ =?us-ascii?Q?lFYwpkgx7yrn7/gszHKgh/N08KVubGbdZ1QD2ydTKXM4dWyM9Kq9i3jw4pV4?=
+ =?us-ascii?Q?ENTX/w=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9913987b-610c-448e-69e7-08dac7be5219
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Nov 2022 10:35:47.6923
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: StK5YWx+haQYw4qD0nQT5RcBKoqLgCxddTt4tl/YaISH2biVZxSdqtq5YvGAMD4f7xpa0xLlDDvQ4lo33uOjYukkaRQVuBHrsaGWtnjd5w8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR13MB3742
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Nov 16, 2022 at 10:40:00AM +0100, Simon Horman wrote:
+> On Wed, Nov 16, 2022 at 11:13:36AM +0300, Denis Arefev wrote:
+> > Return value of a function 'kmalloc_array' is dereferenced at
+> > lag_conf.c:347 without checking for null,
+> > but it is usually checked for this function.
+> > 
+> > Found by Linux Verification Center (linuxtesting.org) with SVACE.
+> > 
+> > Signed-off-by: Denis Arefev <arefev@swemel.ru>
+> 
+> Thanks Denis,
+> 
+> I'll let me colleague Yinjun review the functional change,
+> although, based on his earlier feedback, it does look good to me.
 
---cAHYK1Crg6nEop4T
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I confirmed with Yinjun that he is happy with the patch,
+other than the comments that I made.
 
-On Wed, Nov 16, 2022 at 11:21:37AM +0100, Thierry Reding wrote:
-> On Mon, Nov 14, 2022 at 03:29:43PM -0500, Brian Masney wrote:
-> > Note that this is a RFC patch and not meant to be merged. I looked into
-> > a problem with linux-next-20221110 on the Qualcomm SA8540P automotive
-> > board (sc8280xp) where the UFS host controller would fail to probe due
-> > to repeated probe deferrals when trying to get reset-gpios via
-> > devm_gpiod_get_optional().
-> >=20
-> > of_get_named_gpiod_flags() returns -EPROBE_DEFER, which is caused by
-> > of_gpiochip_match_node_and_xlate() returning 0 since the of_xlate funct=
-ion
-> > pointer is not set for the qcom,sc8280xp-tlmm pinctrl driver. The
-> > pinctrl driver doesn't define one, so of_gpiochip_add() should
-> > automatically setup of_gpio_simple_xlate() on it's behalf. This doesn't
-> > happen since the fwnode member on the struct gpiochip is set to null
-> > when of_gpiochip_add() is called. Let's work around this by ensuring
-> > that it's set if available.
-> >=20
-> > Note that this broke sometime within the last few weeks within
-> > linux-next and I haven't bisected this. I'm posting this in the hopes
-> > that someone may know offhand which patch(es) may have broken this.
-> >=20
-> > Signed-off-by: Brian Masney <bmasney@redhat.com>
-> > ---
-> >  drivers/gpio/gpiolib.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-> > index 11fb7ec883e9..8bec66008869 100644
-> > --- a/drivers/gpio/gpiolib.c
-> > +++ b/drivers/gpio/gpiolib.c
-> > @@ -678,7 +678,7 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc=
-, void *data,
-> >  	 * Assign fwnode depending on the result of the previous calls,
-> >  	 * if none of them succeed, assign it to the parent's one.
-> >  	 */
-> > -	gdev->dev.fwnode =3D dev_fwnode(&gdev->dev) ?: fwnode;
-> > +	gc->fwnode =3D gdev->dev.fwnode =3D dev_fwnode(&gdev->dev) ?: fwnode;
->=20
-> This doesn't look right to me. Looking at the documentation of
-> gc->fwnode and how it is used, the purpose of this is to allow
-> explicitly overriding the fwnode that the GPIO chip will use.
->=20
-> So really this should not be used beyond the initial registration
-> in gpiochip_add_data_with_key(). If the above patch fixes anything,
-> then I suspect somebody is using gc->fwnode outside of this
-> registration.
->=20
-> Looking at gpiolib, the only remaining place that seems to do this is
-> the gpio-reserved-ranges handling code, in which case, the below on top
-> of my initial patch might fix that. That might explain why MSM is still
-> seeing issues.
->=20
-> --- >8 ---
-> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-> index 11fb7ec883e9..d692ad5c5a27 100644
-> --- a/drivers/gpio/gpiolib.c
-> +++ b/drivers/gpio/gpiolib.c
-> @@ -447,10 +447,11 @@ static unsigned long *gpiochip_allocate_mask(struct=
- gpio_chip *gc)
-> =20
->  static unsigned int gpiochip_count_reserved_ranges(struct gpio_chip *gc)
->  {
-> +	struct fwnode_handle *fwnode =3D dev_fwnode(&gc->gpiodev->dev);
->  	int size;
-> =20
->  	/* Format is "start, count, ..." */
-> -	size =3D fwnode_property_count_u32(gc->fwnode, "gpio-reserved-ranges");
-> +	size =3D fwnode_property_count_u32(fwnode, "gpio-reserved-ranges");
->  	if (size > 0 && size % 2 =3D=3D 0)
->  		return size;
-> =20
-> @@ -471,6 +472,7 @@ static int gpiochip_alloc_valid_mask(struct gpio_chip=
- *gc)
-> =20
->  static int gpiochip_apply_reserved_ranges(struct gpio_chip *gc)
->  {
-> +	struct fwnode_handle *fwnode =3D dev_fwnode(&gc->gpiodev->dev);
->  	unsigned int size;
->  	u32 *ranges;
->  	int ret;
-> @@ -483,7 +485,7 @@ static int gpiochip_apply_reserved_ranges(struct gpio=
-_chip *gc)
->  	if (!ranges)
->  		return -ENOMEM;
-> =20
-> -	ret =3D fwnode_property_read_u32_array(gc->fwnode, "gpio-reserved-range=
-s", ranges, size);
-> +	ret =3D fwnode_property_read_u32_array(fwnode, "gpio-reserved-ranges", =
-ranges, size);
->  	if (ret) {
->  		kfree(ranges);
->  		return ret;
-> --- >8 ---
->=20
-> I don't have a good idea about the Lenovo X13 issue, though, but I
-> haven't looked at ACPI at all since I don't have any hardware to test
-> on.
-
-Ah... looks like that device was actually a Thinkpad X13*s*, which is
-based on a Qualcomm chip, so maybe this patch fixes that one, too. It
-does use gpio-reserved-ranges, so seems at least likely.
-
-Thierry
-
---cAHYK1Crg6nEop4T
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmN0vPgACgkQ3SOs138+
-s6Gglw/+KVnw7BuUhbeGDzN3JVl64OYcwz1syDvc/+w6J27C0o2R06hPOjRPMtof
-hiOQPAaTdtUqDjM5tsi77Cslhwt7wOVwLOLvJ0XzA2agearmoIv+M1+De2tbIpmL
-726JCNYZhgDBjy0PrRvDK1y5/nA6lc5+U9rRIz1p0SNx414SIxUspu5IwnbuyABj
-8hB9V9LzVOwDE5wr88Rp7NrrKYoMbmsY4DlzFY8pa8nmhDtr1gxXtFVY3tqDEG21
-qc9BlegBlAC1e/TulKQcbwOJNASrNZaAyZNR/99YXIWg0brJjP4pCimkiuicPkGk
-fUYggbEgiBoIfb+U5XRHxYfgiugchH0opKzhuixdiiL5lzD0RgWtCYatCsofOuYo
-q8qcJ9V4Ah+c6LOM/Y2yNz8sr/NqBV7DWqesEm0PdCovSHsnLxrHYe1qbktiiKof
-nBCQe2zoHGurMQ1K+O4awbzFnlgRw9XA4faG3hgfzrkLepmZcDC0nApXBFVvFfl+
-rdn89/ZShjiWdkUwrE6mFg+dFWSbUICGb9HluOYrSvnlA/als7ovOtSpW3vrkiEC
-GO/GNELpm+LcyMOEiHFr3ZcDM5pSTk/G3qCav55YNgi+KUISTKcGGWjpc28sDqQY
-s7P0W/nKgQGBZq7Y9Az9iNfzmcrmy3ibMGAZ4m6fnVR/7CEawBA=
-=eSq5
------END PGP SIGNATURE-----
-
---cAHYK1Crg6nEop4T--
+> From my side I have two nits:
+> 
+> 1. I think the patch prefix should be 'nfp: flower:'
+>    i.e., the patch subject should be more like
+>    [PATCH v2] nfp: flower: handle allocation failure in LAG delayed work
+> 
+> 2. Inline, below.
+> 
+> Kind regards,
+> Simon
+> 
+> > diff --git a/drivers/net/ethernet/netronome/nfp/flower/lag_conf.c b/drivers/net/ethernet/netronome/nfp/flower/lag_conf.c
+> > index 63907aeb3884..1aaec4cb9f55 100644
+> > --- a/drivers/net/ethernet/netronome/nfp/flower/lag_conf.c
+> > +++ b/drivers/net/ethernet/netronome/nfp/flower/lag_conf.c
+> > @@ -276,7 +276,7 @@ static void nfp_fl_lag_do_work(struct work_struct *work)
+> > 
+> >         mutex_lock(&lag->lock);
+> >         list_for_each_entry_safe(entry, storage, &lag->group_list, list) {
+> > -               struct net_device *iter_netdev, **acti_netdevs;
+> > +               struct net_device *iter_netdev, **acti_netdevs = NULL;
+> 
+> 2. I don't think it is necessary (or therefore desirable)
+>    to initialise acti_netdevs to NULL.
+>    As far as I can tell the variable is already always
+>    set before being used.
+> 
+> ...
