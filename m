@@ -2,187 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8797162C277
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 16:26:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A82962C278
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 16:26:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234589AbiKPP0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 10:26:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44778 "EHLO
+        id S233931AbiKPP0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 10:26:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233931AbiKPP0V (ORCPT
+        with ESMTP id S231403AbiKPP0p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 10:26:21 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6050EC15;
-        Wed, 16 Nov 2022 07:26:20 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 11FA21F94F;
-        Wed, 16 Nov 2022 15:26:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1668612379; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9rMKo/JLYpljrXCSJYnweC/kZn4pkWFWvqrqNAmzLd0=;
-        b=3bw7D/pSt8z8ktzmPBZSavEE8cSAViw3/kVth0baRs3jo0f/J3skWo2cDGRYX81B9h2ri4
-        n4LXQ8VOuEn+dYwWgLEsDQ9cifGfzrf46zekSrxj6kpTrJgvYnT4c5gHl1a0Cv6PU5MzlP
-        dTjTsiCwyx4F0TkEeiH9whq1gVA2fZM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1668612379;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9rMKo/JLYpljrXCSJYnweC/kZn4pkWFWvqrqNAmzLd0=;
-        b=CtwP63Z0+B7JNsNu7Bx8J+0veMszeSxR92VuoaisnDOprwB8NVtsIKaUqaW2AmIEB+4zhY
-        B/hY+hVZEKHDC+BQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E954813480;
-        Wed, 16 Nov 2022 15:26:18 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id tHj0OBoBdWPkbQAAMHmgww
-        (envelope-from <jack@suse.cz>); Wed, 16 Nov 2022 15:26:18 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 26FCBA0709; Wed, 16 Nov 2022 16:26:18 +0100 (CET)
-Date:   Wed, 16 Nov 2022 16:26:18 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Baokun Li <libaokun1@huawei.com>
-Cc:     Jan Kara <jack@suse.cz>, linux-ext4@vger.kernel.org, tytso@mit.edu,
-        adilger.kernel@dilger.ca, ritesh.list@gmail.com,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yukuai3@huawei.com
-Subject: Re: [PATCH v2 2/3] ext4: fix corrupt backup group descriptors after
- online resize
-Message-ID: <20221116152618.hznqamogp2gwpqtp@quack3>
-References: <20221116072802.526990-1-libaokun1@huawei.com>
- <20221116072802.526990-3-libaokun1@huawei.com>
- <20221116114929.wmawudyczia55gpe@quack3>
- <85db0e08-2413-5b6e-1477-47e369cb9f8a@huawei.com>
+        Wed, 16 Nov 2022 10:26:45 -0500
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66923218;
+        Wed, 16 Nov 2022 07:26:43 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0VUyHU7C_1668612396;
+Received: from 30.39.64.129(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VUyHU7C_1668612396)
+          by smtp.aliyun-inc.com;
+          Wed, 16 Nov 2022 23:26:38 +0800
+Message-ID: <d334a33c-b171-8381-3f75-e47392b6cba5@linux.alibaba.com>
+Date:   Wed, 16 Nov 2022 23:26:36 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <85db0e08-2413-5b6e-1477-47e369cb9f8a@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.1
+Subject: Re: [PATCH RFC 0/6] Add metrics for neoverse-n2
+To:     James Clark <james.clark@arm.com>,
+        nick Forrington <Nick.Forrington@arm.com>,
+        Jumana MP <Jumana.MP@arm.com>,
+        John Garry <john.garry@huawei.com>
+Cc:     Will Deacon <will@kernel.org>, Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andrew Kilroy <andrew.kilroy@arm.com>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Zhuo Song <zhuo.song@linux.alibaba.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1667214694-89839-1-git-send-email-renyu.zj@linux.alibaba.com>
+ <d6553087-9157-21e8-6980-31bc8e44f066@arm.com>
+From:   Jing Zhang <renyu.zj@linux.alibaba.com>
+In-Reply-To: <d6553087-9157-21e8-6980-31bc8e44f066@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 16-11-22 21:14:16, Baokun Li wrote:
-> On 2022/11/16 19:49, Jan Kara wrote:
-> > On Wed 16-11-22 15:28:01, Baokun Li wrote:
-> > > In commit 9a8c5b0d0615 ("ext4: update the backup superblock's at the end
-> > > of the online resize"), it is assumed that update_backups() only updates
-> > > backup superblocks, so each b_data is treated as a backupsuper block to
-> > > update its s_block_group_nr and s_checksum. However, update_backups()
-> > > also updates the backup group descriptors, which causes the backup group
-> > > descriptors to be corrupted.
-> > > 
-> > > The above commit fixes the problem of invalid checksum of the backup
-> > > superblock. The root cause of this problem is that the checksum of
-> > > ext4_update_super() is not set correctly. This problem has been fixed
-> > > in the previous patch ("ext4: fix bad checksum after online resize").
-> > > Therefore, roll back some modifications in the above commit.
-> > > 
-> > > Fixes: 9a8c5b0d0615 ("ext4: update the backup superblock's at the end of the online resize")
-> > > Signed-off-by: Baokun Li <libaokun1@huawei.com>
-> > So I agree commit 9a8c5b0d0615 is broken and does corrupt group
-> > descriptors. However I don't see how PATCH 1/3 in this series would fix all
-> > the problems commit 9a8c5b0d0615 is trying to fix. In particular checksums
-> > on backup superblocks will not be properly set by the resize code AFAICT.
-> > 
-> > 								Honza
-> I didn't find these two issues to be the same until I researched the problem
-> in
-> PATCH 3/3 and found that commit 9a8c5b0d0615 introduced a similar problem.
-> Then, it is found that the backup superblock is directly copied from the
-> primary
-> superblock. If the backup superblock is faulty, the primary superblock must
-> be
-> faulty. In this case, patch 1 that fixes the primary superblock problem is
-> thought
-> of. So by rolling back commit 9a8c5b0d0615 to verify, I found that patch 1
-> did
-> fix the problem.
-> 
-> Only ext4_flex_group_add() and ext4_group_extend_no_check() call
-> update_backups() to update the backup superblock. Both of these functions
-> correctly set the checksum of the primary superblock. The backup superblocks
-> that are copied from them are also correct.
-> 
-> In ext4_flex_group_add(), we only update the backup superblock if there are
-> no
-> previous errors, indicating that we must have updated the checksum in
-> ext4_update_super() before executing update_backups(). The previous problem
-> was that after we updated the checksum in ext4_update_super(), we modified
-> s_overhead_clusters, so the checksums for both the primary and backup
-> superblocks
-> were incorrect. This problem has been fixed in PATCH 1/3, so checksum is set
-> correctly in ext4_flex_group_add().
-> 
-> The same is true in ext4_group_extend_no_check(), we only update the backup
-> superblock if there are no errors, and we execute ext4_superblock_csum_set()
-> to update the checksum before updating the backup superblock. Therefore,
-> checksum is correctly set in ext4_group_extend_no_check().
-> 
-> I think we only need to ensure that the checksum is set correctly when the
-> buffer
-> lock of sbi->s_sbh is unlocked. Therefore, the checksum should be correct
-> before
-> update_backups() holds the buffer lock. Also, in update_backups() we copy
-> the
-> entire superblock completely, and the checksum is unchanged, so we don't
-> need
-> to reset it.
 
-So I agree the checksum should be matching but the backup superblock should
-have also s_block_group_nr set properly and after updating that we need to
-recalculate the checksum as well.
 
-								Honza
-
-> > > ---
-> > >   fs/ext4/resize.c | 5 -----
-> > >   1 file changed, 5 deletions(-)
-> > > 
-> > > diff --git a/fs/ext4/resize.c b/fs/ext4/resize.c
-> > > index cb99b410c9fa..32fbfc173571 100644
-> > > --- a/fs/ext4/resize.c
-> > > +++ b/fs/ext4/resize.c
-> > > @@ -1158,7 +1158,6 @@ static void update_backups(struct super_block *sb, sector_t blk_off, char *data,
-> > >   	while (group < sbi->s_groups_count) {
-> > >   		struct buffer_head *bh;
-> > >   		ext4_fsblk_t backup_block;
-> > > -		struct ext4_super_block *es;
-> > >   		/* Out of journal space, and can't get more - abort - so sad */
-> > >   		err = ext4_resize_ensure_credits_batch(handle, 1);
-> > > @@ -1187,10 +1186,6 @@ static void update_backups(struct super_block *sb, sector_t blk_off, char *data,
-> > >   		memcpy(bh->b_data, data, size);
-> > >   		if (rest)
-> > >   			memset(bh->b_data + size, 0, rest);
-> > > -		es = (struct ext4_super_block *) bh->b_data;
-> > > -		es->s_block_group_nr = cpu_to_le16(group);
-> > > -		if (ext4_has_metadata_csum(sb))
-> > > -			es->s_checksum = ext4_superblock_csum(sb, es);
-> > >   		set_buffer_uptodate(bh);
-> > >   		unlock_buffer(bh);
-> > >   		err = ext4_handle_dirty_metadata(handle, NULL, bh);
-> > > -- 
-> > > 2.31.1
-> > > 
-> Thank you for your review!
-> -- 
-> With Best Regards,
-> Baokun Li
+在 2022/11/16 下午7:19, James Clark 写道:
 > 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+> 
+> On 31/10/2022 11:11, Jing Zhang wrote:
+>> This series add six metricgroups for neoverse-n2, among which, the
+>> formula of topdown L1 is from the document:
+>> https://documentation-service.arm.com/static/60250c7395978b529036da86?token=
+>>
+>> Since neoverse-n2 does not yet support topdown L2, metricgroups such
+>> as Cache, TLB, Branch, InstructionsMix, and PEutilization are added to
+>> help further analysis of performance bottlenecks.
+>>
+> 
+> Hi Jing,
+> 
+> Thanks for working on this, these metrics look ok to me in general,
+> although we're currently working on publishing standardised metrics
+> across all new cores as part of a new project in Arm. This will include
+> N2, and our ones are very similar (or almost identical) to yours,
+> barring slightly different group names, metric names, and differences in
+> things like outputting topdown metrics as percentages.
+> 
+> We plan to publish our standard metrics some time in the next 2 months.
+> Would you consider holding off on merging this change so that we have
+> consistant group names and units going forward? Otherwise N2 would be> the odd one out. I will send you the metrics when they are ready, and we
+> will have a script to generate perf jsons from them, so you can review.
+> 
+
+Do you mean that after you release the new standard metrics, I remake my
+patch referring to them, such as consistent group names and unit?
+
+
+> We also have a slightly different forumula for one of the top down
+> metrics which I think would be slightly more accurate. We don't have
+
+
+The v2 version of the patchset updated the formula of topdown L1.
+Link: https://lore.kernel.org/all/1668411720-3581-1-git-send-email-renyu.zj@linux.alibaba.com/
+
+The formula of the v2 version is more accurate than v1, and it has been
+verified in our test environment. Can you share your formula first and we
+can discuss it together? :)
+
+Thanks,
+Jing
+
+
+> anything for your "PE utilization" metrics, which I can raise
+> internally. It could always be added to perf on top of the standardised
+> ones if we don't add it to our standard ones.
+> 
+> Thanks
+> James
+> 
+>> with this series on neoverse-n2:
+>>
+>> $./perf list metricgroup
+>>
+>> List of pre-defined events (to be used in -e):
+>>
+>>
+>> Metric Groups:
+>>
+>> Branch
+>> Cache
+>> InstructionMix
+>> PEutilization
+>> TLB
+>> TopDownL1
+>>
+>>
+>> $./perf list
+>>
+>> ...
+>> Metric Groups:
+>>
+>> Branch:
+>>   branch_miss_pred_rate
+>>        [The rate of branches mis-predited to the overall branches]
+>>   branch_mpki
+>>        [The rate of branches mis-predicted per kilo instructions]
+>>   branch_pki
+>>        [The rate of branches retired per kilo instructions]
+>> Cache:
+>>   l1d_cache_miss_rate
+>>        [The rate of L1 D-Cache misses to the overall L1 D-Cache]
+>>   l1d_cache_mpki
+>>        [The rate of L1 D-Cache misses per kilo instructions]
+>> ...
+>>
+>>
+>> $sudo ./perf stat -a -M TLB sleep 1
+>>
+>>  Performance counter stats for 'system wide':
+>>
+>>         35,861,936      L1I_TLB                          #     0.00 itlb_walk_rate           (74.91%)
+>>              5,661      ITLB_WALK                                                            (74.91%)
+>>         97,279,240      INST_RETIRED                     #     0.07 itlb_mpki                (74.91%)
+>>              6,851      ITLB_WALK                                                            (74.91%)
+>>             26,391      DTLB_WALK                        #     0.00 dtlb_walk_rate           (75.07%)
+>>         35,585,545      L1D_TLB                                                              (75.07%)
+>>         85,923,244      INST_RETIRED                     #     0.35 dtlb_mpki                (75.11%)
+>>             29,992      DTLB_WALK                                                            (75.11%)
+>>
+>>        1.003450755 seconds time elapsed
+>>        
+>>
+>> Jing Zhang (6):
+>>   perf vendor events arm64: Add topdown L1 metrics for neoverse-n2
+>>   perf vendor events arm64: Add TLB metrics for neoverse-n2
+>>   perf vendor events arm64: Add cache metrics for neoverse-n2
+>>   perf vendor events arm64: Add branch metrics for neoverse-n2
+>>   perf vendor events arm64: Add PE utilization metrics for neoverse-n2
+>>   perf vendor events arm64: Add instruction mix metrics for neoverse-n2
+>>
+>>  .../arch/arm64/arm/neoverse-n2/metrics.json        | 247 +++++++++++++++++++++
+>>  1 file changed, 247 insertions(+)
+>>  create mode 100644 tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
+>>
