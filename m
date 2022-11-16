@@ -2,146 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C19E62C86B
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 19:55:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68DAB62C864
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 19:55:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234467AbiKPSzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 13:55:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52876 "EHLO
+        id S239277AbiKPSzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 13:55:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239287AbiKPSy6 (ORCPT
+        with ESMTP id S239023AbiKPSyz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 13:54:58 -0500
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2053.outbound.protection.outlook.com [40.107.101.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBFB654C1;
-        Wed, 16 Nov 2022 10:53:45 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ro26fusu6otApd5rQyYgP3VO9GaYvQPdoW/alRZMoFKWTB/2ilZRnvEjrW4jFISugMGDOt5rOfTQCEjz50zPBs7fj0RJfdcdF8Go6rsJrhbJPna5CldsQmaD8yhoXn2TkVBToUU7fF1TJ2zP8vrrL3Z3sNqnx99aBUM98avN7Ewl/6Ujo5c+jNZXSUMe/8xZHkGccO4vUClgkIKO8dPD6MmRQ0VNtcj1xOiU2fa4kPLxKbrndi0s/2TfD+p3oaH+p9JuZc+HpMnlwltkI7Cnru2g4jPxYTV26mK/Bb9QNS+TZ8McfUlRZLS4J+7GssNuXcDSOFApshHN7RNuKjGU5w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8UkIagF1d99o20SCsMaBbvUSNbhqPrZZV1gKvFDx5wE=;
- b=mmQdNhO13hu//f6EW7QfLUeEhgGCrNTycgx6ydEDSdmZ0V2k1cOY2elwTIeHicp+xKICOiSw7GpApZzHJ+vSHtt8+wRS7gzXnTLmjbj20fNuY/8i1e7fhRIGJQt+gH28EoRY/ZbfbgOCK+sdxEGQDwui9wKIbkAYSrBbmkyukfv5rl7HhkmVZFDbu/nLS72rFj7/NfXAkklYYHug5SmENV6HsPWWcTu54GscyRjAZx9z3ce9QMU5TWyuK4bqKLrF5qfSall1R9ffyBe+Miskq56A0h/oH2fr61qbTJbIvVx1D8hciNwbp8TCW/oSj2MuzJEMRhN5ROhdCc1ZBZBykA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8UkIagF1d99o20SCsMaBbvUSNbhqPrZZV1gKvFDx5wE=;
- b=N5rX13OWewBCgAd9Oh2qHJ4wFz6AVW3yD4Xdbr3IFf5HS/SOJaxNaNCo6lPMdtF5rKFEcGmRmavUIXMlZFm+Foy/+6TruO1j70pHVrn04HVz7JaIizkfaaTHK5fI4IPN5hmvfJq/anNPqiNmf8OXMTFsnJaCWVJbbJM2VxBPGZA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from SN6PR12MB2767.namprd12.prod.outlook.com (2603:10b6:805:75::23)
- by SN7PR12MB8025.namprd12.prod.outlook.com (2603:10b6:806:340::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.26; Wed, 16 Nov
- 2022 18:53:43 +0000
-Received: from SN6PR12MB2767.namprd12.prod.outlook.com
- ([fe80::395:21e6:abfd:7894]) by SN6PR12MB2767.namprd12.prod.outlook.com
- ([fe80::395:21e6:abfd:7894%6]) with mapi id 15.20.5813.018; Wed, 16 Nov 2022
- 18:53:43 +0000
-Message-ID: <834d41e7-44f8-53f9-a1fa-0cdb5aaff30f@amd.com>
-Date:   Wed, 16 Nov 2022 12:53:36 -0600
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.1
-Subject: Re: [PATCH Part2 v6 14/49] crypto: ccp: Handle the legacy TMR
- allocation when SNP is enabled
+        Wed, 16 Nov 2022 13:54:55 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599E364A0E
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 10:53:44 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id ft34so46284380ejc.12
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 10:53:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DCRx1P+KwMIztXXzalL7wF+4lXeQ0p/A8da8gIDiFwQ=;
+        b=Uq9Zt/Gmp3WIvxBD1gMCjIU/KRgYsEY9WKnbj7NbuZ5HDFbLrHQeQKhn+ffrijGFV9
+         PcxhhqthdvY5WS2yzEhRi8U5+sCc5V2Lfc0crcQbRVsrH4Tkkq1XCQ8Cy4rKnY5yxXl+
+         z+2oC339xvacLBMbZUZwJjPBfcVbw2RzYRnzwXh761WMtlCZbBBAuiImvToc+g3JBxGW
+         NBtq6zjFlw1zKZQ9CHQEgQB8otHusvHwYWaJYNyBEVRzZN4IjpKIVlXTYOffUYmI41b5
+         +9fNBt5O3smedH28J2k3jLN3Whyu+VaWnHwfro0j14w9IHVNs3M29lQJBrwlc6fbrMgh
+         c1aQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DCRx1P+KwMIztXXzalL7wF+4lXeQ0p/A8da8gIDiFwQ=;
+        b=DpzViszu8P3RKzTrh3eF8LbJoKwRAL0suop0oiOG3yeLw0kDPKYz1QXrRyejhA7AGQ
+         vKFiRRD/NIPYtn8m759dY2hGLORZIHD79ADg1/fjzZgIPZeUwWIYK6MDpK2MU186g5ix
+         RdcA6VdaiB3uDgYsT/e2WS309KWdO7qQ294Nodxz/iJACv6gMvqXaYf6JMern58kqHsR
+         wmzvCe221jNhS3jquGq1DOBAnx1ugFdcB1cD6HWiaXWv/iDxJXI+4lzsSVyT8cMC0lWi
+         7H94uC3oniroN58Z/MtZHR/QaJjYlgPpCbbES7AmzzmXqsRGv1Z1/TP/8QzZwWuxFrFY
+         uAOw==
+X-Gm-Message-State: ANoB5pnrYUAtS5wjNkJpYENpP400UXgCCoYMmmcmSWyFwVvjmv+DcWRj
+        a9z8Ug2TodxDtRdzO3k5h5A=
+X-Google-Smtp-Source: AA0mqf4OONCebl/IGhnx1wS3TN6OxLZRKs0outOURgx4KO81i/2HnncYhoJDq6reZrYhI5MjI0Bj1w==
+X-Received: by 2002:a17:906:79a:b0:73d:715c:5730 with SMTP id l26-20020a170906079a00b0073d715c5730mr18370075ejc.293.1668624822784;
+        Wed, 16 Nov 2022 10:53:42 -0800 (PST)
+Received: from ?IPV6:2003:c7:8f35:4b36:b14a:31a9:5cf4:bef4? (p200300c78f354b36b14a31a95cf4bef4.dip0.t-ipconnect.de. [2003:c7:8f35:4b36:b14a:31a9:5cf4:bef4])
+        by smtp.gmail.com with ESMTPSA id r1-20020a1709062cc100b00773c60c2129sm7291387ejr.141.2022.11.16.10.53.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Nov 2022 10:53:42 -0800 (PST)
+Message-ID: <1f36ed17-73fa-c4f5-3e04-03d4295a2933@gmail.com>
+Date:   Wed, 16 Nov 2022 19:53:41 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3] staging: vt6655: change the function name
+ s_vFillRTSHead
 Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Vlastimil Babka <vbabka@suse.cz>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
-        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
-        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
-        michael.roth@amd.com, kirill@shutemov.name, ak@linux.intel.com,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org,
-        "Kaplan, David" <David.Kaplan@amd.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Oscar Salvador <osalvador@suse.de>
-References: <dc89b2f4-1053-91ac-aeac-bb3b25f9ebc7@amd.com>
- <Y2JS7kn8Q9P4rXso@zn.tnic> <c2ce6317-aa51-2a2b-2d75-ad1fd269f3fa@amd.com>
- <7882353e-2b13-d35a-b462-cef35ee56f51@suse.cz>
- <5b27a05e-09ad-9139-67b1-77b90731419f@amd.com>
- <9d9f1afe-c981-4df9-f012-89c4cb783cc3@amd.com>
- <973c6f79-38ad-aa30-bfec-c2a1c7db5d70@suse.cz>
- <8692e736-7518-d6d2-ae83-720e42e7a059@amd.com>
- <41b8c83e-2a1a-1dda-945e-99329ca8e7e9@suse.cz>
- <711e6027-1b4f-4aed-47a6-305396d05893@amd.com> <Y3Us9wSX9DrWqCyq@zn.tnic>
-From:   "Kalra, Ashish" <ashish.kalra@amd.com>
-In-Reply-To: <Y3Us9wSX9DrWqCyq@zn.tnic>
+To:     Tanju Brunostar <tanjubrunostar0@gmail.com>
+Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+References: <Y3KJBdUue5otWgOT@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
+ <480340b3-c1c1-74b5-1889-f49dcb644469@gmail.com>
+ <CAHJEyKWRm_wzUcz7wzcveLLGND9F3m3HM23mpwQ=zjeO5zh5FA@mail.gmail.com>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <CAHJEyKWRm_wzUcz7wzcveLLGND9F3m3HM23mpwQ=zjeO5zh5FA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN2PR14CA0017.namprd14.prod.outlook.com
- (2603:10b6:208:23e::22) To SN6PR12MB2767.namprd12.prod.outlook.com
- (2603:10b6:805:75::23)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR12MB2767:EE_|SN7PR12MB8025:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4865fd36-edd4-48aa-5921-08dac803e21e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2zATeLJU0hDHEzzfM9zN/QCLXrAGNVZ+swOvnGDQ0ZBoxjY0LreZphjFj2U6ZzUmOcTp/BOi9Axo/39+0I3MMczHQMnCRwmacPwdQW6Qfzw7Aw9YQKjG/M3YiTfKCNL4QuVo+2JaFXuVJxZ+i9UQbriJJQp+VDsbb5qOPthWfRU3azFFLWQCMJf8+6hWNR4XutfgbAAg2iK1npKfQtz+OlS4b5zv/j18cQSmF491brApT6srX3LnDjpCHQEzKf6JC9oZya/TBySaC4mxz9RoXT9w5TAJFY/SKR4eQ9IBBCT2UKP3rVRycp07rqldgafUBWIU1grbMYgxQE9LQ9OnWfIhmBSqQP7s4NWtnD5dwMA6yQIxci7Rfi2+7KxjHvRUOV5S4541ReB2B45Qbrz+cyewcGBzhj4z5kn33n+keU6+5xGXd7ikd0iPSj9uycxTO+slU1jsbct7rTobITjQ7byjOoFRxh0b840UPQ+cZhjED8JYxDG+J/7eZSoJUSHkRlOPT1IKQliiNXuo55JwWO+DkETn2B2Oj8zd6mcmq1VxpUVggVp+0mzmVQsni14hL4k9WNwH3dKnliYI7ryJ154NRFB1Ija+/St86GceJlLgq6QW8ZzNnAsbeO1zWnXpvBuF2uJHnY/IRm3Yn4RkcaZ7U7zUAovA0nTH0dtTTm0IRByKiTGY+exlHwpeku+yjGiotT/+sq9Gv5/45fyNZUpwdNlk4gxuiPr3QX9f7qnmHJFlC8YKmHxBH/HvthLni7MIvJIqEyCl66OKOJB8EyDDraW/fyvN+2mX78QugUo=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2767.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(376002)(346002)(136003)(39860400002)(366004)(451199015)(6666004)(83380400001)(86362001)(31686004)(6486002)(478600001)(36756003)(4326008)(66556008)(66476007)(8676002)(54906003)(6916009)(316002)(53546011)(66946007)(6506007)(2616005)(186003)(41300700001)(38100700002)(31696002)(2906002)(8936002)(5660300002)(7416002)(7406005)(26005)(6512007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TWJiaTluRTRRNkhGOVJhNGpOd3l6bit2Nlh0Mk8reE9UR2RYYXErcWhOQkdR?=
- =?utf-8?B?dFNSeit5ckJ4bSs0RzVDSjdIeThuc052Q3dLODNJTEhYYWhhbUtWZ1NqY05O?=
- =?utf-8?B?RjFqdVkrWG1zU1hCK3FkUkZYMGVSZ2hyZ3JaR3lWb1FNUEd0aW1rRnpyRlYw?=
- =?utf-8?B?WUUwcWEvOVM4emlGZHVrR3RwYU5vcEs3QVpaOFk4SDFqak5Kem85YlRDdFpM?=
- =?utf-8?B?R1ZCL0lWSHZ3cXRIbVh1WnRwQ1hMV05KMENweW9US204MGhiK0cxUlIybmlo?=
- =?utf-8?B?eHczUnJsaGRNYmNRVVh4TGlKTE02aFliM2JnNG5lbmxBdEFKUXZNTHZiOWx2?=
- =?utf-8?B?SkN3TXcveE51VkdZaWRRZi9MR0ZVV3RldzRHazRBWUp1QmQ5RkNxbFJ0cFF0?=
- =?utf-8?B?ZGF6cFg3RU1LTXMzUStPYUliYWE0bnVRUldsSWpoMnU1K1JSVUNMUWkzeTYr?=
- =?utf-8?B?Smp6ZUcrTjV1aWJ3MjV3NjdjcmJKZ2k4TUNLcjR1S2l1M2hWUHBqSkxPMzhD?=
- =?utf-8?B?NmpTWnQreDZISEYvRFhIcENXblR4Qi9UbzUvTnJTNkpsNjFWdVFxN25JK0Na?=
- =?utf-8?B?T0p0eENVNUJuVjFtMWxZVW5WYWExUTByS3lXT0Rad2w1VzVGRXlvZWdVcS9N?=
- =?utf-8?B?SjlZWVB3SGdSTFovRno4VnF2VWUxeWJiWmhQSWowa2RHaVlLSitxMXZVU3Rk?=
- =?utf-8?B?KzVVNHA1blhQcU56dWNvMVVIMkt3ZUtJcDNzZVVXczhucUZCeGwyUUJkVGRB?=
- =?utf-8?B?LzlIU2h1bmd3L0EyK3FGcnB1MFJqd0RUb0c4SXJheGpzZUxmYkJqS3NGYWZj?=
- =?utf-8?B?dkhtbkp3K0x5SmxlWWtyNC9MUUhsVHdFVHlYVXI5WTBTNDlmOTZ5aHlhNFVK?=
- =?utf-8?B?VHcrTkcyZElOWTdJTUs3L01wUVB2N2F3MzBjVWsvUklqUWVON2Rwa1NwTkJH?=
- =?utf-8?B?cGM0aDEyUmpzTXdnaFNWcGg1NkZtMnpjM2VkZ2JjZWdRcGx3N2R3Q3pEbEZl?=
- =?utf-8?B?V1A5Mm5UWGo5MGtCdWFLVmdIelhsam04VG1rSGxKaW12UktiNGprMjgweFV4?=
- =?utf-8?B?a3JKVnIza0dCN2JHZTExdmczSldjTTRpQSs2RUtqVDdYWENubG9zN0UxN1gv?=
- =?utf-8?B?dFZlbWUyTDcvWXM1QWN1dGJ5NWlTTXZ4WUVrOGFSQ0hKOWZCRFRiZ2dTNXdN?=
- =?utf-8?B?ODlIRXdzcmVYSUx2R0JVWmx1MFRHOU5kVHBvMHFsTWYveS9KN3prRjR6ZDdV?=
- =?utf-8?B?SW43Vjg4ZkZWLytHTUQ0aE1zY0FpbXl4OWwvK3Q1L3IvMWlmdnN0S2J0TDNt?=
- =?utf-8?B?WjI1Q0YyVEZZSXZFRWxhbHNCcittQmZlOWJkQXY2SGdZdDJKYUd4R3VJeFRQ?=
- =?utf-8?B?SjBncmV4aDNvcGU3UkYrcHZxVWtjM1A5czA5RUlwR0lHQmpqZFdUNG1YZHp2?=
- =?utf-8?B?M3lQTGN1a0dKWnVML1BqMWx5R1hwU3lVQy9CTVJCTC9qTU5LY21XZjd2MUZk?=
- =?utf-8?B?T3FublI0Wjl0MGFCTXRYQlozdHRreE5PRTdodHErc0p3N1lLUWJhNHEyWE8v?=
- =?utf-8?B?OGgrVGVSSS9rS21WZTI2VHhVSzI4SEFEbFBIbWUwVytzQlE5bS9oQm8wWHMy?=
- =?utf-8?B?RGVOekxZK3BRZnlUZWt4VWxrdS9haFhBMnppZ285UzB2UUVoeWxKNWRZRlh2?=
- =?utf-8?B?TXVsVGNxOHBtZjBUQXVTOVJCeHNoeUZQem15SmpMNnpwWU5UQjBwWjJaZmpL?=
- =?utf-8?B?Qkg1Tmp4Z25nVG1SdzBwSm4yQ25VajExcHdyTTQ0VDYvbFdWZzlqVll4UitZ?=
- =?utf-8?B?VnN4V1FxMlBkM1d0OER1eExheGoyTTZld1UxY2xOeXNXN1RMOEVhM0pHYUdh?=
- =?utf-8?B?UGJkNzRBcks5ODZrWE05NU4wVnlzWkVmMUxPK0prbmpOK1RUb1dyb3RRcWVi?=
- =?utf-8?B?WGVUVmFWZnA4akJqZkFWRDJUajMvSkI4MVJHNDhNUjJlamVVUVg1Qkhid0Z2?=
- =?utf-8?B?MG96TmJDdml2MnNQS1JYdTMvVG9Pb05ESkMvanNtekp5bW5LKy9URnR1eWVu?=
- =?utf-8?B?SkNNU2R5VnVIMEduTTlaV2tDNU9vRUJPc1FmdGE5TkFOSmNOVjcvUThBZHJq?=
- =?utf-8?Q?Av6H6hP5gIQORolV69nObEJ/i?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4865fd36-edd4-48aa-5921-08dac803e21e
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2767.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Nov 2022 18:53:43.2318
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LWyW+0x9LgX0hQQO5W0wVtDSC05iAXlY6fXbiE2T2SPzZNOwx6YbPNLZLDtIH5DaDYnnwo7ThdeFSlrJ0eadsQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB8025
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -149,37 +78,237 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/16/2022 12:33 PM, Borislav Petkov wrote:
-> On Wed, Nov 16, 2022 at 12:01:11PM -0600, Kalra, Ashish wrote:
->> Ok, so i will work on implementing this leaked pages list and put it on a
->> sev/snp associated structure.
+On 11/14/22 23:59, Tanju Brunostar wrote:
+> On Mon, Nov 14, 2022 at 9:19 PM Philipp Hortmann
+> <philipp.g.hortmann@gmail.com> wrote:
+>>
+>> On 11/14/22 19:29, Tanjuate Brunostar wrote:
+>>> Remove the use of Hungarian notation, which is not used in the Linux
+>>> kernel. Reported by checkpatch
+>>> Add indentation to the affected function to follow the Linux kernel
+>>> coding style. This improves visibility
+>>>
+>>> Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+>>> ---
+>>> v2: corrected confusing changlog message on this patch
+>>> v3: removed unnecessary function prototype
+>>>
+>>>    drivers/staging/vt6655/rxtx.c | 40 ++++++++++++-----------------------
+>>>    1 file changed, 13 insertions(+), 27 deletions(-)
+>>>
+>>> diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
+>>> index 31ae99b3cb35..715b323cd2a8 100644
+>>> --- a/drivers/staging/vt6655/rxtx.c
+>>> +++ b/drivers/staging/vt6655/rxtx.c
+>>> @@ -23,7 +23,7 @@
+>>>     *      s_uGetTxRsvTime- get frame reserved time
+>>>     *      s_vFillCTSHead- fulfill CTS ctl header
+>>>     *      s_vFillFragParameter- Set fragment ctl parameter.
+>>> - *      s_vFillRTSHead- fulfill RTS ctl header
+>>> + *      fill_rts_header- fulfill RTS ctl header
+>>>     *      s_vFillTxKey- fulfill tx encrypt key
+>>>     *      s_vSWencryption- Software encrypt header
+>>>     *      vDMA0_tx_80211- tx 802.11 frame via dma0
+>>> @@ -85,16 +85,6 @@ static const unsigned short fb_opt1[2][5] = {
+>>>    #define DATADUR_A_F1    13
+>>>
+>>>    /*---------------------  Static Functions  --------------------------*/
+>>> -static void s_vFillRTSHead(struct vnt_private *pDevice,
+>>> -                        unsigned char byPktType,
+>>> -                        void *pvRTS,
+>>> -                        unsigned int cbFrameLength,
+>>> -                        bool bNeedAck,
+>>> -                        bool bDisCRC,
+>>> -                        struct ieee80211_hdr *hdr,
+>>> -                        unsigned short wCurrentRate,
+>>> -                        unsigned char byFBOption);
+>>> -
+>>>    static void s_vGenerateTxParameter(struct vnt_private *pDevice,
+>>>                                   unsigned char byPktType,
+>>>                                   struct vnt_tx_fifo_head *,
+>>> @@ -555,19 +545,15 @@ s_uFillDataHead(
+>>>        return buf->duration;
+>>>    }
+>>>
+>>> -static
+>>> -void
+>>> -s_vFillRTSHead(
+>>> -     struct vnt_private *pDevice,
+>>> -     unsigned char byPktType,
+>>> -     void *pvRTS,
+>>> -     unsigned int cbFrameLength,
+>>> -     bool bNeedAck,
+>>> -     bool bDisCRC,
+>>> -     struct ieee80211_hdr *hdr,
+>>> -     unsigned short wCurrentRate,
+>>> -     unsigned char byFBOption
+>>> -)
+>>> +static void fill_rts_header(struct vnt_private *pDevice,
+>>> +                         unsigned char byPktType,
+>>> +                         void *pvRTS,
+>>> +                         unsigned int cbFrameLength,
+>>> +                         bool bNeedAck,
+>>> +                         bool bDisCRC,
+>>> +                         struct ieee80211_hdr *hdr,
+>>> +                         unsigned short wCurrentRate,
+>>> +                         unsigned char byFBOption)
+>>>    {
+>>>        unsigned int uRTSFrameLen = 20;
+>>>
+>>> @@ -912,7 +898,7 @@ s_vGenerateTxParameter(
+>>>                        buf->rrv_time_a = vnt_rxtx_rsvtime_le16(pDevice, byPktType, cbFrameSize, wCurrentRate, bNeedACK);
+>>>                        buf->rrv_time_b = vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11B, cbFrameSize, pDevice->byTopCCKBasicRate, bNeedACK);
+>>>
+>>> -                     s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+>>> +                     fill_rts_header(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+>>>                } else {/* RTS_needless, PCF mode */
+>>>                        struct vnt_rrv_time_cts *buf = pvRrvTime;
+>>>
+>>> @@ -931,7 +917,7 @@ s_vGenerateTxParameter(
+>>>                        buf->rrv_time = vnt_rxtx_rsvtime_le16(pDevice, byPktType, cbFrameSize, wCurrentRate, bNeedACK);
+>>>
+>>>                        /* Fill RTS */
+>>> -                     s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+>>> +                     fill_rts_header(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+>>>                } else if (!pvRTS) {/* RTS_needless, non PCF mode */
+>>>                        struct vnt_rrv_time_ab *buf = pvRrvTime;
+>>>
+>>> @@ -945,7 +931,7 @@ s_vGenerateTxParameter(
+>>>                        buf->rrv_time = vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11B, cbFrameSize, wCurrentRate, bNeedACK);
+>>>
+>>>                        /* Fill RTS */
+>>> -                     s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+>>> +                     fill_rts_header(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+>>>                } else { /* RTS_needless, non PCF mode */
+>>>                        struct vnt_rrv_time_ab *buf = pvRrvTime;
+>>>
+>>
+>> Hi,
+>>
+>> I cannot apply your patch.
+>>
+>> Here my git infos:
+>> git remote show origin
+>> * remote origin
+>>     Fetch URL:
+>> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git
+>> ...
+>> git branch -a
+>> my branch: staging-testing
+>>
+>> Bye Philipp
 > 
-> See __sgx_sanitize_pages() and the poison list there, for an example.
-> 
->> Also to add here, we will actually get a not-present #PF instead of the RMP
->> violation #PF on writing to these leaked pages, as these pages would have
->> been removed from the kernel direct map.
-> 
-> So if you do the list and still have the kernel raise a RMP fault for
-> those pages, traversing that list in the RMP handler to check whether
-> the page is there on it, should be a lot faster operation than doing the
-> #PF thing and removing them from the direct map.
-> 
+> I was recently asked to rebase to the staging-next branch. I think
+> this is where there is conflict
 
-Actually, these host allocated pages would have already been removed 
-from the kernel direct map, when they were transitioned to the firmware 
-state. So actually the not-present #PF fault will happen on any 
-read/write access to these leaked pages instead of the RMP violation #PF 
-(not-present #PF has higher priority than RMP violation #PF).
 
-If these pages cannot be reclaimed, they are unsafe to use and cannot be 
-added back to the kernel direct map.
+Hi,
 
-Thanks,
-Ashish
+now I can tell you where the issue is:
 
-> And sorry for misleading you about UPM - we were thinking wrong
-> yesterday.
-> 
-> Thx.
-> 
+kernel@matrix-ESPRIMO-P710:~/Documents/git/kernels/staging$ git apply 
+--reject --ignore-space-change --ignore-whitespace 
+~/Downloads/20221114-\[PATCH\ v3\]\ staging_\ vt6655_\ change\ the\ 
+function\ name\ s_vFillRTSHead-5397.txt
+Checking patch drivers/staging/vt6655/rxtx.c...
+error: while searching for:
+#define DATADUR_A_F1    13
+
+/*---------------------  Static Functions  --------------------------*/
+static void s_vFillRTSHead(struct vnt_private *pDevice,
+			   unsigned char byPktType,
+			   void *pvRTS,
+			   unsigned int	cbFrameLength,
+			   bool bNeedAck,
+			   bool bDisCRC,
+			   struct ieee80211_hdr *hdr,
+			   unsigned short wCurrentRate,
+			   unsigned char byFBOption);
+
+static void s_vGenerateTxParameter(struct vnt_private *pDevice,
+				   unsigned char byPktType,
+				   struct vnt_tx_fifo_head *,
+
+error: patch failed: drivers/staging/vt6655/rxtx.c:85
+Hunk #3 succeeded at 567 (offset 22 lines).
+Hunk #4 succeeded at 920 (offset 22 lines).
+Hunk #5 succeeded at 939 (offset 22 lines).
+Hunk #6 succeeded at 953 (offset 22 lines).
+Applying patch drivers/staging/vt6655/rxtx.c with 1 reject...
+Hunk #1 applied cleanly.
+Rejected hunk #2.
+Hunk #3 applied cleanly.
+Hunk #4 applied cleanly.
+Hunk #5 applied cleanly.
+Hunk #6 applied cleanly.
+
+Here how this place looks like in my repo:
+#define DATADUR_A_F1    13
+
+/*---------------------  Static Functions  --------------------------*/
+static
+void
+s_vFillRTSHead(
+	struct vnt_private *pDevice,
+	unsigned char byPktType,
+	void *pvRTS,
+	unsigned int	cbFrameLength,
+	bool bNeedAck,
+	bool bDisCRC,
+	struct ieee80211_hdr *hdr,
+	unsigned short wCurrentRate,
+	unsigned char byFBOption
+);
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+switching branch
+
+kernel@matrix-ESPRIMO-P710:~/Documents/git/kernels/staging$ git branch -a
+* staging-next
+
+kernel@matrix-ESPRIMO-P710:~/Documents/git/kernels/staging$ git apply 
+--reject --ignore-space-change --ignore-whitespace 
+~/Downloads/20221114-\[PATCH\ v3\]\ staging_\ vt6655_\ change\ the\ 
+function\ name\ s_vFillRTSHead-5397.txt
+Checking patch drivers/staging/vt6655/rxtx.c...
+error: while searching for:
+#define DATADUR_A_F1    13
+
+/*---------------------  Static Functions  --------------------------*/
+static void s_vFillRTSHead(struct vnt_private *pDevice,
+			   unsigned char byPktType,
+			   void *pvRTS,
+			   unsigned int	cbFrameLength,
+			   bool bNeedAck,
+			   bool bDisCRC,
+			   struct ieee80211_hdr *hdr,
+			   unsigned short wCurrentRate,
+			   unsigned char byFBOption);
+
+static void s_vGenerateTxParameter(struct vnt_private *pDevice,
+				   unsigned char byPktType,
+				   struct vnt_tx_fifo_head *,
+
+error: patch failed: drivers/staging/vt6655/rxtx.c:85
+Hunk #3 succeeded at 567 (offset 22 lines).
+Hunk #4 succeeded at 920 (offset 22 lines).
+Hunk #5 succeeded at 939 (offset 22 lines).
+Hunk #6 succeeded at 953 (offset 22 lines).
+Applying patch drivers/staging/vt6655/rxtx.c with 1 reject...
+Hunk #1 applied cleanly.
+Rejected hunk #2.
+Hunk #3 applied cleanly.
+Hunk #4 applied cleanly.
+Hunk #5 applied cleanly.
+Hunk #6 applied cleanly.
+
+Same issue.
+
+Bye Philipp
+
+
+
+
+
