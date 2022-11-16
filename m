@@ -2,118 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22FE762C073
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:07:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FC5F62C07A
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:07:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233577AbiKPOHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 09:07:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42590 "EHLO
+        id S231706AbiKPOHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 09:07:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233523AbiKPOHO (ORCPT
+        with ESMTP id S233880AbiKPOHT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 09:07:14 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D8DDEA4;
-        Wed, 16 Nov 2022 06:04:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668607458; x=1700143458;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=ZOmbfFA9MpXojKad9z8Mmz7PrFNz8/hAL3rc0Yat6aI=;
-  b=LDJNyXFBw5LhiB/iJ/qRWeEvzaQJ1mQWI/tj+nqsUZnG7T9lAqHIQ+66
-   9sGWpndXt6qbHh3IJDam9Eczbz5JEPwf3xq1YMBSvD+qSoZnqJmMqf8G9
-   OUSYWSceiY35wa5wZ3IRFyrtSxo1ra2sQHEuUADtRCxUfc6Cngr9oKEMO
-   DQYyzFapqFtIpYfoHb524hhmss7nfi04hk2cBK+dbaoMfROh46oi/zgda
-   CYstrOK6ANj/uNj9ZZmjvgw8A1zL7RdhO87RsfYpUEqfJiy9pn7/hmJ+1
-   Ez597CdGdXkI5QBeeKKMKXK6+TZl7wE+hdp1YE5Tj7s/wi37gQtTNQgFV
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="310177876"
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="310177876"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 06:04:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="633638476"
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="633638476"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga007.jf.intel.com with ESMTP; 16 Nov 2022 06:04:14 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ovJ1Q-00D9ao-1x;
-        Wed, 16 Nov 2022 16:04:12 +0200
-Date:   Wed, 16 Nov 2022 16:04:12 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: Re: [PATCH 3/4] pwm: Mark free pwm IDs as used in alloc_pwms()
-Message-ID: <Y3Tt3IvCchpZotk9@smile.fi.intel.com>
-References: <20221115211515.3750209-1-u.kleine-koenig@pengutronix.de>
- <20221115211515.3750209-4-u.kleine-koenig@pengutronix.de>
+        Wed, 16 Nov 2022 09:07:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3221B9EB;
+        Wed, 16 Nov 2022 06:05:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E19B61E15;
+        Wed, 16 Nov 2022 14:05:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E94B6C433C1;
+        Wed, 16 Nov 2022 14:05:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668607521;
+        bh=R8UCmC2PII2RGSBxpsMRtJ4RLUVrVzZ8ARuUjOc0CLo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bfG1n1t/4pXfJpmdenAxdRhMapuo09xYup27Ck8KCVIhUwO+IbhstQSbmy8bk5bRQ
+         sVouTNIntNsthevLuBt4FBh6N5oAww7Nyfhm2bnk9oFiIWZc/xWMhoHST1dpMRB3MZ
+         xpJjWB+0579QwIScULLQ1M0WdDlDwgUncCYiM43QyUkI/JI5rXV1UEhpG0c/rP9cQK
+         +67hv8F5FH5kmvBmXmY21DpLq6A3S/xQTP+AOGwSPkmB6uHWJOu73xJwRVLABOUaJm
+         6pyDtcuK2msLIhbvL63deTiclPQoDyd8e5eKjPAiZ6WpClAOMaBhxzErV36C3alZq7
+         O+Euh/xk09Vrg==
+Date:   Wed, 16 Nov 2022 14:05:15 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Luca Weiss <luca@z3ntu.xyz>
+Cc:     linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        afd@ti.com, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] dt-bindings: mfd: qcom,spmi-pmic: rename extcon node
+ name
+Message-ID: <Y3TuGzPnU6LTWzSm@google.com>
+References: <20221031175717.942237-1-luca@z3ntu.xyz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221115211515.3750209-4-u.kleine-koenig@pengutronix.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221031175717.942237-1-luca@z3ntu.xyz>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 10:15:14PM +0100, Uwe Kleine-Kˆnig wrote:
-> alloc_pwms() only identified a free range of IDs and this range was marked
-> as used only later by pwmchip_add(). Instead let alloc_pwms() already do
-> the marking (which makes the function actually allocating the range and so
-> justifies the function name). This way access to the allocated_pwms
-> bitfield is limited to two functions only.
+On Mon, 31 Oct 2022, Luca Weiss wrote:
 
-Let's assume that developers will be cautious about properly freeing allocated
-resources.
-
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-> Signed-off-by: Uwe Kleine-Kˆnig <u.kleine-koenig@pengutronix.de>
+> extcon is a Linux-specific name and shouldn't be a part of the dts. Make
+> it be called usb-detect@ instead.
+> 
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 > ---
->  drivers/pwm/core.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> This patch builds on top of
+> https://lore.kernel.org/linux-arm-msm/20221031173933.936147-1-luca@z3ntu.xyz/
+> But could also be applied without, if conflicts are resolved.
 > 
-> diff --git a/drivers/pwm/core.c b/drivers/pwm/core.c
-> index 2338119a09d8..b43b24bd3c9f 100644
-> --- a/drivers/pwm/core.c
-> +++ b/drivers/pwm/core.c
-> @@ -51,6 +51,8 @@ static int alloc_pwms(unsigned int count)
->  	if (start + count > MAX_PWMS)
->  		return -ENOSPC;
->  
-> +	bitmap_set(allocated_pwms, start, count);
-> +
->  	return start;
->  }
->  
-> @@ -297,8 +299,6 @@ int pwmchip_add(struct pwm_chip *chip)
->  		radix_tree_insert(&pwm_tree, pwm->pwm, pwm);
->  	}
->  
-> -	bitmap_set(allocated_pwms, chip->base, chip->npwm);
-> -
->  	INIT_LIST_HEAD(&chip->list);
->  	list_add(&chip->list, &pwm_chips);
->  
-> -- 
-> 2.38.1
-> 
+>  Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+
+Applied, thanks.
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Lee Jones [ÊùéÁêºÊñØ]
