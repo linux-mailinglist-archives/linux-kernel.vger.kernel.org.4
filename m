@@ -2,52 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4BE862BF2D
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 14:14:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B366162BF41
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 14:20:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238934AbiKPNO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 08:14:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34636 "EHLO
+        id S238871AbiKPNTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 08:19:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232801AbiKPNOU (ORCPT
+        with ESMTP id S238294AbiKPNTm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 08:14:20 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD20D3E08C;
-        Wed, 16 Nov 2022 05:14:18 -0800 (PST)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NC3Qp2gT1zmW2H;
-        Wed, 16 Nov 2022 21:13:54 +0800 (CST)
-Received: from [10.174.177.174] (10.174.177.174) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 16 Nov 2022 21:14:16 +0800
-Message-ID: <85db0e08-2413-5b6e-1477-47e369cb9f8a@huawei.com>
-Date:   Wed, 16 Nov 2022 21:14:16 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH v2 2/3] ext4: fix corrupt backup group descriptors after
- online resize
-To:     Jan Kara <jack@suse.cz>
-CC:     <linux-ext4@vger.kernel.org>, <tytso@mit.edu>,
-        <adilger.kernel@dilger.ca>, <ritesh.list@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
-        <yukuai3@huawei.com>, Baokun Li <libaokun1@huawei.com>
-References: <20221116072802.526990-1-libaokun1@huawei.com>
- <20221116072802.526990-3-libaokun1@huawei.com>
- <20221116114929.wmawudyczia55gpe@quack3>
-Content-Language: en-US
-From:   Baokun Li <libaokun1@huawei.com>
-In-Reply-To: <20221116114929.wmawudyczia55gpe@quack3>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.174]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500021.china.huawei.com (7.185.36.21)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Wed, 16 Nov 2022 08:19:42 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B35262BB15;
+        Wed, 16 Nov 2022 05:19:41 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id x102so11269244ede.0;
+        Wed, 16 Nov 2022 05:19:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cu4Pj0/g3wVyHJOh6XAPI11RLacw08jC/qauyL0wdeU=;
+        b=cetpZgc842pmN6uwgb0ABFm8EiYtQl9ogkQdutUrZ/sr3Uuluqt2l3XPLfgfocSZFK
+         39BEg8DmghIoghB+7mmw77x0F1KEzT266S1ouXMRxCZ79tYTQFA0hefzNaBZguX14ynn
+         xiNglk1uy+vxm0nVIovVKs00SxCL1cgCLgPKv2Q5SssS0fw8uEOvN1xgHnDGKgcpRs51
+         FcS8EXqvfKnq1+fM4oq4/KUnngxyaoy+SMUo/4cbT1n5/6XxukAOfKwLuIYQk003Q5xx
+         LYSmfd6t0CHoU2p0zccA7Yi4Ta68WZA63Q5aLg5PhOXETKjjRkACG0RHWs9RtpOjdI6F
+         PJvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cu4Pj0/g3wVyHJOh6XAPI11RLacw08jC/qauyL0wdeU=;
+        b=R/7Ums4xYkrsrwuiZIBjywzLzP9/N+E5ozkbv46FjB7wD31pk1v1IBgYJUUzdLO/Wc
+         /Hv8j4SYkRqvVhBhgcB+OKMlI7r0DVGEuJRlXUDbBwbYOwK9YlIpRfFnjvQBjfbgdhpn
+         qN7MM4ZgIve4Dndgx4AKYWhyi/h24au3DkCwrjKEzghMQcxEWzTYBUH91WYEGkQJ49VA
+         pSTH9CnlgoHaR1bzSEJ/AqA50gruhv/cq+gOC5Z+co6iBKI+E7zv7sdGF7snmDyBQNHR
+         mVoqyWTd9dwhVtROaGH/OIL3gzxkTb/OWnb82gX2nkdtBq1cy4ZbHCRZY5o4cv3ETqQZ
+         i2UQ==
+X-Gm-Message-State: ANoB5pmFccSX68BPwCz6lZCbrd45k6EbP5Vam04nqoRBZbU8VHhW1fN2
+        kgkjz5SNKO+ub+7nlEVw3yY=
+X-Google-Smtp-Source: AA0mqf49H2mM4LmigWtuW0lZRPV8K/bjrHWkfrhJ5zGrgfca0PZCw5vWAvPSS1BdgVMJfGcQ7MNWGg==
+X-Received: by 2002:a05:6402:b63:b0:460:6194:d293 with SMTP id cb3-20020a0564020b6300b004606194d293mr19607886edb.331.1668604780144;
+        Wed, 16 Nov 2022 05:19:40 -0800 (PST)
+Received: from felia.fritz.box (200116b826c55000c59461cca0b9a159.dip.versatel-1u1.de. [2001:16b8:26c5:5000:c594:61cc:a0b9:a159])
+        by smtp.gmail.com with ESMTPSA id z10-20020a170906714a00b00738795e7d9bsm6818276ejj.2.2022.11.16.05.19.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 05:19:39 -0800 (PST)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
+Cc:     Mike Rapoport <rppt@linux.ibm.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH RESEND] mm: Kconfig: make config SECRETMEM visible with EXPERT
+Date:   Wed, 16 Nov 2022 14:19:22 +0100
+Message-Id: <20221116131922.25533-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,103 +69,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/16 19:49, Jan Kara wrote:
-> On Wed 16-11-22 15:28:01, Baokun Li wrote:
->> In commit 9a8c5b0d0615 ("ext4: update the backup superblock's at the end
->> of the online resize"), it is assumed that update_backups() only updates
->> backup superblocks, so each b_data is treated as a backupsuper block to
->> update its s_block_group_nr and s_checksum. However, update_backups()
->> also updates the backup group descriptors, which causes the backup group
->> descriptors to be corrupted.
->>
->> The above commit fixes the problem of invalid checksum of the backup
->> superblock. The root cause of this problem is that the checksum of
->> ext4_update_super() is not set correctly. This problem has been fixed
->> in the previous patch ("ext4: fix bad checksum after online resize").
->> Therefore, roll back some modifications in the above commit.
->>
->> Fixes: 9a8c5b0d0615 ("ext4: update the backup superblock's at the end of the online resize")
->> Signed-off-by: Baokun Li <libaokun1@huawei.com>
-> So I agree commit 9a8c5b0d0615 is broken and does corrupt group
-> descriptors. However I don't see how PATCH 1/3 in this series would fix all
-> the problems commit 9a8c5b0d0615 is trying to fix. In particular checksums
-> on backup superblocks will not be properly set by the resize code AFAICT.
->
-> 								Honza
-I didn't find these two issues to be the same until I researched the 
-problem in
-PATCH 3/3 and found that commit 9a8c5b0d0615 introduced a similar problem.
-Then, it is found that the backup superblock is directly copied from the 
-primary
-superblock. If the backup superblock is faulty, the primary superblock 
-must be
-faulty. In this case, patch 1 that fixes the primary superblock problem 
-is thought
-of. So by rolling back commit 9a8c5b0d0615 to verify, I found that patch 
-1 did
-fix the problem.
+Commit 6a108a14fa35 ("kconfig: rename CONFIG_EMBEDDED to CONFIG_EXPERT")
+introduces CONFIG_EXPERT to carry the previous intent of CONFIG_EMBEDDED
+and just gives that intent a much better name. That has been clearly a good
+and long overdue renaming, and it is clearly an improvement to the kernel
+build configuration that has shown to help managing the kernel build
+configuration in the last decade.
 
-Only ext4_flex_group_add() and ext4_group_extend_no_check() call
-update_backups() to update the backup superblock. Both of these functions
-correctly set the checksum of the primary superblock. The backup superblocks
-that are copied from them are also correct.
+However, rather than bravely and radically just deleting CONFIG_EMBEDDED,
+this commit gives CONFIG_EMBEDDED a new intended semantics, but keeps it
+open for future contributors to implement that intended semantics:
 
-In ext4_flex_group_add(), we only update the backup superblock if there 
-are no
-previous errors, indicating that we must have updated the checksum in
-ext4_update_super() before executing update_backups(). The previous problem
-was that after we updated the checksum in ext4_update_super(), we modified
-s_overhead_clusters, so the checksums for both the primary and backup 
-superblocks
-were incorrect. This problem has been fixed in PATCH 1/3, so checksum is set
-correctly in ext4_flex_group_add().
+    A new CONFIG_EMBEDDED option is added that automatically selects
+    CONFIG_EXPERT when enabled and can be used in the future to isolate
+    options that should only be considered for embedded systems (RISC
+    architectures, SLOB, etc).
 
-The same is true in ext4_group_extend_no_check(), we only update the backup
-superblock if there are no errors, and we execute ext4_superblock_csum_set()
-to update the checksum before updating the backup superblock. Therefore,
-checksum is correctly set in ext4_group_extend_no_check().
+Since then, this CONFIG_EMBEDDED implicitly had two purposes:
 
-I think we only need to ensure that the checksum is set correctly when 
-the buffer
-lock of sbi->s_sbh is unlocked. Therefore, the checksum should be 
-correct before
-update_backups() holds the buffer lock. Also, in update_backups() we 
-copy the
-entire superblock completely, and the checksum is unchanged, so we don't 
-need
-to reset it.
->> ---
->>   fs/ext4/resize.c | 5 -----
->>   1 file changed, 5 deletions(-)
->>
->> diff --git a/fs/ext4/resize.c b/fs/ext4/resize.c
->> index cb99b410c9fa..32fbfc173571 100644
->> --- a/fs/ext4/resize.c
->> +++ b/fs/ext4/resize.c
->> @@ -1158,7 +1158,6 @@ static void update_backups(struct super_block *sb, sector_t blk_off, char *data,
->>   	while (group < sbi->s_groups_count) {
->>   		struct buffer_head *bh;
->>   		ext4_fsblk_t backup_block;
->> -		struct ext4_super_block *es;
->>   
->>   		/* Out of journal space, and can't get more - abort - so sad */
->>   		err = ext4_resize_ensure_credits_batch(handle, 1);
->> @@ -1187,10 +1186,6 @@ static void update_backups(struct super_block *sb, sector_t blk_off, char *data,
->>   		memcpy(bh->b_data, data, size);
->>   		if (rest)
->>   			memset(bh->b_data + size, 0, rest);
->> -		es = (struct ext4_super_block *) bh->b_data;
->> -		es->s_block_group_nr = cpu_to_le16(group);
->> -		if (ext4_has_metadata_csum(sb))
->> -			es->s_checksum = ext4_superblock_csum(sb, es);
->>   		set_buffer_uptodate(bh);
->>   		unlock_buffer(bh);
->>   		err = ext4_handle_dirty_metadata(handle, NULL, bh);
->> -- 
->> 2.31.1
->>
-Thank you for your review!
+  - It can make even more options visible beyond what CONFIG_EXPERT makes
+    visible. In other words, it may introduce another level of enabling the
+    visibility of configuration options: always visible, visible with
+    CONFIG_EXPERT and visible with CONFIG_EMBEDDED.
+
+  - Set certain default values of some configurations differently,
+    following the assumption that configuring a kernel build for an
+    embedded system generally starts with a different set of default values
+    compared to kernel builds for all other kind of systems.
+
+Considering the second purpose, note that already probably arguing that a
+kernel build for an embedded system would choose some values differently is
+already tricky: the set of embedded systems with Linux kernels is already
+quite diverse. Many embedded system have powerful CPUs and it would not be
+clear that all embedded systems just optimize towards one specific aspect,
+e.g., a smaller kernel image size. So, it is unclear if starting with "one
+set of default configuration" that is induced by CONFIG_EMBEDDED is a good
+offer for developers configuring their kernels.
+
+Also, the differences of needed user-space features in an embedded system
+compared to a non-embedded system are probably difficult or even impossible
+to name in some generic way.
+
+So it is not surprising that in the last decade hardly anyone has
+contributed changes to make something default differently in case of
+CONFIG_EMBEDDED=y.
+
+Currently, in v6.0-rc4, SECRETMEM is the only config switched off if
+CONFIG_EMBEDDED=y.
+
+As long as that is actually the only option that currently is selected or
+deselected, it is better to just make SECRETMEM configurable at build time
+by experts using menuconfig instead.
+
+Make SECRETMEM configurable when EXPERT is set and otherwise default to
+yes. Further, SECRETMEM needs ARCH_HAS_SET_DIRECT_MAP.
+
+This allows us to remove CONFIG_EMBEDDED in the close future.
+
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Acked-by: Mike Rapoport <rppt@linux.ibm.com>
+Acked-by: Arnd Bergmann <arnd@arndb.de>
+Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
+---
+v1: https://lore.kernel.org/lkml/20220908104337.11940-6-lukas.bulwahn@gmail.com/ 
+
+v1 -> resend:
+  - no change of the commit itself
+  - added tags from Mike, Arnd and Masahiro-san
+
+Andrew, please pick this minor clean-up patch for mm.
+
+ mm/Kconfig | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/mm/Kconfig b/mm/Kconfig
+index c7e06b507965..6a9a7657b470 100644
+--- a/mm/Kconfig
++++ b/mm/Kconfig
+@@ -1074,7 +1074,13 @@ config IO_MAPPING
+ 	bool
+ 
+ config SECRETMEM
+-	def_bool ARCH_HAS_SET_DIRECT_MAP && !EMBEDDED
++	default y
++	bool "Enable memfd_secret() system call" if EXPERT
++	depends on ARCH_HAS_SET_DIRECT_MAP
++	help
++	  Enable the memfd_secret() system call with the ability to create
++	  memory areas visible only in the context of the owning process and
++	  not mapped to other processes and other kernel page tables.
+ 
+ config ANON_VMA_NAME
+ 	bool "Anonymous VMA name support"
 -- 
-With Best Regards,
-Baokun Li
+2.17.1
 
