@@ -2,220 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC34262C8CA
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 20:12:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 206F462C8CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 20:13:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231634AbiKPTM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 14:12:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37142 "EHLO
+        id S233430AbiKPTNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 14:13:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiKPTM2 (ORCPT
+        with ESMTP id S229489AbiKPTNK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 14:12:28 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8097661779
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 11:12:26 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id s5so11825311edc.12
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 11:12:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=08pM1gv30LggQjgAzS6y9T5V02Bhy022fNx+5dfUfno=;
-        b=SUSxsEitWfVe4tH9Q7pGX+7jtGtMRPAExtgKfTJlvBym3hWJ5ofEVqcL10YP0E3F0q
-         g6WQIePM3JEtstv6HqtRL2v6zOEenhj01tPjN0AUODwmHSFsfSvYmXKtE0vf5Uw5ngAn
-         8hgiY1vd70Z3i6U9v1jdNDAR9PPaviEBuvRmGzlzWHD0NwcRlA5GsoYLrxHBc2swnluC
-         Tui7ycTTxU+HDAgrBQ5oBevLWLW26ejI9kczEXZl96OcY6mm38is5Kp+pccXeWr40evr
-         fxhzhN0OG9cuxmXIUMkoEQKFAtLOlBnKVU/tXMJm1U4xZHpXf1gnEoVfMymrjStG6sDv
-         9Z9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=08pM1gv30LggQjgAzS6y9T5V02Bhy022fNx+5dfUfno=;
-        b=uYBcltPgNWw8Ujbvl5ExVuk+l3QdqkVR94+LR1rXq2JHxqIO3LjzQzYV6YF857OiPe
-         vJ7lxlAD1F9TeYDCIEaZBBB9qFzjlTaEfMzcDQO4lpL9c9eiMhRTP76yDA1XOenrIIQE
-         SE2z0ZOItt9NCUV33Qj6fC9cGx0Ud5akrQRlgB5rlbbqvpM1Px92LYkuBu58YE5syHBb
-         yB47aN9Gobq0i3j8/qHwXBedJ9vu5+ONwcYI1xog6BAPtn477uEvTd0iGw9zgt/Dp2kV
-         k4FyR5fOZ3CC93dcEntUg0AhnCcNEgc0AbNTo5VGgOZjktbA/Sp8xQoG6Ykshods110/
-         gR2A==
-X-Gm-Message-State: ANoB5pkaJYBIK52cdnGjp3MJVFhevIRL8bzQF5w4GgyYaiRTfNw97FzO
-        HjKgywIBknPRrL8AoH2m+PM=
-X-Google-Smtp-Source: AA0mqf6twgLt7WpKAE7GhWLHzHR36saOG0xnhjna/Df0Je/W9o97LehDrL3xS/bFmXTmSZqVJmO9NA==
-X-Received: by 2002:aa7:d3c6:0:b0:463:c64e:bc75 with SMTP id o6-20020aa7d3c6000000b00463c64ebc75mr20540586edr.205.1668625945028;
-        Wed, 16 Nov 2022 11:12:25 -0800 (PST)
-Received: from ?IPV6:2003:c7:8f35:4b36:b14a:31a9:5cf4:bef4? (p200300c78f354b36b14a31a95cf4bef4.dip0.t-ipconnect.de. [2003:c7:8f35:4b36:b14a:31a9:5cf4:bef4])
-        by smtp.gmail.com with ESMTPSA id i15-20020a05640200cf00b00463c5c32c6esm7843288edu.89.2022.11.16.11.12.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 11:12:24 -0800 (PST)
-Message-ID: <d145c4f9-7bde-527c-03e9-b2784c3162f4@gmail.com>
-Date:   Wed, 16 Nov 2022 20:12:23 +0100
+        Wed, 16 Nov 2022 14:13:10 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2089.outbound.protection.outlook.com [40.107.92.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A333E089;
+        Wed, 16 Nov 2022 11:13:08 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BJF16SNJIb5jOeP5uVYn+wqNWmZv/cw/cYLjQtR1m6VGovi/UkCLwgK8H2+axiYpmSlyjhPw6wFZlU5x3FXX0J3KlSZr6O5hkkIzp2QdcaEqzqsCgI5I1Y/3glh4XrmBmpWUychOoFu4/MlZEwQuryua5rO6YkEmjrfWrS/4h+fz+hAk/ozuWjEX85qoHFBA34M3tj79y0vgZ0IZlNhtwjkwRIkfMe/uwZN+cHWJzIccpjxiWhJ0SNVk1N7xvdayMaT+D3hKaFS3oHi1JbhAnwhiz6/eSPOPC+s6yui3Zzv1ch7huaxUCjd/9SusaBuUN3ztAt/lDk1UVBjHflp4ew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9xbSaWjEgbsgTjU0YvGrnI2r8rmTEG7YsreHD1+GA2Q=;
+ b=fIMtT5wCX+CO15m/aiWDO7uQ9k2IZ+jgD97fzipU4dRBRgf000dFsYCPA3grDK5PlHMtb6Qyp3eDTV6nV8pxh2LNB2OOXbUKQz1DroapctmPbbrQSRoqPbWC2ck/NQPmOpRLc7QVCpCSotrMpf42a4KYgUAFgXTxchtOUb4NX3/JBwfFAyhwIElp9L1na66jj4oSLO07t+eowJFVQ5ySkdjqYrrGxnXss1E6v8cTuXqAapE5+20dIyUgfWac6hx86uBKvz2EaFtxNHGz9Xpi8rKsYf27tPBEwHr7Ssm6gEbXDy2hsZuTHy26GwwB1mcrZqEZ5aQfgHaiunpQrI8hYg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9xbSaWjEgbsgTjU0YvGrnI2r8rmTEG7YsreHD1+GA2Q=;
+ b=TgaXo3kD0Z5r4CKlMht1IaMvKla0951dRxm5DasenwSINJCswjaTZEQq8+km9XdBh3aZJo1osbZ+0LQQgKVJmx4y9I39oi58IkgYG94uNYzRI4ibVvBKRmxatBahlm+92SdJekVvfag7IFWnhInWLRAcsBChudvmnYWfJJncYT2o4SeWdZ0wER/pL+KRSIWo31v3CXgcQOrxDF5jVqMj9Xhs0WKMBi8Uxqmab6ZeqNfDslHCvl3EcQ3GUhOI6+elprZQPgOBBpd3uUwUnM/pUp207uZSf2QJIYHIYfzOuUMn6sz1+pwf1HxSr/tp/6me/141QTOFykAg71POYYaYtw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by DM4PR12MB5915.namprd12.prod.outlook.com (2603:10b6:8:68::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.18; Wed, 16 Nov
+ 2022 19:13:06 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f8b0:df13:5f8d:12a]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f8b0:df13:5f8d:12a%7]) with mapi id 15.20.5813.017; Wed, 16 Nov 2022
+ 19:13:06 +0000
+Date:   Wed, 16 Nov 2022 15:13:04 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
+        Allen Hubbe <allenbh@gmail.com>,
+        "Ahmed S. Darwish" <darwi@linutronix.de>,
+        Reinette Chatre <reinette.chatre@intel.com>
+Subject: Re: [patch 12/33] PCI/MSI: Add support for per device MSI[X] domains
+Message-ID: <Y3U2QFeoDB17kbIC@nvidia.com>
+References: <20221111133158.196269823@linutronix.de>
+ <20221111135205.951710169@linutronix.de>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221111135205.951710169@linutronix.de>
+X-ClientProxiedBy: BYAPR07CA0023.namprd07.prod.outlook.com
+ (2603:10b6:a02:bc::36) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] staging: vt6655: change the function name
- s_vGenerateTxParameter
-Content-Language: en-US
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-To:     Tanjuate Brunostar <tanjubrunostar0@gmail.com>,
-        gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-References: <Y3KN+kVLZ8gRzccm@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
- <1a95a72e-85b9-a03c-51ad-d5ca4b5d0e0e@gmail.com>
-In-Reply-To: <1a95a72e-85b9-a03c-51ad-d5ca4b5d0e0e@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DM4PR12MB5915:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8e89fdaa-731e-4af4-2a05-08dac8069799
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: j5lK0eC9cDbhx7zKJVcXv3MaPCFY5oyLG3rB02cAoZH8bpFDYojYUtuNKSDfhnzRVOSoX5UIkjuKZ95QybiFZzSBdkyOIs5rgAsgs5cNu0NGTUUhT8zT5xpOMqmNMXXMl8//2LrSS2K/yt0P/3IUN39mn1WHLcRJ1hD/kaOml3eN1L77Y8BdI+iP+C6TJjd8K3ZSv4P9rU4LF0wvANoxq0X00K/Tn0uS5RYkeeh4Ogrk8K6MD+CbRtL26/LwXQ86jFsDcP7hzTO668ZKO1yMadIsnqq5j0TK+CzcOVX5xB483LtICtjEm4K7jLL6V/cjR2u0NUSzfCLI663HDEVMmFMK3MrY4PHKGSwlVs6KWgkEqAr9o0nXpSzjFgyW7uFTWMlIwYn/hnRQv6xBOkYU0cWm16tELXFKZKp7u3Habm45RXYwD2PJaOoQFD0NLgw05G9b7PkhiTux7juI16TUIPzoa0hOdUE9g86wC9jpcdLhFB88Jvf3WhBlMmsVmZ6SyZumsUb27QCwmpZ/a2GdTuefWndl7qKDJ3Cx0BF9MYT0ai4ATXU0aaak8iN2H46QeLS2ErjaPerFy4njsCIQQtwlBSVTmoOqfA+6i1lL+JggMJcmWz+WV2SbmNWWuNVF0RLoLS6jpOnGI7MWli212HOuSC4Fsb7927WyV1x5MvZPX2suhianghQRQAtZlzp1ZVVxMbcoVb/5cnM6HDjSSw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(376002)(346002)(396003)(366004)(451199015)(5660300002)(7416002)(8936002)(2906002)(41300700001)(54906003)(6916009)(4326008)(8676002)(66476007)(66556008)(36756003)(6486002)(478600001)(316002)(66946007)(2616005)(186003)(26005)(6512007)(86362001)(6506007)(38100700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?w/BObz/A9HBMVCyDRCkxi377mzHIz6K7moDgFef5fbbIMTr0UavhGRQKwQlx?=
+ =?us-ascii?Q?kKHDeVLxLTjsy9EvO1PJ75yvV2f9wvAcgKr9TClxQm1EQM89u8ovCPYWDpfL?=
+ =?us-ascii?Q?trJbvk4mWnyABFH+WzDiUyXtFaqbXe3JheT/TeJrwLdEERHWnX5efqGh5EqM?=
+ =?us-ascii?Q?mj8WSlbDEIsdE/t3LkLESavif+koPvomkMiQoxk9j3AkAvvuyY2X1DsdX4hp?=
+ =?us-ascii?Q?qAObs0EG7p105cnVaCrg+azTAWRvzfvC7wFjE8Ar+uUykcZIRK8QVFD2MDyB?=
+ =?us-ascii?Q?mOPzxHO0VpdsDrC0054AKvICj9vJdyxeoMgiNlZdqT3JMujLQxjGqfAbyp/P?=
+ =?us-ascii?Q?ChGlHQoIm4jisAoITIGrlKSSyXWtU1e1fUAnKkKq052447rMzhdkM9WZvYsN?=
+ =?us-ascii?Q?/bl4Nm+2ug+ZF+id8D96d4vmEJk58gMS1UZa/USSVKQw07ELuiSnWapij7MB?=
+ =?us-ascii?Q?7tiA2RpqfLw7TqVGVmjDY+LF/5m4pwBgjzCVuLnN/uecozwY73FyCndzF/Xf?=
+ =?us-ascii?Q?8VU4hV2dfNSSFE2toKgLva374hnbG6jvCThKOsI93PPRyIgZHdNWXtPcP7wV?=
+ =?us-ascii?Q?2Q5Lgr5i1sY4Tlk4tOA8849xP//qEb/OUuX+6YgeP2GRsakwTn6yY8UAit98?=
+ =?us-ascii?Q?IF0xbPjrn2/QSyaO4YG/JzjseOTLRsaJ+2pFPwnpdd3P6hSAx66VgJzroU2b?=
+ =?us-ascii?Q?E6clyFQJIvwDN0Yt6zlceC0xZkD2B9nK8r3z5M093TOs+HY4KcmSaJBTgwnP?=
+ =?us-ascii?Q?ntABqwT9fMs4L2tsbCPqnAKsWgiJPm6JbpFv2DkHsN2EFYOiEer5HLXmbd7J?=
+ =?us-ascii?Q?xeWiAoHGMVX8BRE9vihwBkDNFmIFzlw1WglaADvFxQiY5yjuky59p7sfEkcO?=
+ =?us-ascii?Q?0hWLnzjddprn9pxs8k+S4NCmco/j0LbXbx7Vf5Pvjj0PiVTE+BhXH5SwMPUE?=
+ =?us-ascii?Q?fo3PqM7MkAbc7Ivo7sZNGmgtByVI3cFsf9xaufcxDsy9B+jEGvusbqAS+67g?=
+ =?us-ascii?Q?hARyo5gQT7zLCxv6tH633r0qfamNl8PHUTWBpzh2ilyB0D1eAd+44rzXSX6/?=
+ =?us-ascii?Q?IZUkiSh1ZJsMUpl1DRb5eoKmSEyeO855y0NCLf2RbPILV3qVJNa8NCRE2jNL?=
+ =?us-ascii?Q?yZf03hMg3h6Od+V7ZndfwXk+Cs5pHr26LqTOJf0Dl4dZHVCSgoqED/PIjWVX?=
+ =?us-ascii?Q?YZ0CQhGiH3miu5k8jfyrp9xmgFDqzjgp8zj2pb5mjQ6dxfp6XvIOZOYviURw?=
+ =?us-ascii?Q?Q1HnEXggcbTs3n2QCCfyW13kT6GlFh5uzewdhxPfxCZjw6AM7Ktq4LSPrQj0?=
+ =?us-ascii?Q?M2zAhyWdvJHOoTKEEfgCLOqJaBvqyKPIVaY9Usn0IMgpPr9JuAHBlrnhLxN1?=
+ =?us-ascii?Q?44EPsow0OP37In4Osh/TQbEsmsgbzJ+LFpzK1VlfJUqQ4fWb8YeVsM134Dlu?=
+ =?us-ascii?Q?un0XGTaDoHdabZz0w3sL8rmVcMTVXQfEckskw0p1jQRtyzIk0xmsLFBxG5pK?=
+ =?us-ascii?Q?nVV3TarZRDVtQ4Bc+WEeTp8P+YU+TBrR4B3TwuRlSgZNz9f6WFf/RI6xYeoS?=
+ =?us-ascii?Q?3j1lm6AqTUL8Vqi50U9nsZ5kMQ8P/Wcs/D9h5oeY?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8e89fdaa-731e-4af4-2a05-08dac8069799
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Nov 2022 19:13:06.6665
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6vGIYYa9V12oTcr8I2/bOPMCD5UDOAlsLh6XOiEboODxt2uu96Pek+H64CUMKo90
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5915
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/14/22 21:16, Philipp Hortmann wrote:
-> On 11/14/22 19:50, Tanjuate Brunostar wrote:
->> Remove the use of Hungarian notation, which is not used in the Linux
->> kernel. Reported by checkpatch
->> Add indentation to the affected function to follow the Linux kernel
->> coding style. This improves code visibility
->>
->> Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
->> ---
->>
->> v2: removed unnecessary function prototype
->>
->>   drivers/staging/vt6655/rxtx.c | 44 +++++++++++------------------------
->>   1 file changed, 14 insertions(+), 30 deletions(-)
->>
->> diff --git a/drivers/staging/vt6655/rxtx.c 
->> b/drivers/staging/vt6655/rxtx.c
->> index 715b323cd2a8..341e23054817 100644
->> --- a/drivers/staging/vt6655/rxtx.c
->> +++ b/drivers/staging/vt6655/rxtx.c
->> @@ -10,7 +10,7 @@
->>    * Date: May 20, 2003
->>    *
->>    * Functions:
->> - *      s_vGenerateTxParameter - Generate tx dma required parameter.
->> + *      generate_tx_parameter - Generate tx dma required parameter.
->>    *      vGenerateMACHeader - Translate 802.3 to 802.11 header
->>    *      cbGetFragCount - Calculate fragment number count
->>    *      csBeacon_xmit - beacon tx function
->> @@ -85,18 +85,6 @@ static const unsigned short fb_opt1[2][5] = {
->>   #define DATADUR_A_F1    13
->>   /*---------------------  Static Functions  --------------------------*/
->> -static void s_vGenerateTxParameter(struct vnt_private *pDevice,
->> -                   unsigned char byPktType,
->> -                   struct vnt_tx_fifo_head *,
->> -                   void *pvRrvTime,
->> -                   void *pvRTS,
->> -                   void *pvCTS,
->> -                   unsigned int    cbFrameSize,
->> -                   bool bNeedACK,
->> -                   unsigned int    uDMAIdx,
->> -                   void *psEthHeader,
->> -                   unsigned short wCurrentRate);
->> -
->>   static unsigned int
->>   s_cbFillTxBufHead(struct vnt_private *pDevice, unsigned char byPktType,
->>             unsigned char *pbyTxBufferAddr,
->> @@ -854,21 +842,17 @@ s_vFillCTSHead(
->>    -
->>    * unsigned int cbFrameSize, Hdr+Payload+FCS
->>    */
->> -static
->> -void
->> -s_vGenerateTxParameter(
->> -    struct vnt_private *pDevice,
->> -    unsigned char byPktType,
->> -    struct vnt_tx_fifo_head *tx_buffer_head,
->> -    void *pvRrvTime,
->> -    void *pvRTS,
->> -    void *pvCTS,
->> -    unsigned int cbFrameSize,
->> -    bool bNeedACK,
->> -    unsigned int uDMAIdx,
->> -    void *psEthHeader,
->> -    unsigned short wCurrentRate
->> -)
->> +static void generate_tx_parameter(struct vnt_private *pDevice,
->> +                  unsigned char byPktType,
->> +                  struct vnt_tx_fifo_head *tx_buffer_head,
->> +                  void *pvRrvTime,
->> +                  void *pvRTS,
->> +                  void *pvCTS,
->> +                  unsigned int cbFrameSize,
->> +                  bool bNeedACK,
->> +                  unsigned int uDMAIdx,
->> +                  void *psEthHeader,
->> +                  unsigned short wCurrentRate)
->>   {
->>       u16 fifo_ctl = le16_to_cpu(tx_buffer_head->fifo_ctl);
->>       bool bDisCRC = false;
->> @@ -1097,8 +1081,8 @@ s_cbFillTxBufHead(struct vnt_private *pDevice, 
->> unsigned char byPktType,
->>       memset((void *)(pbyTxBufferAddr + wTxBufSize), 0, 
->> (cbHeaderLength - wTxBufSize));
->>       /* Fill FIFO,RrvTime,RTS,and CTS */
->> -    s_vGenerateTxParameter(pDevice, byPktType, tx_buffer_head, 
->> pvRrvTime, pvRTS, pvCTS,
->> -                   cbFrameSize, bNeedACK, uDMAIdx, hdr, 
->> pDevice->wCurrentRate);
->> +    generate_tx_parameter(pDevice, byPktType, tx_buffer_head, 
->> pvRrvTime, pvRTS, pvCTS,
->> +                  cbFrameSize, bNeedACK, uDMAIdx, hdr, 
->> pDevice->wCurrentRate);
->>       /* Fill DataHead */
->>       uDuration = s_uFillDataHead(pDevice, byPktType, pvTxDataHd, 
->> cbFrameSize, uDMAIdx, bNeedACK,
->>                       0, 0, uMACfragNum, byFBOption, 
->> pDevice->wCurrentRate, is_pspoll);
-> 
-> I cannot apply your patch.
-> 
-> Bye Philipp
+On Fri, Nov 11, 2022 at 02:58:30PM +0100, Thomas Gleixner wrote:
+> +static struct msi_domain_template pci_msi_template = {
+> +	.chip = {
+> +		.name			= "PCI-MSI",
+> +		.irq_mask		= pci_mask_msi,
+> +		.irq_unmask		= pci_unmask_msi,
+> +		.irq_write_msi_msg	= pci_msi_domain_write_msg,
+> +		.flags			= IRQCHIP_ONESHOT_SAFE,
+> +	},
+> +
+> +	.ops = {
+> +		.set_desc		= pci_device_domain_set_desc,
+> +	},
+> +
+> +	.info = {
+> +		.flags			= MSI_COMMON_FLAGS | MSI_FLAG_MULTI_PCI_MSI,
+> +		.bus_token		= DOMAIN_BUS_PCI_DEVICE_MSI,
+> +	},
+> +};
+> +
+> +static void pci_mask_msix(struct irq_data *data)
+> +{
+> +	pci_msix_mask(irq_data_get_msi_desc(data));
+> +}
+> +
+> +static void pci_unmask_msix(struct irq_data *data)
+> +{
+> +	pci_msix_unmask(irq_data_get_msi_desc(data));
+> +}
+> +
+> +static struct msi_domain_template pci_msix_template = {
+> +	.chip = {
+> +		.name			= "PCI-MSIX",
+> +		.irq_mask		= pci_mask_msix,
+> +		.irq_unmask		= pci_unmask_msix,
+> +		.irq_write_msi_msg	= pci_msi_domain_write_msg,
+> +		.flags			= IRQCHIP_ONESHOT_SAFE,
+> +	},
+> +
+> +	.ops = {
+> +		.set_desc		= pci_device_domain_set_desc,
+> +	},
+> +
+> +	.info = {
+> +		.flags			= MSI_COMMON_FLAGS | MSI_FLAG_PCI_MSIX,
+> +		.bus_token		= DOMAIN_BUS_PCI_DEVICE_MSIX,
+> +	},
+> +};
 
-Hi
+I like this splitting alot, it makes the whole thing make so much more
+sense.
 
-kernel@matrix-ESPRIMO-P710:~/Documents/git/kernels/staging$ git apply 
---reject --ignore-space-change --ignore-whitespace 
-~/Downloads/20221114-\[PATCH\ v2\]\ staging_\ vt6655_\ change\ the\ 
-function\ name\ s_vGenerateTxParameter-5399.txt
-Checking patch drivers/staging/vt6655/rxtx.c...
-error: while searching for:
-#define DATADUR_A_F1    13
+> +bool pci_setup_msi_device_domain(struct pci_dev *pdev)
+> +{
+> +	if (WARN_ON_ONCE(pdev->msix_enabled))
+> +		return false;
+> +
+> +	if (pci_match_device_domain(pdev, DOMAIN_BUS_PCI_DEVICE_MSI))
+> +		return true;
+> +	if (pci_match_device_domain(pdev, DOMAIN_BUS_PCI_DEVICE_MSIX))
+> +		msi_remove_device_irq_domain(&pdev->dev, MSI_DEFAULT_DOMAIN);
+> +
+> +	return pci_create_device_domain(pdev, &pci_msi_template, 1);
 
-/*---------------------  Static Functions  --------------------------*/
-static void s_vGenerateTxParameter(struct vnt_private *pDevice,
-				   unsigned char byPktType,
-				   struct vnt_tx_fifo_head *,
-				   void *pvRrvTime,
-				   void *pvRTS,
-				   void *pvCTS,
-				   unsigned int	cbFrameSize,
-				   bool bNeedACK,
-				   unsigned int	uDMAIdx,
-				   void *psEthHeader,
-				   unsigned short wCurrentRate);
+Hardwired to one 1? What about multi-msi?
 
-static unsigned int
-s_cbFillTxBufHead(struct vnt_private *pDevice, unsigned char byPktType,
-		  unsigned char *pbyTxBufferAddr,
-
-error: patch failed: drivers/staging/vt6655/rxtx.c:85
-Hunk #3 succeeded at 880 (offset 38 lines).
-Hunk #4 succeeded at 1119 (offset 38 lines).
-Applying patch drivers/staging/vt6655/rxtx.c with 1 reject...
-Hunk #1 applied cleanly.
-Rejected hunk #2.
-Hunk #3 applied cleanly.
-Hunk #4 applied cleanly.
-
-
-Bye Philipp
+Jason
