@@ -2,123 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7933A62B6D6
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:45:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C06B62B6DE
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:47:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231431AbiKPJpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 04:45:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60830 "EHLO
+        id S233406AbiKPJrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 04:47:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233113AbiKPJo7 (ORCPT
+        with ESMTP id S231431AbiKPJrn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 04:44:59 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC09DEE
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:44:58 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id be13so28660373lfb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:44:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pgS+Ovv0eXOJwFTViusXUlwcEa0Tx7ZA7lRyTAv8k4w=;
-        b=RCe4P4IceE6ZUqJglE+YVt+Dny9tnUgYpgasdp8+S6rXcaCc7k9FtCvWd5x2Bj/sBV
-         NAVASAdFtSlrI+TrToOf3ARBu7wuCOzIF7KDffariJDavuOisxcP1b+91qua69biztg0
-         uGsemHhaMQ0pBs0UcTft6qARg9oiPnZVW2nn5ja8UU27z4v/vz42rv/nV2f2ZxqLyCMp
-         77qSLcgHngG/Eoh2HjSHgQY/VWAvQWZANyGvy/SbToN+hIU8RQN/ULzpAzOZk0n5d1Vr
-         AhDCUuR7iP8in6MICx3X2fC71sp1qR/COkLRjG4njZ8KAuK8zy1cbCpLq1uvSaWGwgS4
-         emEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pgS+Ovv0eXOJwFTViusXUlwcEa0Tx7ZA7lRyTAv8k4w=;
-        b=jD5k+B5V+QEvM8HPI0t+0RAhpoejugJpvRmryxxQa9W2jPyG6asCo0YA1kBMBTXNmN
-         MOmK0J+5EY/jYAfOA/D9LB2lLA2GaceAVEbL6PuMJCk0DPGQxjVtxZC519D0cmYns/Ec
-         Qa7xoX0DdT5JzCZq5o4FeD0zuN5cPHEFAsoAYbUSbhCF1c6dALn6dbzZNsmLxGIQwvC7
-         T/XMDmOg4E4qLjPInPLZt3aLyEK2hlAJgDQKo553ELlSPsvvyPFSO7FGUVkZ6APHCTy/
-         DT9t2WYSPhbm3PqdAMoY6GF9tHFe0A4p/E/GErF+O0Y1y6Hnc47Wzt7nRyATXgcOuzjd
-         XrNg==
-X-Gm-Message-State: ANoB5pn3FZVEed7nAChN0SSp/E6GiBzqDXeQUVnDUj9gE2XOIFozuXYH
-        GBqUGSwdK+GUw2jRcGxrKmnZGg==
-X-Google-Smtp-Source: AA0mqf6rTJFMk6b2mLxnOY8Sft920fWk28nxriGe7jyDuJtMB+LZZKA6WnYqmqoNq3pFIBP+3eFblg==
-X-Received: by 2002:a05:6512:308a:b0:4a2:39e6:4d48 with SMTP id z10-20020a056512308a00b004a239e64d48mr6999988lfd.234.1668591896428;
-        Wed, 16 Nov 2022 01:44:56 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id g5-20020a056512118500b00496693860dcsm2516397lfr.232.2022.11.16.01.44.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 01:44:56 -0800 (PST)
-Message-ID: <0ac1f247-be87-0f92-9ef0-c653bcdb6c1f@linaro.org>
-Date:   Wed, 16 Nov 2022 10:44:54 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 05/11] dt-bindings: mailbox: qcom: Allow syscon on
- qcom,msm8976-apcs-kpss-global
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, agross@kernel.org
-Cc:     andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, jassisinghbrar@gmail.com,
-        srinivas.kandagatla@linaro.org, jic23@kernel.org, lars@metafoo.de,
-        keescook@chromium.org, tony.luck@intel.com, gpiccoli@igalia.com,
-        evgreen@chromium.org, gregkh@linuxfoundation.org,
-        a39.skl@gmail.com, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-hardening@vger.kernel.org,
-        marijn.suijten@somainline.org, kernel@collabora.com, luca@z3ntu.xyz
-References: <20221111120156.48040-1-angelogioacchino.delregno@collabora.com>
- <20221111120156.48040-6-angelogioacchino.delregno@collabora.com>
- <14947ae2-c8d4-de86-ce9e-29175e73cbb2@linaro.org>
- <9f3e88fa-0aaf-2edd-366e-c3f5b2269dba@collabora.com>
- <513a2dc3-d053-6e4b-a125-394cf1f6c81b@linaro.org>
- <f60ccd79-9c82-0844-2c5f-21ec29c14dcf@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <f60ccd79-9c82-0844-2c5f-21ec29c14dcf@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Wed, 16 Nov 2022 04:47:43 -0500
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B651C1A05E
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:47:41 -0800 (PST)
+Received: from pps.filterd (m0134425.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AG827UW020471;
+        Wed, 16 Nov 2022 09:47:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
+ : date : message-id; s=pps0720;
+ bh=ycJwqCMbkamNm9OjhgF+aA5+LBPYf0FftuKwdKDW+8Y=;
+ b=HIly/AYQFdBjy7pEixrIbK2eNocY2RfamWUNqP1MfyyFFAi4xgcymRHiWDUBdhbtCXtG
+ cV9hrPI4T+6M1sjFxv/iewAHlm8LWtikYR9CLfSKio37XCXjHm6+ZlOu5DvWbT909DYT
+ mcZMPPtqOc3ng/VkEr7JUhfbFT5wQ8cb+/jKql3uLg2IOrZCD7v0IzF0m153tjNytrKw
+ DRNifca1e+ludFGASkqY8NjV5GsT+GKs9pPMqF6bFnRFuJ/pPs96pLR+jIWdoQ1tftmC
+ eNDMn/k0uIFLtI7rWcfpDmwMZcU5KA/EH+ZGfKySQz1QN86c3CJJ6kwALw9KOUp81DNf tw== 
+Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3kvv0bh07g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Nov 2022 09:47:31 +0000
+Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by p1lg14879.it.hpe.com (Postfix) with ESMTPS id 384C24B5C9;
+        Wed, 16 Nov 2022 09:47:30 +0000 (UTC)
+Received: from blofly.os1.tw (unknown [16.231.227.36])
+        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTP id E16FD80328F;
+        Wed, 16 Nov 2022 09:47:25 +0000 (UTC)
+From:   matt.hsiao@hpe.com
+To:     linux-kernel@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, arnd@arndb.de,
+        christophe.jaillet@wanadoo.fr, gustavoars@kernel.org,
+        nishadkamdar@gmail.com, torvalds@linux-foundation.org,
+        dhaval.experiance@gmail.com, viro@zeniv.linux.org.uk,
+        arvind.yadav.cs@gmail.com, standby24x7@gmail.com,
+        wfp5p@virginia.edu, jslaby@suse.cz, prarit@redhat.com,
+        tj@kernel.org, adobriyan@gmail.com, Matt Hsiao <matt.hsiao@hpe.com>
+Subject: [PATCH] misc: hpilo: relicense HPE iLO driver as Dual MIT/GPL
+Date:   Wed, 16 Nov 2022 17:47:12 +0800
+Message-Id: <20221116094712.14312-1-matt.hsiao@hpe.com>
+X-Mailer: git-send-email 2.16.6
+X-Proofpoint-GUID: 5MLy5IOjS4qFNt-SDgmSeOXOObkfJktT
+X-Proofpoint-ORIG-GUID: 5MLy5IOjS4qFNt-SDgmSeOXOObkfJktT
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-15_08,2022-11-15_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=928
+ impostorscore=0 clxscore=1011 lowpriorityscore=0 phishscore=0 mlxscore=0
+ bulkscore=0 adultscore=0 spamscore=0 suspectscore=0 malwarescore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211160068
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/11/2022 10:00, AngeloGioacchino Del Regno wrote:
-> Il 16/11/22 09:57, Krzysztof Kozlowski ha scritto:
->> On 16/11/2022 09:52, AngeloGioacchino Del Regno wrote:
->>> Il 15/11/22 17:44, Krzysztof Kozlowski ha scritto:
->>>> On 11/11/2022 13:01, AngeloGioacchino Del Regno wrote:
->>>>> MSM8976 supports SMSM, which needs this node to also be a syscon:
->>>>> move the compatible to allow that.
->>>>>
->>>>> Fixes: bcc8d70f912d ("dt-bindings: mailbox: Add compatible for the MSM8976")
->>>>
->>>> I am not sure if this is still a bug. Maybe just a missing feature?
->>>>
->>>
->>> This changes how you use this mailbox across the entire devicetree (as other
->>> nodes will not use mboxes = xxxx, but qcom,ipc = xxxx as syscon), so I think
->>> that this is not a missing feature?
->>
->> Whether it is a bug depends on existing usage. If none of msm8976 DTSes
->> use it the other way, then it is just incomplete or missing support. Not
->> a bug. If existing DTSes use it as syscon, thus you need to add syscon
->> to compatible, then it would be a bugfix.
->>
-> 
-> It's not a bugfix then. The Fixes tag shall be dropped.
-> 
-> Same question like the other commit, should I send a v3 or can it be dropped while
-> applying?
+From: Matt Hsiao <matt.hsiao@hpe.com>
 
-Maybe better send a v3.
+Currently, the hpilo driver is licensed as GPL. To run OpenBSD on HPE
+servers with BMC (HPE iLO) functionality, a dual MIT/GPL license is needed
+for porting the hpilo driver to OpenBSD.
 
-Best regards,
-Krzysztof
+Signed-off-by: Matt Hsiao <matt.hsiao@hpe.com>
+---
+
+Hello contributors in the CC list,
+
+Thanks for your contributions to the hpilo driver. Please kindly review
+the license change and hopefully you would agree and approve it. Thanks!
+
+ drivers/misc/hpilo.c | 2 +-
+ drivers/misc/hpilo.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/misc/hpilo.c b/drivers/misc/hpilo.c
+index 8d00df9243c4..6a06b6485950 100644
+--- a/drivers/misc/hpilo.c
++++ b/drivers/misc/hpilo.c
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: GPL-2.0
++// SPDX-License-Identifier: GPL-2.0 OR MIT
+ /*
+  * Driver for the HP iLO management processor.
+  *
+diff --git a/drivers/misc/hpilo.h b/drivers/misc/hpilo.h
+index d57c34680b09..581dfd7834b8 100644
+--- a/drivers/misc/hpilo.h
++++ b/drivers/misc/hpilo.h
+@@ -1,4 +1,4 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
++/* SPDX-License-Identifier: GPL-2.0 OR MIT */
+ /*
+  * linux/drivers/char/hpilo.h
+  *
+-- 
+2.16.6
 
