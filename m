@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90E5662C973
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 21:02:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7495662C975
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 21:02:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234249AbiKPUCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 15:02:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33620 "EHLO
+        id S234625AbiKPUCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 15:02:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbiKPUCf (ORCPT
+        with ESMTP id S233955AbiKPUCj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 15:02:35 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689D6657EF;
-        Wed, 16 Nov 2022 12:02:32 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id w23so11009652ply.12;
-        Wed, 16 Nov 2022 12:02:32 -0800 (PST)
+        Wed, 16 Nov 2022 15:02:39 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B26657EC;
+        Wed, 16 Nov 2022 12:02:39 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id 6so17716845pgm.6;
+        Wed, 16 Nov 2022 12:02:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=As0fulMLun+eJjqjObjSTdg/PTBD9UNPaQIMHAXZOXg=;
-        b=HF+WPJyRYMs597lubkXXvkdDma+90w/DWbM/ldOz6YR0pmeg3/ztGGIkmlIlb9vErS
-         nLkLssypMX366ESoLasH3xX4jIb/d3PI5KNYYhpn7wjhV/81J/VMCw//RVp2PExQHVMP
-         /UhkGVXOuZLhy/KZYOeyAgjZpSt8frCme9FgOy+5VP2uuk6Q7I3DrbpycnxZb+MWlONg
-         g6VHarv+9bkOdWOIQ+Xt4kpq5KIew1mfIJ1xE9iTO2vzcSwJ0GcTm17t9mSK6qdpGtvx
-         tzKLD9qGlBH59gUTR6EW5Jy601opo5iJKh69FcFHrpTn9HVXom4nItSUZXgLZaEJMiWG
-         Bh1Q==
+        bh=9u48IeVxeYRpqZXDq8TEy2jgfthr+zPe9V44R0XXV6s=;
+        b=OJlre6S9pakulZA+yEGpONatIYHUbfqM2duW/AMNUeogjFygAv4bC1gl8iiKIN6L6l
+         9V9rlywuoLnK5SwYcyVQS2YSTt3Kqvii4TqEmU2ENGMclvuydNlmNCAUteaOS75MjF/Y
+         MhGThK8Twowj8WQeQ9lAWEYmiILMeQtIu+PiP3qqkDG6rsjtDicG+9RKXHykP+xknhc6
+         X6gs7BePV5RcqSFi1V8QY3DelJ/Ut7FesSt/BazrNm21n79ND4L3ithnApPPwZpaJJfM
+         TAh28RRnZv87qP/NiskyIMIboOAh8QHacJG3uShCw95I0tDHwrsw/zQMQFyCOGnu5Bag
+         R17Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=As0fulMLun+eJjqjObjSTdg/PTBD9UNPaQIMHAXZOXg=;
-        b=I5+LDdY+UIcFnesATSsiDOZq+6sgjpUwt1kc4n907l1W+xEjYvKQLQ5Gx0CuFXSmXN
-         0idvvq3ppyTxMdEWDcSvoylQVseOepr0qHsCrhBYCjNJTkAgcxRNtG466oFAFDqi3zNK
-         lXfyP02oFkXchPmw4Wq7SVuHVnZvw0nGAAZku4qW62O5VFROPFMrMBAPYtq8TkYovrXT
-         fFBgS7UGadD25BWljyoffSHRAmjrNP00JKlmWdEJaYOoSdwT+H6RqG8DK7MpTDozOtGS
-         mF+ZBXiDuFn7I22qpdMMs8miU0e4ytbRaWjaCZwnkwAPiXUPDxDuxT/9UjaOiDosK0wa
-         eKHA==
-X-Gm-Message-State: ANoB5pnF8VhI54bq+Q4D9epud2mYNBd0yZ/x/so7lWEmcNbg7ehDrHFI
-        rmZ7OKVV0KA8JnNMhmEXyiE=
-X-Google-Smtp-Source: AA0mqf5K1iGwEgJfomYHvGNZlBmAKHUob/dddxCYWbbDWYXMYIUVPRGmp/cnjjkHHHFqrb3PbXovHA==
-X-Received: by 2002:a17:902:ba91:b0:188:c395:1748 with SMTP id k17-20020a170902ba9100b00188c3951748mr10019993pls.155.1668628951901;
-        Wed, 16 Nov 2022 12:02:31 -0800 (PST)
+        bh=9u48IeVxeYRpqZXDq8TEy2jgfthr+zPe9V44R0XXV6s=;
+        b=Q0vMvJtCXwaL/Zkk7+V/mukgy/kXp2FOP1Z49bwMBolK0I0ZSAWEO9cn6ZF3GFZSpZ
+         l4RIQp7DHPJv3qR09+XZWB9E0sQoWIWDHHAQRdmuyRNYGkPZfXC+xEqxJM2yyxhj+5kq
+         stpUr3SZ9EYNhnqVMjPkRZw5AI3SIJMYP1KaQEjn9gOWwPM2/JEE5t+R3gvQ6AQyrlE5
+         +oJ8XmeTTr5mbEpZF5GIb5ibV2aZC4yS0NazqpAhyGwwhcjpDycnNh1ELdVb6tq2Hnq1
+         PLEpVJbqRJou61EylmvSow2mwBAqZtaeXDyKzSM3QRgZBEON8IsEmR1s4Lb06/TZrBrL
+         5EKQ==
+X-Gm-Message-State: ANoB5plGjdpzqCSYeErksrC39uibhz82YkbEOHxRpmrwUc+CRVhGwpK5
+        e8mqsAD031KKiEIw9d2fPSA=
+X-Google-Smtp-Source: AA0mqf790rR++Tn3av8PLwCoZX/3FlqthhDW8C6waWJTH8vWZ4I6VdRk+YNTEVcH7PvR8/e6wp9Pyg==
+X-Received: by 2002:a63:5f4c:0:b0:45f:fc05:270b with SMTP id t73-20020a635f4c000000b0045ffc05270bmr21765809pgb.14.1668628958408;
+        Wed, 16 Nov 2022 12:02:38 -0800 (PST)
 Received: from localhost.localdomain ([103.51.72.182])
-        by smtp.gmail.com with ESMTPSA id s18-20020a170903215200b00186a6b6350esm12423950ple.268.2022.11.16.12.02.27
+        by smtp.gmail.com with ESMTPSA id s18-20020a170903215200b00186a6b6350esm12423950ple.268.2022.11.16.12.02.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 12:02:31 -0800 (PST)
+        Wed, 16 Nov 2022 12:02:37 -0800 (PST)
 From:   Anand Moon <linux.amoon@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -60,9 +60,9 @@ Cc:     Anand Moon <linux.amoon@gmail.com>,
         Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [linux-next-v2 2/5] arm64: dts: rockchip: Add support of external clock to ethernet node on Rock 3A SBC
-Date:   Wed, 16 Nov 2022 20:01:44 +0000
-Message-Id: <20221116200150.4657-3-linux.amoon@gmail.com>
+Subject: [linux-next-v2 3/5] arm64: dts: rockchip: Add support of regulator for ethernet node on Rock 3A SBC
+Date:   Wed, 16 Nov 2022 20:01:45 +0000
+Message-Id: <20221116200150.4657-4-linux.amoon@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221116200150.4657-1-linux.amoon@gmail.com>
 References: <20221116200150.4657-1-linux.amoon@gmail.com>
@@ -78,54 +78,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support of external clock gmac1_clkin which is used as input clock
-to ethernet node.
+Add regulator support for ethernet node
+
+Fix following warning.
+[    7.365199] rk_gmac-dwmac fe010000.ethernet: no regulator found
 
 Signed-off-by: Anand Moon <linux.amoon@gmail.com>
 ---
-V2: None
+v2: new patch added
 ---
- arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+ arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts b/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
-index e1c75532dcee..b848282ea005 100644
+index b848282ea005..5378254c57ca 100644
 --- a/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
 +++ b/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
-@@ -32,6 +32,13 @@ hdmi_con_in: endpoint {
- 		};
- 	};
- 
-+	gmac1_clkin: external-gmac1-clock {
-+		compatible = "fixed-clock";
-+		clock-frequency = <125000000>;
-+		clock-output-names = "gmac1_clkin";
-+		#clock-cells = <0>;
-+	};
-+
- 	leds {
- 		compatible = "gpio-leds";
- 
-@@ -249,9 +256,8 @@ &cpu3 {
- 
- &gmac1 {
- 	assigned-clocks = <&cru SCLK_GMAC1_RX_TX>, <&cru SCLK_GMAC1>;
--	assigned-clock-parents = <&cru SCLK_GMAC1_RGMII_SPEED>;
--	assigned-clock-rates = <0>, <125000000>;
--	clock_in_out = "output";
-+	assigned-clock-parents = <&cru SCLK_GMAC1_RGMII_SPEED>, <&gmac1_clkin>;
-+	clock_in_out = "input";
+@@ -260,6 +260,7 @@ &gmac1 {
+ 	clock_in_out = "input";
  	phy-handle = <&rgmii_phy1>;
  	phy-mode = "rgmii";
++	phy-supply = <&vcc_3v3>;
  	pinctrl-names = "default";
-@@ -259,6 +265,7 @@ &gmac1 {
+ 	pinctrl-0 = <&gmac1m1_miim
  		     &gmac1m1_tx_bus2
- 		     &gmac1m1_rx_bus2
- 		     &gmac1m1_rgmii_clk
-+		     &gmac1m1_clkinout
- 		     &gmac1m1_rgmii_bus>;
- 
- 	tx_delay = <0x4f>;
 -- 
 2.38.1
 
