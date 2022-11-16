@@ -2,124 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 094A862B674
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:26:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC5A962B673
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:25:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232833AbiKPJZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 04:25:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47988 "EHLO
+        id S233000AbiKPJZK convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 16 Nov 2022 04:25:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232688AbiKPJZz (ORCPT
+        with ESMTP id S232833AbiKPJZG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 04:25:55 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC4F6240
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:24:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668590691;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iBg0vpR79ykrWg7W6yFVkquAa8QDFi53cO5reZCSm2w=;
-        b=WsLUMYArQTmmG2/5U2O++z89P+bY3Wtkz3/KBQlRqjKcVKHwM9bhlgKAFsNpcdk3HpHB0w
-        GcAeEyNZDy2NrZrEWqmkI55Cei2aVxxyQ+0J7RELSuhW2ExG4JXkvCbiNa2XMrQAVhHOdA
-        nDFmN/A/jHe/dcL42/c8+KK18TKR6hU=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-134-U4nOe68LMW2i8Xog-Z9oJg-1; Wed, 16 Nov 2022 04:24:50 -0500
-X-MC-Unique: U4nOe68LMW2i8Xog-Z9oJg-1
-Received: by mail-wr1-f70.google.com with SMTP id v14-20020adf8b4e000000b0024174021277so2716861wra.13
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:24:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iBg0vpR79ykrWg7W6yFVkquAa8QDFi53cO5reZCSm2w=;
-        b=0BvXiaXVjPkCJAXS70st7qhl+GVKolKSwghzoKADLnO9X6NalnszCrUBaU6geqKNjo
-         3o9FH/CGndFHRrUxu0F2dRdquY9+8Cz54ulaxQk0a/8vv7GpQ44jBG4nl6byflGibDSF
-         NjfqDUGPSz73Bk8Ng/hgRD1R21e4cph4JqTI3DeVSbdmJ52sLL3c2zkIXECthrxQHSlf
-         hMf+yf63wuzrtRDCqlFBv1NgenrmZu2Jw+DVQfPHKnKWcOuv/AtFsRqz9L6nGvJUZOn5
-         SMWD116Cw8YuiHvbJ17o1kWCAUoW4F/6RXtvPsc2wu1Qijw1g5phqMK9wd+815oyQfye
-         /mBQ==
-X-Gm-Message-State: ANoB5pnmTuWV+G+e5mFI8ozFnD++90973KVK8VDeBjfVlQQak192HAPF
-        +oYrhjCe+OPoxJ80vIrG5rli276fKitUer+3lvZ0iGiPHOwYmM8o4oCAT6KjO4eZOmIyn6IDxvK
-        m9gv04Nm3yLxPCM54M7KgVEaX
-X-Received: by 2002:a5d:6743:0:b0:22e:28fe:39d6 with SMTP id l3-20020a5d6743000000b0022e28fe39d6mr13359758wrw.701.1668590689126;
-        Wed, 16 Nov 2022 01:24:49 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4VFuyxwMjEQ9LcEB4erUpRK2y3OS4R2z2ooCMN1U5iH5mRvOiSincwS1V5ESg00uTHpGDJcw==
-X-Received: by 2002:a5d:6743:0:b0:22e:28fe:39d6 with SMTP id l3-20020a5d6743000000b0022e28fe39d6mr13359744wrw.701.1668590688833;
-        Wed, 16 Nov 2022 01:24:48 -0800 (PST)
-Received: from ?IPV6:2003:cb:c704:9f00:a98d:4026:7c44:40fd? (p200300cbc7049f00a98d40267c4440fd.dip0.t-ipconnect.de. [2003:cb:c704:9f00:a98d:4026:7c44:40fd])
-        by smtp.gmail.com with ESMTPSA id h16-20020a05600c315000b003cff309807esm1263398wmo.23.2022.11.16.01.24.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 01:24:48 -0800 (PST)
-Message-ID: <ce30117b-c652-5598-480f-6e367258ab30@redhat.com>
-Date:   Wed, 16 Nov 2022 10:24:47 +0100
+        Wed, 16 Nov 2022 04:25:06 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E01D9FEE;
+        Wed, 16 Nov 2022 01:25:04 -0800 (PST)
+Received: from canpemm500007.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NByLL54f3zRpMX;
+        Wed, 16 Nov 2022 17:24:42 +0800 (CST)
+Received: from canpemm500005.china.huawei.com (7.192.104.229) by
+ canpemm500007.china.huawei.com (7.192.104.62) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 16 Nov 2022 17:25:02 +0800
+Received: from canpemm500005.china.huawei.com ([7.192.104.229]) by
+ canpemm500005.china.huawei.com ([7.192.104.229]) with mapi id 15.01.2375.031;
+ Wed, 16 Nov 2022 17:25:02 +0800
+From:   zhaogongyi <zhaogongyi@huawei.com>
+To:     "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
+CC:     "keescook@chromium.org" <keescook@chromium.org>,
+        "luto@amacapital.net" <luto@amacapital.net>,
+        "wad@chromium.org" <wad@chromium.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "cristian.marussi@arm.com" <cristian.marussi@arm.com>,
+        Matthew Wilcox <willy@infradead.org>
+Subject: Re: [PATCH -next 2/2] selftests/mincore: Optimize
+ TEST(check_file_mmap) accoring to filemap read around
+Thread-Topic: [PATCH -next 2/2] selftests/mincore: Optimize
+ TEST(check_file_mmap) accoring to filemap read around
+Thread-Index: Adj5nOPwb4CsGeQMSgC5GXpGtKemnw==
+Date:   Wed, 16 Nov 2022 09:25:02 +0000
+Message-ID: <d221e784d1f84d1880cf88e556e9ff3a@huawei.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.67.110.209]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH 2/4] mm: teach release_pages() to take an array of encoded
- page pointers too
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
-References: <20221109203051.1835763-1-torvalds@linux-foundation.org>
- <20221109203051.1835763-2-torvalds@linux-foundation.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20221109203051.1835763-2-torvalds@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09.11.22 21:30, Linus Torvalds wrote:
-> release_pages() already could take either an array of page pointers, or
-> an array of folio pointers.  Expand it to also accept an array of
-> encoded page pointers, which is what both the existing mlock() use and
-> the upcoming mmu_gather use of encoded page pointers wants.
+Hi!
+
 > 
-> Note that release_pages() won't actually use, or react to, any extra
-> encoded bits.  Instead, this is very much a case of "I have walked the
-> array of encoded pages and done everything the extra bits tell me to do,
-> now release it all".
+> TEST(check_file_mmap) will fail when we set the ra_pages through
+> blockdev like:
+>   /sbin/blockdev --setra 8196 /dev/sda
 > 
-> Also, while the "either page or folio pointers" dual use was handled
-> with a cast of the pointer in "release_folios()", this takes a slightly
-> different approach and uses the "transparent union" attribute to
-> describe the set of arguments to the function:
+> And, for file mmap, kernel will read 'ra_pages/2' pages of the address on
+> the left hand or right hand. So, add a checking of ra_pages according to
+> the ra_pages setting of the block dev.
 > 
->    https://gcc.gnu.org/onlinedocs/gcc/Common-Type-Attributes.html
+> I have tested it on my system like:
+>   i=0
+>   while [ $i -lt 9000 ]
+>   do
+>         /sbin/blockdev --setra $i /dev/openeuler/*
+>         ./mincore_selftest  || { echo "$i test failed"; exit 1; }
+>         let i=$i+1
+>   done
 > 
-> which has been supported by gcc forever, but the kernel hasn't used
-> before.
-> 
-> That allows us to avoid using various wrappers with casts, and just use
-> the same function regardless of use.
-> 
-> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
-> Acked-by: Hugh Dickins <hughd@google.com>
-> Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Signed-off-by: Zhao Gongyi <zhaogongyi@huawei.com>
 > ---
+>  tools/testing/selftests/kselftest_harness.h   |  2 +
+>  .../selftests/mincore/mincore_selftest.c      | 74 +++++++++++++++----
+>  2 files changed, 62 insertions(+), 14 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kselftest_harness.h
+> b/tools/testing/selftests/kselftest_harness.h
+> index 25f4d54067c0..fa40c85a1099 100644
+> --- a/tools/testing/selftests/kselftest_harness.h
+> +++ b/tools/testing/selftests/kselftest_harness.h
+> @@ -781,6 +781,8 @@
+>  	} \
+>  }
+> 
+> +#define MIN(a, b)       ((a) < (b) ? (a) : (b))
+> +
+>  struct __test_results {
+>  	char reason[1024];	/* Reason for test result */
+>  };
+> diff --git a/tools/testing/selftests/mincore/mincore_selftest.c
+> b/tools/testing/selftests/mincore/mincore_selftest.c
+> index 287351a599a2..5eace1750fef 100644
+> --- a/tools/testing/selftests/mincore/mincore_selftest.c
+> +++ b/tools/testing/selftests/mincore/mincore_selftest.c
+> @@ -17,6 +17,7 @@
+>  #include <mntent.h>
+>  #include <sys/stat.h>
+>  #include <linux/fs.h>
+> +#include <sys/ioctl.h>
+> 
+>  #include "../kselftest.h"
+>  #include "../kselftest_harness.h"
+> @@ -218,11 +219,7 @@ static struct mntent* find_mount_point(const
+> char *name)
+>   * Test mincore() behavior on a file-backed page.
+>   * No pages should be loaded into memory right after the mapping. Then,
+>   * accessing any address in the mapping range should load the page
+> - * containing the address and a number of subsequent pages
+> (readahead).
+> - *
+> - * The actual readahead settings depend on the test environment, so we
+> - * can't make a lot of assumptions about that. This test covers the most
+> - * general cases.
+> + * containing the address and a number of around pages (read around).
+>   */
+>  TEST(check_file_mmap)
+>  {
+> @@ -236,6 +233,10 @@ TEST(check_file_mmap)
+>  	int ra_pages = 0;
+>  	struct stat s;
+>  	struct mntent *mount_entry;
+> +	int ra_size;
+> +	int exp_ra_pages;
+> +	int odd = 0;
+> +	int dev_ra_pages;
+> 
+>  	mount_entry = find_mount_point(".");
+>  	ASSERT_NE(NULL, mount_entry) {
+> @@ -248,11 +249,29 @@ TEST(check_file_mmap)
+>  			"test is not supported");
+>  	}
+> 
+> +	errno = 0;
+> +	fd = open(mount_entry->mnt_fsname, O_RDONLY);
+> +	ASSERT_LT(0, fd) {
+> +		TH_LOG("Open %s failed: %s",
+> +			mount_entry->mnt_fsname, strerror(errno));
+> +	}
+> +
+> +	errno = 0;
+> +	retval = ioctl(fd, BLKRAGET, &ra_size);
+> +	ASSERT_EQ(0, retval) {
+> +		TH_LOG("Get block readahead size failed: %s", strerror(errno));
+> +	}
+> +
+>  	page_size = sysconf(_SC_PAGESIZE);
+>  	vec_size = FILE_SIZE / page_size;
+>  	if (FILE_SIZE % page_size)
+>  		vec_size++;
+> 
+> +	dev_ra_pages = (ra_size * 512) / page_size;
+> +	exp_ra_pages = MIN(vec_size / 2, dev_ra_pages / 2);
+> +	if (dev_ra_pages <= vec_size)
+> +		odd = dev_ra_pages % 2;
+> +
+>  	vec = calloc(vec_size, sizeof(unsigned char));
+>  	ASSERT_NE(NULL, vec) {
+>  		TH_LOG("Can't allocate array");
+> @@ -296,7 +315,7 @@ TEST(check_file_mmap)
+> 
+>  	/*
+>  	 * Touch a page in the middle of the mapping. We expect the next
+> -	 * few pages (the readahead window) to be populated too.
+> +	 * few pages (the read around window) to be populated too.
+>  	 */
+>  	addr[FILE_SIZE / 2] = 1;
+>  	retval = mincore(addr, FILE_SIZE, vec); @@ -310,22 +329,49 @@
+> TEST(check_file_mmap)
+>  		ra_pages++;
+>  		i++;
+>  	}
+> -	EXPECT_GT(ra_pages, 0) {
+> -		TH_LOG("No read-ahead pages found in memory");
+> -	}
+> 
+> -	EXPECT_LT(i, vec_size) {
+> -		TH_LOG("Read-ahead pages reached the end of the file");
+> +	if (!exp_ra_pages) {
+> +		EXPECT_EQ(ra_pages, exp_ra_pages) {
+> +			TH_LOG("Check read-around pages failed");
+> +		}
+> +	} else {
+> +		EXPECT_EQ(ra_pages + (odd ? 0 : 1), exp_ra_pages) {
+> +			TH_LOG("Check read-around pages failed");
+> +		}
+>  	}
+> +
+>  	/*
+> -	 * End of the readahead window. The rest of the pages shouldn't
+> -	 * be in memory.
+> +	 * End of the read around window. The rest of the pages shouldn't
+> +	 * be in memory for the right hand.
+>  	 */
+>  	if (i < vec_size) {
+>  		while (i < vec_size && !vec[i])
+>  			i++;
+>  		EXPECT_EQ(vec_size, i) {
+> -			TH_LOG("Unexpected page in memory beyond readahead
+> window");
+> +			TH_LOG("Unexpected page in memory beyond read around
+> window");
+> +		}
+> +	}
+> +
+> +	i = FILE_SIZE / 2 / page_size - 1;
+> +	ra_pages = 0;
+> +	while (i >= 0 && vec[i]) {
+> +		ra_pages++;
+> +		i--;
+> +	}
+> +
+> +	EXPECT_EQ(ra_pages, exp_ra_pages) {
+> +		TH_LOG("Check read-around pages failed");
+> +	}
+> +
+> +	/*
+> +	 * End of the read around window. The rest of the pages shouldn't
+> +	 * be in memory for the left hand.
+> +	 */
+> +	if (i >= 0) {
+> +		while (i >= 0 && !vec[i])
+> +			i--;
+> +		EXPECT_EQ(-1, i) {
+> +			TH_LOG("Unexpected page in memory beyond read around
+> window");
+>  		}
+>  	}
+> 
+> --
+> 2.17.1
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
 
--- 
-Thanks,
+Gentele ping.
 
-David / dhildenb
+Regards,
+Gongyi
 
