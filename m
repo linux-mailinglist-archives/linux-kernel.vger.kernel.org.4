@@ -2,106 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43C9962C06C
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:06:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6B7562C08A
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:08:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233715AbiKPOEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 09:04:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38176 "EHLO
+        id S232377AbiKPOIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 09:08:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233806AbiKPOCW (ORCPT
+        with ESMTP id S232749AbiKPOGu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 09:02:22 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A1784B999
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 05:59:26 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ovIwk-0004K4-7V; Wed, 16 Nov 2022 14:59:22 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ovIwi-004fJK-HB; Wed, 16 Nov 2022 14:59:21 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ovIwi-00H3xp-Ln; Wed, 16 Nov 2022 14:59:20 +0100
-Date:   Wed, 16 Nov 2022 14:59:15 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-pwm@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH 3/4] pwm: Mark free pwm IDs as used in alloc_pwms()
-Message-ID: <20221116135915.hvhbx6ik2g7bxeox@pengutronix.de>
-References: <20221115211515.3750209-1-u.kleine-koenig@pengutronix.de>
- <20221115211515.3750209-4-u.kleine-koenig@pengutronix.de>
- <Y3SchHhvLZoRO0w6@smile.fi.intel.com>
+        Wed, 16 Nov 2022 09:06:50 -0500
+Received: from relay05.th.seeweb.it (relay05.th.seeweb.it [IPv6:2001:4b7a:2000:18::166])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F9D4FF9D
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 06:01:43 -0800 (PST)
+Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 1627C3F308;
+        Wed, 16 Nov 2022 15:01:41 +0100 (CET)
+Date:   Wed, 16 Nov 2022 15:01:39 +0100
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: Re: [PATCH] docs: dt: writing-schema: Document usage of CHECK_DTBS
+ make flag
+Message-ID: <20221116140139.gjfsgekz4t4pxekz@SoMainline.org>
+References: <20221102214300.309347-1-nfraprado@collabora.com>
+ <20221116135504.mdmgm6ce2cynt5yt@SoMainline.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lbiobgeu5h4xc5gf"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <Y3SchHhvLZoRO0w6@smile.fi.intel.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221116135504.mdmgm6ce2cynt5yt@SoMainline.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
++CC Konrad and Dmitry whom I discussed this with before.
 
---lbiobgeu5h4xc5gf
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Nov 16, 2022 at 10:17:08AM +0200, Andy Shevchenko wrote:
-> On Tue, Nov 15, 2022 at 10:15:14PM +0100, Uwe Kleine-K=F6nig wrote:
-> > alloc_pwms() only identified a free range of IDs and this range was mar=
-ked
-> > as used only later by pwmchip_add(). Instead let alloc_pwms() already do
-> > the marking (which makes the function actually allocating the range and=
- so
-> > justifies the function name). This way access to the allocated_pwms
-> > bitfield is limited to two functions only.
->=20
-> This change is a bit fragile in a long term. Currently we know that we ha=
-ve
-> no points of error after alloc_pwms() in ->probe(), but if somebody misses
-> this in the future, we became to the case where bitmap might be exhausted
-> (kinda resource leakage).
-
-That is always the case for a function allocating resources. If you add
-an error path after the (previously) last allocation, you have to care
-for that.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---lbiobgeu5h4xc5gf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN07LAACgkQwfwUeK3K
-7AlPYAf/c/GG/3uEAL8cxnMqb/aioLdcAoJY1d5vpr89tziR3n+lvkaQwANMfduJ
-2oX5XTDpZrAhEW4BJJmKE6tomJMCldkWtPg3etPgyE/Rk/RSu3/7k5DRmxEdaAHO
-2ZbZr/2jVJI7z7G6IGCdvim7IIMXJOsNY5q4sOAcOGy9OLH1sQWtb3blBJoRpKZp
-TqXszR/n0O+YylRNXMAYE5cYjQvDagGxioLUGYFtTUTDB/iigy3JD5mzcC8+SvE9
-NGITHNILVZ5TnfZ/4lQlMuxC1LoaDtjsVqSpmpB1WcHxM5CurQqiBi74dyNXowHz
-EAN16DbWqX4qI2SNbNVBd+253oXvTA==
-=i+OA
------END PGP SIGNATURE-----
-
---lbiobgeu5h4xc5gf--
+On 2022-11-16 14:55:04, Marijn Suijten wrote:
+> Hi Nícolas,
+> 
+> On 2022-11-02 17:43:00, Nícolas F. R. A. Prado wrote:
+> > It is possible to run checks on a Devicetree by passing the CHECK_DTBS
+> > flag when building. This is a useful shortcut to the dtbs_check make
+> > target since it avoids checking unrelated Devicetrees, which can take
+> > some time and is unnecessary if no bindings were modified. Document it.
+> > 
+> > Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> > 
+> > ---
+> > 
+> >  Documentation/devicetree/bindings/writing-schema.rst | 7 +++++++
+> >  1 file changed, 7 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/writing-schema.rst b/Documentation/devicetree/bindings/writing-schema.rst
+> > index 4a381d20f2b4..55ad556472b4 100644
+> > --- a/Documentation/devicetree/bindings/writing-schema.rst
+> > +++ b/Documentation/devicetree/bindings/writing-schema.rst
+> > @@ -167,6 +167,13 @@ setting the ``DT_SCHEMA_FILES`` variable to a specific schema file or pattern.
+> >      make dt_binding_check DT_SCHEMA_FILES=/gpio/
+> >      make dtbs_check DT_SCHEMA_FILES=trivial-devices.yaml
+> >  
+> > +Note that ``make dtbs_check`` will validate every DT source file that is
+> > +enabled. When making changes to a DT but not to the bindings, a possible
+> > +shortcut to validate only the DT in question is to explicitly build it with
+> > +the ``CHECK_DTBS`` flag enabled. For example::
+> > +
+> > +    make CHECK_DTBS=y mediatek/mt8192-evb.dtb
+> 
+> I have a bit of trouble getting this to work on a _clean_ out directory
+> (perhaps this should have been reported at the original patch, I had
+> always been using Dmitry's version [1] which didn't suffer from this
+> problem).
+> 
+> Consider running with the following:
+> 
+>     rm out -r
+>     make ARCH=arm64 O=out defconfig
+>     make ARCH=arm64 O=out CHECK_DTBS=y qcom/sm8450-sony-xperia-nagara-pdx223.dtb
+> 
+> After compiling preliminaries, it exits with:
+> 
+>     make[3]: *** No rule to make target 'arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx223.dtb'.  Stop.
+>     make[2]: *** [../scripts/Makefile.build:500: arch/arm64/boot/dts/qcom] Error 2
+>     make[1]: *** [/kernel/Makefile:1460: qcom/sm8450-sony-xperia-nagara-pdx223.dtb] Error 2
+>     make[1]: Leaving directory '/kernel/out'
+>     make: *** [Makefile:231: __sub-make] Error 2
+> 
+> However, if I lint all DTBs first by running `dtbs_check`, it seems the
+> schema preliminaries are built:
+> 
+>       LINT    Documentation/devicetree/bindings
+>       CHKDT   Documentation/devicetree/bindings/processed-schema.json
+>     ... bunch of warnings
+>       SCHEMA  Documentation/devicetree/bindings/processed-schema.json
+> 
+> And here I ctrl+c the build so that it doesn't run DTC_CHK over every
+> dts.  If I now re-run the original command on my .dtb of choice, it
+> completes successfully with the warnings that I expect.  Is the logic
+> behind `CHECK_DTBS=y` simply missing a step to make sure SCHEMA is built
+> and up-to-date?
+> 
+> Aside from not working in a clean output directly, could this imply
+> schema changes (edits in Documentation/devicetree/bindings) _are not_
+> propagated when running with `CHECK_DTBS=y?
+> 
+> At the same time running this command twice results in no output the
+> second time around, supposedly because the dtb has "already been built".
+> Is that also something we can improve?
+> 
+> [1]: https://lore.kernel.org/linux-arm-msm/20220623144357.297252-1-dmitry.baryshkov@linaro.org/
+> 
+> Thanks!
+> - Marijn
+> 
