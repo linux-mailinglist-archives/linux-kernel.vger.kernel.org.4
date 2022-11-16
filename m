@@ -2,62 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 218C162BF29
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 14:14:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C382162BF2A
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 14:14:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232762AbiKPNOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 08:14:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34394 "EHLO
+        id S233721AbiKPNOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 08:14:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230343AbiKPNOD (ORCPT
+        with ESMTP id S233463AbiKPNOL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 08:14:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B80C5E
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 05:14:03 -0800 (PST)
+        Wed, 16 Nov 2022 08:14:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04437391D4
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 05:14:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E9076B81D47
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 13:14:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5955C433D6;
-        Wed, 16 Nov 2022 13:13:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D520BB81D47
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 13:14:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9DDDC433D6;
+        Wed, 16 Nov 2022 13:14:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668604440;
-        bh=TMop0E7cDzLpxQZWWEdBbOBwZYi0t6s7bS46e8wbaOc=;
+        s=k20201202; t=1668604447;
+        bh=cLYTO4vzhEsQDvMU8RCQM2yBcrr1qFys1msCOJt3MaQ=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=TNTdoac/GLjnZVSunzWXi21xEL+p3a/XH6GucDkCgYr3tS3iVhInnZn1JCV3r79Ev
-         8OwhhWGQlyaie0g15UruZiP6VoBBwZd5o31qZeo+E0cuPSSMt+W+dbVjIYi3Ic6cvs
-         7lwGU999MQyXkZliLTJ48cBfapYQvEbr5mXLm1AeYDDA0Ar3wKG4DfKuG1Lye71bxg
-         V7Xy/NUNjFQmpgS68PpYVHnnnvIf4nw7lP+PZHPQ4xuKf1FEMSmoIwRd6ydXIEefss
-         640tR9JE7XP/AiuZrvbco3aiFrr6PHB2dpSU1cVbMEBOc1QB8OjkzOY2lQsHIGcgYg
-         CEIjt3hHmxIjQ==
+        b=GKYxrTGEoXaTqBDSkiDsykuHAZ0SuoRXVXtjmB1WkqMW/yV0gL8dDAHWlWg+Di89i
+         LKahkQ695UGzpLTuoTR7txmKBlWRiOW/v+UrfWAwFVlqADYUCX96SaxLo7EdL/akb/
+         uz52Vb1RXTAoW2beKh7Eoj6VuwmfMEia5rJW//rM7Y3th0BiqR+9UjkN9z5o+hXFn1
+         bvHya+Sc1WEK8I8HcBNRWh8rPPe0Bpf36Z4LT8o2QpiNTXe2xF2RYQ9xMrjGOFap2T
+         mC91Dnbu2F8qHUPfi4WsF//Qk95Bicr/yJeMEcISykhLctQ5xsRo7LLrCwfuYwTAyl
+         r6Yu6m9rUE3dw==
 From:   Mark Brown <broonie@kernel.org>
-To:     Ajye Huang <ajye_huang@compal.corp-partner.google.com>,
+To:     Yang Yingliang <yangyingliang@huawei.com>,
         linux-kernel@vger.kernel.org
-Cc:     Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Mac Chiang <mac.chiang@intel.com>,
-        Libin Yang <libin.yang@intel.com>,
-        Brent Lu <brent.lu@intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        David Lin <CTLIN0@nuvoton.com>,
-        Muralidhar Reddy <muralidhar.reddy@intel.com>,
-        Yong Zhi <yong.zhi@intel.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        alsa-devel@alsa-project.org,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Vamshi Krishna <vamshi.krishna.gopal@intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-In-Reply-To: <20221108042716.2930255-1-ajye_huang@compal.corp-partner.google.com>
-References: <20221108042716.2930255-1-ajye_huang@compal.corp-partner.google.com>
-Subject: Re: [PATCH v1 0/2] Adds the combination of headset codec ALC5682I-VD + amp rt1019p
-Message-Id: <166860443597.370630.8092094089019337733.b4-ty@kernel.org>
-Date:   Wed, 16 Nov 2022 13:13:55 +0000
+Cc:     lgirdwood@gmail.com
+In-Reply-To: <20221116092943.1668326-1-yangyingliang@huawei.com>
+References: <20221116092943.1668326-1-yangyingliang@huawei.com>
+Subject: Re: [PATCH] regulator: rt5759: fix OOB in validate_desc()
+Message-Id: <166860444597.370809.18015818974561170969.b4-ty@kernel.org>
+Date:   Wed, 16 Nov 2022 13:14:05 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -71,28 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 8 Nov 2022 12:27:14 +0800, Ajye Huang wrote:
-> v1:
-> - machine driver:
->   - Adds the combination of headset codec ALC5682I-VD + amp rt1019p.
->   - Remove the duplicate code in machine driver.
+On Wed, 16 Nov 2022 17:29:43 +0800, Yang Yingliang wrote:
+> I got the following OOB report:
 > 
-> Ajye Huang (2):
->   ASoC: Intel: sof_rt5682: add support for ALC5682I-VD with amp rt1019p
->   ASoC: Intel: sof rt5682: remove the duplicate codes
+>  BUG: KASAN: slab-out-of-bounds in validate_desc+0xba/0x109
+>  Read of size 8 at addr ffff888107db8ff0 by task python3/253
+>  Call Trace:
+>   <TASK>
+>   dump_stack_lvl+0x67/0x83
+>   print_report+0x178/0x4b0
+>   kasan_report+0x90/0x190
+>   validate_desc+0xba/0x109
+>   gpiod_set_value_cansleep+0x40/0x5a
+>   regulator_ena_gpio_ctrl+0x93/0xfc
+>   _regulator_do_enable.cold.61+0x89/0x163
+>   set_machine_constraints+0x140a/0x159c
+>   regulator_register.cold.73+0x762/0x10cd
+>   devm_regulator_register+0x57/0xb0
+>   rt5759_probe+0x3a0/0x4ac [rt5759_regulator]
 > 
 > [...]
 
 Applied to
 
-   broonie/sound.git for-next
+   broonie/regulator.git for-next
 
 Thanks!
 
-[1/2] ASoC: Intel: sof_rt5682: add support for ALC5682I-VD with amp rt1019p
-      commit: 1a9a5ebe1175537dc817531fe74c5949c3a823c1
-[2/2] ASoC: Intel: sof rt5682: remove the duplicate codes
-      commit: c7a79f546100300d18585506f8fd0460a874df4a
+[1/1] regulator: rt5759: fix OOB in validate_desc()
+      commit: 7920e0fbced429ab18ad4402e3914146a6a0921b
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
