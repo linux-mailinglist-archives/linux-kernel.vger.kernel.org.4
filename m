@@ -2,142 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2B3562CE93
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 00:15:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9E4462CE97
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 00:16:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232532AbiKPXPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 18:15:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47764 "EHLO
+        id S233459AbiKPXQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 18:16:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231300AbiKPXPt (ORCPT
+        with ESMTP id S233151AbiKPXQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 18:15:49 -0500
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E56AEBC09;
-        Wed, 16 Nov 2022 15:15:46 -0800 (PST)
-Received: from [192.168.1.206] (unknown [109.252.125.73])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 26D57419E9D0;
-        Wed, 16 Nov 2022 23:15:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 26D57419E9D0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1668640544;
-        bh=ENb5ICyFLeRoLt0JZL71VaSrfgCllyhsGyF6X6xxnXU=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=kVS8jvnT8EpqDQ8RdVOjGFiER3O0RVXb0QSlwRUOHgYeTZIw9j+SHFVJjp7cX4cC2
-         yAj4fLmNL1i+0KR/KZoIp10DDKVbNRW6fiLlTun8QMAF3CJbkks5hH3Qr4/mwMHikk
-         kuj1WNH8yDuNjAUMEhGQ8qx7gRuTlJNVTPDnAafo=
-Subject: Re: [PATCH] crypto: algapi - fix be32_to_cpu macro call in
- crypto_inc()
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org
-References: <1668606771-5382-1-git-send-email-khoroshilov@ispras.ru>
- <Y3UgUwwV4qZMrzar@sol.localdomain>
-From:   Alexey Khoroshilov <khoroshilov@ispras.ru>
-Autocrypt: addr=khoroshilov@ispras.ru; prefer-encrypt=mutual; keydata=
- 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
- kK2E04Fb+Zk1eJvHYRc=
-Message-ID: <11f2da35-af59-f0ca-950e-931d6193dc3c@ispras.ru>
-Date:   Thu, 17 Nov 2022 02:15:42 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Wed, 16 Nov 2022 18:16:40 -0500
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 785A3BE29
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 15:16:39 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id c15so117479qtw.8
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 15:16:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=E5ndd7ei1Io74IlQNCg2RVaEkTuSWT2qBGbUwsf9a6A=;
+        b=qu9xX9JFKy5ec+Zn86JfnVrvTPOeTV6dVLitbqBNEV5H6OxO3M0ZkQrwKxLpYVE60d
+         eh6dQbJmCtqv4299RJrP2Q4UVMtWv32gv5yIg4cwNS5IEd39y+miraEXBhsHgJjGLrQR
+         yZEU6OEj32doL+QijPBX46ZSEkDtKBC0XVYkSGr5s+1yrSHp0IRU6s54ZJ80arhH17GA
+         V1bttUa9WhFN1zSiIHm7Iphq3w1jQGOeVV+a9pAHqpGJ/Gddoj2EqgxAT5VOz6rjns3q
+         eghi64+NCseYt02+rf7IYkPuyqMzDFdKdglbAXbpvdG2h8CSgvQc5E6Q7vMsLu+WF3nu
+         /6vw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=E5ndd7ei1Io74IlQNCg2RVaEkTuSWT2qBGbUwsf9a6A=;
+        b=pDRlceh5J0qG67qdyV5gkQFoDRagnjhG0DVRcCgY9aBANw8c9qSGg67XgOWBvx+7JG
+         EHeN95PsX5Bsg8etB3ioqWjRA+BVjcbNIr7IQH7WVhn+4t+o5x9oqOsi6SwoHe5fCAr5
+         fLZYODj827xEfRfJCqzYRXvaJfxtAGqPivlYdN8UuMHIz6BkDH0B6+vEoq3gZhKpUalT
+         xS+VzUeqY/tMTVbQ0rTHfk+E3rT8bRiw8ODZgUGix2l5a+ipXY56yS7i+E2esyulAhv0
+         vFBtrfDUHm0t/VGCnN46lPAtmlTV8W4uoND88nXbF7dCN8CMQVb1Nu+pEPIySmpyAXvs
+         bS1g==
+X-Gm-Message-State: ANoB5pkPVVL3lCCsZcF/ExrVCOe3djVtjGM5GYGOOLedW/GOsgfQui/L
+        0EwGUMcUFnoMMR0UtY3EoqrRi1j9WSo=
+X-Google-Smtp-Source: AA0mqf6NoC0bvV/GDfS29nJWFyzAeHkUloMtVDeDFqpmF9D05opjhaNqxB7WK5ftx8vvcDmG0BIz9w==
+X-Received: by 2002:ac8:738b:0:b0:3a4:f6ab:6670 with SMTP id t11-20020ac8738b000000b003a4f6ab6670mr144692qtp.283.1668640598547;
+        Wed, 16 Nov 2022 15:16:38 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id e7-20020ac84b47000000b0039953dcc480sm9430138qts.88.2022.11.16.15.16.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Nov 2022 15:16:38 -0800 (PST)
+Message-ID: <15631f6a-dae6-b996-6e74-1bf7304b30a0@gmail.com>
+Date:   Wed, 16 Nov 2022 15:16:32 -0800
 MIME-Version: 1.0
-In-Reply-To: <Y3UgUwwV4qZMrzar@sol.localdomain>
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: kbuild: check the minimum compiler version in Kconfig
 Content-Language: en-US
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Paul Gortmaker <paul.gortmaker@windriver.com>,
+        Nathan Chancellor <natechancellor@gmail.com>, ojeda@kernel.org,
+        sedat.dilek@gmail.com, clang-built-linux <llvm@lists.linux.dev>,
+        Manoj Gupta <manojgupta@google.com>
+References: <fe18ed06-12f1-1dcb-71ee-aec5a5d656ea@gmail.com>
+ <CAKwvOdnx_hyf=3DZtU_P8icWa07jf1+baNgM9MBh_ojE-EK5=A@mail.gmail.com>
+ <d7e0fbca-7e9d-fbe2-6f8c-6e60a78f56df@gmail.com>
+ <CAKwvOdnNA7pFGNuord-yiArE55oPNCCwCOHdrVQiRiATtYC23g@mail.gmail.com>
+ <CAKwvOdmP+VgjsJGuvuC9q3RbwpqUwoNg6cyv3f5SjAqLc2K3_Q@mail.gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <CAKwvOdmP+VgjsJGuvuC9q3RbwpqUwoNg6cyv3f5SjAqLc2K3_Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16.11.2022 20:39, Eric Biggers wrote:
-> On Wed, Nov 16, 2022 at 04:52:51PM +0300, Alexey Khoroshilov wrote:
->> be32_to_cpu() macro in some cases may be expanded to an expression
->> that evaluates its arguments multiple times. 
+On 11/16/22 15:11, Nick Desaulniers wrote:
+> On Wed, Nov 16, 2022 at 3:10 PM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
+>>
+>> On Wed, Nov 16, 2022 at 2:56 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+>>>
+>>> On 11/16/22 14:48, Nick Desaulniers wrote:
+>>>> On Wed, Nov 16, 2022 at 1:48 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+>>>>>
+>>>>> Hi Masahiro, Nick,
+>>>>>
+>>>>> The compiler version check performed with
+>>>>> aec6c60a01d3a3170242d6a99372a388e1136dc6 ("kbuild: check the minimum
+>>>>> compiler version in Kconfig") can be defeated and prevent running the
+>>>>> *config targets if specifying LLVM=1 on the command line, in that way:
+>>>>>
+>>>>> BR_BINARIES_DIR=/local/users/fainelli/buildroot-llvm/output/arm64/images
+>>>>> LLVM=1 LLVM_IAS=1 PKG_CONFIG_PATH="" /usr/bin/make -j49 -C
+>>>>> /local/users/fainelli/buildroot-llvm/output/arm64/build/linux-custom
+>>>>> HOSTCC="/usr/bin/gcc"
+>>>>> HOSTCC="/local/users/fainelli/buildroot-llvm/output/arm64/host/bin/ccache
+>>>>> /usr/bin/gcc -O2
+>>>>> -I/local/users/fainelli/buildroot-llvm/output/arm64/host/include
+>>>>> -DNDEBUG -L/local/users/fainelli/buildroot-llvm/output/arm64/host/lib
+>>>>> -Wl,-rpath,/local/users/fainelli/buildroot-llvm/output/arm64/host/lib"
+>>>>> ARCH=arm64
+>>>>> INSTALL_MOD_PATH=/local/users/fainelli/buildroot-llvm/output/arm64/target
+>>>>> CROSS_COMPILE="/local/users/fainelli/buildroot-llvm/output/arm64/host/bin/aarch64-linux-"
+>>>>> WERROR=0
+>>>>> DEPMOD=/local/users/fainelli/buildroot-llvm/output/arm64/host/sbin/depmod
+>>>>> INSTALL_MOD_STRIP=1 HOSTCC="/usr/bin/gcc" menuconfig
+>>>>>      UPD     scripts/kconfig/mconf-cfg
+>>>>>      HOSTCC  scripts/kconfig/mconf.o
+>>>>>      HOSTCC  scripts/kconfig/lxdialog/checklist.o
+>>>>>      HOSTCC  scripts/kconfig/lxdialog/inputbox.o
+>>>>>      HOSTCC  scripts/kconfig/lxdialog/menubox.o
+>>>>>      HOSTCC  scripts/kconfig/lxdialog/textbox.o
+>>>>>      HOSTCC  scripts/kconfig/lxdialog/util.o
+>>>>>      HOSTCC  scripts/kconfig/lxdialog/yesno.o
+>>>>>      HOSTLD  scripts/kconfig/mconf
+>>>>> ***
+>>>>> *** Compiler is too old.
+>>>>> ***   Your Clang version:    10.0.0
+>>>>> ***   Minimum Clang version: 10.0.1
+>>>>> ***
+>>>>> scripts/Kconfig.include:44: Sorry, this compiler is not supported.
+>>>>>
+>>>>> Here, the compiler check is actually checking the host compiler clang
+>>>>> version installed on my Ubuntu 20.04 system, as opposed to the cross
+>>>>> compiler clang version that is being used.
+>>>>
+>>>> LLVM=1 will use `clang` as found by your $PATH.  Where did you express
+>>>> to make what the "cross compiler clang version" is? (And why do you
+>>>> set HOSTCC three times)
+>>>
+>>> We are setting CROSS_COMPILE to express the cross compiler clang prefix
+>>> to use.
+>>
+>> Can you try setting CLANG_PREFIX rather than CROSS_COMPILE (to the same value)?
+>>
+>> CLANG_PREFIX=/local/users/fainelli/buildroot-llvm/output/arm64/host/bin/aarch64-linux-
 > 
-> When is that, exactly?
+> sorry, I meant LLVM_PREFIX
 
-
-I considered the path
-#define be32_to_cpu __be32_to_cpu
-
-#define __be32_to_cpu(x) __swab32((__force __u32)(__be32)(x))
-
-#define __swab32(x)				\
-	(__builtin_constant_p((__u32)(x)) ?	\
-	___constant_swab32(x) :			\
-	__fswab32(x))
-
-
-#define ___constant_swab32(x) ((__u32)(				\
-	(((__u32)(x) & (__u32)0x000000ffUL) << 24) |		\
-	(((__u32)(x) & (__u32)0x0000ff00UL) <<  8) |		\
-	(((__u32)(x) & (__u32)0x00ff0000UL) >>  8) |		\
-	(((__u32)(x) & (__u32)0xff000000UL) >> 24)))
-
-
-But you are right, it is protected by __builtin_constant_p() that
-prevents that for memory access.
-
-
-> If that's true, then lots of other places in the kernel would need to be fixed
-> too.  Try running:
-> 
-> 	git grep -E '[bl]e(16|32|64)_to_cpu\([^)]+\+\+\)'
-> 
-> If true, then it would be much better to fix the macros.
-
-
-And yes, anyway it makes sense to keep for be32_to_cpu()-like function
-macro a contract to handle its arguments as a plain function.
-
-Thanks,
-Alexey
+Same results unfortunately.
+-- 
+Florian
 
