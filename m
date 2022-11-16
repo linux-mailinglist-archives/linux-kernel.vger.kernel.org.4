@@ -2,76 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AAE362BEF4
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 14:05:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD03B62BF00
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 14:06:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233142AbiKPNFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 08:05:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52736 "EHLO
+        id S239004AbiKPNGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 08:06:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233560AbiKPNEo (ORCPT
+        with ESMTP id S236982AbiKPNGa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 08:04:44 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A232B62E
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 05:04:42 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id r12so29389105lfp.1
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 05:04:42 -0800 (PST)
+        Wed, 16 Nov 2022 08:06:30 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A723245A35
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 05:05:59 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id b29so17381159pfp.13
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 05:05:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hC7hAWdXJrbOBhiPtC+d8+UIyRAaqU4u9VT50dOh8F0=;
-        b=yjh/9w0+ChTTMXUeNDeMpHE2gsl6ozXsxhdQZC5YMMbA/CF70a9w2fzV6eAOShCktd
-         SVY5T13Bo+eBi9ZIiS5FKaxPZVaufmQ1V8WFkfY5hLa10/qs5ZDuT6lXT6R7Tl76yhd5
-         BJsuuu+t+WchZhcDT77o0KwLcKcv6lMvAue8ACDUKePMLqU0dhj32rlWs/vPMHKV5XQa
-         j5zrL45KTrRVuafLJDd/FNmyZf2QxDHJPV0aUwtFxESMnMAb4bd0Pg6IhHtHLiqYHem0
-         mDw5SDgPPKn6xp+vvlneE9kD/SdFfQL2uEOQ0I6Y9TQAC1fcT/84CX3f6hv019X8hrbY
-         2v/w==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R1Cv588Bvi76L0mcRYpB43mfzM8aVkUH41fr9xnyuZk=;
+        b=E49jHtoq9klKCtsK5b/aDkJEDwWlhujSTGhqkX1i+Yaglh/a7gYuqn640XaMH9YXjR
+         /qIi2NFyFqW/jBsLkuHXjmxtE6xchFocekHbF1Qmgr0bDPVCxpnVJKT61gfeYHAOczeA
+         RbsJrOW87i4MH1C04BOEWdpWtPg9ewvfxldfbk7xqa6FxSP59comhMtjBytSE6G3DZxq
+         YQ+DEQjSEX+ZKtzKK/zrumG4zusL1rc92M47OJDn5wRf4sB4Rt3S3AMTxslAVmzxeq8A
+         Ix5dnWngtEChuNX1Vk7JIRiwgK4FVsN7VDOJ8Bgls/5zFZvPxMx5Pq+LPO680X8plvav
+         uplw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hC7hAWdXJrbOBhiPtC+d8+UIyRAaqU4u9VT50dOh8F0=;
-        b=AdOcoAyRM4Uf8hPr2ZMC+eqDNa9ASLFrqyx4chUoYEOVTXKhr5yyrzHnE8XRmW/NYa
-         /f553qAtOZq6VWbzUNnBC7rZzwMyxrDHIwsKH3YPavg0+hK1Ssgs75dHCB4dRimvGNlV
-         JhUJ300vHwLzOs2RXo9pJlC1xyJx5MJ5qfhtbgZk83ioqx1gslF4z+y1SmbI36J63dD9
-         Zg02Q9FQFlgJGQYzN4fzOQDv/4XBsnBpGb9LgKq63lp846oi7Fb+Ud5RmTv9CQH/+33Y
-         cwrhImBYBMe9xJU1Be+xhDhFGx5ekfRmnybwHjeKUA7galLoLJGiMTrA2vEzm+MqyAGa
-         EuPg==
-X-Gm-Message-State: ANoB5pkg7cWG7PeKiXVNw6VmMq+R0L4UPUFpRDFxiFGemc7BRccYHux4
-        U4RIa7oN0PEwWed0LDD7LY++gw==
-X-Google-Smtp-Source: AA0mqf72YgutZylIoJBbSinzlh9BACGJygEv22CpJzWaxhQBxOmzTy/UCRLkcZlPBtmWoF9YswXL5w==
-X-Received: by 2002:ac2:530c:0:b0:4b4:aed7:4aa5 with SMTP id c12-20020ac2530c000000b004b4aed74aa5mr1198189lfh.447.1668603881020;
-        Wed, 16 Nov 2022 05:04:41 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id c6-20020ac25f66000000b0049a4862966fsm2590501lfc.146.2022.11.16.05.04.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 05:04:39 -0800 (PST)
-Message-ID: <623814f5-9abd-2634-bc2d-51de08074abe@linaro.org>
-Date:   Wed, 16 Nov 2022 14:04:38 +0100
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=R1Cv588Bvi76L0mcRYpB43mfzM8aVkUH41fr9xnyuZk=;
+        b=qdOdFK1w/O5PzV/h1P93vAA6lIBrc48AfnvbGY91Y8v/pzPJvwNGSO+IqdYE4/5WXj
+         vOCs6SHqkkyOpTgHo1wCh6lFyqS5bYgNUp3mUZcvG0tFnpSfDO5lLbMU5pF4PUGoCPWY
+         4SWDFxLo1XBA5cREmRLPms1rwQ1Zhdfg2R1GxReP9J3LDD2doYx69gmRC0dGlV2vTp8+
+         L+/HcunLnPW6C09e68u12j7SOqFXPEn3E7eiYUG1bWWieG+xEMVPH2TZj/XKVYwTh6O7
+         1tzklqQmyC7H4yt6w65+FL8UJrOvyGBCfs3gHorTIJg06xiFXrnVgFqTV8ZakyfNyKbO
+         10wA==
+X-Gm-Message-State: ANoB5pnL2QLTZ5yfjTTAoFN+nPwiaD+AMgqxwpJ5bKGDer5hGsYkCjyf
+        XmFDXBCH7DRDEp78JkUQnJqPkIUhVBMvO5foQPynRg==
+X-Google-Smtp-Source: AA0mqf6E25Iwm0aLBpX3+AHjPA+zg5fg0q8BSA6wix4zK5GRfsG2nVqbiY2284XFQcwXFnSWlMERWp61onfJ2fKediI=
+X-Received: by 2002:aa7:924c:0:b0:566:9f68:c0ad with SMTP id
+ 12-20020aa7924c000000b005669f68c0admr23131650pfp.57.1668603955791; Wed, 16
+ Nov 2022 05:05:55 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] dt-bindings: cpufreq: cpufreq-qcom-hw: Add SM8550
- compatible
-Content-Language: en-US
-To:     Abel Vesa <abel.vesa@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20221116115046.2687244-1-abel.vesa@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221116115046.2687244-1-abel.vesa@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20221104095512.4068-1-chevron.li@bayhubtech.com>
+ <CAPDyKFqaQyQ0rViHUZoN8NzcPu51utu4KhC2KsY4p2s_sua=kQ@mail.gmail.com> <SN1PR16MB22551227277A186B79ECA225F1079@SN1PR16MB2255.namprd16.prod.outlook.com>
+In-Reply-To: <SN1PR16MB22551227277A186B79ECA225F1079@SN1PR16MB2255.namprd16.prod.outlook.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 16 Nov 2022 14:05:19 +0100
+Message-ID: <CAPDyKFp4bDxtFeMcKVrGMySkZbN_eFCJuVEJwsfH834_4V8Sdw@mail.gmail.com>
+Subject: Re: [PATCH V1 1/1] mmc: sdhci-pci-o2micro: fix card detect fail issue
+ caused by CD# debounce timeout
+To:     "Louis Lu(TP)" <louis.lu@bayhubtech.com>
+Cc:     "Chevron Li (WH)" <chevron.li@bayhubtech.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Shaper Liu (WH)" <shaper.liu@bayhubtech.com>,
+        "XiaoGuang Yu (WH)" <xiaoguang.yu@bayhubtech.com>,
+        "Shirley Her(SC)" <shirley.her@bayhubtech.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,22 +75,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/11/2022 12:50, Abel Vesa wrote:
-> Add compatible for EPSS CPUFREQ-HW on SM8550.
-> Also document the interrupts.
+On Wed, 16 Nov 2022 at 07:04, Louis Lu(TP) <louis.lu@bayhubtech.com> wrote:
+>
+> Hi Uffe,
+>
+> May we check when this update patched will be phased in?
 
-None of other variants had interrupts so far, so you are adding it for
-new SoC, right? Or documenting existing usage? If the first, you need
-allOf:if:then.
+I realized that you probably want this to be applied as fix for
+v6.1-rc, so I have moved the patch to the fixes branch. Moreover, I
+will add a stable tag to it.
 
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
->  .../devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml       | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
+That means, the patch should show up in v6.1-rc6 next week and beyond
+that, it should be tried to be picked up by maintainers of the
+stable-kernels.
 
+Kind regards
+Uffe
 
-Best regards,
-Krzysztof
-
+>
+> Thanks,
+> Best Regards,
+> Louis Lu
+>
+> -----Original Message-----
+> From: Ulf Hansson <ulf.hansson@linaro.org>
+> Sent: Tuesday, November 8, 2022 4:13 AM
+> To: Chevron Li (WH) <chevron.li@bayhubtech.com>
+> Cc: adrian.hunter@intel.com; linux-mmc@vger.kernel.org; linux-kernel@vger=
+.kernel.org; Shaper Liu (WH) <shaper.liu@bayhubtech.com>; XiaoGuang Yu (WH)=
+ <xiaoguang.yu@bayhubtech.com>; Shirley Her(SC) <shirley.her@bayhubtech.com=
+>; Louis Lu(TP) <louis.lu@bayhubtech.com>
+> Subject: Re: [PATCH V1 1/1] mmc: sdhci-pci-o2micro: fix card detect fail =
+issue caused by CD# debounce timeout
+>
+> On Fri, 4 Nov 2022 at 10:55, Chevron Li <chevron.li@bayhubtech.com> wrote=
+:
+> >
+> > The SD card is recognized failed sometimes when resume from suspend.
+> > Because CD# debounce time too long then card present report wrong.
+> > Finally, card is recognized failed.
+> >
+> > Signed-off-by: Chevron Li <chevron.li@bayhubtech.com>
+>
+> Applied for next, thanks!
+>
+> Kind regards
+> Uffe
+>
+>
+> > ---
+> > Change in V1:
+> > Adjust bayhub chip setting for CD# debounce time to minimum value
+> > ---
+> >  drivers/mmc/host/sdhci-pci-o2micro.c | 7 +++++++
+> >  1 file changed, 7 insertions(+)
+> >
+> > diff --git a/drivers/mmc/host/sdhci-pci-o2micro.c b/drivers/mmc/host/sd=
+hci-pci-o2micro.c
+> > index ad457cd9cbaa..bca1d095b759 100644
+> > --- a/drivers/mmc/host/sdhci-pci-o2micro.c
+> > +++ b/drivers/mmc/host/sdhci-pci-o2micro.c
+> > @@ -32,6 +32,7 @@
+> >  #define O2_SD_CAPS             0xE0
+> >  #define O2_SD_ADMA1            0xE2
+> >  #define O2_SD_ADMA2            0xE7
+> > +#define O2_SD_MISC_CTRL2       0xF0
+> >  #define O2_SD_INF_MOD          0xF1
+> >  #define O2_SD_MISC_CTRL4       0xFC
+> >  #define O2_SD_MISC_CTRL                0x1C0
+> > @@ -877,6 +878,12 @@ static int sdhci_pci_o2_probe(struct sdhci_pci_chi=
+p *chip)
+> >                 /* Set Tuning Windows to 5 */
+> >                 pci_write_config_byte(chip->pdev,
+> >                                 O2_SD_TUNING_CTRL, 0x55);
+> > +               //Adjust 1st and 2nd CD debounce time
+> > +               pci_read_config_dword(chip->pdev, O2_SD_MISC_CTRL2, &sc=
+ratch_32);
+> > +               scratch_32 &=3D 0xFFE7FFFF;
+> > +               scratch_32 |=3D 0x00180000;
+> > +               pci_write_config_dword(chip->pdev, O2_SD_MISC_CTRL2, sc=
+ratch_32);
+> > +               pci_write_config_dword(chip->pdev, O2_SD_DETECT_SETTING=
+, 1);
+> >                 /* Lock WP */
+> >                 ret =3D pci_read_config_byte(chip->pdev,
+> >                                            O2_SD_LOCK_WP, &scratch);
+> >
+> > base-commit: ee6050c8af96bba2f81e8b0793a1fc2f998fcd20
+> > --
+> > 2.25.1
+> >
