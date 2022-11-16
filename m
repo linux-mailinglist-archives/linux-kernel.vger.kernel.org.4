@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B696B62C5D6
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 18:04:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6579662C5D7
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 18:04:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233554AbiKPREW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 12:04:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50232 "EHLO
+        id S235024AbiKPREZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 12:04:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234801AbiKPREG (ORCPT
+        with ESMTP id S234879AbiKPREH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 12:04:06 -0500
-Received: from mail-ed1-x54a.google.com (mail-ed1-x54a.google.com [IPv6:2a00:1450:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BCD1391F7
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 09:03:57 -0800 (PST)
-Received: by mail-ed1-x54a.google.com with SMTP id v18-20020a056402349200b004622e273bbbso12863605edc.14
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 09:03:56 -0800 (PST)
+        Wed, 16 Nov 2022 12:04:07 -0500
+Received: from mail-ed1-x549.google.com (mail-ed1-x549.google.com [IPv6:2a00:1450:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D71947306
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 09:03:59 -0800 (PST)
+Received: by mail-ed1-x549.google.com with SMTP id q13-20020a056402518d00b00462b0599644so13123610edd.20
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 09:03:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dKmpRv9oYnAFUmNC2vB3bCF8nzlsd9JVBa/slHAfN6o=;
-        b=CLgMgrrcH6xqRvc7dNBg0nJ8Wy/hwMjHvKv0ZdsqRx0VWo1ppcKFPZv2Vl4sa0XbtH
-         /P+9e75YOS4CES7toeMWS2XqDGWw2Z3dMQdTpDFU4FAf1tVxHg+cuaMV7tj9ZMu+1OBg
-         t03GWHD0qg+0WLX9IUBrp0PplHDIIjODI5JSf1ne+yIq5pX7WNxv/XcfUbmi4uPmiP46
-         zo3d9hT6Mmqv4/GR8dFrNTdkA0OhSPHHFc/ja6tobeTaN4+SJDAYgxlvz5BifkAg8D66
-         FTLFI4W7VlXvmtTFQVki2oNpx+mfi8yCGf3HOcE4PZfLM7CtWsjWfMS6WfWM2UNLipL4
-         BD2Q==
+        bh=w3CJ9WqAwrI5MWLbxzP4zufoJqf7Sp8iQz9NzGEzNss=;
+        b=RRQT8R8I8/484VEB7cZtngMuD3T4Py3IF82wRk+y2FNtS+kUp8hwTPzl3tIwgvoHdW
+         OfMMBdCkQOPYoO1cVBvZ+tfGLnLJpB9pDhaN7v7wIhNHpAqrTPXcmcO82vmEUsJDO3F3
+         5bmHSPlxCy1B2rBozvE2SGkdJ+JHBhwWqOz2hbVFkg8YRDSBkH59SdyGZLEMacOQr1y7
+         DKsPdZCaBMauYRGyAPLO9IBwCELxblbYZjnARDadXRCVgiPv4KCjnTCn1TbFZXyYkGpt
+         E8rmNyCUP73bX9xXIaUa8d0tyHdtHjXMd4nwBYClTcug3wD/sJ2ay8q/jGEx1h2u+Wmf
+         2j0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dKmpRv9oYnAFUmNC2vB3bCF8nzlsd9JVBa/slHAfN6o=;
-        b=UwVAKhEEZ1yZejbCoXpRPvuNJOcoNaAcH2V7VDvKddavijmo/bsBOfiEx3vji0CZ+W
-         wVvHljOIkNwYlI81iSe1QfNKXKKgaosT1+YORizao4NHtSuWQ15aRZVL4N1bKB3PwSG/
-         Su1inOobAFlZqsdT+WLaLDZ5s2GXWwLhKjm7pRByYL0EiLz2Fv+AUshA1WuGlnn2h3YK
-         8yE0Vo5MMgxCRYaQW/UvBGBanayQwDCANYwsjIhSGLyl5lrmMGLgLeEoOvxrq0pgZ4f5
-         ZRixcSvXohRqkxAh+6ZIiYaPjZITGU7xZaWDIuUPVR2wCuKmvZLyZl+Mdmwn+3Pc2eVW
-         thxQ==
-X-Gm-Message-State: ANoB5pnLMq/uAIRp+hLQ3v/cwLDYKN0yaxucrGQz7/ekR5J9TMlWwi8o
-        XvVyipfYpf68U58VMLQ61AZbhrmMvHdq
-X-Google-Smtp-Source: AA0mqf5Zh1E2Jq1JH4007iv1JNaQg8tonRvU0GAtnvQjndQkafqFq3DeYbzdetpEQAWaQCv6X1dKLc90yop4
+        bh=w3CJ9WqAwrI5MWLbxzP4zufoJqf7Sp8iQz9NzGEzNss=;
+        b=lEl+avoP/w61dPZXUMN44WnqabXw7rYHGLbzZzUB5SWRPwIMiXk0UzFJCHwwQvxQ6c
+         IoRkR1jw9y0pCt/AmJHALp9T5cPWKh7j8/T9kIJ9zXlL7VImPdLsdHVHVlPJLb8flcJl
+         Bu/GVph6aZgi42oFDJxGgIS1VdKc6QluOxa9S55B9cWQPQQtU9R+qxAR5fLx5Y2EdX0m
+         uGpWe+TxKmHZTcJzqCI+SXmYVVxf8mK6dz98jtZ0CQxTv4g10U+mMd1Oa3En4jn6pp7E
+         QUo0RPslK4cOs7GMiXGIwlld1aR6FY90/HK1Vu/OguXh78Xr1swNLTbNOIyvsQUwd3W6
+         wZUA==
+X-Gm-Message-State: ANoB5pnG4s/b08Py2XRraftrKmR8qDsqHtm9Mbr/eJ8V/C85oPYM7stu
+        +DxOrdUVGt09DMOozOLDMOVY1B8CGhV5
+X-Google-Smtp-Source: AA0mqf6JS80gQxyHP/kM0kvdlOGbGQY5Uhg5+P6sHPSkH1Zbh79if5Kzo0s/F9hrUkjGecANQVWXuHZIGu3M
 X-Received: from big-boi.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:129])
- (user=qperret job=sendgmr) by 2002:a05:6402:b61:b0:461:ed40:c2f2 with SMTP id
- cb1-20020a0564020b6100b00461ed40c2f2mr19383579edb.404.1668618235659; Wed, 16
- Nov 2022 09:03:55 -0800 (PST)
-Date:   Wed, 16 Nov 2022 17:03:30 +0000
+ (user=qperret job=sendgmr) by 2002:a17:907:9142:b0:78d:9c18:7307 with SMTP id
+ l2-20020a170907914200b0078d9c187307mr20201932ejs.23.1668618237769; Wed, 16
+ Nov 2022 09:03:57 -0800 (PST)
+Date:   Wed, 16 Nov 2022 17:03:31 +0000
 In-Reply-To: <20221116170335.2341003-1-qperret@google.com>
 Mime-Version: 1.0
 References: <20221116170335.2341003-1-qperret@google.com>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Message-ID: <20221116170335.2341003-8-qperret@google.com>
-Subject: [PATCH 07/12] KVM: arm64: Handle FFA_RXTX_MAP and FFA_RXTX_UNMAP
- calls from the host
+Message-ID: <20221116170335.2341003-9-qperret@google.com>
+Subject: [PATCH 08/12] KVM: arm64: Add FF-A helpers to share/unshare memory
+ with secure world
 From:   Quentin Perret <qperret@google.com>
 To:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
         Alexandru Elisei <alexandru.elisei@arm.com>,
@@ -79,270 +79,144 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Will Deacon <will@kernel.org>
 
-Handle FFA_RXTX_MAP and FFA_RXTX_UNMAP calls from the host by sharing
-the host's mailbox memory with the hypervisor and establishing a
-separate pair of mailboxes between the hypervisor and the SPMD at EL3.
+Extend pKVM's memory protection code so that we can update the host's
+stage-2 page-table to track pages shared with secure world by the host
+using FF-A and prevent those pages from being mapped into a guest.
 
 Co-developed-by: Andrew Walbran <qwandor@google.com>
 Signed-off-by: Andrew Walbran <qwandor@google.com>
 Signed-off-by: Will Deacon <will@kernel.org>
 Signed-off-by: Quentin Perret <qperret@google.com>
 ---
- arch/arm64/kvm/hyp/nvhe/ffa.c | 173 ++++++++++++++++++++++++++++++++++
- include/linux/arm_ffa.h       |   8 ++
- 2 files changed, 181 insertions(+)
+ arch/arm64/kvm/hyp/include/nvhe/mem_protect.h |  3 +
+ arch/arm64/kvm/hyp/nvhe/mem_protect.c         | 68 +++++++++++++++++++
+ 2 files changed, 71 insertions(+)
 
-diff --git a/arch/arm64/kvm/hyp/nvhe/ffa.c b/arch/arm64/kvm/hyp/nvhe/ffa.c
-index 7cb9095e00ff..8388cc901c97 100644
---- a/arch/arm64/kvm/hyp/nvhe/ffa.c
-+++ b/arch/arm64/kvm/hyp/nvhe/ffa.c
-@@ -31,6 +31,8 @@
- #include <asm/kvm_pkvm.h>
+diff --git a/arch/arm64/kvm/hyp/include/nvhe/mem_protect.h b/arch/arm64/kvm/hyp/include/nvhe/mem_protect.h
+index b7bdbe63deed..0972faccc2af 100644
+--- a/arch/arm64/kvm/hyp/include/nvhe/mem_protect.h
++++ b/arch/arm64/kvm/hyp/include/nvhe/mem_protect.h
+@@ -57,6 +57,7 @@ extern struct host_mmu host_mmu;
+ enum pkvm_component_id {
+ 	PKVM_ID_HOST,
+ 	PKVM_ID_HYP,
++	PKVM_ID_FFA,
+ };
  
- #include <nvhe/ffa.h>
-+#include <nvhe/mem_protect.h>
-+#include <nvhe/memory.h>
- #include <nvhe/trap_handler.h>
- #include <nvhe/spinlock.h>
+ extern unsigned long hyp_nr_cpus;
+@@ -66,6 +67,8 @@ int __pkvm_host_share_hyp(u64 pfn);
+ int __pkvm_host_unshare_hyp(u64 pfn);
+ int __pkvm_host_donate_hyp(u64 pfn, u64 nr_pages);
+ int __pkvm_hyp_donate_host(u64 pfn, u64 nr_pages);
++int __pkvm_host_share_ffa(u64 pfn, u64 nr_pages);
++int __pkvm_host_unshare_ffa(u64 pfn, u64 nr_pages);
  
-@@ -52,6 +54,7 @@ struct kvm_ffa_buffers {
-  * client.
-  */
- static struct kvm_ffa_buffers hyp_buffers;
-+static struct kvm_ffa_buffers host_buffers;
- 
- static void ffa_to_smccc_error(struct arm_smccc_res *res, u64 ffa_errno)
- {
-@@ -71,6 +74,11 @@ static void ffa_to_smccc_res_prop(struct arm_smccc_res *res, int ret, u64 prop)
+ bool addr_is_memory(phys_addr_t phys);
+ int host_stage2_idmap_locked(phys_addr_t addr, u64 size, enum kvm_pgtable_prot prot);
+diff --git a/arch/arm64/kvm/hyp/nvhe/mem_protect.c b/arch/arm64/kvm/hyp/nvhe/mem_protect.c
+index 552653fa18be..e721fba3bb33 100644
+--- a/arch/arm64/kvm/hyp/nvhe/mem_protect.c
++++ b/arch/arm64/kvm/hyp/nvhe/mem_protect.c
+@@ -835,6 +835,13 @@ static int check_share(struct pkvm_mem_share *share)
+ 	case PKVM_ID_HYP:
+ 		ret = hyp_ack_share(completer_addr, tx, share->completer_prot);
+ 		break;
++	case PKVM_ID_FFA:
++		/*
++		 * We only check the host; the secure side will check the other
++		 * end when we forward the FFA call.
++		 */
++		ret = 0;
++		break;
+ 	default:
+ 		ret = -EINVAL;
  	}
+@@ -863,6 +870,13 @@ static int __do_share(struct pkvm_mem_share *share)
+ 	case PKVM_ID_HYP:
+ 		ret = hyp_complete_share(completer_addr, tx, share->completer_prot);
+ 		break;
++	case PKVM_ID_FFA:
++		/*
++		 * We're not responsible for any secure page-tables, so there's
++		 * nothing to do here.
++		 */
++		ret = 0;
++		break;
+ 	default:
+ 		ret = -EINVAL;
+ 	}
+@@ -911,6 +925,10 @@ static int check_unshare(struct pkvm_mem_share *share)
+ 	case PKVM_ID_HYP:
+ 		ret = hyp_ack_unshare(completer_addr, tx);
+ 		break;
++	case PKVM_ID_FFA:
++		/* See check_share() */
++		ret = 0;
++		break;
+ 	default:
+ 		ret = -EINVAL;
+ 	}
+@@ -939,6 +957,10 @@ static int __do_unshare(struct pkvm_mem_share *share)
+ 	case PKVM_ID_HYP:
+ 		ret = hyp_complete_unshare(completer_addr, tx);
+ 		break;
++	case PKVM_ID_FFA:
++		/* See __do_share() */
++		ret = 0;
++		break;
+ 	default:
+ 		ret = -EINVAL;
+ 	}
+@@ -1228,3 +1250,49 @@ void hyp_unpin_shared_mem(void *from, void *to)
+ 	hyp_unlock_component();
+ 	host_unlock_component();
  }
- 
-+static void ffa_to_smccc_res(struct arm_smccc_res *res, int ret)
++
++int __pkvm_host_share_ffa(u64 pfn, u64 nr_pages)
 +{
-+	ffa_to_smccc_res_prop(res, ret, 0);
-+}
-+
- static void ffa_set_retval(struct kvm_cpu_context *ctxt,
- 			   struct arm_smccc_res *res)
- {
-@@ -88,6 +96,140 @@ static bool is_ffa_call(u64 func_id)
- 	       ARM_SMCCC_FUNC_NUM(func_id) <= FFA_MAX_FUNC_NUM;
- }
- 
-+static int spmd_map_ffa_buffers(u64 ffa_page_count)
-+{
-+	struct arm_smccc_res res;
-+
-+	arm_smccc_1_1_smc(FFA_FN64_RXTX_MAP,
-+			  hyp_virt_to_phys(hyp_buffers.tx),
-+			  hyp_virt_to_phys(hyp_buffers.rx),
-+			  ffa_page_count,
-+			  0, 0, 0, 0,
-+			  &res);
-+
-+	return res.a0 == FFA_SUCCESS ? FFA_RET_SUCCESS : res.a2;
-+}
-+
-+static int spmd_unmap_ffa_buffers(void)
-+{
-+	struct arm_smccc_res res;
-+
-+	arm_smccc_1_1_smc(FFA_RXTX_UNMAP,
-+			  HOST_FFA_ID,
-+			  0, 0, 0, 0, 0, 0,
-+			  &res);
-+
-+	return res.a0 == FFA_SUCCESS ? FFA_RET_SUCCESS : res.a2;
-+}
-+
-+static void do_ffa_rxtx_map(struct arm_smccc_res *res,
-+			    struct kvm_cpu_context *ctxt)
-+{
-+	DECLARE_REG(phys_addr_t, tx, ctxt, 1);
-+	DECLARE_REG(phys_addr_t, rx, ctxt, 2);
-+	DECLARE_REG(u32, npages, ctxt, 3);
-+	int ret = 0;
-+	void *rx_virt, *tx_virt;
-+
-+	if (npages != (KVM_FFA_MBOX_NR_PAGES * PAGE_SIZE) / FFA_PAGE_SIZE) {
-+		ret = FFA_RET_INVALID_PARAMETERS;
-+		goto out;
-+	}
-+
-+	if (!PAGE_ALIGNED(tx) || !PAGE_ALIGNED(rx)) {
-+		ret = FFA_RET_INVALID_PARAMETERS;
-+		goto out;
-+	}
-+
-+	hyp_spin_lock(&host_buffers.lock);
-+	if (host_buffers.tx) {
-+		ret = FFA_RET_DENIED;
-+		goto out_unlock;
-+	}
-+
-+	ret = spmd_map_ffa_buffers(npages);
-+	if (ret)
-+		goto out_unlock;
-+
-+	ret = __pkvm_host_share_hyp(hyp_phys_to_pfn(tx));
-+	if (ret) {
-+		ret = FFA_RET_INVALID_PARAMETERS;
-+		goto err_unmap;
-+	}
-+
-+	ret = __pkvm_host_share_hyp(hyp_phys_to_pfn(rx));
-+	if (ret) {
-+		ret = FFA_RET_INVALID_PARAMETERS;
-+		goto err_unshare_tx;
-+	}
-+
-+	tx_virt = hyp_phys_to_virt(tx);
-+	ret = hyp_pin_shared_mem(tx_virt, tx_virt + 1);
-+	if (ret) {
-+		ret = FFA_RET_INVALID_PARAMETERS;
-+		goto err_unshare_rx;
-+	}
-+
-+	rx_virt = hyp_phys_to_virt(rx);
-+	ret = hyp_pin_shared_mem(rx_virt, rx_virt + 1);
-+	if (ret) {
-+		ret = FFA_RET_INVALID_PARAMETERS;
-+		goto err_unpin_tx;
-+	}
-+
-+	host_buffers.tx = tx_virt;
-+	host_buffers.rx = rx_virt;
-+
-+out_unlock:
-+	hyp_spin_unlock(&host_buffers.lock);
-+out:
-+	ffa_to_smccc_res(res, ret);
-+	return;
-+
-+err_unpin_tx:
-+	hyp_unpin_shared_mem(tx_virt, tx_virt + 1);
-+err_unshare_rx:
-+	__pkvm_host_unshare_hyp(hyp_phys_to_pfn(rx));
-+err_unshare_tx:
-+	__pkvm_host_unshare_hyp(hyp_phys_to_pfn(tx));
-+err_unmap:
-+	spmd_unmap_ffa_buffers();
-+	goto out_unlock;
-+}
-+
-+static void do_ffa_rxtx_unmap(struct arm_smccc_res *res,
-+			      struct kvm_cpu_context *ctxt)
-+{
-+	DECLARE_REG(u32, id, ctxt, 1);
-+	int ret = 0;
-+
-+	if (id != HOST_FFA_ID) {
-+		ret = FFA_RET_INVALID_PARAMETERS;
-+		goto out;
-+	}
-+
-+	hyp_spin_lock(&host_buffers.lock);
-+	if (!host_buffers.tx) {
-+		ret = FFA_RET_INVALID_PARAMETERS;
-+		goto out_unlock;
-+	}
-+
-+	hyp_unpin_shared_mem(host_buffers.tx, host_buffers.tx + 1);
-+	WARN_ON(__pkvm_host_unshare_hyp(hyp_virt_to_pfn(host_buffers.tx)));
-+	host_buffers.tx = NULL;
-+
-+	hyp_unpin_shared_mem(host_buffers.rx, host_buffers.rx + 1);
-+	WARN_ON(__pkvm_host_unshare_hyp(hyp_virt_to_pfn(host_buffers.rx)));
-+	host_buffers.rx = NULL;
-+
-+	spmd_unmap_ffa_buffers();
-+
-+out_unlock:
-+	hyp_spin_unlock(&host_buffers.lock);
-+out:
-+	ffa_to_smccc_res(res, ret);
-+}
-+
- static bool ffa_call_unsupported(u64 func_id)
- {
- 	switch (func_id) {
-@@ -159,7 +301,11 @@ bool kvm_host_ffa_handler(struct kvm_cpu_context *host_ctxt)
- 		goto out_handled;
- 	/* Memory management */
- 	case FFA_FN64_RXTX_MAP:
-+		do_ffa_rxtx_map(&res, host_ctxt);
-+		goto out_handled;
- 	case FFA_RXTX_UNMAP:
-+		do_ffa_rxtx_unmap(&res, host_ctxt);
-+		goto out_handled;
- 	case FFA_MEM_SHARE:
- 	case FFA_FN64_MEM_SHARE:
- 	case FFA_MEM_LEND:
-@@ -181,6 +327,7 @@ bool kvm_host_ffa_handler(struct kvm_cpu_context *host_ctxt)
- int hyp_ffa_init(void *pages)
- {
- 	struct arm_smccc_res res;
-+	size_t min_rxtx_sz;
- 
- 	if (kvm_host_psci_config.smccc_version < ARM_SMCCC_VERSION_1_2)
- 		return 0;
-@@ -199,11 +346,37 @@ int hyp_ffa_init(void *pages)
- 	if (res.a2 != HOST_FFA_ID)
- 		return -EINVAL;
- 
-+	arm_smccc_1_1_smc(FFA_FEATURES, FFA_FN64_RXTX_MAP,
-+			  0, 0, 0, 0, 0, 0, &res);
-+	if (res.a0 != FFA_SUCCESS)
-+		return -EOPNOTSUPP;
-+
-+	switch (res.a2) {
-+	case FFA_FEAT_RXTX_MIN_SZ_4K:
-+		min_rxtx_sz = SZ_4K;
-+		break;
-+	case FFA_FEAT_RXTX_MIN_SZ_16K:
-+		min_rxtx_sz = SZ_16K;
-+		break;
-+	case FFA_FEAT_RXTX_MIN_SZ_64K:
-+		min_rxtx_sz = SZ_64K;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	if (min_rxtx_sz > PAGE_SIZE)
-+		return -EOPNOTSUPP;
-+
- 	hyp_buffers = (struct kvm_ffa_buffers) {
- 		.lock	= __HYP_SPIN_LOCK_UNLOCKED,
- 		.tx	= pages,
- 		.rx	= pages + (KVM_FFA_MBOX_NR_PAGES * PAGE_SIZE),
- 	};
- 
-+	host_buffers = (struct kvm_ffa_buffers) {
-+		.lock	= __HYP_SPIN_LOCK_UNLOCKED,
++	int ret;
++	struct pkvm_mem_share share = {
++		.tx	= {
++			.nr_pages	= nr_pages,
++			.initiator	= {
++				.id	= PKVM_ID_HOST,
++				.addr	= hyp_pfn_to_phys(pfn),
++			},
++			.completer	= {
++				.id	= PKVM_ID_FFA,
++			},
++		},
 +	};
 +
- 	return 0;
- }
-diff --git a/include/linux/arm_ffa.h b/include/linux/arm_ffa.h
-index c87aeecaa9b2..b9f81035eb41 100644
---- a/include/linux/arm_ffa.h
-+++ b/include/linux/arm_ffa.h
-@@ -94,6 +94,14 @@
-  */
- #define FFA_PAGE_SIZE		SZ_4K
- 
-+/*
-+ * Minimum buffer size/alignment encodings returned by an FFA_FEATURES
-+ * query for FFA_RXTX_MAP.
-+ */
-+#define FFA_FEAT_RXTX_MIN_SZ_4K		0
-+#define FFA_FEAT_RXTX_MIN_SZ_64K	1
-+#define FFA_FEAT_RXTX_MIN_SZ_16K	2
++	host_lock_component();
++	ret = do_share(&share);
++	host_unlock_component();
 +
- /* FFA Bus/Device/Driver related */
- struct ffa_device {
- 	int vm_id;
++	return ret;
++}
++
++int __pkvm_host_unshare_ffa(u64 pfn, u64 nr_pages)
++{
++	int ret;
++	struct pkvm_mem_share share = {
++		.tx	= {
++			.nr_pages	= nr_pages,
++			.initiator	= {
++				.id	= PKVM_ID_HOST,
++				.addr	= hyp_pfn_to_phys(pfn),
++			},
++			.completer	= {
++				.id	= PKVM_ID_FFA,
++			},
++		},
++	};
++
++	host_lock_component();
++	ret = do_unshare(&share);
++	host_unlock_component();
++
++	return ret;
++}
 -- 
 2.38.1.431.g37b22c650d-goog
 
