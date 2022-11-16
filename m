@@ -2,117 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91E3A62B73C
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 11:10:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED50862B746
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 11:11:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232768AbiKPKKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 05:10:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46000 "EHLO
+        id S232971AbiKPKLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 05:11:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232740AbiKPKKo (ORCPT
+        with ESMTP id S231301AbiKPKLp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 05:10:44 -0500
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110691E3FD
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:10:44 -0800 (PST)
-Received: by mail-wm1-f53.google.com with SMTP id h186-20020a1c21c3000000b003cfe48519a6so1258549wmh.0
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:10:43 -0800 (PST)
+        Wed, 16 Nov 2022 05:11:45 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FAA41FCEA
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:11:44 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id bs21so29087434wrb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:11:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=2sXMPjyYlEjI2B4Rlkp7SFAQqHOI8ZKcd3a/TQ7z30o=;
+        b=Gxzs4tsDE0+FP+wW1pfIp50r9zP6o78+feeCdIiM41l3zs3Vk7HYcqPpVge4ESuXwI
+         yj+Ar2zg8pmyDoTU9OcRXMiLPCP+cvmTUnTntyZlCDGcJAO9FxIXPVjz0e0vz49/xewO
+         n+e7WTuaxj3DkQgJyZyy0kKv1ujONjvua3TPY4OT0m5uYzbCM0+XhJBdnEVvh3ZiD8HR
+         JrH+xgsjtqqMt+TUzBxL96PRXXXE1Sq0e/+WTdQ36vQYNYoiUXpOI85/KLFfYw7P589s
+         43olaDdf49r/yZU8JMILZ9GtjAKX0InNz0Pa7fgQSqXT5CLvi2NHDMQzCKoXc9c8sdzx
+         +DhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ty1Id4ftuY2J/moyYs8ypYuJmz79C5rQqwhw+oW8TYY=;
-        b=JXU+Fm0JcrIvKAxwYGIIkiDhpYhj6dmDwMAaXiFK6nnSugGOwOpB4b0yHSBzEH8t2v
-         Jotjz3V8DkTe0zPxtK5UKqUi6oZmxmXMrCnRj4LGlUSGQwYOD0sl8PYL36+F8ytV6T9y
-         H4cENq0SL0nNhbWM7BWdPI+s/rWuhHSC4XuwIr4v9PJda/j4xEDoBBS/ZjuNP0ByTzRF
-         R3X7wcSmuNDnXVsvLyASACxORkDILCf1uOsQXFh1NnoyJxky9PAr7ebJxDBiJWPiP5+c
-         7MWLNBvRO5w+lJiWIhy/b++bIAL/hX4psxWX3pbtEwDTwKKaKNu1yCj4xY5hwXM/jNtO
-         yJUg==
-X-Gm-Message-State: ANoB5pl+4YzwHjg7CTHQkE+DUWI4+uJknb7xBWwxmhm/0PeFynHsQG73
-        K1PsXod6XvzoIFutViT+xPpNn7EsN0o=
-X-Google-Smtp-Source: AA0mqf4QP0oXLZAAGkkqAlP2YKjaYDEAHbaoz2IzqW+bp+iIvI4Q1I9Of0sJCm4hdCvIYc2rqkhHEw==
-X-Received: by 2002:a05:600c:3d0c:b0:3cf:8279:c80c with SMTP id bh12-20020a05600c3d0c00b003cf8279c80cmr1597841wmb.169.1668593442383;
-        Wed, 16 Nov 2022 02:10:42 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
-        by smtp.gmail.com with ESMTPSA id e1-20020a5d5001000000b002368424f89esm14435384wrt.67.2022.11.16.02.10.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 02:10:41 -0800 (PST)
-Message-ID: <77be348e-3e9d-7bbf-5581-95d78124daa7@kernel.org>
-Date:   Wed, 16 Nov 2022 11:10:40 +0100
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2sXMPjyYlEjI2B4Rlkp7SFAQqHOI8ZKcd3a/TQ7z30o=;
+        b=RKwzBx3qHrG/w2q0mX758663/bh8tw7axGTaQIJmp9M/63aCU6aQyQYvMQQVu44F/i
+         mviaSk0KPXkAAEIg8UtiUNXkagNsCqWud3JMb/YSz8OzTSVpXDUJCM6istod1HxEMRJF
+         rG2krGlz0Pt/ZYo8gr2zQhQg2HBB3n3uiSjQnPwET7TTuO2dCsxtOq3PZr9fJeA0+xot
+         R7pB0tkdPOvgUuDk7qQfGJJmnfMyC6LpNlnmnMqLjgf+tC4OsDsfzgnSzGP7edf+7C3f
+         BQm+yo8yrSDiVUrpcVYEjtbYgyKW1Thi1t6yU84n158joGF3j4rgu5YiGmZNrhuUlpy5
+         iyqA==
+X-Gm-Message-State: ANoB5pnw7vh8XDF+7/5YWUpIQwPgEMBzBnowmuYj5k4HVWfot7Vtj9pu
+        YGdSb1tvjP7Uvhy2Jxu7tJK7KQ==
+X-Google-Smtp-Source: AA0mqf4/okQIcXHsn8/0v1t7nIrZA6mDr+ohIbIQdxlqgvxuf7KXViaPZQrirc2BdsFInvRGsWS6TQ==
+X-Received: by 2002:adf:cd10:0:b0:22e:c2a6:d00d with SMTP id w16-20020adfcd10000000b0022ec2a6d00dmr13486833wrm.29.1668593502580;
+        Wed, 16 Nov 2022 02:11:42 -0800 (PST)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id h12-20020a05600c350c00b003c6bd91caa5sm1741752wmq.17.2022.11.16.02.11.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 02:11:42 -0800 (PST)
+Subject: [PATCH 0/7] qcom: add support for SPMI PMICs found on SM8550 platforms
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH] misc: hpilo: relicense HPE iLO driver as Dual MIT/GPL
-Content-Language: en-US
-To:     matt.hsiao@hpe.com, linux-kernel@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org, arnd@arndb.de,
-        christophe.jaillet@wanadoo.fr, gustavoars@kernel.org,
-        nishadkamdar@gmail.com, torvalds@linux-foundation.org,
-        dhaval.experiance@gmail.com, viro@zeniv.linux.org.uk,
-        arvind.yadav.cs@gmail.com, standby24x7@gmail.com,
-        wfp5p@virginia.edu, prarit@redhat.com, tj@kernel.org,
-        adobriyan@gmail.com
-References: <20221116094712.14312-1-matt.hsiao@hpe.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20221116094712.14312-1-matt.hsiao@hpe.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-b4-tracking: H4sIAFG3dGMC/w3MQQqEMAwAwK9IzhswZQtbf1PboAEbpdG9iH83x7nMDcZd2GAabuj8F5NdHfQZoK
+ xZF0apbghjCET0Rc292dl3XdDaL8YRr8PNuaEdTbCGklLiEmsh8GXOxjj3rGX1R69te54Xmoe7KXYA AAA=
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Date:   Wed, 16 Nov 2022 11:11:29 +0100
+Message-Id: <20221114-narmstrong-sm8550-upstream-spmi-v1-0-6338a2b4b241@linaro.org>
+To:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Lee Jones <lee@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        linux-gpio@vger.kernel.org
+X-Mailer: b4 0.10.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16. 11. 22, 10:47, matt.hsiao@hpe.com wrote:
-> From: Matt Hsiao <matt.hsiao@hpe.com>
-> 
-> Currently, the hpilo driver is licensed as GPL. To run OpenBSD on HPE
-> servers with BMC (HPE iLO) functionality, a dual MIT/GPL license is needed
-> for porting the hpilo driver to OpenBSD.
+The SM8550 based platforms sports a bunch of new PMICs:
+- pm8550
+- pm8550b
+- pm8550ve
+- pm8550vs
+- pmk8550
+- pmr735d
+- pm8010
 
-What about the MODULE_LICENSE() change to "Dual MIT/GPL" too?
+With GPIO support on:
+- pm8550
+- pm8550b
+- pm8550ve
+- pm8550vs
+- pmk8550
+- pmr735d
 
-Acked-by: Jiri Slaby <jirislaby@kernel.org>
+This documents bindings for those SPMI PMIC and adds compatible in the
+PMIC pinctrl driver for GPIO support.
 
-> Signed-off-by: Matt Hsiao <matt.hsiao@hpe.com>
-> ---
-> 
-> Hello contributors in the CC list,
-> 
-> Thanks for your contributions to the hpilo driver. Please kindly review
-> the license change and hopefully you would agree and approve it. Thanks!
-> 
->   drivers/misc/hpilo.c | 2 +-
->   drivers/misc/hpilo.h | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/misc/hpilo.c b/drivers/misc/hpilo.c
-> index 8d00df9243c4..6a06b6485950 100644
-> --- a/drivers/misc/hpilo.c
-> +++ b/drivers/misc/hpilo.c
-> @@ -1,4 +1,4 @@
-> -// SPDX-License-Identifier: GPL-2.0
-> +// SPDX-License-Identifier: GPL-2.0 OR MIT
->   /*
->    * Driver for the HP iLO management processor.
->    *
-> diff --git a/drivers/misc/hpilo.h b/drivers/misc/hpilo.h
-> index d57c34680b09..581dfd7834b8 100644
-> --- a/drivers/misc/hpilo.h
-> +++ b/drivers/misc/hpilo.h
-> @@ -1,4 +1,4 @@
-> -/* SPDX-License-Identifier: GPL-2.0 */
-> +/* SPDX-License-Identifier: GPL-2.0 OR MIT */
->   /*
->    * linux/drivers/char/hpilo.h
->    *
+To: Andy Gross <agross@kernel.org>
+To: Bjorn Andersson <andersson@kernel.org>
+To: Konrad Dybcio <konrad.dybcio@somainline.org>
+To: Lee Jones <lee@kernel.org>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+To: Stephen Boyd <sboyd@kernel.org>
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-gpio@vger.kernel.org
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 
+---
+Neil Armstrong (7):
+      dt-bindings: mfd: qcom,spmi-pmic: document pm8550, pm8550b, pm8550ve, pm8550vs & pmk8550
+      dt-bindings: mfd: qcom,spmi-pmic: document pm8010
+      dt-bindings: mfd: qcom,spmi-pmic: document pmr735d
+      dt-bindings: pinctrl: qcom,pmic-gpio: document pm8550, pm8550b, pm8550ve, pm8550vs & pmk8550
+      dt-bindings: pinctrl: qcom,pmic-gpio: document pmr735d
+      pinctrl: qcom: spmi-gpio: add support for pm8550 gpio control
+      pinctrl: qcom: spmi-gpio: add support for pmr735d gpio control
+
+ .../devicetree/bindings/mfd/qcom,spmi-pmic.yaml        |  7 +++++++
+ .../devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml    | 18 ++++++++++++++++++
+ drivers/pinctrl/qcom/pinctrl-spmi-gpio.c               |  6 ++++++
+ 3 files changed, 31 insertions(+)
+---
+base-commit: 3c1f24109dfc4fb1a3730ed237e50183c6bb26b3
+change-id: 20221114-narmstrong-sm8550-upstream-spmi-d2c999ec5dc1
+
+Best regards,
 -- 
-js
-suse labs
-
+Neil Armstrong <neil.armstrong@linaro.org>
