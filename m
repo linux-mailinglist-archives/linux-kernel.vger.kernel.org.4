@@ -2,119 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04B8162C0F1
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:33:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BCF662C100
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:34:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232803AbiKPOdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 09:33:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55726 "EHLO
+        id S233239AbiKPOe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 09:34:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232115AbiKPOdC (ORCPT
+        with ESMTP id S233227AbiKPOeU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 09:33:02 -0500
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ACF5167F5;
-        Wed, 16 Nov 2022 06:33:01 -0800 (PST)
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-1322d768ba7so20262934fac.5;
-        Wed, 16 Nov 2022 06:33:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Xqn+VpkyaVOXbC/hpj4uzzFiJO18ERrQThzp4BwoimE=;
-        b=ZekgsNM85Sz2y2IdV+7yCnMV0Hl6QaIWi1XDvlpiz+FfzgmaDpY3qW8JGGW7In4vzN
-         HARuZCJgAmBtLwDsQrOO6zO4TfuHMshk16XTD5ltKdCmOyMe3DtzFGHDxo4YtZ72r08A
-         ooq795GfVrnq1GnEbUAQ6cHTtVjo6lrNOhkBYe81O+CBYQdHBYkFWR51MJB1JbOz4unx
-         SGxs4Py0yjuFvi9GC3UmEK5VhNCaJbYs/vzXuaRUQFvyXSKmnrWHaDuiag+HGodkuT7S
-         ORboALmjolvnopJ4gS+m8BoZumeOFuThO2Z56V5yUNwgdvrFAI+LtvG46DEjT+leT1ok
-         VwZg==
-X-Gm-Message-State: ANoB5plrWrSNwlH7PzptTk6nmGtLOfgWJisHkcyWK5YxJF47Wnyn3gfS
-        aHybgHqjzTtdeWpHu0TaRg==
-X-Google-Smtp-Source: AA0mqf5NVHnziasxHfj1GRbI3eGEGLdHD1pPC8kYFKj0a6d/3z5N2SnKoAZ8ZP7XBjj9cphDIrTRJA==
-X-Received: by 2002:a05:6870:b94:b0:131:842a:110c with SMTP id lg20-20020a0568700b9400b00131842a110cmr1864268oab.201.1668609180804;
-        Wed, 16 Nov 2022 06:33:00 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id a26-20020a056830101a00b00667ff6b7e9esm6781696otp.40.2022.11.16.06.32.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 06:33:00 -0800 (PST)
-Received: (nullmailer pid 3809684 invoked by uid 1000);
-        Wed, 16 Nov 2022 14:33:02 -0000
-Date:   Wed, 16 Nov 2022 08:33:02 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     quic_srivasam@quicinc.com, devicetree@vger.kernel.org,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-kernel@vger.kernel.org, quic_plai@quicinc.com,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        alsa-devel@alsa-project.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v2 02/11] ASoC: dt-bindings: qcom,apr: Split services to
- shared schema
-Message-ID: <166860918054.3809609.16135727023403702366.robh@kernel.org>
-References: <20221115120235.167812-1-krzysztof.kozlowski@linaro.org>
- <20221115120235.167812-3-krzysztof.kozlowski@linaro.org>
+        Wed, 16 Nov 2022 09:34:20 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B895C2195;
+        Wed, 16 Nov 2022 06:34:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668609255; x=1700145255;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=38d+7I+PSJp7fiCJLjk7YV/W8ID1c2SPGRtRx9IT9ps=;
+  b=Fq6YNR41kx0B2Le8GnVioeLLxI1LL8AZZrJmOOmbriWlPWNs5hbK9MF5
+   C9GcuwYBV4u/09WdfVJ5YnSSBRnwpuoIhhw3CfEckoY/l+PiBYMxr1Vew
+   EGbbLNMlejQYuFJnPgKLjMXAnyQzlTm5bt7YEoB+40D8azczMgVAyuBo8
+   dXAcpKTZAbwfdoiDMipuPmzvyoiAgoCtqLCHJw4wSC29gIBfZ80EenDCp
+   WsRwyyEXj1NateCBllirL9QSjhL2mllixmOrWMOWZRERAe9p83S2Qixjl
+   1w3h7dpeQbfy0YhSuprEneIz3Xz2v+c/3xiqxEI5mGab6x0nf0hN9IO1U
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="313706180"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="313706180"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 06:34:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="670519005"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="670519005"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga008.jf.intel.com with ESMTP; 16 Nov 2022 06:34:11 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 2AGEYAhv017898;
+        Wed, 16 Nov 2022 14:34:10 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Shenwei Wang <shenwei.wang@nxp.com>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        "Daniel Borkmann" <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Wei Fang <wei.fang@nxp.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "imx@lists.linux.dev" <imx@lists.linux.dev>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v3 1/1] net: fec: add xdp and page pool statistics
+Date:   Wed, 16 Nov 2022 15:33:36 +0100
+Message-Id: <20221116143336.3385874-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <PAXPR04MB918589D35F8B10307D4D430E89059@PAXPR04MB9185.eurprd04.prod.outlook.com>
+References: <20221111153505.434398-1-shenwei.wang@nxp.com> <20221114134542.697174-1-alexandr.lobakin@intel.com> <Y3JLz1niXbdVbRH9@lunn.ch> <PAXPR04MB91853D935E363E8A7E3ED7BF89059@PAXPR04MB9185.eurprd04.prod.outlook.com> <20221114152327.702592-1-alexandr.lobakin@intel.com> <PAXPR04MB918589D35F8B10307D4D430E89059@PAXPR04MB9185.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221115120235.167812-3-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Shenwei Wang <shenwei.wang@nxp.com>
+Date: Mon, 14 Nov 2022 21:17:48 +0000
 
-On Tue, 15 Nov 2022 13:02:26 +0100, Krzysztof Kozlowski wrote:
-> The APR/GPR nodes are organized like:
-> 
->   apr-or-gpr-device-node <- qcom,apr.yaml
->     apr-gpr-service@[0-9] <- qcom,apr.yaml
->       service-specific-components <- /schemas/sound/qcom,q6*.yaml
-> 
-> The schema for services (apr-gpr-service@[0-9]) already grows
-> considerably and is still quite not specific.  It allows several
-> incorrect combinations, like adding a clock-controller to a APM device.
-> Restricting it would complicate the schema even more.  Bringing new
-> support for sound on Qualcomm SM8450 and SC8280XP SoC would grow it as
-> well.
-> 
-> Simplify the qcom,apr.yaml by splitting the services to a shared file
-> which will be:
-> 1. Referenced by qcom,apr.yaml with additionalProperties:true,
-> 2. Referenced by specific bindings for services with
->    additionalProperties:false (not yet in this commit).
-> 
-> While moving the code, add also required 'reg' and
-> 'qcom,protection-domain' to further constrain the bindings.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Changes since v1:
-> 1. Keep compatibles in qcom,apr.yaml
-> 
-> Cc: quic_srivasam@quicinc.com
-> Cc: quic_plai@quicinc.com
-> ---
->  .../bindings/soc/qcom/qcom,apr-services.yaml  | 54 ++++++++++
->  .../bindings/soc/qcom/qcom,apr.yaml           | 98 +------------------
->  MAINTAINERS                                   |  2 +-
->  3 files changed, 58 insertions(+), 96 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,apr-services.yaml
-> 
+> > -----Original Message-----
+> > From: Alexander Lobakin <alexandr.lobakin@intel.com>
+> > Sent: Monday, November 14, 2022 9:23 AM
+> > To: Shenwei Wang <shenwei.wang@nxp.com>
+> > Cc: Alexander Lobakin <alexandr.lobakin@intel.com>; Andrew Lunn
+> > <andrew@lunn.ch>; David S. Miller <davem@davemloft.net>; Eric Dumazet
+> > <edumazet@google.com>; Jakub Kicinski <kuba@kernel.org>; Paolo Abeni
+> > <pabeni@redhat.com>; Alexei Starovoitov <ast@kernel.org>; Daniel Borkmann
+> > <daniel@iogearbox.net>; Jesper Dangaard Brouer <hawk@kernel.org>; John
+> > Fastabend <john.fastabend@gmail.com>; Wei Fang <wei.fang@nxp.com>;
+> > netdev@vger.kernel.org; linux-kernel@vger.kernel.org; imx@lists.linux.dev;
+> > kernel test robot <lkp@intel.com>
+> > Subject: [EXT] Re: [PATCH v3 1/1] net: fec: add xdp and page pool statistics
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+[...]
+
+> Did some testing with the atomic64_t counter, with the following codes to update
+> the u64 counter in the end of every NAPI poll cycle.
+> 
+> @@ -1764,7 +1768,13 @@ fec_enet_rx_queue(struct net_device *ndev, int budget, u16 queue_id)
+>  
+>         if (xdp_result & FEC_ENET_XDP_REDIR)
+>                 xdp_do_flush_map();
+> +#if 1
+> +       if (xdp_prog) {
+> +               int i;
+> +               for(i = 0; i < XDP_STATS_TOTAL; i++)
+> +                       atomic64_add(xdp_stats[i], &rxq->stats[i]);
+> +       }
+> +#endif
+>         return pkt_received;
+>  }
+> 
+> With the codes above, the testing result is below:
+> root@imx8qxpc0mek:~/bpf# ./xdpsock -i eth0
+>  sock0@eth0:0 rxdrop xdp-drv
+>                    pps            pkts           1.00
+> rx                 349399         1035008
+> tx                 0              0
+> 
+>  sock0@eth0:0 rxdrop xdp-drv
+>                    pps            pkts           1.00
+> rx                 349407         1384640
+> tx                 0              0
+> 
+> Without  the atomic_add codes above, the testing result is below:
+> root@imx8qxpc0mek:~/bpf# ./xdpsock -i eth0
+>  sock0@eth0:0 rxdrop xdp-drv
+>                    pps            pkts           1.00
+> rx                 350109         1989130
+> tx                 0              0
+> 
+>  sock0@eth0:0 rxdrop xdp-drv
+>                    pps            pkts           1.00
+> rx                 350425         2339786
+> tx                 0              0
+> 
+> And regarding the u32 counter solution, the testing result is below:
+>    root@imx8qxpc0mek:~/bpf# ./xdpsock -i eth0
+>      sock0@eth0:0 rxdrop xdp-drv
+>                        pps            pkts           1.00
+>     rx                 361347         2637796
+>     tx                 0              0
+> 
+> There are about 10K pkts/s difference here. Do we really want the u64 counters?
+
+Where did those atomic64_t come from? u64_stats_t use either plain
+u64 for 32-bit platforms or local64_t for 64-bit ones. Take a look
+at [0] for the example of how x86_64 does this, it is far from
+atomic64_t.
+
+> 
+> Regards,
+> Shenwei
+> 
+> >>
+> >> Thanks,
+> >> Shenwei
+> >>
+> >>>
+> >>>        Andrew
+> >
+> > Thanks,
+> > Olek
+
+[0] https://elixir.bootlin.com/linux/v6.1-rc5/source/arch/x86/include/asm/local.h#L31
+
+Thanks,
+Olek
