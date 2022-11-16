@@ -2,355 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 985FD62B34D
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 07:31:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBEF762B34F
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 07:33:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232625AbiKPGav (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 01:30:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47238 "EHLO
+        id S232426AbiKPGdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 01:33:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232447AbiKPGaX (ORCPT
+        with ESMTP id S232351AbiKPGcl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 01:30:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF501EEE5
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 22:30:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 16 Nov 2022 01:32:41 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBC906474
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 22:32:40 -0800 (PST)
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0353B6185D
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 06:30:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56A8EC433B5
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 06:30:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668580220;
-        bh=qJbwjn+qU2PFGQkwTNsWF6gjGd7xuEf1eyUCDUVmfco=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=SXvogX1ZFKley+fp3nLCc4gpojR+08/s1hxgetU930+zhYJJXZWOAu4WVUjM4rRWE
-         YGxJ+rmiJfMwN0iLmTvNIN4gho0j1NIvpJ74j2QeWN7VrIyFq6xQD95kK3+5TQFvwd
-         h1WXQqkMsVjgIxfQc97JDTIaj+Hd+7VnuMdpyglBkaQtDXT0ZRNOaHflaF39aUgjW/
-         nQCNF4GRHUD09ZTPU1YqW3WEE8QAaryN0BrGG5NS+YvczkjJrqA0G1b4dPeMYAxZBW
-         6aQFex57oTZznWbOD+IQ/5SwJuK0sVgt2V9wOiM7cQR77+Hu8ng0zd6vJa2JDUfaUv
-         xOMDmfZ+WR4Xg==
-Received: by mail-ed1-f47.google.com with SMTP id s12so25089956edd.5
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 22:30:20 -0800 (PST)
-X-Gm-Message-State: ANoB5pl4B0eDRwS7G/36VPmJ0OKCxuTM4YZhLi8CXIEr8XF/6MDMntcc
-        MvELgtURKUicxfRc/80kWQ9+v78mPOuIveEvab8=
-X-Google-Smtp-Source: AA0mqf7avw9mpU7Md1Xx3d2mPHqjDVI1nyw94hl3nNQydCVU3Tn3Ew70WEAiqiticVyja8x99hZIbFM4mNfhlGP+iMk=
-X-Received: by 2002:a05:6402:2903:b0:467:65a2:f635 with SMTP id
- ee3-20020a056402290300b0046765a2f635mr17510237edb.106.1668580218523; Tue, 15
- Nov 2022 22:30:18 -0800 (PST)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id E93D63F0E1
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 06:32:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1668580357;
+        bh=bRhMbSmo/lMCzW8rsAjxBhsY1shEPnKNLW5ka1HnzPU=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=SvruCZB6WQA9Rfpl5ThWfpzAWV6Rvk1/hWTl/okJFbPgUiZAynLggAAylYfqFzj8k
+         4AIa4ya6xt2v9+FDlEh2h4RNmz9Uml5PsFO9IABRLnWi+/3Ib40v4I8r5DCcp0opqn
+         J5eWIY8BjQKPDLCE+PqB+N/qmKCvF/Wtsdflni1HGdrEag4/aA4xlthOu+pU44oEML
+         GYkcwk0nEGRr13B5rxt5ao081lPiSfeY6EeVsxJ7txjiDQ0G1BorS9BxxnFJadkteQ
+         a5XEePrUBq2g8/Ta1aYoyqxnjqG5OEyRTclGioOPifRWasPl4t7wpralFXMCnoqoVB
+         agIPAFJkJq5ug==
+Received: by mail-pf1-f197.google.com with SMTP id x8-20020aa79568000000b0056dd717e051so9175444pfq.11
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 22:32:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bRhMbSmo/lMCzW8rsAjxBhsY1shEPnKNLW5ka1HnzPU=;
+        b=VNvHyyOk3xr8m9cQ9rqdLKpFTwtmHPv06aQTycLd/i70bsYRbZSPATsEQ/rs4n9KGY
+         chHCExfteG1JkohXQuSPOWJruDGQkmt8F7mG+2qm4DMm2vs5yxFX7EE7duL24qoKds0G
+         RVdIHE+f9NbKLVrIYI0XCebC2lOkrL4vZuZ01p27F1KybPGGzlheLHHIJHK/g99kOPR1
+         OgtBQpXPAU5EuwJ/Lw/j+VAB188CHXRLZ9+nyV9toW6hTavFOP4VfosfffR093UPu/cK
+         Z6idqTFVLsnz8UKH5gtzNmOexmSLMjE90DvPS+Ud57HSl3AFI6Imsw0Z9b9q2X9wNMC8
+         XsYA==
+X-Gm-Message-State: ANoB5pk7ZYt6NgeWWRTpwtzK5IDM3Cif0XSqdoILUReZ4XsiLgHyffws
+        +LoHoFYvIu2tnYQAuMymfi+5BzHYGwRjJK1LUYG0xVERPuXEbuD65OFM1l0L7N6hx8iWBktKIJl
+        AWiuvCUqDXNVBD5LP1lJICd6TfeOSOKTY2lsIvAkO1DNhzEGyo9pepava8A==
+X-Received: by 2002:a17:902:8608:b0:186:61a7:ae94 with SMTP id f8-20020a170902860800b0018661a7ae94mr7572077plo.2.1668580353177;
+        Tue, 15 Nov 2022 22:32:33 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7ujDAzFRMce2M9GGPWc96PwOT0RKJipVuubCMq0+POqiwJv+IROcjlP+YUhB4IHPLadJ/ic4henb4nUAxnCtU=
+X-Received: by 2002:a17:902:8608:b0:186:61a7:ae94 with SMTP id
+ f8-20020a170902860800b0018661a7ae94mr7572061plo.2.1668580352844; Tue, 15 Nov
+ 2022 22:32:32 -0800 (PST)
 MIME-Version: 1.0
-References: <20221116025324.1624-1-zhangqing@loongson.cn> <20221116025324.1624-2-zhangqing@loongson.cn>
-In-Reply-To: <20221116025324.1624-2-zhangqing@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Wed, 16 Nov 2022 14:30:06 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H6FRCA-JBgSKcNBfgerExfK=vPAe_hX5KnRvEqWuk7N2w@mail.gmail.com>
-Message-ID: <CAAhV-H6FRCA-JBgSKcNBfgerExfK=vPAe_hX5KnRvEqWuk7N2w@mail.gmail.com>
-Subject: Re: [PATCH v7 1/9] LoongArch/ftrace: Add basic support
-To:     Qing Zhang <zhangqing@loongson.cn>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Jinyang He <hejinyang@loongson.cn>
+References: <20220930173652.1251349-1-koba.ko@canonical.com>
+ <20221102180726.fuwwk2npsse56ius@cantor> <Y2USwbAzuaCKTGdX@matsya>
+ <20221104153644.sz35cvgbhudr6ad7@cantor> <Y2YOUV0Ym+7DsWQb@matsya>
+In-Reply-To: <Y2YOUV0Ym+7DsWQb@matsya>
+From:   Koba Ko <koba.ko@canonical.com>
+Date:   Wed, 16 Nov 2022 14:32:21 +0800
+Message-ID: <CAJB-X+UAF_CCq6uctLzqUwO5=R90Ddw4kC35kKL607uPo23Drw@mail.gmail.com>
+Subject: Re: [PATCH V2] dmaengine: Fix client_count is countered one more incorrectly.
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Jerry Snitselaar <jsnitsel@redhat.com>, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jie Hai <haijie1@huawei.com>,
+        Dave Jiang <dave.jiang@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Qing,
+hi Vinod,
+Should i re-submit v3 as per comments?
 
-On Wed, Nov 16, 2022 at 10:53 AM Qing Zhang <zhangqing@loongson.cn> wrote:
->
-> This patch contains basic ftrace support for LoongArch.
-> Specifically, function tracer (HAVE_FUNCTION_TRACER), function graph
-> tracer (HAVE_FUNCTION_GRAPH_TRACER) are implemented following the
-> instructions in Documentation/trace/ftrace-design.txt.
->
-> Use `-pg` makes stub like a child function `void _mcount(void *ra)`.
-> Thus, it can be seen store RA and open stack before `call _mcount`.
-> Find `open stack` at first, and then find `store RA`
->
-> Note that the functions in both inst.c and time.c should not be
-> hooked with the compiler's -pg option: to prevent infinite self-
-> referencing for the former, and to ignore early setup stuff for the
-> latter.
->
-> Co-developed-by: Jinyang He <hejinyang@loongson.cn>
-> Signed-off-by: Jinyang He <hejinyang@loongson.cn>
-> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
-> ---
->  arch/loongarch/Kconfig              |  2 +
->  arch/loongarch/Makefile             |  5 ++
->  arch/loongarch/include/asm/ftrace.h | 18 ++++++
->  arch/loongarch/kernel/Makefile      |  8 +++
->  arch/loongarch/kernel/ftrace.c      | 74 +++++++++++++++++++++++
->  arch/loongarch/kernel/mcount.S      | 94 +++++++++++++++++++++++++++++
->  6 files changed, 201 insertions(+)
->  create mode 100644 arch/loongarch/include/asm/ftrace.h
->  create mode 100644 arch/loongarch/kernel/ftrace.c
->  create mode 100644 arch/loongarch/kernel/mcount.S
->
-> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> index 1943f840e494..92c4ec8c8527 100644
-> --- a/arch/loongarch/Kconfig
-> +++ b/arch/loongarch/Kconfig
-> @@ -91,6 +91,8 @@ config LOONGARCH
->         select HAVE_EBPF_JIT
->         select HAVE_EXIT_THREAD
->         select HAVE_FAST_GUP
-> +       select HAVE_FUNCTION_GRAPH_TRACER
-> +       select HAVE_FUNCTION_TRACER
->         select HAVE_GENERIC_VDSO
->         select HAVE_IOREMAP_PROT
->         select HAVE_IRQ_EXIT_ON_IRQ_STACK
-> diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
-> index a0fc1f9980e3..6832a8f891fd 100644
-> --- a/arch/loongarch/Makefile
-> +++ b/arch/loongarch/Makefile
-> @@ -36,6 +36,11 @@ ifneq ($(SUBARCH),$(ARCH))
->    endif
->  endif
->
-> +ifdef CONFIG_DYNAMIC_FTRACE
-> +KBUILD_CPPFLAGS += -DCC_USING_PATCHABLE_FUNCTION_ENTRY
-> +CC_FLAGS_FTRACE := -fpatchable-function-entry=2
-> +endif
-I think these lines should be moved to Patch-3.
+Koba Ko
 
-Huacai
-> +
->  ifdef CONFIG_64BIT
->  ld-emul                        = $(64bit-emul)
->  cflags-y               += -mabi=lp64s
-> diff --git a/arch/loongarch/include/asm/ftrace.h b/arch/loongarch/include/asm/ftrace.h
-> new file mode 100644
-> index 000000000000..6a3e76234618
-> --- /dev/null
-> +++ b/arch/loongarch/include/asm/ftrace.h
-> @@ -0,0 +1,18 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) 2022 Loongson Technology Corporation Limited
-> + */
-> +
-> +#ifndef _ASM_LOONGARCH_FTRACE_H
-> +#define _ASM_LOONGARCH_FTRACE_H
-> +
-> +#ifdef CONFIG_FUNCTION_TRACER
-> +#define MCOUNT_INSN_SIZE 4             /* sizeof mcount call */
-> +
-> +#ifndef __ASSEMBLY__
-> +extern void _mcount(void);
-> +#define mcount _mcount
-> +
-> +#endif /* __ASSEMBLY__ */
-> +#endif /* CONFIG_FUNCTION_TRACER */
-> +#endif /* _ASM_LOONGARCH_FTRACE_H */
-> diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
-> index 86744531b100..3f71bce1c7ce 100644
-> --- a/arch/loongarch/kernel/Makefile
-> +++ b/arch/loongarch/kernel/Makefile
-> @@ -15,6 +15,14 @@ obj-$(CONFIG_EFI)            += efi.o
+On Sat, Nov 5, 2022 at 3:18 PM Vinod Koul <vkoul@kernel.org> wrote:
 >
->  obj-$(CONFIG_CPU_HAS_FPU)      += fpu.o
+> On 04-11-22, 08:36, Jerry Snitselaar wrote:
+> > On Fri, Nov 04, 2022 at 06:55:21PM +0530, Vinod Koul wrote:
+> > > On 02-11-22, 11:07, Jerry Snitselaar wrote:
+> > > > Hi Vinod,
+> > > >
+> > > > Thoughts on this patch?
+> > > >
+> > > > Maybe changing the summary to "dmaengine: Fix double increment of c=
+lient_count in dma_chan_get()"
+> > > > would be clearer?
+> > >
+> > > Yes that would be better
+> > >
+> > > >
+> > > > On Sat, Oct 01, 2022 at 01:36:52AM +0800, Koba Ko wrote:
+> > > > > If the passed client_count is 0,
+> > > > > it would be incremented by balance_ref_count first
+> > > > > then increment one more.
+> > > > > This would cause client_count to 2.
+> > > > >
+> > > > > cat /sys/class/dma/dma0chan*/in_use
+> > > > > 2
+> > > > > 2
+> > > > > 2
+> > > >
+> > > > Would this be better?
+> > > >
+> > > >     The first time dma_chan_get() is called for a channel the chann=
+el
+> > > >     client_count is incorrectly incremented twice for public channe=
+ls,
+> > > >     first in balance_ref_count(), and again prior to returning. Thi=
+s
+> > > >     results in an incorrect client count which will lead to the
+> > > >     channel resources not being freed when they should be. A simple
+> > > >     test of repeated module load and unload of async_tx on a Dell
+> > > >     Power Edge R7425 also shows this resulting in a kref underflow
+> > > >     warning.
+> > >
+> > > Agree, also if you have the underflow warning handy, do add it to the
+> > > log
+> > >
+> >
+> > I don't know if Canonical saw that in their testing, but that was how o=
+ur
+> > QE initially found the issue.
+> >
+> > [  124.329662] async_tx: api initialized (async)
+> > [  129.000627] async_tx: api initialized (async)
+> > [  130.047839] ------------[ cut here ]------------
+> > [  130.052472] refcount_t: underflow; use-after-free.
+> > [  130.057279] WARNING: CPU: 3 PID: 19364 at lib/refcount.c:28 refcount=
+_warn_saturate+0xba/0x110
+> > [  130.065811] Modules linked in: async_tx(-) rfkill intel_rapl_msr int=
+el_rapl_common amd64_edac edac_mce_amd ipmi_ssif kvm_amd dcdbas kvm mgag200=
+ drm_shmem_helper acpi_ipmi irqbypass drm_kms_helper ipmi_si syscopyarea sy=
+sfillrect rapl pcspkr ipmi_devintf sysimgblt fb_sys_fops k10temp i2c_piix4 =
+ipmi_msghandler acpi_power_meter acpi_cpufreq vfat fat drm fuse xfs libcrc3=
+2c sd_mod t10_pi sg ahci crct10dif_pclmul libahci crc32_pclmul crc32c_intel=
+ ghash_clmulni_intel igb megaraid_sas i40e libata i2c_algo_bit ccp sp5100_t=
+co dca dm_mirror dm_region_hash dm_log dm_mod [last unloaded: async_tx]
+> > [  130.117361] CPU: 3 PID: 19364 Comm: modprobe Kdump: loaded Not taint=
+ed 5.14.0-185.el9.x86_64 #1
+> > [  130.126091] Hardware name: Dell Inc. PowerEdge R7425/02MJ3T, BIOS 1.=
+18.0 01/17/2022
+> > [  130.133806] RIP: 0010:refcount_warn_saturate+0xba/0x110
+> > [  130.139041] Code: 01 01 e8 6d bd 55 00 0f 0b e9 72 9d 8a 00 80 3d 26=
+ 18 9c 01 00 75 85 48 c7 c7 f8 a3 03 9d c6 05 16 18 9c 01 01 e8 4a bd 55 00=
+ <0f> 0b e9 4f 9d 8a 00 80 3d 01 18 9c 01 00 0f 85 5e ff ff ff 48 c7
+> > [  130.157807] RSP: 0018:ffffbf98898afe68 EFLAGS: 00010286
+> > [  130.163036] RAX: 0000000000000000 RBX: ffff9da06028e598 RCX: 0000000=
+000000000
+> > [  130.170172] RDX: ffff9daf9de26480 RSI: ffff9daf9de198a0 RDI: ffff9da=
+f9de198a0
+> > [  130.177316] RBP: ffff9da7cddf3970 R08: 0000000000000000 R09: 0000000=
+0ffff7fff
+> > [  130.184459] R10: ffffbf98898afd00 R11: ffffffff9d9e8c28 R12: ffff9da=
+7cddf1970
+> > [  130.191596] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000=
+000000000
+> > [  130.198739] FS:  00007f646435c740(0000) GS:ffff9daf9de00000(0000) kn=
+lGS:0000000000000000
+> > [  130.206832] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > [  130.212586] CR2: 00007f6463b214f0 CR3: 00000008ab98c000 CR4: 0000000=
+0003506e0
+> > [  130.219729] Call Trace:
+> > [  130.222192]  <TASK>
+> > [  130.224305]  dma_chan_put+0x10d/0x110
+> > [  130.227988]  dmaengine_put+0x7a/0xa0
+> > [  130.231575]  __do_sys_delete_module.constprop.0+0x178/0x280
+> > [  130.237157]  ? syscall_trace_enter.constprop.0+0x145/0x1d0
+> > [  130.242652]  do_syscall_64+0x5c/0x90
+> > [  130.246240]  ? exc_page_fault+0x62/0x150
+> > [  130.250178]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > [  130.255243] RIP: 0033:0x7f6463a3f5ab
+> > [  130.258830] Code: 73 01 c3 48 8b 0d 75 a8 1b 00 f7 d8 64 89 01 48 83=
+ c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa b8 b0 00 00 00 0f 05=
+ <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 45 a8 1b 00 f7 d8 64 89 01 48
+> > [  130.277591] RSP: 002b:00007fff22f972c8 EFLAGS: 00000206 ORIG_RAX: 00=
+000000000000b0
+> > [  130.285164] RAX: ffffffffffffffda RBX: 000055b6786edd40 RCX: 00007f6=
+463a3f5ab
+> > [  130.292303] RDX: 0000000000000000 RSI: 0000000000000800 RDI: 000055b=
+6786edda8
+> > [  130.299443] RBP: 000055b6786edd40 R08: 0000000000000000 R09: 0000000=
+000000000
+> > [  130.306584] R10: 00007f6463b9eac0 R11: 0000000000000206 R12: 000055b=
+6786edda8
+> > [  130.313731] R13: 0000000000000000 R14: 000055b6786edda8 R15: 00007ff=
+f22f995f8
+> > [  130.320875]  </TASK>
+> > [  130.323081] ---[ end trace eff7156d56b5cf25 ]---
 >
-> +ifdef CONFIG_FUNCTION_TRACER
-> +obj-y += mcount.o ftrace.o
-> +CFLAGS_REMOVE_ftrace.o = $(CC_FLAGS_FTRACE)
-> +CFLAGS_REMOVE_inst.o = $(CC_FLAGS_FTRACE)
-> +CFLAGS_REMOVE_time.o = $(CC_FLAGS_FTRACE)
-> +CFLAGS_REMOVE_perf_event.o = $(CC_FLAGS_FTRACE)
-> +endif
-> +
->  obj-$(CONFIG_MODULES)          += module.o module-sections.o
->  obj-$(CONFIG_STACKTRACE)       += stacktrace.o
+> This is good, give more details and should be added to log in next
+> iteration
 >
-> diff --git a/arch/loongarch/kernel/ftrace.c b/arch/loongarch/kernel/ftrace.c
-> new file mode 100644
-> index 000000000000..c8ddc5f11f32
-> --- /dev/null
-> +++ b/arch/loongarch/kernel/ftrace.c
-> @@ -0,0 +1,74 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2022 Loongson Technology Corporation Limited
-> + */
-> +
-> +#include <linux/uaccess.h>
-> +#include <linux/init.h>
-> +#include <linux/ftrace.h>
-> +#include <linux/syscalls.h>
-> +
-> +#include <asm/asm.h>
-> +#include <asm/asm-offsets.h>
-> +#include <asm/cacheflush.h>
-> +#include <asm/inst.h>
-> +#include <asm/loongarch.h>
-> +#include <asm/syscall.h>
-> +#include <asm/unistd.h>
-> +
-> +#include <asm-generic/sections.h>
-> +
-> +#ifdef CONFIG_FUNCTION_GRAPH_TRACER
-> +
-> +/*
-> + * As `call _mcount` follows LoongArch psABI, ra-saved operation and
-> + * stack operation can be found before this insn.
-> + */
-> +
-> +static int ftrace_get_parent_ra_addr(unsigned long insn_addr, int *ra_off)
-> +{
-> +       union loongarch_instruction *insn;
-> +       int limit = 32;
-> +
-> +       insn = (union loongarch_instruction *)insn_addr;
-> +
-> +       do {
-> +               insn--;
-> +               limit--;
-> +
-> +               if (is_ra_save_ins(insn))
-> +                       *ra_off = -((1 << 12) - insn->reg2i12_format.immediate);
-> +
-> +       } while (!is_stack_alloc_ins(insn) && limit);
-> +
-> +       if (!limit)
-> +               return -EINVAL;
-> +
-> +       return 0;
-> +}
-> +
-> +void prepare_ftrace_return(unsigned long self_addr,
-> +               unsigned long callsite_sp, unsigned long old)
-> +{
-> +       int ra_off;
-> +       unsigned long return_hooker = (unsigned long)&return_to_handler;
-> +
-> +       if (unlikely(ftrace_graph_is_dead()))
-> +               return;
-> +
-> +       if (unlikely(atomic_read(&current->tracing_graph_pause)))
-> +               return;
-> +
-> +       if (ftrace_get_parent_ra_addr(self_addr, &ra_off))
-> +               goto out;
-> +
-> +       if (!function_graph_enter(old, self_addr, 0, NULL))
-> +               *(unsigned long *)(callsite_sp + ra_off) = return_hooker;
-> +
-> +       return;
-> +
-> +out:
-> +       ftrace_graph_stop();
-> +       WARN_ON(1);
-> +}
-> +#endif /* CONFIG_FUNCTION_GRAPH_TRACER */
-> diff --git a/arch/loongarch/kernel/mcount.S b/arch/loongarch/kernel/mcount.S
-> new file mode 100644
-> index 000000000000..3de7c2d7fd12
-> --- /dev/null
-> +++ b/arch/loongarch/kernel/mcount.S
-> @@ -0,0 +1,94 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * LoongArch specific _mcount support
-> + *
-> + * Copyright (C) 2022 Loongson Technology Corporation Limited
-> + */
-> +
-> +#include <asm/export.h>
-> +#include <asm/regdef.h>
-> +#include <asm/stackframe.h>
-> +#include <asm/ftrace.h>
-> +
-> +       .text
-> +
-> +#define MCOUNT_STACK_SIZE      (2 * SZREG)
-> +#define MCOUNT_S0_OFFSET       (0)
-> +#define MCOUNT_RA_OFFSET       (SZREG)
-> +
-> +       .macro MCOUNT_SAVE_REGS
-> +       PTR_ADDI sp, sp, -MCOUNT_STACK_SIZE
-> +       PTR_S   s0, sp, MCOUNT_S0_OFFSET
-> +       PTR_S   ra, sp, MCOUNT_RA_OFFSET
-> +       move    s0, a0
-> +       .endm
-> +
-> +       .macro MCOUNT_RESTORE_REGS
-> +       move    a0, s0
-> +       PTR_L   ra, sp, MCOUNT_RA_OFFSET
-> +       PTR_L   s0, sp, MCOUNT_S0_OFFSET
-> +       PTR_ADDI sp, sp, MCOUNT_STACK_SIZE
-> +       .endm
-> +
-> +
-> +SYM_FUNC_START(_mcount)
-> +       la.pcrel        t1, ftrace_stub
-> +       la.pcrel        t2, ftrace_trace_function       /* Prepare t2 for (1) */
-> +       PTR_L   t2, t2, 0
-> +       beq     t1, t2, fgraph_trace
-> +
-> +       MCOUNT_SAVE_REGS
-> +
-> +       move    a0, ra                          /* arg0: self return address */
-> +       move    a1, s0                          /* arg1: parent's return address */
-> +       jirl    ra, t2, 0                       /* (1) call *ftrace_trace_function */
-> +
-> +       MCOUNT_RESTORE_REGS
-> +
-> +fgraph_trace:
-> +#ifdef CONFIG_FUNCTION_GRAPH_TRACER
-> +       la.pcrel        t1, ftrace_stub
-> +       la.pcrel        t3, ftrace_graph_return
-> +       PTR_L   t3, t3, 0
-> +       bne     t1, t3, ftrace_graph_caller
-> +       la.pcrel        t1, ftrace_graph_entry_stub
-> +       la.pcrel        t3, ftrace_graph_entry
-> +       PTR_L   t3, t3, 0
-> +       bne     t1, t3, ftrace_graph_caller
-> +#endif
-> +
-> +       .globl ftrace_stub
-> +ftrace_stub:
-> +       jr      ra
-> +SYM_FUNC_END(_mcount)
-> +EXPORT_SYMBOL(_mcount)
-> +
-> +#ifdef CONFIG_FUNCTION_GRAPH_TRACER
-> +SYM_FUNC_START(ftrace_graph_caller)
-> +       MCOUNT_SAVE_REGS
-> +
-> +       PTR_ADDI        a0, ra, -4                      /* arg0: Callsite self return addr */
-> +       PTR_ADDI        a1, sp, MCOUNT_STACK_SIZE       /* arg1: Callsite sp */
-> +       move    a2, s0                                  /* arg2: Callsite parent ra */
-> +       bl      prepare_ftrace_return
-> +
-> +       MCOUNT_RESTORE_REGS
-> +       jr      ra
-> +SYM_FUNC_END(ftrace_graph_caller)
-> +
-> +SYM_FUNC_START(return_to_handler)
-> +       PTR_ADDI sp, sp, -2 * SZREG
-> +       PTR_S   a0, sp, 0
-> +       PTR_S   a1, sp, SZREG
-> +
-> +       bl      ftrace_return_to_handler
-> +
-> +       /* restore the real parent address: a0 -> ra */
-> +       move    ra, a0
-> +
-> +       PTR_L   a0, sp, 0
-> +       PTR_L   a1, sp, SZREG
-> +       PTR_ADDI        sp, sp, 2 * SZREG
-> +       jr      ra
-> +SYM_FUNC_END(return_to_handler)
-> +#endif /* CONFIG_FUNCTION_GRAPH_TRACER */
 > --
-> 2.36.0
->
->
+> ~Vinod
