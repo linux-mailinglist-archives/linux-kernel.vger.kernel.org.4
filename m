@@ -2,93 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A43D362CA6E
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 21:15:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7E5362CA6C
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 21:15:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233485AbiKPUPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 15:15:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42580 "EHLO
+        id S231406AbiKPUPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 15:15:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232097AbiKPUPu (ORCPT
+        with ESMTP id S231448AbiKPUP3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 15:15:50 -0500
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 127A565845;
-        Wed, 16 Nov 2022 12:15:49 -0800 (PST)
-Received: by mail-ot1-f50.google.com with SMTP id p27-20020a056830319b00b0066d7a348e20so7156729ots.8;
-        Wed, 16 Nov 2022 12:15:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=U5LJWysSdFU+Zc/k0bAhJW5rRLdDYPdN6FVykD4Nl8k=;
-        b=WP0bHWVp7vbGY+ug185aRLzWcKGPLl/PEz+naQiQOjlIJhNbMHdOt4jais8NQzqdjr
-         fgJzRYn2httWc8RIXzzfWOP1GuoQ4JNtuhieF6F2j4LIhclgWGI54JzwV/ehpgojo7H/
-         OM84DXu6ZsiN9HoUZAnTJrtjw3mhDUGjmKuDavD4JH76/Q0Gf1WblRB4k+HnTFP40+p+
-         1EgJoHA0tjj73xn2Z1EEYizuw7EX+tMOjrRtR7qljXHTngCmB/HyTRX3kT5oT/JBlxfl
-         2YRuKxeZPsAgSoPqm5QtbO3PoT625yoN0pxBIrR3EEyO2PC5B9kQw5EgIANUfdEA9WKC
-         6jYw==
-X-Gm-Message-State: ANoB5pmbh/ndGJ/yi433peODCBn9DvfvGQMIKKqzvPpUJZ5rCWH/vih7
-        nThgBPbs1En9GVd4HKLGYCY2h3/ddw==
-X-Google-Smtp-Source: AA0mqf6HSWLYnrerfr1UKbSIi1DOecaYVPts8H+J4hwinPVJdDZNGCH2QqHFJf7Fol01NbgZRRSMQQ==
-X-Received: by 2002:a9d:6e8d:0:b0:655:f7b0:bc19 with SMTP id a13-20020a9d6e8d000000b00655f7b0bc19mr11564035otr.381.1668629749159;
-        Wed, 16 Nov 2022 12:15:49 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id j15-20020a056808034f00b0035a66bb4982sm6380993oie.57.2022.11.16.12.15.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 12:15:48 -0800 (PST)
-Received: (nullmailer pid 817327 invoked by uid 1000);
-        Wed, 16 Nov 2022 20:15:50 -0000
-Date:   Wed, 16 Nov 2022 14:15:50 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Georgi Vlaev <g-vlaev@ti.com>
-Cc:     Nishanth Menon <nm@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Tero Kristo <kristo@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Vibhore Vardhan <vibhore@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Roger Quadros <rogerq@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/5] dt-bindings: ti, sci: Add lpm region and
- firmware-name
-Message-ID: <166862975025.817271.11540467321940082459.robh@kernel.org>
-References: <20221111171739.160693-1-g-vlaev@ti.com>
- <20221111171739.160693-2-g-vlaev@ti.com>
+        Wed, 16 Nov 2022 15:15:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81BAC1F2EA
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 12:15:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1DC0061F89
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 20:15:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABB46C433C1;
+        Wed, 16 Nov 2022 20:15:25 +0000 (UTC)
+Date:   Wed, 16 Nov 2022 15:16:10 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc:     linux-kernel@vger.kernel.org, ribalda@google.com,
+        zwisler@google.com, robdclark@gmail.com,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org
+Subject: Re: [PATCH RFC] kexec: Freeze processes before kexec
+Message-ID: <20221116151610.7294a9e8@gandalf.local.home>
+In-Reply-To: <20221116195624.124092-1-joel@joelfernandes.org>
+References: <20221116195624.124092-1-joel@joelfernandes.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221111171739.160693-2-g-vlaev@ti.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 16 Nov 2022 19:56:24 +0000
+"Joel Fernandes (Google)" <joel@joelfernandes.org> wrote:
 
-On Fri, 11 Nov 2022 19:17:35 +0200, Georgi Vlaev wrote:
-> From: Dave Gerlach <d-gerlach@ti.com>
-> 
-> Add documentation for the lpm region which tells the ti-sci driver where
-> to load the FS Stub low power mode firmware and also the firmware-name
-> which tells the driver which binary to load. Both of these are optional
-> for normal system operation but required to enabled suspend-to-mem usage
-> of Deep Sleep state.
-> 
-> Signed-off-by: Dave Gerlach <d-gerlach@ti.com>
-> Signed-off-by: Vibhore Vardhan <vibhore@ti.com>
-> Signed-off-by: Georgi Vlaev <g-vlaev@ti.com>
-> ---
->  .../bindings/arm/keystone/ti,sci.yaml         | 21 +++++++++++++++----
->  1 file changed, 17 insertions(+), 4 deletions(-)
-> 
+> --- a/kernel/kexec_core.c
+> +++ b/kernel/kexec_core.c
+> @@ -1175,6 +1175,12 @@ int kernel_kexec(void)
+>  	} else
+>  #endif
+>  	{
+> +		error = freeze_processes();
+> +		if (error) {
+> +			error = -EBUSY;
+> +			goto Unlock;
+> +		}
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+If this is the path of a kernel panic, do we really want to check the
+return error of freeze_processes()? We are panicing, there's not much more
+we can do.
+
+-- Steve
+
+
+> +
+>  		kexec_in_progress = true;
+>  		kernel_restart_prepare("kexec reboot");
+>  		migrate_to_reboot_cpu();
