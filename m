@@ -2,98 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53EE162BA19
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 11:51:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6395F62BA23
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 11:52:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237515AbiKPKvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 05:51:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59782 "EHLO
+        id S231997AbiKPKwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 05:52:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbiKPKuy (ORCPT
+        with ESMTP id S233059AbiKPKvb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 05:50:54 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234E54E43D;
-        Wed, 16 Nov 2022 02:39:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=jsN0Nhr1vnvrb51t6eKNZY0+CFnpdn/XZ7+QR7DX9s8=; b=EBCdiiAnOXF07kYoDrH66f//Ij
-        2uIWTl0SJZ9G9lybvILij454RhzCO1pdTBQu06PCCF+h3JxE0DlTOUrmGJxdBTAzSJZjR30QwDDXH
-        N4HTfKs/rX4HXWl+Si5Uxsik6awEdetJQFP7oDr2UJf7PD6lv1GpC5JqW6SuioZ1+/gnqVMJQf+Sp
-        x4bY8BlUPmNrsZwsc4CnFCqV1LpHUX1+9y5TBCaAGmsAxwUVxj1AVOB4Ks04mr3l/yv+I6z0yRhE1
-        weWL9Vl8Z8ufAICDubbtmrjlyf63VRbXhrlWTVQ0EdpZVqIJQnMQiHZ29FDgDd9AWmDcNehBIsssn
-        ziROuI/w==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ovFpR-001H3H-Vx; Wed, 16 Nov 2022 10:39:38 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8CC5E3008ED;
-        Wed, 16 Nov 2022 11:39:37 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 492C3200E4A18; Wed, 16 Nov 2022 11:39:37 +0100 (CET)
-Date:   Wed, 16 Nov 2022 11:39:37 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Juergen Gross <jgross@suse.com>
-Cc:     linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org,
-        Guo Jin <guoj17@chinatelecom.cn>,
-        Nathan Chancellor <nathan@kernel.org>, x86@kernel.org
-Subject: Re: [tip: locking/urgent] locking: Fix qspinlock/x86 inline asm error
-Message-ID: <Y3S96d8vrEEQe1XH@hirez.programming.kicks-ass.net>
-References: <20221108060126.2505-1-guoj17@chinatelecom.cn>
- <166859051534.4906.7078966677789928700.tip-bot2@tip-bot2>
- <64372250-a413-076e-3b6d-2d263ee9c7f2@suse.com>
+        Wed, 16 Nov 2022 05:51:31 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88CB75288E
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:40:18 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id r12so28835810lfp.1
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:40:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Q5arRNEzeZmyjcIxb0J9Ia9IkpqFKY/qEalRnuGlZPo=;
+        b=AUBOm9BP50OfpbVXPPBIHmkCgP1NJev70bSUdhsEOQq4AM7FErUK6wWRFf6RuVPBrr
+         ARaEcAzSXMcWgmBz9XRNQ/gJ1Omz572yZJ2Aee15mMgei7lO85PWTuw4Uo38XTOga7bv
+         qYxdard31IkDKjKcP9WV2DSFHOhoL8R3kl4RFHGa0t1YoBB6Ptpx3Y/HfPPpCtwYe8gd
+         MuZA/5kJBOk+q70UO6mo9KKXbX/JLsiUuRkg6PJ3nx0Z4miRTw1X9BDUb2yY/hMqyW1B
+         5kck6QMDyfjJsJ6hU1QTC4eyMGzZHdzGhjnvpGxHTCNP6lqVfnZBjFgJANqXOD62E141
+         J18w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q5arRNEzeZmyjcIxb0J9Ia9IkpqFKY/qEalRnuGlZPo=;
+        b=PVDUmAvjQGYRCVDPUYTQXfyukZtjIEzG7kxzMOqgEmSghV5/ghN31cwu1X2XVv7N4B
+         D5f627lgq3c7Q0/mNj1gQiUOROxvPHfP3wsOaKjSW7GySxEDVFCdTKS9yjWkhHSJAFdt
+         tAlKIWqKsXH3Ghrc5LtA6ZoNaZOC+Vs7d/yrwR7HG4TSv5sUzM63nxLUEGxcWNgO2jvm
+         KMiHMlnsoL+UfgYrollaZIMG1lq1hF9qhSob2AUfQYSsb2nQCpy4/jFgNEIcu2P9zEt7
+         3+haBQLgnrRcNxYqrSVI+z7D9/oLLneb3+pJOUxSlYzVfF6mmURVI5Wa83AMrHDia/VL
+         gZPg==
+X-Gm-Message-State: ANoB5plZW3E1+ODvcE+RLCgXrYaQ7oXWOfp/who3P4Z3SfQ3xlzKD+A7
+        64FJOboZVRrDUO600TN8tJTNSQ==
+X-Google-Smtp-Source: AA0mqf6YoduX3Hvycoq2nH3KppUunH72l9zKBO4zSS68VxXoAK22YdieVasPPe2cdhrbxs+vx3MveA==
+X-Received: by 2002:a05:6512:3f01:b0:4a6:396d:a06a with SMTP id y1-20020a0565123f0100b004a6396da06amr7577079lfa.514.1668595216946;
+        Wed, 16 Nov 2022 02:40:16 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id d25-20020a19e619000000b00494706193adsm2534950lfh.208.2022.11.16.02.40.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Nov 2022 02:40:16 -0800 (PST)
+Message-ID: <75550e08-cbec-2d4a-429f-c94e0803fcc1@linaro.org>
+Date:   Wed, 16 Nov 2022 11:40:15 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <64372250-a413-076e-3b6d-2d263ee9c7f2@suse.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 2/3] arm64: dts: qcom: sc8280xp/sa8540p: add SoundWire and
+ LPASS
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        agross@kernel.org, andersson@kernel.org
+Cc:     konrad.dybcio@somainline.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221115170242.150246-1-srinivas.kandagatla@linaro.org>
+ <20221115170242.150246-3-srinivas.kandagatla@linaro.org>
+ <5ff80fe0-eb23-9db0-ab75-189da5977901@linaro.org>
+In-Reply-To: <5ff80fe0-eb23-9db0-ab75-189da5977901@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 10:40:10AM +0100, Juergen Gross wrote:
-> On 16.11.22 10:21, tip-bot2 for Guo Jin wrote:
-> > The following commit has been merged into the locking/urgent branch of tip:
-> > 
-> > Commit-ID:     23df39fc6a36183af5e6e4f47523f1ad2cdc1d30
-> > Gitweb:        https://git.kernel.org/tip/23df39fc6a36183af5e6e4f47523f1ad2cdc1d30
-> > Author:        Guo Jin <guoj17@chinatelecom.cn>
-> > AuthorDate:    Tue, 08 Nov 2022 14:01:26 +08:00
-> > Committer:     Peter Zijlstra <peterz@infradead.org>
-> > CommitterDate: Wed, 16 Nov 2022 10:18:09 +01:00
-> > 
-> > locking: Fix qspinlock/x86 inline asm error
-> > 
-> > When compiling linux 6.1.0-rc3 configured with CONFIG_64BIT=y and
-> > CONFIG_PARAVIRT_SPINLOCKS=y on x86_64 using LLVM 11.0, an error:
-> > "<inline asm> error: changed section flags for .spinlock.text,
-> > expected:: 0x6" occurred.
-> > 
-> > The reason is the .spinlock.text in kernel/locking/qspinlock.o
-> > is used many times, but its flags are omitted in subsequent use.
-> > 
-> > LLVM 11.0 assembler didn't permit to
-> > leave out flags in subsequent uses of the same sections.
-> > 
-> > So this patch adds the corresponding flags to avoid above error.
-> > 
-> > Fixes: 501f7f69bca1 ("locking: Add __lockfunc to slow path functions")
-> > Signed-off-by: Guo Jin <guoj17@chinatelecom.cn>
-> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> > Link: https://lore.kernel.org/r/20221108060126.2505-1-guoj17@chinatelecom.cn
+On 16/11/2022 09:10, Krzysztof Kozlowski wrote:
+> On 15/11/2022 18:02, Srinivas Kandagatla wrote:
+>> Add LPASS Codecs along with SoundWire controller for TX, RX, WSA and VA macros
+>> along with LPASS LPI pinctrl node.
+>>
+>> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+>> ---
+>>  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 324 +++++++++++++++++++++++++
+>>  1 file changed, 324 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+>> index e3cdd8bccb0c..a87d58bee1e0 100644
+>> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+>> @@ -11,6 +11,7 @@
+>>  #include <dt-bindings/mailbox/qcom-ipcc.h>
+>>  #include <dt-bindings/power/qcom-rpmpd.h>
+>>  #include <dt-bindings/soc/qcom,rpmh-rsc.h>
+>> +#include <dt-bindings/sound/qcom,q6afe.h>
+>>  #include <dt-bindings/thermal/thermal.h>
+>>  #include <dt-bindings/soc/qcom,gpr.h>
+>>  
+>> @@ -1115,6 +1116,9 @@ usb_2_ssphy1: phy@88f1e00 {
+>>  			};
+>>  		};
+>>  
+>> +		sound: sound {
+>> +		};
 > 
-> Wouldn't it be better to take my more generic patch [1] instead?
+> sound node is not part of SoC.
 > 
-> [1]: https://lore.kernel.org/lkml/20221109134418.6516-1-jgross@suse.com/
 
-Durr, I missed that, lemme go stare at it.
+To clarify - I meant to put it outside of soc node.
+
+Best regards,
+Krzysztof
+
