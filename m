@@ -2,220 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C466362C174
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:54:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 801C362C176
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:54:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230343AbiKPOyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 09:54:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42180 "EHLO
+        id S229758AbiKPOyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 09:54:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232035AbiKPOyK (ORCPT
+        with ESMTP id S232126AbiKPOyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 09:54:10 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544861057C;
-        Wed, 16 Nov 2022 06:53:45 -0800 (PST)
-Received: from fraeml701-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NC5bC0LnHz6HJVM;
-        Wed, 16 Nov 2022 22:51:19 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml701-chm.china.huawei.com (10.206.15.50) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.31; Wed, 16 Nov 2022 15:53:42 +0100
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 16 Nov
- 2022 14:53:42 +0000
-Date:   Wed, 16 Nov 2022 14:53:41 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     <ira.weiny@intel.com>
-CC:     Dan Williams <dan.j.williams@intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        "Ben Widawsky" <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
-Subject: Re: [PATCH 01/11] cxl/pci: Add generic MSI-X/MSI irq support
-Message-ID: <20221116145341.00006411@Huawei.com>
-In-Reply-To: <20221110185758.879472-2-ira.weiny@intel.com>
-References: <20221110185758.879472-1-ira.weiny@intel.com>
-        <20221110185758.879472-2-ira.weiny@intel.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Wed, 16 Nov 2022 09:54:45 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E193F10B
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 06:54:43 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id k3-20020a92c243000000b0030201475a6bso13283726ilo.9
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 06:54:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bUN/FpwVFx2Shx7k+l1VE9xLw/IMJFD/43fP0Y4FYAQ=;
+        b=y1/djyFsopgs2nIUsLCQ06s3/dM9Dc/xMhiZeNBj+l2Ifp2+sW4mRtEnOsgQhBTy5n
+         cTZu/j4i/u4Xx165rLl3LBcEPXc1oHzNrxE1uYxApR9wU5ciFsoQUMFgL6kkTTMHvtBb
+         V4Q60s7yMdTA91SbDMnYthRlZtODMFBtVUHNVogYtB2dXEuvZjwWuLA3l2OIrix1YRg0
+         DVIPqMtc0agIV+4Z08XQmJ0huloGqX2Hg7Vh3EBKYPmHxyn1TLiz9ponxC9agIsdzIRx
+         Bnwtpb1udGIMioUl4wiy/dT9pgRcQCXQvoyIlYSIcAq8DAd6lkY3+YrYFpNdrT7UkdoA
+         xnrA==
+X-Gm-Message-State: ANoB5pn2Td0t+WoUUEtUShAT8XN4kw6o9GJlHelGmad6uXMEcsj24t1h
+        OmY0iQsJUAsWo63KVzP3nGx+03ffm96eMUeSrGSmCfcvv56e
+X-Google-Smtp-Source: AA0mqf76o4yj249xQO2NN7upqCvWE6yjt4wgPVQb8EoHioY+gZOrAfEK6vmnn3e4Pk1hF7TfGFgFZRS9d1ogno8UNPMDCQybsDpB
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:3213:0:b0:374:c658:2141 with SMTP id
+ j19-20020a023213000000b00374c6582141mr9822834jaa.210.1668610483183; Wed, 16
+ Nov 2022 06:54:43 -0800 (PST)
+Date:   Wed, 16 Nov 2022 06:54:43 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000001e68ff05ed97a712@google.com>
+Subject: [syzbot] BUG: unable to handle kernel NULL pointer dereference in shmem_evict_inode
+From:   syzbot <syzbot+b90b43fd4c6589e96a39@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, hughd@google.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Nov 2022 10:57:48 -0800
-ira.weiny@intel.com wrote:
+Hello,
 
-> From: Davidlohr Bueso <dave@stgolabs.net>
-> 
-> Currently the only CXL features targeted for irq support require their
-> message numbers to be within the first 16 entries.  The device may
-> however support less than 16 entries depending on the support it
-> provides.
-> 
-> Attempt to allocate these 16 irq vectors.  If the device supports less
-> then the PCI infrastructure will allocate that number.  Store the number
-> of vectors actually allocated in the device state for later use
-> by individual functions.
-See later patch review, but I don't think we need to store the number
-allocated because any vector is guaranteed to be below that point
-(QEMU code is wrong on this at the momemt, but there are very few vectors
- so it hasn't mattered yet).
+syzbot found the following issue on:
 
-Otherwise, pcim fun deals with some of the cleanup you are doing again
-here for us so can simplify this somewhat. See inline.
+HEAD commit:    1621b6eaebf7 Merge branch 'for-next/fixes' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=14016169880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=606e57fd25c5c6cc
+dashboard link: https://syzkaller.appspot.com/bug?extid=b90b43fd4c6589e96a39
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1112f7a9880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17c33e69880000
 
-Jonathan
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/82aa7741098d/disk-1621b6ea.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/f6be08c4e4c2/vmlinux-1621b6ea.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/296b6946258a/Image-1621b6ea.gz.xz
 
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+b90b43fd4c6589e96a39@syzkaller.appspotmail.com
 
+Unable to handle kernel NULL pointer dereference at virtual address 0000000000000010
+Mem abort info:
+  ESR = 0x0000000096000004
+  EC = 0x25: DABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 0x04: level 0 translation fault
+Data abort info:
+  ISV = 0, ISS = 0x00000004
+  CM = 0, WnR = 0
+user pgtable: 4k pages, 48-bit VAs, pgdp=000000010bfaa000
+[0000000000000010] pgd=0000000000000000, p4d=0000000000000000
+Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
+Modules linked in:
 
-> 
-> Upon successful allocation, users can plug in their respective isr at
-> any point thereafter, for example, if the irq setup is not done in the
-> PCI driver, such as the case of the CXL-PMU.
-> 
-> Cc: Bjorn Helgaas <helgaas@kernel.org>
-> Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Co-developed-by: Ira Weiny <ira.weiny@intel.com>
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
-> 
-> ---
-> Changes from Ira
-> 	Remove reviews
-> 	Allocate up to a static 16 vectors.
-> 	Change cover letter
-> ---
->  drivers/cxl/cxlmem.h |  3 +++
->  drivers/cxl/cxlpci.h |  6 ++++++
->  drivers/cxl/pci.c    | 32 ++++++++++++++++++++++++++++++++
->  3 files changed, 41 insertions(+)
-> 
-> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-> index 88e3a8e54b6a..b7b955ded3ac 100644
-> --- a/drivers/cxl/cxlmem.h
-> +++ b/drivers/cxl/cxlmem.h
-> @@ -211,6 +211,7 @@ struct cxl_endpoint_dvsec_info {
->   * @info: Cached DVSEC information about the device.
->   * @serial: PCIe Device Serial Number
->   * @doe_mbs: PCI DOE mailbox array
-> + * @nr_irq_vecs: Number of MSI-X/MSI vectors available
->   * @mbox_send: @dev specific transport for transmitting mailbox commands
->   *
->   * See section 8.2.9.5.2 Capacity Configuration and Label Storage for
-> @@ -247,6 +248,8 @@ struct cxl_dev_state {
->  
->  	struct xarray doe_mbs;
->  
-> +	int nr_irq_vecs;
-> +
->  	int (*mbox_send)(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *cmd);
->  };
->  
-> diff --git a/drivers/cxl/cxlpci.h b/drivers/cxl/cxlpci.h
-> index eec597dbe763..b7f4e2f417d3 100644
-> --- a/drivers/cxl/cxlpci.h
-> +++ b/drivers/cxl/cxlpci.h
-> @@ -53,6 +53,12 @@
->  #define	    CXL_DVSEC_REG_LOCATOR_BLOCK_ID_MASK			GENMASK(15, 8)
->  #define     CXL_DVSEC_REG_LOCATOR_BLOCK_OFF_LOW_MASK		GENMASK(31, 16)
->  
-> +/*
-> + * NOTE: Currently all the functions which are enabled for CXL require their
-> + * vectors to be in the first 16.  Use this as the max.
-> + */
-> +#define CXL_PCI_REQUIRED_VECTORS 16
-> +
->  /* Register Block Identifier (RBI) */
->  enum cxl_regloc_type {
->  	CXL_REGLOC_RBI_EMPTY = 0,
-> diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
-> index faeb5d9d7a7a..62e560063e50 100644
-> --- a/drivers/cxl/pci.c
-> +++ b/drivers/cxl/pci.c
-> @@ -428,6 +428,36 @@ static void devm_cxl_pci_create_doe(struct cxl_dev_state *cxlds)
->  	}
->  }
->  
-> +static void cxl_pci_free_irq_vectors(void *data)
-> +{
-> +	pci_free_irq_vectors(data);
-> +}
-> +
-> +static void cxl_pci_alloc_irq_vectors(struct cxl_dev_state *cxlds)
-> +{
-> +	struct device *dev = cxlds->dev;
-> +	struct pci_dev *pdev = to_pci_dev(dev);
-> +	int nvecs;
-> +	int rc;
-> +
-> +	nvecs = pci_alloc_irq_vectors(pdev, 1, CXL_PCI_REQUIRED_VECTORS,
-> +				   PCI_IRQ_MSIX | PCI_IRQ_MSI);
-> +	if (nvecs < 0) {
-> +		dev_dbg(dev, "Not enough interrupts; use polling instead.\n");
-> +		return;
-> +	}
-> +
-> +	rc = devm_add_action_or_reset(dev, cxl_pci_free_irq_vectors, pdev);
-The pci managed code always gives me a headache because there is a lot of magic
-under the hood if you ever called pcim_enable_device() which we did.
+CPU: 1 PID: 3059 Comm: udevd Not tainted 6.1.0-rc4-syzkaller-31872-g1621b6eaebf7 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : simple_xattrs_free include/linux/xattr.h:111 [inline]
+pc : shmem_evict_inode+0x2d0/0x3d8 mm/shmem.c:1164
+lr : simple_xattrs_free include/linux/xattr.h:110 [inline]
+lr : shmem_evict_inode+0x2f0/0x3d8 mm/shmem.c:1164
+sp : ffff800012c0ba40
+x29: ffff800012c0ba90
+ x28: ffff80000d890000
+ x27: ffff0000ccf252a0
 
-Chasing through
-
-pci_alloc_irq_vectors_affinity()->
-either
-	__pci_enable_msix_range()
-or
-	__pci_enable_msi_range()
-
-they are similar
-	pci_setup_msi_context()
-		pci_setup_msi_release()
-			adds pcmi_msi_release devm action.
-and that frees the vectors for us.
-So we don't need to do it here.
+x26: 00000000000800e0
+ x25: 0000000000000001 x24: 0000000000000001
+x23: ffff0000ccf254c8 x22: ffff0000c0cb6e00 x21: 0000000000000000
+x20: 0000000000000000 x19: ffff0000ccf25310 x18: 0000000000000000
+x17: 0000000000000000 x16: ffff80000db1a158 x15: ffff0000c64dcec0
+x14: 0000000000000000 x13: 00000000ffffffff x12: ffff0000c64dcec0
+x11: ff8080000842e558 x10: 0000000000000000 x9 : ffff80000842e558
+x8 : ffff0000c64dcec0 x7 : ffff8000085252dc x6 : 0000000000000000
+x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : 0000000000000006 x1 : ffff80000cdfe6d9 x0 : ffff8001f1dbd000
+Call trace:
+ simple_xattrs_free include/linux/xattr.h:110 [inline]
+ shmem_evict_inode+0x2d0/0x3d8 mm/shmem.c:1164
+ evict+0xec/0x334 fs/inode.c:664
+ iput_final fs/inode.c:1747 [inline]
+ iput+0x2c4/0x324 fs/inode.c:1773
+ dentry_unlink_inode+0x204/0x21c fs/dcache.c:401
+ __dentry_kill+0x15c/0x37c fs/dcache.c:607
+ dentry_kill+0x8c/0x194
+ dput+0x194/0x2e0 fs/dcache.c:913
+ do_renameat2+0x49c/0x758 fs/namei.c:4931
+ __do_sys_renameat fs/namei.c:4969 [inline]
+ __se_sys_renameat fs/namei.c:4966 [inline]
+ __arm64_sys_renameat+0x64/0x7c fs/namei.c:4966
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+Code: 97f9cd15 f84d0f74 eb1b029f 540001a0 (f9400a80) 
+---[ end trace 0000000000000000 ]---
+----------------
+Code disassembly (best guess):
+   0:	97f9cd15 	bl	0xffffffffffe73454
+   4:	f84d0f74 	ldr	x20, [x27, #208]!
+   8:	eb1b029f 	cmp	x20, x27
+   c:	540001a0 	b.eq	0x40  // b.none
+* 10:	f9400a80 	ldr	x0, [x20, #16] <-- trapping instruction
 
 
-> +	if (rc) {
-> +		dev_dbg(dev, "Device managed call failed; interrupts disabled.\n");
-> +		/* some got allocated, clean them up */
-> +		cxl_pci_free_irq_vectors(pdev);
-We could just leave them lying around for devm cleanup to sweep up eventually
-or free them as you have done here.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-> +		return;
-> +	}
-> +
-> +	cxlds->nr_irq_vecs = nvecs;
-> +}
-> +
->  static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->  {
->  	struct cxl_register_map map;
-> @@ -494,6 +524,8 @@ static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->  	if (rc)
->  		return rc;
->  
-> +	cxl_pci_alloc_irq_vectors(cxlds);
-> +
->  	cxlmd = devm_cxl_add_memdev(cxlds);
->  	if (IS_ERR(cxlmd))
->  		return PTR_ERR(cxlmd);
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
