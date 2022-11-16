@@ -2,156 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C44062C491
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 17:35:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 962AB62C493
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 17:35:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233770AbiKPQfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 11:35:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47902 "EHLO
+        id S234283AbiKPQfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 11:35:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238416AbiKPQfM (ORCPT
+        with ESMTP id S233700AbiKPQfN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 11:35:12 -0500
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B7868C61;
-        Wed, 16 Nov 2022 08:27:00 -0800 (PST)
-Received: by mail-oi1-f179.google.com with SMTP id s206so19069328oie.3;
-        Wed, 16 Nov 2022 08:27:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T7R0vGsL7LQXAd+8RrIgaa2Mm2aDxGNcrTPJcHCRSSc=;
-        b=w4A0crxd6OEjF5JAiqd3EMm0AgLB3Nvq1Gkmrf6E8ZT5FHWAU/r3o1cLBxgX2tZAaF
-         jA7KNsR+7n+vhXKNYOsHsDw83xmnhxTCtUAy8lSoR1zJLOBRawF9owUrEcAY4Xndq/18
-         BDKwG59l6a0Nk8j+NKNMn1qkezL+zqCQHN19EtoDKcILVFqq00dPKm6/2+GkWUjbArou
-         KCL5CEqkZaxcCRAyAW8OlPmoybW1fo1rBFE+YhYDyMRBVjHXdN/wVT0din25GCu+1/NU
-         J2RxUVXbkscoD3iglJOMNr/jDwdM/BdOiC/QVJHkzzfRURQ3LZJGJT70GB947aWJlFhz
-         xZcw==
-X-Gm-Message-State: ANoB5pkwIyzzF+XySaMCgUtURNOHj2QNw20W6i/sLLx1mbbMgATZsF/p
-        cOycp2HNkJabuesqHApOtQ==
-X-Google-Smtp-Source: AA0mqf6DuVjSc+cQ/7WdXNB0o3vYI1ZmEO1IYWfqq/XpJfoZgtGhCe/tYutIIhoKvZH3xOlKIRWMGA==
-X-Received: by 2002:aca:db06:0:b0:359:e535:84a2 with SMTP id s6-20020acadb06000000b00359e53584a2mr2020406oig.59.1668616019885;
-        Wed, 16 Nov 2022 08:26:59 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id m13-20020a9d73cd000000b006621427ecc7sm6667434otk.60.2022.11.16.08.26.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 08:26:59 -0800 (PST)
-Received: (nullmailer pid 196659 invoked by uid 1000);
-        Wed, 16 Nov 2022 16:27:01 -0000
-Date:   Wed, 16 Nov 2022 10:27:01 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Sandor Yu <Sandor.yu@nxp.com>
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, andrzej.hajda@intel.com,
-        neil.armstrong@linaro.org, robert.foss@linaro.org,
-        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, vkoul@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, linux-imx@nxp.com,
-        tzimmermann@suse.de, lyude@redhat.com, javierm@redhat.com,
-        ville.syrjala@linux.intel.com, sam@ravnborg.org,
-        jani.nikula@intel.com, maxime@cerno.tech,
-        penguin-kernel@i-love.sakura.ne.jp, oliver.brown@nxp.com
-Subject: Re: [PATCH v3 05/10] dt-bindings: display: bridge: Add MHDP DP for
- i.MX8MQ
-Message-ID: <20221116162701.GA195244-robh@kernel.org>
-References: <cover.1667911321.git.Sandor.yu@nxp.com>
- <71c504aeb11f55e9dca533cc1b490b8e069c7b7b.1667911321.git.Sandor.yu@nxp.com>
+        Wed, 16 Nov 2022 11:35:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E47168C67;
+        Wed, 16 Nov 2022 08:27:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EEC8761EC4;
+        Wed, 16 Nov 2022 16:27:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05698C43144;
+        Wed, 16 Nov 2022 16:27:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668616027;
+        bh=HjlrE3qPS6/S+YHpKCAMnsJE4Mb7DH9bPKzcgSrHjf8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=a+yzJd2CNITMQpCmphnjYBlYPf3TcNFtxM3gMRzXahRo3NLEq/N2MFr9RLxFunkwM
+         donzPkOGwl1yBERAJPNIP1cG1zIuD92CtPfauE+mRRWZxm6hm2oxJnBbcuZaGQ0zP5
+         1OYwJxr4AnIMoy3YQgFfEoYQuP0hK9CPaPCelDFPvzHUs7HnKO/s7Y1Rb0NzDmCnBc
+         91w6kIBi1FQPE4WnYjxobgHPjJpLEQCi/COd3H/vZw1Cd3r/dP92IuL/eh6QBbzcpc
+         kk/M2/Kz8j5k83VUsThOguMMDS4KukqRClsb6boI6wwW0vMDP71jRNjc4BkzrT7Ads
+         JId6fNTbXeILQ==
+Date:   Wed, 16 Nov 2022 10:27:05 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
+        Allen Hubbe <allenbh@gmail.com>,
+        "Ahmed S. Darwish" <darwi@linutronix.de>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [patch 30/39] PCI/MSI: Move pci_msi_restore_state() to api.c
+Message-ID: <20221116162705.GA1115960@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <71c504aeb11f55e9dca533cc1b490b8e069c7b7b.1667911321.git.Sandor.yu@nxp.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20221111122015.331584998@linutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 09:00:08PM +0800, Sandor Yu wrote:
-> Add bindings for i.MX8MQ MHDP DisplayPort.
-> 
-> Signed-off-by: Sandor Yu <Sandor.yu@nxp.com>
-> ---
->  .../display/bridge/cdns,mhdp-imx8mq-dp.yaml   | 59 +++++++++++++++++++
->  1 file changed, 59 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/display/bridge/cdns,mhdp-imx8mq-dp.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/display/bridge/cdns,mhdp-imx8mq-dp.yaml b/Documentation/devicetree/bindings/display/bridge/cdns,mhdp-imx8mq-dp.yaml
-> new file mode 100644
-> index 000000000000..c4d5362db2b5
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/display/bridge/cdns,mhdp-imx8mq-dp.yaml
-> @@ -0,0 +1,59 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/display/bridge/cdns,mhdp-imx8mq-dp.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Cadence MHDP Displayport bridge
-> +
-> +maintainers:
-> +  - Sandor Yu <Sandor.yu@nxp.com>
-> +
-> +description:
-> +  The Cadence MHDP Displayport TX interface.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - cdns,mhdp-imx8mq-dp
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  phys:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    items:
-> +      - description: Hotplug detect interrupter for cable plugin event.
-> +      - description: Hotplug detect interrupter for cable plugout event.
-> +
-> +  interrupt-names:
-> +    items:
-> +      - const: plug_in
-> +      - const: plug_out
-> +
-> +  port:
-> +    $ref: /schemas/graph.yaml#/properties/port
-> +    description:
-> +      A port node pointing to the output port of a display controller.
+On Fri, Nov 11, 2022 at 02:55:03PM +0100, Thomas Gleixner wrote:
+> From: Ahmed S. Darwish <darwi@linutronix.de>
+>     
+> To distangle the maze in msi.c, all exported device-driver MSI APIs are
+> now to be grouped in one file, api.c.
+>     
+> Move pci_msi_enabled() and add kernel-doc for the function.
+>     
+> Signed-off-by: Ahmed S. Darwish <darwi@linutronix.de>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 
-Similarly, you need an output port to DP (or USB-C) connector.
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>
 
+> diff --git a/drivers/pci/msi/api.c b/drivers/pci/msi/api.c
+> index ee9ed5ccd94d..8d1cf6db9bd7 100644
+> --- a/drivers/pci/msi/api.c
+> +++ b/drivers/pci/msi/api.c
+> @@ -308,6 +308,21 @@ void pci_free_irq_vectors(struct pci_dev *dev)
+>  }
+>  EXPORT_SYMBOL(pci_free_irq_vectors);
+>  
+> +/**
+> + * pci_restore_msi_state() - Restore cached MSI(-X) state on device
+> + * @dev: the PCI device to operate on
+> + *
+> + * Write the Linux-cached MSI(-X) state back on device. This is
+> + * typically useful upon system resume, or after an error-recovery PCI
+> + * adapter reset.
+> + */
+> +void pci_restore_msi_state(struct pci_dev *dev)
+> +{
+> +	__pci_restore_msi_state(dev);
+> +	__pci_restore_msix_state(dev);
+> +}
+> +EXPORT_SYMBOL_GPL(pci_restore_msi_state);
 > +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    mhdp_dp: dp-bridge@32c00000 {
-> +        compatible = "cdns,mhdp-imx8mq-dp";
-> +        reg = <0x32c00000 0x100000>;
-> +        interrupts = <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>,
-> +                <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
-> +        interrupt-names = "plug_in", "plug_out";
-> +        phys = <&dp_phy>;
-> +
-> +        port {
-> +            mhdp_in: endpoint {
-> +                remote-endpoint = <&dcss_out>;
-> +            };
-> +        };
-> +    };
-> -- 
-> 2.34.1
-> 
+>  /**
+>   * pci_msi_enabled() - Are MSI(-X) interrupts enabled system-wide?
+>   *
+> diff --git a/drivers/pci/msi/msi.c b/drivers/pci/msi/msi.c
+> index 59c33bc7fe81..a5d168c823ff 100644
+> --- a/drivers/pci/msi/msi.c
+> +++ b/drivers/pci/msi/msi.c
+> @@ -199,7 +199,7 @@ bool __weak arch_restore_msi_irqs(struct pci_dev *dev)
+>  	return true;
+>  }
+>  
+> -static void __pci_restore_msi_state(struct pci_dev *dev)
+> +void __pci_restore_msi_state(struct pci_dev *dev)
+>  {
+>  	struct msi_desc *entry;
+>  	u16 control;
+> @@ -231,7 +231,7 @@ static void pci_msix_clear_and_set_ctrl(struct pci_dev *dev, u16 clear, u16 set)
+>  	pci_write_config_word(dev, dev->msix_cap + PCI_MSIX_FLAGS, ctrl);
+>  }
+>  
+> -static void __pci_restore_msix_state(struct pci_dev *dev)
+> +void __pci_restore_msix_state(struct pci_dev *dev)
+>  {
+>  	struct msi_desc *entry;
+>  	bool write_msg;
+> @@ -257,13 +257,6 @@ static void __pci_restore_msix_state(struct pci_dev *dev)
+>  	pci_msix_clear_and_set_ctrl(dev, PCI_MSIX_FLAGS_MASKALL, 0);
+>  }
+>  
+> -void pci_restore_msi_state(struct pci_dev *dev)
+> -{
+> -	__pci_restore_msi_state(dev);
+> -	__pci_restore_msix_state(dev);
+> -}
+> -EXPORT_SYMBOL_GPL(pci_restore_msi_state);
+> -
+>  static void pcim_msi_release(void *pcidev)
+>  {
+>  	struct pci_dev *dev = pcidev;
+> diff --git a/drivers/pci/msi/msi.h b/drivers/pci/msi/msi.h
+> index f3f4ede53171..8170ef2c5ad0 100644
+> --- a/drivers/pci/msi/msi.h
+> +++ b/drivers/pci/msi/msi.h
+> @@ -94,6 +94,8 @@ void pci_free_msi_irqs(struct pci_dev *dev);
+>  int __pci_enable_msi_range(struct pci_dev *dev, int minvec, int maxvec, struct irq_affinity *affd);
+>  int __pci_enable_msix_range(struct pci_dev *dev, struct msix_entry *entries, int minvec,
+>  			    int maxvec,  struct irq_affinity *affd, int flags);
+> +void __pci_restore_msi_state(struct pci_dev *dev);
+> +void __pci_restore_msix_state(struct pci_dev *dev);
+>  
+>  /* Legacy (!IRQDOMAIN) fallbacks */
+>  
 > 
