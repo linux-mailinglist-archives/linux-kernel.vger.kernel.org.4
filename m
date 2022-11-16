@@ -2,90 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E32562B49B
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 09:08:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D5A062B4AB
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 09:10:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238619AbiKPIIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 03:08:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41456 "EHLO
+        id S238647AbiKPIJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 03:09:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238149AbiKPIHx (ORCPT
+        with ESMTP id S238635AbiKPIIk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 03:07:53 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC4BC756;
-        Wed, 16 Nov 2022 00:07:51 -0800 (PST)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NBwcv58NdzHvqw;
-        Wed, 16 Nov 2022 16:07:11 +0800 (CST)
-Received: from [10.67.111.192] (10.67.111.192) by
- kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 16 Nov 2022 16:07:41 +0800
-Message-ID: <fd1e6d2d-f7a2-21d2-f0ff-3e3d8b2ba9eb@huawei.com>
-Date:   Wed, 16 Nov 2022 16:07:41 +0800
+        Wed, 16 Nov 2022 03:08:40 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E02B11A1D;
+        Wed, 16 Nov 2022 00:08:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668586086; x=1700122086;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GS5XsrDAkh8voevUSAcZDi09BVLJyVOCPRVqWQvdY/g=;
+  b=H3VUE3s1HDTSyDfQwJoT2y0FWLjqsvFbE1U+OKdbXjOO8UjxPDzhZ5kj
+   UzGgtD3p1+D2uPA8U8sFGjIcggjRMEQoKqKBc+gdRlIWnsOtt5rzpv8pt
+   7+ZfMZPWWftzzspPQladsdZH+Xcy9GNAvF29nnsgceGCBQzyXYz6sgaSr
+   nfvqURCL8yP5VTqC2C3JdE9CJqymeGCAGC8s45Pz0ma8ByEYT8nZVxtmn
+   dzgR3HKc3JJKD3hHb8eHWP33VxC4vHAGlkcAo69oYhudfmOQYeMN8z22C
+   F1i8gNkL4ed6tYi946bYzloNf8tVvT3qE8+mw9LrmwCyjXo36PnCkUAs2
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="374615108"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="374615108"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 00:08:06 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="708064866"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="708064866"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga004.fm.intel.com with ESMTP; 16 Nov 2022 00:08:04 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ovDSk-00D2HB-2e;
+        Wed, 16 Nov 2022 10:08:02 +0200
+Date:   Wed, 16 Nov 2022 10:08:02 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v4 0/6] Add support for software nodes to gpiolib
+Message-ID: <Y3SaYsepJ2sEt2CD@smile.fi.intel.com>
+References: <20221031-gpiolib-swnode-v4-0-6c1671890027@gmail.com>
+ <CAMRc=Mf+FFyx7Mkw-nLMaoayJUjZbkEHDkVCsa_L+XkX6sEQDQ@mail.gmail.com>
+ <Y3QedBxErvjc+YHi@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH bpf 1/2] bpf: Do not copy spin lock field from user in
- bpf_selem_alloc
-Content-Language: en-US
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-CC:     bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-References: <20221114134720.1057939-1-xukuohai@huawei.com>
- <20221114134720.1057939-2-xukuohai@huawei.com>
- <CAADnVQLEzrqjuF+qYh2kJz0Q=9G8PySJ6ZwXD2EGoZsBUdwsog@mail.gmail.com>
-From:   Xu Kuohai <xukuohai@huawei.com>
-In-Reply-To: <CAADnVQLEzrqjuF+qYh2kJz0Q=9G8PySJ6ZwXD2EGoZsBUdwsog@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.192]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3QedBxErvjc+YHi@google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/16/2022 1:27 PM, Alexei Starovoitov wrote:
-> On Mon, Nov 14, 2022 at 5:31 AM Xu Kuohai <xukuohai@huawei.com> wrote:
->>
->> bpf_selem_alloc function is used by inode_storage, sk_storage and
->> task_storage maps to set map value, for these map types, there may
->> be a spin lock in the map value, so if we use memcpy to copy the whole
->> map value from user, the spin lock field may be initialized incorrectly.
->>
->> Since the spin lock field is zeroed by kzalloc, call copy_map_value
->> instead of memcpy to skip copying the spin lock field to fix it.
->>
->> Fixes: 6ac99e8f23d4 ("bpf: Introduce bpf sk local storage")
+On Tue, Nov 15, 2022 at 03:19:16PM -0800, Dmitry Torokhov wrote:
+> On Tue, Nov 15, 2022 at 11:28:17AM +0100, Bartosz Golaszewski wrote:
+> > On Fri, Nov 11, 2022 at 11:19 PM Dmitry Torokhov
+> > <dmitry.torokhov@gmail.com> wrote:
+
+...
+
+> > I still had some fuzz when applying, can you for the future rebase on
+> > top of the GPIO for-next branch?
 > 
-> The tag is wrong. When local storage was introduced it was not
-> possible to use spin_locks there.
-> Pls resubmit.
-> .
+> OK, I will, but I thought it is feeding into the next tree?
 
-No, spin_lock was introduced by d83525ca62cf ("bpf: introduce bpf_spin_lock"),
-before 6ac99e8f23d4 ("bpf: Introduce bpf sk local storage").
+It has ~2-3 days latency usually.
 
-To confirm this, I built a kernel image on comit 6ac99e8f23d4 ("bpf: Introduce bpf sk local storage")
-and run test case posted in patch 2, a softlockup was triggered. Then I picked
-this patch and tried again, nothing failed.
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
