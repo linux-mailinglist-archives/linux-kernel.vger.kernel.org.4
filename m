@@ -2,227 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7A5D62C62E
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 18:19:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5D5C62C631
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 18:19:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbiKPRTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 12:19:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34232 "EHLO
+        id S234413AbiKPRTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 12:19:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234350AbiKPRTP (ORCPT
+        with ESMTP id S232778AbiKPRTZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 12:19:15 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A949E45098;
-        Wed, 16 Nov 2022 09:18:59 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id h193so17252016pgc.10;
-        Wed, 16 Nov 2022 09:18:59 -0800 (PST)
+        Wed, 16 Nov 2022 12:19:25 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54426383
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 09:19:22 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id a29so30589526lfj.9
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 09:19:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KdnWpXnlMV8dqtc8sv94MXZIkfMTh+D/0AUVWA5+XxA=;
-        b=eEQpQ/4vA4BjeCi1aI0tHdBoPVcLwN0Zqr3YWmYJKxkyiJM69zbAFwOxMMaA7gOo1j
-         REI6EK4UH73G00dE6+dFE65dEqpJafISG4TTwdeen7hYnKZwUwPogTNO5ixFISaqxGhT
-         AIZizoUvpoOXrndgB6ZkgKOczq56WG2BIJRC68MuAfKHLhB+R3P/htyJMWm/LNtF697S
-         LPNMNmv96kmuCYGv9ycejgEclbB8nka9lnsqVNk9wCswsSDIJMIpaqckkwS8rm28aatE
-         eOWqHwp8K2GHbIlV8azmj9Qi4fgpoEASYSkLB+RHUn5LEJLBP/ff2VGFXcT1fK/GSi5g
-         GwiA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UCpMqcRT8DeY5MXJCLiKIz5Im5PIOy+nnF0pses3NRo=;
+        b=gPP/YC7RcqXib2XtCBKhb344QqRcr2tCekCF3H6g0DbHMXM4BhF+AYi7kbOqwzduc1
+         3Nci/kOMGv5CP1o5EcR/uksu0p+DQ1m2pB/gPAPIJ41aKwBUyDOCxBpVgybBC/qaRQga
+         T3RREKedJitX+tZgbKXiRYFLTT+UhTcWyWU/SmhiHj57cdAf7pxa5HNvQ4I2SYeFTVPe
+         hwd9U5GXn3E2GS3Eakoa0GH8ZR3mS3C+DQkxZAzSXLcPeG/Pdzdn2nGBPyD2iT60PZDX
+         NIB8D8lpfsyt/RpG+EaZvK2Nv0GLHktVnskYmOD64WMfMkltDs0AtnMchbWTlVb+L9sT
+         fNuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=KdnWpXnlMV8dqtc8sv94MXZIkfMTh+D/0AUVWA5+XxA=;
-        b=YOk21YKJfDgG2/COZEL/7bimhGfV69w9LbXv1xwjwTZDUs5NndeoMGr4XYr8k1LeDl
-         aIQ33WzFcyH8iJHss4wEAyc9ZZoev5uma30NRgY29k0T7hM6iOElderetTuzb0UfsoGs
-         5FX8LOtBJ9ZBg14Owzq5d8lQEWfMls+pqysAm8AtlrRZayXqHKNo/Jl7HsLScXHnmzJ+
-         4Dmkyq2ccngueDghz0zcuZ/ePr0gGEV1T61s7VfoTNpgVE/IPHCy1dl93fRlaeOtCt9S
-         Nwg/h32SamG2FCMGNmmTJEK+UIrtGUx3QRN8+/HU6jAry/zE/ZCytwgDL/AYmDJlzDUT
-         d2dw==
-X-Gm-Message-State: ANoB5pkl5/IycjE8E18FFHlfGKuEj6BdrjMD3A/mcc0P+efZhC2q9aB4
-        W+VUd5muZBX13Y22HjJ9xtk=
-X-Google-Smtp-Source: AA0mqf5jic0GmJlm5IomfjTAv/QAwfiVyeeFDKgw3jg6jUBkIQ69aND/mMQ6qy8xMsNETGZSJnxKHg==
-X-Received: by 2002:a65:620e:0:b0:470:5f22:1496 with SMTP id d14-20020a65620e000000b004705f221496mr20855979pgv.585.1668619139055;
-        Wed, 16 Nov 2022 09:18:59 -0800 (PST)
-Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id s14-20020a17090a764e00b001f262f6f717sm1867217pjl.3.2022.11.16.09.18.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 09:18:58 -0800 (PST)
-Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Hao Chen <chenhao288@hisilicon.com>,
-        Amit Cohen <amcohen@nvidia.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Sean Anderson <sean.anderson@seco.com>,
-        linux-kernel@vger.kernel.org, Leon Romanovsky <leonro@nvidia.com>
-Subject: [PATCH v5] ethtool: doc: clarify what drivers can implement in their get_drvinfo()
-Date:   Thu, 17 Nov 2022 02:18:28 +0900
-Message-Id: <20221116171828.4093-1-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.37.4
-In-Reply-To: <20221111030838.1059-1-mailhol.vincent@wanadoo.fr>
-References: 
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UCpMqcRT8DeY5MXJCLiKIz5Im5PIOy+nnF0pses3NRo=;
+        b=U/zVTLOGiMWmFVAWcCkt5hsgjngg4RA13GBpWyD0ufL6k/RQLkadTL2OIBZzzQrpmn
+         CcmWLS1DPxyy/NOdbj8u0XmXG+5rRsin2P/m7ueWBhrVe5fFxlRO69MX8W1pwe1YN67K
+         5GG3cQ9MG4Uf40jQ/zoMOxyn04zEtQS/xJXEtHyKwZc7/tXNA6gMwWaGj71RwkvXCWJf
+         7PK1kCR+JnzDyL6DfX0j0es9jJEkm2qfBDdFXu0lPfy0kKRqOPThCgBzXkooJmcL6AUV
+         4SPqZTRbJ15aJbP/Bn1jBkUBqjw4nczTJ2WzuZFlZ7V37xdnRvFAooEJq23bEbkPEuRq
+         BPmQ==
+X-Gm-Message-State: ANoB5plIf7CEj57fJ4lNA3X988Ikwk3cW/J/pdfSvAPmRptJDo3iA5LX
+        MmB2+vixIVPm8yz+3MZxUwq06Q==
+X-Google-Smtp-Source: AA0mqf61LBMQcDDOdERra618Gul2RXMcG5LraXEgHjg7sKKHhpXJP2KJpVLUcPqjo1eEivEm8tnoHw==
+X-Received: by 2002:ac2:5093:0:b0:4b1:753b:e66f with SMTP id f19-20020ac25093000000b004b1753be66fmr8351806lfm.276.1668619160736;
+        Wed, 16 Nov 2022 09:19:20 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id 11-20020ac24d4b000000b004a62ff61b3dsm2676326lfp.252.2022.11.16.09.19.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Nov 2022 09:19:20 -0800 (PST)
+Message-ID: <891e51f0-af46-6150-ba4e-807f00cc8e63@linaro.org>
+Date:   Wed, 16 Nov 2022 18:19:18 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 2/8] arm64: dts: qcom: sdm450: Add device tree for
+ Motorola Moto G6
+Content-Language: en-US
+To:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Julian Braha <julianbraha@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kees Cook <keescook@chromium.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+References: <20221116145616.17884-1-luca@z3ntu.xyz>
+ <20221116145616.17884-3-luca@z3ntu.xyz>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221116145616.17884-3-luca@z3ntu.xyz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Many of the drivers which implement ethtool_ops::get_drvinfo() will
-prints the .driver, .version or .bus_info of struct ethtool_drvinfo.
-To have a glance of current state, do:
+On 16/11/2022 15:56, Luca Weiss wrote:
+> From: Julian Braha <julianbraha@gmail.com>
+> 
+> Add device tree for the Motorola Moto G6 (ali) smartphone. This device
+> is based on Snapdragon 450 (sdm450) SoC which is a variant of MSM8953.
+> 
+> Signed-off-by: Julian Braha <julianbraha@gmail.com>
 
-  $ git grep -W "get_drvinfo(struct"
+Missing SoB.
 
-Printing in those three fields is useless because:
+Please run scripts/checkpatch.pl and fix reported warnings.
 
-  - since [1], the driver version should be the kernel version (at
-    least for upstream drivers). Arguably, out of tree drivers might
-    still want to set a custom version, but out of tree is not our
-    focus.
+> ---
+>  arch/arm64/boot/dts/qcom/Makefile             |   1 +
+>  .../boot/dts/qcom/sdm450-motorola-ali.dts     | 256 ++++++++++++++++++
+>  2 files changed, 257 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/qcom/sdm450-motorola-ali.dts
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+> index d7669a7cee9f..a0b537414593 100644
+> --- a/arch/arm64/boot/dts/qcom/Makefile
+> +++ b/arch/arm64/boot/dts/qcom/Makefile
+> @@ -115,6 +115,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-crd-r3.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sc8280xp-crd.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sc8280xp-lenovo-thinkpad-x13s.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sda660-inforce-ifc6560.dtb
+> +dtb-$(CONFIG_ARCH_QCOM)	+= sdm450-motorola-ali.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sdm630-sony-xperia-ganges-kirin.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sdm630-sony-xperia-nile-discovery.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sdm630-sony-xperia-nile-pioneer.dtb
+> diff --git a/arch/arm64/boot/dts/qcom/sdm450-motorola-ali.dts b/arch/arm64/boot/dts/qcom/sdm450-motorola-ali.dts
+> new file mode 100644
+> index 000000000000..62874306fc24
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/sdm450-motorola-ali.dts
+> @@ -0,0 +1,256 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2020, The Linux Foundation. All rights reserved.
+> + */
+> +/dts-v1/;
+> +
+> +#include "msm8953.dtsi"
+> +#include "pm8953.dtsi"
+> +#include "pmi8950.dtsi"
+> +
+> +/ {
+> +	model = "Motorola Moto G6";
+> +	compatible = "motorola,ali", "qcom,sdm450";
+> +	chassis-type = "handset";
+> +	qcom,msm-id = <338 0>;
+> +	qcom,board-id = <0x41 0xb1a0>,
+> +			<0x42 0xb1a0>,
+> +			<0x43 0xc100>,
+> +			<0x42 0xb1b0>,
+> +			<0x43 0xc200>,
+> +			<0x44 0xc200>,
+> +			<0x42 0xb200>,
+> +			<0x43 0xb200>;
 
-  - since [2], the core is able to provide default values for .driver
-    and .bus_info.
+Both properties are not allowed, unless exception list is extended.
 
-In summary, drivers may provide .fw_version and .erom_version, the
-rest is expected to be done by the core.
+Does not look like you tested the DTS against bindings. Please run `make
+dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
+for instructions).
 
-In struct ethtool_ops doc from linux/ethtool: rephrase field
-get_drvinfo() doc to discourage developers from implementing this
-callback.
 
-In struct ethtool_drvinfo doc from uapi/linux/ethtool.h: remove the
-paragraph mentioning what drivers should do. Rationale: no need to
-repeat what is already written in struct ethtool_ops doc. But add a
-note that .fw_version and .erom_version are driver defined.
-
-Also update the dummy driver and simply remove the callback in order
-not to confuse the newcomers: most of the drivers will not need this
-callback function any more.
-
-[1] commit 6a7e25c7fb48 ("net/core: Replace driver version to be
-    kernel version")
-Link: https://git.kernel.org/torvalds/linux/c/6a7e25c7fb48
-
-[2] commit edaf5df22cb8 ("ethtool: ethtool_get_drvinfo: populate
-    drvinfo fields even if callback exits")
-Link: https://git.kernel.org/netdev/net-next/c/edaf5df22cb8
-
-Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
-* Changelog *
-
-v4 -> v5:
-
-  * update struct ethtool_drvinfo doc in uapi/linux/ethtool.h as well.
-
-  * remove the paragraph mentioning what drivers should do from struct
-    ethtool_drvinfo in uapi/linux/ethtool.h. Rationale: no need to
-    repeat what is already written in struct ethtool_ops doc.
-
-v3 -> v4:
-
-  * rephrasing of the documentation according to Jakub's comments.
-
-v2 -> v3:
-
-  * add Reviewed-by: Leon Romanovsky <leonro@nvidia.com> tag.
-
-  * use shorter links.
-
-v1 -> v2:
-
-  * forgot the net-next prefix in the patch subject... Sorry for the
-      noise.
----
- drivers/net/dummy.c          |  7 -------
- include/linux/ethtool.h      |  8 ++++----
- include/uapi/linux/ethtool.h | 10 ++++------
- 3 files changed, 8 insertions(+), 17 deletions(-)
-
-diff --git a/drivers/net/dummy.c b/drivers/net/dummy.c
-index aa0fc00faecb..c4b1b0aa438a 100644
---- a/drivers/net/dummy.c
-+++ b/drivers/net/dummy.c
-@@ -99,14 +99,7 @@ static const struct net_device_ops dummy_netdev_ops = {
- 	.ndo_change_carrier	= dummy_change_carrier,
- };
- 
--static void dummy_get_drvinfo(struct net_device *dev,
--			      struct ethtool_drvinfo *info)
--{
--	strscpy(info->driver, DRV_NAME, sizeof(info->driver));
--}
--
- static const struct ethtool_ops dummy_ethtool_ops = {
--	.get_drvinfo            = dummy_get_drvinfo,
- 	.get_ts_info		= ethtool_op_get_ts_info,
- };
- 
-diff --git a/include/linux/ethtool.h b/include/linux/ethtool.h
-index 5c51c7fda32a..9e0a76fc7de9 100644
---- a/include/linux/ethtool.h
-+++ b/include/linux/ethtool.h
-@@ -473,10 +473,10 @@ struct ethtool_module_power_mode_params {
-  *	parameter.
-  * @supported_coalesce_params: supported types of interrupt coalescing.
-  * @supported_ring_params: supported ring params.
-- * @get_drvinfo: Report driver/device information.  Should only set the
-- *	@driver, @version, @fw_version and @bus_info fields.  If not
-- *	implemented, the @driver and @bus_info fields will be filled in
-- *	according to the netdev's parent device.
-+ * @get_drvinfo: Report driver/device information. Modern drivers no
-+ *	longer have to implement this callback. Most fields are
-+ *	correctly filled in by the core using system information, or
-+ *	populated using other driver operations.
-  * @get_regs_len: Get buffer length required for @get_regs
-  * @get_regs: Get device registers
-  * @get_wol: Report whether Wake-on-Lan is enabled
-diff --git a/include/uapi/linux/ethtool.h b/include/uapi/linux/ethtool.h
-index f341de2ae612..58e587ba0450 100644
---- a/include/uapi/linux/ethtool.h
-+++ b/include/uapi/linux/ethtool.h
-@@ -159,8 +159,10 @@ static inline __u32 ethtool_cmd_speed(const struct ethtool_cmd *ep)
-  *	in its bus driver structure (e.g. pci_driver::name).  Must
-  *	not be an empty string.
-  * @version: Driver version string; may be an empty string
-- * @fw_version: Firmware version string; may be an empty string
-- * @erom_version: Expansion ROM version string; may be an empty string
-+ * @fw_version: Firmware version string; driver defined; may be an
-+ *	empty string
-+ * @erom_version: Expansion ROM version string; driver defined; may be
-+ *	an empty string
-  * @bus_info: Device bus address.  This should match the dev_name()
-  *	string for the underlying bus device, if there is one.  May be
-  *	an empty string.
-@@ -179,10 +181,6 @@ static inline __u32 ethtool_cmd_speed(const struct ethtool_cmd *ep)
-  *
-  * Users can use the %ETHTOOL_GSSET_INFO command to get the number of
-  * strings in any string set (from Linux 2.6.34).
-- *
-- * Drivers should set at most @driver, @version, @fw_version and
-- * @bus_info in their get_drvinfo() implementation.  The ethtool
-- * core fills in the other fields using other driver operations.
-  */
- struct ethtool_drvinfo {
- 	__u32	cmd;
--- 
-2.37.4
+Best regards,
+Krzysztof
 
