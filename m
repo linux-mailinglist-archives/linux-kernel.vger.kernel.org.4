@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9474962C977
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 21:02:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A912062C979
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 21:03:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233941AbiKPUCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 15:02:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33800 "EHLO
+        id S238454AbiKPUDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 15:03:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236124AbiKPUCq (ORCPT
+        with ESMTP id S237831AbiKPUDG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 15:02:46 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65EC663B94;
-        Wed, 16 Nov 2022 12:02:45 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id s196so17748098pgs.3;
-        Wed, 16 Nov 2022 12:02:45 -0800 (PST)
+        Wed, 16 Nov 2022 15:03:06 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24834663C2;
+        Wed, 16 Nov 2022 12:02:52 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id w23so11010488ply.12;
+        Wed, 16 Nov 2022 12:02:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
         bh=Hlf4RPnys2xlptR6hKKlXQBW5qSMO1/p3GZVaaL5DEk=;
-        b=Q1vmNkgnMV1rfn9shs7EUPv1E8qMY58IiMlv0wjSwmEEfxjXjMTTfXyJEBhBiZo4RV
-         1jqoXycSq7g9T26erjmpPfcESFrKSgB+0GZ9uXRuDnLliTwzcp3CITDb5rLft3pHUUpi
-         Uk/ztpz5RY8cTkGXRuGcM71hNwq5QyUBzol5xPf0dZrny2lfx3BZa6ABxvJWlWOVNpv/
-         XHOslswzR/EJoP37wdNKNz8kCdbb+T/xvt0e+VpK+v0o88GygLfHfFUJ01ijAAnOvSuC
-         2OvmU1Qfgf4o7q2CmJmFZvLTNWSz59rzYkXWJyMLkM4/jBLVp2C4joBXxUv+a2T27LLc
-         EBOQ==
+        b=p1xoRO47ZrZ1DdmzZr9wv/ZEi13KH85MY5IcJaX02FD68/K/cmdmHDvzNED+iQn6fi
+         b/BywVdnyw7bc1gzPutqrwvD8uma5HbPaN9VxphqGCIXb9Oi1B0cCgbkoobNrkjbaYe7
+         nN5k/BCr2axXuXqOWPhfsVw/0ldm+p2Qz+Ni//ONsEcVAAZiGlqV/odH2z4xuqy4gAI1
+         YL67GKHiSw63d4ySeeWwOlXjWAKS8bK1oPHYv3zp2EybFz58fl28AJHD9Xqm8dmpaHLN
+         eW81F2sIX89Df+kGKWG2KvKyO2744SmkuuquwI35IOh8l5MNJx5ETidYVQxKmuVi1cCD
+         AkGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
         bh=Hlf4RPnys2xlptR6hKKlXQBW5qSMO1/p3GZVaaL5DEk=;
-        b=YRmH9ZxFmcL/pZODih/5GuhxvRGMmJWs7Ubel0wNr/jT2dCbVaQiK0sgDnDT0bz6yL
-         mbhu7jh+Gn2XqSe5B3zghbIRB9b1fpGR6kKI3wK+KyBJWVdkUmL8z5a8GnYedEhatVnz
-         27/apTN1LOflgdxrWXYPQB3kwLwJ4BuUjYOB9pvpYV+MsfaXC2yfOs5Ml5IoKs0aNODW
-         paDkRve4M3sdYcW/NzwV5DkeMofdmnNDoWeuZEAMLUbkBRxb0qDzKVphPSBGid39e17M
-         eo4yjeeObXk2ghO6Uw5nX8T7yJIbOa3QfZcrmM9rYs0qIn2fuMcIcgmeIh9ml4vFlE9O
-         yfmg==
-X-Gm-Message-State: ANoB5plcjWL/bQBSg6+qeV5Nv52HgvWgbrB3EIdclpqunGFX3h+L9fwk
-        ck3X/n97+QHcixPWUXUE6HE=
-X-Google-Smtp-Source: AA0mqf6qbEHBcFkhsJEvfxwuN4QewKdZ0Bpri9Q9/YF+J2TGtG47mtLJ3TFInumyyIdAseU3vRyqgQ==
-X-Received: by 2002:a05:6a00:4186:b0:56b:d951:67d2 with SMTP id ca6-20020a056a00418600b0056bd95167d2mr24621348pfb.55.1668628964901;
-        Wed, 16 Nov 2022 12:02:44 -0800 (PST)
+        b=NrX6YXYrjaK5MzrPEXz4ohQtYCj97s2+adxMlzyYzENQ46rly7LAMpylB3dxrOE9b3
+         AQDJuq9Wx7NOCChKQh5tAofxFY02dq281G8mEr4uhZGpjEyxqfV3WmWcgXCXIqSyJg5O
+         lZzsIKdHjyMp/Ix8UzsMYG5/jmVF5dDCETl1Rl2TmdmV3dVOaG7CgPjFFwtpAkURkn6U
+         LLPJA0T8RkZm8I2TR3BXI0T3Lx+fuucnCyBrbuuqM9zlXQUF4ejejD1iobGqwpPszZJz
+         fVE2rgvnv7qNj6nnPpsHOTf3lTs337cjqieysRSLMYy+SHRav8JEW32n2vmD+GEJAsTo
+         aRAQ==
+X-Gm-Message-State: ANoB5pki4zK0JtV0hrSdmH9oCCUdyiyCYqosvXhLMruSGSaa6VkQC+7z
+        pYga265N1T8YpabBqcOfYYc=
+X-Google-Smtp-Source: AA0mqf7C+XsGFEi9GeihjTn5V5WPZwj9QlHhQ6Xr1g1pK9CvcEqH7Zj01PlVmvLBIF1bcTXt+nB5cA==
+X-Received: by 2002:a17:902:e791:b0:186:9870:506a with SMTP id cp17-20020a170902e79100b001869870506amr10439418plb.45.1668628971684;
+        Wed, 16 Nov 2022 12:02:51 -0800 (PST)
 Received: from localhost.localdomain ([103.51.72.182])
-        by smtp.gmail.com with ESMTPSA id s18-20020a170903215200b00186a6b6350esm12423950ple.268.2022.11.16.12.02.41
+        by smtp.gmail.com with ESMTPSA id s18-20020a170903215200b00186a6b6350esm12423950ple.268.2022.11.16.12.02.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 12:02:44 -0800 (PST)
+        Wed, 16 Nov 2022 12:02:51 -0800 (PST)
 From:   Anand Moon <linux.amoon@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -61,8 +61,8 @@ Cc:     Anand Moon <linux.amoon@gmail.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
 Subject: [linux-next-v2 4/5] arm64: dts: rockchip: Add support of interrupt to ethernet node on Rock 3A SBC
-Date:   Wed, 16 Nov 2022 20:01:46 +0000
-Message-Id: <20221116200150.4657-5-linux.amoon@gmail.com>
+Date:   Wed, 16 Nov 2022 20:01:47 +0000
+Message-Id: <20221116200150.4657-6-linux.amoon@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221116200150.4657-1-linux.amoon@gmail.com>
 References: <20221116200150.4657-1-linux.amoon@gmail.com>
