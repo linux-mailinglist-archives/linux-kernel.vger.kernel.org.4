@@ -2,47 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BFD562BC98
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:53:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3A5862BC9C
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:53:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbiKPLxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 06:53:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35410 "EHLO
+        id S233587AbiKPLxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 06:53:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233144AbiKPLwg (ORCPT
+        with ESMTP id S232965AbiKPLxG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 06:52:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE3E45EDA
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 03:42:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AAC31B81CF8
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 11:42:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC92BC43470;
-        Wed, 16 Nov 2022 11:42:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1668598939;
-        bh=9eMkKHxHguP0USa1SZGodEQEk/UP3sUe8VUBTS3NJ2Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vBTGVzfUtUW0US1GVjN/jUvNNmNHLPz4cYJuPHf6jd1+Xkcf55ckMErcbd2o2M7qk
-         Eug1EQOG7XGolWNlyda4U7hTe3vLoyFlOadoQq3yG6M3K5C2EQI5bTzLNQdJNmGJ9u
-         x1CeR+IzqAQXaAXl85qE1UaC3k8cJWadkJ8Z1X1w=
-Date:   Wed, 16 Nov 2022 12:42:16 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, Fei Li <fei1.li@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v4 1/1] virt: acrn: Mark the uuid field as unused
-Message-ID: <Y3TMmDXEbGyDQrLF@kroah.com>
-References: <20221116092254.66234-1-andriy.shevchenko@linux.intel.com>
+        Wed, 16 Nov 2022 06:53:06 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D99E9F
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 03:43:29 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id g12so29120574lfh.3
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 03:43:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Z5yJHa+wAEe8GnC+hyt4JSEECXNNqxHwNCKclA9M7H4=;
+        b=NZPZ2yt+mCKAMMhWLsVd7LnxWK3CWyxw8hc+QTsDd/iD/evl6V6WmMsPPLwHfLOlW3
+         ktCK97Koq4e18JLQBXXV2T46QTNF1OsjBiJbEFYTNy2kbyMzQgsHRn9dZtPWDtb1t6CX
+         AzOPFfR5V9U9oAi3v9tCMAsXAbVCZidhSQIzyOUbMrlKFGd4bpWGwgg6ThO/BVGB7Em0
+         fQikqvcQptTcsGZHS/v6fLzvOM8F8RPuLKPQ057cJbl9u5P1fEthXOu+5P5mkTLWCGki
+         If9t+x41gzTaCuDv8nt+hShajuGtbSddPmS9XOWaB+fuuWw35y5rgT9cW03h5n7R3TcZ
+         +ZpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z5yJHa+wAEe8GnC+hyt4JSEECXNNqxHwNCKclA9M7H4=;
+        b=oKNMk+t43lRlkUFVi6JxZS0MX7onUbs/N60qjgaTbyfjP/urLdDNF8QnJ/d8/a7b4F
+         yntV7qCchruJDu0s2NvKtYN/Pg+excKBeEPgpF/Uh2NXUHBqOv8XN2sOTXwpbbmy42EY
+         RDdcNehqWPfjyF8mMO3+hhiRO9bUXXByD6DYZ6TsBSWDVf4y/TOk4AZsCva8fXHK7kAj
+         yOEZk8O2F0Nnv9f68DrLTaFYzP+EMlpb0EY9CUCzFhrxWU3OoUI1XSvkPNiBIAnN1Uv7
+         HX0XskD9jNBzm8aenbxjHn9guMmXHPxj5jwSzEZIlS5HB4gI2EszJr+HrWzFjG+Fojox
+         2ddQ==
+X-Gm-Message-State: ANoB5pkxwZSblnCMfeeHFA1LjdLdW/V7rcEQFTQ0tnAtDOA3pRk5Vc5b
+        J92+tHGKBd78bZm0TFO0vN3+Ag==
+X-Google-Smtp-Source: AA0mqf6iLi6Mve12+MVviZ747v8WvzMemffWyM1PvXX9qD4lpKGp4sLpnRmtU7e4Rxuvlg/gzuu7HQ==
+X-Received: by 2002:a05:6512:308:b0:4aa:8cd:5495 with SMTP id t8-20020a056512030800b004aa08cd5495mr6589357lfp.254.1668599008194;
+        Wed, 16 Nov 2022 03:43:28 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id j9-20020a056512344900b004b1907d85e9sm2559638lfr.161.2022.11.16.03.43.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Nov 2022 03:43:27 -0800 (PST)
+Message-ID: <adc327c7-9e99-4f2d-9641-2981b380ee47@linaro.org>
+Date:   Wed, 16 Nov 2022 12:43:26 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221116092254.66234-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] dt-bindings: soc: qcom: aoss: Add compatible for SM8550
+Content-Language: en-US
+To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <20221116113128.2655441-1-abel.vesa@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221116113128.2655441-1-abel.vesa@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,72 +77,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 11:22:54AM +0200, Andy Shevchenko wrote:
-> After the commits for userspace (see Link tags below) the uuid field is
-> not being used in the ACRN code. Update kernel to reflect these changes.
-> I.e. we do the following:
-> - adding a comment explaining that it's not used anymore
-> - replacing the specific type by a raw buffer
-> - updating the example code accordingly
+On 16/11/2022 12:31, Abel Vesa wrote:
+> Document the compatible for SM8550.
 > 
-> The advertised field confused users and actually never been used. So
-> the wrong part here is that kernel puts something which userspace never
-> used and hence this may confuse a reader of this code.
-> 
-> Link: https://github.com/projectacrn/acrn-hypervisor/commit/da0d24326ed6
-> Link: https://github.com/projectacrn/acrn-hypervisor/commit/bb0327e70097
-> Fixes: 5b06931d7f8b ("sample/acrn: Introduce a sample of HSM ioctl interface usage")
-> Fixes: 9c5137aedd11 ("virt: acrn: Introduce VM management interfaces")
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Acked-by: Rafael J. Wysocki <rafael@kernel.org>
-> ---
-> v4: added tag (Rafael), Cc'ed to Greg (missing in the previous version
->     by some reason)
-> v3: converted to Link tags (Rafael), explained what was wrong (Rafael)
-> v2: added tag (Fei)
-> 
->  include/uapi/linux/acrn.h | 5 ++---
->  samples/acrn/vm-sample.c  | 3 ---
->  2 files changed, 2 insertions(+), 6 deletions(-)
-> 
-> diff --git a/include/uapi/linux/acrn.h b/include/uapi/linux/acrn.h
-> index ccf47ed92500..04fa83647ae5 100644
-> --- a/include/uapi/linux/acrn.h
-> +++ b/include/uapi/linux/acrn.h
-> @@ -12,7 +12,6 @@
->  #define _UAPI_ACRN_H
->  
->  #include <linux/types.h>
-> -#include <linux/uuid.h>
->  
->  #define ACRN_IO_REQUEST_MAX		16
->  
-> @@ -186,7 +185,7 @@ struct acrn_ioreq_notify {
->   * @reserved0:		Reserved and must be 0
->   * @vcpu_num:		Number of vCPU in the VM. Return from hypervisor.
->   * @reserved1:		Reserved and must be 0
-> - * @uuid:		UUID of the VM. Pass to hypervisor directly.
-> + * @uuid:		Reserved (used to be UUID of the VM)
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 
-If it's reserved, then don't you need to check for 0?
+Why this is not part of other SoC patches? I just received many single
+patches for this SM8550 topic. All these should be set of few series,
+not 10 or more...
 
->   * @vm_flag:		Flag of the VM creating. Pass to hypervisor directly.
->   * @ioreq_buf:		Service VM GPA of I/O request buffer. Pass to
->   *			hypervisor directly.
-> @@ -198,7 +197,7 @@ struct acrn_vm_creation {
->  	__u16	reserved0;
->  	__u16	vcpu_num;
->  	__u16	reserved1;
-> -	guid_t	uuid;
-> +	__u8	uuid[16];
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-You just changed the type here, so what is that going to break in
-userspace that depended on this being of a structure type and now it's
-an array?
+Best regards,
+Krzysztof
 
-And no other kernel changes needed?  Shouldn't you warn if this field is
-set?
-
-thanks,
-
-greg k-h
