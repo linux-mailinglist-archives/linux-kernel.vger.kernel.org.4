@@ -2,112 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47D8B62BB4F
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:19:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FE8362BB48
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:18:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239213AbiKPLSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 06:18:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58842 "EHLO
+        id S238938AbiKPLSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 06:18:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236947AbiKPLRi (ORCPT
+        with ESMTP id S237845AbiKPLRi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 16 Nov 2022 06:17:38 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBDC32E9C8;
-        Wed, 16 Nov 2022 03:06:02 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id k8so29344467wrh.1;
-        Wed, 16 Nov 2022 03:06:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BQx3mUtsIUh3Vy0b9GmrxhmpzLCHkLOldYvI6VMUkAY=;
-        b=PagfyanFb0luTYvKTSg8oz5N/SnKghrXCv4UfuXCjAE15ywI3tvQZhnVNuAKBaUMqa
-         4Wu5CDvGFIPSWneNKkM51lb3W9HOJ26l//zf2LbvAvqyAxl+LtEj9KQqeR/XR/Pf844y
-         7pT6xeTirO7YEBQ7O9nFKIt3vVoiI5Ga2GITEP2sOEazgp1Tji2vJ6WL3UtQ/dnKmhSr
-         5c/B3p6XyCgVD9G3hkRlKN5KItm2dzewleCyeJEs1cO/2pYJiFws5O4ybw6m6iTdRf4o
-         SIyVmNfaRAgFdNbsMSGSpkUmWUjk+XqSU/IwYy9N/p0TMrAjPXpQauS5IY7mD0DHJ0pf
-         IlKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BQx3mUtsIUh3Vy0b9GmrxhmpzLCHkLOldYvI6VMUkAY=;
-        b=EQtT8DhPZYotQMkvqZoGZTgxDWvI5It+StHudPWo/icMCE1Vf45SSGJkPfZxN2IKtc
-         mBCxVjNetp1E+ZlzrgUzl5X+GQZ+kkVG2p3/Sn9XoCNI3APPtj7jHRcFzzqiAydQ8nul
-         1bA/cK8FNNjgvP9qVsXine72M3vnK6o7fnGMJNa0FR4Pr+tALnj14KGmlBbYjPxKp3yF
-         z0vqAi/1oDIr/Ov38UuBb2slA9wCtlblDKNSpFaMiB2blpaQQzzbqM65r1ap3SU4DJoJ
-         OI8UC18Rh+Lph30Cpw/y1qg7Y1L430eoful55u0EPXHGqcA+Zmqf7lgT7FfrrPEiVmRP
-         UBaA==
-X-Gm-Message-State: ANoB5pmb+qD2AhaSlAK5zWIqd8QJT8tJPvIK6L0x5y3TGp9YsZZ1Tt+B
-        UnHBwhXmCjK2ttP8uYYVhqA=
-X-Google-Smtp-Source: AA0mqf5+Askp+qzYt/NicE/3sALjyeDRdAyZXWwm1sSuh+ZpzsaN+OqOZ/IsCE/e4Bh3M+8bXo8p9A==
-X-Received: by 2002:adf:e384:0:b0:230:e4e7:b191 with SMTP id e4-20020adfe384000000b00230e4e7b191mr12922337wrm.158.1668596761278;
-        Wed, 16 Nov 2022 03:06:01 -0800 (PST)
-Received: from debian ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id p15-20020a05600c468f00b003cfd10a33afsm1763981wmo.11.2022.11.16.03.06.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 03:06:00 -0800 (PST)
-Date:   Wed, 16 Nov 2022 11:05:59 +0000
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
-        rwarsow@gmx.de
-Subject: Re: [PATCH 5.15 000/130] 5.15.79-rc2 review
-Message-ID: <Y3TEF6piNsjAXVAY@debian>
-References: <20221115140300.534663914@linuxfoundation.org>
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C3D2ED56;
+        Wed, 16 Nov 2022 03:06:05 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 48532336F3;
+        Wed, 16 Nov 2022 11:06:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1668596764; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XH+WwbRJQ41jjX52JCMwciyjC/IToO3NGdpBZjwirKA=;
+        b=vXxZfM8SzWrMncwtQu8dwsdM7I9+mxNBsUUrabi+G/surBd/JeW/L7cEEE7YQyFsgZcImc
+        D9Isv35LGjeZ9nEkZ23bb+rzhjCi08gAjaFKsjKClxh7+qLiMLopXqJ+CUzkKR7xH7yxLM
+        vQr7sWPY+fAvVO/sESxAAfmG/FBuoPw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1668596764;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XH+WwbRJQ41jjX52JCMwciyjC/IToO3NGdpBZjwirKA=;
+        b=w9T+qm/fU+luAhmRTIv97xTItj/rvZ4ohnv0TQQV5Rj7z2XNhiZDarx17klBvJH8zbwBjS
+        TlsDeswKTpbmc9BA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 39C6313480;
+        Wed, 16 Nov 2022 11:06:04 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id IUYSDhzEdGMvYwAAMHmgww
+        (envelope-from <jack@suse.cz>); Wed, 16 Nov 2022 11:06:04 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id CBC73A0709; Wed, 16 Nov 2022 12:06:03 +0100 (CET)
+Date:   Wed, 16 Nov 2022 12:06:03 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Gabriel Krisman Bertazi <krisman@suse.de>
+Cc:     axboe@kernel.dk, mingo@redhat.com, peterz@infradead.org,
+        jack@suse.cz, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org, liusong@linux.alibaba.com,
+        chaitanyak@nvidia.com
+Subject: Re: [PATCH 2/3] wait: Return number of exclusive waiters awaken
+Message-ID: <20221116110603.6rndj2eei6mi6k33@quack3>
+References: <20221115224553.23594-1-krisman@suse.de>
+ <20221115224553.23594-3-krisman@suse.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221115140300.534663914@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221115224553.23594-3-krisman@suse.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On Tue, Nov 15, 2022 at 03:04:00PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.79 release.
-> There are 130 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Tue 15-11-22 17:45:52, Gabriel Krisman Bertazi wrote:
+> Sbitmap code will need to know how many waiters were actually woken for
+> its batched wakeups implementation.  Return the number of woken
+> exclusive waiters from __wake_up() to facilitate that.
 > 
-> Responses should be made by Thu, 17 Nov 2022 14:02:33 +0000.
-> Anything received after that time might be too late.
+> Suggested-by: Jan Kara <jack@suse.cz>
+> Signed-off-by: Gabriel Krisman Bertazi <krisman@suse.de>
 
-Build test (gcc version 12.2.1 20221016):
-mips: 62 configs -> no failure
-arm: 99 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-csky allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+Looks good. Feel free to add:
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-[1]. https://openqa.qa.codethink.co.uk/tests/2173
-[2]. https://openqa.qa.codethink.co.uk/tests/2174
+								Honza
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
+> ---
+>  include/linux/wait.h |  2 +-
+>  kernel/sched/wait.c  | 18 +++++++++++-------
+>  2 files changed, 12 insertions(+), 8 deletions(-)
+> 
+> diff --git a/include/linux/wait.h b/include/linux/wait.h
+> index 7f5a51aae0a7..a0307b516b09 100644
+> --- a/include/linux/wait.h
+> +++ b/include/linux/wait.h
+> @@ -209,7 +209,7 @@ __remove_wait_queue(struct wait_queue_head *wq_head, struct wait_queue_entry *wq
+>  	list_del(&wq_entry->entry);
+>  }
+>  
+> -void __wake_up(struct wait_queue_head *wq_head, unsigned int mode, int nr, void *key);
+> +int __wake_up(struct wait_queue_head *wq_head, unsigned int mode, int nr, void *key);
+>  void __wake_up_locked_key(struct wait_queue_head *wq_head, unsigned int mode, void *key);
+>  void __wake_up_locked_key_bookmark(struct wait_queue_head *wq_head,
+>  		unsigned int mode, void *key, wait_queue_entry_t *bookmark);
+> diff --git a/kernel/sched/wait.c b/kernel/sched/wait.c
+> index 9860bb9a847c..133b74730738 100644
+> --- a/kernel/sched/wait.c
+> +++ b/kernel/sched/wait.c
+> @@ -121,11 +121,12 @@ static int __wake_up_common(struct wait_queue_head *wq_head, unsigned int mode,
+>  	return nr_exclusive;
+>  }
+>  
+> -static void __wake_up_common_lock(struct wait_queue_head *wq_head, unsigned int mode,
+> +static int __wake_up_common_lock(struct wait_queue_head *wq_head, unsigned int mode,
+>  			int nr_exclusive, int wake_flags, void *key)
+>  {
+>  	unsigned long flags;
+>  	wait_queue_entry_t bookmark;
+> +	int remaining = nr_exclusive;
+>  
+>  	bookmark.flags = 0;
+>  	bookmark.private = NULL;
+> @@ -134,10 +135,12 @@ static void __wake_up_common_lock(struct wait_queue_head *wq_head, unsigned int
+>  
+>  	do {
+>  		spin_lock_irqsave(&wq_head->lock, flags);
+> -		nr_exclusive = __wake_up_common(wq_head, mode, nr_exclusive,
+> +		remaining = __wake_up_common(wq_head, mode, remaining,
+>  						wake_flags, key, &bookmark);
+>  		spin_unlock_irqrestore(&wq_head->lock, flags);
+>  	} while (bookmark.flags & WQ_FLAG_BOOKMARK);
+> +
+> +	return nr_exclusive - remaining;
+>  }
+>  
+>  /**
+> @@ -147,13 +150,14 @@ static void __wake_up_common_lock(struct wait_queue_head *wq_head, unsigned int
+>   * @nr_exclusive: how many wake-one or wake-many threads to wake up
+>   * @key: is directly passed to the wakeup function
+>   *
+> - * If this function wakes up a task, it executes a full memory barrier before
+> - * accessing the task state.
+> + * If this function wakes up a task, it executes a full memory barrier
+> + * before accessing the task state.  Returns the number of exclusive
+> + * tasks that were awaken.
+>   */
+> -void __wake_up(struct wait_queue_head *wq_head, unsigned int mode,
+> -			int nr_exclusive, void *key)
+> +int __wake_up(struct wait_queue_head *wq_head, unsigned int mode,
+> +	      int nr_exclusive, void *key)
+>  {
+> -	__wake_up_common_lock(wq_head, mode, nr_exclusive, 0, key);
+> +	return __wake_up_common_lock(wq_head, mode, nr_exclusive, 0, key);
+>  }
+>  EXPORT_SYMBOL(__wake_up);
+>  
+> -- 
+> 2.35.3
+> 
 -- 
-Regards
-Sudip
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
