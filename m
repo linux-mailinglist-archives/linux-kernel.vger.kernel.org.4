@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C382162BF2A
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 14:14:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6F4762BF2B
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 14:14:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233721AbiKPNOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 08:14:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34464 "EHLO
+        id S238294AbiKPNOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 08:14:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233463AbiKPNOL (ORCPT
+        with ESMTP id S233759AbiKPNON (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 08:14:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04437391D4
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 05:14:10 -0800 (PST)
+        Wed, 16 Nov 2022 08:14:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 021C331225
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 05:14:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D520BB81D47
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 13:14:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9DDDC433D6;
-        Wed, 16 Nov 2022 13:14:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B39FDB81D54
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 13:14:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0623AC433C1;
+        Wed, 16 Nov 2022 13:14:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668604447;
-        bh=cLYTO4vzhEsQDvMU8RCQM2yBcrr1qFys1msCOJt3MaQ=;
+        s=k20201202; t=1668604449;
+        bh=ucd5lfEzQabKMvcHK4jf0v8ok9b876G+oG77ASjmgX4=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=GKYxrTGEoXaTqBDSkiDsykuHAZ0SuoRXVXtjmB1WkqMW/yV0gL8dDAHWlWg+Di89i
-         LKahkQ695UGzpLTuoTR7txmKBlWRiOW/v+UrfWAwFVlqADYUCX96SaxLo7EdL/akb/
-         uz52Vb1RXTAoW2beKh7Eoj6VuwmfMEia5rJW//rM7Y3th0BiqR+9UjkN9z5o+hXFn1
-         bvHya+Sc1WEK8I8HcBNRWh8rPPe0Bpf36Z4LT8o2QpiNTXe2xF2RYQ9xMrjGOFap2T
-         mC91Dnbu2F8qHUPfi4WsF//Qk95Bicr/yJeMEcISykhLctQ5xsRo7LLrCwfuYwTAyl
-         r6Yu6m9rUE3dw==
+        b=Uqi0rxRW9OvAKhHdWONzo57F9/AH9fyfN/5OBZCt3Dw7+RU0NTFMSwLqNwCaHh0wq
+         Abph1MCOc6FWsthXsgJeu6ZSOlYpcUkZ440W1YXuyKtBSjFZO/Q25VpMMdWjpOcxWK
+         hNyGu8d7baGoWF5fPVkUYXbwlSEmJGZcS0JxDieImnnchb3KhfxcnyhY/ruvWbHj72
+         v0Fpvpq2TqpIwZZ3hbUPDSSXOZnbMhX2p2z31CWHYX3Ue7kzS32hl8I3Xz5RIrsfWo
+         LYxQaoxZaYMzgoLnlGvSmyS6SGDK3kkJUcXEQJn7PWbesZ8IxvETmX9lwuscnpAjbN
+         0ZYo8L1c5xFDA==
 From:   Mark Brown <broonie@kernel.org>
-To:     Yang Yingliang <yangyingliang@huawei.com>,
-        linux-kernel@vger.kernel.org
-Cc:     lgirdwood@gmail.com
-In-Reply-To: <20221116092943.1668326-1-yangyingliang@huawei.com>
-References: <20221116092943.1668326-1-yangyingliang@huawei.com>
-Subject: Re: [PATCH] regulator: rt5759: fix OOB in validate_desc()
-Message-Id: <166860444597.370809.18015818974561170969.b4-ty@kernel.org>
-Date:   Wed, 16 Nov 2022 13:14:05 +0000
+To:     mirq-linux@rere.qmqm.pl, vz@mleia.com, lgirdwood@gmail.com,
+        Zeng Heng <zengheng4@huawei.com>
+Cc:     liwei391@huawei.com, linux-kernel@vger.kernel.org
+In-Reply-To: <20221116074339.1024240-1-zengheng4@huawei.com>
+References: <20221116074339.1024240-1-zengheng4@huawei.com>
+Subject: Re: [PATCH v2] regulator: core: fix kobject release warning and memory leak in regulator_register()
+Message-Id: <166860444722.370809.11947195278889247340.b4-ty@kernel.org>
+Date:   Wed, 16 Nov 2022 13:14:07 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -54,24 +54,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Nov 2022 17:29:43 +0800, Yang Yingliang wrote:
-> I got the following OOB report:
+On Wed, 16 Nov 2022 15:43:39 +0800, Zeng Heng wrote:
+> Here is a warning report about lack of registered release()
+> from kobject lib:
 > 
->  BUG: KASAN: slab-out-of-bounds in validate_desc+0xba/0x109
->  Read of size 8 at addr ffff888107db8ff0 by task python3/253
->  Call Trace:
->   <TASK>
->   dump_stack_lvl+0x67/0x83
->   print_report+0x178/0x4b0
->   kasan_report+0x90/0x190
->   validate_desc+0xba/0x109
->   gpiod_set_value_cansleep+0x40/0x5a
->   regulator_ena_gpio_ctrl+0x93/0xfc
->   _regulator_do_enable.cold.61+0x89/0x163
->   set_machine_constraints+0x140a/0x159c
->   regulator_register.cold.73+0x762/0x10cd
->   devm_regulator_register+0x57/0xb0
->   rt5759_probe+0x3a0/0x4ac [rt5759_regulator]
+> Device '(null)' does not have a release() function, it is broken and must be fixed.
+> WARNING: CPU: 0 PID: 48430 at drivers/base/core.c:2332 device_release+0x104/0x120
+> Call Trace:
+>  kobject_put+0xdc/0x180
+>  put_device+0x1b/0x30
+>  regulator_register+0x651/0x1170
+>  devm_regulator_register+0x4f/0xb0
 > 
 > [...]
 
@@ -81,8 +74,8 @@ Applied to
 
 Thanks!
 
-[1/1] regulator: rt5759: fix OOB in validate_desc()
-      commit: 7920e0fbced429ab18ad4402e3914146a6a0921b
+[1/1] regulator: core: fix kobject release warning and memory leak in regulator_register()
+      commit: 5f4b204b6b8153923d5be8002c5f7082985d153f
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
