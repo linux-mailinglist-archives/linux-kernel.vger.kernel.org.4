@@ -2,176 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 702BF62BB68
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:21:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB31762BB6B
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:21:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239065AbiKPLVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 06:21:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37838 "EHLO
+        id S238921AbiKPLVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 06:21:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238971AbiKPLVK (ORCPT
+        with ESMTP id S232823AbiKPLVU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 06:21:10 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97BAD4E41D;
-        Wed, 16 Nov 2022 03:09:06 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 57081336F8;
-        Wed, 16 Nov 2022 11:09:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1668596945; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0A7d1xzwheDqkXg7izTobfs56vTna3Rm7EV61mYuosY=;
-        b=HIH0uKbOsn3eGop72mSfQJlx484DBh9V4E/05LrCn+nmjelHDtWJt4iSOghOq3ca0TuDrD
-        TfsbceBYcfAlJbzeAF3Dg7YWjDy+b3IuQBYF4F/UqLzDrWm01ZkdI2a8uB22kEJQfP0//W
-        c+mD4PUazw74Qm04tc/6z5Zi1E14JY8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1668596945;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0A7d1xzwheDqkXg7izTobfs56vTna3Rm7EV61mYuosY=;
-        b=lXq2kmiQ5yHWm57D2vr6XcBF41+i/Q8Sq5YMEqO6/hfSkQCtSmO70IsdWCh6hVY00XmJFE
-        xd/pbLUBSXAq9RCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4990613480;
-        Wed, 16 Nov 2022 11:09:05 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id XATyEdHEdGMRZQAAMHmgww
-        (envelope-from <jack@suse.cz>); Wed, 16 Nov 2022 11:09:05 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 81F25A0709; Wed, 16 Nov 2022 12:09:04 +0100 (CET)
-Date:   Wed, 16 Nov 2022 12:09:04 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Gabriel Krisman Bertazi <krisman@suse.de>
-Cc:     axboe@kernel.dk, mingo@redhat.com, peterz@infradead.org,
-        jack@suse.cz, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org, liusong@linux.alibaba.com,
-        chaitanyak@nvidia.com
-Subject: Re: [PATCH 3/3] sbitmap: Try each queue to wake up at least one
- waiter
-Message-ID: <20221116110904.trhcoxqa6tipevdr@quack3>
-References: <20221115224553.23594-1-krisman@suse.de>
- <20221115224553.23594-4-krisman@suse.de>
+        Wed, 16 Nov 2022 06:21:20 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF2C40450
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 03:09:15 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id n21so2458962ejb.9
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 03:09:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=q56U9tO+bEviYqgOpEu8IESBaXGjd6XtmCO3RbZByhw=;
+        b=djFXN70bt59I60cgRaSA5NvbLVxYeEIER7jqVtipWv778Fop/JoWgZF5bOJ1QnjkYO
+         8neGIu78wWwpl50/b7y2p+yyoaf/9Ab1ae3gB1Idgftyh6/1XsJhW78ZEpOf9b5KH59e
+         2/XlQr7+/t6Mw5pi3g/2Ma7bRxDLG//ARYnZdIXmUUSwWU5ZKyzVutDwAn4rwfiArZkX
+         dDUoM2akhcnYETQfGTXDLXysZFaSMs/QGrnlgQ8VAVeZuBphL0tziYKXHzB4rw3vlvZC
+         ozoJmkxFEfA3WDNDaUMeHGpJ1FgGCkK9ucteDy4kPnq7zyPoqzm0foNWZtCqcGJXxKXs
+         oD+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=q56U9tO+bEviYqgOpEu8IESBaXGjd6XtmCO3RbZByhw=;
+        b=o5o+Hj6hQeLpwXlnJP9rEcLShIqnUPMjmauWEsYVynIiTto4J2cbGpqy880kSlAqs0
+         cG4DHCvK+v7vRx9WwYsZWku3oR143hUrsrfYNSFlw5tT/K6n9fOL5IEegb6effmji403
+         6uYGdhotjCS94skCeFFImO+cBE2faWqW4ukVwhSeWFcqjwymqDyDCPuXuzl9sd4BnoVF
+         X/iBLi0KTDQxbDXXbRH/JjP4qquWwUGTO84MnbeYoy8bfK8UJipUAxsiOTTSLES6VrvB
+         TBhP0Y9NRfJlsOqJWguX5vzV9vIJD5Jvfch6PQf63HFwXeuNTzSxHpo4JfEmuYNgTe4Y
+         Dtzg==
+X-Gm-Message-State: ANoB5pkBXkMLSOIP62g+57Mq1EHp909ZgyRYI+go9qVERrGHLX9TwSxS
+        fkHhjosVrTYxt1kgxSA9kJBTkg==
+X-Google-Smtp-Source: AA0mqf6fcwHzgOUNhm4JAYtCgCMJSV/ojZPf78wcs4L7DgOLE5ZNr+YeKVo4XPoNG6Y8vY8EWK08VA==
+X-Received: by 2002:a17:907:77c4:b0:78d:2af:a818 with SMTP id kz4-20020a17090777c400b0078d02afa818mr16848616ejc.675.1668596954427;
+        Wed, 16 Nov 2022 03:09:14 -0800 (PST)
+Received: from [192.168.31.208] ([194.29.137.22])
+        by smtp.gmail.com with ESMTPSA id de30-20020a1709069bde00b0073d796a1043sm6673058ejc.123.2022.11.16.03.09.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Nov 2022 03:09:14 -0800 (PST)
+Message-ID: <4e186edd-03d4-fd88-0987-b75cc94f96bb@linaro.org>
+Date:   Wed, 16 Nov 2022 12:09:07 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221115224553.23594-4-krisman@suse.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.2
+Subject: Re: [PATCH 08/10] arm64: dts: qcom: Add PMK8550 pmic dtsi
+To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+References: <20221116103146.2556846-1-abel.vesa@linaro.org>
+ <20221116103146.2556846-9-abel.vesa@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221116103146.2556846-9-abel.vesa@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 15-11-22 17:45:53, Gabriel Krisman Bertazi wrote:
-> Jan reported the new algorithm as merged might be problematic if the
-> queue being awaken becomes empty between the waitqueue_active inside
-> sbq_wake_ptr check and the wake up.  If that happens, wake_up_nr will
-> not wake up any waiter and we loose too many wake ups.  In order to
-> guarantee progress, we need to wake up at least one waiter here, if
-> there are any.  This now requires trying to wake up from every queue.
-> 
-> Instead of walking through all the queues with sbq_wake_ptr, this call
-> moves the wake up inside that function.  In a previous version of the
-> patch, I found that updating wake_index several times when walking
-> through queues had a measurable overhead.  This ensures we only update
-> it once, at the end.
-> 
-> Fixes: 4f8126bb2308 ("sbitmap: Use single per-bitmap counting to wake up queued tags")
-> Reported-by: Jan Kara <jack@suse.cz>
-> Signed-off-by: Gabriel Krisman Bertazi <krisman@suse.de>
 
-Elegant and looks good to me! Feel free to add:
 
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
-> ---
->  lib/sbitmap.c | 28 ++++++++++++----------------
->  1 file changed, 12 insertions(+), 16 deletions(-)
+On 16/11/2022 11:31, Abel Vesa wrote:
+> From: Neil Armstrong <neil.armstrong@linaro.org>
 > 
-> diff --git a/lib/sbitmap.c b/lib/sbitmap.c
-> index bea7984f7987..586deb333237 100644
-> --- a/lib/sbitmap.c
-> +++ b/lib/sbitmap.c
-> @@ -560,12 +560,12 @@ void sbitmap_queue_min_shallow_depth(struct sbitmap_queue *sbq,
->  }
->  EXPORT_SYMBOL_GPL(sbitmap_queue_min_shallow_depth);
->  
-> -static struct sbq_wait_state *sbq_wake_ptr(struct sbitmap_queue *sbq)
-> +static void __sbitmap_queue_wake_up(struct sbitmap_queue *sbq, int nr)
->  {
->  	int i, wake_index;
->  
->  	if (!atomic_read(&sbq->ws_active))
-> -		return NULL;
-> +		return;
->  
->  	wake_index = atomic_read(&sbq->wake_index);
->  	for (i = 0; i < SBQ_WAIT_QUEUES; i++) {
-> @@ -579,20 +579,22 @@ static struct sbq_wait_state *sbq_wake_ptr(struct sbitmap_queue *sbq)
->  		 */
->  		wake_index = sbq_index_inc(wake_index);
->  
-> -		if (waitqueue_active(&ws->wait)) {
-> -			if (wake_index != atomic_read(&sbq->wake_index))
-> -				atomic_set(&sbq->wake_index, wake_index);
-> -			return ws;
-> -		}
-> +		/*
-> +		 * It is sufficient to wake up at least one waiter to
-> +		 * guarantee forward progress.
-> +		 */
-> +		if (waitqueue_active(&ws->wait) &&
-> +		    wake_up_nr(&ws->wait, nr))
-> +			break;
->  	}
->  
-> -	return NULL;
-> +	if (wake_index != atomic_read(&sbq->wake_index))
-> +		atomic_set(&sbq->wake_index, wake_index);
->  }
->  
->  void sbitmap_queue_wake_up(struct sbitmap_queue *sbq, int nr)
->  {
->  	unsigned int wake_batch = READ_ONCE(sbq->wake_batch);
-> -	struct sbq_wait_state *ws = NULL;
->  	unsigned int wakeups;
->  
->  	if (!atomic_read(&sbq->ws_active))
-> @@ -604,16 +606,10 @@ void sbitmap_queue_wake_up(struct sbitmap_queue *sbq, int nr)
->  	do {
->  		if (atomic_read(&sbq->completion_cnt) - wakeups < wake_batch)
->  			return;
-> -
-> -		if (!ws) {
-> -			ws = sbq_wake_ptr(sbq);
-> -			if (!ws)
-> -				return;
-> -		}
->  	} while (!atomic_try_cmpxchg(&sbq->wakeup_cnt,
->  				     &wakeups, wakeups + wake_batch));
->  
-> -	wake_up_nr(&ws->wait, wake_batch);
-> +	__sbitmap_queue_wake_up(sbq, wake_batch);
->  }
->  EXPORT_SYMBOL_GPL(sbitmap_queue_wake_up);
->  
-> -- 
-> 2.35.3
+> Add nodes for PMK8550 in separate dtsi file.
 > 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> --- >   arch/arm64/boot/dts/qcom/pmk8550.dtsi | 54 +++++++++++++++++++++++++++
+>   1 file changed, 54 insertions(+)
+>   create mode 100644 arch/arm64/boot/dts/qcom/pmk8550.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/pmk8550.dtsi b/arch/arm64/boot/dts/qcom/pmk8550.dtsi
+> new file mode 100644
+> index 000000000000..1f707202f5da
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/pmk8550.dtsi
+> @@ -0,0 +1,54 @@
+> +// SPDX-License-Identifier: BSD-3-Clause
+> +/*
+> + * Copyright (c) 2022, Linaro Limited
+> + */
+> +
+> +#include <dt-bindings/input/input.h>
+> +#include <dt-bindings/input/linux-event-codes.h>
+> +#include <dt-bindings/interrupt-controller/irq.h>
+> +#include <dt-bindings/spmi/spmi.h>
+> +
+> +&spmi_bus {
+> +	pmk8550: pmic@0 {
+> +		compatible = "qcom,pm8550", "qcom,spmi-pmic";
+> +		reg = <0x0 SPMI_USID>;
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		pmk8550_pon: pon@1300 {
+> +			compatible = "qcom,pm8998-pon";
+Don't you need to specify the PBS register too for this PMIC?
+
+Other than that:
+
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+
+> +			reg = <0x1300>;
+> +
+> +			pon_pwrkey: pwrkey {
+> +				compatible = "qcom,pmk8350-pwrkey";
+> +				interrupts = <0x0 0x13 0x7 IRQ_TYPE_EDGE_BOTH>;
+> +				linux,code = <KEY_POWER>;
+> +				status = "disabled";
+> +			};
+> +
+> +			pon_resin: resin {
+> +				compatible = "qcom,pmk8350-resin";
+> +				interrupts = <0x0 0x13 0x6 IRQ_TYPE_EDGE_BOTH>;
+> +				status = "disabled";
+> +			};
+> +		};
+> +
+> +		pmk8550_rtc: rtc@6100 {
+> +			compatible = "qcom,pmk8350-rtc";
+> +			reg = <0x6100>, <0x6200>;
+> +			reg-names = "rtc", "alarm";
+> +			interrupts = <0x0 0x62 0x1 IRQ_TYPE_EDGE_RISING>;
+> +			status = "disabled";
+> +		};
+> +
+> +		pmk8550_gpios: gpio@8800 {
+> +			compatible = "qcom,pmk8550-gpio", "qcom,spmi-gpio";
+> +			reg = <0xb800>;
+> +			gpio-controller;
+> +			gpio-ranges = <&pmk8550_gpios 0 0 6>;
+> +			#gpio-cells = <2>;
+> +			interrupt-controller;
+> +			#interrupt-cells = <2>;
+> +		};
+> +	};
+> +};
