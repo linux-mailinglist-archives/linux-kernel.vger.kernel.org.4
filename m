@@ -2,120 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F267762B981
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 11:42:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6578262B9A6
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 11:44:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233806AbiKPKma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 05:42:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52022 "EHLO
+        id S233873AbiKPKod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 05:44:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233397AbiKPKlp (ORCPT
+        with ESMTP id S233819AbiKPKoO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 05:41:45 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A99B44046C
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:29:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668594599; x=1700130599;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=qHaY1k9/440h7Ozk3wkx+/ThLOKlts/6OCB+AvN1sSk=;
-  b=iz0Ezs1VKdgvGB4dZfhAoOaNSkVcnd0x09RvcRQata5yWVPSRqGYNeCh
-   070kizeiQvm3Jg2ZVzlOvCCsytxqn+KRh6XuikHOm5k0UQZgz6LmWc/55
-   BHZIZGFWBHv+TscrfelAyUoUq8G7XzBAkqTgxFTiBRO2Y/vy47sRd8iEg
-   wk2TrQ2ia7MZKE9ZP/jluqmyopYvtHqiHuzoaGvGmqFdgHWCVAPcJfAin
-   040dAAh+s+gu7zQ4WrqECRxt4lHW1R/+r7cjUYiQOTuz7DdTc3ihBxbfs
-   DKzC/blCPZHdsSdvMeQw+mMg13sc/9aeRVLlbBjRp4lfNPEPD5IkRG1/f
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="398798092"
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="398798092"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 02:29:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="884347401"
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="884347401"
-Received: from lkp-server01.sh.intel.com (HELO ebd99836cbe0) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 16 Nov 2022 02:29:58 -0800
-Received: from kbuild by ebd99836cbe0 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ovFg5-0002Fn-2R;
-        Wed, 16 Nov 2022 10:29:57 +0000
-Date:   Wed, 16 Nov 2022 18:29:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/mm] BUILD SUCCESS
- f2089aa0cd8e52564240a93ea1e4bb643c0ed34c
-Message-ID: <6374bb9f.ZDXNCo/BqA/ZQK2A%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Wed, 16 Nov 2022 05:44:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9750C2AEA
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:31:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668594680;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=KMf1wj6uhiThKc0LO2n9P1YxDQHLdC8FGGp8WLlmHBQ=;
+        b=by60+Rutuomb40P5INSp5CVUrf5x4FAjz27tz+NpBEr0wFhYNpN8bsikay0Qh7+BK3MogA
+        EwK/zCHLO/RrmCz+hRIpfaxoU+KDXxm5Wk15VEXx7PbwhlrV2+Na+DRA4p/PogvjTLIHkv
+        GdrlMUOhPbLUByJtRrig27OC1gOZyio=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-624-7SY8pOamOjCEh56wKFscnQ-1; Wed, 16 Nov 2022 05:31:17 -0500
+X-MC-Unique: 7SY8pOamOjCEh56wKFscnQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 49D5A1C09B8D;
+        Wed, 16 Nov 2022 10:31:15 +0000 (UTC)
+Received: from plouf.redhat.com (unknown [10.39.194.179])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7063240C83AA;
+        Wed, 16 Nov 2022 10:31:14 +0000 (UTC)
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+To:     Jiri Kosina <jikos@kernel.org>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: [PATCH] HID: bpf: return non NULL data pointer when CONFIG_HID_BPF is not set
+Date:   Wed, 16 Nov 2022 11:31:10 +0100
+Message-Id: <20221116103110.1746497-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/mm
-branch HEAD: f2089aa0cd8e52564240a93ea1e4bb643c0ed34c  x86/kasan: Populate shadow for shared chunk of the CPU entry area
+dispatch_hid_bpf_device_event() is supposed to return either an error,
+or a valid pointer to memory containing the data.
 
-elapsed time: 721m
+Returning NULL simply makes a segfault when CONFIG_HID_BPF is not set
+for any processed event.
 
-configs tested: 38
-configs skipped: 74
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+---
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+This was detected by my own CI. Yes, a little bit embarrassing...
 
-gcc tested configs:
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-i386                          randconfig-a001
-x86_64                           rhel-8.3-syz
-i386                          randconfig-a003
-x86_64                        randconfig-a004
-x86_64                           rhel-8.3-kvm
-x86_64                        randconfig-a002
-x86_64                         rhel-8.3-kunit
-x86_64                        randconfig-a006
-x86_64                          rhel-8.3-func
-x86_64                               rhel-8.3
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-i386                          randconfig-a005
-x86_64                           allyesconfig
-i386                                defconfig
-i386                             allyesconfig
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                            allnoconfig
-ia64                             allmodconfig
+It applies on top of for-6.2/hid-bpf in case it was not obvious
 
-clang tested configs:
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-x86_64                        randconfig-a005
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
+Cheers,
+Benjamin
 
+---
+
+ include/linux/hid_bpf.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/linux/hid_bpf.h b/include/linux/hid_bpf.h
+index 9b11f8f25ad5..3ca85ab91325 100644
+--- a/include/linux/hid_bpf.h
++++ b/include/linux/hid_bpf.h
+@@ -148,7 +148,7 @@ void hid_bpf_device_init(struct hid_device *hid);
+ u8 *call_hid_bpf_rdesc_fixup(struct hid_device *hdev, u8 *rdesc, unsigned int *size);
+ #else /* CONFIG_HID_BPF */
+ static inline u8 *dispatch_hid_bpf_device_event(struct hid_device *hid, enum hid_report_type type,
+-						u8 *data, u32 *size, int interrupt) { return NULL; }
++						u8 *data, u32 *size, int interrupt) { return data; }
+ static inline int hid_bpf_connect_device(struct hid_device *hdev) { return 0; }
+ static inline void hid_bpf_disconnect_device(struct hid_device *hdev) {}
+ static inline void hid_bpf_destroy_device(struct hid_device *hid) {}
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.3
+
