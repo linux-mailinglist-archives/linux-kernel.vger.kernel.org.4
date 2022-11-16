@@ -2,201 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED71962B3DC
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 08:24:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E84862B3E0
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 08:26:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231845AbiKPHWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 02:22:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44226 "EHLO
+        id S231890AbiKPH0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 02:26:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231183AbiKPHWS (ORCPT
+        with ESMTP id S229531AbiKPH0l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 02:22:18 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCBBA193
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 23:22:18 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-36810cfa61fso154636587b3.6
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 23:22:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NO6Jy27duk4navDIf91BiAlCfPwecqqBj66fQCAI5+k=;
-        b=Pr7mjdcYb4qAEw3uOgulSRygcajgBXTmQtAjMOaT4ntJSmqQPXKpb2/w3lKfSLncYU
-         iJB3rB6o6rbI5+Ulkzx5Vle1i67dxwFL9s45ZSE+3wwN4PQCTR8uR59jgQdpzQtvX3ln
-         9CeyrdspkbVCWBDKJySYuge6+beWXNM61UM6BnQtSL8y7boc8j/X58P071TDKAGD3pJ7
-         esUo7Cudp+Jg4L72D+3gQ2eeI/UxkEUfSkPmPJU7Jvh3zTG1+mlSvI7jspnqocGA/hSZ
-         TYbBphk5VzKjXeQHjL4fvvRAr0aVHQAi8WtOY8wpCklTel+uGRpCJI5S7ZLhekCsnQ56
-         HteA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NO6Jy27duk4navDIf91BiAlCfPwecqqBj66fQCAI5+k=;
-        b=AcVbWuoV/t3/2ZBsPIqL8VABi0XIAIadkr47cAGLdL7nYxn9KonF3PPipsK7jxmd60
-         QnRCJ1utlDvrnqZlnWJor1ABrigS9tWmGFb6/DlNdKugp21pZlyq9bO6ysf2pRux0E+5
-         lZxb/BzFS+cWhwxAjuv5ehneObmd1e0EofNwfERcA+vTteiTQ75n9s1/a4Ld9UujLYbV
-         J5gJdB40P6sGIFitPY2ZYIfGfEcQrp8T3uc/F2tzlu3H8zPFo2/I31C9dE8X4czei0mG
-         RVy8Oui8WtSriBcV4YCD+A4R7iE9OYtRTtb7Q6nNAasM38yDP8aZn4kfA8elqjGfRv7n
-         OjNA==
-X-Gm-Message-State: ANoB5pnb+SsniBm2T/cerRtu8zsaTixwn50b1bDGTMmoGJH+3p4s+Tu1
-        GbxyK3YZiIdYAtE9ZanJjUD63v1fSZ+P
-X-Google-Smtp-Source: AA0mqf6/s9UDBseMvwO0B9sUanmLV3Smc5IQvElHLCvgzuhy8jQ9dnTHlYJUB2ggKxcTcdYTeeB/U7gLdk9m
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:bf0f:58f3:342e:c1ec])
- (user=irogers job=sendgmr) by 2002:a25:2fd6:0:b0:6bc:738d:65c9 with SMTP id
- v205-20020a252fd6000000b006bc738d65c9mr18993829ybv.521.1668583337411; Tue, 15
- Nov 2022 23:22:17 -0800 (PST)
-Date:   Tue, 15 Nov 2022 23:22:11 -0800
-In-Reply-To: <20221116072211.2837834-1-irogers@google.com>
-Message-Id: <20221116072211.2837834-2-irogers@google.com>
-Mime-Version: 1.0
-References: <20221116072211.2837834-1-irogers@google.com>
-X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Subject: [PATCH 1/1] perf build: Use tools/lib headers from install path
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        bpf@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 16 Nov 2022 02:26:41 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9C21BA446;
+        Tue, 15 Nov 2022 23:26:39 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3ADCB13D5;
+        Tue, 15 Nov 2022 23:26:45 -0800 (PST)
+Received: from bogus (unknown [10.57.6.137])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E8E913F73B;
+        Tue, 15 Nov 2022 23:26:36 -0800 (PST)
+Date:   Wed, 16 Nov 2022 07:26:33 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Pierre Gondois <pierre.gondois@arm.com>
+Cc:     linux-kernel@vger.kernel.org, Rob.Herring@arm.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: Re: [PATCH -next] cacheinfo: Remove of_node_put() for fw_token
+Message-ID: <20221116072633.igvqiimtx2pzaa37@bogus>
+References: <20221115220520.2076189-1-pierre.gondois@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221115220520.2076189-1-pierre.gondois@arm.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Switch -I from tools/lib to the install path for the tools/lib
-libraries. Add the include_headers build targets to prepare target, as
-well as pmu-events.c compilation that dependes on libperf.
+On Tue, Nov 15, 2022 at 11:05:20PM +0100, Pierre Gondois wrote:
+> fw_token is used for DT/ACPI systems to identify CPUs sharing caches.
+> For DT based systems, fw_token is set to a pointer to a DT node.
+> 
+> commit ("cacheinfo: Decrement refcount in cache_setup_of_node()")
 
-Signed-off-by: Ian Rogers <irogers@google.com>
-Acked-by: Namhyung Kim <namhyung@kernel.org>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Nicolas Schier <nicolas@fjasle.eu>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Stephane Eranian <eranian@google.com>
-Cc: bpf@vger.kernel.org
-Link: http://lore.kernel.org/lkml/20221109184914.1357295-15-irogers@google.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- tools/perf/Makefile.config |  2 --
- tools/perf/Makefile.perf   | 14 +++++++++++++-
- 2 files changed, 13 insertions(+), 3 deletions(-)
+Commit 3da72e18371c ("cacheinfo: Decrement refcount in cache_setup_of_node()")
 
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index a7f6c0669fae..9cc3c48f3288 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -349,7 +349,6 @@ ifeq ($(DEBUG),0)
-   endif
- endif
- 
--INC_FLAGS += -I$(srctree)/tools/lib/perf/include
- INC_FLAGS += -I$(src-perf)/util/include
- INC_FLAGS += -I$(src-perf)/arch/$(SRCARCH)/include
- INC_FLAGS += -I$(srctree)/tools/include/
-@@ -367,7 +366,6 @@ endif
- 
- INC_FLAGS += -I$(src-perf)/util
- INC_FLAGS += -I$(src-perf)
--INC_FLAGS += -I$(srctree)/tools/lib/
- 
- CORE_CFLAGS += -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE
- 
-diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index 6c1a2a3ccc38..dd096aba4430 100644
---- a/tools/perf/Makefile.perf
-+++ b/tools/perf/Makefile.perf
-@@ -305,6 +305,7 @@ LIBTRACEEVENT_INCLUDE = $(LIBTRACEEVENT_DESTDIR)/include
- LIBTRACEEVENT = $(LIBTRACEEVENT_OUTPUT)/libtraceevent.a
- export LIBTRACEEVENT
- LIBTRACEEVENT_DYNAMIC_LIST = $(LIBTRACEEVENT_PLUGINS_OUTPUT)/libtraceevent-dynamic-list
-+CFLAGS += -I$(LIBTRACEEVENT_OUTPUT)/include
- 
- #
- # The static build has no dynsym table, so this does not work for
-@@ -322,6 +323,7 @@ LIBAPI_DESTDIR = $(LIBAPI_OUTPUT)
- LIBAPI_INCLUDE = $(LIBAPI_DESTDIR)/include
- LIBAPI = $(LIBAPI_OUTPUT)/libapi.a
- export LIBAPI
-+CFLAGS += -I$(LIBAPI_OUTPUT)/include
- 
- ifneq ($(OUTPUT),)
-   LIBBPF_OUTPUT = $(abspath $(OUTPUT))/libbpf
-@@ -331,6 +333,7 @@ endif
- LIBBPF_DESTDIR = $(LIBBPF_OUTPUT)
- LIBBPF_INCLUDE = $(LIBBPF_DESTDIR)/include
- LIBBPF = $(LIBBPF_OUTPUT)/libbpf.a
-+CFLAGS += -I$(LIBBPF_OUTPUT)/include
- 
- ifneq ($(OUTPUT),)
-   LIBSUBCMD_OUTPUT = $(abspath $(OUTPUT))/libsubcmd
-@@ -340,6 +343,7 @@ endif
- LIBSUBCMD_DESTDIR = $(LIBSUBCMD_OUTPUT)
- LIBSUBCMD_INCLUDE = $(LIBSUBCMD_DESTDIR)/include
- LIBSUBCMD = $(LIBSUBCMD_OUTPUT)/libsubcmd.a
-+CFLAGS += -I$(LIBSUBCMD_OUTPUT)/include
- 
- ifneq ($(OUTPUT),)
-   LIBSYMBOL_OUTPUT = $(abspath $(OUTPUT))/libsymbol
-@@ -349,6 +353,7 @@ endif
- LIBSYMBOL_DESTDIR = $(LIBSYMBOL_OUTPUT)
- LIBSYMBOL_INCLUDE = $(LIBSYMBOL_DESTDIR)/include
- LIBSYMBOL = $(LIBSYMBOL_OUTPUT)/libsymbol.a
-+CFLAGS += -I$(LIBSYMBOL_OUTPUT)/include
- 
- ifneq ($(OUTPUT),)
-   LIBPERF_OUTPUT = $(abspath $(OUTPUT))/libperf
-@@ -359,6 +364,7 @@ LIBPERF_DESTDIR = $(LIBPERF_OUTPUT)
- LIBPERF_INCLUDE = $(LIBPERF_DESTDIR)/include
- LIBPERF = $(LIBPERF_OUTPUT)/libperf.a
- export LIBPERF
-+CFLAGS += -I$(LIBPERF_OUTPUT)/include
- 
- # python extension build directories
- PYTHON_EXTBUILD     := $(OUTPUT)python_ext_build/
-@@ -691,7 +697,7 @@ build := -f $(srctree)/tools/build/Makefile.build dir=. obj
- $(PERF_IN): prepare FORCE
- 	$(Q)$(MAKE) $(build)=perf
- 
--$(PMU_EVENTS_IN): FORCE
-+$(PMU_EVENTS_IN): FORCE prepare
- 	$(Q)$(MAKE) -f $(srctree)/tools/build/Makefile.build dir=pmu-events obj=pmu-events
- 
- $(OUTPUT)perf: $(PERFLIBS) $(PERF_IN) $(PMU_EVENTS_IN) $(LIBTRACEEVENT_DYNAMIC_LIST)
-@@ -774,6 +780,12 @@ prepare: $(OUTPUT)PERF-VERSION-FILE $(OUTPUT)common-cmds.h archheaders $(drm_ioc
- 	$(rename_flags_array) \
- 	$(arch_errno_name_array) \
- 	$(sync_file_range_arrays) \
-+	$(LIBAPI) \
-+	$(LIBBPF) \
-+	$(LIBPERF) \
-+	$(LIBSUBCMD) \
-+	$(LIBSYMBOL) \
-+	$(LIBTRACEEVENT) \
- 	bpf-skel
- 
- $(OUTPUT)%.o: %.c prepare FORCE
+> doesn't increment the refcount of fw_token anymore in
+> cache_setup_of_node(). fw_token is indeed used as a token and not
+> as a (struct device_node*), so no reference to fw_token should be
+> kept.
+> 
+> However, [1] is triggered when hotplugging a CPU multiple times
+> since cache_shared_cpu_map_remove() decrements the refcount to
+> fw_token at each CPU unplugging, eventually reaching 0.
+> 
+> Remove of_node_put() for fw_token in cache_shared_cpu_map_remove().
+> 
+> [1]
+> [   53.651182] ------------[ cut here ]------------
+> [   53.651186] refcount_t: saturated; leaking memory.
+> [   53.651223] WARNING: CPU: 4 PID: 32 at lib/refcount.c:22 refcount_warn_saturate (lib/refcount.c:22 (discriminator 3))
+> [   53.651241] Modules linked in:
+> [   53.651249] CPU: 4 PID: 32 Comm: cpuhp/4 Tainted: G        W          6.1.0-rc1-14091-g9fdf2ca7b9c8 #76
+> [   53.651261] Hardware name: ARM LTD ARM Juno Development Platform/ARM Juno Development Platform, BIOS EDK II Oct 31 2022
+> [   53.651268] pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [   53.651279] pc : refcount_warn_saturate (lib/refcount.c:22 (discriminator 3))
+> [   53.651293] lr : refcount_warn_saturate (lib/refcount.c:22 (discriminator 3))
+> [...]
+> [   53.651513] Call trace:
+> [...]
+> [   53.651735] of_node_release (drivers/of/dynamic.c:335)
+> [   53.651750] kobject_put (lib/kobject.c:677 lib/kobject.c:704 ./include/linux/kref.h:65 lib/kobject.c:721)
+> [   53.651762] of_node_put (drivers/of/dynamic.c:49)
+> [   53.651776] free_cache_attributes.part.0 (drivers/base/cacheinfo.c:712)
+> [   53.651792] cacheinfo_cpu_pre_down (drivers/base/cacheinfo.c:718)
+> [   53.651807] cpuhp_invoke_callback (kernel/cpu.c:247 (discriminator 4))
+> [   53.651819] cpuhp_thread_fun (kernel/cpu.c:785)
+> [   53.651832] smpboot_thread_fn (kernel/smpboot.c:164 (discriminator 3))
+> [   53.651847] kthread (kernel/kthread.c:376)
+> [   53.651858] ret_from_fork (arch/arm64/kernel/entry.S:861)
+> [   53.651869] ---[ end trace 0000000000000000 ]---
+>
+
+Please remove the timestamp as they add no value to the commit log.
+Also it is worth adding IMO:
+Fixes: 3da72e18371c ("cacheinfo: Decrement refcount in cache_setup_of_node()")
+
+I did a quick test and so,
+Tested-by: Sudeep Holla <sudeep.holla@arm.com>
+Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+
+Thanks for fixing the quickly and sorry for not noticing the extra of_node_put
+even though I thought if it was just incrementing the refcount earlier.
+
 -- 
-2.38.1.431.g37b22c650d-goog
-
+Regards,
+Sudeep
