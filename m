@@ -2,172 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25E4D62C6CC
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 18:49:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DBA162C6D7
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 18:50:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238892AbiKPRt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 12:49:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33310 "EHLO
+        id S238722AbiKPRuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 12:50:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238803AbiKPRtU (ORCPT
+        with ESMTP id S233840AbiKPRux (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 12:49:20 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2082.outbound.protection.outlook.com [40.107.220.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C5D96068A;
-        Wed, 16 Nov 2022 09:49:19 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZH9E0mdu1UhOcbt9KW3MuIri6RWKYxyKBcil7r9auaRwPOPut0ickE4Zb7RA3M4CRFXNQUpYTL3YAR29zfC4A1uxf1k3S9vq+SR69Qhjr4IpM+2uOVX0EPqH3Z9xDD2scK8mcWV8CJngTK0V2m1acswcclB2JwOLq98GAm5NQY0p5ELMtBDHiwoD6ns1syPdxjZFkLmXhzYTSagVqVMsVSi7TCLvvujROw+EwLxb2qkyqN81LfrjeoCoqBT9PWAl0nP2/KdqzzKogAdrfKUu+3RgPZ9O2Gu46EkTZAhDd8XpIQxD0OQtmJACv+0H7ASc51GrN4kji8Ive1uoCYIw0Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aVbWblcr5UHpUoxBEeZLfGVj8gE27kVX8S61D/74qFA=;
- b=WLvlof6AxR2p+qIjxLcxOrGDz59JojK+BsVRM7Ja4vaJD3UmKJF3xP61+/cE7B7u/98/P8Jp2Abaz15T0WZc8OdGvRwNqsqwe0+4kSKfw6gLWoqPBHrMMbBRVJ8EC/+KAz4GXZqicI3yo6M9/sMwSwGFhNEfGjxf7aI4biBPVrshksRSEVY4lXQO/9FJIBy6ZmvVtgrApsLcnRxIeq7SpprK/rDyKhAJ2N4AtoOEp601obOoTbLZIoWxcer4f2uFgjzfX03HQ56YYVpiHJHWow0GlAl0H7HkjkaoOsSbbGdrAbOXDtwl7v2oNWubESOE0XdIs5lSJqBOk9CeE7ywdA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aVbWblcr5UHpUoxBEeZLfGVj8gE27kVX8S61D/74qFA=;
- b=SIfcTqKj4AyekMoSsl3CFB/EUfN7l9DuE7SNPPd3JplL1wGpwKKa0k6O3oYXU/JO3r+3UnXC+dN72c+eudyjGbuLs9u5nFzplIZmIAS3OX5FdsckHtIE0MzOVWFkblt65ab2wBi6MuMtv9f3r2/UUkK/GGIX5TLloTxU7nJtWjPmETTJcXhHUR8k0ljProcCVGEuhSzMZ/HrkD3PO7wCmeahJKxSERE4+BAr2mgIT1tYYhLLMEILU37Qfm+mNOqW/3jgLXCvWmHYNvoVZBeZpTOWTbASUS2n6bG4nBOFsJpwlTVeO5c/QfnYbW9i04jFvDh+jmbXW7dwvV5OSv+jGA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by SN7PR12MB8145.namprd12.prod.outlook.com (2603:10b6:806:350::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.18; Wed, 16 Nov
- 2022 17:49:17 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f8b0:df13:5f8d:12a]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f8b0:df13:5f8d:12a%7]) with mapi id 15.20.5813.017; Wed, 16 Nov 2022
- 17:49:17 +0000
-Date:   Wed, 16 Nov 2022 13:49:15 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
-        Allen Hubbe <allenbh@gmail.com>,
-        "Ahmed S. Darwish" <darwi@linutronix.de>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [patch 12/39] genirq/msi: Add bus token to struct msi_domain_info
-Message-ID: <Y3Uim3pC3hy3HwH8@nvidia.com>
-References: <20221111120501.026511281@linutronix.de>
- <20221111122014.294554462@linutronix.de>
+        Wed, 16 Nov 2022 12:50:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2937E5E9DF;
+        Wed, 16 Nov 2022 09:50:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BDC7361EE5;
+        Wed, 16 Nov 2022 17:50:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F0DEC433C1;
+        Wed, 16 Nov 2022 17:50:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668621052;
+        bh=sYfpAzVzPlK94TgXFu2w+4Eiy5UZCKxlvYioVQA7W0g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=c+3Lf+uCHADtE0GCia3d2ky8ujiTrrIkuWOscMc1Cx8X0BK1qmCSc1aV7TqKmEOCN
+         AMmYUBsKkYe9F9DxfJGNnCXIe3WsLjwmtXiYB90z5c2X84kn4J4ojXQPjU97SNi70l
+         o8RtNTw/E28f7NQvVTLAufSyE9kBlDvvsmkFj71UPdg6Pg3Sw8mk7tYHdDrVQPe9gx
+         5v66uBM0i9fUkn81nwfz2KSfeGtkkOdJ7fwv2piNLIqusmdUAZqshABU5ppTHexBjn
+         PXO9AvKapEFQtHfzfB8R4TswHruXb66mGk9qwHGzAiLC13RFTJZBPlYJKlX/l9WcrV
+         m5do2id/2zeYg==
+Date:   Wed, 16 Nov 2022 17:50:46 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Michael Zhu <michael.zhu@starfivetech.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCH v4 0/3] Enable initial support for StarFive VisionFive V1
+ SBC
+Message-ID: <Y3Ui9mmcvuWMw2AL@spud>
+References: <20221017210542.979051-1-cristian.ciocaltea@collabora.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221111122014.294554462@linutronix.de>
-X-ClientProxiedBy: MN2PR22CA0028.namprd22.prod.outlook.com
- (2603:10b6:208:238::33) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SN7PR12MB8145:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4ff9e9fa-0196-4346-705f-08dac7fae1e4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JdgW1x+o6K7PSyyEQWDrsg41LwOOcgRVvBDFENrZ6Bdp/pAz9Dafyo2BeNishBG3eAT7Ql4lseiEDmr+tSc49kPOOt3cU5NP0XCCpxX6WcoESNw7v1sbJm8l55JEva1x2kORphdITJ3e/ctuCK8AfNGJE3SnOufMAdgTr9S42OCbnl32Hw9oqhB9wXQzzKMDCZN0K+i12/NRUzPd4VNm+gmg8ueK84XiTBpngvC32K22EI9SL3QLjsRk+OjFEZdX+J7ULBSro4M63sU0JYYDkd88+TkdYNozfWyYoF/hHLfVGdx1Veh0N/mabyvppYaqZn06r5+m7zGxXWsxxFCwiaAYD4TO9bawzjdrTT0dvxM7CAgWLl7DdMPE1kg9OHxhRwkh0Ppkp8q6nDjsNo5USb+Op1QIKPodqmoWe+BXQDyaEhakgGexD+eTLB2npjFQP5aV5rPJW4kFJg6B+bs9nvf+gTkcUxYTGYHyGHpAViCnXlhw8j47zmSb7kk9mkkhId6sXawH3eo232fOzP+pwL4ZI/SKOCnvVeGb43NbTMierqi/8bRFRRU04YBJ2VUh+kTCie3Eag/oKyqFejuHrZhbdy0cRXZsBrQErrS1kg94aZ+nc7vHcINp5D7bzEZMA1GpS3nh7LQLsc0jCkxLd2tp4MxcXMzSeHvqUE/gFyvDJXrW8yaRFbuCHSgalGqedw//GGz5odlIGY7qT2rLWA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(376002)(366004)(136003)(39860400002)(451199015)(5660300002)(7416002)(41300700001)(2906002)(6486002)(66556008)(8676002)(66476007)(66946007)(316002)(4326008)(54906003)(6916009)(6506007)(86362001)(2616005)(6512007)(83380400001)(478600001)(186003)(26005)(8936002)(38100700002)(36756003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?mI5rTn1F412KO9ruMqqTp7ydn5TBX5j8B1r4JO/I3kEixuP819WWJctxBE1M?=
- =?us-ascii?Q?KEY8k+OJbhY7IwRO8L+4nN4TJ6+p5PvE5Tv+03ZSv8ilV53lz7UqJqUcFhsU?=
- =?us-ascii?Q?Hfjhk9ND1p2/NVfVFLdJNtYWWQTZjJCOiiMnSnSlArHekKWMnmsWduRlZoCC?=
- =?us-ascii?Q?e4BkCyw8TnsanGtPfQY+Besaq5QGhHgkFRhnsQjs1wLFurcgKdYHXU6D15+b?=
- =?us-ascii?Q?mUdGXkofm21s1gwI8v5vo/LgrvITLA5KRpE4CnpPJCh/EBR2lraFKrZZXkA3?=
- =?us-ascii?Q?+pC8fko5r4aDKBkhJs9l1rPlwXKO/eVVMRjYZBZe8YnLMzG1FKVzaQ6B7gjI?=
- =?us-ascii?Q?iwz9Yqh9dYUESuV+CAWFP/bi/Lx1UTsihiJNAfS8Z69G1or0tOm/lhh+PI0F?=
- =?us-ascii?Q?ScDI48Z2e2NEGd1blrIxLWzQ2bS8vBEJXMVoY3N4OMUbiSYItkWzUnursjbT?=
- =?us-ascii?Q?aUeQctuH3TvyYhZgoDG8wf7qkAhaMvyr430HkdfAhbTYL/N+nN+CywxGNpGd?=
- =?us-ascii?Q?QSuzFtyL50u4pMzzGhqFaCbrM0Vx42kY3xA/x5g9+Mw14K8g4F7G775WYmbD?=
- =?us-ascii?Q?e+bqWa3HA8VhByTxXX6elkriUqkgF5fgb8ctGdFDMVIdIvLUHvfRJPKd19zq?=
- =?us-ascii?Q?IZtbrBvH3AAZVX/d30Gv8oZVHN/i58ULZW0tHI6Ym4NIH4c68YufEbUBiT5S?=
- =?us-ascii?Q?HpRP0vZZ20aZAK8SQ6M0N79vVUTR+DwwkHm73bQMSxL4U3bN1g8mND8YO78+?=
- =?us-ascii?Q?x2gZ7zjlqC0T9A+1nSt+YQSJdffZm7h3aUIG1A75nq3tuvs28ocsyoCeh737?=
- =?us-ascii?Q?KIwQjS0PdFgM4cl5XTYBxOc8Oixz+6FXam94BCh78XojaIfvuMCiif9cKaZ4?=
- =?us-ascii?Q?YOCCiYNDgR41hRgzf0/x9QBlP36sKfaIkSxZRIEP3EOmQ7S/l9NCM1SOmb0Z?=
- =?us-ascii?Q?fomZCjx/0OpwE8b70M7pk5aI5pnIM0y8jjS7egUJ+Fl6iLpDto7VKsgUf3dl?=
- =?us-ascii?Q?8vr7wZNCq3FaZYqy9PVr+YY947buA9a0+J1b7fZLKraWcilcpynHd4gIWigY?=
- =?us-ascii?Q?ZVa04y3NRlikDb6XBJjViyC9HATIgIlF4Olytzyy7T6c0ZcqjvSiaGLMwZEi?=
- =?us-ascii?Q?u+vOG+6D/XPRKj7gTD7bE8smFjuzX8jCzcZhgYdXe5V9/oX56zWHrYn0TwWS?=
- =?us-ascii?Q?ONzZm4K9Nk9dsjHTghX37OtN+cqfjcph58iteIyRjM7BFKxk6dFoZgn2bsak?=
- =?us-ascii?Q?RsEgOHSXU25PxVP4uRYw95KA17gfZH2D1UuDMQbxt2+wMgjkqgqM7qOlbu+Q?=
- =?us-ascii?Q?FZ2O1IHhOvVWjOyyY2UPhm63OKXDdLmwOlrr5HRwrRaly+aGEAlyfzDDkK6A?=
- =?us-ascii?Q?4rinZ8tbcAqjm2zdBv/EkoJw/bbf2B28SiMMXNQ0xaJoblizy3ZHrMPttF/p?=
- =?us-ascii?Q?6E8tsN0Kkct2Re6AaFaOB1ztjXHPQwUiFYlZF0ldnQNjF+1Zm8Xj9l4SvAi1?=
- =?us-ascii?Q?00+Zawa6yDhfZ5f0r6kug5SshDSuClTKF3/qJ6A7NFWmDx7NVL27lgC4UeAi?=
- =?us-ascii?Q?61qkf3tQHC4fL2onBiusGagApotr6FMIhvHPMyGw?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4ff9e9fa-0196-4346-705f-08dac7fae1e4
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Nov 2022 17:49:17.4129
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1Bv0P43cr4j2KiXUugb01rjekYovhjUYiORhcqoTegYWIjo59bOAFgoFocNwor85
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB8145
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20221017210542.979051-1-cristian.ciocaltea@collabora.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 02:54:33PM +0100, Thomas Gleixner wrote:
-> From: Ahmed S. Darwish <darwi@linutronix.de>
+On Tue, Oct 18, 2022 at 12:05:39AM +0300, Cristian Ciocaltea wrote:
+> The StarFive VisionFive V1 SBC [1] is similar with the already supported
+> BeagleV Starlight Beta board, both being based on the StarFive JH7100 SoC.
 > 
-> Add a bus token member to struct msi_domain_info and let
-> msi_create_irq_domain() set the bus token.
+> In addition to documenting the necessary compatibles, this patch series 
+> moves most of the content from jh7100-beaglev-starlight.dts to a new file
+> jh7100-common.dtsi, to be shared between the two boards.
 > 
-> That allows to remove the bus token updates at the call sites.
+> No other changes are required in order to successfully boot the board.
 > 
-> Suggested-by: Thomas Gleixner <tglx@linutronix.de>
-> Signed-off-by: Ahmed S. Darwish <darwi@linutronix.de>
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> ---
->  include/linux/msi.h |   19 +++++++++++--------
->  kernel/irq/msi.c    |    7 +++++--
->  2 files changed, 16 insertions(+), 10 deletions(-)
+> [1] https://github.com/starfive-tech/VisionFive
 
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+Hey Cristian,
 
->  struct msi_domain_info {
-> -	u32			flags;
-> -	struct msi_domain_ops	*ops;
-> -	struct irq_chip		*chip;
-> -	void			*chip_data;
-> -	irq_flow_handler_t	handler;
-> -	void			*handler_data;
-> -	const char		*handler_name;
-> -	void			*data;
-> +	u32				flags;
-> +	enum irq_domain_bus_token	bus_token;
-> +	struct msi_domain_ops		*ops;
-> +	struct irq_chip			*chip;
-> +	void				*chip_data;
-> +	irq_flow_handler_t		handler;
-> +	void				*handler_data;
-> +	const char			*handler_name;
-> +	void				*data;
->  };
+Apologies for the delay here, we've been sorting out re-routing RISC-V
+DT stuff via the SoC tree. That should be sorted now, so I have picked
+the series up. Should be at:
+https://git.kernel.org/conor/c/a3fe69160c7328a284ebc711ccb689f3beec42dc
 
-This is why I've been frowning on horizontal alignment :(
+Thanks,
+Conor.
 
-Jason
+> 
+> Changes in v4:
+>  - Rebased onto v6.1.0-rc1
+>  - Fixed a conflict in patch 2/3 as pinctrl-starfive.h has been renamed
+>    to pinctrl-starfive-jh7100.h
+> 
+> Changes in v3:
+>  - Added Reviewed-by tag from Krzysztof in patch 1/3
+>  - Optimized patch 2/3 by enabling copy detection on "git format-patch",
+>    as indicated by Krzysztof
+> 
+> Changes in v2:
+>  - Simplified documentation by using 'enum' instead of 'const' in 
+>    patch 1/3, according to Conor's review
+>  - Added Reviewed-by tags from Conor
+> 
+> Cristian Ciocaltea (3):
+>   dt-bindings: riscv: starfive: Add StarFive VisionFive V1 board
+>   riscv: dts: starfive: Add common DT for JH7100 based boards
+>   riscv: dts: starfive: Add StarFive VisionFive V1 device tree
+> 
+>  .../devicetree/bindings/riscv/starfive.yaml   |   4 +-
+>  arch/riscv/boot/dts/starfive/Makefile         |   2 +-
+>  .../dts/starfive/jh7100-beaglev-starlight.dts | 153 +-----------------
+>  ...aglev-starlight.dts => jh7100-common.dtsi} |   3 -
+>  .../jh7100-starfive-visionfive-v1.dts         |  20 +++
+>  5 files changed, 25 insertions(+), 157 deletions(-)
+>  copy arch/riscv/boot/dts/starfive/{jh7100-beaglev-starlight.dts => jh7100-common.dtsi} (96%)
+>  create mode 100644 arch/riscv/boot/dts/starfive/jh7100-starfive-visionfive-v1.dts
+> 
+> 
+> base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
+> -- 
+> 2.38.0
+> 
