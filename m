@@ -2,63 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04B6E62B6BD
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:40:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 714F762B6F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:54:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238763AbiKPJkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 04:40:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56938 "EHLO
+        id S229617AbiKPJx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 04:53:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238619AbiKPJkP (ORCPT
+        with ESMTP id S229801AbiKPJxz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 04:40:15 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38E802A72D;
-        Wed, 16 Nov 2022 01:40:12 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E4276336F0;
-        Wed, 16 Nov 2022 09:40:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1668591610; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4/X2nK8ikBpvrCgNSRXtJgM86JjBV4/Rkx2QajeAFT0=;
-        b=UBFvbD+agRHbD91x8CSH3dzjUQJeCTCdayzd/DQ85O/z0Omkg8hpry9jhbv1zkywLywP/I
-        obBy1voKhPnzLlLTkfZ95/OtcYRE4UmGdWwkKuA0Ovf8BQTIdXO1g8GMN41xPcuxZ/13ix
-        UWT7Bnt5ln817vnXocdrae0hO5Cal+U=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B67B0134CE;
-        Wed, 16 Nov 2022 09:40:10 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id xNQzK/qvdGN+OwAAMHmgww
-        (envelope-from <jgross@suse.com>); Wed, 16 Nov 2022 09:40:10 +0000
-Message-ID: <64372250-a413-076e-3b6d-2d263ee9c7f2@suse.com>
-Date:   Wed, 16 Nov 2022 10:40:10 +0100
+        Wed, 16 Nov 2022 04:53:55 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C80311A27
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:53:52 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id t25-20020a1c7719000000b003cfa34ea516so2514636wmi.1
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:53:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zze9Wsxt3ysTHHvg5WBu0SQosVjbcwx2aPdUf6crt3Y=;
+        b=I2T59KEQLxIXM2pHNfvD9YeKkkSHE4ZyMd/bqV2bIhQhCd4r7G3BFqEMlifLl2/V3U
+         Ltzz2PryU6B8uAKFDvsVQ1vtZoIrK9vgSISfVLVmvC111IWlhiu150wSuOeQnJ6nS591
+         EbyyF/lv+oHj3JMgx+8zk0gz81qJBc38w/3AY8cHqHQDXz76GRaAPK34tu5ONO4yvzJi
+         2AZTRHZQV9qWmZROHiHvF+90nX6/MmF+WWmcZMOj7hNAIEiOmXfJs2/gtzUTPmnerT3Y
+         SDwEvPH6Zu2ekiEIvkl//9IDw/jJhHIejKcAMlZV7e7jFfc0EIr02UqMzf+azaJwFDJT
+         h21A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=zze9Wsxt3ysTHHvg5WBu0SQosVjbcwx2aPdUf6crt3Y=;
+        b=bioXwwterD9Il9lbyldLOJ1NX/pqUj/FSi8oh55KP3fRcSdreda/qEshLiTvwcR5Nn
+         mQsN2618XmAecegmqe+JeiQWNFTOj8ao14c9Jll7DhYe2lTPtBr8KmikfEfiXJeXWZ0m
+         efWhXUpo5mpQx0toMkoDNi1ByBKu6uuEUpeQ6nMEjx0WfCKxQ8DuqgFj0wknZ20BiSVS
+         1pvlJ6X7SA1wlgXzkxsSC3J7eHcbai8LV9hbxbScvAwGIYlgbcLIKnMyCiEEixAUZPmx
+         1ajNwwX9zTcIta+tGKD9qWag0PFIM6kdjrWHqFHP/gAfMShfhtcJe2m/n2/afyKp1Hd6
+         4uhg==
+X-Gm-Message-State: ANoB5pkoEVPoTRhQdUhXTSInTrnt5chqZvVzbE2J6U2U0RXvE4u6Q31m
+        W0IwGRp+UmHEWXQE1DmGigsCbw==
+X-Google-Smtp-Source: AA0mqf450k4KT3b612+SvZbSE765F/0XKp3AXD24C9sDIk/4dxF+lDjo+r4A3/pJpT3ovdAyPzm4jg==
+X-Received: by 2002:a7b:ca43:0:b0:3cf:ade4:d529 with SMTP id m3-20020a7bca43000000b003cfade4d529mr1563443wml.193.1668592431026;
+        Wed, 16 Nov 2022 01:53:51 -0800 (PST)
+Received: from zen.linaroharston ([185.81.254.11])
+        by smtp.gmail.com with ESMTPSA id l42-20020a05600c1d2a00b003cf4eac8e80sm2160083wms.23.2022.11.16.01.53.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 01:53:50 -0800 (PST)
+Received: from zen (localhost [127.0.0.1])
+        by zen.linaroharston (Postfix) with ESMTP id B067B1FFB7;
+        Wed, 16 Nov 2022 09:53:49 +0000 (GMT)
+References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
+ <87k03xbvkt.fsf@linaro.org> <20221116050022.GC364614@chaop.bj.intel.com>
+User-agent: mu4e 1.9.2; emacs 28.2.50
+From:   Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        AKASHI Takahiro <takahiro.akashi@linaro.org>
+Subject: Re: [PATCH v9 0/8] KVM: mm: fd-based approach for supporting KVM
+Date:   Wed, 16 Nov 2022 09:40:23 +0000
+In-reply-to: <20221116050022.GC364614@chaop.bj.intel.com>
+Message-ID: <87v8nf8bte.fsf@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [tip: locking/urgent] locking: Fix qspinlock/x86 inline asm error
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org
-Cc:     Guo Jin <guoj17@chinatelecom.cn>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Nathan Chancellor <nathan@kernel.org>, x86@kernel.org
-References: <20221108060126.2505-1-guoj17@chinatelecom.cn>
- <166859051534.4906.7078966677789928700.tip-bot2@tip-bot2>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <166859051534.4906.7078966677789928700.tip-bot2@tip-bot2>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------5fG1cFs5K7SeC2tABgH3Dx7Z"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,134 +108,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------5fG1cFs5K7SeC2tABgH3Dx7Z
-Content-Type: multipart/mixed; boundary="------------NrKot2iyKhMn0dxG5T3hepPx";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org
-Cc: Guo Jin <guoj17@chinatelecom.cn>,
- "Peter Zijlstra (Intel)" <peterz@infradead.org>,
- Nathan Chancellor <nathan@kernel.org>, x86@kernel.org
-Message-ID: <64372250-a413-076e-3b6d-2d263ee9c7f2@suse.com>
-Subject: Re: [tip: locking/urgent] locking: Fix qspinlock/x86 inline asm error
-References: <20221108060126.2505-1-guoj17@chinatelecom.cn>
- <166859051534.4906.7078966677789928700.tip-bot2@tip-bot2>
-In-Reply-To: <166859051534.4906.7078966677789928700.tip-bot2@tip-bot2>
 
---------------NrKot2iyKhMn0dxG5T3hepPx
-Content-Type: multipart/mixed; boundary="------------ZKO1DIAyjWE0K2QT6D1hu5lX"
+Chao Peng <chao.p.peng@linux.intel.com> writes:
 
---------------ZKO1DIAyjWE0K2QT6D1hu5lX
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+> On Mon, Nov 14, 2022 at 11:43:37AM +0000, Alex Benn=C3=A9e wrote:
+>>=20
+>> Chao Peng <chao.p.peng@linux.intel.com> writes:
+>>=20
+>> <snip>
+>> > Introduction
+>> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>> > KVM userspace being able to crash the host is horrible. Under current
+>> > KVM architecture, all guest memory is inherently accessible from KVM
+>> > userspace and is exposed to the mentioned crash issue. The goal of this
+>> > series is to provide a solution to align mm and KVM, on a userspace
+>> > inaccessible approach of exposing guest memory.=20
+>> >
+>> > Normally, KVM populates secondary page table (e.g. EPT) by using a host
+>> > virtual address (hva) from core mm page table (e.g. x86 userspace page
+>> > table). This requires guest memory being mmaped into KVM userspace, but
+>> > this is also the source where the mentioned crash issue can happen. In
+>> > theory, apart from those 'shared' memory for device emulation etc, gue=
+st
+>> > memory doesn't have to be mmaped into KVM userspace.
+>> >
+>> > This series introduces fd-based guest memory which will not be mmaped
+>> > into KVM userspace. KVM populates secondary page table by using a
+>> > fd/offset pair backed by a memory file system. The fd can be created
+>> > from a supported memory filesystem like tmpfs/hugetlbfs and KVM can
+>> > directly interact with them with newly introduced in-kernel interface,
+>> > therefore remove the KVM userspace from the path of accessing/mmaping
+>> > the guest memory.=20
+>> >
+>> > Kirill had a patch [2] to address the same issue in a different way. It
+>> > tracks guest encrypted memory at the 'struct page' level and relies on
+>> > HWPOISON to reject the userspace access. The patch has been discussed =
+in
+>> > several online and offline threads and resulted in a design document [=
+3]
+>> > which is also the original proposal for this series. Later this patch
+>> > series evolved as more comments received in community but the major
+>> > concepts in [3] still hold true so recommend reading.
+>> >
+>> > The patch series may also be useful for other usages, for example, pure
+>> > software approach may use it to harden itself against unintentional
+>> > access to guest memory. This series is designed with these usages in
+>> > mind but doesn't have code directly support them and extension might be
+>> > needed.
+>>=20
+>> There are a couple of additional use cases where having a consistent
+>> memory interface with the kernel would be useful.
+>
+> Thanks very much for the info. But I'm not so confident that the current
+> memfd_restricted() implementation can be useful for all these usages.=20
+>
+>>=20
+>>   - Xen DomU guests providing other domains with VirtIO backends
+>>=20
+>>   Xen by default doesn't give other domains special access to a domains
+>>   memory. The guest can grant access to regions of its memory to other
+>>   domains for this purpose.=20
+>
+> I'm trying to form my understanding on how this could work and what's
+> the benefit for a DomU guest to provide memory through memfd_restricted().
+> AFAICS, memfd_restricted() can help to hide the memory from DomU userspac=
+e,
+> but I assume VirtIO backends are still in DomU uerspace and need access
+> that memory, right?
 
-T24gMTYuMTEuMjIgMTA6MjEsIHRpcC1ib3QyIGZvciBHdW8gSmluIHdyb3RlOg0KPiBUaGUg
-Zm9sbG93aW5nIGNvbW1pdCBoYXMgYmVlbiBtZXJnZWQgaW50byB0aGUgbG9ja2luZy91cmdl
-bnQgYnJhbmNoIG9mIHRpcDoNCj4gDQo+IENvbW1pdC1JRDogICAgIDIzZGYzOWZjNmEzNjE4
-M2FmNWU2ZTRmNDc1MjNmMWFkMmNkYzFkMzANCj4gR2l0d2ViOiAgICAgICAgaHR0cHM6Ly9n
-aXQua2VybmVsLm9yZy90aXAvMjNkZjM5ZmM2YTM2MTgzYWY1ZTZlNGY0NzUyM2YxYWQyY2Rj
-MWQzMA0KPiBBdXRob3I6ICAgICAgICBHdW8gSmluIDxndW9qMTdAY2hpbmF0ZWxlY29tLmNu
-Pg0KPiBBdXRob3JEYXRlOiAgICBUdWUsIDA4IE5vdiAyMDIyIDE0OjAxOjI2ICswODowMA0K
-PiBDb21taXR0ZXI6ICAgICBQZXRlciBaaWpsc3RyYSA8cGV0ZXJ6QGluZnJhZGVhZC5vcmc+
-DQo+IENvbW1pdHRlckRhdGU6IFdlZCwgMTYgTm92IDIwMjIgMTA6MTg6MDkgKzAxOjAwDQo+
-IA0KPiBsb2NraW5nOiBGaXggcXNwaW5sb2NrL3g4NiBpbmxpbmUgYXNtIGVycm9yDQo+IA0K
-PiBXaGVuIGNvbXBpbGluZyBsaW51eCA2LjEuMC1yYzMgY29uZmlndXJlZCB3aXRoIENPTkZJ
-R182NEJJVD15IGFuZA0KPiBDT05GSUdfUEFSQVZJUlRfU1BJTkxPQ0tTPXkgb24geDg2XzY0
-IHVzaW5nIExMVk0gMTEuMCwgYW4gZXJyb3I6DQo+ICI8aW5saW5lIGFzbT4gZXJyb3I6IGNo
-YW5nZWQgc2VjdGlvbiBmbGFncyBmb3IgLnNwaW5sb2NrLnRleHQsDQo+IGV4cGVjdGVkOjog
-MHg2IiBvY2N1cnJlZC4NCj4gDQo+IFRoZSByZWFzb24gaXMgdGhlIC5zcGlubG9jay50ZXh0
-IGluIGtlcm5lbC9sb2NraW5nL3FzcGlubG9jay5vDQo+IGlzIHVzZWQgbWFueSB0aW1lcywg
-YnV0IGl0cyBmbGFncyBhcmUgb21pdHRlZCBpbiBzdWJzZXF1ZW50IHVzZS4NCj4gDQo+IExM
-Vk0gMTEuMCBhc3NlbWJsZXIgZGlkbid0IHBlcm1pdCB0bw0KPiBsZWF2ZSBvdXQgZmxhZ3Mg
-aW4gc3Vic2VxdWVudCB1c2VzIG9mIHRoZSBzYW1lIHNlY3Rpb25zLg0KPiANCj4gU28gdGhp
-cyBwYXRjaCBhZGRzIHRoZSBjb3JyZXNwb25kaW5nIGZsYWdzIHRvIGF2b2lkIGFib3ZlIGVy
-cm9yLg0KPiANCj4gRml4ZXM6IDUwMWY3ZjY5YmNhMSAoImxvY2tpbmc6IEFkZCBfX2xvY2tm
-dW5jIHRvIHNsb3cgcGF0aCBmdW5jdGlvbnMiKQ0KPiBTaWduZWQtb2ZmLWJ5OiBHdW8gSmlu
-IDxndW9qMTdAY2hpbmF0ZWxlY29tLmNuPg0KPiBTaWduZWQtb2ZmLWJ5OiBQZXRlciBaaWps
-c3RyYSAoSW50ZWwpIDxwZXRlcnpAaW5mcmFkZWFkLm9yZz4NCj4gUmV2aWV3ZWQtYnk6IE5h
-dGhhbiBDaGFuY2VsbG9yIDxuYXRoYW5Aa2VybmVsLm9yZz4NCj4gTGluazogaHR0cHM6Ly9s
-b3JlLmtlcm5lbC5vcmcvci8yMDIyMTEwODA2MDEyNi4yNTA1LTEtZ3VvajE3QGNoaW5hdGVs
-ZWNvbS5jbg0KDQpXb3VsZG4ndCBpdCBiZSBiZXR0ZXIgdG8gdGFrZSBteSBtb3JlIGdlbmVy
-aWMgcGF0Y2ggWzFdIGluc3RlYWQ/DQoNClsxXTogaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcv
-bGttbC8yMDIyMTEwOTEzNDQxOC42NTE2LTEtamdyb3NzQHN1c2UuY29tLw0KDQoNCkp1ZXJn
-ZW4NCg0K
---------------ZKO1DIAyjWE0K2QT6D1hu5lX
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+They need access to parts of the memory. At the moment you run your
+VirtIO domains in the Dom0 and give them access to the whole of a DomU's
+address space - however the Xen model is by default the guests memory is
+inaccessible to other domains on the system. The DomU guest uses the Xen
+grant model to expose portions of its address space to other domains -
+namely for the VirtIO queues themselves and any pages containing buffers
+involved in the VirtIO transaction. My thought was that looks like a
+guest memory interface which is mostly inaccessible (private) with some
+holes in it where memory is being explicitly shared with other domains.
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+What I want to achieve is a common userspace API with defined semantics
+for what happens when private and shared regions are accessed. Because
+having each hypervisor/confidential computing architecture define its
+own special API for accessing this memory is just a recipe for
+fragmentation and makes sharing common VirtIO backends impossible.
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
+>
+>>=20
+>>   - pKVM on ARM
+>>=20
+>>   Similar to Xen, pKVM moves the management of the page tables into the
+>>   hypervisor and again doesn't allow those domains to share memory by
+>>   default.
+>
+> Right, we already had some discussions on this in the past versions.
+>
+>>=20
+>>   - VirtIO loopback
+>>=20
+>>   This allows for VirtIO devices for the host kernel to be serviced by
+>>   backends running in userspace. Obviously the memory userspace is
+>>   allowed to access is strictly limited to the buffers and queues
+>>   because giving userspace unrestricted access to the host kernel would
+>>   have consequences.
+>
+> Okay, but normal memfd_create() should work for it, right? And
+> memfd_restricted() instead may not work as it unmaps the memory from
+> userspace.
+>
+>>=20
+>> All of these VirtIO backends work with vhost-user which uses memfds to
+>> pass references to guest memory from the VMM to the backend
+>> implementation.
+>
+> Sounds to me these are the places where normal memfd_create() can act on.
+> VirtIO backends work on the mmap-ed memory which currently is not the
+> case for memfd_restricted(). memfd_restricted() has different design
+> purpose that unmaps the memory from userspace and employs some kernel
+> callbacks so other kernel modules can make use of the memory with these
+> callbacks instead of userspace virtual address.
 
---------------ZKO1DIAyjWE0K2QT6D1hu5lX--
+Maybe my understanding is backwards then. Are you saying a guest starts
+with all its memory exposed and then selectively unmaps the private
+regions? Is this driven by the VMM or the guest itself?
 
---------------NrKot2iyKhMn0dxG5T3hepPx--
-
---------------5fG1cFs5K7SeC2tABgH3Dx7Z
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmN0r/oFAwAAAAAACgkQsN6d1ii/Ey+w
-Owf/fr5JgHNLFiR4anCtHSieh8aJyvdFS1/X32DINUSfOR2+fLM4wvZmbZDZrdl+IRdMcDLg1E8F
-rTOMZMv9KWtqvyndxPzxfWPcUmQF5JRhrtNtRP5BHKw+uGVPyXHWapb7EWKh8a28ffWcOSEc4Ixp
-8wH5gesyPn9hMxRbSO8tA9z3W3ojM0MWJ+zdStUwYThkxm9EkVLx7KOP0LRlGDpOr0FIw2wy4lVJ
-5t2PGcd5S2S8KTm3MA158HT0pmzSxISjvVUBKHHIY3nhalyueTEmB6Z3AaG62rxMfcWnVeb1nUxL
-m2dxdHpP3oAbm41vuJ68m9TXv+Kx/vGr726XUlWD3A==
-=SE6t
------END PGP SIGNATURE-----
-
---------------5fG1cFs5K7SeC2tABgH3Dx7Z--
+--=20
+Alex Benn=C3=A9e
