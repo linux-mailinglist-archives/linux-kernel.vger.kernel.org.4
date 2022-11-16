@@ -2,114 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9046F62BF88
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 14:32:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB87262BF84
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 14:31:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233072AbiKPNcM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 08:32:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47734 "EHLO
+        id S231310AbiKPNbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 08:31:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233869AbiKPNcD (ORCPT
+        with ESMTP id S229489AbiKPNbq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 08:32:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D3C35FC5;
-        Wed, 16 Nov 2022 05:32:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BC27C61DDC;
-        Wed, 16 Nov 2022 13:32:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C362C433D6;
-        Wed, 16 Nov 2022 13:32:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668605522;
-        bh=vGBFo/ah9WmfIpSFtYYdvhOmHS/nYqo+0ewfTvT7Oik=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BI3p5B8jwWp/4299D7+kyP7MSm0UzjWtXeSjYcbKF9+igw8tscxZLoFZh5OBUWI28
-         QDnK7SlnPSb49vQ2k+D+RM0bUaT2DGPRJlQ/LvgWKvgRKJVRJCP3zs8pQAMaeGK418
-         yNz90/5GfZOfTJjqHnfErlNhB3/OirvToJiyoJomJC+4/qSwGHf/tz2CBCYrv2dNnC
-         qo00XZDbudKELiBllkaXNAKNQZrROiiYsqUONaE6QbV0ahDNjFcODonKhFhJOXMZX4
-         dx6jtETsEH503p6HiH6Yn3pjhh2Tfyw97Q02uc/Ag1A0eAT2kG2wq5FLh+yPLYBldD
-         m/4ZpRWgzfmNg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1ovIVn-0002a4-FU; Wed, 16 Nov 2022 14:31:32 +0100
-Date:   Wed, 16 Nov 2022 14:31:31 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 1/2] arm64: dts: qcom: sm8550: Add UFS host controller
- and phy nodes
-Message-ID: <Y3TmM+D7gn7wQM+5@hovoldconsulting.com>
-References: <20221116125112.2788318-1-abel.vesa@linaro.org>
- <20221116125112.2788318-2-abel.vesa@linaro.org>
+        Wed, 16 Nov 2022 08:31:46 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EEE763C0;
+        Wed, 16 Nov 2022 05:31:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668605506; x=1700141506;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Huy2/K1NOJsBt3BQChhqwj4zaLZ9omkEC/MnaVHArno=;
+  b=QbTjI/0sBHW4RqTrf9VcJrqnHAzEzhaW9FflZA2ufjTcjZffDCY/wBGq
+   PCHusKOd9ZU9qB0BXbS2SeadH+rD1HzYZXxm7xkKw6VFPe+SlDTnVqRGN
+   RzgtnfAsHfYpa1YLbaEd5vkzZLCr9KraBBF5MVPHf5Vcx0alvixt9Mmyz
+   mUq7vPqsi/pCOj4zNzZsXT4IHi87c2tXFeWPUHHw7v1JvAmDBSqetGEze
+   oXSsJPi04yrhshSb49XfhY3zdwx/Cg51Qyc+b0QACfyoQRE9XkSJ/+nle
+   tDFvAGP68XaWZZ5+12RdT6SwI1hoYOHa6We8v+0oknXVJE+xAAFv2u8ax
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="339356815"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="339356815"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 05:31:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="633628292"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="633628292"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga007.jf.intel.com with ESMTP; 16 Nov 2022 05:31:41 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ovIVu-00D8uj-1h;
+        Wed, 16 Nov 2022 15:31:38 +0200
+Date:   Wed, 16 Nov 2022 15:31:38 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Rahul Tanwar <rtanwar@maxlinear.com>
+Cc:     bigeasy@linutronix.de, devicetree@vger.kernel.org, robh@kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org, hpa@zytor.com,
+        alan@lxorguk.ukuu.org.uk, dirk.brandewie@gmail.com,
+        grant.likely@secretlab.ca, sodaville@linutronix.de,
+        devicetree-discuss@lists.ozlabs.org, linux-lgm-soc@maxlinear.com
+Subject: Re: [PATCH v2 0/2]  x86/of: Fix a bug in x86 arch OF support
+Message-ID: <Y3TmOvnxnLF54K28@smile.fi.intel.com>
+References: <cover.1668589253.git.rtanwar@maxlinear.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221116125112.2788318-2-abel.vesa@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <cover.1668589253.git.rtanwar@maxlinear.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 02:51:11PM +0200, Abel Vesa wrote:
-> Add UFS host controller and PHY nodes.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/sm8550.dtsi | 76 ++++++++++++++++++++++++++++
->  1 file changed, 76 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-> index 07ba709ca35f..27ce382cb594 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-> @@ -1372,6 +1372,82 @@ mmss_noc: interconnect@1780000 {
->  			qcom,bcm-voters = <&apps_bcm_voter>;
->  		};
->  
-> +		ufs_mem_phy: phy@1d80000 {
-> +			compatible = "qcom,sm8550-qmp-ufs-phy";
+On Wed, Nov 16, 2022 at 06:41:00PM +0800, Rahul Tanwar wrote:
+> [Resend] as i missed to include Sebastian who changes this patch
+> modifies.
 
-Where's the corresponding binding update?
+Now they will not see the ongoing discussion. Better was to just Cc them and
+give a link to lore.kernel.org for the thread.
 
-> +			reg = <0x0 0x01d80000 0x0 0x200>;
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			ranges;
-> +			clock-names = "ref", "qref";
-> +			clocks = <&gcc GCC_UFS_PHY_PHY_AUX_CLK>,
-> +				 <&tcsr TCSR_UFS_CLKREF_EN>;
-> +
-> +			power-domains = <&gcc UFS_MEM_PHY_GDSC>;
-> +
-> +			resets = <&ufs_mem_hc 0>;
-> +			reset-names = "ufsphy";
-> +			status = "disabled";
-> +
-> +			ufs_mem_phy_lanes: phy@1d80400 {
-> +				reg = <0x0 0x01d81000 0x0 0x134>,
-> +				      <0x0 0x01d81200 0x0 0x3d8>,
-> +				      <0x0 0x01d80400 0x0 0x258>,
-> +				      <0x0 0x01d81800 0x0 0x134>,
-> +				      <0x0 0x01d81a00 0x0 0x3d8>;
-> +				#phy-cells = <0>;
-> +			};
+-- 
+With Best Regards,
+Andy Shevchenko
 
-This should be converted to use the new binding scheme which drops the
-child node and individual register descriptions (cf. sc8280xp).
 
-> +		};
-
-Johan
