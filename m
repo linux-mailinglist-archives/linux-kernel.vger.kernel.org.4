@@ -2,115 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CED4E62B7E4
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 11:22:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7339662B7EB
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 11:22:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233319AbiKPKW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 05:22:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56802 "EHLO
+        id S238874AbiKPKWx convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 16 Nov 2022 05:22:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231310AbiKPKV4 (ORCPT
+        with ESMTP id S238606AbiKPKWF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 05:21:56 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7D9422299
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:21:54 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id bs21so29132738wrb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:21:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pv5CcBvM1Y0DmqwfRO50yvVc4LT+eZLqos1FdCMiOYE=;
-        b=sNX56Yaa+zhdebatzuNg1q/oOgZqyK47/jJYDv8HGwrlB9RJ5B9k/A+KJAJwj6uWvH
-         kXVMwg5mVJyulez1FN1bzC/VaDWDyQddXHLz8D96l7RgQh08thdIETLdXPUkC1EsZKOt
-         DUkHxF5msJUPlbmPcbPdLyCTsuawKS0+6zmLNEpDvZTyAv06bjmVH/ypRAqhw7SE7+tP
-         Idh9ZydDXdNC06roDDAbmQJNx/OlWkJd6IyQCDvxB0DE/UpX0a2jkBlIehhGCDtWgjSw
-         fjffMyuYYRJv4ioS/LhSCsLavArIdobqXIehzw5QAYYBlJ7SD3MgZBXAOxgbsDBMc4Q2
-         rkMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pv5CcBvM1Y0DmqwfRO50yvVc4LT+eZLqos1FdCMiOYE=;
-        b=vwU5UGnInWVIICAzPjjE7HweQzUKxS6ln86hFHtz2gL90QyVT7uQMN0atuh5NOTwmj
-         god4301AvwWWi/+uMuxBThLlGI0cJncDeOnutFV3l4w33bhBIBvqnElNDF/Nw1V58cTU
-         IwUIdetAc6XDOds/VtLN/+kXR7Sp+SEGUMuYiALnsXRMwZQdEm1wyFB9qhmPO+qTeYYg
-         YeRv+a+/vM3rA3ysZhZaUQ4f27HlzKNKx65vWdCJJoZ+yVg1ND51hm1n7Q1sPzPWynLa
-         ZcUJxvoe3XhHDNkz+i/AKaJBjLNhyE2qdZP2rWHwcVLpcdax/3Ee/myWZsgQsLUc+ncP
-         /sYQ==
-X-Gm-Message-State: ANoB5plzMZcbjQPEiEGpjGQai15GGAmAsfR2WuVZOBxMHjbO/cvSKbgs
-        u5qS5Ymj+QPHi8R3LbjfxV2yqQ==
-X-Google-Smtp-Source: AA0mqf5O7XLKhkLnRE6lo0qQ5+WVf2QMDkYiVkkmh3KnsQdsDjNuWBtqr9w2Ssw84W3TI1WuDaFMiA==
-X-Received: by 2002:adf:fc47:0:b0:22e:4953:9932 with SMTP id e7-20020adffc47000000b0022e49539932mr13484547wrs.486.1668594114246;
-        Wed, 16 Nov 2022 02:21:54 -0800 (PST)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id o5-20020a05600c510500b003b4ff30e566sm6133615wms.3.2022.11.16.02.21.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 02:21:53 -0800 (PST)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Wed, 16 Nov 2022 11:21:53 +0100
-Subject: [PATCH 6/6] i2c: qcom-geni: add support for I2C Master Hub variant
+        Wed, 16 Nov 2022 05:22:05 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE3B12A9D;
+        Wed, 16 Nov 2022 02:22:03 -0800 (PST)
+Received: from fraeml712-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NBzYk0lwNz6HJ9N;
+        Wed, 16 Nov 2022 18:19:38 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml712-chm.china.huawei.com (10.206.15.61) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 16 Nov 2022 11:22:01 +0100
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 16 Nov
+ 2022 10:22:01 +0000
+Date:   Wed, 16 Nov 2022 10:22:00 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+CC:     Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        "Tanislav, Cosmin" <Cosmin.Tanislav@analog.com>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        "Hennerich, Michael" <Michael.Hennerich@analog.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 5/5] iio: addac: ad74413r: add support for reset-gpio
+Message-ID: <20221116102200.00003d16@Huawei.com>
+In-Reply-To: <6d76cc6d-9db7-5b18-e4f1-dc220b3929a3@rasmusvillemoes.dk>
+References: <20221111143921.742194-1-linux@rasmusvillemoes.dk>
+        <20221111143921.742194-6-linux@rasmusvillemoes.dk>
+        <20221112170705.7efe1673@jic23-huawei>
+        <095a454b55cf497392a621649f24e067@analog.com>
+        <20221114194447.2528f699@jic23-huawei>
+        <0d6b3e4047df9f560079a562bc167bd7a0bf2d28.camel@gmail.com>
+        <20221115161052.00002633@Huawei.com>
+        <6d76cc6d-9db7-5b18-e4f1-dc220b3929a3@rasmusvillemoes.dk>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20221114-narmstrong-sm8550-upstream-i2c-master-hub-v1-6-64449106a148@linaro.org>
-References: <20221114-narmstrong-sm8550-upstream-i2c-master-hub-v1-0-64449106a148@linaro.org>
-In-Reply-To: <20221114-narmstrong-sm8550-upstream-i2c-master-hub-v1-0-64449106a148@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.10.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100004.china.huawei.com (7.191.162.219) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The I2C Master Hub is a stripped down version of the GENI Serial Engine
-QUP Wrapper Controller but only supporting I2C serial engines without
-DMA support.
+On Tue, 15 Nov 2022 20:10:53 +0100
+Rasmus Villemoes <linux@rasmusvillemoes.dk> wrote:
 
-This adds the I2C Master Hub serial engine compatible along the
-specific requirements in a new desc struct passed throug the device
-match data.
+> On 15/11/2022 17.10, Jonathan Cameron wrote:
+> > On Tue, 15 Nov 2022 15:49:46 +0100
+> > Nuno Sá <noname.nuno@gmail.com> wrote:
+> >   
+> >> On Mon, 2022-11-14 at 19:44 +0000, Jonathan Cameron wrote:  
+> >>> On Mon, 14 Nov 2022 13:52:26 +0000
+> >>> "Tanislav, Cosmin" <Cosmin.Tanislav@analog.com> wrote:
+> >>>     
+> >>>>>
+> >>>>> I'm a little confused on polarity here.  The pin is a !reset so
+> >>>>> we need to drive it low briefly to trigger a reset.
+> >>>>> I'm guessing for your board the pin is set to active low? (an
+> >>>>> example
+> >>>>> in the dt would have made that clearer) Hence the pulse
+> >>>>> in here to 1 is actually briefly driving it low before restoring
+> >>>>> to high?
+> >>>>>
+> >>>>> For a pin documented as !reset that seems backwards though you
+> >>>>> have
+> >>>>> called it reset so that is fine, but this description doesn't
+> >>>>> make that
+> >>>>> celar.      
+> >>>>
+> >>>> My opinion is that the driver shouldn't exactly know the polarity
+> >>>> of the reset,
+> >>>> and just assume that setting the reset GPIO to 1 means putting it
+> >>>> in reset,
+> >>>> and setting it to 0 means bringing out of reset.    
+> >>>
+> >>> Agreed. I'd just like a comment + example in the dt-binding to make
+> >>> the point
+> >>> that the pin is !reset.
+> >>>
+> >>> Preferably with an example in the dt binding of the common case of it
+> >>> being wired
+> >>> up to an active low pin.
+> >>>
+> >>> The main oddity here is the need to pulse it rather than request it
+> >>> directly as
+> >>> in the reset state and then just set that to off.
+> >>>
+> >>>     
+> >>
+> >> Agreed... In theory we should be able to request the gpio with
+> >> GPIOD_OUT_HIGH and then just bring the device out of reset  
+> > 
+> > If I recall correctly the datasheet specifically calls out that a pulse
+> > should be used.  No idea if that's actually true, or if it was meant
+> > to be there just to say it needs to be set for X nsecs.  
+> 
+> So the data sheet says
+> 
+>   The hardware reset is initiated by pulsing the RESET pin low. The
+> RESET pulse width must comply with the specifications in Table 11.
+> 
+> and table 11 says that the pulse must be min 50us, max 1ms. We don't
+> really have any way whatsoever to ensure that we're not rescheduled
+> right before pulling the gpio high again (deasserting the reset), so the
+> pulse could effectively be much more than 1ms. But I have a hard time
+> believing that that actually matters (i.e., what state would the chip be
+> in if we happen to make a pulse 1234us wide?).
 
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- drivers/i2c/busses/i2c-qcom-geni.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Test it maybe?  Otherwise we'd have to play games to do it again if the
+timing was too long to ensure after a couple of goes we do get a suitable
+width pulse.
 
-diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-index 75dd0718c5a1..bfe75038bc14 100644
---- a/drivers/i2c/busses/i2c-qcom-geni.c
-+++ b/drivers/i2c/busses/i2c-qcom-geni.c
-@@ -1026,8 +1026,16 @@ static const struct dev_pm_ops geni_i2c_pm_ops = {
- 									NULL)
- };
- 
-+const struct geni_i2c_desc i2c_master_hub = {
-+	.has_core_clk = true,
-+	.icc_ddr = NULL,
-+	.no_dma_support = true,
-+	.tx_fifo_depth = 16,
-+};
-+
- static const struct of_device_id geni_i2c_dt_match[] = {
- 	{ .compatible = "qcom,geni-i2c" },
-+	{ .compatible = "qcom,geni-i2c-master-hub", .data = &i2c_master_hub },
- 	{}
- };
- MODULE_DEVICE_TABLE(of, geni_i2c_dt_match);
+> But what might be
+> relevant, and maybe where that 1ms figure really comes from, can perhaps
+> be read in table 10, which lists a "device reset time" of 1ms, with the
+> description
+> 
+>   Time taken for device reset and calibration memory upload to complete
+> hardware or software reset events after the device is powered up
+> 
+> so perhaps we should ensure a 1ms delay after the reset (whether we used
+> the software or gpio method). But that would be a separate fix IMO (and
+> I'm not sure we actually need it).
+> 
+> I don't mind requesting the gpio with GPIOD_OUT_HIGH, but I'd still keep
+> the gpiod_set_value(, 1) in the reset function, otherwise it's a bit too
+> magic for my taste.
 
--- 
-b4 0.10.1
+Without testing I'd worry that it really does need a pulse so probably better
+to leave it doing so. 
+
+Jonathan
+
+> 
+> Rasmus
+> 
+
