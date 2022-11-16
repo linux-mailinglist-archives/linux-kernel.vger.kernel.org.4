@@ -2,225 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF32062B43A
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 08:51:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5053262B441
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 08:53:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231794AbiKPHvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 02:51:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57576 "EHLO
+        id S229495AbiKPHxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 02:53:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232496AbiKPHvD (ORCPT
+        with ESMTP id S229460AbiKPHxM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 02:51:03 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E16B613D24
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 23:51:02 -0800 (PST)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AG7EZN6019791;
-        Wed, 16 Nov 2022 07:50:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=I72SMcB9Nh5GrbTHhWHuP/ufwCqUK02E800IhbxJcvI=;
- b=JsWjsN2j+gX5kHZaK9XteMv5hujZ65uoBLZBSJGZj+bvAkEGRE4yT1BHAwBRhDD+bGto
- /kRgPW3q2hS5ksX+78V1nolgwq750IQe0JKy149cG6jk4pgNKx4axQrfz9X/9b4mdX1F
- 82uwQZsY/pVuk1S/E8qZuolWtIOvpaAOl+4shvcWCUCUFx4Wkj59gbCJFtn4FBk6Uwb4
- 61pQzAfeRr7p4pOMd43EhCXTGN0DU9ACY9yTzcnmAycjtrqBBy/jLmEbxpQ58ox2GQ0/
- VMJacw++7sX4ig/1PwyXdMcanMJ8CDaCqvyqwGBfVL20hU4h/s5/MWMxewzx6O27I9i3 nA== 
+        Wed, 16 Nov 2022 02:53:12 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD5713E9B;
+        Tue, 15 Nov 2022 23:53:11 -0800 (PST)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AG6IZMf006972;
+        Wed, 16 Nov 2022 07:53:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=e1eiauKe3XGd8wkBOWkUY0MJsPMu0ne6nXu8JZbpHiQ=;
+ b=ntvVEWJdhZqNnejVAs9MKTKGaT49wFGXQDHbc9MgqxZqncj4osnaGcvMdMPNt4gGSuqY
+ 75cQdRZM3yMiMo8GC05i8qTbMlaTuJkcV2MbZEbnF+CIScYnuONS2MM61lrUAANdNV/W
+ JdcLg/FhKg7pQLMqlaNjp6U1n6P+McE9p51DxdAU1UobgColg6ApciXApeOF9l4pAP7a
+ ilYXuv1qsQUTg9SwyqkFE2dL6TotXtRWMxPzofVGHVdH9XaTlUrkqPWbCFccUpuKUSmD
+ 6CVtQVUoyHz4iS3JXe/sIA6PZJFaPsq9W6axIC+TMSqGTbWou8LUHk7LHE98hxwlpTAy GQ== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kvsud8ck8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Nov 2022 07:53:05 +0000
+Received: from pps.filterd (NALASPPMTA04.qualcomm.com [127.0.0.1])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2AG7r4AU002073;
+        Wed, 16 Nov 2022 07:53:04 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kvu9wrqkh-1
+        by NALASPPMTA04.qualcomm.com (PPS) with ESMTPS id 3kt4jkyng7-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Nov 2022 07:50:52 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AG7FtMq027589;
-        Wed, 16 Nov 2022 07:50:52 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kvu9wrqjn-1
+        Wed, 16 Nov 2022 07:53:04 +0000
+Received: from NALASPPMTA04.qualcomm.com (NALASPPMTA04.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AG7r4JI002066;
+        Wed, 16 Nov 2022 07:53:04 GMT
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (PPS) with ESMTPS id 2AG7r3YI002062
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Nov 2022 07:50:52 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AG7oosj016626;
-        Wed, 16 Nov 2022 07:50:50 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03fra.de.ibm.com with ESMTP id 3kt348v3vk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Nov 2022 07:50:50 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AG7okxf62259648
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 16 Nov 2022 07:50:46 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DB7834C044;
-        Wed, 16 Nov 2022 07:50:46 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3ECB14C040;
-        Wed, 16 Nov 2022 07:50:41 +0000 (GMT)
-Received: from li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com (unknown [9.163.49.19])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Wed, 16 Nov 2022 07:50:40 +0000 (GMT)
-Date:   Wed, 16 Nov 2022 08:50:37 +0100
-From:   Alexander Gordeev <agordeev@linux.ibm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Hugh Dickins <hughd@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Nick Piggin <npiggin@gmail.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-Subject: mm: mmu_gather: do not define delayed_rmap if not used
-Message-ID: <Y3SWTXMotahiqvBO@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
-References: <20221109203051.1835763-1-torvalds@linux-foundation.org>
- <20221109203051.1835763-4-torvalds@linux-foundation.org>
- <CAHk-=wjf+gN25grUT3o3XK8-B-b2jhBuN8YMLQvq-=AXTcuFXg@mail.gmail.com>
- <CAHk-=wiFmm+X92Ghkz_LDG53djReK=idAj0uvSdES+yeG1X=Dw@mail.gmail.com>
- <Y3SVqePHGXRUagyF@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+        Wed, 16 Nov 2022 07:53:04 +0000
+Received: from hu-ppareek-blr.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Tue, 15 Nov 2022 23:52:59 -0800
+From:   Parikshit Pareek <quic_ppareek@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Andrew Halaney <ahalaney@redhat.com>,
+        "Shazad Hussain" <quic_shazhuss@quicinc.com>,
+        Brian Masney <bmasney@redhat.com>,
+        "Johan Hovold" <johan@kernel.org>,
+        Parikshit Pareek <quic_ppareek@quicinc.com>
+Subject: [PATCH v8 0/2] arm64: dts: qcom: add dts for sa8540p-ride board
+Date:   Wed, 16 Nov 2022 13:22:05 +0530
+Message-ID: <20221116075207.32363-1-quic_ppareek@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y3SVqePHGXRUagyF@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: cCvXpFGQE3lRE7XncXT-QScuG9jjhokm
-X-Proofpoint-GUID: AHiqeIdmIxzMn1bV-H05LR94Marl3dP9
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: TiuwfQsL_aflZXze3QbsmiWL-XCnw6Yf
+X-Proofpoint-GUID: TiuwfQsL_aflZXze3QbsmiWL-XCnw6Yf
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-11-15_08,2022-11-15_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- clxscore=1015 spamscore=0 mlxlogscore=789 suspectscore=0 adultscore=0
- impostorscore=0 priorityscore=1501 phishscore=0 bulkscore=0 mlxscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211160053
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ impostorscore=0 spamscore=0 clxscore=1011 bulkscore=0 priorityscore=1501
+ adultscore=0 suspectscore=0 mlxlogscore=672 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211160054
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In cases the delayed rmap removal is not used (which are
-currently UP and s390) skip delayed_rmap flag and make
-the related code paths no-op.
+This series introduces the Qualcomm sa8540p-ride automotive development
+  board, also called as Qdrive-3 board.
 
-Signed-off-by: Alexander Gordeev <agordeev@linux.ibm.com>
----
- include/asm-generic/tlb.h | 32 +++++++++++++++++++-------------
- mm/mmu_gather.c           |  8 ++++----
- 2 files changed, 23 insertions(+), 17 deletions(-)
+Changes in v8:
+ - Changed the schema of the regulators(Krzysztof) 
+ - Removed node remoteproc_adsp(Andrew)
+ - Removed TODO comment for node usb_0_dwc3(Andrew)
+ - Added Reviewed-by/Tested-by(Eric)
 
-diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
-index 154c774d6307..317bef9eee3c 100644
---- a/include/asm-generic/tlb.h
-+++ b/include/asm-generic/tlb.h
-@@ -265,24 +265,14 @@ extern bool __tlb_remove_page_size(struct mmu_gather *tlb,
-  * This both sets 'delayed_rmap', and returns true. It would be an inline
-  * function, except we define it before the 'struct mmu_gather'.
-  */
--#define tlb_delay_rmap(tlb) (((tlb)->delayed_rmap = 1), true)
-+#define tlb_delay_rmap(tlb)		(((tlb)->delayed_rmap = 1), true)
-+#define tlb_reset_delay_rmap(tlb)	((tlb)->delayed_rmap = 0)
-+#define tlb_rmap_delayed(tlb)		((tlb)->delayed_rmap)
- extern void tlb_flush_rmaps(struct mmu_gather *tlb, struct vm_area_struct *vma);
- #endif
- 
- #endif
- 
--/*
-- * We have a no-op version of the rmap removal that doesn't
-- * delay anything. That is used on S390, which flushes remote
-- * TLBs synchronously, and on UP, which doesn't have any
-- * remote TLBs to flush and is not preemptible due to this
-- * all happening under the page table lock.
-- */
--#ifndef tlb_delay_rmap
--#define tlb_delay_rmap(tlb) (false)
--static inline void tlb_flush_rmaps(struct mmu_gather *tlb, struct vm_area_struct *vma) { }
--#endif
--
- /*
-  * struct mmu_gather is an opaque type used by the mm code for passing around
-  * any data needed by arch specific code for tlb_remove_page.
-@@ -313,10 +303,12 @@ struct mmu_gather {
- 	 */
- 	unsigned int		freed_tables : 1;
- 
-+#ifdef tlb_delay_rmap
- 	/*
- 	 * Do we have pending delayed rmap removals?
- 	 */
- 	unsigned int		delayed_rmap : 1;
-+#endif
- 
- 	/*
- 	 * at which levels have we cleared entries?
-@@ -346,6 +338,20 @@ struct mmu_gather {
- #endif
- };
- 
-+/*
-+ * We have a no-op version of the rmap removal that doesn't
-+ * delay anything. That is used on S390, which flushes remote
-+ * TLBs synchronously, and on UP, which doesn't have any
-+ * remote TLBs to flush and is not preemptible due to this
-+ * all happening under the page table lock.
-+ */
-+#ifndef tlb_delay_rmap
-+#define tlb_delay_rmap(tlb)		(false)
-+#define tlb_reset_delay_rmap(tlb)	do { } while (0)
-+#define tlb_rmap_delayed(tlb)		(false)
-+static inline void tlb_flush_rmaps(struct mmu_gather *tlb, struct vm_area_struct *vma) { }
-+#endif
-+
- void tlb_flush_mmu(struct mmu_gather *tlb);
- 
- static inline void __tlb_adjust_range(struct mmu_gather *tlb,
-diff --git a/mm/mmu_gather.c b/mm/mmu_gather.c
-index 9f22309affee..b0f1bd20af2f 100644
---- a/mm/mmu_gather.c
-+++ b/mm/mmu_gather.c
-@@ -20,7 +20,7 @@ static bool tlb_next_batch(struct mmu_gather *tlb)
- 	struct mmu_gather_batch *batch;
- 
- 	/* No more batching if we have delayed rmaps pending */
--	if (tlb->delayed_rmap)
-+	if (tlb_rmap_delayed(tlb))
- 		return false;
- 
- 	batch = tlb->active;
-@@ -60,7 +60,7 @@ void tlb_flush_rmaps(struct mmu_gather *tlb, struct vm_area_struct *vma)
- {
- 	struct mmu_gather_batch *batch;
- 
--	if (!tlb->delayed_rmap)
-+	if (!tlb_rmap_delayed(tlb))
- 		return;
- 
- 	batch = tlb->active;
-@@ -73,7 +73,7 @@ void tlb_flush_rmaps(struct mmu_gather *tlb, struct vm_area_struct *vma)
- 		}
- 	}
- 
--	tlb->delayed_rmap = 0;
-+	tlb_reset_delay_rmap(tlb);
- }
- #endif
- 
-@@ -311,7 +311,7 @@ static void __tlb_gather_mmu(struct mmu_gather *tlb, struct mm_struct *mm,
- 	tlb->active     = &tlb->local;
- 	tlb->batch_count = 0;
- #endif
--	tlb->delayed_rmap = 0;
-+	tlb_reset_delay_rmap(tlb);
- 
- 	tlb_table_init(tlb);
- #ifdef CONFIG_MMU_GATHER_PAGE_SIZE
+Changes in v7:
+ - Put the smpi bus related pmic changes in sseparate dtsi files(Konrad)
+ - Mention allowed regulator modes via DT property regulator-allowed-modes
+   (Konrad and Brian)
+ - Remove unused ldo nodes vreg_l3c and vreg_l10c(Shazad)
+
+Changes in v6:
+ - Introduced the new dts for the board, rather than moving common nodes
+   between this one and SA8295 ADP board into dtsi file(Bjorn)
+ - Drop 'adp' term to imply it being unrelated with ADP board(Internal
+   discussion with Bjorn)
+ - Removed Acked-by(Krzysztof) tag in dt-binding document, due to content
+   change.
+ - Not including Reviewed-by(Krzysztof), because of the content change.
+
+Changes in v5:
+ - Moved the usb and ufs nodes from sa8540p-adp.dtsi file to respective
+   board specific dts files: sa8295p-adp.dts and sa8540p-adp-ride.dts.
+   Took inputs from Shazad Hussain in this regard(John)
+ - Added more description of the board differences(John)
+ - Not including Reviewed-by for Krzysztof, because of the new changes to
+   be reviewed.
+ - Removed Reported-by tag(John).
+
+Changes in v4:
+- Removed the ufs_card_hc node, as it is not mounted on Qdrive-3 board.
+- Removed usb_1 relared nodes, as usb1 doesn't have any port connected
+   on Qdrive3 board.
+- Added Reported-by tag for Shazad(for ufs and usb_1 node removals)
+
+Changes in v3:
+ - Added Acked-by tag (Krzysztof)
+ - Renamed dtsi to sa8540p-adp.dtsi (John)
+ - Removed copyright from sa8295-adp.dts and sa8295-adp.dtsi(John)
+ - Added cover letter
+
+Changes in v2:
+ - Make dt-binding patch as the first one in the patch set
+ - Add , after year 2022, in the license header
+
+Initial version:
+ - Move the common nodes to sa8540p-adp.dtsi, and create qrive-3 board
+   specific file sa8540p-adp-ride.dts.
+
+Parikshit Pareek (2):
+  dt-bindings: arm: qcom: Document additional sa8540p device
+  arm64: dts: qcom: add SA8540P ride(Qdrive-3)
+
+ .../devicetree/bindings/arm/qcom.yaml         |   1 +
+ arch/arm64/boot/dts/qcom/Makefile             |   1 +
+ arch/arm64/boot/dts/qcom/pm8450a.dtsi         |  77 ++++++
+ arch/arm64/boot/dts/qcom/sa8540p-ride.dts     | 221 ++++++++++++++++++
+ 4 files changed, 300 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/pm8450a.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sa8540p-ride.dts
+
 -- 
-2.31.1
+2.17.1
 
