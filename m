@@ -2,98 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42C6D62B09D
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 02:38:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9858862B112
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 03:10:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbiKPBia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 20:38:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54780 "EHLO
+        id S231493AbiKPCKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 21:10:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiKPBiY (ORCPT
+        with ESMTP id S229537AbiKPCKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 20:38:24 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB942AC;
-        Tue, 15 Nov 2022 17:38:23 -0800 (PST)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NBlzr50s2z15MPB;
-        Wed, 16 Nov 2022 09:38:00 +0800 (CST)
-Received: from huawei.com (10.67.174.191) by canpemm500009.china.huawei.com
- (7.192.105.203) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 16 Nov
- 2022 09:38:21 +0800
-From:   Li Hua <hucool.lihua@huawei.com>
-To:     <linux@roeck-us.net>, <wim@linux-watchdog.org>
-CC:     <hucool.lihua@huawei.com>, <linux-kernel@vger.kernel.org>,
-        <linux-watchdog@vger.kernel.org>, <weiyongjun1@huawei.com>,
-        <yusongping@huawei.com>
-Subject: [PATCH v2] watchdog: pcwd_usb: Fix attempting to access uninitialized memory
-Date:   Wed, 16 Nov 2022 10:07:06 +0800
-Message-ID: <20221116020706.70847-1-hucool.lihua@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221115134213.GD4189373@roeck-us.net>
-References: <20221115134213.GD4189373@roeck-us.net>
+        Tue, 15 Nov 2022 21:10:16 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0FCC317DF;
+        Tue, 15 Nov 2022 18:10:15 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id c15-20020a17090a1d0f00b0021365864446so979735pjd.4;
+        Tue, 15 Nov 2022 18:10:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xgVYad0b3VkkkVGbrLBOkGV7CIzlD/ERh5I/AWp2m3k=;
+        b=hIqoW9RGKL14ijfujAHMoLC9VF7HPT10Y9eBT5xHlV48w7ZOwKXLbOUgUTQKaWOfWK
+         IVuVj7zO+xNHtyhBogg1gvHnG12lLJnJIQHYEcLMUyXE/KHAYpfxtEez0p7vF/7Vwd5C
+         cfwrbbcHXnK4ibVa2hHUiZkDQ0i15H+uXvB9f7uChacl0Ozzs+06/AmrNMfCrUroYKg8
+         GU11/VDR11N9DHrW//WX++Euy0Bj+ikJsWL+d/X7kym0bXpMLP+JWTYs3wp8nXHid1w4
+         rIzhVUgkjUCj7QmJnBeGTuptJ61eTVluqQPtZOiT9URJSuugfHmNB9+/KFoPITK6y5ts
+         4ZZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xgVYad0b3VkkkVGbrLBOkGV7CIzlD/ERh5I/AWp2m3k=;
+        b=wXfueCjZyR71YJ6+eDm1GzfGeja86RH2eqXAmFeUd6p7l7lvp29OeMFwakVNguNcTS
+         81RjtgSXGmUAyooQfiGUWkY6dREBucfa8y/SHvBIfWs/phMeUwe6muREVaYNs7TsaWEQ
+         NbYg9vVNV/oCVIzUdvaKBqQHhCrm9OWo1JF5UhQ+TdP4Z/eClgPs49t/mcWKc3aiYpZZ
+         qeYtE/2PwmUxVlDJvyaQOEw169KS+JsA5QVWkDhy3kVvGsAuFyCjThcppFqF8WL17/bV
+         w7qTAq9zV09siCaeXEFbMfxF0UCw6srwmUZOfKvrakztJztT6Epxp0YS8uySDus8+zr9
+         QeGQ==
+X-Gm-Message-State: ANoB5pnMUUp/e7mJEuVCF9ofgAgtQZnDC99JhirU8DTomlmAnO9fLitT
+        HHipBF+3pHV/Wi1vFdWPHGuI0DQA9y6lgg==
+X-Google-Smtp-Source: AA0mqf7hhrGeJDOQZv4slw4VF6ULgR68eucYrrcqR7p7UXFCCoJjKmQKV0PoeKCvprt44ASEOJIivA==
+X-Received: by 2002:a17:90a:7804:b0:211:2d90:321 with SMTP id w4-20020a17090a780400b002112d900321mr1352107pjk.84.1668564615228;
+        Tue, 15 Nov 2022 18:10:15 -0800 (PST)
+Received: from fedora.hsd1.ca.comcast.net ([2601:644:8002:1c20::2c6b])
+        by smtp.googlemail.com with ESMTPSA id e18-20020a17090301d200b0018691ce1696sm10782926plh.131.2022.11.15.18.10.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 18:10:14 -0800 (PST)
+From:   "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+To:     linux-mm@kvack.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, akpm@linux-foundation.org,
+        willy@infradead.org, naoya.horiguchi@nec.com, tytso@mit.edu,
+        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+Subject: [PATCH 0/4] Removing the try_to_release_page() wrapper
+Date:   Tue, 15 Nov 2022 18:10:07 -0800
+Message-Id: <20221116021011.54164-1-vishal.moola@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.174.191]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The stack variable msb and lsb may be used uninitialized in function
-usb_pcwd_get_temperature and usb_pcwd_get_timeleft when usb card no response.
+This patchset replaces the remaining calls of try_to_release_page() with
+the folio equivalent: filemap_release_folio(). This allows us to remove
+the wrapper.
 
-The build waring is:
-drivers/watchdog/pcwd_usb.c:336:22: error: ‘lsb’ is used uninitialized in this function [-Werror=uninitialized]
-  *temperature = (lsb * 9 / 5) + 32;
-                  ~~~~^~~
-drivers/watchdog/pcwd_usb.c:328:21: note: ‘lsb’ was declared here
-  unsigned char msb, lsb;
-                     ^~~
-cc1: all warnings being treated as errors
-scripts/Makefile.build:250: recipe for target 'drivers/watchdog/pcwd_usb.o' failed
-make[3]: *** [drivers/watchdog/pcwd_usb.o] Error 1
+The set passes fstests on ext4 and xfs.
 
-Fixes: b7e04f8c61a4 ("mv watchdog tree under drivers")
-Signed-off-by: Li Hua <hucool.lihua@huawei.com>
----
-v1 -> v2: just initialize lsb and msb with 0, but returning -EFAULT
----
- drivers/watchdog/pcwd_usb.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Vishal Moola (Oracle) (4):
+  ext4: Convert move_extent_per_page() to use folios
+  khugepage: Replace try_to_release_page() with filemap_release_folio()
+  memory-failure: Convert truncate_error_page() to use folio
+  folio-compat: Remove try_to_release_page()
 
-diff --git a/drivers/watchdog/pcwd_usb.c b/drivers/watchdog/pcwd_usb.c
-index 1bdaf17c1d38..8202f0a6b093 100644
---- a/drivers/watchdog/pcwd_usb.c
-+++ b/drivers/watchdog/pcwd_usb.c
-@@ -325,7 +325,8 @@ static int usb_pcwd_set_heartbeat(struct usb_pcwd_private *usb_pcwd, int t)
- static int usb_pcwd_get_temperature(struct usb_pcwd_private *usb_pcwd,
- 							int *temperature)
- {
--	unsigned char msb, lsb;
-+	unsigned char msb = 0x00;
-+	unsigned char lsb = 0x00;
- 
- 	usb_pcwd_send_command(usb_pcwd, CMD_READ_TEMP, &msb, &lsb);
- 
-@@ -341,7 +342,8 @@ static int usb_pcwd_get_temperature(struct usb_pcwd_private *usb_pcwd,
- static int usb_pcwd_get_timeleft(struct usb_pcwd_private *usb_pcwd,
- 								int *time_left)
- {
--	unsigned char msb, lsb;
-+	unsigned char msb = 0x00;
-+	unsigned char lsb = 0x00;
- 
- 	/* Read the time that's left before rebooting */
- 	/* Note: if the board is not yet armed then we will read 0xFFFF */
+ fs/ext4/move_extent.c   | 47 +++++++++++++++++++++++------------------
+ include/linux/pagemap.h |  1 -
+ mm/folio-compat.c       |  6 ------
+ mm/khugepaged.c         | 23 ++++++++++----------
+ mm/memory-failure.c     |  5 +++--
+ 5 files changed, 41 insertions(+), 41 deletions(-)
+
 -- 
-2.17.1
+2.38.1
 
