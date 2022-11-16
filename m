@@ -2,305 +2,393 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75A6162C8A0
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 20:02:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8812662C8A8
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 20:03:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234230AbiKPTCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 14:02:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59712 "EHLO
+        id S234306AbiKPTDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 14:03:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbiKPTCW (ORCPT
+        with ESMTP id S234396AbiKPTDN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 14:02:22 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2057.outbound.protection.outlook.com [40.107.244.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B8C731201;
-        Wed, 16 Nov 2022 11:02:21 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fD+97ZWfd2MNUy+GOB4rDcgpeu9My/4R9M/o/JewSsMducDVQ8eTjpN/f8s3+51ZYDZgzr5XsuBeUMXiJBK1AL4I3QDfGZ0Mv12MqJEt4Uq62azpylHAGZLi9MyGzbZTL453pBQuaajiXALvnHCuWnzZQwzT9vHi4XjlvPa61dza4h+grxrWdEWJI7EGxIAxzD1I2TQ7cHNao8waoazNqbJPwzrE1ch/n1nL6R9fdNuUmrulfhgHWvuMya3IV/99KaX8Iv1bPCgGo5nIknIdr7mJFPMRabZpZY9nYWCXPlNH7UpR08WpYTtK3yklRnDi+mSo7uO0iEynU+2DrejCRA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2M+zKUDQz+iz7jXx7oo3P/JPauyWDDTbL0Dy29TSSuM=;
- b=IQM8HgWxwjBH8vGVcVCCIKMMVnOPHgehgJnV0ECrp9AIIvTdZ+r47B0GxhtcxrKPezjcGd+S6As4jnr56E/17GqZ+rVpPVkzew9ddsnO+8CGFiXRzbG8rUQMn11tQwBAvmkDSWdpIvSO1i/AnSHdrPR4ql/09yxbXqcWvEQ+5LEwTxsoY0KnNL1ZbpJ9GelTi9aOkAMKsha9htS6VtgqLXekAkX4VuNXy74f2pzD26GqIlg5OblpN0uBVGuLxF1V4a/z+ykVnNnBrvPL/9W9KgB13CMdg9rf8PGwY2d+oG2yW3vTPlyp6zwaZN7/mcO25PGe9sxwxQpZiQ86Z3ehdA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2M+zKUDQz+iz7jXx7oo3P/JPauyWDDTbL0Dy29TSSuM=;
- b=N8AsPToodJnyjSgS7Jf4VorMUffTNY8Ros2b1B9CiKsjoz/kFUIkJ9QsB4V+aIrTRUoh4ulbpXmED2aG144ZULg0xgCFeZRa8UJMlPjcdjlaAby/o+dEV+Grdf9f9c10O+NQvTS75otSSKiCReqNxkXjbAD3y/d5m8/+V71pMN8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
- by PH0PR12MB7096.namprd12.prod.outlook.com (2603:10b6:510:21d::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17; Wed, 16 Nov
- 2022 19:02:19 +0000
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::4da8:e3eb:20eb:f00]) by DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::4da8:e3eb:20eb:f00%2]) with mapi id 15.20.5813.018; Wed, 16 Nov 2022
- 19:02:17 +0000
-Message-ID: <3e50c258-8732-088c-d9d8-dfaae82213f0@amd.com>
-Date:   Wed, 16 Nov 2022 13:02:14 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH V5] virt: sev: Prevent IV reuse in SNP guest driver
-Content-Language: en-US
-To:     Peter Gonda <pgonda@google.com>
-Cc:     Borislav Petkov <bp@suse.de>, Michael Roth <michael.roth@amd.com>,
-        Haowen Bai <baihaowen@meizu.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Marc Orr <marcorr@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Dionna Glaze <dionnaglaze@google.com>,
-        Ashish Kalra <Ashish.Kalra@amd.com>, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-References: <20221116175558.2373112-1-pgonda@google.com>
-From:   Tom Lendacky <thomas.lendacky@amd.com>
-In-Reply-To: <20221116175558.2373112-1-pgonda@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN2PR20CA0039.namprd20.prod.outlook.com
- (2603:10b6:208:235::8) To DM4PR12MB5229.namprd12.prod.outlook.com
- (2603:10b6:5:398::12)
+        Wed, 16 Nov 2022 14:03:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39BE75BD52
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 11:03:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BC1F561F6D
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 19:03:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B421C43153
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 19:03:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668625391;
+        bh=8NIZ5tXE0gasUV/yv2NKMK//HZWAycBugE0FcykYtP4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=c8KLtGkpHD2S7kR4teZQHxaHKREtH2ZhQES1Wyds/MCEUu3RZ/nW/5FHAGQOXSM+y
+         v8cS7MKNFb/cMUyFJp1Syu/s4EKtZtFEXHg4DhV6pk54qEZ2pc3yPgAgKzdUGCUmVV
+         WCsifAPpodHN1p992nb9pFi/eYqfNlOkZlh3thB694tcshbGoA9PXSYYtuTZZxtWnF
+         RpP8Jrga+6D0gKRdia+Q3To4g85sPGIzgaLXTcI/33iOT1xvyawQuHWVF7xlIMwgaz
+         plUQKl6KCGWKNPnRDVRMghSUhc4QHvVeDnKUkj6dyldqXM4LNf9DMN6P48Pv6zasDV
+         EYrJXHEoCk2pg==
+Received: by mail-lf1-f48.google.com with SMTP id g7so31086603lfv.5
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 11:03:11 -0800 (PST)
+X-Gm-Message-State: ANoB5pk9yZhaQYFq0hqCXQXJ3utzAqqzCLKyI1V4mb4A8zDVziPGVQZe
+        iZkQei7rPPtdV9WgLUFb2BHwBlHNyTehJU3MFtGfJg==
+X-Google-Smtp-Source: AA0mqf4pa64eJTDUQfT7IiAbgIUWJVMsAyCVYJMb7kh4uY5X9i3wmlRDOM4rZjx/2mOmaee4q0ZYBnGpdiU6HWG3Uhk=
+X-Received: by 2002:a05:6512:3f19:b0:4ac:3f87:151f with SMTP id
+ y25-20020a0565123f1900b004ac3f87151fmr8266561lfa.398.1668625388656; Wed, 16
+ Nov 2022 11:03:08 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5229:EE_|PH0PR12MB7096:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5235e525-aa69-46dd-ac58-08dac805149e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yytGplZ719u4waJfX1gTOaJ8elo+EZuhHSDOtVJYZ3fsEPy/iyoRH1pv9Ynik8rqM66Z2KAl/gwzkqALuseArftZ1XuRO6gjp4NMoogiiIIUMM3nQv9LuBOfFuaqz8Yzdskx9iUW85mwSYHYup0L/O05LoX8uUG5CXxBhA2zx1ZQh7Tdv7f5/d+Thth73+Iypv1JHPWnXYtT1VVXk0YqZSp/BXxhJ55FT9YY5GmRufYRqmMiAlnhFifI6SPOLzEpur+NEIpVzG5NvCRsw3svkPDyTuhERwb8IpuUQBVG0iUiJ1WgiVM24k/AASgrUCn3WG+f6GJuKLUkQ1W0cwGMmIsL0/uYDaXcicPFoQIjeH0HyueK2ro3BelNqUfEIH6iBMZiHSGY9aibr8q4wCGSKWVQ4xdWWuqhym/Gtj8ToeUXJGitCCUH7J3Ekq6luXFtKxpqeUyp+thMAW5oQ1WuRe9H3jaCbwYEFcucrwlgeTmwSVda9ocaUPTmW7NvosKpHNW4SnNKQBR5D5khtU5eQDt1hhsGGvl4cBrzB+S4yOwkDx94ATBkg0hQ/TNYqO+6LOJ0SYp5iz2k0vnZtq5y2uEGLZ0cGeIjfzGxg0i+p+SqTTv3V+GVL5GXXFfDDtXUZwyRBvjthuYlRC5XaSApWGfmOJ8SgHYO3AHoRiQ6Ysk35kv6ZA/sdXoQkdig9csI2a1bR8S50k1aYVpINukNJOkogoi0vNfazriVWb8gjpVHueUbwT9YNrUE3/JtoYCyib8kjI3g1JBwfp+LEGfG6ztpNslD2qQG+4aYsXXFzMQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(39860400002)(136003)(366004)(376002)(396003)(451199015)(31686004)(8936002)(7416002)(5660300002)(66556008)(66476007)(8676002)(4326008)(41300700001)(66946007)(316002)(6916009)(54906003)(6486002)(36756003)(6512007)(26005)(6506007)(6666004)(53546011)(478600001)(31696002)(2616005)(2906002)(83380400001)(186003)(38100700002)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Y0JocEp2elByTzNxUWNMRkM4TlF2YUhEbUtKd003VFFyZld3TnZ1RXdMbFM3?=
- =?utf-8?B?c2hzS25SOHdNTGNpbHpIWng3UDZMQUNIQTk0ZEFLZFVmUUxZWGhNcXVONEpW?=
- =?utf-8?B?Y0REMGkwWVVLRE5CbmxEcEptMGNmdVQ0bzA1NUd2MHJTM3hGMkxPNlJNZGo0?=
- =?utf-8?B?VXQ5Q0R0aWtocUljbENtTFBMMzdFUUFYRk5RVisxMk9NSlV3MUF3TW9WSWpt?=
- =?utf-8?B?QWJ4SVBoRDFmTE9jMnJNMkRpd25YNHNBZ2ltUDk2WmY1NGJNaGJBZzhOcTdh?=
- =?utf-8?B?ZnU0MWx0eTlUdVVEQ0xwNmtGK1lkZGgxMVFybXg3UkkyZHl6NkdyVTZQUldQ?=
- =?utf-8?B?UEFFTXpZTFJMSEw2YStZaHR3Q1pTQ1V2dldLcElwdVZhZUZjc3V0TlN4UWtp?=
- =?utf-8?B?Nmd1bnR6UWp6Q3lCTE11a3c2UUFNaEF5QWJwQk0wQ2Z5dDBzSWhTTnBiRnpv?=
- =?utf-8?B?MjdvNkh6SXNyTTFodFRUYk16Y3RBUVU2RkpPbklzWjRxQkNrY3c3bjByOXVk?=
- =?utf-8?B?bHlqYm56T1lIMXkwTk13bC8xdDJ4RFp6eWZJRlpURXBlRGVXVkFaYTFTdlpt?=
- =?utf-8?B?MFdxZVkwNVhZbjFJcDZleEhqQ3dDWnBqOHl4L2pKdUd1WnNrQ0w3VGl1My80?=
- =?utf-8?B?NzJ5RDd1MnpoOE1vVzJRMkNnTlAzM0VWWTJUZSs0VWdYTkJMRGY2Sm5KNjEx?=
- =?utf-8?B?R0tMbGJnUnFRTm5na1o3VlZCTjN2MFcybzZvNkRlby9kUDcyNjlDVS9GQVl4?=
- =?utf-8?B?TFpsNU9IUGhlcGl3YlVRZGlEYWg4MzBYUnpTVmVGaXg4NmZmK2Qya3NpT2or?=
- =?utf-8?B?ZXZaSkVKa3A0eEpzdjIxZVl0T3E1RFhSMElGcGpCaThvcTFJVWFQcDdTaDNl?=
- =?utf-8?B?QXNPRGlmNTAra1dtQVVST1QvdmRYL1l2c2wyQXM1VUNBOWNuRHhqWkExbktR?=
- =?utf-8?B?S1BWaDJzTFMxdW9TM1V5aGhsNWVGVVFTNHF5S1pEOGROOVZZR2R3ZkY2ZkNM?=
- =?utf-8?B?aTRyZDEyd3lNYTBDbmNZSWd0MmZEaXBjS2k4R25BdmN5UzlkaEpDeWk3S1FU?=
- =?utf-8?B?enBSaERMVEVqTEdacUFtdGRZdHZyU1kvemUydkN4VjduZ1BvRGVJTHRJaWxZ?=
- =?utf-8?B?cUN0RlYzZzdoRkJnczMreldEUlNiY1BnOWdxZWJKMVpndjdmWXQ3em4yNFlq?=
- =?utf-8?B?S3hUd2UybHdibGZLRVMrTzZoMWlTazZPOXN6ZVpjdmRpU0lNYVdZSTBnZDls?=
- =?utf-8?B?NTJyMVRLN0dyQUJiajdvQS9mQUlmRk9UbStoR0VRZjRPSFBOWVZuK3VRbTZv?=
- =?utf-8?B?OE5qbFNVeUF0ZDQydVcyVGlmZlNTcEJzS3FxbmZjbEp2a1BmM2JCRmtEZzJy?=
- =?utf-8?B?UFBNT1ZYQ2lMVitZWTlmRXdva0NNNTdOUlNidjQxKzNCWUVHcithR25iUDhF?=
- =?utf-8?B?enZCNEV5bUNXSDZ4OVR2UnZ0Q3VMUWJxRkV4ZkhyZ2NCN2w4eUdxam11UkZm?=
- =?utf-8?B?ZWVmV1hjdHBjRlpNVWY4TzNYMDFiZGpzQXpHYXVuZ0xOREtIR25qelpTWUs5?=
- =?utf-8?B?NFd0djV1eVNRajhjOUVQeEZFL1QwalVBTXMrVDlmUmZ2SjNVdlFHUXdTaVZE?=
- =?utf-8?B?Y05nRWdXVmJNc2VXb3J1YnZ2TCs0OHd6cW5sOGdtTWh2azJmUFRKS1hMSnVL?=
- =?utf-8?B?d3preFVzWWVGVFkxSWhaV2hLS2ZsZTA5aVNSTUVOUVh6RjhIV1JsWUNxdmp2?=
- =?utf-8?B?bU5zbGFhV3J6MjRoVUp1dnFmYSswbFh2N1NxZnBPU25JTFZoZmUzTExlSThs?=
- =?utf-8?B?U3FhZFNDNitod0xad1hSZXk2NmJRR0oxclU4SFBoM0oxdUt1OWhsZUxNQUJV?=
- =?utf-8?B?cFpMM2VxZmdXQ2ZqbXp0KzhZcFZISzArVTBBbFNGclUzZXNlejFVK2ZLdC9m?=
- =?utf-8?B?RDBxcEZ4K1VRbjNjTHBhSW44YWY1SEk1S2lQLzBWMURpUWlkeVNBYmtzdks1?=
- =?utf-8?B?b0tORm1EK1pMSE4zWlYyNXpNNCticU8zYkQwR1Ixb040Y1lUSm52L1ZtbW9K?=
- =?utf-8?B?ZDdGVlAxTWh4ZEFMRUFtRmRNUkZ6OS9xcmtZT1VjZTF6TXMrYzIxaHlweDlG?=
- =?utf-8?Q?PHlALw1UbgjWhpfanAQ1nWFNC?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5235e525-aa69-46dd-ac58-08dac805149e
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Nov 2022 19:02:17.4087
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gvS+eWQxPf6udg+qDeYgNinNc5B0x0ueaJ1Q7mW8ESTBg2uJ3NX72GzPVtM78p6UIxniQJx6rJlIiXBXJCI2pw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7096
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <700dffccdfeeb3d19c5385550e4c84f08c705e19.camel@huaweicloud.com>
+ <20221116154712.4115929-1-roberto.sassu@huaweicloud.com> <41c6eac1-4e02-3499-5d83-468dd1ca434a@schaufler-ca.com>
+In-Reply-To: <41c6eac1-4e02-3499-5d83-468dd1ca434a@schaufler-ca.com>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Wed, 16 Nov 2022 20:02:57 +0100
+X-Gmail-Original-Message-ID: <CACYkzJ4yGObbuLPhnuKXM7aHfxw_NMVf_oHjJgczeTEw0kFpSw@mail.gmail.com>
+Message-ID: <CACYkzJ4yGObbuLPhnuKXM7aHfxw_NMVf_oHjJgczeTEw0kFpSw@mail.gmail.com>
+Subject: Re: [PoC][PATCH] bpf: Call return value check function in the JITed code
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     Roberto Sassu <roberto.sassu@huaweicloud.com>, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        revest@chromium.org, jackmanb@chromium.org, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/16/22 11:55, Peter Gonda wrote:
-> The AMD Secure Processor (ASP) and an SNP guest use a series of
-> AES-GCM keys called VMPCKs to communicate securely with each other.
-> The IV to this scheme is a sequence number that both the ASP and the
-> guest track. Currently this sequence number in a guest request must
-> exactly match the sequence number tracked by the ASP. This means that
-> if the guest sees an error from the host during a request it can only
-> retry that exact request or disable the VMPCK to prevent an IV reuse.
-> AES-GCM cannot tolerate IV reuse see: "Authentication Failures in NIST
-> version of GCM" - Antoine Joux et al.
-> 
-> In order to address this make handle_guest_request() delete the VMPCK
-> on any non successful return. To allow userspace querying the cert_data
-> length make handle_guest_request() safe the number of pages required by
+On Wed, Nov 16, 2022 at 6:12 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
+>
+> On 11/16/2022 7:47 AM, Roberto Sassu wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> >
+> > eBPF allows certain types of eBPF programs to modify the return value of
+> > the functions they attach to. This is used for example by BPF LSM to let
+> > security modules make their decision on LSM hooks.
+> >
+> > The JITed code looks like the following:
+> >
+> >     ret = bpf_lsm_inode_permission_impl1(); // from a security module
+> >     if (ret)
+> >         goto out;
+> >
+> > ..
+> >
+> >     ret = bpf_lsm_inode_permission_implN(); // from a security module
+> >     if (ret)
+> >         goto out;
+> >
+> >     ret = bpf_lsm_inode_permission(); // in the kernel, returns DEFAULT
+> > out:
+> >
+> > If ret is not zero, the attachment points of BPF LSM are not executed. For
+> > this reason, the return value check cannot be done there.
+> >
+> > Instead, the idea is to use the LSM_HOOK() macro to define a per-hook check
+> > function.
+> >
+> > Whenever an eBPF program attaches to an LSM hook, the eBPF verifier
+> > resolves the address of the check function (whose name is
+> > bpf_lsm_<hook name>_ret()) and adds a call to that function just after the
+> > out label. If the return value is illegal, the check function changes it
+> > back to the default value defined by the LSM infrastructure:
+> >
+> > ..
+> >
+> > out:
+> >     ret = bpf_lsm_inode_permission_ret(ret);
+>
+> As I've mentioned elsewhere, the return value is a small part of
+> the problem you have with eBPF programs and the BPF LSM. Because
+> the LSM infrastructure is inconsistent with regard to return codes,
+> values returned in pointers and use of secids there is no uniform
+> mechanism that I can see to address the "legitimate return" problem.
+>
+> Lets look at one of the ickyest interfaces we have, security_getprocattr().
+> It returns the size of a string that it has allocated. It puts the
+> pointer to the allocated buffer into a char **value that was passed to it.
+> If bpf_getprocattr() returns a positive number and sets value to NULL Bad
+> Things can happen. If the return value is greater than the size allocated
+> ditto. If it returns an error but allocates a string you get a memory leak.
 
-s/safe/save/
+I think we should not need this hook in BPF. We can create a list of hooks that
+we should not really expose via BPF.
 
-> the host, then handle_guest_request() retry the request without
+>
+> security_secid_to_secctx() has to work in concert with security_release_secctx()
+> to do memory lifecycle management. If secid_to_secctx() allocates memory
+> release_secctx() has to free it, while if secid_to_secctx() doesn't allocate
+> memory it better not. (SELinux allocates memory, Smack does not. It's a real
+> distinction) Your return checker would need to understand a lot more about
+> the behavior of your eBPF programs than what value they return.
 
-... then have handle_guest_request() ...
+While this is possible to do using the BPF verifier (i.e. more detailed checks).
 
-> requesting the extended data, then return the number of pages required
-> back to userspace.
-> 
-> Fixes: fce96cf044308 ("virt: Add SEV-SNP guest driver")
-> Signed-off-by: Peter Gonda <pgonda@google.com>
-> Reported-by: Peter Gonda <pgonda@google.com>
+I don't see the value of BPF programs attaching to these hooks and we should
+just not register the BPF LSM callbacks for these.
 
-Just some nits on the commit message and comments below, otherwise
-
-Reviewed-by: Tom Lendacky <thomas.lendacky@amd.com>
-
-> Cc: Borislav Petkov <bp@suse.de>
-> Cc: Tom Lendacky <thomas.lendacky@amd.com>
-> Cc: Michael Roth <michael.roth@amd.com>
-> Cc: Haowen Bai <baihaowen@meizu.com>
-> Cc: Yang Yingliang <yangyingliang@huawei.com>
-> Cc: Marc Orr <marcorr@google.com>
-> Cc: David Rientjes <rientjes@google.com>
-> Cc: Dionna Glaze <dionnaglaze@google.com>
-> Cc: Ashish Kalra <Ashish.Kalra@amd.com>
-> Cc: stable@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: kvm@vger.kernel.org
-> ---
->   drivers/virt/coco/sev-guest/sev-guest.c | 83 ++++++++++++++++++++-----
->   1 file changed, 69 insertions(+), 14 deletions(-)
-> 
-> diff --git a/drivers/virt/coco/sev-guest/sev-guest.c b/drivers/virt/coco/sev-guest/sev-guest.c
-> index f422f9c58ba79..64b4234c14da8 100644
-> --- a/drivers/virt/coco/sev-guest/sev-guest.c
-> +++ b/drivers/virt/coco/sev-guest/sev-guest.c
-> @@ -67,8 +67,27 @@ static bool is_vmpck_empty(struct snp_guest_dev *snp_dev)
->   	return true;
->   }
->   
-> +/*
-> + * If an error is received from the host or AMD Secure Processor (ASP) there
-> + * are two options. Either retry the exact same encrypted request or discontinue
-> + * using the VMPCK.
-> + *
-> + * This is because in the current encryption scheme GHCB v2 uses AES-GCM to
-> + * encrypt the requests. The IV for this scheme is the sequence number. GCM
-> + * cannot tolerate IV reuse.
-> + *
-> + * The ASP FW v1.51 only increments the sequence numbers on a successful
-> + * guest<->ASP back and forth and only accepts messages at its exact sequence
-> + * number.
-> + *
-> + * So if the sequence number were to be reused the encryption scheme is
-> + * vulnerable. If the sequence number were incremented for a fresh IV the ASP
-> + * will reject the request.
-> + */
->   static void snp_disable_vmpck(struct snp_guest_dev *snp_dev)
->   {
-> +	dev_alert(snp_dev->dev, "Disabling vmpck_id: %d to prevent IV reuse.\n",
-> +		  vmpck_id);
->   	memzero_explicit(snp_dev->vmpck, VMPCK_KEY_LEN);
->   	snp_dev->vmpck = NULL;
->   }
-> @@ -321,34 +340,70 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
->   	if (rc)
->   		return rc;
->   
-> -	/* Call firmware to process the request */
-> +	/*
-> +	 * Call firmware to process the request. In this function the encrypted
-> +	 * message enters shared memory with the host. So after this call the
-> +	 * sequence number must be incremented or the VMPCK must be deleted to
-> +	 * prevent reuse of the IV.
-> +	 */
->   	rc = snp_issue_guest_request(exit_code, &snp_dev->input, &err);
-> +
-> +	/*
-> +	 * If the extended guest request fails due to having too small of a
-> +	 * certificate data buffer retry the same guest request without the
-> +	 * extended data request in order to not have to reuse the IV.
-
-... in order to increment the sequence number to avoid reuse of the IV.
-
-> +	 */
-> +	if (exit_code == SVM_VMGEXIT_EXT_GUEST_REQUEST &&
-> +	    err == SNP_GUEST_REQ_INVALID_LEN) {
-> +		const unsigned int certs_npages = snp_dev->input.data_npages;
-> +
-> +		exit_code = SVM_VMGEXIT_GUEST_REQUEST;
-> +
-> +		/*
-> +		 * If this call to the firmware succeeds the sequence number can
-> +		 * be incremented allowing for continued use of the VMPCK. If
-> +		 * there is an error reflected in the return value, this value
-> +		 * is checked further down and the result will be the deletion
-> +		 * of the VMPCK and the error code being propagated back to the
-> +		 * user as an IOCLT return code.
-
-s/IOCLT/ioctl()/
-
-Thanks,
-Tom
-
-> +		 */
-> +		rc = snp_issue_guest_request(exit_code, &snp_dev->input, &err);
-> +
-> +		/*
-> +		 * Override the error to inform callers the given extended
-> +		 * request buffer size was too small and give the caller the
-> +		 * required buffer size.
-> +		 */
-> +		err = SNP_GUEST_REQ_INVALID_LEN;
-> +		snp_dev->input.data_npages = certs_npages;
-> +	}
-> +
->   	if (fw_err)
->   		*fw_err = err;
->   
-> -	if (rc)
-> -		return rc;
-> +	if (rc) {
-> +		dev_alert(snp_dev->dev,
-> +			  "Detected error from ASP request. rc: %d, fw_err: %llu\n",
-> +			  rc, *fw_err);
-> +		goto disable_vmpck;
-> +	}
->   
-> -	/*
-> -	 * The verify_and_dec_payload() will fail only if the hypervisor is
-> -	 * actively modifying the message header or corrupting the encrypted payload.
-> -	 * This hints that hypervisor is acting in a bad faith. Disable the VMPCK so that
-> -	 * the key cannot be used for any communication. The key is disabled to ensure
-> -	 * that AES-GCM does not use the same IV while encrypting the request payload.
-> -	 */
->   	rc = verify_and_dec_payload(snp_dev, resp_buf, resp_sz);
->   	if (rc) {
->   		dev_alert(snp_dev->dev,
-> -			  "Detected unexpected decode failure, disabling the vmpck_id %d\n",
-> -			  vmpck_id);
-> -		snp_disable_vmpck(snp_dev);
-> -		return rc;
-> +			  "Detected unexpected decode failure from ASP. rc: %d\n",
-> +			  rc);
-> +		goto disable_vmpck;
->   	}
->   
->   	/* Increment to new message sequence after payload decryption was successful. */
->   	snp_inc_msg_seqno(snp_dev);
->   
->   	return 0;
-> +
-> +disable_vmpck:
-> +	snp_disable_vmpck(snp_dev);
-> +	return rc;
->   }
->   
->   static int get_report(struct snp_guest_dev *snp_dev, struct snp_guest_request_ioctl *arg)
+>
+> >
+> > In this way, an eBPF program cannot cause illegal return values to be sent
+> > to BPF LSM, and to the callers of the LSM infrastructure.
+> >
+> > This is just a PoC, to validate the idea and get an early feedback.
+> >
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > ---
+> >  arch/arm64/net/bpf_jit_comp.c |  7 ++++---
+> >  arch/x86/net/bpf_jit_comp.c   | 17 ++++++++++++++++-
+> >  include/linux/bpf.h           |  4 +++-
+> >  kernel/bpf/bpf_lsm.c          | 20 ++++++++++++++++++++
+> >  kernel/bpf/bpf_struct_ops.c   |  2 +-
+> >  kernel/bpf/trampoline.c       |  6 ++++--
+> >  kernel/bpf/verifier.c         | 28 ++++++++++++++++++++++++++--
+> >  7 files changed, 74 insertions(+), 10 deletions(-)
+> >
+> > diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+> > index 62f805f427b7..5412230c6935 100644
+> > --- a/arch/arm64/net/bpf_jit_comp.c
+> > +++ b/arch/arm64/net/bpf_jit_comp.c
+> > @@ -1764,7 +1764,7 @@ static void restore_args(struct jit_ctx *ctx, int args_off, int nargs)
+> >   */
+> >  static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+> >                             struct bpf_tramp_links *tlinks, void *orig_call,
+> > -                           int nargs, u32 flags)
+> > +                           void *ret_check_call, int nargs, u32 flags)
+> >  {
+> >       int i;
+> >       int stack_size;
+> > @@ -1963,7 +1963,7 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+> >  int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image,
+> >                               void *image_end, const struct btf_func_model *m,
+> >                               u32 flags, struct bpf_tramp_links *tlinks,
+> > -                             void *orig_call)
+> > +                             void *orig_call, void *ret_check_call)
+> >  {
+> >       int i, ret;
+> >       int nargs = m->nr_args;
+> > @@ -1983,7 +1983,8 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image,
+> >                       return -ENOTSUPP;
+> >       }
+> >
+> > -     ret = prepare_trampoline(&ctx, im, tlinks, orig_call, nargs, flags);
+> > +     ret = prepare_trampoline(&ctx, im, tlinks, orig_call, ret_check_call,
+> > +                              nargs, flags);
+> >       if (ret < 0)
+> >               return ret;
+> >
+> > diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> > index cec5195602bc..6cd727b4af0a 100644
+> > --- a/arch/x86/net/bpf_jit_comp.c
+> > +++ b/arch/x86/net/bpf_jit_comp.c
+> > @@ -2123,7 +2123,7 @@ static int invoke_bpf_mod_ret(const struct btf_func_model *m, u8 **pprog,
+> >  int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *image_end,
+> >                               const struct btf_func_model *m, u32 flags,
+> >                               struct bpf_tramp_links *tlinks,
+> > -                             void *func_addr)
+> > +                             void *func_addr, void *func_ret_check_addr)
+> >  {
+> >       int ret, i, nr_args = m->nr_args, extra_nregs = 0;
+> >       int regs_off, ip_off, args_off, stack_size = nr_args * 8, run_ctx_off;
+> > @@ -2280,6 +2280,21 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *i
+> >               for (i = 0; i < fmod_ret->nr_links; i++)
+> >                       emit_cond_near_jump(&branches[i], prog, branches[i],
+> >                                           X86_JNE);
+> > +
+> > +             if (func_ret_check_addr) {
+> > +                     emit_ldx(&prog, BPF_DW, BPF_REG_1, BPF_REG_FP, -8);
+> > +
+> > +                     /* call ret check function */
+> > +                     if (emit_call(&prog, func_ret_check_addr, prog)) {
+> > +                             ret = -EINVAL;
+> > +                             goto cleanup;
+> > +                     }
+> > +
+> > +                     /* remember return value in a stack for bpf prog to access */
+> > +                     emit_stx(&prog, BPF_DW, BPF_REG_FP, BPF_REG_0, -8);
+> > +                     memcpy(prog, x86_nops[5], X86_PATCH_SIZE);
+> > +                     prog += X86_PATCH_SIZE;
+> > +             }
+> >       }
+> >
+> >       if (fexit->nr_links)
+> > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> > index 49f9d2bec401..f3551f7bdc28 100644
+> > --- a/include/linux/bpf.h
+> > +++ b/include/linux/bpf.h
+> > @@ -919,7 +919,7 @@ struct bpf_tramp_image;
+> >  int arch_prepare_bpf_trampoline(struct bpf_tramp_image *tr, void *image, void *image_end,
+> >                               const struct btf_func_model *m, u32 flags,
+> >                               struct bpf_tramp_links *tlinks,
+> > -                             void *orig_call);
+> > +                             void *orig_call, void *ret_call);
+> >  u64 notrace __bpf_prog_enter_sleepable_recur(struct bpf_prog *prog,
+> >                                            struct bpf_tramp_run_ctx *run_ctx);
+> >  void notrace __bpf_prog_exit_sleepable_recur(struct bpf_prog *prog, u64 start,
+> > @@ -974,6 +974,7 @@ struct bpf_trampoline {
+> >       struct {
+> >               struct btf_func_model model;
+> >               void *addr;
+> > +             void *ret_check_addr;
+> >               bool ftrace_managed;
+> >       } func;
+> >       /* if !NULL this is BPF_PROG_TYPE_EXT program that extends another BPF
+> > @@ -994,6 +995,7 @@ struct bpf_trampoline {
+> >  struct bpf_attach_target_info {
+> >       struct btf_func_model fmodel;
+> >       long tgt_addr;
+> > +     long tgt_ret_check_addr;
+> >       const char *tgt_name;
+> >       const struct btf_type *tgt_type;
+> >  };
+> > diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+> > index 37bcedf5a44e..f7f25d0064dd 100644
+> > --- a/kernel/bpf/bpf_lsm.c
+> > +++ b/kernel/bpf/bpf_lsm.c
+> > @@ -18,6 +18,17 @@
+> >  #include <linux/ima.h>
+> >  #include <linux/bpf-cgroup.h>
+> >
+> > +static bool is_ret_value_allowed(int ret, u32 ret_flags)
+> > +{
+> > +     if ((ret < 0 && !(ret_flags & LSM_RET_NEG)) ||
+> > +         (ret == 0 && !(ret_flags & LSM_RET_ZERO)) ||
+> > +         (ret == 1 && !(ret_flags & LSM_RET_ONE)) ||
+> > +         (ret > 1 && !(ret_flags & LSM_RET_GT_ONE)))
+> > +             return false;
+> > +
+> > +     return true;
+> > +}
+> > +
+> >  /* For every LSM hook that allows attachment of BPF programs, declare a nop
+> >   * function where a BPF program can be attached.
+> >   */
+> > @@ -30,6 +41,15 @@ noinline RET bpf_lsm_##NAME(__VA_ARGS__)   \
+> >  #include <linux/lsm_hook_defs.h>
+> >  #undef LSM_HOOK
+> >
+> > +#define LSM_HOOK(RET, DEFAULT, RET_FLAGS, NAME, ...) \
+> > +noinline RET bpf_lsm_##NAME##_ret(int ret)   \
+> > +{                                            \
+> > +     return is_ret_value_allowed(ret, RET_FLAGS) ? ret : DEFAULT; \
+> > +}
+> > +
+> > +#include <linux/lsm_hook_defs.h>
+> > +#undef LSM_HOOK
+> > +
+> >  #define LSM_HOOK(RET, DEFAULT, RET_FLAGS, NAME, ...) \
+> >       BTF_ID(func, bpf_lsm_##NAME)
+> >  BTF_SET_START(bpf_lsm_hooks)
+> > diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
+> > index 84b2d9dba79a..22485f0df534 100644
+> > --- a/kernel/bpf/bpf_struct_ops.c
+> > +++ b/kernel/bpf/bpf_struct_ops.c
+> > @@ -346,7 +346,7 @@ int bpf_struct_ops_prepare_trampoline(struct bpf_tramp_links *tlinks,
+> >        */
+> >       flags = model->ret_size > 0 ? BPF_TRAMP_F_RET_FENTRY_RET : 0;
+> >       return arch_prepare_bpf_trampoline(NULL, image, image_end,
+> > -                                        model, flags, tlinks, NULL);
+> > +                                        model, flags, tlinks, NULL, NULL);
+> >  }
+> >
+> >  static int bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
+> > diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+> > index d6395215b849..3c6821b3c08c 100644
+> > --- a/kernel/bpf/trampoline.c
+> > +++ b/kernel/bpf/trampoline.c
+> > @@ -464,7 +464,8 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mut
+> >
+> >       err = arch_prepare_bpf_trampoline(im, im->image, im->image + PAGE_SIZE,
+> >                                         &tr->func.model, tr->flags, tlinks,
+> > -                                       tr->func.addr);
+> > +                                       tr->func.addr,
+> > +                                       tr->func.ret_check_addr);
+> >       if (err < 0)
+> >               goto out;
+> >
+> > @@ -802,6 +803,7 @@ struct bpf_trampoline *bpf_trampoline_get(u64 key,
+> >
+> >       memcpy(&tr->func.model, &tgt_info->fmodel, sizeof(tgt_info->fmodel));
+> >       tr->func.addr = (void *)tgt_info->tgt_addr;
+> > +     tr->func.ret_check_addr = (void *)tgt_info->tgt_ret_check_addr;
+> >  out:
+> >       mutex_unlock(&tr->mutex);
+> >       return tr;
+> > @@ -1055,7 +1057,7 @@ int __weak
+> >  arch_prepare_bpf_trampoline(struct bpf_tramp_image *tr, void *image, void *image_end,
+> >                           const struct btf_func_model *m, u32 flags,
+> >                           struct bpf_tramp_links *tlinks,
+> > -                         void *orig_call)
+> > +                         void *orig_call, void *ret_check_call)
+> >  {
+> >       return -ENOTSUPP;
+> >  }
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index 5e74f460dfd0..1ad0fe5cefe9 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -14988,12 +14988,13 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+> >  {
+> >       bool prog_extension = prog->type == BPF_PROG_TYPE_EXT;
+> >       const char prefix[] = "btf_trace_";
+> > -     int ret = 0, subprog = -1, i;
+> > +     int ret = 0, subprog = -1, i, tname_len;
+> >       const struct btf_type *t;
+> >       bool conservative = true;
+> >       const char *tname;
+> > +     char *tname_ret;
+> >       struct btf *btf;
+> > -     long addr = 0;
+> > +     long addr = 0, ret_check_addr = 0;
+> >
+> >       if (!btf_id) {
+> >               bpf_log(log, "Tracing programs must provide btf_id\n");
+> > @@ -15168,6 +15169,28 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+> >                                       tname);
+> >                               return -ENOENT;
+> >                       }
+> > +
+> > +                     if (prog->expected_attach_type == BPF_LSM_MAC) {
+> > +                             tname_len = strlen(tname);
+> > +                             tname_ret = kmalloc(tname_len + 5, GFP_KERNEL);
+> > +                             if (!tname_ret) {
+> > +                                     bpf_log(log,
+> > +                                             "Cannot allocate memory for %s_ret string\n",
+> > +                                             tname);
+> > +                                     return -ENOMEM;
+> > +                             }
+> > +
+> > +                             snprintf(tname_ret, tname_len + 5, "%s_ret", tname);
+> > +                             ret_check_addr = kallsyms_lookup_name(tname_ret);
+> > +                             kfree(tname_ret);
+> > +
+> > +                             if (!ret_check_addr) {
+> > +                                     bpf_log(log,
+> > +                                             "Kernel symbol %s_ret not found\n",
+> > +                                             tname);
+> > +                                     return -ENOENT;
+> > +                             }
+> > +                     }
+> >               }
+> >
+> >               if (prog->aux->sleepable) {
+> > @@ -15210,6 +15233,7 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+> >               break;
+> >       }
+> >       tgt_info->tgt_addr = addr;
+> > +     tgt_info->tgt_ret_check_addr = ret_check_addr;
+> >       tgt_info->tgt_name = tname;
+> >       tgt_info->tgt_type = t;
+> >       return 0;
