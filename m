@@ -2,75 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF02B62BB7E
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:23:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C530862BB83
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:24:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233612AbiKPLW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 06:22:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35090 "EHLO
+        id S239211AbiKPLY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 06:24:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239192AbiKPLWe (ORCPT
+        with ESMTP id S239051AbiKPLYF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 06:22:34 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810D032BBE
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 03:11:57 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id be13so28981388lfb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 03:11:57 -0800 (PST)
+        Wed, 16 Nov 2022 06:24:05 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E099363AE
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 03:13:38 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id d6so28926916lfs.10
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 03:13:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=AIhdRtwfJxcSXkKxrQciTPwjYns7WX/KPRxRtELNuBo=;
-        b=FGITvHx7/Dtu/7hLuQxKvATO4co9YpeSV7pKkPMRnqunFYXtIvwFhQTb7q/CSEoss2
-         4SNRotXXM0JWHBHHmlYaMMPkgj2nip7ANeF57qxphhIy+TMHYq1ZyI8Y3SbTRhywF5Cb
-         jC0UiURkbBreN3UESQ8c5Fui+phZoLKXjVmRNAXT8ZQLLoWLdWjhy1DhE8in89gxJ9z+
-         gdwhYiq8LgzR0nsVkz8ZuaEe8BOx4MWcA/1tk6fwLpBJPMPVCj/zOb8krkL6XOhx1rj/
-         +offxsPLXKNC+WsZc7IQcsIPZoj8gDzXNyb8+Kkiy+R6ny7DMorxD5JzcKAVkuMGA2Kl
-         tkSg==
+        bh=wLgF14FPV3MMp8MVY1j5SEgYli+B2HEyuas1yt3mYcI=;
+        b=TKetFqG72xs6ufxtsSKBRPlPPUakkfH7z99Mbw7EISMf0QjR25oKA1NdDbN99tKWA7
+         NZMwqmcjVi5HU0fuyB/qnFkso5Cs85ZibRbq/78cIUglXHWG1J8P+8jesIl2fYStmLhU
+         G7P1h8pV26hjzQsniCFYa+G0DD4cxmUBAYkY5fQBfmcGPwCGl/WyTmTVvol1qmqzIRst
+         SY0tY66Me8GXezWQyIvebVgfAHnbar5398E5WASA0gyOZEbr9VbxAWmg/xgr/WUMmP9J
+         vACZNQ7dHU5Ca2cwF+eRLWi6udE6kxNmFH/jfVINogXbRAFdQawEoMtzOSXjfB3/NGgx
+         kH7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AIhdRtwfJxcSXkKxrQciTPwjYns7WX/KPRxRtELNuBo=;
-        b=PJwhqPM3pydJUE1SIBT2iLsHJN5Vc96RjOsh9yDlV0OMzPKsjC93dIkDcID0DDIQMu
-         gkgOmHemJjOKNdm/gWXoqRQ/Ge0R3533+Jhme72rfOuNJZ0AvLUmjlcYx0qszoHskWX5
-         IiK4KKejC5CFFJ1HVgGPse83agtEGIVRkFmqI8ITUPIoQRt2qalrt4+WQSr5qvsDSGmD
-         8qSlIOQfFQXqss6UMYdGRnPjs5tKIeCDeoF/Dg4BAk2IpxGKKMxaZjFIGpBHeGOU+qG2
-         WCOflnhPn3/Ppm2YlKypPc5rMt6pGBDn9hMQLMEgR7LmvRuQyxbKzc5lNjljYPPXs8iV
-         aMHg==
-X-Gm-Message-State: ANoB5pnOqf+cuAnUSGjXrWeIWmGXselrj7ZdEgh54Y9a/pmBtUygHjnF
-        7pmNX36aj6JJXIr+UQEgINdeqA==
-X-Google-Smtp-Source: AA0mqf4GUS35iCiXM39dALemTg8Vo0uN4hBr1vfIoQnjuVH1IF3zaK1O5DxZn8vW9lrEgIALd1OzFg==
-X-Received: by 2002:a19:645e:0:b0:4a9:e27a:1cfa with SMTP id b30-20020a19645e000000b004a9e27a1cfamr6924743lfj.147.1668597115927;
-        Wed, 16 Nov 2022 03:11:55 -0800 (PST)
+        bh=wLgF14FPV3MMp8MVY1j5SEgYli+B2HEyuas1yt3mYcI=;
+        b=gJmEFV55CuGDi3hr+lI1nYEzTqYI5RhBIRAQ0NCYlXX0v8YzXtb/tNGuD2ow3QTpTG
+         y1eImPWuWLXKr7fQ3au2LbDfozUlS2yTtuKfn1uXn8bhw3l2EuCQigb8piyA8Ah7FU6p
+         hv2SNC4afBIGPR8PGQ+0ao2ziVd3O4xnhBOuxRQUjb0WBQpaaJ3yp8Xkvz4f8SHyYMU1
+         JusipyFAKQPDE7AfZyVcvj7avoA/wbl4uMxuuh9BVnkN+d1YC1rk2X2NpAXEsH9svV6N
+         bKUCBCLfs4eAoyR2dhcSmW/G1F1JZ5BBQNnOSx1fHyikBXy8OWrfln8ZBGKACa33iTrs
+         dSLA==
+X-Gm-Message-State: ANoB5plm/uX+LZFR+mZDQ2NJYzDgKwYNKhrCnFniuzoT9Ae34Gz5xHHz
+        tCb5sDN7HdLHeJ+KeEiPMYtRdw==
+X-Google-Smtp-Source: AA0mqf6pWHapmtWXCvWQ+ycAbVsNQKPW6aT9onNGtzpGYOpC5dSpz+cHqCPl4fcDi3T3ed+VPSp4Hw==
+X-Received: by 2002:a19:5e0a:0:b0:4b0:4b08:6873 with SMTP id s10-20020a195e0a000000b004b04b086873mr7729398lfb.329.1668597217301;
+        Wed, 16 Nov 2022 03:13:37 -0800 (PST)
 Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id y29-20020a19641d000000b004a22599c4ddsm2547699lfb.268.2022.11.16.03.11.54
+        by smtp.gmail.com with ESMTPSA id y1-20020ac24201000000b004a44ffb1023sm2568265lfh.57.2022.11.16.03.13.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 03:11:55 -0800 (PST)
-Message-ID: <74943a08-f5ea-54a0-3891-ef58adac78ca@linaro.org>
-Date:   Wed, 16 Nov 2022 12:11:54 +0100
+        Wed, 16 Nov 2022 03:13:36 -0800 (PST)
+Message-ID: <8e0a9ef1-6abf-1073-0ee6-c60c313fad77@linaro.org>
+Date:   Wed, 16 Nov 2022 12:13:35 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH 3/4] pinctrl: qcom: add support for i2c specific pull
- feature
+Subject: Re: [PATCH 2/2] iio/adc: add documentation for adc ad7927
 Content-Language: en-US
-To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-References: <20221116105724.2600349-1-abel.vesa@linaro.org>
- <20221116105724.2600349-4-abel.vesa@linaro.org>
+To:     Edmund Berenson <edmund.berenson@emlix.com>
+Cc:     Lukasz Zemla <Lukasz.Zemla@woodward.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221116104453.3207-1-edmund.berenson@emlix.com>
+ <20221116104453.3207-2-edmund.berenson@emlix.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221116105724.2600349-4-abel.vesa@linaro.org>
+In-Reply-To: <20221116104453.3207-2-edmund.berenson@emlix.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -82,15 +81,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/11/2022 11:57, Abel Vesa wrote:
-> From: Neil Armstrong <neil.armstrong@linaro.org>
-> 
-> Add support for the new i2c_pull property introduced for SM8550 setting
-> a I2C specific pull mode on I2C able pins.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+On 16/11/2022 11:44, Edmund Berenson wrote:
+> Add the ad7927 compatibility string documentation to
+> ad7923 driver.
 
-Also missing SoB.
+Use subject prefixes matching the subsystem (git log --oneline -- ...).
+
+> 
+> Suggested-by: Lukasz Zemla <Lukasz.Zemla@woodward.com>
+> Signed-off-by: Edmund Berenson <edmund.berenson@emlix.com>
+
 
 Best regards,
 Krzysztof
