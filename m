@@ -2,111 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C453B62C2A8
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 16:31:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3F4762C2AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 16:35:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232682AbiKPPbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 10:31:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48536 "EHLO
+        id S231615AbiKPPfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 10:35:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231231AbiKPPbL (ORCPT
+        with ESMTP id S229489AbiKPPe7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 10:31:11 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 495D41B1F9;
-        Wed, 16 Nov 2022 07:31:10 -0800 (PST)
-Received: from fraeml715-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NC6QM2WF9z68735;
-        Wed, 16 Nov 2022 23:28:43 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml715-chm.china.huawei.com (10.206.15.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 16 Nov 2022 16:31:07 +0100
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 16 Nov
- 2022 15:31:07 +0000
-Date:   Wed, 16 Nov 2022 15:31:06 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     <ira.weiny@intel.com>
-CC:     Dan Williams <dan.j.williams@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        "Ben Widawsky" <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
-Subject: Re: [PATCH 05/11] cxl/mem: Trace General Media Event Record
-Message-ID: <20221116153106.000025d7@Huawei.com>
-In-Reply-To: <20221110185758.879472-6-ira.weiny@intel.com>
-References: <20221110185758.879472-1-ira.weiny@intel.com>
-        <20221110185758.879472-6-ira.weiny@intel.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Wed, 16 Nov 2022 10:34:59 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74B71180B;
+        Wed, 16 Nov 2022 07:34:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668612898; x=1700148898;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Wj5K9Vlpjbs5N2B8PCfWrnygyNn/3oGRftL7tuGMhMM=;
+  b=ECg/2dNILWto8srrBJNIK5eLBDpiD4OPdb/e0W61WnV4rn5toJhfnOTl
+   nlp/BXtK6Z8op91wClOoaAOimZq5mZv2Q3jdCCGBUQTVYeCmWfjZCRM62
+   kRwu0EBRGo8fJEoUpwpHJMmvHhbiaSRnBeKhx7Xd8eDCDyp89kxtIvt9u
+   1WdR7IsudcQp1pefu0jWIHX5aHivKiJQOFAPuIgPmm7Tjxdd0s0yhJRCQ
+   i8K3zAZyClzOyEJIQ6AvfG9DLYQ0s4qFn3DpU/hM4SfLYOUo2qX229EQB
+   Cpea8RIYvPKPbsTNgggjqM7KlXNaeJnePOfA34tsCXtqPPdSh2m2j81aM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="398859749"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="398859749"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 07:34:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="745093734"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="745093734"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by fmsmga002.fm.intel.com with ESMTP; 16 Nov 2022 07:34:55 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 2AGFYsEF029828;
+        Wed, 16 Nov 2022 15:34:54 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, ast@kernel.org,
+        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+        UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH net-next v2 4/5] net: lan966x: Add support for XDP_TX
+Date:   Wed, 16 Nov 2022 16:34:18 +0100
+Message-Id: <20221116153418.3389630-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221115214456.1456856-5-horatiu.vultur@microchip.com>
+References: <20221115214456.1456856-1-horatiu.vultur@microchip.com> <20221115214456.1456856-5-horatiu.vultur@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Nov 2022 10:57:52 -0800
-ira.weiny@intel.com wrote:
+From: Horatiu Vultur <horatiu.vultur@microchip.com>
+Date: Tue, 15 Nov 2022 22:44:55 +0100
 
-> From: Ira Weiny <ira.weiny@intel.com>
-> 
-> CXL rev 3.0 section 8.2.9.2.1.1 defines the General Media Event Record.
-> 
-> Determine if the event read is a general media record and if so trace
-> the record as a General Media Event Record.
-> 
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> 
-A few v2.0 references left in here that should be updated given it's new code.
+Extend lan966x XDP support with the action XDP_TX. In this case when the
+received buffer needs to execute XDP_TX, the buffer will be moved to the
+TX buffers. So a new RX buffer will be allocated.
+When the TX finish with the frame, it would release completely this
+buffer.
 
-With those tidied up
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+---
+ .../ethernet/microchip/lan966x/lan966x_fdma.c | 78 +++++++++++++++++--
+ .../ethernet/microchip/lan966x/lan966x_main.c |  4 +-
+ .../ethernet/microchip/lan966x/lan966x_main.h |  8 ++
+ .../ethernet/microchip/lan966x/lan966x_xdp.c  |  8 ++
+ 4 files changed, 91 insertions(+), 7 deletions(-)
 
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+index 384ed34197d58..c2e56233a8da5 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+@@ -394,13 +394,21 @@ static void lan966x_fdma_tx_clear_buf(struct lan966x *lan966x, int weight)
+ 		dcb_buf->dev->stats.tx_bytes += dcb_buf->len;
+ 
+ 		dcb_buf->used = false;
+-		dma_unmap_single(lan966x->dev,
+-				 dcb_buf->dma_addr,
+-				 dcb_buf->len,
+-				 DMA_TO_DEVICE);
+-		if (!dcb_buf->ptp)
++		if (dcb_buf->skb)
++			dma_unmap_single(lan966x->dev,
++					 dcb_buf->dma_addr,
++					 dcb_buf->len,
++					 DMA_TO_DEVICE);
++
++		if (dcb_buf->skb && !dcb_buf->ptp)
+ 			dev_kfree_skb_any(dcb_buf->skb);
+ 
++		if (dcb_buf->page) {
++			page_pool_release_page(lan966x->rx.page_pool,
++					       dcb_buf->page);
++			put_page(dcb_buf->page);
++		}
 
-> diff --git a/include/trace/events/cxl.h b/include/trace/events/cxl.h
-> index 60dec9a84918..a0c20e110708 100644
-> --- a/include/trace/events/cxl.h
-> +++ b/include/trace/events/cxl.h
-> @@ -119,6 +119,130 @@ TRACE_EVENT(cxl_generic_event,
->  		__print_hex(__entry->data, CXL_EVENT_RECORD_DATA_LENGTH))
->  );
->  
-> +/*
-> + * Physical Address field masks
-> + *
-> + * General Media Event Record
-> + * CXL v2.0 Section 8.2.9.1.1.1; Table 154
+Hmm, that's not really correct.
 
-Update to CXL rev 3.0 as I think we are preferring latest
-spec references on any new code.
+For skb, you need to unmap + free, true (BPW, just use
+napi_consume_skb()).
+For %XDP_TX, as you use Page Pool, you don't need to unmap, but you
+need to do xdp_return_frame{,_bulk}. Plus, as Tx is being done here
+directly from an Rx NAPI polling cycle, xdp_return_frame_rx_napi()
+is usually used. Anyway, each of xdp_return_frame()'s variants will
+call page_pool_put_full_page() for you.
+For %XDP_REDIRECT, as you don't know the source of the XDP frame,
+you need to unmap it (as it was previously mapped in
+::ndo_xdp_xmit()), plus call xdp_return_frame{,_bulk} to free the
+XDP frame. Note that _rx_napi() variant is not applicable here.
 
-> + *
-> + * DRAM Event Record
-> + * CXL rev 3.0 section 8.2.9.2.1.2; Table 8-44
-> + */
+That description might be confusing, so you can take a look at the
+already existing code[0] to get the idea. I think this piece shows
+the expected logics rather well.
 
-> +
-> +/*
-> + * General Media Event Record - GMER
-> + * CXL v2.0 Section 8.2.9.1.1.1; Table 154
-Update ref to r3.0
-Never v or the spec folk will get irritable :)
++
+ 		clear = true;
+ 	}
+ 
+@@ -532,6 +540,9 @@ static int lan966x_fdma_napi_poll(struct napi_struct *napi, int weight)
+ 			lan966x_fdma_rx_free_page(rx);
+ 			lan966x_fdma_rx_advance_dcb(rx);
+ 			goto allocate_new;
++		case FDMA_TX:
++			lan966x_fdma_rx_advance_dcb(rx);
++			continue;
+ 		case FDMA_DROP:
+ 			lan966x_fdma_rx_free_page(rx);
+ 			lan966x_fdma_rx_advance_dcb(rx);
+@@ -653,6 +664,62 @@ static void lan966x_fdma_tx_start(struct lan966x_tx *tx, int next_to_use)
+ 	tx->last_in_use = next_to_use;
+ }
+ 
++int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
++			   struct xdp_frame *xdpf,
++			   struct page *page)
++{
++	struct lan966x *lan966x = port->lan966x;
++	struct lan966x_tx_dcb_buf *next_dcb_buf;
++	struct lan966x_tx *tx = &lan966x->tx;
++	dma_addr_t dma_addr;
++	int next_to_use;
++	__be32 *ifh;
++	int ret = 0;
++
++	spin_lock(&lan966x->tx_lock);
++
++	/* Get next index */
++	next_to_use = lan966x_fdma_get_next_dcb(tx);
++	if (next_to_use < 0) {
++		netif_stop_queue(port->dev);
++		ret = NETDEV_TX_BUSY;
++		goto out;
++	}
++
++	/* Generate new IFH */
++	ifh = page_address(page) + XDP_PACKET_HEADROOM;
++	memset(ifh, 0x0, sizeof(__be32) * IFH_LEN);
++	lan966x_ifh_set_bypass(ifh, 1);
++	lan966x_ifh_set_port(ifh, BIT_ULL(port->chip_port));
++
++	dma_addr = page_pool_get_dma_addr(page);
++	dma_sync_single_for_device(lan966x->dev, dma_addr + XDP_PACKET_HEADROOM,
++				   xdpf->len + IFH_LEN_BYTES,
++				   DMA_TO_DEVICE);
 
-> + */
+Also not correct. This page was mapped with %DMA_FROM_DEVICE in the
+Rx code, now you sync it for the opposite.
+Most drivers in case of XDP enabled create Page Pools with ::dma_dir
+set to %DMA_BIDIRECTIONAL. Now you would need only to sync it here
+with the same direction (bidir) and that's it.
 
++
++	/* Setup next dcb */
++	lan966x_fdma_tx_setup_dcb(tx, next_to_use, xdpf->len + IFH_LEN_BYTES,
++				  dma_addr + XDP_PACKET_HEADROOM);
++
++	/* Fill up the buffer */
++	next_dcb_buf = &tx->dcbs_buf[next_to_use];
++	next_dcb_buf->skb = NULL;
++	next_dcb_buf->page = page;
++	next_dcb_buf->len = xdpf->len + IFH_LEN_BYTES;
++	next_dcb_buf->dma_addr = dma_addr;
++	next_dcb_buf->used = true;
++	next_dcb_buf->ptp = false;
++	next_dcb_buf->dev = port->dev;
++
++	/* Start the transmission */
++	lan966x_fdma_tx_start(tx, next_to_use);
++
++out:
++	spin_unlock(&lan966x->tx_lock);
++
++	return ret;
++}
++
+ int lan966x_fdma_xmit(struct sk_buff *skb, __be32 *ifh, struct net_device *dev)
+ {
+ 	struct lan966x_port *port = netdev_priv(dev);
+@@ -709,6 +776,7 @@ int lan966x_fdma_xmit(struct sk_buff *skb, __be32 *ifh, struct net_device *dev)
+ 	/* Fill up the buffer */
+ 	next_dcb_buf = &tx->dcbs_buf[next_to_use];
+ 	next_dcb_buf->skb = skb;
++	next_dcb_buf->page = NULL;
+ 	next_dcb_buf->len = skb->len;
+ 	next_dcb_buf->dma_addr = dma_addr;
+ 	next_dcb_buf->used = true;
 
+[...]
 
+-- 
+2.38.0
+
+Thanks,
+Olek
