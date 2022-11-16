@@ -2,91 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C33C662CF2D
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 00:55:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BD4C62CF37
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 00:56:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234585AbiKPXzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 18:55:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44096 "EHLO
+        id S233485AbiKPX4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 18:56:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233886AbiKPXzB (ORCPT
+        with ESMTP id S231871AbiKPX4B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 18:55:01 -0500
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C339066C9E;
-        Wed, 16 Nov 2022 15:55:00 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 8FBA832003C0;
-        Wed, 16 Nov 2022 18:54:59 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Wed, 16 Nov 2022 18:55:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1668642899; x=1668729299; bh=E6
-        JF0cEeUYzVPtpcCWq54L+1lUQkLjUmOjkjEOpTZQs=; b=HxYk+rY3975eYJAPSW
-        Ph7ZU1IwAnV4TanjbmZUbDB6VzD/zAZfucXLQXGfvHyoibQO0lD1E2qcwXsf3Alp
-        7PPDHs2Y7WKoBapqB+/iV0/iTm0RXFCMrsgHaag5LHGYqbiLx/IuUsTwkZsCbBRG
-        0Z3zd3w0NkBhAfzrNz8A/8Ll+OU1CmIwCLOtNvkPGmvh7+EjfSFMHTGC7Xjqz3Wn
-        wi7vbkyOHminV0tsPsCiMU3LBwZeDZ9ErNMA4tICmPEqmoCe6R+Ei1yI4avkZ9wy
-        leIpyBk4x1WB7nUXHJu1FP4KLZZ+rVhChhJNTuarphOpvXAIlq4Vknwov//y13RI
-        s8sg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1668642899; x=1668729299; bh=E6JF0cEeUYzVPtpcCWq54L+1lUQk
-        LjUmOjkjEOpTZQs=; b=G07M2l3GSh3PLRpUpbkrFfJDVMCtKW0iGwiKO8yVW688
-        ZPOucYUGnER+7H6ToVIvXVQDpXtrNMor5uRwNLLAKXFG9fk5/97wq7YoI0/rNtLd
-        IWWocrNz3QIS/18Ltl2wAuGImJe8BZizYkyzEoz29+wFZBwXrrjnnY4Vw+5naKL/
-        1QQ9Ol7iYPlEtwt+C0WBLRenclkgXHuCJvxo3anJr/aJmTRWP7Q/9ujfOd8KSnjl
-        VABLD32s5ltm4PfAvK7gBzffZyDqQTO9BFVPARHIElY2Gu5jV0YDLka5u6YlmMFL
-        0kUe9ac6M5uXZ4U43WwFBojxgvm5W+DQNIGNHJaJLw==
-X-ME-Sender: <xms:Unh1Y854ORzk8SFRgynH9lD4k_-BLpT6Vg3ODpSR1Vcs_p_sVrMZyg>
-    <xme:Unh1Y96f3_BXmDZJ0FjEkx0fsO4UhHjD3_O2O04XZdLpFg-nlIP5BwgDJD9SA1yLv
-    zBCtXTsXwOrwcxKrSY>
-X-ME-Received: <xmr:Unh1Y7fd4FQnxXfNnAs_lVR-Ad9HbRsJXxBHKEG-UNlH3z-s5DLQ-AdYoRnBPYubNhnp3A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgeejgdduiecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhirhhi
-    lhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrdhnrg
-    hmvgeqnecuggftrfgrthhtvghrnhephfeigefhtdefhedtfedthefghedutddvueehtedt
-    tdehjeeukeejgeeuiedvkedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
-X-ME-Proxy: <xmx:Unh1YxI9iIYdKgHxx2SGafkvR7A5ElwzVHFEn0Dgj5n8wQrEVljFbw>
-    <xmx:Unh1YwLxu9M0RFU14x20Qo__UDf-WabQX-f-fkbHcvELqCyBSXadCA>
-    <xmx:Unh1YywGTGww3BJL_IVBSnir7p7Ut6GxjQPE6OWW3E-wURkQ0M9CNg>
-    <xmx:U3h1Y1XGTsKaY2E1nHo6LGGHZAd7Gxgkw29BGhfWxjRD5Qq8EuHuRQ>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 16 Nov 2022 18:54:58 -0500 (EST)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 9E6CC109702; Thu, 17 Nov 2022 02:54:55 +0300 (+03)
-Date:   Thu, 17 Nov 2022 02:54:55 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Vishal Verma <vishal.l.verma@intel.com>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-kernel@vger.kernel.org,
-        Chris Piper <chris.d.piper@intel.com>, nvdimm@lists.linux.dev,
-        linux-acpi@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Liu Shixin <liushixin2@huawei.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] ACPI: HMAT: Fix initiator registration for
- single-initiator systems
-Message-ID: <20221116235455.74nqyfdcqe72mhbi@box.shutemov.name>
-References: <20221116-acpi_hmat_fix-v2-0-3712569be691@intel.com>
- <20221116-acpi_hmat_fix-v2-2-3712569be691@intel.com>
+        Wed, 16 Nov 2022 18:56:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61175657E5;
+        Wed, 16 Nov 2022 15:56:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F15466205D;
+        Wed, 16 Nov 2022 23:55:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AABDBC433D6;
+        Wed, 16 Nov 2022 23:55:55 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="goQ4eWiA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1668642952;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sM9LBQZ376u5w/8PZH+YQVlUaxTNIyanmkjPT3FYfMU=;
+        b=goQ4eWiAvkZqWkfss8gq1ex5AtlA/ahfxEBk6r2fheEdHDzxQqDvdaI7jHnRtKQZacSknN
+        xALKJahBGIU2w4KpYkodsz6zSfQUgQjwtn/9XiLQzmbduxm8SAGcIyMTbNpEffPJ6eVtj8
+        fknlTQXlnEW5l9AjbJbPQ6U48mWYP8U=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 48c033fa (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Wed, 16 Nov 2022 23:55:51 +0000 (UTC)
+Date:   Thu, 17 Nov 2022 00:55:47 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Christoph =?utf-8?Q?B=C3=B6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        SeongJae Park <sj@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Helge Deller <deller@gmx.de>, netdev@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-mmc@vger.kernel.org, linux-parisc@vger.kernel.org,
+        ydroneaud@opteya.com
+Subject: Re: [PATCH v2 3/3] treewide: use get_random_u32_between() when
+ possible
+Message-ID: <Y3V4g8eorwiU++Y3@zx2c4.com>
+References: <20221114164558.1180362-1-Jason@zx2c4.com>
+ <20221114164558.1180362-4-Jason@zx2c4.com>
+ <202211161436.A45AD719A@keescook>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221116-acpi_hmat_fix-v2-2-3712569be691@intel.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+In-Reply-To: <202211161436.A45AD719A@keescook>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,41 +88,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 04:37:37PM -0700, Vishal Verma wrote:
-> In a system with a single initiator node, and one or more memory-only
-> 'target' nodes, the memory-only node(s) would fail to register their
-> initiator node correctly. i.e. in sysfs:
+On Wed, Nov 16, 2022 at 02:43:13PM -0800, Kees Cook wrote:
+> On Mon, Nov 14, 2022 at 05:45:58PM +0100, Jason A. Donenfeld wrote:
+> > -				(get_random_u32_below(1024) + 1) * PAGE_SIZE;
+> > +				get_random_u32_between(1, 1024 + 1) * PAGE_SIZE;
 > 
->   # ls /sys/devices/system/node/node0/access0/targets/
->   node0
+> I really don't like "between". Can't this be named "inclusive" (and
+> avoid adding 1 everywhere, which seems ugly), or at least named
+> something less ambiguous?
 > 
-> Where as the correct behavior should be:
+> > -		n = get_random_u32_below(100) + 1;
+> > +		n = get_random_u32_between(1, 101);
 > 
->   # ls /sys/devices/system/node/node0/access0/targets/
->   node0 node1
+> Because I find this much less readable. "Below 100" is clear: 0-99
+> inclusive, plus 1, so 1-100 inclusive. "Between 1 and 101" is not obvious
+> to me to mean: 1-100 inclusive.
 > 
-> This happened because hmat_register_target_initiators() uses list_sort()
-> to sort the initiator list, but the sort comparision function
-> (initiator_cmp()) is overloaded to also set the node mask's bits.
-> 
-> In a system with a single initiator, the list is singular, and list_sort
-> elides the comparision helper call. Thus the node mask never gets set,
-> and the subsequent search for the best initiator comes up empty.
-> 
-> Add a new helper to consume the sorted initiator list, and generate the
-> nodemask, decoupling it from the overloaded initiator_cmp() comparision
-> callback. This prevents the singular list corner case naturally, and
-> makes the code easier to follow as well.
-> 
-> Cc: <stable@vger.kernel.org>
-> Cc: Rafael J. Wysocki <rafael@kernel.org>
-> Cc: Liu Shixin <liushixin2@huawei.com>
-> Cc: Dan Williams <dan.j.williams@intel.com>
-> Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Reported-by: Chris Piper <chris.d.piper@intel.com>
-> Signed-off-by: Vishal Verma <vishal.l.verma@intel.com>
+> These seem so much nicer:
+> 	get_random_u32_inclusive(1, 1024)
+> 	get_random_u32_inclusive(1, 100)
 
-Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Yann pointed out something similar -- the half-closed interval being
+confusing -- and while I was initially dismissive, I've warmed up to
+doing this fully closed after sending a diff of that:
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+https://lore.kernel.org/lkml/Y3Qt8HiXj8giOnZy@zx2c4.com/
+
+So okay, let's say that I'll implement the inclusive version instead. We
+now have two problems to solve:
+
+1) How/whether to make f(0, UR2_MAX) safe,
+   - without additional 64-bit arithmetic,
+   - minimizing the number of branches.
+   I have a few ideas I'll code golf for a bit.
+
+2) What to call it:
+   - between I still like, because it mirrors "I'm thinking of a number
+     between 1 and 10 and..." that everybody knows,
+   - inclusive I guess works, but it's not a preposition,
+   - bikeshed color #3?
+
+I think I can make progress with (1) alone by fiddling around with
+godbolt enough, like usual. I could use some more ideas for (2) though.
+
+Jason
