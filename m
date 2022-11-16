@@ -2,121 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B98262C587
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 17:55:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A09D62C58E
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 17:56:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237831AbiKPQzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 11:55:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41230 "EHLO
+        id S234162AbiKPQ4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 11:56:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234896AbiKPQzR (ORCPT
+        with ESMTP id S229702AbiKPQzk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 11:55:17 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55CA5D48;
-        Wed, 16 Nov 2022 08:54:35 -0800 (PST)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AGGoEKI025231;
-        Wed, 16 Nov 2022 16:54:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=kuGh5ZshHhvPZ5CEVgWb+338jOu59CC5tuxbY6m9GSU=;
- b=d9KfF9DpQgGGL5OuxLl1E6rMfzUUI9uuSCJsCefobIgT9tJGNNEvqv3kLHdkC9PmjM5o
- 0lY6RtVQsKDiiwbOSxhQzdMkku0B0sk38PhTZZhNCuPfQZOZ3MIA00lXUNNsW5ITTcQE
- oS9jg7aqzJ3ApHG5O1bbCjRQc6yXMqs0NbgDSOFrfj0b4WKQUFPJhPM/8DaaAkujv5wI
- SvnAJG7tLnh7ff175aqwCvjyOBZ51aib9fFVMuGm0hY/T8BscXKIzf4ucfc7BzIvcA5A
- X5HWNGwaqGObqJDNw4kAU4NF72bAcGFDFbwPavBIMEUiFGifSfmFtCgAEYkpavmmjIh0 bg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kw3qt023f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Nov 2022 16:54:13 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AGGpBwL027103;
-        Wed, 16 Nov 2022 16:54:12 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kw3qt022w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Nov 2022 16:54:12 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AGGpH1D016936;
-        Wed, 16 Nov 2022 16:54:11 GMT
-Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
-        by ppma03dal.us.ibm.com with ESMTP id 3kt34a2jw9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Nov 2022 16:54:11 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com ([9.208.128.114])
-        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AGGsAjX10486356
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 16 Nov 2022 16:54:10 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9639F5807A;
-        Wed, 16 Nov 2022 16:54:09 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4533D58058;
-        Wed, 16 Nov 2022 16:54:08 +0000 (GMT)
-Received: from sig-9-77-134-48.ibm.com (unknown [9.77.134.48])
-        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 16 Nov 2022 16:54:08 +0000 (GMT)
-Message-ID: <3531e16685587aa8f3181de5eb84bf26f90a5dfb.camel@linux.ibm.com>
-Subject: Re: [PATCH] ima: Fix misuse of dereference of pointer in
- template_desc_init_fields()
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
-        Xiujianfeng <xiujianfeng@huawei.com>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "paul@paul-moore.com" <paul@paul-moore.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "roberto.sassu@polito.it" <roberto.sassu@polito.it>
-Cc:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Date:   Wed, 16 Nov 2022 11:54:01 -0500
-In-Reply-To: <55100c2e550b4649b5a751ca4596fe7c@huawei.com>
-References: <20221112092719.224888-1-xiujianfeng@huawei.com>
-         <55100c2e550b4649b5a751ca4596fe7c@huawei.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: u68NUWLz__BtLRgNKDNb2bAlNWK-0hqB
-X-Proofpoint-GUID: yJDXKb6vON_INKKjklOIZJMdojnUNJiJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-16_03,2022-11-16_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
- suspectscore=0 priorityscore=1501 mlxscore=0 clxscore=1011
- lowpriorityscore=0 phishscore=0 impostorscore=0 bulkscore=0 malwarescore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211160115
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 16 Nov 2022 11:55:40 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8209DB18
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 08:55:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668617736; x=1700153736;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=gVWP195KB/4o1HYHRuQ55q8hg8l803VpcH9uitiDMkQ=;
+  b=RMGrcybavstbcguHfmgTbSlW0hi5pT2+yEmm7KUKABoEgYfMPzGd+hi8
+   M8ju2RnaiwSpYUWEk8kOgt3OvkSgIyg/snE3kKwEASU7sM3awi0nI7g7H
+   +iLUSZtsuNfcuQoGMGipCQ5hDcdIJrtj0T6p4S/mdc3SyRL8kaqJgR/Av
+   SZXZAsU9NYPhpc+8sOq5aHBxLhZ4aMpJxn4QXBvuPabeOuIi2JTXHtjjq
+   kNZGU0jhp4nOpxbmKZYJ+PdkUyVOGjEPuANusXoo+rQDQgAJOwhbrjma2
+   mE+sGUA+LDx4Ppw7QCNlRg1CNEQxjDUraPqDo/kTx3s2/4Yj9QiLEX3ca
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="311304774"
+X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
+   d="scan'208";a="311304774"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 08:55:36 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="814149438"
+X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
+   d="scan'208";a="814149438"
+Received: from msureshb-mobl3.amr.corp.intel.com (HELO [10.212.45.114]) ([10.212.45.114])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 08:55:33 -0800
+Message-ID: <d7b32cb5-7fec-0c2a-d2c7-6934a1eb932b@linux.intel.com>
+Date:   Wed, 16 Nov 2022 10:55:33 -0600
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [Sound-open-firmware] [PATCH 3/4] ASoC: SOF: Adding amd HS
+ functionality to the sof core
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>,
+        broonie@kernel.org, alsa-devel@alsa-project.org
+Cc:     Daniel Baluta <daniel.baluta@nxp.com>, Sunil-kumar.Dommati@amd.com,
+        ssabakar@amd.com, Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        venkataprasad.potturu@amd.com,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Basavaraj.Hiregoudar@amd.com, Chen-Yu Tsai <wenst@chromium.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        YC Hung <yc.hung@mediatek.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Vijendar.Mukunda@amd.com,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:SOUND - SOUND OPEN FIRMWARE (SOF) DRIVERS" 
+        <sound-open-firmware@alsa-project.org>
+References: <20220913144319.1055302-1-Vsujithkumar.Reddy@amd.com>
+ <20220913144319.1055302-4-Vsujithkumar.Reddy@amd.com>
+ <36a45c7a-820a-7675-d740-c0e83ae2c417@collabora.com>
+ <a8bc9284-c0c2-79aa-fee6-40101fc34f96@linux.intel.com>
+ <02c2643f-bd32-c3db-51a1-d7773b60c655@collabora.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <02c2643f-bd32-c3db-51a1-d7773b60c655@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-11-14 at 08:37 +0000, Roberto Sassu wrote:
-> > From: Xiujianfeng
-> > Sent: Saturday, November 12, 2022 10:27 AM
-> > The input parameter @fields is type of struct ima_template_field ***, so
-> > when allocates array memory for @fields, the size of element should be
-> > sizeof(**field) instead of sizeof(*field).
-> > 
-> > Actually the original code would not cause any runtime error, but it's
-> > better to make it logically right.
-> > 
-> > Fixes: adf53a778a0a ("ima: new templates management mechanism")
-> > Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+
+
+On 11/16/22 10:33, AngeloGioacchino Del Regno wrote:
+> Il 16/11/22 16:04, Pierre-Louis Bossart ha scritto:
+>>
+>>>> diff --git a/include/sound/sof/dai.h b/include/sound/sof/dai.h
+>>>> index 21d98f31a9ca..83fd81c82e4c 100644
+>>>> --- a/include/sound/sof/dai.h
+>>>> +++ b/include/sound/sof/dai.h
+>>>> @@ -84,6 +84,7 @@ enum sof_ipc_dai_type {
+>>>>        SOF_DAI_AMD_BT,            /**< AMD ACP BT*/
+>>>>        SOF_DAI_AMD_SP,            /**< AMD ACP SP */
+>>>>        SOF_DAI_AMD_DMIC,        /**< AMD ACP DMIC */
+>>>> +    SOF_DAI_AMD_HS,            /**< Amd HS */
+>>>>        SOF_DAI_MEDIATEK_AFE,        /**< Mediatek AFE */
+>>>
+>>> Adding SOF_DAI_AMD_HS before SOF_DAI_MEDIATEK_AFE desynced this
+>>> enumeration
+>>> so the DAI type is now 11 and not 10 anymore, leading to a failure in
+>>> firmware
+>>> at IPC3 helper function `dai_get()`, as when `dai_find_type()` is
+>>> called, the
+>>> DAI type that the firmware expects doesn't match with the one that gets
+>>> sent
+>>> in the request message from the kernel.
+>>>
+>>> As a local test, I tried moving SOF_DAI_AMD_HS after
+>>> SOF_DAI_MEDIATEK_AFE and
+>>> this has restored full functionality on my MT8195 platform (Tomato
+>>> Chromebook).
+>>>
+>>> If SOF is supposed to guarantee backwards compatibility (and I believe
+>>> it is),
+>>> this commit breaks that.
+>>>
+>>> I would be tempted to send a commit that moves SOF_DAI_AMD_HS to the
+>>> end, but
+>>> that would break the already compiled firmware for AMD platforms, so I
+>>> am not
+>>> sure how to proceed.
+>>
+>> D'oh. Yes this breaks backwards-compatibility and this is a clear
+>> mistake. I think your suggestion to add the AMD_HS at the end is the
+>> only practical solution indeed - this would need to be done for both
+>> kernel and SOF version of dai.h.
+>>
 > 
-> Reviewed-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Okay, I will send a commit tomorrow :-)
 
-Thanks, applied.
+I sent those two GitHub pull requests already:
 
-Mimi
+https://github.com/thesofproject/linux/pull/4017
+https://github.com/thesofproject/sof/pull/6616
 
