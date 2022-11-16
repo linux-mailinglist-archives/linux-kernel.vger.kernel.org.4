@@ -2,109 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB80762CE82
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 00:07:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E11EA62CE7D
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 00:06:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234184AbiKPXH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 18:07:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43578 "EHLO
+        id S234064AbiKPXG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 18:06:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234299AbiKPXHT (ORCPT
+        with ESMTP id S229641AbiKPXGX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 18:07:19 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7536D3FBBC
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 15:06:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668639982;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fWNz/QE0hFws1BC7T/rZzODjo9Sug+sYTjrv+WWI+bk=;
-        b=Vcp2G9QuRqAMVFkfQ6Pf/qM3FTnlWuGTerNqq9aBGNcgEzWlZQn4N4pUW3Q8AnG/ZohdJN
-        yAK9RZBOLe60KoVh0GTibTO1qG4KmSFOq47ma4kbrwPKK2ECgI0P5hoSkZ/W9LVURXDCXZ
-        qJ0wQhhK7MmGvqrAXQNslJFEjBDtjB0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-321-Kh4_YGnwNsCefQGPtUsbUA-1; Wed, 16 Nov 2022 18:06:16 -0500
-X-MC-Unique: Kh4_YGnwNsCefQGPtUsbUA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id ED237811E67;
-        Wed, 16 Nov 2022 23:06:15 +0000 (UTC)
-Received: from [10.22.10.207] (unknown [10.22.10.207])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 35079C1908A;
-        Wed, 16 Nov 2022 23:06:15 +0000 (UTC)
-Message-ID: <4b5142be-6a47-9dfd-a238-5b9d29b296b8@redhat.com>
-Date:   Wed, 16 Nov 2022 18:06:13 -0500
+        Wed, 16 Nov 2022 18:06:23 -0500
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B67832B86;
+        Wed, 16 Nov 2022 15:06:22 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id F355832009A0;
+        Wed, 16 Nov 2022 18:06:19 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Wed, 16 Nov 2022 18:06:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1668639979; x=
+        1668726379; bh=KFtL7NqTvZI+19d8wSLjfwbpth3MGn8P3Kyk3c2j8uk=; b=Y
+        /2hKiOIIFYsfIXg0J5dZKNKvzMp9OWgrntt40C+kQzXVR1e7YchwUqrBeXu/1fyw
+        iR7sRMez5kZ7XAECqIc8PEZ34q/YGeTIn5eotuwcmo/mBnSACJcElJ60e4IKHxWp
+        iAVzx93t2AkJSQKSrIXhFoBQdpBtp1zi5Be/x/C/D/pB93xxiZtWqzsG+i9vXi1i
+        C5XvH8xe/sAcJHdJbULQTZh/QotZHWnphJGSlUdgwuSDAWWFJ4HHUy/D1Dk5ZKNw
+        4686jozx1olB7vAxIZa6F6ZxZwS1GCAea06DOkhL13srusZkenJ+7eNV0Hrgs8Ea
+        N7s2IzLKO6wr3m2aKK4yA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1668639979; x=
+        1668726379; bh=KFtL7NqTvZI+19d8wSLjfwbpth3MGn8P3Kyk3c2j8uk=; b=p
+        4H5UU8OWML9T4zxjTvCNG0VDoU/eIqvLh37jaQA1fonADnS7T8Ie9j++2aJnhk6j
+        LDzb5w2Osj9Qid/pQjCNNCWwmEq8iiJ5K0qsTGHiC5uQ73KC3XAK3ue546EoPNRq
+        Pcj9MtA6fIRZoCo4fP40xVYWUnr9zQTkMGYJN6twucfB/gyNRfORndwKTRsqVGSQ
+        19bJQrHpsDEhunWFfegDyD6KKdoOhDCYE5ap8e4oNIRHwQTckvT97wNGQgdhRXgG
+        BDv7L+mzuMc433fyn1s0OozIfv8NL+eMpdk9iOfY6AHPt6jOaed6/eCqNGfMBfVu
+        m8sRsSgglgSt6z4UaLJ5w==
+X-ME-Sender: <xms:6mx1Y3SOTuoXLCcmFztQqqhbzuYh7ViHGBdTH7Z5y_xsqKaHvXJVZg>
+    <xme:6mx1Y4z7VIpTFMP9eqeQsS-hpQq2Esz1oSnZNNG4Z25j6dBkSaM79pTfrhRQShL-r
+    P36nRMcJAtyIs5ftQ>
+X-ME-Received: <xmr:6mx1Y806n4QRQ6ImNnqOrCG4t_EC5dZsYYIDSGLw8aCo_IB75i20IZYktRKi655VWeQNApnuH3UD1PKvcNTVhdA8RmkbW7MTAovIdqGb5BhSgRwFJxgG-edsUg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgeejgddtjecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefkffggfgfuvfevfhfhjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepkeejleelfeeitdfhtdfgkeeghedufeduueegffdvhfdukeelleef
+    tdetjeehuddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:6mx1Y3Cjf8YLOykp9SXvg66qy0tr21N39MVl18UlsEefSh2mqBjoiw>
+    <xmx:6mx1Ywj7sjhQhwWqz76_J26sNkZVKNNbOwX8XorFzDEBGn_KFzfYIw>
+    <xmx:6mx1Y7quBM6C0R-VlzqKu6hQAr4E2rUdH5s5AP8_VsR5EZ7FjNHLOQ>
+    <xmx:62x1Y5VwdqdwV8gxgtyobO0f2VKwGn-wjEJJa7MscNhxpM95FwKsiw>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 16 Nov 2022 18:06:18 -0500 (EST)
+Message-ID: <d58b5b89-380a-d967-9cd0-6dcf1bb9fe4d@sholland.org>
+Date:   Wed, 16 Nov 2022 17:06:17 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v10 0/3] blk-cgroup: Optimize blkcg_rstat_flush()
+User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH 1/2] media: dt-bindings: allwinner: video-engine: Fix
+ number of IOMMU channels
 Content-Language: en-US
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ming Lei <ming.lei@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Hillf Danton <hdanton@sina.com>, Tejun Heo <tj@kernel.org>
-References: <20221105005902.407297-1-longman@redhat.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20221105005902.407297-1-longman@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Jernej Skrabec <jernej.skrabec@gmail.com>, mchehab@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        wens@csie.org
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <20221116193105.363297-1-jernej.skrabec@gmail.com>
+ <20221116193105.363297-2-jernej.skrabec@gmail.com>
+From:   Samuel Holland <samuel@sholland.org>
+In-Reply-To: <20221116193105.363297-2-jernej.skrabec@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/4/22 20:58, Waiman Long wrote:
->   v10:
->    - Update patch 3 to rename the rstat function to
->      cgroup_rstat_css_cpu_flush().
->
->   v9:
->    - Remove patch "llist: Allow optional sentinel node terminated lockless
->      list" for now. This will be done as a follow-up patch.
->    - Add a new lqueued field to blkg_iostat_set to store the status of
->      whether lnode is in a lockless list.
->    - Add a new patch 3 to speed up the freeing of blkcg by flushing out
->      the rstat lockless lists at blkcg offline time.
->
->   v8:
->    - Update the llist patch to make existing llist functions and macros
->      work for both NULL and sentinel terminated lockless list as much
->      as possible and leave only the initialization and removal functions
->      to have a sentinel terminated llist variants.
->
-> This patch series improves blkcg_rstat_flush() performance by eliminating
-> unnecessary blkg enumeration and flush operations for those blkg's and
-> blkg_iostat_set's that haven't been updated since the last flush.
->
-> Waiman Long (3):
->    blk-cgroup: Return -ENOMEM directly in blkcg_css_alloc() error path
->    blk-cgroup: Optimize blkcg_rstat_flush()
->    blk-cgroup: Flush stats at blkgs destruction path
->
->   block/blk-cgroup.c     | 103 +++++++++++++++++++++++++++++++++++------
->   block/blk-cgroup.h     |  10 ++++
->   include/linux/cgroup.h |   1 +
->   kernel/cgroup/rstat.c  |  20 ++++++++
->   4 files changed, 119 insertions(+), 15 deletions(-)
+On 11/16/22 13:31, Jernej Skrabec wrote:
+> Cedrus (video engine) on Allwinner H6 actually uses two IOMMU channel,
+> not just one. However, Cedrus on SoCs like D1 only uses one channel.
+> 
+> Allow up to 2 IOMMU channels.
+> 
+> Fixes: 62a8ccf3a248 ("arm64: dts: allwinner: h6: Fix Cedrus IOMMU usage")
+> Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+> ---
+>  .../bindings/media/allwinner,sun4i-a10-video-engine.yaml        | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-video-engine.yaml b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-video-engine.yaml
+> index 541325f900a1..257bb372d166 100644
+> --- a/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-video-engine.yaml
+> +++ b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-video-engine.yaml
+> @@ -55,7 +55,7 @@ properties:
+>      description: Phandle to the device SRAM
+>  
+>    iommus:
+> -    maxItems: 1
+> +    maxItems: 2
 
-Jens, do you have any further comment on this patchset? Is it possible 
-to queue it for the next Linux version?
+You need to add minItems: 1, or else this will require two items.
 
-Cheers,
-Longman
+Regards,
+Samuel
+
+>  
+>    memory-region:
+>      maxItems: 1
 
