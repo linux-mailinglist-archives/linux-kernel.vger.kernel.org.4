@@ -2,174 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D658E62C624
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 18:17:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ABCA62C64B
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 18:23:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232548AbiKPRRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 12:17:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34184 "EHLO
+        id S234249AbiKPRXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 12:23:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234304AbiKPRRk (ORCPT
+        with ESMTP id S233262AbiKPRXC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 12:17:40 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A1625B591;
-        Wed, 16 Nov 2022 09:17:25 -0800 (PST)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AGGg24V031453;
-        Wed, 16 Nov 2022 17:17:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=tvO5QRhnZQNwwKCc2yWc5VgfQdhcmKr/lkbJbaWChko=;
- b=G57pzugsozEV35YcVL6LNsPFWKSHx4/WhveKRFpulayy74ZY2OriAJ3LPTbipmuf0uG/
- Nz4YpAxRS8X8IhFbO1yK1ZIWusLa3fzdqjyPfbd/RMjyooUKbdknjRPeZS1v1PCTgBq8
- q+ouHeR419B2EpmfO9UyRPt76p5lYQir0zBXZhpFvBaNCNgjVvZ6Mwi42G08/9jRpwEk
- VrV6spQfX97ET6QmaF5NjJQtl6lMTWdP+fM1kdW7bw+HizZQfQBjo7MaRDZOmDIan56M
- XfbGLSY7BoTpFrxrPLWOMx3ny4b/mW34x5O0/nfbwJjKp4GFQ1PNyntj52z5NiGB5Rtl WQ== 
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kw3m50w66-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Nov 2022 17:17:05 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AGH4kwp006968;
-        Wed, 16 Nov 2022 17:17:04 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma05fra.de.ibm.com with ESMTP id 3kt3494qum-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Nov 2022 17:17:03 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AGHH02G60490164
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 16 Nov 2022 17:17:00 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D40D552054;
-        Wed, 16 Nov 2022 17:17:00 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 54A0D52050;
-        Wed, 16 Nov 2022 17:17:00 +0000 (GMT)
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Matthew Rosato <mjrosato@linux.ibm.com>,
-        Gerd Bayer <gbayer@linux.ibm.com>, iommu@lists.linux.dev,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Wenjia Zhang <wenjia@linux.ibm.com>
-Cc:     Pierre Morel <pmorel@linux.ibm.com>, linux-s390@vger.kernel.org,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, linux-kernel@vger.kernel.org,
-        Julian Ruess <julianr@linux.ibm.com>
-Subject: [PATCH v2 7/7] iommu/s390: flush queued IOVAs on RPCIT out of resource indication
-Date:   Wed, 16 Nov 2022 18:16:56 +0100
-Message-Id: <20221116171656.4128212-8-schnelle@linux.ibm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221116171656.4128212-1-schnelle@linux.ibm.com>
-References: <20221116171656.4128212-1-schnelle@linux.ibm.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 3urLWCGZdldKrrByunqB7bPZQSfeAO4S
-X-Proofpoint-ORIG-GUID: 3urLWCGZdldKrrByunqB7bPZQSfeAO4S
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-16_03,2022-11-16_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 priorityscore=1501 suspectscore=0
- mlxlogscore=999 phishscore=0 malwarescore=0 spamscore=0 adultscore=0
- bulkscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2210170000 definitions=main-2211160119
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 16 Nov 2022 12:23:02 -0500
+X-Greylist: delayed 301 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 16 Nov 2022 09:22:56 PST
+Received: from abi149hd127.arn1.oracleemaildelivery.com (abi149hd127.arn1.oracleemaildelivery.com [129.149.84.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7575559871
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 09:22:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=oci-arn1-20220924;
+ d=augustwikerfors.se;
+ h=Date:To:From:Subject:Message-Id:MIME-Version:Sender;
+ bh=LpcpAH4zxrcMxDLOPMA5F656Hw2TrxzTLadot3yE8cA=;
+ b=vbCP7qhK75aPjwVaVVnjK9avPEKVW8DQTky20IKg23NM1BRDoEtaSMbscBQj/zKwoOPm3WbDLt1A
+   LE1tT4s4sbnbe49Ak5JhgjfZ84JLs19DdSmL5CpyzoglRYPvbQjOqNIPZZ9ZTBb/yyEZsEsxZIZq
+   kqNGxth1PEL9V1wde1yYZOccazC550JgZ9s9xvC4z8y6qVdJR7XV2VtEWuRNCxs1u29MbpjAOR3t
+   LwVzwuzWU9dQFyZzhZ2xwmyJpPqt7Yj8LuCBh04pclR77SSq3umYvF6qWAfwD6lujF2QLtfAGPlC
+   RSeLNIQw6xxA/6E9xt3I5MZTMZDxfsiTKYyh+A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=prod-arn-20211201;
+ d=arn1.rp.oracleemaildelivery.com;
+ h=Date:To:From:Subject:Message-Id:MIME-Version:Sender;
+ bh=LpcpAH4zxrcMxDLOPMA5F656Hw2TrxzTLadot3yE8cA=;
+ b=QDdPe5/aq6cOV5ywHAns7uvVq8CuwohXDRB5cyV3d1jP5FDz4/n9sqU9Vqh57CtCNNzmnzflOJIt
+   Y9DDByKpiot8WfJzBW4Rf2EotLCdkcnYfgog2DlPoRZ1tlO6cGdqMDrXW26lP/kDvom3Gqm02ntr
+   /kFQcBAsRP4eq6sJXykQ2tOivncCLeTpxouAc0wPFjvuIKQF9VH9EpIagcNoul+ZLeON5D+cUJwL
+   si3ZGrB9rbnbeQ+Dl1btQ7VttXN4XF5p+K/vOMAAGK4BzpLJedV40hGiXrQlezK5HPEnU6W43XCp
+   AlJiFLjou5ORUtoP0Iat8JHcgWY2Y3ozlr4m1Q==
+Received: by omta-ad1-fd2-101-eu-stockholm-1.omtaad1.vcndparn.oraclevcn.com
+ (Oracle Communications Messaging Server 8.1.0.1.20221104 64bit (built Nov  4
+ 2022))
+ with ESMTPS id <0RLG0063MAPTE900@omta-ad1-fd2-101-eu-stockholm-1.omtaad1.vcndparn.oraclevcn.com>
+ for linux-kernel@vger.kernel.org; Wed, 16 Nov 2022 17:17:53 +0000 (GMT)
+From:   August Wikerfors <git@augustwikerfors.se>
+To:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>
+Cc:     linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
+        August Wikerfors <git@augustwikerfors.se>
+Subject: [PATCH] nvme-pci: add NVME_QUIRK_BOGUS_NID for Samsung PM9B1 256G and
+ 512G
+Date:   Wed, 16 Nov 2022 18:17:27 +0100
+Message-id: <20221116171727.4083-1-git@augustwikerfors.se>
+MIME-version: 1.0
+Content-transfer-encoding: 8bit
+Reporting-Meta: AAEu+0BrTkHBsWLOK63HjpEKIIURzBrIK56dK+jBm3s0DHlxjT4P2/MBeqUBNrmp
+ VCVIkws4O2zsNXnjRWGkS5823k/tfg+rw6l4Necjg9kJztS2KXqUh3Xg4rRuERuF
+ y59v90MLW5ID7raGwICLysCyEOWQFMjDZS+hM9eFde+qXMfhxSbKKfe8wIYyRSR3
+ rou9S/44Ely2QnM4WpJzVcsC5zLhHEXBOWIjc8cJ8O5OOoeiHXB18/OjMw6c3JMb
+ j9M1ky8eXkYB7Bl4XksHK/T/GaJCCwYpjnVY3REKJc2mqcoJ0FAU22aJbAZ8hlxG
+ BVYpiSO02rAebKgxWgoAVYXOHg22qaejwn6h+htz/Jkbn/DJSNCQMOkNj8q3PBtI
+ y8n2CqiJnEzOSq+2GCP7fqYcZhBPFMfqS2DKAWvqRlFpU3IslFJw3VPLL8Zw4P/a aBEiRg==
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When RPCIT indicates that the underlying hypervisor has run out of
-resources it often means that its IOVA space is exhausted and IOVAs need
-to be freed before new ones can be created. By triggering a flush of the
-IOVA queue we can get the queued IOVAs freed and also get the new
-mapping established during the global flush.
+The Samsung PM9B1 512G SSD found in some Lenovo Yoga 7 14ARB7 laptop units
+reports eui as 0001000200030004 when resuming from s2idle, causing the
+device to be removed with this error in dmesg:
 
-Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+nvme nvme0: identifiers changed for nsid 1
+
+To fix this, add a quirk to ignore namespace identifiers for this device.
+
+Signed-off-by: August Wikerfors <git@augustwikerfors.se>
 ---
- drivers/iommu/dma-iommu.c  | 14 +++++++++-----
- drivers/iommu/dma-iommu.h  |  1 +
- drivers/iommu/s390-iommu.c |  7 +++++--
- 3 files changed, 15 insertions(+), 7 deletions(-)
+ drivers/nvme/host/pci.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
-index 3801cdf11aa8..54e7f63fd0d9 100644
---- a/drivers/iommu/dma-iommu.c
-+++ b/drivers/iommu/dma-iommu.c
-@@ -188,19 +188,23 @@ static void fq_flush_single(struct iommu_dma_cookie *cookie)
- 	spin_unlock_irqrestore(&fq->lock, flags);
- }
- 
--static void fq_flush_timeout(struct timer_list *t)
-+void iommu_dma_flush_fq(struct iommu_dma_cookie *cookie)
- {
--	struct iommu_dma_cookie *cookie = from_timer(cookie, t, fq_timer);
--
--	atomic_set(&cookie->fq_timer_on, 0);
- 	fq_flush_iotlb(cookie);
--
- 	if (cookie->fq_domain->type == IOMMU_DOMAIN_DMA_FQ)
- 		fq_flush_percpu(cookie);
- 	else
- 		fq_flush_single(cookie);
- }
- 
-+static void fq_flush_timeout(struct timer_list *t)
-+{
-+	struct iommu_dma_cookie *cookie = from_timer(cookie, t, fq_timer);
-+
-+	atomic_set(&cookie->fq_timer_on, 0);
-+	iommu_dma_flush_fq(cookie);
-+}
-+
- static void queue_iova(struct iommu_dma_cookie *cookie,
- 		unsigned long pfn, unsigned long pages,
- 		struct list_head *freelist)
-diff --git a/drivers/iommu/dma-iommu.h b/drivers/iommu/dma-iommu.h
-index 942790009292..cac06030aa26 100644
---- a/drivers/iommu/dma-iommu.h
-+++ b/drivers/iommu/dma-iommu.h
-@@ -13,6 +13,7 @@ int iommu_get_dma_cookie(struct iommu_domain *domain);
- void iommu_put_dma_cookie(struct iommu_domain *domain);
- 
- int iommu_dma_init_fq(struct iommu_domain *domain);
-+void iommu_dma_flush_fq(struct iommu_dma_cookie *cookie);
- 
- void iommu_dma_get_resv_regions(struct device *dev, struct list_head *list);
- 
-diff --git a/drivers/iommu/s390-iommu.c b/drivers/iommu/s390-iommu.c
-index 087bb2acff30..9c2782c4043e 100644
---- a/drivers/iommu/s390-iommu.c
-+++ b/drivers/iommu/s390-iommu.c
-@@ -538,14 +538,17 @@ static void s390_iommu_iotlb_sync_map(struct iommu_domain *domain,
- {
- 	struct s390_domain *s390_domain = to_s390_domain(domain);
- 	struct zpci_dev *zdev;
-+	int rc;
- 
- 	rcu_read_lock();
- 	list_for_each_entry_rcu(zdev, &s390_domain->devices, iommu_list) {
- 		if (!zdev->tlb_refresh)
- 			continue;
- 		atomic64_inc(&s390_domain->ctrs.sync_map_rpcits);
--		zpci_refresh_trans((u64)zdev->fh << 32,
--				   iova, size);
-+		rc = zpci_refresh_trans((u64)zdev->fh << 32,
-+					iova, size);
-+		if (rc == -ENOMEM)
-+			iommu_dma_flush_fq(domain->iova_cookie);
- 	}
- 	rcu_read_unlock();
- }
+diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
+index f4335519399d..0af51b85c323 100644
+--- a/drivers/nvme/host/pci.c
++++ b/drivers/nvme/host/pci.c
+@@ -3500,7 +3500,8 @@ static const struct pci_device_id nvme_id_table[] = {
+ 	{ PCI_DEVICE(0x1d97, 0x2263),   /* SPCC */
+ 		.driver_data = NVME_QUIRK_DISABLE_WRITE_ZEROES, },
+ 	{ PCI_DEVICE(0x144d, 0xa80b),   /* Samsung PM9B1 256G and 512G */
+-		.driver_data = NVME_QUIRK_DISABLE_WRITE_ZEROES, },
++		.driver_data = NVME_QUIRK_DISABLE_WRITE_ZEROES |
++				NVME_QUIRK_BOGUS_NID, },
+ 	{ PCI_DEVICE(0x144d, 0xa809),   /* Samsung MZALQ256HBJD 256G */
+ 		.driver_data = NVME_QUIRK_DISABLE_WRITE_ZEROES, },
+ 	{ PCI_DEVICE(0x1cc4, 0x6303),   /* UMIS RPJTJ512MGE1QDY 512G */
 -- 
-2.34.1
+2.38.1
 
