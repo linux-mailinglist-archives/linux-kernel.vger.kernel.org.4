@@ -2,80 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B7C762C0EB
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:32:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 774A962C0EE
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:33:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233410AbiKPObP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 09:31:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54478 "EHLO
+        id S232749AbiKPOdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 09:33:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232324AbiKPOa5 (ORCPT
+        with ESMTP id S229489AbiKPOc7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 09:30:57 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B3351BE9C;
-        Wed, 16 Nov 2022 06:30:55 -0800 (PST)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AGC1BdP019060;
-        Wed, 16 Nov 2022 14:30:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=CLX+bYN8Nd/R1txa/vMcR/jga5jLVp9esL904bGPJ1U=;
- b=GNVeSIYIh66IzitW/lG7ytZuQKGxrukJA5mVt9Ap3scPx1Pl4nWWq0jTxtx/7tqyVZeS
- xdQuBu77l9+CvOqTxjWIx72WJJXi0jRh8LUmH7UFy3Tfu/Ejayo+Th/cXOfgB+WVVe6c
- S7yrZfoV/w+GZZA6hDIu+sI0jDXXtAiBmWwvPKQO9bY8ZkjMikXP9Ca33oP4GCmXIH6m
- lP7rBqhWEI+3+d9io84E87fw0taUvS7RC09d6zsbuuJmfmQXroum8bnS5Dk2msx2e8WI
- YJBLWcQP/8bDJZS/z/cfrZk3iwYEDRqncLYOyWK3GTwT/sXkaFb8qUnn5RRVPDsQA3Nt KQ== 
-Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kvyg9gat5-1
+        Wed, 16 Nov 2022 09:32:59 -0500
+Received: from mx0a-00190b01.pphosted.com (mx0a-00190b01.pphosted.com [IPv6:2620:100:9001:583::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A7057669;
+        Wed, 16 Nov 2022 06:32:58 -0800 (PST)
+Received: from pps.filterd (m0050095.ppops.net [127.0.0.1])
+        by m0050095.ppops.net-00190b01. (8.17.1.19/8.17.1.19) with ESMTP id 2AGDn4ZZ018984;
+        Wed, 16 Nov 2022 14:32:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akamai.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=jan2016.eng;
+ bh=Lsxlj5AabKJ7AffYDE479PSqYgJV4h1n1KSkSjcCA2Y=;
+ b=mj/WxlNKFw7cyX3RIcWfDrAUXpFQicfBuUFDaCzLwx/m+AoS9L+d4DEnzJ0L2L65Tcg1
+ 1cnnWnwX26vohEcNhEtdWwJDrzd2vFI93H2VIuzHepLmcOFa/mhcTeZuSlGBvOqeHKGU
+ LSKQ/msh0i7zyCObRZsvSv9OGaS2mX/VjmbOCAfWND2jExMrGorAZawvaIkepC8CkZmW
+ 2hPfOQ3jkd+TIgxI+K03joYFjXPBMyIur7saGG5fe/dDdUeiYvarNORS74AhG2ueFyGV
+ NI8VDCEwwCoqAtcJqEEtqaQFZWA9hcaoe8UFLt2dExTnpS4dvh+h3i4XwjcZipwa4ZaK oA== 
+Received: from prod-mail-ppoint1 (prod-mail-ppoint1.akamai.com [184.51.33.18] (may be forged))
+        by m0050095.ppops.net-00190b01. (PPS) with ESMTPS id 3kw132h1k3-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Nov 2022 14:30:51 +0000
-Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2AGETMLx005215;
-        Wed, 16 Nov 2022 14:30:48 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 3kt4jkxbcq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Wed, 16 Nov 2022 14:30:48 +0000
-Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AGEUl70008082;
-        Wed, 16 Nov 2022 14:30:47 GMT
-Received: from kalyant-linux.qualcomm.com (kalyant-linux.qualcomm.com [10.204.66.210])
-        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 2AGEUlK3008081;
-        Wed, 16 Nov 2022 14:30:47 +0000
-Received: by kalyant-linux.qualcomm.com (Postfix, from userid 94428)
-        id 9976A48A0; Wed, 16 Nov 2022 06:30:46 -0800 (PST)
-From:   Kalyan Thota <quic_kalyant@quicinc.com>
-To:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
-Cc:     Kalyan Thota <quic_kalyant@quicinc.com>,
-        linux-kernel@vger.kernel.org, robdclark@chromium.org,
-        dianders@chromium.org, swboyd@chromium.org,
-        quic_vpolimer@quicinc.com, dmitry.baryshkov@linaro.org,
-        quic_abhinavk@quicinc.com
-Subject: [PATCH v2 3/3] drm/msm/disp/dpu1: add color management support for the crtc
-Date:   Wed, 16 Nov 2022 06:30:40 -0800
-Message-Id: <1668609040-2549-4-git-send-email-quic_kalyant@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1668609040-2549-1-git-send-email-quic_kalyant@quicinc.com>
-References: <1668609040-2549-1-git-send-email-quic_kalyant@quicinc.com>
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: BKSbHIPyWNFRQ9hPBQbJtVHLLG1_1Q0-
-X-Proofpoint-ORIG-GUID: BKSbHIPyWNFRQ9hPBQbJtVHLLG1_1Q0-
+        Wed, 16 Nov 2022 14:32:46 +0000
+Received: from pps.filterd (prod-mail-ppoint1.akamai.com [127.0.0.1])
+        by prod-mail-ppoint1.akamai.com (8.17.1.5/8.17.1.5) with ESMTP id 2AGDcLCJ022718;
+        Wed, 16 Nov 2022 09:32:42 -0500
+Received: from prod-mail-relay10.akamai.com ([172.27.118.251])
+        by prod-mail-ppoint1.akamai.com (PPS) with ESMTP id 3kt7q49sf9-1;
+        Wed, 16 Nov 2022 09:32:41 -0500
+Received: from [172.19.33.48] (bos-lpa4700a.bos01.corp.akamai.com [172.19.33.48])
+        by prod-mail-relay10.akamai.com (Postfix) with ESMTP id BE5CD5306A;
+        Wed, 16 Nov 2022 14:32:41 +0000 (GMT)
+Message-ID: <f1afc4ed-505e-109f-9c4c-1053af2c1bcd@akamai.com>
+Date:   Wed, 16 Nov 2022 09:32:41 -0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] EDAC/edac_module: order edac_init() before
+ ghes_edac_register()
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Shuai Xue <xueshuai@linux.alibaba.com>, stable@vger.kernel.org
+References: <20221116003729.194802-1-jbaron@akamai.com>
+ <Y3TGFJn7ykeUMk+O@zn.tnic>
+From:   Jason Baron <jbaron@akamai.com>
+In-Reply-To: <Y3TGFJn7ykeUMk+O@zn.tnic>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-11-16_03,2022-11-16_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- phishscore=0 lowpriorityscore=0 adultscore=0 bulkscore=0
- priorityscore=1501 impostorscore=0 mlxlogscore=999 spamscore=0
- malwarescore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2210170000 definitions=main-2211160100
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 adultscore=0 spamscore=0
+ bulkscore=0 suspectscore=0 phishscore=0 mlxlogscore=732 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211160101
+X-Proofpoint-GUID: bkzVylsBtnEldxcXcuRCKIb6CFa6CAgp
+X-Proofpoint-ORIG-GUID: bkzVylsBtnEldxcXcuRCKIb6CFa6CAgp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-16_03,2022-11-16_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 impostorscore=0
+ malwarescore=0 bulkscore=0 priorityscore=1501 clxscore=1015
+ mlxlogscore=675 mlxscore=0 phishscore=0 lowpriorityscore=0 spamscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211160100
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,222 +89,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add color management support for the crtc provided there are
-enough dspps that can be allocated from the catalog.
 
-Changes in v1:
-- cache color enabled state in the dpu crtc obj (Dmitry)
-- simplify dspp allocation while creating crtc (Dmitry)
-- register for color when crtc is created (Dmitry)
+On 11/16/22 06:14, Borislav Petkov wrote:
+> On Tue, Nov 15, 2022 at 07:37:29PM -0500, Jason Baron wrote:
+>> Currently, ghes_edac_register() is called via ghes_init() from acpi_init()
+> https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git/log/?h=edac-ghes__;!!GjvTz_vk!RVsGvU3qNqFLwWDFImJScVgizbxofNbNY-8NF2inDqKTrn3IWJdJdcQJ6FoKxFkWhEPRpYmwzw$ 
+>
+Hi Boris,
 
-Changes in v2:
-- avoid primary encoders in the documentation (Dmitry)
+Thanks, yes this looks like it will address the regression. Is this
+planned for 6.1?
 
-Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
----
- drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c    |  5 ++-
- drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h    |  6 ++-
- drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c |  7 +++-
- drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c     | 58 ++++++++++++++++++++++++++++-
- 4 files changed, 69 insertions(+), 7 deletions(-)
+Or 5.15 stable, which is where we hit this regression?
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-index 4170fbe..ca4c3b3 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-@@ -1571,7 +1571,7 @@ static const struct drm_crtc_helper_funcs dpu_crtc_helper_funcs = {
- 
- /* initialize crtc */
- struct drm_crtc *dpu_crtc_init(struct drm_device *dev, struct drm_plane *plane,
--				struct drm_plane *cursor)
-+				struct drm_plane *cursor, unsigned long features)
- {
- 	struct drm_crtc *crtc = NULL;
- 	struct dpu_crtc *dpu_crtc = NULL;
-@@ -1583,6 +1583,7 @@ struct drm_crtc *dpu_crtc_init(struct drm_device *dev, struct drm_plane *plane,
- 
- 	crtc = &dpu_crtc->base;
- 	crtc->dev = dev;
-+	dpu_crtc->color_enabled = features & BIT(DPU_DSPP_PCC);
- 
- 	spin_lock_init(&dpu_crtc->spin_lock);
- 	atomic_set(&dpu_crtc->frame_pending, 0);
-@@ -1604,7 +1605,7 @@ struct drm_crtc *dpu_crtc_init(struct drm_device *dev, struct drm_plane *plane,
- 
- 	drm_crtc_helper_add(crtc, &dpu_crtc_helper_funcs);
- 
--	drm_crtc_enable_color_mgmt(crtc, 0, true, 0);
-+	drm_crtc_enable_color_mgmt(crtc, 0, dpu_crtc->color_enabled, 0);
- 
- 	/* save user friendly CRTC name for later */
- 	snprintf(dpu_crtc->name, DPU_CRTC_NAME_SIZE, "crtc%u", crtc->base.id);
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h
-index 539b68b..342f9ae 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h
-@@ -136,6 +136,7 @@ struct dpu_crtc_frame_event {
-  * @enabled       : whether the DPU CRTC is currently enabled. updated in the
-  *                  commit-thread, not state-swap time which is earlier, so
-  *                  safe to make decisions on during VBLANK on/off work
-+ * @color_enabled : whether crtc supports color management
-  * @feature_list  : list of color processing features supported on a crtc
-  * @active_list   : list of color processing features are active
-  * @dirty_list    : list of color processing features are dirty
-@@ -164,7 +165,7 @@ struct dpu_crtc {
- 	u64 play_count;
- 	ktime_t vblank_cb_time;
- 	bool enabled;
--
-+	bool color_enabled;
- 	struct list_head feature_list;
- 	struct list_head active_list;
- 	struct list_head dirty_list;
-@@ -269,10 +270,11 @@ void dpu_crtc_complete_commit(struct drm_crtc *crtc);
-  * @dev: dpu device
-  * @plane: base plane
-  * @cursor: cursor plane
-+ * @features: color features
-  * @Return: new crtc object or error
-  */
- struct drm_crtc *dpu_crtc_init(struct drm_device *dev, struct drm_plane *plane,
--			       struct drm_plane *cursor);
-+			       struct drm_plane *cursor, unsigned long features);
- 
- /**
-  * dpu_crtc_register_custom_event - api for enabling/disabling crtc event
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-index be93269..7f1cfc5 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-@@ -561,6 +561,7 @@ bool dpu_encoder_use_dsc_merge(struct drm_encoder *drm_enc)
- static struct msm_display_topology dpu_encoder_get_topology(
- 			struct dpu_encoder_virt *dpu_enc,
- 			struct dpu_kms *dpu_kms,
-+			struct dpu_crtc *dpu_crtc,
- 			struct drm_display_mode *mode)
- {
- 	struct msm_display_topology topology = {0};
-@@ -589,7 +590,7 @@ static struct msm_display_topology dpu_encoder_get_topology(
- 	else
- 		topology.num_lm = (mode->hdisplay > MAX_HDISPLAY_SPLIT) ? 2 : 1;
- 
--	if (dpu_enc->disp_info.intf_type == DRM_MODE_ENCODER_DSI) {
-+	if (dpu_crtc->color_enabled) {
- 		if (dpu_kms->catalog->dspp &&
- 			(dpu_kms->catalog->dspp_count >= topology.num_lm))
- 			topology.num_dspp = topology.num_lm;
-@@ -624,6 +625,7 @@ static int dpu_encoder_virt_atomic_check(
- 	struct drm_display_mode *adj_mode;
- 	struct msm_display_topology topology;
- 	struct dpu_global_state *global_state;
-+	struct dpu_crtc *dpu_crtc;
- 	int i = 0;
- 	int ret = 0;
- 
-@@ -634,6 +636,7 @@ static int dpu_encoder_virt_atomic_check(
- 	}
- 
- 	dpu_enc = to_dpu_encoder_virt(drm_enc);
-+	dpu_crtc = to_dpu_crtc(crtc_state->crtc);
- 	DPU_DEBUG_ENC(dpu_enc, "\n");
- 
- 	priv = drm_enc->dev->dev_private;
-@@ -659,7 +662,7 @@ static int dpu_encoder_virt_atomic_check(
- 		}
- 	}
- 
--	topology = dpu_encoder_get_topology(dpu_enc, dpu_kms, adj_mode);
-+	topology = dpu_encoder_get_topology(dpu_enc, dpu_kms, dpu_crtc, adj_mode);
- 
- 	/* Reserve dynamic resources now. */
- 	if (!ret) {
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-index 4784db8..84e948d 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-@@ -732,7 +732,58 @@ static int _dpu_kms_setup_displays(struct drm_device *dev,
- 	return rc;
- }
- 
-+/**
-+ * _dpu_kms_populate_dspp_features - Evaluate how many dspps pairs can be facilitated
-+ *                                   to enable color features for encoder and assign
-+ *                                   color features preferring primary
-+ * @dpu_kms:    Pointer to dpu kms structure
-+ * @features:   Pointer to feature array
-+ *
-+ * Baring single entry, if at least 2 dspps are available in the catalogue,
-+ * then color can be enabled for that crtc
-+ */
-+static void _dpu_kms_populate_dspp_features(struct dpu_kms *dpu_kms,
-+	unsigned long *features)
-+{
-+	struct drm_encoder *encoder;
-+	u32 enc_mask = 0;
-+	u32 num_dspps = dpu_kms->catalog->dspp_count;
-+
-+	if (!num_dspps)
-+		return;
-+	else if (num_dspps > 1)
-+		num_dspps /= 2;
-+
-+	/* Ensure all builtin displays get first allocation of color */
-+	drm_for_each_encoder(encoder, dpu_kms->dev) {
-+		if (!dpu_encoder_is_pluggable(encoder) &&
-+			encoder->encoder_type != DRM_MODE_ENCODER_VIRTUAL) {
-+			if (num_dspps) {
-+				features[encoder->index] =
-+					dpu_kms->catalog->dspp->features;
-+				num_dspps--;
-+			}
-+		} else if (dpu_encoder_is_pluggable(encoder)) {
-+			enc_mask |= drm_encoder_mask(encoder);
-+		}
-+	}
-+
-+	/* if color resources are exhausted return */
-+	if (!num_dspps)
-+		return;
-+
-+	/* Add color for pluggable displays after builtin on availability */
-+	drm_for_each_encoder_mask(encoder, dpu_kms->dev, enc_mask) {
-+		if (num_dspps) {
-+			features[encoder->index] =
-+				dpu_kms->catalog->dspp->features;
-+			num_dspps--;
-+		}
-+	}
-+}
-+
- #define MAX_PLANES 20
-+#define MAX_ENCODERS 10
- static int _dpu_kms_drm_obj_init(struct dpu_kms *dpu_kms)
- {
- 	struct drm_device *dev;
-@@ -747,6 +798,8 @@ static int _dpu_kms_drm_obj_init(struct dpu_kms *dpu_kms)
- 
- 	int primary_planes_idx = 0, cursor_planes_idx = 0, i, ret;
- 	int max_crtc_count;
-+	unsigned long features[MAX_ENCODERS] = {0};
-+
- 	dev = dpu_kms->dev;
- 	priv = dev->dev_private;
- 	catalog = dpu_kms->catalog;
-@@ -801,10 +854,13 @@ static int _dpu_kms_drm_obj_init(struct dpu_kms *dpu_kms)
- 	 */
- 	WARN_ON(num_encoders > primary_planes_idx);
- 
-+	_dpu_kms_populate_dspp_features(dpu_kms, features);
-+
- 	/* Create one CRTC per encoder */
- 	i = 0;
- 	drm_for_each_encoder(encoder, dev) {
--		crtc = dpu_crtc_init(dev, primary_planes[i], cursor_planes[i]);
-+		crtc = dpu_crtc_init(dev, primary_planes[i], cursor_planes[i],
-+				    features[encoder->index]);
- 		if (IS_ERR(crtc)) {
- 			ret = PTR_ERR(crtc);
- 			return ret;
--- 
-2.7.4
+Thanks,
+
+-Jason
 
