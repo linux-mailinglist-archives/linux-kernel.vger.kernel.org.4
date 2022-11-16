@@ -2,206 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61C5962BD5D
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:18:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74A1062BD5E
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:18:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238691AbiKPMSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 07:18:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33836 "EHLO
+        id S233327AbiKPMSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 07:18:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238454AbiKPMR3 (ORCPT
+        with ESMTP id S238515AbiKPMR3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 16 Nov 2022 07:17:29 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2062d.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe5a::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54358BC9E;
-        Wed, 16 Nov 2022 04:13:16 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DYZ6PGB7tweMChrHVvZKRqszuoV196k7MLoYeLSME70mdAaDkpR44bU9mpLqJpwZhL2BepwrCajVi2LNUJMuRIRK57JRVNSfeE9vzR3WuWvVKx7h9VE7V3R356s0keNs6l6QQ9Z85RRJQqLXIa8EsY6bCO/+kKCu0WFIN1ZKXyR9dQoSE1iH2ykBcs/43AsMMtmw2ZyItb0wQmd6RngQFaA2NJYl72paVXYmd6V8ZnY8LYcbvU79bDbrBZWSN4H8RhDb/m9NGpzLrYPtN5aPGS9qNkF5G89RVzoBgcv+nxqhNs9d4N8b15JZYpKR364npQt0fGAAwR4Y5Eelx2SJuA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EPbMCdTqJpBuh41Rp5qZJKYAWrx9IoUJwtsv+4yt2lo=;
- b=PuT+lOdh01rXRszX3mrzFshC+CZDJO46QWNM8kE2g2LVCFAKsMJbHWQ/weqyt5fgKWSvm2JOzyZoYKCxDeNoFALOhi0LoL0lRme15gU2aQZRkuV7vIx7/x9GnHZH+2SrFT+tTaM5WrSOUObbBxLkFQMYcp7nteONvN5vsT32QUXnSo1GYXX6UkC4RO/0pgRAYmU9+fJBo3l6Q+E6iR+GCALzuVeH/VWWiLD6XxU3MLhN5s3h1dBBUO/BQ98bQdJ+tay3fqIysrNH7pGqNMZjwKuhCAs4sZPnndlDIVXusc21eUXS86tlFEDMPwwiLasP0shbPXXjV4E/IMmvakxzXA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EPbMCdTqJpBuh41Rp5qZJKYAWrx9IoUJwtsv+4yt2lo=;
- b=yzUoOPciuOwdmqJN02H9Z0ma6sxBlRyqRewLazKsI0bZaEISxSl0pfgFCu1CG4dkRiBuYEYR21xWoaZxM9ZHC65qfjbSfi3yjACskHulM8HDv5XSPi81m+tnRivtVrsPigIlAU5hrCLHrvRHuoQmxR2YUYBdhCo1uupoII3vJKA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by MN0PR12MB6368.namprd12.prod.outlook.com (2603:10b6:208:3d2::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.19; Wed, 16 Nov
- 2022 12:13:13 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::7d43:3f30:4caf:7421]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::7d43:3f30:4caf:7421%7]) with mapi id 15.20.5813.017; Wed, 16 Nov 2022
- 12:13:13 +0000
-Message-ID: <b40f9be2-e76d-5860-bf95-e02d0ce1ddee@amd.com>
-Date:   Wed, 16 Nov 2022 13:13:09 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: linux-next: manual merge of the drm-misc tree with the
- drm-misc-fixes tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20221116104752.4c64495a@canb.auug.org.au>
- <20221116112515.3f01531b@canb.auug.org.au>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20221116112515.3f01531b@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0187.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a4::15) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB278BC39;
+        Wed, 16 Nov 2022 04:13:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668600798; x=1700136798;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bIII9nqAa33Yiw1THwvOqyZ2a3+KL2FjBXLs9hG8bVk=;
+  b=E02QI3u41BWb/kGwv+eclktm4T5Q/NpG8BR5+jP7QwitkuxbkTJ+pwev
+   d/GdjPsfQiQF5sdIVEski3Ae8KXvMMfnEN4QmVjTxeHBHP4yMAklB2BIt
+   /H9cq3iCAD3AJ/lGzoAa4QZt985ITV/jGQN1onPt03mwUCrPiFBEXBMb1
+   BGAjuF/bwkzbivvTw4lheV3wzhcYQKO2EjDZRnKEbLS9ozkGsNHwS3hmF
+   g2Czo89+3HAFGYctJU5wPqpXs1Zzd1R2MhDZ2ftVnQ62JOcvjm1IVEsZ6
+   ZvbsPV9Jn23hUCKomPNr0Y73UVdkvzaafi8YhW+3p5S/DpJb0OHzrrL58
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="314343637"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="314343637"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 04:13:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="781745068"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="781745068"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 16 Nov 2022 04:13:15 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 16 Nov 2022 14:13:15 +0200
+Date:   Wed, 16 Nov 2022 14:13:15 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Sven Peter <sven@svenpeter.dev>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] usb: typec: tipd: Cleanup resources if
+ devm_tps6598_psy_register fails
+Message-ID: <Y3TT23pkf3g0VC+g@kuha.fi.intel.com>
+References: <20221114174449.34634-1-sven@svenpeter.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|MN0PR12MB6368:EE_
-X-MS-Office365-Filtering-Correlation-Id: c0aba084-0643-4308-c1e4-08dac7cbef74
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: l7SyLgWS4HANjhgciEOcSswd8439txRKJrCV/iUK54RXyVeE5viH8Um9END0wCxszUXIEpqzqKJnIsIMLIVbIq7aAg2GJUhwmUv4geABQ/75jclDvemp5Q1O+975PQcPAE14Aq9YYikP4DqCxA6NYErFxYQTmQSPxfoBKREveICq9ZwTde+mZ++TegvTf/pWhsS7y4brH9XLb43Z0XyewuF0hxWaDDnpCjm9bXPIrMl76hAoKHuay65/dI6PN6XfZ8GdXM9fG3J98Imhs2pPbUlP+DpVw9eJQEq3gUDgATK4ZpJZyU8nPHbhnBBb5+zQ2TAuktRrFYOB6AALm/pvnfhbJFsrXlNmRsgX5qJlIS3avrBOwe6O7ARPoKvtCYyZa2je0OX1DmuKMew/fcBV32MzP1IpExvQ2j3jespIGqzMzZea9JH/kchqcu60ko3xOEZLgJMO+B6TxGkVkzdbQxWfuG5sLqS2xvHBcRsqYLV9OFIeaEl+AjBaOi3r2BqxGrTS6B7rUrRswnU8azwIBPCVYH4xiLaJoD2vI9omY4fH+WhySaLWawpbJ3nkARY76r4YQHimbMa27rLCxx50NqWp1DXpgLPAfHv0UFRWQ3vUpCZVJgb2SIJjwtBkLXgiWhDmlkBN9LzfknUhhOUZwm/tBQMOHTXOOGIxNIoqb6sbaGajPdtdeC22izsCZ2lXLGD9+0zaEX94r9IM63lxxnme1o1MENQyCsNhFOt1x+fylWJ3YtBDxxro4A7Ok+xS83IGhEZkpBUBz3ybhSl7coLMvnuhOD3btg1LlQzERc4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(136003)(366004)(396003)(39860400002)(451199015)(36756003)(31686004)(86362001)(31696002)(38100700002)(186003)(110136005)(2906002)(6512007)(2616005)(8936002)(5660300002)(6666004)(478600001)(6486002)(66946007)(66476007)(316002)(41300700001)(54906003)(6506007)(66556008)(4326008)(8676002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?L3U0czk3WmQySWFSa3pMMHlBWjJDMFBBeVdTWnJIUzM0Z05GdHlJbTZCOS9p?=
- =?utf-8?B?MlRvRzZnMXlCQ1l4L0tjTnhqQ2dyM0ZMMXQxNFVGK0VkZkc2cXV2K3htOFQ1?=
- =?utf-8?B?ZXRTZXE4c0Vjeng3V0NkNDF3UDVETVZCY1JEbkdRekowWXhuRFZ6STVseHZq?=
- =?utf-8?B?NmlIdU5TOFcyK3NPdlVhZnFzYXJVNmtDaVhWSUFxaTlDaktRR1E2ZnkwOWQw?=
- =?utf-8?B?V1BteGZ2MVBhTUFoZTFlUHgzU0dlL3JvNENGMmZyOWNkT2dzSVhrU012TVBt?=
- =?utf-8?B?YlYvYVZjSWRhMWRqQy9GYjFtNFdNMFh6bElRcGFqK3JSMWc0bjVOa0RFc1lo?=
- =?utf-8?B?NXRCVTVlc2NyYk1tKzRWU0pFbDNmOGNWZWRSdlpMS21yM21hSWlhY21vbmw3?=
- =?utf-8?B?WHR6ZzhLdlhXRFBkRXNEUUR3Vmgxb0J2MlpRbmdHZUhVekQ2REFCQ0svQ3pH?=
- =?utf-8?B?d2g0MWN0NzRMVkh2OUVySzhIejIvQ01GZEp0bGJ5TWF5dENLVGhBRml2eEZ4?=
- =?utf-8?B?NytDZkx0aGhIMHQ2cUt0NVBEbjhTWFJZY1pCMVhtcmhuSytwM0szWGNKeCtD?=
- =?utf-8?B?cTA1UWZuT0t2SEdBKzR5alBic3l3SXlWdG8vKzJEOTN6WVVUd25PNmlSNDhI?=
- =?utf-8?B?bzdrRlFHN0RUajl3blpqV0IrMFJwbzRITUVJY090ZTNhT25oWGhPODJXUjNW?=
- =?utf-8?B?ZHNQejNmUDVQTldLUzFPM2x0OHowb3A5dGk2T2VDRkZkT2xsK1NGUEtXd0p1?=
- =?utf-8?B?VzBqbXIvN1ZUWHIzMHhGL2l0S0t1ZmtYaE9ZNUxXVUxKMGxVSUlsamJVKzJD?=
- =?utf-8?B?aEZod0thWkU5Q3FsdkcvMjNQQUZmcXpPcWpPOEwrWEd4azV4VTB5Zy92eGs3?=
- =?utf-8?B?eXM2U29raVpSZllRd2x2TEs4K1cxWlJQd2JaQzZ0MkdmdElOZy80ajVWbzg3?=
- =?utf-8?B?bDhDMTIyTEpBclhMblpoc0syMHlxeWdscGIzVjU1UTVhNkE1ZnNVSnJkWnJy?=
- =?utf-8?B?MVRxSlVsZ3JCSFk3cTNubGpTOVFMcDBueHlUV3ROZEFYVGNldXB4RXEyOUpi?=
- =?utf-8?B?SjVFb2FJaE9SN1ZXNlIzanFOamxlR1AxZEdYN3NMOHoyakRtRkMvaFB3UFFM?=
- =?utf-8?B?eS9yaVM1T3hGMVpTRHJIVHlSU1crbkZ2WXJkb1lTdUpDSTdCRWRZTnFIajhs?=
- =?utf-8?B?L1drWVRCb091TEwwQ0V3bkI2NDNnUmsxZk8ra2VDWmtZZThTbExUcDEyMDEr?=
- =?utf-8?B?L1NUdExnTXNQeHp2RXRSNys5NVhiQzkvVkR0ZHdjN01jR1ZBMXFRaDcrT0Vy?=
- =?utf-8?B?WmVEZjFMZDF0eTFFeVgvVWZ0WDhSTXFkOGc3WkE5T0MzbnV5eVNDMXVJaHlQ?=
- =?utf-8?B?dU52L1MwUnFObzdiUkxBMnQwNk8xUmJRRHcrOWFrcFBkaXJTd1I4UkdCRWdI?=
- =?utf-8?B?bkhNMndnbGhXbkd6WTM3M2ZYVy9LMjNlMFBJSFBwZjlWOGpuY1dQNTBLR0Fk?=
- =?utf-8?B?dWY0YzZnRXhvQmhvN2c3ZFYyR3YrdTM0UXZhOUtVUjdJVDBLQ0lzeFJpeVZV?=
- =?utf-8?B?aVAyUmZNWDlTVHpIQ0ZZUGNhM1h2UW9CSU5qczhBNDJlQ2pJZDRJM01SblJB?=
- =?utf-8?B?ZmxIa0NBUmxkYzc1NWdhenVSNWlDUzlYZ1pOTFNBYUZ4dkJQVDZBcTYySmE4?=
- =?utf-8?B?QTRSZ2drMUsxcHhyYUFJVWoybTZ6V1V6dVVKam8yS20xS0pabnQ4UjhvV3JH?=
- =?utf-8?B?S2x0WXM5ejh5Uk5GOHpiUTBENnpOUnNpZXlaVkpRYmNKeVRQWnMxbXJDVnZD?=
- =?utf-8?B?TmoxbU5LcjJxWEt4TU9HOVZwRUZkMW45TUtPdnpZUWVMaEFnVkRQUFVhYnpE?=
- =?utf-8?B?MDYwd1piRmxZZytUZ3VzOFZxcXBGeWg1enowN1BRZ3N5QURwa0VDUjYzUXc5?=
- =?utf-8?B?dnZzZzh1ZXVuRzFWN3I3bmRDdWZWeVVjMzdiV2lZMU9PZGdpaUlMWS8rMjVK?=
- =?utf-8?B?QUZLSU92Skl6Qm40eGp1K0g3R3h0VTdLL09wVk51eHQ5ZlpHNnhKTFNRMDds?=
- =?utf-8?B?V3NSZUthaDJubWU1d3daUWNEUndyTDFmWWJUUHFweThjVCtkVnJ5RnlWMm5S?=
- =?utf-8?B?aEdlSFpoMWo1SUpNN3ErZXBiYmRJaFZMZENuZjJzREpnKys1N2lVMlloVFlE?=
- =?utf-8?Q?farlZeDQ7gECs1jgHqMbLwg3bt4ZHtwpgcMsaP0XJLhN?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c0aba084-0643-4308-c1e4-08dac7cbef74
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Nov 2022 12:13:13.8228
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Xhauxm0m/O1PWkiX3E8bC+aFJbRZSf1GnpmaVxdlzu9V4MZ5e+C7sX88v82P2Hxo
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6368
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221114174449.34634-1-sven@svenpeter.dev>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Nov 14, 2022 at 06:44:46PM +0100, Sven Peter wrote:
+> We can't just return if devm_tps6598_psy_register fails since previous
+> resources are not devres managed and have yet to be cleaned up.
+> 
+> Fixes: 10eb0b6ac63a ("usb: typec: tps6598x: Export some power supply properties")
+> Signed-off-by: Sven Peter <sven@svenpeter.dev>
 
+I think this should also automatically go to the stable tree.
 
-Am 16.11.22 um 01:25 schrieb Stephen Rothwell:
-> Hi all,
->
-> On Wed, 16 Nov 2022 10:47:52 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->> Today's linux-next merge of the drm-misc tree got a conflict in:
->>
->>    drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
->>
->> between commit:
->>
->>    eca13f3c67b6 ("drm/amdgpu: use the last IB as gang leader v2")
->>
->> from the drm-misc-fixes tree and commit:
->>
->>    1728baa7e4e6 ("drm/amdgpu: use scheduler dependencies for CS")
->>
->> from the drm-misc tree.
->>
->> I fixed it up (see below) and can carry the fix as necessary. This
->> is now fixed as far as linux-next is concerned, but any non trivial
->> conflicts should be mentioned to your upstream maintainer when your tree
->> is submitted for merging.  You may also want to consider cooperating
->> with the maintainer of the conflicting tree to minimise any particularly
->> complex conflicts.
->>
->> -- 
->> Cheers,
->> Stephen Rothwell
->>
->> diff --cc drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
->> index de5cb056c9ad,0528c2b1db6e..000000000000
->> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
->> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
->> @@@ -1197,10 -1201,7 +1203,10 @@@ static int amdgpu_cs_sync_rings(struct
->>    	}
->>    
->>    	for (i = 0; i < p->gang_size; ++i) {
->>   +		if (p->jobs[i] == leader)
->>   +			continue;
->>   +
->> - 		r = amdgpu_sync_clone(&leader->sync, &p->jobs[i]->sync);
->> + 		r = amdgpu_sync_push_to_job(&p->sync, p->jobs[i]);
->>    		if (r)
->>    			return r;
->>    	}
->> @@@ -1241,14 -1243,11 +1247,14 @@@ static int amdgpu_cs_submit(struct amdg
->>    	for (i = 0; i < p->gang_size; ++i)
->>    		drm_sched_job_arm(&p->jobs[i]->base);
->>    
->>   -	for (i = 0; i < (p->gang_size - 1); ++i) {
->>   +	for (i = 0; i < p->gang_size; ++i) {
->>    		struct dma_fence *fence;
->>    
->>   +		if (p->jobs[i] == leader)
->>   +			continue;
->>   +
->>    		fence = &p->jobs[i]->base.s_fence->scheduled;
->> - 		r = amdgpu_sync_fence(&leader->sync, fence);
->> + 		r = drm_sched_job_add_dependency(&leader->base, fence);
->>    		if (r)
->>    			goto error_cleanup;
->>    	}
-> Note that I had to keep the declaration of "leader" in amdgpu_cs_sync_rings().
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-This and all your other merge resolutions look good to me.
+> ---
+>  drivers/usb/typec/tipd/core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+> index 748ff4f6b5f6..ebc786d728e2 100644
+> --- a/drivers/usb/typec/tipd/core.c
+> +++ b/drivers/usb/typec/tipd/core.c
+> @@ -827,7 +827,7 @@ static int tps6598x_probe(struct i2c_client *client)
+>  
+>  	ret = devm_tps6598_psy_register(tps);
+>  	if (ret)
+> -		return ret;
+> +		goto err_role_put;
+>  
+>  	tps->port = typec_register_port(&client->dev, &typec_cap);
+>  	if (IS_ERR(tps->port)) {
 
-And sorry for the noise, drm-tip somehow doesn't seem to work any more 
-and we had a lot of conflicting patches going in through -fixes and -next.
+thanks,
 
-Regards,
-Christian.
-
->
-
+-- 
+heikki
