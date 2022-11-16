@@ -2,75 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CB4C62B1FE
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 05:00:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0E6E62B205
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 05:03:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231250AbiKPEAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 23:00:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50822 "EHLO
+        id S231573AbiKPEDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 23:03:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiKPEAL (ORCPT
+        with ESMTP id S229958AbiKPEDK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 23:00:11 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99891CB1F;
-        Tue, 15 Nov 2022 20:00:10 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id b185so16272889pfb.9;
-        Tue, 15 Nov 2022 20:00:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=636+W0eI2tQLj88G1y9xJ1MUm1p0RSuNiUGbqqjBohQ=;
-        b=KE7leJ0Uz3prbgKSTiG9YV1cKCjWZ8VBEovgWpDZYu/wZabtoAozr8v4iSB2+zv898
-         6/RX6eRPPnc6f4xZCiRGUNsKVw5h2xYUgazIxgs7Xl9pibdOAAVKWEOHvNBlhO+mUQlu
-         pCp3vxbDMBmGtEpQWnoVC9qcEczoifuuErcBnUsXhJaC+HArgazRmT1VfFn+iSFMjfPL
-         DN4dlQKL3AojOaOxh0S5Gc2sQG7/MBQsaidc8Nl8k8FXiMcROz+6E+e9RONDOO5E1LIh
-         y8J+xlam/orU+iaIplIedgyEQWvkOBgYd5lq8+f1jFphLw1Zpip8cnLj+Jk8GkOgQzw3
-         01kw==
+        Tue, 15 Nov 2022 23:03:10 -0500
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C44391E3EC;
+        Tue, 15 Nov 2022 20:03:09 -0800 (PST)
+Received: by mail-pl1-f171.google.com with SMTP id g24so15310949plq.3;
+        Tue, 15 Nov 2022 20:03:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=636+W0eI2tQLj88G1y9xJ1MUm1p0RSuNiUGbqqjBohQ=;
-        b=7FM0/Ntc0P5Pm6qnzUtNTqXzbfUPmh9jD0bAV0f0gkIFHv/696bHBxi9a+gFMo/wkc
-         VBo/gILRDlcI949m5iVzpS7E/wbgqi2PG7rYrfclVMYuVlPNzeCDHi0TMhk2mcSyK0nh
-         FP22JgLRxN5SYNg1qdpfEuL8njS+EXH3GWZgMJfwrNgfPU+tuB/IjCWBQsWMHpdqWbL1
-         uCaxgqugPSLWoN5bRfeYzsqJ/ffTTQHdgOJeRmCV60sqZNlBdrimfDWw2JofsHhs7e4F
-         i3ZNgw1DZlfP81bH+wF4sANQmaSpsQ5yjvs0Pe1xskqU+9oi094q0FQfZUFZ0y8ykRMc
-         I/eg==
-X-Gm-Message-State: ANoB5pkeIOG8q3hUfnTIvhf5fwMxhAme/M2onyCsVlbEYOBbYFz59yP6
-        VlHIHqf7DheG0uVAqz7hdz8=
-X-Google-Smtp-Source: AA0mqf5NgfbsNJwE2wpIqhUmA3w1BsOVZLvpn8CGkutsjZG1eAKyT7LmzNFKNAIkqD6oizXgWyZnyg==
-X-Received: by 2002:a05:6a00:4211:b0:56b:6936:ddfb with SMTP id cd17-20020a056a00421100b0056b6936ddfbmr21554023pfb.15.1668571210288;
-        Tue, 15 Nov 2022 20:00:10 -0800 (PST)
-Received: from debian.me (subs03-180-214-233-88.three.co.id. [180.214.233.88])
-        by smtp.gmail.com with ESMTPSA id s5-20020a170903200500b00179c9219195sm10735808pla.16.2022.11.15.20.00.09
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1zIzDKHHVNaVurdU/es7VrrKvHMyE/kDIQtf0pEpjIw=;
+        b=D+Dlj71vTioFw5aoFSqADw++/kUzanUTlYOQ7fNeSSjMyycrCR5pZhMeEJnkbqejcL
+         LCCSFSnafpI5ssaa8POK0gcuW/Pw2DoQXy3ETf5PhEBkMpA7JxjClb0TQCXu2Wa34FNU
+         paxEH9ZS+Smwlv0g1rjPoaXrow8a/svdMvaXfNRidTkqKBrFWYad/XgPkl6zJsV8VsDe
+         ktLzqza/cEzYtGUx74382Cx01ZOtKLKnJQzlcTeXkB5TSprKJ3jLyCQH8Haaa+4SiKtE
+         RmvJ+DvB7CJwQ75cNo6yH8rme3Eh9bGnpCXc6lr7VCy0DMpwD3MIByKOGAnmtW3WLsCq
+         f3qA==
+X-Gm-Message-State: ANoB5plbaNnxF6tUPO7irZmLJYu/BThk6sbTxnIKk+p0P70RfRudN0jn
+        5Vs+jCTJiw6fbpcB5ggOi8U=
+X-Google-Smtp-Source: AA0mqf6hyhoq112sIKQo2v/k51nNvfWIgxwNBEvlAx1Pthk/+MTebE7MSfBKsrWrQE5FLsqcaK8YIQ==
+X-Received: by 2002:a17:90a:3f89:b0:217:90e0:3f8c with SMTP id m9-20020a17090a3f8900b0021790e03f8cmr1687555pjc.192.1668571388739;
+        Tue, 15 Nov 2022 20:03:08 -0800 (PST)
+Received: from rocinante (fpd11144dd.ap.nuro.jp. [209.17.68.221])
+        by smtp.gmail.com with ESMTPSA id nl8-20020a17090b384800b0020d48bc6661sm390550pjb.31.2022.11.15.20.03.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 20:00:09 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id 1BF0B10417B; Wed, 16 Nov 2022 11:00:05 +0700 (WIB)
-Date:   Wed, 16 Nov 2022 11:00:05 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 5.15 000/130] 5.15.79-rc2 review
-Message-ID: <Y3RgRQtpdRcYkmyv@debian.me>
-References: <20221115140300.534663914@linuxfoundation.org>
+        Tue, 15 Nov 2022 20:03:08 -0800 (PST)
+Date:   Wed, 16 Nov 2022 13:03:01 +0900
+From:   Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        linux-pci@vger.kernel.org, xen-devel@lists.xenproject.org,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Subject: Re: [PATCH v3 0/4] PCI: Add pci_dev_for_each_resource() helper and
+Message-ID: <Y3Rg9dGmzZl4GJU5@rocinante>
+References: <20221114185822.65038-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="M9cFiUmnwINFl6Jo"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221115140300.534663914@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221114185822.65038-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,36 +84,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
---M9cFiUmnwINFl6Jo
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Provide two new helper macros to iterate over PCI device resources and
+> convert users.
+> 
+> Looking at it, refactor existing pci_bus_for_each_resource() and convert
+> users accordingly.
+> 
+> This applies on top of this patch Mika sent out earlier:
+> https://lore.kernel.org/r/20221114115953.40236-1-mika.westerberg@linux.intel.com
+> 
+> Changelog v3:
+> - rebased on top of v2 by Mika, see above
+> - added tag to pcmcia patch (Dominik)
+[...]
 
-On Tue, Nov 15, 2022 at 03:04:00PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.79 release.
-> There are 130 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
+Thank you Andy for all the improvements and Mika for the idea!
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
-powerpc (ps3_defconfig, GCC 12.2.0).
+For the whole series:
+  Reviewed-by: Krzysztof Wilczyński <kw@linux.com>
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
-=20
---=20
-An old man doll... just what I always wanted! - Clara
+Looks very nice!
 
---M9cFiUmnwINFl6Jo
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY3RgPAAKCRD2uYlJVVFO
-o/rVAQD7zavBgudoB1bmapSnYKeH2LX9yLVqpVO2gJ20+sa0HQD7BpZr2n0mRtIu
-+xsAUVEzbFPC/ok18Mc+KZDY6pjW7gU=
-=tAps
------END PGP SIGNATURE-----
-
---M9cFiUmnwINFl6Jo--
+	Krzysztof
