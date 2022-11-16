@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9021262CD8B
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 23:23:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46F4662CD8E
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 23:24:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233521AbiKPWXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 17:23:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45938 "EHLO
+        id S234632AbiKPWYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 17:24:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234184AbiKPWXu (ORCPT
+        with ESMTP id S234544AbiKPWYA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 17:23:50 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B68FE5
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 14:23:49 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id b29so18774828pfp.13
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 14:23:49 -0800 (PST)
+        Wed, 16 Nov 2022 17:24:00 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7621E3CF
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 14:23:54 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id gw22so17799629pjb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 14:23:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/EY1LYuvEeMmWBh0/R1XK2F3auEDRSjaMa5zKaprZf8=;
-        b=OpNdNdBCSrHWxNkkZA+E6qZDw1ZDI1QlVv2UKT7FZYMvVG3qQ6kBYLigFU0rlRUFsf
-         +XLQscK/ySHtTV9ZPszQB5R7wdU0JKoXOF/MtOh2Pda3FNGpJnfOEJ5H9vNxIgqyVKyy
-         6I6j37axPTFE5wrtP7o29MQQprmD9Zrf1d7e0=
+        bh=tK/A0JOC27A19vLbVWBAPmg5Wb7Cd8nSiAzhgk2OroU=;
+        b=cKkj4SCAV5XoyT4U9NqaVHQ9R1xyL6HfTtEO/kpxTpR5RuTl5eXZJsS1y616Ml1Sq1
+         dNg7UdTxT/Cwo+ZlxEJ5J+axRloWDDyZ97leyLNO0qozaT7kiQrMxFC6xHDFV+V8xdyj
+         7Q0h099lkSkH8GemQWQu1AAiVEyo1ucIb7dHU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/EY1LYuvEeMmWBh0/R1XK2F3auEDRSjaMa5zKaprZf8=;
-        b=gHXsOB+LAoiIlrwhMS75B2U/hkSTBq50w+0FMcqaoZgI57Sv7huwrcdiiOLdGk9cDn
-         GZYIltNuJZ5TmkzokwOKZGSc/TONlkXvA+/Ju20tqJ+EetgfmQv9BLxMXC7DzwljCmxp
-         95EiB1im94dLPQB9DbkM8fF3dRcLfXhX6iuEbhpEfIn8HDFHY7nI0IstQeYVa5kRB9Dm
-         mo6Q/Y9IuDBO5NEQG2ArnWS+2YW6pbG/Q1vXsmkFgX2BbRDe1C3zlspWrj5oVC5MvKH7
-         hL7RmRHLiiPDYIGt08zt4dCqLMa6bJh7FPxk1uXtvGTwfJpEW3nkNhAXlb6IRJqT7e5f
-         ruYw==
-X-Gm-Message-State: ANoB5pmZKj+SwI09j3WC9gqTBu8gZVwQRO1OwfhHxRlAFyMFlekp/FhO
-        yua/kNpg1YnHVBitlGUPT3M6IgPc9BR1ZA==
-X-Google-Smtp-Source: AA0mqf7jVOtnYCs2DJkAYYj4qjR6hmOH3/+q5zUbVrwoiAfK3CqG5t96nw+nE8mbH3/VcCM0K+cT1Q==
-X-Received: by 2002:a63:a512:0:b0:439:8dd3:c3c2 with SMTP id n18-20020a63a512000000b004398dd3c3c2mr22143106pgf.481.1668637429348;
-        Wed, 16 Nov 2022 14:23:49 -0800 (PST)
+        bh=tK/A0JOC27A19vLbVWBAPmg5Wb7Cd8nSiAzhgk2OroU=;
+        b=zCvEb4teXqOMBS/zqNDAUi78G/7VbgW/MRoJuZz2eoemr90iM/e2SHFVx9ZoyjuhHg
+         m39UIiqwBl6sgcyrASnFMiO3glPAvnm6bRf4RZ9yxMyNKPyG9tFQcvB1H0NZ3OPl+Avy
+         H+WFspDUjTfiYfFwARek9RUDCalehS72wkHsCbgvyt2znGvk4aVTaAAkweexpnnVh/iG
+         SE5YB2iEYxTQbUSQkidrLd95iI62hlLlJPIoEje8hWdUAzIvmechtpQXVXsoEuefBWeh
+         S0QTLEl3WjkmFKo8o93FOEeLIi34F4Y+9ZBUQHZHW3+HY0GzUjF0+GZ9GGmfonWw5c41
+         EEcg==
+X-Gm-Message-State: ANoB5pk9yOUehrBjnb1fckD1yibiU/JkAQ/1NOsmR2y6cpQC7EgPPLOl
+        7vUvtJCxeh32Xv4gf2HB0eoefA==
+X-Google-Smtp-Source: AA0mqf5pZQ9l2S/XqCYN0+ZJaxMH65eucNOvAo0YRg6+EuX5cSJzCFbSMcYggLTABXEBYPJjwi+cng==
+X-Received: by 2002:a17:90b:b04:b0:213:c04:42be with SMTP id bf4-20020a17090b0b0400b002130c0442bemr5718426pjb.61.1668637433862;
+        Wed, 16 Nov 2022 14:23:53 -0800 (PST)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id 16-20020a17090a19d000b0020ad53b5883sm2136331pjj.14.2022.11.16.14.23.48
+        by smtp.gmail.com with ESMTPSA id y127-20020a623285000000b0057210dc5f23sm7520958pfy.218.2022.11.16.14.23.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 14:23:48 -0800 (PST)
-Date:   Wed, 16 Nov 2022 14:23:48 -0800
+        Wed, 16 Nov 2022 14:23:53 -0800 (PST)
+Date:   Wed, 16 Nov 2022 14:23:52 -0800
 From:   Kees Cook <keescook@chromium.org>
 To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
 Cc:     Hante Meuleman <hante.meuleman@broadcom.com>,
@@ -61,39 +61,46 @@ Cc:     Hante Meuleman <hante.meuleman@broadcom.com>,
         brcm80211-dev-list.pdl@broadcom.com, netdev@vger.kernel.org,
         linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 1/2][next] wifi: brcmfmac: replace one-element array with
- flexible-array member in struct brcmf_dload_data_le
-Message-ID: <202211161423.1AF172E584@keescook>
+Subject: Re: [PATCH 2/2][next] wifi: brcmfmac: Use struct_size() in code
+ ralated to struct brcmf_dload_data_le
+Message-ID: <202211161423.2531CADA73@keescook>
 References: <cover.1668548907.git.gustavoars@kernel.org>
- <905f5b68cf93c812360d081caae5b15221db09b6.1668548907.git.gustavoars@kernel.org>
+ <41845ad3660ed4375f0c03fd36a67b2e12fafed5.1668548907.git.gustavoars@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <905f5b68cf93c812360d081caae5b15221db09b6.1668548907.git.gustavoars@kernel.org>
+In-Reply-To: <41845ad3660ed4375f0c03fd36a67b2e12fafed5.1668548907.git.gustavoars@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 03:53:27PM -0600, Gustavo A. R. Silva wrote:
-> One-element arrays are deprecated, and we are replacing them with flexible
-> array members instead. So, replace one-element array with flexible-array
-> member in struct brcmf_dload_data_le.
+On Tue, Nov 15, 2022 at 03:55:34PM -0600, Gustavo A. R. Silva wrote:
+> Prefer struct_size() over open-coded versions of idiom:
 > 
-> Important to mention is that doing a build before/after this patch results
-> in no binary output differences.
+> sizeof(struct-with-flex-array) + sizeof(typeof-flex-array-elements) * count
 > 
-> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE routines
-> on memcpy() and help us make progress towards globally enabling
-> -fstrict-flex-arrays=3 [1].
+> where count is the max number of items the flexible array is supposed to
+> contain.
 > 
-> Link: https://github.com/KSPP/linux/issues/230
-> Link: https://github.com/KSPP/linux/issues/79
-> Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
+> In this particular case, in the open-coded version sizeof(typeof-flex-array-elements)
+> is implicit in _count_ because the type of the flex array data is u8:
+> 
+> drivers/net/wireless/broadcom/brcm80211/brcmfmac/fwil_types.h:941:
+>  941 struct brcmf_dload_data_le {
+>  942         __le16 flag;
+>  943         __le16 dload_type;
+>  944         __le32 len;
+>  945         __le32 crc;
+>  946         u8 data[];
+>  947 };
+> 
+> Link: https://github.com/KSPP/linux/issues/160
 > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
 Reviewed-by: Kees Cook <keescook@chromium.org>
