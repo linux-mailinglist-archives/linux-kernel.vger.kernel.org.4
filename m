@@ -2,120 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E45E62BF7A
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 14:29:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0C8562BF7B
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 14:29:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbiKPN3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 08:29:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44942 "EHLO
+        id S232097AbiKPN3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 08:29:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233366AbiKPN3N (ORCPT
+        with ESMTP id S233264AbiKPN3j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 08:29:13 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABAC645A19
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 05:29:04 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id ud5so44122594ejc.4
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 05:29:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5Y2SGednwLIUSWdrpvgLWaQ6UAl5Le0cnjzvD5yy46M=;
-        b=JCNclK2gNzC41DQ8q1ZbV2nxR/c5phT/+CDQW78qsnklM345zzEIIdvyZMgkv8LpNt
-         9Ha7nFeMx73VBl7x+5eLkwW7lruwL/EHgpk8OCmcago07Cv05QVu5h2LI+3t3TRCVHaC
-         oydyMW/wkwEyZ3wpji6+TZbhjmzi5wjl7zorJNm1FML+qdZOeukwcVB1FpYvyO10uBTh
-         HAkcygEcPUK0Xiba/V1bPUUIUX5yLpcKPITB3HX9m+THhOY5gHUXTKexHvjCjNYWwGs0
-         fM+I/w2wKc9G8Y7MTCCS7OIwTPUTRcC3zpV7CfpmnsJD5v4FvQQ94x167KNvEP0TwpEH
-         PzBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=5Y2SGednwLIUSWdrpvgLWaQ6UAl5Le0cnjzvD5yy46M=;
-        b=h/SnRjBXofd3w4Mx0YWKaK1LDX9JdFrPQWu5uQecT3rj64yfG9PcTKEv1sybE0/njG
-         ai91lO8B1kN4kUtfsL9JXSocK1MPzyZbi0+CD03MqS2dZvJdu4vhLT1Awe4N6P+s6jpg
-         PCB7JSz5rrXsFfA//CKu5EX+idNqVjC7Ht2RZ/QD9vlkKFoN5uiOnj+zk/vT8fAhI10G
-         OJINOqAy9hFeJ/lZKGgUPt2KziA2vlvxdPdgReQUQK/yHC7lOafM8XmXB+A2SjVe5/wB
-         P1Z8Det7ag0HtBpddbYv5QDOS69da1MuRh5xkzfXExUJNSLfTsivDjtCdeQ5qaMxJwp3
-         SE+w==
-X-Gm-Message-State: ANoB5pm2vxcbGHqze+1cUMcaAudV1wu9x/ctv1NsouBlkzlJS+ddg+sZ
-        zThBPCJrObZSgGxZrR+9jn/VTA==
-X-Google-Smtp-Source: AA0mqf59MDU3xxTRXgfl/y/PUh85AeEcGstGKV8g5HmAmf/TsCjtbzIdV8DUTbekr2DETvf6fDkcJg==
-X-Received: by 2002:a17:906:8385:b0:7ad:8035:ae3d with SMTP id p5-20020a170906838500b007ad8035ae3dmr17696538ejx.46.1668605343152;
-        Wed, 16 Nov 2022 05:29:03 -0800 (PST)
-Received: from [192.168.31.208] ([194.29.137.22])
-        by smtp.gmail.com with ESMTPSA id e20-20020a170906315400b0077b2b0563f4sm6946476eje.173.2022.11.16.05.29.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 05:29:02 -0800 (PST)
-Message-ID: <9666803c-2f9f-04b2-9bb8-2fec8231a324@linaro.org>
-Date:   Wed, 16 Nov 2022 14:28:56 +0100
+        Wed, 16 Nov 2022 08:29:39 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C97F4450A7
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 05:29:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668605375; x=1700141375;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XUU7tDNgYGoWHHgbI4B+EDpkeBTZbCvGBKabd0d70uw=;
+  b=OTNybwqBwSh72195APyCi4yYM5PwLwFqET6NQGjx7u0EpwAvgAscK4mL
+   zfngwXuwWjmxeQTtRJTzgO5cT+iACnzALRiIclJGYuNmaf0pcv0E8yHgh
+   edayo6XSr6n0mlpNp2Cexi1H5eLfEmWWjsJOw0IFw8+oZuGI5PVcSQihw
+   VgHHKqPriPoltb9aP8WwovR6G3P0KS30+NCQjYVLghsacXC9uWdM8RTXw
+   G5gzGYLjTVj79x9Z67atlpAE9HAXOSBM0QY8cH1ocvt8Dv3LxvZfMC0lP
+   wd5b8w5wIC/zAXlGmHgRnQXfpY+2Uy4QpsAQfhreqDs77XzcfR68O0/cZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="292248058"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="292248058"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 05:29:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="672391618"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="672391618"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga001.jf.intel.com with ESMTP; 16 Nov 2022 05:29:33 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ovITs-00D8sV-0I;
+        Wed, 16 Nov 2022 15:29:32 +0200
+Date:   Wed, 16 Nov 2022 15:29:31 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, Fei Li <fei1.li@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v4 1/1] virt: acrn: Mark the uuid field as unused
+Message-ID: <Y3Tlu0BjgMk3xNDQ@smile.fi.intel.com>
+References: <20221116092254.66234-1-andriy.shevchenko@linux.intel.com>
+ <Y3TMmDXEbGyDQrLF@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.2
-Subject: Re: [RFC PATCH 2/2] arm64: dts: qcom: sm8550-mtp: Add eUSB2 repeater
- node
-To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <20221116132706.2852434-1-abel.vesa@linaro.org>
- <20221116132706.2852434-3-abel.vesa@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221116132706.2852434-3-abel.vesa@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3TMmDXEbGyDQrLF@kroah.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Nov 16, 2022 at 12:42:16PM +0100, Greg Kroah-Hartman wrote:
+> On Wed, Nov 16, 2022 at 11:22:54AM +0200, Andy Shevchenko wrote:
+> > After the commits for userspace (see Link tags below) the uuid field is
+> > not being used in the ACRN code. Update kernel to reflect these changes.
+> > I.e. we do the following:
+> > - adding a comment explaining that it's not used anymore
+> > - replacing the specific type by a raw buffer
+> > - updating the example code accordingly
+> > 
+> > The advertised field confused users and actually never been used. So
+> > the wrong part here is that kernel puts something which userspace never
+> > used and hence this may confuse a reader of this code.
 
-
-On 16/11/2022 14:27, Abel Vesa wrote:
-> Add the PMIC eUSB2 repeater node and add the usb-repeater
-> property to the eUSB2 PHY to allow it to be controlled by the
-> PHY driver.
+> > - * @uuid:		UUID of the VM. Pass to hypervisor directly.
+> > + * @uuid:		Reserved (used to be UUID of the VM)
 > 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
->   arch/arm64/boot/dts/qcom/sm8550-mtp.dts | 7 +++++++
->   1 file changed, 7 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-> index 757cf4f7f195..539d75c0566f 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-> +++ b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-> @@ -414,6 +414,11 @@ data-pins {
->   	};
->   };
->   
-> +&pm8550b_eusb2_repeater {
-Sorting is off.
+> If it's reserved, then don't you need to check for 0?
 
-Konrad
-> +	vdd18-supply = <&vreg_l15b_1p8>;
-> +	vdd3-supply = <&vreg_l5b_3p1>;
-> +};
-> +
->   &uart7 {
->   	status = "okay";
->   };
-> @@ -429,6 +434,8 @@ &usb_1_dwc3 {
->   &usb_1_hsphy {
->   	status = "okay";
->   
-> +	usb-repeater = <&pm8550b_eusb2_repeater>;
-> +
->   	vdd-supply = <&vreg_l1e_0p88>;
->   	vdda12-supply = <&vreg_l3e_1p2>;
->   };
+Reserved in a way that it may content something we just don't care about.
+
+...
+
+> > +	__u8	uuid[16];
+> 
+> You just changed the type here, so what is that going to break in
+> userspace that depended on this being of a structure type and now it's
+> an array?
+
+It's the same. The previous was hidden behind additional type level.
+
+> And no other kernel changes needed?  Shouldn't you warn if this field is
+> set?
+
+No, as pointed out in the commit message kernel never ever used this.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
