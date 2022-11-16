@@ -2,123 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A5E762B62D
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:16:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0881562B626
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:14:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232774AbiKPJPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 04:15:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39344 "EHLO
+        id S232947AbiKPJOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 04:14:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233145AbiKPJPH (ORCPT
+        with ESMTP id S232077AbiKPJOa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 04:15:07 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1139E63C7;
-        Wed, 16 Nov 2022 01:15:06 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AG9ETYl018221;
-        Wed, 16 Nov 2022 03:14:29 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1668590069;
-        bh=2vGXON+Si2EYAR3ov7RM1ZPJ4M02dQQ7aoneZMo/r3A=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=AkflDbEU6VtlZy1QWdz9hvPFNcMmWKQ1oionNJ4x2eAnpx7dgkO9JN54VxIUDQKfK
-         8QZM33oyUS+gqqip4BDHMXhCO6y/AUoQSwvhkQFg9QLf3i9dV6cyofGuVeBx31GUZT
-         bKneUJLTLJ0l8s76aSDOFFkRN9zp0UIuvvz0Xvl8=
-Received: from DFLE101.ent.ti.com (dfle101.ent.ti.com [10.64.6.22])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AG9ETn8107192
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 16 Nov 2022 03:14:29 -0600
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Wed, 16
- Nov 2022 03:14:28 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Wed, 16 Nov 2022 03:14:29 -0600
-Received: from [10.24.69.141] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AG9EQcv055273;
-        Wed, 16 Nov 2022 03:14:26 -0600
-Message-ID: <12285f24-db9d-197b-84e5-e1e296607a04@ti.com>
-Date:   Wed, 16 Nov 2022 14:44:25 +0530
+        Wed, 16 Nov 2022 04:14:30 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FF0559E;
+        Wed, 16 Nov 2022 01:14:29 -0800 (PST)
+Date:   Wed, 16 Nov 2022 09:14:25 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1668590067;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WHQ6L7e8QAPaBVaj6+20+/2M+FkroSiESCfGsG3tCKM=;
+        b=J4Ischh9z8cEBBQg6h+0tjNbbPli0hykWBPD/4yvs8MqHs26rV4xZhFsrWTJ6qta43YEFK
+        tBA52QUT9vq0+abkHlhYIpxuMeHOZ06aMJYDSyNmPwph+PgpFPCWIni9LGM+Q6YFPJeLvD
+        Euu1N3wrA7owv+GDy8htLT1sksMYfWbsQhQieyQ727mu1IOn5ftwNXYqqvn1lcRueBSeJf
+        hdppEHBieTONZXkEBgIFSg3giiRtbpfO5RDobLJUhBPQurid8lMwT4TdJaEPpjhWpFeiM2
+        XZbUPoy3bLgv7SYX3onVXs2I84gym4F7TUWWUaA/PccEUViFtWsJvgVHWGsQVw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1668590067;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WHQ6L7e8QAPaBVaj6+20+/2M+FkroSiESCfGsG3tCKM=;
+        b=naTgVc+kAp0xTEqmJZcDoyvswmE0R5xJK9LoxeapoC3vE7Xft2Z1x/HXUDh7DNX46cdM9r
+        ptZslvOAQ7EQUXCw==
+From:   "tip-bot2 for Chen Zhongjin" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: perf/core] perf: Fix possible memleak in pmu_dev_alloc()
+Cc:     Chen Zhongjin <chenzhongjin@huawei.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20221111103653.91058-1-chenzhongjin@huawei.com>
+References: <20221111103653.91058-1-chenzhongjin@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] arm64: dts: ti: k3-j721s2: Fix the interrupt ranges
- property for main & wkup gpio intr
-Content-Language: en-US
-To:     Keerthy <j-keerthy@ti.com>, <vigneshr@ti.com>, <nm@ti.com>
-CC:     <robh+dt@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <kristo@kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20220922072950.9157-1-j-keerthy@ti.com>
-From:   Vaishnav Achath <vaishnav.a@ti.com>
-In-Reply-To: <20220922072950.9157-1-j-keerthy@ti.com>
-Content-Type: text/plain; charset="UTF-8"
+Message-ID: <166859006599.4906.10242789446125515108.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following commit has been merged into the perf/core branch of tip:
 
+Commit-ID:     e8d7a90c08ce963c592fb49845f2ccc606a2ac21
+Gitweb:        https://git.kernel.org/tip/e8d7a90c08ce963c592fb49845f2ccc606a2ac21
+Author:        Chen Zhongjin <chenzhongjin@huawei.com>
+AuthorDate:    Fri, 11 Nov 2022 18:36:53 +08:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Tue, 15 Nov 2022 22:30:12 +01:00
 
-On 22/09/22 12:59, Keerthy wrote:
-> The parent's input irq number is wrongly subtracted with 32 instead of
-> using the exact numbers in:
-> 
-> https://software-dl.ti.com/tisci/esd/latest/5_soc_doc/j721s2/interrupt_cfg.html
-> 
-> The GPIO interrupts are not working because of that. The toggling works
-> fine but interrupts are not firing. Fix the parent's input irq that
-> specifies the base for parent irq.
-> 
-> Tested for MAIN_GPIO0_6 interrupt on the j721s2 EVM.
-> 
-> Fixes: b8545f9d3a542 ("arm64: dts: ti: Add initial support for J721S2 SoC")
-> Signed-off-by: Keerthy <j-keerthy@ti.com>
-> ---
->  arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi       | 2 +-
->  arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-> index 34e7d577ae13..c89f28235812 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-> @@ -60,7 +60,7 @@
->  		#interrupt-cells = <1>;
->  		ti,sci = <&sms>;
->  		ti,sci-dev-id = <148>;
-> -		ti,interrupt-ranges = <8 360 56>;
-> +		ti,interrupt-ranges = <8 392 56>;
->  	};
->  
->  	main_pmx0: pinctrl@11c000 {
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-> index 4d1bfabd1313..f0644851602c 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-> @@ -65,7 +65,7 @@
->  		#interrupt-cells = <1>;
->  		ti,sci = <&sms>;
->  		ti,sci-dev-id = <125>;
-> -		ti,interrupt-ranges = <16 928 16>;
-> +		ti,interrupt-ranges = <16 960 16>;
+perf: Fix possible memleak in pmu_dev_alloc()
 
-Reviewed-by: Vaishnav Achath <vaishnav.a@ti.com>
+In pmu_dev_alloc(), when dev_set_name() failed, it will goto free_dev
+and call put_device(pmu->dev) to release it.
+However pmu->dev->release is assigned after this, which makes warning
+and memleak.
+Call dev_set_name() after pmu->dev->release = pmu_dev_release to fix it.
 
->  	};
->  
->  	mcu_conf: syscon@40f00000 {
+  Device '(null)' does not have a release() function...
+  WARNING: CPU: 2 PID: 441 at drivers/base/core.c:2332 device_release+0x1b9/0x240
+  ...
+  Call Trace:
+    <TASK>
+    kobject_put+0x17f/0x460
+    put_device+0x20/0x30
+    pmu_dev_alloc+0x152/0x400
+    perf_pmu_register+0x96b/0xee0
+    ...
+  kmemleak: 1 new suspected memory leaks (see /sys/kernel/debug/kmemleak)
+  unreferenced object 0xffff888014759000 (size 2048):
+    comm "modprobe", pid 441, jiffies 4294931444 (age 38.332s)
+    backtrace:
+      [<0000000005aed3b4>] kmalloc_trace+0x27/0x110
+      [<000000006b38f9b8>] pmu_dev_alloc+0x50/0x400
+      [<00000000735f17be>] perf_pmu_register+0x96b/0xee0
+      [<00000000e38477f1>] 0xffffffffc0ad8603
+      [<000000004e162216>] do_one_initcall+0xd0/0x4e0
+      ...
 
--- 
-Regards,
-Vaishnav
+Fixes: abe43400579d ("perf: Sysfs enumeration")
+Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lkml.kernel.org/r/20221111103653.91058-1-chenzhongjin@huawei.com
+---
+ kernel/events/core.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index baa6edf..5f262f9 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -11308,13 +11308,15 @@ static int pmu_dev_alloc(struct pmu *pmu)
+ 
+ 	pmu->dev->groups = pmu->attr_groups;
+ 	device_initialize(pmu->dev);
+-	ret = dev_set_name(pmu->dev, "%s", pmu->name);
+-	if (ret)
+-		goto free_dev;
+ 
+ 	dev_set_drvdata(pmu->dev, pmu);
+ 	pmu->dev->bus = &pmu_bus;
+ 	pmu->dev->release = pmu_dev_release;
++
++	ret = dev_set_name(pmu->dev, "%s", pmu->name);
++	if (ret)
++		goto free_dev;
++
+ 	ret = device_add(pmu->dev);
+ 	if (ret)
+ 		goto free_dev;
