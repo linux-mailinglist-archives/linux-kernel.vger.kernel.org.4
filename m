@@ -2,96 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 668FA62CC4D
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 22:08:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AC4C62CC4B
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 22:08:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239066AbiKPVIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 16:08:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47688 "EHLO
+        id S237515AbiKPVIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 16:08:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239234AbiKPVG5 (ORCPT
+        with ESMTP id S232515AbiKPVH7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 16:06:57 -0500
-Received: from smtpcmd0642.aruba.it (smtpcmd0642.aruba.it [62.149.156.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E9EAA6AEF2
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 13:05:47 -0800 (PST)
-Received: from [192.168.50.220] ([146.241.88.137])
-        by Aruba Outgoing Smtp  with ESMTPSA
-        id vPbNov83AEclovPbNoJmEN; Wed, 16 Nov 2022 22:05:46 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-        t=1668632746; bh=Xvf1+wKHK4unr2y4+q6+Qg2yKoqgkrIdcIad1uJ8cJA=;
-        h=Date:MIME-Version:Subject:To:From:Content-Type;
-        b=DY7nmyE5l0PBK6rwt43WgQ5Bvtl9Fsvs8O5IZ5qC2Sys5+Wo0uunKfkHS276RzADS
-         Xsy7yaBp+0K6JeEtcjFIUQPOiTef6oYMgKdwMeqPkGSyhSBXFsOOCfyQ4xB1qzRDKt
-         f8tlkotnjQ6Au5E8hTjX1E268pbDVrpJ6R/kzvrRuvAVlSzdj8TXNSWPPYmH1WS+ME
-         UVUvF+D1n3qJf+i054deAZejAZR06sFYOwVdHFYw9Gl+mheusEDC5qVzyqihRzXPUP
-         yb3V75MGJ2nrm7L53hsXK8tBWyquP+8c5db8fkb121vS+tU/4uqc92D3OxPxFtD4Jb
-         pUn+HU0eCQkVw==
-Message-ID: <fcf9dd95-fbb6-c511-dfa7-0fed40870922@benettiengineering.com>
-Date:   Wed, 16 Nov 2022 22:05:45 +0100
+        Wed, 16 Nov 2022 16:07:59 -0500
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A7585CD34
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 13:07:32 -0800 (PST)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 3D57A2C027B;
+        Thu, 17 Nov 2022 10:07:27 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1668632847;
+        bh=QRj1PuAIkYt+nXKsnn0wuBRmh8w11dK0S/SK+BuFe2g=;
+        h=From:To:Cc:Subject:Date:From;
+        b=llFcXeywk+eREeFjoXhwMvjW0dOLpNcizJYwpDxaQ39g+sBWjR0ao0uqx/Pokx+2G
+         2tXm5IUZzFqHDjnxuzDddaEzt74sahWOoLRLfAAPgLMCL1t6sm3oZAP41bPjoD5h8L
+         Xgo07fwAeOZl8MJWUD04vVwf07PsY2YFXnHrw3Zo+X0iWERQ2sdb90bqPcZSfSWm2O
+         N/9mCfCX8RJEP0d/qtpmuizYlThkL6khixHVDK6eO83nFfQpwt9U0+zzD/0dHNcGkg
+         0zn2X1UAlW4O0xMk0bz22JRW8hoFxETNWSkxEiiCObb5f64eR+JPApnT/j23pC/73k
+         r5evbsGdzfr3Q==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B6375510f0000>; Thu, 17 Nov 2022 10:07:27 +1300
+Received: from hamishm-dl.ws.atlnz.lc (hamishm-dl.ws.atlnz.lc [10.33.24.30])
+        by pat.atlnz.lc (Postfix) with ESMTP id 1986C13EDD6;
+        Thu, 17 Nov 2022 10:07:27 +1300 (NZDT)
+Received: by hamishm-dl.ws.atlnz.lc (Postfix, from userid 1133)
+        id 15FBB2A2608; Thu, 17 Nov 2022 10:07:27 +1300 (NZDT)
+From:   Hamish Martin <hamish.martin@alliedtelesis.co.nz>
+To:     krzysztof.kozlowski@linaro.org
+Cc:     linux-kernel@vger.kernel.org,
+        Hamish Martin <hamish.martin@alliedtelesis.co.nz>
+Subject: [PATCH] memory: mvebu-devbus: Allow on ARCH_MVEBU systems
+Date:   Thu, 17 Nov 2022 10:07:17 +1300
+Message-Id: <20221116210717.31313-1-hamish.martin@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 1/4] clk: imx: imxrt1050: fix IMXRT1050_CLK_LCDIF_APB
- offsets
-Content-Language: en-US
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Bough Chen <haibo.chen@nxp.com>,
-        Jesse Taube <mr.bossman075@gmail.com>
-References: <20221116203520.8300-1-giulio.benetti@benettiengineering.com>
- <CAOMZO5A9dhxtv2di57tkumS5Y7uDvkKqWvt4MfB9bbdH5dTPwg@mail.gmail.com>
-From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <CAOMZO5A9dhxtv2di57tkumS5Y7uDvkKqWvt4MfB9bbdH5dTPwg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfKmcd3GrKqNdixhv2m/Yj9JO2sEII2WekZSUdpyEaqUmrtz+qDrPKTW36yH3dWUzpmCThjBifHXCoVRwPCne+IKcxrr3YbRV7KmNPNH1tr0Dv9fvU8W4
- Ff+txv8asRss5ptdrrRbY+R2//FTYc0bMJGh5HTWwTJxXJIAB1LdcD3UozyF05OaOE+ee4Wr9dqgW3ijkR4Bwgt/h4muAJf+/nZ41A1EBg581dOKQL9jYGN1
- FNRWSrsIuGhfcqTREM1BRU/u35TdJ5UqVJHWYuuk2YaZyRqCjwINjSPZ2RmjM/EtCeIsKoCD5EKN4dxDpPNfkcC9Qa4VoYlr6wTA0dzdQlU22hGBpJP/UVHa
- bxpnHMkY1uCOSb0ZzdCkxnyHOklwAwm3AQg10GQo2SvsKSWMwoOWlZRDUCNWxR7BrcouQiXqpwLAbG/JJ/BgB18nQYHgyQNcRL1ZN3wqxr5qqpVDEoBxcVVY
- 0uHrWLnnM+Nj3oXqdcnTpmw5/F/y6dQhacUSA5bpcOQszuzv+IJ+4l3ZMKvpTV69oDz2+aRHng4aC8XfLWx3AcljGtJSa+kUBdUEUNNzM1/OCU1kfYZs/azk
- cEVyxqD3y27jKIwUzDXHh/7T9rfz5QBw3U41E7lnxRIIRwGtESPLG6Nc90Vktn2ihMEqjUik33umnberfW1PgDHe+Od4IgkDarwnIlXzhMgf/nU+CfRc6HKz
- OBjMHp98bLHGL+TZiPCcHBefhHwEybKd9BWWbrVWYOHBjGcCyYcrlQ==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=PqrtkDE3 c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=9xFQ1JgjjksA:10 a=xfACtVhq-O2_VhWpyGYA:9
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Fabio,
+The Marvell EBU Device Bus controller is available on more systems than
+currently supported by the Kconfig definition. For instance the CN9130 So=
+C
+has this controller.
+Allow ARCH_MVEBU systems to configure this driver on.
 
-On 16/11/22 21:52, Fabio Estevam wrote:
-> Hi Giulio,
-> 
-> On Wed, Nov 16, 2022 at 5:35 PM Giulio Benetti
-> <giulio.benetti@benettiengineering.com> wrote:
->>
->> Fix IMXRT1050_CLK_LCDIF_APB offsets.
->>
->> Cc: Jesse Taube <mr.bossman075@gmail.com>
->> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> 
-> Since this is a fix, please add a Fixes tag.
+Signed-off-by: Hamish Martin <hamish.martin@alliedtelesis.co.nz>
+---
+ drivers/memory/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Fixes: 7154b046d8f3 ("clk: imx: Add initial support for i.MXRT1050 clock 
-driver")
+diff --git a/drivers/memory/Kconfig b/drivers/memory/Kconfig
+index fac290e48e0b..63176665b4e2 100644
+--- a/drivers/memory/Kconfig
++++ b/drivers/memory/Kconfig
+@@ -159,7 +159,7 @@ config FPGA_DFL_EMIF
+ config MVEBU_DEVBUS
+ 	bool "Marvell EBU Device Bus Controller"
+ 	default y if PLAT_ORION
+-	depends on PLAT_ORION || COMPILE_TEST
++	depends on PLAT_ORION || ARCH_MVEBU || COMPILE_TEST
+ 	depends on OF
+ 	help
+ 	  This driver is for the Device Bus controller available in some
+--=20
+2.38.1
 
-Do you want me to send a V4 for these patches with the Fixes tag?
-
-Best regards
--- 
-Giulio Benetti
-CEO/CTO@Benetti Engineering sas
