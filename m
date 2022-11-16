@@ -2,103 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 914D262B686
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:30:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51EC262B693
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:32:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232833AbiKPJaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 04:30:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51176 "EHLO
+        id S237906AbiKPJcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 04:32:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231801AbiKPJaP (ORCPT
+        with ESMTP id S232019AbiKPJcS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 04:30:15 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB99963A0
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:30:14 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id j4so28636004lfk.0
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:30:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=W3xDpe3WqLIJ4vWlNtEKnmXozr/q5qKt2awRyjeyGr8=;
-        b=cKDokkgwNoTPGUU+9LGCv0aFdwy+mxnCu2is5Bw7otXZunpg4GbYBPW4ePEkZlyk+5
-         V6OlzN61lg3bDAI6B9Qq6TlYwGyW7V8T8dpoD/szCqC3TLiqQZDbJqGgJh7NDczxG1FQ
-         6QkSKI8yseUr0XhAo0IRZll5XLQu86Ud7f0xCXASoWvvFZeadtraDvskBkK9VlBZrmpI
-         /MArBfL2AVRDL2VfJk15aqyMDXS0IJnorn0EPBvCepJBRomkkfENamNHrf/lrd4JcT22
-         NCIzvluLHjCN2UO05Gd6bzSoGIordncKC5qBj5L2PzjpuYJQXPtlbg5pm3sE0GZqVT69
-         8anQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=W3xDpe3WqLIJ4vWlNtEKnmXozr/q5qKt2awRyjeyGr8=;
-        b=zXVUonVUyHS6+WlB5ddX9KGubmB6Sir6Zw8DPx8rZ1KrLBym3OXlS3o9vy4KLQeESN
-         LwY/79kU2mayub/VV8UaD5xuA8BH2gFnBq6V+A3ASka5CkXccZlCFos2R37bBbnbxPli
-         80+LYzWP08SxfJqb0Ipmm9lpm/jBQNWWJm1OD2f7WneNk6smJeZgpql/lx0+0FiZW6CX
-         oQnHp+HTaulDongYeJ+nEc25P0BkBBTJKcuX9F/IFPNFm3tRf/jPquSBbmBmEXc3qmbu
-         +iNZkod19vFyEo+J2OXCVk2ANXHJ+EK3xtUb3QoD+RXtYndZ3udaI2reGn+Vr+jlx5ED
-         Porw==
-X-Gm-Message-State: ANoB5pkr0uoXlcNEU7ImPTFCIyCVKneZxWKE+hhM+NyCZ5blnnXdTyPo
-        qCnz6e2QnKMhyUFAw2y+6TJLbNCyRRz2Dd8N
-X-Google-Smtp-Source: AA0mqf6FXWk24nAVgpV7mXl+2LnsfzbOAjXFhyukT+R5ZHoVyTJf0CF1npAn/gGfDcYBSiK6aftIHQ==
-X-Received: by 2002:a05:6512:360e:b0:4a2:6907:98d8 with SMTP id f14-20020a056512360e00b004a2690798d8mr6515285lfs.28.1668591013337;
-        Wed, 16 Nov 2022 01:30:13 -0800 (PST)
-Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id s18-20020a197712000000b004b18830af7asm2517325lfc.54.2022.11.16.01.30.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 01:30:13 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        arm@kernel.org, soc@kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL 2/2] arm64: dts: samsung: Pull for v6.2
-Date:   Wed, 16 Nov 2022 10:30:10 +0100
-Message-Id: <20221116093010.18515-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221116093010.18515-1-krzysztof.kozlowski@linaro.org>
-References: <20221116093010.18515-1-krzysztof.kozlowski@linaro.org>
+        Wed, 16 Nov 2022 04:32:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 062E212AA7;
+        Wed, 16 Nov 2022 01:32:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BDA74B81C56;
+        Wed, 16 Nov 2022 09:32:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28B2EC433D7;
+        Wed, 16 Nov 2022 09:32:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668591134;
+        bh=gTs3K9d/PdhPyra4juo+80Yt54DsbmGjg8a5VaaNvbQ=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=YuOZEXxK4NdTpbnxVCqSw6gEPxF0wD86605uSrIsXL1v/gaJnTEfq5JmCqG1ziR03
+         cbjL+i3Of/KqFIaHnEfgiA7CIab7kuRyFXUrQuqdYvSzhZ2QmwHcFhxAV3o/UvGkOj
+         RhoyqLr6MeDOVHTp8/mjDsUo7eoeRKYkdOG5WR9DrXJww0zs+9h5EmMFXJUG063CYQ
+         ylz/KhlhSzZWo9PIVvn/y20Tc9kP5rQBycp+yivCdzrRbyEF96Hm085epEyOANraOu
+         WGPKeAJbPa/M1vCfNTzOjQA4dkrXYn2RHHRBpQnigxIPXXoEb3VkfN3Wbsaz/8KuWb
+         VBqpwe3/r3Zmw==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v3 1/7] wifi: orinoco: Avoid clashing function prototypes
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <e564003608a1f2ad86283370ef816805c92b30f6.1667934775.git.gustavoars@kernel.org>
+References: <e564003608a1f2ad86283370ef816805c92b30f6.1667934775.git.gustavoars@kernel.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kees Cook <keescook@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <166859113003.16887.7125863875259889843.kvalo@kernel.org>
+Date:   Wed, 16 Nov 2022 09:32:11 +0000 (UTC)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
+"Gustavo A. R. Silva" <gustavoars@kernel.org> wrote:
 
-  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+> When built with Control Flow Integrity, function prototypes between
+> caller and function declaration must match. These mismatches are visible
+> at compile time with the new -Wcast-function-type-strict in Clang[1].
+> 
+> Fix a total of 43 warnings like these:
+> 
+> drivers/net/wireless/intersil/orinoco/wext.c:1379:27: warning: cast from 'int (*)(struct net_device *, struct iw_request_info *, struct iw_param *, char *)' to 'iw_handler' (aka 'int (*)(struct net_device *, struct iw_request_info *, union iwreq_data *, char *)') converts to incompatible function type [-Wcast-function-type-strict]
+>         IW_HANDLER(SIOCGIWPOWER,        (iw_handler)orinoco_ioctl_getpower),
+>                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> The orinoco Wireless Extension handler callbacks (iw_handler) use a
+> union for the data argument. Actually use the union and perform explicit
+> member selection in the function body instead of having a function
+> prototype mismatch. No significant binary differences were seen
+> before/after changes.
+> 
+> These changes were made partly manually and partly with the help of
+> Coccinelle.
+> 
+> Link: https://github.com/KSPP/linux/issues/234
+> Link: https://reviews.llvm.org/D134831 [1]
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
 
-are available in the Git repository at:
+5 patches applied to wireless-next.git, thanks.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt64-6.2
+2c0e077db65a wifi: orinoco: Avoid clashing function prototypes
+02ae6a7034d7 wifi: cfg80211: Avoid clashing function prototypes
+fd7ef879a983 wifi: hostap: Avoid clashing function prototypes
+ff7efc66b7ea wifi: zd1201: Avoid clashing function prototypes
+89e706459848 wifi: airo: Avoid clashing function prototypes
 
-for you to fetch changes up to 21f6546e8bf68a847601e2710378e2224bf49704:
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/e564003608a1f2ad86283370ef816805c92b30f6.1667934775.git.gustavoars@kernel.org/
 
-  arm64: dts: fsd: fix drive strength values as per FSD HW UM (2022-10-18 09:24:00 -0400)
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 
-----------------------------------------------------------------
-Samsung DTS ARM64 changes for v6.2
-
-Correct pin drive strength macros (names) and values used on Tesla FSD
-SoC.
-
-----------------------------------------------------------------
-Padmanabhan Rajanbabu (2):
-      arm64: dts: fsd: fix drive strength macros as per FSD HW UM
-      arm64: dts: fsd: fix drive strength values as per FSD HW UM
-
- arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi | 34 +++++++++++++++---------------
- arch/arm64/boot/dts/tesla/fsd-pinctrl.h    |  6 +++---
- 2 files changed, 20 insertions(+), 20 deletions(-)
