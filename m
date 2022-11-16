@@ -2,95 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D0BB62B162
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 03:36:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCEB862B169
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 03:38:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231547AbiKPCgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 21:36:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49834 "EHLO
+        id S230472AbiKPCir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 21:38:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231398AbiKPCge (ORCPT
+        with ESMTP id S229560AbiKPCip (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 21:36:34 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A8F1027937
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 18:36:33 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8BxnrewTHRjuo8HAA--.17233S3;
-        Wed, 16 Nov 2022 10:36:32 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dxd1etTHRjVk0UAA--.35869S6;
-        Wed, 16 Nov 2022 10:36:32 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 4/4] samples/kprobes: Add LoongArch support
-Date:   Wed, 16 Nov 2022 10:36:29 +0800
-Message-Id: <1668566189-2056-5-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1668566189-2056-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1668566189-2056-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf8Dxd1etTHRjVk0UAA--.35869S6
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWrZw4rWrW5CF1fJw1xZFWDJwb_yoW8JF1fpF
-        n0y3W5t3yFyw13WFW3Jayvgry0yryjkay8u3ykC34Yya429ry5AF1rKayjyw4kur90qF43
-        tr1FvryUGF1xZrJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        b28YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
-        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE14v26r4j6F4U
-        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x0EwIxGrwCFx2
-        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
-        6r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
-        AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
-        s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
-        0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jOdb8UUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 15 Nov 2022 21:38:45 -0500
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01olkn2079.outbound.protection.outlook.com [40.92.53.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528B3B851;
+        Tue, 15 Nov 2022 18:38:44 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=k1zNWIhDDylp7ur5BgO56IZE26br67hm5fRDfkZZsB/dl+9eD2Z9Vt0Bq4LUPiuyasmxo/24YoY6jvCHez9jX6xqIvBO56AdSn2diKSCwON3buXItCZbOfqhL0S8IhDj2E14Ji6IWVHEmzNS65Uijk+jg/665Q2J45mt5N/lPmBdejoJpJL+CUZLrMdikiwlohxTjT6R3v9M88qa3wfZRtbGEDcgX/AEv/3pAnBDE5UcOcIjS5GwOX+VxGaGhGq6s6B4Lv3ehaY5jIPqfQJbdwAJE434Num/K79CWY6OG7CuZ7AV4/IHoUlZ0MVPsEeidV/nVTfUQTnzFSkybJWJbA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dPC0PWj25MBZSzwsKsVcmMHSzk2NutVG2pM834wRkrI=;
+ b=Yj/ou8PpXod+d2dN3qGpiHeWH0Sh3P5T0CPEtqhJQQcoPFXd2m+3aCePK15UfHKDOwjV8aKz0lzj6RFXt5vJ/I1zgbbLVGxqSldApRec85B/AXClHY85ELdiczpntH37wuQg8HoyGInc2QQa3Kt8CGPcbiPqHaBYry7xkTIReUcZN0PteZbPsTBpaNMl+PBrpB8X2NyP10V+A5X1l9RnC2wxAihZqNJxXJ6N+Eho1IFdvt2Tt+BM4kTz2AAvPD4prF5DmcFZwfqqe+KUuPFGevp8i5ecqIHo09Y7Wnbz8lIa2VbBFwoP0nHMjXJRWKXYwO8FPa/jsLS2jWT48nejWQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dPC0PWj25MBZSzwsKsVcmMHSzk2NutVG2pM834wRkrI=;
+ b=eC2ENhlyaWgSmoFVSyV/iBM9yeaVSANVnBJ8jpvVk89YAd225XpPCwdpqCv6hHJPoXsgAEoihPPpSnIJbLylpKARH/6O8Yk3O2HCwx2hucgXYDMBos7vhy/gRuFH11NIMIw3BZOP4IwbFJHG8eWSsG7znVkTpQ6/JmIK4CQ/itlgnhuiAUsr3vRC0P+s+kiD5jbAjmMDL4cNQBEhPTzcya2Pzw8kYt2BfQWdHPkoxpHoKs7agqM1Dur2nI48SdLncZDjtJtBYF6BNNNmoMi4MKGmNpR4IUH4LybJIDEGPLPCW0+/wLOB0YM0DL9yexfvyudvC7pw9tAYJlvDlP7Biw==
+Received: from SI2PR02MB4603.apcprd02.prod.outlook.com (2603:1096:4:10c::14)
+ by KL1PR02MB5028.apcprd02.prod.outlook.com (2603:1096:820:72::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.15; Wed, 16 Nov
+ 2022 02:38:40 +0000
+Received: from SI2PR02MB4603.apcprd02.prod.outlook.com
+ ([fe80::11fb:db8f:df36:c049]) by SI2PR02MB4603.apcprd02.prod.outlook.com
+ ([fe80::11fb:db8f:df36:c049%8]) with mapi id 15.20.5813.018; Wed, 16 Nov 2022
+ 02:38:40 +0000
+From:   jinchuan li <lifangpi@hotmail.com>
+To:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com
+Cc:     linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        972624427@qq.com, ligongwei <ligongwei@kylinos.cn>
+Subject: [PATCH -next] Bluetooth: btusb: Add a new PID/VID 13d3/3549 for RTL8822CU
+Date:   Wed, 16 Nov 2022 10:38:24 +0800
+Message-ID: <SI2PR02MB4603DDABFC0EC1CC323BAF4ADD079@SI2PR02MB4603.apcprd02.prod.outlook.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TMN:  [EhUlL4l5mle2v/ainhRAOLuUSW/GK78ctfIZEMqu9sY=]
+X-ClientProxiedBy: TYXPR01CA0063.jpnprd01.prod.outlook.com
+ (2603:1096:403:a::33) To SI2PR02MB4603.apcprd02.prod.outlook.com
+ (2603:1096:4:10c::14)
+X-Microsoft-Original-Message-ID: <20221116023824.227808-1-lifangpi@hotmail.com>
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SI2PR02MB4603:EE_|KL1PR02MB5028:EE_
+X-MS-Office365-Filtering-Correlation-Id: f013e288-2c01-4028-e73a-08dac77babab
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: i+SwVAXWSlZktSo8qJYHaUwwvOjEbc9RFENu6iGkVu9SM41WktNU9LPrXAjJkebIZaWTm6+dPedNLRZPvbMs9ES+gakEm5glr12z844PU0NJC8C5yEr/+jsAQfLbJPqsuCtBKUjxaRCGkJnvZa/sH1ismy6KEaY2jNp5vzd9iPp0UPoJ4cLwpYjeLDi7hzlsF8UIq5caNwwtwOLV878YCgxwRCB8fUwRClcB96wXLOecz+fP0zJxVISV7k3FeunSwJqvkal4ggJSFqYFKEq1KTF7oCziizHHwmvoQXqcmNkA39LIw4TgJJ4gUsMH3qvTx+AUWZcFLgXBbo9ZFKapPirAAENsQB7ZfxA+RHQgPpf78x7hAdYvlha2paE2y/Zhh7p2hMSxvaKxQv1FrQq22Hy2pOrOgTLK9BULrEd6ezhI7DBOZm74m91HFvYa6BH08g34wswN9lueaX9fyrkMg6npfqsNE7Mx7AzN8k35nbikB/n3LaYfovrnyNkyK3yiH+SgqbLCemOmfs39oO1e04eRa7XFszsosxuSD698aXcNyvi5qsUrgl4hP10sSfGjHWdnHDP2nL7BQCIbwCALRBVX06ytvO6pL9IuTwHnkWiw9lIOnvEbdERSj8IO5AnVISOZdTq8msfMXXIbKONmSQ==
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?C/GWfkPkaYrLhl36n18oDiwHTGCdGRROr/YvbZapXxXEaWAeiI5qpkFjxUZx?=
+ =?us-ascii?Q?7IVDhQl1/lQZLCKY4fV0as4ano32CjerECkFQjLG/zPqLjKvXTXaWHY6kHJP?=
+ =?us-ascii?Q?91nIUI8E5Xplmx5bxq6C46xNUKaylj1kJ36vPBrLbtf1VzU23zJWJTPHepF9?=
+ =?us-ascii?Q?T2HjQnlEyWlhBEfzQt8bDVId5nfC2Ne2hCZH/JGeBcQ+6m8yOFQQw4DM2wS4?=
+ =?us-ascii?Q?HEE/hCZOgM1dyWOhYECzRQfjFcIyJQ3oYs9eRZBpocv5gxYcWx92jU5L1Gj4?=
+ =?us-ascii?Q?9OK4uSYR4PktmTUYciaT2Po4apemeVkN6H3RssGSOY50pVRUiNAyrH+sCgS7?=
+ =?us-ascii?Q?AErQjodk5O1ffsG5m7oHET/G/d1eFt9SQ0NK02d4LBUnvyk5ifFO5qIDUKpQ?=
+ =?us-ascii?Q?NaCg9/cBJip8vs0lwnGFZ5MEm4/XRdOkg5a5Fye3lebO/4BZoOiFn+RHlK8g?=
+ =?us-ascii?Q?FbIqA+3TTI30eDVXSI31AgzB8WEnbtX3La9DJossO8JU0W2PVLqgzU7uNcCB?=
+ =?us-ascii?Q?+rRj1ZVM3Ar/mt53t5vwlyDOhpZYzQoCR4+xzU9c+JXsqPDg/OFM1lk7qCaI?=
+ =?us-ascii?Q?bxtFb7tzhcisbrxDfRcENX015pYYas4xQHFQqBUdsmxIe6Xs6WPuZ+1GndxI?=
+ =?us-ascii?Q?2R7UFi97FqKHKiEejCiQUYLvD33xQ3cSvXY9xU0yg1oWW5BEbR6nH49cDpv2?=
+ =?us-ascii?Q?gudwMgWLrvL52xxmAy7++IOKjdzvRZvkbdvOHRyTwlnqjRd8WigA6BnQteiG?=
+ =?us-ascii?Q?ew6aD0UoFMraPb1vwl2k2z7bFjAOY9Z+Pe1FjODEB2fWtX3Pmd5lRQNpD1SD?=
+ =?us-ascii?Q?4Da3HBisbZ1VzsHiRb1nSbLEFI2lGoCFf5REWNG3DpE/rEQgo6n0oTkuuJNf?=
+ =?us-ascii?Q?wIFS24pA+rMwyWmc0aF8ID+Y0Dj9d42A3jSaCJGomw7xwvgneaAMMPn1cnbu?=
+ =?us-ascii?Q?TCaCNxJeLEs1QV4NvChYB8ievDSc/6An/YpAn3OypJZBphZyro+6Spitlazd?=
+ =?us-ascii?Q?EoApQYMfm/m2AJUx2hXfAoIWjjbcMnp6+47L3nIMUJx1xBf7TnrMVhuQ+7wz?=
+ =?us-ascii?Q?y1JztKuLtjhTiGh38Z0FxTkPyvbmzN42irxqWzi0ZuQSoWWcPljHiqQ79aZL?=
+ =?us-ascii?Q?DqCaP/8dkIZuq6qCpSSN9xwsO/FpwJJj6BPm4huz/H9ry4UU18Ws550gWBDg?=
+ =?us-ascii?Q?vSOMNXWgcji/KxF/4oxNjI1fFMVTxhxqgMC51S90cXTJ6mvn7wJShfDhZmLH?=
+ =?us-ascii?Q?X+5TP2bYEN1Xmztt5TfOBBBnK3OcoqDIrCntwxTl7Q=3D=3D?=
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-20e34.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: f013e288-2c01-4028-e73a-08dac77babab
+X-MS-Exchange-CrossTenant-AuthSource: SI2PR02MB4603.apcprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Nov 2022 02:38:40.8308
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR02MB5028
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add LoongArch specific info in handler_pre() and handler_post().
+From: ligongwei <ligongwei@kylinos.cn>
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+* /sys/kernel/debug/usb/devices
+T:  Bus=03 Lev=02 Prnt=02 Port=02 Cnt=03 Dev#=  5 Spd=12   MxCh= 0
+D:  Ver= 1.00 Cls=e0(wlcon) Sub=01 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=0bda ProdID=b85b Rev= 0.00
+S:  Manufacturer=Realtek
+S:  Product=Bluetooth Radio
+S:  SerialNumber=00e04c000001
+C:* #Ifs= 2 Cfg#= 1 Atr=e0 MxPwr=500mA
+I:* If#= 0 Alt= 0 #EPs= 3 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=81(I) Atr=03(Int.) MxPS=  16 Ivl=1ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=03(O) Atr=01(Isoc) MxPS=   0 Ivl=1ms
+E:  Ad=83(I) Atr=01(Isoc) MxPS=   0 Ivl=1ms
+I:  If#= 1 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=03(O) Atr=01(Isoc) MxPS=   9 Ivl=1ms
+E:  Ad=83(I) Atr=01(Isoc) MxPS=   9 Ivl=1ms
+I:  If#= 1 Alt= 2 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  17 Ivl=1ms
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  17 Ivl=1ms
+I:  If#= 1 Alt= 3 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  25 Ivl=1ms
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  25 Ivl=1ms
+I:  If#= 1 Alt= 4 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  33 Ivl=1ms
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  33 Ivl=1ms
+I:  If#= 1 Alt= 5 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  49 Ivl=1ms
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  49 Ivl=1ms
+
+Signed-off-by: ligongwei <ligongwei@kylinos.cn>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
 ---
- samples/kprobes/kprobe_example.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/bluetooth/btusb.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/samples/kprobes/kprobe_example.c b/samples/kprobes/kprobe_example.c
-index fd346f5..ef44c61 100644
---- a/samples/kprobes/kprobe_example.c
-+++ b/samples/kprobes/kprobe_example.c
-@@ -55,6 +55,10 @@ static int __kprobes handler_pre(struct kprobe *p, struct pt_regs *regs)
- 	pr_info("<%s> p->addr, 0x%p, ip = 0x%lx, flags = 0x%lx\n",
- 		p->symbol_name, p->addr, regs->psw.addr, regs->flags);
- #endif
-+#ifdef CONFIG_LOONGARCH
-+	pr_info("<%s> p->addr = 0x%p, era = 0x%lx, estat = 0x%lx\n",
-+		p->symbol_name, p->addr, regs->csr_era, regs->csr_estat);
-+#endif
+diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
+index 64a3febb9dec..437d0b53efe7 100644
+--- a/drivers/bluetooth/btusb.c
++++ b/drivers/bluetooth/btusb.c
+@@ -498,6 +498,10 @@ static const struct usb_device_id blacklist_table[] = {
+ 	{ USB_DEVICE(0x0bda, 0xc822), .driver_info = BTUSB_REALTEK |
+ 						     BTUSB_WIDEBAND_SPEECH },
  
- 	/* A dump_stack() here will give a stack backtrace */
- 	return 0;
-@@ -92,6 +96,10 @@ static void __kprobes handler_post(struct kprobe *p, struct pt_regs *regs,
- 	pr_info("<%s> p->addr, 0x%p, flags = 0x%lx\n",
- 		p->symbol_name, p->addr, regs->flags);
- #endif
-+#ifdef CONFIG_LOONGARCH
-+	pr_info("<%s> p->addr = 0x%p, estat = 0x%lx\n",
-+		p->symbol_name, p->addr, regs->csr_estat);
-+#endif
- }
- 
- static int __init kprobe_init(void)
++	/* Realtek 8822CU Bluetooth devices */
++	{ USB_DEVICE(0x13d3, 0x3549), .driver_info = BTUSB_REALTEK |
++						     BTUSB_WIDEBAND_SPEECH },
++
+ 	/* Realtek 8852AE Bluetooth devices */
+ 	{ USB_DEVICE(0x0bda, 0x2852), .driver_info = BTUSB_REALTEK |
+ 						     BTUSB_WIDEBAND_SPEECH },
 -- 
-2.1.0
+2.25.1
 
