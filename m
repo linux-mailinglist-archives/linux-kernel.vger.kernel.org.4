@@ -2,138 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C14662B6B2
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:39:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D4AE62B6B8
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:40:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233411AbiKPJjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 04:39:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56448 "EHLO
+        id S238611AbiKPJjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 04:39:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232019AbiKPJjo (ORCPT
+        with ESMTP id S238109AbiKPJjr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 04:39:44 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E90126489
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:39:43 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id bp15so28538857lfb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:39:43 -0800 (PST)
+        Wed, 16 Nov 2022 04:39:47 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4633D25282
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:39:45 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id n12so42611275eja.11
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:39:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=j+gl7l2sUM+JuRSjFTkzINmsvGZarBZozPSoW/pkC8U=;
-        b=nabZ7U2yFQENwR0B6rx2HYg/E2viR3SDwxtWZnvqTTcgpiKsO/7THHEB0/1bWDQZas
-         /9LJ2x5bQ+FKQpsuQPEma6+eJbo6EmC7g/3RZaRAS20WLqDj03LolJ/lBCtLeBH/cZn0
-         g4qxE6F2YmmvkV5dO7SRs3EnnDvffOAM0JE3FTPz5tMe5ymLKVwA+HcntK4sFKsPF9/i
-         +PcyUwaVWV72eEYFmrZVmcQMyncNjHvdbICJ9q8h2NJLwgatMVH7JA77qqRmKYeRCFix
-         3IrAnSfLYo0MRStXuBTRyRaHVIiI4GfjLCCEm++UXHATgL2WFkefy60VCmsIgzkc8ImQ
-         54pg==
+        d=ffwll.ch; s=google;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=S6oqx15ITri8OuC13o4xCW0SmP3dFj+PiqjV49pnT8A=;
+        b=TZCSe/yGP+6YUUxZ+J3RiJY4ZZose/RfW64FOqPUop2XAXuLE6BVBfv1uW5gjHBz+e
+         jY4ZL1INXZi+XC4mhyNs198vPjVdRcWqCvAv20Hv5CHDkO16DbUgwCNB3owLSdhv/RF9
+         iCekFgLlJcwBBdU6WRRe//N8RcoYY0FGMfYHE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=j+gl7l2sUM+JuRSjFTkzINmsvGZarBZozPSoW/pkC8U=;
-        b=UH3JWdlP93ZEAtPVpcOaXursWjOrowt+Pyi6EiveValkSGyCbhjyyt0+n2fOjbjJHb
-         m6UaS+vouwSsoaQJEQlhgUZWXy64m4hzA1/CIJSsK9rSIU+YW2Ll1aXRWFgHwkpDxfAA
-         /zwb1JwINj4gEn6X3gUgYssnoY2GxSCF3CS54rwIsDyjw3xHSdJMZIafvGx33DZQjeJ5
-         MGLY3TNViBTWNDQJDRy2YWaatkyoALbp9EO7g7kg0vZ0pJxxkocj36Pw5wtpVVywQyfK
-         QB3XpFBoeVn17d0sPExIwCsxRyYO2qYL6grO+5DOzC9QYwfTwFPT+ptKL2KQKPKn1N+e
-         S9OQ==
-X-Gm-Message-State: ANoB5pkvaoGMxh1UuqdTRkfHc/e+5KJGS0IyMm57W178IBepskD2IwqE
-        9E4fHO+AZbBZGIiZFyJgNG9IHg==
-X-Google-Smtp-Source: AA0mqf4mB5/tmsVdj0UfaSGVIV3XOkNlkt4gjuroY+HB7oemrLuFblk2sOHVkDC2mg0gfIwsEcqaEg==
-X-Received: by 2002:a05:6512:1597:b0:4a2:676e:cf68 with SMTP id bp23-20020a056512159700b004a2676ecf68mr6846656lfb.546.1668591581632;
-        Wed, 16 Nov 2022 01:39:41 -0800 (PST)
-Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id c8-20020ac24148000000b00492c663bba2sm2511151lfi.124.2022.11.16.01.39.40
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=S6oqx15ITri8OuC13o4xCW0SmP3dFj+PiqjV49pnT8A=;
+        b=TiuwpzhYfhMNCCNitc0dZFMKjIKmijXcuCcBVonRFAQopDgYTP3jOMbAQiejm7HJOQ
+         eXfSuGwyBuhwpFRw2o049Edp5s2H8CLPfKbP1qKluY8YzCgSOcxQaNMO8IwWp5daXtu3
+         aGrBERWas+v6hnZCkdtCTE6PMUUplmvV4MlvA7y8vIZr26lk3j9XuitBwFNdu7t8+lhn
+         zRSd6/BHVDeUeqfOlQunO0b09jK+mAyTxv9wbagjtLJoS0kZdx554W4r92wmeKczvFYf
+         +4lNqJlO5R9xBlSv+9hsIlE3gSKG8uTQLWhJaezIP3aoqUc4zUYOPA7UQ+kTERw/2aBY
+         bKFA==
+X-Gm-Message-State: ANoB5plqrrY8uWe0KIFtdjcpEo+tb1eBvpuP7Mk5K3LpeneYtw4VGJIa
+        PY+dqPgJ52imV+xG1VNQeiF3Ew==
+X-Google-Smtp-Source: AA0mqf5IDCFzMzxg7K+YiFTymvahSK1AsntC/ot3k1xLAUk0GHJ5RGc4u67XB6zl0x/PYZjfkwUibg==
+X-Received: by 2002:a17:906:414d:b0:781:951:2fb with SMTP id l13-20020a170906414d00b00781095102fbmr17126729ejk.64.1668591583634;
+        Wed, 16 Nov 2022 01:39:43 -0800 (PST)
+Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
+        by smtp.gmail.com with ESMTPSA id z4-20020aa7d404000000b0046778ce5fdfsm5928035edq.10.2022.11.16.01.39.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 01:39:41 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL] pinctrl: dt-bindings: qcom: Second convertions for v6.2
-Date:   Wed, 16 Nov 2022 10:39:39 +0100
-Message-Id: <20221116093939.20111-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Wed, 16 Nov 2022 01:39:43 -0800 (PST)
+Date:   Wed, 16 Nov 2022 10:39:41 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Dave Airlie <airlied@gmail.com>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-api@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michel =?iso-8859-1?Q?D=E4nzer?= <michel@daenzer.net>,
+        Christian Brauner <brauner@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Sultan Alsawaf <sultan@kerneltoast.com>,
+        Sean Paul <sean@poorly.run>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
+Subject: Re: [PATCH] drm/atomic: do not branch based on the value of
+ current->comm[0]
+Message-ID: <Y3Sv3TgclLH6SD0A@phenom.ffwll.local>
+Mail-Followup-To: Dave Airlie <airlied@gmail.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        dri-devel@lists.freedesktop.org, linux-api@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michel =?iso-8859-1?Q?D=E4nzer?= <michel@daenzer.net>,
+        Christian Brauner <brauner@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Sultan Alsawaf <sultan@kerneltoast.com>,
+        Sean Paul <sean@poorly.run>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
+References: <20221105222012.4226-1-Jason@zx2c4.com>
+ <CAPM=9twc_TBtG_654Hm4SV_G1Ar+PiCuZGg1fV-Zooga+4S0GQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPM=9twc_TBtG_654Hm4SV_G1Ar+PiCuZGg1fV-Zooga+4S0GQ@mail.gmail.com>
+X-Operating-System: Linux phenom 5.19.0-2-amd64 
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Nov 16, 2022 at 01:49:43PM +1000, Dave Airlie wrote:
+> On Sun, 6 Nov 2022 at 08:21, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> >
+> > This reverts 26b1d3b527e7 ("drm/atomic: Take the atomic toys away from
+> > X"), a rootkit-like kludge that has no business being inside of a
+> > general purpose kernel. It's the type of debugging hack I'll use
+> > momentarily but never commit, or a sort of babbies-first-process-hider
+> > malware trick.
+> >
+> > The backstory is that some userspace code -- xorg-server -- has a
+> > modesetting DDX that isn't really coded right. With nobody wanting to
+> > maintain X11 anymore, rather than fixing the buggy code, the kernel was
+> > adjusted to avoid having to touch X11. A bummer, but fair enough: if the
+> > kernel doesn't want to support some userspace API any more, the right
+> > thing to do is to arrange for a graceful fallback where userspace thinks
+> > it's not available in a manageable way.
+> >
+> > However, the *way* it goes about doing that is just to check
+> > `current->comm[0] == 'X'`, and disable it for only that case. So that
+> > means it's *not* simply a matter of the kernel not wanting to support a
+> > particular userspace API anymore, but rather it's the kernel not wanting
+> > to support xorg-server, in theory, but actually, it turns out, that's
+> > all processes that begin with 'X'.
+> >
+> > Playing games with current->comm like this is obviously wrong, and it's
+> > pretty shocking that this ever got committed.
+> 
+> I've been ignoring this because I don't really want to reintroduce a
+> regression for deployed X servers. I don't see the value.
+> 
+> You use a lot of what I'd call overly not backed up language. Why is
+> it obviously wrong though? Is it "playing games" or is it accessing
+> the comm to see if the process starts with X.
+> 
+> Do we have lots of userspace processes starting with X that access
+> this specific piece of the drm modesetting API. I suppose we might and
+> if we have complaints about that I'd say let's try to fix it better.
+> 
+> Sometimes engineering is hard, It was a big enough problem that a big
+> enough hammer was used.
+> 
+> I'd hope @Daniel Vetter can comment as well since the original patch was his.
 
-Continuation of my cleanups - second, last round based on previous pull request.
+Frankly I refrained from replying when I've seen the patch originally
+because I didn't manage to come up with a nice&constructive reply like you
+did here. The only thing novel here is the amount of backhanded insults
+folded into the commit message.
 
-Best regards,
-Krzysztof
+I very much welcome constructive contributions that actually solve the
+problem here, or at least move it forward a bit. This patch is neither.
 
-
-The following changes since commit 1b6b54ef7c4a1f482a2a6d33a769e89877beba4e:
-
-  dt-bindings: pinctrl: qcom,sc7180: convert to dtschema (2022-10-19 11:55:58 -0400)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git tags/qcom-pinctrl-6.2-2
-
-for you to fetch changes up to 86bfee318b546c03d954e863fc1af43960cb06e2:
-
-  dt-bindings: pinctrl: qcom,msm8976: convert to dtschema (2022-11-16 08:56:02 +0100)
-
-----------------------------------------------------------------
-Qualcomm pinctrl Devicetree bindings changes for v6.2, part two
-
-Continuation of refactoring and improving Qualcomm pin controller bindings:
-1. Narrow compatible combinations in PMIC MPP.
-2. Convert several bindings from TXT to DT schema format: QCS404,
-   IPQ8074, MSM8660, MSM8916, MSM8960 and MSM8976.
-
-----------------------------------------------------------------
-Krzysztof Kozlowski (7):
-      dt-bindings: pinctrl: qcom,pmic-mpp: make compatible fallbacks specific
-      dt-bindings: pinctrl: qcom,msm8916: convert to dtschema
-      dt-bindings: pinctrl: qcom,qcs404: convert to dtschema
-      dt-bindings: pinctrl: qcom,msm8660: convert to dtschema
-      dt-bindings: pinctrl: qcom,ipq8074: convert to dtschema
-      dt-bindings: pinctrl: qcom,msm8960: convert to dtschema
-      dt-bindings: pinctrl: qcom,msm8976: convert to dtschema
-
- .../bindings/pinctrl/qcom,ipq8074-pinctrl.txt      | 181 -------------------
- .../bindings/pinctrl/qcom,ipq8074-pinctrl.yaml     | 135 ++++++++++++++
- .../bindings/pinctrl/qcom,msm8660-pinctrl.txt      |  96 ----------
- .../bindings/pinctrl/qcom,msm8660-pinctrl.yaml     | 125 +++++++++++++
- .../bindings/pinctrl/qcom,msm8916-pinctrl.txt      | 195 --------------------
- .../bindings/pinctrl/qcom,msm8916-pinctrl.yaml     | 166 +++++++++++++++++
- .../bindings/pinctrl/qcom,msm8960-pinctrl.txt      | 190 --------------------
- .../bindings/pinctrl/qcom,msm8960-pinctrl.yaml     | 164 +++++++++++++++++
- .../bindings/pinctrl/qcom,msm8976-pinctrl.txt      | 183 -------------------
- .../bindings/pinctrl/qcom,msm8976-pinctrl.yaml     | 136 ++++++++++++++
- .../devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml |  45 ++---
- .../bindings/pinctrl/qcom,qcs404-pinctrl.txt       | 199 ---------------------
- .../bindings/pinctrl/qcom,qcs404-pinctrl.yaml      | 176 ++++++++++++++++++
- 13 files changed, 925 insertions(+), 1066 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,ipq8074-pinctrl.txt
- create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,ipq8074-pinctrl.yaml
- delete mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,msm8660-pinctrl.txt
- create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,msm8660-pinctrl.yaml
- delete mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,msm8916-pinctrl.txt
- create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,msm8916-pinctrl.yaml
- delete mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,msm8960-pinctrl.txt
- create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,msm8960-pinctrl.yaml
- delete mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,msm8976-pinctrl.txt
- create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,msm8976-pinctrl.yaml
- delete mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,qcs404-pinctrl.txt
- create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,qcs404-pinctrl.yaml
+What might be an option is a tainting module option that disables this
+check, since the amount of people willing&able to fix up Xorg is still
+zero. But that would need to come with a proper commit message and all
+that, and ideally a pile of acks from people who insist they really want
+this and need it.
+-Daniel
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
