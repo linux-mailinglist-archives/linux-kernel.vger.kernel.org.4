@@ -2,213 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E300862C0B1
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:17:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8501062C0B5
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:17:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232431AbiKPORM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 09:17:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49388 "EHLO
+        id S232915AbiKPOR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 09:17:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233509AbiKPORH (ORCPT
+        with ESMTP id S233009AbiKPORZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 09:17:07 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8C67DF57;
-        Wed, 16 Nov 2022 06:17:06 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id p8so29699153lfu.11;
-        Wed, 16 Nov 2022 06:17:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=03AO/d+34sX5YN3fjNIOuZvahaBINhyoO8pKIANrSLg=;
-        b=FdKmOSWs5xFN+58wikER67yYa5Vny4ZcI3G1EZaRA47K3g3cxQSoYX2Rf5H2vc84iv
-         5hYP4a1AOLTId+qe9ZTmuf6dKhq+6CqIPWkHjQFgCulwkXfOlrbnkEV/t+MAbPVoG0hk
-         d8k2SKK1PsulPklunT7RtLkWS560LFjyi1EGSVvH4ymKDViaJdZXdz6xk9ZguePd1R0/
-         s8Nq3AkP+h/E8dzSguyzN0C4v3NzhkyF/xmfOoJzWprJC14pMjq47vQkuQZNU0ECOGG5
-         ePrAG4QUC+b9qEwIvud9lAp0SnxJtnfwGagSY3+BwLIrtQh7Uy55vM1BPeHJi2LDK67b
-         urAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=03AO/d+34sX5YN3fjNIOuZvahaBINhyoO8pKIANrSLg=;
-        b=uIEU2ylqpDpOdFvv6TlvplLzLphvri+Qm5xnwZeN/coGyrYua96+X6HmZyMgLoyrls
-         x/1/Mtz77vaQwVPBoCpXQMwg9ZSbEXFkrRyWcB7wV3dc+Ynz7iXQA33ersiut10Ygs0k
-         T0Fppz+W35viJvruKMk1IWxYtvqCmXc8JUPNT59I9z7Qj0dhHkQO6aH+kACGDgNcbBS1
-         2zog/+RNuI907e3/wL/Y5ENT/1gZN5L0a3YStSR124zwzA6UFM6RrhEzi80r3y1ZIVo8
-         MfwTDdeU0qMWzqugjSaAfJulWwoUsxsMDqzaK6ONCcueUPA+NpZaD6U56X84V118gHAk
-         kriw==
-X-Gm-Message-State: ANoB5plcIR+QZ/ECPHC49H5tOcD5uy5dTBTKYwLFWXuvpQ35YIIKXxgg
-        E/ABGVR1fpbY9d30RUyPr00=
-X-Google-Smtp-Source: AA0mqf6JWruVUZBOSSlDanBIhDMGzTs2Upx3yEKchOpWuoY6srpCJEpuwyeVU+HZlq5crpJBj2gaAw==
-X-Received: by 2002:a05:6512:3ba8:b0:4b0:7a03:60dc with SMTP id g40-20020a0565123ba800b004b07a0360dcmr6789861lfv.567.1668608224875;
-        Wed, 16 Nov 2022 06:17:04 -0800 (PST)
-Received: from ?IPV6:2001:14ba:16f3:4a00::7? (dc75zzyyyyyyyyyyyyydt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::7])
-        by smtp.gmail.com with ESMTPSA id v15-20020a2ea44f000000b0027738fd1eb6sm3018470ljn.110.2022.11.16.06.17.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 06:17:04 -0800 (PST)
-Message-ID: <d61d8c22-fce5-74d5-6d2b-0eda6f2ace9e@gmail.com>
-Date:   Wed, 16 Nov 2022 16:17:02 +0200
+        Wed, 16 Nov 2022 09:17:25 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955B422BD4;
+        Wed, 16 Nov 2022 06:17:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668608244; x=1700144244;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=OQO0TWqVhuXOlBW2yi+Jiv/ulHMt3UHPh/srl3YFKp4=;
+  b=LHBV7vuUmUYSx4yRMnOzzQVU3j7pYAC3VemtCqQD9p99Y7vCGIhMEhBa
+   Vs558Ev/sWMqYs2Tdm/nFQRs3CeLH7DpXE+ug0SDP1Bym9buG9ZR0xHqm
+   OTycJMCcGUJp9/PBOY40BDHZ6zN/GNsdAyQLKLR3PjZCS/vH5ZYueCqrU
+   lUlz9c9JCvfBpbtOD6FyRla3Y4FHOEwHZ0Ax9dQDVm+z8e7/TpIRJXVHs
+   Xva779XWHOXzrvqp4+xm/+v+iqFe7/M9QdwdwdcbeBVGzFBkkJR0oPhft
+   uZUtdRkWkoBI/SHwPmNoeNV3Dz/pb0CBlmEWf3wElOxwF7/dSseYV6tFl
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="311258687"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="311258687"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 06:17:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="641658846"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="641658846"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga007.fm.intel.com with ESMTP; 16 Nov 2022 06:17:21 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 617522F3; Wed, 16 Nov 2022 16:17:46 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Brian Masney <bmasney@redhat.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>
+Subject: [PATCH v1 1/1] gpiolib: Unify access to the device properties
+Date:   Wed, 16 Nov 2022 16:17:28 +0200
+Message-Id: <20221116141728.72491-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Content-Language: en-US
-To:     Alexandre Mergnat <amergnat@baylibre.com>,
-        Flora Fu <flora.fu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Tianping Fang <tianping.fang@mediatek.com>,
-        Fabien Parent <fabien.parent@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Chen Zhong <chen.zhong@mediatek.com>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-leds@vger.kernel.org, Fabien Parent <fparent@baylibre.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-rtc@vger.kernel.org, linux-input@vger.kernel.org
-References: <20221005-mt6357-support-v5-0-8210d955dd3d@baylibre.com>
- <20221005-mt6357-support-v5-9-8210d955dd3d@baylibre.com>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: [PATCH v5 09/10] regulator: add mt6357 regulator
-In-Reply-To: <20221005-mt6357-support-v5-9-8210d955dd3d@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alexandre, All
+Some of the functions are using struct fwnode_handle, some struct device
+pointer. In the GPIO library the firmware node of the GPIO device is the
+same as GPIO node of the GPIO chip. Due to this fact we may use former
+to access properties everywhere in the code.
 
-Please, treat my review more as initiation for discussion than 'hard 
-requirements' for this driver. I am in no point or no "confidence level" 
-to give you any requirements ;)
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/gpio/gpiolib.c | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
-On 11/16/22 14:33, Alexandre Mergnat wrote:
-> From: Fabien Parent <fparent@baylibre.com>
-> 
-> Add regulator driver for the MT6357 PMIC.
-> 
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
-> ---
+diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+index 51afdc6ac919..c163b354e727 100644
+--- a/drivers/gpio/gpiolib.c
++++ b/drivers/gpio/gpiolib.c
+@@ -367,12 +367,12 @@ static int gpiochip_set_desc_names(struct gpio_chip *gc)
+ static int devprop_gpiochip_set_names(struct gpio_chip *chip)
+ {
+ 	struct gpio_device *gdev = chip->gpiodev;
+-	const struct fwnode_handle *fwnode = dev_fwnode(&gdev->dev);
++	struct device *dev = &gdev->dev;
+ 	const char **names;
+ 	int ret, i;
+ 	int count;
+ 
+-	count = fwnode_property_string_array_count(fwnode, "gpio-line-names");
++	count = device_property_string_array_count(dev, "gpio-line-names");
+ 	if (count < 0)
+ 		return 0;
+ 
+@@ -385,7 +385,7 @@ static int devprop_gpiochip_set_names(struct gpio_chip *chip)
+ 	 * gpiochips.
+ 	 */
+ 	if (count <= chip->offset) {
+-		dev_warn(&gdev->dev, "gpio-line-names too short (length %d), cannot map names for the gpiochip at offset %u\n",
++		dev_warn(dev, "gpio-line-names too short (length %d), cannot map names for the gpiochip at offset %u\n",
+ 			 count, chip->offset);
+ 		return 0;
+ 	}
+@@ -394,10 +394,9 @@ static int devprop_gpiochip_set_names(struct gpio_chip *chip)
+ 	if (!names)
+ 		return -ENOMEM;
+ 
+-	ret = fwnode_property_read_string_array(fwnode, "gpio-line-names",
+-						names, count);
++	ret = device_property_read_string_array(dev, "gpio-line-names", names, count);
+ 	if (ret < 0) {
+-		dev_warn(&gdev->dev, "failed to read GPIO line names\n");
++		dev_warn(dev, "failed to read GPIO line names\n");
+ 		kfree(names);
+ 		return ret;
+ 	}
+@@ -448,10 +447,11 @@ static unsigned long *gpiochip_allocate_mask(struct gpio_chip *gc)
+ 
+ static unsigned int gpiochip_count_reserved_ranges(struct gpio_chip *gc)
+ {
++	struct device *dev = &gc->gpiodev->dev;
+ 	int size;
+ 
+ 	/* Format is "start, count, ..." */
+-	size = fwnode_property_count_u32(gc->fwnode, "gpio-reserved-ranges");
++	size = device_property_count_u32(dev, "gpio-reserved-ranges");
+ 	if (size > 0 && size % 2 == 0)
+ 		return size;
+ 
+@@ -472,6 +472,7 @@ static int gpiochip_alloc_valid_mask(struct gpio_chip *gc)
+ 
+ static int gpiochip_apply_reserved_ranges(struct gpio_chip *gc)
+ {
++	struct device *dev = &gc->gpiodev->dev;
+ 	unsigned int size;
+ 	u32 *ranges;
+ 	int ret;
+@@ -484,7 +485,7 @@ static int gpiochip_apply_reserved_ranges(struct gpio_chip *gc)
+ 	if (!ranges)
+ 		return -ENOMEM;
+ 
+-	ret = fwnode_property_read_u32_array(gc->fwnode, "gpio-reserved-ranges", ranges, size);
++	ret = device_property_read_u32_array(dev, "gpio-reserved-ranges", ranges, size);
+ 	if (ret) {
+ 		kfree(ranges);
+ 		return ret;
 
-//snip
-
-> +/*
-> + * MT6357 regulators' information
-> + *
-> + * @desc: standard fields of regulator description.
-> + * @da_vsel_reg: Monitor register for query buck's voltage.
-> + * @da_vsel_mask: Mask for query buck's voltage.
-> + */
-> +struct mt6357_regulator_info {
-> +	struct regulator_desc desc;
-> +	u32 da_vsel_reg;
-> +	u32 da_vsel_mask;
-> +};
-> +
-
-//snip
-
-> +/**
-> + * mt6357_get_buck_voltage_sel - get_voltage_sel for regmap users
-> + *
-> + * @rdev: regulator to operate on
-> + *
-> + * Regulators that use regmap for their register I/O can set the
-> + * da_vsel_reg and da_vsel_mask fields in the info structure and
-> + * then use this as their get_voltage_vsel operation.
-> + */
-> +static int mt6357_get_buck_voltage_sel(struct regulator_dev *rdev)
-> +{
-> +	int ret, regval;
-> +	struct mt6357_regulator_info *info = rdev_get_drvdata(rdev);
-> +
-> +	ret = regmap_read(rdev->regmap, info->da_vsel_reg, &regval);
-> +	if (ret != 0) {
-> +		dev_err(&rdev->dev,
-> +			"Failed to get mt6357 Buck %s vsel reg: %d\n",
-> +			info->desc.name, ret);
-> +		return ret;
-> +	}
-> +
-> +	regval &= info->da_vsel_mask;
-> +	regval >>= ffs(info->da_vsel_mask) - 1;
-> +
-> +	return regval;
-> +}
-
-If I read this right, the device has separate register(s) for writing 
-and reading the voltage? I wonder if this is a completely unique setup?
-
-If this is not unique, then it might be worth adding another field for 
-'vsel_get' register and a flag in regulator desc - and modify the 
-generic regmap helpers to handle this in common code if the special 
-register? Not sure if this HW design is common enough to warrant the 
-added confusion though. You and Mark may have more insight.
-
-> +
-> +static const struct linear_range buck_volt_range1[] = {
-> +	REGULATOR_LINEAR_RANGE(518750, 0, 0x7f, 6250),
-> +};
-> +
-> +static const struct linear_range buck_volt_range2[] = {
-> +	REGULATOR_LINEAR_RANGE(500000, 0, 0x7f, 6250),
-> +};
-> +
-> +static const struct linear_range buck_volt_range3[] = {
-> +	REGULATOR_LINEAR_RANGE(500000, 0, 0x3f, 50000),
-> +};
-> +
-> +static const struct linear_range buck_volt_range4[] = {
-> +	REGULATOR_LINEAR_RANGE(1200000, 0, 0x7f, 12500),
-> +};
-
-I am unsure if we should aim for dropping the REGULATOR_LINEAR_RANGE() 
-and using the LINEAR_RANGE(). If yes, then it might simplify things if 
-new drivers used LINEAR_RANGE() from the day 1. If we don't, then it 
-makes sense to keep consistently using REGULATOR_LINEAR_RANGE() for all 
-of the drivers. I am not sure which way is the right way.
-
-> +static int mt6357_regulator_probe(struct platform_device *pdev)
-> +{
-> +	struct mt6397_chip *mt6357 = dev_get_drvdata(pdev->dev.parent);
-
-I am unsure what data do you need from the parent. If it is just the 
-regmap / device-tree node / device, then it does not (in my opinion) 
-really warrant using parent's drvdata. One can often get away with the
-dev_get_regmap(pdev->dev.parent, NULL).
-
-Anyways, the driver looks good to me.
-
-Yours,
-	-- Matti Vaittinen
-
+base-commit: 40059212f99c31f26c69763e560325e59eac02c6
 -- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
+2.35.1
 
