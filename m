@@ -2,142 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B100F62C4BC
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 17:38:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B59762C4BA
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 17:37:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233512AbiKPQh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 11:37:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48032 "EHLO
+        id S232907AbiKPQh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 11:37:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232527AbiKPQhX (ORCPT
+        with ESMTP id S238999AbiKPQhE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 11:37:23 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB91ED5E
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 08:30:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668616207;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KLeAHhTgIs3sfF0MHUgRVFm01Nu2oqFmzIWBikyuyGo=;
-        b=TOZnenHxCWzEVjRyySb75u2lu6ABqujaa3kJvCbe7+q1Q3DrsAXB4wBtfv7cix/u21BMvf
-        JN9ddsNqXiAi7UBVwRTukWTG55xHF/p7Gd9XmRaNvIkGNM7BSHryr76LMnfDAgNcLnhLL7
-        pOd+LJmjlszGG1n/ruMnKo2TkT6qgEc=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-206-HrR3VGPDN66sbe80GZteLg-1; Wed, 16 Nov 2022 11:30:05 -0500
-X-MC-Unique: HrR3VGPDN66sbe80GZteLg-1
-Received: by mail-qt1-f197.google.com with SMTP id u31-20020a05622a199f00b003a51fa90654so13394499qtc.19
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 08:30:05 -0800 (PST)
+        Wed, 16 Nov 2022 11:37:04 -0500
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12BBC56542
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 08:31:01 -0800 (PST)
+Received: by mail-qt1-x832.google.com with SMTP id h24so11001865qta.9
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 08:31:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ApymBN4HCJe4qPGiaFQtDv5unh6AiatY7RGDCxWHUDg=;
+        b=FrERdPZcuqjxQfZTlaYc0UDu4E5e6Q3qAG6L95OXLAXP79g/xalUGw/BhXBlOyqKBv
+         jbNldlmaM5IOFfRm952+FVbMV6yJqK3Wy5jMZJYvdnSzxGca5E0MfuBCmlaADJeIQT8o
+         i6ORG4y5fM5oPshbLC0l16ml5f5/HLLGBiyPje9CRyTcv0B5NO4wNQ51WxAM/VDxT2RT
+         OXRVEx5VTflX13cxwXkjZYVLs0+LN/Tg5/hFbKY3jNMOhwrLSmpGYnfxGv3qSSKb3hW+
+         6yA/9Q6rfLf+L1b4kTlP/k2RmiLizj/LM/TM4XlSt6UrXq8WODQWl2HzUVYM/ZK4AWHx
+         CUIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KLeAHhTgIs3sfF0MHUgRVFm01Nu2oqFmzIWBikyuyGo=;
-        b=fzPNj4frlraiI5hI66oyxvtrMpGFifOgod/fP0NAGVB7jdZWg035iWB1+hVTZmUdVu
-         wNjIfWOkB5OFdfSOPwrvQ4njUMh2ThfKEPqcaxBCoV+hnp6bFMp08ojKhS05kc2diTEx
-         Sh//HqT8scd/0c8KlYlirJqUqfFrjWYN9IlvQtexePF5ASBnGsQNGSjCZ/T9aEOv+TUY
-         cdVXCfWW67iUNcDCEMpJypez/pQpZ2akg4h1Sf0dF5ZqZOHexiDM5K2R2CJRm4hPmJFN
-         43yGsEUVbqiMfvs5HFMJ9nDFQVnZdYFVS+G0K256Hpi/9UalrhSjYGoeykUZUorwBVOd
-         2WmA==
-X-Gm-Message-State: ANoB5pmnFOUmR+KHh6r4DBICqFa/s5gtwUoHCncaTGS/39dLK/4lAlyA
-        fi+V21/Yafdc/LkxAZASopJNq/6d8I9Ov89gbj7r5Gmd2xqJsonOSsNY/yK8UguZlGy4os9PFoF
-        +QpXkpILeRjQ5FYz/LNEI8gec
-X-Received: by 2002:ac8:5982:0:b0:35c:ea7a:fcac with SMTP id e2-20020ac85982000000b0035cea7afcacmr22070714qte.172.1668616204834;
-        Wed, 16 Nov 2022 08:30:04 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4H4ODhyaAdfXNNQskKRrtkGtobSVhMccIg90++BBAIaHrmD9mUQVq4LxT2Id/oKQmu/YsDcA==
-X-Received: by 2002:ac8:5982:0:b0:35c:ea7a:fcac with SMTP id e2-20020ac85982000000b0035cea7afcacmr22070695qte.172.1668616204607;
-        Wed, 16 Nov 2022 08:30:04 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id o23-20020ac872d7000000b0039a610a04b1sm8938544qtp.37.2022.11.16.08.30.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 08:30:04 -0800 (PST)
-Date:   Wed, 16 Nov 2022 11:30:02 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     James Houghton <jthoughton@google.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Zach O'Keefe <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v2 01/47] hugetlb: don't set PageUptodate for
- UFFDIO_CONTINUE
-Message-ID: <Y3UQCmlnQXfKhbyE@x1n>
-References: <20221021163703.3218176-1-jthoughton@google.com>
- <20221021163703.3218176-2-jthoughton@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ApymBN4HCJe4qPGiaFQtDv5unh6AiatY7RGDCxWHUDg=;
+        b=GcdN9g3Thccg/mHXU3rMl68WuFANG3iPJQ6p0hB6nxG8BorLqPM+0/bjtraiyxlQih
+         cOSbzaLEJ39q89gar0STbzCIRLIdZKp/ATw3V/0aeBK/6+RVfHYclXDTRfwqEci7W9OR
+         1t4Ha2SVugGbb5LBKVMoWG8jC+xDR2P7PXHRulULBsevFD4Xy7rkziu4zrYUwThNck7L
+         BVjvjO+BzS8lmQkZK2JT8rZCMGO5JZ6qbLkIczgyFIaSzOAqazI3UIhpAg5ivugGGRVp
+         8cy0q38kfiy5t+snlOjN/yRSgv8qRnHIRZ9V5O4W2n7U1GqOzXRfXWG7cNDQE8w/S3mk
+         WS5g==
+X-Gm-Message-State: ANoB5pnov2ZAVG2AFxGNvXKoBBy+v9gyc8WAvAHiY0wIRZm3Klmc8P92
+        sKhAHZyu8Alf1pE1NieFK9ysD3KaYKgQMVDFHpEOotX2OLhsaxdu
+X-Google-Smtp-Source: AA0mqf7nZU1tzxNLlm9U6r0LUkMRNu1wpaM0W4L4pVP+0ls6sXTlGSEFegzPrvVwLv9bhlPQ+5bo0ytBD1d5XWy44Y4=
+X-Received: by 2002:ac8:7303:0:b0:3a5:50fa:1a32 with SMTP id
+ x3-20020ac87303000000b003a550fa1a32mr21752240qto.11.1668616260181; Wed, 16
+ Nov 2022 08:31:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221021163703.3218176-2-jthoughton@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221116154935.163810-1-krzysztof.kozlowski@linaro.org> <92993d1d-e7b0-199c-5652-5158988a65b9@linaro.org>
+In-Reply-To: <92993d1d-e7b0-199c-5652-5158988a65b9@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Date:   Wed, 16 Nov 2022 17:30:49 +0100
+Message-ID: <CAGE=qrpAUcGwS5EQgMA9oA0c56=1C+2X5TjyyEFrf4xd5r7k+Q@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: qcom: sm8150: use defines for RPMh power domains
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 04:36:17PM +0000, James Houghton wrote:
-> This is how it should have been to begin with. It would be very bad if
-> we actually set PageUptodate with a UFFDIO_CONTINUE, as UFFDIO_CONTINUE
-> doesn't actually set/update the contents of the page, so we would be
-> exposing a non-zeroed page to the user.
-> 
-> The reason this change is being made now is because UFFDIO_CONTINUEs on
-> subpages definitely shouldn't set this page flag on the head page.
-> 
-> Signed-off-by: James Houghton <jthoughton@google.com>
-> ---
->  mm/hugetlb.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index 1a7dc7b2e16c..650761cdd2f6 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -6097,7 +6097,10 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
->  	 * preceding stores to the page contents become visible before
->  	 * the set_pte_at() write.
->  	 */
-> -	__SetPageUptodate(page);
-> +	if (!is_continue)
-> +		__SetPageUptodate(page);
-> +	else
-> +		VM_WARN_ON_ONCE_PAGE(!PageUptodate(page), page);
+On Wed, 16 Nov 2022 at 16:58, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+> On 16/11/2022 16:49, Krzysztof Kozlowski wrote:
+> > Use defines for RPMh power domains instead of hard-coding numbers.
+> >
+> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > ---
+> I sent exactly the same patch yesterday.
 
-Yeah the old code looks wrong, I'm just wondering whether we can 100%
-guarantee this for hugetlb.  E.g. for shmem that won't hold when we
-uffd-continue on a not used page (e.g. by an over-sized fallocate()).
-
-Another safer approach is simply fail the ioctl if !uptodate, but if you're
-certain then WARN_ON_ONCE sounds all good too.  At least I did have a quick
-look on hugetlb fallocate() and pages will be uptodate immediately.
-
->  
->  	/* Add shared, newly allocated pages to the page cache. */
->  	if (vm_shared && !is_continue) {
-> -- 
-> 2.38.0.135.g90850a2211-goog
-> 
-> 
-
--- 
-Peter Xu
-
+Then the same as me I think you miss remoteproc@4080000. :)
