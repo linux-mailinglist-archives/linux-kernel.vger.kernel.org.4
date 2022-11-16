@@ -2,293 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26A3062B210
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 05:11:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1FB062B214
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 05:14:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231517AbiKPELM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 23:11:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53138 "EHLO
+        id S231676AbiKPEOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 23:14:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbiKPELJ (ORCPT
+        with ESMTP id S229862AbiKPEOM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 23:11:09 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B20CA477;
-        Tue, 15 Nov 2022 20:11:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668571868; x=1700107868;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=tb6hBpzQd1mUyMUlyTqEKWxcinaiGn84ipF26eLT3qQ=;
-  b=EviP3xUghAiTMJB8q3QCZoEwoYpNhKTU9+aVlrP9ZFyG0NOeJ0wDYStl
-   GojhX5O1I3oYlfoafOuPA839rIA5yqrwmHR0gJVAiG9XRG9Wop+hXj1tc
-   yDki0cYEps2gLP/G3SnhF+FYXr3TCk2I7A1UEJfzX4ObdGNtrms3Zgi1W
-   HqAHVT5aopvtMQ2jyb3U+nsJbJk8u5lPC3/RTrLHc05t+6qSNwZf476S8
-   IYcTzUfXPwcmOCv78DZZOprIcwlf/u7cJnT/oU7fLxO1H8qOqme/y8Hit
-   bXJuzYroMIgUMO/hcXHU4K87Z6oTYSRhpvVIClhiYBAWWzOG7WL311dwC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="299971806"
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="299971806"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 20:10:54 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="707995859"
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="707995859"
-Received: from zhaohaif-mobl.ccr.corp.intel.com (HELO [10.254.210.123]) ([10.254.210.123])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 20:10:51 -0800
-Message-ID: <96be2403-d0b1-7dbc-8278-4347f1a9347d@linux.intel.com>
-Date:   Wed, 16 Nov 2022 12:10:34 +0800
+        Tue, 15 Nov 2022 23:14:12 -0500
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49EA81E3D2;
+        Tue, 15 Nov 2022 20:14:11 -0800 (PST)
+Received: from pps.filterd (m0150242.ppops.net [127.0.0.1])
+        by mx0a-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AG3dW60009594;
+        Wed, 16 Nov 2022 04:13:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : content-transfer-encoding
+ : mime-version; s=pps0720;
+ bh=Qj7j8pjop4erRoPwUhbMI2fTBopxdbJ9Z+dRh60Lpqg=;
+ b=fmQ0uzAffrN3vKxRGzwxxQdF4OQCG6GmrXubruKlImK33SFeLG3Wk91NAckXRwIWgUhA
+ OH4pElOQmM6DxpFtUCyz2ublf5VncVHKIx9rLeIroqDKcB7doQng7asAN6jRBXkYwiqm
+ +5HW0lEVT9PYPI132IN1ViuXrqKy1/BmTAUwWK6QrICc3pZna4x8SGEAD4cULdoermLX
+ SrAloAtvkbTjCn7Y8W5rhZdRf4Nul4EwVIe1OHC4TXKY8S5WHd3ecbfNFIi2cqsxOMpr
+ Sv5XRQslnbp0DX7eHh9BZCMizLXMNT+JDIz7aJHR0THbaFkNxnSXzy0/8GPucdtPGmtc tA== 
+Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
+        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3kvr5486s5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Nov 2022 04:13:54 +0000
+Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by p1lg14879.it.hpe.com (Postfix) with ESMTPS id A2E184B5C7;
+        Wed, 16 Nov 2022 04:13:52 +0000 (UTC)
+Received: from adevxp033-sys.us.rdlabs.hpecorp.net (unknown [16.231.227.36])
+        by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTP id C91D6808B9A;
+        Wed, 16 Nov 2022 04:13:50 +0000 (UTC)
+From:   Robert Elliott <elliott@hpe.com>
+To:     herbert@gondor.apana.org.au, davem@davemloft.net,
+        tim.c.chen@linux.intel.com, ap420073@gmail.com, ardb@kernel.org,
+        Jason@zx2c4.com, David.Laight@ACULAB.COM, ebiggers@kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Robert Elliott <elliott@hpe.com>
+Subject: [PATCH v4 00/24] crypto: fix RCU stalls
+Date:   Tue, 15 Nov 2022 22:13:18 -0600
+Message-Id: <20221116041342.3841-1-elliott@hpe.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221103042740.6556-1-elliott@hpe.com>
+References: <20221103042740.6556-1-elliott@hpe.com>
+X-Proofpoint-ORIG-GUID: k2vNFqgcAFtLJIgVDuly1wSfrl6F68bQ
+X-Proofpoint-GUID: k2vNFqgcAFtLJIgVDuly1wSfrl6F68bQ
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 -next] iommu/dma: avoid expensive indirect calls for
- sync operations
-To:     Eric Dumazet <edumazet@google.com>, Joerg Roedel <joro@8bytes.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        netdev@vger.kernel.org, Eric Dumazet <eric.dumazet@gmail.com>,
-        iommu@lists.linux.dev
-References: <20221115182841.2640176-1-edumazet@google.com>
-From:   Ethan Zhao <haifeng.zhao@linux.intel.com>
-In-Reply-To: <20221115182841.2640176-1-edumazet@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-15_08,2022-11-15_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ adultscore=0 clxscore=1015 lowpriorityscore=0 spamscore=0 bulkscore=0
+ mlxlogscore=999 phishscore=0 impostorscore=0 priorityscore=1501
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211160029
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+This series fixes the RCU stalls triggered by the x86 crypto
+modules discussed in
+https://lore.kernel.org/all/MW5PR84MB18426EBBA3303770A8BC0BDFAB759@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM/
 
-On 2022/11/16 2:28, Eric Dumazet wrote:
-> Quite often, NIC devices do not need dma_sync operations
-> on x86_64 at least.
->
-> Indeed, when dev_is_dma_coherent(dev) is true and
-> dev_use_swiotlb(dev) is false, iommu_dma_sync_single_for_cpu()
-> and friends do nothing.
->
-> However, indirectly calling them when CONFIG_RETPOLINE=y
-> consumes about 10% of cycles on a cpu receiving packets
-> from softirq at ~100Gbit rate, as shown in [1]
->
-> Even if/when CONFIG_RETPOLINE is not set, there
-> is a cost of about 3%.
->
-> This patch adds dev->skip_dma_sync boolean that can be opted-in.
->
-> For instance iommu_setup_dma_ops() can set this boolean to true
-> if CONFIG_DMA_API_DEBUG is not set, and dev_is_dma_coherent(dev).
->
-> Then later, if/when swiotlb is used for the first time, the flag
-> is turned off, from swiotlb_tbl_map_single()
->
-> We might in the future inline again these helpers, like:
->
-> static void inline
-> dma_sync_single_for_cpu(struct device *dev, dma_addr_t addr,
-> 			size_t size, enum dma_data_direction dir)
-> {
-> 	if (!dev_skip_dma_sync(dev))
-> 		__dma_sync_single_for_cpu(dev, addr, size, dir);
-> }
->
-> perf profile before the patch:
->
->      18.53%  [kernel]       [k] gq_rx_skb
->      14.77%  [kernel]       [k] napi_reuse_skb
->       8.95%  [kernel]       [k] skb_release_data
->       5.42%  [kernel]       [k] dev_gro_receive
->       5.37%  [kernel]       [k] memcpy
-> <*>  5.26%  [kernel]       [k] iommu_dma_sync_sg_for_cpu
->       4.78%  [kernel]       [k] tcp_gro_receive
-> <*>  4.42%  [kernel]       [k] iommu_dma_sync_sg_for_device
->       4.12%  [kernel]       [k] ipv6_gro_receive
->       3.65%  [kernel]       [k] gq_pool_get
->       3.25%  [kernel]       [k] skb_gro_receive
->       2.07%  [kernel]       [k] napi_gro_frags
->       1.98%  [kernel]       [k] tcp6_gro_receive
->       1.27%  [kernel]       [k] gq_rx_prep_buffers
->       1.18%  [kernel]       [k] gq_rx_napi_handler
->       0.99%  [kernel]       [k] csum_partial
->       0.74%  [kernel]       [k] csum_ipv6_magic
->       0.72%  [kernel]       [k] free_pcp_prepare
->       0.60%  [kernel]       [k] __napi_poll
->       0.58%  [kernel]       [k] net_rx_action
->       0.56%  [kernel]       [k] read_tsc
-> <*>  0.50%  [kernel]       [k] __x86_indirect_thunk_r11
->       0.45%  [kernel]       [k] memset
->
-> After patch, lines with <*> no longer show up, and overall
-> cpu usage looks much better (~60% instead of ~72%)
->
->      25.56%  [kernel]       [k] gq_rx_skb
->       9.90%  [kernel]       [k] napi_reuse_skb
->       7.39%  [kernel]       [k] dev_gro_receive
->       6.78%  [kernel]       [k] memcpy
->       6.53%  [kernel]       [k] skb_release_data
->       6.39%  [kernel]       [k] tcp_gro_receive
->       5.71%  [kernel]       [k] ipv6_gro_receive
->       4.35%  [kernel]       [k] napi_gro_frags
->       4.34%  [kernel]       [k] skb_gro_receive
->       3.50%  [kernel]       [k] gq_pool_get
->       3.08%  [kernel]       [k] gq_rx_napi_handler
->       2.35%  [kernel]       [k] tcp6_gro_receive
->       2.06%  [kernel]       [k] gq_rx_prep_buffers
->       1.32%  [kernel]       [k] csum_partial
->       0.93%  [kernel]       [k] csum_ipv6_magic
->       0.65%  [kernel]       [k] net_rx_action
->
-> Many thanks to Robin Murphy for his feedback and ideas to make this patch
-> much better !
->
-> Signed-off-by: Eric Dumazet <edumazet@google.com>
-> Cc: Robin Murphy <robin.murphy@arm.com>
-> Cc: Joerg Roedel <joro@8bytes.org>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: iommu@lists.linux.dev
-> ---
->   drivers/iommu/dma-iommu.c   |  2 ++
->   include/linux/device.h      |  1 +
->   include/linux/dma-map-ops.h |  5 +++++
->   kernel/dma/mapping.c        | 20 ++++++++++++++++----
->   kernel/dma/swiotlb.c        |  3 +++
->   5 files changed, 27 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
-> index 9297b741f5e80e2408e864fc3f779410d6b04d49..bd3f4d3d646cc57c7588f22d49ea32ac693e38ff 100644
-> --- a/drivers/iommu/dma-iommu.c
-> +++ b/drivers/iommu/dma-iommu.c
-> @@ -1587,6 +1587,8 @@ void iommu_setup_dma_ops(struct device *dev, u64 dma_base, u64 dma_limit)
->   		if (iommu_dma_init_domain(domain, dma_base, dma_limit, dev))
->   			goto out_err;
->   		dev->dma_ops = &iommu_dma_ops;
-> +		if (!IS_ENABLED(CONFIG_DMA_API_DEBUG) && dev_is_dma_coherent(dev))
-> +			dev->skip_dma_sync = true;
->   	}
->   
->   	return;
-> diff --git a/include/linux/device.h b/include/linux/device.h
-> index 424b55df02727b5742070f72374fd65f5dd68151..2fbb2cc18e44e21eba5f43557ee16d0dc92ef2ef 100644
-> --- a/include/linux/device.h
-> +++ b/include/linux/device.h
-> @@ -647,6 +647,7 @@ struct device {
->       defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU_ALL)
->   	bool			dma_coherent:1;
->   #endif
-> +	bool			skip_dma_sync:1;
->   #ifdef CONFIG_DMA_OPS_BYPASS
->   	bool			dma_ops_bypass : 1;
->   #endif
-> diff --git a/include/linux/dma-map-ops.h b/include/linux/dma-map-ops.h
-> index d678afeb8a13a3a54380a959d14f79bca9c23d8e..4691081f71c51da5468cf6703570ebc7a64d40c5 100644
-> --- a/include/linux/dma-map-ops.h
-> +++ b/include/linux/dma-map-ops.h
-> @@ -275,6 +275,11 @@ static inline bool dev_is_dma_coherent(struct device *dev)
->   }
->   #endif /* CONFIG_ARCH_HAS_DMA_COHERENCE_H */
->   
-> +static inline bool dev_skip_dma_sync(struct device *dev)
-> +{
-> +	return dev->skip_dma_sync;
-> +}
-> +
->   void *arch_dma_alloc(struct device *dev, size_t size, dma_addr_t *dma_handle,
->   		gfp_t gfp, unsigned long attrs);
->   void arch_dma_free(struct device *dev, size_t size, void *cpu_addr,
-> diff --git a/kernel/dma/mapping.c b/kernel/dma/mapping.c
-> index 33437d6206445812b6d4d5b33c77235d18074dec..5d5d286ffae7fa6b7ff1aef46bdc59e7e31a8038 100644
-> --- a/kernel/dma/mapping.c
-> +++ b/kernel/dma/mapping.c
-> @@ -328,9 +328,12 @@ EXPORT_SYMBOL(dma_unmap_resource);
->   void dma_sync_single_for_cpu(struct device *dev, dma_addr_t addr, size_t size,
->   		enum dma_data_direction dir)
->   {
-> -	const struct dma_map_ops *ops = get_dma_ops(dev);
-> +	const struct dma_map_ops *ops;
->   
->   	BUG_ON(!valid_dma_direction(dir));
-> +	if (dev_skip_dma_sync(dev))
-> +		return;
+Two root causes were:
+- too much data processed between kernel_fpu_begin and
+  kernel_fpu_end calls (which are heavily used by the x86
+  optimized drivers)
+- tcrypt not calling cond_resched during speed test loops
 
-May I know why this funciton that is called by all coherent or 
-non-coherent dev
+These problems have always been lurking, but improving the
+loading of the x86/sha512 module led to it happening a lot
+during boot when using SHA-512 for module signature checking.
 
-got a burden to decide to bail out or not ? Is it really the better 
-point to check
+Fixing these problems makes it safer to improve loading
+the rest of the x86 modules like the sha512 module.
 
-it ?
+This series only handles the x86 modules.
+
+Version 4 tackles lingering comments from version 2.
+
+1. Unlike the hash functions, skcipher and aead functions
+accept pointers to scatter-gather lists, and the helper
+functions that walk through those lists limit processing
+to a page size at a time.
+
+The aegis module did everything inside one pair of
+kernel_fpu_begin() and kernel_fpu_end() calls including
+walking through the sglist, so it could preempt the CPU
+without constraint.
+
+The aesni aead functions for gcm process the additional
+data (data that is included in the authentication tag
+calculation but not encrypted) in one FPU context, so
+that can be a problem. This will require some asm changes
+to fix. However, I don't think that is a typical use case,
+so this series defers fixing that.
+
+The series adds device table matching for all the x86
+crypto modules.
+
+2. I replaced all the positive and negative prints with
+module parameters, including enough clues in modinfo
+descriptions that a user can determine what is
+working and not working.
 
 
-Thanks,
+Robert Elliott (24):
+  crypto: tcrypt - test crc32
+  crypto: tcrypt - test nhpoly1305
+  crypto: tcrypt - reschedule during cycles speed tests
+  crypto: x86/sha - limit FPU preemption
+  crypto: x86/crc - limit FPU preemption
+  crypto: x86/sm3 - limit FPU preemption
+  crypto: x86/ghash - use u8 rather than char
+  crypto: x86/ghash - restructure FPU context saving
+  crypto: x86/ghash - limit FPU preemption
+  crypto: x86/poly - limit FPU preemption
+  crypto: x86/aegis - limit FPU preemption
+  crypto: x86/sha - register all variations
+  crypto: x86/sha - minimize time in FPU context
+  crypto: x86/sha - load based on CPU features
+  crypto: x86/crc - load based on CPU features
+  crypto: x86/sm3 - load based on CPU features
+  crypto: x86/poly - load based on CPU features
+  crypto: x86/ghash - load based on CPU features
+  crypto: x86/aesni - avoid type conversions
+  crypto: x86/ciphers - load based on CPU features
+  crypto: x86 - report used CPU features via module parameters
+  crypto: x86 - report missing CPU features via module parameters
+  crypto: x86 - report suboptimal CPUs via module parameters
+  crypto: x86 - standarize module descriptions
 
-Ethan
+ arch/x86/crypto/aegis128-aesni-glue.c      |  66 +++--
+ arch/x86/crypto/aesni-intel_glue.c         |  45 ++--
+ arch/x86/crypto/aria_aesni_avx_glue.c      |  43 ++-
+ arch/x86/crypto/blake2s-glue.c             |  18 +-
+ arch/x86/crypto/blowfish_glue.c            |  39 ++-
+ arch/x86/crypto/camellia_aesni_avx2_glue.c |  40 ++-
+ arch/x86/crypto/camellia_aesni_avx_glue.c  |  38 ++-
+ arch/x86/crypto/camellia_glue.c            |  37 ++-
+ arch/x86/crypto/cast5_avx_glue.c           |  30 ++-
+ arch/x86/crypto/cast6_avx_glue.c           |  30 ++-
+ arch/x86/crypto/chacha_glue.c              |  18 +-
+ arch/x86/crypto/crc32-pclmul_asm.S         |   6 +-
+ arch/x86/crypto/crc32-pclmul_glue.c        |  39 ++-
+ arch/x86/crypto/crc32c-intel_glue.c        |  66 +++--
+ arch/x86/crypto/crct10dif-pclmul_glue.c    |  56 ++--
+ arch/x86/crypto/curve25519-x86_64.c        |  29 +-
+ arch/x86/crypto/des3_ede_glue.c            |  36 ++-
+ arch/x86/crypto/ghash-clmulni-intel_asm.S  |   4 +-
+ arch/x86/crypto/ghash-clmulni-intel_glue.c |  45 ++--
+ arch/x86/crypto/nhpoly1305-avx2-glue.c     |  36 ++-
+ arch/x86/crypto/nhpoly1305-sse2-glue.c     |  22 +-
+ arch/x86/crypto/poly1305_glue.c            |  56 +++-
+ arch/x86/crypto/polyval-clmulni_glue.c     |  31 ++-
+ arch/x86/crypto/serpent_avx2_glue.c        |  36 ++-
+ arch/x86/crypto/serpent_avx_glue.c         |  31 ++-
+ arch/x86/crypto/serpent_sse2_glue.c        |  13 +-
+ arch/x86/crypto/sha1_ssse3_glue.c          | 298 ++++++++++++++-------
+ arch/x86/crypto/sha256_ssse3_glue.c        | 294 +++++++++++++-------
+ arch/x86/crypto/sha512_ssse3_glue.c        | 205 +++++++++-----
+ arch/x86/crypto/sm3_avx_glue.c             |  70 +++--
+ arch/x86/crypto/sm4_aesni_avx2_glue.c      |  37 ++-
+ arch/x86/crypto/sm4_aesni_avx_glue.c       |  39 ++-
+ arch/x86/crypto/twofish_avx_glue.c         |  29 +-
+ arch/x86/crypto/twofish_glue.c             |  12 +-
+ arch/x86/crypto/twofish_glue_3way.c        |  36 ++-
+ crypto/aes_ti.c                            |   2 +-
+ crypto/blake2b_generic.c                   |   2 +-
+ crypto/blowfish_common.c                   |   2 +-
+ crypto/crct10dif_generic.c                 |   2 +-
+ crypto/curve25519-generic.c                |   1 +
+ crypto/sha256_generic.c                    |   2 +-
+ crypto/sha512_generic.c                    |   2 +-
+ crypto/sm3.c                               |   2 +-
+ crypto/sm4.c                               |   2 +-
+ crypto/tcrypt.c                            |  56 ++--
+ crypto/twofish_common.c                    |   2 +-
+ crypto/twofish_generic.c                   |   2 +-
+ 47 files changed, 1377 insertions(+), 630 deletions(-)
 
-> +	ops = get_dma_ops(dev);;
->   	if (dma_map_direct(dev, ops))
->   		dma_direct_sync_single_for_cpu(dev, addr, size, dir);
->   	else if (ops->sync_single_for_cpu)
-> @@ -342,9 +345,12 @@ EXPORT_SYMBOL(dma_sync_single_for_cpu);
->   void dma_sync_single_for_device(struct device *dev, dma_addr_t addr,
->   		size_t size, enum dma_data_direction dir)
->   {
-> -	const struct dma_map_ops *ops = get_dma_ops(dev);
-> +	const struct dma_map_ops *ops;
->   
->   	BUG_ON(!valid_dma_direction(dir));
-> +	if (dev_skip_dma_sync(dev))
-> +		return;
-> +	ops = get_dma_ops(dev);;
->   	if (dma_map_direct(dev, ops))
->   		dma_direct_sync_single_for_device(dev, addr, size, dir);
->   	else if (ops->sync_single_for_device)
-> @@ -356,9 +362,12 @@ EXPORT_SYMBOL(dma_sync_single_for_device);
->   void dma_sync_sg_for_cpu(struct device *dev, struct scatterlist *sg,
->   		    int nelems, enum dma_data_direction dir)
->   {
-> -	const struct dma_map_ops *ops = get_dma_ops(dev);
-> +	const struct dma_map_ops *ops;
->   
->   	BUG_ON(!valid_dma_direction(dir));
-> +	if (dev_skip_dma_sync(dev))
-> +		return;
-> +	ops = get_dma_ops(dev);;
->   	if (dma_map_direct(dev, ops))
->   		dma_direct_sync_sg_for_cpu(dev, sg, nelems, dir);
->   	else if (ops->sync_sg_for_cpu)
-> @@ -370,9 +379,12 @@ EXPORT_SYMBOL(dma_sync_sg_for_cpu);
->   void dma_sync_sg_for_device(struct device *dev, struct scatterlist *sg,
->   		       int nelems, enum dma_data_direction dir)
->   {
-> -	const struct dma_map_ops *ops = get_dma_ops(dev);
-> +	const struct dma_map_ops *ops;
->   
->   	BUG_ON(!valid_dma_direction(dir));
-> +	if (dev_skip_dma_sync(dev))
-> +		return;
-> +	ops = get_dma_ops(dev);;
->   	if (dma_map_direct(dev, ops))
->   		dma_direct_sync_sg_for_device(dev, sg, nelems, dir);
->   	else if (ops->sync_sg_for_device)
-> diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
-> index 339a990554e7fed98dd337efe4fb759a98161cdb..03ebd9803db1a457600f1fac8a18fb3dde724a6f 100644
-> --- a/kernel/dma/swiotlb.c
-> +++ b/kernel/dma/swiotlb.c
-> @@ -734,6 +734,9 @@ phys_addr_t swiotlb_tbl_map_single(struct device *dev, phys_addr_t orig_addr,
->   	int index;
->   	phys_addr_t tlb_addr;
->   
-> +	if (unlikely(dev->skip_dma_sync))
-> +		dev->skip_dma_sync = false;
-> +
->   	if (!mem || !mem->nslabs) {
->   		dev_warn_ratelimited(dev,
->   			"Can not allocate SWIOTLB buffer earlier and can't now provide you with the DMA bounce buffer");
+-- 
+2.38.1
+
