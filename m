@@ -2,159 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D48862B45B
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 08:58:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEBA662B463
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 08:58:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232938AbiKPH6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 02:58:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33910 "EHLO
+        id S233230AbiKPH6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 02:58:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232793AbiKPH5u (ORCPT
+        with ESMTP id S233066AbiKPH63 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 02:57:50 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB5123154;
-        Tue, 15 Nov 2022 23:57:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668585470; x=1700121470;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=verj7hVUBInaUTF3sejWeZjrgjgv2y6v3Lf9mbwz5Qg=;
-  b=ktiYYRaVPz2+PliAKTwVkG3LO+dbbsgvG4mS+EWHYgtczXej+6FLOe6x
-   nA4gyqwT5Z8+sHjvI4mZalfPbu+GzQUpU/Zf9sU19/W9UtfhAjHtoRuAe
-   hKFRtiu95z7BKsLCIkJArAC1zPtX8Pd5p8L+whwy3HgAbrCerdif6YPGJ
-   XUylVolqsURspS+4z4SSVNIAmBuHtP6v/K/2LKn8knwwUwqSSb0xKsFLr
-   TlLRBsT0+DmnBLbhwMfbc41uj5+NMLuY2lwYEXhfklSQfW9C7FwINn3e9
-   uGEgw55HJpF7uoY9YsBxHQzmTl5mZ7mB3/NUmGqVFL4R/o+7l0BLzU1QR
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="398767160"
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="398767160"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 23:57:49 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="702769368"
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="702769368"
-Received: from ake-mobl.amr.corp.intel.com (HELO vverma7-desk1.intel.com) ([10.209.189.231])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 23:57:48 -0800
-From:   Vishal Verma <vishal.l.verma@intel.com>
-To:     <linux-acpi@vger.kernel.org>
-Cc:     <linux-kernel@vger.kernel.org>, <nvdimm@lists.linux.dev>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>, liushixin2@huawei.com,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Chris Piper <chris.d.piper@intel.com>, stable@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-Subject: [PATCH 2/2] ACPI: HMAT: Fix initiator registration for single-initiator systems
-Date:   Wed, 16 Nov 2022 00:57:36 -0700
-Message-Id: <20221116075736.1909690-3-vishal.l.verma@intel.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221116075736.1909690-1-vishal.l.verma@intel.com>
-References: <20221116075736.1909690-1-vishal.l.verma@intel.com>
+        Wed, 16 Nov 2022 02:58:29 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14CD424F00;
+        Tue, 15 Nov 2022 23:58:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=GIDdGR9NVpGZvPLCxr6Lt5iCaPSKMyIMMAkRo9Z5H0U=; b=GjO5nedtvQbFTSqVOHRhbXy9R8
+        wVqBzTfrNIv7JpJlixcjrIFsfztRINtv8hTfXP2xdXEzm1cusHr/wBzkJXgfC1yhvBcEie3kT73/O
+        01LQ4kQ1f6HUsl8HrvglXy/FRBy9LtDRvVeVVUpFuiLU2bM1O526Y4aH4dTvRXBW0GPumyvly0J8g
+        j8A65L4jHZ6Xw5pRJSKwaDU4OJKbnsY+aJWT+IdlxO59woGeC73lkhcvx1HU3HmkmDQlDcMZG1atN
+        c3mMvdJgqYg3ThnwdQQzL544qHjEtDzguypzVWJunrU6ZXYfGQHiHRXlUFVNS4So63yUHmxiRrkDX
+        H//I7SVQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ovDIx-00HA6L-AC; Wed, 16 Nov 2022 07:57:55 +0000
+Date:   Wed, 16 Nov 2022 07:57:55 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Conor Dooley <conor@kernel.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Rustam Kovhaev <rkovhaev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Alexander Shiyan <shc_work@mail.ru>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        openrisc@lists.librecores.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Conor.Dooley@microchip.com, Paul Cercueil <paul@crapouillou.net>
+Subject: Re: Deprecating and removing SLOB
+Message-ID: <Y3SYA31zobR6/qbj@casper.infradead.org>
+References: <CA+CK2bD-uVGJ0=9uc7Lt5zwY+2PM2RTcfOhxEd65S7TvTrJULA@mail.gmail.com>
+ <c1caa5ce-eeaf-8038-2dea-051c98aade45@suse.cz>
+ <Y260tkNHc2vFITJ3@spud>
+ <a5bba3ca-da19-293c-c01b-a28291533466@opensource.wdc.com>
+ <93079aba-362e-5d1e-e9b4-dfe3a84da750@opensource.wdc.com>
+ <44da078c-b630-a249-bf50-67df83cd8347@suse.cz>
+ <35650fd4-3152-56db-7c27-b9997e31cfc7@opensource.wdc.com>
+ <Y3JU5cfyid1rBoOy@hyeyoo>
+ <97c0735c-3127-83d5-30ff-8e57c6634f6e@opensource.wdc.com>
+ <0e45a2f2-6dd5-5a43-c1a0-7520c1ed2675@opensource.wdc.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3279; h=from:subject; bh=verj7hVUBInaUTF3sejWeZjrgjgv2y6v3Lf9mbwz5Qg=; b=owGbwMvMwCXGf25diOft7jLG02pJDMkl0z9svJ/buO2c3Rtu9enxRRNuzgtbEmQ67VaDm8jbhSIb 5/RP7ShlYRDjYpAVU2T5u+cj4zG57fk8gQmOMHNYmUCGMHBxCsBECqIY/vs7MtucytbScuKRXbFYMr ro6v09R37KLFjgFX8/0Z2j8AnDH47sSynStb89puWtldx+bNK/fQLWPxZavtp/xEj2bdZzRjYA
-X-Developer-Key: i=vishal.l.verma@intel.com; a=openpgp; fpr=F8682BE134C67A12332A2ED07AFA61BEA3B84DFF
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0e45a2f2-6dd5-5a43-c1a0-7520c1ed2675@opensource.wdc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In a system with a single initiator node, and one or more memory-only
-'target' nodes, the memory-only node(s) would fail to register their
-initiator node correctly. i.e. in sysfs:
+On Tue, Nov 15, 2022 at 01:28:14PM +0900, Damien Le Moal wrote:
+> On 11/15/22 13:24, Damien Le Moal wrote:
+> > 6.1-rc5, SLOB:
+> >     - 623 free pages
+> >     - 629 free pages
+> >     - 629 free pages
+> > 6.1-rc5, SLUB:
+> >     - 448 free pages
+> >     - 448 free pages
+> >     - 429 free pages
+> > 6.1-rc5, SLUB + slub_max_order=0:
+> >     - Init error, shell prompt but no shell command working
+> >     - Init error, no shell prompt
+> >     - 508 free pages
+> >     - Init error, shell prompt but no shell command working
+> > 6.1-rc5, SLUB + patch:
+> >     - Init error, shell prompt but no shell command working
+> >     - 433 free pages
+> >     - 448 free pages
+> >     - 423 free pages
+> > 6.1-rc5, SLUB + slub_max_order=0 + patch:
+> >     - Init error, no shell prompt
+> >     - Init error, shell prompt, 499 free pages
+> >     - Init error, shell prompt but no shell command working
+> >     - Init error, no shell prompt
+> > 
+> > No changes for SLOB results, expected.
+> > 
+> > For default SLUB, I did get all clean boots this time and could run the
+> > cat command. But I do see shell fork failures if I keep running commands.
+> > 
+> > For SLUB + slub_max_order=0, I only got one clean boot with 508 free
+> > pages. Remaining runs failed to give a shell prompt or allow running cat
+> > command. For the clean boot, I do see higher number of free pages.
+> > 
+> > SLUB with the patch was nearly identical to SLUB without the patch.
+> > 
+> > And SLUB+patch+slub_max_order=0 gave again a lot of errors/bad boot. I
+> > could run the cat command only once, giving 499 free pages, so better than
+> > regular SLUB. But it seems that the memory is more fragmented as
+> > allocations fail more often.
+> 
+> Note about the last case (SLUB+patch+slub_max_order=0). Here are the
+> messages I got when the init shell process fork failed:
+> 
+> [    1.217998] nommu: Allocation of length 491520 from process 1 (sh) failed
+> [    1.224098] active_anon:0 inactive_anon:0 isolated_anon:0
+> [    1.224098]  active_file:5 inactive_file:12 isolated_file:0
+> [    1.224098]  unevictable:0 dirty:0 writeback:0
+> [    1.224098]  slab_reclaimable:38 slab_unreclaimable:459
+> [    1.224098]  mapped:0 shmem:0 pagetables:0
+> [    1.224098]  sec_pagetables:0 bounce:0
+> [    1.224098]  kernel_misc_reclaimable:0
+> [    1.224098]  free:859 free_pcp:0 free_cma:0
+> [    1.260419] Node 0 active_anon:0kB inactive_anon:0kB active_file:20kB
+> inactive_file:48kB unevictable:0kB isolated(anon):0kB isolated(file):0kB
+> mapped:0kB dirty:0kB writeback:0kB shmem:0kB writeback_tmp:0kB
+> kernel_stack:576kB pagetables:0kB sec_pagetables:0kB all_unreclaimable? no
+> [    1.285147] DMA32 free:3436kB boost:0kB min:312kB low:388kB high:464kB
+> reserved_highatomic:0KB active_anon:0kB inactive_anon:0kB active_file:0kB
+> inactive_file:28kB unevictable:0kB writepending:0kB present:8192kB
+> managed:6240kB mlocked:0kB bounce:0kB free_pcp:0kB local_pcp:0kB free_cma:0kB
+> [    1.310654] lowmem_reserve[]: 0 0 0
+> [    1.314089] DMA32: 17*4kB (U) 10*8kB (U) 7*16kB (U) 6*32kB (U) 11*64kB
+> (U) 6*128kB (U) 6*256kB (U) 0*512kB 0*1024kB 0*2048kB 0*4096kB = 3460kB
+> [    1.326883] 33 total pagecache pages
+> [    1.330420] binfmt_flat: Unable to allocate RAM for process text/data,
+> errno -12
 
-  # ls /sys/devices/system/node/node0/access0/targets/
-  node0
-
-Where as the correct behavior should be:
-
-  # ls /sys/devices/system/node/node0/access0/targets/
-  node0 node1
-
-This happened because hmat_register_target_initiators() uses list_sort()
-to sort the initiator list, but the sort comparision function
-(initiator_cmp()) is overloaded to also set the node mask's bits.
-
-In a system with a single initiator, the list is singular, and list_sort
-elides the comparision helper call. Thus the node mask never gets set,
-and the subsequent search for the best initiator comes up empty.
-
-Add a new helper to sort the initiator list, and handle the singular
-list corner case by setting the node mask for that explicitly.
-
-Reported-by: Chris Piper <chris.d.piper@intel.com>
-Cc: <stable@vger.kernel.org>
-Cc: Rafael J. Wysocki <rafael@kernel.org>
-Cc: Liu Shixin <liushixin2@huawei.com>
-Cc: Dan Williams <dan.j.williams@intel.com>
-Signed-off-by: Vishal Verma <vishal.l.verma@intel.com>
----
- drivers/acpi/numa/hmat.c | 32 ++++++++++++++++++++++++++++++--
- 1 file changed, 30 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/acpi/numa/hmat.c b/drivers/acpi/numa/hmat.c
-index 144a84f429ed..cd20b0e9cdfa 100644
---- a/drivers/acpi/numa/hmat.c
-+++ b/drivers/acpi/numa/hmat.c
-@@ -573,6 +573,30 @@ static int initiator_cmp(void *priv, const struct list_head *a,
- 	return ia->processor_pxm - ib->processor_pxm;
- }
- 
-+static int initiators_to_nodemask(unsigned long *p_nodes)
-+{
-+	/*
-+	 * list_sort doesn't call @cmp (initiator_cmp) for 0 or 1 sized lists.
-+	 * For a single-initiator system with other memory-only nodes, this
-+	 * means an empty p_nodes mask, since that is set by initiator_cmp().
-+	 * Special case the singular list, and make sure the node mask gets set
-+	 * appropriately.
-+	 */
-+	if (list_empty(&initiators))
-+		return -ENXIO;
-+
-+	if (list_is_singular(&initiators)) {
-+		struct memory_initiator *initiator = list_first_entry(
-+			&initiators, struct memory_initiator, node);
-+
-+		set_bit(initiator->processor_pxm, p_nodes);
-+		return 0;
-+	}
-+
-+	list_sort(p_nodes, &initiators, initiator_cmp);
-+	return 0;
-+}
-+
- static void hmat_register_target_initiators(struct memory_target *target)
- {
- 	static DECLARE_BITMAP(p_nodes, MAX_NUMNODES);
-@@ -609,7 +633,9 @@ static void hmat_register_target_initiators(struct memory_target *target)
- 	 * initiators.
- 	 */
- 	bitmap_zero(p_nodes, MAX_NUMNODES);
--	list_sort(p_nodes, &initiators, initiator_cmp);
-+	if (initiators_to_nodemask(p_nodes) < 0)
-+		return;
-+
- 	if (!access0done) {
- 		for (i = WRITE_LATENCY; i <= READ_BANDWIDTH; i++) {
- 			loc = localities_types[i];
-@@ -643,7 +669,9 @@ static void hmat_register_target_initiators(struct memory_target *target)
- 
- 	/* Access 1 ignores Generic Initiators */
- 	bitmap_zero(p_nodes, MAX_NUMNODES);
--	list_sort(p_nodes, &initiators, initiator_cmp);
-+	if (initiators_to_nodemask(p_nodes) < 0)
-+		return;
-+
- 	for (i = WRITE_LATENCY; i <= READ_BANDWIDTH; i++) {
- 		loc = localities_types[i];
- 		if (!loc)
--- 
-2.38.1
-
+What you're seeing here is memory fragmentation.  There's more than 512kB
+of memory available, but nommu requires it to be contiguous, and it's
+not.  This is pretty bad, really.  We didn't even finish starting up
+and already we've managed to allocate at least one page from each of
+the 16 512kB chunks which existed.  Commit df48a5f7a3bb was supposed
+to improve matters by making exact allocations reassemble once they
+were freed.  Maybe the problem is entirely different.
