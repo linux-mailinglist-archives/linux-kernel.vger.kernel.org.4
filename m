@@ -2,73 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8105762C5DE
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 18:05:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 788F362C5E0
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 18:05:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234459AbiKPRFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 12:05:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50614 "EHLO
+        id S233572AbiKPRFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 12:05:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233827AbiKPREi (ORCPT
+        with ESMTP id S238495AbiKPREy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 12:04:38 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8978559876
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 09:04:16 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id g4-20020a92cda4000000b00301ff06da14so13583485ild.11
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 09:04:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ms3o1oCtSPlMnp0EJmXL0dtGWZHfF5+ovUGbqazHZgw=;
-        b=OVxwuOCR5SM46nsqHnuACaI4tdVQNblFq3FKc9XIKBXuUt4ueNJ+66D8N6AOaceEdr
-         u+4hhRods0v+l7fAmHfTobhx/Q9mEmbptjgekK5B383FuIzxXhYciAY4WeyLjiFdvi2R
-         gSuOA30jyCD4YUKolr89Em+dJ4KtGLU266uLqv4QvVlK/YcBdLM4exeOOz+0J2AhEsCo
-         JoTfoYeqzQnUgXvYG3ZfXg9sz/kJf7I4Uo5jQEJlnjqtQcOwC/F+768lE1AlB88yTlKT
-         jgOOFD8RfeO7/m2awiqqUe5ZipssJ6Ei0wAHUnd7KC3EMOTKLk//t++/RRD0nMJmmLUq
-         jr8A==
-X-Gm-Message-State: ANoB5pmYyIWm1tvhV9Dy0iKNio5bET1UJ2EmtuyIDh9pz6jMS7LF4fFe
-        wveuEKNUtZwjBAQdKKNS8iOhffq2SCOSxukj3GKooQTA9DQ5
-X-Google-Smtp-Source: AA0mqf7GT+KtUFy910VUeWnjWwuF8TcGtrTRMRxnNAswY8BP7udS/Mr1eDME0VTRm5c2qE7dPluZbcUgC9niNnHXwDwyAtx0ZEp/
+        Wed, 16 Nov 2022 12:04:54 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B83659FF8;
+        Wed, 16 Nov 2022 09:04:22 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1668618260;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Haup1+EG6/nyZ+dTGHkeO4GoC5W1dC85saJanHjmmb0=;
+        b=EohNRDhsZX3YNcyJ4gnN9eEHeeGTGmgS0vaYkSBnpxiqZ4hgpefZJ+mLrZ1AgOloCkEc6K
+        6WRNM6BV/MuXhXd9h7W+DB+dfWlXp3tYG3YhqA9XR00/0PXP0381a47uiZbZSao7TpsRUH
+        QsUWRy//tMsojpVM/c9tjDo4tUrkKe8h+49ZGDXNd0mtNWROjByJAuZWS1ES66sDt9ah+3
+        wdIl5ekfKcRhEljA1oOGPwll/R8fP+CdpI0R/kAuz0hC5I04X41OcpsTM6ItAhc4revBop
+        RMDzDqPrCFWvHWyov7+9obntnAbLqGN1GlxjgTe+HYbISWOaaV2YPE73vyCNyA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1668618260;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Haup1+EG6/nyZ+dTGHkeO4GoC5W1dC85saJanHjmmb0=;
+        b=Ckye8rDIgS7J7NV3L3Clr4HG9VuIyyDOMR7gghBvjxvNkIhp0jWte1cUOhVJw7Wf2hYg2L
+        CzpJcC4xDl1OgoAg==
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
+        Allen Hubbe <allenbh@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linuxppc-dev@lists.ozlabs.org,
+        "Ahmed S. Darwish" <darwi@linutronix.de>,
+        Reinette Chatre <reinette.chatre@intel.com>
+Subject: Re: [patch 15/39] PCI/MSI: Get rid of PCI_MSI_IRQ_DOMAIN
+In-Reply-To: <20221116161230.GA1113864@bhelgaas>
+References: <20221116161230.GA1113864@bhelgaas>
+Date:   Wed, 16 Nov 2022 18:04:20 +0100
+Message-ID: <87r0y2q19n.ffs@tglx>
 MIME-Version: 1.0
-X-Received: by 2002:a02:2286:0:b0:363:a1bb:343e with SMTP id
- o128-20020a022286000000b00363a1bb343emr10983038jao.175.1668618254922; Wed, 16
- Nov 2022 09:04:14 -0800 (PST)
-Date:   Wed, 16 Nov 2022 09:04:14 -0800
-In-Reply-To: <20221116120954.3294-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000059c74905ed997607@google.com>
-Subject: Re: [syzbot] WARNING in nci_send_cmd
-From:   syzbot <syzbot+43475bf3cfbd6e41f5b7@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Nov 16 2022 at 10:12, Bjorn Helgaas wrote:
+> On Fri, Nov 11, 2022 at 02:54:38PM +0100, Thomas Gleixner wrote:
+>> What a zoo:
+>> 
+>>      PCI_MSI
+>> 	select GENERIC_MSI_IRQ
+>> 
+>>      PCI_MSI_IRQ_DOMAIN
+>>      	def_bool y
+>> 	depends on PCI_MSI
+>> 	select GENERIC_MSI_IRQ_DOMAIN
+>> 
+>> Ergo PCI_MSI enables PCI_MSI_IRQ_DOMAIN which in turn selects
+>> GENERIC_MSI_IRQ_DOMAIN. So all the dependencies on PCI_MSI_IRQ_DOMAIN are
+>> just an indirection to PCI_MSI.
+>> 
+>> Match the reality and just admit that PCI_MSI requires
+>> GENERIC_MSI_IRQ_DOMAIN.
+>> 
+>> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+>
+> Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+>
+> Just FYI, this will conflict with my work-in-progress to add more
+> COMPILE_TEST coverage:
+>   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/commit/?id=72b5e7c401a1
+>
+> No *actual* conflicts, just textually next door, so should be sipmle
+> to resolve.  Worst case I can postpone my patch until the next cycle.
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
-
-Reported-and-tested-by: syzbot+43475bf3cfbd6e41f5b7@syzkaller.appspotmail.com
-
-Tested on:
-
-commit:         9500fc6e Merge branch 'for-next/core' into for-kernelci
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=171cb89e880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b25c9f218686dd5e
-dashboard link: https://syzkaller.appspot.com/bug?extid=43475bf3cfbd6e41f5b7
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=16aed579880000
-
-Note: testing is done by a robot and is best-effort only.
+Linus should be able to resolve that conflict :)
