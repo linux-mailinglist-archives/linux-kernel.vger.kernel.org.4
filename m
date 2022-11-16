@@ -2,73 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 786C962C8CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 20:14:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F90162C8D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 20:16:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233188AbiKPTOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 14:14:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38076 "EHLO
+        id S233413AbiKPTQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 14:16:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiKPTOh (ORCPT
+        with ESMTP id S229489AbiKPTQG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 14:14:37 -0500
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF54E4FF9E;
-        Wed, 16 Nov 2022 11:14:35 -0800 (PST)
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-13bd19c3b68so21236662fac.7;
-        Wed, 16 Nov 2022 11:14:35 -0800 (PST)
+        Wed, 16 Nov 2022 14:16:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F1DA53EF6
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 11:15:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668626111;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lfLRij7l12paP94g1Vl4KJDeYdRaQzDak4ajvEFazKc=;
+        b=THjI7SIWzny/P5MhSD1J/Uuz66DnmZ3gfurHSZzNaDuCbAUQjfr8PFA88oKU9OHu9PJsjw
+        kdE4hXsKNy2zD21dVuc0oOchCF/N/lD9n/fYvRlYeQOi8bMcVaGAt71UfHD9Ytn9Vjb7i+
+        lfOePDomOONDR8KGgH/aRC5gk1AvBlA=
+Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com
+ [209.85.210.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-209-dw6OgLidOLeczJD8-Hrdfg-1; Wed, 16 Nov 2022 14:15:10 -0500
+X-MC-Unique: dw6OgLidOLeczJD8-Hrdfg-1
+Received: by mail-ot1-f71.google.com with SMTP id 33-20020a9d0124000000b0066adf5218b2so9291605otu.10
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 11:15:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SbNwY8VQfyVGQAfwpv9JwDuw9SzkucH6WBiJQC8HG/0=;
-        b=thSBOreqavT3G5hbzKdeAv2t9AUEetIAen5peKjjwkUa66DRE4r2xhma6s5VCa99XX
-         vV8TeSD5QHJTzaP2d0kmwabBuC63PZTgSsbSQ6Eq1H8Jwt1qZw0ziUsd7kmCWU9PVKv8
-         qTgtCVJ0G+t2thWRfGBlE8lXM5FAIbLMGNayalT0w42eXH8SwbJbQ8N3z0GLAmqRZK50
-         MmOZ/cXGR6SPfKXUZ0/+kLpvRKEzF0979LEc7MH3Zt+WsoY8XcUjTHuqBlWlRhsm8zHi
-         EGoTuejDsB6zpmqHm78UQwDa4OujznynQppCCXGbGTt6gVt1e4s+mwu07scgnDXTyLnN
-         fMHQ==
-X-Gm-Message-State: ANoB5pnYNUAE22IBZcmDPWTl31dTSPHec1ZrWiikLOngKTB4AzLEvEYW
-        rPePap/LWWXWjphqLuBmIUXXJe8OJw==
-X-Google-Smtp-Source: AA0mqf6W/GBmEupGrcmRWBiGyu1SngWULZHScW7/4hei+ZTTdpIo3o2J+2Cu2gu2NAHj41OG+sJznA==
-X-Received: by 2002:a05:6870:4b4c:b0:13c:c5bd:c311 with SMTP id ls12-20020a0568704b4c00b0013cc5bdc311mr2710756oab.108.1668626074869;
-        Wed, 16 Nov 2022 11:14:34 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id d5-20020a4aaa85000000b0049faebecee2sm338173oon.35.2022.11.16.11.14.33
+        bh=lfLRij7l12paP94g1Vl4KJDeYdRaQzDak4ajvEFazKc=;
+        b=65SfmMEowv7mu9WywQyRpBVqOTuzpNspsAPQqMjIahrPnPrk6yFYZOOwZ1Kd7hEPua
+         hD4MmbGD2oh2mbu5dudGBFgAUOE66fK3Mzv41Bh3aZFS9jegZj/NWURD+VIod0lr/QQA
+         wpInV98cABlhDYN4/F8Mnr2CPM9a0esjduaOt51x4sapdE3knTulp6VQ58L6RRMzRQm8
+         L2vQX906e38+zsoPFr1f3yKZxnPklw7vwVii+IxWW9N/VVWwl/ZmFaDVNmSm+lkUcJ2R
+         3pP1d4fc975C4r4NfC1Kmv5znQfnF0Fo6kkKolFAkfvGxwiAEXBCzvqIPa4lTMAhxJdf
+         TfYg==
+X-Gm-Message-State: ANoB5pluYsBkQUMA8dYSGkZZYw6uzo3eMI2KRHROYev74xY+T1ued0jx
+        rR/jJWp0grDGkxlxj3UZzVtenXNbff/+WIKVDnLcLCxQPbVfIPvge5Ghf7fGYKniqem7g9nyY6Z
+        eJ13Uq+GebVwaN4B4ZKfTaszu
+X-Received: by 2002:a05:6808:64e:b0:359:cfaf:7129 with SMTP id z14-20020a056808064e00b00359cfaf7129mr2441145oih.138.1668626109277;
+        Wed, 16 Nov 2022 11:15:09 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6yyHtrKzDkICyQ/GcPC00u0hkYXeMEQ5XeUtPs9o6GweW8SID9IOlDutHJ8Hy/lmi5QZlFvQ==
+X-Received: by 2002:a05:6808:64e:b0:359:cfaf:7129 with SMTP id z14-20020a056808064e00b00359cfaf7129mr2441135oih.138.1668626109041;
+        Wed, 16 Nov 2022 11:15:09 -0800 (PST)
+Received: from halaney-x13s ([2600:1700:1ff0:d0e0::41])
+        by smtp.gmail.com with ESMTPSA id u64-20020a4a2143000000b0049f9731ae1esm1771053oou.41.2022.11.16.11.15.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 11:14:34 -0800 (PST)
-Received: (nullmailer pid 743580 invoked by uid 1000);
-        Wed, 16 Nov 2022 19:14:36 -0000
-Date:   Wed, 16 Nov 2022 13:14:36 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 4/9] dt-bindings: Add RISC-V incoming MSI controller
- bindings
-Message-ID: <20221116191436.GA576695-robh@kernel.org>
-References: <20221111044207.1478350-1-apatel@ventanamicro.com>
- <20221111044207.1478350-5-apatel@ventanamicro.com>
- <9be58cb4-4ee8-a6e0-7a0a-f2f581e394d3@linaro.org>
- <CAK9=C2X55CG6tjjiTPrecnnZZiwTOS1BSH3UTPa-fLBm38WdLA@mail.gmail.com>
+        Wed, 16 Nov 2022 11:15:08 -0800 (PST)
+Date:   Wed, 16 Nov 2022 13:15:05 -0600
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        linux-arm-msm@vger.kernel.org, John Stultz <jstultz@google.com>,
+        Peter Robinson <pbrobinson@redhat.com>,
+        Steev Klimaszewski <steev@kali.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Enric Balletbo i Serra <eballetbo@redhat.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Brian Masney <bmasney@redhat.com>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v2 4/4] driver core: Disable driver deferred probe
+ timeout by default
+Message-ID: <20221116191505.x6ruzruc3yprp7sx@halaney-x13s>
+References: <20221116115348.517599-1-javierm@redhat.com>
+ <20221116120236.520017-1-javierm@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAK9=C2X55CG6tjjiTPrecnnZZiwTOS1BSH3UTPa-fLBm38WdLA@mail.gmail.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+In-Reply-To: <20221116120236.520017-1-javierm@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,97 +90,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 05:36:06PM +0530, Anup Patel wrote:
-> On Mon, Nov 14, 2022 at 3:19 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
-> >
-> > On 11/11/2022 05:42, Anup Patel wrote:
-> > > We add DT bindings document for RISC-V incoming MSI controller (IMSIC)
-> > > defined by the RISC-V advanced interrupt architecture (AIA) specification.
-> > >
-> > > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> > > ---
-> > >  .../interrupt-controller/riscv,imsic.yaml     | 174 ++++++++++++++++++
-> > >  1 file changed, 174 insertions(+)
-> > >  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/riscv,imsic.yaml
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/interrupt-controller/riscv,imsic.yaml b/Documentation/devicetree/bindings/interrupt-controller/riscv,imsic.yaml
-> > > new file mode 100644
-> > > index 000000000000..05106eb1955e
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/interrupt-controller/riscv,imsic.yaml
-> > > @@ -0,0 +1,174 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/interrupt-controller/riscv,imsic.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: RISC-V Incoming MSI Controller (IMSIC)
-> > > +
-> > > +maintainers:
-> > > +  - Anup Patel <anup@brainfault.org>
-> > > +
-> > > +description:
-> > > +  The RISC-V advanced interrupt architecture (AIA) defines a per-CPU incoming
-> > > +  MSI controller (IMSIC) for handling MSIs in a RISC-V platform. The RISC-V
-> > > +  AIA specification can be found at https://github.com/riscv/riscv-aia.
-> > > +
-> > > +  The IMSIC is a per-CPU (or per-HART) device with separate interrupt file
-> > > +  for each privilege level (machine or supervisor). The configuration of
-> > > +  a IMSIC interrupt file is done using AIA CSRs and it also has a 4KB MMIO
-> > > +  space to receive MSIs from devices. Each IMSIC interrupt file supports a
-> > > +  fixed number of interrupt identities (to distinguish MSIs from devices)
-> > > +  which is same for given privilege level across CPUs (or HARTs).
-> > > +
-> > > +  The arrangement of IMSIC interrupt files in MMIO space of a RISC-V platform
-> > > +  follows a particular scheme defined by the RISC-V AIA specification. A IMSIC
-> > > +  group is a set of IMSIC interrupt files co-located in MMIO space and we can
-> > > +  have multiple IMSIC groups (i.e. clusters, sockets, chiplets, etc) in a
-> > > +  RISC-V platform. The MSI target address of a IMSIC interrupt file at given
-> > > +  privilege level (machine or supervisor) encodes group index, HART index,
-> > > +  and guest index (shown below).
-> > > +
-> > > +  XLEN-1           >=24                                 12    0
-> > > +  |                  |                                  |     |
-> > > +  -------------------------------------------------------------
-> > > +  |xxxxxx|Group Index|xxxxxxxxxxx|HART Index|Guest Index|  0  |
-> > > +  -------------------------------------------------------------
-> > > +
-> > > +  The device tree of a RISC-V platform will have one IMSIC device tree node
-> > > +  for each privilege level (machine or supervisor) which collectively describe
-> > > +  IMSIC interrupt files at that privilege level across CPUs (or HARTs).
-> > > +
-> > > +allOf:
-> > > +  - $ref: /schemas/interrupt-controller.yaml#
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    items:
-> > > +      - enum:
-> > > +          - vendor,chip-imsics
-> >
-> > There is no such vendor... As Conor pointed out, this does not look
-> > correct. Compatibles must be real and specific.
+On Wed, Nov 16, 2022 at 01:02:36PM +0100, Javier Martinez Canillas wrote:
+> The driver_deferred_probe_timeout value has a long history. It was first
+> set to -1 when was introduced by commit 25b4e70dcce9 ("driver core: allow
+> stopping deferred probe after init"), meaning that the driver core would
+> defer the probe forever unless a subsystem would opt-in by checking if the
+> initcalls where done using the driver_deferred_probe_check_state() helper,
+> or if a timeout was explicitly set with a "deferred_probe_timeout" param.
+
+This or statement here sounds like you either opt-in, or the timeout
+affects you (at least that's how I read it).
+
+A subsystem has to opt-in to get either result by using
+driver_deferred_probe_check_state()!
+
 > 
-> Previously, Rob had suggest to:
-> 1) Mandate two compatible strings: one for implementation and
->     and second for specification
-> 2) Since this is new specification with QEMU being the only
->     implementation, we add "vendor,chip-imsics" as dummy
->     implementation specific string for DT schema checkers
->     to pass the examples. Once we have an actual implementation,
->    we will replace this dummy string.
+> Only the power domain, IOMMU and MDIO subsystems currently opt-in to check
+> if the initcalls have completed with driver_deferred_probe_check_state().
+> 
+> Commit c8c43cee29f6 ("driver core: Fix driver_deferred_probe_check_state()
+> logic") then changed the driver_deferred_probe_check_state() helper logic,
+> to take into account whether modules have been enabled or not and also to
+> return -EPROBE_DEFER if the probe deferred timeout work was still running.
+> 
+> Then in commit e2cec7d68537 ("driver core: Set deferred_probe_timeout to a
+> longer default if CONFIG_MODULES is set"), the timeout was increased to 30
+> seconds if modules are enabled. Because seems that some of the subsystems
+> that were opt-in to not return -EPROBE_DEFER after the initcall where done
 
-What will QEMU's DT use? That's an implementation we can and do run 
-validation on. Your choices are define a QEMU specific compatible string 
-or allow the fallback alone. I'm fine either way. With the latter, 
-someone has to review that the fallback is not used alone in .dts files 
-while doing the former allows the tools to check for you. It also 
-encourages making every new difference a property rather than implied by 
-compatible, but those should be caught in review.
+s/where/were/
 
-If you go with the fallback only, just make it clear that it's for QEMU 
-or s/w models only.
+> could still have dependencies whose drivers were built as a module.
+> 
+> This commit did a fundamental change to how probe deferral worked though,
+> since now the default was not to attempt probing for drivers indefinitely
+> but instead to timeout after 30 seconds, unless a different timeout is set
+> using the "deferred_probe_timeout" command line parameter.
+> 
+> The behavior was changed even more with commit ce68929f07de ("driver core:
+> Revert default driver_deferred_probe_timeout value to 0"), since the value
+> was set to 0 by default. Meaning that the probe deferral would be disabled
+> after the initcalls where done. Unless a timeout was set in the cmdline.
+> 
+> Notice that the commit said that it was reverting the default value to 0,
+> but this was never 0. The default was -1 at the beginning and then changed
+> to 30 in a later commit.
+> 
+> This default value of 0 was reverted again by commit f516d01b9df2 ("Revert
+> "driver core: Set default deferred_probe_timeout back to 0."") and set to
+> 10 seconds instead. Which was still less than the 30 seconds that was set
+> at some point, to allow systems with drivers built as modules and loaded
+> later by user-land to probe drivers that were still in the deferred list.
+> 
+> The 10 seconds timeout isn't enough in some cases, for example the Fedora
+> kernel builds as much drivers as possible as modules. And this leads to an
+> Snapdragon SC7180 based HP X2 Chromebook to not have display, due the DRM
+> driver failing to probe if CONFIG_ARM_SMMU=y and CONFIG_SC_GPUCC_7180=m.
+> 
+> So let's change the default again to -1 as it was at the beginning. That's
+> how probe deferral always worked. The kernel should try to avoid guessing
+> when it should be safe to give up on deferred drivers to be probed.
+> 
+> The reason why the default "deferred_probe_timeout" was changed from -1 to
+> the other values was to allow drivers that have only optional dependencies
+> to probe even if the suppliers are not available.
+> 
+> But now there is a "fw_devlink.timeout" parameter to timeout the links and
+> allow drivers to probe even when the dependencies are not present. Let's
+> set the default for that timeout to 10 seconds, to give the same behaviour
+> as expected by these driver with optional device links.
+> 
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
 
-Rob
+This sounds like a reasonable solution to me:
+
+Acked-by: Andrew Halaney <ahalaney@redhat.com>
+
+> ---
+> 
+> Changes in v2:
+> - Mention in the commit messsage the specific machine and drivers that
+>   are affected by the issue (Greg).
+> - Double check the commit message for accuracy (John).
+> - Add a second workqueue to timeout the devlink enforcing and allow
+>   drivers to probe even without their optional dependencies available.
+> 
+>  drivers/base/dd.c | 8 ++------
+>  1 file changed, 2 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+> index ea448df94d24..5f18cd497850 100644
+> --- a/drivers/base/dd.c
+> +++ b/drivers/base/dd.c
+> @@ -256,12 +256,8 @@ static int deferred_devs_show(struct seq_file *s, void *data)
+>  }
+>  DEFINE_SHOW_ATTRIBUTE(deferred_devs);
+>  
+> -#ifdef CONFIG_MODULES
+> -static int driver_deferred_probe_timeout = 10;
+> -#else
+> -static int driver_deferred_probe_timeout;
+> -#endif
+> -static int fw_devlink_timeout = -1;
+> +static int driver_deferred_probe_timeout = -1;
+> +static int fw_devlink_timeout = 10;
+>  
+>  static int __init deferred_probe_timeout_setup(char *str)
+>  {
+> -- 
+> 2.38.1
+> 
+
