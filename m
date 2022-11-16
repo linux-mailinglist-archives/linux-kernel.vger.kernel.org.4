@@ -2,82 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 446AA62CC4A
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 22:08:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45CEF62CC50
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 22:09:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233114AbiKPVI2 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 16 Nov 2022 16:08:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48810 "EHLO
+        id S239220AbiKPVJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 16:09:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239272AbiKPVH7 (ORCPT
+        with ESMTP id S231448AbiKPVIu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 16:07:59 -0500
-Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [IPv6:2001:4b7a:2000:18::162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C88C5CD0A
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 13:07:29 -0800 (PST)
-Received: from [127.0.0.1] (bband-dyn193.178-41-216.t-com.sk [178.41.216.193])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 569622009F;
-        Wed, 16 Nov 2022 22:07:27 +0100 (CET)
-Date:   Wed, 16 Nov 2022 22:07:25 +0100
-From:   Martin Botka <martin.botka@somainline.org>
-To:     Lee Jones <lee@kernel.org>
-CC:     martin.botka1@gmail.com, ~postmarketos/upstreaming@lists.sr.ht,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Jami Kettunen <jamipkettunen@somainline.org>,
-        Paul Bouchara <paul.bouchara@somainline.org>,
-        Yenda <jtrmal@gmail.com>, Chen-Yu Tsai <wens@csie.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] mfd: ax20x: Add suppport for AXP1530 PMIC
-User-Agent: K-9 Mail for Android
-In-Reply-To: <Y3UGc//UuuinJcbE@google.com>
-References: <20221114162334.1801137-1-martin.botka@somainline.org> <Y3UGc//UuuinJcbE@google.com>
-Message-ID: <671D1BC5-589B-4AFF-B026-1810F48522FD@somainline.org>
+        Wed, 16 Nov 2022 16:08:50 -0500
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF04BC0D
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 13:08:08 -0800 (PST)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-1322d768ba7so21611141fac.5
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 13:08:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=g6WOXENW7WX8DdQN2AnIBv+P/H8oQWA5leDhKVCB5PU=;
+        b=IN2JITV99+mFdxD4DTqauw+JFm0+ykGGIE0IXqgxPI11e0JooNYGLa6GV0g98jl3fi
+         PoqLlDVoJTBDkRv/d4fAeMs8VtNFN5HtP051grWq2ZPyt13a3UcgPAwHxeg/HW/6dU94
+         r6I1WMxTD/qqNss5NVb4PlwxPB4XcAKqBBN/0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=g6WOXENW7WX8DdQN2AnIBv+P/H8oQWA5leDhKVCB5PU=;
+        b=IE7M85SmfWA8cRscRFkCEmIHhkXiQVTxcm3j+9F817cwCrpSLpHeO9at5iJu74nNVw
+         CUkzSOrFusFPJixnhRp3+fr7l26woszWWIY6TDk1B2ikVCIkwaDKxLukuheEOf2TWRqF
+         zK00u0lYn+KYIIuHJElJQesZJhFLgiZKhD/PhOuMhWR5WcZfS7fBDaoK3Yn3BV/S3Q8i
+         vuasGdgTp7CsrvEbAJd7VE4ovbIzy29VqJwu/V9V5pD91LF/JfSvlkSHvIW+gQgU8CCS
+         zzgMzC9wkUpRMhk1GVljqsr1xFb58nTjKjDC+uid46Cakgu7+jAQvmjGQUv4IzvOM7TF
+         sQJA==
+X-Gm-Message-State: ANoB5pkS5WlJrB6Fcj3yEXHPXkIV7gSawyEXfnUq1+ziGGJbWyuSK2LT
+        B2/N/r6sqdYseG/cFSxoYZXiotuTMZCHmQakEb9PRKmH+54=
+X-Google-Smtp-Source: AA0mqf6Mw2Z4CJsebYX3GVNqu7GYjb9m73oyQ3ljCp/6SYOSqjmmeBg8Tk+CrrGeJvli2sNkWgZ1NPwGWAMXUL6OtaA=
+X-Received: by 2002:a05:6870:bacb:b0:13a:dd16:9b83 with SMTP id
+ js11-20020a056870bacb00b0013add169b83mr2778705oab.15.1668632887526; Wed, 16
+ Nov 2022 13:08:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221116195624.124092-1-joel@joelfernandes.org> <20221116151610.7294a9e8@gandalf.local.home>
+In-Reply-To: <20221116151610.7294a9e8@gandalf.local.home>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Wed, 16 Nov 2022 21:07:56 +0000
+Message-ID: <CAEXW_YTu2-zM_Qmm5=giLoDvqEutMHFNxsi8Q2kT9axCgHFwEQ@mail.gmail.com>
+Subject: Re: [PATCH RFC] kexec: Freeze processes before kexec
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org, ribalda@google.com,
+        zwisler@google.com, robdclark@gmail.com,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hey Steve,
 
+On Wed, Nov 16, 2022 at 8:15 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> On Wed, 16 Nov 2022 19:56:24 +0000
+> "Joel Fernandes (Google)" <joel@joelfernandes.org> wrote:
+>
+> > --- a/kernel/kexec_core.c
+> > +++ b/kernel/kexec_core.c
+> > @@ -1175,6 +1175,12 @@ int kernel_kexec(void)
+> >       } else
+> >  #endif
+> >       {
+> > +             error = freeze_processes();
+> > +             if (error) {
+> > +                     error = -EBUSY;
+> > +                     goto Unlock;
+> > +             }
+>
+> If this is the path of a kernel panic, do we really want to check the
+> return error of freeze_processes()? We are panicing, there's not much more
+> we can do.
 
-On November 16, 2022 4:49:07 PM GMT+01:00, Lee Jones <lee@kernel.org> wrote:
->On Mon, 14 Nov 2022, Martin Botka wrote:
->
->> AXP1530 is a PMIC chip produced by X-Powers and an be connected via
->> I2C or RSB bus.
->> Where AXP313A seems to be closely related so the same driver can be used and
->> seen it only paired with H616 SoC.
->> 
->> Signed-off-by: Martin Botka <martin.botka@somainline.org>
->> ---
->>  drivers/mfd/axp20x-i2c.c   |  2 ++
->>  drivers/mfd/axp20x-rsb.c   |  1 +
->>  drivers/mfd/axp20x.c       | 63 ++++++++++++++++++++++++++++++++++++++
->>  include/linux/mfd/axp20x.h | 34 ++++++++++++++++++++
->>  4 files changed, 100 insertions(+)
->
->No major concerns.
->
->> +static struct mfd_cell axp1530_cells[] = {
->> +	{
->> +		.id = 0,
->> +		.name = "axp20x-regulator",
->> +	},
->> +};
->
->Why .id = 0?
->
+I am OK with not checking the return of freeze_processes() and trying
+to shut down anyway. Will re-spin after any other feedback.
 
-Oh good eye. Yea thats just left over. Will be removed in V2 :) 
+Thanks,
+
+ - Joel
