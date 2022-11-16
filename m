@@ -2,372 +2,305 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA9D662C91D
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 20:42:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6AED62C920
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 20:43:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233705AbiKPTmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 14:42:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51514 "EHLO
+        id S233809AbiKPTns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 14:43:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232126AbiKPTmg (ORCPT
+        with ESMTP id S229446AbiKPTnq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 14:42:36 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9FBCDD
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 11:42:33 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id b29so18424904pfp.13
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 11:42:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KlWeHY37dk13pgneQQF09xyXNkcCF6rl/x3zODlH9RE=;
-        b=Oj4UqhJfRqo2qKRgU4WMPLYSfxFcmatpiZJ+WfpHYOc9ii2L5vU+VdHRw3z0vRFUOg
-         zJ8Lkxf95uy7YzDsvbjMKN2itsSfLteot3ADVAMoJqjfOZHcqK0oR6d+6LQUAtWkLJLh
-         RbIi2dt4zOYyieHE1CeqnciTN1OgNDj4HxdKHmy4d8gbvrpPxQySV4+o1w5V9wabH70d
-         ZHiGR/drmo0zMKvAVYdfNUWGnnNF4LDhCps16N4h2e3YizN0jnN6K6J+EeqTzP18MAh1
-         yuH1dqxkMz2gM1S9cdq+tu4ECSONqRn3T+eTGhrfs2GGlzRnbFnGdcOFbDNWrqHyrEI+
-         qspg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KlWeHY37dk13pgneQQF09xyXNkcCF6rl/x3zODlH9RE=;
-        b=tui/QtTriys9m3fAPAp0abH9z3iOefbXvOIaiL7iZawfI5jd5mkH+usNOIWBHvOjx2
-         9ww9gS5ZvVTVR3lFYN2sf/uW+7ARft+wAzYs4RXXrL/Inl/t/xY6Ke0UAJ8Kvtpb7LqX
-         6XehOc+micQjiXqY7yhNgtrJe/NWHaqvkRyqLAjXS9vjmLtTOMZ5BMBVuwakNhi6niHU
-         QID3gfkyqritG5+rFUtLTLBC66ikUPYsgEBAlRpbiaH3+bC9J0FTsxsyMMo8MqrvIEMQ
-         N7bsRdJBemtgYXhNZztQIapEpauoUwfevy/hHrcoOhmNosO+8FeS1f1DNRyT4t7Ptda3
-         lnGA==
-X-Gm-Message-State: ANoB5pmmnjW86H9kybYogq82WhFstUZw452LlV6e4FHl5cMfSjeMlVQU
-        a07/h5rimpMCfX6cIOnjEe9DCw==
-X-Google-Smtp-Source: AA0mqf4DKE/DXI0zn+3B84iiiR60cPYKjY+cVxa4rceL520VBxnAaVIFUNVUHCCrTVsBEewI4HaTpw==
-X-Received: by 2002:a63:d153:0:b0:46f:9193:467d with SMTP id c19-20020a63d153000000b0046f9193467dmr21924717pgj.479.1668627752567;
-        Wed, 16 Nov 2022 11:42:32 -0800 (PST)
-Received: from ?IPV6:2405:201:d02f:d899:2028:7962:400:43b6? ([2405:201:d02f:d899:2028:7962:400:43b6])
-        by smtp.gmail.com with ESMTPSA id 186-20020a6206c3000000b00553d573222fsm11219313pfg.199.2022.11.16.11.42.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 11:42:32 -0800 (PST)
-Message-ID: <187b21f4-8acc-5991-e534-0f48d0dda184@9elements.com>
-Date:   Thu, 17 Nov 2022 01:12:29 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v9 2/2] mfd: max597x: Add support for MAX5970 and MAX5978
-Content-Language: en-US
-To:     Lee Jones <lee@kernel.org>
+        Wed, 16 Nov 2022 14:43:46 -0500
+Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A32327CE8;
+        Wed, 16 Nov 2022 11:43:44 -0800 (PST)
+Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx0.riseup.net (Postfix) with ESMTPS id 4NCD4b6yrhz9spR;
+        Wed, 16 Nov 2022 19:43:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1668627824; bh=hTIhk1ZkKb1/fle5JjgddcjN0q3ejTMLd/sSXkZyzPU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OV5ewi3vv3nWKAWy3L5ABtJYsne0a1mdGli9tw9ewljY3zemoSpaeqEwGuGA9mctc
+         /odGiQl30UTwD8yeoyMgC/LtMimqs2+6KokKFmXFPI7CeGzV+hr1CQlLyjQdTSj1zO
+         Z1fQ0WgiBRX4WGWPf1hX8Rqha4vB5OqcpyX70egk=
+X-Riseup-User-ID: 7F799B8F6493BB01D539ACDD2BB7E111E5235A48851B40C03B3BEE043B1EBDBB
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews2.riseup.net (Postfix) with ESMTPSA id 4NCD4Y1Jrzz1xwx;
+        Wed, 16 Nov 2022 19:43:40 +0000 (UTC)
+From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>
 Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Marcello Sylvester Bauer <sylv@sylv.io>
-References: <20221114075739.4117439-1-Naresh.Solanki@9elements.com>
- <20221114075739.4117439-3-Naresh.Solanki@9elements.com>
- <Y3Ud+CfFwIURcs9R@google.com>
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-In-Reply-To: <Y3Ud+CfFwIURcs9R@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        linux-media@vger.kernel.org,
+        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
+Subject: [PATCH 1/2] media: s5c73m3: Replace legacy gpio interface for gpiod
+Date:   Wed, 16 Nov 2022 16:43:06 -0300
+Message-Id: <20221116194307.164543-1-mairacanal@riseup.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lee,
+Considering the current transition of the GPIO subsystem, remove all
+dependencies of the legacy GPIO interface (linux/gpio.h and linux
+/of_gpio.h) and replace it with the descriptor-based GPIO approach.
 
-On 16-11-2022 10:59 pm, Lee Jones wrote:
-> On Mon, 14 Nov 2022, Naresh Solanki wrote:
-> 
->> From: Patrick Rudolph <patrick.rudolph@9elements.com>
->>
->> Implement a regulator driver with IRQ support for fault management.
->> Written against documentation [1] and [2] and tested on real hardware.
->>
->> Every channel has its own regulator supplies nammed 'vss1-supply' and
->> 'vss2-supply'. The regulator supply is used to determine the output
->> voltage, as the smart switch provides no output regulation.
->> The driver requires the 'shunt-resistor-micro-ohms' property to be
->> present in Device Tree to properly calculate current related
->> values.
->>
->> Datasheet links:
->> 1: https://datasheets.maximintegrated.com/en/ds/MAX5970.pdf
->> 2: https://datasheets.maximintegrated.com/en/ds/MAX5978.pdf
->>
->> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
->> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
->> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
->> ---
->>   drivers/mfd/Kconfig         |  12 +++++
->>   drivers/mfd/Makefile        |   1 +
->>   drivers/mfd/max597x.c       |  92 ++++++++++++++++++++++++++++++++
->>   include/linux/mfd/max597x.h | 103 ++++++++++++++++++++++++++++++++++++
->>   4 files changed, 208 insertions(+)
->>   create mode 100644 drivers/mfd/max597x.c
->>   create mode 100644 include/linux/mfd/max597x.h
->>
->> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
->> index 8b93856de432..416fe7986b7b 100644
->> --- a/drivers/mfd/Kconfig
->> +++ b/drivers/mfd/Kconfig
->> @@ -253,6 +253,18 @@ config MFD_MADERA_SPI
->>   	  Support for the Cirrus Logic Madera platform audio SoC
->>   	  core functionality controlled via SPI.
->>   
->> +config MFD_MAX597X
->> +	tristate "Maxim 597x Power Switch and Monitor"
->> +	depends on I2C
->> +	depends on OF
->> +	select MFD_CORE
->> +	select REGMAP_I2C
->> +	help
->> +	  This driver controls a Maxim 5970/5978 switch via I2C bus.
->> +	  The MAX5970/5978 is a smart switch with no output regulation, but
->> +	  fault protection and voltage and current monitoring capabilities.
->> +	  Also it supports upto 4 indication LEDs.
->> +
->>   config MFD_CS47L15
->>   	bool "Cirrus Logic CS47L15"
->>   	select PINCTRL_CS47L15
->> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
->> index 7ed3ef4a698c..819d711fa748 100644
->> --- a/drivers/mfd/Makefile
->> +++ b/drivers/mfd/Makefile
->> @@ -161,6 +161,7 @@ obj-$(CONFIG_MFD_DA9063)	+= da9063.o
->>   obj-$(CONFIG_MFD_DA9150)	+= da9150-core.o
->>   
->>   obj-$(CONFIG_MFD_MAX14577)	+= max14577.o
->> +obj-$(CONFIG_MFD_MAX597X)	+= max597x.o
->>   obj-$(CONFIG_MFD_MAX77620)	+= max77620.o
->>   obj-$(CONFIG_MFD_MAX77650)	+= max77650.o
->>   obj-$(CONFIG_MFD_MAX77686)	+= max77686.o
->> diff --git a/drivers/mfd/max597x.c b/drivers/mfd/max597x.c
->> new file mode 100644
->> index 000000000000..ae43d57cde26
->> --- /dev/null
->> +++ b/drivers/mfd/max597x.c
->> @@ -0,0 +1,92 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * Maxim MAX5970/MAX5978 Power Switch & Monitor
->> + *
->> + * Copyright (c) 2022 9elements GmbH
->> + *
->> + * Author: Patrick Rudolph <patrick.rudolph@9elements.com>
->> + */
->> +
->> +#include <linux/i2c.h>
->> +#include <linux/mfd/core.h>
->> +#include <linux/mfd/max597x.h>
->> +#include <linux/regmap.h>
->> +
->> +static const struct regmap_config max597x_regmap_config = {
->> +	.reg_bits = 8,
->> +	.val_bits = 8,
->> +	.max_register = MAX_REGISTERS,
->> +};
->> +
->> +static const struct mfd_cell max597x_cells[] = {
->> +	{ .name = "max597x-regulator", },
->> +	{ .name = "max597x-iio", },
->> +	{ .name = "max597x-led", },
->> +};
->> +
->> +static int max597x_probe(struct i2c_client *i2c, const struct i2c_device_id *id)
->> +{
->> +	struct max597x_data *ddata;
->> +	enum max597x_chip_type chip = id->driver_data;
->> +
->> +	ddata = devm_kzalloc(&i2c->dev, sizeof(*ddata),	GFP_KERNEL);
->> +	if (!ddata)
->> +		return -ENOMEM;
->> +
->> +	/*
->> +	 * Based on chip type, Initialize the number of switch. This is needed by
->> +	 * regulator & iio cells.
->> +	 */
->> +	switch (chip) {
->> +	case MAX597x_TYPE_MAX5970:
->> +		ddata->num_switches = MAX5970_NUM_SWITCHES;
->> +		break;
->> +	case MAX597x_TYPE_MAX5978:
->> +		ddata->num_switches = MAX5978_NUM_SWITCHES;
->> +		break;
->> +	}
->> +
->> +	ddata->regmap = devm_regmap_init_i2c(i2c, &max597x_regmap_config);
->> +	if (IS_ERR(ddata->regmap)) {
->> +		dev_err(&i2c->dev, "Failed to initialize regmap");
->> +		return PTR_ERR(ddata->regmap);
->> +	}
->> +
->> +	/* IRQ used by regulator cell */
->> +	ddata->irq = i2c->irq;
->> +	ddata->dev = &i2c->dev;
-> 
-> You won't need both.  You can derive one from the other.
-> 
->> +	i2c_set_clientdata(i2c, ddata);
->> +
->> +	return devm_mfd_add_devices(ddata->dev, PLATFORM_DEVID_AUTO,
->> +				    max597x_cells, ARRAY_SIZE(max597x_cells),
->> +				    NULL, 0, NULL);
->> +}
->> +
->> +static const struct i2c_device_id max597x_table[] = {
->> +	{ .name = "max5970", MAX597x_TYPE_MAX5970 },
->> +	{ .name = "max5978", MAX597x_TYPE_MAX5978 },
->> +};
->> +
->> +MODULE_DEVICE_TABLE(i2c, max597x_table);
->> +
->> +static const struct of_device_id max597x_of_match[] = {
->> +	{ .compatible = "maxim,max5970", .data = (void *)MAX597x_TYPE_MAX5970 },
->> +	{ .compatible = "maxim,max5978", .data = (void *)MAX597x_TYPE_MAX5978 },
->> +	{}
->> +};
->> +
->> +MODULE_DEVICE_TABLE(of, max597x_of_match);
->> +
->> +static struct i2c_driver max597x_driver = {
->> +	.id_table = max597x_table,
->> +	.driver = {
->> +		  .name = "max597x",
->> +		  .of_match_table = of_match_ptr(max597x_of_match),
->> +		  },
->> +	.probe = max597x_probe,
->> +};
->> +module_i2c_driver(max597x_driver);
->> +
->> +MODULE_AUTHOR("Patrick Rudolph <patrick.rudolph@9elements.com>");
->> +MODULE_DESCRIPTION("MAX597X Power Switch and Monitor");
->> +MODULE_LICENSE("GPL v2");
-> 
-> This driver looks *very* simple.
-> 
-> Are you able to use simple-mfd-i2c.c instead?
-> 
-> I suspect the answer to that would be "yes".
-> 
->> diff --git a/include/linux/mfd/max597x.h b/include/linux/mfd/max597x.h
->> new file mode 100644
->> index 000000000000..99a047e66b44
->> --- /dev/null
->> +++ b/include/linux/mfd/max597x.h
->> @@ -0,0 +1,103 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +/*
->> + * Maxim MAX5970/MAX5978 Power Switch & Monitor
->> + *
->> + * Copyright (c) 2022 9elements GmbH
->> + *
->> + * Author: Patrick Rudolph <patrick.rudolph@9elements.com>
->> + */
->> +
->> +#ifndef MFD_MAX597X_H
->> +#define MFD_MAX597X_H
->> +
->> +#include <linux/device.h>
->> +#include <linux/regmap.h>
->> +
->> +/* Number of switch based on chip variant */
->> +#define MAX5970_NUM_SWITCHES 2
->> +#define MAX5978_NUM_SWITCHES 1
->> +/* Both chip variant have 4 indication LEDs used by LED cell */
->> +#define MAX597X_NUM_LEDS     4
->> +
->> +enum max597x_chip_type {
->> +	MAX597x_TYPE_MAX5978 = 1,
->> +	MAX597x_TYPE_MAX5970,
->> +};
->> +
->> +#define MAX5970_REG_CURRENT_L(ch)		(0x01 + (ch) * 4)
->> +#define MAX5970_REG_CURRENT_H(ch)		(0x00 + (ch) * 4)
->> +#define MAX5970_REG_VOLTAGE_L(ch)		(0x03 + (ch) * 4)
->> +#define MAX5970_REG_VOLTAGE_H(ch)		(0x02 + (ch) * 4)
->> +#define MAX5970_REG_MON_RANGE			0x18
->> +#define  MAX5970_MON_MASK				0x3
->> +#define  MAX5970_MON(reg, ch)		(((reg) >> ((ch) * 2)) & MAX5970_MON_MASK)
->> +#define  MAX5970_MON_MAX_RANGE_UV		16000000
->> +
->> +#define MAX5970_REG_CH_UV_WARN_H(ch)	(0x1A + (ch) * 10)
->> +#define MAX5970_REG_CH_UV_WARN_L(ch)	(0x1B + (ch) * 10)
->> +#define MAX5970_REG_CH_UV_CRIT_H(ch)	(0x1C + (ch) * 10)
->> +#define MAX5970_REG_CH_UV_CRIT_L(ch)	(0x1D + (ch) * 10)
->> +#define MAX5970_REG_CH_OV_WARN_H(ch)	(0x1E + (ch) * 10)
->> +#define MAX5970_REG_CH_OV_WARN_L(ch)	(0x1F + (ch) * 10)
->> +#define MAX5970_REG_CH_OV_CRIT_H(ch)	(0x20 + (ch) * 10)
->> +#define MAX5970_REG_CH_OV_CRIT_L(ch)	(0x21 + (ch) * 10)
->> +
->> +#define  MAX5970_VAL2REG_H(x)			(((x) >> 2) & 0xFF)
->> +#define  MAX5970_VAL2REG_L(x)			((x) & 0x3)
->> +
->> +#define MAX5970_REG_DAC_FAST(ch)		(0x2E + (ch))
->> +
->> +#define MAX5970_FAST2SLOW_RATIO			200
->> +
->> +#define MAX5970_REG_STATUS0				0x31
->> +#define  MAX5970_CB_IFAULTF(ch)			(1 << (ch))
->> +#define  MAX5970_CB_IFAULTS(ch)			(1 << ((ch) + 4))
->> +
->> +#define MAX5970_REG_STATUS1				0x32
->> +#define  STATUS1_PROT_MASK				0x3
->> +#define  STATUS1_PROT(reg) \
->> +	(((reg) >> 6) & STATUS1_PROT_MASK)
->> +#define  STATUS1_PROT_SHUTDOWN			0
->> +#define  STATUS1_PROT_CLEAR_PG			1
->> +#define  STATUS1_PROT_ALERT_ONLY		2
->> +
->> +#define MAX5970_REG_STATUS2				0x33
->> +#define  MAX5970_IRNG_MASK				0x3
->> +#define  MAX5970_IRNG(reg, ch)	\
->> +						(((reg) >> ((ch) * 2)) & MAX5970_IRNG_MASK)
->> +
->> +#define MAX5970_REG_STATUS3				0x34
->> +#define  MAX5970_STATUS3_ALERT			BIT(4)
->> +#define  MAX5970_STATUS3_PG(ch)			BIT(ch)
->> +
->> +#define MAX5970_REG_FAULT0				0x35
->> +#define  UV_STATUS_WARN(ch)				BIT(ch)
->> +#define  UV_STATUS_CRIT(ch)				BIT(ch + 4)
->> +
->> +#define MAX5970_REG_FAULT1				0x36
->> +#define  OV_STATUS_WARN(ch)				BIT(ch)
->> +#define  OV_STATUS_CRIT(ch)				BIT(ch + 4)
->> +
->> +#define MAX5970_REG_FAULT2				0x37
->> +#define  OC_STATUS_WARN(ch)				BIT(ch)
->> +
->> +#define MAX5970_REG_CHXEN				0x3b
->> +#define  CHXEN(ch)						(3 << (ch * 2))
->> +
->> +#define MAX5970_REG_LED_FLASH			0x43
->> +
->> +#define MAX_REGISTERS					0x49
->> +#define ADC_MASK						0x3FF
->> +
->> +struct max597x_data {
->> +	struct device *dev;
->> +	int irq;
->> +	int num_switches;
->> +	struct regmap *regmap;
->> +	/* Chip specific parameters needed by regulator & iio cells */
->> +	u32 irng[MAX5970_NUM_SWITCHES];
->> +	u32 mon_rng[MAX5970_NUM_SWITCHES];
->> +	u32 shunt_micro_ohms[MAX5970_NUM_SWITCHES];
->> +};
->> +
->> +#endif
-> 
->> \ No newline at end of file
-> 
-> ???
-> 
-Will clean up in next version.
+Signed-off-by: Maíra Canal <mairacanal@riseup.net>
+---
+ drivers/media/i2c/s5c73m3/s5c73m3-core.c | 95 ++++++++++--------------
+ drivers/media/i2c/s5c73m3/s5c73m3.h      |  9 +--
+ include/media/i2c/s5c73m3.h              | 15 +---
+ 3 files changed, 44 insertions(+), 75 deletions(-)
 
-Regards,
-Naresh
+diff --git a/drivers/media/i2c/s5c73m3/s5c73m3-core.c b/drivers/media/i2c/s5c73m3/s5c73m3-core.c
+index d96ba58ce1e5..77cba5f47364 100644
+--- a/drivers/media/i2c/s5c73m3/s5c73m3-core.c
++++ b/drivers/media/i2c/s5c73m3/s5c73m3-core.c
+@@ -10,12 +10,11 @@
+ #include <linux/clk.h>
+ #include <linux/delay.h>
+ #include <linux/firmware.h>
+-#include <linux/gpio.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/i2c.h>
+ #include <linux/init.h>
+ #include <linux/media.h>
+ #include <linux/module.h>
+-#include <linux/of_gpio.h>
+ #include <linux/of_graph.h>
+ #include <linux/regulator/consumer.h>
+ #include <linux/sizes.h>
+@@ -1347,22 +1346,26 @@ static int s5c73m3_oif_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
+ 	return 0;
+ }
+ 
+-static int s5c73m3_gpio_set_value(struct s5c73m3 *priv, int id, u32 val)
++static int s5c73m3_gpio_set_value(struct gpio_desc *gpio, int val)
+ {
+-	if (!gpio_is_valid(priv->gpio[id].gpio))
++	if (!gpio)
+ 		return 0;
+-	gpio_set_value(priv->gpio[id].gpio, !!val);
++	gpiod_set_value(gpio, !!val);
+ 	return 1;
+ }
+ 
+-static int s5c73m3_gpio_assert(struct s5c73m3 *priv, int id)
++static int s5c73m3_gpio_assert(struct gpio_desc *gpio)
+ {
+-	return s5c73m3_gpio_set_value(priv, id, priv->gpio[id].level);
++	int val = gpiod_get_value(gpio);
++
++	return s5c73m3_gpio_set_value(gpio, val);
+ }
+ 
+-static int s5c73m3_gpio_deassert(struct s5c73m3 *priv, int id)
++static int s5c73m3_gpio_deassert(struct gpio_desc *gpio)
+ {
+-	return s5c73m3_gpio_set_value(priv, id, !priv->gpio[id].level);
++	int val = gpiod_get_value(gpio);
++
++	return s5c73m3_gpio_set_value(gpio, !val);
+ }
+ 
+ static int __s5c73m3_power_on(struct s5c73m3 *state)
+@@ -1386,10 +1389,10 @@ static int __s5c73m3_power_on(struct s5c73m3 *state)
+ 	v4l2_dbg(1, s5c73m3_dbg, &state->oif_sd, "clock frequency: %ld\n",
+ 					clk_get_rate(state->clock));
+ 
+-	s5c73m3_gpio_deassert(state, STBY);
++	s5c73m3_gpio_deassert(state->gpio_stby);
+ 	usleep_range(100, 200);
+ 
+-	s5c73m3_gpio_deassert(state, RSET);
++	s5c73m3_gpio_deassert(state->gpio_reset);
+ 	usleep_range(50, 100);
+ 
+ 	return 0;
+@@ -1404,10 +1407,10 @@ static int __s5c73m3_power_off(struct s5c73m3 *state)
+ {
+ 	int i, ret;
+ 
+-	if (s5c73m3_gpio_assert(state, RSET))
++	if (s5c73m3_gpio_assert(state->gpio_reset))
+ 		usleep_range(10, 50);
+ 
+-	if (s5c73m3_gpio_assert(state, STBY))
++	if (s5c73m3_gpio_assert(state->gpio_stby))
+ 		usleep_range(100, 200);
+ 
+ 	clk_disable_unprepare(state->clock);
+@@ -1545,50 +1548,34 @@ static const struct v4l2_subdev_ops oif_subdev_ops = {
+ 
+ static int s5c73m3_configure_gpios(struct s5c73m3 *state)
+ {
+-	static const char * const gpio_names[] = {
+-		"S5C73M3_STBY", "S5C73M3_RST"
+-	};
+ 	struct i2c_client *c = state->i2c_client;
+-	struct s5c73m3_gpio *g = state->gpio;
+-	int ret, i;
++	struct device *dev = &c->dev;
++	struct device_node *np = dev->of_node;
+ 
+-	for (i = 0; i < GPIO_NUM; ++i) {
+-		unsigned int flags = GPIOF_DIR_OUT;
+-		if (g[i].level)
+-			flags |= GPIOF_INIT_HIGH;
+-		ret = devm_gpio_request_one(&c->dev, g[i].gpio, flags,
+-					    gpio_names[i]);
+-		if (ret) {
+-			v4l2_err(c, "failed to request gpio %s\n",
+-				 gpio_names[i]);
+-			return ret;
+-		}
++	state->gpio_stby = gpiod_get_from_of_node(np, "standby-gpios", 0, GPIOD_ASIS,
++			"S5C73M3_STBY");
++
++	if (IS_ERR(state->gpio_stby)) {
++		v4l2_err(c, "failed to request gpio S5C73M3_STBY");
++		return PTR_ERR(state->gpio_stby);
+ 	}
+-	return 0;
+-}
+ 
+-static int s5c73m3_parse_gpios(struct s5c73m3 *state)
+-{
+-	static const char * const prop_names[] = {
+-		"standby-gpios", "xshutdown-gpios",
+-	};
+-	struct device *dev = &state->i2c_client->dev;
+-	struct device_node *node = dev->of_node;
+-	int ret, i;
++	if (state->gpio_stby)
++		gpiod_direction_output(state->gpio_stby,
++				!gpiod_is_active_low(state->gpio_stby));
+ 
+-	for (i = 0; i < GPIO_NUM; ++i) {
+-		enum of_gpio_flags of_flags;
++	state->gpio_reset = gpiod_get_from_of_node(np, "xshutdown-gpios", 0, GPIOD_ASIS,
++			"S5C73M3_RST");
+ 
+-		ret = of_get_named_gpio_flags(node, prop_names[i],
+-					      0, &of_flags);
+-		if (ret < 0) {
+-			dev_err(dev, "failed to parse %s DT property\n",
+-				prop_names[i]);
+-			return -EINVAL;
+-		}
+-		state->gpio[i].gpio = ret;
+-		state->gpio[i].level = !(of_flags & OF_GPIO_ACTIVE_LOW);
++	if (IS_ERR(state->gpio_reset)) {
++		v4l2_err(c, "failed to request gpio S5C73M3_RST");
++		return PTR_ERR(state->gpio_reset);
+ 	}
++
++	if (state->gpio_reset)
++		gpiod_direction_output(state->gpio_reset,
++				!gpiod_is_active_low(state->gpio_reset));
++
+ 	return 0;
+ }
+ 
+@@ -1608,8 +1595,8 @@ static int s5c73m3_get_platform_data(struct s5c73m3 *state)
+ 		}
+ 
+ 		state->mclk_frequency = pdata->mclk_frequency;
+-		state->gpio[STBY] = pdata->gpio_stby;
+-		state->gpio[RSET] = pdata->gpio_reset;
++		state->gpio_stby = pdata->gpio_stby;
++		state->gpio_reset = pdata->gpio_reset;
+ 		return 0;
+ 	}
+ 
+@@ -1624,10 +1611,6 @@ static int s5c73m3_get_platform_data(struct s5c73m3 *state)
+ 					state->mclk_frequency);
+ 	}
+ 
+-	ret = s5c73m3_parse_gpios(state);
+-	if (ret < 0)
+-		return -EINVAL;
+-
+ 	node_ep = of_graph_get_next_endpoint(node, NULL);
+ 	if (!node_ep) {
+ 		dev_warn(dev, "no endpoint defined for node: %pOF\n", node);
+diff --git a/drivers/media/i2c/s5c73m3/s5c73m3.h b/drivers/media/i2c/s5c73m3/s5c73m3.h
+index c3fcfdd3ea66..f0056ae6e51a 100644
+--- a/drivers/media/i2c/s5c73m3/s5c73m3.h
++++ b/drivers/media/i2c/s5c73m3/s5c73m3.h
+@@ -351,12 +351,6 @@ struct s5c73m3_ctrls {
+ 	struct v4l2_ctrl *scene_mode;
+ };
+ 
+-enum s5c73m3_gpio_id {
+-	STBY,
+-	RSET,
+-	GPIO_NUM,
+-};
+-
+ enum s5c73m3_resolution_types {
+ 	RES_ISP,
+ 	RES_JPEG,
+@@ -383,7 +377,8 @@ struct s5c73m3 {
+ 	u32 i2c_read_address;
+ 
+ 	struct regulator_bulk_data supplies[S5C73M3_MAX_SUPPLIES];
+-	struct s5c73m3_gpio gpio[GPIO_NUM];
++	struct gpio_desc *gpio_stby;
++	struct gpio_desc *gpio_reset;
+ 
+ 	struct clk *clock;
+ 
+diff --git a/include/media/i2c/s5c73m3.h b/include/media/i2c/s5c73m3.h
+index a51f1025ba1c..caad855a8394 100644
+--- a/include/media/i2c/s5c73m3.h
++++ b/include/media/i2c/s5c73m3.h
+@@ -17,19 +17,10 @@
+ #ifndef MEDIA_S5C73M3__
+ #define MEDIA_S5C73M3__
+ 
++#include <linux/gpio/consumer.h>
+ #include <linux/videodev2.h>
+ #include <media/v4l2-mediabus.h>
+ 
+-/**
+- * struct s5c73m3_gpio - data structure describing a GPIO
+- * @gpio:  GPIO number
+- * @level: indicates active state of the @gpio
+- */
+-struct s5c73m3_gpio {
+-	int gpio;
+-	int level;
+-};
+-
+ /**
+  * struct s5c73m3_platform_data - s5c73m3 driver platform data
+  * @mclk_frequency: sensor's master clock frequency in Hz
+@@ -44,8 +35,8 @@ struct s5c73m3_gpio {
+ struct s5c73m3_platform_data {
+ 	unsigned long mclk_frequency;
+ 
+-	struct s5c73m3_gpio gpio_reset;
+-	struct s5c73m3_gpio gpio_stby;
++	struct gpio_desc *gpio_reset;
++	struct gpio_desc *gpio_stby;
+ 
+ 	enum v4l2_mbus_type bus_type;
+ 	u8 nlanes;
+-- 
+2.38.1
+
