@@ -2,164 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FE8362BB48
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:18:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5C3B62BB4D
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:18:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238938AbiKPLSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 06:18:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33726 "EHLO
+        id S239143AbiKPLSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 06:18:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237845AbiKPLRi (ORCPT
+        with ESMTP id S239097AbiKPLRs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 06:17:38 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C3D2ED56;
-        Wed, 16 Nov 2022 03:06:05 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 48532336F3;
-        Wed, 16 Nov 2022 11:06:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1668596764; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XH+WwbRJQ41jjX52JCMwciyjC/IToO3NGdpBZjwirKA=;
-        b=vXxZfM8SzWrMncwtQu8dwsdM7I9+mxNBsUUrabi+G/surBd/JeW/L7cEEE7YQyFsgZcImc
-        D9Isv35LGjeZ9nEkZ23bb+rzhjCi08gAjaFKsjKClxh7+qLiMLopXqJ+CUzkKR7xH7yxLM
-        vQr7sWPY+fAvVO/sESxAAfmG/FBuoPw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1668596764;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XH+WwbRJQ41jjX52JCMwciyjC/IToO3NGdpBZjwirKA=;
-        b=w9T+qm/fU+luAhmRTIv97xTItj/rvZ4ohnv0TQQV5Rj7z2XNhiZDarx17klBvJH8zbwBjS
-        TlsDeswKTpbmc9BA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 39C6313480;
-        Wed, 16 Nov 2022 11:06:04 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id IUYSDhzEdGMvYwAAMHmgww
-        (envelope-from <jack@suse.cz>); Wed, 16 Nov 2022 11:06:04 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id CBC73A0709; Wed, 16 Nov 2022 12:06:03 +0100 (CET)
-Date:   Wed, 16 Nov 2022 12:06:03 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Gabriel Krisman Bertazi <krisman@suse.de>
-Cc:     axboe@kernel.dk, mingo@redhat.com, peterz@infradead.org,
-        jack@suse.cz, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org, liusong@linux.alibaba.com,
-        chaitanyak@nvidia.com
-Subject: Re: [PATCH 2/3] wait: Return number of exclusive waiters awaken
-Message-ID: <20221116110603.6rndj2eei6mi6k33@quack3>
-References: <20221115224553.23594-1-krisman@suse.de>
- <20221115224553.23594-3-krisman@suse.de>
+        Wed, 16 Nov 2022 06:17:48 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7954B9A1
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 03:06:27 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id x102so10774651ede.0
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 03:06:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R5/N5LyBz+qKhDlrBFv0875oFJ3hH7vg4dj8YnmHYuQ=;
+        b=Eyfm9LAdzTXXfnF6NWjr2swz7ns/Z8SRnftpfOEIxvLoP0I9W9wyyFnmnfwLWs7AXm
+         fAJXTUrZtCjSnKOcZOnUmzXBY87gJCeHa+Wvsenaqp5Q60Ax19XilMT5wTQjIxhtlqqZ
+         f9y92MEqv5lpj+WYn060367m/SWJQtdsHes1sJ5W+4OZdV229sCU6ewX1offjuS2TtUW
+         P3kzENfg1e82Xu/qdcs13EYP0Q9I3O0Ix9Qm0fax4nlZnJc04yDhOWZkgITDULlPftsi
+         +LmPiQuc0STm46TMEZUMms/gifCU4utcnmriKnFUwrLn7Yq7R+axjEUMCJrb5OeI464D
+         Fnqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=R5/N5LyBz+qKhDlrBFv0875oFJ3hH7vg4dj8YnmHYuQ=;
+        b=1VR7g2yFe6fPYGQdI2a/360kMFoCKwy0zkCcou702rMe2S6gP+v3bKR320kust5AdX
+         ykhm2MzjOtQMmEGTH6E3c32oKA7Ot2aWjj1v35PsL2NlnBpjGz4MEs4OKdBST7nqNZqt
+         CEhw5+YmuV6Jj/B6aPY1BG+ECCw1HhUL9yeKafhq6B4WeVROyYGbwkVZmL0cQpNfjGKg
+         cHxg6LocJUN7AbtjoEO3+ZJtH0+OHSeJcU2zyqS4VJ+ruYrVoorOkBLzFwnj5QHiS+lX
+         J9u8TkB+tRMExn9qSwLayOBDcYOUdrtgv0EcYJqat0ls7QBOwg7EeUDo2dLWn6l41hmc
+         Yovw==
+X-Gm-Message-State: ANoB5pkHM3o0sZsEAedN51AymvD7XUNwgqzEpDG1t4OxVC7OKRf9jBos
+        /TWCjD29XXG/ph8vsXidQSI9UW69c5NheAv3
+X-Google-Smtp-Source: AA0mqf5OU9UWZUGRklx8nSQJtDU+t/03DGd/iu2VDa9tHl5/YLHJbGegy00xmMg3GF3EtpP/6uzM5w==
+X-Received: by 2002:aa7:d691:0:b0:468:74:9668 with SMTP id d17-20020aa7d691000000b0046800749668mr9311523edr.394.1668596786354;
+        Wed, 16 Nov 2022 03:06:26 -0800 (PST)
+Received: from [192.168.31.208] ([194.29.137.22])
+        by smtp.gmail.com with ESMTPSA id x16-20020a170906135000b0077f20a722dfsm6620030ejb.165.2022.11.16.03.06.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Nov 2022 03:06:25 -0800 (PST)
+Message-ID: <4d5daa59-37c8-6664-fb6e-6d0d58245664@linaro.org>
+Date:   Wed, 16 Nov 2022 12:06:19 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221115224553.23594-3-krisman@suse.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.2
+Subject: Re: [PATCH 03/10] arm64: dts: qcom: Add pm8010 pmic dtsi
+To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+References: <20221116103146.2556846-1-abel.vesa@linaro.org>
+ <20221116103146.2556846-4-abel.vesa@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221116103146.2556846-4-abel.vesa@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 15-11-22 17:45:52, Gabriel Krisman Bertazi wrote:
-> Sbitmap code will need to know how many waiters were actually woken for
-> its batched wakeups implementation.  Return the number of woken
-> exclusive waiters from __wake_up() to facilitate that.
+
+
+On 16/11/2022 11:31, Abel Vesa wrote:
+> From: Neil Armstrong <neil.armstrong@linaro.org>
 > 
-> Suggested-by: Jan Kara <jack@suse.cz>
-> Signed-off-by: Gabriel Krisman Bertazi <krisman@suse.de>
-
-Looks good. Feel free to add:
-
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
+> Add nodes for pm8010 in separate dtsi file.
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 > ---
->  include/linux/wait.h |  2 +-
->  kernel/sched/wait.c  | 18 +++++++++++-------
->  2 files changed, 12 insertions(+), 8 deletions(-)
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+>   arch/arm64/boot/dts/qcom/pm8010.dtsi | 84 ++++++++++++++++++++++++++++
+>   1 file changed, 84 insertions(+)
+>   create mode 100644 arch/arm64/boot/dts/qcom/pm8010.dtsi
 > 
-> diff --git a/include/linux/wait.h b/include/linux/wait.h
-> index 7f5a51aae0a7..a0307b516b09 100644
-> --- a/include/linux/wait.h
-> +++ b/include/linux/wait.h
-> @@ -209,7 +209,7 @@ __remove_wait_queue(struct wait_queue_head *wq_head, struct wait_queue_entry *wq
->  	list_del(&wq_entry->entry);
->  }
->  
-> -void __wake_up(struct wait_queue_head *wq_head, unsigned int mode, int nr, void *key);
-> +int __wake_up(struct wait_queue_head *wq_head, unsigned int mode, int nr, void *key);
->  void __wake_up_locked_key(struct wait_queue_head *wq_head, unsigned int mode, void *key);
->  void __wake_up_locked_key_bookmark(struct wait_queue_head *wq_head,
->  		unsigned int mode, void *key, wait_queue_entry_t *bookmark);
-> diff --git a/kernel/sched/wait.c b/kernel/sched/wait.c
-> index 9860bb9a847c..133b74730738 100644
-> --- a/kernel/sched/wait.c
-> +++ b/kernel/sched/wait.c
-> @@ -121,11 +121,12 @@ static int __wake_up_common(struct wait_queue_head *wq_head, unsigned int mode,
->  	return nr_exclusive;
->  }
->  
-> -static void __wake_up_common_lock(struct wait_queue_head *wq_head, unsigned int mode,
-> +static int __wake_up_common_lock(struct wait_queue_head *wq_head, unsigned int mode,
->  			int nr_exclusive, int wake_flags, void *key)
->  {
->  	unsigned long flags;
->  	wait_queue_entry_t bookmark;
-> +	int remaining = nr_exclusive;
->  
->  	bookmark.flags = 0;
->  	bookmark.private = NULL;
-> @@ -134,10 +135,12 @@ static void __wake_up_common_lock(struct wait_queue_head *wq_head, unsigned int
->  
->  	do {
->  		spin_lock_irqsave(&wq_head->lock, flags);
-> -		nr_exclusive = __wake_up_common(wq_head, mode, nr_exclusive,
-> +		remaining = __wake_up_common(wq_head, mode, remaining,
->  						wake_flags, key, &bookmark);
->  		spin_unlock_irqrestore(&wq_head->lock, flags);
->  	} while (bookmark.flags & WQ_FLAG_BOOKMARK);
+> diff --git a/arch/arm64/boot/dts/qcom/pm8010.dtsi b/arch/arm64/boot/dts/qcom/pm8010.dtsi
+> new file mode 100644
+> index 000000000000..0ea641e12209
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/pm8010.dtsi
+> @@ -0,0 +1,84 @@
+> +// SPDX-License-Identifier: BSD-3-Clause
+> +/*
+> + * Copyright (c) 2022, Linaro Limited
+> + */
 > +
-> +	return nr_exclusive - remaining;
->  }
->  
->  /**
-> @@ -147,13 +150,14 @@ static void __wake_up_common_lock(struct wait_queue_head *wq_head, unsigned int
->   * @nr_exclusive: how many wake-one or wake-many threads to wake up
->   * @key: is directly passed to the wakeup function
->   *
-> - * If this function wakes up a task, it executes a full memory barrier before
-> - * accessing the task state.
-> + * If this function wakes up a task, it executes a full memory barrier
-> + * before accessing the task state.  Returns the number of exclusive
-> + * tasks that were awaken.
->   */
-> -void __wake_up(struct wait_queue_head *wq_head, unsigned int mode,
-> -			int nr_exclusive, void *key)
-> +int __wake_up(struct wait_queue_head *wq_head, unsigned int mode,
-> +	      int nr_exclusive, void *key)
->  {
-> -	__wake_up_common_lock(wq_head, mode, nr_exclusive, 0, key);
-> +	return __wake_up_common_lock(wq_head, mode, nr_exclusive, 0, key);
->  }
->  EXPORT_SYMBOL(__wake_up);
->  
-> -- 
-> 2.35.3
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+> +#include <dt-bindings/interrupt-controller/irq.h>
+> +#include <dt-bindings/spmi/spmi.h>
+> +
+> +/ {
+> +	thermal-zones {
+> +		pm8010-m-thermal {
+> +			polling-delay-passive = <100>;
+> +			polling-delay = <0>;
+> +
+> +			thermal-sensors = <&pm8010_m_temp_alarm>;
+> +
+> +			trips {
+> +				trip0 {
+> +					temperature = <95000>;
+> +					hysteresis = <0>;
+> +					type = "passive";
+> +				};
+> +
+> +				trip1 {
+> +					temperature = <115000>;
+> +					hysteresis = <0>;
+> +					type = "hot";
+> +				};
+> +			};
+> +		};
+> +
+> +		pm8010-n-thermal {
+> +			polling-delay-passive = <100>;
+> +			polling-delay = <0>;
+> +
+> +			thermal-sensors = <&pm8010_n_temp_alarm>;
+> +
+> +			trips {
+> +				trip0 {
+> +					temperature = <95000>;
+> +					hysteresis = <0>;
+> +					type = "passive";
+> +				};
+> +
+> +				trip1 {
+> +					temperature = <115000>;
+> +					hysteresis = <0>;
+> +					type = "hot";
+> +				};
+> +			};
+> +		};
+> +	};
+> +};
+> +
+> +
+> +&spmi_bus {
+> +	pm8010_m: pmic@c {
+> +		compatible = "qcom,pm8010", "qcom,spmi-pmic";
+> +		reg = <0xc SPMI_USID>;
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		pm8010_m_temp_alarm: temp-alarm@2400 {
+> +			compatible = "qcom,spmi-temp-alarm";
+> +			reg = <0x2400>;
+> +			interrupts = <0xc 0x24 0x0 IRQ_TYPE_EDGE_BOTH>;
+> +			#thermal-sensor-cells = <0>;
+> +		};
+> +	};
+> +
+> +	pm8010_n: pmic@d {
+> +		compatible = "qcom,pm8010", "qcom,spmi-pmic";
+> +		reg = <0xd SPMI_USID>;
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		pm8010_n_temp_alarm: temp-alarm@2400 {
+> +			compatible = "qcom,spmi-temp-alarm";
+> +			reg = <0x2400>;
+> +			interrupts = <0xd 0x24 0x0 IRQ_TYPE_EDGE_BOTH>;
+> +			#thermal-sensor-cells = <0>;
+> +		};
+> +	};
+> +};
