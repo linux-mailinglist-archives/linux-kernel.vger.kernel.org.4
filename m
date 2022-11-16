@@ -2,114 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C06B62B6DE
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:47:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B7FB62B6E0
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:48:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233406AbiKPJrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 04:47:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33506 "EHLO
+        id S230128AbiKPJsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 04:48:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231431AbiKPJrn (ORCPT
+        with ESMTP id S233072AbiKPJsI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 04:47:43 -0500
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B651C1A05E
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:47:41 -0800 (PST)
-Received: from pps.filterd (m0134425.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AG827UW020471;
-        Wed, 16 Nov 2022 09:47:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id; s=pps0720;
- bh=ycJwqCMbkamNm9OjhgF+aA5+LBPYf0FftuKwdKDW+8Y=;
- b=HIly/AYQFdBjy7pEixrIbK2eNocY2RfamWUNqP1MfyyFFAi4xgcymRHiWDUBdhbtCXtG
- cV9hrPI4T+6M1sjFxv/iewAHlm8LWtikYR9CLfSKio37XCXjHm6+ZlOu5DvWbT909DYT
- mcZMPPtqOc3ng/VkEr7JUhfbFT5wQ8cb+/jKql3uLg2IOrZCD7v0IzF0m153tjNytrKw
- DRNifca1e+ludFGASkqY8NjV5GsT+GKs9pPMqF6bFnRFuJ/pPs96pLR+jIWdoQ1tftmC
- eNDMn/k0uIFLtI7rWcfpDmwMZcU5KA/EH+ZGfKySQz1QN86c3CJJ6kwALw9KOUp81DNf tw== 
-Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3kvv0bh07g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Nov 2022 09:47:31 +0000
-Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by p1lg14879.it.hpe.com (Postfix) with ESMTPS id 384C24B5C9;
-        Wed, 16 Nov 2022 09:47:30 +0000 (UTC)
-Received: from blofly.os1.tw (unknown [16.231.227.36])
-        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTP id E16FD80328F;
-        Wed, 16 Nov 2022 09:47:25 +0000 (UTC)
-From:   matt.hsiao@hpe.com
-To:     linux-kernel@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org, arnd@arndb.de,
-        christophe.jaillet@wanadoo.fr, gustavoars@kernel.org,
-        nishadkamdar@gmail.com, torvalds@linux-foundation.org,
-        dhaval.experiance@gmail.com, viro@zeniv.linux.org.uk,
-        arvind.yadav.cs@gmail.com, standby24x7@gmail.com,
-        wfp5p@virginia.edu, jslaby@suse.cz, prarit@redhat.com,
-        tj@kernel.org, adobriyan@gmail.com, Matt Hsiao <matt.hsiao@hpe.com>
-Subject: [PATCH] misc: hpilo: relicense HPE iLO driver as Dual MIT/GPL
-Date:   Wed, 16 Nov 2022 17:47:12 +0800
-Message-Id: <20221116094712.14312-1-matt.hsiao@hpe.com>
-X-Mailer: git-send-email 2.16.6
-X-Proofpoint-GUID: 5MLy5IOjS4qFNt-SDgmSeOXOObkfJktT
-X-Proofpoint-ORIG-GUID: 5MLy5IOjS4qFNt-SDgmSeOXOObkfJktT
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-15_08,2022-11-15_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=928
- impostorscore=0 clxscore=1011 lowpriorityscore=0 phishscore=0 mlxscore=0
- bulkscore=0 adultscore=0 spamscore=0 suspectscore=0 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211160068
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 16 Nov 2022 04:48:08 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A8A616E
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:48:01 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id 205so5823358ybe.7
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:48:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=csie-ntu-edu-tw.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=mTORVN+vb4ThEpVx7AxMit72NMXnsKSRAUOh1o/a8os=;
+        b=iu183/XFyyYXhzOM/zCv5oVLc0dNPc63N8nAumxBq/E9DEFMaXcMVFjPQ8RwSk95QN
+         qPwzLXSSx8g02xKSE2HH+0qsqSQCjwfSCzXWlPyjEt/GMuVRrUs4M66m6Cu0X5AQXy4f
+         grx1TUGxOlGHdm36mCX0F436ljRJmlrugQFJE/7SgB9QyklFPlaZwbUq3IlCTAOCpwd/
+         F26ekdEMZKT7QmX+J3Gkt/LyfFZI6fOtWtkqbWHCQT2Kj2v9bB/AlCunfzrwmdXqAIg4
+         Mej0KEH0pinOfwJGOzYHS5tFfxdnFPQchC2uhzzBaANzkXA5ZF/2zY6zPgpj5XzyFdX0
+         cc7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mTORVN+vb4ThEpVx7AxMit72NMXnsKSRAUOh1o/a8os=;
+        b=SJvyG0PV2hAuiHXay0cBbRQ0D5d0maErNGPvo3dlZMtg+VNTZumDk2+LMMmwTVBb25
+         eGj4mmPKTLhgZ0tOgpW/UMOZTQPIVoMC3Wt/9JLFBkiYsIof43sQlBl9nwMMfbX2xiEJ
+         /G2z1jL8BGRDSHmbhot/Q61RHSB7e7QVc9d/UjqtDIgfURPLqf/4QzWEtCiQr8N7DLJQ
+         UKzSRxxEzl8rMLXjndxNMo907FJTkxmjHqoGpkeOe+ydNayPZwLTN0jyZmyq63Uvkdc4
+         3RIiIpmrgH7P/PA702Buxtt4fNAUg1aygKjzONl/5WKqJi45gg/C0WyF7VXWxsWFs3xR
+         Ru5w==
+X-Gm-Message-State: ANoB5pmaOI0Q7rPDRmiKpkW2llom9CaBbGUaDwJu+XS0ofZQYx2Jsrmf
+        +XmVgfVuv1f0RWFWmX4kSBkNQcjQb/l+ThXzzfmQ08k+zzW5OKq8yk3P5hxynmnXtTjsjS4M0SD
+        UQCPd9nsCEBjz8DOaBcNfTG0RjXq//WPccNxvxO4s3uKc4BBMlER0m9qzKGmTR3HDGmkiF/Ek+A
+        XQhDPGBPyV2/JVhsfHOUY4DUcsYEb0TqOHogfZkITE25Q=
+X-Google-Smtp-Source: AA0mqf5LPJHOIlXR/n5HkFhpXmP9htXFS+/vEYllOxnCYgoAQzNsF/+mL8haFdY/qJv+WVKacahqx8L+Nyvl6l+bD2g=
+X-Received: by 2002:a25:7757:0:b0:6dd:ff71:f26c with SMTP id
+ s84-20020a257757000000b006ddff71f26cmr20724110ybc.120.1668592081122; Wed, 16
+ Nov 2022 01:48:01 -0800 (PST)
+MIME-Version: 1.0
+References: <20221103053228.961591-1-r09922117@csie.ntu.edu.tw> <86fseppiqt.wl-maz@kernel.org>
+In-Reply-To: <86fseppiqt.wl-maz@kernel.org>
+From:   =?UTF-8?B?56ug55GL6bqf?= <r09922117@csie.ntu.edu.tw>
+Date:   Wed, 16 Nov 2022 17:48:00 +0800
+Message-ID: <CAM+=qvOKDeXcaxBUh9aAGbcQaLiiur=jui_EgwNzksopik_LzA@mail.gmail.com>
+Subject: Re: [PATCH] KVM: arm64: Update comment of create_hyp_mappings
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     james.morse@arm.com, alexandru.elisei@arm.com,
+        suzuki.poulose@arm.com, oliver.upton@linux.dev,
+        catalin.marinas@arm.com, will@kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Gm-Spam: 0
+X-Gm-Phishy: 0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SPF_TEMPERROR
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matt Hsiao <matt.hsiao@hpe.com>
+On Sat, Nov 12, 2022 at 12:18 AM Marc Zyngier <maz@kernel.org> wrote:
+> My problem with this comment is that neither va_mask, tag_val, nor
+> tag_lsb mean anything in this context. All this is purely internal to
+> kvm_compute_layout(), and is unnecessary here.
+>
+> I'd rather you have something along the lines of:
+>
+> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+> index 60ee3d9f01f8..6d04818a1a5b 100644
+> --- a/arch/arm64/kvm/mmu.c
+> +++ b/arch/arm64/kvm/mmu.c
+> @@ -460,7 +460,7 @@ void kvm_unshare_hyp(void *from, void *to)
+>   * @prot:      The protection to be applied to this range
+>   *
+>   * The same virtual address as the kernel virtual address is also used
+> - * in Hyp-mode mapping (modulo HYP_PAGE_OFFSET) to the same underlying
+> + * in Hyp-mode mapping (modulo a random offset) to the same underlying
+>   * physical pages.
+>   */
+>  int create_hyp_mappings(void *from, void *to, enum kvm_pgtable_prot prot)
+>
+> Whoever is interested in understanding the generation of the offset
+> can follow kern_hyp_va().
 
-Currently, the hpilo driver is licensed as GPL. To run OpenBSD on HPE
-servers with BMC (HPE iLO) functionality, a dual MIT/GPL license is needed
-for porting the hpilo driver to OpenBSD.
+Yes I agree, thanks for the advice.
+I'll update the patch.
 
-Signed-off-by: Matt Hsiao <matt.hsiao@hpe.com>
----
-
-Hello contributors in the CC list,
-
-Thanks for your contributions to the hpilo driver. Please kindly review
-the license change and hopefully you would agree and approve it. Thanks!
-
- drivers/misc/hpilo.c | 2 +-
- drivers/misc/hpilo.h | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/misc/hpilo.c b/drivers/misc/hpilo.c
-index 8d00df9243c4..6a06b6485950 100644
---- a/drivers/misc/hpilo.c
-+++ b/drivers/misc/hpilo.c
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0
-+// SPDX-License-Identifier: GPL-2.0 OR MIT
- /*
-  * Driver for the HP iLO management processor.
-  *
-diff --git a/drivers/misc/hpilo.h b/drivers/misc/hpilo.h
-index d57c34680b09..581dfd7834b8 100644
---- a/drivers/misc/hpilo.h
-+++ b/drivers/misc/hpilo.h
-@@ -1,4 +1,4 @@
--/* SPDX-License-Identifier: GPL-2.0 */
-+/* SPDX-License-Identifier: GPL-2.0 OR MIT */
- /*
-  * linux/drivers/char/hpilo.h
-  *
--- 
-2.16.6
-
+Wei-Lin Chang
