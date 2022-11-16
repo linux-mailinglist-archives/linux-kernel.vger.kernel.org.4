@@ -2,47 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C51FC62B10B
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 03:09:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42C6D62B09D
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 02:38:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231686AbiKPCJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 21:09:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38702 "EHLO
+        id S229509AbiKPBia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 20:38:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231465AbiKPCJs (ORCPT
+        with ESMTP id S229561AbiKPBiY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 21:09:48 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9012913F;
-        Tue, 15 Nov 2022 18:09:47 -0800 (PST)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NBmh65L1DzRpJ7;
-        Wed, 16 Nov 2022 10:09:26 +0800 (CST)
-Received: from kwepemm600005.china.huawei.com (7.193.23.191) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 16 Nov 2022 10:09:45 +0800
-Received: from ubuntu1804.huawei.com (10.67.175.30) by
- kwepemm600005.china.huawei.com (7.193.23.191) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 16 Nov 2022 10:09:45 +0800
-From:   Hui Tang <tanghui20@huawei.com>
-To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <mw@semihalf.com>, <linux@armlinux.org.uk>, <leon@kernel.org>,
-        <andrew@lunn.ch>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Tue, 15 Nov 2022 20:38:24 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB942AC;
+        Tue, 15 Nov 2022 17:38:23 -0800 (PST)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NBlzr50s2z15MPB;
+        Wed, 16 Nov 2022 09:38:00 +0800 (CST)
+Received: from huawei.com (10.67.174.191) by canpemm500009.china.huawei.com
+ (7.192.105.203) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 16 Nov
+ 2022 09:38:21 +0800
+From:   Li Hua <hucool.lihua@huawei.com>
+To:     <linux@roeck-us.net>, <wim@linux-watchdog.org>
+CC:     <hucool.lihua@huawei.com>, <linux-kernel@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>, <weiyongjun1@huawei.com>,
         <yusongping@huawei.com>
-Subject: [PATCH net v3] net: mvpp2: fix possible invalid pointer dereference
-Date:   Wed, 16 Nov 2022 10:06:17 +0800
-Message-ID: <20221116020617.137247-1-tanghui20@huawei.com>
+Subject: [PATCH v2] watchdog: pcwd_usb: Fix attempting to access uninitialized memory
+Date:   Wed, 16 Nov 2022 10:07:06 +0800
+Message-ID: <20221116020706.70847-1-hucool.lihua@huawei.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <Y3O1V4FAACa9Ed9S@lunn.ch>
-References: <Y3O1V4FAACa9Ed9S@lunn.ch>
+In-Reply-To: <20221115134213.GD4189373@roeck-us.net>
+References: <20221115134213.GD4189373@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.30]
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.174.191]
 X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600005.china.huawei.com (7.193.23.191)
+ canpemm500009.china.huawei.com (7.192.105.203)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -52,44 +48,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It will cause invalid pointer dereference to priv->cm3_base behind,
-if PTR_ERR(priv->cm3_base) in mvpp2_get_sram().
+The stack variable msb and lsb may be used uninitialized in function
+usb_pcwd_get_temperature and usb_pcwd_get_timeleft when usb card no response.
 
-Fixes: a59d354208a7 ("net: mvpp2: enable global flow control")
-Signed-off-by: Hui Tang <tanghui20@huawei.com>
----
-v1 -> v2: patch title include target
-v2 -> v3: keep priv->cm3_base NULL if devm_ioremap_resource() failed
----
- drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+The build waring is:
+drivers/watchdog/pcwd_usb.c:336:22: error: ‘lsb’ is used uninitialized in this function [-Werror=uninitialized]
+  *temperature = (lsb * 9 / 5) + 32;
+                  ~~~~^~~
+drivers/watchdog/pcwd_usb.c:328:21: note: ‘lsb’ was declared here
+  unsigned char msb, lsb;
+                     ^~~
+cc1: all warnings being treated as errors
+scripts/Makefile.build:250: recipe for target 'drivers/watchdog/pcwd_usb.o' failed
+make[3]: *** [drivers/watchdog/pcwd_usb.o] Error 1
 
-diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-index d98f7e9a480e..9c3fbb153b5b 100644
---- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-+++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-@@ -7349,6 +7349,7 @@ static int mvpp2_get_sram(struct platform_device *pdev,
- 			  struct mvpp2 *priv)
+Fixes: b7e04f8c61a4 ("mv watchdog tree under drivers")
+Signed-off-by: Li Hua <hucool.lihua@huawei.com>
+---
+v1 -> v2: just initialize lsb and msb with 0, but returning -EFAULT
+---
+ drivers/watchdog/pcwd_usb.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/watchdog/pcwd_usb.c b/drivers/watchdog/pcwd_usb.c
+index 1bdaf17c1d38..8202f0a6b093 100644
+--- a/drivers/watchdog/pcwd_usb.c
++++ b/drivers/watchdog/pcwd_usb.c
+@@ -325,7 +325,8 @@ static int usb_pcwd_set_heartbeat(struct usb_pcwd_private *usb_pcwd, int t)
+ static int usb_pcwd_get_temperature(struct usb_pcwd_private *usb_pcwd,
+ 							int *temperature)
  {
- 	struct resource *res;
-+	void __iomem *base;
+-	unsigned char msb, lsb;
++	unsigned char msb = 0x00;
++	unsigned char lsb = 0x00;
  
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 2);
- 	if (!res) {
-@@ -7359,9 +7360,11 @@ static int mvpp2_get_sram(struct platform_device *pdev,
- 		return 0;
- 	}
+ 	usb_pcwd_send_command(usb_pcwd, CMD_READ_TEMP, &msb, &lsb);
  
--	priv->cm3_base = devm_ioremap_resource(&pdev->dev, res);
-+	base = devm_ioremap_resource(&pdev->dev, res);
-+	if (!IS_ERR(priv->cm3_base))
-+		priv->cm3_base = base;
+@@ -341,7 +342,8 @@ static int usb_pcwd_get_temperature(struct usb_pcwd_private *usb_pcwd,
+ static int usb_pcwd_get_timeleft(struct usb_pcwd_private *usb_pcwd,
+ 								int *time_left)
+ {
+-	unsigned char msb, lsb;
++	unsigned char msb = 0x00;
++	unsigned char lsb = 0x00;
  
--	return PTR_ERR_OR_ZERO(priv->cm3_base);
-+	return PTR_ERR_OR_ZERO(base);
- }
- 
- static int mvpp2_probe(struct platform_device *pdev)
+ 	/* Read the time that's left before rebooting */
+ 	/* Note: if the board is not yet armed then we will read 0xFFFF */
 -- 
 2.17.1
 
