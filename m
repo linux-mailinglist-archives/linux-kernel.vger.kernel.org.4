@@ -2,87 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E8DE62C981
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 21:05:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED1F562C9A2
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 21:10:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231565AbiKPUE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 15:04:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36372 "EHLO
+        id S233200AbiKPUKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 15:10:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234297AbiKPUEi (ORCPT
+        with ESMTP id S232804AbiKPUKR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 15:04:38 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A463663C2
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 12:04:34 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id b131so21630697yba.11
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 12:04:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=PSKQyCay4BBogRpmQsUSaoxdrcqQ8CI1eEM5yI2MZYA=;
-        b=TGxi2qoKU+O5Kf8x39Y0vpnERSqdiODPn3n6IblXD89ESRoR88nKxACFftILuVafLV
-         a1eWlSBVq9ZhGn2oD/QIYWoyoc5zEEacySXCCpNdmXP5eHxVJVia1N5B16hAxmULDWYF
-         WVUOuIHfN5dPoQy9iIT/DAfrC7xKFg3wZ6iFpwiK9CQA0ArBOGAjt3ur4lCrU4BQFnA8
-         Uu1APb8vFUvV/kHr3VaYp+znz9zTrqVXEKwIrdFFZfxeDwFND+WBLX/cWOxXkzcHVQ7I
-         n9skPNGueq70oONSIUCSxtwUDsKQyvD4wEr2xGKm99xy2Oc/BpzGlG9SLVhC800rzmiG
-         QWNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PSKQyCay4BBogRpmQsUSaoxdrcqQ8CI1eEM5yI2MZYA=;
-        b=pi+dho/S5AqIaE/wcGyPcIy7H8U2W91eYpGaSflw/WvU8OzVM982fvArXkFgRsY52K
-         RwufnBU+Csg2kEhFAO1JitNfZ8ucFwFzSZw1ndmPKHn17BNBRE6qSPlUv0TjFIFFhU+i
-         a8t0DmzY+A8NHqDGoFLiDLXSHWR/4+ZtEn2P1R6AIARGAg1AO1lSQLODGLTlHBo1Co0Y
-         h9ZARKz4Zl3YlLfUl/mON8kUaNY6ZRG2CCGXKR3lDunlQ5OgK8D9HzBumxAUsobJevFd
-         Ei9taBM9CKjmsZAsd4HN0J7c93v65Vi2XxLleyje8eqJgk+hHXUGcIgckIfsB2elk6BN
-         +uvw==
-X-Gm-Message-State: ANoB5pnrkZTfrZAHiwNUqPE21+q6yVlxMYncxnIxDN4h7u0+q9gcPSJQ
-        fY2D0ebupp+LX6yLPMrrWXRSiZoRlxJ3RiYJZEA=
-X-Google-Smtp-Source: AA0mqf7JMZj7Yoq1mO618KFhnfeVpb2kxVsYpbT1hNk+/yO5E4ZsiWjSqlBd5dVJaJYO01tPmpPIfGF50QysE5UhIx8=
-X-Received: by 2002:a25:d60e:0:b0:6cb:16d0:1ae1 with SMTP id
- n14-20020a25d60e000000b006cb16d01ae1mr22524009ybg.581.1668629073696; Wed, 16
- Nov 2022 12:04:33 -0800 (PST)
+        Wed, 16 Nov 2022 15:10:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C146314B;
+        Wed, 16 Nov 2022 12:10:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C8BD61F7E;
+        Wed, 16 Nov 2022 20:10:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61803C433D6;
+        Wed, 16 Nov 2022 20:10:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668629413;
+        bh=WyIRbhkov3S53GoGHspADdJx6JBTh0gwM3r9YQo7aoU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=AALtFw3qTqrwnXfBdZ8sJgymnC1ZAeT7DfbUukgZyWAeu1+4BKEutdV/u8sr64/0/
+         H5SFSR+ZAgjnSnPIyIDJ9xBMfc4VWhlqYsowtn/jsVcd/CKHE4wkN4/yL7XbBDZO96
+         mXNDZl1cLsDeupRiVj99lOkBUvbqztAYxFi6orIcFVX8LtdqeFjHEjDON9VatlMeGx
+         k6CUVkPpwvwoH55yehVPREEQxjrmMI4NdODniCKpJZOh0lX7zYBCCg6nzrwOKLtXVH
+         OvlqjdW38ya6B8VkWJuIw+fXTotGXm3LoEoPLB8JQTcQK6VGcnWYx6Y+9iLxlRNlJO
+         QWiW608QJPrkw==
+Date:   Wed, 16 Nov 2022 14:10:11 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
+        Allen Hubbe <allenbh@gmail.com>,
+        "Ahmed S. Darwish" <darwi@linutronix.de>,
+        Reinette Chatre <reinette.chatre@intel.com>
+Subject: Re: [patch 10/33] PCI/MSI: Split __pci_write_msi_msg()
+Message-ID: <20221116201011.GA1133404@bhelgaas>
 MIME-Version: 1.0
-References: <20221115212546.7154-1-cyan@0x00a1e9.dev>
-In-Reply-To: <20221115212546.7154-1-cyan@0x00a1e9.dev>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Wed, 16 Nov 2022 21:04:22 +0100
-Message-ID: <CANiq72nJ8OutiA48zzXkZUvfGFjEWazPOgzXtqV2-J5HnDWx=w@mail.gmail.com>
-Subject: Re: [PATCH v2] scripts/kallsyms.c Make the comment up-to-date with
- current implementation
-To:     Yuma Ueda <cyan@0x00a1e9.dev>
-Cc:     linux-kernel@vger.kernel.org, keescook@chromium.org,
-        gregkh@linuxfoundation.org, ojeda@kernel.org, boqun.feng@gmail.com,
-        masahiroy@kernel.org, samitolvanen@google.com, ytcoode@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221111135205.836259395@linutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 10:26 PM Yuma Ueda <cyan@0x00a1e9.dev> wrote:
->
-> The comment in scripts/kallsyms.c describing the usage of
-> scripts/kallsyms does not reflect the latest implementation.
-> Fix the comment to be up-to-date with the current implementation.
+On Fri, Nov 11, 2022 at 02:58:27PM +0100, Thomas Gleixner wrote:
+> The upcoming per device MSI domains will create different domains for MSI
+> and MSI-X. Split the write message function into MSI and MSI-X helpers so
+> they can be used by those new domain functions seperately.
+> 
+> Signed-off-by: Ahmed S. Darwish <darwi@linutronix.de>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 
-It may be a good idea to say in the commit message that this is now
-equivalent to what the `usage()` function prints (and possibly change
-`scripts/kallsyms` to just `kallsyms` to make it exactly equal). In
-fact, we could replace the comment with "See usage() function" to
-avoid further desyncs... But that is a different patch :)
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>
 
-Also, I am not sure we want to use tabs on the comment -- the rest of
-it uses spaces.
-
-Cheers,
-Miguel
+> ---
+>  drivers/pci/msi/msi.c |  104 +++++++++++++++++++++++++-------------------------
+>  1 file changed, 54 insertions(+), 50 deletions(-)
+> 
+> --- a/drivers/pci/msi/msi.c
+> +++ b/drivers/pci/msi/msi.c
+> @@ -180,6 +180,58 @@ void __pci_read_msi_msg(struct msi_desc
+>  	}
+>  }
+>  
+> +static inline void pci_write_msg_msi(struct pci_dev *dev, struct msi_desc *desc,
+> +				     struct msi_msg *msg)
+> +{
+> +	int pos = dev->msi_cap;
+> +	u16 msgctl;
+> +
+> +	pci_read_config_word(dev, pos + PCI_MSI_FLAGS, &msgctl);
+> +	msgctl &= ~PCI_MSI_FLAGS_QSIZE;
+> +	msgctl |= desc->pci.msi_attrib.multiple << 4;
+> +	pci_write_config_word(dev, pos + PCI_MSI_FLAGS, msgctl);
+> +
+> +	pci_write_config_dword(dev, pos + PCI_MSI_ADDRESS_LO, msg->address_lo);
+> +	if (desc->pci.msi_attrib.is_64) {
+> +		pci_write_config_dword(dev, pos + PCI_MSI_ADDRESS_HI,  msg->address_hi);
+> +		pci_write_config_word(dev, pos + PCI_MSI_DATA_64, msg->data);
+> +	} else {
+> +		pci_write_config_word(dev, pos + PCI_MSI_DATA_32, msg->data);
+> +	}
+> +	/* Ensure that the writes are visible in the device */
+> +	pci_read_config_word(dev, pos + PCI_MSI_FLAGS, &msgctl);
+> +}
+> +
+> +static inline void pci_write_msg_msix(struct msi_desc *desc, struct msi_msg *msg)
+> +{
+> +	void __iomem *base = pci_msix_desc_addr(desc);
+> +	u32 ctrl = desc->pci.msix_ctrl;
+> +	bool unmasked = !(ctrl & PCI_MSIX_ENTRY_CTRL_MASKBIT);
+> +
+> +	if (desc->pci.msi_attrib.is_virtual)
+> +		return;
+> +	/*
+> +	 * The specification mandates that the entry is masked
+> +	 * when the message is modified:
+> +	 *
+> +	 * "If software changes the Address or Data value of an
+> +	 * entry while the entry is unmasked, the result is
+> +	 * undefined."
+> +	 */
+> +	if (unmasked)
+> +		pci_msix_write_vector_ctrl(desc, ctrl | PCI_MSIX_ENTRY_CTRL_MASKBIT);
+> +
+> +	writel(msg->address_lo, base + PCI_MSIX_ENTRY_LOWER_ADDR);
+> +	writel(msg->address_hi, base + PCI_MSIX_ENTRY_UPPER_ADDR);
+> +	writel(msg->data, base + PCI_MSIX_ENTRY_DATA);
+> +
+> +	if (unmasked)
+> +		pci_msix_write_vector_ctrl(desc, ctrl);
+> +
+> +	/* Ensure that the writes are visible in the device */
+> +	readl(base + PCI_MSIX_ENTRY_DATA);
+> +}
+> +
+>  void __pci_write_msi_msg(struct msi_desc *entry, struct msi_msg *msg)
+>  {
+>  	struct pci_dev *dev = msi_desc_to_pci_dev(entry);
+> @@ -187,63 +239,15 @@ void __pci_write_msi_msg(struct msi_desc
+>  	if (dev->current_state != PCI_D0 || pci_dev_is_disconnected(dev)) {
+>  		/* Don't touch the hardware now */
+>  	} else if (entry->pci.msi_attrib.is_msix) {
+> -		void __iomem *base = pci_msix_desc_addr(entry);
+> -		u32 ctrl = entry->pci.msix_ctrl;
+> -		bool unmasked = !(ctrl & PCI_MSIX_ENTRY_CTRL_MASKBIT);
+> -
+> -		if (entry->pci.msi_attrib.is_virtual)
+> -			goto skip;
+> -
+> -		/*
+> -		 * The specification mandates that the entry is masked
+> -		 * when the message is modified:
+> -		 *
+> -		 * "If software changes the Address or Data value of an
+> -		 * entry while the entry is unmasked, the result is
+> -		 * undefined."
+> -		 */
+> -		if (unmasked)
+> -			pci_msix_write_vector_ctrl(entry, ctrl | PCI_MSIX_ENTRY_CTRL_MASKBIT);
+> -
+> -		writel(msg->address_lo, base + PCI_MSIX_ENTRY_LOWER_ADDR);
+> -		writel(msg->address_hi, base + PCI_MSIX_ENTRY_UPPER_ADDR);
+> -		writel(msg->data, base + PCI_MSIX_ENTRY_DATA);
+> -
+> -		if (unmasked)
+> -			pci_msix_write_vector_ctrl(entry, ctrl);
+> -
+> -		/* Ensure that the writes are visible in the device */
+> -		readl(base + PCI_MSIX_ENTRY_DATA);
+> +		pci_write_msg_msix(entry, msg);
+>  	} else {
+> -		int pos = dev->msi_cap;
+> -		u16 msgctl;
+> -
+> -		pci_read_config_word(dev, pos + PCI_MSI_FLAGS, &msgctl);
+> -		msgctl &= ~PCI_MSI_FLAGS_QSIZE;
+> -		msgctl |= entry->pci.msi_attrib.multiple << 4;
+> -		pci_write_config_word(dev, pos + PCI_MSI_FLAGS, msgctl);
+> -
+> -		pci_write_config_dword(dev, pos + PCI_MSI_ADDRESS_LO,
+> -				       msg->address_lo);
+> -		if (entry->pci.msi_attrib.is_64) {
+> -			pci_write_config_dword(dev, pos + PCI_MSI_ADDRESS_HI,
+> -					       msg->address_hi);
+> -			pci_write_config_word(dev, pos + PCI_MSI_DATA_64,
+> -					      msg->data);
+> -		} else {
+> -			pci_write_config_word(dev, pos + PCI_MSI_DATA_32,
+> -					      msg->data);
+> -		}
+> -		/* Ensure that the writes are visible in the device */
+> -		pci_read_config_word(dev, pos + PCI_MSI_FLAGS, &msgctl);
+> +		pci_write_msg_msi(dev, entry, msg);
+>  	}
+>  
+> -skip:
+>  	entry->msg = *msg;
+>  
+>  	if (entry->write_msi_msg)
+>  		entry->write_msi_msg(entry, entry->write_msi_msg_data);
+> -
+>  }
+>  
+>  void pci_write_msi_msg(unsigned int irq, struct msi_msg *msg)
+> 
