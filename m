@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB69562BBCA
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:26:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDF2062BBCF
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:27:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233791AbiKPL0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 06:26:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42046 "EHLO
+        id S239263AbiKPL0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 06:26:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232974AbiKPLZ4 (ORCPT
+        with ESMTP id S229937AbiKPLZy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 06:25:56 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 745B2DF77;
+        Wed, 16 Nov 2022 06:25:54 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649AFDE91;
         Wed, 16 Nov 2022 03:16:44 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AGBG95p020474;
-        Wed, 16 Nov 2022 11:16:09 GMT
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AGAujVa013006;
+        Wed, 16 Nov 2022 11:16:14 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type; s=qcppdkim1;
- bh=UTmKarFPkSvVf8oAnDfrwsXb+Y3PAv+STybkm1PSo7Y=;
- b=oiFyaa/+lXwh7zbP9UR+6OP/FI5XbsHZOylhbJSFAZJj615C64ctmNhpGZKzqQJUWhjl
- gf0bJIt7wPKLGL+v83g+UD8nxfAeSH8I5n3YcELfJkvrFafQH3SkU1LuV/HA2qzEsbUF
- wOMETBtgIaB57UiP7vc6vfNsNzAHdIfoQI0QF0ThNG3QuZsaY45HQJyPqVp4at4yIF6S
- NWjhE/ncIOnsRESd5qYfJmZYcxGEGsFEletX2yl6BTkFvloAYDWBIVw+/6jbkv+MGCkC
- 3QvQHeMjs7f/KFAKjk0++ZZeVXWYYM+Ax6jBPSQ/XkHIFLq/Uv5uQQ3w+6191soaDjx/ Vw== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kvwwg83vg-1
+ bh=v/pLN+yYjsL//koXM2furCrpLljrFBSw2Ot9D3dLs3A=;
+ b=ophbFCWl7olnj39kyeS5qDMehEExvv0EyMchvNPsUIDwm/fyPCJ4aXsGuMb8hJ5laHvD
+ xM4di469le/Isjc03wMQeu5eAWfYTZ2KagQUQn9WmGrdCAyeufoEfP7W8NIznSV30fU1
+ NPCLrqsIAkxTMFWxt+2yjanhjcFB3z2pOm+JrQ6AlLy5Sb1sPwCvTr+6anDyBC0vp0oe
+ f0LMsuO6UHKsZ9ddsXqOUe09ygvVTEon9snnWWkaEHDoeo255ucO1yKcCSf+gxsEEK6T
+ VrkbjjIIMg6hmMoUSORdJHUfN5mWgHnW8cC2T/znCJLWqTmZqYsLOXr6x7XdjhpPnDxF LQ== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kvwxc87p4-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Nov 2022 11:16:09 +0000
+        Wed, 16 Nov 2022 11:16:14 +0000
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AGBG8IZ025169
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AGBGDk0015047
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Nov 2022 11:16:08 GMT
+        Wed, 16 Nov 2022 11:16:13 GMT
 Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Wed, 16 Nov 2022 03:16:03 -0800
+ 15.2.986.29; Wed, 16 Nov 2022 03:16:08 -0800
 From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -53,9 +53,9 @@ CC:     <linux-arm-kernel@lists.infradead.org>,
         Sibi Sankar <sibis@codeaurora.org>,
         Rajendra Nayak <rnayak@codeaurora.org>, <vkoul@kernel.org>,
         Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Subject: [PATCH V19 5/7] arm64: dts: qcom: sc7280: Add Data Capture and Compare(DCC) support node
-Date:   Wed, 16 Nov 2022 16:43:58 +0530
-Message-ID: <544d13eb309b6259a4d641ac48304df874ac2520.1668595616.git.quic_schowdhu@quicinc.com>
+Subject: [PATCH V19 6/7] arm64: dts: qcom: sc7180: Add Data Capture and Compare(DCC) support node
+Date:   Wed, 16 Nov 2022 16:43:59 +0530
+Message-ID: <c81fd0dc02c98e1de7e553678440662e724cf8a1.1668595616.git.quic_schowdhu@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <cover.1668595616.git.quic_schowdhu@quicinc.com>
 References: <cover.1668595616.git.quic_schowdhu@quicinc.com>
@@ -66,15 +66,15 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: J1lFltcBqcqWoezOBqkI4wwXNyxP3qUJ
-X-Proofpoint-ORIG-GUID: J1lFltcBqcqWoezOBqkI4wwXNyxP3qUJ
+X-Proofpoint-GUID: AkjYkP18mki3sUfOVG4TETdqe8_FeHCd
+X-Proofpoint-ORIG-GUID: AkjYkP18mki3sUfOVG4TETdqe8_FeHCd
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-11-16_02,2022-11-16_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 spamscore=0 impostorscore=0 clxscore=1015 adultscore=0
- bulkscore=0 mlxscore=0 suspectscore=0 priorityscore=1501 phishscore=0
- mlxlogscore=884 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 priorityscore=1501 phishscore=0 mlxscore=0 spamscore=0
+ malwarescore=0 bulkscore=0 clxscore=1015 adultscore=0 mlxlogscore=884
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2210170000 definitions=main-2211160080
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -90,26 +90,26 @@ the address of the register region.
 
 Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
 ---
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 6 ++++++
+ arch/arm64/boot/dts/qcom/sc7180.dtsi | 6 ++++++
  1 file changed, 6 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index 2125803..f116fac 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -2658,6 +2658,12 @@
+diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+index 58976a1..3b1bcad 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+@@ -2089,6 +2089,12 @@
  			#power-domain-cells = <1>;
  		};
  
-+		dma@117f000 {
-+			compatible = "qcom,sc7280-dcc", "qcom,dcc";
-+			reg = <0x0 0x0117f000 0x0 0x1000>,
-+			      <0x0 0x01112000 0x0 0x6000>;
++		dma@10a2000 {
++			compatible = "qcom,sc7180-dcc", "qcom,dcc";
++			reg = <0x0 0x010a2000 0x0 0x1000>,
++			      <0x0 0x010ae000 0x0 0x2000>;
 +		};
 +
- 		adreno_smmu: iommu@3da0000 {
- 			compatible = "qcom,sc7280-smmu-500", "qcom,adreno-smmu", "arm,mmu-500";
- 			reg = <0 0x03da0000 0 0x20000>;
+ 		stm@6002000 {
+ 			compatible = "arm,coresight-stm", "arm,primecell";
+ 			reg = <0 0x06002000 0 0x1000>,
 -- 
 2.7.4
 
