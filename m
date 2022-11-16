@@ -2,106 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F349062C833
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 19:51:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E696562C83C
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 19:53:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233670AbiKPSvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 13:51:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50634 "EHLO
+        id S234578AbiKPSxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 13:53:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232097AbiKPSvH (ORCPT
+        with ESMTP id S239372AbiKPSw3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 13:51:07 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC6A49B50
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 10:48:47 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id v17so17279608plo.1
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 10:48:47 -0800 (PST)
+        Wed, 16 Nov 2022 13:52:29 -0500
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D8BD67112
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 10:49:37 -0800 (PST)
+Received: by mail-io1-xd2a.google.com with SMTP id h206so13919933iof.10
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 10:49:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=A0w6P3/5rWNmrPimfeWShNgQxfD7eWOB8psbtgB4eNM=;
-        b=iuHU2XySbRBXDBvmb7KGdjsTrJ11MtKm8XUWbJgiH+mJZH0mrNKnmVkYWIqEN8KH+D
-         TMTSgskSxS+dz6pqJQ/6lU5YOrdG2ZlIZWDOaRJRiQwsbQA3PrerGAmObwm4ynhLdSAK
-         ipQyS23YgpxwcwZ6vh4k2Bq/MDUW0MakaENRTi4n4z7trqezhQAU1VBvvRliz6hMutEA
-         9nByJ3f7EiBHZeDsD30/pNhrYplPoCDi15C49ph/4Z5Ug6emFwiauN/3keUjTSc8xjjS
-         9rhI8o2gCdwKZQMaSLBrQFcQ5PC0p5wqf3PICwkpXgJE4dUBiCSgdG/Zg1bcsS/uJXqa
-         0yLg==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U+5NOj/eN7Sd6zRcjl8U07Wqml0C/EahqV1VAbj3kLI=;
+        b=3a+/zkDiOpLfoSG+mtPZSx/BkQe0mtIT+bCyIDz99pulN7wgz1ryTHjFU576r5zr47
+         BYY7bRC7QNjQdh0AthCUEclr2OFeRxAe2kY6VQGAvLp3aY2L8ZyCiLMkBvS5YqQ+HoiY
+         zrH4jji0EHBd+pGd9mYnIcN0SBFm6Gve0vSZ1M5w5J7Ufb9lU+XUcyp4arSJbnaA3wJ3
+         Rb7b4U4FSgi6F41tpOwgBUtdXEotp0FKO2a7h42O1ONT8uU8Meefc4e+Iv9mPYHYjK4Y
+         FvOrP5fvbYAOAP4+hLKYhQq93TWz5coOUpxrHR3zA3O4YCP3Jr2vyRBSF8tfcrD7S5jL
+         5Hsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=A0w6P3/5rWNmrPimfeWShNgQxfD7eWOB8psbtgB4eNM=;
-        b=Xvpy0V+yjeQE6rBv8ny8z0DRfqbcj5k+R5BEWUN3UWwOXoCAtKpWwlVZBkn9K5mBy3
-         GL2/eIb5xxgoUsgPr8RTH5Cus8Z0auYsZ/qpQ+Drw3pbgvEQ3pYWEDpz8oVh/PVu6E4O
-         zEo4t2JxVFx3VTBtTNdeHEzvBD6kYAJvnSOTH+nL5j/NtZ9mKNR9FdCIGs+lo2mJMKQH
-         RCRaJpRsHejXcaBxH0NpxPi9cIg+2hr4QNhvt8aQrCcJ8CfPIVkSMgmvXnPCUtufH0dz
-         H76nwOzFNPs4RB8iMxCxdB0PAIMTxZY54FkT/DQ9sfmBoBBwm0AI+NTt27f4WRDHrs2L
-         9hIg==
-X-Gm-Message-State: ANoB5plUTd8EownJ4CvyRfPyqLre6TCfaYhSCElw1wylsV1do95uelJy
-        DLSb3QI/IbIugHbroLzX2dyQ0g==
-X-Google-Smtp-Source: AA0mqf7gsXMWPLCwPxYnb+HvqYNLX3WPvDWV8mKDKQpAZsMJhL2t5iqRN/vftj6zV72w0hUj24psag==
-X-Received: by 2002:a17:90b:3c0d:b0:20d:478a:9d75 with SMTP id pb13-20020a17090b3c0d00b0020d478a9d75mr5030085pjb.149.1668624527166;
-        Wed, 16 Nov 2022 10:48:47 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id 7-20020a621507000000b0056c0b98617esm11265827pfv.0.2022.11.16.10.48.46
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=U+5NOj/eN7Sd6zRcjl8U07Wqml0C/EahqV1VAbj3kLI=;
+        b=W6C/nev7kS0YHFzlv5bv7oYwQvSe5cS7O41MS0N9yoQfALJnEJc84IUbFQj57KzDDY
+         LSsW4GaEpI3QT9lNqTAuX2tHXkrR75b01WIICql6xzhrrwBG1TeXcTdqa8o1ryXnOeZ9
+         NYk9NJXorRkEInlfDqfv8j0w5HbrwjhYIbnQvvVvUl+LKvc/0Akcly5G5Ic8Kmckm7fn
+         MlKoxJHXdnYfP4PgNjJIQ1/f7Ki5++56+DRG5r+JJxIgZy/a+sUJ3LevQCYIZXVMXepe
+         ofh2ENFjugjHtFdIkAOsZLHzSMNufydDCYNCE/V+Tx/cBV9GO1+dhW94l+tog44V1XC5
+         GRTQ==
+X-Gm-Message-State: ANoB5pnRdv4xs0dBPNAX2F9WDtXwDTN7KRKQUlhnrcqYzQVUVm1nfjub
+        vyO6dOrQNXZATOPkY4QbPy1rwQ==
+X-Google-Smtp-Source: AA0mqf7vRHK9SdHOKCvaaWwNJAo58DVTBKpqQuukd1w41sRkOWimHGDz5HNQTHZi3PKUV8M8AOvWCQ==
+X-Received: by 2002:a5d:948b:0:b0:6bc:2a47:a874 with SMTP id v11-20020a5d948b000000b006bc2a47a874mr10180859ioj.126.1668624576555;
+        Wed, 16 Nov 2022 10:49:36 -0800 (PST)
+Received: from [127.0.0.1] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id m1-20020a0566022ac100b0067b75781af9sm6913174iov.37.2022.11.16.10.49.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 10:48:46 -0800 (PST)
-Date:   Wed, 16 Nov 2022 18:48:43 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>,
-        kvm list <kvm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, Linux API <linux-api@vger.kernel.org>,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Fuad Tabba <tabba@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Wei W Wang <wei.w.wang@intel.com>
-Subject: Re: [PATCH v9 3/8] KVM: Add KVM_EXIT_MEMORY_FAULT exit
-Message-ID: <Y3Uwi2lc4NDrdzML@google.com>
-References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
- <20221025151344.3784230-4-chao.p.peng@linux.intel.com>
- <2e252f4f-7d45-42ac-a88f-fa8045fe3748@app.fastmail.com>
+        Wed, 16 Nov 2022 10:49:36 -0800 (PST)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Gabriel Krisman Bertazi <krisman@suse.de>
+Cc:     mingo@redhat.com, linux-kernel@vger.kernel.org, jack@suse.cz,
+        chaitanyak@nvidia.com, peterz@infradead.org,
+        liusong@linux.alibaba.com, linux-block@vger.kernel.org
+In-Reply-To: <20221115224553.23594-1-krisman@suse.de>
+References: <20221115224553.23594-1-krisman@suse.de>
+Subject: Re: [PATCH 0/3] sbitmap: Fix two issues in the per-bitmap wakeup counter code
+Message-Id: <166862457559.199729.5082175605885412089.b4-ty@kernel.dk>
+Date:   Wed, 16 Nov 2022 11:49:35 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2e252f4f-7d45-42ac-a88f-fa8045fe3748@app.fastmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.11.0-dev-28747
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -109,49 +73,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022, Andy Lutomirski wrote:
+On Tue, 15 Nov 2022 17:45:50 -0500, Gabriel Krisman Bertazi wrote:
+> Jan reported two issues in the original thread.
 > 
+> The first is that wake_index was not updated after returning from
+> sbq_wake_ptr which meant we'd have to empty the wq before moving to the
+> next one.  Patch 1/3 in this series reorders the code to avoid this
+> condition, increasing fairness of queue selection and preventing
+> starvation.  I sent this patch already on the other thread and Jan
+> reviewed it, but since it is a small one, and a dependency for the
+> other, I'm resending it a along this series.
 > 
-> On Tue, Oct 25, 2022, at 8:13 AM, Chao Peng wrote:
-> > diff --git a/Documentation/virt/kvm/api.rst 
-> > b/Documentation/virt/kvm/api.rst
-> > index f3fa75649a78..975688912b8c 100644
-> > --- a/Documentation/virt/kvm/api.rst
-> > +++ b/Documentation/virt/kvm/api.rst
-> > @@ -6537,6 +6537,29 @@ array field represents return values. The 
-> > userspace should update the return
-> >  values of SBI call before resuming the VCPU. For more details on 
-> > RISC-V SBI
-> >  spec refer, https://github.com/riscv/riscv-sbi-doc.
-> > 
-> > +::
-> > +
-> > +		/* KVM_EXIT_MEMORY_FAULT */
-> > +		struct {
-> > +  #define KVM_MEMORY_EXIT_FLAG_PRIVATE	(1 << 0)
-> > +			__u32 flags;
-> > +			__u32 padding;
-> > +			__u64 gpa;
-> > +			__u64 size;
-> > +		} memory;
-> > +
-> 
-> Would it make sense to also have a field for the access type (read, write,
-> execute, etc)?  I realize that shared <-> private conversion doesn't strictly
-> need this, but it seems like it could be useful for logging failures and also
-> for avoiding a second immediate fault if the type gets converted but doesn't
-> have the right protection yet.
+> [...]
 
-I don't think a separate field is necessary, that info can be conveyed via flags.
-Though maybe we should go straight to a u64 for flags.  Hmm, and maybe avoid bits
-0-3 so that if/when RWX info is conveyed the flags can align with
-PROT_{READ,WRITE,EXEC} and the EPT flags, e.g.
+Applied, thanks!
 
-	KVM_MEMORY_EXIT_FLAG_READ	(1 << 0)
-	KVM_MEMORY_EXIT_FLAG_WRITE	(1 << 1)
-	KVM_MEMORY_EXIT_FLAG_EXECUTE	(1 << 2)
+[1/3] sbitmap: Advance the queue index before waking up a queue
+      commit: 976570b4ecd30d3ec6e1b0910da8e5edc591f2b6
+[2/3] wait: Return number of exclusive waiters awaken
+      commit: ee7dc86b6d3e3b86c2c487f713eda657850de238
+[3/3] sbitmap: Try each queue to wake up at least one waiter
+      commit: 26edb30dd1c0c9be11fa676b4f330ada7b794ba6
 
-> (Obviously, if this were changed, KVM would need the ability to report that
-> it doesn't actually know the mode.)
-> 
-> --Andy
+Best regards,
+-- 
+Jens Axboe
+
+
