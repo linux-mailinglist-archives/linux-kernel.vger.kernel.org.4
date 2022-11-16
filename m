@@ -2,121 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7FE362B1A4
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 04:03:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C606962B1A9
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 04:08:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231811AbiKPDDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 22:03:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34904 "EHLO
+        id S231811AbiKPDIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 22:08:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230424AbiKPDDO (ORCPT
+        with ESMTP id S230208AbiKPDIK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 22:03:14 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9815713E23;
-        Tue, 15 Nov 2022 19:03:12 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NBnt237r2z4x1T;
-        Wed, 16 Nov 2022 14:03:06 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1668567788;
-        bh=UY0ccI3aO6v1TmsIAsEjO7GSYU2Ug6bsvaaUvJWXiMQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=LTKdcjZwHb/zHQzEtIEVprOBzl+Y3uuuOJpyhuB4GUTkdC+0+++faKzOv8NcEKzId
-         TzL5XOQFwGmx83aRyA4Wx6+lJJMqC9mp4pATzcqvbuC3oUgFxjSCySRSifbsTt13ye
-         VpZSDKh5q2ISpJFGbPfQ5eCxF0G529cmBTqJf1Rb76W6NRFREPNOJKXczdgsKJehlj
-         bQ4SumTu2uyyRxpzyqNJGPERLCe2PX6VRlfv7yvloDsOiBoGXnFsyhnalWIcJd8YGs
-         ZV3GZpixibbbNr/kqz0+fr2F/gJTq3CYnnwdJbLfxlU9aE6GaBiSqMnkFyw4lkhvcv
-         Zf8sauDVR7QNg==
-Date:   Wed, 16 Nov 2022 14:03:04 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Christoffer Dall <cdall@cs.columbia.edu>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Gavin Shan <gshan@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: linux-next: manual merge of the kvms390 tree with the kvm-arm tree
-Message-ID: <20221116140304.48333261@canb.auug.org.au>
+        Tue, 15 Nov 2022 22:08:10 -0500
+Received: from cstnet.cn (smtp23.cstnet.cn [159.226.251.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D96471704C
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 19:08:07 -0800 (PST)
+Received: from localhost.localdomain (unknown [124.16.138.125])
+        by APP-03 (Coremail) with SMTP id rQCowACnWVkHVHRjpdQyCQ--.64513S2;
+        Wed, 16 Nov 2022 11:07:52 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, matthias.bgg@gmail.com
+Cc:     alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] ASoC: mediatek: mtk-btcvsd: Add checks for write and read of mtk_btcvsd_snd
+Date:   Wed, 16 Nov 2022 11:07:50 +0800
+Message-Id: <20221116030750.40500-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/mzxMh2a2MppNBDeVeNrwBI9";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: rQCowACnWVkHVHRjpdQyCQ--.64513S2
+X-Coremail-Antispam: 1UD129KBjvdXoWruFy3Gr15AFyfAr1xZFy5urg_yoWDtFb_Zw
+        4kW3W7Zr98WFyfAr4UKrW5AFWUXFW3AF10gFy0qr45XrWUGrnaqw1qyF93urs8Zr4vv34f
+        Xr1IgFWvy3yxujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbxxFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
+        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
+        8cxan2IY04v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+        8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8
+        ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+        0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+        Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUoO
+        J5UUUUU
+X-Originating-IP: [124.16.138.125]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/mzxMh2a2MppNBDeVeNrwBI9
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+As the mtk_btcvsd_snd_write and mtk_btcvsd_snd_read may return error,
+it should be better to catch the exception.
 
-Hi all,
+Fixes: 4bd8597dc36c ("ASoC: mediatek: add btcvsd driver")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ sound/soc/mediatek/common/mtk-btcvsd.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-Today's linux-next merge of the kvms390 tree got a conflict in:
+diff --git a/sound/soc/mediatek/common/mtk-btcvsd.c b/sound/soc/mediatek/common/mtk-btcvsd.c
+index d884bb7c0fc7..1c28b41e4311 100644
+--- a/sound/soc/mediatek/common/mtk-btcvsd.c
++++ b/sound/soc/mediatek/common/mtk-btcvsd.c
+@@ -1038,11 +1038,9 @@ static int mtk_pcm_btcvsd_copy(struct snd_soc_component *component,
+ 	struct mtk_btcvsd_snd *bt = snd_soc_component_get_drvdata(component);
+ 
+ 	if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
+-		mtk_btcvsd_snd_write(bt, buf, count);
++		return mtk_btcvsd_snd_write(bt, buf, count);
+ 	else
+-		mtk_btcvsd_snd_read(bt, buf, count);
+-
+-	return 0;
++		return mtk_btcvsd_snd_read(bt, buf, count);
+ }
+ 
+ /* kcontrol */
+-- 
+2.25.1
 
-  include/uapi/linux/kvm.h
-
-between commit:
-
-  86bdf3ebcfe1 ("KVM: Support dirty ring in conjunction with bitmap")
-
-from the kvm-arm tree and commit:
-
-  57ecc06995f9 ("KVM: s390: pv: add KVM_CAP_S390_PROTECTED_ASYNC_DISABLE")
-
-from the kvms390 tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc include/uapi/linux/kvm.h
-index c87b5882d7ae,d3f86a280858..000000000000
---- a/include/uapi/linux/kvm.h
-+++ b/include/uapi/linux/kvm.h
-@@@ -1178,7 -1178,7 +1178,8 @@@ struct kvm_ppc_resize_hpt=20
-  #define KVM_CAP_S390_ZPCI_OP 221
-  #define KVM_CAP_S390_CPU_TOPOLOGY 222
-  #define KVM_CAP_DIRTY_LOG_RING_ACQ_REL 223
- -#define KVM_CAP_S390_PROTECTED_ASYNC_DISABLE 224
- +#define KVM_CAP_DIRTY_LOG_RING_WITH_BITMAP 224
-++#define KVM_CAP_S390_PROTECTED_ASYNC_DISABLE 225
- =20
-  #ifdef KVM_CAP_IRQ_ROUTING
- =20
-
---Sig_/mzxMh2a2MppNBDeVeNrwBI9
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmN0UugACgkQAVBC80lX
-0GxI5QgAnyuHlbIYa4BK79/8oGra7RkwRp0ZwR9XEMQa6eP0RzWfwSyLxDJd120O
-6NiOy2ZotxsbUKLdMOwRfJoiee6arwccqt13CfgbbhwcHdZCJIKgSR4AteY7m2hJ
-fjf6toEXqjT1f1WRL+lTlyG+ryllzWv4GtUnwHuuSziqrCgUygy5EduLvIDOlITU
-lIRWU7R/MrPThcE0RG7O/pXMq5vZbr7VmFC+6XuOe33TtriBnm4LVZmhBJto3f9d
-9H0sGBZ6IhBxPQK/fGYz7c7d0jhX7thSYtxnOXdy75/nxQMiUUW35bQoPSYXWVzQ
-3XdXWlyJ5iErjNXtzBitpJsKkF+76Q==
-=PVhU
------END PGP SIGNATURE-----
-
---Sig_/mzxMh2a2MppNBDeVeNrwBI9--
