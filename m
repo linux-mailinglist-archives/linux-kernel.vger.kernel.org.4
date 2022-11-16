@@ -2,152 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 316CA62C2EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 16:45:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DC6A62C2F0
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 16:47:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233143AbiKPPpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 10:45:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57280 "EHLO
+        id S233016AbiKPPrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 10:47:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230115AbiKPPpt (ORCPT
+        with ESMTP id S233247AbiKPPrT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 10:45:49 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A2232613E;
-        Wed, 16 Nov 2022 07:45:47 -0800 (PST)
-Received: from fraeml739-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NC6hd0VM5z67KvJ;
-        Wed, 16 Nov 2022 23:41:05 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml739-chm.china.huawei.com (10.206.15.220) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 16 Nov 2022 16:45:44 +0100
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 16 Nov
- 2022 15:45:44 +0000
-Date:   Wed, 16 Nov 2022 15:45:43 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     <ira.weiny@intel.com>
-CC:     Dan Williams <dan.j.williams@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        "Ben Widawsky" <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
-Subject: Re: [PATCH 03/11] cxl/mem: Implement Clear Event Records command
-Message-ID: <20221116154543.00003c6a@Huawei.com>
-In-Reply-To: <20221116152426.0000626b@Huawei.com>
-References: <20221110185758.879472-1-ira.weiny@intel.com>
-        <20221110185758.879472-4-ira.weiny@intel.com>
-        <20221116152426.0000626b@Huawei.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Wed, 16 Nov 2022 10:47:19 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DEFC342F75
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 07:47:16 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5960B150C;
+        Wed, 16 Nov 2022 07:47:18 -0800 (PST)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.35.169])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 079933F587;
+        Wed, 16 Nov 2022 07:47:06 -0800 (PST)
+Date:   Wed, 16 Nov 2022 15:46:59 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Liu Shixin <liushixin2@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Denys Vlasenko <dvlasenk@redhat.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        David Hildenbrand <dhildenb@redhat.com>,
+        Rafael Aquini <raquini@redhat.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] arm64/mm: fix incorrect file_map_count for invalid
+ pmd/pud
+Message-ID: <Y3UF87Z/a7UVThVF@FVFF77S0Q05N.cambridge.arm.com>
+References: <20221116083811.464678-1-liushixin2@huawei.com>
+ <20221116083811.464678-3-liushixin2@huawei.com>
+ <73189e81-08c2-bb18-dd4a-f717996ea819@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <73189e81-08c2-bb18-dd4a-f717996ea819@redhat.com>
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Nov 2022 15:24:26 +0000
-Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
+On Wed, Nov 16, 2022 at 10:08:27AM +0100, David Hildenbrand wrote:
+> On 16.11.22 09:38, Liu Shixin wrote:
+> > The page table check trigger BUG_ON() unexpectedly when split hugepage:
+> > 
+> >   ------------[ cut here ]------------
+> >   kernel BUG at mm/page_table_check.c:119!
+> >   Internal error: Oops - BUG: 00000000f2000800 [#1] SMP
+> >   Dumping ftrace buffer:
+> >      (ftrace buffer empty)
+> >   Modules linked in:
+> >   CPU: 7 PID: 210 Comm: transhuge-stres Not tainted 6.1.0-rc3+ #748
+> >   Hardware name: linux,dummy-virt (DT)
+> >   pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> >   pc : page_table_check_set.isra.0+0x398/0x468
+> >   lr : page_table_check_set.isra.0+0x1c0/0x468
+> > [...]
+> >   Call trace:
+> >    page_table_check_set.isra.0+0x398/0x468
+> >    __page_table_check_pte_set+0x160/0x1c0
+> >    __split_huge_pmd_locked+0x900/0x1648
+> >    __split_huge_pmd+0x28c/0x3b8
+> >    unmap_page_range+0x428/0x858
+> >    unmap_single_vma+0xf4/0x1c8
+> >    zap_page_range+0x2b0/0x410
+> >    madvise_vma_behavior+0xc44/0xe78
+> >    do_madvise+0x280/0x698
+> >    __arm64_sys_madvise+0x90/0xe8
+> >    invoke_syscall.constprop.0+0xdc/0x1d8
+> >    do_el0_svc+0xf4/0x3f8
+> >    el0_svc+0x58/0x120
+> >    el0t_64_sync_handler+0xb8/0xc0
+> >    el0t_64_sync+0x19c/0x1a0
+> > [...]
+> > 
+> > On arm64, pmd_present() will return true even if the pmd is invalid.
+> 
+> I assume that's because of the pmd_present_invalid() check.
+> 
+> ... I wonder why that behavior was chosen. Sounds error-prone to me.
 
-> On Thu, 10 Nov 2022 10:57:50 -0800
-> ira.weiny@intel.com wrote:
-> 
-> > From: Ira Weiny <ira.weiny@intel.com>
-> > 
-> > CXL rev 3.0 section 8.2.9.2.3 defines the Clear Event Records mailbox
-> > command.  After an event record is read it needs to be cleared from the
-> > event log.
-> > 
-> > Implement cxl_clear_event_record() and call it for each record retrieved
-> > from the device.
-> > 
-> > Each record is cleared individually.  A clear all bit is specified but
-> > events could arrive between a get and the final clear all operation.
-> > Therefore each event is cleared specifically.
-> > 
-> > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> >   
-> Some follow through comment updates needed from changes in earlier patches +
-> one comment you can ignore if you prefer to keep it as is.
-> 
-> >  static void cxl_mem_get_records_log(struct cxl_dev_state *cxlds,
-> >  				    enum cxl_event_log_type type)
-> >  {
-> > @@ -728,14 +750,23 @@ static void cxl_mem_get_records_log(struct cxl_dev_state *cxlds,
-> >  		}
-> >  
-> >  		pl_nr = le16_to_cpu(payload.record_count);
-> > -		if (trace_cxl_generic_event_enabled()) {  
-> 
-> To simplify this patch, maybe push this check down in the previous patch so this
-> one doesn't move code around?  It'll look a tiny bit odd there of course..
-> 
-> > +		if (pl_nr > 0) {
-> >  			u16 nr_rec = min_t(u16, pl_nr, CXL_GET_EVENT_NR_RECORDS);
-> >  			int i;
-> >  
-> > -			for (i = 0; i < nr_rec; i++)
-> > -				trace_cxl_generic_event(dev_name(cxlds->dev),
-> > -							type,
-> > -							&payload.record[i]);
-> > +			if (trace_cxl_generic_event_enabled()) {
-> > +				for (i = 0; i < nr_rec; i++)
-> > +					trace_cxl_generic_event(dev_name(cxlds->dev),
-> > +								type,
-> > +								&payload.record[i]);
-> > +			}
-> > +
-> > +			rc = cxl_clear_event_record(cxlds, type, &payload, nr_rec);
-> > +			if (rc) {
-> > +				dev_err(cxlds->dev, "Event log '%s': Failed to clear events : %d",
-> > +					cxl_event_log_type_str(type), rc);
-> > +				return;
-> > +			}
-> >  		}
-> >    
-> 
-> > diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-> > index da64ba0f156b..28a114c7cf69 100644
-> > --- a/drivers/cxl/cxlmem.h
-> > +++ b/drivers/cxl/cxlmem.h  
-> 
-> >  
-> > +/*
-> > + * Clear Event Records input payload
-> > + * CXL rev 3.0 section 8.2.9.2.3; Table 8-51
-> > + *
-> > + * Space given for 1 record  
-> 
-> Nope...
-> 
-> 
-> > + */
-> > +struct cxl_mbox_clear_event_payload {
-> > +	u8 event_log;		/* enum cxl_event_log_type */
-> > +	u8 clear_flags;
-> > +	u8 nr_recs;		/* 1 for this struct */  
-> Nope :)  Delete the comments so they can't be wrong if this changes in future!
-Ah. You only use one. So should hard code that in the array size below.
+That seems to be down to commit:
 
-> 
-> > +	u8 reserved[3];
-> > +	__le16 handle[CXL_GET_EVENT_NR_RECORDS];
-> > +};
-> > +  
-> 
+  b65399f6111b03df ("arm64/mm: Change THP helpers to comply with generic MM semantics")
 
+... apparently because Andrea Arcangelli said this was necessary in:
+
+  https://lore.kernel.org/lkml/20181017020930.GN30832@redhat.com/
+
+... but that does see to contradict what's said in:
+
+  Documentation/mm/arch_pgtable_helpers.rst
+
+... which just says:
+
+  pmd_present  Tests a valid mapped PMD 
+
+... and it's not clear to me why this *only* applies to the PMD level.
+
+Anshuman?
+
+Thanks,
+Mark.
