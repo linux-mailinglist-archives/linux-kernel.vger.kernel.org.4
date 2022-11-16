@@ -2,126 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B659762BD0C
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:07:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9E4C62BD34
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:09:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232412AbiKPMHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 07:07:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53426 "EHLO
+        id S233846AbiKPMJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 07:09:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233584AbiKPMGv (ORCPT
+        with ESMTP id S229617AbiKPMIF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 07:06:51 -0500
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5011C29C86;
-        Wed, 16 Nov 2022 04:00:50 -0800 (PST)
-Received: by mail-qv1-f50.google.com with SMTP id x13so11732420qvn.6;
-        Wed, 16 Nov 2022 04:00:50 -0800 (PST)
+        Wed, 16 Nov 2022 07:08:05 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AFB6A3
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 04:01:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668600074;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qXpS5ogY+quOVBSqhFr3jD7fUFESPhWtnRgSpqA/kiQ=;
+        b=CQGDJjRxtH3VgVhznwqsBhGuMANrybOgdJX4e7yc28wZPW3Gjet7o+EdeUGPG2HVs2jD71
+        mVJTDNHJI6SJoJtgLJ7rWZ4hgAerv7D73YkJGXma/t+x+CdUtIvkXvCY7U4LNf+ltrB9ue
+        EmbpMoq/HJJcWhAlj5npcOJ2trKZx5Y=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-321-tDjxHqfVMVWS_e0R1uoHMQ-1; Wed, 16 Nov 2022 07:01:07 -0500
+X-MC-Unique: tDjxHqfVMVWS_e0R1uoHMQ-1
+Received: by mail-wm1-f69.google.com with SMTP id x10-20020a05600c420a00b003cfa33f2e7cso9895431wmh.2
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 04:01:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pLjn09SIm5W8Gdy8FxqMI+enAz3ipU2J5urg+CGsoDg=;
-        b=eCCimOmXA9GTB1ElMIRtpNl+jr6pag4nT82xVGVNDKZjTPZJ29qT+ZiHDEaxllSStI
-         4slzvLcItwlSvBTndqpMZZSDaGcfhpLZvW6HO6XHGqP4EOYSZwPVJtNH4Mqxagp6zFNM
-         593hjKcQtn0ea/2+bMQ8ibOzaDoMzr49zzJdKj6BqmQcdrx0uNF7SLkxOc/MxNfOtO2B
-         bJ2nTVkmpzU/k8r5X2B/BzJQZpa8U9za94IxMsVXfmcM8Q/ZmcFzJVnLenz7MJBKvZHc
-         meARiSwMynJyi/pYUeRlB10/HBCofy9ZzXKUg/GG/0RQszBYJWzFlp3DjIb2+tc97zB3
-         0tnw==
-X-Gm-Message-State: ANoB5pkpfuewP7z693aMPrIG85Vdb9Fxpo0GE2g+54cJtrSku4N1NxQk
-        mT20TtaHDP1uKslg9NDBppNpTNzJFRKzVFrqY6+nG97Y
-X-Google-Smtp-Source: AA0mqf5iQnSi2WYAf3lvk6A5SWcouBkUCDGrperQwwzY6EkndjzlhDFA44ccIAvaQkqUC9rEbGGIq4eOvUxCKRSSgeI=
-X-Received: by 2002:a0c:8043:0:b0:4c0:8055:fb5 with SMTP id
- 61-20020a0c8043000000b004c080550fb5mr20815149qva.73.1668600048968; Wed, 16
- Nov 2022 04:00:48 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qXpS5ogY+quOVBSqhFr3jD7fUFESPhWtnRgSpqA/kiQ=;
+        b=fHxxx4+2r8T7mKQuov9MbQwdHvwMgTJCy6po91dRsUfpWhXiUBh4S0S1iU4aD0tnqR
+         IkMPcL8mO2U193S+8GKFG5LTSqc7C4qC8iOIfy0IyM2rJUF3YF7oKHgK0dnf6IOl5ylN
+         cUJka2kymer2jTTVMipQU1BpNOmTtipA+tzF0Mrub2lYedEOT5Dj24JAsR9H7/x646zh
+         wfNZDScEnAilJ+c/CtucRH8GGkbZ8bfzWvRqwDtneoVfpJmGlMYx6QKq8RC/gU91vD9v
+         xX7hYvMzEKSeAR3pEYoUoctcZ0O5piYG0U/Y6fjXObB0zvqOK2JjVgxg5VGaxYr44rc2
+         /eAg==
+X-Gm-Message-State: ANoB5pmxnVhoOu4cplZZghMlwvWtHuKldcAopq5v2nBy7E140iC0hy4s
+        hWEW+FYw43fR5/jKUAkDfhqCy4sKwxENWdlavTfuYbl+Hgoa5J6RbnEisi1w4Ww65Ybw6HzhkB7
+        +ZmiQ/O0gRlk+URJlAbcTfJrjblGrvk0pXkj/T9AB17tMCnS99ifb0HrbD/iWOD4eRECxo/Ex4A
+        k=
+X-Received: by 2002:a5d:6752:0:b0:236:73b2:f026 with SMTP id l18-20020a5d6752000000b0023673b2f026mr13799536wrw.396.1668600066375;
+        Wed, 16 Nov 2022 04:01:06 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4JOT6/zsQCPAo4bnANXkeD6+Wah+l7xo5KbcAGf+Aw9JQb7E9QHfplxlEHsyJcBBgtA/Vxqg==
+X-Received: by 2002:a5d:6752:0:b0:236:73b2:f026 with SMTP id l18-20020a5d6752000000b0023673b2f026mr13799498wrw.396.1668600066055;
+        Wed, 16 Nov 2022 04:01:06 -0800 (PST)
+Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id by7-20020a056000098700b002368a6deaf8sm15112370wrb.57.2022.11.16.04.01.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 04:01:05 -0800 (PST)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        linux-arm-msm@vger.kernel.org, John Stultz <jstultz@google.com>,
+        Peter Robinson <pbrobinson@redhat.com>,
+        Steev Klimaszewski <steev@kali.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Enric Balletbo i Serra <eballetbo@redhat.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Brian Masney <bmasney@redhat.com>,
+        Rob Herring <robh@kernel.org>,
+        Javier Martinez Canillas <javierm@redhat.com>
+Subject: [PATCH v2 2/4] driver core: Set deferred probe timeout to 0 if modules are disabled
+Date:   Wed, 16 Nov 2022 13:00:43 +0100
+Message-Id: <20221116120043.519614-1-javierm@redhat.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221116115348.517599-1-javierm@redhat.com>
+References: <20221116115348.517599-1-javierm@redhat.com>
 MIME-Version: 1.0
-References: <CAJZ5v0g834K4ZBrEvhAbJhvGBVyq53nreG+xeBufXKQXA3VtrQ@mail.gmail.com>
- <20221116003739.GA1061657@bhelgaas>
-In-Reply-To: <20221116003739.GA1061657@bhelgaas>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 16 Nov 2022 13:00:36 +0100
-Message-ID: <CAJZ5v0gyVq0AOM1_kd3QWHj+jihL-vxBv=fcEJ_Zcp8QiOymcg@mail.gmail.com>
-Subject: Re: [PATCH v5] PCI/ACPI: PCI/ACPI: Validate devices with power
- resources support D3
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>,
-        Len Brown <lenb@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mehta Sanju <Sanju.Mehta@amd.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 1:37 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> On Mon, Nov 14, 2022 at 04:33:52PM +0100, Rafael J. Wysocki wrote:
-> > On Fri, Nov 11, 2022 at 10:42 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > >
-> > > On Fri, Nov 11, 2022 at 12:58:28PM -0600, Limonciello, Mario wrote:
-> > > > On 11/11/2022 11:41, Bjorn Helgaas wrote:
-> > > > > On Mon, Oct 31, 2022 at 05:33:55PM -0500, Mario Limonciello wrote:
-> > > > > > Firmware typically advertises that ACPI devices that represent PCIe
-> > > > > > devices can support D3 by a combination of the value returned by
-> > > > > > _S0W as well as the HotPlugSupportInD3 _DSD [1].
-> > > > > >
-> > > > > > `acpi_pci_bridge_d3` looks for this combination but also contains
-> > > > > > an assumption that if an ACPI device contains power resources the PCIe
-> > > > > > device it's associated with can support D3.  This was introduced
-> > > > > > from commit c6e331312ebf ("PCI/ACPI: Whitelist hotplug ports for
-> > > > > > D3 if power managed by ACPI").
-> > > > > >
-> > > > > > Some firmware configurations for "AMD Pink Sardine" do not support
-> > > > > > wake from D3 in _S0W for the ACPI device representing the PCIe root
-> > > > > > port used for tunneling. The PCIe device will still be opted into
-> > > > > > runtime PM in the kernel [2] because of the logic within
-> > > > > > `acpi_pci_bridge_d3`. This currently happens because the ACPI
-> > > > > > device contains power resources.
-> > >
-> > > Wait.  Is this as simple as just recognizing that:
-> > >
-> > >   _PS0 means the OS has a knob to put the device in D0, but it doesn't
-> > >   mean the device can wake itself from a low-power state.  The OS has
-> > >   to use _S0W to learn the device's ability to wake itself.
-> >
-> > It is.
->
-> Now I'm confused again about what "HotPlugSupportInD3" means.  The MS
-> web page [1] says it identifies Root Ports capable of handling hot
-> plug events while in D3.  That sounds kind of related to _S0W: If _S0W
-> says "I can wake myself from D3hot and D3cold", how is that different
-> from "I can handle hotplug events in D3"?
+There is no point to schedule the work queue to timeout the deferred probe
+if all the initcalls are done and modules are not enabled. The default for
+this case is already 0 but can be overridden by the deferred_probe_timeout
+parameter. Let's just disable to avoid queuing a work that is not needed.
 
-For native PME/hot-plug signaling there is no difference.  This is the
-same interrupt by the spec after all IIRC.
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+---
 
-For GPE-based signaling, though, there is a difference, because GPEs
-can only be used directly for wake signaling (this is related to
-_PRW).  In particular, the only provision in the ACPI spec for device
-hot-add are the Bus Check and Device Check notification values (0 and
-1) which require AML to run and evaluate Notify() on specific AML
-objects.
+(no changes since v1)
 
-Hence, there is no spec-defined way to tell the OS that "something can
-be hot-added under this device while in D3 and you will get notified
-about that".
+ drivers/base/dd.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-> This patch says that if dev's Root Port has "HotPlugSupportInD3", we
-> don't need _PS0 or _PR0 for dev.  I guess that must be true, because
-> previously the fact that we checked for "HotPlugSupportInD3" meant the
-> device did NOT have _PS0 or _PR0.
->
-> [1] https://learn.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports#identifying-pcie-root-ports-supporting-hot-plug-in-d3
+diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+index 040b4060f903..1e8f1afeac98 100644
+--- a/drivers/base/dd.c
++++ b/drivers/base/dd.c
+@@ -350,8 +350,10 @@ static int deferred_probe_initcall(void)
+ 	flush_work(&deferred_probe_work);
+ 	initcalls_done = true;
+ 
+-	if (!IS_ENABLED(CONFIG_MODULES))
++	if (!IS_ENABLED(CONFIG_MODULES)) {
++		driver_deferred_probe_timeout = 0;
+ 		fw_devlink_drivers_done();
++	}
+ 
+ 	/*
+ 	 * Trigger deferred probe again, this time we won't defer anything
+-- 
+2.38.1
+
