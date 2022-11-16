@@ -2,172 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D66FD62C8E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 20:23:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA6D362C8E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 20:25:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233959AbiKPTXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 14:23:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41364 "EHLO
+        id S234129AbiKPTZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 14:25:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233358AbiKPTXe (ORCPT
+        with ESMTP id S233358AbiKPTY7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 14:23:34 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2071.outbound.protection.outlook.com [40.107.223.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05635F0B;
-        Wed, 16 Nov 2022 11:23:32 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q71WwSuTEjgv9upXNXcJ6m47tjD/a6iOBhB90yNokAJDYLKbt4WTbsg8sdrD7HY/tGt/7nWl2kybiSQp/ZVefuQmJvgGTN59Z1i5mPsxkZvLhLSa1vvifFAShag1rmTdStTfg7NRDQG5pMFNoPxdlqQXfGMcLE/EQjr5eZQ84AHF2dvmVyt17zD+oBCZW0yQ7vicLZZGCZizScFzXsZCw4PPXWxkTKpb8/XlgupJUS4x2DA+N6RltGKgt5hWbTKpWBY0t/OVuBnNn/4JWnnS+Qp2ufBFGkEMqmjaFWdoGMD9E5voNPYZcYk67cRbjzLeh+Epx6spJ4WEvNytnkhuIA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DwRgLh0QIe+YimCwD6XlgHHT1WTGbVLveWajkaG5KNA=;
- b=GsQoDBgCOIxSla19irR+D7Rm9Cw7pXPBEFdmy+kUi4s+G6EEGQzv7UYTZreUdk5z6OrRnX6GZ0/PbKpCT8V1iTzSo6OZIrIzlyg8coMdqtDSmftFZGG5wTmp9K490ekvBjC5hLq+6B4raDeskIhjx4sZjpBKO3VcX5ekJyhEhJJn/L82opL00PuRCCnoi3TULMnRc8tUtMlmrwujLTXG45l+F/DJDMLuCTncSbuF6gQwZB1Ph/Kgx2jCq0AKB5FR4+WdA/ksDpn+FKMyYrXDp1Te9Zpb6Y2E59cPbFA9nJkzsj/aWaAQWTWpw9XF8RiX4U7s8e4vDE2BXG7/rFIrfg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DwRgLh0QIe+YimCwD6XlgHHT1WTGbVLveWajkaG5KNA=;
- b=jwtBvgo+RP/pK2iJOLiDrxrRTHtZt5QjYgKA4vSZGbln8FvtgyFqsoetT6f0RMUcLrHlP+wresPclqZxNQ/FCsIsY/jo2T3VEwMHwb4SSc4GXOA4GgpumbvLG0ZuY8VWj/ppl11bfxKhzsfWOFCwq/Rp9wQn9sakq+BSvItRoJE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from SN6PR12MB2767.namprd12.prod.outlook.com (2603:10b6:805:75::23)
- by BL3PR12MB6524.namprd12.prod.outlook.com (2603:10b6:208:38c::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17; Wed, 16 Nov
- 2022 19:23:29 +0000
-Received: from SN6PR12MB2767.namprd12.prod.outlook.com
- ([fe80::395:21e6:abfd:7894]) by SN6PR12MB2767.namprd12.prod.outlook.com
- ([fe80::395:21e6:abfd:7894%6]) with mapi id 15.20.5813.018; Wed, 16 Nov 2022
- 19:23:29 +0000
-Message-ID: <a7b3ddb5-73ff-0560-1fa5-beb05864feee@amd.com>
-Date:   Wed, 16 Nov 2022 13:23:23 -0600
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.1
-Subject: Re: [PATCH Part2 v6 14/49] crypto: ccp: Handle the legacy TMR
- allocation when SNP is enabled
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Vlastimil Babka <vbabka@suse.cz>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
-        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
-        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
-        michael.roth@amd.com, kirill@shutemov.name, ak@linux.intel.com,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org,
-        "Kaplan, David" <David.Kaplan@amd.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Oscar Salvador <osalvador@suse.de>
-References: <c2ce6317-aa51-2a2b-2d75-ad1fd269f3fa@amd.com>
- <7882353e-2b13-d35a-b462-cef35ee56f51@suse.cz>
- <5b27a05e-09ad-9139-67b1-77b90731419f@amd.com>
- <9d9f1afe-c981-4df9-f012-89c4cb783cc3@amd.com>
- <973c6f79-38ad-aa30-bfec-c2a1c7db5d70@suse.cz>
- <8692e736-7518-d6d2-ae83-720e42e7a059@amd.com>
- <41b8c83e-2a1a-1dda-945e-99329ca8e7e9@suse.cz>
- <711e6027-1b4f-4aed-47a6-305396d05893@amd.com> <Y3Us9wSX9DrWqCyq@zn.tnic>
- <834d41e7-44f8-53f9-a1fa-0cdb5aaff30f@amd.com> <Y3U1VJdC77CfniJj@zn.tnic>
-From:   "Kalra, Ashish" <ashish.kalra@amd.com>
-In-Reply-To: <Y3U1VJdC77CfniJj@zn.tnic>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH2PR05CA0072.namprd05.prod.outlook.com
- (2603:10b6:610:38::49) To SN6PR12MB2767.namprd12.prod.outlook.com
- (2603:10b6:805:75::23)
+        Wed, 16 Nov 2022 14:24:59 -0500
+Received: from mailout-pe-b.jellyfish.systems (mailout-pe-b.jellyfish.systems [198.54.127.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35F7A644F
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 11:24:57 -0800 (PST)
+Received: from output-router-58994b6955-smsdz (unknown [10.35.5.64])
+        by mailout-pe-b.jellyfish.systems (Postfix) with ESMTPA id 4NCCfr4M6mzDqMs;
+        Wed, 16 Nov 2022 19:24:52 +0000 (UTC)
+Received: from MTA-05.privateemail.com (unknown [10.50.14.15])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by NEW-01.privateemail.com (Postfix) with ESMTPS id 81C3A18000CF;
+        Wed, 16 Nov 2022 14:24:52 -0500 (EST)
+Received: from mta-05.privateemail.com (localhost [127.0.0.1])
+        by mta-05.privateemail.com (Postfix) with ESMTP id 6029318000AA;
+        Wed, 16 Nov 2022 14:24:52 -0500 (EST)
+Received: from bpappas-XPS-13-9310.wppl.org (unknown [131.226.25.151])
+        by mta-05.privateemail.com (Postfix) with ESMTPA id 8868818000A0;
+        Wed, 16 Nov 2022 14:24:47 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=pappasbrent.com;
+        s=default; t=1668626692;
+        bh=QvsVh75+ZnsL2z/rlywbbUnkur9BTukvZDfLnRxV6Ec=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hmYwvYxYsbDtTCOHnMvYOWnHgShkzRVDTMA+8hSnyvsxDebsO0fNuapZpVcl33LNP
+         VvH+RMjjLmkJYFSWd8rosSpKG0uo3gBVjHb1aPdkKxGB6KZi5pK2MRFFs7c09lcLGP
+         mfiWHmSE9IdD9H9xQ2LK+KL0nuzw3OJrp0JYeRBHES1HMv4KEIfGFyZ97Voysrxk3i
+         2XdS/yfQqSsKKFxH2Wtroh/53N/BELT8/WfRF9W4rzLgJxgXEQDYasWFSmBvSTA1AH
+         bkqM1HUhO+3bnBGTRhCoDjt791k8nXlZXgUn0F3uPq5uPUiev7JFdZ9LW8rUOxKWIP
+         Wq/Q4LXoiRWvQ==
+From:   Brent Pappas <bpappas@pappasbrent.com>
+To:     gregkh@linuxfoundation.org
+Cc:     johan@kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Brent Pappas <bpappas@pappasbrent.com>
+Subject: [PATCH 1/1] staging: gdm724x: Replace macro GDM_TTY_READY with static inline function
+Date:   Wed, 16 Nov 2022 14:24:13 -0500
+Message-Id: <20221116192412.22446-1-bpappas@pappasbrent.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR12MB2767:EE_|BL3PR12MB6524:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5e03829a-03c4-4353-1832-08dac8080ad4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WSzAwKJk0jRm+idy4ex6OXJBCnwu5sPfF7wAl8HgmXNMhLKxLy/ARKiT3P0VDx0PS+oM4ySe4neBeDPLpvOSOmudpZ3EnHBCsV0nh3NlHv9NQ149GlYySil/BNCxkWb0S7AHc/kFc2NKQ9BPXo64YluTqwzb9rgpQb1FuIL5igAsYQWR7hNseVBewbrP6KY7Pqi5CODGHG0cFn/eO4nKAhREn+eL34jWRhiKmtF9IoTizf7aYDWgcTBiDrgTx/2WpSrdIIB5Cro8CfeuImRXoKsjXliZU01M7JLWmIto5qH4BdGhP4I9KPPHJnqG+DcVbyozMnVdEFIOdFzsMPj4ujoh6zEktSLzMQjpRt0ejYN0vxduxJqkQhMsra0PgZ6vaoHgrjra/WDe6zeCvZ3OkFGLCoHRMjw+uLSiZLEJuNzc3bhyFFzHdWF1jeNZkH5SdLSSnIfAaxYhvb8q805PBGdy20ImlxThvG30DoOqX68LjFQMbEPunJnoyzvuyVHkR4Hp+mo5c3KYIwAQqEGMaCMlxodiAba7byLxz+RaNecmzrJiWsNTSmtBnInfBTsx30POFBncDrVrHrPm3fJnPtkBw9Fd2QPqCiNnJ9/QCUWJ8TUBMu6uGxrqmx3pacZg2eNwp85oLq7PdPRHJyTXsktPZ/IMi+5GiQDXJySRB3+E7MTSx8tnIC/D94tgbtPoD+TyeYv7liFRhJKy8XV/Mlzga7aQ1hwf6NOMjm8xyMOqguZvF2qH/2miVjcGMHK4oaQxBT6dWa4lKqiBHFxaNhSVINOnLvLUGZ4d1D/ncEI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2767.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(366004)(346002)(396003)(39860400002)(376002)(451199015)(38100700002)(86362001)(41300700001)(6512007)(31696002)(4744005)(6486002)(478600001)(7416002)(316002)(66476007)(66946007)(4326008)(8676002)(8936002)(54906003)(6666004)(7406005)(6916009)(66556008)(186003)(53546011)(2616005)(6506007)(2906002)(5660300002)(26005)(36756003)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?em5qQ2gzVnMzUWJvSXBUNjRGNXdhSTEvYkJ4MVo3Q05rK2M3VC9qY2Zsb0lt?=
- =?utf-8?B?MkN1S0lsTlQ0eERzMmtRS2xydzdjN1NWOHY0YXFYb0JXdEpZVnpPREtNQUNF?=
- =?utf-8?B?MTlIbFJLZ0pTQ3lhbjV4aTlESVYrc0NQUzhmSmJ5b2I4ajJiSjkwT1dDdFND?=
- =?utf-8?B?eElVU3k0ZGdQc2dSLzJHb1JvblJNOWk5TTlGbE1saGFSYndMa2c3cGtlVDdN?=
- =?utf-8?B?R0wxZkNaKzg5YS9vMndiUS9hSCtBTUN5WEFMWFZ3aFBoaHZjMEtQUEpPRFBF?=
- =?utf-8?B?cEZ3dHRGeGkxb0NGMVZ0OFBoMUVZcWpKZzNhSEJSajY0eXBOVVBXdlNMQkYw?=
- =?utf-8?B?SXJLdm1HQUpFckp2NkdGYUpIQ1pxVHRWZmVIeDN4bTRndnhwMXNRbkxCZ2Ra?=
- =?utf-8?B?TWY3SmRiNnZCeExoN3JVUG1oMFRERExUTEhaRGxDbmxieHlHQnpGeUlPNkhD?=
- =?utf-8?B?NVRCaWJmNDRUTEcvN29uU1h4S2RPeWdnV2FOaS91SGRKTllxWEdxWTkzZk1y?=
- =?utf-8?B?aWVyVlhna2RmcGQrbmp6UzIzR3htQ1g1R05EbFBsc1BGT2grY0U0ZFhZVUxG?=
- =?utf-8?B?NERGcVVHWU83L2Qyd2YycDFHNFdoZjZpRXlpMW1FV2JFMFJkekJqeWtCZkVv?=
- =?utf-8?B?WWxLK3NpVkVXVlFPSXpoT2VtYU5mc0d0S0RLUHFGV3c4MWdDc0o0eVgwZk15?=
- =?utf-8?B?ay9xODdSaVVYNXRMM1VrV0dlaGhZQWU5QVVERkpzWldqL0dKbGdReVJJZXFG?=
- =?utf-8?B?cEIrMWhqaVZLUVp0UWdaaUlvK05aRXZBc1l6V2hVQ2NiSGxyWW9VY3Eyc05C?=
- =?utf-8?B?VnEzWE80c1ZzaFUveG5Md0doaG82OWdwaTB4YzBIeU9YMCs5TkxDVUtHMUYr?=
- =?utf-8?B?S3NyV3FGL2hBWHFHcWpwZnUydS93YlhuS3VLT2oxNVJ2S20wRE9mQlFLV250?=
- =?utf-8?B?VnVNS3dqajg4TmV6Z2t3ZFV4UUZOalI1ck1EOEN0TE5SM0NVWHRtYk1TdTM5?=
- =?utf-8?B?UG5hQlgzbGR6c2VkMFk5OGZEc2VCekxURlZiRGwyc3lvUklEaXIvb0pnRGU2?=
- =?utf-8?B?aWR1c1RiMTJxei94ZXJXM0ppdy9EZ0VzYytiazR6T0V1YzYwekRvZ1lGK3JP?=
- =?utf-8?B?UzZxSXNJaDlLMGErQnpVOTl4N2NpejRDbllDSVNrVTJBT2c5OG9GYXNGWGdo?=
- =?utf-8?B?UUE1VnJhTUxoTGxuYW5lVzFFYmdSZi9xeENDeGcwQUF3SzRyWU04RVRzQU43?=
- =?utf-8?B?ZStVNUN1UXF6NDlhYjl5QVZEdVkwZVUxT2lweDJIN0NMSWcranMzK1pDUW53?=
- =?utf-8?B?dTNsMzM1Wi9kajdMalEyeTN4OFBjalZ6WGpCUElBYXJCZ005MjZuNHNlNVhq?=
- =?utf-8?B?NFpBRTdnZkxFUHNENHFGOFhHL25mV2N4L2VRb1F0ZzVwV0NvWStKRmI0ZWpm?=
- =?utf-8?B?TklMSXlqUzFxVExteTRhc2cxeS9yNDBUMktLc0U1REk4cXBHL1cwdDBLT1BG?=
- =?utf-8?B?dkpJcXhGVElhOVRoOEFvRWZWUmUzRm9Pb05HcnZYWU1WYjREaDhmalpCYU00?=
- =?utf-8?B?VUZOWFU2UmVieUlrZm1haUhwaUZDZEM2dUVlOFdqMEtUanRrMW9TR3J4bDdD?=
- =?utf-8?B?WVJ4NXErM0l2STM3NHNlc0J2a3VhVXpwNXlTSnpqaXhsWEgxb2d0MXEvK2I5?=
- =?utf-8?B?N0t4YjExSWUvTEZ3WTFNWFBkc3FCc1JYZVFjSkNsRHQ1WlZ6L21kMUZwc1p1?=
- =?utf-8?B?YVR1MlZJbjI2SVhPcVlVSlhYN1laTDBPQTJzLytPZ1VmMkt3WUNVMXFHTi9o?=
- =?utf-8?B?YW5GWGMxeXR5UUd0NGlWSWowMjFKKzRtZlZ4cFlCR0N1SGhMdmJqU3p2VDFa?=
- =?utf-8?B?MHJNYzdkTWIvVVJvYjJXZEEyQ2JsN2Vza1lydmZPN0phQU1tSHJBcitYSi96?=
- =?utf-8?B?ZXUrSTg5akJDTzFPQ1VPVG9VUTA3M0xpYWRheU53MDM2NjZESFRDSWl4K1Zk?=
- =?utf-8?B?Q0JuS3pZdEM4czhQbXkzcURJZ1BxeEE2UXZrdFhtK2lYZ2JCWkFHMVRYT1dV?=
- =?utf-8?B?SnJsbldVT1NHS0VyNktkNldsZkNXSEpjWG1VT0xYYjc0UTgxdEpPdlRMTFRa?=
- =?utf-8?Q?RDCtLt1wQZLYYMNA5qXTrA//G?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5e03829a-03c4-4353-1832-08dac8080ad4
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2767.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Nov 2022 19:23:29.5655
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /5zC6vTiGpS7u5pOu774azGJg/w1tNGLoEko0u7HVGpWcmqup0Xck+TutkdXs8+1MCTbrUJVeUGW9oqoNAqgbA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6524
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: ClamAV using ClamSMTP
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/16/2022 1:09 PM, Borislav Petkov wrote:
-> On Wed, Nov 16, 2022 at 12:53:36PM -0600, Kalra, Ashish wrote:
->> Actually, these host allocated pages would have already been removed from
->> the kernel direct map,
-> 
-> And, as I said above, it would be a lot easier to handle any potential
-> faults resulting from the host touching them by having it raise a *RMP*
-> fault instead of normal *PF* fault where the latter code is a crazy mess.
+Replace the macro GDM_TTY_READY with a static inline function
+to follow the Linux kernel coding style.
 
-Just to reiterate here, we won't be getting a *RMP* fault but will 
-instead get a normal (not-present) #PF fault when the host touches these 
-pages.
+Signed-off-by: Brent Pappas <bpappas@pappasbrent.com>
+---
+ drivers/staging/gdm724x/gdm_tty.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-Sorry for any confusion about the fault signaled, earlier i mentioned we 
-will get a RMP violation #PF, but actually as these pages are also 
-removed from the kernel direct-map, therefore, we will get the 
-not-present #PF and not the RMP #PF (core will check and signal 
-not-present #PF before it performs the RMP checks).
-
-Thanks,
-Ashish
+diff --git a/drivers/staging/gdm724x/gdm_tty.c b/drivers/staging/gdm724x/gdm_tty.c
+index cc6d80554c98..93d50d42a367 100644
+--- a/drivers/staging/gdm724x/gdm_tty.c
++++ b/drivers/staging/gdm724x/gdm_tty.c
+@@ -21,7 +21,10 @@
+ 
+ #define MUX_TX_MAX_SIZE 2048
+ 
+-#define GDM_TTY_READY(gdm) (gdm && gdm->tty_dev && gdm->port.count)
++static inline int gdm_tty_ready(struct gdm *gdm)
++{
++	return gdm && gdm->tty_dev && gdm->port.count;
++}
+ 
+ static struct tty_driver *gdm_driver[TTY_MAX_COUNT];
+ static struct gdm *gdm_table[TTY_MAX_COUNT][GDM_TTY_MINOR];
+@@ -113,7 +116,7 @@ static int gdm_tty_recv_complete(void *data,
+ {
+ 	struct gdm *gdm = tty_dev->gdm[index];
+ 
+-	if (!GDM_TTY_READY(gdm)) {
++	if (!gdm_tty_ready(gdm)) {
+ 		if (complete == RECV_PACKET_PROCESS_COMPLETE)
+ 			gdm->tty_dev->recv_func(gdm->tty_dev->priv_dev,
+ 						gdm_tty_recv_complete);
+@@ -140,7 +143,7 @@ static void gdm_tty_send_complete(void *arg)
+ {
+ 	struct gdm *gdm = arg;
+ 
+-	if (!GDM_TTY_READY(gdm))
++	if (!gdm_tty_ready(gdm))
+ 		return;
+ 
+ 	tty_port_tty_wakeup(&gdm->port);
+@@ -154,7 +157,7 @@ static int gdm_tty_write(struct tty_struct *tty, const unsigned char *buf,
+ 	int sent_len = 0;
+ 	int sending_len = 0;
+ 
+-	if (!GDM_TTY_READY(gdm))
++	if (!gdm_tty_ready(gdm))
+ 		return -ENODEV;
+ 
+ 	if (!len)
+@@ -181,7 +184,7 @@ static unsigned int gdm_tty_write_room(struct tty_struct *tty)
+ {
+ 	struct gdm *gdm = tty->driver_data;
+ 
+-	if (!GDM_TTY_READY(gdm))
++	if (!gdm_tty_ready(gdm))
+ 		return 0;
+ 
+ 	return WRITE_SIZE;
+-- 
+2.34.1
 
