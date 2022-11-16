@@ -2,115 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B3D762BD79
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:19:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 528B262BD65
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:19:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233807AbiKPMTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 07:19:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34862 "EHLO
+        id S233489AbiKPMTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 07:19:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238266AbiKPMTC (ORCPT
+        with ESMTP id S233064AbiKPMSh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 07:19:02 -0500
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C981818E36;
-        Wed, 16 Nov 2022 04:16:55 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AGCGkwR058271;
-        Wed, 16 Nov 2022 06:16:46 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1668601006;
-        bh=cLDcxht+GZb1N7QGNbVmOg3psxKJsN5LhlYIFPJxwHM=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=SiKg5ErfBQ+amsib/kAMOuklIbJ6GDDAVx9UCpsRI2AdV2I29f+t2wwax+qxiMNU9
-         QHtxfWsVpjtU3ri2iUxnuALze6GhqTxNXRh2S4Y/4O8Z27jzfWJryFzdZc7FD9IOUK
-         9x166AjPi3hA91QCTzZcJ6D6JWLlRryxxkZCnoyk=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AGCGkcn080326
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 16 Nov 2022 06:16:46 -0600
-Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Wed, 16
- Nov 2022 06:16:46 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Wed, 16 Nov 2022 06:16:46 -0600
-Received: from fllv0122.itg.ti.com (fllv0122.itg.ti.com [10.247.120.72])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AGCGk7f080233;
-        Wed, 16 Nov 2022 06:16:46 -0600
-Received: from localhost (a0501179-pc.dhcp.ti.com [10.24.69.114])
-        by fllv0122.itg.ti.com (8.14.7/8.14.7) with ESMTP id 2AGCGjmg013735;
-        Wed, 16 Nov 2022 06:16:45 -0600
-From:   MD Danish Anwar <danishanwar@ti.com>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Suman Anna <s-anna@ti.com>, Roger Quadros <rogerq@kernel.org>,
-        "Andrew F . Davis" <afd@ti.com>, <nm@ti.com>, <vigneshr@ti.com>,
-        <srk@ti.com>, <linux-remoteproc@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        MD Danish Anwar <danishanwar@ti.com>
-Subject: [PATCH v8 4/6] remoteproc: pru: Make sysfs entries read-only for PRU client driven boots
-Date:   Wed, 16 Nov 2022 17:46:32 +0530
-Message-ID: <20221116121634.2901265-5-danishanwar@ti.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221116121634.2901265-1-danishanwar@ti.com>
-References: <20221116121634.2901265-1-danishanwar@ti.com>
+        Wed, 16 Nov 2022 07:18:37 -0500
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8541C186E7
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 04:16:46 -0800 (PST)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-3701a0681daso165700917b3.4
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 04:16:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rBIIPAxEMDmWChtWJvfnNUpO+ivoCFncrKiKxYRGVW4=;
+        b=t8KpbpC9U6ngJ5hW9MWblzaYLatmkTSgM14ROwi8OIWiMWl/QZ6H3hvFG9U1uFOGrW
+         FGVb57z9ID6xCB8HjftKpmVyDnWG6dZMJJ8viGmY1C9/V4RZP3CQMB6un8s1MSmma/0T
+         b5wrRrn8tqWgEDE0gDlpKMx8QQLT8Ec+mfkOg/4+l1Ba6GioWh7wbJGe6FZdPp2mvyK/
+         mt3Je8PyWyIbBjS4IGLb2NJ1pAH/8znidII1/+Cl4E4D0J9HKGqdAYZYEtMkUssFG4eU
+         kwE1m7m4KilYtp8LttC1bQONX14IuzsFYrB0sv0wmCHVBM2pSJMDsgWJca3hTKPt1DYr
+         smGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rBIIPAxEMDmWChtWJvfnNUpO+ivoCFncrKiKxYRGVW4=;
+        b=tIZZdjZnpHYvdrnTSl5wVaaR7ayjTWFTzSfFHkxgnZ2+jqccBNyqi6U8AgXP4fH6dr
+         3m/12MTtPojPQKiLTG67Do97sBTL5Q6MoUhzlJuuo3Y1o+WtT/N9Cxc0ew/iSOx/Xj/T
+         zAZ2U9sufyrkxayzFZLIns9JArDqAOGzkoQrScnkeDfPbVcPG6YHRHpWjEB6jMweVVxX
+         0XJ5Tp5KgIpoKiV9EWFw51lhaYDrYtStfu+Ih/kBOxdoU7ibOZBKZYx51A9tmpPUVbk5
+         Jvkow47BpN86fkpXge2dDQ0jGZDWsgoqUjWV8vRqYZfB4l4HU0BGAOAkBBGDsTFpr9ve
+         M13w==
+X-Gm-Message-State: ANoB5pndzzBAEVjlA8mLmoooZR3pow2AmQSTgefeT25cU5NaolIe4daG
+        kSe4AoWsiscojwTF0bU/eEt/7dIgmdHh4o9JEc18gLq1UpMX8w==
+X-Google-Smtp-Source: AA0mqf6040AtJHvH8e6BidX2XV6aiIQjvB0qQXbeXoDkgyQOp+G3I9bJFM7OfOtUmvzF5iJn0vaLanIHI0rF8bLhUpk=
+X-Received: by 2002:a0d:db44:0:b0:367:bab2:d50c with SMTP id
+ d65-20020a0ddb44000000b00367bab2d50cmr22786012ywe.459.1668601004632; Wed, 16
+ Nov 2022 04:16:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 16 Nov 2022 17:46:33 +0530
+Message-ID: <CA+G9fYu0p4cFdkrkQyV4OC-iPpY18asV0VTP=O_sysLNaJJAQw@mail.gmail.com>
+Subject: kselftest: Bad test result: from results parsing in LAVA
+To:     open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, lkft-triage@lists.linaro.org
+Cc:     Shuah Khan <shuah@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Remi Duraffort <remi.duraffort@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Suman Anna <s-anna@ti.com>
+kselftest running on LAVA infrastures provides test results parser
+from test-definitions repository.
+which is getting  "Bad test result:".
 
-The PRU remoteproc driver is not configured for 'auto-boot' by default,
-and allows to be booted either by in-kernel PRU client drivers or by
-userspace using the generic remoteproc sysfs interfaces. The sysfs
-interfaces should not be permitted to change the remoteproc firmwares
-or states when a PRU is being managed by an in-kernel client driver.
-Use the newly introduced remoteproc generic 'sysfs_read_only' flag to
-provide these restrictions by setting and clearing it appropriately
-during the PRU acquire and release steps.
+I have noticed this on kernelci [1] and LKFT LAVA instances [2].
+We need to investigate and change parse_output [3] inside test-definitions.
 
-Co-developed-by: Suman Anna <s-anna@ti.com>
-Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-Co-developed-by: Puranjay Mohan <p-mohan@ti.com>
-Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
----
- drivers/remoteproc/pru_rproc.c | 2 ++
- 1 file changed, 2 insertions(+)
+Report-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-diff --git a/drivers/remoteproc/pru_rproc.c b/drivers/remoteproc/pru_rproc.c
-index 7d4ed39b3772..bca7550d79d2 100644
---- a/drivers/remoteproc/pru_rproc.c
-+++ b/drivers/remoteproc/pru_rproc.c
-@@ -228,6 +228,7 @@ struct rproc *pru_rproc_get(struct device_node *np, int index,
- 	}
- 
- 	pru->client_np = np;
-+	rproc->sysfs_read_only = true;
- 
- 	mutex_unlock(&pru->lock);
- 
-@@ -266,6 +267,7 @@ void pru_rproc_put(struct rproc *rproc)
- 	}
- 
- 	pru->client_np = NULL;
-+	rproc->sysfs_read_only = false;
- 	mutex_unlock(&pru->lock);
- 
- 	rproc_put(rproc);
--- 
-2.25.1
+Test results parser showing =E2=80=9CBad test results: =E2=80=9C,
 
+Received signal: <TESTCASE> TEST_CASE_ID=3Darm64.sve-ptrace.SVE RESULT=3DFP=
+SIMD
+Bad test result: FPSIMD
+<LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Darm64.sve-ptrace.SVE RESULT=3DFPSIMD>
+Received signal: <TESTCASE> TEST_CASE_ID=3Darm64.sve-ptrace.SVE
+RESULT=3Dget_fpsimd()
+Bad test result: get_fpsimd()
+<LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Darm64.sve-ptrace.SVE RESULT=3Dget_fpsi=
+md()>
+Received signal: <TESTCASE> TEST_CASE_ID=3Darm64.sve-ptrace.SVE
+RESULT=3DSVE_PT_VL_INHERIT
+Bad test result: SVE_PT_VL_INHERIT
+<LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Darm64.sve-ptrace.SVE
+RESULT=3DSVE_PT_VL_INHERIT>
+Received signal: <TESTCASE> TEST_CASE_ID=3Darm64.sve-ptrace.SVE
+RESULT=3DSVE_PT_VL_INHERIT
+Bad test result: SVE_PT_VL_INHERIT
+<LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Darm64.sve-ptrace.SVE
+RESULT=3DSVE_PT_VL_INHERIT>
+Received signal: <TESTCASE> TEST_CASE_ID=3Darm64.sve-ptrace.Set RESULT=3DSV=
+E
+Bad test result: SVE
+<LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Darm64.sve-ptrace.Set RESULT=3DSVE>
+<LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Darm64.sve-ptrace.Set RESULT=3Dand>
+Received signal: <TESTCASE> TEST_CASE_ID=3Darm64.sve-ptrace.Set RESULT=3Dan=
+d
+Bad test result: and
+Received signal: <TESTCASE> TEST_CASE_ID=3Darm64.sve-ptrace.Set RESULT=3Dan=
+d
+Bad test result: and
+..
+<LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dclone3.clone3_set_tid.[1710] RESULT=3D=
+Result>
+Received signal: <TESTCASE> TEST_CASE_ID=3Dclone3.clone3_set_tid.[1710]
+RESULT=3DResult
+Bad test result: Result
+
+[1] https://storage.kernelci.org/next/master/next-20221116/arm64/defconfig+=
+arm64-chromebook/gcc-10/lab-collabora/kselftest-arm64-mt8173-elm-hana.html#=
+L3105
+[2] https://linaro.atlassian.net/browse/LKQ-934
+[3] https://github.com/Linaro/test-definitions/blob/master/automated/linux/=
+kselftest/kselftest.sh#L124
+[4] https://lkft.validation.linaro.org/scheduler/job/5729151#L2511
+
+--
+Linaro LKFT
+https://lkft.linaro.org
