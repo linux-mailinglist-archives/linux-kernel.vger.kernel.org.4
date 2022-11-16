@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EC6662CB8F
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 21:54:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B4BE62CBA0
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 21:54:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238781AbiKPUyI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 15:54:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35168 "EHLO
+        id S234520AbiKPUyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 15:54:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238595AbiKPUxn (ORCPT
+        with ESMTP id S233340AbiKPUxo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 15:53:43 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62823B9
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 12:53:24 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id l11so28488769edb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 12:53:24 -0800 (PST)
+        Wed, 16 Nov 2022 15:53:44 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4C10D89
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 12:53:25 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id n20so98457ejh.0
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 12:53:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=CYWMMUbBw93RRaB82Tv6rmjWQ7OjIXTvTPik8qxDxCo=;
-        b=rTDy/jgYPCRzE6NdKcp1p40vLzuwCFilt4GMZ2KgsYOwc3AeCM+94KSaGrZKLYKxFG
-         opmzxtk5xRCS5WSeC565gaVF4DdshwC1HSRqklfwYr7WJ+S0owa0wHj3IbmeF8U1T4i7
-         6RiyePLsWNqDFSqXEFhJCNuyBMF6k4Yb7ur9DPggsh6q8H5JA4FmNPH5NuR0vw5ngGgX
-         EpYPw123nxWG7VbD4qJmqj19F3NVD0pF4BS+TSEKNlxF5l8N1f3xyN6mpRnn/CsSlGp6
-         3rLhBMS8WxVlXUhSQSd6FVwmIqlHmbypQP6abng742u05WM1o/YX6VCFz2FMNznvbHgS
-         ybZg==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2rJ/wCekKfh+/zbab0KIF63OXyhft6t7a9cE754TRYE=;
+        b=P2To7HYyeZgnQrgVSiKYZjY/MFYOIWjd/XCA+rlJONO4UE9NbuRNNXqh4OoyMZDMFD
+         8Jf5jjQg1yf4Vyr1mTAAW8m6RnMK0YsErEsVDcNgxGXty8Ezc6tEkn/cflJkqTKCAMtP
+         GZ7exwXlAMjj1At6Tc/0RmiIDNSF1RMyZg3yIdEIJLGYXi1ucQ7ODKnL+s0di9XHxfaQ
+         slvIwH/ocjac5SAAfER5A1IWBuhmNTJ+e/WhRYA/VeSeEWyGUUyumYgQbgc6gQMyylXG
+         TOVZtkibuNn46tWev4OobR6gdDQVrGUxaw0tXDwxjwLTmKrHDf5404mUyxGyYeqnyRSa
+         HUyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CYWMMUbBw93RRaB82Tv6rmjWQ7OjIXTvTPik8qxDxCo=;
-        b=juChfMDpXQCpkZ8HGLG8d2Hc2QeER6VZ/9ID1DPpzDvm6aC2lmT1cfh/VwwW2LwFcT
-         6PvZ7EDriRD2DUEDR1c9XUWazz0kPUY2UV+XTwPTKB631LYKfUdYrZSIqTOYiR4EhmX1
-         z1nBYCU0/FxjgOLW/zWWUTsqzABBwEGlKOkNKbQ8/T2mOzl8EJFBEj0zWHKDJj1Z5CgN
-         4SsXpi93Er1tWXEPCO+0/3RyPYaEj9BaIyRIqpBh1ZgNoTw94JQxAUwfZLXlatka3OqM
-         s6pY6Ul/e66gLOz9tf14xCO+IDAyaavn8b3xXdTRBdSB+gzLFyki1tYbFTPhIAM2nGKz
-         BEtg==
-X-Gm-Message-State: ANoB5pkc1j2sRq8KIFCbXfD7x+x6hICSrZIEA4Aly0vRcdwHCZuToli4
-        3cPDI4ohhZgZojpuLctVJe9omw==
-X-Google-Smtp-Source: AA0mqf5GghMPuf8/49SrUqtwUrDtiDsBaRv1sxhvM2kqZAgVR5XZuviSvJwLzzJB0XDNHiDQmj6t4A==
-X-Received: by 2002:a05:6402:f8d:b0:461:8f21:5f12 with SMTP id eh13-20020a0564020f8d00b004618f215f12mr20896599edb.54.1668632003246;
-        Wed, 16 Nov 2022 12:53:23 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2rJ/wCekKfh+/zbab0KIF63OXyhft6t7a9cE754TRYE=;
+        b=Oc62xkx8PN7ZMX42VHXAhrUkOD0PD2QXzNcovsQqIQRvv5YINLbL37GcNRfepS/XQY
+         g5IcmZbQLRfFyvaknSzd8oegPITdGClcltjazgSwEUEc5eCz9/JvCJ7CrmQkaL05lQEY
+         EfGVvqkAkaD7axdH/nTJ5ioJ0u27MZqa+CeNHTHiG/fMsrxNLIdaWaROriMP38BZAsWd
+         w8HiYoltmX7YMXXA+7QCt0TTH5xQDa59uNuHH03QZiGSLahTB6GQC7wmEl9d9qhdUHVt
+         v05sTdAGfn8cez7vSxlBmw/GXxyi3Chg9oSFlZEXiMp/dqqIKPl8i3ueuPSPHX0nDK9+
+         LSGQ==
+X-Gm-Message-State: ANoB5pmb8PlhRdQa1nBt1rxcsDyeN1VeXN/YWJDenC99Y8/j4dKz+K2L
+        Wzm/fDGkM6r0wjSzdXyAIqSBkQ==
+X-Google-Smtp-Source: AA0mqf7gkUlgqdFMbhRGiQ4SNQC97BkRRTReNc1yfIImtknfhy+YxiIiJqYtvcTWGm8CTPGs3KmFqA==
+X-Received: by 2002:a17:906:1248:b0:7ad:f9da:8986 with SMTP id u8-20020a170906124800b007adf9da8986mr19202437eja.54.1668632004349;
+        Wed, 16 Nov 2022 12:53:24 -0800 (PST)
 Received: from blmsp.fritz.box ([2001:4090:a244:804b:353b:565:addf:3aa7])
-        by smtp.gmail.com with ESMTPSA id kv17-20020a17090778d100b007aece68483csm6782828ejc.193.2022.11.16.12.53.22
+        by smtp.gmail.com with ESMTPSA id kv17-20020a17090778d100b007aece68483csm6782828ejc.193.2022.11.16.12.53.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 12:53:22 -0800 (PST)
+        Wed, 16 Nov 2022 12:53:23 -0800 (PST)
 From:   Markus Schneider-Pargmann <msp@baylibre.com>
 To:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
@@ -56,10 +57,12 @@ To:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
 Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Markus Schneider-Pargmann <msp@baylibre.com>
-Subject: [PATCH 00/15] can: m_can: Optimizations for tcan and peripheral chips
-Date:   Wed, 16 Nov 2022 21:52:53 +0100
-Message-Id: <20221116205308.2996556-1-msp@baylibre.com>
+Subject: [PATCH 01/15] can: m_can: Eliminate double read of TXFQS in tx_handler
+Date:   Wed, 16 Nov 2022 21:52:54 +0100
+Message-Id: <20221116205308.2996556-2-msp@baylibre.com>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221116205308.2996556-1-msp@baylibre.com>
+References: <20221116205308.2996556-1-msp@baylibre.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,51 +74,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The TXFQS register is read first to check if the fifo is full and then
+immediately again to get the putidx. This is unnecessary and adds
+significant overhead if read requests are done over a slow bus, for
+example SPI with tcan4x5x.
 
-this series is aimed at optimizing the driver code for tcan chips and
-more generally for peripheral m_can chips.
+Add a variable to store the value of the register. Split the
+m_can_tx_fifo_full function into two to avoid the hidden m_can_read call
+if not needed.
 
-I did different things to improve the performance:
-- Reduce the number of SPI transfers.
-- Reduce the number of interrupts.
-- Enable use of FIFOs.
+Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+---
+ drivers/net/can/m_can/m_can.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
-I am working with a tcan4550 in loopback mode attached to a beaglebone
-black. I am currently working on optimizing the receive path as well
-which will be submitted in another series once it is done.
-
-Best,
-Markus
-
-Markus Schneider-Pargmann (15):
-  can: m_can: Eliminate double read of TXFQS in tx_handler
-  can: m_can: Wakeup net queue once tx was issued
-  can: m_can: Cache tx putidx and transmits in flight
-  can: m_can: Use transmit event FIFO watermark level interrupt
-  can: m_can: Disable unused interrupts
-  can: m_can: Avoid reading irqstatus twice
-  can: m_can: Read register PSR only on error
-  can: m_can: Count TXE FIFO getidx in the driver
-  can: m_can: Count read getindex in the driver
-  can: m_can: Batch acknowledge rx fifo
-  can: m_can: Batch acknowledge transmit events
-  can: tcan4x5x: Remove invalid write in clear_interrupts
-  can: tcan4x5x: Fix use of register error status mask
-  can: tcan4x5x: Fix register range of first block
-  can: tcan4x5x: Specify separate read/write ranges
-
- drivers/net/can/m_can/m_can.c           | 140 +++++++++++++++---------
- drivers/net/can/m_can/m_can.h           |   5 +
- drivers/net/can/m_can/tcan4x5x-core.c   |  19 ++--
- drivers/net/can/m_can/tcan4x5x-regmap.c |  45 ++++++--
- 4 files changed, 141 insertions(+), 68 deletions(-)
-
-
-base-commit: 094226ad94f471a9f19e8f8e7140a09c2625abaa
-prerequisite-patch-id: e9df6751d43bb0d1e3b8938d7e93bc1cfa22cef2
-prerequisite-patch-id: dad9ec37af766bcafe54cb156f896267a0f47fe1
-prerequisite-patch-id: f4e6f1a213a31df2741a5fa3baa87aa45ef6707a
+diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+index 00d11e95fd98..2c01e3f7b23f 100644
+--- a/drivers/net/can/m_can/m_can.c
++++ b/drivers/net/can/m_can/m_can.c
+@@ -368,9 +368,14 @@ m_can_txe_fifo_read(struct m_can_classdev *cdev, u32 fgi, u32 offset, u32 *val)
+ 	return cdev->ops->read_fifo(cdev, addr_offset, val, 1);
+ }
+ 
++static inline bool _m_can_tx_fifo_full(u32 txfqs)
++{
++	return !!(txfqs & TXFQS_TFQF);
++}
++
+ static inline bool m_can_tx_fifo_full(struct m_can_classdev *cdev)
+ {
+-	return !!(m_can_read(cdev, M_CAN_TXFQS) & TXFQS_TFQF);
++	return _m_can_tx_fifo_full(m_can_read(cdev, M_CAN_TXFQS));
+ }
+ 
+ static void m_can_config_endisable(struct m_can_classdev *cdev, bool enable)
+@@ -1585,6 +1590,7 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
+ 	struct sk_buff *skb = cdev->tx_skb;
+ 	struct id_and_dlc fifo_header;
+ 	u32 cccr, fdflags;
++	u32 txfqs;
+ 	int err;
+ 	int putidx;
+ 
+@@ -1641,8 +1647,10 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
+ 	} else {
+ 		/* Transmit routine for version >= v3.1.x */
+ 
++		txfqs = m_can_read(cdev, M_CAN_TXFQS);
++
+ 		/* Check if FIFO full */
+-		if (m_can_tx_fifo_full(cdev)) {
++		if (_m_can_tx_fifo_full(txfqs)) {
+ 			/* This shouldn't happen */
+ 			netif_stop_queue(dev);
+ 			netdev_warn(dev,
+@@ -1658,8 +1666,7 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
+ 		}
+ 
+ 		/* get put index for frame */
+-		putidx = FIELD_GET(TXFQS_TFQPI_MASK,
+-				   m_can_read(cdev, M_CAN_TXFQS));
++		putidx = FIELD_GET(TXFQS_TFQPI_MASK, txfqs);
+ 
+ 		/* Construct DLC Field, with CAN-FD configuration.
+ 		 * Use the put index of the fifo as the message marker,
 -- 
 2.38.1
 
