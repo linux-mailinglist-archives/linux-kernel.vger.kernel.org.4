@@ -2,196 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0526562BDA3
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:23:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8260562BDAE
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:24:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238742AbiKPMXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 07:23:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37638 "EHLO
+        id S233430AbiKPMYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 07:24:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233305AbiKPMWm (ORCPT
+        with ESMTP id S238495AbiKPMX6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 07:22:42 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E1F327CFD;
-        Wed, 16 Nov 2022 04:19:46 -0800 (PST)
-Received: from fraeml740-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NC26w365Wz67QRR;
-        Wed, 16 Nov 2022 20:15:04 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml740-chm.china.huawei.com (10.206.15.221) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 16 Nov 2022 13:19:43 +0100
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 16 Nov
- 2022 12:19:43 +0000
-Date:   Wed, 16 Nov 2022 12:19:42 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     <alison.schofield@intel.com>
-CC:     Dan Williams <dan.j.williams@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, <linux-cxl@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 1/6] trace, cxl: Introduce a TRACE_EVENT for CXL
- poison records
-Message-ID: <20221116121942.00003a3e@Huawei.com>
-In-Reply-To: <5746274c905f57f117987c8268c9f6dc9bd33337.1668115235.git.alison.schofield@intel.com>
-References: <cover.1668115235.git.alison.schofield@intel.com>
-        <5746274c905f57f117987c8268c9f6dc9bd33337.1668115235.git.alison.schofield@intel.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Wed, 16 Nov 2022 07:23:58 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2EFA2F389;
+        Wed, 16 Nov 2022 04:20:07 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 1099A336F0;
+        Wed, 16 Nov 2022 12:20:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1668601206; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=U5CoxrssX3lwO2yTdR28sH82ZL6YuWSWRKEuuR+bTSg=;
+        b=1KQ9vl9AZ3Xi2ks+r3Tcd7Kt6XHbCFYASKFZ0N10cT8ptZznJhYf3Jig7tmgWYfk+2a78D
+        abAy3zOZF+vEVxb6EWrp2tvqrgw4XVMH/R+NMl3kTfRMWH0CcmeWkgYfZyKTx1EryqS6fp
+        90fuqtFZCtBAOcexE52g2J7yLWgF3cQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1668601206;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=U5CoxrssX3lwO2yTdR28sH82ZL6YuWSWRKEuuR+bTSg=;
+        b=CCTAQzUMyrC4rnInTPc4mAiJf2AstLr6KjyaFFw87i+FMST7AQHNaie5KWBElvpFspJaPh
+        i10PPdpYQErXifBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 05A92134CE;
+        Wed, 16 Nov 2022 12:20:06 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ZUxdAXbVdGNFEwAAMHmgww
+        (envelope-from <bp@suse.de>); Wed, 16 Nov 2022 12:20:06 +0000
+Date:   Wed, 16 Nov 2022 13:20:00 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Peter Gonda <pgonda@google.com>
+Cc:     thomas.lendacky@amd.com, Dionna Glaze <dionnaglaze@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Haowen Bai <baihaowen@meizu.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Marc Orr <marcorr@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Ashish Kalra <Ashish.Kalra@amd.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH V4] virt: sev: Prevent IV reuse in SNP guest driver
+Message-ID: <Y3TVcJnQ/Ym6dGz2@zn.tnic>
+References: <20221103152318.88354-1-pgonda@google.com>
+ <Y258U+8oF/eo14U+@zn.tnic>
+ <CAMkAt6o-jcG7u1=zw4jJp5evrO4sFJR-iG_ApF7LhT+7c55_Wg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml500005.china.huawei.com (7.191.163.240) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMkAt6o-jcG7u1=zw4jJp5evrO4sFJR-iG_ApF7LhT+7c55_Wg@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Nov 2022 19:12:39 -0800
-alison.schofield@intel.com wrote:
-
-> From: Alison Schofield <alison.schofield@intel.com>
+On Tue, Nov 15, 2022 at 02:47:31PM -0700, Peter Gonda wrote:
+> > > +      * certificate data buffer retry the same guest request without the
+> > > +      * extended data request.
+> > > +      */
+> > > +     if (exit_code == SVM_VMGEXIT_EXT_GUEST_REQUEST &&
+> > > +         err == SNP_GUEST_REQ_INVALID_LEN) {
+> > > +             const unsigned int certs_npages = snp_dev->input.data_npages;
+> > > +
+> > > +             exit_code = SVM_VMGEXIT_GUEST_REQUEST;
+> > > +             rc = snp_issue_guest_request(exit_code, &snp_dev->input, &err);
+> > > +
+> > > +             err = SNP_GUEST_REQ_INVALID_LEN;
+> >
+> > Huh, why are we overwriting err here?
 > 
-> CXL devices may support the retrieval of a device poison list.
-> Introduce a trace event that the CXL subsystem can use to log
-> the poison error records.
+> I have added a comment for the next revision.
 > 
-> Signed-off-by: Alison Schofield <alison.schofield@intel.com>
-Only thing I wondered a bit about in here is the philosophy of whether it is
-useful to include the pcidev and region given they can both be established
-fairly easily via other paths..  Meh. Seems reasonable to me to have the
-in here so.
+> We are overwriting err here so that userspace is alerted that they
+> supplied a buffer too small.
 
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> ---
->  drivers/cxl/cxlmem.h       | 14 +++++++
->  include/trace/events/cxl.h | 80 ++++++++++++++++++++++++++++++++++++++
->  2 files changed, 94 insertions(+)
->  create mode 100644 include/trace/events/cxl.h
-> 
-> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-> index 88e3a8e54b6a..669868cc1553 100644
-> --- a/drivers/cxl/cxlmem.h
-> +++ b/drivers/cxl/cxlmem.h
-> @@ -347,6 +347,20 @@ struct cxl_mbox_set_partition_info {
->  
->  #define  CXL_SET_PARTITION_IMMEDIATE_FLAG	BIT(0)
->  
-> +/* Get Poison List  CXL 3.0 Spec 8.2.9.8.4.1 */
-> +
-> +/* Get Poison List: Payload out flags */
-> +#define CXL_POISON_FLAG_MORE            BIT(0)
-> +#define CXL_POISON_FLAG_OVERFLOW        BIT(1)
-> +#define CXL_POISON_FLAG_SCANNING        BIT(2)
-> +
-> +/* Get Poison List: Poison Source */
-> +#define CXL_POISON_SOURCE_UNKNOWN	0
-> +#define CXL_POISON_SOURCE_EXTERNAL	1
-> +#define CXL_POISON_SOURCE_INTERNAL	2
-> +#define CXL_POISON_SOURCE_INJECTED	3
-> +#define CXL_POISON_SOURCE_VENDOR	7
-> +
->  /**
->   * struct cxl_mem_command - Driver representation of a memory device command
->   * @info: Command information as it exists for the UAPI
-> diff --git a/include/trace/events/cxl.h b/include/trace/events/cxl.h
-> new file mode 100644
-> index 000000000000..03428125573f
-> --- /dev/null
-> +++ b/include/trace/events/cxl.h
-> @@ -0,0 +1,80 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#undef TRACE_SYSTEM
-> +#define TRACE_SYSTEM cxl
-> +
-> +#if !defined(_CXL_TRACE_H) ||  defined(TRACE_HEADER_MULTI_READ)
-> +#define _CXL_TRACE_H
-> +
-> +#include <linux/tracepoint.h>
-> +#include <cxlmem.h>
-> +
-> +#define __show_poison_source(source)                          \
-> +	__print_symbolic(source,                              \
-> +		{ CXL_POISON_SOURCE_UNKNOWN,   "Unknown"  },  \
-> +		{ CXL_POISON_SOURCE_EXTERNAL,  "External" },  \
-> +		{ CXL_POISON_SOURCE_INTERNAL,  "Internal" },  \
-> +		{ CXL_POISON_SOURCE_INJECTED,  "Injected" },  \
-> +		{ CXL_POISON_SOURCE_VENDOR,    "Vendor"   })
-> +
-> +#define show_poison_source(source)			     \
-> +	(((source > CXL_POISON_SOURCE_INJECTED) &&	     \
-> +	 (source != CXL_POISON_SOURCE_VENDOR)) ? "Reserved"  \
-> +	 : __show_poison_source(source))
-> +
-> +#define show_poison_flags(flags)                             \
-> +	__print_flags(flags, "|",                            \
-> +		{ CXL_POISON_FLAG_MORE,      "More"     },   \
-> +		{ CXL_POISON_FLAG_OVERFLOW,  "Overflow"  },  \
-> +		{ CXL_POISON_FLAG_SCANNING,  "Scanning"  })
-> +
-> +TRACE_EVENT(cxl_poison,
-> +
-> +	    TP_PROTO(const char *memdev, const char *pcidev, const char *region,
-> +		     const uuid_t *uuid, u64 dpa, u32 length, u8 source,
-> +		     u8 flags, u64 overflow_t),
-> +
-> +	    TP_ARGS(memdev, pcidev, region, uuid, dpa, length, source,
-> +		    flags, overflow_t),
-> +
-> +	    TP_STRUCT__entry(
-> +		__string(memdev, memdev)
-> +		__string(pcidev, pcidev)
-> +		__string(region, region ? region : "")
-> +		__array(char, uuid, 16)
-> +		__field(u64, dpa)
-> +		__field(u32, length)
-> +		__field(u8, source)
-> +		__field(u8, flags)
-> +		__field(u64, overflow_t)
-> +	    ),
-> +
-> +	    TP_fast_assign(
-> +		__assign_str(memdev, memdev);
-> +		__assign_str(pcidev, pcidev);
-> +		__assign_str(region, region ? region : "");
-> +		if (uuid)
-> +			memcpy(__entry->uuid, uuid, 16);
-> +		__entry->dpa = dpa;
-> +		__entry->length = length;
-> +		__entry->source = source;
-> +		__entry->flags = flags;
-> +		__entry->overflow_t = overflow_t;
-> +	    ),
-> +
-> +	    TP_printk("memdev=%s pcidev=%s region=%s region_uuid=%pU dpa=0x%llx length=0x%x source=%s flags=%s overflow_time=%llu",
-> +		__get_str(memdev),
-> +		__get_str(pcidev),
-> +		__get_str(region),
-> +		__entry->uuid,
-> +		__entry->dpa,
-> +		__entry->length,
-> +		show_poison_source(__entry->source),
-> +		show_poison_flags(__entry->flags),
-> +		__entry->overflow_t)
-> +);
-> +#endif /* _CXL_TRACE_H */
-> +
-> +/* This part must be outside protection */
-> +#undef TRACE_INCLUDE_FILE
-> +#define TRACE_INCLUDE_FILE cxl
-> +#include <trace/define_trace.h>
+Sure but you're not checking rc either. What if that reissue fails for
+whatever other reason? -EIO for example...
 
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH
+GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
+(HRB 36809, AG Nürnberg)
