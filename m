@@ -2,70 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A29F62B02D
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 01:40:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97F2962B030
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 01:43:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231346AbiKPAkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 19:40:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33772 "EHLO
+        id S230206AbiKPAnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 19:43:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231142AbiKPAkP (ORCPT
+        with ESMTP id S229937AbiKPAnQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 19:40:15 -0500
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8E452C674
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 16:40:14 -0800 (PST)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-13bd19c3b68so18297683fac.7
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 16:40:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lQT+j5hdzGfE1l14JY4Uf0FVeNfG/68KrbfSmguSC+Q=;
-        b=UA7WiuZ98uEwXpJleiiXUYhmb9+UwSB8txAwjgslkMHMSA2eltPR5ofSS13rlI3gVi
-         4Ca0OYbRKBm5HUhu/wkhkCuS/E7SGRK7zTBz5bkAgZtc8LDtbETWfJB1RvayXg/SeSEM
-         Kv7ZAMzXpGUSwqtZrnGn+yPhw+stpHqGQWCpoImcbGcaSLSElLCy39lJj4aysNgnb0IE
-         j76PiXnHhpBHR4ImUWpoYF6nAKp5y6f+/akJPQuwhBvbPD3/oOIZxEuBZKWrH6d9ivuD
-         bvPCoYkZbF3RVBY6QPFLkxeuViQet8+pbHYOVjB1GuRT65NReeCnTTZDEoGPrqZownIV
-         zoyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lQT+j5hdzGfE1l14JY4Uf0FVeNfG/68KrbfSmguSC+Q=;
-        b=mov/NAgERHNIsv2ZmjC5IXe/r3omF01IfwrUHOivdqUvkl0HRLZxCW6MQ3UgOISeLy
-         7CjCrVwXigd0EgINr0iI57bfnZhG1ocMhoiQrtJNmnZnVV1875b92iSeYbeQM83+jXgU
-         NQvOVUMLoeWj5ok23qdwPaiT1CyEpHwLk5h/1O2rhxdGHexITNt9WvJUTGkRzEPzzu5a
-         bzQ/tE35cz7hjmrZGLbRFTy4oLxXrlI7wC1ZvoVCCUPaA9hKDsHrMWh48MbpSlzKUvkz
-         fyeXzF9dJ4LMePgh6U6jHDOp5bToRu4nSbk1WXhx//KtksD25zfmQ4094kDJhZehUrWi
-         YGNg==
-X-Gm-Message-State: ANoB5pnXkXL6eLWbtZ7Go3uEp1YoiHILS9M++9rbencEDG5E1jRaINuN
-        KV6kIbjBCpYN5XHE3iU0QAPj6oRkPKS0WrGfUoC3LQ==
-X-Google-Smtp-Source: AA0mqf5gcNnc+lOsaLj3LIpF4Gxs7IzosfXYLhxtUdn1pal/rMV2uOpq1r7K4BFv/EgeOk4FtjVnaMUiAoJxC4LId6U=
-X-Received: by 2002:a05:6870:6a94:b0:136:82f6:7ece with SMTP id
- mv20-20020a0568706a9400b0013682f67ecemr493702oab.271.1668559213981; Tue, 15
- Nov 2022 16:40:13 -0800 (PST)
+        Tue, 15 Nov 2022 19:43:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E7B2CC94;
+        Tue, 15 Nov 2022 16:43:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 178E060C89;
+        Wed, 16 Nov 2022 00:43:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 773C7C433D6;
+        Wed, 16 Nov 2022 00:43:11 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="SYWaBXGU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1668559389;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qkMzVfZO6MnvmNWivwaf0RHBj22gVN9c7Q6Xj0c2l0A=;
+        b=SYWaBXGUSwnnVGkO7D7Dnl4XabQbYcjAxbjlRqJ7S1dn6fN+/sHbVwHn1e8t0lXYXUwO2v
+        QxGZf6FFJzndvcFFJj/OmyEKe8W6lhhOtBKV/jnTTig+TwZ6Jbb0u4T2ytHnDUK25O8t7Q
+        T2hRuoNdlOWwhjQweBBTQPtvojH0wt0=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 7454d2f0 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Wed, 16 Nov 2022 00:43:09 +0000 (UTC)
+Date:   Wed, 16 Nov 2022 01:43:06 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     dri-devel@lists.freedesktop.org, linux-api@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Daniel Vetter <daniel.vetter@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Michel =?utf-8?Q?D=C3=A4nzer?= <michel@daenzer.net>,
+        Alex Deucher <alexdeucher@gmail.com>,
+        Adam Jackson <ajax@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@redhat.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Sultan Alsawaf <sultan@kerneltoast.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH] drm/atomic: do not branch based on the value of
+ current->comm[0]
+Message-ID: <Y3QyGtFcIj/LGPIw@zx2c4.com>
+References: <20221105222012.4226-1-Jason@zx2c4.com>
+ <Y3QwcKEVTg8hu2WA@zx2c4.com>
 MIME-Version: 1.0
-References: <20221104230040.2346862-1-dionnaglaze@google.com>
- <20221104230040.2346862-5-dionnaglaze@google.com> <b332c967-cbe5-891a-3d15-f9fbb514d8e6@amd.com>
- <CAAH4kHY-zq_WrZK1-Jne8LURwY5K_6orK3NuZbVn9u+gwQdN=w@mail.gmail.com>
-In-Reply-To: <CAAH4kHY-zq_WrZK1-Jne8LURwY5K_6orK3NuZbVn9u+gwQdN=w@mail.gmail.com>
-From:   Dionna Amalie Glaze <dionnaglaze@google.com>
-Date:   Tue, 15 Nov 2022 16:40:03 -0800
-Message-ID: <CAAH4kHaq+vNRkQRA9WX_V+R_hoXn3SKcRfJcyd2ddJqQ8ZzmkQ@mail.gmail.com>
-Subject: Re: [PATCH v8 4/4] virt: sev-guest: interpret VMM errors from guest request
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Peter Gonda <pgonda@google.com>, Borislav Petkov <bp@suse.de>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Haowen Bai <baihaowen@meizu.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y3QwcKEVTg8hu2WA@zx2c4.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,7 +76,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry for the top post.
+Hey again,
 
--- 
--Dionna Glaze, PhD (she/her)
+On Wed, Nov 16, 2022 at 01:36:00AM +0100, Jason A. Donenfeld wrote:
+> I'm a bit surprised that this patch was ignored. I had sort of assumed
+
+Mystery solved: this message to you bounced from this linux.ie address I
+somehow wound up with in the recipients list. Fixing now by using the
+one in MAINTAINERS. Sorry about that.
+
+Jason
+
+> On Sat, Nov 05, 2022 at 11:20:12PM +0100, Jason A. Donenfeld wrote:
+> > This reverts 26b1d3b527e7 ("drm/atomic: Take the atomic toys away from
+> > X"), a rootkit-like kludge that has no business being inside of a
+> > general purpose kernel. It's the type of debugging hack I'll use
+> > momentarily but never commit, or a sort of babbies-first-process-hider
+> > malware trick.
+> > 
+> > The backstory is that some userspace code -- xorg-server -- has a
+> > modesetting DDX that isn't really coded right. With nobody wanting to
+> > maintain X11 anymore, rather than fixing the buggy code, the kernel was
+> > adjusted to avoid having to touch X11. A bummer, but fair enough: if the
+> > kernel doesn't want to support some userspace API any more, the right
+> > thing to do is to arrange for a graceful fallback where userspace thinks
+> > it's not available in a manageable way.
+> > 
+> > However, the *way* it goes about doing that is just to check
+> > `current->comm[0] == 'X'`, and disable it for only that case. So that
+> > means it's *not* simply a matter of the kernel not wanting to support a
+> > particular userspace API anymore, but rather it's the kernel not wanting
+> > to support xorg-server, in theory, but actually, it turns out, that's
+> > all processes that begin with 'X'.
+> > 
+> > Playing games with current->comm like this is obviously wrong, and it's
+> > pretty shocking that this ever got committed.
+> > 
+> > Fortunately, since this was committed, somebody did actually disable
+> > the userspace side by default in X11:
+> > https://gitlab.freedesktop.org/xorg/xserver/-/merge_requests/180 and
+> > this was three years ago. So userspace is mostly fine now for ordinary
+> > default usage. And people who opt into this -- since it does actually
+> > work fine for many use cases on i915 -- ostensibly know what they're
+> > getting themselves into (my case).
+> > 
+> > So let's just revert this `comm[0] == 'X'` business entirely, but still
+> > allow for `value == 2`, in case anybody actually started working on that
+> > part elsewhere.
+> > 
+> > Fixes: 26b1d3b527e7 ("drm/atomic: Take the atomic toys away from X")
+> > Cc: Daniel Vetter <daniel.vetter@intel.com>
+> > Cc: Peter Zijlstra <peterz@infradead.org>
+> > Cc: Ilia Mirkin <imirkin@alum.mit.edu>
+> > Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+> > Cc: Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
+> > Cc: Christian Brauner <brauner@kernel.org>
+> > Cc: Michel Dänzer <michel@daenzer.net>
+> > Cc: Alex Deucher <alexdeucher@gmail.com>
+> > Cc: Adam Jackson <ajax@redhat.com>
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Cc: Sean Paul <sean@poorly.run>
+> > Cc: David Airlie <airlied@linux.ie>
+> > Cc: Rob Clark <robdclark@gmail.com>
+> > Cc: Sultan Alsawaf <sultan@kerneltoast.com>
+> > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> > ---
+> >  drivers/gpu/drm/drm_ioctl.c | 5 -----
+> >  1 file changed, 5 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/drm_ioctl.c b/drivers/gpu/drm/drm_ioctl.c
+> > index ca2a6e6101dc..017f31e67179 100644
+> > --- a/drivers/gpu/drm/drm_ioctl.c
+> > +++ b/drivers/gpu/drm/drm_ioctl.c
+> > @@ -336,11 +336,6 @@ drm_setclientcap(struct drm_device *dev, void *data, struct drm_file *file_priv)
+> >  	case DRM_CLIENT_CAP_ATOMIC:
+> >  		if (!drm_core_check_feature(dev, DRIVER_ATOMIC))
+> >  			return -EOPNOTSUPP;
+> > -		/* The modesetting DDX has a totally broken idea of atomic. */
+> > -		if (current->comm[0] == 'X' && req->value == 1) {
+> > -			pr_info("broken atomic modeset userspace detected, disabling atomic\n");
+> > -			return -EOPNOTSUPP;
+> > -		}
+> >  		if (req->value > 2)
+> >  			return -EINVAL;
+> >  		file_priv->atomic = req->value;
+> > -- 
+> > 2.38.1
