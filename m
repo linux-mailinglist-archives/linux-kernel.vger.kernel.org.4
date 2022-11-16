@@ -2,129 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A742A62BD4B
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:14:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CD3862BD4F
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:16:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238563AbiKPMOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 07:14:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33838 "EHLO
+        id S238618AbiKPMQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 07:16:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232951AbiKPMNy (ORCPT
+        with ESMTP id S238559AbiKPMQY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 07:13:54 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B464B988
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 04:08:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668600516; x=1700136516;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ROaSIFRIO9vsgedLMOHZiWNscCfhR6myclt50kra5OA=;
-  b=KPy2rWqd4O1LmiWl9mBiBF9TRq8mbaKavx53RWUvI6MeFwkD6K8JwJyr
-   B9IQkhe5wEmUyo0cqE1upZ6G8aHQeGdUeKqm5nTUgaxSinp7OveVDk61+
-   ao3izyzF110JEFQPIHHG+iOgFnDgsTUZnjxeBIwWoiI3XzNKp/xd/7E8A
-   9EPNI+kImRxO4aIfc+oiTdY1bgpVFlAmDZ1/dt9fixY06Q+BeyiZSEYBi
-   r0mVwBzhUD/U4hZiTaMGLZk4p/Z8KuAAA+WqaRBCy5bOOQ0VtUbl53uhb
-   wJ+hyYUIt89TDm1T6mMPxrBYLoPFNGsGBTAFNJK8+ot3gljUW/lLaS37E
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="312534528"
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="312534528"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 04:08:35 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="641620162"
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="641620162"
-Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.212.114]) ([10.254.212.114])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 04:08:33 -0800
-Message-ID: <b2fba491-2196-bd6a-d6ef-4029a04a97e6@linux.intel.com>
-Date:   Wed, 16 Nov 2022 20:08:30 +0800
+        Wed, 16 Nov 2022 07:16:24 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8A83F05A;
+        Wed, 16 Nov 2022 04:10:35 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id w3-20020a17090a460300b00218524e8877so2482801pjg.1;
+        Wed, 16 Nov 2022 04:10:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Xt1QsURs8dSzNQ+WHlj7oV4CqoPL0fiQE0UeKb8Zq/8=;
+        b=T/HxHqwRNJefXpFUOTtsaXE4BZnCfPpY3R2h3RXPbWTAgzvZPUOsIOnm8RyiAexkWg
+         YiS3nsV1WAvy3Va3Ik+A5JeXb3MnUOCauA8KJimmmzn0EWtVm9p4nMrlE/4xfPUKdvZd
+         +CUFnpT/pgaHBIlUBNkmyLKDWdAkbs+zE2qLj2d7QBT8ePqcmAS9it8WH/FzAD8Cihbh
+         8uXcWYvxTwVHnawTp6Y1/MG25gXRfH5Wbh+qgvEAwJVjboRALATGT2pIgDnkHIN6itLE
+         DVE4L7MaJn9/ru23TqYflCXPe/ckdP31JPREwlsfTyIMpfWRX0xiJ6m3eSU+LKFfcnBT
+         kFBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Xt1QsURs8dSzNQ+WHlj7oV4CqoPL0fiQE0UeKb8Zq/8=;
+        b=qbrguXCuA7opJkocKxLvArOe/uyu6m3X3o+yzqIn2i4+MVe+XqxlOD3BH0aWo5VyZJ
+         RLrXxQtFNewxQHklSWzS58FfdRpJkY05m28TMh1hZBNbmK+r1Ayt7ZB9Vi2/A2smytlM
+         NOXB88uqx2TC8C072IVfOMn+9TVPFK/u43QoL0trvP+acizTMzO9seyqXgmHe2/U3osB
+         Fc3dfrPY6auh1e8XRxZ7Dcjaa/1Hu6sXUlp1icUfrYQnsbfE8AmQP3ycHhohRK+LjSo3
+         wyNHAH05YyvC0QDObKA2CVmcgOGI85cLeNTIUZmBSy7EOvE8R0nEP4y4YcOl+TKdkLyn
+         ke/A==
+X-Gm-Message-State: ANoB5pm8v6kGcM1vVqmT5pWa+atB5gBUSyYNK9SSXsgdlRGBdEFbSxZY
+        nGizA847GVWEQ51R36txCTc=
+X-Google-Smtp-Source: AA0mqf6AxicNbrmQQOiMjHmkrqREXP7f4cqpC7FE0HOS5MwnsRlKv8MlI5QPM+jXrzOS3ggB7sLAjg==
+X-Received: by 2002:a17:902:e951:b0:177:e4c7:e8b7 with SMTP id b17-20020a170902e95100b00177e4c7e8b7mr8727198pll.118.1668600634751;
+        Wed, 16 Nov 2022 04:10:34 -0800 (PST)
+Received: from localhost ([114.254.0.245])
+        by smtp.gmail.com with ESMTPSA id k12-20020a17090a39cc00b0020d67a726easm1420084pjf.10.2022.11.16.04.10.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 04:10:34 -0800 (PST)
+From:   Hawkins Jiawei <yin31149@gmail.com>
+To:     kuba@kernel.org
+Cc:     18801353760@163.com, cong.wang@bytedance.com, davem@davemloft.net,
+        edumazet@google.com, jhs@mojatatu.com, jiri@resnulli.us,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com,
+        syzbot+232ebdbd36706c965ebf@syzkaller.appspotmail.com,
+        syzkaller-bugs@googlegroups.com, xiyou.wangcong@gmail.com,
+        yin31149@gmail.com
+Subject: Re: [PATCH v2] net: sched: fix memory leak in tcindex_set_parms
+Date:   Wed, 16 Nov 2022 20:10:10 +0800
+Message-Id: <20221116121010.101577-1-yin31149@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221115184442.272b6ea8@kernel.org>
+References: <20221115184442.272b6ea8@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 4/7] iommu/vt-d: Fold dmar_remove_one_dev_info() into
- its caller
-Content-Language: en-US
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
-References: <20221114014049.3959-1-baolu.lu@linux.intel.com>
- <20221114014049.3959-5-baolu.lu@linux.intel.com>
- <BN9PR11MB527668E6C7666CAA5F0804428C079@BN9PR11MB5276.namprd11.prod.outlook.com>
- <e7c686d7-bad9-b58b-3be4-50898e142230@linux.intel.com>
- <BL1PR11MB5271F0D4E91A3F6179216ADA8C079@BL1PR11MB5271.namprd11.prod.outlook.com>
- <ebace32b-be36-5c9f-579b-211cad75df02@linux.intel.com>
- <BN9PR11MB5276DEEEA205B267192FC01B8C079@BN9PR11MB5276.namprd11.prod.outlook.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <BN9PR11MB5276DEEEA205B267192FC01B8C079@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/16 17:15, Tian, Kevin wrote:
->> From: Baolu Lu <baolu.lu@linux.intel.com>
->> Sent: Wednesday, November 16, 2022 4:03 PM
->>
->> On 2022/11/16 13:35, Tian, Kevin wrote:
->>>> From: Baolu Lu<baolu.lu@linux.intel.com>
->>>> Sent: Wednesday, November 16, 2022 12:36 PM
->>>>
->>>> On 11/16/22 11:53 AM, Tian, Kevin wrote:
->>>>>> From: Lu Baolu<baolu.lu@linux.intel.com>
->>>>>> Sent: Monday, November 14, 2022 9:41 AM
->>>>>> @@ -4562,7 +4538,10 @@ static void
->> intel_iommu_release_device(struct
->>>>>> device *dev)
->>>>>>     {
->>>>>>     	struct device_domain_info *info = dev_iommu_priv_get(dev);
->>>>>>
->>>>>> -	dmar_remove_one_dev_info(dev);
->>>>>> +	iommu_disable_pci_caps(info);
->>>>>> +	domain_context_clear(info);
->>>>>> +	device_block_translation(dev);
->>>>> clear context after blocking translation.
->>>> Unfortunately domain_context_clear() needs reference to info->domain
->>>> (for domain id when flushing cache), which is cleared in
->>>> device_block_translation().
->>>>
->>> this sounds an ordering problem. clearing context should be after
->>> blocking translation in concept.
->>
->> At present, when the default domain is attached to the device, we first
->> populate the pasid table entry, and then populate the device context
->> entry. Above code is just the reverse operation.
->>
->> Can you see any practical problems caused by this sequence? If so, it
->> seems that we should carefully consider whether such problems already
->> exist.
->>
-> 
-> there is no problem with existing code. Just after this patch the order
-> looks weird based on the literal name of those functions.
-> 
-> domain_context_clear() is a big hammer to disable the context entry,
-> implying translation must be blocked. Then calling another block
-> translation afterwards becomes unnecessary.
-> 
-> Probably it should be split into two functions with one requiring
-> info->domain called before block translation and the rest which
-> actually clears the context entry being the last step?
+On Wed, 16 Nov 2022 at 10:44, Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Tue, 15 Nov 2022 19:57:10 +0100 Paolo Abeni wrote:
+> > This code confuses me more than a bit, and I don't follow ?!?
+>
+> It's very confusing :S
+>
+> For starters I don't know when r != old_r. I mean now it triggers
+> randomly after the RCU-ification, but in the original code when
+> it was just a memset(). When would old_r ever not be null and yet
+> point to a different entry?
 
-This is what the existing code does. Perhaps I should drop this patch,
-or only rename iommu_disable_dev_iotlb() to iommu_disable_pci_caps().
+I am also confused about the code when I tried to fix this bug.
 
-Best regards,
-baolu
+As for when `old_r != r`, according to the simplified
+code below, this should be probably true if `p->perfect` is true
+or `!p->perfect && !pc->h` is true(please correct me if I am wrong)
+
+        struct tcindex_filter_result new_filter_result, *old_r = r;
+        struct tcindex_data *cp = NULL, *oldp;
+        struct tcf_result cr = {};
+
+        /* tcindex_data attributes must look atomic to classifier/lookup so
+         * allocate new tcindex data and RCU assign it onto root. Keeping
+         * perfect hash and hash pointers from old data.
+         */
+        cp = kzalloc(sizeof(*cp), GFP_KERNEL);
+
+        if (p->perfect) {
+                if (tcindex_alloc_perfect_hash(net, cp) < 0)
+                        goto errout;
+                ...
+        }
+        cp->h = p->h;
+
+        if (!cp->perfect && !cp->h) {
+                if (valid_perfect_hash(cp)) {
+                        if (tcindex_alloc_perfect_hash(net, cp) < 0)
+                                goto errout_alloc;
+
+                } else {
+                        struct tcindex_filter __rcu **hash;
+
+                        hash = kcalloc(cp->hash,
+                                       sizeof(struct tcindex_filter *),
+                                       GFP_KERNEL);
+
+                        if (!hash)
+                                goto errout_alloc;
+
+                        cp->h = hash;
+                }
+        }
+        ...
+
+        if (cp->perfect)
+                r = cp->perfect + handle;
+        else
+                r = tcindex_lookup(cp, handle) ? : &new_filter_result;
+
+        if (old_r && old_r != r) {
+                err = tcindex_filter_result_init(old_r, cp, net);
+                if (err < 0) {
+                        kfree(f);
+                        goto errout_alloc;
+                }
+        }
+
+* If `p->perfect` is true, tcindex_alloc_perfect_hash() newly
+alloctes cp->perfect.
+
+* If `!p->perfect && !p->h` is true, cp->perfect or cp->h is
+newly allocated.
+
+In either case, r probably points to the newly allocated memory,
+which should not equals to the old_r.
+
+>
+> > it looks like that at this point:
+> >
+> > * the data path could access 'old_r->exts' contents via 'p' just before
+> > the previous 'tcindex_filter_result_init(old_r, cp, net);' but still
+> > potentially within the same RCU grace period
+> >
+> > * 'tcindex_filter_result_init(old_r, cp, net);' has 'unlinked' the old
+> > exts from 'p'  so that will not be freed by later
+> > tcindex_partial_destroy_work()
+> >
+> > Overall it looks to me that we need some somewhat wait for the RCU
+> > grace period,
+>
+> Isn't it better to make @cp a deeper copy of @p ?
+> I thought it already is but we don't seem to be cloning p->h.
+> Also the cloning of p->perfect looks quite lossy.
+
+Yes, I also think @cp should be a deeper copy of @p.
+
+But it seems that in tcindex_alloc_perfect_hash(),
+each @cp ->exts will be initialized by tcf_exts_init()
+as below, and tcindex_set_parms() forgets to free the
+old ->exts content, triggering this memory leak.(Please
+correct me if I am wrong)
+
+        static int tcindex_alloc_perfect_hash(struct net *net,
+                                              struct tcindex_data *cp)
+        {
+        	int i, err = 0;
+        
+        	cp->perfect = kcalloc(cp->hash, sizeof(struct tcindex_filter_result),
+        			      GFP_KERNEL | __GFP_NOWARN);
+        
+        	for (i = 0; i < cp->hash; i++) {
+        		err = tcf_exts_init(&cp->perfect[i].exts, net,
+        				    TCA_TCINDEX_ACT, TCA_TCINDEX_POLICE);
+        		if (err < 0)
+        			goto errout;
+        		cp->perfect[i].p = cp;
+        	}
+        }
+
+        static inline int tcf_exts_init(struct tcf_exts *exts, struct net *net,
+        				int action, int police)
+        {
+        #ifdef CONFIG_NET_CLS_ACT
+        	exts->type = 0;
+        	exts->nr_actions = 0;
+        	/* Note: we do not own yet a reference on net.
+        	 * This reference might be taken later from tcf_exts_get_net().
+        	 */
+        	exts->net = net;
+        	exts->actions = kcalloc(TCA_ACT_MAX_PRIO, sizeof(struct tc_action *),
+        				GFP_KERNEL);
+        	if (!exts->actions)
+        		return -ENOMEM;
+        #endif
+        	exts->action = action;
+        	exts->police = police;
+        	return 0;
+        }
+
+>
+> > Somewhat side question: it looks like that the 'perfect hashing' usage
+> > is the root cause of the issue addressed here, and very likely is
+> > afflicted by other problems, e.g. the data curruption in 'err =
+> > tcindex_filter_result_init(old_r, cp, net);'.
+> >
+> > AFAICS 'perfect hashing' usage is a sort of optimization that the user-
+> > space may trigger with some combination of the tcindex arguments. I'm
+> > wondering if we could drop all perfect hashing related code?
+>
+> The thought of "how much of this can we delete" did cross my mind :)
