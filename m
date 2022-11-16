@@ -2,118 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EC6B62BFBE
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 14:41:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9A0B62BFC4
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 14:41:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229456AbiKPNlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 08:41:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53810 "EHLO
+        id S238422AbiKPNlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 08:41:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbiKPNku (ORCPT
+        with ESMTP id S238662AbiKPNlT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 08:40:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 627C01D652
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 05:40:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F322A61DA9
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 13:40:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FFA2C433C1;
-        Wed, 16 Nov 2022 13:40:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668606049;
-        bh=z7L4ZwsP2r0f5F+oDv2xGPaX16u1lFzSpvV90X3HMjk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SvmUpo5Mfv0YsGRx2tbbam7HKIyguPsH9CTX7t16ZNww2gddTfqf4oVrWSSTzeQyc
-         GMw4eX5hhuHfqUiD5cP6RyeSqGbcfu2TK72gKMnsBhsDJVM8mtWOw95A53hnh+HweP
-         rFv657FJD+MxPcVPdQ0FniUPmayZWkNuF5M43yAJ9NYtSC6piJpvjlo9yPBeATdzIa
-         YWOZkS7CHtxqbp/FC36LQAMogga7ip9Rz6x9kkWNOUDP7jXQ2ku+OFkZOb1pKi2JnI
-         A9SFIz6D/e7w/pU0iOWMUrmZP14ovxlizOlDpsf81nPYh1UfANGPzz9/WzN2AsePzB
-         +v7NnhpLl4K+g==
-Date:   Wed, 16 Nov 2022 14:40:46 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Anna-Maria Behnsen <anna-maria@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Eric Dumazet <edumazet@google.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Arjan van de Ven <arjan@infradead.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Rik van Riel <riel@surriel.com>
-Subject: Re: [PATCH v4 14/16] timer: Implement the hierarchical pull model
-Message-ID: <20221116134046.GC816333@lothringen>
-References: <20221104145737.71236-1-anna-maria@linutronix.de>
- <20221104145737.71236-15-anna-maria@linutronix.de>
+        Wed, 16 Nov 2022 08:41:19 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4EB1E3FC;
+        Wed, 16 Nov 2022 05:41:16 -0800 (PST)
+Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id BF5B049C;
+        Wed, 16 Nov 2022 14:41:14 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1668606074;
+        bh=7kjV9XaHGlcIvSJMo1l48yxddcL5QyvUynUQIQE/utQ=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=PiSQRbxCpnhfvhLOvIlPUw+8d+v/T/vnY2kITjyVbbBRPRnaI26+x6KjSeEJAkFiE
+         R/4WIZXhHw0F1vbQABp1Wn2bdozEEwXuxGS45peSlO4RxQUTFRRahTtr9S6UAmjYat
+         S/H9lzSD7Uf3qXQDbCCMFxxR29ESVlnrcRDsinKk=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221104145737.71236-15-anna-maria@linutronix.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20221107175256.360839-7-paul@crapouillou.net>
+References: <20221107175106.360578-1-paul@crapouillou.net> <20221107175256.360839-1-paul@crapouillou.net> <20221107175256.360839-7-paul@crapouillou.net>
+Subject: Re: [PATCH 17/26] drm: rcar-du: Remove #ifdef guards for PM related functions
+From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Paul Cercueil <paul@crapouillou.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-renesas-soc@vger.kernel.org
+To:     Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Date:   Wed, 16 Nov 2022 13:41:12 +0000
+Message-ID: <166860607235.50677.11372324946195607108@Monstersaurus>
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 04, 2022 at 03:57:35PM +0100, Anna-Maria Behnsen wrote:
-> +static bool tmigr_handle_remote_up(struct tmigr_group *group,
-> +				   struct tmigr_group *child,
-> +				   void *ptr)
-> +{
-> +	struct tmigr_remote_data *data = ptr;
-> +	u64 now, next = KTIME_MAX;
-> +	unsigned long flags, jif;
-> +	struct tmigr_event *evt;
-> +	u32 childmask;
-> +
-> +	jif = data->basej;
-> +	now = data->now;
-> +
-> +	childmask = data->childmask;
-> +
-> +again:
-> +	/*
-> +	 * Handle the group only if @childmask is the migrator or if the
-> +	 * group has no migrator. Otherwise the group is active and is
-> +	 * handled by its own migrator.
-> +	 */
-> +	if (!tmigr_check_migrator(group, childmask))
-> +		return true;
-> +
-> +	raw_spin_lock_irqsave(&group->lock, flags);
-> +
-> +	evt = tmigr_next_expired_groupevt(group, now);
-> +
-> +	if (evt) {
-> +		unsigned int remote_cpu;
-> +
-> +		remote_cpu = READ_ONCE(evt->cpu);
+Quoting Paul Cercueil (2022-11-07 17:52:47)
+> Use the DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr() macros to handle
+> the .suspend/.resume callbacks.
+>=20
+> These macros allow the suspend and resume functions to be automatically
+> dropped by the compiler when CONFIG_SUSPEND is disabled, without having
+> to use #ifdef guards.
+>=20
+> This has the advantage of always compiling these functions in,
+> independently of any Kconfig option. Thanks to that, bugs and other
+> regressions are subsequently easier to catch.
+>=20
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 
-Is that READ_ONCE() really necessary?
+Seems reasonable to me.
 
-Thanks.
+Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 
-> +
-> +		raw_spin_unlock_irqrestore(&group->lock, flags);
-> +
-> +		next = tmigr_handle_remote_cpu(remote_cpu, now, jif);
-> +
-> +		/* check if there is another event, that needs to be handled */
-> +		goto again;
-> +	} else {
-> +		raw_spin_unlock_irqrestore(&group->lock, flags);
-> +	}
-> +
-> +	/* Update of childmask for next level */
-> +	data->childmask = group->childmask;
-> +	data->wakeup = next;
-> +
-> +	return false;
-> +}
+> ---
+> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Cc: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+> Cc: linux-renesas-soc@vger.kernel.org
+> ---
+>  drivers/gpu/drm/rcar-du/rcar_du_drv.c | 9 +++------
+>  1 file changed, 3 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/drivers/gpu/drm/rcar-du/rcar_du_drv.c b/drivers/gpu/drm/rcar=
+-du/rcar_du_drv.c
+> index a2776f1d6f2c..0a89094461cc 100644
+> --- a/drivers/gpu/drm/rcar-du/rcar_du_drv.c
+> +++ b/drivers/gpu/drm/rcar-du/rcar_du_drv.c
+> @@ -599,7 +599,6 @@ static const struct drm_driver rcar_du_driver =3D {
+>   * Power management
+>   */
+> =20
+> -#ifdef CONFIG_PM_SLEEP
+>  static int rcar_du_pm_suspend(struct device *dev)
+>  {
+>         struct rcar_du_device *rcdu =3D dev_get_drvdata(dev);
+> @@ -613,11 +612,9 @@ static int rcar_du_pm_resume(struct device *dev)
+> =20
+>         return drm_mode_config_helper_resume(&rcdu->ddev);
+>  }
+> -#endif
+> =20
+> -static const struct dev_pm_ops rcar_du_pm_ops =3D {
+> -       SET_SYSTEM_SLEEP_PM_OPS(rcar_du_pm_suspend, rcar_du_pm_resume)
+> -};
+> +static DEFINE_SIMPLE_DEV_PM_OPS(rcar_du_pm_ops,
+> +                               rcar_du_pm_suspend, rcar_du_pm_resume);
+> =20
+>  /* ---------------------------------------------------------------------=
+--------
+>   * Platform driver
+> @@ -712,7 +709,7 @@ static struct platform_driver rcar_du_platform_driver=
+ =3D {
+>         .shutdown       =3D rcar_du_shutdown,
+>         .driver         =3D {
+>                 .name   =3D "rcar-du",
+> -               .pm     =3D &rcar_du_pm_ops,
+> +               .pm     =3D pm_sleep_ptr(&rcar_du_pm_ops),
+>                 .of_match_table =3D rcar_du_of_table,
+>         },
+>  };
+> --=20
+> 2.35.1
+>
