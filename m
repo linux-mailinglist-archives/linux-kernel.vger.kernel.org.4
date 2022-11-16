@@ -2,181 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 322BA62C74F
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 19:12:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB76F62C751
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 19:13:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234470AbiKPSMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 13:12:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51220 "EHLO
+        id S234154AbiKPSNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 13:13:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234274AbiKPSMJ (ORCPT
+        with ESMTP id S233825AbiKPSNe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 13:12:09 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592535F866;
-        Wed, 16 Nov 2022 10:12:07 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id m22so46059285eji.10;
-        Wed, 16 Nov 2022 10:12:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=AD20eKHS2F7b47L1iqXnzg2RFxJr+L65BkbTitr0Fkw=;
-        b=KsQmzCIEK8MWYSZTbZxubjO5yaIJHrJBkyWJjXX+NzrcA/Cxe6PbrIFt700NTGZPnd
-         ZcX/fvjGZNEkYHOPgCGgmnKhw087XVIwjXczacKiEC9vpWlwWoSJcrEwZMLUDbY0gl+e
-         N7jBKQhds/7lnbpqN546ppBSdhoIWLM3YqLRiwRvAHb/wbUEYUsBHhqhsNFs9ABBCYSx
-         ECfajeHvXWRkccS3Y8WdZ47uottVZTqZIX+PmkObmGWY4nQv2mo5sR480CWpTwMks47q
-         dEhkHIoHGbTF9/cwmheQLmDZsP2oyeh8E5Wc0N9yrEXJyRbehxvlEng9mmSrk09OcJXN
-         3pdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AD20eKHS2F7b47L1iqXnzg2RFxJr+L65BkbTitr0Fkw=;
-        b=mywPLUCwSyWXLKL1C6AQ+MB6DBaNAXj0j0LGXqTVZIyboMD39S1afj1pW8BCZBRDJH
-         K/BIck3DGlhKOL/hrizezAtskmHYR/sjc0cfvHNvOTZVZIqCgtJ6EYrgFEhLQvfuJQzi
-         TFjL/jGJgfHN66cTS6LWB4tSFBISFqtNgeoMEo8Lo8fnrVM/O5354KP3D5/YOGqxgdQU
-         p93hjbGbbvNBBM8+Q+5MGLyU0JYJpa0VJf0lN4yPiyY4xbUDAXdAC37EeRbYZDncGjDd
-         N1hczKTj674XBZWEFTmxP/2ymafkfdNNZeZPWlRcK8mbZ7YY7McX002rac24X4Yb+7ha
-         G1hw==
-X-Gm-Message-State: ANoB5pm2MSpzcBsjXj+8hqaD97Z6JnZyeXawV5D8dhkByHuV9RI1Mqu9
-        iJwG4AM/oS4oc1cP/EOsofXwa2BHdo+xYsnsh8U=
-X-Google-Smtp-Source: AA0mqf7xRmPEMMaPmpKbzCGRPL4nDRnA2ZfpeekiSduf4ALKGptYu95T17tjXAAokH5Mg3QTUZscKxkoR4f4wGYXqAE=
-X-Received: by 2002:a17:906:b103:b0:7ad:c3b6:fe89 with SMTP id
- u3-20020a170906b10300b007adc3b6fe89mr17520031ejy.697.1668622325824; Wed, 16
- Nov 2022 10:12:05 -0800 (PST)
+        Wed, 16 Nov 2022 13:13:34 -0500
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD828DEA5;
+        Wed, 16 Nov 2022 10:13:32 -0800 (PST)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AGIDIvt124704;
+        Wed, 16 Nov 2022 12:13:18 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1668622398;
+        bh=1L0WY0yI5y9feiQbVZ8rLBkv86csE4RjbMTHBRJ+J34=;
+        h=From:To:CC:Subject:Date;
+        b=P40jWrct08UtaFW0YRvLV82dO7rVZqAMjKHuZsph3hYg/zD+oMPsZccKjXr2bATJT
+         QukX6qqOhTzTnn+6/ISdcROydQ0DDWgd7gxtdbqyErK3nCfUMW1rGXhnEKt8ZLO2QR
+         i3tyumpjAQaEDcRoIJQxAk2EdJ+68YJyTWTRdryc=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AGIDI2s013544
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 16 Nov 2022 12:13:18 -0600
+Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 16
+ Nov 2022 12:13:17 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Wed, 16 Nov 2022 12:13:17 -0600
+Received: from jti.ent.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AGID8ME026690;
+        Wed, 16 Nov 2022 12:13:10 -0600
+From:   Georgi Vlaev <g-vlaev@ti.com>
+To:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Vibhore Vardhan <vibhore@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Roger Quadros <rogerq@kernel.org>
+Subject: [PATCH v4 0/5] firmware: ti_sci: Introduce system suspend support
+Date:   Wed, 16 Nov 2022 20:13:02 +0200
+Message-ID: <20221116181307.198209-1-g-vlaev@ti.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20221111094238.1640-1-linux.amoon@gmail.com> <20221111094238.1640-3-linux.amoon@gmail.com>
- <CAMdYzYpi_9B+riQSMk+cjRLd-b_TTi2rQUD7P5PUg_Fd5dGeMA@mail.gmail.com>
-In-Reply-To: <CAMdYzYpi_9B+riQSMk+cjRLd-b_TTi2rQUD7P5PUg_Fd5dGeMA@mail.gmail.com>
-From:   Anand Moon <linux.amoon@gmail.com>
-Date:   Wed, 16 Nov 2022 23:41:49 +0530
-Message-ID: <CANAwSgT-sr9uknyuwd2f_ODmr_9WAqLXyp5x7AN4w9p=TAVyhg@mail.gmail.com>
-Subject: Re: [linux-next-v1 3/3] arm64: dts: rockchip: Fix ethernet reset node
- Rock 3A sbc
-To:     Peter Geis <pgwipeout@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Chukun Pan <amadeus@jmu.edu.cn>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter / Michael
+This series introduces necessary ti_sci driver functionality in
+preparation of supporting DeepSleep mode for suspend to mem on TI
+K3 AM62x. This version is a fixup and rebase of the patch series by
+Dave Gerlach [1]. It applies on top of v6.1-rc5.
 
-On Fri, 11 Nov 2022 at 18:32, Peter Geis <pgwipeout@gmail.com> wrote:
->
-> On Fri, Nov 11, 2022 at 4:44 AM Anand Moon <linux.amoon@gmail.com> wrote:
-> >
-> > Add support for snps,reset-gpio reset ethernet gpio pins and
-> > drop the mdio reset code.
->
-> Nack, the snps,reset-gpio is depreciated in favor of the mdio-reset
-> code. See [0].
->
+Deep Sleep mode is described in section "5.2.4.4 DeepSleep" of the
+AM62x Technical Reference Manual [2].
 
-Ok coming to the ethernet reset controller with gpio-reset with MDIO.
-I got this working by adding ethernet-phy-id to MDIO.
+The kernel triggers entry to Deep Sleep mode through the mem suspend
+transition with the following:
 
-> >
-> > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
-> > ---
-> >  .../boot/dts/rockchip/rk3568-rock-3a.dts      | 19 ++++++++-----------
-> >  1 file changed, 8 insertions(+), 11 deletions(-)
-> >
-> > diff --git a/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts b/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
-> > index 16fff1ada195..9172cf60b867 100644
-> > --- a/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
-> > +++ b/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
-> > @@ -258,6 +258,11 @@ &gmac1 {
-> >         assigned-clocks = <&cru SCLK_GMAC1_RX_TX>, <&cru SCLK_GMAC1>;
-> >         assigned-clock-parents = <&cru SCLK_GMAC1_RGMII_SPEED>, <&gmac1_clkin>;
-> >         clock_in_out = "input";
-> > +       snps,reset-gpio = <&gpio3 RK_PB0 GPIO_ACTIVE_LOW>;
-> > +       snps,reset-active-low;
-> > +       /* Reset time is 20ms, 100ms for rtl8211f */
-> > +       snps,reset-delays-us = <0 20000 100000>;
-> > +       phy-supply = <&vcc_3v3>;
->
-> The phy supply shouldn't be part of this patch.
->
+* Use a TF-A binary that supports PSCI_SYSTEM_SUSPEND call. This causes
+  system to use PSCI system suspend as last step of mem sleep.
 
-Ok will add this in a separate patch.
+* The firmware requires that the OS sends a TISCI_MSG_PREPARE_SLEEP
+  message in order to provide details about suspend, so we must add the
+  ability to send this message. We also add TISCI_MSG_LPM_WAKE_REASON
+  and TISCI_MSG_SET_IO_ISOLATION messages as part of a new PM ops. These
+  messages are part of the TISCI PM Low Power Mode API [3]. (Patch 2)
 
-> >         phy-handle = <&rgmii_phy1>;
-> >         phy-mode = "rgmii";
-> >         pinctrl-names = "default";
-> > @@ -267,6 +272,9 @@ &gmac1m1_rx_bus2
-> >                      &gmac1m1_rgmii_clk
-> >                      &gmac1m1_clkinout
-> >                      &gmac1m1_rgmii_bus>;
-> > +
-> > +       tx_delay = <0x4f>;
-> > +       rx_delay = <0x26>;
->
-> Delays should move to your rgmii patch. Have you tested these to
-> ensure they are in the middle of the functional range for this board?
+* A memory address must be provided to the firmware using the above
+  message, which is allocated and managed by dma_alloc_coherent()
+  and friends. (Patch 3)
 
-Ok but this delay is different from the actual requirements see below.
-rx-internal-delay-ps and tx-internal-delay-ps
-[3] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/net/ethernet-controller.yaml?h=v6.1-rc5#n222
+* System must load firmware to a specific location before Deep Sleep is
+  entered, and this is accomplished using a memory region in device
+  tree to indicate where this firmware should be loaded, and also a
+  "firmware-name" property to indicate the name of the firmware
+  to load. The ti_sci driver checks in its pm handler to see if
+  the firmware has been loaded and if not, loads it. (Patch 4)
 
-tx_delay and rx_dealy are used by rockchip binding.
+* Finally, the ti_sci driver must actually send TISCI_MSG_PREPARE_SLEEP
+  message to firmware with the above information included, which it
+  does during the driver suspend handler when PM_MEM_SUSPEND is the
+  determined state being entered. (Patch 5)
 
->
-> >         status = "okay";
-> >  };
-> >
-> > @@ -583,11 +591,6 @@ &mdio1 {
-> >         rgmii_phy1: ethernet-phy@0 {
-> >                 compatible = "ethernet-phy-ieee802.3-c22";
-> >                 reg = <0x0>;
-> > -               pinctrl-names = "default";
-> > -               pinctrl-0 = <&eth_phy_rst>;
-> > -               reset-assert-us = <20000>;
-> > -               reset-deassert-us = <100000>;
-> > -               reset-gpios = <&gpio3 RK_PB0 GPIO_ACTIVE_LOW>;
-> >         };
-> >  };
-> >
-> > @@ -625,12 +628,6 @@ vcc_mipi_en: vcc_mipi_en {
-> >                 };
-> >         };
-> >
-> > -       ethernet {
-> > -               eth_phy_rst: eth_phy_rst {
-> > -                       rockchip,pins = <3 RK_PB0 RK_FUNC_GPIO &pcfg_pull_none>;
-> > -               };
-> > -       };
-> > -
-> >         hym8563 {
-> >                 hym8563_int: hym8563-int {
-> >                         rockchip,pins = <0 RK_PD3 RK_FUNC_GPIO &pcfg_pull_up>;
-> > --
-> > 2.38.1
-> >
-> [0] https://elixir.bootlin.com/linux/v6.1-rc4/source/Documentation/devicetree/bindings/net/snps,dwmac.yaml#L222
-> >
-Thanks
+This is tested on am625-sk using a limited dts with all devices disabled
+apart from cpu0, main_uart0, i2c, rtc, mmc/sd, dmsc, and secure_proxy_main.
+
+Testing this sequence requires K3 sdhci suspend/resume support [4],
+enable the wkup_rtc in the am625-sk.dts, disable devices that don't
+support system suspend/resume like OSPI and CPSW3G.
+
+In can be tested on the following branch:
+https://github.com/gvlaev/linux/tree/upstream-v6.2/lpm-ti-sci-v2
+
+Changelog:
+v4:
+- Fix checkpacth warnings in patches 2 and 3.
+- Drop the links with anchors in patch 2.
+
+v3:
+- Fix the compile warnings on 32-bit platforms reported by the kernel
+  test robot in patches (3,5).
+- Pick up Roger's "Tested-by" tags.
+
+v2:
+- Addressed comments received for v1 series [1].
+- Updated v1 patch 5 to use pm notifier to avoid firmware loading
+  issues.
+- Dropped the reserved region requirement and allocate DMA memory
+  instead. The reserved region binding patch is also removed.
+- Introduce two more TISCI LPM messages that are supported in SysFW.
+- Fixes in error handling.
+
+[1] https://lore.kernel.org/lkml/20220421203659.27853-1-d-gerlach@ti.com
+[2] https://www.ti.com/lit/pdf/spruiv7
+[3] https://software-dl.ti.com/tisci/esd/latest/2_tisci_msgs/pm/lpm.html
+[4] https://lore.kernel.org/lkml/20220408124338.27090-1-a-govindraju@ti.com
+
+Georgi Vlaev (5):
+  dt-bindings: ti, sci: Add lpm region and firmware-name
+  firmware: ti_sci: Introduce Power Management Ops
+  firmware: ti_sci: Allocate memory for the LPM modes
+  firmware: ti_sci: Use dt provided fw name and address to load at
+    suspend time
+  firmware: ti_sci: Introduce prepare system suspend call
+
+ .../bindings/arm/keystone/ti,sci.yaml         |  21 +-
+ drivers/firmware/ti_sci.c                     | 357 ++++++++++++++++++
+ drivers/firmware/ti_sci.h                     |  64 +++-
+ include/linux/soc/ti/ti_sci_protocol.h        |  44 +++
+ 4 files changed, 481 insertions(+), 5 deletions(-)
 
 
+base-commit: 094226ad94f471a9f19e8f8e7140a09c2625abaa
+-- 
+2.30.2
 
-
-
--Anand
-> > _______________________________________________
-> > Linux-rockchip mailing list
-> > Linux-rockchip@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-rockchip
