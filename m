@@ -2,93 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 145F762BCA1
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:54:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 080AA62BCA4
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:54:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232584AbiKPLyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 06:54:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38916 "EHLO
+        id S233530AbiKPLyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 06:54:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232115AbiKPLx0 (ORCPT
+        with ESMTP id S233471AbiKPLxt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 06:53:26 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E041167F5
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 03:44:19 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id c1so29063262lfi.7
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 03:44:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rhkxa1BnRWWj45GOqN+hYkfIBY5C7zyuz6t5kZ6f2Eo=;
-        b=MWW9HBXCHSPxeFAKGGxXleYbVa+tx8EcDs6ot7AklMwf69S2CJOHR/ZdTAcUolFRzQ
-         cp/bb2fDvECLT0O99HvpNnUOi77FtFDxq27r5qPW7E3EIPvVI1HKm7OL67E//jsPtfIl
-         vvQA1Piyb/l25nrNJLAAWmcFjUXVqllKZSM6Qk8Z8qcQuEdx6hngPJI3YtQukf54GJGo
-         GbM2LmXap8ThHKxHr4aIgGosstmZH/sinLrFk5N+BJDvKJIc9o6gjz51szrGYt+jnZzr
-         sK7c6RzSR+jXU0wJNVLLPb9yobXFdvRkv6UGTSYUZIFTk1hBfoofnF43TqlsgC19yFEe
-         x1ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rhkxa1BnRWWj45GOqN+hYkfIBY5C7zyuz6t5kZ6f2Eo=;
-        b=mMyFXsewEhjl32aaBJznr+qFkBWJe1WDAvMabzu70iuHREJQO2T97Xcur37P8UhRwl
-         Jr6ofamb4dbbg/bPCI6YYtvFOAJ+z0g8pfWn71aVrPHlEI4VVlywWenKXKiWdzaktn+p
-         m+FFI9tsxxl3rdb1q29O3sX9LHoXKsy/+ujeKIeJ7YIrgmLdii3tZUBTN6zlZ3bKVSQA
-         wbNZSP6cpGM4YuSf/vCCX0siMlActzZpa1271H8qBrkurjRwjtPPZXdGN32aC+fwvu6U
-         22a95kF40ApQj44tYPy1G2ms4wu761zcu4KJmFiRM04bJMVsTKyp+DG6dI1zmA1Vqqmp
-         g0JA==
-X-Gm-Message-State: ANoB5pnU4fx2TwLA1MPyM2h28msZlbi7aqOun4n0ERXz1/nZzcVQ6oiA
-        7KJ/EQvcwbzDaHeP0Uz4fTtL5w==
-X-Google-Smtp-Source: AA0mqf5FqZaeA5gMVK8IMJXojfeD1ykEZMAdHNylNYCrDuMgO8lLQS5s66dCO7D+o2bX/dDJjXB9pw==
-X-Received: by 2002:a05:6512:e9a:b0:4b4:11c0:f572 with SMTP id bi26-20020a0565120e9a00b004b411c0f572mr6855777lfb.583.1668599057711;
-        Wed, 16 Nov 2022 03:44:17 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id v26-20020ac258fa000000b004a8b9c68728sm2566110lfo.105.2022.11.16.03.44.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 03:44:17 -0800 (PST)
-Message-ID: <9c86ba22-fac8-ff9b-b0cc-86b48d4bcfe5@linaro.org>
-Date:   Wed, 16 Nov 2022 12:44:16 +0100
+        Wed, 16 Nov 2022 06:53:49 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DDB612D07;
+        Wed, 16 Nov 2022 03:45:06 -0800 (PST)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NC1Rv07ZDz15Md6;
+        Wed, 16 Nov 2022 19:44:43 +0800 (CST)
+Received: from kwepemm600015.china.huawei.com (7.193.23.52) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 16 Nov 2022 19:45:04 +0800
+Received: from [10.174.176.52] (10.174.176.52) by
+ kwepemm600015.china.huawei.com (7.193.23.52) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 16 Nov 2022 19:45:03 +0800
+Message-ID: <eef82083-c158-4afa-645c-0bf1518d5db7@huawei.com>
+Date:   Wed, 16 Nov 2022 19:45:02 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] dt-bindings: mailbox: qcom-ipcc: Add compatible for
- SM8550
-Content-Language: en-US
-To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <20221116113457.2660792-1-abel.vesa@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221116113457.2660792-1-abel.vesa@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+Subject: Re: [PATCH v3 0/2] NFS: check FMODE_EXEC from open context mode
+To:     <trond.myklebust@hammerspace.com>
+CC:     <linux-nfs@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yi.zhang@huawei.com>, <zhangxiaoxu5@huawei.com>, <anna@kernel.org>
+References: <20220923054015.2890271-1-chenxiaosong2@huawei.com>
+From:   ChenXiaoSong <chenxiaosong2@huawei.com>
+In-Reply-To: <20220923054015.2890271-1-chenxiaosong2@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.52]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600015.china.huawei.com (7.193.23.52)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/11/2022 12:34, Abel Vesa wrote:
-> Document the compatible for SM8550 mailbox.
+Hi Trond:
+
+Do you have any suggestions for this patchset ?
+
+在 2022/9/23 13:40, ChenXiaoSong 写道:
+> Currently, we check FMODE_EXEC from file f_flags, and check FMODE_READ or
+> FMODE_WRITE from open context mode.
 > 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
->  Documentation/devicetree/bindings/mailbox/qcom-ipcc.yaml | 1 +
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+> After converting file f_flags to open context mode by flags_to_mode(),
+> we can check all mode from open context mode.
+> 
+> ChenXiaoSong (2):
+>    NFS: make sure open context mode have FMODE_EXEC when file open for
+>      exec
+>    NFSv4: check FMODE_EXEC from open context mode in
+>      nfs4_opendata_access()
+> 
+>   fs/nfs/inode.c    |  3 ++-
+>   fs/nfs/nfs4file.c | 12 ++++--------
+>   fs/nfs/nfs4proc.c | 16 +++++-----------
+>   3 files changed, 11 insertions(+), 20 deletions(-)
+> 
