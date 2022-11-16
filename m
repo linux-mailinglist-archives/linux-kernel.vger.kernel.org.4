@@ -2,85 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5503762C7F4
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 19:44:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93F2B62C817
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 19:46:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239058AbiKPSoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 13:44:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43120 "EHLO
+        id S234549AbiKPSpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 13:45:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238725AbiKPSnp (ORCPT
+        with ESMTP id S234209AbiKPSoj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 13:43:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2EE60EAC
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 10:42:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668624152;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NBZ39WNjycPf4R6M83kSnl6Dtr1v471N2pU+M0ytGIU=;
-        b=NW1L31MMiFfjWa2P104LRm6AGNoIN9nqEjJivM4x+7L3yQbXlFodE8pcMITOK9TI83BHqL
-        MpTOkxSDkRPs4wshlFl0LIte84/64QBGw1LaWVLuwwGJDgtEoDCqsNDA/1D//II940fdpe
-        y7GCiOaBpmNez/qj2C1Cfhr13iiGkbg=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-32-1BP7D7YNMiKqtqcVopQjhQ-1; Wed, 16 Nov 2022 13:42:31 -0500
-X-MC-Unique: 1BP7D7YNMiKqtqcVopQjhQ-1
-Received: by mail-qk1-f200.google.com with SMTP id bp10-20020a05620a458a00b006fa29f253dcso18291901qkb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 10:42:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NBZ39WNjycPf4R6M83kSnl6Dtr1v471N2pU+M0ytGIU=;
-        b=4Q/RfKdIqeWj3y/ru51I5B9vifeyz2gJS0vgD9JD+TqJvtOK5cxgrjKTIomA7Rz8xC
-         g/OSftZ6/wGv3pE6CqcTiPkmQku7wNX5AjIJnMy5SNYxTpfQ52nAnaN+V9N18GbLG3j9
-         RYTcMGpl9VAbFAMCi2K+qgkAyWWrFJwsFDi1WMrDuCHAe2o/KQtbaWBwAjTfSjR9gQDZ
-         H6pk+D9WV/B79zaj4FSg25PeqcEuazFJDGFUI6j87GWev3Vxo3NZP2ffAWEtKtqzUmex
-         fCk7KkMUNXmX1ZPF0YZWWCbmbUlAugEUGSY/DXFz4eXg7PKWP6k7bUpdu/LiR/tZbhdZ
-         Z+yw==
-X-Gm-Message-State: ANoB5pmZxQGPAdd6IlfrWbmTUoSvC3GayXgRQaZcCDsKwROjIKQDulHd
-        MxpczkJc1z4PVqJF6l1Ddi4GFML/g+qCTUt9pj7L0LJ51ouW8FAoGWaByyf1w7OlUJ31fPADAUl
-        ILY29xD7B9DE8RAEm5pHbkM5L
-X-Received: by 2002:a05:620a:1091:b0:6fa:faac:926d with SMTP id g17-20020a05620a109100b006fafaac926dmr20644246qkk.33.1668624150761;
-        Wed, 16 Nov 2022 10:42:30 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf74h3OlNFfa4y4vca5+glxCb7Xmv3G53GcklHC7K/2QU+PPM7VPRcXlMA2kXHR3p+zgzGIZKA==
-X-Received: by 2002:a05:620a:1091:b0:6fa:faac:926d with SMTP id g17-20020a05620a109100b006fafaac926dmr20644228qkk.33.1668624150555;
-        Wed, 16 Nov 2022 10:42:30 -0800 (PST)
-Received: from vschneid.remote.csb ([154.57.232.159])
-        by smtp.gmail.com with ESMTPSA id k21-20020ac84795000000b003a569a0afcasm8981146qtq.66.2022.11.16.10.42.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 10:42:30 -0800 (PST)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Sander Vanheule <sander@svanheule.net>,
-        Alexey Klimov <klimov.linux@gmail.com>,
-        Eric Biggers <ebiggers@google.com>
-Cc:     Yury Norov <yury.norov@gmail.com>
-Subject: Re: [PATCH v3] cpumask: limit visibility of FORCE_NR_CPUS
-In-Reply-To: <20221116172451.274938-1-yury.norov@gmail.com>
-References: <20221116172451.274938-1-yury.norov@gmail.com>
-Date:   Wed, 16 Nov 2022 18:42:25 +0000
-Message-ID: <xhsmhr0y2yc4u.mognet@vschneid.remote.csb>
+        Wed, 16 Nov 2022 13:44:39 -0500
+Received: from mx0b-00190b01.pphosted.com (mx0b-00190b01.pphosted.com [IPv6:2620:100:9005:57f::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71101C68;
+        Wed, 16 Nov 2022 10:43:31 -0800 (PST)
+Received: from pps.filterd (m0050096.ppops.net [127.0.0.1])
+        by m0050096.ppops.net-00190b01. (8.17.1.19/8.17.1.19) with ESMTP id 2AGITFN2017459;
+        Wed, 16 Nov 2022 18:43:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akamai.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=jan2016.eng;
+ bh=PVz8DE1+if9pFWMMr73CQxHTxNV1L8eNQQuz00I9uic=;
+ b=mRUHzOh+j/uvoHasB/pC6B6JaZjKGpynafWrDTP24IQ0B+eBnC71AfN4snTJ3yqYhgFs
+ tWJEHaVyQ3Nl39a+/1Lc7k3gpgKATpiiCVjBpn9UAqUKltezBwxPzTmt9GQ12bVrekWg
+ 7rE/Qd4H8Eco8GH+GLMg1fYyfb7JaGjV9Efw3441mHhIVvTxaEM4xL8iNJGTpE3eWq/S
+ 2Vw9dcimO8LWOeRaODl5eBOTBi/IzIthV8nsDi20skog2xm/RMcpF7ek3mvHNXWuRK+r
+ OTRSOZGOs1RIWIqBW2kS67LDCK7uQe9uBbPS1/Q0WVQ8SuW7OIS6qwHjjT1wfsu7vTYr Ww== 
+Received: from prod-mail-ppoint7 (a72-247-45-33.deploy.static.akamaitechnologies.com [72.247.45.33] (may be forged))
+        by m0050096.ppops.net-00190b01. (PPS) with ESMTPS id 3kvv5ap2cp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Nov 2022 18:43:12 +0000
+Received: from pps.filterd (prod-mail-ppoint7.akamai.com [127.0.0.1])
+        by prod-mail-ppoint7.akamai.com (8.17.1.5/8.17.1.5) with ESMTP id 2AGHn1X1023866;
+        Wed, 16 Nov 2022 13:43:11 -0500
+Received: from prod-mail-relay19.dfw02.corp.akamai.com ([172.27.165.173])
+        by prod-mail-ppoint7.akamai.com (PPS) with ESMTP id 3kt7q4nmf4-1;
+        Wed, 16 Nov 2022 13:43:11 -0500
+Received: from [172.19.33.48] (bos-lpa4700a.bos01.corp.akamai.com [172.19.33.48])
+        by prod-mail-relay19.dfw02.corp.akamai.com (Postfix) with ESMTP id D1EFF600CD;
+        Wed, 16 Nov 2022 18:43:10 +0000 (GMT)
+Message-ID: <ea9bb9e6-17a5-7ca8-91cc-6c7bcbeac355@akamai.com>
+Date:   Wed, 16 Nov 2022 13:43:10 -0500
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] EDAC/edac_module: order edac_init() before
+ ghes_edac_register()
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Shuai Xue <xueshuai@linux.alibaba.com>, stable@vger.kernel.org
+References: <20221116003729.194802-1-jbaron@akamai.com>
+ <Y3TGFJn7ykeUMk+O@zn.tnic> <f1afc4ed-505e-109f-9c4c-1053af2c1bcd@akamai.com>
+ <Y3Ut4L18XI+PGCze@zn.tnic>
+From:   Jason Baron <jbaron@akamai.com>
+In-Reply-To: <Y3Ut4L18XI+PGCze@zn.tnic>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-16_03,2022-11-16_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 spamscore=0
+ suspectscore=0 adultscore=0 malwarescore=0 mlxlogscore=500 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211160127
+X-Proofpoint-ORIG-GUID: 5gYJ-NpzmG-Zuom9DnaRClrDbnDT5AtT
+X-Proofpoint-GUID: 5gYJ-NpzmG-Zuom9DnaRClrDbnDT5AtT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-16_03,2022-11-16_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 lowpriorityscore=0
+ adultscore=0 phishscore=0 mlxlogscore=393 clxscore=1015 mlxscore=0
+ priorityscore=1501 malwarescore=0 bulkscore=0 suspectscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211160128
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,41 +90,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/11/22 09:24, Yury Norov wrote:
-> In current form, FORCE_NR_CPUS is visible to all users building their
-> kernels, even not experts. It is also set in allmodconfig or allyesconfig,
-> which is not a correct behavior.
->
-> This patch fixes it. It also changes the parameter short description:
-> removes implementation details and highlights the effect of the change.
->
-> Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
 
-Reviewed-by: Valentin Schneider <vschneid@redhat.com>
+On 11/16/22 13:37, Borislav Petkov wrote:
+> Hi,
+>
+> On Wed, Nov 16, 2022 at 09:32:41AM -0500, Jason Baron wrote:
+>> Thanks, yes this looks like it will address the regression. Is this
+>> planned for 6.1?
+> 6.2.
+>
+>> Or 5.15 stable, which is where we hit this regression?
+> No, I don't think it is stable material.
+>
+> Thx.
+>
+Ok, thanks. Is there any plan to address this in 5.15 stable/6.1 ?
 
-> ---
-> v3: instead of 'choice', use !COMPILE_TEST to disable FORCE_NR_CPUS
->     in all{yes,mod}config, as suggested by Linus.
->  lib/Kconfig | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/lib/Kconfig b/lib/Kconfig
-> index 9bbf8a4b2108..404647cd3fac 100644
-> --- a/lib/Kconfig
-> +++ b/lib/Kconfig
-> @@ -529,8 +529,8 @@ config CPUMASK_OFFSTACK
->         stack overflow.
->
->  config FORCE_NR_CPUS
-> -       bool "NR_CPUS is set to an actual number of CPUs"
-> -       depends on SMP
-> +       bool "Set number of CPUs at compile time"
-> +       depends on SMP && EXPERT && !COMPILE_TEST
->         help
->           Say Yes if you have NR_CPUS set to an actual number of possible
->           CPUs in your system, not to a default value. This forces the core
-> --
-> 2.34.1
+Either with a revert or fixup as I proposed or something else?
+
+Thanks,
+
+-Jason
 
