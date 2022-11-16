@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0881562B626
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:14:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D95A162B627
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:14:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232947AbiKPJOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 04:14:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38738 "EHLO
+        id S233106AbiKPJOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 04:14:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232077AbiKPJOa (ORCPT
+        with ESMTP id S230280AbiKPJOa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 16 Nov 2022 04:14:30 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FF0559E;
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0AE62C1;
         Wed, 16 Nov 2022 01:14:29 -0800 (PST)
-Date:   Wed, 16 Nov 2022 09:14:25 -0000
+Date:   Wed, 16 Nov 2022 09:14:27 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668590067;
+        s=2020; t=1668590068;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=WHQ6L7e8QAPaBVaj6+20+/2M+FkroSiESCfGsG3tCKM=;
-        b=J4Ischh9z8cEBBQg6h+0tjNbbPli0hykWBPD/4yvs8MqHs26rV4xZhFsrWTJ6qta43YEFK
-        tBA52QUT9vq0+abkHlhYIpxuMeHOZ06aMJYDSyNmPwph+PgpFPCWIni9LGM+Q6YFPJeLvD
-        Euu1N3wrA7owv+GDy8htLT1sksMYfWbsQhQieyQ727mu1IOn5ftwNXYqqvn1lcRueBSeJf
-        hdppEHBieTONZXkEBgIFSg3giiRtbpfO5RDobLJUhBPQurid8lMwT4TdJaEPpjhWpFeiM2
-        XZbUPoy3bLgv7SYX3onVXs2I84gym4F7TUWWUaA/PccEUViFtWsJvgVHWGsQVw==
+        bh=ntXmTzcMVrQc++9yhCFjiIC9jVlTb71PBDC8seZSSSU=;
+        b=zIEwQAiuscQ6JqTADM0FtvuJjHb+dJznnXpqivThgP05jflGCzFDBNZEwuQWmraB6tR7MI
+        7z9cg0+NUCwkzR7C+bZtggiJ4QebTUYdFi5GdgobWfe4eOR0sY/NGyIJ4BYM/1KtGiDVXY
+        PyA8bG2bFdmqpymMW00132iAKtKmb8Ies6216bWZNo2io+SgJ2zPxKmO7NiNTa5KHB+m0J
+        DcUodSRYbEgmxEH67BYmK9DU0s2Uh0kemlGRSPI61KgCVL4QTm6ap8gzaHC9B4ppw85i7R
+        h2fnWi+0RGE4m8YVOLWZG9BFfqUagZEgrIItjsGthLI28l7/jYOIDAFr9b71DQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668590067;
+        s=2020e; t=1668590068;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=WHQ6L7e8QAPaBVaj6+20+/2M+FkroSiESCfGsG3tCKM=;
-        b=naTgVc+kAp0xTEqmJZcDoyvswmE0R5xJK9LoxeapoC3vE7Xft2Z1x/HXUDh7DNX46cdM9r
-        ptZslvOAQ7EQUXCw==
-From:   "tip-bot2 for Chen Zhongjin" <tip-bot2@linutronix.de>
+        bh=ntXmTzcMVrQc++9yhCFjiIC9jVlTb71PBDC8seZSSSU=;
+        b=ePhxbwo+I+MjhTdlse1fz4nuGKZtn8ZrUCV3o2F1dsZSQOSuSshh11EktvKe5aSoO1KMQL
+        s5en9am3v3phQDAw==
+From:   "tip-bot2 for Gaosheng Cui" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/core] perf: Fix possible memleak in pmu_dev_alloc()
-Cc:     Chen Zhongjin <chenzhongjin@huawei.com>,
+Subject: [tip: perf/core] perf: Fix IS_ERR() vs NULL check in inherit_event()
+Cc:     Gaosheng Cui <cuigaosheng1@huawei.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20221111103653.91058-1-chenzhongjin@huawei.com>
-References: <20221111103653.91058-1-chenzhongjin@huawei.com>
+In-Reply-To: <20221114091833.1492575-1-cuigaosheng1@huawei.com>
+References: <20221114091833.1492575-1-cuigaosheng1@huawei.com>
 MIME-Version: 1.0
-Message-ID: <166859006599.4906.10242789446125515108.tip-bot2@tip-bot2>
+Message-ID: <166859006717.4906.1082358264373442577.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,70 +66,36 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the perf/core branch of tip:
 
-Commit-ID:     e8d7a90c08ce963c592fb49845f2ccc606a2ac21
-Gitweb:        https://git.kernel.org/tip/e8d7a90c08ce963c592fb49845f2ccc606a2ac21
-Author:        Chen Zhongjin <chenzhongjin@huawei.com>
-AuthorDate:    Fri, 11 Nov 2022 18:36:53 +08:00
+Commit-ID:     c55bfbb3ebce4e0956972f02b82673950ad1a2d2
+Gitweb:        https://git.kernel.org/tip/c55bfbb3ebce4e0956972f02b82673950ad1a2d2
+Author:        Gaosheng Cui <cuigaosheng1@huawei.com>
+AuthorDate:    Mon, 14 Nov 2022 17:18:33 +08:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Tue, 15 Nov 2022 22:30:12 +01:00
+CommitterDate: Tue, 15 Nov 2022 22:30:11 +01:00
 
-perf: Fix possible memleak in pmu_dev_alloc()
+perf: Fix IS_ERR() vs NULL check in inherit_event()
 
-In pmu_dev_alloc(), when dev_set_name() failed, it will goto free_dev
-and call put_device(pmu->dev) to release it.
-However pmu->dev->release is assigned after this, which makes warning
-and memleak.
-Call dev_set_name() after pmu->dev->release = pmu_dev_release to fix it.
+The find_get_pmu_context() returns an ERR_PTR() on failure, we should use
+IS_ERR() to check the return value.
 
-  Device '(null)' does not have a release() function...
-  WARNING: CPU: 2 PID: 441 at drivers/base/core.c:2332 device_release+0x1b9/0x240
-  ...
-  Call Trace:
-    <TASK>
-    kobject_put+0x17f/0x460
-    put_device+0x20/0x30
-    pmu_dev_alloc+0x152/0x400
-    perf_pmu_register+0x96b/0xee0
-    ...
-  kmemleak: 1 new suspected memory leaks (see /sys/kernel/debug/kmemleak)
-  unreferenced object 0xffff888014759000 (size 2048):
-    comm "modprobe", pid 441, jiffies 4294931444 (age 38.332s)
-    backtrace:
-      [<0000000005aed3b4>] kmalloc_trace+0x27/0x110
-      [<000000006b38f9b8>] pmu_dev_alloc+0x50/0x400
-      [<00000000735f17be>] perf_pmu_register+0x96b/0xee0
-      [<00000000e38477f1>] 0xffffffffc0ad8603
-      [<000000004e162216>] do_one_initcall+0xd0/0x4e0
-      ...
-
-Fixes: abe43400579d ("perf: Sysfs enumeration")
-Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+Fixes: bd2756811766 ("perf: Rewrite core context handling")
+Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20221111103653.91058-1-chenzhongjin@huawei.com
+Link: https://lkml.kernel.org/r/20221114091833.1492575-1-cuigaosheng1@huawei.com
 ---
- kernel/events/core.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ kernel/events/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/kernel/events/core.c b/kernel/events/core.c
-index baa6edf..5f262f9 100644
+index baa2997..baa6edf 100644
 --- a/kernel/events/core.c
 +++ b/kernel/events/core.c
-@@ -11308,13 +11308,15 @@ static int pmu_dev_alloc(struct pmu *pmu)
+@@ -13171,7 +13171,7 @@ inherit_event(struct perf_event *parent_event,
+ 		return child_event;
  
- 	pmu->dev->groups = pmu->attr_groups;
- 	device_initialize(pmu->dev);
--	ret = dev_set_name(pmu->dev, "%s", pmu->name);
--	if (ret)
--		goto free_dev;
- 
- 	dev_set_drvdata(pmu->dev, pmu);
- 	pmu->dev->bus = &pmu_bus;
- 	pmu->dev->release = pmu_dev_release;
-+
-+	ret = dev_set_name(pmu->dev, "%s", pmu->name);
-+	if (ret)
-+		goto free_dev;
-+
- 	ret = device_add(pmu->dev);
- 	if (ret)
- 		goto free_dev;
+ 	pmu_ctx = find_get_pmu_context(child_event->pmu, child_ctx, child_event);
+-	if (!pmu_ctx) {
++	if (IS_ERR(pmu_ctx)) {
+ 		free_event(child_event);
+ 		return NULL;
+ 	}
