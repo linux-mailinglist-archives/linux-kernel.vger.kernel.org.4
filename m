@@ -2,316 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1143F62C68A
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 18:41:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3010962C68C
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 18:41:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234069AbiKPRlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 12:41:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53084 "EHLO
+        id S234324AbiKPRlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 12:41:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233485AbiKPRla (ORCPT
+        with ESMTP id S234218AbiKPRlo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 12:41:30 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE5ED137
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 09:41:28 -0800 (PST)
-Received: from mail-yb1-f198.google.com (mail-yb1-f198.google.com [209.85.219.198])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 16 Nov 2022 12:41:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29219D137;
+        Wed, 16 Nov 2022 09:41:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id C9BD93F0C8
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 17:41:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1668620484;
-        bh=xz4EiCr6ZuWL/U16EFiHXOXw+kW3GS1JYc7thj3Y4eY=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=KiflCoESWWPSb8CVCL5927nohGvNoBsYXI+fmmVmlYmQ2rwwriIKt28WpF+/NPh9H
-         iLs5YkwBgMZ/VlEOudSbrZeUdV5UqY+ghva7GEVNRVyjO8m1ASLeCwo6Sam36B3DKG
-         r8CDkUURvDF649Hx23KXceeq0PL4GbcF3rK08NAnZsJE7+5Zx5cYlOJFWmAAluQdoq
-         7TuYfV6j3qHxAvRf01V6RYnbAHkqSCwpRfuJGXCZwJEn0drLXm3F8upOnJNE7s1My0
-         3cPXHyK4bVtNCSvCs9Zv05CLEDPMxlSYUFyFEW+wODVvWnkUvfvFAo4kS8/AsYgl4x
-         NXmVrSpuPvSxg==
-Received: by mail-yb1-f198.google.com with SMTP id s77-20020a257750000000b006e5e383ec68so1807997ybc.6
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 09:41:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xz4EiCr6ZuWL/U16EFiHXOXw+kW3GS1JYc7thj3Y4eY=;
-        b=acZGTSoyKJU3XIwKOZJij8dETVfAiFOerzbriJmUjpvCioucBpscPxIwCCf4fzL5FG
-         Hrrsb2tQZiXPdzYoYerYzxcKx1KtJ1g/QOEIwyHE0mDP1TmaeEExaXHwFgWmNw5Bl5L1
-         zBUejVezJWDNGjs9BESFquX0dvnrU0mfvNakMEe0N436rOKormT5P7fhHPFdzTtAL1pe
-         wBhuzYkrPCQnvqgRuEY4nmhSwk796NAcfxnoUHevliUzoDYw5orNsP/LDFXeDNxpiC9B
-         hVrLclWwndt2xEcA3f59y18WflPV5GS88ThfLqwKpUm/G2C6FVIa0qMAA6qBDiEVk3sN
-         pa5g==
-X-Gm-Message-State: ANoB5pmIhLwLcbzgW1DHVobtTkGdSpgrl6nRf5iJNPGnl5SoHbNLUj2G
-        IYZSOtCiYgZM2TXSSP9uAJLVGsITqKJtjKH4l3euQLI6vDyiBagjYvqMaW+EbIXvIilvX80V25I
-        LvX7nXMVOt3OQE1yLdCW5T6DKK6oNCnEKebbvIyBfPEHbv7psBgK55o5O5Q==
-X-Received: by 2002:a0d:d78c:0:b0:357:94cb:7a8 with SMTP id z134-20020a0dd78c000000b0035794cb07a8mr22043896ywd.326.1668620482724;
-        Wed, 16 Nov 2022 09:41:22 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4WVbP7g9iQI9RHRyPHivBQ4DhEh1eC80B9tJcCzYio/ZUwo5VpBylCewZZWyJBrgUqUhtOBDp0n5rmefHi9+M=
-X-Received: by 2002:a0d:d78c:0:b0:357:94cb:7a8 with SMTP id
- z134-20020a0dd78c000000b0035794cb07a8mr22043875ywd.326.1668620482437; Wed, 16
- Nov 2022 09:41:22 -0800 (PST)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DC2E6B81E31;
+        Wed, 16 Nov 2022 17:41:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60E00C433D6;
+        Wed, 16 Nov 2022 17:41:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668620500;
+        bh=ze6lrws1PcLEoJV4hUYYFp/aoWa0Afbnhm9vvHmIuA0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hDhUQ5OgrJUWUV60LKsv4XdeShIdcDJGo42XW7WehX1q3JJj7E9BFx250SS4Hruk0
+         orAWet0r0LHwJT/1r4kyPr1HoWy2mZvmir08kp80/dCX7uz0yHADdQlBDr0l/Rdp4P
+         YCFaC5virxzOpwrsRD2XwiFwxTwIkFyq7/mOJjCvVmJ/7GHnoHJbQYU0kdDcK6TSiH
+         U4FUeC1VI70B3nTUkCVDCpETP535Oqxc0SmpolpD3xdqAufR6pPCOwi1NAXjLJEhIg
+         SS/xCa2KAPgNGjydkwkDCvf4MoQTc1Ed/NmGpEY3VNB2YiWIO/xxut0GjAmJ0w4rQP
+         T0HA9k71LGbFQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id C0BE24034E; Wed, 16 Nov 2022 14:41:37 -0300 (-03)
+Date:   Wed, 16 Nov 2022 14:41:37 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        bpf@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH 0/1] Fix perf tools/lib includes
+Message-ID: <Y3Ug0c01n2tFzVlK@kernel.org>
+References: <20221116072211.2837834-1-irogers@google.com>
+ <Y3T/fxPOvZgePIEz@kernel.org>
+ <Y3UAX3U/cpszMFE7@kernel.org>
+ <CAP-5=fWu2Ywz9rC3fq9GSnASbJu4hyiF4bqyrSDi34Rz6A8y+A@mail.gmail.com>
+ <CAP-5=fX5X8=-jbj7wo7LZpNhgYzJqPJ1duJbdf2zH3HtPhcdsA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20221109113724.519021-1-emil.renner.berthing@canonical.com>
- <20221109120102.ylnseq2w33rvt7fz@pengutronix.de> <CAJM55Z-EVXB6FTWwh_vY_B3LoVv+b7TCQCE7asB8G8wkEwui_g@mail.gmail.com>
- <20221109153311.cszr7fgfmyelwra3@pengutronix.de>
-In-Reply-To: <20221109153311.cszr7fgfmyelwra3@pengutronix.de>
-From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Date:   Wed, 16 Nov 2022 18:41:06 +0100
-Message-ID: <CAJM55Z8vpJ0XtQqnsFMLE4rkyV11ePbNjtYx0u4pgM9-MT=Kvg@mail.gmail.com>
-Subject: Re: [PATCH v2] pwm: sifive: Always let the first pwm_apply_state succeed
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        "Wesley W. Terpstra" <wesley@sifive.com>,
-        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAP-5=fX5X8=-jbj7wo7LZpNhgYzJqPJ1duJbdf2zH3HtPhcdsA@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NUMERIC_HTTP_ADDR,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 9 Nov 2022 at 16:33, Uwe Kleine-K=C3=B6nig
-<u.kleine-koenig@pengutronix.de> wrote:
->
-> On Wed, Nov 09, 2022 at 01:45:43PM +0100, Emil Renner Berthing wrote:
-> > On Wed, 9 Nov 2022 at 13:01, Uwe Kleine-K=C3=B6nig
-> > <u.kleine-koenig@pengutronix.de> wrote:
-> > >
-> > > Hello Emil,
-> > >
-> > > On Wed, Nov 09, 2022 at 12:37:24PM +0100, Emil Renner Berthing wrote:
-> > > > Commit 2cfe9bbec56ea579135cdd92409fff371841904f added support for t=
-he
-> > > > RGB and green PWM controlled LEDs on the HiFive Unmatched board
-> > > > managed by the leds-pwm-multicolor and leds-pwm drivers respectivel=
-y.
-> > > > All three colours of the RGB LED and the green LED run from differe=
-nt
-> > > > lines of the same PWM, but with the same period so this works fine =
-when
-> > > > the LED drivers are loaded one after the other.
-> > > >
-> > > > Unfortunately it does expose a race in the PWM driver when both LED
-> > > > drivers are loaded at roughly the same time. Here is an example:
-> > > >
-> > > >   |          Thread A           |          Thread B           |
-> > > >   |  led_pwm_mc_probe           |  led_pwm_probe              |
-> > > >   |    devm_fwnode_pwm_get      |                             |
-> > > >   |      pwm_sifive_request     |                             |
-> > > >   |        ddata->user_count++  |                             |
-> > > >   |                             |    devm_fwnode_pwm_get      |
-> > > >   |                             |      pwm_sifive_request     |
-> > > >   |                             |        ddata->user_count++  |
-> > > >   |         ...                 |          ...                |
-> > > >   |    pwm_state_apply          |    pwm_state_apply          |
-> > > >   |      pwm_sifive_apply       |      pwm_sifive_apply       |
-> > > >
-> > > > Now both calls to pwm_sifive_apply will see that ddata->approx_peri=
-od,
-> > > > initially 0, is different from the requested period and the clock n=
-eeds
-> > > > to be updated. But since ddata->user_count >=3D 2 both calls will f=
-ail
-> > > > with -EBUSY, which will then cause both LED drivers to fail to prob=
-e.
-> > > >
-> > > > Fix it by letting the first call to pwm_sifive_apply update the clo=
-ck
-> > > > even when ddata->user_count !=3D 1.
-> > > >
-> > > > Fixes: 9e37a53eb051 ("pwm: sifive: Add a driver for SiFive SoC PWM"=
-)
-> > > > Signed-off-by: Emil Renner Berthing <emil.renner.berthing@canonical=
-.com>
-> > > > ---
-> > > >  drivers/pwm/pwm-sifive.c | 8 +++++++-
-> > > >  1 file changed, 7 insertions(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/drivers/pwm/pwm-sifive.c b/drivers/pwm/pwm-sifive.c
-> > > > index 2d4fa5e5fdd4..b3c60ec72a6e 100644
-> > > > --- a/drivers/pwm/pwm-sifive.c
-> > > > +++ b/drivers/pwm/pwm-sifive.c
-> > > > @@ -159,7 +159,13 @@ static int pwm_sifive_apply(struct pwm_chip *c=
-hip, struct pwm_device *pwm,
-> > > >
-> > > >       mutex_lock(&ddata->lock);
-> > > >       if (state->period !=3D ddata->approx_period) {
-> > > > -             if (ddata->user_count !=3D 1) {
-> > > > +             /*
-> > > > +              * Don't let a 2nd user change the period underneath =
-the 1st user.
-> > > > +              * However if ddate->approx_period =3D=3D 0 this is t=
-he first time we set
-> > > > +              * any period, so let whoever gets here first set the=
- period so other
-> > > > +              * users who agree on the period won't fail.
-> > > > +              */
-> > > > +             if (ddata->user_count !=3D 1 && ddata->approx_period)=
- {
-> > >
-> > > While I'm convinced this works, we'd get some more uniform behaviour
-> > > compared to other hardwares with similar restrictions if you lock the
-> > > period on enabling the PWM instead of at request time. See for exampl=
-e
-> > > drivers/pwm/pwm-pca9685.c.
-> >
-> > Hmm.. that driver uses a pwms_enabled bitmap rather than a user count,
-> > but it still sets the bit in the request method and refuses to change
-> > period in the apply method if more than 1 bit is set.
->
-> Note there are two different bitmaps. The one modified in .request is
-> for gpio stuff and the other in .apply() for locking the common period
-> length.
+Em Wed, Nov 16, 2022 at 08:47:51AM -0800, Ian Rogers escreveu:
+> On Wed, Nov 16, 2022 at 8:45 AM Ian Rogers <irogers@google.com> wrote:
+> > Looks like the GTK part of the build isn't depending on the prepare
+> > step. I'll take a look.
 
-Yeah, there is the pwms_enabled and pwms_inuse bitmaps, but
-pwms_enabled is used both in .request and .apply.
+> Yep. The target:
+ 
+> $(GTK_IN): FORCE
+ 
+> should be:
+ 
+> $(GTK_IN): FORCE prepare
+ 
+> Could you try this, or do you want me to resend?
 
-> > So as far as I
-> > can tell it still suffers from the same race. However using a bitmap
-> > instead of a user count would let us handle everything in the apply
-> > method if we don't set the bit in the request method, but then the
-> > behaviour would still be different. In any case it would still be a
-> > large change to this driver.
-> >
-> > How about we merge this bug fix that can easily be backported first
-> > and then look at how it should be handled properly?
->
-> I thought it wouldn't be that hard to do it right from the start,
-> but I admit it's harder than I expected to get right. My prototype looks
-> as follows:
+Trying it, so far so good:
 
-This works for me (modulo the two extra {'s). I'd still prefer merging
-the simpler version and then this on top for ease of backporting, but
-as long as the race is fixed I'm fine. Will you send a cleaned up
-version of this?
+[perfbuilder@five ~]$ export BUILD_TARBALL=http://192.168.86.14/perf/perf-6.1.0-rc5.tar.xz
+[perfbuilder@five ~]$ time dm
+   1   197.40 almalinux:8                   : Ok   gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-4) , clang version 12.0.1 (Red Hat 12.0.1-4.module_el8.5.0+1025+93159d6c)
+   2   195.05 almalinux:9                   : Ok   gcc (GCC) 11.2.1 20220127 (Red Hat 11.2.1-9) , clang version 13.0.1 (Red Hat 13.0.1-1.el9)
+   3   160.09 alpine:3.12                   : Ok   gcc (Alpine 9.3.0) 9.3.0 , Alpine clang version 10.0.0 (https://gitlab.alpinelinux.org/alpine/aports.git 7445adce501f8473efdb93b17b5eaf2f1445ed4c)
+   4   151.66 alpine:3.13                   : Ok   gcc (Alpine 10.2.1_pre1) 10.2.1 20201203 , Alpine clang version 10.0.1
+   5   151.66 alpine:3.14                   : Ok   gcc (Alpine 10.3.1_git20210424) 10.3.1 20210424 , Alpine clang version 11.1.0
 
-/Emil
-
-> diff --git a/drivers/pwm/pwm-sifive.c b/drivers/pwm/pwm-sifive.c
-> index 2d4fa5e5fdd4..89846d95bfc0 100644
-> --- a/drivers/pwm/pwm-sifive.c
-> +++ b/drivers/pwm/pwm-sifive.c
-> @@ -41,13 +41,13 @@
->
->  struct pwm_sifive_ddata {
->         struct pwm_chip chip;
-> -       struct mutex lock; /* lock to protect user_count and approx_perio=
-d */
-> +       struct mutex lock; /* lock to protect approx_period */
->         struct notifier_block notifier;
->         struct clk *clk;
->         void __iomem *regs;
->         unsigned int real_period;
->         unsigned int approx_period;
-> -       int user_count;
-> +       DECLARE_BITMAP(pwms_enabled, 4);
->  };
->
->  static inline
-> @@ -59,10 +59,16 @@ struct pwm_sifive_ddata *pwm_sifive_chip_to_ddata(str=
-uct pwm_chip *c)
->  static int pwm_sifive_request(struct pwm_chip *chip, struct pwm_device *=
-pwm)
->  {
->         struct pwm_sifive_ddata *ddata =3D pwm_sifive_chip_to_ddata(chip)=
-;
-> +       u32 val =3D readl(ddata->regs + PWM_SIFIVE_PWMCFG);
->
-> -       mutex_lock(&ddata->lock);
-> -       ddata->user_count++;
-> -       mutex_unlock(&ddata->lock);
-> +       if (val & PWM_SIFIVE_PWMCFG_EN_ALWAYS) {
-> +               val =3D readl(ddata->regs + PWM_SIFIVE_PWMCMP(pwm->hwpwm)=
-);
-> +               if (val > 0) {
-> +                       mutex_lock(&ddata->lock);
-> +                       __set_bit(pwm->hwpwm, ddata->pwms_enabled);
-> +                       mutex_unlock(&ddata->lock);
-> +               }
-> +       }
->
->         return 0;
->  }
-> @@ -72,7 +78,7 @@ static void pwm_sifive_free(struct pwm_chip *chip, stru=
-ct pwm_device *pwm)
->         struct pwm_sifive_ddata *ddata =3D pwm_sifive_chip_to_ddata(chip)=
-;
->
->         mutex_lock(&ddata->lock);
-> -       ddata->user_count--;
-> +       __clear_bit(pwm->hwpwm, ddata->pwms_enabled);
->         mutex_unlock(&ddata->lock);
->  }
->
-> @@ -158,11 +164,18 @@ static int pwm_sifive_apply(struct pwm_chip *chip, =
-struct pwm_device *pwm,
->         frac =3D min(frac, (1U << PWM_SIFIVE_CMPWIDTH) - 1);
->
->         mutex_lock(&ddata->lock);
-> +
-> +       if (state->enabled) {
-> +               __set_bit(pwm->hwpwm, ddata->pwms_enabled);
-> +
->         if (state->period !=3D ddata->approx_period) {
-> -               if (ddata->user_count !=3D 1) {
-> +               if (bitmap_weight(ddata->pwms_enabled, 4) > 1) {
-> +                       if (!enabled) {
-> +                               __clear_bit(pwm->hwpwm, ddata->pwms_enabl=
-ed);
->                         mutex_unlock(&ddata->lock);
->                         return -EBUSY;
->                 }
-> +
->                 ddata->approx_period =3D state->period;
->                 pwm_sifive_update_clock(ddata, clk_get_rate(ddata->clk));
->         }
-> @@ -177,14 +190,23 @@ static int pwm_sifive_apply(struct pwm_chip *chip, =
-struct pwm_device *pwm,
->                 ret =3D clk_enable(ddata->clk);
->                 if (ret) {
->                         dev_err(ddata->chip.dev, "Enable clk failed\n");
-> +                       if (state->enabled) {
-> +                               mutex_lock(&ddata->lock);
-> +                               __clear_bit(pwm->hwpwm, ddata->pwms_enabl=
-ed);
-> +                               mutex_unlock(&ddata->lock);
-> +                       }
->                         return ret;
->                 }
->         }
->
->         writel(frac, ddata->regs + PWM_SIFIVE_PWMCMP(pwm->hwpwm));
->
-> -       if (!state->enabled)
-> +       if (!state->enabled) {
-> +               mutex_lock(&ddata->lock);
-> +               __clear_bit(pwm->hwpwm, ddata->pwms_enabled);
-> +               mutex_unlock(&ddata->lock);
->                 clk_disable(ddata->clk);
-> +       }
->
->         return 0;
->  }
->
-> Best regards
-> Uwe
->
-> --
-> Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig       =
-     |
-> Industrial Linux Solutions                 | https://www.pengutronix.de/ =
-|
+[perfbuilder@pumpkin ~]$ export BUILD_TARBALL=http://192.168.86.14/perf/perf-6.1.0-rc5.tar.xz
+[perfbuilder@pumpkin ~]$ time dm from fedora:24
+  22    40.30 fedora:24                     : Ok   gcc (GCC) 6.3.1 20161221 (Red Hat 6.3.1-1) 
+  23     2.64 fedora:24-x-ARC-uClibc        : FAIL gcc version 7.1.1 20170710 (ARCompact ISA Linux uClibc toolchain 2017.09-rc2) 
+    libbpf.c:46:10: fatal error: libelf.h: No such file or directory
+     #include <libelf.h>
+              ^~~~~~~~~~
+    compilation terminated.
+  24    40.29 fedora:25                     : Ok   gcc (GCC) 6.4.1 20170727 (Red Hat 6.4.1-1) 
+  25    42.61 fedora:26                     : Ok   gcc (GCC) 7.3.1 20180130 (Red Hat 7.3.1-2) 
+  26    41.70 fedora:27                     : Ok   gcc (GCC) 7.3.1 20180712 (Red Hat 7.3.1-6) 
+  27    44.11 fedora:28                     : Ok   gcc (GCC) 8.3.1 20190223 (Red Hat 8.3.1-2) 
+  28    46.22 fedora:29                     : Ok   gcc (GCC) 8.3.1 20190223 (Red Hat 8.3.1-2) 
+  29    45.02 fedora:30                     : Ok   gcc (GCC) 9.3.1 20200408 (Red Hat 9.3.1-2) 
+  30   178.98 fedora:31                     : Ok   gcc (GCC) 9.3.1 20200408 (Red Hat 9.3.1-2) , clang version 9.0.1 (Fedora 9.0.1-4.fc31)
+  31   159.04 fedora:32                     : Ok   gcc (GCC) 10.3.1 20210422 (Red Hat 10.3.1-1) , clang version 10.0.1 (Fedora 10.0.1-3.fc32)
+  32   178.60 fedora:33                     : Ok   gcc (GCC) 10.3.1 20210422 (Red Hat 10.3.1-1) , clang version 11.0.0 (Fedora 11.0.0-3.fc33)
+  33: fedora:34
