@@ -2,155 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACC9D62BAAF
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:02:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D16ED62BAB1
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:02:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232412AbiKPLCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 06:02:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46472 "EHLO
+        id S232755AbiKPLCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 06:02:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233038AbiKPLBl (ORCPT
+        with ESMTP id S238967AbiKPLBm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 06:01:41 -0500
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 862331570D;
+        Wed, 16 Nov 2022 06:01:42 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 41F871FFA0;
+        Wed, 16 Nov 2022 02:49:38 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3A20C150C;
+        Wed, 16 Nov 2022 02:49:44 -0800 (PST)
+Received: from [10.57.40.76] (unknown [10.57.40.76])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E18253F663;
         Wed, 16 Nov 2022 02:49:36 -0800 (PST)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id B3666849CD;
-        Wed, 16 Nov 2022 11:49:33 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1668595775;
-        bh=/RKFfzPIDJxjayT8Q6/3VwncSgZG64bhHeq7pBCHSnA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=TOMraKeo5PIXkAxKSEL5gxonyxHgglRaYWwca+KPliAyOnpzMUypspmazZYYFgWSv
-         zVUFGC97rOQpr+iTdULLFDukZHgK04QdbmWY1MmJdMoYNIAqn0Yrut+tiy6mjOvR2F
-         vaDcphuKbob1UeQTE73UcYouwN1bnwRBuJZfDGpFwpFDWm8myRWgRfEnDB7lzBvAaA
-         bO8DpeYowwmh5epa5XaKQP47h9j1XQ0l2mNn+35T3AED3d2n9CM1UIfoMMQq3pTg6S
-         ZjMZTj24fNNieuuBS1jMpWxxs6Fk6yoit9OIv/dYbW0B+4xNIJ1fBzfkuYxCfyMKTy
-         +IZ/m2Zoa01lQ==
-Message-ID: <c0aeb578-611b-d008-cdc6-148f99bf19c2@denx.de>
-Date:   Wed, 16 Nov 2022 11:49:33 +0100
+Message-ID: <774c9e6b-a8f4-66fe-aae0-d1cefedf7df3@arm.com>
+Date:   Wed, 16 Nov 2022 10:49:35 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v3] spi: spi-imx: Fix spi_bus_clk if requested clock is
- higher than input clock
-Content-Language: en-US
-To:     Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Frieder Schrempf <frieder@fris.de>,
-        David Jander <david@protonic.nl>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>
-Cc:     Fabio Estevam <festevam@gmail.com>, stable@vger.kernel.org,
-        Baruch Siach <baruch.siach@siklu.com>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-References: <20221115181002.2068270-1-frieder@fris.de>
- <7b31dd4d-a74c-1013-491f-81538001917e@denx.de>
- <01bce6c9-7825-2995-44fb-ddebbbd7b482@kontron.de>
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <01bce6c9-7825-2995-44fb-ddebbbd7b482@kontron.de>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.2
+Subject: Re: linux-next: build failure after merge of the arm64 tree
+To:     Besar Wicaksono <bwicaksono@nvidia.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20221116090401.0cd5ccc7@canb.auug.org.au>
+ <SJ0PR12MB56762CFC0B8D680B05828EF8A0049@SJ0PR12MB5676.namprd12.prod.outlook.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <SJ0PR12MB56762CFC0B8D680B05828EF8A0049@SJ0PR12MB5676.namprd12.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/16/22 09:17, Frieder Schrempf wrote:
-> On 16.11.22 00:49, Marek Vasut wrote:
->> On 11/15/22 19:10, Frieder Schrempf wrote:
->>> From: Frieder Schrempf <frieder.schrempf@kontron.de>
->>>
->>> In case the requested bus clock is higher than the input clock, the
->>> correct
->>> dividers (pre = 0, post = 0) are returned from mx51_ecspi_clkdiv(), but
->>> *fres is left uninitialized and therefore contains an arbitrary value.
->>>
->>> This causes trouble for the recently introduced PIO polling feature as
->>> the
->>> value in spi_imx->spi_bus_clk is used there to calculate for which
->>> transfers to enable PIO polling.
->>>
->>> Fix this by setting *fres even if no clock dividers are in use.
->>>
->>> This issue was observed on Kontron BL i.MX8MM with an SPI peripheral
->>> clock set
->>> to 50 MHz by default and a requested SPI bus clock of 80 MHz for the
->>> SPI NOR
->>> flash.
->>>
->>> With the fix applied the debug message from mx51_ecspi_clkdiv() now
->>> prints the
->>> following:
->>>
->>> spi_imx 30820000.spi: mx51_ecspi_clkdiv: fin: 50000000, fspi: 50000000,
->>> post: 0, pre: 0
->>>
->>> Fixes: 6fd8b8503a0d ("spi: spi-imx: Fix out-of-order CS/SCLK operation
->>> at low speeds")
->>> Fixes: 07e759387788 ("spi: spi-imx: add PIO polling support")
->>> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
->>> Cc: David Jander <david@protonic.nl>
->>> Cc: Fabio Estevam <festevam@gmail.com>
->>> Cc: Mark Brown <broonie@kernel.org>
->>> Cc: Marek Vasut <marex@denx.de>
->>> Cc: stable@vger.kernel.org
->>> Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
->>> Tested-by: Fabio Estevam <festevam@gmail.com>
->>> ---
->>>
->>> Changes for v3:
->>>
->>> * Add back the Fixes tag for commit 6fd8b8503a0d
->>> * Add Fabio's Tested-by (Thanks!)
->>>
->>> Changes for v2:
->>>
->>> * Remove the reference and the Fixes tag for commit 6fd8b8503a0d as it is
->>>     incorrect.
->>> ---
->>>    drivers/spi/spi-imx.c | 3 +--
->>>    1 file changed, 1 insertion(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
->>> index 30d82cc7300b..468ce0a2b282 100644
->>> --- a/drivers/spi/spi-imx.c
->>> +++ b/drivers/spi/spi-imx.c
->>> @@ -444,8 +444,7 @@ static unsigned int mx51_ecspi_clkdiv(struct
->>> spi_imx_data *spi_imx,
->>>        unsigned int pre, post;
->>>        unsigned int fin = spi_imx->spi_clk;
->>>    -    if (unlikely(fspi > fin))
->>> -        return 0;
->>> +    fspi = min(fspi, fin);
->>>          post = fls(fin) - fls(fspi);
->>>        if (fin > fspi << post)
->>
->> Can you also test the SPI flash at some 100 kHz, just to see whether it
->> still works properly ? (to retain behavior fixed first in 6fd8b8503a0dc
->> ("spi: spi-imx: Fix out-of-order CS/SCLK operation at low speeds") )
->>
->> The fix here does look fine by me however.
+On 15/11/2022 23:52, Besar Wicaksono wrote:
 > 
-> I successfully tested at 100 kHZ SPI bus clock. As in this case fspi is
-> lower than fin, the patch doesn't change anything in the code path and
-> therefore the behavior introduced in 6fd8b8503a0dc stays the same as
-> without the patch.
+> 
+>> -----Original Message-----
+>> From: Stephen Rothwell <sfr@canb.auug.org.au>
+>> Sent: Tuesday, November 15, 2022 4:04 PM
+>> To: Catalin Marinas <catalin.marinas@arm.com>; Will Deacon
+>> <will@kernel.org>
+>> Cc: Besar Wicaksono <bwicaksono@nvidia.com>; Linux Kernel Mailing List
+>> <linux-kernel@vger.kernel.org>; Linux Next Mailing List <linux-
+>> next@vger.kernel.org>
+>> Subject: linux-next: build failure after merge of the arm64 tree
+>>
+>> Hi all,
+>>
+>> After merging the arm64 tree, today's linux-next build (x86_64
+>> allmodconfig) failed like this:
+>>
+>> drivers/perf/arm_cspmu/arm_cspmu.c: In function 'arm_cspmu_get_cpus':
+>> drivers/perf/arm_cspmu/arm_cspmu.c:1114:29: error: implicit declaration of
+>> function 'get_acpi_id_for_cpu' [-Werror=implicit-function-declaration]
+>>   1114 |                             get_acpi_id_for_cpu(cpu)) {
+>>        |                             ^~~~~~~~~~~~~~~~~~~
+>>
+> 
+> +CC Suzuki for awareness.
+> 
+> This function is used for searching CPU with matching ACPI Processor ID in PPTT.
+> I will check if adding PPTT dependency to arm_cspmu would resolve this issue.
 
-Acked-by: Marek Vasut <marex@denx.de>
+Please make this dependent on ARM64. That should resolve the failure.
+As such the helper is available with ARM64 && ACPI.
 
-Thanks for the extra check !
+Suzuki
+
+> 
+> Regards,
+> Besar
+> 
+>> Caused by commit
+>>
+>>    e37dfd65731d ("perf: arm_cspmu: Add support for ARM CoreSight PMU
+>> driver")
+>>
+>> I have used the arm64 tree from next-20221115 for today.
+>>
+>> --
+>> Cheers,
+>> Stephen Rothwell
+
