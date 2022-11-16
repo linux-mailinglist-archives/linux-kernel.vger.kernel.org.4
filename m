@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04B8D62BA90
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:00:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4FCD62BA92
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:00:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233309AbiKPLAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 06:00:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42220 "EHLO
+        id S238735AbiKPLAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 06:00:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232170AbiKPK7V (ORCPT
+        with ESMTP id S233287AbiKPK7Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 05:59:21 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B30042998
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:47:49 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id l14so29243810wrw.2
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:47:49 -0800 (PST)
+        Wed, 16 Nov 2022 05:59:24 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9DC2CCAD
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:47:50 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id h9so29262215wrt.0
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:47:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WNW/Ja3/47L5Q6fjd4PGfYDK3b2eBGCySrTuDZ3fEGg=;
-        b=g4kj6djy7NMvEN/v/5WER99YaZ8lBUBq5E5hIZRyGiJ1rya+5uQbWJODAMblSkd1L8
-         W/oTb3zxOf3Cfl7AGHtrl95wpDQrs6kDU7OY5vdi1nIvP52/hHfBqijyTleQaAfGuH1f
-         0//ZQn6Y/FBI3Il9SStlx0WXZXTVulSxHonZ3KrfQmUPPs8FRVuFwwjsgjGVvKBDe7lf
-         o2AxoAEVZF3ZmSq01xkcJnbcHTtZPOVluUUPGpP+6gZ8EvrEgNsxLxbil+2ykgs2j2vu
-         2/UYd5dUK7jfKi08Z5NuvwVFnQUK/r4iPl0N7UWezWyhdo3f5INBzxxbxn6bsAkVFcAX
-         Zhgw==
+        bh=Bqj14+L6wdPnBz6T0oVqLW81gC5yVGp113SLh//BQYI=;
+        b=xOkYtqh6Bl5JzNc7V3YRj/0E2PYSYdLe/tJFi9ca0LBYndz74OvhRYwhlvFV4pKJyN
+         NfHTomr9fxL6FlQllcmhmdwkG3xCj/1y3AzbXrMjjRCapWZaMVWahqndDxLYFLlBgGVt
+         583lnykBZpEGsDbqCIMDX2xet6fJlGpkChKA5FAH08MHVnc3JSzUmLJcSKfcRRT3cGUn
+         wIkCAm4UMxjhgNGJ/AeWWG5HZMFzGQB2aE+XvgXDUF1VeD8kzWgFS56gBBxAEVOuSsKU
+         EepycxCiBnCZyNVabhfcquV1+qr4Pil04dRPUch/dWI1eL4SowhcR9CFnRWK9RFmw4iU
+         sfug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WNW/Ja3/47L5Q6fjd4PGfYDK3b2eBGCySrTuDZ3fEGg=;
-        b=jjW8T+Ol0HqZoHL24vkqNT06AL0/880KYdumJcS0EIoL/St9f81FOnSeqHqTbxuNbp
-         xvnbhdU61zKMqKXaMoPMTLr1VfcwRQ+KXNDTrBjcajaOK+Z27OaGHuLOWfBeM015gUQn
-         PW0nf6PS07seLuc8mRinM++SoDTAIkuA0mvZFAROVjwOu+hDOt+f30W3/la8XsThUzWM
-         pnlN2oclU+M9A0qd2CFmjcnDAbgVhv4Z+yD+G9RMQqBybNpXWuIwWZa7RcffYl8pjc8a
-         bWFT8HnTrh4AB5jXHuyYHrhzoTO2W5b4iQmBeMRv1BjWBvGhQJc7FC2JjYh25xHplC+O
-         /72w==
-X-Gm-Message-State: ANoB5pmePdbMG0Nr3SHdoxo77ntDBouTd93YYW7H3GT9CuYQ15blNqdt
-        7PG5LeLgIO6jY1d71sew8+FZJw==
-X-Google-Smtp-Source: AA0mqf5DPwHle12bDp7CJWEGQtzmW+z5NcBGbxTf9oJX9lozvjtjqJRV7UEQQKEIBYxWPG3UCj3HgA==
-X-Received: by 2002:a5d:56cb:0:b0:236:d611:84e1 with SMTP id m11-20020a5d56cb000000b00236d61184e1mr13553865wrw.328.1668595668803;
-        Wed, 16 Nov 2022 02:47:48 -0800 (PST)
+        bh=Bqj14+L6wdPnBz6T0oVqLW81gC5yVGp113SLh//BQYI=;
+        b=42odOmYl8BLrL8grvFCCN5+JEaktGDzc2JdPQ8k3xfU7u8U/cfz2NuNz246SnXlUEQ
+         GRker7ghhAx5gXM3oZYx3Z/9rnys2N8RKRDzOkRmYeAryyDINVGHMBab95w4lybfe+/d
+         fpm+mWUAralkwNmxv505z9Er2KOJXe0l8eMmsC1mpWgBOiSV6CA6/xrnaxtyIFuzuNzz
+         aM629bR6Ya5LaiEmsb7CKWqQGWgYR6NZ2DeI/UZHHhw4n8DQQZHBiIClnjqjeqzII0gl
+         5G8tWKd9AbAsKFiDsqDbMrtAs1BO0MAkZNUmvpojtc9NZ+ynQbQNAjC14PO2FO+Dj9+r
+         aYew==
+X-Gm-Message-State: ANoB5pk73gojWHtCT0yWl2p6oIy2qpd8VMiEeuIKRii+hNCk2O8ShIK+
+        pudvRdmGLYSnSs3KmJwHbf5uMg==
+X-Google-Smtp-Source: AA0mqf7tUMzzQCjkI/aYStOQx/zXAnKBT79x8VDlvphHG9gTZImDP6E9ruWZXn6GzruLw9At1zgvWw==
+X-Received: by 2002:a5d:6dc2:0:b0:22e:4864:ee11 with SMTP id d2-20020a5d6dc2000000b0022e4864ee11mr13051107wrz.488.1668595669967;
+        Wed, 16 Nov 2022 02:47:49 -0800 (PST)
 Received: from localhost.localdomain ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id b3-20020adff903000000b002366fb99cdasm14674206wrr.50.2022.11.16.02.47.47
+        by smtp.gmail.com with ESMTPSA id b3-20020adff903000000b002366fb99cdasm14674206wrr.50.2022.11.16.02.47.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 02:47:48 -0800 (PST)
+        Wed, 16 Nov 2022 02:47:49 -0800 (PST)
 From:   Abel Vesa <abel.vesa@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -60,9 +60,9 @@ To:     Andy Gross <agross@kernel.org>,
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-clk@vger.kernel.org
-Subject: [PATCH 7/9] clk: qcom: rpmh: Add support for SM8550 rpmh clocks
-Date:   Wed, 16 Nov 2022 12:47:14 +0200
-Message-Id: <20221116104716.2583320-8-abel.vesa@linaro.org>
+Subject: [PATCH 8/9] dt-bindings: clock: Add SM8550 TCSR CC clock bindings
+Date:   Wed, 16 Nov 2022 12:47:15 +0200
+Message-Id: <20221116104716.2583320-9-abel.vesa@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221116104716.2583320-1-abel.vesa@linaro.org>
 References: <20221116104716.2583320-1-abel.vesa@linaro.org>
@@ -77,151 +77,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds the RPMH clocks present in SM8550 SoC.
+Add bindings documentation for clock TCSR driver on SM8550.
 
 Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 ---
- drivers/clk/qcom/clk-rpmh.c | 110 +++++++++++++++++++++++++++++-------
- 1 file changed, 90 insertions(+), 20 deletions(-)
+ .../bindings/clock/qcom,tcsrcc-sm8550.yaml    | 46 +++++++++++++++++++
+ .../dt-bindings/clock/qcom,tcsrcc-sm8550.h    | 18 ++++++++
+ 2 files changed, 64 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,tcsrcc-sm8550.yaml
+ create mode 100644 include/dt-bindings/clock/qcom,tcsrcc-sm8550.h
 
-diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
-index 1da45a6e2f29..63975490ab54 100644
---- a/drivers/clk/qcom/clk-rpmh.c
-+++ b/drivers/clk/qcom/clk-rpmh.c
-@@ -579,6 +579,73 @@ static const struct clk_rpmh_desc clk_rpmh_sm8450 = {
- 	.num_clks = ARRAY_SIZE(sm8450_rpmh_clocks),
- };
- 
-+#define DEFINE_CLK_RPMH_FIXED(_platform, _name, _name_active,	\
-+				  _parent_name, _name_active_parent,	\
-+				  _div)					\
-+	static struct clk_fixed_factor _platform##_##_name = {		\
-+		.mult = 1,						\
-+		.div = _div,						\
-+		.hw.init = &(struct clk_init_data){			\
-+			.ops = &clk_fixed_factor_ops,			\
-+			.name = #_name,					\
-+			.parent_data =  &(const struct clk_parent_data){ \
-+					.fw_name = #_parent_name,	\
-+					.name = #_parent_name,		\
-+			},						\
-+			.num_parents = 1,				\
-+		},							\
-+	};								\
-+	static struct clk_fixed_factor _platform##_##_name_active = {	\
-+		.mult = 1,						\
-+		.div = _div,						\
-+		.hw.init = &(struct clk_init_data){			\
-+			.ops = &clk_fixed_factor_ops,			\
-+			.name = #_name_active,				\
-+			.parent_data =  &(const struct clk_parent_data){ \
-+					.fw_name = #_name_active_parent,\
-+					.name = #_name_active_parent,	\
-+			},						\
-+			.num_parents = 1,				\
-+		},							\
-+	}
+diff --git a/Documentation/devicetree/bindings/clock/qcom,tcsrcc-sm8550.yaml b/Documentation/devicetree/bindings/clock/qcom,tcsrcc-sm8550.yaml
+new file mode 100644
+index 000000000000..7d7bacb23610
+--- /dev/null
++++ b/Documentation/devicetree/bindings/clock/qcom,tcsrcc-sm8550.yaml
+@@ -0,0 +1,46 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/qcom,tcsrcc-sm8550.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+DEFINE_CLK_RPMH_ARC(sm8550, xo_pad, xo_pad_ao, "xo.lvl", 0x03, 2);
-+DEFINE_CLK_RPMH_FIXED(sm8550, bi_tcxo, bi_tcxo_ao, xo_pad, xo_pad_ao, 2);
-+DEFINE_CLK_RPMH_VRM(sm8550, rf_clk1, rf_clk1_ao, "clka1", 1);
-+DEFINE_CLK_RPMH_VRM(sm8550, rf_clk2, rf_clk2_ao, "clka2", 1);
-+DEFINE_CLK_RPMH_VRM(sm8550, rf_clk3, rf_clk3_ao, "clka3", 1);
-+DEFINE_CLK_RPMH_VRM(sm8550, rf_clk4, rf_clk4_ao, "clka4", 1);
-+DEFINE_CLK_RPMH_VRM(sm8550, ln_bb_clk1, ln_bb_clk1_ao, "clka6", 2);
-+DEFINE_CLK_RPMH_VRM(sm8550, ln_bb_clk2, ln_bb_clk2_ao, "clka7", 2);
-+DEFINE_CLK_RPMH_VRM(sm8550, ln_bb_clk3, ln_bb_clk3_ao, "clka8", 2);
++title: Qualcomm TCSR Clock Controller Binding for SM8550
 +
-+static struct clk_hw *sm8550_rpmh_clocks[] = {
-+	[RPMH_CXO_PAD_CLK]      = &sm8550_xo_pad.hw,
-+	[RPMH_CXO_PAD_CLK_A]    = &sm8550_xo_pad_ao.hw,
-+	[RPMH_CXO_CLK]		= &sm8550_bi_tcxo.hw,
-+	[RPMH_CXO_CLK_A]	= &sm8550_bi_tcxo_ao.hw,
-+	[RPMH_LN_BB_CLK1]	= &sm8550_ln_bb_clk1.hw,
-+	[RPMH_LN_BB_CLK1_A]	= &sm8550_ln_bb_clk1_ao.hw,
-+	[RPMH_LN_BB_CLK2]	= &sm8550_ln_bb_clk2.hw,
-+	[RPMH_LN_BB_CLK2_A]	= &sm8550_ln_bb_clk2_ao.hw,
-+	[RPMH_LN_BB_CLK3]	= &sm8550_ln_bb_clk3.hw,
-+	[RPMH_LN_BB_CLK3_A]	= &sm8550_ln_bb_clk3_ao.hw,
-+	[RPMH_RF_CLK1]		= &sm8550_rf_clk1.hw,
-+	[RPMH_RF_CLK1_A]	= &sm8550_rf_clk1_ao.hw,
-+	[RPMH_RF_CLK2]		= &sm8550_rf_clk2.hw,
-+	[RPMH_RF_CLK2_A]	= &sm8550_rf_clk2_ao.hw,
-+	[RPMH_RF_CLK3]		= &sm8550_rf_clk3.hw,
-+	[RPMH_RF_CLK3_A]	= &sm8550_rf_clk3_ao.hw,
-+	[RPMH_RF_CLK4]		= &sm8550_rf_clk4.hw,
-+	[RPMH_RF_CLK4_A]	= &sm8550_rf_clk4_ao.hw,
-+	[RPMH_IPA_CLK]		= &sdm845_ipa.hw,
-+};
++maintainers:
++  - Bjorn Andersson <andersson@kernel.org>
 +
-+static const struct clk_rpmh_desc clk_rpmh_sm8550 = {
-+	.clks = sm8550_rpmh_clocks,
-+	.num_clks = ARRAY_SIZE(sm8550_rpmh_clocks),
-+};
++description: |
++  Qualcomm TCSR clock control module which supports the clocks,
++  resets and power domains on SM8550
 +
- static struct clk_hw *sc7280_rpmh_clocks[] = {
- 	[RPMH_CXO_CLK]      = &sc7280_bi_tcxo.hw,
- 	[RPMH_CXO_CLK_A]    = &sc7280_bi_tcxo_ao.hw,
-@@ -694,29 +761,31 @@ static int clk_rpmh_probe(struct platform_device *pdev)
- 
- 		name = hw_clks[i]->init->name;
- 
--		rpmh_clk = to_clk_rpmh(hw_clks[i]);
--		res_addr = cmd_db_read_addr(rpmh_clk->res_name);
--		if (!res_addr) {
--			dev_err(&pdev->dev, "missing RPMh resource address for %s\n",
--				rpmh_clk->res_name);
--			return -ENODEV;
--		}
-+		if (hw_clks[i]->init->ops != &clk_fixed_factor_ops) {
-+			rpmh_clk = to_clk_rpmh(hw_clks[i]);
-+			res_addr = cmd_db_read_addr(rpmh_clk->res_name);
-+			if (!res_addr) {
-+				dev_err(&pdev->dev, "missing RPMh resource address for %s\n",
-+					rpmh_clk->res_name);
-+				return -ENODEV;
-+			}
- 
--		data = cmd_db_read_aux_data(rpmh_clk->res_name, &aux_data_len);
--		if (IS_ERR(data)) {
--			ret = PTR_ERR(data);
--			dev_err(&pdev->dev,
--				"error reading RPMh aux data for %s (%d)\n",
--				rpmh_clk->res_name, ret);
--			return ret;
--		}
-+			data = cmd_db_read_aux_data(rpmh_clk->res_name, &aux_data_len);
-+			if (IS_ERR(data)) {
-+				ret = PTR_ERR(data);
-+				dev_err(&pdev->dev,
-+					"error reading RPMh aux data for %s (%d)\n",
-+					rpmh_clk->res_name, ret);
-+				return ret;
-+			}
- 
--		/* Convert unit from Khz to Hz */
--		if (aux_data_len == sizeof(*data))
--			rpmh_clk->unit = le32_to_cpu(data->unit) * 1000ULL;
-+			/* Convert unit from Khz to Hz */
-+			if (aux_data_len == sizeof(*data))
-+				rpmh_clk->unit = le32_to_cpu(data->unit) * 1000ULL;
- 
--		rpmh_clk->res_addr += res_addr;
--		rpmh_clk->dev = &pdev->dev;
-+			rpmh_clk->res_addr += res_addr;
-+			rpmh_clk->dev = &pdev->dev;
-+		}
- 
- 		ret = devm_clk_hw_register(&pdev->dev, hw_clks[i]);
- 		if (ret) {
-@@ -752,6 +821,7 @@ static const struct of_device_id clk_rpmh_match_table[] = {
- 	{ .compatible = "qcom,sm8250-rpmh-clk", .data = &clk_rpmh_sm8250},
- 	{ .compatible = "qcom,sm8350-rpmh-clk", .data = &clk_rpmh_sm8350},
- 	{ .compatible = "qcom,sm8450-rpmh-clk", .data = &clk_rpmh_sm8450},
-+	{ .compatible = "qcom,sm8550-rpmh-clk", .data = &clk_rpmh_sm8550},
- 	{ .compatible = "qcom,sc7280-rpmh-clk", .data = &clk_rpmh_sc7280},
- 	{ }
- };
++  See also:
++  - dt-bindings/clock/qcom,tcsrcc-sm8550.h
++
++properties:
++  compatible:
++    const: qcom,sm8550-tcsrcc
++
++  '#clock-cells':
++    const: 1
++
++  '#reset-cells':
++    const: 1
++
++  reg:
++    maxItems: 1
++
++required:
++  - compatible
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    clock-controller@1fc0000 {
++      compatible = "qcom,sm8550-tcsrcc";
++      reg = <0x1fc0000 0x30000>;
++      #clock-cells = <1>;
++      #reset-cells = <1>;
++    };
++
++...
+diff --git a/include/dt-bindings/clock/qcom,tcsrcc-sm8550.h b/include/dt-bindings/clock/qcom,tcsrcc-sm8550.h
+new file mode 100644
+index 000000000000..eda360e84f0a
+--- /dev/null
++++ b/include/dt-bindings/clock/qcom,tcsrcc-sm8550.h
+@@ -0,0 +1,18 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (c) 2022, The Linux Foundation. All rights reserved.
++ * Copyright (c) 2022, Linaro Limited
++ */
++
++#ifndef _DT_BINDINGS_CLK_QCOM_TCSR_CC_SM8550_H
++#define _DT_BINDINGS_CLK_QCOM_TCSR_CC_SM8550_H
++
++/* GCC clocks */
++#define TCSR_PCIE_0_CLKREF_EN					0
++#define TCSR_PCIE_1_CLKREF_EN					1
++#define TCSR_UFS_CLKREF_EN					2
++#define TCSR_UFS_PAD_CLKREF_EN					3
++#define TCSR_USB2_CLKREF_EN					4
++#define TCSR_USB3_CLKREF_EN					5
++
++#endif
 -- 
 2.34.1
 
