@@ -2,201 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 719EC62B60F
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:09:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5CC962B618
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:10:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238728AbiKPJJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 04:09:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60258 "EHLO
+        id S232975AbiKPJKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 04:10:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238657AbiKPJIh (ORCPT
+        with ESMTP id S232734AbiKPJKO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 04:08:37 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D1C02610D;
-        Wed, 16 Nov 2022 01:08:07 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 44DB6336EA;
-        Wed, 16 Nov 2022 09:08:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1668589686; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Wed, 16 Nov 2022 04:10:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2EFEC2A
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:08:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668589713;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=QkGnWNUe/aroHkW59nLSy3H+5a/ksc/i7EJqwuZASVU=;
-        b=OtdNrVKx0awLItSwRdlvyJ+m6fYTDVwYgIFkXfaeqfNSMyI6p8Ru42dZRq0zSJEsUHpoSs
-        lu9KphEaT2QCVWBZLoOHqvTMnTJN8agKiQr57fvVurED05ThRehJmsypnxhdZQMkr252pu
-        DJroji6kfIwCkTNpYqM9EnvhIP6OJdc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1668589686;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QkGnWNUe/aroHkW59nLSy3H+5a/ksc/i7EJqwuZASVU=;
-        b=InuaK5TeH86FfY1//TXHUTsMBNytvb1Pc+TzaZhSwRiBPnNNr/SkgLV8jaXiL28Rb3YNcE
-        N0T0caICKINcYcBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A858E134CE;
-        Wed, 16 Nov 2022 09:08:05 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id nQu1J3WodGMNLQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 16 Nov 2022 09:08:05 +0000
-Message-ID: <973c6f79-38ad-aa30-bfec-c2a1c7db5d70@suse.cz>
-Date:   Wed, 16 Nov 2022 10:08:05 +0100
+        bh=uyltcw5T2Jgb215BEwpuC1JHtb3SSPcmkoPplj08lqE=;
+        b=IjKrCjsyP0ZYPNAJO/fq/ReE+oSqp4E4sAy8qimIABpzLKCqUe3kVwf0HG7EdVcuhz6l+v
+        7bCIndz9+QrKVy7buK5Z7ZtaEOKltzp587oSaD+Q8CrxGbbapWs1tthxfjjHreBw0wIsrH
+        3jJcB1QAPOqi5Cz8L5527T6tXWgEBh8=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-662-NWY4lrf7MsuK1hhp-BKhUA-1; Wed, 16 Nov 2022 04:08:29 -0500
+X-MC-Unique: NWY4lrf7MsuK1hhp-BKhUA-1
+Received: by mail-wm1-f70.google.com with SMTP id h9-20020a1c2109000000b003cfd37aec58so7144730wmh.1
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:08:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uyltcw5T2Jgb215BEwpuC1JHtb3SSPcmkoPplj08lqE=;
+        b=GO4oyyeyPHsXsTqq4BrXek+BDV0yiPUbDqaiYXw9bA2DaKrAFIZlHoIM6NLINEeomp
+         kmLftBs6NXa3HtEfj/RQs+hnWRBq3OwZ2akA32w2WbwajYaagzgLVquEQ1S5vwe4Hi0k
+         X+6CDIEuMPbgAnFm2Ri2yQt0aNijb/xXdDtbUB0Q7QSWtqyNEyNQO7TLrshxnz1c/V3/
+         PWHauQptqjip1a1w/XwzG8uyazaEAxkMwH8OCEPB8a1WXfYVLJjM2ePidNX07Q0N3JJf
+         9ideaF2vPCZVhtVti83mHGIXhoTtvKAyXZCgyUlgJeKftUn50KJ65os3eshlEVBAubFA
+         lb8A==
+X-Gm-Message-State: ANoB5pkRn/606MgBavKBwujVUXgbk0qhSCR9oCJfZMYmJHOgP0I2ESU4
+        1RXrVtIJyHcLJpDUsp0cz6VmrKPfIGnLFPuxodk8Z879U4qDABZdgtSmXBfOhT1b+ooYnQsGNkF
+        hjvMfTA45NZUxy63uhGozPbh3
+X-Received: by 2002:a5d:6e86:0:b0:22f:8603:24c5 with SMTP id k6-20020a5d6e86000000b0022f860324c5mr12582230wrz.245.1668589708627;
+        Wed, 16 Nov 2022 01:08:28 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4/R3OSAatEf0znUrZyOwmCCnGSuHg/w/V9S5+ALzG2D88hMgYBJ7ZeTzD2kRv/0ygfsZHPog==
+X-Received: by 2002:a5d:6e86:0:b0:22f:8603:24c5 with SMTP id k6-20020a5d6e86000000b0022f860324c5mr12582211wrz.245.1668589708279;
+        Wed, 16 Nov 2022 01:08:28 -0800 (PST)
+Received: from ?IPV6:2003:cb:c704:9f00:a98d:4026:7c44:40fd? (p200300cbc7049f00a98d40267c4440fd.dip0.t-ipconnect.de. [2003:cb:c704:9f00:a98d:4026:7c44:40fd])
+        by smtp.gmail.com with ESMTPSA id i10-20020a05600c4b0a00b003b476cabf1csm1331225wmp.26.2022.11.16.01.08.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Nov 2022 01:08:27 -0800 (PST)
+Message-ID: <73189e81-08c2-bb18-dd4a-f717996ea819@redhat.com>
+Date:   Wed, 16 Nov 2022 10:08:27 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH Part2 v6 14/49] crypto: ccp: Handle the legacy TMR
- allocation when SNP is enabled
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 2/2] arm64/mm: fix incorrect file_map_count for invalid
+ pmd/pud
 Content-Language: en-US
-To:     "Kalra, Ashish" <ashish.kalra@amd.com>,
-        Borislav Petkov <bp@alien8.de>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
-        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
-        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
-        michael.roth@amd.com, kirill@shutemov.name, ak@linux.intel.com,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org,
-        "Kaplan, David" <David.Kaplan@amd.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Oscar Salvador <osalvador@suse.de>
-References: <cover.1655761627.git.ashish.kalra@amd.com>
- <3a51840f6a80c87b39632dc728dbd9b5dd444cd7.1655761627.git.ashish.kalra@amd.com>
- <Y0grhk1sq2tf/tUl@zn.tnic> <380c9748-1c86-4763-ea18-b884280a3b60@amd.com>
- <Y1e5oC9QyDlKpxZ9@zn.tnic> <6511c122-d5cc-3f8d-9651-7c2cd67dc5af@amd.com>
- <Y2A6/ZwvKhpNBTMP@zn.tnic> <dc89b2f4-1053-91ac-aeac-bb3b25f9ebc7@amd.com>
- <Y2JS7kn8Q9P4rXso@zn.tnic> <c2ce6317-aa51-2a2b-2d75-ad1fd269f3fa@amd.com>
- <7882353e-2b13-d35a-b462-cef35ee56f51@suse.cz>
- <5b27a05e-09ad-9139-67b1-77b90731419f@amd.com>
- <9d9f1afe-c981-4df9-f012-89c4cb783cc3@amd.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <9d9f1afe-c981-4df9-f012-89c4cb783cc3@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Liu Shixin <liushixin2@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Denys Vlasenko <dvlasenk@redhat.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        David Hildenbrand <dhildenb@redhat.com>,
+        Rafael Aquini <raquini@redhat.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221116083811.464678-1-liushixin2@huawei.com>
+ <20221116083811.464678-3-liushixin2@huawei.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20221116083811.464678-3-liushixin2@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/15/22 19:15, Kalra, Ashish wrote:
+On 16.11.22 09:38, Liu Shixin wrote:
+> The page table check trigger BUG_ON() unexpectedly when split hugepage:
 > 
-> On 11/15/2022 11:24 AM, Kalra, Ashish wrote:
->> Hello Vlastimil,
->>
->> On 11/15/2022 9:14 AM, Vlastimil Babka wrote:
->>> Cc'ing memory failure folks, the beinning of this subthread is here:
->>>
->>> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Fall%2F3a51840f6a80c87b39632dc728dbd9b5dd444cd7.1655761627.git.ashish.kalra%40amd.com%2F&amp;data=05%7C01%7Cashish.kalra%40amd.com%7C944b59f239c541a52ac808dac71c2089%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638041220947600149%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=do9zzyMlAErkKx5rguqnL2GoG4lhsWHDI74zgwLWaZU%3D&amp;reserved=0
->>>
->>> On 11/15/22 00:36, Kalra, Ashish wrote:
->>>> Hello Boris,
->>>>
->>>> On 11/2/2022 6:22 AM, Borislav Petkov wrote:
->>>>> On Mon, Oct 31, 2022 at 04:58:38PM -0500, Kalra, Ashish wrote:
->>>>>>        if (snp_lookup_rmpentry(pfn, &rmp_level)) {
->>>>>>               do_sigbus(regs, error_code, address, VM_FAULT_SIGBUS);
->>>>>>               return RMP_PF_RETRY;
->>>>>
->>>>> Does this issue some halfway understandable error message why the
->>>>> process got killed?
->>>>>
->>>>>> Will look at adding our own recovery function for the same, but that will
->>>>>> again mark the pages as poisoned, right ?
->>>>>
->>>>> Well, not poisoned but PG_offlimits or whatever the mm folks agree upon.
->>>>> Semantically, it'll be handled the same way, ofc.
->>>>
->>>> Added a new PG_offlimits flag and a simple corresponding handler for it.
->>>
->>> One thing is, there's not enough page flags to be adding more (except
->>> aliases for existing) for cases that can avoid it, but as Boris says, if
->>> using alias to PG_hwpoison it depends what will become confused with the
->>> actual hwpoison.
->>>
->>>> But there is still added complexity of handling hugepages as part of
->>>> reclamation failures (both HugeTLB and transparent hugepages) and that
->>>> means calling more static functions in mm/memory_failure.c
->>>>
->>>> There is probably a more appropriate handler in mm/memory-failure.c:
->>>>
->>>> soft_offline_page() - this will mark the page as HWPoisoned and also has
->>>> handling for hugepages. And we can avoid adding a new page flag too.
->>>>
->>>> soft_offline_page - Soft offline a page.
->>>> Soft offline a page, by migration or invalidation, without killing
->>>> anything.
->>>>
->>>> So, this looks like a good option to call
->>>> soft_offline_page() instead of memory_failure() in case of
->>>> failure to transition the page back to HV/shared state via SNP_RECLAIM_CMD
->>>> and/or RMPUPDATE instruction.
->>>
->>> So it's a bit unclear to me what exact situation we are handling here. The
->>> original patch here seems to me to be just leaking back pages that are
->>> unsafe for further use. soft_offline_page() seems to fit that scenario of a
->>> graceful leak before something is irrepairably corrupt and we page fault
->>> on it.
->>> But then in the thread you discus PF handling and killing. So what is the
->>> case here? If we detect this need to call snp_leak_pages() does it mean:
->>>
->>> a) nobody that could page fault at them (the guest?) is running anymore, we
->>> are tearing it down, we just can't reuse the pages further on the host
->>
->> The host can page fault on them, if anything on the host tries to write to
->> these pages. Host reads will return garbage data.
->>
->>> - seem like soft_offline_page() could work, but maybe we could just put the
->>> pages on some leaked lists without special page? The only thing that should
->>> matter is not to free the pages to the page allocator so they would be
->>> reused by something else.
->>>
->>> b) something can stil page fault at them (what?) - AFAIU can't be resolved
->>> without killing something, memory_failure() might limit the damage
->>
->> As i mentioned above, host writes will cause RMP violation page fault.
->>
+>   ------------[ cut here ]------------
+>   kernel BUG at mm/page_table_check.c:119!
+>   Internal error: Oops - BUG: 00000000f2000800 [#1] SMP
+>   Dumping ftrace buffer:
+>      (ftrace buffer empty)
+>   Modules linked in:
+>   CPU: 7 PID: 210 Comm: transhuge-stres Not tainted 6.1.0-rc3+ #748
+>   Hardware name: linux,dummy-virt (DT)
+>   pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>   pc : page_table_check_set.isra.0+0x398/0x468
+>   lr : page_table_check_set.isra.0+0x1c0/0x468
+> [...]
+>   Call trace:
+>    page_table_check_set.isra.0+0x398/0x468
+>    __page_table_check_pte_set+0x160/0x1c0
+>    __split_huge_pmd_locked+0x900/0x1648
+>    __split_huge_pmd+0x28c/0x3b8
+>    unmap_page_range+0x428/0x858
+>    unmap_single_vma+0xf4/0x1c8
+>    zap_page_range+0x2b0/0x410
+>    madvise_vma_behavior+0xc44/0xe78
+>    do_madvise+0x280/0x698
+>    __arm64_sys_madvise+0x90/0xe8
+>    invoke_syscall.constprop.0+0xdc/0x1d8
+>    do_el0_svc+0xf4/0x3f8
+>    el0_svc+0x58/0x120
+>    el0t_64_sync_handler+0xb8/0xc0
+>    el0t_64_sync+0x19c/0x1a0
+> [...]
 > 
-> And to add here, if its a guest private page, then the above fault cannot be
-> resolved, so the faulting process is terminated.
+> On arm64, pmd_present() will return true even if the pmd is invalid.
 
-BTW would this not be mostly resolved as part of rebasing to UPM?
-- host will not have these pages mapped in the first place (both kernel
-directmap and qemu userspace)
-- guest will have them mapped, but I assume that the conversion from private
-to shared (that might fail?) can only happen after guest's mappings are
-invalidated in the first place?
+I assume that's because of the pmd_present_invalid() check.
 
-> Thanks,
-> Ashish
-> 
->>
->>>>
->>>>>
->>>>>> Still waiting for some/more feedback from mm folks on the same.
->>>>>
->>>>> Just send the patch and they'll give it.
->>>>>
->>>>> Thx.
->>>>>
->>>
+... I wonder why that behavior was chosen. Sounds error-prone to me.
+
+Fix LGHTM, but I am not an arm64 pgtable expert.
+
+-- 
+Thanks,
+
+David / dhildenb
 
