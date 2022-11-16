@@ -2,61 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3918062CCC4
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 22:36:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB89162CCCE
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 22:37:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231261AbiKPVgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 16:36:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41704 "EHLO
+        id S238603AbiKPVhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 16:37:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234328AbiKPVg2 (ORCPT
+        with ESMTP id S234221AbiKPVhO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 16:36:28 -0500
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C306F12744
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 13:36:22 -0800 (PST)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 2A14892009C; Wed, 16 Nov 2022 22:36:22 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 2318F92009B;
-        Wed, 16 Nov 2022 21:36:22 +0000 (GMT)
-Date:   Wed, 16 Nov 2022 21:36:22 +0000 (GMT)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] parport_pc: Limit the number of PCI BAR pairs to 2
-Message-ID: <alpine.DEB.2.21.2209260132340.29493@angie.orcam.me.uk>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Wed, 16 Nov 2022 16:37:14 -0500
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2511B167D7;
+        Wed, 16 Nov 2022 13:37:12 -0800 (PST)
+Received: by mail-oi1-f171.google.com with SMTP id q83so20038073oib.10;
+        Wed, 16 Nov 2022 13:37:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Oefeuf5fuvGFpB+rvweoxv6bsV88f1v7eEwRKxp5gtM=;
+        b=Zew91e1yRtoPmfyT3seBPi4LxW0BHbZUOve/yU2t2oVEFeqFt1N8IlqS3YqSAo/sq7
+         RzJwdW/1mFWF7IfarNBnK5/eunPxF+IqzhW8TDCQKjCuF/eNVPrTRiexrUXMk6zS0zJB
+         iTUU8PLnSw2krwONh357dUhRKwDTSe+iXXE8AbHPm7C+uw67M7yLBY4KintpeFI3/pYA
+         kJThvJOIbs+XOgM+J6a3Mj4r7PO1Ru2qfxgEsrG3G3rb6JhbdR2DWtXgiiuoA68oeIXx
+         QtkPZ1inlmPXkolrsJbcE85e2fqVZTz5f915ZyRpZWh62urAnFi9jEbDXuz6dNO1nO2p
+         8leQ==
+X-Gm-Message-State: ANoB5pk+yBXziLoNSlleJzFIevPrZmlK63bd2CW+OfDQ2DB6TMsJoG81
+        JudvASUl6L3WbCDfS5rFwA==
+X-Google-Smtp-Source: AA0mqf6lWGCUbNaxxK775OFLA/lUqyvZryGiDjkHAhJXPy85gpnhRcbtyviZPghK/T6FEJTtFwDFVg==
+X-Received: by 2002:a05:6808:30a0:b0:359:f059:ed05 with SMTP id bl32-20020a05680830a000b00359f059ed05mr2516554oib.148.1668634632174;
+        Wed, 16 Nov 2022 13:37:12 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id f8-20020a056830204800b0066101e9dccdsm7233469otp.45.2022.11.16.13.37.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 13:37:11 -0800 (PST)
+Received: (nullmailer pid 1015517 invoked by uid 1000);
+        Wed, 16 Nov 2022 21:37:13 -0000
+Date:   Wed, 16 Nov 2022 15:37:13 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Chris Brandt <chris.brandt@renesas.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: i2c: renesas,riic: Document RZ/Five SoC
+Message-ID: <166863463251.1015442.11078645842148048968.robh@kernel.org>
+References: <20221115123018.1182324-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_HDRS_LCASE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221115123018.1182324-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Decrease the number of PCI BAR pair slots allocated for port subdrivers 
-from 4 to 2 as none wants more than 2 at this time, reducing the memory 
-footprint a little.  No functional change.
 
-Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
----
- drivers/parport/parport_pc.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Tue, 15 Nov 2022 12:30:18 +0000, Prabhakar wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> 
+> The RIIC block on the RZ/Five SoC is identical to one found on the RZ/G2UL
+> SoC. "renesas,riic-r9a07g043" compatible string will be used on the
+> RZ/Five SoC so to make this clear, update the comment to include RZ/Five
+> SoC.
+> 
+> No driver changes are required as generic compatible string
+> "renesas,riic-rz" will be used as a fallback on RZ/Five SoC.
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+>  Documentation/devicetree/bindings/i2c/renesas,riic.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-linux-parport-pc-pci-bars.diff
-Index: linux-macro/drivers/parport/parport_pc.c
-===================================================================
---- linux-macro.orig/drivers/parport/parport_pc.c
-+++ linux-macro/drivers/parport/parport_pc.c
-@@ -2657,7 +2657,7 @@ static struct parport_pc_pci {
- 		int lo;
- 		int hi;
- 		/* -1 if not there, >6 for offset-method (max BAR is 6) */
--	} addr[4];
-+	} addr[2];
- 
- 	/* Bit field of parport modes to exclude. */
- 	unsigned int mode_mask;
+Acked-by: Rob Herring <robh@kernel.org>
