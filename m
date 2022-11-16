@@ -2,125 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AFD962C93B
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 20:50:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58E9E62C947
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 20:53:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234076AbiKPTu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 14:50:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54862 "EHLO
+        id S234261AbiKPTxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 14:53:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230471AbiKPTuy (ORCPT
+        with ESMTP id S238454AbiKPTw7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 14:50:54 -0500
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A5643AC2;
-        Wed, 16 Nov 2022 11:50:53 -0800 (PST)
-Received: by mail-qt1-f179.google.com with SMTP id jr19so11408281qtb.7;
-        Wed, 16 Nov 2022 11:50:53 -0800 (PST)
+        Wed, 16 Nov 2022 14:52:59 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E3754B22
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 11:52:53 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id h9so31751494wrt.0
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 11:52:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=39FrZeC3ldj+FLM9X1uVpeGgui7FIaSFbHe+gmieiBI=;
+        b=I7DDyylHlmqNdBztRaCOoZdNNkKXkZU1deI2LZHgYeAwT9ohF8CwLdqnvdpTvHGnAJ
+         z6X3TZEO/12NlmnHbtctMhEYC7ke/7TKaRqpWisfbp15Y8Gq2r9dGUIIJ7nIs/A8agUX
+         6iNEHx8wAXDL0HlbZsoMCWMpt4kb3MHuKtcOrEU7+Pws5KnkQssBpj3/b77ElFuN//33
+         nK7HKn+lVli/J6Bt/aKm1KVu4azjtlTlVeblHiorthWAMS5NURVJTT+rJfYM9VDqat73
+         oRwxcZbbcT/20QiEqs86wy+2/pQVLQwj2+nsppCr/2EewHEvBaLMdgGIABKELc7IxX6j
+         kRTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=BN5F/4SLMsWjv+SqMlOL2vb1K62iKbshTk4wJRTKB4w=;
-        b=KaRNy+FTK13YzDLsfA5pYPI1a2aN6CSlBrS/XRrHwrSJD4DhoSG1XVVxL/38rdnVSj
-         8YRCtseQE0WFZ1M5xEYKXOzRI4N2O2HuetXHdNK7HbYsItFS0XUZZ55HVMLqZGW98KQC
-         hntaGWxaN00I6KwK31vgcNcTf+FNoXVa/zlFKeLDjDExq2aPpNKhe0MB9Wr4fRiShjX6
-         xpZHCRJ5Qn5BGOogKi3U1JaaSwVetpE87CxksX3Z77mIybUpFNc2/wVyq4S7JjiIITkG
-         /kpzcDWs8Xo1k33n9Nha3sekNlMACqUnV9U5yq7fef5WX/dwyOp+HFzjgvapShhi9bHB
-         838w==
-X-Gm-Message-State: ANoB5pmn929xuMgpZmgbbnpuv1Vy02Q6AtgG2L02drVyf12zcknEUdPA
-        8oVLnZGVp/jIAoyvoyA4JcC1/t8xtv6kgk4hl+A=
-X-Google-Smtp-Source: AA0mqf5DdYqVIQKzGyroYxqt/YMnjdICg0KGWwqFQ9FMq3AQOkcuLpJHYmrtoJMEEiDV53G8U4yyuMX3mH3i7gaYbO0=
-X-Received: by 2002:ac8:5198:0:b0:3a5:1e6f:7e05 with SMTP id
- c24-20020ac85198000000b003a51e6f7e05mr22586496qtn.357.1668628252715; Wed, 16
- Nov 2022 11:50:52 -0800 (PST)
+        bh=39FrZeC3ldj+FLM9X1uVpeGgui7FIaSFbHe+gmieiBI=;
+        b=fVj33dIEcyRFcH7706PxMMzDu6RNw3H5pzRjGvn/0LDesNGC377bTOgKu6t+tR4SBY
+         WIOFqtZHKzRe0sVuB6G7v/d2xUC8pXGrJzp02pSVJnpfuoB6Ue/+a+esACEUEMY1Ajw8
+         oIo0xan+z7Rn9BZ6oaEIFozIdWZ9kaYVG3xsoxFo2hY1WVzk0D78F38iWfnFrew7aISL
+         2O2PXqKjJjzfFdy8ZyqWfawiVfen61Pv/zRBFjpeAQmPRIJtqDjNtFBNlOyG6o2RFzaa
+         4pECRJ0J4FEATHlt0OLj0w2cA/cFGgdmIUkP+VpWd4yIuJROqOphaGrTIqiaD2JS2AUF
+         CoHQ==
+X-Gm-Message-State: ANoB5plA9mMKEwXZaO+6CZOhbqewIjCrdMpOb9t7+cR36la6UQdQHkWg
+        BJ/mY5CATMI/H25MHhRqHrF8K4rgBH1dZScqve4MaA==
+X-Google-Smtp-Source: AA0mqf5BoMWamLtMLOTBSfl9vCb3jBOp5Cgemlel7yfgZXbj7+1Ps46hMiNrTjfbihElPCeoUY7/NtmMkKhFexk5Yt8=
+X-Received: by 2002:a05:6000:1241:b0:236:d8f8:b87d with SMTP id
+ j1-20020a056000124100b00236d8f8b87dmr14186527wrx.343.1668628372056; Wed, 16
+ Nov 2022 11:52:52 -0800 (PST)
 MIME-Version: 1.0
-References: <20221108170103.3375832-1-nathan@kernel.org> <Y3U7MWezkc8aizuo@dev-arch.thelio-3990X>
-In-Reply-To: <Y3U7MWezkc8aizuo@dev-arch.thelio-3990X>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 16 Nov 2022 20:50:41 +0100
-Message-ID: <CAJZ5v0iJ0quqN2ErfmPmiN0YRTTfJcC5BiCq+joe_RKBkfYCng@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: ACPI: Remove unused variables
- 'acpi_cpufreq_online' and 'ret'
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Stuart Hayes <stuart.w.hayes@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20221114210723.2749751-1-irogers@google.com> <20221114210723.2749751-11-irogers@google.com>
+ <Y3OX1pcclKCgbpeT@kernel.org> <Y3TIG7BIzltgvCPw@kernel.org>
+ <Y3TK/6bBFsHxduPc@kernel.org> <Y3TOwYdhzURKTgyB@kernel.org>
+ <Y3Tah5Ocvx6lQ4jP@kernel.org> <Y3ThXYH3SAyEGmQ+@kernel.org> <Y3T/35DcAw+h4R93@kernel.org>
+In-Reply-To: <Y3T/35DcAw+h4R93@kernel.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 16 Nov 2022 11:52:39 -0800
+Message-ID: <CAP-5=fU-tJPdxosVFfbbKtrswom7bnY6Ei3JczRJaQYyOnjcAA@mail.gmail.com>
+Subject: Re: [PATCH v3 10/10] perf list: Add json output option
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Weilin Wang <weilin.wang@intel.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Sandipan Das <sandipan.das@amd.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Xin Gao <gaoxin@cdjrlc.com>, Rob Herring <robh@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 8:34 PM Nathan Chancellor <nathan@kernel.org> wrote:
+On Wed, Nov 16, 2022 at 7:21 AM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
 >
-> Hi all,
+> Em Wed, Nov 16, 2022 at 10:10:53AM -0300, Arnaldo Carvalho de Melo escreveu:
+> > Em Wed, Nov 16, 2022 at 09:41:43AM -0300, Arnaldo Carvalho de Melo escreveu:
+> > > But then:
+> >
+> > > [root@five ~]# perf list syscalls:sys_enter_open* |& grep syscalls:
+> > >   syscalls:sys_enter_open                            [Tracepoint event]
+> > >   syscalls:sys_enter_open_by_handle_at               [Tracepoint event]
+> > >   syscalls:sys_enter_open_tree                       [Tracepoint event]
+> > >   syscalls:sys_enter_openat                          [Tracepoint event]
+> > >   syscalls:sys_enter_openat2                         [Tracepoint event]
+> > > [root@five ~]#
+> > >
+> > > This stops working, looking into it.
+> >
+> > Sidetracked with other stuff, please find what I have patched at
+> > perf/perf-list-json-output in my tree.
+> >
+> > I removed the last two patches and I'm testing so that I can push
+> > perf/core with your series modulo the last two + Namhyung's 'perf list'
+> > kit.
 >
-> Small ping, was there an issue with this change? It seems pretty
-> straight forward to me and it is wreaking havoc on our build matrix due
-> to -Werror.
+> I just saw you sent a patch on top of the previous one, will try and
+> combine stuff to remove failures from the bisect history.
+>
+> - Arnaldo
 
-Applied now, thanks!
+So the failing test was skipping for me due to a lack of kernel
+symbols, sorry for not spotting it. I find that the issue is resolved
+with your fixes and:
 
-> On Tue, Nov 08, 2022 at 10:01:03AM -0700, Nathan Chancellor wrote:
-> > Clang warns:
-> >
-> >   drivers/cpufreq/acpi-cpufreq.c:970:24: error: variable 'ret' is uninitialized when used here [-Werror,-Wuninitialized]
-> >           acpi_cpufreq_online = ret;
-> >                                 ^~~
-> >   drivers/cpufreq/acpi-cpufreq.c:960:9: note: initialize the variable 'ret' to silence this warning
-> >           int ret;
-> >                 ^
-> >                   = 0
-> >   1 error generated.
-> >
-> > Both ret and acpi_cpufreq_online are now unused so they can be safely
-> > removed, clearing up the warning.
-> >
-> > Fixes: 13fdbc8b8da6 ("cpufreq: ACPI: Defer setting boost MSRs")
-> > Link: https://github.com/ClangBuiltLinux/linux/issues/1757
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > ---
-> >  drivers/cpufreq/acpi-cpufreq.c | 6 ------
-> >  1 file changed, 6 deletions(-)
-> >
-> > diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
-> > index c8fdfcf659e6..74ef0e05ff7b 100644
-> > --- a/drivers/cpufreq/acpi-cpufreq.c
-> > +++ b/drivers/cpufreq/acpi-cpufreq.c
-> > @@ -953,12 +953,8 @@ static struct cpufreq_driver acpi_cpufreq_driver = {
-> >       .attr           = acpi_cpufreq_attr,
-> >  };
-> >
-> > -static enum cpuhp_state acpi_cpufreq_online;
-> > -
-> >  static void __init acpi_cpufreq_boost_init(void)
-> >  {
-> > -     int ret;
-> > -
-> >       if (!(boot_cpu_has(X86_FEATURE_CPB) || boot_cpu_has(X86_FEATURE_IDA))) {
-> >               pr_debug("Boost capabilities not present in the processor\n");
-> >               return;
-> > @@ -966,8 +962,6 @@ static void __init acpi_cpufreq_boost_init(void)
-> >
-> >       acpi_cpufreq_driver.set_boost = set_boost;
-> >       acpi_cpufreq_driver.boost_enabled = boost_state(0);
-> > -
-> > -     acpi_cpufreq_online = ret;
-> >  }
-> >
-> >  static int __init acpi_cpufreq_init(void)
-> >
-> > base-commit: 21cdb6c18f85fe538ca8740bc79f11fbe08d0197
-> > --
-> > 2.38.1
-> >
+```
+diff --git a/tools/perf/builtin-list.c b/tools/perf/builtin-list.c
+index 30937e1dd82c..ad6cb5d2e1cc 100644
+--- a/tools/perf/builtin-list.c
++++ b/tools/perf/builtin-list.c
+@@ -107,7 +107,7 @@ static void default_print_event(void *ps, const
+char *pmu_name, const char *topi
+       if (deprecated && !print_state->deprecated)
+               return;
+
+-       if (print_state->pmu_glob && !strglobmatch(pmu_name,
+print_state->pmu_glob))
++       if (print_state->pmu_glob && pmu_name &&
+!strglobmatch(pmu_name, print_state->pmu_glob))
+               return;
+
+       if (print_state->event_glob &&
+@@ -534,24 +534,18 @@ int cmd_list(int argc, const char **argv)
+                       default_ps.metrics = false;
+                       metricgroup__print(&print_cb, ps);
+               } else if ((sep = strchr(argv[i], ':')) != NULL) {
+-                       int sep_idx;
+-
+-                       sep_idx = sep - argv[i];
+-                       s = strdup(argv[i]);
+-                       if (s == NULL) {
++                       default_ps.event_glob = strdup(argv[i]);
++                       if (!default_ps.event_glob) {
+                               ret = -1;
+                               goto out;
+                       }
+-
+-                       s[sep_idx] = '\0';
+-                       default_ps.pmu_glob = s;
+-                       default_ps.event_glob = s + sep_idx + 1;
+                       print_tracepoint_events(&print_cb, ps);
+                       print_sdt_events(&print_cb, ps);
+                       default_ps.metrics = true;
+                       default_ps.metricgroups = true;
+                       metricgroup__print(&print_cb, ps);
+-                       free(s);
++                       free(default_ps.event_glob);
++                       default_ps.event_glob = NULL;
+```
+I think this should be squashed into "perf list: Reorganize to use
+callbacks". Some explanation, in porting the : glob case I'd assumed
+the before the colon would be the PMU and the after the event. Doing
+things caused tracepoint output to differ too much and so for
+tracepoints the : is kept in the event name. So we can simplify the
+matching to not be pmu and event, just use the event glob.
+
+Thanks,
+Ian
+
+               } else {
+                       if (asprintf(&s, "*%s*", argv[i]) < 0) {
+                               printf("Critical: Not enough memory!
+Trying to continue...\n");
