@@ -2,68 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3A6462B4BB
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 09:14:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B435F62B4C7
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 09:14:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233131AbiKPIOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 03:14:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48948 "EHLO
+        id S238761AbiKPIOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 03:14:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238647AbiKPINq (ORCPT
+        with ESMTP id S232483AbiKPIOX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 03:13:46 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 896C3C2F;
-        Wed, 16 Nov 2022 00:11:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668586300; x=1700122300;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=wuRDsrMORCD054oFgsKRIJ7FO0a6ZUpcEuJQ+QkEcRQ=;
-  b=WXQKISAsVtXPnkUzTGqjkYwhC6yXVM+p92rnSJX2579G/4R34gehui52
-   BZUTuTrzRibDXOzGxNS3d8rbwoOriLHKXFTC3C0lKabUiql+0kMk5Dgtg
-   23uY0zQxAFgvEkxZkU6jFgRcrDAsX5ig8/pnzDA88kvvevM+rNahD0Hsg
-   WOOUtZSD8//Xmj6pKtbkC2oy3dmWl2sdqrTiS514MjEX2oiyWY9Zcah52
-   vVdeMiJkmT0sgvNKwlzwf7Zp5qfi5EeMBiYjWcjkFbgtlh4/DaMIWhfdL
-   qbaraLKaJ15G0B6Xpe8eP5SFk3I0jJ/st9bORAJf6kAcI+nD/0ubOWcqW
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="300010433"
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="300010433"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 00:11:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="617078944"
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="617078944"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga006.jf.intel.com with ESMTP; 16 Nov 2022 00:11:34 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ovDW8-00D2KK-34;
-        Wed, 16 Nov 2022 10:11:32 +0200
-Date:   Wed, 16 Nov 2022 10:11:32 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: Re: [PATCH 2/4] pwm: Reduce time the pwm_lock mutex is held in
- pwmchip_add()
-Message-ID: <Y3SbNM8H3QxY0XF2@smile.fi.intel.com>
-References: <20221115211515.3750209-1-u.kleine-koenig@pengutronix.de>
- <20221115211515.3750209-3-u.kleine-koenig@pengutronix.de>
+        Wed, 16 Nov 2022 03:14:23 -0500
+Received: from mx.swemel.ru (mx.swemel.ru [95.143.211.150])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7037EB878;
+        Wed, 16 Nov 2022 00:13:39 -0800 (PST)
+From:   Denis Arefev <arefev@swemel.ru>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=swemel.ru; s=mail;
+        t=1668586416;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=hjmjzVkqQPjx/npqqU/y02BPLs+FOpb+o0cfroaLLuc=;
+        b=PJB6PZXgOHV0D5d7q9mP/lyARL1pZXYxFup2lag2r+lsiIPB6rTt6ft4aDeQ7mtJIWG9bb
+        1fKYeoN5E03KiWOuJOKM7ZLd7K3Ny9h2DgZhRPhNaFTsUPZ2++xv7LGQVkG2H/2Mans21t
+        f/fZ4VYUYjEt+cVqtao1lt4HrdgUS4M=
+To:     Simon Horman <simon.horman@netronome.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>, oss-drivers@netronome.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lvc-patchest@linuxtesting.org, trufanov@swemel.ru, vfh@swemel.ru
+Subject: [PATCH v2] lag_conf: Added pointer check and continue
+Date:   Wed, 16 Nov 2022 11:13:36 +0300
+Message-Id: <20221116081336.83373-1-arefev@swemel.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221115211515.3750209-3-u.kleine-koenig@pengutronix.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,26 +44,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 10:15:13PM +0100, Uwe Kleine-König wrote:
-> This simplifies error handling as the need for goto error handling goes
-> away and at the end of the function the code can be simplified as this
-> code isn't used in the error case any more.
+Return value of a function 'kmalloc_array' is dereferenced at 
+lag_conf.c:347 without checking for null, 
+but it is usually checked for this function.
 
-...
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-> +	mutex_unlock(&pwm_lock);
->  
->  	if (IS_ENABLED(CONFIG_OF))
->  		of_pwmchip_add(chip);
+Signed-off-by: Denis Arefev <arefev@swemel.ru>
+---
+ drivers/net/ethernet/netronome/nfp/flower/lag_conf.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-Why calling this without a lock is not a problem? Commit message doesn't share
-a bit about this change.
-
-> -out:
-> -	mutex_unlock(&pwm_lock);
-
+diff --git a/drivers/net/ethernet/netronome/nfp/flower/lag_conf.c b/drivers/net/ethernet/netronome/nfp/flower/lag_conf.c
+index 63907aeb3884..1aaec4cb9f55 100644
+--- a/drivers/net/ethernet/netronome/nfp/flower/lag_conf.c
++++ b/drivers/net/ethernet/netronome/nfp/flower/lag_conf.c
+@@ -276,7 +276,7 @@ static void nfp_fl_lag_do_work(struct work_struct *work)
+ 
+ 	mutex_lock(&lag->lock);
+ 	list_for_each_entry_safe(entry, storage, &lag->group_list, list) {
+-		struct net_device *iter_netdev, **acti_netdevs;
++		struct net_device *iter_netdev, **acti_netdevs = NULL;
+ 		struct nfp_flower_repr_priv *repr_priv;
+ 		int active_count = 0, slaves = 0;
+ 		struct nfp_repr *repr;
+@@ -308,6 +308,10 @@ static void nfp_fl_lag_do_work(struct work_struct *work)
+ 
+ 		acti_netdevs = kmalloc_array(entry->slave_cnt,
+ 					     sizeof(*acti_netdevs), GFP_KERNEL);
++		if (!acti_netdevs) {
++			schedule_delayed_work(&lag->work, NFP_FL_LAG_DELAY);
++			continue;
++		}
+ 
+ 		/* Include sanity check in the loop. It may be that a bond has
+ 		 * changed between processing the last notification and the
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.25.1
 
