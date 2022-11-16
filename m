@@ -2,158 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27CD362CE89
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 00:12:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DCCC62CE96
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 00:16:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233933AbiKPXMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 18:12:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46404 "EHLO
+        id S233056AbiKPXQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 18:16:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiKPXMK (ORCPT
+        with ESMTP id S231126AbiKPXQh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 18:12:10 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F4948759
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 15:12:09 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id n17so345543pgh.9
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 15:12:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lOpUt4MEJD12Cx7f2vbHFt5WAvFTf2t/WiLzrqLvSWE=;
-        b=DIlI543KOUa7IEfy+QPTu5triJKIlMWH2SLf+ZUpGlw7Cbt+AtaIPQ6401eYKCACSq
-         M/orPGBoXiCcalGNKWlsY7xgn5CPX1tqN+bw2DtWJtQC2Zy0xii7b3bkJiL00eqA3y+l
-         uNcLndMqQtdewduelBatcW1vbHZM2aw+vE19i4sFnzegEnA0xxRmuUkifWwASF7NILHB
-         9nh631rIt8XQMdlB0DjEazJzWrlp9qheZyCXOYHusv8eYqvdarIrQubBVI4A1SagTKk9
-         GRKPAZtfcy7WRE4C/X9mf6pNGEFEl4chz9AhjQTl6zFz1j+U6o6XGgd9foKWvLsBFbQT
-         edkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lOpUt4MEJD12Cx7f2vbHFt5WAvFTf2t/WiLzrqLvSWE=;
-        b=q5Jco7nma2LTI81DtJiOgv+Xkx4iwOh/dIuZEnEOghe01D47FTYYZGzDPo7UsrQM6w
-         SVLOd1Q0QRAteCkR3+FryzpAi/ci2hFM6kwx0PYGLoDphbY+nVieQq3nM7AURYzStEdN
-         BVfV+54xVa2Y7+5xQ+J4MM3IjeLGLvHnm+iMnSZhmZsqkpJrXOloQpipCZ8dvl7sIXqj
-         ZzG9E8p5knt75ljnEwrn+zZTKuZ/FmAT1w1yPOEuRHm+H1f1n4gOvD+7Aq0gZlFJ81gQ
-         Ysc3ucfmqI+fRnpLQMJXbSrx/+2rosz+WGzYBrWqvVoZ9YWJuW5Ey5e5DDmvH4B1YEUG
-         CMNg==
-X-Gm-Message-State: ANoB5pkyKS81MF1essYP3fwbH8XLe91CyVXaohAJL1x8KjbVx/uWOOD0
-        HBXvLHc2IkeryRxTiKzjTC0Xfn3fgDvzHcaxgiaozQ==
-X-Google-Smtp-Source: AA0mqf43ki7XjbQ2ZiztfxEjqkL5NoA1N+7JHmbpV5rb8PW1UOPdvdRwzl+zbjSFf1fz965IGQwQwJlG5HJ9Yak2ZFY=
-X-Received: by 2002:a62:1a05:0:b0:56c:1277:d056 with SMTP id
- a5-20020a621a05000000b0056c1277d056mr295541pfa.23.1668640328441; Wed, 16 Nov
- 2022 15:12:08 -0800 (PST)
+        Wed, 16 Nov 2022 18:16:37 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A9C10FE8;
+        Wed, 16 Nov 2022 15:16:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668640596; x=1700176596;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=qqwWgejappy/k3mRhaxSaxdFyg89ME16FnWhZAGgCI8=;
+  b=AkpUu9MgA5QmBqs9o/a5WDYexpyLpsHsRxxDCeeoJPc1mqV75z0FDnAJ
+   ntZFVhzfZBNYhyk+HsU1IqlseMsv+CSMlBCbYT9aTaRNC8kiw2d3TVnZu
+   GqL7W09AGGT97wiCOu7CuHHF7UHQvZIpB7DQSmoGuwgJKgVo5aFDpmyZX
+   7GILg3ydNrILxx1xMYqWlUmOljraxg8t7euinBFL1ChxAg59WyOnDEPuc
+   Dkhz6+86aHwGASxGZ+VBkpmOj17aCbn/5B9swM3bfWLxZG3MXKQP9H69u
+   +Hd0HygBUNxtL5avL5SJp2cxNiXPIqgILG2xIQiTQZFJNUnLePPCQBQQP
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="398981913"
+X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
+   d="scan'208";a="398981913"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 15:15:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="764516508"
+X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
+   d="scan'208";a="764516508"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by orsmga004.jf.intel.com with ESMTP; 16 Nov 2022 15:15:02 -0800
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        Arshad@vger.kernel.org, Adeel <adeel.arshad@intel.com>
+Subject: [PATCH] thermal: intel: hfi: ACK HFI for the same timestamp
+Date:   Wed, 16 Nov 2022 15:14:59 -0800
+Message-Id: <20221116231459.2632710-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <fe18ed06-12f1-1dcb-71ee-aec5a5d656ea@gmail.com>
- <CAKwvOdnx_hyf=3DZtU_P8icWa07jf1+baNgM9MBh_ojE-EK5=A@mail.gmail.com>
- <d7e0fbca-7e9d-fbe2-6f8c-6e60a78f56df@gmail.com> <CAKwvOdnNA7pFGNuord-yiArE55oPNCCwCOHdrVQiRiATtYC23g@mail.gmail.com>
-In-Reply-To: <CAKwvOdnNA7pFGNuord-yiArE55oPNCCwCOHdrVQiRiATtYC23g@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 16 Nov 2022 15:11:57 -0800
-Message-ID: <CAKwvOdmP+VgjsJGuvuC9q3RbwpqUwoNg6cyv3f5SjAqLc2K3_Q@mail.gmail.com>
-Subject: Re: kbuild: check the minimum compiler version in Kconfig
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Nathan Chancellor <natechancellor@gmail.com>, ojeda@kernel.org,
-        sedat.dilek@gmail.com, clang-built-linux <llvm@lists.linux.dev>,
-        Manoj Gupta <manojgupta@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 3:10 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Wed, Nov 16, 2022 at 2:56 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
-> >
-> > On 11/16/22 14:48, Nick Desaulniers wrote:
-> > > On Wed, Nov 16, 2022 at 1:48 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
-> > >>
-> > >> Hi Masahiro, Nick,
-> > >>
-> > >> The compiler version check performed with
-> > >> aec6c60a01d3a3170242d6a99372a388e1136dc6 ("kbuild: check the minimum
-> > >> compiler version in Kconfig") can be defeated and prevent running the
-> > >> *config targets if specifying LLVM=1 on the command line, in that way:
-> > >>
-> > >> BR_BINARIES_DIR=/local/users/fainelli/buildroot-llvm/output/arm64/images
-> > >> LLVM=1 LLVM_IAS=1 PKG_CONFIG_PATH="" /usr/bin/make -j49 -C
-> > >> /local/users/fainelli/buildroot-llvm/output/arm64/build/linux-custom
-> > >> HOSTCC="/usr/bin/gcc"
-> > >> HOSTCC="/local/users/fainelli/buildroot-llvm/output/arm64/host/bin/ccache
-> > >> /usr/bin/gcc -O2
-> > >> -I/local/users/fainelli/buildroot-llvm/output/arm64/host/include
-> > >> -DNDEBUG -L/local/users/fainelli/buildroot-llvm/output/arm64/host/lib
-> > >> -Wl,-rpath,/local/users/fainelli/buildroot-llvm/output/arm64/host/lib"
-> > >> ARCH=arm64
-> > >> INSTALL_MOD_PATH=/local/users/fainelli/buildroot-llvm/output/arm64/target
-> > >> CROSS_COMPILE="/local/users/fainelli/buildroot-llvm/output/arm64/host/bin/aarch64-linux-"
-> > >> WERROR=0
-> > >> DEPMOD=/local/users/fainelli/buildroot-llvm/output/arm64/host/sbin/depmod
-> > >> INSTALL_MOD_STRIP=1 HOSTCC="/usr/bin/gcc" menuconfig
-> > >>     UPD     scripts/kconfig/mconf-cfg
-> > >>     HOSTCC  scripts/kconfig/mconf.o
-> > >>     HOSTCC  scripts/kconfig/lxdialog/checklist.o
-> > >>     HOSTCC  scripts/kconfig/lxdialog/inputbox.o
-> > >>     HOSTCC  scripts/kconfig/lxdialog/menubox.o
-> > >>     HOSTCC  scripts/kconfig/lxdialog/textbox.o
-> > >>     HOSTCC  scripts/kconfig/lxdialog/util.o
-> > >>     HOSTCC  scripts/kconfig/lxdialog/yesno.o
-> > >>     HOSTLD  scripts/kconfig/mconf
-> > >> ***
-> > >> *** Compiler is too old.
-> > >> ***   Your Clang version:    10.0.0
-> > >> ***   Minimum Clang version: 10.0.1
-> > >> ***
-> > >> scripts/Kconfig.include:44: Sorry, this compiler is not supported.
-> > >>
-> > >> Here, the compiler check is actually checking the host compiler clang
-> > >> version installed on my Ubuntu 20.04 system, as opposed to the cross
-> > >> compiler clang version that is being used.
-> > >
-> > > LLVM=1 will use `clang` as found by your $PATH.  Where did you express
-> > > to make what the "cross compiler clang version" is? (And why do you
-> > > set HOSTCC three times)
-> >
-> > We are setting CROSS_COMPILE to express the cross compiler clang prefix
-> > to use.
->
-> Can you try setting CLANG_PREFIX rather than CROSS_COMPILE (to the same value)?
->
-> CLANG_PREFIX=/local/users/fainelli/buildroot-llvm/output/arm64/host/bin/aarch64-linux-
+Some processors issue more than one HFI interrupt with the same
+timestamp. Each interrupt must be acknowledged to let the hardware issue
+new HFI interrupts. But this can't be done without some additional flow
+modification in the existing interrupt handling.
 
-sorry, I meant LLVM_PREFIX
+For background, the HFI interrupt is a package level thermal interrupt
+delivered via a LVT. This LVT is common for both the CPU and package
+level interrupts. Hence, all CPUs receive the HFI interrupts. But only
+one CPU should process interrupt and others simply exit by issuing EOI
+to LAPIC.
 
->
->
-> >
-> > Setting HOSTCC three times is done by buildroot, it does it through make
-> > flags, and then variables passed to make etc. clearly we could change
-> > that, but that's out of scope is not it?
-> > --
-> > Florian
-> >
->
->
-> --
-> Thanks,
-> ~Nick Desaulniers
+The current HFI interrupt processing flow:
 
+1. Receive Thermal interrupt
+2. Check if there is an active HFI status in MSR_IA32_THERM_STATUS
+3. Try and get spinlock, one CPU will enter spinlock and others
+will simply return from here to issue EOI.
+   (Let's assume CPU 4 is processing interrupt)
+4. Check the stored time-stamp from the HFI memory time-stamp
+5. if same
+6.      ignore interrupt, unlock and return
+7. Copy the HFI message to local buffer
+8. unlock spinlock
+9. ACK HFI interrupt
+10. Queue the message for processing in a work-queue
 
+It is tempting to simply acknowledge all the interrupts even if they
+have the same timestamp. This may cause some interrupts to not be
+processed.
 
+Let's say CPU5 is slightly late and reaches step 4 while CPU4 is
+between steps 8 and 9.
+
+Currently we simply ignore interrupts with the same timestamp. No
+issue here for CPU5. When CPU4 acknowledges the interrupt, the next
+HFI interrupt can be delivered.
+
+If we acknowledge interrupts with the same timestamp (at step 6), there
+is a race condition. Under the same scenario, CPU 5 will acknowledge
+the HFI interrupt. This lets hardware generate another HFI interrupt,
+before CPU 4 start executing step 9. Once CPU 4 complete step 9, it
+will acknowledge the newly arrived HFI interrupt, without actually
+processing it.
+
+Acknowledge the interrupt when holding the spinlock. This avoids
+contention of the interrupt acknowledgment.
+
+Updated flow:
+
+1. Receive HFI Thermal interrupt
+2. Check if there is an active HFI status in MSR_IA32_THERM_STATUS
+3. Try and get spin-lock
+   Let's assume CPU 4 is processing interrupt
+4.1 Read MSR_IA32_PACKAGE_THERM_STATUS and check HFI status bit
+4.2	If hfi status is 0
+4.3		unlock spinlock
+4.4		return
+4.5 Check the stored time-stamp from the HFI memory time-stamp
+5. if same
+6.1      ACK HFI Interrupt,
+6.2	unlock spinlock
+6.3	return
+7. Copy the HFI message to local buffer
+8. ACK HFI interrupt
+9. unlock spinlock
+10. Queue the message for processing in a work-queue
+
+To avoid taking the lock unnecessarily, intel_hfi_process_event() checks
+the status of the HFI interrupt before taking the lock. If CPU5 is late,
+when it starts processing the interrupt there are two scenarios:
+
+a) CPU4 acknowledged the HFI interrupt before CPU5 read
+MSR_IA32_THERM_STATUS. CPU5 exits.
+
+b) CPU5 reads MSR_IA32_THERM_STATUS before CPU4 has acknowledged the
+interrupt. CPU5 will take the lock if CPU4 has released it. It then
+re-reads MSR_IA32_THERM_STATUS. If there is not a new interrupt, the HFI
+status bit is clear and CPU5 exits. If a new HFI interrupt was generated
+it will find that the status bit is set and it will continue to process
+the interrupt. In this case even if timestamp is not changed, the ACK
+can be issued as this is a new interrupt.
+
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Reviewed-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Tested-by: Arshad, Adeel<adeel.arshad@intel.com>
+---
+This patch depends on two other patches posted before:
+[PATCH RESEND 1/2] thermal: intel: Prevent accidental clearing of HFI status
+[PATCH RESEND 2/2] thermal: intel: Protect clearing of thermal status bits
+
+ drivers/thermal/intel/intel_hfi.c | 22 +++++++++++++++++-----
+ 1 file changed, 17 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
+index c9e0827c9ebe..c543a967cd50 100644
+--- a/drivers/thermal/intel/intel_hfi.c
++++ b/drivers/thermal/intel/intel_hfi.c
+@@ -250,7 +250,7 @@ void intel_hfi_process_event(__u64 pkg_therm_status_msr_val)
+ 	struct hfi_instance *hfi_instance;
+ 	int cpu = smp_processor_id();
+ 	struct hfi_cpu_info *info;
+-	u64 new_timestamp;
++	u64 new_timestamp, msr, hfi;
+ 
+ 	if (!pkg_therm_status_msr_val)
+ 		return;
+@@ -279,9 +279,21 @@ void intel_hfi_process_event(__u64 pkg_therm_status_msr_val)
+ 	if (!raw_spin_trylock(&hfi_instance->event_lock))
+ 		return;
+ 
+-	/* Skip duplicated updates. */
++	rdmsrl(MSR_IA32_PACKAGE_THERM_STATUS, msr);
++	hfi = msr & PACKAGE_THERM_STATUS_HFI_UPDATED;
++	if (!hfi) {
++		raw_spin_unlock(&hfi_instance->event_lock);
++		return;
++	}
++
++	/*
++	 * Ack duplicate update. Since there is an active HFI
++	 * status from HW, it must be a new event, not a case
++	 * where a lagging CPU entered the locked region.
++	 */
+ 	new_timestamp = *(u64 *)hfi_instance->hw_table;
+ 	if (*hfi_instance->timestamp == new_timestamp) {
++		thermal_clear_package_intr_status(PACKAGE_LEVEL, PACKAGE_THERM_STATUS_HFI_UPDATED);
+ 		raw_spin_unlock(&hfi_instance->event_lock);
+ 		return;
+ 	}
+@@ -295,15 +307,15 @@ void intel_hfi_process_event(__u64 pkg_therm_status_msr_val)
+ 	memcpy(hfi_instance->local_table, hfi_instance->hw_table,
+ 	       hfi_features.nr_table_pages << PAGE_SHIFT);
+ 
+-	raw_spin_unlock(&hfi_instance->table_lock);
+-	raw_spin_unlock(&hfi_instance->event_lock);
+-
+ 	/*
+ 	 * Let hardware know that we are done reading the HFI table and it is
+ 	 * free to update it again.
+ 	 */
+ 	thermal_clear_package_intr_status(PACKAGE_LEVEL, PACKAGE_THERM_STATUS_HFI_UPDATED);
+ 
++	raw_spin_unlock(&hfi_instance->table_lock);
++	raw_spin_unlock(&hfi_instance->event_lock);
++
+ 	queue_delayed_work(hfi_updates_wq, &hfi_instance->update_work,
+ 			   HFI_UPDATE_INTERVAL);
+ }
 -- 
-Thanks,
-~Nick Desaulniers
+2.31.1
+
