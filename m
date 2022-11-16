@@ -2,192 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 010DE62CB44
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 21:42:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85D2862CB52
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 21:45:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234032AbiKPUmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 15:42:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57620 "EHLO
+        id S233486AbiKPUpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 15:45:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233861AbiKPUmV (ORCPT
+        with ESMTP id S231221AbiKPUpA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 15:42:21 -0500
-Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F28EF59
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 12:42:20 -0800 (PST)
-Received: by mail-vk1-xa2f.google.com with SMTP id g4so8902356vkk.6
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 12:42:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vO5311Qe6LB2FIy4YoKv4H8uuO4JMc6A/UgteLfosX8=;
-        b=O8RLzwCakZklUR+LYHgZkLukNV+NhgiYievXBxx4o4/BXnIgG41Be2zTmlxvo7qqgr
-         gv7dHNBotogbw3kQ1MpQxeHtZ2+CcXIeJ0rOI1js52OXbz0aeYXiVJ1daCjsZQzuP/QV
-         kFDJopCQXw2i+PcPpmHV1LQvL5AvElPnKE0RzI9nN8EioMIWYNfJ7nNMtTFqkiEqm0jk
-         P98f2CdUcgVPCjDX/4BpKwLVUSToTtzKw5idfP4e9XTK/MXqIxUW2yi3etTuBBHeCAL2
-         4aWHCdJN9rarL3tS5x/USPAug5rp260aTN7LayEmjBkqqKAEsgxwvBvryNm9ZvspZ0Sq
-         5HKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vO5311Qe6LB2FIy4YoKv4H8uuO4JMc6A/UgteLfosX8=;
-        b=vXxhOk/i0eA200PrSFcaFZirst8vEhytdPNt5Y3Fm1y40rLLu5APwnPz71s9tb/KV0
-         bYo2emPxpEkmQfsxYuXFaCsnRYTyptYnO2C3+9vPsLOowhwEQh0NZNNySel1cwYT4TJU
-         hCqjc7S/0wdR8af7mnk73K2YY3IENqvPH9GvlXoZg5IcnYHbeMNhKeHFS9iqcwgnKZZ2
-         +r4tgJ/3JkRPOv/x5MvRQ6jXRcUuliYe/iuAu4bgM2RY/WMD/7q4XH9hvJIwuTXuyBIz
-         paJwTHr2GnVdZ1tWaUYPQ33lhEHWE1uCCoix8KhyPF7Awm6gT5ztlw5qXUu+Qg6oIyUv
-         GKVw==
-X-Gm-Message-State: ANoB5pmgnD/c97880EtNDrqrv2msW3cULPBlEh9LMb0riGdyQtM54hD9
-        /LbjEtRX5O/5YTdIHB394G4Nmw5GjnBhXkSMLY9SYA==
-X-Google-Smtp-Source: AA0mqf5XJefBQw6SXETwoEsAo80++wTS4Jn4DgAC/4bK8t42Go+Rf+yfdLi5Z73mZyPRSK4J97lCSjZicQ4PktnYuno=
-X-Received: by 2002:a1f:19d4:0:b0:3bb:ebc4:cab4 with SMTP id
- 203-20020a1f19d4000000b003bbebc4cab4mr12792135vkz.26.1668631339343; Wed, 16
- Nov 2022 12:42:19 -0800 (PST)
+        Wed, 16 Nov 2022 15:45:00 -0500
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1300E40448;
+        Wed, 16 Nov 2022 12:44:58 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 13E02320096B;
+        Wed, 16 Nov 2022 15:44:56 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Wed, 16 Nov 2022 15:44:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-transfer-encoding:content-type:date:date:from
+        :from:in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1668631495; x=
+        1668717895; bh=YOfiesPEOAuUBSKKpRAQrX3e3W+dT8d3FBCanuP8ktQ=; b=N
+        08txJlUzUDG1GQF4uRqGt7udIYP7fS7l3NRcYysByYbhCMbq9e4xqDHSxNBTV2Km
+        iofRM+eUOJUo5KznvBAdG1FV9cnpjnSKGEBomqIK0CsXtW5COSjS5juZ/Z3h82Ox
+        h2ZGcaZPeYmlCwxeWieupmAMQoHy6E0e14aerd6V9MUqBb29y3/QQaLmp4Iuh2ES
+        evJczTWPL5xpf2mrDLvmBRdgulCX9Vv0VdLiSzjMF8oXJt6KIJ6kwEBAK6qUsld/
+        EXvgkk4G4BZXUocLVYa4LYh+GyZMcZy9iooNv7EXPcmRQ29ssGGHaY45J07lb9cY
+        2b/3xJcdaMFFDqkgEUIEQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1668631495; x=
+        1668717895; bh=YOfiesPEOAuUBSKKpRAQrX3e3W+dT8d3FBCanuP8ktQ=; b=i
+        rvJFQALqk2m9ETraqa9ybGitP5C4ZLZOREAwq/aM/bBoX3Olp2w6i4x8qommR4te
+        8rFDrvzIMHx7lbqzFGiHVH705dNMhp2Z5zrmeQFBDQqDFgHBzKVD1vA+o1PyDQTU
+        eCLPr++CCOYVUuVHCDF+k5g2e4s8pt48qUC49WUQjq7doSgZ544WPwpC5KpKOJnQ
+        qd9Q+tOyUR3zaXfVIcaRZkGRswv697bU13T85ZDVK8PNceJ0obtpcZmG8fa+ZQ7s
+        riqbnzN03UFJLupeOoPqEpvXOtI1LpmHkIeP2WXIO/NUdy3ZA3HZCvbMezN1fSYx
+        bChB5SkSSvIvOnxikL+2A==
+X-ME-Sender: <xms:xkt1Y69JOZNpI_wbdvb1KFo-TZjZwVAVzTyxlX6KBkXP5LxLjweC9Q>
+    <xme:xkt1Y6u14R5FT9QgNTummNSxZNGEZHvzNs1Ykuq1JncpSxkwH2aernhZW7ZxVeCyj
+    1i5BveRucWlDAoOiXE>
+X-ME-Received: <xmr:xkt1YwBUVqqE0fzE3zmiS6L_SVchxo4nPKvKOnx-RiJ8qyuPwrCVys79au8ZDYFJGfSJUw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgeeigddufeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggugfgjsehtkedttddttddunecuhfhrohhmpedfkhhi
+    rhhilhhlsehshhhuthgvmhhovhdrnhgrmhgvfdcuoehkihhrihhllhesshhhuhhtvghmoh
+    hvrdhnrghmvgeqnecuggftrfgrthhtvghrnhepleehvefgieeukeekvddvudevieeikeeu
+    gfeghfejjedvfeeivdfhtddtueetgfejnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
+    hrrghmpehmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:xkt1YycwHcuJnoD6aYa_kB3bvM122-QDPK1Ckm0uSUPnyTtD63aq5Q>
+    <xmx:xkt1Y_NO6CaWKcg5UjVEBkXKC2wensON05H0-ATI4CKaZ8WMcOVMqA>
+    <xmx:xkt1Y8mLwkr77TPCSWOnYyE_iJh08HpiI4Gu8SYD_f-I848HOZUyMg>
+    <xmx:x0t1Y4g8QjR1NfGjP8caFLxuYxTZRZYaNKw7p11BwBV0AtjfEIQcjw>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 16 Nov 2022 15:44:54 -0500 (EST)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 1BEF1109702; Wed, 16 Nov 2022 23:44:51 +0300 (+03)
+Date:   Wed, 16 Nov 2022 23:44:51 +0300
+From:   "kirill@shutemov.name" <kirill@shutemov.name>
+To:     "Verma, Vishal L" <vishal.l.verma@intel.com>
+Cc:     "Piper, Chris D" <chris.d.piper@intel.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>,
+        "liushixin2@huawei.com" <liushixin2@huawei.com>
+Subject: Re: [PATCH 2/2] ACPI: HMAT: Fix initiator registration for
+ single-initiator systems
+Message-ID: <20221116204451.rmh6lq7vilajg7ss@box.shutemov.name>
+References: <20221116075736.1909690-1-vishal.l.verma@intel.com>
+ <20221116075736.1909690-3-vishal.l.verma@intel.com>
+ <20221116124634.nlvnsirdnlafdfeh@box.shutemov.name>
+ <b29163f4e39d28c3656b468a52a63b34073cb933.camel@intel.com>
 MIME-Version: 1.0
-References: <b2d1004d-4a76-ab0b-d369-a38c2d7c1624@csgroup.eu>
- <20221111152852.2837363-1-allenwebb@google.com> <Y26UcbviRaoK9a3C@bombadil.infradead.org>
- <CAJzde06b4d065y7KSoGO6qQBgvcVdkUai1WAy_TkrkTCDHS41A@mail.gmail.com>
- <20221114172214.ilnk5wj3eevpsqts@ldmartin-desk2.lan> <CAJzde04id1kWhnR5HfuFEZR+ej7xXAsmQ9HpwYT5rQEY4Jsntw@mail.gmail.com>
- <Y3PN0GZYvFyUF83g@bombadil.infradead.org> <CAJzde06cFefEFwRxYo1ia=27rUw6yPn9ejkNChEH8YnVK1LWYQ@mail.gmail.com>
-In-Reply-To: <CAJzde06cFefEFwRxYo1ia=27rUw6yPn9ejkNChEH8YnVK1LWYQ@mail.gmail.com>
-From:   Allen Webb <allenwebb@google.com>
-Date:   Wed, 16 Nov 2022 14:42:08 -0600
-Message-ID: <CAJzde06o9acw4gW1bn9UXkCOPHSRTyDxroTiWZFU3aORaAy9+g@mail.gmail.com>
-Subject: Re: [PATCH] modules: add modalias file to sysfs for modules.
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Lucas De Marchi <lucas.demarchi@intel.com>,
-        Alexey Gladkov <gladkov.alexey@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b29163f4e39d28c3656b468a52a63b34073cb933.camel@intel.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I think I am misunderstanding something because the aliases visible
-through kmod_config_get_aliases don't look anything like the
-modaliases used by udev to match devices to modules.
+On Wed, Nov 16, 2022 at 06:02:32PM +0000, Verma, Vishal L wrote:
+> On Wed, 2022-11-16 at 15:46 +0300, Kirill A. Shutemov wrote:
+> > On Wed, Nov 16, 2022 at 12:57:36AM -0700, Vishal Verma wrote:
+> > > In a system with a single initiator node, and one or more memory-only
+> > > 'target' nodes, the memory-only node(s) would fail to register their
+> > > initiator node correctly. i.e. in sysfs:
+> > > 
+> > >   # ls /sys/devices/system/node/node0/access0/targets/
+> > >   node0
+> > > 
+> > > Where as the correct behavior should be:
+> > > 
+> > >   # ls /sys/devices/system/node/node0/access0/targets/
+> > >   node0 node1
+> > > 
+> > > This happened because hmat_register_target_initiators() uses list_sort()
+> > > to sort the initiator list, but the sort comparision function
+> > > (initiator_cmp()) is overloaded to also set the node mask's bits.
+> > > 
+> > > In a system with a single initiator, the list is singular, and list_sort
+> > > elides the comparision helper call. Thus the node mask never gets set,
+> > > and the subsequent search for the best initiator comes up empty.
+> > > 
+> > > Add a new helper to sort the initiator list, and handle the singular
+> > > list corner case by setting the node mask for that explicitly.
+> > > 
+> > > Reported-by: Chris Piper <chris.d.piper@intel.com>
+> > > Cc: <stable@vger.kernel.org>
+> > > Cc: Rafael J. Wysocki <rafael@kernel.org>
+> > > Cc: Liu Shixin <liushixin2@huawei.com>
+> > > Cc: Dan Williams <dan.j.williams@intel.com>
+> > > Signed-off-by: Vishal Verma <vishal.l.verma@intel.com>
+> > > ---
+> > >  drivers/acpi/numa/hmat.c | 32 ++++++++++++++++++++++++++++++--
+> > >  1 file changed, 30 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/drivers/acpi/numa/hmat.c b/drivers/acpi/numa/hmat.c
+> > > index 144a84f429ed..cd20b0e9cdfa 100644
+> > > --- a/drivers/acpi/numa/hmat.c
+> > > +++ b/drivers/acpi/numa/hmat.c
+> > > @@ -573,6 +573,30 @@ static int initiator_cmp(void *priv, const struct list_head *a,
+> > >         return ia->processor_pxm - ib->processor_pxm;
+> > >  }
+> > >  
+> > > +static int initiators_to_nodemask(unsigned long *p_nodes)
+> > > +{
+> > > +       /*
+> > > +        * list_sort doesn't call @cmp (initiator_cmp) for 0 or 1 sized lists.
+> > > +        * For a single-initiator system with other memory-only nodes, this
+> > > +        * means an empty p_nodes mask, since that is set by initiator_cmp().
+> > > +        * Special case the singular list, and make sure the node mask gets set
+> > > +        * appropriately.
+> > > +        */
+> > > +       if (list_empty(&initiators))
+> > > +               return -ENXIO;
+> > > +
+> > > +       if (list_is_singular(&initiators)) {
+> > > +               struct memory_initiator *initiator = list_first_entry(
+> > > +                       &initiators, struct memory_initiator, node);
+> > > +
+> > > +               set_bit(initiator->processor_pxm, p_nodes);
+> > > +               return 0;
+> > > +       }
+> > > +
+> > > +       list_sort(p_nodes, &initiators, initiator_cmp);
+> > > +       return 0;
+> > > +}
+> > > +
+> > 
+> > Hm. I think it indicates that these set_bit()s do not belong to
+> > initiator_cmp().
+> > 
+> > Maybe remove both set_bit() from the compare helper and walk the list
+> > separately to initialize the node mask? I think it will be easier to
+> > follow.
+> 
+> 
+> Yes - I thuoght about this, but went with the seemingly less intrusive
+> change. I can send a v2 which separates out the set_bit()s. I agree
+> that's cleaner and easier to follow than overloading initiator_cmp().
 
-I have some concern that making the changes necessary to use kmod
-would result in the files/indexes being much larger to include all the
-extra values that are being left out, so I think the sysfs approach
-might be the better way to go.
+Yes, please make v2.
 
-On Tue, Nov 15, 2022 at 12:40 PM Allen Webb <allenwebb@google.com> wrote:
->
-> When i get the modinfo for usbhid, there are no aliases listed:
-> ```
-> localhost ~ # modinfo usbhid
-> name:           usbhid
-> filename:       (builtin)
-> author:         Andreas Gal
-> author:         Vojtech Pavlik
-> author:         Jiri Kosina
-> description:    USB HID core driver
-> file:           drivers/hid/usbhid/usbhid
-> license:        GPL
-> parm:           quirks:Add/modify USB HID quirks by specifying
-> quirks=vendorID:productID:quirks where vendorID, productID, and quirks
-> are all in 0x-prefixed hex (array of charp)
-> parm:           ignoreled:Autosuspend with active leds (uint)
-> parm:           kbpoll:Polling interval of keyboards (uint)
-> parm:           jspoll:Polling interval of joysticks (uint)
-> parm:           mousepoll:Polling interval of mice (uint)
-> ```
->
-> bluetooth however has an alias listed:
-> ```
-> localhost ~ # modinfo bluetooth
-> filename:
-> /lib/modules/5.10.154-20424-gea7532c123d8/kernel/net/bluetooth/bluetooth.ko.gz
-> author:         Marcel Holtmann <marcel@holtmann.org>
-> description:    Bluetooth Core ver 2.22
-> version:        2.22
-> license:        GPL
-> alias:          net-pf-31
-> vermagic:       5.10.154-20424-gea7532c123d8 SMP preempt mod_unload
-> name:           bluetooth
-> intree:         Y
-> retpoline:      Y
-> depends:        ecdh_generic
-> srcversion:     F8E46CD048C50B0AA1CD471
-> parm:           disable_esco:Disable eSCO connection creation (bool)
-> parm:           enable_ecred:Enable enhanced credit flow control mode (bool)
-> parm:           disable_ertm:Disable enhanced retransmission mode (bool)
-> ```
->
-> I believe the reason for this is many modules use `#define
-> MODULE_DEVICE_TABLE(type, name)` which is a noop for buildin modules.
-> I have a local patch that resolves that issue here:
-> See: https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/3840672/1/include/linux/module.h#b246
->
-> However, I probably ought to rework that patch to create the
-> MODULE_ALIAS defines instead of the buildin.alias file.
->
-> On Tue, Nov 15, 2022 at 11:35 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> >
-> > On Tue, Nov 15, 2022 at 10:05:35AM -0600, Allen Webb wrote:
-> > > On Mon, Nov 14, 2022 at 11:22 AM Lucas De Marchi
-> > > <lucas.demarchi@intel.com> wrote:
-> > > >
-> > > > On Mon, Nov 14, 2022 at 10:42:50AM -0600, Allen Webb wrote:
-> > > > >On Fri, Nov 11, 2022 at 12:29 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> > > > >>
-> > > > >> On Fri, Nov 11, 2022 at 09:28:52AM -0600, Allen Webb wrote:
-> > > > >> > USB devices support the authorized attribute which can be used by
-> > > > >> > user-space to implement trust-based systems for enabling USB devices. It
-> > > > >> > would be helpful when building these systems to be able to know in
-> > > > >> > advance which kernel drivers (or modules) are reachable from a
-> > > > >> > particular USB device.
-> > > > >> >
-> > > > >> > This information is readily available for external modules in
-> > > > >> > modules.alias. However, builtin kernel modules are not covered. This
-> > > > >> > patch adds a sys-fs attribute to both builtin and loaded modules
-> > > > >> > exposing the matching rules in the modalias format for integration
-> > > > >> > with tools like USBGuard.
-> > > > >> >
-> > > > >> > Signed-off-by: Allen Webb <allenwebb@google.com>
-> > > > >>
-> > > > >> Thanks for the patch Allen!
-> > > > >>
-> > > > >> I'd rather have something generic though, and it would seem kmod [0] already
-> > > > >> does this, have you seen the kmod support for builtin.alias.bin
-> > > > >>
-> > > > >> Can't that be used?
-> > > > >
-> > > > >Probably, but I don't see the builtin.alias.bin in my build. Is it experimental?
-> > > >
-> > > > no. That is generated by depmod since v27 using modules.builtin.modinfo
-> > > > generated by the kernel build system. Highly recommend v30 though
-> > > > as there were fixes in v28 and v29 and some changes to speed up its
-> > > > generation/use in v30:  See entries mentioning
-> > > > builtin.alias and bultin.modinfo in
-> > > > https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/tree/NEWS
-> > > >
-> > > > libkmod/modprobe/modinfo also have the corresponding changes to lookup that
-> > > > index when resolving aliases.
-> > >
-> > > I see the file but it is largely missing the aliases I am interested
-> > > in, so it looks like I might need to modify my patch that creates
-> > > buildin.alias to add the missing alias defines in the header along
-> > > with the other module metadata for builtin modules. Does this sound
-> > > right to you?
-> >
-> > Can you clarify what is missing and why? And an RFC is welcomed if it
-> > helps demonstrates what you mean.
-> >
-> >   Luis
+With current implementation set_bit() can be called multiple times on the
+same initiator, depending on placement of the initiator in the list.
+It is totally wrong place.
+
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
