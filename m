@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93C9C62C5C0
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 18:03:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2550C62C5C3
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 18:03:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234187AbiKPRDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 12:03:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49818 "EHLO
+        id S234077AbiKPRDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 12:03:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233746AbiKPRDl (ORCPT
+        with ESMTP id S233521AbiKPRDn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 12:03:41 -0500
-Received: from mail-ej1-x64a.google.com (mail-ej1-x64a.google.com [IPv6:2a00:1450:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFF8F10FD8
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 09:03:39 -0800 (PST)
-Received: by mail-ej1-x64a.google.com with SMTP id sh31-20020a1709076e9f00b007ae32b7eb51so10246858ejc.9
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 09:03:39 -0800 (PST)
+        Wed, 16 Nov 2022 12:03:43 -0500
+Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C7D15A18
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 09:03:42 -0800 (PST)
+Received: by mail-wm1-x34a.google.com with SMTP id c10-20020a7bc84a000000b003cf81c2d3efso699198wml.7
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 09:03:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=cqmymE4F1AzcVr0rAjT0TqGqidpCow5ff2C/QyEftUQ=;
-        b=d5fT1+t1Uo2vlTG633RLZsby5RVVFLgn62ja1ehg00dbGfGQEC4Dclj3otyomMqUPd
-         dRK431qRTVccl0zLA+QR3Sg1k5tDwTP8ZvlufaosrJTeU3I9SGP6OP3RA3fRRBtnD8Ra
-         5Bw4S/8y6bjg7zU/jiFNGb7HTGS1TeUhX/xk/4NS1EVllxg4OgkSwcX6hc6UYr74us+Q
-         7JJL7Zfs2I7Vnj52QpXivh6m59Efsn5pt519MvUQncwPIFm88yDje7J8NmlGrXYMAjTf
-         qIASv6dOtCL/6Kntz4wo0E5kYL/8nDfVYFicos/exbnXSX97JGrG8tez3uP+AGBti+4i
-         s/gA==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dsByD/1OWs5bmI3/YxWCflrJ7cqAVuJs4R5P7alGmUk=;
+        b=QoU3RUBrlX9icO2dBhb6xT8ANjfdw6gOsVnj2i4jZQGlnEJcwKPMnervPHQ8xN+Pzw
+         7AtUz87S38OOgpIC4BTOqXRnTfPRvnp48oowyc3nzBJfbuqKCUrpY9WlLSjBiLrqpVaU
+         f2XN4bangieJMnKPXg+XrvsQyEoS7qbESoIvuFkTxWdiPyth/KE6O2OHkL3Rs+59tiPk
+         VI238RrgqonL4ZhsrHQc+O8gZc8jI6YKIxiqPcoIJtwrNxG2GRWdB2llqA3og7JBRgny
+         eKLCkBDyhKfu0CuIOALc08cqrscrphH3zAANhtdFsmSr/L4VO+2N4O29VviyRchyh+Rr
+         jDoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cqmymE4F1AzcVr0rAjT0TqGqidpCow5ff2C/QyEftUQ=;
-        b=oiLx/Y4hQI2QYHjyLdKxZTDkXOWySVYL4ypAt/G0GIXvrsRr3QT6pC3tTdzEqtx3IU
-         VwYgYHVEtku8XRwsNGafdhDJuXs6DeRhWcJPZWGo51fehqedS6GlhuAr+qaZ8yfULkQB
-         2dJH7Hfyejn1hlDYY1r+Jh+JrJj6JQHl1mfwFlJf84ACFJUysAuac4chDzVQWj+mygxY
-         YYap9V22SjH9vkyRttJ188iwe0FRP2JFQG2+yItvFF2Rq08jdYBK6ugNbaEDLf4FewI3
-         LuLWYWPijziE4/mgWguosbBxscSm3AGqsajSPrCnfgSDmfmjexBo0bCd9vSIs39rNGFA
-         3HBw==
-X-Gm-Message-State: ANoB5pkVMjQ+NGQ3Zc2V5gRzb8v6zEv/0MaRBORQnDZZHe5FoXMplixE
-        lrqEvERicaHVM+JROc4JaN8/SFxJRm92
-X-Google-Smtp-Source: AA0mqf4kQcttgHovLZay3IZ5h8ySDasGuaZQArDBf5GZUHdssSgbM3MLRht2rLrBlFf4v9LLwgRpdc7gy3Ky
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dsByD/1OWs5bmI3/YxWCflrJ7cqAVuJs4R5P7alGmUk=;
+        b=ZUgy/fxm+WwVRFMFOC6U9eBv/i3/R5IYXYURiTBKrsnWDCDJ1s7eD+Im1FnzQxQ7gj
+         MGqZtJO/8qXeBLDIOQ6vuqoxkOYYA6p3ie9mGAAhQ16vJEKq3fXf297+i9e96PYUYlLg
+         aJkBCxx9p3nSxnBQtW2phVRKXyYKTtqXMsqftdMd8XnXCfRw6xODy6RooWYgV0oWZVa5
+         5s2e/RQUb2MYBWk48vj/jWiNM87eqTMKG+ihOr99EnbCZTPr/KX5LEjqaNznzX67uMA/
+         +HCjqGV6iDkGlCKEJlXTUPaUz97SITtq2eNIHaDeh4m8JuT/oMm0tRWrby/xuaPpSJ96
+         CyRA==
+X-Gm-Message-State: ANoB5pkkiLS4l+ASZGm6N4+nwj+au/NO9W/Y3p/k1YrJWDCbRZAt9Rew
+        tOMmXvfpLTRmLQzFdn8a4NSfqZ+0TEdK
+X-Google-Smtp-Source: AA0mqf5ufR4hbciycDKUL0HlWb01ySkclL1nx8lUzdbC20+AxX1htABnFLyA1M8XBGED6AMm2DCaEkTPFDL4
 X-Received: from big-boi.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:129])
- (user=qperret job=sendgmr) by 2002:a17:906:6893:b0:7ad:14f8:7583 with SMTP id
- n19-20020a170906689300b007ad14f87583mr19341242ejr.185.1668618218081; Wed, 16
- Nov 2022 09:03:38 -0800 (PST)
-Date:   Wed, 16 Nov 2022 17:03:23 +0000
+ (user=qperret job=sendgmr) by 2002:a5d:5707:0:b0:236:8130:56e3 with SMTP id
+ a7-20020a5d5707000000b00236813056e3mr14904159wrv.371.1668618220591; Wed, 16
+ Nov 2022 09:03:40 -0800 (PST)
+Date:   Wed, 16 Nov 2022 17:03:24 +0000
+In-Reply-To: <20221116170335.2341003-1-qperret@google.com>
 Mime-Version: 1.0
+References: <20221116170335.2341003-1-qperret@google.com>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Message-ID: <20221116170335.2341003-1-qperret@google.com>
-Subject: [PATCH 00/12] KVM: arm64: FF-A proxy for pKVM
+Message-ID: <20221116170335.2341003-2-qperret@google.com>
+Subject: [PATCH 01/12] firmware: arm_ffa: Move constants to header file
 From:   Quentin Perret <qperret@google.com>
 To:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
         Alexandru Elisei <alexandru.elisei@arm.com>,
@@ -74,107 +76,252 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+From: Will Deacon <will@kernel.org>
 
-pKVM's primary goal is to protect guest pages from a compromised host by
-enforcing access control restrictions using stage-2 page-tables. Sadly,
-this cannot prevent TrustZone from accessing non-secure memory, and a
-compromised host could, for example, perform a 'confused deputy' attack
-by asking TrustZone to use pages that have been donated to protected
-guests. This would effectively allow the host to have TrustZone
-exfiltrate guest secrets on its behalf, hence breaking the isolation
-that pKVM intends to provide.
+FF-A function IDs and error codes will be needed in the hypervisor too,
+so move to them to the header file where they can be shared. Rename the
+version constants with an "FFA_" prefix so that they are less likely
+to clash with other code in the tree.
 
-This series addresses this problem by providing pKVM with the ability to
-monitor SMCs following the Arm FF-A protocol. FF-A provides (among other
-things) a set of memory management APIs allowing the Normal World to
-share, donate or lend pages with Secure. By monitoring these SMCs, pKVM
-can ensure that the pages that are shared, lent or donated to Secure by
-the host kernel are only pages that it owns.
+Co-developed-by: Andrew Walbran <qwandor@google.com>
+Signed-off-by: Andrew Walbran <qwandor@google.com>
+Signed-off-by: Will Deacon <will@kernel.org>
+Signed-off-by: Quentin Perret <qperret@google.com>
+---
+ drivers/firmware/arm_ffa/driver.c | 101 +++---------------------------
+ include/linux/arm_ffa.h           |  83 ++++++++++++++++++++++++
+ 2 files changed, 93 insertions(+), 91 deletions(-)
 
-It should be noted that the robustness of this approach relies on having
-all Secure Software on the device use the FF-A protocol for memory
-management transactions with the normal world, and not use
-vendor-specific SMCs that pKVM is unable to parse. This is an important
-software requirement to integrate pKVM correctly on a device. For the
-record, this work is tractable in real world scenarios -- it was done
-for the Pixel 7 and Pixel 7 Pro devices, both of which launched recently
-with pKVM enabled.
-
-This series introduces support for monitoring FF-A SMCs in the form of a
-minimal proxy running in the EL2 hypervisor. This proxy aims to be
-entirely 'transparent' to both the host kernel and TrustZone when the
-system behaves correctly (the host is not compromised). The FF-A proxy
-intercepts the SMCs coming from the host, and verifies that the pages
-involved in the memory transition can be shared/lent/donated legally
-before forwarding the SMC to Secure. The proxy also tracks which pages
-have been made accessible to TrustZone at any point in time using
-software bits in the stage-2 page-table of the host, to ensure they
-can't be subsequently donated to guests.
-
-The patch series is divided as follows:
-
- - patches 01-02 refactor existing FF-A header to allow code re-use;
-
- - patches 03-07 provide the initial infrastructure at EL2 to handle
-   FF-A SMCs;
-
- - patches 08-12 use the previously introduced infrastructure to
-   intercept the main memory management operations to share, reclaim and
-   lend memory to/with Secure, and implement the core of the memory
-   tracking logic.
-
-Since this series depends on Will's recent pKVM series [1], it is based
-on today's kvmarm/next:
-
-    eb8be68e907e ("Merge branch kvm-arm64/misc-6.2 into kvmarm-master/next")
-
-A branch with all the goodies applied can also be found here:
-
-    https://android-kvm.googlesource.com/linux qperret/ffa-proxy
-
-Feedback welcome!
-
-Cheers,
-Quentin
-
-[1] https://lore.kernel.org/kvm/20221110190259.26861-1-will@kernel.org/
-
-Fuad Tabba (1):
-  KVM: arm64: Handle FFA_FEATURES call from the host
-
-Quentin Perret (1):
-  ANDROID: KVM: arm64: pkvm: Add support for fragmented FF-A descriptors
-
-Will Deacon (10):
-  firmware: arm_ffa: Move constants to header file
-  firmware: arm_ffa: Move comment before the field it is documenting
-  KVM: arm64: Block unsafe FF-A calls from the host
-  KVM: arm64: Probe FF-A version and host/hyp partition ID during init
-  KVM: arm64: Allocate pages for hypervisor FF-A mailboxes
-  KVM: arm64: Handle FFA_RXTX_MAP and FFA_RXTX_UNMAP calls from the host
-  KVM: arm64: Add FF-A helpers to share/unshare memory with secure world
-  KVM: arm64: Handle FFA_MEM_SHARE calls from the host
-  KVM: arm64: Handle FFA_MEM_RECLAIM calls from the host
-  KVM: arm64: Handle FFA_MEM_LEND calls from the host
-
- arch/arm64/include/asm/kvm_host.h             |   1 +
- arch/arm64/include/asm/kvm_pkvm.h             |  21 +
- arch/arm64/kvm/arm.c                          |   1 +
- arch/arm64/kvm/hyp/include/nvhe/ffa.h         |  17 +
- arch/arm64/kvm/hyp/include/nvhe/mem_protect.h |   3 +
- arch/arm64/kvm/hyp/nvhe/Makefile              |   2 +-
- arch/arm64/kvm/hyp/nvhe/ffa.c                 | 741 ++++++++++++++++++
- arch/arm64/kvm/hyp/nvhe/hyp-main.c            |   3 +
- arch/arm64/kvm/hyp/nvhe/mem_protect.c         |  68 ++
- arch/arm64/kvm/hyp/nvhe/setup.c               |  11 +
- arch/arm64/kvm/pkvm.c                         |   1 +
- drivers/firmware/arm_ffa/driver.c             | 101 +--
- include/linux/arm_ffa.h                       |  93 ++-
- 13 files changed, 970 insertions(+), 93 deletions(-)
- create mode 100644 arch/arm64/kvm/hyp/include/nvhe/ffa.h
- create mode 100644 arch/arm64/kvm/hyp/nvhe/ffa.c
-
+diff --git a/drivers/firmware/arm_ffa/driver.c b/drivers/firmware/arm_ffa/driver.c
+index d5e86ef40b89..fa85c64d3ded 100644
+--- a/drivers/firmware/arm_ffa/driver.c
++++ b/drivers/firmware/arm_ffa/driver.c
+@@ -36,81 +36,6 @@
+ #include "common.h"
+ 
+ #define FFA_DRIVER_VERSION	FFA_VERSION_1_0
+-
+-#define FFA_SMC(calling_convention, func_num)				\
+-	ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL, (calling_convention),	\
+-			   ARM_SMCCC_OWNER_STANDARD, (func_num))
+-
+-#define FFA_SMC_32(func_num)	FFA_SMC(ARM_SMCCC_SMC_32, (func_num))
+-#define FFA_SMC_64(func_num)	FFA_SMC(ARM_SMCCC_SMC_64, (func_num))
+-
+-#define FFA_ERROR			FFA_SMC_32(0x60)
+-#define FFA_SUCCESS			FFA_SMC_32(0x61)
+-#define FFA_INTERRUPT			FFA_SMC_32(0x62)
+-#define FFA_VERSION			FFA_SMC_32(0x63)
+-#define FFA_FEATURES			FFA_SMC_32(0x64)
+-#define FFA_RX_RELEASE			FFA_SMC_32(0x65)
+-#define FFA_RXTX_MAP			FFA_SMC_32(0x66)
+-#define FFA_FN64_RXTX_MAP		FFA_SMC_64(0x66)
+-#define FFA_RXTX_UNMAP			FFA_SMC_32(0x67)
+-#define FFA_PARTITION_INFO_GET		FFA_SMC_32(0x68)
+-#define FFA_ID_GET			FFA_SMC_32(0x69)
+-#define FFA_MSG_POLL			FFA_SMC_32(0x6A)
+-#define FFA_MSG_WAIT			FFA_SMC_32(0x6B)
+-#define FFA_YIELD			FFA_SMC_32(0x6C)
+-#define FFA_RUN				FFA_SMC_32(0x6D)
+-#define FFA_MSG_SEND			FFA_SMC_32(0x6E)
+-#define FFA_MSG_SEND_DIRECT_REQ		FFA_SMC_32(0x6F)
+-#define FFA_FN64_MSG_SEND_DIRECT_REQ	FFA_SMC_64(0x6F)
+-#define FFA_MSG_SEND_DIRECT_RESP	FFA_SMC_32(0x70)
+-#define FFA_FN64_MSG_SEND_DIRECT_RESP	FFA_SMC_64(0x70)
+-#define FFA_MEM_DONATE			FFA_SMC_32(0x71)
+-#define FFA_FN64_MEM_DONATE		FFA_SMC_64(0x71)
+-#define FFA_MEM_LEND			FFA_SMC_32(0x72)
+-#define FFA_FN64_MEM_LEND		FFA_SMC_64(0x72)
+-#define FFA_MEM_SHARE			FFA_SMC_32(0x73)
+-#define FFA_FN64_MEM_SHARE		FFA_SMC_64(0x73)
+-#define FFA_MEM_RETRIEVE_REQ		FFA_SMC_32(0x74)
+-#define FFA_FN64_MEM_RETRIEVE_REQ	FFA_SMC_64(0x74)
+-#define FFA_MEM_RETRIEVE_RESP		FFA_SMC_32(0x75)
+-#define FFA_MEM_RELINQUISH		FFA_SMC_32(0x76)
+-#define FFA_MEM_RECLAIM			FFA_SMC_32(0x77)
+-#define FFA_MEM_OP_PAUSE		FFA_SMC_32(0x78)
+-#define FFA_MEM_OP_RESUME		FFA_SMC_32(0x79)
+-#define FFA_MEM_FRAG_RX			FFA_SMC_32(0x7A)
+-#define FFA_MEM_FRAG_TX			FFA_SMC_32(0x7B)
+-#define FFA_NORMAL_WORLD_RESUME		FFA_SMC_32(0x7C)
+-
+-/*
+- * For some calls it is necessary to use SMC64 to pass or return 64-bit values.
+- * For such calls FFA_FN_NATIVE(name) will choose the appropriate
+- * (native-width) function ID.
+- */
+-#ifdef CONFIG_64BIT
+-#define FFA_FN_NATIVE(name)	FFA_FN64_##name
+-#else
+-#define FFA_FN_NATIVE(name)	FFA_##name
+-#endif
+-
+-/* FFA error codes. */
+-#define FFA_RET_SUCCESS            (0)
+-#define FFA_RET_NOT_SUPPORTED      (-1)
+-#define FFA_RET_INVALID_PARAMETERS (-2)
+-#define FFA_RET_NO_MEMORY          (-3)
+-#define FFA_RET_BUSY               (-4)
+-#define FFA_RET_INTERRUPTED        (-5)
+-#define FFA_RET_DENIED             (-6)
+-#define FFA_RET_RETRY              (-7)
+-#define FFA_RET_ABORTED            (-8)
+-
+-#define MAJOR_VERSION_MASK	GENMASK(30, 16)
+-#define MINOR_VERSION_MASK	GENMASK(15, 0)
+-#define MAJOR_VERSION(x)	((u16)(FIELD_GET(MAJOR_VERSION_MASK, (x))))
+-#define MINOR_VERSION(x)	((u16)(FIELD_GET(MINOR_VERSION_MASK, (x))))
+-#define PACK_VERSION_INFO(major, minor)			\
+-	(FIELD_PREP(MAJOR_VERSION_MASK, (major)) |	\
+-	 FIELD_PREP(MINOR_VERSION_MASK, (minor)))
+-#define FFA_VERSION_1_0		PACK_VERSION_INFO(1, 0)
+ #define FFA_MIN_VERSION		FFA_VERSION_1_0
+ 
+ #define SENDER_ID_MASK		GENMASK(31, 16)
+@@ -120,12 +45,6 @@
+ #define PACK_TARGET_INFO(s, r)		\
+ 	(FIELD_PREP(SENDER_ID_MASK, (s)) | FIELD_PREP(RECEIVER_ID_MASK, (r)))
+ 
+-/*
+- * FF-A specification mentions explicitly about '4K pages'. This should
+- * not be confused with the kernel PAGE_SIZE, which is the translation
+- * granule kernel is configured and may be one among 4K, 16K and 64K.
+- */
+-#define FFA_PAGE_SIZE		SZ_4K
+ /*
+  * Keeping RX TX buffer size as 4K for now
+  * 64K may be preferred to keep it min a page in 64K PAGE_SIZE config
+@@ -178,9 +97,9 @@ static struct ffa_drv_info *drv_info;
+  */
+ static u32 ffa_compatible_version_find(u32 version)
+ {
+-	u16 major = MAJOR_VERSION(version), minor = MINOR_VERSION(version);
+-	u16 drv_major = MAJOR_VERSION(FFA_DRIVER_VERSION);
+-	u16 drv_minor = MINOR_VERSION(FFA_DRIVER_VERSION);
++	u16 major = FFA_MAJOR_VERSION(version), minor = FFA_MINOR_VERSION(version);
++	u16 drv_major = FFA_MAJOR_VERSION(FFA_DRIVER_VERSION);
++	u16 drv_minor = FFA_MINOR_VERSION(FFA_DRIVER_VERSION);
+ 
+ 	if ((major < drv_major) || (major == drv_major && minor <= drv_minor))
+ 		return version;
+@@ -204,16 +123,16 @@ static int ffa_version_check(u32 *version)
+ 
+ 	if (ver.a0 < FFA_MIN_VERSION) {
+ 		pr_err("Incompatible v%d.%d! Earliest supported v%d.%d\n",
+-		       MAJOR_VERSION(ver.a0), MINOR_VERSION(ver.a0),
+-		       MAJOR_VERSION(FFA_MIN_VERSION),
+-		       MINOR_VERSION(FFA_MIN_VERSION));
++		       FFA_MAJOR_VERSION(ver.a0), FFA_MINOR_VERSION(ver.a0),
++		       FFA_MAJOR_VERSION(FFA_MIN_VERSION),
++		       FFA_MINOR_VERSION(FFA_MIN_VERSION));
+ 		return -EINVAL;
+ 	}
+ 
+-	pr_info("Driver version %d.%d\n", MAJOR_VERSION(FFA_DRIVER_VERSION),
+-		MINOR_VERSION(FFA_DRIVER_VERSION));
+-	pr_info("Firmware version %d.%d found\n", MAJOR_VERSION(ver.a0),
+-		MINOR_VERSION(ver.a0));
++	pr_info("Driver version %d.%d\n", FFA_MAJOR_VERSION(FFA_DRIVER_VERSION),
++		FFA_MINOR_VERSION(FFA_DRIVER_VERSION));
++	pr_info("Firmware version %d.%d found\n", FFA_MAJOR_VERSION(ver.a0),
++		FFA_MINOR_VERSION(ver.a0));
+ 	*version = ffa_compatible_version_find(ver.a0);
+ 
+ 	return 0;
+diff --git a/include/linux/arm_ffa.h b/include/linux/arm_ffa.h
+index 5f02d2e6b9d9..daff44d777fa 100644
+--- a/include/linux/arm_ffa.h
++++ b/include/linux/arm_ffa.h
+@@ -11,6 +11,89 @@
+ #include <linux/types.h>
+ #include <linux/uuid.h>
+ 
++#define FFA_SMC(calling_convention, func_num)				\
++	ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL, (calling_convention),	\
++			   ARM_SMCCC_OWNER_STANDARD, (func_num))
++
++#define FFA_SMC_32(func_num)	FFA_SMC(ARM_SMCCC_SMC_32, (func_num))
++#define FFA_SMC_64(func_num)	FFA_SMC(ARM_SMCCC_SMC_64, (func_num))
++
++#define FFA_ERROR			FFA_SMC_32(0x60)
++#define FFA_SUCCESS			FFA_SMC_32(0x61)
++#define FFA_INTERRUPT			FFA_SMC_32(0x62)
++#define FFA_VERSION			FFA_SMC_32(0x63)
++#define FFA_FEATURES			FFA_SMC_32(0x64)
++#define FFA_RX_RELEASE			FFA_SMC_32(0x65)
++#define FFA_RXTX_MAP			FFA_SMC_32(0x66)
++#define FFA_FN64_RXTX_MAP		FFA_SMC_64(0x66)
++#define FFA_RXTX_UNMAP			FFA_SMC_32(0x67)
++#define FFA_PARTITION_INFO_GET		FFA_SMC_32(0x68)
++#define FFA_ID_GET			FFA_SMC_32(0x69)
++#define FFA_MSG_POLL			FFA_SMC_32(0x6A)
++#define FFA_MSG_WAIT			FFA_SMC_32(0x6B)
++#define FFA_YIELD			FFA_SMC_32(0x6C)
++#define FFA_RUN				FFA_SMC_32(0x6D)
++#define FFA_MSG_SEND			FFA_SMC_32(0x6E)
++#define FFA_MSG_SEND_DIRECT_REQ		FFA_SMC_32(0x6F)
++#define FFA_FN64_MSG_SEND_DIRECT_REQ	FFA_SMC_64(0x6F)
++#define FFA_MSG_SEND_DIRECT_RESP	FFA_SMC_32(0x70)
++#define FFA_FN64_MSG_SEND_DIRECT_RESP	FFA_SMC_64(0x70)
++#define FFA_MEM_DONATE			FFA_SMC_32(0x71)
++#define FFA_FN64_MEM_DONATE		FFA_SMC_64(0x71)
++#define FFA_MEM_LEND			FFA_SMC_32(0x72)
++#define FFA_FN64_MEM_LEND		FFA_SMC_64(0x72)
++#define FFA_MEM_SHARE			FFA_SMC_32(0x73)
++#define FFA_FN64_MEM_SHARE		FFA_SMC_64(0x73)
++#define FFA_MEM_RETRIEVE_REQ		FFA_SMC_32(0x74)
++#define FFA_FN64_MEM_RETRIEVE_REQ	FFA_SMC_64(0x74)
++#define FFA_MEM_RETRIEVE_RESP		FFA_SMC_32(0x75)
++#define FFA_MEM_RELINQUISH		FFA_SMC_32(0x76)
++#define FFA_MEM_RECLAIM			FFA_SMC_32(0x77)
++#define FFA_MEM_OP_PAUSE		FFA_SMC_32(0x78)
++#define FFA_MEM_OP_RESUME		FFA_SMC_32(0x79)
++#define FFA_MEM_FRAG_RX			FFA_SMC_32(0x7A)
++#define FFA_MEM_FRAG_TX			FFA_SMC_32(0x7B)
++#define FFA_NORMAL_WORLD_RESUME		FFA_SMC_32(0x7C)
++
++/*
++ * For some calls it is necessary to use SMC64 to pass or return 64-bit values.
++ * For such calls FFA_FN_NATIVE(name) will choose the appropriate
++ * (native-width) function ID.
++ */
++#ifdef CONFIG_64BIT
++#define FFA_FN_NATIVE(name)	FFA_FN64_##name
++#else
++#define FFA_FN_NATIVE(name)	FFA_##name
++#endif
++
++/* FFA error codes. */
++#define FFA_RET_SUCCESS            (0)
++#define FFA_RET_NOT_SUPPORTED      (-1)
++#define FFA_RET_INVALID_PARAMETERS (-2)
++#define FFA_RET_NO_MEMORY          (-3)
++#define FFA_RET_BUSY               (-4)
++#define FFA_RET_INTERRUPTED        (-5)
++#define FFA_RET_DENIED             (-6)
++#define FFA_RET_RETRY              (-7)
++#define FFA_RET_ABORTED            (-8)
++
++/* FFA version encoding */
++#define FFA_MAJOR_VERSION_MASK	GENMASK(30, 16)
++#define FFA_MINOR_VERSION_MASK	GENMASK(15, 0)
++#define FFA_MAJOR_VERSION(x)	((u16)(FIELD_GET(FFA_MAJOR_VERSION_MASK, (x))))
++#define FFA_MINOR_VERSION(x)	((u16)(FIELD_GET(FFA_MINOR_VERSION_MASK, (x))))
++#define FFA_PACK_VERSION_INFO(major, minor)			\
++	(FIELD_PREP(FFA_MAJOR_VERSION_MASK, (major)) |		\
++	 FIELD_PREP(FFA_MINOR_VERSION_MASK, (minor)))
++#define FFA_VERSION_1_0		FFA_PACK_VERSION_INFO(1, 0)
++
++/**
++ * FF-A specification mentions explicitly about '4K pages'. This should
++ * not be confused with the kernel PAGE_SIZE, which is the translation
++ * granule kernel is configured and may be one among 4K, 16K and 64K.
++ */
++#define FFA_PAGE_SIZE		SZ_4K
++
+ /* FFA Bus/Device/Driver related */
+ struct ffa_device {
+ 	int vm_id;
 -- 
 2.38.1.431.g37b22c650d-goog
 
