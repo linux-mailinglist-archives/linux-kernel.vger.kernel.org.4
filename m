@@ -2,89 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4081B62B358
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 07:35:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E44A162B35D
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 07:36:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232775AbiKPGfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 01:35:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49298 "EHLO
+        id S232793AbiKPGfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 01:35:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232615AbiKPGfC (ORCPT
+        with ESMTP id S232570AbiKPGfK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 01:35:02 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC59DEDE;
-        Tue, 15 Nov 2022 22:35:01 -0800 (PST)
-Received: from [192.168.88.87] (unknown [125.160.109.228])
-        by gnuweeb.org (Postfix) with ESMTPSA id B4C9D80BE8;
-        Wed, 16 Nov 2022 06:34:59 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1668580501;
-        bh=RTkIMOtf0HhfVfKBcaoF8pGYhOmFJpcuCVB8H/b0kAQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=A3gCFSFUVGNXHikFZY0Nkb3SgaZBlFoNnHwCBzgj5HiJOgBnRsjGkeDHg4l3mTnJx
-         YSuUW9OORLf+bUDg5/OJRf/Hid97VLux2HmdO4mcGW/QEcRKaL7bnmkdXCa9EvkBpX
-         TFDA2LNYI+t7Sydl1jT3o8uVDb95Oa40agzZrlvASyJLVpExmOqQPG4lSIGuWcdRPV
-         sKaZiSYLuV20v9MSfJwetdzZRN/vZX6JDZ1oiSRUzmdO87P2riLvGy9x2Ee3Hx1QOZ
-         pheBJK1xoFdSbvYNADGt+1MVLlig0ofBqipTr2JRyYyd/Qvg+OqGS0xMgFWZedE+ol
-         16UGA4axift+w==
-Message-ID: <61293423-8541-cb8b-32b4-9a4decb3544f@gnuweeb.org>
-Date:   Wed, 16 Nov 2022 13:34:57 +0700
+        Wed, 16 Nov 2022 01:35:10 -0500
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E2B620E;
+        Tue, 15 Nov 2022 22:35:10 -0800 (PST)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 9519168AA6; Wed, 16 Nov 2022 07:35:06 +0100 (CET)
+Date:   Wed, 16 Nov 2022 07:35:06 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     hch@lst.de, axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
+        dm-devel@redhat.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
+        yi.zhang@huawei.com
+Subject: Re: [PATCH RFC v3 05/10] dm: make sure create and remove dm device
+ won't race with open and close table
+Message-ID: <20221116063506.GA19492@lst.de>
+References: <20221115141054.1051801-1-yukuai1@huaweicloud.com> <20221115141054.1051801-6-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: (subset) [PATCH v1 0/2] io_uring uapi updates
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        io-uring Mailing List <io-uring@vger.kernel.org>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Stefan Metzmacher <metze@samba.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20221115212614.1308132-1-ammar.faizi@intel.com>
- <166855408973.7702.1716032255757220554.b4-ty@kernel.dk>
-Content-Language: en-US
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-In-Reply-To: <166855408973.7702.1716032255757220554.b4-ty@kernel.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SORBS_WEB,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221115141054.1051801-6-yukuai1@huaweicloud.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/16/22 6:14 AM, Jens Axboe wrote:
-> On Wed, 16 Nov 2022 04:29:51 +0700, Ammar Faizi wrote:
->> From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
->>
->> Hi Jens,
->>
->> io_uring uapi updates:
->>
->> 1) Don't force linux/time_types.h for userspace. Linux's io_uring.h is
->>     synced 1:1 into liburing's io_uring.h. liburing has a configure
->>     check to detect the need for linux/time_types.h (Stefan).
->>
->> [...]
-> 
-> Applied, thanks!
-> 
-> [1/2] io_uring: uapi: Don't force linux/time_types.h for userspace
->        commit: 958bfdd734b6074ba88ee3abc69d0053e26b7b9c
+Looks good:
 
-Jens, please drop this commit. It breaks the build:
-
-All errors (new ones prefixed by >>):
-
-    In file included from <command-line>:
->> ./usr/include/linux/io_uring.h:654:41: error: field 'timeout' has incomplete type
-      654 |         struct __kernel_timespec        timeout;
-          |                                         ^~~~~~~
-
--- 
-Ammar Faizi
-
+Reviewed-by: Christoph Hellwig <hch@lst.de>
