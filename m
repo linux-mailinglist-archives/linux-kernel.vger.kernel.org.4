@@ -2,83 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 591CA62B701
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:56:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE79762B703
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:56:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231177AbiKPJ4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 04:56:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38946 "EHLO
+        id S231182AbiKPJ4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 04:56:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229908AbiKPJ4J (ORCPT
+        with ESMTP id S231189AbiKPJ4U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 04:56:09 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F96D635F;
-        Wed, 16 Nov 2022 01:56:09 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AG8DXG0011111;
-        Wed, 16 Nov 2022 09:55:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=AZYBM7yo5DAFdaVrtM8YSBmdlBbwjY0NigrJe0QAl2I=;
- b=QSRU7oeGFRv6gCjmY2WWvnQ888VSbBumaynIhZcXg4sJDdsX7do66ZvJXGx/4T/QYtSV
- /mLH8/LW9gR31CEerNTGFRLnSBpz+vFoLZPg4N5bO8IpF1G4w8AnKyTf+5BbEk0DrREX
- ZUcdpXFQJkfyyekZiMHxGsucn8goLTdbqMTNDY7a133X/Xw+RAlw0zVguYJKj5nhIkKM
- Mu0JmzPUG6/Sq3IUyQ6K+B09wNsvLbUqLfuBi+jfb879oAxRCsuV245yZPXAHQfCW5+M
- 1IcNEsAfElnXorF/ZdXtPQxECkEKKdQIuwyvKKfuvUD7GkqOwD6oV0UBRAawWKNSCorS lw== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kvt9d8n4e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Nov 2022 09:55:33 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AG9tXkB031962
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Nov 2022 09:55:33 GMT
-Received: from [10.79.43.91] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 16 Nov
- 2022 01:55:29 -0800
-Message-ID: <da77b6f8-a511-4e3d-ba59-ca4c41415312@quicinc.com>
-Date:   Wed, 16 Nov 2022 15:25:26 +0530
+        Wed, 16 Nov 2022 04:56:20 -0500
+X-Greylist: delayed 388 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 16 Nov 2022 01:55:28 PST
+Received: from mail-sz.amlogic.com (mail-sz.amlogic.com [211.162.65.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D093A1789E;
+        Wed, 16 Nov 2022 01:55:28 -0800 (PST)
+Received: from [10.88.19.158] (10.88.19.158) by mail-sz.amlogic.com
+ (10.28.11.5) with Microsoft SMTP Server id 15.1.2507.13; Wed, 16 Nov 2022
+ 17:55:26 +0800
+Message-ID: <7bb5e9ee-358b-ce6f-2cb5-a6b6b558c0a9@amlogic.com>
+Date:   Wed, 16 Nov 2022 17:56:12 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 1/2] remoteproc: qcom_q6v5_pas: disable wakeup on probe
- fail or remove
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v10 2/2] docs/perf: Add documentation for the Amlogic G12
+ DDR PMU
 Content-Language: en-US
-To:     Luca Weiss <luca.weiss@fairphone.com>,
-        <linux-arm-msm@vger.kernel.org>
-CC:     <~postmarketos/upstreaming@lists.sr.ht>,
-        <phone-devel@vger.kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Siddharth Gupta <sidgup@codeaurora.org>,
-        Rishabh Bhatnagar <rishabhb@codeaurora.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20221111115414.153961-1-luca.weiss@fairphone.com>
-From:   Sibi Sankar <quic_sibis@quicinc.com>
-In-Reply-To: <20221111115414.153961-1-luca.weiss@fairphone.com>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+CC:     <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        John Garry <john.garry@huawei.com>,
+        Wan Jiabing <wanjiabing@vivo.com>,
+        Chris Healy <cphealy@gmail.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Kelvin Zhang <kelvin.zhang@amlogic.com>,
+        Chris Healy <healych@amazon.com>
+References: <20221116003133.1049346-1-jiucheng.xu@amlogic.com>
+ <20221116003133.1049346-2-jiucheng.xu@amlogic.com>
+ <Y3SwIPnDvEOlL+Mz@debian.me>
+From:   Jiucheng Xu <jiucheng.xu@amlogic.com>
+In-Reply-To: <Y3SwIPnDvEOlL+Mz@debian.me>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: i7DjL4hW_YA6R5gDFurFX4kJ4vPO0ujD
-X-Proofpoint-GUID: i7DjL4hW_YA6R5gDFurFX4kJ4vPO0ujD
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-15_08,2022-11-15_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- impostorscore=0 mlxscore=0 spamscore=0 suspectscore=0 malwarescore=0
- priorityscore=1501 adultscore=0 phishscore=0 clxscore=1011 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211160070
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Originating-IP: [10.88.19.158]
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,57 +61,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Luca,
+Sorry for my poor English. Your writing looks very elegant. I will apply 
+your modification in next version.
 
-Thanks for the patch.
+Thanks,
 
-On 11/11/22 17:24, Luca Weiss wrote:
-> Leaving wakeup enabled during probe fail (-EPROBE_DEFER) or remove makes
-> the subsequent probe fail.
-> 
-> [    3.749454] remoteproc remoteproc0: releasing 3000000.remoteproc
-> [    3.752949] qcom_q6v5_pas: probe of 3000000.remoteproc failed with error -17
-> [    3.878935] remoteproc remoteproc0: releasing 4080000.remoteproc
-> [    3.887602] qcom_q6v5_pas: probe of 4080000.remoteproc failed with error -17
-> [    4.319552] remoteproc remoteproc0: releasing 8300000.remoteproc
-> [    4.332716] qcom_q6v5_pas: probe of 8300000.remoteproc failed with error -17
-> 
-> Fix this by disabling wakeup in both cases so the driver can properly
-> probe on the next try.
-> 
-> Fixes: a781e5aa5911 ("remoteproc: core: Prevent system suspend during remoteproc recovery")
-> Fixes: dc86c129b4fb ("remoteproc: qcom: pas: Mark devices as wakeup capable")
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> ---
->   drivers/remoteproc/qcom_q6v5_pas.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
-> index 6afd0941e552..d830bf13c32c 100644
-> --- a/drivers/remoteproc/qcom_q6v5_pas.c
-> +++ b/drivers/remoteproc/qcom_q6v5_pas.c
-> @@ -557,6 +557,7 @@ static int adsp_probe(struct platform_device *pdev)
->   	adsp_pds_detach(adsp, adsp->proxy_pds, adsp->proxy_pd_count);
->   free_rproc:
->   	rproc_free(rproc);
-> +	device_init_wakeup(adsp->dev, false);
+Jiucheng
 
-You would want to do ^^ before rproc free since adsp is a
-private data of rproc struct.
-
+On 2022/11/16 17:40, Bagas Sanjaya wrote:
+>
+> The wordings are rather weird, so I need to improve the doc:
+>
+> ---- >8 ----
+>
+> diff --git a/Documentation/admin-guide/perf/meson-ddr-pmu.rst b/Documentation/admin-guide/perf/meson-ddr-pmu.rst
+> index 15e93a751ced8a..4a1fdb5aba4b24 100644
+> --- a/Documentation/admin-guide/perf/meson-ddr-pmu.rst
+> +++ b/Documentation/admin-guide/perf/meson-ddr-pmu.rst
+> @@ -4,11 +4,12 @@
+>   Amlogic SoC DDR Bandwidth Performance Monitoring Unit (PMU)
+>   ===========================================================
 >   
->   	return ret;
->   }
-> @@ -573,6 +574,7 @@ static int adsp_remove(struct platform_device *pdev)
->   	qcom_remove_smd_subdev(adsp->rproc, &adsp->smd_subdev);
->   	qcom_remove_ssr_subdev(adsp->rproc, &adsp->ssr_subdev);
->   	rproc_free(adsp->rproc);
-> +	device_init_wakeup(adsp->dev, false);
-
-ditto.
-
+> -There is a bandwidth monitor inside the DRAM controller. The monitor includes
+> -4 channels which can count the read/write request of accessing DRAM individually.
+> -It can be helpful to show if the performance bottleneck is on DDR bandwidth.
+> +The Amlogic Meson G12 SoC contains a bandwidth monitor inside DRAM controller.
+> +The monitor includes 4 channels which can count the read/write request of
+> +individual DRAM. It can be helpful to show if the performance bottleneck is on
+> +DDR bandwidth.
 >   
->   	return 0;
->   }
+> -Currently, this driver supports the following 5 Perf events:
+> +Currently, this driver supports the following 5 perf events:
+>   
+>   + meson_ddr_bw/total_rw_bytes/
+>   + meson_ddr_bw/chan_1_rw_bytes/
+> @@ -16,55 +17,54 @@ Currently, this driver supports the following 5 Perf events:
+>   + meson_ddr_bw/chan_3_rw_bytes/
+>   + meson_ddr_bw/chan_4_rw_bytes/
+>   
+> -meson_ddr_bw/chan_{1,2,3,4}_rw_bytes/ events are the channel related events.
+> -Each channel support using keywords as filter, which can let the channel
+> -to monitor the individual IP module in SoC.
+> +meson_ddr_bw/chan_{1,2,3,4}_rw_bytes/ events are channel-specific events.
+> +Each channel support filtering, which can let the channel to monitor
+> +individual IP module in SoC.
+>   
+> -The following keywords are the filter:
+> +Below are DDR access request event filter keywords:
+>   
+> -+ arm             - DDR access request from CPU
+> -+ vpu_read1       - DDR access request from OSD + VPP read
+> -+ gpu             - DDR access request from 3D GPU
+> -+ pcie            - DDR access request from PCIe controller
+> -+ hdcp            - DDR access request from HDCP controller
+> -+ hevc_front      - DDR access request from HEVC codec front end
+> -+ usb3_0          - DDR access request from USB3.0 controller
+> -+ hevc_back       - DDR access request from HEVC codec back end
+> -+ h265enc         - DDR access request from HEVC encoder
+> -+ vpu_read2       - DDR access request from DI read
+> -+ vpu_write1      - DDR access request from VDIN write
+> -+ vpu_write2      - DDR access request from di write
+> -+ vdec            - DDR access request from legacy codec video decoder
+> -+ hcodec          - DDR access request from H264 encoder
+> -+ ge2d            - DDR access request from ge2d
+> -+ spicc1          - DDR access request from SPI controller 1
+> -+ usb0            - DDR access request from USB2.0 controller 0
+> -+ dma             - DDR access request from system DMA controller 1
+> -+ arb0            - DDR access request from arb0
+> -+ sd_emmc_b       - DDR access request from SD eMMC b controller
+> -+ usb1            - DDR access request from USB2.0 controller 1
+> -+ audio           - DDR access request from Audio module
+> -+ sd_emmc_c       - DDR access request from SD eMMC c controller
+> -+ spicc2          - DDR access request from SPI controller 2
+> -+ ethernet        - DDR access request from Ethernet controller
+> ++ arm             - from CPU
+> ++ vpu_read1       - from OSD + VPP read
+> ++ gpu             - from 3D GPU
+> ++ pcie            - from PCIe controller
+> ++ hdcp            - from HDCP controller
+> ++ hevc_front      - from HEVC codec front end
+> ++ usb3_0          - from USB3.0 controller
+> ++ hevc_back       - from HEVC codec back end
+> ++ h265enc         - from HEVC encoder
+> ++ vpu_read2       - from DI read
+> ++ vpu_write1      - from VDIN write
+> ++ vpu_write2      - from di write
+> ++ vdec            - from legacy codec video decoder
+> ++ hcodec          - from H264 encoder
+> ++ ge2d            - from ge2d
+> ++ spicc1          - from SPI controller 1
+> ++ usb0            - from USB2.0 controller 0
+> ++ dma             - from system DMA controller 1
+> ++ arb0            - from arb0
+> ++ sd_emmc_b       - from SD eMMC b controller
+> ++ usb1            - from USB2.0 controller 1
+> ++ audio           - from Audio module
+> ++ sd_emmc_c       - from SD eMMC c controller
+> ++ spicc2          - from SPI controller 2
+> ++ ethernet        - from Ethernet controller
+>   
+>   
+> -The following command is to show the total DDR bandwidth:
+> +Examples:
+>   
+> -  .. code-block:: bash
+> +  + Show the total DDR bandwidth per seconds:
+>   
+> -      perf stat -a -e meson_ddr_bw/total_rw_bytes/ -I 1000 sleep 10
+> +    .. code-block:: bash
+>   
+> -This command will print the total DDR bandwidth per second.
+> +       perf stat -a -e meson_ddr_bw/total_rw_bytes/ -I 1000 sleep 10
+>   
+> -The following commands are to show how to use filter parameters:
+>   
+> -  .. code-block:: bash
+> +  + Show individual DDR bandwidth from CPU and GPU respectively, as well as
+> +    sum of them:
+>   
+> -      perf stat -a -e meson_ddr_bw/chan_1_rw_bytes,arm=1/ -I 1000 sleep 10
+> -      perf stat -a -e meson_ddr_bw/chan_2_rw_bytes,gpu=1/ -I 1000 sleep 10
+> -      perf stat -a -e meson_ddr_bw/chan_3_rw_bytes,arm=1,gpu=1/ -I 1000 sleep 10
+> +    .. code-block:: bash
+> +
+> +       perf stat -a -e meson_ddr_bw/chan_1_rw_bytes,arm=1/ -I 1000 sleep 10
+> +       perf stat -a -e meson_ddr_bw/chan_2_rw_bytes,gpu=1/ -I 1000 sleep 10
+> +       perf stat -a -e meson_ddr_bw/chan_3_rw_bytes,arm=1,gpu=1/ -I 1000 sleep 10
+>   
+> -The 1st command show how to use channel 1 to monitor the DDR bandwidth from ARM.
+> -The 2nd command show using channel 2 to get the DDR bandwidth of GPU.
+> -The 3rd command show using channel 3 to monitor the sum of ARM and GPU.
+>
+> Thanks.
+>
+-- 
+Thanks,
+Jiucheng
 
-- Sibi
