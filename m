@@ -2,123 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5DEE62B733
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 11:10:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91E3A62B73C
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 11:10:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232540AbiKPKKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 05:10:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45340 "EHLO
+        id S232768AbiKPKKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 05:10:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232496AbiKPKJ5 (ORCPT
+        with ESMTP id S232740AbiKPKKo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 05:09:57 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C60181FF98
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:09:55 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id l14so29078840wrw.2
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:09:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=IS4NhixtyW5TeYqdp9/kbVVcuyzIalO1l41VFDtVdNU=;
-        b=hAGvJenW4Og2mAreBZMcIFFcI0BIjoFZ4aGOfVRJ5QO/K2ukidMP6ikxXClzBqeciY
-         DzNaAxq0ZUy+w4M8sMIw/QH1eHuwUapiftptHXpYLudfJu/s7dnOOUQfJx2h7K2NQlMv
-         2QyKJWcTZYgV884sMYySdwt9E007kmh0uq4VviHXRFOSi3qAkOtcB+TQBydG5uQCxdJ2
-         xCQYkB7oWGoWG7eN7J2kRx33MRTyrDU+ZdDAfBJPth2ZB96WnLTNHc/wEe+8d9rA5Nvz
-         tLVsicWdtM80d8+Ml6UooeTFWWW7/GTMsSAsgkm+jNa6Fs93EMi6HIOuU14i4SnMsJT4
-         Vxtg==
+        Wed, 16 Nov 2022 05:10:44 -0500
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110691E3FD
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:10:44 -0800 (PST)
+Received: by mail-wm1-f53.google.com with SMTP id h186-20020a1c21c3000000b003cfe48519a6so1258549wmh.0
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:10:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IS4NhixtyW5TeYqdp9/kbVVcuyzIalO1l41VFDtVdNU=;
-        b=CM6LDxG5mur1oQ+JjQRD4Qd4mm6E11pY7lNLpZBJvTVetWbo3iH7oJUuyAksLWS/dd
-         cdwIOvN9d2/FrZyv8PrjVK7tu+1qCDQW8b+V0hSbb9De3KbL8FV/XcCPTDSFLkLK5IOa
-         F9Mhu4igUEtoK/rix0ZOItbHXPjXmQFlcQ8vjbgSLKnNBFikgj+amknTzZOX+e7LdHF/
-         OCrp4SJBEn+44XPsa82DaH1t2NJOisIGodaOBj/shLUcqtCOEgEjeWGJ0J5f9vml8X1I
-         u8phqAGhdELodLHXsjnPJ3umHZxzy0gIgGdMV+oCam02oTyVTS4o5eXjkrsC5SDacZ16
-         p9OA==
-X-Gm-Message-State: ANoB5pmoganfTJslGQ66HSEOam3/1yiqCFZyyqKMznsG9cP/CUryGl1e
-        +iOmxHWLEriogWwpN4BUAGwOow==
-X-Google-Smtp-Source: AA0mqf4ho7H2ywGylNwvkqJy3pkJcC2giMqrzoSpvKj0x9mRAyZorDJ++ZPQPO+Ldxl7gjyzjvBsqA==
-X-Received: by 2002:a5d:526d:0:b0:238:3fcb:31ce with SMTP id l13-20020a5d526d000000b002383fcb31cemr13873164wrc.655.1668593394376;
-        Wed, 16 Nov 2022 02:09:54 -0800 (PST)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id i8-20020a1c3b08000000b003cf5ec79bf9sm1504500wma.40.2022.11.16.02.09.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 02:09:53 -0800 (PST)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Wed, 16 Nov 2022 11:09:50 +0100
-Subject: [PATCH] dt-bindings: thermal: qcom-tsens: Add compatible for sm8550
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ty1Id4ftuY2J/moyYs8ypYuJmz79C5rQqwhw+oW8TYY=;
+        b=JXU+Fm0JcrIvKAxwYGIIkiDhpYhj6dmDwMAaXiFK6nnSugGOwOpB4b0yHSBzEH8t2v
+         Jotjz3V8DkTe0zPxtK5UKqUi6oZmxmXMrCnRj4LGlUSGQwYOD0sl8PYL36+F8ytV6T9y
+         H4cENq0SL0nNhbWM7BWdPI+s/rWuhHSC4XuwIr4v9PJda/j4xEDoBBS/ZjuNP0ByTzRF
+         R3X7wcSmuNDnXVsvLyASACxORkDILCf1uOsQXFh1NnoyJxky9PAr7ebJxDBiJWPiP5+c
+         7MWLNBvRO5w+lJiWIhy/b++bIAL/hX4psxWX3pbtEwDTwKKaKNu1yCj4xY5hwXM/jNtO
+         yJUg==
+X-Gm-Message-State: ANoB5pl+4YzwHjg7CTHQkE+DUWI4+uJknb7xBWwxmhm/0PeFynHsQG73
+        K1PsXod6XvzoIFutViT+xPpNn7EsN0o=
+X-Google-Smtp-Source: AA0mqf4QP0oXLZAAGkkqAlP2YKjaYDEAHbaoz2IzqW+bp+iIvI4Q1I9Of0sJCm4hdCvIYc2rqkhHEw==
+X-Received: by 2002:a05:600c:3d0c:b0:3cf:8279:c80c with SMTP id bh12-20020a05600c3d0c00b003cf8279c80cmr1597841wmb.169.1668593442383;
+        Wed, 16 Nov 2022 02:10:42 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
+        by smtp.gmail.com with ESMTPSA id e1-20020a5d5001000000b002368424f89esm14435384wrt.67.2022.11.16.02.10.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Nov 2022 02:10:41 -0800 (PST)
+Message-ID: <77be348e-3e9d-7bbf-5581-95d78124daa7@kernel.org>
+Date:   Wed, 16 Nov 2022 11:10:40 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20221114-narmstrong-sm8550-upstream-tsens-v1-0-0e169822830f@linaro.org>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
-X-Mailer: b4 0.10.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH] misc: hpilo: relicense HPE iLO driver as Dual MIT/GPL
+Content-Language: en-US
+To:     matt.hsiao@hpe.com, linux-kernel@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, arnd@arndb.de,
+        christophe.jaillet@wanadoo.fr, gustavoars@kernel.org,
+        nishadkamdar@gmail.com, torvalds@linux-foundation.org,
+        dhaval.experiance@gmail.com, viro@zeniv.linux.org.uk,
+        arvind.yadav.cs@gmail.com, standby24x7@gmail.com,
+        wfp5p@virginia.edu, prarit@redhat.com, tj@kernel.org,
+        adobriyan@gmail.com
+References: <20221116094712.14312-1-matt.hsiao@hpe.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20221116094712.14312-1-matt.hsiao@hpe.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Qualcomm SM8550 platform has three instances of the tsens block,
-add a compatible for these instances.
+On 16. 11. 22, 10:47, matt.hsiao@hpe.com wrote:
+> From: Matt Hsiao <matt.hsiao@hpe.com>
+> 
+> Currently, the hpilo driver is licensed as GPL. To run OpenBSD on HPE
+> servers with BMC (HPE iLO) functionality, a dual MIT/GPL license is needed
+> for porting the hpilo driver to OpenBSD.
 
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
-To: Andy Gross <agross@kernel.org>
-To: Bjorn Andersson <andersson@kernel.org>
-To: Konrad Dybcio <konrad.dybcio@somainline.org>
-To: Amit Kucheria <amitk@kernel.org>
-To: Thara Gopinath <thara.gopinath@gmail.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-To: Zhang Rui <rui.zhang@intel.com>
-To: Rob Herring <robh+dt@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc: linux-arm-msm@vger.kernel.org
-Cc: linux-pm@vger.kernel.org
-Cc: devicetree@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
- Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
- 1 file changed, 1 insertion(+)
+What about the MODULE_LICENSE() change to "Dual MIT/GPL" too?
 
-diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-index f0bd4b979e28..09dbd96d380e 100644
---- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-+++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-@@ -58,6 +58,7 @@ properties:
-               - qcom,sm8250-tsens
-               - qcom,sm8350-tsens
-               - qcom,sm8450-tsens
-+              - qcom,sm8550-tsens
-           - const: qcom,tsens-v2
- 
-       - description: v2 of TSENS with combined interrupt
+Acked-by: Jiri Slaby <jirislaby@kernel.org>
 
----
-base-commit: 3c1f24109dfc4fb1a3730ed237e50183c6bb26b3
-change-id: 20221114-narmstrong-sm8550-upstream-tsens-dfaec218c321
+> Signed-off-by: Matt Hsiao <matt.hsiao@hpe.com>
+> ---
+> 
+> Hello contributors in the CC list,
+> 
+> Thanks for your contributions to the hpilo driver. Please kindly review
+> the license change and hopefully you would agree and approve it. Thanks!
+> 
+>   drivers/misc/hpilo.c | 2 +-
+>   drivers/misc/hpilo.h | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/misc/hpilo.c b/drivers/misc/hpilo.c
+> index 8d00df9243c4..6a06b6485950 100644
+> --- a/drivers/misc/hpilo.c
+> +++ b/drivers/misc/hpilo.c
+> @@ -1,4 +1,4 @@
+> -// SPDX-License-Identifier: GPL-2.0
+> +// SPDX-License-Identifier: GPL-2.0 OR MIT
+>   /*
+>    * Driver for the HP iLO management processor.
+>    *
+> diff --git a/drivers/misc/hpilo.h b/drivers/misc/hpilo.h
+> index d57c34680b09..581dfd7834b8 100644
+> --- a/drivers/misc/hpilo.h
+> +++ b/drivers/misc/hpilo.h
+> @@ -1,4 +1,4 @@
+> -/* SPDX-License-Identifier: GPL-2.0 */
+> +/* SPDX-License-Identifier: GPL-2.0 OR MIT */
+>   /*
+>    * linux/drivers/char/hpilo.h
+>    *
 
-Best regards,
 -- 
-Neil Armstrong <neil.armstrong@linaro.org>
+js
+suse labs
+
