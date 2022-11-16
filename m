@@ -2,124 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FBC362AFDD
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 01:09:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FC1162AFE6
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 01:11:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbiKPAJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 19:09:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51234 "EHLO
+        id S231304AbiKPALF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 19:11:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiKPAJ2 (ORCPT
+        with ESMTP id S229953AbiKPALB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 19:09:28 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E1A2A70D;
-        Tue, 15 Nov 2022 16:09:26 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NBk1c5hkTz4xGH;
-        Wed, 16 Nov 2022 11:09:24 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1668557365;
-        bh=6Nu4z6TdAZbmv8KRjIMPAWBQTNbHXtov0C66FP7Dsyw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=sy0p4glJEpPzZDYl5SH1/6Kbi9cBB9sNJHISD+khwc9+U+vnu8uKbOp5pLviPLjA0
-         Fbgg3XBylRV5yRmJ3y1qE9UUPDigVuldmHq7QHZ/Qma9ld1/mhBJ7Uu937Ini4dhzp
-         dHPno5qkkHPpir6KsRyfCPBaCQ65CzNAOpTEXGI667WgzVjlF5MUCi/diYvmqx1kZs
-         yIDuAdgGXhSvZPb5Ip+Hh1pEppQPp8GDJ1WJJ8S5JmAjhwinUrd0dxwF4cilUyzLnW
-         H+m6WLVHvH9yRE746Yeky2CbEWWWA6r9MD7hNdAua18V1X/HtC9Oz4vJLiwG8bwg23
-         wWoUN9+wEe13A==
-Date:   Wed, 16 Nov 2022 11:09:23 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the amdgpu tree with the drm-misc tree
-Message-ID: <20221116110923.0b6b04da@canb.auug.org.au>
+        Tue, 15 Nov 2022 19:11:01 -0500
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB6292A716;
+        Tue, 15 Nov 2022 16:10:59 -0800 (PST)
+Message-ID: <c1fa0a0c-d8f3-f6c4-7964-3bb31ac936ff@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1668557458;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JvPn6Ns2hZ82F1x4tzt3EH9pCuqXBb8Xskbp9KbDexI=;
+        b=CkKtpHcBA8Jp61hlsJmIuHBy5U08VG7cJU2r189KoSbfvo0I4GAWAZpjhAiGwkdYNL6+js
+        +FUfihWSm8/iUZnhAUzvNcn9nY/MmuQILi/p7vuExm2z+JpGNBViaMKpoJhJgRNvRqfEQX
+        zirpltS9GTN69xs30ZaHxDdLNHy9Ec4=
+Date:   Wed, 16 Nov 2022 08:10:52 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/r_DbATAmjPh=+MAx6uZqSW_";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH for-next v2] RDMA/rxe: Fix mr->map double free
+To:     Li Zhijian <lizhijian@fujitsu.com>, zyjzyj2000@gmail.com,
+        jgg@ziepe.ca, leon@kernel.org, linux-rdma@vger.kernel.org
+Cc:     Bob Pearson <rpearsonhpe@gmail.com>, linux-kernel@vger.kernel.org
+References: <1667099073-2-1-git-send-email-lizhijian@fujitsu.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Yanjun Zhu <yanjun.zhu@linux.dev>
+In-Reply-To: <1667099073-2-1-git-send-email-lizhijian@fujitsu.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/r_DbATAmjPh=+MAx6uZqSW_
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+在 2022/10/30 11:04, Li Zhijian 写道:
+> rxe_mr_cleanup() which tries to free mr->map again will be called
+> when rxe_mr_init_user() fails.
+> 
+> [43895.939883] CPU: 0 PID: 4917 Comm: rdma_flush_serv Kdump: loaded Not tainted 6.1.0-rc1-roce-flush+ #25
+> [43895.942341] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+> [43895.945208] Call Trace:
+> [43895.946130]  <TASK>
+> [43895.946931]  dump_stack_lvl+0x45/0x5d
+> [43895.948049]  panic+0x19e/0x349
+> [43895.949010]  ? panic_print_sys_info.part.0+0x77/0x77
+> [43895.950356]  ? asm_sysvec_apic_timer_interrupt+0x16/0x20
+> [43895.952589]  ? preempt_count_sub+0x14/0xc0
+> [43895.953809]  end_report.part.0+0x54/0x7c
+> [43895.954993]  ? rxe_mr_cleanup+0x9d/0xf0 [rdma_rxe]
+> [43895.956406]  kasan_report.cold+0xa/0xf
+> [43895.957668]  ? rxe_mr_cleanup+0x9d/0xf0 [rdma_rxe]
+> [43895.959090]  rxe_mr_cleanup+0x9d/0xf0 [rdma_rxe]
+> [43895.960502]  __rxe_cleanup+0x10a/0x1e0 [rdma_rxe]
+> [43895.961983]  rxe_reg_user_mr+0xb7/0xd0 [rdma_rxe]
+> [43895.963456]  ib_uverbs_reg_mr+0x26a/0x480 [ib_uverbs]
+> [43895.964921]  ? __lock_acquire+0x876/0x31e0
+> [43895.966182]  ? ib_uverbs_ex_create_wq+0x630/0x630 [ib_uverbs]
+> [43895.967739]  ? uverbs_fill_udata+0x1c6/0x330 [ib_uverbs]
+> [43895.969204]  ib_uverbs_handler_UVERBS_METHOD_INVOKE_WRITE+0x1a2/0x250 [ib_uverbs]
+> [43895.971126]  ? ib_uverbs_handler_UVERBS_METHOD_QUERY_CONTEXT+0x1a0/0x1a0 [ib_uverbs]
+> [43895.973094]  ? ib_uverbs_handler_UVERBS_METHOD_QUERY_CONTEXT+0x1a0/0x1a0 [ib_uverbs]
+> [43895.975096]  ? uverbs_fill_udata+0x25f/0x330 [ib_uverbs]
+> [43895.976466]  ib_uverbs_cmd_verbs+0x1397/0x15a0 [ib_uverbs]
+> [43895.977930]  ? ib_uverbs_handler_UVERBS_METHOD_QUERY_CONTEXT+0x1a0/0x1a0 [ib_uverbs]
+> [43895.979937]  ? uverbs_fill_udata+0x330/0x330 [ib_uverbs]
+> 
+> This issue was fistrly exposed since
+> commit: b18c7da63fcb ("RDMA/rxe: Fix memory leak in error path code")
+> and then we fixed it in
+> commit: 8ff5f5d9d8cf ("RDMA/rxe: Prevent double freeing rxe_map_set()")
+> but this fix was reverted together at last by
+> commit: 1e75550648da (Revert "RDMA/rxe: Create duplicate mapping tables for FMRs")
+> 
+> Fixes: 1e75550648da (Revert "RDMA/rxe: Create duplicate mapping tables for FMRs")
+> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
+> ---
+>   drivers/infiniband/sw/rxe/rxe_mr.c | 9 ++-------
+>   1 file changed, 2 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/infiniband/sw/rxe/rxe_mr.c b/drivers/infiniband/sw/rxe/rxe_mr.c
+> index d4f10c2d1aa7..7c99d1591580 100644
+> --- a/drivers/infiniband/sw/rxe/rxe_mr.c
+> +++ b/drivers/infiniband/sw/rxe/rxe_mr.c
+> @@ -99,6 +99,7 @@ static int rxe_mr_alloc(struct rxe_mr *mr, int num_buf)
+>   		kfree(mr->map[i]);
+>   
+>   	kfree(mr->map);
+> +	mr->map = NULL;
+>   err1:
+>   	return -ENOMEM;
+>   }
+> @@ -122,7 +123,6 @@ int rxe_mr_init_user(struct rxe_dev *rxe, u64 start, u64 length, u64 iova,
+>   	int			num_buf;
+>   	void			*vaddr;
+>   	int err;
+> -	int i;
+>   
+>   	umem = ib_umem_get(&rxe->ib_dev, start, length, access);
+>   	if (IS_ERR(umem)) {
+> @@ -163,9 +163,8 @@ int rxe_mr_init_user(struct rxe_dev *rxe, u64 start, u64 length, u64 iova,
+>   				pr_warn("%s: Unable to get virtual address\n",
+>   						__func__);
+>   				err = -ENOMEM;
+> -				goto err_cleanup_map;
+> +				goto err_release_umem;
 
-Hi all,
+This call trace results from page_address's returning NULL, then goto 
+err_cleanup_map where mr->map[i] and mr->map are freed.
 
-Today's linux-next merge of the amdgpu tree got a conflict in:
+And finally rxe_reg_user_mr gets an error from rxe_mr_init_user, the 
+function rxe_mr_cleanup is called to handle mr to free mr->map[i] and 
+mr->map again.
 
-  include/drm/gpu_scheduler.h
+So mr->map[i] and mr->map are double freed.
 
-between commit:
+As such, this commit is reasonable.
 
-  2cf9886e2816 ("drm/scheduler: remove drm_sched_dependency_optimized")
+But why page_address will return NULL?
 
-from the drm-misc tree and commit:
+Zhu Yanjun
 
-  06a2d7cc3f04 ("drm/amdgpu: revert "implement tdr advanced mode"")
+>   			}
+> -
+>   			buf->addr = (uintptr_t)vaddr;
+>   			buf->size = PAGE_SIZE;
+>   			num_buf++;
+> @@ -182,10 +181,6 @@ int rxe_mr_init_user(struct rxe_dev *rxe, u64 start, u64 length, u64 iova,
+>   
+>   	return 0;
+>   
+> -err_cleanup_map:
+> -	for (i = 0; i < mr->num_map; i++)
+> -		kfree(mr->map[i]);
+> -	kfree(mr->map);
+>   err_release_umem:
+>   	ib_umem_release(umem);
+>   err_out:
 
-from the amdgpu tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc include/drm/gpu_scheduler.h
-index cec147f7c50b,0168ff469ae0..000000000000
---- a/include/drm/gpu_scheduler.h
-+++ b/include/drm/gpu_scheduler.h
-@@@ -532,10 -528,9 +532,7 @@@ void drm_sched_wakeup(struct drm_gpu_sc
-  void drm_sched_stop(struct drm_gpu_scheduler *sched, struct drm_sched_job=
- *bad);
-  void drm_sched_start(struct drm_gpu_scheduler *sched, bool full_recovery);
-  void drm_sched_resubmit_jobs(struct drm_gpu_scheduler *sched);
-- void drm_sched_resubmit_jobs_ext(struct drm_gpu_scheduler *sched, int max=
-);
-  void drm_sched_increase_karma(struct drm_sched_job *bad);
-- void drm_sched_reset_karma(struct drm_sched_job *bad);
-- void drm_sched_increase_karma_ext(struct drm_sched_job *bad, int type);
- -bool drm_sched_dependency_optimized(struct dma_fence* fence,
- -				    struct drm_sched_entity *entity);
-  void drm_sched_fault(struct drm_gpu_scheduler *sched);
-  void drm_sched_job_kickout(struct drm_sched_job *s_job);
- =20
-
---Sig_/r_DbATAmjPh=+MAx6uZqSW_
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmN0KjMACgkQAVBC80lX
-0GyuAwf+M10fb+ko1NtpmFHEMA41pxXR9JSkAVY5/dvaeMlHcxDpVxhQH8W1Dwvn
-UOvsPYKeWYu9j9hA6advozzvrnlvckmk9XQamQapL54rQE5r7x37QazHHXv1ZCuv
-vzmSf10kEKCkyzyctpne0Ud287VdueXEHYNt+eayzNHk1MTG+LkZzZDSBBsCPK/N
-mvnSJ47TY5Zxu3+4xeG8TRiSEsuECGLGV8dl9JPE7Fyfrza837RY1eMwPxkqsdLL
-j7ncxqwDIW3VC/0l2IhN1zSiwyU2FAV0UB1c43Kvva0pH9vxzZJfvUDgFNcJfO16
-opoGpRNpa6umSU3ONqFGKUeDYgYKmA==
-=fp2y
------END PGP SIGNATURE-----
-
---Sig_/r_DbATAmjPh=+MAx6uZqSW_--
