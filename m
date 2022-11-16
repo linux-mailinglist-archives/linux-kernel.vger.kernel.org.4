@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F92D62B3D3
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 08:13:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2D1762B3D2
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 08:13:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232846AbiKPHNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 02:13:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41106 "EHLO
+        id S232838AbiKPHN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 02:13:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232775AbiKPHNO (ORCPT
+        with ESMTP id S232715AbiKPHNR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 02:13:14 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 573FE205EF
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 23:13:11 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id z125-20020a25c983000000b006dc905e6ccfso15201649ybf.1
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 23:13:11 -0800 (PST)
+        Wed, 16 Nov 2022 02:13:17 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B8E20F59
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 23:13:13 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-385bbf9bc8fso38274697b3.23
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 23:13:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8BtTjoVTgJBCnMEOfrF9LMVewuWD63PoncZuyhv6/RQ=;
-        b=qMXfYRpM94F/ZAAUpeaVfNAUPzTX87g3JG1eVb+B3lSzOCPQq7ftZwYck58S/u3iMU
-         N2UzvX6bAF+hHMbXbBxhrBndXHpJShGWWP9xcKFOMp3lnoVeMOCHV/Si6N8Esvh7Amts
-         GB59QsaFyxFp7MM8q36anQQ2jfAgXgoRtXXW946thbBbrWwp42qMWn/Jv4SJbIChlhUO
-         81F9YNt55oSCcBQwok9R4x3FufoGxjqEm8yyyhynYkVWfQrgV6MDiXsLcUb/LzDuGgmG
-         WfBQj6IjYw+L8HIEpm+VbyFHdKdl1fjhWhJtU/hoOAbvc0/jY6DnaVkkeeVVfVczuPz0
-         BOHQ==
+        bh=wK54JSKXe0LqXOZ3d575hQDmq52LEert5D/pS8cJUkE=;
+        b=U1d7MimG9gAoAlzFe+38ukpZbqtI6+WSbYJnASee2xaNcWt9opU7e/VTdFaLjmpQZ2
+         X6zxHepXPQVF/knczaV0Pk8JFjDlEBpBHbz22Y4XJdOcTCUABE2+IndsM8s4fHNawIC9
+         MD1gxzR8AmL78bWa8wfA+IVoUCxS5DHItTEtHlR2nrlphjwbkXfl+hxyZdBarRoMrzr3
+         NLndOR5LqnrWjzZmVrvhyHo143J9+5KkXgPEmb1ylBLCZkMwVDWkTAftNfK6J3O5TMag
+         GaUcHNH+DaKajLT22/xCtcYz0jKRXgawxf9IPirCd6aZfH/lds7D6x85YrlWF35ZX96L
+         V0Fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8BtTjoVTgJBCnMEOfrF9LMVewuWD63PoncZuyhv6/RQ=;
-        b=YionqmmSU8f+cKxAumMEugplPJHlDSDm9Tk0dq0TwEqoCBVcNgh5xvkU/yvTrj5fTw
-         o1OdoHQr7jS6Rx/uwGbmCIR0vgI1iY8u+7l2uf95Cm3cqI07cblrhnOTvysq4bKqzO66
-         sju32zHCuyQaD50Uwm5WoSNzXQc4BgiDdaC8Iq446MOb6RntzJ4dzlFXDECT7sU5MXHJ
-         YynRNgVEgeiPEqY4FHBEsnC9jImWyaRxrmrPWmAE9WKUmXiPFIMxugUD1YbsKJeBZ1oX
-         FFjSueqlEZqx2q5COn7F3RlQ77P9wcBvzkx8tNpo5v+umtb2binABbdcSybObmx5kDLw
-         M/yQ==
-X-Gm-Message-State: ANoB5pmKH4sTdDTKr7HvZXpDBXjJmUqjGKgc7wQ/KE2EvmNm4ycUMPfP
-        uPloVf4A0QohHR0LoJL9DS3myAK/jBey
-X-Google-Smtp-Source: AA0mqf5AqRay4kWJpBlr8wcHh3MyyR/e1oEbI/Gc/G3dmbepVgwzY3QgfAuQrNKkSosSEqB1wtALddShzsts
+        bh=wK54JSKXe0LqXOZ3d575hQDmq52LEert5D/pS8cJUkE=;
+        b=JKjGTNSjhIyfJSxKCKo4RN9LROrDMz7pZnTtJH2zsxlNFnkICNPCYXrLOhv9pI7US8
+         FdvQWWLeh9X4qkMZnZ3N5iUeqSvpajLywOM6JWWw0w6r5HfWHTZzZK34wmNBHwW4uODC
+         5gIEpYKXtTIyHp+Ad1DBGbxyRQM/IaFWLmhhIKPQlcFXFG/mUaYiiToezfofC3kyhsUg
+         3FsOiReGkJx18pJBzbCgx2ldySlkPQtxgglVBG15e4YJwkoL2mToL+f/kOB75siLAsf8
+         Y4oHl03psuknSsjjCeqBsH6EBuQV7cRrSqOVl88x1W2LN5rxypAPzTW/es6Wy8LboXPY
+         LPzw==
+X-Gm-Message-State: ANoB5pnQDhAyJDhj8VEl4IQfkhT8TKUWDP/l8TKObKqRC1+vg3W8WCmR
+        JUBjEClK3opCvYrEloUQVvwjCtDLliOX
+X-Google-Smtp-Source: AA0mqf4Owhg9TSF5BqPmkokKmNN1T62eQp1AeaL0nFC6RJ1ulWDmRb4Tbo2Zj8w/ORKb01IV4bsRzBTCf1i+
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:bf0f:58f3:342e:c1ec])
- (user=irogers job=sendgmr) by 2002:a25:aaeb:0:b0:6dd:89ad:6c33 with SMTP id
- t98-20020a25aaeb000000b006dd89ad6c33mr20698230ybi.188.1668582790604; Tue, 15
- Nov 2022 23:13:10 -0800 (PST)
-Date:   Tue, 15 Nov 2022 23:12:58 -0800
+ (user=irogers job=sendgmr) by 2002:a05:690c:e:b0:388:2fb:57d9 with SMTP id
+ bc14-20020a05690c000e00b0038802fb57d9mr4675335ywb.371.1668582792508; Tue, 15
+ Nov 2022 23:13:12 -0800 (PST)
+Date:   Tue, 15 Nov 2022 23:12:59 -0800
 In-Reply-To: <20221116071259.2832681-1-irogers@google.com>
-Message-Id: <20221116071259.2832681-4-irogers@google.com>
+Message-Id: <20221116071259.2832681-5-irogers@google.com>
 Mime-Version: 1.0
 References: <20221116071259.2832681-1-irogers@google.com>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Subject: [PATCH v1 3/4] perf list: Json escape encoding improvements
+Subject: [PATCH v1 4/4] perf list: List callback support for libpfm
 From:   Ian Rogers <irogers@google.com>
 To:     Weilin Wang <weilin.wang@intel.com>,
         Perry Taylor <perry.taylor@intel.com>,
@@ -86,239 +86,282 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use strbuf to make the string under construction's length
-unlimited. Use the format %s to mean a literal string copy and %S to
-signify a need to escape the string. Add supported for escaping a
-newline character.
+Missed previously, add libpfm support for 'perf list' callbacks and
+thereby json support.
 
+Fixes: df936cadfb58ba93 ("perf stat: Add JSON output option")
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-list.c | 109 +++++++++++++++++++++++---------------
- 1 file changed, 67 insertions(+), 42 deletions(-)
+ tools/perf/util/pfm.c | 154 ++++++++++++++++++------------------------
+ tools/perf/util/pfm.h |   6 +-
+ 2 files changed, 70 insertions(+), 90 deletions(-)
 
-diff --git a/tools/perf/builtin-list.c b/tools/perf/builtin-list.c
-index 43c635d58627..30937e1dd82c 100644
---- a/tools/perf/builtin-list.c
-+++ b/tools/perf/builtin-list.c
-@@ -17,6 +17,7 @@
- #include "util/metricgroup.h"
- #include "util/string2.h"
- #include "util/strlist.h"
+diff --git a/tools/perf/util/pfm.c b/tools/perf/util/pfm.c
+index f0bcfcab1a93..ac3227ba769c 100644
+--- a/tools/perf/util/pfm.c
++++ b/tools/perf/util/pfm.c
+@@ -12,6 +12,7 @@
+ #include "util/parse-events.h"
+ #include "util/pmu.h"
+ #include "util/pfm.h"
 +#include "util/strbuf.h"
- #include <subcmd/pager.h>
- #include <subcmd/parse-options.h>
- #include <stdarg.h>
-@@ -249,45 +250,56 @@ static void json_print_end(void *ps)
- 	printf("%s]\n", print_state->need_sep ? "\n" : "");
+ 
+ #include <string.h>
+ #include <linux/kernel.h>
+@@ -130,53 +131,36 @@ static const char *srcs[PFM_ATTR_CTRL_MAX] = {
+ };
+ 
+ static void
+-print_attr_flags(pfm_event_attr_info_t *info)
++print_attr_flags(struct strbuf *buf, const pfm_event_attr_info_t *info)
+ {
+-	int n = 0;
++	if (info->is_dfl)
++		strbuf_addf(buf, "[default] ");
+ 
+-	if (info->is_dfl) {
+-		printf("[default] ");
+-		n++;
+-	}
+-
+-	if (info->is_precise) {
+-		printf("[precise] ");
+-		n++;
+-	}
+-
+-	if (!n)
+-		printf("- ");
++	if (info->is_precise)
++		strbuf_addf(buf, "[precise] ");
  }
  
--static void fix_escape_printf(const char *fmt, ...)
-+static void fix_escape_printf(struct strbuf *buf, const char *fmt, ...)
+ static void
+-print_libpfm_events_detailed(pfm_event_info_t *info, bool long_desc)
++print_libpfm_event(const struct print_callbacks *print_cb, void *print_state,
++		const pfm_pmu_info_t *pinfo, const pfm_event_info_t *info,
++		struct strbuf *buf)
  {
- 	va_list args;
--	char buf[2048];
--	size_t buf_pos = 0;
+-	pfm_event_attr_info_t ainfo;
+-	const char *src;
+ 	int j, ret;
++	char topic[80], name[80];
  
- 	va_start(args, fmt);
+-	ainfo.size = sizeof(ainfo);
 +	strbuf_setlen(buf, 0);
- 	for (size_t fmt_pos = 0; fmt_pos < strlen(fmt); fmt_pos++) {
- 		switch (fmt[fmt_pos]) {
--		case '%': {
--			const char *s = va_arg(args, const char*);
++	snprintf(topic, sizeof(topic), "pfm %s", pinfo->name);
+ 
+-	printf("  %s\n", info->name);
+-	printf("    [%s]\n", info->desc);
+-	if (long_desc) {
+-		if (info->equiv)
+-			printf("      Equiv: %s\n", info->equiv);
++	snprintf(name, sizeof(name), "%s::%s", pinfo->name, info->name);
++	strbuf_addf(buf, "Code: 0x%"PRIx64"\n", info->code);
+ 
+-		printf("      Code  : 0x%"PRIx64"\n", info->code);
+-	}
+ 	pfm_for_each_event_attr(j, info) {
+-		ret = pfm_get_event_attr_info(info->idx, j,
+-					      PFM_OS_PERF_EVENT_EXT, &ainfo);
+-		if (ret != PFM_SUCCESS)
+-			continue;
 -
-+		case '%':
- 			fmt_pos++;
--			assert(fmt[fmt_pos] == 's');
--			for (size_t s_pos = 0; s_pos < strlen(s); s_pos++) {
--				switch (s[s_pos]) {
--				case '\\':
--					__fallthrough;
--				case '\"':
--					buf[buf_pos++] = '\\';
--					assert(buf_pos < sizeof(buf));
--					__fallthrough;
--				default:
--					buf[buf_pos++] = s[s_pos];
--					assert(buf_pos < sizeof(buf));
--					break;
-+			switch (fmt[fmt_pos]) {
-+			case 's': {
-+				const char *s = va_arg(args, const char*);
-+
-+				strbuf_addstr(buf, s);
-+				break;
-+			}
-+			case 'S': {
-+				const char *s = va_arg(args, const char*);
-+
-+				for (size_t s_pos = 0; s_pos < strlen(s); s_pos++) {
-+					switch (s[s_pos]) {
-+					case '\n':
-+						strbuf_addstr(buf, "\\n");
-+						break;
-+					case '\\':
-+						__fallthrough;
-+					case '\"':
-+						strbuf_addch(buf, '\\');
-+						__fallthrough;
-+					default:
-+						strbuf_addch(buf, s[s_pos]);
-+						break;
-+					}
- 				}
-+				break;
-+			}
-+			default:
-+				pr_err("Unexpected format character '%c'\n", fmt[fmt_pos]);
-+				strbuf_addch(buf, '%');
-+				strbuf_addch(buf, fmt[fmt_pos]);
- 			}
- 			break;
+-		if (ainfo.type == PFM_ATTR_UMASK) {
+-			printf("      %s:%s\n", info->name, ainfo.name);
+-			printf("        [%s]\n", ainfo.desc);
 -		}
- 		default:
--			buf[buf_pos++] = fmt[fmt_pos];
--			assert(buf_pos < sizeof(buf));
-+			strbuf_addch(buf, fmt[fmt_pos]);
++		pfm_event_attr_info_t ainfo;
++		const char *src;
+ 
+-		if (!long_desc)
++		ainfo.size = sizeof(ainfo);
++		ret = pfm_get_event_attr_info(info->idx, j, PFM_OS_PERF_EVENT_EXT, &ainfo);
++		if (ret != PFM_SUCCESS)
+ 			continue;
+ 
+ 		if (ainfo.ctrl >= PFM_ATTR_CTRL_MAX)
+@@ -184,64 +168,74 @@ print_libpfm_events_detailed(pfm_event_info_t *info, bool long_desc)
+ 
+ 		src = srcs[ainfo.ctrl];
+ 		switch (ainfo.type) {
+-		case PFM_ATTR_UMASK:
+-			printf("        Umask : 0x%02"PRIx64" : %s: ",
+-				ainfo.code, src);
+-			print_attr_flags(&ainfo);
+-			putchar('\n');
++		case PFM_ATTR_UMASK: /* Ignore for now */
  			break;
+ 		case PFM_ATTR_MOD_BOOL:
+-			printf("      Modif : %s: [%s] : %s (boolean)\n", src,
+-				ainfo.name, ainfo.desc);
++			strbuf_addf(buf, " Modif: %s: [%s] : %s (boolean)\n", src,
++				    ainfo.name, ainfo.desc);
+ 			break;
+ 		case PFM_ATTR_MOD_INTEGER:
+-			printf("      Modif : %s: [%s] : %s (integer)\n", src,
+-				ainfo.name, ainfo.desc);
++			strbuf_addf(buf, " Modif: %s: [%s] : %s (integer)\n", src,
++				    ainfo.name, ainfo.desc);
+ 			break;
+ 		case PFM_ATTR_NONE:
+ 		case PFM_ATTR_RAW_UMASK:
+ 		case PFM_ATTR_MAX:
+ 		default:
+-			printf("      Attr  : %s: [%s] : %s\n", src,
+-				ainfo.name, ainfo.desc);
++			strbuf_addf(buf, " Attr: %s: [%s] : %s\n", src,
++				    ainfo.name, ainfo.desc);
  		}
  	}
- 	va_end(args);
--	buf[buf_pos] = '\0';
--	fputs(buf, stdout);
-+	fputs(buf->buf, stdout);
+-}
++	print_cb->print_event(print_state,
++			pinfo->name,
++			topic,
++			name, info->equiv,
++			/*scale_unit=*/NULL,
++			/*deprecated=*/NULL, "PFM event",
++			info->desc, /*long_desc=*/NULL,
++			/*encoding_desc=*/buf->buf,
++			/*metric_name=*/NULL, /*metric_expr=*/NULL);
+ 
+-/*
+- * list all pmu::event:umask, pmu::event
+- * printed events may not be all valid combinations of umask for an event
+- */
+-static void
+-print_libpfm_events_raw(pfm_pmu_info_t *pinfo, pfm_event_info_t *info)
+-{
+-	pfm_event_attr_info_t ainfo;
+-	int j, ret;
+-	bool has_umask = false;
++	pfm_for_each_event_attr(j, info) {
++		pfm_event_attr_info_t ainfo;
++		const char *src;
+ 
+-	ainfo.size = sizeof(ainfo);
++		strbuf_setlen(buf, 0);
+ 
+-	pfm_for_each_event_attr(j, info) {
+-		ret = pfm_get_event_attr_info(info->idx, j,
+-					      PFM_OS_PERF_EVENT_EXT, &ainfo);
++		ainfo.size = sizeof(ainfo);
++		ret = pfm_get_event_attr_info(info->idx, j, PFM_OS_PERF_EVENT_EXT, &ainfo);
+ 		if (ret != PFM_SUCCESS)
+ 			continue;
+ 
+-		if (ainfo.type != PFM_ATTR_UMASK)
+-			continue;
++		if (ainfo.ctrl >= PFM_ATTR_CTRL_MAX)
++			ainfo.ctrl = PFM_ATTR_CTRL_UNKNOWN;
+ 
+-		printf("%s::%s:%s\n", pinfo->name, info->name, ainfo.name);
+-		has_umask = true;
++		src = srcs[ainfo.ctrl];
++		if (ainfo.type == PFM_ATTR_UMASK) {
++			strbuf_addf(buf, "Umask: 0x%02"PRIx64" : %s: ",
++				ainfo.code, src);
++			print_attr_flags(buf, &ainfo);
++			snprintf(name, sizeof(name), "%s::%s:%s",
++				 pinfo->name, info->name, ainfo.name);
++			print_cb->print_event(print_state,
++					pinfo->name,
++					topic,
++					name, /*alias=*/NULL,
++					/*scale_unit=*/NULL,
++					/*deprecated=*/NULL, "PFM event",
++					ainfo.desc, /*long_desc=*/NULL,
++					/*encoding_desc=*/buf->buf,
++					/*metric_name=*/NULL, /*metric_expr=*/NULL);
++		}
+ 	}
+-	if (!has_umask)
+-		printf("%s::%s\n", pinfo->name, info->name);
  }
  
- static void json_print_event(void *ps, const char *pmu_name, const char *topic,
-@@ -300,62 +312,71 @@ static void json_print_event(void *ps, const char *pmu_name, const char *topic,
+-void print_libpfm_events(bool name_only, bool long_desc)
++void print_libpfm_events(const struct print_callbacks *print_cb, void *print_state)
  {
- 	struct json_print_state *print_state = ps;
- 	bool need_sep = false;
-+	struct strbuf buf;
+ 	pfm_event_info_t info;
+ 	pfm_pmu_info_t pinfo;
+-	int i, p, ret;
++	int p, ret;
++	struct strbuf storage;
  
-+	strbuf_init(&buf, 0);
- 	printf("%s{\n", print_state->need_sep ? ",\n" : "");
- 	print_state->need_sep = true;
- 	if (pmu_name) {
--		fix_escape_printf("\t\"Unit\": \"%s\"", pmu_name);
-+		fix_escape_printf(&buf, "\t\"Unit\": \"%S\"", pmu_name);
- 		need_sep = true;
+ 	libpfm_initialize();
+ 
+@@ -249,12 +243,9 @@ void print_libpfm_events(bool name_only, bool long_desc)
+ 	info.size  = sizeof(info);
+ 	pinfo.size = sizeof(pinfo);
+ 
+-	if (!name_only)
+-		puts("\nList of pre-defined events (to be used in --pfm-events):\n");
++	strbuf_init(&storage, 2048);
+ 
+ 	pfm_for_all_pmus(p) {
+-		bool printed_pmu = false;
+-
+ 		ret = pfm_get_pmu_info(p, &pinfo);
+ 		if (ret != PFM_SUCCESS)
+ 			continue;
+@@ -267,25 +258,14 @@ void print_libpfm_events(bool name_only, bool long_desc)
+ 		if (pinfo.pmu == PFM_PMU_PERF_EVENT)
+ 			continue;
+ 
+-		for (i = pinfo.first_event; i != -1;
+-		     i = pfm_get_event_next(i)) {
+-
++		for (int i = pinfo.first_event; i != -1; i = pfm_get_event_next(i)) {
+ 			ret = pfm_get_event_info(i, PFM_OS_PERF_EVENT_EXT,
+ 						&info);
+ 			if (ret != PFM_SUCCESS)
+ 				continue;
+ 
+-			if (!name_only && !printed_pmu) {
+-				printf("%s:\n", pinfo.name);
+-				printed_pmu = true;
+-			}
+-
+-			if (!name_only)
+-				print_libpfm_events_detailed(&info, long_desc);
+-			else
+-				print_libpfm_events_raw(&pinfo, &info);
++			print_libpfm_event(print_cb, print_state, &pinfo, &info, &storage);
+ 		}
+-		if (!name_only && printed_pmu)
+-			putchar('\n');
  	}
- 	if (topic) {
--		fix_escape_printf("%s\t\"Topic\": \"%s\"", need_sep ? ",\n" : "", topic);
-+		fix_escape_printf(&buf, "%s\t\"Topic\": \"%S\"", need_sep ? ",\n" : "", topic);
- 		need_sep = true;
- 	}
- 	if (event_name) {
--		fix_escape_printf("%s\t\"EventName\": \"%s\"", need_sep ? ",\n" : "", event_name);
-+		fix_escape_printf(&buf, "%s\t\"EventName\": \"%S\"", need_sep ? ",\n" : "",
-+				  event_name);
- 		need_sep = true;
- 	}
- 	if (event_alias && strlen(event_alias)) {
--		fix_escape_printf("%s\t\"EventAlias\": \"%s\"", need_sep ? ",\n" : "", event_alias);
-+		fix_escape_printf(&buf, "%s\t\"EventAlias\": \"%S\"", need_sep ? ",\n" : "",
-+				  event_alias);
- 		need_sep = true;
- 	}
- 	if (scale_unit && strlen(scale_unit)) {
--		fix_escape_printf("%s\t\"ScaleUnit\": \"%s\"", need_sep ? ",\n" : "",
-+		fix_escape_printf(&buf, "%s\t\"ScaleUnit\": \"%S\"", need_sep ? ",\n" : "",
- 				  scale_unit);
- 		need_sep = true;
- 	}
- 	if (event_type_desc) {
--		fix_escape_printf("%s\t\"EventType\": \"%s\"", need_sep ? ",\n" : "",
-+		fix_escape_printf(&buf, "%s\t\"EventType\": \"%S\"", need_sep ? ",\n" : "",
- 				  event_type_desc);
- 		need_sep = true;
- 	}
- 	if (deprecated) {
--		fix_escape_printf("%s\t\"Deprecated\": \"%s\"", need_sep ? ",\n" : "",
-+		fix_escape_printf(&buf, "%s\t\"Deprecated\": \"%S\"", need_sep ? ",\n" : "",
- 				  deprecated ? "1" : "0");
- 		need_sep = true;
- 	}
- 	if (desc) {
--		fix_escape_printf("%s\t\"BriefDescription\": \"%s\"", need_sep ? ",\n" : "", desc);
-+		fix_escape_printf(&buf, "%s\t\"BriefDescription\": \"%S\"", need_sep ? ",\n" : "",
-+				  desc);
- 		need_sep = true;
- 	}
- 	if (long_desc) {
--		fix_escape_printf("%s\t\"PublicDescription\": \"%s\"", need_sep ? ",\n" : "",
-+		fix_escape_printf(&buf, "%s\t\"PublicDescription\": \"%S\"", need_sep ? ",\n" : "",
- 				  long_desc);
- 		need_sep = true;
- 	}
- 	if (encoding_desc) {
--		fix_escape_printf("%s\t\"Encoding\": \"%s\"", need_sep ? ",\n" : "", encoding_desc);
-+		fix_escape_printf(&buf, "%s\t\"Encoding\": \"%S\"", need_sep ? ",\n" : "",
-+				  encoding_desc);
- 		need_sep = true;
- 	}
- 	if (metric_name) {
--		fix_escape_printf("%s\t\"MetricName\": \"%s\"", need_sep ? ",\n" : "", metric_name);
-+		fix_escape_printf(&buf, "%s\t\"MetricName\": \"%S\"", need_sep ? ",\n" : "",
-+				  metric_name);
- 		need_sep = true;
- 	}
- 	if (metric_expr) {
--		fix_escape_printf("%s\t\"MetricExpr\": \"%s\"", need_sep ? ",\n" : "", metric_expr);
-+		fix_escape_printf(&buf, "%s\t\"MetricExpr\": \"%S\"", need_sep ? ",\n" : "",
-+				  metric_expr);
- 		need_sep = true;
- 	}
- 	printf("%s}", need_sep ? "\n" : "");
-+	strbuf_release(&buf);
++	strbuf_release(&storage);
+ }
+diff --git a/tools/perf/util/pfm.h b/tools/perf/util/pfm.h
+index 7d70dda87012..9cc9bb1e0949 100644
+--- a/tools/perf/util/pfm.h
++++ b/tools/perf/util/pfm.h
+@@ -7,13 +7,14 @@
+ #ifndef __PERF_PFM_H
+ #define __PERF_PFM_H
+ 
++#include "print-events.h"
+ #include <subcmd/parse-options.h>
+ 
+ #ifdef HAVE_LIBPFM
+ int parse_libpfm_events_option(const struct option *opt, const char *str,
+ 			int unset);
+ 
+-void print_libpfm_events(bool name_only, bool long_desc);
++void print_libpfm_events(const struct print_callbacks *print_cb, void *print_state);
+ 
+ #else
+ #include <linux/compiler.h>
+@@ -26,8 +27,7 @@ static inline int parse_libpfm_events_option(
+ 	return 0;
  }
  
- static void json_print_metric(void *ps __maybe_unused, const char *group,
-@@ -365,35 +386,39 @@ static void json_print_metric(void *ps __maybe_unused, const char *group,
+-static inline void print_libpfm_events(bool name_only __maybe_unused,
+-				       bool long_desc __maybe_unused)
++static inline void print_libpfm_events(const struct print_callbacks *print_cb, void *print_state)
  {
- 	struct json_print_state *print_state = ps;
- 	bool need_sep = false;
-+	struct strbuf buf;
- 
-+	strbuf_init(&buf, 0);
- 	printf("%s{\n", print_state->need_sep ? ",\n" : "");
- 	print_state->need_sep = true;
- 	if (group) {
--		fix_escape_printf("\t\"MetricGroup\": \"%s\"", group);
-+		fix_escape_printf(&buf, "\t\"MetricGroup\": \"%S\"", group);
- 		need_sep = true;
- 	}
- 	if (name) {
--		fix_escape_printf("%s\t\"MetricName\": \"%s\"", need_sep ? ",\n" : "", name);
-+		fix_escape_printf(&buf, "%s\t\"MetricName\": \"%S\"", need_sep ? ",\n" : "", name);
- 		need_sep = true;
- 	}
- 	if (expr) {
--		fix_escape_printf("%s\t\"MetricExpr\": \"%s\"", need_sep ? ",\n" : "", expr);
-+		fix_escape_printf(&buf, "%s\t\"MetricExpr\": \"%S\"", need_sep ? ",\n" : "", expr);
- 		need_sep = true;
- 	}
- 	if (unit) {
--		fix_escape_printf("%s\t\"ScaleUnit\": \"%s\"", need_sep ? ",\n" : "", unit);
-+		fix_escape_printf(&buf, "%s\t\"ScaleUnit\": \"%S\"", need_sep ? ",\n" : "", unit);
- 		need_sep = true;
- 	}
- 	if (desc) {
--		fix_escape_printf("%s\t\"BriefDescription\": \"%s\"", need_sep ? ",\n" : "", desc);
-+		fix_escape_printf(&buf, "%s\t\"BriefDescription\": \"%S\"", need_sep ? ",\n" : "",
-+				  desc);
- 		need_sep = true;
- 	}
- 	if (long_desc) {
--		fix_escape_printf("%s\t\"PublicDescription\": \"%s\"", need_sep ? ",\n" : "",
-+		fix_escape_printf(&buf, "%s\t\"PublicDescription\": \"%S\"", need_sep ? ",\n" : "",
- 				  long_desc);
- 		need_sep = true;
- 	}
- 	printf("%s}", need_sep ? "\n" : "");
-+	strbuf_release(&buf);
  }
  
- int cmd_list(int argc, const char **argv)
 -- 
 2.38.1.431.g37b22c650d-goog
 
