@@ -2,86 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 774A962C0EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:33:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04B8162C0F1
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:33:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232749AbiKPOdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 09:33:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55678 "EHLO
+        id S232803AbiKPOdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 09:33:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiKPOc7 (ORCPT
+        with ESMTP id S232115AbiKPOdC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 09:32:59 -0500
-Received: from mx0a-00190b01.pphosted.com (mx0a-00190b01.pphosted.com [IPv6:2620:100:9001:583::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A7057669;
-        Wed, 16 Nov 2022 06:32:58 -0800 (PST)
-Received: from pps.filterd (m0050095.ppops.net [127.0.0.1])
-        by m0050095.ppops.net-00190b01. (8.17.1.19/8.17.1.19) with ESMTP id 2AGDn4ZZ018984;
-        Wed, 16 Nov 2022 14:32:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akamai.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=jan2016.eng;
- bh=Lsxlj5AabKJ7AffYDE479PSqYgJV4h1n1KSkSjcCA2Y=;
- b=mj/WxlNKFw7cyX3RIcWfDrAUXpFQicfBuUFDaCzLwx/m+AoS9L+d4DEnzJ0L2L65Tcg1
- 1cnnWnwX26vohEcNhEtdWwJDrzd2vFI93H2VIuzHepLmcOFa/mhcTeZuSlGBvOqeHKGU
- LSKQ/msh0i7zyCObRZsvSv9OGaS2mX/VjmbOCAfWND2jExMrGorAZawvaIkepC8CkZmW
- 2hPfOQ3jkd+TIgxI+K03joYFjXPBMyIur7saGG5fe/dDdUeiYvarNORS74AhG2ueFyGV
- NI8VDCEwwCoqAtcJqEEtqaQFZWA9hcaoe8UFLt2dExTnpS4dvh+h3i4XwjcZipwa4ZaK oA== 
-Received: from prod-mail-ppoint1 (prod-mail-ppoint1.akamai.com [184.51.33.18] (may be forged))
-        by m0050095.ppops.net-00190b01. (PPS) with ESMTPS id 3kw132h1k3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Nov 2022 14:32:46 +0000
-Received: from pps.filterd (prod-mail-ppoint1.akamai.com [127.0.0.1])
-        by prod-mail-ppoint1.akamai.com (8.17.1.5/8.17.1.5) with ESMTP id 2AGDcLCJ022718;
-        Wed, 16 Nov 2022 09:32:42 -0500
-Received: from prod-mail-relay10.akamai.com ([172.27.118.251])
-        by prod-mail-ppoint1.akamai.com (PPS) with ESMTP id 3kt7q49sf9-1;
-        Wed, 16 Nov 2022 09:32:41 -0500
-Received: from [172.19.33.48] (bos-lpa4700a.bos01.corp.akamai.com [172.19.33.48])
-        by prod-mail-relay10.akamai.com (Postfix) with ESMTP id BE5CD5306A;
-        Wed, 16 Nov 2022 14:32:41 +0000 (GMT)
-Message-ID: <f1afc4ed-505e-109f-9c4c-1053af2c1bcd@akamai.com>
-Date:   Wed, 16 Nov 2022 09:32:41 -0500
+        Wed, 16 Nov 2022 09:33:02 -0500
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ACF5167F5;
+        Wed, 16 Nov 2022 06:33:01 -0800 (PST)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-1322d768ba7so20262934fac.5;
+        Wed, 16 Nov 2022 06:33:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Xqn+VpkyaVOXbC/hpj4uzzFiJO18ERrQThzp4BwoimE=;
+        b=ZekgsNM85Sz2y2IdV+7yCnMV0Hl6QaIWi1XDvlpiz+FfzgmaDpY3qW8JGGW7In4vzN
+         HARuZCJgAmBtLwDsQrOO6zO4TfuHMshk16XTD5ltKdCmOyMe3DtzFGHDxo4YtZ72r08A
+         ooq795GfVrnq1GnEbUAQ6cHTtVjo6lrNOhkBYe81O+CBYQdHBYkFWR51MJB1JbOz4unx
+         SGxs4Py0yjuFvi9GC3UmEK5VhNCaJbYs/vzXuaRUQFvyXSKmnrWHaDuiag+HGodkuT7S
+         ORboALmjolvnopJ4gS+m8BoZumeOFuThO2Z56V5yUNwgdvrFAI+LtvG46DEjT+leT1ok
+         VwZg==
+X-Gm-Message-State: ANoB5plrWrSNwlH7PzptTk6nmGtLOfgWJisHkcyWK5YxJF47Wnyn3gfS
+        aHybgHqjzTtdeWpHu0TaRg==
+X-Google-Smtp-Source: AA0mqf5NVHnziasxHfj1GRbI3eGEGLdHD1pPC8kYFKj0a6d/3z5N2SnKoAZ8ZP7XBjj9cphDIrTRJA==
+X-Received: by 2002:a05:6870:b94:b0:131:842a:110c with SMTP id lg20-20020a0568700b9400b00131842a110cmr1864268oab.201.1668609180804;
+        Wed, 16 Nov 2022 06:33:00 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id a26-20020a056830101a00b00667ff6b7e9esm6781696otp.40.2022.11.16.06.32.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 06:33:00 -0800 (PST)
+Received: (nullmailer pid 3809684 invoked by uid 1000);
+        Wed, 16 Nov 2022 14:33:02 -0000
+Date:   Wed, 16 Nov 2022 08:33:02 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     quic_srivasam@quicinc.com, devicetree@vger.kernel.org,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-kernel@vger.kernel.org, quic_plai@quicinc.com,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        alsa-devel@alsa-project.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v2 02/11] ASoC: dt-bindings: qcom,apr: Split services to
+ shared schema
+Message-ID: <166860918054.3809609.16135727023403702366.robh@kernel.org>
+References: <20221115120235.167812-1-krzysztof.kozlowski@linaro.org>
+ <20221115120235.167812-3-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] EDAC/edac_module: order edac_init() before
- ghes_edac_register()
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Shuai Xue <xueshuai@linux.alibaba.com>, stable@vger.kernel.org
-References: <20221116003729.194802-1-jbaron@akamai.com>
- <Y3TGFJn7ykeUMk+O@zn.tnic>
-From:   Jason Baron <jbaron@akamai.com>
-In-Reply-To: <Y3TGFJn7ykeUMk+O@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-16_03,2022-11-16_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 adultscore=0 spamscore=0
- bulkscore=0 suspectscore=0 phishscore=0 mlxlogscore=732 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2211160101
-X-Proofpoint-GUID: bkzVylsBtnEldxcXcuRCKIb6CFa6CAgp
-X-Proofpoint-ORIG-GUID: bkzVylsBtnEldxcXcuRCKIb6CFa6CAgp
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-16_03,2022-11-16_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 impostorscore=0
- malwarescore=0 bulkscore=0 priorityscore=1501 clxscore=1015
- mlxlogscore=675 mlxscore=0 phishscore=0 lowpriorityscore=0 spamscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211160100
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221115120235.167812-3-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,19 +77,44 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 11/16/22 06:14, Borislav Petkov wrote:
-> On Tue, Nov 15, 2022 at 07:37:29PM -0500, Jason Baron wrote:
->> Currently, ghes_edac_register() is called via ghes_init() from acpi_init()
-> https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git/log/?h=edac-ghes__;!!GjvTz_vk!RVsGvU3qNqFLwWDFImJScVgizbxofNbNY-8NF2inDqKTrn3IWJdJdcQJ6FoKxFkWhEPRpYmwzw$ 
->
-Hi Boris,
+On Tue, 15 Nov 2022 13:02:26 +0100, Krzysztof Kozlowski wrote:
+> The APR/GPR nodes are organized like:
+> 
+>   apr-or-gpr-device-node <- qcom,apr.yaml
+>     apr-gpr-service@[0-9] <- qcom,apr.yaml
+>       service-specific-components <- /schemas/sound/qcom,q6*.yaml
+> 
+> The schema for services (apr-gpr-service@[0-9]) already grows
+> considerably and is still quite not specific.  It allows several
+> incorrect combinations, like adding a clock-controller to a APM device.
+> Restricting it would complicate the schema even more.  Bringing new
+> support for sound on Qualcomm SM8450 and SC8280XP SoC would grow it as
+> well.
+> 
+> Simplify the qcom,apr.yaml by splitting the services to a shared file
+> which will be:
+> 1. Referenced by qcom,apr.yaml with additionalProperties:true,
+> 2. Referenced by specific bindings for services with
+>    additionalProperties:false (not yet in this commit).
+> 
+> While moving the code, add also required 'reg' and
+> 'qcom,protection-domain' to further constrain the bindings.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> Changes since v1:
+> 1. Keep compatibles in qcom,apr.yaml
+> 
+> Cc: quic_srivasam@quicinc.com
+> Cc: quic_plai@quicinc.com
+> ---
+>  .../bindings/soc/qcom/qcom,apr-services.yaml  | 54 ++++++++++
+>  .../bindings/soc/qcom/qcom,apr.yaml           | 98 +------------------
+>  MAINTAINERS                                   |  2 +-
+>  3 files changed, 58 insertions(+), 96 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,apr-services.yaml
+> 
 
-Thanks, yes this looks like it will address the regression. Is this
-planned for 6.1?
-
-Or 5.15 stable, which is where we hit this regression?
-
-Thanks,
-
--Jason
-
+Reviewed-by: Rob Herring <robh@kernel.org>
