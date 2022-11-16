@@ -2,207 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE8FB62B357
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 07:35:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D66C62B35C
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 07:36:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232721AbiKPGfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 01:35:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49254 "EHLO
+        id S232715AbiKPGfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 01:35:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232501AbiKPGev (ORCPT
+        with ESMTP id S232670AbiKPGfM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 01:34:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06DE12DD2
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 22:34:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BDEACB81ACB
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 06:34:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51553C433C1
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 06:34:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668580487;
-        bh=V22BgxTJQvo7vvpSBXolDtXyeZMf8nSLNQ7zZy4L1YQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=OB7WyX82uzkKJpi0sYxZnY7XzZcZoiC1cSS/cDFrxFco7FFzwm+0Cw/htWarkcDJw
-         pPzSbv3c4hGsLSEvcuhYhRRGTdscaSTpGzrr2SHH1hvbNs57PzU00nk6mType6hb1B
-         XpAkoHC33j0BX2zeo2NGfSPfYnDsYcdZln8CrgG0zPPqZbSkZjQc/9wV+BA61qDsi5
-         MNByVcXLfQvq/Ctqb8aXFkZnEoM+jLTmuCKO+jNkJaNp4jYK0okb1X1kUkPHysISJm
-         CwNDk6DyCiLIxim/2utcUQXCbmj4PEd8Mwa5u2aoIVRlMfE/Rn2jtopAbD7pjoHwVl
-         BGX04QLw3uQlw==
-Received: by mail-ed1-f45.google.com with SMTP id u24so25085170edd.13
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 22:34:47 -0800 (PST)
-X-Gm-Message-State: ANoB5pmeubZGZRtdOXMjb73lVRtoX4msZD23nalIXIxtz9SpGtgYHWyP
-        u2UqMAA9J/e46mY7BSt7Uq1nVCSZ44o1s3Jrc4U=
-X-Google-Smtp-Source: AA0mqf6TxifyHRI+WD4g8dUY2QGeoGMVHsb62hMs+XwysFm/GWxz2qhwhxZOqk5vFTNfmxnGARPf2vwj7jtQtqmX+eE=
-X-Received: by 2002:aa7:c515:0:b0:462:a25f:f0f2 with SMTP id
- o21-20020aa7c515000000b00462a25ff0f2mr17790890edq.156.1668580485339; Tue, 15
- Nov 2022 22:34:45 -0800 (PST)
+        Wed, 16 Nov 2022 01:35:12 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46499F599;
+        Tue, 15 Nov 2022 22:35:11 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AG6Ywqp008932;
+        Wed, 16 Nov 2022 00:34:58 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1668580498;
+        bh=TMq2Zg7xGsqnRqLN7tOz5WB3RI0L2+bFG3U6rxb2x/E=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=r2PJEdIUFQfMLSvFp7KuTk2j/tJro/7eBdHyeTBE43JGA1Pf+vUsZwVknhDgXCXJd
+         ydC0ubMxTziGLRQfXvKVGzdK7HPpt732J7JNqZEvz+kaUZ4Cxxmfwpkkot5ag2nzHs
+         ae9R4One7auahTs77CQLeEK8ZI6wAETYnh8Aov4o=
+Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AG6YweF090091
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 16 Nov 2022 00:34:58 -0600
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Wed, 16
+ Nov 2022 00:34:58 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Wed, 16 Nov 2022 00:34:58 -0600
+Received: from [172.24.145.60] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AG6YsKu050961;
+        Wed, 16 Nov 2022 00:34:55 -0600
+Message-ID: <952988dc-471b-ba2a-cad4-cf65d7290700@ti.com>
+Date:   Wed, 16 Nov 2022 12:04:54 +0530
 MIME-Version: 1.0
-References: <20221116025324.1624-1-zhangqing@loongson.cn> <20221116025324.1624-6-zhangqing@loongson.cn>
-In-Reply-To: <20221116025324.1624-6-zhangqing@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Wed, 16 Nov 2022 14:34:33 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7SLDmr196DYVecaqbrmyL99ugy0NB-NwtCt=uh9Sbj2w@mail.gmail.com>
-Message-ID: <CAAhV-H7SLDmr196DYVecaqbrmyL99ugy0NB-NwtCt=uh9Sbj2w@mail.gmail.com>
-Subject: Re: [PATCH v7 5/9] LoongArch/ftrace: Add HAVE_DYNAMIC_FTRACE_WITH_REGS
- support
-To:     Qing Zhang <zhangqing@loongson.cn>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Jinyang He <hejinyang@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] arm64: dts: ti: j721e-common-proc-board: Fix sound
+ node-name
+Content-Language: en-US
+To:     Jayesh Choudhary <j-choudhary@ti.com>, <nm@ti.com>
+CC:     <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+References: <20220928122509.143342-1-j-choudhary@ti.com>
+From:   Jai Luthra <j-luthra@ti.com>
+In-Reply-To: <20220928122509.143342-1-j-choudhary@ti.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Qing,
+On 28/09/22 17:55, Jayesh Choudhary wrote:
+> If root-node has no reg property, the unit-address should not
+> be appended at the end of node-name. sound node has no 'reg'
+> property, so remove the unit-address.
+> 
+> Fixes: ed3aad5b8268 ('arm64: dts: ti: j721e-common-proc-board: Analog audio support')
+> Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
 
-On Wed, Nov 16, 2022 at 10:53 AM Qing Zhang <zhangqing@loongson.cn> wrote:
->
-> This patch implements CONFIG_DYNAMIC_FTRACE_WITH_REGS on LoongArch, which allows
-> a traced function's arguments (and some other registers) to be captured
-> into a struct pt_regs, allowing these to be inspected and modified.
->
-> Co-developed-by: Jinyang He <hejinyang@loongson.cn>
-> Signed-off-by: Jinyang He <hejinyang@loongson.cn>
-> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+Reviewed-by: Jai Luthra <j-luthra@ti.com>
+
 > ---
->  arch/loongarch/Kconfig              |  1 +
->  arch/loongarch/include/asm/ftrace.h |  3 +++
->  arch/loongarch/kernel/ftrace_dyn.c  | 17 ++++++++++++++
->  arch/loongarch/kernel/mcount_dyn.S  | 36 +++++++++++++++++++++++++++--
->  4 files changed, 55 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> index 615ce62422b8..12e3e91a68ae 100644
-> --- a/arch/loongarch/Kconfig
-> +++ b/arch/loongarch/Kconfig
-> @@ -90,6 +90,7 @@ config LOONGARCH
->         select HAVE_DEBUG_STACKOVERFLOW
->         select HAVE_DMA_CONTIGUOUS
->         select HAVE_DYNAMIC_FTRACE
-> +       select HAVE_DYNAMIC_FTRACE_WITH_REGS
->         select HAVE_EBPF_JIT
->         select HAVE_EXIT_THREAD
->         select HAVE_FAST_GUP
-> diff --git a/arch/loongarch/include/asm/ftrace.h b/arch/loongarch/include/asm/ftrace.h
-> index 76ca58767f4d..a3f974a7a5ce 100644
-> --- a/arch/loongarch/include/asm/ftrace.h
-> +++ b/arch/loongarch/include/asm/ftrace.h
-> @@ -28,6 +28,9 @@ struct dyn_ftrace;
->  int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec);
->  #define ftrace_init_nop ftrace_init_nop
->
-> +#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
-> +#define ARCH_SUPPORTS_FTRACE_OPS 1
-> +#endif
-This ifdef can be removed, because you have no chance to disable
-DYNAMIC_FTRACE_WITH_REGS after this commit.
+>   arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
+> index b1691ac3442d..4da3fcdc28e5 100644
+> --- a/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
+> +++ b/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
+> @@ -96,7 +96,7 @@ vdd_sd_dv_alt: gpio-regulator-TLV71033 {
+>   			 <3300000 0x1>;
+>   	};
+>   
+> -	sound0: sound@0 {
+> +	sound0: sound-0 {
+>   		compatible = "ti,j721e-cpb-audio";
+>   		model = "j721e-cpb";
+>   
 
-Huacai
->  #endif /* CONFIG_DYNAMIC_FTRACE */
->  #endif /* __ASSEMBLY__ */
->  #endif /* CONFIG_FUNCTION_TRACER */
-> diff --git a/arch/loongarch/kernel/ftrace_dyn.c b/arch/loongarch/kernel/ftrace_dyn.c
-> index 3fe791b6783e..ec3d951be50c 100644
-> --- a/arch/loongarch/kernel/ftrace_dyn.c
-> +++ b/arch/loongarch/kernel/ftrace_dyn.c
-> @@ -99,6 +99,23 @@ int ftrace_make_nop(struct module *mod, struct dyn_ftrace *rec,
->         return ftrace_modify_code(pc, old, new, true);
->  }
->
-> +#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
-> +int ftrace_modify_call(struct dyn_ftrace *rec, unsigned long old_addr,
-> +                       unsigned long addr)
-> +{
-> +       unsigned long pc;
-> +       long offset;
-> +       u32 old, new;
-> +
-> +       pc = rec->ip + LOONGARCH_INSN_SIZE;
-> +
-> +       old = larch_insn_gen_bl(pc, old_addr);
-> +       new = larch_insn_gen_bl(pc, addr);
-> +
-> +       return ftrace_modify_code(pc, old, new, true);
-> +}
-> +#endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
-> +
->  void arch_ftrace_update_code(int command)
->  {
->         command |= FTRACE_MAY_SLEEP;
-> diff --git a/arch/loongarch/kernel/mcount_dyn.S b/arch/loongarch/kernel/mcount_dyn.S
-> index 0c12cc108e6f..02835186b463 100644
-> --- a/arch/loongarch/kernel/mcount_dyn.S
-> +++ b/arch/loongarch/kernel/mcount_dyn.S
-> @@ -27,7 +27,7 @@
->   * follows the LoongArch psABI well.
->   */
->
-> -       .macro  ftrace_regs_entry
-> +       .macro  ftrace_regs_entry allregs=0
->         PTR_ADDI sp, sp, -PT_SIZE
->         /* Save trace function ra at PT_ERA */
->         PTR_S   ra, sp, PT_ERA
-> @@ -43,16 +43,48 @@
->         PTR_S   a7, sp, PT_R11
->         PTR_S   fp, sp, PT_R22
->
-> +       .if \allregs
-> +       PTR_S   t0, sp, PT_R12
-> +       PTR_S   t1, sp, PT_R13
-> +       PTR_S   t2, sp, PT_R14
-> +       PTR_S   t3, sp, PT_R15
-> +       PTR_S   t4, sp, PT_R16
-> +       PTR_S   t5, sp, PT_R17
-> +       PTR_S   t6, sp, PT_R18
-> +       PTR_S   t7, sp, PT_R19
-> +       PTR_S   t8, sp, PT_R20
-> +       PTR_S   s0, sp, PT_R23
-> +       PTR_S   s1, sp, PT_R24
-> +       PTR_S   s2, sp, PT_R25
-> +       PTR_S   s3, sp, PT_R26
-> +       PTR_S   s4, sp, PT_R27
-> +       PTR_S   s5, sp, PT_R28
-> +       PTR_S   s6, sp, PT_R29
-> +       PTR_S   s7, sp, PT_R30
-> +       PTR_S   s8, sp, PT_R31
-> +       PTR_S   tp, sp, PT_R2
-> +       /* Clear it for later use as a flag sometimes. */
-> +       PTR_S   zero, sp, PT_R0
-> +       PTR_S   $r21, sp, PT_R21
-> +       .endif
-> +
->         PTR_ADDI t8, sp, PT_SIZE
->         PTR_S   t8, sp, PT_R3
->
->         .endm
->
->  SYM_CODE_START(ftrace_caller)
-> -       ftrace_regs_entry
-> +       ftrace_regs_entry allregs=0
->         b       ftrace_common
->  SYM_CODE_END(ftrace_caller)
->
-> +#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
-> +SYM_CODE_START(ftrace_regs_caller)
-> +       ftrace_regs_entry allregs=1
-> +       b       ftrace_common
-> +SYM_CODE_END(ftrace_regs_caller)
-> +#endif
-> +
->  SYM_CODE_START(ftrace_common)
->         PTR_ADDI        a0, ra, -8      /* arg0: ip */
->         move            a1, t0          /* arg1: parent_ip */
-> --
-> 2.36.0
->
->
+Thanks,
+Jai
