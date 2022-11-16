@@ -2,255 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1353362C8F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 20:28:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E61762C8F5
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 20:28:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234297AbiKPT2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 14:28:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43374 "EHLO
+        id S234142AbiKPT2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 14:28:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234047AbiKPT17 (ORCPT
+        with ESMTP id S234355AbiKPT2M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 14:27:59 -0500
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7DF5F868;
-        Wed, 16 Nov 2022 11:27:58 -0800 (PST)
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-12c8312131fso21276863fac.4;
-        Wed, 16 Nov 2022 11:27:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ddXhyxWoWR+WuCeBU1+8MsAASKTX24pGAhHTry1xkHY=;
-        b=RlsFkQBUC9FYHbGlWpSz78Auzqwpx/21p73MiSt7Mm5w1o9SrnmU9kt9IRXY3CKVLX
-         H9LfsFhZUC1SzeXPD9lqPARuaizbRDgrV5fWAM/YeBvRVDwkMo9Cf7kN1dBB5VriQuZW
-         H27mBpTr6yD2Pvx/HYTk/HH760kbjAwSjui5ymp7ILXf2GKkZmsMwIuAZN12nJlDxeAb
-         7d8nEjpyVP/V7djIplz+zDk7OSWJvvEuR/XrR5Y4Aj2sH3srgZxzl0ng5LqtC68HAQmV
-         bbyvl3UyRKS7g6KzAxQZb9CiNtmKGO4JQQieQd1XGvOdrJ0QyhfE8kOOn++gj5WxHrpl
-         NZOg==
-X-Gm-Message-State: ANoB5pkuKdMF3pgPW9+0qF9avSz4Y75udLBiKGsrs+JHF4VEu/v6RB2Q
-        OUOJEdRf8YLDB4KZsPIgnQ==
-X-Google-Smtp-Source: AA0mqf4jU21nGD1Cah9qRaDMr7mqZE3Yy81FStzVZijy2j0rrHDWZ2yH/tP1NmDHcAc1cnaeHAQ2NQ==
-X-Received: by 2002:a05:6870:4192:b0:141:ae05:159e with SMTP id y18-20020a056870419200b00141ae05159emr2594008oac.39.1668626877885;
-        Wed, 16 Nov 2022 11:27:57 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id z41-20020a056870c22900b001324315bb6asm8432984oae.29.2022.11.16.11.27.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 11:27:57 -0800 (PST)
-Received: (nullmailer pid 759466 invoked by uid 1000);
-        Wed, 16 Nov 2022 19:27:59 -0000
-Date:   Wed, 16 Nov 2022 13:27:59 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        Wed, 16 Nov 2022 14:28:12 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2071.outbound.protection.outlook.com [40.107.244.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B4F61B8A;
+        Wed, 16 Nov 2022 11:28:11 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kIt3OiMF9imSPiLgPS9PdFj2AgdOdWeMDURY9FD3aAv5m88iUJJtoRTGrSgG04tPxIoei8JRQaglz9wvFh1lVHTj2UFZFX3DpgGSLDYPj5W4n2lU1VtC2QHXBOl6nfHJCcy8IvN8LHWqW0oDT/zJXOSVV+vLX1ItIy65bBH4eeRhnPy/i+0csW6i/qEu0ItT9wYt2KMpp5YDN6ILyLzuPcfPTpavf/smxr6IVHoXwPwMMgoZtDYynZWJrpAemJeabt14yQVDB24/xj1bjc5GaAOacN1Q2zjqNXKf5z+VAcK/UnQ/LpYNL2e+Z7muMwO8RHCIcGFVRjkCKtHKr14kDw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NCeMiV59uKsC6wANGYbddbo12LyYsEJfAjjmIqJ1rTQ=;
+ b=iXw4RO2V7OLVxw5Wd/QpJW2n/9B5XqK3n+vIzrUkMvCOA5muRMK7QuUwcs6tqTGHCS97ljts4PrXjbqe8uvw4NAnLY+SlcjcXVIN1SbOZDWspQjKKks04LAR9ZAOy4f3hHzIvX7D/5KC7J6Sptbk3Pc6Z0Q7rBBu/lahejbvfUNEyW2VEw8BipnkZkSe5nKTVtrujvm0jPaxwvDwbFUCU81M1eoBsUulwOJvzN6FpiS3L7oRCb2rDp+80rSq81cxAasphhhUfQEYeTRQ0GqAIp1AF+CseJnqtcFUe2IQDSf3C6W1Vh1nVMBDdMXfUhgjaC+I0dn5PXBtXFgBpswEcw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NCeMiV59uKsC6wANGYbddbo12LyYsEJfAjjmIqJ1rTQ=;
+ b=M65mTkTodAov5wZiCQXhOZCd6U9tFyzEHJInL20d4G67GHJep+eSJoDBGbeqVJhZKkaB1CK3BnYaW8hNTqE31kOLMIRcodfFFtB6HSptXne00YbEnU1Sy0Nqw0EIarhvK5s5CRJ2WBRenWdvLMqBpgeDCMjewpcVa8N+aVtB5i5bw3QQJz61f8tgrIvmRmi99fykNMs8BAOWUsTFf1JU5i3nCW/DbBHnKvYhvIld4KRS2gFNHn7qB+6egQVBocSKcinvvG9ReptHbxNzvaNDr/l+U2T+bljaw8HHDpvV9R9W4Pnp0a6u5VIqx+BWhMltk/tZ569eAlb9UU4gB0B8Ag==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by IA1PR12MB6458.namprd12.prod.outlook.com (2603:10b6:208:3aa::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17; Wed, 16 Nov
+ 2022 19:28:09 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f8b0:df13:5f8d:12a]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f8b0:df13:5f8d:12a%7]) with mapi id 15.20.5813.017; Wed, 16 Nov 2022
+ 19:28:09 +0000
+Date:   Wed, 16 Nov 2022 15:28:07 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
         Marc Zyngier <maz@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 6/9] dt-bindings: Add RISC-V advanced PLIC bindings
-Message-ID: <20221116192759.GA743769-robh@kernel.org>
-References: <20221111044207.1478350-1-apatel@ventanamicro.com>
- <20221111044207.1478350-7-apatel@ventanamicro.com>
-MIME-Version: 1.0
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
+        Allen Hubbe <allenbh@gmail.com>,
+        "Ahmed S. Darwish" <darwi@linutronix.de>,
+        Reinette Chatre <reinette.chatre@intel.com>
+Subject: Re: [patch 19/33] genirq/msi: Provide msi_desc::msi_data
+Message-ID: <Y3U5xwujkZvI0TEN@nvidia.com>
+References: <20221111133158.196269823@linutronix.de>
+ <20221111135206.346985384@linutronix.de>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221111044207.1478350-7-apatel@ventanamicro.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221111135206.346985384@linutronix.de>
+X-ClientProxiedBy: YT1PR01CA0046.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:2e::15) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|IA1PR12MB6458:EE_
+X-MS-Office365-Filtering-Correlation-Id: 65af350a-d8ce-470e-588c-08dac808b18b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: CXh6NkB7wYax+28VoqcnWaXi/J6/VADRoQY1Fdf8Dubyty4G6gw35XekDMny7tDiaMEErM0iPtt2xew86BF2XVVqCQ0qw7jaiIPq0kMjPSik8L7jhX3mQ0Tz9aNMcOwgcbTKzbZzpoxVF5t2ONnVK2QG4u+zK+FYzXBqdHNJguuw8uO6dD40B3kDs1EeEL/K467ks6A8o3kqGwQ508ARmny5bYns7qlo4wGviaIuP5AxPAYeDL/Zfc3BqjCc87fy3I+RSUiaEr/mP4gT/RkEPQicT/tE0/UdrEWucW1oslGBjoN4xAAiduEXJfCc51geBbpIX/axLPzyl5NtNhwLxukWb8oo+BwVixdfng38onEXChG5A782dgofQoLp0cTDwCUIW32Vrpj3c81Bt6Osq/fCdmndYsIuiYgVgrkIMbf0w7jwbayuVBzWtSOHxW4P7h9wzUTvw1/m430S0nCBJ35B13Zfk0X4DKQSNJe/l0x89H5O4W+4llOp/u7jsYOSDSh+hRKR7eQOWabfOHOlxrt3qWaNKVg1rWqzVCSqBi3j4R1kumkQ12PdDXvGSYYM29WDoumIwWaVWLqWHV3zaP7+P4Sn0YM7X5qFPcd/p6AFnGknwPLbEPvptP74CKF468g/3E4Fk+0EJ0s/eFWfsTgKsJZbhBfrHogx+B7r8jXYBvbpjyH6Hy4wNBqb3RRE7rKeol9iktO7KaJD15We+A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(396003)(376002)(136003)(366004)(346002)(451199015)(86362001)(38100700002)(2906002)(7416002)(8936002)(4326008)(8676002)(41300700001)(66476007)(5660300002)(66946007)(6512007)(26005)(6506007)(54906003)(186003)(6916009)(478600001)(66556008)(316002)(6486002)(2616005)(36756003)(66899015);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6Ar4BO+megp0FcbkEw2OlfNPsho8/1L3J0yUsc+J11SMu1M5A1NhVLWBFpNn?=
+ =?us-ascii?Q?AKrg9WkmGxl9vqp4GMaxQHGraYiEOI9x0aGN7PQCZDHjybCGU9RjAW6lMVdu?=
+ =?us-ascii?Q?Lq5PsPGhTnVhy0WKmKSXOrAEsi1BvPWc22xwnch7J7IfiuGG+StSoGUEF7IA?=
+ =?us-ascii?Q?wbOW05tHyGQeGDsZRWP0XQgicn2RG6OS3RW5E3Wfy5xMacSXwm4C1fd38koh?=
+ =?us-ascii?Q?JFPPeJioxY07NF98NP+pUWNytv9z/oiz1PAMzGlNoP4/nYPFQP8SZMeAUAJR?=
+ =?us-ascii?Q?drzrVV3lEMms4DoKrtCHL6rFm8j2+miiau1RCWe3G1u/DuTYofIylRPKI4Yf?=
+ =?us-ascii?Q?W1OG7VqSuG5zvhIldnk/JYPy6We18XspWJeHqZGh0Demai4YgBdI6bwkGeXW?=
+ =?us-ascii?Q?TlvqMa1Z3mpX6+xEARauoVCBAah2dngKb2UOZHc5UFhpoDagOaYL2PDd1x0A?=
+ =?us-ascii?Q?lvzD/YlIEUo2zZYkpZXSafcVOuHs1exaf0A0RBHsD6joooIO0N5ahHhoBWze?=
+ =?us-ascii?Q?QFn9qfYagY4jK2Zv5rQ7FbSrau1nHgwK7ALacKzdPV4T+jiL1HWn+VgNSAPo?=
+ =?us-ascii?Q?j6oFJcs6iaDnssXbfk6wEONzTyytf5+ChuM0dBVT72fQOM3yK3ey19kz2A1X?=
+ =?us-ascii?Q?sCmhkLKD+p282GAB+ANIfu3QQid+sRshjCXQqOAwo2ZzdMvTtN4cbwWCUJ+H?=
+ =?us-ascii?Q?QAmYs2ZxvaBgWhR1dO0KwV6gzYE4WHIAezYf36XT1eZe2aQ9jZFzV0MTQnSH?=
+ =?us-ascii?Q?C8GbOJstWINhpcKzSzlxNyk0eH8CtH/3qY7W0yGA6V1tB1lBbDVuq3BYplQO?=
+ =?us-ascii?Q?/q9EBqBdEhdbidDv0K0MwFgzIAu0QkHfsp4PT7C82k9g3eHFmU2sPAydljd7?=
+ =?us-ascii?Q?0N20zqyNdC/P2l++IbcwdDVfbSRoKdVK0u4Bhcx5JK/8yaBOrJjlIh8k166X?=
+ =?us-ascii?Q?HtnoMOLwBuiQHjmu6t8IsTPl90NPVTpVh5i9qEqmWNjFCgQZxhJDEVusrstw?=
+ =?us-ascii?Q?b6jiWZgAClrJrRb08LDQp8dnNRKvxob85BZ90nsPlRWsMK4WrLYttMBayu6D?=
+ =?us-ascii?Q?7BZJzvk3QpX7lJ0ro99tAZIX6+c60SeSs70dzcE08ITy0WZW2IyC2uhaTmXB?=
+ =?us-ascii?Q?5OEGn7gLK9j36dZcpBOJWxBLHtjIP3NYbQDVIrAI9ROhZNt8ddeHZfdeqnGL?=
+ =?us-ascii?Q?KsWnqk8xaENVGSMdpfb8b7DzYqRVfTqhLBiM5PoYq4EQVeaskFt9dlMskp4G?=
+ =?us-ascii?Q?Wr03gccewDFo5Mk2VUTJcfcAqpC1106mP39YGgDfInT2/t6/owF2UtBbkA9K?=
+ =?us-ascii?Q?NXNcOeghYWQBDu3x8TQf2dLUL0EtLvlZuhCevWSNEXNuGuL+jTTa74k+nV4+?=
+ =?us-ascii?Q?Ijwm90QDrz3SW4n8CiyecTCUDmscg4diM+LP9G3A6FZdqIgOko/U5yWFMEsv?=
+ =?us-ascii?Q?rMfRxx+TDdgCO1p4TNX/ubKTRjQpyPsgGvqDh2PhFyQ3kTWZrm4Ux9qLfCSI?=
+ =?us-ascii?Q?KmT88zRrviginNdAnrKhstWDYMiAIawx+6sjn4YDnVrZe2GQ6dS17anAgmIa?=
+ =?us-ascii?Q?eHGOxjKfAtOvhZYgqtp9TzEn11lkJN2QymMzZwVB?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 65af350a-d8ce-470e-588c-08dac808b18b
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Nov 2022 19:28:09.2370
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ubr9LO2gd9UYrv5RNOgnSQJYx/3PUaQHepr67XeiodD0Qw03tXxIOpWQb6baknew
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6458
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 10:12:04AM +0530, Anup Patel wrote:
-> We add DT bindings document for RISC-V advanced platform level interrupt
-> controller (APLIC) defined by the RISC-V advanced interrupt architecture
-> (AIA) specification.
-> 
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> ---
->  .../interrupt-controller/riscv,aplic.yaml     | 136 ++++++++++++++++++
->  1 file changed, 136 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/riscv,aplic.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/interrupt-controller/riscv,aplic.yaml b/Documentation/devicetree/bindings/interrupt-controller/riscv,aplic.yaml
-> new file mode 100644
-> index 000000000000..0aa48571f3bc
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/interrupt-controller/riscv,aplic.yaml
-> @@ -0,0 +1,136 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/interrupt-controller/riscv,aplic.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: RISC-V Advancded Platform Level Interrupt Controller (APLIC)
-> +
-> +maintainers:
-> +  - Anup Patel <anup@brainfault.org>
-> +
-> +description:
-> +  The RISC-V advanced interrupt architecture (AIA) defines advanced platform
-> +  level interrupt controller (APLIC) for handling wired interrupts in a
-> +  RISC-V platform. The RISC-V AIA specification can be found at
-> +  https://github.com/riscv/riscv-aia.
-> +
-> +  The RISC-V APLIC is implemented as hierarchical APLIC domains where all
-> +  interrupt sources connect to the root domain which can further delegate
-> +  interrupts to child domains. We have one device tree node for each APLIC
-> +  domain.
-> +
-> +allOf:
-> +  - $ref: /schemas/interrupt-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - vendor,chip-aplic
-> +      - const: riscv,aplic
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupt-controller: true
-> +
-> +  "#interrupt-cells":
-> +    const: 2
-> +
-> +  interrupts-extended:
-> +    minItems: 1
-> +    maxItems: 16384
-> +    description:
-> +      The presence of this property implies that given APLIC domain directly
-> +      injects external interrupts to a set of RISC-V HARTS (or CPUs). Each
-> +      node pointed to should be a riscv,cpu-intc node, which has a riscv node
-> +      (i.e. RISC-V HART) as parent.
-> +
-> +  msi-parent:
-> +    description:
-> +      The presence of this property implies that given APLIC domain forwards
-> +      wired interrupts as MSIs to a AIA incoming message signaled interrupt
-> +      controller (IMSIC). This property should be considered only when the
-> +      interrupts-extended property is absent.
-> +
-> +  riscv,num-sources:
-> +    $ref: "/schemas/types.yaml#/definitions/uint32"
-> +    minimum: 1
-> +    maximum: 1023
-> +    description:
-> +      Specifies how many wired interrupts are supported by this APLIC domain.
-> +
-> +  riscv,children:
-> +    $ref: '/schemas/types.yaml#/definitions/phandle-array'
-> +    minItems: 1
-> +    maxItems: 1024
+On Fri, Nov 11, 2022 at 02:58:41PM +0100, Thomas Gleixner wrote:
 
-As each entry is a single phandle:
+> +/**
+> + * struct msi_desc_data - Generic MSI descriptor data
+> + * @iobase:     Pointer to the IOMEM base adress for interrupt callbacks
+> + * @cookie:	Device cookie provided at allocation time
+> + *
+> + * The content of this data is implementation defined, e.g. PCI/IMS
+> + * implementations will define the meaning of the data.
+> + */
+> +struct msi_desc_data {
+> +	void			__iomem *iobase;
+> +	union msi_dev_cookie	cookie;
+> +};
 
-       items:
-         maxItems: 1
+It would be nice to see the pci_msi_desc converted to a domain
+specific storage as well.
 
-> +    description:
-> +      This property represents a list of child APLIC domains for the given
-> +      APLIC domain. Each child APLIC domain is assigned child index in
-> +      increasing order with the first child APLIC domain assigned child
-> +      index 0. The APLIC domain child index is used by firmware to delegate
-> +      interrupts from the given APLIC domain to a particular child APLIC
-> +      domain.
-> +
-> +  riscv,delegate:
-> +    $ref: '/schemas/types.yaml#/definitions/phandle-array'
-> +    minItems: 1
-> +    maxItems: 1024
+Maybe could be written
 
-       items:
-         items:
-           - description: child APLIC domain phandle
-           - description: ...
-           - description: ...
+struct msi_desc {
+   u64 domain_data[2];
+}
 
-> +    description:
-> +      This property represents a interrupt delegation list where each entry
-> +      is a triple consisting of child APLIC domain phandle, first interrupt
-> +      number, and last interrupt number. The firmware will configure interrupt
-> +      delegation registers based on interrupt delegation list.
+struct pci_msi_desc {
+		u32 msi_mask;
+		u8	multiple	: 3;
+		u8	multi_cap	: 3;
+		u8	can_mask	: 1;
+		u8	is_64		: 1;
+		u8	mask_pos;
+		u16 default_irq;
+}
+static_assert(sizeof(struct pci_msi_desc) <= sizeof(((struct msi_desc *)0)->domain_data));
 
-First and last are inclusive?
+struct pci_msix_desc {
+		u32 msix_ctrl;
+		u8	multiple	: 3;
+		u8	multi_cap	: 3;
+		u8	can_mask	: 1;
+		u8	is_64		: 1;
+		u16 default_irq;
+		void __iomem *mask_base;
+}
+static_assert(sizeof(struct pci_msix_desc) <= sizeof(((struct msi_desc *)0)->domain_data));
 
-Couldn't riscv,children and riscv,delegate be combined? How would they 
-be different? If some children don't have any delegated interrupts, you 
-could use -1 for the cells for example.
+ideally hidden in the pci code with some irq_chip facing export API to
+snoop in the bits a few places need
 
-An example showing the need would be nice.
+We've used 128 bits for the PCI descriptor, we might as well like
+everyone have all 128 bits for whatever they want to do
 
-> +
-> +additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupt-controller
-> +  - "#interrupt-cells"
-> +  - riscv,num-sources
-> +
-> +examples:
-> +  - |
-> +    // Example 1 (APIC domain directly injecting interrupt to HARTs):
-
-Is than an x86 APIC or a typo?
-
-> +
-> +    aplic0: interrupt-controller@c000000 {
-> +      compatible = "vendor,chip-aplic", "riscv,aplic";
-> +      interrupts-extended = <&cpu1_intc 11>,
-> +                            <&cpu2_intc 11>,
-> +                            <&cpu3_intc 11>,
-> +                            <&cpu4_intc 11>;
-> +      reg = <0xc000000 0x4080>;
-> +      interrupt-controller;
-> +      #interrupt-cells = <2>;
-> +      riscv,num-sources = <63>;
-> +      riscv,children = <&aplic1>;
-> +      riscv,delegate = <&aplic1 1 63>;
-> +    };
-> +
-> +    aplic1: interrupt-controller@d000000 {
-> +      compatible = "vendor,chip-aplic", "riscv,aplic";
-> +      interrupts-extended = <&cpu1_intc 9>,
-> +                            <&cpu2_intc 9>,
-> +                            <&cpu3_intc 9>,
-> +                            <&cpu4_intc 9>;
-> +      reg = <0xd000000 0x4080>;
-> +      interrupt-controller;
-> +      #interrupt-cells = <2>;
-> +      riscv,num-sources = <63>;
-> +    };
-> +
-> +  - |
-> +    // Example 2 (APIC domain forwarding interrupts as MSIs):
-> +
-> +    interrupt-controller@d000000 {
-> +      compatible = "vendor,chip-aplic", "riscv,aplic";
-> +      msi-parent = <&imsics>;
-> +      reg = <0xd000000 0x4000>;
-> +      interrupt-controller;
-> +      #interrupt-cells = <2>;
-> +      riscv,num-sources = <63>;
-> +    };
-> +...
-> -- 
-> 2.34.1
-> 
-> 
+Jason
