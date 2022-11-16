@@ -2,99 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC4E162BE9B
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:49:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DCD662BE9C
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:49:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238824AbiKPMtK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 07:49:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38568 "EHLO
+        id S238901AbiKPMti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 07:49:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239038AbiKPMsu (ORCPT
+        with ESMTP id S239092AbiKPMtB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 07:48:50 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DBCAC76D
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 04:48:46 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id s8so12174363lfc.8
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 04:48:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jKTXv3W+aVVrG7M+pevbCvwAQjTJkck5FLwc5nQCkkQ=;
-        b=KuBg0PdH3A4pnA7c9PaC5TTDHb3iw7rEugZB2T11VX4xjA8rPiUzhctQR2NVll5+7I
-         QRIznVLfZ5EacZ/UbgjnAmazKCNgKwl1eFIEvVcoP/NopMhDbl7xqlzOHelCx41eKK3r
-         ScKmaAOyuRKRgbS0JsOE2knYK8zVjFB5RNN/gfaW6JKJMybxcLoGGIm5DWReXub8JtEB
-         RFjFDDci7gs2tH5QTc8ePF61aG7/G9LyvlTGLyk0VhTHLyc3U+79wkZQ7YSbqQDU0hIj
-         vBc8Rb4kw9sQc4Af6Z1yF5TkTG8cNhIUPxE+3YGgFpqruwnfH1gg8zi4JhBOrc5hrVXu
-         6htg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jKTXv3W+aVVrG7M+pevbCvwAQjTJkck5FLwc5nQCkkQ=;
-        b=0zUlV25TFQHbR9lhgpXXY2RpaTU+cl7gStomYN9MxO05PuDO4QthG2sdLNQvIeeT4k
-         OV26ztm/awi3nmjSfL90QodXwzNpW0SiVGyXD4wG5Pq+0ypeF2iUv478AW4wwZsaKA90
-         trx6VC/RTPty7CvLhHiNUi5aq8+ZQI22dFxNxB4Ov0rgo7N1VEuPgv5MB3/lWu6nMlyk
-         t4SLQxtFHYSSEVn/USa4BdLu+gzGJbXFtRZxke3W2MdPo8CV7fABkEKgRwTkSENY7ccF
-         4Cazyahv165gCVL3OaphklnHdZVcC29n5A7ErNTVVHfyJEXEeq6PkUsRWqZ8WXVW9Txo
-         496w==
-X-Gm-Message-State: ANoB5pkEm7z87Ru8gw/sPaH+IlzcKMjL3TofP3m37LnQfkasi0CmIElV
-        /dHlYlJ2g7KJV5lL+WTqGDMbdw==
-X-Google-Smtp-Source: AA0mqf7/5F66e1Pt6JlCU8Ah87lxd0DJlaAsqswlnj6wFWJZb1wN+pQUnFCD0yMYLrIc4RaYiZ07iA==
-X-Received: by 2002:a19:4f4e:0:b0:499:fd39:b1e3 with SMTP id a14-20020a194f4e000000b00499fd39b1e3mr6909937lfk.348.1668602924742;
-        Wed, 16 Nov 2022 04:48:44 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id b13-20020ac25e8d000000b004b1892aa5c8sm2594135lfq.56.2022.11.16.04.48.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 04:48:44 -0800 (PST)
-Message-ID: <d9ee3801-d5a8-ecdd-96c0-ec2fbd6d43e2@linaro.org>
-Date:   Wed, 16 Nov 2022 13:48:43 +0100
+        Wed, 16 Nov 2022 07:49:01 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6E3E1740A;
+        Wed, 16 Nov 2022 04:48:58 -0800 (PST)
+Received: from fraeml704-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NC2qD1h5gz6H7RN;
+        Wed, 16 Nov 2022 20:46:32 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml704-chm.china.huawei.com (10.206.15.53) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.31; Wed, 16 Nov 2022 13:48:56 +0100
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 16 Nov
+ 2022 12:48:56 +0000
+Date:   Wed, 16 Nov 2022 12:48:55 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     <alison.schofield@intel.com>
+CC:     Dan Williams <dan.j.williams@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, <linux-cxl@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 3/6] cxl/memdev: Add trigger_poison_list sysfs
+ attribute
+Message-ID: <20221116124855.00002f58@Huawei.com>
+In-Reply-To: <5055dd47526d900f85f43bb0d85f4ccd4c9502b6.1668115235.git.alison.schofield@intel.com>
+References: <cover.1668115235.git.alison.schofield@intel.com>
+        <5055dd47526d900f85f43bb0d85f4ccd4c9502b6.1668115235.git.alison.schofield@intel.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 2/2] dt-bindings: ufs: qcom: Add SM8550 compatible string
-Content-Language: en-US
-To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-References: <20221116121732.2731448-1-abel.vesa@linaro.org>
- <20221116121732.2731448-3-abel.vesa@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221116121732.2731448-3-abel.vesa@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/11/2022 13:17, Abel Vesa wrote:
-> Document the compatible for the UFS found on SM8550.
+On Thu, 10 Nov 2022 19:12:41 -0800
+alison.schofield@intel.com wrote:
+
+> From: Alison Schofield <alison.schofield@intel.com>
 > 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> When a boolean 'true' is written to this attribute the memdev driver
+> retrieves the poison list from the device. The list includes addresses
+> that are poisoned, or would result in poison if accessed, and the
+> source of the poison. This attribute is only visible for devices
+> supporting the capability. The retrieved errors are logged as kernel
+> trace events with the label 'cxl_poison'.
+> 
+> Signed-off-by: Alison Schofield <alison.schofield@intel.com>
+Hi Alison,
 
+A few comments inline.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Jonathan
 
-Best regards,
-Krzysztof
+> ---
+>  Documentation/ABI/testing/sysfs-bus-cxl | 14 +++++++++
+>  drivers/cxl/core/memdev.c               | 41 +++++++++++++++++++++++++
+>  2 files changed, 55 insertions(+)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-bus-cxl b/Documentation/ABI/testing/sysfs-bus-cxl
+> index 8494ef27e8d2..1c5f4a853ba2 100644
+> --- a/Documentation/ABI/testing/sysfs-bus-cxl
+> +++ b/Documentation/ABI/testing/sysfs-bus-cxl
+> @@ -388,3 +388,17 @@ Description:
+>  		1), and checks that the hardware accepts the commit request.
+>  		Reading this value indicates whether the region is committed or
+>  		not.
+> +
+> +
+> +What:		/sys/bus/cxl/devices/memX/trigger_poison_list
+> +Date:		November, 2022
+> +KernelVersion:	v6.2
+> +Contact:	linux-cxl@vger.kernel.org
+> +Description:
+> +		(WO) When a boolean 'true' is written to this attribute the
+> +		memdev driver retrieves the poison list from the device. The
+> +		list includes addresses that are poisoned or would result in
+> +		poison if accessed, and the source of the poison. This
+
+Trivial, but 'includes' kind of implies it might have other things as well.
+
+The list consists of addresses that are... perhaps?
+
+> +		attribute is only visible for devices supporting the
+> +		capability. The retrieved errors are logged as kernel
+> +		trace events with the label 'cxl_poison'.
+> diff --git a/drivers/cxl/core/memdev.c b/drivers/cxl/core/memdev.c
+> index 20ce488a7754..06d265db5127 100644
+> --- a/drivers/cxl/core/memdev.c
+> +++ b/drivers/cxl/core/memdev.c
+> @@ -106,12 +106,45 @@ static ssize_t numa_node_show(struct device *dev, struct device_attribute *attr,
+>  }
+>  static DEVICE_ATTR_RO(numa_node);
+>  
+> +static ssize_t trigger_poison_list_store(struct device *dev,
+> +					 struct device_attribute *attr,
+> +					 const char *buf, size_t len)
+> +{
+> +	struct cxl_memdev *cxlmd = to_cxl_memdev(dev);
+> +	struct cxl_dev_state *cxlds = cxlmd->cxlds;
+> +	u64 offset, length;
+> +	bool tmp;
+> +	int rc;
+> +
+> +	if (kstrtobool(buf, &tmp))
+> +		return -EINVAL;
+> +
+> +	/* Per CXL Spec, separate the pmem and ram poison list reads */
+
+Reference?  I assume this is the bit about what happens if the
+device doesn't support poison list retrieval for volatile memory?
+I can't find anything more specific but maybe I'm looking in wrong place.
+
+> +	if (resource_size(&cxlds->pmem_res)) {
+> +		offset = cxlds->pmem_res.start;
+> +		length = resource_size(&cxlds->pmem_res);
+> +		rc = cxl_mem_get_poison(cxlmd, offset, length, NULL);
+> +		if (rc)
+> +			return rc;
+> +	}
+> +	if (resource_size(&cxlds->ram_res)) {
+> +		offset = cxlds->ram_res.start;
+> +		length = resource_size(&cxlds->ram_res);
+> +		rc = cxl_mem_get_poison(cxlmd, offset, length, NULL);
+> +		if (rc)
+> +			return rc;
+
+Hmm.  So should we handle the return of Invalid Physical Address as an
+error or not?  I think not given it's optional to support the poison
+list for volatile memory.
+
+> +	}
+> +	return len;
+> +}
+> +static DEVICE_ATTR_WO(trigger_poison_list);
+> +
+>  static struct attribute *cxl_memdev_attributes[] = {
+>  	&dev_attr_serial.attr,
+>  	&dev_attr_firmware_version.attr,
+>  	&dev_attr_payload_max.attr,
+>  	&dev_attr_label_storage_size.attr,
+>  	&dev_attr_numa_node.attr,
+> +	&dev_attr_trigger_poison_list.attr,
+>  	NULL,
+>  };
+>  
+> @@ -130,6 +163,14 @@ static umode_t cxl_memdev_visible(struct kobject *kobj, struct attribute *a,
+>  {
+>  	if (!IS_ENABLED(CONFIG_NUMA) && a == &dev_attr_numa_node.attr)
+>  		return 0;
+> +
+> +	if (a == &dev_attr_trigger_poison_list.attr) {
+> +		struct device *dev = kobj_to_dev(kobj);
+> +
+> +		if (!test_bit(CXL_MEM_COMMAND_ID_GET_POISON,
+> +			      to_cxl_memdev(dev)->cxlds->enabled_cmds))
+> +			return 0;
+> +	}
+>  	return a->mode;
+>  }
+>  
 
