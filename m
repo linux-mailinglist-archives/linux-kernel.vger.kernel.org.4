@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CB6C62C162
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:50:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3173F62C164
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:50:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233864AbiKPOuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 09:50:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40996 "EHLO
+        id S233879AbiKPOuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 09:50:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233561AbiKPOt0 (ORCPT
+        with ESMTP id S233643AbiKPOtc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 09:49:26 -0500
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB7A432B8B;
-        Wed, 16 Nov 2022 06:49:24 -0800 (PST)
-Received: by mail-qk1-x733.google.com with SMTP id v8so11715408qkg.12;
-        Wed, 16 Nov 2022 06:49:24 -0800 (PST)
+        Wed, 16 Nov 2022 09:49:32 -0500
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79F52D1C7;
+        Wed, 16 Nov 2022 06:49:26 -0800 (PST)
+Received: by mail-qt1-x829.google.com with SMTP id jr19so10777826qtb.7;
+        Wed, 16 Nov 2022 06:49:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zbM5jPqWMW+ZSl/JSR0+XTeoHUgjIND5CEiOvEuQtSk=;
-        b=PRWc0U7J5pAZNRoK7CPP+L+WKOUezRC7GcfZGc/EkY9Oecm/u4DIcjZYj+Yyipg6sS
-         178IvYFnqI1hnjr/OrvAoAgqOBmL306RkNSmdyhFWym+EKqXfwgmN8am4I/DLZs5ARpB
-         ZR2CQnaskTci2KGFuk0gA+s+cRzngvkBJ2WLuV9NVelmKprPuPXee18Mfm3Z0Js4bUG/
-         ZHVKd7Bunhvg7VWT8AHzqaHXUr9pk20jfFbuAxE8YNwWtNMT+INF3yo8Eh06RjJFm/xC
-         RelO8ogc5Ndh7K/jqMYrTZdw2KmBzec5b2xnrUdCxa+hOczfCkyZ3pxmhCdaYeMh60je
-         GaMA==
+        bh=AUJ4wmyHldmie0gv1i5ed1iRJzoHABMpIHKKor6rIMU=;
+        b=UK+4W/tZnQ3nJx2fg8CxMw5okEpDI1+RbjMzW+k0vTeDQzjRo9kFVFA4+y6qMvjtjk
+         ofKKesMCD7H6VOpH0acPm19dlRhPC0R29sj6VmzG/PmKmXnBd2Rl88FJmCVAREDXjhIF
+         8NBXQSMpXWWwv867j3rKzigzm655q6iMz626SZR0unzDlRNVqTKqfZKVqEXR2HhJZzls
+         UU0EwSg4Hm4GPdyXXhIMwGUM34MAeWowo+usiruyHxW9gIDNENxtFhiwJRhY6RUUif3d
+         pZ37m7EtqH4qKSUDDk03ccF7u0899nB7ZucmDbgDonMPOnzFU5cW+REeNSCWfnF3FIpI
+         ptpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zbM5jPqWMW+ZSl/JSR0+XTeoHUgjIND5CEiOvEuQtSk=;
-        b=1yFuP4mU42pRTTV3En9kpHndyNms2ZAqkUZNeNG7JJfUK4JLD7HijLMdIgIM5YOUT6
-         liT+8aNn+6kT7w9pjNue4nfzGhaIjjrOQ3Y20ScEsEtcSdXSRFwJ+ZbD8Ke863s3rJr1
-         +ryslLXg5oMOV2eOMuAbCEcFcbCPu7dkkm30tRfOJp46LC+Drswc84VADKDZBgNPTwpA
-         I1Y6+DpuDDluPDcPoJUUH4niopXhMg7FyvIC97M8PCnR8jjAWkWNuiToM/svMQ+Zt6g6
-         8fX3ejbcU7Dw10MDkjbpjJ82OTKW3n3qhCsMzxR/hC+wx2SV6qxuWL+G1IAL4YMNUd1Y
-         x+1w==
-X-Gm-Message-State: ANoB5pmzFTFDYkaYvQNXhUl4TpPi13vumlMXzG1MorVGXJpc/GdTsV9i
-        c9a+j9wafbAfwgQTnAJ9n7BWwwEE+vf6Mg==
-X-Google-Smtp-Source: AA0mqf6p2uq0pZRkd8/l6mb/PcvGZco83vJ7V5lzW2+57TlRJ0WnQO+welWA5FPATcUIc84zDS6S2Q==
-X-Received: by 2002:a05:620a:3708:b0:6fa:88c:50e5 with SMTP id de8-20020a05620a370800b006fa088c50e5mr19318464qkb.186.1668610164217;
-        Wed, 16 Nov 2022 06:49:24 -0800 (PST)
+        bh=AUJ4wmyHldmie0gv1i5ed1iRJzoHABMpIHKKor6rIMU=;
+        b=ZrWBauAjb8NzP/5urQqGrZ9fyj60LVlEdQMcnn+MCBwTRSL25B3YVDumpn5EJx/hRr
+         jBGmJsijXpIgb+WPaYC1Ay0IWG2XVGS1enj+BZe0ryP9szRfc6upxTclvGukKNzrCNtH
+         n011HY1jXVcMBrfEuqkjK19gdEoPPRI4/iORBYPt1VpopjnWOGW8zma0Caf7kkLXFb+X
+         81nms98sWDRwR9Dd3VfbMc30e7xP0/K2tzz7RcG5Vh0eWOdTSZpF0J3dcmlf9JLH4/zC
+         oJACveWivyczUK/+05RbrxDvxdXf/3RfxapBzYJdA4Ng9QXVGkb3gbvBAate9JckFd87
+         H12A==
+X-Gm-Message-State: ANoB5pmnwE24RBI6bcmQBA47ZM0Bk3yg982ZAHBHMPdl32eAoFkiuj2f
+        zXhvg7Hde/BPCBQkH+mxt9i/YqHR/ATddA==
+X-Google-Smtp-Source: AA0mqf5AWisHXZFcMr7VRZI1b4RNxrtCidTJ3ZlM8685E46b/XAUGpx+nLWoiCjTE5dwq6sS09ai0g==
+X-Received: by 2002:a05:622a:a0b:b0:3a5:4fdb:ac40 with SMTP id bv11-20020a05622a0a0b00b003a54fdbac40mr21241113qtb.268.1668610165509;
+        Wed, 16 Nov 2022 06:49:25 -0800 (PST)
 Received: from glsvmlin.ini.cmu.edu (GLSVMLIN.INI.CMU.EDU. [128.2.16.9])
-        by smtp.gmail.com with ESMTPSA id g5-20020ac84805000000b0039a55f78792sm8729624qtq.89.2022.11.16.06.49.23
+        by smtp.gmail.com with ESMTPSA id g5-20020ac84805000000b0039a55f78792sm8729624qtq.89.2022.11.16.06.49.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 06:49:23 -0800 (PST)
+        Wed, 16 Nov 2022 06:49:25 -0800 (PST)
 From:   Gabriel Somlo <gsomlo@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
@@ -57,9 +57,9 @@ Cc:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
         joel@jms.id.au, david.abdurachmanov@gmail.com,
         florent@enjoy-digital.fr, geert@linux-m68k.org,
         ilpo.jarvinen@linux.intel.com
-Subject: [PATCH v4 08/14] serial: liteuart: simplify passing of uart_insert_char() flag
-Date:   Wed, 16 Nov 2022 09:49:02 -0500
-Message-Id: <20221116144908.234154-9-gsomlo@gmail.com>
+Subject: [PATCH v4 09/14] serial: liteuart: fix rx loop variable types
+Date:   Wed, 16 Nov 2022 09:49:03 -0500
+Message-Id: <20221116144908.234154-10-gsomlo@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221116144908.234154-1-gsomlo@gmail.com>
 References: <20221116144908.234154-1-gsomlo@gmail.com>
@@ -76,8 +76,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Simply provide the hard-coded TTY_NORMAL flag to uart_insert_char()
-directly -- no need to dedicate a variable for that exclusive purpose.
+Update variable types to match the signature of uart_insert_char()
+which consumes them.
 
 Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
 Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
@@ -86,26 +86,19 @@ Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
  1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/drivers/tty/serial/liteuart.c b/drivers/tty/serial/liteuart.c
-index c90ab65fbdcf..81aa7c1da73c 100644
+index 81aa7c1da73c..42ac9aee050a 100644
 --- a/drivers/tty/serial/liteuart.c
 +++ b/drivers/tty/serial/liteuart.c
-@@ -73,7 +73,6 @@ static void liteuart_timer(struct timer_list *t)
+@@ -73,8 +73,7 @@ static void liteuart_timer(struct timer_list *t)
  	struct liteuart_port *uart = from_timer(uart, t, timer);
  	struct uart_port *port = &uart->port;
  	unsigned char __iomem *membase = port->membase;
--	unsigned int flg = TTY_NORMAL;
- 	int ch;
- 	unsigned long status;
+-	int ch;
+-	unsigned long status;
++	unsigned int status, ch;
  
-@@ -86,7 +85,7 @@ static void liteuart_timer(struct timer_list *t)
- 
- 		/* no overflow bits in status */
- 		if (!(uart_handle_sysrq_char(port, ch)))
--			uart_insert_char(port, status, 0, ch, flg);
-+			uart_insert_char(port, status, 0, ch, TTY_NORMAL);
- 	}
- 
- 	tty_flip_buffer_push(&port->state->port);
+ 	while ((status = !litex_read8(membase + OFF_RXEMPTY)) == 1) {
+ 		ch = litex_read8(membase + OFF_RXTX);
 -- 
 2.38.1
 
