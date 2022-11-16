@@ -2,197 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9976362CCDA
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 22:40:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A420A62CCDC
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 22:40:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233828AbiKPVj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 16:39:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46372 "EHLO
+        id S234019AbiKPVkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 16:40:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbiKPVj5 (ORCPT
+        with ESMTP id S234119AbiKPVkM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 16:39:57 -0500
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F29926FB;
-        Wed, 16 Nov 2022 13:39:56 -0800 (PST)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-141ca09c2fbso153fac.6;
-        Wed, 16 Nov 2022 13:39:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WdkJqVop4q3J0CGCyK+J6NJIGxrPvhJmwkz+Dg+EfiI=;
-        b=CmdDPJAJIRMmEt1tcojYpWcro06DdegbdYOVn/7lcCT0qLEOhlEvg+7o+hn9a8ml3E
-         UnpObArnqOC4yLSEhSF1m19GjgraHbzuzEHAbjWUnC/Kvqrb13K4QBdbs/mHEw0m59DU
-         KBBTREmBC9cxrhw5UfRuBNHjqoqNwYUj0jQPZ2rWWdB1qHwcu5Nj45EFiUFRJC3s1iBL
-         ZJUILNHuQ4Ibe4kxa/VRJGxWwPkBvCzkgTvHuC2Swh6d1UUkaQPVcub82ITY0sV5YLYF
-         di8wsy3/nzs1P4mnSzhQ6W9SWR54sBGpXkVhPyqcveSbH0y2sKyxA4006BykJEuFDxtq
-         496Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WdkJqVop4q3J0CGCyK+J6NJIGxrPvhJmwkz+Dg+EfiI=;
-        b=i+a5/k0VxOk70PZTYpDC4ASwi5FpvyYWainDYRMQSEkbB/T/82BkdaBkB3gvzZW8xx
-         K4+v0P6RA07/LyNWujA7GCkKwiY7jqb/MQGwziaHtCHoZ/zJxk8sR9W9mfNVwQKfGCnD
-         Jp4YGvvC5j8NWLnUB8vIouDdF7k7rABnTUnq6KK4h+UkMI+dd54dXPBq5Is/meYWt4o5
-         9WtXkUfOhpBHcb8x5pWKe8fP6TC3p/paua1ikknBlXjklLxspz+5wt6lgTRYfiWKiqHx
-         w+FSg5R8Y7cxEpBicxn5cSYoVQeTGlh+zl5muDb2cE6Um9hLMfJUjCC/IOUsU11W6v6z
-         lFWQ==
-X-Gm-Message-State: ANoB5pkNYzCyIP1SGNFcihzcYTMCmkG+07ghewGYbvjr8zBKBvnKXhVJ
-        HCjxxvaiCafiYqVVe6jnhFK3PyfimDQqb9FpDFg=
-X-Google-Smtp-Source: AA0mqf4zd0/xENSX0QBk22bSKVg5KhdCJKy8Aoy8Smk2BCl2rYAHKcpnp9jwxoqt8/EDGEzPWiPNSE31gpRg5AScFY4=
-X-Received: by 2002:a05:6871:4219:b0:13b:9676:8aba with SMTP id
- li25-20020a056871421900b0013b96768abamr2776077oab.88.1668634794942; Wed, 16
- Nov 2022 13:39:54 -0800 (PST)
-MIME-Version: 1.0
-References: <d1ecf500f07e063d4e8e34f4045ddca55416c686.1668507036.git.geert+renesas@glider.be>
- <20221116123115.6b49e1b8@kernel.org>
-In-Reply-To: <20221116123115.6b49e1b8@kernel.org>
-From:   Jamie Bainbridge <jamie.bainbridge@gmail.com>
-Date:   Thu, 17 Nov 2022 08:39:43 +1100
-Message-ID: <CAAvyFNhbsks96=yyWHDCi-u+A1vaEy845_+pytghAscoG0rrTQ@mail.gmail.com>
-Subject: Re: [PATCH net-next] tcp: Fix tcp_syn_flood_action() if CONFIG_IPV6=n
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Chris Down <chris@chrisdown.name>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 16 Nov 2022 16:40:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B453639F;
+        Wed, 16 Nov 2022 13:40:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2DC38B81EBC;
+        Wed, 16 Nov 2022 21:40:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5CD4C433D6;
+        Wed, 16 Nov 2022 21:40:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668634807;
+        bh=ARfrvyFLGorIZ3kzUAoR0AQIez47iYNNUSrsyVHjxOM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nGEtCwfsVmZWtjN6QaGOVnweV0CvMDiPR8DEGjg6SRFBztRwUG7KV0ZLjdky/IGaO
+         7cxAax5L/nwK16SsZq7pfzK0JNBkfKWGXCtwdjyxZ/FMFcxlcYcGvG3oZJDyQc7EU8
+         h4TzZtATG3MYXCSnlK81akfdj029Dbx0hLrRUzCgepxPiWG4s+Vj4SDKraYKGhb70U
+         M6l8j3C1qN2TjdVYrUdp+43Jo1r+YNUIgAoh5yQGjbSLTKlewE4XEiErts03t1KIiL
+         mHwKdJeIaD3yJKQIQwHXcguyHa8gjY94HGVBJHLDNv84BxU9b857P8OcaXBS5W/vuq
+         Ro9MGrzl8DcoA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1ovQ8b-006Zq2-9F;
+        Wed, 16 Nov 2022 21:40:05 +0000
+Date:   Wed, 16 Nov 2022 21:40:04 +0000
+Message-ID: <865yfepoi3.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [PATCH] kbuild: Restore .version auto-increment behaviour for Debian packages
+In-Reply-To: <CAK7LNATLaT4uwhpT-2o54Z4QjnOcuBDfGwgi-6Jvdr3+SgVo7Q@mail.gmail.com>
+References: <20221115220453.3463096-1-maz@kernel.org>
+        <CAK7LNASC6f_=ngS4NW0prvwcOribumeajW1r4q57u3LGZvuEdA@mail.gmail.com>
+        <867czvozhn.wl-maz@kernel.org>
+        <CAK7LNATLaT4uwhpT-2o54Z4QjnOcuBDfGwgi-6Jvdr3+SgVo7Q@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: masahiroy@kernel.org, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, michal.lkml@markovi.net, ndesaulniers@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Nov 2022 at 07:31, Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Tue, 15 Nov 2022 11:12:16 +0100 Geert Uytterhoeven wrote:
-> > If CONFIG_IPV6=3Dn:
+On Wed, 16 Nov 2022 20:56:38 +0000,
+Masahiro Yamada <masahiroy@kernel.org> wrote:
+> 
+> On Wed, Nov 16, 2022 at 9:28 PM Marc Zyngier <maz@kernel.org> wrote:
 > >
-> >     net/ipv4/tcp_input.c: In function =E2=80=98tcp_syn_flood_action=E2=
-=80=99:
-> >     include/net/sock.h:387:37: error: =E2=80=98const struct sock_common=
-=E2=80=99 has no member named =E2=80=98skc_v6_rcv_saddr=E2=80=99; did you m=
-ean =E2=80=98skc_rcv_saddr=E2=80=99?
-> >       387 | #define sk_v6_rcv_saddr __sk_common.skc_v6_rcv_saddr
-> >         |                                     ^~~~~~~~~~~~~~~~
-> >     include/linux/printk.h:429:19: note: in definition of macro =E2=80=
-=98printk_index_wrap=E2=80=99
-> >       429 |   _p_func(_fmt, ##__VA_ARGS__);    \
-> >         |                   ^~~~~~~~~~~
-> >     include/linux/printk.h:530:2: note: in expansion of macro =E2=80=98=
-printk=E2=80=99
-> >       530 |  printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
-> >         |  ^~~~~~
-> >     include/linux/net.h:272:3: note: in expansion of macro =E2=80=98pr_=
-info=E2=80=99
-> >       272 |   function(__VA_ARGS__);    \
-> >         |   ^~~~~~~~
-> >     include/linux/net.h:288:2: note: in expansion of macro =E2=80=98net=
-_ratelimited_function=E2=80=99
-> >       288 |  net_ratelimited_function(pr_info, fmt, ##__VA_ARGS__)
-> >         |  ^~~~~~~~~~~~~~~~~~~~~~~~
-> >     include/linux/net.h:288:43: note: in expansion of macro =E2=80=98sk=
-_v6_rcv_saddr=E2=80=99
-> >       288 |  net_ratelimited_function(pr_info, fmt, ##__VA_ARGS__)
-> >         |                                           ^~~~~~~~~~~
-> >     net/ipv4/tcp_input.c:6847:4: note: in expansion of macro =E2=80=98n=
-et_info_ratelimited=E2=80=99
-> >      6847 |    net_info_ratelimited("%s: Possible SYN flooding on port =
-[%pI6c]:%u. %s.\n",
-> >         |    ^~~~~~~~~~~~~~~~~~~~
+> > On Wed, 16 Nov 2022 06:09:31 +0000,
+> > Masahiro Yamada <masahiroy@kernel.org> wrote:
+> > >
+> > > On Wed, Nov 16, 2022 at 7:05 AM Marc Zyngier <maz@kernel.org> wrote:
+> > > >
+> > > > Since 2df8220cc511 ("kbuild: build init/built-in.a just once"),
+> > > > generating Debian packages using 'make bindeb-pkg' results in
+> > > > packages that are stuck to the same .version, leading to unexpected
+> > > > behaviours (multiple packages with the same version).
+> > > >
+> > > > That's because the mkdebian script samples the build version
+> > > > before building the kernel, and forces the use of that version
+> > > > number for the actual build.
+> > > >
+> > > > Restore the previous behaviour by calling init/build-version
+> > > > instead of reading the .version file. This is likely to result
+> > > > in too many .version bumps, but this is what was happening before
+> > > > (although the bump was affecting builds made after the current one).
+> > >
+> > >
+> > > What do you mean by "too many .version bumps"?
+> > >
+> > > Every "make bindeb-pkg" increments the version by one.
 > >
-> > Fix this by using "#if" instead of "if", like is done for all other
-> > checks for CONFIG_IPV6.
-> >
-> > Fixes: d9282e48c6088105 ("tcp: Add listening address to SYN flood messa=
-ge")
-> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
->
-> Sorry for the late reaction, this now conflicts with bf36267e3ad3df8
->
-> I was gonna hand edit but perhaps we can do better with the ifdef
-> formation.
->
-> Instead of
->
-> #ifdef v6
->         if (v6) {
->                 expensive_call6();
->         } else    //  d k
-> #endif            //  o i
->         {         //  o e
->                 expensive_call4();
->         }
+> > And isn't that a problem? We increase the build number pointlessly,
+> > even if there is *nothing* to change.
+> 
+> 
+> I think "make *-pkg" should increment the version every time.
 
-I actually started off using this way in my v1. I did that
-intentionally because that pattern already exists in other places,
-discussed at:
+But that's not what the rpm package builder does.
 
- https://lore.kernel.org/netdev/CAAvyFNg1F8ixrgy0YeL-TT5xLmk8N7dD=3DZMLQ6Vx=
-sjHb_PU9bg@mail.gmail.com/
+> 
+> 
+> The .version is incremented only when vmlinux is updated.
+> 
+> When you change module code, only *.ko is relinked.
+> The .version stays because it is embedded in vmlinux.
+> 
+> 
+> Even if you build the kernel first, and .version has no change,
+> the package contents may have some changes.
 
-or just see:
+And again, isn't that an inconsistency?
 
- grep -C1 -ERHn "IS_ENABLED\(CONFIG_IPV6\)" net | grep -C1 "family =3D=3D A=
-F_INET6"
+Anyway, enough idle arguing. What do want me to do about this bug?
 
-Geert's patch adheres to existing style, which seems the better option?
+	M.
 
-> Can we go with:
->
-> #ifdef v6
->         if (v6)
->                 expensive_call6();
->         else
-> #endif
->                 expensive_call4();
-
-This is a nested if, so it really should have braces to prevent
-dangling else, both now and in the future.
-
-> or
->
->         if (v4) {
->                 expensive_call4();
-> #ifdef v6
->         } else {
->                 expensive_call6();
-> #endif
->         }
-> or
->
->         if (v6) {
-> #ifdef v6
->                 expensive_call6();
-> #endif
->         } else {
->                 expensive_call6();
->         }
-
-These should work, but I expect they cause a comparison which can't be
-optimised out at compile time. This is probably why the first style
-exists.
-
-In this SYN flood codepath optimisation doesn't matter because we're
-doing ratelimited logging anyway. But if we're breaking with existing
-style, then wouldn't the others also have to change to this style? I
-haven't reviewed all the other usage to tell if they're in an oft-used
-fastpath where such a thing might matter.
-
-It seems Geert's patch style is the best way.
-
-Jamie
+-- 
+Without deviation from the norm, progress is not possible.
