@@ -2,132 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BB2562BCBF
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:57:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9DC362BCC0
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:57:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbiKPL5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 06:57:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44524 "EHLO
+        id S232077AbiKPL5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 06:57:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231985AbiKPL5Y (ORCPT
+        with ESMTP id S239272AbiKPL5Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 16 Nov 2022 06:57:24 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97DEC2C11A;
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29B452CE26
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 03:49:33 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id x21so21479276ljg.10
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 03:49:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=D4yQuD++gHc/GHIwBktSITQt5Jig/BfC/opKH/PnkSM=;
+        b=BX2kZt1rlLhnmA9uX9tCVWARUnGOnsUT/L56si9opqSB0mmmkQ+Rgd0KfWXSOMl0zO
+         vZW57IhT79BFGGV0yfoKw7Cra9dYPt6soKnGIA+D+HA9OvXSxm+c7TE4o6bs5kGVtA0L
+         5dJavtQwH+jaPJdV8X74Gbb5OwAYFQxf7cTnbQ1oLGKaZuJivFaSt37yjZ8y3RW8jMdh
+         10hVfO+993wwv6bJ3K6L4zmbL2nXwOTPtXHDGJgjWjmjRT7pDRWFPaw3sImKXAkAReOd
+         U6Na5K2H7pXhWAXb9XWnPGk/aQDy1ctat+OCF5Tu2GwbWV/MovuiaPLqlacF0AQ0QOat
+         fKvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=D4yQuD++gHc/GHIwBktSITQt5Jig/BfC/opKH/PnkSM=;
+        b=LT6A6mLcRY7neoXpye7P4FaBheqZID7z9aO13s9x7FEV7HZb1/0PljyOJyIKvIQn4f
+         RE4WzyUmgZkrog/8fn5fHMf6fGykhBKoDf6c5QyxN24OGTyWRRCOrqpdLJohzefsbP0F
+         s55vnj4X+UBCylXKIRUOqMPBP12lKFz5oYTCfGrbr8awmJElXuOoLNWIvjlDm+0jKLbD
+         xcaxOm+m5hbZral0haQNp5svSEgMyZVG/3mR6Ph8J/3SOsZ2e2/5YtHWIdNZs5VTvkxs
+         FZzjPgUPQJvGfQRGcaa8VHVXl2CwnH9sp7IDxTjYeYoMHh0Xn+yceYSjP5PTx9SDB855
+         oXeQ==
+X-Gm-Message-State: ANoB5pnPaSpYk6arlzDcl0NqTKVNVp0v1HHkv0KwTsGaBg9rGeumTuGt
+        JuIKPqAbh9xWFJX8mudxibohyA==
+X-Google-Smtp-Source: AA0mqf76HRCov0FT6yjAI+NG83nlIDMQsyrRZ3GksITd7qJmgy2BlU2UzFWnoblRuWHCEm/1/NrGVg==
+X-Received: by 2002:a05:651c:1308:b0:277:70fb:8576 with SMTP id u8-20020a05651c130800b0027770fb8576mr7038093lja.106.1668599371557;
         Wed, 16 Nov 2022 03:49:31 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 4E6981F920;
-        Wed, 16 Nov 2022 11:49:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1668599370; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DhlnYHc5lqYtVE2JY7TNjxERCR0CvhdNBUBJS3BlmxQ=;
-        b=X9r3fDmwizy2l3nijdIKOgxz2opeDeWGQzXWpsC+jzlPGsN8dPzA2Y/r1fxsTzQN5dpul3
-        6QgRVRYV+OAc4FMn8UfRHGAeyj+JAHLrepnmOm01THSxaYB0iPePr5RzGnDaJjKkhM3cpR
-        Y/R+T74cGeqL+JrS2jlShsVnCFYtc20=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1668599370;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DhlnYHc5lqYtVE2JY7TNjxERCR0CvhdNBUBJS3BlmxQ=;
-        b=eVPjjcn7QnC0B5re1/XKMY262s1XYw+zaR0RMaSYALLUAbxH+Txu05SRhWUHxRRgD7nY2p
-        nwhUbbEI9ITrCVAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4121B134CE;
-        Wed, 16 Nov 2022 11:49:30 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Z1/gD0rOdGORdgAAMHmgww
-        (envelope-from <jack@suse.cz>); Wed, 16 Nov 2022 11:49:30 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id C0B06A0709; Wed, 16 Nov 2022 12:49:29 +0100 (CET)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id 24-20020ac24838000000b004a2550db9ddsm2543692lft.245.2022.11.16.03.49.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Nov 2022 03:49:31 -0800 (PST)
+Message-ID: <97cd880f-c51c-67f5-eb33-4c211e862e73@linaro.org>
 Date:   Wed, 16 Nov 2022 12:49:29 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Baokun Li <libaokun1@huawei.com>
-Cc:     linux-ext4@vger.kernel.org, tytso@mit.edu,
-        adilger.kernel@dilger.ca, jack@suse.cz, ritesh.list@gmail.com,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yukuai3@huawei.com
-Subject: Re: [PATCH v2 2/3] ext4: fix corrupt backup group descriptors after
- online resize
-Message-ID: <20221116114929.wmawudyczia55gpe@quack3>
-References: <20221116072802.526990-1-libaokun1@huawei.com>
- <20221116072802.526990-3-libaokun1@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221116072802.526990-3-libaokun1@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 1/4] dt-bindings: dma: qcom,bam-dma: Add 'interconnects'
+ and 'interconnect-names'
+Content-Language: en-US
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
+        Abel Vesa <abel.vesa@linaro.org>, linux-arm-msm@vger.kernel.org
+References: <20221114-narmstrong-sm8550-upstream-qce-v1-0-31b489d5690a@linaro.org>
+ <20221114-narmstrong-sm8550-upstream-qce-v1-1-31b489d5690a@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221114-narmstrong-sm8550-upstream-qce-v1-1-31b489d5690a@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 16-11-22 15:28:01, Baokun Li wrote:
-> In commit 9a8c5b0d0615 ("ext4: update the backup superblock's at the end
-> of the online resize"), it is assumed that update_backups() only updates
-> backup superblocks, so each b_data is treated as a backupsuper block to
-> update its s_block_group_nr and s_checksum. However, update_backups()
-> also updates the backup group descriptors, which causes the backup group
-> descriptors to be corrupted.
+On 16/11/2022 11:23, Neil Armstrong wrote:
+> From: Abel Vesa <abel.vesa@linaro.org>
+
+Subject is precious, so after prefixes (these are good) just "Add
+interconnects".
+
 > 
-> The above commit fixes the problem of invalid checksum of the backup
-> superblock. The root cause of this problem is that the checksum of
-> ext4_update_super() is not set correctly. This problem has been fixed
-> in the previous patch ("ext4: fix bad checksum after online resize").
-> Therefore, roll back some modifications in the above commit.
+> Add 'interconnects' and 'interconnect-names' as optional properties
+> to the device-tree binding documentation for BAM DMA IP.
 > 
-> Fixes: 9a8c5b0d0615 ("ext4: update the backup superblock's at the end of the online resize")
-> Signed-off-by: Baokun Li <libaokun1@huawei.com>
+> These properties describe the interconnect path between BAM and main
+> memory and the interconnect type respectively.
 
-So I agree commit 9a8c5b0d0615 is broken and does corrupt group
-descriptors. However I don't see how PATCH 1/3 in this series would fix all
-the problems commit 9a8c5b0d0615 is trying to fix. In particular checksums
-on backup superblocks will not be properly set by the resize code AFAICT.
+Where is the type described? What is an "interconnect type"?
 
-								Honza
-
+> 
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 > ---
->  fs/ext4/resize.c | 5 -----
->  1 file changed, 5 deletions(-)
+>  Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 > 
-> diff --git a/fs/ext4/resize.c b/fs/ext4/resize.c
-> index cb99b410c9fa..32fbfc173571 100644
-> --- a/fs/ext4/resize.c
-> +++ b/fs/ext4/resize.c
-> @@ -1158,7 +1158,6 @@ static void update_backups(struct super_block *sb, sector_t blk_off, char *data,
->  	while (group < sbi->s_groups_count) {
->  		struct buffer_head *bh;
->  		ext4_fsblk_t backup_block;
-> -		struct ext4_super_block *es;
->  
->  		/* Out of journal space, and can't get more - abort - so sad */
->  		err = ext4_resize_ensure_credits_batch(handle, 1);
-> @@ -1187,10 +1186,6 @@ static void update_backups(struct super_block *sb, sector_t blk_off, char *data,
->  		memcpy(bh->b_data, data, size);
->  		if (rest)
->  			memset(bh->b_data + size, 0, rest);
-> -		es = (struct ext4_super_block *) bh->b_data;
-> -		es->s_block_group_nr = cpu_to_le16(group);
-> -		if (ext4_has_metadata_csum(sb))
-> -			es->s_checksum = ext4_superblock_csum(sb, es);
->  		set_buffer_uptodate(bh);
->  		unlock_buffer(bh);
->  		err = ext4_handle_dirty_metadata(handle, NULL, bh);
-> -- 
-> 2.31.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Best regards,
+Krzysztof
+
