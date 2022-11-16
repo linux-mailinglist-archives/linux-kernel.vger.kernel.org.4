@@ -2,193 +2,400 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E85D862B528
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 09:27:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FBC562B522
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 09:27:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238921AbiKPI0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 03:26:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57102 "EHLO
+        id S238940AbiKPI1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 03:27:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237952AbiKPIZA (ORCPT
+        with ESMTP id S231765AbiKPIZC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 03:25:00 -0500
+        Wed, 16 Nov 2022 03:25:02 -0500
 Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 37C82B7CC
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 00:23:46 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D0F96BC01
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 00:23:47 -0800 (PST)
 Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8Dx_7cSnnRjFLQHAA--.20903S3;
+        by gateway (Coremail) with SMTP id _____8BxXbcSnnRjHrQHAA--.13162S3;
         Wed, 16 Nov 2022 16:23:46 +0800 (CST)
 Received: from localhost.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx_1cKnnRjxqMUAA--.54947S9;
-        Wed, 16 Nov 2022 16:23:45 +0800 (CST)
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx_1cKnnRjxqMUAA--.54947S10;
+        Wed, 16 Nov 2022 16:23:46 +0800 (CST)
 From:   Qing Zhang <zhangqing@loongson.cn>
 To:     Huacai Chen <chenhuacai@kernel.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Ingo Molnar <mingo@redhat.com>
 Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v8 RESEND 7/9] LoongArch/ftrace: Add HAVE_FUNCTION_GRAPH_RET_ADDR_PTR support
-Date:   Wed, 16 Nov 2022 16:23:36 +0800
-Message-Id: <20221116082338.5145-8-zhangqing@loongson.cn>
+Subject: [PATCH v8 RESEND 8/9] LoongArch: modules/ftrace: Initialize PLT at load time
+Date:   Wed, 16 Nov 2022 16:23:37 +0800
+Message-Id: <20221116082338.5145-9-zhangqing@loongson.cn>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20221116082338.5145-1-zhangqing@loongson.cn>
 References: <20221116082338.5145-1-zhangqing@loongson.cn>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Dx_1cKnnRjxqMUAA--.54947S9
+X-CM-TRANSID: AQAAf8Dx_1cKnnRjxqMUAA--.54947S10
 X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxAr43CF45Zr4xCr1fZr4ktFb_yoWrKFyUpF
-        9rCas5GrWxGF9agrnFqr1j9r4kGrn7Cw1agasFy34FkFsFqFy7Wrn2vryqqF4kt3ykW3yI
-        q3Z5G390ka1UXwUanT9S1TB71UUUUb7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+X-Coremail-Antispam: 1Uk129KBjvJXoWfGF47Jr13WF1UJFW8ZF17GFg_yoWDKrWxpF
+        yqywn5GrWUGFn3Wa4q9wn8ur1UGFZ7W342gFW3G34akw42qry5AF1vkr90yFyjqws8uFWS
+        ga1fur4j9FW7Xw7anT9S1TB71UUUUb7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
         qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bhxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        bhkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
         1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAa
-        w2AFwI0_Jw0_GFyle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
-        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Wrv_ZF1lYx0Ex4A2
-        jsIE14v26r4UJVWxJr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I
-        0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCI
-        bckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_Jr
-        I_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v2
-        6ryj6F1UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj4
-        0_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr1j6F4UJwCI42IY6I8E87Iv6xkF7I0E14v26r4U
-        JVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IUnc4S5UUUUU==
+        wVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84
+        ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWl
+        n4kS14v26r1q6r43M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26rWY6Fy7McIj6I8E
+        87Iv67AKxVW8Jr0_Cr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x
+        0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCF
+        I7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r
+        106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AK
+        xVW7JVWDJwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7
+        xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4UJVWxJr1lIxAIcVC2z280aVCY1x0267AKxVW8
+        Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07jkkucUUUUU=
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_FILL_THIS_FORM_SHORT autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ftrace_graph_ret_addr can be called by stack unwinding code to convert
-a found stack return address ('ret') to its original value, in case the
-function graph tracer has modified it to be 'return_to_handler',If the
-hasn't been modified, the unchanged value of 'ret' is returned.
+To Implement ftrace trampiones through plt entry.
+
+Tested by forcing ftrace_make_call() to use the module PLT, and then
+loading up a module after setting up ftrace with:
+
+| echo ":mod:<module-name>" > set_ftrace_filter;
+| echo function > current_tracer;
+| modprobe <module-name>
+
+Since FTRACE_ADDR/FTRACE_REGS_ADDR is only defined when CONFIG_DYNAMIC_FTRACE
+is selected, we wrap its use along with most of module_init_ftrace_plt() with
+ifdeffery rather than using IS_ENABLED().
 
 Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
 ---
- arch/loongarch/include/asm/ftrace.h     |  3 +++
- arch/loongarch/include/asm/unwind.h     |  1 +
- arch/loongarch/kernel/ftrace_dyn.c      |  2 +-
- arch/loongarch/kernel/unwind_guess.c    |  4 +++-
- arch/loongarch/kernel/unwind_prologue.c | 11 +++++++++--
- 5 files changed, 17 insertions(+), 4 deletions(-)
+ arch/loongarch/include/asm/ftrace.h     |  4 ++
+ arch/loongarch/include/asm/inst.h       |  3 +
+ arch/loongarch/include/asm/module.h     |  5 +-
+ arch/loongarch/include/asm/module.lds.h |  1 +
+ arch/loongarch/kernel/ftrace_dyn.c      | 79 +++++++++++++++++++++++++
+ arch/loongarch/kernel/inst.c            | 11 ++++
+ arch/loongarch/kernel/module-sections.c | 11 ++++
+ arch/loongarch/kernel/module.c          | 21 +++++++
+ 8 files changed, 134 insertions(+), 1 deletion(-)
 
 diff --git a/arch/loongarch/include/asm/ftrace.h b/arch/loongarch/include/asm/ftrace.h
-index 9c3d05c727e3..6c6187a01c68 100644
+index 6c6187a01c68..e8b58d8f99ec 100644
 --- a/arch/loongarch/include/asm/ftrace.h
 +++ b/arch/loongarch/include/asm/ftrace.h
-@@ -6,6 +6,8 @@
- #ifndef _ASM_LOONGARCH_FTRACE_H
- #define _ASM_LOONGARCH_FTRACE_H
+@@ -8,6 +8,10 @@
  
-+#define GRAPH_FAKE_OFFSET (sizeof(struct pt_regs) - offsetof(struct pt_regs, regs[1]))
+ #define GRAPH_FAKE_OFFSET (sizeof(struct pt_regs) - offsetof(struct pt_regs, regs[1]))
+ 
++#define FTRACE_PLT_IDX		0
++#define FTRACE_REGS_PLT_IDX	1
++#define NR_FTRACE_PLTS		2
 +
  #ifdef CONFIG_FUNCTION_TRACER
  #define MCOUNT_INSN_SIZE 4		/* sizeof mcount call */
  
-@@ -33,6 +35,7 @@ void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
- #endif
+diff --git a/arch/loongarch/include/asm/inst.h b/arch/loongarch/include/asm/inst.h
+index 59fee75590e9..417d6b8bc43e 100644
+--- a/arch/loongarch/include/asm/inst.h
++++ b/arch/loongarch/include/asm/inst.h
+@@ -13,10 +13,12 @@
  
- #ifdef CONFIG_DYNAMIC_FTRACE
-+#define HAVE_FUNCTION_GRAPH_RET_ADDR_PTR
- static inline unsigned long ftrace_call_adjust(unsigned long addr)
- {
- 	return addr;
-diff --git a/arch/loongarch/include/asm/unwind.h b/arch/loongarch/include/asm/unwind.h
-index a51eec00efb8..f2b52b9ea93d 100644
---- a/arch/loongarch/include/asm/unwind.h
-+++ b/arch/loongarch/include/asm/unwind.h
-@@ -21,6 +21,7 @@ struct unwind_state {
- 	struct stack_info stack_info;
- 	struct task_struct *task;
- 	bool first, error, is_ftrace;
-+	int graph_idx;
- 	unsigned long sp, pc, ra;
+ #define ADDR_IMMMASK_LU52ID	0xFFF0000000000000
+ #define ADDR_IMMMASK_LU32ID	0x000FFFFF00000000
++#define ADDR_IMMMASK_LU12IW	0x00000000FFFFF000
+ #define ADDR_IMMMASK_ADDU16ID	0x00000000FFFF0000
+ 
+ #define ADDR_IMMSHIFT_LU52ID	52
+ #define ADDR_IMMSHIFT_LU32ID	32
++#define ADDR_IMMSHIFT_LU12IW	12
+ #define ADDR_IMMSHIFT_ADDU16ID	16
+ 
+ #define ADDR_IMM(addr, INSN)	((addr & ADDR_IMMMASK_##INSN) >> ADDR_IMMSHIFT_##INSN)
+@@ -361,6 +363,7 @@ u32 larch_insn_gen_or(enum loongarch_gpr rd, enum loongarch_gpr rj,
+ 			enum loongarch_gpr rk);
+ u32 larch_insn_gen_move(enum loongarch_gpr rd, enum loongarch_gpr rj);
+ 
++u32 larch_insn_gen_lu12iw(enum loongarch_gpr rd, int imm);
+ u32 larch_insn_gen_lu32id(enum loongarch_gpr rd, int imm);
+ u32 larch_insn_gen_lu52id(enum loongarch_gpr rd, enum loongarch_gpr rj, int imm);
+ u32 larch_insn_gen_jirl(enum loongarch_gpr rd, enum loongarch_gpr rj, unsigned long pc, unsigned long dest);
+diff --git a/arch/loongarch/include/asm/module.h b/arch/loongarch/include/asm/module.h
+index b29b19a46f42..a311cfec2b23 100644
+--- a/arch/loongarch/include/asm/module.h
++++ b/arch/loongarch/include/asm/module.h
+@@ -20,6 +20,9 @@ struct mod_arch_specific {
+ 	struct mod_section got;
+ 	struct mod_section plt;
+ 	struct mod_section plt_idx;
++
++	/* for CONFIG_DYNAMIC_FTRACE */
++	struct plt_entry *ftrace_trampolines;
  };
  
+ struct got_entry {
+@@ -49,7 +52,7 @@ static inline struct plt_entry emit_plt_entry(unsigned long val)
+ {
+ 	u32 lu12iw, lu32id, lu52id, jirl;
+ 
+-	lu12iw = (lu12iw_op << 25 | (((val >> 12) & 0xfffff) << 5) | LOONGARCH_GPR_T1);
++	lu12iw = larch_insn_gen_lu12iw(LOONGARCH_GPR_T1, ADDR_IMM(val, LU12IW));
+ 	lu32id = larch_insn_gen_lu32id(LOONGARCH_GPR_T1, ADDR_IMM(val, LU32ID));
+ 	lu52id = larch_insn_gen_lu52id(LOONGARCH_GPR_T1, LOONGARCH_GPR_T1, ADDR_IMM(val, LU52ID));
+ 	jirl = larch_insn_gen_jirl(0, LOONGARCH_GPR_T1, 0, (val & 0xfff));
+diff --git a/arch/loongarch/include/asm/module.lds.h b/arch/loongarch/include/asm/module.lds.h
+index a3d1bc0fcc72..438f09d4ccf4 100644
+--- a/arch/loongarch/include/asm/module.lds.h
++++ b/arch/loongarch/include/asm/module.lds.h
+@@ -5,4 +5,5 @@ SECTIONS {
+ 	.got : { BYTE(0) }
+ 	.plt : { BYTE(0) }
+ 	.plt.idx : { BYTE(0) }
++	.ftrace_trampoline : { BYTE(0) }
+ }
 diff --git a/arch/loongarch/kernel/ftrace_dyn.c b/arch/loongarch/kernel/ftrace_dyn.c
-index f538829312d7..cd64887e26b5 100644
+index cd64887e26b5..b070ce225989 100644
 --- a/arch/loongarch/kernel/ftrace_dyn.c
 +++ b/arch/loongarch/kernel/ftrace_dyn.c
-@@ -140,7 +140,7 @@ void prepare_ftrace_return(unsigned long self_addr, unsigned long *parent)
- 
- 	old = *parent;
- 
--	if (!function_graph_enter(old, self_addr, 0, NULL))
-+	if (!function_graph_enter(old, self_addr, 0, parent))
- 		*parent = return_hooker;
- }
- 
-diff --git a/arch/loongarch/kernel/unwind_guess.c b/arch/loongarch/kernel/unwind_guess.c
-index 5afa6064d73e..229ba014cea0 100644
---- a/arch/loongarch/kernel/unwind_guess.c
-+++ b/arch/loongarch/kernel/unwind_guess.c
-@@ -2,6 +2,7 @@
- /*
-  * Copyright (C) 2022 Loongson Technology Corporation Limited
-  */
-+#include <linux/ftrace.h>
- #include <linux/kernel.h>
- 
- #include <asm/unwind.h>
-@@ -53,7 +54,8 @@ bool unwind_next_frame(struct unwind_state *state)
- 		     state->sp < info->end;
- 		     state->sp += sizeof(unsigned long)) {
- 			addr = *(unsigned long *)(state->sp);
--
-+			state->pc = ftrace_graph_ret_addr(state->task, &state->graph_idx,
-+				addr, (unsigned long *)(state->sp - GRAPH_FAKE_OFFSET));
- 			if (__kernel_text_address(addr))
- 				return true;
- 		}
-diff --git a/arch/loongarch/kernel/unwind_prologue.c b/arch/loongarch/kernel/unwind_prologue.c
-index c5df4ae73e0d..48f7a120ec27 100644
---- a/arch/loongarch/kernel/unwind_prologue.c
-+++ b/arch/loongarch/kernel/unwind_prologue.c
-@@ -2,6 +2,7 @@
- /*
-  * Copyright (C) 2022 Loongson Technology Corporation Limited
-  */
-+#include <linux/ftrace.h>
- #include <linux/kallsyms.h>
+@@ -9,6 +9,7 @@
+ #include <linux/uaccess.h>
  
  #include <asm/inst.h>
-@@ -30,6 +31,8 @@ static bool unwind_by_guess(struct unwind_state *state)
- 	     state->sp < info->end;
- 	     state->sp += sizeof(unsigned long)) {
- 		addr = *(unsigned long *)(state->sp);
-+		state->pc = ftrace_graph_ret_addr(state->task, &state->graph_idx,
-+			addr, (unsigned long *)(state->sp - GRAPH_FAKE_OFFSET));
- 		if (__kernel_text_address(addr))
- 			return true;
++#include <asm/module.h>
+ 
+ static int ftrace_modify_code(unsigned long pc, u32 old, u32 new,
+ 			      bool validate)
+@@ -72,12 +73,63 @@ int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec)
+ 	return ftrace_modify_code(pc, old, new, true);
+ }
+ 
++static inline int __get_mod(struct module **mod, unsigned long addr)
++{
++	preempt_disable();
++	*mod = __module_text_address(addr);
++	preempt_enable();
++
++	if (WARN_ON(!(*mod)))
++		return -EINVAL;
++
++	return 0;
++}
++
++static struct plt_entry *get_ftrace_plt(struct module *mod, unsigned long addr)
++{
++	struct plt_entry *plt = mod->arch.ftrace_trampolines;
++
++	if (addr == FTRACE_ADDR)
++		return &plt[FTRACE_PLT_IDX];
++	if (addr == FTRACE_REGS_ADDR &&
++			IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_REGS))
++		return &plt[FTRACE_REGS_PLT_IDX];
++
++	return NULL;
++}
++
++static unsigned long get_plt_addr(struct module *mod, unsigned long addr)
++{
++	struct plt_entry *plt;
++
++	plt = get_ftrace_plt(mod, addr);
++	if (!plt) {
++		pr_err("ftrace: no module PLT for %ps\n", (void *)addr);
++		return -EINVAL;
++	}
++
++	return (unsigned long)plt;
++}
++
+ int ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
+ {
+ 	unsigned long pc;
++	long offset;
+ 	u32 old, new;
+ 
+ 	pc = rec->ip + LOONGARCH_INSN_SIZE;
++	offset = (long)pc - (long)addr;
++
++	if (offset < -SZ_128M || offset >= SZ_128M) {
++		int ret;
++		struct module *mod;
++
++		ret = __get_mod(&mod, pc);
++		if (ret)
++			return ret;
++
++		addr = get_plt_addr(mod, addr);
++	}
+ 
+ 	old = larch_insn_gen_nop();
+ 	new = larch_insn_gen_bl(pc, addr);
+@@ -89,9 +141,22 @@ int ftrace_make_nop(struct module *mod, struct dyn_ftrace *rec,
+ 		    unsigned long addr)
+ {
+ 	unsigned long pc;
++	long offset;
+ 	u32 old, new;
+ 
+ 	pc = rec->ip + LOONGARCH_INSN_SIZE;
++	offset = (long)pc - (long)addr;
++
++	if (offset < -SZ_128M || offset >= SZ_128M) {
++		int ret;
++		struct module *mod;
++
++		ret = __get_mod(&mod, pc);
++		if (ret)
++			return ret;
++
++		addr = get_plt_addr(mod, addr);
++	}
+ 
+ 	new = larch_insn_gen_nop();
+ 	old = larch_insn_gen_bl(pc, addr);
+@@ -108,6 +173,20 @@ int ftrace_modify_call(struct dyn_ftrace *rec, unsigned long old_addr,
+ 	u32 old, new;
+ 
+ 	pc = rec->ip + LOONGARCH_INSN_SIZE;
++	offset = (long)pc - (long)addr;
++
++	if (offset < -SZ_128M || offset >= SZ_128M) {
++		int ret;
++		struct module *mod;
++
++		ret = __get_mod(&mod, pc);
++		if (ret)
++			return ret;
++
++		addr = get_plt_addr(mod, addr);
++
++		old_addr = get_plt_addr(mod, old_addr);
++	}
+ 
+ 	old = larch_insn_gen_bl(pc, old_addr);
+ 	new = larch_insn_gen_bl(pc, addr);
+diff --git a/arch/loongarch/kernel/inst.c b/arch/loongarch/kernel/inst.c
+index 2d2e942eb06a..0d6bd7000ba6 100644
+--- a/arch/loongarch/kernel/inst.c
++++ b/arch/loongarch/kernel/inst.c
+@@ -103,6 +103,17 @@ u32 larch_insn_gen_bl(unsigned long pc, unsigned long dest)
+ 	return insn.word;
+ }
+ 
++u32 larch_insn_gen_lu12iw(enum loongarch_gpr rd, int imm)
++{
++	union loongarch_instruction insn;
++
++	insn.reg1i20_format.opcode = lu12iw_op;
++	insn.reg1i20_format.rd = rd;
++	insn.reg1i20_format.immediate = imm;
++
++	return insn.word;
++}
++
+ u32 larch_insn_gen_lu32id(enum loongarch_gpr rd, int imm)
+ {
+ 	union loongarch_instruction insn;
+diff --git a/arch/loongarch/kernel/module-sections.c b/arch/loongarch/kernel/module-sections.c
+index d296a70b758f..bd1a96691c98 100644
+--- a/arch/loongarch/kernel/module-sections.c
++++ b/arch/loongarch/kernel/module-sections.c
+@@ -4,6 +4,7 @@
+  */
+ 
+ #include <linux/elf.h>
++#include <linux/ftrace.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ 
+@@ -103,6 +104,7 @@ int module_frob_arch_sections(Elf_Ehdr *ehdr, Elf_Shdr *sechdrs,
+ 			      char *secstrings, struct module *mod)
+ {
+ 	unsigned int i, num_plts = 0, num_gots = 0;
++	Elf_Shdr *tramp = NULL;
+ 
+ 	/*
+ 	 * Find the empty .plt sections.
+@@ -114,6 +116,8 @@ int module_frob_arch_sections(Elf_Ehdr *ehdr, Elf_Shdr *sechdrs,
+ 			mod->arch.plt.shdr = sechdrs + i;
+ 		else if (!strcmp(secstrings + sechdrs[i].sh_name, ".plt.idx"))
+ 			mod->arch.plt_idx.shdr = sechdrs + i;
++		else if (!strcmp(secstrings + sechdrs[i].sh_name, ".ftrace_trampoline"))
++			tramp = sechdrs + i;
  	}
-@@ -171,8 +174,11 @@ bool unwind_next_frame(struct unwind_state *state)
- 			break;
  
- 		case UNWINDER_PROLOGUE:
--			if (unwind_by_prologue(state))
-+			if (unwind_by_prologue(state)) {
-+				state->pc = ftrace_graph_ret_addr(state->task, &state->graph_idx,
-+					state->pc, (unsigned long *)(state->sp - GRAPH_FAKE_OFFSET));
- 				return true;
-+			}
+ 	if (!mod->arch.got.shdr) {
+@@ -166,5 +170,12 @@ int module_frob_arch_sections(Elf_Ehdr *ehdr, Elf_Shdr *sechdrs,
+ 	mod->arch.plt_idx.num_entries = 0;
+ 	mod->arch.plt_idx.max_entries = num_plts;
  
- 			if (info->type == STACK_TYPE_IRQ &&
- 				info->end == state->sp) {
-@@ -182,8 +188,9 @@ bool unwind_next_frame(struct unwind_state *state)
- 				if (user_mode(regs) || !__kernel_text_address(pc))
- 					return false;
++	if (tramp) {
++		tramp->sh_type = SHT_NOBITS;
++		tramp->sh_flags = SHF_EXECINSTR | SHF_ALLOC;
++		tramp->sh_addralign = __alignof__(struct plt_entry);
++		tramp->sh_size = NR_FTRACE_PLTS * sizeof(struct plt_entry);
++	}
++
+ 	return 0;
+ }
+diff --git a/arch/loongarch/kernel/module.c b/arch/loongarch/kernel/module.c
+index 825fcf77f9e7..58c57540c0bd 100644
+--- a/arch/loongarch/kernel/module.c
++++ b/arch/loongarch/kernel/module.c
+@@ -10,6 +10,7 @@
  
--				state->pc = pc;
- 				state->sp = regs->regs[3];
-+				state->pc = ftrace_graph_ret_addr(state->task, &state->graph_idx,
-+					pc, (unsigned long *)(state->sp - GRAPH_FAKE_OFFSET));
- 				state->ra = regs->regs[1];
- 				state->first = true;
- 				get_stack_info(state->sp, state->task, info);
+ #include <linux/moduleloader.h>
+ #include <linux/elf.h>
++#include <linux/ftrace.h>
+ #include <linux/mm.h>
+ #include <linux/numa.h>
+ #include <linux/vmalloc.h>
+@@ -18,6 +19,7 @@
+ #include <linux/string.h>
+ #include <linux/kernel.h>
+ #include <asm/alternative.h>
++#include <asm/inst.h>
+ 
+ static int rela_stack_push(s64 stack_value, s64 *rela_stack, size_t *rela_stack_top)
+ {
+@@ -458,6 +460,23 @@ void *module_alloc(unsigned long size)
+ 			GFP_KERNEL, PAGE_KERNEL, 0, NUMA_NO_NODE, __builtin_return_address(0));
+ }
+ 
++static void module_init_ftrace_plt(const Elf_Ehdr *hdr, const Elf_Shdr *sechdrs,
++				  struct module *mod)
++{
++#ifdef CONFIG_DYNAMIC_FTRACE
++	struct plt_entry *ftrace_plts;
++
++	ftrace_plts = (void *)sechdrs->sh_addr;
++
++	ftrace_plts[FTRACE_PLT_IDX] = emit_plt_entry(FTRACE_ADDR);
++
++	if (IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_REGS))
++		ftrace_plts[FTRACE_REGS_PLT_IDX] = emit_plt_entry(FTRACE_REGS_ADDR);
++
++	mod->arch.ftrace_trampolines = ftrace_plts;
++#endif
++}
++
+ int module_finalize(const Elf_Ehdr *hdr,
+ 		    const Elf_Shdr *sechdrs, struct module *mod)
+ {
+@@ -467,6 +486,8 @@ int module_finalize(const Elf_Ehdr *hdr,
+ 	for (s = sechdrs, se = sechdrs + hdr->e_shnum; s < se; s++) {
+ 		if (!strcmp(".altinstructions", secstrs + s->sh_name))
+ 			apply_alternatives((void *)s->sh_addr, (void *)s->sh_addr + s->sh_size);
++		if (!strcmp(".ftrace_trampoline", secstrs + s->sh_name))
++			module_init_ftrace_plt(hdr, s, mod);
+ 	}
+ 
+ 	return 0;
 -- 
 2.36.0
 
