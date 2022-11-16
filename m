@@ -2,87 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C3A062C12A
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:42:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B4F962C12F
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 15:42:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233740AbiKPOlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 09:41:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34884 "EHLO
+        id S231448AbiKPOmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 09:42:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230123AbiKPOle (ORCPT
+        with ESMTP id S233841AbiKPOl7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 09:41:34 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793F22D777;
-        Wed, 16 Nov 2022 06:41:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668609693; x=1700145693;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ycJs6ajpUg38/Rvys2BGxzFtcS8ZL6CaiA8Bd2XGwI0=;
-  b=eFfWQYvKwoqoJzMaR/zLpxyn4d+/q6ITwdNIzFqOQCBdra4eZMhTjrIw
-   aAWXnMcDw5XbDditog2I1k/l/16FWYBqavkxASqLJrpnn1XnmYlSTUpIc
-   Hhy0Vs2NNX1TCON/U6YjF+O8AuDA7osF6sFdZM2YDXJIBXoQcr+sXZKKe
-   y+p9zV0g8qVUjK7KRo+n33yotgj5OuLNovDuRygZ76A0dlVTdnZ1hRqwI
-   h0NjHVXraOkmhusETOHM1KRbpoYXCEyVBjzHNAnZ+qg/RqQrm7tkl3mOE
-   bF4KR+gUWC05Drl60Xetbj+mqPdqC6eWRl2UO3rZAzdFKFTF2oYHCuLpA
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="295922287"
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="295922287"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 06:41:33 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="968446430"
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="968446430"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga005.fm.intel.com with ESMTP; 16 Nov 2022 06:41:30 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ovJbU-00DALM-3C;
-        Wed, 16 Nov 2022 16:41:28 +0200
-Date:   Wed, 16 Nov 2022 16:41:28 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Brian Masney <bmasney@redhat.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-Subject: Re: [PATCH v1 1/1] gpiolib: Unify access to the device properties
-Message-ID: <Y3T2mN1inwsYZWLW@smile.fi.intel.com>
-References: <20221116141728.72491-1-andriy.shevchenko@linux.intel.com>
+        Wed, 16 Nov 2022 09:41:59 -0500
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51BB63F04D;
+        Wed, 16 Nov 2022 06:41:58 -0800 (PST)
+Received: by mail-ot1-f48.google.com with SMTP id g51-20020a9d12b6000000b0066dbea0d203so489444otg.6;
+        Wed, 16 Nov 2022 06:41:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hmTmOBiujjJzMOC34NULLqzGRaBRcGqq+M/PlxPI0qg=;
+        b=z978liilT2RAwIoFmc1uvIHwUMgrs8vJjMt0ioB8LTBtIJxfxnWEpLrSXE62rPkUTL
+         VQm1+FEkLQ/O7ZbgLaOLlczswlfjrSb/FSALexe8CmPLKiD6PFKTHM7V/CBvLzHGThY0
+         2e0Y1uR3sJF/lC4MsDRgt99eD0B4wAKkTsrGE7RIqyOGaD74lzkFVj+NhLTQ/U5UD7bO
+         w26MFJEXUQhMvTwy9kDluWf5FoYKKgFQArlGAVwjGfgVK4RVX+bby3YNiywQlKfhpFfO
+         smSNTmzXgWgjsLRRqlXBJw45DkPLVRkTVIeFTugV7LUuSNKVELFO4ehlmMej/fNGuUje
+         A+yA==
+X-Gm-Message-State: ANoB5pltFQ2LsEVMtyMpUMlXyV1Ge6ibXMU+xykjwhSFFAmRkwupD/IB
+        MNlySF35HVOPqwBJDP4UoQ==
+X-Google-Smtp-Source: AA0mqf6yczlqz0ixYCplthhhPxfTsROjnYiGuRO6OYi37eGwpih3pykOrdiorPCJqKBhxfSpfvob4w==
+X-Received: by 2002:a05:6830:6089:b0:66d:8b98:683f with SMTP id by9-20020a056830608900b0066d8b98683fmr7259700otb.40.1668609717543;
+        Wed, 16 Nov 2022 06:41:57 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id l6-20020a056870204600b00136c20b1c59sm8057852oad.43.2022.11.16.06.41.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 06:41:56 -0800 (PST)
+Received: (nullmailer pid 3820928 invoked by uid 1000);
+        Wed, 16 Nov 2022 14:41:58 -0000
+Date:   Wed, 16 Nov 2022 08:41:58 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mark Brown <broonie@kernel.org>, quic_plai@quicinc.com,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        alsa-devel@alsa-project.org, quic_srivasam@quicinc.com,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: Re: [PATCH v2 07/11] ASoC: dt-bindings: qcom,q6asm: Split to
+ separate schema
+Message-ID: <166860971788.3820869.2449332152697837525.robh@kernel.org>
+References: <20221115120235.167812-1-krzysztof.kozlowski@linaro.org>
+ <20221115120235.167812-8-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221116141728.72491-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221115120235.167812-8-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 04:17:28PM +0200, Andy Shevchenko wrote:
-> Some of the functions are using struct fwnode_handle, some struct device
-> pointer. In the GPIO library the firmware node of the GPIO device is the
-> same as GPIO node of the GPIO chip. Due to this fact we may use former
-> to access properties everywhere in the code.
 
-Citing myself from another thread to the topic:
+On Tue, 15 Nov 2022 13:02:31 +0100, Krzysztof Kozlowski wrote:
+> The APR/GPR bindings with services got complicated so move out the Q6ASM
+> service to its own binding.  Previously the compatible was documented in
+> qcom,apr.yaml.  Move most of the examples from its children to this new
+> file.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> Cc: quic_srivasam@quicinc.com
+> Cc: quic_plai@quicinc.com
+> ---
+>  .../bindings/sound/qcom,q6asm-dais.yaml       | 48 +++++--------
+>  .../devicetree/bindings/sound/qcom,q6asm.yaml | 68 +++++++++++++++++++
+>  2 files changed, 84 insertions(+), 32 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/sound/qcom,q6asm.yaml
+> 
 
-Nevertheless, for of_gpiochip_add()/of_gpiochip_remove() and
-of_mm_gpiochip_add_data() I still left use of fwnode, because it feels
-the right thing to do: we are taking reference on the input data in
-such cases.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Reviewed-by: Rob Herring <robh@kernel.org>
