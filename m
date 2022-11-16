@@ -2,103 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64CA562B5D2
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:00:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C69A562B5D3
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:00:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233115AbiKPJAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 04:00:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54894 "EHLO
+        id S233339AbiKPJAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 04:00:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232353AbiKPJAZ (ORCPT
+        with ESMTP id S233301AbiKPJAc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 04:00:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 141581142;
-        Wed, 16 Nov 2022 01:00:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A8F9B61AE9;
-        Wed, 16 Nov 2022 09:00:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CDDDC433D6;
-        Wed, 16 Nov 2022 09:00:15 +0000 (UTC)
-Date:   Wed, 16 Nov 2022 09:00:12 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        will@kernel.org, Suzuki K Poulose <suzuki.poulose@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mark Rutland <mark.rutland@arm.com>, linux-doc@vger.kernel.org
-Subject: Re: [PATCH V2 2/2] arm64: errata: Workaround possible Cortex-A715
- [ESR|FAR]_ELx corruption
-Message-ID: <Y3SmnJLO92zc20lD@arm.com>
-References: <20221113012645.190301-1-anshuman.khandual@arm.com>
- <20221113012645.190301-3-anshuman.khandual@arm.com>
- <Y3Ob2MmmuoXOs2In@arm.com>
- <438ddc78-ded6-d464-f917-6b8749626f16@arm.com>
+        Wed, 16 Nov 2022 04:00:32 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECCA7765D
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:00:30 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id r12so28474824lfp.1
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:00:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FVdV6LebjwCpmwDk6trJqC8cySRjktuHUoTqdWNdcms=;
+        b=khTlLRnGvCZXS8zSbmdGUxyvWawM2fSnfv8ljuguxkvPyAT5UUql0SYa5oohRXhQTd
+         I88GbIyvvk7Q5jqHMKbJtEm/uFyFy0ZmiUAnPm0/uFL+innZxOko6G7JEv2kZT/9hERJ
+         th/tEufxqaMEx421Dyo6sxDbbABvx6rLxB997bMfwk+g/1DjUf9UXDUNk3t8XsM2WT4j
+         pgG/vIRMFhV+6XQSwNYnzaAenrqk7fU49GBqbb0pPU13Q/4+JDNkIL0Y9u6ZoZmE8dQc
+         Lm2pM5RzmBs8uGXIir8fPW7SJvcdkVYnEwLBs0Ajo6yXndizM7u2F1/Xes/K5ILVZPOB
+         9+4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FVdV6LebjwCpmwDk6trJqC8cySRjktuHUoTqdWNdcms=;
+        b=aLTrMa6X8hB1LmEvZNWPuFFI44+/pV4P8jEe7Tu8CHpJApakB2ontLwwr5pHy57rAM
+         y6fjoV0R5HP39BDrx0PFscqM9d0Rptw4g0LPsfa4QAtWVhp+OSwV7Mm2Z2eqk2yv+2Rq
+         Ca3Im8hAFkYnxMsoClXDSses0ykvyUJbYlAU2fFYwtgcTi8uuaTfer1mYtBxkFJERfEA
+         Vqkg91/7jJdTOd/Cy52+FjsEQPJIogn/awIaDclrsgoWud2PpCC1P9B0PzceQpALtF3M
+         xQtAk3b0r7S12A/0sZTUF7PTZKtPswiXT9hrqTZRUOcjAU0ycZ3lRnVp1Dm2w5m70G60
+         lmJw==
+X-Gm-Message-State: ANoB5pnZ1ZYioqBrCGhJB8G+NfFcftK/eax+z7wOurYToRhNB7lIZC1g
+        pNn+IIF1UPx04WNJ12WSx2bYnA==
+X-Google-Smtp-Source: AA0mqf4ACaYKe07LviNcmJVRzmLlpSA+Y194j1OxaF80zT6bNeKpJkTnKfKaXj01iJCNB7gYnIy8Pg==
+X-Received: by 2002:a05:6512:239d:b0:4a2:7574:b64a with SMTP id c29-20020a056512239d00b004a27574b64amr6712826lfv.336.1668589229325;
+        Wed, 16 Nov 2022 01:00:29 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id q21-20020a0565123a9500b0048afb8b8e53sm2510621lfu.80.2022.11.16.01.00.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Nov 2022 01:00:28 -0800 (PST)
+Message-ID: <3037b4f9-268d-df03-380c-393a5d01f3ba@linaro.org>
+Date:   Wed, 16 Nov 2022 10:00:27 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <438ddc78-ded6-d464-f917-6b8749626f16@arm.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 4/9] dt-bindings: Add RISC-V incoming MSI controller
+ bindings
+Content-Language: en-US
+To:     Conor Dooley <conor@kernel.org>,
+        Anup Patel <apatel@ventanamicro.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20221111044207.1478350-1-apatel@ventanamicro.com>
+ <20221111044207.1478350-5-apatel@ventanamicro.com> <Y3EDuaW0zQSSfiQ/@spud>
+ <CAK9=C2WDQCnVnxKR6SFspdwope2KffyASLJDF_Ygo_417ekJ5w@mail.gmail.com>
+ <Y3QT5Vy3RnIXobHz@spud>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Y3QT5Vy3RnIXobHz@spud>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 10:12:34AM +0530, Anshuman Khandual wrote:
-> Planning to apply the following change after this patch.
+On 15/11/2022 23:34, Conor Dooley wrote:
+> On Mon, Nov 14, 2022 at 05:59:00PM +0530, Anup Patel wrote:
+>> On Sun, Nov 13, 2022 at 8:18 PM Conor Dooley <conor@kernel.org> wrote:
 > 
-> diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
-> index 6552947ca7fa..cd8d96e1fa1a 100644
-> --- a/arch/arm64/mm/hugetlbpage.c
-> +++ b/arch/arm64/mm/hugetlbpage.c
-> @@ -562,14 +562,14 @@ bool __init arch_hugetlb_valid_size(unsigned long size)
->  
->  pte_t huge_ptep_modify_prot_start(struct vm_area_struct *vma, unsigned long addr, pte_t *ptep)
->  {
-> -       if (IS_ENABLED(CONFIG_ARM64_WORKAROUND_2645198)) {
-> -               pte_t pte = READ_ONCE(*ptep);
-> +       if (IS_ENABLED(CONFIG_ARM64_WORKAROUND_2645198) &&
-> +           cpus_have_const_cap(ARM64_WORKAROUND_2645198)) {
->                 /*
->                  * Break-before-make (BBM) is required for all user space mappings
->                  * when the permission changes from executable to non-executable
->                  * in cases where cpu is affected with errata #2645198.
->                  */
-> -               if (pte_user_exec(pte) && cpus_have_const_cap(ARM64_WORKAROUND_2645198))
-> +               if (pte_user_exec(READ_ONCE(*ptep)))
->                         return huge_ptep_clear_flush(vma, addr, ptep);
->         }
->         return huge_ptep_get_and_clear(vma->vm_mm, addr, ptep);
-> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-> index c1fb0ce1473c..ec305ea3942c 100644
-> --- a/arch/arm64/mm/mmu.c
-> +++ b/arch/arm64/mm/mmu.c
-> @@ -1705,14 +1705,14 @@ early_initcall(prevent_bootmem_remove_init);
->  
->  pte_t ptep_modify_prot_start(struct vm_area_struct *vma, unsigned long addr, pte_t *ptep)
->  {
-> -       if (IS_ENABLED(CONFIG_ARM64_WORKAROUND_2645198)) {
-> -               pte_t pte = READ_ONCE(*ptep);
-> +       if (IS_ENABLED(CONFIG_ARM64_WORKAROUND_2645198) &&
-> +           cpus_have_const_cap(ARM64_WORKAROUND_2645198)) {
->                 /*
->                  * Break-before-make (BBM) is required for all user space mappings
->                  * when the permission changes from executable to non-executable
->                  * in cases where cpu is affected with errata #2645198.
->                  */
-> -               if (pte_user_exec(pte) && cpus_have_const_cap(ARM64_WORKAROUND_2645198))
-> +               if (pte_user_exec(READ_ONCE(*ptep)))
->                         return ptep_clear_flush(vma, addr, ptep);
->         }
->         return ptep_get_and_clear(vma->vm_mm, addr, ptep);
+>>> Also, the file name says "riscv,imsic", the description says "IMSIC" but
+>>> you've used "imsics" in the compatible. Is this a typo, or a plural?
+>>
+>> Yes, the file name should be consistent. I will update the file name.
+> 
+> Is there a reason why the compatible is plural when all of the other
+> mentions etc do not have an "s"? It really did look like a typo to me.
+> 
+> It's the "incoming MSI controller", so I am unsure as to where the "s"
+> actually even comes from. Why not just use "riscv,imsic"?
 
-It looks fine to me. Thanks.
+Yep, should be rather consistent with all others, and IMSIC stands for
+Integrated Circuit?
 
--- 
-Catalin
+Best regards,
+Krzysztof
+
