@@ -2,74 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C09D62CDFE
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 23:46:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F99462CDFF
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 23:46:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238786AbiKPWqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 17:46:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33496 "EHLO
+        id S239078AbiKPWqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 17:46:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238781AbiKPWpd (ORCPT
+        with ESMTP id S239127AbiKPWqN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 17:45:33 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B2306C739
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 14:45:31 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-37f0f3e59b2so2468517b3.0
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 14:45:31 -0800 (PST)
+        Wed, 16 Nov 2022 17:46:13 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C216EB44;
+        Wed, 16 Nov 2022 14:45:44 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id a29so31954735lfj.9;
+        Wed, 16 Nov 2022 14:45:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=9fahfTN7gQdYGghMf/BqQFGqnV5aYRbsgDQfX2spz1M=;
-        b=J7ejO2+4pPwjvYasRYxGqprxcZToIIQir/+zCv8XJOXAMoIEz5oHnj13Y8NijHrFhl
-         omJb9OhW/gqGpL1NLmRkpbxYcnrraM5LGPZJwFksGnOgQ/DzMb5BTrVy7kM1SmnB7TOZ
-         ochF4Ipzbw6mYxgQRV+7WVG35O5xbVpFHMM+lIfNW2uizI14ZHcnEN6muh/uPbnLch2U
-         wUcrjLJXXvi1Rf2bjwAzb608dtEh7Nn3O+4LPDUG0pKk52Bx7ZPJeXV6kxRD5SRH/AiW
-         37sWLNgegGpwsAPiqmGDEPYburNB4KofqnCAOFjBpivk2rXIBmw7axJX5G0D+ZbvwZ0p
-         z1Ow==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NOzbRqoexIerjFudiptz/V+WQ2iY16Vv0uUoLUqoblE=;
+        b=bgGCBqR25eYw9/KiYTU5oUEAsuMXPX0r6nD+Ci8t+TOFDf4svb4zTiiHBeDXL52pMg
+         +CJIM/6pRJWJE1tBMrsX7yC8BScgiDNK10gCe8IgG0A1YTS0gByzmaFwDnnHoZxQipvj
+         hQrrFsT14vCW9Z5VgVWCgqbSwkEngUtrJLVSlTQWRnZG0X14iJ5i0uV2gCMByzlgibvL
+         kx+EBfm/MJQ7zWq33QDaj8qOOAk4Vq0B5gwiHr7d85mcsP2EVjAdSJBiC3LxzmaLr5mr
+         oA9tzmrcMYrbO/7JJfl7QNgs6FeCxJEMJ0WyQbpXQLY3IBBlrjZc221RApETlDzjfBDx
+         PNUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9fahfTN7gQdYGghMf/BqQFGqnV5aYRbsgDQfX2spz1M=;
-        b=3+j49SxJMOMcAyos38CfMQET/8k/tfXOLbq9HP7XKj2q6c3+VOu8028WFMK/rIplAj
-         h/gLYCNBy8tnZjK5TTh3D5Gs4sxWp6xzuTbZ2TupY0vnwtIUgpeiT77y5SbIzO/0SB/j
-         8dKqPaLxaaW34UKev4ZhSOdY+3q+5iee3kpohqpYVLgtRdnmWISa/J+UBqL375bFtcGP
-         pi9XuHTS4G/+QDD543VKrFdnNrKZ16hFLlXbQc5DVawYieh7j9FjymUsRSW3TnD5eR3J
-         00Nfd/XVP+tjr4SXm1wz0u5TAF3rK00krXLnBFFhrRUE/1gZYbOauPlzX/i7p5bw/Kv/
-         K3aA==
-X-Gm-Message-State: ANoB5pklu7UCjAOkGmOHxQb5RYzfrbqBHlMocvoTafKslMdyAB5ITOIM
-        5pKavgv/w+nzHtn7wrLRqa4xW+XUVonm
-X-Google-Smtp-Source: AA0mqf4Nb9ngGN3qX4fMKqqiImwtvR4v0w2iedkDOCXier2Uk2gOkfn2P+l1BjX+RTvpu1mgdn+Sr0cKx7BR
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:c14c:6035:5882:8faa])
- (user=irogers job=sendgmr) by 2002:a25:55d4:0:b0:6ca:363a:9a1b with SMTP id
- j203-20020a2555d4000000b006ca363a9a1bmr23754825ybb.1.1668638730427; Wed, 16
- Nov 2022 14:45:30 -0800 (PST)
-Date:   Wed, 16 Nov 2022 14:45:11 -0800
-Message-Id: <20221116224511.207235-1-irogers@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Subject: [PATCH] perf build: Fix LIBTRACEEVENT_DYNAMIC
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        bpf@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NOzbRqoexIerjFudiptz/V+WQ2iY16Vv0uUoLUqoblE=;
+        b=vvU3V+P/BE29NG+00wMMzNytx0JANzv4a1W2BcT1JhfztNrkOf75uysGCqCWt+v/t5
+         8ybqyBRqUQ7kYOHLzqRsIYmi3+KwZbkBswZ32Cn3Pcfoyr9O/XC6NLZ/9m+zd5/exnyV
+         dI0wyVJMn0IiwEgWw9bMGP4mIj3GY0SLCYsgfjePEd+xVGXXg9qJMgQzI/PgqdysX2HS
+         6rmRPyKjhbhkXWin+LsZk4RdxjrlnNOb9LyXqgJi4zELIhacIYYX2Nr92LXrylfV+XOX
+         FmmioeYG+jc8dTPYs+DM4CH0IcjGG2Kpyeb0qUIUzVCWuXFMa8Q9IIkuE8OuJLkQD0HQ
+         AefQ==
+X-Gm-Message-State: ANoB5plHmgIMFOV64RaUdBV2SDu+XPQcr0xlAifbgoBmKNnbxj9+M6M/
+        tr0B5G/r4J+VPxRD7Rn0R6uAaXThUxtBP1sBeFY=
+X-Google-Smtp-Source: AA0mqf6wR4mNOabyl/sxE7AcNGGXeFsnh0UvWoVfxYgt5WAeqaCrUBJEXu9QLWTr430tFFVHUucv3vTughwrkV0wMQc=
+X-Received: by 2002:a05:6512:3982:b0:4b4:210d:7d2e with SMTP id
+ j2-20020a056512398200b004b4210d7d2emr55130lfu.450.1668638742859; Wed, 16 Nov
+ 2022 14:45:42 -0800 (PST)
+MIME-Version: 1.0
+References: <20221115161627.4169428-1-kristen@linux.intel.com>
+In-Reply-To: <20221115161627.4169428-1-kristen@linux.intel.com>
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Date:   Wed, 16 Nov 2022 23:45:26 +0100
+Message-ID: <CAPj211stX5Tja_wjiYnSDGq-vtgFgntT9Wir1dM9HcqyVNk68w@mail.gmail.com>
+Subject: Re: [PATCH v2] x86/sgx: Replace kmap/kunmap_atomic calls
+To:     jarkko@kernel.org, ira.weiny@intel.com,
+        dave.hansen@linux.intel.com, linux-sgx@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,132 +73,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The tools/lib includes fixes break LIBTRACEVENT_DYNAMIC as the
-makefile erroneously had depdendencies on building libtraceevent even
-when not linking with it. This change fixes the issues with
-LIBTRACEEVENT_DYNAMIC by making the built files optional.
----
- tools/perf/Makefile.perf | 25 ++++++++++++++++++++++---
- tools/perf/util/setup.py |  3 ++-
- 2 files changed, 24 insertions(+), 4 deletions(-)
+On marted=C3=AC 15 novembre 2022 17:16:26 CET Kristen Carlson Accardi wrote=
+:
+> kmap_local_page() is the preferred way to create temporary mappings
+> when it is feasible, because the mappings are thread-local and
+> CPU-local. kmap_local_page() uses per-task maps rather than per-CPU
+> maps. This in effect removes the need to preemption in the
+> local CPU while kmap is active, and thus vastly reduces overall
+> system latency. It is also valid to take pagefaults.
+>
+> The use of kmap_atomic() in the SGX code was not an explicit design
+> choice to disable page faults or preemption, and there is no compelling
+> design reason to using kmap_atomic() vs. kmap_local_page().
+>
+> Link: https://lore.kernel.org/linux-sgx/Y0biN3%2FJsZMa0yUr@kernel.org/
+>
+> For more information on the use of kmap_local_page() vs.
+> kmap_atomic(), please see Documentation/mm/highmem.rst
+>
+> Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
+> ---
+> Changes since V1:
+>
+> - Reword commit message to make it more clear why it is preferred
+>   to use kmap_local_page() vs. kmap_atomic().
+>
+>  arch/x86/kernel/cpu/sgx/encl.c  | 12 ++++++------
+>  arch/x86/kernel/cpu/sgx/ioctl.c |  4 ++--
+>  arch/x86/kernel/cpu/sgx/main.c  |  8 ++++----
+>  3 files changed, 12 insertions(+), 12 deletions(-)
+>
+> diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/enc=
+l.c
+> index 2c258255a629..68f8b18d2278 100644
+> --- a/arch/x86/kernel/cpu/sgx/encl.c
+> +++ b/arch/x86/kernel/cpu/sgx/encl.c
+> @@ -160,8 +160,8 @@ static int __sgx_encl_eldu(struct sgx_encl_page
+> *encl_page, return ret;
+>
+>       pginfo.addr =3D encl_page->desc & PAGE_MASK;
+> -     pginfo.contents =3D (unsigned long)kmap_atomic(b.contents);
+> -     pcmd_page =3D kmap_atomic(b.pcmd);
+> +     pginfo.contents =3D (unsigned long)kmap_local_page(b.contents);
+> +     pcmd_page =3D kmap_local_page(b.pcmd);
+>       pginfo.metadata =3D (unsigned long)pcmd_page + b.pcmd_offset;
+>
+>       if (secs_page)
+> @@ -187,8 +187,8 @@ static int __sgx_encl_eldu(struct sgx_encl_page
+> *encl_page, */
+>       pcmd_page_empty =3D !memchr_inv(pcmd_page, 0, PAGE_SIZE);
+>
+> -     kunmap_atomic(pcmd_page);
+> -     kunmap_atomic((void *)(unsigned long)pginfo.contents);
+> +     kunmap_local(pcmd_page);
+> +     kunmap_local((void *)(unsigned long)pginfo.contents);
+>
+>       get_page(b.pcmd);
+>       sgx_encl_put_backing(&b);
+> @@ -197,10 +197,10 @@ static int __sgx_encl_eldu(struct sgx_encl_page
+> *encl_page,
+>
+>       if (pcmd_page_empty && !reclaimer_writing_to_pcmd(encl,
+pcmd_first_page)) {
+>               sgx_encl_truncate_backing_page(encl,
+PFN_DOWN(page_pcmd_off));
+> -             pcmd_page =3D kmap_atomic(b.pcmd);
+> +             pcmd_page =3D kmap_local_page(b.pcmd);
+>               if (memchr_inv(pcmd_page, 0, PAGE_SIZE))
+>                       pr_warn("PCMD page not empty after truncate.
+\n");
+> -             kunmap_atomic(pcmd_page);
+> +             kunmap_local(pcmd_page);
+>       }
+>
+>       put_page(b.pcmd);
+> diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/
+ioctl.c
+> index ef874828fa6b..03c50f11ad75 100644
+> --- a/arch/x86/kernel/cpu/sgx/ioctl.c
+> +++ b/arch/x86/kernel/cpu/sgx/ioctl.c
+> @@ -221,11 +221,11 @@ static int __sgx_encl_add_page(struct sgx_encl *enc=
+l,
+>       pginfo.secs =3D (unsigned long)sgx_get_epc_virt_addr(encl-
+>secs.epc_page);
+>       pginfo.addr =3D encl_page->desc & PAGE_MASK;
+>       pginfo.metadata =3D (unsigned long)secinfo;
+> -     pginfo.contents =3D (unsigned long)kmap_atomic(src_page);
+> +     pginfo.contents =3D (unsigned long)kmap_local_page(src_page);
+>
+>       ret =3D __eadd(&pginfo, sgx_get_epc_virt_addr(epc_page));
+>
+> -     kunmap_atomic((void *)pginfo.contents);
+> +     kunmap_local((void *)pginfo.contents);
+>       put_page(src_page);
+>
+>       return ret ? -EIO : 0;
+> diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/mai=
+n.c
+> index 0aad028f04d4..e5a37b6e9aa5 100644
+> --- a/arch/x86/kernel/cpu/sgx/main.c
+> +++ b/arch/x86/kernel/cpu/sgx/main.c
+> @@ -165,17 +165,17 @@ static int __sgx_encl_ewb(struct sgx_epc_page
+*epc_page,
+> void *va_slot, pginfo.addr =3D 0;
+>       pginfo.secs =3D 0;
+>
+> -     pginfo.contents =3D (unsigned long)kmap_atomic(backing->contents);
+> -     pginfo.metadata =3D (unsigned long)kmap_atomic(backing->pcmd) +
+> +     pginfo.contents =3D (unsigned long)kmap_local_page(backing->content=
+s);
+> +     pginfo.metadata =3D (unsigned long)kmap_local_page(backing->pcmd) +
+>                         backing->pcmd_offset;
+>
+>       ret =3D __ewb(&pginfo, sgx_get_epc_virt_addr(epc_page), va_slot);
+>       set_page_dirty(backing->pcmd);
+>       set_page_dirty(backing->contents);
+>
+> -     kunmap_atomic((void *)(unsigned long)(pginfo.metadata -
+> +     kunmap_local((void *)(unsigned long)(pginfo.metadata -
+>                                             backing-
+>pcmd_offset));
+> -     kunmap_atomic((void *)(unsigned long)pginfo.contents);
+> +     kunmap_local((void *)(unsigned long)pginfo.contents);
+>
+>       return ret;
+>  }
+> --
+> 2.38.1
 
-diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index dd096aba4430..59c4e8f9b014 100644
---- a/tools/perf/Makefile.perf
-+++ b/tools/perf/Makefile.perf
-@@ -242,8 +242,10 @@ sub-make: fixdep
- else # force_fixdep
- 
- LIBAPI_DIR      = $(srctree)/tools/lib/api/
-+ifndef LIBTRACEEVENT_DYNAMIC
- LIBTRACEEVENT_DIR = $(srctree)/tools/lib/traceevent/
- LIBTRACEEVENT_PLUGINS_DIR = $(LIBTRACEEVENT_DIR)/plugins
-+endif
- LIBBPF_DIR      = $(srctree)/tools/lib/bpf/
- LIBSUBCMD_DIR   = $(srctree)/tools/lib/subcmd/
- LIBSYMBOL_DIR   = $(srctree)/tools/lib/symbol/
-@@ -293,6 +295,7 @@ SCRIPT_SH += perf-iostat.sh
- grep-libs = $(filter -l%,$(1))
- strip-libs = $(filter-out -l%,$(1))
- 
-+ifndef LIBTRACEEVENT_DYNAMIC
- ifneq ($(OUTPUT),)
-   LIBTRACEEVENT_OUTPUT = $(abspath $(OUTPUT))/libtraceevent
- else
-@@ -306,13 +309,16 @@ LIBTRACEEVENT = $(LIBTRACEEVENT_OUTPUT)/libtraceevent.a
- export LIBTRACEEVENT
- LIBTRACEEVENT_DYNAMIC_LIST = $(LIBTRACEEVENT_PLUGINS_OUTPUT)/libtraceevent-dynamic-list
- CFLAGS += -I$(LIBTRACEEVENT_OUTPUT)/include
--
- #
- # The static build has no dynsym table, so this does not work for
- # static build. Looks like linker starts to scream about that now
- # (in Fedora 26) so we need to switch it off for static build.
- DYNAMIC_LIST_LDFLAGS               = -Xlinker --dynamic-list=$(LIBTRACEEVENT_DYNAMIC_LIST)
- LIBTRACEEVENT_DYNAMIC_LIST_LDFLAGS = $(if $(findstring -static,$(LDFLAGS)),,$(DYNAMIC_LIST_LDFLAGS))
-+else
-+LIBTRACEEVENT_DYNAMIC_LIST =
-+LIBTRACEEVENT_DYNAMIC_LIST_LDFLAGS =
-+endif
- 
- ifneq ($(OUTPUT),)
-   LIBAPI_OUTPUT = $(abspath $(OUTPUT))/libapi
-@@ -375,7 +381,11 @@ export PYTHON_EXTBUILD_LIB PYTHON_EXTBUILD_TMP
- python-clean := $(call QUIET_CLEAN, python) $(RM) -r $(PYTHON_EXTBUILD) $(OUTPUT)python/perf*.so
- 
- PYTHON_EXT_SRCS := $(shell grep -v ^\# util/python-ext-sources)
-+ifndef LIBTRACEEVENT_DYNAMIC
- PYTHON_EXT_DEPS := util/python-ext-sources util/setup.py $(LIBTRACEEVENT) $(LIBAPI)
-+else
-+PYTHON_EXT_DEPS := util/python-ext-sources util/setup.py $(LIBAPI)
-+endif
- 
- SCRIPTS = $(patsubst %.sh,%,$(SCRIPT_SH))
- 
-@@ -785,9 +795,12 @@ prepare: $(OUTPUT)PERF-VERSION-FILE $(OUTPUT)common-cmds.h archheaders $(drm_ioc
- 	$(LIBPERF) \
- 	$(LIBSUBCMD) \
- 	$(LIBSYMBOL) \
--	$(LIBTRACEEVENT) \
- 	bpf-skel
- 
-+ifndef LIBTRACEEVENT_DYNAMIC
-+prepare: $(LIBTRACEEVENT)
-+endif
-+
- $(OUTPUT)%.o: %.c prepare FORCE
- 	$(Q)$(MAKE) -f $(srctree)/tools/build/Makefile.build dir=$(build-dir) $@
- 
-@@ -843,6 +856,7 @@ endif
- 
- $(patsubst perf-%,%.o,$(PROGRAMS)): $(wildcard */*.h)
- 
-+ifndef LIBTRACEEVENT_DYNAMIC
- LIBTRACEEVENT_FLAGS += plugin_dir=$(plugindir_SQ) 'EXTRA_CFLAGS=$(EXTRA_CFLAGS)' 'LDFLAGS=$(filter-out -static,$(LDFLAGS))'
- 
- $(LIBTRACEEVENT): FORCE | $(LIBTRACEEVENT_OUTPUT)
-@@ -872,6 +886,7 @@ install-traceevent-plugins: libtraceevent_plugins
- 	$(Q)$(MAKE) -C $(LIBTRACEEVENT_PLUGINS_DIR) O=$(LIBTRACEEVENT_PLUGINS_OUTPUT) \
- 		DESTDIR=$(LIBTRACEEVENT_PLUGINS_DESTDIR) prefix= \
- 		$(LIBTRACEEVENT_FLAGS) install
-+endif
- 
- $(LIBAPI): FORCE | $(LIBAPI_OUTPUT)
- 	$(Q)$(MAKE) -C $(LIBAPI_DIR) O=$(LIBAPI_OUTPUT) \
-@@ -1152,7 +1167,7 @@ endif # BUILD_BPF_SKEL
- bpf-skel-clean:
- 	$(call QUIET_CLEAN, bpf-skel) $(RM) -r $(SKEL_TMP_OUT) $(SKELETONS)
- 
--clean:: $(LIBTRACEEVENT)-clean $(LIBAPI)-clean $(LIBBPF)-clean $(LIBSUBCMD)-clean $(LIBSYMBOL)-clean $(LIBPERF)-clean fixdep-clean python-clean bpf-skel-clean tests-coresight-targets-clean libtraceevent_plugins-clean
-+clean:: $(LIBAPI)-clean $(LIBBPF)-clean $(LIBSUBCMD)-clean $(LIBSYMBOL)-clean $(LIBPERF)-clean fixdep-clean python-clean bpf-skel-clean tests-coresight-targets-clean
- 	$(call QUIET_CLEAN, core-objs)  $(RM) $(LIBPERF_A) $(OUTPUT)perf-archive $(OUTPUT)perf-iostat $(LANG_BINDINGS)
- 	$(Q)find $(or $(OUTPUT),.) -name '*.o' -delete -o -name '\.*.cmd' -delete -o -name '\.*.d' -delete
- 	$(Q)$(RM) $(OUTPUT).config-detected
-@@ -1192,6 +1207,10 @@ clean:: $(LIBTRACEEVENT)-clean $(LIBAPI)-clean $(LIBBPF)-clean $(LIBSUBCMD)-clea
- 	$(call QUIET_CLEAN, Documentation) \
- 	$(MAKE) -C $(DOC_DIR) O=$(OUTPUT) clean >/dev/null
- 
-+ifndef LIBTRACEEVENT_DYNAMIC
-+clean:: $(LIBTRACEEVENT)-clean libtraceevent_plugins-clean
-+endif
-+
- #
- # To provide FEATURE-DUMP into $(FEATURE_DUMP_COPY)
- # file if defined, with no further action.
-diff --git a/tools/perf/util/setup.py b/tools/perf/util/setup.py
-index 5b1e6468d5e8..43e7ca40b2ec 100644
---- a/tools/perf/util/setup.py
-+++ b/tools/perf/util/setup.py
-@@ -77,7 +77,8 @@ perf = Extension('perf',
- 		  include_dirs = ['util/include'],
- 		  libraries = extra_libraries,
- 		  extra_compile_args = cflags,
--		  extra_objects = [libtraceevent, libapikfs, libperf],
-+		  extra_objects = [ x for x in [libtraceevent, libapikfs, libperf]
-+                                    if x is not None],
-                  )
- 
- setup(name='perf',
--- 
-2.38.1.431.g37b22c650d-goog
+Despite my tendency to focus attention on details of little importance for =
+the
+task at hand, I think that your conversions are good and that your analysis
+proves them safe because there is no need to explicitly disable page faults
+and/or preemption along with the conversions.
 
+Reviewed-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+
+Thanks,
+
+Fabio
