@@ -2,162 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99AE362BEA3
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:50:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECCC762BEA9
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:51:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbiKPMuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 07:50:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41810 "EHLO
+        id S232718AbiKPMvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 07:51:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233319AbiKPMuq (ORCPT
+        with ESMTP id S232580AbiKPMvg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 07:50:46 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E14B619C2C;
-        Wed, 16 Nov 2022 04:50:41 -0800 (PST)
-Received: from frapeml500003.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NC2sD1rSzz6887q;
-        Wed, 16 Nov 2022 20:48:16 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- frapeml500003.china.huawei.com (7.182.85.28) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 16 Nov 2022 13:50:40 +0100
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 16 Nov
- 2022 12:50:39 +0000
-Date:   Wed, 16 Nov 2022 12:50:38 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     <alison.schofield@intel.com>
-CC:     Dan Williams <dan.j.williams@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, <linux-cxl@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 4/6] cxl/region: Add trigger_poison_list sysfs
- attribute
-Message-ID: <20221116125038.00006273@Huawei.com>
-In-Reply-To: <a696d91e34fc845673345a6b024545df849a8fef.1668115235.git.alison.schofield@intel.com>
-References: <cover.1668115235.git.alison.schofield@intel.com>
-        <a696d91e34fc845673345a6b024545df849a8fef.1668115235.git.alison.schofield@intel.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Wed, 16 Nov 2022 07:51:36 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39EE5192B0
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 04:51:35 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id v7so11839980wmn.0
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 04:51:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xvewyL9Srcl/UYiOCULojIpYPvNQi7FyRT20YzMudhI=;
+        b=PD2BHh+aYaR8MwPg9mY0opbbfUHjaJ8kDacSGtCRy6U00OuAbqnl+u0rwZJ3xtHiHL
+         ijFLr+8jr37MlaCBdAaTHgZodiZaPjiXX6YD6MEeVWjrHh2o+ZSXFJjdommW5OXX0Uhj
+         OWUBHMV8TmU02OtQ4KCoufNSGRW5Eqb0iDUk4PplwfMdGvYrGXd7ZcjM2xIMVlAKd1Ij
+         ELDl8UYNDvVzvr4FOVBN0waFAABw6PegiGKIM4bQXFP3K6umlAsLW5MJYPw9SVipTs/X
+         eECGA1jKxJZ8IFu/eBWU3NrQnpk6AfwKLv/oFJgTjKJ0tKA4HhE1RQIVXlEGR0NhqTxi
+         MFaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xvewyL9Srcl/UYiOCULojIpYPvNQi7FyRT20YzMudhI=;
+        b=XaWBamDAWWPHF+C1/VUPv3oSDpOkf3wGoswJ1DKIL6TsWKzw7tDecQl3IUoZ8OGfUI
+         Eb3EesPJ43sscqy8QoVn7WSNXVYeCSlO8yvfaL0bDjAhQf4r5Szo+xCOg5LFsb4Ic+/w
+         vEc81ND+t+jhBvtpC2zsHunkk0MQ+N4S7wzTyGqHI3Uuon2t/XpMrLH9RRVNmbduCuau
+         c8K1I+aEBoRoxEsTEr7UxBlShaqVGNtfwNzvt6as3nvgqIDMkwjf/cyf3KqHEgo/Wuq/
+         axDocJMSJHSmrCPE2uJhTJw0O/MhJViuwfV+JpTbGXIFdU9UYJxGlZpC5Z8zjVhJin0l
+         MqsA==
+X-Gm-Message-State: ANoB5plog+uWsOR3+4LpaS5axGEd9Ge05Fi3M6kbhtABamkp0md5SsaG
+        Z7ACV2yDCmZ9lBzjf6o7hV/IiYgGQfsbdg==
+X-Google-Smtp-Source: AA0mqf4G3T9A4M5CHKjZxKJesLF6GKiHLKgZViXHZ7lz1f8U4MBR5cscgGLGmLpwEm9f1Jz2BqRm9g==
+X-Received: by 2002:a1c:e914:0:b0:3cf:d055:9138 with SMTP id q20-20020a1ce914000000b003cfd0559138mr1988307wmc.140.1668603093771;
+        Wed, 16 Nov 2022 04:51:33 -0800 (PST)
+Received: from localhost.localdomain ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id d16-20020a5d6450000000b0022cc0a2cbecsm15386776wrw.15.2022.11.16.04.51.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 04:51:33 -0800 (PST)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: [PATCH 0/2] arm64: dts: qcom: sm8550: Add UFS HC and PHY
+Date:   Wed, 16 Nov 2022 14:51:10 +0200
+Message-Id: <20221116125112.2788318-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Nov 2022 19:12:42 -0800
-alison.schofield@intel.com wrote:
+This patchset adds UFS HC and PHY support to SM8550 platform and to its
+MTP board.
 
-> From: Alison Schofield <alison.schofield@intel.com>
-> 
-> When a boolean 'true' is written to this attribute the region driver
-> retrieves the poison list for the capacity each device contributes
-> to this region. The list includes addresses that are poisoned, or
-> would result in poison if accessed, and the source of the poison.
-> The retrieved errors are logged as kernel trace events with the
-> label 'cxl_poison'.
-> 
-> Devices not supporting the poison list capability are ignored.
-> 
-> Signed-off-by: Alison Schofield <alison.schofield@intel.com>
-Trivial comment inline you might want to consider.
+This patchset depends following patchsets:
+[1] https://lore.kernel.org/all/20221116103146.2556846-1-abel.vesa@linaro.org/
+[2] https://lore.kernel.org/all/20221116114526.2679041-1-abel.vesa@linaro.org/
 
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-> ---
->  Documentation/ABI/testing/sysfs-bus-cxl | 14 +++++++++++
->  drivers/cxl/core/region.c               | 33 +++++++++++++++++++++++++
->  2 files changed, 47 insertions(+)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-bus-cxl b/Documentation/ABI/testing/sysfs-bus-cxl
-> index 1c5f4a853ba2..54fad3bdcb2b 100644
-> --- a/Documentation/ABI/testing/sysfs-bus-cxl
-> +++ b/Documentation/ABI/testing/sysfs-bus-cxl
-> @@ -402,3 +402,17 @@ Description:
->  		attribute is only visible for devices supporting the
->  		capability. The retrieved errors are logged as kernel
->  		trace events with the label 'cxl_poison'.
-> +
-> +
-> +What:		/sys/bus/cxl/devices/regionZ/trigger_poison_list
-> +Date:		November, 2022
-> +KernelVersion:	v6.2
-> +Contact:	linux-cxl@vger.kernel.org
-> +Description:
-> +		(WO) When a boolean 'true' is written to this attribute the
-> +		region driver retrieves the poison list for the capacity
-> +		each device contributes to this region. The list includes
-Trivial: Same as in previous patch. "includes" is too vague.
+Abel Vesa (2):
+  arm64: dts: qcom: sm8550: Add UFS host controller and phy nodes
+  arm64: dts: qcom: sm8550-mtp: Add UFS host controller and PHY node
 
-> +		addresses that are poisoned, or would result in poison if
-> +		accessed, and the source of the poison. The retrieved
-> +		errors are logged as kernel trace events with the label
-> +		'cxl_poison'.
-> diff --git a/drivers/cxl/core/region.c b/drivers/cxl/core/region.c
-> index f9ae5ad284ff..68821238491e 100644
-> --- a/drivers/cxl/core/region.c
-> +++ b/drivers/cxl/core/region.c
-> @@ -72,6 +72,38 @@ static int is_dup(struct device *match, void *data)
->  	return 0;
->  }
->  
-> +static ssize_t trigger_poison_list_store(struct device *dev,
-> +					 struct device_attribute *attr,
-> +					 const char *buf, size_t len)
-> +{
-> +	struct cxl_region *cxlr = to_cxl_region(dev);
-> +	struct cxl_region_params *p = &cxlr->params;
-> +	struct cxl_endpoint_decoder *cxled;
-> +	struct cxl_memdev *cxlmd;
-> +	u64 offset, length;
-> +	int rc, i;
-> +	bool tmp;
-> +
-> +	if (kstrtobool(buf, &tmp))
-> +		return -EINVAL;
-> +
-> +	for (i = 0; i <  p->nr_targets; i++) {
-> +		cxled = p->targets[i];
-> +		cxlmd = cxled_to_memdev(cxled);
-> +		if (!test_bit(CXL_MEM_COMMAND_ID_GET_POISON,
-> +			      cxlmd->cxlds->enabled_cmds))
-> +			continue;
-> +
-> +		offset = cxl_dpa_resource_start(cxled);
-> +		length = cxl_dpa_size(cxled);
-> +		rc = cxl_mem_get_poison(cxlmd, offset, length, cxlr);
-> +		if (rc)
-> +			return rc;
-> +	}
-> +	return len;
-> +}
-> +static DEVICE_ATTR_WO(trigger_poison_list);
-> +
->  static ssize_t uuid_store(struct device *dev, struct device_attribute *attr,
->  			  const char *buf, size_t len)
->  {
-> @@ -570,6 +602,7 @@ static struct attribute *cxl_region_attrs[] = {
->  	&dev_attr_interleave_granularity.attr,
->  	&dev_attr_resource.attr,
->  	&dev_attr_size.attr,
-> +	&dev_attr_trigger_poison_list.attr,
->  	NULL,
->  };
->  
+ arch/arm64/boot/dts/qcom/sm8550-mtp.dts | 22 +++++++
+ arch/arm64/boot/dts/qcom/sm8550.dtsi    | 76 +++++++++++++++++++++++++
+ 2 files changed, 98 insertions(+)
+
+-- 
+2.34.1
 
