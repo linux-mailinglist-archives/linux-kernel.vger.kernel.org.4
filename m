@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E22662BD9A
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:22:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2CE762BD9E
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 13:22:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238872AbiKPMW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 07:22:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35844 "EHLO
+        id S232934AbiKPMWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 07:22:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233621AbiKPMVl (ORCPT
+        with ESMTP id S231490AbiKPMWI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 07:21:41 -0500
-Received: from 189.cn (ptr.189.cn [183.61.185.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3A14CCFE;
-        Wed, 16 Nov 2022 04:19:04 -0800 (PST)
-HMM_SOURCE_IP: 10.64.8.41:49124.1136556408
+        Wed, 16 Nov 2022 07:22:08 -0500
+Received: from 189.cn (ptr.189.cn [183.61.185.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E14C192B2;
+        Wed, 16 Nov 2022 04:19:18 -0800 (PST)
+HMM_SOURCE_IP: 10.64.8.43:56970.952856087
 HMM_ATTACHE_NUM: 0000
 HMM_SOURCE_TYPE: SMTP
-Received: from clientip-123.150.8.42 (unknown [10.64.8.41])
-        by 189.cn (HERMES) with SMTP id 467FD1002A6;
-        Wed, 16 Nov 2022 20:19:01 +0800 (CST)
+Received: from clientip-123.150.8.42 (unknown [10.64.8.43])
+        by 189.cn (HERMES) with SMTP id D58DA10013F;
+        Wed, 16 Nov 2022 20:19:16 +0800 (CST)
 Received: from  ([123.150.8.42])
-        by gateway-153622-dep-787c977d48-25qs2 with ESMTP id a3e05bda80234194b94086a8bb2ac2a2 for rostedt@goodmis.org;
-        Wed, 16 Nov 2022 20:19:02 CST
-X-Transaction-ID: a3e05bda80234194b94086a8bb2ac2a2
+        by gateway-153622-dep-787c977d48-59pdt with ESMTP id bb526a9be1f64334901ccff8ad48b6a4 for rostedt@goodmis.org;
+        Wed, 16 Nov 2022 20:19:16 CST
+X-Transaction-ID: bb526a9be1f64334901ccff8ad48b6a4
 X-Real-From: chensong_2000@189.cn
 X-Receive-IP: 123.150.8.42
 X-MEDUSA-Status: 0
@@ -33,13 +33,13 @@ From:   Song Chen <chensong_2000@189.cn>
 To:     rostedt@goodmis.org, mhiramat@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         Song Chen <chensong_2000@189.cn>
-Subject: [PATCH 2/4] kernel/trace/kprobe: Use new APIs to process kprobe arguments
-Date:   Wed, 16 Nov 2022 20:25:16 +0800
-Message-Id: <1668601516-4332-1-git-send-email-chensong_2000@189.cn>
+Subject: [PATCH 3/4] kernel/trace/eprobe: Use new APIs to process eprobe arguments
+Date:   Wed, 16 Nov 2022 20:25:30 +0800
+Message-Id: <1668601530-4379-1-git-send-email-chensong_2000@189.cn>
 X-Mailer: git-send-email 2.7.4
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -47,32 +47,173 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Trace probe introduces new APIs to process probe arguments, so
-kprobe shall remove old implementations and turn to those new
+eprobe shall remove old implementations and turn to those new
 APIs.
 
 Signed-off-by: Song Chen <chensong_2000@189.cn>
 ---
- kernel/trace/trace_kprobe.c | 125 +++---------------------------------
- 1 file changed, 10 insertions(+), 115 deletions(-)
+ kernel/trace/trace_eprobe.c | 194 +-----------------------------------
+ 1 file changed, 3 insertions(+), 191 deletions(-)
 
-diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
-index 5a75b039e586..d734602f2898 100644
---- a/kernel/trace/trace_kprobe.c
-+++ b/kernel/trace/trace_kprobe.c
-@@ -19,8 +19,6 @@
+diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
+index 5dd0617e5df6..e6de612aa4e0 100644
+--- a/kernel/trace/trace_eprobe.c
++++ b/kernel/trace/trace_eprobe.c
+@@ -15,8 +15,6 @@
+ 
  #include "trace_dynevent.h"
- #include "trace_kprobe_selftest.h"
  #include "trace_probe.h"
 -#include "trace_probe_tmpl.h"
 -#include "trace_probe_kernel.h"
  
- #define KPROBE_EVENT_SYSTEM "kprobes"
- #define KRETPROBE_MAXACTIVE_MAX 4096
-@@ -1218,109 +1216,6 @@ static const struct file_operations kprobe_profile_ops = {
- 	.release        = seq_release,
- };
+ #define EPROBE_EVENT_SYSTEM "eprobes"
  
+@@ -310,7 +308,7 @@ print_eprobe_event(struct trace_iterator *iter, int flags,
+ 
+ 	trace_seq_putc(s, ')');
+ 
+-	if (print_probe_args(s, tp->args, tp->nr_args,
++	if (trace_probe_print_args(s, tp->args, tp->nr_args,
+ 			     (u8 *)&field[1], field) < 0)
+ 		goto out;
+ 
+@@ -319,192 +317,6 @@ print_eprobe_event(struct trace_iterator *iter, int flags,
+ 	return trace_handle_return(s);
+ }
+ 
+-static unsigned long get_event_field(struct fetch_insn *code, void *rec)
+-{
+-	struct ftrace_event_field *field = code->data;
+-	unsigned long val;
+-	void *addr;
+-
+-	addr = rec + field->offset;
+-
+-	if (is_string_field(field)) {
+-		switch (field->filter_type) {
+-		case FILTER_DYN_STRING:
+-			val = (unsigned long)(rec + (*(unsigned int *)addr & 0xffff));
+-			break;
+-		case FILTER_RDYN_STRING:
+-			val = (unsigned long)(addr + (*(unsigned int *)addr & 0xffff));
+-			break;
+-		case FILTER_STATIC_STRING:
+-			val = (unsigned long)addr;
+-			break;
+-		case FILTER_PTR_STRING:
+-			val = (unsigned long)(*(char *)addr);
+-			break;
+-		default:
+-			WARN_ON_ONCE(1);
+-			return 0;
+-		}
+-		return val;
+-	}
+-
+-	switch (field->size) {
+-	case 1:
+-		if (field->is_signed)
+-			val = *(char *)addr;
+-		else
+-			val = *(unsigned char *)addr;
+-		break;
+-	case 2:
+-		if (field->is_signed)
+-			val = *(short *)addr;
+-		else
+-			val = *(unsigned short *)addr;
+-		break;
+-	case 4:
+-		if (field->is_signed)
+-			val = *(int *)addr;
+-		else
+-			val = *(unsigned int *)addr;
+-		break;
+-	default:
+-		if (field->is_signed)
+-			val = *(long *)addr;
+-		else
+-			val = *(unsigned long *)addr;
+-		break;
+-	}
+-	return val;
+-}
+-
+-static int get_eprobe_size(struct trace_probe *tp, void *rec)
+-{
+-	struct fetch_insn *code;
+-	struct probe_arg *arg;
+-	int i, len, ret = 0;
+-
+-	for (i = 0; i < tp->nr_args; i++) {
+-		arg = tp->args + i;
+-		if (arg->dynamic) {
+-			unsigned long val;
+-
+-			code = arg->code;
+- retry:
+-			switch (code->op) {
+-			case FETCH_OP_TP_ARG:
+-				val = get_event_field(code, rec);
+-				break;
+-			case FETCH_OP_IMM:
+-				val = code->immediate;
+-				break;
+-			case FETCH_OP_COMM:
+-				val = (unsigned long)current->comm;
+-				break;
+-			case FETCH_OP_DATA:
+-				val = (unsigned long)code->data;
+-				break;
+-			case FETCH_NOP_SYMBOL:	/* Ignore a place holder */
+-				code++;
+-				goto retry;
+-			default:
+-				continue;
+-			}
+-			code++;
+-			len = process_fetch_insn_bottom(code, val, NULL, NULL);
+-			if (len > 0)
+-				ret += len;
+-		}
+-	}
+-
+-	return ret;
+-}
+-
 -/* Kprobe specific fetch functions */
+-
+-/* Note that we don't verify it, since the code does not come from user space */
+-static int
+-process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
+-		   void *base)
+-{
+-	unsigned long val;
+-
+- retry:
+-	switch (code->op) {
+-	case FETCH_OP_TP_ARG:
+-		val = get_event_field(code, rec);
+-		break;
+-	case FETCH_OP_IMM:
+-		val = code->immediate;
+-		break;
+-	case FETCH_OP_COMM:
+-		val = (unsigned long)current->comm;
+-		break;
+-	case FETCH_OP_DATA:
+-		val = (unsigned long)code->data;
+-		break;
+-	case FETCH_NOP_SYMBOL:	/* Ignore a place holder */
+-		code++;
+-		goto retry;
+-	default:
+-		return -EILSEQ;
+-	}
+-	code++;
+-	return process_fetch_insn_bottom(code, val, dest, base);
+-}
+-NOKPROBE_SYMBOL(process_fetch_insn)
 -
 -/* Return the length of string -- including null terminal byte */
 -static nokprobe_inline int
@@ -126,147 +267,26 @@ index 5a75b039e586..d734602f2898 100644
 -	return copy_from_kernel_nofault(dest, src, size);
 -}
 -
--/* Note that we don't verify it, since the code does not come from user space */
--static int
--process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
--		   void *base)
--{
--	struct pt_regs *regs = rec;
--	unsigned long val;
--
--retry:
--	/* 1st stage: get value from context */
--	switch (code->op) {
--	case FETCH_OP_REG:
--		val = regs_get_register(regs, code->param);
--		break;
--	case FETCH_OP_STACK:
--		val = regs_get_kernel_stack_nth(regs, code->param);
--		break;
--	case FETCH_OP_STACKP:
--		val = kernel_stack_pointer(regs);
--		break;
--	case FETCH_OP_RETVAL:
--		val = regs_return_value(regs);
--		break;
--	case FETCH_OP_IMM:
--		val = code->immediate;
--		break;
--	case FETCH_OP_COMM:
--		val = (unsigned long)current->comm;
--		break;
--	case FETCH_OP_DATA:
--		val = (unsigned long)code->data;
--		break;
--#ifdef CONFIG_HAVE_FUNCTION_ARG_ACCESS_API
--	case FETCH_OP_ARG:
--		val = regs_get_kernel_argument(regs, code->param);
--		break;
--#endif
--	case FETCH_NOP_SYMBOL:	/* Ignore a place holder */
--		code++;
--		goto retry;
--	default:
--		return -EILSEQ;
--	}
--	code++;
--
--	return process_fetch_insn_bottom(code, val, dest, base);
--}
--NOKPROBE_SYMBOL(process_fetch_insn)
--
- /* Kprobe handler */
- static nokprobe_inline void
- __kprobe_trace_func(struct trace_kprobe *tk, struct pt_regs *regs,
-@@ -1336,7 +1231,7 @@ __kprobe_trace_func(struct trace_kprobe *tk, struct pt_regs *regs,
- 	if (trace_trigger_soft_disabled(trace_file))
+ /* eprobe handler */
+ static inline void
+ __eprobe_trace_func(struct eprobe_data *edata, void *rec)
+@@ -520,7 +332,7 @@ __eprobe_trace_func(struct eprobe_data *edata, void *rec)
+ 	if (trace_trigger_soft_disabled(edata->file))
  		return;
  
--	dsize = __get_data_size(&tk->tp, regs);
-+	dsize = trace_probe_get_data_size(&tk->tp, regs);
+-	dsize = get_eprobe_size(&edata->ep->tp, rec);
++	dsize = trace_probe_get_data_size(&edata->ep->tp, rec);
  
- 	entry = trace_event_buffer_reserve(&fbuffer, trace_file,
- 					   sizeof(*entry) + tk->tp.size + dsize);
-@@ -1346,7 +1241,7 @@ __kprobe_trace_func(struct trace_kprobe *tk, struct pt_regs *regs,
- 	fbuffer.regs = regs;
+ 	entry = trace_event_buffer_reserve(&fbuffer, edata->file,
+ 					   sizeof(*entry) + edata->ep->tp.size + dsize);
+@@ -529,7 +341,7 @@ __eprobe_trace_func(struct eprobe_data *edata, void *rec)
+ 		return;
+ 
  	entry = fbuffer.entry = ring_buffer_event_data(fbuffer.event);
- 	entry->ip = (unsigned long)tk->rp.kp.addr;
--	store_trace_args(&entry[1], &tk->tp, regs, sizeof(*entry), dsize);
-+	trace_probe_store_args(&entry[1], &tk->tp, regs, sizeof(*entry), dsize);
+-	store_trace_args(&entry[1], &edata->ep->tp, rec, sizeof(*entry), dsize);
++	trace_probe_store_args(&entry[1], &edata->ep->tp, rec, sizeof(*entry), dsize);
  
  	trace_event_buffer_commit(&fbuffer);
- }
-@@ -1377,7 +1272,7 @@ __kretprobe_trace_func(struct trace_kprobe *tk, struct kretprobe_instance *ri,
- 	if (trace_trigger_soft_disabled(trace_file))
- 		return;
- 
--	dsize = __get_data_size(&tk->tp, regs);
-+	dsize = trace_probe_get_data_size(&tk->tp, regs);
- 
- 	entry = trace_event_buffer_reserve(&fbuffer, trace_file,
- 					   sizeof(*entry) + tk->tp.size + dsize);
-@@ -1388,7 +1283,7 @@ __kretprobe_trace_func(struct trace_kprobe *tk, struct kretprobe_instance *ri,
- 	entry = fbuffer.entry = ring_buffer_event_data(fbuffer.event);
- 	entry->func = (unsigned long)tk->rp.kp.addr;
- 	entry->ret_ip = get_kretprobe_retaddr(ri);
--	store_trace_args(&entry[1], &tk->tp, regs, sizeof(*entry), dsize);
-+	trace_probe_store_args(&entry[1], &tk->tp, regs, sizeof(*entry), dsize);
- 
- 	trace_event_buffer_commit(&fbuffer);
- }
-@@ -1426,7 +1321,7 @@ print_kprobe_event(struct trace_iterator *iter, int flags,
- 
- 	trace_seq_putc(s, ')');
- 
--	if (print_probe_args(s, tp->args, tp->nr_args,
-+	if (trace_probe_print_args(s, tp->args, tp->nr_args,
- 			     (u8 *)&field[1], field) < 0)
- 		goto out;
- 
-@@ -1461,7 +1356,7 @@ print_kretprobe_event(struct trace_iterator *iter, int flags,
- 
- 	trace_seq_putc(s, ')');
- 
--	if (print_probe_args(s, tp->args, tp->nr_args,
-+	if (trace_probe_print_args(s, tp->args, tp->nr_args,
- 			     (u8 *)&field[1], field) < 0)
- 		goto out;
- 
-@@ -1536,7 +1431,7 @@ kprobe_perf_func(struct trace_kprobe *tk, struct pt_regs *regs)
- 	if (hlist_empty(head))
- 		return 0;
- 
--	dsize = __get_data_size(&tk->tp, regs);
-+	dsize = trace_probe_get_data_size(&tk->tp, regs);
- 	__size = sizeof(*entry) + tk->tp.size + dsize;
- 	size = ALIGN(__size + sizeof(u32), sizeof(u64));
- 	size -= sizeof(u32);
-@@ -1547,7 +1442,7 @@ kprobe_perf_func(struct trace_kprobe *tk, struct pt_regs *regs)
- 
- 	entry->ip = (unsigned long)tk->rp.kp.addr;
- 	memset(&entry[1], 0, dsize);
--	store_trace_args(&entry[1], &tk->tp, regs, sizeof(*entry), dsize);
-+	trace_probe_store_args(&entry[1], &tk->tp, regs, sizeof(*entry), dsize);
- 	perf_trace_buf_submit(entry, size, rctx, call->event.type, 1, regs,
- 			      head, NULL);
- 	return 0;
-@@ -1572,7 +1467,7 @@ kretprobe_perf_func(struct trace_kprobe *tk, struct kretprobe_instance *ri,
- 	if (hlist_empty(head))
- 		return;
- 
--	dsize = __get_data_size(&tk->tp, regs);
-+	dsize = trace_probe_get_data_size(&tk->tp, regs);
- 	__size = sizeof(*entry) + tk->tp.size + dsize;
- 	size = ALIGN(__size + sizeof(u32), sizeof(u64));
- 	size -= sizeof(u32);
-@@ -1583,7 +1478,7 @@ kretprobe_perf_func(struct trace_kprobe *tk, struct kretprobe_instance *ri,
- 
- 	entry->func = (unsigned long)tk->rp.kp.addr;
- 	entry->ret_ip = get_kretprobe_retaddr(ri);
--	store_trace_args(&entry[1], &tk->tp, regs, sizeof(*entry), dsize);
-+	trace_probe_store_args(&entry[1], &tk->tp, regs, sizeof(*entry), dsize);
- 	perf_trace_buf_submit(entry, size, rctx, call->event.type, 1, regs,
- 			      head, NULL);
  }
 -- 
 2.25.1
