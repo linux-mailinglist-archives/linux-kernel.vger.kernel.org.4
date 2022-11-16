@@ -2,101 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCCB062B175
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 03:44:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00C3562B17B
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 03:50:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231320AbiKPCos (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 21:44:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54638 "EHLO
+        id S231686AbiKPCuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 21:50:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229976AbiKPCoq (ORCPT
+        with ESMTP id S229976AbiKPCuK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 21:44:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8CA11C41F;
-        Tue, 15 Nov 2022 18:44:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7157861843;
-        Wed, 16 Nov 2022 02:44:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62CD0C433D6;
-        Wed, 16 Nov 2022 02:44:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668566683;
-        bh=/++rVgvIq2fiB1hShSRzWBW48QNbuvdmn/4eTcyeZlY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Dabsw+YB9lfb96T1sAp8Ek5iCMRfxI78BA8VVukZZcLe4812RdsnhClvocAnwQfKJ
-         DcAfvIz9LejNakoQlk0gIA1MOeYZkcgsIYUxIWSUatbyX4J0MccBzX8f5JLwgBy6Vm
-         oEk8y06U3gD/4D2HY0razMuVxPDf//B4nFnaQb798bpFflF83IlihjPnTm5RVl0LIt
-         w0msH1+Am+YDe3a1dg6/Crkt63qW9WqdhNfwx1tjE42AqzHwkWm5nPS/wNPHl//ZGl
-         drf1b7vjMXozj/Z8kdtw8Mh+YFEoluqXizRdgfF6hRet+MfFqP/pb1djRUlOzdXDTR
-         0BII3WyziCSRA==
-Date:   Tue, 15 Nov 2022 18:44:42 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     Hawkins Jiawei <yin31149@gmail.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, 18801353760@163.com,
-        syzbot+232ebdbd36706c965ebf@syzkaller.appspotmail.com,
-        syzkaller-bugs@googlegroups.com,
-        Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] net: sched: fix memory leak in tcindex_set_parms
-Message-ID: <20221115184442.272b6ea8@kernel.org>
-In-Reply-To: <bc4616002932b25973533c39c07f48ea57afa3dc.camel@redhat.com>
-References: <20221113170507.8205-1-yin31149@gmail.com>
-        <20221115090237.5d5988bb@kernel.org>
-        <bc4616002932b25973533c39c07f48ea57afa3dc.camel@redhat.com>
+        Tue, 15 Nov 2022 21:50:10 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9224E1E72F;
+        Tue, 15 Nov 2022 18:50:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668567009; x=1700103009;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=s20sResmhc8ejFkXsCSWiCoJuJKw41o0gUFDOP1PetU=;
+  b=BATXj3C+hC65EHgfynScfTiMorass7QgXJpsmy9ijP57/EsQQcnggBO6
+   8u+CLohvGms9xDx/NdHAOMudEmaJvQzRbu+mV7eEVPRF9raIsb46eLP6F
+   yC1fM4q4Qk2R7a2h3TNWJfZIeWDwWV4mFDS6I4dHPlrdHWbXkiq7UVWdO
+   tmEOb8BcFn8TbJ1UyuFINikH+XfjRCp4m3RFT6tnFVCy/1HzwpKL0ryc8
+   H+UVBv2E2MTBXmlI0tInWrlkkNNzNr7grpSM1aJ8pPLOZfigR0aLi88VF
+   z5RmAdBOzmDFPMaWqVOSJgeWS4uzeqLhcBVuChg3MtiBSMUBelr1qf5GX
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="314243438"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="314243438"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 18:50:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="707974583"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="707974583"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by fmsmga004.fm.intel.com with ESMTP; 15 Nov 2022 18:50:06 -0800
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     afael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Subject: [PATCH 1/2] thermal: intel: Prevent accidental clearing of HFI status
+Date:   Tue, 15 Nov 2022 18:49:48 -0800
+Message-Id: <20221116024949.2590043-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Nov 2022 19:57:10 +0100 Paolo Abeni wrote:
-> This code confuses me more than a bit, and I don't follow ?!?=20
+When there is a package thermal interrupt with PROCHOT log, it will be
+processed and cleared. It is possible that there is an active HFI event
+status, which is about to get processed or getting processed. While
+clearing PROCHOT log bit, it will also clear HFI status bit. This means
+that hardware is free to update HFI memory.
 
-It's very confusing :S
+When clearing a package thermal interrupt, some processors will generate
+a "general protection fault" when any of the read only bit is set to 1.
+The driver maintains a mask of all read-write bits which can be set.
+This mask doesn't include HFI status bit. This bit will also be cleared,
+as it will be assumed read-only bit. So, add HFI status bit 26 to the
+mask.
 
-For starters I don't know when r !=3D old_r. I mean now it triggers
-randomly after the RCU-ification, but in the original code when
-it was just a memset(). When would old_r ever not be null and yet
-point to a different entry?
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Reviewed-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+---
+ drivers/thermal/intel/therm_throt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> it looks like that at this point:
->=20
-> * the data path could access 'old_r->exts' contents via 'p' just before
-> the previous 'tcindex_filter_result_init(old_r, cp, net);' but still
-> potentially within the same RCU grace period
->=20
-> * 'tcindex_filter_result_init(old_r, cp, net);' has 'unlinked' the old
-> exts from 'p'  so that will not be freed by later
-> tcindex_partial_destroy_work()=C2=A0
->=20
-> Overall it looks to me that we need some somewhat wait for the RCU
-> grace period,=20
+diff --git a/drivers/thermal/intel/therm_throt.c b/drivers/thermal/intel/therm_throt.c
+index 8352083b87c7..9e8ab31d756e 100644
+--- a/drivers/thermal/intel/therm_throt.c
++++ b/drivers/thermal/intel/therm_throt.c
+@@ -197,7 +197,7 @@ static const struct attribute_group thermal_attr_group = {
+ #define THERM_STATUS_PROCHOT_LOG	BIT(1)
+ 
+ #define THERM_STATUS_CLEAR_CORE_MASK (BIT(1) | BIT(3) | BIT(5) | BIT(7) | BIT(9) | BIT(11) | BIT(13) | BIT(15))
+-#define THERM_STATUS_CLEAR_PKG_MASK  (BIT(1) | BIT(3) | BIT(5) | BIT(7) | BIT(9) | BIT(11))
++#define THERM_STATUS_CLEAR_PKG_MASK  (BIT(1) | BIT(3) | BIT(5) | BIT(7) | BIT(9) | BIT(11) | BIT(26))
+ 
+ static void clear_therm_status_log(int level)
+ {
+-- 
+2.31.1
 
-Isn't it better to make @cp a deeper copy of @p ?
-I thought it already is but we don't seem to be cloning p->h.
-Also the cloning of p->perfect looks quite lossy.
-
-> Somewhat side question: it looks like that the 'perfect hashing' usage
-> is the root cause of the issue addressed here, and very likely is
-> afflicted by other problems, e.g. the data curruption in 'err =3D
-> tcindex_filter_result_init(old_r, cp, net);'.
->=20
-> AFAICS 'perfect hashing' usage is a sort of optimization that the user-
-> space may trigger with some combination of the tcindex arguments. I'm
-> wondering if we could drop all perfect hashing related code?
-
-The thought of "how much of this can we delete" did cross my mind :)
