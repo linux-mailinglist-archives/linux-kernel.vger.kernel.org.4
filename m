@@ -2,63 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9B7E62B2D1
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 06:38:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E961162B2D3
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 06:38:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229531AbiKPFif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 00:38:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54078 "EHLO
+        id S231753AbiKPFio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 00:38:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231517AbiKPFi1 (ORCPT
+        with ESMTP id S231659AbiKPFi1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 16 Nov 2022 00:38:27 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC382F3AE
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 21:38:22 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id b21so15441428plc.9
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 21:38:22 -0800 (PST)
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 785C138C
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 21:38:24 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id k7so15447672pll.6
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 21:38:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Mv8IbBpLkdekGE7AGRon9TYjB5CPxoZZsopxc+3pauE=;
-        b=O9LU0JS8vCLzMrJ6zb77qaHvNYgKNqhBG+WIauQj6WG9zYSAm6dnNrs0cHutUfSh9x
-         qzRtZnolhIfOD+aFB7tYYIJZzjAkg8T7aYSZSpFTkBuWQG0ftQo7X/u4gN23aJKyjsIk
-         Po6VVr4pFEZ722hTx+CNArXH84MNDnnCV9NHuBQpViFkLpX1/ZCvHZ/0krO/pLf9mbBv
-         eG6qWg0hFRbrUljZ5nCIsdTCogtWg7nNsdtLQO8bfyvccDmgj4FUb1eRWUnARowRsUZg
-         I66K77RF09CTR7/VgRQxIV2EiBtxZY7yNtd1hqSIWWHYi+5vb392Dk95uyVYJLY3kRqs
-         8SVA==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yEUFbdVypOtyoH064OjwzyJ2ZvEG5EnyjXzOQihafjo=;
+        b=b5/F1lcFrypyG5b3jZd+tIci2jDxqkerWT178BAUcRicXkw95dBFxRknwrsZMS5Qud
+         MlaVJs2wquHY4clWTApR5ZADFFvP/rBfGGjMXoynix7py8419JTe18a4QU3ldzp2e42Q
+         snQtuSlystcc2T7vWhP4LZ5Id/pkAsturPEbM21KtqDB66Q5yrGIVhQE5h0/XF9atu2b
+         /viTKRsIgxeAFGKq2MKvzP3a5zDdh5uIv8BnGJlIt66+NkLlvfgaDCbbJZ3LBxTIGUrx
+         Q4M4eXC+8RU/oLEVmQgsyKM6/CmwkPOoVFpU+cxPL+MfceYAsUS/byeTNadVgiOQVpr9
+         1OWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Mv8IbBpLkdekGE7AGRon9TYjB5CPxoZZsopxc+3pauE=;
-        b=NelaDgCM1RFmIINtS0tVJ1dlGwMqghpot/nQin5+jWMJ7OEL9BkR2q1IC1XK20o8bZ
-         RtekgeYkz/Y81YDBOvD8W2ctLGtE3GzESw8yvuOO8etu6bFhtlBFuHbxdWDKUQ46Ubre
-         SXMd0ld07ZvaZARUmzFhk8hH3oVxCRg5G8HtLSKKJsxWRgtF2FTSwW92xIl3TkR/UXtL
-         /XFhzjxN5uuzlKsbfHLdaKUY5/cFJ05sP5h0yjSWnhUHPbSG4h0n69SnNi8XewU8ibOW
-         jyvTL3IzCDHK4VZwlT6RG3+E/mdQ3hNyczY7wo1AhpAZuG392OLudM+SXnv48ScKf2Kl
-         K9FA==
-X-Gm-Message-State: ANoB5plW8ep5V9Qc15HSUj8mIuUA7n4eQPTDIUYGH5BkOAi0WU5h937c
-        OEa7/kMJKS1l4Jst4Sub1Eo=
-X-Google-Smtp-Source: AA0mqf7WoMoXlq9y8GdxWgoMyn/khFjjuSj+m8WTDJSLDonfOrPV3r49GVlLtLExyuhQWHMJ69EHvA==
-X-Received: by 2002:a17:90a:7e87:b0:212:f810:a846 with SMTP id j7-20020a17090a7e8700b00212f810a846mr2131715pjl.71.1668577101886;
-        Tue, 15 Nov 2022 21:38:21 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yEUFbdVypOtyoH064OjwzyJ2ZvEG5EnyjXzOQihafjo=;
+        b=QOp25vNCzHwh63B4JI0KbCn+P9Pp32+UnFaD0U56L8KLc643noldCKGQ40dYFwdRIm
+         O22Wy8TfSNlLhIpRKHOaOOOEMLkN7Yyh3d3cmO5oHJtTtNu/89cJl5169UylfAMqhng2
+         eqvk5pLTGLThG9lDOobhuPYIs2Y2o83kE9Ueiv5DLXaNlpaK+Fdre46obB5Q8lQe/fSB
+         IZmQKnNZ+/yNU0MIy7G/HVyUU+XGx+EmBXsvpML8G8V2QiRlxn5CIUbWogWN+2Yfw3b+
+         /UwSN2tYVNQkH/9Ns6nSwOUn3PjQQqet7ET8pv6vUqiggwT9Bq5V2G6fovhKcYfHBaQl
+         yoGA==
+X-Gm-Message-State: ANoB5pnPfGZ0ogiUIOTArpZaNa/C6Vylp8zyJi1Sv2GZHTNrvjhWvniK
+        CuS3gAwHX9EaUzmdEkZrh+q47BW8x6M=
+X-Google-Smtp-Source: AA0mqf5z79P1swqzv8dzeNZZJOFB+xE8MMujTBBZYIu2jV3tvbzH4zWATe4F3ROm4HqVKvHQzeUozw==
+X-Received: by 2002:a17:902:e846:b0:186:94b8:5980 with SMTP id t6-20020a170902e84600b0018694b85980mr7764409plg.113.1668577103864;
+        Tue, 15 Nov 2022 21:38:23 -0800 (PST)
 Received: from dtor-ws.mtv.corp.google.com ([2620:15c:9d:2:2d36:e9a0:170b:669f])
-        by smtp.gmail.com with ESMTPSA id ik13-20020a170902ab0d00b0017834a6966csm10881038plb.176.2022.11.15.21.38.20
+        by smtp.gmail.com with ESMTPSA id ik13-20020a170902ab0d00b0017834a6966csm10881038plb.176.2022.11.15.21.38.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 21:38:21 -0800 (PST)
+        Tue, 15 Nov 2022 21:38:23 -0800 (PST)
 From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
 To:     Mark Brown <broonie@kernel.org>,
         Liam Girdwood <lgirdwood@gmail.com>
 Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: [PATCH 01/11] ASoC: ak5386: switch to using gpiod API
-Date:   Tue, 15 Nov 2022 21:38:07 -0800
-Message-Id: <20221116053817.2929810-1-dmitry.torokhov@gmail.com>
+Subject: [PATCH 02/11] ASoC: max98373: switch to using gpiod API
+Date:   Tue, 15 Nov 2022 21:38:08 -0800
+Message-Id: <20221116053817.2929810-2-dmitry.torokhov@gmail.com>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
+In-Reply-To: <20221116053817.2929810-1-dmitry.torokhov@gmail.com>
+References: <20221116053817.2929810-1-dmitry.torokhov@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -75,89 +77,131 @@ gpiod API that respects line polarities described in ACPI/DT.
 
 Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 ---
- sound/soc/codecs/ak5386.c | 30 ++++++++++++++----------------
- 1 file changed, 14 insertions(+), 16 deletions(-)
+ sound/soc/codecs/max98373-i2c.c | 39 +++++++++++++++++++--------------
+ sound/soc/codecs/max98373.c     | 18 ---------------
+ sound/soc/codecs/max98373.h     |  1 -
+ 3 files changed, 22 insertions(+), 36 deletions(-)
 
-diff --git a/sound/soc/codecs/ak5386.c b/sound/soc/codecs/ak5386.c
-index 0c5e00679c7d..0562890b5dc7 100644
---- a/sound/soc/codecs/ak5386.c
-+++ b/sound/soc/codecs/ak5386.c
-@@ -6,11 +6,12 @@
-  * (c) 2013 Daniel Mack <zonque@gmail.com>
-  */
+diff --git a/sound/soc/codecs/max98373-i2c.c b/sound/soc/codecs/max98373-i2c.c
+index 3e04c7f0cce4..969cdca83bc1 100644
+--- a/sound/soc/codecs/max98373-i2c.c
++++ b/sound/soc/codecs/max98373-i2c.c
+@@ -3,12 +3,12 @@
  
-+
+ #include <linux/acpi.h>
+ #include <linux/delay.h>
+-#include <linux/gpio.h>
 +#include <linux/err.h>
 +#include <linux/gpio/consumer.h>
+ #include <linux/i2c.h>
  #include <linux/module.h>
- #include <linux/slab.h>
+ #include <linux/mod_devicetable.h>
  #include <linux/of.h>
 -#include <linux/of_gpio.h>
--#include <linux/of_device.h>
- #include <linux/regulator/consumer.h>
- #include <sound/soc.h>
- #include <sound/pcm.h>
-@@ -21,7 +22,7 @@ static const char * const supply_names[] = {
- };
- 
- struct ak5386_priv {
--	int reset_gpio;
+ #include <linux/pm_runtime.h>
+ #include <linux/regmap.h>
+ #include <linux/slab.h>
+@@ -520,14 +520,13 @@ static int max98373_i2c_probe(struct i2c_client *i2c)
+ 	int ret = 0;
+ 	int reg = 0;
+ 	int i;
+-	struct max98373_priv *max98373 = NULL;
++	struct max98373_priv *max98373;
 +	struct gpio_desc *reset_gpio;
- 	struct regulator_bulk_data supplies[ARRAY_SIZE(supply_names)];
- };
  
-@@ -111,8 +112,8 @@ static int ak5386_hw_params(struct snd_pcm_substream *substream,
- 	 * the AK5386 in power-down mode (PDN pin = “L”).
- 	 */
+ 	max98373 = devm_kzalloc(&i2c->dev, sizeof(*max98373), GFP_KERNEL);
++	if (!max98373)
++		return -ENOMEM;
  
--	if (gpio_is_valid(priv->reset_gpio))
--		gpio_set_value(priv->reset_gpio, 1);
-+	if (priv->reset_gpio)
-+		gpiod_set_value(priv->reset_gpio, 0);
+-	if (!max98373) {
+-		ret = -ENOMEM;
+-		return ret;
+-	}
+ 	i2c_set_clientdata(i2c, max98373);
  
- 	return 0;
- }
-@@ -123,8 +124,8 @@ static int ak5386_hw_free(struct snd_pcm_substream *substream,
- 	struct snd_soc_component *component = dai->component;
- 	struct ak5386_priv *priv = snd_soc_component_get_drvdata(component);
+ 	/* update interleave mode info */
+@@ -557,17 +556,23 @@ static int max98373_i2c_probe(struct i2c_client *i2c)
+ 	max98373_slot_config(&i2c->dev, max98373);
  
--	if (gpio_is_valid(priv->reset_gpio))
--		gpio_set_value(priv->reset_gpio, 0);
-+	if (priv->reset_gpio)
-+		gpiod_set_value(priv->reset_gpio, 1);
- 
- 	return 0;
- }
-@@ -168,7 +169,6 @@ static int ak5386_probe(struct platform_device *pdev)
- 	if (!priv)
- 		return -ENOMEM;
- 
--	priv->reset_gpio = -EINVAL;
- 	dev_set_drvdata(dev, priv);
- 
- 	for (i = 0; i < ARRAY_SIZE(supply_names); i++)
-@@ -179,15 +179,13 @@ static int ak5386_probe(struct platform_device *pdev)
- 	if (ret < 0)
- 		return ret;
- 
--	if (of_match_device(of_match_ptr(ak5386_dt_ids), dev))
--		priv->reset_gpio = of_get_named_gpio(dev->of_node,
--						      "reset-gpio", 0);
-+	priv->reset_gpio = devm_gpiod_get_optional(dev, "reset",
-+						   GPIOD_OUT_HIGH);
-+	ret = PTR_ERR_OR_ZERO(priv->reset_gpio);
-+	if (ret)
+ 	/* Power on device */
+-	if (gpio_is_valid(max98373->reset_gpio)) {
+-		ret = devm_gpio_request(&i2c->dev, max98373->reset_gpio,
+-					"MAX98373_RESET");
+-		if (ret) {
+-			dev_err(&i2c->dev, "%s: Failed to request gpio %d\n",
+-				__func__, max98373->reset_gpio);
+-			return -EINVAL;
+-		}
+-		gpio_direction_output(max98373->reset_gpio, 0);
++	/* Acquire and assert reset line */
++	reset_gpio = devm_gpiod_get_optional(&i2c->dev, "maxim,reset",
++					     GPIOD_OUT_HIGH);
++	ret = PTR_ERR_OR_ZERO(reset_gpio);
++	if (ret) {
++		dev_err(&i2c->dev, "%s: Failed to request reset gpio: %d\n",
++			__func__, ret);
 +		return ret;
++	}
++
++	gpiod_set_consumer_name(reset_gpio, "MAX98373_RESET");
++
++	if (reset_gpio) {
++		/* Keep line asserted to reset device */
+ 		msleep(50);
+-		gpio_direction_output(max98373->reset_gpio, 1);
++		/* Deassert reset line */
++		gpiod_set_value_cansleep(reset_gpio, 0);
+ 		msleep(20);
+ 	}
  
--	if (gpio_is_valid(priv->reset_gpio))
--		if (devm_gpio_request_one(dev, priv->reset_gpio,
--					  GPIOF_OUT_INIT_LOW,
--					  "AK5386 Reset"))
--			priv->reset_gpio = -EINVAL;
-+	gpiod_set_consumer_name(priv->reset_gpio, "AK5386 Reset");
+diff --git a/sound/soc/codecs/max98373.c b/sound/soc/codecs/max98373.c
+index f90a6a7ba83b..401546c1084e 100644
+--- a/sound/soc/codecs/max98373.c
++++ b/sound/soc/codecs/max98373.c
+@@ -12,9 +12,6 @@
+ #include <sound/pcm.h>
+ #include <sound/pcm_params.h>
+ #include <sound/soc.h>
+-#include <linux/gpio.h>
+-#include <linux/of.h>
+-#include <linux/of_gpio.h>
+ #include <sound/tlv.h>
+ #include "max98373.h"
  
- 	return devm_snd_soc_register_component(dev, &soc_component_ak5386,
- 				      &ak5386_dai, 1);
+@@ -478,21 +475,6 @@ void max98373_slot_config(struct device *dev,
+ 		max98373->i_slot = value & 0xF;
+ 	else
+ 		max98373->i_slot = 1;
+-	if (dev->of_node) {
+-		max98373->reset_gpio = of_get_named_gpio(dev->of_node,
+-						"maxim,reset-gpio", 0);
+-		if (!gpio_is_valid(max98373->reset_gpio)) {
+-			dev_err(dev, "Looking up %s property in node %s failed %d\n",
+-				"maxim,reset-gpio", dev->of_node->full_name,
+-				max98373->reset_gpio);
+-		} else {
+-			dev_dbg(dev, "maxim,reset-gpio=%d",
+-				max98373->reset_gpio);
+-		}
+-	} else {
+-		/* this makes reset_gpio as invalid */
+-		max98373->reset_gpio = -1;
+-	}
+ 
+ 	if (!device_property_read_u32(dev, "maxim,spkfb-slot-no", &value))
+ 		max98373->spkfb_slot = value & 0xF;
+diff --git a/sound/soc/codecs/max98373.h b/sound/soc/codecs/max98373.h
+index e1810b3b1620..7b259789e1be 100644
+--- a/sound/soc/codecs/max98373.h
++++ b/sound/soc/codecs/max98373.h
+@@ -213,7 +213,6 @@ struct max98373_cache {
+ 
+ struct max98373_priv {
+ 	struct regmap *regmap;
+-	int reset_gpio;
+ 	unsigned int v_slot;
+ 	unsigned int i_slot;
+ 	unsigned int spkfb_slot;
 -- 
 2.38.1.431.g37b22c650d-goog
 
