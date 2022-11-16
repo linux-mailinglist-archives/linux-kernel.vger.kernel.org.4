@@ -2,124 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3635862BBA4
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:25:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 620D362BB90
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:24:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237931AbiKPLZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 06:25:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40540 "EHLO
+        id S238085AbiKPLYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 06:24:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbiKPLZZ (ORCPT
+        with ESMTP id S232802AbiKPLYb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 06:25:25 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE674508E
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 03:14:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668597245;
+        Wed, 16 Nov 2022 06:24:31 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC162983F;
+        Wed, 16 Nov 2022 03:14:35 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e74b329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e74b:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1E7C61EC053B;
+        Wed, 16 Nov 2022 12:14:34 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1668597274;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AqO20RkBmPLk/Zsbvz4xja2ZPkggecsj1kg48NugNtU=;
-        b=Z/6XnAYVImU6vSBStf9MIEJs45vO96im9b/75gKcuxkRHddXbnHXxNjnEDt5Spu/YEarEm
-        YoZGo/dz5hNmfQ/eeUNWzLQV8eiTwiu/co1ZfCfH6OV0Qd/qI6+y6+TwP6JNAaUDhFe4/Q
-        NuNrVa8pX4q/+3T8j3F8Fj2J23rqWqE=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-480-j_vAX-DnO_S2ZFAmTG1Wzw-1; Wed, 16 Nov 2022 06:14:04 -0500
-X-MC-Unique: j_vAX-DnO_S2ZFAmTG1Wzw-1
-Received: by mail-qt1-f197.google.com with SMTP id ew11-20020a05622a514b00b003a524196d31so12513037qtb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 03:14:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AqO20RkBmPLk/Zsbvz4xja2ZPkggecsj1kg48NugNtU=;
-        b=meR3S1jfoGjX7Utud+1jsAmI0FIK5m3iGeutaoF/rqscozf76ScDRg1QpRJ9pc2KFT
-         LiUCbjqyJZV9vwXG6gnMve9rvXeZIfWaiDgBKkEl5ct//EGjzTlsqRAYNbqQaKUGWVqk
-         fhyob+jDw0OgPvYVlwauU1JLAzrem2PmLq1RIDGxwZY5QPhK+MURwaI03eNq0ojO4Q+m
-         N11QWGzpBGVyAaJYW2Y2lOHwQ/fpwGbj0qs/jy421uXd0+b0JczsKiZF0C5SkiPyALJn
-         VL6olwzZqMUGj+J6eZwSrysp8pWrcrR+68FRympVCrVOGQEx00dbhewTSBrZ+/P5d+Qx
-         Xw0w==
-X-Gm-Message-State: ANoB5pnbaOm045zSVwLEsZeN81p1YECVS5+erH9pYNooxyyQNp0fIFaA
-        QA4mFyIg1ZfU4ThAD9vMyVFTYUkWXLpAv1i6l/dMAijjEuEzp7XJ3u3TWzhaO8U1ZBx7UM/cSZV
-        q2eiDKdroEvwIWTKnRJltIGFQ
-X-Received: by 2002:ad4:450d:0:b0:4c6:5a5f:3063 with SMTP id k13-20020ad4450d000000b004c65a5f3063mr6024304qvu.4.1668597243594;
-        Wed, 16 Nov 2022 03:14:03 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7zVoHnSML4pkn3Q4Eh7xfnZiowbK8L5hFzRTrOFF/MLKTx3usbbcLq0D+RjcLq4PE4cjVYNw==
-X-Received: by 2002:ad4:450d:0:b0:4c6:5a5f:3063 with SMTP id k13-20020ad4450d000000b004c65a5f3063mr6024286qvu.4.1668597243332;
-        Wed, 16 Nov 2022 03:14:03 -0800 (PST)
-Received: from x1 (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
-        by smtp.gmail.com with ESMTPSA id g6-20020ac870c6000000b003996aa171b9sm8427814qtp.97.2022.11.16.03.14.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 03:14:03 -0800 (PST)
-Date:   Wed, 16 Nov 2022 06:14:01 -0500
-From:   Brian Masney <bmasney@redhat.com>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, psodagud@quicinc.com,
-        quic_shazhuss@quicinc.com, quic_ppareek@quicinc.com,
-        ahalaney@redhat.com, echanude@redhat.com,
-        nicolas.dechesne@linaro.org
-Subject: Re: [PATCH RFC] gpiolib: ensure that fwnode is properly set
-Message-ID: <Y3TF+VbE5yFlz+OZ@x1>
-References: <20221114202943.2389489-1-bmasney@redhat.com>
- <Y3S5sZIVi2DPua0p@orome>
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=X1MDsyX35MKj8p8BBuZRg90EXQO3G67HQhry3OHcka8=;
+        b=DSGOQbJpJv+KxURrpQgIQPuVJekdhfOZ00fJUqPkzhyKl4+ATbQeTQbVJOQXIHIfciSzVs
+        xxPKTH/yyDuBQFHCD4YlURtYv/zVqNqSzLxv8mE28ihkkOgDkciTsuv8hZJ7mEiQDCY/4y
+        HofKmWLWSlgW4eB+LM8+1t5LIiotDyc=
+Date:   Wed, 16 Nov 2022 12:14:28 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Jason Baron <jbaron@akamai.com>
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Shuai Xue <xueshuai@linux.alibaba.com>, stable@vger.kernel.org
+Subject: Re: [PATCH] EDAC/edac_module: order edac_init() before
+ ghes_edac_register()
+Message-ID: <Y3TGFJn7ykeUMk+O@zn.tnic>
+References: <20221116003729.194802-1-jbaron@akamai.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y3S5sZIVi2DPua0p@orome>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221116003729.194802-1-jbaron@akamai.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 11:21:37AM +0100, Thierry Reding wrote:
-> On Mon, Nov 14, 2022 at 03:29:43PM -0500, Brian Masney wrote:
-> > diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-> > index 11fb7ec883e9..8bec66008869 100644
-> > --- a/drivers/gpio/gpiolib.c
-> > +++ b/drivers/gpio/gpiolib.c
-> > @@ -678,7 +678,7 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
-> >  	 * Assign fwnode depending on the result of the previous calls,
-> >  	 * if none of them succeed, assign it to the parent's one.
-> >  	 */
-> > -	gdev->dev.fwnode = dev_fwnode(&gdev->dev) ?: fwnode;
-> > +	gc->fwnode = gdev->dev.fwnode = dev_fwnode(&gdev->dev) ?: fwnode;
-> 
-> This doesn't look right to me. Looking at the documentation of
-> gc->fwnode and how it is used, the purpose of this is to allow
-> explicitly overriding the fwnode that the GPIO chip will use.
-> 
-> So really this should not be used beyond the initial registration
-> in gpiochip_add_data_with_key(). If the above patch fixes anything,
-> then I suspect somebody is using gc->fwnode outside of this
-> registration.
-> 
-> Looking at gpiolib, the only remaining place that seems to do this is
-> the gpio-reserved-ranges handling code, in which case, the below on top
-> of my initial patch might fix that. That might explain why MSM is still
-> seeing issues.
+On Tue, Nov 15, 2022 at 07:37:29PM -0500, Jason Baron wrote:
+> Currently, ghes_edac_register() is called via ghes_init() from acpi_init()
 
-That is correct. The Thinkpad x13s laptop uses the driver
-drivers/pinctrl/qcom/pinctrl-sc8280xp.c and
-arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts defines a
-gpio-reserved-ranges property. The SA8540p automotive board has the same
-SoC, however the DTS we are using doesn't use the gpio-reserved-ranges
-property, and why only your original patch fixed the issue for this
-board.
+https://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git/log/?h=edac-ghes
 
-I think my patch should be removed from the GPIO tree if Thierry's two
-patches work for everyone.
+-- 
+Regards/Gruss,
+    Boris.
 
-Brian
-
+https://people.kernel.org/tglx/notes-about-netiquette
