@@ -2,324 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3297562BA93
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:00:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DECE862BA98
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:01:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233287AbiKPLAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 06:00:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42600 "EHLO
+        id S232716AbiKPLBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 06:01:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231265AbiKPK7Z (ORCPT
+        with ESMTP id S233983AbiKPLAk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 05:59:25 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A2FB429AE
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:47:51 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id g12so29013866wrs.10
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:47:51 -0800 (PST)
+        Wed, 16 Nov 2022 06:00:40 -0500
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E83A5F82
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:48:30 -0800 (PST)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-376596ae449so163621687b3.5
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 02:48:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7Ox2coJth2fVU0i1DjnwD0OBNEmCEwPUUDS9+i62Wok=;
-        b=AfFwN85Vm7AHpaxOE8UwNtFAud5+/Pre+M7qbo73CpGOJYPqVEA6n5NCzERSlwUlJ4
-         zgyFo0PYEoNbFCGLNJZF5voLAjA5/WFcF4bOiyeL2cDiZa9A0xOjtx4LgaMR4RxYy/5o
-         1Ivi0nCAHO3B50Wj40Eo/Ksijfe+SQJKflvCFW2/cnKH0e4HyzFbuMl/BaGWcopC0XH5
-         CcI/IeFRi4inQZqgiAFw44pv5CY19OicowgoSMF3CzXi1AjIp9ldr7TJRj3fHVpRTkrY
-         G1jk3058TSupcjjGkTd8zIXI40qkzaCEydJVQzaClA5Pnb2j+Ki4ZmHhHJuItojW5vKk
-         2vqg==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=cFR/wt3y9YnCrykafRz+rVN7c4XKPP1zl0PGh6JnSDo=;
+        b=DutzTOKABfvo92q4x8MnbkpyKnFoxxoa0UhmPjrGP5ZFsTsTu4f2nD6DCCTGD7GjqI
+         vp7eIGnScP2GByzWsqcBG986rqcJ/Lkg92+2VR3MSMcZjUknD2T/3Tjxesfsn0pKeR+k
+         ZYGD3nYhiM4JHUNZoTH8YoQtj52m0UDg0xASyHjKN7vs+3lNm8+iIKc2+9GyD5SS7Fq3
+         YHfIN3GiOR3Dnslz3UXPCBKj1/Y2Ex0vv5km0+Wg+Iaa0px6wH8MauNeC9V4GjteY1a4
+         lzfiQO+QCXILG0gqw+DDBTIX8/gvYKEGIz8dcJ7m5sRLmr+6MlhBJq/uzgvoa1e8lL6q
+         TUhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7Ox2coJth2fVU0i1DjnwD0OBNEmCEwPUUDS9+i62Wok=;
-        b=PKA9eKDskNdqmJKTSegV/8ui5jrh3tQthjifVBDTA2FkNq8gGCUriH1oU7VVPlY2TV
-         REUqPS2J/GMN8yILh6SRKsmewQ+Kj64DRqCWMPIpTyrTjnBgW0X3c42v8Q4fJBNQ3WUi
-         uyzD4u3qLNtfdmDY0WeOuKVE5Fz6H0cGEm4bFHkqEa9qafu0EFWnr+v391/FEwFWOUXW
-         xKP4NTJDGi8d/fsZtr2kFxcJwV1kVJw3EyopcPN76fl22vnHqXbQEkH6eDTZzNnUe8tM
-         vVWzTXkUv3shiS3qEKfij190r9/5JJgWSiFguIScSUdhIou7wb3h2RQ2p/GHsgp97UIr
-         paPQ==
-X-Gm-Message-State: ANoB5pnxuc5hiE7nV6kO71ZQYTavHhHSnCGMlArAbUkR87ApmXYp0XTr
-        HmRGlZoMQdXXeWaBw+WK5NjteQ==
-X-Google-Smtp-Source: AA0mqf6SXYzsbZbvXQ95u/C+s1771IJs/gg+BzU1oOiaK7F7ef5fB+j4xZxoFxzkXzU7IF0+jdfqIA==
-X-Received: by 2002:adf:e242:0:b0:236:6181:a1ad with SMTP id bl2-20020adfe242000000b002366181a1admr13110038wrb.85.1668595671124;
-        Wed, 16 Nov 2022 02:47:51 -0800 (PST)
-Received: from localhost.localdomain ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id b3-20020adff903000000b002366fb99cdasm14674206wrr.50.2022.11.16.02.47.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 02:47:50 -0800 (PST)
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Subject: [PATCH 9/9] clk: qcom: Add TCSR clock driver for SM8550
-Date:   Wed, 16 Nov 2022 12:47:16 +0200
-Message-Id: <20221116104716.2583320-10-abel.vesa@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221116104716.2583320-1-abel.vesa@linaro.org>
-References: <20221116104716.2583320-1-abel.vesa@linaro.org>
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cFR/wt3y9YnCrykafRz+rVN7c4XKPP1zl0PGh6JnSDo=;
+        b=uyQoB5O2vxTNHjtuxN2Ou0cfCuXY+9Tm+/aVgebyDg1OFl6e0o7Yt9gqnifE41vvEc
+         klalVZZmFgRd1lLyZq9HsTPYV82kY80oegj0SK7t9FLvjMJJqedEF47MfjxwO0Mj1nOe
+         0sqynsZpcLNXcVC6m/5att1dAyDolZAIiyoYlaqvFGfEvY8ZnvdEY8h7Pn3ieT6nCKj9
+         qIR7baplevcAJ/8vHgdCNPelup5ox/tbnQPc+P0CFihivEH6Huy2TX5QyQcnBOwgdfPu
+         QuoHRCp7nrqE6nAxQnsIpgGC02b5P7PXwSl5KgqHt0kheM6XD4CY/AHExZisQX2XbhHO
+         pUyw==
+X-Gm-Message-State: ANoB5plGb2g29ppY7j+ccHz/2P+7YTql1TXvIkJTwuRSV0fStRxXNFvy
+        QLRNLggypOHI1OQylZFAjvgEmnOH7S1d04tWbAdFd5pyoqw=
+X-Google-Smtp-Source: AA0mqf74CBfev4gBgEF3N3/nHSY+NG2PD3H3ybibJa9dDq6RJECBNhl4JBXlz9ArQ0oXnvTU3vjcfvmi6kG7LGL6Cw0=
+X-Received: by 2002:a0d:f3c2:0:b0:345:5edc:2193 with SMTP id
+ c185-20020a0df3c2000000b003455edc2193mr21154996ywf.481.1668595709498; Wed, 16
+ Nov 2022 02:48:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date:   Wed, 16 Nov 2022 11:48:18 +0100
+Message-ID: <CAKXUXMyVFw6cec09+R_sQ5EZLKt+3W3ypucjZCbzYBOyRjC2Yw@mail.gmail.com>
+Subject: Thunder Bay architecture still relevant?
+To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "kenchappa.demakkanavar@intel.com" <kenchappa.demakkanavar@intel.com>
+Cc:     urong.zhou@intel.com, kris.pan@linux.intel.com, kris.pan@intel.com,
+        mgross@linux.intel.com, mark.gross@intel.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The TCSR clock controller found on SM8550 provides refclks
-for PCIE, USB and UFS. Add clock driver for it.
+Dear Kenchappa Demakkanavar,
 
-This patch is based on initial code downstream.
+you submitted initial support for a new Intel Movidius SoC code-named
+Thunder Bay, along with a number of drivers for that architecture.
 
-Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
----
- drivers/clk/qcom/Kconfig         |   7 ++
- drivers/clk/qcom/Makefile        |   1 +
- drivers/clk/qcom/tcsrcc-sm8550.c | 193 +++++++++++++++++++++++++++++++
- 3 files changed, 201 insertions(+)
- create mode 100644 drivers/clk/qcom/tcsrcc-sm8550.c
+The drivers are included in the repository, but refer to the
+ARCH_THUNDERBAY support to even enable them.
 
-diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
-index 7186faf70562..653049b08a25 100644
---- a/drivers/clk/qcom/Kconfig
-+++ b/drivers/clk/qcom/Kconfig
-@@ -788,6 +788,13 @@ config SM_GPUCC_8350
- 	  Say Y if you want to support graphics controller devices and
- 	  functionality such as 3D graphics.
- 
-+config SM_TCSRCC_8550
-+	tristate "SM8550 TCSR Clock Controller"
-+	select QCOM_GDSC
-+	help
-+	  Support for the TCSR clock controller on SM8550 devices.
-+	  Say Y if you want to use peripheral devices such as SD/UFS.
-+
- config SM_VIDEOCC_8150
- 	tristate "SM8150 Video Clock Controller"
- 	select SM_GCC_8150
-diff --git a/drivers/clk/qcom/Makefile b/drivers/clk/qcom/Makefile
-index dc4b803d3f3d..17d878482a45 100644
---- a/drivers/clk/qcom/Makefile
-+++ b/drivers/clk/qcom/Makefile
-@@ -111,6 +111,7 @@ obj-$(CONFIG_SM_GPUCC_6350) += gpucc-sm6350.o
- obj-$(CONFIG_SM_GPUCC_8150) += gpucc-sm8150.o
- obj-$(CONFIG_SM_GPUCC_8250) += gpucc-sm8250.o
- obj-$(CONFIG_SM_GPUCC_8350) += gpucc-sm8350.o
-+obj-$(CONFIG_SM_TCSRCC_8550) += tcsrcc-sm8550.o
- obj-$(CONFIG_SM_VIDEOCC_8150) += videocc-sm8150.o
- obj-$(CONFIG_SM_VIDEOCC_8250) += videocc-sm8250.o
- obj-$(CONFIG_SPMI_PMIC_CLKDIV) += clk-spmi-pmic-div.o
-diff --git a/drivers/clk/qcom/tcsrcc-sm8550.c b/drivers/clk/qcom/tcsrcc-sm8550.c
-new file mode 100644
-index 000000000000..3e6756da1e83
---- /dev/null
-+++ b/drivers/clk/qcom/tcsrcc-sm8550.c
-@@ -0,0 +1,193 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2021, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2022, Qualcomm Innovation Center, Inc. All rights reserved.
-+ * Copyright (c) 2022, Linaro Limited
-+ */
-+
-+#include <linux/clk-provider.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/regmap.h>
-+
-+#include <dt-bindings/clock/qcom,tcsrcc-sm8550.h>
-+
-+#include "clk-alpha-pll.h"
-+#include "clk-branch.h"
-+#include "clk-pll.h"
-+#include "clk-rcg.h"
-+#include "clk-regmap.h"
-+#include "clk-regmap-divider.h"
-+#include "clk-regmap-mux.h"
-+#include "common.h"
-+#include "reset.h"
-+
-+enum {
-+	DT_BI_TCXO,
-+	DT_BI_TCXO_PAD,
-+};
-+
-+static struct clk_branch tcsr_pcie_0_clkref_en = {
-+	.halt_reg = 0x15100,
-+	.halt_check = BRANCH_HALT_SKIP,
-+	.clkr = {
-+		.enable_reg = 0x15100,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "tcsr_pcie_0_clkref_en",
-+			.parent_data = &(const struct clk_parent_data){
-+				.index = DT_BI_TCXO,
-+			},
-+			.num_parents = 1,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch tcsr_pcie_1_clkref_en = {
-+	.halt_reg = 0x15114,
-+	.halt_check = BRANCH_HALT_SKIP,
-+	.clkr = {
-+		.enable_reg = 0x15114,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "tcsr_pcie_1_clkref_en",
-+			.parent_data = &(const struct clk_parent_data){
-+				.index = DT_BI_TCXO,
-+			},
-+			.num_parents = 1,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch tcsr_ufs_clkref_en = {
-+	.halt_reg = 0x15110,
-+	.halt_check = BRANCH_HALT_SKIP,
-+	.clkr = {
-+		.enable_reg = 0x15110,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "tcsr_ufs_clkref_en",
-+			.parent_data = &(const struct clk_parent_data){
-+				.index = DT_BI_TCXO,
-+			},
-+			.num_parents = 1,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch tcsr_ufs_pad_clkref_en = {
-+	.halt_reg = 0x15104,
-+	.halt_check = BRANCH_HALT_SKIP,
-+	.clkr = {
-+		.enable_reg = 0x15104,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "tcsr_ufs_pad_clkref_en",
-+			.parent_data = &(const struct clk_parent_data){
-+				.index = DT_BI_TCXO,
-+			},
-+			.num_parents = 1,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch tcsr_usb2_clkref_en = {
-+	.halt_reg = 0x15118,
-+	.halt_check = BRANCH_HALT_SKIP,
-+	.clkr = {
-+		.enable_reg = 0x15118,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "tcsr_usb2_clkref_en",
-+			.parent_data = &(const struct clk_parent_data){
-+				.index = DT_BI_TCXO_PAD,
-+			},
-+			.num_parents = 1,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch tcsr_usb3_clkref_en = {
-+	.halt_reg = 0x15108,
-+	.halt_check = BRANCH_HALT_SKIP,
-+	.clkr = {
-+		.enable_reg = 0x15108,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "tcsr_usb3_clkref_en",
-+			.parent_data = &(const struct clk_parent_data){
-+				.index = DT_BI_TCXO,
-+			},
-+			.num_parents = 1,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_regmap *tcsr_cc_sm8550_clocks[] = {
-+	[TCSR_PCIE_0_CLKREF_EN] = &tcsr_pcie_0_clkref_en.clkr,
-+	[TCSR_PCIE_1_CLKREF_EN] = &tcsr_pcie_1_clkref_en.clkr,
-+	[TCSR_UFS_CLKREF_EN] = &tcsr_ufs_clkref_en.clkr,
-+	[TCSR_UFS_PAD_CLKREF_EN] = &tcsr_ufs_pad_clkref_en.clkr,
-+	[TCSR_USB2_CLKREF_EN] = &tcsr_usb2_clkref_en.clkr,
-+	[TCSR_USB3_CLKREF_EN] = &tcsr_usb3_clkref_en.clkr,
-+};
-+
-+static const struct regmap_config tcsr_cc_sm8550_regmap_config = {
-+	.reg_bits = 32,
-+	.reg_stride = 4,
-+	.val_bits = 32,
-+	.max_register = 0x2f000,
-+	.fast_io = true,
-+};
-+
-+static const struct qcom_cc_desc tcsr_cc_sm8550_desc = {
-+	.config = &tcsr_cc_sm8550_regmap_config,
-+	.clks = tcsr_cc_sm8550_clocks,
-+	.num_clks = ARRAY_SIZE(tcsr_cc_sm8550_clocks),
-+};
-+
-+static const struct of_device_id tcsr_cc_sm8550_match_table[] = {
-+	{ .compatible = "qcom,sm8550-tcsrcc" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, tcsr_cc_sm8550_match_table);
-+
-+static int tcsr_cc_sm8550_probe(struct platform_device *pdev)
-+{
-+	struct regmap *regmap;
-+
-+	regmap = qcom_cc_map(pdev, &tcsr_cc_sm8550_desc);
-+	if (IS_ERR(regmap))
-+		return PTR_ERR(regmap);
-+
-+	return qcom_cc_really_probe(pdev, &tcsr_cc_sm8550_desc, regmap);
-+}
-+
-+static struct platform_driver tcsr_cc_sm8550_driver = {
-+	.probe = tcsr_cc_sm8550_probe,
-+	.driver = {
-+		.name = "tcsr_cc-sm8550",
-+		.of_match_table = tcsr_cc_sm8550_match_table,
-+	},
-+};
-+
-+static int __init tcsr_cc_sm8550_init(void)
-+{
-+	return platform_driver_register(&tcsr_cc_sm8550_driver);
-+}
-+subsys_initcall(tcsr_cc_sm8550_init);
-+
-+static void __exit tcsr_cc_sm8550_exit(void)
-+{
-+	platform_driver_unregister(&tcsr_cc_sm8550_driver);
-+}
-+module_exit(tcsr_cc_sm8550_exit);
-+
-+MODULE_DESCRIPTION("QTI TCSRCC SM8550 Driver");
-+MODULE_LICENSE("GPL");
--- 
-2.34.1
+The last state I see on architecture support is your submission:
 
+https://lore.kernel.org/linux-arm-kernel/1631771898-18702-1-git-send-email-kenchappa.demakkanavar@intel.com/
+
+However, since then there seems nobody further pushing to include this
+architecture. Is this architecture still relevant or has it been
+abandoned?
+
+If it is abandoned, we should also remove the drivers again as far as
+I can tell.
+
+
+Best regards,
+
+Lukas
