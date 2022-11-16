@@ -2,99 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31AF962B5E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:02:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10D2962B5E6
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 10:03:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232934AbiKPJC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 04:02:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55300 "EHLO
+        id S233203AbiKPJDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 04:03:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232130AbiKPJBu (ORCPT
+        with ESMTP id S231259AbiKPJDP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 04:01:50 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC3921AF33;
-        Wed, 16 Nov 2022 01:00:59 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 176E26602A81;
-        Wed, 16 Nov 2022 09:00:57 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1668589258;
-        bh=GuVy2p92QW9W2mJLHekEdzZ8JahojsK0Oac56TKj1HU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=CXKCdNla+P8jvn7BrlpAFuFlr4aWU/rubMcEDE6lQ78vXLYnSbQhRUVbqYgagAS6n
-         Ps0XyzQuavM0yLSNpKvlEm1Kdalv2t4TzYJe5fdFt3lsvSv0Aq0DSC8pkqoWGEHePW
-         0+lemygkwEauNI6ATm/uWO5fXjB3FuZaVUQ7SYERjpK3VSZjJapV/OV63IrvEbR5eV
-         XOSkFymt4UtY9OJ9NEqMGmYq1jSIYmkZQ6e4j0sLotYcsL+ZRfmuwsmwjDOZgFyC4N
-         dl7LGj37drAlcyXM5c4eOaTYCUA5IGp0xifi+8FtUrx6MvvUEMEBap9XTq38A7tUNT
-         U29nwQVQ2klnA==
-Message-ID: <f60ccd79-9c82-0844-2c5f-21ec29c14dcf@collabora.com>
-Date:   Wed, 16 Nov 2022 10:00:54 +0100
+        Wed, 16 Nov 2022 04:03:15 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C091CFC9
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 01:03:01 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1ovEJm-0000wV-6Z; Wed, 16 Nov 2022 10:02:50 +0100
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1ovEJl-00070t-Qp; Wed, 16 Nov 2022 10:02:49 +0100
+Date:   Wed, 16 Nov 2022 10:02:49 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Clark Wang <xiaoning.wang@nxp.com>
+Cc:     linux@rempel-privat.de, kernel@pengutronix.de, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: imx: add irqf_no_suspend flag
+Message-ID: <20221116090249.GB12278@pengutronix.de>
+References: <20221116074431.513214-1-xiaoning.wang@nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v2 05/11] dt-bindings: mailbox: qcom: Allow syscon on
- qcom,msm8976-apcs-kpss-global
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        agross@kernel.org
-Cc:     andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, jassisinghbrar@gmail.com,
-        srinivas.kandagatla@linaro.org, jic23@kernel.org, lars@metafoo.de,
-        keescook@chromium.org, tony.luck@intel.com, gpiccoli@igalia.com,
-        evgreen@chromium.org, gregkh@linuxfoundation.org,
-        a39.skl@gmail.com, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-hardening@vger.kernel.org,
-        marijn.suijten@somainline.org, kernel@collabora.com, luca@z3ntu.xyz
-References: <20221111120156.48040-1-angelogioacchino.delregno@collabora.com>
- <20221111120156.48040-6-angelogioacchino.delregno@collabora.com>
- <14947ae2-c8d4-de86-ce9e-29175e73cbb2@linaro.org>
- <9f3e88fa-0aaf-2edd-366e-c3f5b2269dba@collabora.com>
- <513a2dc3-d053-6e4b-a125-394cf1f6c81b@linaro.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <513a2dc3-d053-6e4b-a125-394cf1f6c81b@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221116074431.513214-1-xiaoning.wang@nxp.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 16/11/22 09:57, Krzysztof Kozlowski ha scritto:
-> On 16/11/2022 09:52, AngeloGioacchino Del Regno wrote:
->> Il 15/11/22 17:44, Krzysztof Kozlowski ha scritto:
->>> On 11/11/2022 13:01, AngeloGioacchino Del Regno wrote:
->>>> MSM8976 supports SMSM, which needs this node to also be a syscon:
->>>> move the compatible to allow that.
->>>>
->>>> Fixes: bcc8d70f912d ("dt-bindings: mailbox: Add compatible for the MSM8976")
->>>
->>> I am not sure if this is still a bug. Maybe just a missing feature?
->>>
->>
->> This changes how you use this mailbox across the entire devicetree (as other
->> nodes will not use mboxes = xxxx, but qcom,ipc = xxxx as syscon), so I think
->> that this is not a missing feature?
+On Wed, Nov 16, 2022 at 03:44:31PM +0800, Clark Wang wrote:
+> The i2c irq is masked when user starts an i2c transfer process
+> during noirq suspend stage. As a result, i2c transfer fails.
+> To solve the problem, IRQF_NO_SUSPEND is added to i2c bus.
 > 
-> Whether it is a bug depends on existing usage. If none of msm8976 DTSes
-> use it the other way, then it is just incomplete or missing support. Not
-> a bug. If existing DTSes use it as syscon, thus you need to add syscon
-> to compatible, then it would be a bugfix.
+> Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
+
+Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
+
+> ---
+>  drivers/i2c/busses/i2c-imx.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
+> index 1ce0cf7a323f..ba49b2f7a1d1 100644
+> --- a/drivers/i2c/busses/i2c-imx.c
+> +++ b/drivers/i2c/busses/i2c-imx.c
+> @@ -1510,7 +1510,8 @@ static int i2c_imx_probe(struct platform_device *pdev)
+>  		goto rpm_disable;
+>  
+>  	/* Request IRQ */
+> -	ret = request_threaded_irq(irq, i2c_imx_isr, NULL, IRQF_SHARED,
+> +	ret = request_threaded_irq(irq, i2c_imx_isr, NULL,
+> +				   IRQF_SHARED | IRQF_NO_SUSPEND,
+>  				   pdev->name, i2c_imx);
+>  	if (ret) {
+>  		dev_err(&pdev->dev, "can't claim irq %d\n", irq);
+> -- 
+> 2.34.1
+> 
 > 
 
-It's not a bugfix then. The Fixes tag shall be dropped.
-
-Same question like the other commit, should I send a v3 or can it be dropped while
-applying?
-
-
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
