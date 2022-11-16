@@ -2,125 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4396D62BCB9
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:56:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BB2562BCBF
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 12:57:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233759AbiKPL4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 06:56:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38814 "EHLO
+        id S229939AbiKPL5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 06:57:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233504AbiKPLzp (ORCPT
+        with ESMTP id S231985AbiKPL5Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 06:55:45 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB1424AF11
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 03:46:51 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id ft34so43342634ejc.12
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 03:46:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UGh6LEw9sD5U1ZV9P+A40VyRZW/b0s7lkJhlbNsJWyg=;
-        b=tZydqGulJDpbofkvCx9ifk/cC0D8/C+Fu15MacnEuX0mdETX8lAC3SF6p0xtEqoJlL
-         WU42q1qwx3G1rKm6dQITYgp1ZE6UISGQVP3xfhkPly+9f2CyYiwMp6n2OmQAwq6Jt3gE
-         aiwcUOzlxFJ13JUymym54LLuupcXfvr8Yr8yqaOuzKfgI6TASPO1AZQKgjbsK0SZ9zpl
-         42Q+xU2WdlD86p3L4OGF1MAIvWRwmXLNyAq/8wo+Io/74a+0RVU6Cm3tK+PEWl7wSp9y
-         xMsj3a+9Sj3GlWyPbPug6sdIdBG9xnNgth2dkIbo1HIlWxuWO3s/8y+UORJu0LiyZEQq
-         gYVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=UGh6LEw9sD5U1ZV9P+A40VyRZW/b0s7lkJhlbNsJWyg=;
-        b=SRzPwLqD/U7dCm9pkDqfh33PPIBKeBtuu2F70Hx/nt3BtSo09uP/QmlwBYEAzMekzJ
-         4CfubkjF4I7S5fWwPQP6y0tWfq4NtTK45ZFUjaCCA9GWwYBEqoUg6doQiJpYqtBwPUJ8
-         qqIaNEFxnGQTuhGUALl78XR/GtefkB/e0ngJqbeb3vyy3rDjSlRhdkAtiZ2LT3lnBHgf
-         CDhPZYE9ey7UrSWoFp77bmsKS0sA73A2Xil17cuy+7rB9es3fF4v8Mp0rydv9xA6lyYg
-         H7gc28xPRlbwxFm40wHWm/zF8OCXyGlkixfLKURKYsaRE95yhyjpz9buWmXouc+CMtFs
-         xAvw==
-X-Gm-Message-State: ANoB5plpwC04vZgE0mwZMj9dau/ltGyXMfSOmiOQZAY0xoepsbPWphB3
-        HtghHh8+fhaEmTdF/1uRhzAI/Q==
-X-Google-Smtp-Source: AA0mqf4TLWE3qa0twFDb2mzsNtdutyTOUdBepJumOUQKoCYkEeueUI5CbVEuzzmyZJ9+U4hvCuZAjg==
-X-Received: by 2002:a17:907:7659:b0:7a0:3125:f1e5 with SMTP id kj25-20020a170907765900b007a03125f1e5mr17056326ejc.314.1668599210470;
-        Wed, 16 Nov 2022 03:46:50 -0800 (PST)
-Received: from [192.168.31.208] ([194.29.137.22])
-        by smtp.gmail.com with ESMTPSA id bf28-20020a0564021a5c00b004643f1524f3sm7373522edb.44.2022.11.16.03.46.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 03:46:50 -0800 (PST)
-Message-ID: <b8404a1e-9171-0b64-f879-beac62bac92c@linaro.org>
-Date:   Wed, 16 Nov 2022 12:46:43 +0100
+        Wed, 16 Nov 2022 06:57:24 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97DEC2C11A;
+        Wed, 16 Nov 2022 03:49:31 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 4E6981F920;
+        Wed, 16 Nov 2022 11:49:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1668599370; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DhlnYHc5lqYtVE2JY7TNjxERCR0CvhdNBUBJS3BlmxQ=;
+        b=X9r3fDmwizy2l3nijdIKOgxz2opeDeWGQzXWpsC+jzlPGsN8dPzA2Y/r1fxsTzQN5dpul3
+        6QgRVRYV+OAc4FMn8UfRHGAeyj+JAHLrepnmOm01THSxaYB0iPePr5RzGnDaJjKkhM3cpR
+        Y/R+T74cGeqL+JrS2jlShsVnCFYtc20=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1668599370;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DhlnYHc5lqYtVE2JY7TNjxERCR0CvhdNBUBJS3BlmxQ=;
+        b=eVPjjcn7QnC0B5re1/XKMY262s1XYw+zaR0RMaSYALLUAbxH+Txu05SRhWUHxRRgD7nY2p
+        nwhUbbEI9ITrCVAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4121B134CE;
+        Wed, 16 Nov 2022 11:49:30 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Z1/gD0rOdGORdgAAMHmgww
+        (envelope-from <jack@suse.cz>); Wed, 16 Nov 2022 11:49:30 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id C0B06A0709; Wed, 16 Nov 2022 12:49:29 +0100 (CET)
+Date:   Wed, 16 Nov 2022 12:49:29 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Baokun Li <libaokun1@huawei.com>
+Cc:     linux-ext4@vger.kernel.org, tytso@mit.edu,
+        adilger.kernel@dilger.ca, jack@suse.cz, ritesh.list@gmail.com,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        yukuai3@huawei.com
+Subject: Re: [PATCH v2 2/3] ext4: fix corrupt backup group descriptors after
+ online resize
+Message-ID: <20221116114929.wmawudyczia55gpe@quack3>
+References: <20221116072802.526990-1-libaokun1@huawei.com>
+ <20221116072802.526990-3-libaokun1@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.2
-Subject: Re: [PATCH 3/3] arm64: dts: qcom: sm8550-mtp: enable adsp, cdsp &
- mdss
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, Abel Vesa <abel.vesa@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20221115-topic-sm8550-upstream-dts-remoteproc-v1-0-379eec11d841@linaro.org>
- <20221115-topic-sm8550-upstream-dts-remoteproc-v1-3-379eec11d841@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221115-topic-sm8550-upstream-dts-remoteproc-v1-3-379eec11d841@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221116072802.526990-3-libaokun1@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 16/11/2022 11:43, Neil Armstrong wrote:
-> Add the aDSP, cDSP and MPSS firmware and "Devicetree" firmware paths
-> for the SM8550 MTP platform.
+On Wed 16-11-22 15:28:01, Baokun Li wrote:
+> In commit 9a8c5b0d0615 ("ext4: update the backup superblock's at the end
+> of the online resize"), it is assumed that update_backups() only updates
+> backup superblocks, so each b_data is treated as a backupsuper block to
+> update its s_block_group_nr and s_checksum. However, update_backups()
+> also updates the backup group descriptors, which causes the backup group
+> descriptors to be corrupted.
 > 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> The above commit fixes the problem of invalid checksum of the backup
+> superblock. The root cause of this problem is that the checksum of
+> ext4_update_super() is not set correctly. This problem has been fixed
+> in the previous patch ("ext4: fix bad checksum after online resize").
+> Therefore, roll back some modifications in the above commit.
+> 
+> Fixes: 9a8c5b0d0615 ("ext4: update the backup superblock's at the end of the online resize")
+> Signed-off-by: Baokun Li <libaokun1@huawei.com>
+
+So I agree commit 9a8c5b0d0615 is broken and does corrupt group
+descriptors. However I don't see how PATCH 1/3 in this series would fix all
+the problems commit 9a8c5b0d0615 is trying to fix. In particular checksums
+on backup superblocks will not be properly set by the resize code AFAICT.
+
+								Honza
+
 > ---
->   arch/arm64/boot/dts/qcom/sm8550-mtp.dts | 18 ++++++++++++++++++
->   1 file changed, 18 insertions(+)
+>  fs/ext4/resize.c | 5 -----
+>  1 file changed, 5 deletions(-)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-> index d4c8d5b2497e..be06e25409c3 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-> +++ b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-> @@ -376,6 +376,24 @@ &qupv3_id_0 {
->   	status = "okay";
->   };
->   
-> +&remoteproc_adsp {
-> +	status = "okay";
-> +	firmware-name = "qcom/sm8550/adsp.mbn";
-> +	qcom,dtb-firmware-name = "qcom/sm8550/adsp_dtb.mbn";
-status should go last. I missed that in the review of the patchset 
-introducing this DTS, please fix it over there as well.
-
-Konrad
-> +};
-> +
-> +&remoteproc_cdsp {
-> +	status = "okay";
-> +	firmware-name = "qcom/sm8550/cdsp.mbn";
-> +	qcom,dtb-firmware-name = "qcom/sm8550/cdsp_dtb.mbn";
-> +};
-> +
-> +&remoteproc_mpss {
-> +	status = "okay";
-> +	firmware-name = "qcom/sm8550/modem.mbn";
-> +	qcom,dtb-firmware-name = "qcom/sm8550/modem_dtb.mbn";
-> +};
-> +
->   &sdhc_2 {
->   	status = "okay";
->   
+> diff --git a/fs/ext4/resize.c b/fs/ext4/resize.c
+> index cb99b410c9fa..32fbfc173571 100644
+> --- a/fs/ext4/resize.c
+> +++ b/fs/ext4/resize.c
+> @@ -1158,7 +1158,6 @@ static void update_backups(struct super_block *sb, sector_t blk_off, char *data,
+>  	while (group < sbi->s_groups_count) {
+>  		struct buffer_head *bh;
+>  		ext4_fsblk_t backup_block;
+> -		struct ext4_super_block *es;
+>  
+>  		/* Out of journal space, and can't get more - abort - so sad */
+>  		err = ext4_resize_ensure_credits_batch(handle, 1);
+> @@ -1187,10 +1186,6 @@ static void update_backups(struct super_block *sb, sector_t blk_off, char *data,
+>  		memcpy(bh->b_data, data, size);
+>  		if (rest)
+>  			memset(bh->b_data + size, 0, rest);
+> -		es = (struct ext4_super_block *) bh->b_data;
+> -		es->s_block_group_nr = cpu_to_le16(group);
+> -		if (ext4_has_metadata_csum(sb))
+> -			es->s_checksum = ext4_superblock_csum(sb, es);
+>  		set_buffer_uptodate(bh);
+>  		unlock_buffer(bh);
+>  		err = ext4_handle_dirty_metadata(handle, NULL, bh);
+> -- 
+> 2.31.1
 > 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
