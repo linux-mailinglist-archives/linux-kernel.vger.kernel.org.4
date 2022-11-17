@@ -2,73 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ABEE62DE11
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 15:28:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6913B62DE14
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 15:28:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239838AbiKQO1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 09:27:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55090 "EHLO
+        id S234819AbiKQO2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 09:28:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239493AbiKQO1R (ORCPT
+        with ESMTP id S240352AbiKQO2o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 09:27:17 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B776379E1C;
-        Thu, 17 Nov 2022 06:27:16 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id k15so1935402pfg.2;
-        Thu, 17 Nov 2022 06:27:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MuPgpre3wzn5WJZUlqLPK4/VfBG9+9DDaXxDqH0YfTg=;
-        b=gDrkj1lVR4IK0kfw/npxyZUbUD2NZG/OGlcfnkWxLkgYEFb7H9Q44NG9P/eKZVCRwy
-         0AqPixB5lzjkrxJ3Tvemmb32exJNXXMaUfqmNPd+pS6qNQmVL/9KPo3l97hnNjAxEk1O
-         ArenFxGlmUYLJW6Xb+oCKHz76UB9OV5SaguCLg7sw2h5AYKN4vncA/euRp4ZbDdK8a94
-         3q6JUUf1s9ejeo59lUs0/Elc1nmbjzHfof/IopD2wfsscm9srbbRuwG8U4jbLkPA4QOv
-         n9RZM0l1pgrBOwrs4yaSCeb11kaNUPzSyAJTbU2E1nUfw3nxmQXX9W1FXtelewruH4yY
-         JpBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MuPgpre3wzn5WJZUlqLPK4/VfBG9+9DDaXxDqH0YfTg=;
-        b=RXiI5ED/LwcsjBGI+raSsHG7VMnSzVFm/1KDoEzo0ezoPmuRbTUoHNz7lKVsYUStV7
-         3VZvXqyvWAExQLLFfV34MNINDwpw1CUJqIAj3YKmUnvBRUcdckYs3RYm49hc3DQMCKIK
-         3E6+ao+S9XM7LGmiwYEz8Bbofi8EUA3KkU1Pj4Po17R4Ip1wZVZkAx48k5wwXG699S63
-         0Mji1ryWy0ADY/hs/EyCAeubTJXlvb3fAbFcI9HVO4AqKWlgT/k5ilQV1KCJYIRlN00z
-         DODdX9s3aaX+cHXV1HzrwJnGiGx4rCngxxRME8KSKgwbLXdbG9/hLdAdgCwdVlPoTPja
-         T3Cg==
-X-Gm-Message-State: ANoB5pkDQ0ftq3qWrKX+vhmUoDsYO0N3kIM3y9215A+1akdosYQx9tRC
-        kWufMNc2eGlMaxjz0HXkMo4=
-X-Google-Smtp-Source: AA0mqf5j440VkxQLEn4vGPnBkUjnZGHiKjxcKqHgkmTySQfsUCazaibRjFLcAv3i9cDadAoIGIpVgA==
-X-Received: by 2002:a63:e008:0:b0:46f:5979:8889 with SMTP id e8-20020a63e008000000b0046f59798889mr2339672pgh.119.1668695236195;
-        Thu, 17 Nov 2022 06:27:16 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c5-20020a170902b68500b00186b758c9fasm1448385pls.33.2022.11.17.06.27.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 06:27:15 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 17 Nov 2022 06:27:14 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Ninad Malwade <nmalwade@nvidia.com>
-Cc:     treding@nvidia.com, jonathanh@nvidia.com, jdelvare@suse.com,
-        nicolinc@nvidia.com, rkasirajan@nvidia.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (ina3221): tighten attribute sysfs permissions
-Message-ID: <20221117142714.GB664755@roeck-us.net>
-References: <20221117083920.20493-1-nmalwade@nvidia.com>
+        Thu, 17 Nov 2022 09:28:44 -0500
+Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293951261B
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 06:28:42 -0800 (PST)
+Date:   Thu, 17 Nov 2022 14:28:20 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1668695315; x=1668954515;
+        bh=h8QUQMuBeId16fwT8sIh6ZqutzDewiMZtFIp21P7mOY=;
+        h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+         Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+        b=cLYLHTMvI4pQQtyVvzPKzaE42SZoN0qoVPQeQLANiJ77ipklFCAlKAu9C2fUV9eQn
+         B+dBlatkXMTkQhcJxLeUiX5os+iXkuE6Dny9XEf+idfQzdHupDpmBG/f6/MHmuA7Lr
+         XEd9hN5wfk4hjQEfPv1xyMlEAh3lnNglucGJ2Xdk43Vwhsz2JpZFKojtMoU4tDd1lf
+         YP3z2yogAUeXhmE3lTxsdYliSWbIy5uNXp1g7nrsotbj8VmDvtOGHEq5ekFX3m6LdO
+         i1eJuzY10Jz64eFubqo79KYtQfTU/717jpWZI7ABXH9twBqmoSps8Uow3PsOpbOHes
+         aCVnYVrwm/oQw==
+To:     linux-input@vger.kernel.org
+From:   "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Corey Minyard <cminyard@mvista.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Zheng Yongjun <zhengyongjun3@huawei.com>,
+        =?utf-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Nikita Travkin <nikita@trvn.ru>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+Subject: [PATCH] Input: stmfts - retry commands after timeout
+Message-ID: <20221117142753.2477-1-linmengbo0689@protonmail.com>
+Feedback-ID: 40467236:user:proton
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221117083920.20493-1-nmalwade@nvidia.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,37 +59,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 04:39:20PM +0800, Ninad Malwade wrote:
-> The INA3221 device provides voltage and current measurements for
-> various power rails, including the CPU rail, on at least some Jetson
-> boards. This raises the possibility of the Platypus attack being relevant
-> to Jetson. To prevent this possibility, modify all attribute
-> channel permissions so that only root can access the values.
+Add #define STMFTS_RETRY_COUNT 3 to retry stmfts_command() 3 times.
+Without it, STMFTS_SYSTEM_RESET or STMFTS_SLEEP_OUT may return -110 to
+failed attempt due to no event received for completion.
 
-NACK. The hwmon ABI expects all attributes to be readable for everyone.
-Forcing userspace to have root privilege to read sensor values just moves
-the attack vector into the affected applications.
+Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
+---
+ drivers/input/touchscreen/stmfts.c | 20 +++++++++++---------
+ 1 file changed, 11 insertions(+), 9 deletions(-)
 
-You have a number of options:
+diff --git a/drivers/input/touchscreen/stmfts.c b/drivers/input/touchscreen=
+/stmfts.c
+index d5bd170808fb..22de34966373 100644
+--- a/drivers/input/touchscreen/stmfts.c
++++ b/drivers/input/touchscreen/stmfts.c
+@@ -68,6 +68,7 @@
+ #define STMFTS_DATA_MAX_SIZE=09(STMFTS_EVENT_SIZE * STMFTS_STACK_DEPTH)
+ #define STMFTS_MAX_FINGERS=0910
+ #define STMFTS_DEV_NAME=09=09"stmfts"
++#define STMFTS_RETRY_COUNT=093
+=20
+ enum stmfts_regulators {
+ =09STMFTS_REGULATOR_VDD,
+@@ -317,19 +318,20 @@ static irqreturn_t stmfts_irq_handler(int irq, void *=
+dev)
+=20
+ static int stmfts_command(struct stmfts_data *sdata, const u8 cmd)
+ {
+-=09int err;
++=09int err, retry;
+=20
+ =09reinit_completion(&sdata->cmd_done);
+=20
+-=09err =3D i2c_smbus_write_byte(sdata->client, cmd);
+-=09if (err)
+-=09=09return err;
+-
+-=09if (!wait_for_completion_timeout(&sdata->cmd_done,
+-=09=09=09=09=09 msecs_to_jiffies(1000)))
+-=09=09return -ETIMEDOUT;
++=09for (retry =3D 0; retry < STMFTS_RETRY_COUNT; retry++) {
++=09=09err =3D i2c_smbus_write_byte(sdata->client, cmd);
++=09=09if (err)
++=09=09=09return err;
+=20
+-=09return 0;
++=09=09if (wait_for_completion_timeout(&sdata->cmd_done,
++=09=09=09=09=09=09msecs_to_jiffies(1000)))
++=09=09=09return 0;
++=09}
++=09return -ETIMEDOUT;
+ }
+=20
+ static int stmfts_input_open(struct input_dev *dev)
+--=20
+2.30.2
 
-1) Make the values reported vague enough to be useless for attacks
-2) Remove the attributes
-3) Remove the driver
 
-2) and 3) are obviously unacceptable here. Your option would be to
-disable the driver on the affected system.
-
-Having said that, for me to accept any driver change, you would have to
-prove that the values reported by the chip are really accurate enough to
-be useful in any attack (most chips do not deliver that level of accuracy).
-A generic statement along the line of "raises the possibility" is
-insufficient.
-
-> This is logically equivalent to 949dd0104c49 ("powercap: restrict energy
-> meter to root access") upstream.
- 
-The change in the powercap driver is not hwmon ABI related and
-irrelevant. If you look for an example, use commit 9049572fb145
-("hwmon: Remove amd_energy driver").
-
-Guenter
