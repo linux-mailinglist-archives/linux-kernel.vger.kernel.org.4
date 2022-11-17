@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF26662E177
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 17:20:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA04F62E17C
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 17:21:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240456AbiKQQUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 11:20:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55876 "EHLO
+        id S240506AbiKQQUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 11:20:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240297AbiKQQUM (ORCPT
+        with ESMTP id S240355AbiKQQUW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 11:20:12 -0500
+        Thu, 17 Nov 2022 11:20:22 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B0313F0C
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 08:20:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F8357A35D
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 08:20:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 840BCB82103
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 16:20:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71E94C433C1;
-        Thu, 17 Nov 2022 16:20:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CB983B8210A
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 16:20:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFE70C433D6;
+        Thu, 17 Nov 2022 16:20:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668702009;
-        bh=wYyaZcJsYDXxKravXk0Nnu1NnFDV/b9rP1oOJ4QQBLg=;
+        s=k20201202; t=1668702010;
+        bh=j3xCV8+gZ5DdIUThsLOjpQ6nM+SExrFIzy3t+gNDPRs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NgqM1oZES5ioOOPcPdD6n4nW5+3+070B7V8JTS1qoJQ3n4xpz9g2AugODSAfXo1UN
-         jqAmmVvaL2Wf+RMKlr3YvD1rCTmK8oYBF/BAJ8vorhoeWojQXOdC5lmm387sX7I2Ao
-         OYhvLzvRwPdhsgP/D8tGOHsN2mzEtoSdKlFSGrMHGqFDgs/jXreY68e3JvSBzfHfsg
-         j0D5cYZe82g0w2wrR5x/eR/jr1u/1yWRudGHhh3PvcipWNOxxWhLenXkZDntVAvA9N
-         ee4GcI5SrhkMWLfUADLRNFSj+oYeTbRiHRJprrk/jyBWCdeQT6RwJYmUCVr/84Pm/z
-         lsWhuyvGtuQMg==
+        b=V4LpwbMKQLwC9zSQYUUu0PR6ZuMdKhgDA2mZpE9vaUBr0LceUvgEFN5PAzlqHmLlq
+         XpkfNmYtAZkkKMAgYeiaNphtDhh5EAIj0+Va8pv6yYKYVmBKhaOEwHORrm4lbOP8GI
+         qMc/jsJfB4CxlyoSCYi4ch+Tjyn8CNS433HL900DX5Dhq1mPbkuZOuMxIU/VROgTVB
+         UAbUaX40oG7CzRhrOUgYhNwbygYV0prvVITuKSLlICozutlM+0Fji4V44hV1iWv8RH
+         vpq7jtW58e+w8hSnqbxUOAxG0CnY/PBo4w7WxrF8tzGzkQGryp/LEjRB5F1nc5l0k3
+         aTJJaOUew264A==
 From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     Dani Liberman <dliberman@habana.ai>
-Subject: [PATCH 10/20] habanalabs/gaudi2: add page fault notify event
-Date:   Thu, 17 Nov 2022 18:19:41 +0200
-Message-Id: <20221117161951.845454-10-ogabbay@kernel.org>
+Cc:     Tomer Tayar <ttayar@habana.ai>
+Subject: [PATCH 11/20] habanalabs: fix print for out-of-sync and pkt-failure events
+Date:   Thu, 17 Nov 2022 18:19:42 +0200
+Message-Id: <20221117161951.845454-11-ogabbay@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221117161951.845454-1-ogabbay@kernel.org>
 References: <20221117161951.845454-1-ogabbay@kernel.org>
@@ -52,95 +52,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dani Liberman <dliberman@habana.ai>
+From: Tomer Tayar <ttayar@habana.ai>
 
-Each time page fault happens, besides capturing its data, also notify
-the user about it.
+Add missing le32_to_cpu() conversions, and use %d for the value
+returned from atomic_read().
 
-Signed-off-by: Dani Liberman <dliberman@habana.ai>
+Signed-off-by: Tomer Tayar <ttayar@habana.ai>
 Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- drivers/misc/habanalabs/gaudi2/gaudi2.c | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
+ drivers/misc/habanalabs/gaudi/gaudi.c   | 4 ++--
+ drivers/misc/habanalabs/gaudi2/gaudi2.c | 8 ++++----
+ drivers/misc/habanalabs/goya/goya.c     | 4 ++--
+ 3 files changed, 8 insertions(+), 8 deletions(-)
 
+diff --git a/drivers/misc/habanalabs/gaudi/gaudi.c b/drivers/misc/habanalabs/gaudi/gaudi.c
+index cbe1daf5a793..7b93f0d26dd0 100644
+--- a/drivers/misc/habanalabs/gaudi/gaudi.c
++++ b/drivers/misc/habanalabs/gaudi/gaudi.c
+@@ -7347,8 +7347,8 @@ static void gaudi_print_out_of_sync_info(struct hl_device *hdev,
+ {
+ 	struct hl_hw_queue *q = &hdev->kernel_queues[GAUDI_QUEUE_ID_CPU_PQ];
+ 
+-	dev_err(hdev->dev, "Out of sync with FW, FW: pi=%u, ci=%u, LKD: pi=%u, ci=%u\n",
+-			sync_err->pi, sync_err->ci, q->pi, atomic_read(&q->ci));
++	dev_err(hdev->dev, "Out of sync with FW, FW: pi=%u, ci=%u, LKD: pi=%u, ci=%d\n",
++		le32_to_cpu(sync_err->pi), le32_to_cpu(sync_err->ci), q->pi, atomic_read(&q->ci));
+ }
+ 
+ static void gaudi_print_fw_alive_info(struct hl_device *hdev,
 diff --git a/drivers/misc/habanalabs/gaudi2/gaudi2.c b/drivers/misc/habanalabs/gaudi2/gaudi2.c
-index 61960fa059e0..65c9b535aa69 100644
+index 65c9b535aa69..bdb5782afb7e 100644
 --- a/drivers/misc/habanalabs/gaudi2/gaudi2.c
 +++ b/drivers/misc/habanalabs/gaudi2/gaudi2.c
-@@ -8253,7 +8253,8 @@ static void gaudi2_handle_hif_fatal(struct hl_device *hdev, u16 event_type, u64
- 	}
- }
- 
--static void gaudi2_handle_page_error(struct hl_device *hdev, u64 mmu_base, bool is_pmmu)
-+static void gaudi2_handle_page_error(struct hl_device *hdev, u64 mmu_base, bool is_pmmu,
-+					u64 *event_mask)
+@@ -8684,8 +8684,8 @@ static void gaudi2_print_out_of_sync_info(struct hl_device *hdev,
  {
- 	u32 valid, val;
- 	u64 addr;
-@@ -8270,7 +8271,7 @@ static void gaudi2_handle_page_error(struct hl_device *hdev, u64 mmu_base, bool
+ 	struct hl_hw_queue *q = &hdev->kernel_queues[GAUDI2_QUEUE_ID_CPU_PQ];
  
- 	dev_err_ratelimited(hdev->dev, "%s page fault on va 0x%llx\n",
- 				is_pmmu ? "PMMU" : "HMMU", addr);
--	hl_capture_page_fault(hdev, addr, 0, is_pmmu);
-+	hl_handle_page_fault(hdev, addr, 0, is_pmmu, event_mask);
- 
- 	WREG32(mmu_base + MMU_OFFSET(mmDCORE0_HMMU0_MMU_PAGE_ERROR_CAPTURE), 0);
- }
-@@ -8296,7 +8297,7 @@ static void gaudi2_handle_access_error(struct hl_device *hdev, u64 mmu_base, boo
+-	dev_err(hdev->dev, "Out of sync with FW, FW: pi=%u, ci=%u, LKD: pi=%u, ci=%u\n",
+-			sync_err->pi, sync_err->ci, q->pi, atomic_read(&q->ci));
++	dev_err(hdev->dev, "Out of sync with FW, FW: pi=%u, ci=%u, LKD: pi=%u, ci=%d\n",
++		le32_to_cpu(sync_err->pi), le32_to_cpu(sync_err->ci), q->pi, atomic_read(&q->ci));
  }
  
- static void gaudi2_handle_mmu_spi_sei_generic(struct hl_device *hdev, const char *mmu_name,
--						u64 mmu_base, bool is_pmmu)
-+						u64 mmu_base, bool is_pmmu, u64 *event_mask)
+ static void gaudi2_handle_pcie_p2p_msix(struct hl_device *hdev)
+@@ -8751,8 +8751,8 @@ static void gaudi2_print_cpu_pkt_failure_info(struct hl_device *hdev,
+ 	struct hl_hw_queue *q = &hdev->kernel_queues[GAUDI2_QUEUE_ID_CPU_PQ];
+ 
+ 	dev_warn(hdev->dev,
+-		"FW reported sanity check failure, FW: pi=%u, ci=%u, LKD: pi=%u, ci=%u\n",
+-		sync_err->pi, sync_err->ci, q->pi, atomic_read(&q->ci));
++		"FW reported sanity check failure, FW: pi=%u, ci=%u, LKD: pi=%u, ci=%d\n",
++		le32_to_cpu(sync_err->pi), le32_to_cpu(sync_err->ci), q->pi, atomic_read(&q->ci));
+ }
+ 
+ static void hl_arc_event_handle(struct hl_device *hdev,
+diff --git a/drivers/misc/habanalabs/goya/goya.c b/drivers/misc/habanalabs/goya/goya.c
+index 5ef9e3ca97a6..0f083fcf81a6 100644
+--- a/drivers/misc/habanalabs/goya/goya.c
++++ b/drivers/misc/habanalabs/goya/goya.c
+@@ -4475,8 +4475,8 @@ static void goya_print_out_of_sync_info(struct hl_device *hdev,
  {
- 	u32 spi_sei_cause, interrupt_clr = 0x0;
- 	int i;
-@@ -8309,7 +8310,7 @@ static void gaudi2_handle_mmu_spi_sei_generic(struct hl_device *hdev, const char
- 						mmu_name, gaudi2_mmu_spi_sei[i].cause);
+ 	struct hl_hw_queue *q = &hdev->kernel_queues[GOYA_QUEUE_ID_CPU_PQ];
  
- 			if (i == 0)
--				gaudi2_handle_page_error(hdev, mmu_base, is_pmmu);
-+				gaudi2_handle_page_error(hdev, mmu_base, is_pmmu, event_mask);
- 			else if (i == 1)
- 				gaudi2_handle_access_error(hdev, mmu_base, is_pmmu);
- 
-@@ -8381,7 +8382,7 @@ static bool gaudi2_handle_sm_err(struct hl_device *hdev, u8 sm_index)
- 	return reset;
+-	dev_err(hdev->dev, "Out of sync with FW, FW: pi=%u, ci=%u, LKD: pi=%u, ci=%u\n",
+-			sync_err->pi, sync_err->ci, q->pi, atomic_read(&q->ci));
++	dev_err(hdev->dev, "Out of sync with FW, FW: pi=%u, ci=%u, LKD: pi=%u, ci=%d\n",
++		le32_to_cpu(sync_err->pi), le32_to_cpu(sync_err->ci), q->pi, atomic_read(&q->ci));
  }
  
--static void gaudi2_handle_mmu_spi_sei_err(struct hl_device *hdev, u16 event_type)
-+static void gaudi2_handle_mmu_spi_sei_err(struct hl_device *hdev, u16 event_type, u64 *event_mask)
- {
- 	bool is_pmmu = false;
- 	char desc[32];
-@@ -8439,7 +8440,7 @@ static void gaudi2_handle_mmu_spi_sei_err(struct hl_device *hdev, u16 event_type
- 		return;
- 	}
- 
--	gaudi2_handle_mmu_spi_sei_generic(hdev, desc, mmu_base, is_pmmu);
-+	gaudi2_handle_mmu_spi_sei_generic(hdev, desc, mmu_base, is_pmmu, event_mask);
- }
- 
- 
-@@ -8969,7 +8970,7 @@ static void gaudi2_handle_eqe(struct hl_device *hdev, struct hl_eq_entry *eq_ent
- 	case GAUDI2_EVENT_HMMU_0_AXI_ERR_RSP ... GAUDI2_EVENT_HMMU_12_AXI_ERR_RSP:
- 	case GAUDI2_EVENT_PMMU0_PAGE_FAULT_WR_PERM ... GAUDI2_EVENT_PMMU0_SECURITY_ERROR:
- 	case GAUDI2_EVENT_PMMU_AXI_ERR_RSP_0:
--		gaudi2_handle_mmu_spi_sei_err(hdev, event_type);
-+		gaudi2_handle_mmu_spi_sei_err(hdev, event_type, &event_mask);
- 		reset_flags |= HL_DRV_RESET_FW_FATAL_ERR;
- 		event_mask |= HL_NOTIFIER_EVENT_USER_ENGINE_ERR;
- 		break;
-@@ -10206,7 +10207,7 @@ static void gaudi2_ack_mmu_error(struct hl_device *hdev, u64 mmu_id)
- 	if (gaudi2_get_mmu_base(hdev, mmu_id, &mmu_base))
- 		return;
- 
--	gaudi2_handle_page_error(hdev, mmu_base, is_pmmu);
-+	gaudi2_handle_page_error(hdev, mmu_base, is_pmmu, NULL);
- 	gaudi2_handle_access_error(hdev, mmu_base, is_pmmu);
- }
- 
+ static void goya_print_irq_info(struct hl_device *hdev, u16 event_type,
 -- 
 2.25.1
 
