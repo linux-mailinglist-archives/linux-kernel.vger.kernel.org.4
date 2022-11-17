@@ -2,221 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D16D62E590
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 21:01:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAA3E62E58E
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 21:00:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240580AbiKQUBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 15:01:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50726 "EHLO
+        id S240586AbiKQUAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 15:00:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234246AbiKQUBZ (ORCPT
+        with ESMTP id S234246AbiKQUAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 15:01:25 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F2A7EC9A;
-        Thu, 17 Nov 2022 12:01:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668715284; x=1700251284;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=JZAqYHXX3Zowv4qFiLkNY0ZQXmYsKWrL4YoY5pdFWWs=;
-  b=V3/9tyNNkFj8QO6S5WoFOi+iFaAR5ys3GCC7F8LD8iBjxzjeoycMGimt
-   BRnTUMG1UV8zb0O4ebvGLkEYGUxnwUKFfnT9Y45EXSYQ97biN8oX84f/H
-   JwdMVkrKCZM52E4Pkhhuhclo4A61yc99m7bE/gxBGsnYE9zEzCTUlydIy
-   OTZaDWfvv+rwVjo3/YZTCW5h+jguCIizlQP5lFaTJPHEdCizdhtJ6oVbY
-   08BiUj0JCYxBKMnRV2BXO0cFLpBL4HeVMQNZqHUnw/OTPo5aXDpvXx+zB
-   l2LzzrjjAvEis7peCM82Lt8jGXWk3J5Kb9YWWY+2DiFgfemhWzJy9UO+m
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="292664330"
-X-IronPort-AV: E=Sophos;i="5.96,172,1665471600"; 
-   d="scan'208";a="292664330"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 12:01:20 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="782372429"
-X-IronPort-AV: E=Sophos;i="5.96,172,1665471600"; 
-   d="scan'208";a="782372429"
-Received: from jithujos.sc.intel.com ([172.25.103.66])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 12:01:20 -0800
-From:   Jithu Joseph <jithu.joseph@intel.com>
-To:     hdegoede@redhat.com, markgross@kernel.org
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        gregkh@linuxfoundation.org, jithu.joseph@intel.com,
-        ashok.raj@intel.com, tony.luck@intel.com,
-        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        patches@lists.linux.dev, ravi.v.shankar@intel.com,
-        thiago.macieira@intel.com, athenas.jimenez.gonzalez@intel.com,
-        sohil.mehta@intel.com
-Subject: [PATCH v3 04/16] platform/x86/intel/ifs: Remove memory allocation from load path
-Date:   Thu, 17 Nov 2022 11:59:57 -0800
-Message-Id: <20221117195957.28225-1-jithu.joseph@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <c7414e8b-c113-eff8-b435-ddde705a6f6c@redhat.com>
-References: <c7414e8b-c113-eff8-b435-ddde705a6f6c@redhat.com>
+        Thu, 17 Nov 2022 15:00:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C5117EC9C;
+        Thu, 17 Nov 2022 12:00:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F3A96205B;
+        Thu, 17 Nov 2022 20:00:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 722D9C433C1;
+        Thu, 17 Nov 2022 20:00:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668715217;
+        bh=vO+cKwGnnt7Ikp4K63ZOyB2XNYmenlQEdQ2QOJjZGLs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=qBYjZa/IMlM5KHeE09wABdhBZYEwPpjSjJIewLnsQOK2jagLXDzJKNAC+8P0TGMXB
+         aHGKpChuj12Gwa7Bf4xXECgPo8xYZys0D7zAFVnUYPqyq+GfMzHbgUY7AL5WMud7Ig
+         ACvYjH5wAkDAYx2409RaAYKs88aLxCkw0dL02JMhF2v4T2hV5Mrj94QELuDjvy9BoI
+         UcJe8WHHheCZtWrkr0AHL9Y2RctZqIuX2fvaCpTrLGZFvSN7olSLrkR+FcOV1IFu0V
+         RkuT9dRd8U1xbpV8pu7/ya50NWOGz3iRdQzSLENEj0ITSYTyZkF5BQfoeKTx/R7D/U
+         DSTTSk6NLM3xQ==
+Received: by mail-ej1-f52.google.com with SMTP id t25so7795802ejb.8;
+        Thu, 17 Nov 2022 12:00:17 -0800 (PST)
+X-Gm-Message-State: ANoB5pktOUx3aYSim57QAhG8Asd4qyqns6vuS9rw2x+7LzrDI+2YO3K6
+        KZ6EagFccW8GTIHZCjISBKMEq+rbejbpvUHO8eg=
+X-Google-Smtp-Source: AA0mqf6SNJLDD3oiqBQCmMYdAYbreHZsfuDK2kTU00718Bq5Y5pcgY1A6dEu0CdLovuJ4lmnGI/Lx90ew7Kr9kt8xFM=
+X-Received: by 2002:a17:906:2645:b0:781:d0c1:4434 with SMTP id
+ i5-20020a170906264500b00781d0c14434mr3379349ejc.756.1668715215682; Thu, 17
+ Nov 2022 12:00:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221114114344.18650-1-jirislaby@kernel.org> <20221114114344.18650-41-jirislaby@kernel.org>
+In-Reply-To: <20221114114344.18650-41-jirislaby@kernel.org>
+From:   Song Liu <song@kernel.org>
+Date:   Thu, 17 Nov 2022 12:00:03 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW4GBD4uhPqDAubO=xF+ve6G-STtt8fxzFNvGcnWcfaSxQ@mail.gmail.com>
+Message-ID: <CAPhsuW4GBD4uhPqDAubO=xF+ve6G-STtt8fxzFNvGcnWcfaSxQ@mail.gmail.com>
+Subject: Re: [PATCH 40/46] x86/livepatch, lto: Disable live patching with gcc LTO
+To:     "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Andi Kleen <andi@firstfloor.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        live-patching@vger.kernel.org, Andi Kleen <ak@linux.intel.com>,
+        Martin Liska <mliska@suse.cz>, Jiri Slaby <jslaby@suse.cz>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-IFS requires tests to be authenticated once for each CPU socket
-on a system.
+On Mon, Nov 14, 2022 at 3:48 AM Jiri Slaby (SUSE) <jirislaby@kernel.org> wrote:
+>
+> From: Andi Kleen <andi@firstfloor.org>
+>
+> It is not supported by gcc 12 so far, so it causes compiler "sorry"
+> messages.
+>
+> Other than the compiler support, there shouldn't be any barriers for
+> live patching LTOed kernels, although it might be more difficult to
+> create patches for larger functions.
 
-scan_chunks_sanity_check() was dynamically allocating memory
-to store the state of whether tests have been authenticated on
-each socket for every load operation.
+A loosely related question: does livepatch work with CLANG LTO?
+AFAICT, kpatch-build doesn't support it. But the kernel side should
+work just fine?
 
-Move the memory allocation to init path and store the pointer
-in ifs_data struct.
+Thanks,
+Song
 
-Also rearrange the adjacent error checking in init for a
-more simplified and natural flow.
-
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Suggested-by: Borislav Petkov <bp@alien8.de>
-Signed-off-by: Jithu Joseph <jithu.joseph@intel.com>
----
- - Replaced global pkg_auth pointer to struct ifs_data (Hans)
- - Rearrange the adjacent error checking flow in ifs_init (Hans)
- - With this change there are conflicts in patches 11 and 12 (I will
-    post the updated 11 and 12 if this is satisfactory)
-
- drivers/platform/x86/intel/ifs/ifs.h  |  2 ++
- drivers/platform/x86/intel/ifs/core.c | 20 ++++++++++++++++----
- drivers/platform/x86/intel/ifs/load.c | 14 ++++----------
- 3 files changed, 22 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/platform/x86/intel/ifs/ifs.h b/drivers/platform/x86/intel/ifs/ifs.h
-index 3ff1d9aaeaa9..8de1952a1b7b 100644
---- a/drivers/platform/x86/intel/ifs/ifs.h
-+++ b/drivers/platform/x86/intel/ifs/ifs.h
-@@ -191,6 +191,7 @@ union ifs_status {
-  * struct ifs_data - attributes related to intel IFS driver
-  * @integrity_cap_bit: MSR_INTEGRITY_CAPS bit enumerating this test
-  * @loaded_version: stores the currently loaded ifs image version.
-+ * @pkg_auth: array of bool storing per package auth status
-  * @loaded: If a valid test binary has been loaded into the memory
-  * @loading_error: Error occurred on another CPU while loading image
-  * @valid_chunks: number of chunks which could be validated.
-@@ -199,6 +200,7 @@ union ifs_status {
-  */
- struct ifs_data {
- 	int	integrity_cap_bit;
-+	bool	*pkg_auth;
- 	int	loaded_version;
- 	bool	loaded;
- 	bool	loading_error;
-diff --git a/drivers/platform/x86/intel/ifs/core.c b/drivers/platform/x86/intel/ifs/core.c
-index 5fb7f655c291..943eb2a17c64 100644
---- a/drivers/platform/x86/intel/ifs/core.c
-+++ b/drivers/platform/x86/intel/ifs/core.c
-@@ -4,6 +4,7 @@
- #include <linux/module.h>
- #include <linux/kdev_t.h>
- #include <linux/semaphore.h>
-+#include <linux/slab.h>
- 
- #include <asm/cpu_device_id.h>
- 
-@@ -34,6 +35,7 @@ static int __init ifs_init(void)
- {
- 	const struct x86_cpu_id *m;
- 	u64 msrval;
-+	int ret;
- 
- 	m = x86_match_cpu(ifs_cpu_ids);
- 	if (!m)
-@@ -50,16 +52,26 @@ static int __init ifs_init(void)
- 
- 	ifs_device.misc.groups = ifs_get_groups();
- 
--	if ((msrval & BIT(ifs_device.data.integrity_cap_bit)) &&
--	    !misc_register(&ifs_device.misc))
--		return 0;
-+	if (!(msrval & BIT(ifs_device.data.integrity_cap_bit)))
-+		return -ENODEV;
-+
-+	ifs_device.data.pkg_auth = kmalloc_array(topology_max_packages(), sizeof(bool), GFP_KERNEL);
-+	if (!ifs_device.data.pkg_auth)
-+		return -ENOMEM;
-+
-+	ret = misc_register(&ifs_device.misc);
-+	if (ret) {
-+		kfree(ifs_device.data.pkg_auth);
-+		return ret;
-+	}
- 
--	return -ENODEV;
-+	return 0;
- }
- 
- static void __exit ifs_exit(void)
- {
- 	misc_deregister(&ifs_device.misc);
-+	kfree(ifs_device.data.pkg_auth);
- }
- 
- module_init(ifs_init);
-diff --git a/drivers/platform/x86/intel/ifs/load.c b/drivers/platform/x86/intel/ifs/load.c
-index 89ce265887ea..8423c486d11b 100644
---- a/drivers/platform/x86/intel/ifs/load.c
-+++ b/drivers/platform/x86/intel/ifs/load.c
-@@ -3,7 +3,6 @@
- 
- #include <linux/firmware.h>
- #include <asm/cpu.h>
--#include <linux/slab.h>
- #include <asm/microcode_intel.h>
- 
- #include "ifs.h"
-@@ -118,16 +117,12 @@ static void copy_hashes_authenticate_chunks(struct work_struct *work)
-  */
- static int scan_chunks_sanity_check(struct device *dev)
- {
--	int metadata_size, curr_pkg, cpu, ret = -ENOMEM;
-+	int metadata_size, curr_pkg, cpu, ret;
- 	struct ifs_data *ifsd = ifs_get_data(dev);
--	bool *package_authenticated;
- 	struct ifs_work local_work;
- 	char *test_ptr;
- 
--	package_authenticated = kcalloc(topology_max_packages(), sizeof(bool), GFP_KERNEL);
--	if (!package_authenticated)
--		return ret;
--
-+	memset(ifsd->pkg_auth, 0, (topology_max_packages() * sizeof(bool)));
- 	metadata_size = ifs_header_ptr->metadata_size;
- 
- 	/* Spec says that if the Meta Data Size = 0 then it should be treated as 2000 */
-@@ -150,7 +145,7 @@ static int scan_chunks_sanity_check(struct device *dev)
- 	cpus_read_lock();
- 	for_each_online_cpu(cpu) {
- 		curr_pkg = topology_physical_package_id(cpu);
--		if (package_authenticated[curr_pkg])
-+		if (ifsd->pkg_auth[curr_pkg])
- 			continue;
- 		reinit_completion(&ifs_done);
- 		local_work.dev = dev;
-@@ -161,12 +156,11 @@ static int scan_chunks_sanity_check(struct device *dev)
- 			ret = -EIO;
- 			goto out;
- 		}
--		package_authenticated[curr_pkg] = 1;
-+		ifsd->pkg_auth[curr_pkg] = 1;
- 	}
- 	ret = 0;
- out:
- 	cpus_read_unlock();
--	kfree(package_authenticated);
- 
- 	return ret;
- }
--- 
-2.25.1
-
+[...]
