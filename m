@@ -2,128 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E310862DE43
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 15:34:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A68562DE25
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 15:32:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240214AbiKQOed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 09:34:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58422 "EHLO
+        id S234934AbiKQOco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 09:32:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240248AbiKQOeI (ORCPT
+        with ESMTP id S230383AbiKQOck (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 09:34:08 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED7279E36
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 06:33:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668695584;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Frw/bhnQ/fgaTcwMRmhjoEhY2NlH0mLgodVAsiEeP10=;
-        b=M/egedW2fnnIy0yipWmUtvABP2vtOkGAO6qEYiDOhmWTslB7Ugruek72D2hacJgiVbALrB
-        Hh092ZfONnzmAYAMzLxErfO8/sg8NVJNpMTp9PLphckw3+Ocv+ny3lzxjiP6Wh6JaGuVtx
-        b9sojq7TQnNBgE5/f7ef2LNx0S1vLLM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-274-CYSwL3jhOAizB5te_RPptQ-1; Thu, 17 Nov 2022 09:32:59 -0500
-X-MC-Unique: CYSwL3jhOAizB5te_RPptQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6F9D2185A794;
-        Thu, 17 Nov 2022 14:32:58 +0000 (UTC)
-Received: from amdlaptop.tlv.redhat.com (dhcp-4-238.tlv.redhat.com [10.35.4.238])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 19A852166B29;
-        Thu, 17 Nov 2022 14:32:54 +0000 (UTC)
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thu, 17 Nov 2022 09:32:40 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E9BA7343E
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 06:32:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=xczmDwmQvJMb2yHeLKnzAiVojFRoCjmU/lJyxAeUCfo=; b=DlrPE0ohbgfwGz+QbRL4xQODrz
+        uCzWMWCyxRepnrE0xrZVut1sTeol+lTRUp7OVRc66PN/4w/zsjLkbv/6n55nxn/gHHISzcJ/fFX6o
+        d5OC99H+jke3vttkc11eJdmeG0EemdehGvn+OHHTxZE7vWCzl4wu402nEA2jb2vyQ/f5+kCjrXQ8J
+        l4viWrts58wE9VTEjaMkqJGvqvF7KXadIP49CrSblduJFd5J4sDGmDUr8nvyT7sabuHfTgYWMnStB
+        JPgBXWQmQI+g+YTi6icWI/3ec9s7Cl8kwbg89T7h938nIZXW5bYAQE9uUYhqYsq95JRx3U/R/T3Ry
+        iOFqIjfw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ovfwQ-001hS9-9W; Thu, 17 Nov 2022 14:32:34 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C9A81300454;
+        Thu, 17 Nov 2022 15:32:33 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id AD3D12C12E8FD; Thu, 17 Nov 2022 15:32:33 +0100 (CET)
+Date:   Thu, 17 Nov 2022 15:32:33 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Richard Biener <rguenther@suse.de>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
         linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        Jing Liu <jing2.liu@intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Wyes Karny <wyes.karny@amd.com>,
+        Alexander Potapenko <glider@google.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ben Segall <bsegall@google.com>,
         Borislav Petkov <bp@alien8.de>,
-        Babu Moger <babu.moger@amd.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Jim Mattson <jmattson@google.com>, x86@kernel.org,
-        Maxim Levitsky <mlevitsk@redhat.com>
-Subject: [PATCH 03/13] KVM: nSVM: rename nested_sync_control_from_vmcb02 to nested_sync_int_ctl_from_vmcb02
-Date:   Thu, 17 Nov 2022 16:32:32 +0200
-Message-Id: <20221117143242.102721-4-mlevitsk@redhat.com>
-In-Reply-To: <20221117143242.102721-1-mlevitsk@redhat.com>
-References: <20221117143242.102721-1-mlevitsk@redhat.com>
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Don Zickus <dzickus@redhat.com>, Hao Luo <haoluo@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Huang Rui <ray.huang@amd.com>,
+        Ingo Molnar <mingo@redhat.com>, Jan Hubicka <jh@suse.de>,
+        Jason Baron <jbaron@akamai.com>,
+        Jiri Kosina <jikos@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Martin Liska <mliska@suse.cz>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Mel Gorman <mgorman@suse.de>, Miguel Ojeda <ojeda@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Petr Mladek <pmladek@suse.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Song Liu <song@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Yonghong Song <yhs@fb.com>
+Subject: Re: [PATCH 00/46] gcc-LTO support for the kernel
+Message-ID: <Y3ZGAf2rdV1Ia5P3@hirez.programming.kicks-ass.net>
+References: <20221114114344.18650-1-jirislaby@kernel.org>
+ <CAMj1kXEMejnuMx1LJbfJj1+RUmZzZJNSmOVu_tWAbU6RXGqA3A@mail.gmail.com>
+ <Y3XwkFWJhcwApm4I@hirez.programming.kicks-ass.net>
+ <nycvar.YFH.7.77.849.2211170847400.3995@jbgna.fhfr.qr>
+ <Y3YeQMAqCecwrIN1@hirez.programming.kicks-ass.net>
+ <CAMj1kXEkUN6ySsyaLVKqNzhRmfw9CfPYyQd_efRgLjCT9dS-yg@mail.gmail.com>
+ <nycvar.YFH.7.77.849.2211171331410.3995@jbgna.fhfr.qr>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <nycvar.YFH.7.77.849.2211171331410.3995@jbgna.fhfr.qr>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The nested_sync_control_from_vmcb02 name is misleading as there
-are many fields which are modified by the CPU and need to be written back
-to vmcb12.
+On Thu, Nov 17, 2022 at 01:55:07PM +0000, Richard Biener wrote:
 
-This function only copies some int_ctl bits and thecevent_inj*
-fields.
+> > > I'm not sure what you're on about; only symbols annotated with
+> > > EXPORT_SYMBOL*() are accessible from modules (aka DSOs) and those will
+> > > have their address taken. You can feely eliminate any unused symbol.
+> 
+> But IIRC that's not reflected on the ELF level by making EXPORT_SYMBOL*()
+> symbols public and the rest hidden - instead all symbols global in the C TUs
+> will become public and the module dynamic loader details are hidden from
+> GCCs view of the kernel image as ELF relocatable object.
 
-Make it copy only these int_ctl bits and rename the function.
+It is reflected by keeping their address in __ksymtab_$foo sections, as
+such their address 'escapes'.
 
-Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
----
- arch/x86/kvm/svm/nested.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+> > We have an __ADDRESSABLE() macro and asmlinkage modifier to annotate
+> > symbols that may appear to the compiler as though they are never
+> > referenced.
+> > 
+> > Would it be possible to repurpose those so that the LTO code knows
+> > which symbols it must not remove?
+> 
+> I find
+> 
+> /*
+>  * Force the compiler to emit 'sym' as a symbol, so that we can reference
+>  * it from inline assembler. Necessary in case 'sym' could be inlined
+>  * otherwise, or eliminated entirely due to lack of references that are
+>  * visible to the compiler.
+>  */
+> #define ___ADDRESSABLE(sym, __attrs) \
+> 	static void * __used __attrs \
+> 		__UNIQUE_ID(__PASTE(__addressable_,sym)) = (void *)&sym;
+> #define __ADDRESSABLE(sym) \
+> 	___ADDRESSABLE(sym, __section(".discard.addressable"))
+> 
+> that should be enough to force LTO keeping 'sym' - unless there's
+> a linker script that discards .discard.addressable which I fear LTO
+> will notice, losing the effect.
 
-diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-index 91a51e75717dca..54eb152e2b60b6 100644
---- a/arch/x86/kvm/svm/nested.c
-+++ b/arch/x86/kvm/svm/nested.c
-@@ -404,15 +404,13 @@ void nested_copy_vmcb_save_to_cache(struct vcpu_svm *svm,
- }
- 
- /*
-- * Synchronize fields that are written by the processor, so that
-+ * Synchronize int_ctl fields that are written by the processor, so that
-  * they can be copied back into the vmcb12.
-  */
--static void nested_sync_control_from_vmcb02(struct vcpu_svm *svm,
-+static void nested_sync_int_ctl_from_vmcb02(struct vcpu_svm *svm,
- 					    struct vmcb *vmcb12)
- {
- 	u32 mask;
--	vmcb12->control.event_inj      = svm->vmcb->control.event_inj;
--	vmcb12->control.event_inj_err  = svm->vmcb->control.event_inj_err;
- 
- 	/* Only a few fields of int_ctl are written by the processor.  */
- 	mask = V_IRQ_MASK | V_TPR_MASK;
-@@ -986,7 +984,10 @@ int nested_svm_vmexit(struct vcpu_svm *svm)
- 	if (vmcb12->control.exit_code != SVM_EXIT_ERR)
- 		nested_save_pending_event_to_vmcb12(svm, vmcb12);
- 
--	nested_sync_control_from_vmcb02(svm, vmcb12);
-+	nested_sync_int_ctl_from_vmcb02(svm, vmcb12);
-+
-+	vmcb12->control.event_inj      = svm->vmcb->control.event_inj;
-+	vmcb12->control.event_inj_err  = svm->vmcb->control.event_inj_err;
- 
- 	if (svm->nrips_enabled)
- 		vmcb12->control.next_rip  = vmcb02->control.next_rip;
--- 
-2.34.3
+The initial LTO link pass will not discard .discard sections in order to
+generate a regular ELF object file. This object file is then fed to
+objtool and the kallsyms tool and eventually linked with the linker
+script in a multi-stage link pass.
 
+Also see scripts/link-vmlinux.sh for all the horrible details.
+
+> The folks who worked on LTO enablement of the kernel should know the
+> real issue better - I understand asm()s are a pain because GCC
+> refuses to parse the assembler string heuristically for used
+> symbols (but it can never be more than heuristics). 
+
+I don't understand why it can't be more than heuristics; eventually the
+asm() contents end up in a real assembler and it has to make sense.
+
+Might as well parse it directly -- isn't that what clang-ias does?
+
+> The issue with asm()s is not so much elimination (__used solves that)
+> but that GCC can end up moving the asm() and the refered to symbols to
+> different link-time units causing unresolved symbols for non-global
+> symbols.  -fno-toplevel-reorder should fix that at some cost.
+
+I thought the whole point of LTO was that there was only a single link
+time unit, translate all the tus into intermadiate gunk and then collect
+the whole lot in one go.
