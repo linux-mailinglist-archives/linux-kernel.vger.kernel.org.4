@@ -2,166 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AC4962DA7F
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 13:15:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2643E62DA79
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 13:14:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240095AbiKQMPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 07:15:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44902 "EHLO
+        id S239263AbiKQMOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 07:14:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239825AbiKQMO4 (ORCPT
+        with ESMTP id S239850AbiKQMOm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 07:14:56 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6436C72F;
-        Thu, 17 Nov 2022 04:14:54 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id k2so4621377ejr.2;
-        Thu, 17 Nov 2022 04:14:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=30Evq79zECYrxJQ0aLDQD8Gv3fjzDC3E9Fl79Br+Hz8=;
-        b=auNimxq/45H6SDO3vky7POlzUEJCauq832U99WM5r9wrqlkPKfI6RYAuNSeTXl4ykW
-         tPDQ0w0EQ8mRX/dtggKB6zl2a2UB8l2T0SCSYgLrpedyvBDRXn/9lZZQWme6yGAq5td1
-         SAyIKM5wQldHJoqo7U45252D6zmYNbkpM9kYhQSlXZ1r7d6VITPmCFL2kI+Tnho8BMcm
-         QrLJhge32UIEGTCHT1xGLwmF9bX3jCu8D6QUBQ1MyfvbaynSKUsAoldQ3H26WGEVeLWz
-         mrWqfdtAy7/QRtKYZe0DRr6IFUvWKD7QtsryKKuoDye7ZA1Y+PreW2TdjFMC13wf2P9H
-         TWHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=30Evq79zECYrxJQ0aLDQD8Gv3fjzDC3E9Fl79Br+Hz8=;
-        b=IOOpWMWAgAKV+15390ZaobkYTSZu+7fuMHE3WQD56aOmt13+7J7ObNJwsCzI7e1kUm
-         R8LxXmTfvx+9M46Lypn8fxalHXLNwZl+LD28x7YpuQ6Uz5GAh7QCyNaZ1EG/NKneDlUe
-         R0iDzfEjJcWb6OeBEpBve4O6ZHKEENDYx4rzGc5s7ON8ZaPRAXQyaAbZ7Zh8mb6p3UNd
-         kAC4AYj+iSMYfrqdNxmq67jZAEfteNW9tdfOG+eAJaHx3dPPNyZ3Gy6iXaAl8uLhNr8o
-         BNBgvC5jwiVFHOP76QK2TU8Srljl+NpGBrWZ/BimVAMr87IPZJeOCimnuE3Ngz3wKxkg
-         gczg==
-X-Gm-Message-State: ANoB5pkzTH4pK5wRR1Ge+avyFSou8DfmqQec/4AmFMWoIeUNUt88xery
-        X+E1G+Eu2qQJqm7Cxs3JPOUv6/dUsQCBgGPYthA=
-X-Google-Smtp-Source: AA0mqf4E+FLYJqRjO9fTTonpvJCaxpvTEVX1VZTTQwaXeADfXJrSuVEtRH//Dm92r5J8qv6wj6AFlEkL8x4pCtS+fJE=
-X-Received: by 2002:a17:906:79c4:b0:778:e3e2:8311 with SMTP id
- m4-20020a17090679c400b00778e3e28311mr2002726ejo.342.1668687293127; Thu, 17
- Nov 2022 04:14:53 -0800 (PST)
+        Thu, 17 Nov 2022 07:14:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03BCF697FD
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 04:14:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A9037B81FF8
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 12:14:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14469C433C1;
+        Thu, 17 Nov 2022 12:14:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668687279;
+        bh=5AGlEfjAH4p4s75U9CBP7W+SmAqweBoH1A780nJMhiE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Pf5T+HAXKsKKGjiCy+wijhg8pKq29AzH6VeFTaKNiTLDNelim0u8qwV8eS/hO3VQO
+         lEQKblHAipIX8Z6LOjOFyftzm0VmJwCnz0MvFHrmPLqTG4QrdTeLwRRExQtW7oMtrN
+         1oJuscIz810ePrSbKwH08Vxr9bBbQpYQKRfdP7h+c/GDoV5LGnBA7tw6YtAhLGMshJ
+         sIbTfGs05lVTsQHNsfVLIDoT3Uyt5aDi91ZvhxTenq9YRtHblGPJdynySXQqWcaKYK
+         x/SilLKxnYT7G1JudnmGNaDljSQut4rXVbb1+E4y5VXqfs+K9aBM8TU639s+nDT/X3
+         Jb3zHJeNBNCeg==
+Date:   Thu, 17 Nov 2022 13:14:36 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     "Zhou, Yun" <Yun.Zhou@windriver.com>,
+        "jstultz@google.com" <jstultz@google.com>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] timers: fix LVL_START macro
+Message-ID: <20221117121436.GB839309@lothringen>
+References: <20221115025614.79537-1-yun.zhou@windriver.com>
+ <20221115120239.GA721394@lothringen>
+ <SN6PR11MB300812CA336B497C40E93CA19F049@SN6PR11MB3008.namprd11.prod.outlook.com>
+ <20221115224042.GA722789@lothringen>
+ <877czuo40a.ffs@tglx>
 MIME-Version: 1.0
-References: <20221107175305.63975-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221107175305.63975-3-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdW9K=gd7F-G-7v0J5Mz8jyZa_Vu3UZWsNZin76tff7f3g@mail.gmail.com>
-In-Reply-To: <CAMuHMdW9K=gd7F-G-7v0J5Mz8jyZa_Vu3UZWsNZin76tff7f3g@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Thu, 17 Nov 2022 12:14:26 +0000
-Message-ID: <CA+V-a8ugHB2NqH4qa01LQm6yXaeSk2WweUX3ZP+fT3F_bU99Pg@mail.gmail.com>
-Subject: Re: [PATCH RFC 2/5] pinctrl: renesas: rzg2l: Fix configuring the GPIO
- pins as interrupts
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <877czuo40a.ffs@tglx>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
-
-Thank you for the review.
-
-On Thu, Nov 17, 2022 at 11:09 AM Geert Uytterhoeven
-<geert@linux-m68k.org> wrote:
->
-> Hi Prabhakar,
->
-> On Mon, Nov 7, 2022 at 6:53 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+On Thu, Nov 17, 2022 at 12:48:05AM +0100, Thomas Gleixner wrote:
+> On Tue, Nov 15 2022 at 23:40, Frederic Weisbecker wrote:
+> > On Tue, Nov 15, 2022 at 01:15:11PM +0000, Zhou, Yun wrote:
+> >> Hi Frederic,
+> >> 
+> >> The issue now is that a timer may be thrown into the upper level bucket. For example, expires 4090 and 1000 HZ, it should be in level 2, but now it will be placed in the level 3. Is this expected?
+> >> 
+> >>  * HZ 1000 steps
+> >>  * Level Offset  Granularity            Range
+> >>  *  0      0         1 ms                0 ms -         63 ms
+> >>  *  1     64         8 ms               64 ms -        511 ms
+> >>  *  2    128        64 ms              512 ms -       4095 ms (512ms - ~4s)
+> >>  *  3    192       512 ms             4096 ms -      32767 ms (~4s - ~32s)
+> >>  *  4    256      4096 ms (~4s)      32768 ms -     262143 ms (~32s - ~4m)
 > >
-> > On the RZ/G2UL SoC we have less number of pins compared to RZ/G2L and also
-> > the pin configs are completely different. This patch makes sure we use the
-> > appropriate pin configs for each SoC (which is passed as part of the OF
-> > data) while configuring the GPIO pin as interrupts instead of using
-> > rzg2l_gpio_configs[] for all the SoCs.
+> > The rule is that a timer is not allowed to expire too early. But it can expire
+> > a bit late. Hence why it is always rounded up. So in the case of 4090, we have
+> > the choice between:
 > >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Thanks for your patch!
->
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> But I do think there is room for improvement...
->
-> > --- a/drivers/pinctrl/renesas/pinctrl-rzg2l.c
-> > +++ b/drivers/pinctrl/renesas/pinctrl-rzg2l.c
-> > @@ -127,6 +127,7 @@ struct rzg2l_dedicated_configs {
-> >  struct rzg2l_pinctrl_data {
-> >         const char * const *port_pins;
-> >         const u32 *port_pin_configs;
-> > +       unsigned int n_port_pin_configs;
->
-> n_ports?
->
-Ok I will rename it to n_ports.
+> > 1) expiring at bucket 2 after 4096 - 64 = 4032 ms
+> > 2) expiring at bucket 3 after 4096 ms
+> >
+> > The 1) rounds down and expires too early. The 2) rounds up and expires a bit
+> > late. So the second solution is preferred.
+> 
+> It's not only preferred, it's required simply because the timer wheel
+> has only one guarantee: Not to expire early.
+> 
+> Timer wheel based timers are fundamentaly not precise unless the timeout
+> is short and hits the first level.
+> 
+> But even hrtimers which are designed to be precise have only one real
+> guarantee: Not to expire early.
+> 
+> hrtimers do not have the side effect of batching on long timeouts like
+> timer wheel based timer have, but that's it.
+> 
+> Timers in the kernel come with a choice:
+> 
+>   -  Imprecise and inexpensive to arm and cancel (timer_list)
+>   -  Precise and expensive to arm and cancel (hrtimer)
+> 
+> You can't have both. That's well documented.
 
-> >         struct rzg2l_dedicated_configs *dedicated_pins;
-> >         unsigned int n_port_pins;
->
-> n_port_pins is now always n_port_pin_configs * RZG2L_PINS_PER_PORT,
-> right?
->
-Yes, that's right. So are you suggesting to drop it and use it runtime instead?
+Actually I'm pretty sure we can manage imprecise and expensive to arm and
+cancel. It's a matter of willpower!
 
-> >         unsigned int n_dedicated_pins;
->
-> > @@ -1517,6 +1518,7 @@ static int rzg2l_pinctrl_probe(struct platform_device *pdev)
-> >  static struct rzg2l_pinctrl_data r9a07g043_data = {
-> >         .port_pins = rzg2l_gpio_names,
-> >         .port_pin_configs = r9a07g043_gpio_configs,
-> > +       .n_port_pin_configs = ARRAY_SIZE(r9a07g043_gpio_configs),
-> >         .dedicated_pins = rzg2l_dedicated_pins.common,
-> >         .n_port_pins = ARRAY_SIZE(r9a07g043_gpio_configs) * RZG2L_PINS_PER_PORT,
-> >         .n_dedicated_pins = ARRAY_SIZE(rzg2l_dedicated_pins.common),
-> > @@ -1525,6 +1527,7 @@ static struct rzg2l_pinctrl_data r9a07g043_data = {
-> >  static struct rzg2l_pinctrl_data r9a07g044_data = {
-> >         .port_pins = rzg2l_gpio_names,
->
-> .port_pins is always rzg2l_gpio_names
->
-Yes to avoid the huge array to be duplicated for other SoCs but bound
-checking is done by  n_port_pins.
+Anyway, thanks for confirming what I thought about timers guarantees.
 
-> >         .port_pin_configs = rzg2l_gpio_configs,
-> > +       .n_port_pin_configs = ARRAY_SIZE(rzg2l_gpio_configs),
-> >         .dedicated_pins = rzg2l_dedicated_pins.common,
-> >         .n_port_pins = ARRAY_SIZE(rzg2l_gpio_names),
->
-> I think this should have become
-> ARRAY_SIZE(rzg2l_gpio_configs) * RZG2L_PINS_PER_PORT)
-> when support for r9a07g043 was introduced.
->
-Agreed, I will update it as part of v2.
+Thanks.
 
-> To avoid overflows when adding support for more SoCs, you can add a
-> bunch of checks like
->
->     BUILD_BUG_ON(ARRAY_SIZE(r9a07g043_gpio_configs) *
-> RZG2L_PINS_PER_PORT > ARRAY_SIZE(rzg2l_gpio_names))
->     BUILD_BUG_ON(ARRAY_SIZE(rzg2l_gpio_configs) * RZG2L_PINS_PER_PORT
-> > ARRAY_SIZE(rzg2l_gpio_names))
->
-OK, I'll add those checks in the probe as a separate patch.
-
-Cheers,
-Prabhakar
+> 
+> Thanks,
+> 
+>         tglx
