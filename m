@@ -2,61 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04D6362E232
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 17:44:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E278062E233
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 17:44:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239691AbiKQQo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 11:44:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53878 "EHLO
+        id S239739AbiKQQon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 11:44:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239518AbiKQQoZ (ORCPT
+        with ESMTP id S234551AbiKQQol (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 11:44:25 -0500
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2DE32F65E
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 08:44:24 -0800 (PST)
-Received: by mail-vs1-xe31.google.com with SMTP id t14so2095927vsr.9
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 08:44:24 -0800 (PST)
+        Thu, 17 Nov 2022 11:44:41 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7210B2F65E
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 08:44:40 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id u8-20020a17090a5e4800b002106dcdd4a0so5953483pji.1
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 08:44:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WBFWV6bJTjR54bCf66QrQ4IGcYOkIHSW11fHj/DCmJQ=;
-        b=bEg0NyqvTO5C9GT3UhrmRML4hA67vSwaOw3rVSCMtYca6qiMhYT+Jse7iR4MaGeozr
-         Hw1/JxxT/r/Z5NlJtx6r1j2zBQ6Ya9K7IhXsc5NDelIKzEuumFDEbOTcDeu8FcAtRIYm
-         B3RL2s3JauD6EQW1qSQzROdidjWDKhR1/rmlKNBGC+ehwWGRgFzpmUw+xdiHku0mH2TY
-         gEqIfiQljSxs7YQr7gSjylgeYG0NKdY7LHirz5Y9C2zbphBWvXlhtPUulHT6wEz1V8dR
-         6ezlAnygA5yyrbHktqr+oIGylcdhZwLXe/cUUl2PuvaF7sZXt4xl1rvQP7c7Kp90RnuW
-         gssA==
+        h=to:cc:date:message-id:subject:mime-version
+         :content-transfer-encoding:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4pehiEX3O7+10JOfvl6Go8PAptHMCNDVr2AxlBu5gCc=;
+        b=BX/ZOpVhcPqTE9SIHVYMCZo10XXujFWt57YZSrVtvWFoDVxkR2RlZorxjW8fwC/f1k
+         5O7b6MpOPivawml6ImkZD2+yi88L6/1jhng6IU/4iCpVybqysfK8vmA2L2MQ3gwMhiBQ
+         w9p12yTkZmvrgwV7gthcY22Q4eXf8SsPkt6tDWAIEOI8eS0V3YanzwELgAPuKNgYL2G7
+         k+d/SLRnvw3q5mSmetXgZnMwhKxGdockTxKGXv44XEAepizbJ2blGcPVx6Iuj/i03z2+
+         wUovn2fRmzzotOjs5sJqj5bOXPRmS7qQJ0m3eBITcIYc/a5xnFTJkgMakgKiuvRH9xRl
+         M38Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WBFWV6bJTjR54bCf66QrQ4IGcYOkIHSW11fHj/DCmJQ=;
-        b=pmL/qjdOexm84AQmJ7e9DERdnuNDrCqlJYKpYtr5o+l6uETz6pctj+J7fTK4jNeKuK
-         qy7+0gtLdnqN1RZL92DP6TRtQZdEjXllDyYUHnzn6Mea2jxCAJ02lcM65Ew0sRTrZWtl
-         noWsQWh+M1RMY3M9BZ18sOJ53rq+BtBQsksvxuxqFfSpNefuerimrsHs9AagZ0BzP979
-         kFFsrQRSKprTRVVfkrLMuEiHeNhAL6sjerQj2iZRx+mFOXvbHVJB4uC1eOgtE4DyhYGw
-         SGtEYJ0h1WDWmdeaoPwODLH74ifwSdEOZgh0lfFLNrEPMJinpo7xQ/ixcJ2uuRrbQlRl
-         +44A==
-X-Gm-Message-State: ANoB5pkwkeCgXzJ5O5yQaJSvDmFN9gK0vnA0rshnpT93lvakm7XQheFS
-        sMan5Q/fXVi0oZPjMf0fEWGawk0qUPOtGWmjUaCFBL7RiQKgqg==
-X-Google-Smtp-Source: AA0mqf6lm3kdCV6xaP/UO+zCdWXHkz1ZN8535dZaMbLkneJ8flM9oAqRqaGVAlp+esdMhYweh+g7uakcw3qAQ/+Usf4=
-X-Received: by 2002:a05:6102:240e:b0:3aa:fc1:ad40 with SMTP id
- j14-20020a056102240e00b003aa0fc1ad40mr2260496vsi.23.1668703463666; Thu, 17
- Nov 2022 08:44:23 -0800 (PST)
-MIME-Version: 1.0
-References: <Y20+PqtF+dFAe7hX@kroah.com> <20221117002022.860237-1-jim.cromie@gmail.com>
- <20221117002022.860237-2-jim.cromie@gmail.com> <Y3XU59mj80wvTD6Y@kroah.com>
-In-Reply-To: <Y3XU59mj80wvTD6Y@kroah.com>
-From:   jim.cromie@gmail.com
-Date:   Thu, 17 Nov 2022 09:43:57 -0700
-Message-ID: <CAJfuBxzPGL2dP6fSV9XGLS=+yqu0YxJXUS+SAmjwKfm+6WkbyQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] vmlinux.lds.h: fix BOUNDED_SECTION_(PRE|POST)_LABEL macros
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     jbaron@akamai.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        h=to:cc:date:message-id:subject:mime-version
+         :content-transfer-encoding:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4pehiEX3O7+10JOfvl6Go8PAptHMCNDVr2AxlBu5gCc=;
+        b=vISFUK91RsaNWJsRHmsD+fU/sH8YXPJOKDn9ffUwMfbRroGuLfeAHPhDydSOzYvse4
+         5PCEDSBtLlnTDg3GmrxDTDlNvzRf6lPC+3LmGt08DZuKqgKwDIQ+JtYm8Bjw1IoZ0XdA
+         VteYwx7WBDhxQJXYr+a7Dl+7cz/XQEBGvgqUSDNImxxuHs/dILksKGRC+Tb8P6eIUAxu
+         7z5Wdw3ya+uL7Fr4qhKzRV/4QdEbzA8In0pLaeaom16+eq8H+ed2fN1XZ6zMwFhJiXok
+         0Tzda71kETDdtEVsijbNKtekD48Jh5IuEl9DfstIHAzMEKYBQr+vOUyHmWHYPDX3+jwK
+         0xtw==
+X-Gm-Message-State: ANoB5pnLODIygIDOQt/x1zG4hXpNkAzrvVwVS5IGlATvnR9tXxAZzKAK
+        TGKOPhP2tUNIbpytZAUyM6I=
+X-Google-Smtp-Source: AA0mqf5o7C2VNkO+/ic5Mv2JfUfSMTDAyy1zQSt/xJBP0A49vtJFh1TQKlpA54uIFPlxNbRDlmV+FA==
+X-Received: by 2002:a17:90a:8417:b0:210:9e08:d577 with SMTP id j23-20020a17090a841700b002109e08d577mr9846266pjn.134.1668703479649;
+        Thu, 17 Nov 2022 08:44:39 -0800 (PST)
+Received: from smtpclient.apple ([103.135.102.120])
+        by smtp.gmail.com with ESMTPSA id r15-20020a17090a4dcf00b00214247ac1acsm3731457pjl.12.2022.11.17.08.44.38
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 17 Nov 2022 08:44:39 -0800 (PST)
+From:   Qiujun Huang <hqjagain@gmail.com>
+Content-Type: text/plain;
+        charset=us-ascii
+Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
+Subject: [PATCH] tracing: remove __bad_type_size() method
+Message-Id: <D062EC2E-7DB7-4402-A67E-33C3577F551E@gmail.com>
+Date:   Fri, 18 Nov 2022 00:44:35 +0800
+Cc:     linux-kernel@vger.kernel.org
+To:     rostedt@goodmis.org, mhiramat@kernel.org
+X-Mailer: Apple Mail (2.3696.80.82.1.1)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -67,50 +71,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 11:30 PM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Wed, Nov 16, 2022 at 05:20:21PM -0700, Jim Cromie wrote:
-> > commit foo added BOUNDED_SECTION_(PRE|POST)_LABEL macros,
-> > encapsulating the basic boilerplate to: KEEP/pack records into a
-> > section, and to mark the begin and end of the section with
-> > linker-symbols.
-> >
-> > But it tried to do extra, adding KEEP(*(.gnu.linkonce.##_sec_)) to
-> > optionally reserve a header record in front of the data.  It wrongly
-> > placed the KEEP after the linker-symbol starting the section,
-> > so if a header was added, it would wind up in the data.
-> >
-> > Putting the KEEP in the "correct" place proved brittle, and too clever
-> > by half.  The obvious safe fix is to remove the KEEP, and provide
-> > separate macros to do the extra work.
-> >
-> > While here, the macro var-names: _s_, _e_ are nearly invisible, change
-> > them to more obvious names: _BEGIN_, _END_
-> >
-> > Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
-> > ---
-> >  include/asm-generic/vmlinux.lds.h | 14 ++++++--------
-> >  1 file changed, 6 insertions(+), 8 deletions(-)
->
-> This change fails to apply to my driver-core-next tree.  Are you sure it
-> is correct?
->
 
-meh - it seems I missed a failure of a  git commit --amend,
-since im sure I edited a fixes: tag into this commit-msg
-or something :-/
+__bad_type_size() is unused after
+commit 04ae87a52074("ftrace: Rework event_create_dir()").
+So, remove it.
 
-I'll send an update shortly,  heres the HEAD of it:
+Signed-off-by: Qiujun Huang <hqjagain@gmail.com>
+---
+ kernel/trace/trace_syscalls.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-b8b7f5a7a624 (HEAD -> bounded-5) vmlinux.lds.h: add HEADERED_SECTION_* macros
-d712ed004b64 vmlinux.lds.h: fix BOUNDED_SECTION_(PRE|POST)_LABEL macros
-f613facc82cf (driver-core/driver-core-testing,
-driver-core/driver-core-next) mfd: vexpress-sysreg: Fix resource
-compound literal assignments
-2f465b921bb8 vmlinux.lds.h: place optional header space in BOUNDED_SECTION
-9b351be25360 vmlinux.lds.h: add BOUNDED_SECTION* macros
-
-
-> confused,
->
-> greg k-h
+diff --git a/kernel/trace/trace_syscalls.c =
+b/kernel/trace/trace_syscalls.c
+index b69e207012c9..942ddbdace4a 100644
+--- a/kernel/trace/trace_syscalls.c
++++ b/kernel/trace/trace_syscalls.c
+@@ -201,8 +201,6 @@ print_syscall_exit(struct trace_iterator *iter, int =
+flags,
+ 	return trace_handle_return(s);
+ }
+=20
+-extern char *__bad_type_size(void);
+-
+ #define SYSCALL_FIELD(_type, _name) {					=
+\
+ 	.type =3D #_type, .name =3D #_name,					=
+\
+ 	.size =3D sizeof(_type), .align =3D __alignof__(_type),		=
+\
+--=20
+2.30.2=
