@@ -2,136 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DB1E62E36F
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:52:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A371562E381
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:53:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239999AbiKQRvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 12:51:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36754 "EHLO
+        id S240223AbiKQRwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 12:52:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234005AbiKQRv2 (ORCPT
+        with ESMTP id S240398AbiKQRwN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 12:51:28 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E41D77C031;
-        Thu, 17 Nov 2022 09:51:27 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id y203so2488166pfb.4;
-        Thu, 17 Nov 2022 09:51:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=C1uNPWN9nebG+rk7o8ckVu9MurS/3CN2wIQ6qnCi4S8=;
-        b=I9iiKaaIkHrqNpq1tu6TUZ6I5q/eDQVuMRB++ypxVHQJGAsFNyucK23qj/Uxq8Aaf0
-         PX6d6kpU8TbtSkalKFG5WleLQubXBaq5cNc559zITy0ATYXj2u0k2M+goK7PmN5L0OCV
-         eigr1NxYEAen7ef8zDV0Jbc4LMZAwL+UV/QqGtrpvPQPzmuLxAMe4q1xVcIDAeZhnTWB
-         L5MFbcJeuUJ1hVGfL1tev+I0oowcGanqjcela0Q7yLCZHDiSofzDKIgziwU4fl0HOF8R
-         KibkX+3u8eLN4E4fG4CqAlEvZQi6fRURrDgUQxi/ebNnRuRHWyCsDiI/H85JTTiHGqlc
-         e6Jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=C1uNPWN9nebG+rk7o8ckVu9MurS/3CN2wIQ6qnCi4S8=;
-        b=KG4H9sGF4Q/EQb0I2gTqIKuEEbn3CYD6JbfZDWDmldMrEjLyzFe/aG9GgNkMaqDKcx
-         6WJbkmbf4sAyzfLEjjupKJWCvv4uzxSMxg+R77jfRSavUy8rs+3SRWzqOpxVsCnzI1em
-         j1YtTb0XwypM8GUMrnq7mziaRNM+LjLkGZY/fjZw25SPuupeZSl5Yo7QiSn0uMm/MJqd
-         wscecz7OaIBFipTACVZW9bkOEWpmLRjMGbzB/zeEK2tdGew2Au2Nj8MIhr8RtGjSXlBX
-         h/PB/QY/ajlMgBy01+2O/J4NagclVty1/rXo1nEvielbCCgyP6vI7nWWlrJtEB9hYThc
-         /QqQ==
-X-Gm-Message-State: ANoB5pl1qHNbA23MeFhX6jKDVHxxiL3GC7W+09vrcOkUSo5ZXwqHPxQ4
-        KUmtDQojVOBASZ6qpoPvCJY=
-X-Google-Smtp-Source: AA0mqf4fdkgjMxLFT6ZYTm3erhhaBq9vIp28V/lpTJUCibqzr1iPlGgc+ydKxM7JYiyvNhLTXy+ZkA==
-X-Received: by 2002:a05:6a00:330e:b0:56c:d93a:ac5f with SMTP id cq14-20020a056a00330e00b0056cd93aac5fmr3987408pfb.48.1668707487267;
-        Thu, 17 Nov 2022 09:51:27 -0800 (PST)
-Received: from localhost ([192.55.54.55])
-        by smtp.gmail.com with ESMTPSA id c8-20020aa79528000000b005622f99579esm1411455pfp.160.2022.11.17.09.51.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 09:51:26 -0800 (PST)
-Date:   Thu, 17 Nov 2022 09:51:25 -0800
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     "Wang, Lei" <lei4.wang@intel.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
-        Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Xiaoyao Li <xiaoyao.li@intel.com>
-Subject: Re: [PATCH v10 021/108] KVM: TDX: initialize VM with TDX specific
- parameters
-Message-ID: <20221117175125.GF2350331@ls.amr.corp.intel.com>
-References: <cover.1667110240.git.isaku.yamahata@intel.com>
- <ebb4beadff8e117d0fb643af4ee310b6608679bf.1667110240.git.isaku.yamahata@intel.com>
- <af953c96-d40e-eccd-5a3e-f00521848f0c@intel.com>
+        Thu, 17 Nov 2022 12:52:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A0CD7FC26;
+        Thu, 17 Nov 2022 09:52:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 09755621E1;
+        Thu, 17 Nov 2022 17:52:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE4C2C433D7;
+        Thu, 17 Nov 2022 17:52:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668707531;
+        bh=wVcYKV9ryyiDH/YHL+yzTatasapLPFcACLj99oy49LE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=a7sDmIc+MIiyHVMXaBusQ6SkTG7PgwM/a0EJ4zKHIvOVy6oKK6b3AT7G6BL7IAhyb
+         tQrGOQ8EZryz0g9CPyeova2t7BapHsbt5mf3emi2EuVCeQXhXqwUn+kqAW/vkW3pTf
+         Kd3saMsh3WvsIsW95EjyysGP+2g6w6bUubvY77zS2JNX3hodGbWwqnkeOfkUkv44d1
+         wVdNvSyfxUXTwGs/CxfcJu1R/YNgmbTF9P0hHUecae9laDee6pIqWGqoCswKxWBQ7e
+         3D8Kmq02sXbN6LrlSaw20+B84srvuF3HVurawDtGLsPyRommshzXNIKHm27diMG12K
+         Io+tfOlGUFb/g==
+Date:   Thu, 17 Nov 2022 17:52:03 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-watchdog@vger.kernel.org
+Subject: Re: [RFC PATCH 1/9] dt-bindings: drop redundant part of title of
+ shared bindings
+Message-ID: <Y3Z0w6JH1f5zgwvW@spud>
+References: <20221117123850.368213-1-krzysztof.kozlowski@linaro.org>
+ <20221117123850.368213-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <af953c96-d40e-eccd-5a3e-f00521848f0c@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221117123850.368213-2-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 01:34:46PM +0800,
-"Wang, Lei" <lei4.wang@intel.com> wrote:
+On Thu, Nov 17, 2022 at 01:38:42PM +0100, Krzysztof Kozlowski wrote:
+> The Devicetree bindings document does not have to say in the title that
+> it is a "binding", but instead just describe the hardware.  For shared
+> (re-usable) schemas, name them all as "common properties".
 
-> > @@ -431,50 +633,65 @@ int tdx_vm_init(struct kvm *kvm)
-> >  	return ret;
-> >  }
-> >  
-> > -int tdx_dev_ioctl(void __user *argp)
-> > +static int tdx_td_init(struct kvm *kvm, struct kvm_tdx_cmd *cmd)
-> >  {
-> > -	struct kvm_tdx_capabilities __user *user_caps;
-> > -	struct kvm_tdx_capabilities caps;
-> > -	struct kvm_tdx_cmd cmd;
-> > +	struct kvm_tdx *kvm_tdx = to_kvm_tdx(kvm);
-> > +	struct kvm_tdx_init_vm *init_vm = NULL;
-> > +	struct td_params *td_params = NULL;
-> > +	void *entries_end;
-> > +	int ret;
-> >  
-> > -	BUILD_BUG_ON(sizeof(struct kvm_tdx_cpuid_config) !=
-> > -		     sizeof(struct tdx_cpuid_config));
-> > +	BUILD_BUG_ON(sizeof(*init_vm) != 16 * 1024);
-> > +	BUILD_BUG_ON((sizeof(*init_vm) - offsetof(typeof(*init_vm), entries)) /
-> > +		     sizeof(init_vm->entries[0]) < KVM_MAX_CPUID_ENTRIES);
-> > +	BUILD_BUG_ON(sizeof(struct td_params) != 1024);
-> >  
-> > -	if (copy_from_user(&cmd, argp, sizeof(cmd)))
-> > -		return -EFAULT;
-> > -	if (cmd.flags || cmd.error || cmd.unused)
-> > +	if (is_td_initialized(kvm))
-> >  		return -EINVAL;
-> > -	/*
-> > -	 * Currently only KVM_TDX_CAPABILITIES is defined for system-scoped
-> > -	 * mem_enc_ioctl().
-> > -	 */
-> > -	if (cmd.id != KVM_TDX_CAPABILITIES)
-> > +
-> > +	if (cmd->flags)
-> >  		return -EINVAL;
-> >  
-> > -	user_caps = (void __user *)cmd.data;
-> > -	if (copy_from_user(&caps, user_caps, sizeof(caps)))
-> > -		return -EFAULT;
-> > +	init_vm = kzalloc(sizeof(*init_vm), GFP_KERNEL);
-> > +	if (copy_from_user(init_vm, (void __user *)cmd->data, sizeof(*init_vm))) {
-> 
-> Pointer 'init_vm' returned from call to function 'kzalloc' may be NULL and will
-> be dereferenced at this line.
-> 
-> Maybe a NULL-check here is needed?
 
-Yes, thank you for catching it.
+> diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
+> index 1ab416c83c8d..d2de3d128b73 100644
+> --- a/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
+> +++ b/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/clock/qcom,gcc.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: Qualcomm Global Clock & Reset Controller Common Bindings
+> +title: Qualcomm Global Clock & Reset Controller common parts
+>  
+>  maintainers:
+>    - Stephen Boyd <sboyd@kernel.org>
+
+
+> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+> index cf9c2f7bddc2..20ac432dc683 100644
+> --- a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+> +++ b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/opp/opp-v2-base.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: Generic OPP (Operating Performance Points) Common Binding
+> +title: Generic OPP (Operating Performance Points) common parts
+>  
+>  maintainers:
+>    - Viresh Kumar <viresh.kumar@linaro.org>
+
+Hey Krzysztof,
+
+Hopefully I've not overlooked something obvious, but it wasnt noted in
+the commit message - how come these two are "parts" rather than
+"properties"? The opp one at least don't seem to have much more than
+properties and patterProperties in it.
 
 Thanks,
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+Conor.
+
