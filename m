@@ -2,102 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D04162D8C1
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 12:02:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6273862D8B9
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 12:01:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239378AbiKQLCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 06:02:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47554 "EHLO
+        id S239739AbiKQLB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 06:01:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239742AbiKQLB1 (ORCPT
+        with ESMTP id S239584AbiKQLAY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 06:01:27 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 166AEDD9
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 02:59:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668682766;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=NHqZVSUZPL4fN7KKyUIajXaGhTjFsMLtpxufRffoPO0=;
-        b=aR+d7/lRGlTbVD4c+0G670OGH6P18nE9zakR1G0atcq9pwIZdRSDc09iOlqzSTgTKl3m0v
-        0qDTZznSJgPxGRwC4aG3hW6lvcHPu3dJrujeIvRtlKwsC8XlN84MSmoAkoqC7f8HDOBtym
-        LLwIB50f472AGIe0dsUqloLgokxp24o=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-657-Dm1S-QSBOXmhIZtfBKefOQ-1; Thu, 17 Nov 2022 05:59:25 -0500
-X-MC-Unique: Dm1S-QSBOXmhIZtfBKefOQ-1
-Received: by mail-qv1-f71.google.com with SMTP id lb11-20020a056214318b00b004c63b9f91e5so1270621qvb.8
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 02:59:25 -0800 (PST)
+        Thu, 17 Nov 2022 06:00:24 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8376FAD1
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 02:58:51 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id c25so2206046ljr.8
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 02:58:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GmKcDm7hddmC/x4qiaZJDVe0loHtuACJqTTAG7FSgII=;
+        b=p51ZwemdiBWYVixFemwKQeNFdvrcnE7Od76T1rNvhrukAot/C+POHfwKajWdn6N5BU
+         dUjIOwjULWKBOS3ulKnlRPqbcsf3E0LGwqKip5PqnpIfdeYz07/ZwWTCHiOhc7cORrsg
+         kC7TEkw8oBIJAxF8diOb70F21m3H7pkaS+aG4clKTX4Y4jaAzhf+7o/bHRvPV0aJGXy6
+         vtDtFd4IYT41Dt6iHyZ92hbuCnSlB2DD5hyAySRTErBd0LceFP8U3BS/eDN97TMJW3I2
+         Nyk0n1EfvMwPMTRqqFK4tnUFmeuQVXZACwnMJgbjJxYr/QT+lglIIM05FYtXf1EP7qRB
+         Dciw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=NHqZVSUZPL4fN7KKyUIajXaGhTjFsMLtpxufRffoPO0=;
-        b=yhfw5NOLuCRVYG2YTNQAyEzHOF4Ix8GiNIYwlxlifrWmwSJcmzINcIOoMTsPR18tfx
-         80xEzGQfD725KlNNQ3uyTn9GvXZvI2sk7Gqb58OGyl2OcS1SzvGCqr5Q6xqj9Tsvou51
-         b+0l6a6pL1DzeFT1nXOPLeyoNPFbXb1CuUHQhtPn3IcpFEzTlqS+TdEL83d+/LqaCmHv
-         E5Z9f7mNcQNZBlhlk7r809Oj8QFB9fx5CBHniUB3J6ydBHfmVNmWmP+DwjjfsKhowFLv
-         CJiOsMKDUkBQ8H8z+c8P8uCT/z1TIW7dC5i2pzkFMwD3mYbNfv8bw+jI75AwfwaRL3Sz
-         b02g==
-X-Gm-Message-State: ANoB5pmH6yeRt5VbcYMZFvr/u6wRHFHksP1UrR1Rf1fpjghBWzxUXqd8
-        8kmB9YTNC06FcQ3fzza7oWc/I31aTsYgvSI+c2k19J8APB32G5bo96CAfxrgiz7QmKU8Kr3JMkW
-        oYpnO2C7+zB66KFnlYj5ysQIR
-X-Received: by 2002:a05:622a:1c1b:b0:39c:d5cd:848e with SMTP id bq27-20020a05622a1c1b00b0039cd5cd848emr1598588qtb.294.1668682765185;
-        Thu, 17 Nov 2022 02:59:25 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4tEcsbNaCntauYyT3prVUMPVvxQYyD+D9GBgxd8uTGR7ZKequMv/3F6KVAscjxQWvnFW7ULw==
-X-Received: by 2002:a05:622a:1c1b:b0:39c:d5cd:848e with SMTP id bq27-20020a05622a1c1b00b0039cd5cd848emr1598583qtb.294.1668682764977;
-        Thu, 17 Nov 2022 02:59:24 -0800 (PST)
-Received: from x1.redhat.com (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
-        by smtp.gmail.com with ESMTPSA id d7-20020ac86147000000b003a5c60686b0sm202843qtm.22.2022.11.17.02.59.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 02:59:24 -0800 (PST)
-From:   Brian Masney <bmasney@redhat.com>
-To:     sboyd@kernel.org, mturquette@baylibre.com
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] clk: add debug message showing which unused clocks are disabled on boot
-Date:   Thu, 17 Nov 2022 05:58:29 -0500
-Message-Id: <20221117105829.256717-1-bmasney@redhat.com>
-X-Mailer: git-send-email 2.38.1
+        bh=GmKcDm7hddmC/x4qiaZJDVe0loHtuACJqTTAG7FSgII=;
+        b=CgLCA9uiaJborLOFhZZXqXW8zN0Zs4nwZpJ/LK2wsJA/DRRVJTzCqeKATSsKNkK972
+         cdPZRdDB69gekCU5u2vSZNSbyaQKjxxh2a3Nr3Mm7LFtT76XjWsaE4B4uh81ye6LJDyn
+         jJ+FChIC9cu7ZyGUrWXBmR4sEz1Cghndd3xcp5/JYE+SsWUAr75IYrIs/XTVUW79Frty
+         CNRLItZXDhA+GKlO8r1LNRXZk5rS5+MQBLNAGxKBYmnEXfEBCC4u6wQGsKiDc7jhYnz7
+         FDkEaVwrfTML6Pbwpnhshiz7VpP+DHOC3yfmeE8CxH9P6MrtmNkT/mQSgbVlRx/tkJxo
+         F5jQ==
+X-Gm-Message-State: ANoB5pkhsUJhQRbW7zxGnBvCO2LC18FIO4rzps0CVSYUdQqZygwVjv7L
+        ixZPTVATAEzsIA4prnehwXRmba8ZugeeJvGV
+X-Google-Smtp-Source: AA0mqf6jXayNUYuYVM/Q2O9jVhnf8jCQmWn9Jur7Dg3gxDEdyjQAxO00cv2p5RDoW6obLrAprLCfcg==
+X-Received: by 2002:a2e:a553:0:b0:277:665c:eb4c with SMTP id e19-20020a2ea553000000b00277665ceb4cmr772966ljn.287.1668682730109;
+        Thu, 17 Nov 2022 02:58:50 -0800 (PST)
+Received: from localhost.localdomain ([194.29.137.22])
+        by smtp.gmail.com with ESMTPSA id d7-20020a193847000000b00499cf3e3edcsm89123lfj.296.2022.11.17.02.58.48
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Thu, 17 Nov 2022 02:58:49 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     patches@linaro.org, Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] arm64: dts: qcom: msm8994: Drop spi-max-frequency from SPI host
+Date:   Thu, 17 Nov 2022 11:58:44 +0100
+Message-Id: <20221117105845.13644-1-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.32.0 (Apple Git-132)
 MIME-Version: 1.0
-Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The clk framework on bootup will automatically disable all unused clocks
-on bootup unless the clk_ignore_unused kernel parameter is present.
-Let's add a basic debugging log statement here that shows which clocks
-are disabled. There is already tracepoint present here as well, but
-there's nothing like a simple, good ol' fashioned printk for simplicity.
+This is a device property, not a bus host one.
 
-Signed-off-by: Brian Masney <bmasney@redhat.com>
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- drivers/clk/clk.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm64/boot/dts/qcom/msm8994.dtsi | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index 57b83665e5c3..ddf5a48e72b6 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -1352,6 +1352,7 @@ static void __init clk_disable_unused_subtree(struct clk_core *core)
- 	 * back to .disable
- 	 */
- 	if (clk_core_is_enabled(core)) {
-+		dev_dbg(core->dev, "Powering off unused clock %s\n", core->name);
- 		trace_clk_disable(core);
- 		if (core->ops->disable_unused)
- 			core->ops->disable_unused(core->hw);
+diff --git a/arch/arm64/boot/dts/qcom/msm8994.dtsi b/arch/arm64/boot/dts/qcom/msm8994.dtsi
+index adcea31a0c68..9ff9d35496d2 100644
+--- a/arch/arm64/boot/dts/qcom/msm8994.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8994.dtsi
+@@ -554,7 +554,6 @@ blsp1_spi1: spi@f9923000 {
+ 			clocks = <&gcc GCC_BLSP1_QUP1_SPI_APPS_CLK>,
+ 				 <&gcc GCC_BLSP1_AHB_CLK>;
+ 			clock-names = "core", "iface";
+-			spi-max-frequency = <19200000>;
+ 			dmas = <&blsp1_dma 12>, <&blsp1_dma 13>;
+ 			dma-names = "tx", "rx";
+ 			pinctrl-names = "default", "sleep";
+@@ -692,7 +691,6 @@ blsp2_spi4: spi@f9966000 {
+ 			clocks = <&gcc GCC_BLSP2_QUP4_SPI_APPS_CLK>,
+ 				 <&gcc GCC_BLSP2_AHB_CLK>;
+ 			clock-names = "core", "iface";
+-			spi-max-frequency = <19200000>;
+ 			dmas = <&blsp2_dma 18>, <&blsp2_dma 19>;
+ 			dma-names = "tx", "rx";
+ 			pinctrl-names = "default", "sleep";
 -- 
 2.38.1
 
