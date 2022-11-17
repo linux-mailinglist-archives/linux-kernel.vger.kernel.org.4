@@ -2,93 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D132162DE73
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 15:41:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 620B662DE74
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 15:41:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234943AbiKQOlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 09:41:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37316 "EHLO
+        id S240337AbiKQOlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 09:41:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240401AbiKQOkl (ORCPT
+        with ESMTP id S234954AbiKQOk7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 09:40:41 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E084326E8
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 06:39:40 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id d6so3091652lfs.10
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 06:39:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hhqHTIdakMdpvgIm6p6wrgckSR+qp6nVKOdBw1n2NYA=;
-        b=RJSBSDT6way2QB6z7HOF4VHWQBZ9FM3sbXcO8/5CIix4Mp/vZMTmZLxUkLjNqtf1In
-         0vpKyapKN6tjlgUmXV9npaTLNABbXAkVOWSAeEBCZqbMrofXlF8zh6m6mHHtIV4XgWfB
-         IbXeXtGIaInF3qUbtgheXdOd/AWwMzj8iLF0isC5t5oBmmCQTBy7nklFHT7b0oxn6Yzv
-         1wIsBiVpdUG5vkX+Gy1/dfqhk/S/u5ziz3S82tjNRvMDfCJ59L/R5iJIVB1iuZWBt6FK
-         tH1acOcewQWWB0gA4+iapqwA/CI81cIWsXxy/YP0o+gVyLmpeZl2nGs6H3EthqQSST+a
-         Faow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hhqHTIdakMdpvgIm6p6wrgckSR+qp6nVKOdBw1n2NYA=;
-        b=3MtpbS164vyiMeP4cBMVpvyK18oxrogc6sc8iaFf3nTKAMQZJ0HVMjhP+ns1gCvcKd
-         PRktVnczcL7rwYq5CGEqjzRp4vMjGruXdSjmUcJOo97+WohrkJaG37LYpGFE8nFYsRcC
-         V46pChdr9mxxZm5Bdy2h6Uwmcofzxj/m4jaLQjWYYd603i4spK5/Z4XOREak6IU6FTf+
-         6lBRh/P2AJcOUFBvEamiYc5dkyoKOre0rrRHeeJ7pE/9Y7Im7wGi8rWHDG9Ndu5pbhVD
-         FCGsRB87uqF6QanxyiNMctDekUVkYNrxb2x383Qu/vfjyEom9Xj4o8nbm9C3ZWV9ng20
-         592g==
-X-Gm-Message-State: ANoB5plAATtIiz8FGPOfgrLnsCGuKRMZ9l00S1982hFVHMH1vKQebueb
-        1I1JNI2oXkeXrOQKJbKfEwrEAA==
-X-Google-Smtp-Source: AA0mqf4NaGpugqjSDrrmrqo3jAPO3q9RsT21DAZOI0kv5akXE5GBfutYL6Bg/02pvozfY5G9BEbmeA==
-X-Received: by 2002:a19:a405:0:b0:4b0:8644:2951 with SMTP id q5-20020a19a405000000b004b086442951mr953840lfc.93.1668695978726;
-        Thu, 17 Nov 2022 06:39:38 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id n25-20020a195519000000b004ae394b6a6fsm173335lfe.246.2022.11.17.06.39.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Nov 2022 06:39:37 -0800 (PST)
-Message-ID: <23a4623d-4bc3-72cf-f56d-ad6737594977@linaro.org>
-Date:   Thu, 17 Nov 2022 15:39:36 +0100
+        Thu, 17 Nov 2022 09:40:59 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB9C1769EC
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 06:40:16 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 784F022789;
+        Thu, 17 Nov 2022 14:40:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1668696015; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=D1kqm4NTuLqt4P5j0+BjzYHODH2usXp2+Kg4xoCqgvs=;
+        b=Vlyas2QBo5dYyEWniYISh4gjJGw9UvUDJHmTlnKu38fYLU8fN9nL67Tfik1kocLVd6Xr+y
+        sM6nTwVV25KlhpWxqkJzS2nFvwYiPOjW2CafRLRe+OpSH6A+pfefFJ075TfjeU/H3Za7oi
+        rLfeC4ChFoJafD/LrKutFDVzcXxEhnM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1668696015;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=D1kqm4NTuLqt4P5j0+BjzYHODH2usXp2+Kg4xoCqgvs=;
+        b=QnDENqFIA3AkfxbL5NOqeccDMU0aBYI8wyXJa6sED6R2lKp0ET2fghrZQhiI2PJD7i0tlP
+        Lt6OnsPZR4h0oRBA==
+Received: from wotan.suse.de (wotan.suse.de [10.160.0.1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id E30C92C141;
+        Thu, 17 Nov 2022 14:40:14 +0000 (UTC)
+Date:   Thu, 17 Nov 2022 14:40:14 +0000 (UTC)
+From:   Richard Biener <rguenther@suse.de>
+To:     Peter Zijlstra <peterz@infradead.org>
+cc:     Ard Biesheuvel <ardb@kernel.org>,
+        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Alexander Potapenko <glider@google.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ben Segall <bsegall@google.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Don Zickus <dzickus@redhat.com>, Hao Luo <haoluo@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Huang Rui <ray.huang@amd.com>,
+        Ingo Molnar <mingo@redhat.com>, Jan Hubicka <jh@suse.de>,
+        Jason Baron <jbaron@akamai.com>,
+        Jiri Kosina <jikos@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Martin Liska <mliska@suse.cz>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Mel Gorman <mgorman@suse.de>, Miguel Ojeda <ojeda@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Petr Mladek <pmladek@suse.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Song Liu <song@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Yonghong Song <yhs@fb.com>
+Subject: Re: [PATCH 00/46] gcc-LTO support for the kernel
+In-Reply-To: <Y3ZGAf2rdV1Ia5P3@hirez.programming.kicks-ass.net>
+Message-ID: <nycvar.YFH.7.77.849.2211171434440.3995@jbgna.fhfr.qr>
+References: <20221114114344.18650-1-jirislaby@kernel.org> <CAMj1kXEMejnuMx1LJbfJj1+RUmZzZJNSmOVu_tWAbU6RXGqA3A@mail.gmail.com> <Y3XwkFWJhcwApm4I@hirez.programming.kicks-ass.net> <nycvar.YFH.7.77.849.2211170847400.3995@jbgna.fhfr.qr>
+ <Y3YeQMAqCecwrIN1@hirez.programming.kicks-ass.net> <CAMj1kXEkUN6ySsyaLVKqNzhRmfw9CfPYyQd_efRgLjCT9dS-yg@mail.gmail.com> <nycvar.YFH.7.77.849.2211171331410.3995@jbgna.fhfr.qr> <Y3ZGAf2rdV1Ia5P3@hirez.programming.kicks-ass.net>
+User-Agent: Alpine 2.22 (LSU 394 2020-01-19)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 6/9] dt-bindings: PCI: qcom: document IPQ8074 Gen3 port
-Content-Language: en-US
-To:     Robert Marko <robimarko@gmail.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        bhelgaas@google.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mani@kernel.org,
-        lpieralisi@kernel.org, kw@linux.com, svarbanov@mm-sol.com,
-        shawn.guo@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221116214841.1116735-1-robimarko@gmail.com>
- <20221116214841.1116735-6-robimarko@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221116214841.1116735-6-robimarko@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/11/2022 22:48, Robert Marko wrote:
-> IPQ8074 has one Gen2 and one Gen3 PCIe port, with Gen2 already supported.
-> Document Gen3 port which uses the same controller as IPQ6018.
+On Thu, 17 Nov 2022, Peter Zijlstra wrote:
+
+> On Thu, Nov 17, 2022 at 01:55:07PM +0000, Richard Biener wrote:
 > 
-> Signed-off-by: Robert Marko <robimarko@gmail.com>
-> ---
+> > > > I'm not sure what you're on about; only symbols annotated with
+> > > > EXPORT_SYMBOL*() are accessible from modules (aka DSOs) and those will
+> > > > have their address taken. You can feely eliminate any unused symbol.
+> > 
+> > But IIRC that's not reflected on the ELF level by making EXPORT_SYMBOL*()
+> > symbols public and the rest hidden - instead all symbols global in the C TUs
+> > will become public and the module dynamic loader details are hidden from
+> > GCCs view of the kernel image as ELF relocatable object.
+> 
+> It is reflected by keeping their address in __ksymtab_$foo sections, as
+> such their address 'escapes'.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+That's not enough to make symbols not appearing in __ksymtab_$foo
+sections eliminatable.
 
-Best regards,
-Krzysztof
+> > > We have an __ADDRESSABLE() macro and asmlinkage modifier to annotate
+> > > symbols that may appear to the compiler as though they are never
+> > > referenced.
+> > > 
+> > > Would it be possible to repurpose those so that the LTO code knows
+> > > which symbols it must not remove?
+> > 
+> > I find
+> > 
+> > /*
+> >  * Force the compiler to emit 'sym' as a symbol, so that we can reference
+> >  * it from inline assembler. Necessary in case 'sym' could be inlined
+> >  * otherwise, or eliminated entirely due to lack of references that are
+> >  * visible to the compiler.
+> >  */
+> > #define ___ADDRESSABLE(sym, __attrs) \
+> > 	static void * __used __attrs \
+> > 		__UNIQUE_ID(__PASTE(__addressable_,sym)) = (void *)&sym;
+> > #define __ADDRESSABLE(sym) \
+> > 	___ADDRESSABLE(sym, __section(".discard.addressable"))
+> > 
+> > that should be enough to force LTO keeping 'sym' - unless there's
+> > a linker script that discards .discard.addressable which I fear LTO
+> > will notice, losing the effect.
+> 
+> The initial LTO link pass will not discard .discard sections in order to
+> generate a regular ELF object file. This object file is then fed to
+> objtool and the kallsyms tool and eventually linked with the linker
+> script in a multi-stage link pass.
+> 
+> Also see scripts/link-vmlinux.sh for all the horrible details.
+> 
+> > The folks who worked on LTO enablement of the kernel should know the
+> > real issue better - I understand asm()s are a pain because GCC
+> > refuses to parse the assembler string heuristically for used
+> > symbols (but it can never be more than heuristics). 
+> 
+> I don't understand why it can't be more than heuristics; eventually the
+> asm() contents end up in a real assembler and it has to make sense.
+> 
+> Might as well parse it directly -- isn't that what clang-ias does?
 
+GCC doesn't have an integrated assembler and the actual assembler text
+that's emitted is not known at the stage we need to know the symbol.
+Which means for GCC it would be heuristics.
+
+> > The issue with asm()s is not so much elimination (__used solves that)
+> > but that GCC can end up moving the asm() and the refered to symbols to
+> > different link-time units causing unresolved symbols for non-global
+> > symbols.  -fno-toplevel-reorder should fix that at some cost.
+> 
+> I thought the whole point of LTO was that there was only a single link
+> time unit, translate all the tus into intermadiate gunk and then collect
+> the whole lot in one go.
+
+that's what it does, but it fans out to parallelize the final compile,
+dividing the whole lot again which is where this problem can appear
+if GCC doesn't see that asm() X uses symbol Y.
+
+Richard.
+
+-- 
+Richard Biener <rguenther@suse.de>
+SUSE Software Solutions Germany GmbH, Frankenstrasse 146, 90461 Nuernberg,
+Germany; GF: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman;
+HRB 36809 (AG Nuernberg)
