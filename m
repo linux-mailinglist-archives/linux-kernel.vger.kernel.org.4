@@ -2,103 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 135CD62D4E9
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:21:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53CC162D4ED
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:22:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234189AbiKQIU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 03:20:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60612 "EHLO
+        id S239323AbiKQIWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 03:22:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233958AbiKQIUy (ORCPT
+        with ESMTP id S234819AbiKQIWV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 03:20:54 -0500
-Received: from sonata.ens-lyon.org (sonata.ens-lyon.org [140.77.166.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F036DCE7
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 00:20:53 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by sonata.ens-lyon.org (Postfix) with ESMTP id 8C54220134;
-        Thu, 17 Nov 2022 09:20:51 +0100 (CET)
-Received: from sonata.ens-lyon.org ([127.0.0.1])
-        by localhost (sonata.ens-lyon.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id F_4vo_GaCFsi; Thu, 17 Nov 2022 09:20:51 +0100 (CET)
-Received: from begin (lfbn-bor-1-376-208.w109-215.abo.wanadoo.fr [109.215.91.208])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by sonata.ens-lyon.org (Postfix) with ESMTPSA id CE49D20119;
-        Thu, 17 Nov 2022 09:20:50 +0100 (CET)
-Received: from samy by begin with local (Exim 4.96)
-        (envelope-from <samuel.thibault@ens-lyon.org>)
-        id 1ova8g-002zbq-0j;
-        Thu, 17 Nov 2022 09:20:50 +0100
-Date:   Thu, 17 Nov 2022 09:20:50 +0100
-From:   Samuel Thibault <samuel.thibault@ens-lyon.org>
-To:     Yureka Lilian <yuka@yuka.dev>
-Cc:     gregkh@linuxfoundation.org, chris@the-brannons.com,
-        linux-kernel@vger.kernel.org, speakup@linux-speakup.org,
-        w.d.hubbs@gmail.com
-Subject: Re: [PATCH v2] speakup: remove usage of non-standard u_char
-Message-ID: <20221117082050.54uhm54udqatdlru@begin>
-Mail-Followup-To: Samuel Thibault <samuel.thibault@ens-lyon.org>,
-        Yureka Lilian <yuka@yuka.dev>, gregkh@linuxfoundation.org,
-        chris@the-brannons.com, linux-kernel@vger.kernel.org,
-        speakup@linux-speakup.org, w.d.hubbs@gmail.com
-References: <20221117001244.212047-1-yuka@yuka.dev>
+        Thu, 17 Nov 2022 03:22:21 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A14E6DCEB;
+        Thu, 17 Nov 2022 00:22:20 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1668673338;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wIVX2MwJcu88wyoRSA1ASXFeHTanLRpod2fOiAYk42Q=;
+        b=pRs5JR7b+MK5IrHfaCpInQxaDeC9PvLo7Zo1msTJyoCGPbL+6O8u4CqY3P5lAAqWNgdDeS
+        Wor/o6pp3iVymD4p2gJG/HMX74WixBFfLFutuf+HsdWohrU85CZzDkvVKrovF6T+T3m+AW
+        BDyNHqKpKeCG8Pa2zdgXoqAMhZ4x3ntI+1l75eBvNGQy5jeEGTbkgKSYJuB9Xa+hDLyRPo
+        CP3cEuwwh7lHoufv9Otj/O10K7OhQ0HLfG06MINUxbYTEwlTMqaY9g/V9xuSqs+FZfpGMk
+        JRzV6t/Z3sPM+330lwYCsVQBePNWNqlFlrM6HYoHwLO+biS1QiI67/gbnW8E4Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1668673338;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wIVX2MwJcu88wyoRSA1ASXFeHTanLRpod2fOiAYk42Q=;
+        b=VPYEAu0OHciMT2/0zjp9NwK3Ej0xV3gqu1ZiXKKa3Bl2hm2hGGSIINgmAIItBguwG+ofeA
+        EnxX6Q1iJQJvdiDQ==
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
+        Allen Hubbe <allenbh@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linuxppc-dev@lists.ozlabs.org,
+        "Ahmed S. Darwish" <darwi@linutronix.de>,
+        Reinette Chatre <reinette.chatre@intel.com>
+Subject: Re: [patch 34/39] PCI/MSI: Reject multi-MSI early
+In-Reply-To: <20221116163118.GA1116261@bhelgaas>
+References: <20221116163118.GA1116261@bhelgaas>
+Date:   Thu, 17 Nov 2022 09:22:18 +0100
+Message-ID: <8735aing79.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221117001244.212047-1-yuka@yuka.dev>
-Organization: I am not organized
-User-Agent: NeoMutt/20170609 (1.8.3)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Yureka Lilian, le jeu. 17 nov. 2022 01:12:44 +0100, a ecrit:
-> This code is included in the build tools makemapdata and genmap, and it
-> expects that libc exposes a definition of u_char. But u_char is not
-> defined in either C or POSIX standards, and some systems don't have it.
-> Namely this breaks the build on hosts using musl libc, because musl only
-> exposes u_char if _GNU_SOURCE is defined.
-> 
-> Signed-off-by: Yureka Lilian <yuka@yuka.dev>
-> Cc: stable@vger.kernel.org
+On Wed, Nov 16 2022 at 10:31, Bjorn Helgaas wrote:
+> On Fri, Nov 11, 2022 at 02:55:09PM +0100, Thomas Gleixner wrote:
+>>  
+>> +/**
+>> + * pci_msi_domain_supports - Check for support of a particular feature flag
+>> + * @pdev:		The PCI device to operate on
+>> + * @feature_mask:	The feature mask to check for (full match)
+>> + * @mode:		If ALLOW_LEGACY this grants the feature when there is no irq domain
+>> + *			associated to the device. If DENY_LEGACY the lack of an irq domain
+>> + *			makes the feature unsupported
+>
+> Looks like some of these might be wider than 80 columns, which I think
+> was the typical width of this file.
 
-Reviewed-by: Samuel Thibault <samuel.thibault@ens-lyon.org>
+I accommodated to the general sentiment that 80 columns is yesterday. My
+new cutoff is 100.
 
-thanks!
+Thanks,
 
-> ---
-> Content is unchanged compared to v1, but hopefully the patch is not
-> corrupted this time and I added a cc: stable
-> ---
->  drivers/accessibility/speakup/utils.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/accessibility/speakup/utils.h b/drivers/accessibility/speakup/utils.h
-> index 4bf2ee8ac246..4ce9a12f7664 100644
-> --- a/drivers/accessibility/speakup/utils.h
-> +++ b/drivers/accessibility/speakup/utils.h
-> @@ -54,7 +54,7 @@ static inline int oops(const char *msg, const char *info)
->  
->  static inline struct st_key *hash_name(char *name)
->  {
-> -	u_char *pn = (u_char *)name;
-> +	unsigned char *pn = (unsigned char *)name;
->  	int hash = 0;
->  
->  	while (*pn) {
-> -- 
-> 2.38.1
-> 
-
--- 
-Samuel
----
-Pour une évaluation indépendante, transparente et rigoureuse !
-Je soutiens la Commission d'Évaluation de l'Inria.
+        tglx
