@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F154A62DF06
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:08:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F37AF62DF07
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:08:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240131AbiKQPIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 10:08:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53490 "EHLO
+        id S240166AbiKQPIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 10:08:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239887AbiKQPH4 (ORCPT
+        with ESMTP id S239931AbiKQPH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 10:07:56 -0500
+        Thu, 17 Nov 2022 10:07:57 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25064140A6;
-        Thu, 17 Nov 2022 07:07:55 -0800 (PST)
-Date:   Thu, 17 Nov 2022 15:07:52 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A48A159876;
+        Thu, 17 Nov 2022 07:07:56 -0800 (PST)
+Date:   Thu, 17 Nov 2022 15:07:54 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668697674;
+        s=2020; t=1668697675;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=NhN45R8XDsYS+qO3ag3gg15R4teB4dZBCZ4VjNt75NQ=;
-        b=s7yf8arwgITZ+tpC0ECzwtFwNBX4DEfYCpikBid0Sb//wQgGIPcSblk8wGA4RkTHnANNtb
-        aLmbM/RqTrWg59E6Nr14jPHsTTE0TzRRXrzCbwUz/FL+vKdSlflXU+MMkkH3jUQ0c8ZbgU
-        37l4tjPvKaa48uvFmVCq5Y0WRMb3v5q15VbZBdKhKMoJS1DIoeTiTWmlOb+l+JjeB2dUxO
-        3T4RGeDXuLOzFfZFpE3UbzDP9NPiXM56ywbopx4FoVp2t6c6gSkc1ZiXhxko/aTvbamZhP
-        29vi8/6wR0h2UNGGyp1aGPtXDWVVbpwP5ROPHZ3BAGyRLywOnIAj+UTsCydxPQ==
+        bh=K+p/3EF3ZPOVV5DsExwKrDuDyfRU/SzuktZL9Elkis0=;
+        b=16v9QNJDOUHSl3FcAA0be2i4TRLW8uCJSvfpgOG4LNkll5wq76egyG/f0hZONc5zDsYjMM
+        ZFHbdwy7bq6Y+GgbYy47pNoCw860QjIE7AtUgk5h8oVEwhQ0zfpg95wJx0gobpvrw798Y+
+        iiMu2sl3DgCqIDRS5K9BUG3sPpICuF6Dl5oocIqIDNsK226uBJ98kEUUcplWPKCqkH1IXX
+        rxrJDf8AG3vy3Tr2KZ0zXcZJUdeNEBrR4o1VY1RMHjNQxMOsfXImV1x6tSh5v4r1uLbddK
+        f4KPlgAllKb++UjxNMm73fEjKENa8tmdbUoWZ66tSDTm0haIIItgqrN5Fyy7Pw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668697674;
+        s=2020e; t=1668697675;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=NhN45R8XDsYS+qO3ag3gg15R4teB4dZBCZ4VjNt75NQ=;
-        b=DQMm/RG7n421u5EgyiyraN+0SipsYp3s3+O/boKfD87b6JapebYmC5fytR6ozhlE27LKcG
-        RIZU+Xlgdkh3gUDQ==
+        bh=K+p/3EF3ZPOVV5DsExwKrDuDyfRU/SzuktZL9Elkis0=;
+        b=507iZZGOiQXlBE0wPou0HSprRM0m0l1BB3ehyiFxLVt1VuJPuoTRVKobMIQokEYW4jICVg
+        uesZv1gfeKN8J8Cg==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/core] PCI/MSI: Remove redundant msi_check() callback
+Subject: [tip: irq/core] PCI/MSI: Validate MSI-X contiguous restriction early
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Jason Gunthorpe <jgg@nvidia.com>,
         Bjorn Helgaas <bhelgaas@google.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org, maz@kernel.org
-In-Reply-To: <20221111122015.749446904@linutronix.de>
-References: <20221111122015.749446904@linutronix.de>
+In-Reply-To: <20221111122015.691357406@linutronix.de>
+References: <20221111122015.691357406@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <166869767291.4906.5832389984277922977.tip-bot2@tip-bot2>
+Message-ID: <166869767404.4906.3594475439584777347.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,97 +67,75 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/core branch of tip:
 
-Commit-ID:     9c03b2589da2b2b259a960f2a325731f6b38d115
-Gitweb:        https://git.kernel.org/tip/9c03b2589da2b2b259a960f2a325731f6b38d115
+Commit-ID:     4644d22eb673f173252610a93aaaba4c2bff7b41
+Gitweb:        https://git.kernel.org/tip/4644d22eb673f173252610a93aaaba4c2bff7b41
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Fri, 11 Nov 2022 14:55:14 +01:00
+AuthorDate:    Fri, 11 Nov 2022 14:55:12 +01:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Thu, 17 Nov 2022 15:15:22 +01:00
 
-PCI/MSI: Remove redundant msi_check() callback
+PCI/MSI: Validate MSI-X contiguous restriction early
 
-All these sanity checks are now done _before_ any allocation work
-happens. No point in doing it twice.
+With interrupt domains the sanity check for MSI-X vector validation can be
+done _before_ any allocation happens. The sanity check only applies to the
+allocation functions which have an 'entries' array argument. The entries
+array is filled by the caller with the requested MSI-X indices. Some drivers
+have gaps in the index space which is not supported on all architectures.
+
+The PCI/MSI irq domain has a 'feature' bit to enforce this validation late
+during the allocation phase.
+
+Just do it right away before doing any other work along with the other
+sanity checks on that array.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-Link: https://lore.kernel.org/r/20221111122015.749446904@linutronix.de
+Link: https://lore.kernel.org/r/20221111122015.691357406@linutronix.de
 
 ---
- drivers/pci/msi/irqdomain.c | 48 +------------------------------------
- 1 file changed, 48 deletions(-)
+ drivers/pci/msi/msi.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/pci/msi/irqdomain.c b/drivers/pci/msi/irqdomain.c
-index 666ed21..dea2e8c 100644
---- a/drivers/pci/msi/irqdomain.c
-+++ b/drivers/pci/msi/irqdomain.c
-@@ -64,51 +64,6 @@ static irq_hw_number_t pci_msi_domain_calc_hwirq(struct msi_desc *desc)
- 		(pci_domain_nr(dev->bus) & 0xFFFFFFFF) << 27;
+diff --git a/drivers/pci/msi/msi.c b/drivers/pci/msi/msi.c
+index 0740acd..b94f6da 100644
+--- a/drivers/pci/msi/msi.c
++++ b/drivers/pci/msi/msi.c
+@@ -725,13 +725,17 @@ out_disable:
+ 	return ret;
  }
  
--static inline bool pci_msi_desc_is_multi_msi(struct msi_desc *desc)
--{
--	return !desc->pci.msi_attrib.is_msix && desc->nvec_used > 1;
--}
--
--/**
-- * pci_msi_domain_check_cap - Verify that @domain supports the capabilities
-- *			      for @dev
-- * @domain:	The interrupt domain to check
-- * @info:	The domain info for verification
-- * @dev:	The device to check
-- *
-- * Returns:
-- *  0 if the functionality is supported
-- *  1 if Multi MSI is requested, but the domain does not support it
-- *  -ENOTSUPP otherwise
-- */
--static int pci_msi_domain_check_cap(struct irq_domain *domain,
--				    struct msi_domain_info *info,
--				    struct device *dev)
--{
--	struct msi_desc *desc = msi_first_desc(dev, MSI_DESC_ALL);
--
--	/* Special handling to support __pci_enable_msi_range() */
--	if (pci_msi_desc_is_multi_msi(desc) &&
--	    !(info->flags & MSI_FLAG_MULTI_PCI_MSI))
--		return 1;
--
--	if (desc->pci.msi_attrib.is_msix) {
--		if (!(info->flags & MSI_FLAG_PCI_MSIX))
--			return -ENOTSUPP;
--
--		if (info->flags & MSI_FLAG_MSIX_CONTIGUOUS) {
--			unsigned int idx = 0;
--
--			/* Check for gaps in the entry indices */
--			msi_for_each_desc(desc, dev, MSI_DESC_ALL) {
--				if (desc->msi_index != idx++)
--					return -ENOTSUPP;
--			}
--		}
--	}
--	return 0;
--}
--
- static void pci_msi_domain_set_desc(msi_alloc_info_t *arg,
- 				    struct msi_desc *desc)
+-static bool pci_msix_validate_entries(struct msix_entry *entries, int nvec, int hwsize)
++static bool pci_msix_validate_entries(struct pci_dev *dev, struct msix_entry *entries,
++				      int nvec, int hwsize)
  {
-@@ -118,7 +73,6 @@ static void pci_msi_domain_set_desc(msi_alloc_info_t *arg,
++	bool nogap;
+ 	int i, j;
  
- static struct msi_domain_ops pci_msi_domain_ops_default = {
- 	.set_desc	= pci_msi_domain_set_desc,
--	.msi_check	= pci_msi_domain_check_cap,
- };
+ 	if (!entries)
+ 		return true;
  
- static void pci_msi_domain_update_dom_ops(struct msi_domain_info *info)
-@@ -130,8 +84,6 @@ static void pci_msi_domain_update_dom_ops(struct msi_domain_info *info)
- 	} else {
- 		if (ops->set_desc == NULL)
- 			ops->set_desc = pci_msi_domain_set_desc;
--		if (ops->msi_check == NULL)
--			ops->msi_check = pci_msi_domain_check_cap;
++	nogap = pci_msi_domain_supports(dev, MSI_FLAG_MSIX_CONTIGUOUS, DENY_LEGACY);
++
+ 	for (i = 0; i < nvec; i++) {
+ 		/* Entry within hardware limit? */
+ 		if (entries[i].entry >= hwsize)
+@@ -742,6 +746,9 @@ static bool pci_msix_validate_entries(struct msix_entry *entries, int nvec, int 
+ 			if (entries[i].entry == entries[j].entry)
+ 				return false;
+ 		}
++		/* Check for unsupported gaps */
++		if (nogap && entries[i].entry != i)
++			return false;
  	}
+ 	return true;
  }
+@@ -773,7 +780,7 @@ int __pci_enable_msix_range(struct pci_dev *dev, struct msix_entry *entries, int
+ 	if (hwsize < 0)
+ 		return hwsize;
  
+-	if (!pci_msix_validate_entries(entries, nvec, hwsize))
++	if (!pci_msix_validate_entries(dev, entries, nvec, hwsize))
+ 		return -EINVAL;
+ 
+ 	/* PCI_IRQ_VIRTUAL is a horrible hack! */
