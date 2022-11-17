@@ -2,198 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EECEE62E0A8
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 17:01:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5BE362E0A7
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 17:01:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234952AbiKQQBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 11:01:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37996 "EHLO
+        id S239999AbiKQQA4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 11:00:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239989AbiKQQAp (ORCPT
+        with ESMTP id S239416AbiKQQAo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 11:00:45 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DA1538A8
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 08:00:43 -0800 (PST)
-Received: from ideasonboard.com (unknown [103.251.226.79])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id CC745929;
-        Thu, 17 Nov 2022 17:00:38 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1668700842;
-        bh=1DYpqsXvXsGG5IOvxeeijtQCtN/gvWpP1KZhKnLeIbw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Swk4StMfC87C4+EHNtHps8Zsm2j+XMV36WOhsHH2IDlV0p4FtZWLFnZh30co8Uk3+
-         TqZolGoofnEbvlq7GVz/B1koaxITxDxKocWiklCxhMTXfbWerF19KP1SL44gEeGDOM
-         669rva9SqVKPAJetExlV5w9KTLO6YrdgwGxUHNzI=
-From:   Umang Jain <umang.jain@ideasonboard.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>, Dan Carpenter <error27@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Cc:     kieran.bingham@ideasonboard.com,
-        Umang Jain <umang.jain@ideasonboard.com>
-Subject: [PATCH 3/3] vc04_services: bcm2835-camera: Use bool values for mmal_fmt.remove_padding
-Date:   Thu, 17 Nov 2022 21:30:15 +0530
-Message-Id: <20221117160015.344528-4-umang.jain@ideasonboard.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221117160015.344528-1-umang.jain@ideasonboard.com>
-References: <20221117160015.344528-1-umang.jain@ideasonboard.com>
+        Thu, 17 Nov 2022 11:00:44 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B8E22BC6
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 08:00:40 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id q1so2317858pgl.11
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 08:00:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WeXWqGLnMnk6uS6XkKZbr/nN6eSE9M6SqY0Ycssq4Dg=;
+        b=PUS4jdB+kqWabwXwuFg3VjIMIsjSVWnik9vZDbsjJ3S1YGa1A0mdY4EFcfp/b6wuGh
+         Ie1KuTrSGuy3q5hBbBuzlvOccif2bvxxDOc9HUdwaZGkJ/m1FCTNU/F/Lwur7sySFogt
+         7bsxtUyXBWZEloqP4EJfIpcUMlwYfpoUG1U809+jrJJz0lEvRuALyH5zjAtAFay7O06m
+         C0sXM/5WIRNwcqda38DQy0Nt3Q4fXMJW7YCBbgJnJZq7O8oHh+X9nOiCXqBLFBWm5A5l
+         nyTMBLMX3J4q2JJRtZPFlaefYqgthHcxCByWo2u+7v+ulBnCHcFiehT/7c9oJxUU6F38
+         ykBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WeXWqGLnMnk6uS6XkKZbr/nN6eSE9M6SqY0Ycssq4Dg=;
+        b=grRavQtO97jRQ+cB+uSrucCPJgwwbhWl0bfcRWUL6T3M1p3k/S1xXje7SpByvP1qjJ
+         gVWp7Zj9PAwndvxF6Z8yeApGAdsQ91Vk5JX/ADjRq3/DeOj9yx9Xamhrlfmtx66B5ZB+
+         k+wXDEzyllzzmHaHU+FZnt7grT4HDfPzrwGWugT/GCD0FoiYP0N9e1keCJcOVjgBRJvj
+         Iwoy+GlpZeG/72SCR5t6SreHfZtCeDM2aidTux1USPF9Sknz2geMTxmpvdNk8tyiTigZ
+         hcivnJlQHSTiHghJnH24xA7/dexqNWnuBx9WMJGAyLurp/OCQzMgtEU4EztFFn2VJ6E9
+         AJSg==
+X-Gm-Message-State: ANoB5pmSCLZMM6GCH6SXytF9PfPbXybaWeVTs0VmCVPVWX9zKagpq2KU
+        i3rU3RewCU/ZEKZ0AoLYlJa1Zg==
+X-Google-Smtp-Source: AA0mqf6xLyDPJpFM5ANLVXCIXp6GJqaL+20inLmVRY8uVTrkvctosjsvdu8xHT0YU5iw6N0lZNtYZw==
+X-Received: by 2002:a05:6a00:f92:b0:562:317c:2a8 with SMTP id ct18-20020a056a000f9200b00562317c02a8mr3664989pfb.49.1668700840241;
+        Thu, 17 Nov 2022 08:00:40 -0800 (PST)
+Received: from localhost ([75.172.139.56])
+        by smtp.gmail.com with ESMTPSA id 8-20020a17090a004800b0020ae09e9724sm1040623pjb.53.2022.11.17.08.00.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 08:00:39 -0800 (PST)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     soc@kernel.org, Jerome Neanne <jneanne@baylibre.com>,
+        lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
+        nm@ti.com, kristo@kernel.org, dmitry.torokhov@gmail.com,
+        krzysztof.kozlowski+dt@linaro.org, catalin.marinas@arm.com,
+        will@kernel.org, lee@kernel.org, tony@atomide.com, vigneshr@ti.com,
+        shawnguo@kernel.org, geert+renesas@glider.be,
+        dmitry.baryshkov@linaro.org, marcel.ziswiler@toradex.com,
+        vkoul@kernel.org, biju.das.jz@bp.renesas.com, arnd@arndb.de,
+        jeff@labundy.com
+Cc:     afd@ti.com, narmstrong@baylibre.com, msp@baylibre.com,
+        j-keerthy@ti.com, jneanne@baylibre.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
+        linux-omap@vger.kernel.org
+Subject: Re: [PATCH v7 6/6] arm64: defconfig: Add tps65219 as modules
+In-Reply-To: <7h5yffamcf.fsf@baylibre.com>
+References: <20221104152311.1098603-1-jneanne@baylibre.com>
+ <20221104152311.1098603-7-jneanne@baylibre.com>
+ <7h5yffamcf.fsf@baylibre.com>
+Date:   Thu, 17 Nov 2022 08:00:37 -0800
+Message-ID: <7hfsehbmfu.fsf@baylibre.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-struct mmal_fmt.remove_padding is defined as a boolean type hence,
-use boolean values for it instead of 0/1 integers. This enhances
-code readability.
+Arnd, Olof,
 
-Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
----
- .../bcm2835-camera/bcm2835-camera.c           | 30 +++++++++----------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+Kevin Hilman <khilman@baylibre.com> writes:
 
-diff --git a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-index fd456d1f7061..797ebe2a973a 100644
---- a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-+++ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-@@ -87,21 +87,21 @@ static struct mmal_fmt formats[] = {
- 		.depth = 12,
- 		.mmal_component = COMP_CAMERA,
- 		.ybbp = 1,
--		.remove_padding = 1,
-+		.remove_padding = true,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_YUYV,
- 		.mmal = MMAL_ENCODING_YUYV,
- 		.depth = 16,
- 		.mmal_component = COMP_CAMERA,
- 		.ybbp = 2,
--		.remove_padding = 0,
-+		.remove_padding = false,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_RGB24,
- 		.mmal = MMAL_ENCODING_RGB24,
- 		.depth = 24,
- 		.mmal_component = COMP_CAMERA,
- 		.ybbp = 3,
--		.remove_padding = 0,
-+		.remove_padding = false,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_JPEG,
- 		.flags = V4L2_FMT_FLAG_COMPRESSED,
-@@ -109,7 +109,7 @@ static struct mmal_fmt formats[] = {
- 		.depth = 8,
- 		.mmal_component = COMP_IMAGE_ENCODE,
- 		.ybbp = 0,
--		.remove_padding = 0,
-+		.remove_padding = false,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_H264,
- 		.flags = V4L2_FMT_FLAG_COMPRESSED,
-@@ -117,7 +117,7 @@ static struct mmal_fmt formats[] = {
- 		.depth = 8,
- 		.mmal_component = COMP_VIDEO_ENCODE,
- 		.ybbp = 0,
--		.remove_padding = 0,
-+		.remove_padding = false,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_MJPEG,
- 		.flags = V4L2_FMT_FLAG_COMPRESSED,
-@@ -125,63 +125,63 @@ static struct mmal_fmt formats[] = {
- 		.depth = 8,
- 		.mmal_component = COMP_VIDEO_ENCODE,
- 		.ybbp = 0,
--		.remove_padding = 0,
-+		.remove_padding = false,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_YVYU,
- 		.mmal = MMAL_ENCODING_YVYU,
- 		.depth = 16,
- 		.mmal_component = COMP_CAMERA,
- 		.ybbp = 2,
--		.remove_padding = 0,
-+		.remove_padding = false,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_VYUY,
- 		.mmal = MMAL_ENCODING_VYUY,
- 		.depth = 16,
- 		.mmal_component = COMP_CAMERA,
- 		.ybbp = 2,
--		.remove_padding = 0,
-+		.remove_padding = false,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_UYVY,
- 		.mmal = MMAL_ENCODING_UYVY,
- 		.depth = 16,
- 		.mmal_component = COMP_CAMERA,
- 		.ybbp = 2,
--		.remove_padding = 0,
-+		.remove_padding = false,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_NV12,
- 		.mmal = MMAL_ENCODING_NV12,
- 		.depth = 12,
- 		.mmal_component = COMP_CAMERA,
- 		.ybbp = 1,
--		.remove_padding = 1,
-+		.remove_padding = true,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_BGR24,
- 		.mmal = MMAL_ENCODING_BGR24,
- 		.depth = 24,
- 		.mmal_component = COMP_CAMERA,
- 		.ybbp = 3,
--		.remove_padding = 0,
-+		.remove_padding = false,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_YVU420,
- 		.mmal = MMAL_ENCODING_YV12,
- 		.depth = 12,
- 		.mmal_component = COMP_CAMERA,
- 		.ybbp = 1,
--		.remove_padding = 1,
-+		.remove_padding = true,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_NV21,
- 		.mmal = MMAL_ENCODING_NV21,
- 		.depth = 12,
- 		.mmal_component = COMP_CAMERA,
- 		.ybbp = 1,
--		.remove_padding = 1,
-+		.remove_padding = true,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_BGR32,
- 		.mmal = MMAL_ENCODING_BGRA,
- 		.depth = 32,
- 		.mmal_component = COMP_CAMERA,
- 		.ybbp = 4,
--		.remove_padding = 0,
-+		.remove_padding = false,
- 	},
- };
- 
-@@ -1147,7 +1147,7 @@ static int mmal_setup_components(struct bcm2835_mmal_dev *dev,
- 	struct vchiq_mmal_port *port = NULL, *camera_port = NULL;
- 	struct vchiq_mmal_component *encode_component = NULL;
- 	struct mmal_fmt *mfmt = get_format(f);
--	u32 remove_padding;
-+	bool remove_padding;
- 
- 	if (!mfmt)
- 		return -EINVAL;
--- 
-2.38.1
+> Jerome Neanne <jneanne@baylibre.com> writes:
+>
+>> Development boards from TI: SK-AM64 PROC1004 include the TPS65219 PMIC.
+>> Add support for the TPS65219 PMIC by enabling MFD, regulator and
+>> power-button drivers.  All drivers enabled as modules.
+>>
+>> Signed-off-by: Jerome Neanne <jneanne@baylibre.com>
+>> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+>
+> Reviewed-by: Kevin Hilman <khilman@baylibre.com>
+
+Could you pick this one up via the soc tree?  The mfd & input parts have
+been applied.
+
+In case you don't have the full series in your inbox, it's here:
+https://lore.kernel.org/r/20221104152311.1098603-1-jneanne@baylibre.com
+
+Thanks,
+
+Kevin
 
