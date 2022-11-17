@@ -2,100 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB5D462E63D
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 22:01:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FCA162E649
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 22:04:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239771AbiKQVBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 16:01:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47722 "EHLO
+        id S240398AbiKQVEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 16:04:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231919AbiKQVBp (ORCPT
+        with ESMTP id S239985AbiKQVDo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 16:01:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 382271004D;
-        Thu, 17 Nov 2022 13:01:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C453E6223F;
-        Thu, 17 Nov 2022 21:01:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4B04C433C1;
-        Thu, 17 Nov 2022 21:01:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668718903;
-        bh=pK84Oh+46qGlbj35Fr/fiQAsI8PUo07QeOABAKvF8PQ=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=ZCMFoS4Q5IRm3PIqnwqena3O+EzT5bxvElqtPEk0o/uiFZG4rloq3U+xuL2cekRGB
-         lbsbQxBrjNjWm4c/5iC8INH3e/4E1/xw2b1MnxkAhRwBSbIiTFVnG9KlrcH3ELnYuQ
-         g4/4vdfdR+qQrxh1BQscyEmC7a+L+4OcWtqxYKKYXr4nGFfgMen/C/AsyBbcZ7cO2u
-         FJ3V6g7VkAq9wWjpotrujtpzlbnBtOvXFbcze8b/BAHwfla6I8kSZv+2PWFlqGoiAf
-         nbSTtd0461JVEIV+TGzzJ8imKrlz2Mr1Dd6Afqbinrk1O9oByPojdxdqcVA87JP7hB
-         j4oD+UmKf/fWg==
-Message-ID: <f31d4114f363ed9de0eba66ad6a730fe013896a6.camel@kernel.org>
-Subject: Re: [PATCH 2/3] fs: namei: Allow follow_down() to uncover auto
- mounts
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Richard Weinberger <richard@nod.at>, linux-nfs@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        chuck.lever@oracle.com, anna@kernel.org,
-        trond.myklebust@hammerspace.com, viro@zeniv.linux.org.uk,
-        raven@themaw.net, chris.chilvers@appsbroker.com,
-        david.young@appsbroker.com, luis.turcitu@appsbroker.com,
-        david@sigma-star.at
-Date:   Thu, 17 Nov 2022 16:01:40 -0500
-In-Reply-To: <20221117191151.14262-3-richard@nod.at>
-References: <20221117191151.14262-1-richard@nod.at>
-         <20221117191151.14262-3-richard@nod.at>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Thu, 17 Nov 2022 16:03:44 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8D022BEA
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 13:03:43 -0800 (PST)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AHKY74p016799;
+        Thu, 17 Nov 2022 21:03:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2022-7-12; bh=MiU74nK64gYccmwmRIXU9lqMFSAbnA0iBagipReue0M=;
+ b=K8oAexBz8+qS8Rw+6jSrRgUhagYjsGLjYRZOjZixa7tQIWfN+RQ1nEAMxDLqizt3TBWF
+ PB3lRDOpV5w2YOPAQEA3cJ0mg9xu69lF+MbN3STTWRjD91Sxwnummet/2jcS9I1KIMTE
+ zkTONLo8+ghtuZtDZ6C718wH53s683CAY+IsQnFPnUVDIWW7ZLfdCy2GRGGvvvQfcdIr
+ I4tXaLyyQsXDQNxGT+yyR/rBPxDAi7ZZuONFXJ2szChxY/uUYT774BMxkiq0PrbsjwD4
+ xL1y1Y1ypRtRo5cwTnEYAYdv/ffDReYKL17EkupMLm4eg82vmurNvfr77EzR+ADbrw74 5A== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kv8yktgkq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 17 Nov 2022 21:03:10 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2AHKeRoc010857;
+        Thu, 17 Nov 2022 21:03:08 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3ku3kagy1q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 17 Nov 2022 21:03:08 +0000
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AHL37Fb032582;
+        Thu, 17 Nov 2022 21:03:07 GMT
+Received: from sid-dell.us.oracle.com (dhcp-10-132-95-73.usdhcp.oraclecorp.com [10.132.95.73])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3ku3kagy08-1;
+        Thu, 17 Nov 2022 21:03:07 +0000
+From:   Sidhartha Kumar <sidhartha.kumar@oracle.com>
+To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Cc:     akpm@linux-foundation.org, songmuchun@bytedance.com,
+        mike.kravetz@oracle.com, willy@infradead.org,
+        almasrymina@google.com, linmiaohe@huawei.com, hughd@google.com,
+        Sidhartha Kumar <sidhartha.kumar@oracle.com>
+Subject: [PATCH mm-unstable v2 00/10] convert core hugetlb functions to folios
+Date:   Thu, 17 Nov 2022 13:02:48 -0800
+Message-Id: <20221117210258.12732-1-sidhartha.kumar@oracle.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-17_06,2022-11-17_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 adultscore=0
+ phishscore=0 malwarescore=0 suspectscore=0 mlxlogscore=886 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211170150
+X-Proofpoint-GUID: Dxcto2aWTr9yjCwghAGnTNJdrNxzVGS5
+X-Proofpoint-ORIG-GUID: Dxcto2aWTr9yjCwghAGnTNJdrNxzVGS5
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-11-17 at 20:11 +0100, Richard Weinberger wrote:
-> This function is only used by NFSD to cross mount points.
-> If a mount point is of type auto mount, follow_down() will
-> not uncover it. Add LOOKUP_AUTOMOUNT to the lookup flags
-> to have ->d_automount() called when NFSD walks down the
-> mount tree.
->=20
-> Signed-off-by: Richard Weinberger <richard@nod.at>
-> ---
->  fs/namei.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/fs/namei.c b/fs/namei.c
-> index 578c2110df02..000c4b84e6be 100644
-> --- a/fs/namei.c
-> +++ b/fs/namei.c
-> @@ -1462,7 +1462,7 @@ int follow_down(struct path *path)
->  {
->  	struct vfsmount *mnt =3D path->mnt;
->  	bool jumped;
-> -	int ret =3D traverse_mounts(path, &jumped, NULL, 0);
-> +	int ret =3D traverse_mounts(path, &jumped, NULL, LOOKUP_AUTOMOUNT);
-> =20
->  	if (path->mnt !=3D mnt)
->  		mntput(mnt);
+============== OVERVIEW ===========================
+Now that many hugetlb helper functions that deal with hugetlb specific
+flags[1] and hugetlb cgroups[2] are converted to folios, higher level
+allocation, prep, and freeing functions within hugetlb can also be
+converted to operate in folios.
 
+Patch 1 of this series implements the wrapper functions around setting
+the compound destructor and compound order for a folio. Besides the user
+added in patch 1, patch 2 and patch 9 also use these helper functions.
 
-What happens when CROSSMOUNT isn't enabled and someone tries to stroll
-into an automount point? I'm guessing the automount happens but the
-export is denied? It seems like LOOKUP_AUTOMOUNT ought to be conditional
-on the parent export having CROSSMOUNT set.
+Patches 2-10 convert the higher level hugetlb functions to folios.
 
-There's also another caller of follow_down too, the UNIX98 pty code.
-This may be harmless for it, but it'd be best not to perturb that if we
-can help it.
+============== TESTING ===========================
+LTP:
+	Ran 10 back to back rounds of the LTP hugetlb test suite.
 
-Maybe follow_down can grow a lookupflags argument?
---=20
-Jeff Layton <jlayton@kernel.org>
+Gigantic Huge Pages:
+	Test allocation and freeing via hugeadm commands:
+		hugeadm --pool-pages-min 1GB:10
+		hugeadm --pool-pages-min 1GB:0
+
+Demote:
+	Demote 1 1GB hugepages to 512 2MB hugepages
+		echo 1 > /sys/kernel/mm/hugepages/hugepages-1048576kB/nr_hugepages
+		echo 1 > /sys/kernel/mm/hugepages/hugepages-1048576kB/demote
+		cat /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
+			# 512
+		cat /sys/kernel/mm/hugepages/hugepages-1048576kB/nr_hugepages
+			# 0
+
+Rebased on 10/17/2022 mm-unstable
+
+[1] https://lore.kernel.org/lkml/20220922154207.1575343-1-sidhartha.kumar@oracle.com/
+[2] https://lore.kernel.org/linux-mm/20221101223059.460937-1-sidhartha.kumar@oracle.com/
+
+v1 -> v2:
+	- fix conflict with "mm,thp,rmap: simplify compound page mapcount handling"
+
+Sidhartha Kumar (10):
+  mm: add folio dtor and order setter functions
+  mm/hugetlb: convert destroy_compound_gigantic_page() to folios
+  mm/hugetlb: convert dissolve_free_huge_page() to folios
+  mm/hugetlb: convert remove_hugetlb_page() to folios
+  mm/hugetlb: convert update_and_free_page() to folios
+  mm/hugetlb: convert add_hugetlb_page() to folios and add
+    hugetlb_cma_folio()
+  mm/hugetlb: convert enqueue_huge_page() to folios
+  mm/hugetlb: convert free_gigantic_page() to folios
+  mm/hugetlb: convert hugetlb prep functions to folios
+  mm/hugetlb: change hugetlb allocation functions to return a folio
+
+ include/linux/mm.h |  16 ++
+ mm/hugetlb.c       | 383 ++++++++++++++++++++++-----------------------
+ 2 files changed, 206 insertions(+), 193 deletions(-)
+
+-- 
+2.38.1
+
