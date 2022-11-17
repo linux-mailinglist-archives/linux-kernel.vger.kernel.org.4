@@ -2,128 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBB0962E366
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:49:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9303862E368
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:50:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234844AbiKQRtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 12:49:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35824 "EHLO
+        id S239934AbiKQRuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 12:50:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232347AbiKQRtR (ORCPT
+        with ESMTP id S232347AbiKQRuA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 12:49:17 -0500
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792E863CA
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 09:49:16 -0800 (PST)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-3704852322fso25984427b3.8
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 09:49:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1wrgTKzaDrTBJIAKqG3lHjG1mI6f1GpMwMp11e5egR4=;
-        b=sGSF4x/7CTOsgayZlnfj2zXvpdTitbQ0wiOoKT9SHtguKHoW7+ek6d1GzqnEZpw6bU
-         YjVWpF/I/Y5R93HVFOgQeDkqofnxtjaoTJOZytTKzU8n/YfGQ9vExjo+7JW9sCps92AW
-         EUYGhreqcjqAh7RAsg2zUkCy4DYtAtxR0j3OFk4nPEJzT2DUKHmaIcFb8b1KFpSFyrbw
-         hNUIjO4KuaElNKvdBerAmw4rDiV9lZ9RVdKhdYMKf6qnvQwU2n+fd/lUcdUkj7w6/2ga
-         tEtWfyTYJZrJzMPfTMwzXQwSTSqJDJOKIVhoCH5oZx55kGDaW0F9vMFRyNnxFx/jrPB/
-         SzLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1wrgTKzaDrTBJIAKqG3lHjG1mI6f1GpMwMp11e5egR4=;
-        b=g/WWDD3PQA7Etg3wQINQwajCGYKWPM9sHCJSxWWUQa8UqrVC1s8JNx6d4EKjWqAHrq
-         1KVMnbxbzrLsXOirWVZkGU7lk4667PsePhhYlH29G2umnELhBQKJDdglVK76qtvBFw0B
-         7xEk7nPSaDRbFVtj/7QuvJ7NEiukNyCsV2xVBKnCALTnvW7w4QxB1EVDG374ae34mXkc
-         9l953VoJJTjxlh8YI48lO6YGJa3apYcf57AvsmbgWVg7M97EVONYTUJ3CjuiGuHuMFRa
-         kz9kDUi9ATuFVoQSTJXmEhqWou0nCboBxnPCCKFWMC9NeYUTfs7nLgEIA/YZ88h+mQd7
-         AKxA==
-X-Gm-Message-State: ANoB5pmFadlrSFK/d70EXhMDGAWdlFExg8IEJ0qt6A9sTJQGlstknauD
-        0Yg/b9eP40qj6foPxdNBCBX8iD2tlGONCoogw4ud1Sh9upU=
-X-Google-Smtp-Source: AA0mqf75oUkC2jN9k/dkeEOGIn/OfK3gmDlfMwThyzfEwe2njYu0dxQ+llKYE22+YU/VQDAmOt3iBT/0LEi2Shh2NTg=
-X-Received: by 2002:a0d:e601:0:b0:356:d0ed:6a79 with SMTP id
- p1-20020a0de601000000b00356d0ed6a79mr2911019ywe.489.1668707355322; Thu, 17
- Nov 2022 09:49:15 -0800 (PST)
+        Thu, 17 Nov 2022 12:50:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580387C031;
+        Thu, 17 Nov 2022 09:49:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E8FE96219E;
+        Thu, 17 Nov 2022 17:49:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15822C433C1;
+        Thu, 17 Nov 2022 17:49:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668707398;
+        bh=WnRGHqZfDipdxaPWHgzJwBRqCoXDbebGZ2a9CcK4lgg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=B8AjFdPgkkWoCHq1oGzAGQ3fg1O6kA7JNCWqx453/ZV1hY7uhaIR6saF72jCBJz6M
+         iGPpqk7s3wnxY5r7EI9WXN082NZC4tfJwTEMNpbYXzWJ65WyWT3uwuskTXDr6HgIlV
+         NsxO6tRY/RcvBWGwv0mrfpU6EbeySXW1bVGh62KefYP6KXc1WGcuQofSnLHABb3jku
+         yQtCqSo9nXDcQXBN1U/LK/qq+eY8PYUKB6rf5RtTBimX4/DF+kSkPLI7WJqHCgTzQb
+         ssOmZbZv7iM2eL+VbTm0RmgyLzPFk1m/LjXL/y6QSwWUtdrodw5vuUIzABgDj+EuqA
+         X8MyCZc69n2QQ==
+Date:   Thu, 17 Nov 2022 17:49:52 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Oliver Upton <oliver.upton@linux.dev>
+Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, kvmarm@lists.linux.dev,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] KVM: arm64: Don't acquire RCU read lock for
+ exclusive table walks
+Message-ID: <20221117174951.GA2916@willie-the-truck>
+References: <20221116165655.2649475-1-oliver.upton@linux.dev>
+ <20221116165655.2649475-3-oliver.upton@linux.dev>
 MIME-Version: 1.0
-References: <20221117031551.1142289-1-joel@joelfernandes.org>
- <20221117031551.1142289-3-joel@joelfernandes.org> <CANn89i+gKVdveEtR9DX15Xr7E9Nn2my6SEEbXTMmxbqtezm2vg@mail.gmail.com>
- <Y3ZaH4C4omQs1OR4@google.com> <CANn89iJRhr8+osviYKVYhcHHk5TnQQD53x87-WG3iTo4YNa0qA@mail.gmail.com>
- <CAEXW_YRULY2KzMtkv+KjA_hSr1tSKhQLuCt-RrOkMLjjwAbwKg@mail.gmail.com>
- <CANn89i+9XRh+p-ZiyY_VKy=EcxEyg+3AdtruMnj=KCgXF7QtoQ@mail.gmail.com> <CAEXW_YS-d_URqjfcasNnqf3zhCKAny8dhhLifAxtrpz1XYd_=w@mail.gmail.com>
-In-Reply-To: <CAEXW_YS-d_URqjfcasNnqf3zhCKAny8dhhLifAxtrpz1XYd_=w@mail.gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Thu, 17 Nov 2022 09:49:04 -0800
-Message-ID: <CANn89i+GcVzgg56fd9iO5Ma6vSUVvJmLHTvRwPMoYKMPR4G4Lw@mail.gmail.com>
-Subject: Re: [PATCH rcu/dev 3/3] net: Use call_rcu_flush() for dst_destroy_rcu
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org, Cong Wang <xiyou.wangcong@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Jiri Pirko <jiri@resnulli.us>, netdev@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>, rcu@vger.kernel.org,
-        rostedt@goodmis.org, paulmck@kernel.org, fweisbec@gmail.com,
-        jiejiang@google.com, Thomas Glexiner <tglx@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221116165655.2649475-3-oliver.upton@linux.dev>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 9:42 AM Joel Fernandes <joel@joelfernandes.org> wrote:
->
+On Wed, Nov 16, 2022 at 04:56:55PM +0000, Oliver Upton wrote:
+> Marek reported a BUG resulting from the recent parallel faults changes,
+> as the hyp stage-1 map walker attempted to allocate table memory while
+> holding the RCU read lock:
+> 
+>   BUG: sleeping function called from invalid context at
+>   include/linux/sched/mm.h:274
+>   in_atomic(): 0, irqs_disabled(): 0, non_block: 0, pid: 1, name: swapper/0
+>   preempt_count: 0, expected: 0
+>   RCU nest depth: 1, expected: 0
+>   2 locks held by swapper/0/1:
+>     #0: ffff80000a8a44d0 (kvm_hyp_pgd_mutex){+.+.}-{3:3}, at:
+>   __create_hyp_mappings+0x80/0xc4
+>     #1: ffff80000a927720 (rcu_read_lock){....}-{1:2}, at:
+>   kvm_pgtable_walk+0x0/0x1f4
+>   CPU: 2 PID: 1 Comm: swapper/0 Not tainted 6.1.0-rc3+ #5918
+>   Hardware name: Raspberry Pi 3 Model B (DT)
+>   Call trace:
+>     dump_backtrace.part.0+0xe4/0xf0
+>     show_stack+0x18/0x40
+>     dump_stack_lvl+0x8c/0xb8
+>     dump_stack+0x18/0x34
+>     __might_resched+0x178/0x220
+>     __might_sleep+0x48/0xa0
+>     prepare_alloc_pages+0x178/0x1a0
+>     __alloc_pages+0x9c/0x109c
+>     alloc_page_interleave+0x1c/0xc4
+>     alloc_pages+0xec/0x160
+>     get_zeroed_page+0x1c/0x44
+>     kvm_hyp_zalloc_page+0x14/0x20
+>     hyp_map_walker+0xd4/0x134
+>     kvm_pgtable_visitor_cb.isra.0+0x38/0x5c
+>     __kvm_pgtable_walk+0x1a4/0x220
+>     kvm_pgtable_walk+0x104/0x1f4
+>     kvm_pgtable_hyp_map+0x80/0xc4
+>     __create_hyp_mappings+0x9c/0xc4
+>     kvm_mmu_init+0x144/0x1cc
+>     kvm_arch_init+0xe4/0xef4
+>     kvm_init+0x3c/0x3d0
+>     arm_init+0x20/0x30
+>     do_one_initcall+0x74/0x400
+>     kernel_init_freeable+0x2e0/0x350
+>     kernel_init+0x24/0x130
+>     ret_from_fork+0x10/0x20
+> 
+> Since the hyp stage-1 table walkers are serialized by kvm_hyp_pgd_mutex,
+> RCU protection really doesn't add anything. Don't acquire the RCU read
+> lock for an exclusive walk. While at it, add a warning which codifies
+> the lack of support for shared walks in the hypervisor code.
+> 
+> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
+> ---
+>  arch/arm64/include/asm/kvm_pgtable.h | 22 ++++++++++++++++------
+>  arch/arm64/kvm/hyp/pgtable.c         |  4 ++--
+>  2 files changed, 18 insertions(+), 8 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/kvm_pgtable.h b/arch/arm64/include/asm/kvm_pgtable.h
+> index f23af693e3c5..a07fc5e35a8c 100644
+> --- a/arch/arm64/include/asm/kvm_pgtable.h
+> +++ b/arch/arm64/include/asm/kvm_pgtable.h
+> @@ -229,8 +229,16 @@ static inline kvm_pte_t *kvm_dereference_pteref(struct kvm_pgtable_walker *walke
+>  	return pteref;
+>  }
+>  
+> -static inline void kvm_pgtable_walk_begin(void) {}
+> -static inline void kvm_pgtable_walk_end(void) {}
+> +static inline void kvm_pgtable_walk_begin(struct kvm_pgtable_walker *walker)
+> +{
+> +	/*
+> +	 * Due to the lack of RCU (or a similar protection scheme), only
+> +	 * non-shared table walkers are allowed in the hypervisor.
+> +	 */
+> +	WARN_ON(walker->flags & KVM_PGTABLE_WALK_SHARED);
+> +}
 
->
-> Yes, I agree. Your comments here have not been useful (or respectful)
-> so I am Ok with that.
->
->  - Joel
+I think it would be better to propagate the error to the caller rather
+than WARN here. Since you're rejigging things anyway, can you have this
+function return int?
 
-Well, I have discovered that some changes went in networking tree
-without network maintainers being involved nor CCed.
-
-What can I say ?
-
-It seems I have no say, right ?
-
-
-commit f32846476afbe1f296c41d036219178b3dfb6a9d
-Author: Joel Fernandes (Google) <joel@joelfernandes.org>
-Date:   Sun Oct 16 16:23:04 2022 +0000
-
-    rxrpc: Use call_rcu_flush() instead of call_rcu()
-
-    call_rcu() changes to save power may cause slowness. Use the
-    call_rcu_flush() API instead which reverts to the old behavior.
-
-    We find this via inspection that the RCU callback does a wakeup of a
-    thread. This usually indicates that something is waiting on it. To be
-    safe, let us use call_rcu_flush() here instead.
-
-    Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-
-diff --git a/net/rxrpc/conn_object.c b/net/rxrpc/conn_object.c
-index 22089e37e97f0628f780855f9e219e5c33d4afa1..fdcfb509cc4434b0781b76623532aff9c854ce60
-100644
---- a/net/rxrpc/conn_object.c
-+++ b/net/rxrpc/conn_object.c
-@@ -253,7 +253,7 @@ void rxrpc_kill_connection(struct rxrpc_connection *conn)
-         * must carry a ref on the connection to prevent us getting here whilst
-         * it is queued or running.
-         */
--       call_rcu(&conn->rcu, rxrpc_destroy_connection);
-+       call_rcu_flush(&conn->rcu, rxrpc_destroy_connection);
- }
-
- /*
+Will
