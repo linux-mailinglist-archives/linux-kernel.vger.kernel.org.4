@@ -2,102 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 562E262D64E
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 10:18:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A74E62D64F
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 10:18:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239812AbiKQJSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 04:18:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43602 "EHLO
+        id S239826AbiKQJS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 04:18:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239808AbiKQJSf (ORCPT
+        with ESMTP id S239807AbiKQJSq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 04:18:35 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8017B60C0
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 01:18:25 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id j16so1788241lfe.12
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 01:18:25 -0800 (PST)
+        Thu, 17 Nov 2022 04:18:46 -0500
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83E8360377
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 01:18:40 -0800 (PST)
+Received: by mail-il1-x12e.google.com with SMTP id o13so622794ilc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 01:18:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lLFGwEWPh+89QV0pVhSS68GinK0G+oaZz4v6Lu9hAZs=;
-        b=LkMa0Dl0cNwFkd3Q3OQLsQFFNFtI+G8p4jjHruzKFqDFaxOB0nYlAHulUFdSYR9G3e
-         zfYmMOVN29KSDydbMwW6ElcJdg4lsE6tEaRjSwOp+UggOL1UWg2xM6WTvzTFcJfL0ehT
-         NMEl4dyNHR0IIxFPlTw95P03mFvMFJVAU32e5dZ7YN0CYHLFdz3hYNRwkL0A3OlmoSYT
-         zrDLB8VAAdFPg0lCz6HLhT4OurxKsuF2zO4AMEHhHMP3QNg/HQnSCOL9F5r+AbHNZzM+
-         ZW848XWUK6uJq1kHLN2fHocExahorRrc7Mlwn4vShZ5KcICTylHVrsGP8RjedPG2UXmm
-         IjzQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rnNkhD49ZX86noJXnc45GrrX0asvHoDEzC6w1qgJFjQ=;
+        b=oUEoVoNVq+/z4tPMfMzXi/xMduKKG6eGVwa1i1wRb0zwhqEYHn9gwftg/id7J+Sb0C
+         eXrLLo0hDDhcJjV1zmrxU2nBbSGAetGD+9YXAwU2UCZmBTR7zLGN11BU+9qS3qgcqvJa
+         AHOeR2Xn8/2R7K6+veESpZt+x7P7QUgGOSXY3gR2mRjJg2aRSUJxgcQchqgq6NT902iT
+         xVynXl9BvfHq1MGIC83DrKNUl2ujhMxgEfnUe7Bzw23QtfGrJg0azCW1bPVvoXh+8HF4
+         bgY6vG6jK8IfWvC39RmxWwpCk+AdSbGw09GLy47bAIlzgye50ZdTh+Cc6oPpLO2ZdQZ0
+         WDiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lLFGwEWPh+89QV0pVhSS68GinK0G+oaZz4v6Lu9hAZs=;
-        b=yVAHkSQcSGsHf+34cgPu4UJa65YVMPIcMR3ta4u5IRZmiyBvsHdyqkUKqBpkrI4gon
-         RS6HeFhQIRJsvsjN6618h83aIS106bDkel/4wzZfz81dXb/dp3bDcu+fWwz5tm5IDX5I
-         d/Uuoy4yYv7vCCui4Wm4G+R3g0AjY3YLJuhb+wdpkpe7x6ToAkGTXBEp2MSaKv+ymuq5
-         0jzL4pdy2stfnH2fhfcqlOYaItWdG7H4blPHeOfpkkuVCmreIbskoN3t+uQcnGx7uDt7
-         pvrl7PNangNBTcrZYIKD6qsjhHah1RB0VVE9rDciQaZGg3YXHvlOoQjn/c5znD+injG/
-         r6Ow==
-X-Gm-Message-State: ANoB5pl9ZNcSl9sdEt5Fxh+Z2sX6WxT0zm/Qi7PJ8jm+oDHsOMiotfp/
-        jibkF3jqaNpVl7eScpYp9oZtmQ==
-X-Google-Smtp-Source: AA0mqf4/6BJcvJvcM+zce625GqtjXKyhZFyZtLVu6hUl5YtywTAvK6E7RO04n2pluWLT4D7i7ORDRw==
-X-Received: by 2002:ac2:4c18:0:b0:4a2:6e2e:2d17 with SMTP id t24-20020ac24c18000000b004a26e2e2d17mr567318lfq.339.1668676703843;
-        Thu, 17 Nov 2022 01:18:23 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id z10-20020ac25dea000000b0048b003c4bf7sm56570lfq.169.2022.11.17.01.18.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Nov 2022 01:18:23 -0800 (PST)
-Message-ID: <d9c41d62-6318-0fec-c2f6-9eac8f2d0de0@linaro.org>
-Date:   Thu, 17 Nov 2022 10:18:22 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rnNkhD49ZX86noJXnc45GrrX0asvHoDEzC6w1qgJFjQ=;
+        b=Xjs8+sm37T+f9KXiNeONDMKn9AUzbQ3Dda8/WS1tcWyLY2du/vYIUz6vyLIVixbtsy
+         UzoEWnSWCAl4K6g05f/7i+sSrXNJwNhgMyzDYa9gIroR0Makb+x6HVgGjx73dmsHud7F
+         zfg5aG2KKU/Tk0n/ban6AMgoMPCc3GL5s537S/Pox2g+KyKwEpYPJLE8kC8hSNv3bZU3
+         vBbT20/6HFTxPZUzGYGvgu9ayZREK1Jyfr83MCyUC3WoLohfg9afVFfw8A8rXx5jOD3f
+         it4rvCQlM+1rbXinwBFmn+UbGm0dAhjJEBmUlbLLSwqM17XHrSdZZTof6o+DsUzJTmZh
+         F5vA==
+X-Gm-Message-State: ANoB5pla8Q6TVvyZ2x8+bszwQjbji01DVPGVisoU2HrbR+8AW3kBB7ee
+        JZipdSMNuyejo0LppAXI4gYIDc5PWW7hfbCcsPvk4w==
+X-Google-Smtp-Source: AA0mqf5xuAPtl0jH4aMVdgd2horFQvkUCaSlkdiVX3z0bAKWklPigkCb4DrPkxKRN3rfGkbmf1p4/h9Brt1UjfwsBdc=
+X-Received: by 2002:a92:2611:0:b0:302:815d:50c1 with SMTP id
+ n17-20020a922611000000b00302815d50c1mr889848ile.31.1668676719743; Thu, 17 Nov
+ 2022 01:18:39 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 5/7] dt-bindings: pinctrl: qcom,pmic-gpio: document
- pmr735d
-Content-Language: en-US
-To:     neil.armstrong@linaro.org, Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Lee Jones <lee@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org
-References: <20221114-narmstrong-sm8550-upstream-spmi-v1-0-6338a2b4b241@linaro.org>
- <20221114-narmstrong-sm8550-upstream-spmi-v1-5-6338a2b4b241@linaro.org>
- <2ca3260e-f3f6-cd69-96c7-e971fa757968@linaro.org>
- <575758c9-6bc1-e980-4aba-b49cf9246d03@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <575758c9-6bc1-e980-4aba-b49cf9246d03@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20221110175009.18458-1-vincent.guittot@linaro.org>
+ <20221110175009.18458-2-vincent.guittot@linaro.org> <Y3Gwr2p5BcofuZ8e@google.com>
+ <CAKfTPtD2A3QaMON_jkhaobY0Wy+LpnAnfhtuaozK_OkmSvuf8Q@mail.gmail.com> <Y3SefaraLvX2hPYj@ziqianlu-desk2>
+In-Reply-To: <Y3SefaraLvX2hPYj@ziqianlu-desk2>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Thu, 17 Nov 2022 10:18:28 +0100
+Message-ID: <CAKfTPtBX_3rZ_7sNUrt7isqa9wvJ1KZpe=Prsycq59iO+UWvxg@mail.gmail.com>
+Subject: Re: [PATCH v8 1/9] sched/fair: fix unfairness at wakeup
+To:     Aaron Lu <aaron.lu@intel.com>
+Cc:     Joel Fernandes <joel@joelfernandes.org>, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
+        qyousef@layalina.io, chris.hyser@oracle.com,
+        patrick.bellasi@matbug.net, David.Laight@aculab.com,
+        pjt@google.com, pavel@ucw.cz, tj@kernel.org, qperret@google.com,
+        tim.c.chen@linux.intel.com, joshdon@google.com, timj@gnu.org,
+        kprateek.nayak@amd.com, yu.c.chen@intel.com,
+        youssefesmat@chromium.org, riel@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/11/2022 08:42, Neil Armstrong wrote:
-> On 16/11/2022 12:17, Krzysztof Kozlowski wrote:
->> On 16/11/2022 11:11, Neil Armstrong wrote:
->>> Document compatible, pin count & pin names for pmr735d.
->>>
->>
->> Squash with previous.
-> 
-> I'll squash 5 into 4, can I keep your Reviewed-by on 4 ?
+On Wed, 16 Nov 2022 at 09:26, Aaron Lu <aaron.lu@intel.com> wrote:
+>
+> On Mon, Nov 14, 2022 at 12:05:18PM +0100, Vincent Guittot wrote:
+> > On Mon, 14 Nov 2022 at 04:06, Joel Fernandes <joel@joelfernandes.org> wrote:
+> > >
+> > > Hi Vincent,
+> > >
+> > > On Thu, Nov 10, 2022 at 06:50:01PM +0100, Vincent Guittot wrote:
+>
+> ... ...
+>
+> > > > +static inline unsigned long  get_latency_max(void)
+> > > > +{
+> > > > +     unsigned long thresh = get_sched_latency(false);
+> > > > +
+> > > > +     thresh -= sysctl_sched_min_granularity;
+> > >
+> > > Could you clarify, why are you subtracting sched_min_granularity here? Could
+> > > you add some comments here to make it clear?
+> >
+> > If the waking task failed to preempt current it could to wait up to
+> > sysctl_sched_min_granularity before preempting it during next tick.
+>
+> check_preempt_tick() compares vdiff/delta between the leftmost se and
+> curr against curr's ideal_runtime, it doesn't use thresh here or the
+> adjusted wakeup_gran, so I don't see why reducing thresh here can help
+> se to preempt curr during next tick if it failed to preempt curr in its
+> wakeup path.
 
-Yes.
+If waking task doesn't preempt curr, it will wait for the next
+check_preempt_tick(), but check_preempt_tick() ensures a minimum
+runtime of sysctl_sched_min_granularity before comparing the vruntime.
+Thresh doesn't help in check_preempt_tick() but anticipate the fact
+that if it fails to preempt now, current can get an additional
+sysctl_sched_min_granularity runtime before being preempted.
 
-Best regards,
-Krzysztof
-
+>
+> I can see reducing thresh here with whatever value can help the waking
+> se to preempt curr in wakeup_preempt_entity() though, because most
+> likely the waking se's vruntime is cfs_rq->min_vruntime -
+> sysctl_sched_latency/2 and curr->vruntime is near cfs_rq->min_vruntime
+> so vdiff is about sysctl_sched_latency/2, which is the same value as
+> get_sched_latency(false) and when thresh is reduced some bit, then vdiff
+> in wakeup_preempt_entity() will be larger than gran and make it possible
+> to preempt.
+>
+> So I'm confused by your comment or I might misread the code.
