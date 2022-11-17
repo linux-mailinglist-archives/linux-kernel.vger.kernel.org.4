@@ -2,193 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A69A62E3B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 19:06:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E151862E3BA
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 19:07:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240256AbiKQSGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 13:06:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46266 "EHLO
+        id S235039AbiKQSHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 13:07:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234925AbiKQSGC (ORCPT
+        with ESMTP id S234811AbiKQSHG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 13:06:02 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFB9A697D2;
-        Thu, 17 Nov 2022 10:06:00 -0800 (PST)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AHHqJ9R026486;
-        Thu, 17 Nov 2022 18:05:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=23YpcWHp7RXhRkJzkYcEYErF8JfBkyEzzT7Mr4ILTDk=;
- b=BQzngDN/k1BIi9flXfs14CuP1AbywTFOY/bz65u85R3gC/4K5DwpXFJYNd4Ew+ui/MVh
- pY5PCwHvqLAikZ3eVWao/Q2zSyJopwKEFL/gcx9JNwcPyfsKrgkbODCbFqFN2RxnFvSB
- k8bDgQyHEO7l3mQsM6/NspaN0OsvR7/BMHpsGV3Wje945PSrYQv1WrG1wAlYvAhXPk2z
- J/gyY7j3R5J8HPi+ifYtlCUHqnwjiMDrTuX0sDzhgfPm5YlOPbFbMFfzpbwajw+J79EJ
- busdH3KbRxBl0PbVUX7DasVw2Qye+0/bxmYMwHF02D1WeIztZhJTxL7YPwsoByMTc9qP vA== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kwrsk0c8s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Nov 2022 18:05:57 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AHI5u8B009282
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Nov 2022 18:05:56 GMT
-Received: from youghand-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Thu, 17 Nov 2022 10:05:53 -0800
-From:   Youghandhar Chintala <quic_youghand@quicinc.com>
-To:     <ath10k@lists.infradead.org>
-CC:     <linux-wireless@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_mpubbise@quicinc.com>, <rameshn@qti.qualcomm.com>,
-        Youghandhar Chintala <quic_youghand@quicinc.com>
-Subject: [PATCH v4] wifi: ath10k: Store WLAN firmware version in SMEM image table
-Date:   Thu, 17 Nov 2022 23:35:34 +0530
-Message-ID: <20221117180534.2267-1-quic_youghand@quicinc.com>
-X-Mailer: git-send-email 2.38.0
+        Thu, 17 Nov 2022 13:07:06 -0500
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D622E697D2
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 10:07:04 -0800 (PST)
+Received: by mail-qt1-x829.google.com with SMTP id e15so1620417qts.1
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 10:07:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2HPIXQbIrPnuqK125OGbmjGgvwi+I/0K6FJ7sbpZHi0=;
+        b=nAEb4V+rPllk4yYfIKmhZuBLFGuUNzw4u9T5qf6/naX6NI/vvSZsg6P9EQXt0HvJCn
+         3cPXYuiUgg7ZM8+T+N+/C4WEs4m5Jm/RPrO7DLtmw1XV+94gVpFMLDi8qfyWUbSOtCmg
+         YZv4roOTmITs4+PiJVPVdX7z71XMOYCkF6+p67ml48vveURuDGWswXGSnWNkSFtEzOow
+         /2EEi2WJKFL/2GQAlIB+ALJ2D1yuSNie57I6z+BENl2rLkgfYQE/LN5i3aVziADhGWJY
+         5GxzMqekQeJMlU2SlBJMQJU43fLHyG02Oy0KJ1YtAAUoB3d7C13rrsCygGBGZCFANdiv
+         MeSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2HPIXQbIrPnuqK125OGbmjGgvwi+I/0K6FJ7sbpZHi0=;
+        b=MVLD0Z+LqzRuElesN+2poczkKGHj0cswb+SSeS6Qi0uhpOP/czi+/RK4FoUvU2BiOT
+         J3VHqzaseGtJF9fbrQgFjRpnucdgMPGYnbgsVryO7y9aEU7XYW+GESbV4NElpczOEhr5
+         F53YZHt6tCvGwBoGq0+4+6L5UVkU7N70oRtvYNTYL5P6Gl6KhpzwTRLiG0RstneNgSK6
+         1d5HC24G3Gh/9Jrv/62BgmfpJ5nBIsG9ZIIFHKm7Pl3s/oTXYBkctS2Uw0LsC/lyf3TN
+         ok9hCXFtto7u/2YNA0mDdaQeOnSAjQZjlRBmjv41NufzrO1DbYouIgN68WWn/39cmMRl
+         bSQg==
+X-Gm-Message-State: ANoB5plKLlg52zv3192wWb8VmkKsQoSSbPGuhcOh4OLmyXS2A7A46T1n
+        EiYj5Zh91WtHmDGjatB2dT3hHCX4dV8MYQ==
+X-Google-Smtp-Source: AA0mqf4CgakhwYHpec/A0fPHzxBoFCwV3ijijJ39AMA/ov/Z3Txnly7AUnen6dCUMERwaQfYlsO/sA==
+X-Received: by 2002:ac8:108d:0:b0:391:6892:16cb with SMTP id a13-20020ac8108d000000b00391689216cbmr3310779qtj.332.1668708423959;
+        Thu, 17 Nov 2022 10:07:03 -0800 (PST)
+Received: from localhost ([2620:10d:c091:480::1:bc4])
+        by smtp.gmail.com with ESMTPSA id p16-20020a05620a057000b006fb8239db65sm813592qkp.43.2022.11.17.10.07.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 10:07:01 -0800 (PST)
+Date:   Thu, 17 Nov 2022 13:07:24 -0500
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Chao Xu <amos.xuchao@gmail.com>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Chao Xu <Chao.Xu9@zeekrlife.com>,
+        yu@cmpxchg.org
+Subject: Re: [PATCH v1] mm/vmscan: simplify the nr assignment logic for pages
+ to scan
+Message-ID: <Y3Z4XMKvcBOAwZvU@cmpxchg.org>
+References: <20221110113130.284290-1-Chao.Xu9@zeekrlife.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 3gFMwSTY54VgrZoOZN1D5KT-CuEznU46
-X-Proofpoint-ORIG-GUID: 3gFMwSTY54VgrZoOZN1D5KT-CuEznU46
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-17_06,2022-11-17_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
- suspectscore=0 mlxlogscore=999 mlxscore=0 spamscore=0 lowpriorityscore=0
- impostorscore=0 priorityscore=1501 phishscore=0 bulkscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2211170130
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221110113130.284290-1-Chao.Xu9@zeekrlife.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In a SoC based solution, it would be useful to know the versions of the
-various binary firmware blobs the system is running on. On a QCOM based
-SoC, this info can be obtained from socinfo debugfs infrastructure. For
-this to work, respective subsystem drivers have to export the firmware
-version information to an SMEM based version information table.
+On Thu, Nov 10, 2022 at 07:31:30PM +0800, Chao Xu wrote:
+> By default the assignment logic of anonymouns or file inactive
+> pages and active pages to scan using the same duplicated code
+> snippet. To simplify the logic, merge the same part.
+> 
+> Signed-off-by: Chao Xu <Chao.Xu9@zeekrlife.com>
+> ---
+>  mm/vmscan.c | 13 +++++--------
+>  1 file changed, 5 insertions(+), 8 deletions(-)
+> 
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index 04d8b88e5216..69e458e51c81 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -5932,14 +5932,11 @@ static void shrink_lruvec(struct lruvec *lruvec, struct scan_control *sc)
+>  		 * scan target and the percentage scanning already complete
+>  		 */
+>  		lru = (lru == LRU_FILE) ? LRU_BASE : LRU_FILE;
+> -		nr_scanned = targets[lru] - nr[lru];
+> -		nr[lru] = targets[lru] * (100 - percentage) / 100;
+> -		nr[lru] -= min(nr[lru], nr_scanned);
+> -
+> -		lru += LRU_ACTIVE;
+> -		nr_scanned = targets[lru] - nr[lru];
+> -		nr[lru] = targets[lru] * (100 - percentage) / 100;
+> -		nr[lru] -= min(nr[lru], nr_scanned);
+> +		for ( ; lru <= lru + LRU_ACTIVE; lru += LRU_ACTIVE) {
 
-Having firmware version information at one place will help quickly
-figure out the firmware versions of various subsystems on the device
-instead of going through builds/logs in an event of a system crash.
+As Yu points out, this will loop until lru overflows.
 
-Fill WLAN firmware version information in SMEM version table to be
-printed as part of socinfo debugfs infrastructure on a Qualcomm based
-SoC.
-
-This change is applicable only for SNOC/QMI based targets.
-
-Example:
-cat /sys/kernel/debug/qcom_socinfo/cnss/name
-QC_IMAGE_VERSION_STRING=WLAN.HL.3.2.2.c10-00754-QCAHLSWMTPL-1
-
-Tested-on: WCN3990 hw1.0 SNOC WLAN.HL.3.2.2.c10-00754-QCAHLSWMTPL-1
-
-Signed-off-by: Youghandhar Chintala <quic_youghand@quicinc.com>
----
-Changes from v3:
- - Changed patch title
- - Changed naming conventions
- - Removed MAX_BUILD_ID_LEN usuage
- - Added condition to call API
- - Changed depends on QCOM_SMEM to select QCOM_SMEM
----
- drivers/net/wireless/ath/ath10k/Kconfig |  1 +
- drivers/net/wireless/ath/ath10k/qmi.c   | 35 +++++++++++++++++++++++++
- 2 files changed, 36 insertions(+)
-
-diff --git a/drivers/net/wireless/ath/ath10k/Kconfig b/drivers/net/wireless/ath/ath10k/Kconfig
-index ca007b800f75..e0a51dad8e42 100644
---- a/drivers/net/wireless/ath/ath10k/Kconfig
-+++ b/drivers/net/wireless/ath/ath10k/Kconfig
-@@ -44,6 +44,7 @@ config ATH10K_SNOC
- 	tristate "Qualcomm ath10k SNOC support"
- 	depends on ATH10K
- 	depends on ARCH_QCOM || COMPILE_TEST
-+	select QCOM_SMEM
- 	select QCOM_SCM
- 	select QCOM_QMI_HELPERS
- 	help
-diff --git a/drivers/net/wireless/ath/ath10k/qmi.c b/drivers/net/wireless/ath/ath10k/qmi.c
-index 66cb7a1e628a..cdcb162f93c2 100644
---- a/drivers/net/wireless/ath/ath10k/qmi.c
-+++ b/drivers/net/wireless/ath/ath10k/qmi.c
-@@ -14,6 +14,7 @@
- #include <linux/net.h>
- #include <linux/platform_device.h>
- #include <linux/qcom_scm.h>
-+#include <linux/soc/qcom/smem.h>
- #include <linux/string.h>
- #include <net/sock.h>
- 
-@@ -22,6 +23,10 @@
- 
- #define ATH10K_QMI_CLIENT_ID		0x4b4e454c
- #define ATH10K_QMI_TIMEOUT		30
-+#define SMEM_IMAGE_VERSION_TABLE       469
-+#define SMEM_IMAGE_TABLE_CNSS_INDEX     13
-+#define SMEM_IMAGE_VERSION_ENTRY_SIZE	128
-+#define SMEM_IMAGE_VERSION_NAME_SIZE	75
- 
- static int ath10k_qmi_map_msa_permission(struct ath10k_qmi *qmi,
- 					 struct ath10k_msa_mem_info *mem_info)
-@@ -536,6 +541,33 @@ int ath10k_qmi_wlan_disable(struct ath10k *ar)
- 	return ath10k_qmi_mode_send_sync_msg(ar, QMI_WLFW_OFF_V01);
- }
- 
-+static void ath10k_qmi_add_wlan_ver_smem(struct ath10k *ar, const char *fw_build_id)
-+{
-+	u8 *table_ptr;
-+	size_t smem_item_size;
-+	const u32 smem_img_idx_wlan = SMEM_IMAGE_TABLE_CNSS_INDEX *
-+				      SMEM_IMAGE_VERSION_ENTRY_SIZE;
-+
-+	table_ptr = qcom_smem_get(QCOM_SMEM_HOST_ANY,
-+				  SMEM_IMAGE_VERSION_TABLE,
-+				  &smem_item_size);
-+
-+	if (IS_ERR(table_ptr)) {
-+		ath10k_err(ar, "smem image version table not found\n");
-+		return;
-+	}
-+
-+	if (smem_img_idx_wlan + SMEM_IMAGE_VERSION_ENTRY_SIZE >
-+	    smem_item_size) {
-+		ath10k_err(ar, "smem block size too small: %zu\n",
-+			   smem_item_size);
-+		return;
-+	}
-+
-+	strscpy(table_ptr + smem_img_idx_wlan, fw_build_id,
-+		SMEM_IMAGE_VERSION_NAME_SIZE);
-+}
-+
- static int ath10k_qmi_cap_send_sync_msg(struct ath10k_qmi *qmi)
- {
- 	struct wlfw_cap_resp_msg_v01 *resp;
-@@ -606,6 +638,9 @@ static int ath10k_qmi_cap_send_sync_msg(struct ath10k_qmi *qmi)
- 			    qmi->fw_version, qmi->fw_build_timestamp, qmi->fw_build_id);
- 	}
- 
-+	if (resp->fw_build_id_valid)
-+		ath10k_qmi_add_wlan_ver_smem(ar, qmi->fw_build_id);
-+
- 	kfree(resp);
- 	return 0;
- 
--- 
-2.38.0
-
+NAK.
