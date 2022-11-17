@@ -2,110 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9946462DA0E
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 12:59:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B893162DA17
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 13:01:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239791AbiKQL7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 06:59:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60458 "EHLO
+        id S239853AbiKQMBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 07:01:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239734AbiKQL7m (ORCPT
+        with ESMTP id S234840AbiKQMBL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 06:59:42 -0500
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 977B65916B
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 03:59:40 -0800 (PST)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-376596ae449so16503297b3.5
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 03:59:40 -0800 (PST)
+        Thu, 17 Nov 2022 07:01:11 -0500
+Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97B8228729;
+        Thu, 17 Nov 2022 04:01:10 -0800 (PST)
+Received: by mail-vs1-xe2c.google.com with SMTP id a6so1284004vsc.5;
+        Thu, 17 Nov 2022 04:01:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=bH+0RvoZ7i4netcv2Qm/XManTXGIlOc5VePUHQ0TQYs=;
-        b=Z+ezOOH1jPwC6RmMuMEYxI3g97rZBUAeNf2AopoKxyRUjsTlNG8iYmoldQ6VfAGoeY
-         /8hxpIxYGOB6np8XrjjirTgIFzkG2c8OnUL4FOKurNb7ey6jWr+uooCrw/q8/HnTt668
-         79rCj8FpqqH/DSbJi4JeZdTEBpYNMvvw4Ws0s7v13KE3bMfO/j+yu2kED8M3045jlHrU
-         viZsBGkZrGsIa4ZyUw1VugoYik/qrloGxGaF0vXYRYfQpHgsG3xBAru2jl7aXpWx9ohl
-         /1tzDjMqEHDFmS5NwXsabq9I9D+Xm4Mcxcl3rRB5WqwSK3whcydMhDD/hZMIQYE93h4C
-         92Ig==
+        bh=HBt8DUE3xpm3UcQFvGVPGZx2MhTcfsoY3gAkEK/8Wf8=;
+        b=QjyhNjW80NVWL/lOz+SS3leVzo7NyiaXDJVo8kceK9mWHhVjmrue29+e/mGzcVDgDB
+         GKOUph429uqyuyYNnW6HWM9BMmcnC7YmDXvkZu1P+bum8p0M3581aUUj0VYQJrlaz9X7
+         4cNaf5RdYczDKVfEUrETPU0vlRQpGoDsQQPSwJnHV9Yj5X2nGMxQF7sl8M3+VqCuM0oE
+         LTcOcRE+EAqjGr8OL37NBxYxm4OLVZWmI6NNQbRVwJzoZdrNzl1pANMY4jK5vemvr0Uo
+         aieHd79W6fhAGRqJzBQDeJH7L1He9N3NB1EMIOeauBRXHVjiLoVFuBpOFiUaD6TCe841
+         5Wzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=bH+0RvoZ7i4netcv2Qm/XManTXGIlOc5VePUHQ0TQYs=;
-        b=wBpVWebQhnASlWa4Sa6zfnb2D9c+3ooeXZ0Qld8RPLk9JKLjjNiXNuvt0p+C+MR+my
-         yDYGmbVrDrrFnXgQBjRone1ublHXZw6SBK/QH2PT8vnlIIxqFQ1HM1lhKtGAJp4j7PLB
-         fASV7wJMlUvulCP9DHYSVC7dpfsstM2N2MCVYVCw5Pxc4JHsTuCgrNRW+CPvZ3g5Uhxp
-         F0TSt7msndDbovqbjMM3dyQVmMYXbWOKkT8SY+VRE0JOcb/o19NI8v2kxGL5qliubtP0
-         TD7kAfnoV3xFafnZqve9xbdQxrD5hPIUAhkYEoaj8ejWe6twcZw3kkuRHjtaZLVDngpQ
-         RUiA==
-X-Gm-Message-State: ANoB5pnBa6dDESwn/eMZTPRLO7am1IIATeHYX+IioQd07SU6mXkz5jx7
-        it87GB5btLYT6DVAKUVbp7WyI4Vn5c9WntjOFG1B+f4ghRY=
-X-Google-Smtp-Source: AA0mqf6VzV73GU9rixFMDpi5ce+FN0xuXQf0UswbkoCe1YMMPqsPyajAXSICPjF1VUy6m+4ozsKADkCt+8ucUY96H5U=
-X-Received: by 2002:a0d:f846:0:b0:37b:e3ae:decc with SMTP id
- i67-20020a0df846000000b0037be3aedeccmr1612086ywf.418.1668686379767; Thu, 17
- Nov 2022 03:59:39 -0800 (PST)
+        bh=HBt8DUE3xpm3UcQFvGVPGZx2MhTcfsoY3gAkEK/8Wf8=;
+        b=skXuoiTNwxftzIY2Aosw6aS2DoT05bna4usQvvbheZCyVCjCGQ5gKI0wfPd5uLqrsl
+         NAfqbeAnxGOmCUePDXJYZfWmgC93wgs4esdP/6HjbTEDyFiPdsRQo0uJgYgs8WL4gMRy
+         sLcPgdp0oRdfBF4HGFRf7Km/aVlbNW9MVlJ+v0QPDU9OiIBkwBLjxDOWgCjIVy4ohIrd
+         ADuoQqlVjFc+pVdXaqSAuHElsB+YXlN1RWwmV8hcjmjkUX4f8zB0wK0+869yNV51JegV
+         a+UWeHXvwsLEtKOc++pkkHNvrny7AZ7OjbNpCp5NfdEQGfptVJLEr9X8ah3xCytl2npz
+         /AXw==
+X-Gm-Message-State: ANoB5pluJWK7equR3p+k11d1eRI7AXaMDrB3FaXuytmCjThP/j5APMPl
+        2Yfj879WXWw/5apDzWznIf3v/LfVQ3HP8/yPPe0=
+X-Google-Smtp-Source: AA0mqf7YJOFWKiWLY57JD/Q1OmjIAGhJtBpJbVqZ3q1Oh9sn7GRcRB6FXVUQzqZ4Wt+7NNl5GwV1929V/KdLcRcXijI=
+X-Received: by 2002:a05:6102:11f1:b0:3a6:fde0:cf74 with SMTP id
+ e17-20020a05610211f100b003a6fde0cf74mr1364150vsg.73.1668686469693; Thu, 17
+ Nov 2022 04:01:09 -0800 (PST)
 MIME-Version: 1.0
-References: <20221115154555.324437-1-angelogioacchino.delregno@collabora.com>
- <20221115154555.324437-3-angelogioacchino.delregno@collabora.com>
- <555fbc95-c002-7705-0639-9deb701ad513@linaro.org> <42d55695-9db0-b835-4837-8dae6e76046c@collabora.com>
-In-Reply-To: <42d55695-9db0-b835-4837-8dae6e76046c@collabora.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Thu, 17 Nov 2022 13:59:28 +0200
-Message-ID: <CAA8EJpov_cs-YNF+kPqvjTVSHTY-fGOmo0aKUo4L-23vepQQiA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] soc: qcom: Add Qualcomm Ramp Controller driver
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@somainline.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        marijn.suijten@somainline.org, kernel@collabora.com
+References: <20221115100039.441295-1-pawell@cadence.com>
+In-Reply-To: <20221115100039.441295-1-pawell@cadence.com>
+From:   Peter Chen <hzpeterchen@gmail.com>
+Date:   Thu, 17 Nov 2022 20:00:00 +0800
+Message-ID: <CAL411-o4BETLPd-V_4yR6foXbES=72-P4tq-fQ_W_p0P_3ZqEw@mail.gmail.com>
+Subject: Re: [PATCH] usb: cdns3: remove fetched trb from cache before dequeuing
+To:     Pawel Laszczak <pawell@cadence.com>
+Cc:     peter.chen@kernel.org, linux-usb@vger.kernel.org,
+        gregkh@linuxfoundation.org, felipe.balbi@linux.intel.com,
+        rogerq@kernel.org, a-govindraju@ti.com,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Nov 2022 at 11:12, AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
+On Tue, Nov 15, 2022 at 6:01 PM Pawel Laszczak <pawell@cadence.com> wrote:
 >
-> Il 16/11/22 14:46, Dmitry Baryshkov ha scritto:
-> > On 15/11/2022 18:45, AngeloGioacchino Del Regno wrote:
-> >> The Ramp Controller is used to program the sequence ID for pulse
-> >> swallowing, enable sequence and linking sequence IDs for the CPU
-> >> cores on some Qualcomm SoCs.
-> >>
-> >> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> >> ---
-> >>   drivers/soc/qcom/Kconfig           |   9 +
-> >>   drivers/soc/qcom/Makefile          |   1 +
-> >>   drivers/soc/qcom/ramp_controller.c | 331 +++++++++++++++++++++++++++++
-> >>   3 files changed, 341 insertions(+)
-> >>   create mode 100644 drivers/soc/qcom/ramp_controller.c
-> >>
-> >
-> > I'd allow myself to re-ask the same questions here:
-> >
-> > Generic question. regarding this controller. If it is supposed to work
-> > close to DVCS, etc. Does ramp controller need any programming when
-> > changing speed and/or APC voltage?
-> > Is it necessary to turn ramp on and off during the runtime?
-> >
+> After doorbell DMA fetches the TRB. If during dequeuing request
+> driver changes NORMAL TRB to LINK TRB but doesn't delete it from
+> controller cache then controller will handle cached TRB and packet
+> can be lost.
 >
-> No, it's a set-and-forget type of programming. Turning that on/off during
-> runtime is self-managed and, after the initial setting that this driver,
-> no further action is required - or at least not from Linux.
+> The example scenario for this issue looks like:
+> 1. queue request - set doorbell
+> 2. dequeue request
+> 3. send OUT data packet from host
+> 4. Device will accept this packet which is unexpected
+> 5. queue new request - set doorbell
+> 6. Device lost the expected packet.
+>
+> By setting DFLUSH controller clears DRDY bit and stop DMA transfer.
+>
+> Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
+> cc: <stable@vger.kernel.org>
+> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> ---
+>  drivers/usb/cdns3/cdns3-gadget.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+>
+> diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
+> index 5adcb349718c..ccfaebca6faa 100644
+> --- a/drivers/usb/cdns3/cdns3-gadget.c
+> +++ b/drivers/usb/cdns3/cdns3-gadget.c
+> @@ -2614,6 +2614,7 @@ int cdns3_gadget_ep_dequeue(struct usb_ep *ep,
+>         u8 req_on_hw_ring = 0;
+>         unsigned long flags;
+>         int ret = 0;
+> +       int val;
+>
+>         if (!ep || !request || !ep->desc)
+>                 return -EINVAL;
+> @@ -2649,6 +2650,13 @@ int cdns3_gadget_ep_dequeue(struct usb_ep *ep,
+>
+>         /* Update ring only if removed request is on pending_req_list list */
+>         if (req_on_hw_ring && link_trb) {
+> +               /* Stop DMA */
+> +               writel(EP_CMD_DFLUSH, &priv_dev->regs->ep_cmd);
+> +
+> +               /* wait for DFLUSH cleared */
+> +               readl_poll_timeout_atomic(&priv_dev->regs->ep_cmd, val,
+> +                                         !(val & EP_CMD_DFLUSH), 1, 1000);
+> +
+>                 link_trb->buffer = cpu_to_le32(TRB_BUFFER(priv_ep->trb_pool_dma +
+>                         ((priv_req->end_trb + 1) * TRB_SIZE)));
+>                 link_trb->control = cpu_to_le32((le32_to_cpu(link_trb->control) & TRB_CYCLE) |
+> @@ -2660,6 +2668,10 @@ int cdns3_gadget_ep_dequeue(struct usb_ep *ep,
+>
+>         cdns3_gadget_giveback(priv_ep, priv_req, -ECONNRESET);
+>
+> +       req = cdns3_next_request(&priv_ep->pending_req_list);
+> +       if (req)
+> +               cdns3_rearm_transfer(priv_ep, 1);
+> +
 
-Ack, thank you!
+Why the above changes are needed?
 
+Peter
 
--- 
-With best wishes
-Dmitry
+>  not_found:
+>         spin_unlock_irqrestore(&priv_dev->lock, flags);
+>         return ret;
+> --
+> 2.25.1
+>
