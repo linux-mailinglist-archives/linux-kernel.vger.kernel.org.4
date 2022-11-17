@@ -2,57 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D02C162DC2D
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:01:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0553262DC26
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:00:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239465AbiKQNBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 08:01:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54324 "EHLO
+        id S234855AbiKQNAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 08:00:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234724AbiKQNA5 (ORCPT
+        with ESMTP id S234421AbiKQNAH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 08:00:57 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A655916D;
-        Thu, 17 Nov 2022 05:00:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=Znj/zN2SyjWqIbqwFb6gAvBXmx3ZvTt/Rr7JUuD+cp0=; b=ibMvFW/DbQabpQK9XmnHg3CC5V
-        gR5XWZWWAhzpGHocBkJMdXNQYdp8rnkLtregkjQtKEicGCdplsqGxmJPcSNUzjpuHdxOF8Zxbq84m
-        53B4wwdaDE0rFqnHzj7wEbZH5aJwSmdJ+BLNfMskz5JW9ylYkL+sR/gGjTeD6vKLgixI=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oveUE-002gbS-QO; Thu, 17 Nov 2022 13:59:22 +0100
-Date:   Thu, 17 Nov 2022 13:59:22 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Daniil Tatianin <d-tatianin@yandex-team.ru>
-Cc:     Saeed Mahameed <saeed@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Hao Chen <chenhao288@hisilicon.com>,
-        Guangbin Huang <huangguangbin2@huawei.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Marco Bonelli <marco@mebeim.net>, Tom Rix <trix@redhat.com>,
-        Tonghao Zhang <xiangxia.m.yue@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org, yc-core@yandex-team.ru
-Subject: Re: [PATCH v1] net/ethtool/ioctl: ensure that we have phy ops before
- using them
-Message-ID: <Y3YwKrgrZ9Aci7m1@lunn.ch>
-References: <20221114081532.3475625-1-d-tatianin@yandex-team.ru>
- <20221114210705.216996a9@kernel.org>
- <Y3Oy14CNVEttEI7T@lunn.ch>
- <Y3VqUBUXdMrt4iAC@x130.lan>
- <d220e5b6-70d8-e64f-0544-d3dfaf905a6d@yandex-team.ru>
+        Thu, 17 Nov 2022 08:00:07 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DE06456D
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 05:00:06 -0800 (PST)
+Received: from ideasonboard.com (unknown [103.251.226.79])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 11B0B929;
+        Thu, 17 Nov 2022 13:59:59 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1668690003;
+        bh=1QQRNgimyKov9bKl7TJpIiPIdUN7If/628V/9chreyo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=c6T14Bl7VHDYGP2dTSg8C3kUchtdndJ4cZIKnc7ujNtwemVjVJQFl5V9FpvbniTWX
+         TcVKkA/nnFCIYJUZsyC2i0+NblonPPQnDr360PBKEvUADomrBb0cD4NhLrMQw8JcTG
+         UKffceW9/I9fXbLIIRvWoowQGTJSUrmC5KxMo85c=
+From:   Umang Jain <umang.jain@ideasonboard.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stefan Wahren <wahrenst@gmx.net>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc:     kieran.bingham@ideasonboard.com,
+        Umang Jain <umang.jain@ideasonboard.com>
+Subject: [PATCH 0/2] vc04_services: vchiq-mmal: Drop bool usage
+Date:   Thu, 17 Nov 2022 18:29:51 +0530
+Message-Id: <20221117125953.88441-1-umang.jain@ideasonboard.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d220e5b6-70d8-e64f-0544-d3dfaf905a6d@yandex-team.ru>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -62,12 +54,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Strange, pretty sure it CCed the netdev ML. Unless there's something else
-> you must do for it to get through?
+Simple fixes to drop bool usage from vchiq-mmal.
+Individual patches contains details.
 
-HTML might get it rejected. But so long as you used git send-email, it
-normally works.
+Dave Stevenson (1):
+  staging: vc04_services: mmal-vchiq: Do not assign bool to u32
 
-Anyway, please resend.
+Umang Jain (1):
+  staging: vc04_services: mmal-common: Do not use bool in structures
 
-	Andrew
+ drivers/staging/vc04_services/vchiq-mmal/mmal-common.h | 6 +++---
+ drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c  | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+-- 
+2.38.1
+
