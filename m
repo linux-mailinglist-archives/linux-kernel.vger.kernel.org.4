@@ -2,141 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE23162DC21
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 13:58:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7019D62DC23
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 13:59:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234875AbiKQM6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 07:58:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52524 "EHLO
+        id S239329AbiKQM7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 07:59:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234774AbiKQM6V (ORCPT
+        with ESMTP id S234942AbiKQM67 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 07:58:21 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C3F2D1FF
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 04:58:19 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id r12so2673867lfp.1
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 04:58:19 -0800 (PST)
+        Thu, 17 Nov 2022 07:58:59 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719E243AD3;
+        Thu, 17 Nov 2022 04:58:58 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id l8so2545543ljh.13;
+        Thu, 17 Nov 2022 04:58:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3/Ym4H+GfMviN6/G1FhFGdK0zwCiyAfv5x1OUJDNIlY=;
-        b=ZbxBs8x57tViKk8dVG4W/fkLcsnZT2gppAREc2LdVbeTgxqD/1ZHMkdrZ9I74TzPMY
-         Q9U1yUOTl7P9Od7dwn5G89vjhe79ux2WNr6C2j/1h1C1DVKozMVzAEUA9TApVKROZ15I
-         AH8sJQK2RNJAp8FLKHYxGZmKk4YiHjy7oaAupkkhNGC62r9pSKsmJZQRyA9fL7D0tjT1
-         rOU2ENSFG0Mc5PECnFKIi2f8GOXSBP33jtpsXivaZjDxvxAgKfbkgWSva5zI2DOW3+Tx
-         x2FR3N3WorLmKSZwdYEJIfxhYZ1/JNRrormrp7U3YS2SKdSZnXgf4dV1lsT/md1XnibW
-         fpsA==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4M57t7OTYcTJSURkZCimQgbB4Jr0X+04ID9CvGlRIYw=;
+        b=UP34KdXI2/OgF70xNfa2goOp9brX4OwQZBDswcubWNdwRgwVK4rJTcDlD0tFWbPzpq
+         5wRnHHSoO/9L7CuMY6jzi1jbE9T3vK1mczWnzoJm84STvjjcQodQgxwRbKugDX4Wbk5L
+         mH+jITgl3PNOgLUUl8YAUoUn4ehLW9FC1VJ0IW9sbB2CSXAfSRcFtqTl7LgcmpXZSh+O
+         Ck8NAOzXBjK2np4NbJM8r27pJzeUapbyStJ7WcevzAqjOoGbMH7cmKFGDQgkApoILMs/
+         prEyTMncyPxHbnMCNiuUEqDW5fAE9qvJOERc8FZNeSlMsJ/rOhQDT6jsme8PYEn8s49s
+         6/VA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3/Ym4H+GfMviN6/G1FhFGdK0zwCiyAfv5x1OUJDNIlY=;
-        b=4vKhIJEeUKQue9OTW+Jgnoss4++flNEi+Juh0vDcm0hhd6GtuslpE/kUkwaGdIl822
-         VWCHfhkbf4RDry9CZVoSWNuKoakspV4jNWaI7gBwzmBPdkquLzwzPdgBlTsW7Z0jZadl
-         jG8mo+4oo0Q2Hzk2ToMgLslW+IKz9mVVNxQTGH3v9sJteyKuayliGTLarGNcvagKoPmp
-         BCFy38DGlQFNUvOX22J/B+jPrj9XMBaLkeMyFXauAZYikOxGOGMCFG2Iy6URSfDV5K5O
-         YCQy8CXleql6A+p4+leJuOXS/y1AVoFVZHjyiVrC1dhb389rdty3DrGYF/zEhgYlRrGo
-         V4mw==
-X-Gm-Message-State: ANoB5pkbQ0GCj8fNdvtAFXWTjMaLpeeRmlFRjJuwP/kWy30wrwzNv43v
-        u1ZfNRdiVcdL2rIn2eZNaV98wg==
-X-Google-Smtp-Source: AA0mqf6CahUyXo5c2XC3fgjghDAZPTCYLIkRDSTrxOCJK4a0guVWdA7pQcn0TaJj7XPlFRL86NnNBQ==
-X-Received: by 2002:a19:5e58:0:b0:4a7:5a63:71e1 with SMTP id z24-20020a195e58000000b004a75a6371e1mr873041lfi.399.1668689897798;
-        Thu, 17 Nov 2022 04:58:17 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id m6-20020a056512114600b0048cc076a03dsm135517lfg.237.2022.11.17.04.58.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Nov 2022 04:58:17 -0800 (PST)
-Message-ID: <c818f6d8-94e1-5ac4-ec67-f6f872780c38@linaro.org>
-Date:   Thu, 17 Nov 2022 13:58:16 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4M57t7OTYcTJSURkZCimQgbB4Jr0X+04ID9CvGlRIYw=;
+        b=lfQHY3A2PFQKwsutBH29PAtmfoBzr5Af7jyWl6KVNlLVOe3ukNiMnsTMelW7JG7JPf
+         hrbIPS2Oz41AQ1fm5FMNzd7RH0yTjwPGeRsE+TlYKUyuj7qE5/Oc7NMprNG4y7CB9eQW
+         vTtKlYHCPB8BzNb1MAjrKki02ESBHw2n/sV/jTVFpBiGEQ73mq3i3iOVRrad6jp3sL0E
+         134UIqT/ZZEm5u0hFX6c11IUpHjmWPzL8+1rQzRyX5IQSGYxbwKX3VPlOrUPcJ4YxyD9
+         y6mVdR0+s20IFoByMX8SlfvvwlhhJWZdrqBuIE+5X4wVUUnwKE7xgaARiUwXA8GO9NLe
+         J7bA==
+X-Gm-Message-State: ANoB5plR9ToUq30lWcPaycG4AO9uHq5F+THjPWbzX49nco5kWJevGvkT
+        t3CvyVh++1HPEhfmXHTvgSY=
+X-Google-Smtp-Source: AA0mqf7st/5wwsDYJQtakeDuEYYh6gQHjTSvgKCecK6CrMPFGlT6HYFaePwvZ95gxNfflboIqyyTSg==
+X-Received: by 2002:a05:651c:247:b0:278:fa62:bc91 with SMTP id x7-20020a05651c024700b00278fa62bc91mr900665ljn.100.1668689936666;
+        Thu, 17 Nov 2022 04:58:56 -0800 (PST)
+Received: from pc636 (host-90-235-25-77.mobileonline.telia.com. [90.235.25.77])
+        by smtp.gmail.com with ESMTPSA id q30-20020a19431e000000b0049735cec78dsm140026lfa.67.2022.11.17.04.58.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 04:58:56 -0800 (PST)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Thu, 17 Nov 2022 13:58:54 +0100
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Uladzislau Rezki <urezki@gmail.com>, paulmck@kernel.org,
+        linux-kernel@vger.kernel.org, rcu@vger.kernel.org
+Subject: Re: [PATCH v2] rcu/kfree: Do not request RCU when not needed
+Message-ID: <Y3YwDuKibmOiz6/7@pc636>
+References: <20221109024758.2644936-1-joel@joelfernandes.org>
+ <Y2z3Mb3u8bFZ12wY@pc636>
+ <CAEXW_YSq89xzgyQ9Tdt1tCqz8VAfzb7kSXVZmnxDuJ65U0UZ3w@mail.gmail.com>
+ <Y20EOinwcLSZHmXg@pc638.lan>
+ <Y22ry4Q2OY2zovco@google.com>
+ <Y3Iyka86FlUh9D1P@pc636>
+ <CAEXW_YR8ycdF0Y80p2qKXQm3Qc+XA441jQZ3uiHk=TbaXngNkQ@mail.gmail.com>
+ <Y3OPI/pWZ5jf4X9y@pc636>
+ <Y3U3zPzLMux8fpVY@pc638.lan>
+ <CAEXW_YTVmGnC_aBNQ49OfNiD+CX1VX0-R6c_3mNZNvvAoAw0hA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] dt-bindings: thermal: qcom-tsens: Add compatible for
- sm8550
-Content-Language: en-US
-To:     neil.armstrong@linaro.org, Bjorn Andersson <andersson@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20221114-narmstrong-sm8550-upstream-tsens-v1-0-0e169822830f@linaro.org>
- <4dd96db7-b667-7b8f-f80d-a250ac63f223@linaro.org>
- <cb94a2f5-6521-19b5-ca30-c68ffd2068a4@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <cb94a2f5-6521-19b5-ca30-c68ffd2068a4@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEXW_YTVmGnC_aBNQ49OfNiD+CX1VX0-R6c_3mNZNvvAoAw0hA@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/11/2022 09:06, Neil Armstrong wrote:
-> Hi,
+On Wed, Nov 16, 2022 at 10:05:46PM +0000, Joel Fernandes wrote:
+> On Wed, Nov 16, 2022 at 7:19 PM Uladzislau Rezki <urezki@gmail.com> wrote:
+> >
+> > Hello, Paul, Joel.
+> >
+> > > >
+> > > > Yes sure, I am doing a run now with my patch. However, I have a
+> > > > question -- why do you feel blocking in the kworker is not an issue?
+> > > > You are taking a snapshot before queuing the normal kwork and then
+> > > > reading the snapshot when the normal kwork runs. Considering it is a
+> > > > high priority queue, the delay between when you are taking the
+> > > > snapshot, and reading it is likely small so there is a bigger chance
+> > > > of blocking in cond_synchronize_rcu(). Did I miss something?
+> > > >
+> > > We can wait indeed in the reclaim worker. But the worker does not do any
+> > > nasty or extra work here. If there is a need we block and wait. After a
+> > > grace period, we are awoken and proceed.
+> > >
+> > > Therefore i do not see the reason in handling two cases:
+> > >
+> > > if (gp_done)
+> > >     queue_work();
+> > > else
+> > >     queue_rcu_work();
+> > >
+> > > it is the same if we just queue the work and check on entry. The current
+> > > scenario is: queue the work after a grace period. This is the difference.
+> > >
+> > > Right if the reclaimer was a high prio kthread a time would be shorter.
+> > >
+> > > In your scenario the time seems even shorter(i have not checked) because
+> > > you update a snapshot of krcp each time a kvfree_rcu() is invoked. So
+> > > basically even though you have objects whose grace period is passed you
+> > > do not separate it anyhow. Because you update the:
+> > >
+> > > krcp->gp_snap = get_state_synchronize_rcu();
+> > >
+> > > too often.
+> > >
+> > Once upon a time we discussed that it is worth to keep track of GP
+> > per-a-page in order to reduce a memory footprint. Below patch addresses
+> > it:
 > 
-> On 16/11/2022 12:26, Krzysztof Kozlowski wrote:
->> On 16/11/2022 11:09, Neil Armstrong wrote:
->>> The Qualcomm SM8550 platform has three instances of the tsens block,
->>> add a compatible for these instances.
->>>
->>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->>> ---
->>> To: Andy Gross <agross@kernel.org>
->>> To: Bjorn Andersson <andersson@kernel.org>
->>> To: Konrad Dybcio <konrad.dybcio@somainline.org>
->>> To: Amit Kucheria <amitk@kernel.org>
->>> To: Thara Gopinath <thara.gopinath@gmail.com>
->>> To: "Rafael J. Wysocki" <rafael@kernel.org>
->>> To: Daniel Lezcano <daniel.lezcano@linaro.org>
->>> To: Zhang Rui <rui.zhang@intel.com>
->>> To: Rob Herring <robh+dt@kernel.org>
->>> To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
->>> Cc: linux-arm-msm@vger.kernel.org
->>> Cc: linux-pm@vger.kernel.org
->>> Cc: devicetree@vger.kernel.org
->>> Cc: linux-kernel@vger.kernel.org
->>> ---
->>>   Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
->>>   1 file changed, 1 insertion(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
->>> index f0bd4b979e28..09dbd96d380e 100644
->>> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
->>> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
->>> @@ -58,6 +58,7 @@ properties:
->>>                 - qcom,sm8250-tsens
->>>                 - qcom,sm8350-tsens
->>>                 - qcom,sm8450-tsens
->>> +              - qcom,sm8550-tsens
->>
->> alOf:if:then should be updated.
+> In the patch below, it appears you are tracking the GP per krwp, and
+> not per page. But I could be missing something - could you split it
+> into separate patches for easier review?
+>
+I will split. I was thinking about it. The GP is tracked per-a-page. As for
+krwp it is only for channel_3. Everything goes there if no-page or no cache.
+
 > 
-> I thought the -v2 fallback would be enough since 8450 isn't present either in the alOf:if:then either.
+> Also it still does cond_synchronize_rcu() :-(
 > 
-> Anyway, will fix this.
+Sometimes we need to wait for a GP we can not just release :)
 
-
-No, you are right. The v2 fallback is already in several allOf:if:then,
-so this should be fine.
-
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+--
+Uladzislau Rezki
