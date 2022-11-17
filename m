@@ -2,75 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 650C262D49F
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:05:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A40F862D4A6
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:06:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239353AbiKQIFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 03:05:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51696 "EHLO
+        id S239410AbiKQIGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 03:06:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239251AbiKQIF1 (ORCPT
+        with ESMTP id S239425AbiKQIGC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 03:05:27 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8065D716E6
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 00:05:25 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id bs21so2347856wrb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 00:05:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=iKXYExdFPBk6x5LL48YmrBCt/Ex+r4UJ3aXw7toOApc=;
-        b=JbcW44dILJwm0wi2gWylt6XUA0QoEFA2sBCQ9vchinitjnk2CVTPOoED5IVzakXcko
-         Mum8HNtrKiWiAXYGrXGaNNeIRt6YWRHbT7YmpbhopIX3X9pWf0KBztjMvyE43SMRyxYY
-         uyVi7BAZdhRiFt73AtL74DeKif/2MjxAIjBvP6k1BoE6pRLSxsQxLknREs311LxHFSRZ
-         Z9vdG21Mby0rs/9Q1EIFLfxIaJauGzqoMEMLS7u5qDo6nJb5CT+rroC4LWaxeRNHYW1r
-         TjG/UEXMPyINJ/TZ+vawpX+rhK03JrFPZdQbdyX65J9otSrnVeEIeSh34fzH1m66qSC6
-         sIYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iKXYExdFPBk6x5LL48YmrBCt/Ex+r4UJ3aXw7toOApc=;
-        b=BDmtx6kE0dwtNREQYVB5f/UNsYgEMHJU/ursDGTugyIc/aSWhGfRRlBJ6R7pEHLwu6
-         HznKtvyUVxkIhSYVuIXdBynj+5amM5HLCWt2vHRuZAoZSUXTwMOFcfbYYUKunep83mLu
-         sz5WJziYUZndf0LIONFQrsiehhrL8N3/rQqunrkZkIeKBiPMg0DRmglEj//S0zKwtIPs
-         8urx2xQ0R0RYpxSzQgvwoyEIt96nT2ur5QtTtvtxbjcjfMnqEKuTzG14IvOvzUqWtixS
-         ITc2ycoZzZMCAjgvX+v9wfx7KAvexqG/KFGbNZ/FxIcV0ua1jXqJYlchDA3HM451nXRs
-         7R+w==
-X-Gm-Message-State: ANoB5pm/73Ni5ursPrJWUTV7qkT+hkaUSLOUrDrmhRNNiVWm3vknsnq5
-        HuIdqT8m4c1cwiXFW8en2a8dlg==
-X-Google-Smtp-Source: AA0mqf4z1Vw0osU9THOIqfd9q3COzRk87Bb9SpjfWJEe8ARfejulNJEeCFJYH4ns55QzuC7Fx9ys2A==
-X-Received: by 2002:a5d:440a:0:b0:238:3dc7:2adc with SMTP id z10-20020a5d440a000000b002383dc72adcmr708168wrq.160.1668672324057;
-        Thu, 17 Nov 2022 00:05:24 -0800 (PST)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id m4-20020a05600c4f4400b003cffd3c3d6csm452796wmq.12.2022.11.17.00.05.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 00:05:23 -0800 (PST)
-Date:   Thu, 17 Nov 2022 10:05:22 +0200
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Subject: Re: [PATCH 2/9] clk: qcom: gdsc: Add configurable poll timeout
-Message-ID: <Y3XrQrnT0dxTvc5S@linaro.org>
-References: <20221116104716.2583320-1-abel.vesa@linaro.org>
- <20221116104716.2583320-3-abel.vesa@linaro.org>
- <9c5b6037-c962-81d3-41c1-a9ec459c9adc@linaro.org>
+        Thu, 17 Nov 2022 03:06:02 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFBCB716D2
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 00:05:59 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1ovZtw-0003au-Jr; Thu, 17 Nov 2022 09:05:36 +0100
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1ovZtv-0003Zc-CX; Thu, 17 Nov 2022 09:05:35 +0100
+Date:   Thu, 17 Nov 2022 09:05:35 +0100
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     Joy Zou <joy.zou@nxp.com>
+Cc:     vkoul@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        kernel@pengutronix.de, festevam@gmail.com, shengjiu.wang@nxp.com,
+        martink@posteo.de, dev@lynxeye.de, alexander.stein@ew.tq-group.com,
+        peng.fan@nxp.com, david@ixit.cz, aford173@gmail.com,
+        hongxing.zhu@nxp.com, linux-imx@nxp.com, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v10 2/2] dmaengine: imx-sdma: support hdmi in sdma
+Message-ID: <20221117080535.GF9130@pengutronix.de>
+References: <20221115093823.2879128-1-joy.zou@nxp.com>
+ <20221115093823.2879128-3-joy.zou@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9c5b6037-c962-81d3-41c1-a9ec459c9adc@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <20221115093823.2879128-3-joy.zou@nxp.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,68 +60,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-11-16 12:19:09, Konrad Dybcio wrote:
+On Tue, Nov 15, 2022 at 05:38:23PM +0800, Joy Zou wrote:
+> The hdmi script already supported in sdma firmware. So add support hdmi
+> in sdma driver.
+> 
+> The design of hdmi script is different from common script such as sai.
+> There is no need to config buffer descriptor for HDMI. The cyclic
+> capability is achieved by the hdmi script. The slave config is so simple,
+> only config src_addr, dts_addr and direction DMA_TRANS_NONE.
+> 
+> Signed-off-by: Joy Zou <joy.zou@nxp.com>
+
+Reviewed-by: Sascha Hauer <s.hauer@pengutronix.de>
+
+Sascha
+
+> ---
+> Changes in v7:
+>     modify the commit message.
+> ---
+>  drivers/dma/imx-sdma.c      | 38 +++++++++++++++++++++++++++++--------
+>  include/linux/dma/imx-dma.h |  1 +
+>  2 files changed, 31 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/dma/imx-sdma.c b/drivers/dma/imx-sdma.c
+> index fbea5f62dd98..ab877ceeac3f 100644
+> --- a/drivers/dma/imx-sdma.c
+> +++ b/drivers/dma/imx-sdma.c
+> @@ -954,7 +954,10 @@ static irqreturn_t sdma_int_handler(int irq, void *dev_id)
+>  		desc = sdmac->desc;
+>  		if (desc) {
+>  			if (sdmac->flags & IMX_DMA_SG_LOOP) {
+> -				sdma_update_channel_loop(sdmac);
+> +				if (sdmac->peripheral_type != IMX_DMATYPE_HDMI)
+> +					sdma_update_channel_loop(sdmac);
+> +				else
+> +					vchan_cyclic_callback(&desc->vd);
+>  			} else {
+>  				mxc_sdma_handle_channel_normal(sdmac);
+>  				vchan_cookie_complete(&desc->vd);
+> @@ -1074,6 +1077,10 @@ static int sdma_get_pc(struct sdma_channel *sdmac,
+>  		per_2_emi = sdma->script_addrs->sai_2_mcu_addr;
+>  		emi_2_per = sdma->script_addrs->mcu_2_sai_addr;
+>  		break;
+> +	case IMX_DMATYPE_HDMI:
+> +		emi_2_per = sdma->script_addrs->hdmi_dma_addr;
+> +		sdmac->is_ram_script = true;
+> +		break;
+>  	default:
+>  		dev_err(sdma->dev, "Unsupported transfer type %d\n",
+>  			peripheral_type);
+> @@ -1125,11 +1132,16 @@ static int sdma_load_context(struct sdma_channel *sdmac)
+>  	/* Send by context the event mask,base address for peripheral
+>  	 * and watermark level
+>  	 */
+> -	context->gReg[0] = sdmac->event_mask[1];
+> -	context->gReg[1] = sdmac->event_mask[0];
+> -	context->gReg[2] = sdmac->per_addr;
+> -	context->gReg[6] = sdmac->shp_addr;
+> -	context->gReg[7] = sdmac->watermark_level;
+> +	if (sdmac->peripheral_type == IMX_DMATYPE_HDMI) {
+> +		context->gReg[4] = sdmac->per_addr;
+> +		context->gReg[6] = sdmac->shp_addr;
+> +	} else {
+> +		context->gReg[0] = sdmac->event_mask[1];
+> +		context->gReg[1] = sdmac->event_mask[0];
+> +		context->gReg[2] = sdmac->per_addr;
+> +		context->gReg[6] = sdmac->shp_addr;
+> +		context->gReg[7] = sdmac->watermark_level;
+> +	}
+>  
+>  	bd0->mode.command = C0_SETDM;
+>  	bd0->mode.status = BD_DONE | BD_WRAP | BD_EXTD;
+> @@ -1513,7 +1525,7 @@ static struct sdma_desc *sdma_transfer_init(struct sdma_channel *sdmac,
+>  	desc->sdmac = sdmac;
+>  	desc->num_bd = bds;
+>  
+> -	if (sdma_alloc_bd(desc))
+> +	if (bds && sdma_alloc_bd(desc))
+>  		goto err_desc_out;
+>  
+>  	/* No slave_config called in MEMCPY case, so do here */
+> @@ -1678,13 +1690,16 @@ static struct dma_async_tx_descriptor *sdma_prep_dma_cyclic(
+>  {
+>  	struct sdma_channel *sdmac = to_sdma_chan(chan);
+>  	struct sdma_engine *sdma = sdmac->sdma;
+> -	int num_periods = buf_len / period_len;
+> +	int num_periods = 0;
+>  	int channel = sdmac->channel;
+>  	int i = 0, buf = 0;
+>  	struct sdma_desc *desc;
+>  
+>  	dev_dbg(sdma->dev, "%s channel: %d\n", __func__, channel);
+>  
+> +	if (sdmac->peripheral_type != IMX_DMATYPE_HDMI)
+> +		num_periods = buf_len / period_len;
+> +
+>  	sdma_config_write(chan, &sdmac->slave_config, direction);
+>  
+>  	desc = sdma_transfer_init(sdmac, direction, num_periods);
+> @@ -1701,6 +1716,9 @@ static struct dma_async_tx_descriptor *sdma_prep_dma_cyclic(
+>  		goto err_bd_out;
+>  	}
+>  
+> +	if (sdmac->peripheral_type == IMX_DMATYPE_HDMI)
+> +		return vchan_tx_prep(&sdmac->vc, &desc->vd, flags);
+> +
+>  	while (buf < buf_len) {
+>  		struct sdma_buffer_descriptor *bd = &desc->bd[i];
+>  		int param;
+> @@ -1761,6 +1779,10 @@ static int sdma_config_write(struct dma_chan *chan,
+>  		sdmac->watermark_level |= (dmaengine_cfg->dst_maxburst << 16) &
+>  			SDMA_WATERMARK_LEVEL_HWML;
+>  		sdmac->word_size = dmaengine_cfg->dst_addr_width;
+> +	} else if (sdmac->peripheral_type == IMX_DMATYPE_HDMI) {
+> +		sdmac->per_address = dmaengine_cfg->dst_addr;
+> +		sdmac->per_address2 = dmaengine_cfg->src_addr;
+> +		sdmac->watermark_level = 0;
+>  	} else {
+>  		sdmac->per_address = dmaengine_cfg->dst_addr;
+>  		sdmac->watermark_level = dmaengine_cfg->dst_maxburst *
+> diff --git a/include/linux/dma/imx-dma.h b/include/linux/dma/imx-dma.h
+> index f487a4fa103a..cfec5f946e23 100644
+> --- a/include/linux/dma/imx-dma.h
+> +++ b/include/linux/dma/imx-dma.h
+> @@ -40,6 +40,7 @@ enum sdma_peripheral_type {
+>  	IMX_DMATYPE_ASRC_SP,	/* Shared ASRC */
+>  	IMX_DMATYPE_SAI,	/* SAI */
+>  	IMX_DMATYPE_MULTI_SAI,	/* MULTI FIFOs For Audio */
+> +	IMX_DMATYPE_HDMI,       /* HDMI Audio */
+>  };
+>  
+>  enum imx_dma_prio {
+> -- 
+> 2.37.1
 > 
 > 
-> On 16/11/2022 11:47, Abel Vesa wrote:
-> > Depending on the platform, the poll timeout delay might be different,
-> > so allow the platform specific drivers to specify their own values.
-> > 
-> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> > ---
-> >   drivers/clk/qcom/gdsc.c | 5 ++++-
-> >   drivers/clk/qcom/gdsc.h | 1 +
-> >   2 files changed, 5 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
-> > index 0f21a8a767ac..3753f3ef7241 100644
-> > --- a/drivers/clk/qcom/gdsc.c
-> > +++ b/drivers/clk/qcom/gdsc.c
-> > @@ -107,7 +107,7 @@ static int gdsc_poll_status(struct gdsc *sc, enum gdsc_status status)
-> >   	do {
-> >   		if (gdsc_check_status(sc, status))
-> >   			return 0;
-> > -	} while (ktime_us_delta(ktime_get(), start) < TIMEOUT_US);
-> > +	} while (ktime_us_delta(ktime_get(), start) < sc->poll_timeout);
-> What about the second usage of TIMEOUT_US (in gdsc_toggle_logic)? Is it fine
-> for that to be the default value?
 
-The usleep you mention is not really for polling the state.
-So I think it should stay as is. Who knows, maybe in the future we will
-need to have the configurable as well, but as a toggle delay rather than
-a status poll timeout.
-
-I added this configurable poll timeout just because I saw that
-downstream, each driver has different values. And it kind of makes sense,
-because the state machine inside the GDSC might be different between
-platforms, and so, it might take different time to reach a certain on/off
-state.
-
-Thanks,
-Abel
-
-> 
-> 
-> Konrad
-> >   	if (gdsc_check_status(sc, status))
-> >   		return 0;
-> > @@ -454,6 +454,9 @@ static int gdsc_init(struct gdsc *sc)
-> >   	if (ret)
-> >   		goto err_disable_supply;
-> > +	if (!sc->poll_timeout)
-> > +		sc->poll_timeout = 500;
-> > +
-> >   	return 0;
-> >   err_disable_supply:
-> > diff --git a/drivers/clk/qcom/gdsc.h b/drivers/clk/qcom/gdsc.h
-> > index 803512688336..9a1e1fb3d12f 100644
-> > --- a/drivers/clk/qcom/gdsc.h
-> > +++ b/drivers/clk/qcom/gdsc.h
-> > @@ -36,6 +36,7 @@ struct gdsc {
-> >   	struct generic_pm_domain	*parent;
-> >   	struct regmap			*regmap;
-> >   	unsigned int			gdscr;
-> > +	unsigned int			poll_timeout;
-> >   	unsigned int			collapse_ctrl;
-> >   	unsigned int			collapse_mask;
-> >   	unsigned int			gds_hw_ctrl;
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
