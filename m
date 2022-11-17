@@ -2,177 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E966362E2A7
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:14:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F25E62E2AD
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:15:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240533AbiKQROM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 12:14:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42334 "EHLO
+        id S240723AbiKQRPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 12:15:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239948AbiKQROK (ORCPT
+        with ESMTP id S240718AbiKQRPl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 12:14:10 -0500
-Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC61F73B8B
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 09:14:09 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.west.internal (Postfix) with ESMTP id 8DB7F2B06A50;
-        Thu, 17 Nov 2022 12:14:04 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Thu, 17 Nov 2022 12:14:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1668705244; x=1668712444; bh=EPKM98yuI0
-        FafDSpZ4oH9M/3CpWV+m3u8fcRxTeHRuU=; b=IKSCrjRehJXLLAheMi3x1nBBT6
-        xv79+oCuXcYWNZ56lfkM1xLPxqSAtDNNT3XxpSJC6jHP7Vkok/cXYc/Q95YEBpG+
-        ezh5FAEU/QFRRHMU7pCIMZWiaEuhO0x26gZVc/BGSuAHy5m4qU6aEWjP9OzWk5Cf
-        7y/V0+6av4McswO2nCTSoODDF+vOIcOUhzF9inIWGgUE2fphLHOeDM01YAIZHVuu
-        6op3/MJ3VV7BmT1MOYTIwx+Fbwwh/wYlU+bcv4kNzWVhRhtS1sqQ7QUSpdXtsDF3
-        jygjVycsZPOEbUmO7CCsQXSFduE2nvV6WgRq+ZD9hm+mSroQWO84l6sQNe3A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1668705244; x=1668712444; bh=EPKM98yuI0FafDSpZ4oH9M/3CpWV
-        +m3u8fcRxTeHRuU=; b=FJ0o9lSTMDJUUNFAeEUAJvhsA4JEtyf0agBRuNaZs/Ax
-        /vKmYa1NT94ktikwdItSLaULxP0rJYkbgBubo/OPC2hiCxDNnIO6FtAxj+/ejJGS
-        iKmzcK9bLoYUzLTB6c7XqPKkxdZbPF4H0feWwbfpJ0BWVbdQePGuBroxY9MueMih
-        7FT17Z+ie0MmgR4aTVQmXVHXO6zsdMFbjOYNE6tCp0e8Lbm1N/mKRHD2iGxx8Xcb
-        IXPAvjwzB7KOyD9S/fDSePH03flvfPtPB7NrqZXeNUmupz+zQ9RaGmo2KcKRHvbT
-        zwZ7vlVYZEzM0Z1UI08AtAbJrk2HLpqzUu9OF5IoOQ==
-X-ME-Sender: <xms:22t2Y7aq50whuiFoQkEUePGTIQQg6ZfqHjYpnO3ZncSCACAWCnOiMg>
-    <xme:22t2Y6ZPwV0Q-ALL-9E4JiTTYPis500kQYlEddlLdZGekFPHa-FsXpXfxA25fJ3o2
-    gwMU9kLZtOVoGM6TQg>
-X-ME-Received: <xmr:22t2Y99lRvGfydEV4TyGUQvS_xMgz5cYjOuHKny_YDGWhp55onjpyMcwIi6_VHCLq68SvWWLiZglAAmz18UhhoZIzXVeUJL6MkOpgZBxhvpz-Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgeekgdeljecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheehfffh
-    vedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:22t2Yxom94qDjT-BzKQYtjOcEEJ5G_ZpbqblIPWD4ny5xSpnARo47w>
-    <xmx:22t2Y2pZsh_WWZJSX9aXYTEk1HHwKH4A-o6rp_LoVNmwmGmnNPxxGA>
-    <xmx:22t2Y3Tq45VHs9_ipPR4WzxHHa3NojkmAl11WzxKDRL27UL_x3KIdg>
-    <xmx:3Gt2Y5CoJVgET8RSJmOoRJmYWzwp91a6JyV2_DM6wMLHtCwwG3cyUPBYqxc>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 17 Nov 2022 12:14:02 -0500 (EST)
-Date:   Thu, 17 Nov 2022 18:14:01 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Ben Skeggs <bskeggs@redhat.com>, Chen-Yu Tsai <wens@csie.org>,
-        David Airlie <airlied@linux.ie>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Emma Anholt <emma@anholt.net>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dom Cobley <dom@raspberrypi.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Phil Elwell <phil@raspberrypi.com>,
-        nouveau@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-sunxi@lists.linux.dev, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v10 18/19] drm/vc4: vec: Add support for more analog TV
- standards
-Message-ID: <20221117171401.3ogenv6g5nszufmm@houat>
-References: <20220728-rpi-analog-tv-properties-v10-0-256dad125326@cerno.tech>
- <20220728-rpi-analog-tv-properties-v10-18-256dad125326@cerno.tech>
- <20221117164928.200b3a1a@maurocar-mobl2>
+        Thu, 17 Nov 2022 12:15:41 -0500
+X-Greylist: delayed 2422 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Nov 2022 09:15:40 PST
+Received: from mail-4027.protonmail.ch (mail-4027.protonmail.ch [185.70.40.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C4673B95
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 09:15:40 -0800 (PST)
+Date:   Thu, 17 Nov 2022 17:15:26 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1668705338; x=1668964538;
+        bh=dW92NfqJF9I5odBniSAN3HdOJVVBTtflw7kZQiRR6D8=;
+        h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+         Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+        b=KlkGvxw6ftiz2mNoE9miBobvV1zFeKvvM2HwSC/Jjh+qx9h+1/rzgH30rQ06maH2J
+         Wg/m+tTo0V4GZoE9pEjC9cJmvOmCjRwOMRyoKAL4S86a4tBJ0o9VLnpocjBxX1L2yw
+         jkAbQ7BmnobI4TP/sfX4VM46H5DpAGMj294p9KGDUTpI57mW2KGBMBmBixOJP1joeF
+         FZA943yFVU3hqOJo9sxyVzrXG15eJ/JqRVzVFGex6WYQzg8xEk2pTzY91aDaEnzyG9
+         UevOrmhK6Sn4QQcUKmU+jU2SUOA3/phKg/aoFDDOkwDJ5qoMGOjMNYH1mbu03urWt0
+         WAPstBe57vL7g==
+To:     linux-clk@vger.kernel.org
+From:   "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
+Cc:     Nikita Travkin <nikita@trvn.ru>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "open list:QUALCOMM CLOCK DRIVERS" <linux-arm-msm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: [PATCH] clk: qcom: gcc-msm8939: Add rates to the GP clocks
+Message-ID: <20221117171343.24216-1-linmengbo0689@protonmail.com>
+Feedback-ID: 40467236:user:proton
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cz56iqciiap5nisp"
-Content-Disposition: inline
-In-Reply-To: <20221117164928.200b3a1a@maurocar-mobl2>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Similar to msm8916, msm8939 has (at least) 6 "General Purpose" clocks that
+can be muxed to SoC pins. These clocks are:
 
---cz56iqciiap5nisp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+GP_CLK{0, 1} : GPIO_{31, 32} (Belongs to CAMSS according to Linux)
+GP_CLK_{1-3}{A, B} : GPIO_{49-51, 97, 12, 13} (Belongs to GCC itself)
+GP_MN : GPIO_110 (Doesn't seem to be described in gcc,
+    ignored in this patch)
 
-On Thu, Nov 17, 2022 at 04:49:28PM +0100, Mauro Carvalho Chehab wrote:
-> On Thu, 17 Nov 2022 10:29:01 +0100
-> Maxime Ripard <maxime@cerno.tech> wrote:
->=20
-> > From: Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>
-> >=20
-> > Add support for the following composite output modes (all of them are
-> > somewhat more obscure than the previously defined ones):
-> >=20
-> > - NTSC_443 - NTSC-style signal with the chroma subcarrier shifted to
-> >   4.43361875 MHz (the PAL subcarrier frequency). Never used for
-> >   broadcasting, but sometimes used as a hack to play NTSC content in PAL
-> >   regions (e.g. on VCRs).
->=20
-> > - PAL_N - PAL with alternative chroma subcarrier frequency,
-> >   3.58205625 MHz. Used as a broadcast standard in Argentina, Paraguay
-> >   and Uruguay to fit 576i50 with colour in 6 MHz channel raster.
->=20
-> That's not right. Argentina uses a different standard than Paraguay and
-> Uruguai.
->=20
-> See, there are two variants of PAL/N. The original one and PAL/N' - also
-> called PAL/NC or PAL/CN (Combination N). Some of the timings are=20
-> different on /NC variant.
->=20
-> As far as I'm aware, PAL/Nc is used in Argentina, while
-> PAL/N is used in Paraguai and Uruguai, but I may be wrong on that,
-> as it has been a long time since had to touch on this.
->=20
-> > - PAL60 - 480i60 signal with PAL-style color at normal European PAL
-> >   frequency. Another non-standard, non-broadcast mode, used in similar
-> >   contexts as NTSC_443. Some displays support one but not the other.
->=20
-> > - SECAM - French frequency-modulated analog color standard; also have
-> >   been broadcast in Eastern Europe and various parts of Africa and Asia.
-> >   Uses the same 576i50 timings as PAL.
->=20
-> This is also wrong. just like PAL, there are several variants of SECAM,
-> one used in France, and a different one in France overseas and on
-> previous France colonies in Africa and Asia. Eastern Europe also used
-> different variants of SECAM.
+Those clocks may be used as e.g. PWM sources for external peripherals.
+Add more frequencies to the table for those clocks so it's possible
+for arbitrary peripherals to make use of them.
 
-And that's fine? Everything I did is supposed to be easy to extend if
-and when needed, so if someone has some interest in providing support
-for more standards, they are very welcome to do so.
+Reference: https://lore.kernel.org/r/20220612145955.385787-5-nikita@trvn.ru
 
-I won't do it in this series though.
+Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
+---
+ drivers/clk/qcom/gcc-msm8939.c | 35 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-Maxime
+diff --git a/drivers/clk/qcom/gcc-msm8939.c b/drivers/clk/qcom/gcc-msm8939.=
+c
+index af608f165896..712073f9dc69 100644
+--- a/drivers/clk/qcom/gcc-msm8939.c
++++ b/drivers/clk/qcom/gcc-msm8939.c
+@@ -1033,7 +1033,20 @@ static struct clk_rcg2 cci_clk_src =3D {
+ =09},
+ };
+=20
++/*
++ * This is a frequency table for "General Purpose" clocks.
++ * These clocks can be muxed to the SoC pins and may be used by
++ * external devices. They're often used as PWM source.
++ *
++ * See comment at ftbl_gcc_gp1_3_clk.
++ */
+ static const struct freq_tbl ftbl_gcc_camss_gp0_1_clk[] =3D {
++=09F(10000,   P_XO,    16,  1, 120),
++=09F(100000,  P_XO,    16,  1,  12),
++=09F(500000,  P_GPLL0, 16,  1, 100),
++=09F(1000000, P_GPLL0, 16,  1,  50),
++=09F(2500000, P_GPLL0, 16,  1,  20),
++=09F(5000000, P_GPLL0, 16,  1,  10),
+ =09F(100000000, P_GPLL0, 8, 0, 0),
+ =09F(200000000, P_GPLL0, 4, 0, 0),
+ =09{ }
+@@ -1198,7 +1211,29 @@ static struct clk_rcg2 crypto_clk_src =3D {
+ =09},
+ };
+=20
++/*
++ * This is a frequency table for "General Purpose" clocks.
++ * These clocks can be muxed to the SoC pins and may be used by
++ * external devices. They're often used as PWM source.
++ *
++ * Please note that MND divider must be enabled for duty-cycle
++ * control to be possible. (M !=3D N) Also since D register is configured
++ * with a value multiplied by 2, and duty cycle is calculated as
++ *                             (2 * D) % 2^W
++ *                DutyCycle =3D ----------------
++ *                              2 * (N % 2^W)
++ * (where W =3D .mnd_width)
++ * N must be half or less than maximum value for the register.
++ * Otherwise duty-cycle control would be limited.
++ * (e.g. for 8-bit NMD N should be less than 128)
++ */
+ static const struct freq_tbl ftbl_gcc_gp1_3_clk[] =3D {
++=09F(10000,   P_XO,    16,  1, 120),
++=09F(100000,  P_XO,    16,  1,  12),
++=09F(500000,  P_GPLL0, 16,  1, 100),
++=09F(1000000, P_GPLL0, 16,  1,  50),
++=09F(2500000, P_GPLL0, 16,  1,  20),
++=09F(5000000, P_GPLL0, 16,  1,  10),
+ =09F(19200000, P_XO, 1, 0,=090),
+ =09{ }
+ };
+--=20
+2.30.2
 
---cz56iqciiap5nisp
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY3Zr2QAKCRDj7w1vZxhR
-xQY3AQC3ODU/A4r/xCJ5Ms7gOYpWhJaSGlaY+jf/qgMPcMmMhAD/VJCODvzEFvlF
-AuxhxZDFClQh1TusZBNOY31fQyzDIAU=
-=f8ne
------END PGP SIGNATURE-----
-
---cz56iqciiap5nisp--
