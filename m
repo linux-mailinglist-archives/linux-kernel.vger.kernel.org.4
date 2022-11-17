@@ -2,115 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA5DB62E76C
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 22:57:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64B7362E771
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 22:57:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241052AbiKQV5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 16:57:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35228 "EHLO
+        id S241126AbiKQV5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 16:57:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241014AbiKQV4g (ORCPT
+        with ESMTP id S241077AbiKQV5d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 16:56:36 -0500
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0694C720AF;
-        Thu, 17 Nov 2022 13:56:12 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 2F74E1C0002;
-        Thu, 17 Nov 2022 21:56:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1668722171;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pnwcTEHTghwysLoyLNFVglyZaxT5Ls5k3YuYD2ZlLQk=;
-        b=pGduEhjemQPZpFe5yPmEqyzpTHt+2IF7nJ0J79XTjsXLCnJ6FaMTCtWNYI4y5b9Ir5oNO0
-        siuTj+UeXGN94dZ4kUWDf2pEeR96X/rph/aHn9UGUC3OseFPmwnSLGs6RRYQod5ItahMt5
-        V07els7hoQ8ncswGxXbeUHqRpbjL9bFagFpeSJpgazZgF/IXTKGtHR+mupY/0bRm9BCjda
-        RTtHPlW1XAw6DeIM7PULKz56KWNWeVYLIlmww7/qKR6xLaQKJj0ARBJ4tNKDpqFqYYH/79
-        OOjXjHRLtf9Y7R3/0YFrJs3eG6/03t8O0XNfN0ty9IfjpDKfW8/ge4QO6UK+pw==
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        devicetree@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org
-Cc:     Marcin Wojtas <mw@semihalf.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Taras Chornyi <tchornyi@marvell.com>,
-        <linux-kernel@vger.kernel.org>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Michael Walle <michael@walle.cc>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH net-next 6/6] net: mvpp2: Consider NVMEM cells as possible MAC address source
-Date:   Thu, 17 Nov 2022 22:55:57 +0100
-Message-Id: <20221117215557.1277033-7-miquel.raynal@bootlin.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221117215557.1277033-1-miquel.raynal@bootlin.com>
-References: <20221117215557.1277033-1-miquel.raynal@bootlin.com>
+        Thu, 17 Nov 2022 16:57:33 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 257E279929;
+        Thu, 17 Nov 2022 13:56:50 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id gv23so8568087ejb.3;
+        Thu, 17 Nov 2022 13:56:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qDO6ZvFTlzP/mSC07WX0PHWZxtm2OkM+w+461rLKdK4=;
+        b=XwyvU3K6QvYPxeEt8mlmDGyP13A/0mOWUl2b49auWMpIR1Rdz8s4n2ak7BfMWM7Lvz
+         +w0y6JEAurNqxL9NR+XNehJ3actjk7k09WAt97nzwidit0nM+KodUqqjSqkL9cYgVE5o
+         wHG44++hDUB9hARpHKJrqdGfIhscgQ9+e5e2h2ctJaoqJUIofZuXoFhvZZ+hjewh/pA8
+         7/ScWWztNH7LfQVXJvHMX/8s77XDWSNhTUYAY6OLbSWtEmTVUciaZZyGmKgCWevH5lsv
+         ZmKuc22EQahZ9RzxQwEwsjvrRQ8Oez2H0RONmQa6jzSvH77C//H8BnOvEFT2pNF51hLO
+         iCEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qDO6ZvFTlzP/mSC07WX0PHWZxtm2OkM+w+461rLKdK4=;
+        b=J3S3jC7c1CYoC8Xb0RDVT9q04W7vt4noDQCkbc/5kYD4Ujz7MfRXiwBtv/k8zJ06CZ
+         COIE8NW8nwjy5LntLw5hIqC348fmSqPRYXNey8Pa+SbPDMicf4FenWG+t3lsaI7vy6Co
+         ec6ULr8WII08D+vvVedt8QXw4z9BWuuJFjbzFyxa/r1Q5CGvdbYOJUqgT4MydZE165Ur
+         +HEhJxI3X9CbLMKpAUQU/DoCtEf56ZaZlkseZbBPA/46dcecwjfIshcqwcSms9YgdWDF
+         9wo8ikTsSpZX7a52jPFY0PrpS8/1aKbddDouzJ/7p1Z3SlIiwOoX0s6e2ZOp+3QVAqVv
+         RPoA==
+X-Gm-Message-State: ANoB5plLl/70IpWmMmlakxaHiOsSjGcBeoLlnwN1SPodlrvd80ef4baw
+        diE6XnADQjFUv2t0fJy8ZFxRtEilimM=
+X-Google-Smtp-Source: AA0mqf5JEOAJSEkta+wEDUuq3Us56H/u5TD23H7SAzl0eMCj5iOrVl0eyopeO1WmUfkq5iTaFA/rYg==
+X-Received: by 2002:a17:907:1df2:b0:7ae:8411:112c with SMTP id og50-20020a1709071df200b007ae8411112cmr3535248ejc.97.1668722208647;
+        Thu, 17 Nov 2022 13:56:48 -0800 (PST)
+Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id b14-20020a170906660e00b0073dd8e5a39fsm861542ejp.156.2022.11.17.13.56.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 13:56:47 -0800 (PST)
+Date:   Thu, 17 Nov 2022 22:56:45 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Vidya Sagar <vidyas@nvidia.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        jonathanh@nvidia.com, mperttunen@nvidia.com,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kthota@nvidia.com,
+        mmaddireddy@nvidia.com, sagar.tv@gmail.com
+Subject: Re: [PATCH] arm64: tegra: Fix non-prefetchable aperture of PCIe C3
+ controller
+Message-ID: <Y3auHfv0VL8AiVd+@orome>
+References: <20221025182508.10687-1-vidyas@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="6OwvVH3W1DANH+Ik"
+Content-Disposition: inline
+In-Reply-To: <20221025182508.10687-1-vidyas@nvidia.com>
+User-Agent: Mutt/2.2.8 (2022-11-05)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ONIE standard describes the organization of tlv (type-length-value)
-arrays commonly stored within NVMEM devices on common networking
-hardware.
 
-Several drivers already make use of NVMEM cells for purposes like
-retrieving a default MAC address provided by the manufacturer.
+--6OwvVH3W1DANH+Ik
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-What made ONIE tables unusable so far was the fact that the information
-where "dynamically" located within the table depending on the
-manufacturer wishes, while Linux NVMEM support only allowed statically
-defined NVMEM cells. Fortunately, this limitation was eventually tackled
-with the introduction of discoverable cells through the use of NVMEM
-layouts, making it possible to extract and consistently use the content
-of tables like ONIE's tlv arrays.
+On Tue, Oct 25, 2022 at 11:55:08PM +0530, Vidya Sagar wrote:
+> Fix the starting address of the non-prefetchable aperture of PCIe C3
+> controller.
+>=20
+> Fixes: ec142c44b026 ("arm64: tegra: Add P2U and PCIe controller nodes to =
+Tegra234 DT")
+> Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
+> ---
+>  arch/arm64/boot/dts/nvidia/tegra234.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Parsing this table at runtime in order to get various information is now
-possible. So, because many Marvell networking switches already follow
-this standard, let's consider using NVMEM cells as a new valid source of
-information when looking for a base MAC address, which is one of the
-primary uses of these new fields. Indeed, manufacturers following the
-ONIE standard are encouraged to provide a default MAC address there, so
-let's eventually use it if no other MAC address has been found using the
-existing methods.
+Applied, thanks.
 
-Link: https://opencomputeproject.github.io/onie/design-spec/hw_requirements.html
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
----
- drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+Thierry
 
-diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-index eb0fb8128096..7c8c323f4411 100644
---- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-+++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-@@ -6104,6 +6104,12 @@ static void mvpp2_port_copy_mac_addr(struct net_device *dev, struct mvpp2 *priv,
- 		}
- 	}
- 
-+	if (!of_get_mac_address(to_of_node(fwnode), hw_mac_addr)) {
-+		*mac_from = "nvmem cell";
-+		eth_hw_addr_set(dev, hw_mac_addr);
-+		return;
-+	}
-+
- 	*mac_from = "random";
- 	eth_hw_addr_random(dev);
- }
--- 
-2.34.1
+--6OwvVH3W1DANH+Ik
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmN2rhsACgkQ3SOs138+
+s6FbWw//XlQN3vUskTr3058wSW/TFQa3V6T2wS7zqqN6d5JZw9JlcW+zC2Fq2IVl
+EE6WLbT5IcV6gKXZQ82C7ge6Mu9Dn3ve6YgvLiuwN88nxoN9w2oIW0YMU/DrcWDi
+jYMN9xJcJzQV/rO/0NIAqNsJheVtP8CPxchsTRuWr7f8sOLV4ou3pvs9IGio3O2n
+JcI/8JKVwHBlSn9pJgGWcPWxB7uvj3OU1Lyzk6HBFEcDk+Mf4rX4mRSqv+WM9kow
+eEGdLhCtevPhs6ymC1XzTLfkIsYsJoC4wHXP6fvFiqF9xvrdRfbvpmSB9b/34EcT
+lO/K6MepwxtK+eFn1v2MvQYYaH/5VBAmltkCyr1wiUQeDBofi0LYYu4JEo0xqmZB
+5tKUBE+5W4XogoKArMZHgdVfoyhUFva3diS0H1QCC3HLiX0t6RiztadPfP7qb8JJ
+Pwy7HQlY03mKC1nyOmaxYVZe71J2knCLnvXC8ByUvQmL6HHjlVbQoQXgJ81bGVp7
+oAFqxFYoVwVF5bOeuuXLby/IDirtnlv6HaNk7Tmwpo78fg9fdYk1dHkXNsh8KtK5
+z1jpKmDur9n8A1yDRBwHRsGddYQk+guEnwXtwGFsuheH1ZUCnHiX3FcNLd9xH3ui
++W4EzkiaRbHVnmp04CH5fPlFZ8Pnw7cWQATcJuv3fayomQJx1mk=
+=u8DA
+-----END PGP SIGNATURE-----
+
+--6OwvVH3W1DANH+Ik--
