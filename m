@@ -2,140 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7257B62D60A
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 10:11:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBA6362D60C
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 10:11:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239750AbiKQJLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 04:11:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38494 "EHLO
+        id S239760AbiKQJL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 04:11:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239725AbiKQJLM (ORCPT
+        with ESMTP id S239703AbiKQJLZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 04:11:12 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C343413E81;
-        Thu, 17 Nov 2022 01:11:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=rs9mPbZMWkmGpFMwZXAxzgJsIHnGFVekqWq8NHBYPaE=; b=R1R3c0H1DMOPHL2EgzaQiKmWc6
-        4g7vKNmWUZA3OnVQZ/791nS7MV15HGuXYR4LWct/zjRRgTK+dNnL85b46VmpoobJ+EHG/3iX5n7IA
-        +equo9lBjaJUg3gTG+mevrb7K9jv6FfkkHfl2p47Rs0cy6NoLBkr9vyQZjccWCdTguIbSq3W8L+M+
-        g5vZQ/0UzVMiD70Ih/xvhFHjAJMHV/ca+Xik2nReUKV0TeWwkr909DO60dbGyjqIg2jCR8xKkeWGW
-        uwTyKLOnFvLCxPonjQNLfIhyogu3+VVn7IZf6T5ilF6RWcC9C3xOpf/z/mpnIIqLWzT4qucfdy49N
-        D47XaqmA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ovavI-000qVG-8t; Thu, 17 Nov 2022 09:11:04 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7C93830002E;
-        Thu, 17 Nov 2022 10:10:57 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 64B5420B670CB; Thu, 17 Nov 2022 10:10:57 +0100 (CET)
-Date:   Thu, 17 Nov 2022 10:10:57 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        x86@kernel.org, "Paul E. McKenney" <paulmck@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Guo Ren <guoren@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [RFC PATCH v2 5/8] irq_work: Trace self-IPIs sent via
- arch_irq_work_raise()
-Message-ID: <Y3X6oQdySdXBh7v8@hirez.programming.kicks-ass.net>
-References: <20221102182949.3119584-1-vschneid@redhat.com>
- <20221102183336.3120536-4-vschneid@redhat.com>
+        Thu, 17 Nov 2022 04:11:25 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9206B59171
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 01:11:24 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id gv23so3520295ejb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 01:11:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=w2kfn5b4knzE1+oQl9jwi6wbBS5Fy4A8mt/gKYPzDDY=;
+        b=I1BLtoq75dsLJakBJStQd2/w0ENDCPXS+L+xq1pB4I9guAn6qlcm88vjGVcjgJnxZb
+         QW+yP9nFhTTqUNrhbGDxFeJF+k1MKSu5GMT2upczZt4walVJtMB2r5llNOgeFYroAzfl
+         QPnEMw7mmn3bYkZn7JD4337mmunWQ266bJ1EQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=w2kfn5b4knzE1+oQl9jwi6wbBS5Fy4A8mt/gKYPzDDY=;
+        b=K5rlYQ8uMc+OIwTrwmTpt3yTLI9nc2Vf+uW8IiqOa/qRPzNlJsPnIbo2sizDd4yx+T
+         9kz+eYykk/q7Dz/0ODdXFicbRtgC4ukefLc8qOEcyAG6Ktn3hI27/ObRAl8cYLLzS03m
+         LC4pxAK0rHUnrYVFP3HJ+yfoBHGJAPjFmJq9YKdJHffngp5H8QqW/LvX5CGvWOIStkEx
+         yfHOYugcIXl+8N3W5mNyk3zXxIJ9id6CV6YRZyrWXvL1EJSk1fRCK2ZZaljmr9Rbch5L
+         hk3hibnaTlyv9W3ubRY/hth3GdtUtKMyPzaBr9w670wC+wcYnQ9DVMGP/88CtaPzP21v
+         j/IA==
+X-Gm-Message-State: ANoB5pmgdSiak7TSRehr4G44/5v86UW4pmU2hoQrb7JDVbBCxrp4zBli
+        m1/AyofRp1VVCFbvhriE4vb+/w==
+X-Google-Smtp-Source: AA0mqf5qcvcHpVnnzYypXRCSlUwa0bOZTJnMKZcv3zxTRnMxqPi8rz92yOtpchQ4rvn3UxUG9pT7zA==
+X-Received: by 2002:a17:907:778c:b0:7ad:79c0:4669 with SMTP id ky12-20020a170907778c00b007ad79c04669mr1387919ejc.395.1668676283087;
+        Thu, 17 Nov 2022 01:11:23 -0800 (PST)
+Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-54-207.cust.vodafonedsl.it. [188.217.54.207])
+        by smtp.gmail.com with ESMTPSA id n23-20020a05640204d700b0045c47b2a800sm257929edw.67.2022.11.17.01.11.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 01:11:22 -0800 (PST)
+Date:   Thu, 17 Nov 2022 10:11:20 +0100
+From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: Re: [PATCH 1/4] media: i2c: s5k6a3: switch to using gpiod API
+Message-ID: <20221117091120.GA2725180@tom-ThinkPad-T14s-Gen-2i>
+References: <20221115221145.2550572-1-dmitry.torokhov@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221102183336.3120536-4-vschneid@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221115221145.2550572-1-dmitry.torokhov@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 06:33:33PM +0000, Valentin Schneider wrote:
-> IPIs sent to remove CPUs via irq_work_queue_on() are now covered by
-> trace_ipi_send_cpumask(), add another instance of the tracepoint to cover
-> self-IPIs.
+Hi Dmitry,
+
+On Tue, Nov 15, 2022 at 02:11:42PM -0800, Dmitry Torokhov wrote:
+> This patch switches the driver away from legacy gpio/of_gpio API to
+> gpiod API, and removes one of the last uses of of_get_gpio_flags().
 > 
-> Signed-off-by: Valentin Schneider <vschneid@redhat.com>
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 > ---
->  kernel/irq_work.c | 14 +++++++++++++-
->  1 file changed, 13 insertions(+), 1 deletion(-)
+>  drivers/media/i2c/s5k6a3.c | 30 +++++++++++-------------------
+>  1 file changed, 11 insertions(+), 19 deletions(-)
 > 
-> diff --git a/kernel/irq_work.c b/kernel/irq_work.c
-> index 7afa40fe5cc43..aec38c294ce68 100644
-> --- a/kernel/irq_work.c
-> +++ b/kernel/irq_work.c
-> @@ -22,6 +22,8 @@
->  #include <asm/processor.h>
->  #include <linux/kasan.h>
+> diff --git a/drivers/media/i2c/s5k6a3.c b/drivers/media/i2c/s5k6a3.c
+> index a4efd6d10b43..ef6673b10580 100644
+> --- a/drivers/media/i2c/s5k6a3.c
+> +++ b/drivers/media/i2c/s5k6a3.c
+> @@ -9,12 +9,12 @@
+>  #include <linux/clk.h>
+>  #include <linux/delay.h>
+>  #include <linux/device.h>
+> +#include <linux/err.h>
+>  #include <linux/errno.h>
+> -#include <linux/gpio.h>
+> +#include <linux/gpio/consumer.h>
+>  #include <linux/i2c.h>
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+> -#include <linux/of_gpio.h>
+>  #include <linux/pm_runtime.h>
+>  #include <linux/regulator/consumer.h>
+>  #include <linux/slab.h>
+> @@ -59,7 +59,7 @@ struct s5k6a3 {
+>  	struct v4l2_subdev subdev;
+>  	struct media_pad pad;
+>  	struct regulator_bulk_data supplies[S5K6A3_NUM_SUPPLIES];
+> -	int gpio_reset;
+> +	struct gpio_desc *gpio_reset;
+>  	struct mutex lock;
+>  	struct v4l2_mbus_framefmt format;
+>  	struct clk *clock;
+> @@ -216,11 +216,11 @@ static int __s5k6a3_power_on(struct s5k6a3 *sensor)
+>  			goto error_clk;
+>  	}
 >  
-> +#include <trace/events/ipi.h>
-> +
->  static DEFINE_PER_CPU(struct llist_head, raised_list);
->  static DEFINE_PER_CPU(struct llist_head, lazy_list);
->  static DEFINE_PER_CPU(struct task_struct *, irq_workd);
-> @@ -74,6 +76,16 @@ void __weak arch_irq_work_raise(void)
->  	 */
->  }
+> -	gpio_set_value(sensor->gpio_reset, 1);
+> +	gpiod_set_value_cansleep(sensor->gpio_reset, 0);
+>  	usleep_range(600, 800);
+> -	gpio_set_value(sensor->gpio_reset, 0);
+> +	gpiod_set_value_cansleep(sensor->gpio_reset, 1);
+>  	usleep_range(600, 800);
+> -	gpio_set_value(sensor->gpio_reset, 1);
+> +	gpiod_set_value_cansleep(sensor->gpio_reset, 0);
 >  
-> +static inline void irq_work_raise(struct irq_work *work)
-
-__always_inline, unless you want to occasionally only see it point to
-__irq_work_queue_local().
-
-> +{
-> +	if (trace_ipi_send_cpumask_enabled() && arch_irq_work_has_interrupt()) {
-> +		trace_ipi_send_cpumask(cpumask_of(smp_processor_id()),
-> +				       _RET_IP_,
-> +				       work->func);
-	}
-> +
-> +	arch_irq_work_raise();
-> +}
-> +
->  /* Enqueue on current CPU, work must already be claimed and preempt disabled */
->  static void __irq_work_queue_local(struct irq_work *work)
+>  	/* Delay needed for the sensor initialization */
+>  	msleep(20);
+> @@ -240,7 +240,7 @@ static int __s5k6a3_power_off(struct s5k6a3 *sensor)
 >  {
-> @@ -99,7 +111,7 @@ static void __irq_work_queue_local(struct irq_work *work)
+>  	int i;
 >  
->  	/* If the work is "lazy", handle it from next tick if any */
->  	if (!lazy_work || tick_nohz_tick_stopped())
-> -		arch_irq_work_raise();
-> +		irq_work_raise(work);
->  }
+> -	gpio_set_value(sensor->gpio_reset, 0);
+> +	gpiod_set_value_cansleep(sensor->gpio_reset, 1);
 >  
->  /* Enqueue the irq work @work on the current CPU */
+>  	for (i = S5K6A3_NUM_SUPPLIES - 1; i >= 0; i--)
+>  		regulator_disable(sensor->supplies[i].consumer);
+> @@ -285,32 +285,24 @@ static int s5k6a3_probe(struct i2c_client *client)
+>  	struct device *dev = &client->dev;
+>  	struct s5k6a3 *sensor;
+>  	struct v4l2_subdev *sd;
+> -	int gpio, i, ret;
+> +	int i, ret;
+>  
+>  	sensor = devm_kzalloc(dev, sizeof(*sensor), GFP_KERNEL);
+>  	if (!sensor)
+>  		return -ENOMEM;
+>  
+>  	mutex_init(&sensor->lock);
+> -	sensor->gpio_reset = -EINVAL;
+> -	sensor->clock = ERR_PTR(-EINVAL);
+>  	sensor->dev = dev;
+>  
+>  	sensor->clock = devm_clk_get(sensor->dev, S5K6A3_CLK_NAME);
+>  	if (IS_ERR(sensor->clock))
+>  		return PTR_ERR(sensor->clock);
+>  
+> -	gpio = of_get_gpio_flags(dev->of_node, 0, NULL);
+> -	if (!gpio_is_valid(gpio))
+> -		return gpio;
+> -
+> -	ret = devm_gpio_request_one(dev, gpio, GPIOF_OUT_INIT_LOW,
+> -						S5K6A3_DRV_NAME);
+> -	if (ret < 0)
+> +	sensor->gpio_reset = devm_gpiod_get(dev, NULL, GPIOD_OUT_HIGH);
+> +	ret = PTR_ERR_OR_ZERO(sensor->gpio_reset);
+> +	if (ret)
+>  		return ret;
+
+Patch looks good to me!
+Reviewed-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+
+For the future I think would be nice use "reset-gpios" name in dts.
+Then call:
+
+	devm_gpiod_get(dev, "reset", GPIOD_OUT_HIGH);
+
+But this is a todo :)
+
+Regards,
+Tommaso
+
+>  
+> -	sensor->gpio_reset = gpio;
+> -
+>  	if (of_property_read_u32(dev->of_node, "clock-frequency",
+>  				 &sensor->clock_frequency)) {
+>  		sensor->clock_frequency = S5K6A3_DEFAULT_CLK_FREQ;
 > -- 
-> 2.31.1
+> 2.38.1.431.g37b22c650d-goog
 > 
+
+-- 
+Tommaso Merciai
+Embedded Linux Engineer
+tommaso.merciai@amarulasolutions.com
+__________________________________
+
+Amarula Solutions SRL
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+T. +39 042 243 5310
+info@amarulasolutions.com
+www.amarulasolutions.com
