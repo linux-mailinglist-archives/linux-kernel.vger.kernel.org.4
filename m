@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0888E62E165
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 17:20:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5450362E166
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 17:20:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239679AbiKQQUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 11:20:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55766 "EHLO
+        id S240056AbiKQQUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 11:20:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234725AbiKQQUB (ORCPT
+        with ESMTP id S234762AbiKQQUC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 11:20:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD12978D7F
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 08:19:59 -0800 (PST)
+        Thu, 17 Nov 2022 11:20:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7690878D7A
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 08:20:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7CE4CB820F9
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 16:19:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29C9BC433D6;
-        Thu, 17 Nov 2022 16:19:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 03A06B82104
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 16:20:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABB3FC433C1;
+        Thu, 17 Nov 2022 16:19:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668701997;
-        bh=gALm3Hj+xZ0hQpaXHl63IdMmEC4JCRNy1Wtv4B5EeLM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=kALXWhCy21vpoPQaephaJAbUr8h/wNM+n/xlXwVITLI0vziijFplKMFVuxQFp/C87
-         MmQVVgn8Luu96mzfZgxSbxJZGT/DxwfV2AO1mLj60bigF4wKYh6SrYZlaEK8Wg/PqO
-         2CHxbe4M8sXzFZ4Sc/j2o1z2G6x99gtIyGsX0PqO7BF6NvJJ/FjcDKceHcsCjMAonY
-         EwI2m+3sbNKcGjtx6kiW6i94FZuNknn5XVBA6IspbDcNw/q2c49p+VtsiSDx5pYFVB
-         1JB7Pwzmk9eDrjBQuRk3HLV7KpNvUJaQtTyZ8gwO0OQ0hggoUNUp0boBK06JRLfSP0
-         nQzE/WrEj8t1Q==
+        s=k20201202; t=1668701998;
+        bh=0qrYKoGFSGwe6KK/rIbg5V80Mliqyjd1Au0nd5otEuM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=qhfGgnwZSSHpYJQzOnJ01AWNsCXy86vxm4Q90h202h8wU2iF4AFRQ98InonYPqwkc
+         nrvxrTcRU40fwUWyRBXOz+94KyjK7/iArX4KVNOey53AvBogPwz4WmqzfeE09vBYft
+         YEn+dB7uplZ0vvYN4gIXJiPdYRlt0KlzzMZOHLT+v7btBpqyxv/3EtIMJoEwv4Zefn
+         E+spwYDeR3jMoVlqff7ws1T6R67xvxuli+VyVIhMN7mVVnw/Qz0fgTQBaidCSeMYm5
+         fJoqyhSX1gJTvLuLqUn4wAQ1R8lfHxIcSHxZze4qYXEj4KMCwrqOIzMgrSGTwe4uPt
+         QByv6zdcUMH8Q==
 From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     Ofir Bitton <obitton@habana.ai>
-Subject: [PATCH 01/20] habanalabs/gaudi2: add PCI revision 2 support
-Date:   Thu, 17 Nov 2022 18:19:32 +0200
-Message-Id: <20221117161951.845454-1-ogabbay@kernel.org>
+Cc:     Dani Liberman <dliberman@habana.ai>
+Subject: [PATCH 02/20] habanalabs/gaudi: add razwi notify event
+Date:   Thu, 17 Nov 2022 18:19:33 +0200
+Message-Id: <20221117161951.845454-2-ogabbay@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221117161951.845454-1-ogabbay@kernel.org>
+References: <20221117161951.845454-1-ogabbay@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -50,250 +52,233 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ofir Bitton <obitton@habana.ai>
+From: Dani Liberman <dliberman@habana.ai>
 
-Add support for Gaudi2 Device with PCI revision 2.
-Functionality is exactly the same as revision 1, the only difference
-is device name exposed to user.
+Each time razwi (read-only zero, write ignore) happens, besides
+capturing its data, also notify the user about it.
 
-Signed-off-by: Ofir Bitton <obitton@habana.ai>
+Signed-off-by: Dani Liberman <dliberman@habana.ai>
 Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- drivers/misc/habanalabs/common/device.c       |  4 +++
- drivers/misc/habanalabs/common/habanalabs.h   |  2 ++
- .../misc/habanalabs/common/habanalabs_drv.c   | 26 +++++++++++++------
- .../misc/habanalabs/common/habanalabs_ioctl.c |  6 +++--
- drivers/misc/habanalabs/common/mmu/mmu.c      |  1 +
- drivers/misc/habanalabs/common/sysfs.c        |  2 ++
- drivers/misc/habanalabs/gaudi2/gaudi2.c       |  6 +----
- drivers/misc/habanalabs/gaudi2/gaudi2P.h      |  2 --
- .../include/hw_ip/pci/pci_general.h           |  7 +++++
- include/uapi/misc/habanalabs.h                |  7 +++++
- 10 files changed, 46 insertions(+), 17 deletions(-)
+ drivers/misc/habanalabs/common/device.c     |  8 +++++
+ drivers/misc/habanalabs/common/habanalabs.h |  2 ++
+ drivers/misc/habanalabs/gaudi/gaudi.c       | 37 +++++++++++----------
+ include/uapi/misc/habanalabs.h              |  2 ++
+ 4 files changed, 31 insertions(+), 18 deletions(-)
 
 diff --git a/drivers/misc/habanalabs/common/device.c b/drivers/misc/habanalabs/common/device.c
-index 3ea1ee1ec8ef..35ed494fcfdf 100644
+index 35ed494fcfdf..d1a609589558 100644
 --- a/drivers/misc/habanalabs/common/device.c
 +++ b/drivers/misc/habanalabs/common/device.c
-@@ -748,6 +748,10 @@ static int device_early_init(struct hl_device *hdev)
- 		gaudi2_set_asic_funcs(hdev);
- 		strscpy(hdev->asic_name, "GAUDI2", sizeof(hdev->asic_name));
- 		break;
-+	case ASIC_GAUDI2B:
-+		gaudi2_set_asic_funcs(hdev);
-+		strscpy(hdev->asic_name, "GAUDI2B", sizeof(hdev->asic_name));
-+		break;
- 		break;
- 	default:
- 		dev_err(hdev->dev, "Unrecognized ASIC type %d\n",
+@@ -2409,6 +2409,14 @@ void hl_capture_razwi(struct hl_device *hdev, u64 addr, u16 *engine_id, u16 num_
+ 			num_of_engines * sizeof(u16));
+ 	hdev->captured_err_info.razwi.flags = flags;
+ }
++
++void hl_handle_razwi(struct hl_device *hdev, u64 addr, u16 *engine_id, u16 num_of_engines,
++			u8 flags, u64 *event_mask)
++{
++	hl_capture_razwi(hdev, addr, engine_id, num_of_engines, flags);
++	*event_mask |= HL_NOTIFIER_EVENT_RAZWI;
++}
++
+ static void hl_capture_user_mappings(struct hl_device *hdev, bool is_pmmu)
+ {
+ 	struct page_fault_info *pgf_info = &hdev->captured_err_info.pgf_info;
 diff --git a/drivers/misc/habanalabs/common/habanalabs.h b/drivers/misc/habanalabs/common/habanalabs.h
-index 7d191f388953..e391e7951fb7 100644
+index e391e7951fb7..d9335f3769b8 100644
 --- a/drivers/misc/habanalabs/common/habanalabs.h
 +++ b/drivers/misc/habanalabs/common/habanalabs.h
-@@ -1192,6 +1192,7 @@ struct hl_dec {
-  * @ASIC_GAUDI: Gaudi device (HL-2000).
-  * @ASIC_GAUDI_SEC: Gaudi secured device (HL-2000).
-  * @ASIC_GAUDI2: Gaudi2 device.
-+ * @ASIC_GAUDI2B: Gaudi2B device.
-  */
- enum hl_asic_type {
- 	ASIC_INVALID,
-@@ -1199,6 +1200,7 @@ enum hl_asic_type {
- 	ASIC_GAUDI,
- 	ASIC_GAUDI_SEC,
- 	ASIC_GAUDI2,
-+	ASIC_GAUDI2B,
- };
+@@ -3812,6 +3812,8 @@ hl_mmap_mem_buf_alloc(struct hl_mem_mgr *mmg,
+ __printf(2, 3) void hl_engine_data_sprintf(struct engines_data *e, const char *fmt, ...);
+ void hl_capture_razwi(struct hl_device *hdev, u64 addr, u16 *engine_id, u16 num_of_engines,
+ 			u8 flags);
++void hl_handle_razwi(struct hl_device *hdev, u64 addr, u16 *engine_id, u16 num_of_engines,
++			u8 flags, u64 *event_mask);
+ void hl_capture_page_fault(struct hl_device *hdev, u64 addr, u16 eng_id, bool is_pmmu);
  
- struct hl_cs_parser;
-diff --git a/drivers/misc/habanalabs/common/habanalabs_drv.c b/drivers/misc/habanalabs/common/habanalabs_drv.c
-index e82af8989700..7815c60df54e 100644
---- a/drivers/misc/habanalabs/common/habanalabs_drv.c
-+++ b/drivers/misc/habanalabs/common/habanalabs_drv.c
-@@ -9,6 +9,7 @@
- #define pr_fmt(fmt)		"habanalabs: " fmt
+ #ifdef CONFIG_DEBUG_FS
+diff --git a/drivers/misc/habanalabs/gaudi/gaudi.c b/drivers/misc/habanalabs/gaudi/gaudi.c
+index 3dfb9ecf7db3..035865cb097c 100644
+--- a/drivers/misc/habanalabs/gaudi/gaudi.c
++++ b/drivers/misc/habanalabs/gaudi/gaudi.c
+@@ -7301,7 +7301,7 @@ static void gaudi_handle_qman_err(struct hl_device *hdev, u16 event_type, u64 *e
+ }
  
- #include "habanalabs.h"
-+#include "../include/hw_ip/pci/pci_general.h"
- 
- #include <linux/pci.h>
- #include <linux/aer.h>
-@@ -74,16 +75,17 @@ MODULE_DEVICE_TABLE(pci, ids);
- /*
-  * get_asic_type - translate device id to asic type
-  *
-- * @device: id of the PCI device
-+ * @hdev: pointer to habanalabs device structure.
-  *
-- * Translate device id to asic type.
-+ * Translate device id and revision id to asic type.
-  * In case of unidentified device, return -1
-  */
--static enum hl_asic_type get_asic_type(u16 device)
-+static enum hl_asic_type get_asic_type(struct hl_device *hdev)
+ static void gaudi_print_irq_info(struct hl_device *hdev, u16 event_type,
+-					bool razwi)
++					bool razwi, u64 *event_mask)
  {
--	enum hl_asic_type asic_type;
-+	struct pci_dev *pdev = hdev->pdev;
-+	enum hl_asic_type asic_type = ASIC_INVALID;
+ 	bool is_read = false, is_write = false;
+ 	u16 engine_id[2], num_of_razwi_eng = 0;
+@@ -7337,7 +7337,8 @@ static void gaudi_print_irq_info(struct hl_device *hdev, u16 event_type,
+ 				num_of_razwi_eng = 1;
+ 		}
  
--	switch (device) {
-+	switch (pdev->device) {
- 	case PCI_IDS_GOYA:
- 		asic_type = ASIC_GOYA;
- 		break;
-@@ -94,10 +96,18 @@ static enum hl_asic_type get_asic_type(u16 device)
- 		asic_type = ASIC_GAUDI_SEC;
- 		break;
- 	case PCI_IDS_GAUDI2:
--		asic_type = ASIC_GAUDI2;
-+		switch (pdev->revision) {
-+		case REV_ID_A:
-+			asic_type = ASIC_GAUDI2;
-+			break;
-+		case REV_ID_B:
-+			asic_type = ASIC_GAUDI2B;
-+			break;
-+		default:
-+			break;
-+		}
- 		break;
- 	default:
--		asic_type = ASIC_INVALID;
- 		break;
+-		hl_capture_razwi(hdev, razwi_addr, engine_id, num_of_razwi_eng, razwi_flags);
++		hl_handle_razwi(hdev, razwi_addr, engine_id, num_of_razwi_eng, razwi_flags,
++				event_mask);
  	}
+ }
  
-@@ -416,7 +426,7 @@ static int create_hdev(struct hl_device **dev, struct pci_dev *pdev)
- 	/* First, we must find out which ASIC are we handling. This is needed
- 	 * to configure the behavior of the driver (kernel parameters)
- 	 */
--	hdev->asic_type = get_asic_type(pdev->device);
-+	hdev->asic_type = get_asic_type(hdev);
- 	if (hdev->asic_type == ASIC_INVALID) {
- 		dev_err(&pdev->dev, "Unsupported ASIC\n");
- 		rc = -ENODEV;
-diff --git a/drivers/misc/habanalabs/common/habanalabs_ioctl.c b/drivers/misc/habanalabs/common/habanalabs_ioctl.c
-index 5ce5c42e2731..ee43017eb563 100644
---- a/drivers/misc/habanalabs/common/habanalabs_ioctl.c
-+++ b/drivers/misc/habanalabs/common/habanalabs_ioctl.c
-@@ -10,10 +10,11 @@
- #include <uapi/misc/habanalabs.h>
- #include "habanalabs.h"
- 
--#include <linux/kernel.h>
- #include <linux/fs.h>
--#include <linux/uaccess.h>
-+#include <linux/kernel.h>
-+#include <linux/pci.h>
- #include <linux/slab.h>
-+#include <linux/uaccess.h>
- #include <linux/vmalloc.h>
- 
- static u32 hl_debug_struct_size[HL_DEBUG_OP_TIMESTAMP + 1] = {
-@@ -105,6 +106,7 @@ static int hw_ip_info(struct hl_device *hdev, struct hl_info_args *args)
- 	hw_ip.edma_enabled_mask = prop->edma_enabled_mask;
- 	hw_ip.server_type = prop->server_type;
- 	hw_ip.security_enabled = prop->fw_security_enabled;
-+	hw_ip.revision_id = hdev->pdev->revision;
- 
- 	return copy_to_user(out, &hw_ip,
- 		min((size_t) size, sizeof(hw_ip))) ? -EFAULT : 0;
-diff --git a/drivers/misc/habanalabs/common/mmu/mmu.c b/drivers/misc/habanalabs/common/mmu/mmu.c
-index 67d3e70cf571..2c1005f74cf4 100644
---- a/drivers/misc/habanalabs/common/mmu/mmu.c
-+++ b/drivers/misc/habanalabs/common/mmu/mmu.c
-@@ -635,6 +635,7 @@ int hl_mmu_if_set_funcs(struct hl_device *hdev)
- 		hl_mmu_v1_set_funcs(hdev, &hdev->mmu_func[MMU_DR_PGT]);
+@@ -7675,7 +7676,7 @@ static void gaudi_handle_eqe(struct hl_device *hdev, struct hl_eq_entry *eq_entr
+ 	case GAUDI_EVENT_HBM_0_DERR ... GAUDI_EVENT_HBM_3_DERR:
+ 	case GAUDI_EVENT_MMU_DERR:
+ 	case GAUDI_EVENT_NIC0_CS_DBG_DERR ... GAUDI_EVENT_NIC4_CS_DBG_DERR:
+-		gaudi_print_irq_info(hdev, event_type, true);
++		gaudi_print_irq_info(hdev, event_type, true, &event_mask);
+ 		gaudi_handle_ecc_event(hdev, event_type, &eq_entry->ecc_data);
+ 		event_mask |= HL_NOTIFIER_EVENT_GENERAL_HW_ERR;
+ 		fw_fatal_err_flag = HL_DRV_RESET_FW_FATAL_ERR;
+@@ -7685,7 +7686,7 @@ static void gaudi_handle_eqe(struct hl_device *hdev, struct hl_eq_entry *eq_entr
+ 	case GAUDI_EVENT_AXI_ECC:
+ 	case GAUDI_EVENT_L2_RAM_ECC:
+ 	case GAUDI_EVENT_PLL0 ... GAUDI_EVENT_PLL17:
+-		gaudi_print_irq_info(hdev, event_type, false);
++		gaudi_print_irq_info(hdev, event_type, false, &event_mask);
+ 		fw_fatal_err_flag = HL_DRV_RESET_FW_FATAL_ERR;
+ 		event_mask |= HL_NOTIFIER_EVENT_GENERAL_HW_ERR;
+ 		goto reset_device;
+@@ -7694,7 +7695,7 @@ static void gaudi_handle_eqe(struct hl_device *hdev, struct hl_eq_entry *eq_entr
+ 	case GAUDI_EVENT_HBM1_SPI_0:
+ 	case GAUDI_EVENT_HBM2_SPI_0:
+ 	case GAUDI_EVENT_HBM3_SPI_0:
+-		gaudi_print_irq_info(hdev, event_type, false);
++		gaudi_print_irq_info(hdev, event_type, false, &event_mask);
+ 		gaudi_hbm_read_interrupts(hdev,
+ 				gaudi_hbm_event_to_dev(event_type),
+ 				&eq_entry->hbm_ecc_data);
+@@ -7706,7 +7707,7 @@ static void gaudi_handle_eqe(struct hl_device *hdev, struct hl_eq_entry *eq_entr
+ 	case GAUDI_EVENT_HBM1_SPI_1:
+ 	case GAUDI_EVENT_HBM2_SPI_1:
+ 	case GAUDI_EVENT_HBM3_SPI_1:
+-		gaudi_print_irq_info(hdev, event_type, false);
++		gaudi_print_irq_info(hdev, event_type, false, &event_mask);
+ 		gaudi_hbm_read_interrupts(hdev,
+ 				gaudi_hbm_event_to_dev(event_type),
+ 				&eq_entry->hbm_ecc_data);
+@@ -7728,7 +7729,7 @@ static void gaudi_handle_eqe(struct hl_device *hdev, struct hl_eq_entry *eq_entr
+ 		 * if the event is a TPC Assertion or a "real" TPC DEC.
+ 		 */
+ 		event_mask |= HL_NOTIFIER_EVENT_TPC_ASSERT;
+-		gaudi_print_irq_info(hdev, event_type, true);
++		gaudi_print_irq_info(hdev, event_type, true, &event_mask);
+ 		reset_required = gaudi_tpc_read_interrupts(hdev,
+ 					tpc_dec_event_to_tpc_id(event_type),
+ 					"AXI_SLV_DEC_Error");
+@@ -7753,7 +7754,7 @@ static void gaudi_handle_eqe(struct hl_device *hdev, struct hl_eq_entry *eq_entr
+ 	case GAUDI_EVENT_TPC5_KRN_ERR:
+ 	case GAUDI_EVENT_TPC6_KRN_ERR:
+ 	case GAUDI_EVENT_TPC7_KRN_ERR:
+-		gaudi_print_irq_info(hdev, event_type, true);
++		gaudi_print_irq_info(hdev, event_type, true, &event_mask);
+ 		reset_required = gaudi_tpc_read_interrupts(hdev,
+ 					tpc_krn_event_to_tpc_id(event_type),
+ 					"KRN_ERR");
+@@ -7792,7 +7793,7 @@ static void gaudi_handle_eqe(struct hl_device *hdev, struct hl_eq_entry *eq_entr
+ 	case GAUDI_EVENT_HBM_0_SERR ... GAUDI_EVENT_HBM_3_SERR:
+ 		fallthrough;
+ 	case GAUDI_EVENT_MMU_SERR:
+-		gaudi_print_irq_info(hdev, event_type, true);
++		gaudi_print_irq_info(hdev, event_type, true, &event_mask);
+ 		gaudi_handle_ecc_event(hdev, event_type, &eq_entry->ecc_data);
+ 		hl_fw_unmask_irq(hdev, event_type);
+ 		event_mask |= HL_NOTIFIER_EVENT_GENERAL_HW_ERR;
+@@ -7802,14 +7803,14 @@ static void gaudi_handle_eqe(struct hl_device *hdev, struct hl_eq_entry *eq_entr
+ 	case GAUDI_EVENT_CPU_AXI_SPLITTER:
+ 	case GAUDI_EVENT_PSOC_AXI_DEC:
+ 	case GAUDI_EVENT_PSOC_PRSTN_FALL:
+-		gaudi_print_irq_info(hdev, event_type, true);
++		gaudi_print_irq_info(hdev, event_type, true, &event_mask);
+ 		hl_fw_unmask_irq(hdev, event_type);
+ 		event_mask |= HL_NOTIFIER_EVENT_GENERAL_HW_ERR;
  		break;
- 	case ASIC_GAUDI2:
-+	case ASIC_GAUDI2B:
- 		/* MMUs in Gaudi2 are always host resident */
- 		hl_mmu_v2_hr_set_funcs(hdev, &hdev->mmu_func[MMU_HR_PGT]);
+ 
+ 	case GAUDI_EVENT_MMU_PAGE_FAULT:
+ 	case GAUDI_EVENT_MMU_WR_PERM:
+-		gaudi_print_irq_info(hdev, event_type, true);
++		gaudi_print_irq_info(hdev, event_type, true, &event_mask);
+ 		hl_fw_unmask_irq(hdev, event_type);
+ 		event_mask |= HL_NOTIFIER_EVENT_USER_ENGINE_ERR;
  		break;
-diff --git a/drivers/misc/habanalabs/common/sysfs.c b/drivers/misc/habanalabs/common/sysfs.c
-index c924fc994bd9..735d8bed0066 100644
---- a/drivers/misc/habanalabs/common/sysfs.c
-+++ b/drivers/misc/habanalabs/common/sysfs.c
-@@ -248,6 +248,8 @@ static ssize_t device_type_show(struct device *dev,
- 	case ASIC_GAUDI2:
- 		str = "GAUDI2";
+@@ -7838,14 +7839,14 @@ static void gaudi_handle_eqe(struct hl_device *hdev, struct hl_eq_entry *eq_entr
+ 	case GAUDI_EVENT_NIC4_QM1:
+ 	case GAUDI_EVENT_DMA0_CORE ... GAUDI_EVENT_DMA7_CORE:
+ 	case GAUDI_EVENT_TPC0_QM ... GAUDI_EVENT_TPC7_QM:
+-		gaudi_print_irq_info(hdev, event_type, true);
++		gaudi_print_irq_info(hdev, event_type, true, &event_mask);
+ 		gaudi_handle_qman_err(hdev, event_type, &event_mask);
+ 		hl_fw_unmask_irq(hdev, event_type);
+ 		event_mask |= (HL_NOTIFIER_EVENT_USER_ENGINE_ERR | HL_NOTIFIER_EVENT_DEVICE_RESET);
  		break;
-+	case ASIC_GAUDI2B:
-+		str = "GAUDI2B";
+ 
+ 	case GAUDI_EVENT_RAZWI_OR_ADC_SW:
+-		gaudi_print_irq_info(hdev, event_type, true);
++		gaudi_print_irq_info(hdev, event_type, true, &event_mask);
+ 		event_mask |= HL_NOTIFIER_EVENT_USER_ENGINE_ERR;
+ 		goto reset_device;
+ 
+@@ -7858,7 +7859,7 @@ static void gaudi_handle_eqe(struct hl_device *hdev, struct hl_eq_entry *eq_entr
+ 	case GAUDI_EVENT_TPC6_BMON_SPMU:
+ 	case GAUDI_EVENT_TPC7_BMON_SPMU:
+ 	case GAUDI_EVENT_DMA_BM_CH0 ... GAUDI_EVENT_DMA_BM_CH7:
+-		gaudi_print_irq_info(hdev, event_type, false);
++		gaudi_print_irq_info(hdev, event_type, false, &event_mask);
+ 		hl_fw_unmask_irq(hdev, event_type);
+ 		event_mask |= HL_NOTIFIER_EVENT_USER_ENGINE_ERR;
  		break;
- 	default:
- 		dev_err(hdev->dev, "Unrecognized ASIC type %d\n",
-diff --git a/drivers/misc/habanalabs/gaudi2/gaudi2.c b/drivers/misc/habanalabs/gaudi2/gaudi2.c
-index 03f8cf9bb136..f21b68be6d20 100644
---- a/drivers/misc/habanalabs/gaudi2/gaudi2.c
-+++ b/drivers/misc/habanalabs/gaudi2/gaudi2.c
-@@ -3968,11 +3968,7 @@ static void gaudi2_init_firmware_loader(struct hl_device *hdev)
- 	fw_loader->skip_bmc = false;
- 	fw_loader->sram_bar_id = SRAM_CFG_BAR_ID;
- 	fw_loader->dram_bar_id = DRAM_BAR_ID;
--
--	if (hdev->asic_type == ASIC_GAUDI2)
--		fw_loader->cpu_timeout = GAUDI2_CPU_TIMEOUT_USEC;
--	else /* ASIC_GAUDI2_FPGA */
--		fw_loader->cpu_timeout = GAUDI2_FPGA_CPU_TIMEOUT;
-+	fw_loader->cpu_timeout = GAUDI2_CPU_TIMEOUT_USEC;
+@@ -7870,7 +7871,7 @@ static void gaudi_handle_eqe(struct hl_device *hdev, struct hl_eq_entry *eq_entr
+ 		break;
  
- 	/* here we update initial values for few specific dynamic regs (as
- 	 * before reading the first descriptor from FW those value has to be
-diff --git a/drivers/misc/habanalabs/gaudi2/gaudi2P.h b/drivers/misc/habanalabs/gaudi2/gaudi2P.h
-index a99c348bbf39..b4383c199bbb 100644
---- a/drivers/misc/habanalabs/gaudi2/gaudi2P.h
-+++ b/drivers/misc/habanalabs/gaudi2/gaudi2P.h
-@@ -23,8 +23,6 @@
+ 	case GAUDI_EVENT_DMA_IF_SEI_0 ... GAUDI_EVENT_DMA_IF_SEI_3:
+-		gaudi_print_irq_info(hdev, event_type, false);
++		gaudi_print_irq_info(hdev, event_type, false, &event_mask);
+ 		gaudi_print_sm_sei_info(hdev, event_type,
+ 					&eq_entry->sm_sei_data);
+ 		rc = hl_state_dump(hdev);
+@@ -7899,18 +7900,18 @@ static void gaudi_handle_eqe(struct hl_device *hdev, struct hl_eq_entry *eq_entr
+ 		break;
  
- #define GAUDI2_CPU_TIMEOUT_USEC		30000000	/* 30s */
+ 	case GAUDI_EVENT_DEV_RESET_REQ:
+-		gaudi_print_irq_info(hdev, event_type, false);
++		gaudi_print_irq_info(hdev, event_type, false, &event_mask);
+ 		event_mask |= HL_NOTIFIER_EVENT_GENERAL_HW_ERR;
+ 		goto reset_device;
  
--#define GAUDI2_FPGA_CPU_TIMEOUT		100000000	/* 100s */
--
- #define NUMBER_OF_PDMA_QUEUES		2
- #define NUMBER_OF_EDMA_QUEUES		8
- #define NUMBER_OF_MME_QUEUES		4
-diff --git a/drivers/misc/habanalabs/include/hw_ip/pci/pci_general.h b/drivers/misc/habanalabs/include/hw_ip/pci/pci_general.h
-index d232081d4e0f..f5d497dc9bdc 100644
---- a/drivers/misc/habanalabs/include/hw_ip/pci/pci_general.h
-+++ b/drivers/misc/habanalabs/include/hw_ip/pci/pci_general.h
-@@ -20,4 +20,11 @@
- #define PCI_CONFIG_ELBI_STS_MASK	(PCI_CONFIG_ELBI_STS_ERR | \
- 					PCI_CONFIG_ELBI_STS_DONE)
+ 	case GAUDI_EVENT_PKT_QUEUE_OUT_SYNC:
+-		gaudi_print_irq_info(hdev, event_type, false);
++		gaudi_print_irq_info(hdev, event_type, false, &event_mask);
+ 		gaudi_print_out_of_sync_info(hdev, &eq_entry->pkt_sync_err);
+ 		event_mask |= HL_NOTIFIER_EVENT_GENERAL_HW_ERR;
+ 		goto reset_device;
  
-+enum hl_revision_id {
-+	/* PCI revision ID 0 is not legal */
-+	REV_ID_INVALID				= 0x00,
-+	REV_ID_A				= 0x01,
-+	REV_ID_B				= 0x02,
-+};
-+
- #endif /* INCLUDE_PCI_GENERAL_H_ */
+ 	case GAUDI_EVENT_FW_ALIVE_S:
+-		gaudi_print_irq_info(hdev, event_type, false);
++		gaudi_print_irq_info(hdev, event_type, false, &event_mask);
+ 		gaudi_print_fw_alive_info(hdev, &eq_entry->fw_alive);
+ 		event_mask |= HL_NOTIFIER_EVENT_GENERAL_HW_ERR;
+ 		goto reset_device;
 diff --git a/include/uapi/misc/habanalabs.h b/include/uapi/misc/habanalabs.h
-index a4ceee681898..58343998bd63 100644
+index 58343998bd63..7747e19e81fe 100644
 --- a/include/uapi/misc/habanalabs.h
 +++ b/include/uapi/misc/habanalabs.h
-@@ -868,6 +868,7 @@ enum hl_server_type {
-  * @number_of_user_interrupts: The number of interrupts that are available to the userspace
-  *                             application to use. Relevant for Gaudi2 and later.
-  * @device_mem_alloc_default_page_size: default page size used in device memory allocation.
-+ * @revision_id: PCI revision ID of the ASIC.
+@@ -721,6 +721,7 @@ enum hl_server_type {
+  * HL_NOTIFIER_EVENT_DEVICE_UNAVAILABLE	- Indicates device is unavailable
+  * HL_NOTIFIER_EVENT_USER_ENGINE_ERR	- Indicates device engine in error state
+  * HL_NOTIFIER_EVENT_GENERAL_HW_ERR     - Indicates device HW error
++ * HL_NOTIFIER_EVENT_RAZWI              - Indicates razwi happened
   */
- struct hl_info_hw_ip_info {
- 	__u64 sram_base_address;
-@@ -898,6 +899,12 @@ struct hl_info_hw_ip_info {
- 	__u16 pad2;
- 	__u64 reserved4;
- 	__u64 device_mem_alloc_default_page_size;
-+	__u64 reserved5;
-+	__u64 reserved6;
-+	__u32 reserved7;
-+	__u8 reserved8;
-+	__u8 revision_id;
-+	__u8 pad[2];
- };
+ #define HL_NOTIFIER_EVENT_TPC_ASSERT		(1ULL << 0)
+ #define HL_NOTIFIER_EVENT_UNDEFINED_OPCODE	(1ULL << 1)
+@@ -729,6 +730,7 @@ enum hl_server_type {
+ #define HL_NOTIFIER_EVENT_DEVICE_UNAVAILABLE	(1ULL << 4)
+ #define HL_NOTIFIER_EVENT_USER_ENGINE_ERR	(1ULL << 5)
+ #define HL_NOTIFIER_EVENT_GENERAL_HW_ERR	(1ULL << 6)
++#define HL_NOTIFIER_EVENT_RAZWI			(1ULL << 7)
  
- struct hl_info_dram_usage {
+ /* Opcode for management ioctl
+  *
 -- 
 2.25.1
 
