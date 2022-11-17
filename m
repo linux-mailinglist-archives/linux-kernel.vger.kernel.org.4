@@ -2,80 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0E8262E321
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:33:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C649F62E327
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:34:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240107AbiKQRdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 12:33:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54214 "EHLO
+        id S231377AbiKQReQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 12:34:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232427AbiKQRdG (ORCPT
+        with ESMTP id S230447AbiKQReN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 12:33:06 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411BB79E16;
-        Thu, 17 Nov 2022 09:33:06 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id d192so2479465pfd.0;
-        Thu, 17 Nov 2022 09:33:06 -0800 (PST)
+        Thu, 17 Nov 2022 12:34:13 -0500
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E91178D64
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 09:34:12 -0800 (PST)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-36cbcda2157so25414327b3.11
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 09:34:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=irBTpzdt3UKRDSaNb8P0V0IX9do/eaeR5wsA7XkY2ZM=;
-        b=he3HAFo1vLSohQ1GDMkdmyEQuAtzCtKtgHDZ9rpSjs/rlQYgBG2tiS79xmS9Or1e8X
-         C2uBPXlyMuubFKL8UqsXYX0n27S5LwIYGhWJkkZe5qXRkrrRjpIezlltEoyKSIR166Rn
-         dZ5HCa8vzD4epku1LfsNmvU8CLXTd/fKYF6ELgR8SE6XfL/ZRhDihUj3KpmndifWM4ur
-         cj/o4R9gxWPfMwfmofXWxUFeJDhlw70mq2cV6+5ZEm7VszZOWHjadrcz5wM0iviLwCTH
-         Y34E6E0Xlxc9S8nLc4UiwngYQINpmL8DdA0PhP6qHlz900Nfsb5unfx2oSKJR/JJwbak
-         MugA==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=gnHYZNnUQPhhtm+c6+nXXKTYFwWxWq5yxUS6615HEp4=;
+        b=LtzbAWE2mhQFcfcSDhzAra9cfowCswIjObI7qG4BIW5iceajiS/eY3koUUflXTA7O+
+         jrXs2/kdSmvKHX56DJK7BBFRmzH3ZkZ9SFRHhuyp49uayPjyvYV2E/iPR+8HyXJoVhxO
+         MdjeTCJvu5e2o67UHQo0dcxK1DQMxTZGvrCSpCh3HUgvX3l0wtXN1TjNf0V0sImEZL/2
+         y+y35XXuyuXHWp5wAG8/EvHJ+mkLc4qtELo7i64Ue//oMo63utDDufOKpZEw4Y37r3ap
+         Izvh6MQqVitbCfdeF4cv2WaGYvjygNa6RXWVEKN7P2SDFMuSAuaHwvpyfLHbmDogtrpN
+         4aVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=irBTpzdt3UKRDSaNb8P0V0IX9do/eaeR5wsA7XkY2ZM=;
-        b=bLAaxue1bEXUh5Zl/0FKUOFS1FvKvL4ue+tMjepImAfxlGhu/O2DhOKAuFihTbSLwQ
-         IKNDlfg8/Nmw9fer4zdt8fQphAH2TcE7vDNbxVQmBDW+PG77/m6zuseR0e7It3sRKl9c
-         6/AjjzSOd9iUeok/lziR5dz+PL1TsiWoWQH5wv4yFH4mAy5QrpB+PIHWSFnnaH0QTpnk
-         nU8SdpRlZ5i5yHsTgUf1IBmstl1y+xUwKdwtff/aUWKP6O2qg+BwmZVAQtrr23Yu3m0t
-         vk0//iFI4kgnFd2ASY/6DlHEBrJxJNi0DXvFbuB3e7YZfE453gEhrLn7g80pSQruUPFq
-         Thcw==
-X-Gm-Message-State: ANoB5pnHhOpXIT7OZt2QSPAuSCZ9ldGtxXYPP1y/DGLTgW3zz49ZsFqr
-        Thsg924szY8OnIE1vZiENAey+5sotUo=
-X-Google-Smtp-Source: AA0mqf5uJqta9XJjikgXOcN3zPD0sje1CAgXFsnL+Bp0lgoCql9d0jjeN9rKmGWuTl37VIGedFZ3KQ==
-X-Received: by 2002:a63:171e:0:b0:476:9983:b395 with SMTP id x30-20020a63171e000000b004769983b395mr2972617pgl.355.1668706385524;
-        Thu, 17 Nov 2022 09:33:05 -0800 (PST)
-Received: from localhost ([192.55.54.55])
-        by smtp.gmail.com with ESMTPSA id 34-20020a631362000000b004597e92f99dsm1220728pgt.66.2022.11.17.09.33.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 09:33:04 -0800 (PST)
-Date:   Thu, 17 Nov 2022 09:33:03 -0800
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Erdem Aktas <erdemaktas@google.com>
-Cc:     Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "Huang, Kai" <kai.huang@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "dmatlack@google.com" <dmatlack@google.com>,
-        "Christopherson,, Sean" <seanjc@google.com>
-Subject: Re: [PATCH v10 005/108] KVM: TDX: Initialize the TDX module when
- loading the KVM intel kernel module
-Message-ID: <20221117173303.GB2350331@ls.amr.corp.intel.com>
-References: <cover.1667110240.git.isaku.yamahata@intel.com>
- <99e5fcf2a7127347816982355fd4141ee1038a54.1667110240.git.isaku.yamahata@intel.com>
- <0feaa13fa5bf45258f2ebb8407eaefadf5c48976.camel@intel.com>
- <20221114231835.GA2350331@ls.amr.corp.intel.com>
- <CAAYXXYzM4=X5euL_cMx=YnPR7=8k9V_VY2ZyLs-RKz76DB2DcA@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gnHYZNnUQPhhtm+c6+nXXKTYFwWxWq5yxUS6615HEp4=;
+        b=A+yewPgL1KyJOMHemw4y6cy3cAWcZ7EkziObkNPHGi5NgxLxk3TZ/ZqcX+MbQgYFeZ
+         1fFZF8TZ+Ug03qvL76bUspD3l/euIc8d4Ya2XN0cRwLKmsbd7Ue1L7+26PkmVIb2Bx/h
+         NlvUPmxR5DAJM229m39mQVtbjuR/tnBbnU8AbjP8TBL5pmFEqUF73xXBcpH2suCXYPY0
+         Ou8+TWfgFIIbas8LFyYQOEGMFBvVbe+smsIsew+tVt0OVCN6xRoFQaUiSo5OnTeVZL5n
+         S0yeqmgvzVJEpi7YgexOj9ENmEnqb4VOxpZQWkNsSmXbezpA9N1SgYKkNumvRLq5tln2
+         wLRw==
+X-Gm-Message-State: ANoB5pmH6JNS1qrBdMsQ5LIDHJZnCn1jfMGg6hUlN8qWSHwkU5pGUjzM
+        6UAHajHbZ/Ck8uFRjVoD0BrIq3c+bgh1dzasrnqmbBTPnr3T7Q==
+X-Google-Smtp-Source: AA0mqf6KCLRpFQbK+c5XYubxaIcqESvR9Vv03C7CIPbHJA4qgSSjlWQofuQWVyxkUGAF6iDFg/e60hLM0uLbDIjyDAI=
+X-Received: by 2002:a0d:e601:0:b0:356:d0ed:6a79 with SMTP id
+ p1-20020a0de601000000b00356d0ed6a79mr2854499ywe.489.1668706451317; Thu, 17
+ Nov 2022 09:34:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAAYXXYzM4=X5euL_cMx=YnPR7=8k9V_VY2ZyLs-RKz76DB2DcA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221117031551.1142289-1-joel@joelfernandes.org>
+ <20221117031551.1142289-3-joel@joelfernandes.org> <CANn89i+gKVdveEtR9DX15Xr7E9Nn2my6SEEbXTMmxbqtezm2vg@mail.gmail.com>
+ <Y3ZaH4C4omQs1OR4@google.com> <CANn89iJRhr8+osviYKVYhcHHk5TnQQD53x87-WG3iTo4YNa0qA@mail.gmail.com>
+In-Reply-To: <CANn89iJRhr8+osviYKVYhcHHk5TnQQD53x87-WG3iTo4YNa0qA@mail.gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Thu, 17 Nov 2022 09:33:59 -0800
+Message-ID: <CANn89iLSsoS1dT5GzyjV=wBFLjM6BzjXJooWMNQV+ffQvhCrYw@mail.gmail.com>
+Subject: Re: [PATCH rcu/dev 3/3] net: Use call_rcu_flush() for dst_destroy_rcu
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     linux-kernel@vger.kernel.org, Cong Wang <xiyou.wangcong@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Jiri Pirko <jiri@resnulli.us>, netdev@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>, rcu@vger.kernel.org,
+        rostedt@goodmis.org, paulmck@kernel.org, fweisbec@gmail.com,
+        jiejiang@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,39 +78,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 04:22:13AM -0800,
-Erdem Aktas <erdemaktas@google.com> wrote:
-
-> On Mon, Nov 14, 2022 at 3:18 PM Isaku Yamahata <isaku.yamahata@gmail.com> wrote:
-> > > I think you should explain why MOVDIR64B is required, otherwise this just comes
-> > > out of blue.
-> > >
-> > > Btw, is this absolutely required?  TDX also supports Li-mode, which doesn't have
-> > > integrity check.  So theoretically with Li-mode, normal zeroing is also OK but
-> > > doesn't need to use MOVDIR64B.
-> > >
-> > > That being said, do we have a way to tell whether TDX works in Ci or Li mode?
+On Thu, Nov 17, 2022 at 9:17 AM Eric Dumazet <edumazet@google.com> wrote:
+>
+> On Thu, Nov 17, 2022 at 7:58 AM Joel Fernandes <joel@joelfernandes.org> wrote:
 > >
-> > As long as I don't know.  When clearing page, we can use
-> > if (featuremovdir64b) movdir64b else memset(0).
-> 
-> -- sorry for resending the same email, for some reason my previous
-> email was not in plain text mode--
-> As far as I know, Li mode and Ci mode both are working very similarly
-> and require movdir64b to clear any poison bit previously set. Why
-> would movdir64b is not supported in a tdx capable cpu?
+> > Hello Eric,
+> >
+> > On Wed, Nov 16, 2022 at 07:44:41PM -0800, Eric Dumazet wrote:
+> > > On Wed, Nov 16, 2022 at 7:16 PM Joel Fernandes (Google)
+> > > <joel@joelfernandes.org> wrote:
+> > > >
+> > > > In a networking test on ChromeOS, we find that using the new CONFIG_RCU_LAZY
+> > > > causes a networking test to fail in the teardown phase.
+> > > >
+> > > > The failure happens during: ip netns del <name>
+> > >
+> > > And ? What happens then next ?
+> >
+> > The test is doing the 'ip netns del <name>' and then polling for the
+> > disappearance of a network interface name for upto 5 seconds. I believe it is
+> > using netlink to get a table of interfaces. That polling is timing out.
+> >
+> > Here is some more details from the test's owner (copy pasting from another
+> > bug report):
+> > In the cleanup, we remove the netns, and thus will cause the veth pair being
+> > removed automatically, so we use a poll to check that if the veth in the root
+> > netns still exists to know whether the cleanup is done.
+> >
+> > Here is a public link to the code that is failing (its in golang):
+> > https://source.chromium.org/chromiumos/chromiumos/codesearch/+/main:src/platform/tast-tests/src/chromiumos/tast/local/network/virtualnet/env/env.go;drc=6c2841d6cc3eadd23e07912ec331943ee33d7de8;l=161
+> >
+> > Here is a public link to the line of code in the actual test leading up to the above
+> > path (this is the test that is run:
+> > network.RoutingFallthrough.ipv4_only_primary) :
+> > https://source.chromium.org/chromiumos/chromiumos/codesearch/+/main:src/platform/tast-tests/src/chromiumos/tast/local/bundles/cros/network/routing_fallthrough.go;drc=8fbf2c53960bc8917a6a01fda5405cad7c17201e;l=52
+> >
+> > > > Using ftrace, I found the callbacks it was queuing which this series fixes. Use
+> > > > call_rcu_flush() to revert to the old behavior. With that, the test passes.
+> > >
+> > > What is this test about ? What barrier was used to make it not flaky ?
+> >
+> > I provided the links above, let me know if you have any questions.
+> >
+> > > Was it depending on some undocumented RCU behavior ?
+> >
+> > This is a new RCU feature posted here for significant power-savings on
+> > battery-powered devices:
+> > https://lore.kernel.org/rcu/20221017140726.GG5600@paulmck-ThinkPad-P17-Gen-1/T/#m7a54809b8903b41538850194d67eb34f203c752a
+> >
+> > There is also an LPC presentation about the same, I can dig the link if you
+> > are interested.
+> >
+> > > Maybe adding a sysctl to force the flush would be better for functional tests ?
+> > >
+> > > I would rather change the test(s), than adding call_rcu_flush(),
+> > > adding merge conflicts to future backports.
+> >
+> > I am not too sure about that, I think a user might expect the network
+> > interface to disappear from the networking tables quickly enough without
+> > dealing with barriers or kernel iternals. However, I added the authors of the
+> > test to this email in the hopes he can provide is point of views as well.
+> >
+> > The general approach we are taking with this sort of thing is to use
+> > call_rcu_flush() which is basically the same as call_rcu() for systems with
+> > CALL_RCU_LAZY=n. You can see some examples of that in the patch series link
+> > above. Just to note, CALL_RCU_LAZY depends on CONFIG_RCU_NOCB_CPU so its only
+> > Android and ChromeOS that are using it. I am adding Jie to share any input,
+> > he is from the networking team and knows this test well.
+> >
+> >
+>
+> I do not know what is this RCU_LAZY thing, but IMO this should be opt-in
+>
+> For instance, only kfree_rcu() should use it.
+>
+> We can not review hundreds of call_rcu() call sites and decide if
+> adding arbitrary delays cou hurt .
 
-In practice, movdir64b can be safely assumed to be supported, I think.  Strictly
-it's not guaranteed by SDM.
-There are two options.
-
-1. Assume modir64b. If it's not supported, KVM refuses to enable TDX.
-   + Don't care CI-mode or Li-mode
-   - not strictly conforming to SDM. In practice, it won't matter.
-2. Don't assume movdir64b.  If movdir64b not supported, use memset(0).
-   + strictly conforming to SDM
-   - needs to care Ci-mode or Li-mode.
-
-So I'll choose option 1.
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+At a very minimum, things like rcu_barrier() should make sure that all
+'lazy' callbacks are processed in a reasonable amount of time.
