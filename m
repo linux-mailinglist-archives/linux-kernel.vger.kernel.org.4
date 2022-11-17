@@ -2,95 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E89B62E987
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 00:23:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C98262E98A
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 00:26:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234843AbiKQXX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 18:23:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38086 "EHLO
+        id S234710AbiKQX0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 18:26:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233865AbiKQXXP (ORCPT
+        with ESMTP id S234063AbiKQX0m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 18:23:15 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D36274A91;
-        Thu, 17 Nov 2022 15:23:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668727394; x=1700263394;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=1vf+nxtKsojFCFBBwNt1MycZfyiXZfZyH/YixPFSLlM=;
-  b=Ow/Fa2lQiysdU6TqdjWVzqTc/bhhB1C0ddbuOzZdto9UkNvNL/MEyhz/
-   HNF9mP2SoiWObyxy6HqUgwCKR5oj+6D51T3z30OqQTk/jt++0GBEZoJnL
-   aWV1I+/VdXGbs3vaggNibWN4vm/0R5OAmonPzKm2Fr/EXgahO5rOGZ5m0
-   UUkbD5rOmzZWuPkHlaa7nSEryg/Gb+uF/mC4yHtpADYTcDrFInEQwVHAM
-   KgrcJWum+5MOsJPYCOL1OwbGbbR0DO6u8N9scK7fDwu/RcpWhHEfG7EY/
-   Ko2WcTm67eV8UD4AhsYnsLrzHB2SauFnmpCm6eZbWHJzTmQ9fCG3OE/Jy
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="292704100"
-X-IronPort-AV: E=Sophos;i="5.96,172,1665471600"; 
-   d="scan'208";a="292704100"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 15:23:13 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="969064618"
-X-IronPort-AV: E=Sophos;i="5.96,172,1665471600"; 
-   d="scan'208";a="969064618"
-Received: from cvadim-mobl1.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.60.21])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 15:23:11 -0800
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 5FA7D109763; Fri, 18 Nov 2022 02:23:09 +0300 (+03)
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org
-Cc:     dave.hansen@linux.intel.com, David.Laight@ACULAB.COM,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCHv2] scsi: Fix get_user() in call sg_scsi_ioctl()
-Date:   Fri, 18 Nov 2022 02:23:04 +0300
-Message-Id: <20221117232304.1544-1-kirill.shutemov@linux.intel.com>
-X-Mailer: git-send-email 2.38.0
+        Thu, 17 Nov 2022 18:26:42 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC8C82F5;
+        Thu, 17 Nov 2022 15:26:41 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id z18so4824420edb.9;
+        Thu, 17 Nov 2022 15:26:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=yJfiRY/THrfxp68on+xM5wu4YptIc+9/TjEbNBRuQSI=;
+        b=BmgiDAN02XbAyzBOe34n5+NOE6w9YZ8LMptFPoYxXM6PNZKL3DLbi+vpeoHRTQxr6k
+         rdeMU5nVWaqNtIRxmhwCCNeUBn++qOZXyCbcOUctlMW5BWUqc6zX/c8sql959SoWNiD2
+         fIrmG0HCV37/1kZzyVOYlUTUZzby2UUd7xgdNCNqKlLcxLD57xLmtCMvv5gkeI3PXMvd
+         zJKq3X8JUss1ZiAsRtnalKG4LptBFy5w2YX5RwdhwwXpcu3MBa8khNZTN5P2zFbSXnwz
+         plx66DkH55omoPOMZHu1MTJ2UcuxfCBA9bSdobgTNXuvCM9F9VN9yZkoJl/oyAwtReR+
+         i7JQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yJfiRY/THrfxp68on+xM5wu4YptIc+9/TjEbNBRuQSI=;
+        b=Zp+ySitHxRWV1HnSHVw/TAyMuwzLoEZxJhy0OKm1ojSJ+1HX11IBIdQiIX62fL7+82
+         PvHUO6XkFuEWQHJdEhAGn78njWe4PXRCZBlvMPh7z6wFpQn4lYGC0izP7htasRugdpSg
+         8RLe5Oy0chYMWp7xUCHvggaatza+J4967hZhWNsdnjDEZaV1qkhLjKC/IaP7qtw3ZJi7
+         EQsCqMaXRfi4WLsXWCvkGx+M5kKU9iSnCMHf0N2aOwqFnt96U+zd7m77VJ7bgf14KeNZ
+         Susm75JKlBceh7yNKn6hd8hxFlYsVrW0zeQeLK9cRDu6XEeVIhdxZ0UkLqrqbFlUIsU3
+         YO4w==
+X-Gm-Message-State: ANoB5pkUiEp4J2K9EBBcE3e3e2TT80jXwnxTi3yArkdl2Cbef6o0xbbS
+        OuBVabmXwaXKG2ExBB4pC9D7+sktI8J+jCfbsIU=
+X-Google-Smtp-Source: AA0mqf4m83QI2OEaPeLuS8Zq3i5RZegg3WidXusvKj5A+wNcIQnsMky18V2MxfIHfa7mi98zpBFsvtNalN/cLZz1naY=
+X-Received: by 2002:a05:6402:2075:b0:457:1323:1b7e with SMTP id
+ bd21-20020a056402207500b0045713231b7emr3922238edb.311.1668727600375; Thu, 17
+ Nov 2022 15:26:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221116064631.16224-1-tegongkang@gmail.com>
+In-Reply-To: <20221116064631.16224-1-tegongkang@gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 17 Nov 2022 15:26:28 -0800
+Message-ID: <CAEf4BzbqKRTzTdhD1Vt-j8NXaqnyqXCRjNgMe9_h56rbt4a9YA@mail.gmail.com>
+Subject: Re: [PATCH] samples, bpf: Add duration option D for sampleip
+To:     Kang Minchul <tegongkang@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-get_user() expects the pointer to be pointer-to-simple-variable type,
-but sic->data is array of 'unsigned char'. It violates get_user()
-contracts.
+On Tue, Nov 15, 2022 at 10:46 PM Kang Minchul <tegongkang@gmail.com> wrote:
+>
+> Although sampleip program can handle three options,
+> (-F for frequency, duration, and -h for help)
+> currently there is no independent option for duration.
 
-Explicitly take pointer to the first element of the array. It matches
-current behaviour.
+Because it's positional argument, which is very clearly documented by
+usage(). What's wrong with that and why do you want to change this?
 
-This is preparation for fixing sparse warnings caused by Linear Address
-Masking patchset.
-
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
-Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
----
- drivers/scsi/scsi_ioctl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/scsi_ioctl.c b/drivers/scsi/scsi_ioctl.c
-index 2d20da55fb64..fdd47565a311 100644
---- a/drivers/scsi/scsi_ioctl.c
-+++ b/drivers/scsi/scsi_ioctl.c
-@@ -519,7 +519,7 @@ static int sg_scsi_ioctl(struct request_queue *q, fmode_t mode,
- 		return -EFAULT;
- 	if (in_len > PAGE_SIZE || out_len > PAGE_SIZE)
- 		return -EINVAL;
--	if (get_user(opcode, sic->data))
-+	if (get_user(opcode, &sic->data[0]))
- 		return -EFAULT;
- 
- 	bytes = max(in_len, out_len);
--- 
-2.38.0
-
+>
+> This patch adds option -D for duration like below:
+>
+> $ sudo ./samples/bpf/sampleip -h
+> USAGE: sampleip [-F freq] [-D duration]
+>        -F freq       # sample frequency (Hertz), default 99
+>        -D duration   # sampling duration (seconds), default 5
+>
+> $ sudo ./samples/bpf/sampleip -F 120
+> Sampling at 120 Hertz for 5 seconds. Ctrl-C also ends.
+> ADDR                KSYM                          COUNT
+> ...
+>
+> $ sudo ./samples/bpf/sampleip -D 7
+> Sampling at 99 Hertz for 7 seconds. Ctrl-C also ends.
+> ADDR                KSYM                          COUNT
+> ...
+>
+> $ sudo ./samples/bpf/sampleip -F 120 -D 7
+> Sampling at 120 Hertz for 7 seconds. Ctrl-C also ends.
+> ADDR                KSYM                          COUNT
+> ...
+>
+> Signed-off-by: Kang Minchul <tegongkang@gmail.com>
+> ---
+>  samples/bpf/sampleip_user.c | 13 +++++++------
+>  1 file changed, 7 insertions(+), 6 deletions(-)
+>
+> diff --git a/samples/bpf/sampleip_user.c b/samples/bpf/sampleip_user.c
+> index 921c505bb567..ce6aadd496e1 100644
+> --- a/samples/bpf/sampleip_user.c
+> +++ b/samples/bpf/sampleip_user.c
+> @@ -28,9 +28,9 @@ static int nr_cpus;
+>
+>  static void usage(void)
+>  {
+> -       printf("USAGE: sampleip [-F freq] [duration]\n");
+> -       printf("       -F freq    # sample frequency (Hertz), default 99\n");
+> -       printf("       duration   # sampling duration (seconds), default 5\n");
+> +       printf("USAGE: sampleip [-F freq] [-D duration]\n");
+> +       printf("       -F freq       # sample frequency (Hertz), default 99\n");
+> +       printf("       -D duration   # sampling duration (seconds), default 5\n");
+>  }
+>
+>  static int sampling_start(int freq, struct bpf_program *prog,
+> @@ -145,19 +145,20 @@ int main(int argc, char **argv)
+>         char filename[256];
+>
+>         /* process arguments */
+> -       while ((opt = getopt(argc, argv, "F:h")) != -1) {
+> +       while ((opt = getopt(argc, argv, "F:D:h")) != -1) {
+>                 switch (opt) {
+>                 case 'F':
+>                         freq = atoi(optarg);
+>                         break;
+> +               case 'D':
+> +                       secs = atoi(optarg);
+> +                       break;
+>                 case 'h':
+>                 default:
+>                         usage();
+>                         return 0;
+>                 }
+>         }
+> -       if (argc - optind == 1)
+> -               secs = atoi(argv[optind]);
+>         if (freq == 0 || secs == 0) {
+>                 usage();
+>                 return 1;
+> --
+> 2.34.1
+>
