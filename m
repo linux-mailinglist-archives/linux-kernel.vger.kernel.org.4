@@ -2,302 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B8CE62DF65
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:13:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E764462DF37
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:10:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240676AbiKQPNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 10:13:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56176 "EHLO
+        id S240592AbiKQPKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 10:10:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240400AbiKQPMx (ORCPT
+        with ESMTP id S240430AbiKQPJ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 10:12:53 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDBAF7CB8E
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 07:09:22 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id a14so4358900wru.5
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 07:09:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OBusLlaaNz/2IZSIaqYfgs6/xdT0ROMSHKfiBIhkdsE=;
-        b=NfpbBsBQgrbY75WiJ016e0JTmdGmoYyca7I/NCnJZhfmCCTZjayS9RdRKm4JfS2fcJ
-         fVeXHWNZWpWqOxuAKjFqL87nRYvfdIeS/OGZksL27R8rb8hVNRwXGKXYPRUYovuyOhTQ
-         2KdieC+Lyx97mRgkXg4lB53Eby8Njkv0vJYLjpXxSam8mrjRDYlb2SWZOAdruhuNiKch
-         oimt+1rPmL9CFVQctuwqINnIzoMMDOOHZx1qNiF5cxB4yWYef69Ku4OJl58DzQ7tLFDO
-         9GvANFdmzddlRJJK66Ax9Y8b7HOjXFK6WEOP7Gtp/3GhVHUbB2438tgaxi1Vg2RVLoXk
-         l1kQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=OBusLlaaNz/2IZSIaqYfgs6/xdT0ROMSHKfiBIhkdsE=;
-        b=dhWmSpSQuYG1wZD3eIWF1Rfl6+7GJTWBLV9Jl1TVlE1IUbxAT8YsKAWDgTeJcOQoaW
-         6NFeIZTPJtmGiUO+ZLkRZQcjM/dQ9x39HAEjY0DiNb0k1rUwfUO0DqbSRKJuARjZKa+0
-         aox3+yAX7Qluq/LNSaTPfRos7mnix8wLS/wLTEaMg1sQRklR5P+22LoEauz/TOUdmf/i
-         XwtIIV2BlGhfeaHCYVND2/RnnHvBNO/TJpozjZgF36zihMInOn1y0K733QvrYm5Hqie6
-         /E+a5AhrPZRIzYpIjx4ehMnAsw/NHf6Mp/Ig7saIFaPhqk5+JYVIkowPhxaFC08ToqIY
-         +kXQ==
-X-Gm-Message-State: ANoB5pneRTCq7xMoXoEahNb8vUv49fPKQBqc+7hr2OSXrXepO8Jh58zc
-        ieOTvadm4tPrFzfG1H2D+xp4Dw==
-X-Google-Smtp-Source: AA0mqf7vvxL/xmrC6/yE9sA9AOuHHRmrasa80rT6NKUjVl0i95jt04rAjvEUusssVu8F+bFzV97rWw==
-X-Received: by 2002:adf:efd2:0:b0:236:e5a2:4f66 with SMTP id i18-20020adfefd2000000b00236e5a24f66mr1861434wrp.357.1668697761285;
-        Thu, 17 Nov 2022 07:09:21 -0800 (PST)
-Received: from zen.linaroharston ([185.81.254.11])
-        by smtp.gmail.com with ESMTPSA id r10-20020adfce8a000000b00241b371d73esm1255319wrn.77.2022.11.17.07.09.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 07:09:20 -0800 (PST)
-Received: from zen (localhost [127.0.0.1])
-        by zen.linaroharston (Postfix) with ESMTP id 5177C1FFB7;
-        Thu, 17 Nov 2022 15:09:20 +0000 (GMT)
-References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
- <20221025151344.3784230-4-chao.p.peng@linux.intel.com>
- <87cz9o9mr8.fsf@linaro.org> <20221116031441.GA364614@chaop.bj.intel.com>
- <87mt8q90rw.fsf@linaro.org> <20221117134520.GD422408@chaop.bj.intel.com>
-User-agent: mu4e 1.9.2; emacs 28.2.50
-From:   Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
+        Thu, 17 Nov 2022 10:09:26 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 456FF781AA;
+        Thu, 17 Nov 2022 07:08:21 -0800 (PST)
+Date:   Thu, 17 Nov 2022 15:08:18 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1668697700;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=22RMjeZ9ETKCP9UZiZ2z3rOsKYgMh4RjNDTkJH0aR3c=;
+        b=Mp/a9P6LVFh0takYrqkM4/abV5yexzDPwHvVRU3sYX/Yb/13ktZscNF8aL8sJiOHuA4B6F
+        yqev8qnBVuBVFKE3jv8JUBymuL1pQeEyAWwGvJj4OQgDuJrDON3yNwQOB4n9hxNG8R2S0t
+        MIEKMa4TC2MOxVPJ/yyL+nX1nq3L9TrIlgVxM+CFxKLVXR6/p2DW6Ws/flIvc+tf3fcNH+
+        EloEKNfsJ2aZKj66ghRjcsZNyJURI+1PRkUU4RJ5+7KWmpyTOpLwPDM6h5el6+wOrBJ8qt
+        KeQBtO4mj1RZwvCdZeOYxn1R1G4SQ7G9Qb5Mpj81Jg7A0QjuYlXo1ooMFiVqsQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1668697700;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=22RMjeZ9ETKCP9UZiZ2z3rOsKYgMh4RjNDTkJH0aR3c=;
+        b=3gwOjgQ1N3Sp+hKyG7CNtBiNWlCUngZNHKRPmN3wWRy4ti4IGWWxzEwfL0cB6Ql/6kOAqc
+        lbkKFwScxlFK9DBQ==
+From:   "tip-bot2 for Ahmed S. Darwish" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: irq/core] PCI/MSI: Let the MSI core free descriptors
+Cc:     "Ahmed S. Darwish" <darwi@linutronix.de>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
-Subject: Re: [PATCH v9 3/8] KVM: Add KVM_EXIT_MEMORY_FAULT exit
-Date:   Thu, 17 Nov 2022 15:08:17 +0000
-In-reply-to: <20221117134520.GD422408@chaop.bj.intel.com>
-Message-ID: <87a64p8vof.fsf@linaro.org>
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, maz@kernel.org
+In-Reply-To: <20221111122014.409654736@linutronix.de>
+References: <20221111122014.409654736@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Message-ID: <166869769869.4906.16348702206591791978.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following commit has been merged into the irq/core branch of tip:
 
-Chao Peng <chao.p.peng@linux.intel.com> writes:
+Commit-ID:     b2bdda205c0c256d6483231d0afe58a6d68fd3ed
+Gitweb:        https://git.kernel.org/tip/b2bdda205c0c256d6483231d0afe58a6d68fd3ed
+Author:        Ahmed S. Darwish <darwi@linutronix.de>
+AuthorDate:    Fri, 11 Nov 2022 14:54:37 +01:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Thu, 17 Nov 2022 15:15:19 +01:00
 
-> On Wed, Nov 16, 2022 at 07:03:49PM +0000, Alex Benn=C3=A9e wrote:
->>=20
->> Chao Peng <chao.p.peng@linux.intel.com> writes:
->>=20
->> > On Tue, Nov 15, 2022 at 04:56:12PM +0000, Alex Benn=C3=A9e wrote:
->> >>=20
->> >> Chao Peng <chao.p.peng@linux.intel.com> writes:
->> >>=20
->> >> > This new KVM exit allows userspace to handle memory-related errors.=
- It
->> >> > indicates an error happens in KVM at guest memory range [gpa, gpa+s=
-ize).
->> >> > The flags includes additional information for userspace to handle t=
-he
->> >> > error. Currently bit 0 is defined as 'private memory' where '1'
->> >> > indicates error happens due to private memory access and '0' indica=
-tes
->> >> > error happens due to shared memory access.
->> >> >
->> >> > When private memory is enabled, this new exit will be used for KVM =
-to
->> >> > exit to userspace for shared <-> private memory conversion in memory
->> >> > encryption usage. In such usage, typically there are two kind of me=
-mory
->> >> > conversions:
->> >> >   - explicit conversion: happens when guest explicitly calls into K=
-VM
->> >> >     to map a range (as private or shared), KVM then exits to usersp=
-ace
->> >> >     to perform the map/unmap operations.
->> >> >   - implicit conversion: happens in KVM page fault handler where KVM
->> >> >     exits to userspace for an implicit conversion when the page is =
-in a
->> >> >     different state than requested (private or shared).
->> >> >
->> >> > Suggested-by: Sean Christopherson <seanjc@google.com>
->> >> > Co-developed-by: Yu Zhang <yu.c.zhang@linux.intel.com>
->> >> > Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
->> >> > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
->> >> > ---
->> >> >  Documentation/virt/kvm/api.rst | 23 +++++++++++++++++++++++
->> >> >  include/uapi/linux/kvm.h       |  9 +++++++++
->> >> >  2 files changed, 32 insertions(+)
->> >> >
->> >> > diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kv=
-m/api.rst
->> >> > index f3fa75649a78..975688912b8c 100644
->> >> > --- a/Documentation/virt/kvm/api.rst
->> >> > +++ b/Documentation/virt/kvm/api.rst
->> >> > @@ -6537,6 +6537,29 @@ array field represents return values. The us=
-erspace should update the return
->> >> >  values of SBI call before resuming the VCPU. For more details on R=
-ISC-V SBI
->> >> >  spec refer, https://github.com/riscv/riscv-sbi-doc.
->> >> >=20=20
->> >> > +::
->> >> > +
->> >> > +		/* KVM_EXIT_MEMORY_FAULT */
->> >> > +		struct {
->> >> > +  #define KVM_MEMORY_EXIT_FLAG_PRIVATE	(1 << 0)
->> >> > +			__u32 flags;
->> >> > +			__u32 padding;
->> >> > +			__u64 gpa;
->> >> > +			__u64 size;
->> >> > +		} memory;
->> >> > +
->> >> > +If exit reason is KVM_EXIT_MEMORY_FAULT then it indicates that the=
- VCPU has
->> >> > +encountered a memory error which is not handled by KVM kernel modu=
-le and
->> >> > +userspace may choose to handle it. The 'flags' field indicates the=
- memory
->> >> > +properties of the exit.
->> >> > +
->> >> > + - KVM_MEMORY_EXIT_FLAG_PRIVATE - indicates the memory error is ca=
-used by
->> >> > +   private memory access when the bit is set. Otherwise the memory=
- error is
->> >> > +   caused by shared memory access when the bit is clear.
->> >>=20
->> >> What does a shared memory access failure entail?
->> >
->> > In the context of confidential computing usages, guest can issue a
->> > shared memory access while the memory is actually private from the host
->> > point of view. This exit with bit 0 cleared gives userspace a chance to
->> > convert the private memory to shared memory on host.
->>=20
->> I think this should be explicit rather than implied by the absence of
->> another flag. Sean suggested you might want flags for RWX failures so
->> maybe something like:
->>=20
->> 	KVM_MEMORY_EXIT_SHARED_FLAG_READ	(1 << 0)
->> 	KVM_MEMORY_EXIT_SHARED_FLAG_WRITE	(1 << 1)
->> 	KVM_MEMORY_EXIT_SHARED_FLAG_EXECUTE	(1 << 2)
->>         KVM_MEMORY_EXIT_FLAG_PRIVATE            (1 << 3)
->
-> Yes, but I would not add 'SHARED' to RWX, they are not share memory
-> specific, private memory can also set them once introduced.
+PCI/MSI: Let the MSI core free descriptors
 
-OK so how about:
+Let the core do the freeing of descriptors and just keep it around for the
+legacy case.
 
- 	KVM_MEMORY_EXIT_FLAG_READ	(1 << 0)
- 	KVM_MEMORY_EXIT_FLAG_WRITE	(1 << 1)
- 	KVM_MEMORY_EXIT_FLAG_EXECUTE	(1 << 2)
-        KVM_MEMORY_EXIT_FLAG_SHARED     (1 << 3)
-        KVM_MEMORY_EXIT_FLAG_PRIVATE    (1 << 4)
+Signed-off-by: Ahmed S. Darwish <darwi@linutronix.de>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+Link: https://lore.kernel.org/r/20221111122014.409654736@linutronix.de
 
->
-> Thanks,
-> Chao
->>=20
->> which would allow you to signal the various failure modes of the shared
->> region, or that you had accessed private memory.
->>=20
->> >
->> >>=20
->> >> If you envision any other failure modes it might be worth making it
->> >> explicit with additional flags.
->> >
->> > Sean mentioned some more usages[1][]2] other than the memory conversion
->> > for confidential usage. But I would leave those flags being added in t=
-he
->> > future after those usages being well discussed.
->> >
->> > [1] https://lkml.kernel.org/r/20200617230052.GB27751@linux.intel.com
->> > [2] https://lore.kernel.org/all/YKxJLcg%2FWomPE422@google.com
->> >
->> >> I also wonder if a bitmask makes sense if
->> >> there can only be one reason for a failure? Maybe all that is needed =
-is
->> >> a reason enum?
->> >
->> > Tough we only have one reason right now but we still want to leave room
->> > for future extension. Enum can express a single value at once well but
->> > bitmask makes it possible to express multiple orthogonal flags.
->>=20
->> I agree if multiple orthogonal failures can occur at once a bitmask is
->> the right choice.
->>=20
->> >
->> > Chao
->> >>=20
->> >> > +
->> >> > +'gpa' and 'size' indicate the memory range the error occurs at. Th=
-e userspace
->> >> > +may handle the error and return to KVM to retry the previous memor=
-y access.
->> >> > +
->> >> >  ::
->> >> >=20=20
->> >> >      /* KVM_EXIT_NOTIFY */
->> >> > diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
->> >> > index f1ae45c10c94..fa60b032a405 100644
->> >> > --- a/include/uapi/linux/kvm.h
->> >> > +++ b/include/uapi/linux/kvm.h
->> >> > @@ -300,6 +300,7 @@ struct kvm_xen_exit {
->> >> >  #define KVM_EXIT_RISCV_SBI        35
->> >> >  #define KVM_EXIT_RISCV_CSR        36
->> >> >  #define KVM_EXIT_NOTIFY           37
->> >> > +#define KVM_EXIT_MEMORY_FAULT     38
->> >> >=20=20
->> >> >  /* For KVM_EXIT_INTERNAL_ERROR */
->> >> >  /* Emulate instruction failed. */
->> >> > @@ -538,6 +539,14 @@ struct kvm_run {
->> >> >  #define KVM_NOTIFY_CONTEXT_INVALID	(1 << 0)
->> >> >  			__u32 flags;
->> >> >  		} notify;
->> >> > +		/* KVM_EXIT_MEMORY_FAULT */
->> >> > +		struct {
->> >> > +#define KVM_MEMORY_EXIT_FLAG_PRIVATE	(1 << 0)
->> >> > +			__u32 flags;
->> >> > +			__u32 padding;
->> >> > +			__u64 gpa;
->> >> > +			__u64 size;
->> >> > +		} memory;
->> >> >  		/* Fix the size of the union. */
->> >> >  		char padding[256];
->> >> >  	};
->> >>=20
->> >>=20
->> >> --=20
->> >> Alex Benn=C3=A9e
->>=20
->>=20
->> --=20
->> Alex Benn=C3=A9e
+---
+ drivers/pci/msi/irqdomain.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-
---=20
-Alex Benn=C3=A9e
+diff --git a/drivers/pci/msi/irqdomain.c b/drivers/pci/msi/irqdomain.c
+index 7766fa6..edd0cc2 100644
+--- a/drivers/pci/msi/irqdomain.c
++++ b/drivers/pci/msi/irqdomain.c
+@@ -24,11 +24,12 @@ void pci_msi_teardown_msi_irqs(struct pci_dev *dev)
+ 	struct irq_domain *domain;
+ 
+ 	domain = dev_get_msi_domain(&dev->dev);
+-	if (domain && irq_domain_is_hierarchy(domain))
++	if (domain && irq_domain_is_hierarchy(domain)) {
+ 		msi_domain_free_irqs_descs_locked(domain, &dev->dev);
+-	else
++	} else {
+ 		pci_msi_legacy_teardown_msi_irqs(dev);
+-	msi_free_msi_descs(&dev->dev);
++		msi_free_msi_descs(&dev->dev);
++	}
+ }
+ 
+ /**
+@@ -170,6 +171,9 @@ struct irq_domain *pci_msi_create_irq_domain(struct fwnode_handle *fwnode,
+ 	if (info->flags & MSI_FLAG_USE_DEF_CHIP_OPS)
+ 		pci_msi_domain_update_chip_ops(info);
+ 
++	/* Let the core code free MSI descriptors when freeing interrupts */
++	info->flags |= MSI_FLAG_FREE_MSI_DESCS;
++
+ 	info->flags |= MSI_FLAG_ACTIVATE_EARLY | MSI_FLAG_DEV_SYSFS;
+ 	if (IS_ENABLED(CONFIG_GENERIC_IRQ_RESERVATION_MODE))
+ 		info->flags |= MSI_FLAG_MUST_REACTIVATE;
