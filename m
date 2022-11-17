@@ -2,74 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D86FA62E2B2
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:16:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7C2B62E2B5
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:16:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240771AbiKQRP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 12:15:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43234 "EHLO
+        id S234724AbiKQRQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 12:16:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240200AbiKQRPt (ORCPT
+        with ESMTP id S239947AbiKQRQ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 12:15:49 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9390A16586;
-        Thu, 17 Nov 2022 09:15:48 -0800 (PST)
+        Thu, 17 Nov 2022 12:16:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB9267819F;
+        Thu, 17 Nov 2022 09:16:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 32D92621C2;
-        Thu, 17 Nov 2022 17:15:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8E37AC433D6;
-        Thu, 17 Nov 2022 17:15:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668705347;
-        bh=P1n5qNuQbEQGE1/dAUJa/5m+AGcru7jZ50+Mdbr4Ax8=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=k4v7m5TT74mlYcSG4WZFy5SiY/YE1csfEB4bOAiHm48KUdocvEhslaMPle6jorXbG
-         3FYMYIYqJpOmFpthmsYqQCF+mFekEWtR/GLBgvXCC3NJ6lE0NBSQ9zE+A0ShXRCS3U
-         UA+JlFXx5fw8U2LhXRi0i1xSyYloP+9Knz2FnWo9+wSrpf3MQluLpvPptuNBkQ308A
-         FHyNhj3bgUBCfjDP1Y/DjWKZcQx34ywMQEJGSoFH/IcH7Nb5Pre4WhfH3L0yD5CjDf
-         unV0KaW4iGYhv408PMDDnyuypxEKhZKMyyArWOwdE7zBuFLlJPwkNdCaeem4Rr/HWI
-         KGoKDlJbJfm5w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7AD71E270D5;
-        Thu, 17 Nov 2022 17:15:47 +0000 (UTC)
-Subject: Re: [GIT PULL] Networking for 6.1-rc6
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20221117120017.26184-1-pabeni@redhat.com>
-References: <20221117120017.26184-1-pabeni@redhat.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20221117120017.26184-1-pabeni@redhat.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-6.1-rc6
-X-PR-Tracked-Commit-Id: 58e0be1ef6118c5352b56a4d06e974c5599993a5
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 847ccab8fdcf4a0cd85a278480fab1ccdc9f6136
-Message-Id: <166870534749.19027.2331840091834304165.pr-tracker-bot@kernel.org>
-Date:   Thu, 17 Nov 2022 17:15:47 +0000
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     torvalds@linux-foundation.org, kuba@kernel.org,
-        davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by ams.source.kernel.org (Postfix) with ESMTPS id 936FAB82161;
+        Thu, 17 Nov 2022 17:16:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E601C433D7;
+        Thu, 17 Nov 2022 17:16:21 +0000 (UTC)
+Date:   Thu, 17 Nov 2022 12:16:17 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Florent Revest <revest@chromium.org>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        KP Singh <kpsingh@kernel.org>,
+        Brendan Jackman <jackmanb@google.com>, markowsky@google.com,
+        Mark Rutland <mark.rutland@arm.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Xu Kuohai <xukuohai@huawei.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [RFC 0/1] BPF tracing for arm64 using fprobe
+Message-ID: <20221117121617.4e1529d3@gandalf.local.home>
+In-Reply-To: <CAADnVQ+BWpzqOV8dGCR=A3dR3u60CkBkqSXEQHe2kVqFzsgnHw@mail.gmail.com>
+References: <20221108220651.24492-1-revest@chromium.org>
+        <CAADnVQ+BWpzqOV8dGCR=A3dR3u60CkBkqSXEQHe2kVqFzsgnHw@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu, 17 Nov 2022 13:00:17 +0100:
+On Wed, 16 Nov 2022 18:41:26 -0800
+Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-6.1-rc6
+> Even with all optimization the performance overhead is not acceptable.
+> It feels to me that folks are still thinking about bpf trampoline
+> as a tracing facility.
+> It's a lot more than that. It needs to run 24/7 with zero overhead.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/847ccab8fdcf4a0cd85a278480fab1ccdc9f6136
+It obviously doesn't have zero overhead.
 
-Thank you!
+And correctness and maintainability trumps micro-optimizations.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+> It needs to replace the kernel functions and be invoked
+
+What do you mean by "replace the kernel functions"? You mean an existing
+kernel function can be replaced by a bpf program? Like live patching?
+
+This seems rather dangerous, and how does one know that their system has
+integrity? Is there a feature to sign bpf programs before they can be added?
+
+Also, it may be time to bring in the lawyers. If a bpf program can replace
+an existing kernel function, then it has definitely passed the "user space"
+exception to the GPL, where user space must use the system call interface.
+By injecting executable code into the kernel, especially something that
+replaces kernel functionality, it becomes arguably derived from the kernel
+itself. And the BPF program must be GPL.
+
+Allowing proprietary BPF programs to replace kernel functionality looks
+like a clear violation and circumvention of the GPL. But I could be
+mistaken. As I said, it's time to bring in the lawyers on this one.
+
+> millions times a second until the system is rebooted.
+> In this environment every nanosecond counts.
+> 
+> Even if the fprobe side was completely free the patch 1 has so much
+> overhead in copy of bpf_cookie, regs, etc that it's a non-starter
+> for these use cases.
+> 
+> There are several other fundamental issues in this approach
+> because of fprobe/ftrace.
+> It has ftrace_test_recursion_trylock and disables preemption.
+> Both are deal breakers.
+
+Please explain why? The recursion protection lock is a simply bit operation
+on the task struct which is used to protect against recursion at the same
+context. Which if you do not have, will likely happen, and the only hint of
+it is that the system triple faults and reboots. If you are only hooking to
+one function, then it is easy to figure this out. But with the multi work
+being done, that is no longer the case.
+
+Hooking to functions is *extremely* intrusive. And protection against
+errors is a must have, and not an option.
+
+> 
+> bpf trampoline has to allow recursion in some cases.
+> See __bpf_prog_enter*() flavors.
+
+The recursion lock allows recursions, but not at the same context. That is,
+interrupt against normal context is fine. But really, you should not have
+it within the same context. How do you verify that you do not run out of
+stack?
+
+> 
+> bpf trampoline also has to use migrate_disable instead of preemption
+> and rcu_read_lock() in some cases and rcu_read_lock_trace() in others.
+> 
+> bpf trampoline must never allocate memory or grab locks.
+
+Neither should fprobes / ftrace.
+
+-- Steve
+
+> 
+> All of these mandatory features exclude fprobe, ftrace, rethook
+> from possible options.
+> 
+> Let's figure out how to address concerns with direct calls:
