@@ -2,210 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D57EA62D4BA
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:09:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FDCF62D4BE
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:09:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239460AbiKQIJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 03:09:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54730 "EHLO
+        id S239468AbiKQIJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 03:09:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiKQIIx (ORCPT
+        with ESMTP id S239427AbiKQIJf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 03:08:53 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6823DC6E;
-        Thu, 17 Nov 2022 00:08:49 -0800 (PST)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8CxjdoN7HVj_zcIAA--.23265S3;
-        Thu, 17 Nov 2022 16:08:45 +0800 (CST)
-Received: from [10.180.13.64] (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxR1cK7HVj3M8VAA--.39222S2;
-        Thu, 17 Nov 2022 16:08:44 +0800 (CST)
-Subject: Re: [PATCH v10 2/2] dt-bindings: hpet: add loongson-2 hpet
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        Thu, 17 Nov 2022 03:09:35 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B312EF5D;
+        Thu, 17 Nov 2022 00:09:34 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id n21so3092549ejb.9;
+        Thu, 17 Nov 2022 00:09:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mHrJvt3/b8ocan2zs8qQMEVGwjMHNUAgBUCFjsp+mQU=;
+        b=q6Ltg4dpREcxyfJavgtB+RA8ZfmfQ4JEzspKSga1zTZpdWBtTYw/PrLDcopwEV4FGj
+         Drbc6DGQUUqRlEupRZftUgDSNNO0DiOChwpvDEsESsjp56RYErBOtTjZ07giHSgHlMqs
+         HxuKwhVq2oEcccxRdT4Snia3+LYhHHhWrF/Lx4weg0Yurn/T3t9JQvT6CeHP6CX3aep0
+         xa4nVjllgJM7Ul47b+3VEQc6QkEBK2to9TFzcls4jlikhE+MplV5jAbsTtBMk6maIbue
+         cvy+e6Mz+gFiVf2tqOkBNQ3wEKrgQLWvg9gwpAfvP5cEd7ZCacNP8bJCmA8bEeEgGAdU
+         hOMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mHrJvt3/b8ocan2zs8qQMEVGwjMHNUAgBUCFjsp+mQU=;
+        b=UiJKP4htdEklEyjCcLjn96Y/CsRnV69NycoAw8lF5P5aI8y7oWrxZfrGSmhDH6hkkd
+         IAZnCwwREd6G87jNk6qVVcDFARCCEQne8KHP7ZpEaZ+XSb34/0y8NdW3SNJNmesgVnni
+         Zg9F60+S351QO1AUj70+eCieG+lhoY+yG7FbMtDG9gGYg7OqAA88vthjngCiccHu+iHe
+         xtsC7RlsCSrBa2o/erii1Nz1Paa4BfvnLqA6d0OSDTyMcY7sLrjqtHFmqNX3ke/iZLWU
+         wVmVJQg08DlKJPG9aPl4OP2L98NsSgOI+4ZyXWChiJ7UX1w4OJgPE1CJi013gFaOMXKD
+         9LWg==
+X-Gm-Message-State: ANoB5plNT6QP9KM4pkZp4DjxIX0iT+rk9zX5/KSY5V3NfuaJ0ZX3iHze
+        MqIhCUZ38Mo05fwnf5dZ2p4=
+X-Google-Smtp-Source: AA0mqf7qvFJyguNi0DLyioIgn6dzOu97NdlD5KPXZuhgSEiaIfKNodRZtnNM2FPzVVDdtjO9XRwNUg==
+X-Received: by 2002:a17:907:9190:b0:78a:52bb:d904 with SMTP id bp16-20020a170907919000b0078a52bbd904mr1159731ejb.630.1668672572594;
+        Thu, 17 Nov 2022 00:09:32 -0800 (PST)
+Received: from localhost.localdomain ([5.2.194.157])
+        by smtp.gmail.com with ESMTPSA id la18-20020a170907781200b00770880dfc4fsm42192ejc.29.2022.11.17.00.09.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 00:09:32 -0800 (PST)
+From:   Cosmin Tanislav <demonsingur@gmail.com>
+X-Google-Original-From: Cosmin Tanislav <cosmin.tanislav@analog.com>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Yun Liu <liuyun@loongson.cn>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        loongarch@lists.linux.dev
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20221103131202.12481-1-zhuyinbo@loongson.cn>
- <20221103131202.12481-2-zhuyinbo@loongson.cn>
- <c1def742-c10b-beaf-9a77-bd5eed253154@loongson.cn>
-Message-ID: <ce61cbea-edca-5cae-799b-9294fe704298@loongson.cn>
-Date:   Thu, 17 Nov 2022 16:08:42 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        William Breathitt Gray <william.gray@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/2] AD74115
+Date:   Thu, 17 Nov 2022 10:09:14 +0200
+Message-Id: <20221117080916.411766-1-cosmin.tanislav@analog.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-In-Reply-To: <c1def742-c10b-beaf-9a77-bd5eed253154@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxR1cK7HVj3M8VAA--.39222S2
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxKryxuF1rZFyDCryxXw4kXrb_yoW7XrW5pF
-        n7CFZxJrW7Jr1rXwsrtF1jyFy5Zw18J3WDJr1xJFyUJFyDJr1jqr18WF1q9r13Jr48Gr17
-        Xr12vr17ur1jyrJanT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bgAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVWxJr0_Gc
-        Wl84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAaw2AFwI0_JF0_Jw1le2I262IYc4CY
-        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_ZF0_GryDMcIj6I8E87Iv67AKxVW8Jr0_Cr1UMcvjeVCF
-        s4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4
-        kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCF
-        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVW7JVWDJwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
-        CI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr1j6F4UJwCI42IY
-        6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU0jjg7UUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Any updates?
+The AD74115H is a single-channel, software-configurable, input and
+output device for industrial control applications. The AD74115H
+provides a wide range of use cases, integrated on a single chip.
 
-在 2022/11/9 下午5:50, Yinbo Zhu 写道:
-> Hi maintainer,
-> 
-> please help me merge it to upstream.
-> 
-> In addition, this patch need rely on 
-> "https://patchwork.kernel.org/project/linux-clk/list/?series=691497"
-> 
-> Thanks,
-> Yinbo.
-> 
-> 在 2022/11/3 下午9:12, Yinbo Zhu 写道:
->> Add the Loongson-2 High Precision Event Timer (HPET) binding
->> with DT schema format using json-schema.
->>
->> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->> Change in v10:
->>         1. NO change, but other patch in this series of patches set
->>            has changes.
->>                  2. This patch need rely on clock patch, which patchwork
->>            link was 
->> "https://patchwork.kernel.org/project/linux-clk/list/?series=691497".
->> Change in v9:
->>                  1. This patch need rely on clock patch, which patchwork
->>            link was 
->> "https://patchwork.kernel.org/project/linux-clk/list/?series=691497".
->>         2. NO change, but other patch in this series of patches set
->>            has changes.
->> Change in v8:
->>                  1. This patch need rely on clock patch, which patchwork
->>            link was 
->> "https://patchwork.kernel.org/project/linux-clk/list/?series=691497".
->>         2. Add all history change log information.
->> Change in v7:
->>         1. NO change, but other patch in this series of patches set
->>            has changes.
->> Change in v6:
->>         1. NO change, but other patch in this series of patches set
->>            has changes.
->> Change in v5:
->>         1. Replace string loongson2/Loongson2 with Loongson-2/loongson-2.
->>         2. Add the patch review information.
->> Change in v4:
->>                  1. Fixup the clock-names that replace apb-clk with apb.
->>                  2. This patch need rely on clock patch, which patchwork
->>                     link was 
->> "https://patchwork.kernel.org/project/linux-clk/list/?series=688892".
->> Change in v3:
->>         1. Update dts that base on common clock framework.
->> Change in v2:
->>         1. Drop the  "hpet0" label.
->>         2. Modify the hpet node name to timer.
->>
->>   .../bindings/timer/loongson,ls2k-hpet.yaml    | 50 +++++++++++++++++++
->>   MAINTAINERS                                   |  1 +
->>   2 files changed, 51 insertions(+)
->>   create mode 100644 
->> Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml
->>
->> diff --git 
->> a/Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml 
->> b/Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml
->> new file mode 100644
->> index 000000000000..30685c8fbead
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml
->> @@ -0,0 +1,50 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/timer/loongson,ls2k-hpet.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Loongson-2 High Precision Event Timer (HPET)
->> +
->> +maintainers:
->> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
->> +
->> +properties:
->> +  compatible:
->> +    const: loongson,ls2k-hpet
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  clocks:
->> +    items:
->> +      - description: SoC apb clock
->> +
->> +  clock-names:
->> +    items:
->> +      - const: apb
->> +
->> +  interrupts:
->> +    maxItems: 1
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - clocks
->> +  - clock-names
->> +  - interrupts
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    #include <dt-bindings/clock/loongson,ls2k-clk.h>
->> +    #include <dt-bindings/interrupt-controller/irq.h>
->> +    timer@1fe24000 {
->> +        compatible = "loongson,ls2k-hpet";
->> +        reg = <0x1fe24000 0x15f>;
->> +        clocks = <&clk LOONGSON2_APB_CLK>;
->> +        clock-names = "apb";
->> +        interrupt-parent = <&liointc0>;
->> +        interrupts = <21 IRQ_TYPE_LEVEL_LOW>;
->> +    };
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 52519695a458..939af260fe0f 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -12030,6 +12030,7 @@ LOONGSON-2 SOC SERIES HPET DRIVER
->>   M:    Yinbo Zhu <zhuyinbo@loongson.cn>
->>   L:    linux-kernel@vger.kernel.org
->>   S:    Maintained
->> +F:    Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml
->>   F:    drivers/clocksource/loongson2_hpet.c
->>   LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
->>
+These use cases include analog output, analog input, digital output,
+digital input, resistance temperature detector (RTD), and thermocouple
+measurement capability. The AD74115H also has an integrated HART modem.
+
+A serial peripheral interface (SPI) is used to handle all communications
+to the device, including communications with the HART modem. The digital
+input and digital outputs can be accessed via the SPI or the
+general-purpose input and output (GPIO) pins to support higher
+speed data rates.
+
+The device features a 16-bit, sigma-delta analog-to-digital converter
+(ADC) and a 14-bit digital-to-analog converter (DAC).
+The AD74115H contains a high accuracy 2.5 V on-chip reference that can
+be used as the DAC and ADC reference.
+
+V2 -> V3:
+ * dt-bindings: remove address and size cells specifiers
+ * dt-bindings: additionalProperties -> unevaluatedProperties
+ * dt-bindings: remove pipe where not needed
+ * dt-bindings: use required for adi,digital-input-sink-range-high: true
+ * do not uselessly store poll time
+ * fix ad74115_adc_gain capitalization
+ * inline ad74115_channels_map[st->ch_func] access
+ * keep consistent table naming
+ * remove aldo1v8 regulator
+ * spell out low-power
+ * split up resistance offset and scale into separate function
+ * use adc_rdy name for irq
+ * use microvolt for conv2 range
+ * use unsigned int for ad74115_adc_conv_mul
+ * use unsigned int for ad74115_adc_gain
+ * wrap module_driver call less
+
+V1 -> V2:
+ * dt-bindings: add spi peripheral allOf
+ * dt-bindings: remove cs-gpios
+ * dt-bindings: remove refin supply from example
+ * dt-bindings: remove status
+ * sort includes
+ * ad74115_parse_fw_prop -> ad74115_apply_fw_prop
+ * ad74115_setup_{comp,}_gc -> ad74115_setup_{comp,}_gpio_chip
+ * gpiod_get_optional -> devm_gpiod_get_optional
+ * add support for reset-gpios
+ * add support for running without an interrupt
+ * fix comma after terminating member
+ * fix order of rate and range masks
+ * fix reset pin wait time and out of reset time
+ * fix rtd mode reading
+ * pass chan spec only where needed
+ * remove -en suffix
+ * remove default 0 values
+ * remove diag support
+ * remove unecessary prop storage
+ * reorder switch cases to match enum
+ * set burnout enable bit based on burnout current
+ * set default value for props
+ * simplify dac hart slew usage
+ * simplify prop value validation
+ * use bool for 4 wire rtd mode
+ * use bool for burnout current polarity
+ * use bool for dac sc current limit
+ * use bool for debounce mode
+ * use bool for din sink range
+ * use bool for din threshold mode
+ * use devm_regulator_bulk_get_enable
+ * use IIO_VAL_FRACTIONAL for resistance offset
+ * use struct assignment for gpiochip
+ * warn on empty prop mask
+
+Cosmin Tanislav (2):
+  dt-bindings: iio: addac: add AD74115
+  iio: addac: add AD74115 driver
+
+ .../bindings/iio/addac/adi,ad74115.yaml       |  373 ++++
+ MAINTAINERS                                   |    8 +
+ drivers/iio/addac/Kconfig                     |   14 +
+ drivers/iio/addac/Makefile                    |    1 +
+ drivers/iio/addac/ad74115.c                   | 1947 +++++++++++++++++
+ 5 files changed, 2343 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iio/addac/adi,ad74115.yaml
+ create mode 100644 drivers/iio/addac/ad74115.c
+
+-- 
+2.38.1
 
