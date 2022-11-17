@@ -2,60 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 314ED62D470
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 08:55:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46B3E62D473
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 08:55:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234412AbiKQHzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 02:55:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45972 "EHLO
+        id S239230AbiKQHzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 02:55:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiKQHzd (ORCPT
+        with ESMTP id S238868AbiKQHzq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 02:55:33 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D1D59871
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 23:55:32 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id f201so924693yba.12
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 23:55:31 -0800 (PST)
+        Thu, 17 Nov 2022 02:55:46 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D263D5987E
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 23:55:45 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id g12so1537095lfh.3
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 23:55:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=MR/mQ7ErzLslQ7dM0kWBgKuDJb0UWjJ2ZmvDXIqO0jk=;
-        b=ODxl9+j48bIdAzfRlS+CCddaWTBnFWL9CYN0As+w/fUCh9HhddxP7n9dsOEOek3LDx
-         xdU8xi1eNGhvjYMTXtHzxqPdHcwAlL/xDn0RreNNO7o5YwQaK8MR9UgUPgtdrxWjUi8q
-         XnWfbX2KVWerA84bCCq4933ObU4EvHII6lRBuNzaJ2ovCPGUYza4oT/OhUz9imkvjhoG
-         AEPffaNXetYCwoYOikukWyDjXl6QFseGInm+cP1J1yztBHaqhMh0BMf6QG27cqZPI2hc
-         eicx+AWGGlnc2Lw6lCt4R4yrYu9l2UoJdkPQGnGDmp18G2ITu3b6ajMLJuUGCZgoKIfF
-         DC7Q==
+        bh=C78aGbjrXr/kztGG2Ey4CvIW/8gpjBglbtD87+pP3/g=;
+        b=L5NI37RMQHU/jKY7fsOJm5fHqjyg67DgFAJIRcYsy2MSda+2XZwjnR/S6jp3uBXQPv
+         +q/1okHDvOo8hfhxDWwpXs2LQV74UsNV6kukkYiN6wFNK/Dam5ZkQHWxjyzQjdrOXP4P
+         SA4KlR/TOvZClvL9soUWzpG0Oa7WlKIo0Qf6pcwQQncv3uAYYbPgXWD1r6s5b7tdCB2H
+         tw2QAZJMTRK+v2Z+2J2eFe/WIj46HVc3Osz0Zx3O3FB6wcgXBmbb3yFYa3pE2TMJpU8r
+         7LA044q12rqA+mbqslhqWSO7OHQKVGIyufI8wlfiuXSmCBdm5PvWLhxSjcbKOiRI1p2W
+         RYlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=MR/mQ7ErzLslQ7dM0kWBgKuDJb0UWjJ2ZmvDXIqO0jk=;
-        b=WY1KCxPaGfBSUas38R8Fnt/vthkbP4BotewAsgTkw6ot4td47FIo5wyXsWzDolg6Mf
-         YSl97VeML2PPNSOWdDKekZql4HEeFdt5ESNcxm5Z3QJKYcJsGTNSMRPKw0yx4U7kDAda
-         soHBD6geL+adxAqKApgS2qpsw/HJmKnA4HVg517vwrYoTvxPPIhjOXFgT5vmLQXx3ZF3
-         5ikdVNjqGlx/3jHfPKclcfVljMZPUS0vUER8OgmKWyGCEUVKBtV2GHR2fFqHupYwq8En
-         7D3jmfL1J/mMma22FAAp9ONI7vZ91jnryOjOHcqdbWjnOYEcM177jwaJ7H6+5CK63DNO
-         +NOQ==
-X-Gm-Message-State: ANoB5pk4kuDduTEvvdgt/Zn8Q24Hbv8+uY3V/SVP3JcWdVj8HemAv+wn
-        IyfRD1fx7YN0FlS0dWeGZK/BXLIax5grw4UJpdcLdwVlKEV00ozc
-X-Google-Smtp-Source: AA0mqf4CM1hW6YMosRox0Vo9EiTnZimicHVSTymmHTOUcbjbAUbXw7Wu/veU1Wh6AMW2IZ1Eh+drBgVO8BEKnKDTPV0=
-X-Received: by 2002:a5b:78e:0:b0:6cc:5084:2517 with SMTP id
- b14-20020a5b078e000000b006cc50842517mr1073408ybq.464.1668671731021; Wed, 16
- Nov 2022 23:55:31 -0800 (PST)
+        bh=C78aGbjrXr/kztGG2Ey4CvIW/8gpjBglbtD87+pP3/g=;
+        b=u0JwC1uVH8deCI7g0+mAKVMLExzD8ZbSIuYGltGot0f3uZcx4pFHuyob1qinYk2fYU
+         ZfAU+usJG7is8D7GrQtjJrjGFpD3c3LqfmItZBCz12dM1rk+OuSVbQbP22TdGrU9Re5Y
+         IRyZtuelJzzgvmFbuFe58y2Nyv4W0cOkArkvh5N7eMBHWQm6EOLvfzwNnYvgXGAxii61
+         6yOvzaUPLoJD4ppYNuI/oFddCDgjau4akhU/rNpHFGq3c9rL/yr2M6fwbDoXCycr0arv
+         hwHH/+f7uQXlSIDd8CgpEZU5f65aEd0aK7q2uJIjVDFyRJIB/Lt8K0FJ8nwjg9ekV7gi
+         1h1g==
+X-Gm-Message-State: ANoB5pnwRhVwCSMU099lCLw1BXW+h5CHov+9jzJgjUnA81p4R0X1c6mH
+        u36TYfqt+d6HrBufXiSidQLrmrP7cy4es9UhaeHMalzQ+DcTEQ==
+X-Google-Smtp-Source: AA0mqf6vacXv8wtce7xA07fSW8Cd8F7eJx9Z6EmNaiflvVQOZGLGZKLwV8fdDEugCSwC09Mx+Wq/QT9RXjrrC9cUlkk=
+X-Received: by 2002:ac2:52ad:0:b0:4a2:23b0:b850 with SMTP id
+ r13-20020ac252ad000000b004a223b0b850mr466081lfm.60.1668671744208; Wed, 16 Nov
+ 2022 23:55:44 -0800 (PST)
 MIME-Version: 1.0
-From:   Hang An <anhang610@gmail.com>
-Date:   Thu, 17 Nov 2022 15:55:21 +0800
-Message-ID: <CAKdx3izLgNJO+5ye4twe0+CFMcUBrFUa+-NdLN6VKKWQ76YiLA@mail.gmail.com>
-Subject: Can Not Send Netlink Messages with Unshare(CLONE_NEWNET)
-To:     linux-kernel@vger.kernel.org
+From:   Jun Nie <jun.nie@linaro.org>
+Date:   Thu, 17 Nov 2022 15:55:35 +0800
+Message-ID: <CABymUCOsVcpaS+uXqzB7-hm0FZwm2ZXD8J=6m0NKAh8WyrTiwA@mail.gmail.com>
+Subject: [BUG REPORT] kernel BUG in ext4_write_inline_data_end
+To:     harshadshirwadkar@gmail.com, tytso@mit.edu,
+        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     Lee Jones <joneslee@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -63,20 +65,45 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
-A process can not send netlink messages(errno is ECONNREFUSED) after
-running unshare(CLONE_NEWNET).
 
-Part of the call stack when process failed:
-netlink_sendmsg
-netlink_unicast
-netlink_getsockbyportid
-netlink_lookup(return NULL)
+syzbot find a bug[0] in ext4 on android13-5.15-lts as below and it can
+be reproduced on mailine v6.1-rc5(094226ad94f4) too The log from
+mainline can be found in URL [1]. The bisect test shows below
+commit[2] is the first commit that reproduce the bug. With reverting
+the commit, there is no bug reproduced[3].
 
-The corresponding pseudocode is shown below:
-unshare(CLONE_NEWNET) ;
-res_socket = syscall(__NR_socket, 0x10ul, 3ul, 8);
-syscall(__NR_sendmsg, res_socket, msghdr, 0ul);
+Is reverting the commit 21175ca434c5 a acceptable solution? Any fix
+work is in progress?
 
-I can't understand this situation. Is this a bug or special design?
+[0] https://syzkaller.appspot.com/bug?id=5bafe4554067100b70f58a81268aa06ea3f9c345
+[1] https://syzkaller.appspot.com/text?tag=CrashLog&x=118359c1880000
+[2] 21175ca434c5 ext4: make prefetch_block_bitmaps default
+[3] https://groups.google.com/g/syzkaller-android-bugs/c/HKLNVJQICMM/m/YcHNpH_iBAAJ
 
-Thanks.
+kernel BUG at fs/ext4/inline.c:227!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+Call Trace:
+ <TASK>
+ ext4_write_end+0x1af/0x9d0 fs/ext4/inode.c:1307
+ ext4_da_write_end+0x92/0xa70 fs/ext4/inode.c:3067
+ generic_perform_write+0x3c7/0x5d0 mm/filemap.c:3836
+ ext4_buffered_write_iter+0x49b/0x630 fs/ext4/file.c:271
+ ext4_file_write_iter+0x456/0x1dc0
+ do_iter_readv_writev+0x52a/0x720
+ do_iter_write+0x1f4/0x760 fs/read_write.c:855
+ vfs_iter_write+0x7c/0xa0 fs/read_write.c:896
+ iter_file_splice_write+0x810/0xfd0 fs/splice.c:689
+ do_splice_from fs/splice.c:767 [inline]
+ direct_splice_actor+0xfe/0x130 fs/splice.c:934
+ splice_direct_to_actor+0x4d4/0xbd0 fs/splice.c:889
+ do_splice_direct+0x2a0/0x3f0 fs/splice.c:977
+ do_sendfile+0x63b/0xfd0 fs/read_write.c:1249
+ __do_sys_sendfile64 fs/read_write.c:1317 [inline]
+ __se_sys_sendfile64 fs/read_write.c:1303 [inline]
+ __x64_sys_sendfile64+0x1ce/0x230 fs/read_write.c:1303
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x61/0xcb
+
+Regards,
+Jun
