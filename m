@@ -2,123 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29ACB62E0AA
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 17:01:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E26F562E0BC
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 17:02:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234749AbiKQQBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 11:01:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37984 "EHLO
+        id S240030AbiKQQCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 11:02:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240048AbiKQQAt (ORCPT
+        with ESMTP id S240255AbiKQQCC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 11:00:49 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1082253F;
-        Thu, 17 Nov 2022 08:00:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668700847; x=1700236847;
-  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=BuUmPgqr1gKGWjTUN8g9tLoojOhBbprvA2Zcib8Mm6k=;
-  b=QJz22JKdj9Ns5vhsaP8MwLwfusIV2ccOT1p4jdf/Etpbb3UcGsjm3eEe
-   Kjre/ALZAsQsgq7mAf1YPzhW3e15DCb8ciZa/gwA4F4NXabR48dsM3blj
-   tSPO/gz2sWIRk9yJoHGQkrUgW6KdfCmGnCizb1fm1c4dDPHogMsRCW5MN
-   IJtCHgvVIf4UENp7sX2C1otMVV4Hm9ZZ6lDfjNQx4J/cbIoo8E3tY8Ahf
-   npsgb0WmPDEbVPt1aFQPmGmqPvh4oPYea41ShEVKeb1DTbNurPEdrqxak
-   m33BE3jxb9OFLKgsVVt4RAnB3kLOAOrPFskf+QEFl/rLeytnM3dl0ttKC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="311592482"
-X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
-   d="scan'208";a="311592482"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 08:00:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="708665301"
-X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
-   d="scan'208";a="708665301"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga004.fm.intel.com with ESMTP; 17 Nov 2022 08:00:42 -0800
-Received: from sulochan-mobl.amr.corp.intel.com (unknown [10.212.246.182])
-        by linux.intel.com (Postfix) with ESMTP id 9B45A580BBE;
-        Thu, 17 Nov 2022 08:00:42 -0800 (PST)
-Message-ID: <a21a7a1b749d0c7e8f7942fe02dd4b6fcd3e97f6.camel@linux.intel.com>
-Subject: Re: [PATCH 0/9] Extend Intel On Demand (SDSi) support
-From:   "David E. Box" <david.e.box@linux.intel.com>
-Reply-To: david.e.box@linux.intel.com
-To:     Hans de Goede <hdegoede@redhat.com>, markgross@kernel.org,
-        andriy.shevchenko@linux.intel.com, srinivas.pandruvada@intel.com
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 17 Nov 2022 08:00:42 -0800
-In-Reply-To: <267ebc83-04a8-4421-732d-7a329bc0fa9a@redhat.com>
-References: <20221101191023.4150315-1-david.e.box@linux.intel.com>
-         <267ebc83-04a8-4421-732d-7a329bc0fa9a@redhat.com>
-Organization: David E. Box
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        Thu, 17 Nov 2022 11:02:02 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADE45786FB;
+        Thu, 17 Nov 2022 08:02:00 -0800 (PST)
+Received: from frapeml100003.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NCl3S1NS9z6H7Rh;
+        Thu, 17 Nov 2022 23:59:32 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ frapeml100003.china.huawei.com (7.182.85.60) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 17 Nov 2022 17:01:58 +0100
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 17 Nov
+ 2022 16:01:57 +0000
+Date:   Thu, 17 Nov 2022 16:01:56 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-iio@vger.kernel.org>, <linux-input@vger.kernel.org>,
+        <linux-leds@vger.kernel.org>, <linux-media@vger.kernel.org>,
+        <linux-mips@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        <linux-mtd@lists.infradead.org>, <netdev@vger.kernel.org>,
+        <linux-can@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <linux-pwm@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <virtualization@lists.linux-foundation.org>,
+        <linux-watchdog@vger.kernel.org>
+Subject: Re: [RFC PATCH 7/9] dt-bindings: drop redundant part of title
+ (beginning)
+Message-ID: <20221117160156.00004e31@Huawei.com>
+In-Reply-To: <20221117123850.368213-8-krzysztof.kozlowski@linaro.org>
+References: <20221117123850.368213-1-krzysztof.kozlowski@linaro.org>
+        <20221117123850.368213-8-krzysztof.kozlowski@linaro.org>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-11-17 at 15:01 +0100, Hans de Goede wrote:
-> Hi David,
->=20
-> On 11/1/22 20:10, David E. Box wrote:
-> > Intel Software Defined Silicon (SDSi) is now known as Intel On Demand. =
-The
-> > following patches do the following:
-> >=20
-> > 1. Identify the driver/tools as Intel On Demand. Only text descriptions=
- are
-> > changed. Kconfig and filenames remain the same.
-> > 2. Perform some attribute cleanup by preventing the showing of files wh=
-en
-> > features are not supported.
-> > 3. Adds support for a new GUID. GUIDs are used to identify the layout o=
-f
-> > the On Demand registers in sysfs. Layouts are described in the
-> > documentation on github [1].
-> > 4. Add support for reading On Demand meter certificates in sysfs.
-> > 5. The rest of the patches modify the existing tool to support discover=
-y
-> > and reading of On Demand registers and the meter certificate.
-> >=20
-> > [1] https://github.com/intel/intel-sdsi/blob/master/os-interface.rst
-> >=20
-> > David E. Box (9):
-> > =C2=A0 platform/x86/intel/sdsi: Add Intel On Demand text
-> > =C2=A0 platform/x86/intel/sdsi: Hide attributes if hardware doesn't sup=
-port
-> > =C2=A0 platform/x86/intel/sdsi: Support different GUIDs
-> > =C2=A0 platform/x86/intel/sdsi: Add meter certificate support
-> > =C2=A0 tools/arch/x86: intel_sdsi: Add support for reading state certif=
-icates
-> > =C2=A0 tools/arch/x86: intel_sdsi: Add Intel On Demand text
-> > =C2=A0 tools/arch/x86: intel_sdsi: Read more On Demand registers
-> > =C2=A0 tools/arch/x86: intel_sdsi: Add support for new GUID
-> > =C2=A0 tools/arch/x86: intel_sdsi: Add support for reading meter certif=
-icates
->=20
-> Thank you, over all this looks good. I have some small remarks
-> on patches 4, 8 and 9 see my replies to those.
->=20
-> Please prepare a v2 addressing Andy's + my review remarks and get
-> that v2 to me no later then next week Tuesday, then I can still
-> merge this in time for 6.2 .
+On Thu, 17 Nov 2022 13:38:48 +0100
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-Will do. Thanks Hans, Andy.
+> The Devicetree bindings document does not have to say in the title that
+> it is a "Devicetree binding", but instead just describe the hardware.
+> 
+> Drop beginning "Devicetree bindings" in various forms:
+> 
+>   find Documentation/devicetree/bindings/ -type f -name '*.yaml' \
+>     -exec sed -i -e 's/^title: [dD]evice[ -]\?[tT]ree [bB]indings\? for \([tT]he \)\?\(.*\)$/title: \u\2/' {} \;
+> 
+>   find Documentation/devicetree/bindings/ -type f -name '*.yaml' \
+>     -exec sed -i -e 's/^title: [bB]indings\? for \([tT]he \)\?\(.*\)$/title: \u\2/' {} \;
+> 
+>   find Documentation/devicetree/bindings/ -type f -name '*.yaml' \
+>     -exec sed -i -e 's/^title: [dD][tT] [bB]indings\? for \([tT]he \)\?\(.*\)$/title: \u\2/' {} \;
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+LGTM
 
->=20
-> Regards,
->=20
-> Hans
->=20
->=20
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+
+Oh for consistent capitalization though ;)
+
 
