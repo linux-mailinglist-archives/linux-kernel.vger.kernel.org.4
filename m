@@ -2,98 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FC2262D762
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 10:46:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58ACF62D768
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 10:47:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234674AbiKQJqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 04:46:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36200 "EHLO
+        id S239165AbiKQJrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 04:47:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233220AbiKQJqh (ORCPT
+        with ESMTP id S234819AbiKQJrx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 04:46:37 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488483204D;
-        Thu, 17 Nov 2022 01:46:36 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668678394;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gquu1ZTTEBDKIhI2pV8dgt1FSaeBDeaXtLNdg4+XaPk=;
-        b=wNcCk0qkTgyuNsVHaiNO8d3XS6+hY6fnnDIcMzVj36njCY6on15RXkl31j0Kk7Bdjjr8Eb
-        VEKpv5K8wsJDfHX5iVN/n/2Ncea2ha6qd88Te7u4zYrZwzCR1HmQN3zAc8zuuogdqtB7F2
-        rx6ZeLx2cI2hERpe/EQNVKBirR7HIFDyhrUKlblLX8Dg/uN40l9FPmJG8RmCDuAjfZH5o7
-        E6zK+bTgfVlEb7QNOF2g6n1rCdi8xWL/sdjgBC0gStORRw6gnSEqesZAUS2r7ys227bzVw
-        XuyDy4qTFrMHDDrzaLtdMoMkGbeUQZUSkmkuphcE59dXRhSFJIuakhOOVFd+1g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668678394;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gquu1ZTTEBDKIhI2pV8dgt1FSaeBDeaXtLNdg4+XaPk=;
-        b=btkKxgoo4G39juKRAY25iro1A6DK9xxOm+3epNLxGy3fLzh3vnkeIqjlYNlKy18H53IJeY
-        0hUwo4ykI4F0u6Cw==
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
-        Allen Hubbe <allenbh@gmail.com>,
-        "Ahmed S. Darwish" <darwi@linutronix.de>,
-        Reinette Chatre <reinette.chatre@intel.com>
-Subject: Re: [patch 27/33] genirq/msi: Provide constants for PCI/IMS support
-In-Reply-To: <Y3U/8/0p66cG4tjk@nvidia.com>
-References: <20221111133158.196269823@linutronix.de>
- <20221111135206.800062166@linutronix.de> <Y3U/8/0p66cG4tjk@nvidia.com>
-Date:   Thu, 17 Nov 2022 10:46:34 +0100
-Message-ID: <87o7t5ncat.ffs@tglx>
+        Thu, 17 Nov 2022 04:47:53 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7125151C18
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 01:47:51 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id o30so999145wms.2
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 01:47:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=mJE8bZ1d16Soq/u3zXafNtgnkPdOoiLGxDgt0M+ZXuA=;
+        b=LxuJaGiRi3GBofhyCy0PMCAzPQdVyvyWx9AX37dIms/Xgg/2EH91lE0RW/4HzaaPiJ
+         NDb9kG83yG4+JBTlINwBojFti0v/j+BqGiF3Sv0oRKzvlmuq5aAcJWvO/s72RAy1q8DX
+         d2iqPnmY/rOJ3qvZsVDoe61fCsT2glT6txgpJRgOyFQvzd2TD718M7nsPrkDKcsi3W0g
+         iM8pE2ne9+VDho8RF0CxLtISIKliPqVbpRKuZmIdXGJnfUnZN84tNANhydhNukBD+Qka
+         rdaYy7EqskyGKeC1H2NtefrWLKKy/zYREUJNVv8shrHgwXLCCAY8dSk/wkFY6d4+mg+U
+         1H5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mJE8bZ1d16Soq/u3zXafNtgnkPdOoiLGxDgt0M+ZXuA=;
+        b=bGbWfjKolMBy/FkWJ4tmM05cWH38LFsxsClOWmlijQchCSLKc434vBna5xuDenHZg2
+         ctq4Mu6SOgl26riv+9RvIyaQIF/igdUrhdFI/7Oy31RaB5YKG7zkBb8YJA5jVq9Nnihs
+         jZedVAna64Reeec4GpzMfXlFuyKw5IhKaTEeNSK7QCpDodCghyMFPpSsJgAw7a3YEwFC
+         glhOohuyBYgK6okOc8Ce+xmVsvPiVcbENeS59sTEmB8I+H8eMg/qC+K3bxqNneb0hFXV
+         T2kRzSRmKWjw5jFTWrWISqezAuCzzyroLQ3mm60n/CphEFkVMdcKOq5CsSw1A6O4petl
+         r4og==
+X-Gm-Message-State: ANoB5pnPPtIjadRtSptBhe01k0RbWd9DUaSdZOZL8IgHnIa7KPnDB5GM
+        qOwkPt6fnFoep1eQt/RNDyrHEA==
+X-Google-Smtp-Source: AA0mqf6GnUIX2gam7adzA/Cn6Eg7pIWME+I/iWVz6m4/uWp50R1x4P8/TKeoURKqMpd7/os5BKfyAw==
+X-Received: by 2002:a7b:c00a:0:b0:3cf:e8f0:ad11 with SMTP id c10-20020a7bc00a000000b003cfe8f0ad11mr4777193wmb.65.1668678469971;
+        Thu, 17 Nov 2022 01:47:49 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:aad5:8d14:a22f:2e8b? ([2a01:e0a:982:cbb0:aad5:8d14:a22f:2e8b])
+        by smtp.gmail.com with ESMTPSA id u16-20020a05600c19d000b003cf37c5ddc0sm726317wmq.22.2022.11.17.01.47.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Nov 2022 01:47:49 -0800 (PST)
+Message-ID: <9aa23650-6ae1-3844-7cf3-6812dc023c11@linaro.org>
+Date:   Thu, 17 Nov 2022 10:47:48 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org, Bjorn Andersson <andersson@kernel.org>
+Subject: Re: [PATCH 1/2] dt-bindings: reserved-memory: document Qualcomm MPSS
+ DSM memory
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20221114-narmstrong-sm8550-upstream-mpss_dsm-v1-0-158dc2bb6e96@linaro.org>
+ <20221114-narmstrong-sm8550-upstream-mpss_dsm-v1-1-158dc2bb6e96@linaro.org>
+ <38fff21b-3e75-13f9-664e-a115bc527b67@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <38fff21b-3e75-13f9-664e-a115bc527b67@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16 2022 at 15:54, Jason Gunthorpe wrote:
-> On Fri, Nov 11, 2022 at 02:58:54PM +0100, Thomas Gleixner wrote:
->> +	/* Support for PCI/IMS */
->> +	MSI_FLAG_PCI_IMS		= (1 << 21),
->
-> Maybe for legacy reasons it is too complicated, but it would be so
-> much clearer of the special case of "I only know how to support PCI
-> MSI and PCI MSI-X" was called out as a special flag, and the more
-> general case of "any write_msg is fine by me" was left behind.
->
-> I feel like when the device domain is created in the first place the
-> parent domain(s) should be able to reject the creation if the
-> requested child domain is not one it supports. Eg the hypervisor
-> interactions checks if the child domain is PCI MSI or PCI MSI-X and
-> rejects otherwise, because that is the only thing the hypervisor knows
-> how to work with.
->
-> If we did that perhaps we don't even need a flag or further checks?
+On 16/11/2022 13:17, Krzysztof Kozlowski wrote:
+> On 16/11/2022 11:16, Neil Armstrong wrote:
+>> This documents the Qualcomm Modem Processing SubSystem DSM shared memory.
+> 
+> Do not use "This commit/patch".
+> https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+> 
+>>
+>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>> ---
+>>   .../reserved-memory/qcom,mpss-dsm-mem.yaml         | 37 ++++++++++++++++++++++
+>>   1 file changed, 37 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/reserved-memory/qcom,mpss-dsm-mem.yaml b/Documentation/devicetree/bindings/reserved-memory/qcom,mpss-dsm-mem.yaml
+>> new file mode 100644
+>> index 000000000000..65f37e1356d4
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/reserved-memory/qcom,mpss-dsm-mem.yaml
+>> @@ -0,0 +1,37 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: "http://devicetree.org/schemas/reserved-memory/qcom,mpss-dsm-mem.yaml#"
+>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> 
+> Drop quotes from above.
+> 
+> I know that this and few further pieces came from existing files...
 
-It's not that simple. The flags are part of the domain creation sanity
-checks and due to other constraints in our marvelous zoo of
-architectures, iommus, hypervisors and whatever being explicit about
-this is really required. Look at the GICv3-ITS voodoo which explicitly
-needs to differentiate between PCI and non-PCI MSI. I wish we could
-start from a clean slate, but that train has left the station long ago.
+Yep sorry, I'll clean it up.
 
-Thanks,
+> 
+>> +
+>> +title: Qualcomm Modem Processing SubSystem DSM Memory
+>> +
+>> +description: |
+>> +  This binding describes the Qualcomm Modem Processing SubSystem DSM, which serves the
+> 
+> Drop "This binding describes"
+> 
+>> +  purpose of describing the shared memory region used for MPSS remote processors.
+> 
+> Entire description seems like not wrapped at 80.
+> 
+>> +
+>> +maintainers:
+>> +  - Bjorn Andersson <bjorn.andersson@linaro.org>
+> 
+> Need to update the address.
 
-        tglx
+Argh
+
+> 
+>> +
+>> +allOf:
+>> +  - $ref: "reserved-memory.yaml"
+> 
+> Drop quotes.
+> 
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: qcom,mpss-dsm-mem
+> 
+> Why do we need dedicated binding and compatible for it instead of using
+> memory-region phandle in the device?
+
+So like rmtfs, this memory zone is shared between APPS and the MPSS subsystem.
+
+Like rmtfs it makes no sense to link it to the MPSS PAS, since it's only a launcher,
+it doesn't represent the MPSS subsystem.
+
+In the PAS startup process, the resources are released from APPS once the MPSS subsystem
+is running, which is not the case with the MPSS DSM where it must be shared during the whole
+lifetime of the system.
+
+Neil
+
+> 
+>> +
+>> +unevaluatedProperties: false
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
+
