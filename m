@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59DE562E169
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 17:20:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A00A862E168
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 17:20:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240341AbiKQQUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 11:20:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55806 "EHLO
+        id S240330AbiKQQUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 11:20:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239853AbiKQQUE (ORCPT
+        with ESMTP id S239808AbiKQQUE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 17 Nov 2022 11:20:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3EBD74CE8
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A643873B8A
         for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 08:20:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8C883B82106
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 16:20:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8664AC433C1;
-        Thu, 17 Nov 2022 16:20:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4022B62129
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 16:20:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D39DDC433D6;
+        Thu, 17 Nov 2022 16:20:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668702001;
-        bh=kUluxspYCSEwhHwxHr/16Jwpsv1UyFZrsVvni+5ynh0=;
+        s=k20201202; t=1668702002;
+        bh=ZN1OImQXtdV/N+x4MEmihbOCG5GyKnlc5upWgVkA87I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A+LFliHw6DVA0OU/n9VR2+v6IzUaaKsWWKGmNUO6jyaK3QK+NQmZoQA84VWy3HskF
-         I2fLal0yXwLacbyApJ7pzrTSoM4zdoJpyCSw7yNszO4fDuB0RLhRItzGWFL0C3iZ37
-         HnN1WGkEStsCF+tMkoLZFe0l5sLx/M6eVzz+BZqLOOHfg8AlboUC1cgIHfO3pxl/Y9
-         vyruDwjPIE+WPompQSCSXmXoKVPdpQ75dpmLR/0l4shWTyPY6s/ang/ANOLnxE5k4F
-         IhI7e6tpf1UMnm0Q7geS9hz7sHQT81mH1nI9z+HuyupiaVGaIn2DsBkA9bVyr1miIE
-         MKFd70xYmxzGQ==
+        b=uAPHuz1e1elQCUTlIboF8V9UIMamUtm78xZfnt4wZkdceqvIsLHcI127q8j8J0TO4
+         qRnjhSpLra/X28V+v+uAQBpqSpGMpobQ+v0qwxY2oe9RaXaUrpmwlSryGImIsBcaSd
+         OUExCNftFazT3rsS0l/iODjaKWHzfXcnjHAvWKMxzFPo2JP8iAefxc1d8WxZz9uHYq
+         7oXlKPRJqZlXcBob1qgdu9Rq0MNllMssHFZQAarTl5gIbW5kE4onxUwcazwUqvNXov
+         Fhr3SeydjXwtov1OBl387y3lPG7H8XmAjrmgQ6ZNwrlmnfHHayhg8SUqiS9sv+tAe5
+         O42P6rr8oWjlQ==
 From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     Dani Liberman <dliberman@habana.ai>
-Subject: [PATCH 04/20] habanalabs/gaudi: add page fault notify event
-Date:   Thu, 17 Nov 2022 18:19:35 +0200
-Message-Id: <20221117161951.845454-4-ogabbay@kernel.org>
+Cc:     Ofir Bitton <obitton@habana.ai>
+Subject: [PATCH 05/20] habanalabs/gaudi2: implement fp32 not supported event
+Date:   Thu, 17 Nov 2022 18:19:36 +0200
+Message-Id: <20221117161951.845454-5-ogabbay@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221117161951.845454-1-ogabbay@kernel.org>
 References: <20221117161951.845454-1-ogabbay@kernel.org>
@@ -52,102 +52,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dani Liberman <dliberman@habana.ai>
+From: Ofir Bitton <obitton@habana.ai>
 
-Each time page fault happens, besides capturing its data, also notify
-the user about it.
+Due to binning, Gaudi2 does not always support fp32.
+We add support for such an event in case fp32 is used by the user
+in such a device.
 
-Signed-off-by: Dani Liberman <dliberman@habana.ai>
+Signed-off-by: Ofir Bitton <obitton@habana.ai>
 Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- drivers/misc/habanalabs/common/device.c     | 9 +++++++++
- drivers/misc/habanalabs/common/habanalabs.h | 2 ++
- drivers/misc/habanalabs/gaudi/gaudi.c       | 6 +++---
- include/uapi/misc/habanalabs.h              | 2 ++
- 4 files changed, 16 insertions(+), 3 deletions(-)
+ drivers/misc/habanalabs/gaudi2/gaudi2.c                      | 5 +++++
+ drivers/misc/habanalabs/include/gaudi2/gaudi2_async_events.h | 1 +
+ .../include/gaudi2/gaudi2_async_ids_map_extended.h           | 4 +++-
+ 3 files changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/misc/habanalabs/common/device.c b/drivers/misc/habanalabs/common/device.c
-index 65bb40f81901..31818121ef4d 100644
---- a/drivers/misc/habanalabs/common/device.c
-+++ b/drivers/misc/habanalabs/common/device.c
-@@ -2490,3 +2490,12 @@ void hl_capture_page_fault(struct hl_device *hdev, u64 addr, u16 eng_id, bool is
- 	hdev->captured_err_info.pgf_info.pgf.engine_id = eng_id;
- 	hl_capture_user_mappings(hdev, is_pmmu);
- }
+diff --git a/drivers/misc/habanalabs/gaudi2/gaudi2.c b/drivers/misc/habanalabs/gaudi2/gaudi2.c
+index f21b68be6d20..77bdbab41e6c 100644
+--- a/drivers/misc/habanalabs/gaudi2/gaudi2.c
++++ b/drivers/misc/habanalabs/gaudi2/gaudi2.c
+@@ -9148,6 +9148,11 @@ static void gaudi2_handle_eqe(struct hl_device *hdev, struct hl_eq_entry *eq_ent
+ 		event_mask |= HL_NOTIFIER_EVENT_USER_ENGINE_ERR;
+ 		break;
+ 
++	case GAUDI2_EVENT_CPU_FP32_NOT_SUPPORTED:
++		event_mask |= HL_NOTIFIER_EVENT_GENERAL_HW_ERR;
++		is_critical = true;
++		break;
 +
-+void hl_handle_page_fault(struct hl_device *hdev, u64 addr, u16 eng_id, bool is_pmmu,
-+				u64 *event_mask)
-+{
-+	hl_capture_page_fault(hdev, addr, eng_id, is_pmmu);
-+
-+	if (event_mask)
-+		*event_mask |=  HL_NOTIFIER_EVENT_PAGE_FAULT;
-+}
-diff --git a/drivers/misc/habanalabs/common/habanalabs.h b/drivers/misc/habanalabs/common/habanalabs.h
-index d9335f3769b8..0781b8698f74 100644
---- a/drivers/misc/habanalabs/common/habanalabs.h
-+++ b/drivers/misc/habanalabs/common/habanalabs.h
-@@ -3815,6 +3815,8 @@ void hl_capture_razwi(struct hl_device *hdev, u64 addr, u16 *engine_id, u16 num_
- void hl_handle_razwi(struct hl_device *hdev, u64 addr, u16 *engine_id, u16 num_of_engines,
- 			u8 flags, u64 *event_mask);
- void hl_capture_page_fault(struct hl_device *hdev, u64 addr, u16 eng_id, bool is_pmmu);
-+void hl_handle_page_fault(struct hl_device *hdev, u64 addr, u16 eng_id, bool is_pmmu,
-+				u64 *event_mask);
+ 	default:
+ 		if (gaudi2_irq_map_table[event_type].valid)
+ 			dev_err_ratelimited(hdev->dev, "Cannot find handler for event %d\n",
+diff --git a/drivers/misc/habanalabs/include/gaudi2/gaudi2_async_events.h b/drivers/misc/habanalabs/include/gaudi2/gaudi2_async_events.h
+index 34406770a76a..305b576222e6 100644
+--- a/drivers/misc/habanalabs/include/gaudi2/gaudi2_async_events.h
++++ b/drivers/misc/habanalabs/include/gaudi2/gaudi2_async_events.h
+@@ -957,6 +957,7 @@ enum gaudi2_async_event_id {
+ 	GAUDI2_EVENT_CPU11_STATUS_NIC11_ENG0 = 1317,
+ 	GAUDI2_EVENT_CPU11_STATUS_NIC11_ENG1 = 1318,
+ 	GAUDI2_EVENT_ARC_DCCM_FULL = 1319,
++	GAUDI2_EVENT_CPU_FP32_NOT_SUPPORTED = 1320,
+ 	GAUDI2_EVENT_SIZE,
+ };
  
- #ifdef CONFIG_DEBUG_FS
- 
-diff --git a/drivers/misc/habanalabs/gaudi/gaudi.c b/drivers/misc/habanalabs/gaudi/gaudi.c
-index 035865cb097c..cbe1daf5a793 100644
---- a/drivers/misc/habanalabs/gaudi/gaudi.c
-+++ b/drivers/misc/habanalabs/gaudi/gaudi.c
-@@ -6740,7 +6740,7 @@ static void gaudi_print_and_get_razwi_info(struct hl_device *hdev, u16 *engine_i
- 	}
- }
- 
--static void gaudi_print_and_get_mmu_error_info(struct hl_device *hdev, u64 *addr)
-+static void gaudi_print_and_get_mmu_error_info(struct hl_device *hdev, u64 *addr, u64 *event_mask)
- {
- 	struct gaudi_device *gaudi = hdev->asic_specific;
- 	u32 val;
-@@ -6755,7 +6755,7 @@ static void gaudi_print_and_get_mmu_error_info(struct hl_device *hdev, u64 *addr
- 		*addr |= RREG32(mmMMU_UP_PAGE_ERROR_CAPTURE_VA);
- 
- 		dev_err_ratelimited(hdev->dev, "MMU page fault on va 0x%llx\n", *addr);
--		hl_capture_page_fault(hdev, *addr, 0, true);
-+		hl_handle_page_fault(hdev, *addr, 0, true, event_mask);
- 
- 		WREG32(mmMMU_UP_PAGE_ERROR_CAPTURE, 0);
- 	}
-@@ -7323,7 +7323,7 @@ static void gaudi_print_irq_info(struct hl_device *hdev, u16 event_type,
- 	if (razwi) {
- 		gaudi_print_and_get_razwi_info(hdev, &engine_id[0], &engine_id[1], &is_read,
- 						&is_write);
--		gaudi_print_and_get_mmu_error_info(hdev, &razwi_addr);
-+		gaudi_print_and_get_mmu_error_info(hdev, &razwi_addr, event_mask);
- 
- 		if (is_read)
- 			razwi_flags |= HL_RAZWI_READ;
-diff --git a/include/uapi/misc/habanalabs.h b/include/uapi/misc/habanalabs.h
-index 7747e19e81fe..e50cb71df081 100644
---- a/include/uapi/misc/habanalabs.h
-+++ b/include/uapi/misc/habanalabs.h
-@@ -722,6 +722,7 @@ enum hl_server_type {
-  * HL_NOTIFIER_EVENT_USER_ENGINE_ERR	- Indicates device engine in error state
-  * HL_NOTIFIER_EVENT_GENERAL_HW_ERR     - Indicates device HW error
-  * HL_NOTIFIER_EVENT_RAZWI              - Indicates razwi happened
-+ * HL_NOTIFIER_EVENT_PAGE_FAULT         - Indicates page fault happened
-  */
- #define HL_NOTIFIER_EVENT_TPC_ASSERT		(1ULL << 0)
- #define HL_NOTIFIER_EVENT_UNDEFINED_OPCODE	(1ULL << 1)
-@@ -731,6 +732,7 @@ enum hl_server_type {
- #define HL_NOTIFIER_EVENT_USER_ENGINE_ERR	(1ULL << 5)
- #define HL_NOTIFIER_EVENT_GENERAL_HW_ERR	(1ULL << 6)
- #define HL_NOTIFIER_EVENT_RAZWI			(1ULL << 7)
-+#define HL_NOTIFIER_EVENT_PAGE_FAULT		(1ULL << 8)
- 
- /* Opcode for management ioctl
+diff --git a/drivers/misc/habanalabs/include/gaudi2/gaudi2_async_ids_map_extended.h b/drivers/misc/habanalabs/include/gaudi2/gaudi2_async_ids_map_extended.h
+index 5bd4383c9f2c..d510cb10c883 100644
+--- a/drivers/misc/habanalabs/include/gaudi2/gaudi2_async_ids_map_extended.h
++++ b/drivers/misc/habanalabs/include/gaudi2/gaudi2_async_ids_map_extended.h
+@@ -1,6 +1,6 @@
+ /* SPDX-License-Identifier: GPL-2.0
   *
+- * Copyright 2018-2021 HabanaLabs, Ltd.
++ * Copyright 2018-2022 HabanaLabs, Ltd.
+  * All Rights Reserved.
+  *
+  */
+@@ -2663,6 +2663,8 @@ static struct gaudi2_async_events_ids_map gaudi2_irq_map_table[] = {
+ 		.msg = 1, .reset = 0, .name = "STATUS_NIC11_ENG1" },
+ 	{ .fc_id = 1319, .cpu_id = 625, .valid = 1,
+ 		.msg = 1, .reset = 0, .name = "ARC_DCCM_FULL" },
++	{ .fc_id = 1320, .cpu_id = 626, .valid = 1,
++		.msg = 1, .reset = 1, .name = "FP32_NOT_SUPPORTED" },
+ };
+ 
+ #endif /* __GAUDI2_ASYNC_IDS_MAP_EVENTS_EXT_H_ */
 -- 
 2.25.1
 
