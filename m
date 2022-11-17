@@ -2,112 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D18762DDB2
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 15:13:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9246F62DDB7
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 15:15:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240255AbiKQONq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 09:13:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46438 "EHLO
+        id S240307AbiKQOPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 09:15:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240317AbiKQONl (ORCPT
+        with ESMTP id S234758AbiKQOPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 09:13:41 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0408F63E5
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 06:13:36 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id 6so2066633pgm.6
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 06:13:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=X5edKik6Yy70E8i5dbszPvRkPfUcmxGnVozSbtL7NQA=;
-        b=aNN72l2bRasM321JMm9ZKQ0575K/e/Dkc+0KUYJ4tBAGfORjLPuuPodacs4Z9V0VKU
-         ELIyzoaIY3udDDmoLRZYc/QcVaiUAqY+1Hio+60D9L2SZN+rGkd0cD8DimwzXFNuFOFB
-         bGLJ0R8Zf/E/odUK3oHbkmJpoy1IA67+V0kNQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=X5edKik6Yy70E8i5dbszPvRkPfUcmxGnVozSbtL7NQA=;
-        b=e8UpcE+qCbOU3hzBK0Nw30B8VFxTWBVi9iQ+eQg+HrrbJkVXmL/PxjgJrG1Ommfdl0
-         thLP08hlR/RclFkrQ+vWUGbUa7JYU1hh0wZ3eAkZPFiVwWD/5fXsTOaqAxQEWPChdeaR
-         O3Mk4S7UympZPhXioO0+tLYQn/86OKqQfSWt0kisAV603Z9m7SRbopcp4M0vjKTTgQwS
-         mLe4Aluruv+H5Ru7nHQ4Q3jjGglOvJ4g6abS9UnDpaOV9rC7i7UPSju4dJwpp/VbY/mT
-         h5N2nUAei/MsHf0KniJR8pT+SMNkM87qbFxQHUchEVPgyxwRvN+UM+3b2nQruUXgghnw
-         5u0Q==
-X-Gm-Message-State: ANoB5pkgOlPFIaUrlrNawRLPnsfnpfyTAuFcE/g3tVNQX7Mq2D2MywCt
-        KfzTq7Ur9sySEJKZW+DpenvsEFQEHIk2mg==
-X-Google-Smtp-Source: AA0mqf72fVfRgHzUCMhe32Qxs9QuRwXrtajxHZ1bgfU5Ypu+FT9FL/z5+03VRU2MMpaAxIRgy/SJmQ==
-X-Received: by 2002:a05:6a00:1993:b0:56c:3fbb:7eb1 with SMTP id d19-20020a056a00199300b0056c3fbb7eb1mr3261692pfl.7.1668694415440;
-        Thu, 17 Nov 2022 06:13:35 -0800 (PST)
-Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:3925:36ee:c53c:7a49])
-        by smtp.gmail.com with ESMTPSA id t18-20020a170902e1d200b001888a46e2d0sm1365037pla.162.2022.11.17.06.13.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 06:13:35 -0800 (PST)
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Minchan Kim <minchan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: [PATCH] zram: remove unused stats fields
-Date:   Thu, 17 Nov 2022 23:13:26 +0900
-Message-Id: <20221117141326.1105181-1-senozhatsky@chromium.org>
-X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
+        Thu, 17 Nov 2022 09:15:35 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D55D63E5;
+        Thu, 17 Nov 2022 06:15:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=fwfXj9i+0drfeAtV3x/BJbMGowEj2984Cc/3ytwqZcU=; b=KZVC5rscvSiJsyoZlBXxoTQtTB
+        5ldi2h+HYWjRL1mnMiZtA39wkJdfvf9ezxl3yKLMMVJnDkoG0btc/6h8cUs10tELVVdgxp5/HP13k
+        lty5MCtWPNWA8yVbzaNK6Erpks/hJfDwdkagDaJH/50gefiKH4OuJqQa6sDhi9BEH4UdUyg+A3+MY
+        t7N0sM4tE4/X/wG+mH2DUnF2cx/E7okVhFaHzmFdOvVSLBse+ad6x6xJ961SiYWD48vNi9CK8tkez
+        BbI5DPiuGl29Y6FLhXH2dm9j2fl2pRZ+1vWOXmtVTvQmF7Ct0tc/aZjtkquIQ2GdhQIa3vVlqCjuU
+        EABT5AzQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ovffP-001hFW-Uz; Thu, 17 Nov 2022 14:15:00 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 73C33300454;
+        Thu, 17 Nov 2022 15:14:58 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 5B4D0207D6246; Thu, 17 Nov 2022 15:14:58 +0100 (CET)
+Date:   Thu, 17 Nov 2022 15:14:58 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Schimpe, Christina" <christina.schimpe@intel.com>
+Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Subject: Re: [PATCH v3 35/37] x86/cet: Add PTRACE interface for CET
+Message-ID: <Y3ZB4iJew2Fkh4R3@hirez.programming.kicks-ass.net>
+References: <20221104223604.29615-1-rick.p.edgecombe@intel.com>
+ <20221104223604.29615-36-rick.p.edgecombe@intel.com>
+ <Y3Olme4Nl+VOkjAH@hirez.programming.kicks-ass.net>
+ <223bf306716f5eb68e4f9fd660414c84cddd9886.camel@intel.com>
+ <CY4PR11MB2005AD47BA1D97BC1A96A769F9069@CY4PR11MB2005.namprd11.prod.outlook.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CY4PR11MB2005AD47BA1D97BC1A96A769F9069@CY4PR11MB2005.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We don't show num_reads and num_writes since we removed
-corresponding sysfs nodes in 2017. Block layer stats are
-exposed via /sys/block/zramX/stat file.
+On Thu, Nov 17, 2022 at 12:25:16PM +0000, Schimpe, Christina wrote:
+> > + Christina
+> > 
+> > On Tue, 2022-11-15 at 15:43 +0100, Peter Zijlstra wrote:
+> > > On Fri, Nov 04, 2022 at 03:36:02PM -0700, Rick Edgecombe wrote:
+> > > > From: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> > > >
+> > > > Some applications (like GDB and CRIU) would like to tweak CET state
+> > > > via ptrace. This allows for existing functionality to continue to
+> > > > work for seized CET applications. Provide an interface based on the
+> > > > xsave buffer format of CET, but filter unneeded states to make the
+> > > > kernel’s job easier.
+> > > >
+> > > > There is already ptrace functionality for accessing xstate, but this
+> > > > does not include supervisor xfeatures. So there is not a completely
+> > > > clear place for where to put the CET state. Adding it to the user
+> > > > xfeatures regset would complicate that code, as it currently shares
+> > > > logic with signals which should not have supervisor features.
+> > > >
+> > > > Don’t add a general supervisor xfeature regset like the user one,
+> > > > because it is better to maintain flexibility for other supervisor
+> > > > xfeatures to define their own interface. For example, an xfeature
+> > > > may decide not to expose all of it’s state to userspace. A lot of
+> > > > enum values remain to be used, so just put it in dedicated CET
+> > > > regset.
+> > > >
+> > > > The only downside to not having a generic supervisor xfeature
+> > > > regset, is that apps need to be enlightened of any new supervisor
+> > > > xfeature exposed this way (i.e. they can’t try to have generic
+> > > > save/restore logic). But maybe that is a good thing, because they
+> > > > have to think through each new xfeature instead of encountering
+> > > > issues when new a new supervisor xfeature was added.
+> > >
+> > > Per this argument this should not use the CET XSAVE format and CET
+> > > name at all, because that conflates the situation vs IBT. Enabling
+> > > that might not want to follow this precedent.
+> > 
+> > Hmm, we definitely need to be able to set the SSP. Christina, does GDB need
+> > anything else? I thought maybe toggling SHSTK_EN?
+> 
+> In addition to the SSP, we want to write the CET state. For instance for inferior calls,
+> we want to reset the IBT bits.
 
-However, we still increment those atomic vars and store
-them in zram stats. Remove leftovers.
+This is about Shadow Stack -- IBT is a completely different feature and
+not subject of this series.
 
-Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
----
- drivers/block/zram/zram_drv.c | 2 --
- drivers/block/zram/zram_drv.h | 2 --
- 2 files changed, 4 deletions(-)
-
-diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
-index 4e493c198d84..eea06b1a556f 100644
---- a/drivers/block/zram/zram_drv.c
-+++ b/drivers/block/zram/zram_drv.c
-@@ -2033,11 +2033,9 @@ static int zram_bvec_rw(struct zram *zram, struct bio_vec *bvec, u32 index,
- 	int ret;
- 
- 	if (!op_is_write(op)) {
--		atomic64_inc(&zram->stats.num_reads);
- 		ret = zram_bvec_read(zram, bvec, index, offset, bio);
- 		flush_dcache_page(bvec->bv_page);
- 	} else {
--		atomic64_inc(&zram->stats.num_writes);
- 		ret = zram_bvec_write(zram, bvec, index, offset, bio);
- 	}
- 
-diff --git a/drivers/block/zram/zram_drv.h b/drivers/block/zram/zram_drv.h
-index c322d9c9dde2..4b46fcc651b1 100644
---- a/drivers/block/zram/zram_drv.h
-+++ b/drivers/block/zram/zram_drv.h
-@@ -76,8 +76,6 @@ struct zram_table_entry {
- 
- struct zram_stats {
- 	atomic64_t compr_data_size;	/* compressed size of pages stored */
--	atomic64_t num_reads;	/* failed + successful */
--	atomic64_t num_writes;	/* --do-- */
- 	atomic64_t failed_reads;	/* can happen when memory is too low */
- 	atomic64_t failed_writes;	/* can happen when memory is too low */
- 	atomic64_t invalid_io;	/* non-page-aligned I/O requests */
--- 
-2.38.1.431.g37b22c650d-goog
-
+Also, wth is an inferior call?
