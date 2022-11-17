@@ -2,69 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FC0462E897
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 23:41:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B320B62E8A1
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 23:44:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240074AbiKQWlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 17:41:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44366 "EHLO
+        id S240260AbiKQWow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 17:44:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232026AbiKQWlS (ORCPT
+        with ESMTP id S231274AbiKQWou (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 17:41:18 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D838DA51
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 14:41:17 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id n186so3512670oih.7
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 14:41:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=csDjA7Lmaoy5t254PbIdwoXPbMVcPqUkx2VOtdueRJA=;
-        b=WcCYDu+PsGUNad1cIgVVLDXXKK+7SMRon35QDWLYdzHMC2Nfe+AJjlPyeQ+mTu9p2M
-         lnKp7TE209DHIBwCFIwt13H+B1gwnE1I0xbUsPntNC8IsWiqDD38owDU1nhRRAZpyBwm
-         SGDeAQTKLvoCYiUoaCCUxckQCxRFp0KH1FV3cKhOpYZum13wN3Iu0WOuavrbQJtQF/oi
-         7j9uJvvZnZZRt6uur28wzC7JOs9XzeHpBLrm2bhuoorZiEOW4yVDFK1d476Yi1NFe+rG
-         VJVvrFemSmwvxuLJtWUO7wb2U58Y8ysRNo2iTDRkkZHHb417wB7LhB+tsf5/d+r+KnsI
-         zwAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=csDjA7Lmaoy5t254PbIdwoXPbMVcPqUkx2VOtdueRJA=;
-        b=Nkure9tcL59balXSe2z8msk9xjhWpcq+JY1QOUG5OEO/E4FMCKfk7PBrndbeX7y3ya
-         jEUEXScAIllQj1k7cgSVcXP09Ae/yWngjQ4bKZAdZZbZEI8ygKENThdOcKfys4h+NSy6
-         hO5tgLTkXQ7lNTqBsQJ/iQWkWQYlzE4RMgyL6lPnhE/zTM/COFiZyub7ZUu4lMB72x0f
-         QZ4ANpZ5NhttQPPd9CYCTnYR6PKaJMkUSkpI3TUrx+HBM+leePE/gNWRQntWrBVxKCEm
-         MYZlpZG3a0NJyjlgg4Pu0f+CJFlgN+fwOMuYznLzAeMdXGMK9+TAtINTilmvi8XFB/DZ
-         Jhkw==
-X-Gm-Message-State: ANoB5pkV/SAGLhSoUWfEk7fVZhiSDFPmpwGPFmefmAR15OXxuAlaZugP
-        paZyOAP5EsifRg6pXa5OTEV0KKhatIDzwWLJZFM=
-X-Google-Smtp-Source: AA0mqf5J6WVBYllKAiTJyVqHtz6V+lyUbEN/ZA10bz48P3xq84tSQvKqSf2PuVmJs4C/a56qA04o7ofJp3BIpIYXmV4=
-X-Received: by 2002:a05:6808:9b8:b0:34f:97ea:14d with SMTP id
- e24-20020a05680809b800b0034f97ea014dmr2306901oig.96.1668724876652; Thu, 17
- Nov 2022 14:41:16 -0800 (PST)
-MIME-Version: 1.0
-References: <20221117172009.28207-1-rdunlap@infradead.org> <28960f0b-97b9-7a41-9da3-188be25dd886@amd.com>
-In-Reply-To: <28960f0b-97b9-7a41-9da3-188be25dd886@amd.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Thu, 17 Nov 2022 17:41:04 -0500
-Message-ID: <CADnq5_P5SLbamNkRYOhjvicnyHzKaBp8=V5g8hNtyz+TD5-UZA@mail.gmail.com>
-Subject: Re: [PATCH -next] drm/amd/display: fix kernel-doc issues in dc.h
-To:     Harry Wentland <harry.wentland@amd.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        David Airlie <airlied@gmail.com>
+        Thu, 17 Nov 2022 17:44:50 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7269490A9;
+        Thu, 17 Nov 2022 14:44:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668725089; x=1700261089;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=AJm6NPVytGUORI94lgiLZka1V7WhEWQWYswh8u6uOvU=;
+  b=WHlOdYHC3R8zow/WUKxUZrgD5tHksTAihlW1gMHn1EgGXZk4/H8QRoVB
+   sBN8Gwb941a7su+lWAt7Iq/pHE6Ka/3dwjoDvAhztXNkNpQ0CNJdqk4cp
+   lf/hC9KHI/+6GLkn52q2lrAFtSa6IOeLdIOAd9ZvthleQur7/Q+q2Nxa1
+   U4s/fRkZPqRtyIut0pMuSAVH+ZcLKh4GIp8fp5rMqzT+jrFF71ey5oINe
+   nYn3crXoOidilWj+e2WIW2siCHaEMMpNsMb6fVYJM7nVpIwmvGDmLWbxW
+   L7HcxHWqPz5TWNbA721kCoYIZY/NFsb3xBUHmg7t0qbzJEado90XQVoo1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="311699144"
+X-IronPort-AV: E=Sophos;i="5.96,172,1665471600"; 
+   d="scan'208";a="311699144"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 14:44:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="703513200"
+X-IronPort-AV: E=Sophos;i="5.96,172,1665471600"; 
+   d="scan'208";a="703513200"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga008.fm.intel.com with ESMTP; 17 Nov 2022 14:44:49 -0800
+Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 17 Nov 2022 14:44:48 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Thu, 17 Nov 2022 14:44:48 -0800
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.177)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Thu, 17 Nov 2022 14:44:48 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=czUne6qozLhv5kEIX1aqfke4ZRQPYQGHilBrx8QVw30mZ5xwazzku3j6XlZMSwO3fWpo6nIfOkVBNUsGFMIqh5EKIZ1Q5tqDJFzAjFGcaRYbAro4yfDXBwo1Sy1eLr3sKHbSqzvUuuvkj8tuHBreoCZoTD9dgCYgzycX4yXmqsHnTQoEboAWdXpMqRqyvajnfIFqVTkOVFhdRWkCabnLc3BGXrBbM44Y/etOHpfGUDytXBT96zfA5UoAe3mG7mF/SY1nX3u8xmwgHBHgRTK/q13xjpHVuPQ4zHSFVVf2wlw9SkzxoJnPApfO5blKntlU67q4pxNVEW8JBsO11yQP5A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hj/Bca3SkHRBgFmJYdSb+aPSGHhQG4Tqn5m+tjO3jKw=;
+ b=aBxpBatN6dCVBx6R6JT2riY7lH2UNWkRVgWCaSO7Mqtxe5vxZ9S+NgdfGkv6vtZDxLIFoIKkuDRd6br6aHDLbpEyyB3YsGHCSrTr9J1zQZ8Vx6xqzFzNTZlSrGUv55KbR/uMbGmbzTscWY+79FRrqX28pi0Po/qaGCKwpn/MbZG/nfCKlfIGAD73ITA1Jnydl+jo2xfj6Z2wa3syLQ+Sn161lgQFPFq8pLGItwLk1vb0w4ENT1AMDopSR9ID3HFTpMYeqzuHk0gZ+OXy/d40ojBOj4sEJYx28i7JfB1cprS6zQwsoPjqDAfMuMuLTBinzDGHwB4XNhm3Nz4tRzC4Gw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from BYAPR11MB3768.namprd11.prod.outlook.com (2603:10b6:a03:fa::20)
+ by DM4PR11MB6285.namprd11.prod.outlook.com (2603:10b6:8:a8::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.18; Thu, 17 Nov
+ 2022 22:44:41 +0000
+Received: from BYAPR11MB3768.namprd11.prod.outlook.com
+ ([fe80::f980:8dbd:ddf0:11c0]) by BYAPR11MB3768.namprd11.prod.outlook.com
+ ([fe80::f980:8dbd:ddf0:11c0%4]) with mapi id 15.20.5813.018; Thu, 17 Nov 2022
+ 22:44:41 +0000
+Message-ID: <90b6e371-3cc2-ff0c-92fa-51fc9691c1f1@intel.com>
+Date:   Thu, 17 Nov 2022 14:44:37 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3 04/16] platform/x86/intel/ifs: Remove memory allocation
+ from load path
+To:     Hans de Goede <hdegoede@redhat.com>, <markgross@kernel.org>
+CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
+        <gregkh@linuxfoundation.org>, <ashok.raj@intel.com>,
+        <tony.luck@intel.com>, <linux-kernel@vger.kernel.org>,
+        <platform-driver-x86@vger.kernel.org>, <patches@lists.linux.dev>,
+        <ravi.v.shankar@intel.com>, <thiago.macieira@intel.com>,
+        <athenas.jimenez.gonzalez@intel.com>, <sohil.mehta@intel.com>
+References: <c7414e8b-c113-eff8-b435-ddde705a6f6c@redhat.com>
+ <20221117195957.28225-1-jithu.joseph@intel.com>
+ <75da80a5-f727-2ef2-f0f5-939cce9b2b87@redhat.com>
+Content-Language: en-US
+From:   "Joseph, Jithu" <jithu.joseph@intel.com>
+In-Reply-To: <75da80a5-f727-2ef2-f0f5-939cce9b2b87@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR03CA0354.namprd03.prod.outlook.com
+ (2603:10b6:a03:39c::29) To BYAPR11MB3768.namprd11.prod.outlook.com
+ (2603:10b6:a03:fa::20)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR11MB3768:EE_|DM4PR11MB6285:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4e00374e-d18c-4e18-8dee-08dac8ed50bc
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HXoa3oiQXJd/bmDyPywVzGXX9hiAg1Qagfgw7ar0A9Bs7QBvgmJEWDwqK6lZoX4OX18eKHtzjW9pZiSU8uoL71tfXFYQIrbK5ScVQCrCYGxaaSNPvvm9fMp0WVoyHQpBXRM29ip5kDN8pIUxJotujU/IWUoqTUyWZiVEnAmX8/ci0Cq07W1copF7ZPeje3E0yn35VOv4MmHqVFUiz6INOgVkYMvrJc/tDz8gADKU/KkSgfKGn0AGLTNoAN7/hEQ7wiYGIXQmiHRCwyNXMFgJSAAv8oVY3hYbuouT+ufYOj0LMDZ5LrnG44No+9WZmG1mXl4R1pq1yNj/pUzZorG7oCOe9HAtfXMsub+Z6mJDHEbWvhPBrNv8c2Y1ft4LPAl1853KWHebJ8EiRiALZ7yUSt9uWqzsJfbnloqXZfl9TYVrPXvxG88BVDCsunztSO57NysC324zB6FMT+gY6vn66sasEsG8V+eWe4xM7t/pKkw94ws2M9JSPEnOdSEPrCDWbnq+vse3G4UlVMKLB1mvH6xrvVOqtsgiElFgk79vTrib1902Wonu+L4HFevZ6C7MPvOubQZrulbOb1JgcAq8xyFbaFIIXNRiafZIN8e6tUZSYz5evbeD7wkTkPH+9eQ5KxDXt0srhRwWWPAbMoXYnpuiEWodgE6X2kBPZVmfLTSOxGj146b5+8Nh0ndCe2OZhRtypfQC9FOreEAj/1mJujuujj9wbEgtH5rGxpIood0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3768.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(346002)(396003)(39860400002)(136003)(366004)(451199015)(31686004)(31696002)(86362001)(36756003)(2906002)(8936002)(5660300002)(7416002)(2616005)(83380400001)(186003)(82960400001)(316002)(41300700001)(38100700002)(4326008)(26005)(6666004)(8676002)(478600001)(66556008)(66946007)(6512007)(53546011)(6486002)(6506007)(66476007)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZTl3MGNJeG4zRTVybXZIT0Y3elR2Y0xNTSt4a3pYL3FNVTNyL0NFcDIzc0RN?=
+ =?utf-8?B?RXRpMGd6MjdIMHQyR0FjQllhc0V6SHBIYlRiTWpHZGtpS1lhTjFia1ZFRU13?=
+ =?utf-8?B?b2dIWHY1NzVXSnNaSElaQUd4YnF1UW5zK3huZzNvSUdwNk5veVJGMWhManVh?=
+ =?utf-8?B?ZjNYWU1lbmM0SEdKa3dSUHFVMjhkUzRuOFN5MTBGYWx0YTZPZzBDTzc2NmlP?=
+ =?utf-8?B?d0pucW9xei96L2tyZ1Q5WFhLL0JKRzlRTTYvamlNVy83QWdDdzBiVjJ4N2VY?=
+ =?utf-8?B?eDNIdVdrTXZuZUtmNGlqSElIeVB1dU1TZXFyQWJTdmlzMlNVMUU5eXpML1h2?=
+ =?utf-8?B?RithQlV5Uys1eXc4aW1MUkptbXh1ZGtudUVKWS83T1pFUFVCWUdqQ284cXo1?=
+ =?utf-8?B?M1JrMEpST3lzT0ZMUDAyd3ZrQ2J0OTQ0NUVKc1Z2VmZ0QzZmWWhSaXRuZlpl?=
+ =?utf-8?B?UzB3T0tQSGViUm5qT1F0UkZDRGNDOW14UFZNZXhVRlpSeWE5NWRXZG1aUzln?=
+ =?utf-8?B?RzBVQWdqZ21zK1hPU0pRaTZ5RndMSmt4cktCN3kxeEUzWnFjZnE4V2Q3RUJQ?=
+ =?utf-8?B?YWFyekE0ZFJoWUwrQThqN3N5azVXWEllQVhtSVo3Y1hNWDZha1VKUWNQNWs5?=
+ =?utf-8?B?eXBYRnh0MmpkQVZ2ODVjbnhYbEdYUlJ4dEpzdnhxd0JvdTQ4aWdyaVBPa1VX?=
+ =?utf-8?B?d2t4Wjd6M0ZHQkM3REJUUGYwMC9BTUNQcU9zclhKMkExQWMwMkpVRFJLWlE4?=
+ =?utf-8?B?S1VUWk13L29aYVVDZjJEU2JNeWUxVzRiN1BlbmNla04rRGNZTWRoUFJBTzJ2?=
+ =?utf-8?B?UGFjcXUxYVJyNkI0VnZNbktURllhREMydFkxQzIxeWpPZWpnbXpuNnp4bUJW?=
+ =?utf-8?B?azhYZXFCdHNZbS85Zlh1STRRTFZoQitaa05TdVVaSWcxS0dPTWtCWkp0eG9p?=
+ =?utf-8?B?bzJYMWNNQXh2d0xQOERmMGl2aGQzOXlWNG5zckRzMWV2MWhKWG45LzhYZTM1?=
+ =?utf-8?B?Smt4M3NKajBoYndraytTNFk5ZUx0YTFxN2wwQlpSZjAzVi8yQ1FUc04wSXNE?=
+ =?utf-8?B?RTNMdytnZ2pyUkh2S2g3cTc0WGVlOXRaRWZQK2VnVXNnc3BtcEZvRnY3M3lz?=
+ =?utf-8?B?L01VYWQ1b2o2dDdhd2EzNHZpVU1iemtoeVRLSUU1VGkvV1lzYlpIVndkMk5X?=
+ =?utf-8?B?VjYyQVFZQ0IwWFhBZXgrRWhIeDU5dm9yeDdDL2NYMjgwbExYRkZteldUZEdl?=
+ =?utf-8?B?Y0hSK0c1ajcvcm1oZXhmeVNNU2QrTkw5eG9hSzkrVUZjeUZhL2lpZGRnQ0FU?=
+ =?utf-8?B?eCtKekZqOG5ORGlnWUo1ZFNSTmlyOWpEVFNVTXg0bllIMFlpWHlvUzBad1M4?=
+ =?utf-8?B?MnhHYk9mLzdmRHNIN1FBbjJDMU5FbHJ3NlFycXJDMjFCYXF1RVZRbVh3R0Ni?=
+ =?utf-8?B?SUZiVTlKSGRLWDU2eVdKNHZ1enVJZU5zdmxRN3h1MzNGTVpoNUptOW9XMGxt?=
+ =?utf-8?B?c0VXaEZNYUJESnRjYkwxTEpDYmxIa2ZFTyt0c1pmWjRGK0JOeTVpc3FPSS9n?=
+ =?utf-8?B?aUtiN0x6N1I5S0Q5Q1VmRzZXM0ZUOFFsUjFHN0FLWjRDY01PYk5DTWFaWG15?=
+ =?utf-8?B?Y2NYMHljQ3EzUVNSL0RldGdFbzBQMHBYMlRMM25oNEpJdC8zRktEaTh1S0wy?=
+ =?utf-8?B?NUdFSjQ5VXY4azd0RlhNTGQvZXlOMmNRWEIxWW4zdTdhSWJQUThReEJROExj?=
+ =?utf-8?B?d3VQaldWTWFnT2Z3dEVjMU9Kcnl6ek5vcEd2SlhKNHdINC9IdTdqaldSNjRq?=
+ =?utf-8?B?R2dRVi9kb3ZmQWF2WVE3ckdXbzZlYS9hYnhnRCswU1dZZUJDOU1VQnZDZHo4?=
+ =?utf-8?B?a0FKTEtLQzVwTUtqV3k1WEpYME9SVHpXcnVBQWRKdFlFN1hMeEEvZ1pJRCsy?=
+ =?utf-8?B?ZGpQVjVCL2p4bGdGQXY4RSt1Q1FOY2NsS2tKUU0xdFJWWTNqTEtLbmJZQ3pO?=
+ =?utf-8?B?cmZqWEJ0bWhQTmNhMEVPSjY1UmY3MnBPREdHWTJCMHFBOUxIRmNMYU1MUXA1?=
+ =?utf-8?B?QjFLbWNIY3lLREtDaXdYRjl6UFBIUVRwZmt4bUtyU2h0L25FRVlLMFRPb2Ry?=
+ =?utf-8?B?cXg1L0EvSEhacWFhWWZXNWtyU005bTl1MXhuQ0NlVFdHTWNhRUF5WHlrYmh2?=
+ =?utf-8?B?eWc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4e00374e-d18c-4e18-8dee-08dac8ed50bc
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3768.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Nov 2022 22:44:41.5560
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ZlBIowItPZfyco2d2DL4szadBRvwPsCCamiWK38pw17SdAkL/nan1L3+QH0oxJqyczizKY/H/xo1bm4AgcZL3Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6285
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,81 +166,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
 
-Alex
 
-On Thu, Nov 17, 2022 at 2:39 PM Harry Wentland <harry.wentland@amd.com> wrote:
->
->
->
-> On 11/17/22 12:20, Randy Dunlap wrote:
-> > Fix these kernel-doc complaints:
-> >
-> > drivers/gpu/drm/amd/display/dc/dc.h:505: warning: cannot understand function prototype: 'struct dc_clocks '
-> > dc.h:472: warning: Enum value 'MPC_SPLIT_AVOID' not described in enum 'pipe_split_policy'
-> > dc.h:472: warning: Enum value 'MPC_SPLIT_AVOID_MULT_DISP' not described in enum 'pipe_split_policy'
-> > dc.h:532: warning: Incorrect use of kernel-doc format:          * @fw_based_mclk_switching
-> >
-> > Fixes: ea76895ffab1 ("drm/amd/display: Document pipe split policy")
-> > Fixes: 1682bd1a6b5f ("drm/amd/display: Expand kernel doc for DC")
-> > Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> > Cc: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
-> > Cc: Alex Deucher <alexander.deucher@amd.com>
-> > Cc: Harry Wentland <harry.wentland@amd.com>
-> > Cc: Leo Li <sunpeng.li@amd.com>
-> > Cc: amd-gfx@lists.freedesktop.org
-> > Cc: David Airlie <airlied@gmail.com>
-> > Cc: Daniel Vetter <daniel@ffwll.ch>
-> > Cc: dri-devel@lists.freedesktop.org
->
-> Reviewed-by: Harry Wentland <harry.wentland@amd.com>
->
-> Harry
->
-> > ---
-> >  drivers/gpu/drm/amd/display/dc/dc.h |   12 ++++++------
-> >  1 file changed, 6 insertions(+), 6 deletions(-)
-> >
-> > diff -- a/drivers/gpu/drm/amd/display/dc/dc.h b/drivers/gpu/drm/amd/display/dc/dc.h
-> > --- a/drivers/gpu/drm/amd/display/dc/dc.h
-> > +++ b/drivers/gpu/drm/amd/display/dc/dc.h
-> > @@ -458,15 +458,15 @@ enum pipe_split_policy {
-> >       MPC_SPLIT_DYNAMIC = 0,
-> >
-> >       /**
-> > -      * @MPC_SPLIT_DYNAMIC: Avoid pipe split, which means that DC will not
-> > +      * @MPC_SPLIT_AVOID: Avoid pipe split, which means that DC will not
-> >        * try any sort of split optimization.
-> >        */
-> >       MPC_SPLIT_AVOID = 1,
-> >
-> >       /**
-> > -      * @MPC_SPLIT_DYNAMIC: With this option, DC will only try to optimize
-> > -      * the pipe utilization when using a single display; if the user
-> > -      * connects to a second display, DC will avoid pipe split.
-> > +      * @MPC_SPLIT_AVOID_MULT_DISP: With this option, DC will only try to
-> > +      * optimize the pipe utilization when using a single display; if the
-> > +      * user connects to a second display, DC will avoid pipe split.
-> >        */
-> >       MPC_SPLIT_AVOID_MULT_DISP = 2,
-> >  };
-> > @@ -497,7 +497,7 @@ enum dcn_zstate_support_state {
-> >  };
-> >
-> >  /**
-> > - * dc_clocks - DC pipe clocks
-> > + * struct dc_clocks - DC pipe clocks
-> >   *
-> >   * For any clocks that may differ per pipe only the max is stored in this
-> >   * structure
-> > @@ -528,7 +528,7 @@ struct dc_clocks {
-> >       bool fclk_prev_p_state_change_support;
-> >       int num_ways;
-> >
-> > -     /**
-> > +     /*
-> >        * @fw_based_mclk_switching
-> >        *
-> >        * DC has a mechanism that leverage the variable refresh rate to switch
->
+On 11/17/2022 1:13 PM, Hans de Goede wrote:
+> Hi,
+> 
+> On 11/17/22 20:59, Jithu Joseph wrote:
+>> IFS requires tests to be authenticated once for each CPU socket
+>> on a system.
+>>
+>> scan_chunks_sanity_check() was dynamically allocating memory
+>> to store the state of whether tests have been authenticated on
+>> each socket for every load operation.
+>>
+>> Move the memory allocation to init path and store the pointer
+>> in ifs_data struct.
+>>
+>> Also rearrange the adjacent error checking in init for a
+>> more simplified and natural flow.
+>>
+>> Reviewed-by: Tony Luck <tony.luck@intel.com>
+>> Suggested-by: Borislav Petkov <bp@alien8.de>
+>> Signed-off-by: Jithu Joseph <jithu.joseph@intel.com>
+>> ---
+>>  - Replaced global pkg_auth pointer to struct ifs_data (Hans)
+>>  - Rearrange the adjacent error checking flow in ifs_init (Hans)
+>>  - With this change there are conflicts in patches 11 and 12 (I will
+>>     post the updated 11 and 12 if this is satisfactory)
+> 
+> Thanks, this patch looks good to me now:
+> 
+> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+> 
+
+Thanks for the detailed review and suggestions.
+I will now resend patches 11 and 12 which will apply ontop of this revised patch4 . 
+
+Jithu
