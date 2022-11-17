@@ -2,154 +2,451 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21B3362D48A
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:00:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 679A862D490
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:02:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238603AbiKQIAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 03:00:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48818 "EHLO
+        id S234648AbiKQICk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 03:02:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239383AbiKQIAF (ORCPT
+        with ESMTP id S231871AbiKQICh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 03:00:05 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46538716FF;
-        Thu, 17 Nov 2022 00:00:01 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id b3so1553893lfv.2;
-        Thu, 17 Nov 2022 00:00:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hy7NLr5hqE2CbJ9jouBdK1ZIwHDUPfh4zTUfGBjG5As=;
-        b=n7y4fRjf6M5mskOzXdXUZu8ArEzlfdQw6BxAnS7gl3FgJm37oY7ADxdez6z4WWtTEk
-         GZeTVdJPSVQyNhme1p8tRboH2k51cxTEp8FLujI3ksGvHyel2Gyta3T8gmbGylSm7rwA
-         ZKFDykhol1g8+PCoHl1KQi6weDsspBkelXR/lkOk9fV9WD1QVDExKjbRjO/Adltz8PDH
-         KljdCHYf+Ok5oN5ZLJ+Dxe9MFmgMQZB7M5h4ZaWFO68V2azjPzkURmfYgBkzoVIJCZjX
-         9fU97XTmcsYxdyLWTdI9jmgzKUFNnDrGjZW1+wVIo/BrtSaho6N/nwid7ytf5AzDXNIL
-         tbfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Hy7NLr5hqE2CbJ9jouBdK1ZIwHDUPfh4zTUfGBjG5As=;
-        b=taqWzTGe7++D8kO9uiJNk7eTJt5qvALitUfNrlivLM6Pz9s84Tu88eD8dMAju+VLKR
-         Y2WOf+n2Jfrc+Ee6JhkKRWdx2qNHg3RhQUs4fHhZ2oaoEY/sJSPCTcwGNw8k0rBpqBXJ
-         sfjp6WBFmK5uom2B49wd2bY7eLHFXa7eDJ0S1FMUrkCvjv44dQOnYd14g38m2ZE1KnzX
-         hMthdLR+ChnIiaXzJ2hHj+KCJQIq3KVtBPVQdXNZrtUJckASxQ1pQSCUWf3k2Ma+RPae
-         UgA7MPcWPpRxAYTbfj7yGSKEknTE2vwvqQ8eBKYdf+y4MdxPpPE0bY/C7hVnFCejcmD/
-         d5zw==
-X-Gm-Message-State: ANoB5pln/iMauXgATTQSe5ojv00AmQnwG0u/xevCYZ6DyiMg0lZBtt4b
-        GKBvPmN+CNiPueRbQy0F77o=
-X-Google-Smtp-Source: AA0mqf5/X/D4OGM7Km0DSNGgRsSX5HuHd40Bn19ehlIO61z4kcYkdVKpjil1rziL0MyeWcAlCyLmvw==
-X-Received: by 2002:ac2:4201:0:b0:4b1:7c15:e923 with SMTP id y1-20020ac24201000000b004b17c15e923mr512728lfh.320.1668671999651;
-        Wed, 16 Nov 2022 23:59:59 -0800 (PST)
-Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id b17-20020a196711000000b004a100c21eaesm28532lfc.97.2022.11.16.23.59.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 23:59:59 -0800 (PST)
-Date:   Thu, 17 Nov 2022 10:59:56 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Rob Herring <robh@kernel.org>, Marek Vasut <marex@denx.de>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Richard Zhu <hongxing.zhu@nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        caihuoqing <caihuoqing@baidu.com>, Vinod Koul <vkoul@kernel.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v7 01/20] dt-bindings: imx6q-pcie: Fix clock names for
- imx6sx and imx8mq
-Message-ID: <20221117075956.4dw4g7cswr2iamro@mobilestation>
-References: <20221113191301.5526-1-Sergey.Semin@baikalelectronics.ru>
- <20221113191301.5526-2-Sergey.Semin@baikalelectronics.ru>
- <20221116203812.GA834519-robh@kernel.org>
- <20221117074318.cd52h5ks7ay4j4wb@mobilestation>
+        Thu, 17 Nov 2022 03:02:37 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 427BADF57;
+        Thu, 17 Nov 2022 00:02:34 -0800 (PST)
+Received: from loongson.cn (unknown [10.180.13.64])
+        by gateway (Coremail) with SMTP id _____8AxbdqY6nVjHzcIAA--.23520S3;
+        Thu, 17 Nov 2022 16:02:32 +0800 (CST)
+Received: from [10.180.13.64] (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx9VaV6nVjCM8VAA--.39038S2;
+        Thu, 17 Nov 2022 16:02:31 +0800 (CST)
+Subject: Re: [PATCH v12 1/2] thermal: loongson-2: add thermal management
+ support
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>
+References: <20221114024709.7975-1-zhuyinbo@loongson.cn>
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+Message-ID: <7573d427-a830-4da3-c016-3c6bbec2563e@loongson.cn>
+Date:   Thu, 17 Nov 2022 16:02:29 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221117074318.cd52h5ks7ay4j4wb@mobilestation>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221114024709.7975-1-zhuyinbo@loongson.cn>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Dx9VaV6nVjCM8VAA--.39038S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvAXoWfGFW3WFWkGw13try5try7KFg_yoW8Jr1rZo
+        WfJr1v9F4Syr1IyFyqqryUJFyaqa4UZ3W3ZFySkrs0qFWFqwn8ZrW5Gr43GF1rua1rtr47
+        JFy2ga1rXF4ft395n29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXasCq-sGcSsGvf
+        J3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnRJU
+        UUvI1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFV
+        AK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2
+        z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJr0_Gc
+        Wl84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487
+        Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
+        IY67AKxVWrXVW3AwAv7VC2z280aVAFwI0_Cr0_Gr1UMcvjeVCFs4IE7xkEbVWUJVW8JwAC
+        jcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxAIw28IcV
+        Cjz48v1sIEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18
+        MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr4
+        1lIxAIcVC0I7IYx2IY67AKxVW5JVW7JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1U
+        MIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWxJVW8Jr1lIxAIcV
+        C2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07joWlkUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 10:43:22AM +0300, Serge Semin wrote:
-> On Wed, Nov 16, 2022 at 02:38:12PM -0600, Rob Herring wrote:
-> > On Sun, Nov 13, 2022 at 10:12:42PM +0300, Serge Semin wrote:
-> > > Originally as it was defined the legacy bindings the pcie_inbound_axi and
-> > > pcie_aux clock names were supposed to be used in the fsl,imx6sx-pcie and
-> > > fsl,imx8mq-pcie devices respectively. But the bindings conversion has been
-> > > incorrectly so now the fourth clock name is defined as "pcie_inbound_axi
-> > > for imx6sx-pcie, pcie_aux for imx8mq-pcie", which is completely wrong.
-> > > Let's fix that by conditionally apply the clock-names constraints based on
-> > > the compatible string content.
-> > > 
-> > > Fixes: 751ca492f131 ("dt-bindings: PCI: imx6: convert the imx pcie controller to dtschema")
-> > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > > Acked-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> > > 
-> > > ---
-> > > 
-> > > Changelog v5:
-> > > - This is a new patch added on the v5 release of the patchset.
-> > > 
-> > > Changelog v7:
-> > > - Move the allOf clause to the bottom of the bindings. (@Krzysztof)
-> > > - Get back the names to the clock-names property and make sure the
-> > >   platform-specific name constraint is applied in the allOf clause.
-> > >   (@Rob)
-> > > ---
-> > >  .../bindings/pci/fsl,imx6q-pcie.yaml          | 46 +++++++++++++++++--
-> > >  1 file changed, 42 insertions(+), 4 deletions(-)
-> > 
-> > We have 2 patches doing the same thing:
-> > 
-> > https://lore.kernel.org/all/20221109002449.35936-1-marex@denx.de/
+Hi Maintainer,
+
+Could you help me merge my patch?
+
+Thanks
+Yinbo.
+ÔÚ 2022/11/14 ÉÏÎç10:47, Yinbo Zhu Ð´µÀ:
+> This patch adds the support for Loongson-2 thermal sensor controller,
+> which can support maximum 4 sensors.
+> 
+> It's based on thermal of framework:
+>   - Trip points defined in device tree.
+>   - Cpufreq as cooling device registered in Loongson-2 cpufreq driver.
+>   - Pwm fan as cooling device registered in hwmon pwm-fan driver.
+> 
+> Signed-off-by: zhanghongchen <zhanghongchen@loongson.cn>
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> ---
+> Change in v12:
+> 		1. Fixup it about min and max.
+> 		2. Use dev_err_probe replace dev_err in devm_request_threaded_irq context.
+> Change in v11:
+> 		1. Add min() and max() to replace related code in function
+> 		   loongson2_thermal_set.
+> 		2. Add dev_err_probe to to replace related code for function
+> 		   return value use devm_thermal_of_zone_register.
+> 		3. Replace thermal_add_hwmon_sysfs with devm_thermal_add_hwmon_sysfs
+> 		   and use dev_warn replace dev_err in this context.
+> Change in v10:
+> 		1. Add all history change log information.
+> Change in v9:
+> 		1. Switch new API that use devm_thermal_of_zone_register
+> 		   to replace previous interfaces.
+> 		2. Add depend on LOONGARCH || COMPILE_TEST.
+> Change in v8:
+>                  1. Replace string loongson2/Loongson2/LOONGSON2 with loongson-2/
+>                     Loongson-2/LOONGSON-2 in Kconfig and commit log and MAINTAINERS
+> 		   files.
+> Change in v7:
+> 		1. Split the modification of patch 3 and merge it into this patch.
+> 		2. Remove the unless code annotation to fix the compile warning
+> 		   when compile C code with W=1.
+> Change in v6:
+> 		1. NO change, but other patch in this series of patches set has
+> 		   changes.
+> Change in v5:
+> 		1. NO change, but other patch in this series of patches set has
+> 		   changes.
+> Change in v4:
+> 		1. Fixup the compatible.
+> Change in v3:
+> 		1. Add a function to gain sensor id an remove dts id.
+> Change in v2:
+> 		1. Remove error msg printing when addr ioremap has error.
+> 		2. Make loongson2 thermal driver was built-in by default.
+> 		3. Replace ls2k with loongson2.
+> 		4. Remove CONFIG_PM_SLEEP and set pm function type was
+> 		   __maybe_unused.
+> 
+>   MAINTAINERS                         |   7 +
+>   drivers/thermal/Kconfig             |  10 ++
+>   drivers/thermal/Makefile            |   1 +
+>   drivers/thermal/loongson2_thermal.c | 260 ++++++++++++++++++++++++++++
+>   4 files changed, 278 insertions(+)
+>   create mode 100644 drivers/thermal/loongson2_thermal.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 1b391ca7cf91..0d867573fe4c 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -12013,6 +12013,13 @@ F:	drivers/*/*loongarch*
+>   F:	Documentation/loongarch/
+>   F:	Documentation/translations/zh_CN/loongarch/
+>   
+> +LOONGSON-2 SOC SERIES THERMAL DRIVER
+> +M:	zhanghongchen <zhanghongchen@loongson.cn>
+> +M:	Yinbo Zhu <zhuyinbo@loongson.cn>
+> +L:	linux-pm@vger.kernel.org
+> +S:	Maintained
+> +F:	drivers/thermal/loongson2_thermal.c
+> +
+>   LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+>   M:	Sathya Prakash <sathya.prakash@broadcom.com>
+>   M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> index e052dae614eb..93d84bcb16dd 100644
+> --- a/drivers/thermal/Kconfig
+> +++ b/drivers/thermal/Kconfig
+> @@ -504,4 +504,14 @@ config KHADAS_MCU_FAN_THERMAL
+>   	  If you say yes here you get support for the FAN controlled
+>   	  by the Microcontroller found on the Khadas VIM boards.
+>   
+> +config LOONGSON2_THERMAL
+> +	tristate "Loongson-2 SoC series thermal driver"
+> +	depends on LOONGARCH || COMPILE_TEST
+> +	depends on OF
+> +	help
+> +	  Support for Thermal driver found on Loongson-2 SoC series platforms.
+> +	  It supports one critical trip point and one passive trip point. The
+> +	  cpufreq and the pwm fan is used as the cooling device to throttle
+> +	  CPUs when the passive trip is crossed.
+> +
+>   endif
+> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+> index 2506c6c8ca83..02f3db809858 100644
+> --- a/drivers/thermal/Makefile
+> +++ b/drivers/thermal/Makefile
+> @@ -61,3 +61,4 @@ obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
+>   obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
+>   obj-$(CONFIG_SPRD_THERMAL)	+= sprd_thermal.o
+>   obj-$(CONFIG_KHADAS_MCU_FAN_THERMAL)	+= khadas_mcu_fan.o
+> +obj-$(CONFIG_LOONGSON2_THERMAL)	+= loongson2_thermal.o
+> diff --git a/drivers/thermal/loongson2_thermal.c b/drivers/thermal/loongson2_thermal.c
+> new file mode 100644
+> index 000000000000..2d495469e8dd
+> --- /dev/null
+> +++ b/drivers/thermal/loongson2_thermal.c
+> @@ -0,0 +1,260 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Author: zhanghongchen <zhanghongchen@loongson.cn>
+> + *         Yinbo Zhu <zhuyinbo@loongson.cn>
+> + * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
+> + */
+> +
+> +#include <linux/cpufreq.h>
+> +#include <linux/delay.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/io.h>
+> +#include <linux/of_device.h>
+> +#include <linux/thermal.h>
+> +#include "thermal_hwmon.h"
+> +
+> +#define LOONGSON2_SOC_MAX_SENSOR_NUM			4
+> +
+> +#define LOONGSON2_TSENSOR_CTRL_HI			0x0
+> +#define LOONGSON2_TSENSOR_CTRL_LO			0x8
+> +#define LOONGSON2_TSENSOR_STATUS			0x10
+> +#define LOONGSON2_TSENSOR_OUT				0x14
+> +
+> +struct loongson2_thermal_data {
+> +	struct thermal_zone_device *tzd;
+> +	int irq;
+> +	int id;
+> +	void __iomem *regs;
+> +	struct platform_device *pdev;
+> +	u16 ctrl_low_val;
+> +	u16 ctrl_hi_val;
+> +};
+> +
+> +static int loongson2_thermal_set(struct loongson2_thermal_data *data,
+> +					int low, int high, bool enable)
+> +{
+> +	u64 reg_ctrl = 0;
+> +	int reg_off = data->id * 2;
+> +
+> +	if (low > high)
+> +		return -EINVAL;
+> +
+> +	low = max(low, -100);
+> +	high = min(high, 155);
+> +
+> +	low += 100;
+> +	high += 100;
+> +
+> +	reg_ctrl |= low;
+> +	reg_ctrl |= enable ? 0x100 : 0;
+> +	writew(reg_ctrl, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
+> +
+> +	reg_ctrl = 0;
+> +	reg_ctrl |= high;
+> +	reg_ctrl |= enable ? 0x100 : 0;
+> +	writew(reg_ctrl, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
+> +
+> +	return 0;
+> +}
+> +
+> +static int loongson2_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
+> +{
+> +	u32 reg_val;
+> +	struct loongson2_thermal_data *data = tz->devdata;
+> +
+> +	reg_val = readl(data->regs + LOONGSON2_TSENSOR_OUT);
+> +	*temp = ((reg_val & 0xff) - 100) * 1000;
+> +
+> +	return 0;
+> +}
+> +
+> +static int loongson2_thermal_get_sensor_id(void)
+> +{
+> +	int ret, id;
+> +	struct of_phandle_args sensor_specs;
+> +	struct device_node *np, *sensor_np;
+> +
+> +	np = of_find_node_by_name(NULL, "thermal-zones");
+> +	if (!np)
+> +		return -ENODEV;
+> +
+> +	sensor_np = of_get_next_child(np, NULL);
+> +	ret = of_parse_phandle_with_args(sensor_np, "thermal-sensors",
+> +			"#thermal-sensor-cells",
+> +			0, &sensor_specs);
+> +	if (ret) {
+> +		of_node_put(np);
+> +		of_node_put(sensor_np);
+> +		return ret;
+> +	}
+> +
+> +	if (sensor_specs.args_count >= 1) {
+> +		id = sensor_specs.args[0];
+> +		WARN(sensor_specs.args_count > 1,
+> +				"%s: too many cells in sensor specifier %d\n",
+> +				sensor_specs.np->name, sensor_specs.args_count);
+> +	} else {
+> +		id = 0;
+> +	}
+> +
+> +	of_node_put(np);
+> +	of_node_put(sensor_np);
+> +
+> +	return id;
+> +}
+> +
+> +static irqreturn_t loongson2_thermal_alarm_irq(int irq, void *dev)
+> +{
+> +	struct loongson2_thermal_data *data = dev;
+> +
+> +	/* clear interrupt */
+> +	writeb(0x3, data->regs + LOONGSON2_TSENSOR_STATUS);
+> +
+> +	disable_irq_nosync(irq);
+> +
+> +	return IRQ_WAKE_THREAD;
+> +}
+> +
+> +static irqreturn_t loongson2_thermal_irq_thread(int irq, void *dev)
+> +{
+> +	struct loongson2_thermal_data *data = dev;
+> +
+> +	thermal_zone_device_update(data->tzd,
+> +				   THERMAL_EVENT_UNSPECIFIED);
+> +	enable_irq(data->irq);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static int loongson2_thermal_set_trips(struct thermal_zone_device *tz, int low, int high)
+> +{
+> +	struct loongson2_thermal_data *data = tz->devdata;
+> +
+> +	return loongson2_thermal_set(data, low/1000, high/1000, true);
+> +}
+> +
+> +static const struct thermal_zone_device_ops loongson2_of_thermal_ops = {
+> +	.get_temp = loongson2_thermal_get_temp,
+> +	.set_trips = loongson2_thermal_set_trips,
+> +};
+> +
+> +static int loongson2_thermal_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct resource *res;
+> +	struct loongson2_thermal_data *data;
+> +	int ret;
+> +
+> +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+> +	if (!data)
+> +		return -ENOMEM;
+> +
+> +	data->pdev = pdev;
+> +	platform_set_drvdata(pdev, data);
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	data->regs = devm_ioremap(dev, res->start, resource_size(res));
+> +	if (IS_ERR(data->regs))
+> +		return PTR_ERR(data->regs);
+> +
+> +	/* get irq */
+> +	data->irq = platform_get_irq(pdev, 0);
+> +	if (data->irq < 0)
+> +		return data->irq;
+> +
+> +	/* get id */
+> +	data->id = loongson2_thermal_get_sensor_id();
+> +	if (data->id > LOONGSON2_SOC_MAX_SENSOR_NUM - 1 || data->id < 0) {
+> +		dev_err(dev, "sensor id error,must be in <0 ~ %d>\n",
+> +				LOONGSON2_SOC_MAX_SENSOR_NUM - 1);
+> +		return -EINVAL;
+> +	}
+> +
+> +	writeb(0xff, data->regs + LOONGSON2_TSENSOR_STATUS);
+> +
+> +	loongson2_thermal_set(data, 0, 0, false);
+> +
+> +	data->tzd = devm_thermal_of_zone_register(&pdev->dev, data->id, data,
+> +			&loongson2_of_thermal_ops);
+> +	if (IS_ERR(data->tzd))
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(data->tzd),
+> +				"failed to register");
+> +
+> +	ret = devm_request_threaded_irq(dev, data->irq,
+> +			loongson2_thermal_alarm_irq, loongson2_thermal_irq_thread,
+> +			IRQF_ONESHOT, "loongson2_thermal", data);
+> +	if (ret < 0)
+> +		return dev_err_probe(dev, ret, "failed to request alarm irq\n");
+> +
+> +	/*
+> +	 * Thermal_zone doesn't enable hwmon as default,
+> +	 * enable it here
+> +	 */
+> +	data->tzd->tzp->no_hwmon = false;
+> +	if (devm_thermal_add_hwmon_sysfs(data->tzd))
+> +		dev_warn(&pdev->dev, "Failed to add hwmon sysfs attributes\n");
+> +
+> +	return 0;
+> +}
+> +
+> +static int loongson2_thermal_remove(struct platform_device *pdev)
+> +{
+> +	struct loongson2_thermal_data *data = platform_get_drvdata(pdev);
+> +	int reg_off = data->id * 2;
+> +
+> +	/* disable interrupt */
+> +	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
+> +	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id of_loongson2_thermal_match[] = {
+> +	{ .compatible = "loongson,ls2k-thermal",},
+> +	{ /* end */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, of_loongson2_thermal_match);
+> +
+> +static int __maybe_unused loongson2_thermal_suspend(struct device *dev)
+> +{
+> +	struct loongson2_thermal_data *data = dev_get_drvdata(dev);
+> +	int reg_off = data->id * 2;
+> +
+> +	data->ctrl_low_val = readw(data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
+> +	data->ctrl_hi_val = readw(data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
+> +
+> +	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
+> +	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
+> +
+> +	return 0;
+> +}
+> +
+> +static int __maybe_unused loongson2_thermal_resume(struct device *dev)
+> +{
+> +	struct loongson2_thermal_data *data = dev_get_drvdata(dev);
+> +	int reg_off = data->id * 2;
+> +
+> +	writew(data->ctrl_low_val, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
+> +	writew(data->ctrl_hi_val, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
+> +
+> +	return 0;
+> +}
+> +
+> +static SIMPLE_DEV_PM_OPS(loongson2_thermal_pm_ops,
+> +			 loongson2_thermal_suspend, loongson2_thermal_resume);
+> +
+> +static struct platform_driver loongson2_thermal_driver = {
+> +	.driver = {
+> +		.name		= "loongson2_thermal",
+> +		.pm = &loongson2_thermal_pm_ops,
+> +		.of_match_table = of_loongson2_thermal_match,
+> +	},
+> +	.probe	= loongson2_thermal_probe,
+> +	.remove	= loongson2_thermal_remove,
+> +};
+> +module_platform_driver(loongson2_thermal_driver);
+> +
+> +MODULE_DESCRIPTION("Loongson2 thermal driver");
+> +MODULE_LICENSE("GPL");
 > 
 
-> It seems to me that that patch does two things at a time:
-> 1. Fixes invalid fourth clock-names entry.
-> 2. Fixes the fsl,imx8mm-pcie device having the "pcie_aux" clock name
-> required instead of "pcie_phy".
-> 
-> My patch does only the first part. What about moving my patch to that
-> series and converting the Marek' patch to being applicable on top of
-> it and fixing the imx8mm part only? That seems reasonable.
-
-BTW, if this patch is moved from here the series will fail the
-dt_binding_check procedure.
-
--Sergey
-
-> 
-> -Sergey
-> 
-> > 
-> > Please hash out which one you all want. Both seem to have clock 
-> > warnings still...
-> > 
-> > Reviewed-by: Rob Herring <robh@kernel.org>
