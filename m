@@ -2,102 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA2EF62CF9A
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 01:29:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B71662CFA2
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 01:31:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234398AbiKQA3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 19:29:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59366 "EHLO
+        id S233859AbiKQAbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 19:31:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233772AbiKQA3K (ORCPT
+        with ESMTP id S231394AbiKQAbU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 19:29:10 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A7AC45A08
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 16:29:10 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id 63so111043ybq.4
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 16:29:10 -0800 (PST)
+        Wed, 16 Nov 2022 19:31:20 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9442545A08
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 16:31:19 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id c15-20020a17090a1d0f00b0021365864446so422437pjd.4
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 16:31:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ptpAuz6wBAg9E85YTijlWlQ6KM9q6IpHeJLRCU6Du2A=;
-        b=k0Ok9itAisdvfhbOrqbOstzQTbmJard0gBsiRnI6b7MXOgiNlA+NJ1gfYXFW7FVp5r
-         v8SuuIVKBrOpOF/R5mm1uzgho1e0ZkSb0AI7Gku2WhUu+eJ+l58GsYTG2BEbXYUC5Loh
-         LPnwdfI30EyIww/fPHiGQf/JvBr5beZd1gCDBS+r0aY52z97Seb99yLsSd12Uq8+S2nZ
-         pCtLINBvr0f0GYTX4o6DR/KjlUVpjWNvt4dPHHCql1OFXlZI5Sy4Mv2tv/gGNQFC5QPT
-         +4ZkgNuAIiaibeYNiD6NYy7Sv0PbOSqixVWZDpaC/SBhXCX8O/VmToiph8CdHcM7QFLh
-         I1/w==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=bfYTHCNCtdWeHJf9pplhisQ2FfqYgZ1s/D8ukZJ0aF0=;
+        b=noLKefdE/A5/nbmTvR6mJw3cGxk/a7fIL83IBp5Ph1Sax30+McHCvDQ9202nLf5uce
+         hPc2gZOe0LsvudzlGDyBmEAgwDGtCwPT27+S6nCdQzTHR81ueFyHGEG25Bj0t5HJUYw6
+         csu11i/pEoPga4S6lvqc8FbzvURZMsHN35+PY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ptpAuz6wBAg9E85YTijlWlQ6KM9q6IpHeJLRCU6Du2A=;
-        b=f1ALeHwKdoJb5tGOPenpE1f3TycO3Y2RosQSd4OjJqR0D+MCW4wk6jZYn6VwfAgv+z
-         IfsEg5lWvKzzamuRrxw+Wtiy6tMMh8yLkgWhAIooWm6bsJMznGgcRIDG4VbUD7YzDY5x
-         /Mf/yuZSb8NJbOFSTBJwXx35qfhJA1EXvd6rIcZrp1dakSVr+0rfhC6S6ZmFr1JQxtEY
-         S93unNCHQp3w+tlzDZnNH4NMNX9hnXydaaWg0THMZooP66SDiRP5z3b8TUQ5qZO+jrkc
-         AON3f3j+uCEYxs3WrP1g890n+fIYNFCqjmtFMmHALy9M8O5r0tx/bbi0IvtkuXjrb+xu
-         hrfQ==
-X-Gm-Message-State: ANoB5pl7DB7q/7Vr4MAmKQOmzGsh9xco3l0O9/Ob5b0wzgpDJVBOw9cY
-        Dknny16na6O4m3RPQPhJ1CxT0uMQdfgImswUQLo=
-X-Google-Smtp-Source: AA0mqf77MWqNBK/J+kipbNJ9dneESQ6NgoMujAtx6Q0taRn+Hd/HWjmCqXU4SmMEEj/IPuyQT3oTWdNCka3LLJjs+Hw=
-X-Received: by 2002:a25:2613:0:b0:6de:a395:564e with SMTP id
- m19-20020a252613000000b006dea395564emr120306ybm.490.1668644949481; Wed, 16
- Nov 2022 16:29:09 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bfYTHCNCtdWeHJf9pplhisQ2FfqYgZ1s/D8ukZJ0aF0=;
+        b=5Xnfi/iQqjMiYmI8usga7ZVjed31z1HyFaoO5zqaJdmn8eN5vxV6/fPGAT0wWGdjjI
+         pW1L7EjratzIleJVyi7KxMdj9xPSNU77qdF40aGo6wu1hqrGvdCFCEo/QshY0v8p6Rpb
+         xUXL8/Str08f01lwlJI8O24dL0TX7++cHAAGc8FWgPz99v+V8iIPzpX8jawiVQQA7sVC
+         CGaHl1V+BMcBR35sOfPpLcFD2xnKnZQrmYM7Fvc5piJupkpMreu9ZsXrlqaA1V/ihjvi
+         wV3ByneHhM1uifGdqnciw0aAlSLuUmA1ynoTzN+hpnSaHzrv08+9MOxuW+Xiw2HQbgj1
+         motw==
+X-Gm-Message-State: ANoB5plnf+KYAjS2GJLS12lqrfAWi4IZMumWW2Y4eK4c6giAafGVT7sj
+        e+uW7DF1GnnBq00/03Bvve5j/Q==
+X-Google-Smtp-Source: AA0mqf5LCeBMlQYf9iRokqtAPq5JSpm9R+EnXlxq59oA8dqbtgC+he2PCZJy9QgLdGN/YL6SFM4OFA==
+X-Received: by 2002:a17:90a:6949:b0:213:188c:158d with SMTP id j9-20020a17090a694900b00213188c158dmr343097pjm.11.1668645079035;
+        Wed, 16 Nov 2022 16:31:19 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id s1-20020a170902ea0100b00174f61a7d09sm12946657plg.247.2022.11.16.16.31.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 16:31:18 -0800 (PST)
+Date:   Wed, 16 Nov 2022 16:31:18 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Christoph =?iso-8859-1?Q?B=F6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        SeongJae Park <sj@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Helge Deller <deller@gmx.de>, netdev@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-mmc@vger.kernel.org, linux-parisc@vger.kernel.org,
+        ydroneaud@opteya.com
+Subject: Re: [PATCH v2 3/3] treewide: use get_random_u32_between() when
+ possible
+Message-ID: <202211161628.164F47F@keescook>
+References: <20221114164558.1180362-1-Jason@zx2c4.com>
+ <20221114164558.1180362-4-Jason@zx2c4.com>
+ <202211161436.A45AD719A@keescook>
+ <Y3V4g8eorwiU++Y3@zx2c4.com>
+ <Y3V6QtYMayODVDOk@zx2c4.com>
 MIME-Version: 1.0
-Received: by 2002:a05:7000:84c7:b0:3bf:566c:3677 with HTTP; Wed, 16 Nov 2022
- 16:29:08 -0800 (PST)
-Reply-To: gregmsgbox212@gmail.com
-From:   Greg Pot <ibemsgbox20@gmail.com>
-Date:   Wed, 16 Nov 2022 16:29:08 -0800
-Message-ID: <CAEGNGnJtn3GAh4M8KKNT5UtPRY-SP41JSGV3P9PXq3NcvP-q8Q@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:b2c listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [gregmsgbox212[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [ibemsgbox20[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [ibemsgbox20[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3V6QtYMayODVDOk@zx2c4.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, Nov 17, 2022 at 01:03:14AM +0100, Jason A. Donenfeld wrote:
+> On Thu, Nov 17, 2022 at 12:55:47AM +0100, Jason A. Donenfeld wrote:
+> > 2) What to call it:
+> >    - between I still like, because it mirrors "I'm thinking of a number
+> >      between 1 and 10 and..." that everybody knows,
+> >    - inclusive I guess works, but it's not a preposition,
+> >    - bikeshed color #3?
+> 
+> - between
+> - ranged
+> - spanning
+> 
+> https://www.thefreedictionary.com/List-of-prepositions.htm
+> - amid
+> 
+> Sigh, names.
 
-Would your organization be interested in supplying raw material from
-your Country to a biotech company in USA/UK?
+I think "inclusive" is best. The other words still don't provide
+unambiguous language. It's the language used in formal math, e.g.
+sigma-notation, etc. It's an adjective for "get random" (verb, noun).
 
-Regards,
-Greg Pot.
+-- 
+Kees Cook
