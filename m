@@ -2,142 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F3A562D4AF
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:07:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A99D162D4B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:07:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239430AbiKQIHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 03:07:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52836 "EHLO
+        id S239445AbiKQIHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 03:07:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239207AbiKQIHA (ORCPT
+        with ESMTP id S239477AbiKQIHR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 03:07:00 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20E1571F12
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 00:06:59 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id l14so2405216wrw.2
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 00:06:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=LbRTiKNw92Ee+1b4C3YYFV4rUTYbBfHXEQTVRGxB8K0=;
-        b=YEUxhIvwNLSEyaevRqAqDbLFOcHB+hlOkXbIq4aS1RVO0zI5RZ3HWM+tUclgOH9JZ7
-         kaS+ynCCLgCLoZec1AarloUM8RxUzaaGax3abu8IfAP/47NjR2qJJ6UYYMJ+3FvG4xNJ
-         fsr2DBW3tJ7D2djf5OPf394Hi/EQHsHY265NMN17TwgrJ/6Zsv5ijivwz6mb2zp9iqVr
-         GoMzcpxJCto9b3/qGFm27wcd2qXKbBHzMGAN/WGyUy11pOySgTVqKPIMfjzb6v3Ig86K
-         rJ5OC5KrxD/P+c/5fSxhi/UOFdbeOZF9FmQLxT82EoL8gChlRCu6P5CgyAx8Tt7mMQBL
-         49ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LbRTiKNw92Ee+1b4C3YYFV4rUTYbBfHXEQTVRGxB8K0=;
-        b=Yp9fUlae125RIgNqrWPZmV1CUyc5Npy091pIukdJG/IV1Of54JWKj0VnOcvDC32cFa
-         oIpewnSde45fFid9b8DvtavmlxuqxV0tYbvnIxRWJnvb1rHcDNnnnKtCOUteOIuQkPBC
-         mapPUOusP5TyJTjUDB/XkuR9vPbmW8a8AxS5pC99GT1yUeQrZExbI7UjpST+efFP96+V
-         RM9rGytsRy5Y/04PXcHIzQWa7eHD9vWm1ul3EUhZFyYeubiUEr8yIW6Dxf6hTObE8ZWV
-         PwkGbdUAoyVANoxkoyX9pRk1givaFUe7ZSgyfH5uepWf2YhyFYb7bGLyKV0HlnTImsw/
-         eLpg==
-X-Gm-Message-State: ANoB5pkCAN9gYiUb9v3OuwldIdX+J3GdZmX7i9cs34mOyCDy0gwOQIDd
-        VgJOMui7jkgxXoldi+eWQZT/kA==
-X-Google-Smtp-Source: AA0mqf4ZeAm5v63sFB1ue0O1rCuSr9Ker30/XMjXG0JEU1vGy71om73E8lAPBoWdhIOxA0I08OHCcw==
-X-Received: by 2002:a5d:68c1:0:b0:236:8a38:4deb with SMTP id p1-20020a5d68c1000000b002368a384debmr694397wrw.487.1668672417764;
-        Thu, 17 Nov 2022 00:06:57 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:aad5:8d14:a22f:2e8b? ([2a01:e0a:982:cbb0:aad5:8d14:a22f:2e8b])
-        by smtp.gmail.com with ESMTPSA id v3-20020a1cf703000000b003cf774c31a0sm4414524wmh.16.2022.11.17.00.06.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Nov 2022 00:06:57 -0800 (PST)
-Message-ID: <cb94a2f5-6521-19b5-ca30-c68ffd2068a4@linaro.org>
-Date:   Thu, 17 Nov 2022 09:06:56 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH] dt-bindings: thermal: qcom-tsens: Add compatible for
- sm8550
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
+        Thu, 17 Nov 2022 03:07:17 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 34D33716EF;
+        Thu, 17 Nov 2022 00:07:16 -0800 (PST)
+Received: from loongson.cn (unknown [10.180.13.64])
+        by gateway (Coremail) with SMTP id _____8DxPdmz63VjtzcIAA--.23490S3;
+        Thu, 17 Nov 2022 16:07:15 +0800 (CST)
+Received: from [10.180.13.64] (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxJlex63Vjns8VAA--.39175S2;
+        Thu, 17 Nov 2022 16:07:14 +0800 (CST)
+Subject: Re: [PATCH v9 3/3] dt-bindings: clock: add loongson-2 clock
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20221114-narmstrong-sm8550-upstream-tsens-v1-0-0e169822830f@linaro.org>
- <4dd96db7-b667-7b8f-f80d-a250ac63f223@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <4dd96db7-b667-7b8f-f80d-a250ac63f223@linaro.org>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20221103050032.29236-1-zhuyinbo@loongson.cn>
+ <20221103050032.29236-3-zhuyinbo@loongson.cn>
+ <450c73ad-0008-1e32-6081-00ef54072dc1@loongson.cn>
+Message-ID: <08dd3b1a-4a18-87d3-d62a-15bfd4a1e5c7@loongson.cn>
+Date:   Thu, 17 Nov 2022 16:07:13 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+MIME-Version: 1.0
+In-Reply-To: <450c73ad-0008-1e32-6081-00ef54072dc1@loongson.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8CxJlex63Vjns8VAA--.39175S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxAryrJrWxtF43ur1UZF18Xwb_yoWruw43pF
+        1kCFZ8Jry0yr1fur1UtFy7Jr98Aw18J3WDJr10qFyDAry3J34jqr17Wryq9rWDXr4xZr4U
+        ZF1jqr47Zr17ArJanT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bqAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVWxJr0_Gc
+        Wl84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAaw2AFwI0_JF0_Jw1le2I262IYc4CY
+        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
+        C2j2WlYx0E2Ix0cI8IcVAFwI0_Wrv_ZF1lYx0Ex4A2jsIE14v26F4j6r4UJwAm72CE4IkC
+        6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7
+        AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26rWl4I8I3I0E4IkC
+        6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF
+        0xvE2Ix0cI8IcVAFwI0_Ar0_tr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42
+        IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Cr0_Gr1UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxU42YLDUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Any updates?
 
-On 16/11/2022 12:26, Krzysztof Kozlowski wrote:
-> On 16/11/2022 11:09, Neil Armstrong wrote:
->> The Qualcomm SM8550 platform has three instances of the tsens block,
->> add a compatible for these instances.
+在 2022/11/9 下午5:11, Yinbo Zhu 写道:
+> Hi maintainer,
+> 
+> Please help me merge this patch to upstream.
+> 
+> thanks,
+> Yinbo.
+> 
+> 在 2022/11/3 下午1:00, Yinbo Zhu 写道:
+>> Add the Loongson-2 clock binding with DT schema format using
+>> json-schema.
 >>
->> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 >> ---
->> To: Andy Gross <agross@kernel.org>
->> To: Bjorn Andersson <andersson@kernel.org>
->> To: Konrad Dybcio <konrad.dybcio@somainline.org>
->> To: Amit Kucheria <amitk@kernel.org>
->> To: Thara Gopinath <thara.gopinath@gmail.com>
->> To: "Rafael J. Wysocki" <rafael@kernel.org>
->> To: Daniel Lezcano <daniel.lezcano@linaro.org>
->> To: Zhang Rui <rui.zhang@intel.com>
->> To: Rob Herring <robh+dt@kernel.org>
->> To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
->> Cc: linux-arm-msm@vger.kernel.org
->> Cc: linux-pm@vger.kernel.org
->> Cc: devicetree@vger.kernel.org
->> Cc: linux-kernel@vger.kernel.org
->> ---
->>   Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
->>   1 file changed, 1 insertion(+)
+>> Change in v9:
+>>         1. Add all history changlog information.
+>> Change in v8:
+>>         1. NO change, but other patch in this series of patches has
+>>            changes.
+>> Change in v7:
+>>         1. NO change, but other patch in this series of patches has
+>>            changes.
+>> Change in v6:
+>>         1. NO change, but other patch in this series of patches has
+>>            changes.
+>> Change in v5:
+>>         1. NO change, but other patch in this series of patches has
+>>            changes.
+>> Change in v4:
+>>         1. NO change, but other patch in this series of patches has
+>>            changes.
+>> Change in v3:
+>>         1. Drop redundant (last) binding from the title.
+>>         2. Drop "- |" between ref_100m node and clk node.
+>> Change in v2:
+>>         1. Drop "Binding" string in the title.
+>>         2. Drop entire allOf and move the contents to top level.
+>>         3. Change string "refclk_100m" to "ref_100m".
 >>
->> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
->> index f0bd4b979e28..09dbd96d380e 100644
->> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
->> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
->> @@ -58,6 +58,7 @@ properties:
->>                 - qcom,sm8250-tsens
->>                 - qcom,sm8350-tsens
->>                 - qcom,sm8450-tsens
->> +              - qcom,sm8550-tsens
-> 
-> alOf:if:then should be updated.
-
-I thought the -v2 fallback would be enough since 8450 isn't present either in the alOf:if:then either.
-
-Anyway, will fix this.
-
-Thanks,
-Neil
-
-> 
-> Best regards,
-> Krzysztof
-> 
+>>   .../bindings/clock/loongson,ls2k-clk.yaml     | 63 +++++++++++++++++++
+>>   MAINTAINERS                                   |  1 +
+>>   2 files changed, 64 insertions(+)
+>>   create mode 100644 
+>> Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
+>>
+>> diff --git 
+>> a/Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml 
+>> b/Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
+>> new file mode 100644
+>> index 000000000000..63a59015987e
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
+>> @@ -0,0 +1,63 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/clock/loongson,ls2k-clk.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Loongson-2 SoC Clock Control Module
+>> +
+>> +maintainers:
+>> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
+>> +
+>> +description: |
+>> +  Loongson-2 SoC clock control module is an integrated clock 
+>> controller, which
+>> +  generates and supplies to all modules.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - loongson,ls2k-clk
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  clocks:
+>> +    items:
+>> +      - description: 100m ref
+>> +
+>> +  clock-names:
+>> +    items:
+>> +      - const: ref_100m
+>> +
+>> +  '#clock-cells':
+>> +    const: 1
+>> +    description:
+>> +      The clock consumer should specify the desired clock by having 
+>> the clock
+>> +      ID in its "clocks" phandle cell. See 
+>> include/dt-bindings/clock/loongson,ls2k-clk.h
+>> +      for the full list of Loongson-2 SoC clock IDs.
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - clocks
+>> +  - clock-names
+>> +  - '#clock-cells'
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    ref_100m: clock-ref-100m {
+>> +        compatible = "fixed-clock";
+>> +        #clock-cells = <0>;
+>> +        clock-frequency = <100000000>;
+>> +        clock-output-names = "ref_100m";
+>> +    };
+>> +
+>> +    clk: clock-controller@1fe00480 {
+>> +        compatible = "loongson,ls2k-clk";
+>> +        reg = <0x1fe00480 0x58>;
+>> +        #clock-cells = <1>;
+>> +        clocks = <&ref_100m>;
+>> +        clock-names = "ref_100m";
+>> +    };
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index 8b3d7bb18350..7afaf6d72800 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -12022,6 +12022,7 @@ LOONGSON-2 SOC SERIES CLOCK DRIVER
+>>   M:    Yinbo Zhu <zhuyinbo@loongson.cn>
+>>   L:    linux-clk@vger.kernel.org
+>>   S:    Maintained
+>> +F:    Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
+>>   F:    drivers/clk/clk-loongson2.c
+>>   F:    include/dt-bindings/clock/loongson,ls2k-clk.h
+>>
 
