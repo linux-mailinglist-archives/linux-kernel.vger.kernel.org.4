@@ -2,46 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20D3462DC83
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:21:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4295A62DCA0
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:24:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239922AbiKQNVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 08:21:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39560 "EHLO
+        id S239485AbiKQNYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 08:24:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234870AbiKQNVQ (ORCPT
+        with ESMTP id S240016AbiKQNYA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 08:21:16 -0500
-Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25491558D
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 05:21:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1668691261; bh=N9pDZUTKVWmcCMLDo7BDwGJ71H9koLDvz0Lw4Lwo6pQ=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=Y/pQXmvAbDfPJC2BXP/MP7acs7sOO8XEv4QnGYFRLasTAsRNAVyOBPvWGFJboPdv1
-         bsdK/WJDPci3NIBO7bOMHQcuPGMO4G2btrPw0UAjmyCoE4XRmAvLb2nsmZX8Up38bq
-         Cm9CZG8+rP84Ly+46oaOkiuzS1UilPVpLtBcPys4=
-Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Thu, 17 Nov 2022 14:21:00 +0100 (CET)
-X-EA-Auth: UijATNLUhksPhklMt0RnzdQPPKNk33NwzW2kr3ZK5xnRR3INQDOR1bX/0JRfebmWS/jsblxg8mESktDJkPEfVbXPwqGPnOpG
-Date:   Thu, 17 Nov 2022 18:50:55 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        gustavoars@kernel.org
-Subject: Re: [PATCH] staging: wlan-ng: Replace zero-length arrays with
- DECLARE_FLEX_ARRAY() helper
-Message-ID: <Y3Y1N6AwWEXLpSrx@qemulion>
-References: <Y3YKhee8L+kAfHM4@qemulion>
- <Y3YvGdkyGm7azGg4@kroah.com>
+        Thu, 17 Nov 2022 08:24:00 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC9F67F5F;
+        Thu, 17 Nov 2022 05:23:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=+G6PrQX4WZ0clAFOG+6oorGnE1VikHeuERGrZVmD//k=; b=vgwvpEFQBvBPGJ4l5Fdl5ZljTl
+        ypo25jDbsASqpcWo44PsikMJUyEh/j8+KuNKwMVnNYUK8cne4i1X7nrUciBY+tVcS/iiHdJ2HFZ/H
+        2esnkjM/ujU0Xuz3sce+hbgODPmYjA5uixlRGmvbn4lmRkP+O1N9/KY5ao9XxabklPQ0=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1overO-002grq-5j; Thu, 17 Nov 2022 14:23:18 +0100
+Date:   Thu, 17 Nov 2022 14:23:18 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+        linux-can@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-watchdog@vger.kernel.org
+Subject: Re: [RFC PATCH 1/9] dt-bindings: drop redundant part of title of
+ shared bindings
+Message-ID: <Y3Y1xjOjijBsQLZA@lunn.ch>
+References: <20221117123850.368213-1-krzysztof.kozlowski@linaro.org>
+ <20221117123850.368213-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y3YvGdkyGm7azGg4@kroah.com>
+In-Reply-To: <20221117123850.368213-2-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,68 +63,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 01:54:49PM +0100, Greg Kroah-Hartman wrote:
-> On Thu, Nov 17, 2022 at 03:48:45PM +0530, Deepak R Varma wrote:
-> > The code currently uses C90 standard extension based zero length arrays.
-> > The zero length array member also happens to be the only member of the
-> > structs. Such zero length array declarations are deprecated and the
-> > new C99 standard extension of flexible array declarations are to be
-> > used instead.
-> >
-> > The DECLARE_FLEX_ARRAY() helper allows for a flexible array member as
-> > the only member in a structure. Refer to these links [1], [2] for
-> > details.
-> >
-> > [1] https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
-> > [2] https://lkml.kernel.org/r/YxKY6O2hmdwNh8r8@work
-> >
-> > Issue identified using Coccinelle.
-> >
-> > Signed-off-by: Deepak R Varma <drv@mailo.com>
-> > ---
-> >
-> > Notes:
-> >    1. Proposed change is compile tested only.
-> >    2. Solution feedback from gustavoars@kernel.org
-> >
-> >
-> >  drivers/staging/wlan-ng/hfa384x.h | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/staging/wlan-ng/hfa384x.h b/drivers/staging/wlan-ng/hfa384x.h
-> > index 0611e37df6ac..3a1edcb43e07 100644
-> > --- a/drivers/staging/wlan-ng/hfa384x.h
-> > +++ b/drivers/staging/wlan-ng/hfa384x.h
-> > @@ -960,15 +960,15 @@ struct hfa384x_pdr_nicid {
-> >  } __packed;
-> >
-> >  struct hfa384x_pdr_refdac_measurements {
-> > -	u16 value[0];
-> > +	DECLARE_FLEX_ARRAY(u16, value);
-> >  } __packed;
->
-> Why?  This structure is never used anywhere, right?  So why is this
-> needed to be changed and not just removed entirely?  Same for the other
-> structures in this patch.
+>  allOf:
+> -  - $ref: "dma-common.yaml#"
+> +  - $ref: dma-common.yaml#
+>  
+>  
+>  allOf:
+> -  - $ref: "dma-common.yaml#"
+> +  - $ref: dma-common.yaml#
 
-Hello Greg,
-I am unable to confirm that these structures are truly not needed in the absence
-if a real device based testing. I could only validate that using the compile
-build and driver loading.
+Looks like some other automated change made its way into this patch.
 
-This change that I am proposing in the interim would enable the compiler to
-protect the structure from addition of a new member below the zero length array.
-
-If there is a way to confirm that the structures are indeed not needed, I can
-revise the patch and send the cleanup accordingly. Please suggest.
-
-Thank you,
-./drv
-
-
->
-> thanks,
->
-> greg k-h
-
-
+      Andrew
