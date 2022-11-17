@@ -2,71 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 537B762DA78
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 13:14:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B72162DA82
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 13:15:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240052AbiKQMOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 07:14:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44608 "EHLO
+        id S239744AbiKQMPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 07:15:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240056AbiKQMOd (ORCPT
+        with ESMTP id S240068AbiKQMPk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 07:14:33 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223986E557;
-        Thu, 17 Nov 2022 04:14:32 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id k19so2474138lji.2;
-        Thu, 17 Nov 2022 04:14:31 -0800 (PST)
+        Thu, 17 Nov 2022 07:15:40 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA006F375;
+        Thu, 17 Nov 2022 04:15:39 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id s24so2416665ljs.11;
+        Thu, 17 Nov 2022 04:15:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=B6zHRQIDfVqY+MN9crSq6m8AIqJBXp1xNp2VI0ETVz4=;
-        b=NAtKyRUDSXxY7UulH8aiXUGgsG98vHa12hlu0JqZK0IWSu5lAEPsSIk8/+xr7W7jeO
-         nfy3sPrTK/9ZTUSJkKoxn7gd+1ZiabPpcva97RigeTRWY4LvoBOz1WrxaDQQf9vn/CmR
-         vipGuVTTXpAqxHATChNaw/vZrCB9efAPByUC8mkNqvDNtswDIM+XAaN7KsKbkxbuU0Ur
-         ko3ytcvmjsjLXfS4SaQUrn6TAICv1irAu6tRdlhHOYuoNO6IU3Z76lg+b6/FL7+d9mZ1
-         kHKjTIfQorEOpHgpv0lrRc6JojzRxWjDZq4etPN3IVUH+xgozDZM0F4gmoFF3uafZ7Tz
-         FvIg==
+        bh=kKtlUJsoWwuJjn2VHo1qi4XSHSvJGEMBe3QKZ5NB7JU=;
+        b=KunCPphvVvLwYsVVkKod7lezBxR7mK0L81iehXwwrQMtgiPRmMer82ixlmGKbAUR1Q
+         Tu/Hqj7s9ji6czoAV3ceB9SK1wJGu3lA6+r3KW2P4s4FzdJYp+H/LNHmHTKHTdtqjtwU
+         vgDIcgZfn/Ma4UlgaliNvLzhbBpXFD/VQs+A/RK6P/ihpi1UR8u25xMCykbmZj35b2Qf
+         HqkeHfM1CsmG0Qf5yp1CodQCklhYOhtUuVoGk8idOab8tbuHDpdmKe/qBPvX2hv+0kE+
+         zwUY0NZvLcN/h/TWMLRqlm2c2T6OYCpnpvIEaPgP6InwCdxJvcch/FXKnLCJRXl90uNf
+         KzgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=B6zHRQIDfVqY+MN9crSq6m8AIqJBXp1xNp2VI0ETVz4=;
-        b=PbizBpMoY3hHFnUbFDymSp+hl6hPMofEOnJe+gp01hNzxms4HziI9x/SC1PJcI517C
-         L994yPHOgZt/5Y2Pl2yyPSZDkgPGrGhSoggUXi6N6TFtBqLgOeGzZbSfB7jss+dW7Z4/
-         wbTYciXS1wN1M45cfzLhELN3gP79xvWYzJUXGWk0DGRkaDwDwzp25DeL+v1DSlFAjXEh
-         8qYto4kvrW6ssck/BKxeyfhYEP8Deg8EcV/blrk3mKL0O0nrfIdiBxp/HBHYJ6rUfzwx
-         veWu0A74yp1b6kDiWJeX2IcDP8C5zjSQiXJn2o0+UZqoGPi5xBNY0uDBMru4TN2zgYHX
-         PI5Q==
-X-Gm-Message-State: ANoB5pkA66w3sUHXRV77o+jo15rfh6BzIhZ+JGrek2oF20lAq1tgr77Y
-        XR4jJJ7S2zwF55pDl+393rw=
-X-Google-Smtp-Source: AA0mqf69FHMTSFIbdZPgE2n+FGOVyAUXb+/2vN66+CtWjT+DyaI9gTXjrIMDllk1NcrDIlfGEIYkuQ==
-X-Received: by 2002:a2e:22c4:0:b0:277:515b:3db6 with SMTP id i187-20020a2e22c4000000b00277515b3db6mr827777lji.497.1668687270460;
-        Thu, 17 Nov 2022 04:14:30 -0800 (PST)
+        bh=kKtlUJsoWwuJjn2VHo1qi4XSHSvJGEMBe3QKZ5NB7JU=;
+        b=El0xkzKK5DLcsHGRIJhxIAS69VjCHE30ZbKxItJdaMLiBEQi/YtHZv2nDdFxduQJhd
+         hzv0E3OopEZKoAPqb0SPyBrZYfkKX6klUlaZJZUr824+rTRnhXFmYt873VQ2N3dcGxu/
+         f4NUKjDkoGhAxZNUNx+DqwJPxcW3PkdOcXRLL3ePUra2pu6pVw8+uyDnMq5w42sJQThi
+         XbzknR7lfKK6ighH+6SMhGjReWxDiXx26u2FiWQkY5EL78abrjuO4J2XTASevAz7cc17
+         IxVpOq89nC1MUE27HDfkoHaGHyYLpc+HlI6UqDYm6kbYMWRYB/nIEgYgCkBd5uH/bPtA
+         lSFw==
+X-Gm-Message-State: ANoB5pnamFN61hO+Ee99bV9UA/yPsEUSN4ar84DGPMkkLUxag0YFJ7wX
+        GSSzqqyNU1ggZEAMOwwmzKKtXiY4fqI=
+X-Google-Smtp-Source: AA0mqf4UCDUQaigclcgvYY1BIeuKdUrjoaago4v5D3TcDO0TTVIP7PmqyWK/SWWBu7nujQOsL1jXDg==
+X-Received: by 2002:a05:651c:198d:b0:278:eef5:8d16 with SMTP id bx13-20020a05651c198d00b00278eef58d16mr866908ljb.220.1668687337634;
+        Thu, 17 Nov 2022 04:15:37 -0800 (PST)
 Received: from gmail.com (82-209-154-112.cust.bredband2.com. [82.209.154.112])
-        by smtp.gmail.com with ESMTPSA id n16-20020a05651203f000b004b1b0f12cb4sm119917lfq.201.2022.11.17.04.14.29
+        by smtp.gmail.com with ESMTPSA id j6-20020a2e8006000000b0026dd24dc4ecsm168361ljg.82.2022.11.17.04.15.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 04:14:29 -0800 (PST)
-Date:   Thu, 17 Nov 2022 13:15:53 +0100
+        Thu, 17 Nov 2022 04:15:36 -0800 (PST)
+Date:   Thu, 17 Nov 2022 13:17:00 +0100
 From:   Marcus Folkesson <marcus.folkesson@gmail.com>
 To:     Jiri Kosina <jikos@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     linux-input@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH v2] HID: hid-sensor-custom: set fixed size for custom
- attributes
-Message-ID: <Y3Yl+eJndSuoV0vn@gmail.com>
-References: <20221117121326.5621-1-marcus.folkesson@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
+Subject: Re: [PATCH v2] HID: hid-cmedia: use device managed resources
+Message-ID: <Y3YmPA/TqAFQ4xwn@gmail.com>
+References: <20221117121304.5516-1-marcus.folkesson@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="3U7giTovVB84HU4S"
+        protocol="application/pgp-signature"; boundary="sGgkfKs0LXXLLOUj"
 Content-Disposition: inline
-In-Reply-To: <20221117121326.5621-1-marcus.folkesson@gmail.com>
+In-Reply-To: <20221117121304.5516-1-marcus.folkesson@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -78,73 +73,45 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---3U7giTovVB84HU4S
+--sGgkfKs0LXXLLOUj
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 17, 2022 at 01:13:26PM +0100, Marcus Folkesson wrote:
-> This is no bugfix (so no Fixes: tag is necessary) as it is
-> taken care of in hid_sensor_custom_add_attributes().
->=20
-> The motivation for this patch is that:
-> hid_sensor_custom_field.attr_name and
-> hid_sensor_custom_field.attrs
-> has the size of HID_CUSTOM_TOTAL_ATTRS and used in same context.
->=20
-> We compare against HID_CUSTOM_TOTAL_ATTRS when
-> looping through hid_custom_attrs.
->=20
-> We will silent the smatch error:
-> hid_sensor_custom_add_attributes() error: buffer overflow
-> 'hid_custom_attrs' 8 <=3D 10
+On Thu, Nov 17, 2022 at 01:13:04PM +0100, Marcus Folkesson wrote:
+> When we do not need to free() any memory in .remove, we can remove
+> cmhid_remove as well.
+> hid_device_remove() will call hid_hw_stop() as default .remove function
+> if no function is specified.
 >=20
 > Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
-> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 > ---
 
-v2:
-    - add acked-by tag
+    v2:
+    - return ret instead of 0 in probe.
 
->  drivers/hid/hid-sensor-custom.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/hid/hid-sensor-custom.c b/drivers/hid/hid-sensor-cus=
-tom.c
-> index 32c2306e240d..602465ad2745 100644
-> --- a/drivers/hid/hid-sensor-custom.c
-> +++ b/drivers/hid/hid-sensor-custom.c
-> @@ -62,7 +62,7 @@ struct hid_sensor_sample {
->  	u32 raw_len;
->  } __packed;
-> =20
-> -static struct attribute hid_custom_attrs[] =3D {
-> +static struct attribute hid_custom_attrs[HID_CUSTOM_TOTAL_ATTRS] =3D {
->  	{.name =3D "name", .mode =3D S_IRUGO},
->  	{.name =3D "units", .mode =3D S_IRUGO},
->  	{.name =3D "unit-expo", .mode =3D S_IRUGO},
-> --=20
-> 2.38.1
+>  drivers/hid/hid-cmedia.c | 27 +++++----------------------
+>  1 file changed, 5 insertions(+), 22 deletions(-)
 >=20
 
---3U7giTovVB84HU4S
+--sGgkfKs0LXXLLOUj
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEEBVGi6LZstU1kwSxliIBOb1ldUjIFAmN2JfQACgkQiIBOb1ld
-UjKuQRAAmnGTkNKC0HeF6xWruvf7jiY2S3pBUim6DIfShzjf9Zbi9LHFmTL5LGVL
-mkVq8B+c7ppX/zbQePLG4+lsJ2BKElNFBDDv98gJljqEH1QO+o2f4Z7DoASOzk4f
-rKRTyE+qi7Qy0jDRMsLgX0GP6lSTyo6uq5mVKSS/TnqnBElv7sye/uaT63xYbL2Z
-uvnD0B5xb8Uyk9Xem//9HPRAgCrz1xLX1de1JZVIoFZwOjceBEMBbKFM2dHiftXU
-7PMj42ePEX5kcXBPXDMDfCL2iTgbkXvH04M5/xUFT/+QOj/hJhumxfGmUHUWwUFY
-6xK00y3CGuVi2KfFkgO6/9KBARL+OScW3Eu/HvhSuY6d4cXnuR6oKTGQEZ24TCYr
-ZfuBIrUMC4h72AtR/WR+Z59wh+ev8d8LNr8xOBA01qhM+m/6ALGh5meZEjmLOJAZ
-4S8KpvgPZ+gTVvn2dev6WFkgBfFbxu5Pqsyp1XSDL39N63uqeE5z6ABC9JNYaO8M
-SeE+ybbCksyDQld0z4JVCMMs5ZFPXeY4Wrdu1zvmLferEPSlCFyq2MAOezUGyDm+
-uZJPNE6+EUuTJBg/ZZa35zn1Qqx8rNdaww7VRAD7a/lSdy7zcaSAhB/idJOLmAM5
-a6wJa7FLHo8eHepAmBqO2qR2bZ3NbUJSgWlcsX06+0MPx7zobmY=
-=9o6A
+iQIzBAEBCAAdFiEEBVGi6LZstU1kwSxliIBOb1ldUjIFAmN2JjgACgkQiIBOb1ld
+UjKh0RAA3RH3WxbO24nxmCHtkOfwZciwymwpbzySUKGBRyVHrET+JfouDirx3oSd
+lHI+1XYVT4JnwhdFm+SAQ9pjpOn4rNMVmqwoTJSLSQO1WLGsc3VTW8dsSieyyAkE
+2JQU2RxUsqJziTjensq1Xpt4spy4c8QDuyOQEfQr2ES57ggPxcsxqwSPAQWv7DVu
+lhHEJ+xSQ8kw+RAJW860rdvr8JUDtb6uWHL2H3ziQ0QFH+wfl+Mq1GCGp8zkq8F1
+E8HjDBl753faG/Kmv2LNtKgVPV3Dg4boYsWDgJnx81w//ltiKqJhHXACGhq8Lwwy
+XEQGPjh7jBbgsL1GEke0AyHaSu8kOYccYAfCCrD37fYBremNeVd7uiBiYkZmIV7q
+LoaVX62FYekBynviLY7ujzQfKOgfTv2RfCg3HI+gfBZFYciJiwrGw+VtEArjIVE6
+wJoEPQF3bVQik34EBjE3h0zVcmHXWhTNRy5Oo7VkH0F8N1SOlz1V25tGioitOZEZ
+z6mAxEAMO8JxywMVpiz4G3BACZvoH7gU6vL3uuVGo/y4Qe+JFo3hnCuedul4mCbD
+Leqkk3QbsY/5cRLbACJmJcbZ2/6lR/RLwZmiTCEEbGwnzrHviV3WF97paRN0l+wQ
+YCNGB5yMt/Q/tt+u100jeOH+iiq05kMy/swErcuILaUJxpFuAfc=
+=ues2
 -----END PGP SIGNATURE-----
 
---3U7giTovVB84HU4S--
+--sGgkfKs0LXXLLOUj--
