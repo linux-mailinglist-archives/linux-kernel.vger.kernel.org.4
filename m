@@ -2,191 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE6B662DDD5
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 15:21:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D378B62DDE8
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 15:24:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240366AbiKQOVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 09:21:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51062 "EHLO
+        id S240279AbiKQOYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 09:24:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234845AbiKQOVW (ORCPT
+        with ESMTP id S240024AbiKQOYA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 09:21:22 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A02976173;
-        Thu, 17 Nov 2022 06:21:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1668694882; x=1700230882;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=dk4PcX/hxHwhWP9fMfn16UOk/ywJvkeni5B+SNS+UD4=;
-  b=2n5Z24KBmt6YgoofsDEvFwe6YxX5k6w7yl47eirpm9fUKivcSPteJpo5
-   +nWYIQodTXSFiNbVv6VQ7ApcpXJWXuMPBv+nQtsrteWNPJnhf1VA5lPdu
-   oRmvjVM4Y+JXAMWJNDGdyLdSVatmUZuHszgOODYyclPPvV37DybNu2WpF
-   FfD3WvA9x2Z37F8YNzuQwi1I85f018nIurdsa1UDIKVMG/xZuXSyXw7h9
-   3FXEFdBBJp570lpWd8po50UXgpPa6Lc35XKzUAK6YCn3iau7FtpmEbd1O
-   H13LlB9AYpL9s8qsFKF9o6EXPlNrkiiHYCXVOZ4tUSGWwpQ3xLCySt9wc
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
-   d="scan'208";a="184003718"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Nov 2022 07:21:21 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Thu, 17 Nov 2022 07:21:20 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12 via Frontend Transport; Thu, 17 Nov 2022 07:21:20 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=X/kjorxiXCu7ztwYfiUk5noqQYw5veYoEFABNWjvqpQzSm3Dc85O/HST/UM8IHwjx133laUWQ2/pcX3VID7EFwc1ljkIXUvKIMpEJGw2XsfNuEM4trrgtvya1HcbjXWq1+xBrgs2Tgug2XaqUfIwJ9S/FqijVZbheaisck/db8XHOQ7PoO0kaY7C84eLavB0l3+UmkHDNmJGepCjIGZGICaLMRgErAxk8gCkZgpmFWHQhj6yaWFYE+HMhuG4hGFYp2hkqloHN4MExtMjMlRMPEdJxsitb/sxOs03Sj+toTrQKYtdkBSUNrY8rnTVs29+W12ut4Q8uHzeEcvd8k8zaw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=894CNVnTKpyqBsrnXub4aiCXY2ThKZXCQWDapsQHQ1Q=;
- b=MYY5hANg0spjjgNuX5fNbASaIV/n2hr4AJB0iLx7Z4JRnNPJSGLQxKwIjKD0eDQwCiW5uiU7bwJ0Gb+iosQDYtVmI0nqUmXGIZ+LTfO73UYp6mhNTLUEVN5/0hlTR9yxo2VrmoiIr8PgXP2qVn5niDJY/kHNCqgfLiE+lczjdSkfSFujYito82pZj/YOO8M+MyIvoRqN2uJSoqQoZr/2o+mio8rXew/3niHKeD6Y5RCMMRIqu/16gP2g+/HyEzPYGVSnX949hQW8cLVuuj2hk5jLV31lQaFRdQtQxz91PjmRXxCvbGkuf9LDiVXhikNLUk3L7ESHJtojCUtSjHJCNg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+        Thu, 17 Nov 2022 09:24:00 -0500
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52ED41D30E
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 06:23:59 -0800 (PST)
+Received: by mail-qt1-x831.google.com with SMTP id w4so1163249qts.0
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 06:23:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=894CNVnTKpyqBsrnXub4aiCXY2ThKZXCQWDapsQHQ1Q=;
- b=p4aZw9I//mXwRBm6HkV6/UHelTlVOiNCuCl1qOh0ixPVAQ1LPbo5gCN6mFWiL6eqepCkk7rB7FJDLeeC62rd43d+TzXln8/ajWeBFq8yQ39aMt6AzlZSI1mYojxWmk1XSUVA41ut520Yd7pDWMFLWSL8gyvM3hC/+i8KVijxqBM=
-Received: from CO6PR11MB5569.namprd11.prod.outlook.com (2603:10b6:303:139::20)
- by SA1PR11MB6615.namprd11.prod.outlook.com (2603:10b6:806:256::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.13; Thu, 17 Nov
- 2022 14:21:15 +0000
-Received: from CO6PR11MB5569.namprd11.prod.outlook.com
- ([fe80::72d6:72a6:b14:e620]) by CO6PR11MB5569.namprd11.prod.outlook.com
- ([fe80::72d6:72a6:b14:e620%3]) with mapi id 15.20.5813.020; Thu, 17 Nov 2022
- 14:21:15 +0000
-From:   <Daniel.Machon@microchip.com>
-To:     <luwei32@huawei.com>
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <Lars.Povlsen@microchip.com>,
-        <Steen.Hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>,
-        <netdev@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [patch net-next] net: microchip: sparx5: remove useless code in
- sparx5_qos_init()
-Thread-Topic: [patch net-next] net: microchip: sparx5: remove useless code in
- sparx5_qos_init()
-Thread-Index: AQHY+owNFKsLhwrlhky7iF4RkPp5vK5DLagA
-Date:   Thu, 17 Nov 2022 14:21:14 +0000
-Message-ID: <Y3ZF6gLy7hjW0KAx@DEN-LT-70577>
-References: <20221117145820.2898968-1-luwei32@huawei.com>
-In-Reply-To: <20221117145820.2898968-1-luwei32@huawei.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CO6PR11MB5569:EE_|SA1PR11MB6615:EE_
-x-ms-office365-filtering-correlation-id: 77746431-0d78-4ee9-f970-08dac8a6fc4f
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: jHMq+PRlTSFjGyL0dcv8jRzufJqZA7kjp30IHNXvHZbg+Uke9bGBTd7IYMoHzEEM52DF+4YNP1gZHtA8ufC7T9/7clqYr3xgB9eJRS2U9vAe1e10qApMa/ro/EakX3lvnRMdvTthjiunQBbX/FlvVVUEmnDEiQFKjZN44ATAo8SEXUcLv/MsKHGvjMZx4CACtt+mG9qFIgTpABQEHSM6a5/eYf8R3bLqJtnmE+Rs+f7x0+bCrSNretsOZTBaoZx8b8U2CQMaIU0pPV305kXKtgustxIdOx+h8xjSSha9/ZXHT6E+jQHDcBZfqkym3ebcaLsF46Zj4V3CKquy1/jLydcDIFcwNhaxxTbjK8akU8NynrSmBQLXtX3bSd8uNvpaSDqXFX+y1n+w0NIZAhL4Um97ChX52m7ZJmxzZH7lwyThwVJIv8oOw8HNRioBfykmHdpFTKMIzzw5V1QNPT5MNNj2v4DYRfL1QLm7Bs/VcgUTGb0vnNL6iBASV3f6Ow8Q/2Pd3cF0HB05bSBrjZNWAMam5mnjllguKkGgq3emYzlXyjgLuiK73CktpmMiJfdfy0J70Rtjw16kNSTaDTOJBNk9hOk80WMwAZ+RXMZ7K8ZzABhUwz5Sp+S+8h62kOBLPuhAK3imZbP/ZHkZm6aepIrw/O5byBj4yLtOkEC7Fi/koMJ5+cMmjLKsW84K5qOjSL/8mbM3Z/zsDFIAxL5UYQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR11MB5569.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(346002)(39860400002)(376002)(396003)(366004)(136003)(451199015)(66476007)(5660300002)(91956017)(9686003)(66556008)(8676002)(26005)(66446008)(41300700001)(8936002)(76116006)(6512007)(316002)(66946007)(64756008)(186003)(4326008)(2906002)(86362001)(122000001)(38100700002)(83380400001)(38070700005)(6486002)(33716001)(71200400001)(478600001)(6506007)(6916009)(54906003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?4hhrrW0kLi2LZ2HT6/xVp2Af6bXkrCd0urCMKqVlTJF4EUOOOvvPcF1bFmT1?=
- =?us-ascii?Q?6Sy85feU7t4imVJGxdssIt+geCAsN44a+kDGaK9eNUpOGrHwQyXkrJlDst4d?=
- =?us-ascii?Q?k1DGN5bg83lo9KYupmVwSWXZ6KaAvmqEV17KLbpknTbIN9+TVpdB+32nRYxZ?=
- =?us-ascii?Q?CHS85dxYuZne+PHvUpz4EO/oGQrjDppLWy8vUE4eQdeAdMGsTSLZEemxbnLi?=
- =?us-ascii?Q?6ZAdMns1L5W8JTC/ge9w1EBAVWEB3PQ8DAxPUSUAGr+X2AT1hE9R5clla31R?=
- =?us-ascii?Q?pBPohQrF2M+bHQlpBh1WOeznoLvEVCke8npKtH1ZhtBmyOvCaaFXk584DGPP?=
- =?us-ascii?Q?9XQ2MVBYzrptkcrflHMEcvQQwUcGxPqmz6lCzeU6JlgCKCv3Gmsd+a6lQ5Mw?=
- =?us-ascii?Q?F2IhibDUa+gQgWkJmuRrK5wGd5wtsvANF8rHuvmLWH1n4hvRgch59LR1LUWm?=
- =?us-ascii?Q?XVRadQkGFYbkqBfshRO6WMuKToJhS4hSyllLH+EjjkWXzLSiBPSEJB/uAvc2?=
- =?us-ascii?Q?gH04PRUa4GdwsGEs2n3OIIWkqvmE0rw5C5MO0ioOIXwyX/BVT7c+sv37SXsS?=
- =?us-ascii?Q?7mANDLbbzNfOtKbsPLJn0lVUcRNMbLTU55pUxZ7uiDMC1bN/8fqOWvJj6MC+?=
- =?us-ascii?Q?9X5j0RWgjwLBvwN9N2w4yzXXzIq7mI77Wuhd7Jb5iE/cFit/lPo2csqMkUMs?=
- =?us-ascii?Q?M2p2kEFmJyzlv5RCEIlazX97YS9+fPWbOAuq0w/NwWbDzV9mAxn4Vm1Z45Ak?=
- =?us-ascii?Q?SDAyRZdSeHKRk7umcvDlKCd4N3arL1RSLcppbWHRvsxZeqQxaEw9yze/srCu?=
- =?us-ascii?Q?KIQllJCWgC/eqw43zvyqF03Ai+oBC9h9K+QzQsqsd7Nwk/kXFLZ4IBdKxiwt?=
- =?us-ascii?Q?QQDWBRBc3G0C+32iPENuBpOE9qc0NDOylAxePuQoY497qPrTfLCDITeZMRPf?=
- =?us-ascii?Q?OKoT8ILVU70tLC9ih2RTom2H3YaInNNKYSwnGRm2bQr4xXeN2GfjN/X3vbnO?=
- =?us-ascii?Q?PlClnUlnWBtIiO6NkZ0dOdyc5aUh0+5SNMTdAzpMiu2yUFaPPbmRBAEzrNlC?=
- =?us-ascii?Q?Dx/TA3G0zr/B+KMdbztr0FbNFWkPbSrOsJ1jQO4WxdqRqiAsAgGZjKB3d6O1?=
- =?us-ascii?Q?XNp80Qkf1z24nF8N3clD0S2l5o6X6DPcUSN4dAg+fWaV0OntP9JIhwLFBYVz?=
- =?us-ascii?Q?9ZFEybWzbvwUnAHRtA1vmbArvfPrjDVskVo6D8YKd9nYMGtSdQmVj4aVl7g+?=
- =?us-ascii?Q?8tWB3LhV+ynBSecXblNwRHXqnCc7X5o458iCrpCFPcGDTfIqxTmRYs7pE5Hj?=
- =?us-ascii?Q?vT+QOoaPtHrMbbTWUNjipVS6th9ZuO3mPGr4p0mcozjI3jOUu5/xxttPU79U?=
- =?us-ascii?Q?k4BulSD6XJpDJoN1E2a6bf4LGTgKq0HCQkWAnz3x1XscEj9ghXrRKaZ1whZQ?=
- =?us-ascii?Q?nIzuX3wlIW84x+uKO/3PVEiXf5HoAPJxcpvUcZEzH+0clK5z4XqRUz4/4Ekz?=
- =?us-ascii?Q?0YTJJaDZkb5mzebkMSo0AlqdINwdfO9Ek+pOEw6TKXxaqZGz5cKXInqu1sjh?=
- =?us-ascii?Q?3YT5FDz2C6947nE2hVFsCkXT4720Wqo5ghl8m9yZuVRs7fHQ3bduRprBA66x?=
- =?us-ascii?Q?dAW1P/w0pkUW2B17fIAn8lw=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <9055AFF4EEB2EC4DAA64C12D0BCC5819@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XwTck/ecNhkid0iaJxj8dCkVWjNa9jLvmWZcqTf2HEY=;
+        b=TofIAUcUgNXdKkRlLpXAHp8LPOT+KnI3SNxuveYWvBTs6tRG9zxznjhaG2E7m2VMv3
+         82jxzeTw6haC8iWyHY4JKqEZAXouquoN8TTFCJIgKd0d6UUzGEptPxRLjrg6KXxGNR2w
+         murjBhrirP64xXtZVcfHKlVhh5Td4BPvP61Ri4IPnEo3rrcEFnmr8dzp9Y3rXM5DsbjL
+         cyvdDaLTYt/KwCvRorUY98pNdUqFz/pwBQTNa6TXZwKx4T2dPSblqWtCbJznGaCm4mQA
+         +hsDXCfEm9hy9oEg+09mtgkWC6h/eMmJVN7jFodZBQRn0d3FbwVDKDvxy6pwBsOQUSOp
+         IwUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XwTck/ecNhkid0iaJxj8dCkVWjNa9jLvmWZcqTf2HEY=;
+        b=EDAne1FDjGK0eTnVKFhTY/iQN6+hzPWlpYzHp/tEBLcQhaxGt3S7Qwo2butq97+g9Y
+         kkJjI+tzXZ4TaCTcQDU/2FEN68a5gX7eyUnrwJvpUMTCxui54QLcKL8c7j51w+Fr73SJ
+         zB8ino/v5wpB2DKbYZQkTeEKgtew8GpYGCY0PYPfAiRBBTioyq/iDX/UCPR6xFqskJD1
+         ED03gX2WfoDKUcxu07M1Igmsnwqvvzs0359xikhMcou7v6oTCa78pQ12uUm2n7v5lKSn
+         /Ex1ARh6uv7OJh2yTBGYEdNlh0uinnMIZovZK+QjYzDAzhrJGrSiVym4FEcR9OXHG/yI
+         uL/Q==
+X-Gm-Message-State: ANoB5pniS+uE4nRU5/7lV+ppF/vS4sW4useqUxNbroGJ6aP5091MZTzP
+        DbufeS09/bo5ClKQmP1++xOfgg==
+X-Google-Smtp-Source: AA0mqf7v3Ie4yFVjQ30XKSRMo7y2QRB7Hnlv7UR53ByhdzHhYt63cPhGswcMJ05MvFXZN2boPog0Bg==
+X-Received: by 2002:ac8:5441:0:b0:3a5:50ba:b20c with SMTP id d1-20020ac85441000000b003a550bab20cmr2336722qtq.588.1668695038409;
+        Thu, 17 Nov 2022 06:23:58 -0800 (PST)
+Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id y19-20020a05620a44d300b006bbf85cad0fsm574376qkp.20.2022.11.17.06.23.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 06:23:57 -0800 (PST)
+Date:   Thu, 17 Nov 2022 09:22:31 -0500
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        robert.marko@sartura.hr, linus.walleij@linaro.org, brgl@bgdev.pl,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        broonie@kernel.org
+Subject: Re: [PATCH v2 1/4] gpio: regmap: Always set gpio_chip get_direction
+Message-ID: <Y3ZDp6skghvMyaKv@fedora>
+References: <cover.1668129763.git.william.gray@linaro.org>
+ <1805d1ddb5bbce8e86164e66421ddde481cce4f9.1668129763.git.william.gray@linaro.org>
+ <Y3DlsTAQMi6kKObJ@smile.fi.intel.com>
+ <Y3DvUaA7YYAsypGv@fedora>
+ <cc33aaa342ad60749d2f7c2a6d690733@walle.cc>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR11MB5569.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 77746431-0d78-4ee9-f970-08dac8a6fc4f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Nov 2022 14:21:14.9411
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: l8eMSto1dIYOh2mxd0rhM8im5GAaK43AjboU+4Qavskto7uOBqXbbBRuMHC3iPiqx/JcOKxlZSA74fUUMpIc4ojQ7Vur7K6yGYZUXOahaqY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB6615
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="enTNzqmh6/WJTuPZ"
+Content-Disposition: inline
+In-Reply-To: <cc33aaa342ad60749d2f7c2a6d690733@walle.cc>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Den Thu, Nov 17, 2022 at 10:58:20PM +0800 skrev Lu Wei:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know th=
-e content is safe
->=20
-> There is no need to define variable ret, so remove it
-> and return sparx5_leak_groups_init() directly.
->=20
-> Signed-off-by: Lu Wei <luwei32@huawei.com>
-> ---
->  drivers/net/ethernet/microchip/sparx5/sparx5_qos.c | 8 +-------
->  1 file changed, 1 insertion(+), 7 deletions(-)
->=20
-> diff --git a/drivers/net/ethernet/microchip/sparx5/sparx5_qos.c b/drivers=
-/net/ethernet/microchip/sparx5/sparx5_qos.c
-> index 1e79d0ef0cb8..2f39300d52cc 100644
-> --- a/drivers/net/ethernet/microchip/sparx5/sparx5_qos.c
-> +++ b/drivers/net/ethernet/microchip/sparx5/sparx5_qos.c
-> @@ -383,13 +383,7 @@ static int sparx5_leak_groups_init(struct sparx5 *sp=
-arx5)
->=20
->  int sparx5_qos_init(struct sparx5 *sparx5)
->  {
-> -       int ret;
-> -
-> -       ret =3D sparx5_leak_groups_init(sparx5);
-> -       if (ret < 0)
-> -               return ret;
-> -
-> -       return 0;
-> +       return sparx5_leak_groups_init(sparx5);
->  }
->=20
->  int sparx5_tc_mqprio_add(struct net_device *ndev, u8 num_tc)
-> --
-> 2.31.1
->
 
-sparx5_qos_init() will be expanded in later patch series, as new QoS
-features require new initializations - so this is actually somewhat
-intentional.
+--enTNzqmh6/WJTuPZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-/ Daniel
+On Wed, Nov 16, 2022 at 04:41:30PM +0100, Michael Walle wrote:
+> Am 2022-11-13 14:21, schrieb William Breathitt Gray:
+> > On Sun, Nov 13, 2022 at 02:40:17PM +0200, Andy Shevchenko wrote:
+> > > On Thu, Nov 10, 2022 at 08:55:50PM -0500, William Breathitt Gray
+> > > wrote:
+> > > > If you only have reg_dat_base set, then it is input-only; if you on=
+ly
+> > > > have reg_set_base set, then it is output-only. Thus, we can always =
+set
+> > > > gpio_chip get_direction to gpio_regmap_get_direction and return
+> > > > GPIO_LINE_DIRECTION_IN/GPIO_LINE_DIRECTION_OUT given the respective
+> > > > register base addresses configuration.
+> > >=20
+> > > Seems legit to me. Have you checked if we have any gpio-regmap
+> > > drivers that
+> > > have something like this in their configuration already? In such
+> > > cases we need
+> > > to be sure they behave as expected.
+> > >=20
+> > > From the code perspective:
+> > > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> >=20
+> > I see gpio-sl28cpld has two device types SL28CPLD_GPO (output-only) and
+> > SL28CPLD_GPI (input-only); gpio-tn48m similarly has two device types
+> > TN48M_GPO (output-only) and TN48M_GPI (input-only). It doesn't look like
+> > the change in this patch will cause problems for them, but I'll let
+> > Michael Walle and Robert Marko comment if they see issues here.
+>=20
+> For the sl28cpld driver this shouldn't be a problem. So for that
+> Acked-by: Michael Walle <michael@walle.cc>
+>=20
+> But back when I wrote gpio-regmap the bgpio served as a blue print.
+> There is the same handling. If you look at gpiolib-sysfs.c there
+> is a comment about the direction property:
+>=20
+>  * MAY BE OMITTED if kernel won't allow direction changes
+>=20
+> So from a gpiolib/sysfs POV I'm not sure about this change. Does
+> get_direction =3D=3D NULL means setting the direction isn't possible?
+> OTHO there is a fat "MAY" :)
+>=20
+> Which brings me to the question of "why this change?". The commit
+> message doesn't mention it. Just out of curiosity.
+>=20
+> -michael
+
+Currently, the 104-idi-48 module implements a get_direction() callback
+that is executed in situations such as gpiod_get_direction() which
+aren't necessarily related to sysfs. In this patch series, the
+104-idi-48 module is migrated to the gpio_regmap API, but loses this
+get_direction() support because it's an input-only configuration. The
+purpose of this patch is to prevent that regression by supporting
+get_direction() for input-only/output-only configurations.
+
+William Breathitt Gray
+
+--enTNzqmh6/WJTuPZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCY3ZDpwAKCRC1SFbKvhIj
+K+zwAP91upqRhQV1dEM30LJyPIHO0ZHSXcyFgPN/PzNpEzV9cAEAvGvb9qHtmdAk
+xs3ibm0MRBsHFvbknnITdjEwBm27pg8=
+=/k59
+-----END PGP SIGNATURE-----
+
+--enTNzqmh6/WJTuPZ--
