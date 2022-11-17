@@ -2,102 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E278062E233
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 17:44:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6BDD62E237
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 17:48:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239739AbiKQQon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 11:44:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54074 "EHLO
+        id S239808AbiKQQsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 11:48:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234551AbiKQQol (ORCPT
+        with ESMTP id S234714AbiKQQsG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 11:44:41 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7210B2F65E
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 08:44:40 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id u8-20020a17090a5e4800b002106dcdd4a0so5953483pji.1
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 08:44:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:cc:date:message-id:subject:mime-version
-         :content-transfer-encoding:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4pehiEX3O7+10JOfvl6Go8PAptHMCNDVr2AxlBu5gCc=;
-        b=BX/ZOpVhcPqTE9SIHVYMCZo10XXujFWt57YZSrVtvWFoDVxkR2RlZorxjW8fwC/f1k
-         5O7b6MpOPivawml6ImkZD2+yi88L6/1jhng6IU/4iCpVybqysfK8vmA2L2MQ3gwMhiBQ
-         w9p12yTkZmvrgwV7gthcY22Q4eXf8SsPkt6tDWAIEOI8eS0V3YanzwELgAPuKNgYL2G7
-         k+d/SLRnvw3q5mSmetXgZnMwhKxGdockTxKGXv44XEAepizbJ2blGcPVx6Iuj/i03z2+
-         wUovn2fRmzzotOjs5sJqj5bOXPRmS7qQJ0m3eBITcIYc/a5xnFTJkgMakgKiuvRH9xRl
-         M38Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:cc:date:message-id:subject:mime-version
-         :content-transfer-encoding:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4pehiEX3O7+10JOfvl6Go8PAptHMCNDVr2AxlBu5gCc=;
-        b=vISFUK91RsaNWJsRHmsD+fU/sH8YXPJOKDn9ffUwMfbRroGuLfeAHPhDydSOzYvse4
-         5PCEDSBtLlnTDg3GmrxDTDlNvzRf6lPC+3LmGt08DZuKqgKwDIQ+JtYm8Bjw1IoZ0XdA
-         VteYwx7WBDhxQJXYr+a7Dl+7cz/XQEBGvgqUSDNImxxuHs/dILksKGRC+Tb8P6eIUAxu
-         7z5Wdw3ya+uL7Fr4qhKzRV/4QdEbzA8In0pLaeaom16+eq8H+ed2fN1XZ6zMwFhJiXok
-         0Tzda71kETDdtEVsijbNKtekD48Jh5IuEl9DfstIHAzMEKYBQr+vOUyHmWHYPDX3+jwK
-         0xtw==
-X-Gm-Message-State: ANoB5pnLODIygIDOQt/x1zG4hXpNkAzrvVwVS5IGlATvnR9tXxAZzKAK
-        TGKOPhP2tUNIbpytZAUyM6I=
-X-Google-Smtp-Source: AA0mqf5o7C2VNkO+/ic5Mv2JfUfSMTDAyy1zQSt/xJBP0A49vtJFh1TQKlpA54uIFPlxNbRDlmV+FA==
-X-Received: by 2002:a17:90a:8417:b0:210:9e08:d577 with SMTP id j23-20020a17090a841700b002109e08d577mr9846266pjn.134.1668703479649;
-        Thu, 17 Nov 2022 08:44:39 -0800 (PST)
-Received: from smtpclient.apple ([103.135.102.120])
-        by smtp.gmail.com with ESMTPSA id r15-20020a17090a4dcf00b00214247ac1acsm3731457pjl.12.2022.11.17.08.44.38
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 17 Nov 2022 08:44:39 -0800 (PST)
-From:   Qiujun Huang <hqjagain@gmail.com>
-Content-Type: text/plain;
-        charset=us-ascii
-Content-Transfer-Encoding: quoted-printable
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
-Subject: [PATCH] tracing: remove __bad_type_size() method
-Message-Id: <D062EC2E-7DB7-4402-A67E-33C3577F551E@gmail.com>
-Date:   Fri, 18 Nov 2022 00:44:35 +0800
-Cc:     linux-kernel@vger.kernel.org
-To:     rostedt@goodmis.org, mhiramat@kernel.org
-X-Mailer: Apple Mail (2.3696.80.82.1.1)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 17 Nov 2022 11:48:06 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9012849097;
+        Thu, 17 Nov 2022 08:48:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 06124CE1EB1;
+        Thu, 17 Nov 2022 16:48:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0327AC433D6;
+        Thu, 17 Nov 2022 16:47:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668703679;
+        bh=LBa/FWQk4tjkT7d11S/VUUI/bOAPkWA5R/HXGPMfV64=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fdcKHJ/BWbvfEovc8sxVXyrPw3Y0g+EyhN5oxcJjMQ6IgL8hdR9HlnafOojQy4cCp
+         5RyhCSPFpQUlDTsG+EywAsT/DWFqzHgOgGTRCyB6K3IM781VyghflANcsLxtjR0HQL
+         QTpTZ/vSDGwa8w7bj+nl1HPGqxD6xtyk8G2rDSGoDjYbOZP4nSfmMpcz/VaZ8DdqOg
+         QPxnC1B/ISwlJ0t370VlnxXchh3MkW5YXzCqsnUNAAbEYkuaVhhbqzEC36DwWSW8e9
+         prH/xf9i1q32YgeiEoosM8+3WCAFsF3Yz8GgANCaV7gVbfKJjghbofpJ2cDnNoLhd1
+         sis9itYIzS14Q==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 4840F4034E; Thu, 17 Nov 2022 13:47:55 -0300 (-03)
+Date:   Thu, 17 Nov 2022 13:47:55 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Weilin Wang <weilin.wang@intel.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Sandipan Das <sandipan.das@amd.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Xin Gao <gaoxin@cdjrlc.com>, Rob Herring <robh@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v3 10/10] perf list: Add json output option
+Message-ID: <Y3Zlu4lAbZI8cQhT@kernel.org>
+References: <20221114210723.2749751-11-irogers@google.com>
+ <Y3OX1pcclKCgbpeT@kernel.org>
+ <Y3TIG7BIzltgvCPw@kernel.org>
+ <Y3TK/6bBFsHxduPc@kernel.org>
+ <Y3TOwYdhzURKTgyB@kernel.org>
+ <Y3Tah5Ocvx6lQ4jP@kernel.org>
+ <Y3ThXYH3SAyEGmQ+@kernel.org>
+ <Y3T/35DcAw+h4R93@kernel.org>
+ <CAP-5=fU-tJPdxosVFfbbKtrswom7bnY6Ei3JczRJaQYyOnjcAA@mail.gmail.com>
+ <Y3Zh+XTXbhrOXAla@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3Zh+XTXbhrOXAla@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Em Thu, Nov 17, 2022 at 01:31:53PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Wed, Nov 16, 2022 at 11:52:39AM -0800, Ian Rogers escreveu:
+> > I think this should be squashed into "perf list: Reorganize to use
+> > callbacks". Some explanation, in porting the : glob case I'd assumed
+> > the before the colon would be the PMU and the after the event. Doing
+> > things caused tracepoint output to differ too much and so for
+> > tracepoints the : is kept in the event name. So we can simplify the
+> > matching to not be pmu and event, just use the event glob.
+ 
+> Next time please send the patch, I did it manually and before the last
+> option I get:
+ 
+> [root@quaco ~]# perf list syscalls:sys_enter_open |& grep syscalls
+>   syscalls:sys_enter_open                            [Tracepoint event]
+> [root@quaco ~]# perf test 112
+> 112: Check open filename arg using perf trace + vfs_getname          : Ok
+> [root@quaco ~]#
 
-__bad_type_size() is unused after
-commit 04ae87a52074("ftrace: Rework event_create_dir()").
-So, remove it.
+Ok, adjusted the last patch in the series, everything is in my
+tmp.perf/core branch, will go to perf/core later today when all tests
+gets passed.
 
-Signed-off-by: Qiujun Huang <hqjagain@gmail.com>
----
- kernel/trace/trace_syscalls.c | 2 --
- 1 file changed, 2 deletions(-)
+Please check that what is at:
 
-diff --git a/kernel/trace/trace_syscalls.c =
-b/kernel/trace/trace_syscalls.c
-index b69e207012c9..942ddbdace4a 100644
---- a/kernel/trace/trace_syscalls.c
-+++ b/kernel/trace/trace_syscalls.c
-@@ -201,8 +201,6 @@ print_syscall_exit(struct trace_iterator *iter, int =
-flags,
- 	return trace_handle_return(s);
- }
-=20
--extern char *__bad_type_size(void);
--
- #define SYSCALL_FIELD(_type, _name) {					=
-\
- 	.type =3D #_type, .name =3D #_name,					=
-\
- 	.size =3D sizeof(_type), .align =3D __alignof__(_type),		=
-\
---=20
-2.30.2=
+git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tmp.perf/core
+
+Is ok, its passing 'perf test' for me, including the one that was
+failing:
+
+[root@quaco ~]# perf test 112
+112: Check open filename arg using perf trace + vfs_getname          : Ok
+[root@quaco ~]#
+
+- Arnaldo
