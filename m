@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1651C62DF01
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:07:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6751862DF05
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:08:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239918AbiKQPH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 10:07:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53490 "EHLO
+        id S240016AbiKQPH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 10:07:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234965AbiKQPHz (ORCPT
+        with ESMTP id S231240AbiKQPHz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 17 Nov 2022 10:07:55 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F9F140A6;
-        Thu, 17 Nov 2022 07:07:53 -0800 (PST)
-Date:   Thu, 17 Nov 2022 15:07:50 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D4F59876;
+        Thu, 17 Nov 2022 07:07:54 -0800 (PST)
+Date:   Thu, 17 Nov 2022 15:07:51 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668697672;
+        s=2020; t=1668697673;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=VNmQEcEjGzxFCaQveibqJYQwGgBrqlyIcsFyeRFOUc4=;
-        b=uv04DabORtBeXcnJJ3ROYUdj9aSgLMClMv0lkN/cCSV5LyiZ0cSJZzJ8rXrEz8dPr/w3kh
-        n7GTuaje6khIpSf58sqLGlICRfyuAXgT5Bz391TYgBXlJVLo1xyYb69bA8VDrkIbmvByNz
-        ULl32Dg6S2kxDFNZDFU8VOd19uB1Vk5rzJYJGG4r/K5rchhhgD1kQh6sTp//Zv51YzPd46
-        Vl+m43ScXdqztv/dnR5CvYnK7Tc1rYfZn63t9asY54nsJrQFzcgLws5csvcwWKxvnCKT4J
-        Yp2SwTaHkNcnYjgL9faYoE4qTb4I85WifTht9iIvSZtvOkx91L5hWb5BgG8ayg==
+        bh=aKFoUwAiMO5fsxBWJlAcCHc5lmCkjHrwDLhNDwM8/yk=;
+        b=YtMeYNuyNGuDR4+/fvtzxchyYP3UMdy7cKZyLAIXRAZxor4GryFrC/zwVjObEXo1eSx6n9
+        coEf3UWH3iDAz/66+xlD/2Fja1axufLTHodxhiHkQdO47R1uVPBIgZgJjT92KWOIqTDXRu
+        my28q8/AQYMyR0f1f8qMo599JaCYqkSkFE5YeVZuq1JT3FZQPhZLobfha8kxb4xxlSBikI
+        SLRDEXSmmWNC+vpex4qPpQ/oLXHE5rwDHA0R7x/9txLA9cFfHt/AfQYE32kbA2pm0lorGt
+        kSzdCNQQtDfq9iAweROIxRRPR9ldfj2wGrRm1Zt3KFQXMyK9pHVDmco5Fv+rrg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668697672;
+        s=2020e; t=1668697673;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=VNmQEcEjGzxFCaQveibqJYQwGgBrqlyIcsFyeRFOUc4=;
-        b=JPSFDf0yt6efXnHjchIlkmkc26QQ5XWT/iokX5v4QnVzuc+T8LTxlFZrdfDC3AXDpSwfWC
-        cofgYlQj/pHr/0BQ==
+        bh=aKFoUwAiMO5fsxBWJlAcCHc5lmCkjHrwDLhNDwM8/yk=;
+        b=yYDmm0aflvLr2CkYVLAw14Zyg+SpwxJQpcTzONStfYriorgDJpIUYsNBRaOcziNMxqgLT+
+        sb+8iPmNBOB8K6Bg==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/core] x86/apic: Remove X86_IRQ_ALLOC_CONTIGUOUS_VECTORS
+Subject: [tip: irq/core] genirq/msi: Remove msi_domain_ops:: Msi_check()
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Jason Gunthorpe <jgg@nvidia.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org, maz@kernel.org
-In-Reply-To: <20221111122015.865042356@linutronix.de>
-References: <20221111122015.865042356@linutronix.de>
+In-Reply-To: <20221111122015.807616900@linutronix.de>
+References: <20221111122015.807616900@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <166869767063.4906.3559414491432257536.tip-bot2@tip-bot2>
+Message-ID: <166869767181.4906.10080889603936468444.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,141 +66,91 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/core branch of tip:
 
-Commit-ID:     d474d92d70250d43e7ce0c7cb8623f31ee7c40f6
-Gitweb:        https://git.kernel.org/tip/d474d92d70250d43e7ce0c7cb8623f31ee7c40f6
+Commit-ID:     2569f62ca473584a8ba389f455fc00805389f7da
+Gitweb:        https://git.kernel.org/tip/2569f62ca473584a8ba389f455fc00805389f7da
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Fri, 11 Nov 2022 14:55:17 +01:00
+AuthorDate:    Fri, 11 Nov 2022 14:55:15 +01:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Thu, 17 Nov 2022 15:15:22 +01:00
 
-x86/apic: Remove X86_IRQ_ALLOC_CONTIGUOUS_VECTORS
+genirq/msi: Remove msi_domain_ops:: Msi_check()
 
-Now that the PCI/MSI core code does early checking for multi-MSI support
-X86_IRQ_ALLOC_CONTIGUOUS_VECTORS is not required anymore.
-
-Remove the flag and rely on MSI_FLAG_MULTI_PCI_MSI.
+No more users.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-Link: https://lore.kernel.org/r/20221111122015.865042356@linutronix.de
+Link: https://lore.kernel.org/r/20221111122015.807616900@linutronix.de
 
 ---
- arch/x86/include/asm/irqdomain.h    |  4 +---
- arch/x86/kernel/apic/msi.c          |  6 ++----
- arch/x86/kernel/apic/vector.c       |  4 ----
- drivers/iommu/amd/iommu.c           |  7 -------
- drivers/iommu/intel/irq_remapping.c |  7 -------
- drivers/pci/controller/pci-hyperv.c | 15 +--------------
- 6 files changed, 4 insertions(+), 39 deletions(-)
+ include/linux/msi.h |  4 ----
+ kernel/irq/msi.c    | 17 +----------------
+ 2 files changed, 1 insertion(+), 20 deletions(-)
 
-diff --git a/arch/x86/include/asm/irqdomain.h b/arch/x86/include/asm/irqdomain.h
-index 125c23b..30c325c 100644
---- a/arch/x86/include/asm/irqdomain.h
-+++ b/arch/x86/include/asm/irqdomain.h
-@@ -7,9 +7,7 @@
- 
- #ifdef CONFIG_X86_LOCAL_APIC
- enum {
--	/* Allocate contiguous CPU vectors */
--	X86_IRQ_ALLOC_CONTIGUOUS_VECTORS		= 0x1,
--	X86_IRQ_ALLOC_LEGACY				= 0x2,
-+	X86_IRQ_ALLOC_LEGACY				= 0x1,
- };
- 
- extern int x86_fwspec_is_ioapic(struct irq_fwspec *fwspec);
-diff --git a/arch/x86/kernel/apic/msi.c b/arch/x86/kernel/apic/msi.c
-index 7517eb0..248a6a5 100644
---- a/arch/x86/kernel/apic/msi.c
-+++ b/arch/x86/kernel/apic/msi.c
-@@ -161,12 +161,10 @@ int pci_msi_prepare(struct irq_domain *domain, struct device *dev, int nvec,
- 		    msi_alloc_info_t *arg)
- {
- 	init_irq_alloc_info(arg, NULL);
--	if (to_pci_dev(dev)->msix_enabled) {
-+	if (to_pci_dev(dev)->msix_enabled)
- 		arg->type = X86_IRQ_ALLOC_TYPE_PCI_MSIX;
--	} else {
-+	else
- 		arg->type = X86_IRQ_ALLOC_TYPE_PCI_MSI;
--		arg->flags |= X86_IRQ_ALLOC_CONTIGUOUS_VECTORS;
--	}
- 
+diff --git a/include/linux/msi.h b/include/linux/msi.h
+index 8b28714..1ce9d5e 100644
+--- a/include/linux/msi.h
++++ b/include/linux/msi.h
+@@ -292,7 +292,6 @@ struct msi_domain_info;
+  * @get_hwirq:		Retrieve the resulting hw irq number
+  * @msi_init:		Domain specific init function for MSI interrupts
+  * @msi_free:		Domain specific function to free a MSI interrupts
+- * @msi_check:		Callback for verification of the domain/info/dev data
+  * @msi_prepare:	Prepare the allocation of the interrupts in the domain
+  * @set_desc:		Set the msi descriptor for an interrupt
+  * @domain_alloc_irqs:	Optional function to override the default allocation
+@@ -330,9 +329,6 @@ struct msi_domain_ops {
+ 	void		(*msi_free)(struct irq_domain *domain,
+ 				    struct msi_domain_info *info,
+ 				    unsigned int virq);
+-	int		(*msi_check)(struct irq_domain *domain,
+-				     struct msi_domain_info *info,
+-				     struct device *dev);
+ 	int		(*msi_prepare)(struct irq_domain *domain,
+ 				       struct device *dev, int nvec,
+ 				       msi_alloc_info_t *arg);
+diff --git a/kernel/irq/msi.c b/kernel/irq/msi.c
+index 4fde917..4b99f37 100644
+--- a/kernel/irq/msi.c
++++ b/kernel/irq/msi.c
+@@ -617,17 +617,9 @@ static int msi_domain_ops_init(struct irq_domain *domain,
  	return 0;
  }
-diff --git a/arch/x86/kernel/apic/vector.c b/arch/x86/kernel/apic/vector.c
-index 3e6f6b4..c1efebd 100644
---- a/arch/x86/kernel/apic/vector.c
-+++ b/arch/x86/kernel/apic/vector.c
-@@ -539,10 +539,6 @@ static int x86_vector_alloc_irqs(struct irq_domain *domain, unsigned int virq,
- 	if (disable_apic)
- 		return -ENXIO;
  
--	/* Currently vector allocator can't guarantee contiguous allocations */
--	if ((info->flags & X86_IRQ_ALLOC_CONTIGUOUS_VECTORS) && nr_irqs > 1)
--		return -ENOSYS;
+-static int msi_domain_ops_check(struct irq_domain *domain,
+-				struct msi_domain_info *info,
+-				struct device *dev)
+-{
+-	return 0;
+-}
 -
- 	/*
- 	 * Catch any attempt to touch the cascade interrupt on a PIC
- 	 * equipped system.
-diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
-index 8ece864..72dfe57 100644
---- a/drivers/iommu/amd/iommu.c
-+++ b/drivers/iommu/amd/iommu.c
-@@ -3297,13 +3297,6 @@ static int irq_remapping_alloc(struct irq_domain *domain, unsigned int virq,
- 	if (nr_irqs > 1 && info->type != X86_IRQ_ALLOC_TYPE_PCI_MSI)
- 		return -EINVAL;
+ static struct msi_domain_ops msi_domain_ops_default = {
+ 	.get_hwirq		= msi_domain_ops_get_hwirq,
+ 	.msi_init		= msi_domain_ops_init,
+-	.msi_check		= msi_domain_ops_check,
+ 	.msi_prepare		= msi_domain_ops_prepare,
+ 	.set_desc		= msi_domain_ops_set_desc,
+ 	.domain_alloc_irqs	= __msi_domain_alloc_irqs,
+@@ -655,8 +647,6 @@ static void msi_domain_update_dom_ops(struct msi_domain_info *info)
+ 		ops->get_hwirq = msi_domain_ops_default.get_hwirq;
+ 	if (ops->msi_init == NULL)
+ 		ops->msi_init = msi_domain_ops_default.msi_init;
+-	if (ops->msi_check == NULL)
+-		ops->msi_check = msi_domain_ops_default.msi_check;
+ 	if (ops->msi_prepare == NULL)
+ 		ops->msi_prepare = msi_domain_ops_default.msi_prepare;
+ 	if (ops->set_desc == NULL)
+@@ -707,13 +697,8 @@ int msi_domain_prepare_irqs(struct irq_domain *domain, struct device *dev,
+ {
+ 	struct msi_domain_info *info = domain->host_data;
+ 	struct msi_domain_ops *ops = info->ops;
+-	int ret;
+-
+-	ret = ops->msi_check(domain, info, dev);
+-	if (ret == 0)
+-		ret = ops->msi_prepare(domain, dev, nvec, arg);
  
--	/*
--	 * With IRQ remapping enabled, don't need contiguous CPU vectors
--	 * to support multiple MSI interrupts.
--	 */
--	if (info->type == X86_IRQ_ALLOC_TYPE_PCI_MSI)
--		info->flags &= ~X86_IRQ_ALLOC_CONTIGUOUS_VECTORS;
--
- 	sbdf = get_devid(info);
- 	if (sbdf < 0)
- 		return -EINVAL;
-diff --git a/drivers/iommu/intel/irq_remapping.c b/drivers/iommu/intel/irq_remapping.c
-index 0b80a27..a914eba 100644
---- a/drivers/iommu/intel/irq_remapping.c
-+++ b/drivers/iommu/intel/irq_remapping.c
-@@ -1337,13 +1337,6 @@ static int intel_irq_remapping_alloc(struct irq_domain *domain,
- 	if (nr_irqs > 1 && info->type != X86_IRQ_ALLOC_TYPE_PCI_MSI)
- 		return -EINVAL;
- 
--	/*
--	 * With IRQ remapping enabled, don't need contiguous CPU vectors
--	 * to support multiple MSI interrupts.
--	 */
--	if (info->type == X86_IRQ_ALLOC_TYPE_PCI_MSI)
--		info->flags &= ~X86_IRQ_ALLOC_CONTIGUOUS_VECTORS;
--
- 	ret = irq_domain_alloc_irqs_parent(domain, virq, nr_irqs, arg);
- 	if (ret < 0)
- 		return ret;
-diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
-index ba64284..1dee55d 100644
---- a/drivers/pci/controller/pci-hyperv.c
-+++ b/drivers/pci/controller/pci-hyperv.c
-@@ -611,20 +611,7 @@ static unsigned int hv_msi_get_int_vector(struct irq_data *data)
- 	return cfg->vector;
+-	return ret;
++	return ops->msi_prepare(domain, dev, nvec, arg);
  }
  
--static int hv_msi_prepare(struct irq_domain *domain, struct device *dev,
--			  int nvec, msi_alloc_info_t *info)
--{
--	int ret = pci_msi_prepare(domain, dev, nvec, info);
--
--	/*
--	 * By using the interrupt remapper in the hypervisor IOMMU, contiguous
--	 * CPU vectors is not needed for multi-MSI
--	 */
--	if (info->type == X86_IRQ_ALLOC_TYPE_PCI_MSI)
--		info->flags &= ~X86_IRQ_ALLOC_CONTIGUOUS_VECTORS;
--
--	return ret;
--}
-+#define hv_msi_prepare		pci_msi_prepare
- 
- /**
-  * hv_arch_irq_unmask() - "Unmask" the IRQ by setting its current
+ int msi_domain_populate_irqs(struct irq_domain *domain, struct device *dev,
