@@ -2,80 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0D9562D6BE
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 10:25:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08C3162D6C3
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 10:27:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239902AbiKQJZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 04:25:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48772 "EHLO
+        id S239872AbiKQJ0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 04:26:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239267AbiKQJZJ (ORCPT
+        with ESMTP id S240026AbiKQJ0Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 04:25:09 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0FFC7656;
-        Thu, 17 Nov 2022 01:25:05 -0800 (PST)
-X-UUID: 9d4c971178fc4c6392487e0b8f157fb8-20221117
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=2i8ue32zbAB2L5zW+f/v6ja22a6vjPgIueav6O2jRPg=;
-        b=PFAKG40Vd32WWsTq+f5SipqSe6RDKWFcRVv0OamftBF6HwSO+/PMs2qEpA1gvCn2vHcaS9BCbF7yd8DYdPjqGYGb5Zu1ueq81K4v4Apb44GpXDzPT+SC7FXhUyZ58DSMwbc1YqlPu8YlSNvmr2QlX1qyApuVoOJrKUF0wGedZ9U=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.13,REQID:3371898b-ad19-4ed9-aab4-4732f3087482,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:95
-X-CID-INFO: VERSION:1.1.13,REQID:3371898b-ad19-4ed9-aab4-4732f3087482,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
-        :quarantine,TS:95
-X-CID-META: VersionHash:d12e911,CLOUDID:55f976db-6ad4-42ff-91f3-18e0272db660,B
-        ulkID:221117172503CT5CQNLZ,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
-        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 9d4c971178fc4c6392487e0b8f157fb8-20221117
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 240677237; Thu, 17 Nov 2022 17:25:03 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 17 Nov 2022 17:25:01 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs13n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Thu, 17 Nov 2022 17:25:00 +0800
-From:   Yunfei Dong <yunfei.dong@mediatek.com>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>
-CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Steve Cho <stevecho@chromium.org>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v2,5/5] media: mediatek: vcodec: Core thread depends on core_list
-Date:   Thu, 17 Nov 2022 17:24:53 +0800
-Message-ID: <20221117092453.31366-6-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221117092453.31366-1-yunfei.dong@mediatek.com>
-References: <20221117092453.31366-1-yunfei.dong@mediatek.com>
+        Thu, 17 Nov 2022 04:26:25 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B482AC6C
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 01:26:09 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id f18so3580657ejz.5
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 01:26:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y0g4EDLEtDgnBBPOyUYQ2dr/MAZ6qJQSPBk0Q+DqlDg=;
+        b=U6Xn1tmRgEP+iOoHqH7pL0JfFVvxDSkevb4lZlOofuSTiJFrB2mCMfrdb78IDVIPuL
+         T/E3iV802C60USeteFevWYf4IwZuRQa+WHhb81/DIgHRZxxDmrWJte75DZBsDysG6+VF
+         8ZdOYQ+VlZtHpdGiR13aEf951nVu7lD0wp0KyPGE/Mqb1BkgBeNXP3MDoGJifa5h0k+A
+         NMyQstFHrQ/czvqSlLMWgc84tNbuJjVU0dS+DUi8dKNI0imZfv/CbH7onQ+6/eJ/AJF5
+         cM1yX5B1lzMA7xv3Fzmeli0ORFJiK++HVVdX8Y9+ICYS3lFrVfya2LB64TmYitOSoAQv
+         pAlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Y0g4EDLEtDgnBBPOyUYQ2dr/MAZ6qJQSPBk0Q+DqlDg=;
+        b=e6wnV3rxVYOcimYpJBFffg2YMYIGMTUiAluS5/F+5OcANFInsVCWvQt/bZY8RlDeRQ
+         2uPAed9QwsiZZx8hkF03RU37w8qQH21g5sFsyfebcsRfmueXrZ3jA26rNe3zHtJ/s8jZ
+         eGmzHd8NBoOXvOwDtfF2BlCdR1lFXqNImdCEyjGb3fEZp/kQby6FBTa/7prvHTuy71Aj
+         nAMV55LIiGGHhcwJ7MAP1rBqTAwfje6QWjh2wvwrbOIgc5+ui7z7Nz1rKMeMcoq++oFv
+         N6n2TBKTRLKzTuItKixDAx+FmYLsP5W4F/ZParnaL52/gbPCqijzYCKks6OWyZvpFnml
+         PYDg==
+X-Gm-Message-State: ANoB5pnHil5zQOAZnCrkEH6HNZvTI2P1ee1TWi2Ai6+/Iw4YZQm5HVFM
+        vCjpgcqA20UeD3yy/XKoHdO1oVPVSl/6Q2BHIP2a+w==
+X-Google-Smtp-Source: AA0mqf7l7ukZ/SXh93B5lgna2wPGzns9s7lKHxDCNS2xUNQiUQGB4mpqRTQmGP4LTe5h2/x7RpzxoTPaAL5VGOvn+GU=
+X-Received: by 2002:a17:906:ce35:b0:7ae:215:2dd5 with SMTP id
+ sd21-20020a170906ce3500b007ae02152dd5mr1439941ejb.208.1668677167917; Thu, 17
+ Nov 2022 01:26:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
+References: <20221114024942.8111-1-zhuyinbo@loongson.cn> <b3768259-68e8-fbed-ec9f-c43aa12b86b4@loongson.cn>
+In-Reply-To: <b3768259-68e8-fbed-ec9f-c43aa12b86b4@loongson.cn>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 17 Nov 2022 10:25:56 +0100
+Message-ID: <CACRpkdZvG41ApNkxjeb8cSuoFGT_WfR-X-g9GdnhHp962-j6ag@mail.gmail.com>
+Subject: Re: [PATCH v10 1/2] pinctrl: pinctrl-loongson2: add pinctrl driver support
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        zhanghongchen <zhanghongchen@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,29 +71,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Core thread will continue to work when core_list is not empty, not
-depends on lat_list.
+On Thu, Nov 17, 2022 at 8:51 AM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
 
-Fixes: 365e4ba01df4 ("media: mtk-vcodec: Add work queue for core hardware decode")
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Could you help me to merge my patch. I just use the latest code in your
+> pinctrl tree have a test about my v10 patch. It was okay. and my patch
+> had adop other reivewer's advice and recently no other person feedback.
 
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c
-index ae500980ad45..dc2004790a47 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c
-+++ b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c
-@@ -221,7 +221,7 @@ static void vdec_msg_queue_core_work(struct work_struct *work)
- 	mtk_vcodec_dec_disable_hardware(ctx, MTK_VDEC_CORE);
- 	vdec_msg_queue_qbuf(&ctx->msg_queue.lat_ctx, lat_buf);
- 
--	if (!list_empty(&ctx->msg_queue.lat_ctx.ready_queue)) {
-+	if (!list_empty(&dev->msg_queue_core_ctx.ready_queue)) {
- 		mtk_v4l2_debug(3, "re-schedule to decode for core: %d",
- 			       dev->msg_queue_core_ctx.ready_num);
- 		queue_work(dev->core_workqueue, &msg_queue->core_work);
--- 
-2.18.0
+Patches applied, I think, you forgot to collect Rob's ACK again but I added it
+back.
 
+Yours,
+Linus Walleij
