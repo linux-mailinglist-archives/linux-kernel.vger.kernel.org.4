@@ -2,214 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 003F662DEA9
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 15:49:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20FD162DEB0
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 15:53:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234824AbiKQOtg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 09:49:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44460 "EHLO
+        id S234774AbiKQOxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 09:53:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234418AbiKQOtd (ORCPT
+        with ESMTP id S231463AbiKQOx2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 09:49:33 -0500
-Received: from mail-m974.mail.163.com (mail-m974.mail.163.com [123.126.97.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 592392496F
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 06:49:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=dVUyL
-        PAb6gzI8XbCZsHtM1m990u4NxC9ACv5+48r8FU=; b=Ct4hvXR/oo0bZSsxDB+t2
-        OUtTr36iUqj0hh52f0U52lPXwRnfMSqhKhaDQsgZVaINWQG5Ur+NtOoQCwH4NU72
-        0t38f8JxFKvug94ZTGSG00FirHqscYajbnuj9tdLkbGj3wIp11ngv07igHv9EcuU
-        PwoCc7hQpma/iGDgnH0TVk=
-Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by smtp4 (Coremail) with SMTP id HNxpCgD3PX7cSXZjBWjisg--.23803S2;
-        Thu, 17 Nov 2022 22:49:00 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     gregkh@linuxfoundation.org
-Cc:     zhengyejian1@huawei.com, dimitri.sivanich@hpe.com, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
-        alex000young@gmail.com, security@kernel.org, sivanich@hpe.com,
-        lkp@intel.com, Zheng Wang <zyytlz.wz@163.com>
-Subject: [PATCH v10 RESEND] misc: sgi-gru: fix use-after-free error in  gru_set_context_option, gru_fault and gru_handle_user_call_os
-Date:   Thu, 17 Nov 2022 22:48:59 +0800
-Message-Id: <20221117144859.4710-1-zyytlz.wz@163.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 17 Nov 2022 09:53:28 -0500
+Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EACFD10FD6
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 06:53:22 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.west.internal (Postfix) with ESMTP id 1D9672B06A0F;
+        Thu, 17 Nov 2022 09:53:18 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Thu, 17 Nov 2022 09:53:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1668696797; x=1668703997; bh=P+Mr1SL559
+        jIilm9PEYPnBvDF7YF573nzLUdcJpasyg=; b=U+VbZC5zUyzYvx1yj3a1C54+lx
+        jz4fjzVkJUhXoDT82EijIh8V/jDk63l5W/BG90AegA8jJqyYsC0LNHeNIsPat5RR
+        /2g3LSkJHgXmfxByw1lWhWN2xl1PqS4l3FlWqrt4UvY93NlGqJhmwLk496YHp8eI
+        ABHAALlp7tV7Ij0cbjkNaJrM2iVqTwR0dTwOwaMbr8P67NhyOlb/+wO0mC0QWBRt
+        AT4awFlRCBs2LypcLc1tNlI130XWImblKyGkFcubOGzI89S01DIAyaF804xOnas0
+        WtDKFv8QJt7rzWHzezwxX5iIqQCfSIN4zA3IMZhHQUKwKEtMIbJ9BVztkP8w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1668696797; x=1668703997; bh=P+Mr1SL559jIilm9PEYPnBvDF7YF
+        573nzLUdcJpasyg=; b=xC7sUXofv0fkoCCNv5hAvrZ4E9fMPBoYYK4010kZTguL
+        71FuU3oKPCoEGJl8fmNrPuBRTB9Q+XZTaHSNIHWMP23p7ij/YxyJQSangKNX1BM8
+        hSsh0lpG1ytgu4wKRDUzyniJcUPDr5NNamcslrkshtGuj1XFGJi0F1HA4FOA5V29
+        I/cGTS/cYUREqoKF0LeRy/30kz6/Yah4l3+ccpiPoul4WTiMWfryoHYusIx4TFf6
+        oukzBrD/9v63Pj4SWiAoeTEgg8r9/Ch9GiwhVZrvwK5hwanw34aRHtWurtq44XrT
+        sWTmCIY+nrfGqSoYFe8TVd4Ffblx/vIT3O3d2roAYA==
+X-ME-Sender: <xms:3Ep2Y4yGAaPbWy7VQYS-4rEpAlarsPcQhW8iANLjeiBA-NLdRPYTBw>
+    <xme:3Ep2Y8Qtjn-EJ-YQJVA5j6gIRQb-5qSdw5WGfjPnGPPf_EhNtfELlPLC67Fi3eRNt
+    j9k8oIVeNJQ_2GUWOo>
+X-ME-Received: <xmr:3Ep2Y6Xstyxc9mlXQOBLsiZGSwdo1XI7lXqdxDyhPi_0mCR-1fL7-IRXjOdLq9_Om2qKJ1TTcZQwIr7pfJxGZ1LpY-psTiQJKJW77FfEEwmx6w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgeekgdeikecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepveefgfejffdvieeffeehueeguddvjeegvefghfdujeffffeiheekvdelhedv
+    keefnecuffhomhgrihhnpehithhurdhinhhtpdhkvghrnhgvlhdrohhrghenucevlhhush
+    htvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggv
+    rhhnohdrthgvtghh
+X-ME-Proxy: <xmx:3Ep2Y2hs68uTtmPm487wkfEovHB0iT55P6W8qN7619f_VFwjmyLPbw>
+    <xmx:3Ep2Y6BcxrKz5_NdMSV1ETH07cPXzJJlu2-5gJC8Ku0dGY60SQgEoA>
+    <xmx:3Ep2Y3LME_puhtZ05fmu_7R3FjLz76xMvVX20wTspBC_ZLXU1IILIg>
+    <xmx:3Up2Y1ZlUsHWZadmHPgc8xRbpG2Urq0g3FRqPqz98KRxnxaKUY750yVVCKo>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 17 Nov 2022 09:53:16 -0500 (EST)
+Date:   Thu, 17 Nov 2022 15:53:14 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Ben Skeggs <bskeggs@redhat.com>, Chen-Yu Tsai <wens@csie.org>,
+        David Airlie <airlied@linux.ie>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Emma Anholt <emma@anholt.net>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dom Cobley <dom@raspberrypi.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Phil Elwell <phil@raspberrypi.com>,
+        nouveau@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-sunxi@lists.linux.dev, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v10 05/19] drm/connector: Add TV standard property
+Message-ID: <20221117145314.veaam3djm6fkh56f@houat>
+References: <20220728-rpi-analog-tv-properties-v10-0-256dad125326@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v10-5-256dad125326@cerno.tech>
+ <20221117153557.75c5dba1@maurocar-mobl2>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: HNxpCgD3PX7cSXZjBWjisg--.23803S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxKryxXr13Xr47uryDZw1DZFb_yoW7ZrWkpa
-        1jg34F9rW3JF4avrsrta18XFW3CFykJFW5Gr9rKw1rur4rAFs8GryDtas8tr4DZrW0qF42
-        yF4rtFnI93Z0vaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziaZXrUUUUU=
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiXBy8U1Xl40225gAAsh
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="oacbmgkrlh2j7rjz"
+Content-Disposition: inline
+In-Reply-To: <20221117153557.75c5dba1@maurocar-mobl2>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In some bad situation, the gts may be freed gru_check_chiplet_assignment.
-The call chain can be gru_unload_context->gru_free_gru_context->gts_drop
-and kfree finally. However, the caller didn't know if the gts is freed
-or not and use it afterwards. This will trigger a Use after Free bug.
 
-Fix it by introducing a return value to see if it's in error path or not.
-Free the gts in caller if gru_check_chiplet_assignment check failed.
+--oacbmgkrlh2j7rjz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Fixes: 55484c45dbec ("gru: allow users to specify gru chiplet 2")
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-Acked-by: Dimitri Sivanich <sivanich@hpe.com>
----
-v10:
-- try again in gru_handle_user_call_osif gru_check_chiplet_assignment failed,
-  return success in gru_set_context_optionif we have unloaded gts, change the
-  comment, all suggested by Dimitri Sivanich.
+On Thu, Nov 17, 2022 at 03:35:57PM +0100, Mauro Carvalho Chehab wrote:
+> On Thu, 17 Nov 2022 10:28:48 +0100
+> Maxime Ripard <maxime@cerno.tech> wrote:
+>=20
+> > The TV mode property has been around for a while now to select and get =
+the
+> > current TV mode output on an analog TV connector.
+> >=20
+> > Despite that property name being generic, its content isn't and has been
+> > driver-specific which makes it hard to build any generic behaviour on t=
+op
+> > of it, both in kernel and user-space.
+> >=20
+> > Let's create a new enum tv norm property, that can contain any of the
+> > analog TV standards currently supported by kernel drivers. Each driver =
+can
+> > then pass in a bitmask of the modes it supports, and the property
+> > creation function will filter out the modes not supported.
+> >=20
+> > We'll then be able to phase out the older tv mode property.
+> >=20
+> > Tested-by: Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>
+> > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> >=20
+> > ---
+> > Changes in v10:
+> > - Fix checkpatch warning
+> >=20
+> > Changes in v5:
+> > - Create an analog TV properties documentation section, and document TV
+> >   Mode there instead of the csv file
+> >=20
+> > Changes in v4:
+> > - Add property documentation to kms-properties.csv
+> > - Fix documentation
+> > ---
+> >  Documentation/gpu/drm-kms.rst     |   6 ++
+> >  drivers/gpu/drm/drm_atomic_uapi.c |   4 ++
+> >  drivers/gpu/drm/drm_connector.c   | 122 ++++++++++++++++++++++++++++++=
++++++++-
+> >  include/drm/drm_connector.h       |  64 ++++++++++++++++++++
+> >  include/drm/drm_mode_config.h     |   8 +++
+> >  5 files changed, 203 insertions(+), 1 deletion(-)
+> >=20
+> > diff --git a/Documentation/gpu/drm-kms.rst b/Documentation/gpu/drm-kms.=
+rst
+> > index b4377a545425..321f2f582c64 100644
+> > --- a/Documentation/gpu/drm-kms.rst
+> > +++ b/Documentation/gpu/drm-kms.rst
+> > @@ -520,6 +520,12 @@ HDMI Specific Connector Properties
+> >  .. kernel-doc:: drivers/gpu/drm/drm_connector.c
+> >     :doc: HDMI connector properties
+> > =20
+> > +Analog TV Specific Connector Properties
+> > +----------------------------------
+> > +
+> > +.. kernel-doc:: drivers/gpu/drm/drm_connector.c
+> > +   :doc: Analog TV Connector Properties
+> > +
+> >  Standard CRTC Properties
+> >  ------------------------
+> > =20
+> > diff --git a/drivers/gpu/drm/drm_atomic_uapi.c b/drivers/gpu/drm/drm_at=
+omic_uapi.c
+> > index 7f2b9a07fbdf..d867e7f9f2cd 100644
+> > --- a/drivers/gpu/drm/drm_atomic_uapi.c
+> > +++ b/drivers/gpu/drm/drm_atomic_uapi.c
+> > @@ -700,6 +700,8 @@ static int drm_atomic_connector_set_property(struct=
+ drm_connector *connector,
+> >  		state->tv.margins.bottom =3D val;
+> >  	} else if (property =3D=3D config->legacy_tv_mode_property) {
+> >  		state->tv.legacy_mode =3D val;
+> > +	} else if (property =3D=3D config->tv_mode_property) {
+> > +		state->tv.mode =3D val;
+> >  	} else if (property =3D=3D config->tv_brightness_property) {
+> >  		state->tv.brightness =3D val;
+> >  	} else if (property =3D=3D config->tv_contrast_property) {
+> > @@ -810,6 +812,8 @@ drm_atomic_connector_get_property(struct drm_connec=
+tor *connector,
+> >  		*val =3D state->tv.margins.bottom;
+> >  	} else if (property =3D=3D config->legacy_tv_mode_property) {
+> >  		*val =3D state->tv.legacy_mode;
+> > +	} else if (property =3D=3D config->tv_mode_property) {
+> > +		*val =3D state->tv.mode;
+> >  	} else if (property =3D=3D config->tv_brightness_property) {
+> >  		*val =3D state->tv.brightness;
+> >  	} else if (property =3D=3D config->tv_contrast_property) {
+> > diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_conn=
+ector.c
+> > index 06e737ed15f5..07d449736956 100644
+> > --- a/drivers/gpu/drm/drm_connector.c
+> > +++ b/drivers/gpu/drm/drm_connector.c
+> > @@ -984,6 +984,17 @@ static const struct drm_prop_enum_list drm_dvi_i_s=
+ubconnector_enum_list[] =3D {
+> >  DRM_ENUM_NAME_FN(drm_get_dvi_i_subconnector_name,
+> >  		 drm_dvi_i_subconnector_enum_list)
+> > =20
+> > +static const struct drm_prop_enum_list drm_tv_mode_enum_list[] =3D {
+> > +	{ DRM_MODE_TV_MODE_NTSC, "NTSC" },
+> > +	{ DRM_MODE_TV_MODE_NTSC_443, "NTSC-443" },
+> > +	{ DRM_MODE_TV_MODE_NTSC_J, "NTSC-J" },
+> > +	{ DRM_MODE_TV_MODE_PAL, "PAL" },
+> > +	{ DRM_MODE_TV_MODE_PAL_M, "PAL-M" },
+> > +	{ DRM_MODE_TV_MODE_PAL_N, "PAL-N" },
+> > +	{ DRM_MODE_TV_MODE_SECAM, "SECAM" },
+> > +};
+>=20
+> Nack. It sounds a very bad idea to have standards as generic as=20
+> NTSC, PAL, SECAM.=20
+>=20
+> If you take a look at the CCIR/ITU-R specs that define video standards,=
+=20
+> you'll see that the standard has actually two components:
+>=20
+> 1. the composite color TV signal: PAL, NTSC, SECAM, defined in ITU-R BT17=
+00[1]
+>=20
+> 2. and the conventional analogue TV (the "monochromatic" part),
+> as defined in ITU-R BT.1701[2], which is, basically, a letter from A to N
+> (with some country-specific variants, like Nc). Two of those standards
+> (M and J) are used on Countries with a power grid of 60Hz, as they have
+> a frame rate of either 30fps or 29.997fps.
+>=20
+> [1] https://www.itu.int/rec/R-REC-BT.1700-0-200502-I/en
+> [2] https://www.itu.int/rec/R-REC-BT.1701-1-200508-I/en
+>=20
+> The actual combination is defined within Country-specific laws, which
+> selects a conventional analogue signal with a composite color one.
+>=20
+> So, for instance, US uses NTSC/M (because it uses a 60Hz power grid).
+> There is a 50Hz variant, called NTSC/443 (not used on any Country, but
+> present on some European VCR equipments capable of recording at 25fps,
+> using NTSC).
+>=20
+> Btw, some VCR equipments in US may also have PAL/60 with has the
+> same timings as NTSC, but uses PAL instead.
+>=20
+> What happens is that, in Europe, different PAL standards got used, but:
+>=20
+> - most TV sets and their chipsets were developed to auto-detect and
+>   support the differences between different systems PAL/B, PAL/G, PAL/D,.=
+=2E.
+> - several of those standards have a difference only at the audio
+>   sub-carriers. So, they look identical for the video decoding part.
+> - standards may have a different inter-channel space (it can vary from
+>   5 to 8 MHz) to minimize cross-signal interference.
 
-v9:
-- rewrite changelog and add comment in the code to make it more clear
+We've had that discussion already, at v3:
+https://lore.kernel.org/dri-devel/20220728-rpi-analog-tv-properties-v2-9-45=
+9522d653a7@cerno.tech/
 
-v8:
-- remove tested-by tag suggested by Greg
+AFAICS, we can easily add the extra standards to the properties list if
+and when needed.
 
-v7:
-- fix some spelling problems suggested by Greg, change kernel test robot from reported-by tag to tested-by tag
+So unless you can come up with some practical issues that can't be
+addressed by the current design without a major rework, I don't intend
+to change that.
 
-v6:
-- remove unused var checked by kernel test robot
+Maxime
 
-v5:
-- fix logical issue and remove unnecessary variable suggested by Dimitri Sivanich
+--oacbmgkrlh2j7rjz
+Content-Type: application/pgp-signature; name="signature.asc"
 
-v4:
-- use VM_FAULT_NOPAGE as failure code in gru_fault and -EINVAL in other functions suggested by Yejian
+-----BEGIN PGP SIGNATURE-----
 
-v3:
-- add preempt_enable and use VM_FAULT_NOPAGE as failure code suggested by Yejian
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY3ZK2gAKCRDj7w1vZxhR
+xctUAPwNSfrXHSxkMcmoX9TMuhDfLNnKYS+AeFk5aGfPpAQA6wEA4sHsEUuqbsiH
+5jCNRnrCKpEoOHX55nQPeJoiF3bmigQ=
+=ZS7W
+-----END PGP SIGNATURE-----
 
-v2:
-- commit message changes suggested by Greg
-
-v1: https://lore.kernel.org/lkml/CAJedcCzY72jqgF-pCPtx66vXXwdPn-KMagZnqrxcpWw1NxTLaA@mail.gmail.com/
----
- drivers/misc/sgi-gru/grufault.c  | 15 ++++++++++++---
- drivers/misc/sgi-gru/grumain.c   | 22 ++++++++++++++++++----
- drivers/misc/sgi-gru/grutables.h |  2 +-
- 3 files changed, 31 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/misc/sgi-gru/grufault.c b/drivers/misc/sgi-gru/grufault.c
-index d7ef61e602ed..ff2970fbd644 100644
---- a/drivers/misc/sgi-gru/grufault.c
-+++ b/drivers/misc/sgi-gru/grufault.c
-@@ -647,7 +647,8 @@ int gru_handle_user_call_os(unsigned long cb)
- 	ucbnum = get_cb_number((void *)cb);
- 	if ((cb & (GRU_HANDLE_STRIDE - 1)) || ucbnum >= GRU_NUM_CB)
- 		return -EINVAL;
--
-+
-+again:
- 	gts = gru_find_lock_gts(cb);
- 	if (!gts)
- 		return -EINVAL;
-@@ -656,7 +657,11 @@ int gru_handle_user_call_os(unsigned long cb)
- 	if (ucbnum >= gts->ts_cbr_au_count * GRU_CBR_AU_SIZE)
- 		goto exit;
- 
--	gru_check_context_placement(gts);
-+	if (gru_check_context_placement(gts)) {
-+		gru_unlock_gts(gts);
-+		gru_unload_context(gts, 1);
-+		goto again;
-+	}
- 
- 	/*
- 	 * CCH may contain stale data if ts_force_cch_reload is set.
-@@ -874,7 +879,11 @@ int gru_set_context_option(unsigned long arg)
- 		} else {
- 			gts->ts_user_blade_id = req.val1;
- 			gts->ts_user_chiplet_id = req.val0;
--			gru_check_context_placement(gts);
-+			if (gru_check_context_placement(gts)) {
-+				gru_unlock_gts(gts);
-+				gru_unload_context(gts, 1);
-+				return ret;
-+			}
- 		}
- 		break;
- 	case sco_gseg_owner:
-diff --git a/drivers/misc/sgi-gru/grumain.c b/drivers/misc/sgi-gru/grumain.c
-index 6706ef3c5977..5e5862e6ee6e 100644
---- a/drivers/misc/sgi-gru/grumain.c
-+++ b/drivers/misc/sgi-gru/grumain.c
-@@ -716,9 +716,10 @@ static int gru_check_chiplet_assignment(struct gru_state *gru,
-  * chiplet. Misassignment can occur if the process migrates to a different
-  * blade or if the user changes the selected blade/chiplet.
-  */
--void gru_check_context_placement(struct gru_thread_state *gts)
-+int gru_check_context_placement(struct gru_thread_state *gts)
- {
- 	struct gru_state *gru;
-+	int ret = 0;
- 
- 	/*
- 	 * If the current task is the context owner, verify that the
-@@ -726,15 +727,23 @@ void gru_check_context_placement(struct gru_thread_state *gts)
- 	 * references. Pthread apps use non-owner references to the CBRs.
- 	 */
- 	gru = gts->ts_gru;
-+	/*
-+	 * If gru or gts->ts_tgid_owner isn't initialized properly, return
-+	 * success to indicate that the caller does not need to unload the
-+	 * gru context.The caller is responsible for their inspection and
-+	 * reinitialization if needed.
-+	 */
- 	if (!gru || gts->ts_tgid_owner != current->tgid)
--		return;
-+		return ret;
- 
- 	if (!gru_check_chiplet_assignment(gru, gts)) {
- 		STAT(check_context_unload);
--		gru_unload_context(gts, 1);
-+		ret = -EINVAL;
- 	} else if (gru_retarget_intr(gts)) {
- 		STAT(check_context_retarget_intr);
- 	}
-+
-+	return ret;
- }
- 
- 
-@@ -934,7 +943,12 @@ vm_fault_t gru_fault(struct vm_fault *vmf)
- 	mutex_lock(&gts->ts_ctxlock);
- 	preempt_disable();
- 
--	gru_check_context_placement(gts);
-+	if (gru_check_context_placement(gts)) {
-+		preempt_enable();
-+		mutex_unlock(&gts->ts_ctxlock);
-+		gru_unload_context(gts, 1);
-+		return VM_FAULT_NOPAGE;
-+	}
- 
- 	if (!gts->ts_gru) {
- 		STAT(load_user_context);
-diff --git a/drivers/misc/sgi-gru/grutables.h b/drivers/misc/sgi-gru/grutables.h
-index 8c52776db234..640daf1994df 100644
---- a/drivers/misc/sgi-gru/grutables.h
-+++ b/drivers/misc/sgi-gru/grutables.h
-@@ -632,7 +632,7 @@ extern int gru_user_flush_tlb(unsigned long arg);
- extern int gru_user_unload_context(unsigned long arg);
- extern int gru_get_exception_detail(unsigned long arg);
- extern int gru_set_context_option(unsigned long address);
--extern void gru_check_context_placement(struct gru_thread_state *gts);
-+extern int gru_check_context_placement(struct gru_thread_state *gts);
- extern int gru_cpu_fault_map_id(void);
- extern struct vm_area_struct *gru_find_vma(unsigned long vaddr);
- extern void gru_flush_all_tlb(struct gru_state *gru);
--- 
-2.25.1
-
+--oacbmgkrlh2j7rjz--
