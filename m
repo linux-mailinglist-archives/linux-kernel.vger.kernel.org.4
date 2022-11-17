@@ -2,59 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A06B162D168
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 04:04:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E5F262D170
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 04:07:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234170AbiKQDE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 22:04:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41564 "EHLO
+        id S234170AbiKQDHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 22:07:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233015AbiKQDE1 (ORCPT
+        with ESMTP id S232921AbiKQDHj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 22:04:27 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B80CE58BFF;
-        Wed, 16 Nov 2022 19:04:25 -0800 (PST)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NCPrc4qFDzmVvN;
-        Thu, 17 Nov 2022 11:04:00 +0800 (CST)
-Received: from dggpeml500006.china.huawei.com (7.185.36.76) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 17 Nov 2022 11:04:23 +0800
-Received: from [10.174.178.240] (10.174.178.240) by
- dggpeml500006.china.huawei.com (7.185.36.76) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 17 Nov 2022 11:04:23 +0800
-Subject: Re: [PATCH net] net: nixge: fix potential memory leak in
- nixge_start_xmit()
-To:     Saeed Mahameed <saeed@kernel.org>
-CC:     Francois Romieu <romieu@fr.zoreil.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1668416136-33530-1-git-send-email-zhangchangzhong@huawei.com>
- <Y3IbBCioK1Clt/3a@electric-eye.fr.zoreil.com>
- <21641ba0-3ce1-c409-b513-1bbbaeccaa51@huawei.com> <Y3Vl40BzsL9nFqQv@x130.lan>
-From:   Zhang Changzhong <zhangchangzhong@huawei.com>
-Message-ID: <a84e51e3-3f19-51f3-e4f5-12cfa13aa548@huawei.com>
-Date:   Thu, 17 Nov 2022 11:04:23 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+        Wed, 16 Nov 2022 22:07:39 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586E161BB1
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 19:07:39 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso649913pjt.0
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 19:07:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=pa5UqVHoKtSmMcTtq44P+OTbkS+eAwwWT8kOI+vqzfQ=;
+        b=fGfwLJbYQdy/G/BDCUmvzEKCl86N3TtDPIxkdzCUUG5SxWXmkaqsjH4zxZjm+9EqQ3
+         0DnbmWLdhVLD47jVGlDwt1Qi6cjG3CIXIHP5oC5CQ2zRR7QTACY9/Sb//2HfGoIVou2o
+         lDypdJakoSkMG3OzQNBziXbuuQAqSMTXNI8tHZFEW3YYnLF489LAS1awa1C6y1UBWVUL
+         2dEn1B0NeuQluzDRXry+DZBdotiZsXrloQg00i634wfHsCm6zZ+VSRzNBsejwHT7/IFV
+         fuEAkUYy07DwH+JrjYGkN8EM7flnITG0xEK3F4svo31W7SWMBhULnsAp5qwRqfjTF03S
+         Xx/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pa5UqVHoKtSmMcTtq44P+OTbkS+eAwwWT8kOI+vqzfQ=;
+        b=5RQLyeL99rUgB5WPKSzt0eg9LAd1kyi0APt0Zg/S8blsfANbfae3gZddWcyksTWru9
+         7R3O6gzqaUjYp7zR2nvbSU1Kj1jmX8J1nTp9CkuFt/PjIJ2kKK4m4eqfpnvR8FtFP1e0
+         QOGGCPTP1GjNoG7KNCxfZup8G0krk6oPEEJN73lA4v0QLFUVKZV23AZjXNtXz7yRtY+f
+         yruqiRMvtsu4Ik68rOlC7xjVGfNEferBt8jkh6cjF3+CsyDV31wzMvLbT5grV820Smr8
+         bQqfPNzreeeiTMRr8FHVxKQzVuPBSPRisqw8SfIAyCtrs4Ulh/W5+rjXVlVoKOOPRNpU
+         ARjw==
+X-Gm-Message-State: ANoB5pmfweeZFKVOqz6FILy9xPGQ08kM4jj/S2TaWlfHa1IDhIj7lz4z
+        zQT2hDYNYKTSjWqPnOAB12cpk5vIQ7Hc53MfC1cZ4w==
+X-Google-Smtp-Source: AA0mqf5jM3My1EFwIt/TwMaZZNxkmVEVeIgETQ8NwxHMtyqxBMr0+Vx0ky5+Ys2cY70a/jv7ld+2MVmtsd4eI1eTa5I=
+X-Received: by 2002:a17:90a:ab84:b0:213:343:9873 with SMTP id
+ n4-20020a17090aab8400b0021303439873mr6754073pjq.102.1668654458703; Wed, 16
+ Nov 2022 19:07:38 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <Y3Vl40BzsL9nFqQv@x130.lan>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.240]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500006.china.huawei.com (7.185.36.76)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221117002350.2178351-1-seanjc@google.com> <20221117002350.2178351-2-seanjc@google.com>
+In-Reply-To: <20221117002350.2178351-2-seanjc@google.com>
+From:   Reiji Watanabe <reijiw@google.com>
+Date:   Wed, 16 Nov 2022 19:07:22 -0800
+Message-ID: <CAAeT=Fx1u=H=5xvmaPxnv4osNwAqNT5c_K1XTfwT0HiPucn+gg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] KVM: arm64: selftests: Disable single-step with
+ correct KVM define
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,52 +73,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/17 6:36, Saeed Mahameed wrote:
-> On 15 Nov 21:20, Zhang Changzhong wrote:
->> On 2022/11/14 18:40, Francois Romieu wrote:
->>> Zhang Changzhong <zhangchangzhong@huawei.com> :
->>>> The nixge_start_xmit() returns NETDEV_TX_OK but does not free skb on two
->>>> error handling cases, which can lead to memory leak.
->>>>
->>>> To fix this, return NETDEV_TX_BUSY in case of nixge_check_tx_bd_space()
->>>> fails and add dev_kfree_skb_any() in case of dma_map_single() fails.
->>>
->>> This patch merge two unrelated changes. Please split.
->>>
->>>> Fixes: 492caffa8a1a ("net: ethernet: nixge: Add support for National Instruments XGE netdev")
->>>> Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
->>>> ---
->>>>  drivers/net/ethernet/ni/nixge.c | 6 ++++--
->>>>  1 file changed, 4 insertions(+), 2 deletions(-)
->>>>
->>>> diff --git a/drivers/net/ethernet/ni/nixge.c b/drivers/net/ethernet/ni/nixge.c
->>>> index 19d043b593cc..b9091f9bbc77 100644
->>>> --- a/drivers/net/ethernet/ni/nixge.c
->>>> +++ b/drivers/net/ethernet/ni/nixge.c
->>>> @@ -521,13 +521,15 @@ static netdev_tx_t nixge_start_xmit(struct sk_buff *skb,
->>>>      if (nixge_check_tx_bd_space(priv, num_frag)) {
->>>>          if (!netif_queue_stopped(ndev))
->>>>              netif_stop_queue(ndev);
->>>> -        return NETDEV_TX_OK;
->>>> +        return NETDEV_TX_BUSY;
->>>>      }
->>>
->>> The driver should probably check the available room before returning
->>> from hard_start_xmit and turn the check above unlikely().
->>>
->>> Btw there is no lock and the Tx completion is irq driven: the driver
->>> is racy. :o(
->>>
->>
->> Hi Francois,
->>
->> Thanks for you review. I'll make v2 according to your suggestion.
->>
-> 
-> you will probably need to check out: Transmit path guidelines:
-> https://www.kernel.org/doc/Documentation/networking/driver.rst
-> 
+On Wed, Nov 16, 2022 at 4:24 PM Sean Christopherson <seanjc@google.com> wrote:
+>
+> Disable single-step by setting debug.control to KVM_GUESTDBG_ENABLE,
+> not to SINGLE_STEP_DISABLE.  The latter is an arbitrary test enum that
+> just happens to have the same value as KVM_GUESTDBG_ENABLE, and so
+> effectively disables single-step debug.
+>
+> No functional change intended.
+>
+> Cc: Reiji Watanabe <reijiw@google.com>
+> Fixes: b18e4d4aebdd ("KVM: arm64: selftests: Add a test case for KVM_GUESTDBG_SINGLESTEP")
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  tools/testing/selftests/kvm/aarch64/debug-exceptions.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/kvm/aarch64/debug-exceptions.c b/tools/testing/selftests/kvm/aarch64/debug-exceptions.c
+> index 947bd201435c..91f55b45dfc7 100644
+> --- a/tools/testing/selftests/kvm/aarch64/debug-exceptions.c
+> +++ b/tools/testing/selftests/kvm/aarch64/debug-exceptions.c
+> @@ -369,7 +369,7 @@ void test_single_step_from_userspace(int test_cnt)
+>                                                 KVM_GUESTDBG_SINGLESTEP;
+>                                 ss_enable = true;
+>                         } else {
+> -                               debug.control = SINGLE_STEP_DISABLE;
+> +                               debug.control = KVM_GUESTDBG_ENABLE;
 
-Thank! This document is very helpful.
+Reviewed-by: Reiji Watanabe <reijiw@google.com>
 
-> .
+Maybe I originally wanted to set it to 0:)
+There is no issue with KVM_GUESTDBG_ENABLE at all,
+as KVM_GUESTDBG_SINGLESTEP is cleared with that.
+
+Thank you for fixing this!
+
+Thanks,
+Reiji
+
+
+>                                 ss_enable = false;
+>                         }
+>
+> --
+> 2.38.1.431.g37b22c650d-goog
+>
