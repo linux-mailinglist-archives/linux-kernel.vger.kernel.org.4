@@ -2,294 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFF9262E345
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:39:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E6AF62E34D
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:40:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240324AbiKQRjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 12:39:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57876 "EHLO
+        id S234784AbiKQRkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 12:40:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233439AbiKQRiq (ORCPT
+        with ESMTP id S233439AbiKQRkM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 12:38:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08C85B4A0;
-        Thu, 17 Nov 2022 09:38:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F997621DA;
-        Thu, 17 Nov 2022 17:38:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34DD5C43146;
-        Thu, 17 Nov 2022 17:38:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668706710;
-        bh=ggzU7u09LLXVEK7H5l5kNbttSfGBUQn5Cxm4kEPkMfE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MmuGE7JFr7IjWILXQCZeb2lBDp74W9L+9YxV1e7r7255dfY3x0X2qs9KtjDVA3ODP
-         X4uI2I2QOxv9r/syqNuwuRjxW2IkO6HhLB/s/57+hxyiMng9e5YSia/UgnetGIs2IH
-         Sbo/kLlFM9FpjbEy7MB/dFedwW2ORawWPZgmCUrFx/6iAw0LkOXZ0w8iGDTVsKyTGw
-         rI7OTpz/AcS+eZi9ZjtYlxXPDfCBpruK7I/Gijk1Vi8X/gXjL3O9GEX1OfvHStjqqW
-         IQJLmNOQOkA1uPJvzaUSK/e2h/TpW3jUmeQmk/KOh7NA/Rvn7Igs2Rcl9/1nxYZhoN
-         rCuvrWMTuIDqw==
-Date:   Thu, 17 Nov 2022 17:38:26 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v12 1/2] pwm: add microchip soft ip corePWM driver
-Message-ID: <Y3Zxkt3OSPQc46Q2@spud>
-References: <20221110093512.333881-1-conor.dooley@microchip.com>
- <20221110093512.333881-2-conor.dooley@microchip.com>
- <20221117164950.cssukd63fywzuwua@pengutronix.de>
+        Thu, 17 Nov 2022 12:40:12 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5C9C1118
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 09:40:10 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id 7so2696798ybp.13
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 09:40:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=AKl1hHI5se5hw6UJ9agcMcck6mPAULEqYlgEMH+yNFQ=;
+        b=Nbf/olEfLZZXz7uiFTazHgrt6PaxZPZNdS17D5K2J6t9KQIhcV+YJjWktIXwgjlTY0
+         GpuiEnVuIIP16rXL/3UbqClkbwxNCZrqzxScSlrZvLP42fuOr8KHRjAguMSSGODsgO3E
+         /fsoB0TbOFNEtFPXrEqvkEgo7nSdpnV22auDYH5pLwzZ87DEOy5Cf2ivZtCDwIhXk0Eb
+         x6+nYZAbCiRu1pxIB1t1ONlwggxNrmOTnUSmjPLsEdS+e9vJkZR8dWcOrYrcHKKgw5E7
+         HahCGTyComxOFcxrBBsX9VJWEwWA4Q2sWGTv1JkwK9NcWx8i+fxMsrczZWZaoL+5zpc4
+         hyxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AKl1hHI5se5hw6UJ9agcMcck6mPAULEqYlgEMH+yNFQ=;
+        b=ILcOrq7Hr1E/CbaedCOja48tbWMLOmDTsSfUQLx7GFY4PpDCifxow1h4rXIaEMAWoQ
+         ytTMgZSibF815JwAopfBwPXZbPm5GK7Vw9fmPtjv9oaDfsDb1a54NL6KNGqmrlC2WV1P
+         ULy8qHN4gaW+z4fxLDPNr5e2GeTq6kqtANmQCEuItOgxpclM8wfsHFXs7a/f/+y7vZfJ
+         QpaEXK2Jw1UHNXBz2/qruPTkMr8jg1qHIzjlpJg+zFBkXybBpuf0yZq7JksB7FA3yfj6
+         qvtEO1a/RxGWFGnmpHI/DHWs3NJyyVQe9gBeqAvohSG4C6iWz74fXzCGPgbyNaVkeClg
+         giyg==
+X-Gm-Message-State: ANoB5pnC2lETrHwePqk9rsWsTQJJfGMNp5RaxZePEnujkHqLdLy6VwmD
+        mkJYj4QP65wwl1RIM9MROoGqt/2g/CqWLmJLv8fS6qEQ0iE=
+X-Google-Smtp-Source: AA0mqf6uttxSWotz+Oayev08TSggx/5dMxILtzURgKDg1t+nWq4ImxvQ68Ne+mSpn5oyL8Ufjg4XsybtkACdF+cJR5c=
+X-Received: by 2002:a05:6902:11cd:b0:6e7:f2ba:7c0f with SMTP id
+ n13-20020a05690211cd00b006e7f2ba7c0fmr1182001ybu.55.1668706809796; Thu, 17
+ Nov 2022 09:40:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221117164950.cssukd63fywzuwua@pengutronix.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221117031551.1142289-1-joel@joelfernandes.org>
+ <20221117031551.1142289-3-joel@joelfernandes.org> <CANn89i+gKVdveEtR9DX15Xr7E9Nn2my6SEEbXTMmxbqtezm2vg@mail.gmail.com>
+ <Y3ZaH4C4omQs1OR4@google.com> <CANn89iJRhr8+osviYKVYhcHHk5TnQQD53x87-WG3iTo4YNa0qA@mail.gmail.com>
+ <CAEXW_YRULY2KzMtkv+KjA_hSr1tSKhQLuCt-RrOkMLjjwAbwKg@mail.gmail.com>
+In-Reply-To: <CAEXW_YRULY2KzMtkv+KjA_hSr1tSKhQLuCt-RrOkMLjjwAbwKg@mail.gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Thu, 17 Nov 2022 09:39:57 -0800
+Message-ID: <CANn89i+9XRh+p-ZiyY_VKy=EcxEyg+3AdtruMnj=KCgXF7QtoQ@mail.gmail.com>
+Subject: Re: [PATCH rcu/dev 3/3] net: Use call_rcu_flush() for dst_destroy_rcu
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     linux-kernel@vger.kernel.org, Cong Wang <xiyou.wangcong@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Jiri Pirko <jiri@resnulli.us>, netdev@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>, rcu@vger.kernel.org,
+        rostedt@goodmis.org, paulmck@kernel.org, fweisbec@gmail.com,
+        jiejiang@google.com, Thomas Glexiner <tglx@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 05:49:50PM +0100, Uwe Kleine-König wrote:
-> Hello Conor,
-
-Hello Uwe,
-
-> On Thu, Nov 10, 2022 at 09:35:12AM +0000, Conor Dooley wrote:
-> > [...]
-> > +
-> > +static void mchp_core_pwm_enable(struct pwm_chip *chip, struct pwm_device *pwm,
-> > +				 bool enable, u64 period)
-> > +{
-> > +	struct mchp_core_pwm_chip *mchp_core_pwm = to_mchp_core_pwm(chip);
-> > +	u8 channel_enable, reg_offset, shift;
-> > +
-> > +	/*
-> > +	 * There are two adjacent 8 bit control regs, the lower reg controls
-> > +	 * 0-7 and the upper reg 8-15. Check if the pwm is in the upper reg
-> > +	 * and if so, offset by the bus width.
-> > +	 */
-> > +	reg_offset = MCHPCOREPWM_EN(pwm->hwpwm >> 3);
-> > +	shift = pwm->hwpwm & 7;
-> > +
-> > +	channel_enable = readb_relaxed(mchp_core_pwm->base + reg_offset);
-> > +	channel_enable &= ~(1 << shift);
-> > +	channel_enable |= (enable << shift);
-> > +
-> > +	writel_relaxed(channel_enable, mchp_core_pwm->base + reg_offset);
-> > +	mchp_core_pwm->channel_enabled &= ~BIT(pwm->hwpwm);
-> > +	mchp_core_pwm->channel_enabled |= enable << pwm->hwpwm;
-> > +
-> > +	/*
-> > +	 * Notify the block to update the waveform from the shadow registers.
-> > +	 * The updated values will not appear on the bus until they have been
-> > +	 * applied to the waveform at the beginning of the next period. We must
-> > +	 * write these registers and wait for them to be applied before
-> > +	 * considering the channel enabled.
-> > +	 * If the delay is under 1 us, sleep for at least 1 us anyway.
-> > +	 */
-> > +	if (mchp_core_pwm->sync_update_mask & (1 << pwm->hwpwm)) {
-> > +		u64 delay;
-> > +
-> > +		delay = div_u64(period, 1000u) ? : 1u;
-> > +		writel_relaxed(1U, mchp_core_pwm->base + MCHPCOREPWM_SYNC_UPD);
-> > +		usleep_range(delay, delay * 2);
-> > +	}
-> 
-> In some cases the delay could be prevented. e.g. when going from one
-> disabled state to another. If you don't want to complicate the driver
-> here, maybe point it out in a comment at least?
-
-Maybe this is my naivity talking, but I'd rather wait. Is there not the
-chance that we re-enter pwm_apply() before the update has actually gone
-through?
-IIRC, but I'll have to confirm it, when the "shadow registers" are
-enabled reads show the values that the hardware is using rather than the
-values that are queued in the shadow registers. I'd rather avoid that
-sort of mess and always sleep.
-
-Now that I think of it, the reason I moved to unconditionally sleeping
-was that if I turned on the PWM debugging it'd get tripped up. When it
-tried to read the state, it got the old one rather than what'd just been
-written.
-
-Pasting my comment from above:
-> > +	/*
-> > +	 * Notify the block to update the waveform from the shadow registers.
-> > +	 * The updated values will not appear on the bus until they have been
-
-By "bus" in this statement, I meant on the AXI/AHB etc bus that the IP
-core is connected to the CPUs on rather than the output. Perhaps my
-wording of the comment could be improved and replace the word "bus" with
-some wording containing "CPU" instead. "The updated values will not
-appear to the CPU until" maybe.
-
-I can also add some words relating to unconditionally sleeping w.r.t to
-disabled states.
-
-> > +	 * applied to the waveform at the beginning of the next period. We must
-> > +	 * write these registers and wait for them to be applied before
-> > +	 * considering the channel enabled.
-> > +	 * If the delay is under 1 us, sleep for at least 1 us anyway.
-> > +	 */
-
-> It's not well defined if pwm_apply should only return when the new
-> setting is actually active. (e.g. mxs doesn't wait)
-> So I wonder: Are there any hardware restrictions between setting the
-> SYNC_UPD flag and modifying the registers for duty and period? (I assume
-> writing a new duty and period might then result in a glitch if the
-> period just ends between the two writes.) Can you check if the hardware
-> waits on such a completion, e.g. by reading that register?
-
-Not entirely sure by what you mean: "waits on such a completion".
-The hardware updates the registers at the first end-of-period after
-SYNC_UPD is set. Don't write the bit, nothing happens. From the docs:
-
-> > A shadow register holds all values and writes them when the SYNC_UPDATE
-> > register is set to 1. In other words, for all channel synchronous
-> > updates, write a "1" to the SYNC_UPDATE register after writing to all
-> > the channel registers.
-
-The docs also say:
-> > SYNC_UPDATE: When this bit is set to "1" and SHADOW_REG_EN
-> > is selected, all POSEDGE and NEGEDGE registers are updated
-> > synchronously. Synchronous updates to the PWM waveform occur only
-> > when SHADOW_REG_EN is asserted and SYNC_UPDATE is set to “1”.
+On Thu, Nov 17, 2022 at 9:38 AM Joel Fernandes <joel@joelfernandes.org> wrote:
+>
+> On Thu, Nov 17, 2022 at 5:17 PM Eric Dumazet <edumazet@google.com> wrote:
 > >
-> > When this bit is set to "0", all the POSEDGE and NEGEDGE registers
-> > are updated asynchronously
+> > On Thu, Nov 17, 2022 at 7:58 AM Joel Fernandes <joel@joelfernandes.org> wrote:
+> > >
+> > > Hello Eric,
+> > >
+> > > On Wed, Nov 16, 2022 at 07:44:41PM -0800, Eric Dumazet wrote:
+> > > > On Wed, Nov 16, 2022 at 7:16 PM Joel Fernandes (Google)
+> > > > <joel@joelfernandes.org> wrote:
+> > > > >
+> > > > > In a networking test on ChromeOS, we find that using the new CONFIG_RCU_LAZY
+> > > > > causes a networking test to fail in the teardown phase.
+> > > > >
+> > > > > The failure happens during: ip netns del <name>
+> > > >
+> > > > And ? What happens then next ?
+> > >
+> > > The test is doing the 'ip netns del <name>' and then polling for the
+> > > disappearance of a network interface name for upto 5 seconds. I believe it is
+> > > using netlink to get a table of interfaces. That polling is timing out.
+> > >
+> > > Here is some more details from the test's owner (copy pasting from another
+> > > bug report):
+> > > In the cleanup, we remove the netns, and thus will cause the veth pair being
+> > > removed automatically, so we use a poll to check that if the veth in the root
+> > > netns still exists to know whether the cleanup is done.
+> > >
+> > > Here is a public link to the code that is failing (its in golang):
+> > > https://source.chromium.org/chromiumos/chromiumos/codesearch/+/main:src/platform/tast-tests/src/chromiumos/tast/local/network/virtualnet/env/env.go;drc=6c2841d6cc3eadd23e07912ec331943ee33d7de8;l=161
+> > >
+> > > Here is a public link to the line of code in the actual test leading up to the above
+> > > path (this is the test that is run:
+> > > network.RoutingFallthrough.ipv4_only_primary) :
+> > > https://source.chromium.org/chromiumos/chromiumos/codesearch/+/main:src/platform/tast-tests/src/chromiumos/tast/local/bundles/cros/network/routing_fallthrough.go;drc=8fbf2c53960bc8917a6a01fda5405cad7c17201e;l=52
+> > >
+> > > > > Using ftrace, I found the callbacks it was queuing which this series fixes. Use
+> > > > > call_rcu_flush() to revert to the old behavior. With that, the test passes.
+> > > >
+> > > > What is this test about ? What barrier was used to make it not flaky ?
+> > >
+> > > I provided the links above, let me know if you have any questions.
+> > >
+> > > > Was it depending on some undocumented RCU behavior ?
+> > >
+> > > This is a new RCU feature posted here for significant power-savings on
+> > > battery-powered devices:
+> > > https://lore.kernel.org/rcu/20221017140726.GG5600@paulmck-ThinkPad-P17-Gen-1/T/#m7a54809b8903b41538850194d67eb34f203c752a
+> > >
+> > > There is also an LPC presentation about the same, I can dig the link if you
+> > > are interested.
+> > >
+> > > > Maybe adding a sysctl to force the flush would be better for functional tests ?
+> > > >
+> > > > I would rather change the test(s), than adding call_rcu_flush(),
+> > > > adding merge conflicts to future backports.
+> > >
+> > > I am not too sure about that, I think a user might expect the network
+> > > interface to disappear from the networking tables quickly enough without
+> > > dealing with barriers or kernel iternals. However, I added the authors of the
+> > > test to this email in the hopes he can provide is point of views as well.
+> > >
+> > > The general approach we are taking with this sort of thing is to use
+> > > call_rcu_flush() which is basically the same as call_rcu() for systems with
+> > > CALL_RCU_LAZY=n. You can see some examples of that in the patch series link
+> > > above. Just to note, CALL_RCU_LAZY depends on CONFIG_RCU_NOCB_CPU so its only
+> > > Android and ChromeOS that are using it. I am adding Jie to share any input,
+> > > he is from the networking team and knows this test well.
+> > >
+> > >
+> >
+> > I do not know what is this RCU_LAZY thing, but IMO this should be opt-in
+>
+> You should read the links I sent you. We did already try opt-in,
+> Thomas Gleixner made a point at LPC that we should not add new APIs
+> for this purpose and confuse kernel developers.
+>
+> > For instance, only kfree_rcu() should use it.
+>
+> No. Most of the call_rcu() usages are for freeing memory, so the
+> consensus is we should apply this as opt out and fix issues along the
+> way. We already did a lot of research/diligence on seeing which users
+> need conversion.
+>
+> > We can not review hundreds of call_rcu() call sites and decide if
+> > adding arbitrary delays cou hurt .
+>
+> That work has already been done as much as possible, please read the
+> links I sent.
 
-The second statement is at best vague (if the this bit in "when this
-bit" refers to the bit in SHADOW_REG_EN) or contradictory at worse.
-I suspect it's the former meaning, as shadow registers are a per-channel
-thing. I suppose I have to go get some docs changed, **sigh**. It
-doesn't make all that much sense to me, SHADOW_REG_EN is a RTL parameter
-not a register that can be accessed from the AXI interface.
+Oh well. No.
 
-Anyways, back to the topic at hand.. if you were to do the following
-(in really pseudocode form..):
-	write(SYNC_UPD)
-	write(period)
-	<end-of-period>
-	write(duty)
-
-Then the duty cycle would not get updated, ever. At least, per doc
-comment #1 & my "experimental" data. The RTL is rather dumb, since
-AFAICT, this is meant to be cheap to implement in FPGA fabric.
-Hence the default core configuration option is no shadow registers
-& just immediately updates the output, waveform glitches be damned.
-
-Hopefully that all helps?
-
-> > +}
-> > +
-> > [...]
-> > +
-> > +static int mchp_core_pwm_apply_locked(struct pwm_chip *chip, struct pwm_device *pwm,
-> > +				      const struct pwm_state *state)
-> > +{
-> > +	struct mchp_core_pwm_chip *mchp_core_pwm = to_mchp_core_pwm(chip);
-> > +	struct pwm_state current_state = pwm->state;
-> 
-> You're doing a copy of pwm->state just to use one of the members to pass
-> it to mchp_core_pwm_enable.
-
-Fallout from refactoring I assume. I'll drop it.
-
-> > +	bool period_locked;
-> > +	u64 duty_steps, clk_rate;
-> 
-> I think using unsigned long for clk_rate would be beneficial. The
-> comparison against NSEC_PER_SEC might get cheaper (depending on how
-> clever the compiler is), and calling mchp_core_pwm_calc_period
-> should get cheaper, too. (At least on 32 bit archs.)
-
-Sure.
-
-> > +	u16 prescale;
-> > +	u8 period_steps;
-> > +
-> > +	if (!state->enabled) {
-> > +		mchp_core_pwm_enable(chip, pwm, false, current_state.period);
-> > +		return 0;
-> > +	}
-> > +
-> > +	/*
-> > +	 * If clk_rate is too big, the following multiplication might overflow.
-> > +	 * However this is implausible, as the fabric of current FPGAs cannot
-> > +	 * provide clocks at a rate high enough.
-> > +	 */
-> > +	clk_rate = clk_get_rate(mchp_core_pwm->clk);
-> > +	if (clk_rate >= NSEC_PER_SEC)
-> > +		return -EINVAL;
-> > +
-> > +	mchp_core_pwm_calc_period(state, clk_rate, &prescale, &period_steps);
-> > +
-> > +	/*
-> > +	 * If the only thing that has changed is the duty cycle or the polarity,
-> > +	 * we can shortcut the calculations and just compute/apply the new duty
-> > +	 * cycle pos & neg edges
-> > +	 * As all the channels share the same period, do not allow it to be
-> > +	 * changed if any other channels are enabled.
-> > +	 * If the period is locked, it may not be possible to use a period
-> > +	 * less than that requested. In that case, we just abort.
-> > +	 */
-> > +	period_locked = mchp_core_pwm->channel_enabled & ~(1 << pwm->hwpwm);
-> > +
-> > +	if (period_locked) {
-> > +		u16 hw_prescale;
-> > +		u8 hw_period_steps;
-> > +
-> > +		hw_prescale = readb_relaxed(mchp_core_pwm->base + MCHPCOREPWM_PRESCALE);
-> > +		hw_period_steps = readb_relaxed(mchp_core_pwm->base + MCHPCOREPWM_PERIOD);
-> > +
-> > +		if ((period_steps + 1) * (prescale + 1) <
-> > +		    (hw_period_steps + 1) * (hw_prescale + 1))
-> > +			return -EINVAL;
-> > +
-> > +		/*
-> > +		 * It is possible that something could have set the period_steps
-> > +		 * register to 0xff, which would prevent us from setting a 100%
-> > +		 * or 0% relative duty cycle, as explained above in
-> > +		 * mchp_core_pwm_calc_period().
-> > +		 * The period is locked and we cannot change this, so we abort.
-> > +		 */
-> > +		if (hw_period_steps == MCHPCOREPWM_PERIOD_STEPS_MAX)
-> > +			return -EINVAL;
-> > +
-> > +		prescale = hw_prescale;
-> > +		period_steps = hw_period_steps;
-> > +	} else {
-> > +		mchp_core_pwm_apply_period(mchp_core_pwm, prescale, period_steps);
-> > +	}
-> > +
-> > +	duty_steps = mchp_core_pwm_calc_duty(state, clk_rate, prescale, period_steps);
-> > +
-> > +	/*
-> > +	 * Because the period is per channel, it is possible that the requested
-> > +	 * duty cycle is longer than the period, in which case cap it to the
-> > +	 * period, IOW a 100% duty cycle.
-> > +	 */
-> > +	if (duty_steps > period_steps)
-> > +		duty_steps = period_steps + 1;
-> > +
-> > +	mchp_core_pwm_apply_duty(chip, pwm, state, duty_steps, period_steps);
-> > +
-> > +	mchp_core_pwm_enable(chip, pwm, true, state->period);
-> 
-> Don't you need to pass the previously configured period here?
-
-Yeah, should be current_state. Thanks.
-
-Conor.
-
+I will leave it to other folks dealing with this crazy thing.
