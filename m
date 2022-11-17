@@ -2,109 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6B7162DCB9
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:27:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10DA162DCB6
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:27:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239730AbiKQN1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 08:27:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44122 "EHLO
+        id S240059AbiKQN0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 08:26:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234551AbiKQN1U (ORCPT
+        with ESMTP id S234146AbiKQN0s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 08:27:20 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C892C18B1E
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 05:27:19 -0800 (PST)
-Received: from [192.168.1.104] (unknown [103.251.226.79])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E6365929;
-        Thu, 17 Nov 2022 14:27:12 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1668691636;
-        bh=ksqVn1M+K1UPnIgTVAJW3Motav4KyH3E0VO3VHEyo3I=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Fh/yu3+PaERnKVO0zP0zvkr7mnGBIfr3P1363lnM+XTNh9X+U/4XhSVu1t/Vp8TCR
-         zoLLxelzj00eMk5CGkZ1yGFVSGXDwiEvNgUl+sr0i0q5CUNwrHd/C1WuyQLaUv6IVq
-         LUrocBTf+aCZVJaHICZEJYR+P8eDfA791DSqcAbk=
-Message-ID: <5f139eeb-24cc-85c1-34b6-f1334313839f@ideasonboard.com>
-Date:   Thu, 17 Nov 2022 18:57:07 +0530
+        Thu, 17 Nov 2022 08:26:48 -0500
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 007D559FF0
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 05:26:46 -0800 (PST)
+Received: by mail-qt1-x82d.google.com with SMTP id c15so1008174qtw.8
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 05:26:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KZKDGywksPC2VKoAr50lKKIAMxnyrxtKe798RUQ67C8=;
+        b=nW22d0AkvFDqi0/36i4jyFmsCYj+HPbm4fDGwpKz9UhyCY33HEmokqBTgN+fehY1ou
+         +zi3rxyzFMSOlFyNHHnT7/wFf0mGNvjAUwSOzLEdqu0FhUwsg93a+fvASIpddmOybBT6
+         DPQXtRhVjcRaefRIp86JeA2bvEW+zSxVoGDCjZqKATjKKQQ3DxwAla1kZ6sLAkUwWu+5
+         GgJ9tWVFNm8hNfjQ5qh5WNbV7CAvTXzK4193PWX3ia++2gQXEgIaAqGYVc8mXaFz1Caz
+         Y3RjPADGlZli6DhCkkBJo+p3B2dm4dSQ5wCipPsS65SZFRqTvdF9vaTzmKg4x6x8aVR0
+         vdsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KZKDGywksPC2VKoAr50lKKIAMxnyrxtKe798RUQ67C8=;
+        b=n9zoVDPaOORKjh/67N0Vn3h44TCfobjhJf/vk88c6qLimGD6Ly93Qwp5P+vJ5zRoB/
+         4IOY83X7JOgjoqbX5AJcWTIGhLaG0Aoqyh+5muANCLPkn1ziuc8ib6eIhpFtSu+jOmWG
+         Snr5uSGNvpjeU6+YW2e5wQ35zwJzupKD9NQoqxuAARGTyxxVp9DkYsYIdTubdqP7hxjl
+         E1drGbbQ8yavzY+zCv0/+LYs3J3h3G/nlo/9zXjjXeI93Xd0ITr49Qb2RYmjZN/Mpjsf
+         vMlN4Wg0/ZBUK3wvv3SqrKooYIYwlEZNKRnhCrnW+6ms3FpoSBS6yHWzv43bzTmH6OGq
+         Dz/g==
+X-Gm-Message-State: ANoB5pl6kWyQ709ceiU1xFqP+QGjhwrmAIEWdJfICJWgFomOsPNhlddW
+        MUHKDsv3aolpAU0kI7NHAK2pQg==
+X-Google-Smtp-Source: AA0mqf6IJ9TfEi4fdZUSbZrZidog6WqIgbZlNXByL6goS1x+RR8fuxBhuZpaBoyABKyEvDf3soyJWA==
+X-Received: by 2002:a05:622a:410a:b0:3a5:5987:42c6 with SMTP id cc10-20020a05622a410a00b003a5598742c6mr2154192qtb.147.1668691606159;
+        Thu, 17 Nov 2022 05:26:46 -0800 (PST)
+Received: from localhost ([2620:10d:c091:480::1:bc4])
+        by smtp.gmail.com with ESMTPSA id n1-20020a05620a294100b006fa617ac616sm447437qkp.49.2022.11.17.05.26.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 05:26:45 -0800 (PST)
+Date:   Thu, 17 Nov 2022 08:27:09 -0500
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH] proc/meminfo: fix spacing in SecPageTables
+Message-ID: <Y3Y2rUaTPN6e2/EI@cmpxchg.org>
+References: <20221117043247.133294-1-yosryahmed@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH 1/2] staging: vc04_services: mmal-vchiq: Do not assign
- bool to u32
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Stefan Wahren <wahrenst@gmx.net>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kieran.bingham@ideasonboard.com
-References: <20221117125953.88441-1-umang.jain@ideasonboard.com>
- <20221117125953.88441-2-umang.jain@ideasonboard.com>
- <Y3Yziqaj9majJlNl@kroah.com>
-From:   Umang Jain <umang.jain@ideasonboard.com>
-In-Reply-To: <Y3Yziqaj9majJlNl@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221117043247.133294-1-yosryahmed@google.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Thu, Nov 17, 2022 at 04:32:47AM +0000, Yosry Ahmed wrote:
+> SecPageTables has a tab after it instead of a space, this can break
+> fragile parsers that depend on spaces after the stat names.
+> 
+> Fixes: ebc97a ("mm: add NR_SECONDARY_PAGETABLE to count secondary page table uses.")
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
 
-Thanks for the comment,
-
-On 11/17/22 6:43 PM, Greg Kroah-Hartman wrote:
-> On Thu, Nov 17, 2022 at 06:29:52PM +0530, Umang Jain wrote:
->> From: Dave Stevenson <dave.stevenson@raspberrypi.com>
->>
->> struct vchiq_mmal_component.enabled is a u32 type. Do not assign
->> it a bool.
->>
->> Fixes: 640e77466e69 ("staging: mmal-vchiq: Avoid use of bool in structures")
->> Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
->> Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
->> ---
->>   drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
->> index cb921c94996a..17f8ceda87ca 100644
->> --- a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
->> +++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
->> @@ -1773,7 +1773,7 @@ int vchiq_mmal_component_enable(struct vchiq_mmal_instance *instance,
->>   
->>   	ret = enable_component(instance, component);
->>   	if (ret == 0)
->> -		component->enabled = true;
->> +		component->enabled = 1;
-> Why not make enabled a bool instead?
-
-Makes sense. It would probably require reverting the 640e77466e69 
-("staging: mmal-vchiq: Avoid use of bool in structures")
-
-I'll also find other occurances in vchiq-mmal (if any). Also for other 
-reviewers, I found the context at:
-
-7967656ffbfa ("coding-style: Clarify the expectations around bool")
-
-Thanks,
-
-uajain
-
->
-> thanks,
->
-> greg k-h
-
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>
