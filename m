@@ -2,142 +2,378 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 691DF62D3FD
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 08:21:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 930CD62D3EE
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 08:19:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239268AbiKQHVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 02:21:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57228 "EHLO
+        id S234545AbiKQHT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 02:19:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239263AbiKQHVC (ORCPT
+        with ESMTP id S234761AbiKQHT1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 02:21:02 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50B4F6EB6C;
-        Wed, 16 Nov 2022 23:21:01 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IHdiTMqwLnlrb5Fck6H5/7F+Fz65fQRTK2tahlqd8tq+kjGP4yxHl6vh6fQEtauUhMpA7xyug4Y1o+uVrWPvprVPFWNERCflemcVDEYpcLv1uWsvHVC7m9pngH1/4/+dBwg2k8/Z33KDVt0ag1ci76UWukXXWYLFwUTNoyeb4q/OnLbvn0BW1KbFtzRem+I2mknzQTNFXpfdWQan+yygP6ExTrBTm/pJ38UudkNYzvXTQ51mslxZUQ6W/c2sAFwQxOhV68BdtqMdQjZDX5E94dzrujA1/B9nMPwN1szHcrBCsuG8B6XBu/oPHARugAnTFHPTc5veEAb1NcfA0k19zg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=twNCEF+3Cm30wI7GPDmqmf+pT9ExxrwwuLBiy4lneVs=;
- b=N7WD6PQf9mT1Mwk0s66PkEeZV/i6JbuKqWckbZUMZGkqIdO2wuymXZmBifquhjCROdu1XGbfol6CVQXHom47jG4t2h7cMj80EpsrGtQkyBfkyuDlr9wZ0VuouZMADJjzwgB1+UgpISp/d8yq7ncDwCc1KmWbMOasLOF80NllmnYuty8d6J4hkLbVlVEBkV4ORff5Qif2M5rgXvcnzRpDQN0GWNULaA5XCiowLgoVfIGhyzNMFXeMiHdY2/ATc+D04a3Am0Wcj4Dac4DWIPVoF5PioFEO6yspgV52G9nDbhYX58EjRv/rhWeWyLQiL0375KzNWLWBZVvn5PLqwZyTiA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=twNCEF+3Cm30wI7GPDmqmf+pT9ExxrwwuLBiy4lneVs=;
- b=sLyNlWprdIywhQ0d7lzf9hY/BRUh+a6ptcspjea7ydq0AMFQZBF9tdZSYdx9OMctLIip7tH0GtwXIiIHH9YKEopQBDIt0J47vTtfF8p2/8oQpwbut+rUU+zg6IBiuoydW8/eWkAPFSo6XJszI0FFkMQQ4/pN4fUEGc7CSERpzNQ=
-Received: from MW4PR04CA0332.namprd04.prod.outlook.com (2603:10b6:303:8a::7)
- by DM4PR12MB5232.namprd12.prod.outlook.com (2603:10b6:5:39c::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.20; Thu, 17 Nov
- 2022 07:20:59 +0000
-Received: from CO1NAM11FT098.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:8a:cafe::8f) by MW4PR04CA0332.outlook.office365.com
- (2603:10b6:303:8a::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.18 via Frontend
- Transport; Thu, 17 Nov 2022 07:20:58 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT098.mail.protection.outlook.com (10.13.174.207) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5834.8 via Frontend Transport; Thu, 17 Nov 2022 07:20:24 +0000
-Received: from pyuan-Cloudripper.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Thu, 17 Nov 2022 01:19:55 -0600
-From:   Perry Yuan <Perry.Yuan@amd.com>
-To:     <rafael.j.wysocki@intel.com>, <ray.huang@amd.com>,
-        <viresh.kumar@linaro.org>, <Mario.Limonciello@amd.com>
-CC:     <Nathan.Fontenot@amd.com>, <Alexander.Deucher@amd.com>,
-        <Deepak.Sharma@amd.com>, <Shimmer.Huang@amd.com>,
-        <Li.Meng@amd.com>, <Xiaojian.Du@amd.com>, <wyes.karny@amd.com>,
-        <gautham.shenoy@amd.com>, <ananth.narayan@amd.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Perry Yuan <Perry.Yuan@amd.com>
-Subject: [PATCH v2 5/5] Documentation: add amd-pstate kernel command line options
-Date:   Thu, 17 Nov 2022 15:19:10 +0800
-Message-ID: <20221117071910.3347052-6-Perry.Yuan@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221117071910.3347052-1-Perry.Yuan@amd.com>
-References: <20221117071910.3347052-1-Perry.Yuan@amd.com>
+        Thu, 17 Nov 2022 02:19:27 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777AB165A4
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 23:19:26 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id k7so822138pll.6
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 23:19:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U2F1Gvqt/Q56rI57EGntvViKlZXpCO31yBDbo9Chm+4=;
+        b=OInrjIJb+zpctma3IvYVArFUeiEyzg2eW2VpGlSGYfRa4spB/NJyuFmt9+YkAEbLxD
+         eVbAWUV6/QzVBBMBNFk0ZBQ0zbk0XCPap3dKrd+59hpOoVwXbfBgPzuxw8aBAHBkQzVr
+         U125oCXOKcMJXCT+FKNHw8WP6uuZxf5UVkpJTF16JXfoUL27tcO6F8nZIBBlc0zKLB07
+         3OwYEEW2iVje+2CVhKYSgmZsJr6p9t4fOmLfFwStJYi0HlqTVbNz3vPgG2HYJNe0A70E
+         8tw8poGlqSBMcksZmvYaxutCbwqoaT9Yp93dWWYEoZc1B4M11OD5O+QsktO7IjgItdu2
+         wlcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=U2F1Gvqt/Q56rI57EGntvViKlZXpCO31yBDbo9Chm+4=;
+        b=lufn2Xz2ePPOOmn1U/inQMn1z4RzlJppynu6vE0RlB7oJY9ln5vD2CTsxWXjOgx1bc
+         JLA8WAVoL5o0tXfV2IuYWcffasEvC5I7sLgO1u2y0NMH1Pew6uhOhtJ0BFnqnqkSJliQ
+         GK3EiMrI3Q9e0UM+NjbeZ+/hJN1WzFDisEpwFSrvjKDf51yYKkKFdazqEybp4pbUpgfP
+         NSjeQhkeNI1qjzWIdhBXC+dSH/jpCvKU4idMqgwYYSYQ8ydFCEPxZUfYX76FaB1fK32F
+         yMFKoDMYdB6UCnPF9pkTcexHOFktrCI1H3HCF1ImJFmJvoiGQwbXWyd7bwc0Y33U2Es/
+         SLzg==
+X-Gm-Message-State: ANoB5pnUGMIyBH6ndAN7k4KqGRCUuJ0ZBftIt0VKtIWtyyg2sk/Vb66b
+        CqYF+y3ixd+tmlMtEcdwnOdYzg==
+X-Google-Smtp-Source: AA0mqf5wEXQHErhBBGxMw+n4hHa0kstF3CSQkP6tE64hX1AHAC8zFohruy5DaoR1XqwZWrNDiAeJsQ==
+X-Received: by 2002:a17:90a:8d14:b0:213:e4:3f57 with SMTP id c20-20020a17090a8d1400b0021300e43f57mr7246449pjo.204.1668669565963;
+        Wed, 16 Nov 2022 23:19:25 -0800 (PST)
+Received: from [10.68.76.92] ([139.177.225.229])
+        by smtp.gmail.com with ESMTPSA id f12-20020a170902684c00b0017808db132bsm427529pln.137.2022.11.16.23.19.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Nov 2022 23:19:25 -0800 (PST)
+Message-ID: <6433156f-34a8-400f-e282-91268b242279@bytedance.com>
+Date:   Thu, 17 Nov 2022 15:19:20 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT098:EE_|DM4PR12MB5232:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4dd7b304-7656-4a04-1289-08dac86c4658
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: o+vurTr6sfEERVlJ1u0aNR3Oaay3DHtH1VkHaSey08ajszMT7UW6tEJG0HfkXgMLnfAkmjV1HjWAq8OnghK8eef4+52/qrYeAQ4GPeAMm7W1wuXUmIm7/B9JhNNw3whEm+5YzkwkUGyhB6kyFueKSFJqZqXpiGMd1UTNvOV/DLQMhO7UUhITVlGchv8KD7Ii0m06ZpxWtxKdNFLBMTyLAfk53EJC7LXwlyuQ2bi1lJqwMck8BfMCQaQ2LGoVHfdThFbYO9lQTCalUkBCVTypiLPvNUi2/FBnGYBBjlSiInHwl9cSQxCaHVycXU5rTGMJceQS1ec14+nvAqYfpAOmS5MKDmVimoNfSO+mGKraqUXf/lA4mXymmzl4JUTt3UaZC5Xuqq7VBcxZC7rSfxLzxlxOf2JyD4NAhGFGqM02GTE/Grur6iWef84y8iag9FyllLqKWdnP8FDFBsC/ZXQTgk7sZXTbX6FhPUWASt5meEojRsLe35kuRM8l6S8TYUa6h9Q7MApGOOPO/pvFBzfZQ6GJ4XIQw+GH82xvZGrvhQl7s6TGGUYh6LKsBG6tZFTS0B6tvI6semqnw2SydnIy7tIe6fY7V8LdYaip0+I1c1jRQepqlTtUdou5K5ONTJjkEV5UGqdaaIpp3jht5tEdrHIBKa5ad5BJJ0wAeWjfpbsGDbFXJb1/MK1ouvB96lbYuJ4fRHj2Hmd/UxSjJTPf8dAQLIedwFPEAzcuCYNRv+4os8mHV1rmWVv1n9WHTBCL
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(396003)(136003)(376002)(451199015)(40470700004)(46966006)(36840700001)(186003)(1076003)(16526019)(40460700003)(5660300002)(336012)(7696005)(110136005)(316002)(54906003)(6636002)(41300700001)(2616005)(8936002)(26005)(70586007)(70206006)(36756003)(8676002)(4326008)(82310400005)(36860700001)(81166007)(356005)(82740400003)(2906002)(40480700001)(83380400001)(47076005)(426003)(86362001)(478600001)(6666004)(36900700001)(2101003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Nov 2022 07:20:24.7634
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4dd7b304-7656-4a04-1289-08dac86c4658
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT098.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5232
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [External] Re: [PATCH v2] mm: add new syscall
+ pidfd_set_mempolicy().
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, corbet@lwn.net,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org
+References: <20221111084051.2121029-1-hezhongkun.hzk@bytedance.com>
+ <20221111112732.30e1696bcd0d5b711c188a9a@linux-foundation.org>
+ <a44f794e-fe60-e261-3631-9107822d5c36@bytedance.com>
+ <Y3IqLzvduM6HqPJV@dhcp22.suse.cz>
+ <3a3b4f5b-14d1-27d8-7727-cf23da90988f@bytedance.com>
+ <Y3KFFfMFE55lVdNZ@dhcp22.suse.cz>
+ <82c9c89c-aee2-08a3-e562-359631bb0137@bytedance.com>
+ <0bd0b744-3d97-b4c3-a4fb-6040f8f8024a@bytedance.com>
+ <Y3T6SqZvAmSG5I6W@dhcp22.suse.cz>
+From:   Zhongkun He <hezhongkun.hzk@bytedance.com>
+In-Reply-To: <Y3T6SqZvAmSG5I6W@dhcp22.suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a new amd pstate driver command line option to enable driver passive
-working mode via MSR and shared memory interface to request desired
-performance within abstract scale and the power management firmware
-(SMU) convert the perf requests into actual hardware pstates.
+Hi Michal, thanks for your replay.
 
-Also the `disable` parameter can disable the pstate driver loading by
-adding `amd_pstate=disable` to kernel command line.
+> 
+> It would be better to add the patch that has been tested.
 
-Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
-Tested-by: Wyes Karny <wyes.karny@amd.com>
-Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
----
- Documentation/admin-guide/kernel-parameters.txt | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+OK.
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index a465d5242774..42af9ca0127e 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -6959,3 +6959,14 @@
- 				memory, and other data can't be written using
- 				xmon commands.
- 			off	xmon is disabled.
+> 
+> One way to deal with that would be to use a similar model as css_tryget
+
+Percpu_ref is a good way to  reduce memory footprint in fast path.But it
+has the potential to make mempolicy heavy. the sizeof mempolicy is 32
+bytes and it may not have a long life time, which duplicated from the
+parent in fork().If we modify atomic_t to percpu_ref, the efficiency of
+reading in fastpath will increase, the efficiency of creation and
+deletion will decrease, and the occupied space will increase
+significantly.I am not really sure it is worth it.
+
+atomic_t; 4
+sizeof(percpu_ref + percpu_ref_data + cpus* unsigned long)
+16+56+cpus*8
+
+> 
+> Btw. have you tried to profile those slowdowns to identify hotspots?
+> 
+> Thanks
+
+Yes, it will degrade performance about 2%-%3 may because of the 
+task_lock and  atomic operations on the reference count as shown
+in the previous email.
+
+new hotspots in perf.
+1.34%  [kernel]          [k] __mpol_put
+0.53%  [kernel]          [k] _raw_spin_lock
+0.44%  [kernel]          [k] get_task_policy
+
+
+Tested patch.
+
+diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+index 8a74cdcc9af0..3f1b5c8329a8 100644
+--- a/fs/proc/task_mmu.c
++++ b/fs/proc/task_mmu.c
+@@ -105,10 +105,7 @@ static void hold_task_mempolicy(struct 
+proc_maps_private *priv)
+  {
+         struct task_struct *task = priv->task;
+
+-       task_lock(task);
+         priv->task_mempolicy = get_task_policy(task);
+-       mpol_get(priv->task_mempolicy);
+-       task_unlock(task);
+  }
+  static void release_task_mempolicy(struct proc_maps_private *priv)
+  {
+diff --git a/include/linux/mempolicy.h b/include/linux/mempolicy.h
+index d232de7cdc56..786481d7abfd 100644
+--- a/include/linux/mempolicy.h
++++ b/include/linux/mempolicy.h
+@@ -62,7 +62,7 @@ struct mempolicy {
+  extern void __mpol_put(struct mempolicy *pol);
+  static inline void mpol_put(struct mempolicy *pol)
+  {
+-       if (pol)
++       if (pol && !(pol->flags & MPOL_F_STATIC))
+                 __mpol_put(pol);
+  }
+
+diff --git a/include/uapi/linux/mempolicy.h b/include/uapi/linux/mempolicy.h
+index 046d0ccba4cd..7c2068163a0c 100644
+--- a/include/uapi/linux/mempolicy.h
++++ b/include/uapi/linux/mempolicy.h
+@@ -63,7 +63,7 @@ enum {
+  #define MPOL_F_SHARED  (1 << 0)        /* identify shared policies */
+  #define MPOL_F_MOF     (1 << 3) /* this policy wants migrate on fault */
+  #define MPOL_F_MORON   (1 << 4) /* Migrate On protnone Reference On 
+Node */
+-
++#define MPOL_F_STATIC (1 << 5)
+  /*
+   * These bit locations are exposed in the vm.zone_reclaim_mode sysctl
+   * ABI.  New bits are OK, but existing bits can never change.
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 546df97c31e4..4cca96a40d04 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -1247,6 +1247,7 @@ static struct page *dequeue_huge_page_vma(struct 
+hstate *h,
+         }
+
+         mpol_cond_put(mpol);
++       mpol_put(mpol);
+         return page;
+
+  err:
+@@ -2316,6 +2317,7 @@ struct page 
+*alloc_buddy_huge_page_with_mpol(struct hstate *h,
+         if (!page)
+                 page = alloc_surplus_huge_page(h, gfp_mask, nid, nodemask);
+         mpol_cond_put(mpol);
++       mpol_put(mpol);
+         return page;
+  }
+
+@@ -2352,6 +2354,7 @@ struct page *alloc_huge_page_vma(struct hstate *h, 
+struct vm_area_struct *vma,
+         node = huge_node(vma, address, gfp_mask, &mpol, &nodemask);
+         page = alloc_huge_page_nodemask(h, node, nodemask, gfp_mask);
+         mpol_cond_put(mpol);
++       mpol_put(mpol);
+
+         return page;
+  }
+diff --git a/mm/mempolicy.c b/mm/mempolicy.c
+index 61aa9aedb728..ea670db6881f 100644
+--- a/mm/mempolicy.c
++++ b/mm/mempolicy.c
+@@ -126,6 +126,7 @@ enum zone_type policy_zone = 0;
+  static struct mempolicy default_policy = {
+         .refcnt = ATOMIC_INIT(1), /* never free it */
+         .mode = MPOL_LOCAL,
++       .flags = MPOL_F_STATIC
+  };
+
+  static struct mempolicy preferred_node_policy[MAX_NUMNODES];
+@@ -160,11 +161,19 @@ EXPORT_SYMBOL_GPL(numa_map_to_online_node);
+
+  struct mempolicy *get_task_policy(struct task_struct *p)
+  {
+-       struct mempolicy *pol = p->mempolicy;
++       struct mempolicy *pol;
+         int node;
+
+-       if (pol)
+-               return pol;
++       if (p->mempolicy)
++       {
++               task_lock(p);
++               pol = p->mempolicy;
++               mpol_get(pol);
++               task_unlock(p);
 +
-+	amd_pstate=	[X86]
-+			disable
-+			  Do not enable amd_pstate as the default
-+			  scaling driver for the supported processors
-+			passive
-+			  Use amd_pstate as a scaling driver, driver requests a
-+			  desired performance on this abstract scale and the power
-+			  management firmware translates the requests into actual
-+			  hardware states (core frequency, data fabric and memory
-+			  clocks etc.)
--- 
-2.25.1
++               if(pol)
++                       return pol;
++       }
 
+         node = numa_node_id();
+         if (node != NUMA_NO_NODE) {
+@@ -1764,10 +1773,12 @@ struct mempolicy *__get_vma_policy(struct 
+vm_area_struct *vma,
+                          * a pseudo vma whose vma->vm_ops=NULL. Take a 
+reference
+                          * count on these policies which will be dropped by
+                          * mpol_cond_put() later
++                        *
++                        * if (mpol_needs_cond_ref(pol))
++                        *      mpol_get(pol);
+                          */
+-                       if (mpol_needs_cond_ref(pol))
+-                               mpol_get(pol);
+                 }
++               mpol_get(pol);
+         }
+
+         return pol;
+@@ -1799,9 +1810,9 @@ static struct mempolicy *get_vma_policy(struct 
+vm_area_struct *vma,
+  bool vma_policy_mof(struct vm_area_struct *vma)
+  {
+         struct mempolicy *pol;
++       bool ret = false;
+
+         if (vma->vm_ops && vma->vm_ops->get_policy) {
+-               bool ret = false;
+
+                 pol = vma->vm_ops->get_policy(vma, vma->vm_start);
+                 if (pol && (pol->flags & MPOL_F_MOF))
+@@ -1812,10 +1823,13 @@ bool vma_policy_mof(struct vm_area_struct *vma)
+         }
+
+         pol = vma->vm_policy;
++       mpol_get(pol);
+         if (!pol)
+                 pol = get_task_policy(current);
++       ret = pol && (pol->flags & MPOL_F_MOF);
++       mpol_put(pol);
+
+-       return pol->flags & MPOL_F_MOF;
++       return ret;
+  }
+
+  bool apply_policy_zone(struct mempolicy *policy, enum zone_type zone)
+@@ -2179,7 +2193,6 @@ struct folio *vma_alloc_folio(gfp_t gfp, int 
+order, struct vm_area_struct *vma,
+                 unsigned nid;
+
+                 nid = interleave_nid(pol, vma, addr, PAGE_SHIFT + order);
+-               mpol_cond_put(pol);
+                 gfp |= __GFP_COMP;
+                 page = alloc_page_interleave(gfp, order, nid);
+                 if (page && order > 1)
+@@ -2194,7 +2207,6 @@ struct folio *vma_alloc_folio(gfp_t gfp, int 
+order, struct vm_area_struct *vma,
+                 node = policy_node(gfp, pol, node);
+                 gfp |= __GFP_COMP;
+                 page = alloc_pages_preferred_many(gfp, order, node, pol);
+-               mpol_cond_put(pol);
+                 if (page && order > 1)
+                         prep_transhuge_page(page);
+                 folio = (struct folio *)page;
+@@ -2219,7 +2231,6 @@ struct folio *vma_alloc_folio(gfp_t gfp, int 
+order, struct vm_area_struct *vma,
+
+                 nmask = policy_nodemask(gfp, pol);
+                 if (!nmask || node_isset(hpage_node, *nmask)) {
+-                       mpol_cond_put(pol);
+                         /*
+                          * First, try to allocate THP only on local 
+node, but
+                          * don't reclaim unnecessarily, just compact.
+@@ -2244,8 +2255,9 @@ struct folio *vma_alloc_folio(gfp_t gfp, int 
+order, struct vm_area_struct *vma,
+         nmask = policy_nodemask(gfp, pol);
+         preferred_nid = policy_node(gfp, pol, node);
+         folio = __folio_alloc(gfp, order, preferred_nid, nmask);
+-       mpol_cond_put(pol);
+  out:
++       mpol_cond_put(pol);
++       mpol_put(pol);
+         return folio;
+  }
+  EXPORT_SYMBOL(vma_alloc_folio);
+@@ -2286,6 +2298,7 @@ struct page *alloc_pages(gfp_t gfp, unsigned order)
+                                 policy_node(gfp, pol, numa_node_id()),
+                                 policy_nodemask(gfp, pol));
+
++       mpol_put(pol);
+         return page;
+  }
+  EXPORT_SYMBOL(alloc_pages);
+@@ -2365,21 +2378,23 @@ unsigned long 
+alloc_pages_bulk_array_mempolicy(gfp_t gfp,
+                 unsigned long nr_pages, struct page **page_array)
+  {
+         struct mempolicy *pol = &default_policy;
++       unsigned long allocated;
+
+         if (!in_interrupt() && !(gfp & __GFP_THISNODE))
+                 pol = get_task_policy(current);
+
+-       if (pol->mode == MPOL_INTERLEAVE)
+-               return alloc_pages_bulk_array_interleave(gfp, pol,
++       if (pol->mode == MPOL_INTERLEAVE) {
++               allocated =  alloc_pages_bulk_array_interleave(gfp, pol,
+                                                          nr_pages, 
+page_array);
+-
+-       if (pol->mode == MPOL_PREFERRED_MANY)
+-               return alloc_pages_bulk_array_preferred_many(gfp,
++       } else if (pol->mode == MPOL_PREFERRED_MANY)
++               allocated = alloc_pages_bulk_array_preferred_many(gfp,
+                                 numa_node_id(), pol, nr_pages, page_array);
+-
+-       return __alloc_pages_bulk(gfp, policy_node(gfp, pol, 
+numa_node_id()),
++       else
++              allocated = __alloc_pages_bulk(gfp, policy_node(gfp, pol, 
+numa_node_id()),
+                                   policy_nodemask(gfp, pol), nr_pages, 
+NULL,
+                                   page_array);
++       mpol_put(pol);
++       return allocated;
+  }
+
+  int vma_dup_policy(struct vm_area_struct *src, struct vm_area_struct *dst)
+@@ -2636,6 +2651,7 @@ int mpol_misplaced(struct page *page, struct 
+vm_area_struct *vma, unsigned long
+                 ret = polnid;
+  out:
+         mpol_cond_put(pol);
++       mpol_put(pol);
+
+         return ret;
+  }
+@@ -2917,7 +2933,7 @@ void __init numa_policy_init(void)
+                 preferred_node_policy[nid] = (struct mempolicy) {
+                         .refcnt = ATOMIC_INIT(1),
+                         .mode = MPOL_PREFERRED,
+-                       .flags = MPOL_F_MOF | MPOL_F_MORON,
++                       .flags = MPOL_F_MOF | MPOL_F_MORON | MPOL_F_STATIC,
+                         .nodes = nodemask_of_node(nid),
+                 };
+         }
