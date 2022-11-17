@@ -2,222 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C4EB62DAE3
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 13:30:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A6DA62DAD3
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 13:29:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240167AbiKQMaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 07:30:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52728 "EHLO
+        id S239618AbiKQM3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 07:29:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231634AbiKQM3G (ORCPT
+        with ESMTP id S240188AbiKQM2t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 07:29:06 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBE2F725D7
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 04:28:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668688132; x=1700224132;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=IWN+Jc3bIdcog99k6C0X9y70oAbhT4EqrD0N2igtiLI=;
-  b=OYb2zRG3JKMyjTXGN2TZn22p5Gx3M/KRkiHMf+2o/kb4sS/TaXrPJx7Z
-   5EeVLKBegohq8pRhAzHOrfsksFe0g2K4EH5Y2U+7zeDTESSRyl9jLL/Yq
-   4Jz/9eJ9gLaL4/ims+ymz7/KmQSRQ95y/ERks0RIF3o3BvVtjLPsRvtXF
-   JjQXuFJXd7x3cA0Btyx/4zcrHYorAMjjQTXCDb5vsqNl1jjMSD8COP1Bz
-   /vbutgWh0lF4L09ZX0/zOgo7vvvbhv6yEH0RFcr0XwlI3K6QugCzclRN/
-   hmiJMq7KCUAx/i5yGIbaw0xczcJv7SY9your/GHfsWKpOLRTQVk+EJX+B
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="296199878"
-X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
-   d="scan'208";a="296199878"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 04:28:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="590604561"
-X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
-   d="scan'208";a="590604561"
-Received: from jfdev013vml03.jf.intel.com ([10.23.26.52])
-  by orsmga003.jf.intel.com with ESMTP; 17 Nov 2022 04:28:47 -0800
-From:   alexander.antonov@linux.intel.com
-To:     peterz@infradead.org, linux-kernel@vger.kernel.org
-Cc:     kan.liang@linux.intel.com, alexey.v.bayduraev@linux.intel.com,
-        alexander.antonov@linux.intel.com
-Subject: [PATCH 11/11] perf/x86/intel/uncore: Make set_mapping() procedure void
-Date:   Thu, 17 Nov 2022 12:28:33 +0000
-Message-Id: <20221117122833.3103580-12-alexander.antonov@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221117122833.3103580-1-alexander.antonov@linux.intel.com>
-References: <20221117122833.3103580-1-alexander.antonov@linux.intel.com>
+        Thu, 17 Nov 2022 07:28:49 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D13C165B6
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 04:28:36 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id bp15so2489236lfb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 04:28:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LaV4zTImQ9m6pb9NhstVvLhblGt5Yc3IF7BX7u0m3cA=;
+        b=HZnrzIGAYGbh+QP2qNAap3x2wWoNfEbQisc3dfbYBg9OeECrBvMO5K0IFvBxZZvlUB
+         4CWmeZxBXjNuJzLO15EVRrKZzCWMlV6t58sQ7IN+1+crJm6P4QYKho9KYH3oHZK5LQvO
+         vwn+n/hQSmLSRxoib57GmS9aq30F3PHiP4DiaZuLXKaIegUQSxnt0LJXhCZgTdSVaq8E
+         dKJbfW3rw5b/3mUFq4K6zVUTj0qO03SCHtF+tiNu3rwwIcDLZeIHTnq+/3Ih8L7WsPYy
+         E+A/aVnnUVEwSFTxyBP9ujnMhAUgvY/lTHUQk1cbEae8o//P2MtSBiKyvcl4pjGrVyI9
+         n8Gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LaV4zTImQ9m6pb9NhstVvLhblGt5Yc3IF7BX7u0m3cA=;
+        b=zp7Ot144mwLlVp8lIQeIFzwGHpSklgiymi4BsFA23paZuHvmwf9kjCQNBDe6ET9Vtk
+         Omvz82bp9Z2NChPwMx2q6Nd37yiHRgCrMxnQgmW57heZ4DRa6cqrX+uqStNwRmXlVub8
+         uFOeEKhH9AAgcFMlkkcnT0c0UhaxjqPNp1VL70lGz1q/IOn5qCwsNF+6amEM6zIP9TAp
+         vcT2BPe/E3tsEpH/99lUGWE0tVLigqd/5iDQvyDOTCo1fxz/ghzmjqETOMDLhHU6IgbJ
+         nYqN9u8aGz7lM6hRxlcNaVlALjZHdV398s/FJp+Tb5U6gxoKgbeApu6Xg68bUN2/Upe/
+         1Q2Q==
+X-Gm-Message-State: ANoB5plbnIc/xDGoJ4+QEJ0J8fry/2Q82cUSEQDesfz4BUUdxr5sVe5p
+        d8NCFBtOoA8wfPwekGj3kktOVQ==
+X-Google-Smtp-Source: AA0mqf5+ZifQCXbi70+2WGQf3dE4b5msdrwfnRA4Y5oqrR/WDBI7n3uYsrARQOWdpgzREgWvze50/w==
+X-Received: by 2002:ac2:4d93:0:b0:4a2:70a5:992f with SMTP id g19-20020ac24d93000000b004a270a5992fmr747564lfe.341.1668688114935;
+        Thu, 17 Nov 2022 04:28:34 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id s22-20020a056512315600b00497a0ea92desm126731lfi.135.2022.11.17.04.28.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Nov 2022 04:28:34 -0800 (PST)
+Message-ID: <a3da2ab9-ad36-2283-0659-ad8ebf877e17@linaro.org>
+Date:   Thu, 17 Nov 2022 13:28:33 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] dt-bindings: iio: adc: qcom,spmi-vadc: fix PM8350 define
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221117121307.264550-1-krzysztof.kozlowski@linaro.org>
+ <20221117122256.GG93179@thinkpad>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221117122256.GG93179@thinkpad>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Antonov <alexander.antonov@linux.intel.com>
+On 17/11/2022 13:22, Manivannan Sadhasivam wrote:
+> On Thu, Nov 17, 2022 at 01:13:07PM +0100, Krzysztof Kozlowski wrote:
+>> The defines from include/dt-bindings/iio/qcom,spmi-adc7-pm8350.h were
+>> changed to take sid argument:
+>>
+>>   Error: Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.example.dts:99.28-29 syntax error
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> Looks like I didn't rebase on top of Bjorn's for-next for my series, so didn't
+> see this example.
+> 
+> Thanks for fixing!
+> 
+> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> 
 
-Return value of set_mapping() is not needed to be checked anymore.
-So, make this procedure void.
+This should not go via Bjorn's tree without IIO ack and
+Jonathan/Lars-Peter/IIO lists were not in CC.
 
-Signed-off-by: Alexander Antonov <alexander.antonov@linux.intel.com>
-Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
----
- arch/x86/events/intel/uncore.h       |  2 +-
- arch/x86/events/intel/uncore_snbep.c | 41 +++++++++++++---------------
- 2 files changed, 20 insertions(+), 23 deletions(-)
-
-diff --git a/arch/x86/events/intel/uncore.h b/arch/x86/events/intel/uncore.h
-index fac3612289f1..e278e2e7c051 100644
---- a/arch/x86/events/intel/uncore.h
-+++ b/arch/x86/events/intel/uncore.h
-@@ -94,7 +94,7 @@ struct intel_uncore_type {
- 	 * Optional callbacks for managing mapping of Uncore units to PMONs
- 	 */
- 	int (*get_topology)(struct intel_uncore_type *type);
--	int (*set_mapping)(struct intel_uncore_type *type);
-+	void (*set_mapping)(struct intel_uncore_type *type);
- 	void (*cleanup_mapping)(struct intel_uncore_type *type);
- };
- 
-diff --git a/arch/x86/events/intel/uncore_snbep.c b/arch/x86/events/intel/uncore_snbep.c
-index 4c2d5b5ea445..b8f9bd150b42 100644
---- a/arch/x86/events/intel/uncore_snbep.c
-+++ b/arch/x86/events/intel/uncore_snbep.c
-@@ -3924,7 +3924,7 @@ static void pmu_clear_mapping_attr(const struct attribute_group **groups,
- 	}
- }
- 
--static int
-+static void
- pmu_set_mapping(struct intel_uncore_type *type, struct attribute_group *ag,
- 		ssize_t (*show)(struct device*, struct device_attribute*, char*),
- 		int topology_type)
-@@ -3943,8 +3943,6 @@ pmu_set_mapping(struct intel_uncore_type *type, struct attribute_group *ag,
- 	if (ret < 0)
- 		goto clear_topology;
- 
--	ret = -ENOMEM;
--
- 	/* One more for NULL. */
- 	attrs = kcalloc((uncore_max_dies() + 1), sizeof(*attrs), GFP_KERNEL);
- 	if (!attrs)
-@@ -3968,7 +3966,7 @@ pmu_set_mapping(struct intel_uncore_type *type, struct attribute_group *ag,
- 	}
- 	ag->attrs = attrs;
- 
--	return 0;
-+	return;
- err:
- 	for (; die >= 0; die--)
- 		kfree(eas[die].attr.attr.name);
-@@ -3979,7 +3977,6 @@ pmu_set_mapping(struct intel_uncore_type *type, struct attribute_group *ag,
- 	pmu_free_topology(type);
- clear_attr_update:
- 	pmu_clear_mapping_attr(type->attr_update, ag);
--	return ret;
- }
- 
- static void
-@@ -3998,15 +3995,15 @@ pmu_cleanup_mapping(struct intel_uncore_type *type, struct attribute_group *ag)
- 	pmu_free_topology(type);
- }
- 
--static int
-+static void
- pmu_iio_set_mapping(struct intel_uncore_type *type, struct attribute_group *ag)
- {
--	return pmu_set_mapping(type, ag, skx_iio_mapping_show, IIO_TOPOLOGY_TYPE);
-+	pmu_set_mapping(type, ag, skx_iio_mapping_show, IIO_TOPOLOGY_TYPE);
- }
- 
--static int skx_iio_set_mapping(struct intel_uncore_type *type)
-+static void skx_iio_set_mapping(struct intel_uncore_type *type)
- {
--	return pmu_iio_set_mapping(type, &skx_iio_mapping_group);
-+	pmu_iio_set_mapping(type, &skx_iio_mapping_group);
- }
- 
- static void skx_iio_cleanup_mapping(struct intel_uncore_type *type)
-@@ -4382,15 +4379,15 @@ static const struct attribute_group *skx_upi_attr_update[] = {
- 	NULL
- };
- 
--static int
-+static void
- pmu_upi_set_mapping(struct intel_uncore_type *type, struct attribute_group *ag)
- {
--	return pmu_set_mapping(type, ag, skx_upi_mapping_show, UPI_TOPOLOGY_TYPE);
-+	pmu_set_mapping(type, ag, skx_upi_mapping_show, UPI_TOPOLOGY_TYPE);
- }
- 
--static int skx_upi_set_mapping(struct intel_uncore_type *type)
-+static void skx_upi_set_mapping(struct intel_uncore_type *type)
- {
--	return pmu_upi_set_mapping(type, &skx_upi_mapping_group);
-+	pmu_upi_set_mapping(type, &skx_upi_mapping_group);
- }
- 
- static void skx_upi_cleanup_mapping(struct intel_uncore_type *type)
-@@ -4773,9 +4770,9 @@ static int snr_iio_get_topology(struct intel_uncore_type *type)
- 	return sad_cfg_iio_topology(type, snr_sad_pmon_mapping);
- }
- 
--static int snr_iio_set_mapping(struct intel_uncore_type *type)
-+static void snr_iio_set_mapping(struct intel_uncore_type *type)
- {
--	return pmu_iio_set_mapping(type, &snr_iio_mapping_group);
-+	pmu_iio_set_mapping(type, &snr_iio_mapping_group);
- }
- 
- static void snr_iio_cleanup_mapping(struct intel_uncore_type *type)
-@@ -5391,14 +5388,14 @@ static int icx_iio_get_topology(struct intel_uncore_type *type)
- 	return sad_cfg_iio_topology(type, icx_sad_pmon_mapping);
- }
- 
--static int icx_iio_set_mapping(struct intel_uncore_type *type)
-+static void icx_iio_set_mapping(struct intel_uncore_type *type)
- {
- 	/* Detect ICX-D system. This case is not supported */
- 	if (boot_cpu_data.x86_model == INTEL_FAM6_ICELAKE_D) {
- 		pmu_clear_mapping_attr(type->attr_update, &icx_iio_mapping_group);
--		return -EPERM;
-+		return;
- 	}
--	return pmu_iio_set_mapping(type, &icx_iio_mapping_group);
-+	pmu_iio_set_mapping(type, &icx_iio_mapping_group);
- }
- 
- static void icx_iio_cleanup_mapping(struct intel_uncore_type *type)
-@@ -5656,9 +5653,9 @@ static const struct attribute_group *icx_upi_attr_update[] = {
- 	NULL
- };
- 
--static int icx_upi_set_mapping(struct intel_uncore_type *type)
-+static void icx_upi_set_mapping(struct intel_uncore_type *type)
- {
--	return pmu_upi_set_mapping(type, &icx_upi_mapping_group);
-+	pmu_upi_set_mapping(type, &icx_upi_mapping_group);
- }
- 
- static void icx_upi_cleanup_mapping(struct intel_uncore_type *type)
-@@ -6125,9 +6122,9 @@ static const struct attribute_group *spr_upi_attr_update[] = {
- 
- #define SPR_UPI_REGS_ADDR_DEVICE_LINK0	0x01
- 
--static int spr_upi_set_mapping(struct intel_uncore_type *type)
-+static void spr_upi_set_mapping(struct intel_uncore_type *type)
- {
--	return pmu_upi_set_mapping(type, &spr_upi_mapping_group);
-+	pmu_upi_set_mapping(type, &spr_upi_mapping_group);
- }
- 
- static void spr_upi_cleanup_mapping(struct intel_uncore_type *type)
--- 
-2.25.1
+Best regards,
+Krzysztof
 
