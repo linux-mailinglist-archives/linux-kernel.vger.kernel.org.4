@@ -2,54 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E86362D3FF
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 08:22:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1F2A62D401
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 08:24:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239207AbiKQHWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 02:22:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58522 "EHLO
+        id S234756AbiKQHYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 02:24:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234692AbiKQHWJ (ORCPT
+        with ESMTP id S229991AbiKQHYV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 02:22:09 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C6F531F8D
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 23:22:08 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ovZDk-0006pm-A6; Thu, 17 Nov 2022 08:22:00 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ovZDi-004o2U-38; Thu, 17 Nov 2022 08:21:59 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ovZDi-00HDlY-6h; Thu, 17 Nov 2022 08:21:58 +0100
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee@kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>
-Cc:     linux-pwm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] backlight: pwm_bl: Drop support for legacy PWM probing
-Date:   Thu, 17 Nov 2022 08:21:51 +0100
-Message-Id: <20221117072151.3789691-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.38.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2504; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=rSqok1k4GUjtAWeSAyFWtQ9yZyvrbmXx+GAVnwVQK7U=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBjdeEJwIfzABoyAsEpLbMq3vER8M/vKHHUdwIlvheh rgvLFW+JATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCY3XhCQAKCRDB/BR4rcrsCV0AB/ oCGu1BnxfECZOLO6M3AVdlDI867ImIggjUXeq4vMaxX9R73D/rOkVaKrmsp5nS1jLSdBmIEwEamNxE D/xd8KzJsqdK3tLMIP+ig3TkZo+TUae1i4SjeJuZ0WvYO44lefTwz3C/JfgCLwoz1G3sz6sa6bHIvQ KXaPggRyfIGuMeyd9C7AyptL9SnGqs5sZNTuiT+h+4QhbcWS6jWM0pBG5IkEp6uvexHs3D8OG5xmDc D1+6JxNHTwu3xbBGS4oGC2aZxAQLfSZnUvlBC4werJrWD/QCWpi00v6DXMUyT+Lb8dc6IcSNaqvUeI r0VshUIRi4rhAyrOGFQBuboRKV3+4n
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        Thu, 17 Nov 2022 02:24:21 -0500
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7833B28E1E
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 23:24:20 -0800 (PST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NCWcy6Fz6z4y0vK;
+        Thu, 17 Nov 2022 15:24:18 +0800 (CST)
+Received: from xaxapp01.zte.com.cn ([10.88.40.50])
+        by mse-fl2.zte.com.cn with SMTP id 2AH7O9Qq090542;
+        Thu, 17 Nov 2022 15:24:09 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Thu, 17 Nov 2022 15:24:11 +0800 (CST)
+Date:   Thu, 17 Nov 2022 15:24:11 +0800 (CST)
+X-Zmail-TransId: 2af96375e19b4b0447f0
+X-Mailer: Zmail v1.0
+Message-ID: <202211171524116446204@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <ulf.hansson@linaro.org>
+Cc:     <linux-mmc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIG1tYzogcHdyc2VxOiBVc2UgZGV2aWNlX21hdGNoX29mX25vZGUoKQ==?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 2AH7O9Qq090542
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.251.13.novalocal with ID 6375E1A2.000 by FangMail milter!
+X-FangMail-Envelope: 1668669858/4NCWcy6Fz6z4y0vK/6375E1A2.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 6375E1A2.000/4NCWcy6Fz6z4y0vK
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,81 +53,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no in-tree user left which relies on legacy probing. So drop
-support for it which removes another user of the deprecated
-pwm_request() function.
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Replace the open-code with device_match_of_node().
+
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 ---
- drivers/video/backlight/pwm_bl.c | 12 ------------
- include/linux/pwm_backlight.h    |  1 -
- 2 files changed, 13 deletions(-)
+ drivers/mmc/core/pwrseq.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/video/backlight/pwm_bl.c b/drivers/video/backlight/pwm_bl.c
-index c0523a0269ee..d0b22158cd70 100644
---- a/drivers/video/backlight/pwm_bl.c
-+++ b/drivers/video/backlight/pwm_bl.c
-@@ -28,7 +28,6 @@ struct pwm_bl_data {
- 	struct regulator	*power_supply;
- 	struct gpio_desc	*enable_gpio;
- 	unsigned int		scale;
--	bool			legacy;
- 	unsigned int		post_pwm_on_delay;
- 	unsigned int		pwm_off_delay;
- 	int			(*notify)(struct device *,
-@@ -455,7 +454,6 @@ static int pwm_backlight_probe(struct platform_device *pdev)
- 	struct platform_pwm_backlight_data defdata;
- 	struct backlight_properties props;
- 	struct backlight_device *bl;
--	struct device_node *node = pdev->dev.of_node;
- 	struct pwm_bl_data *pb;
- 	struct pwm_state state;
- 	unsigned int i;
-@@ -506,12 +504,6 @@ static int pwm_backlight_probe(struct platform_device *pdev)
- 	}
- 
- 	pb->pwm = devm_pwm_get(&pdev->dev, NULL);
--	if (IS_ERR(pb->pwm) && PTR_ERR(pb->pwm) != -EPROBE_DEFER && !node) {
--		dev_err(&pdev->dev, "unable to request PWM, trying legacy API\n");
--		pb->legacy = true;
--		pb->pwm = pwm_request(data->pwm_id, "pwm-backlight");
--	}
--
- 	if (IS_ERR(pb->pwm)) {
- 		ret = PTR_ERR(pb->pwm);
- 		if (ret != -EPROBE_DEFER)
-@@ -604,8 +596,6 @@ static int pwm_backlight_probe(struct platform_device *pdev)
- 	if (IS_ERR(bl)) {
- 		dev_err(&pdev->dev, "failed to register backlight\n");
- 		ret = PTR_ERR(bl);
--		if (pb->legacy)
--			pwm_free(pb->pwm);
- 		goto err_alloc;
- 	}
- 
-@@ -639,8 +629,6 @@ static int pwm_backlight_remove(struct platform_device *pdev)
- 
- 	if (pb->exit)
- 		pb->exit(&pdev->dev);
--	if (pb->legacy)
--		pwm_free(pb->pwm);
- 
- 	return 0;
- }
-diff --git a/include/linux/pwm_backlight.h b/include/linux/pwm_backlight.h
-index 06086cb93b6f..cdd2ac366bc7 100644
---- a/include/linux/pwm_backlight.h
-+++ b/include/linux/pwm_backlight.h
-@@ -8,7 +8,6 @@
- #include <linux/backlight.h>
- 
- struct platform_pwm_backlight_data {
--	int pwm_id;
- 	unsigned int max_brightness;
- 	unsigned int dft_brightness;
- 	unsigned int lth_brightness;
+diff --git a/drivers/mmc/core/pwrseq.c b/drivers/mmc/core/pwrseq.c
+index ef675f364bf0..2374669b588a 100644
+--- a/drivers/mmc/core/pwrseq.c
++++ b/drivers/mmc/core/pwrseq.c
+@@ -29,7 +29,7 @@ int mmc_pwrseq_alloc(struct mmc_host *host)
 
-base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
+ 	mutex_lock(&pwrseq_list_mutex);
+ 	list_for_each_entry(p, &pwrseq_list, pwrseq_node) {
+-		if (p->dev->of_node == np) {
++		if (device_match_of_node(p->dev, np)) {
+ 			if (!try_module_get(p->owner))
+ 				dev_err(host->parent,
+ 					"increasing module refcount failed\n");
 -- 
-2.38.1
-
+2.25.1
