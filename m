@@ -2,119 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A42462E298
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:08:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67B8262E2A1
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:10:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240579AbiKQRIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 12:08:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40228 "EHLO
+        id S240612AbiKQRK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 12:10:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240562AbiKQRIo (ORCPT
+        with ESMTP id S240530AbiKQRKU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 12:08:44 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B4155DB92;
-        Thu, 17 Nov 2022 09:08:43 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id bj12so6569660ejb.13;
-        Thu, 17 Nov 2022 09:08:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=UXTIiUhTsDF1ksUQHxOjXei7p0SmIC0BDVdiFoql/Uc=;
-        b=mfyuY0gsE5mnqDj5qh5OiKmRss9nTC7A3qsjOYoPmm5QQril+rlThWhPU0wD6Ub4FC
-         e8dxsES6M1eDGjtNdYNKm9uWUX68BWALYloABbu3r2vvFDB+bl/D9MHQ6dolimQYL7aN
-         EDoPyKs23xH6dMrl3+/EWt/jUTXcuymGKUPBkiLzojbxcQ6vhLN5DETjo1B4QFlOQLpM
-         A7oFWHptPVyHvILMhI23wk40X9QgjTKiYte9CvQuDej/WMCu4v9CcFPEYvL/YiE3Mxtw
-         /HQeS59Jod2FDBu4Yq1PYEyxlMlpgmB9ck9ERJDj84wD/D15QAx9uXMl5r5UV9ZilzRE
-         MwDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UXTIiUhTsDF1ksUQHxOjXei7p0SmIC0BDVdiFoql/Uc=;
-        b=fT8rO/lgz/rCC8TBf3Eg+U6cds3HnfxzYoAO3gifj/sqmudcfcMGwBalb/XSsEhYbF
-         ay7zXZSujljDlSavLLDe6Hk82SBj9tLQWYMHfgny/+NF3BlbV/Z+v9VKfK7Yjyg0/4rN
-         TkBsKjAp49VbE12DIhgJg0Oz8U06vjavaNdKjbo9fo6whRd+xEfpDg9p7aQ+hg+DNIh3
-         EdHLvRsN7Q7DN1sGf5kBBrD0DPeJ/eU9pFvZXiYhMcZkPimJllmDoNrAWxwLJO/tpKOW
-         SxcngIx2i3qHGlrRsGfuDxHrtck6iiEP51WY/L31U1QTBt1zDKHhgYayP5LpWttf61Pd
-         IV1w==
-X-Gm-Message-State: ANoB5pljE5o2up5LZBMTBFX4NIvyqHZXShibFq1kV4fwIHKfnUyLEygH
-        a6shTv64S9OEWvIPO65GN70=
-X-Google-Smtp-Source: AA0mqf7wfxRfK7sRIBOzZ7oJkCHzXBfgd3DzeE6bB2BpmX+zB3cRO/dVMMsqWRKhiAIJzI2mS2+oNg==
-X-Received: by 2002:a17:906:c084:b0:78d:e786:e322 with SMTP id f4-20020a170906c08400b0078de786e322mr2804280ejz.308.1668704921768;
-        Thu, 17 Nov 2022 09:08:41 -0800 (PST)
-Received: from thinkpad-p72 (user-5-173-65-115.play-internet.pl. [5.173.65.115])
-        by smtp.gmail.com with ESMTPSA id m7-20020aa7c2c7000000b00467c3cbab6fsm769694edp.77.2022.11.17.09.08.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 09:08:41 -0800 (PST)
-From:   Lukasz Wiecaszek <lukasz.wiecaszek@googlemail.com>
-X-Google-Original-From: Lukasz Wiecaszek <lukasz.wiecaszek@gmail.com>
-Date:   Thu, 17 Nov 2022 18:08:38 +0100
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Lukasz Wiecaszek <lukasz.wiecaszek@googlemail.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] udmabuf: add vmap and vunmap methods to udmabuf_ops
-Message-ID: <20221117170838.GA74987@thinkpad-p72>
-References: <20221117045842.27161-1-lukasz.wiecaszek@gmail.com>
- <970e798d-ea26-5e1e-ace8-7915a866f7c7@collabora.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <970e798d-ea26-5e1e-ace8-7915a866f7c7@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 17 Nov 2022 12:10:20 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A71742F6;
+        Thu, 17 Nov 2022 09:10:18 -0800 (PST)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AHGh8QQ022552;
+        Thu, 17 Nov 2022 17:09:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=P6bVVTs1DEkKUn+owkyBSAOzyaJeKvl7bEJ6DG9N340=;
+ b=p22IQdwLtM/mDQhoB3qaw6HO3DKxYDerJhvBI/tU3eNxGzf6oDnidoSVWCb1710IFMXV
+ Qy+CBXqKfmN/2XZfNewyG5ISBhszpSRf58Sd5XIx79MU0kIo8TBiKm2V3i3C59OE+4Rp
+ gWFaY5PPHqiKyiO3/muSdDHcSPc2ebjmv17WJZ1+6nkMCiR7L+ZA0JN9TNB3xi23GG1k
+ BsGQ2OcJQkwROtWQBecgZa6ZR2VmZ09JAKfEQjlagCUOZ3hQEKozxAsy5s+EcOlQLI48
+ wmUFERd0QHgkpCINJxj2MjDZMKVjZHnZUS3GQTql9j7ZrbVIs/fkK/IBG9qzLA4fH3Iy bA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kwrqprpds-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Nov 2022 17:09:49 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AHH8UY7013219;
+        Thu, 17 Nov 2022 17:09:48 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kwrqprpde-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Nov 2022 17:09:48 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AHH5MfX021087;
+        Thu, 17 Nov 2022 17:09:47 GMT
+Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
+        by ppma03dal.us.ibm.com with ESMTP id 3kt34aay3b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Nov 2022 17:09:47 +0000
+Received: from smtpav06.wdc07v.mail.ibm.com ([9.208.128.115])
+        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AHH9ksi57606544
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 17 Nov 2022 17:09:46 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 06F6A5803F;
+        Thu, 17 Nov 2022 17:09:46 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 86EBC5804E;
+        Thu, 17 Nov 2022 17:09:44 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.98.240])
+        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 17 Nov 2022 17:09:44 +0000 (GMT)
+Message-ID: <eda23c9935712cf122bb6a8929b53835d56df6cb.camel@linux.ibm.com>
+Subject: Re: [PATCH v4 5/5] evm: Support multiple LSMs providing an xattr
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keescook@chromium.org, nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Thu, 17 Nov 2022 12:09:44 -0500
+In-Reply-To: <20221110094639.3086409-6-roberto.sassu@huaweicloud.com>
+References: <20221110094639.3086409-1-roberto.sassu@huaweicloud.com>
+         <20221110094639.3086409-6-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: HUtqmd8a-RoLJkareu0-76d2cwPooe7i
+X-Proofpoint-ORIG-GUID: MPmG1n6GkTliUym63TahoYWzB8IMXNGi
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-17_06,2022-11-17_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
+ clxscore=1015 lowpriorityscore=0 spamscore=0 bulkscore=0 impostorscore=0
+ suspectscore=0 adultscore=0 priorityscore=1501 mlxlogscore=999
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211170126
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 12:04:35PM +0300, Dmitry Osipenko wrote:
-> Hi,
+On Thu, 2022-11-10 at 10:46 +0100, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
 > 
-> On 11/17/22 07:58, Lukasz Wiecaszek wrote:
-> > The reason behind that patch is associated with videobuf2 subsystem
-> > (or more genrally with v4l2 framework) and user created
-> > dma buffers (udmabuf). In some circumstances
-> > when dealing with V4L2_MEMORY_DMABUF buffers videobuf2 subsystem
-> > wants to use dma_buf_vmap() method on the attached dma buffer.
-> > As udmabuf does not have .vmap operation implemented,
-> > such dma_buf_vmap() natually fails.
-> > 
-> > videobuf2_common: __vb2_queue_alloc: allocated 3 buffers, 1 plane(s) each
-> > videobuf2_common: __prepare_dmabuf: buffer for plane 0 changed
-> > videobuf2_common: __prepare_dmabuf: failed to map dmabuf for plane 0
-> > videobuf2_common: __buf_prepare: buffer preparation failed: -14
-> > 
-> > The patch itself seems to be strighforward.
-> > It adds implementation of .vmap and .vunmap methods
-> > to 'struct dma_buf_ops udmabuf_ops'.
-> > .vmap method itself uses vm_map_ram() to map pages linearly
-> > into the kernel virtual address space.
-> > .vunmap removes mapping created earlier by .vmap.
-> > All locking and 'vmapping counting' is done in dma_buf.c
-> > so it seems to be redundant/unnecessary in .vmap/.vunmap.
-> > 
-> > Signed-off-by: Lukasz Wiecaszek <lukasz.wiecaszek@gmail.com>
+> Currently, evm_inode_init_security() processes a single LSM xattr from
+> the array passed by security_inode_init_security(), and calculates the
+> HMAC on it and other inode metadata.
 > 
-> If new patch version doesn't contain significant changes and you got
-> acks/reviews for the previous version, then you should add the given
-> acked-by and reviewed-by tags to the commit message by yourself.
+> Given that initxattrs() callbacks, called by
+> security_inode_init_security(), expect that this array is terminated when
+> the xattr name is set to NULL, reuse the same assumption to scan all xattrs
+> and to calculate the HMAC on all of them.
 > 
-> -- 
-> Best regards,
-> Dmitry
->
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 
-I would like to thank you all for your patience and on the same time say
-sorry that I still cannot follow the process (although I have read
-'submitting patches' chapter).
+Thanks, Roberto.  This looks good.
+
+Mimi
 
