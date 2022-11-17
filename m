@@ -2,147 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D79B62E863
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 23:26:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69D1162E866
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 23:29:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240548AbiKQW0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 17:26:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35872 "EHLO
+        id S235029AbiKQW34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 17:29:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240794AbiKQWZ4 (ORCPT
+        with ESMTP id S230287AbiKQW3y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 17:25:56 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2793784313
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 14:25:55 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id b62so3428807pgc.0
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 14:25:55 -0800 (PST)
+        Thu, 17 Nov 2022 17:29:54 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF724BF7F;
+        Thu, 17 Nov 2022 14:29:52 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id 21so4686895edv.3;
+        Thu, 17 Nov 2022 14:29:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dgr+e8ZyUoyDeyQ+E1fecvyvQ3W2gshFUSz2h8pvtJo=;
-        b=DSg1++mVGWTTs7HfqbyCCT1RM+HQcQfLF37N/1OsrGl29ndKcrswsXH85YfT5n3j6U
-         5FeMN6xIWV2gDbdsV+uwPpP78AvaGvtc5ezIVRGPWwjYinE4FHanGwaJXmxJnwmDZkVC
-         +YoOUjS36Rwmv/Jp3G4T/DT4sazBl+QThyz17uQjFB/4g4wv8Vb9mwIO1KbJkYt0sq0K
-         UrHI5Qs4fht+UlFZFUQLDMQ+pycLVg04zv3VTKamGabTNtFOSd6w75hkrR1vqon/EAWZ
-         qyq0pEprtGELFzQ86y9i1aWNnW9Lggog846qYgk9lmWLvfzn/eg7Cf6mzDhAOXKI40e0
-         pfMQ==
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l7K+2+hb50PgBvImpYfRCmrZDiumqAIoMLO+SRy2BjY=;
+        b=OW8Sf6bOy/sCfRmUTV1Jn9JpRbQqH2u+fqVW7VD2h/eJW2dpOxkbe90k0zJTN4gAJ4
+         gi/dGTx5ZPclge1JRDpCh73zPeMtOPChP0YMVcZo2Ah8KufSyuT72LhV3cmlbtCDbL65
+         UHe7SKts67iQyKQALQ3XpcCSOuSNa+6hrNJAcOU7/Zkl3UwULhXMdztK7HD6AviiFEmO
+         LWY8bT1+Ux0EvQs0/Mj+DgPyPeRwbjBQipMEBTtiC/8MkcJEC8krB0XmCJHX9/uyqiHy
+         2boukPOWjy7bBGTjy/aSUP0ys4fx0RQjGgj2v5RjeLK+LIXRKo2OQjhdCdugzbamdD9t
+         1euw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dgr+e8ZyUoyDeyQ+E1fecvyvQ3W2gshFUSz2h8pvtJo=;
-        b=RLHm5G2BwsZ1Ww1NrQBM2r9eRFPoiveLxZ2TM3984xw+z/ArIqnNolScjNyTXHulcI
-         NyG/JBPWpKH7gQY8TngODNTqZAJOd86o7WdyuIELbP9B3W3FMqDYLdR+KgVdhCV26Sib
-         iT+YDk8NMr/E+3k9sxq8S8Hn2TrjjDaEg7BKftJh2v/UVCJ3rYgU5Yz/IceC/SrlCsKK
-         wtYNumrLLYyCQlvCzaQ/OZAbzuPk9SrD9bQSFGgf8YL8vp42Hy6zbH6YuxK4YkkhXFtG
-         NVQhhh//ke6VXDFfbSsixYo7t6luUQM+oeDgbetp0hNkxbNwXzGSIRa3o39KUXPbZpwU
-         o1eA==
-X-Gm-Message-State: ANoB5plx4/wxWgemnycLtecpzYc88DQXfbBIgZYgIcmXJVuFKprszFWY
-        Nt0DTjp2FbmceUs3iTHMeVQ=
-X-Google-Smtp-Source: AA0mqf7Z65fj1NYronMx4tvVIgXpfTk0PfmABsMsNxgksLL4eZYFqj9gERnwE5cFmcG759Xa+4GpXA==
-X-Received: by 2002:a63:c65:0:b0:476:db6f:d436 with SMTP id 37-20020a630c65000000b00476db6fd436mr4003107pgm.394.1668723954609;
-        Thu, 17 Nov 2022 14:25:54 -0800 (PST)
-Received: from google.com ([2620:15c:211:201:6bbc:b70a:8f80:710d])
-        by smtp.gmail.com with ESMTPSA id u15-20020a170902e80f00b001869581f7ecsm1963826plg.116.2022.11.17.14.25.53
+        bh=l7K+2+hb50PgBvImpYfRCmrZDiumqAIoMLO+SRy2BjY=;
+        b=I/dzjHugphbDffrt+O9JTVmxyeBF67qsFU96ukBZXgBypLHtEEocimGNu98jEYv0kc
+         vy9XeG47Kt4o6XgB1SaAKUqbVC7lK07Qxd8oEkFtjwBMKH4pFIBRYp8aOvZH4CbBP7fL
+         f8fV+QptkJaCiySwTc3Jia1QOmgXzKeaQHTBdZF2+63UOtOBdxkRt7OTyz6ljl5wrr/P
+         HyQ1LEe49e5F1bxFejCowXMYE13h9B6JQ4tKuK2+67/7ZI3Bzz+Dy5ydPaJIkL6BZG4o
+         R7z5OSF+HK90wUsRZYB7bCjmmLXZJvXU5zw3hfGXpnKNkKkBNXry7YTCGjktFPBlSceJ
+         koeg==
+X-Gm-Message-State: ANoB5pkXn8Lp5GoiaSFU3xmz0gd6biK2GQcHz/5H19xrOuJyq9wAX1ID
+        34LkMDSRtYk57xEYl3OEjRo=
+X-Google-Smtp-Source: AA0mqf5oLozVoWkc8kyT9DFV87DVXFHiYgdXSJjg30pW9ms02tIgyRzoBtVLyPgG54wncIMrJJEmHw==
+X-Received: by 2002:a05:6402:2993:b0:462:845:ba98 with SMTP id eq19-20020a056402299300b004620845ba98mr3862361edb.12.1668724191287;
+        Thu, 17 Nov 2022 14:29:51 -0800 (PST)
+Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id v10-20020aa7dbca000000b0044dbecdcd29sm1034459edt.12.2022.11.17.14.29.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 14:25:54 -0800 (PST)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Thu, 17 Nov 2022 14:25:52 -0800
-From:   Minchan Kim <minchan@kernel.org>
-To:     Nhat Pham <nphamcs@gmail.com>
-Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, ngupta@vflare.org,
-        senozhatsky@chromium.org, sjenning@redhat.com, ddstreet@ieee.org,
-        vitaly.wool@konsulko.com
-Subject: Re: [PATCH v4 4/5] zsmalloc: Add ops fields to zs_pool to store
- evict handlers
-Message-ID: <Y3a08ElhlyLN+0rG@google.com>
-References: <20221117163839.230900-1-nphamcs@gmail.com>
- <20221117163839.230900-5-nphamcs@gmail.com>
+        Thu, 17 Nov 2022 14:29:50 -0800 (PST)
+Date:   Thu, 17 Nov 2022 23:29:49 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Jim Lin <jilin@nvidia.com>
+Cc:     gregkh@linuxfoundation.org, jonathanh@nvidia.com,
+        mathias.nyman@intel.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v7 1/3] xhci: Add hub_control to xhci_driver_overrides
+Message-ID: <Y3a13Q+iSosDUOW3@orome>
+References: <20221111101813.32482-1-jilin@nvidia.com>
+ <20221111101813.32482-2-jilin@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="jnB12ol0gjctK1Jc"
 Content-Disposition: inline
-In-Reply-To: <20221117163839.230900-5-nphamcs@gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20221111101813.32482-2-jilin@nvidia.com>
+User-Agent: Mutt/2.2.8 (2022-11-05)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 08:38:38AM -0800, Nhat Pham wrote:
-> This adds fields to zs_pool to store evict handlers for writeback,
-> analogous to the zbud allocator.
-> 
-> Signed-off-by: Nhat Pham <nphamcs@gmail.com>
-> ---
->  mm/zsmalloc.c | 35 ++++++++++++++++++++++++++++++++++-
->  1 file changed, 34 insertions(+), 1 deletion(-)
-> 
-> diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
-> index 2557b55ec767..776d0e15a401 100644
-> --- a/mm/zsmalloc.c
-> +++ b/mm/zsmalloc.c
-> @@ -225,6 +225,12 @@ struct link_free {
->  	};
->  };
-> 
-> +struct zs_pool;
-> +
-> +struct zs_ops {
-> +	int (*evict)(struct zs_pool *pool, unsigned long handle);
-> +};
-> +
->  struct zs_pool {
->  	const char *name;
-> 
-> @@ -242,6 +248,9 @@ struct zs_pool {
->  #ifdef CONFIG_ZPOOL
->  	/* List tracking the zspages in LRU order by most recently added object */
->  	struct list_head lru;
-> +	const struct zs_ops *ops;
-> +	struct zpool *zpool;
-> +	const struct zpool_ops *zpool_ops;
->  #endif
-> 
->  #ifdef CONFIG_ZSMALLOC_STAT
-> @@ -385,6 +394,18 @@ static void record_obj(unsigned long handle, unsigned long obj)
-> 
->  #ifdef CONFIG_ZPOOL
-> 
-> +static int zs_zpool_evict(struct zs_pool *pool, unsigned long handle)
-> +{
-> +	if (pool->zpool && pool->zpool_ops && pool->zpool_ops->evict)
-> +		return pool->zpool_ops->evict(pool->zpool, handle);
-> +	else
-> +		return -ENOENT;
-> +}
-> +
-> +static const struct zs_ops zs_zpool_ops = {
-> +	.evict =	zs_zpool_evict
-> +};
-> +
->  static void *zs_zpool_create(const char *name, gfp_t gfp,
->  			     const struct zpool_ops *zpool_ops,
->  			     struct zpool *zpool)
-> @@ -394,7 +415,19 @@ static void *zs_zpool_create(const char *name, gfp_t gfp,
->  	 * different contexts and its caller must provide a valid
->  	 * gfp mask.
->  	 */
-> -	return zs_create_pool(name);
-> +	struct zs_pool *pool = zs_create_pool(name);
-> +
-> +	if (pool) {
-> +		pool->zpool = zpool;
-> +		pool->zpool_ops = zpool_ops;
-> +
-> +		if (zpool_ops)
 
-I lost. When do we have zpool_ops as NULL?
+--jnB12ol0gjctK1Jc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Nov 11, 2022 at 06:18:11PM +0800, Jim Lin wrote:
+> Add a hub_control() callback to the xhci_driver_overrides structure to
+> allow host drivers to override the default hub_control function. This
+> is required for Tegra which requires device specific actions for power
+> management to be executed during USB state transitions.
+>=20
+> Signed-off-by: Jim Lin <jilin@nvidia.com>
+>=20
+> ---
+> v5: new change
+> v6: adjust parameter alignment (xhci.h hub_control)
+> v7: change commit message
+>=20
+>  drivers/usb/host/xhci.c | 2 ++
+>  drivers/usb/host/xhci.h | 2 ++
+>  2 files changed, 4 insertions(+)
+
+Acked-by: Thierry Reding <treding@nvidia.com>
+
+--jnB12ol0gjctK1Jc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmN2tdoACgkQ3SOs138+
+s6Heyw//S8yCagyOrYQmjUJ/unCk4QbLBERULyACz8zFu9dU5pv3FwGQ3wt5Gype
+DoRh0fqnPOQO7raK4fbXp+ZtC8DrykmJFBhAsi+ePH3fihusMHjrbCr6CMjENH6d
+xAkY0YKEdYywz12smypRGxrwoD10IkwV8AEWoxJbzbJSJetKJ01ot0V7BUpZbt8o
+oCSzQmOmWXCX8InlZKaRm6zKrNU9Cy5mbgnv17tVv8XMrkuju00c8GrzVcdiFOkP
+H1LK0z/B66NQJFUyeAxNPYXwlntpc6hubdLOcKbx/VozrU/eKu4mXnGIuRNJx+x6
+eTO4MN8rcGCQ8ZGb9wEm8xkh0HedddjRh+xD9X9rugWdcEk22rlRO3bGS/FLS61r
+hHfM3YFhzHt08Xtyj6GnEMmncno+ZVVtP0jpb9StkuvqRSuJK2/73fI+Y4F760cY
+jTv0+PvgzNUgeBdK+c0UE7RCk6/jvhDXpPLC5K72qR5eKTWzF3+sH80tkgOKLuKc
+0+LCAQlKuC1cJAyHucUE3pKmlNxMeorP/MJmEUtXs1WyvHWfu4eNq7ZDQFP1r7z1
+AyEj8Wj3rkSzXQr1oNrglVuX8BPPnw0t0qeAtmwNVrdYLvshYC+1r46rQ91/HSPg
+NxBG6K+GWQZU68TUXDpqopbcymlFXpxsmNvAC5ztf4vIq3BOwh4=
+=RD/t
+-----END PGP SIGNATURE-----
+
+--jnB12ol0gjctK1Jc--
