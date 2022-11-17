@@ -2,120 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 578BC62E859
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 23:24:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D79B62E863
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 23:26:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240950AbiKQWYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 17:24:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34190 "EHLO
+        id S240548AbiKQW0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 17:26:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240574AbiKQWYJ (ORCPT
+        with ESMTP id S240794AbiKQWZ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 17:24:09 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F77B786CC
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 14:22:35 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id v28so3109342pfi.12
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 14:22:35 -0800 (PST)
+        Thu, 17 Nov 2022 17:25:56 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2793784313
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 14:25:55 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id b62so3428807pgc.0
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 14:25:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GWX8xZ3siPWUJmFJ+ak5rgGJi5tbSkwD+aeiBnxAmP8=;
-        b=EM8Vk/IuYu8zsCx3D/aXB1ydE3hr9wSOvvA42mWznF7gALJ+S0g32LM4VMRNu1vT0I
-         IPnZPUy1UHRB7LAfgLDHAN9pUPbP7x9qAzaFWa855hCAHbw9CsPIIBF5+anBUiN/O8k3
-         wugLM9mY7sID2s8OU8olcNXrMbck9LM8PlAVI=
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dgr+e8ZyUoyDeyQ+E1fecvyvQ3W2gshFUSz2h8pvtJo=;
+        b=DSg1++mVGWTTs7HfqbyCCT1RM+HQcQfLF37N/1OsrGl29ndKcrswsXH85YfT5n3j6U
+         5FeMN6xIWV2gDbdsV+uwPpP78AvaGvtc5ezIVRGPWwjYinE4FHanGwaJXmxJnwmDZkVC
+         +YoOUjS36Rwmv/Jp3G4T/DT4sazBl+QThyz17uQjFB/4g4wv8Vb9mwIO1KbJkYt0sq0K
+         UrHI5Qs4fht+UlFZFUQLDMQ+pycLVg04zv3VTKamGabTNtFOSd6w75hkrR1vqon/EAWZ
+         qyq0pEprtGELFzQ86y9i1aWNnW9Lggog846qYgk9lmWLvfzn/eg7Cf6mzDhAOXKI40e0
+         pfMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GWX8xZ3siPWUJmFJ+ak5rgGJi5tbSkwD+aeiBnxAmP8=;
-        b=lf652IvY4OklxruOO8SMzJnzrT6ufb/yqcUVzk9hX4tLYhrXokchRz0v3ouvfXE3zn
-         9UZcawt61XBH901VhU8+wMJO9G7NnVd1VFemMhX5CWiL0S9I2oVTSmPi5HbNmOyjhnyg
-         OYGbXacCkPKD+HdL/NxoKIbO+d+/WpbLzNm06qRvuh9TTTVGoFKRpUgBwJ7zUYV2h9e5
-         J3GLkNCKSk9710ElU36FEMAv9tU+k2eO7ESRPZENoWutEk3FelSoAEaPiA65PQQi5RQT
-         JwRoENZ2LbQmcwUZCXkgfgWKwmrDu/inrz39ROQC0nIi8US7FY0Vo1sWO38niweDx+pg
-         Fd1Q==
-X-Gm-Message-State: ANoB5pmucBum1Z89OrSfTCbnj4RWIaRG1Bqk2Qs4HZ06cCjQ0yHWrYwb
-        ct1ZZSXJk9YZB/YqzQkoj5P+/g==
-X-Google-Smtp-Source: AA0mqf6X+fpknreQzV9svORhPmRkzR9ZQ875/5OC9hPXiNreh29vMThcE29r/hJZCyBpnjdvstKNoQ==
-X-Received: by 2002:a63:1626:0:b0:46e:96b9:ed63 with SMTP id w38-20020a631626000000b0046e96b9ed63mr4102293pgl.258.1668723754996;
-        Thu, 17 Nov 2022 14:22:34 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id w1-20020aa79541000000b0056c360af4e3sm1690348pfq.9.2022.11.17.14.22.34
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dgr+e8ZyUoyDeyQ+E1fecvyvQ3W2gshFUSz2h8pvtJo=;
+        b=RLHm5G2BwsZ1Ww1NrQBM2r9eRFPoiveLxZ2TM3984xw+z/ArIqnNolScjNyTXHulcI
+         NyG/JBPWpKH7gQY8TngODNTqZAJOd86o7WdyuIELbP9B3W3FMqDYLdR+KgVdhCV26Sib
+         iT+YDk8NMr/E+3k9sxq8S8Hn2TrjjDaEg7BKftJh2v/UVCJ3rYgU5Yz/IceC/SrlCsKK
+         wtYNumrLLYyCQlvCzaQ/OZAbzuPk9SrD9bQSFGgf8YL8vp42Hy6zbH6YuxK4YkkhXFtG
+         NVQhhh//ke6VXDFfbSsixYo7t6luUQM+oeDgbetp0hNkxbNwXzGSIRa3o39KUXPbZpwU
+         o1eA==
+X-Gm-Message-State: ANoB5plx4/wxWgemnycLtecpzYc88DQXfbBIgZYgIcmXJVuFKprszFWY
+        Nt0DTjp2FbmceUs3iTHMeVQ=
+X-Google-Smtp-Source: AA0mqf7Z65fj1NYronMx4tvVIgXpfTk0PfmABsMsNxgksLL4eZYFqj9gERnwE5cFmcG759Xa+4GpXA==
+X-Received: by 2002:a63:c65:0:b0:476:db6f:d436 with SMTP id 37-20020a630c65000000b00476db6fd436mr4003107pgm.394.1668723954609;
+        Thu, 17 Nov 2022 14:25:54 -0800 (PST)
+Received: from google.com ([2620:15c:211:201:6bbc:b70a:8f80:710d])
+        by smtp.gmail.com with ESMTPSA id u15-20020a170902e80f00b001869581f7ecsm1963826plg.116.2022.11.17.14.25.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 14:22:34 -0800 (PST)
-From:   coverity-bot <keescook@chromium.org>
-X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
-Date:   Thu, 17 Nov 2022 14:22:34 -0800
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Nikolay Aleksandrov <nikolay@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        netdev@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Coverity: __sock_gen_cookie(): Error handling issues
-Message-ID: <202211171422.7A7A7A9@keescook>
+        Thu, 17 Nov 2022 14:25:54 -0800 (PST)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Thu, 17 Nov 2022 14:25:52 -0800
+From:   Minchan Kim <minchan@kernel.org>
+To:     Nhat Pham <nphamcs@gmail.com>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, ngupta@vflare.org,
+        senozhatsky@chromium.org, sjenning@redhat.com, ddstreet@ieee.org,
+        vitaly.wool@konsulko.com
+Subject: Re: [PATCH v4 4/5] zsmalloc: Add ops fields to zs_pool to store
+ evict handlers
+Message-ID: <Y3a08ElhlyLN+0rG@google.com>
+References: <20221117163839.230900-1-nphamcs@gmail.com>
+ <20221117163839.230900-5-nphamcs@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20221117163839.230900-5-nphamcs@gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+On Thu, Nov 17, 2022 at 08:38:38AM -0800, Nhat Pham wrote:
+> This adds fields to zs_pool to store evict handlers for writeback,
+> analogous to the zbud allocator.
+> 
+> Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+> ---
+>  mm/zsmalloc.c | 35 ++++++++++++++++++++++++++++++++++-
+>  1 file changed, 34 insertions(+), 1 deletion(-)
+> 
+> diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
+> index 2557b55ec767..776d0e15a401 100644
+> --- a/mm/zsmalloc.c
+> +++ b/mm/zsmalloc.c
+> @@ -225,6 +225,12 @@ struct link_free {
+>  	};
+>  };
+> 
+> +struct zs_pool;
+> +
+> +struct zs_ops {
+> +	int (*evict)(struct zs_pool *pool, unsigned long handle);
+> +};
+> +
+>  struct zs_pool {
+>  	const char *name;
+> 
+> @@ -242,6 +248,9 @@ struct zs_pool {
+>  #ifdef CONFIG_ZPOOL
+>  	/* List tracking the zspages in LRU order by most recently added object */
+>  	struct list_head lru;
+> +	const struct zs_ops *ops;
+> +	struct zpool *zpool;
+> +	const struct zpool_ops *zpool_ops;
+>  #endif
+> 
+>  #ifdef CONFIG_ZSMALLOC_STAT
+> @@ -385,6 +394,18 @@ static void record_obj(unsigned long handle, unsigned long obj)
+> 
+>  #ifdef CONFIG_ZPOOL
+> 
+> +static int zs_zpool_evict(struct zs_pool *pool, unsigned long handle)
+> +{
+> +	if (pool->zpool && pool->zpool_ops && pool->zpool_ops->evict)
+> +		return pool->zpool_ops->evict(pool->zpool, handle);
+> +	else
+> +		return -ENOENT;
+> +}
+> +
+> +static const struct zs_ops zs_zpool_ops = {
+> +	.evict =	zs_zpool_evict
+> +};
+> +
+>  static void *zs_zpool_create(const char *name, gfp_t gfp,
+>  			     const struct zpool_ops *zpool_ops,
+>  			     struct zpool *zpool)
+> @@ -394,7 +415,19 @@ static void *zs_zpool_create(const char *name, gfp_t gfp,
+>  	 * different contexts and its caller must provide a valid
+>  	 * gfp mask.
+>  	 */
+> -	return zs_create_pool(name);
+> +	struct zs_pool *pool = zs_create_pool(name);
+> +
+> +	if (pool) {
+> +		pool->zpool = zpool;
+> +		pool->zpool_ops = zpool_ops;
+> +
+> +		if (zpool_ops)
 
-This is an experimental semi-automated report about issues detected by
-Coverity from a scan of next-20221117 as part of the linux-next scan project:
-https://scan.coverity.com/projects/linux-next-weekly-scan
-
-You're getting this email because you were associated with the identified
-lines of code (noted below) that were touched by commits:
-
-  Wed Nov 16 12:42:01 2022 +0000
-    4ebf802cf1c6 ("net: __sock_gen_cookie() cleanup")
-
-Coverity reported the following:
-
-*** CID 1527347:  Error handling issues  (CHECKED_RETURN)
-net/core/sock_diag.c:33 in __sock_gen_cookie()
-27     {
-28     	u64 res = atomic64_read(&sk->sk_cookie);
-29
-30     	if (!res) {
-31     		u64 new = gen_cookie_next(&sock_cookie);
-32
-vvv     CID 1527347:  Error handling issues  (CHECKED_RETURN)
-vvv     Calling "atomic64_try_cmpxchg" without checking return value (as is done elsewhere 8 out of 9 times).
-33     		atomic64_try_cmpxchg(&sk->sk_cookie, &res, new);
-34     	}
-35     	return res;
-36     }
-37
-38     int sock_diag_check_cookie(struct sock *sk, const __u32 *cookie)
-
-If this is a false positive, please let us know so we can mark it as
-such, or teach the Coverity rules to be smarter. If not, please make
-sure fixes get into linux-next. :) For patches fixing this, please
-include these lines (but double-check the "Fixes" first):
-
-Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-Addresses-Coverity-ID: 1527347 ("Error handling issues")
-Fixes: 4ebf802cf1c6 ("net: __sock_gen_cookie() cleanup")
-
-Thanks for your attention!
-
--- 
-Coverity-bot
+I lost. When do we have zpool_ops as NULL?
