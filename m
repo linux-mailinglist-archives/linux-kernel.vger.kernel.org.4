@@ -2,139 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE10F62DD92
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 15:09:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E22B62DDA0
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 15:11:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239783AbiKQOJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 09:09:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43486 "EHLO
+        id S240092AbiKQOLe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 09:11:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239766AbiKQOJD (ORCPT
+        with ESMTP id S240046AbiKQOL0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 09:09:03 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3524E4D5C4;
-        Thu, 17 Nov 2022 06:09:02 -0800 (PST)
-Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 23FE6929;
-        Thu, 17 Nov 2022 15:09:00 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1668694140;
-        bh=l3w4hDhFa9Q3sZuthvIK7obC041o1KWG3D5dnjxX6h8=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=nArpv6AjlaW4aiWbQIjXqz/lmnYN27IiyKDXnG+PmNfWkkqcOidTx/6fh1P6i5GE5
-         qHDCb9ZE9r+4CAFjfnTMwXRlIxPcKGsEi3GzuW5dO3sRa55j7CLI+99Vdi/4p3zFNx
-         +wLWVVgW6TBPQpqNz4tx6M/Ow5sN1J51n4CWWklo=
-Content-Type: text/plain; charset="utf-8"
+        Thu, 17 Nov 2022 09:11:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B25062054
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 06:10:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668694229;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZOfT5eurCDMRxlkmRM+KtqZ95XT89veQx2mLMpeWx5s=;
+        b=CLSV3SpJGhwvtmUhPoWN6QciGKUlPdgWCFeM/Coxpp7UAtyMjhw4CQLJpO909I6zLqB86e
+        W8BtOZ3BBn6ab/gJ3VZtSKk8HHR0BQcCXi1u7449mbldS4aCJLsY+P3q16M/Uss6PrL4c1
+        UsTP9hpa0uhdZkb4s4lWjH+nkMiu1NA=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-594-Ddu0Z2hKPXK9Bye0mYJsKw-1; Thu, 17 Nov 2022 09:10:28 -0500
+X-MC-Unique: Ddu0Z2hKPXK9Bye0mYJsKw-1
+Received: by mail-ed1-f70.google.com with SMTP id c9-20020a05640227c900b00463de74bc15so1304426ede.13
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 06:10:28 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZOfT5eurCDMRxlkmRM+KtqZ95XT89veQx2mLMpeWx5s=;
+        b=0xJWBl/v384ojCljClamt7reSkI+WwJZfPgX+LDHKm7/St3RjTnxL4EoNFh/bAkn6m
+         0NQMN3HmhiZdZ/WJ3xMTxt2A+gOtii6KXSGddzxztbAu5Yce4UfiQmZoRcaUD8ACrCNw
+         LKgf8ArL4Bz2tJsUCZmCqsQWc51tpLjogUbxQ5C0TY/fnNuu5xTi1dgorrJ5IX0Mj6z0
+         obww9UWfjn/NO3yANG9gOP5UA0Tl9N4GyI+4AjQ8qVljXguPlOLZOQfWo5LIe7OR/YIt
+         RlfeRdsWQ5272huS88bvuQUL7QCgQXJ9uEZiIU3vedWaVT4aKDoecdFCWP6eAIMZhk6l
+         /+UA==
+X-Gm-Message-State: ANoB5pn1jQcjQfDRPHt287+xCu5oj4SEXt/kt7MH61zaco2lGAzqlRJQ
+        eKfm/Zbj73p5wAiJ+2jGBJrkcWkORKSq187EWS2FNV38fSuQTVqr1eMLJnrhSSCn/2dbOIoouSw
+        wOgGwnhUGN/CPVgmofVFz5IcH
+X-Received: by 2002:a17:906:a0d7:b0:7b2:7af0:c231 with SMTP id bh23-20020a170906a0d700b007b27af0c231mr2246812ejb.240.1668694227325;
+        Thu, 17 Nov 2022 06:10:27 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5yZNP1T9Ajp8UDXy9301jUiAy463N9N6Tnb93rlCZ5crLe0F9/d4DGRRfgxna+qFpfi0BKgg==
+X-Received: by 2002:a17:906:a0d7:b0:7b2:7af0:c231 with SMTP id bh23-20020a170906a0d700b007b27af0c231mr2246782ejb.240.1668694227137;
+        Thu, 17 Nov 2022 06:10:27 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id b2-20020a1709063ca200b007acd04fcedcsm413829ejh.46.2022.11.17.06.10.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Nov 2022 06:10:26 -0800 (PST)
+Message-ID: <de3aae46-58bd-7041-df49-10cfb6be1603@redhat.com>
+Date:   Thu, 17 Nov 2022 15:10:25 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20221117122547.809644-4-tomi.valkeinen@ideasonboard.com>
-References: <20221117122547.809644-1-tomi.valkeinen@ideasonboard.com> <20221117122547.809644-4-tomi.valkeinen@ideasonboard.com>
-Subject: Re: [PATCH v1 3/8] clk: renesas: r8a779g0: Add display related clocks
-From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Date:   Thu, 17 Nov 2022 14:08:57 +0000
-Message-ID: <166869413781.50677.10862438013473651942@Monstersaurus>
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [RFC v3 0/4] Make it easier to measure % in HW sleep state
+Content-Language: en-US, nl
+To:     Mario Limonciello <mario.limonciello@amd.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Sven van Ashbrook <svenva@chromium.org>,
+        Raul Rangel <rrangel@chromium.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        John Stultz <jstultz@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
+        Rajat Jain <rajatja@google.com>,
+        David E Box <david.e.box@intel.com>
+References: <20221115200156.12218-1-mario.limonciello@amd.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20221115200156.12218-1-mario.limonciello@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Tomi Valkeinen (2022-11-17 12:25:42)
-> From: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
->=20
-> Add clocks related to display which are needed to get the DSI output
-> working.
->=20
-> Extracted from Renesas BSP tree.
->=20
-> Signed-off-by: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
-> ---
->  drivers/clk/renesas/r8a779g0-cpg-mssr.c | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
->=20
-> diff --git a/drivers/clk/renesas/r8a779g0-cpg-mssr.c b/drivers/clk/renesa=
-s/r8a779g0-cpg-mssr.c
-> index c6337a408e5e..6937f1aee677 100644
-> --- a/drivers/clk/renesas/r8a779g0-cpg-mssr.c
-> +++ b/drivers/clk/renesas/r8a779g0-cpg-mssr.c
-> @@ -145,6 +145,8 @@ static const struct cpg_core_clk r8a779g0_core_clks[]=
- __initconst =3D {
->         DEF_FIXED("viobusd2",   R8A779G0_CLK_VIOBUSD2,  CLK_VIO,        2=
-, 1),
->         DEF_FIXED("vcbus",      R8A779G0_CLK_VCBUS,     CLK_VC,         1=
-, 1),
->         DEF_FIXED("vcbusd2",    R8A779G0_CLK_VCBUSD2,   CLK_VC,         2=
-, 1),
-> +       DEF_FIXED("dsiref",     R8A779G0_CLK_DSIREF,    CLK_PLL5_DIV4,  4=
-8, 1),
-> +       DEF_DIV6P1("dsiext",    R8A779G0_CLK_DSIEXT,    CLK_PLL5_DIV4,  0=
-x884),
-> =20
->         DEF_GEN4_SDH("sd0h",    R8A779G0_CLK_SD0H,      CLK_SDSRC,       =
-  0x870),
->         DEF_GEN4_SD("sd0",      R8A779G0_CLK_SD0,       R8A779G0_CLK_SD0H=
-, 0x870),
-> @@ -161,6 +163,14 @@ static const struct mssr_mod_clk r8a779g0_mod_clks[]=
- __initconst =3D {
->         DEF_MOD("avb0",         211,    R8A779G0_CLK_S0D4_HSC),
->         DEF_MOD("avb1",         212,    R8A779G0_CLK_S0D4_HSC),
->         DEF_MOD("avb2",         213,    R8A779G0_CLK_S0D4_HSC),
-> +
-> +       DEF_MOD("dis0",                 411,    R8A779G0_CLK_S0D3),
+Hi,
 
-dsi0?
+On 11/15/22 21:01, Mario Limonciello wrote:
+> Sven van Ashbrook brought a patch to the kernel mailing list that
+> attempted to change the reporting level of a s0ix entry issue to a
+> different debugging level so that infastructure used by Google could
+> better scan logs to catch problems.
+> 
+> This approach was rejected, but during the conversation another
+> suggestion was made by David E. Box to introduce some infrastructure
+> into the kernel to report this information.
+> 
+> As it's information that is reported by both AMD and Intel platforms
+> over s2idle, this seems to make sense.
+> 
+> RFC v1 and v2 introduced two new sysfs files to report the information, but
+> Rafael pointed out that there was already a file that could be used on
+> Intel platforms: `low_power_idle_system_residency_us`.
+> 
+> RFC v3 creates this file for AMD platforms and also introduces another file
+> that can be used to determine total sleep time:
+> `/sys/power/suspend_stats/last_total`.
+> 
+> With these two files a simple shell script can be run after suspend to
+> calculate the percentage.
+> 
+> ```
+>  #!/bin/sh
+> total=$(cat /sys/power/suspend_stats/last_total)
+> hw=$(cat /sys/devices/system/cpu/cpuidle/low_power_idle_system_residency_us)
+> percent=$(awk -v hw=$hw -v total=$total 'BEGIN { printf "%.2f%%", (hw/total*100) }')
+> echo "Last ${total}us suspend cycle spent $percent of the time in a hardware sleep state."
+> ```
+> 
+> A sample run on an AMD platform that was just sleeping with this series on
+> top of 6.1-rc5 shows the following:
+>  # ./compare.sh
+> Last 15699838us suspend cycle spent 98.63% of the time in a hardware sleep state.
+> 
+> Further discussion to be expected on this series:
+> 
+> * What last_total will represent from the suspend cycle
+> 
+> * Whether the semantics of all platforms will be the same for
+>   `low_power_idle_system_residency_us`
+>   - AMD platforms reset this counter before s2idle entry.  Do Intel? Others?
+> 
+> * Maybe the *kernel* should be responsible to do the calculation and export
+>   a `last_hw_sleep_percent` file instead. Platform differences can be
+>   abstracted then within individual drivers.
 
-Oh - how curious - it's listed as dis0 in the datasheet.
-Ok - so this is the DU *display* not DSI ;-)
+That (`last_hw_sleep_percent` file) is an interesting proposal,
+I can see that being a better interface because as you say this allows
+the kernel / platform-drivers to take care of any platform quirks /
+weirdness, avoiding any userspace monitoring of this to possibly
+give false positive warnings.
 
-> +       DEF_MOD("dsitxlink0",           415,    R8A779G0_CLK_DSIREF),
-> +       DEF_MOD("dsitxlink1",           416,    R8A779G0_CLK_DSIREF),
-> +
-> +       DEF_MOD("fcpvd0",               508,    R8A779G0_CLK_S0D3),
-> +       DEF_MOD("fcpvd1",               509,    R8A779G0_CLK_S0D3),
-> +
+Regards,
 
-checks out. I guess the fcpcs is the CSI related FCP ? Anyway, if it's
-not needed it can be ignored for now.
+Hans
 
 
->         DEF_MOD("hscif0",       514,    R8A779G0_CLK_SASYNCPERD1),
->         DEF_MOD("hscif1",       515,    R8A779G0_CLK_SASYNCPERD1),
->         DEF_MOD("hscif2",       516,    R8A779G0_CLK_SASYNCPERD1),
-> @@ -193,6 +203,10 @@ static const struct mssr_mod_clk r8a779g0_mod_clks[]=
- __initconst =3D {
->         DEF_MOD("tmu3",         716,    R8A779G0_CLK_SASYNCPERD2),
->         DEF_MOD("tmu4",         717,    R8A779G0_CLK_SASYNCPERD2),
->         DEF_MOD("tpu0",         718,    R8A779G0_CLK_SASYNCPERD4),
-> +
-> +       DEF_MOD("vspd0",                830,    R8A779G0_CLK_S0D1_VIO),
-> +       DEF_MOD("vspd1",                831,    R8A779G0_CLK_S0D1_VIO),
-> +
 
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 
->         DEF_MOD("wdt1:wdt0",    907,    R8A779G0_CLK_R),
->         DEF_MOD("cmt0",         910,    R8A779G0_CLK_R),
->         DEF_MOD("cmt1",         911,    R8A779G0_CLK_R),
-> --=20
-> 2.34.1
->
+
+> 
+> Mario Limonciello (4):
+>   PM: Add a sysfs file to represent the total sleep duration
+>   platform/x86/intel/pmc: core: Drop check_counters
+>   platform/x86/amd: pmc: Report duration of time in deepest hw state
+>   platform/x86/amd: pmc: Populate cpuidle sysfs file with hw sleep data
+> 
+>  Documentation/ABI/testing/sysfs-amd-pmc |  6 ++++++
+>  Documentation/ABI/testing/sysfs-power   |  8 ++++++++
+>  drivers/platform/x86/amd/pmc.c          | 27 ++++++++++++++++++++++---
+>  drivers/platform/x86/intel/pmc/core.c   |  7 ++-----
+>  drivers/platform/x86/intel/pmc/core.h   |  1 -
+>  include/linux/suspend.h                 |  2 ++
+>  kernel/power/main.c                     | 15 ++++++++++++++
+>  kernel/power/suspend.c                  |  2 ++
+>  kernel/time/timekeeping.c               |  2 ++
+>  9 files changed, 61 insertions(+), 9 deletions(-)
+> 
+
