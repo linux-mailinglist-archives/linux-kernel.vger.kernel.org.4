@@ -2,89 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17D2362D0AB
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 02:30:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89D5362D0AD
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 02:34:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234505AbiKQBas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 20:30:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36694 "EHLO
+        id S237236AbiKQBeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 20:34:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234546AbiKQBao (ORCPT
+        with ESMTP id S234444AbiKQBeS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 20:30:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CD1645EDA;
-        Wed, 16 Nov 2022 17:30:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 16 Nov 2022 20:34:18 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 476F51DDF9;
+        Wed, 16 Nov 2022 17:34:17 -0800 (PST)
+Received: from mxct.zte.com.cn (unknown [192.168.251.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NCMs25BWqz4xVnD;
+        Thu, 17 Nov 2022 09:34:14 +0800 (CST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B489F61F76;
-        Thu, 17 Nov 2022 01:30:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A006C433D6;
-        Thu, 17 Nov 2022 01:30:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668648641;
-        bh=+PGZeGtBYoTBr5h6JcWPDbDXDm8TITSpW/m6MKyrUeo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=L/UZOKq9H6xje/OlvgNOHky3TkyOVMOX5gC1BQpPEaanxgTNZFFPl6Fyo08M03FOi
-         7yYzVYkCjAkCcjpPYyzKd4bR+Qajdmigy8nyXKo2DlW5fkyORMqRTXxbcx6AdWR/cx
-         y84siDxlHNZh2PNsN5q4qNVbxAuiE/NJyR6VwVTMURZU+IgCfx0KDoVXQDwLlRQfRm
-         dinfiMAC225cWKZOYuNIeAkvLQOpUFEeodUQHfVCRZKCu2R+Q2FpNlDqlRiD+Rjfrm
-         quDAmH7GFSaYc70HLfZETuszZwI3nWATNh6cr8hr7AsOYnUY3m+GBdglb1RmpTJjBn
-         BrcM3SPCZPKQw==
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Ben Hutchings <ben@decadent.org.uk>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] kbuild: deb-pkg: get rid of |flex:native workaround from Build-Depends
-Date:   Thu, 17 Nov 2022 10:30:33 +0900
-Message-Id: <20221117013033.1105289-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NCMry6TYlz4y3ZB;
+        Thu, 17 Nov 2022 09:34:10 +0800 (CST)
+Received: from xaxapp01.zte.com.cn ([10.88.40.50])
+        by mse-fl2.zte.com.cn with SMTP id 2AH1XxdK072447;
+        Thu, 17 Nov 2022 09:33:59 +0800 (+08)
+        (envelope-from guo.ziliang@zte.com.cn)
+Received: from mapi (xaxapp03[null])
+        by mapi (Zmail) with MAPI id mid32;
+        Thu, 17 Nov 2022 09:34:00 +0800 (CST)
+Date:   Thu, 17 Nov 2022 09:34:00 +0800 (CST)
+X-Zmail-TransId: 2afb63758f887390f199
+X-Mailer: Zmail v1.0
+Message-ID: <202211170934005278113@zte.com.cn>
+Mime-Version: 1.0
+From:   <guo.ziliang@zte.com.cn>
+To:     <rafael@kernel.org>
+Cc:     <lenb@kernel.org>, <linux-acpi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIEFDUEk6IHN5c2ZzOiB1c2Ugc3lzZnNfZW1pdCgpIHRvIGluc3RlYWQgb2Ygc2NucHJpbnRmKCk=?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 2AH1XxdK072447
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 63758F96.002 by FangMail milter!
+X-FangMail-Envelope: 1668648854/4NCMs25BWqz4xVnD/63758F96.002/192.168.251.13/[192.168.251.13]/mxct.zte.com.cn/<guo.ziliang@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 63758F96.002/4NCMs25BWqz4xVnD
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"| flex:native" was a workaround (suggested by Ben, see Link) because
-"MultiArch: foreign" was missing in the flex package on some old distros
-when commit e3a22850664f ("deb-pkg: generate correct build dependencies")
-was applied.
+From: guo ziliang <guo.ziliang@zte.com.cn>
 
-It seems fixing the flex package has been completed. Get rid of the
-workaround.
+Replace the open-code with sysfs_emit() to simplify the code.
 
-Link: https://lore.kernel.org/linux-kbuild/ab49b0582ef12b14b1a68877263b81813e2492a2.camel@decadent.org.uk/
-Link: https://wiki.debian.org/CrossBuildPackagingGuidelines
-Cc: Ben Hutchings <ben@decadent.org.uk>
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Signed-off-by: guo ziliang <guo.ziliang@zte.com.cn>
 ---
-
- scripts/package/mkdebian | 2 +-
+ drivers/acpi/sysfs.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/scripts/package/mkdebian b/scripts/package/mkdebian
-index 60a2a63a5e90..852d13e738c5 100755
---- a/scripts/package/mkdebian
-+++ b/scripts/package/mkdebian
-@@ -175,7 +175,7 @@ Section: kernel
- Priority: optional
- Maintainer: $maintainer
- Rules-Requires-Root: no
--Build-Depends: bc, rsync, kmod, cpio, bison, flex | flex:native $extra_build_depends
-+Build-Depends: bc, rsync, kmod, cpio, bison, flex $extra_build_depends
- Homepage: https://www.kernel.org/
- 
- Package: $packagename-$version
--- 
-2.34.1
+diff --git a/drivers/acpi/sysfs.c b/drivers/acpi/sysfs.c
+index 2d81c74..7db3b53 100644
+--- a/drivers/acpi/sysfs.c
++++ b/drivers/acpi/sysfs.c
+@@ -198,7 +198,7 @@ static int param_set_trace_method_name(const char *val,
 
+ static int param_get_trace_method_name(char *buffer, const struct kernel_param *kp)
+ {
+-       return scnprintf(buffer, PAGE_SIZE, "%s\n", acpi_gbl_trace_method_name);
++       return sysfs_emit(buffer, "%s\n", acpi_gbl_trace_method_name);
+ }
+
+ static const struct kernel_param_ops param_ops_trace_method = {
+--
+1.8.3.1
