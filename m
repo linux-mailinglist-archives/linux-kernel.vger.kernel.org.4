@@ -2,178 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92C6162E394
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:56:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FE1462E39A
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:57:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235030AbiKQR4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 12:56:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40062 "EHLO
+        id S240140AbiKQR4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 12:56:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240109AbiKQR4D (ORCPT
+        with ESMTP id S232841AbiKQR4w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 12:56:03 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9261B2EF0A
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 09:56:00 -0800 (PST)
-Received: from [192.168.1.102] (unknown [103.251.226.79])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0BDCA929;
-        Thu, 17 Nov 2022 18:55:53 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1668707758;
-        bh=GdPOoKRqrG2ufeGG/2SH9V/fWXWoBKC38Aw9FoNcfyA=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=RFMPyXfbOKxmZOwkcsSeCt9YujWgYk8Et2/ySAHb5YtjlkpdkeZt8KCS07tioUone
-         Pf4qq9KsOr2zL9mk99Wyfftk73nFOpuRKrbD0JTstUCgDzCYRA1SNi1sCG9YXM4F0N
-         2mhNLN+zB1z7Q5h0G1XbczuO1E+iSrbuV6BNp+lI=
-Message-ID: <c718624a-bb6f-5474-5cc3-4319b1fdb282@ideasonboard.com>
-Date:   Thu, 17 Nov 2022 23:25:48 +0530
+        Thu, 17 Nov 2022 12:56:52 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 361382EF0A;
+        Thu, 17 Nov 2022 09:56:50 -0800 (PST)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AHHpvnP007922;
+        Thu, 17 Nov 2022 17:56:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=CWJAfnwyh5Q9V5PWdy4ziO9VlLOg/mrmsCUrHWibKhM=;
+ b=hSuESqvVxDH4K0PFc83716rKu7EQE+N/6UQ1SJqF5oURw+3BqcoOrjcOv6Qf6dW767NW
+ R8QAZBvGg1FMyq2lfCXg74ZuntF4Z2fx02Bjwgq9Qubpqjixgj4JmWvIvmjtdI7cIwRh
+ JXxgJdvK01U3j1aEjm29FgYOMhPM2Umep74Yf0BKBxKvGRmA7aSGfy+J8wuaIsXKiU2U
+ F7a803nBKNz+vaA4MDRhio9elVJdooxnUmm26GkO2nNoTY6wss580aJpKywxA9nszie6
+ o5lt3bQTinOvpLkb7WmXudcPkNgSN+u4G8MBSKqd6G8XR1GdkicGQx+AcC6np0g+ylox cw== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kws2m87sd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Nov 2022 17:56:37 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AHHubOr013696
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Nov 2022 17:56:37 GMT
+Received: from [10.216.15.99] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 17 Nov
+ 2022 09:56:35 -0800
+Message-ID: <9ba8f115-9f21-9edd-059d-638ad11b781f@quicinc.com>
+Date:   Thu, 17 Nov 2022 23:26:32 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.1
-Subject: Re: [PATCH 1/3] Revert "staging: mmal-vchiq: Avoid use of bool in
- structures"
-To:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Ray Jui <rjui@broadcom.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org, linux-staging@lists.linux.dev
-References: <20221117160015.344528-1-umang.jain@ideasonboard.com>
- <20221117160015.344528-2-umang.jain@ideasonboard.com>
- <166870135963.50677.14827688186331561108@Monstersaurus>
+Subject: Re: [PATCH v3] wifi: ath10k: Add WLAN firmware image version info
+ into smem
 Content-Language: en-US
-From:   Umang Jain <umang.jain@ideasonboard.com>
-In-Reply-To: <166870135963.50677.14827688186331561108@Monstersaurus>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To:     Kalle Valo <kvalo@kernel.org>
+CC:     <linux-wireless@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_mpubbise@quicinc.com>, <ath10k@lists.infradead.org>
+References: <20221111114235.10287-1-quic_youghand@quicinc.com>
+ <87edu5bsjw.fsf@kernel.org>
+From:   "Youghandhar Chintala (Temp)" <quic_youghand@quicinc.com>
+In-Reply-To: <87edu5bsjw.fsf@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: JvzufnOMUDgRPdNxsOKLbd7ZmP2wWX92
+X-Proofpoint-GUID: JvzufnOMUDgRPdNxsOKLbd7ZmP2wWX92
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-17_06,2022-11-17_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
+ mlxscore=0 clxscore=1015 impostorscore=0 malwarescore=0 spamscore=0
+ phishscore=0 lowpriorityscore=0 priorityscore=1501 mlxlogscore=999
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211170130
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kieran,
 
-On 11/17/22 9:39 PM, Kieran Bingham wrote:
-> Quoting Umang Jain (2022-11-17 16:00:13)
->> This reverts commit 640e77466e69d9c28de227bc76881f5501f532ca.
+On 11/14/2022 6:29 PM, Kalle Valo wrote:
+> Youghandhar Chintala <quic_youghand@quicinc.com> writes:
+>
+>> In a SoC based solution, it would be useful to know the versions of the
+>> various binary firmware blobs the system is running on. On a QCOM based
+>> SoC, this info can be obtained from socinfo debugfs infrastructure. For
+>> this to work, respective subsystem drivers have to export the firmware
+>> version information to an SMEM based version information table.
 >>
->> In commit 7967656ffbfa ("coding-style: Clarify the expectations around
->> bool") the check to dis-allow bool structure members was removed from
->> checkpatch.pl. It promotes bool structure members to store boolean
->> values. This enhances code readability.
+>> Having firmware version information at one place will help quickly
+>> figure out the firmware versions of various subsystems on the device
+>> instead of going through builds/logs in an event of a system crash.
 >>
->> Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
+>> Fill WLAN firmware version information in SMEM version table to be
+>> printed as part of socinfo debugfs infrastructure on a Qualcomm based
+>> SoC.
+>>
+>> This change is applicable only for WCN399X targets.
+>>
+>> Example:
+>> cat /sys/kernel/debug/qcom_socinfo/cnss/name
+>> QC_IMAGE_VERSION_STRING=WLAN.HL.3.2.2.c10-00754-QCAHLSWMTPL-1
+>>
+>> Reported-by: kernel test robot <lkp@intel.com>
+>>
+>> Tested-on: WCN3990 hw1.0 SNOC WLAN.HL.3.2.2.c10-00754-QCAHLSWMTPL-1
+>>
+>> Signed-off-by: Youghandhar Chintala <quic_youghand@quicinc.com>
 >> ---
->>   .../staging/vc04_services/vchiq-mmal/mmal-vchiq.c    | 12 ++++++------
->>   .../staging/vc04_services/vchiq-mmal/mmal-vchiq.h    |  4 ++--
->>   2 files changed, 8 insertions(+), 8 deletions(-)
+>> Changes from v2:
+>>   - Removed blank line between trailers
+>>   - Changed memcpy to strscpy
+>>   - Removed version_string_size
+>>   - Added new condition fw_build_id against max length
+>>   - Added depends on QCOM_SMEM for ath10k_snoc
+>> ---
+>>   drivers/net/wireless/ath/ath10k/Kconfig |  1 +
+>>   drivers/net/wireless/ath/ath10k/qmi.c   | 34 +++++++++++++++++++++++++
+>>   2 files changed, 35 insertions(+)
 >>
->> diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
->> index cb921c94996a..4abb6178cb9f 100644
->> --- a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
->> +++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
->> @@ -863,9 +863,9 @@ static int port_info_get(struct vchiq_mmal_instance *instance,
->>                  goto release_msg;
->>   
->>          if (rmsg->u.port_info_get_reply.port.is_enabled == 0)
->> -               port->enabled = 0;
->> +               port->enabled = false;
->>          else
->> -               port->enabled = 1;
->> +               port->enabled = true;
->>   
->>          /* copy the values out of the message */
->>          port->handle = rmsg->u.port_info_get_reply.port_handle;
->> @@ -1304,7 +1304,7 @@ static int port_disable(struct vchiq_mmal_instance *instance,
->>          if (!port->enabled)
->>                  return 0;
->>   
->> -       port->enabled = 0;
->> +       port->enabled = false;
->>   
->>          ret = port_action_port(instance, port,
->>                                 MMAL_MSG_PORT_ACTION_TYPE_DISABLE);
->> @@ -1359,7 +1359,7 @@ static int port_enable(struct vchiq_mmal_instance *instance,
->>          if (ret)
->>                  goto done;
->>   
->> -       port->enabled = 1;
->> +       port->enabled = true;
->>   
->>          if (port->buffer_cb) {
->>                  /* send buffer headers to videocore */
->> @@ -1531,7 +1531,7 @@ int vchiq_mmal_port_connect_tunnel(struct vchiq_mmal_instance *instance,
->>                          pr_err("failed disconnecting src port\n");
->>                          goto release_unlock;
->>                  }
->> -               src->connected->enabled = 0;
->> +               src->connected->enabled = false;
->>                  src->connected = NULL;
->>          }
->>   
->> @@ -1799,7 +1799,7 @@ int vchiq_mmal_component_disable(struct vchiq_mmal_instance *instance,
->>   
->>          ret = disable_component(instance, component);
->>          if (ret == 0)
->> -               component->enabled = 0;
->> +               component->enabled = false;
->>   
->>          mutex_unlock(&instance->vchiq_mutex);
->>   
->> diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.h b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.h
->> index 6006e29232b3..70eda6cac1c6 100644
->> --- a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.h
->> +++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.h
->> @@ -48,7 +48,7 @@ typedef void (*vchiq_mmal_buffer_cb)(
->>                  int status, struct mmal_buffer *buffer);
->>   
->>   struct vchiq_mmal_port {
->> -       u32 enabled:1;
->> +       bool enabled:1;
-> Is this a direct revert with 'git revert' ?
-
-
-No. It had conflicts plus I added the ':1' initialization to keep the 
-logic same (in case 'enabled' gets used directly). Similar pattern come 
-up with:
-     ($) git grep 'bool' -- '*.[h]' | grep '\:1'
-
-So it shouldn't be an issue.
-
+>> diff --git a/drivers/net/wireless/ath/ath10k/Kconfig b/drivers/net/wireless/ath/ath10k/Kconfig
+>> index ca007b800f75..e6ea884cafc1 100644
+>> --- a/drivers/net/wireless/ath/ath10k/Kconfig
+>> +++ b/drivers/net/wireless/ath/ath10k/Kconfig
+>> @@ -44,6 +44,7 @@ config ATH10K_SNOC
+>>   	tristate "Qualcomm ath10k SNOC support"
+>>   	depends on ATH10K
+>>   	depends on ARCH_QCOM || COMPILE_TEST
+>> +	depends on QCOM_SMEM
+>>   	select QCOM_SCM
+>>   	select QCOM_QMI_HELPERS
+> Is there a reason why you used "depends on"? Other QCOM dependencies
+> used "select", so I'm wondering if QCOM_SMEM should also use select?
+Sure Kalle. As suggested will change it to select.
 >
-> I would expect this to be
-> 	bool enabled;
-
-
-True but it won't functionally not be the same in matter of 
-initialization. Should the initialization be split to separate patch?
-
->
->
->>          u32 handle;
->>          u32 type; /* port type, cached to use on port info set */
->>          u32 index; /* port index, cached to use on port info set */
->> @@ -83,7 +83,7 @@ struct vchiq_mmal_port {
->>   
->>   struct vchiq_mmal_component {
->>          u32 in_use:1;
->> -       u32 enabled:1;
->> +       bool enabled:1;
-> Same here of course.
->
->>          u32 handle;  /* VideoCore handle for component */
->>          u32 inputs;  /* Number of input ports */
->>          u32 outputs; /* Number of output ports */
->> -- 
->> 2.38.1
->>
+> Please also use ath10k list for ath10k patches, not ath11k.
+Apologies, My bad.
