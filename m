@@ -2,145 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7C0162D506
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:28:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D05462D50A
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:29:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239595AbiKQI2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 03:28:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36016 "EHLO
+        id S239536AbiKQI3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 03:29:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239536AbiKQI21 (ORCPT
+        with ESMTP id S239554AbiKQI2t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 03:28:27 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 138C8729BE
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 00:28:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=NNbNOwbcUMHNS/7bdatGU27KOLFjcCDm3+xJi7GtDC0=; b=hC6iPKJY6glbHhdE1Bp6WRha0d
-        mKKJIGEP/FeAZFXUUpITJng8JyaIqt05TwzACd5kfaZvY16QEljkpXzta4UQPAGHZVKc2TH6dzpsz
-        To87fPuqRA6/wX7/x6AUC1baXFt5U/sRlXEmwwmx/nakdSHiUgWC+9rX7u46XyckUspnh36tlIsP1
-        DBR7jgtp+xmeDzKhbgmJ3JisEDbdyaI+Kdvrs3FwPlMwSqkH8+W2jsu4ZZnngc71AhFKvIXgvVcvj
-        XP+jt9ha75z0rB+tJxeubQNq0A4z11aFRQoXHwGiPnmqNFnKwSm7fDc844P/Xx5OvNrIvr3sT4o/E
-        Vf/RCLTQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ovaFj-000nuI-38; Thu, 17 Nov 2022 08:28:07 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 55722300E52;
-        Thu, 17 Nov 2022 09:28:00 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 3896C200FC693; Thu, 17 Nov 2022 09:28:00 +0100 (CET)
-Date:   Thu, 17 Nov 2022 09:28:00 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Alexander Potapenko <glider@google.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ben Segall <bsegall@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Don Zickus <dzickus@redhat.com>, Hao Luo <haoluo@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Huang Rui <ray.huang@amd.com>,
-        Ingo Molnar <mingo@redhat.com>, Jan Hubicka <jh@suse.de>,
-        Jason Baron <jbaron@akamai.com>,
-        Jiri Kosina <jikos@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Martin Liska <mliska@suse.cz>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Mel Gorman <mgorman@suse.de>, Miguel Ojeda <ojeda@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Petr Mladek <pmladek@suse.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Richard Biener <RGuenther@suse.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Song Liu <song@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        Yonghong Song <yhs@fb.com>
-Subject: Re: [PATCH 00/46] gcc-LTO support for the kernel
-Message-ID: <Y3XwkFWJhcwApm4I@hirez.programming.kicks-ass.net>
-References: <20221114114344.18650-1-jirislaby@kernel.org>
- <CAMj1kXEMejnuMx1LJbfJj1+RUmZzZJNSmOVu_tWAbU6RXGqA3A@mail.gmail.com>
+        Thu, 17 Nov 2022 03:28:49 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040721F9F6;
+        Thu, 17 Nov 2022 00:28:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668673727; x=1700209727;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/JCCdl2h5+PM9X0mxvGrky+PhMRG4ua+zibm+Re3NT8=;
+  b=Wqdjb/4pRTJ5Y2l3yw2aliXEnbBKRIzilFltTaxb3hfz/KxgJmvGLaBK
+   CExFWP9X0VBZiFAdcUmyaFWW0dZLygGYMPFK2gbxHWEyU9dNsVVMGoUVX
+   tGd8mfUBZZSQAabZVc2q62wP5iky7/5k6cb0tUTPyRNa1t3DXN5dk5QEf
+   GrNEjuJDkEcEngiIu4Ks+eye+GX6cLQ9oN3dMTiV2FyN6NQ5scOi1gb7y
+   7Lv/MvZImH/l8d4oCaRNg5RdcvIOgFlMn93JeBPHK1cP4o+26hpkbP1MZ
+   lWrYkuO9W5uQS27dATKFf2rgKoNhI2MzjS+6bL4m3vUFhTIYu+IyH/ODk
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="296156411"
+X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
+   d="scan'208";a="296156411"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 00:28:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="745439868"
+X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
+   d="scan'208";a="745439868"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP; 17 Nov 2022 00:28:42 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ovaGF-00DUo9-1f;
+        Thu, 17 Nov 2022 10:28:39 +0200
+Date:   Thu, 17 Nov 2022 10:28:39 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        William Zhang <william.zhang@broadcom.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Jan Dabros <jsd@semihalf.com>,
+        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] i2c: loongson: add bus driver for the loongson
+ i2c controller
+Message-ID: <Y3Xwt2xtAbd8ubkF@smile.fi.intel.com>
+References: <20221117075938.23379-1-zhuyinbo@loongson.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMj1kXEMejnuMx1LJbfJj1+RUmZzZJNSmOVu_tWAbU6RXGqA3A@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221117075938.23379-1-zhuyinbo@loongson.cn>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 08:40:50PM +0100, Ard Biesheuvel wrote:
-> On Mon, 14 Nov 2022 at 12:44, Jiri Slaby (SUSE) <jirislaby@kernel.org> wrote:
-> >
-> > Hi,
-> >
-> > this is the first call for comments (and kbuild complaints) for this
-> > support of gcc (full) LTO in the kernel. Most of the patches come from
-> > Andi. Me and Martin rebased them to new kernels and fixed the to-use
-> > known issues. Also I updated most of the commit logs and reordered the
-> > patches to groups of patches with similar intent.
-> >
-> > The very first patch comes from Alexander and is pending on some x86
-> > queue already (I believe). I am attaching it only for completeness.
-> > Without that, the kernel does not boot (LTO reorders a lot).
-> >
-> > In our measurements, the performance differences are negligible.
-> >
-> > The kernel is bigger with gcc LTO due to more inlining.
+On Thu, Nov 17, 2022 at 03:59:37PM +0800, Yinbo Zhu wrote:
+> This bus driver supports the Loongson i2c hardware controller in the
+> Loongson platforms and supports to use DTS and ACPI framework to
+> register i2c adapter device resources.
 > 
-> OK, so if I understand this correctly:
-> - the performance is the same
-> - the resulting image is bigger
-> - we need a whole lot of ugly hacks to placate the linker.
-> 
-> Pardon my cynicism, but this cover letter does not mention any
-> advantages of LTO, so what is the point of all of this?
+> The Loongson i2c controller supports operating frequencty is 50MHZ
+> and supports the maximum transmission rate is 400kbps.
 
-Seconded; I really hate all the ugly required for the GCC-LTO
-'solution'. There not actually being any benefit just makes it a very
-simple decision to drop all these patches on the floor.
+Can you split slave part as a separate change? It will help to review and
+to understand the code better in the future by browsing the history.
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
