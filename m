@@ -2,109 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78E7F62D560
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:46:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D89C62D564
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:47:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234490AbiKQIqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 03:46:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47328 "EHLO
+        id S234515AbiKQIrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 03:47:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239556AbiKQIq1 (ORCPT
+        with ESMTP id S229931AbiKQIrS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 03:46:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A35551326
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 00:46:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FE6D62112
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 08:46:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F37A7C43140
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 08:46:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668674785;
-        bh=lshv90GZvIIRK6CiPhX598Z0NXfqQjkAdH3RaDMv5VI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=u/OQDRNwnK/M9biz6uwuatzfT/SMUcdgkHij+2f2WkgwBIi67jSFOfow+6aVJOzI5
-         6bfkSeOWA2AAcF7wIVZSlAdB93FVP4d8LwMpBWnavdF2n92eVcHHvfOgQKshqzkKnm
-         noutrGxbrEL4RfwtSVfvkXcUA1Aw5rLsTsAuVPGmyQDLimO6vDJ0FKyp/7uB5rF+AQ
-         vAFxT8B0sVy0su8LzqEB1N95Zww3N4JTh/K7YgC3AbQ6QvzlA6Y5jkjzuS2K5AhK6h
-         AR+/vYHPVeQoziZehyoUhvH8lLgmCSup8jMHu72nHdPmvs4fnH5BGgepAxX9xXjujc
-         T3/jw+ZHrP+rQ==
-Received: by mail-yb1-f173.google.com with SMTP id z192so1120449yba.0
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 00:46:24 -0800 (PST)
-X-Gm-Message-State: ANoB5pmmjwvz4Gv34L02VnPkGHS9pgHmj4euGqXXLCbFpbm07sscrOFb
-        uYbD/OzthBYYhWcMaw4flcej5vHYGd9nuZKiJJ8=
-X-Google-Smtp-Source: AA0mqf6HeEJZ+tdQw5CBNfxZKT4jBpeHrgZVXlfuQnhJWeQGG5PT1VyndJ7zdBDZbvkTJhvXL8jiWN3PXlXdLSAlpMU=
-X-Received: by 2002:a25:83c7:0:b0:6dd:1ffe:2028 with SMTP id
- v7-20020a2583c7000000b006dd1ffe2028mr1209144ybm.550.1668674783929; Thu, 17
- Nov 2022 00:46:23 -0800 (PST)
+        Thu, 17 Nov 2022 03:47:18 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7D5EC03;
+        Thu, 17 Nov 2022 00:47:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668674837; x=1700210837;
+  h=date:from:to:subject:message-id:references:mime-version:
+   in-reply-to;
+  bh=6KcOzwaOfZlcBiEgPlkMskn+edpOXlDZLDpkAd0fjXc=;
+  b=jzToVI4f2obVUayC0aujcHnqG/rt5vJavfaAul9tf30fUNNTKbSiXCCp
+   JMtlkdTDGMWUkIT2mxTtGIIAo9O1qaEovY82IHM1y5KU+it09byjYJd7J
+   RZADYYJQoIsnRYYXR9TV3VZRn7oToFdybUbfUwVFAbwdTuK9xZMOmLeHe
+   32X1CZ/wsR0tkrP2dpNK9lupO+vNr0EVjjn+tPnIdDVdt04UNypyeEx19
+   L8zZ4PbENfizOiXx7dh2vadzUqoUCca2Gv9abn1F+FaDhlOB5o0cy4Klp
+   dPz9xnsU7QOdtsjjkrdYxcwfJ+c9BxIndqn8UIAIWXB6N5S2st+vZIPDv
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="292502752"
+X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
+   d="scan'208";a="292502752"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 00:47:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="703245803"
+X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
+   d="scan'208";a="703245803"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga008.fm.intel.com with ESMTP; 17 Nov 2022 00:47:13 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ovaYA-00DV7I-2Q;
+        Thu, 17 Nov 2022 10:47:10 +0200
+Date:   Thu, 17 Nov 2022 10:47:10 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Wolfram Sang <wsa@kernel.org>, Yinbo Zhu <zhuyinbo@loongson.cn>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        William Zhang <william.zhang@broadcom.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Jan Dabros <jsd@semihalf.com>,
+        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] i2c: loongson: add bus driver for the loongson
+ i2c controller
+Message-ID: <Y3X1Dppjg/yGgLSS@smile.fi.intel.com>
+References: <20221117075938.23379-1-zhuyinbo@loongson.cn>
+ <Y3Xwt2xtAbd8ubkF@smile.fi.intel.com>
+ <Y3XyU70QJruJUsI0@ninjato>
 MIME-Version: 1.0
-References: <20221116134126.199087-1-marpagan@redhat.com> <Y3T/ESXEb+MF2QEW@kroah.com>
-In-Reply-To: <Y3T/ESXEb+MF2QEW@kroah.com>
-From:   Oded Gabbay <ogabbay@kernel.org>
-Date:   Thu, 17 Nov 2022 10:45:57 +0200
-X-Gmail-Original-Message-ID: <CAFCwf1193-TiMdx3unuHC1H4zK+7qYg_4A5mtOB7VGmqZ6M6HQ@mail.gmail.com>
-Message-ID: <CAFCwf1193-TiMdx3unuHC1H4zK+7qYg_4A5mtOB7VGmqZ6M6HQ@mail.gmail.com>
-Subject: Re: [PATCH] habanalabs: added return value check for hl_fw_dynamic_send_clear_cmd()
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Marco Pagani <marpagan@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3XyU70QJruJUsI0@ninjato>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 5:17 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Wed, Nov 16, 2022 at 02:41:25PM +0100, Marco Pagani wrote:
-> > The clang-analyzer reported a warning: "Value stored to 'rc' is never
-> > read".
-> >
-> > The return value check for the first hl_fw_dynamic_send_clear_cmd() call
-> > in hl_fw_dynamic_send_protocol_cmd() appears to be missing.
-> >
-> > Signed-off-by: Marco Pagani <marpagan@redhat.com>
-> > ---
-> >  drivers/misc/habanalabs/common/firmware_if.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/drivers/misc/habanalabs/common/firmware_if.c b/drivers/misc/habanalabs/common/firmware_if.c
-> > index 2de6a9bd564d..311942108dbc 100644
-> > --- a/drivers/misc/habanalabs/common/firmware_if.c
-> > +++ b/drivers/misc/habanalabs/common/firmware_if.c
-> > @@ -1782,6 +1782,8 @@ int hl_fw_dynamic_send_protocol_cmd(struct hl_device *hdev,
-> >
-> >       /* first send clear command to clean former commands */
-> >       rc = hl_fw_dynamic_send_clear_cmd(hdev, fw_loader);
-> > +     if (rc)
-> > +             return rc;
-> >
-> >       /* send the actual command */
-> >       hl_fw_dynamic_send_cmd(hdev, fw_loader, cmd, size);
->
-> Are you sure this is ok?  If the first "clean the buffer" command fails,
-> all should still be good as that wasn't the real command.
->
-> But maybe the hardware will never fail this?
->
-> thanks,
->
-> greg k-h
+On Thu, Nov 17, 2022 at 09:35:31AM +0100, Wolfram Sang wrote:
+> 
+> > Can you split slave part as a separate change? It will help to review and
+> > to understand the code better in the future by browsing the history.
+> 
+> Thanks for all your reviewing help, Andy! Regarding this comment, I
+> don't think a split is needed. The driver is small enough with ~500
+> lines, so I think it can stay this way. It would be different if the
+> driver was 1000+ lines, then I'd totally agree. I will have a look at
+> this driver soon.
 
-Actually it's a real mistake, it was overlooked when the code was
-written (although chances of failure in clear cmd are very small).
-I'll apply it to my tree.
-Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
-Thanks,
-Oded
+Depends on the ratio "Comments per LoC" by the certain reviewer.
+
+My experience with the other drivers for this architecture / platform that they
+all need much more work before accepting them. And to reduce burden split would
+be good.
+
+But then it's up to you (to me it's a burden for even these 500 LoCs,
+that are full of room to improvement).
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
