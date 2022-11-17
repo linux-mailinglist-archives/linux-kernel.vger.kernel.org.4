@@ -2,50 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B758862D908
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 12:09:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BECF62D90C
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 12:09:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239782AbiKQLJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 06:09:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54518 "EHLO
+        id S239812AbiKQLJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 06:09:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239721AbiKQLIP (ORCPT
+        with ESMTP id S239734AbiKQLIP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 17 Nov 2022 06:08:15 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D1213E12
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 03:08:09 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id j12so1300204plj.5
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 03:08:09 -0800 (PST)
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCCDF42987
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 03:08:11 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id q1so1639189pgl.11
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 03:08:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0tqK0qcu4ZbXIz1FounyREg16LfpvMx9JNd0Tfa961A=;
-        b=AFoBfEAD1nJWlMgLMnXn0vdIL+CPo94VWnV12a+S1YWYICb26F1Np8B8kTDn2QXh8v
-         3MDzOYrdbhabqzws4QPDv8RY9mRvzvrHQTlp+AE1wWRhkwPQ4zHAz5NAx5NSPfZW3mQE
-         TIKnnBeFktEgCF3rHIxA2KZt5ybmy93+PksJ8=
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9adTC/kCnTAWZTCymBogkO2KVEPuyw81zYQPMZxxoSo=;
+        b=RuLMYR/7GIUlRh1mNcPgSb0/ogtrlYZLLuQLzBZM/cfwz01+rqe0iqeUeS/oXZ2/n+
+         VlevcOghg3lFqNrl7iEEHHgvKdDffYOe2ShXsXSylfV9oMoM105qreZo9uEPdaFVVVdR
+         RbdlIxs2BBKDo1mqk5/u+LrdZ1Hxmxqmsp3mg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0tqK0qcu4ZbXIz1FounyREg16LfpvMx9JNd0Tfa961A=;
-        b=GQQ5aG4/HB0TqYI3sJxwZKckIboJ3oV2k0rDWMglXdJevZSNBoSn86Hs8yA6Oag/EZ
-         IgSjnQOt+8xRbmcmbv0ckw2Tu/oLX73XVdBCm2M8p72xEuJmNlDqdVd/MIDhrhbxOTwt
-         TFVD9FbUtTEb/B0pCCgO0GAuZrIpX2N2n0C7FLi9NvscPt+IunOGKrP49t6WsrYdYS1r
-         ai60lDyBoNhuWeZodNThpdgWe/rRXZBLGx2VPfgfmCr7Pc04gtfCzueGkSFmNrmD2lhR
-         UMrTmHrT4ebjJ0G+BR3BBeOPzrJ5Gfre9mSQHZQyIWIHNObGYva+yT5tlPREhlIYqh3l
-         3nPA==
-X-Gm-Message-State: ANoB5pln5cfSbD4Oclv6qsCavBZuP6Xnbw/LYXXrr4oehkvtme+FcKRQ
-        GxgnrXcgNcaScihj5IQbUNGRYg==
-X-Google-Smtp-Source: AA0mqf4+GevadWvaves7De04ntMu+JYejX2ZKDF7Jns6C/cQy0CVatDlK3RNSm4xGN01xw2wzCaSaQ==
-X-Received: by 2002:a17:90b:3544:b0:213:2173:f46a with SMTP id lt4-20020a17090b354400b002132173f46amr8259914pjb.103.1668683288952;
-        Thu, 17 Nov 2022 03:08:08 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9adTC/kCnTAWZTCymBogkO2KVEPuyw81zYQPMZxxoSo=;
+        b=dR8MXkm3WiGLGiHoHqHM7JXHYVOdUPtShxW0pZBL/vB6GVW1PF/hmWIpgTEBT7BTeB
+         syfLf2Ok3VmfEoAIZUjoJZIbfNT4nTlRgM+xvj/zl8P/KpGVsNZa5CF2mDZ5vmkQ7A/H
+         tZLfAcyCdba/YnApsbTUpDaqQUdV4no2SRl7bvZ1CqtyiNf3ZXc1TFITknETkbU5msjT
+         e3LKfQKkmzoAPQhEgdFE8/SpTP8L2dbk0kaK+1RYAFJMfiucPl2MQWEFXchc3qanfSoc
+         gQYrvwv8KrQ5hGYRcj3IGu95pTzzK7vNJ+5g1SmL/vZgi+DGMX3oCcpHzaC2yWw0kKK9
+         HK4Q==
+X-Gm-Message-State: ANoB5pn6xM4ffDiBGGwBfAJ21SxGHNIA8YKfQYlV3/h6P0j0GpWI2FBB
+        zh3ZtpHxub9vqjnAmGrf2gHNFBZxX0UUIw==
+X-Google-Smtp-Source: AA0mqf5UvhJh1+5BA+ftKIjgtSrH/nEpcIRbmgpRI80uU8ijBGEp1TdPaC/eD3sh7ZMlCOAopARHuQ==
+X-Received: by 2002:a63:180a:0:b0:470:63e5:5c59 with SMTP id y10-20020a63180a000000b0047063e55c59mr1579787pgl.172.1668683291132;
+        Thu, 17 Nov 2022 03:08:11 -0800 (PST)
 Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:e678:c7f5:9cb3:1a06])
-        by smtp.gmail.com with ESMTPSA id z18-20020a170902ccd200b0017a032d7ae4sm1025540ple.104.2022.11.17.03.08.06
+        by smtp.gmail.com with ESMTPSA id z18-20020a170902ccd200b0017a032d7ae4sm1025540ple.104.2022.11.17.03.08.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 03:08:08 -0800 (PST)
+        Thu, 17 Nov 2022 03:08:10 -0800 (PST)
 From:   Hsin-Yi Wang <hsinyi@chromium.org>
 To:     Sean Paul <seanpaul@chromium.org>,
         Douglas Anderson <dianders@chromium.org>,
@@ -57,10 +58,12 @@ Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         Allen Chen <allen.chen@ite.com.tw>,
         David Airlie <airlied@gmail.com>
-Subject: [PATCH v6 1/3] drm_bridge: register content protect property
-Date:   Thu, 17 Nov 2022 19:08:02 +0800
-Message-Id: <20221117110804.1431024-1-hsinyi@chromium.org>
+Subject: [PATCH v6 2/3] drm/bridge: anx7625: register content protect property
+Date:   Thu, 17 Nov 2022 19:08:03 +0800
+Message-Id: <20221117110804.1431024-2-hsinyi@chromium.org>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
+In-Reply-To: <20221117110804.1431024-1-hsinyi@chromium.org>
+References: <20221117110804.1431024-1-hsinyi@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -72,82 +75,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some bridges are able to update HDCP status from userspace request if
-they support HDCP.
-
-HDCP property is the same as other connector properties that needs to be
-created after the connecter is initialized and before the connector is
-registered.
-
-If there exists a bridge that supports HDCP, add the property to the
-bridge connector.
+Set support_hdcp so the connector can register content protect proterty
+when it's initializing.
 
 Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
 Reviewed-by: Sean Paul <seanpaul@chromium.org>
-Reported-by: kernel test robot <lkp@intel.com>
 ---
-v5->v6: fix compile warning when CONFIG_DRM_DISPLAY_HELPER=m
+v5->v6: no change.
 ---
- drivers/gpu/drm/drm_bridge_connector.c | 9 +++++++++
- include/drm/drm_bridge.h               | 4 ++++
- 2 files changed, 13 insertions(+)
+ drivers/gpu/drm/bridge/analogix/anx7625.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpu/drm/drm_bridge_connector.c b/drivers/gpu/drm/drm_bridge_connector.c
-index 1c7d936523df..4147c6240110 100644
---- a/drivers/gpu/drm/drm_bridge_connector.c
-+++ b/drivers/gpu/drm/drm_bridge_connector.c
-@@ -7,6 +7,7 @@
- #include <linux/module.h>
- #include <linux/slab.h>
+diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+index b0ff1ecb80a5..0636ac59c739 100644
+--- a/drivers/gpu/drm/bridge/analogix/anx7625.c
++++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+@@ -2680,6 +2680,7 @@ static int anx7625_i2c_probe(struct i2c_client *client,
+ 	platform->bridge.type = platform->pdata.panel_bridge ?
+ 				    DRM_MODE_CONNECTOR_eDP :
+ 				    DRM_MODE_CONNECTOR_DisplayPort;
++	platform->bridge.support_hdcp = true;
  
-+#include <drm/display/drm_hdcp_helper.h>
- #include <drm/drm_atomic_state_helper.h>
- #include <drm/drm_bridge.h>
- #include <drm/drm_bridge_connector.h>
-@@ -333,6 +334,7 @@ struct drm_connector *drm_bridge_connector_init(struct drm_device *drm,
- 	struct i2c_adapter *ddc = NULL;
- 	struct drm_bridge *bridge, *panel_bridge = NULL;
- 	int connector_type;
-+	bool support_hdcp = false;
+ 	drm_bridge_add(&platform->bridge);
  
- 	bridge_connector = kzalloc(sizeof(*bridge_connector), GFP_KERNEL);
- 	if (!bridge_connector)
-@@ -376,6 +378,9 @@ struct drm_connector *drm_bridge_connector_init(struct drm_device *drm,
- 
- 		if (drm_bridge_is_panel(bridge))
- 			panel_bridge = bridge;
-+
-+		if (bridge->support_hdcp)
-+			support_hdcp = true;
- 	}
- 
- 	if (connector_type == DRM_MODE_CONNECTOR_Unknown) {
-@@ -398,6 +403,10 @@ struct drm_connector *drm_bridge_connector_init(struct drm_device *drm,
- 	if (panel_bridge)
- 		drm_panel_bridge_set_orientation(connector, panel_bridge);
- 
-+	if (support_hdcp && IS_REACHABLE(CONFIG_DRM_DISPLAY_HELPER) &&
-+	    IS_ENABLED(CONFIG_DRM_DISPLAY_HDCP_HELPER))
-+		drm_connector_attach_content_protection_property(connector, true);
-+
- 	return connector;
- }
- EXPORT_SYMBOL_GPL(drm_bridge_connector_init);
-diff --git a/include/drm/drm_bridge.h b/include/drm/drm_bridge.h
-index 6b65b0dfb4fb..1d2ab70f3436 100644
---- a/include/drm/drm_bridge.h
-+++ b/include/drm/drm_bridge.h
-@@ -768,6 +768,10 @@ struct drm_bridge {
- 	 * modes.
- 	 */
- 	bool interlace_allowed;
-+	/**
-+	 * @support_hdcp: Indicate that the bridge supports HDCP.
-+	 */
-+	bool support_hdcp;
- 	/**
- 	 * @ddc: Associated I2C adapter for DDC access, if any.
- 	 */
 -- 
 2.38.1.431.g37b22c650d-goog
 
