@@ -2,211 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 167DE62E966
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 00:16:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B3DE62E969
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 00:16:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235035AbiKQXQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 18:16:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33850 "EHLO
+        id S235050AbiKQXQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 18:16:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232715AbiKQXQ3 (ORCPT
+        with ESMTP id S235045AbiKQXQf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 18:16:29 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 478E7716EE;
-        Thu, 17 Nov 2022 15:16:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE90D622BB;
-        Thu, 17 Nov 2022 23:16:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8ADAC433D6;
-        Thu, 17 Nov 2022 23:16:25 +0000 (UTC)
-Date:   Thu, 17 Nov 2022 18:16:22 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Steven Rostedt <rostedt@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Linux Trace Devel <linux-trace-devel@vger.kernel.org>,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v1 2/2] tools lib traceevent: Remove libtraceevent
-Message-ID: <20221117181622.3c13bb13@gandalf.local.home>
-In-Reply-To: <20221117224952.358639-3-irogers@google.com>
-References: <20221117224952.358639-1-irogers@google.com>
-        <20221117224952.358639-3-irogers@google.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 17 Nov 2022 18:16:35 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B795973414
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 15:16:34 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id m14so3014910pji.0
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 15:16:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qBaTUoDsXALrUVQtij25WDMU7eXVKHt6J9ZXCE39/vs=;
+        b=mPx7GfLKwl5PN26MoaT6nRGqXps4iNeaIV3mZJ2OrRc+k8ZGxjmrhLJ5GKKMgle1Vt
+         VZoTFVV72Da8WA67ax23QGqZckaZpge9lfoa35250ISwHoqYy1Rq4+5hyuKdOUb5oFKE
+         7Nkj5fpNRne7ObCD/w9tabX/9KfFNvUUIoP/4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qBaTUoDsXALrUVQtij25WDMU7eXVKHt6J9ZXCE39/vs=;
+        b=eg04u83m3cN9CaWCQkCndThH/xwb/krzQ1R1cQ3qb6m0BacXbB/T3eaYqvFvh56B46
+         Q/+oTh9tRYfjX5AijKkj3rpWGpfK6xKsMd6WQ20rYY3y67WoA3SR/yrlFL7YyxLZDOW/
+         hyN4YtPocwi46nKyx6skwcv960zvwdYxS5jTLocorVKp7KqrcgYvkcLqedwmbG53tjR1
+         4rdat0g/M5qE58zHTQ20aHjr6GDEFa3HLS1Gk9tRdV19wgwfv9jaVba615pUke9UGVV5
+         TwlQ8jDckHm9UIpvxpPfdwifY5JTjOT3TRB+KrYT02APyIUmd1dgbmzw1ZAQ3z/zqtVq
+         yCMA==
+X-Gm-Message-State: ANoB5pnwuD5CfjZEFDX9XPImrYcbncm4RoCXJNBJxpA8IKWUoLKMziAy
+        cI0Rn5PmJHZmG+xNHeT+FxujUQ==
+X-Google-Smtp-Source: AA0mqf4Dk5voBB082r8Rrpwvcj3grSiIUC5dxPvucpmLRslxiH0tXg3k9C9HsKhUo4r5XO/MYhuZEA==
+X-Received: by 2002:a17:90a:b285:b0:216:ab1b:98d0 with SMTP id c5-20020a17090ab28500b00216ab1b98d0mr10943008pjr.67.1668726994206;
+        Thu, 17 Nov 2022 15:16:34 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id n16-20020a170903111000b00188fc6766d6sm334840plh.219.2022.11.17.15.16.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 15:16:33 -0800 (PST)
+Date:   Thu, 17 Nov 2022 15:16:33 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 1/2][next] wifi: brcmfmac: Replace one-element array with
+ flexible-array member
+Message-ID: <202211171516.4BDCE17@keescook>
+References: <cover.1668466470.git.gustavoars@kernel.org>
+ <7694550aa9a2753a73a687f61af9441c8cf52fd7.1668466470.git.gustavoars@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7694550aa9a2753a73a687f61af9441c8cf52fd7.1668466470.git.gustavoars@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Nov 2022 14:49:52 -0800
-Ian Rogers <irogers@google.com> wrote:
-
-> libtraceevent is now out-of-date and it is better to depend on the
-> system version. Remove this code that is no longer depended upon by
-> any builds.
+On Mon, Nov 14, 2022 at 05:01:11PM -0600, Gustavo A. R. Silva wrote:
+> One-element arrays are deprecated, and we are replacing them with flexible
+> array members instead. So, replace one-element array with flexible-array
+> member in struct brcmf_gscan_config.
 > 
+> Important to mention is that doing a build before/after this patch results
+> in no binary output differences.
+> 
+> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE routines
+> on memcpy() and help us make progress towards globally enabling
+> -fstrict-flex-arrays=3 [1].
+> 
+> Link: https://github.com/KSPP/linux/issues/79
+> Link: https://github.com/KSPP/linux/issues/241
+> Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
--- Steve
-
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/lib/traceevent/.gitignore               |    4 -
->  tools/lib/traceevent/Build                    |    8 -
->  tools/lib/traceevent/Documentation/Makefile   |  207 -
->  .../traceevent/Documentation/asciidoc.conf    |  120 -
->  .../Documentation/libtraceevent-commands.txt  |  153 -
->  .../Documentation/libtraceevent-cpus.txt      |   77 -
->  .../libtraceevent-endian_read.txt             |   78 -
->  .../libtraceevent-event_find.txt              |  103 -
->  .../Documentation/libtraceevent-event_get.txt |   99 -
->  .../libtraceevent-event_list.txt              |  122 -
->  .../libtraceevent-event_print.txt             |  130 -
->  .../libtraceevent-field_find.txt              |  118 -
->  .../libtraceevent-field_get_val.txt           |  122 -
->  .../libtraceevent-field_print.txt             |  126 -
->  .../libtraceevent-field_read.txt              |   81 -
->  .../Documentation/libtraceevent-fields.txt    |  105 -
->  .../libtraceevent-file_endian.txt             |   91 -
->  .../Documentation/libtraceevent-filter.txt    |  209 -
->  .../Documentation/libtraceevent-func_apis.txt |  183 -
->  .../Documentation/libtraceevent-func_find.txt |   88 -
->  .../Documentation/libtraceevent-handle.txt    |  101 -
->  .../libtraceevent-header_page.txt             |  102 -
->  .../libtraceevent-host_endian.txt             |  104 -
->  .../Documentation/libtraceevent-long_size.txt |   78 -
->  .../Documentation/libtraceevent-page_size.txt |   82 -
->  .../libtraceevent-parse_event.txt             |   90 -
->  .../libtraceevent-parse_head.txt              |   82 -
->  .../Documentation/libtraceevent-plugins.txt   |  122 -
->  .../libtraceevent-record_parse.txt            |  137 -
->  .../libtraceevent-reg_event_handler.txt       |  156 -
->  .../libtraceevent-reg_print_func.txt          |  155 -
->  .../Documentation/libtraceevent-set_flag.txt  |  104 -
->  .../Documentation/libtraceevent-strerror.txt  |   85 -
->  .../Documentation/libtraceevent-tseq.txt      |  158 -
->  .../Documentation/libtraceevent.txt           |  192 -
->  .../traceevent/Documentation/manpage-1.72.xsl |   14 -
->  .../traceevent/Documentation/manpage-base.xsl |   35 -
->  .../Documentation/manpage-bold-literal.xsl    |   17 -
->  .../Documentation/manpage-normal.xsl          |   13 -
->  .../Documentation/manpage-suppress-sp.xsl     |   21 -
->  tools/lib/traceevent/Makefile                 |  300 -
->  tools/lib/traceevent/event-parse-api.c        |  333 -
->  tools/lib/traceevent/event-parse-local.h      |  123 -
->  tools/lib/traceevent/event-parse.c            | 7624 -----------------
->  tools/lib/traceevent/event-parse.h            |  750 --
->  tools/lib/traceevent/event-plugin.c           |  711 --
->  tools/lib/traceevent/event-utils.h            |   67 -
->  tools/lib/traceevent/kbuffer-parse.c          |  809 --
->  tools/lib/traceevent/kbuffer.h                |   68 -
->  .../lib/traceevent/libtraceevent.pc.template  |   10 -
->  tools/lib/traceevent/parse-filter.c           | 2281 -----
->  tools/lib/traceevent/parse-utils.c            |   71 -
->  tools/lib/traceevent/plugins/Build            |   12 -
->  tools/lib/traceevent/plugins/Makefile         |  225 -
->  .../lib/traceevent/plugins/plugin_cfg80211.c  |   43 -
->  .../lib/traceevent/plugins/plugin_function.c  |  282 -
->  tools/lib/traceevent/plugins/plugin_futex.c   |  123 -
->  tools/lib/traceevent/plugins/plugin_hrtimer.c |   74 -
->  tools/lib/traceevent/plugins/plugin_jbd2.c    |   61 -
->  tools/lib/traceevent/plugins/plugin_kmem.c    |   80 -
->  tools/lib/traceevent/plugins/plugin_kvm.c     |  527 --
->  .../lib/traceevent/plugins/plugin_mac80211.c  |   88 -
->  .../traceevent/plugins/plugin_sched_switch.c  |  146 -
->  tools/lib/traceevent/plugins/plugin_scsi.c    |  434 -
->  tools/lib/traceevent/plugins/plugin_tlb.c     |   66 -
->  tools/lib/traceevent/plugins/plugin_xen.c     |  138 -
->  tools/lib/traceevent/tep_strerror.c           |   53 -
->  tools/lib/traceevent/trace-seq.c              |  249 -
->  tools/lib/traceevent/trace-seq.h              |   55 -
->  69 files changed, 19875 deletions(-)
->  delete mode 100644 tools/lib/traceevent/.gitignore
->  delete mode 100644 tools/lib/traceevent/Build
->  delete mode 100644 tools/lib/traceevent/Documentation/Makefile
->  delete mode 100644 tools/lib/traceevent/Documentation/asciidoc.conf
->  delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-commands.txt
->  delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-cpus.txt
->  delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-endian_read.txt
->  delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-event_find.txt
->  delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-event_get.txt
->  delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-event_list.txt
->  delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-event_print.txt
->  delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-field_find.txt
->  delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-field_get_val.txt
->  delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-field_print.txt
->  delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-field_read.txt
->  delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-fields.txt
->  delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-file_endian.txt
->  delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-filter.txt
->  delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-func_apis.txt
->  delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-func_find.txt
->  delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-handle.txt
->  delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-header_page.txt
->  delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-host_endian.txt
->  delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-long_size.txt
->  delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-page_size.txt
->  delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-parse_event.txt
->  delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-parse_head.txt
->  delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-plugins.txt
->  delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-record_parse.txt
->  delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-reg_event_handler.txt
->  delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-reg_print_func.txt
->  delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-set_flag.txt
->  delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-strerror.txt
->  delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-tseq.txt
->  delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent.txt
->  delete mode 100644 tools/lib/traceevent/Documentation/manpage-1.72.xsl
->  delete mode 100644 tools/lib/traceevent/Documentation/manpage-base.xsl
->  delete mode 100644 tools/lib/traceevent/Documentation/manpage-bold-literal.xsl
->  delete mode 100644 tools/lib/traceevent/Documentation/manpage-normal.xsl
->  delete mode 100644 tools/lib/traceevent/Documentation/manpage-suppress-sp.xsl
->  delete mode 100644 tools/lib/traceevent/Makefile
->  delete mode 100644 tools/lib/traceevent/event-parse-api.c
->  delete mode 100644 tools/lib/traceevent/event-parse-local.h
->  delete mode 100644 tools/lib/traceevent/event-parse.c
->  delete mode 100644 tools/lib/traceevent/event-parse.h
->  delete mode 100644 tools/lib/traceevent/event-plugin.c
->  delete mode 100644 tools/lib/traceevent/event-utils.h
->  delete mode 100644 tools/lib/traceevent/kbuffer-parse.c
->  delete mode 100644 tools/lib/traceevent/kbuffer.h
->  delete mode 100644 tools/lib/traceevent/libtraceevent.pc.template
->  delete mode 100644 tools/lib/traceevent/parse-filter.c
->  delete mode 100644 tools/lib/traceevent/parse-utils.c
->  delete mode 100644 tools/lib/traceevent/plugins/Build
->  delete mode 100644 tools/lib/traceevent/plugins/Makefile
->  delete mode 100644 tools/lib/traceevent/plugins/plugin_cfg80211.c
->  delete mode 100644 tools/lib/traceevent/plugins/plugin_function.c
->  delete mode 100644 tools/lib/traceevent/plugins/plugin_futex.c
->  delete mode 100644 tools/lib/traceevent/plugins/plugin_hrtimer.c
->  delete mode 100644 tools/lib/traceevent/plugins/plugin_jbd2.c
->  delete mode 100644 tools/lib/traceevent/plugins/plugin_kmem.c
->  delete mode 100644 tools/lib/traceevent/plugins/plugin_kvm.c
->  delete mode 100644 tools/lib/traceevent/plugins/plugin_mac80211.c
->  delete mode 100644 tools/lib/traceevent/plugins/plugin_sched_switch.c
->  delete mode 100644 tools/lib/traceevent/plugins/plugin_scsi.c
->  delete mode 100644 tools/lib/traceevent/plugins/plugin_tlb.c
->  delete mode 100644 tools/lib/traceevent/plugins/plugin_xen.c
->  delete mode 100644 tools/lib/traceevent/tep_strerror.c
->  delete mode 100644 tools/lib/traceevent/trace-seq.c
->  delete mode 100644 tools/lib/traceevent/trace-seq.h
-
+-- 
+Kees Cook
