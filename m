@@ -2,280 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6841862E0A6
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 17:00:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29ACB62E0AA
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 17:01:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239956AbiKQQAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 11:00:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37866 "EHLO
+        id S234749AbiKQQBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 11:01:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234491AbiKQQAn (ORCPT
+        with ESMTP id S240048AbiKQQAt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 11:00:43 -0500
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96728167FF;
-        Thu, 17 Nov 2022 08:00:39 -0800 (PST)
-Received: by mail-oi1-f169.google.com with SMTP id l127so2308289oia.8;
-        Thu, 17 Nov 2022 08:00:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s1iYFV/pk3VtxO2Vv/uRHQvi4wu62XG1HbiVw4tLmgA=;
-        b=Ube61iOK6nv4L9b0waxDPQqb6rTflRHew2dno5HjNlH4gEKGPixrF6UIpLN1chc2mF
-         IEaIU0OP0BZls/l+MGdtdNCq5w0nJCQOOkk84vF1k+Fd70lyl6PXR+Ed1WMR0BLZ8xkm
-         +FGOzftTr8kqqhaGcmyg3flIyD1hxEPoguX9UdeTrspkMAMCxeOtt1NF8otfDQQRWO3V
-         iekPTYjxP+cFHsJ4hLnFpT3YqFoFei0n1QVg/CfxbGkHCJQUzFpXxwTYVX6MoJLk4N5m
-         wNCGiVBSR99fIaFPXZn1ZKuo/VBkOM8+k/Y40OBJkxQk8TiYgqKKsbKesPcqQTKf95hJ
-         kmDQ==
-X-Gm-Message-State: ANoB5pmhvLJEwwQDMI3kdocChfn5Qu8rkeP7xu+yPx3K9mmAhUXfjqMH
-        Ozc8C8CKBiDpy+E5iom6TA==
-X-Google-Smtp-Source: AA0mqf5qHLQTURJi2r+QuYwmtK6l/Uins36ngd8s4Y3T/DUk0YNW/CdISa+Z16Dhzxc3RQDy3uZlng==
-X-Received: by 2002:aca:1308:0:b0:354:94c3:2b33 with SMTP id e8-20020aca1308000000b0035494c32b33mr4405489oii.247.1668700839047;
-        Thu, 17 Nov 2022 08:00:39 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id p15-20020a056870568f00b0014185b2b3d5sm579786oao.18.2022.11.17.08.00.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 08:00:38 -0800 (PST)
-Received: (nullmailer pid 2943020 invoked by uid 1000);
-        Thu, 17 Nov 2022 16:00:40 -0000
-Date:   Thu, 17 Nov 2022 10:00:40 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Alexandre Mergnat <amergnat@baylibre.com>
-Cc:     Flora Fu <flora.fu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Tianping Fang <tianping.fang@mediatek.com>,
-        Fabien Parent <fabien.parent@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Chen Zhong <chen.zhong@mediatek.com>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-leds@vger.kernel.org, Fabien Parent <fparent@baylibre.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-rtc@vger.kernel.org, linux-input@vger.kernel.org
-Subject: Re: [PATCH v5 06/10] dt-bindings: soc: mediatek: convert pwrap
- documentation
-Message-ID: <20221117160040.GB2913522-robh@kernel.org>
-References: <20221005-mt6357-support-v5-0-8210d955dd3d@baylibre.com>
- <20221005-mt6357-support-v5-6-8210d955dd3d@baylibre.com>
+        Thu, 17 Nov 2022 11:00:49 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1082253F;
+        Thu, 17 Nov 2022 08:00:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668700847; x=1700236847;
+  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=BuUmPgqr1gKGWjTUN8g9tLoojOhBbprvA2Zcib8Mm6k=;
+  b=QJz22JKdj9Ns5vhsaP8MwLwfusIV2ccOT1p4jdf/Etpbb3UcGsjm3eEe
+   Kjre/ALZAsQsgq7mAf1YPzhW3e15DCb8ciZa/gwA4F4NXabR48dsM3blj
+   tSPO/gz2sWIRk9yJoHGQkrUgW6KdfCmGnCizb1fm1c4dDPHogMsRCW5MN
+   IJtCHgvVIf4UENp7sX2C1otMVV4Hm9ZZ6lDfjNQx4J/cbIoo8E3tY8Ahf
+   npsgb0WmPDEbVPt1aFQPmGmqPvh4oPYea41ShEVKeb1DTbNurPEdrqxak
+   m33BE3jxb9OFLKgsVVt4RAnB3kLOAOrPFskf+QEFl/rLeytnM3dl0ttKC
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="311592482"
+X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
+   d="scan'208";a="311592482"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 08:00:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="708665301"
+X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
+   d="scan'208";a="708665301"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga004.fm.intel.com with ESMTP; 17 Nov 2022 08:00:42 -0800
+Received: from sulochan-mobl.amr.corp.intel.com (unknown [10.212.246.182])
+        by linux.intel.com (Postfix) with ESMTP id 9B45A580BBE;
+        Thu, 17 Nov 2022 08:00:42 -0800 (PST)
+Message-ID: <a21a7a1b749d0c7e8f7942fe02dd4b6fcd3e97f6.camel@linux.intel.com>
+Subject: Re: [PATCH 0/9] Extend Intel On Demand (SDSi) support
+From:   "David E. Box" <david.e.box@linux.intel.com>
+Reply-To: david.e.box@linux.intel.com
+To:     Hans de Goede <hdegoede@redhat.com>, markgross@kernel.org,
+        andriy.shevchenko@linux.intel.com, srinivas.pandruvada@intel.com
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 17 Nov 2022 08:00:42 -0800
+In-Reply-To: <267ebc83-04a8-4421-732d-7a329bc0fa9a@redhat.com>
+References: <20221101191023.4150315-1-david.e.box@linux.intel.com>
+         <267ebc83-04a8-4421-732d-7a329bc0fa9a@redhat.com>
+Organization: David E. Box
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221005-mt6357-support-v5-6-8210d955dd3d@baylibre.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 01:33:00PM +0100, Alexandre Mergnat wrote:
-> - Convert soc/mediatek/pwrap.txt to soc/mediatek/mediatek,pwrap.yaml
-> - MT8365 SoC has 2 additional clock items and a yaml schema for its PMIC
-> - Remove pwrap.txt file
-> 
-> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
-> ---
->  .../devicetree/bindings/leds/leds-mt6323.txt       |   2 +-
->  Documentation/devicetree/bindings/mfd/mt6397.txt   |   2 +-
->  .../bindings/soc/mediatek/mediatek,pwrap.yaml      | 145 +++++++++++++++++++++
->  .../devicetree/bindings/soc/mediatek/pwrap.txt     |  75 -----------
->  4 files changed, 147 insertions(+), 77 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/leds/leds-mt6323.txt b/Documentation/devicetree/bindings/leds/leds-mt6323.txt
-> index 45bf9f7d85f3..73353692efa1 100644
-> --- a/Documentation/devicetree/bindings/leds/leds-mt6323.txt
-> +++ b/Documentation/devicetree/bindings/leds/leds-mt6323.txt
-> @@ -9,7 +9,7 @@ MT6323 PMIC hardware.
->  For MT6323 MFD bindings see:
->  Documentation/devicetree/bindings/mfd/mt6397.txt
->  For MediaTek PMIC wrapper bindings see:
-> -Documentation/devicetree/bindings/soc/mediatek/pwrap.txt
-> +Documentation/devicetree/bindings/soc/mediatek/mediatek,pwrap.yaml
->  
->  Required properties:
->  - compatible : Must be "mediatek,mt6323-led"
-> diff --git a/Documentation/devicetree/bindings/mfd/mt6397.txt b/Documentation/devicetree/bindings/mfd/mt6397.txt
-> index 79aaf21af8e9..3bee4a42555d 100644
-> --- a/Documentation/devicetree/bindings/mfd/mt6397.txt
-> +++ b/Documentation/devicetree/bindings/mfd/mt6397.txt
-> @@ -13,7 +13,7 @@ MT6397/MT6323 is a multifunction device with the following sub modules:
->  It is interfaced to host controller using SPI interface by a proprietary hardware
->  called PMIC wrapper or pwrap. MT6397/MT6323 MFD is a child device of pwrap.
->  See the following for pwarp node definitions:
-> -../soc/mediatek/pwrap.txt
-> +../soc/mediatek/mediatek,pwrap.yaml
->  
->  This document describes the binding for MFD device and its sub module.
->  
-> diff --git a/Documentation/devicetree/bindings/soc/mediatek/mediatek,pwrap.yaml b/Documentation/devicetree/bindings/soc/mediatek/mediatek,pwrap.yaml
-> new file mode 100644
-> index 000000000000..6d19f534e994
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/soc/mediatek/mediatek,pwrap.yaml
-> @@ -0,0 +1,145 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/soc/mediatek/mediatek,pwrap.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Mediatek PMIC Wrapper
-> +
-> +maintainers:
-> +  - Flora Fu <flora.fu@mediatek.com>
-> +  - Alexandre Mergnat <amergnat@baylibre.com>
-> +
-> +description: |
-> +  On MediaTek SoCs the PMIC is connected via SPI. The SPI master interface
-> +  is not directly visible to the CPU, but only through the PMIC wrapper
-> +  inside the SoC. The communication between the SoC and the PMIC can
-> +  optionally be encrypted. Also a non standard Dual IO SPI mode can be
-> +  used to increase speed.
-> +
-> +  IP Pairing
-> +
-> +  On MT8135 the pins of some SoC internal peripherals can be on the PMIC.
-> +  The signals of these pins are routed over the SPI bus using the pwrap
-> +  bridge. In the binding description below the properties needed for bridging
-> +  are marked with "IP Pairing". These are optional on SoCs which do not support
-> +  IP Pairing
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +          - enum:
-> +              - mediatek,mt2701-pwrap
-> +              - mediatek,mt6765-pwrap
-> +              - mediatek,mt6779-pwrap
-> +              - mediatek,mt6797-pwrap
-> +              - mediatek,mt6873-pwrap
-> +              - mediatek,mt7622-pwrap
-> +              - mediatek,mt8135-pwrap
-> +              - mediatek,mt8173-pwrap
-> +              - mediatek,mt8183-pwrap
-> +              - mediatek,mt8188-pwrap
-> +              - mediatek,mt8365-pwrap
-> +              - mediatek,mt8516-pwrap
-> +      - items:
-> +          - enum:
-> +              - mediatek,mt8186-pwrap
-> +              - mediatek,mt8195-pwrap
-> +          - const: syscon
-> +
-> +  reg:
-> +    minItems: 1
-> +    items:
-> +      - description: PMIC wrapper registers
-> +      - description: IP pairing registers
-> +
-> +  reg-names:
-> +    minItems: 1
-> +    items:
-> +      - const: pwrap
-> +      - const: pwrap-bridge
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    minItems: 2
-> +    items:
-> +      - description: SPI bus clock
-> +      - description: Main module clock
-> +      - description: System module clock
-> +      - description: Timer module clock
-> +
-> +  clock-names:
-> +    minItems: 2
-> +    items:
-> +      - const: spi
-> +      - const: wrap
-> +      - const: sys
-> +      - const: tmr
-> +
-> +  resets:
-> +    minItems: 1
-> +    items:
-> +      - description: PMIC wrapper reset
-> +      - description: IP pairing reset
-> +
-> +  reset-names:
-> +    minItems: 1
-> +    items:
-> +      - const: pwrap
-> +      - const: pwrap-bridge
-> +
-> +  pmic:
-> +    type: object
-> +    $ref: /schemas/regulator/mediatek,mt6357-regulator.yaml
+On Thu, 2022-11-17 at 15:01 +0100, Hans de Goede wrote:
+> Hi David,
+>=20
+> On 11/1/22 20:10, David E. Box wrote:
+> > Intel Software Defined Silicon (SDSi) is now known as Intel On Demand. =
+The
+> > following patches do the following:
+> >=20
+> > 1. Identify the driver/tools as Intel On Demand. Only text descriptions=
+ are
+> > changed. Kconfig and filenames remain the same.
+> > 2. Perform some attribute cleanup by preventing the showing of files wh=
+en
+> > features are not supported.
+> > 3. Adds support for a new GUID. GUIDs are used to identify the layout o=
+f
+> > the On Demand registers in sysfs. Layouts are described in the
+> > documentation on github [1].
+> > 4. Add support for reading On Demand meter certificates in sysfs.
+> > 5. The rest of the patches modify the existing tool to support discover=
+y
+> > and reading of On Demand registers and the meter certificate.
+> >=20
+> > [1] https://github.com/intel/intel-sdsi/blob/master/os-interface.rst
+> >=20
+> > David E. Box (9):
+> > =C2=A0 platform/x86/intel/sdsi: Add Intel On Demand text
+> > =C2=A0 platform/x86/intel/sdsi: Hide attributes if hardware doesn't sup=
+port
+> > =C2=A0 platform/x86/intel/sdsi: Support different GUIDs
+> > =C2=A0 platform/x86/intel/sdsi: Add meter certificate support
+> > =C2=A0 tools/arch/x86: intel_sdsi: Add support for reading state certif=
+icates
+> > =C2=A0 tools/arch/x86: intel_sdsi: Add Intel On Demand text
+> > =C2=A0 tools/arch/x86: intel_sdsi: Read more On Demand registers
+> > =C2=A0 tools/arch/x86: intel_sdsi: Add support for new GUID
+> > =C2=A0 tools/arch/x86: intel_sdsi: Add support for reading meter certif=
+icates
+>=20
+> Thank you, over all this looks good. I have some small remarks
+> on patches 4, 8 and 9 see my replies to those.
+>=20
+> Please prepare a v2 addressing Andy's + my review remarks and get
+> that v2 to me no later then next week Tuesday, then I can still
+> merge this in time for 6.2 .
 
-Drop the $ref. It will get validated by matching the pmic compatible.
+Will do. Thanks Hans, Andy.
 
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - reg-names
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +
-> +dependentRequired:
-> +  resets: [reset-names]
-> +
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: mediatek,mt8365-pwrap
-> +    then:
-> +      properties:
-> +        clocks:
-> +          minItems: 4
-> +
-> +        clock-names:
-> +          minItems: 4
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/clock/mediatek,mt8365-clk.h>
-> +
-> +    soc {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +        pwrap: pwrap@1000d000 {
+>=20
+> Regards,
+>=20
+> Hans
+>=20
+>=20
 
-Drop unused labels.
-
-> +            compatible = "mediatek,mt8365-pwrap";
-> +            reg = <0 0x1000d000 0 0x1000>;
-> +            reg-names = "pwrap";
-> +            interrupts = <GIC_SPI 123 IRQ_TYPE_LEVEL_HIGH>;
-> +            clocks = <&infracfg CLK_IFR_PWRAP_SPI>,
-> +                     <&infracfg CLK_IFR_PMIC_AP>,
-> +                     <&infracfg CLK_IFR_PWRAP_SYS>,
-> +                     <&infracfg CLK_IFR_PWRAP_TMR>;
-> +            clock-names = "spi", "wrap", "sys", "tmr";
-> +        };
-> +    };
