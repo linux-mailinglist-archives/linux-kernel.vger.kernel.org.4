@@ -2,101 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7598562D9A1
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 12:39:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C834C62D958
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 12:24:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239876AbiKQLjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 06:39:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45774 "EHLO
+        id S239268AbiKQLYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 06:24:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239853AbiKQLjK (ORCPT
+        with ESMTP id S239238AbiKQLYJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 06:39:10 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 444A86828E;
-        Thu, 17 Nov 2022 03:39:06 -0800 (PST)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NCdGK5MZjzHvsd;
-        Thu, 17 Nov 2022 19:38:33 +0800 (CST)
-Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 17 Nov 2022 19:39:05 +0800
-Received: from linux-ibm.site (10.175.102.37) by
- dggpemm500002.china.huawei.com (7.185.36.229) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 17 Nov 2022 19:39:04 +0800
-From:   Hanjun Guo <guohanjun@huawei.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Peter Huewe <peterhuewe@gmx.de>
-CC:     <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Hanjun Guo" <guohanjun@huawei.com>
-Subject: [PATCH v2 3/3] tpm: tpm_tis: Add the missed acpi_put_table() to fix memory leak
-Date:   Thu, 17 Nov 2022 19:23:42 +0800
-Message-ID: <1668684222-38457-4-git-send-email-guohanjun@huawei.com>
-X-Mailer: git-send-email 1.7.12.4
-In-Reply-To: <1668684222-38457-1-git-send-email-guohanjun@huawei.com>
-References: <1668684222-38457-1-git-send-email-guohanjun@huawei.com>
+        Thu, 17 Nov 2022 06:24:09 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D3D3E0B8
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 03:24:07 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id r61-20020a17090a43c300b00212f4e9cccdso5112590pjg.5
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 03:24:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=i+s6Ug5M5MNLeX0nDma7SaMLHMCJkt7UhOngWgPpU1U=;
+        b=wNNgQ/ujNH4aMiqD04braFOKKTznPN8QXWqPUL3WqXaFDSCXmvcc72WiGKxO5PEz36
+         xr/Fsvt7CyfIlnQTopNyjDouuyuKapNzxa5lfXtmpt2sycPaGWyX0EdziRTw7AeU7bDh
+         Ux9A5wbvnBFZRUGKmZW+3Jl6qaDWzrIylvnwr8ybkHCNkYKgqJ7scbe2Y2GLWKqi0kYZ
+         b9bicqYYE5bY0OT0dnHBY7WtfjClSSQnDvQBc1TUuPHwgyYdGL5p8mciOmma+hF6g9Ua
+         NSa0LHXavdxR3GUMlBJkUCnAUEMYheSUTtC21D2raVEAXfdVDkMFi1qniRW9Mrk7RPDg
+         fEXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=i+s6Ug5M5MNLeX0nDma7SaMLHMCJkt7UhOngWgPpU1U=;
+        b=RDMsRN1O8AYDWNriDz0gPuIP6OJoAXtaFD5ioBVnR/bDL6hukDaFVp+gm3LTPHQARD
+         xg3uHFCipYRxDOKpZKXW8Xe4n/IgLIybleWzACggF+QlDko5U71txILulysg/K2Uola+
+         YggRUaEnTYbvYreryX/QPwyZyOjKSmUN0uMxE9lVvPcdWOgnQebJDr9d6S83+gr16sXH
+         j1F1m3aBqEILuhwKZfSHaC/uwX3IhBD2N+A8zkhcPWIKFRvjJcpFTtv36XrD5MT163Fu
+         VB+F3ndjaL8rK3JxgcAeQ1I9JUxjbBqwFLG9X0G/tnoAzGg09HCSxG+RTTRDQKuMOtFt
+         T22A==
+X-Gm-Message-State: ANoB5pnJSGn7pMqatU2G1+qjU7wyNB+ImoiQLgqvDrIPnRPkQOQ9Y0aL
+        ZFThQHAOP6iiRJwLL9aCDEvEww==
+X-Google-Smtp-Source: AA0mqf560Kd2vqBW3wj4OBZezqM8uLWOdkM4wwz1Qay/d9Jm9v2iltTJxm4b4e7pw4JfhJOSm6zreg==
+X-Received: by 2002:a17:90a:62c2:b0:20d:bc7f:4fee with SMTP id k2-20020a17090a62c200b0020dbc7f4feemr8385860pjs.168.1668684247332;
+        Thu, 17 Nov 2022 03:24:07 -0800 (PST)
+Received: from localhost ([122.172.85.60])
+        by smtp.gmail.com with ESMTPSA id iz9-20020a170902ef8900b001754cfb5e21sm1062247plb.96.2022.11.17.03.24.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 03:24:05 -0800 (PST)
+Date:   Thu, 17 Nov 2022 16:54:03 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        rafael@kernel.org, robh+dt@kernel.org, johan@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v7 0/4] qcom-cpufreq-hw: Add CPU clock provider support
+Message-ID: <20221117112403.haffuclwooudvgwz@vireshk-i7>
+References: <20221117053145.10409-1-manivannan.sadhasivam@linaro.org>
+ <20221117101903.sw3hxaruj5sfhybw@bogus>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.102.37]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500002.china.huawei.com (7.185.36.229)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221117101903.sw3hxaruj5sfhybw@bogus>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In check_acpi_tpm2(), we get the TPM2 table just to make
-sure the table is there, not used after the init, so the
-acpi_put_table() should be added to release the ACPI memory.
+On 17-11-22, 10:19, Sudeep Holla wrote:
+> Why do you need the above 3 changes if the below(4/4) will ensure
+> cpufreq_get(cpu) returns the clock frequency. I was expecting to drop the
+> whole "confusing" clock bindings and the unnecessary clock provider.
+> 
+> Can't we just use cpufreq_get(cpu) ?
 
-Fixes: 4cb586a188d4 ("tpm_tis: Consolidate the platform and acpi probe flow")
-Cc: stable@vger.kernel.org
-Signed-off-by: Hanjun Guo <guohanjun@huawei.com>
----
- drivers/char/tpm/tpm_tis.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+https://lore.kernel.org/lkml/cover.1657695140.git.viresh.kumar@linaro.org/
 
-diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
-index bcff642..ed5dabd 100644
---- a/drivers/char/tpm/tpm_tis.c
-+++ b/drivers/char/tpm/tpm_tis.c
-@@ -125,6 +125,7 @@ static int check_acpi_tpm2(struct device *dev)
- 	const struct acpi_device_id *aid = acpi_match_device(tpm_acpi_tbl, dev);
- 	struct acpi_table_tpm2 *tbl;
- 	acpi_status st;
-+	int ret = 0;
- 
- 	if (!aid || aid->driver_data != DEVICE_IS_TPM2)
- 		return 0;
-@@ -132,8 +133,7 @@ static int check_acpi_tpm2(struct device *dev)
- 	/* If the ACPI TPM2 signature is matched then a global ACPI_SIG_TPM2
- 	 * table is mandatory
- 	 */
--	st =
--	    acpi_get_table(ACPI_SIG_TPM2, 1, (struct acpi_table_header **)&tbl);
-+	st = acpi_get_table(ACPI_SIG_TPM2, 1, (struct acpi_table_header **)&tbl);
- 	if (ACPI_FAILURE(st) || tbl->header.length < sizeof(*tbl)) {
- 		dev_err(dev, FW_BUG "failed to get TPM2 ACPI table\n");
- 		return -EINVAL;
-@@ -141,9 +141,10 @@ static int check_acpi_tpm2(struct device *dev)
- 
- 	/* The tpm2_crb driver handles this device */
- 	if (tbl->start_method != ACPI_TPM2_MEMORY_MAPPED)
--		return -ENODEV;
-+		ret = -ENODEV;
- 
--	return 0;
-+	acpi_put_table((struct acpi_table_header *)tbl);
-+	return ret;
- }
- #else
- static int check_acpi_tpm2(struct device *dev)
+The basic idea (need) here was to fix the DT and let the CPU nodes have clock
+related properties, which are missing currently.
+
+The context can be seen in the above thread.
+
 -- 
-1.7.12.4
-
+viresh
