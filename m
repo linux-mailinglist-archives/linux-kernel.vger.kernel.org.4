@@ -2,102 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 858A662DD14
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:46:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 490DC62DD1E
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:47:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240205AbiKQNqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 08:46:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55624 "EHLO
+        id S239442AbiKQNrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 08:47:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239645AbiKQNqf (ORCPT
+        with ESMTP id S240352AbiKQNrJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 08:46:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D087C71F29;
-        Thu, 17 Nov 2022 05:46:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A8CA61E38;
-        Thu, 17 Nov 2022 13:46:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 807B5C433C1;
-        Thu, 17 Nov 2022 13:46:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668692790;
-        bh=jwrKHq8lqrVCytRmbVBCOLUIrbyqXrDKHErC15q+x7I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZVYUWfNzSW5qOrsXH5425h8Res0qNWH6lXbS5xlr8vmHQ/PtWZthcWDOx6KgKe4HX
-         0TzcYSLuZx/hrZ4H86Bl4s0rsh2/E9hRMAbWLp4SseTVjPOaBzH7aRvWyE5shozlJF
-         akUK6fXyj5hRx2pgVQEzJ3SUI83XHwuyAP+y6lWN3+5/OUu7psy51T4DCq0dZ7TSS9
-         JZfDjvqS8GcOzw5fb3hkbJRuXz62MNFJtvUBT4SdyXSaq9tHp53qou1Xh/x0jkWejO
-         XJUMrfQvAQwUvLwmWj/PtiPpsIHJ+NCZPqfwgkYlHouNg7X5sLGioAmXbb3M2qdX3N
-         LLUDmFcEFUFGQ==
-Date:   Thu, 17 Nov 2022 13:46:26 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     balbi@kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/1] usb: gadget: f_hid: Conduct proper refcounting on
- shared f_hidg pointer
-Message-ID: <Y3Y7MlwV0UFcA3w8@google.com>
-References: <20221117120813.1257583-1-lee@kernel.org>
- <Y3YuL8rSE9pNfIZN@kroah.com>
+        Thu, 17 Nov 2022 08:47:09 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD3F072986
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 05:47:07 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id b131so1890689yba.11
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 05:47:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NBgn5FfavxoeQ10DPy6H31rWSKaucrVJq2p8zFcWxKg=;
+        b=c8vO+LU/6D7WLpwp+xS+e7pSpjTJYsFE5wxwezmF8/RoKcKqrJZQ3VUZ5fF8CX/jbY
+         ttUyIILBf0O5GwhZQwIkilveYui+lHb0dbfqNUNZzbmPHb1rcoT1FN4FFAtiP1dwKGMZ
+         qU6ihrbZ3JwUSqNkqWHFdB6KB2vQRS3kATGkd0C4ulV0w648oN/YsD+VUcTc4IYv/x0L
+         Wjw1cayxL8M/C3T/otTw1cN1x59Be6qTUc6tTki6nc1Gi007tmIokpieU8VkR9s1QpzS
+         JwzpriJG08ep2sN9Zy/y66xkG4JqlcdcHdc3yHTFssABRtUZrdNsGYKYaDPvTjDt/fZd
+         8mMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NBgn5FfavxoeQ10DPy6H31rWSKaucrVJq2p8zFcWxKg=;
+        b=rTJhKpDLFtTdpZO67KcY7sh5Y81+hnS4OozY5dJ5jK+eri5r2YHfmsY6nAcVpEF0th
+         Pfv5PgTwanKaBrD55yDOMmygopjc1cV5fFGZnOIzirUR6yxxsytVtRe9G5/DFk0DcxIR
+         YxMNGiDf8cKBoTcATewusIP/Z7AAW7pstZhex3JShAe1wcH85opy1NX6cF0hnPFV1jKf
+         Q3ghbTg1a3bpaUt3b+XqEoIgToCU9kO3CL1cWXE2A1O8kFaW7IucJnNCwWXcc62gM0sI
+         MeTnozE0PDS0ZPNJhzZeXZu1rMuExJz91VClaKSE9ck4RXVxxD9AMe12sCCIOVQd/WS5
+         IvAg==
+X-Gm-Message-State: ANoB5pmeDHyHmTplYy48pLKNpBRkYCrTkW3Gcl41seF5LdBFB2ptKPBg
+        7rSelMMp5azzC6UEG1Ir3xcJ6yPnoZSjHU2vxEqGoA==
+X-Google-Smtp-Source: AA0mqf5DA2St0Zb3VPFdfrjrKJWXQbBpURxq8lktGKo5RRNI3h3NDvIgMgHA8sWN0gARZLOBu4Ye2QdYcMogA+UjaPg=
+X-Received: by 2002:a25:8390:0:b0:6de:5b33:4a29 with SMTP id
+ t16-20020a258390000000b006de5b334a29mr2076908ybk.485.1668692825505; Thu, 17
+ Nov 2022 05:47:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y3YuL8rSE9pNfIZN@kroah.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <Y3VEL0P0M3uSCxdk@sol.localdomain>
+In-Reply-To: <Y3VEL0P0M3uSCxdk@sol.localdomain>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Thu, 17 Nov 2022 14:46:29 +0100
+Message-ID: <CAG_fn=XwRo71wqyo-zvZxzE021tY52KKE0j_GmYUjpZeAZa7dA@mail.gmail.com>
+Subject: Re: KMSAN broken with lockdep again?
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Marco Elver <elver@google.com>, Dmitry Vyukov <dvyukov@google.com>,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Nov 2022, Greg KH wrote:
+On Wed, Nov 16, 2022 at 9:12 PM Eric Biggers <ebiggers@kernel.org> wrote:
+>
+> Hi,
+>
+> I'm trying v6.1-rc5 with CONFIG_KMSAN, but the kernel continuously spams
+> "BUG: KMSAN: uninit-value in __init_waitqueue_head".
+>
+> I tracked it down to lockdep (CONFIG_PROVE_LOCKING=3Dy).  The problem goe=
+s away if
+> I disable that.
+>
+> I don't see any obvious use of uninitialized memory in __init_waitqueue_h=
+ead().
+>
+> The compiler I'm using is tip-of-tree clang (LLVM commit 4155be339ba80fef=
+).
+>
+> Is this a known issue?
+>
+> - Eric
 
-> On Thu, Nov 17, 2022 at 12:08:13PM +0000, Lee Jones wrote:
-> > +static inline bool f_hidg_is_open(struct f_hidg *hidg)
-> > +{
-> > +	return !!kref_read(&hidg->cdev.kobj.kref);
-> > +}
-> 
-> Ick, sorry, no, that's not going to work and is not allowed at all.
-> That's some major layering violations there, AND it can change after you
-> get the value as well.
+Thanks for flagging this!
 
-This cdev belongs solely to this driver.  Hence the *.*.* and not
-*->*->*.  What is preventing us from reading our own data?  If we
-cannot do this directly, can I create an API to do it 'officially'?
+The reason behind that is that under lockdep we're accessing the
+contents of wq_head->lock->dep_map, which KMSAN considers
+uninitialized.
+The initialization of dep_map happens inside kernel/locking/lockdep.c,
+for which KMSAN is deliberately disabled, because lockep used to
+deadlock in the past.
 
-I do, however, appreciate that a little locking wouldn't go amiss.
+As far as I can tell, removing `KMSAN_SANITIZE_lockdep.o :=3D n` does
+not actually break anything now (although the kernel becomes quite
+slow with both lockdep and KMSAN). Let me experiment a bit and send a
+patch.
+If this won't work out, we'll need an explicit call to
+kmsan_unpoison_memory() somewhere in lockdep_init_map_type() to
+suppress these reports.
 
-If this solution is not acceptable either, then we're left up the
-creak without a paddle.  The rules you've communicated are not
-compatible with each other.
 
-Rule 1: Only one item in a data structure can reference count.
+--
+Alexander Potapenko
+Software Engineer
 
-Due to the embedded cdev struct, this rules out my first solution of
-giving f_hidg its own kref so that it can conduct its own life-time
-management.
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
 
-A potential option to satisfy this rule would be to remove the cdev
-attribute and create its data dynamically instead.  However, the
-staticness of cdev is used to obtain f_hidg (with container_of()) in
-the character device handling component, so it cannot be removed.
-
-Rule 2: Reading the present refcount causes a laying violation
-
-So we're essentially saying, if data is already being reference
-counted, you have to use the present implementation instead of adding
-additional counts, but there is no way to actually do that, which
-kind of puts us at stalemate.
-
-Since this is a genuine issue, doing anything is not really an option
-either.  So where do we go from here?
-
--- 
-Lee Jones [李琼斯]
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg
