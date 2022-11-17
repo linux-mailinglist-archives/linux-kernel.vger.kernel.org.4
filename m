@@ -2,260 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4700862D46C
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 08:53:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 314ED62D470
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 08:55:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239406AbiKQHxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 02:53:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44954 "EHLO
+        id S234412AbiKQHzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 02:55:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232372AbiKQHxR (ORCPT
+        with ESMTP id S229658AbiKQHzd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 02:53:17 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 37F2B6B39A;
-        Wed, 16 Nov 2022 23:53:15 -0800 (PST)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8Dxvrdp6HVjgDYIAA--.18611S3;
-        Thu, 17 Nov 2022 15:53:13 +0800 (CST)
-Received: from [10.180.13.64] (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxXuBm6HVjyc0VAA--.56814S2;
-        Thu, 17 Nov 2022 15:53:11 +0800 (CST)
-Subject: Re: [PATCH v10 2/2] dt-bindings: pinctrl: add loongson-2 pinctrl
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        zhanghongchen <zhanghongchen@loongson.cn>
-References: <20221114024942.8111-1-zhuyinbo@loongson.cn>
- <20221114024942.8111-2-zhuyinbo@loongson.cn>
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-Message-ID: <bdfabfac-7280-a9bd-ba5b-6d14096df757@loongson.cn>
-Date:   Thu, 17 Nov 2022 15:53:10 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Thu, 17 Nov 2022 02:55:33 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D1D59871
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 23:55:32 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id f201so924693yba.12
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 23:55:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=MR/mQ7ErzLslQ7dM0kWBgKuDJb0UWjJ2ZmvDXIqO0jk=;
+        b=ODxl9+j48bIdAzfRlS+CCddaWTBnFWL9CYN0As+w/fUCh9HhddxP7n9dsOEOek3LDx
+         xdU8xi1eNGhvjYMTXtHzxqPdHcwAlL/xDn0RreNNO7o5YwQaK8MR9UgUPgtdrxWjUi8q
+         XnWfbX2KVWerA84bCCq4933ObU4EvHII6lRBuNzaJ2ovCPGUYza4oT/OhUz9imkvjhoG
+         AEPffaNXetYCwoYOikukWyDjXl6QFseGInm+cP1J1yztBHaqhMh0BMf6QG27cqZPI2hc
+         eicx+AWGGlnc2Lw6lCt4R4yrYu9l2UoJdkPQGnGDmp18G2ITu3b6ajMLJuUGCZgoKIfF
+         DC7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MR/mQ7ErzLslQ7dM0kWBgKuDJb0UWjJ2ZmvDXIqO0jk=;
+        b=WY1KCxPaGfBSUas38R8Fnt/vthkbP4BotewAsgTkw6ot4td47FIo5wyXsWzDolg6Mf
+         YSl97VeML2PPNSOWdDKekZql4HEeFdt5ESNcxm5Z3QJKYcJsGTNSMRPKw0yx4U7kDAda
+         soHBD6geL+adxAqKApgS2qpsw/HJmKnA4HVg517vwrYoTvxPPIhjOXFgT5vmLQXx3ZF3
+         5ikdVNjqGlx/3jHfPKclcfVljMZPUS0vUER8OgmKWyGCEUVKBtV2GHR2fFqHupYwq8En
+         7D3jmfL1J/mMma22FAAp9ONI7vZ91jnryOjOHcqdbWjnOYEcM177jwaJ7H6+5CK63DNO
+         +NOQ==
+X-Gm-Message-State: ANoB5pk4kuDduTEvvdgt/Zn8Q24Hbv8+uY3V/SVP3JcWdVj8HemAv+wn
+        IyfRD1fx7YN0FlS0dWeGZK/BXLIax5grw4UJpdcLdwVlKEV00ozc
+X-Google-Smtp-Source: AA0mqf4CM1hW6YMosRox0Vo9EiTnZimicHVSTymmHTOUcbjbAUbXw7Wu/veU1Wh6AMW2IZ1Eh+drBgVO8BEKnKDTPV0=
+X-Received: by 2002:a5b:78e:0:b0:6cc:5084:2517 with SMTP id
+ b14-20020a5b078e000000b006cc50842517mr1073408ybq.464.1668671731021; Wed, 16
+ Nov 2022 23:55:31 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20221114024942.8111-2-zhuyinbo@loongson.cn>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxXuBm6HVjyc0VAA--.56814S2
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxGryfZFy8ZryfWw17Wr4fAFb_yoWrtF1kpF
-        Z3C393GF12qa1xCry3Ca40yw13Jan7CasF9FsFg34jyr4DKw1IvrW3Kw4DurZrCrWxArWU
-        Xa45uryUXF1DArJanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bTAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM2
-        8EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq
-        07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7
-        xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Y
-        z7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwI
-        xGrwCF04k20xvE74AGY7Cv6cx26rWl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAF
-        wI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zV
-        AF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1l
-        IxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCw
-        CI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnI
-        WIevJa73UjIFyTuYvjxUc4EEUUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Hang An <anhang610@gmail.com>
+Date:   Thu, 17 Nov 2022 15:55:21 +0800
+Message-ID: <CAKdx3izLgNJO+5ye4twe0+CFMcUBrFUa+-NdLN6VKKWQ76YiLA@mail.gmail.com>
+Subject: Can Not Send Netlink Messages with Unshare(CLONE_NEWNET)
+To:     linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi maintainer,
+Hi,
+A process can not send netlink messages(errno is ECONNREFUSED) after
+running unshare(CLONE_NEWNET).
 
-This patch has also changed recently. Please help merge it.
+Part of the call stack when process failed:
+netlink_sendmsg
+netlink_unicast
+netlink_getsockbyportid
+netlink_lookup(return NULL)
 
-Thanks,
-Yinbo.
-ÔÚ 2022/11/14 ÉÏÎç10:49, Yinbo Zhu Ð´µÀ:
-> Add the Loongson-2 pinctrl binding with DT schema format using
-> json-schema.
-> 
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> ---
-> Change in v10:
-> 		1. Remove lio/uart2/uart1/carmera/dvo1/dvo0 pins resue configuration.
-> Change in v9:
-> 		1. NO change, but other patch in this series patches set has
-> 		   change.
-> Change in v8:
-> 		1. NO change, but other patch in this series patches set has
-> 		   change.
-> Change in v7:
-> 		1. Add all change log information.
-> Change in v6:
-> 		1. NO change, but other patch in this series patches set has
-> 		   change.
-> Change in v5:
-> 		1. Drop dependencies.
-> 		2. Add spaces after '='.
-> 		3. Replace string loongson2 with loongson-2 in title.
-> Change in v4:
-> 		1. Replace Loongson2 with Loongson-2.
-> Change in v3:
-> 		1. Drop the quotes in "pinctrl.yaml#".
-> 		2. Remove the items in function node.
-> 		3. Add requird node for "group" and "function" in properties.
-> Change in v2:
->                  1. Add "$ref to pinctrl.yaml".
->                  2. Put required after patternProperties.
->                  3. Add "additionalProperties: false" after '-pins$'
->                  4. Add "unevaluatedProperties: false" after 'pinmux$'
->                  5. Fixup the broken indentation in patternProperties node.
->                  6. Use 4 spaces for example indentation.
-> 
->   .../pinctrl/loongson,ls2k-pinctrl.yaml        | 123 ++++++++++++++++++
->   MAINTAINERS                                   |   1 +
->   2 files changed, 124 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/pinctrl/loongson,ls2k-pinctrl.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/loongson,ls2k-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/loongson,ls2k-pinctrl.yaml
-> new file mode 100644
-> index 000000000000..bd8a45843566
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/pinctrl/loongson,ls2k-pinctrl.yaml
-> @@ -0,0 +1,123 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/pinctrl/loongson,ls2k-pinctrl.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Loongson-2 SoC Pinctrl Controller
-> +
-> +maintainers:
-> +  - zhanghongchen <zhanghongchen@loongson.cn>
-> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
-> +
-> +allOf:
-> +  - $ref: pinctrl.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: loongson,ls2k-pinctrl
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +patternProperties:
-> +  '-pins$':
-> +    type: object
-> +
-> +    additionalProperties: false
-> +
-> +    patternProperties:
-> +      'pinmux$':
-> +        type: object
-> +        description: node for pinctrl.
-> +        $ref: pinmux-node.yaml#
-> +
-> +        unevaluatedProperties: false
-> +
-> +        properties:
-> +          groups:
-> +            description:
-> +              One or more groups of pins to mux to a certain function
-> +            items:
-> +              enum: [gpio, sdio, can1, can0, pwm3, pwm2, pwm1, pwm0, i2c1, i2c0,
-> +                     nand, sata_led, i2s, hda]
-> +          function:
-> +            description:
-> +              The function that a group of pins is muxed to
-> +            enum: [gpio, sdio, can1, can0, pwm3, pwm2, pwm1, pwm0, i2c1, i2c0,
-> +                   nand, sata_led, i2s, hda]
-> +
-> +        required:
-> +          - groups
-> +          - function
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    pctrl: pinctrl@1fe00420 {
-> +        compatible = "loongson,ls2k-pinctrl";
-> +        reg = <0x1fe00420 0x18>;
-> +        sdio_pins_default: sdio-pins {
-> +            sdio-pinmux {
-> +                groups = "sdio";
-> +                function = "sdio";
-> +            };
-> +
-> +            sdio-det-pinmux {
-> +                groups = "pwm2";
-> +                function = "gpio";
-> +            };
-> +        };
-> +
-> +        pwm1_pins_default: pwm1-pins {
-> +            pinmux {
-> +                groups = "pwm1";
-> +                function = "pwm1";
-> +            };
-> +        };
-> +
-> +        pwm0_pins_default: pwm0-pins {
-> +            pinmux {
-> +                groups = "pwm0";
-> +                function = "pwm0";
-> +            };
-> +        };
-> +
-> +        i2c1_pins_default: i2c1-pins {
-> +            pinmux {
-> +                groups = "i2c1";
-> +                function = "i2c1";
-> +            };
-> +        };
-> +
-> +        i2c0_pins_default: i2c0-pins {
-> +            pinmux {
-> +                groups = "i2c0";
-> +                function = "i2c0";
-> +            };
-> +        };
-> +
-> +        nand_pins_default: nand-pins {
-> +            pinmux {
-> +                groups = "nand";
-> +                function = "nand";
-> +            };
-> +        };
-> +
-> +        hda_pins_default: hda-pins {
-> +            grp0-pinmux {
-> +                groups = "hda";
-> +                function = "hda";
-> +            };
-> +
-> +            grp1-pinmux {
-> +                groups = "i2s";
-> +                function = "gpio";
-> +            };
-> +        };
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 0e493b4d6e39..e85b0c1aeebb 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -12041,6 +12041,7 @@ M:	zhanghongchen <zhanghongchen@loongson.cn>
->   M:	Yinbo Zhu <zhuyinbo@loongson.cn>
->   L:	linux-gpio@vger.kernel.org
->   S:	Maintained
-> +F:	Documentation/devicetree/bindings/pinctrl/loongson,ls2k-pinctrl.yaml
->   F:	drivers/pinctrl/pinctrl-loongson2.c
->   
->   LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
-> 
+The corresponding pseudocode is shown below:
+unshare(CLONE_NEWNET) ;
+res_socket = syscall(__NR_socket, 0x10ul, 3ul, 8);
+syscall(__NR_sendmsg, res_socket, msghdr, 0ul);
 
+I can't understand this situation. Is this a bug or special design?
+
+Thanks.
