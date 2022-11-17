@@ -2,165 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40C1B62E020
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:40:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7436E62E022
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:40:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239529AbiKQPkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 10:40:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51038 "EHLO
+        id S239613AbiKQPkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 10:40:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239776AbiKQPju (ORCPT
+        with ESMTP id S239562AbiKQPkH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 10:39:50 -0500
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2CBEEBD;
-        Thu, 17 Nov 2022 07:39:49 -0800 (PST)
-Received: by mail-ot1-f43.google.com with SMTP id t19-20020a9d7753000000b0066d77a3d474so1258140otl.10;
-        Thu, 17 Nov 2022 07:39:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TVhbvRUqZQu6uk1nSlOpC0Wl3O1+Ha3Mzov9EJw71XE=;
-        b=qZkEGPzBU9nepJmT/trzMGKP66HWNxqpAT29SXCU4qP+k+rf1wQrg3Tu8ttQxffvKQ
-         TtmC1pRWCj72U6ptzNGgf/Bgd9JAuPRTWZq33UO0G8kgQ+bOaZPyqx3LqwipDrnBA/8c
-         99xonw/WuJ8zK3a8QRPuI0oh3q7hVEO09FMby9SXazlHRBUQtgl21pl3Rdh1RcMTomDO
-         e1OFC+alOhpZLDI4/hlxipGlTvz1rVRVbq/j4dKmsJB6BErHvd5ttNGhDHkDMDpVU6bi
-         AtkBsSo7oJxOkU+XveZVeRbZJZeH0w1YOpmc03jHrSA6pMbG70WHSHZO851EWFtOPisV
-         kJkQ==
-X-Gm-Message-State: ANoB5pktJJtd8uZLlo7Sky+8ymTZRfHKA34dbPtAR3WSGv4pFH1FDtXM
-        OjBRT5tdE2TWwnUEXGG5aQ==
-X-Google-Smtp-Source: AA0mqf4f8AEtQBCEXoach04sei0JgrD/an2wLNFUiFJXCBqskIg7Lnw9MEjrMzhIfDsicIRmbX4Fng==
-X-Received: by 2002:a05:6830:1d66:b0:66c:5b70:2396 with SMTP id l6-20020a0568301d6600b0066c5b702396mr1626581oti.357.1668699589169;
-        Thu, 17 Nov 2022 07:39:49 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id 44-20020a9d04af000000b0066101e9dccdsm450844otm.45.2022.11.17.07.39.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 07:39:48 -0800 (PST)
-Received: (nullmailer pid 2918390 invoked by uid 1000);
-        Thu, 17 Nov 2022 15:39:50 -0000
-Date:   Thu, 17 Nov 2022 09:39:50 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Alexandre Mergnat <amergnat@baylibre.com>
-Cc:     Flora Fu <flora.fu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Tianping Fang <tianping.fang@mediatek.com>,
-        Fabien Parent <fabien.parent@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Chen Zhong <chen.zhong@mediatek.com>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-leds@vger.kernel.org, Fabien Parent <fparent@baylibre.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-rtc@vger.kernel.org, linux-input@vger.kernel.org
-Subject: Re: [PATCH v5 02/10] dt-bindings: rtc: mediatek: convert MT6397 rtc
- documentation
-Message-ID: <20221117153950.GA2913522-robh@kernel.org>
-References: <20221005-mt6357-support-v5-0-8210d955dd3d@baylibre.com>
- <20221005-mt6357-support-v5-2-8210d955dd3d@baylibre.com>
+        Thu, 17 Nov 2022 10:40:07 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF5062609;
+        Thu, 17 Nov 2022 07:40:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E336F61F86;
+        Thu, 17 Nov 2022 15:40:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15C57C433C1;
+        Thu, 17 Nov 2022 15:40:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668699605;
+        bh=Mc4ySWjClUjGsVC0d00yorexigtt/BL4IyUH3iK7Dms=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=esYymimzQxLQyT1zPNhzzNLMA9P11nnWOpGfhtQLbqqh32cB/bCL8RMeYTXChwavj
+         m6D777/MjK1+PH1gMGESslKB28HOG3RkUWpndfXnTwvKVwmorWa85rssjI4He7JrOX
+         XC/T0uRDs7yoIYUuvo4QVJR9VRsfmpdAzECzg0pdqGF/bSm0R3/GpnEpeTfVPmmvtK
+         lWi6jzj5dCx9iz4/Y1lBHmh1uZbOWC8EdPc3hjE6IvyKHZMZjg1vieesWw+8IrPkmz
+         P1wzog4efm6zpl9UzRl4JqsPRZrm6zypANXpCmDa3H4VWWJmMcI6HLwaqmfeyCMWOb
+         5LXb2WH+w7xnw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 3AF294034E; Thu, 17 Nov 2022 12:40:00 -0300 (-03)
+Date:   Thu, 17 Nov 2022 12:40:00 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH 0/6] Build output clean up
+Message-ID: <Y3ZV0FDW70ADoIYE@kernel.org>
+References: <20221117004356.279422-1-irogers@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221005-mt6357-support-v5-2-8210d955dd3d@baylibre.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221117004356.279422-1-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 01:32:56PM +0100, Alexandre Mergnat wrote:
-> - Convert rtc/rtc-mt6397.txt to rtc/mt6397-rtc.yaml
-> - Add maintainer
-> - Remove the .txt binding file
+Em Wed, Nov 16, 2022 at 04:43:50PM -0800, Ian Rogers escreveu:
+> Reduce build spam from commands not prefixed with @. Make
+> install_headers targets distinguishable by adding in the library name
+> so:
+> INSTALL headers
+> becomes:
+> INSTALL libapi_headers
 > 
-> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
-> ---
->  Documentation/devicetree/bindings/mfd/mt6397.txt   |  2 +-
->  .../bindings/rtc/mediatek,mt6397-rtc.yaml          | 43 ++++++++++++++++++++++
->  .../devicetree/bindings/rtc/rtc-mt6397.txt         | 31 ----------------
->  3 files changed, 44 insertions(+), 32 deletions(-)
+> Ian Rogers (6):
+>   tools lib api: clean up install_headers
+>   tools lib bpf: Avoid install_headers make warning
+>   tools lib symbol: clean up build output
+>   tools lib perf: Make install_headers clearer
+>   tools lib subcmd: Make install_headers clearer
+>   tools lib traceevent: Make install_headers clearer
+
+Andrii, are you ok with that? Can I carry this on my next (perf/core)
+branch?
+
+Testing it now.
+
+- Arnaldo
+ 
+>  tools/lib/api/Makefile        | 4 ++--
+>  tools/lib/bpf/Makefile        | 1 +
+>  tools/lib/perf/Makefile       | 2 +-
+>  tools/lib/subcmd/Makefile     | 2 +-
+>  tools/lib/symbol/Makefile     | 4 ++--
+>  tools/lib/traceevent/Makefile | 4 ++--
+>  6 files changed, 9 insertions(+), 8 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/mfd/mt6397.txt b/Documentation/devicetree/bindings/mfd/mt6397.txt
-> index 0088442efca1..79aaf21af8e9 100644
-> --- a/Documentation/devicetree/bindings/mfd/mt6397.txt
-> +++ b/Documentation/devicetree/bindings/mfd/mt6397.txt
-> @@ -33,7 +33,7 @@ Optional subnodes:
->  		- compatible: "mediatek,mt6331-rtc"
->  		- compatible: "mediatek,mt6358-rtc"
->  		- compatible: "mediatek,mt6397-rtc"
-> -	For details, see ../rtc/rtc-mt6397.txt
-> +	For details, see ../rtc/mediatek,mt6397-rtc.yaml
->  - regulators
->  	Required properties:
->  		- compatible: "mediatek,mt6323-regulator"
-> diff --git a/Documentation/devicetree/bindings/rtc/mediatek,mt6397-rtc.yaml b/Documentation/devicetree/bindings/rtc/mediatek,mt6397-rtc.yaml
-> new file mode 100644
-> index 000000000000..f5a323597f1d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/rtc/mediatek,mt6397-rtc.yaml
-> @@ -0,0 +1,43 @@
-> + # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/rtc/mediatek,mt6397-rtc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MediaTek MT6397/MT6366/MT6358/MT6323 RTC
-> +
-> +maintainers:
-> +  - Tianping Fang <tianping.fang@mediatek.com>
-> +  - Alexandre Mergnat <amergnat@baylibre.com>
-> +
-> +description: |
+> -- 
+> 2.38.1.431.g37b22c650d-goog
 
-Don't need '|' if no formatting.
+-- 
 
-> +  MediaTek PMIC based RTC is an independent function of MediaTek PMIC that works
-> +  as a type of multi-function device (MFD). The RTC can be configured and set up
-> +  with PMIC wrapper bus which is a common resource shared with the other
-> +  functions found on the same PMIC.
-> +
-> +allOf:
-> +  - $ref: rtc.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - mediatek,mt6323-rtc
-> +      - mediatek,mt6358-rtc
-> +      - mediatek,mt6366-rtc
-> +      - mediatek,mt6397-rtc
-> +
-> +  start-year: true
-> +
-> +additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +
-> +examples:
-> +  - |
-> +    pmic {
-> +        rtc {
-> +            compatible = "mediatek,mt6397-rtc";
-> +        };
-> +    };
-
-Please drop the example here. Just one complete example in the MFD 
-schema.
+- Arnaldo
