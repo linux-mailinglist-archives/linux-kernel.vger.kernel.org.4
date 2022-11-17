@@ -2,84 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89D5362D0AD
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 02:34:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A734762D0AE
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 02:35:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237236AbiKQBeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 20:34:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38312 "EHLO
+        id S238109AbiKQBfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 20:35:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234444AbiKQBeS (ORCPT
+        with ESMTP id S234016AbiKQBfT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 20:34:18 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 476F51DDF9;
-        Wed, 16 Nov 2022 17:34:17 -0800 (PST)
-Received: from mxct.zte.com.cn (unknown [192.168.251.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NCMs25BWqz4xVnD;
-        Thu, 17 Nov 2022 09:34:14 +0800 (CST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NCMry6TYlz4y3ZB;
-        Thu, 17 Nov 2022 09:34:10 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl2.zte.com.cn with SMTP id 2AH1XxdK072447;
-        Thu, 17 Nov 2022 09:33:59 +0800 (+08)
-        (envelope-from guo.ziliang@zte.com.cn)
-Received: from mapi (xaxapp03[null])
-        by mapi (Zmail) with MAPI id mid32;
-        Thu, 17 Nov 2022 09:34:00 +0800 (CST)
-Date:   Thu, 17 Nov 2022 09:34:00 +0800 (CST)
-X-Zmail-TransId: 2afb63758f887390f199
-X-Mailer: Zmail v1.0
-Message-ID: <202211170934005278113@zte.com.cn>
-Mime-Version: 1.0
-From:   <guo.ziliang@zte.com.cn>
-To:     <rafael@kernel.org>
-Cc:     <lenb@kernel.org>, <linux-acpi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIEFDUEk6IHN5c2ZzOiB1c2Ugc3lzZnNfZW1pdCgpIHRvIGluc3RlYWQgb2Ygc2NucHJpbnRmKCk=?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 2AH1XxdK072447
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 63758F96.002 by FangMail milter!
-X-FangMail-Envelope: 1668648854/4NCMs25BWqz4xVnD/63758F96.002/192.168.251.13/[192.168.251.13]/mxct.zte.com.cn/<guo.ziliang@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63758F96.002/4NCMs25BWqz4xVnD
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 16 Nov 2022 20:35:19 -0500
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B2259FF2
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 17:35:19 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id q6-20020a056e020c2600b00302664fc72cso292720ilg.14
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 17:35:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=m2M14rjVSVmIxFERIVkDBPniB6v1VgAS1vnPA623NfI=;
+        b=fDSVz4Lg3YGkvBPvYw+xlHL0w0ir/f58ctnwMZZNBWfaIy0qvoQ2NqyHtUA5bxJSBQ
+         kCQGZHkeh0RHO1tB3nVhIpuKsMAm2/xP6fwYbssIWzcxavlV9u+Gf9r8PbOEiWhGWq8X
+         yqvfTjwUQayi3qpmX+s6NsGOq8i+J40Qqks2hSNdiFxcHopySvknJniTV/HFhm5VHGOr
+         vrhZR/LTQDeCXylDDIYUnWLBLQoWRU4UVcjyAruz+yi3cAQywe8ChIpzJQI7xmyPwZNN
+         yU0UoqesC6kTWqAB4W4R1NAD1uCMfkixsRNIcUpXbPsSdiyjy3Flj6sXmpSJEzyIGRmm
+         aycw==
+X-Gm-Message-State: ANoB5pnqNFk6FtaDyPJ5SypMY4T8XT4vLFxJRKIfhbQPCQSZ2jjHS9Za
+        GDa1Uzr0z3NyAPmhCWcDlOoZvo+/QYc7syw6VpZkVQY8Mxlx
+X-Google-Smtp-Source: AA0mqf748OaI1Q7vumE815Vq8lgU51VjBRoqQLAeYQAknLuvzvObzoulNjXvZtW+A3fc6UPllvTZI44Wy24d7/ssuQQT2kE0ABej
+MIME-Version: 1.0
+X-Received: by 2002:a92:c889:0:b0:2ff:6c26:1c75 with SMTP id
+ w9-20020a92c889000000b002ff6c261c75mr244831ilo.315.1668648918534; Wed, 16 Nov
+ 2022 17:35:18 -0800 (PST)
+Date:   Wed, 16 Nov 2022 17:35:18 -0800
+In-Reply-To: <20221117010835.3474-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000000b539d05eda09a88@google.com>
+Subject: Re: [syzbot] WARNING in call_timer_fn
+From:   syzbot <syzbot+6fb78d577e89e69602f9@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: guo ziliang <guo.ziliang@zte.com.cn>
+Hello,
 
-Replace the open-code with sysfs_emit() to simplify the code.
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+INFO: rcu detected stall in corrupted
 
-Signed-off-by: guo ziliang <guo.ziliang@zte.com.cn>
----
- drivers/acpi/sysfs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P4107 } 2643 jiffies s: 2809 root: 0x0/T
+rcu: blocking rcu_node structures (internal RCU debug):
 
-diff --git a/drivers/acpi/sysfs.c b/drivers/acpi/sysfs.c
-index 2d81c74..7db3b53 100644
---- a/drivers/acpi/sysfs.c
-+++ b/drivers/acpi/sysfs.c
-@@ -198,7 +198,7 @@ static int param_set_trace_method_name(const char *val,
 
- static int param_get_trace_method_name(char *buffer, const struct kernel_param *kp)
- {
--       return scnprintf(buffer, PAGE_SIZE, "%s\n", acpi_gbl_trace_method_name);
-+       return sysfs_emit(buffer, "%s\n", acpi_gbl_trace_method_name);
- }
+Tested on:
 
- static const struct kernel_param_ops param_ops_trace_method = {
---
-1.8.3.1
+commit:         7eba4505 net: dcb: move getapptrust to separate function
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=12b65845880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=893a728fb1a6b263
+dashboard link: https://syzkaller.appspot.com/bug?extid=6fb78d577e89e69602f9
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=14ef644e880000
+
