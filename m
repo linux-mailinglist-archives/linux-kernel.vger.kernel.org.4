@@ -2,54 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A76D062D9F8
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 12:55:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEADF62D9FA
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 12:55:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239456AbiKQLz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 06:55:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56832 "EHLO
+        id S239586AbiKQLzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 06:55:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239586AbiKQLzB (ORCPT
+        with ESMTP id S239489AbiKQLzI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 06:55:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D3F72BB0B;
-        Thu, 17 Nov 2022 03:54:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 893EDB82028;
-        Thu, 17 Nov 2022 11:54:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69110C433D6;
-        Thu, 17 Nov 2022 11:54:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668686097;
-        bh=WX1FWx2cF2AM6qxLI/JRI3DYphuxTC736SeVco5ArOU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QcpxXSpU/6MGdIy4/UdvTwVesfdFJVIvX6SASQZT5tQM/KAQsk85zm7H0/fAizZYX
-         w/jVFYK12QJZnNTUY6lQAo4wyo32XRQFNI2ul1/XBUbGdEj8AW5wdxBfPgaqasCbCK
-         n+nCHTy3yjEnj8etlVFnL2uKE4oE3scLyDJhIhYdVn45Swl3tI50V/SKSLc8Jc3+Uh
-         P7+iIIBRJZb/sFrDE8KDDn84kEA/PoturCLKlO1RX0lqnONRY32fJWLKUSjg4rep9o
-         rMAiyMB4s+Evij0XT01fzNkplXD9561TaDtKOcwTot3iofbxH5UvqHj/AtzD2ajC9G
-         5hr5yz1clrsIw==
-Date:   Thu, 17 Nov 2022 11:54:52 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, linux-pwm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] backlight: pwm_bl: Drop support for legacy PWM probing
-Message-ID: <Y3YhDLwOSEQoSWrb@google.com>
-References: <20221117072151.3789691-1-u.kleine-koenig@pengutronix.de>
+        Thu, 17 Nov 2022 06:55:08 -0500
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBFCA4387F
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 03:55:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Yd7mdC1LPQekUFWJKkE454RqYpqT+F4Lkf7XxnWlk9c=; b=kQTC/S+6FwkGTvxV6OS46JT1Xc
+        Qvmke6Q7yeIzz7dtSpMLRD8zQkHbc2d57J2K3kn0ktbRUd1lHTFrWY4Zp+ou5UAyLp4750rU8++8N
+        suZRqhMqq8t/9ghE+kfFy3iLYkIck4vxcrirs/9rGrrNRPD6eAU7FBQSipdL0+7paKHPS1iAtcumR
+        yac4pRDZjdV4Tykf/3GZ/Tb7n6plyP0D8Mm87P+bQKnek9RGMW/rCe4CZY8aP+01xpy2+22XiUg35
+        ERjtm2fs/47jtfRiMAjQQqvglxPNChlKz7ioiPiFS4CIbfIqJZQK6oaKPBY5xfJB2cL2rT4hv75pc
+        q9Yj8k5g==;
+Received: from [2a01:799:95e:1700:6395:ccbd:d000:d42b] (port=54193)
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1ovdTz-0003nI-Gy; Thu, 17 Nov 2022 12:55:03 +0100
+Message-ID: <92529a83-1c04-27b5-7d3d-35fb4fcd0824@tronnes.org>
+Date:   Thu, 17 Nov 2022 12:54:54 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v10 01/19] drm/tests: client: Mention that we can't use
+ MODULE_ macros
+To:     Maxime Ripard <maxime@cerno.tech>,
+        Samuel Holland <samuel@sholland.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Ben Skeggs <bskeggs@redhat.com>, Chen-Yu Tsai <wens@csie.org>,
+        David Airlie <airlied@linux.ie>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Emma Anholt <emma@anholt.net>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        nouveau@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, Dom Cobley <dom@raspberrypi.com>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+References: <20220728-rpi-analog-tv-properties-v10-0-256dad125326@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v10-1-256dad125326@cerno.tech>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+In-Reply-To: <20220728-rpi-analog-tv-properties-v10-1-256dad125326@cerno.tech>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221117072151.3789691-1-u.kleine-koenig@pengutronix.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,19 +80,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Nov 2022, Uwe Kleine-König wrote:
 
-> There is no in-tree user left which relies on legacy probing. So drop
-> support for it which removes another user of the deprecated
-> pwm_request() function.
+
+Den 17.11.2022 10.28, skrev Maxime Ripard:
+> That file is included directly, so we can't use any MODULE macro. Let's
+> leave a comment to avoid any future mistake.
 > 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 > ---
->  drivers/video/backlight/pwm_bl.c | 12 ------------
->  include/linux/pwm_backlight.h    |  1 -
->  2 files changed, 13 deletions(-)
 
-Applied, thanks.
-
--- 
-Lee Jones [李琼斯]
+Reviewed-by: Noralf Trønnes <noralf@tronnes.org>
