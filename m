@@ -2,195 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3CA562D8EA
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 12:08:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5859262D8F8
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 12:08:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239627AbiKQLHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 06:07:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53578 "EHLO
+        id S239415AbiKQLIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 06:08:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239801AbiKQLHj (ORCPT
+        with ESMTP id S239808AbiKQLID (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 06:07:39 -0500
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83711581F
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 03:07:38 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id b185so1427952pfb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 03:07:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=PBTy6d/RjS8lPD0yo/Wdj9yLVWoOYYSyLo6KPxke2Xo=;
-        b=TmuqZePgyGhLmzr7tqu87fAhc+MjXhJoSsLPdmMNB3sjBoovGGcID2QVrZRfMc8RQN
-         zLoAIg8tGTNqsQ8nEXR75pCjK6nRVXLO55gncwQNskY0Ae9lk1i1PmAUuIpq62czDRxA
-         Akyw4s6ipajDiod4tY4q1LtjWkDj0cYZXW8lNdaga8xhKr63lD1F3VJSSz1LIeq2PQU9
-         sX845Es8dcHggnJvKGF1fRTInyzCls+/BmqUV7Xyu++gMi+wpej8+iYCBuJrjuK2O32C
-         7DDu9/N+KVwY9ksO/aPCKXVrDkImBD7JHW5jBauPkqj2kzCxnlUviCYLynPfOIlL4NWW
-         mb7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PBTy6d/RjS8lPD0yo/Wdj9yLVWoOYYSyLo6KPxke2Xo=;
-        b=VlMaZbwtontkOcENGYn1t69sGwASkWEXUdF/DpiD2OuYAi05RhNWGpA9L/yKe6APFp
-         1ZAtph+rddCOv880pUpMI9Fxcz5h/bTRxpWuWMa1v4fRl/LOq0l3YrIHq98t48naZt/a
-         Y08MlQ1dcPKC7/tJO3JPHUjBmDNzrIRu2KNgH+dFZ9gqHbpmlA/1lw1xxPvnMabj8kgh
-         QqLD9aNnjlZZejPvz391ZK8qTmLm04z6U486GgPWNkZYuSdfjRjaVc2NJmxo0rHsU22D
-         YZlU+o48JVax5mtS18bUG7LH+xat46ORcLB/hse4gDVMPFG6apEAwaWP7tY4JJIVqibc
-         /cTQ==
-X-Gm-Message-State: ANoB5pk6f4V6vuUHFv90uwIS7nfJK9BaV8QENyG/0lbgFph62dn8OszD
-        JwIFc1I4HSvC5/Hr7YBeC560Doc9Th4LDZfHpK2vmA==
-X-Google-Smtp-Source: AA0mqf6YmWnFKdAlow79QIEg6M0eJh6h88NATW0O0k0R7hagOy/J6l1FQJixnCR7Ecg5f/uxbyyg0VytaYrU6iY7HGI=
-X-Received: by 2002:a05:6a00:798:b0:566:9f68:c0ad with SMTP id
- g24-20020a056a00079800b005669f68c0admr2432819pfu.57.1668683258266; Thu, 17
- Nov 2022 03:07:38 -0800 (PST)
+        Thu, 17 Nov 2022 06:08:03 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3BE06AECA;
+        Thu, 17 Nov 2022 03:07:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668683275; x=1700219275;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Q/yxfRZ31XbA8GZUusYpG1deAjqkNJJIHGUThuhmAhw=;
+  b=ibMe4WNgKh1eQIsmm1sLLYZtVDLRKM95eCP01fDqW6J8/+4kvB20NGL7
+   Hs9eyhHVL3wZVX744xCFImtSedwatIJfEa+mWh05sD6fFZK7FUrgOJj1A
+   Ng43tJ4irs1avQahc33JpHIRW1tfX4r+bOu/1RDKBS9JaCQsoEznFovJ3
+   xWKHWRjOQo+QZtZ9p2sBAHNOBzkPdOSO23MInaE+HjEEjvZvdEHFKfZwy
+   A5/Te5eUcOkCxCyzx+IIB9JbO+uI9YOxudJkngNsjCiuS8Zx9deGh5I1w
+   zzO5tPW/37Yhxs54HohZMzAfqGKDkrZLf2ma/7JW+Z8I8rgKFZeFRO+1v
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="314638708"
+X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
+   d="scan'208";a="314638708"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 03:07:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="617572312"
+X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
+   d="scan'208";a="617572312"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga006.jf.intel.com with ESMTP; 17 Nov 2022 03:07:51 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id B4CCD2B7; Thu, 17 Nov 2022 13:08:15 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-pwm@vger.kernel.org
+Cc:     Andy Shevchenko <andy@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH v5 0/7] pinctrl: intel: Enable PWM optional feature
+Date:   Thu, 17 Nov 2022 13:07:59 +0200
+Message-Id: <20221117110806.65470-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20221117094859.20582-1-quic_sartgarg@quicinc.com>
-In-Reply-To: <20221117094859.20582-1-quic_sartgarg@quicinc.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 17 Nov 2022 12:07:01 +0100
-Message-ID: <CAPDyKFqLjKOUwbAY5KXWK7g2xcWBQLW09nYoeVCxarfJPGNrTg@mail.gmail.com>
-Subject: Re: [PATCH V1] mmc: core: Wait for 1ms after enabling the clocks post
- voltage switch
-To:     Sarthak Garg <quic_sartgarg@quicinc.com>
-Cc:     adrian.hunter@intel.com, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        quic_rampraka@quicinc.com, quic_pragalla@quicinc.com,
-        quic_sayalil@quicinc.com,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Nov 2022 at 10:49, Sarthak Garg <quic_sartgarg@quicinc.com> wrote:
->
-> As per spec we should wait for 1ms after providing the SD clock to the
-> card again as part of voltage switch sequence but there seems to be a
-> violation here. Clocks are getting gated before 1ms as part of
-> sdhci_set_ios function where we try to reset SD Clock Enable by
-> resetting SDHCI_CLOCK_CARD_EN bit in SDHCI_CLOCK_CONTROL register
-> leading to voltage switch failures for specific SD cards.
-> Below ftraces also confirms the above understanding :
->
-> 9.511367: mmc_host_set_uhs_voltage: mmc1 called
-> 9.511369: mmc_set_ios: mmc1: clock 0Hz busmode 2 powermode 2 cs 0
-> Vdd 18 width 1 timing 0
-> 9.511370: sdhci_set_ios: mmc1 called
-> 9.511370: sdhci_set_ios: mmc1 setting clock ios->clock: 0 host->clock:
-> 400000
-> 9.511372: sdhci_msm_set_clock: mmc1 clock: 0
-> 9.511394: sdhci_set_ios: mmc1 gating clocks by writing
-> ~SDHCI_CLOCK_CARD_EN to SDHCI_CLOCK_CONTROL register
-> 9.511413: sdhci_msm_set_clock: mmc1 clock: 0
-> 9.511423: mmc_set_signal_voltage: mmc1 called
-> 9.533816: mmc_set_ios: mmc1: clock 400000Hz busmode 2 powermode 2 cs 0
-> Vdd 18 width 1 timing 0
-> 9.533820: sdhci_set_ios: mmc1 called
-> 9.533822: sdhci_set_ios: mmc1 setting clock ios->clock: 400000
-> host->clock: 0
-> 9.533826: sdhci_msm_set_clock: mmc1 clock: 400000
-> 9.533925: sdhci_enable_clk: mmc1 Enabling clocks by writing
-> SDHCI_CLOCK_CARD_EN to SDHCI_CLOCK_CONTROL register
-> 9.533950: sdhci_set_ios: mmc1 gating clocks by writing
-> ~SDHCI_CLOCK_CARD_EN to SDHCI_CLOCK_CONTROL register
-> 9.533973: sdhci_msm_set_clock: mmc1 clock: 400000
-> 9.534043: sdhci_enable_clk: mmc1 Enabling clocks by writing
-> SDHCI_CLOCK_CARD_EN to SDHCI_CLOCK_CONTROL register
-> 9.534045: mmc_host_set_uhs_voltage: mmc1 Done
->
-> Wait for 1ms after enabling the clock post voltage switch to make sure
-> clock is kept alive for alteast 1ms as per spec.
->
-> Signed-off-by: Sarthak Garg <quic_sartgarg@quicinc.com>
 
-I don't know the exact behaviour of sdhci around this, so I will defer
-to Adrian's input for that.
+This is a continuation of the previously applied PWM LPSS cleanup series.
+Now, we would like to enable PWM optional feature that may be embedded
+into Intel pin control IPs (starting from Sky Lake platforms).
 
-However, let me point out that in mmc_set_uhs_voltage() we are trying
-to take the 1ms into account. More precisely, after
-mmc_host_set_uhs_voltage() has been called to switch the voltage to
-1.8V and to re-enable the clock, mmc_set_uhs_voltage() does a
-"mmc_delay(1)" and then it calls the ->card_busy() ops to check that
-card doesn't signal busy by holding DAT0 low.
+I would like to route this via Intel pin control tree with issuing
+an immutable branch for both PINCTRL and PWM subsystems, but I'm
+open for other suggestions.
 
-I understand that the code in mmc_set_uhs_voltage(), expects the host
-to be rather dumb from the HW perspective, which may not always be the
-case. Although, I would rather avoid introducing new host flags, along
-what you propose in the $subject patch. If this can't be managed in
-sdhci, without some new help from the mmc core, I would rather suggest
-that we introduce a new host callback that can be used to replace the
-entire part in mmc_host_set_uhs_voltage() (or something along those
-lines).
+Hans, I dared to leave your Rb tags, however the patches are slightly
+differ, because of the Uwe's suggestion on how to handle the missing
+headers. I hope you are okay with that. If not, please comment what
+must be amended then.
 
-Kind regards
-Uffe
+Uwe, the patches 3 and 6 still need your blessing.
 
-> ---
->  drivers/mmc/core/core.c  | 4 ++++
->  drivers/mmc/host/sdhci.c | 3 +++
->  include/linux/mmc/host.h | 1 +
->  3 files changed, 8 insertions(+)
->
-> diff --git a/drivers/mmc/core/core.c b/drivers/mmc/core/core.c
-> index a1efda85c6f2..d63e00aab6cb 100644
-> --- a/drivers/mmc/core/core.c
-> +++ b/drivers/mmc/core/core.c
-> @@ -1181,6 +1181,8 @@ int mmc_host_set_uhs_voltage(struct mmc_host *host)
->         host->ios.clock = 0;
->         mmc_set_ios(host);
->
-> +       host->doing_signal_voltage_switch = true;
-> +
->         if (mmc_set_signal_voltage(host, MMC_SIGNAL_VOLTAGE_180))
->                 return -EAGAIN;
->
-> @@ -1189,6 +1191,8 @@ int mmc_host_set_uhs_voltage(struct mmc_host *host)
->         host->ios.clock = clock;
->         mmc_set_ios(host);
->
-> +       host->doing_signal_voltage_switch = false;
-> +
->         return 0;
->  }
->
-> diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
-> index fb6e9a81f198..ac7c254eef4b 100644
-> --- a/drivers/mmc/host/sdhci.c
-> +++ b/drivers/mmc/host/sdhci.c
-> @@ -2312,6 +2312,9 @@ void sdhci_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
->                 host->ops->set_clock(host, ios->clock);
->                 host->clock = ios->clock;
->
-> +               if (mmc->doing_signal_voltage_switch)
-> +                       usleep_range(1000, 1250);
-> +
->                 if (host->quirks & SDHCI_QUIRK_DATA_TIMEOUT_USES_SDCLK &&
->                     host->clock) {
->                         host->timeout_clk = mmc->actual_clock ?
-> diff --git a/include/linux/mmc/host.h b/include/linux/mmc/host.h
-> index 8fdd3cf971a3..06c88cd7a8bf 100644
-> --- a/include/linux/mmc/host.h
-> +++ b/include/linux/mmc/host.h
-> @@ -521,6 +521,7 @@ struct mmc_host {
->         bool                    hsq_enabled;
->
->         u32                     err_stats[MMC_ERR_MAX];
-> +       bool                    doing_signal_voltage_switch;
->         unsigned long           private[] ____cacheline_aligned;
->  };
->
-> --
-> 2.17.1
->
+Changelog v5:
+- added more tags (Uwe)
+- avoid moving struct pwm_lpss_chip in patch 3 (Uwe)
+- simplified error checking in intel_pinctrl_probe_pwm() (Uwe)
+
+Changelog v4:
+- added patch "Rename pwm_lpss_probe() --> devm_pwm_lpss_probe()"
+
+Changelog v3:
+- added tags (Uwe, Linus, Thierry)
+- fixed some spelling issues in the commit messages
+- changed a paragraph in the commit message of the patch 3 (Uwe)
+- replaced -ENODEV check with IS_REACHABLE() in the patch 6 (Uwe)
+
+Changelog v2:
+- added tag (Mika)
+- added base-commit to the series, to make sure LKP can test it
+
+Cc: Hans de Goede <hdegoede@redhat.com>
+Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+
+Andy Shevchenko (7):
+  pwm: Add a stub for devm_pwmchip_add()
+  pwm: lpss: Rename MAX_PWMS --> LPSS_MAX_PWMS
+  pwm: lpss: Include headers we are the direct user of
+  pwm: lpss: Allow other drivers to enable PWM LPSS
+  pwm: lpss: Rename pwm_lpss_probe() --> devm_pwm_lpss_probe()
+  pwm: lpss: Add devm_pwm_lpss_probe() stub
+  pinctrl: intel: Enumerate PWM device when community has a capability
+
+ drivers/pinctrl/intel/pinctrl-intel.c      | 29 ++++++++++++++
+ drivers/pwm/pwm-lpss-pci.c                 |  2 +-
+ drivers/pwm/pwm-lpss-platform.c            |  2 +-
+ drivers/pwm/pwm-lpss.c                     |  8 ++--
+ drivers/pwm/pwm-lpss.h                     | 26 ++-----------
+ include/linux/platform_data/x86/pwm-lpss.h | 44 ++++++++++++++++++++++
+ include/linux/pwm.h                        |  5 +++
+ 7 files changed, 88 insertions(+), 28 deletions(-)
+ create mode 100644 include/linux/platform_data/x86/pwm-lpss.h
+
+
+base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
+-- 
+2.35.1
+
