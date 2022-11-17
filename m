@@ -2,211 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25E9B62E777
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 22:58:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 720A662E77D
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 22:59:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241143AbiKQV6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 16:58:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35622 "EHLO
+        id S241046AbiKQV7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 16:59:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241088AbiKQV5t (ORCPT
+        with ESMTP id S241034AbiKQV62 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 16:57:49 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8DF7A34E
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 13:57:15 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id v3-20020a17090ac90300b00218441ac0f6so6812799pjt.0
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 13:57:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=IIh+nGIerLfk4ZB9SpoRZWMODmjSUqXiyhjydKb0Cds=;
-        b=PJZ6jbnQhQq9tru88c3QcgjfZaJDnoJRCzzf1bX0/gWQf6BO1kYnGuZiAkcQbfZxF1
-         wVZdaktXE7y7G0iGR9w0mDib97tK+9Z1KEN4DGKZzUJEwZpO/1SRERjEZW4dZS1lSmQm
-         6pLSDQke2I1tY0Rbt7braOr4eQDXUxJpKb4Zg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IIh+nGIerLfk4ZB9SpoRZWMODmjSUqXiyhjydKb0Cds=;
-        b=UbOXoZby+UQfnJkY+SDjFK4mL/r2PJ3Uop2lsVDzT7sWgYUKnqf7i2b2BGlyCzf2Ch
-         Cobvc6mUZqVka00/8bWf3YOiWCTD/YOT/4+UmxbqvfBVX4PWj5gU6ZJmjHUSyY2Tq8iJ
-         cwvzmRTSQ/JUV2V4twn1vNfMYS0bLQinIPVt9uXut2b/P+kbdXq+MM7UasrnmbPoWEnh
-         8j8GN122CZWqSlaN6FS2RrhTcYS/Uev54JYmcig3ESTllZlCLowrjRBK6YvgDO6gNzd1
-         /1e5delNlf1jxjb5ZEusdGfYIsDNn7tbY6LbPGweHQmDfRGDZuuf7ka3y8JrrOLfEzvV
-         7H6g==
-X-Gm-Message-State: ANoB5pkDAFe8ez/gvLfNdHMZwDMboS86NFYlsspuL7DiUtIiYZ2UW7v/
-        PL0U+BYJOf/b2Yfr7SKZqdlh+w==
-X-Google-Smtp-Source: AA0mqf5F2mDePv/SsUAusLJAu22vdbKLGH3peZOY+MZBhXcyEG7NIlWlaGpyKLA4kx4t011dWowR5A==
-X-Received: by 2002:a17:90a:dd82:b0:212:fdb1:720b with SMTP id l2-20020a17090add8200b00212fdb1720bmr10785160pjv.66.1668722234748;
-        Thu, 17 Nov 2022 13:57:14 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id a28-20020aa795bc000000b0056beae3dee2sm1674860pfk.145.2022.11.17.13.57.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 13:57:14 -0800 (PST)
-Date:   Thu, 17 Nov 2022 13:57:13 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Christoph =?iso-8859-1?Q?B=F6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        "Darrick J . Wong" <djwong@kernel.org>,
-        SeongJae Park <sj@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Helge Deller <deller@gmx.de>, netdev@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-mmc@vger.kernel.org, linux-parisc@vger.kernel.org
-Subject: Re: [PATCH v3 3/3] treewide: use get_random_u32_inclusive() when
- possible
-Message-ID: <202211171349.F42BA5B0@keescook>
-References: <20221114164558.1180362-1-Jason@zx2c4.com>
- <20221117202906.2312482-1-Jason@zx2c4.com>
- <20221117202906.2312482-4-Jason@zx2c4.com>
+        Thu, 17 Nov 2022 16:58:28 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D79B72137
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 13:57:37 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1668722255;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=H9wRa3+GgKpIPdNjGF7czujjEWj4rhvBPlhM04JuIGc=;
+        b=GPjEw4ohnKxxTXMP0QjYmPRAi1tg3AqjLKZhdQlipua+zmyga4zkcEZRpAFamqacqtrdM3
+        Pg6wLCxaySUywhXyIeME7F0WxchY2oqxwFS1MD4kQru7guXvPd4FXx/ksbKT/7LgHEhCDS
+        XBRJQa+MGdkCBConzPG2o6j1ED7jyOudF0LH3ztrTaADQtDwos9ajxqZBzFkvEhZS8jjIJ
+        ceXilqFbxGxOUauIXLF5Pop5OrFQaGOTMgwNmluyG9TVltuRpVIzEf4HWUz2WvKZsIbDc7
+        YtMK25WGFnUvsKpt//iI9gIJ91kdCGQFWJu42HwUBVHRdZ5JepSJbPE9v6zOfw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1668722255;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=H9wRa3+GgKpIPdNjGF7czujjEWj4rhvBPlhM04JuIGc=;
+        b=uich/CXUIOK8gag1wFkTT2aKcnGbePGvFDrHwURV1DTLHev9M3wLvcmhLD3pWJDuWy5e82
+        r4CttknM+Lxpv3BA==
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, john.stultz@linaro.org,
+        sboyd@kernel.org, corbet@lwn.net, Mark.Rutland@arm.com,
+        maz@kernel.org, kernel-team@meta.com, neeraju@codeaurora.org,
+        ak@linux.intel.com, feng.tang@intel.com, zhengjun.xing@intel.com,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Chris Mason <clm@meta.com>, John Stultz <jstultz@google.com>,
+        Waiman Long <longman@redhat.com>
+Subject: Re: [PATCH clocksource 1/3] clocksource: Reject bogus watchdog
+ clocksource measurements
+In-Reply-To: <20221114232827.835599-1-paulmck@kernel.org>
+References: <20221114232807.GA834337@paulmck-ThinkPad-P17-Gen-1>
+ <20221114232827.835599-1-paulmck@kernel.org>
+Date:   Thu, 17 Nov 2022 22:57:34 +0100
+Message-ID: <87mt8pkzw1.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221117202906.2312482-4-Jason@zx2c4.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 09:29:06PM +0100, Jason A. Donenfeld wrote:
-> These cases were done with this Coccinelle:
-> 
-> @@
-> expression H;
-> expression L;
-> @@
-> - (get_random_u32_below(H) + L)
-> + get_random_u32_inclusive(L, H + L - 1)
-> 
-> @@
-> expression H;
-> expression L;
-> expression E;
-> @@
->   get_random_u32_inclusive(L,
->   H
-> - + E
-> - - E
->   )
-> 
-> @@
-> expression H;
-> expression L;
-> expression E;
-> @@
->   get_random_u32_inclusive(L,
->   H
-> - - E
-> - + E
->   )
-> 
-> @@
-> expression H;
-> expression L;
-> expression E;
-> expression F;
-> @@
->   get_random_u32_inclusive(L,
->   H
-> - - E
->   + F
-> - + E
->   )
-> 
-> @@
-> expression H;
-> expression L;
-> expression E;
-> expression F;
-> @@
->   get_random_u32_inclusive(L,
->   H
-> - + E
->   + F
-> - - E
->   )
-> 
-> And then subsequently cleaned up by hand, with several automatic cases
-> rejected if it didn't make sense contextually.
-> 
-> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com> # for infiniband
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
->  arch/x86/kernel/module.c                      |  2 +-
->  crypto/rsa-pkcs1pad.c                         |  2 +-
->  crypto/testmgr.c                              | 10 ++++----
->  drivers/bus/mhi/host/internal.h               |  2 +-
->  drivers/dma-buf/st-dma-fence-chain.c          |  2 +-
->  drivers/infiniband/core/cma.c                 |  2 +-
->  drivers/infiniband/hw/hns/hns_roce_ah.c       |  5 ++--
->  drivers/mtd/nand/raw/nandsim.c                |  2 +-
->  drivers/net/wireguard/selftest/allowedips.c   |  8 +++---
->  .../broadcom/brcm80211/brcmfmac/p2p.c         |  2 +-
->  .../net/wireless/intel/iwlwifi/mvm/mac-ctxt.c |  2 +-
->  fs/f2fs/segment.c                             |  6 ++---
->  kernel/kcsan/selftest.c                       |  2 +-
->  lib/test_hexdump.c                            | 10 ++++----
->  lib/test_printf.c                             |  2 +-
->  lib/test_vmalloc.c                            |  6 ++---
->  mm/kasan/kasan_test.c                         |  6 ++---
->  mm/kfence/kfence_test.c                       |  2 +-
->  mm/swapfile.c                                 |  5 ++--
->  net/bluetooth/mgmt.c                          |  5 ++--
->  net/core/pktgen.c                             | 25 ++++++++-----------
->  net/ipv4/tcp_input.c                          |  2 +-
->  net/ipv6/addrconf.c                           |  6 ++---
->  net/netfilter/nf_nat_helper.c                 |  2 +-
->  net/xfrm/xfrm_state.c                         |  2 +-
->  25 files changed, 56 insertions(+), 64 deletions(-)
+Paul!
 
-Even the diffstat agrees this is a nice clean-up. :)
+On Mon, Nov 14 2022 at 15:28, Paul E. McKenney wrote:
+>  
+> +		/* Check for bogus measurements. */
+> +		wdi = jiffies_to_nsecs(WATCHDOG_INTERVAL);
+> +		if (wd_nsec < (wdi >> 2)) {
+> +			pr_warn("timekeeping watchdog on CPU%d: Watchdog clocksource '%s' advanced only %lld ns during %d-jiffy time interval, skipping watchdog check.\n", smp_processor_id(), watchdog->name, wd_nsec, WATCHDOG_INTERVAL);
+> +			continue;
+> +		}
+> +		if (wd_nsec > (wdi << 2)) {
+> +			pr_warn("timekeeping watchdog on CPU%d: Watchdog clocksource '%s' advanced an excessive %lld ns during %d-jiffy time interval, probable CPU overutilization, skipping watchdog check.\n", smp_processor_id(), watchdog->name, wd_nsec, WATCHDOG_INTERVAL);
+> +			continue;
+> +		}
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+This is really getting ridiculous.
 
-The only comment I have is that maybe these cases can just be left as-is
-with _below()?
+The clocksource watchdog is supposed to run periodically with period =
+WATCHDOG_INTERVAL.
 
-> -             size_t len = get_random_u32_below(rs) + gs;
-> +             size_t len = get_random_u32_inclusive(gs, rs + gs - 1);
+That periodic schedule depends on the clocksource which is monitored. If
+the clocksource runs fast the period is shortened and if it runs slow is
+prolonged.
 
-It seems like writing it in the form of base plus [0, limit) is clearer?
+Now you add checks:
 
-		size_t len = gs + get_random_u32_below(rs);
+ 1) If the period observed by the watchdog clocksource is less than 1/4
+    of the expected period, everything is fine.
 
-But there is only a handful, so *shrug*
+ 2) If the period observed by the watchdog clocksource is greater than 4
+    times the expected period, everything is fine.
 
-All the others are much cleaner rewritten as _inclusive().
+IOW, you are preventing detection of one class of problems which caused
+us to implement the watchdog clocksource in the first place.
 
--- 
-Kees Cook
+You are preventing it by making the watchdog decision circular dependent
+on the clocksource it is supposed to watch. IOW, you put a fox in charge
+of the henhouse. That's a really brilliant plan.
+
+But what's worse is the constant stream of heuristics which make the
+clocksource watchdog "work" under workloads which are simply impossible
+to be handled by its current implementation.
+
+If I look at the full set of them by now, I'm pretty sure that a real
+TSC fail would not be noticed anymore because there are more exceptions
+and excuses why a particular measurement it bogus or invalid or
+whatever.
+
+I didn't do a full analysis yet, but I have a hard time to convince
+myself that - assumed we add this gem - the watchdog will be anything
+else than a useless waste of CPU cycles as there is always one of the
+heuristics declaring that everything is fine along with incomprehensible
+messages in dmesg which will create more confusion to most people than
+being helpful.
+
+This is hunting us for 20+ years now and why do we still need this? I'm
+pretty sure that farcebook does not run their server farms on 20 years
+old silicon.
+
+That means even the largest customers have not been able to convince the
+CPU manufactures to fix this idiocy by now, right? Either that or they
+did not even try because it's simpler to "fix" it in software.
+
+That's the only two explanations I have for the constant stream of
+voodoo logic. Both are just a proof for my claim that this industry just
+"works" by chance.
+
+Can we stop this pretty please and either come up with something
+fundamentally different or just admit defeat and remove the whole thing?
+
+Thanks,
+
+        tglx
+
