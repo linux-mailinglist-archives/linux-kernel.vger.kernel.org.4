@@ -2,71 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10DA162DCB6
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:27:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F240062DC97
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:24:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240059AbiKQN0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 08:26:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43800 "EHLO
+        id S240006AbiKQNYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 08:24:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234146AbiKQN0s (ORCPT
+        with ESMTP id S240018AbiKQNYA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 08:26:48 -0500
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 007D559FF0
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 05:26:46 -0800 (PST)
-Received: by mail-qt1-x82d.google.com with SMTP id c15so1008174qtw.8
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 05:26:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KZKDGywksPC2VKoAr50lKKIAMxnyrxtKe798RUQ67C8=;
-        b=nW22d0AkvFDqi0/36i4jyFmsCYj+HPbm4fDGwpKz9UhyCY33HEmokqBTgN+fehY1ou
-         +zi3rxyzFMSOlFyNHHnT7/wFf0mGNvjAUwSOzLEdqu0FhUwsg93a+fvASIpddmOybBT6
-         DPQXtRhVjcRaefRIp86JeA2bvEW+zSxVoGDCjZqKATjKKQQ3DxwAla1kZ6sLAkUwWu+5
-         GgJ9tWVFNm8hNfjQ5qh5WNbV7CAvTXzK4193PWX3ia++2gQXEgIaAqGYVc8mXaFz1Caz
-         Y3RjPADGlZli6DhCkkBJo+p3B2dm4dSQ5wCipPsS65SZFRqTvdF9vaTzmKg4x6x8aVR0
-         vdsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KZKDGywksPC2VKoAr50lKKIAMxnyrxtKe798RUQ67C8=;
-        b=n9zoVDPaOORKjh/67N0Vn3h44TCfobjhJf/vk88c6qLimGD6Ly93Qwp5P+vJ5zRoB/
-         4IOY83X7JOgjoqbX5AJcWTIGhLaG0Aoqyh+5muANCLPkn1ziuc8ib6eIhpFtSu+jOmWG
-         Snr5uSGNvpjeU6+YW2e5wQ35zwJzupKD9NQoqxuAARGTyxxVp9DkYsYIdTubdqP7hxjl
-         E1drGbbQ8yavzY+zCv0/+LYs3J3h3G/nlo/9zXjjXeI93Xd0ITr49Qb2RYmjZN/Mpjsf
-         vMlN4Wg0/ZBUK3wvv3SqrKooYIYwlEZNKRnhCrnW+6ms3FpoSBS6yHWzv43bzTmH6OGq
-         Dz/g==
-X-Gm-Message-State: ANoB5pl6kWyQ709ceiU1xFqP+QGjhwrmAIEWdJfICJWgFomOsPNhlddW
-        MUHKDsv3aolpAU0kI7NHAK2pQg==
-X-Google-Smtp-Source: AA0mqf6IJ9TfEi4fdZUSbZrZidog6WqIgbZlNXByL6goS1x+RR8fuxBhuZpaBoyABKyEvDf3soyJWA==
-X-Received: by 2002:a05:622a:410a:b0:3a5:5987:42c6 with SMTP id cc10-20020a05622a410a00b003a5598742c6mr2154192qtb.147.1668691606159;
-        Thu, 17 Nov 2022 05:26:46 -0800 (PST)
-Received: from localhost ([2620:10d:c091:480::1:bc4])
-        by smtp.gmail.com with ESMTPSA id n1-20020a05620a294100b006fa617ac616sm447437qkp.49.2022.11.17.05.26.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 05:26:45 -0800 (PST)
-Date:   Thu, 17 Nov 2022 08:27:09 -0500
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH] proc/meminfo: fix spacing in SecPageTables
-Message-ID: <Y3Y2rUaTPN6e2/EI@cmpxchg.org>
-References: <20221117043247.133294-1-yosryahmed@google.com>
+        Thu, 17 Nov 2022 08:24:00 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3105C5F86F;
+        Thu, 17 Nov 2022 05:23:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1668691436; x=1700227436;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Mva3irCZtbU/n4ixfR3IHzyqvcagg8EtGCdeTzm6YVk=;
+  b=U56tONk9N9N8xHXozEs1syZCq+FBrJxJOvzf2GtnhVY4Un6LFpjDKBXT
+   MajopqvOaP7P7HyNwhx0fzqPzekPEVjKGGaJxTMXMt3FdaxGQJbvVVXrj
+   8t8Dm/seOCY4SZ1b/dkTVpIQG+CYNTKb9cJlFv+1zs4EJnk/ukeU5SXUY
+   WSTGp1kUfyFhjhcyCI16uVkRjiy4GIbiu32umf+PE+HaD+ppT+Ranz4nH
+   VKuSQipfLLbJeLcm4B3HFNDBeMA9PY2Q/QL+k93kmxwGAiyTawJHRdI2J
+   YJ1aGwN/U5VT6+VI/x0PI5JAruIheQiAH3u5g824cdgtPbmBSBjJir3WE
+   w==;
+X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
+   d="scan'208";a="189423565"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Nov 2022 06:23:56 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Thu, 17 Nov 2022 06:23:56 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Thu, 17 Nov 2022 06:23:54 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <linux-arm-kernel@lists.infradead.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <Steen.Hegelund@microchip.com>, <lars.povlsen@microchip.com>,
+        <daniel.machon@microchip.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <UNGLinuxDriver@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH net-next] net: microchip: sparx5: kunit test: Fix compile warnings.
+Date:   Thu, 17 Nov 2022 14:28:12 +0100
+Message-ID: <20221117132812.2105718-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221117043247.133294-1-yosryahmed@google.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,11 +64,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 04:32:47AM +0000, Yosry Ahmed wrote:
-> SecPageTables has a tab after it instead of a space, this can break
-> fragile parsers that depend on spaces after the stat names.
-> 
-> Fixes: ebc97a ("mm: add NR_SECONDARY_PAGETABLE to count secondary page table uses.")
-> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+When VCAP_KUNIT_TEST is enabled the following warnings are generated:
 
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+drivers/net/ethernet/microchip/vcap/vcap_api_kunit.c:257:34: warning: Using plain integer as NULL pointer
+drivers/net/ethernet/microchip/vcap/vcap_api_kunit.c:258:41: warning: Using plain integer as NULL pointer
+drivers/net/ethernet/microchip/vcap/vcap_api_kunit.c:342:23: warning: Using plain integer as NULL pointer
+drivers/net/ethernet/microchip/vcap/vcap_api_kunit.c:359:23: warning: Using plain integer as NULL pointer
+drivers/net/ethernet/microchip/vcap/vcap_api_kunit.c:1327:34: warning: Using plain integer as NULL pointer
+drivers/net/ethernet/microchip/vcap/vcap_api_kunit.c:1328:41: warning: Using plain integer as NULL pointer
+
+Therefore fix this.
+
+Fixes: dccc30cc4906 ("net: microchip: sparx5: Add KUNIT test of counters and sorted rules")
+Fixes: c956b9b318d9 ("net: microchip: sparx5: Adding KUNIT tests of key/action values in VCAP API")
+Fixes: 67d637516fa9 ("net: microchip: sparx5: Adding KUNIT test for the VCAP API")
+Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+---
+ drivers/net/ethernet/microchip/vcap/vcap_api_kunit.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/net/ethernet/microchip/vcap/vcap_api_kunit.c b/drivers/net/ethernet/microchip/vcap/vcap_api_kunit.c
+index 6858e44ce4a55..194734cadf8b4 100644
+--- a/drivers/net/ethernet/microchip/vcap/vcap_api_kunit.c
++++ b/drivers/net/ethernet/microchip/vcap/vcap_api_kunit.c
+@@ -254,8 +254,8 @@ test_vcap_xn_rule_creator(struct kunit *test, int cid, enum vcap_user user,
+ 			  u16 priority,
+ 			  int id, int size, int expected_addr)
+ {
+-	struct vcap_rule *rule = 0;
+-	struct vcap_rule_internal *ri = 0;
++	struct vcap_rule *rule;
++	struct vcap_rule_internal *ri;
+ 	enum vcap_keyfield_set keyset = VCAP_KFS_NO_VALUE;
+ 	enum vcap_actionfield_set actionset = VCAP_AFS_NO_VALUE;
+ 	int ret;
+@@ -339,7 +339,7 @@ static void vcap_api_set_bit_1_test(struct kunit *test)
+ 		.sw_width = 52,
+ 		.reg_idx = 1,
+ 		.reg_bitpos = 20,
+-		.tg = 0
++		.tg = NULL,
+ 	};
+ 	u32 stream[2] = {0};
+ 
+@@ -356,7 +356,7 @@ static void vcap_api_set_bit_0_test(struct kunit *test)
+ 		.sw_width = 52,
+ 		.reg_idx = 2,
+ 		.reg_bitpos = 11,
+-		.tg = 0
++		.tg = NULL,
+ 	};
+ 	u32 stream[3] = {~0, ~0, ~0};
+ 
+@@ -1324,8 +1324,8 @@ static void vcap_api_encode_rule_test(struct kunit *test)
+ 			.actionstream = actdata,
+ 		},
+ 	};
+-	struct vcap_rule *rule = 0;
+-	struct vcap_rule_internal *ri = 0;
++	struct vcap_rule *rule;
++	struct vcap_rule_internal *ri;
+ 	int vcap_chain_id = 10005;
+ 	enum vcap_user user = VCAP_USER_VCAP_UTIL;
+ 	u16 priority = 10;
+-- 
+2.38.0
+
