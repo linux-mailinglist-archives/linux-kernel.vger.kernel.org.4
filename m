@@ -2,149 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3807562E3DF
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 19:12:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A53FB62E3DC
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 19:12:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240346AbiKQSMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 13:12:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50180 "EHLO
+        id S240356AbiKQSMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 13:12:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240329AbiKQSLw (ORCPT
+        with ESMTP id S235066AbiKQSLu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 13:11:52 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5D682209
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 10:11:50 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-370624ca2e8so25923677b3.16
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 10:11:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wteh+NFEi1GAsB9oF3PCiWMRRI+co3r9IDe7/2rAE34=;
-        b=nMPxbK2ewjH+fsYNZqiLd//2LrKs65SwyM7mNXN787ZD4W6hIOaTT53xBtzBuwe83f
-         dPp8qx9NrhlldMjEFYsXhWxhpArwLywx3EZ5yiRT9eCxLDCW2IyhYOwLtAnlL0wg8slI
-         8OMjRj6j07oCEOVTquGO1qFYXxy1XvyLgRXhOMv7B/OhbZbgtPsw9gFwd1D7YBQSRH4F
-         EVkBwDdJV5Gzegu0E/MV/fztUe+LBFRAUgq58rdCy767/vUbt02dcLrd0ATI4ibZc3AM
-         8hluEOAvA6br6+3UyzVP7s6kTDbf78BNguWrUs1opz1P7+su76qBu1ToVn6P8e4UKWH3
-         /l1Q==
+        Thu, 17 Nov 2022 13:11:50 -0500
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CECA7FF39;
+        Thu, 17 Nov 2022 10:11:48 -0800 (PST)
+Received: by mail-ot1-f45.google.com with SMTP id p8-20020a056830130800b0066bb73cf3bcso1545424otq.11;
+        Thu, 17 Nov 2022 10:11:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wteh+NFEi1GAsB9oF3PCiWMRRI+co3r9IDe7/2rAE34=;
-        b=v+tpHOz/IoKJR+jjW3s9DPogzlNab/GHIO4tvreTOJGe7pz8nkLszdiaX5pYpyeoOB
-         mjDuGOTj/zlCU/sgM8VHthiV+H4xwWL00tF6kTRtxY7vBGvRMVqOxQsexM8n8z/xlakj
-         VQHlUFEgYVsZYVG0jR/Fcu2VAZH7TVTqUPaHol84+DBwyjLqOVwRvrCsfQBgcK7I7L1n
-         7vPBe4cltE9/OnC7TdW+c9YrUBnm2N36fdjzKD2iOZPtVLrprD+Tx1v4/GE/O9XGduR7
-         44QYnXnQB1mBhK8vpni5JCPULH5hJg113Xn+L+HqC6PjkEmks98pFErHvlHWLsm2RvQZ
-         Jemg==
-X-Gm-Message-State: ANoB5pnXKptbAo+DvbCVvEXVyjQxcs4vOkcIa4L8wTq+bENPg8IjvWjb
-        pkxmedbLwWnTAHEzN+IM/vsz4XvbM0Xh9eVgOcCAF1XqkGDMJIB3mJs8dyaQA71WMX8+Bt/dW/u
-        IftkB5IWv+NOpto5it0BR6SY6ONARVF3BwUsrAG8HKpt/1a9r2TjeryMDLp5GcKzptYVHCUCXl8
-        vznS6i12g=
-X-Google-Smtp-Source: AA0mqf6V5BCoS8nuaZkX6AKXJwgdSPrsb9yINktEj3ef0TIf06GgqLN7xzlorDuSHRHkCtTI+xWz5xk/yNS8Crmgvg==
-X-Received: from dionnaglaze.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2ee6])
- (user=dionnaglaze job=sendgmr) by 2002:a25:74c1:0:b0:6de:47e2:e344 with SMTP
- id p184-20020a2574c1000000b006de47e2e344mr3355252ybc.450.1668708709870; Thu,
- 17 Nov 2022 10:11:49 -0800 (PST)
-Date:   Thu, 17 Nov 2022 18:11:27 +0000
-In-Reply-To: <20221117181127.1859634-1-dionnaglaze@google.com>
-Mime-Version: 1.0
-References: <20221117181127.1859634-1-dionnaglaze@google.com>
-X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-Message-ID: <20221117181127.1859634-3-dionnaglaze@google.com>
-Subject: [PATCH v2 2/2] kvm: sev: If ccp is busy, report throttled to guest
-From:   Dionna Glaze <dionnaglaze@google.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org
-Cc:     Dionna Glaze <dionnaglaze@google.com>,
-        Thomas Lendacky <Thomas.Lendacky@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Joerg Roedel <jroedel@suse.de>, Ingo Molnar <mingo@redhat.com>,
-        Andy Lutomirsky <luto@kernel.org>,
-        John Allen <john.allen@amd.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Peter Gonda <pgonda@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7TiNyM9B5M+n2XUh8qUxi//SLLvzOC5yxBWOEqJpqDM=;
+        b=EFjPOR8TZIkh2AITRBxbIRluckgnZ5qj/qL/QFt+neUPNS5NIclcjE3TJUus16ilRL
+         CuQWE0dcF600n6hKK/ex5haCg3i4Ee/SYaSX3FIzs4Gc8Wo3sTn8wFQQQjfERxwhP0wi
+         Q4K5yXwC2IY/Z0nIg6krn+IJmcKa29ha5KyHg2gfTUfa9ngZpD6j+PULM+EWt7Krwd3C
+         7X2WSMw8omlCEsPqhAMwZv4lazQV6PVDjrw8oUeWtaJn0zY4E3CPoiyiWUsiZKU4TnLA
+         iuSXOacJkDBDlv3LbofwpPraN0zXjyBj2F6EMYYqUgKQJO364/7c88MyllEsC/+K5JdR
+         kYkg==
+X-Gm-Message-State: ANoB5pnPeZjOQpMZPcaISXuo7QQblWUd+HiYkBzfC7tM+7Pf6O+lsDDy
+        CmeaC4BW17sWbk9dsxtIbffpi2Ev3oNxhep2UbM=
+X-Google-Smtp-Source: AA0mqf4I4wJeFvLDnwGkxkqCOjJzpbLZcED+PxWHhM8DlnN5kTUiEEvJBBG00gzGYPs5X0SbZkjUBqoUyQiGWMACLZc=
+X-Received: by 2002:a05:6830:1215:b0:66d:78b8:7b1a with SMTP id
+ r21-20020a056830121500b0066d78b87b1amr2135173otp.206.1668708707662; Thu, 17
+ Nov 2022 10:11:47 -0800 (PST)
+MIME-Version: 1.0
+References: <20221116233854.1596378-1-namhyung@kernel.org> <20221116233854.1596378-6-namhyung@kernel.org>
+ <Y3Zb+JChHoq+89yM@kernel.org> <Y3ZeOuNnk0xclY2x@kernel.org>
+ <CAP-5=fVh0cQDeqSgVkLHbuiZKoFAp628oggQKwN6KxfUusA01Q@mail.gmail.com>
+ <Y3ZuW2IxVWp9yoaD@kernel.org> <CAP-5=fWYi2ASE=v0UgrqbBDA2+jC0qmNX2_4r0wbFLV3Dw2nYw@mail.gmail.com>
+In-Reply-To: <CAP-5=fWYi2ASE=v0UgrqbBDA2+jC0qmNX2_4r0wbFLV3Dw2nYw@mail.gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Thu, 17 Nov 2022 10:11:36 -0800
+Message-ID: <CAM9d7cioaqjPgp+-UyUwzg7J3OQRC8DNMP0T1h5ro=yNgr128w@mail.gmail.com>
+Subject: Re: [PATCH 05/12] perf test: Add 'leafloop' test workload
+To:     Ian Rogers <irogers@google.com>,
+        German Gomez <german.gomez@arm.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, Leo Yan <leo.yan@linaro.org>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        James Clark <james.clark@arm.com>,
+        Athira Jajeev <atrajeev@linux.vnet.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ccp driver can be overloaded even with 1 HZ throttling. The return
-value of -EBUSY means that there is no firmware error to report back to
-user space, so the guest VM would see this as exitinfo2 = 0. The false
-success can trick the guest to update its the message sequence number
-when it shouldn't have.
+Hi,
 
-Instead, when ccp returns -EBUSY, we report that to userspace as the
-throttling return value.
+On Thu, Nov 17, 2022 at 9:42 AM Ian Rogers <irogers@google.com> wrote:
+>
+> On Thu, Nov 17, 2022 at 9:24 AM Arnaldo Carvalho de Melo
+> <acme@kernel.org> wrote:
+> >
+> > Em Thu, Nov 17, 2022 at 09:16:58AM -0800, Ian Rogers escreveu:
+> > > On Thu, Nov 17, 2022 at 8:15 AM Arnaldo Carvalho de Melo
+> > > <acme@kernel.org> wrote:
+> > > >
+> > > > Em Thu, Nov 17, 2022 at 01:06:16PM -0300, Arnaldo Carvalho de Melo escreveu:
+> > > > > Em Wed, Nov 16, 2022 at 03:38:47PM -0800, Namhyung Kim escreveu:
+> > > > > > The leafloop workload is to run an infinite loop in the test_leaf
+> > > > > > function.  This is needed for the ARM fp callgraph test to verify if it
+> > > > > > gets the correct callchains.
+> > > > > >
+> > > > > >   $ perf test -w leafloop
+> > > > >
+> > > > > On fedora:36
+> > > > >
+> > > > > In file included from /usr/include/bits/libc-header-start.h:33,
+> > > > >                  from /usr/include/stdlib.h:26,
+> > > > >                  from tests/workloads/leafloop.c:2:
+> > > > > /usr/include/features.h:412:4: error: #warning _FORTIFY_SOURCE requires compiling with optimization (-O) [-Werror=cpp]
+> > > > >   412 | #  warning _FORTIFY_SOURCE requires compiling with optimization (-O)
+> > > > >       |    ^~~~~~~
+> > > > > cc1: all warnings being treated as errors
+> > > > > make[5]: *** [/home/acme/git/perf/tools/build/Makefile.build:96: /tmp/build/perf/tests/workloads/leafloop.o] Error 1
+> > > > > make[5]: *** Waiting for unfinished jobs....
+> > > > >
+> > > > > I'll try removing the _FORTIFY_SOURCE
+> > > >
+> > > > Works after I added this to datasym.c, leafloop.c and brstack.c:
+> > >
+> > > Is there a reason we are compiling without -O ? Perhaps we can filter
+> >
+> > I assumed so as Namhyung added it, perhaps he is just carrying it from
+> > the pre-existing shell tests?
 
-Cc: Thomas Lendacky <Thomas.Lendacky@amd.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Joerg Roedel <jroedel@suse.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Andy Lutomirsky <luto@kernel.org>
-Cc: John Allen <john.allen@amd.com>
-Cc: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Peter Gonda <pgonda@google.com>
+Exactly :)
 
-Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
----
- arch/x86/kvm/svm/sev.c | 19 ++++++++++++++++---
- 1 file changed, 16 insertions(+), 3 deletions(-)
+> >
+> > I wonder its to have a predictable binary output that the test expects
+> > when doing things like hardware tracing? As it come from the coresight
+> > tests, IIRC.
 
-diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-index 3ced06c6e07a..81e4862126fb 100644
---- a/arch/x86/kvm/svm/sev.c
-+++ b/arch/x86/kvm/svm/sev.c
-@@ -3335,7 +3335,13 @@ static void snp_handle_guest_request(struct vcpu_svm *svm, gpa_t req_gpa, gpa_t
- 		goto unlock;
- 
- 	rc = sev_issue_cmd(kvm, SEV_CMD_SNP_GUEST_REQUEST, &data, &err);
--	if (rc)
-+	/*
-+	 * The ccp driver can return -EBUSY if the PSP is overloaded, so
-+	 * we offer that as a throttling signal too.
-+	 */
-+	if (rc == -EBUSY)
-+		rc = SNP_GUEST_REQ_THROTTLED;
-+	else if (rc)
- 		/* use the firmware error code */
- 		rc = err;
- 
-@@ -3368,7 +3374,7 @@ static void snp_handle_ext_guest_request(struct vcpu_svm *svm, gpa_t req_gpa, gp
- 	if (snp_throttle_guest_request(sev)) {
- 		rc = SNP_GUEST_REQ_THROTTLED;
- 		goto e_fail;
--	}
-+       }
- 
- 	data_gpa = vcpu->arch.regs[VCPU_REGS_RAX];
- 	data_npages = vcpu->arch.regs[VCPU_REGS_RBX];
-@@ -3392,7 +3398,14 @@ static void snp_handle_ext_guest_request(struct vcpu_svm *svm, gpa_t req_gpa, gp
- 
- 	rc = snp_guest_ext_guest_request(&req, (unsigned long)sev->snp_certs_data,
- 					 &data_npages, &err);
--	if (rc) {
-+	/*
-+	 * The ccp driver can return -EBUSY if the PSP is overloaded, so
-+	 * we offer that as a throttling signal too.
-+	 */
-+	if (rc == -EBUSY) {
-+		rc = SNP_GUEST_REQ_THROTTLED;
-+		goto cleanup;
-+	} else if (rc) {
- 		/*
- 		 * If buffer length is small then return the expected
- 		 * length in rbx.
--- 
-2.38.1.584.g0f3c55d4c2-goog
+I think it just checks frame-pointer based callstacks on ARM to have the
+precise results for leaves and their parents.
 
+
+>
+> Would the following in the Build be better:
+>
+> ```
+> # Undefine _FORTIFY_SOURCE as it doesn't work with -O0
+> CFLAGS_leafloop.o         = -g -O0 -fno-inline -fno-omit-frame-pointer
+> -U_FORTIFY_SOURCE
+> ```
+>
+> We could also use make's `filter-out`. If we are disabling inlining
+> then there is also `-fno-optimize-sibling-calls` otherwise we can
+> still lose stack frames.
+
+I wonder if it's enough to use -O0 as it's enabled from -O2.
+Maybe we can get rid of -fno-inline as well.
+
+German, did you have any concerns for those options?
+
+Thanks,
+Namhyung
