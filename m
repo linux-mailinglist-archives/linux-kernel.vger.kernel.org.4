@@ -2,75 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB89262E2BC
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:17:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2169C62E2DE
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:20:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240666AbiKQRRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 12:17:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44606 "EHLO
+        id S240634AbiKQRUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 12:20:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234952AbiKQRRe (ORCPT
+        with ESMTP id S240009AbiKQRTo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 12:17:34 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34EA07AF77
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 09:17:33 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id 7so2618089ybp.13
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 09:17:33 -0800 (PST)
+        Thu, 17 Nov 2022 12:19:44 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19DCB30F70;
+        Thu, 17 Nov 2022 09:19:43 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id ft34so6656086ejc.12;
+        Thu, 17 Nov 2022 09:19:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=TfyR42Rw7fajSCS2sVCfl9VRMWqE/0SBTvtxDZ7f2WE=;
-        b=qCmP/eA6/5UdR6Qw9Wcp6BWygueNO+fpKceuuW0fRwSaskw4hNdQZGG511optr0DMU
-         QBX08dMPfFKcq40jL4Oi1OVErlnaFQQGwsE9V3y91/3Mqkyow+i/sCHJeovnVm9l+/cg
-         q9z4uNPnmEzIJOOQ5me7/fPVCFB8/LnVN21KwBZB0dT2/r4mm5da75L4IQZVxwxwTiZ8
-         8NDpLCgN0foSY+sa+g3wcjnBcRyA4idrkIWtgkADW+cTZjzo3MiG60440K5bgwkt0KIG
-         ypbZiWQc3jq4SP1f2Ad3cfTy19SajhMzIV6zm7Q+EvpyLpOLgqWNCOR+EFHRCFrxIrOz
-         7vqw==
+        d=googlemail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vQyLviGauL30ZeO1VGGTeRWRAcWIrY0ASAZn99FKrKk=;
+        b=fy3Tzc3SpdWc06CoKx7g1QwwPHkHOB52LAGG2x0xRXgBBRgB+lhzB4dijn+MMgvCeo
+         +5REjnoYlMAIGg9muDOehuGTyb3yMonp7FWDWMeDx+kccf8/GI9w7Gb37iOlCByty0Io
+         gAEBG+4wDRyCNpGARhe8IWVrC34XHmo8N2d/bzPgnmD/e573rG5YdA0eYNnJM9TNaP0J
+         7TqYmvcQfO0ReBOxz+w820/rvEZB03wQ6CleZceh6xToQnloUYi5RF3I6CHeY/Y9q/ws
+         SCeMehGPWjpATVnss7nV36hcQp+q6iM8X81Uuqd8taY5/ezLJqtp5750TZJKQHOhUNAP
+         X7jA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=TfyR42Rw7fajSCS2sVCfl9VRMWqE/0SBTvtxDZ7f2WE=;
-        b=khfSD6Rhj6tP+e1+znNjdbgWWuxvwc8EwOVmfZuetytr/C8VMbBA3REJgECrfBQgWX
-         m2m8wahAxlDDY3P14wZiFFI+XBN1t5SSo/QpSgpfmjbJg/yAz8NH80q1jcK7q+dfsYY/
-         ff0CItpdxcPbpbS50edc3UWAYXJAGxVEXFuniIYTpoyBpoeH6OOEGXzzAexiqcjR9UC1
-         UXpvqy5rll9ElwYWf42J9fM2+b0ruB7thWJ0/GfayXOH73dkRgzqD+jsGXOogDMFwpfa
-         MdMUwW6Z6DkgUACuomg9XmYSmrbUItBcsLs8JD63TzUk7+shzDL/ZZFChAIlmo5MkFpM
-         2D0Q==
-X-Gm-Message-State: ANoB5pl8+9DF3fAioNijFAOVbsDUEoOIMxQl+vrK75Xyrxu1o8+4GZvE
-        rcS9zHZ+VqXSGTwvLE2VJGdK0Dk+sIy9ENPhl3171w==
-X-Google-Smtp-Source: AA0mqf73E4+kuvxdg0duH17ARaFj8atik60eG5l6dkv5xwpg4t6aJri+ZCy5XxZ3TixjUfLmq8pnVq3XwD9jewuLhEc=
-X-Received: by 2002:a05:6902:11cd:b0:6e7:f2ba:7c0f with SMTP id
- n13-20020a05690211cd00b006e7f2ba7c0fmr1090831ybu.55.1668705452067; Thu, 17
- Nov 2022 09:17:32 -0800 (PST)
+        bh=vQyLviGauL30ZeO1VGGTeRWRAcWIrY0ASAZn99FKrKk=;
+        b=wN+VCoHt/PQMFMWODTY+KttQV0pjPT6o61I7BDRhyLLcfr4w7AVUfBCBmTCe2yxxeE
+         39Xkr+QWiVkTatybCaB6lDIjwJG6gn40r5Ndaqti2E7BGICPRiEaFBRfMPZeVZV0O/8F
+         pUB8CpunFwEgzag8Tz8h7uyWuATo+wOb57yInYeMUQvZ4G+pBXbhwfYI/QKGl8K2a1Mv
+         L5nF9Kg9EcWWT41j8Z8G7hqFtBvgM5EUIxpGeku7+8TLvG6bSrM9y10nQB5Lfh5Bh8TO
+         p+5lYpED+Uwbvsr/G9ycR/Y/1Itr5DuPvTYvx7HLUojv3uH1LLb0JiY3JjUYNAvAYWeO
+         YEiQ==
+X-Gm-Message-State: ANoB5pk5jedR1/uIsIOMTQWv0EaLCMqz9vGK+DK0R3wu0Nn6up6bR+Jo
+        QeHPwpOFY3+fI5i7XGYlPFA=
+X-Google-Smtp-Source: AA0mqf5kyd7O9Z2bUni4KE4HeakSPUmYiLtDLsMAABeqNZzbxLcNduSMzaOOHwW1pVRI0s/KYpzEVQ==
+X-Received: by 2002:a17:906:1585:b0:7ad:84c7:502d with SMTP id k5-20020a170906158500b007ad84c7502dmr2879660ejd.177.1668705582464;
+        Thu, 17 Nov 2022 09:19:42 -0800 (PST)
+Received: from localhost.localdomain (user-5-173-65-115.play-internet.pl. [5.173.65.115])
+        by smtp.googlemail.com with ESMTPSA id h5-20020a0564020e8500b00458a03203b1sm777561eda.31.2022.11.17.09.19.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 09:19:42 -0800 (PST)
+From:   Lukasz Wiecaszek <lukasz.wiecaszek@googlemail.com>
+X-Google-Original-From: Lukasz Wiecaszek <lukasz.wiecaszek@gmail.com>
+To:     Gerd Hoffmann <kraxel@redhat.com>
+Cc:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Lukasz Wiecaszek <lukasz.wiecaszek@gmail.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v5] udmabuf: add vmap and vunmap methods to udmabuf_ops
+Date:   Thu, 17 Nov 2022 18:18:09 +0100
+Message-Id: <20221117171810.75637-1-lukasz.wiecaszek@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20221117031551.1142289-1-joel@joelfernandes.org>
- <20221117031551.1142289-3-joel@joelfernandes.org> <CANn89i+gKVdveEtR9DX15Xr7E9Nn2my6SEEbXTMmxbqtezm2vg@mail.gmail.com>
- <Y3ZaH4C4omQs1OR4@google.com>
-In-Reply-To: <Y3ZaH4C4omQs1OR4@google.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Thu, 17 Nov 2022 09:17:20 -0800
-Message-ID: <CANn89iJRhr8+osviYKVYhcHHk5TnQQD53x87-WG3iTo4YNa0qA@mail.gmail.com>
-Subject: Re: [PATCH rcu/dev 3/3] net: Use call_rcu_flush() for dst_destroy_rcu
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org, Cong Wang <xiyou.wangcong@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Jiri Pirko <jiri@resnulli.us>, netdev@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>, rcu@vger.kernel.org,
-        rostedt@goodmis.org, paulmck@kernel.org, fweisbec@gmail.com,
-        jiejiang@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,77 +75,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 7:58 AM Joel Fernandes <joel@joelfernandes.org> wrote:
->
-> Hello Eric,
->
-> On Wed, Nov 16, 2022 at 07:44:41PM -0800, Eric Dumazet wrote:
-> > On Wed, Nov 16, 2022 at 7:16 PM Joel Fernandes (Google)
-> > <joel@joelfernandes.org> wrote:
-> > >
-> > > In a networking test on ChromeOS, we find that using the new CONFIG_RCU_LAZY
-> > > causes a networking test to fail in the teardown phase.
-> > >
-> > > The failure happens during: ip netns del <name>
-> >
-> > And ? What happens then next ?
->
-> The test is doing the 'ip netns del <name>' and then polling for the
-> disappearance of a network interface name for upto 5 seconds. I believe it is
-> using netlink to get a table of interfaces. That polling is timing out.
->
-> Here is some more details from the test's owner (copy pasting from another
-> bug report):
-> In the cleanup, we remove the netns, and thus will cause the veth pair being
-> removed automatically, so we use a poll to check that if the veth in the root
-> netns still exists to know whether the cleanup is done.
->
-> Here is a public link to the code that is failing (its in golang):
-> https://source.chromium.org/chromiumos/chromiumos/codesearch/+/main:src/platform/tast-tests/src/chromiumos/tast/local/network/virtualnet/env/env.go;drc=6c2841d6cc3eadd23e07912ec331943ee33d7de8;l=161
->
-> Here is a public link to the line of code in the actual test leading up to the above
-> path (this is the test that is run:
-> network.RoutingFallthrough.ipv4_only_primary) :
-> https://source.chromium.org/chromiumos/chromiumos/codesearch/+/main:src/platform/tast-tests/src/chromiumos/tast/local/bundles/cros/network/routing_fallthrough.go;drc=8fbf2c53960bc8917a6a01fda5405cad7c17201e;l=52
->
-> > > Using ftrace, I found the callbacks it was queuing which this series fixes. Use
-> > > call_rcu_flush() to revert to the old behavior. With that, the test passes.
-> >
-> > What is this test about ? What barrier was used to make it not flaky ?
->
-> I provided the links above, let me know if you have any questions.
->
-> > Was it depending on some undocumented RCU behavior ?
->
-> This is a new RCU feature posted here for significant power-savings on
-> battery-powered devices:
-> https://lore.kernel.org/rcu/20221017140726.GG5600@paulmck-ThinkPad-P17-Gen-1/T/#m7a54809b8903b41538850194d67eb34f203c752a
->
-> There is also an LPC presentation about the same, I can dig the link if you
-> are interested.
->
-> > Maybe adding a sysctl to force the flush would be better for functional tests ?
-> >
-> > I would rather change the test(s), than adding call_rcu_flush(),
-> > adding merge conflicts to future backports.
->
-> I am not too sure about that, I think a user might expect the network
-> interface to disappear from the networking tables quickly enough without
-> dealing with barriers or kernel iternals. However, I added the authors of the
-> test to this email in the hopes he can provide is point of views as well.
->
-> The general approach we are taking with this sort of thing is to use
-> call_rcu_flush() which is basically the same as call_rcu() for systems with
-> CALL_RCU_LAZY=n. You can see some examples of that in the patch series link
-> above. Just to note, CALL_RCU_LAZY depends on CONFIG_RCU_NOCB_CPU so its only
-> Android and ChromeOS that are using it. I am adding Jie to share any input,
-> he is from the networking team and knows this test well.
->
->
+The reason behind that patch is associated with videobuf2 subsystem
+(or more genrally with v4l2 framework) and user created
+dma buffers (udmabuf). In some circumstances
+when dealing with V4L2_MEMORY_DMABUF buffers videobuf2 subsystem
+wants to use dma_buf_vmap() method on the attached dma buffer.
+As udmabuf does not have .vmap operation implemented,
+such dma_buf_vmap() natually fails.
 
-I do not know what is this RCU_LAZY thing, but IMO this should be opt-in
+videobuf2_common: __vb2_queue_alloc: allocated 3 buffers, 1 plane(s) each
+videobuf2_common: __prepare_dmabuf: buffer for plane 0 changed
+videobuf2_common: __prepare_dmabuf: failed to map dmabuf for plane 0
+videobuf2_common: __buf_prepare: buffer preparation failed: -14
 
-For instance, only kfree_rcu() should use it.
+The patch itself seems to be strighforward.
+It adds implementation of .vmap and .vunmap methods
+to 'struct dma_buf_ops udmabuf_ops'.
+.vmap method itself uses vm_map_ram() to map pages linearly
+into the kernel virtual address space.
+.vunmap removes mapping created earlier by .vmap.
+All locking and 'vmapping counting' is done in dma_buf.c
+so it seems to be redundant/unnecessary in .vmap/.vunmap.
 
-We can not review hundreds of call_rcu() call sites and decide if
-adding arbitrary delays cou hurt .
+Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Acked-by: Christian König <christian.koenig@amd.com>
+Signed-off-by: Lukasz Wiecaszek <lukasz.wiecaszek@gmail.com>
+---
+v1: https://lore.kernel.org/linux-media/202211120352.G7WPASoP-lkp@intel.com/T/#t
+v2: https://lore.kernel.org/linux-media/20221114052944.GA7264@thinkpad-p72/T/#t
+v3: https://lore.kernel.org/linux-media/4f92e95f-a0dc-4eac-4c08-0df85de78ae7@collabora.com/T/#t
+v4: https://lore.kernel.org/linux-media/970e798d-ea26-5e1e-ace8-7915a866f7c7@collabora.com/T/#t
+
+v4 -> v5: Added Acked-by and Reviewed-by to the commit message
+v3 -> v4: Removed line/info 'reported by kernel test robot'
+v2 -> v3: Added .vunmap to 'struct dma_buf_ops udmabuf_ops'
+v1 -> v2: Patch prepared and tested against 6.1.0-rc2+
+
+ drivers/dma-buf/udmabuf.c | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+
+diff --git a/drivers/dma-buf/udmabuf.c b/drivers/dma-buf/udmabuf.c
+index 283816fbd72f..740d6e426ee9 100644
+--- a/drivers/dma-buf/udmabuf.c
++++ b/drivers/dma-buf/udmabuf.c
+@@ -13,6 +13,8 @@
+ #include <linux/slab.h>
+ #include <linux/udmabuf.h>
+ #include <linux/hugetlb.h>
++#include <linux/vmalloc.h>
++#include <linux/iosys-map.h>
+ 
+ static int list_limit = 1024;
+ module_param(list_limit, int, 0644);
+@@ -60,6 +62,30 @@ static int mmap_udmabuf(struct dma_buf *buf, struct vm_area_struct *vma)
+ 	return 0;
+ }
+ 
++static int vmap_udmabuf(struct dma_buf *buf, struct iosys_map *map)
++{
++	struct udmabuf *ubuf = buf->priv;
++	void *vaddr;
++
++	dma_resv_assert_held(buf->resv);
++
++	vaddr = vm_map_ram(ubuf->pages, ubuf->pagecount, -1);
++	if (!vaddr)
++		return -EINVAL;
++
++	iosys_map_set_vaddr(map, vaddr);
++	return 0;
++}
++
++static void vunmap_udmabuf(struct dma_buf *buf, struct iosys_map *map)
++{
++	struct udmabuf *ubuf = buf->priv;
++
++	dma_resv_assert_held(buf->resv);
++
++	vm_unmap_ram(map->vaddr, ubuf->pagecount);
++}
++
+ static struct sg_table *get_sg_table(struct device *dev, struct dma_buf *buf,
+ 				     enum dma_data_direction direction)
+ {
+@@ -162,6 +188,8 @@ static const struct dma_buf_ops udmabuf_ops = {
+ 	.unmap_dma_buf	   = unmap_udmabuf,
+ 	.release	   = release_udmabuf,
+ 	.mmap		   = mmap_udmabuf,
++	.vmap		   = vmap_udmabuf,
++	.vunmap		   = vunmap_udmabuf,
+ 	.begin_cpu_access  = begin_cpu_udmabuf,
+ 	.end_cpu_access    = end_cpu_udmabuf,
+ };
+-- 
+2.25.1
+
