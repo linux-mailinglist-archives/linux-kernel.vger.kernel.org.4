@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C32D362E2B7
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:17:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AFC362E2B8
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:17:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240228AbiKQRQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 12:16:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44020 "EHLO
+        id S240645AbiKQRQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 12:16:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240195AbiKQRQo (ORCPT
+        with ESMTP id S240235AbiKQRQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 12:16:44 -0500
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01B84786C0
+        Thu, 17 Nov 2022 12:16:45 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C1C786D9
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 09:16:44 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id h206so1843088iof.10
         for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 09:16:43 -0800 (PST)
-Received: by mail-io1-xd35.google.com with SMTP id p184so1844066iof.11
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 09:16:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=g45vmLNr3T8L9tQdS63erVOB1IUABPfK3xYft3/SwQE=;
-        b=eOQWrIYB2qxOjWkWNg310qcA4ou1hMsC9SKlnBGThNkTh8lQssJpdFuCNfkbcmMZZ2
-         TIP3gIme50FkzhTk0v3dumgy8sLrk5rVxJXtkC05iK93vLp8eMaJQZA7QpEzURHF2Y0l
-         5dqts3tfrh1kcD8TStlC64TvLsUOv5awaK3pMwtZHLKIel8xGt4lL0EcDeBkc9zbFC59
-         ZGc+77M3IGvV/hwwzC1ZhsuHgF0cuwRANOI+9CHSjCbfdHmRdCIXNMS4LfxvcvNHT2c8
-         yG49CFG6P5fTPqgOTBMmB6VrO96XMC9CvmJH8jwNhni3POc8j/g3ICRvY+7EyvUq4e89
-         QLPQ==
+        bh=Wlb4nC9DiXpO42QAvf6JoYYqoUdGTO9JI9f6xMWbJYA=;
+        b=awTeIDv6fg3KHIIIrRiWuAGtdhW00GmDoj4Wnpn0OOhaVTbA4ZxNVZWHvmD/RSWWwn
+         QSZ8dJZis0G7sL/0xt9hR1po6coA0mHVOwgRrPQUuXW04PyrVlhk5CU24yyKGQuMRidI
+         kU+s0/UCbgNdoDlAXyjcfqYFJS4tt8UuHd8w5hspXqKLg2+DkKf7lLq+07ETeGsDCrOr
+         LQNwiJ6WcZFaBD/LTZXRvjwPPiQuM1Y+D6YVEJNv2urkcJRVRGJ0+x4jYqCdVDDfc5yo
+         7kp5ZB04aWLleSC476bymda6lNDdPQ0IymleoKlXkXQNXN04lofzu1FXEudfPCCfNEZD
+         K0Iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=g45vmLNr3T8L9tQdS63erVOB1IUABPfK3xYft3/SwQE=;
-        b=uQtlwn97+CnAxI8dcb4go83Jka43zESElPInsUq/EMF0tREGOPt/Npgzd85eNGqK4v
-         MaoW+yRuxzFwPpB1wS13XhA9esKCkA/24zaczjF1c+7VYsrt9a94cmBSFbOwSCrgoneE
-         WpcgsiaDRpuGcK6mKiB2SyIpgRZVOK9V0DR1ESdKpmnT6GMOFguR2+2D/DjsB4PFqYGn
-         4znBSDYNIPBPNtF9m2YMOH6m5Ulrn9h3tKtUrVcrWjxHPhV7NX3ibSYT5LMiRY7ujYHm
-         QG1d4ZdT//8d5Xeh4WglbXwV/oyM9eihrSfU++jMPh0P3Ii2ZRTSAYLe25Xi7u7D7oSP
-         b2hg==
-X-Gm-Message-State: ANoB5pmG62p9cDN2VDVt75oak5YhlBhiSzNzsN4PA3cqe0tLQVxcrWcm
-        nZtqZ5/fC2hfpmsj9s5Rf5desUkA/M+7tQ==
-X-Google-Smtp-Source: AA0mqf5t/+A2cQoGLBvqicfEHQc7SInv4gaHfBCVsrg6/nOSD+mKGgmkLucGoZzDbs389iXcDDAlYQ==
-X-Received: by 2002:a02:ccaf:0:b0:372:4b69:fe1f with SMTP id t15-20020a02ccaf000000b003724b69fe1fmr1440398jap.109.1668705402274;
-        Thu, 17 Nov 2022 09:16:42 -0800 (PST)
+        bh=Wlb4nC9DiXpO42QAvf6JoYYqoUdGTO9JI9f6xMWbJYA=;
+        b=felK7abin8ZmY6fPNFu62gJ+fLTvgdh5ERpcijzJQ55AXV206U+z/QUew7SlHqVBB2
+         8S5UHoKtFjKqqvVir49CJK5oZnxR99Ar22teof0DvtnsImlLrk6NbvjDIL0wXqyy18Uz
+         wwH+MTSZmeOSKP/JveuUQDltexXyfaM33Qx/Kriwbe8DhpVmoqrweeI5wjIq/rzA1I75
+         2IPf4qctSLCegR9Rb698lK9qR52W0UXzG/Ek5s7S9sIF+qi9ROKJ2tgm7+GrKzS5cpQX
+         sRFkD0rTeqUCoat0TCFYLEuHZ+At4E980x2toeoFNL/ltBSmlrizrFkF350d4H0mV0zR
+         bMkA==
+X-Gm-Message-State: ANoB5plEbiGkfquyGdb5xS2mn5CQTzk01XgRyuAHVJctCG7d2TmXAIL3
+        WLiDFtOY6I144JLxLF0FtaI=
+X-Google-Smtp-Source: AA0mqf6/UwSv2HIQjy4BOxI3VoRGYVYxR6pVWI++hEqbk7GM3RSWNmA8aY+EOmEBnSkFViHId3WLcA==
+X-Received: by 2002:a05:6638:4308:b0:376:246:e637 with SMTP id bt8-20020a056638430800b003760246e637mr1517322jab.260.1668705403314;
+        Thu, 17 Nov 2022 09:16:43 -0800 (PST)
 Received: from frodo.. (c-73-78-62-130.hsd1.co.comcast.net. [73.78.62.130])
-        by smtp.googlemail.com with ESMTPSA id o1-20020a92d381000000b002faf6559e90sm495322ilo.51.2022.11.17.09.16.41
+        by smtp.googlemail.com with ESMTPSA id o1-20020a92d381000000b002faf6559e90sm495322ilo.51.2022.11.17.09.16.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 09:16:41 -0800 (PST)
+        Thu, 17 Nov 2022 09:16:42 -0800 (PST)
 From:   Jim Cromie <jim.cromie@gmail.com>
 To:     jbaron@akamai.com, gregkh@linuxfoundation.org,
         linux-kernel@vger.kernel.org
 Cc:     Jim Cromie <jim.cromie@gmail.com>
-Subject: [PATCH 1/2] vmlinux.lds.h: fix BOUNDED_SECTION_(PRE|POST)_LABEL macros
-Date:   Thu, 17 Nov 2022 10:16:32 -0700
-Message-Id: <20221117171633.923628-2-jim.cromie@gmail.com>
+Subject: [PATCH 2/2] vmlinux.lds.h: add HEADERED_SECTION_* macros
+Date:   Thu, 17 Nov 2022 10:16:33 -0700
+Message-Id: <20221117171633.923628-3-jim.cromie@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221117171633.923628-1-jim.cromie@gmail.com>
 References: <Y3XU59mj80wvTD6Y@kroah.com>
@@ -73,59 +73,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 2f465b921bb8 ("vmlinux.lds.h: place optional header space in BOUNDED_SECTION")
+These macros elaborate on BOUNDED_SECTION_(PRE|POST)_LABEL macros,
+prepending an optional KEEP(.gnu.linkonce##_sec_) reservation, and a
+linker-symbol to address it.
 
-added BOUNDED_SECTION_(PRE|POST)_LABEL macros, encapsulating the basic
-boilerplate to KEEP/pack records into a section, and to mark the begin
-and end of the section with linker-symbols.
+This allows a developer to define a header struct (which must fit with
+the section's base struct-type), and could contain:
 
-But it tried to do extra, adding KEEP(*(.gnu.linkonce.##_sec_)) to
-optionally reserve a header record in front of the data.  It wrongly
-placed the KEEP after the linker-symbol starting the section,
-so if a header was added, it would wind up in the data.
+1- fields whose value is common to the entire set of data-records.
+   This allows the header & data structs to specialize, complement
+   each other, and shrink.
 
-Moving the KEEP to the "correct" place proved brittle, and too clever
-by half.  The obvious safe fix is to remove the KEEP and restore the
-plain old boilerplate.  The header can be added later, with separate
-macros.
+2- an uplink pointer to an organizing struct
+   which refs other related/sub data-tables
+   header record is addressable via the extern'd header linker-symbol
 
-Also, the macro var-names: _s_, _e_ are nearly invisible, change them
-to more obvious names: _BEGIN_, _END_
+Once the linker-symbols created by the macro are ref'd extern in code,
+that code can compute a record's index (ptr - start) in the "primary"
+table, then use it to index into the related/sub tables.  Adding a
+primary.map_* field foreach sub-table would then allow deduplication
+and remapping of that sub-table.
 
-Fixes: 2f465b921bb8 ("vmlinux.lds.h: place optional header space in BOUNDED_SECTION")
+This is aimed at dyndbg's struct _ddebug __dyndbg[] section, whose 3
+columns: function, file, module are 50%, 90%, 100% redundant.  The
+module column is fully recoverable after dynamic_debug_init() saves it
+to each ddebug_table.module as the builtin __dyndbg[] table is parsed.
+
+Given that those 3 columns use 24/56 of a _ddebug record, a dyndbg=y
+kernel with ~5k callsites could reduce kernel memory substantially.
+Returning that memory to the kernel buddy-allocator? is then possible.
+
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 ---
- include/asm-generic/vmlinux.lds.h | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+---
+ include/asm-generic/vmlinux.lds.h | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
 diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index b3ca56ac163f..c17f94785253 100644
+index c17f94785253..c9a475a30803 100644
 --- a/include/asm-generic/vmlinux.lds.h
 +++ b/include/asm-generic/vmlinux.lds.h
-@@ -193,17 +193,15 @@
- # endif
- #endif
+@@ -208,6 +208,21 @@
  
--#define BOUNDED_SECTION_PRE_LABEL(_sec_, _label_, _s_, _e_)		\
--	_s_##_label_ = .;						\
--	KEEP(*(.gnu.linkonce.##_sec_))					\
-+#define BOUNDED_SECTION_PRE_LABEL(_sec_, _label_, _BEGIN_, _END_)	\
-+	_BEGIN_##_label_ = .;						\
- 	KEEP(*(_sec_))							\
--	_e_##_label_ = .;
-+	_END_##_label_ = .;
+ #define BOUNDED_SECTION(_sec)	 BOUNDED_SECTION_BY(_sec, _sec)
  
--#define BOUNDED_SECTION_POST_LABEL(_sec_, _label_, _s_, _e_)		\
--	_label_##_s_ = .;						\
--	KEEP(*(.gnu.linkonce.##_sec_))					\
-+#define BOUNDED_SECTION_POST_LABEL(_sec_, _label_, _BEGIN_, _END_)	\
-+	_label_##_BEGIN_ = .;						\
- 	KEEP(*(_sec_))							\
--	_label_##_e_ = .;
-+	_label_##_END_ = .;
- 
- #define BOUNDED_SECTION_BY(_sec_, _label_)				\
- 	BOUNDED_SECTION_PRE_LABEL(_sec_, _label_, __start, __stop)
++#define HEADERED_SECTION_PRE_LABEL(_sec_, _label_, _BEGIN_, _END_, _HDR_) \
++	_HDR_##_label_	= .;						\
++	KEEP(*(.gnu.linkonce.##_sec_))					\
++	BOUNDED_SECTION_PRE_LABEL(_sec_, _label_, _BEGIN_, _END_)
++
++#define HEADERED_SECTION_POST_LABEL(_sec_, _label_, _BEGIN_, _END_, _HDR_) \
++	_label_##_HDR_ = .;						\
++	KEEP(*(.gnu.linkonce.##_sec_))					\
++	BOUNDED_SECTION_POST_LABEL(_sec_, _label_, _BEGIN_, _END_)
++
++#define HEADERED_SECTION_BY(_sec_, _label_)				\
++	HEADERED_SECTION_PRE_LABEL(_sec_, _label_, __start, __stop)
++
++#define HEADERED_SECTION(_sec)	 HEADERED_SECTION_BY(_sec, _sec)
++
+ #ifdef CONFIG_TRACE_BRANCH_PROFILING
+ #define LIKELY_PROFILE()						\
+ 	BOUNDED_SECTION_BY(_ftrace_annotated_branch, _annotated_branch_profile)
 -- 
 2.38.1
 
