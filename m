@@ -2,86 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F09862CFDE
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 01:43:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD5A562CFE0
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 01:43:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233842AbiKQAng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 19:43:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36900 "EHLO
+        id S233802AbiKQAnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 19:43:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234042AbiKQAnT (ORCPT
+        with ESMTP id S233688AbiKQAnf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 19:43:19 -0500
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27EC964A1B;
-        Wed, 16 Nov 2022 16:43:16 -0800 (PST)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.94.2)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1ovSzk-0002VB-PV; Thu, 17 Nov 2022 01:43:08 +0100
-Date:   Thu, 17 Nov 2022 00:43:03 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 2/4] block: add new flag to add partitions read-only
-Message-ID: <31b78b87ece4e095aa082d09ca3d4058a2484f3c.1668644705.git.daniel@makrotopia.org>
-References: <cover.1668644705.git.daniel@makrotopia.org>
+        Wed, 16 Nov 2022 19:43:35 -0500
+Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABEEBDFD1
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 16:43:33 -0800 (PST)
+Date:   Thu, 17 Nov 2022 00:43:28 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1668645812;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=x1yq7+HlMjVk7Mh1lF9aHzv9fMnW5d57Fj9ITz0qudw=;
+        b=VKj6EkJlmRwJ/R9BSNln/48AvN39ZRzjnnqQut2Sebkl98iH4xYuh1yWwPrN5/Ljyxyoo5
+        8OELoe35KKjnxshX7VpbR8bk/n97tA5ti5e2q/DThvPqFdjgNukfU1YQj0258KD+EKQht/
+        ZjjLqjPgqwbDvsAz1xMWCU42Ooo50bE=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
+        Reiji Watanabe <reijiw@google.com>
+Subject: Re: [PATCH 1/2] KVM: arm64: selftests: Disable single-step with
+ correct KVM define
+Message-ID: <Y3WDsIp6Jk5dVg0n@google.com>
+References: <20221117002350.2178351-1-seanjc@google.com>
+ <20221117002350.2178351-2-seanjc@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1668644705.git.daniel@makrotopia.org>
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,PDS_OTHER_BAD_TLD,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20221117002350.2178351-2-seanjc@google.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add flag ADDPART_FLAG_READONLY to allow partition parsers marking a
-partition to be set read-only.
-This is needed for the uImage.FIT partition parser added by a follow-up
-commit: we need to be sure the contents of uImage.FIT sub-images
-remain unaltered they are validated using a hash within the uImage.FIT
-structure which also serves as partition table.
+On Thu, Nov 17, 2022 at 12:23:49AM +0000, Sean Christopherson wrote:
+> Disable single-step by setting debug.control to KVM_GUESTDBG_ENABLE,
+> not to SINGLE_STEP_DISABLE.  The latter is an arbitrary test enum that
+> just happens to have the same value as KVM_GUESTDBG_ENABLE, and so
+> effectively disables single-step debug.
+> 
+> No functional change intended.
+> 
+> Cc: Reiji Watanabe <reijiw@google.com>
+> Fixes: b18e4d4aebdd ("KVM: arm64: selftests: Add a test case for KVM_GUESTDBG_SINGLESTEP")
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
----
- block/blk.h             | 1 +
- block/partitions/core.c | 3 +++
- 2 files changed, 4 insertions(+)
+Reviewed-by: Oliver Upton <oliver.upton@linux.dev>
 
-diff --git a/block/blk.h b/block/blk.h
-index e85703ae81dd..05ac426350b2 100644
---- a/block/blk.h
-+++ b/block/blk.h
-@@ -414,6 +414,7 @@ void blk_free_ext_minor(unsigned int minor);
- #define ADDPART_FLAG_NONE	0
- #define ADDPART_FLAG_RAID	1
- #define ADDPART_FLAG_WHOLEDISK	2
-+#define ADDPART_FLAG_READONLY	4
- int bdev_add_partition(struct gendisk *disk, int partno, sector_t start,
- 		sector_t length);
- int bdev_del_partition(struct gendisk *disk, int partno);
-diff --git a/block/partitions/core.c b/block/partitions/core.c
-index b8112f52d388..355646b0707d 100644
---- a/block/partitions/core.c
-+++ b/block/partitions/core.c
-@@ -398,6 +398,9 @@ static struct block_device *add_partition(struct gendisk *disk, int partno,
- 			goto out_del;
- 	}
- 
-+	if (flags & ADDPART_FLAG_READONLY)
-+		bdev->bd_read_only = true;
-+
- 	/* everything is up and running, commence */
- 	err = xa_insert(&disk->part_tbl, partno, bdev, GFP_KERNEL);
- 	if (err)
--- 
-2.38.1
-
+--
+Thanks,
+Oliver
