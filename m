@@ -2,69 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC22662E7F3
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 23:12:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEBBA62E7F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 23:13:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239809AbiKQWMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 17:12:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51426 "EHLO
+        id S234957AbiKQWNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 17:13:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234710AbiKQWMV (ORCPT
+        with ESMTP id S231194AbiKQWNm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 17:12:21 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 827A26160;
-        Thu, 17 Nov 2022 14:12:20 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id u2so4553118ljl.3;
-        Thu, 17 Nov 2022 14:12:20 -0800 (PST)
+        Thu, 17 Nov 2022 17:13:42 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C28B46376;
+        Thu, 17 Nov 2022 14:13:41 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso3103130pjt.0;
+        Thu, 17 Nov 2022 14:13:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Nn7CD1Io5Tu7IrvKfUpPCinD6fv0Cid4YkXQszLbTa0=;
-        b=HNtqT3X+fZXMPAUtvFZEGrDknoC92jrQXKMoHNuWCUfeaQPRVAULY3fZqDTqk2NIRz
-         L/SXPWL82YbSC9Dv3QkLR1BNjhy1YMblLF6GP6J+oHJTGW7V3mtq2FFT4QNzl/ZSIZSV
-         G0+Lgh51wunlfbEpg2VGDLZhwspxlqwGoVnXdKTgw5IYrbGdNV6FcEaWa05RB/nOEAH7
-         B9Mzo6WfmX9EXTnWYO5tS+mEQDm6immwn79yM+xEJ9xSlx7YfidWD/GF5W/ldRgnzbhM
-         uIUoOlOiMgePlv4p0ZXIMZcjLsApNQ6Ij5IEtMYvIfk0eYvs8FhlEdcyBMJPsNfFWRie
-         kLlw==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=f06cqSRJWJq7tzA4zFWcNI3yf20+OmliN5HlU3NPwBg=;
+        b=kIDW4IG0NXahblHZ+J9OHofWLjPQX/rflmieQg9t0L3fpCknXE3kM/jf+yeTz1/ZtP
+         59XjoEKvi8ZufmQrmDCps36RQY8RQ8LcSD4PQsjEBoDfo9Q9DEBldCMe2lcFAjc0Mi6M
+         PwzZVo3x8EPmc0fXTpSo++I/CDL3vjGrpG5XYnTGLXZoAyHvodu+cQhuDtgL9r1nYtEa
+         T2Fj68OP9mlxVwQZZnp/rqLnPt00y3LTdraBTdN2Nb0zIc7R2cncOPzPlwSguPvYYHQb
+         ic3ywhdWmemRh9X5kPZRSQA3+dL4NXrQ4dXzB4rv8TRiq0UAliBSRHHgl04OlTTTP+rQ
+         SSVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Nn7CD1Io5Tu7IrvKfUpPCinD6fv0Cid4YkXQszLbTa0=;
-        b=iT6C756sQD3hLtO00gIUolk9+OzDeMAO/jXXZXYqtqcPFYemT5yz5S6Uk/Yf4QY1ta
-         3LMFiqS1jrYpwMAJOECcLbcK+gMzTEShboOLloI7QLgDBalAUCagvhRML4ZyKS384QUy
-         YxOQahY6H/TXn5xCqbOYB79P4ru0kYtdjUt2u4Qh3S+twGmRSTm177wdBTU0hiiCFTWI
-         S9108548/AxyLlbnJwTNzfMDiNCXr5IX6i79SFTSfmKlwGpjMcKPenwqxkPDg7dhTGgT
-         loS23qs6c95dGuTBoP7oZky8aBOcyZL7tvfDuWe3Dd8e8jW0oRSmbMTJ74yAALXQcQpQ
-         MVoA==
-X-Gm-Message-State: ANoB5pkoNUWWhpsOJWod8WO7wJvuXSFyIwSxprQFKh41qcba+IEkj4cB
-        H0noLB8qqcA7Neamvp13f8fVfaIuQy43RQaaKvw=
-X-Google-Smtp-Source: AA0mqf6XFdGLQW/qNOnI71a815e7g8gK6kELLCP8DjyotGqp/RBDsq3X83iooriuM6qpAmr2g8HEuGZtuah2g3JBZJc=
-X-Received: by 2002:a2e:a4c7:0:b0:277:81ff:b8c4 with SMTP id
- p7-20020a2ea4c7000000b0027781ffb8c4mr1578359ljm.260.1668723138518; Thu, 17
- Nov 2022 14:12:18 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=f06cqSRJWJq7tzA4zFWcNI3yf20+OmliN5HlU3NPwBg=;
+        b=yp0sYbYmwtiAxSmMvO6seJxnSwHkeYHPiY1DjmmngISk7tVg+O9a6G3qUC0BHwgmaJ
+         YY93WLQ+JZWnqfAto2+9aKposmpTrkXaUW1mV2TMdeKsYCBMAgk/C7DsjfJ2Y8RulsJI
+         E952NdcqeSzZKtJgb4ECSfXFiUYkKYf47u7lPUbHgAcDXgknVFugQtpclQFP+fo7IrOL
+         vCBpT9YAGofLlVAD0ZrvYXH+f2ZoBMB68hCKDdHe2ik9LzFLuMBjWceI40rLsX/uRUb8
+         1FIwIBPGsWf1CXGH9FmmxsVoLyIZEgjcjEZgLTA2prWz9EPosgQtMthqh54UerjWfTTC
+         MG4A==
+X-Gm-Message-State: ANoB5plmT2YQv4cGeJAys51JsMy6XHOvSbgeOf0q5kGW6K3UStB8p3k8
+        eFiKfLNQHH8Q4igM2mL6HW4=
+X-Google-Smtp-Source: AA0mqf43FrXDE+6wKKa2X5G/31I/6kOkI9kyNqrRRQw/mzu7UkBb7oxm5w9ytGlOr1K+rri6xGa1IA==
+X-Received: by 2002:a17:902:a508:b0:17c:7aaa:c67d with SMTP id s8-20020a170902a50800b0017c7aaac67dmr4499159plq.171.1668723221142;
+        Thu, 17 Nov 2022 14:13:41 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:e4c5:c31d:4c68:97a0])
+        by smtp.gmail.com with ESMTPSA id j23-20020a63e757000000b0047063eb4098sm1527256pgk.37.2022.11.17.14.13.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 14:13:40 -0800 (PST)
+Date:   Thu, 17 Nov 2022 14:13:37 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     Benson Leung <bleung@chromium.org>,
+        Johnny Chuang <johnny.chuang.emc@gmail.com>,
+        Scott Liu <scott.liu@emc.com.tw>, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Input: elants_i2c: Properly handle the reset GPIO when
+ power is off
+Message-ID: <Y3ayEc8sFCLahOT3@google.com>
+References: <20221117123805.1.I9959ac561dd6e1e8e1ce7085e4de6167b27c574f@changeid>
 MIME-Version: 1.0
-References: <20221116202856.55847-1-mat.jonczyk@o2.pl> <499a1278bcf1b2028f6984d61733717a849d9787.camel@intel.com>
- <232fd0ae-0002-53cb-9400-f0347e434d42@o2.pl> <7909f86e4d13015b7f14a6f3f1f75f053d837314.camel@intel.com>
-In-Reply-To: <7909f86e4d13015b7f14a6f3f1f75f053d837314.camel@intel.com>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Thu, 17 Nov 2022 14:12:07 -0800
-Message-ID: <CABBYNZJowvWWtKs_Ok74wNxCVsrKt26pqftG5hgpknusosjbZw@mail.gmail.com>
-Subject: Re: [PATCH] Bluetooth: silence a dmesg error message in hci_request.c
-To:     "Gix, Brian" <brian.gix@intel.com>
-Cc:     "mat.jonczyk@o2.pl" <mat.jonczyk@o2.pl>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Von Dentz, Luiz" <luiz.von.dentz@intel.com>,
-        "johan.hedberg@gmail.com" <johan.hedberg@gmail.com>,
-        "marcel@holtmann.org" <marcel@holtmann.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221117123805.1.I9959ac561dd6e1e8e1ce7085e4de6167b27c574f@changeid>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -75,78 +74,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Nov 17, 2022 at 12:38:23PM -0800, Douglas Anderson wrote:
+> As can be seen in elants_i2c_power_off(), we want the reset GPIO
+> asserted when power is off. The reset GPIO is active low so we need
+> the reset line logic low when power is off to avoid leakage.
+> 
+> We have a problem, though, at probe time. At probe time we haven't
+> powered the regulators on yet but we have:
+>   devm_gpiod_get(&client->dev, "reset", GPIOD_OUT_LOW);
+> 
+> While that _looks_ right, it turns out that it's not. The
+> GPIOD_OUT_LOW doesn't mean to init the GPIO to low. It means init the
+> GPIO to "not asserted". Since this is an active low GPIO that inits it
+> to be high.
+> 
+> Let's fix this to properly init the GPIO. Now after both probe and
+> power off the state of the GPIO is consistent (it's "asserted" or
+> level low).
+> 
+> Once we fix this, we can see that at power on time we no longer to
+> assert the reset GPIO as the first thing. The reset GPIO is _always_
+> asserted before powering on. Let's fix powering on to account for
+> this.
 
-On Thu, Nov 17, 2022 at 1:45 PM Gix, Brian <brian.gix@intel.com> wrote:
->
-> Hi  Mateusz,
->
-> On Thu, 2022-11-17 at 22:27 +0100, Mateusz Jo=C5=84czyk wrote:
-> > W dniu 17.11.2022 o 21:34, Gix, Brian pisze:
-> > > On Wed, 2022-11-16 at 21:28 +0100, Mateusz Jo=C5=84czyk wrote:
-> > > > On kernel 6.1-rcX, I have been getting the following dmesg error
-> > > > message
-> > > > on every boot, resume from suspend and rfkill unblock of the
-> > > > Bluetooth
-> > > > device:
-> > > >
-> > > >         Bluetooth: hci0: HCI_REQ-0xfcf0
-> > > >
-> > > This has a patch that fixes the usage of the deprecated HCI_REQ
-> > > mechanism rather than hiding the fact it is being called, as in
-> > > this
-> > > case.
-> > >
-> > > I am still waiting for someone to give me a "Tested-By:" tag to
-> > > patch:
-> > >
-> > > [PATCH 1/1] Bluetooth: Convert MSFT filter HCI cmd to hci_sync
-> > >
-> > > Which will also stop the dmesg error. If you could try that patch,
-> > > and
-> > > resend it to the list with a Tested-By tag, it can be applied.
-> >
-> > Hello,
-> >
-> > I did not receive this patch, as I was not on the CC list; I was not
-> > aware of it. I will test it shortly.
+I kind of like that elants_i2c_power_on() is self-contained and does the
+full power sequence. Can we simply change devm_gpiod_get() to use
+GPIOD_ASIS to avoid the momentary spike in reset line state (assuming
+that the firmware initializes the reset line sanely because if it does
+not we have much longer time where we are leaking into the controller)?
 
-You can find the patch here:
+Thanks.
 
-https://patchwork.kernel.org/project/bluetooth/patch/20221102175927.401091-=
-2-brian.gix@intel.com/
-
-> >
-> > Any guidelines how I should test this functionality? I have a Sony
-> > Xperia 10 i4113
-> > mobile phone with LineageOS 19.1 / Android 12L, which according to
-> > the spec supports
-> > Bluetooth 5.0. Quick Google search tells me that I should do things
-> > like
-> >
-> >         hcitool lescan
-> >
->
-> Whatever you were running that produced the
->
-> "Bluetooth: hci0: HCI_REQ-0xfcf0"
->
-> error in the dmesg log should be sufficient to determine that the error
-> log is no longer happening. The HCI call is necessary on some
-> platforms, so the absense of other negative behavior should be
-> sufficient to verify that the call is still being made.  The code flow
-> itself has not changed, and new coding enforces the HCI command
-> sequence, so that it is more deterministric than it was with
-> hci_request. The hci_request mechanism was an asyncronous request.
->
-> > to discover the phone, then use gatttool to list the services, etc.
-> >
-> > Greetings,
-> >
-> > Mateusz
-> >
->
-
-
---=20
-Luiz Augusto von Dentz
+-- 
+Dmitry
