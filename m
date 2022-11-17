@@ -2,79 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7883B62DC3E
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:05:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F5F462DC40
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:05:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239590AbiKQNFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 08:05:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56790 "EHLO
+        id S234518AbiKQNFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 08:05:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239280AbiKQNFN (ORCPT
+        with ESMTP id S231634AbiKQNFe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 08:05:13 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B8A048763
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 05:05:12 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id u2so2628427ljl.3
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 05:05:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6o6875WgReRaHrL7mfmplhzccEYmNiHd+KnxOuIwE1k=;
-        b=oGIGoKNZWt+TEvSGwX2huvWOYzkp/PzuBLlXqfNHLAqtbjhmLefFKPJO6BKqk7cw0E
-         f3UWAYwYIxbV82Zbsom1piXdothmHlenjh6V0kXM6sWlSzfG5hA7AcgKI9T2Op5ARSow
-         tI2DA+ND1mmWacjMpUgbQ0Voth0SWudHATKqlGnrhTs2+nFxm5SlLFXlPStz0DJoXKwr
-         DRJsTIvaE1Fjdcyu4lp3LjGxiLHXuvLASw6J9d9VF+i+QWc+I7yW8lP38sxH2MVbO+sv
-         h42zmLCkuHo+QcKUkmcXfh0tmmKsrWZPWCjGsrpr79zc/HRgtrbgM62XD5YxWyX8EVN1
-         HKuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6o6875WgReRaHrL7mfmplhzccEYmNiHd+KnxOuIwE1k=;
-        b=Nt3LTt17ixp4Xt+kL7TSGl6VqU2AGA6ZquJa1oni4+nnwg/8UGNHDgqpxrIN94iZtR
-         NwMlFxCcUsEHiFw7Emi+u8LizhJTL//zPafD4WT6NJB/de3HBncmSTivgdY64RX0YUNH
-         wVK+yDCOqf5nwo9U50nwh2dcSSyQwYdUmk8fwMYbyK+YbOzuqVk9465ZyI93f07wLgUa
-         XFDq+ZghVm1vbv4uszkw2IOkSGwTsqxoX2/YkHZ/GJ9k/fIEpHwpYPRr6VTJAs/RFFOs
-         l8Wl0rt/iXINAiVEvdNR4TBCKmqiRhs2W22jSdpPyj0l3rkD99d+YidOy4o0MayQwKtk
-         SU5Q==
-X-Gm-Message-State: ANoB5pmNMBmNFtLk4fL6Pt1BJys54oYV+j+Puhw5L61UquFdoALsFZuQ
-        +tRxVTpBb0fOwu0Vyc0lcyfzKQ==
-X-Google-Smtp-Source: AA0mqf5FeNxtFGS0rsYMZmkU3OkAGojteHdSJx0Ua6wFXCuYC9bMdmq8MmOjgUCvWnQIG50eLPE1Nw==
-X-Received: by 2002:a05:651c:2cb:b0:277:746:62c2 with SMTP id f11-20020a05651c02cb00b00277074662c2mr1068450ljo.236.1668690310730;
-        Thu, 17 Nov 2022 05:05:10 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id q3-20020ac246e3000000b004b19f766b07sm142467lfo.91.2022.11.17.05.05.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Nov 2022 05:05:10 -0800 (PST)
-Message-ID: <0e3ec86f-2a2b-bdb9-09b2-db720b5af435@linaro.org>
-Date:   Thu, 17 Nov 2022 14:05:08 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 1/4] dt-bindings: arm: fsl: Add PDK2, PicoITX and DRC02
- boards for the DHCOM i.MX6ULL SoM
-Content-Language: en-US
-To:     Christoph Niedermaier <cniedermaier@dh-electronics.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Peng Fan <peng.fan@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
-        Marek Vasut <marex@denx.de>, Fabio Estevam <festevam@denx.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        kernel@dh-electronics.com, devicetree@vger.kernel.org,
+        Thu, 17 Nov 2022 08:05:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D2668680;
+        Thu, 17 Nov 2022 05:05:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 453FD61DC8;
+        Thu, 17 Nov 2022 13:05:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF665C433C1;
+        Thu, 17 Nov 2022 13:05:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668690332;
+        bh=ZBEVfZF0QfQVnHQWHX5dlMjl2pKu1VG+I2bBas101IA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dpDWeSb5XkVrG8JHsAMvnoA9fhp2c6yoZ3FwJtqXYxbiCSKfWgmKGanNImUWBDVw/
+         IBllnoICpbAQl2ErpTx0t1Mole0ubfTgTcmq+4XU5gjhLpt1hZO7oOHm3BSPhJKKTx
+         +H6J1bfg5WJK54MCbGNpRdAS2HdA0Qi/D1ajMVx1+iTajXK7pQKvkxsULCoaaaWNSU
+         wps/PM2FZBtzhJ7O8ZfoMmLT6mYe728drxe+3iZdr/7U3+NWVlEyZ3dGgBUQFolQ+T
+         ewkVSRvZdWCyXojC3QwAuIJo/sw4ElrXonvM2V2W6f1GvijlfKWp4VyA7jmFLE10en
+         j+E0340KFrZpA==
+Date:   Thu, 17 Nov 2022 15:05:27 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Zhang Changzhong <zhangchangzhong@huawei.com>
+Cc:     Edward Cree <ecree.xilinx@gmail.com>,
+        Martin Habets <habetsm.xilinx@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20221117103134.6452-1-cniedermaier@dh-electronics.com>
- <20221117103134.6452-2-cniedermaier@dh-electronics.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221117103134.6452-2-cniedermaier@dh-electronics.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Subject: Re: [PATCH net] sfc: fix potential memleak in
+ __ef100_hard_start_xmit()
+Message-ID: <Y3YxlxPIiw43QiKE@unreal>
+References: <1668671409-10909-1-git-send-email-zhangchangzhong@huawei.com>
+ <Y3YctdnKDDvikQcl@unreal>
+ <efedaa0e-33ce-24c6-bb9d-8f9b5c4a1c38@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <efedaa0e-33ce-24c6-bb9d-8f9b5c4a1c38@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,16 +61,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/11/2022 11:31, Christoph Niedermaier wrote:
-> Add DH electronics DHCOM PDK2, PicoITX and DRC02 boards
-> for the DHCOM i.MX6ULL SoM.
+On Thu, Nov 17, 2022 at 08:41:52PM +0800, Zhang Changzhong wrote:
 > 
-> Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
-> ---
+> 
+> On 2022/11/17 19:36, Leon Romanovsky wrote:
+> > On Thu, Nov 17, 2022 at 03:50:09PM +0800, Zhang Changzhong wrote:
+> >> The __ef100_hard_start_xmit() returns NETDEV_TX_OK without freeing skb
+> >> in error handling case, add dev_kfree_skb_any() to fix it.
+> >>
+> >> Fixes: 51b35a454efd ("sfc: skeleton EF100 PF driver")
+> >> Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
+> >> ---
+> >>  drivers/net/ethernet/sfc/ef100_netdev.c | 1 +
+> >>  1 file changed, 1 insertion(+)
+> >>
+> >> diff --git a/drivers/net/ethernet/sfc/ef100_netdev.c b/drivers/net/ethernet/sfc/ef100_netdev.c
+> >> index 88fa295..ddcc325 100644
+> >> --- a/drivers/net/ethernet/sfc/ef100_netdev.c
+> >> +++ b/drivers/net/ethernet/sfc/ef100_netdev.c
+> >> @@ -218,6 +218,7 @@ netdev_tx_t __ef100_hard_start_xmit(struct sk_buff *skb,
+> >>  		   skb->len, skb->data_len, channel->channel);
+> >>  	if (!efx->n_channels || !efx->n_tx_channels || !channel) {
+> >>  		netif_stop_queue(net_dev);
+> >> +		dev_kfree_skb_any(skb);
+> >>  		goto err;
+> >>  	}
+> > 
+> > ef100 doesn't release in __ef100_enqueue_skb() either. SKB shouldn't be
+> > NULL or ERR at this stage.
+> 
+> SKB shouldn't be NULL or ERR, so it can be freed. But this code looks weird.
 
+Please take a look __ef100_enqueue_skb() and see if it frees SKB on
+error or not. If not, please fix it.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Thanks
 
-Best regards,
-Krzysztof
-
+> 
+> > 
+> > diff --git a/drivers/net/ethernet/sfc/ef100_tx.c b/drivers/net/ethernet/sfc/ef100_tx.c
+> > index 29ffaf35559d..426706b91d02 100644
+> > --- a/drivers/net/ethernet/sfc/ef100_tx.c
+> > +++ b/drivers/net/ethernet/sfc/ef100_tx.c
+> > @@ -497,7 +497,7 @@ int __ef100_enqueue_skb(struct efx_tx_queue *tx_queue, struct sk_buff *skb,
+> > 
+> >  err:
+> >         efx_enqueue_unwind(tx_queue, old_insert_count);
+> > -       if (!IS_ERR_OR_NULL(skb))
+> > +       if (rc)
+> >                 dev_kfree_skb_any(skb);
+> > 
+> >         /* If we're not expecting another transmit and we had something to push
+> > 
+> > 
+> >>  
+> >> -- 
+> >> 2.9.5
+> >>
+> > .
+> > 
