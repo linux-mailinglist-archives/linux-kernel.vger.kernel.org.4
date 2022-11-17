@@ -2,68 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7BA062E7F8
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 23:15:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE61862E7FD
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 23:15:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235044AbiKQWPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 17:15:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53158 "EHLO
+        id S234875AbiKQWP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 17:15:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231194AbiKQWO6 (ORCPT
+        with ESMTP id S238729AbiKQWPQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 17:14:58 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCBE7E0F9;
-        Thu, 17 Nov 2022 14:14:57 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id kt23so8618270ejc.7;
-        Thu, 17 Nov 2022 14:14:57 -0800 (PST)
+        Thu, 17 Nov 2022 17:15:16 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD90374CCD;
+        Thu, 17 Nov 2022 14:15:15 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id k22so3125695pfd.3;
+        Thu, 17 Nov 2022 14:15:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0dEy2MWffxARTA6zpS6WOEHguSrey9IVoa1qUoLFPs4=;
-        b=SsvdE486wdBDaI76GLLefpDMcukxSC2ydeKO7li5+P8D/HufZpWnL4XqybMcFXTFFQ
-         EJX1qOsg0PFY2nlHwGeCAn0/tgY8T2QgNhzk3rnMs6FPHbtRSOqoH5aiwSiRAOx6aJDM
-         fgDr3nAo2hmCTgWPdNpXo7Ufobj7r0oR/F+mntl/2WoYhJ8r499RGjVREbdYUSlkbE5f
-         UIz3thBewuiUQBcJl7uWhJ3E+IIElopwoKRNGqGSGWdQ6k3WzkT3RZWUgB0JrX1VZxvl
-         4v461OkclKir2WTqNn4bo+2nNm+hDfUo/Z2jVFhueprKISk9gz6ei/mYdRZ2TUgdKdHo
-         x/fw==
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=N7duF0PlBN6lshFkS+sJiVqebLxCzfkfifRx7exo7Ek=;
+        b=McAXDy1TOpM5aPvG8ZiiqTGYqbwZcW75cWxetdt2nAQxdBw0yaXeZlMhTDO7VEgyXg
+         QzGVfGVn9v8NRKVA/+EjdSI1BRy8puyv95ZkWV893lh7xJMhGvjJU8UYY0K4sgucCA6X
+         3dlEn7C39n7SOsrLeD7yS3eqEmpPKwPaK5yM5ScQCFnKqKOrcwan3ktbubyqGuLO9PVm
+         gxx/97ioLsEMJvx5nP2cBShQyRI/jTuvKhXt1czYcsCaZAXDQY4UP7KRJB92J4UfnU6Q
+         jRsybrijYe0UmFYYeBn9J6bZ2AZltREQo0uYp5+sMqgfwgYiz8YW7chm4QA88VD/xPmU
+         q61w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0dEy2MWffxARTA6zpS6WOEHguSrey9IVoa1qUoLFPs4=;
-        b=ic+qEbnALG1XwPoy8BdMXsda0KaPXWBrFqHoRdbwDJXGTazuRs/UDMJPlYlfMFOtKb
-         bKapSpCWJiml56oeVNc50dI3GPS+MlPK8Nv04rEv+vvuYfi4hjbvHFykn+cIDUY+HUSl
-         THAlGpPvfRaacnGW4oKhS9FCPdNQP1kP5ckvnzaDqCvK8GBI66NZhD8J8zsO3vQc/wy6
-         wzqEWIB6TVHF3MN70gPIDSqK+vQC0K+6ZJ50OVcJoq2z26dsOlO5G4nO2cEduRxRFtqH
-         TiYkN9FeKtPiyN40qWL161QCVjDIZqO+GqxCE8jPfaJJLc108jUuxYF0HGe3qOnlgydA
-         kPaQ==
-X-Gm-Message-State: ANoB5plSO6EuwpYcF5NMxPSaW51Bs2VDnaJWXNUwZ3Jc5IFuVjmta1u8
-        7f1o/y/OlEl1F4v9XJrIzQ8msnxU1S4=
-X-Google-Smtp-Source: AA0mqf5HHmn9aGkgvNgEdSfyi0YoolnK75N0aXwLkLPDfM0HyM1C03peox32AgBn9Clt3mqbR3NFJg==
-X-Received: by 2002:a17:907:d042:b0:78c:c893:1965 with SMTP id vb2-20020a170907d04200b0078cc8931965mr3659378ejc.247.1668723296241;
-        Thu, 17 Nov 2022 14:14:56 -0800 (PST)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id s22-20020a1709067b9600b0077205dd15basm885027ejo.66.2022.11.17.14.14.55
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=N7duF0PlBN6lshFkS+sJiVqebLxCzfkfifRx7exo7Ek=;
+        b=0MGz4vEhsv/phHm+RD0NwT85H+d4h8R9C6qZxHrRz10TXilq8P5SH4tYoyZGdzN7eq
+         eZT8zeuNBbWdmfVbYhb2fq2y5dUlu4fl+KY02l1ijLNfEnFB6qS90qBKTDS8SgQf1axv
+         K9jU0VeiLzpXdtxOb5boOs2UUYLgNkdPbJ1/5lr5ZxI7JelgVsFrTHoz9padSqBCudIX
+         bcVhMfY/b75ffMzNL00+nVzsxffW+/1LkCDJ5BxX/ihL1Cz0G83cJUAker/lm+fTbIG1
+         CFi3nulJeO4Pk2/kEjtHyarnYHzWaXUm5bGHfyyFFkfd38MayaeBncr4HdLA6rLi4L5y
+         L/UQ==
+X-Gm-Message-State: ANoB5pmmOPhP7stP5E1HzLKUm+jvFug6eeUi6CKzPhhYLEhy1/QAV6ad
+        xukJyk7jiqy+qjhu6RQ4d5M=
+X-Google-Smtp-Source: AA0mqf4zecntXXKVewH88hqZ02AGSJ09Uw1l40rvqqDZAcis8clBig99HgaKBF70S/DYMZiHRORqhA==
+X-Received: by 2002:a63:5819:0:b0:476:8ce9:be5d with SMTP id m25-20020a635819000000b004768ce9be5dmr3996499pgb.15.1668723315212;
+        Thu, 17 Nov 2022 14:15:15 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:e4c5:c31d:4c68:97a0])
+        by smtp.gmail.com with ESMTPSA id i6-20020a170902c94600b00172e19c5f8bsm1930696pla.168.2022.11.17.14.15.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 14:14:55 -0800 (PST)
-Date:   Thu, 17 Nov 2022 23:14:54 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Manish Bhardwaj <mbhardwaj@nvidia.com>
-Cc:     jonathanh@nvidia.com, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] firmware: tegra: include IVC header file only once
-Message-ID: <Y3ayXgIRy4VbdiPy@orome>
-References: <20220922102627.16705-1-mbhardwaj@nvidia.com>
+        Thu, 17 Nov 2022 14:15:14 -0800 (PST)
+Date:   Thu, 17 Nov 2022 14:15:11 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     linmengbo0689@protonmail.com, alistair@alistair23.me,
+        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linus.walleij@linaro.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org
+Subject: Re: [PATCH 2/2] Input: cyttsp5 - add vddio regulator
+Message-ID: <Y3ayb8b9vyQHRabc@google.com>
+References: <20221117190507.87535-1-linmengbo0689@protonmail.com>
+ <20221117190507.87535-3-linmengbo0689@protonmail.com>
+ <4fe0c7c3-f5eb-4c01-8607-ce79a768cb06@wanadoo.fr>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="zcYlsKaSwNVzHDgz"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220922102627.16705-1-mbhardwaj@nvidia.com>
-User-Agent: Mutt/2.2.8 (2022-11-05)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4fe0c7c3-f5eb-4c01-8607-ce79a768cb06@wanadoo.fr>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -74,45 +77,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Nov 17, 2022 at 10:16:40PM +0100, Christophe JAILLET wrote:
+> Le 17/11/2022 à 20:05, Lin, Meng-Bo a écrit :
+> > The Samsung touchscreen controllers are often used with external pull-up
+> > for the interrupt line and the I2C lines, so we might need to enable
+> > a regulator to bring the lines into usable state. Otherwise, this might
+> > cause spurious interrupts and reading from I2C will fail.
+> > 
+> > Implement support for a "vddio-supply" that is enabled by the cyttsp5
+> > driver so that the regulator gets enabled when needed.
+> > 
+> > Signed-off-by: Lin, Meng-Bo <linmengbo0689-g/b1ySJe57IN+BqQ9rBEUg@public.gmane.org>
+> > ---
+> >   drivers/input/touchscreen/cyttsp5.c | 19 ++++++++++++-------
+> >   1 file changed, 12 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/drivers/input/touchscreen/cyttsp5.c b/drivers/input/touchscreen/cyttsp5.c
+> > index 24ab1df9fc07..d02fdb940edf 100644
+> > --- a/drivers/input/touchscreen/cyttsp5.c
+> > +++ b/drivers/input/touchscreen/cyttsp5.c
+> > @@ -190,7 +190,7 @@ struct cyttsp5 {
+> >   	int num_prv_rec;
+> >   	struct regmap *regmap;
+> >   	struct touchscreen_properties prop;
+> > -	struct regulator *vdd;
+> > +	struct regulator_bulk_data supplies[2];
+> >   };
+> >   /*
+> > @@ -767,7 +767,7 @@ static void cyttsp5_cleanup(void *data)
+> >   {
+> >   	struct cyttsp5 *ts = data;
+> > -	regulator_disable(ts->vdd);
+> > +	regulator_bulk_disable(ARRAY_SIZE(ts->supplies), ts->supplies);
+> >   }
+> >   static int cyttsp5_probe(struct device *dev, struct regmap *regmap, int irq,
+> > @@ -790,9 +790,12 @@ static int cyttsp5_probe(struct device *dev, struct regmap *regmap, int irq,
+> >   	init_completion(&ts->cmd_done);
+> >   	/* Power up the device */
+> > -	ts->vdd = devm_regulator_get(dev, "vdd");
+> > -	if (IS_ERR(ts->vdd)) {
+> > -		error = PTR_ERR(ts->vdd);
+> > +	ts->supplies[0].supply = "vdd";
+> > +	ts->supplies[1].supply = "vddio";
+> > +	error = devm_regulator_bulk_get(dev, ARRAY_SIZE(ts->supplies),
+> > +				      ts->supplies);
+> > +	if (error < 0) {
+> > +		dev_err(ts->dev, "Failed to get regulators, error %d\n", error);
+> 
+> Hi,
+> 
+> dev_err_probe()?
+> I think that devm_regulator_bulk_get() can return -EPROBE_DEFER;
 
---zcYlsKaSwNVzHDgz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+No, I'd rather we avoid dev_err_probe().
 
-On Thu, Sep 22, 2022 at 03:56:27PM +0530, Manish Bhardwaj wrote:
-> Add the necessary definition to prevent compilation
-> errors from the ivc.h file being included multiple times.
-> This does not currently cause any compilation issues,
-> but fix this anyway.
->=20
-> Signed-off-by: Manish Bhardwaj <mbhardwaj@nvidia.com>
-> ---
->  include/soc/tegra/ivc.h | 1 +
->  1 file changed, 1 insertion(+)
+Thanks.
 
-Applied, thanks.
-
-Thierry
-
---zcYlsKaSwNVzHDgz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmN2slsACgkQ3SOs138+
-s6EkVxAAnTnoskRCD7m1CAL+RyukULpNnsNkW3cJen/TppR33yeGnjobJeeDhJaj
-hwGCe1KCzVdS1UFgkHVJtuZ0MiGn8M2sZWRvpCNPh7BLQ1PaoNsSBTJYPA3Zbsdd
-cDpFci0ZVuaFGZEi4Y1uDwKvU/8DYVnD5f1RcfoPrG3VfliZD+e8oK050V8nNsV7
-626tSCTcS0Jpe99F/mJMnbku8l0G8aNVYIq4kO8UkPfezb0Fk+cOpcB0/BJ9TDBz
-TePS6ogNnSYYr/oDTb6H6XVa4OmH/0BNPRcMkqtI0LvGMfg+UtqZBbMt3bA9YD4R
-N2pf+3rsrIUUuNS4ERQSAaHRqj74kWllKOCEgvzMGSXbr0PNtZz5eiYPUTlvBgFB
-bosXJ9SIgXiOBCeVE2LhNMVIqdUxVk0qosWop+dyQLTArRrbyZI99RoOzGuZA8S7
-q4MG4I+W4myqiqkUtpSgKwmRBqJKT/qdV08UsnQbIc+ZN4HEP8aIfC2j3NLYBzmU
-U029HWJOqepUzFKCNYv808S6Li4GyBYFb9oeeexXf8ueqnGIVCD5HdWTcUYduq4V
-6KHIyNuUvnqI8oGMSwFaPHr908BtVSsr4mHUh46BMrHpUxYMl46PeHSVrfXUnpp2
-RWG8E5+cdv8j/39MvTJtk/VMd5m49ebGjkw5rEacObPnVlcPuFw=
-=jMO4
------END PGP SIGNATURE-----
-
---zcYlsKaSwNVzHDgz--
+-- 
+Dmitry
