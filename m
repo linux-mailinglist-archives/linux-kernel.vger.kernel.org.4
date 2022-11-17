@@ -2,89 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8703C62D9A7
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 12:40:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3923562D9AA
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 12:41:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234777AbiKQLka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 06:40:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45950 "EHLO
+        id S234700AbiKQLll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 06:41:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239932AbiKQLkD (ORCPT
+        with ESMTP id S239559AbiKQLlX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 06:40:03 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D8685C74F
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 03:39:40 -0800 (PST)
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NCdHZ5ThZz8RTZK;
-        Thu, 17 Nov 2022 19:39:38 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl1.zte.com.cn with SMTP id 2AHBdTsH020311;
-        Thu, 17 Nov 2022 19:39:29 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Thu, 17 Nov 2022 19:39:32 +0800 (CST)
-Date:   Thu, 17 Nov 2022 19:39:32 +0800 (CST)
-X-Zmail-TransId: 2af963761d74ffffffff8983c8e3
-X-Mailer: Zmail v1.0
-Message-ID: <202211171939327684154@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <ssantosh@kernel.org>
-Cc:     <krzysztof.kozlowski@linaro.org>, <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIG1lbW9yeTogdGktZW1pZi1wbTogVXNlIGRldmljZV9nZXRfbWF0Y2hfZGF0YSgpIHRvIHNpbXBsaWZ5CgogdGhlIGNvZGU=?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl1.zte.com.cn 2AHBdTsH020311
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 63761D7A.001 by FangMail milter!
-X-FangMail-Envelope: 1668685178/4NCdHZ5ThZz8RTZK/63761D7A.001/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63761D7A.001/4NCdHZ5ThZz8RTZK
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 17 Nov 2022 06:41:23 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 500096E541
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 03:40:55 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ovdGF-0004db-1A; Thu, 17 Nov 2022 12:40:51 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ovdG6-004q8e-Fp; Thu, 17 Nov 2022 12:40:43 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ovdG6-00HGZa-PW; Thu, 17 Nov 2022 12:40:42 +0100
+Date:   Thu, 17 Nov 2022 12:40:42 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Zhi Mao <zhi.mao@mediatek.com>,
+        Sam Shih <sam.shih@mediatek.com>
+Subject: Re: [PATCH v2] dt-bindings: pwm: mediatek: Add compatible for MT7986
+Message-ID: <20221117114042.iafjyb6yuxp7tavr@pengutronix.de>
+References: <6f28ccf3-ea27-9d5e-bd67-14f7729f713f@linaro.org>
+ <e2170b37f28238c59b2f43309822b63a4d0ac9b1.1667243978.git.daniel@makrotopia.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="354maudea2s6zisl"
+Content-Disposition: inline
+In-Reply-To: <e2170b37f28238c59b2f43309822b63a4d0ac9b1.1667243978.git.daniel@makrotopia.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Directly get the match data with device_get_match_data().
+--354maudea2s6zisl
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/memory/ti-emif-pm.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+On Mon, Oct 31, 2022 at 07:23:28PM +0000, Daniel Golle wrote:
+> Add new compatible string for MT7986 PWM and list compatible units for
+> existing entries. Also make sure the number of pwm1-X clocks is listed
+> for all supported units.
+>=20
+> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> ---
+>  .../devicetree/bindings/pwm/pwm-mediatek.txt  | 20 +++++++++++--------
+>  1 file changed, 12 insertions(+), 8 deletions(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/pwm/pwm-mediatek.txt b/Doc=
+umentation/devicetree/bindings/pwm/pwm-mediatek.txt
+> index 554c96b6d0c3e0..952a338e06e7c5 100644
+> --- a/Documentation/devicetree/bindings/pwm/pwm-mediatek.txt
+> +++ b/Documentation/devicetree/bindings/pwm/pwm-mediatek.txt
+> @@ -2,14 +2,15 @@ MediaTek PWM controller
+> =20
+>  Required properties:
+>   - compatible: should be "mediatek,<name>-pwm":
+> -   - "mediatek,mt2712-pwm": found on mt2712 SoC.
+> +   - "mediatek,mt2712-pwm", "mediatek,mt6795-pwm": found on mt2712 SoC.
+>     - "mediatek,mt6795-pwm": found on mt6795 SoC.
+> -   - "mediatek,mt7622-pwm": found on mt7622 SoC.
+> -   - "mediatek,mt7623-pwm": found on mt7623 SoC.
+> +   - "mediatek,mt7622-pwm", "mediatek,mt8195-pwm", "mediatek,mt8183-pwm"=
+, "mediatek,mt7986-pwm": found on mt7622 SoC.
+> +   - "mediatek,mt7623-pwm", "mediatek,mt7628-pwm": found on mt7623 SoC.
+>     - "mediatek,mt7628-pwm": found on mt7628 SoC.
+>     - "mediatek,mt7629-pwm": found on mt7629 SoC.
+> -   - "mediatek,mt8183-pwm": found on mt8183 SoC.
+> -   - "mediatek,mt8195-pwm", "mediatek,mt8183-pwm": found on mt8195 SoC.
+> +   - "mediatek,mt7986-pwm": found on mt7986 SoC.
+> +   - "mediatek,mt8183-pwm", "mediatek,mt7986-pwm": found on mt8183 SoC.
+> +   - "mediatek,mt8195-pwm", "mediatek,mt8183-pwm", "mediatek,mt7986-pwm"=
+: found on mt8195 SoC.
+>     - "mediatek,mt8365-pwm": found on mt8365 SoC.
+>     - "mediatek,mt8516-pwm": found on mt8516 SoC.
+>   - reg: physical base address and length of the controller's registers.
+> @@ -20,11 +21,14 @@ Required properties:
+>                  has no clocks
+>     - "top": the top clock generator
+>     - "main": clock used by the PWM core
+> +   - "pwm1"  : the PWM1 clock for mt7629
+> +   - "pwm1-2": the two per PWM clocks for mt7986
+>     - "pwm1-3": the three per PWM clocks for mt8365
+> -   - "pwm1-8": the eight per PWM clocks for mt2712
+> +   - "pwm1-4": the four per PWM clocks for mt7628 or mt8183
+> +   - "pwm1-5": the five per PWM clocks for mt7623 or mt8516
+>     - "pwm1-6": the six per PWM clocks for mt7622
+> -   - "pwm1-5": the five per PWM clocks for mt7623
+> -   - "pwm1"  : the PWM1 clock for mt7629
+> +   - "pwm1-7": the seven per PWM clocks for mt6795
+> +   - "pwm1-8": the eight per PWM clocks for mt2712
+>   - pinctrl-names: Must contain a "default" entry.
+>   - pinctrl-0: One property must exist for each entry in pinctrl-names.
+>     See pinctrl/pinctrl-bindings.txt for details of the property values.
 
-diff --git a/drivers/memory/ti-emif-pm.c b/drivers/memory/ti-emif-pm.c
-index 31d6266f008c..cef0d3beb63b 100644
---- a/drivers/memory/ti-emif-pm.c
-+++ b/drivers/memory/ti-emif-pm.c
-@@ -277,18 +277,13 @@ static int ti_emif_probe(struct platform_device *pdev)
- 	int ret;
- 	struct resource *res;
- 	struct device *dev = &pdev->dev;
--	const struct of_device_id *match;
- 	struct ti_emif_data *emif_data;
+I have no concerns. However converting that to yaml would be a nice
+thing. Also I didn't notice an effort to adapt the dts files
+accordingly. But that might be because I wasn't on Cc: for these (or I
+might have missed them despite the Cc: :-)
 
- 	emif_data = devm_kzalloc(dev, sizeof(*emif_data), GFP_KERNEL);
- 	if (!emif_data)
- 		return -ENOMEM;
+I'll mark this patch as handled-elsewhere in the PWM patchwork.
 
--	match = of_match_device(ti_emif_of_match, &pdev->dev);
--	if (!match)
--		return -ENODEV;
--
--	emif_data->pm_data.ti_emif_sram_config = (unsigned long)match->data;
-+	emif_data->pm_data.ti_emif_sram_config = (unsigned long) device_get_match_data(&pdev->dev);
+Best regards
+Uwe
 
- 	emif_data->pm_data.ti_emif_base_addr_virt = devm_platform_get_and_ioremap_resource(pdev,
- 											   0,
--- 
-2.25.1
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--354maudea2s6zisl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN2HbcACgkQwfwUeK3K
+7AnwKAf+KLqsYzYCpZ4xcmQE2Sz176na/2EfV4aRcaOI59IzpZ+9qLx6fB/TZJkk
+5EZpDBLhvfU7Z2cZSh1NaIofHryDB/4kLHraevxfBE0llrkKYp4tqjiFqc65zixf
+vNx92I9KqJlV4yYfZOoMBF2rbdNkQ6GUMGARzzt/1S1Un0qbURY61vgHFXrYcPri
+wlMOrg8NHAC+vDrlWm18kf9s/xHtG3q7r9BXRvfOY87sFrg7fabt1ZZZekxcZCs9
+fvqxRXzFF08k6ocGxqrMKJzkHquA4YSLLRoiuYhox824yVqiMtMkwaQc2kqQUNjN
+ass9UQVGR/pSxuqIRyUzl6Lu6fL+7A==
+=RVOc
+-----END PGP SIGNATURE-----
+
+--354maudea2s6zisl--
