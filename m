@@ -2,112 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C54662D479
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 08:56:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00B0B62D480
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 08:58:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239300AbiKQH4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 02:56:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46996 "EHLO
+        id S234503AbiKQH6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 02:58:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231871AbiKQH4p (ORCPT
+        with ESMTP id S234689AbiKQH60 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 02:56:45 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3740259871
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 23:56:44 -0800 (PST)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NCXKv5GxJz15Mkr;
-        Thu, 17 Nov 2022 15:56:19 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 17 Nov 2022 15:56:42 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 17 Nov 2022 15:56:41 +0800
-Message-ID: <3ab1b3ee-4710-b598-c634-81c096ef0100@huawei.com>
-Date:   Thu, 17 Nov 2022 15:56:41 +0800
+        Thu, 17 Nov 2022 02:58:26 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B04B3D7E
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 23:58:24 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id cl5so2307640wrb.9
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 23:58:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=hM8BQcdwBxLXfEtfq7sGjS/dHJrVj14bOfYseYvsWQI=;
+        b=SmNykQahRoLaPjhrzoF43A9aDFrnnM4l4LWYdgyrnMNGh2ld3eAQDkzDZoUfyB66yn
+         vG+8P4Nuew4u7D7Fd5bgRSjzhaEzfa8FwvgFtBWyEovuuWp6C4X7PoUYXvNHXm9L4+M/
+         OJTRebB26s0Nh8Z+y9P4BPdH3u7dhd9/vYGOwZLb/IIiMKgQiLlG8dwzgB3uJiXvT6xW
+         rVhb8h78hcM0wDny2bOMbrVQ2FXY7O8Mo6cX8r48HYAODmNoBMcKqUyla1yha8iDWRPC
+         xlSjCu0QZ1PdcxmUGbi/J1uDRHMlQToSa1F+QK8k6RiQvgMCNzumdJL8BFRPTkR3rhQ4
+         8ajQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hM8BQcdwBxLXfEtfq7sGjS/dHJrVj14bOfYseYvsWQI=;
+        b=fDPrX1+APUEBL9qHgAIWhM0sduXEWNnXUkIJfUxjAwiw3z9YrNd5ju+j025srCptsx
+         RLHqDgDwtb4xeeBvSy6wfCPr9EV/by2uSmcqfRVZs9SNRjHJbU5HPOwjt0dWk2RPW1zz
+         1y9b/QKdN8CK+evWOyJyz05RoLNdBg3gV2Q9I3NMuqY0ingQTgnahBTXFrkVXTHAokik
+         wSo7uwWuEqQ11VVmk6sTRlObZFPVuN1BAXNv4KanvSgsTE+ydeMYvkQPdB2+MZ6BANxj
+         jHz0HMwhOJlrq51mNoo/07xHQRAfe01j7TQhhxvJuYpo9lItvVgLYKTgbmHcS+/TVove
+         /4mQ==
+X-Gm-Message-State: ANoB5pkrcVBKtGtlOPF4T+WaDUYppvfb64MIU569NMtKAzDulkqqejEf
+        4J6DRPh3Xj4oSmWsxEtG0C1qPDO4YocUBg==
+X-Google-Smtp-Source: AA0mqf7z8wquf9ieqUd+81O3fKI2FalZ/xqrNkQArMkHhTZfk0bCbAt5a8xqA+HuYrnqMzbo5td7Cw==
+X-Received: by 2002:adf:fe52:0:b0:236:6ab6:a51c with SMTP id m18-20020adffe52000000b002366ab6a51cmr725698wrs.54.1668671903315;
+        Wed, 16 Nov 2022 23:58:23 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:aad5:8d14:a22f:2e8b? ([2a01:e0a:982:cbb0:aad5:8d14:a22f:2e8b])
+        by smtp.gmail.com with ESMTPSA id d9-20020adfe889000000b0024166413a4fsm227398wrm.37.2022.11.16.23.58.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Nov 2022 23:58:22 -0800 (PST)
+Message-ID: <ddb4cb6b-538e-0c56-679d-7ec7fdf5d041@linaro.org>
+Date:   Thu, 17 Nov 2022 08:58:22 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 2/2] arm64/mm: fix incorrect file_map_count for invalid
- pmd/pud
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH 3/6] soc: qcom: geni-se: add desc struct to specify clocks
+ from device match data
 Content-Language: en-US
-To:     Liu Shixin <liushixin2@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Denys Vlasenko <dvlasenk@redhat.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        "David Hildenbrand" <dhildenb@redhat.com>,
-        Rafael Aquini <raquini@redhat.com>,
-        "Pasha Tatashin" <pasha.tatashin@soleen.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221117075602.2904324-1-liushixin2@huawei.com>
- <20221117075602.2904324-3-liushixin2@huawei.com>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <20221117075602.2904324-3-liushixin2@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20221114-narmstrong-sm8550-upstream-i2c-master-hub-v1-0-64449106a148@linaro.org>
+ <20221114-narmstrong-sm8550-upstream-i2c-master-hub-v1-3-64449106a148@linaro.org>
+ <16d6c50b-f7da-a2b3-0b95-726b843e50c0@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <16d6c50b-f7da-a2b3-0b95-726b843e50c0@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 16/11/2022 11:32, Konrad Dybcio wrote:
+> 
+> 
+> On 16/11/2022 11:21, Neil Armstrong wrote:
+>> The I2C Master Hub is a stripped down version of the GENI Serial Engine
+>> QUP Wrapper Controller but only supporting I2C serial engines without
+>> DMA support.
+>>
+>> This prepares support for the I2C Master Hub variant, by moving
+>> the required clocks list to a new desc struct then passing it through the
+>> compatible match data.
+>>
+>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>> ---
+>>   drivers/soc/qcom/qcom-geni-se.c | 57 +++++++++++++++++++++++++++++++----------
+>>   1 file changed, 43 insertions(+), 14 deletions(-)
+>>
+>> diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
+>> index a0ceeede450f..f4f54d92a01a 100644
+>> --- a/drivers/soc/qcom/qcom-geni-se.c
+>> +++ b/drivers/soc/qcom/qcom-geni-se.c
+>> @@ -81,19 +81,31 @@
+>>    */
+>>   #define MAX_CLK_PERF_LEVEL 32
+>> -#define NUM_AHB_CLKS 2
+>> +#define MAX_CLKS 2
+>>   /**
+>>    * struct geni_wrapper - Data structure to represent the QUP Wrapper Core
+>>    * @dev:        Device pointer of the QUP wrapper core
+>>    * @base:        Base address of this instance of QUP wrapper core
+>> - * @ahb_clks:        Handle to the primary & secondary AHB clocks
+>> + * @clks:        Handle to the primary & optional secondary AHB clocks
+>> + * @num_clks:        Count of clocks
+>>    * @to_core:        Core ICC path
+>>    */
+>>   struct geni_wrapper {
+>>       struct device *dev;
+>>       void __iomem *base;
+>> -    struct clk_bulk_data ahb_clks[NUM_AHB_CLKS];
+>> +    struct clk_bulk_data clks[MAX_CLKS];
+>> +    unsigned int num_clks;
+>> +};
+>> +
+>> +/**
+>> + * struct geni_se_desc - Data structure to represent the QUP Wrapper resources
+>> + * @clks:        Name of the primary & optional secondary AHB clocks
+>> + * @num_clks:        Count of clock names
+>> + */
+>> +struct geni_se_desc {
+>> +    unsigned int num_clks;
+>> +    const char * const *clks;
+>>   };
+>>   static const char * const icc_path_names[] = {"qup-core", "qup-config",
+>> @@ -496,8 +508,7 @@ static void geni_se_clks_off(struct geni_se *se)
+>>       struct geni_wrapper *wrapper = se->wrapper;
+>>       clk_disable_unprepare(se->clk);
+>> -    clk_bulk_disable_unprepare(ARRAY_SIZE(wrapper->ahb_clks),
+>> -                        wrapper->ahb_clks);
+>> +    clk_bulk_disable_unprepare(wrapper->num_clks, wrapper->clks);
+>>   }
+>>   /**
+>> @@ -528,15 +539,13 @@ static int geni_se_clks_on(struct geni_se *se)
+>>       int ret;
+>>       struct geni_wrapper *wrapper = se->wrapper;
+>> -    ret = clk_bulk_prepare_enable(ARRAY_SIZE(wrapper->ahb_clks),
+>> -                        wrapper->ahb_clks);
+>> +    ret = clk_bulk_prepare_enable(wrapper->num_clks, wrapper->clks);
+>>       if (ret)
+>>           return ret;
+>>       ret = clk_prepare_enable(se->clk);
+>>       if (ret)
+>> -        clk_bulk_disable_unprepare(ARRAY_SIZE(wrapper->ahb_clks),
+>> -                            wrapper->ahb_clks);
+>> +        clk_bulk_disable_unprepare(wrapper->num_clks, wrapper->clks);
+>>       return ret;
+>>   }
+>> @@ -887,11 +896,21 @@ static int geni_se_probe(struct platform_device *pdev)
+>>           return PTR_ERR(wrapper->base);
+>>       if (!has_acpi_companion(&pdev->dev)) {
+>> -        wrapper->ahb_clks[0].id = "m-ahb";
+>> -        wrapper->ahb_clks[1].id = "s-ahb";
+>> -        ret = devm_clk_bulk_get(dev, NUM_AHB_CLKS, wrapper->ahb_clks);
+>> +        const struct geni_se_desc *desc;
+>> +        int i;
+>> +
+>> +        desc = device_get_match_data(&pdev->dev);
+>> +        if (!desc)
+>> +            return -EINVAL;
+>> +
+>> +        wrapper->num_clks = min_t(unsigned int, desc->num_clks, MAX_CLKS);
+> Maybe a warning would be suitable if num mismatch happens?
 
-On 2022/11/17 15:56, Liu Shixin wrote:
-> The page table check trigger BUG_ON() unexpectedly when split hugepage:
->
->   ------------[ cut here ]------------
->   kernel BUG at mm/page_table_check.c:119!
->   Internal error: Oops - BUG: 00000000f2000800 [#1] SMP
->   Dumping ftrace buffer:
->      (ftrace buffer empty)
->   Modules linked in:
->   CPU: 7 PID: 210 Comm: transhuge-stres Not tainted 6.1.0-rc3+ #748
->   Hardware name: linux,dummy-virt (DT)
->   pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->   pc : page_table_check_set.isra.0+0x398/0x468
->   lr : page_table_check_set.isra.0+0x1c0/0x468
-> [...]
->   Call trace:
->    page_table_check_set.isra.0+0x398/0x468
->    __page_table_check_pte_set+0x160/0x1c0
->    __split_huge_pmd_locked+0x900/0x1648
->    __split_huge_pmd+0x28c/0x3b8
->    unmap_page_range+0x428/0x858
->    unmap_single_vma+0xf4/0x1c8
->    zap_page_range+0x2b0/0x410
->    madvise_vma_behavior+0xc44/0xe78
->    do_madvise+0x280/0x698
->    __arm64_sys_madvise+0x90/0xe8
->    invoke_syscall.constprop.0+0xdc/0x1d8
->    do_el0_svc+0xf4/0x3f8
->    el0_svc+0x58/0x120
->    el0t_64_sync_handler+0xb8/0xc0
->    el0t_64_sync+0x19c/0x1a0
-> [...]
->
-> On arm64, pmd_leaf() will return true even if the pmd is invalid due to
-> pmd_present_invalid() check. So in pmdp_invalidate() the file_map_count
-> will not only decrease once but also increase once. Then in set_pte_at(),
-> the file_map_count increase again, and so trigger BUG_ON() unexpectedly.
->
-> Fix this problem by adding pmd_valid() in pmd_user_accessible_page().
-> Moreover, add pud_valid() for pud_user_accessible_page() too.
->
-> Fixes: 42b2547137f5 ("arm64/mm: enable ARCH_SUPPORTS_PAGE_TABLE_CHECK")
-> Reported-by: Denys Vlasenko <dvlasenk@redhat.com>
-> Signed-off-by: Liu Shixin <liushixin2@huawei.com>
-> Acked-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+Indeed, will add that, thx.
+
+> 
+> Other than that,
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> 
+> 
+> Konrad
+>> +
+>> +        for (i = 0; i < wrapper->num_clks; ++i)
+>> +            wrapper->clks[i].id = desc->clks[i];
+>> +
+>> +        ret = devm_clk_bulk_get(dev, wrapper->num_clks, wrapper->clks);
+>>           if (ret) {
+>> -            dev_err(dev, "Err getting AHB clks %d\n", ret);
+>> +            dev_err(dev, "Err getting clks %d\n", ret);
+>>               return ret;
+>>           }
+>>       }
+>> @@ -901,8 +920,18 @@ static int geni_se_probe(struct platform_device *pdev)
+>>       return devm_of_platform_populate(dev);
+>>   }
+>> +static const char * const qup_clks[] = {
+>> +    "m-ahb",
+>> +    "s-ahb",
+>> +};
+>> +
+>> +static const struct geni_se_desc qup_desc = {
+>> +    .clks = qup_clks,
+>> +    .num_clks = ARRAY_SIZE(qup_clks),
+>> +};
+>> +
+>>   static const struct of_device_id geni_se_dt_match[] = {
+>> -    { .compatible = "qcom,geni-se-qup", },
+>> +    { .compatible = "qcom,geni-se-qup", .data = &qup_desc },
+>>       {}
+>>   };
+>>   MODULE_DEVICE_TABLE(of, geni_se_dt_match);
+>>
 
