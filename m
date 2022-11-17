@@ -2,135 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AA3062E404
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 19:22:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2589462E406
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 19:23:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240464AbiKQSWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 13:22:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58422 "EHLO
+        id S235041AbiKQSXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 13:23:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240196AbiKQSWf (ORCPT
+        with ESMTP id S234918AbiKQSXT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 13:22:35 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38CA74AB5
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 10:22:34 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id 7so2839115ybp.13
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 10:22:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Jfw5a5L8IvV/kvGKF/DMQqdusHiCh0R6uAmQu8nYnr4=;
-        b=hhaKe9nmlIc9X4Cmc8AhvoNPtHtitfsgQ7h0eCN2o7MPAQzrzYJx3f+IIL6a1Ve0dA
-         a+Gl2GeZdlwbc12piw1ri0yNfOPBrcCqEoJHXdPcrE5gY+PYmkVcpnWvfJmCTn83dmSW
-         PS97FcUQeBOy89fduiZRqVY8iiv8sD+jsWGf5njDs575tBaCKH7IFL1XhQPK61vTZ1Ao
-         EXt6bjQr4DFr7ZBr/4kUU4xyCaUIz1KvuZbTyDlbtcPXu/rHbBCv+mBOqFJWTnBN8SkJ
-         RxYk9uEkt1GsQ5cWr3PV2SlNgwG2j4Cp/UWegVlnpa8YVHUN4EWyl41cEecoL4USxfo/
-         A3ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Jfw5a5L8IvV/kvGKF/DMQqdusHiCh0R6uAmQu8nYnr4=;
-        b=wh1XdeE93tQBjP5jC/US/gr2yd9J6JQAu0V0mwZk+QU8f9UkuhpiqJjyKKcRp3ExDB
-         p4nOdb/zNFZoa4ZQN/D0Ft5AvrN5oc1MNIzPGddDX7AEBHAjpdgrFHIAunEMQlSt8cpz
-         Lmcbl8GNsRte6yRKq0plhjXaW8Jw8KFL9ZxXXnTNw4a+Q7yxtE7PoKQdwwUqWzZJCCnC
-         ZtRD5d7PhPwH2HkCI/GhFxrqPY7lNiNvnZtQwSJyzpjvvgtgfGCry8o2sBEOAuvVsCRz
-         YzEXI34Ci/y5wHD5vn/jY7vr3lyIl+H7QgCdRgKzdPNNDWQF4K0yHZOBm+Ub1cI5An06
-         XuQg==
-X-Gm-Message-State: ANoB5pna/kvfYCoH9ZJF+AXn0zqVdB1iCEWpzhYvRJ0s2C9YQXWKzk2C
-        m4Tg8nDkPiRMSWndnXZTNP8DuAQQTBwvOZJxvdWXpvG6zIw=
-X-Google-Smtp-Source: AA0mqf5KlD5QStHh0O7F5hQQBDfNprNdYBO58yBn4u5NkFxM4ijVuetszSLxi8cDgRzyQaJfc0pBNCtKbgDXl3I4IE0=
-X-Received: by 2002:a25:e90f:0:b0:6d2:d710:7454 with SMTP id
- n15-20020a25e90f000000b006d2d7107454mr3122162ybd.407.1668709353799; Thu, 17
- Nov 2022 10:22:33 -0800 (PST)
+        Thu, 17 Nov 2022 13:23:19 -0500
+Received: from mx0a-002c1b01.pphosted.com (mx0a-002c1b01.pphosted.com [148.163.151.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B8CA7FF2F
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 10:23:17 -0800 (PST)
+Received: from pps.filterd (m0127839.ppops.net [127.0.0.1])
+        by mx0a-002c1b01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AHHn5iT027081;
+        Thu, 17 Nov 2022 10:23:06 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nutanix.com; h=from : to : cc :
+ subject : date : message-id : content-transfer-encoding : content-type :
+ mime-version; s=proofpoint20171006;
+ bh=4ZPvwgnnjtZDDCVOpA449PvCyUyhPb7SwW0t+FMWDRQ=;
+ b=tudP6RVGm6ac5AzqpfLXEKGXJPPZu1poPYEPmPhdQ7JQyKv59qBhwSNpy28A6wEBnp7o
+ Ks8C+lVlLIz05NBpZGa25T0z/KAO2pEiqXmi5zm1xY0qkj0bkr+wY9XSQ7+KvtIsWi3G
+ 2aTxB9IYk/NMrp7yAiO8Azn2yP/W7chAL2Gp2GSoI/TR4vA3IJSMc7lUypNYoxJCfTrV
+ 4ENIQtXt9mD/AvGpwMnnKbPWyYkxNgoSzCJOCRhBpEKjkX3tWOUhgwc4NvGX4RyBV1kE
+ p1bXtqEDFGr8FEiT46eGhVOcc3T/+QPSP7kF+1m+hTax9lbkAEffNfdiJUJGtNmncGmI wg== 
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2100.outbound.protection.outlook.com [104.47.55.100])
+        by mx0a-002c1b01.pphosted.com (PPS) with ESMTPS id 3kwbtjsryv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Nov 2022 10:23:06 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Rp/4AGgec0kh+jgOp8gc9Ssc3+VRnWOYflIWtXRXqjd1TqNC8Poend/0XgViCoi1TXEWcHH4/mV0HZxN0cWtG27isPSMERnRXbKxhTrBCfUYfzc1mgWz1aTYWs8Qswn9NC7rpc8RsP3Wc+PMUw/Fp5Qpn9Lui/rcvh4msohNhg4kj+xGg3YKA6HFk1hyKJX063EKGcg/3X4uTYs+ksFd4+cnQtVLnLvbnp+CBjbg0DsVfPxgFPG1LvmM7F2sbpDSG0aNhZi/2Hzai07/4EtwMHpSizbjJjcRSI3CpV5715WxTSpTvxFEtofZ6UvS2u/ZrZeY8D4gYit+uFKerqp1SQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4ZPvwgnnjtZDDCVOpA449PvCyUyhPb7SwW0t+FMWDRQ=;
+ b=ltI3gAtV5qkjQcowDe7mHmTouo2wgun5zQmIya00qO5xPPTyBQjU7jkcXZAQQd9g7qRKwA3UvkWEaUM3r+SYx4s9MN0wN30fsAhAjscjmLsfM/QtBcX9hskXI3Ds0wjTQZrnabK/0IpFt3J2x0UVdc60d+rx6C+G7JBGLNjpbc65bEzXXh0MzeLuEltGGERWrU9S1RrKsALHCqqHdq4pnOU3BjaVQCfyl5xUxuJN493JSJuG5MUQMbCvY3xuKhg1WG99MbxRG8Md/Noa1711NXaL66NjmpzQ+au5CKwhqFWN0c8HyD6E2MfXNloU1TKrzvBKVHUe+pE+3kKNuOGtJg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nutanix.com; dmarc=pass action=none header.from=nutanix.com;
+ dkim=pass header.d=nutanix.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nutanix.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4ZPvwgnnjtZDDCVOpA449PvCyUyhPb7SwW0t+FMWDRQ=;
+ b=sdVwfMISaZkeBDblbmz9MHd2G2Rht2g3SHSVVCaX6obdNhC/xhDnvZC5c8QABsRsxtkSLRNCPIDbTNrWe4ILl8n/GXvRh5w1k+7IgOqffAR+tJfZJfZxDCqNgeIqEXMdOTAc9FYqFzpSiLpHWKf/RB/52m7Ec9smXWVbKNwT0ezh70mo1bUBS2y3U1ysKWccR6X8KqUAoIGosPJd1wSp6me5ip34r47Zp10mnwBcYHgKz1Z7f2S98NIHFHvNwNhGukrLOFtloj2+3SlQ/DcVq7Ko7oKlrD7Cpy1MH0kprpR7vmlnpsWCfm5GpdTY7qwus6GzEGPWPg6wx6miPybRQQ==
+Received: from CH0PR02MB7964.namprd02.prod.outlook.com (2603:10b6:610:105::16)
+ by SJ0PR02MB8676.namprd02.prod.outlook.com (2603:10b6:a03:3fc::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.18; Thu, 17 Nov
+ 2022 18:23:04 +0000
+Received: from CH0PR02MB7964.namprd02.prod.outlook.com
+ ([fe80::7bb8:3ebf:497c:17f]) by CH0PR02MB7964.namprd02.prod.outlook.com
+ ([fe80::7bb8:3ebf:497c:17f%7]) with mapi id 15.20.5813.020; Thu, 17 Nov 2022
+ 18:23:04 +0000
+From:   Jonathan Davies <jonathan.davies@nutanix.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Mike Pagano <mpagano@gentoo.org>, Michal Marek <mmarek@suse.cz>,
+        Jonathan Davies <jonathan.davies@nutanix.com>
+Subject: [PATCH] scripts/show_delta: port to python3
+Date:   Thu, 17 Nov 2022 18:22:40 +0000
+Message-Id: <20221117182240.39104-1-jonathan.davies@nutanix.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: AM0P190CA0005.EURP190.PROD.OUTLOOK.COM
+ (2603:10a6:208:190::15) To CH0PR02MB7964.namprd02.prod.outlook.com
+ (2603:10b6:610:105::16)
 MIME-Version: 1.0
-References: <20221117031551.1142289-1-joel@joelfernandes.org>
- <20221117031551.1142289-3-joel@joelfernandes.org> <CANn89i+gKVdveEtR9DX15Xr7E9Nn2my6SEEbXTMmxbqtezm2vg@mail.gmail.com>
- <Y3ZaH4C4omQs1OR4@google.com> <CANn89iJRhr8+osviYKVYhcHHk5TnQQD53x87-WG3iTo4YNa0qA@mail.gmail.com>
- <CAEXW_YRULY2KzMtkv+KjA_hSr1tSKhQLuCt-RrOkMLjjwAbwKg@mail.gmail.com>
- <CANn89i+9XRh+p-ZiyY_VKy=EcxEyg+3AdtruMnj=KCgXF7QtoQ@mail.gmail.com>
- <CAEXW_YS-d_URqjfcasNnqf3zhCKAny8dhhLifAxtrpz1XYd_=w@mail.gmail.com>
- <CANn89i+GcVzgg56fd9iO5Ma6vSUVvJmLHTvRwPMoYKMPR4G4Lw@mail.gmail.com> <CAEXW_YSyZswszFo-J6rEFsb2mAcXLytZaFSqi1L1LpSHWfTXMQ@mail.gmail.com>
-In-Reply-To: <CAEXW_YSyZswszFo-J6rEFsb2mAcXLytZaFSqi1L1LpSHWfTXMQ@mail.gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Thu, 17 Nov 2022 10:22:22 -0800
-Message-ID: <CANn89iL_m=TS92-V=rE4pvB1_Wu=etb6c2UT8AxWiKwZjiLNQA@mail.gmail.com>
-Subject: Re: [PATCH rcu/dev 3/3] net: Use call_rcu_flush() for dst_destroy_rcu
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org, Cong Wang <xiyou.wangcong@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Jiri Pirko <jiri@resnulli.us>, netdev@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>, rcu@vger.kernel.org,
-        rostedt@goodmis.org, paulmck@kernel.org, fweisbec@gmail.com,
-        jiejiang@google.com, Thomas Glexiner <tglx@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH0PR02MB7964:EE_|SJ0PR02MB8676:EE_
+X-MS-Office365-Filtering-Correlation-Id: 77ddcacc-8d45-4649-bf28-08dac8c8c461
+x-proofpoint-crosstenant: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 3p5E4JmhJiz53U4yTAv8OlZj8Ifb78+8XNwvnw0a0lgl0R7FEN8ARBZaEW69oBnzm+3WIi/TX0w8QiHRHJQstQ9k1CHDq4MlPi3i7yUxL4wyWAE50JMUbuIrlWGTm/4vDLc5AAwnnlvJjrpQb6qJFQMn+NmZLmM2gVkFvGSiFedO1SNRMQ0dzkza9oa6eEJdx2Eh89YWFPTaYIYCZi/wm2MB8MB7JIHuqUXdxNWJS+AAhk+gKw2KFn1bYdXbp8rqiwP0qXi86/vhdtflYWgw/nHfGzH1CVSeigtJKJxIkCnlffTX/LmWNHH9lfNqf9HDRLa/dhgJjk3OwxVe2aCfxr2tDrKgYkheK55HutFBCpLd+1h80VJGnvAqmIONl9vUvK84RvwrzrV8KBVxxI16HOGMqAZNbO2MA8xLRqInCg/woBrCqEmgc49ilDvpujNCyMaDIOK2YTBFrx7WdQqp3EpzQE/5YAJGeQoRcTe4+RmfXNbl+l6VZIHhhuUfjwC6m5lreP+qTht05QuaUnzHr/LCCfXM9JX9r6SYa9IvcucxNGHQYZbp1dXEj7mLDoT/2mST5Atg39IYac8FLz8s8veTX4BkEF2uPpCZpP3RzSjuCcKiQd5kcAloLQ3A9fAtij7WBJ6iQxc/beaRZdumkKycgAQvhlZ5/0fm+lKbefiFp8uGkEDK/BWddWL2ORfhPNZ45xRr0I+C/RimW1ksXQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR02MB7964.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(136003)(396003)(366004)(39860400002)(346002)(451199015)(316002)(8676002)(66476007)(66556008)(26005)(4326008)(6512007)(41300700001)(52116002)(66946007)(2906002)(83380400001)(1076003)(5660300002)(2616005)(186003)(36756003)(44832011)(8936002)(38350700002)(38100700002)(478600001)(6506007)(107886003)(6916009)(6666004)(6486002)(54906003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?2RrmiZPp8l565GjM5GIxKIi0i7ONNQS8iVuLKqxrubH0SjCLLpvqpO0zvxiD?=
+ =?us-ascii?Q?v1pfe9GG2+4W/m/iXPhGVYp6lv3QQoXREMsSFMTfKx5bzfukzTS3l2pg6CEV?=
+ =?us-ascii?Q?wl9+VbRcr5XHaUnid62Q88RqWuEsx/ppcX+l26EXmH42RahdtEJF9e9ooZ6M?=
+ =?us-ascii?Q?OEppWiuZg6IdnRd1QKfXKhAVb/EzidFHbu8I4BYVnA6QH/8alTsUT7NFaxEO?=
+ =?us-ascii?Q?mvS68cBiiFk1Wxujqfrm182IwOXQUNvOjbq1VVtdZL9nv8GyYIhlu8q82ZZ7?=
+ =?us-ascii?Q?W+vKi0op4wCwxeIC7m/eYGm92ih7cqT2QzohuF1zRJ+c49C3sQK4Vpk72b9G?=
+ =?us-ascii?Q?0Y2uorpbIFpezY3qU4NHcJC6H1dTnJ1/+KEwSbOtheyukzmPTw1GT+TQeIZr?=
+ =?us-ascii?Q?AqQDqi5YAD5NAm2w8SQXp9zy6vlICAxY62JoHKUiWHseZrHzslFdug72b8CG?=
+ =?us-ascii?Q?yQ9yyFxmFY4sE0ihhZ6Zj+5fv9Qm80z0tw2iUfl/oMN9D+4zXI5zK+Ly6Tor?=
+ =?us-ascii?Q?C0I5xtlIGBy1moVHQI3x4fV/+Lo8G2Y+9fuAzIXdaCuX23Ucl6OPhlswKGeL?=
+ =?us-ascii?Q?biyeAeaUwU0IX10TOBvfvp73s8a91h8/HSyR49h/Jbvbt+JQx0tffDfaPdFm?=
+ =?us-ascii?Q?V8GW/xNtNS8Eps/CutvnHP1bDYhE5QS7Vp89q4I8zvJLYIWU5aJeHc6KKQON?=
+ =?us-ascii?Q?eWyGV1Z8WqnV6BtwATC8qrzfMu2GXyKjxqilyf1PwUHCcsqiNjVTYZ6iYult?=
+ =?us-ascii?Q?RuP1tI5c7dDDSL5GlikTtgt7TmWErgnglkvM1cJSumyBh/2zS07KKtQDDtIy?=
+ =?us-ascii?Q?hTpUcd/iIUw+Z7XFEM1Uo/1ZLg9LN8qzLEls22QVfLvA8DRR61OxXCrk35Lr?=
+ =?us-ascii?Q?4rxHICNdXi4sOnvGWAS/pXdAFGrAqrM+HFBT2LibOoqv6XhLJgqcyOAmeXXi?=
+ =?us-ascii?Q?hx0vPj9AZkn7BZKS8CFngR+BfRojnU13tx7KXGcKrqIbqSym2IrIT6AhZdet?=
+ =?us-ascii?Q?CP42IwIdQjlHlXTzqm72ofKk7qhSuFgOdxE2OR8VDWVPCqouojx/zIz5znq5?=
+ =?us-ascii?Q?F2OXU3GiwTvH3lmj4bneKVMgZUOtsiGecMXf5+0wa25/ytQwwcBl9Y+gjq8d?=
+ =?us-ascii?Q?sCYUHhePxzAK5Erwymz3tkNyDkP2TvoKowtmhTSu8DCrld8sCL6M5zLWF04U?=
+ =?us-ascii?Q?dU//8xRJECY7h3rfBy146jA5NIBaop9Z+yCphZ91UF2FRbrsYq5Z9Edvn8ix?=
+ =?us-ascii?Q?Lf89xhrTS4o+nLEgLrNfeITWqWkQcoii71aibR2aZ2DcgDfGSqJYGezIy5+1?=
+ =?us-ascii?Q?8O39ijlCoGNR7V+6dSd+B47gNPvtDrivbt7Xu9vfpaOkbv9Mf7H6yX7HcZRI?=
+ =?us-ascii?Q?qBmNg1oSkwVznGYHIgzJzWE1f1RwyUpb/CnnFkYbIpFlgxzHmpTMAlHOEwFS?=
+ =?us-ascii?Q?Y6i4g3XB0esQvNGwrPKNdEbkTpAqw6YqDzOKDAO+W8dliIPbcMnjd10fbtLH?=
+ =?us-ascii?Q?Dgr0mfdlWFgPs3xpSYnDjvRNxNGFpSkanCJVzA9xtGCAVOwFSMGXzMPjJrRk?=
+ =?us-ascii?Q?HMoAqswerP8mQvTT0BoQ8XGBvV7CcIO9OlsTNnMjXwiz0uEgv4CCO1FTECq7?=
+ =?us-ascii?Q?Sg=3D=3D?=
+X-OriginatorOrg: nutanix.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 77ddcacc-8d45-4649-bf28-08dac8c8c461
+X-MS-Exchange-CrossTenant-AuthSource: CH0PR02MB7964.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Nov 2022 18:23:04.1196
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bb047546-786f-4de1-bd75-24e5b6f79043
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /HjF2fmjMSpxyH4Gte+TxsOwi8eV3/LWSRlfQpmeI8eagPi2Lgf3xe6dT2lTIuSQhrMYGJkVr/nN1CwuptwiQJg0B/frZwKAoHkTtTUBFWM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR02MB8676
+X-Proofpoint-GUID: PbhMvOU3Cskf6vParM6xm9rVWAVGUJCR
+X-Proofpoint-ORIG-GUID: PbhMvOU3Cskf6vParM6xm9rVWAVGUJCR
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-17_06,2022-11-17_01,2022-06-22_01
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 10:18 AM Joel Fernandes <joel@joelfernandes.org> wrote:
->
-> On Thu, Nov 17, 2022 at 5:49 PM Eric Dumazet <edumazet@google.com> wrote:
-> >
-> > On Thu, Nov 17, 2022 at 9:42 AM Joel Fernandes <joel@joelfernandes.org> wrote:
-> > >
-> >
-> > >
-> > > Yes, I agree. Your comments here have not been useful (or respectful)
-> > > so I am Ok with that.
-> > >
-> > >  - Joel
-> >
-> > Well, I have discovered that some changes went in networking tree
-> > without network maintainers being involved nor CCed.
-> >
-> > What can I say ?
-> >
-> > It seems I have no say, right ?
->
-> Sorry, I take responsibility for that. FWIW, the rxrpc change is not
-> yet in Linus's tree.
->
-> Also FWIW, the rxrpc case came up because we detected that it does a
-> scheduler wakeup from the callback. We did both static and dynamic
-> testing to identify callbacks that do wakeups throughout the kernel
-> (kernel patch available on request), as the pattern observed is things
-> doing wakeups typically are for use cases that are not freeing memory
-> but something blocking, similar to synchronize_rcu(). So it was a
-> "trivial/obvious" change to make for rxrpc which I might have assumed
-> did not need much supervision because it just reverts that API to the
-> old behavior -- still probably no excuse.
->
-> Again, we can talk this out no problem. But I would strongly recommend
-> not calling it "crazy thing", as we did all due diligence for almost a
-> year (talking about it at LPC, working through various code paths and
-> bugs, 4 different patch redesigns on the idea (including the opt-in
-> that you are bringing up), including a late night debugging session to
-> figure this out etc).
+Although commit f29b5f3e6fc0 ("show_delta: Update script to support python
+versions 2.5 through 3.3") claims that show_delta is python3-compatible, it
+uses some functions that were removed in python3: string.split, string.atof
+and string.find. Replace these with modern equivalents.
 
-Apologies.
+Also, to suppress newlines from print(), the 'end' parameter is now required.
 
-For me "crazy" does not have the same meaning, apparently.
+With these changes, the script can be used under python3, so update the
+shebang line to reflect this.
 
-I will try to use more neutral words in the future.
+Signed-off-by: Jonathan Davies <jonathan.davies@nutanix.com>
+---
+ scripts/show_delta | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
->
-> Just to clarify, I know you review/maintain a lot of the networking
-> code and I really appreciate that (not praising just for the sake).
-> And I care about the kernel too, just like you.
+diff --git a/scripts/show_delta b/scripts/show_delta
+index 28e67e178194..10f0c9089611 100755
+--- a/scripts/show_delta
++++ b/scripts/show_delta
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ # SPDX-License-Identifier: GPL-2.0-only
+ #
+ # show_deltas: Read list of printk messages instrumented with
+@@ -46,8 +46,8 @@ def get_time(line):
+ 		raise ValueError
+ 
+ 	# split on closing bracket
+-	(time_str, rest) = string.split(line[1:],']',1)
+-	time = string.atof(time_str)
++	(time_str, rest) = line[1:].split(']', 1)
++	time = float(time_str)
+ 
+ 	#print "time=", time
+ 	return (time, rest)
+@@ -111,7 +111,7 @@ def main():
+ 					(time, rest) = get_time(line)
+ 				except:
+ 					continue
+-				if string.find(rest, base_str)==1:
++				if rest.find(base_str)==1:
+ 					base_time = time
+ 					found = 1
+ 					# stop at first match
+@@ -123,6 +123,6 @@ def main():
+ 		base_time = 0.0
+ 
+ 	for line in lines:
+-		print (convert_line(line, base_time),)
++		print (convert_line(line, base_time), end='')
+ 
+ main()
+-- 
+2.34.1
 
-I had no doubts about that, really.
