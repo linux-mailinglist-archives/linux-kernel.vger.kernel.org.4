@@ -2,93 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA49362E1D6
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 17:29:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD4CA62E1C8
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 17:28:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234811AbiKQQ3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 11:29:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34980 "EHLO
+        id S239745AbiKQQ2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 11:28:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234957AbiKQQ2K (ORCPT
+        with ESMTP id S240596AbiKQQ1m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 11:28:10 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2814313F0C
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 08:27:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668702432;
+        Thu, 17 Nov 2022 11:27:42 -0500
+Received: from mxout3.routing.net (mxout3.routing.net [IPv6:2a03:2900:1:a::8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6BC73B8A;
+        Thu, 17 Nov 2022 08:27:35 -0800 (PST)
+Received: from mxbox2.masterlogin.de (unknown [192.168.10.89])
+        by mxout3.routing.net (Postfix) with ESMTP id CC97562631;
+        Thu, 17 Nov 2022 16:27:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
+        s=20200217; t=1668702454;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ECSnbQYfyTzj4hb5xC2FkZlFvx+IZRrl+au2Rw9T6WM=;
-        b=b1W7SD++7/eHRs04MbtjXhhqyv9dQ9q12TjfYq+lr7e9l7Q7HcbgSiiWHgNLw+nJJ2VM2l
-        XtH6GMu2lGv1byw7XpLMGSNQItP30eOVHLqUr1pu7NDYH77m5Bcnrtb5YVfX8G4vcNDWZ2
-        RTzfo146vkaDMoMzqAyRAfem5rwiO68=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-120-a4GArCUPNteFQirxUpXz0g-1; Thu, 17 Nov 2022 11:27:10 -0500
-X-MC-Unique: a4GArCUPNteFQirxUpXz0g-1
-Received: by mail-qt1-f199.google.com with SMTP id z11-20020a05622a028b00b003a550fa8989so2091241qtw.12
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 08:27:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ECSnbQYfyTzj4hb5xC2FkZlFvx+IZRrl+au2Rw9T6WM=;
-        b=2W4luGV/yoef4iXnHSfKc6coFCVt6YgiI1iuDmzBbXmn28RGOpk+tBFz2ATfQq10a5
-         iRzMi2vJINP6MKAs+XClP2d7yWXpne7kBS1k+Rgl7SP36OpuJjB8HH8fxgQinkKNqG/y
-         Dkxaa88JX3FfnZ5jn7LuEptGGjOEbuyjDzKxxZWspsJ9YLfdtd7hDEdPFdJZnW7KaFYF
-         Y2wtiwIATEpvnWvpxxpKf21fPUfEWTMrQoQH18YudJX9Usp7ujNeEMmMpaBODjp214np
-         IoOXaaB53PC4PixvMLRAR2Jn8c7X7NvHw+186OudZH5Mpc7CmhOy/K3SXt1s3aSMQL2a
-         d7Pw==
-X-Gm-Message-State: ANoB5pmw99Q/3hoOT1DtgoKBmybjZbKhNYPEi01sqsUoFoJBZu63Tcpt
-        heIc+dVxforNpliizJH49cvvjM1mY/dyNCZk2xVgsGTPxd1ZdYBlEIGnnCA1GQ1j3hnWIsypiG8
-        1HsE6D9DYdtXGtHA/qYVsL0gY
-X-Received: by 2002:ac8:704:0:b0:39c:d509:76a5 with SMTP id g4-20020ac80704000000b0039cd50976a5mr2899884qth.382.1668702430475;
-        Thu, 17 Nov 2022 08:27:10 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7EJS/miV6XQ6ptWdO+LFShsaM6eU5na38uW33M+lBwqqItY3BuFgTw/XjdD19YLVqgAVclZg==
-X-Received: by 2002:ac8:704:0:b0:39c:d509:76a5 with SMTP id g4-20020ac80704000000b0039cd50976a5mr2899857qth.382.1668702430219;
-        Thu, 17 Nov 2022 08:27:10 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id u12-20020a37ab0c000000b006bb29d932e1sm681515qke.105.2022.11.17.08.27.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 08:27:09 -0800 (PST)
-Date:   Thu, 17 Nov 2022 11:27:08 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     James Houghton <jthoughton@google.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Zach O'Keefe <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v2 10/47] hugetlb: add hugetlb_pte to track HugeTLB
- page table entries
-Message-ID: <Y3Zg3PgqSgDt/Z2t@x1n>
-References: <20221021163703.3218176-1-jthoughton@google.com>
- <20221021163703.3218176-11-jthoughton@google.com>
- <Y3Vhl6jzTLP0AggE@x1n>
- <CADrL8HUZRAT1ViYniBEL=SQaFsmwSpMUmR6tSWy11LdbdhePnQ@mail.gmail.com>
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=gJcKjc3U/1ZgUtZqBtBqjQ25Ma5XTx9jmqwsXvu8sJ8=;
+        b=YF2QEJksGC+YKvEzRPajXrUawr/zW5CrAmEt+nZJ80HVWBJo0fG+WOqRxUVMUPqKt7u+CY
+        E7pwGQ9EGTW9/QTyCIgZfs0icZgE2wHQDsuCE2PsJiUBEvuOZFceN/5Mj5fMm0ODsri6Ln
+        EWy3oCXTXbOVI70qyZ15vfhiVtBectM=
+Received: from frank-G5.. (fttx-pool-80.245.75.65.bambit.de [80.245.75.65])
+        by mxbox2.masterlogin.de (Postfix) with ESMTPSA id 40E96100501;
+        Thu, 17 Nov 2022 16:27:32 +0000 (UTC)
+From:   Frank Wunderlich <linux@fw-web.de>
+To:     linux-mediatek@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Bo Jiao <Bo.Jiao@mediatek.com>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org
+Subject: [PATCH v5 00/11] Add BananaPi R3
+Date:   Thu, 17 Nov 2022 17:27:17 +0100
+Message-Id: <20221117162728.20608-1-linux@fw-web.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CADrL8HUZRAT1ViYniBEL=SQaFsmwSpMUmR6tSWy11LdbdhePnQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Mail-ID: ef396687-64f9-4e40-a6f7-12ef3db568a6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,69 +65,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 05:00:08PM -0800, James Houghton wrote:
-> On Wed, Nov 16, 2022 at 2:18 PM Peter Xu <peterx@redhat.com> wrote:
-> >
-> > On Fri, Oct 21, 2022 at 04:36:26PM +0000, James Houghton wrote:
-> > > +struct hugetlb_pte {
-> > > +     pte_t *ptep;
-> > > +     unsigned int shift;
-> > > +     enum hugetlb_level level;
-> > > +     spinlock_t *ptl;
-> > > +};
-> >
-> > Do we need both shift + level?  Maybe it's only meaningful for ARM where
-> > the shift may not be directly calculcated from level?
-> >
-> > I'm wondering whether we can just maintain "shift" then we calculate
-> > "level" realtime.  It just reads a bit weird to have these two fields, also
-> > a burden to most of the call sites where shift and level exactly match..
-> 
-> My main concern is interaction with folded levels. For example, if
-> PUD_SIZE and PMD_SIZE are the same, we want to do something like this:
-> 
-> pud = pud_offset(p4d, addr)
-> pmd = pmd_offset(pud, addr) /* this is just pmd = (pmd_t *) pud */
-> pte = pte_offset(pmd, addr)
-> 
-> and I think we should avoid quietly skipping the folded level, which
-> could happen:
-> 
-> pud = pud_offset(p4d, addr)
-> /* Each time, we go back to pte_t *, so if we stored PUD_SHIFT here,
-> it is impossible to know that `pud` came from `pud_offset` and not
-> `pmd_offset`. We must assume the deeper level so that we don't get
-> stuck in a loop. */
-> pte = pte_offset(pud, addr) /* pud is cast from (pud_t * -> pte_t * ->
-> pmd_t *) */
-> 
-> Quietly dropping p*d_offset for folded levels is safe; it's just a
-> cast that we're doing anyway. If you think this is fine, then I can
-> remove `level`. It might also be that this is a non-issue and that
-> there will never be a folded level underneath a hugepage level.
-> 
-> We could also change `ptep` to a union eventually (to clean up
-> "hugetlb casts everything to pte_t *" messiness), and having an
-> explicit `level` as a tag for the union would be nice help. In the
-> same way: I like having `level` explicitly so that we know for sure
-> where `ptep` came from.
+From: Frank Wunderlich <frank-w@public-files.de>
 
-Makes sense.
+This Series adds some Nodes to mt7986 devicetree and the BananaPi R3
 
-> 
-> I can try to reduce the burden at the callsite while keeping `level`:
-> hpage_size_to_level() is really annoying to have everywhere.
+This version is rebased on Matthias' DTS64 next Branch from 2022/11/11.
 
-Yeah this would be nice.
+i included sams series for mt7986 DTS with small changes
+https://patchwork.kernel.org/project/linux-mediatek/cover/20220427124741.18245->
 
-Per what I see most callers are having paired level/shift, so maybe we can
-make hugetlb_hgm_iter_init() to only take one of them and calculate the
-other. Then there can also be the __hugetlb_hgm_iter_init() which takes
-both, only used in the few places where necessary to have explicit
-level/shift.  hugetlb_hgm_iter_init() calls __hugetlb_hgm_iter_init().
+6.2 will support dtso extension for dt overlays:
 
-Thanks,
+"kbuild: Allow DTB overlays to built from .dtso named source files"
+https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git/commit/?h=dt/next&id=363547d2191cbc32ca954ba75d72908712398ff2
+
+There is some discussion about inclusion of dt-overlays and if it is
+better to support mmc also by these:
+
+https://patchwork.kernel.org/comment/25092116/
+https://patchwork.kernel.org/comment/25085681/
+
+i had run full dtbs-check but i end up with some strange warnings in
+ethernet-node that should not come up as phy-handle and sfp/managed
+properties are already defined.
+
+phy-handle made optional
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documen>
+
+property sfp/managed (which is included for mac subnode in yaml above):
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documen>
+
+changes:
+v5:
+- changed usb ranges/reg/unit-adress
+- added reviewd-by's except usb-part due to changes
+
+v4:
+- dropped RFC prefix
+- rebase on matthias' mtk dts-next (for 6.2) branch
+- added author information to overlays
+- fixed sfp binding error
+- added fix for moving wed_pcie node
+- readded missing compatible patches
+
+v3:
+- changed mmc pull-ups
+- added patch for board binding (sent separately before)
+- added pcie node in mt7986 (not yet again in r3)
+- added dt overlays
+
+
+
+
+
+Frank Wunderlich (7):
+  arm64: dts: mt7986: move wed_pcie node
+  dt-bindings: phy: mediatek,tphy: add support for mt7986
+  dt-bindings: usb: mtk-xhci: add support for mt7986
+  dt-bindings: PCI: mediatek-gen3: add SoC based clock config
+  dt-bindings: PCI: mediatek-gen3: add support for mt7986
+  arm64: dts: mt7986: add Bananapi R3
+  arm64: dts: mt7986: add BPI-R3 nand/nor overlays
+
+Sam Shih (4):
+  arm64: dts: mt7986: add spi related device nodes
+  arm64: dts: mt7986: add usb related device nodes
+  arm64: dts: mt7986: add mmc related device nodes
+  arm64: dts: mt7986: add pcie related device nodes
+
+ .../bindings/pci/mediatek-pcie-gen3.yaml      |  64 ++-
+ .../bindings/phy/mediatek,tphy.yaml           |   1 +
+ .../bindings/usb/mediatek,mtk-xhci.yaml       |   1 +
+ arch/arm64/boot/dts/mediatek/Makefile         |   4 +
+ .../mediatek/mt7986a-bananapi-bpi-r3-emmc.dts |  31 ++
+ .../mediatek/mt7986a-bananapi-bpi-r3-nand.dts |  55 +++
+ .../mediatek/mt7986a-bananapi-bpi-r3-nor.dts  |  69 +++
+ .../mediatek/mt7986a-bananapi-bpi-r3-sd.dts   |  25 +
+ .../dts/mediatek/mt7986a-bananapi-bpi-r3.dtsi | 458 ++++++++++++++++++
+ arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts  | 166 +++++++
+ arch/arm64/boot/dts/mediatek/mt7986a.dtsi     | 162 ++++++-
+ arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts  |  63 +++
+ 12 files changed, 1081 insertions(+), 18 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-emmc.dts
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nand.dts
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nor.dts
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-sd.dts
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dtsi
 
 -- 
-Peter Xu
+2.34.1
 
