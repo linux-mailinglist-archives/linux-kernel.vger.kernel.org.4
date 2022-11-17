@@ -2,101 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EBBD62E621
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 21:50:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5280862E62A
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 21:54:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235029AbiKQUuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 15:50:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43748 "EHLO
+        id S235031AbiKQUyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 15:54:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234954AbiKQUuL (ORCPT
+        with ESMTP id S231194AbiKQUyW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 15:50:11 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E10CC2727
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 12:50:09 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id 7so3315514ybp.13
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 12:50:09 -0800 (PST)
+        Thu, 17 Nov 2022 15:54:22 -0500
+Received: from mailfilter05-out40.webhostingserver.nl (mailfilter05-out40.webhostingserver.nl [195.211.74.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 641C1218D
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 12:54:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=niF2TfaqiGWEWf+fbzMXTHzb6tNy2XERgzLkPBLvhBc=;
-        b=d8gqlCMpqbzH9SXu7HdP1XbTINWPqtkjFdpiOVsCHE2abnDL9MzbcWl7Tp6sEhm22R
-         w05RMdqI8/v8B6qaxa5bAwAIJiE0O24PTqf08l0j8yDdHWWij+cn8zdfQXajCgfkbgpW
-         kl1pCbLY2BYviFddRE+cxfP/UFoFhGj8G4ZiYM2bj1K53H7S+mGS07hgKgusAuA1Qz4c
-         K0wX1SnlPRyO3Lg4ElU/WsDojNMQzuhqzIydhR0pRhd6K1Qu9ghdJNSHeDhr93qBH0Vk
-         qE1QUqkEAVdkNTBWGJXlPYQqcYMq3JEOCkRpDi2JGdx7u0vywJHqES649lpWgfKV8zr3
-         YEeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=niF2TfaqiGWEWf+fbzMXTHzb6tNy2XERgzLkPBLvhBc=;
-        b=rKbWxD72R7C31h28NygLvDBHuhrTmqguVkoboVS1Ualk9XrfVrkICvUkRGMd00xSYR
-         rqPd1Q+70rEsR60BEODBNkjdqunVjirgvdByNnonGD9AZBIyQOqJ+aLlFqw46ov0hPKW
-         DJp4gNqs34YnBCiF+vM97o0fXdJrJ4CBYM50Mr3MpVm9pvlVnb1yn+Z3sPL3SLGrae47
-         ZdeTwHntFHXat69pTaC43Hutl3K6/Qx0RQwcoXLxoauaNMLO9szmPO9oBtC4pj1muDma
-         p/9+XpmYo9GtQ5KNoVh6bWTYLB8oCuXR1L91/AuN2hCNSfeHVkHB9GM/Y07pJLGwdwJf
-         AAQA==
-X-Gm-Message-State: ANoB5pkp/kPY/Q+JhR/JJbdUodn2SDoT8FiapPPBvLkLUtFjMCqU2dGd
-        8cjr9J4e/lBsBKqr/rnUkeTqG+G/naKU6B5Ini6ROQ==
-X-Google-Smtp-Source: AA0mqf7zka4IouqmmsdERQL2C8NaNXIo67ho2D/5Z6cCUq0+wkfec9WZvlCC2Tgqul2V23BCPvtxNZNsDVlc9MeHF7E=
-X-Received: by 2002:a25:ce83:0:b0:6dd:edba:c7cb with SMTP id
- x125-20020a25ce83000000b006ddedbac7cbmr3628727ybe.507.1668718209114; Thu, 17
- Nov 2022 12:50:09 -0800 (PST)
+        d=exalondelft.nl; s=whs1;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc:to:from:
+         from;
+        bh=jw62oI9VQIF8XDYXE+BEsn+Rf/63tDx8HvpIrdQjyEw=;
+        b=fa1RsfUYHTA8bPHM1do9MoO+RXhXBNnuUQaN1wEkBp7is78v60lmIYssFw4ad00EnuA8vNfbLnZe+
+         fZoKKRFIYO68+3FmdIFFrp9KkhvAE4DMluboV8l0BRX0uiyPCKl9LyFc2f37yhhNe5nKifhnlJWKff
+         GbUS59TYgbIeHTNwEEjktDuEXlYyds4Cn6drhJcEld9UDoqli1P+EKIES7tDxQpaVZYuBfeTy0Rkc4
+         71YPl9X8jmfbjRuSw91ZSA2FcJF6we+sUbEAX7C9ysqMlH8w6VgJ1l/ehsELfFx45D3IPVTgUfV0PM
+         S5rYfWmOpV0Q3jzsnp4pGEe7rV3f6cg==
+X-Halon-ID: ffc03dc5-66b9-11ed-9686-001a4a4cb933
+Received: from s198.webhostingserver.nl (s198.webhostingserver.nl [141.138.168.154])
+        by mailfilter05.webhostingserver.nl (Halon) with ESMTPSA
+        id ffc03dc5-66b9-11ed-9686-001a4a4cb933;
+        Thu, 17 Nov 2022 21:54:16 +0100 (CET)
+Received: from 2a02-a466-68ed-1-6f6f-9a68-8ab0-3e9e.fixed6.kpn.net ([2a02:a466:68ed:1:6f6f:9a68:8ab0:3e9e] helo=delfion.fritz.box)
+        by s198.webhostingserver.nl with esmtpa (Exim 4.96)
+        (envelope-from <ftoth@exalondelft.nl>)
+        id 1ovlto-0054mk-0i;
+        Thu, 17 Nov 2022 21:54:16 +0100
+From:   Ferry Toth <ftoth@exalondelft.nl>
+To:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Sean Anderson <sean.anderson@seco.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Ferry Toth <fntoth@gmail.com>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        stable@vger.kernel.org, Ferry Toth <ftoth@exalondelft.nl>
+Subject: [PATCH v3 0/2] usb: dwc3: core: defer probe on ulpi_read_id timeout
+Date:   Thu, 17 Nov 2022 21:54:09 +0100
+Message-Id: <20221117205411.11489-1-ftoth@exalondelft.nl>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-References: <20221116185500.40431-1-nfrayer@baylibre.com> <864juypoax.wl-maz@kernel.org>
-In-Reply-To: <864juypoax.wl-maz@kernel.org>
-From:   Nicolas Frayer <nfrayer@baylibre.com>
-Date:   Thu, 17 Nov 2022 21:49:58 +0100
-Message-ID: <CANyCTtTfhhORL32EweGN2Gtx9=kpA+PAxTUKE84C5sGmjTfPyw@mail.gmail.com>
-Subject: Re: [PATCH 0/2] irqchip: Kconfig: Add module support for TI inta/intr
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     tglx@linutronix.de, linux-kernel@vger.kernel.org,
-        khilman@baylibre.com, glaroque@baylibre.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Antivirus-Scanner: Clean mail though you should still use an Antivirus
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le mer. 16 nov. 2022 =C3=A0 22:44, Marc Zyngier <maz@kernel.org> a =C3=A9cr=
-it :
->
-> On Wed, 16 Nov 2022 18:54:58 +0000,
-> Nicolas Frayer <nfrayer@baylibre.com> wrote:
-> >
-> > Added module support for TI interrupt aggregator and interrupt router
-> >
-> > Nicolas Frayer (2):
-> >   irqchip: Kconfig: module build support for the TI interrupt router
-> >     driver
-> >   irqchip: Kconfig: Added module build support for the TI interrupt
-> >     aggregator
-> >
-> >  arch/arm64/Kconfig.platforms |  2 --
-> >  drivers/irqchip/Kconfig      | 12 +++++++-----
-> >  2 files changed, 7 insertions(+), 7 deletions(-)
->
-> How did you test that it doesn't introduce any regression due to
-> implicit ordering requirements that are now voided?
-Hi Marc,
-I tested on a TI AM62x SK board.
-By default the drivers are set to ARCH_K3 (built-in).
->
-> Please Cc the TI folks so that they can at least check this.
-I'll resend the series with more description and CC Ti engineers.
-Thanks
->
->         M.
->
-> --
-> Without deviation from the norm, progress is not possible.
+v3:
+- Correct commit message (Greg)
+- Add fixes (Greg)
+
+v2:
+- Split into separate commits (Thinh)
+- Only defer probe on -ETIMEDOUT (Thinh)
+- Loose curly brackets (Heikki)
+
+Ferry Toth (2):
+  usb: ulpi: defer ulpi_register on ulpi_read_id timeout
+  usb: dwc3: core: defer probe on ulpi_read_id timeout
+
+ drivers/usb/common/ulpi.c | 2 +-
+ drivers/usb/dwc3/core.c   | 7 ++++++-
+ 2 files changed, 7 insertions(+), 2 deletions(-)
+
+-- 
+2.37.2
+
