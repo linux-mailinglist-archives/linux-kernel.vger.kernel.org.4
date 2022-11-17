@@ -2,204 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB17D62E3AD
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 19:01:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B93562E3E4
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 19:13:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240256AbiKQSBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 13:01:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43908 "EHLO
+        id S239785AbiKQSNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 13:13:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239005AbiKQSBq (ORCPT
+        with ESMTP id S240421AbiKQSN1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 13:01:46 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E184F7FC36;
-        Thu, 17 Nov 2022 10:01:44 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Thu, 17 Nov 2022 13:13:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35CD587576
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 10:12:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 4F3121F8E2;
-        Thu, 17 Nov 2022 18:01:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1668708102; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/+JxpzcfcwJFtmpbUfqLQDQyF+RiIM1YT3S3Jpqg/d4=;
-        b=AmzzsF36XcppJVp01VviVMI/EYGRXtbY8kWOFLbzX5FU/64nCzJg0Ug4nfEM5rBkKARJFc
-        /xs/oPABmyaLRwMHmbrBJckpbrOw1gFRUxqFxgm5fhz1Gy6X+rkA5IgwZBSuJP6QItjk5n
-        hcsMlgKY0IDnchfnwh1btDeho3h2dgs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1668708102;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/+JxpzcfcwJFtmpbUfqLQDQyF+RiIM1YT3S3Jpqg/d4=;
-        b=KAzzWGSo6pgveVs1eykJsU/7Lh9nA/8embvn35gm2rFFxbezxMLlIOicf2IuLpzN6Chgkf
-        BC2WvIWL9k6VkIAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E10B713A12;
-        Thu, 17 Nov 2022 18:01:41 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id M9srNAV3dmMFYAAAMHmgww
-        (envelope-from <lhenriques@suse.de>); Thu, 17 Nov 2022 18:01:41 +0000
-Received: from localhost (brahms.olymp [local])
-        by brahms.olymp (OpenSMTPD) with ESMTPA id c385487c;
-        Thu, 17 Nov 2022 18:02:41 +0000 (UTC)
-From:   =?utf-8?Q?Lu=C3=ADs_Henriques?= <lhenriques@suse.de>
-To:     Xiubo Li <xiubli@redhat.com>
-Cc:     Ilya Dryomov <idryomov@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>, ceph-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ceph: make sure directories aren't complete after
- setting crypt context
-References: <20221116153703.27292-1-lhenriques@suse.de>
-        <5de0ae69-5e3d-2ccb-64a3-971db66477f8@redhat.com>
-        <41710b3d-b37f-8c65-d55d-c4137a366efd@redhat.com>
-Date:   Thu, 17 Nov 2022 18:02:41 +0000
-In-Reply-To: <41710b3d-b37f-8c65-d55d-c4137a366efd@redhat.com> (Xiubo Li's
-        message of "Thu, 17 Nov 2022 19:08:02 +0800")
-Message-ID: <87o7t5mpby.fsf@suse.de>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CE9E9621F4
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 18:12:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DB60C433D6;
+        Thu, 17 Nov 2022 18:12:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1668708778;
+        bh=KCxIvC+hdiZE+1xFJ8BT4IQmgI+9o6zwKKamoBYbuNM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VZEIAlFP2o9Yg1Z/w7VpifR6D0Fwaxj/sMh8ldKE1jsH9NbJwe2MwIfRjTAHJeJjE
+         9KAfvkOaR9UmvUrI/KUoZ5IXk3Cdjiwuw99hwL7kwsjS22tKw08hw/ST2ptF2Iio+z
+         Ta/6iFmu/XE88+Udz+7LzikWgNIrnawguU5YZQeo=
+Date:   Thu, 17 Nov 2022 19:03:21 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Deepak R Varma <drv@mailo.com>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        gustavoars@kernel.org
+Subject: Re: [PATCH] staging: wlan-ng: Replace zero-length arrays with
+ DECLARE_FLEX_ARRAY() helper
+Message-ID: <Y3Z3aatcaISvqURJ@kroah.com>
+References: <Y3YKhee8L+kAfHM4@qemulion>
+ <Y3YvGdkyGm7azGg4@kroah.com>
+ <Y3Y1N6AwWEXLpSrx@qemulion>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3Y1N6AwWEXLpSrx@qemulion>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Xiubo Li <xiubli@redhat.com> writes:
+On Thu, Nov 17, 2022 at 06:50:55PM +0530, Deepak R Varma wrote:
+> On Thu, Nov 17, 2022 at 01:54:49PM +0100, Greg Kroah-Hartman wrote:
+> > On Thu, Nov 17, 2022 at 03:48:45PM +0530, Deepak R Varma wrote:
+> > > The code currently uses C90 standard extension based zero length arrays.
+> > > The zero length array member also happens to be the only member of the
+> > > structs. Such zero length array declarations are deprecated and the
+> > > new C99 standard extension of flexible array declarations are to be
+> > > used instead.
+> > >
+> > > The DECLARE_FLEX_ARRAY() helper allows for a flexible array member as
+> > > the only member in a structure. Refer to these links [1], [2] for
+> > > details.
+> > >
+> > > [1] https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
+> > > [2] https://lkml.kernel.org/r/YxKY6O2hmdwNh8r8@work
+> > >
+> > > Issue identified using Coccinelle.
+> > >
+> > > Signed-off-by: Deepak R Varma <drv@mailo.com>
+> > > ---
+> > >
+> > > Notes:
+> > >    1. Proposed change is compile tested only.
+> > >    2. Solution feedback from gustavoars@kernel.org
+> > >
+> > >
+> > >  drivers/staging/wlan-ng/hfa384x.h | 6 +++---
+> > >  1 file changed, 3 insertions(+), 3 deletions(-)
+> > >
+> > > diff --git a/drivers/staging/wlan-ng/hfa384x.h b/drivers/staging/wlan-ng/hfa384x.h
+> > > index 0611e37df6ac..3a1edcb43e07 100644
+> > > --- a/drivers/staging/wlan-ng/hfa384x.h
+> > > +++ b/drivers/staging/wlan-ng/hfa384x.h
+> > > @@ -960,15 +960,15 @@ struct hfa384x_pdr_nicid {
+> > >  } __packed;
+> > >
+> > >  struct hfa384x_pdr_refdac_measurements {
+> > > -	u16 value[0];
+> > > +	DECLARE_FLEX_ARRAY(u16, value);
+> > >  } __packed;
+> >
+> > Why?  This structure is never used anywhere, right?  So why is this
+> > needed to be changed and not just removed entirely?  Same for the other
+> > structures in this patch.
+> 
+> Hello Greg,
+> I am unable to confirm that these structures are truly not needed in the absence
+> if a real device based testing. I could only validate that using the compile
+> build and driver loading.
 
-> On 17/11/2022 16:03, Xiubo Li wrote:
->>
->> On 16/11/2022 23:37, Lu=C3=ADs Henriques wrote:
->>> When setting a directory's crypt context, __ceph_dir_clear_complete() n=
-eeds
->>> to be used otherwise, if it was complete before, any old dentry that's =
-still
->>> around will be valid.
->>>
->>> Signed-off-by: Lu=C3=ADs Henriques <lhenriques@suse.de>
->>> ---
->>> Hi!
->>>
->>> Here's a simple way to trigger the bug this patch is fixing:
->>>
->>> # cd /cephfs
->>> # ls mydir
->>> nKRhofOAVNsAwVLvDw7a0c9ypsjbZfK3n0Npnmni6j0
->>> # ls mydir/nKRhofOAVNsAwVLvDw7a0c9ypsjbZfK3n0Npnmni6j0/
->>> Cyuer5xT+kBlEPgtwAqSj0WK2taEljP5vHZ,D8VXCJ8
->>> u+46b2XVCt7Obpz0gznZyNLRj79Q2l4KmkwbKOzdQKw
->>> # fscrypt unlock mydir
->>> # touch /mnt/test/mydir/mysubdir/file
->>> touch: cannot touch '/mnt/test/mydir/mysubdir/file': No such file or
->>> directory
->>>
->>> =C2=A0 fs/ceph/crypto.c | 4 ++++
->>> =C2=A0 1 file changed, 4 insertions(+)
->>>
->>> diff --git a/fs/ceph/crypto.c b/fs/ceph/crypto.c
->>> index 35a2ccfe6899..dc1557967032 100644
->>> --- a/fs/ceph/crypto.c
->>> +++ b/fs/ceph/crypto.c
->>> @@ -87,6 +87,10 @@ static int ceph_crypt_get_context(struct inode *inod=
-e,
->>> void *ctx, size_t len)
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -ERANGE;
->>> =C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 memcpy(ctx, cfa->cfa_blob, ctxlen=
-);
->>> +
->>> +=C2=A0=C2=A0=C2=A0 /* Directory isn't complete anymore */
->>> +=C2=A0=C2=A0=C2=A0 if (S_ISDIR(inode->i_mode) && __ceph_dir_is_complet=
-e(ci))
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 __ceph_dir_clear_complete(c=
-i);
->>
->> Hi Luis,
->>
->> Good catch!
->>
->> BTW, why do this in the ceph_crypt_get_context() ? As my understanding i=
-s that
->> we should mark 'mydir' as incomplete when unlocking it. While as I remem=
-bered
->> the unlock operation will do:
->>
->>
->> Step1: get_encpolicy via 'mydir' as ctx
->> Step2: rm_enckey of ctx from the superblock
->>
-> Sorry, it should be add_enckey.
->>
->> Since I am still running the test cases for the file lock patches, so I =
-didn't
->> catch logs to confirm the above steps yet.
->>
->> If I am right IMO then we should mark the dir as incomplete in the Step2
->> instead, because for non-unlock operations they may also do the Step1.
->>
-> Your patch will work. But probably we should do this just around
-> __fscrypt_prepare_readdir() or fscrypt_prepare_readdir() instead ? We nee=
-d to
-> detect that once the 'inode->i_crypt_info' changed then mark the dir as
-> incomplete.
->
-> For now for the lock operation it will evict the inode, which will help d=
-o this
-> for us already. But for unlock case, we need to handle it by ourself.
+Think this through, if no one is actually using this structure, and it
+is of 0 size, then do you think it is being used?
 
-OK, that makes sense and to be honest I thought that there should be
-another place for doing this. Unfortunately, I didn't found it: in the
-test case I have the fscrypt_prepare_readdir() isn't called:
+> This change that I am proposing in the interim would enable the compiler to
+> protect the structure from addition of a new member below the zero length array.
 
-   # cd /cephfs
-   # ls mydir
-   nKRhofOAVNsAwVLvDw7a0c9ypsjbZfK3n0Npnmni6j0
-   # ls mydir/nKRhofOAVNsAwVLvDw7a0c9ypsjbZfK3n0Npnmni6j0/
-   Cyuer5xT+kBlEPgtwAqSj0WK2taEljP5vHZ,D8VXCJ8 u+46b2XVCt7Obpz0gznZyNLRj79Q=
-2l4KmkwbKOzdQKw
+Why would you want to add a new member below this?  That's not what is
+happening here at all.
 
-At this point readdir was executed, of course.  And
-__ceph_dir_set_complete() is also used to indicate that we have the full
-contents.  However, executing the following commands won't result in any
-new readdir():
+Please think this through a bit more.
 
-   # fscrypt unlock mydir
-   # touch /mnt/test/mydir/mysubdir/file
+good luck!
 
-and since the encryption key is set at the sb level, I couldn't find a way
-to detect changes in inode->i_crypt_info.  ceph_d_revalidate() is invoked
-but at that point I don't thing we have a way to know what is changing.
-
-Any ideas?
-
-Cheers,
---=20
-Lu=C3=ADs
-
->
-> Thanks!
->
-> - Xiubo
->
->
->> Thanks!
->>
->> - Xiubo
->>
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return ctxlen;
->>> =C2=A0 }
->>>
->
-
+greg k-h
