@@ -2,80 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C190662E511
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 20:12:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5F9E62E516
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 20:15:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240698AbiKQTM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 14:12:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57954 "EHLO
+        id S240219AbiKQTPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 14:15:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240560AbiKQTMM (ORCPT
+        with ESMTP id S234861AbiKQTPG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 14:12:12 -0500
-Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E6587569;
-        Thu, 17 Nov 2022 11:12:10 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 320B163E5175;
-        Thu, 17 Nov 2022 20:12:09 +0100 (CET)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id EeudFGW_NLvE; Thu, 17 Nov 2022 20:12:08 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id CBA1063E516B;
-        Thu, 17 Nov 2022 20:12:08 +0100 (CET)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id IduuldTnhFni; Thu, 17 Nov 2022 20:12:08 +0100 (CET)
-Received: from blindfold.corp.sigma-star.at (213-47-184-186.cable.dynamic.surfer.at [213.47.184.186])
-        by lithops.sigma-star.at (Postfix) with ESMTPSA id 4918F63E5168;
-        Thu, 17 Nov 2022 20:12:08 +0100 (CET)
-From:   Richard Weinberger <richard@nod.at>
-To:     linux-nfs@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        jlayton@kernel.org, chuck.lever@oracle.com, anna@kernel.org,
-        trond.myklebust@hammerspace.com, viro@zeniv.linux.org.uk,
-        raven@themaw.net, chris.chilvers@appsbroker.com,
-        david.young@appsbroker.com, luis.turcitu@appsbroker.com,
-        david@sigma-star.at, Richard Weinberger <richard@nod.at>
-Subject: [PATCH 3/3] NFS: nfs_encode_fh: Remove S_AUTOMOUNT check
-Date:   Thu, 17 Nov 2022 20:11:51 +0100
-Message-Id: <20221117191151.14262-4-richard@nod.at>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20221117191151.14262-1-richard@nod.at>
-References: <20221117191151.14262-1-richard@nod.at>
+        Thu, 17 Nov 2022 14:15:06 -0500
+Received: from mail-4318.protonmail.ch (mail-4318.protonmail.ch [185.70.43.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33EC14D38;
+        Thu, 17 Nov 2022 11:15:05 -0800 (PST)
+Date:   Thu, 17 Nov 2022 19:14:50 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1668712503; x=1668971703;
+        bh=UHkvVZhelkt87lb5NxW5b94WAvZpnGxgLmfBH+Voh+Y=;
+        h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+         Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+        b=zlZDbCMP+HCK6Gg+23TVi2Euz3znZ6FE+eFeNGK2glZkksObrzW3N5Oy5DAM4VyFL
+         26MxHYtRCjmTxD5yxR8VdszNMsg2CD13DMiaxFXkYI669VV96LG3ICQSp/VRovXHVO
+         dxCktZmUCLNtzynRYqYfW/lek/nNYYzmCNbgfk3t5S6rASEAsc24+BF1F5/AbO6t3G
+         x0iVcaS2V3uNLVntyKDrSIVIZM7r43XzCsdopnHmBAUrK79jAC7sw9mOxgaNpDI2OW
+         gpQADYRuXRILdUAErRVxnHpdtfULUKWF6vAwnapGbKiyawuipcuRdzWXnIaNlaTUQZ
+         Jv3HN+blkTQcw==
+To:     linux-kernel@vger.kernel.org
+From:   "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
+Cc:     Markuss Broks <markuss.broks@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Henrik Rydberg <rydberg@bitmath.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Nikita Travkin <nikita@trvn.ru>, linux-input@vger.kernel.org,
+        devicetree@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+Subject: [RESEND PATCH 0/3] Add supports for Imagis IST3038 and IST30XXB
+Message-ID: <20221117191436.87938-1-linmengbo0689@protonmail.com>
+Feedback-ID: 40467236:user:proton
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now with NFSD being able to cross into auto mounts,
-the check can be removed.
+This series adds supports for Imagis IST3038 and IST30XXB IC, which are
+variants of Imagis IST3038 IC. They have a different register map
+(labeled protocol b), but otherwise it seems to be the same IC.
+It is also possible to support various other Imagis ICs using
+protocol b, such as (but not limited to) IST3044B, IST3026, IST3032,
+IST3026B, IST3032B. However, most of them (all except IST3044B)
+use a different coordinate format, so extra effort would be needed
+to support those.
 
-Signed-off-by: Richard Weinberger <richard@nod.at>
----
- fs/nfs/export.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/fs/nfs/export.c b/fs/nfs/export.c
-index 01596f2d0a1e..0a5ee1754d50 100644
---- a/fs/nfs/export.c
-+++ b/fs/nfs/export.c
-@@ -42,7 +42,7 @@ nfs_encode_fh(struct inode *inode, __u32 *p, int *max_l=
-en, struct inode *parent)
- 	dprintk("%s: max fh len %d inode %p parent %p",
- 		__func__, *max_len, inode, parent);
-=20
--	if (*max_len < len || IS_AUTOMOUNT(inode)) {
-+	if (*max_len < len) {
- 		dprintk("%s: fh len %d too small, required %d\n",
- 			__func__, *max_len, len);
- 		*max_len =3D len;
---=20
-2.26.2
+Tested on Samsung Galaxy Core Prime and Grand Max.
 
