@@ -2,139 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AD6562DCE3
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:34:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3937862DCE7
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:36:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238685AbiKQNez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 08:34:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49168 "EHLO
+        id S234885AbiKQNgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 08:36:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239985AbiKQNeu (ORCPT
+        with ESMTP id S234893AbiKQNgC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 08:34:50 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 412AB6D4B3;
-        Thu, 17 Nov 2022 05:34:48 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id bs21so3863063wrb.4;
-        Thu, 17 Nov 2022 05:34:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EhKVrw7KFZLn19rEhcnsVCkZk3EVXEQ/dtAysM5yqZs=;
-        b=B/L/OYCqdPqaKN60Yirvyp/xs6JOCIuqb66bFgjcdBJLtXQiw6xc0AU1s84FHbe2e/
-         PnhxqJqULnV9dP7+GxBXDOKu178DEr6M2AZ2K5iwUgDVPBoed7qcgMVuHD0aZhSlJVkV
-         DebKnQNJ2VEIwLKXBluPepo7zDBVzEmX9qMd6lZCeRtNd/F36g2jv40nLdWKNLtgwsxk
-         NB2E1XRBB/NKNcIIvzJ9CaB4FQVqDSykkae7b8Q9MA00G5SJU3csOMdPL6ZhJy29z7kI
-         koosCRasnhwU+u6BI+BQeyObnmjjzR2p/wocFa7BEBuDs6ETP/rPngfmmzVVWDdTCjap
-         qCaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EhKVrw7KFZLn19rEhcnsVCkZk3EVXEQ/dtAysM5yqZs=;
-        b=HF2qWE4PQTW9pEsbZhACWqnbW+24lDiQGL1cGWc9dP36zsjVAnV/XVKezWwpJ8finU
-         /eQUXqKhXc1kVJkYvzfwegsZDQ/AL08UvlwhzCTNrq0o5h+YXa9tAuRySGQjABSd3ruc
-         bkszt488XIPuTAlxeOx3XzL5lEObsm7fKZDARTL9AqWL0LBLkanZaWNa+OT3b7eCa2JI
-         VwlvY/H3UM58Q3pr8GTbuge8dfTUnjfAosQz37JN1PKa7EG+D56jJe765Uvm//zZoIBx
-         958GWMP8Jt/LefJGbcd+Dusx01j6KqmLzpY29h0cI6zy+F/nMgL6+ZbLtV0lpzi2fQVI
-         b/ww==
-X-Gm-Message-State: ANoB5pmVpUN1dG6rY3TqMck6m5jPDtMiGYFajI498cjyeDXe82Cd0ug5
-        MG4wy5Nk4JQpILEeIWvGRv1goClc9+RfMw==
-X-Google-Smtp-Source: AA0mqf5/+mRn66/+kGSXe1ZnQM3zgaeAFTVcX4rccGy0llnt7XV8Gpo+YfaUqoTAQE+IvVmvsdgJ0Q==
-X-Received: by 2002:adf:f843:0:b0:241:bcae:987f with SMTP id d3-20020adff843000000b00241bcae987fmr306084wrq.619.1668692086759;
-        Thu, 17 Nov 2022 05:34:46 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id t13-20020a05600c198d00b003cf75f56105sm1653285wmq.41.2022.11.17.05.34.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 05:34:46 -0800 (PST)
-Date:   Thu, 17 Nov 2022 16:34:43 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     oe-kbuild@lists.linux.dev, Denis Arefev <arefev@swemel.ru>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        trufanov@swemel.ru, vfh@swemel.ru
-Subject: Re: [PATCH] namespace: Added pointer check in copy_mnt_ns()
-Message-ID: <202211171954.d4Dr5tHz-lkp@intel.com>
+        Thu, 17 Nov 2022 08:36:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E11373428;
+        Thu, 17 Nov 2022 05:36:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E692161E18;
+        Thu, 17 Nov 2022 13:36:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA920C433D6;
+        Thu, 17 Nov 2022 13:36:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668692161;
+        bh=K2PdyXue1T1mB/kQrqHZQRjeefIBFNaF0sLD9ShBKWY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SYlAqzB1OTHwETApwkMwZk4pY5rKcO3R/AdOeGSZMK4xDdPJSU9tUZOqtsAof9xMx
+         9EElW5NudHGjgiyV6YdWOA0LEJRBObSFN5L6hQ6NaTrD75DYkVAV+cpvGsWCHdsS41
+         Uny7dtY9zPK3VDZq/FOCjDYN74mPR511cOfIG+6nHaDTyCG1l9fnCS2j/Wo8txuwnZ
+         hVMwH2yzJ3vLUeqzRfRKYzt4U48VqjJaZQuGXWcfeDAvoLtUgAIiogN1fI9usUcdGO
+         ydyLH20OWdtWMMDHZ0O0fSMTtOXkL+eR2coAjxgwkLCa9xlzjIZV3BeQ/mA7L1rTa7
+         rNA+N5VMf0IOg==
+Date:   Thu, 17 Nov 2022 13:35:57 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, Lee Jones <lee@kernel.org>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Marco Pagani <marpagan@redhat.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 07/11] regmap: indirect: Add indirect regmap support
+Message-ID: <Y3Y4vWr/CGbaH0HQ@sirena.org.uk>
+References: <20221117120515.37807-1-ilpo.jarvinen@linux.intel.com>
+ <20221117120515.37807-8-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="nQO9GaPF0umGSqdg"
 Content-Disposition: inline
-In-Reply-To: <20221116091255.84576-1-arefev@swemel.ru>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221117120515.37807-8-ilpo.jarvinen@linux.intel.com>
+X-Cookie: Ego sum ens omnipotens.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Denis,
 
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+--nQO9GaPF0umGSqdg
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Denis-Arefev/namespace-Added-pointer-check-in-copy_mnt_ns/20221116-171424
-patch link:    https://lore.kernel.org/r/20221116091255.84576-1-arefev%40swemel.ru
-patch subject: [PATCH] namespace: Added pointer check in copy_mnt_ns()
-config: x86_64-randconfig-m001
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+On Thu, Nov 17, 2022 at 02:05:11PM +0200, Ilpo J=E4rvinen wrote:
+> Add support for indirect register access via a regmap interface.
+>=20
+> Indirect register access is a generic way to access registers indirectly.
+> One use case is accessing registers on Intel FPGA IPs with e.g. PMCI or
+> HSSI.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <error27@gmail.com>
+I can't tell from this changelog what exactly you're trying to
+implement here...
 
-New smatch warnings:
-fs/namespace.c:3518 copy_mnt_ns() error: we previously assumed 'p' could be null (see line 3518)
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Indirect Register Access.
+> + *
+> + * Copyright (C) 2020-2022 Intel Corporation, Inc.
+> + */
+> +#include <linux/debugfs.h>
 
-Old smatch warnings:
-fs/namespace.c:4059 mount_setattr_prepare() error: uninitialized symbol 'err'.
+Please make the entire comment a C++ one so things look more
+intentional.
 
-vim +/p +3518 fs/namespace.c
+> +#include <linux/module.h>
+> +#include <linux/mutex.h>
+> +#include <linux/regmap.h>
+> +#include <linux/seq_file.h>
 
-^1da177e4c3f41 Linus Torvalds    2005-04-16  3494  	/*
-^1da177e4c3f41 Linus Torvalds    2005-04-16  3495  	 * Second pass: switch the tsk->fs->* elements and mark new vfsmounts
-^1da177e4c3f41 Linus Torvalds    2005-04-16  3496  	 * as belonging to new namespace.  We have already acquired a private
-^1da177e4c3f41 Linus Torvalds    2005-04-16  3497  	 * fs_struct, so tsk->fs->lock is not needed.
-^1da177e4c3f41 Linus Torvalds    2005-04-16  3498  	 */
-909b0a88ef2dc8 Al Viro           2011-11-25  3499  	p = old;
-cb338d06e9716c Al Viro           2011-11-24  3500  	q = new;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  3501  	while (p) {
-143c8c91cee7ef Al Viro           2011-11-25  3502  		q->mnt_ns = new_ns;
-d29216842a85c7 Eric W. Biederman 2016-09-28  3503  		new_ns->mounts++;
-9559f68915024e Al Viro           2013-09-28  3504  		if (new_fs) {
-9559f68915024e Al Viro           2013-09-28  3505  			if (&p->mnt == new_fs->root.mnt) {
-9559f68915024e Al Viro           2013-09-28  3506  				new_fs->root.mnt = mntget(&q->mnt);
-315fc83e56c699 Al Viro           2011-11-24  3507  				rootmnt = &p->mnt;
-315fc83e56c699 Al Viro           2011-11-24  3508  			}
-9559f68915024e Al Viro           2013-09-28  3509  			if (&p->mnt == new_fs->pwd.mnt) {
-9559f68915024e Al Viro           2013-09-28  3510  				new_fs->pwd.mnt = mntget(&q->mnt);
-315fc83e56c699 Al Viro           2011-11-24  3511  				pwdmnt = &p->mnt;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  3512  			}
-^1da177e4c3f41 Linus Torvalds    2005-04-16  3513  		}
-909b0a88ef2dc8 Al Viro           2011-11-25  3514  		p = next_mnt(p, old);
-909b0a88ef2dc8 Al Viro           2011-11-25  3515  		q = next_mnt(q, new);
-ff6985ba29d455 Denis Arefev      2022-11-16  3516  		if (!q || !p)
-4ce5d2b1a8fde8 Eric W. Biederman 2013-03-30  3517  			break;
-ff6985ba29d455 Denis Arefev      2022-11-16 @3518  		while (!p && (p->mnt.mnt_root != q->mnt.mnt_root))
-                                                                       ^
-The ! needs to be removed.
+I can't see what seq_file.h is used for, which is probably good
+TBH since the interfaces it offers don't look like things I'd
+expect a regmap bus to use.
 
-4ce5d2b1a8fde8 Eric W. Biederman 2013-03-30  3519  			p = next_mnt(p, old);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  3520  	}
-328e6d9014636a Al Viro           2013-03-16  3521  	namespace_unlock();
-^1da177e4c3f41 Linus Torvalds    2005-04-16  3522  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  3523  	if (rootmnt)
-f03c65993b98ee Al Viro           2011-01-14  3524  		mntput(rootmnt);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  3525  	if (pwdmnt)
-f03c65993b98ee Al Viro           2011-01-14  3526  		mntput(pwdmnt);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  3527  
-741a2951306061 JANAK DESAI       2006-02-07  3528  	return new_ns;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  3529  }
+> +static int indirect_bus_reg_read(void *context, unsigned int reg,
+> +				     unsigned int *val)
+> +{
+> +	struct indirect_ctx *ctx =3D context;
+> +	unsigned int cmd, ack, tmpval;
+> +	int ret;
+> +
+> +	cmd =3D readl(ctx->base + ctx->indirect_cfg->cmd_offset);
+> +	if (cmd !=3D ctx->indirect_cfg->idle_cmd)
+> +		dev_warn(ctx->dev, "residual cmd 0x%x on read entry\n", cmd);
+> +
+> +	writel(reg, ctx->base + ctx->indirect_cfg->addr_offset);
+> +	writel(ctx->indirect_cfg->read_cmd, ctx->base + ctx->indirect_cfg->cmd_=
+offset);
+> +
+> +	ret =3D readl_poll_timeout(ctx->base + ctx->indirect_cfg->ack_offset, a=
+ck,
+> +				 (ack & ctx->indirect_cfg->ack_mask) =3D=3D ctx->indirect_cfg->ack_m=
+ask,
+> +				 ctx->indirect_cfg->sleep_us, ctx->indirect_cfg->timeout_us);
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+This all looks very specific to one particular implementation,
+requiring a particular set of memory mapped registers and
+operations - things like the initial read of the command for
+example.  It's not clear to me how much reuse this is likely to
+see outside of the one driver you're trying to add - if you want
+to implement something device specific you can just provide
+the custom operations in the device's regmap configuration rather
+than having to provide a bus.  Why add a bus?
 
+--nQO9GaPF0umGSqdg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmN2OLwACgkQJNaLcl1U
+h9D5ZAf/e5fz0cFGzhXEImFM0J/nvy+stqG9TBm5URXEa3SpNg7qjqiRjbNAjhI3
++7c06CM8HurjZy3klhWEo7/JUGd5v2v32CUWN9W3dEnuQ+M3CB7xT3QiFusJWFbd
+nskK15BqEAEHf3R8PvjdBLYA15iuERAasqkmu7RizSGUASprR8kL98DoMokT70Ss
+y2wld1jFZ/aptfe5HsAuD6wwS9w0oB8M9D00sHpxIJXmaM+Zc8AFvHq+U98Z20ee
+N6SpI82D53BpeJ+WjgfrcjrQ3BTmS31yQsfhmJnv5qjsyqbgK37A9JRI1HQK7157
+sQEZKenH4YfdmGOYe2YMSrM2isDUkg==
+=OsB+
+-----END PGP SIGNATURE-----
+
+--nQO9GaPF0umGSqdg--
