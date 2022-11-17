@@ -2,81 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0131B62E4D6
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 19:54:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB4F662E4CA
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 19:54:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240096AbiKQSyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 13:54:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50760 "EHLO
+        id S231377AbiKQSyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 13:54:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240018AbiKQSyw (ORCPT
+        with ESMTP id S234418AbiKQSyL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 13:54:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F44686A43
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 10:54:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668711239;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pqDtOtNSwX0ZV2YnFqWo79lClAu9bDuVWAJZIEodJ7s=;
-        b=HpsUOQEU44K0KINKcRGDgLeIzb4eCZQZGeFoHnZfIVw1nFfRduZb9f07JM+ke4lNXIlZIg
-        Ukgs+ETqiO5xSd+czSX1rZFwrPoAJpCrRQU0NlZnZXR6f+CHlfHeHzwWSBm4Ydm/KRqd5x
-        kHL+mRUIjF//wsE76j429+QwU70YEfA=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-106-Uo4Zsa69O2ix-lnp1xylFw-1; Thu, 17 Nov 2022 13:53:54 -0500
-X-MC-Unique: Uo4Zsa69O2ix-lnp1xylFw-1
-Received: by mail-qk1-f199.google.com with SMTP id de43-20020a05620a372b00b006fae7e5117fso3220125qkb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 10:53:54 -0800 (PST)
+        Thu, 17 Nov 2022 13:54:11 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 730CF86A48
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 10:54:10 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id k2-20020a17090a4c8200b002187cce2f92so1028528pjh.2
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 10:54:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=7tuTPYaip0buFm1R2LuQQeQrPhqmlAkfQwU5all+C98=;
+        b=YrWkEshLI0itsiLecKhk4dwkmRm2FcGLQhVSYFiiCVDxfQPf7xMnX3wL0UWBXt4/yZ
+         75bcxHlIJDWBaLf32PBaCMOQT4RUdEBw9ynjAVisMNySTa8TaOUUsq8aozrDZ/4ZRLXM
+         UhnL7EyhuxfvwSDMjKYPNvDtZac1Bi3dXaPIuYzc7Khn3Kc263Fxr0cPG6RBbPXrIgJT
+         lCV341NG9BWzUcbaqSpT4exu3kb232urOIoCuE0cnX+H5OeB+CelCrPpbLm4Z10nPBcu
+         7//7r9IntV8SKhai7dClyJRDymY3MHN4RIv50ZmrBbtq4XKH4s2D/mwO1dpubo8O/6Oa
+         Z0bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pqDtOtNSwX0ZV2YnFqWo79lClAu9bDuVWAJZIEodJ7s=;
-        b=DSxTFb9vnQPSSd2x9o2L5SLyfapXR8ppZ/dUGMNCt8JPqayLPvRk2fae4XJhOHLIVh
-         Gyt5pNr5yW54HS/x9KqDrBqS7teeF70kpzFCcrX9N+8Bb8eQKwHXca7BqX0JtHV8NxVI
-         +QgBOhsPJ9e0d7w1/pq6AiG8uoiUXTGVUXMyI7jMJVH2zR3u9E/n6++LtsnmPTJr31Yu
-         awlyPmPkRjzNrFL4P6LwHOlhMS2Ltpot9WRi2Wdg2Qh/AQx8m0JFuGpIuDs8ghXcTbWV
-         3rmj+8HDM0VX21pizo+BlyAYoYB3ODuU9FPyoNRCn3+xE1Mz3QA+QBCwsNPqEvcZ95Uq
-         UT9g==
-X-Gm-Message-State: ANoB5pkUrTbWD/PfxyeC47v89Gp6feDd5xPSBmrKP1r9vte8WwUggkzH
-        FqOZ56LkPRqy1YcfE0YvOkbwA6thZhoU10xbLkdAA1qUvDM+HWozWhx6sZAfROiD4m8d+FOL2xi
-        mdi9p309JKLR/DYRYV7YQSZn3
-X-Received: by 2002:a05:622a:289:b0:343:6909:9204 with SMTP id z9-20020a05622a028900b0034369099204mr3581884qtw.347.1668711234081;
-        Thu, 17 Nov 2022 10:53:54 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4pjBfmBUmb8xyyeg1C+sqT3nsADmA8FXGzdanQiaRc4baapIqKmPjicoswCyXlkvWC03dPvQ==
-X-Received: by 2002:a05:622a:289:b0:343:6909:9204 with SMTP id z9-20020a05622a028900b0034369099204mr3581867qtw.347.1668711233802;
-        Thu, 17 Nov 2022 10:53:53 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id d17-20020a05620a241100b006f87d28ea3asm974024qkn.54.2022.11.17.10.53.52
+        bh=7tuTPYaip0buFm1R2LuQQeQrPhqmlAkfQwU5all+C98=;
+        b=56DiJfCurI1BCneG8sI5CWu6C5nqUy+7eo3u97Nue87qLq+qQ9voSWpEmb+iP/RwXR
+         12wGtTGz7WAml+/d2OA3b0XxMRO3Typ/pN+8LPL6BBZ8U8/hOlPRWcSIckq71Wt54kHA
+         /5/sgHl6/D7bXyr3O/g+vpLESbPv/uGns1VPwyZrLXq89ApRiXS53HQQgo4vJPGQQHRh
+         wPF4DcVK5umByFLYNH7b/GF/3oSzF2gXCxMhed4rKvdpW20ewlbgrkomQy8TlHEFgUhe
+         ilkfqPoLzWkD/9OD/mOSMK8V++rASduVej2mOM0SvM51COK9DU9lGVhVgVOYY8Mv8iOA
+         UvNA==
+X-Gm-Message-State: ANoB5pm8a1tcS3NrT4iM9DprvHJvskhF+D1oo5BSsevbhsLf0EhbzEAG
+        LmdZ2sMCCkH7KmW5t6TNt9j3jQ==
+X-Google-Smtp-Source: AA0mqf6iD6Di3oz2avNhbgCCtvr0vmOmmX5lTTYWd5gW61sbaegZZur6x2lLj1Zso+P8PGZFpbvJOw==
+X-Received: by 2002:a17:902:f78c:b0:188:5d24:87e with SMTP id q12-20020a170902f78c00b001885d24087emr4089103pln.87.1668711249805;
+        Thu, 17 Nov 2022 10:54:09 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id l11-20020a170903120b00b001769e6d4fafsm1801632plh.57.2022.11.17.10.54.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 10:53:53 -0800 (PST)
-Date:   Thu, 17 Nov 2022 13:53:52 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, r@hev.cc
-Subject: Re: [PATCH 04/47] LoongArch: Set _PAGE_DIRTY only if _PAGE_WRITE is
- set in {pmd,pte}_mkdirty()
-Message-ID: <Y3aDQKwGDLXtWRJu@x1n>
-References: <20221117042532.4064448-1-chenhuacai@loongson.cn>
- <Y3ZPRx/VUoVvujNa@x1n>
+        Thu, 17 Nov 2022 10:54:09 -0800 (PST)
+Date:   Thu, 17 Nov 2022 18:54:06 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sandipan Das <sandipan.das@amd.com>,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        Jing Liu <jing2.liu@intel.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Wyes Karny <wyes.karny@amd.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Babu Moger <babu.moger@amd.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Jim Mattson <jmattson@google.com>, x86@kernel.org,
+        Santosh Shukla <santosh.shukla@amd.com>
+Subject: Re: [PATCH 07/13] KVM: SVM: Add VNMI support in get/set_nmi_mask
+Message-ID: <Y3aDTvglaSfhG8Tg@google.com>
+References: <20221117143242.102721-1-mlevitsk@redhat.com>
+ <20221117143242.102721-8-mlevitsk@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y3ZPRx/VUoVvujNa@x1n>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+In-Reply-To: <20221117143242.102721-8-mlevitsk@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,148 +88,224 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 10:12:07AM -0500, Peter Xu wrote:
-> Hi, Huacai,
+On Thu, Nov 17, 2022, Maxim Levitsky wrote:
+> From: Santosh Shukla <santosh.shukla@amd.com>
 > 
-> On Thu, Nov 17, 2022 at 12:25:32PM +0800, Huacai Chen wrote:
-> > Now {pmd,pte}_mkdirty() set _PAGE_DIRTY bit unconditionally, this causes
-> > random segmentation fault after commit 0ccf7f168e17bb7e ("mm/thp: carry
-> > over dirty bit when thp splits on pmd").
-> > 
-> > The reason is: when fork(), parent process use pmd_wrprotect() to clear
-> > huge page's _PAGE_WRITE and _PAGE_DIRTY (for COW);
+> VMCB intr_ctrl bit12 (V_NMI_MASK) is set by the processor when handling
+> NMI in guest and is cleared after the NMI is handled. Treat V_NMI_MASK
+> as read-only in the hypervisor except for the SMM case where hypervisor
+> before entring and after leaving SMM mode requires to set and unset
+> V_NMI_MASK.
 > 
-> Is it safe to drop dirty bit when wr-protect?  It means the mm can reclaim
-> the page directly assuming the page contains rubbish.
+> Adding API(get_vnmi_vmcb) in order to return the correct vmcb for L1 or
+> L2.
 > 
-> Consider after fork() and memory pressure kicks the kswapd, I don't see
-> anything stops the kswapd from recycling the pages and lose the data in
-> both processes.
-
-Feel free to ignore this question..  I think I got an answer from Hev (and
-I then got a follow up question):
-
-https://lore.kernel.org/all/Y3Z9Zf0jARMOkFBq@x1n/
-
+> Maxim:
+>    - made set_vnmi_mask/clear_vnmi_mask/is_vnmi_mask warn if called
+>      without vNMI enabled
+>    - clear IRET intercept in svm_set_nmi_mask even with vNMI
 > 
-> > then pte_mkdirty() set
-> > _PAGE_DIRTY as well as _PAGE_MODIFIED while splitting dirty huge pages;
-> > once _PAGE_DIRTY is set, there will be no tlb modify exception so the COW
-> > machanism fails; and at last memory corruption occurred between parent
-> > and child processes.
-> > 
-> > So, we should set _PAGE_DIRTY only when _PAGE_WRITE is set in {pmd,pte}_
-> > mkdirty().
-> > 
-> > Cc: stable@vger.kernel.org
-> > Cc: Peter Xu <peterx@redhat.com>
-> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> > ---
-> > Note: CC sparc maillist because they have similar issues.
+> Signed-off-by: Santosh Shukla <santosh.shukla@amd.com>
+> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> ---
+>  arch/x86/kvm/svm/svm.c | 18 ++++++++++++++-
+>  arch/x86/kvm/svm/svm.h | 52 ++++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 69 insertions(+), 1 deletion(-)
 > 
-> I also had a look on sparc64, it seems to not do the same as loongarch
-> here (not removing dirty in wr-protect):
-> 
-> static inline pmd_t pmd_wrprotect(pmd_t pmd)
-> {
-> 	pte_t pte = __pte(pmd_val(pmd));
-> 
-> 	pte = pte_wrprotect(pte);
-> 
-> 	return __pmd(pte_val(pte));
-> }
-> 
-> static inline pte_t pte_wrprotect(pte_t pte)
-> {
-> 	unsigned long val = pte_val(pte), tmp;
-> 
-> 	__asm__ __volatile__(
-> 	"\n661:	andn		%0, %3, %0\n"
-> 	"	nop\n"
-> 	"\n662:	nop\n"
-> 	"	nop\n"
-> 	"	.section	.sun4v_2insn_patch, \"ax\"\n"
-> 	"	.word		661b\n"
-> 	"	sethi		%%uhi(%4), %1\n"
-> 	"	sllx		%1, 32, %1\n"
-> 	"	.word		662b\n"
-> 	"	or		%1, %%lo(%4), %1\n"
-> 	"	andn		%0, %1, %0\n"
-> 	"	.previous\n"
-> 	: "=r" (val), "=r" (tmp)
-> 	: "0" (val), "i" (_PAGE_WRITE_4U | _PAGE_W_4U),
-> 	  "i" (_PAGE_WRITE_4V | _PAGE_W_4V));
-> 
-> 	return __pte(val);
-> }
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index 08a7b2a0a29f3a..c16f68f6c4f7d7 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -3618,13 +3618,29 @@ static int svm_nmi_allowed(struct kvm_vcpu *vcpu, bool for_injection)
+>  
+>  static bool svm_get_nmi_mask(struct kvm_vcpu *vcpu)
+>  {
+> -	return !!(vcpu->arch.hflags & HF_NMI_MASK);
+> +	struct vcpu_svm *svm = to_svm(vcpu);
+> +
+> +	if (is_vnmi_enabled(svm))
+> +		return is_vnmi_mask_set(svm);
+> +	else
+> +		return !!(vcpu->arch.hflags & HF_NMI_MASK);
+>  }
+>  
+>  static void svm_set_nmi_mask(struct kvm_vcpu *vcpu, bool masked)
+>  {
+>  	struct vcpu_svm *svm = to_svm(vcpu);
+>  
+> +	if (is_vnmi_enabled(svm)) {
+> +		if (masked)
+> +			set_vnmi_mask(svm);
 
-(Same here; I just overlooked what does _PAGE_W_4U meant..)
+I believe not setting INTERCEPT_IRET is correct, but only because the existing
+code is unnecessary.  And this all very subtly relies on KVM_REQ_EVENT being set
+and/or KVM already being in kvm_check_and_inject_events().
 
-> 
-> >  
-> >  arch/loongarch/include/asm/pgtable.h | 8 ++++++--
-> >  1 file changed, 6 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/arch/loongarch/include/asm/pgtable.h b/arch/loongarch/include/asm/pgtable.h
-> > index 946704bee599..debbe116f105 100644
-> > --- a/arch/loongarch/include/asm/pgtable.h
-> > +++ b/arch/loongarch/include/asm/pgtable.h
-> > @@ -349,7 +349,9 @@ static inline pte_t pte_mkclean(pte_t pte)
-> >  
-> >  static inline pte_t pte_mkdirty(pte_t pte)
-> >  {
-> > -	pte_val(pte) |= (_PAGE_DIRTY | _PAGE_MODIFIED);
-> > +	pte_val(pte) |= _PAGE_MODIFIED;
-> > +	if (pte_val(pte) & _PAGE_WRITE)
-> > +		pte_val(pte) |= _PAGE_DIRTY;
-> 
-> I'm not sure whether mm has rule to always set write bit then set dirty
-> bit, need to be careful here because the outcome may differ when use:
-> 
->   pte_mkdirty(pte_mkwrite(pte))
->   (expected)
-> 
-> VS:
-> 
->   pte_mkwrite(pte_mkdirty(pte))
->   (dirty not set)
-> 
-> I had a feeling I miss some arch-specific details here on why loongarch
-> needs such implementation, but I can't quickly tell.
+When NMIs become unblocked, INTERCEPT_IRET can be cleared, but KVM should also
+pending KVM_REQ_EVENT.  AFAICT, that doesn't happen when this is called via the
+emulator.  Ah, because em_iret() only handles RM for Intel's restricted guest
+crap.  I.e. it "works" only because it never happens.  All other flows set
+KVM_REQ_EVENT when toggling NMI blocking, e.g. the RSM path of kvm_smm_changed().
 
-After a closer look I think it's fine for loongarch as pte_mkwrite will
-also set the dirty bit unconditionally, so at least the two ways will still
-generate the same pte (DIRTY+MODIFIED+WRITE).
+And when NMIs become blocked, there's no need to force INTERCEPT_IRET in this
+code because kvm_check_and_inject_events() will request an NMI window and set the
+intercept if necessary, and all paths that set NMI blocking are guaranteed to
+reach kvm_check_and_inject_events() before entering the guest.
 
-But this whole thing is still confusing to me.  It'll still be great if
-anyone can help explain why the _DIRTY cannot be set only in pte_mkwrite()
-if that's the solo place in charge of "whether the pte is writable".
+  1. RSM => kvm_smm_changed() sets KVM_REQ_EVENT
+  2. enter_smm() is only called from within kvm_check_and_inject_events(),
+     before pending NMIs are processed (yay priority)
+  3. emulator_set_nmi_mask() never blocks NMIs, only does the half-baked IRET emulation
+  4. kvm_vcpu_ioctl_x86_set_vcpu_event() sets KVM_REQ_EVENT
 
-The other follow up question is: how do we mark "this pte contains valid
-data" (the common definition of "dirty bit"), while "this pte is not
-writable" on loongarch?
+So, can you add a prep patch to drop the forced INTERCEPT_IRET?  That way the
+logic for vNMI and !vNMI is the same.
 
-It can happen when we're installing a page with non-zero data meanwhile
-wr-protected.  That's actually a valid case for userfaultfd wr-protect mode
-where user specified UFFDIO_COPY ioctl with flag UFFDIO_COPY_MODE_WP, where
-we'll install a non-zero page from user buffer but don't grant write bit.
+> +		else {
+> +			clear_vnmi_mask(svm);
 
-From code-wise, I think it can be done currently with this on loongarch:
+This is the only code that sets/clears the vNMI mask, so rather than have set/clear
+helpers, what about a single helper to do the dirty work? 
 
-  pte_wrprotect(pte_mkwrite(pte_mkdirty(pte)))
+> +			if (!sev_es_guest(vcpu->kvm))
+> +				svm_clr_intercept(svm, INTERCEPT_IRET);
+> +		}
+> +		return;
+> +	}
+> +
+>  	if (masked) {
+>  		vcpu->arch.hflags |= HF_NMI_MASK;
+>  		if (!sev_es_guest(vcpu->kvm))
+> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+> index f5383104d00580..bf7f4851dee204 100644
+> --- a/arch/x86/kvm/svm/svm.h
+> +++ b/arch/x86/kvm/svm/svm.h
+> @@ -35,6 +35,7 @@ extern u32 msrpm_offsets[MSRPM_OFFSETS] __read_mostly;
+>  extern bool npt_enabled;
+>  extern int vgif;
+>  extern bool intercept_smi;
+> +extern bool vnmi;
+>  
+>  enum avic_modes {
+>  	AVIC_MODE_NONE = 0,
+> @@ -531,6 +532,57 @@ static inline bool is_x2apic_msrpm_offset(u32 offset)
+>  	       (msr < (APIC_BASE_MSR + 0x100));
+>  }
+>  
+> +static inline struct vmcb *get_vnmi_vmcb(struct vcpu_svm *svm)
+> +{
+> +	if (!vnmi)
+> +		return NULL;
+> +
+> +	if (is_guest_mode(&svm->vcpu))
+> +		return svm->nested.vmcb02.ptr;
+> +	else
+> +		return svm->vmcb01.ptr;
+> +}
+> +
+> +static inline bool is_vnmi_enabled(struct vcpu_svm *svm)
+> +{
+> +	struct vmcb *vmcb = get_vnmi_vmcb(svm);
+> +
+> +	if (vmcb)
+> +		return !!(vmcb->control.int_ctl & V_NMI_ENABLE);
+> +	else
+> +		return false;
 
-Where pte_wrprotect(pte_mkwrite(pte)) is not a no-op but applying MODIFIED.
+Maybe just this?
 
-While on many other archs it'll be as simple as:
+	return vmcb && (vmcb->control.int_ctl & V_NMI_ENABLE);
 
-  pte_mkdirty(pte)
+Or if an inner helper is added:
 
-But that's really error-prone and not obvious.
+	return vmcb && __is_vnmi_enabled(vmcb);
 
-Copying Hev too.
+> +}
+> +
+> +static inline bool is_vnmi_mask_set(struct vcpu_svm *svm)
+> +{
+> +	struct vmcb *vmcb = get_vnmi_vmcb(svm);
+> +
+> +	if (!WARN_ON_ONCE(!vmcb))
 
-Thanks,
+Rather than WARN, add an inner __is_vnmi_enabled() that takes the vnmi_vmcb.
+Actually, if you do that, the test/set/clear helpers can go away entirely.
 
--- 
-Peter Xu
+> +		return false;
+> +
+> +	return !!(vmcb->control.int_ctl & V_NMI_MASK);
+> +}
+> +
+> +static inline void set_vnmi_mask(struct vcpu_svm *svm)
+> +{
+> +	struct vmcb *vmcb = get_vnmi_vmcb(svm);
+> +
+> +	if (!WARN_ON_ONCE(!vmcb))
+> +		return;
+> +
+> +	vmcb->control.int_ctl |= V_NMI_MASK;
+> +}
+> +
+> +static inline void clear_vnmi_mask(struct vcpu_svm *svm)
+> +{
+> +	struct vmcb *vmcb = get_vnmi_vmcb(svm);
+> +
+> +	if (!WARN_ON_ONCE(!vmcb))
+> +		return;
+> +
+> +	vmcb->control.int_ctl &= ~V_NMI_MASK;
+> +}
 
+These helpers can all go in svm.  There are no users oustide of svm.c, and
+unless I'm misunderstanding how nested works, there should never be oustide users.
+
+E.g. with HF_NMI_MASK => svm->nmi_masked, the end result can be something like:
+
+static bool __is_vnmi_enabled(struct *vmcb)
+{
+	return !!(vmcb->control.int_ctl & V_NMI_ENABLE);
+}
+
+static bool is_vnmi_enabled(struct vcpu_svm *svm)
+{
+	struct vmcb *vmcb = get_vnmi_vmcb(svm);
+
+	return vmcb && __is_vnmi_enabled(vmcb);
+}
+
+static bool svm_get_nmi_mask(struct kvm_vcpu *vcpu)
+{
+	struct vcpu_svm *svm = to_svm(vcpu);
+	struct vmcb *vmcb = get_vnmi_vmcb(svm);
+
+	if (vmcb && __is_vnmi_enabled(vmcb))
+		return !!(vmcb->control.int_ctl & V_NMI_MASK);
+	else
+		return !!(vcpu->arch.hflags & HF_NMI_MASK);
+}
+
+static void svm_set_or_clear_vnmi_mask(struct vmcb *vmcb, bool set)
+{
+	if (set)
+		vmcb->control.int_ctl |= V_NMI_MASK;
+	else
+		vmcb->control.int_ctl &= ~V_NMI_MASK;
+}
+
+static void svm_set_nmi_mask(struct kvm_vcpu *vcpu, bool masked)
+{
+	struct vcpu_svm *svm = to_svm(vcpu);
+	struct vmcb *vmcb = get_vnmi_vmcb(svm);
+
+	if (vmcb && __is_vnmi_enabled(vmcb)) {
+		if (masked)
+			vmcb->control.int_ctl |= V_NMI_MASK;
+		else
+			vmcb->control.int_ctl &= ~V_NMI_MASK;
+	} else {
+		svm->nmi_masked = masked;
+	}
+
+	if (!masked)
+		svm_disable_iret_interception(svm);
+}
