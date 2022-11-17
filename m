@@ -2,138 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F329262D0EB
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 03:03:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20B5462D0F1
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 03:05:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233842AbiKQCDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 21:03:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50614 "EHLO
+        id S234175AbiKQCFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 21:05:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbiKQCDV (ORCPT
+        with ESMTP id S234174AbiKQCFE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 21:03:21 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10956A745;
-        Wed, 16 Nov 2022 18:03:19 -0800 (PST)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NCNV95hY7zRpNf;
-        Thu, 17 Nov 2022 10:02:57 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 17 Nov 2022 10:03:18 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 17 Nov 2022 10:03:17 +0800
-Subject: Re: [PATCH v7 5/6] doc: Document CONFIG_RCU_CPU_STALL_CPUTIME=y stall
- information
-To:     Frederic Weisbecker <frederic@kernel.org>
-CC:     "Paul E . McKenney" <paulmck@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        "Steven Rostedt" <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Robert Elliott <elliott@hpe.com>
-References: <20221111130709.247-1-thunder.leizhen@huawei.com>
- <20221111130709.247-6-thunder.leizhen@huawei.com>
- <20221116225507.GA839220@lothringen>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <1d007125-9e1a-8018-d6b4-8838ecc1a873@huawei.com>
-Date:   Thu, 17 Nov 2022 10:03:17 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Wed, 16 Nov 2022 21:05:04 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 711187678;
+        Wed, 16 Nov 2022 18:05:02 -0800 (PST)
+Received: from loongson.cn (unknown [10.20.42.77])
+        by gateway (Coremail) with SMTP id _____8BxLtvNlnVj2SEIAA--.23346S3;
+        Thu, 17 Nov 2022 10:05:01 +0800 (CST)
+Received: from [10.20.42.77] (unknown [10.20.42.77])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxqFfMlnVjspAVAA--.38831S3;
+        Thu, 17 Nov 2022 10:05:00 +0800 (CST)
+Subject: Re: [PATCH V5] PCI: loongson: Skip scanning unavailable child devices
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>,
+        wanghongliang <wanghongliang@loongson.cn>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221116181446.GA1126453@bhelgaas>
+From:   Liu Peibao <liupeibao@loongson.cn>
+Message-ID: <50ca749f-beb1-4a52-d0c5-cc503cbd3563@loongson.cn>
+Date:   Thu, 17 Nov 2022 10:05:00 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <20221116225507.GA839220@lothringen>
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <20221116181446.GA1126453@bhelgaas>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8CxqFfMlnVjspAVAA--.38831S3
+X-CM-SenderInfo: xolx1vpled0qxorr0wxvrqhubq/1tbiAQANCmN00uUg2AAAse
+X-Coremail-Antispam: 1Uk129KBjvJXoW7uF1xCr1fur1DZF43JFy3CFg_yoW8CrWDpF
+        W3WFWrtF4DKr129rnrXw45ur98Aw47C3yrGF1kJF1akan8WryfGa4xGa15Xa13XryxWayS
+        vFWjqrW0vF4jvaUanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bqxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
+        87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
+        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
+        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI
+        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
+        IxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
+        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8HKZJUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/11/17 6:55, Frederic Weisbecker wrote:
-> On Fri, Nov 11, 2022 at 09:07:08PM +0800, Zhen Lei wrote:
->> +1. A CPU looping with interrupts disabled.::
->> +
->> +   rcu:          hardirqs   softirqs   csw/system
->> +   rcu:  number:        0          0            0
->> +65;6003;1c   rcu: cputime:        0          0            0   ==> 2500(ms)
->> +
->> +   Because interrupts have been disabled throughout the measurement
->> +   interval, there are no interrupts and no context switches.
->> +   Furthermore, because CPU time consumption was measured using interrupt
->> +   handlers, the system CPU consumption is misleadingly measured as zero.
->> +   This scenario will normally also have "(0 ticks this GP)" printed on
->> +   this CPU's summary line.
->> +
->> +2. A CPU looping with bottom halves disabled.
->> +
->> +   This is similar to the previous example, but with non-zero number of
->> +   and CPU time consumed by hard interrupts, along with non-zero CPU
->> +   time consumed by in-kernel execution.::
->> +
->> +   rcu:          hardirqs   softirqs   csw/system
->> +   rcu:  number:      624          0            0
->> +   rcu: cputime:       49          0         2446   ==> 2500(ms)
->> +
->> +   The fact that there are zero softirqs gives a hint that these were
->> +   disabled, perhaps via local_bh_disable().  It is of course possible
->> +   that there were no softirqs, perhaps because all events that would
->> +   result in softirq execution are confined to other CPUs.  In this case,
->> +   the diagnosis should continue as shown in the next example.
->> +
->> +3. A CPU looping with preemption disabled.
->> +
->> +   Here, only the number of context switches is zero.::
->> +
->> +   rcu:          hardirqs   softirqs   csw/system
->> +   rcu:  number:      624         45            0
->> +   rcu: cputime:       69          1         2425   ==> 2500(ms)
->> +
->> +   This situation hints that the stalled CPU was looping with preemption
->> +   disabled.
->> +
->> +4. No looping, but massive hard and soft interrupts.::
->> +
->> +   rcu:          hardirqs   softirqs   csw/system
->> +   rcu:  number:       xx         xx            0
->> +   rcu: cputime:       xx         xx            0   ==> 2500(ms)
->> +
->> +   Here, the number and CPU time of hard interrupts are all non-zero,
->> +   but the number of context switches and the in-kernel CPU time consumed
->> +   are zero. The number and cputime of soft interrupts will usually be
->> +   non-zero, but could be zero, for example, if the CPU was spinning
->> +   within a single hard interrupt handler.
->> +
->> +   If this type of RCU CPU stall warning can be reproduced, you can
->> +   narrow it down by looking at /proc/interrupts or by writing code to
->> +   trace each interrupt, for example, by referring to show_interrupts().
+On 11/17/22 2:14 AM, Bjorn Helgaas wrote:
+> On Wed, Nov 16, 2022 at 05:57:46PM +0800, Liu Peibao wrote:
+>> On 11/15/22 1:11 AM, Bjorn Helgaas wrote:
+>>> On Mon, Nov 14, 2022 at 03:43:46PM +0800, Liu Peibao wrote:
 > 
-> One last question I have. Usually all these informations can be deduced by
-> just looking at the stacktrace that comes along an RCU stall report. So on
-> which kind of situation the stacktrace is not enough?
-
-Interrupt storm.
-
+>>> I assume there's a single device in the hardware, and both the
+>>> "platform device" and the PCI device" refer to that single device?
+>>>
+>>> And there's some reason you prefer to use the platform device
+>>> interface to enumerate that device?
+>>
+>> No, they are not the same device. For example, GMAC1(on chip PCI device) and
+>> GPIO(platform device, not PCI device) 14 use the same pin. The function for
+>> this pin can be configured by one bit in general register, eg, 0 for GPIO 14,
+>> 1 for GMAC1. Sometimes, GPIO 14 is preferred, so configure the pin with
+>> function GPIO 14 and disable GMAC1.
 > 
-> Thanks.
-> .
+> Ah, I see, so there's some circuit that can be driven by either the
+> platform (GPIO) device or the PCI (GMAC1) device.
 > 
 
--- 
-Regards,
-  Zhen Lei
+That is really the point. Sorry for my poor description and English :).
+
+>> Overall, how about the following refactored commit log:
+>>
+>> "This patch adds a mechanism to disable on chip PCI devices by DT. Typically,
+>> when there are pins shareable between the platform device and the on chip PCI
+>> device, if the PCI device is not preferred, add `status = "disabled"` property
+>> to this PCI device DT node.
+>>
+>> For example, on LS2K1000, GMAC1(on chip PCI device) and GPIO(platform device,
+>> not PCI device) 14 share the same pin. If GMAC1 is not preferred, add
+>> `status = "disabled"` property in GMAC1 DT node."
+> 
+>   Add a mechanism ...
+> 
+> (Instead of "This patch adds ..."; no need to say "this patch" because
+> it's obvious that the commit log applies to *this patch*)
+> 
+> Add spaces before "(", e.g., "GMAC1 (on-chip PCI device)".
+> 
+> Looks good!
+> 
+> Bjorn
+> 
+
+I will modify these and send the next version patch.
+
+Thanks a lot!
+
+BR,
+Peibao
+
