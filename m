@@ -2,102 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3FD962E71E
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 22:40:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EFF562E721
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 22:41:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232126AbiKQVkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 16:40:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54964 "EHLO
+        id S240308AbiKQVlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 16:41:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240096AbiKQVkJ (ORCPT
+        with ESMTP id S234418AbiKQVlF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 16:40:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D3276829A
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 13:40:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ED4C162281
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 21:40:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7AA6C433D6;
-        Thu, 17 Nov 2022 21:40:05 +0000 (UTC)
-Date:   Thu, 17 Nov 2022 16:40:03 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Yang Jihong <yangjihong1@huawei.com>
-Cc:     <mhiramat@kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] tracing: Fix infinite loop in tracing_read_pipe on
- overflowed print_trace_line
-Message-ID: <20221117164003.6e655615@gandalf.local.home>
-In-Reply-To: <20221114022946.66255-1-yangjihong1@huawei.com>
-References: <20221114022946.66255-1-yangjihong1@huawei.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 17 Nov 2022 16:41:05 -0500
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1156828F;
+        Thu, 17 Nov 2022 13:41:04 -0800 (PST)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-1322d768ba7so3783157fac.5;
+        Thu, 17 Nov 2022 13:41:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Nc+c1ZgyaRHbiRmnbtBUUwq9SlkKMk4TXjmG53a3qPI=;
+        b=nVvdu7JjyqkMcVh0WyCRhREoZFkY9TCHEnNLzr+ogGqNGJR+sFmPKas4PS6VZx3R+F
+         B5I57zIftnK/XsEP9bHGsyDaZZyyyYzIH7nVzWhpzXoc8dt0liEKqxA3wpLInzrJFraK
+         uTps7bxurQEC6N71TBxEzdZhL+ATw3nhc1GGhjb9KqdVO+5AKaR24AH5zfeg81Mk7rgd
+         F0rYnPRiVhXSfIU5l7eupBixu3JTRrI0A9EfldNo55GTD9ZpHI2iid7gzeKb2pAfxu9r
+         nIfd/ULkmoTQ/SnGsb2JYm4onWueWg7QS8F6xOGKJ4J/DIRkyRvSj230OefIYh1v0tAq
+         Nf5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Nc+c1ZgyaRHbiRmnbtBUUwq9SlkKMk4TXjmG53a3qPI=;
+        b=RBh4Z4vKAi4qEHyIhbRvZ0RcEuaUNOYkqCUbEgxdf5lUmFKty1G+Xztwg8+o8Da56H
+         4tp8RnbG68wWoSaUND7PKwsiqaV8FefpJuabf9plH5e5/CLCM5OdsBAj8TuNur/G9id2
+         uVFIje1GqPYV8GaJRQQBVS2ArBcg+ZkO8kmqS/k1YOkh8huHYbIZ4J4HBIX1E5W4Hngd
+         I16L+05jWtIF2sDggkQzYrqr2Q2cmGHm4r36WtiUfOh/cWZ0kns3oxn85ZuAXoEx2/vG
+         xlDxo13XHaVCfE1GFzUIzZJgrubwpOObweDJFLaj1b2wGXhiO7iJ5zatkryPCK4/QR2J
+         XxCA==
+X-Gm-Message-State: ANoB5pmVun5UosbJh46Nb5WuZeaA5AtdpWvP0VT/L5HZYSjdqUZIDmOs
+        yb8YSeDhPwDwyH67S62TiI045XhrUaQ5REQ5SSQ=
+X-Google-Smtp-Source: AA0mqf4kfKVTGi28Jg/pTNx2eiR1aNW14wXxeGvdl18I0KBg/P9rdGDpIevTBJ7ln+4qdyUStAa7R+2g/qBCXeQbqPs=
+X-Received: by 2002:a05:6870:b07:b0:13b:d07f:f29d with SMTP id
+ lh7-20020a0568700b0700b0013bd07ff29dmr2479858oab.96.1668721263887; Thu, 17
+ Nov 2022 13:41:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221114222046.386560-1-lyude@redhat.com>
+In-Reply-To: <20221114222046.386560-1-lyude@redhat.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Thu, 17 Nov 2022 16:40:52 -0500
+Message-ID: <CADnq5_PrarJPZQu6uRwDdCqhZr7Hvbtxo_HuhiQ7H1DYRgSyqQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/amd/dc/dce120: Fix audio register mapping, stop
+ triggering KASAN
+To:     Lyude Paul <lyude@redhat.com>,
+        "Wentland, Harry" <Harry.Wentland@amd.com>
+Cc:     amd-gfx@lists.freedesktop.org, Alan Liu <HaoPing.Liu@amd.com>,
+        Leo Li <sunpeng.li@amd.com>, David Airlie <airlied@gmail.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        stable@vger.kernel.org,
+        Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Nov 2022 10:29:46 +0800
-Yang Jihong <yangjihong1@huawei.com> wrote:
+On Mon, Nov 14, 2022 at 5:21 PM Lyude Paul <lyude@redhat.com> wrote:
+>
+> There's been a very long running bug that seems to have been neglected for
+> a while, where amdgpu consistently triggers a KASAN error at start:
+>
+>   BUG: KASAN: global-out-of-bounds in read_indirect_azalia_reg+0x1d4/0x2a0 [amdgpu]
+>   Read of size 4 at addr ffffffffc2274b28 by task modprobe/1889
+>
+> After digging through amd's rather creative method for accessing registers,
+> I eventually discovered the problem likely has to do with the fact that on
+> my dce120 GPU there are supposedly 7 sets of audio registers. But we only
+> define a register mapping for 6 sets.
+>
+> So, fix this and fix the KASAN warning finally.
+>
+> Signed-off-by: Lyude Paul <lyude@redhat.com>
+> Cc: stable@vger.kernel.org
 
-> print_trace_line may overflow seq_file buffer. If the event is not
-> consumed, the while loop keeps peeking this event, causing a infinite loop.
-> 
-> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+This is the correct fix for asics having 7 audio instances.  It looks
+correct to me, assuming DCE12 actually has 7 audio instances.
+@Wentland, Harry Do you know off hand?  If you can confirm that, the
+patch is:
+Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
+
+
 > ---
->  kernel/trace/trace.c | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
-> 
-> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-> index 47a44b055a1d..2a8d5c68c29b 100644
-> --- a/kernel/trace/trace.c
-> +++ b/kernel/trace/trace.c
-> @@ -6788,6 +6788,19 @@ tracing_read_pipe(struct file *filp, char __user *ubuf,
->  		if (ret == TRACE_TYPE_PARTIAL_LINE) {
->  			/* don't print partial lines */
->  			iter->seq.seq.len = save_len;
-> +
-> +			/*
-> +			 * If one trace_line of the tracer overflows seq_file
-> +			 * buffer, trace_seq_to_user returns -EBUSY because
-> +			 * nothing in the sequence (iter->seq.seq.len = \
-> +			 * iter->seq.seq.readpos = 0).
-> +			 * In this case, we need to consume, otherwise,
-> +			 * "while" will peek this event next time, resulting
-> +			 * in an infinite loop.
-> +			 */
-> +			if (trace_seq_has_overflowed(&iter->seq))
-> +				trace_consume(iter);
-
-Instead of consuming it, I think the right solution is to print the partial
-line. Something like:
-
-			if (trace_seq_has_overflowed(&iter->seq)) {
-				char dots[] = "...";
-
-				iter->seq.seq.len -= sizeof(dots) + 1;
-				iter->seq.seq.full = 0;
-				trace_seq_puts(&iter->seq, dots);
-				trace_consume(iter);
-				break;
-			}
-
-			iter->seq.seq.len = save_len;
-			break;
-
-That way we can see the broken trace event and not just silently drop it.
-
--- Steve
-
-> +
->  			break;
->  		}
->  		if (ret != TRACE_TYPE_NO_CONSUME)
-
+> Sending this one separately from the rest of my fixes since:
+>
+> * It's definitely completely unrelated to the Gitlab 2171 issue
+> * I'm not sure if this is the correct fix since it's in DC
+>
+>  drivers/gpu/drm/amd/display/dc/dce120/dce120_resource.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/amd/display/dc/dce120/dce120_resource.c b/drivers/gpu/drm/amd/display/dc/dce120/dce120_resource.c
+> index 1b70b78e2fa15..af631085e88c5 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dce120/dce120_resource.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dce120/dce120_resource.c
+> @@ -359,7 +359,8 @@ static const struct dce_audio_registers audio_regs[] = {
+>         audio_regs(2),
+>         audio_regs(3),
+>         audio_regs(4),
+> -       audio_regs(5)
+> +       audio_regs(5),
+> +       audio_regs(6),
+>  };
+>
+>  #define DCE120_AUD_COMMON_MASK_SH_LIST(mask_sh)\
+> --
+> 2.37.3
+>
