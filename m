@@ -2,174 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 424E862DEC0
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 15:56:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8739662DEC7
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 15:58:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239647AbiKQO4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 09:56:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46380 "EHLO
+        id S239833AbiKQO5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 09:57:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231463AbiKQO4J (ORCPT
+        with ESMTP id S240193AbiKQO5Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 09:56:09 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9056270A30;
-        Thu, 17 Nov 2022 06:56:04 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id ud5so5692712ejc.4;
-        Thu, 17 Nov 2022 06:56:04 -0800 (PST)
+        Thu, 17 Nov 2022 09:57:24 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163D476173
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 06:57:21 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id j16so3159930lfe.12
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 06:57:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=IwcBeOeaR1x2IX2rcDUeXOgXDe6Ex8fSz1cnyCozQpY=;
-        b=YSbLyyV7nMqaA8uzhE/7NUar5IU3ldPaqFTGYdhbhpi/i6JENFicWabNE82rh3YcvC
-         /MsEW+riExmXumJl0F33+QZHopBnPiAnfChwq56W09Mqn5Ly7SEcblsrbFPQV7WuizAo
-         QDaqrHBAKGYiHgCnBbzD2rDZyYN25iVBg4cajJ2MW/ZV95uNesh+LY+OzOvUvu2kgGxY
-         dhxPoRPsODjcaaEW4z10TpmHrT9/l+KArlJaC8fWUReXOY9uNSkHWCB0cOpBgN+FEiaW
-         HDk3K67YU7e/8zqqxhbljCrCKWLejAH5IrDRLMkEDs3bbU3YfCqF2u8RjG/bTh7wPJxj
-         Odng==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UdCfv431jqwhM+KQDL4GlLi43icmR8iSXxt/gu6+Rys=;
+        b=bJEOYJfW0rPbshF9PevRR/1b2MUlMwGPv9+wzegp26kkKXz8OGV00PoqtO/hZPQ4NY
+         gMPiuDdgIKSsQn4xC5PNlFinxOoqwdoDzzEPgy+jo8LS/luRy/in73v+KWvbKvjKTTbS
+         ujFrqIpfBrbAth+G3xhpPy4t3HP0CCnOSKpm2k/jgfuFWkN+zDkcSyC5jQGpa/Mj/ooW
+         tyT8QckqWM5o/vh8kSZY8Kx0nlmoZnHNg6zIYfH1qUal+73CeqEeGfS3L3jkVV2hq7E5
+         bejJKH1vQR5DcvTaYvI/r29KUPRl5OF8daRNht81IVG17V+E09l9dT9UiJd7mrAN7Uod
+         ee0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IwcBeOeaR1x2IX2rcDUeXOgXDe6Ex8fSz1cnyCozQpY=;
-        b=s/3dZypUTeslpF53GMZA2LfydiIJ7QQeK3E35qbzJFrRvYym21LMDhn2Q5e+V+p34e
-         TyKzcOh5WjgMSlpIUo5hYcHxctzgDs4if4uUVP/vBU+J1Kuv8hWYpNBsDS+TG9fjCTda
-         8rtaDp1LHKayeKKf1q6zTKNN4UiaZiSwad5EMLjtSRk4rWuddcTLBBe2diPCVkr/SSgG
-         UcloDaK2TYas7rxEDPMxzxLIPaL398bvPqygqNAhD/2KbeURWCSY2fZFP6F5F4Kq7Cza
-         gDkXb4uEIrmrFRMwpmNPzJyk6EoQFYG7bVo1EsdouiwOwSNxk45GSvNALaXw/Qm3nLH+
-         LjJg==
-X-Gm-Message-State: ANoB5pk4Q5sMGFvK53RprIF3vUuoWGofXilCXBOurmQXMNPIW+dHjm3h
-        A40dfdcQf4KXLjRCgYS+8bK7Nh7oi/K5ele45Qg=
-X-Google-Smtp-Source: AA0mqf52mP6ZXbFpsqp7GEgOo5nw27q8XKx7vtmAVStFWouVwqYRa/fwXgtfW4+1KV5eCfJecGpJcMybBmTEHTaypHM=
-X-Received: by 2002:a17:906:c18c:b0:7b2:8a6e:c569 with SMTP id
- g12-20020a170906c18c00b007b28a6ec569mr2464374ejz.582.1668696963090; Thu, 17
- Nov 2022 06:56:03 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=UdCfv431jqwhM+KQDL4GlLi43icmR8iSXxt/gu6+Rys=;
+        b=WHRl3z8RxaFnkJpvs2R2+v/80zurN0jKbH8PswGcVb4zHhnJ73nfzF/bz2RnEvcw6m
+         ee1jERYw+IGsap7ZOk5S1a8HIoiHH7zwKB8B/cD9g1Lj1UiJ9omqS99om4OXiKrvkU+c
+         mkdnaIbI2lQdkfE0rHYJk0MyC5UPSeL/Is8DLf+RIvwofvzP/YEXqtMoqemCAbSg0bJF
+         CH2eu/CSQgp07HF7DE77a48pHwFXZo0SezU8dEiOh7cfNFkj4kgqGkNd1vGskL73kgpw
+         ffhu3oUOUzJRiDDaphMMNULhCxPTBJux5tkVg0PnAT4alKhgmTnXPmFTSGN/StBTdv2A
+         OeKQ==
+X-Gm-Message-State: ANoB5plbmrAOlQzxJzl31YhqT62MHodF65UYwsH7HiL41p+OIZqmKZp+
+        TNbNy/roDrB6YrYyTk0Ui11J9A==
+X-Google-Smtp-Source: AA0mqf5HMqFOprUrMQnUCqgvwsJ2g3LSERRqqOVcIoJZdsRxNdb+AYnvNJd+sDHEhnT7NKIuQg3wTg==
+X-Received: by 2002:a05:6512:c29:b0:4b1:b061:4815 with SMTP id z41-20020a0565120c2900b004b1b0614815mr959380lfu.18.1668697039485;
+        Thu, 17 Nov 2022 06:57:19 -0800 (PST)
+Received: from [192.168.31.208] ([194.29.137.22])
+        by smtp.gmail.com with ESMTPSA id b12-20020ac247ec000000b004a93b8508edsm181303lfp.181.2022.11.17.06.57.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Nov 2022 06:57:18 -0800 (PST)
+Message-ID: <b5fcd010-76bf-9ec3-bf52-6ed51c655afa@linaro.org>
+Date:   Thu, 17 Nov 2022 15:57:15 +0100
 MIME-Version: 1.0
-References: <20221116200150.4657-1-linux.amoon@gmail.com> <20221116200150.4657-7-linux.amoon@gmail.com>
- <CAMdYzYo_DGiO0UxJEb3xues7Um=X9AgPvz+Xp_YWb9pp9HaScg@mail.gmail.com>
- <CANAwSgQJGH-+aXyUF18kGks4YKfBYvQ4-B7S2m8eaAr=yNS7vQ@mail.gmail.com> <99849c5e-5bd9-386b-99c5-fbc8c8df9656@arm.com>
-In-Reply-To: <99849c5e-5bd9-386b-99c5-fbc8c8df9656@arm.com>
-From:   Anand Moon <linux.amoon@gmail.com>
-Date:   Thu, 17 Nov 2022 20:25:47 +0530
-Message-ID: <CANAwSgT7rasp=QYdvukAO-y6NzsOfKsjdy0jAEubvMymmfDqWA@mail.gmail.com>
-Subject: Re: [linux-next-v2 5/5] arm64: dts: rockchip: Add missing of
- ethernet-phy-id to reset the phy on Rock 3A SBC
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Peter Geis <pgwipeout@gmail.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Chukun Pan <amadeus@jmu.edu.cn>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.2
+Subject: Re: [PATCH v2 10/13] arm64: dts: qcom: sm8450: add spmi node
+To:     Vinod Koul <vkoul@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211209103505.197453-1-vkoul@kernel.org>
+ <20211209103505.197453-11-vkoul@kernel.org>
+ <5035b6a3-164b-afa0-b714-4deb886f9f90@linaro.org>
+ <9f696023-f2b4-ccd0-34a0-6f4d5848e862@linaro.org>
+ <8c1428a6-f268-cb03-3e55-887d30236924@linaro.org>
+ <3af48606-731f-6047-92ca-80435f401ae3@linaro.org>
+ <d5726896-e62b-d19d-454b-700dd1c42222@linaro.org>
+ <CAA8EJpovd0D154QUG1_EtCnCrffJBt+SPWQtLEZWb=dc_PLGjA@mail.gmail.com>
+ <Y1jGjCU47+tOBLus@matsya>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <Y1jGjCU47+tOBLus@matsya>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Robin
-
-On Thu, 17 Nov 2022 at 16:24, Robin Murphy <robin.murphy@arm.com> wrote:
->
-> On 2022-11-17 05:57, Anand Moon wrote:
-> > Hi Peter,
-> >
-> > On Thu, 17 Nov 2022 at 02:16, Peter Geis <pgwipeout@gmail.com> wrote:
-> >>
-> >> On Wed, Nov 16, 2022 at 3:02 PM Anand Moon <linux.amoon@gmail.com> wrote:
-> >>>
-> >>> Add MDIO description with ethernet-phy-id compatible string
-> >>> which enable calling reset of the phy. The PHY will then be probed,
-> >>> independent of if it can be found on the bus or not,
-> >>> and that probing will enable the GPIO.
-> >>>
-> >>> ethernet-phy-id is read from ethenet register dump reg2 and reg3.
-> >>>
-> >>> Fix following warning.
-> >>> [   12.323417] rk_gmac-dwmac fe010000.ethernet eth0: Register MEM_TYPE_PAGE_POOL RxQ-0
-> >>> [   12.324078] rk_gmac-dwmac fe010000.ethernet eth0: no phy at addr -1
-> >>> [   12.324099] rk_gmac-dwmac fe010000.ethernet eth0: __stmmac_open: Cannot attach to PHY (error: -19)
-> >>>
-> >>> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
-> >>> ---
-> >>> V2: new to the patch series.
-> >>>
-> >>> alarm@rock-3a:~$ sudo ethtool -d eth0
-> >>> [sudo] password for alarm:
-> >>> ST GMAC Registers
-> >>> GMAC Registers
-> >>> Reg0  0x08072203
-> >>> Reg1  0x00000000
-> >>> Reg2  0x00000404
-> >>> Reg3  0x00000000
-> >>> Reg4  0x00000002
-> >>> ---
-> >>>   arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts | 2 +-
-> >>>   1 file changed, 1 insertion(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts b/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
-> >>> index 9f84a23a8789..fe36156a5017 100644
-> >>> --- a/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
-> >>> +++ b/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
-> >>> @@ -585,7 +585,7 @@ &i2s2_2ch {
-> >>>
-> >>>   &mdio1 {
-> >>>          rgmii_phy1: ethernet-phy@0 {
-> >>> -               compatible = "ethernet-phy-ieee802.3-c22";
-> >>> +               compatible = "ethernet-phy-id0000.0404", "ethernet-phy-ieee802.3-c22";
-> >>>                  reg = <0x0>;
-> >>>                  pinctrl-names = "default";
-> >>>                  pinctrl-0 = <&eth_phy_rst>, <&eth_phy_int>;
-> >>
-> >> Have you tried instead moving the reset to the mdio bus? I've had
-> >> success with this, though you'll need to change the reset assert and
-> >> deassert timing handles, they are different for the bus.
-> >>
-> > No can you share some examples?
-> > If you got a better way to solve this issue please let me know.
-> > I will give this a try.
->
-> Note that the Rock 3A schematic says the phy is configured for address
-> 1, not 0. From what I remember of adding the MDIO node for NanoiPi4,
-> that didn't work if I got the address wrong, despite the fact that the
-> auto-detection when the MDIO node is omitted claimed to find the same
-> phy on both addresses 0 and 1.
->
-
-Yes, I have tested with these changes still this does not work, with
-out this fix as of now..
-
-We can check this comment in the below commit id
-70f04e9a3358404367030493dc36718d4495a9a5  ARM: dts: imx6ul-14x14-evk:
-Enable the GPIO expander
-
-maybe something is still missing to be configured.
-
-Thanks
--Anand
 
 
+On 26/10/2022 07:33, Vinod Koul wrote:
+> On 24-10-22, 21:58, Dmitry Baryshkov wrote:
+>> On Mon, 24 Oct 2022 at 21:56, Krzysztof Kozlowski
+>> <krzysztof.kozlowski@linaro.org> wrote:
+>>>
+>>> On 24/10/2022 12:48, Dmitry Baryshkov wrote:
+>>>> On 24/10/2022 19:46, Krzysztof Kozlowski wrote:
+>>>>> On 24/10/2022 12:45, Dmitry Baryshkov wrote:
+>>>>>> On 24/10/2022 17:56, Krzysztof Kozlowski wrote:
+>>>>>>> On 09/12/2021 05:35, Vinod Koul wrote:
+>>>>>>>> Add the spmi bus as found in the SM8450 SoC
+>>>>>>>>
+>>>>>>>> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+>>>>>>>> Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+>>>>>>>> ---
+>>>>>>>>     arch/arm64/boot/dts/qcom/sm8450.dtsi | 18 ++++++++++++++++++
+>>>>>>>>     1 file changed, 18 insertions(+)
+>>>>>>>>
+>>>>>>>> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+>>>>>>>> index f75de777f6ea..b80e34fd3fe1 100644
+>>>>>>>> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
+>>>>>>>> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+>>>>>>>> @@ -645,6 +645,24 @@ pdc: interrupt-controller@b220000 {
+>>>>>>>>                            interrupt-controller;
+>>>>>>>>                    };
+>>>>>>>>
+>>>>>>>> +         spmi_bus: spmi@c42d000 {
+>>>>>>>> +                 compatible = "qcom,spmi-pmic-arb";
+>>>>>>>> +                 reg = <0x0 0x0c400000 0x0 0x00003000>,
+>>>>>>>> +                       <0x0 0x0c500000 0x0 0x00400000>,
+>>>>>>>> +                       <0x0 0x0c440000 0x0 0x00080000>,
+>>>>>>>> +                       <0x0 0x0c4c0000 0x0 0x00010000>,
+>>>>>>>> +                       <0x0 0x0c42d000 0x0 0x00010000>;
+>>>>>>>
+>>>>>>> This is a patch from December 2021. Is there anything blocking it from
+>>>>>>> being merged?
+>>>>>>>
+>>>>>>> The same applies to several other patches here.
+>>>>>>
+>>>>>> As far as I know, Stephen still didn't pick up the spmi-pmic-arb support
+>>>>>> for the PMIC on the SM8450 platform. Thus we also can not merge the DT
+>>>>>> parts.
+>>>>>
+>>>>> Why we cannot merge DTS? How is DTS with new nodes depending on any
+>>>>> driver changes?
+>>>>
+>>>> In this particular case, there was an open question, what should be the
+>>>> bindings for the PMIC ARB v7.
+>>>
+>>> Ah, so it is about PMIC ARB v7 bindings? Then it's reasonable to wait
+>>> with this one. I just had an impression that it's about driver changes...
+>>
+>> Yes, it's about binding. Thus we have been waiting for quite some time.
+> 
+> Yes sadly Steven has stopped responding to emails or IRC.. I am not
+> sure whats going on!
+> 
+> Even the SPMI tree is not being actively maintained with only few
+> patches which were picked in last cycle since this year!
+It's in -next now and 8450 boots and works fine. If the binding 
+situation has been resolved, I say merge this ASAP! :)
 
-
-
-> Robin.
->
-> >
-> > Thanks
-> > -Anand
-> >>> --
-> >>> 2.38.1
-> >>>
-> >
-> > _______________________________________________
-> > Linux-rockchip mailing list
-> > Linux-rockchip@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-rockchip
+Konrad
+> 
