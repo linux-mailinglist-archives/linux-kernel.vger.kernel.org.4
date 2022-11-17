@@ -2,86 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA3B162DEED
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:01:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7385262DD78
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 15:02:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239647AbiKQPBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 10:01:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50466 "EHLO
+        id S239839AbiKQOCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 09:02:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234267AbiKQPBE (ORCPT
+        with ESMTP id S234629AbiKQOCl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 10:01:04 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97AB3CE0;
-        Thu, 17 Nov 2022 07:01:01 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668697259;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RP+U+feZlcZmrP3/IlXzJjEfrliAdXsJ/Be3VTH8hM4=;
-        b=yIMYsx8Ax/ruYoEaGB1680I3hBo33RXitUEA7+OswjFiHPWiao11xXYIPjCJvTM2HCKaI2
-        RY7j8mOW2ncx+3XttulWIEsrwrOODQ+4ZsrTQ7ufRC5IwPXGED+cydt8Wi2iNcTejnW4BH
-        GgGs/41wgb0SUGvNk1ONVVc/6kNv3J+M5NACfPeN5D0bLosXCcEsNYnxKhbFXYu51i3MbX
-        qaNNPRCMV2c0+ex4tdvDIoqEOm9H/tQsBWcrDGUC7qT1PNY7IBJXiAQ8kQIyhguimgV2rR
-        OgoiPXH4zFIqhCiB46/y6o8YQwdobX4ctsnN3sbopkL08t5BQv4ydmABvcHAdg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668697259;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RP+U+feZlcZmrP3/IlXzJjEfrliAdXsJ/Be3VTH8hM4=;
-        b=zD3n5LruqflYwcA/byHi6Sl3zDk32yjCX+vWdV3TVGvkIuIL5PtPucTyH45LuHX4K2xR9n
-        HW/N/3UKH0gtg3DA==
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
-        Allen Hubbe <allenbh@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linuxppc-dev@lists.ozlabs.org,
-        "Ahmed S. Darwish" <darwi@linutronix.de>,
-        Reinette Chatre <reinette.chatre@intel.com>
-Subject: Re: [patch 39/39] x86/apic: Remove X86_IRQ_ALLOC_CONTIGUOUS_VECTORS
-In-Reply-To: <Y3Umh+Pa1WSJ33fD@nvidia.com>
-References: <20221111120501.026511281@linutronix.de>
- <20221111122015.865042356@linutronix.de> <Y3Umh+Pa1WSJ33fD@nvidia.com>
-Date:   Thu, 17 Nov 2022 16:00:58 +0100
-Message-ID: <87a64pmxqt.ffs@tglx>
+        Thu, 17 Nov 2022 09:02:41 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 889DA4093E;
+        Thu, 17 Nov 2022 06:02:40 -0800 (PST)
+Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NChS842jpzRpFX;
+        Thu, 17 Nov 2022 22:02:16 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by kwepemi500015.china.huawei.com
+ (7.221.188.92) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 17 Nov
+ 2022 22:02:37 +0800
+From:   Lu Wei <luwei32@huawei.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <lars.povlsen@microchip.com>,
+        <Steen.Hegelund@microchip.com>, <daniel.machon@microchip.com>,
+        <UNGLinuxDriver@microchip.com>, <netdev@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [patch net] net: microchip: sparx5: Fix return value in sparx5_tc_setup_qdisc_ets()
+Date:   Thu, 17 Nov 2022 23:07:22 +0800
+Message-ID: <20221117150722.2909271-1-luwei32@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemi500015.china.huawei.com (7.221.188.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jason, Bjorn, Ashok!
+Function sparx5_tc_setup_qdisc_ets() always returns negative value
+because it return -EOPNOTSUPP in the end. This patch returns the
+rersult of sparx5_tc_ets_add() and sparx5_tc_ets_del() directly.
 
-On Wed, Nov 16 2022 at 14:05, Jason Gunthorpe wrote:
-> On Fri, Nov 11, 2022 at 02:55:17PM +0100, Thomas Gleixner wrote:
->> Now that the PCI/MSI core code does early checking for multi-MSI support
->> X86_IRQ_ALLOC_CONTIGUOUS_VECTORS is not required anymore.
->
->> Remove the flag and rely on MSI_FLAG_MULTI_PCI_MSI.
->
-> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+Fixes: 211225428d65 ("net: microchip: sparx5: add support for offloading ets qdisc")
+Signed-off-by: Lu Wei <luwei32@huawei.com>
+---
+ drivers/net/ethernet/microchip/sparx5/sparx5_tc.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-Thanks for taking the time to go through this pile!
+diff --git a/drivers/net/ethernet/microchip/sparx5/sparx5_tc.c b/drivers/net/ethernet/microchip/sparx5/sparx5_tc.c
+index e05429c751ee..dc2c3756e3a2 100644
+--- a/drivers/net/ethernet/microchip/sparx5/sparx5_tc.c
++++ b/drivers/net/ethernet/microchip/sparx5/sparx5_tc.c
+@@ -90,13 +90,10 @@ static int sparx5_tc_setup_qdisc_ets(struct net_device *ndev,
+ 			}
+ 		}
+ 
+-		sparx5_tc_ets_add(port, params);
+-		break;
++		return sparx5_tc_ets_add(port, params);
+ 	case TC_ETS_DESTROY:
+ 
+-		sparx5_tc_ets_del(port);
+-
+-		break;
++		return sparx5_tc_ets_del(port);
+ 	case TC_ETS_GRAFT:
+ 		return -EOPNOTSUPP;
+ 
+-- 
+2.31.1
 
-       tglx
