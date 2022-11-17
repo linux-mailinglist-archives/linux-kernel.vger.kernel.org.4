@@ -2,194 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A76B62D190
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 04:23:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4578D62D192
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 04:24:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233752AbiKQDXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 22:23:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47320 "EHLO
+        id S234510AbiKQDYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 22:24:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233151AbiKQDXw (ORCPT
+        with ESMTP id S233958AbiKQDYG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 22:23:52 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2102.outbound.protection.outlook.com [40.107.92.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C27463A2;
-        Wed, 16 Nov 2022 19:23:51 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=H/XLn2j1fWYOKHFlYNp9SL4y6z5HKUH8N1MxfGRGvsMLG0scSXRhlboHJdP3HOQpA+NHtK3idARpoYJ1auFAl1eC/FbTU5fCD7P4Vt6iGYZrEhuZ/Rd1mcu+94uR+8l8pMNHgTinxxVXqLcDEXvm4bEVvvLehnOaSiTjcu+oAF6i+noONAmIP8itfq6Ybw8JX3XJCVpgJgCCrVZ4Sma+48z/fVOzI6tvcvoBJqvprfeYyH67pBY2MpMOuJ7KNVpppIdlSsI3RPRKuDhwcTqKzI3BI93ffboZiRpIyalPKXqObx/xSvWy3MtbNKZQ/6ZxtktStj2P4tJ/mfXa0RT4vA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=v0H3mSvcnxlObHJYpZD1w1bfKTfsQ095RKzPqChWCrI=;
- b=jMtMPENkf7ejPGWId14xe5xOSPrq7UtPJxVkSdbO1kfvpy8oRmXmdTYT0TrpRHwtlIMD/Znn+3L326NllmkjnTK/IMFqWOyshcuKS3CTVoiqqOWlen4BDwskHUaImFRuW2m/e07G5qUfxaQkU8HoKNqWpHFsE8CInjzOpxw6RNUjtSsWKOXGSJRKearyxw4FTGQbv5mQkVoTa6Qbs4KHoDZjWL6DP40fFf2X9JaQzZylGNpOOU0JMndTff4O1BldGm7M9TKpsZJne+6ZQyPwOlCQhh7SoRO3l1CLxQtwoGYB3/G5Vc/9FcJ5TjcspSCa1jWovZMTKquOx7VuM7sCSw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=v0H3mSvcnxlObHJYpZD1w1bfKTfsQ095RKzPqChWCrI=;
- b=oAphoW4ucWBBCcQ1eSqXm7gY1E/rAYwrFBRsCuCKLdI15ft8TqNNdAEpKcz1U+7G6gUrBBXGpJI3rzW65kV+1R0fKh0WKuXXXRPjJ8EODME81G97UUR5ZlbnYh1E4LWs2w9me/hjCeXgI+svvWoMOkv8N08+/zPEvS/cCdGl8qc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from SN4PR01MB7455.prod.exchangelabs.com (2603:10b6:806:202::11) by
- DM6PR01MB5050.prod.exchangelabs.com (2603:10b6:5:68::22) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5813.16; Thu, 17 Nov 2022 03:23:49 +0000
-Received: from SN4PR01MB7455.prod.exchangelabs.com
- ([fe80::df7e:7f53:a83f:a86a]) by SN4PR01MB7455.prod.exchangelabs.com
- ([fe80::df7e:7f53:a83f:a86a%4]) with mapi id 15.20.5813.016; Thu, 17 Nov 2022
- 03:23:49 +0000
-Message-ID: <8562147f-b68a-e49d-c914-c8d9d00901d6@os.amperecomputing.com>
-Date:   Thu, 17 Nov 2022 10:23:38 +0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.2
-Subject: Re: [PATCH] ARM: dts: aspeed: mtjade,mtmitchell: Add BMC SSIF nodes
-Content-Language: en-CA
-To:     Joel Stanley <joel@jms.id.au>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Open Source Submission <patches@amperecomputing.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org,
-        Phong Vo <phong@os.amperecomputing.com>,
-        thang@os.amperecomputing.com
-References: <20221024081115.3320584-1-quan@os.amperecomputing.com>
- <781ea7c7-b33e-f054-71eb-d760f7a01301@os.amperecomputing.com>
- <CACPK8XcCKK_o0hBA82k0CEcpbHXbHcUii3bgoGvHaGvtw2Q_Ww@mail.gmail.com>
-From:   Quan Nguyen <quan@os.amperecomputing.com>
-In-Reply-To: <CACPK8XcCKK_o0hBA82k0CEcpbHXbHcUii3bgoGvHaGvtw2Q_Ww@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SI2PR04CA0010.apcprd04.prod.outlook.com
- (2603:1096:4:197::11) To SN4PR01MB7455.prod.exchangelabs.com
- (2603:10b6:806:202::11)
+        Wed, 16 Nov 2022 22:24:06 -0500
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B000EC770;
+        Wed, 16 Nov 2022 19:24:03 -0800 (PST)
+Received: by mail-qv1-f44.google.com with SMTP id o8so407513qvw.5;
+        Wed, 16 Nov 2022 19:24:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ieG8FEYcPH+W9pEbA1cC8itGyGdZ/0ghqx0HbPxMjkc=;
+        b=2ZWsjlsvfAb72Y1wTGVVBYEp6lWOs/vR2KyF7xwlY2dAhZm6KKsv6f2p7QE0awoOX7
+         DLuYTkYaxj6/9Y+j1xTFGrki9sq//mM7fRsag8B9KETL+xDhiZKJigZ6cozSA7KeVzar
+         CEfWOZJsULL8bY/YyX3jrlUtk2K1J/KV0e6RKUr6kz0wTnhZvKBhuaXuEtAGGR3g5ojH
+         1JemL2n9GBREG1AZMDiVShXulshtZHa+znpRx4KYXwRNJumgiID9mJioKGO+QDIfKe39
+         79+tWNyQwujaGBbMO2XOSMcqb+HQeZAVLf3NuxA4SHAIWzxegIllpp+sKkBhdfdvw3XA
+         wxbA==
+X-Gm-Message-State: ANoB5pmGkYj2qZDoDkkfrXN/7FHrR1DHNbfj+UDexX+cJDDMll+mGz9G
+        tTurB7uZHBdKJMmSCozVTL0cbSVZHuXry2+S
+X-Google-Smtp-Source: AA0mqf5zQpGowaR5AsNw+uBRubVSXP1y/x2mBl7h27fnFaBtNbViqEgw9yHOQa5bGGuIr3ELD5OsKQ==
+X-Received: by 2002:ad4:55ec:0:b0:4af:b3c6:f29c with SMTP id bu12-20020ad455ec000000b004afb3c6f29cmr990147qvb.45.1668655442296;
+        Wed, 16 Nov 2022 19:24:02 -0800 (PST)
+Received: from localhost (c-24-15-214-156.hsd1.il.comcast.net. [24.15.214.156])
+        by smtp.gmail.com with ESMTPSA id y23-20020a37f617000000b006fa22f0494bsm11066009qkj.117.2022.11.16.19.24.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 19:24:01 -0800 (PST)
+From:   David Vernet <void@manifault.com>
+To:     bpf@vger.kernel.org
+Cc:     ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+        martin.lau@linux.dev, memxor@gmail.com, yhs@fb.com,
+        song@kernel.org, sdf@google.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, jolsa@kernel.org, haoluo@google.com,
+        tj@kernel.org, kernel-team@fb.com, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v7 0/3] Support storing struct task_struct objects as kptrs
+Date:   Wed, 16 Nov 2022 21:23:59 -0600
+Message-Id: <20221117032402.2356776-1-void@manifault.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN4PR01MB7455:EE_|DM6PR01MB5050:EE_
-X-MS-Office365-Filtering-Correlation-Id: 12a3b9ce-2c56-43ff-13f8-08dac84b247f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7gtorwebTpL5/WLFcyOzJK2c/xhG54vm42SCzFYLfWYK4amgORR34VCz2CeDd8O/qXBKZFrvCWb4JTug4NX5aMYvk3rkhiUp/7GxlwHrGK1+vtkvf67nXjJzJrNeGu/SqmlPdh3YTMKG5BH4aqWNN8fs+WJ/GmnW+USjPC6Sear5G+DOzG0BEhKCQNdKh/b84duArogEOPZe7HEMwIiml9dfbgXR77cNPFnJ2FyRP15pf4oGVsB+Y1GVdx5aW7xCLFrC9n7VZmkHGO+W3/PxARXzLk/sbrnlbvZP+sRDqQNAhfR1ZfdTlV+U2AFNacQQIwnFTtpcKPTQNa+fakhQAb77uYqiUd+2ZSaxvK9SjS5/uaCTWj9160gWvpR3P8fdfA3QtNO7Sdj6scaegs4+XVlaN2vBuXhKfxQiAOEmrs9LbnzYFdmy4OD2kyQx5mO+hawDJ6eANLsTwi88NKHD3c+GMA9kiI2Q/j2TNxlAsX1qNs6aKE9MbMGvZR6wuXoNhWsSAhsmjozADYcjRKGOae1v9oDnRcOqx7B4mEitwdVUI2FWLf59yN6mGz66ZnbQAem1+P4nnMROhr1u6/reEX8UGNuqfMTE2ZI/LJhA1UhHjttksDY5SQ8PRNGQBzcLrbDptPFXl09VYKdeOj8PCOMLA/PHrgpZiyM1tQXl6lP5Qy3TAJbgKJ6aa8LFgVprssCC4C2bIytCOwxHF2c3BoObNdZdgSltwq+LMLDGsqg+6/QF2KsEZr/tZNal2VciVg7J79q8aRvpyEynBvh+hytghD/TAc7ljtMG14Wn1cg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN4PR01MB7455.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(376002)(346002)(136003)(396003)(39850400004)(451199015)(478600001)(107886003)(6916009)(316002)(6666004)(6486002)(41300700001)(66946007)(4326008)(8676002)(66476007)(66556008)(2616005)(186003)(8936002)(5660300002)(2906002)(26005)(6512007)(6506007)(38350700002)(52116002)(54906003)(31686004)(38100700002)(53546011)(31696002)(86362001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dm9rK3dyZ3J0a0wwS2daRldwaW9jUzVYbGQvM2hUNmR6cWtqTkxpVXVwcFNV?=
- =?utf-8?B?SFR1Q2NJTjhBQnNvR0NDb2phRVA3RndIY01NZzRXcFZWd1FEaGdmMXI4aytB?=
- =?utf-8?B?ZDFDQjhkV1VURzhtRkNHYkRvK3Jlc0E5QnVBdDJUbStKLzZPTUpXQXd3SjZ0?=
- =?utf-8?B?MzRJbDg4RXhGSFVwaERBRVNzZlh0WElRYzM5TjdiS0Z3MzVKNU1NZTFBbUpq?=
- =?utf-8?B?SmozMUhPZEhQbFVSMFY2YmRVYW81RVdYNkNoSkMrd0Z6SVMyWEhRQnQ0VDZQ?=
- =?utf-8?B?MnhlZ3RsSVVXeVF1ODhZdng2ZWlOSGZLUjNiNEdRak8vbmtiaTJ2TWJCR1NU?=
- =?utf-8?B?SVZhZUI2TFAwYnNGZm9NRXZoWkM0anArZENQcnlBWGtneWNtYVBBRy80Znky?=
- =?utf-8?B?RURyanFwUE85UDRlbXBDVnZHTXlDd0lmamdwTmF6cGE1VUUxMWtBeWNlODRJ?=
- =?utf-8?B?MFA3R20wYVQzOC94ZGdDRnRWMVBycTFLYWdZejg4aHhPK0srU2VzVG9RQlMr?=
- =?utf-8?B?b1hLc2F1bHg3MENqSUtyejNSeXBaaEtQYjhFODJIQ1NqU0oxM2hyN3EraGRX?=
- =?utf-8?B?elljeGUzZnlKZ0ZQSnpmZFdIQ2ZmZlVHSGtQU01nTE45QkhpM2IvRytBbklw?=
- =?utf-8?B?SnhxWlVYQUo2bzRla2YzMG81SzNYOGNxRjZ6emNDazA1Wkp6S3ZiMHRNcmNr?=
- =?utf-8?B?Myt5dk90bWlEemRsMFdoa3l0N05RL0RQZkQxeUVlVGRKazVYUFRhdEZzTVVC?=
- =?utf-8?B?VFFmcjFKUUdUTDUzMDZ0MGMyaEs4R3RrZERpYWxndFFuNFQ0Zk9nWVhiL0N0?=
- =?utf-8?B?Q2ErUjRzdTJIdGM2TFh3SXNQSm1NZ1BmR1dKVGVkRzlpWFBCZkJDemJxMHFi?=
- =?utf-8?B?YkRFbWpSaC9naURwQnJURnVsbkZlL2xnUndHUGpIWTFMckc4blN6ZmM2WEhV?=
- =?utf-8?B?Yk9sOURySE43WE5GWkJHK3pGckp3UjZTblBmajlhWW1ESnRhd2Nrdk96Lzky?=
- =?utf-8?B?RmhHM2E1N1plbXpLYW9aWGxCS0JiMGFmeTYyUE9CSUJzOXcxblkva1ErY25G?=
- =?utf-8?B?YzZTRGhPdm1vVjdXY0VZcTFiajcvbnBNR2xWcnBvd1MxU0g3ajFxdEVIdDY1?=
- =?utf-8?B?ZzBZREd6bFd6OWpZV2FETS90ZVJ4UHU2bjlucytMeTRPVFprbksyZlh2SWk2?=
- =?utf-8?B?VERmRG5XcG1IZCsxVkdESmo3Z0djM25GQkxiS21sUGYwQ1U5eFFCTkFiTEJO?=
- =?utf-8?B?YXNwdzBMYXhpa0tmdnQ1NXI2V0VJQU9GT05mTkh4b21EWVJ0d25LTTZMRUo2?=
- =?utf-8?B?alQyNlIrMXZ6bTVSS2JkZXVFckZCcXpmNzQrblhnTC8yOTZNQ2QyRmhxNnRu?=
- =?utf-8?B?TjR0M281eVNxZVRmYTh4TE1JNlRnL1BJbzB0S0dHQWgrbXNMbGpHNUJGdFVo?=
- =?utf-8?B?QXRPcW1ZNlR3bWR5cFdtTm1CbEd2dkMvZXFvR2N4VG1pZk8reFVESzVsUWw1?=
- =?utf-8?B?NmxDM2dFU3pVeFNTTVY1VnZxTGoyWHJueWt3MVp5b1oyU0Q1UFYyOFEzSHNG?=
- =?utf-8?B?SHg4U0RXcUZINDRyY0JWaWVyaUxTMk56VHBJbnhrdHFLc3NtYWlVQWRjRGdN?=
- =?utf-8?B?M2dlOGZMNmVGbmZ6MDhWenZhd1Q5OVNaVjVCMjBiUGZEYXpHYW4yVHh0czJz?=
- =?utf-8?B?VVN1VHc0V1E0OGpuR1FUV0d1b2g3ekkrOFhIamJRaWZ1Y3Y1WkZqMVNiKzJX?=
- =?utf-8?B?UTM5NUxra29ndy8yc3NEN1dBWHV5dEVZUFIwUXQ4aXZ6SjdqR0VXQ1dPRTJM?=
- =?utf-8?B?cE9zSnd6R05KZXpBcFNUbkJmS3RCeXN3REZYM051cHY1OGgwcGk2TnFjelRp?=
- =?utf-8?B?WXhYRHpVd2l3cU04ZTFOd21uVXhJTUgwSDJNM2xQeEF1RmhrYW1XeXI4cTJQ?=
- =?utf-8?B?Sm9wdklZRVBKNzg4OXM5Zk9XVmFRVlpBK0Zoc05rWTlwSlNNSXNzK0hkc2ZO?=
- =?utf-8?B?U1J5VzJEMWpEN2xBZFBPZnh2dHpLTFRLOFAwallaOHY4NWZ5dXNWRW85OTZz?=
- =?utf-8?B?THBaSExNQTlnbklWcktEcEZPMG1PTWhPY0lESFJNSTU5WEY4N2pYNVdsbnVW?=
- =?utf-8?B?Nm02WXB2aUtncW1IMjcySGlJdGxpK0pUQXR1ZTBKbHlReVNsaTNSbmkrZWpB?=
- =?utf-8?Q?Iw6yej4QR9el0HnMAUTGCIA=3D?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 12a3b9ce-2c56-43ff-13f8-08dac84b247f
-X-MS-Exchange-CrossTenant-AuthSource: SN4PR01MB7455.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Nov 2022 03:23:49.1912
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4szbR3crtL/vMui4MheLEGj3JxWzBR/WxXiA6TOpe36FgfUDI6ASgBAR8vMhe4aLoYsMGwOH+tZf6HdprjouRK9VVwz1qRJrqtDEYMdwROo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR01MB5050
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        TVD_PH_BODY_ACCOUNTS_PRE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Now that BPF supports adding new kernel functions with kfuncs, and
+storing kernel objects in maps with kptrs, we can add a set of kfuncs
+which allow struct task_struct objects to be stored in maps as
+referenced kptrs.
 
+The possible use cases for doing this are plentiful.  During tracing,
+for example, it would be useful to be able to collect some tasks that
+performed a certain operation, and then periodically summarize who they
+are, which cgroup they're in, how much CPU time they've utilized, etc.
+Doing this now would require storing the tasks' pids along with some
+relevant data to be exported to user space, and later associating the
+pids to tasks in other event handlers where the data is recorded.
+Another useful by-product of this is that it allows a program to pin a
+task in a BPF program, and by proxy therefore also e.g. pin its task
+local storage.
 
-On 17/11/2022 10:01, Joel Stanley wrote:
-> On Wed, 16 Nov 2022 at 07:06, Quan Nguyen <quan@os.amperecomputing.com> wrote:
->>
->>
->> Just a gentle ping about this patch.
->>
->> Thanks and best regards,
->> - Quan
->>
->> On 24/10/2022 15:11, Quan Nguyen wrote:
->>> Add BMC SSIF node to support IPMI in-band communication.
->>>
->>> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
-> 
-> Applied, thanks.
-> 
+In order to support this, we'll need to expand KF_TRUSTED_ARGS to
+support receiving trusted, non-refcounted pointers. It currently only
+supports either PTR_TO_CTX pointers, or refcounted pointers. What this
+means in terms of the implementation is that btf_check_func_arg_match()
+would have to add another condition to its logic for checking if
+a ptr needs a refcount to also require that the pointer has at least one
+type modifier, such as a new modifier we're adding called PTR_TRUSTED
+(described below). Note that PTR_UNTRUSTED is insufficient for this
+purpose, as it does not cover all of the possible pointers we need to
+watch out for, though. For example, a pointer obtained from walking a
+struct is considered "trusted" (or at least, not PTR_UNTRUSTED). To
+account for this and enable us to expand KF_TRUSTED_ARGS to include
+allow-listed arguments such as those passed by the kernel to tracepoints
+and struct_ops callbacks, this patch set also introduces a new
+PTR_TRUSTED type flag modifier which records if a pointer was obtained
+passed from the kernel in a trusted context.
 
-Thanks Joel.
-- Quan
+In closing, this patch set:
 
-> 
->>> ---
->>>    arch/arm/boot/dts/aspeed-bmc-ampere-mtjade.dts     | 4 ++++
->>>    arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts | 4 ++++
->>>    2 files changed, 8 insertions(+)
->>>
->>> diff --git a/arch/arm/boot/dts/aspeed-bmc-ampere-mtjade.dts b/arch/arm/boot/dts/aspeed-bmc-ampere-mtjade.dts
->>> index d127cbcc7998..353359822d7b 100644
->>> --- a/arch/arm/boot/dts/aspeed-bmc-ampere-mtjade.dts
->>> +++ b/arch/arm/boot/dts/aspeed-bmc-ampere-mtjade.dts
->>> @@ -342,6 +342,10 @@ &mac1 {
->>>
->>>    &i2c0 {
->>>        status = "okay";
->>> +     ssif-bmc@10 {
->>> +             compatible = "ssif-bmc";
->>> +             reg = <0x10>;
->>> +     };
->>>    };
->>>
->>>    &i2c1 {
->>> diff --git a/arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts b/arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts
->>> index 606cd4be245a..4b91600eaf62 100644
->>> --- a/arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts
->>> +++ b/arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts
->>> @@ -445,6 +445,10 @@ &i2c9 {
->>>
->>>    &i2c11 {
->>>        status = "okay";
->>> +     ssif-bmc@10 {
->>> +             compatible = "ssif-bmc";
->>> +             reg = <0x10>;
->>> +     };
->>>    };
->>>
->>>    &i2c14 {
+1. Adds the new PTR_TRUSTED register type modifier flag, and updates the
+   verifier and existing selftests accordingly.
+2. Expands KF_TRUSTED_ARGS to also include trusted pointers that were
+   not obtained from walking structs. 
+3. Adds a new set of kfuncs that allows struct task_struct* objects to be
+   used as kptrs.
+4. Adds a new selftest suite to validate these new task kfuncs.
+
+--
+Changelog:
+v6 -> v7:
+- Removed the PTR_WALKED type modifier, and instead define a new
+  PTR_TRUSTED type modifier which is set on registers containing
+  pointers passed from trusted contexts (i.e. as tracepoint or
+  struct_ops callback args) (Alexei)
+- Remove the new KF_OWNED_ARGS kfunc flag. This can be accomplished
+  by defining a new type that wraps an existing type, such as with
+  struct nf_conn___init (Alexei)
+- Add a test_task_current_acquire_release testcase which verifies we can
+  acquire a task struct returned from bpf_get_current_task_btf().
+- Make bpf_task_acquire() no longer return NULL, as it can no longer be
+  called with a NULL task.
+- Removed unnecessary is_test_kfunc_task() checks from failure
+  testcases.
+
+v5 -> v6:
+- Add a new KF_OWNED_ARGS kfunc flag which may be used by kfuncs to
+  express that they require trusted, refcounted args (Kumar)
+- Rename PTR_NESTED -> PTR_WALKED in the verifier (Kumar)
+- Convert reg_type_str() prefixes to use snprintf() instead of strncpy()
+  (Kumar)
+- Add PTR_TO_BTF_ID | PTR_WALKED to missing struct btf_reg_type
+  instances -- specifically btf_id_sock_common_types, and
+  percpu_btf_ptr_types.
+- Add a missing PTR_TO_BTF_ID | PTR_WALKED switch case entry in
+  check_func_arg_reg_off(), which is required when validating helper
+  calls (Kumar)
+- Update reg_type_mismatch_ok() to check base types for the registers
+  (i.e. to accommodate type modifiers). Additionally, add a lengthy
+  comment that explains why this is being done (Kumar)
+- Update convert_ctx_accesses() to also issue probe reads for
+  PTR_TO_BTF_ID | PTR_WALKED (Kumar)
+- Update selftests to expect new prefix reg type strings.
+- Rename task_kfunc_acquire_trusted_nested testcase to
+  task_kfunc_acquire_trusted_walked, and fix a comment (Kumar)
+- Remove KF_TRUSTED_ARGS from bpf_task_release(), which already includes
+  KF_RELEASE (Kumar)
+- Add bpf-next in patch subject lines (Kumar)
+
+v4 -> v5:
+- Fix an improperly formatted patch title.
+
+v3 -> v4:
+- Remove an unnecessary check from my repository that I forgot to remove
+  after debugging something.
+
+v2 -> v3:
+- Make bpf_task_acquire() check for NULL, and include KF_RET_NULL
+  (Martin)
+- Include new PTR_NESTED register modifier type flag which specifies
+  whether a pointer was obtained from walking a struct. Use this to
+  expand the meaning of KF_TRUSTED_ARGS to include trusted pointers that
+  were passed from the kernel (Kumar)
+- Add more selftests to the task_kfunc selftest suite which verify that
+  you cannot pass a walked pointer to bpf_task_acquire().
+- Update bpf_task_acquire() to also specify KF_TRUSTED_ARGS.
+
+v1 -> v2:
+- Rename tracing_btf_ids to generic_kfunc_btf_ids, and add the new
+  kfuncs to that list instead of making a separate btf id list (Alexei).
+- Don't run the new selftest suite on s390x, which doesn't appear to
+  support invoking kfuncs.
+- Add a missing __diag_ignore block for -Wmissing-prototypes
+  (lkp@intel.com).
+- Fix formatting on some of the SPDX-License-Identifier tags.
+- Clarified the function header comment a bit on bpf_task_kptr_get().
+
+David Vernet (3):
+  bpf: Allow trusted pointers to be passed to KF_TRUSTED_ARGS kfuncs
+  bpf: Add kfuncs for storing struct task_struct * as a kptr
+  bpf/selftests: Add selftests for new task kfuncs
+
+ Documentation/bpf/kfuncs.rst                  |  28 +-
+ include/linux/bpf.h                           |  25 ++
+ include/linux/btf.h                           |  66 ++--
+ kernel/bpf/btf.c                              |  44 ++-
+ kernel/bpf/helpers.c                          |  83 ++++-
+ kernel/bpf/verifier.c                         |  45 ++-
+ kernel/trace/bpf_trace.c                      |   2 +-
+ net/ipv4/bpf_tcp_ca.c                         |   4 +-
+ tools/testing/selftests/bpf/DENYLIST.s390x    |   1 +
+ .../selftests/bpf/prog_tests/task_kfunc.c     | 160 +++++++++
+ .../selftests/bpf/progs/task_kfunc_common.h   |  81 +++++
+ .../selftests/bpf/progs/task_kfunc_failure.c  | 304 ++++++++++++++++++
+ .../selftests/bpf/progs/task_kfunc_success.c  | 127 ++++++++
+ tools/testing/selftests/bpf/verifier/calls.c  |   4 +-
+ .../selftests/bpf/verifier/ref_tracking.c     |   4 +-
+ 15 files changed, 906 insertions(+), 72 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/task_kfunc.c
+ create mode 100644 tools/testing/selftests/bpf/progs/task_kfunc_common.h
+ create mode 100644 tools/testing/selftests/bpf/progs/task_kfunc_failure.c
+ create mode 100644 tools/testing/selftests/bpf/progs/task_kfunc_success.c
+
+-- 
+2.38.1
