@@ -2,310 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB4F662E4CA
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 19:54:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70CB962E4DC
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 19:56:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231377AbiKQSyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 13:54:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50776 "EHLO
+        id S240109AbiKQS4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 13:56:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234418AbiKQSyL (ORCPT
+        with ESMTP id S232841AbiKQS4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 13:54:11 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 730CF86A48
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 10:54:10 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id k2-20020a17090a4c8200b002187cce2f92so1028528pjh.2
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 10:54:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7tuTPYaip0buFm1R2LuQQeQrPhqmlAkfQwU5all+C98=;
-        b=YrWkEshLI0itsiLecKhk4dwkmRm2FcGLQhVSYFiiCVDxfQPf7xMnX3wL0UWBXt4/yZ
-         75bcxHlIJDWBaLf32PBaCMOQT4RUdEBw9ynjAVisMNySTa8TaOUUsq8aozrDZ/4ZRLXM
-         UhnL7EyhuxfvwSDMjKYPNvDtZac1Bi3dXaPIuYzc7Khn3Kc263Fxr0cPG6RBbPXrIgJT
-         lCV341NG9BWzUcbaqSpT4exu3kb232urOIoCuE0cnX+H5OeB+CelCrPpbLm4Z10nPBcu
-         7//7r9IntV8SKhai7dClyJRDymY3MHN4RIv50ZmrBbtq4XKH4s2D/mwO1dpubo8O/6Oa
-         Z0bg==
+        Thu, 17 Nov 2022 13:56:05 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A86688F8D
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 10:55:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668711305;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7ib+z4LYCW5CoTqQqR59vxmOP/VcqCP1xatXfReClms=;
+        b=fAjQHgxmicAyd2t7yER1I2eMOF/yJzozukGeafZVDrKNkFRkJKsg0JaWx/KVBNVvSgNSyX
+        eBbtRxPeDSAjbK6m7GMUbveZYSPNnk2Ezy0Mq7+bmbq/nWajBQGPHu+csVzT/ZFB1U2qa+
+        KddKUTZQ2ue7yTRsK4n+zB70ybeQVFc=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-587-mWe7J9vDPxuYzeN_XkzXIg-1; Thu, 17 Nov 2022 13:55:03 -0500
+X-MC-Unique: mWe7J9vDPxuYzeN_XkzXIg-1
+Received: by mail-wr1-f72.google.com with SMTP id w11-20020adfbacb000000b002418a90da01so968215wrg.16
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 10:55:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7tuTPYaip0buFm1R2LuQQeQrPhqmlAkfQwU5all+C98=;
-        b=56DiJfCurI1BCneG8sI5CWu6C5nqUy+7eo3u97Nue87qLq+qQ9voSWpEmb+iP/RwXR
-         12wGtTGz7WAml+/d2OA3b0XxMRO3Typ/pN+8LPL6BBZ8U8/hOlPRWcSIckq71Wt54kHA
-         /5/sgHl6/D7bXyr3O/g+vpLESbPv/uGns1VPwyZrLXq89ApRiXS53HQQgo4vJPGQQHRh
-         wPF4DcVK5umByFLYNH7b/GF/3oSzF2gXCxMhed4rKvdpW20ewlbgrkomQy8TlHEFgUhe
-         ilkfqPoLzWkD/9OD/mOSMK8V++rASduVej2mOM0SvM51COK9DU9lGVhVgVOYY8Mv8iOA
-         UvNA==
-X-Gm-Message-State: ANoB5pm8a1tcS3NrT4iM9DprvHJvskhF+D1oo5BSsevbhsLf0EhbzEAG
-        LmdZ2sMCCkH7KmW5t6TNt9j3jQ==
-X-Google-Smtp-Source: AA0mqf6iD6Di3oz2avNhbgCCtvr0vmOmmX5lTTYWd5gW61sbaegZZur6x2lLj1Zso+P8PGZFpbvJOw==
-X-Received: by 2002:a17:902:f78c:b0:188:5d24:87e with SMTP id q12-20020a170902f78c00b001885d24087emr4089103pln.87.1668711249805;
-        Thu, 17 Nov 2022 10:54:09 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id l11-20020a170903120b00b001769e6d4fafsm1801632plh.57.2022.11.17.10.54.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 10:54:09 -0800 (PST)
-Date:   Thu, 17 Nov 2022 18:54:06 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        Jing Liu <jing2.liu@intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Wyes Karny <wyes.karny@amd.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Babu Moger <babu.moger@amd.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Jim Mattson <jmattson@google.com>, x86@kernel.org,
-        Santosh Shukla <santosh.shukla@amd.com>
-Subject: Re: [PATCH 07/13] KVM: SVM: Add VNMI support in get/set_nmi_mask
-Message-ID: <Y3aDTvglaSfhG8Tg@google.com>
-References: <20221117143242.102721-1-mlevitsk@redhat.com>
- <20221117143242.102721-8-mlevitsk@redhat.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7ib+z4LYCW5CoTqQqR59vxmOP/VcqCP1xatXfReClms=;
+        b=OLTdpSJ+21kwgms41ksQZW1kqVUcbfckUKYz5VkG65MDgfqLlibZiJDHTEvLcAfnlX
+         HWam3E/giGdhV+4a5UeuYxWVFk4/F7coVAF6kI0/yhGZwOPkfH58p1ZISvyUU4DPOY/T
+         FU8c2ADLPRb0bLTiOQMyvfnUfznIzRk/b8qUctkpYzAsOeZoDnPh+tP4ggsVBOnMBTgp
+         sUhVi7rnVQXHHrmK5qDMnKdpztTya7sibgzUrtfzTRkHJKUimPgNxJKSY+WIqRZWp/rh
+         6YoRDdOQjQKwVIb8J5OezYPhPpkJTYgsf7lM/CqpbOgInj0v7KD/oGZrU5olTkg9jVFL
+         h5ZQ==
+X-Gm-Message-State: ANoB5pkllxbijiLSpiv+WJ7+RMbBy0PixPwhirbPh/5F20ykC9ctDbeM
+        xVwemeBU+K6E5k5sh5vUpZATyOv535fZBMWjzF0nHzX/t97Jpnam7swls91LziScBLMbtT+s5Rl
+        UShnfN7fdEVfPjmU1b7cbpPfD
+X-Received: by 2002:a05:6000:18f:b0:241:a046:91ff with SMTP id p15-20020a056000018f00b00241a04691ffmr2305502wrx.23.1668711302854;
+        Thu, 17 Nov 2022 10:55:02 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf49F36rPsugeoEVN8qVjZWHBSltr+YLPcfR65ls1jmoPsJTWQ8KTfPjqx5rW1DW4udiPFO9dw==
+X-Received: by 2002:a05:6000:18f:b0:241:a046:91ff with SMTP id p15-20020a056000018f00b00241a04691ffmr2305488wrx.23.1668711302578;
+        Thu, 17 Nov 2022 10:55:02 -0800 (PST)
+Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id w3-20020a5d6803000000b00228d67db06esm1676538wru.21.2022.11.17.10.55.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Nov 2022 10:55:01 -0800 (PST)
+Message-ID: <eb33b5c1-cd36-ecf9-57df-c8755e438548@redhat.com>
+Date:   Thu, 17 Nov 2022 19:55:00 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221117143242.102721-8-mlevitsk@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v2 3/4] driver core: Add fw_devlink.timeout param to stop
+ waiting for devlinks
+Content-Language: en-US
+To:     Andrew Halaney <ahalaney@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        linux-arm-msm@vger.kernel.org, John Stultz <jstultz@google.com>,
+        Peter Robinson <pbrobinson@redhat.com>,
+        Steev Klimaszewski <steev@kali.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Enric Balletbo i Serra <eballetbo@redhat.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Brian Masney <bmasney@redhat.com>,
+        Rob Herring <robh@kernel.org>
+References: <20221116115348.517599-1-javierm@redhat.com>
+ <20221116120159.519908-1-javierm@redhat.com>
+ <20221117151949.3cbc6cwphnv4scze@halaney-x13s>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <20221117151949.3cbc6cwphnv4scze@halaney-x13s>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022, Maxim Levitsky wrote:
-> From: Santosh Shukla <santosh.shukla@amd.com>
+Hello Andrew,
+
+On 11/17/22 16:19, Andrew Halaney wrote:
+> On Wed, Nov 16, 2022 at 01:01:59PM +0100, Javier Martinez Canillas wrote:
+>> Currently, the probe deferral timeout does two things:
+>>
+>> 1) Call to fw_devlink_drivers_done() to relax the device dependencies and
+>>    allow drivers to be probed if these dependencies are optional.
+>>
+>> 2) Disable the probe deferral mechanism so that drivers will fail to probe
+>>    if the required dependencies are not present, instead of adding them to
+>>    the deferred probe pending list.
+>>
+>> But there is no need to couple these two, for example the probe deferral
+>> can be used even when the device links are disable (i.e: fw_devlink=off).
+>>
+>> So let's add a separate fw_devlink.timeout command line parameter to allow
+>> relaxing the device links and prevent drivers to wait for these to probe.
+>>
+>> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+>> ---
+>>
+>> (no changes since v1)
+>>
+>>  .../admin-guide/kernel-parameters.txt         |  7 ++++
+>>  drivers/base/dd.c                             | 38 ++++++++++++++++++-
+>>  2 files changed, 44 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+>> index a465d5242774..38138a44d5ed 100644
+>> --- a/Documentation/admin-guide/kernel-parameters.txt
+>> +++ b/Documentation/admin-guide/kernel-parameters.txt
+>> @@ -1581,6 +1581,13 @@
+>>  			dependencies. This only applies for fw_devlink=on|rpm.
+>>  			Format: <bool>
+>>  
+>> +	fw_devlink.timeout=
 > 
-> VMCB intr_ctrl bit12 (V_NMI_MASK) is set by the processor when handling
-> NMI in guest and is cleared after the NMI is handled. Treat V_NMI_MASK
-> as read-only in the hypervisor except for the SMM case where hypervisor
-> before entring and after leaving SMM mode requires to set and unset
-> V_NMI_MASK.
+> Just thought about this, but I think this should be called
+> fw_devlink_timeout. Generally the $MODULE.$PARAM syntax is reserved for
+> things that can be specificed with module_param().
 > 
-> Adding API(get_vnmi_vmcb) in order to return the correct vmcb for L1 or
-> L2.
+> The advantage is if you accidentally type say fw_devlink_timeut=10 the
+> kernel logs will indicate it has no clue what that means. Including the
+> "." makes the kernel assume that maybe a future module name fw_devlink
+> will be loaded, and at that time will see if that module has the
+> parameter mentioned. A little thing but I think work changing in v3.
 > 
-> Maxim:
->    - made set_vnmi_mask/clear_vnmi_mask/is_vnmi_mask warn if called
->      without vNMI enabled
->    - clear IRET intercept in svm_set_nmi_mask even with vNMI
-> 
-> Signed-off-by: Santosh Shukla <santosh.shukla@amd.com>
-> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> ---
->  arch/x86/kvm/svm/svm.c | 18 ++++++++++++++-
->  arch/x86/kvm/svm/svm.h | 52 ++++++++++++++++++++++++++++++++++++++++++
->  2 files changed, 69 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index 08a7b2a0a29f3a..c16f68f6c4f7d7 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -3618,13 +3618,29 @@ static int svm_nmi_allowed(struct kvm_vcpu *vcpu, bool for_injection)
->  
->  static bool svm_get_nmi_mask(struct kvm_vcpu *vcpu)
->  {
-> -	return !!(vcpu->arch.hflags & HF_NMI_MASK);
-> +	struct vcpu_svm *svm = to_svm(vcpu);
-> +
-> +	if (is_vnmi_enabled(svm))
-> +		return is_vnmi_mask_set(svm);
-> +	else
-> +		return !!(vcpu->arch.hflags & HF_NMI_MASK);
->  }
->  
->  static void svm_set_nmi_mask(struct kvm_vcpu *vcpu, bool masked)
->  {
->  	struct vcpu_svm *svm = to_svm(vcpu);
->  
-> +	if (is_vnmi_enabled(svm)) {
-> +		if (masked)
-> +			set_vnmi_mask(svm);
 
-I believe not setting INTERCEPT_IRET is correct, but only because the existing
-code is unnecessary.  And this all very subtly relies on KVM_REQ_EVENT being set
-and/or KVM already being in kvm_check_and_inject_events().
+I was actually on the fence on this one but the reason why I did the .timeout
+was that the other fw_devlink param [0] is defined as fw_devlink.strict=<bool>
+so I wanted to keep this one consistent with that.
 
-When NMIs become unblocked, INTERCEPT_IRET can be cleared, but KVM should also
-pending KVM_REQ_EVENT.  AFAICT, that doesn't happen when this is called via the
-emulator.  Ah, because em_iret() only handles RM for Intel's restricted guest
-crap.  I.e. it "works" only because it never happens.  All other flows set
-KVM_REQ_EVENT when toggling NMI blocking, e.g. the RSM path of kvm_smm_changed().
+https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html
 
-And when NMIs become blocked, there's no need to force INTERCEPT_IRET in this
-code because kvm_check_and_inject_events() will request an NMI window and set the
-intercept if necessary, and all paths that set NMI blocking are guaranteed to
-reach kvm_check_and_inject_events() before entering the guest.
+-- 
+Best regards,
 
-  1. RSM => kvm_smm_changed() sets KVM_REQ_EVENT
-  2. enter_smm() is only called from within kvm_check_and_inject_events(),
-     before pending NMIs are processed (yay priority)
-  3. emulator_set_nmi_mask() never blocks NMIs, only does the half-baked IRET emulation
-  4. kvm_vcpu_ioctl_x86_set_vcpu_event() sets KVM_REQ_EVENT
+Javier Martinez Canillas
+Core Platforms
+Red Hat
 
-So, can you add a prep patch to drop the forced INTERCEPT_IRET?  That way the
-logic for vNMI and !vNMI is the same.
-
-> +		else {
-> +			clear_vnmi_mask(svm);
-
-This is the only code that sets/clears the vNMI mask, so rather than have set/clear
-helpers, what about a single helper to do the dirty work? 
-
-> +			if (!sev_es_guest(vcpu->kvm))
-> +				svm_clr_intercept(svm, INTERCEPT_IRET);
-> +		}
-> +		return;
-> +	}
-> +
->  	if (masked) {
->  		vcpu->arch.hflags |= HF_NMI_MASK;
->  		if (!sev_es_guest(vcpu->kvm))
-> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-> index f5383104d00580..bf7f4851dee204 100644
-> --- a/arch/x86/kvm/svm/svm.h
-> +++ b/arch/x86/kvm/svm/svm.h
-> @@ -35,6 +35,7 @@ extern u32 msrpm_offsets[MSRPM_OFFSETS] __read_mostly;
->  extern bool npt_enabled;
->  extern int vgif;
->  extern bool intercept_smi;
-> +extern bool vnmi;
->  
->  enum avic_modes {
->  	AVIC_MODE_NONE = 0,
-> @@ -531,6 +532,57 @@ static inline bool is_x2apic_msrpm_offset(u32 offset)
->  	       (msr < (APIC_BASE_MSR + 0x100));
->  }
->  
-> +static inline struct vmcb *get_vnmi_vmcb(struct vcpu_svm *svm)
-> +{
-> +	if (!vnmi)
-> +		return NULL;
-> +
-> +	if (is_guest_mode(&svm->vcpu))
-> +		return svm->nested.vmcb02.ptr;
-> +	else
-> +		return svm->vmcb01.ptr;
-> +}
-> +
-> +static inline bool is_vnmi_enabled(struct vcpu_svm *svm)
-> +{
-> +	struct vmcb *vmcb = get_vnmi_vmcb(svm);
-> +
-> +	if (vmcb)
-> +		return !!(vmcb->control.int_ctl & V_NMI_ENABLE);
-> +	else
-> +		return false;
-
-Maybe just this?
-
-	return vmcb && (vmcb->control.int_ctl & V_NMI_ENABLE);
-
-Or if an inner helper is added:
-
-	return vmcb && __is_vnmi_enabled(vmcb);
-
-> +}
-> +
-> +static inline bool is_vnmi_mask_set(struct vcpu_svm *svm)
-> +{
-> +	struct vmcb *vmcb = get_vnmi_vmcb(svm);
-> +
-> +	if (!WARN_ON_ONCE(!vmcb))
-
-Rather than WARN, add an inner __is_vnmi_enabled() that takes the vnmi_vmcb.
-Actually, if you do that, the test/set/clear helpers can go away entirely.
-
-> +		return false;
-> +
-> +	return !!(vmcb->control.int_ctl & V_NMI_MASK);
-> +}
-> +
-> +static inline void set_vnmi_mask(struct vcpu_svm *svm)
-> +{
-> +	struct vmcb *vmcb = get_vnmi_vmcb(svm);
-> +
-> +	if (!WARN_ON_ONCE(!vmcb))
-> +		return;
-> +
-> +	vmcb->control.int_ctl |= V_NMI_MASK;
-> +}
-> +
-> +static inline void clear_vnmi_mask(struct vcpu_svm *svm)
-> +{
-> +	struct vmcb *vmcb = get_vnmi_vmcb(svm);
-> +
-> +	if (!WARN_ON_ONCE(!vmcb))
-> +		return;
-> +
-> +	vmcb->control.int_ctl &= ~V_NMI_MASK;
-> +}
-
-These helpers can all go in svm.  There are no users oustide of svm.c, and
-unless I'm misunderstanding how nested works, there should never be oustide users.
-
-E.g. with HF_NMI_MASK => svm->nmi_masked, the end result can be something like:
-
-static bool __is_vnmi_enabled(struct *vmcb)
-{
-	return !!(vmcb->control.int_ctl & V_NMI_ENABLE);
-}
-
-static bool is_vnmi_enabled(struct vcpu_svm *svm)
-{
-	struct vmcb *vmcb = get_vnmi_vmcb(svm);
-
-	return vmcb && __is_vnmi_enabled(vmcb);
-}
-
-static bool svm_get_nmi_mask(struct kvm_vcpu *vcpu)
-{
-	struct vcpu_svm *svm = to_svm(vcpu);
-	struct vmcb *vmcb = get_vnmi_vmcb(svm);
-
-	if (vmcb && __is_vnmi_enabled(vmcb))
-		return !!(vmcb->control.int_ctl & V_NMI_MASK);
-	else
-		return !!(vcpu->arch.hflags & HF_NMI_MASK);
-}
-
-static void svm_set_or_clear_vnmi_mask(struct vmcb *vmcb, bool set)
-{
-	if (set)
-		vmcb->control.int_ctl |= V_NMI_MASK;
-	else
-		vmcb->control.int_ctl &= ~V_NMI_MASK;
-}
-
-static void svm_set_nmi_mask(struct kvm_vcpu *vcpu, bool masked)
-{
-	struct vcpu_svm *svm = to_svm(vcpu);
-	struct vmcb *vmcb = get_vnmi_vmcb(svm);
-
-	if (vmcb && __is_vnmi_enabled(vmcb)) {
-		if (masked)
-			vmcb->control.int_ctl |= V_NMI_MASK;
-		else
-			vmcb->control.int_ctl &= ~V_NMI_MASK;
-	} else {
-		svm->nmi_masked = masked;
-	}
-
-	if (!masked)
-		svm_disable_iret_interception(svm);
-}
