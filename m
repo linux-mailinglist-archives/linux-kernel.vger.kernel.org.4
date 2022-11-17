@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA4D762D04F
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 01:59:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FCF962D055
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 02:00:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234661AbiKQA7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 19:59:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49210 "EHLO
+        id S239004AbiKQBAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 20:00:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238592AbiKQA7l (ORCPT
+        with ESMTP id S238704AbiKQA75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 19:59:41 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C11BA6A6B9
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 16:59:40 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id l11so401806edb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 16:59:40 -0800 (PST)
+        Wed, 16 Nov 2022 19:59:57 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7A06AED4
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 16:59:51 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id f18so1363761ejz.5
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 16:59:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=457d9iQgit+Z1EJB0nqQekgVdEZwOgAEMvvOEWPkupI=;
-        b=Bh70kUdShhAGETdykikAQJOKTnFptoZPW3kSYZE+AGERi5jQgkT24kHTMqNAWR10tU
-         BuAeJQu/Oi7S5Fcd6875vVxSldt7DeCbJfaCEzyokpntEoPmNCfgg0zYiuf//Cx60LbX
-         eL07Ybiq3UPZ7/QNaNsuVClF+LzfF5L0ZCzFo=
+        bh=7IItaZa/7I4VBu5cw0wrKUsh/hbQDFMwGlkpESbfAao=;
+        b=HAD+QNbZhmm80gWWfMxazQiOdxU/8OoWGwpppi16ividblCxYrow2hz0E0zZ7AhQ0z
+         cJqUTprf41aF4MbLXaLFlbvRQJVq6IL9gsK+Kqxa/h2queVIuT30rA6VyDlCgXIBzNyT
+         qslBCis6l11GbiAG8lz7dScccivWN8QaYUE08=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=457d9iQgit+Z1EJB0nqQekgVdEZwOgAEMvvOEWPkupI=;
-        b=BAaX2D7/i+jounNEz0RG0mMNFTDaD/kCklSdTXpMEHhcTEipwkz6OmWY1AWSpL0ay0
-         cf3iDumuqvMqvXyhtI9fnbIuKURTAYMNdaayWDkV6EsFQ3T4fCv6j4yMj0byfuaW4qnL
-         Tkue/RSuR0Zk+i8upCH5wVDvddRvTPXJMDEs5g7awCrUFhUj3ZuLiAN9OFdsrTgaPmrP
-         VhO/V06XRUruYcIknbwTYlgsoKPEPXOnf7ysZ+6Vb+xU73I5iF037SssFkHlhfOkx+7y
-         whONvjRC4guiZ38Xwsl5rmtp9CjGSgiiP6YVz/Jfq04r0GKus8Zxt+2rqblHN2RRQM+9
-         GqKA==
-X-Gm-Message-State: ANoB5pkwbOgzl3dS8+iQoX5uPJ+F4OxQYeEqGk8mA+imEk3Y+APorMM5
-        dh7iTn9xUM9EVM8OtovIKt7hpBoVIV4D3KK8
-X-Google-Smtp-Source: AA0mqf6FnKr/gyatQWtdyHZPQ5yap1QIdKDvb60E42qK32wWZrTNHFvXaeodM3eQaFDUgeavskM6EA==
-X-Received: by 2002:a05:6402:1386:b0:458:d7b5:9793 with SMTP id b6-20020a056402138600b00458d7b59793mr174803edv.377.1668646778757;
-        Wed, 16 Nov 2022 16:59:38 -0800 (PST)
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com. [209.85.128.44])
-        by smtp.gmail.com with ESMTPSA id ga22-20020a1709070c1600b007aee947ce9esm5932987ejc.138.2022.11.16.16.59.35
+        bh=7IItaZa/7I4VBu5cw0wrKUsh/hbQDFMwGlkpESbfAao=;
+        b=WrgqmdoB6xx6tUc6fVs97/EHR6SdTPwaOmgwkUuVtq8tJrMUCy7h5fc6wFjnptu1QF
+         nL6b16KDnCw5K/g4WgQMWJ+v/tRwOGnZHUOTuHfARBbVhDOAb6cCx0xnIS8AomVeAMFI
+         /UDSpwmRJqWzC0CRxuX0YznJW3hEkVJ0bXDIUsaiIJyCGr/FpLc3KHUpa2wGnwbazIb6
+         1Gs4KlEpspwvwqsLT8EHMWZdw7YrJ9IECGNeRJ9TuonuhGNdK3qFLIFGS6x/2Zk8Ya58
+         RN+alphoQ3FkBXKeI5WnHrgoWep9yPXtYleJU1aN6MHKKD3LRfEWiGtjDKgJ+H7ZdNp1
+         TyGA==
+X-Gm-Message-State: ANoB5pkL76NGUwpeysFtIPqGe5kaLnF0u2kxXwjKq2jwO0F++ffPsS/o
+        V37mf37pHI+58Ji+MkvmZUoTR7itwoA3nakW
+X-Google-Smtp-Source: AA0mqf6IlnzWW/ChDvuq+R1rg/xLpa1JolTaH+QAeF2Pod0XpJwBH6X7iHqDRgNiWJPiaOCrhYCP9g==
+X-Received: by 2002:a17:906:a418:b0:7a5:e944:9e48 with SMTP id l24-20020a170906a41800b007a5e9449e48mr323674ejz.109.1668646789331;
+        Wed, 16 Nov 2022 16:59:49 -0800 (PST)
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com. [209.85.221.52])
+        by smtp.gmail.com with ESMTPSA id 13-20020a170906318d00b007822196378asm7574170ejy.176.2022.11.16.16.59.47
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 16:59:36 -0800 (PST)
-Received: by mail-wm1-f44.google.com with SMTP id 5so146996wmo.1
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 16:59:35 -0800 (PST)
-X-Received: by 2002:a05:600c:1e12:b0:3cf:9ad3:a20e with SMTP id
- ay18-20020a05600c1e1200b003cf9ad3a20emr110075wmb.151.1668646775488; Wed, 16
- Nov 2022 16:59:35 -0800 (PST)
+        Wed, 16 Nov 2022 16:59:48 -0800 (PST)
+Received: by mail-wr1-f52.google.com with SMTP id z14so410229wrn.7
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 16:59:47 -0800 (PST)
+X-Received: by 2002:adf:fb4c:0:b0:236:5270:735e with SMTP id
+ c12-20020adffb4c000000b002365270735emr35889wrs.659.1668646787360; Wed, 16 Nov
+ 2022 16:59:47 -0800 (PST)
 MIME-Version: 1.0
-References: <20221116162152.193147-1-john.ogness@linutronix.de> <20221116162152.193147-37-john.ogness@linutronix.de>
-In-Reply-To: <20221116162152.193147-37-john.ogness@linutronix.de>
+References: <20221116162152.193147-1-john.ogness@linutronix.de> <20221116162152.193147-36-john.ogness@linutronix.de>
+In-Reply-To: <20221116162152.193147-36-john.ogness@linutronix.de>
 From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 16 Nov 2022 16:59:23 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=XhkmOLXnfc0YQyUN-FvNeoF1+=zvp56ttaYvsoKESMdA@mail.gmail.com>
-Message-ID: <CAD=FV=XhkmOLXnfc0YQyUN-FvNeoF1+=zvp56ttaYvsoKESMdA@mail.gmail.com>
-Subject: Re: [PATCH printk v5 36/40] tty: serial: kgdboc: use
- console_list_lock for list traversal
+Date:   Wed, 16 Nov 2022 16:59:35 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=WHEjpL1VYnLRp9Vy300Xd3Tu=u3MOo_rvHCABDTsQFPA@mail.gmail.com>
+Message-ID: <CAD=FV=WHEjpL1VYnLRp9Vy300Xd3Tu=u3MOo_rvHCABDTsQFPA@mail.gmail.com>
+Subject: Re: [PATCH printk v5 35/40] tty: serial: kgdboc: use srcu console
+ list iterator
 To:     John Ogness <john.ogness@linutronix.de>
 Cc:     Petr Mladek <pmladek@suse.com>,
         Sergey Senozhatsky <senozhatsky@chromium.org>,
@@ -86,21 +86,59 @@ Hi,
 
 On Wed, Nov 16, 2022 at 8:22 AM John Ogness <john.ogness@linutronix.de> wrote:
 >
-> configure_kgdboc() uses the console_lock for console list iteration. Use
-> the console_list_lock instead because list synchronization responsibility
-> will be removed from the console_lock in a later change.
->
-> The SRCU iterator could have been used here, but a later change will
-> relocate the locking of the console_list_lock to also provide
-> synchronization against register_console().
->
-> Note, the console_lock is still needed to serialize the device()
-> callback with other console operations.
+> Use srcu console list iteration for safe console list traversal.
+> Note that this is a preparatory change for when console_lock no
+> longer provides synchronization for the console list.
 >
 > Signed-off-by: John Ogness <john.ogness@linutronix.de>
 > Reviewed-by: Petr Mladek <pmladek@suse.com>
 > ---
->  drivers/tty/serial/kgdboc.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
+>  drivers/tty/serial/kgdboc.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/tty/serial/kgdboc.c b/drivers/tty/serial/kgdboc.c
+> index 5be381003e58..c6df9ef34099 100644
+> --- a/drivers/tty/serial/kgdboc.c
+> +++ b/drivers/tty/serial/kgdboc.c
+> @@ -451,6 +451,7 @@ static void kgdboc_earlycon_pre_exp_handler(void)
+>  {
+>         struct console *con;
+>         static bool already_warned;
+> +       int cookie;
+>
+>         if (already_warned)
+>                 return;
+> @@ -463,9 +464,14 @@ static void kgdboc_earlycon_pre_exp_handler(void)
+>          * serial drivers might be OK with this, print a warning once per
+>          * boot if we detect this case.
+>          */
+> -       for_each_console(con)
+> +       cookie = console_srcu_read_lock();
+> +       for_each_console_srcu(con) {
+>                 if (con == kgdboc_earlycon_io_ops.cons)
+> -                       return;
+> +                       break;
+> +       }
+> +       console_srcu_read_unlock(cookie);
+> +       if (con)
+> +               return;
+
+Is there truly any guarantee that "con" will be NULL if
+for_each_console_srcu() finishes naturally (AKA without a "break"
+being executed)?
+
+It looks as if currently this will be true but nothing in the comments
+of for_each_console_srcu() nor hlist_for_each_entry_srcu() (which it
+calls) guarantees this, right? It would be nice if that was
+documented, but I guess it's not a huge deal.
+
+ Also: wasn't there just some big issue about people using loop
+iteration variables after the loop finished?
+
+https://lwn.net/Articles/885941/
+
+Ah, I guess that's a slightly different problem and probably not relevant here.
+
+So it seems like this is fine.
 
 Reviewed-by: Douglas Anderson <dianders@chromium.org>
