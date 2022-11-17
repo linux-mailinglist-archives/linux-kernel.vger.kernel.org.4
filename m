@@ -2,59 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 842B862DA91
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 13:22:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBEBD62DA94
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 13:23:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233725AbiKQMWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 07:22:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48818 "EHLO
+        id S239572AbiKQMXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 07:23:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231489AbiKQMWn (ORCPT
+        with ESMTP id S231489AbiKQMXF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 07:22:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AE40CDB;
-        Thu, 17 Nov 2022 04:22:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2734661482;
-        Thu, 17 Nov 2022 12:22:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF504C433C1;
-        Thu, 17 Nov 2022 12:22:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668687761;
-        bh=zx0pWb4nQH5eQDMQu6wkWFs3SGyhmtK2xNcBwlJKago=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EOEcrIuJuXo3UqeHSLDo4YcpL+sR1xv99xElhrQ5H3zZ7gavxEZ3MiyfMmP7DT4td
-         RBF36nj/9nq/sU80QmRWCE2hPI2nNqTopUFc0xlGqr3+UoL3VrnW3ZO9N72UQGud01
-         T6B4F1peVgNtAM8xE+km2Erhp9Ldqwh6TXfSIUPsxPWYegK3+ZZ+wq1tMcvtM1y0MK
-         oIuudSVQxwDeG7F99C7a/5h7NGLK0P1muN2SmAdIlCL7T7DkabPvz0TWl4I2yTO5qt
-         dVveaM7ccLfzPS4iAKF2EB8EVMJ431y+T98fw63gaFe5zDv8vm4s3X5UFjA9YWuLaF
-         jH4oYq5Oq7uUg==
-Date:   Thu, 17 Nov 2022 13:22:38 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Cc:     "Paul E . McKenney" <paulmck@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Robert Elliott <elliott@hpe.com>
-Subject: Re: [PATCH v7 4/6] rcu: Add RCU stall diagnosis information
-Message-ID: <20221117122238.GC839309@lothringen>
-References: <20221111130709.247-1-thunder.leizhen@huawei.com>
- <20221111130709.247-5-thunder.leizhen@huawei.com>
- <20221116223942.GA838972@lothringen>
- <d4f7f41c-e1ef-606f-d700-3e67059bb06d@huawei.com>
+        Thu, 17 Nov 2022 07:23:05 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F7C716C6
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 04:23:03 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id k7so1458484pll.6
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 04:23:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=5Z65m0DgunHILIy2ME/mQky7Pas/nTA/BCKHp6AXOSY=;
+        b=Qj3MYPr3dBnSlxUwOIve/Ri50g8A0uPXUF7X+99Is8mVhZSVOhFLCazeEJ0v4UYfyW
+         xJ/Ih267QLKKnZXqWcVQIdPoDU6Jz88En47W3BnahE+TZHL4GIgc27+cWoDEZfcMqa+W
+         b5iPMco4iYPZKZzPJpCjXlgtMphMZPWikQ0J0buq9Il/5lfL0isrPU95rMtD6e/cRLgx
+         RZg1ltn6w+49jcJd8TPB2nllVVeCiDtku7XBmzJeJ734xTdPYQnSLui8eXsXL5PRej5x
+         9acvKWDchlcorpInv8/THpzBp0jqWXZ6SjgGumQg3b8z71GuCqRc3KllwWawzpsxIMcO
+         1YSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5Z65m0DgunHILIy2ME/mQky7Pas/nTA/BCKHp6AXOSY=;
+        b=SEyAPMEjsvSG82fpAiw8FNMA9p+LeDpHH44hhIoNEW9e/n/oZuBzQ9XpAj9cPEsE7I
+         lBG1tvCk/bgM9orcVmA1/eJXxqs+jFbIaa/WNgqpTe3yCKyLrkXXest9qFeJHDdMeSS0
+         9ABPEaoe1gqttOe+ZruEOAYpT1yjeDUB/5Db2IHkMtLdCfigZodgU3vBQQyOkFOucavw
+         zTlgpBRM+r1lNILKqZElqfw0YQvRKI6osDN5m2KlsPRSiId67GaEnl5DCE/t2WqXxpOR
+         RcMGD7DO//E7F536J9u4b5S+EdxDAY2Loe6xFJCtkGonBM+PnDccAxDBVjBC4qIWv79g
+         ZHrQ==
+X-Gm-Message-State: ANoB5pl8VLnXeeeE4WGKhhg4a4TR7jyvqzmewwJMrwrwb4g+8g+//H+0
+        AUEgqoG2Dpow+tl+2RevsDD2
+X-Google-Smtp-Source: AA0mqf4Wo4+kNnV3lxmeTlDpo6H+hjTXpl1VEPBYMQ2o1Sr4hlgXHXt0iXsPG72d8S6WQ9HLfYB96Q==
+X-Received: by 2002:a17:902:bc83:b0:188:eebf:2361 with SMTP id bb3-20020a170902bc8300b00188eebf2361mr2480619plb.125.1668687783183;
+        Thu, 17 Nov 2022 04:23:03 -0800 (PST)
+Received: from thinkpad ([117.193.208.31])
+        by smtp.gmail.com with ESMTPSA id t29-20020aa7947d000000b0056b6d31ac8asm994236pfq.178.2022.11.17.04.22.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 04:23:02 -0800 (PST)
+Date:   Thu, 17 Nov 2022 17:52:56 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: iio: adc: qcom,spmi-vadc: fix PM8350 define
+Message-ID: <20221117122256.GG93179@thinkpad>
+References: <20221117121307.264550-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <d4f7f41c-e1ef-606f-d700-3e67059bb06d@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221117121307.264550-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,68 +77,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 09:57:18AM +0800, Leizhen (ThunderTown) wrote:
+On Thu, Nov 17, 2022 at 01:13:07PM +0100, Krzysztof Kozlowski wrote:
+> The defines from include/dt-bindings/iio/qcom,spmi-adc7-pm8350.h were
+> changed to take sid argument:
 > 
+>   Error: Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.example.dts:99.28-29 syntax error
 > 
-> On 2022/11/17 6:39, Frederic Weisbecker wrote:
-> > On Fri, Nov 11, 2022 at 09:07:07PM +0800, Zhen Lei wrote:
-> >> @@ -262,6 +279,8 @@ struct rcu_data {
-> >>  	short rcu_onl_gp_flags;		/* ->gp_flags at last online. */
-> >>  	unsigned long last_fqs_resched;	/* Time of last rcu_resched(). */
-> >>  	unsigned long last_sched_clock;	/* Jiffies of last rcu_sched_clock_irq(). */
-> >> +	struct rcu_snap_record snap_record; /* Snapshot of core stats at half of */
-> >> +					    /* the first RCU stall timeout */
-> > 
-> > This should be under #ifdef CONFIG_RCU_CPU_STALL_CPUTIME
-> 
-> This will not work for now because we also support boot option
-> rcupdate.rcu_cpu_stall_cputime.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-I'm confused. If CONFIG_RCU_CPU_STALL_CPUTIME=n then rcupdate.rcu_cpu_stall_cputime has
-no effect, right?
+Looks like I didn't rebase on top of Bjorn's for-next for my series, so didn't
+see this example.
 
-Thanks.
+Thanks for fixing!
+
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+
+Thanks,
+Mani
 
 > 
-> > 
-> >> +static void print_cpu_stat_info(int cpu)
-> >> +{
-> >> +	struct rcu_snap_record rsr, *rsrp;
-> >> +	struct rcu_data *rdp = per_cpu_ptr(&rcu_data, cpu);
-> >> +	struct kernel_cpustat *kcsp = &kcpustat_cpu(cpu);
-> >> +
-> >> +	if (!rcu_cpu_stall_cputime)
-> >> +		return;
-> >> +
-> >> +	rsrp = &rdp->snap_record;
-> >> +	if (rsrp->gp_seq != rdp->gp_seq)
-> >> +		return;
-> >> +
-> >> +	rsr.cputime_irq     = kcpustat_field(kcsp, CPUTIME_IRQ, cpu);
-> >> +	rsr.cputime_softirq = kcpustat_field(kcsp, CPUTIME_SOFTIRQ, cpu);
-> >> +	rsr.cputime_system  = kcpustat_field(kcsp, CPUTIME_SYSTEM, cpu);
-> >> +
-> >> +	pr_err("\t         hardirqs   softirqs   csw/system\n");
-> >> +	pr_err("\t number: %8ld %10d %12lld\n",
-> >> +		kstat_cpu_irqs_sum(cpu) - rsrp->nr_hardirqs,
-> >> +		kstat_cpu_softirqs_sum(cpu) - rsrp->nr_softirqs,
-> >> +		nr_context_switches_cpu(cpu) - rsrp->nr_csw);
-> >> +	pr_err("\tcputime: %8lld %10lld %12lld   ==> %lld(ms)\n",
-> >> +		div_u64(rsr.cputime_irq - rsrp->cputime_irq, NSEC_PER_MSEC),
-> >> +		div_u64(rsr.cputime_softirq - rsrp->cputime_softirq, NSEC_PER_MSEC),
-> >> +		div_u64(rsr.cputime_system - rsrp->cputime_system, NSEC_PER_MSEC),
-> >> +		jiffies64_to_msecs(jiffies - rsrp->jiffies));
-> > 
-> > jiffies_to_msecs() should be enough.
+> ---
 > 
-> OK, thanks.
+> Issue is caused by commit 22f1d06f4f28 ("dt-bindings: iio: qcom:
+> adc7-pm8350: Allow specifying SID for channels") from Bjorn's tree.
 > 
-> > 
-> > Thanks.
-> > 
-> > .
-> > 
+> Unfortunately get_maintainers.pl were not used, so IIO maintaners were
+> not CCed.
+> ---
+>  Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
+> diff --git a/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml b/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml
+> index f1522196042d..bd6e0d6f6e0c 100644
+> --- a/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml
+> +++ b/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml
+> @@ -299,7 +299,7 @@ examples:
+>              };
+>  
+>              conn-therm@47 {
+> -                reg = <PM8350_ADC7_AMUX_THM4_100K_PU>;
+> +                reg = <PM8350_ADC7_AMUX_THM4_100K_PU(1)>;
+>                  qcom,ratiometric;
+>                  qcom,hw-settle-time = <200>;
+>              };
 > -- 
-> Regards,
->   Zhen Lei
+> 2.34.1
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்
