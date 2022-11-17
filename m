@@ -2,275 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1501C62E3AF
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 19:02:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03F0462E3B3
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 19:02:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240272AbiKQSCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 13:02:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43730 "EHLO
+        id S240311AbiKQSCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 13:02:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239005AbiKQSCM (ORCPT
+        with ESMTP id S240392AbiKQSCb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 13:02:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C2DD7FC20
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 10:01:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668708079;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HWUPnZjpAAiyG7WtckU2rsuHVVx+xGUGdmvEJKTgSfg=;
-        b=JQmPL0kb3dPa9sF9VTkz3C4F81Lq+ud1vc6pACGmz1zVvVWC4cZXZ6wJclzylHaL4GELmj
-        I+eOLXOiWL6LY9s3cK+BE0k8vBNAE2ba7Duk9cl5fPlQJI58lobTOMV9HbYiUrxc/2lf+c
-        qkYcQgKmg/KKuftUWp6UCKmQwFRPbjk=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-296-OpTRnOumNGKQ0dH9aDptnA-1; Thu, 17 Nov 2022 13:01:18 -0500
-X-MC-Unique: OpTRnOumNGKQ0dH9aDptnA-1
-Received: by mail-ej1-f71.google.com with SMTP id dn14-20020a17090794ce00b007ae5d040ca8so1525778ejc.17
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 10:01:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HWUPnZjpAAiyG7WtckU2rsuHVVx+xGUGdmvEJKTgSfg=;
-        b=e0eWvgJPJbSDE69+SRUteYUkDWWocovHmGfLfZkEnKqV5Ip3ji79o5iAnisXelNs6y
-         KVNfWyu3vBtdQIqB4TN9y6S34+Rdg7yf56NTIosURNjKJxobkHYVYA7dUnZNcDcmn170
-         hBonWTgil/ZVW+WfwMWGCbJTu/Z+PlQ5mupbQ5GbK7TJR6YrAiC1m0UwDrsT3SAhwlWp
-         5xr47psqYZwKLsiTDW0j5Lelaa8fm6ZaOt/VkJFvBgOI7NgnJKWm1vOWwXbczobDeJs/
-         ocH+aFOn8MIW80EF49AymWAOJGPCArhugpf5XtehLCIxgfCUva1u9x1mRBY2Pa1z1kzp
-         ROAQ==
-X-Gm-Message-State: ANoB5pkrUHQe7Fm56WrtQvGKsxDScYSnu4/ddzEspQFQZlsHVMtSajxv
-        hBq2/Z7epS74ezmG55fo8drj3pha8wGEwQxmRai7E1fRK61A0Wf0PbfbJalCoKbFBwxZgNnY1J6
-        0yIHOQPkQIYdroAlacqDK5IYB
-X-Received: by 2002:a05:6402:388e:b0:468:fb0d:2d8b with SMTP id fd14-20020a056402388e00b00468fb0d2d8bmr1299752edb.124.1668708076561;
-        Thu, 17 Nov 2022 10:01:16 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5sDdSnb1q5z/1hVRdNRsWV26PsKbc/HV7QuBMYEclJnt3H9XCU+Is9uh8bSS79OjtqPxKCQQ==
-X-Received: by 2002:a05:6402:388e:b0:468:fb0d:2d8b with SMTP id fd14-20020a056402388e00b00468fb0d2d8bmr1299692edb.124.1668708075973;
-        Thu, 17 Nov 2022 10:01:15 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id l4-20020aa7cac4000000b00461bacee867sm819311edt.25.2022.11.17.10.01.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Nov 2022 10:01:15 -0800 (PST)
-Message-ID: <c7414e8b-c113-eff8-b435-ddde705a6f6c@redhat.com>
-Date:   Thu, 17 Nov 2022 19:01:14 +0100
+        Thu, 17 Nov 2022 13:02:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B517FF07
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 10:02:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 27FE9621F1
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 18:02:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5464C433D6;
+        Thu, 17 Nov 2022 18:02:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1668708147;
+        bh=TRjm0WT33DZOnm4zQ5Af86jucgIaP3z093GvYTORYYs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mTbXHZNNdEIy33+Uk8+Oq9oCmUpdng8aTdMFnD1OG+4HLFcapT9PyeYQ6P8DKydRT
+         9UNFybcWRDzgvRltMBWtwR8utLTYsLBVPsFNQyquckIKoXAefKdNhGhsDMtDTlEPRK
+         nu3CDMx6eoIgfv4foyowbh8LnaW96W3NM2qLxPmM=
+Date:   Thu, 17 Nov 2022 19:02:10 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Umang Jain <umang.jain@ideasonboard.com>
+Cc:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Ray Jui <rjui@broadcom.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org, linux-staging@lists.linux.dev
+Subject: Re: [PATCH 1/3] Revert "staging: mmal-vchiq: Avoid use of bool in
+ structures"
+Message-ID: <Y3Z3Is8u4wGZfKU5@kroah.com>
+References: <20221117160015.344528-1-umang.jain@ideasonboard.com>
+ <20221117160015.344528-2-umang.jain@ideasonboard.com>
+ <166870135963.50677.14827688186331561108@Monstersaurus>
+ <c718624a-bb6f-5474-5cc3-4319b1fdb282@ideasonboard.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v3 04/16] platform/x86/intel/ifs: Remove memory allocation
- from load path
-Content-Language: en-US, nl
-To:     Jithu Joseph <jithu.joseph@intel.com>, markgross@kernel.org
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        gregkh@linuxfoundation.org, ashok.raj@intel.com,
-        tony.luck@intel.com, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, patches@lists.linux.dev,
-        ravi.v.shankar@intel.com, thiago.macieira@intel.com,
-        athenas.jimenez.gonzalez@intel.com, sohil.mehta@intel.com
-References: <77e9d0f2-12d9-fc7a-2161-c579b7bbd673@redhat.com>
- <20221117172958.4172029-1-jithu.joseph@intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20221117172958.4172029-1-jithu.joseph@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c718624a-bb6f-5474-5cc3-4319b1fdb282@ideasonboard.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jithu,
-
-On 11/17/22 18:29, Jithu Joseph wrote:
-> IFS requires tests to be authenticated once for each CPU socket
-> on a system.
+On Thu, Nov 17, 2022 at 11:25:48PM +0530, Umang Jain wrote:
+> Hi Kieran,
 > 
-> scan_chunks_sanity_check() was dynamically allocating memory
-> to store the state of whether tests have been authenticated on
-> each socket for every load operation.
+> On 11/17/22 9:39 PM, Kieran Bingham wrote:
+> > Quoting Umang Jain (2022-11-17 16:00:13)
+> > > This reverts commit 640e77466e69d9c28de227bc76881f5501f532ca.
+> > > 
+> > > In commit 7967656ffbfa ("coding-style: Clarify the expectations around
+> > > bool") the check to dis-allow bool structure members was removed from
+> > > checkpatch.pl. It promotes bool structure members to store boolean
+> > > values. This enhances code readability.
+> > > 
+> > > Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
+> > > ---
+> > >   .../staging/vc04_services/vchiq-mmal/mmal-vchiq.c    | 12 ++++++------
+> > >   .../staging/vc04_services/vchiq-mmal/mmal-vchiq.h    |  4 ++--
+> > >   2 files changed, 8 insertions(+), 8 deletions(-)
+> > > 
+> > > diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
+> > > index cb921c94996a..4abb6178cb9f 100644
+> > > --- a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
+> > > +++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
+> > > @@ -863,9 +863,9 @@ static int port_info_get(struct vchiq_mmal_instance *instance,
+> > >                  goto release_msg;
+> > >          if (rmsg->u.port_info_get_reply.port.is_enabled == 0)
+> > > -               port->enabled = 0;
+> > > +               port->enabled = false;
+> > >          else
+> > > -               port->enabled = 1;
+> > > +               port->enabled = true;
+> > >          /* copy the values out of the message */
+> > >          port->handle = rmsg->u.port_info_get_reply.port_handle;
+> > > @@ -1304,7 +1304,7 @@ static int port_disable(struct vchiq_mmal_instance *instance,
+> > >          if (!port->enabled)
+> > >                  return 0;
+> > > -       port->enabled = 0;
+> > > +       port->enabled = false;
+> > >          ret = port_action_port(instance, port,
+> > >                                 MMAL_MSG_PORT_ACTION_TYPE_DISABLE);
+> > > @@ -1359,7 +1359,7 @@ static int port_enable(struct vchiq_mmal_instance *instance,
+> > >          if (ret)
+> > >                  goto done;
+> > > -       port->enabled = 1;
+> > > +       port->enabled = true;
+> > >          if (port->buffer_cb) {
+> > >                  /* send buffer headers to videocore */
+> > > @@ -1531,7 +1531,7 @@ int vchiq_mmal_port_connect_tunnel(struct vchiq_mmal_instance *instance,
+> > >                          pr_err("failed disconnecting src port\n");
+> > >                          goto release_unlock;
+> > >                  }
+> > > -               src->connected->enabled = 0;
+> > > +               src->connected->enabled = false;
+> > >                  src->connected = NULL;
+> > >          }
+> > > @@ -1799,7 +1799,7 @@ int vchiq_mmal_component_disable(struct vchiq_mmal_instance *instance,
+> > >          ret = disable_component(instance, component);
+> > >          if (ret == 0)
+> > > -               component->enabled = 0;
+> > > +               component->enabled = false;
+> > >          mutex_unlock(&instance->vchiq_mutex);
+> > > diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.h b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.h
+> > > index 6006e29232b3..70eda6cac1c6 100644
+> > > --- a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.h
+> > > +++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.h
+> > > @@ -48,7 +48,7 @@ typedef void (*vchiq_mmal_buffer_cb)(
+> > >                  int status, struct mmal_buffer *buffer);
+> > >   struct vchiq_mmal_port {
+> > > -       u32 enabled:1;
+> > > +       bool enabled:1;
+> > Is this a direct revert with 'git revert' ?
 > 
-> Move the memory allocation to init path and store the pointer
-> in ifs_data struct.
 > 
-> Reviewed-by: Tony Luck <tony.luck@intel.com>
-> Suggested-by: Borislav Petkov <bp@alien8.de>
-> Signed-off-by: Jithu Joseph <jithu.joseph@intel.com>
-> ---
->  - Replaced global pkg_auth pointer to struct ifs_data (Hans)
->  - With this change there are conflicts in patches 11 and 12 (I will
->     post the updated 11 and 12 if this is satisfactory)
+> No. It had conflicts plus I added the ':1' initialization to keep the logic
+> same (in case 'enabled' gets used directly). Similar pattern come up with:
+>     ($) git grep 'bool' -- '*.[h]' | grep '\:1'
 > 
->  drivers/platform/x86/intel/ifs/ifs.h  |  2 ++
->  drivers/platform/x86/intel/ifs/core.c | 12 ++++++++++--
->  drivers/platform/x86/intel/ifs/load.c | 14 ++++----------
->  3 files changed, 16 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/platform/x86/intel/ifs/ifs.h b/drivers/platform/x86/intel/ifs/ifs.h
-> index 3ff1d9aaeaa9..8de1952a1b7b 100644
-> --- a/drivers/platform/x86/intel/ifs/ifs.h
-> +++ b/drivers/platform/x86/intel/ifs/ifs.h
-> @@ -191,6 +191,7 @@ union ifs_status {
->   * struct ifs_data - attributes related to intel IFS driver
->   * @integrity_cap_bit: MSR_INTEGRITY_CAPS bit enumerating this test
->   * @loaded_version: stores the currently loaded ifs image version.
-> + * @pkg_auth: array of bool storing per package auth status
->   * @loaded: If a valid test binary has been loaded into the memory
->   * @loading_error: Error occurred on another CPU while loading image
->   * @valid_chunks: number of chunks which could be validated.
-> @@ -199,6 +200,7 @@ union ifs_status {
->   */
->  struct ifs_data {
->  	int	integrity_cap_bit;
-> +	bool	*pkg_auth;
->  	int	loaded_version;
->  	bool	loaded;
->  	bool	loading_error;
-> diff --git a/drivers/platform/x86/intel/ifs/core.c b/drivers/platform/x86/intel/ifs/core.c
-> index 5fb7f655c291..6980a31e9786 100644
-> --- a/drivers/platform/x86/intel/ifs/core.c
-> +++ b/drivers/platform/x86/intel/ifs/core.c
-> @@ -4,6 +4,7 @@
->  #include <linux/module.h>
->  #include <linux/kdev_t.h>
->  #include <linux/semaphore.h>
-> +#include <linux/slab.h>
->  
->  #include <asm/cpu_device_id.h>
->  
-> @@ -51,8 +52,14 @@ static int __init ifs_init(void)
->  	ifs_device.misc.groups = ifs_get_groups();
->  
->  	if ((msrval & BIT(ifs_device.data.integrity_cap_bit)) &&
-> -	    !misc_register(&ifs_device.misc))
-> -		return 0;
-> +	    !misc_register(&ifs_device.misc)) {
-> +		ifs_device.data.pkg_auth = kmalloc_array(topology_max_packages(),
-> +							 sizeof(bool), GFP_KERNEL);
+> So it shouldn't be an issue.
 
-Thank you for the new version, but as I mentioned in my review, this kmalloc
-must be done *before* the misc_register(&ifs_device.misc), because as soon
-as that is done the other code may get triggered creating a race condition.
+Please don't do that "bool foo:1" makes no sense.  Drop the ":1"
+please.
 
-More in general && the misc_register to gether with the integrity_cap_bit
-is not really nice. If someone does not pay close attention they may
-mis that the check of the if has the pretty big side-effect of
-registering the actual misc device.
+thanks,
 
-Generally speaking test-conditions for if-s should not have side
-effects if possible.
-
-> +		if (!ifs_device.data.pkg_auth)
-> +			return -ENOMEM;
-> +		else
-> +			return 0;
-> +	}
->  
->  	return -ENODEV;
->  }
-
-This also makes me realize that you have your -ENODEV error exit and
-your normal success exit paths switched around from what is normal.
-
-Why not just write the above as (can be done as part of this
-patch since you need to touch it all anyways):
-
-	if (!(msrval & BIT(ifs_device.data.integrity_cap_bit))
-		return -ENODEV;
-
-	ifs_device.data.pkg_auth = kmalloc_array(topology_max_packages(), sizeof(bool), GFP_KERNEL);
-	if (!ifs_device.data.pkg_auth)
-		return -ENOMEM
-
-	ret = misc_register(&ifs_device.misc);
-	if (ret) {
-		kfree(ifs_device.data.pkg_auth);
-		return ret;
-	}
-
-	return 0;
-}
-
-That makes this all look much more like a normal probe() function
-with the success 0 return at the end.
-
-Where as your version has the success 0 return nested 2 levels
-deep in the else of a kmalloc() error check...
-
-Regards,
-
-Hans
-
-
-
-> @@ -60,6 +67,7 @@ static int __init ifs_init(void)
->  static void __exit ifs_exit(void)
->  {
->  	misc_deregister(&ifs_device.misc);
-> +	kfree(ifs_device.data.pkg_auth);
->  }
->  
->  module_init(ifs_init);
-> diff --git a/drivers/platform/x86/intel/ifs/load.c b/drivers/platform/x86/intel/ifs/load.c
-> index 89ce265887ea..8423c486d11b 100644
-> --- a/drivers/platform/x86/intel/ifs/load.c
-> +++ b/drivers/platform/x86/intel/ifs/load.c
-> @@ -3,7 +3,6 @@
->  
->  #include <linux/firmware.h>
->  #include <asm/cpu.h>
-> -#include <linux/slab.h>
->  #include <asm/microcode_intel.h>
->  
->  #include "ifs.h"
-> @@ -118,16 +117,12 @@ static void copy_hashes_authenticate_chunks(struct work_struct *work)
->   */
->  static int scan_chunks_sanity_check(struct device *dev)
->  {
-> -	int metadata_size, curr_pkg, cpu, ret = -ENOMEM;
-> +	int metadata_size, curr_pkg, cpu, ret;
->  	struct ifs_data *ifsd = ifs_get_data(dev);
-> -	bool *package_authenticated;
->  	struct ifs_work local_work;
->  	char *test_ptr;
->  
-> -	package_authenticated = kcalloc(topology_max_packages(), sizeof(bool), GFP_KERNEL);
-> -	if (!package_authenticated)
-> -		return ret;
-> -
-> +	memset(ifsd->pkg_auth, 0, (topology_max_packages() * sizeof(bool)));
->  	metadata_size = ifs_header_ptr->metadata_size;
->  
->  	/* Spec says that if the Meta Data Size = 0 then it should be treated as 2000 */
-> @@ -150,7 +145,7 @@ static int scan_chunks_sanity_check(struct device *dev)
->  	cpus_read_lock();
->  	for_each_online_cpu(cpu) {
->  		curr_pkg = topology_physical_package_id(cpu);
-> -		if (package_authenticated[curr_pkg])
-> +		if (ifsd->pkg_auth[curr_pkg])
->  			continue;
->  		reinit_completion(&ifs_done);
->  		local_work.dev = dev;
-> @@ -161,12 +156,11 @@ static int scan_chunks_sanity_check(struct device *dev)
->  			ret = -EIO;
->  			goto out;
->  		}
-> -		package_authenticated[curr_pkg] = 1;
-> +		ifsd->pkg_auth[curr_pkg] = 1;
->  	}
->  	ret = 0;
->  out:
->  	cpus_read_unlock();
-> -	kfree(package_authenticated);
->  
->  	return ret;
->  }
-
+greg k-h
