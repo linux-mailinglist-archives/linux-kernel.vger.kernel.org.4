@@ -2,151 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20D0962E534
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 20:25:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 579A162E536
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 20:26:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235015AbiKQTZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 14:25:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36612 "EHLO
+        id S240151AbiKQT0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 14:26:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240151AbiKQTZf (ORCPT
+        with ESMTP id S234540AbiKQT0a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 14:25:35 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E240D7C03F;
-        Thu, 17 Nov 2022 11:25:32 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id t1so2106345wmi.4;
-        Thu, 17 Nov 2022 11:25:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :message-id:subject:cc:to:from:date:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LZmg9eU02dztT0bMJhjJcCh58+tIuhR14Ezkf+QZKaA=;
-        b=ZB+nDURRcTpbgUf075xI0DrxVcI/+BZ2qTVobfEEouDjkyw/b2kNuWEtFglOgqapmu
-         WXRVVf8m5QJK215xoTnKRdqI9Id/G2b8Fb7zQ2zjzmCk+WxxilV12eOcbhM7/84IBPaN
-         4u5QQu+6ns8L9M+QIn5owmJpVoUJI9yo3Z9XeMPDh+UCmJTZoS7QyThb1fj2fp3XuZfU
-         J+7U2QcsoRpgPhcbVB4YeWMtHOFrKzaWsN7TlN2uLIZOFec9eatBsjZo1FC3EoGd9+Pp
-         9TJe0mZgHUmxYVx/PDvjtCT/3twp826Za4Dyso61Ni6NozG7vH7ugrmSolX16DAyxJb0
-         Brjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :message-id:subject:cc:to:from:date:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=LZmg9eU02dztT0bMJhjJcCh58+tIuhR14Ezkf+QZKaA=;
-        b=ElTp2lZoon61Z+4Tpk96BRPvlTsZUPRGoBHlUQkPWz0rU7QlBAyt3OqtUB1WHl/bWs
-         pp1ZIv7+WBo8NnQEPaADk0CMNoStjjFly5sSm8MmuhHKQUhKV0/3ZGELYSj2ueQCrZaz
-         asQxAWXyWofjrSu7eQH37UJqPQR7iHBQH3Cnd3yvm2mEF36HpRQU7OkT0fOOxh6XzLdW
-         mjcNgZpdF/7/cRFuNdQZG85aJ/6VoodV/yE/SfVQ0xftf7g/ZqcX83FNRvhh34269cyJ
-         k4Ci3qvVGF/ywevcwEOA+uI83xZTbLFYGSaQw+zY+G5z883ecEyXAHoC06AfHYH/LFhi
-         zYUg==
-X-Gm-Message-State: ANoB5pkiPvP6suzAXL9YUTzshEf3duqX3kDFmkiEn171B83HHENau/XJ
-        MP9QRSObKMvxtHxTwMQ6bzA=
-X-Google-Smtp-Source: AA0mqf6TptJ8+ZE43/TQ2OnxBdYCBWgOcoAGWgr6kyLYmMlms6k6UnsrpyPDylYuKDAQY7OEZUwBYA==
-X-Received: by 2002:a05:600c:3b84:b0:3cf:b73f:c062 with SMTP id n4-20020a05600c3b8400b003cfb73fc062mr6233948wms.204.1668713131290;
-        Thu, 17 Nov 2022 11:25:31 -0800 (PST)
-Received: from eldamar.lan (c-82-192-242-114.customer.ggaweb.ch. [82.192.242.114])
-        by smtp.gmail.com with ESMTPSA id i14-20020adff30e000000b002368a6deaf8sm1700730wro.57.2022.11.17.11.25.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 11:25:30 -0800 (PST)
-Sender: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com>
-Received: by eldamar.lan (Postfix, from userid 1000)
-        id 17EC1BE2DE0; Thu, 17 Nov 2022 20:25:29 +0100 (CET)
-Date:   Thu, 17 Nov 2022 20:25:29 +0100
-From:   Salvatore Bonaccorso <carnil@debian.org>
-To:     M Chetan Kumar <m.chetan.kumar@intel.com>,
-        Intel Corporation <linuxwwan@intel.com>
-Cc:     Loic Poulain <loic.poulain@linaro.org>,
-        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: drivers/net/wwan/iosm/iosm_ipc_protocol.c:244:36: error: passing
- argument 3 of 'dma_alloc_coherent' from incompatible pointer type
- [-Werror=incompatible-pointer-types]
-Message-ID: <Y3aKqZ5E8VVIZ6jh@eldamar.lan>
+        Thu, 17 Nov 2022 14:26:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09DCDA4
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 11:26:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A05C3B821C3
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 19:26:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68CD1C433D6;
+        Thu, 17 Nov 2022 19:26:26 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="fKZGboZT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1668713184;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4miayFE14wny2mfBEslDdups7GCejc3Lbk78v1jBxlM=;
+        b=fKZGboZTtshrffcHojQQYR/YysoPKel7w/6GLqYGZ8JiWNU+ranJ6JYveLPMNJJ2DvXkev
+        rxCBiFqrNY2svEhwcXYAN9GI80gZ5D1WeuPLewWnEELrHKr4SLCHEBZTFft8rA9RLuH09E
+        pJdUbnAQ8btv25DZ1ugoP45nCRFu8S4=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 9093a911 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Thu, 17 Nov 2022 19:26:24 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org, tytso@mit.edu, kees@kernel.org,
+        linux@armlinux.org.uk, ydroneaud@opteya.com,
+        gregkh@linuxfoundation.org, rdunlap@infradead.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH v3] random: add helpers for random numbers with given floor or range
+Date:   Thu, 17 Nov 2022 20:26:20 +0100
+Message-Id: <20221117192620.2304613-1-Jason@zx2c4.com>
+In-Reply-To: <2b3bc31e-c308-b04c-1759-26bcf8dba6d3@infradead.org>
+References: <2b3bc31e-c308-b04c-1759-26bcf8dba6d3@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,TVD_SPACE_RATIO autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+Now that we have get_random_u32_below(), it's nearly trivial to make
+inline helpers to compute get_random_u32_above() and
+get_random_u32_inclusive(), which will help clean up open coded loops
+and manual computations throughout the tree.
 
-While preparing 6.1-rc5 for Debian, we noticed that compilation of
-drivers/net/wwan/iosm/iosm_ipc_protocol.c fails (with
--Werror=3Dincompatible-pointer-types), on armhf[1]:
+One snag is that in order to make get_random_u32_inclusive() operate on
+closed intervals, we have to do some (unlikely) special case handling if
+get_random_u32_interval(0, U32_MAX) is called. The least expensive way
+of doing this is actually to adjust the slowpath of
+get_random_u32_below() to have its undefined 0 result just return the
+output of get_random_u32(). We can make this basically free by calling
+get_random_u32() before the branch, so that the branch latency gets
+interleaved.
 
-   gcc-12 -Wp,-MMD,drivers/net/wwan/iosm/.iosm_ipc_protocol_ops.o.d -nostdi=
-nc -I/<<PKGBUILDDIR>>/arch/arm/include -I./arch/arm/include/generated -I/<<=
-PKGBUILDDIR>>/include -I./include -I/<<PKGBUILDDIR>>/arch/arm/include/uapi =
--I./arch/ar
-m/include/generated/uapi -I/<<PKGBUILDDIR>>/include/uapi -I./include/genera=
-ted/uapi -include /<<PKGBUILDDIR>>/include/linux/compiler-version.h -includ=
-e /<<PKGBUILDDIR>>/include/linux/kconfig.h -include /<<PKGBUILDDIR>>/includ=
-e/linux/compiler_types.h -D__KERNEL__ -mlittle-endian -fmacro-prefix-map=3D=
-/<<PKGBUILDDIR>>/=3D -Wall -Wundef -Werror=3Dstrict-prototypes -Wno-trigrap=
-hs -fno-strict-aliasing -fno-common -fshort-wchar -fno-PIE -Werror=3Dimplic=
-it-function-declaration -Werror=3Dimplicit-int -Werror=3Dreturn-type -Wno-f=
-ormat-security -std=3Dgnu11 -fno-dwarf2-cfi-asm -mno-fdpic -fno-ipa-sra -ma=
-bi=3Daapcs-linux -mfpu=3Dvfp -funwind-tables -mtp=3Dcp15 -marm -Wa,-mno-war=
-n-deprecated -D__LINUX_ARM_ARCH__=3D7 -march=3Darmv7-a -msoft-float -Uarm -=
-fno-delete-null-pointer-checks -Wno-frame-address -Wno-format-truncation -W=
-no-format-overflow -Wno-address-of-packed-member -O2 -fno-allow-store-data-=
-races -Wframe-larger-than=3D1024 -fstack-protector-strong -Wno-main -Wno-un=
-used-but-set-variable -Wno-unused-const-variable -Wno-dangling-pointer -ftr=
-ivial-auto-var-init=3Dzero -fno-stack-clash-protection -pg -Wdeclaration-af=
-ter-statement -Wvla -Wno-pointer-sign -Wcast-function-type -Wno-stringop-tr=
-uncation -Wno-stringop-overflow -Wno-restrict -Wno-maybe-uninitialized -Wno=
--array-bounds -Wno-alloc-size-larger-than -Wimplicit-fallthrough=3D5 -fno-s=
-trict-overflow -fno-stack-check -fconserve-stack -Werror=3Ddate-time -Werro=
-r=3Dincompatible-pointer-types -Werror=3Ddesignated-init -Wno-packed-not-al=
-igned -g -fdebug-prefix-map=3D/<<PKGBUILDDIR>>/=3D -mstack-protector-guard=
-=3Dtls -mstack-protector-guard-offset=3D1592 -I /<<PKGBUILDDIR>>/drivers/ne=
-t/wwan/iosm -I ./drivers/net/wwan/iosm  -DMODULE  -DKBUILD_BASENAME=3D'"ios=
-m_ipc_protocol_ops"' -DKBUILD_MODNAME=3D'"iosm"' -D__KBUILD_MODNAME=3Dkmod_=
-iosm -c -o drivers/net/wwan/iosm/iosm_ipc_protocol_ops.o /<<PKGBUILDDIR>>/d=
-rivers/net/wwan/iosm/iosm_ipc_protocol_ops.c =20
-/<<PKGBUILDDIR>>/drivers/net/wwan/iosm/iosm_ipc_protocol.c: In function 'ip=
-c_protocol_init':
-/<<PKGBUILDDIR>>/drivers/net/wwan/iosm/iosm_ipc_protocol.c:244:36: error: p=
-assing argument 3 of 'dma_alloc_coherent' from incompatible pointer type [-=
-Werror=3Dincompatible-pointer-types]
-  244 |                                    &ipc_protocol->phy_ap_shm, GFP_K=
-ERNEL);
-      |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~
-      |                                    |
-      |                                    phys_addr_t * {aka unsigned int =
-*}
-In file included from /<<PKGBUILDDIR>>/include/linux/skbuff.h:31,
-                 from /<<PKGBUILDDIR>>/drivers/net/wwan/iosm/iosm_ipc_imem.=
-h:9,
-                 from /<<PKGBUILDDIR>>/drivers/net/wwan/iosm/iosm_ipc_proto=
-col.c:6:
-/<<PKGBUILDDIR>>/include/linux/dma-mapping.h:421:29: note: expected 'dma_ad=
-dr_t *' {aka 'long long unsigned int *'} but argument is of type 'phys_addr=
-_t *' {aka 'unsigned int *'}
-  421 |                 dma_addr_t *dma_handle, gfp_t gfp)
-      |                 ~~~~~~~~~~~~^~~~~~~~~~
-cc1: some warnings being treated as errors
-make[8]: *** [/<<PKGBUILDDIR>>/scripts/Makefile.build:255: drivers/net/wwan=
-/iosm/iosm_ipc_protocol.o] Error 1
-make[8]: *** Waiting for unfinished jobs....
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+v2->v3:
+- Fix doc comment argument order.
+- Interleave !ceil check with get_random_u32() call to make branch ~free.
 
-Regards,
-Salvtore
+ drivers/char/random.c  | 18 +++++++++++++++++-
+ include/linux/random.h | 25 +++++++++++++++++++++++++
+ 2 files changed, 42 insertions(+), 1 deletion(-)
 
-[1]: https://buildd.debian.org/status/fetch.php?pkg=3Dlinux&arch=3Darmhf&ve=
-r=3D6.1%7Erc5-1%7Eexp1&stamp=3D1668648913&raw=3D0
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index 6f323344d0b9..f5868dddbb61 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -161,6 +161,8 @@ EXPORT_SYMBOL(wait_for_random_bytes);
+  *	u16 get_random_u16()
+  *	u32 get_random_u32()
+  *	u32 get_random_u32_below(u32 ceil)
++ *	u32 get_random_u32_above(u32 floor)
++ *	u32 get_random_u32_inclusive(u32 floor, u32 ceil)
+  *	u64 get_random_u64()
+  *	unsigned long get_random_long()
+  *
+@@ -522,7 +524,21 @@ u32 __get_random_u32_below(u32 ceil)
+ 	 * of `-ceil % ceil` is analogous to `2^32 % ceil`, but is computable
+ 	 * in 32-bits.
+ 	 */
+-	u64 mult = (u64)ceil * get_random_u32();
++	u32 rand = get_random_u32();
++	u64 mult;
++
++	/*
++	 * This function is technically undefined for ceil == 0, and in fact
++	 * for the non-underscored constant version in the header, we build bug
++	 * on that. But for the non-constant case, it's convenient to have that
++	 * evaluate to being a straight call to get_random_u32(), so that
++	 * get_random_u32_inclusive() can work over its whole range without
++	 * undefined behavior.
++	 */
++	if (unlikely(!ceil))
++		return rand;
++
++	mult = (u64)ceil * rand;
+ 	if (unlikely((u32)mult < ceil)) {
+ 		u32 bound = -ceil % ceil;
+ 		while (unlikely((u32)mult < bound))
+diff --git a/include/linux/random.h b/include/linux/random.h
+index 3a82c0a8bc46..bd954ecbef90 100644
+--- a/include/linux/random.h
++++ b/include/linux/random.h
+@@ -91,6 +91,31 @@ static inline u32 get_random_u32_below(u32 ceil)
+ 	}
+ }
+ 
++/*
++ * Returns a random integer in the interval (floor, U32_MAX], with uniform
++ * distribution, suitable for all uses. Fastest when floor is a constant, but
++ * still fast for variable floor as well.
++ */
++static inline u32 get_random_u32_above(u32 floor)
++{
++	BUILD_BUG_ON_MSG(__builtin_constant_p(floor) && floor == U32_MAX,
++			 "get_random_u32_above() must take floor < U32_MAX");
++	return floor + 1 + get_random_u32_below(U32_MAX - floor);
++}
++
++/*
++ * Returns a random integer in the interval [floor, ceil], with uniform
++ * distribution, suitable for all uses. Fastest when floor and ceil are
++ * constant, but still fast for variable floor and ceil as well.
++ */
++static inline u32 get_random_u32_inclusive(u32 floor, u32 ceil)
++{
++	BUILD_BUG_ON_MSG(__builtin_constant_p(floor) && __builtin_constant_p(ceil) &&
++			 (floor > ceil || ceil - floor == U32_MAX),
++			 "get_random_u32_inclusive() must take floor <= ceil");
++	return floor + get_random_u32_below(ceil - floor + 1);
++}
++
+ /*
+  * On 64-bit architectures, protect against non-terminated C string overflows
+  * by zeroing out the first byte of the canary; this leaves 56 bits of entropy.
+-- 
+2.38.1
+
