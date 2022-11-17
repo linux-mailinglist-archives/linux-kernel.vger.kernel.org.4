@@ -2,199 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CA1262D236
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 05:16:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E22C462D23A
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 05:17:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238955AbiKQEQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 23:16:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43882 "EHLO
+        id S239064AbiKQEQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 23:16:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239201AbiKQEPr (ORCPT
+        with ESMTP id S239259AbiKQEP5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 23:15:47 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FAC85BD6A;
-        Wed, 16 Nov 2022 20:15:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1668658519; x=1700194519;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=EnePFvhGfKbl2ud+JLIFkHLrcC90umgCGaxzD9qalXk=;
-  b=Bg4Vw+tw07lGBLXmO0lL960Tpwb6GayTm6mBHyZcG61954Ujc2ZlAn0z
-   fX73JYDJdzhVLanIPv2WtiS4TABAfy7xCmauqosO/uveY5XBjoHRPFLNh
-   H2XDeglZoccmBDyj3my63/LZPxobnr7H5uh3bEV9Mz8xzFAQQ0P6c1iY8
-   RLM8QWSLpQ2Puwoa68011xcptKLlbvsMNRfkgetESCv027wiydQ04vJ7h
-   hRZXGqTw7WCvNmjXkih6h7L4sMig/2P07SzMUF3Vav1qmLxpB/0o9JDJx
-   h375w+sXk8MTmNlCtVF/SXjEW+LBUbTB5cSjL6NT6L4HZLGSZf6hFrQXr
-   g==;
-X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
-   d="scan'208";a="189317680"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Nov 2022 21:15:19 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 16 Nov 2022 21:15:06 -0700
-Received: from che-lt-i64410lx.microchip.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Wed, 16 Nov 2022 21:15:01 -0700
-From:   Balamanikandan Gunasundar 
-        <balamanikandan.gunasundar@microchip.com>
-To:     <ludovic.desroches@microchip.com>, <ulf.hansson@linaro.org>,
-        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <3chas3@gmail.com>, <linux-kernel@vger.kernel.org>,
-        <linux-mmc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-atm-general@lists.sourceforge.net>,
-        <netdev@vger.kernel.org>, <linus.walleij@linaro.org>,
-        <hari.prasathge@microchip.com>
-CC:     <balamanikandan.gunasundar@microchip.com>
-Subject: [PATCH v2 2/2] mmc: atmel-mci: move atmel MCI header file
-Date:   Thu, 17 Nov 2022 09:44:30 +0530
-Message-ID: <20221117041430.9108-3-balamanikandan.gunasundar@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221117041430.9108-1-balamanikandan.gunasundar@microchip.com>
-References: <20221117041430.9108-1-balamanikandan.gunasundar@microchip.com>
+        Wed, 16 Nov 2022 23:15:57 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5478532D2
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 20:15:55 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id k15so615952pfg.2
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 20:15:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mDD27eRVr6Jpi3mv3EpbjZBfO7XDNZID1/HCkNCN7Lc=;
+        b=gq4qQ68HZFLk59q+PiEYGf4KzSPXoaHUCGwkgytoBfV4K3UXyLtQ2hMzRC5aOA5dXl
+         eaXR7lnrkMQ5OB82HlcrD6e4+rvYsdmKyUGqDxa5dzldStKrUaPEeB+uUO1cNDjU7sFO
+         2J5JcdaRhESAPx6/3TBJ+botN3IwFQ8UWQOBPtpqgMKy1AnYeOkWMKa6+1Eig6DYMkYN
+         larq/bjcceNN8CMNhOVRKuk2svcVPlK3XafSQL2ljGXKVqEsha6lkNZveRSYragc3+CC
+         61+10oaKb+iDkIrMZ3OuvCyQRiXmanL+ElMojCyZc3coiJMeGoDVZzsPVV2FwOPMlM0v
+         33tQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mDD27eRVr6Jpi3mv3EpbjZBfO7XDNZID1/HCkNCN7Lc=;
+        b=Op1OZ8mYMbH7NSjWhJtLPpjiCbA26EPZZbJNRGbnkb75dmljqE3gMrIZBKmYIL9kZc
+         nPdWMqesWHjQrfKt7vZNd5SbK4TsT3CUc8CuRasGEWuRAI7qvzCXMVTMGoB9frr1kcXN
+         S9PCrmSpjuRf659xBHGhkt9CTj+h9m+QK2Fnzo7nTL/3WfTGI/m3pggTgUmSojt+avkp
+         kU+2HL+Xtziwc5VFa+EIprYeiIaitaOpCuZG3Q0L8g0ao/T8Eu88xU8nnlfvEyppcvpZ
+         Y/kqg1irJs+mxAlSxLd/Y4R8e8xYjcLCb/WIDlikRRsws4Sqs9XY5392Svjni0XsOcco
+         9QJg==
+X-Gm-Message-State: ANoB5pkgdZ/YBApWAvB61xETGypk2/J9cIQSXcEjOCo5+UG3g+2MU3vy
+        ClShKA5Z3uEfyvvuyuHhiwp6cg==
+X-Google-Smtp-Source: AA0mqf5V6OHqKAmUjJGcpIKqwpZ/GjFFX4NKQgV3lxyTXpAi69qVN9PHK/mDtD9wPzRAO4Z61xHymQ==
+X-Received: by 2002:a63:712:0:b0:438:e0dc:9c53 with SMTP id 18-20020a630712000000b00438e0dc9c53mr478580pgh.322.1668658555199;
+        Wed, 16 Nov 2022 20:15:55 -0800 (PST)
+Received: from debug.ba.rivosinc.com ([66.220.2.162])
+        by smtp.gmail.com with ESMTPSA id fu15-20020a17090ad18f00b0020d51aefb82sm431788pjb.19.2022.11.16.20.15.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 20:15:54 -0800 (PST)
+Date:   Wed, 16 Nov 2022 20:15:51 -0800
+From:   Deepak Gupta <debug@rivosinc.com>
+To:     Xianting Tian <xianting.tian@linux.alibaba.com>
+Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, anup@brainfault.org, heiko@sntech.de,
+        guoren@kernel.org, mick@ics.forth.gr,
+        alexandre.ghiti@canonical.com, bhe@redhat.com, vgoyal@redhat.com,
+        dyoung@redhat.com, corbet@lwn.net, Conor.Dooley@microchip.com,
+        bagasdotme@gmail.com, kexec@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, crash-utility@redhat.com,
+        heinrich.schuchardt@canonical.com, k-hagio-ab@nec.com,
+        hschauhan@nulltrace.org, yixun.lan@gmail.com
+Subject: Re: [PATCH V5 1/2] RISC-V: Add arch_crash_save_vmcoreinfo support
+Message-ID: <20221117041551.GA2197698@debug.ba.rivosinc.com>
+References: <20221026144208.373504-1-xianting.tian@linux.alibaba.com>
+ <20221026144208.373504-2-xianting.tian@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20221026144208.373504-2-xianting.tian@linux.alibaba.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move the contents of linux/atmel-mci.h into
-drivers/mmc/host/atmel-mci.c as it is only used in one file
+On Wed, Oct 26, 2022 at 10:42:07PM +0800, Xianting Tian wrote:
+>Add arch_crash_save_vmcoreinfo(), which exports VM layout(MODULES, VMALLOC,
+>VMEMMAP ranges and KERNEL_LINK_ADDR), va bits and ram base for vmcore.
+>
+>Default pagetable levels and PAGE_OFFSET aren't same for different kernel
+>version as below. For pagetable levels, it sets sv57 by default and falls
+>back to setting sv48 at boot time if sv57 is not supported by the hardware.
+>
+>For ram base, the default value is 0x80200000 for qemu riscv64 env and,
+>for example, is 0x200000 on the XuanTie 910 CPU.
+>
+> * Linux Kernel 5.18 ~
+> *      PGTABLE_LEVELS = 5
+> *      PAGE_OFFSET = 0xff60000000000000
+> * Linux Kernel 5.17 ~
+> *      PGTABLE_LEVELS = 4
+> *      PAGE_OFFSET = 0xffffaf8000000000
+> * Linux Kernel 4.19 ~
+> *      PGTABLE_LEVELS = 3
+> *      PAGE_OFFSET = 0xffffffe000000000
+>
+>Since these configurations change from time to time and version to version,
+>it is preferable to export them via vmcoreinfo than to change the crash's
+>code frequently, it can simplify the development of crash tool.
+>
+>Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+>---
+> arch/riscv/kernel/Makefile     |  1 +
+> arch/riscv/kernel/crash_core.c | 21 +++++++++++++++++++++
+> 2 files changed, 22 insertions(+)
+> create mode 100644 arch/riscv/kernel/crash_core.c
+>
+>diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+>index db6e4b1294ba..4cf303a779ab 100644
+>--- a/arch/riscv/kernel/Makefile
+>+++ b/arch/riscv/kernel/Makefile
+>@@ -81,6 +81,7 @@ obj-$(CONFIG_KGDB)		+= kgdb.o
+> obj-$(CONFIG_KEXEC_CORE)	+= kexec_relocate.o crash_save_regs.o machine_kexec.o
+> obj-$(CONFIG_KEXEC_FILE)	+= elf_kexec.o machine_kexec_file.o
+> obj-$(CONFIG_CRASH_DUMP)	+= crash_dump.o
+>+obj-$(CONFIG_CRASH_CORE)	+= crash_core.o
+>
+> obj-$(CONFIG_JUMP_LABEL)	+= jump_label.o
+>
+>diff --git a/arch/riscv/kernel/crash_core.c b/arch/riscv/kernel/crash_core.c
+>new file mode 100644
+>index 000000000000..b351a3c01355
+>--- /dev/null
+>+++ b/arch/riscv/kernel/crash_core.c
+>@@ -0,0 +1,21 @@
+>+// SPDX-License-Identifier: GPL-2.0-only
+>+
+>+#include <linux/crash_core.h>
+>+#include <linux/pagemap.h>
+>+
+>+void arch_crash_save_vmcoreinfo(void)
+>+{
+>+	VMCOREINFO_NUMBER(VA_BITS);
+>+	VMCOREINFO_NUMBER(phys_ram_base);
+>+
+>+	vmcoreinfo_append_str("NUMBER(PAGE_OFFSET)=0x%lx\n", PAGE_OFFSET);
+>+	vmcoreinfo_append_str("NUMBER(VMALLOC_START)=0x%lx\n", VMALLOC_START);
+>+	vmcoreinfo_append_str("NUMBER(VMALLOC_END)=0x%lx\n", VMALLOC_END);
+>+	vmcoreinfo_append_str("NUMBER(VMEMMAP_START)=0x%lx\n", VMEMMAP_START);
+>+	vmcoreinfo_append_str("NUMBER(VMEMMAP_END)=0x%lx\n", VMEMMAP_END);
+>+#ifdef CONFIG_64BIT
+>+	vmcoreinfo_append_str("NUMBER(MODULES_VADDR)=0x%lx\n", MODULES_VADDR);
+>+	vmcoreinfo_append_str("NUMBER(MODULES_END)=0x%lx\n", MODULES_END);
+>+#endif
+>+	vmcoreinfo_append_str("NUMBER(KERNEL_LINK_ADDR)=0x%lx\n", KERNEL_LINK_ADDR);
+>+}
+>-- 
+>2.17.1
+>
 
-Signed-off-by: Balamanikandan Gunasundar <balamanikandan.gunasundar@microchip.com>
----
- drivers/mmc/host/atmel-mci.c | 39 +++++++++++++++++++++++++++++-
- include/linux/atmel-mci.h    | 46 ------------------------------------
- 2 files changed, 38 insertions(+), 47 deletions(-)
- delete mode 100644 include/linux/atmel-mci.h
+I had been looking around to play around with crash-utility.
+Applied v5 patches, triggered a crash and have been able to use crash tool with commands 
+like vtop/bt.
 
-diff --git a/drivers/mmc/host/atmel-mci.c b/drivers/mmc/host/atmel-mci.c
-index f6194aab17df..d1e2011f881b 100644
---- a/drivers/mmc/host/atmel-mci.c
-+++ b/drivers/mmc/host/atmel-mci.c
-@@ -30,7 +30,6 @@
- #include <linux/mmc/host.h>
- #include <linux/mmc/sdio.h>
- 
--#include <linux/atmel-mci.h>
- #include <linux/atmel_pdc.h>
- #include <linux/pm.h>
- #include <linux/pm_runtime.h>
-@@ -41,6 +40,8 @@
- #include <asm/unaligned.h>
- #include "../core/pwrseq.h"
- 
-+#define ATMCI_MAX_NR_SLOTS	2
-+
- /*
-  * Superset of MCI IP registers integrated in Atmel AT91 Processor
-  * Registers and bitfields marked with [2] are only available in MCI2
-@@ -202,6 +203,42 @@ enum atmci_pdc_buf {
- 	PDC_SECOND_BUF,
- };
- 
-+/**
-+ * struct mci_slot_pdata - board-specific per-slot configuration
-+ * @bus_width: Number of data lines wired up the slot
-+ * @detect_pin: GPIO pin wired to the card detect switch
-+ * @wp_pin: GPIO pin wired to the write protect sensor
-+ * @detect_is_active_high: The state of the detect pin when it is active
-+ * @non_removable: The slot is not removable, only detect once
-+ *
-+ * If a given slot is not present on the board, @bus_width should be
-+ * set to 0. The other fields are ignored in this case.
-+ *
-+ * Any pins that aren't available should be set to a negative value.
-+ *
-+ * Note that support for multiple slots is experimental -- some cards
-+ * might get upset if we don't get the clock management exactly right.
-+ * But in most cases, it should work just fine.
-+ */
-+struct mci_slot_pdata {
-+	unsigned int		bus_width;
-+	struct gpio_desc        *detect_pin;
-+	struct gpio_desc	*wp_pin;
-+	bool			detect_is_active_high;
-+	bool			non_removable;
-+};
-+
-+/**
-+ * struct mci_platform_data - board-specific MMC/SDcard configuration
-+ * @dma_slave: DMA slave interface to use in data transfers.
-+ * @slot: Per-slot configuration data.
-+ */
-+struct mci_platform_data {
-+	void			*dma_slave;
-+	dma_filter_fn		dma_filter;
-+	struct mci_slot_pdata	slot[ATMCI_MAX_NR_SLOTS];
-+};
-+
- struct atmel_mci_caps {
- 	bool    has_dma_conf_reg;
- 	bool    has_pdc;
-diff --git a/include/linux/atmel-mci.h b/include/linux/atmel-mci.h
-deleted file mode 100644
-index 017e7d8f6126..000000000000
---- a/include/linux/atmel-mci.h
-+++ /dev/null
-@@ -1,46 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef __LINUX_ATMEL_MCI_H
--#define __LINUX_ATMEL_MCI_H
--
--#include <linux/types.h>
--#include <linux/dmaengine.h>
--
--#define ATMCI_MAX_NR_SLOTS	2
--
--/**
-- * struct mci_slot_pdata - board-specific per-slot configuration
-- * @bus_width: Number of data lines wired up the slot
-- * @detect_pin: GPIO pin wired to the card detect switch
-- * @wp_pin: GPIO pin wired to the write protect sensor
-- * @detect_is_active_high: The state of the detect pin when it is active
-- * @non_removable: The slot is not removable, only detect once
-- *
-- * If a given slot is not present on the board, @bus_width should be
-- * set to 0. The other fields are ignored in this case.
-- *
-- * Any pins that aren't available should be set to a negative value.
-- *
-- * Note that support for multiple slots is experimental -- some cards
-- * might get upset if we don't get the clock management exactly right.
-- * But in most cases, it should work just fine.
-- */
--struct mci_slot_pdata {
--	unsigned int		bus_width;
--	struct gpio_desc        *detect_pin;
--	struct gpio_desc	*wp_pin;
--	bool			detect_is_active_high;
--	bool			non_removable;
--};
--
--/**
-- * struct mci_platform_data - board-specific MMC/SDcard configuration
-- * @dma_slave: DMA slave interface to use in data transfers.
-- * @slot: Per-slot configuration data.
-- */
--struct mci_platform_data {
--	void			*dma_slave;
--	dma_filter_fn		dma_filter;
--	struct mci_slot_pdata	slot[ATMCI_MAX_NR_SLOTS];
--};
--
--#endif /* __LINUX_ATMEL_MCI_H */
--- 
-2.25.1
+Tested-by: Deepak Gupta <debug@rivosinc.com>
+
+Thanks
+debug
 
