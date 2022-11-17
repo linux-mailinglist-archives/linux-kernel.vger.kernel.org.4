@@ -2,107 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA2A862D0E1
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 02:55:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C77662D0E2
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 02:56:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234669AbiKQBzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 20:55:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48004 "EHLO
+        id S230377AbiKQBz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 20:55:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231840AbiKQBzd (ORCPT
+        with ESMTP id S233772AbiKQBz5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 20:55:33 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B3AB60E8B;
-        Wed, 16 Nov 2022 17:55:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668650132; x=1700186132;
-  h=message-id:date:mime-version:cc:to:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=uuP5q8gUlbvgaw8quTq8oqXHFLQt2Yhg3IPq6GPh/j8=;
-  b=ChmhzHvxTU3g8tGyFOqlsWV5x056Vhppal3M6uYw/PTjuq+Av4AjCZtL
-   +S6qxTwQZfllKvgFn7r3lGYlhtbvqrVrYKmjR9NZSoHstvoLa6CUSdsTx
-   wnDKEUpBYzjUDP3er6DUSFSeWfCaXFM3yJS40Yl/gLB/CCVmLCodEo602
-   vNhoUw+ypvnhteV7DbskKZvYEcsfmRO+qtR4je4jeQ1HYrj0hOmJDB1vs
-   R/qBJ11YNZoEoaz3DAV1cKwYj5kdAfU27L8nkGaVKm5RK9FYw9P+fMfkX
-   WVcuTN0m9oGOBMo57+oi5nf2EqeA+yOjC5eZ9eDqf9HlzqfDLK3hNBasj
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="300256615"
-X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
-   d="scan'208";a="300256615"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 17:55:32 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="764562079"
-X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
-   d="scan'208";a="764562079"
-Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.210.247]) ([10.254.210.247])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 17:55:27 -0800
-Message-ID: <33eea9bd-e101-4836-19e8-d4b191b78b00@linux.intel.com>
-Date:   Thu, 17 Nov 2022 09:55:25 +0800
+        Wed, 16 Nov 2022 20:55:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90267654EE
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 17:55:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 164A862060
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 01:55:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7407EC43145
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 01:55:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668650155;
+        bh=S0DqzMJHKbSmIvt1FFR0xECdHab+RFIBJvJI8T2w/Tc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=FILurbRxsifye76/ouoCgqE7Q7XsXu0jtZEqYQ/blOGZe4iwAE3DAcdHkSvQ9iTkL
+         J+Dbz0uXB0i5AyaWIhZFlcwW8vf5pllQzyN7ilIkK/rGmQC2j0gnaQ/NrtygqtjfBD
+         wgiV7Cvax0Wuy3SyfU/BvMX6gUxwIm9xylwzkBY6ofi6M8S+E1oV9mAIf0gYm8PlkG
+         tQw0zq+XN6fV/PuOg0cgbYn6CECMxB0ocfC5Hu1r1cyvQNsAlDH8yk4RvdLtLM7TZo
+         rw1eZktny/4nGr+mdpI/Br3vTqPc+ngDalg4s2/DLlG3ACQ54ijwjuvM2R3wg0yBrx
+         pA/JXm8Ng8RNg==
+Received: by mail-ej1-f54.google.com with SMTP id ft34so1500347ejc.12
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 17:55:55 -0800 (PST)
+X-Gm-Message-State: ANoB5pkE+N+a5lIZlnZvGwKsZMCgRwxJXztqH04h8KNQiwKofeg4lYFW
+        AHHlDa2YNzAee49XG1qYgNf2/mnYhj1Z1oMSUhk=
+X-Google-Smtp-Source: AA0mqf4FmoJXxKh1bucmvcCygXSBfBAcHJDD3FKzWJIRyNGTgEkiXem5V5rtshJXRD2fvl9OMRrUskOJMWYJgOlU844=
+X-Received: by 2002:a17:907:cf84:b0:78d:4795:ff1f with SMTP id
+ ux4-20020a170907cf8400b0078d4795ff1fmr424058ejc.331.1668650153644; Wed, 16
+ Nov 2022 17:55:53 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Cc:     baolu.lu@linux.intel.com, Pierre Morel <pmorel@linux.ibm.com>,
-        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, linux-kernel@vger.kernel.org,
-        Julian Ruess <julianr@linux.ibm.com>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Gerd Bayer <gbayer@linux.ibm.com>, iommu@lists.linux.dev,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Wenjia Zhang <wenjia@linux.ibm.com>
-References: <20221116171656.4128212-1-schnelle@linux.ibm.com>
- <20221116171656.4128212-5-schnelle@linux.ibm.com>
-Content-Language: en-US
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-Subject: Re: [PATCH v2 4/7] iommu: Let iommu.strict override
- ops->def_domain_type
-In-Reply-To: <20221116171656.4128212-5-schnelle@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221116031305.286634-1-suagrfillet@gmail.com>
+ <20221116031305.286634-3-suagrfillet@gmail.com> <20221116084540.aslzynq4bmar6f46@kamzik>
+In-Reply-To: <20221116084540.aslzynq4bmar6f46@kamzik>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Thu, 17 Nov 2022 09:55:41 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSBdum6UwVkVq37mrH_GKssSMBCRAWKXKs31B3R3ypKpg@mail.gmail.com>
+Message-ID: <CAJF2gTSBdum6UwVkVq37mrH_GKssSMBCRAWKXKs31B3R3ypKpg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] riscv/ftrace: SAVE_ALL supports lightweight save
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     Song Shuai <suagrfillet@gmail.com>, rostedt@goodmis.org,
+        mhiramat@kernel.org, mark.rutland@arm.com,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/17 1:16, Niklas Schnelle wrote:
-> When iommu.strict=1 is set or iommu_set_dma_strict() was called we
-> should use IOMMU_DOMAIN_DMA irrespective of ops->def_domain_type.
-> 
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> ---
->   drivers/iommu/iommu.c | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-> index 65a3b3d886dc..d9bf94d198df 100644
-> --- a/drivers/iommu/iommu.c
-> +++ b/drivers/iommu/iommu.c
-> @@ -1562,6 +1562,9 @@ static int iommu_get_def_domain_type(struct device *dev)
->   {
->   	const struct iommu_ops *ops = dev_iommu_ops(dev);
->   
-> +	if (iommu_dma_strict)
-> +		return IOMMU_DOMAIN_DMA;
+On Wed, Nov 16, 2022 at 4:45 PM Andrew Jones <ajones@ventanamicro.com> wrote:
+>
+> On Wed, Nov 16, 2022 at 11:13:04AM +0800, Song Shuai wrote:
+> > In order to make the function graph use ftrace directly, ftrace_caller
+> > should be adjusted to save the necessary regs against the pt_regs layout
+> > so it can call ftrace_graph_func reasonably.
+> >
+> > SAVE_ALL now saves all the regs according to the pt_regs struct. Here
+> > introduces a lightweight option for SAVE_ALL to save only the necessary
+> > regs for ftrace_caller.
+> >
+> > For convenience, the original argument setup for the tracing function in
+> > ftrace_[regs]_caller is killed and appended to the tail of SAVE_ALL.
+> >
+> > Signed-off-by: Song Shuai <suagrfillet@gmail.com>
+> > ---
+> >  arch/riscv/kernel/mcount-dyn.S | 110 +++++++++++++++++++++++++++------
+> >  1 file changed, 92 insertions(+), 18 deletions(-)
+> >
+> > diff --git a/arch/riscv/kernel/mcount-dyn.S b/arch/riscv/kernel/mcount-dyn.S
+> > index d171eca623b6..2f0a280bd7a0 100644
+> > --- a/arch/riscv/kernel/mcount-dyn.S
+> > +++ b/arch/riscv/kernel/mcount-dyn.S
+> > @@ -56,7 +56,51 @@
+> >       .endm
+> >
+> >  #ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
+> > -     .macro SAVE_ALL
+> > +
+> > +/**
+> > +* SAVE_ALL - save regs against the pt_regs struct
+> > +*
+> > +* @all: tell if saving all the regs
+>
+> I find it odd to have a macro name that includes 'ALL' in it
+> to require a parameter 'all' to be set in order to actually save
+> all. I suggest renaming the macro to something like SAVE_REGS.
+SAVE_ABI_REGS <arg>
+arg = 0 -> SAVE_ABI in pt_regs
+arg = 1 -> SAVE_REGS
 
-If any quirky device must work in IOMMU identity mapping mode, this
-might introduce functional regression. At least for VT-d platforms, some
-devices do require IOMMU identity mapping mode for functionality.
+SAVE_ABI_REGS keeps the pt_regs layout and needs more stack space than SAVE_ABI.
 
-> +
->   	if (dev_is_pci(dev) && to_pci_dev(dev)->untrusted)
->   		return IOMMU_DOMAIN_DMA;
->   
+>
+> > +*
+> > +* If all is set, all the regs will be saved, otherwise only ABI
+> > +* related regs (a0-a7,epc,ra and optional s0) will be saved.
+> > +*
+> > +* For convenience the argument setup for tracing function is appended here.
+> > +* Especially $sp is passed as the 4th argument of the tracing function.
+> > +*
+> > +* After the stack is established,
+> > +*
+> > +* 0(sp) stores the PC of the traced function which can be accessed
+> > +* by &(fregs)->regs->epc in tracing function. Note that the real
+> > +* function entry address should be computed with -FENTRY_RA_OFFSET.
+> > +*
+> > +* 8(sp) stores the function return address (i.e. parent IP) that
+> > +* can be accessed by &(fregs)->regs->ra in tracing function.
+> > +*
+> > +* The other regs are saved at the respective localtion and accessed
+> > +* by the respective pt_regs member.
+> > +*
+> > +* Here is the layout of stack for your reference.
+> > +*
+> > +*
+> > +*                    =========
+> > +*                    |  pip  |
+> > +* PT_SIZE_ON_STACK  ->  =========
+> > +*                    + ..... +
+> > +*                    + t3-t6 +
+> > +*                    + s2-s11+
+> > +*                    + a0-a7 + --++++-> ftrace_caller saved
+> > +*                    + s1    +   +
+> > +*                    + s0    + --+
+> > +*                    + t0-t2 +   +
+> > +*                    + tp    +   +
+> > +*                    + gp    +   +
+> > +*                    + sp    +   +
+> > +*                    + ra    + --+ // parent IP
+> > +*            sp  ->  + epc   + --+ // PC of the traced function
+> > +*                    +++++++++
+> > +**/
+> > +     .macro SAVE_ALL, all=0
+> >       addi    sp, sp, -SZREG
+> >       addi    sp, sp, -PT_SIZE_ON_STACK
+> >
+> > @@ -67,14 +111,8 @@
+> >       REG_S x1,  PT_RA(sp)
+> >       REG_L x1,  PT_EPC(sp)
+> >
+> > -     REG_S x2,  PT_SP(sp)
+> > -     REG_S x3,  PT_GP(sp)
+> > -     REG_S x4,  PT_TP(sp)
+> > -     REG_S x5,  PT_T0(sp)
+> > -     REG_S x6,  PT_T1(sp)
+> > -     REG_S x7,  PT_T2(sp)
+> > -     REG_S x8,  PT_S0(sp)
+> > -     REG_S x9,  PT_S1(sp)
+> > +     /* always save the ABI regs */
+> > +
+> >       REG_S x10, PT_A0(sp)
+> >       REG_S x11, PT_A1(sp)
+> >       REG_S x12, PT_A2(sp)
+> > @@ -83,6 +121,18 @@
+> >       REG_S x15, PT_A5(sp)
+> >       REG_S x16, PT_A6(sp)
+> >       REG_S x17, PT_A7(sp)
+> > +
+> > +     /* save leftover regs for ftrace_regs_caller*/
+> > +
+> > +     .if \all == 1
+> > +     REG_S x2,  PT_SP(sp)
+> > +     REG_S x3,  PT_GP(sp)
+> > +     REG_S x4,  PT_TP(sp)
+> > +     REG_S x5,  PT_T0(sp)
+> > +     REG_S x6,  PT_T1(sp)
+> > +     REG_S x7,  PT_T2(sp)
+> > +     REG_S x8,  PT_S0(sp)
+> > +     REG_S x9,  PT_S1(sp)
+> >       REG_S x18, PT_S2(sp)
+> >       REG_S x19, PT_S3(sp)
+> >       REG_S x20, PT_S4(sp)
+> > @@ -97,22 +147,31 @@
+> >       REG_S x29, PT_T4(sp)
+> >       REG_S x30, PT_T5(sp)
+> >       REG_S x31, PT_T6(sp)
+> > +     .else
+> > +
+> > +     /* save s0 for ftrace_caller if FP_TEST defined */
+> > +
+> > +#ifdef HAVE_FUNCTION_GRAPH_FP_TEST
+> > +     REG_S x8,  PT_S0(sp)
+> > +#endif
+> > +     .endif
+> > +
+> > +     /* setup 4 args for tracing functions  */
+> > +
+> > +     addi    a0, ra, -FENTRY_RA_OFFSET // ip
+> > +     la      a1, function_trace_op
+> > +     REG_L   a2, 0(a1)               // op
+> > +     REG_L   a1, PT_SIZE_ON_STACK(sp) // parent_ip
+> > +     mv      a3, sp                  // fregs
+>
+> Please line up the comments.
+>
+> >       .endm
+> >
+> > -     .macro RESTORE_ALL
+> > +     .macro RESTORE_ALL, all=0
+> >       REG_L x1,  PT_RA(sp)
+> >       addi    sp, sp, PT_SIZE_ON_STACK
+> >       REG_S x1,  (sp)
+> >       addi    sp, sp, -PT_SIZE_ON_STACK
+> >       REG_L x1,  PT_EPC(sp)
+> > -     REG_L x2,  PT_SP(sp)
+> > -     REG_L x3,  PT_GP(sp)
+> > -     REG_L x4,  PT_TP(sp)
+> > -     REG_L x5,  PT_T0(sp)
+> > -     REG_L x6,  PT_T1(sp)
+> > -     REG_L x7,  PT_T2(sp)
+> > -     REG_L x8,  PT_S0(sp)
+> > -     REG_L x9,  PT_S1(sp)
+> > +
+> >       REG_L x10, PT_A0(sp)
+> >       REG_L x11, PT_A1(sp)
+> >       REG_L x12, PT_A2(sp)
+> > @@ -121,6 +180,16 @@
+> >       REG_L x15, PT_A5(sp)
+> >       REG_L x16, PT_A6(sp)
+> >       REG_L x17, PT_A7(sp)
+> > +
+> > +     .if \all == 1
+> > +     REG_L x2,  PT_SP(sp)
+> > +     REG_L x3,  PT_GP(sp)
+> > +     REG_L x4,  PT_TP(sp)
+> > +     REG_L x5,  PT_T0(sp)
+> > +     REG_L x6,  PT_T1(sp)
+> > +     REG_L x7,  PT_T2(sp)
+> > +     REG_L x8,  PT_S0(sp)
+> > +     REG_L x9,  PT_S1(sp)
+> >       REG_L x18, PT_S2(sp)
+> >       REG_L x19, PT_S3(sp)
+> >       REG_L x20, PT_S4(sp)
+> > @@ -136,6 +205,11 @@
+> >       REG_L x30, PT_T5(sp)
+> >       REG_L x31, PT_T6(sp)
+> >
+> > +     .else
+> > +#ifdef HAVE_FUNCTION_GRAPH_FP_TEST
+> > +     REG_L x8,  PT_S0(sp)
+> > +#endif
+> > +     .endif
+> >       addi    sp, sp, PT_SIZE_ON_STACK
+> >       addi    sp, sp, SZREG
+> >       .endm
+> > --
+> > 2.20.1
+> >
+> >
+>
+> Thanks,
+> drew
 
-Best regards,
-baolu
+
+
+-- 
+Best Regards
+ Guo Ren
