@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C90862D182
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 04:16:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7680E62D184
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 04:16:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234669AbiKQDQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 22:16:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44334 "EHLO
+        id S234505AbiKQDQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 22:16:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234166AbiKQDQG (ORCPT
+        with ESMTP id S234364AbiKQDQH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 22:16:06 -0500
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EBBB64A04
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 19:16:05 -0800 (PST)
-Received: by mail-qk1-x729.google.com with SMTP id z17so379368qki.11
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 19:16:05 -0800 (PST)
+        Wed, 16 Nov 2022 22:16:07 -0500
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950C564A31
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 19:16:06 -0800 (PST)
+Received: by mail-qt1-x831.google.com with SMTP id w9so359114qtv.13
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 19:16:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=joelfernandes.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=TVyiieWly24z0z0fYFBjEvhMrkOmEI6OGYeufoegUM4=;
-        b=phUx/1hExUXj+l6ZupXb949+eS0h2KoDX51zvVMU7Ie7h3iZCBke2E+BGODPJBV4tL
-         xGjPEH8PMNVD5NL6U0rDwSD9odVjl6CMe7+lYIMoTphmU1iyZXlh7qyciMp422Gumrv7
-         eeX0U1xVIh4mhYZ+0J4/xwfFnxRJXhOqK1gQk=
+        bh=X9LBEXDD+Ph4SF0Q02heQyIynGLkO+luTsSJyIxQLi8=;
+        b=JHB8aiQgqZr6T2488gjy0+mFOhHh2VyJvRopV5+pPWMJXZhxAwmnceQy5QEv3N8tOk
+         Ne1NmLfUHfz0FDXUP8hNcvKOK5FPq4UpnuFxw8/1IO6+cRNfmUgFz3ciXPbZVkiiHxIV
+         xS+aaBeY1m0r9PJS6zCglk21/419o+83mDIcQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=TVyiieWly24z0z0fYFBjEvhMrkOmEI6OGYeufoegUM4=;
-        b=jVhHF+RUQ5ssDW4yX1/babfZSNoQjbtkP938NU0gKUOyR1ih3BtBHeoHSL/2jMFZKM
-         0JBn8PFdPDU8QI/CRcbjcuAioihyHzZX6AmFPLiwTeEP5PYnz3FoiwvlTnDDFntDkn6E
-         ZQPiTVWzlPcTnEMlWAgUL3VOjxjAbhoycOy3CcThJdvLcYsM+VkzlTPkwwjIJpDoRGPB
-         3o/vX0hrMmHDfiCNvVmXwMTYgBCct9YkR1dj89QRt0LbRZqbNOpVi2G9qHus1VzW1nAe
-         gRwB5HON3GUbsnt9B+XZkXkyOU+UJFI3o+1XO+80DWBrjDlhvRs2V6jXDeeKc4e8Eljg
-         AGkQ==
-X-Gm-Message-State: ANoB5plkigErQ7XQQELuFCksPOycvaacq6gsDfFOgTAnLwt34BK2kmFC
-        MXe1fXVJa1bTEsOUTuHE0mkbeJWGb71rpQ==
-X-Google-Smtp-Source: AA0mqf4iZQlFujHEBGLFvhYWg4vhUvvJjjCO/pv1TcbmlblMbmZxj6HXge1lTpprJ/0n5Y9W2BGmxQ==
-X-Received: by 2002:a05:620a:459f:b0:6fa:f76d:bbc1 with SMTP id bp31-20020a05620a459f00b006faf76dbbc1mr307187qkb.11.1668654964533;
-        Wed, 16 Nov 2022 19:16:04 -0800 (PST)
+        bh=X9LBEXDD+Ph4SF0Q02heQyIynGLkO+luTsSJyIxQLi8=;
+        b=o2ac17Kkt0TI3hKWKjlTBQCYic08ZszD60V1t7Y691kMYA99K4VybgwqgytQ0Aalj7
+         D6FbaiIfjS2gYRwcjwXDbkUVNJnxtq/+gKtjwY8cSxCCc/QZhe8ThGfC4Ca0SJtui1PB
+         srYlbm7hq7jp0lDcKLoJUqkC7Qc/1HV08UNrVGsqAK1AHMBN7T/+eobp8hdMgjhzjXHf
+         eipkUW+Qs/CttOReKXROb+s+HMy8l3VIeL4rfJObTnfvl9JWE7l9SNlVWxGj1SCoiOg8
+         sq/dNeBO7AZiGo8J1GHFgXcdcO8tVPHH258LX8z45/cEyMLD8Sgd40yHdFQaB4guSwpF
+         j+lA==
+X-Gm-Message-State: ANoB5pn4qDQwFy5l8viiclN9P0Ks7gPB+BRrgbmGa0yGbH5hYPZL67hD
+        /4s/XZnt7n8lI5LQOeZdH7kVgp1KZWrGKg==
+X-Google-Smtp-Source: AA0mqf6tYbb7aqh2iSUw+/DUxtEpt+XbSFQV9UPEmammY7VOC9v7BaLxv9VBsF2YJcPh3TQAZIKKew==
+X-Received: by 2002:a05:622a:4899:b0:3a5:64a0:5eba with SMTP id fc25-20020a05622a489900b003a564a05ebamr827383qtb.96.1668654965522;
+        Wed, 16 Nov 2022 19:16:05 -0800 (PST)
 Received: from joelboxx.c.googlers.com.com (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
-        by smtp.gmail.com with ESMTPSA id k19-20020a05620a415300b006cdd0939ffbsm11398318qko.86.2022.11.16.19.16.03
+        by smtp.gmail.com with ESMTPSA id k19-20020a05620a415300b006cdd0939ffbsm11398318qko.86.2022.11.16.19.16.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 19:16:04 -0800 (PST)
+        Wed, 16 Nov 2022 19:16:05 -0800 (PST)
 From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
@@ -60,9 +60,9 @@ Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
         Jiri Pirko <jiri@resnulli.us>, netdev@vger.kernel.org,
         Paolo Abeni <pabeni@redhat.com>, rcu@vger.kernel.org,
         rostedt@goodmis.org, paulmck@kernel.org, fweisbec@gmail.com
-Subject: [PATCH rcu/dev 2/3] net: Use call_rcu_flush() for in_dev_rcu_put
-Date:   Thu, 17 Nov 2022 03:15:49 +0000
-Message-Id: <20221117031551.1142289-2-joel@joelfernandes.org>
+Subject: [PATCH rcu/dev 3/3] net: Use call_rcu_flush() for dst_destroy_rcu
+Date:   Thu, 17 Nov 2022 03:15:50 +0000
+Message-Id: <20221117031551.1142289-3-joel@joelfernandes.org>
 X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
 In-Reply-To: <20221117031551.1142289-1-joel@joelfernandes.org>
 References: <20221117031551.1142289-1-joel@joelfernandes.org>
@@ -88,22 +88,22 @@ call_rcu_flush() to revert to the old behavior. With that, the test passes.
 
 Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 ---
- net/ipv4/devinet.c | 2 +-
+ net/core/dst.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/ipv4/devinet.c b/net/ipv4/devinet.c
-index e8b9a9202fec..98b20f333e00 100644
---- a/net/ipv4/devinet.c
-+++ b/net/ipv4/devinet.c
-@@ -328,7 +328,7 @@ static void inetdev_destroy(struct in_device *in_dev)
- 	neigh_parms_release(&arp_tbl, in_dev->arp_parms);
- 	arp_ifdown(dev);
- 
--	call_rcu(&in_dev->rcu_head, in_dev_rcu_put);
-+	call_rcu_flush(&in_dev->rcu_head, in_dev_rcu_put);
+diff --git a/net/core/dst.c b/net/core/dst.c
+index bc9c9be4e080..15b16322703f 100644
+--- a/net/core/dst.c
++++ b/net/core/dst.c
+@@ -174,7 +174,7 @@ void dst_release(struct dst_entry *dst)
+ 			net_warn_ratelimited("%s: dst:%p refcnt:%d\n",
+ 					     __func__, dst, newrefcnt);
+ 		if (!newrefcnt)
+-			call_rcu(&dst->rcu_head, dst_destroy_rcu);
++			call_rcu_flush(&dst->rcu_head, dst_destroy_rcu);
+ 	}
  }
- 
- int inet_addr_onlink(struct in_device *in_dev, __be32 a, __be32 b)
+ EXPORT_SYMBOL(dst_release);
 -- 
 2.38.1.584.g0f3c55d4c2-goog
 
