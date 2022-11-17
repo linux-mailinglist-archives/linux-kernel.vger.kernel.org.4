@@ -2,159 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6977F62D2FD
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 06:50:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AA6962D302
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 06:50:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239145AbiKQFue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 00:50:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44336 "EHLO
+        id S239175AbiKQFuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 00:50:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239112AbiKQFuH (ORCPT
+        with ESMTP id S239298AbiKQFuK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 00:50:07 -0500
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2053.outbound.protection.outlook.com [40.107.113.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96027E2A;
-        Wed, 16 Nov 2022 21:49:29 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QcvGLahwxdFsTznsg4d6a/nhNGRVaA2yS7m3lEs8vce1GR/jpLfKcoLPNVkfvE3Jeywo/DVukYxKfkR/onkvT/S0oQI8QitHXIZvULJriLsvo5QWoXpO/U81GGLjRIQM4g6xFRceCmBz9TIaNEfTde4nwwv1oZ1Y4Tk9MNHxOA1/hROdNAmV3K93DXOhKVvGRupSQ4lDoeDrjn1cRTfczgfPrOvdWViofTsp8FHytIST5Y1vBl5NuCDh2HciOr+XhPGyq7a7xm2YZBMq5h6Pd8WEYUWbOUpSKmsZHbRpunT0KAQGw0SaF+WozXsEh4vlbuDA1eMqnCQx9qmcT/SNWA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6WakgoREuAOiWvD7OuBOmdeUf9uzHSA60aPzxDpHSNE=;
- b=d9g/dUq7DXd+8UnONG74NXhvabdRCuWlkwOTQ5lw9NuyiT3Y2FP7K3htSSTbZKWKin1mtv7lL8vZe3x9e5Goc24yUhZGdzniZ/QA9tHRSyEq72qwZ/wbb6ZSCw14VRYDubf0Cz6jtATwe5L/7y8wBQp+aZMNBxa9CYgPbFw3KbTqKc8D6rMfOPozRZv/U5N6OhSZEaA/iZ6XP08HL1D0BTWZYeKHSQl9om0Rs2T1VdFwZCnGjcG9oL1HmK1qBOgUtzYto3tQXtYQPManf8l/YSsWkLQE5eTkKgVrrNCHrgs8E6qNEoAPZ10yZ2zT9yTXolwB4AjCf/mHJwf1B5ixWw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nec.com; dmarc=pass action=none header.from=nec.com; dkim=pass
- header.d=nec.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nec.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6WakgoREuAOiWvD7OuBOmdeUf9uzHSA60aPzxDpHSNE=;
- b=d/dKBDp0ZATU9fB2OyAv12tddKhyuhRktxxmXjDDUtjS2Hr4HBRvCAY7HxCrlq8FHziIQhSxTfngNHRlKk85olvs8RkVOwvbYyEM7X4pC5P98VKrQqFE1ROjS0/Dwhm4kSqUlOfv6vJXkVVM97l4GBL7Z22F+PUBJluSxlzLPgY=
-Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com (2603:1096:400:13c::10)
- by TYAPR01MB5673.jpnprd01.prod.outlook.com (2603:1096:404:8052::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.19; Thu, 17 Nov
- 2022 05:49:27 +0000
-Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com
- ([fe80::9f34:8082:cd2f:589c]) by TYWPR01MB8591.jpnprd01.prod.outlook.com
- ([fe80::9f34:8082:cd2f:589c%7]) with mapi id 15.20.5813.019; Thu, 17 Nov 2022
- 05:49:27 +0000
-From:   =?utf-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPo+OAgOebtOS5nyk=?= 
-        <naoya.horiguchi@nec.com>
-To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-CC:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "tytso@mit.edu" <tytso@mit.edu>
-Subject: Re: [PATCH 3/4] memory-failure: Convert truncate_error_page() to use
- folio
-Thread-Topic: [PATCH 3/4] memory-failure: Convert truncate_error_page() to use
- folio
-Thread-Index: AQHY+WCXTUnInI8R702OWCGz2BHGca5CnekA
-Date:   Thu, 17 Nov 2022 05:49:27 +0000
-Message-ID: <20221117054918.GA881314@hori.linux.bs1.fc.nec.co.jp>
-References: <20221116021011.54164-1-vishal.moola@gmail.com>
- <20221116021011.54164-4-vishal.moola@gmail.com>
-In-Reply-To: <20221116021011.54164-4-vishal.moola@gmail.com>
-Accept-Language: ja-JP, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nec.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYWPR01MB8591:EE_|TYAPR01MB5673:EE_
-x-ms-office365-filtering-correlation-id: 7aaa8d7f-f163-4bed-5ee2-08dac85f7d54
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 2Rdks1PfIJ8qv//XIOf0vUQ2UdNzDVqtX9geR5cK+3/V/aWeMkxQ2tdwH6vyaI1bqCwrGjHh7NmdpwU+LH3U9+gpoYTUBAViuk120JiJsW04Xldl0u3GrwXJXaCvOMRWkC5AFUwOKvjJNaUX802e9jXrI/ca7QSnTWyrGKHv86dxNHSr/hiMnFv820qIqtlwoL5mdvoZneam9uYRjdlA/HBEvQekSwYIy1ClrKl21i8tiAQtaL7jlzO5qZ3EXFHoSscAWby6Rep1Axfvxf/W8fF46u5jCAYFAWNr+AED3a6/VUqlEh/K5lHC4IAgvmWS2V2EihA5NiReiA631sOgK1RZ+tNQfyGxqYPUkkGQ93pJ3k88TYAosCz7JbaoIR1BTIj0FNQck1oShCnYWd2r/Dhnx2rbepmbQ4Vco9Df9azLaVyavVSZHsmyCbvqa8ezRDSxxoirqfEs78438JG+XcXTlcpsqIRkVlnHYlzQgMw35sC76di8mD0vz7NP6S4b9702YqNMY1zvlg5FRq7H/+4jJx6qkqoGzxrBqIKzS0ZzeL+FKLy9U6BaDpymmvFGwM5aiu73v+2xoX6z0dxaVPK4BGTMPBIp2882KPepTTVqZOe+o1wyYfCJxBShnLsaZUkcrB8dkSh8mY1C8zz/bBf6Iw5bzwCGSUHkB3UreWdPRiJgZmpiw40Wm1qvHTpbZyZq7LPH0jeBg0dlquzXUg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYWPR01MB8591.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(396003)(366004)(136003)(39860400002)(376002)(451199015)(86362001)(38100700002)(6506007)(55236004)(9686003)(26005)(6512007)(82960400001)(186003)(1076003)(54906003)(6916009)(5660300002)(8936002)(6486002)(66446008)(66556008)(66476007)(64756008)(8676002)(4326008)(71200400001)(33656002)(38070700005)(41300700001)(85182001)(66946007)(478600001)(316002)(76116006)(2906002)(83380400001)(122000001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dWt5ZmUvdjgzUXFIM1ZoTzcxRXUyblVGYWVRc1lEcVdjUzVzcUhnZEs5c0h0?=
- =?utf-8?B?bloyeExvQTBiUlV5QXhEZlppWCsyZDNTaVVFNFBiaW5sNmRJUzRHYnN6VlZE?=
- =?utf-8?B?ajkvSDB0cGFRdGFrdUV5SVdOOTJScHBlSURtUzg1T0pnWDNtWVR6V2FhN1hn?=
- =?utf-8?B?eXIwYVQ4c1VwcWt4NnFtSHNiRkRHQ0hMMTk2aUtnWXc3SzRhdndrY3I5T0xs?=
- =?utf-8?B?REZXWndBQkdwZEV0WWkreW1Qem02UmN3dHI2SnhNWW5sSUNxYmQ1empoU2lo?=
- =?utf-8?B?bmV0ekRnbGZJcitCQVRPa3VZZmRCaVNuRUE3VWNrS0NTRHJoOGUrSlpZWG5i?=
- =?utf-8?B?WVI0V1dYekJ6NVRVK2J0aUZzUUR3YmZUdDd3ajhtb3NrcXFOU3d5ekx1dGdp?=
- =?utf-8?B?UlpXV1lkN090UlJzaVpjaEUzL0RybUVIcmRmejFNNnZXVDU0NExteWFEeWxz?=
- =?utf-8?B?Z2phUHZxWHFYUk9laVZnWWFyK29ZNmtoUFdxMjhucER1WGxqeWljY0FOQnM2?=
- =?utf-8?B?Z1ExK0dnL1BDRXZsWUs5bFZTeUdyM0wyOFdKeVkzcGdLNWd3RnhXdFZPTnBZ?=
- =?utf-8?B?bE9pb2NKN085cm5vUDlEU2JrcXVKZmZCZUx2VGJpNUlwbTU1M1dSQ0gwVSsz?=
- =?utf-8?B?elR5Qkp4VlJUbmJjWCtvS3BvMGRWYnRIeWJaTlVuTU1mZ0xJVkRLcEVPRFMy?=
- =?utf-8?B?cnRKTm5Sb3FQZnNiclRSOHVRZXNJc1F2V0h4RWtVVWZ2UWNTNlJMUzYxbElW?=
- =?utf-8?B?UG4vV3Voa2NleFVLMjZUQ05yUWc5YnY5TVlRYW91VmVVcXp3WVEyOXNnNFUx?=
- =?utf-8?B?WWJRQ0FYd3c5YWFuNW5lZ21OZ2RQNE5hK2NjUktDNmc3Y1NCdkkrWWVMWndu?=
- =?utf-8?B?di9aUlBQc0dBT1NDdC8rZXZtbWorSVhvM2hCYkFXTU9Kb0lNQUs0S2lsaVhC?=
- =?utf-8?B?Y2QyUjB0a25oa1U1VW1SeU9UTHAvQ0dRRXpqamhHRkUxcHNLTlZZdGlKd3Uw?=
- =?utf-8?B?NVM1RGY4QXluNjdpc1I1OUpuWDBFcmlOckdLeWdWeExOb2VaeVV4S0hPWnc2?=
- =?utf-8?B?MTFEN043cjZMWlovQ28wKzJtcm1aam55MHFjWnBReGc3VzROREVMZWV6THV3?=
- =?utf-8?B?VW1nMHZwT2p0SVMrSGVzWk1ObFdtelN0SkFic0FITkdxT09reUdlUm8xQWE2?=
- =?utf-8?B?aGQ4RHcwRm5RVmhKUVFNWk9rL2tjNGUxR2RiWWpmNURaQWdoUS94SHJ2STBZ?=
- =?utf-8?B?THZHeFY1MHZ1SGRXZjBNTWkvdld0b3FmenlTQmlvUisxcTQralQyUkMwVUZz?=
- =?utf-8?B?SUg2SWZtQlR1elRhWEFDZFVXTS9RYkdnNTBXWDlsNCtnRnRwdi9ObHFzbFJx?=
- =?utf-8?B?RFdGazF2NHg2ck9jQzJySWg2RjJmaDJzc1NoZURKUFdrQ3RIK1hhNFNSYms5?=
- =?utf-8?B?bkgvUGR1WTQrekY0K25tRGJ1dFlIYnVMclQ4TkdRN1oraUlSZ09SK1c0eXZC?=
- =?utf-8?B?QWRDUU5NZEtxWHlsYU12aDFTLzlWZW5UT3ExMTVvMVY1ZE92YTdLTWorbW5j?=
- =?utf-8?B?RXkreFZoNFB6aXBMMXZ3UFFDNzdlTTVjQ2N1dUxzeElMN20xWThMYysyZnpK?=
- =?utf-8?B?dnllNWo2TUtNc0xNcHdFVWJ3S0RoY04xcmRlWUhQWHZiZWdaOW5GNzJIUVJE?=
- =?utf-8?B?TzFFVzJkdFhYNWtYaVBXcDlkL0hrL2ZKdUUyOGhYRmhXSWM2OVNtTCswZWxZ?=
- =?utf-8?B?YUdYUFVhc2xhRUZqcDAzdENWZHFmaytSUFlXUkVDRGU5c2wyVHhpMThEU3pB?=
- =?utf-8?B?ZktwTDgxYnpMWWdNZzAxZVJxYWxPWHhzQVhqSkFPZ2hYTkR2OEpaNnBlcnZL?=
- =?utf-8?B?a3BQVkdFSStJRUxzUDRjVURtelliQmkwRWZwYUVNMzZrZWhpWDB2L29CbjM2?=
- =?utf-8?B?enpKS1FwbzdPSU9jNHJab1pVajByUW1qR0tKNVhJeklwR1hsZzRtYmtucDJF?=
- =?utf-8?B?c3l1Qy9sa3Fsb040TkgvTU9DUTRCcmFYTlFxRUUzZDlOYW1iRks5bTA1dU1r?=
- =?utf-8?B?OFFETXh5NlJDL2wzUGJqTDVLVVlYbFpZekVBeHk3aGs3UnRqWXFERWtPTTQ0?=
- =?utf-8?B?RjVGMmdkakxzZy8yK2JTRWRITjZYeWh6cnlmWHB5dUJ5QVUzSWd4RW8rbVhX?=
- =?utf-8?B?a0E9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <0E051B4B41AFB9499E7B73F77D8B9624@jpnprd01.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Thu, 17 Nov 2022 00:50:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A91A11813;
+        Wed, 16 Nov 2022 21:49:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C19F462085;
+        Thu, 17 Nov 2022 05:49:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC1FEC433D6;
+        Thu, 17 Nov 2022 05:49:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1668664198;
+        bh=qGKZERLnu8H566XOnqj6FLlWt0eOikd2hAvc/xFshHU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=D9NNrD2fNtF7I72M6hrNhHhwkE2rhBXmwCdDK8zyAqTTmwRIFYD8KFuG7BWWnwbHO
+         oWYhw9cBKohhzm1BSqMZa60ABglKr+cHH8E6/Kks2Pl8YyevoNX4FPKY196qp0r3a4
+         cv8MWhjq/phiXboDHlQQVjm0Ujb5crZk7pYpUmNg=
+Date:   Thu, 17 Nov 2022 06:49:54 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Roberto Sassu <roberto.sassu@huaweicloud.com>, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, revest@chromium.org, jackmanb@chromium.org,
+        jmorris@namei.org, serge@hallyn.com, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org
+Subject: Re: [RFC][PATCH 3/4] lsm: Redefine LSM_HOOK() macro to add return
+ value flags as argument
+Message-ID: <Y3XLgrYbIEpdW0vy@kroah.com>
+References: <20221115175652.3836811-1-roberto.sassu@huaweicloud.com>
+ <20221115175652.3836811-4-roberto.sassu@huaweicloud.com>
+ <CAHC9VhTA7SgFnTFGNxOGW38WSkWu7GSizBmNz=TuazUR4R_jUg@mail.gmail.com>
+ <83cbff40f16a46e733a877d499b904cdf06949b6.camel@huaweicloud.com>
+ <CAHC9VhRX0J8Z61_fH9T5O1ZpRQWSppQekxP8unJqStHuTwQkLQ@mail.gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nec.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYWPR01MB8591.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7aaa8d7f-f163-4bed-5ee2-08dac85f7d54
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Nov 2022 05:49:27.6163
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: e67df547-9d0d-4f4d-9161-51c6ed1f7d11
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: L4yrLrJIc1JWp0KEkUNjSFiaXUPLTRUt/0EAwGrDGLFH0LBUU9WoS7qI8kVgauoACHQiT+vdR+V5tRYt2l2SbQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB5673
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHC9VhRX0J8Z61_fH9T5O1ZpRQWSppQekxP8unJqStHuTwQkLQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVHVlLCBOb3YgMTUsIDIwMjIgYXQgMDY6MTA6MTBQTSAtMDgwMCwgVmlzaGFsIE1vb2xhIChP
-cmFjbGUpIHdyb3RlOg0KPiBSZXBsYWNlcyB0cnlfdG9fcmVsZWFzZV9wYWdlKCkgd2l0aCBmaWxl
-bWFwX3JlbGVhc2VfZm9saW8oKS4gVGhpcyBjaGFuZ2UNCj4gaXMgaW4gcHJlcGFyYXRpb24gZm9y
-IHRoZSByZW1vdmFsIG9mIHRoZSB0cnlfdG9fcmVsZWFzZV9wYWdlKCkgd3JhcHBlci4NCj4gDQo+
-IFNpZ25lZC1vZmYtYnk6IFZpc2hhbCBNb29sYSAoT3JhY2xlKSA8dmlzaGFsLm1vb2xhQGdtYWls
-LmNvbT4NCg0KTG9va3MgZ29vZCB0byBtZSwgdGhhbmsgeW91Lg0KDQpBY2tlZC1ieTogTmFveWEg
-SG9yaWd1Y2hpIDxuYW95YS5ob3JpZ3VjaGlAbmVjLmNvbT4NCg0KPiAtLS0NCj4gIG1tL21lbW9y
-eS1mYWlsdXJlLmMgfCA1ICsrKy0tDQo+ICAxIGZpbGUgY2hhbmdlZCwgMyBpbnNlcnRpb25zKCsp
-LCAyIGRlbGV0aW9ucygtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL21tL21lbW9yeS1mYWlsdXJlLmMg
-Yi9tbS9tZW1vcnktZmFpbHVyZS5jDQo+IGluZGV4IDE0NWJiNTYxZGRiMy4uOTJlYzliMGU1OGEz
-IDEwMDY0NA0KPiAtLS0gYS9tbS9tZW1vcnktZmFpbHVyZS5jDQo+ICsrKyBiL21tL21lbW9yeS1m
-YWlsdXJlLmMNCj4gQEAgLTgyNywxMiArODI3LDEzIEBAIHN0YXRpYyBpbnQgdHJ1bmNhdGVfZXJy
-b3JfcGFnZShzdHJ1Y3QgcGFnZSAqcCwgdW5zaWduZWQgbG9uZyBwZm4sDQo+ICAJaW50IHJldCA9
-IE1GX0ZBSUxFRDsNCj4gIA0KPiAgCWlmIChtYXBwaW5nLT5hX29wcy0+ZXJyb3JfcmVtb3ZlX3Bh
-Z2UpIHsNCj4gKwkJc3RydWN0IGZvbGlvICpmb2xpbyA9IHBhZ2VfZm9saW8ocCk7DQo+ICAJCWlu
-dCBlcnIgPSBtYXBwaW5nLT5hX29wcy0+ZXJyb3JfcmVtb3ZlX3BhZ2UobWFwcGluZywgcCk7DQo+
-ICANCj4gIAkJaWYgKGVyciAhPSAwKSB7DQo+ICAJCQlwcl9pbmZvKCIlI2x4OiBGYWlsZWQgdG8g
-cHVuY2ggcGFnZTogJWRcbiIsIHBmbiwgZXJyKTsNCj4gLQkJfSBlbHNlIGlmIChwYWdlX2hhc19w
-cml2YXRlKHApICYmDQo+IC0JCQkgICAhdHJ5X3RvX3JlbGVhc2VfcGFnZShwLCBHRlBfTk9JTykp
-IHsNCj4gKwkJfSBlbHNlIGlmIChmb2xpb19oYXNfcHJpdmF0ZShmb2xpbykgJiYNCj4gKwkJCSAg
-ICFmaWxlbWFwX3JlbGVhc2VfZm9saW8oZm9saW8sIEdGUF9OT0lPKSkgew0KPiAgCQkJcHJfaW5m
-bygiJSNseDogZmFpbGVkIHRvIHJlbGVhc2UgYnVmZmVyc1xuIiwgcGZuKTsNCj4gIAkJfSBlbHNl
-IHsNCj4gIAkJCXJldCA9IE1GX1JFQ09WRVJFRDsNCj4gLS0gDQo+IDIuMzguMQ==
+On Wed, Nov 16, 2022 at 05:04:05PM -0500, Paul Moore wrote:
+> On Wed, Nov 16, 2022 at 3:11 AM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> > On Tue, 2022-11-15 at 21:27 -0500, Paul Moore wrote:
+> > > On Tue, Nov 15, 2022 at 12:58 PM Roberto Sassu
+> > > <roberto.sassu@huaweicloud.com> wrote:
+> > > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > >
+> > > > Define four return value flags (LSM_RET_NEG, LSM_RET_ZERO, LSM_RET_ONE,
+> > > > LSM_RET_GT_ONE), one for each interval of interest (< 0, = 0, = 1, > 1).
+> > > >
+> > > > Redefine the LSM_HOOK() macro to add return value flags as argument, and
+> > > > set the correct flags for each LSM hook.
+> > > >
+> > > > Implementors of new LSM hooks should do the same as well.
+> > > >
+> > > > Cc: stable@vger.kernel.org # 5.7.x
+> > > > Fixes: 9d3fdea789c8 ("bpf: lsm: Provide attachment points for BPF LSM programs")
+> > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > ---
+> > > >  include/linux/bpf_lsm.h       |   2 +-
+> > > >  include/linux/lsm_hook_defs.h | 779 ++++++++++++++++++++--------------
+> > > >  include/linux/lsm_hooks.h     |   9 +-
+> > > >  kernel/bpf/bpf_lsm.c          |   5 +-
+> > > >  security/bpf/hooks.c          |   2 +-
+> > > >  security/security.c           |   4 +-
+> > > >  6 files changed, 466 insertions(+), 335 deletions(-)
+> > >
+> > > Just a quick note here that even if we wanted to do something like
+> > > this, it is absolutely not -stable kernel material.  No way.
+> >
+> > I was unsure about that. We need a proper fix for this issue that needs
+> > to be backported to some kernels. I saw this more like a dependency.
+> > But I agree with you that it would be unlikely that this patch is
+> > applied to stable kernels.
+> >
+> > For stable kernels, what it would be the proper way? We still need to
+> > maintain an allow list of functions that allow a positive return value,
+> > at least. Should it be in the eBPF code only?
+> 
+> Ideally the fix for -stable is the same as what is done for Linus'
+> kernel (ignoring backport fuzzing), so I would wait and see how that
+> ends up first.  However, if the patchset for Linus' tree is
+> particularly large and touches a lot of code, you may need to work on
+> something a bit more targeted to the specific problem.  I tend to be
+> more conservative than most kernel devs when it comes to -stable
+> patches, but if you can't backport the main upstream patchset, smaller
+> (both in terms of impact and lines changed) is almost always better.
+
+No, the mainline patch (what is in Linus's tree), is almost always
+better and preferred for stable backports.  When you diverge, bugs
+happen, almost every time, and it makes later fixes harder to backport
+as well.
+
+But first work on solving the problem in Linus's tree.  Don't worry
+about stable trees until after the correct solution is merged.
+
+thanks,
+
+greg k-h
