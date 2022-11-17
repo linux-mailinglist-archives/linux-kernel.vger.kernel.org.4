@@ -2,61 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A62462D78C
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 10:56:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C579262D78D
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 10:56:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239425AbiKQJ4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 04:56:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39402 "EHLO
+        id S239419AbiKQJ4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 04:56:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239419AbiKQJz3 (ORCPT
+        with ESMTP id S239421AbiKQJzc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 04:55:29 -0500
+        Thu, 17 Nov 2022 04:55:32 -0500
 Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FEE077221
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 01:54:28 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id a14so2880062wru.5
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 01:54:28 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77FDB43AFE
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 01:54:29 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id z14so2875160wrn.7
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 01:54:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=oY8oYo0J2WCfjABGKVsTvkXLjzVmSdzWanTinZnS2yQ=;
-        b=CNxJMfcYaLTqxRf8f8dPKq4eOgNemQipmzPq65IOpab5yzDrsRgh7fLSwmx0JeU+2M
-         IjaYo8xje7qIPA4DTeniUaKKitHwLD8OBqeCHRCA2MFLTO4UKO3HFdMA6P7eDy7UUg4u
-         0V5tJLwBw2JT6IN4sk7X4ec9ucxmQ34ub/qjNa7jgJtr9nYhkttW5q0iRvb3XXh3bXdM
-         Bo6pBvzMkv9hnqt15PPKB7gHJc4cwQOAYQI2J/lY5ZMsZrzawT5/TL1XoFLlRGdpo1XV
-         9IWI4KgD/1snoa8j3SVIdVSo6HaLr3OnRMegGAo5H26H6jtOC9LRqft9DZxCdoEuO8M8
-         fTaQ==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1o2x75QMXnEx7W9bo3sYlpr0oxVXvlHN3ieGl1S2FPc=;
+        b=F2sxDaqNmyRFU3z4S0Onk+bOJP0mQcW/5PONPT8SXUJziEIvIo/1FwHHO266M0witV
+         ZIFDxUV1eikIhGo9ZFkzd20h8+WtXuGnEJy6mulsQkRanw4LYXkuWlIFJVVwbJ7m6job
+         rTy8mAbNoqlqhz0GudToFxJL5w97RH56WUrfTNItIIMzKamn2Qwee972p2Ou1uzWG8F2
+         eHVUL6mFW7uBV78aAIyZq58qk8rHKMXpRA+sEne3sEs7lHEFLYVWLxePOqy/6ZcMg1ha
+         DfwDX/SWL7qboeqAHfvN7bhyE2lo4pk8iQa5e8nkwvkXDCWJagqjI1f+VY+owbjgyn/0
+         2JCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oY8oYo0J2WCfjABGKVsTvkXLjzVmSdzWanTinZnS2yQ=;
-        b=d0vWkGhqHrJ6rtKZmEWQ3iHPROK0Eh7v/8RzI9k6uynXk2l4G0+TxtoBFZhQtPPBg6
-         rqAJ7Omu55uk64yLKXVszGfXpyB7bNVVJb4+sG1LPcOM3G52EGCuclGTMoiYu2srWpoF
-         RKF2zdd5VnkZuelbD4HZA9FsOPP9cmA8b9szQwgbibSx2/zczM1qiXc5DgTCMGXTPqCw
-         DSH1jK7Y91LP4C6w7crQQppSFRAZLppCiRREIvsmgkFoMzZxjfSZO/k+n00MuAKjx1iE
-         6rcumB/rt7GLWU4Rg2REbimEeJj+XSFUcAN4ZLr7w6rIWaMyPFVpJrfE69Uc6y+iSTff
-         ueIg==
-X-Gm-Message-State: ANoB5pkwfpkAAT8cGMOU/NxQXOrzSm0stZ3oXC+bMH2JdB2by4vvczZ7
-        YcSLHQXNltdZd7835MdUbi560g==
-X-Google-Smtp-Source: AA0mqf6S0L3qmno4fvZJevVrOQJzy7nE/zgJMRoucaSwvKRt0OMNCZVcKOXPmahLQ+c+J5ARm5G9Ug==
-X-Received: by 2002:adf:e94c:0:b0:236:6d79:b312 with SMTP id m12-20020adfe94c000000b002366d79b312mr943646wrn.699.1668678867223;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1o2x75QMXnEx7W9bo3sYlpr0oxVXvlHN3ieGl1S2FPc=;
+        b=w/xDNNhgJleQdtMjsCmvZpn40hBxkeQIF/C8vTJxQCUqz9GRHoMEiwpXw0MLwT0qzh
+         VwsjCcWr/XvS68OmKEut2CqVxIb+pMt6NZkBm5FsDn806M9xflUU7yQDOhYgMhM4Kfn9
+         kwMAgtdHygb36ADKCSGNuvyL2sCbE1ZGmFUDsviVCk1Pai60s8bhu1+0ixwvaa1+rX6t
+         zbqcv+7EBBZxsuqLnNqRIPAX8xBKlSoBqe454ogqJ10oCXWqNNpBAwEFO3dqWFvqThFK
+         ksh6wD7klufREJ8+LgGui4fQoP/Cc5BKtuCyHQ2G/KzCQZxUu4XjYPRhjj/DGl0S90Y3
+         9hhg==
+X-Gm-Message-State: ANoB5pnpczyDf8hEesXpslD1SBSimL2hGWz8sHrZXhiyZgPFZ7UWgal+
+        RUkOzh0w0Loeyg/KGKVQTOrVJg==
+X-Google-Smtp-Source: AA0mqf6DQq9HKMbJVhBHzcujBbtwoXJUJKNe0Bf2Bb0RioItGpEc2WaOe6H3EboIddDlE1YESX6pTQ==
+X-Received: by 2002:a5d:58c7:0:b0:236:60f3:d28f with SMTP id o7-20020a5d58c7000000b0023660f3d28fmr976253wrf.454.1668678867980;
         Thu, 17 Nov 2022 01:54:27 -0800 (PST)
 Received: from nicolas-Precision-3551.home ([2001:861:5180:dcc0:9287:74a3:4740:e7a0])
-        by smtp.gmail.com with ESMTPSA id v18-20020a5d6112000000b00236e834f050sm497021wrt.35.2022.11.17.01.54.26
+        by smtp.gmail.com with ESMTPSA id v18-20020a5d6112000000b00236e834f050sm497021wrt.35.2022.11.17.01.54.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 01:54:26 -0800 (PST)
+        Thu, 17 Nov 2022 01:54:27 -0800 (PST)
 From:   Nicolas Frayer <nfrayer@baylibre.com>
 To:     nm@ti.com, ssantosh@kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
 Cc:     khilman@baylibre.com, glaroque@baylibre.com, nfrayer@baylibre.com
-Subject: [PATCH v6 0/2] soc: ti: k3-socinfo: Add module build support to the k3 socinfo driver
-Date:   Thu, 17 Nov 2022 10:54:17 +0100
-Message-Id: <20221117095419.171906-1-nfrayer@baylibre.com>
+Subject: [PATCH v6 1/2] soc: ti: k3-socinfo: Convert allocations to devm
+Date:   Thu, 17 Nov 2022 10:54:18 +0100
+Message-Id: <20221117095419.171906-2-nfrayer@baylibre.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221117095419.171906-1-nfrayer@baylibre.com>
+References: <20221117095419.171906-1-nfrayer@baylibre.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -68,38 +71,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order for the TI K3 SoC info driver to be built as a module, the
-following changes have been made:
-- Converted memory allocations to devm and added the remove callback
-- Added necessary code to build the driver as a module
+Changed the memory and resource allocations in the probe function
+to devm. Also added a remove callback.
 
-v2->v3:
-dropped module conversion part of this series while other driver
-dependencies on socinfo are worked out.
-A dependency issue is introduced by changing subsys_initcall()
-to module_platform_driver(). Some drivers using the socinfo information
-probe before the socinfo driver itself and it makes their probe fail.
+Signed-off-by: Nicolas Frayer <nfrayer@baylibre.com>
+---
+ drivers/soc/ti/k3-socinfo.c | 36 +++++++++++++++++++-----------------
+ 1 file changed, 19 insertions(+), 17 deletions(-)
 
-v3->v4:
-reintegrated the module build support and added patches for udma and mdio
-drivers to allow for deferred probe if socinfo hasn't probed yet.
-
-v4->v5:
-Remove the k3 udma and mdio patches from this series and sent them
-individually
-
-v5->v6:
-Add k3-socinfo to the subject
-
-Nicolas Frayer (2):
-  soc: ti: k3-socinfo: Convert allocations to devm
-  soc: ti: k3-socinfo: Add module build support
-
- arch/arm64/Kconfig.platforms |  1 -
- drivers/soc/ti/Kconfig       |  3 ++-
- drivers/soc/ti/k3-socinfo.c  | 47 +++++++++++++++++++++++-------------
- 3 files changed, 32 insertions(+), 19 deletions(-)
-
+diff --git a/drivers/soc/ti/k3-socinfo.c b/drivers/soc/ti/k3-socinfo.c
+index 91f441ee6175..19f3e74f5376 100644
+--- a/drivers/soc/ti/k3-socinfo.c
++++ b/drivers/soc/ti/k3-socinfo.c
+@@ -96,21 +96,18 @@ static int k3_chipinfo_probe(struct platform_device *pdev)
+ 	partno_id = (jtag_id & CTRLMMR_WKUP_JTAGID_PARTNO_MASK) >>
+ 		 CTRLMMR_WKUP_JTAGID_PARTNO_SHIFT;
+ 
+-	soc_dev_attr = kzalloc(sizeof(*soc_dev_attr), GFP_KERNEL);
++	soc_dev_attr = devm_kzalloc(&pdev->dev, sizeof(*soc_dev_attr), GFP_KERNEL);
+ 	if (!soc_dev_attr)
+ 		return -ENOMEM;
+ 
+-	soc_dev_attr->revision = kasprintf(GFP_KERNEL, "SR%x.0", variant);
+-	if (!soc_dev_attr->revision) {
+-		ret = -ENOMEM;
+-		goto err;
+-	}
++	soc_dev_attr->revision = devm_kasprintf(&pdev->dev, GFP_KERNEL, "SR%x.0", variant);
++	if (!soc_dev_attr->revision)
++		return -ENOMEM;
+ 
+ 	ret = k3_chipinfo_partno_to_names(partno_id, soc_dev_attr);
+ 	if (ret) {
+ 		dev_err(dev, "Unknown SoC JTAGID[0x%08X]\n", jtag_id);
+-		ret = -ENODEV;
+-		goto err_free_rev;
++		return -ENODEV;
+ 	}
+ 
+ 	node = of_find_node_by_path("/");
+@@ -118,22 +115,26 @@ static int k3_chipinfo_probe(struct platform_device *pdev)
+ 	of_node_put(node);
+ 
+ 	soc_dev = soc_device_register(soc_dev_attr);
+-	if (IS_ERR(soc_dev)) {
+-		ret = PTR_ERR(soc_dev);
+-		goto err_free_rev;
+-	}
++	if (IS_ERR(soc_dev))
++		return PTR_ERR(soc_dev);
++
++	platform_set_drvdata(pdev, soc_dev);
+ 
+ 	dev_info(dev, "Family:%s rev:%s JTAGID[0x%08x] Detected\n",
+ 		 soc_dev_attr->family,
+ 		 soc_dev_attr->revision, jtag_id);
+ 
+ 	return 0;
++}
++
++static int k3_chipinfo_remove(struct platform_device *pdev)
++{
++	struct soc_device *soc_dev = platform_get_drvdata(pdev);
+ 
+-err_free_rev:
+-	kfree(soc_dev_attr->revision);
+-err:
+-	kfree(soc_dev_attr);
+-	return ret;
++	if (soc_dev)
++		soc_device_unregister(soc_dev);
++
++	return 0;
+ }
+ 
+ static const struct of_device_id k3_chipinfo_of_match[] = {
+@@ -147,6 +148,7 @@ static struct platform_driver k3_chipinfo_driver = {
+ 		.of_match_table = k3_chipinfo_of_match,
+ 	},
+ 	.probe = k3_chipinfo_probe,
++	.remove = k3_chipinfo_remove,
+ };
+ 
+ static int __init k3_chipinfo_init(void)
 -- 
 2.25.1
 
