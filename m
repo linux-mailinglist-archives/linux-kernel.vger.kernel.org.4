@@ -2,143 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D414562E5C8
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 21:24:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5681062E5C9
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 21:26:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234174AbiKQUYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 15:24:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59572 "EHLO
+        id S234540AbiKQU0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 15:26:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbiKQUYa (ORCPT
+        with ESMTP id S230287AbiKQU0N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 15:24:30 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA489140DC;
-        Thu, 17 Nov 2022 12:24:29 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id y10so1495790plp.3;
-        Thu, 17 Nov 2022 12:24:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kSpu5sc5U8jHoWQxjZChOPhUIMdGYPDGSrrgGj2BtkA=;
-        b=IIO4tJm0jxiNKt2ynxLjMXbPNAEbxyL3w7pgZ17A0UgiCUhEmRQ65tShIODeOioXsG
-         1KwxkZY+du560KcmS+fOsQfpk+TBGw/pn8QKPuZNlp4IScwVILAIDITku4tDylE34zEI
-         aM26sjinYaZekaSCx9pNl6rmyKqijAZo+WAECj4BBxyvFprY3Obk8p76qC5RKAIwVS/Z
-         hLz+2TQHeD5OIvBDabXnlASQdbQYJTka1ksMEzQKi6+79QmCNgS9Cw16307Cd2nw6dze
-         I4l42NbYiQoYaidFVPnqwwXYFB7a8rk8kVe358zXbNxSjGPf6OYHRGbr+d3Xd0iCNwPS
-         ErzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kSpu5sc5U8jHoWQxjZChOPhUIMdGYPDGSrrgGj2BtkA=;
-        b=438x51/4MR5/M+tf9sEYxiUbMKg61LX1TUvlZ5kpyC3vk6chGn7cTfdSZU0J49OYkU
-         NlMi4QF3pMBKnZXIV7yot9QvavUUDCdukbYPjeelRVJJDseRE26PZacyOCLa4yvMgXsk
-         cBU5NA4eMo5MoJXq31heJsLv+VCDMZ1yFUQqt2obxTcDAS1aPS/PETfh4q6HDqijp/4Q
-         l0/H2FtH1GJxxbC8J/6nwL/yP4ynLl8Tv4+qIutSc9BnFfbtcXTX11Ho+8L+ve47sd7x
-         /FuLZgRN/ZVmL60E5Ih9K6ZQn1fiEoRbiNflfuXeqHXxV+5QHHIuHXfhzpeZ9/yXjjmP
-         QZMA==
-X-Gm-Message-State: ANoB5plSx8pchJTmaroFl3N7t79J6NzG1kLm0PH4X8YPSH7XzHSh+RpE
-        xEGKzWmPdZ/fPMa7lfusuvmv6fcorh0=
-X-Google-Smtp-Source: AA0mqf5foWhdwXWOmAt9rpLN5hvmsqBo2cUGVi/8M999BsCRjATexZQpuc3btyTtOCtEBDmP+17qEg==
-X-Received: by 2002:a17:902:c652:b0:186:9890:97d1 with SMTP id s18-20020a170902c65200b00186989097d1mr4429506pls.114.1668716669056;
-        Thu, 17 Nov 2022 12:24:29 -0800 (PST)
-Received: from localhost ([192.55.54.55])
-        by smtp.gmail.com with ESMTPSA id ie4-20020a17090b400400b0020af2bab83fsm1310182pjb.23.2022.11.17.12.24.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 12:24:28 -0800 (PST)
-Date:   Thu, 17 Nov 2022 12:24:27 -0800
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Binbin Wu <binbin.wu@linux.intel.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
-        Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>,
-        David Matlack <dmatlack@google.com>
-Subject: Re: [PATCH v10 076/108] KVM: TDX: handle vcpu migration over logical
- processor
-Message-ID: <20221117202427.GC2751024@ls.amr.corp.intel.com>
-References: <cover.1667110240.git.isaku.yamahata@intel.com>
- <782f74f7d5375a36b2857be59262c1c4c4cf16a7.1667110240.git.isaku.yamahata@intel.com>
- <b6276f58-8ff5-9a3c-e6c7-c38f2ddb682a@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <b6276f58-8ff5-9a3c-e6c7-c38f2ddb682a@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 17 Nov 2022 15:26:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D53FA5DBB3
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 12:26:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D0986223F
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 20:26:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4B4CC433C1;
+        Thu, 17 Nov 2022 20:26:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668716771;
+        bh=NU8WowZ1PcNl92Yu66s+f9tjA31I88naX1GnSsHLwEY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bQWN/ZzRe77jFNpN+Z7bijYO3IPA0lbckgTPH3vOoxXXqnqELUwgAR0IHGDWSG/n3
+         Y0G4e/vgOH/yHAs+iYVgRkdbOck/bG/apgBRuiz8G4iZnwuyRY51AT6qY5NGkByXnQ
+         CTTY5dH5UM+/TQad55PVYAQ8yEH9GHtaUhqOyiD4Y7URbNOG/Y10F3kI5m+mY9tUJp
+         ZZgSuEOfxIyvgzbnZHB11saQtEFJPa5CQbnZTg+QQxi/h+/ru6o75E2KDMt1RqXRM0
+         sLFe597R4A6vi3ieXqd1myhm2V4RdVBAn/whR7XfF/pQVY93zIE8difSaQYHYrlMv1
+         dGsSkALiwx9VQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1ovlSb-006pBs-E7;
+        Thu, 17 Nov 2022 20:26:09 +0000
+Date:   Thu, 17 Nov 2022 20:26:09 +0000
+Message-ID: <86wn7tnx9a.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Conor Dooley <conor.dooley@microchip.com>
+Subject: Re: [PATCH] irqchip/sifive-plic: default to enabled
+In-Reply-To: <Y3aSHUb8GHnso3Qb@spud>
+References: <20221117185942.3896559-1-conor@kernel.org>
+        <86y1s9nzja.wl-maz@kernel.org>
+        <Y3aSHUb8GHnso3Qb@spud>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: conor@kernel.org, tglx@linutronix.de, paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, conor.dooley@microchip.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 10:28:20AM +0800,
-Binbin Wu <binbin.wu@linux.intel.com> wrote:
+On Thu, 17 Nov 2022 19:57:17 +0000,
+Conor Dooley <conor@kernel.org> wrote:
+> 
+> On Thu, Nov 17, 2022 at 07:36:57PM +0000, Marc Zyngier wrote:
+> > On Thu, 17 Nov 2022 18:59:43 +0000,
+> > Conor Dooley <conor@kernel.org> wrote:
+> > > 
+> > > From: Conor Dooley <conor.dooley@microchip.com>
+> > > 
+> > > The SiFive PLIC driver is used by all current implementations, including
+> > > those that do not have a SiFive PLIC. Default the driver to enabled,
+> > > with the intention of later removing the current "every SOC selects
+> > > this" situation in Kconfig.socs at the moment.
+> > > 
+> > > The speculative "potential others" in the description no longer makes
+> > > any sense, as the driver is always used. Update the Kconfig symbol's
+> > > description to reflect the driver's ubiquitous state.
+> > > 
+> > > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> > > ---
+> > > Hey Marc,
+> > > 
+> > > I recall some discussion when this driver was extended to other PLICs a
+> > > few months ago:
+> > > https://lore.kernel.org/linux-riscv/20511a05f39408c8ffbcc98923c4abd2@kernel.org/
+> > > 
+> > > Perhaps I got the wrong impression, but it seemed to me that you intend
+> > > for future implementations to reuse this driver where possible?
+> > 
+> > Well, within reasons. People seem to have some very liberal
+> > interpretations of the architecture spec...
+> 
+> Yeah, I know.. something something "RISC-V is meant to be extensible"
+> something something. Even if that means doing some "standard" thing
+> your own way apparently.
+
+Funny how someone's "extensible" is someone else's "terminally
+broken". I guess HW folks will eventually learn that, possibly the
+hard way.
 
 > 
-> On 10/30/2022 2:23 PM, isaku.yamahata@intel.com wrote:
-> > From: Isaku Yamahata <isaku.yamahata@intel.com>
+> > > I'd like to think, and surely will be proven wrong, that ~all future
+> > > plic implementations should be similar enough to fit that bill.
+> > > It's kinda on this basis that I figure switching this thing to default y
+> > > should be okay. It's already only buildable on RISC-V & every
+> > > implementation uses it, so no difference there.
 > > 
-> > For vcpu migration, in the case of VMX, VCMS
+> > If you expect this to be present at all times, why isn't this selected
+> > by the architecture Kconfig instead?
 > 
-> typo, VMCS
-> 
-> 
-> >   is flushed on the source pcpu,
-> > and load it on the target pcpu.  There are corresponding TDX SEAMCALL APIs,
-> > call them on vcpu migration.  The logic is mostly same as VMX except the
-> > TDX SEAMCALLs are used.
+> Everyone at the moment needs it, but that's not always going to be true.
+> The AIA APLIC that's currently out for review is the "next generation"
+> interrupt controller. When we will actually see one in the wild is
+> another question.
+>
+> > I always find it pretty odd to
+> > have something that is 'default y' and yet constrained by a 'depend
+> > MYARCH'. A 'select PLIC' would make a lot more sense.
 > > 
-> > When shutting down the machine, (VMX or TDX) vcpus needs to be shutdown on
-> > each pcpu.  Do the similar for TDX with TDX SEAMCALL APIs.
-> > 
-> > Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> > ---
-> >   arch/x86/kvm/vmx/main.c    |  43 +++++++++++--
-> >   arch/x86/kvm/vmx/tdx.c     | 121 +++++++++++++++++++++++++++++++++++++
-> >   arch/x86/kvm/vmx/tdx.h     |   2 +
-> >   arch/x86/kvm/vmx/x86_ops.h |   6 ++
-> >   4 files changed, 168 insertions(+), 4 deletions(-)
-> > 
-> > 
-> > @@ -176,6 +214,41 @@ static void tdx_reclaim_td_page(struct tdx_td_page *page)
-> >   	}
-> >   }
-> > +static void tdx_flush_vp(void *arg)
-> > +{
-> > +	struct kvm_vcpu *vcpu = arg;
-> > +	u64 err;
-> > +
-> > +	lockdep_assert_irqs_disabled();
-> > +
-> > +	/* Task migration can race with CPU offlining. */
-> > +	if (vcpu->cpu != raw_smp_processor_id())
-> > +		return;
-> > +
-> > +	/*
-> > +	 * No need to do TDH_VP_FLUSH if the vCPU hasn't been initialized.  The
-> > +	 * list tracking still needs to be updated so that it's correct if/when
-> > +	 * the vCPU does get initialized.
-> > +	 */
-> > +	if (is_td_vcpu_created(to_tdx(vcpu))) {
-> > +		err = tdh_vp_flush(to_tdx(vcpu)->tdvpr.pa);
+> > And then you can stop making this user selectable.
 > 
-> Need to retry here if tdh.vp.flush fails due to tdx operand busy?
+> I was considering moving the select to arch level, but settled for this
+> as while I'd like to stop the individual SOCs doing `select PLIC`, I can
+> see why someone building for a (future) system with the new AIA stuff
+> may not care to build it.
 > 
-> If such failure occurs, the next vp enter will fail after the vCPU migrated
-> to another LP, how is it hanlded?
+> Or maybe the overhead of this one driver is nothing to care about?
 
+In the grand scheme of things, it really doesn't matter. Hardly anyone
+is configuring their own kernel. People use distro kernels, which will
+have *everything* enabled.
 
-No need to retry.  TDX Resources needed for TDH.VP.FLUSH are, TDVPR as exclusive,
-TDR as shared, and TDCS as shared.
+As an example, on the arm64 side we have long decided that some things
+were not worth the trouble, such as selectable root interrupt
+controllers and non-SMP support. Life is too short to care about
+those.
 
-This vp flush function is called when destructing vcpu/TD or vcpu migration.  No
-other thread uses TDVPR in those cases.
+	M.
+
 -- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+Without deviation from the norm, progress is not possible.
