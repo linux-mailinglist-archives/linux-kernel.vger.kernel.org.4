@@ -2,65 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76A0462E023
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:40:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40C1B62E020
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:40:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239727AbiKQPkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 10:40:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51500 "EHLO
+        id S239529AbiKQPkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 10:40:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234965AbiKQPkJ (ORCPT
+        with ESMTP id S239776AbiKQPju (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 10:40:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11406205E6
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 07:39:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668699547;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=dVlZMe9k6FGYu0ltCFG6EsUuMhhHTcljQyz0mONX3Sk=;
-        b=h1Bcl/A33EJTAicKu1mhs9QahP1G/m61UlBB1AI/60MkAh5/FKjn/sP0ixt/EtgQ0IHBm4
-        PcZCZmbeZvCIUYlpFLLoGXU8EE5OEg6Lyr8f0j2J6vKILqZJM0TjEeksXYdoFpJuY0xz+U
-        Yx+TRiYxwOUWhaHCH+tWJDyFwSOyot8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-94-A8eawBDmNG2DMMLhoJFQSQ-1; Thu, 17 Nov 2022 10:39:05 -0500
-X-MC-Unique: A8eawBDmNG2DMMLhoJFQSQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2FBC585A59D;
-        Thu, 17 Nov 2022 15:39:05 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C5FA6111E3ED;
-        Thu, 17 Nov 2022 15:39:03 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH] fscache: fix OOB Read in __fscache_acquire_volume
-From:   David Howells <dhowells@redhat.com>
-To:     zhangpeng362@huawei.com, asmadeus@codewreck.org
-Cc:     syzbot+a76f6a6e524cf2080aa3@syzkaller.appspotmail.com,
-        Jeff Layton <jlayton@kernel.org>,
-        v9fs-developer@lists.sourceforge.net, linux-cachefs@redhat.com,
-        dhowells@redhat.com, ericvh@gmail.com, lucho@ionkov.net,
-        linux_oss@crudebyte.com,
-        syzbot+a76f6a6e524cf2080aa3@syzkaller.appspotmail.com,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 17 Nov 2022 15:39:00 +0000
-Message-ID: <166869954095.3793579.8500020902371015443.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.5
+        Thu, 17 Nov 2022 10:39:50 -0500
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2CBEEBD;
+        Thu, 17 Nov 2022 07:39:49 -0800 (PST)
+Received: by mail-ot1-f43.google.com with SMTP id t19-20020a9d7753000000b0066d77a3d474so1258140otl.10;
+        Thu, 17 Nov 2022 07:39:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TVhbvRUqZQu6uk1nSlOpC0Wl3O1+Ha3Mzov9EJw71XE=;
+        b=qZkEGPzBU9nepJmT/trzMGKP66HWNxqpAT29SXCU4qP+k+rf1wQrg3Tu8ttQxffvKQ
+         TtmC1pRWCj72U6ptzNGgf/Bgd9JAuPRTWZq33UO0G8kgQ+bOaZPyqx3LqwipDrnBA/8c
+         99xonw/WuJ8zK3a8QRPuI0oh3q7hVEO09FMby9SXazlHRBUQtgl21pl3Rdh1RcMTomDO
+         e1OFC+alOhpZLDI4/hlxipGlTvz1rVRVbq/j4dKmsJB6BErHvd5ttNGhDHkDMDpVU6bi
+         AtkBsSo7oJxOkU+XveZVeRbZJZeH0w1YOpmc03jHrSA6pMbG70WHSHZO851EWFtOPisV
+         kJkQ==
+X-Gm-Message-State: ANoB5pktJJtd8uZLlo7Sky+8ymTZRfHKA34dbPtAR3WSGv4pFH1FDtXM
+        OjBRT5tdE2TWwnUEXGG5aQ==
+X-Google-Smtp-Source: AA0mqf4f8AEtQBCEXoach04sei0JgrD/an2wLNFUiFJXCBqskIg7Lnw9MEjrMzhIfDsicIRmbX4Fng==
+X-Received: by 2002:a05:6830:1d66:b0:66c:5b70:2396 with SMTP id l6-20020a0568301d6600b0066c5b702396mr1626581oti.357.1668699589169;
+        Thu, 17 Nov 2022 07:39:49 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id 44-20020a9d04af000000b0066101e9dccdsm450844otm.45.2022.11.17.07.39.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 07:39:48 -0800 (PST)
+Received: (nullmailer pid 2918390 invoked by uid 1000);
+        Thu, 17 Nov 2022 15:39:50 -0000
+Date:   Thu, 17 Nov 2022 09:39:50 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Alexandre Mergnat <amergnat@baylibre.com>
+Cc:     Flora Fu <flora.fu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Tianping Fang <tianping.fang@mediatek.com>,
+        Fabien Parent <fabien.parent@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Chen Zhong <chen.zhong@mediatek.com>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-leds@vger.kernel.org, Fabien Parent <fparent@baylibre.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-rtc@vger.kernel.org, linux-input@vger.kernel.org
+Subject: Re: [PATCH v5 02/10] dt-bindings: rtc: mediatek: convert MT6397 rtc
+ documentation
+Message-ID: <20221117153950.GA2913522-robh@kernel.org>
+References: <20221005-mt6357-support-v5-0-8210d955dd3d@baylibre.com>
+ <20221005-mt6357-support-v5-2-8210d955dd3d@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221005-mt6357-support-v5-2-8210d955dd3d@baylibre.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,121 +84,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ZhangPeng <zhangpeng362@huawei.com>
+On Wed, Nov 16, 2022 at 01:32:56PM +0100, Alexandre Mergnat wrote:
+> - Convert rtc/rtc-mt6397.txt to rtc/mt6397-rtc.yaml
+> - Add maintainer
+> - Remove the .txt binding file
+> 
+> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> ---
+>  Documentation/devicetree/bindings/mfd/mt6397.txt   |  2 +-
+>  .../bindings/rtc/mediatek,mt6397-rtc.yaml          | 43 ++++++++++++++++++++++
+>  .../devicetree/bindings/rtc/rtc-mt6397.txt         | 31 ----------------
+>  3 files changed, 44 insertions(+), 32 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/mt6397.txt b/Documentation/devicetree/bindings/mfd/mt6397.txt
+> index 0088442efca1..79aaf21af8e9 100644
+> --- a/Documentation/devicetree/bindings/mfd/mt6397.txt
+> +++ b/Documentation/devicetree/bindings/mfd/mt6397.txt
+> @@ -33,7 +33,7 @@ Optional subnodes:
+>  		- compatible: "mediatek,mt6331-rtc"
+>  		- compatible: "mediatek,mt6358-rtc"
+>  		- compatible: "mediatek,mt6397-rtc"
+> -	For details, see ../rtc/rtc-mt6397.txt
+> +	For details, see ../rtc/mediatek,mt6397-rtc.yaml
+>  - regulators
+>  	Required properties:
+>  		- compatible: "mediatek,mt6323-regulator"
+> diff --git a/Documentation/devicetree/bindings/rtc/mediatek,mt6397-rtc.yaml b/Documentation/devicetree/bindings/rtc/mediatek,mt6397-rtc.yaml
+> new file mode 100644
+> index 000000000000..f5a323597f1d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/rtc/mediatek,mt6397-rtc.yaml
+> @@ -0,0 +1,43 @@
+> + # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/rtc/mediatek,mt6397-rtc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek MT6397/MT6366/MT6358/MT6323 RTC
+> +
+> +maintainers:
+> +  - Tianping Fang <tianping.fang@mediatek.com>
+> +  - Alexandre Mergnat <amergnat@baylibre.com>
+> +
+> +description: |
 
-The type of a->key[0] is char in fscache_volume_same().  If the length of
-cache volume key is greater than 127, the value of a->key[0] is less than
-0.  In this case, klen becomes much larger than 255 after type conversion,
-because the type of klen is size_t.  As a result, memcmp() is read out of
-bounds.
+Don't need '|' if no formatting.
 
-This causes a slab-out-of-bounds Read in __fscache_acquire_volume(), as
-reported by Syzbot.
+> +  MediaTek PMIC based RTC is an independent function of MediaTek PMIC that works
+> +  as a type of multi-function device (MFD). The RTC can be configured and set up
+> +  with PMIC wrapper bus which is a common resource shared with the other
+> +  functions found on the same PMIC.
+> +
+> +allOf:
+> +  - $ref: rtc.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - mediatek,mt6323-rtc
+> +      - mediatek,mt6358-rtc
+> +      - mediatek,mt6366-rtc
+> +      - mediatek,mt6397-rtc
+> +
+> +  start-year: true
+> +
+> +additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +
+> +examples:
+> +  - |
+> +    pmic {
+> +        rtc {
+> +            compatible = "mediatek,mt6397-rtc";
+> +        };
+> +    };
 
-Fix this by changing the type of the stored key to "u8 *" rather than "char
-*" (it isn't a simple string anyway).  Also put in a check that the volume
-name doesn't exceed NAME_MAX.
-
-==================================================================
-BUG: KASAN: slab-out-of-bounds in memcmp+0x16f/0x1c0 lib/string.c:757
-Read of size 8 at addr ffff888016f3aa90 by task syz-executor344/3613
-
-CPU: 0 PID: 3613 Comm: syz-executor344 Not tainted
-6.0.0-rc2-syzkaller-00327-g8379c0b31fbc #0
-Hardware name: Google Compute Engine/Google Compute Engine, BIOS
-Google 07/22/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:317 [inline]
- print_report.cold+0x2ba/0x719 mm/kasan/report.c:433
- kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
- memcmp+0x16f/0x1c0 lib/string.c:757
- memcmp include/linux/fortify-string.h:420 [inline]
- fscache_volume_same fs/fscache/volume.c:133 [inline]
- fscache_hash_volume fs/fscache/volume.c:171 [inline]
- __fscache_acquire_volume+0x76c/0x1080 fs/fscache/volume.c:328
- fscache_acquire_volume include/linux/fscache.h:204 [inline]
- v9fs_cache_session_get_cookie+0x143/0x240 fs/9p/cache.c:34
- v9fs_session_init+0x1166/0x1810 fs/9p/v9fs.c:473
- v9fs_mount+0xba/0xc90 fs/9p/vfs_super.c:126
- legacy_get_tree+0x105/0x220 fs/fs_context.c:610
- vfs_get_tree+0x89/0x2f0 fs/super.c:1530
- do_new_mount fs/namespace.c:3040 [inline]
- path_mount+0x1326/0x1e20 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f7d5064b1d9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 e1 14 00 00 90 48 89 f8 48 89
-f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01
-f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffd1700c028 EFLAGS: 00000246 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 00007ffd1700c060 RCX: 00007f7d5064b1d9
-RDX: 0000000020000040 RSI: 0000000020000000 RDI: 0000000000000000
-RBP: 0000000000000000 R08: 0000000020000200 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00000000000f4240
-R13: 0000000000000000 R14: 00007ffd1700c04c R15: 00007ffd1700c050
-==================================================================
-
-Fixes: 62ab63352350 ("fscache: Implement volume registration")
-Reported-by: syzbot+a76f6a6e524cf2080aa3@syzkaller.appspotmail.com
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Peng Zhang <zhangpeng362@huawei.com>
-cc: Dominique Martinet <asmadeus@codewreck.org>
-cc: Jeff Layton <jlayton@kernel.org>
-cc: v9fs-developer@lists.sourceforge.net
-cc: linux-cachefs@redhat.com
-Link: https://lore.kernel.org/r/Y3OH+Dmi0QIOK18n@codewreck.org/ # Zhang Peng's v1 fix
-Link: https://lore.kernel.org/r/20221115140447.2971680-1-zhangpeng362@huawei.com/ # Zhang Peng's v2 fix
----
-
- fs/fscache/volume.c     |    7 +++++--
- include/linux/fscache.h |    2 +-
- 2 files changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/fs/fscache/volume.c b/fs/fscache/volume.c
-index a058e0136bfe..ab8ceddf9efa 100644
---- a/fs/fscache/volume.c
-+++ b/fs/fscache/volume.c
-@@ -203,7 +203,11 @@ static struct fscache_volume *fscache_alloc_volume(const char *volume_key,
- 	struct fscache_volume *volume;
- 	struct fscache_cache *cache;
- 	size_t klen, hlen;
--	char *key;
-+	u8 *key;
-+
-+	klen = strlen(volume_key);
-+	if (klen > NAME_MAX)
-+		return NULL;
- 
- 	if (!coherency_data)
- 		coherency_len = 0;
-@@ -229,7 +233,6 @@ static struct fscache_volume *fscache_alloc_volume(const char *volume_key,
- 	/* Stick the length on the front of the key and pad it out to make
- 	 * hashing easier.
- 	 */
--	klen = strlen(volume_key);
- 	hlen = round_up(1 + klen + 1, sizeof(__le32));
- 	key = kzalloc(hlen, GFP_KERNEL);
- 	if (!key)
-diff --git a/include/linux/fscache.h b/include/linux/fscache.h
-index 36e5dd84cf59..8e312c8323a8 100644
---- a/include/linux/fscache.h
-+++ b/include/linux/fscache.h
-@@ -75,7 +75,7 @@ struct fscache_volume {
- 	atomic_t			n_accesses;	/* Number of cache accesses in progress */
- 	unsigned int			debug_id;
- 	unsigned int			key_hash;	/* Hash of key string */
--	char				*key;		/* Volume ID, eg. "afs@example.com@1234" */
-+	u8				*key;		/* Volume ID, eg. "afs@example.com@1234" */
- 	struct list_head		proc_link;	/* Link in /proc/fs/fscache/volumes */
- 	struct hlist_bl_node		hash_link;	/* Link in hash table */
- 	struct work_struct		work;
-
-
+Please drop the example here. Just one complete example in the MFD 
+schema.
