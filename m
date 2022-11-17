@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D738C62E225
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 17:39:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBD3462E227
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 17:39:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240542AbiKQQj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 11:39:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47762 "EHLO
+        id S240609AbiKQQjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 11:39:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233679AbiKQQi4 (ORCPT
+        with ESMTP id S234810AbiKQQi5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 11:38:56 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF5E7C011
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 08:38:47 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id r61-20020a17090a43c300b00212f4e9cccdso5875119pjg.5
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 08:38:47 -0800 (PST)
+        Thu, 17 Nov 2022 11:38:57 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C267819D
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 08:38:48 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id p21so2114842plr.7
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 08:38:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8Nqg4Xt8lGKthWB+nE04XmQsPpZUs65jb+qHOq4Cr/k=;
-        b=PRXwfJiPmdnJffoazkBjUBN8ZE3gBH/hkNy/65kEe1ygSQwxKpmoEIjZkvNBkBd3d4
-         UAcN7kr2yQiixORgoPBvpXxN27IMZ+QOmLa8coD8Fa9cMn2Khspr0MSgul60p0CoPc9S
-         V+hm8qNojAxVS77NWN/UxmzX/5B2ujehMRzWW57FsYBMYCh65oPMx5O2EkKMzdJq8OIs
-         wz9RkshLbCfjuOFy8mofp+9SYbllP0P65SoImEnn29027zUuKntQn2uac4eQxrdzBN7W
-         n57wczZSCztTlEVXxl8d3ExlLHHiz5qAxdv8Y9hE3J/YV9vEgMNrMQKQ3YdiJzgniV/Z
-         VWpw==
+        bh=ZYWORxAy79T9WSWxF/CzcXujG+zLBtFc0XTbXyObrLk=;
+        b=cxoxzA1yR0JaEcjtU7/sl5d2AWPjbyN5aOS8lYZ4bai+Z+XDdRAtGrSYARtZzd+1cY
+         ZWH39uulSUzkCQGhLtKeairHXCRc6rkUM09SU6GptTcoXjZxBuM+SMbWbzyin4tVEzf/
+         zJ3Pji1h80X7w9GZG8QKUW/EPJDpAJLrjUTbj1QJ5N3Mkz49EBn41LC/YiovSlPHCxhb
+         mu6MrNkCYoYlTIwbAh0OU0DSpNzizg5v874pHUqkIRKLnwVgkMpiUA8x+kEtPSxOqXtN
+         7yVsFRxSEgER6zooRBZfUO1wolw9tCxG82Z3TTRGZgYpBMrB0xMLRrJRuIa6i7Hq/TO8
+         3kZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8Nqg4Xt8lGKthWB+nE04XmQsPpZUs65jb+qHOq4Cr/k=;
-        b=yPrBJXPszLxGdSpBb3CPSD85IfpiYH2H31FrnITV4zsuRvfwDJjCVH/WQ9Xyp3rz+Q
-         obfV7ot8cLemyiPz2HYMaBdQVSxM8daOlPQxT3B+An7f1ORnmPjElh56emLmb9es//7B
-         qxopPOaNW0zhs9Dkiy83y5twGQ1pBoZ3raovOzzh8pk4hEsSX1Jz7omiRPWtRLnL6Pv9
-         YGWnGvzgDYc4hER3n+/dBi1R9hAjnZF3JkLA+VXzjmFl2EU8jfbGEQYISU4ydqjG0NTw
-         sPV+C1tMOf/g+Mli38Mgrqyfptbnx2/iVKIxN5MBMxfdc8F5dMhxBG19aFxz9oFy/WWm
-         WkrQ==
-X-Gm-Message-State: ANoB5pkzoP31++w4J9lQbWW2PXVfcSqBXkXNK2YiX/xafn47hRbHB/ay
-        UpCq5djHN8AbKVvy3IjwlSDHdMMGuSOUlw==
-X-Google-Smtp-Source: AA0mqf44KzoNad4Ffghvr1rp79PUpUhzA6ssZf3/8UcqNZf9nc9k7+WSrqnu8RxDJ2OxLOuAnvhU0g==
-X-Received: by 2002:a17:90a:bc4b:b0:212:d796:d30f with SMTP id t11-20020a17090abc4b00b00212d796d30fmr3699709pjv.9.1668703126784;
-        Thu, 17 Nov 2022 08:38:46 -0800 (PST)
-Received: from localhost (fwdproxy-prn-001.fbsv.net. [2a03:2880:ff:1::face:b00c])
-        by smtp.gmail.com with ESMTPSA id y4-20020a17090322c400b0016f196209c9sm1645420plg.123.2022.11.17.08.38.45
+        bh=ZYWORxAy79T9WSWxF/CzcXujG+zLBtFc0XTbXyObrLk=;
+        b=lZarqQ9GEdnJy8jXMBRJYYs/SuWrpwkbLjSwhD660QE9FMFKknSZqwUrKQU4kXxIDd
+         HX4piVioERt+zjAjyTISIqDrsMplpMtfODlyxX8LEKsJRaTiW1Ksph+I9uAUuuNnjqnN
+         np6cVRrmQaplZyAskumuiwcNsKmETvirXvgwq9Rvpucm3yUYv8zDlXVTr9xTzzn9eEDv
+         JjaJqMKt3/jFKxWNIRjmJJsIaIhwhfsE08GiQws+t9wQF9xwcm8Yv23e+g1IyVTEbOTE
+         uaKtN4B2Wcv3HVn/69nrE8Bh1SpO/HzfSDykSfRkqWt9Cp/vIkxjrTz4yD9w8PIQeciP
+         n4kQ==
+X-Gm-Message-State: ANoB5pkEfKrp5G731mUI5B4zUykSYocg1N2+mEYheIHCn5lCwy8cUQXC
+        BViTZ4WjkoSH1bkTxHA396Y=
+X-Google-Smtp-Source: AA0mqf7fn8cu6fs/3fJDiIG2Radf7GNtZoRsfAylYg2J1YU0aHoQ+8MVjWntS4QeVlQ82OqGkAf7cQ==
+X-Received: by 2002:a17:902:d355:b0:17f:6fee:3334 with SMTP id l21-20020a170902d35500b0017f6fee3334mr3662600plk.10.1668703128072;
+        Thu, 17 Nov 2022 08:38:48 -0800 (PST)
+Received: from localhost (fwdproxy-prn-012.fbsv.net. [2a03:2880:ff:c::face:b00c])
+        by smtp.gmail.com with ESMTPSA id m10-20020a634c4a000000b00476e84c3530sm1176069pgl.60.2022.11.17.08.38.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 08:38:46 -0800 (PST)
+        Thu, 17 Nov 2022 08:38:47 -0800 (PST)
 From:   Nhat Pham <nphamcs@gmail.com>
 To:     akpm@linux-foundation.org
 Cc:     hannes@cmpxchg.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, minchan@kernel.org,
         ngupta@vflare.org, senozhatsky@chromium.org, sjenning@redhat.com,
         ddstreet@ieee.org, vitaly.wool@konsulko.com
-Subject: [PATCH v4 4/5] zsmalloc: Add ops fields to zs_pool to store evict handlers
-Date:   Thu, 17 Nov 2022 08:38:38 -0800
-Message-Id: <20221117163839.230900-5-nphamcs@gmail.com>
+Subject: [PATCH v4 5/5] zsmalloc: Implement writeback mechanism for zsmalloc
+Date:   Thu, 17 Nov 2022 08:38:39 -0800
+Message-Id: <20221117163839.230900-6-nphamcs@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221117163839.230900-1-nphamcs@gmail.com>
 References: <20221117163839.230900-1-nphamcs@gmail.com>
@@ -74,80 +74,339 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds fields to zs_pool to store evict handlers for writeback,
-analogous to the zbud allocator.
+This commit adds the writeback mechanism for zsmalloc, analogous to the
+zbud allocator. Zsmalloc will attempt to determine the coldest zspage
+(i.e least recently used) in the pool, and attempt to write back all the
+stored compressed objects via the pool's evict handler.
 
 Signed-off-by: Nhat Pham <nphamcs@gmail.com>
 ---
- mm/zsmalloc.c | 35 ++++++++++++++++++++++++++++++++++-
- 1 file changed, 34 insertions(+), 1 deletion(-)
+ mm/zsmalloc.c | 203 +++++++++++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 184 insertions(+), 19 deletions(-)
 
 diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
-index 2557b55ec767..776d0e15a401 100644
+index 776d0e15a401..0ab9f173e964 100644
 --- a/mm/zsmalloc.c
 +++ b/mm/zsmalloc.c
-@@ -225,6 +225,12 @@ struct link_free {
- 	};
- };
-
-+struct zs_pool;
-+
-+struct zs_ops {
-+	int (*evict)(struct zs_pool *pool, unsigned long handle);
-+};
-+
- struct zs_pool {
- 	const char *name;
-
-@@ -242,6 +248,9 @@ struct zs_pool {
- #ifdef CONFIG_ZPOOL
- 	/* List tracking the zspages in LRU order by most recently added object */
+@@ -280,10 +280,13 @@ struct zspage {
  	struct list_head lru;
-+	const struct zs_ops *ops;
-+	struct zpool *zpool;
-+	const struct zpool_ops *zpool_ops;
  #endif
 
- #ifdef CONFIG_ZSMALLOC_STAT
-@@ -385,6 +394,18 @@ static void record_obj(unsigned long handle, unsigned long obj)
++	bool under_reclaim;
++
++	/* list of unfreed handles whose objects have been reclaimed */
++	unsigned long *deferred_handles;
++
+ 	struct zs_pool *pool;
+-#ifdef CONFIG_COMPACTION
+ 	rwlock_t lock;
+-#endif
+ };
 
- #ifdef CONFIG_ZPOOL
-
-+static int zs_zpool_evict(struct zs_pool *pool, unsigned long handle)
-+{
-+	if (pool->zpool && pool->zpool_ops && pool->zpool_ops->evict)
-+		return pool->zpool_ops->evict(pool->zpool, handle);
-+	else
-+		return -ENOENT;
-+}
-+
-+static const struct zs_ops zs_zpool_ops = {
-+	.evict =	zs_zpool_evict
-+};
-+
- static void *zs_zpool_create(const char *name, gfp_t gfp,
- 			     const struct zpool_ops *zpool_ops,
- 			     struct zpool *zpool)
-@@ -394,7 +415,19 @@ static void *zs_zpool_create(const char *name, gfp_t gfp,
- 	 * different contexts and its caller must provide a valid
- 	 * gfp mask.
- 	 */
--	return zs_create_pool(name);
-+	struct zs_pool *pool = zs_create_pool(name);
-+
-+	if (pool) {
-+		pool->zpool = zpool;
-+		pool->zpool_ops = zpool_ops;
-+
-+		if (zpool_ops)
-+			pool->ops = &zs_zpool_ops;
-+		else
-+			pool->ops = NULL;
-+	}
-+
-+	return pool;
+ struct mapping_area {
+@@ -304,10 +307,11 @@ static bool ZsHugePage(struct zspage *zspage)
+ 	return zspage->huge;
  }
 
- static void zs_zpool_destroy(void *pool)
+-#ifdef CONFIG_COMPACTION
+ static void migrate_lock_init(struct zspage *zspage);
+ static void migrate_read_lock(struct zspage *zspage);
+ static void migrate_read_unlock(struct zspage *zspage);
++
++#ifdef CONFIG_COMPACTION
+ static void migrate_write_lock(struct zspage *zspage);
+ static void migrate_write_lock_nested(struct zspage *zspage);
+ static void migrate_write_unlock(struct zspage *zspage);
+@@ -315,9 +319,6 @@ static void kick_deferred_free(struct zs_pool *pool);
+ static void init_deferred_free(struct zs_pool *pool);
+ static void SetZsPageMovable(struct zs_pool *pool, struct zspage *zspage);
+ #else
+-static void migrate_lock_init(struct zspage *zspage) {}
+-static void migrate_read_lock(struct zspage *zspage) {}
+-static void migrate_read_unlock(struct zspage *zspage) {}
+ static void migrate_write_lock(struct zspage *zspage) {}
+ static void migrate_write_lock_nested(struct zspage *zspage) {}
+ static void migrate_write_unlock(struct zspage *zspage) {}
+@@ -449,6 +450,27 @@ static void zs_zpool_free(void *pool, unsigned long handle)
+ 	zs_free(pool, handle);
+ }
+
++static int zs_reclaim_page(struct zs_pool *pool, unsigned int retries);
++
++static int zs_zpool_shrink(void *pool, unsigned int pages,
++			unsigned int *reclaimed)
++{
++	unsigned int total = 0;
++	int ret = -EINVAL;
++
++	while (total < pages) {
++		ret = zs_reclaim_page(pool, 8);
++		if (ret < 0)
++			break;
++		total++;
++	}
++
++	if (reclaimed)
++		*reclaimed = total;
++
++	return ret;
++}
++
+ static void *zs_zpool_map(void *pool, unsigned long handle,
+ 			enum zpool_mapmode mm)
+ {
+@@ -487,6 +509,7 @@ static struct zpool_driver zs_zpool_driver = {
+ 	.malloc_support_movable = true,
+ 	.malloc =		  zs_zpool_malloc,
+ 	.free =			  zs_zpool_free,
++	.shrink =		  zs_zpool_shrink,
+ 	.map =			  zs_zpool_map,
+ 	.unmap =		  zs_zpool_unmap,
+ 	.total_size =		  zs_zpool_total_size,
+@@ -960,6 +983,21 @@ static int trylock_zspage(struct zspage *zspage)
+ 	return 0;
+ }
+
++/*
++ * Free all the deferred handles whose objects are freed in zs_free.
++ */
++static void free_handles(struct zs_pool *pool, struct zspage *zspage)
++{
++	unsigned long handle = (unsigned long)zspage->deferred_handles;
++
++	while (handle) {
++		unsigned long nxt_handle = handle_to_obj(handle);
++
++		cache_free_handle(pool, handle);
++		handle = nxt_handle;
++	}
++}
++
+ static void __free_zspage(struct zs_pool *pool, struct size_class *class,
+ 				struct zspage *zspage)
+ {
+@@ -974,6 +1012,9 @@ static void __free_zspage(struct zs_pool *pool, struct size_class *class,
+ 	VM_BUG_ON(get_zspage_inuse(zspage));
+ 	VM_BUG_ON(fg != ZS_EMPTY);
+
++	/* Free all deferred handles from zs_free */
++	free_handles(pool, zspage);
++
+ 	next = page = get_first_page(zspage);
+ 	do {
+ 		VM_BUG_ON_PAGE(!PageLocked(page), page);
+@@ -1060,6 +1101,8 @@ static void init_zspage(struct size_class *class, struct zspage *zspage)
+ #ifdef CONFIG_ZPOOL
+ 	INIT_LIST_HEAD(&zspage->lru);
+ #endif
++	zspage->under_reclaim = false;
++	zspage->deferred_handles = NULL;
+
+ 	set_freeobj(zspage, 0);
+ }
+@@ -1482,13 +1525,7 @@ unsigned long zs_malloc(struct zs_pool *pool, size_t size, gfp_t gfp)
+ 		record_obj(handle, obj);
+ 		class_stat_inc(class, OBJ_USED, 1);
+
+-#ifdef CONFIG_ZPOOL
+-		/* Move the zspage to front of pool's LRU */
+-		move_to_front(pool, zspage);
+-#endif
+-		spin_unlock(&pool->lock);
+-
+-		return handle;
++		goto out;
+ 	}
+
+ 	spin_unlock(&pool->lock);
+@@ -1512,12 +1549,12 @@ unsigned long zs_malloc(struct zs_pool *pool, size_t size, gfp_t gfp)
+
+ 	/* We completely set up zspage so mark them as movable */
+ 	SetZsPageMovable(pool, zspage);
++out:
+ #ifdef CONFIG_ZPOOL
+ 	/* Move the zspage to front of pool's LRU */
+ 	move_to_front(pool, zspage);
+ #endif
+ 	spin_unlock(&pool->lock);
+-
+ 	return handle;
+ }
+ EXPORT_SYMBOL_GPL(zs_malloc);
+@@ -1571,12 +1608,24 @@ void zs_free(struct zs_pool *pool, unsigned long handle)
+
+ 	obj_free(class->size, obj);
+ 	class_stat_dec(class, OBJ_USED, 1);
++
++	if (zspage->under_reclaim) {
++		/*
++		 * Reclaim needs the handles during writeback. It'll free
++		 * them along with the zspage when it's done with them.
++		 *
++		 * Record current deferred handle at the memory location
++		 * whose address is given by handle.
++		 */
++		record_obj(handle, (unsigned long)zspage->deferred_handles);
++		zspage->deferred_handles = (unsigned long *)handle;
++		spin_unlock(&pool->lock);
++		return;
++	}
+ 	fullness = fix_fullness_group(class, zspage);
+-	if (fullness != ZS_EMPTY)
+-		goto out;
++	if (fullness == ZS_EMPTY)
++		free_zspage(pool, class, zspage);
+
+-	free_zspage(pool, class, zspage);
+-out:
+ 	spin_unlock(&pool->lock);
+ 	cache_free_handle(pool, handle);
+ }
+@@ -1776,7 +1825,7 @@ static enum fullness_group putback_zspage(struct size_class *class,
+ 	return fullness;
+ }
+
+-#ifdef CONFIG_COMPACTION
++#if defined(CONFIG_ZPOOL) || defined(CONFIG_COMPACTION)
+ /*
+  * To prevent zspage destroy during migration, zspage freeing should
+  * hold locks of all pages in the zspage.
+@@ -1818,6 +1867,24 @@ static void lock_zspage(struct zspage *zspage)
+ 	}
+ 	migrate_read_unlock(zspage);
+ }
++#endif /* defined(CONFIG_ZPOOL) || defined(CONFIG_COMPACTION) */
++
++#ifdef CONFIG_ZPOOL
++/*
++ * Unlocks all the pages of the zspage.
++ *
++ * pool->lock must be held before this function is called
++ * to prevent the underlying pages from migrating.
++ */
++static void unlock_zspage(struct zspage *zspage)
++{
++	struct page *page = get_first_page(zspage);
++
++	do {
++		unlock_page(page);
++	} while ((page = get_next_page(page)) != NULL);
++}
++#endif /* CONFIG_ZPOOL */
+
+ static void migrate_lock_init(struct zspage *zspage)
+ {
+@@ -1834,6 +1901,7 @@ static void migrate_read_unlock(struct zspage *zspage) __releases(&zspage->lock)
+ 	read_unlock(&zspage->lock);
+ }
+
++#ifdef CONFIG_COMPACTION
+ static void migrate_write_lock(struct zspage *zspage)
+ {
+ 	write_lock(&zspage->lock);
+@@ -2398,6 +2466,103 @@ void zs_destroy_pool(struct zs_pool *pool)
+ }
+ EXPORT_SYMBOL_GPL(zs_destroy_pool);
+
++#ifdef CONFIG_ZPOOL
++static int zs_reclaim_page(struct zs_pool *pool, unsigned int retries)
++{
++	int i, obj_idx, ret = 0;
++	unsigned long handle;
++	struct zspage *zspage;
++	struct page *page;
++	enum fullness_group fullness;
++
++	if (retries == 0 || !pool->ops || !pool->ops->evict)
++		return -EINVAL;
++
++	/* Lock LRU and fullness list */
++	spin_lock(&pool->lock);
++	if (list_empty(&pool->lru)) {
++		spin_unlock(&pool->lock);
++		return -EINVAL;
++	}
++
++	for (i = 0; i < retries; i++) {
++		struct size_class *class;
++
++		zspage = list_last_entry(&pool->lru, struct zspage, lru);
++		list_del(&zspage->lru);
++
++		/* zs_free may free objects, but not the zspage and handles */
++		zspage->under_reclaim = true;
++
++		class = zspage_class(pool, zspage);
++		fullness = get_fullness_group(class, zspage);
++
++		/* Lock out object allocations and object compaction */
++		remove_zspage(class, zspage, fullness);
++
++		spin_unlock(&pool->lock);
++
++		/* Lock backing pages into place */
++		lock_zspage(zspage);
++
++		obj_idx = 0;
++		page = zspage->first_page;
++		while (1) {
++			handle = find_alloced_obj(class, page, &obj_idx);
++			if (!handle) {
++				page = get_next_page(page);
++				if (!page)
++					break;
++				obj_idx = 0;
++				continue;
++			}
++
++			/*
++			 * This will write the object and call
++			 * zs_free.
++			 *
++			 * zs_free will free the object, but the
++			 * under_reclaim flag prevents it from freeing
++			 * the zspage altogether. This is necessary so
++			 * that we can continue working with the
++			 * zspage potentially after the last object
++			 * has been freed.
++			 */
++			ret = pool->ops->evict(pool, handle);
++			if (ret)
++				goto next;
++
++			obj_idx++;
++		}
++
++next:
++		/* For freeing the zspage, or putting it back in the pool and LRU list. */
++		spin_lock(&pool->lock);
++		zspage->under_reclaim = false;
++
++		if (!get_zspage_inuse(zspage)) {
++			/*
++			 * Fullness went stale as zs_free() won't touch it
++			 * while the page is removed from the pool. Fix it
++			 * up for the check in __free_zspage().
++			 */
++			zspage->fullness = ZS_EMPTY;
++
++			__free_zspage(pool, class, zspage);
++			spin_unlock(&pool->lock);
++			return 0;
++		}
++
++		putback_zspage(class, zspage);
++		list_add(&zspage->lru, &pool->lru);
++		unlock_zspage(zspage);
++	}
++
++	spin_unlock(&pool->lock);
++	return -EAGAIN;
++}
++#endif /* CONFIG_ZPOOL */
++
+ static int __init zs_init(void)
+ {
+ 	int ret;
 --
 2.30.2
