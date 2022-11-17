@@ -2,113 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4253262D8B0
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 12:00:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59F9B62D8B1
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 12:01:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234851AbiKQLAt convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 17 Nov 2022 06:00:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47592 "EHLO
+        id S239716AbiKQLA4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 06:00:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239322AbiKQLAB (ORCPT
+        with ESMTP id S234882AbiKQLAG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 06:00:01 -0500
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F48AE4B;
-        Thu, 17 Nov 2022 02:57:29 -0800 (PST)
-Received: by mail-qt1-f178.google.com with SMTP id fz10so814788qtb.3;
-        Thu, 17 Nov 2022 02:57:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=caoh7PtTsDMq2hTmo+2WH4i1lSrvHnWeG1MPfrjXBCc=;
-        b=Fj4n6vvbAPjlGd0kLgW1sknzhopZ2Q2EZj5SV/UFOY1R0gg5efXL0mGXr6itfEOUqe
-         onxbMxfukY6Zah1a8fgK5KxuR/FcBd/dSJdCenm7qxoxNiocSBkou/JDr3OZyp2pzFFB
-         6bHrMIhbWHeDoOxapbQR/I+DGfhHEaFDx50pgpvJxX72EIZKZa9F1O6xOVY741xalYyS
-         Zr5/mhB5dW/1p3TZQRbS7ZD4pWtiWO9Lx3QqeKgUQ6yg5KplAviKlh/UCwx/hUAxnCUW
-         9G9zv9VDoK1uOPqGUJR5dcRR0401YzVoBvSyNbJwJBel9X/uJ1KN2lNbJhTpFIr34EPa
-         m90A==
-X-Gm-Message-State: ANoB5pmCfcGfbfupsErpG+aKgc9NbfugcNHoF+J7hOcqXhl0iIbn8/hD
-        saQ/mQnct0U6fFxRV67VKJzkNyGYbIWhEQ==
-X-Google-Smtp-Source: AA0mqf5YMPNR/PZY5dMyjg4VQiNOnixdDmBKtxVeBSHp3u2RirIYUf//SKvORs99EcTk+hglSjjZ0A==
-X-Received: by 2002:ac8:7457:0:b0:3a5:2e28:b57b with SMTP id h23-20020ac87457000000b003a52e28b57bmr1705455qtr.106.1668682648074;
-        Thu, 17 Nov 2022 02:57:28 -0800 (PST)
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
-        by smtp.gmail.com with ESMTPSA id bi40-20020a05620a31a800b006f7ee901674sm256648qkb.2.2022.11.17.02.57.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Nov 2022 02:57:27 -0800 (PST)
-Received: by mail-yb1-f182.google.com with SMTP id b131so1400194yba.11;
-        Thu, 17 Nov 2022 02:57:27 -0800 (PST)
-X-Received: by 2002:a25:8249:0:b0:6dd:b521:a8f2 with SMTP id
- d9-20020a258249000000b006ddb521a8f2mr1439247ybn.380.1668682647179; Thu, 17
- Nov 2022 02:57:27 -0800 (PST)
+        Thu, 17 Nov 2022 06:00:06 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D2A36B237;
+        Thu, 17 Nov 2022 02:57:45 -0800 (PST)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AH6nwhY000845;
+        Thu, 17 Nov 2022 10:57:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=F0pGU1BlNM79za83vEB5fdDsZRyTyENXL11lu+0vAWI=;
+ b=XnKTGrX5RA3CffErTysra0/6A8G5d11s16zOCoGIxx4eVBEhps9KX0LmTBXUCzyLFtHc
+ 6DDsR1ON+HaoAqtLbfoX2R2Fn9auQpcG3MYWJBoNVkR4NSMy46v6b/94niuqQuyQ85gZ
+ HwXXy/fNNsPQPb+udjW7xGjAvI/y6Ycev0K+AITeweBw0xobn/pFZizlCUtidkegOi82
+ m5hdjsrSUI7qB6W2pUcH1qJWd3JysP3n4xEGuB4L4DSfQsr6TAGxGdqT3PAccDIYYGff
+ JC0GsysjYG0LYHRtbO3ccA2PVXsjSwVRQ5LR+qCom5qZD3GTo9idq9wCd6DCg68SFUMC 4A== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kwg1mrt8e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Nov 2022 10:57:39 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AHAvcFd011626
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Nov 2022 10:57:38 GMT
+Received: from [10.216.1.87] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Thu, 17 Nov
+ 2022 02:57:32 -0800
+Message-ID: <ee436c31-6b38-4c1c-8d40-865e57750e6f@quicinc.com>
+Date:   Thu, 17 Nov 2022 16:27:28 +0530
 MIME-Version: 1.0
-References: <20221115192625.9410-1-alexander.helms.jy@renesas.com>
- <20221115192625.9410-2-alexander.helms.jy@renesas.com> <e9fd112f-0fd2-e833-8687-9a256c307842@linaro.org>
- <9231404a-85b2-9a9f-f040-f97615bf8ec0@renesas.com> <6dc67c30-d9c3-5906-a2bc-263ac83df051@linaro.org>
- <CAMuHMdVoCVz7zyWvAbCydSGQ6RnRxH2kBFDyu-M-Fn8h_XicLQ@mail.gmail.com> <5a986cd4-12fe-a9f9-51f2-844fa6989bc8@linaro.org>
-In-Reply-To: <5a986cd4-12fe-a9f9-51f2-844fa6989bc8@linaro.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 17 Nov 2022 11:57:15 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUG9ojeSYqiz6fuuFkFsCBk7S8k3j3qurfutorLFpK2Uw@mail.gmail.com>
-Message-ID: <CAMuHMdUG9ojeSYqiz6fuuFkFsCBk7S8k3j3qurfutorLFpK2Uw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dtbindings: clock: Add bindings for Renesas PhiClock
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Alex Helms <alexander.helms.jy@renesas.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        robh+dt@kernel.org, sboyd@kernel.org, mturquette@baylibre.com,
-        geert+renesas@glider.be
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v3] drm/msm/a6xx: Fix speed-bin detection vs probe-defer
+Content-Language: en-US
+To:     Rob Clark <robdclark@gmail.com>, <dri-devel@lists.freedesktop.org>
+CC:     <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        "Rob Clark" <robdclark@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Chia-I Wu <olvaffe@gmail.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20221115154637.1613968-1-robdclark@gmail.com>
+From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
+In-Reply-To: <20221115154637.1613968-1-robdclark@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: UL_coQY-6jlE9drln0tJpKU__dSx8ogz
+X-Proofpoint-ORIG-GUID: UL_coQY-6jlE9drln0tJpKU__dSx8ogz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-17_06,2022-11-17_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
+ phishscore=0 adultscore=0 impostorscore=0 lowpriorityscore=0
+ malwarescore=0 priorityscore=1501 bulkscore=0 clxscore=1015 mlxscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211170083
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
-
-On Thu, Nov 17, 2022 at 11:41 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
-> On 17/11/2022 09:11, Geert Uytterhoeven wrote:
-> >>>>> +  renesas,ss-amount-percent:
-> >>>>> +    description: Spread spectrum absolute amount as hundredths of a percent, e.g. 150 is 1.50%.
-> >>>>
-> >>>> What? If this is percent then it cannot be hundreds of percent. Percent
-> >>>> is percent. Use appropriate units.
-> >>>> https://jpn01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2Fdevicetree-org%2Fdt-schema%2Fblob%2Fmain%2Fdtschema%2Fschemas%2Fproperty-units.yaml&amp;data=05%7C01%7Calexander.helms.jy%40renesas.com%7C9c13a32848f3434e217108dac7ab69f6%7C53d82571da1947e49cb4625a166a4a2a%7C0%7C0%7C638041836281252737%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=6MULpJhPyyjWSo1SvPCrz6KidE1VEtiiNYk1O5wS1vI%3D&amp;reserved=0
-> >>>>
-> >>>
-> >>> Values like 0.5% or 2.5% must be representable which is why this
-> >>> property is an integer of hundredths of percent. How else would you
-> >>> represent a non-integer percent?
-> >>
-> >> With an appropriate unit.
-> >
-> > Krzysztof really means the property should be named e.g.
-> > "renesas,ss-amount-centipercent" instead.
+On 11/15/2022 9:16 PM, Rob Clark wrote:
+> From: Rob Clark <robdclark@chromium.org>
 >
-> I provided an URL to document with units, so I was hoping Alex will take
-> a bit of effort to open it. Hundredths of percent sounds like basis
-> point... If it is not basis point, maybe it could be made such?
+> If we get an error (other than -ENOENT) we need to propagate that up the
+> stack.  Otherwise if the nvmem driver hasn't probed yet, we'll end up
+> end up claiming that we support all the OPPs which is not likely to be
+> true (and on some generations impossible to be true, ie. if there are
+> conflicting OPPs).
+>
+> v2: Update commit msg, gc unused label, etc
+> v3: Add previously missing \n's
+>
+> Fixed: fe7952c629da ("drm/msm: Add speed-bin support to a618 gpu")
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> ---
+>   drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 12 +++++-------
+>   1 file changed, 5 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> index 7fe60c65a1eb..ebe9599a8316 100644
+> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> @@ -1931,7 +1931,7 @@ static u32 fuse_to_supp_hw(struct device *dev, struct adreno_rev rev, u32 fuse)
+>   
+>   	if (val == UINT_MAX) {
+>   		DRM_DEV_ERROR(dev,
+> -			"missing support for speed-bin: %u. Some OPPs may not be supported by hardware",
+> +			"missing support for speed-bin: %u. Some OPPs may not be supported by hardware\n",
+>   			fuse);
+>   		return UINT_MAX;
+>   	}
+> @@ -1941,7 +1941,7 @@ static u32 fuse_to_supp_hw(struct device *dev, struct adreno_rev rev, u32 fuse)
+>   
+>   static int a6xx_set_supported_hw(struct device *dev, struct adreno_rev rev)
+>   {
+> -	u32 supp_hw = UINT_MAX;
+> +	u32 supp_hw;
+>   	u32 speedbin;
+>   	int ret;
+>   
+> @@ -1953,15 +1953,13 @@ static int a6xx_set_supported_hw(struct device *dev, struct adreno_rev rev)
+>   	if (ret == -ENOENT) {
+>   		return 0;
+>   	} else if (ret) {
+> -		DRM_DEV_ERROR(dev,
+> -			      "failed to read speed-bin (%d). Some OPPs may not be supported by hardware",
+> -			      ret);
+> -		goto done;
+> +		dev_err_probe(dev, ret,
+> +			      "failed to read speed-bin. Some OPPs may not be supported by hardware\n");
+> +		return ret;
+>   	}
+>   
+>   	supp_hw = fuse_to_supp_hw(dev, rev, speedbin);
+>   
+> -done:
+>   	ret = devm_pm_opp_set_supported_hw(dev, &supp_hw, 1);
+>   	if (ret)
+>   		return ret;
 
-Thank you, I didn't know about basis points. TIL ;-)
+Reviewed-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
 
-(and I didn't dare to click on the safelink-converted quoted link)
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-Akhil.
