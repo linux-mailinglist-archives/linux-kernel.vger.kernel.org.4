@@ -2,97 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDE9C62E18F
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 17:24:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0707462E193
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 17:25:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240512AbiKQQYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 11:24:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59284 "EHLO
+        id S239931AbiKQQZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 11:25:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240478AbiKQQYP (ORCPT
+        with ESMTP id S240506AbiKQQZ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 11:24:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE8088FA6;
-        Thu, 17 Nov 2022 08:21:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E77FA62129;
-        Thu, 17 Nov 2022 16:21:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB5F2C433C1;
-        Thu, 17 Nov 2022 16:21:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668702104;
-        bh=phsVL3/hsv+v4acS8Sc0lFUGpjMm1v6dsEcH7Nzqomc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hmkZC3D0au47/OYpQ1ksGKtVv9CiqIPL7XknQf09yV5vSp1F0K+2dCNLYWC/Va31V
-         uVcvHviKCGT1romm1/eM6Lps6F2lIzXKYKSw58dDEO6suaqLQkZ0Y/imxN6FN/15U8
-         vUFeHa2OWGz2rzOaEbPvm4osX0ugWuZ3EsMPsDanGPFB7Gt4CWAq9Fezqdc4hFBpBT
-         sCLckKaFc12UFRGEGiQl1TsyyzbXp7ZJVKatO3Yq/MX8Tt7xFEwQiljuZ25I/aAT0M
-         +4LgvdOmAj/Wg9cXXNK05x38NJ+mdtnYCnDuNscFozvoyqYS/XmAaHFgFLXWlvl06y
-         sqTweD275CG9g==
-Date:   Thu, 17 Nov 2022 16:21:40 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Michael Walle <michael@walle.cc>
-Cc:     William Breathitt Gray <william.gray@linaro.org>,
-        linus.walleij@linaro.org, brgl@bgdev.pl,
-        andriy.shevchenko@linux.intel.com, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/4] gpio: i8255: Migrate to regmap API
-Message-ID: <Y3ZflHI6CYfaGIbn@sirena.org.uk>
-References: <cover.1668129763.git.william.gray@linaro.org>
- <61327a67cc308af413471a69a4810b2785e53e8e.1668129763.git.william.gray@linaro.org>
- <5123090e11da67e57fb00984445ece2f@walle.cc>
+        Thu, 17 Nov 2022 11:25:28 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7BB7D533;
+        Thu, 17 Nov 2022 08:22:42 -0800 (PST)
+Received: from fraeml713-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NClWK0b2Wz67M1h;
+        Fri, 18 Nov 2022 00:20:13 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml713-chm.china.huawei.com (10.206.15.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 17 Nov 2022 17:22:40 +0100
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 17 Nov
+ 2022 16:22:39 +0000
+Date:   Thu, 17 Nov 2022 16:22:38 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Cosmin Tanislav <demonsingur@gmail.com>
+CC:     Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "William Breathitt Gray" <william.gray@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 2/2] iio: addac: add AD74115 driver
+Message-ID: <20221117162238.0000224a@Huawei.com>
+In-Reply-To: <20221117080916.411766-3-cosmin.tanislav@analog.com>
+References: <20221117080916.411766-1-cosmin.tanislav@analog.com>
+        <20221117080916.411766-3-cosmin.tanislav@analog.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="KArWzu10SZ74/FYp"
-Content-Disposition: inline
-In-Reply-To: <5123090e11da67e57fb00984445ece2f@walle.cc>
-X-Cookie: Ego sum ens omnipotens.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 17 Nov 2022 10:09:16 +0200
+Cosmin Tanislav <demonsingur@gmail.com> wrote:
 
---KArWzu10SZ74/FYp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> The AD74115H is a single-channel, software-configurable, input and
+> output device for industrial control applications. The AD74115H
+> provides a wide range of use cases, integrated on a single chip.
+> 
+> These use cases include analog output, analog input, digital output,
+> digital input, resistance temperature detector (RTD), and thermocouple
+> measurement capability. The AD74115H also has an integrated HART modem.
+> 
+> A serial peripheral interface (SPI) is used to handle all communications
+> to the device, including communications with the HART modem. The digital
+> input and digital outputs can be accessed via the SPI or the
+> general-purpose input and output (GPIO) pins to support higher
+> speed data rates.
+> 
+> The device features a 16-bit, sigma-delta analog-to-digital converter
+> (ADC) and a 14-bit digital-to-analog converter (DAC).
+> The AD74115H contains a high accuracy 2.5 V on-chip reference that can
+> be used as the DAC and ADC reference.
+> 
+> Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
+LGTM
 
-On Thu, Nov 17, 2022 at 05:18:55PM +0100, Michael Walle wrote:
-> Am 2022-11-11 02:55, schrieb William Breathitt Gray:
+Not sure if Linus W wants to take a look at the GPIO chip stuff, but
+we should leave a few days to give him the opportunity + DT review
+needed before I pick this up.
 
-> > +	gpio_config.parent = config->parent;
-> > +	gpio_config.regmap = config->map;
+Thanks,
 
-> I'd propose to add a new config flag to indicate that accesses to
-> the device will be fast:
+Jonathan
 
-> gpio_config.regmap_has_fast_io = true;
 
-> which will then set gpio->can_sleep = false.
-
-It's probably useful to provide a query function in the regmap
-API for generic regmap users like this.
-
---KArWzu10SZ74/FYp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmN2X5EACgkQJNaLcl1U
-h9BYlwf/cBtqSPMTzYsl99bR9c8JJNXZeeYSwkVnwLuXJs0lf70APD+eCNa2IQI0
-qj2Zq/ekgfnYW9+YsswY9O/dzf0ZNFhC/Pie6TM5uNnYC3yJBMAaVNoA6KOQTBED
-upXDb1QOSbYpct97CJJmx6/zyIzszjIQmuQZ/lC/gGq1Ni0Ye5+0M65tNMCDSUD3
-Uuc6tRmXOtgwCHda6Hfpis033dwWQRMvMivF6+3svGZ0GzywBME5Eft23EHooqdt
-2uEXT24DDssydf4LG65YbdeyFZJ3GQiVi/jmlSywKSyZ66bn8BpNJE/LT8aVDo6/
-sEt1FKTcbQoJm0CgdJ2AJUI2OgP2sg==
-=5d1H
------END PGP SIGNATURE-----
-
---KArWzu10SZ74/FYp--
