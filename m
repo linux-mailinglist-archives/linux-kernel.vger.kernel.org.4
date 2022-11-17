@@ -2,119 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9A7662D409
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 08:26:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C81262D40D
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 08:28:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239314AbiKQH0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 02:26:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60478 "EHLO
+        id S239334AbiKQH2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 02:28:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234615AbiKQH0p (ORCPT
+        with ESMTP id S234615AbiKQH2Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 02:26:45 -0500
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D36A4299C;
-        Wed, 16 Nov 2022 23:26:45 -0800 (PST)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AH7QasS051985;
-        Thu, 17 Nov 2022 01:26:36 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1668669996;
-        bh=eqQ/3cCLrSuzVZEUFTNhVlp1S92E4HYsYV7v9SonXn8=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=fNQufl1//OH+DxPdwyri9aYKsr69ShdyqndU96TP7c0OaMGwnxMlv4bZQ0S0OPi0t
-         8aXSH/QA5hKeEyMkAcRqjT49mJqbtZ1m9kfUw7aTbdWUuL4+x6+/Mc5jXP41WuCeWU
-         klbgiMjKj0uaoxnWaea8duEHuRYQ7RedBEZOuq8E=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AH7QZGd017005
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 17 Nov 2022 01:26:36 -0600
-Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 17
- Nov 2022 01:26:35 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Thu, 17 Nov 2022 01:26:35 -0600
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AH7QZ9u012868;
-        Thu, 17 Nov 2022 01:26:35 -0600
-Date:   Thu, 17 Nov 2022 01:26:35 -0600
-From:   Nishanth Menon <nm@ti.com>
-To:     Bhavya Kapoor <b-kapoor@ti.com>
-CC:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <vigneshr@ti.com>,
-        <piyali_g@ti.com>
-Subject: Re: [PATCH v2] arm64: dts: ti: k3-j721e-main: Remove ti,strobe-sel
- property
-Message-ID: <20221117072635.k4fmjqcnw3kcjrc4@precinct>
-References: <20221116091652.112620-1-b-kapoor@ti.com>
+        Thu, 17 Nov 2022 02:28:16 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4774942F46;
+        Wed, 16 Nov 2022 23:28:14 -0800 (PST)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NCWdp6DkkzJnlm;
+        Thu, 17 Nov 2022 15:25:02 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 17 Nov 2022 15:27:41 +0800
+Received: from [10.67.108.193] (10.67.108.193) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 17 Nov 2022 15:27:40 +0800
+Subject: Re: [PATCH] device_cgroup: Roll back to original exceptions after
+ copy failure
+To:     Paul Moore <paul@paul-moore.com>
+CC:     <jmorris@namei.org>, <serge@hallyn.com>,
+        <serge.hallyn@canonical.com>, <akpm@linux-foundation.org>,
+        <aris@redhat.com>, <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        wangweiyang <wangweiyang2@huawei.com>
+References: <20221025113101.41132-1-wangweiyang2@huawei.com>
+ <CAHC9VhRa16htUXSN0AXrbUwadRa-qQv+UX8ZO_8W_z2eL=6trw@mail.gmail.com>
+From:   wangweiyang <wangweiyang2@huawei.com>
+Message-ID: <2a52eca2-a064-38da-9f6f-6f4736753067@huawei.com>
+Date:   Thu, 17 Nov 2022 15:27:40 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221116091652.112620-1-b-kapoor@ti.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAHC9VhRa16htUXSN0AXrbUwadRa-qQv+UX8ZO_8W_z2eL=6trw@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.108.193]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14:46-20221116, Bhavya Kapoor wrote:
-> According to latest errata of J721e [1], HS400 mode is not supported
-> in MMCSD0 subsystem (i2024) .  Speed modes supported has been already
-			     ^^ space before "."
+On 2022/11/17 7:33, Paul Moore wrote:
+> On Tue, Oct 25, 2022 at 7:02 AM Wang Weiyang <wangweiyang2@huawei.com> wrote:
+>>
+>> When add the 'a *:* rwm' entry to devcgroup A's whitelist, at first A's
+>> exceptions will be cleaned and A's behavior is changed to
+>> DEVCG_DEFAULT_ALLOW. Then parent's exceptions will be copyed to A's
+>> whitelist. If copy failure occurs, just return leaving A to grant
+>> permissions to all devices. And A may grant more permissions than
+>> parent.
+>>
+>> Backup A's whitelist and recover original exceptions after copy
+>> failure.
+>>
+>> Fixes: 4cef7299b478 ("device_cgroup: add proper checking when changing default behavior")
+>> Signed-off-by: Wang Weiyang <wangweiyang2@huawei.com>
+>> ---
+>>  security/device_cgroup.c | 33 +++++++++++++++++++++++++++++----
+>>  1 file changed, 29 insertions(+), 4 deletions(-)
+> 
+> Merged into lsm/next, but with a stable@vger tag.  Normally I would
+> merge something like this into lsm/stable-X.Y and send it up to Linus
+> after a few days, but I'd really like this to spend some time in
+> linux-next before going up to Linus.
 
-btw, "The MMCSD peripherals do not support the Multimedia Card HS400
-mode." is the exact text of the erratum. Even though it applies to
-instance 0. I think minor rewording will probably help people from
-running to search for which specific instances.
-
-> updated in commit eb8f6194e807 ("arm64: dts: ti: k3-j721e-main: Update the speed modes supported and their itap delay values for MMCSD subsystems")
-
-Please format this correctly.
-
-> but it missed dropping 'ti,strobe-sel' property which is
-> only required by HS400 speed mode.
-> 
-> Thus, drop 'ti,strobe-sel' property from kernel dtsi for J721e SoC.
-> 
-> [1] https://www.ti.com/lit/er/sprz455/sprz455.pdf
-> 
-> Fixes: eb8f6194e807 ("arm64: dts: ti: k3-j721e-main: Update the speed modes supported and their itap delay values for MMCSD subsystems")
-> Signed-off-by: Bhavya Kapoor <b-kapoor@ti.com>
-> ---
-> 
-> Changelog v1 -> v2 :
-> 	- Updated Commit Message based on what Nishanth Menon has told
-> 		in https://lore.kernel.org/all/20221115034324.6qpxl2774bzwbl3t@acorn/
-> 
->  arch/arm64/boot/dts/ti/k3-j721e-main.dtsi | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
-> index 917c9dc99efa..e4748a838d83 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
-> @@ -1094,7 +1094,6 @@
->  		ti,itap-del-sel-mmc-hs = <0xa>;
->  		ti,itap-del-sel-ddr52 = <0x3>;
->  		ti,trm-icp = <0x8>;
-> -		ti,strobe-sel = <0x77>;
->  		dma-coherent;
->  	};
->  
-> -- 
-> 2.20.1
-> 
-
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+Thanks Paul. This sounds fine.
