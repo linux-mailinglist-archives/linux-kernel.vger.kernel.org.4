@@ -2,79 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EA8D62DA71
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 13:14:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DBFD62DA5D
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 13:12:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240045AbiKQMOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 07:14:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42918 "EHLO
+        id S239958AbiKQML5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 07:11:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239145AbiKQMOF (ORCPT
+        with ESMTP id S239982AbiKQMLw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 07:14:05 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A9BD7018F
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 04:13:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668687185;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=D5j9DmJftbiNuyWuQp4J4DaVBp6LHbVnovAFrJEquk4=;
-        b=AyERdWz9WyjvQxT/gdl+RwEQT6Yf1Q2SRkkjWcBRhhCW4j5tADei8vwroOYgXuPFUIIGlL
-        vpwAY21lQR6PoZpMxxrP5Z9AJDOQiW63q/4eo0hrpm7WJb5eZcNdphPGX1p2o8ogOD+6Ns
-        JdJWb7N2/evjpqHXOhbNiPUtAAl/K9E=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-80-UJWfcDZHO6yBGUNSzGMU-g-1; Thu, 17 Nov 2022 07:13:04 -0500
-X-MC-Unique: UJWfcDZHO6yBGUNSzGMU-g-1
-Received: by mail-wr1-f72.google.com with SMTP id k1-20020adfb341000000b00238745c9b1aso624104wrd.5
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 04:13:04 -0800 (PST)
+        Thu, 17 Nov 2022 07:11:52 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E93346E579;
+        Thu, 17 Nov 2022 04:11:50 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id a29so2439555lfj.9;
+        Thu, 17 Nov 2022 04:11:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fvAW3QWfUB+ZRXw7GQnabgmGHjk0bbcFTzdS5NeGHzY=;
+        b=C7uJ0cx9ggyreToG9gcrAMQhBSyIzs+ls96OriZEul48TPbg1IgQyPPIze5fsrTx84
+         7Hj4kz7BsIMz62520ZnJI7gQyy6S7tuv/dKfFFtAPH7GTc3or1R0JN8gQEuwkycNCAN3
+         1K/mIN5aOAxCdwoIp5s0HWIeLofo+UyQR01k1m8VMGfU6xbMyUL724myAYKfKyioc+JT
+         rDdEsmK9AY64yQy2LshJEuw2scY1Ad8YP0oC9YT4YP027Vf4BC3AOH5ruZmsD9H+Fwfy
+         nHmxvR0wRWUpavG8RRu0OMD94GDr8CXAw2yvqyf9PTvNC+ebh7WVNhXtp0v+AMyGaLWJ
+         Br8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=D5j9DmJftbiNuyWuQp4J4DaVBp6LHbVnovAFrJEquk4=;
-        b=KdpYVvgfpEgx5AGu5ZiSSGN9mKZ+IOc+XmaP6C7LLTepxYvSGzBGxz2bKSqVPwBSY9
-         fWPPfl3gNLT6EAx6QIc9B7IDBwKsq6C8XTADeuKjNmfHHm4sL+g2up2W6afHaIZIEpme
-         Of9kSnQ5Pmdh2X+t6V3iN1PGnJ4J7wQ4zS5h8Mm1Uo/xoFk4ZGrPDbsgCs4icxEUJs2w
-         5GXdpcBrR3GIxNTmfoDMktwaINYHhk81zvhOKS33cDRJiMiD5nZiSKT+jzz9ozVDBQiY
-         48Jd9AqJfrCDsiJASDCQk/rGPCySPtgnBiqRdWlOualGbMUs7gTjAwyJ0QRsNgvb8ZZP
-         IQtw==
-X-Gm-Message-State: ANoB5plkinVg/gINVQRfW1BYgrIMJmsJQ47iidC3ikjyBgmCLuvY+jbn
-        hatSHjvm86Fy8PZSB72nqSAMD89LfGatIoThxqxhnQGWblLiP7QasA7zKnFhYUjEQC7nlJ2T0Z5
-        mYN1kF2QkXdcswId7xSxAnoPr
-X-Received: by 2002:a1c:7318:0:b0:3cf:cb16:f24a with SMTP id d24-20020a1c7318000000b003cfcb16f24amr4940547wmb.182.1668687183284;
-        Thu, 17 Nov 2022 04:13:03 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf45Fdyv1heAo7QA/P1UGM3QqYUDdP9AyD2QFRZJEGDSgoiGR7WkHocJh68ff65K5BiMjVG/Ig==
-X-Received: by 2002:a1c:7318:0:b0:3cf:cb16:f24a with SMTP id d24-20020a1c7318000000b003cfcb16f24amr4940530wmb.182.1668687183035;
-        Thu, 17 Nov 2022 04:13:03 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-120-203.dyn.eolo.it. [146.241.120.203])
-        by smtp.gmail.com with ESMTPSA id y15-20020a1c4b0f000000b003cf7292c553sm1022914wma.13.2022.11.17.04.13.02
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fvAW3QWfUB+ZRXw7GQnabgmGHjk0bbcFTzdS5NeGHzY=;
+        b=sWhU8zbMp6p+CIuD3H7s6grIbGXdg4UO3dXO0q018oxQ4oHOflea8WPkyoisGeHPFT
+         qJDhbjfLss94jSOUt9jQi40jQepQnCWJxPO/jHmBMeMsdQ1K4O07i+kbSziUmggzFc5G
+         OJrs+jBZQc6ESFjegZCMLewlP8L82ADjTTafn7cmjSALtEkPCDRkC8xg3qxRcQC9xCcZ
+         Td0D1989p5ty+13DTRSVH3NlL32ITswK43x6DEBl9xQNAHhnUcGvsEgxBUs4w4gu2xwC
+         EUX6KibDU/NGld/+N5RxMMudksWm7oKN8Irtwkuqekf2n662eIyJqeckFgWJvZxwdID2
+         DNcQ==
+X-Gm-Message-State: ANoB5pkroCrLsGMwES0VE3xDhcQ93fddbnBHPeRIiDrck0+gLUpNlGoQ
+        V9gK3McieWPHxfdNd2610lw=
+X-Google-Smtp-Source: AA0mqf5GhB75MjBiceXBvCuZIH5c3Zh03VDGGyqDfDC8g1rB4okdbuRRnRi+kIpynfNLDfCudrygaA==
+X-Received: by 2002:a05:6512:3084:b0:4aa:83e6:53e4 with SMTP id z4-20020a056512308400b004aa83e653e4mr761123lfd.13.1668687109201;
+        Thu, 17 Nov 2022 04:11:49 -0800 (PST)
+Received: from localhost.localdomain (82-209-154-112.cust.bredband2.com. [82.209.154.112])
+        by smtp.gmail.com with ESMTPSA id s15-20020a056512214f00b004a8b9c68735sm121152lfr.102.2022.11.17.04.11.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 04:13:02 -0800 (PST)
-Message-ID: <1c43f0836d741a575b4805292d6dfff134ef6225.camel@redhat.com>
-Subject: Re: [PATCH] sctp: sm_statefuns: Remove unnecessary
- =?UTF-8?Q?=E2=80=98NULL=E2=80=99?= values from Pointer
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Li zeming <zeming@nfschina.com>, vyasevich@gmail.com,
-        nhorman@tuxdriver.com, marcelo.leitner@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org
-Cc:     linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 17 Nov 2022 13:13:01 +0100
-In-Reply-To: <20221115015508.3054-1-zeming@nfschina.com>
-References: <20221115015508.3054-1-zeming@nfschina.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Thu, 17 Nov 2022 04:11:48 -0800 (PST)
+From:   Marcus Folkesson <marcus.folkesson@gmail.com>
+To:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Marcus Folkesson <marcus.folkesson@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
+Subject: [PATCH v2] HID: hid-cmedia: use device managed resources
+Date:   Thu, 17 Nov 2022 13:13:04 +0100
+Message-Id: <20221117121304.5516-1-marcus.folkesson@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,23 +70,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+When we do not need to free() any memory in .remove, we can remove
+cmhid_remove as well.
+hid_device_remove() will call hid_hw_stop() as default .remove function
+if no function is specified.
 
-On Tue, 2022-11-15 at 09:55 +0800, Li zeming wrote:
-> The packet pointer is assigned first. It does not need to initialize the
-> assignment.
-> 
-> Signed-off-by: Li zeming <zeming@nfschina.com>
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+---
+ drivers/hid/hid-cmedia.c | 27 +++++----------------------
+ 1 file changed, 5 insertions(+), 22 deletions(-)
 
-I'm sorry, but IMHO the commit message is quite unclear, I suggest to
-re-phrase to something alike:
-
-"""
-The 'packet' pointer is always set in the later code, no need to
-initialize it at definition time.
-"""
-
-Thanks,
-
-Paolo
+diff --git a/drivers/hid/hid-cmedia.c b/drivers/hid/hid-cmedia.c
+index cab42047bc99..8b0007168afb 100644
+--- a/drivers/hid/hid-cmedia.c
++++ b/drivers/hid/hid-cmedia.c
+@@ -145,11 +145,9 @@ static int cmhid_probe(struct hid_device *hid, const struct hid_device_id *id)
+ 	int ret;
+ 	struct cmhid *cm;
+ 
+-	cm = kzalloc(sizeof(struct cmhid), GFP_KERNEL);
+-	if (!cm) {
+-		ret = -ENOMEM;
+-		goto allocfail;
+-	}
++	cm = devm_kzalloc(&hid->dev, sizeof(struct cmhid), GFP_KERNEL);
++	if (!cm)
++		return -ENOMEM;
+ 
+ 	cm->hid = hid;
+ 
+@@ -159,30 +157,16 @@ static int cmhid_probe(struct hid_device *hid, const struct hid_device_id *id)
+ 	ret = hid_parse(hid);
+ 	if (ret) {
+ 		hid_err(hid, "parse failed\n");
+-		goto fail;
++		return ret;
+ 	}
+ 
+ 	ret = hid_hw_start(hid, HID_CONNECT_DEFAULT | HID_CONNECT_HIDDEV_FORCE);
+-	if (ret) {
++	if (ret)
+ 		hid_err(hid, "hw start failed\n");
+-		goto fail;
+-	}
+ 
+-	return 0;
+-fail:
+-	kfree(cm);
+-allocfail:
+ 	return ret;
+ }
+ 
+-static void cmhid_remove(struct hid_device *hid)
+-{
+-	struct cmhid *cm = hid_get_drvdata(hid);
+-
+-	hid_hw_stop(hid);
+-	kfree(cm);
+-}
+-
+ static const struct hid_device_id cmhid_devices[] = {
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_CMEDIA, USB_DEVICE_ID_CM6533) },
+ 	{ }
+@@ -195,7 +179,6 @@ static struct hid_driver cmhid_driver = {
+ 	.raw_event = cmhid_raw_event,
+ 	.input_configured = cmhid_input_configured,
+ 	.probe = cmhid_probe,
+-	.remove = cmhid_remove,
+ 	.input_mapping = cmhid_input_mapping,
+ };
+ 
+-- 
+2.38.1
 
