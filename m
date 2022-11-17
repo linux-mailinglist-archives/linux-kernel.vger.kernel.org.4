@@ -2,166 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A788462D288
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 06:01:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBC5062D25B
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 05:33:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238854AbiKQFBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 00:01:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57888 "EHLO
+        id S239220AbiKQEdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 23:33:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234681AbiKQFBb (ORCPT
+        with ESMTP id S233363AbiKQEds (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 00:01:31 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9CAE654E4;
-        Wed, 16 Nov 2022 21:01:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1668661279; x=1700197279;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=KtXZOYbD4plLDa2Ad1WCAaIg5uR0r+ACgPobtXvRYeU=;
-  b=hnWPIQBaJEGKYFGXoeJGNXpiLaWr64RQ4bDJEjv4Y9j9kZCPKU6ZV5In
-   QrzzObErA0/+EKbsmrkbhbCifiwAuws1DYtRxJcIOk2Mz4+5glTPcVrHK
-   HUcqVY+XLu4SiNdYhUN4YJPxDPp1OAFCn4DUwb440zwJhm1V1Qy4hOU1R
-   xF8X0UdjtSkusVBcNF8FNMhZUgdWJjsJ2y9zu5kWSxCtRPpo68JAr66qI
-   zK+ortNYNbIvmHkI03CNTRNeT9vijQezFCgkxRUbnSMdmLbNC5kcQDxpN
-   2HQ1Vd9VLKPT1Z1YHgXT/7Y3SC99JShz69zOPKEgLMm26F8PBSC9UJXHC
-   A==;
-X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
-   d="scan'208";a="187387079"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Nov 2022 22:01:18 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+        Wed, 16 Nov 2022 23:33:48 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C5B92704;
+        Wed, 16 Nov 2022 20:33:47 -0800 (PST)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NCRqm6CD7zRpGY;
+        Thu, 17 Nov 2022 12:33:24 +0800 (CST)
+Received: from kwepemm600001.china.huawei.com (7.193.23.3) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 16 Nov 2022 22:01:18 -0700
-Received: from CHE-LT-UNGSOFTWARE.microchip.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Wed, 16 Nov 2022 22:01:12 -0700
-From:   Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-serial@vger.kernel.org>
-CC:     <gregkh@linuxfoundation.org>, <jirislaby@kernel.org>,
-        <andriy.shevchenko@linux.intel.com>,
-        <ilpo.jarvinen@linux.intel.com>, <macro@orcam.me.uk>,
-        <jay.dolan@accesio.com>, <cang1@live.co.uk>,
-        <u.kleine-koenig@pengutronix.de>, <wander@redhat.com>,
-        <etremblay@distech-controls.com>, <jk@ozlabs.org>,
-        <biju.das.jz@bp.renesas.com>, <geert+renesas@glider.be>,
-        <phil.edworthy@renesas.com>, <lukas@wunner.de>,
-        <UNGLinuxDriver@microchip.com>, <colin.i.king@gmail.com>,
-        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-Subject: [PATCH v5 tty-next 3/4] 8250: microchip: pci1xxxx: Add RS485 support to quad-uart driver
-Date:   Thu, 17 Nov 2022 10:31:25 +0530
-Message-ID: <20221117050126.2966714-4-kumaravel.thiagarajan@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221117050126.2966714-1-kumaravel.thiagarajan@microchip.com>
-References: <20221117050126.2966714-1-kumaravel.thiagarajan@microchip.com>
+ 15.1.2375.31; Thu, 17 Nov 2022 12:33:44 +0800
+Received: from huawei.com (10.175.113.133) by kwepemm600001.china.huawei.com
+ (7.193.23.3) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 17 Nov
+ 2022 12:33:43 +0800
+From:   Wang Hai <wanghai38@huawei.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <andriy.shevchenko@linux.intel.com>,
+        <liuhangbin@gmail.co>, <masa-korg@dsn.okisemi.com>
+CC:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
+Subject: [PATCH net] net: pch_gbe: fix potential memleak in pch_gbe_tx_queue()
+Date:   Thu, 17 Nov 2022 14:55:27 +0800
+Message-ID: <20221117065527.71103-1-wanghai38@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.175.113.133]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600001.china.huawei.com (7.193.23.3)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pci1xxxx uart supports RS485 mode of operation in the hardware with
-auto-direction control with configurable delay for releasing RTS after
-the transmission. This patch adds support for the RS485 mode.
+In pch_gbe_xmit_frame(), NETDEV_TX_OK will be returned whether
+pch_gbe_tx_queue() sends data successfully or not, so pch_gbe_tx_queue()
+needs to free skb before returning. But pch_gbe_tx_queue() returns without
+freeing skb in case of dma_map_single() fails. Add dev_kfree_skb_any()
+to fix it.
 
-Co-developed-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-Signed-off-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-Signed-off-by: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+Fixes: 77555ee72282 ("net: Add Gigabit Ethernet driver of Topcliff PCH")
+Signed-off-by: Wang Hai <wanghai38@huawei.com>
 ---
-Changes in v5:
-- Removed unnecessary assignments
-- Corrected styling issues in comments
+ drivers/net/ethernet/oki-semi/pch_gbe/pch_gbe_main.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Changes in v4:
-- No Change
-
-Changes in v3:
-- Remove flags sanitization in driver which is taken care in core
-
-Changes in v2:
-- move pci1xxxx_rs485_config to a separate patch with
-  pci1xxxx_rs485_supported.
----
- drivers/tty/serial/8250/8250_pci1xxxx.c | 50 +++++++++++++++++++++++++
- 1 file changed, 50 insertions(+)
-
-diff --git a/drivers/tty/serial/8250/8250_pci1xxxx.c b/drivers/tty/serial/8250/8250_pci1xxxx.c
-index 02b9c6959dcc..bead9fd4019e 100644
---- a/drivers/tty/serial/8250/8250_pci1xxxx.c
-+++ b/drivers/tty/serial/8250/8250_pci1xxxx.c
-@@ -139,6 +139,54 @@ static void pci1xxxx_set_divisor(struct uart_port *port, unsigned int baud,
- 	       port->membase + UART_BAUD_CLK_DIVISOR_REG);
- }
- 
-+static int pci1xxxx_rs485_config(struct uart_port *port,
-+				 struct ktermios *termios,
-+				 struct serial_rs485 *rs485)
-+{
-+	u32 clock_div = readl(port->membase + UART_BAUD_CLK_DIVISOR_REG);
-+	u8 delay_in_baud_periods;
-+	u32 baud_period_in_ns;
-+	u32 data = 0;
-+
-+	/*
-+	 * pci1xxxx's uart hardware supports only RTS delay after
-+	 * Tx and in units of bit times to a maximum of 15
-+	 */
-+	if (rs485->flags & SER_RS485_ENABLED) {
-+		data = ADCL_CFG_EN | ADCL_CFG_PIN_SEL;
-+
-+		if (!(rs485->flags & SER_RS485_RTS_ON_SEND))
-+			data |= ADCL_CFG_POL_SEL;
-+
-+		if (rs485->delay_rts_after_send) {
-+			baud_period_in_ns =
-+				FIELD_GET(BAUD_CLOCK_DIV_INT_MSK, clock_div) *
-+				UART_BIT_SAMPLE_CNT;
-+			delay_in_baud_periods =
-+				(rs485->delay_rts_after_send * NSEC_PER_MSEC) /
-+				baud_period_in_ns;
-+			delay_in_baud_periods =
-+				min_t(u8, delay_in_baud_periods,
-+				      FIELD_MAX(ADCL_CFG_RTS_DELAY_MASK));
-+			data |= FIELD_PREP(ADCL_CFG_RTS_DELAY_MASK,
-+					   delay_in_baud_periods);
-+			rs485->delay_rts_after_send =
-+				(baud_period_in_ns * delay_in_baud_periods) /
-+				NSEC_PER_MSEC;
-+			rs485->delay_rts_before_send = 0;
-+		}
-+	}
-+	writel(data, port->membase + ADCL_CFG_REG);
-+	return 0;
-+}
-+
-+static const struct serial_rs485 pci1xxxx_rs485_supported = {
-+	.flags = SER_RS485_ENABLED | SER_RS485_RTS_ON_SEND |
-+		 SER_RS485_RTS_AFTER_SEND,
-+	.delay_rts_after_send = 1,
-+	/* Delay RTS before send is not supported */
-+};
-+
- static int pci1xxxx_setup(struct pci1xxxx_8250 *priv,
- 			  struct uart_8250_port *port, int idx)
- {
-@@ -193,6 +241,8 @@ static int pci1xxxx_setup(struct pci1xxxx_8250 *priv,
- 	port->port.set_termios = serial8250_do_set_termios;
- 	port->port.get_divisor = pci1xxxx_get_divisor;
- 	port->port.set_divisor = pci1xxxx_set_divisor;
-+	port->port.rs485_config = pci1xxxx_rs485_config;
-+	port->port.rs485_supported = pci1xxxx_rs485_supported;
- 	ret = serial8250_pci_setup_port(priv->dev, port, 0, offset, 0);
- 	if (ret < 0)
- 		return ret;
+diff --git a/drivers/net/ethernet/oki-semi/pch_gbe/pch_gbe_main.c b/drivers/net/ethernet/oki-semi/pch_gbe/pch_gbe_main.c
+index 3f2c30184752..c9ae47128a07 100644
+--- a/drivers/net/ethernet/oki-semi/pch_gbe/pch_gbe_main.c
++++ b/drivers/net/ethernet/oki-semi/pch_gbe/pch_gbe_main.c
+@@ -1143,6 +1143,7 @@ static void pch_gbe_tx_queue(struct pch_gbe_adapter *adapter,
+ 		buffer_info->dma = 0;
+ 		buffer_info->time_stamp = 0;
+ 		tx_ring->next_to_use = ring_num;
++		dev_kfree_skb_any(skb);
+ 		return;
+ 	}
+ 	buffer_info->mapped = true;
 -- 
-2.25.1
+2.17.1
 
