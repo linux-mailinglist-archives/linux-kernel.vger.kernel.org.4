@@ -2,137 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9AF062E279
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:02:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81F8F62E275
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:02:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240392AbiKQRCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 12:02:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34424 "EHLO
+        id S240338AbiKQRB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 12:01:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240452AbiKQRBe (ORCPT
+        with ESMTP id S240433AbiKQRBe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 17 Nov 2022 12:01:34 -0500
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BEFA76160;
-        Thu, 17 Nov 2022 09:01:16 -0800 (PST)
-Received: by mail-wr1-f50.google.com with SMTP id y16so4829605wrt.12;
-        Thu, 17 Nov 2022 09:01:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TCtKsbdbGCL0+efRLWW3g52mJNVL+7oDz6rW5IEN9zQ=;
-        b=FVWcwWwIlSooynuz4s9nJ0yRdsAIXNlvau1VbDoEGl6z0ynrsuZdPrmvC7PFaNOOVE
-         ftLVTJFxpEDHGFUK6peRxtUT9HXYjYNGDFdCf29HC7DM7o41Dpxe06aGa9ZlRkUsF+GV
-         BknVoWh2hilFO5oDxUH6yaj1mDtROK4EZ5AgVbEOW2cj24u/3V2sMIBuLQU+EtNdzekH
-         mrKaAenbTBgcsGBvDHX8RJFbNAltNxsVRQMjv1mEcq54M/DhCcxTTOu0xpsuE0NmsbAJ
-         IuTC/8P8lAFhcwrcHPEkPqYUwVJyWjMqgfgCNrzCO38cyBLXJnpVEPQMal7bF0eQ4Z7O
-         PnYA==
-X-Gm-Message-State: ANoB5pndIEjBoLtvnyb9t8f5NKFC/KBEWONktrwtt9kPu727Tc6Liepm
-        FtZiv0WtswZzYwry/hn18pI=
-X-Google-Smtp-Source: AA0mqf7E6EBcNgl7/0rKpmjSNjeqcv15ZypUN6Bh7EtNRf6vRUVAjnCbO/f4FevAbKhhgNYSiA+ZCw==
-X-Received: by 2002:a05:6000:61a:b0:236:8a38:66f1 with SMTP id bn26-20020a056000061a00b002368a3866f1mr2043698wrb.327.1668704470746;
-        Thu, 17 Nov 2022 09:01:10 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id r4-20020a05600c35c400b003c6b874a0dfsm2164698wmq.14.2022.11.17.09.01.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 09:01:10 -0800 (PST)
-Date:   Thu, 17 Nov 2022 17:01:03 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     Wei Liu <wei.liu@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
-Subject: Re: [Patch v3 13/14] PCI: hv: Add hypercalls to read/write MMIO space
-Message-ID: <Y3Zoz2VcpXlhlazS@liuwe-devbox-debian-v2>
-References: <1668624097-14884-1-git-send-email-mikelley@microsoft.com>
- <1668624097-14884-14-git-send-email-mikelley@microsoft.com>
- <Y3ZQVpkS0Hr4LsI2@liuwe-devbox-debian-v2>
- <SN6PR2101MB16939A620AE1C8C7D98816A5D7069@SN6PR2101MB1693.namprd21.prod.outlook.com>
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE5637C033;
+        Thu, 17 Nov 2022 09:01:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=Vmi6/RojD9d1OxFKL4E7Z1ad9Xu2eaOWEvbqfcXEucU=; b=atuTIcZYof2OikVaDi2a/irx4/
+        k/aN4pt24Bz1QrGqRk3h+E2CnMAVSEGu5d+kLIFJ1ihdP+n6Q+m29Dl9hTpVGd8XLyqWuGzhHgDHJ
+        NKEMrfT5+mrPjNLhvfUFVvZFyK9kum1Ll2G1bak/fNSuGNgE5wSlq7QDcYpW7ywnrjBFtrvz8wBlI
+        x5SoItlev/9/36Wp+yzpsOHBnT9AbxU0ed+MU65fDJwcHGadtJ/rSceZIrTziOTkFzvOywMKeDIkd
+        jbMOotCoxmhRJdd3Ql1zItsDWsEeWH2fNXXgCT5L0hBI14qD0+exyOjwKv3Dzey48OS/1OeLqAS3P
+        gd69Ktaw==;
+Received: from [2601:1c2:d80:3110::a2e7]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oviGF-00GH03-Jy; Thu, 17 Nov 2022 17:01:11 +0000
+Message-ID: <e2948e8b-6e00-abbb-0948-017e7fd584f6@infradead.org>
+Date:   Thu, 17 Nov 2022 09:01:11 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <SN6PR2101MB16939A620AE1C8C7D98816A5D7069@SN6PR2101MB1693.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v1 1/2] math64: favor kernel-doc from header files
+Content-Language: en-US
+To:     Liam Beguin <liambeguin@gmail.com>, corbet@lwn.net
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221117023510.2338176-1-liambeguin@gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20221117023510.2338176-1-liambeguin@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 04:14:44PM +0000, Michael Kelley (LINUX) wrote:
-> From: Wei Liu <wei.liu@kernel.org> Sent: Thursday, November 17, 2022 7:17 AM
-> >
-> > On Wed, Nov 16, 2022 at 10:41:36AM -0800, Michael Kelley wrote:
-> > [...]
-> > >
-> > > +static void hv_pci_read_mmio(struct device *dev, phys_addr_t gpa, int size, u32
-> > *val)
-> > > +{
-> > > +	struct hv_mmio_read_input *in;
-> > > +	struct hv_mmio_read_output *out;
-> > > +	u64 ret;
-> > > +
-> > > +	/*
-> > > +	 * Must be called with interrupts disabled so it is safe
-> > > +	 * to use the per-cpu input argument page.  Use it for
-> > > +	 * both input and output.
-> > > +	 */
-> > 
-> > Perhaps adding something along this line?
-> > 
-> > 	WARN_ON(!irqs_disabled());
-> > 
-> > I can fold this in if you agree.
+Hi--
+
+On 11/16/22 18:35, Liam Beguin wrote:
+> Fix the kernel-doc markings for div64 functions to point to the header
+> file instead of the lib/ directory.  This avoids having implementation
+> specific comments in generic documentation.  Furthermore, given that
+> some kernel-doc comments are identical, drop them from lib/math64 and
+> only keep there comments that add implementation details.
 > 
-> These two new functions are only called within this module from code
-> that already has interrupts disabled (as added in Patch 14 of the series),
-> so I didn't do the extra check.  But I'm OK with adding it.  These functions
-> make a hypercall, so the additional check doesn't have enough perf
-> impact to matter.
+> Signed-off-by: Liam Beguin <liambeguin@gmail.com>
 
-Okay, not adding them is fine too.
+LGTM.
 
-Thanks,
-Wei.
+Could you also fix these 2 warnings?
+
+math64.h:126: warning: No description found for return value of 'div_u64'
+math64.h:139: warning: No description found for return value of 'div_s64'
+
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Tested-by: Randy Dunlap <rdunlap@infradead.org>
+
+Thanks.
+
+> ---
+>  Documentation/core-api/kernel-api.rst |  3 ---
+>  include/linux/math64.h                | 12 ++++++------
+>  lib/math/div64.c                      | 15 ++-------------
+>  3 files changed, 8 insertions(+), 22 deletions(-)
+
+-- 
+~Randy
