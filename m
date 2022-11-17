@@ -2,111 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7436E62E022
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:40:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2EA762E02E
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:42:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239613AbiKQPkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 10:40:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51746 "EHLO
+        id S234614AbiKQPma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 10:42:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239562AbiKQPkH (ORCPT
+        with ESMTP id S230383AbiKQPm2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 10:40:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF5062609;
-        Thu, 17 Nov 2022 07:40:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E336F61F86;
-        Thu, 17 Nov 2022 15:40:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15C57C433C1;
-        Thu, 17 Nov 2022 15:40:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668699605;
-        bh=Mc4ySWjClUjGsVC0d00yorexigtt/BL4IyUH3iK7Dms=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=esYymimzQxLQyT1zPNhzzNLMA9P11nnWOpGfhtQLbqqh32cB/bCL8RMeYTXChwavj
-         m6D777/MjK1+PH1gMGESslKB28HOG3RkUWpndfXnTwvKVwmorWa85rssjI4He7JrOX
-         XC/T0uRDs7yoIYUuvo4QVJR9VRsfmpdAzECzg0pdqGF/bSm0R3/GpnEpeTfVPmmvtK
-         lWi6jzj5dCx9iz4/Y1lBHmh1uZbOWC8EdPc3hjE6IvyKHZMZjg1vieesWw+8IrPkmz
-         P1wzog4efm6zpl9UzRl4JqsPRZrm6zypANXpCmDa3H4VWWJmMcI6HLwaqmfeyCMWOb
-         5LXb2WH+w7xnw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 3AF294034E; Thu, 17 Nov 2022 12:40:00 -0300 (-03)
-Date:   Thu, 17 Nov 2022 12:40:00 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH 0/6] Build output clean up
-Message-ID: <Y3ZV0FDW70ADoIYE@kernel.org>
-References: <20221117004356.279422-1-irogers@google.com>
+        Thu, 17 Nov 2022 10:42:28 -0500
+X-Greylist: delayed 6147 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Nov 2022 07:42:26 PST
+Received: from xry111.site (xry111.site [IPv6:2001:470:683e::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DAECB5D;
+        Thu, 17 Nov 2022 07:42:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1668699742;
+        bh=aJ3Su7Id8fFh36dDnfD7Im9eQ/HKaolYvEEtMS4T6wA=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=gcnqWlsJVFIti3S36UCLPp6LZWk61Yum6VxXfUEEo4xF3bzMGzkJwph+NBHUoWZFQ
+         +1XyIzoo2E9NcQI+br42vmJf0KXrTfNAGUhS2wgJl36idviXeRB4RUxnxHUh5GWZI1
+         E5Jxa6DoZmf1A2F3e6ZkZKKVJLO93ciY9CMFCDSc=
+Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id 61F7565DD0;
+        Thu, 17 Nov 2022 10:42:19 -0500 (EST)
+Message-ID: <b402098421927699db853e5e05fbb9d48fa24886.camel@xry111.site>
+Subject: Re: [PATCH 04/47] LoongArch: Set _PAGE_DIRTY only if _PAGE_WRITE is
+ set in {pmd,pte}_mkdirty()
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     Huacai Chen <chenhuacai@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Peter Xu <peterx@redhat.com>
+Date:   Thu, 17 Nov 2022 23:42:17 +0800
+In-Reply-To: <b1707e1c04a6a9b91fd5f70ea012b5bcc764516e.camel@xry111.site>
+References: <20221117042532.4064448-1-chenhuacai@loongson.cn>
+         <b1707e1c04a6a9b91fd5f70ea012b5bcc764516e.camel@xry111.site>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.0 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221117004356.279422-1-irogers@google.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        PDS_OTHER_BAD_TLD,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, Nov 16, 2022 at 04:43:50PM -0800, Ian Rogers escreveu:
-> Reduce build spam from commands not prefixed with @. Make
-> install_headers targets distinguishable by adding in the library name
-> so:
-> INSTALL headers
-> becomes:
-> INSTALL libapi_headers
-> 
-> Ian Rogers (6):
->   tools lib api: clean up install_headers
->   tools lib bpf: Avoid install_headers make warning
->   tools lib symbol: clean up build output
->   tools lib perf: Make install_headers clearer
->   tools lib subcmd: Make install_headers clearer
->   tools lib traceevent: Make install_headers clearer
+On Thu, 2022-11-17 at 21:59 +0800, Xi Ruoyao wrote:
+> Hi Huacai,
+>=20
+> On Thu, 2022-11-17 at 12:25 +0800, Huacai Chen wrote:
+> > Now {pmd,pte}_mkdirty() set _PAGE_DIRTY bit unconditionally, this cause=
+s
+> > random segmentation fault after commit 0ccf7f168e17bb7e ("mm/thp: carry
+> > over dirty bit when thp splits on pmd").
+>=20
+> Hmm, the pte_mkdirty call is already removed in commit 624a2c94f5b7a081
+> ("Partly revert \"mm/thp: carry over dirty bit when thp splits on
+> pmd\"").
+>=20
+> Not sure if this issue is related to some random segfaults I've observed
+> recently though.=C2=A0 My last kernel build contains 0ccf7f168e17bb7e but
+> does not contain 624a2c94f5b7a081.
 
-Andrii, are you ok with that? Can I carry this on my next (perf/core)
-branch?
+I can confirm this patch alone (without 624a2c94f5b7a081) fixes the
+random segfaults I've recently encountered running GCC testsuite.
 
-Testing it now.
+Link: https://gcc.gnu.org/pipermail/gcc/2022-November/239857.html
+Tested-by: Xi Ruoyao <xry111@xry111.site>
 
-- Arnaldo
- 
->  tools/lib/api/Makefile        | 4 ++--
->  tools/lib/bpf/Makefile        | 1 +
->  tools/lib/perf/Makefile       | 2 +-
->  tools/lib/subcmd/Makefile     | 2 +-
->  tools/lib/symbol/Makefile     | 4 ++--
->  tools/lib/traceevent/Makefile | 4 ++--
->  6 files changed, 9 insertions(+), 8 deletions(-)
-> 
-> -- 
-> 2.38.1.431.g37b22c650d-goog
-
--- 
-
-- Arnaldo
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University
