@@ -2,136 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 720A662E77D
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 22:59:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BEF562E78C
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 23:00:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241046AbiKQV7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 16:59:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38080 "EHLO
+        id S241118AbiKQWAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 17:00:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241034AbiKQV62 (ORCPT
+        with ESMTP id S241015AbiKQV7x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 16:58:28 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D79B72137
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 13:57:37 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668722255;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=H9wRa3+GgKpIPdNjGF7czujjEWj4rhvBPlhM04JuIGc=;
-        b=GPjEw4ohnKxxTXMP0QjYmPRAi1tg3AqjLKZhdQlipua+zmyga4zkcEZRpAFamqacqtrdM3
-        Pg6wLCxaySUywhXyIeME7F0WxchY2oqxwFS1MD4kQru7guXvPd4FXx/ksbKT/7LgHEhCDS
-        XBRJQa+MGdkCBConzPG2o6j1ED7jyOudF0LH3ztrTaADQtDwos9ajxqZBzFkvEhZS8jjIJ
-        ceXilqFbxGxOUauIXLF5Pop5OrFQaGOTMgwNmluyG9TVltuRpVIzEf4HWUz2WvKZsIbDc7
-        YtMK25WGFnUvsKpt//iI9gIJ91kdCGQFWJu42HwUBVHRdZ5JepSJbPE9v6zOfw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668722255;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=H9wRa3+GgKpIPdNjGF7czujjEWj4rhvBPlhM04JuIGc=;
-        b=uich/CXUIOK8gag1wFkTT2aKcnGbePGvFDrHwURV1DTLHev9M3wLvcmhLD3pWJDuWy5e82
-        r4CttknM+Lxpv3BA==
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, john.stultz@linaro.org,
-        sboyd@kernel.org, corbet@lwn.net, Mark.Rutland@arm.com,
-        maz@kernel.org, kernel-team@meta.com, neeraju@codeaurora.org,
-        ak@linux.intel.com, feng.tang@intel.com, zhengjun.xing@intel.com,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Chris Mason <clm@meta.com>, John Stultz <jstultz@google.com>,
-        Waiman Long <longman@redhat.com>
-Subject: Re: [PATCH clocksource 1/3] clocksource: Reject bogus watchdog
- clocksource measurements
-In-Reply-To: <20221114232827.835599-1-paulmck@kernel.org>
-References: <20221114232807.GA834337@paulmck-ThinkPad-P17-Gen-1>
- <20221114232827.835599-1-paulmck@kernel.org>
-Date:   Thu, 17 Nov 2022 22:57:34 +0100
-Message-ID: <87mt8pkzw1.ffs@tglx>
+        Thu, 17 Nov 2022 16:59:53 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E42A6455
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 13:58:30 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id f201so3521285yba.12
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 13:58:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=RgumxfwxThuKjg8yg5dtYwukRopRTEm6oZ8ITbTV/uo=;
+        b=n0G5zTHzacXIAgd7mjoenJz/ejLGbNkXRpZgXMFWraIDIofsRa35jrgZzI2vzpdKpL
+         tV0iwsPhA5gMQ7FOJHSPGarwOvUmleFDr5vJOQUVHEndQbzY/23HGZqRQ7MJ0MhZhodb
+         3cD5JxvfGWMNgJY6C14G7j6ZcaPlFnKNZSpXXSwnL/fvDjEDRdPQEHF1a4fSExQzdhWB
+         Ykbq3UH4TzgdXUBNtG9af4zSV65gx/dDsE2AxLAqD5xdZQ6kNJG4OX0bnE4l4Ooho7aJ
+         wjkf3TM8Pdm+YiJiF2qPaF6CcQ4kklcB0W8PHt8d+h0WmSbRsEo2r2HluVOW6J/ehPo3
+         YP5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RgumxfwxThuKjg8yg5dtYwukRopRTEm6oZ8ITbTV/uo=;
+        b=suzAcB7dlktzqCgJ4LiF72czGvQ6GBQk4N+tb5gQhVWXBi51hHkwvxF2M4sNKxEYZq
+         whQPiAX7duHiDmc4I6Q5vLYTX/Vd4NKyuGr4MkWinaywnh6CbtXsaQqANAgnkNVzCx9/
+         iynb/m4uiGRzsgVlavSAxf4YzCo0cF2YqCu7E5UNDAhK8qSTGsx4BaCS/4ICrOWNeRfD
+         rBZdpNhgAywuwhhsXYFrGJtcI1kK9cLTI+UBmXVb2GELzqTQZYcW4NBVLUplcuPVm9v9
+         St27dlws3qPTB4uVHCafTup9oo2SGoSAPEC9N/jokxn6znzLSdR8dW8eYdN9aBlixnBQ
+         WLFQ==
+X-Gm-Message-State: ANoB5pl6/7dJ+CKYwSOHhSd/NfvJvBnfBiyz1Ps4nb7vkYhJxr49jB9Z
+        sDZSXDYH0nBCrzJctuxiPjRsrZdCKvJxH+vsvWNaRnq1DINakQ==
+X-Google-Smtp-Source: AA0mqf4Yigljrmxq3yh0btTQMbgwSgrKFFiBC27fc/y57fyL+Q0/akvblcaxWH12hdyVzF7CHnhhPaGMuiEHJN1pwbo=
+X-Received: by 2002:a05:6902:11cd:b0:6e7:f2ba:7c0f with SMTP id
+ n13-20020a05690211cd00b006e7f2ba7c0fmr2115271ybu.55.1668722309460; Thu, 17
+ Nov 2022 13:58:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221117031551.1142289-1-joel@joelfernandes.org> <20221117031551.1142289-2-joel@joelfernandes.org>
+In-Reply-To: <20221117031551.1142289-2-joel@joelfernandes.org>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Thu, 17 Nov 2022 13:58:18 -0800
+Message-ID: <CANn89iK345JjXoCAPYK6hZF99zBBWRM1z7xCWbstQJLb4aBGQg@mail.gmail.com>
+Subject: Re: [PATCH rcu/dev 2/3] net: Use call_rcu_flush() for in_dev_rcu_put
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc:     linux-kernel@vger.kernel.org, Cong Wang <xiyou.wangcong@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Jiri Pirko <jiri@resnulli.us>, netdev@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>, rcu@vger.kernel.org,
+        rostedt@goodmis.org, paulmck@kernel.org, fweisbec@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Paul!
+On Wed, Nov 16, 2022 at 7:16 PM Joel Fernandes (Google)
+<joel@joelfernandes.org> wrote:
+>
+> In a networking test on ChromeOS, we find that using the new CONFIG_RCU_LAZY
+> causes a networking test to fail in the teardown phase.
+>
+> The failure happens during: ip netns del <name>
+>
+> Using ftrace, I found the callbacks it was queuing which this series fixes. Use
+> call_rcu_flush() to revert to the old behavior. With that, the test passes.
+>
+> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> ---
+>  net/ipv4/devinet.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/net/ipv4/devinet.c b/net/ipv4/devinet.c
+> index e8b9a9202fec..98b20f333e00 100644
+> --- a/net/ipv4/devinet.c
+> +++ b/net/ipv4/devinet.c
+> @@ -328,7 +328,7 @@ static void inetdev_destroy(struct in_device *in_dev)
+>         neigh_parms_release(&arp_tbl, in_dev->arp_parms);
+>         arp_ifdown(dev);
+>
+> -       call_rcu(&in_dev->rcu_head, in_dev_rcu_put);
+> +       call_rcu_flush(&in_dev->rcu_head, in_dev_rcu_put);
+>  }
 
-On Mon, Nov 14 2022 at 15:28, Paul E. McKenney wrote:
->  
-> +		/* Check for bogus measurements. */
-> +		wdi = jiffies_to_nsecs(WATCHDOG_INTERVAL);
-> +		if (wd_nsec < (wdi >> 2)) {
-> +			pr_warn("timekeeping watchdog on CPU%d: Watchdog clocksource '%s' advanced only %lld ns during %d-jiffy time interval, skipping watchdog check.\n", smp_processor_id(), watchdog->name, wd_nsec, WATCHDOG_INTERVAL);
-> +			continue;
-> +		}
-> +		if (wd_nsec > (wdi << 2)) {
-> +			pr_warn("timekeeping watchdog on CPU%d: Watchdog clocksource '%s' advanced an excessive %lld ns during %d-jiffy time interval, probable CPU overutilization, skipping watchdog check.\n", smp_processor_id(), watchdog->name, wd_nsec, WATCHDOG_INTERVAL);
-> +			continue;
-> +		}
+For this one, I suspect the issue is about device refcount lingering ?
 
-This is really getting ridiculous.
+I think we should release refcounts earlier (and only delegate the
+freeing part after RCU grace period, which can be 'lazy' just fine)
 
-The clocksource watchdog is supposed to run periodically with period =
-WATCHDOG_INTERVAL.
+Something like:
 
-That periodic schedule depends on the clocksource which is monitored. If
-the clocksource runs fast the period is shortened and if it runs slow is
-prolonged.
+diff --git a/net/ipv4/devinet.c b/net/ipv4/devinet.c
+index e8b9a9202fecd913137f169f161dfdccc16f7edf..e0258aef4211ec6a72d062963470a32776e6d010
+100644
+--- a/net/ipv4/devinet.c
++++ b/net/ipv4/devinet.c
+@@ -234,13 +234,21 @@ static void inet_free_ifa(struct in_ifaddr *ifa)
+        call_rcu(&ifa->rcu_head, inet_rcu_free_ifa);
+ }
 
-Now you add checks:
++static void in_dev_free_rcu(struct rcu_head *head)
++{
++       struct in_device *idev = container_of(head, struct in_device, rcu_head);
++
++       kfree(rcu_dereference_protected(idev->mc_hash, 1));
++       kfree(idev);
++}
++
+ void in_dev_finish_destroy(struct in_device *idev)
+ {
+        struct net_device *dev = idev->dev;
 
- 1) If the period observed by the watchdog clocksource is less than 1/4
-    of the expected period, everything is fine.
+        WARN_ON(idev->ifa_list);
+        WARN_ON(idev->mc_list);
+-       kfree(rcu_dereference_protected(idev->mc_hash, 1));
++
+ #ifdef NET_REFCNT_DEBUG
+        pr_debug("%s: %p=%s\n", __func__, idev, dev ? dev->name : "NIL");
+ #endif
+@@ -248,7 +256,7 @@ void in_dev_finish_destroy(struct in_device *idev)
+        if (!idev->dead)
+                pr_err("Freeing alive in_device %p\n", idev);
+        else
+-               kfree(idev);
++               call_rcu(&idev->rcu_head, in_dev_free_rcu);
+ }
+ EXPORT_SYMBOL(in_dev_finish_destroy);
 
- 2) If the period observed by the watchdog clocksource is greater than 4
-    times the expected period, everything is fine.
+@@ -298,12 +306,6 @@ static struct in_device *inetdev_init(struct
+net_device *dev)
+        goto out;
+ }
 
-IOW, you are preventing detection of one class of problems which caused
-us to implement the watchdog clocksource in the first place.
+-static void in_dev_rcu_put(struct rcu_head *head)
+-{
+-       struct in_device *idev = container_of(head, struct in_device, rcu_head);
+-       in_dev_put(idev);
+-}
+-
+ static void inetdev_destroy(struct in_device *in_dev)
+ {
+        struct net_device *dev;
+@@ -328,7 +330,7 @@ static void inetdev_destroy(struct in_device *in_dev)
+        neigh_parms_release(&arp_tbl, in_dev->arp_parms);
+        arp_ifdown(dev);
 
-You are preventing it by making the watchdog decision circular dependent
-on the clocksource it is supposed to watch. IOW, you put a fox in charge
-of the henhouse. That's a really brilliant plan.
+-       call_rcu(&in_dev->rcu_head, in_dev_rcu_put);
++       in_dev_put(in_dev);
+ }
 
-But what's worse is the constant stream of heuristics which make the
-clocksource watchdog "work" under workloads which are simply impossible
-to be handled by its current implementation.
-
-If I look at the full set of them by now, I'm pretty sure that a real
-TSC fail would not be noticed anymore because there are more exceptions
-and excuses why a particular measurement it bogus or invalid or
-whatever.
-
-I didn't do a full analysis yet, but I have a hard time to convince
-myself that - assumed we add this gem - the watchdog will be anything
-else than a useless waste of CPU cycles as there is always one of the
-heuristics declaring that everything is fine along with incomprehensible
-messages in dmesg which will create more confusion to most people than
-being helpful.
-
-This is hunting us for 20+ years now and why do we still need this? I'm
-pretty sure that farcebook does not run their server farms on 20 years
-old silicon.
-
-That means even the largest customers have not been able to convince the
-CPU manufactures to fix this idiocy by now, right? Either that or they
-did not even try because it's simpler to "fix" it in software.
-
-That's the only two explanations I have for the constant stream of
-voodoo logic. Both are just a proof for my claim that this industry just
-"works" by chance.
-
-Can we stop this pretty please and either come up with something
-fundamentally different or just admit defeat and remove the whole thing?
-
-Thanks,
-
-        tglx
-
+ int inet_addr_onlink(struct in_device *in_dev, __be32 a, __be32 b)
