@@ -2,143 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8477C62DFE7
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:32:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A964162DFED
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:34:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234668AbiKQPcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 10:32:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47594 "EHLO
+        id S234866AbiKQPeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 10:34:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233179AbiKQPb4 (ORCPT
+        with ESMTP id S232427AbiKQPeD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 10:31:56 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF604E092
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 07:31:55 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id d13-20020a17090a3b0d00b00213519dfe4aso2305863pjc.2
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 07:31:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YYbyGvr7R4QJ31YRKXqxJVIlaxGSfN/nVPLH9/segYo=;
-        b=bhV42qvhSh6JlAr5LOzLdUDf3KEvgkBFoxSgGMdYhoPh4wNmiNmakO5pya7uYnFNX3
-         9vKnTRjuljBe+GvnX2CkYyrlclqY1/0MWPRPksqKeLO4NhA2lGk5oFt9yTwq7qAyaDQy
-         16zGofSttVBr7KsWP7JC5kJoDoJSMlh/tUIaMbm1gFflZT41h1lXXpfZvGjWMUnexXSC
-         XFbOfhqZ8rRfdbenEkZQfMLMWRZ+KDxBAeflZifNmraa/XKSUNql8j51PuZNSs1hVJDw
-         GmMGb3ZTI2FOYZ7Yes6t/xn8JvLFzyDsxqCyMmVIi3WtCSCO1fEfFREmA+vUGKciNLHl
-         MI8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YYbyGvr7R4QJ31YRKXqxJVIlaxGSfN/nVPLH9/segYo=;
-        b=8KZ+GABKancz9Cl4frLVMksYuOk5Me/yaQgy4ioRsuxlSrpInahUvO1UehRYmU45Ya
-         BzVQEf5DjUW6Z5bWIUL+ax2H8IKa40WdxjfeDkbmB+pU2AlAuyxaHHQOyh4nKBDuJkgC
-         Od3zm484XIJhQYvK9pVOgAnwPW2nMxzWuknbJurWs3ar8jqN4ZKG73EELaDeU34ePmv8
-         ep9I1YfsTAjzd5+8tehO08PeYA6J8/plsRmAlyVz50bBptlpJgrEmKj32HsbnWbr4muR
-         0qNBgR7lx2c2l0glOUqFidlVHwjsQH+0IaeR0hQjkzaFaZbnEVzYTjHhdCuVrX/BFwhR
-         fiTQ==
-X-Gm-Message-State: ANoB5pmC3PWMakWAAwbFWgfvqboVsERwaTKNrFdgF4ntt9hyNQzNxwJ+
-        b0NwMQ2xFVztKSZSmFt/ZuETIKmxV1h+o/9Gay5a
-X-Google-Smtp-Source: AA0mqf7PTUB1E6jT7w2n1cqUSGbsHd4TwbTJSD3G3paAWrXk8kz5NT/xoC/cgmw9kA0xw6mqSK8TjJ9No6As8SS+Zq4=
-X-Received: by 2002:a17:902:b097:b0:17b:4ace:b67f with SMTP id
- p23-20020a170902b09700b0017b4aceb67fmr3442926plr.12.1668699115322; Thu, 17
- Nov 2022 07:31:55 -0800 (PST)
+        Thu, 17 Nov 2022 10:34:03 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38CA815FF4;
+        Thu, 17 Nov 2022 07:34:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668699242; x=1700235242;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=fkCAycRFwGIy50cHuUdedfLvL366rnmiKrb/go8o+Dc=;
+  b=PCFnigxqvqaYm6cLXUvcrSJDIb+tFKciZvoGE5mjA6HeIKXDlaoDolhy
+   atOwVswOig1bO3VRHVoIUE3QiKNstNv/iYptysesH5rA0Y1C+mWIfLGKf
+   xrIru7BrEhZStmVqPcfN+Gy+9o1WOEfSYc58s9bxcuOmm470W4SdxH1R2
+   uxdahsI20ji0MwLFiWLl9lIW8eqqeyHhLq9tdKTVrBIQ0Abic7Umz4FFQ
+   +Q9na0Trcvln08zbTHUJwj3wiw9/XX1PaJWlEMoRIS6Dwhat6Pc1FyQew
+   AnNRJw5gH37xOLrQtbdzi/o2MZHbepmtzhl0blMCyhgqcPZyhOsql5ycZ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="377146610"
+X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
+   d="scan'208";a="377146610"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 07:33:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="814551644"
+X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
+   d="scan'208";a="814551644"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005.jf.intel.com with ESMTP; 17 Nov 2022 07:33:36 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ovgtT-00DcyZ-0v;
+        Thu, 17 Nov 2022 17:33:35 +0200
+Date:   Thu, 17 Nov 2022 17:33:35 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     linux-pwm@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH 2/4] pwm: Reduce time the pwm_lock mutex is held in
+ pwmchip_add()
+Message-ID: <Y3ZUT3SNmfInzEv9@smile.fi.intel.com>
+References: <20221115211515.3750209-1-u.kleine-koenig@pengutronix.de>
+ <20221115211515.3750209-3-u.kleine-koenig@pengutronix.de>
+ <Y3SbNM8H3QxY0XF2@smile.fi.intel.com>
+ <20221117140024.o77f5prewt5clgyh@pengutronix.de>
 MIME-Version: 1.0
-References: <20221115175652.3836811-1-roberto.sassu@huaweicloud.com>
- <20221115175652.3836811-4-roberto.sassu@huaweicloud.com> <CAHC9VhTA7SgFnTFGNxOGW38WSkWu7GSizBmNz=TuazUR4R_jUg@mail.gmail.com>
- <83cbff40f16a46e733a877d499b904cdf06949b6.camel@huaweicloud.com>
- <CAHC9VhRX0J8Z61_fH9T5O1ZpRQWSppQekxP8unJqStHuTwQkLQ@mail.gmail.com> <Y3XLgrYbIEpdW0vy@kroah.com>
-In-Reply-To: <Y3XLgrYbIEpdW0vy@kroah.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 17 Nov 2022 10:31:44 -0500
-Message-ID: <CAHC9VhTXegLqVH18AXTYrFPBn1WF0Wu8hbybc1Y5LTr-StFrOw@mail.gmail.com>
-Subject: Re: [RFC][PATCH 3/4] lsm: Redefine LSM_HOOK() macro to add return
- value flags as argument
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Roberto Sassu <roberto.sassu@huaweicloud.com>, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, revest@chromium.org, jackmanb@chromium.org,
-        jmorris@namei.org, serge@hallyn.com, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221117140024.o77f5prewt5clgyh@pengutronix.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 12:50 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> On Wed, Nov 16, 2022 at 05:04:05PM -0500, Paul Moore wrote:
-> > On Wed, Nov 16, 2022 at 3:11 AM Roberto Sassu
-> > <roberto.sassu@huaweicloud.com> wrote:
-> > > On Tue, 2022-11-15 at 21:27 -0500, Paul Moore wrote:
-> > > > On Tue, Nov 15, 2022 at 12:58 PM Roberto Sassu
-> > > > <roberto.sassu@huaweicloud.com> wrote:
-> > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > >
-> > > > > Define four return value flags (LSM_RET_NEG, LSM_RET_ZERO, LSM_RET_ONE,
-> > > > > LSM_RET_GT_ONE), one for each interval of interest (< 0, = 0, = 1, > 1).
-> > > > >
-> > > > > Redefine the LSM_HOOK() macro to add return value flags as argument, and
-> > > > > set the correct flags for each LSM hook.
-> > > > >
-> > > > > Implementors of new LSM hooks should do the same as well.
-> > > > >
-> > > > > Cc: stable@vger.kernel.org # 5.7.x
-> > > > > Fixes: 9d3fdea789c8 ("bpf: lsm: Provide attachment points for BPF LSM programs")
-> > > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > > ---
-> > > > >  include/linux/bpf_lsm.h       |   2 +-
-> > > > >  include/linux/lsm_hook_defs.h | 779 ++++++++++++++++++++--------------
-> > > > >  include/linux/lsm_hooks.h     |   9 +-
-> > > > >  kernel/bpf/bpf_lsm.c          |   5 +-
-> > > > >  security/bpf/hooks.c          |   2 +-
-> > > > >  security/security.c           |   4 +-
-> > > > >  6 files changed, 466 insertions(+), 335 deletions(-)
-> > > >
-> > > > Just a quick note here that even if we wanted to do something like
-> > > > this, it is absolutely not -stable kernel material.  No way.
-> > >
-> > > I was unsure about that. We need a proper fix for this issue that needs
-> > > to be backported to some kernels. I saw this more like a dependency.
-> > > But I agree with you that it would be unlikely that this patch is
-> > > applied to stable kernels.
-> > >
-> > > For stable kernels, what it would be the proper way? We still need to
-> > > maintain an allow list of functions that allow a positive return value,
-> > > at least. Should it be in the eBPF code only?
-> >
-> > Ideally the fix for -stable is the same as what is done for Linus'
-> > kernel (ignoring backport fuzzing), so I would wait and see how that
-> > ends up first.  However, if the patchset for Linus' tree is
-> > particularly large and touches a lot of code, you may need to work on
-> > something a bit more targeted to the specific problem.  I tend to be
-> > more conservative than most kernel devs when it comes to -stable
-> > patches, but if you can't backport the main upstream patchset, smaller
-> > (both in terms of impact and lines changed) is almost always better.
->
-> No, the mainline patch (what is in Linus's tree), is almost always
-> better and preferred for stable backports.  When you diverge, bugs
-> happen, almost every time, and it makes later fixes harder to backport
-> as well.
->
-> But first work on solving the problem in Linus's tree.  Don't worry
-> about stable trees until after the correct solution is merged.
+On Thu, Nov 17, 2022 at 03:00:24PM +0100, Uwe Kleine-König wrote:
+> On Wed, Nov 16, 2022 at 10:11:32AM +0200, Andy Shevchenko wrote:
+> > On Tue, Nov 15, 2022 at 10:15:13PM +0100, Uwe Kleine-König wrote:
+> > > This simplifies error handling as the need for goto error handling goes
+> > > away and at the end of the function the code can be simplified as this
+> > > code isn't used in the error case any more.
 
-Perhaps you missed my very first sentence where I mentioned exactly
-the same things: solve it in Linus' tree first, backports of patches
-in Linus' tree is ideal.
+...
+
+> > > +	mutex_unlock(&pwm_lock);
+> > >  
+> > >  	if (IS_ENABLED(CONFIG_OF))
+> > >  		of_pwmchip_add(chip);
+> > 
+> > Why calling this without a lock is not a problem? Commit message doesn't share
+> > a bit about this change.
+> 
+> Maybe add another paragraph at the end reading:
+> 
+> Now memory allocation and the call to of_pwmchip_add() are done without
+> holding the lock. Both don't access the data structures protected by
+> &pwm_lock.
+
+Good to me, with that added
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
 -- 
-paul-moore.com
+With Best Regards,
+Andy Shevchenko
+
+
