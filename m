@@ -2,78 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E0E662D2D8
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 06:42:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2414E62D2DB
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 06:45:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238876AbiKQFmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 00:42:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42316 "EHLO
+        id S234669AbiKQFpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 00:45:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233899AbiKQFmB (ORCPT
+        with ESMTP id S233899AbiKQFpU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 00:42:01 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1029512AB1;
-        Wed, 16 Nov 2022 21:41:59 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NCTLs4DTfz5BNS0;
-        Thu, 17 Nov 2022 13:41:57 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl2.zte.com.cn with SMTP id 2AH5fkwM060327;
-        Thu, 17 Nov 2022 13:41:46 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Thu, 17 Nov 2022 13:41:47 +0800 (CST)
-Date:   Thu, 17 Nov 2022 13:41:47 +0800 (CST)
-X-Zmail-TransId: 2af96375c99bffffffff8020bc7a
-X-Mailer: Zmail v1.0
-Message-ID: <202211171341474562261@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <vkoul@kernel.org>
-Cc:     <dmaengine@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIGRtYWVuZ2luZTogb2YtZG1hOiBVc2UgZGV2aWNlX21hdGNoX29mX25vZGUoKQ==?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 2AH5fkwM060327
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 6375C9A5.000 by FangMail milter!
-X-FangMail-Envelope: 1668663717/4NCTLs4DTfz5BNS0/6375C9A5.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 6375C9A5.000/4NCTLs4DTfz5BNS0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 17 Nov 2022 00:45:20 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 847505EFB1;
+        Wed, 16 Nov 2022 21:45:18 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2F71713D5;
+        Wed, 16 Nov 2022 21:45:24 -0800 (PST)
+Received: from [10.162.40.18] (unknown [10.162.40.18])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 538693F73B;
+        Wed, 16 Nov 2022 21:45:13 -0800 (PST)
+Message-ID: <a065d948-3b9c-86bf-4a10-45d9c47e7ea1@arm.com>
+Date:   Thu, 17 Nov 2022 11:15:10 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH V5 6/7] arm64/perf: Add BRBE driver
+Content-Language: en-US
+To:     James Clark <james.clark@arm.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, peterz@infradead.org,
+        acme@kernel.org, mark.rutland@arm.com, will@kernel.org,
+        catalin.marinas@arm.com
+References: <20221107062514.2851047-1-anshuman.khandual@arm.com>
+ <20221107062514.2851047-7-anshuman.khandual@arm.com>
+ <1d06f05c-0e7f-7648-6b1b-b78e999bc65f@arm.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <1d06f05c-0e7f-7648-6b1b-b78e999bc65f@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Replace the open-code with device_match_of_node().
 
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/dma/of-dma.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 11/16/22 22:12, James Clark wrote:
+> 
+> 
+> On 07/11/2022 06:25, Anshuman Khandual wrote:
+> [...]
+> 
+>> +static void perf_branch_to_brbcr(struct pmu_hw_events *cpuc, int branch_type)
+>> +{
+>> +	cpuc->brbcr = (BRBCR_EL1_CC | BRBCR_EL1_MPRED);
+>> +
+>> +	if (branch_type & PERF_SAMPLE_BRANCH_USER)
+>> +		cpuc->brbcr |= BRBCR_EL1_E0BRE;
+>> +
+>> +	if (branch_type & PERF_SAMPLE_BRANCH_NO_CYCLES)
+>> +		cpuc->brbcr &= ~BRBCR_EL1_CC;
+>> +
+>> +	if (branch_type & PERF_SAMPLE_BRANCH_NO_FLAGS)
+>> +		cpuc->brbcr &= ~BRBCR_EL1_MPRED;
+>> +
+>> +	if (branch_type & PERF_SAMPLE_BRANCH_KERNEL)
+>> +		cpuc->brbcr |= BRBCR_EL1_E1BRE;
+>> +	else
+>> +		return;
+>> +
+>> +	/*
+>> +	 * The exception and exception return branches could be
+>> +	 * captured only when the event has necessary privilege
+>> +	 * indicated via branch type PERF_SAMPLE_BRANCH_KERNEL,
+>> +	 * which has been ascertained in generic perf. Please
+>> +	 * refer perf_copy_attr() for more details.
+>> +	 */
+>> +	if (branch_type & PERF_SAMPLE_BRANCH_ANY) {
+>> +		cpuc->brbcr |= BRBCR_EL1_EXCEPTION;
+>> +		cpuc->brbcr |= BRBCR_EL1_ERTN;
+> 
+> Because this comes after the PERF_SAMPLE_BRANCH_KERNEL check, it's
+> impossible to get syscall records from userspace. When you enable kernel
+> branch records, the buffer always fills up before it gets to userspace.
 
-diff --git a/drivers/dma/of-dma.c b/drivers/dma/of-dma.c
-index ac61ecda2926..8281a4aebca8 100644
---- a/drivers/dma/of-dma.c
-+++ b/drivers/dma/of-dma.c
-@@ -157,7 +157,7 @@ void of_dma_controller_free(struct device_node *np)
- 	mutex_lock(&of_dma_lock);
+Just to summerize.
 
- 	list_for_each_entry(ofdma, &of_dma_list, of_dma_controllers)
--		if (ofdma->of_node == np) {
-+		if (device_match_of_node(ofdma, np)) {
- 			list_del(&ofdma->of_dma_controllers);
- 			kfree(ofdma);
- 			break;
--- 
-2.25.1
+System call [user_addr -> kernel_addr] and return [kernel_addr -> user_addr]
+records are impossible to be captured, because
+
+- Without PERF_SAMPLE_BRANCH_KERNEL, BRBCR_EL1_EXCEPTION/ERTN are not set
+- With PERF_SAMPLE_BRANCH_KERNEL, buffer fills up with in kernel branches
+
+Did you try with latest fix, that clears the paused BRBE after reading branch
+records during PMU interrupt ? That fix creates much more samples than before.
+
+> 
+> Can you move this to the top so that it can be set if either
+> PERF_SAMPLE_BRANCH_USER or PERF_SAMPLE_BRANCH_KERNEL is set. The
+
+Why should they depend on privilege filters i.e PERF_SAMPLE_BRANCH_USER/KERNEL
+rather than just branch filters PERF_SAMPLE_BRANCH_ANY/ANY_CALL/ANY_RETURN ?
+
+> hardware already handles the security by giving partial records with the
+> kernel part zeroed out so I don't think the driver needs to add any
+> additional rules other than setting BRBCR_EL1_E1BRE or BRBCR_EL1_E0BRE.
+
+Basically BRBCR_EL1_EXCEPTION/BRBCR_EL1_ERTN should be treated like any other
+branch filter rather than privilege filters as is the case now ?
+
+> 
+> For example I moved it to the top, removed the return below and then I
+> get syscall partial records:
+> 
+> ....  5: 0000000000745d0c -> 0000000000000000 0 cycles  P   9fbfbfbf SYSCALL
+> 
+> I also get ERETS but with only the userspace part set:
+> 
+> .....  4: 0000000000000000 -> 0000000000745d10 0 cycles  P   9fbfbfbf ERET
+But with both user and kernel privilege filters being set, these should have
+been complete branch records containing both user and kernel addresses ?
+
+> 
+>> +		return;
+>> +	}
+>> +
+>> +	if (branch_type & PERF_SAMPLE_BRANCH_ANY_CALL)
+>> +		cpuc->brbcr |= BRBCR_EL1_EXCEPTION;
+>> +
+>> +	if (branch_type & PERF_SAMPLE_BRANCH_ANY_RETURN)
+>> +		cpuc->brbcr |= BRBCR_EL1_ERTN;
+>> +}
+>> +
+
+[....]
