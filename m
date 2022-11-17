@@ -2,139 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E96B562E2F5
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:25:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C22FF62E2F7
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:26:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239737AbiKQRZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 12:25:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50462 "EHLO
+        id S240016AbiKQR0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 12:26:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235029AbiKQRZa (ORCPT
+        with ESMTP id S234725AbiKQR0B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 12:25:30 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA68645A0B;
-        Thu, 17 Nov 2022 09:25:29 -0800 (PST)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AHHAHPS021262;
-        Thu, 17 Nov 2022 17:24:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=suLEoiSZqoI/ONg4Oq+RZpcdAxea8urstYGtfJ4HZ18=;
- b=sZC5GSEN4COtNf8WRFGteiIKAAbYmLFmU/O50i0E5uVz7bdfrTUiXlfYORZ5SKje5hRe
- w7Ne9WMPSMYFTD38KBTdmOjV26iKT4BDX2Fwkki9OXR516iOXVP2F41K35gT5wQ8+qyr
- 2rFhq23WOyJjtHDBYbGCX2ssINIcGpntkMYRPUAvF4Ry/evIGIPtevxxeEqaoCrcn4n7
- 2JgiQoLbs87ZmJnjDWHuWvnF3CtjHWSzPllIXmKTsPSeMPDndQnSPlDQ8kAhVwK5s0+U
- RF3+N7ccplGx4iVS7IBtkR0JO+qR2XfVY4Fr8/2j5SuVLOsnnReCOhOabUF5oiYbor+U fQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kwrx48j0g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Nov 2022 17:24:59 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AHHC45k027831;
-        Thu, 17 Nov 2022 17:24:58 GMT
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kwrx48j05-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Nov 2022 17:24:58 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AHH4t7u000476;
-        Thu, 17 Nov 2022 17:24:57 GMT
-Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
-        by ppma01wdc.us.ibm.com with ESMTP id 3kt349tkdf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Nov 2022 17:24:57 +0000
-Received: from smtpav06.dal12v.mail.ibm.com ([9.208.128.130])
-        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AHHOrga45548010
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 17 Nov 2022 17:24:53 GMT
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 02AAC58059;
-        Thu, 17 Nov 2022 17:24:56 +0000 (GMT)
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CD4C958043;
-        Thu, 17 Nov 2022 17:24:54 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.98.240])
-        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 17 Nov 2022 17:24:54 +0000 (GMT)
-Message-ID: <6b4d47765a4ddcfdf07158f3ad0737fa3aa5823e.camel@linux.ibm.com>
-Subject: Re: [PATCH v4 3/5] security: Allow all LSMs to provide xattrs for
- inode_init_security hook
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Casey Schaufler <casey@schaufler-ca.com>,
-        Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        keescook@chromium.org, nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Thu, 17 Nov 2022 12:24:54 -0500
-In-Reply-To: <026075fa-0b58-9041-0727-b75e19499356@schaufler-ca.com>
-References: <20221110094639.3086409-1-roberto.sassu@huaweicloud.com>
-         <20221110094639.3086409-4-roberto.sassu@huaweicloud.com>
-         <4c1349f670dc3c23214a5a5036e43ddaa0a7bc89.camel@linux.ibm.com>
-         <026075fa-0b58-9041-0727-b75e19499356@schaufler-ca.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: fpSioghH0RFkWuopp8jYOt8pezhX03tV
-X-Proofpoint-GUID: arArzTbFTFnuHFxLo4w1t1eyMUOnEW6v
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-17_06,2022-11-17_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- lowpriorityscore=0 priorityscore=1501 spamscore=0 mlxscore=0 clxscore=1015
- malwarescore=0 phishscore=0 mlxlogscore=946 adultscore=0 impostorscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211170126
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 17 Nov 2022 12:26:01 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF9AC4C252
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 09:25:59 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id f27so6860723eje.1
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 09:25:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=7rh9znBXsFKpv/JRJo88opLzz4QQKJoh7e7ZIix0R5c=;
+        b=mojJmptnETuCrRADBiymgqt9Ztwx8PnEPoJX0GAXmR6QOws+o5duVYpswPjZ2Rczqk
+         6EblxUIk7HUZ41mzG3+saD5VFiZDnoRbemfg6pXTdvYRLAIn3AeIbULlCYXEupOZZdH6
+         Si94ZrcsmFk5y0xQe/OTfyEE30OCO9fS9Z7ZE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7rh9znBXsFKpv/JRJo88opLzz4QQKJoh7e7ZIix0R5c=;
+        b=kxB+57glVun9WOIyDNfO2b/mAjo2qA/D75/7gYo2XAahcLIfK1lhRWD6vFe4/9sh9K
+         ttuJ7p01YC+47/aPYEYD6AooIlKEGaGIQAHdcQ9tEpGH90RJDeGWC9esDkyAsu+tpzzr
+         RMVhYzuZ6c4Y+dgBEWDsTb2juu70SwaGrmPB/5DTLP1Ilxj3/0IIkygu1oPC9MfSC6DD
+         6gxdccR5iuluKkyV8aBh2Kse1E9O0nj2NNJwUgwJPg9mh8HA7/MgxTrMBGzfDFcoOdrM
+         0ha5hoPsqkQ5yvhsQysjZBZeo7vWdwVFMcw//DX6MmjG2EE/NPMrxGm0TXryeY/E++kx
+         QwfA==
+X-Gm-Message-State: ANoB5pnG2aT2ndc4sfX2S/XzBX8GcKzLCL4BpwVCKKCqWnjrkn7TYAEU
+        8WnLfEIWn18YK8K8VsGFKBxp5F6EAlglphfl
+X-Google-Smtp-Source: AA0mqf7zMG4uyZTWpNf2KynbkW6tGB/X95NXQUgVEg6R1WsV5UPPw6I6/XVqF1WnZ3g2uBylzm70Ug==
+X-Received: by 2002:a17:906:455:b0:7ad:b97e:283a with SMTP id e21-20020a170906045500b007adb97e283amr2882949eja.567.1668705958135;
+        Thu, 17 Nov 2022 09:25:58 -0800 (PST)
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
+        by smtp.gmail.com with ESMTPSA id c1-20020a17090618a100b0074134543f82sm627775ejf.90.2022.11.17.09.25.57
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Nov 2022 09:25:57 -0800 (PST)
+Received: by mail-wr1-f47.google.com with SMTP id y16so4940109wrt.12
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 09:25:57 -0800 (PST)
+X-Received: by 2002:adf:cd82:0:b0:238:b29e:4919 with SMTP id
+ q2-20020adfcd82000000b00238b29e4919mr2112282wrj.583.1668705956712; Thu, 17
+ Nov 2022 09:25:56 -0800 (PST)
+MIME-Version: 1.0
+References: <20221117110804.1431024-1-hsinyi@chromium.org> <CAD=FV=VEC=GzkDfaOqauBB5Y79teS1ENA5wFUHZmnTRkg6Z4tg@mail.gmail.com>
+ <CAJMQK-gQj83N1MBu1s+_YDJ4qbqN4McSqCnOwWAq4iaNXo5Sfg@mail.gmail.com>
+In-Reply-To: <CAJMQK-gQj83N1MBu1s+_YDJ4qbqN4McSqCnOwWAq4iaNXo5Sfg@mail.gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 17 Nov 2022 09:25:44 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=VoF5PyeNWX+4_3sseyRemZVsr5WtQVeg-8mhfgm40w3g@mail.gmail.com>
+Message-ID: <CAD=FV=VoF5PyeNWX+4_3sseyRemZVsr5WtQVeg-8mhfgm40w3g@mail.gmail.com>
+Subject: Re: [PATCH v6 1/3] drm_bridge: register content protect property
+To:     Hsin-Yi Wang <hsinyi@chromium.org>
+Cc:     Sean Paul <seanpaul@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Allen Chen <allen.chen@ite.com.tw>,
+        David Airlie <airlied@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-11-17 at 09:18 -0800, Casey Schaufler wrote:
-> On 11/17/2022 8:05 AM, Mimi Zohar wrote:
-> > hOn Thu, 2022-11-10 at 10:46 +0100, Roberto Sassu wrote:
-> >> From: Roberto Sassu <roberto.sassu@huawei.com>
-> >>
-> >> Currently, security_inode_init_security() supports only one LSM providing
-> >> an xattr and EVM calculating the HMAC on that xattr, plus other inode
-> >> metadata.
-> >>
-> >> Allow all LSMs to provide one or multiple xattrs, by extending the security
-> >> blob reservation mechanism. Introduce the new lbs_xattr field of the
-> >> lsm_blob_sizes structure, so that each LSM can specify how many xattrs it
-> >> needs, and the LSM infrastructure knows how many xattr slots it should
-> >> allocate.
-> > Perhaps supporting per LSM multiple xattrs is a nice idea, but EVM
-> > doesn't currently support it.  The LSM xattrs are hard coded in
-> > evm_config_default_xattrnames[],  based on whether the LSM is
-> > configured.  Additional security xattrs may be included in the
-> > security.evm calculation, by extending the list via
-> > security/integrity/evm/evm_xattrs.
-> 
-> Smack uses multiple xattrs. All file system objects have a SMACK64
-> attribute, which is used for access control. A program file may have
-> a SMACK64EXEC attribute, which is the label the program will run with.
-> A library may have a SMACK64MMAP attribute to restrict loading. A
-> directory may have a SMACK64TRANSMUTE attribute, which modifies the
-> new object creation behavior.
-> 
-> The point being that it may be more than a "nice idea" to support
-> multiple xattrs. It's not a hypothetical situation.
+Hi,
 
-And each of these addiitonal Smack xattrs are already defined in 
-evm_config_default_xattrnames[].
+On Thu, Nov 17, 2022 at 9:12 AM Hsin-Yi Wang <hsinyi@chromium.org> wrote:
+>
+> On Thu, Nov 17, 2022 at 11:57 PM Doug Anderson <dianders@chromium.org> wrote:
+> >
+> > Hi,
+> >
+> > On Thu, Nov 17, 2022 at 3:08 AM Hsin-Yi Wang <hsinyi@chromium.org> wrote:
+> > >
+> > > Some bridges are able to update HDCP status from userspace request if
+> > > they support HDCP.
+> > >
+> > > HDCP property is the same as other connector properties that needs to be
+> > > created after the connecter is initialized and before the connector is
+> > > registered.
+> > >
+> > > If there exists a bridge that supports HDCP, add the property to the
+> > > bridge connector.
+> > >
+> > > Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> > > Reviewed-by: Sean Paul <seanpaul@chromium.org>
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> >
+> > Not sure it's worth spinning for, but FWIW I wouldn't put
+> > "Reported-by: kernel test robot <lkp@intel.com>". The emails from that
+> > bot are always a bit confusing in this regards, but I think they mean
+> > "if the patch has already landed and you're sending a separate patch
+> > with a fix then please add the "Reported-by" tag". ...but adding it to
+> > the original patch just doesn't make a lot of sense.
+>
+> Got it, thanks. I think I'll wait for a while to see if there's other
+> comments. Otherwise should I send another version to remove the tag?
 
-Mimi
+I don't think it's necessary. Someone could just remove it when they
+land the patch.
 
+Speaking of which, I'm OK with landing the first two patches with
+Sean's Reviewed-by, but ideally we'd get a non-Google review from
+someone that maintains the bridge stuff on the patches. That being
+said, in another email thread [1] it was pointed out that the bridge
+subsystem is mainly under maintained. When I got committer access for
+drm-misc access I was told in IRC that part of my job would be to deal
+with landing ChromeOS-related stuff assuming it was properly reviewed.
+
+I'm about to head on vacation for ~1 week and don't want to land and
+run, so how about this? Let's see if you can get Sean to review the
+3rd patch in the series. If he's happy with it and things aren't on
+fire when I get back, I'll send another email to the list saying that
+I'll give that patch another ~1 week on the list and then land it if
+there are no objections. This way folks will have plenty of warning if
+they want to review the series, but if not then it won't sit waiting
+forever. Assuming everything with v6 still looks good and there is no
+other reason to spin, I'm happy removing the extra Reported-by tag
+when I land.
+
+[1] https://lore.kernel.org/r/20221117143411.5sdyrx6v2nunql5n@houat
