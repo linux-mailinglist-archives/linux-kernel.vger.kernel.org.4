@@ -2,61 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46B3E62D473
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 08:55:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5956062D3D0
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 08:08:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239230AbiKQHzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 02:55:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46154 "EHLO
+        id S229991AbiKQHIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 02:08:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238868AbiKQHzq (ORCPT
+        with ESMTP id S238973AbiKQHIp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 02:55:46 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D263D5987E
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 23:55:45 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id g12so1537095lfh.3
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 23:55:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=C78aGbjrXr/kztGG2Ey4CvIW/8gpjBglbtD87+pP3/g=;
-        b=L5NI37RMQHU/jKY7fsOJm5fHqjyg67DgFAJIRcYsy2MSda+2XZwjnR/S6jp3uBXQPv
-         +q/1okHDvOo8hfhxDWwpXs2LQV74UsNV6kukkYiN6wFNK/Dam5ZkQHWxjyzQjdrOXP4P
-         SA4KlR/TOvZClvL9soUWzpG0Oa7WlKIo0Qf6pcwQQncv3uAYYbPgXWD1r6s5b7tdCB2H
-         tw2QAZJMTRK+v2Z+2J2eFe/WIj46HVc3Osz0Zx3O3FB6wcgXBmbb3yFYa3pE2TMJpU8r
-         7LA044q12rqA+mbqslhqWSO7OHQKVGIyufI8wlfiuXSmCBdm5PvWLhxSjcbKOiRI1p2W
-         RYlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=C78aGbjrXr/kztGG2Ey4CvIW/8gpjBglbtD87+pP3/g=;
-        b=u0JwC1uVH8deCI7g0+mAKVMLExzD8ZbSIuYGltGot0f3uZcx4pFHuyob1qinYk2fYU
-         ZfAU+usJG7is8D7GrQtjJrjGFpD3c3LqfmItZBCz12dM1rk+OuSVbQbP22TdGrU9Re5Y
-         IRyZtuelJzzgvmFbuFe58y2Nyv4W0cOkArkvh5N7eMBHWQm6EOLvfzwNnYvgXGAxii61
-         6yOvzaUPLoJD4ppYNuI/oFddCDgjau4akhU/rNpHFGq3c9rL/yr2M6fwbDoXCycr0arv
-         hwHH/+f7uQXlSIDd8CgpEZU5f65aEd0aK7q2uJIjVDFyRJIB/Lt8K0FJ8nwjg9ekV7gi
-         1h1g==
-X-Gm-Message-State: ANoB5pnwRhVwCSMU099lCLw1BXW+h5CHov+9jzJgjUnA81p4R0X1c6mH
-        u36TYfqt+d6HrBufXiSidQLrmrP7cy4es9UhaeHMalzQ+DcTEQ==
-X-Google-Smtp-Source: AA0mqf6vacXv8wtce7xA07fSW8Cd8F7eJx9Z6EmNaiflvVQOZGLGZKLwV8fdDEugCSwC09Mx+Wq/QT9RXjrrC9cUlkk=
-X-Received: by 2002:ac2:52ad:0:b0:4a2:23b0:b850 with SMTP id
- r13-20020ac252ad000000b004a223b0b850mr466081lfm.60.1668671744208; Wed, 16 Nov
- 2022 23:55:44 -0800 (PST)
+        Thu, 17 Nov 2022 02:08:45 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AF9F1DF1A
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 23:08:44 -0800 (PST)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NCWGM1754zHvyV;
+        Thu, 17 Nov 2022 15:08:11 +0800 (CST)
+Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 17 Nov 2022 15:08:26 +0800
+Received: from huawei.com (10.175.113.32) by dggpemm100009.china.huawei.com
+ (7.185.36.113) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 17 Nov
+ 2022 15:08:25 +0800
+From:   Liu Shixin <liushixin2@huawei.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Denys Vlasenko <dvlasenk@redhat.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        David Hildenbrand <dhildenb@redhat.com>,
+        Rafael Aquini <raquini@redhat.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Liu Shixin <liushixin2@huawei.com>
+Subject: [PATCH v2 0/2] arm64: fix two bug about page table check
+Date:   Thu, 17 Nov 2022 15:56:00 +0800
+Message-ID: <20221117075602.2904324-1-liushixin2@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-From:   Jun Nie <jun.nie@linaro.org>
-Date:   Thu, 17 Nov 2022 15:55:35 +0800
-Message-ID: <CABymUCOsVcpaS+uXqzB7-hm0FZwm2ZXD8J=6m0NKAh8WyrTiwA@mail.gmail.com>
-Subject: [BUG REPORT] kernel BUG in ext4_write_inline_data_end
-To:     harshadshirwadkar@gmail.com, tytso@mit.edu,
-        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc:     Lee Jones <joneslee@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.32]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm100009.china.huawei.com (7.185.36.113)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,46 +56,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Denys Vlasenko has reported two bug about page table check on arm64.
+On arm64, pmd_present() contains non-leaf pmd and invalid pmd too.
 
-syzbot find a bug[0] in ext4 on android13-5.15-lts as below and it can
-be reproduced on mailine v6.1-rc5(094226ad94f4) too The log from
-mainline can be found in URL [1]. The bisect test shows below
-commit[2] is the first commit that reproduce the bug. With reverting
-the commit, there is no bug reproduced[3].
+When collapse hugepage, the pmd is non-leaf and should skip the check.
+Use pmd_leaf() instead of pmd_present().
 
-Is reverting the commit 21175ca434c5 a acceptable solution? Any fix
-work is in progress?
+When split hugepage, the pmd will be marked as invalid and then populate.
+So we should decrease file_map_count when invalid pmd and then increase
+when populate the pmd. Add pmd_valid() check.
 
-[0] https://syzkaller.appspot.com/bug?id=5bafe4554067100b70f58a81268aa06ea3f9c345
-[1] https://syzkaller.appspot.com/text?tag=CrashLog&x=118359c1880000
-[2] 21175ca434c5 ext4: make prefetch_block_bitmaps default
-[3] https://groups.google.com/g/syzkaller-android-bugs/c/HKLNVJQICMM/m/YcHNpH_iBAAJ
+v1->v2: Update comment and optimize the code by moving p?d_valid() at
+	first place suggested by Mark.
 
-kernel BUG at fs/ext4/inline.c:227!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-Call Trace:
- <TASK>
- ext4_write_end+0x1af/0x9d0 fs/ext4/inode.c:1307
- ext4_da_write_end+0x92/0xa70 fs/ext4/inode.c:3067
- generic_perform_write+0x3c7/0x5d0 mm/filemap.c:3836
- ext4_buffered_write_iter+0x49b/0x630 fs/ext4/file.c:271
- ext4_file_write_iter+0x456/0x1dc0
- do_iter_readv_writev+0x52a/0x720
- do_iter_write+0x1f4/0x760 fs/read_write.c:855
- vfs_iter_write+0x7c/0xa0 fs/read_write.c:896
- iter_file_splice_write+0x810/0xfd0 fs/splice.c:689
- do_splice_from fs/splice.c:767 [inline]
- direct_splice_actor+0xfe/0x130 fs/splice.c:934
- splice_direct_to_actor+0x4d4/0xbd0 fs/splice.c:889
- do_splice_direct+0x2a0/0x3f0 fs/splice.c:977
- do_sendfile+0x63b/0xfd0 fs/read_write.c:1249
- __do_sys_sendfile64 fs/read_write.c:1317 [inline]
- __se_sys_sendfile64 fs/read_write.c:1303 [inline]
- __x64_sys_sendfile64+0x1ce/0x230 fs/read_write.c:1303
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x61/0xcb
+Liu Shixin (2):
+  arm64/mm: fix incorrect file_map_count for non-leaf pmd/pud
+  arm64/mm: fix incorrect file_map_count for invalid pmd/pud
 
-Regards,
-Jun
+ arch/arm64/include/asm/pgtable.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+-- 
+2.25.1
+
