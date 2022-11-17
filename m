@@ -2,53 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D3B862DD5D
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:56:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6537462DD62
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:58:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240267AbiKQN4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 08:56:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36210 "EHLO
+        id S240275AbiKQN60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 08:58:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240262AbiKQN4e (ORCPT
+        with ESMTP id S234267AbiKQN6Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 08:56:34 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A798712AD7;
-        Thu, 17 Nov 2022 05:56:33 -0800 (PST)
-Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 466E9929;
-        Thu, 17 Nov 2022 14:56:31 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1668693391;
-        bh=c2RW4LUtvNluOm+Cqh3RfQ6aRd78E7VYjwgRpRVslCg=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=bwymGI1/MQcNpO+auto7FRyxZV08oS7APBvCgl1ZTcA1xmBDO6D66ZHGwDwgdl7fZ
-         XAt2tMYGsujKYUKcRoqYV6Jg5F8r2YwqnWC0tQKFOkeH+T50gK31DxkKrtuZn1lqdw
-         n26tOtiXff6IDX6Yn5DtfKr+EBid/G9MQBiG+T4E=
-Content-Type: text/plain; charset="utf-8"
+        Thu, 17 Nov 2022 08:58:25 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED11B958F;
+        Thu, 17 Nov 2022 05:58:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=dBOuPLoqufhzIHBhnUrPowMnSxcJ7fbtffIk2nq1bjg=; b=fSqHKi4WOAW4udDRU9cRTFDk06
+        B3rT7dae00kRrk2M01L7pc8FOj7VIDtBLcc3RujXzDeozXwLo4eGtEGAx10PgHlibSlADFSq1SgoS
+        6yqp1ez6q8Eq/F+9dVFdF1Kf3FTVkSNRZgKqbi6XruOHDYhrWDi2T0QWn48c2rAev104=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1ovfOt-002h7i-JB; Thu, 17 Nov 2022 14:57:55 +0100
+Date:   Thu, 17 Nov 2022 14:57:55 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Hui Tang <tanghui20@huawei.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        mw@semihalf.com, linux@armlinux.org.uk, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yusongping@huawei.com
+Subject: Re: [PATCH net v2] net: mdio-ipq4019: fix possible invalid pointer
+ dereference
+Message-ID: <Y3Y94/My9Al4pw+h@lunn.ch>
+References: <20221117090514.118296-1-tanghui20@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20221117122547.809644-2-tomi.valkeinen@ideasonboard.com>
-References: <20221117122547.809644-1-tomi.valkeinen@ideasonboard.com> <20221117122547.809644-2-tomi.valkeinen@ideasonboard.com>
-Subject: Re: [PATCH v1 1/8] dt-bindings: display: renesas,du: Provide bindings for r8a779g0
-From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Date:   Thu, 17 Nov 2022 13:56:28 +0000
-Message-ID: <166869338879.50677.4956722311608432842@Monstersaurus>
-User-Agent: alot/0.10
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221117090514.118296-1-tanghui20@huawei.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -58,42 +50,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Tomi Valkeinen (2022-11-17 12:25:40)
-> From: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
->=20
-> Extend the Renesas DU display bindings to support the r8a779g0 V4H.
->=20
-> Signed-off-by: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
-
-Matches my expectations, and interpretations of the datasheets.
-
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-
+On Thu, Nov 17, 2022 at 05:05:14PM +0800, Hui Tang wrote:
+> priv->eth_ldo_rdy is saved the return value of devm_ioremap_resource(),
+> which !IS_ERR() should be used to check.
+> 
+> Fixes: 23a890d493e3 ("net: mdio: Add the reset function for IPQ MDIO driver")
+> Signed-off-by: Hui Tang <tanghui20@huawei.com>
 > ---
->  Documentation/devicetree/bindings/display/renesas,du.yaml | 2 ++
->  1 file changed, 2 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/display/renesas,du.yaml b/=
-Documentation/devicetree/bindings/display/renesas,du.yaml
-> index b3e588022082..d4830f52c512 100644
-> --- a/Documentation/devicetree/bindings/display/renesas,du.yaml
-> +++ b/Documentation/devicetree/bindings/display/renesas,du.yaml
-> @@ -40,6 +40,7 @@ properties:
->        - renesas,du-r8a77990 # for R-Car E3 compatible DU
->        - renesas,du-r8a77995 # for R-Car D3 compatible DU
->        - renesas,du-r8a779a0 # for R-Car V3U compatible DU
-> +      - renesas,du-r8a779g0 # for R-Car V4H compatible DU
-> =20
->    reg:
->      maxItems: 1
-> @@ -762,6 +763,7 @@ allOf:
->            contains:
->              enum:
->                - renesas,du-r8a779a0
-> +              - renesas,du-r8a779g0
->      then:
->        properties:
->          clocks:
-> --=20
-> 2.34.1
->
+> v1 -> v2: set priv->eth_ldo_rdy NULL, if devm_ioremap_resource() failed
+> ---
+>  drivers/net/mdio/mdio-ipq4019.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/mdio/mdio-ipq4019.c b/drivers/net/mdio/mdio-ipq4019.c
+> index 4eba5a91075c..dfd1647eac36 100644
+> --- a/drivers/net/mdio/mdio-ipq4019.c
+> +++ b/drivers/net/mdio/mdio-ipq4019.c
+> @@ -231,8 +231,11 @@ static int ipq4019_mdio_probe(struct platform_device *pdev)
+>  	/* The platform resource is provided on the chipset IPQ5018 */
+>  	/* This resource is optional */
+>  	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+> -	if (res)
+> +	if (res) {
+>  		priv->eth_ldo_rdy = devm_ioremap_resource(&pdev->dev, res);
+> +		if (IS_ERR(priv->eth_ldo_rdy))
+> +			priv->eth_ldo_rdy = NULL;
+> +	}
+
+As i said, please add devm_ioremap_resource_optional().  Follow the
+concept of devm_clk_get_optional(), devm_gpiod_get_optional(),
+devm_reset_control_get_optional(), devm_reset_control_get_optional(),
+platform_get_irq_byname_optional() etc.
+
+All these will not return an error if the resource you are trying to
+get does not exist. They instead return NULL, or something which other
+API members understand as does not exist, but thats O.K.
+
+These functions however do return errors for real problem, ENOMEM,
+EINVAL etc. These should not be ignored.
+
+You should then use this new function for all your other patches where
+the resource is optional.
+
+       Andrew
