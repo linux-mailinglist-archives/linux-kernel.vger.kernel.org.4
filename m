@@ -2,172 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C826662D913
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 12:10:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B758862D908
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 12:09:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234646AbiKQLKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 06:10:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54516 "EHLO
+        id S239782AbiKQLJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 06:09:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239903AbiKQLJO (ORCPT
+        with ESMTP id S239721AbiKQLIP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 06:09:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C54E055A1
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 03:08:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668683290;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3hJFMcIT53QnK3wZUol6C7JAYb+pXC+Uh295TWzYK8g=;
-        b=dDfksV8JfcJ4ylJjhuZ/zII6OKc5CoKM901fE8tv0rW8QqFtTVXn+lZpt3OIZooI9PXQ+9
-        d1oDkLGKm12fcstrq6ehsWZRBByb2MpGcHCiybGHW3yoaQjwask9fD53dQlzrRq23Ee8+Q
-        RIAM604l5Xau+OUZ3dc/JY0fr+r5PrA=
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
- [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-266-0H-vN4oYNdCYNTaTk85AYA-1; Thu, 17 Nov 2022 06:08:08 -0500
-X-MC-Unique: 0H-vN4oYNdCYNTaTk85AYA-1
-Received: by mail-pl1-f198.google.com with SMTP id q10-20020a170902f34a00b00186c5448b01so1207135ple.4
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 03:08:08 -0800 (PST)
+        Thu, 17 Nov 2022 06:08:15 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D1213E12
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 03:08:09 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id j12so1300204plj.5
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 03:08:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0tqK0qcu4ZbXIz1FounyREg16LfpvMx9JNd0Tfa961A=;
+        b=AFoBfEAD1nJWlMgLMnXn0vdIL+CPo94VWnV12a+S1YWYICb26F1Np8B8kTDn2QXh8v
+         3MDzOYrdbhabqzws4QPDv8RY9mRvzvrHQTlp+AE1wWRhkwPQ4zHAz5NAx5NSPfZW3mQE
+         TIKnnBeFktEgCF3rHIxA2KZt5ybmy93+PksJ8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-language:content-transfer-encoding:in-reply-to:mime-version
-         :user-agent:date:message-id:references:cc:to:from:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3hJFMcIT53QnK3wZUol6C7JAYb+pXC+Uh295TWzYK8g=;
-        b=c/8OEAyUBZ3ukj6t9N+qjZ0sjwq1V69kv67Jp3ZGPTuzbPR7Ac+xRtqSrFlSojhA+Q
-         YWeHeKNLQAG4AJT4PutxbzdaNCVjwoY1CzHAgk9n32F+MuoORqjoZGegjTXzV+f3femf
-         WzNCf26yUCvDLFcR3vRr/XTrrUnCYS7vv18uwTqgLtuJtwyR+m3JSP04qbzNohvYIvyO
-         TAwdXnfghu4pa/6YdhvFvtE6YVMOEZwrnRm1xMFegDEi4SVn1dSbxQzzAd8FLvQt4T/e
-         0O6jbFV1nJlJqNntmkYb+V/sUufmSiSXrxTe281TMphkeHBshRCm1DRYuLxpq7pz2bNd
-         iijQ==
-X-Gm-Message-State: ANoB5plhqOeze2H94cEGZR9hEK5xUab5zzClB5MrHk9mVoGkwnZB/6SD
-        fUWhHs13o0w5vX25mSagdxC9ALVYarJJCLlupbDcBxnn/PCUz1E7XwqeX8T1l5kybhaqHPsRKFT
-        saU2YO5cEgEA16d6voPjTTouiGS12ujew+D606+9d7b0QZ9Gc0UuDhuZtN3Jhh06hLudBKD+v6g
-        ==
-X-Received: by 2002:a17:903:2ce:b0:17f:8a20:d9b5 with SMTP id s14-20020a17090302ce00b0017f8a20d9b5mr2278815plk.76.1668683287637;
-        Thu, 17 Nov 2022 03:08:07 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7Aqgbfk1NNZoVWMG2j8mJu0XUHx0gOZFjXhj6xB3w7YNJtRnuIV8CRlIjpnEZ3Kh2u+d8EQA==
-X-Received: by 2002:a17:903:2ce:b0:17f:8a20:d9b5 with SMTP id s14-20020a17090302ce00b0017f8a20d9b5mr2278784plk.76.1668683287253;
-        Thu, 17 Nov 2022 03:08:07 -0800 (PST)
-Received: from [10.72.12.148] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id n25-20020a63a519000000b0046ec057243asm762689pgf.12.2022.11.17.03.08.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Nov 2022 03:08:06 -0800 (PST)
-Subject: Re: [PATCH] ceph: make sure directories aren't complete after setting
- crypt context
-From:   Xiubo Li <xiubli@redhat.com>
-To:     =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>
-Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221116153703.27292-1-lhenriques@suse.de>
- <5de0ae69-5e3d-2ccb-64a3-971db66477f8@redhat.com>
-Message-ID: <41710b3d-b37f-8c65-d55d-c4137a366efd@redhat.com>
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0tqK0qcu4ZbXIz1FounyREg16LfpvMx9JNd0Tfa961A=;
+        b=GQQ5aG4/HB0TqYI3sJxwZKckIboJ3oV2k0rDWMglXdJevZSNBoSn86Hs8yA6Oag/EZ
+         IgSjnQOt+8xRbmcmbv0ckw2Tu/oLX73XVdBCm2M8p72xEuJmNlDqdVd/MIDhrhbxOTwt
+         TFVD9FbUtTEb/B0pCCgO0GAuZrIpX2N2n0C7FLi9NvscPt+IunOGKrP49t6WsrYdYS1r
+         ai60lDyBoNhuWeZodNThpdgWe/rRXZBLGx2VPfgfmCr7Pc04gtfCzueGkSFmNrmD2lhR
+         UMrTmHrT4ebjJ0G+BR3BBeOPzrJ5Gfre9mSQHZQyIWIHNObGYva+yT5tlPREhlIYqh3l
+         3nPA==
+X-Gm-Message-State: ANoB5pln5cfSbD4Oclv6qsCavBZuP6Xnbw/LYXXrr4oehkvtme+FcKRQ
+        GxgnrXcgNcaScihj5IQbUNGRYg==
+X-Google-Smtp-Source: AA0mqf4+GevadWvaves7De04ntMu+JYejX2ZKDF7Jns6C/cQy0CVatDlK3RNSm4xGN01xw2wzCaSaQ==
+X-Received: by 2002:a17:90b:3544:b0:213:2173:f46a with SMTP id lt4-20020a17090b354400b002132173f46amr8259914pjb.103.1668683288952;
+        Thu, 17 Nov 2022 03:08:08 -0800 (PST)
+Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:e678:c7f5:9cb3:1a06])
+        by smtp.gmail.com with ESMTPSA id z18-20020a170902ccd200b0017a032d7ae4sm1025540ple.104.2022.11.17.03.08.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 03:08:08 -0800 (PST)
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+To:     Sean Paul <seanpaul@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Allen Chen <allen.chen@ite.com.tw>,
+        David Airlie <airlied@gmail.com>
+Subject: [PATCH v6 1/3] drm_bridge: register content protect property
 Date:   Thu, 17 Nov 2022 19:08:02 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+Message-Id: <20221117110804.1431024-1-hsinyi@chromium.org>
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
 MIME-Version: 1.0
-In-Reply-To: <5de0ae69-5e3d-2ccb-64a3-971db66477f8@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Some bridges are able to update HDCP status from userspace request if
+they support HDCP.
 
-On 17/11/2022 16:03, Xiubo Li wrote:
->
-> On 16/11/2022 23:37, Luís Henriques wrote:
->> When setting a directory's crypt context, __ceph_dir_clear_complete() 
->> needs
->> to be used otherwise, if it was complete before, any old dentry 
->> that's still
->> around will be valid.
->>
->> Signed-off-by: Luís Henriques <lhenriques@suse.de>
->> ---
->> Hi!
->>
->> Here's a simple way to trigger the bug this patch is fixing:
->>
->> # cd /cephfs
->> # ls mydir
->> nKRhofOAVNsAwVLvDw7a0c9ypsjbZfK3n0Npnmni6j0
->> # ls mydir/nKRhofOAVNsAwVLvDw7a0c9ypsjbZfK3n0Npnmni6j0/
->> Cyuer5xT+kBlEPgtwAqSj0WK2taEljP5vHZ,D8VXCJ8 
->> u+46b2XVCt7Obpz0gznZyNLRj79Q2l4KmkwbKOzdQKw
->> # fscrypt unlock mydir
->> # touch /mnt/test/mydir/mysubdir/file
->> touch: cannot touch '/mnt/test/mydir/mysubdir/file': No such file or 
->> directory
->>
->>   fs/ceph/crypto.c | 4 ++++
->>   1 file changed, 4 insertions(+)
->>
->> diff --git a/fs/ceph/crypto.c b/fs/ceph/crypto.c
->> index 35a2ccfe6899..dc1557967032 100644
->> --- a/fs/ceph/crypto.c
->> +++ b/fs/ceph/crypto.c
->> @@ -87,6 +87,10 @@ static int ceph_crypt_get_context(struct inode 
->> *inode, void *ctx, size_t len)
->>           return -ERANGE;
->>         memcpy(ctx, cfa->cfa_blob, ctxlen);
->> +
->> +    /* Directory isn't complete anymore */
->> +    if (S_ISDIR(inode->i_mode) && __ceph_dir_is_complete(ci))
->> +        __ceph_dir_clear_complete(ci);
->
-> Hi Luis,
->
-> Good catch!
->
-> BTW, why do this in the ceph_crypt_get_context() ? As my understanding 
-> is that we should mark 'mydir' as incomplete when unlocking it. While 
-> as I remembered the unlock operation will do:
->
->
-> Step1: get_encpolicy via 'mydir' as ctx
-> Step2: rm_enckey of ctx from the superblock
->
-Sorry, it should be add_enckey.
->
-> Since I am still running the test cases for the file lock patches, so 
-> I didn't catch logs to confirm the above steps yet.
->
-> If I am right IMO then we should mark the dir as incomplete in the 
-> Step2 instead, because for non-unlock operations they may also do the 
-> Step1.
->
-Your patch will work. But probably we should do this just around 
-__fscrypt_prepare_readdir() or fscrypt_prepare_readdir() instead ? We 
-need to detect that once the 'inode->i_crypt_info' changed then mark the 
-dir as incomplete.
+HDCP property is the same as other connector properties that needs to be
+created after the connecter is initialized and before the connector is
+registered.
 
-For now for the lock operation it will evict the inode, which will help 
-do this for us already. But for unlock case, we need to handle it by 
-ourself.
+If there exists a bridge that supports HDCP, add the property to the
+bridge connector.
 
-Thanks!
+Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+Reviewed-by: Sean Paul <seanpaul@chromium.org>
+Reported-by: kernel test robot <lkp@intel.com>
+---
+v5->v6: fix compile warning when CONFIG_DRM_DISPLAY_HELPER=m
+---
+ drivers/gpu/drm/drm_bridge_connector.c | 9 +++++++++
+ include/drm/drm_bridge.h               | 4 ++++
+ 2 files changed, 13 insertions(+)
 
-- Xiubo
-
-
-> Thanks!
->
-> - Xiubo
->
->>       return ctxlen;
->>   }
->>
+diff --git a/drivers/gpu/drm/drm_bridge_connector.c b/drivers/gpu/drm/drm_bridge_connector.c
+index 1c7d936523df..4147c6240110 100644
+--- a/drivers/gpu/drm/drm_bridge_connector.c
++++ b/drivers/gpu/drm/drm_bridge_connector.c
+@@ -7,6 +7,7 @@
+ #include <linux/module.h>
+ #include <linux/slab.h>
+ 
++#include <drm/display/drm_hdcp_helper.h>
+ #include <drm/drm_atomic_state_helper.h>
+ #include <drm/drm_bridge.h>
+ #include <drm/drm_bridge_connector.h>
+@@ -333,6 +334,7 @@ struct drm_connector *drm_bridge_connector_init(struct drm_device *drm,
+ 	struct i2c_adapter *ddc = NULL;
+ 	struct drm_bridge *bridge, *panel_bridge = NULL;
+ 	int connector_type;
++	bool support_hdcp = false;
+ 
+ 	bridge_connector = kzalloc(sizeof(*bridge_connector), GFP_KERNEL);
+ 	if (!bridge_connector)
+@@ -376,6 +378,9 @@ struct drm_connector *drm_bridge_connector_init(struct drm_device *drm,
+ 
+ 		if (drm_bridge_is_panel(bridge))
+ 			panel_bridge = bridge;
++
++		if (bridge->support_hdcp)
++			support_hdcp = true;
+ 	}
+ 
+ 	if (connector_type == DRM_MODE_CONNECTOR_Unknown) {
+@@ -398,6 +403,10 @@ struct drm_connector *drm_bridge_connector_init(struct drm_device *drm,
+ 	if (panel_bridge)
+ 		drm_panel_bridge_set_orientation(connector, panel_bridge);
+ 
++	if (support_hdcp && IS_REACHABLE(CONFIG_DRM_DISPLAY_HELPER) &&
++	    IS_ENABLED(CONFIG_DRM_DISPLAY_HDCP_HELPER))
++		drm_connector_attach_content_protection_property(connector, true);
++
+ 	return connector;
+ }
+ EXPORT_SYMBOL_GPL(drm_bridge_connector_init);
+diff --git a/include/drm/drm_bridge.h b/include/drm/drm_bridge.h
+index 6b65b0dfb4fb..1d2ab70f3436 100644
+--- a/include/drm/drm_bridge.h
++++ b/include/drm/drm_bridge.h
+@@ -768,6 +768,10 @@ struct drm_bridge {
+ 	 * modes.
+ 	 */
+ 	bool interlace_allowed;
++	/**
++	 * @support_hdcp: Indicate that the bridge supports HDCP.
++	 */
++	bool support_hdcp;
+ 	/**
+ 	 * @ddc: Associated I2C adapter for DDC access, if any.
+ 	 */
+-- 
+2.38.1.431.g37b22c650d-goog
 
