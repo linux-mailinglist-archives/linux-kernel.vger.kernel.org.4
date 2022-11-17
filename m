@@ -2,107 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74FE262D33C
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 07:07:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5687862D340
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 07:08:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239184AbiKQGHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 01:07:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54660 "EHLO
+        id S239349AbiKQGH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 01:07:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234756AbiKQGHT (ORCPT
+        with ESMTP id S239321AbiKQGHm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 01:07:19 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CD8754B15;
-        Wed, 16 Nov 2022 22:07:13 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id l39-20020a05600c1d2700b003cf93c8156dso999347wms.4;
-        Wed, 16 Nov 2022 22:07:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FYLz02viNCcZeuKJqkLZJicl/v6PrsUfH2KEY8TpF5c=;
-        b=XAILsUAJagM8MUl29mV+63W7fYXbvVj1O6ywhS5MTgcLI3+dE+YuG2BgElNzv6qGWd
-         MIZhedNEAN9eTFz/qYbXZx2SjfD70pLE01qrHOw3JGyBdYj6UsAcNBEtF2N5XvcmhAJ0
-         WtWGTmDzYXmFJ7LNism80tQWa8NLSn2Qjmys/RmCnCbJ4moyDyZ4kNBacLPBepBvYcTa
-         WP7rHuVe+fy4cFCCxUGZUGCtFHBL0EznaMPh+gxSyKLHaCq9rhNckWaf+qPIWNQ1G9rF
-         pbxv3rI+yj4bcGOzQW/oH0Ug5kZ+MGSOaMSCMf7Rv198BUocjZaEy+Gb8hRpUYKFcrvn
-         Rnpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FYLz02viNCcZeuKJqkLZJicl/v6PrsUfH2KEY8TpF5c=;
-        b=TBmHtnQ5jURK4VhVZXwEQwYAoPVJ/vWBVTXwi5wQG/iHkQYm1mHPhwpas1zQ+ZFZ9x
-         bHIFFqutWzQSVsN45F2PvEL+sVHx+4c2RC46kGN5mzL19WKGMN9J5gVCLJc9ztBaje2f
-         4pvFRMUT2gVR8ZpxfcFFmLep6Y6pAOcTgW25oprBvpkTbBS72YfJlePBmeBXlvrJVJDH
-         qh0WG2eCxR4ycTAX/4vRHJF6pcbXBH7aD3ImmKFeSaZ/Uo2YzceZS58rMdMSUSkRP2CY
-         xp07PcRNyX3uxRu6VZWDderWBxG1ZIT/9xlyAtFAKIBW9qTnHi+UHJAVwrnLVupgwujt
-         y/uw==
-X-Gm-Message-State: ANoB5pkJwj3XwBrTyZUmCQpKD732bFHkAgYgyYRMPOW8mWRmesTBLpce
-        NWTV9Qdvbdo8Nxyamb+VGHE=
-X-Google-Smtp-Source: AA0mqf7PN/VpawVglIwIn6auY2jtpRLyUWC/cyLwr5nNPze1Twrr1VtCbQ+ltxYbw0sQ6aJURe2Rag==
-X-Received: by 2002:a05:600c:3b18:b0:3cf:6ab3:49ce with SMTP id m24-20020a05600c3b1800b003cf6ab349cemr538308wms.137.1668665231715;
-        Wed, 16 Nov 2022 22:07:11 -0800 (PST)
-Received: from kista.localdomain (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
-        by smtp.gmail.com with ESMTPSA id r11-20020a5d694b000000b0023691d62cffsm16542568wrw.70.2022.11.16.22.07.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 22:07:11 -0800 (PST)
-From:   Jernej Skrabec <jernej.skrabec@gmail.com>
-To:     mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, wens@csie.org,
-        samuel@sholland.org
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Subject: [PATCH v2 2/2] arm64: dts: allwinner: h6: Fix Cedrus IOMMU channels
-Date:   Thu, 17 Nov 2022 07:07:04 +0100
-Message-Id: <20221117060704.367945-3-jernej.skrabec@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221117060704.367945-1-jernej.skrabec@gmail.com>
-References: <20221117060704.367945-1-jernej.skrabec@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 17 Nov 2022 01:07:42 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2CE27CED
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 22:07:34 -0800 (PST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NCTwP0Bbtz5BNS0;
+        Thu, 17 Nov 2022 14:07:33 +0800 (CST)
+Received: from xaxapp01.zte.com.cn ([10.88.40.50])
+        by mse-fl2.zte.com.cn with SMTP id 2AH67NQq084944;
+        Thu, 17 Nov 2022 14:07:23 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Thu, 17 Nov 2022 14:07:24 +0800 (CST)
+Date:   Thu, 17 Nov 2022 14:07:24 +0800 (CST)
+X-Zmail-TransId: 2af96375cf9cffffffffa124fe46
+X-Mailer: Zmail v1.0
+Message-ID: <202211171407248212856@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <lee@kernel.org>
+Cc:     <shawnguo@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIXSBtZmQ6IGZzbC1pbXgyNS10c2FkYzogdXNlCgogZGV2bV9wbGF0Zm9ybV9nZXRfYW5kX2lvcmVtYXBfcmVzb3VyY2UoKQ==?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 2AH67NQq084944
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 6375CFA5.000 by FangMail milter!
+X-FangMail-Envelope: 1668665253/4NCTwP0Bbtz5BNS0/6375CFA5.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 6375CFA5.000/4NCTwP0Bbtz5BNS0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cedrus H6 actually uses two IOMMU channels. During development page
-faults from both were observed. Documentation also lists both of them
-to be connected to Cedrus, but it doesn't make clear which is used for
-what.
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-Add second IOMMU channel.
+Convert platform_get_resource(), devm_ioremap_resource() to a single
+call to devm_platform_get_and_ioremap_resource(), as this is exactly
+what this function does.
 
-Reviewed-by: Samuel Holland <samuel@sholland.org>
-Fixes: 62a8ccf3a248 ("arm64: dts: allwinner: h6: Fix Cedrus IOMMU usage")
-Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 ---
- arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/mfd/fsl-imx25-tsadc.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
-index 53f6660656ac..7bff054a9bdf 100644
---- a/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
-+++ b/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
-@@ -172,7 +172,7 @@ video-codec@1c0e000 {
- 			resets = <&ccu RST_BUS_VE>;
- 			interrupts = <GIC_SPI 89 IRQ_TYPE_LEVEL_HIGH>;
- 			allwinner,sram = <&ve_sram 1>;
--			iommus = <&iommu 3>;
-+			iommus = <&iommu 1>, <&iommu 3>;
- 		};
- 
- 		gpu: gpu@1800000 {
+diff --git a/drivers/mfd/fsl-imx25-tsadc.c b/drivers/mfd/fsl-imx25-tsadc.c
+index 823595bcc9b7..089c2ce615b6 100644
+--- a/drivers/mfd/fsl-imx25-tsadc.c
++++ b/drivers/mfd/fsl-imx25-tsadc.c
+@@ -137,7 +137,6 @@ static int mx25_tsadc_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+ 	struct mx25_tsadc *tsadc;
+-	struct resource *res;
+ 	int ret;
+ 	void __iomem *iomem;
+
+@@ -145,8 +144,7 @@ static int mx25_tsadc_probe(struct platform_device *pdev)
+ 	if (!tsadc)
+ 		return -ENOMEM;
+
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	iomem = devm_ioremap_resource(dev, res);
++	iomem = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
+ 	if (IS_ERR(iomem))
+ 		return PTR_ERR(iomem);
+
 -- 
-2.38.1
-
+2.25.1
