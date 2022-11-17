@@ -2,556 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1D3862DDBD
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 15:16:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 657FA62DDDB
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 15:21:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240332AbiKQOQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 09:16:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47456 "EHLO
+        id S240377AbiKQOVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 09:21:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240314AbiKQOQV (ORCPT
+        with ESMTP id S240373AbiKQOVd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 09:16:21 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F9C6DF01
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 06:16:20 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id kt23so5348575ejc.7
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 06:16:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=U5cS9nqr5rAd4hwsFX5SVt8LkKZ5u86E9Sxsnqkok3E=;
-        b=odAFJJQuOJDT6LIyvCQ81jC7THS9snaqZj0vPNHHO4U0SzQf5SBJoAaC9GzlIX1RUM
-         UgEfjnsWtyY80qabTaqQFZ6jymafAdop/MF5KpBrpjk8FLVhkdycu1qJ2802w8p2YrA6
-         EuS/3Uu/ebdQRhynosF3sij1g+c5QhFn0kol8ae8lpocb6QDE+Yeewmlk4nx1H8jhBLM
-         /eNqjK4J48qRGsXV19BMH6EOPnhcjlkFagqpsdPMtRtJjU8TCuJ9U82csskAjpcPlyDu
-         7nsl4oC0/dbHd1KGpRWHOoDZNDUL5vfkkXz66zNQwi3oTn5hQnXN1j4650rzn+mayhTg
-         7rMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=U5cS9nqr5rAd4hwsFX5SVt8LkKZ5u86E9Sxsnqkok3E=;
-        b=luvLpSvTbFNJKiDA6FRuXiCirSt1fUARvU6TIh4e82FUw4QXGsCDTMye8sRjWQNegy
-         ZirkFg2C/nhrhyVlcfTqqDUTn6yuThKXSC31hZfRskKwZ0dRFlLdVK9NuownMjCn6aLb
-         ZZ40ub/uLTfyewxIzN4Qs0cDIq3JRRL9ymjdqDpPt5a5aQAzVDR4+rg30HniX+LDdRcn
-         brmP+lUj9anAxhzL158mo5wyCWD9HtfEmYyAblSDyEti7u02TNWLneyv6VVLy8z0wbhk
-         /WKpL3x8Fl6hs4TSaP+VobLZ2ox4HZ7bpi23sts+KUkHpbDJUEkw+fD33ObjayxD/sRy
-         PzmQ==
-X-Gm-Message-State: ANoB5pm0MKV9stIb6x2f32ps2dXO7iR1sYhq+fn45r+GxhHICKvSeRGm
-        jQnu8CzsnUw67P0WfTPVLo+6yA==
-X-Google-Smtp-Source: AA0mqf7j5IOnbTiFENJOyEPXBicv3MOIZR2rnX8YCISCZ9OTd0wRnF/F/zZ7tnGLqNgWCcennRMywQ==
-X-Received: by 2002:a17:906:4804:b0:7a8:3ecb:bd62 with SMTP id w4-20020a170906480400b007a83ecbbd62mr2307514ejq.721.1668694579013;
-        Thu, 17 Nov 2022 06:16:19 -0800 (PST)
-Received: from localhost.localdomain ([194.29.137.22])
-        by smtp.gmail.com with ESMTPSA id e24-20020a170906315800b0078d793e7927sm432543eje.4.2022.11.17.06.16.17
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 17 Nov 2022 06:16:18 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     patches@linaro.org, Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: dts: qcom: sm8450-nagara: Add gpio line names for TLMM
-Date:   Thu, 17 Nov 2022 15:16:13 +0100
-Message-Id: <20221117141613.19942-1-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+        Thu, 17 Nov 2022 09:21:33 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F6EC77225;
+        Thu, 17 Nov 2022 06:21:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668694890; x=1700230890;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=QAS2h8V2dfght1SJU/Na0JcJSN/AEZSVl08JRBsGjdI=;
+  b=NNK2xzoKjwI6qrmzmGmeKxLrNmv1MfC5ADjD6m8RHOc5qInpX8GUo6Kc
+   DGxFqUcjxrFSxNgjlG6pAFy+WDmFjandV5TQM4N6SsjF0ito1788+EDl+
+   H5+XYRvEc5yS8+cPIzx8zzTd3zL73kJ1dSrkXXa/Zs6DUma1Ls4bUAUH8
+   7OPnFgL4uM5NiL++90N5G2kik3Z8LhOB4Ee65e3421zTIjyEi7ViQHN+V
+   qUmBIlieRBS0vf/6d1u/PWIq6fQo/FdDSlVTcNrbhFh8rjJeNTtnJJ1ZW
+   0vusI+e60KUZESmSxqDOLI5XdLgX6B/nwtsIM49grAuhoJJhuZ8f1gd25
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="312874347"
+X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
+   d="scan'208";a="312874347"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 06:21:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="634066426"
+X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
+   d="scan'208";a="634066426"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by orsmga007.jf.intel.com with ESMTP; 17 Nov 2022 06:21:17 -0800
+Date:   Thu, 17 Nov 2022 22:16:53 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Alex =?iso-8859-1?Q?Benn=E9e?= <alex.bennee@linaro.org>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        AKASHI Takahiro <takahiro.akashi@linaro.org>
+Subject: Re: [PATCH v9 0/8] KVM: mm: fd-based approach for supporting KVM
+Message-ID: <20221117141653.GE422408@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
+ <87k03xbvkt.fsf@linaro.org>
+ <20221116050022.GC364614@chaop.bj.intel.com>
+ <87v8nf8bte.fsf@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75 autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <87v8nf8bte.fsf@linaro.org>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sony ever so graciously provides GPIO line names in their downstream
-kernel (though sometimes they are not 100% accurate and you can judge
-that by simply looking at them and with what drivers they are used).
+On Wed, Nov 16, 2022 at 09:40:23AM +0000, Alex Bennée wrote:
+> 
+> Chao Peng <chao.p.peng@linux.intel.com> writes:
+> 
+> > On Mon, Nov 14, 2022 at 11:43:37AM +0000, Alex Bennée wrote:
+> >> 
+> >> Chao Peng <chao.p.peng@linux.intel.com> writes:
+> >> 
+> >> <snip>
+> >> > Introduction
+> >> > ============
+> >> > KVM userspace being able to crash the host is horrible. Under current
+> >> > KVM architecture, all guest memory is inherently accessible from KVM
+> >> > userspace and is exposed to the mentioned crash issue. The goal of this
+> >> > series is to provide a solution to align mm and KVM, on a userspace
+> >> > inaccessible approach of exposing guest memory. 
+> >> >
+> >> > Normally, KVM populates secondary page table (e.g. EPT) by using a host
+> >> > virtual address (hva) from core mm page table (e.g. x86 userspace page
+> >> > table). This requires guest memory being mmaped into KVM userspace, but
+> >> > this is also the source where the mentioned crash issue can happen. In
+> >> > theory, apart from those 'shared' memory for device emulation etc, guest
+> >> > memory doesn't have to be mmaped into KVM userspace.
+> >> >
+> >> > This series introduces fd-based guest memory which will not be mmaped
+> >> > into KVM userspace. KVM populates secondary page table by using a
+> >> > fd/offset pair backed by a memory file system. The fd can be created
+> >> > from a supported memory filesystem like tmpfs/hugetlbfs and KVM can
+> >> > directly interact with them with newly introduced in-kernel interface,
+> >> > therefore remove the KVM userspace from the path of accessing/mmaping
+> >> > the guest memory. 
+> >> >
+> >> > Kirill had a patch [2] to address the same issue in a different way. It
+> >> > tracks guest encrypted memory at the 'struct page' level and relies on
+> >> > HWPOISON to reject the userspace access. The patch has been discussed in
+> >> > several online and offline threads and resulted in a design document [3]
+> >> > which is also the original proposal for this series. Later this patch
+> >> > series evolved as more comments received in community but the major
+> >> > concepts in [3] still hold true so recommend reading.
+> >> >
+> >> > The patch series may also be useful for other usages, for example, pure
+> >> > software approach may use it to harden itself against unintentional
+> >> > access to guest memory. This series is designed with these usages in
+> >> > mind but doesn't have code directly support them and extension might be
+> >> > needed.
+> >> 
+> >> There are a couple of additional use cases where having a consistent
+> >> memory interface with the kernel would be useful.
+> >
+> > Thanks very much for the info. But I'm not so confident that the current
+> > memfd_restricted() implementation can be useful for all these usages. 
+> >
+> >> 
+> >>   - Xen DomU guests providing other domains with VirtIO backends
+> >> 
+> >>   Xen by default doesn't give other domains special access to a domains
+> >>   memory. The guest can grant access to regions of its memory to other
+> >>   domains for this purpose. 
+> >
+> > I'm trying to form my understanding on how this could work and what's
+> > the benefit for a DomU guest to provide memory through memfd_restricted().
+> > AFAICS, memfd_restricted() can help to hide the memory from DomU userspace,
+> > but I assume VirtIO backends are still in DomU uerspace and need access
+> > that memory, right?
+> 
+> They need access to parts of the memory. At the moment you run your
+> VirtIO domains in the Dom0 and give them access to the whole of a DomU's
+> address space - however the Xen model is by default the guests memory is
+> inaccessible to other domains on the system. The DomU guest uses the Xen
+> grant model to expose portions of its address space to other domains -
+> namely for the VirtIO queues themselves and any pages containing buffers
+> involved in the VirtIO transaction. My thought was that looks like a
+> guest memory interface which is mostly inaccessible (private) with some
+> holes in it where memory is being explicitly shared with other domains.
 
-Add these to the PDX223&224 DTSIs to better document the hardware.
+Yes, similar in conception. For KVM, memfd_restricted() is used by host
+OS, guest will issue conversion between private and shared for its
+memory range. This is similar to Xen DomU guest grants its memory to
+other domains. Similarly, I guess to make memfd_restricted() being really
+useful for Xen, it should be run on the VirtIO backend domain (e.g.
+equivalent to the host position for KVM).
 
-Diff between 223 and 224:
-< 	gpio-line-names = "NC", /* GPIO_0 */
-< 			  "NC",
-< 			  "NC",
-< 			  "NC",
-> 	gpio-line-names = "TELE_SPI_MISO", /* GPIO_0 */
-> 			  "TELE_SPI_MOSI",
-> 			  "TELE_SPI_CLK",
-> 			  "TELE_SPI_CS_N",
-< 			  "PM8010_2_RESET_N",
-> 			  "NC",
-< 			  "NC",
-> 			  "UWIDEC_PWR_EN",
-< 			  "TOF_RST_N",
-> 			  "NC"
-< 			  "QLINK1_REQ",
-< 			  "QLINK1_EN", /* GPIO_160 */
-< 			  "QLINK1_WMSS_RESET_N",
-> 			  "NC",
-> 			  "NC", /* GPIO_160 */
-> 			  "NC",
-The tele lens setup is different on 1 IV and 5 IV and power wiring
-is different for some lenses, so it makes sense. As for QLINK, no
-idea.
+> 
+> What I want to achieve is a common userspace API with defined semantics
+> for what happens when private and shared regions are accessed. Because
+> having each hypervisor/confidential computing architecture define its
+> own special API for accessing this memory is just a recipe for
+> fragmentation and makes sharing common VirtIO backends impossible.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- .../qcom/sm8450-sony-xperia-nagara-pdx223.dts | 213 ++++++++++++++++++
- .../qcom/sm8450-sony-xperia-nagara-pdx224.dts | 213 ++++++++++++++++++
- 2 files changed, 426 insertions(+)
+Yes, I agree. That's interesting to explore.
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx223.dts b/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx223.dts
-index 3ab145877094..b83500316a81 100644
---- a/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx223.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx223.dts
-@@ -12,3 +12,216 @@ / {
- 	model = "Sony Xperia 1 IV";
- 	compatible = "sony,pdx223", "qcom,sm8450";
- };
-+
-+&tlmm {
-+	gpio-line-names = "NC", /* GPIO_0 */
-+			  "NC",
-+			  "NC",
-+			  "NC",
-+			  "WLC_I2C_SDA",
-+			  "WLC_I2C_SCL",
-+			  "NC",
-+			  "PM8010_1_RESET_N",
-+			  "WLC_INT_N",
-+			  "NC",
-+			  "NC", /* GPIO_10 */
-+			  "PM8010_2_RESET_N",
-+			  "DISP_ERR_FG",
-+			  "HALL_INT_N",
-+			  "ALS_PROX_INT_N",
-+			  "IMU1_INT",
-+			  "TS_I2C_SDA",
-+			  "TS_I2C_SCL",
-+			  "DISP_RESET_N",
-+			  "DISP_VDDR_EN",
-+			  "TS_RESET_N", /* GPIO_20 */
-+			  "TS_INT_N",
-+			  "NC",
-+			  "TELEC_PWR_EN",
-+			  "CAM1_RESET_N",
-+			  "LEO_CAM0_RESET_N",
-+			  "DEBUG_UART_TX",
-+			  "DEBUG_UART_RX",
-+			  "FP_SPI_MISO",
-+			  "FP_SPI_MOSI",
-+			  "FP_SPI_CLK", /* GPIO_30 */
-+			  "FP_SPI_CS_N",
-+			  "NFC_I2C_SDA",
-+			  "NFC_I2C_SCL",
-+			  "NFC_EN",
-+			  "NFC_CLK_REQ",
-+			  "NFC_ESE_SPI_MISO",
-+			  "NFC_ESE_SPI_MOSI",
-+			  "NFC_ESE_SPI_CLK",
-+			  "NFC_ESE_SPI_CS",
-+			  "FP_INT_N", /* GPIO_40 */
-+			  "NC",
-+			  "FP_RESET_N",
-+			  "WCD_RST_N",
-+			  "NC",
-+			  "NFC_DWL_REQ",
-+			  "NFC_IRQ",
-+			  "FORCE_USB_BOOT",
-+			  "APPS_I2C_1_SDA",
-+			  "APPS_I2C_1_SCL",
-+			  "SBU_SW_OE", /* GPIO_50 */
-+			  "SBU_SW_SEL",
-+			  "SPK_AMP_I2C_SDA",
-+			  "SPK_AMP_I2C_SCL",
-+			  "NC",
-+			  "NC",
-+			  "CAMSENSOR_I2C_SDA",
-+			  "CAMSENSOR_I2C_SCL",
-+			  "GNSS_ELNA_EN0",
-+			  "NC",
-+			  "NC", /* GPIO_60 */
-+			  "NC",
-+			  "NC",
-+			  "NC",
-+			  "NC",
-+			  "NC",
-+			  "RGBC_IR_INT",
-+			  "NC",
-+			  "NC",
-+			  "NC",
-+			  "NC", /* GPIO_70 */
-+			  "NC",
-+			  "HAP_I2C_SDA",
-+			  "HAP_I2C_SCL",
-+			  "HAP_RST_N",
-+			  "HAP_INT_N",
-+			  "HST_BT_UART_CTS",
-+			  "HST_BT_UART_RFR",
-+			  "HST_BT_UART_TX",
-+			  "HST_BT_UART_RX",
-+			  "HST_WLAN_EN", /* GPIO_80 */
-+			  "HST_BT_EN",
-+			  "HST_SW_CTRL",
-+			  "NC",
-+			  "NC",
-+			  "NC",
-+			  "DISP_VSYNC",
-+			  "NC",
-+			  "NC",
-+			  "HW_ID_0",
-+			  "HW_ID_1", /* GPIO_90 */
-+			  "USB_CC_DIR",
-+			  "TRAY_DET",
-+			  "SW_SERVICE",
-+			  "PCIE0_RESET_N",
-+			  "PCIE0_CLK_REQ_N",
-+			  "PCIE0_WAKE_N",
-+			  "OIS_ENABLE_WIDE",
-+			  "DEBUG_GPIO0",
-+			  "NC",
-+			  "CAM_MCLK0", /* GPIO_100 */
-+			  "CAM_MCLK1",
-+			  "CAM_MCLK2",
-+			  "CAM_MCLK3",
-+			  "NC",
-+			  "NC",
-+			  "TOF_RST_N",
-+			  "CAM_SOF",
-+			  "NC",
-+			  "AFEXPTMG_TELE",
-+			  "CCI_I2C0_SDA", /* GPIO_110 */
-+			  "CCI_I2C0_SCL",
-+			  "CCI_I2C1_SDA",
-+			  "CCI_I2C1_SCL",
-+			  "CCI_I2C2_SDA",
-+			  "CCI_I2C2_SCL",
-+			  "NC",
-+			  "CAM2_RESET_N",
-+			  "NC",
-+			  "EXT_VD0_XVS",
-+			  "CAM3_RESET_N", /* GPIO_120 */
-+			  "NC",
-+			  "NC",
-+			  "NC",
-+			  "NC",
-+			  "RF_ID_EXTENSION_2",
-+			  "HAP_I2S_CLK",
-+			  "HAP_I2S_DOUT",
-+			  "HAP_TRG1",
-+			  "HAP_I2S_SYNC",
-+			  "UIM1_DATA", /* GPIO_130 */
-+			  "UIM1_CLK",
-+			  "UIM1_RESET",
-+			  "TRAY_DET",
-+			  "UIM2_DATA",
-+			  "UIM2_CLK",
-+			  "UIM2_RESET",
-+			  "UIM2_PRESENT",
-+			  "SM_RFFE0_CLK",
-+			  "SM_RFFE0_DATA",
-+			  "SM_RFFE1_CLK", /* GPIO_140 */
-+			  "SM_RFFE1_DATA",
-+			  "SM_MSS_GRFC4",
-+			  "HST_AS_EN",
-+			  "LAA_RX_EN",
-+			  "NC",
-+			  "SM_RFFE4_CLK",
-+			  "SM_RFFE4_DATA",
-+			  "WLAN_COEX_UART1_RX",
-+			  "WLAN_COEX_UART1_TX",
-+			  "RF_LCD_ID_EN", /* GPIO_150 */
-+			  "RF_ID_EXTENSION",
-+			  "SM_MSS_GRFC12",
-+			  "NFC_COLD_RST",
-+			  "NC",
-+			  "NC",
-+			  "SDR1_QLINK0_REQ",
-+			  "SDR1_QLINK0_EN",
-+			  "SDR1_QLINK0_WMSS_RESET_N",
-+			  "QLINK1_REQ",
-+			  "QLINK1_EN", /* GPIO_160 */
-+			  "QLINK1_WMSS_RESET_N",
-+			  "SDR2_QLINK2_REQ",
-+			  "SDR2_QLINK2_EN",
-+			  "SDR2_QLINK2_WMSS_RESET_N",
-+			  "WCD_SWR_TX_CLK",
-+			  "WCD_SWR_TX_DATA0",
-+			  "WCD_SWR_TX_DATA1",
-+			  "WCD_SWR_RX_CLK",
-+			  "WCD_SWR_RX_DATA0",
-+			  "WCD_SWR_RX_DATA1", /* GPIO_170 */
-+			  "SM_DMIC1_CLK",
-+			  "SM_DMIC1_DATA",
-+			  "SM_DMIC2_CLK",
-+			  "SM_DMIC2_DATA",
-+			  "SPK_AMP_I2S_CLK",
-+			  "SPK_AMP_I2S_WS",
-+			  "NC",
-+			  "NC",
-+			  "WCD_SWR_TX_DATA2",
-+			  "SPK_AMP_I2S_ASP_DIN", /* GPIO_180 */
-+			  "SPK_AMP_I2S_ASP_DOUT",
-+			  "SPK_AMP_INT_N",
-+			  "SPK_AMP_RESET_N",
-+			  "HST_BT_WLAN_SLIMBUS_CLK",
-+			  "HST_BT_WLAN_SLIMBUS_DAT0",
-+			  "NC",
-+			  "NC",
-+			  "NC",
-+			  "NC",
-+			  "MAG_I2C_SDA", /* GPIO_190 */
-+			  "MAG_I2C_SCL",
-+			  "IMU_SPI_MISO",
-+			  "IMU_SPI_MOSI",
-+			  "IMU_SPI_CLK",
-+			  "IMU_SPI_CS_N",
-+			  "SENSOR_I2C_SDA",
-+			  "SENSOR_I2C_SCL",
-+			  "OIS_TELE_I2C_SDA",
-+			  "OIS_TELE_I2C_SCL",
-+			  "NC", /* GPIO_200 */
-+			  "OIS_ENABLE_TELE",
-+			  "HST_BLE_UART_TX",
-+			  "HST_BLE_UART_RX",
-+			  "HSTP_CLK_CFG_SEL",
-+			  "NC",
-+			  "APPS_I2C_0_SDA",
-+			  "APPS_I2C_0_SCL",
-+			  "CCI_I2C3_SDA",
-+			  "CCI_I2C3_SCL";
-+};
-diff --git a/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx224.dts b/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx224.dts
-index 0d64d3c0afed..13c2fc4bccfc 100644
---- a/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx224.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx224.dts
-@@ -19,3 +19,216 @@ imx563_vdig_vreg: imx563-vdig-regulator {
- 		enable-active-high;
- 	};
- };
-+
-+&tlmm {
-+	gpio-line-names = "TELE_SPI_MISO", /* GPIO_0 */
-+			  "TELE_SPI_MOSI", /* SONY says NC, but it only makes sense this way.. */
-+			  "TELE_SPI_CLK",
-+			  "TELE_SPI_CS_N",
-+			  "WLC_I2C_SDA",
-+			  "WLC_I2C_SCL",
-+			  "NC",
-+			  "PM8010_1_RESET_N",
-+			  "WLC_INT_N",
-+			  "NC",
-+			  "NC", /* GPIO_10 */
-+			  "NC",
-+			  "DISP_ERR_FG",
-+			  "HALL_INT_N",
-+			  "ALS_PROX_INT_N",
-+			  "IMU1_INT",
-+			  "TS_I2C_SDA",
-+			  "TS_I2C_SCL",
-+			  "DISP_RESET_N",
-+			  "DISP_VDDR_EN",
-+			  "TS_RESET_N", /* GPIO_20 */
-+			  "TS_INT_N",
-+			  "UWIDEC_PWR_EN",
-+			  "TELEC_PWR_EN",
-+			  "CAM1_RESET_N",
-+			  "LEO_CAM0_RESET_N",
-+			  "DEBUG_UART_TX",
-+			  "DEBUG_UART_RX",
-+			  "FP_SPI_MISO",
-+			  "FP_SPI_MOSI",
-+			  "FP_SPI_CLK", /* GPIO_30 */
-+			  "FP_SPI_CS_N",
-+			  "NFC_I2C_SDA",
-+			  "NFC_I2C_SCL",
-+			  "NFC_EN",
-+			  "NFC_CLK_REQ",
-+			  "NFC_ESE_SPI_MISO",
-+			  "NFC_ESE_SPI_MOSI",
-+			  "NFC_ESE_SPI_CLK",
-+			  "NFC_ESE_SPI_CS",
-+			  "FP_INT_N", /* GPIO_40 */
-+			  "NC",
-+			  "FP_RESET_N",
-+			  "WCD_RST_N",
-+			  "NC",
-+			  "NFC_DWL_REQ",
-+			  "NFC_IRQ",
-+			  "FORCE_USB_BOOT",
-+			  "APPS_I2C_1_SDA",
-+			  "APPS_I2C_1_SCL",
-+			  "SBU_SW_OE", /* GPIO_50 */
-+			  "SBU_SW_SEL",
-+			  "SPK_AMP_I2C_SDA",
-+			  "SPK_AMP_I2C_SCL",
-+			  "NC",
-+			  "NC",
-+			  "CAMSENSOR_I2C_SDA",
-+			  "CAMSENSOR_I2C_SCL",
-+			  "GNSS_ELNA_EN0",
-+			  "NC",
-+			  "NC", /* GPIO_60 */
-+			  "NC",
-+			  "NC",
-+			  "NC",
-+			  "NC",
-+			  "NC",
-+			  "RGBC_IR_INT",
-+			  "NC",
-+			  "NC",
-+			  "NC",
-+			  "NC", /* GPIO_70 */
-+			  "NC",
-+			  "HAP_I2C_SDA",
-+			  "HAP_I2C_SCL",
-+			  "HAP_RST_N",
-+			  "HAP_INT_N",
-+			  "HST_BT_UART_CTS",
-+			  "HST_BT_UART_RFR",
-+			  "HST_BT_UART_TX",
-+			  "HST_BT_UART_RX",
-+			  "HST_WLAN_EN", /* GPIO_80 */
-+			  "HST_BT_EN",
-+			  "HST_SW_CTRL",
-+			  "NC",
-+			  "NC",
-+			  "NC",
-+			  "DISP_VSYNC",
-+			  "NC",
-+			  "NC",
-+			  "HW_ID_0",
-+			  "HW_ID_1", /* GPIO_90 */
-+			  "USB_CC_DIR",
-+			  "TRAY_DET",
-+			  "SW_SERVICE",
-+			  "PCIE0_RESET_N",
-+			  "PCIE0_CLK_REQ_N",
-+			  "PCIE0_WAKE_N",
-+			  "OIS_ENABLE_WIDE",
-+			  "DEBUG_GPIO0",
-+			  "NC",
-+			  "CAM_MCLK0", /* GPIO_100 */
-+			  "CAM_MCLK1",
-+			  "CAM_MCLK2",
-+			  "CAM_MCLK3",
-+			  "NC",
-+			  "NC",
-+			  "NC", /* SONY didn't rename this, but there's no ToF so it's likely NC */
-+			  "CAM_SOF",
-+			  "NC",
-+			  "AFEXPTMG_TELE",
-+			  "CCI_I2C0_SDA", /* GPIO_110 */
-+			  "CCI_I2C0_SCL",
-+			  "CCI_I2C1_SDA",
-+			  "CCI_I2C1_SCL",
-+			  "CCI_I2C2_SDA",
-+			  "CCI_I2C2_SCL",
-+			  "NC",
-+			  "CAM2_RESET_N",
-+			  "NC",
-+			  "EXT_VD0_XVS",
-+			  "CAM3_RESET_N", /* GPIO_120 */
-+			  "NC",
-+			  "NC",
-+			  "NC",
-+			  "NC",
-+			  "RF_ID_EXTENSION_2",
-+			  "HAP_I2S_CLK",
-+			  "HAP_I2S_DOUT",
-+			  "HAP_TRG1",
-+			  "HAP_I2S_SYNC",
-+			  "UIM1_DATA", /* GPIO_130 */
-+			  "UIM1_CLK",
-+			  "UIM1_RESET",
-+			  "TRAY_DET",
-+			  "UIM2_DATA",
-+			  "UIM2_CLK",
-+			  "UIM2_RESET",
-+			  "UIM2_PRESENT",
-+			  "SM_RFFE0_CLK",
-+			  "SM_RFFE0_DATA",
-+			  "SM_RFFE1_CLK", /* GPIO_140 */
-+			  "SM_RFFE1_DATA",
-+			  "SM_MSS_GRFC4",
-+			  "HST_AS_EN",
-+			  "LAA_RX_EN",
-+			  "NC",
-+			  "SM_RFFE4_CLK",
-+			  "SM_RFFE4_DATA",
-+			  "WLAN_COEX_UART1_RX",
-+			  "WLAN_COEX_UART1_TX",
-+			  "RF_LCD_ID_EN", /* GPIO_150 */
-+			  "RF_ID_EXTENSION",
-+			  "SM_MSS_GRFC12",
-+			  "NFC_COLD_RST",
-+			  "NC",
-+			  "NC",
-+			  "SDR1_QLINK0_REQ",
-+			  "SDR1_QLINK0_EN",
-+			  "SDR1_QLINK0_WMSS_RESET_N",
-+			  "NC",
-+			  "NC", /* GPIO_160 */
-+			  "NC",
-+			  "SDR2_QLINK2_REQ",
-+			  "SDR2_QLINK2_EN",
-+			  "SDR2_QLINK2_WMSS_RESET_N",
-+			  "WCD_SWR_TX_CLK",
-+			  "WCD_SWR_TX_DATA0",
-+			  "WCD_SWR_TX_DATA1",
-+			  "WCD_SWR_RX_CLK",
-+			  "WCD_SWR_RX_DATA0",
-+			  "WCD_SWR_RX_DATA1", /* GPIO_170 */
-+			  "SM_DMIC1_CLK",
-+			  "SM_DMIC1_DATA",
-+			  "SM_DMIC2_CLK",
-+			  "SM_DMIC2_DATA",
-+			  "SPK_AMP_I2S_CLK",
-+			  "SPK_AMP_I2S_WS",
-+			  "NC",
-+			  "NC",
-+			  "WCD_SWR_TX_DATA2",
-+			  "SPK_AMP_I2S_ASP_DIN", /* GPIO_180 */
-+			  "SPK_AMP_I2S_ASP_DOUT",
-+			  "SPK_AMP_INT_N",
-+			  "SPK_AMP_RESET_N",
-+			  "HST_BT_WLAN_SLIMBUS_CLK",
-+			  "HST_BT_WLAN_SLIMBUS_DAT0",
-+			  "NC",
-+			  "NC",
-+			  "NC",
-+			  "NC",
-+			  "MAG_I2C_SDA", /* GPIO_190 */
-+			  "MAG_I2C_SCL",
-+			  "IMU_SPI_MISO",
-+			  "IMU_SPI_MOSI",
-+			  "IMU_SPI_CLK",
-+			  "IMU_SPI_CS_N",
-+			  "SENSOR_I2C_SDA",
-+			  "SENSOR_I2C_SCL",
-+			  "OIS_TELE_I2C_SDA",
-+			  "OIS_TELE_I2C_SCL",
-+			  "NC", /* GPIO_200 */
-+			  "OIS_ENABLE_TELE",
-+			  "HST_BLE_UART_TX",
-+			  "HST_BLE_UART_RX",
-+			  "HSTP_CLK_CFG_SEL",
-+			  "NC",
-+			  "APPS_I2C_0_SDA",
-+			  "APPS_I2C_0_SCL",
-+			  "CCI_I2C3_SDA",
-+			  "CCI_I2C3_SCL";
-+};
--- 
-2.38.1
+> 
+> >
+> >> 
+> >>   - pKVM on ARM
+> >> 
+> >>   Similar to Xen, pKVM moves the management of the page tables into the
+> >>   hypervisor and again doesn't allow those domains to share memory by
+> >>   default.
+> >
+> > Right, we already had some discussions on this in the past versions.
+> >
+> >> 
+> >>   - VirtIO loopback
+> >> 
+> >>   This allows for VirtIO devices for the host kernel to be serviced by
+> >>   backends running in userspace. Obviously the memory userspace is
+> >>   allowed to access is strictly limited to the buffers and queues
+> >>   because giving userspace unrestricted access to the host kernel would
+> >>   have consequences.
+> >
+> > Okay, but normal memfd_create() should work for it, right? And
+> > memfd_restricted() instead may not work as it unmaps the memory from
+> > userspace.
+> >
+> >> 
+> >> All of these VirtIO backends work with vhost-user which uses memfds to
+> >> pass references to guest memory from the VMM to the backend
+> >> implementation.
+> >
+> > Sounds to me these are the places where normal memfd_create() can act on.
+> > VirtIO backends work on the mmap-ed memory which currently is not the
+> > case for memfd_restricted(). memfd_restricted() has different design
+> > purpose that unmaps the memory from userspace and employs some kernel
+> > callbacks so other kernel modules can make use of the memory with these
+> > callbacks instead of userspace virtual address.
+> 
+> Maybe my understanding is backwards then. Are you saying a guest starts
+> with all its memory exposed and then selectively unmaps the private
+> regions? Is this driven by the VMM or the guest itself?
 
+For confidential computing usages, normally guest starts with all guest
+memory being private, e.g,  cannot be accessed by host. The memory will
+be lived in memfd_restricted() memory and not exposed to host userspace
+VMM like QEMU. Guest then can selectively map its private sub regions
+(e.g. VirtIO queue in the guest VirtIO frontend driver) as shared so
+host backend driver in QEMU can see it. When this happens, new shared
+mapping will be established in KVM and the new memory will be provided
+from normal mmap-able memory, then QEMU can do whatever it can do for
+the device emulation.
+
+Thanks,
+Chao
+> 
+> -- 
+> Alex Bennée
