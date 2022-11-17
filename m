@@ -2,155 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D541762D486
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 08:59:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21B3362D48A
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:00:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239305AbiKQH7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 02:59:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48574 "EHLO
+        id S238603AbiKQIAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 03:00:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234510AbiKQH7s (ORCPT
+        with ESMTP id S239383AbiKQIAF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 02:59:48 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E342214013;
-        Wed, 16 Nov 2022 23:59:45 -0800 (PST)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8Dxfbfw6XVj7DYIAA--.18414S3;
-        Thu, 17 Nov 2022 15:59:44 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxtuPr6XVjnc4VAA--.57405S3;
-        Thu, 17 Nov 2022 15:59:43 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Jean Delvare <jdelvare@suse.de>,
-        William Zhang <william.zhang@broadcom.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Jan Dabros <jsd@semihalf.com>,
-        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yinbo Zhu <zhuyinbo@loongson.cn>
-Subject: [PATCH v1 2/2] dt-bindings: i2c: add loongson i2c
-Date:   Thu, 17 Nov 2022 15:59:38 +0800
-Message-Id: <20221117075938.23379-2-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221117075938.23379-1-zhuyinbo@loongson.cn>
-References: <20221117075938.23379-1-zhuyinbo@loongson.cn>
+        Thu, 17 Nov 2022 03:00:05 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46538716FF;
+        Thu, 17 Nov 2022 00:00:01 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id b3so1553893lfv.2;
+        Thu, 17 Nov 2022 00:00:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Hy7NLr5hqE2CbJ9jouBdK1ZIwHDUPfh4zTUfGBjG5As=;
+        b=n7y4fRjf6M5mskOzXdXUZu8ArEzlfdQw6BxAnS7gl3FgJm37oY7ADxdez6z4WWtTEk
+         GZeTVdJPSVQyNhme1p8tRboH2k51cxTEp8FLujI3ksGvHyel2Gyta3T8gmbGylSm7rwA
+         ZKFDykhol1g8+PCoHl1KQi6weDsspBkelXR/lkOk9fV9WD1QVDExKjbRjO/Adltz8PDH
+         KljdCHYf+Ok5oN5ZLJ+Dxe9MFmgMQZB7M5h4ZaWFO68V2azjPzkURmfYgBkzoVIJCZjX
+         9fU97XTmcsYxdyLWTdI9jmgzKUFNnDrGjZW1+wVIo/BrtSaho6N/nwid7ytf5AzDXNIL
+         tbfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Hy7NLr5hqE2CbJ9jouBdK1ZIwHDUPfh4zTUfGBjG5As=;
+        b=taqWzTGe7++D8kO9uiJNk7eTJt5qvALitUfNrlivLM6Pz9s84Tu88eD8dMAju+VLKR
+         Y2WOf+n2Jfrc+Ee6JhkKRWdx2qNHg3RhQUs4fHhZ2oaoEY/sJSPCTcwGNw8k0rBpqBXJ
+         sfjp6WBFmK5uom2B49wd2bY7eLHFXa7eDJ0S1FMUrkCvjv44dQOnYd14g38m2ZE1KnzX
+         hMthdLR+ChnIiaXzJ2hHj+KCJQIq3KVtBPVQdXNZrtUJckASxQ1pQSCUWf3k2Ma+RPae
+         UgA7MPcWPpRxAYTbfj7yGSKEknTE2vwvqQ8eBKYdf+y4MdxPpPE0bY/C7hVnFCejcmD/
+         d5zw==
+X-Gm-Message-State: ANoB5pln/iMauXgATTQSe5ojv00AmQnwG0u/xevCYZ6DyiMg0lZBtt4b
+        GKBvPmN+CNiPueRbQy0F77o=
+X-Google-Smtp-Source: AA0mqf5/X/D4OGM7Km0DSNGgRsSX5HuHd40Bn19ehlIO61z4kcYkdVKpjil1rziL0MyeWcAlCyLmvw==
+X-Received: by 2002:ac2:4201:0:b0:4b1:7c15:e923 with SMTP id y1-20020ac24201000000b004b17c15e923mr512728lfh.320.1668671999651;
+        Wed, 16 Nov 2022 23:59:59 -0800 (PST)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id b17-20020a196711000000b004a100c21eaesm28532lfc.97.2022.11.16.23.59.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 23:59:59 -0800 (PST)
+Date:   Thu, 17 Nov 2022 10:59:56 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Rob Herring <robh@kernel.org>, Marek Vasut <marex@denx.de>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Richard Zhu <hongxing.zhu@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        caihuoqing <caihuoqing@baidu.com>, Vinod Koul <vkoul@kernel.org>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v7 01/20] dt-bindings: imx6q-pcie: Fix clock names for
+ imx6sx and imx8mq
+Message-ID: <20221117075956.4dw4g7cswr2iamro@mobilestation>
+References: <20221113191301.5526-1-Sergey.Semin@baikalelectronics.ru>
+ <20221113191301.5526-2-Sergey.Semin@baikalelectronics.ru>
+ <20221116203812.GA834519-robh@kernel.org>
+ <20221117074318.cd52h5ks7ay4j4wb@mobilestation>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxtuPr6XVjnc4VAA--.57405S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7uF15Xw48ZF4rtF48uF4UArb_yoW8uryUp3
-        ZrCrsxGF1IqF12939xKFyUC3W5Zwn5CFnruFsFqw1DKF98G3Z8Zw4akFn8Za13ury8XFW7
-        XFZ29r4j93Wvyw7anT9S1TB71UUUUbDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bS8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUAVWUZwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0ow
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kKe7AKxVWUtVW8ZwAS0I0E0xvYzxvE
-        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
-        80ewAv7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2z280aVAFwI0_Cr0_Gr1UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x
-        0EwIxGrwCF04k20xvE74AGY7Cv6cx26rWl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xF
-        xVAFwI0_Jw0_GFylx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWw
-        C2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Xr0_
-        Ar1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJV
-        WUCwCI42IY6I8E87Iv67AKxVWxJVW8Jr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1U
-        YxBIdaVFxhVjvjDU0xZFpf9x07jY2NtUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221117074318.cd52h5ks7ay4j4wb@mobilestation>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the Loongson platform i2c binding with DT schema format using
-json-schema.
+On Thu, Nov 17, 2022 at 10:43:22AM +0300, Serge Semin wrote:
+> On Wed, Nov 16, 2022 at 02:38:12PM -0600, Rob Herring wrote:
+> > On Sun, Nov 13, 2022 at 10:12:42PM +0300, Serge Semin wrote:
+> > > Originally as it was defined the legacy bindings the pcie_inbound_axi and
+> > > pcie_aux clock names were supposed to be used in the fsl,imx6sx-pcie and
+> > > fsl,imx8mq-pcie devices respectively. But the bindings conversion has been
+> > > incorrectly so now the fourth clock name is defined as "pcie_inbound_axi
+> > > for imx6sx-pcie, pcie_aux for imx8mq-pcie", which is completely wrong.
+> > > Let's fix that by conditionally apply the clock-names constraints based on
+> > > the compatible string content.
+> > > 
+> > > Fixes: 751ca492f131 ("dt-bindings: PCI: imx6: convert the imx pcie controller to dtschema")
+> > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > > Acked-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> > > 
+> > > ---
+> > > 
+> > > Changelog v5:
+> > > - This is a new patch added on the v5 release of the patchset.
+> > > 
+> > > Changelog v7:
+> > > - Move the allOf clause to the bottom of the bindings. (@Krzysztof)
+> > > - Get back the names to the clock-names property and make sure the
+> > >   platform-specific name constraint is applied in the allOf clause.
+> > >   (@Rob)
+> > > ---
+> > >  .../bindings/pci/fsl,imx6q-pcie.yaml          | 46 +++++++++++++++++--
+> > >  1 file changed, 42 insertions(+), 4 deletions(-)
+> > 
+> > We have 2 patches doing the same thing:
+> > 
+> > https://lore.kernel.org/all/20221109002449.35936-1-marex@denx.de/
+> 
 
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
----
- .../bindings/i2c/loongson,ls-i2c.yaml         | 49 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 50 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/i2c/loongson,ls-i2c.yaml
+> It seems to me that that patch does two things at a time:
+> 1. Fixes invalid fourth clock-names entry.
+> 2. Fixes the fsl,imx8mm-pcie device having the "pcie_aux" clock name
+> required instead of "pcie_phy".
+> 
+> My patch does only the first part. What about moving my patch to that
+> series and converting the Marek' patch to being applicable on top of
+> it and fixing the imx8mm part only? That seems reasonable.
 
-diff --git a/Documentation/devicetree/bindings/i2c/loongson,ls-i2c.yaml b/Documentation/devicetree/bindings/i2c/loongson,ls-i2c.yaml
-new file mode 100644
-index 000000000000..275afe8c8483
---- /dev/null
-+++ b/Documentation/devicetree/bindings/i2c/loongson,ls-i2c.yaml
-@@ -0,0 +1,49 @@
-+# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/i2c/loongson,ls-i2c.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Loongson I2C controller
-+
-+maintainers:
-+  - Yinbo Zhu <zhuyinbo@loongson.cn>
-+
-+allOf:
-+  - $ref: /schemas/i2c/i2c-controller.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - loongson,ls2k-i2c
-+      - loongson,ls7a-i2c
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - "#address-cells"
-+  - "#size-cells"
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    i2c0: i2c@1fe21000 {
-+        compatible = "loongson,ls2k-i2c";
-+        reg = <0x1fe21000 0x8>;
-+        interrupt-parent = <&liointc0>;
-+        interrupts = <22 IRQ_TYPE_LEVEL_LOW>;
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        pinctrl-names = "default";
-+        pinctrl-0 = <&i2c0_pins_default>;
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e45c678eb40e..b956d5e2d9e0 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12064,6 +12064,7 @@ LOONGSON SERIES I2C DRIVER
- M:	Yinbo Zhu <zhuyinbo@loongson.cn>
- L:	linux-i2c@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/i2c/loongson,ls-i2c.yaml
- F:	drivers/i2c/busses/i2c-loongson.c
- 
- LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
--- 
-2.20.1
+BTW, if this patch is moved from here the series will fail the
+dt_binding_check procedure.
 
+-Sergey
+
+> 
+> -Sergey
+> 
+> > 
+> > Please hash out which one you all want. Both seem to have clock 
+> > warnings still...
+> > 
+> > Reviewed-by: Rob Herring <robh@kernel.org>
