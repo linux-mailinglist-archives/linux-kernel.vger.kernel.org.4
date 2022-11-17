@@ -2,67 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8404F62DC8E
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:23:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE91862DCAF
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:25:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239956AbiKQNXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 08:23:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40910 "EHLO
+        id S234869AbiKQNZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 08:25:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239967AbiKQNXi (ORCPT
+        with ESMTP id S230365AbiKQNZs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 08:23:38 -0500
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B120E17046
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 05:23:32 -0800 (PST)
-Received: by mail-qv1-xf34.google.com with SMTP id i12so1160175qvs.2
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 05:23:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=P4qE9RTmLTvrWv23dU+LZNw4qYAOY7fS7onaXUzE0KE=;
-        b=hCgwdYKJAabgQcG7x7Z5xhvq/SHD0Zb7OxSrL9ICbK+vw9MifK7iAQRL6b7ew/68vk
-         upRDnHFRIfKf6apYbyKsvxDKZi8ktRxFjqK9fizdwCT/yedtDvrWJd3QHY8PtegqezR2
-         XNa5fXdQ2M8Iovz6JKGLtSYiX1rLVbupFnI6k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=P4qE9RTmLTvrWv23dU+LZNw4qYAOY7fS7onaXUzE0KE=;
-        b=ip9cCiJ1Ou4igzu3IATK8e6qunV9dJcioHSRDDBECZDYlZuEmxaoA0YGiq5APzfrbK
-         NmLlGXhzStXKZQ3LVjYRWg2FZFAtc5PKe517oPl85DvxeVEBSbveEgEDtlPGGn3mI2PM
-         epUiQrVwPeBkh0zGY8tdMff8InI56YqDkwPc4dUSXF/wvIDjKLBX6OMYoT2J7BbUOJG6
-         dDp8yd79V8tMJgS9rc4K2AiVxr+0Tl6C8fCBtSMeStnaXBnPFFrc6R4F0sVezSsZxtH/
-         McVzyApX5kAT6d19JwHlmJwcuHVzlRBCLoq4qOdz+p7UTMLVhUcD+OgMjzP9ucnOLc35
-         dC1A==
-X-Gm-Message-State: ANoB5pkZ2qS7xY3foz3WL8OeaRKTFBMpsx3+fdeJrGuvIzQh52g1YG8s
-        b5hldzla52U4nJ5qgByjltkrepTuFmoQkg==
-X-Google-Smtp-Source: AA0mqf5xndxZ8iAeDsaSH/FxEPM9+KbqDuWBUmYEtwMIhFyeeODi0zo5VnEW3+siC1GYw2GAM9n1FQ==
-X-Received: by 2002:a0c:ea88:0:b0:4bb:8304:23b1 with SMTP id d8-20020a0cea88000000b004bb830423b1mr2332515qvp.15.1668691411529;
-        Thu, 17 Nov 2022 05:23:31 -0800 (PST)
-Received: from smtpclient.apple (c-73-148-104-166.hsd1.va.comcast.net. [73.148.104.166])
-        by smtp.gmail.com with ESMTPSA id dm50-20020a05620a1d7200b006fb7f94a65bsm448221qkb.44.2022.11.17.05.23.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Nov 2022 05:23:31 -0800 (PST)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Joel Fernandes <joel@joelfernandes.org>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH v2] rcu/kfree: Do not request RCU when not needed
-Date:   Thu, 17 Nov 2022 08:23:30 -0500
-Message-Id: <938BD0DD-9F91-44E6-BCBA-3DA3FA6779C0@joelfernandes.org>
-References: <Y3YzCi9exKhiAAd0@pc636>
-Cc:     paulmck@kernel.org, linux-kernel@vger.kernel.org,
-        rcu@vger.kernel.org
-In-Reply-To: <Y3YzCi9exKhiAAd0@pc636>
-To:     Uladzislau Rezki <urezki@gmail.com>
-X-Mailer: iPhone Mail (19G82)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_QP_LONG_LINE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Thu, 17 Nov 2022 08:25:48 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123E065E44;
+        Thu, 17 Nov 2022 05:25:47 -0800 (PST)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NCgdZ1ldfz15MfR;
+        Thu, 17 Nov 2022 21:25:22 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 17 Nov 2022 21:25:45 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 17 Nov 2022 21:25:44 +0800
+Subject: Re: [PATCH v7 4/6] rcu: Add RCU stall diagnosis information
+To:     Frederic Weisbecker <frederic@kernel.org>
+CC:     "Paul E . McKenney" <paulmck@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        "Steven Rostedt" <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Robert Elliott <elliott@hpe.com>
+References: <20221111130709.247-1-thunder.leizhen@huawei.com>
+ <20221111130709.247-5-thunder.leizhen@huawei.com>
+ <20221116223942.GA838972@lothringen>
+ <d4f7f41c-e1ef-606f-d700-3e67059bb06d@huawei.com>
+ <20221117122238.GC839309@lothringen>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <54aa07c4-b7e3-1a0e-e6a3-444573caba16@huawei.com>
+Date:   Thu, 17 Nov 2022 21:25:44 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
+MIME-Version: 1.0
+In-Reply-To: <20221117122238.GC839309@lothringen>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,100 +66,82 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-> On Nov 17, 2022, at 8:11 AM, Uladzislau Rezki <urezki@gmail.com> wrote:
->=20
-> =EF=BB=BFOn Thu, Nov 17, 2022 at 08:06:21AM -0500, Joel Fernandes wrote:
->>=20
->>=20
->>>> On Nov 17, 2022, at 7:58 AM, Uladzislau Rezki <urezki@gmail.com> wrote:=
+On 2022/11/17 20:22, Frederic Weisbecker wrote:
+> On Thu, Nov 17, 2022 at 09:57:18AM +0800, Leizhen (ThunderTown) wrote:
+>>
+>>
+>> On 2022/11/17 6:39, Frederic Weisbecker wrote:
+>>> On Fri, Nov 11, 2022 at 09:07:07PM +0800, Zhen Lei wrote:
+>>>> @@ -262,6 +279,8 @@ struct rcu_data {
+>>>>  	short rcu_onl_gp_flags;		/* ->gp_flags at last online. */
+>>>>  	unsigned long last_fqs_resched;	/* Time of last rcu_resched(). */
+>>>>  	unsigned long last_sched_clock;	/* Jiffies of last rcu_sched_clock_irq(). */
+>>>> +	struct rcu_snap_record snap_record; /* Snapshot of core stats at half of */
+>>>> +					    /* the first RCU stall timeout */
+>>>
+>>> This should be under #ifdef CONFIG_RCU_CPU_STALL_CPUTIME
+>>
+>> This will not work for now because we also support boot option
+>> rcupdate.rcu_cpu_stall_cputime.
+> 
+> I'm confused. If CONFIG_RCU_CPU_STALL_CPUTIME=n then rcupdate.rcu_cpu_stall_cputime has
+> no effect, right?
 
->>>=20
->>> =EF=BB=BFOn Wed, Nov 16, 2022 at 10:05:46PM +0000, Joel Fernandes wrote:=
+No, rcupdate.rcu_cpu_stall_cputime override CONFIG_RCU_CPU_STALL_CPUTIME. Because
+the default value of CONFIG_RCU_CPU_STALL_CPUTIME is n, so in most cases, we need
+rcupdate.rcu_cpu_stall_cputime as the escape route.
 
->>>>> On Wed, Nov 16, 2022 at 7:19 PM Uladzislau Rezki <urezki@gmail.com> wr=
-ote:
->>>>>=20
->>>>> Hello, Paul, Joel.
->>>>>=20
->>>>>>>=20
->>>>>>> Yes sure, I am doing a run now with my patch. However, I have a
->>>>>>> question -- why do you feel blocking in the kworker is not an issue?=
+If CONFIG_RCU_CPU_STALL_CPUTIME=y is default, your suggestion is more appropriate.
 
->>>>>>> You are taking a snapshot before queuing the normal kwork and then
->>>>>>> reading the snapshot when the normal kwork runs. Considering it is a=
+> 
+> Thanks.
+> 
+>>
+>>>
+>>>> +static void print_cpu_stat_info(int cpu)
+>>>> +{
+>>>> +	struct rcu_snap_record rsr, *rsrp;
+>>>> +	struct rcu_data *rdp = per_cpu_ptr(&rcu_data, cpu);
+>>>> +	struct kernel_cpustat *kcsp = &kcpustat_cpu(cpu);
+>>>> +
+>>>> +	if (!rcu_cpu_stall_cputime)
+>>>> +		return;
+>>>> +
+>>>> +	rsrp = &rdp->snap_record;
+>>>> +	if (rsrp->gp_seq != rdp->gp_seq)
+>>>> +		return;
+>>>> +
+>>>> +	rsr.cputime_irq     = kcpustat_field(kcsp, CPUTIME_IRQ, cpu);
+>>>> +	rsr.cputime_softirq = kcpustat_field(kcsp, CPUTIME_SOFTIRQ, cpu);
+>>>> +	rsr.cputime_system  = kcpustat_field(kcsp, CPUTIME_SYSTEM, cpu);
+>>>> +
+>>>> +	pr_err("\t         hardirqs   softirqs   csw/system\n");
+>>>> +	pr_err("\t number: %8ld %10d %12lld\n",
+>>>> +		kstat_cpu_irqs_sum(cpu) - rsrp->nr_hardirqs,
+>>>> +		kstat_cpu_softirqs_sum(cpu) - rsrp->nr_softirqs,
+>>>> +		nr_context_switches_cpu(cpu) - rsrp->nr_csw);
+>>>> +	pr_err("\tcputime: %8lld %10lld %12lld   ==> %lld(ms)\n",
+>>>> +		div_u64(rsr.cputime_irq - rsrp->cputime_irq, NSEC_PER_MSEC),
+>>>> +		div_u64(rsr.cputime_softirq - rsrp->cputime_softirq, NSEC_PER_MSEC),
+>>>> +		div_u64(rsr.cputime_system - rsrp->cputime_system, NSEC_PER_MSEC),
+>>>> +		jiffies64_to_msecs(jiffies - rsrp->jiffies));
+>>>
+>>> jiffies_to_msecs() should be enough.
+>>
+>> OK, thanks.
+>>
+>>>
+>>> Thanks.
+>>>
+>>> .
+>>>
+>>
+>> -- 
+>> Regards,
+>>   Zhen Lei
+> .
+> 
 
->>>>>>> high priority queue, the delay between when you are taking the
->>>>>>> snapshot, and reading it is likely small so there is a bigger chance=
-
->>>>>>> of blocking in cond_synchronize_rcu(). Did I miss something?
->>>>>>>=20
->>>>>> We can wait indeed in the reclaim worker. But the worker does not do a=
-ny
->>>>>> nasty or extra work here. If there is a need we block and wait. After=
- a
->>>>>> grace period, we are awoken and proceed.
->>>>>>=20
->>>>>> Therefore i do not see the reason in handling two cases:
->>>>>>=20
->>>>>> if (gp_done)
->>>>>>   queue_work();
->>>>>> else
->>>>>>   queue_rcu_work();
->>>>>>=20
->>>>>> it is the same if we just queue the work and check on entry. The curr=
-ent
->>>>>> scenario is: queue the work after a grace period. This is the differe=
-nce.
->>>>>>=20
->>>>>> Right if the reclaimer was a high prio kthread a time would be shorte=
-r.
->>>>>>=20
->>>>>> In your scenario the time seems even shorter(i have not checked) beca=
-use
->>>>>> you update a snapshot of krcp each time a kvfree_rcu() is invoked. So=
-
->>>>>> basically even though you have objects whose grace period is passed y=
-ou
->>>>>> do not separate it anyhow. Because you update the:
->>>>>>=20
->>>>>> krcp->gp_snap =3D get_state_synchronize_rcu();
->>>>>>=20
->>>>>> too often.
->>>>>>=20
->>>>> Once upon a time we discussed that it is worth to keep track of GP
->>>>> per-a-page in order to reduce a memory footprint. Below patch addresse=
-s
->>>>> it:
->>>>=20
->>>> In the patch below, it appears you are tracking the GP per krwp, and
->>>> not per page. But I could be missing something - could you split it
->>>> into separate patches for easier review?
->>>>=20
->>> I will split. I was thinking about it. The GP is tracked per-a-page. As f=
-or
->>> krwp it is only for channel_3. Everything goes there if no-page or no ca=
-che.
->>>=20
->> Ah, ok.
->>=20
->>>>=20
->>>> Also it still does cond_synchronize_rcu() :-(
->>>>=20
->>> Sometimes we need to wait for a GP we can not just release :)
->>=20
->> You know that is not what I meant ;) I was concerned about the blocking.
->>=20
-> Let me split. After that we/you can test and check if there is any issue
-> with sleeping on entry for waiting a GP if needed.
-
-Ack. What I=E2=80=99ll also do is, whenever you split it, I=E2=80=99ll put i=
-t on ChromeOS and see in real world, how many times we block. It could be I=E2=
-=80=99m missing something of how polled GP works.
-
-thanks,
-
- - Joel=20
-
->=20
-> --
-> Uladzislau Rezki
+-- 
+Regards,
+  Zhen Lei
