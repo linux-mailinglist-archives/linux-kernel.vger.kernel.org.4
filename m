@@ -2,136 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 194EB62E5A4
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 21:11:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17BDC62E5A6
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 21:12:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235051AbiKQULs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 15:11:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53712 "EHLO
+        id S235117AbiKQUMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 15:12:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232330AbiKQULq (ORCPT
+        with ESMTP id S232347AbiKQUM2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 15:11:46 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BF0977DED9;
-        Thu, 17 Nov 2022 12:11:45 -0800 (PST)
-Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 7798620B6C40;
-        Thu, 17 Nov 2022 12:11:45 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7798620B6C40
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1668715905;
-        bh=wa9uP9wabMDKDkEi7yCMCeF3v/U9yuY0CAIcQrCpuoU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Gu6zLkUqn/uJuiye/UTwpFsFT0Gmrzz+J9+GgnY9QRxk4itMn63Ey1ubnmU5Xq5n0
-         BaD8ysJgRDVorR4U4xN5hCpRgDlbWIWTVUr1Upxaq8O3GLO6l82xzuiLF+3JdZ7ZvW
-         AcjguNhb8JmwR8/FfTgQjtQxbl7JPLa+XYvVUq8k=
-From:   Nuno Das Neves <nunodasneves@linux.microsoft.com>
-To:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        iommu@lists.linux.dev
-Cc:     mikelley@microsoft.com, sunilmut@microsoft.com, wei.liu@kernel.org,
-        kys@microsoft.com, Tianyu.Lan@microsoft.com,
-        haiyangz@microsoft.com, decui@microsoft.com, dwmw2@infradead.org,
-        joro@8bytes.org, will@kernel.org
-Subject: [PATCH v2] iommu/hyper-v: Allow hyperv irq remapping without x2apic
-Date:   Thu, 17 Nov 2022 12:11:39 -0800
-Message-Id: <1668715899-8971-1-git-send-email-nunodasneves@linux.microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 17 Nov 2022 15:12:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 867077EBE9;
+        Thu, 17 Nov 2022 12:12:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CE992B821F3;
+        Thu, 17 Nov 2022 20:12:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 563B4C433C1;
+        Thu, 17 Nov 2022 20:12:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668715944;
+        bh=e56t0nc+8yUV+Q3+RwNDdQyrSxLwHO3oWil+eDUu2OQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aW4l8+bEIhdXj2ZhqjYoeuhszYj66EVOf9rvi+67SpIjx6a3fp0KXztwPzpIsQsao
+         WQ0++A/LoX763NCRoD6DGhp+XvQLVuuLfTckbNSSeqqnDV3+fxoLoGqDvB+uQL7jM+
+         PHhoE6UkJGITq7zjVVehYAkRN52Y1GX7wfKNcVYLk7QYoPU3P8IaLMkUGQ0zKXQpuA
+         dZhYQj3YGDv5xdv3Nbfe03Bq3ptmRoz/ZHH3BV5F+htFuOPwB/HLMTY5iaLXf//gdd
+         3Py16U5e87wF1Du96Gt1CmiQ8eEMX/KxTiE7ke21F0Gjtnl17viVdhYUc8eM+4Fnnm
+         ZTyiqMYH1lUnA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 261D94034E; Thu, 17 Nov 2022 17:12:21 -0300 (-03)
+Date:   Thu, 17 Nov 2022 17:12:21 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Ian Rogers <irogers@google.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH 0/6] Build output clean up
+Message-ID: <Y3aVpVkPkOf8nw4x@kernel.org>
+References: <20221117004356.279422-1-irogers@google.com>
+ <Y3ZV0FDW70ADoIYE@kernel.org>
+ <CAEf4BzbZ2-KiM=S6k11+39Y7vQMOmj7YvAd2w59BOXtCacjtFg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzbZ2-KiM=S6k11+39Y7vQMOmj7YvAd2w59BOXtCacjtFg@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If x2apic is not available, hyperv-iommu skips remapping
-irqs. This breaks root partition which always needs irqs
-remapped.
+Em Thu, Nov 17, 2022 at 11:32:10AM -0800, Andrii Nakryiko escreveu:
+> On Thu, Nov 17, 2022 at 7:40 AM Arnaldo Carvalho de Melo
+> <acme@kernel.org> wrote:
+> >
+> > Em Wed, Nov 16, 2022 at 04:43:50PM -0800, Ian Rogers escreveu:
+> > > Reduce build spam from commands not prefixed with @. Make
+> > > install_headers targets distinguishable by adding in the library name
+> > > so:
+> > > INSTALL headers
+> > > becomes:
+> > > INSTALL libapi_headers
+> > >
+> > > Ian Rogers (6):
+> > >   tools lib api: clean up install_headers
+> > >   tools lib bpf: Avoid install_headers make warning
+> > >   tools lib symbol: clean up build output
+> > >   tools lib perf: Make install_headers clearer
+> > >   tools lib subcmd: Make install_headers clearer
+> > >   tools lib traceevent: Make install_headers clearer
+> >
+> > Andrii, are you ok with that? Can I carry this on my next (perf/core)
+> > branch?
+> 
+> yep, lgtm. Please take it through your tree, in-kernel Makefile is not
+> even synced into Github, so there is no downsides in terms of libbpf
+> sync.
+> 
+> Acked-by: Andrii Nakryiko <andrii@kernel.org>
 
-Fix this by allowing irq remapping regardless of x2apic,
-and change hyperv_enable_irq_remapping() to return
-IRQ_REMAP_XAPIC_MODE in case x2apic is missing.
+Thanks, done.
 
-Tested with root and non-root hyperv partitions.
-
-Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
----
- arch/x86/kernel/cpu/mshyperv.c |  6 ++++++
- drivers/iommu/Kconfig          |  6 +++---
- drivers/iommu/hyperv-iommu.c   | 11 ++++++++---
- 3 files changed, 17 insertions(+), 6 deletions(-)
-
-diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
-index 831613959a92..46668e255421 100644
---- a/arch/x86/kernel/cpu/mshyperv.c
-+++ b/arch/x86/kernel/cpu/mshyperv.c
-@@ -475,6 +475,12 @@ static bool __init ms_hyperv_x2apic_available(void)
-  * (logically) generates MSIs directly to the system APIC irq domain.
-  * There is no HPET, and PCI MSI/MSI-X interrupts are remapped by the
-  * pci-hyperv host bridge.
-+ *
-+ * Note: for a Hyper-V root partition, this will always return false.
-+ * The hypervisor doesn't expose these HYPERV_CPUID_VIRT_STACK_* cpuids by
-+ * default, they are implemented as intercepts by the Windows Hyper-V stack.
-+ * Even a nested root partition (L2 root) will not get them because the
-+ * nested (L1) hypervisor filters them out.
-  */
- static bool __init ms_hyperv_msi_ext_dest_id(void)
- {
-diff --git a/drivers/iommu/Kconfig b/drivers/iommu/Kconfig
-index dc5f7a156ff5..cf7433652db0 100644
---- a/drivers/iommu/Kconfig
-+++ b/drivers/iommu/Kconfig
-@@ -474,13 +474,13 @@ config QCOM_IOMMU
- 	  Support for IOMMU on certain Qualcomm SoCs.
- 
- config HYPERV_IOMMU
--	bool "Hyper-V x2APIC IRQ Handling"
-+	bool "Hyper-V IRQ Handling"
- 	depends on HYPERV && X86
- 	select IOMMU_API
- 	default HYPERV
- 	help
--	  Stub IOMMU driver to handle IRQs as to allow Hyper-V Linux
--	  guests to run with x2APIC mode enabled.
-+	  Stub IOMMU driver to handle IRQs to support Hyper-V Linux
-+	  guest and root partitions.
- 
- config VIRTIO_IOMMU
- 	tristate "Virtio IOMMU driver"
-diff --git a/drivers/iommu/hyperv-iommu.c b/drivers/iommu/hyperv-iommu.c
-index e190bb8c225c..8302db7f783e 100644
---- a/drivers/iommu/hyperv-iommu.c
-+++ b/drivers/iommu/hyperv-iommu.c
-@@ -122,9 +122,12 @@ static int __init hyperv_prepare_irq_remapping(void)
- 	const char *name;
- 	const struct irq_domain_ops *ops;
- 
-+	/*
-+	 * For a Hyper-V root partition, ms_hyperv_msi_ext_dest_id()
-+	 * will always return false.
-+	 */
- 	if (!hypervisor_is_type(X86_HYPER_MS_HYPERV) ||
--	    x86_init.hyper.msi_ext_dest_id() ||
--	    !x2apic_supported())
-+	    x86_init.hyper.msi_ext_dest_id())
- 		return -ENODEV;
- 
- 	if (hv_root_partition) {
-@@ -170,7 +173,9 @@ static int __init hyperv_prepare_irq_remapping(void)
- 
- static int __init hyperv_enable_irq_remapping(void)
- {
--	return IRQ_REMAP_X2APIC_MODE;
-+	if (x2apic_supported())
-+		return IRQ_REMAP_X2APIC_MODE;
-+	return IRQ_REMAP_XAPIC_MODE;
- }
- 
- struct irq_remap_ops hyperv_irq_remap_ops = {
--- 
-2.25.1
-
+- Arnaldo
