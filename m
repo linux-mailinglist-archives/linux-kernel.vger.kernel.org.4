@@ -2,75 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC43462E363
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:48:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBB0962E366
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:49:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239005AbiKQRsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 12:48:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35388 "EHLO
+        id S234844AbiKQRtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 12:49:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234664AbiKQRsb (ORCPT
+        with ESMTP id S232347AbiKQRtR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 12:48:31 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86980FE4;
-        Thu, 17 Nov 2022 09:48:28 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id w15-20020a17090a380f00b0021873113cb4so2259582pjb.0;
-        Thu, 17 Nov 2022 09:48:28 -0800 (PST)
+        Thu, 17 Nov 2022 12:49:17 -0500
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792E863CA
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 09:49:16 -0800 (PST)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-3704852322fso25984427b3.8
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 09:49:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=s1yYyNmZdv0daCGoHPHS3FUErcT+tuPk7PSjFra0en8=;
-        b=cGLj1pwtomgmbByfX6WX1U5VFKSYmw1CoVvTun74RZ1F5WUcqXYadMBeRKWnQD4sbD
-         UEtWkhVQMvidb7CS/SwYw5dMznbXkc1A2fjJ7P+AD6C+5UoEgKJc3CbYekdSMe2F3rGO
-         iPfq0sUfX2kgjHUCJi+1SPy7G5pmwUsf/HZUih8Z7edJP8AdfSmBYgO/EJoCHv67bMfJ
-         ly9iIYlmBxqawthD3cxy2wmryDHf85BW52l0PniSXiv9uuZVSms5B6XUIImmEl8ZAnlM
-         c0o2d9ed96ww9fRCky1LsXK6DQD4vVAQiy5Mwvd4a0Yv83J3zxKMiHzxDt/Qi0mabbZP
-         2qTQ==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1wrgTKzaDrTBJIAKqG3lHjG1mI6f1GpMwMp11e5egR4=;
+        b=sGSF4x/7CTOsgayZlnfj2zXvpdTitbQ0wiOoKT9SHtguKHoW7+ek6d1GzqnEZpw6bU
+         YjVWpF/I/Y5R93HVFOgQeDkqofnxtjaoTJOZytTKzU8n/YfGQ9vExjo+7JW9sCps92AW
+         EUYGhreqcjqAh7RAsg2zUkCy4DYtAtxR0j3OFk4nPEJzT2DUKHmaIcFb8b1KFpSFyrbw
+         hNUIjO4KuaElNKvdBerAmw4rDiV9lZ9RVdKhdYMKf6qnvQwU2n+fd/lUcdUkj7w6/2ga
+         tEtWfyTYJZrJzMPfTMwzXQwSTSqJDJOKIVhoCH5oZx55kGDaW0F9vMFRyNnxFx/jrPB/
+         SzLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s1yYyNmZdv0daCGoHPHS3FUErcT+tuPk7PSjFra0en8=;
-        b=PBZJmLIfcbmNkCYaSS+yLER1SDwOOHy3zuaV/uehJSblO1NB25WtsvrndbFahelSXo
-         gbPoE6Jz8wy1oL4HsZDwc/40jf6KH3TSGoEKbi84cR68r2lhlk7XDswFn/JYADntE2s6
-         UM9NrXvYNjX2dRWcVNGRCkMnP+QWSs8Hm4PfvKvapSjCOiwbgMopg2o/P4iBcJxSmPGM
-         q1gOpHG/7fti4WsecyyTPSWbGjOsSr4y3h+wioIIFUnutF5TeOahNmrf23otpFK/C/rE
-         amge5m60GGgtKugtt5+fJhgc0nysltpjcqrn/MB1zfyS357KFgfBZ9XGOxyWy9h1qCgN
-         mWeQ==
-X-Gm-Message-State: ANoB5plLyq4BRhFq6jf+DsuGjvu8Rz7ozo51Yu0tQds+L7lJxKn9gMp8
-        aufdPzuD5p060d2rAP1epTdZQf4Aols=
-X-Google-Smtp-Source: AA0mqf4Bqehu/lUEeB16X4B1QBG8C+LCUyw88XLJlnfIwVSP0sizWnH3+FPhFqN4bJVqPLWWSrlqWw==
-X-Received: by 2002:a17:902:8d92:b0:182:e9dd:936d with SMTP id v18-20020a1709028d9200b00182e9dd936dmr3949002plo.6.1668707307958;
-        Thu, 17 Nov 2022 09:48:27 -0800 (PST)
-Received: from localhost ([192.55.54.55])
-        by smtp.gmail.com with ESMTPSA id r8-20020a63ce48000000b0046feca0883fsm1233253pgi.64.2022.11.17.09.48.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 09:48:27 -0800 (PST)
-Date:   Thu, 17 Nov 2022 09:48:26 -0800
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Sagi Shahar <sagis@google.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
-        Sean Christopherson <seanjc@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Kai Huang <kai.huang@intel.com>
-Subject: Re: [PATCH v10 016/108] KVM: TDX: create/destroy VM structure
-Message-ID: <20221117174826.GE2350331@ls.amr.corp.intel.com>
-References: <cover.1667110240.git.isaku.yamahata@intel.com>
- <fb337a67e17715977e46523d1344cb2a7f46a37a.1667110240.git.isaku.yamahata@intel.com>
- <CAAhR5DFGvGQmf95hrGcK0uvawvFrzdCisnEtvLV8k8pM3FRV_w@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1wrgTKzaDrTBJIAKqG3lHjG1mI6f1GpMwMp11e5egR4=;
+        b=g/WWDD3PQA7Etg3wQINQwajCGYKWPM9sHCJSxWWUQa8UqrVC1s8JNx6d4EKjWqAHrq
+         1KVMnbxbzrLsXOirWVZkGU7lk4667PsePhhYlH29G2umnELhBQKJDdglVK76qtvBFw0B
+         7xEk7nPSaDRbFVtj/7QuvJ7NEiukNyCsV2xVBKnCALTnvW7w4QxB1EVDG374ae34mXkc
+         9l953VoJJTjxlh8YI48lO6YGJa3apYcf57AvsmbgWVg7M97EVONYTUJ3CjuiGuHuMFRa
+         kz9kDUi9ATuFVoQSTJXmEhqWou0nCboBxnPCCKFWMC9NeYUTfs7nLgEIA/YZ88h+mQd7
+         AKxA==
+X-Gm-Message-State: ANoB5pmFadlrSFK/d70EXhMDGAWdlFExg8IEJ0qt6A9sTJQGlstknauD
+        0Yg/b9eP40qj6foPxdNBCBX8iD2tlGONCoogw4ud1Sh9upU=
+X-Google-Smtp-Source: AA0mqf75oUkC2jN9k/dkeEOGIn/OfK3gmDlfMwThyzfEwe2njYu0dxQ+llKYE22+YU/VQDAmOt3iBT/0LEi2Shh2NTg=
+X-Received: by 2002:a0d:e601:0:b0:356:d0ed:6a79 with SMTP id
+ p1-20020a0de601000000b00356d0ed6a79mr2911019ywe.489.1668707355322; Thu, 17
+ Nov 2022 09:49:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAAhR5DFGvGQmf95hrGcK0uvawvFrzdCisnEtvLV8k8pM3FRV_w@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221117031551.1142289-1-joel@joelfernandes.org>
+ <20221117031551.1142289-3-joel@joelfernandes.org> <CANn89i+gKVdveEtR9DX15Xr7E9Nn2my6SEEbXTMmxbqtezm2vg@mail.gmail.com>
+ <Y3ZaH4C4omQs1OR4@google.com> <CANn89iJRhr8+osviYKVYhcHHk5TnQQD53x87-WG3iTo4YNa0qA@mail.gmail.com>
+ <CAEXW_YRULY2KzMtkv+KjA_hSr1tSKhQLuCt-RrOkMLjjwAbwKg@mail.gmail.com>
+ <CANn89i+9XRh+p-ZiyY_VKy=EcxEyg+3AdtruMnj=KCgXF7QtoQ@mail.gmail.com> <CAEXW_YS-d_URqjfcasNnqf3zhCKAny8dhhLifAxtrpz1XYd_=w@mail.gmail.com>
+In-Reply-To: <CAEXW_YS-d_URqjfcasNnqf3zhCKAny8dhhLifAxtrpz1XYd_=w@mail.gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Thu, 17 Nov 2022 09:49:04 -0800
+Message-ID: <CANn89i+GcVzgg56fd9iO5Ma6vSUVvJmLHTvRwPMoYKMPR4G4Lw@mail.gmail.com>
+Subject: Re: [PATCH rcu/dev 3/3] net: Use call_rcu_flush() for dst_destroy_rcu
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     linux-kernel@vger.kernel.org, Cong Wang <xiyou.wangcong@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Jiri Pirko <jiri@resnulli.us>, netdev@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>, rcu@vger.kernel.org,
+        rostedt@goodmis.org, paulmck@kernel.org, fweisbec@gmail.com,
+        jiejiang@google.com, Thomas Glexiner <tglx@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,28 +80,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 04:06:10PM -0800,
-Sagi Shahar <sagis@google.com> wrote:
+On Thu, Nov 17, 2022 at 9:42 AM Joel Fernandes <joel@joelfernandes.org> wrote:
+>
 
-> > +int tdx_vm_init(struct kvm *kvm)
-> > +{
-> > +       struct kvm_tdx *kvm_tdx = to_kvm_tdx(kvm);
-> > +       cpumask_var_t packages;
-> > +       int ret, i;
-> > +       u64 err;
-> > +
-> > +       ret = tdx_keyid_alloc();
-> 
-> Can we skip the hkid allocation at such an early stage?
-> This makes intra-host migration more complicated as the hkid of the
-> destination VM is already allocated before we have a chance to migrate
-> the state from the source VM.
-> 
-> I remember you had an internal version that already did that in
-> https://github.com/intel/tdx/blob/552dd80c48f67ca01bcdd10667e0c11efd375177/arch/x86/kvm/vmx/tdx.c#L508
+>
+> Yes, I agree. Your comments here have not been useful (or respectful)
+> so I am Ok with that.
+>
+>  - Joel
 
-With the patch of "KVM: TDX: initialize VM with TDX specific parameters",
-the allocation code is split out into its own code with KVM_TDX_INIT_VM.
-I think that's what you want.
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+Well, I have discovered that some changes went in networking tree
+without network maintainers being involved nor CCed.
+
+What can I say ?
+
+It seems I have no say, right ?
+
+
+commit f32846476afbe1f296c41d036219178b3dfb6a9d
+Author: Joel Fernandes (Google) <joel@joelfernandes.org>
+Date:   Sun Oct 16 16:23:04 2022 +0000
+
+    rxrpc: Use call_rcu_flush() instead of call_rcu()
+
+    call_rcu() changes to save power may cause slowness. Use the
+    call_rcu_flush() API instead which reverts to the old behavior.
+
+    We find this via inspection that the RCU callback does a wakeup of a
+    thread. This usually indicates that something is waiting on it. To be
+    safe, let us use call_rcu_flush() here instead.
+
+    Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+
+diff --git a/net/rxrpc/conn_object.c b/net/rxrpc/conn_object.c
+index 22089e37e97f0628f780855f9e219e5c33d4afa1..fdcfb509cc4434b0781b76623532aff9c854ce60
+100644
+--- a/net/rxrpc/conn_object.c
++++ b/net/rxrpc/conn_object.c
+@@ -253,7 +253,7 @@ void rxrpc_kill_connection(struct rxrpc_connection *conn)
+         * must carry a ref on the connection to prevent us getting here whilst
+         * it is queued or running.
+         */
+-       call_rcu(&conn->rcu, rxrpc_destroy_connection);
++       call_rcu_flush(&conn->rcu, rxrpc_destroy_connection);
+ }
+
+ /*
