@@ -2,150 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD4EF62E00C
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:38:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76A0462E023
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:40:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234933AbiKQPiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 10:38:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50284 "EHLO
+        id S239727AbiKQPkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 10:40:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239647AbiKQPiB (ORCPT
+        with ESMTP id S234965AbiKQPkJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 10:38:01 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B3955EF89
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 07:37:54 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id n20so6148175ejh.0
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 07:37:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gyfLDCXcuLa+C4OYIAkICRz8xqfia7ngJD8kmgn0ZTA=;
-        b=KKmMVS1epMfQldi2MnGOupMKOvuYohhAkJLmOxrz7u/rOjbIqz7Xu6iQoHWwPB7iX3
-         PRmGp1LE9EMO/7OYGm2Y+cEzoGjl5LFrbONA9pqRLgBoLrCeDX7d1ZpYFf4w5H6tIEFu
-         4bGiHKdGQcsjlZQYzTKeaoRYPJwhBocOj1c5k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gyfLDCXcuLa+C4OYIAkICRz8xqfia7ngJD8kmgn0ZTA=;
-        b=7HivHqfe7MmPmr4V+VmaMzu1qrzoKiKU2yuy9dExRV4NEa5YUUmGY0/TS95t2vzJQ3
-         iuyOcTVSYTJ/hyXhnkoNDRuUBiNUlyWUCN8gfc3myv4EKYqJeiyeqjizizmG9gxYbcEv
-         wVw3fjdJ6kFVyXgaB/CLSbmW/BptEdN82rlRfyqgCL6xk/6GylxO4ln4qxGoqPUWQZUE
-         8DtM/J3lmuEa8Ywq2OokZlygc0aWK1Wa81LXtwiSwpA8OQJ6g3RapYTXpETMv6e94veB
-         JxCzR5Xnc+ylW2xMgS60y6YJowok6f9p8WOzU7elR+mPhAISXRLRx0ba9yHRwNX3Ffgy
-         Xetw==
-X-Gm-Message-State: ANoB5pm0YN376nivyecaolSbAJXxIfZom4TWjj3A7wbBrG1CNbMVmSTN
-        63fIIDQf01d9RSilNGg/TT6GNoj9+vtuAA+o
-X-Google-Smtp-Source: AA0mqf5gy5dgEDUjwI+GzNuWooGrItC4/v6sc0aRUQjN+dQ222Rtz1IcAGXeMQRsPDu1HR+xO4RetQ==
-X-Received: by 2002:a17:906:f252:b0:7ae:4236:bfb5 with SMTP id gy18-20020a170906f25200b007ae4236bfb5mr2472131ejb.428.1668699471968;
-        Thu, 17 Nov 2022 07:37:51 -0800 (PST)
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com. [209.85.221.46])
-        by smtp.gmail.com with ESMTPSA id s8-20020aa7cb08000000b00461b169c02csm664309edt.91.2022.11.17.07.37.48
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Nov 2022 07:37:49 -0800 (PST)
-Received: by mail-wr1-f46.google.com with SMTP id bs21so4473248wrb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 07:37:48 -0800 (PST)
-X-Received: by 2002:a5d:53c4:0:b0:236:7741:fa7b with SMTP id
- a4-20020a5d53c4000000b002367741fa7bmr1851138wrw.138.1668699468263; Thu, 17
- Nov 2022 07:37:48 -0800 (PST)
+        Thu, 17 Nov 2022 10:40:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11406205E6
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 07:39:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668699547;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=dVlZMe9k6FGYu0ltCFG6EsUuMhhHTcljQyz0mONX3Sk=;
+        b=h1Bcl/A33EJTAicKu1mhs9QahP1G/m61UlBB1AI/60MkAh5/FKjn/sP0ixt/EtgQ0IHBm4
+        PcZCZmbeZvCIUYlpFLLoGXU8EE5OEg6Lyr8f0j2J6vKILqZJM0TjEeksXYdoFpJuY0xz+U
+        Yx+TRiYxwOUWhaHCH+tWJDyFwSOyot8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-94-A8eawBDmNG2DMMLhoJFQSQ-1; Thu, 17 Nov 2022 10:39:05 -0500
+X-MC-Unique: A8eawBDmNG2DMMLhoJFQSQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2FBC585A59D;
+        Thu, 17 Nov 2022 15:39:05 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C5FA6111E3ED;
+        Thu, 17 Nov 2022 15:39:03 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH] fscache: fix OOB Read in __fscache_acquire_volume
+From:   David Howells <dhowells@redhat.com>
+To:     zhangpeng362@huawei.com, asmadeus@codewreck.org
+Cc:     syzbot+a76f6a6e524cf2080aa3@syzkaller.appspotmail.com,
+        Jeff Layton <jlayton@kernel.org>,
+        v9fs-developer@lists.sourceforge.net, linux-cachefs@redhat.com,
+        dhowells@redhat.com, ericvh@gmail.com, lucho@ionkov.net,
+        linux_oss@crudebyte.com,
+        syzbot+a76f6a6e524cf2080aa3@syzkaller.appspotmail.com,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 17 Nov 2022 15:39:00 +0000
+Message-ID: <166869954095.3793579.8500020902371015443.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.5
 MIME-Version: 1.0
-References: <20221117094251.1.I74849cf9699b8ff2e47f6028e28861101297549b@changeid>
- <20221117094251.2.Ibfc4751e4ba044d1caa1f88a16015e7c45c7db65@changeid>
-In-Reply-To: <20221117094251.2.Ibfc4751e4ba044d1caa1f88a16015e7c45c7db65@changeid>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 17 Nov 2022 07:37:35 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=Vd4UFabWeEsd7cDhhpnFkjTuYhc38zwAbfyxq2AHnhYA@mail.gmail.com>
-Message-ID: <CAD=FV=Vd4UFabWeEsd7cDhhpnFkjTuYhc38zwAbfyxq2AHnhYA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] Adding DT binding for zombie
-To:     Owen Yang <ecs.taipeikernel@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Harvey <hunge@google.com>,
-        Bob Moragues <moragues@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@codeaurora.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: ZhangPeng <zhangpeng362@huawei.com>
 
-On Wed, Nov 16, 2022 at 5:44 PM Owen Yang <ecs.taipeikernel@gmail.com> wrote:
->
->     creating first device tree binding for zombie case.
->
->     Documentation/devicetree/bindings/arm/qcom.yaml
->
->     Series-to: LKML <linux-kernel@vger.kernel.org>
->     Series-cc: Douglas Anderson <dianders@chromium.org>
->     Series-cc: Bob Moragues <moragues@chromium.org>
->     Series-cc: Harvey <hunge@google.com>
->
-> Signed-off-by: Owen Yang <ecs.taipeikernel@gmail.com>
-> ---
->
->  Documentation/devicetree/bindings/arm/qcom.yaml | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+The type of a->key[0] is char in fscache_volume_same().  If the length of
+cache volume key is greater than 127, the value of a->key[0] is less than
+0.  In this case, klen becomes much larger than 255 after type conversion,
+because the type of klen is size_t.  As a result, memcmp() is read out of
+bounds.
 
-There are a few problems with this patch.
+This causes a slab-out-of-bounds Read in __fscache_acquire_volume(), as
+reported by Syzbot.
 
-1. The patch does not apply to the top of the upstream Qualcomm tree
-(it gets merge conflicts). You should be sending your patches against
-the upstream Qualcomm dts tree, which is where they will land. For
-instance, since you're sending patches with patman you could make sure
-you're targeting the right tree with something like this:
+Fix this by changing the type of the stored key to "u8 *" rather than "char
+*" (it isn't a simple string anyway).  Also put in a check that the volume
+name doesn't exceed NAME_MAX.
 
-git remote add linux_qcom
-git://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git
-get fetch --no-tags linux_qcom
-git checkout -b 221117-send-zombie linux_qcom/for-next
-git cherry-pick ${PATCH1_TO_SEND}
-git cherry-pick ${PATCH2_TO_SEND}
-...
-git cherry-pick ${PATCHN_TO_SEND}
-patman
+==================================================================
+BUG: KASAN: slab-out-of-bounds in memcmp+0x16f/0x1c0 lib/string.c:757
+Read of size 8 at addr ffff888016f3aa90 by task syz-executor344/3613
 
-2. Because you were based on the wrong tree, you got Bjorn's email
-address wrong. You need his @kernel.org address. If you were targeting
-the correct tree then it would have been auto-fixed up for you by the
-.mailmap.
+CPU: 0 PID: 3613 Comm: syz-executor344 Not tainted
+6.0.0-rc2-syzkaller-00327-g8379c0b31fbc #0
+Hardware name: Google Compute Engine/Google Compute Engine, BIOS
+Google 07/22/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:317 [inline]
+ print_report.cold+0x2ba/0x719 mm/kasan/report.c:433
+ kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
+ memcmp+0x16f/0x1c0 lib/string.c:757
+ memcmp include/linux/fortify-string.h:420 [inline]
+ fscache_volume_same fs/fscache/volume.c:133 [inline]
+ fscache_hash_volume fs/fscache/volume.c:171 [inline]
+ __fscache_acquire_volume+0x76c/0x1080 fs/fscache/volume.c:328
+ fscache_acquire_volume include/linux/fscache.h:204 [inline]
+ v9fs_cache_session_get_cookie+0x143/0x240 fs/9p/cache.c:34
+ v9fs_session_init+0x1166/0x1810 fs/9p/v9fs.c:473
+ v9fs_mount+0xba/0xc90 fs/9p/vfs_super.c:126
+ legacy_get_tree+0x105/0x220 fs/fs_context.c:610
+ vfs_get_tree+0x89/0x2f0 fs/super.c:1530
+ do_new_mount fs/namespace.c:3040 [inline]
+ path_mount+0x1326/0x1e20 fs/namespace.c:3370
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f7d5064b1d9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 e1 14 00 00 90 48 89 f8 48 89
+f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01
+f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffd1700c028 EFLAGS: 00000246 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 00007ffd1700c060 RCX: 00007f7d5064b1d9
+RDX: 0000000020000040 RSI: 0000000020000000 RDI: 0000000000000000
+RBP: 0000000000000000 R08: 0000000020000200 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00000000000f4240
+R13: 0000000000000000 R14: 00007ffd1700c04c R15: 00007ffd1700c050
+==================================================================
 
-3. A minor detail, but "bindings" should be patch #1 and the device
-tree should be patch #2.
+Fixes: 62ab63352350 ("fscache: Implement volume registration")
+Reported-by: syzbot+a76f6a6e524cf2080aa3@syzkaller.appspotmail.com
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Peng Zhang <zhangpeng362@huawei.com>
+cc: Dominique Martinet <asmadeus@codewreck.org>
+cc: Jeff Layton <jlayton@kernel.org>
+cc: v9fs-developer@lists.sourceforge.net
+cc: linux-cachefs@redhat.com
+Link: https://lore.kernel.org/r/Y3OH+Dmi0QIOK18n@codewreck.org/ # Zhang Peng's v1 fix
+Link: https://lore.kernel.org/r/20221115140447.2971680-1-zhangpeng362@huawei.com/ # Zhang Peng's v2 fix
+---
 
-4. If I were picking the right place to add Zombie in the bindings, I
-would put it right after the "Villager" entries. Then all the Google
-sc7280 devices are next to each other and sorted by name.
+ fs/fscache/volume.c     |    7 +++++--
+ include/linux/fscache.h |    2 +-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-5. Somehow your patch description contains a bunch of "patman"
-commands directly. I think maybe this is because you indented them and
-thus patman didn't process the commands? Please try sending again
-after getting rid of the indentation. Also the
-"Documentation/devicetree/bindings/arm/qcom.yaml" line doesn't belong
-in the description.
+diff --git a/fs/fscache/volume.c b/fs/fscache/volume.c
+index a058e0136bfe..ab8ceddf9efa 100644
+--- a/fs/fscache/volume.c
++++ b/fs/fscache/volume.c
+@@ -203,7 +203,11 @@ static struct fscache_volume *fscache_alloc_volume(const char *volume_key,
+ 	struct fscache_volume *volume;
+ 	struct fscache_cache *cache;
+ 	size_t klen, hlen;
+-	char *key;
++	u8 *key;
++
++	klen = strlen(volume_key);
++	if (klen > NAME_MAX)
++		return NULL;
+ 
+ 	if (!coherency_data)
+ 		coherency_len = 0;
+@@ -229,7 +233,6 @@ static struct fscache_volume *fscache_alloc_volume(const char *volume_key,
+ 	/* Stick the length on the front of the key and pad it out to make
+ 	 * hashing easier.
+ 	 */
+-	klen = strlen(volume_key);
+ 	hlen = round_up(1 + klen + 1, sizeof(__le32));
+ 	key = kzalloc(hlen, GFP_KERNEL);
+ 	if (!key)
+diff --git a/include/linux/fscache.h b/include/linux/fscache.h
+index 36e5dd84cf59..8e312c8323a8 100644
+--- a/include/linux/fscache.h
++++ b/include/linux/fscache.h
+@@ -75,7 +75,7 @@ struct fscache_volume {
+ 	atomic_t			n_accesses;	/* Number of cache accesses in progress */
+ 	unsigned int			debug_id;
+ 	unsigned int			key_hash;	/* Hash of key string */
+-	char				*key;		/* Volume ID, eg. "afs@example.com@1234" */
++	u8				*key;		/* Volume ID, eg. "afs@example.com@1234" */
+ 	struct list_head		proc_link;	/* Link in /proc/fs/fscache/volumes */
+ 	struct hlist_bl_node		hash_link;	/* Link in hash table */
+ 	struct work_struct		work;
 
-6. The ${SUBJECT} of your patch (which comes from the first line of
-the patch description) needs tags. It probably should be:
 
-dt-bindings: arm: qcom: Add initial sc7280-zombie entries
-
-7. The patch description should ideally be a proper sentence (with the
-first word capitalized, for instance), like:
-
-Add an entry in the device tree binding for sc7280-zombie.
-
-8. Just to be consistent with other Chromebooks and to handle the case
-when we later add extra revs, please add "(newest rev)" for all of
-your descriptions in the yaml.
