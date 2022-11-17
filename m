@@ -2,118 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E95DF62E393
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:55:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92C6162E394
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:56:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234455AbiKQRz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 12:55:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39824 "EHLO
+        id S235030AbiKQR4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 12:56:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240291AbiKQRzs (ORCPT
+        with ESMTP id S240109AbiKQR4D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 12:55:48 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D6EF7FF2E;
-        Thu, 17 Nov 2022 09:55:48 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id h193so2615344pgc.10;
-        Thu, 17 Nov 2022 09:55:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1GKnYydXCYqxqW9dR7aXjYaf7V42K6rqe1svrcwQLNA=;
-        b=SsPhA+/zwr2soeEEaWB0iEXVlj2pRXy3T+5MRNkg3gA5bYnDEY76LeiMkjnH6Gtuek
-         VQBK8qn5HlwgpU7JZk31s67cl0oqPFk3/+E+STN+mOv1n0rSuGKwz4ufNl96yyvb+ehm
-         aR16ZhBgByLcqtxYalWYt3DhzqpWD1xk7B/ERhHy5UROjXSA2O4WT484NF1gnxYt2zLo
-         VhlagvXdWvqrnTC1Vpr/nXSDV94IDRsmmPKjuIzbKfxVwlbZ700ttpYm5thGIaufzUrk
-         HWDdterCqcq4ySav4311fVhhOLzfuYpSaYvQzNRfmNvAt+J1fYmNxyHxf+meEu+3PzVd
-         YRFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1GKnYydXCYqxqW9dR7aXjYaf7V42K6rqe1svrcwQLNA=;
-        b=TkOn/q0TYypgvcItYVwdYw9qRENVqNoMzOyCXJV/l1sjxWsfcAhYbafpwg3gwEyEuX
-         I94sNPdmxKAJQ8P0+6ww9LuTpeJ+o0mzwOOpmmF4pIql8cjSEYYkbSYUWVuK0iT9x3A+
-         dtFSAgArJE6z8YtbuG0C6n45vmrv7m2Et/fbjI5/8GIMoDLp5jFgv6aaCAMQHysevL8I
-         5gnVxqD5t0hEWjSUCXnPdOVyfxjsKtSaOBJC33ZIzgAXbfALIFYF76k8F6bo09ynwqw5
-         fwbUo3jJ5/HdNVkV9MA8SEqCOjTj6P2aJJWfjyN+zZ5P+cjKGnuTyMN8+dGKZu4Ty0xU
-         X71g==
-X-Gm-Message-State: ANoB5pmldrGwdlerUPJA8ojU7sBUF+DxMpT1LwYQkhxoDiTsVxMIhWTA
-        feqrtWaqwKTsF9uzONXaZBVVoN4Tsy4=
-X-Google-Smtp-Source: AA0mqf6iXN48y71fjRlt9NKrGMiWHTqJP3NlCcBrojVNFQ5F8Uz85fLyhe10Tsd6646K6iiHVBVGYw==
-X-Received: by 2002:a63:165d:0:b0:473:f7cd:6603 with SMTP id 29-20020a63165d000000b00473f7cd6603mr3055977pgw.336.1668707747710;
-        Thu, 17 Nov 2022 09:55:47 -0800 (PST)
-Received: from localhost ([192.55.54.55])
-        by smtp.gmail.com with ESMTPSA id h4-20020a170902680400b001870dc3b4c0sm1705264plk.74.2022.11.17.09.55.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 09:55:47 -0800 (PST)
-Date:   Thu, 17 Nov 2022 09:55:46 -0800
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "Aktas, Erdem" <erdemaktas@google.com>,
-        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
-        "dmatlack@google.com" <dmatlack@google.com>,
-        "Christopherson,, Sean" <seanjc@google.com>
-Subject: Re: [PATCH v10 032/108] KVM: x86/mmu: Make sync_page not use
- hard-coded 0 as the initial SPTE value
-Message-ID: <20221117175546.GH2350331@ls.amr.corp.intel.com>
-References: <cover.1667110240.git.isaku.yamahata@intel.com>
- <adcc3484605cb460a0c00ee5673c83f32a88e6ca.1667110240.git.isaku.yamahata@intel.com>
- <3f805b540780494c4a5b068287c37e40d71d7ba4.camel@intel.com>
+        Thu, 17 Nov 2022 12:56:03 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9261B2EF0A
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 09:56:00 -0800 (PST)
+Received: from [192.168.1.102] (unknown [103.251.226.79])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0BDCA929;
+        Thu, 17 Nov 2022 18:55:53 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1668707758;
+        bh=GdPOoKRqrG2ufeGG/2SH9V/fWXWoBKC38Aw9FoNcfyA=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=RFMPyXfbOKxmZOwkcsSeCt9YujWgYk8Et2/ySAHb5YtjlkpdkeZt8KCS07tioUone
+         Pf4qq9KsOr2zL9mk99Wyfftk73nFOpuRKrbD0JTstUCgDzCYRA1SNi1sCG9YXM4F0N
+         2mhNLN+zB1z7Q5h0G1XbczuO1E+iSrbuV6BNp+lI=
+Message-ID: <c718624a-bb6f-5474-5cc3-4319b1fdb282@ideasonboard.com>
+Date:   Thu, 17 Nov 2022 23:25:48 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <3f805b540780494c4a5b068287c37e40d71d7ba4.camel@intel.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 1/3] Revert "staging: mmal-vchiq: Avoid use of bool in
+ structures"
+To:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Ray Jui <rjui@broadcom.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org, linux-staging@lists.linux.dev
+References: <20221117160015.344528-1-umang.jain@ideasonboard.com>
+ <20221117160015.344528-2-umang.jain@ideasonboard.com>
+ <166870135963.50677.14827688186331561108@Monstersaurus>
+Content-Language: en-US
+From:   Umang Jain <umang.jain@ideasonboard.com>
+In-Reply-To: <166870135963.50677.14827688186331561108@Monstersaurus>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 09, 2022 at 11:24:44AM +0000,
-"Huang, Kai" <kai.huang@intel.com> wrote:
+Hi Kieran,
 
-> On Sat, 2022-10-29 at 23:22 -0700, isaku.yamahata@intel.com wrote:
-> > From: Isaku Yamahata <isaku.yamahata@intel.com>
-> > 
-> > FNAME(sync_page) in arch/x86/kvm/mmu/paging_tmpl.h assumes that the initial
-> > shadow page table entry (SPTE) is zero.  Remove the assumption by using
-> > SHADOW_NONPRESENT_VALUE that will be updated from 0 to non-zero value.
-> > 
-> > Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> > ---
-> >  arch/x86/kvm/mmu/paging_tmpl.h | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
-> > index 5ab5f94dcb6f..6db3f2b5563a 100644
-> > --- a/arch/x86/kvm/mmu/paging_tmpl.h
-> > +++ b/arch/x86/kvm/mmu/paging_tmpl.h
-> > @@ -1036,7 +1036,8 @@ static int FNAME(sync_page)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp)
-> >  		gpa_t pte_gpa;
-> >  		gfn_t gfn;
-> >  
-> > -		if (!sp->spt[i])
-> > +		/* spt[i] has initial value of shadow page table allocation */
-> > +		if (sp->spt[i] == SHADOW_NONPRESENT_VALUE)
-> >  			continue;
-> >  
-> >  		pte_gpa = first_pte_gpa + i * sizeof(pt_element_t);
-> 
-> I think this patch can be merged to previous one?  Looks there's no good reason
-> to keep it as standalone.
+On 11/17/22 9:39 PM, Kieran Bingham wrote:
+> Quoting Umang Jain (2022-11-17 16:00:13)
+>> This reverts commit 640e77466e69d9c28de227bc76881f5501f532ca.
+>>
+>> In commit 7967656ffbfa ("coding-style: Clarify the expectations around
+>> bool") the check to dis-allow bool structure members was removed from
+>> checkpatch.pl. It promotes bool structure members to store boolean
+>> values. This enhances code readability.
+>>
+>> Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
+>> ---
+>>   .../staging/vc04_services/vchiq-mmal/mmal-vchiq.c    | 12 ++++++------
+>>   .../staging/vc04_services/vchiq-mmal/mmal-vchiq.h    |  4 ++--
+>>   2 files changed, 8 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
+>> index cb921c94996a..4abb6178cb9f 100644
+>> --- a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
+>> +++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
+>> @@ -863,9 +863,9 @@ static int port_info_get(struct vchiq_mmal_instance *instance,
+>>                  goto release_msg;
+>>   
+>>          if (rmsg->u.port_info_get_reply.port.is_enabled == 0)
+>> -               port->enabled = 0;
+>> +               port->enabled = false;
+>>          else
+>> -               port->enabled = 1;
+>> +               port->enabled = true;
+>>   
+>>          /* copy the values out of the message */
+>>          port->handle = rmsg->u.port_info_get_reply.port_handle;
+>> @@ -1304,7 +1304,7 @@ static int port_disable(struct vchiq_mmal_instance *instance,
+>>          if (!port->enabled)
+>>                  return 0;
+>>   
+>> -       port->enabled = 0;
+>> +       port->enabled = false;
+>>   
+>>          ret = port_action_port(instance, port,
+>>                                 MMAL_MSG_PORT_ACTION_TYPE_DISABLE);
+>> @@ -1359,7 +1359,7 @@ static int port_enable(struct vchiq_mmal_instance *instance,
+>>          if (ret)
+>>                  goto done;
+>>   
+>> -       port->enabled = 1;
+>> +       port->enabled = true;
+>>   
+>>          if (port->buffer_cb) {
+>>                  /* send buffer headers to videocore */
+>> @@ -1531,7 +1531,7 @@ int vchiq_mmal_port_connect_tunnel(struct vchiq_mmal_instance *instance,
+>>                          pr_err("failed disconnecting src port\n");
+>>                          goto release_unlock;
+>>                  }
+>> -               src->connected->enabled = 0;
+>> +               src->connected->enabled = false;
+>>                  src->connected = NULL;
+>>          }
+>>   
+>> @@ -1799,7 +1799,7 @@ int vchiq_mmal_component_disable(struct vchiq_mmal_instance *instance,
+>>   
+>>          ret = disable_component(instance, component);
+>>          if (ret == 0)
+>> -               component->enabled = 0;
+>> +               component->enabled = false;
+>>   
+>>          mutex_unlock(&instance->vchiq_mutex);
+>>   
+>> diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.h b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.h
+>> index 6006e29232b3..70eda6cac1c6 100644
+>> --- a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.h
+>> +++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.h
+>> @@ -48,7 +48,7 @@ typedef void (*vchiq_mmal_buffer_cb)(
+>>                  int status, struct mmal_buffer *buffer);
+>>   
+>>   struct vchiq_mmal_port {
+>> -       u32 enabled:1;
+>> +       bool enabled:1;
+> Is this a direct revert with 'git revert' ?
 
-Yes, will squash it.
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+
+No. It had conflicts plus I added the ':1' initialization to keep the 
+logic same (in case 'enabled' gets used directly). Similar pattern come 
+up with:
+     ($) git grep 'bool' -- '*.[h]' | grep '\:1'
+
+So it shouldn't be an issue.
+
+>
+> I would expect this to be
+> 	bool enabled;
+
+
+True but it won't functionally not be the same in matter of 
+initialization. Should the initialization be split to separate patch?
+
+>
+>
+>>          u32 handle;
+>>          u32 type; /* port type, cached to use on port info set */
+>>          u32 index; /* port index, cached to use on port info set */
+>> @@ -83,7 +83,7 @@ struct vchiq_mmal_port {
+>>   
+>>   struct vchiq_mmal_component {
+>>          u32 in_use:1;
+>> -       u32 enabled:1;
+>> +       bool enabled:1;
+> Same here of course.
+>
+>>          u32 handle;  /* VideoCore handle for component */
+>>          u32 inputs;  /* Number of input ports */
+>>          u32 outputs; /* Number of output ports */
+>> -- 
+>> 2.38.1
+>>
