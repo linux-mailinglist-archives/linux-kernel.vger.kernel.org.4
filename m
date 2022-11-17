@@ -2,77 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B991562E888
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 23:36:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1E4B62E88F
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 23:39:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235096AbiKQWg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 17:36:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41892 "EHLO
+        id S235112AbiKQWjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 17:39:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240018AbiKQWgy (ORCPT
+        with ESMTP id S232026AbiKQWjB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 17:36:54 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF53B1659F;
-        Thu, 17 Nov 2022 14:36:52 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id w3-20020a17090a460300b00218524e8877so5735366pjg.1;
-        Thu, 17 Nov 2022 14:36:52 -0800 (PST)
+        Thu, 17 Nov 2022 17:39:01 -0500
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 695D14877E;
+        Thu, 17 Nov 2022 14:39:00 -0800 (PST)
+Received: by mail-ot1-x32f.google.com with SMTP id cn2-20020a056830658200b0066c74617e3dso2023794otb.2;
+        Thu, 17 Nov 2022 14:39:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MCGsGWRONG6v/SgotUhqwMZI4/tumJFdiemZiG1EYz0=;
-        b=ZOzabP6xkUTUtr/QJnyMK/XhuThhhK7Iit4scavgk2H8JyBDFxa7FcqVJktbGVnEsf
-         7EhGmQK8VdONtFJfbpi/N7GcJJM4ae/IURkzFUK7rSIRdhe2sUc7fPX3n7m6cRMkVpW+
-         O8lPP5wWo/c1FCyxfNRDPJnhiZYz/IF++PsVsOISyBTrsTs+pY/EXvd4VBEzOqsRvAok
-         Ubt21fO0bX1zxM/WA4QqsdY+KsGF8UryJdiKLeKs+UfpwtLbk1z8Z/Ajwi48H6jWp1hu
-         Xm6ao2Zpabnmjwa/+aT6ZnaaYFyobR/5YcZZZBdMRMwJ7POzN7Qicv0URQMVUNZnFdTr
-         Bh2w==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Pzc4Q2RrCyrUGod2Zml3PFkTAVtf8vqrot7kLoQWlTQ=;
+        b=CM3GAjharx/2BPsRMkTU4FbkxD6u3ERBE43l5cDmlMI35e1iGnSI4CtBlJ+DbLM6WC
+         Ze7kWTpZoUNJdRL2n/nBxmplkZJWxf/ZwX91zeKFV9zY+6pbiEFV5xOG6UrDuQnVrFji
+         +w3PFI5ilf47vh/KtMAoodI0jxudRk1sitNyV0AkaUPQgmgTspSUJ0VW8SRqK6GOmnWV
+         fyT118i+yYx71etqMoImiaK80gEnZEwjLXxIIcYHqV4nNnon9TWHeUq+7UEBk9ZFTftV
+         jTskabyGB+w7b1EBtVj6aJ1KO/aWZbx61K0l+AAWk40c5eMFV9tr4TVFmfSGwZ2Q/eVz
+         qcYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=MCGsGWRONG6v/SgotUhqwMZI4/tumJFdiemZiG1EYz0=;
-        b=vylfJ3jyzcwyFMfBpjAds002o0JXEmnzu1ADP+2t2ItWfulVKPS36tlin8LwFOETAZ
-         RHWid5QMnVZ6ueCWbmNf2xqfMisVoUdiQ4wP5iCb6lmaURSJV610OqoMRtMD1ReG8IUw
-         7tepASqyJSiSlApysttadWOeJoNBSLqWW0FO+zawfFHvE5ytDesATRqjbx1BvqQhk7Ty
-         prWxUoLjX4rSirDHV47xqOjXF7o8WoECC+v9Y3FcWq4BpN/FJavPvQ+pLNd6Tgse3Bdm
-         plXXntuhcGy1noYX88z4BJX72nyVmChEfVNmz2m81Gz0sHLZxRsURgTKSsBNgitUuaYD
-         xDTg==
-X-Gm-Message-State: ANoB5pnT3MritYZpbbAJiMwALw423y7ptAnMIF/lmTm3ucxe3NaNUXzT
-        gy/Tpcj4rusZIlFhSpKoj/w=
-X-Google-Smtp-Source: AA0mqf5pzZ9XhJOtQzZiBSYnLGkMrYjAlITumeWei4wgo0buGMRCC318ynGnKN7WNuWIfqxb0Bzxew==
-X-Received: by 2002:a17:90b:1bc3:b0:212:ed58:2825 with SMTP id oa3-20020a17090b1bc300b00212ed582825mr10888765pjb.199.1668724612296;
-        Thu, 17 Nov 2022 14:36:52 -0800 (PST)
-Received: from localhost ([98.97.115.29])
-        by smtp.gmail.com with ESMTPSA id b7-20020aa79507000000b0056bcfe015c9sm1633662pfp.204.2022.11.17.14.36.51
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Pzc4Q2RrCyrUGod2Zml3PFkTAVtf8vqrot7kLoQWlTQ=;
+        b=FqvpbBvE4Sk0mKFW5b+pTXiOYocLtcf+u+l2YINJM+kx0JFaWumoVD6EAFSJ284DXb
+         1CdZy5ZW7BkpdUW6es6LLbSXp9kxLwzQ3u+MrpJDIbZbe+e1W56ih7h7eMfig8LeAcnz
+         I/+0FS8tORUfmmIfl90a04wwdEuAlRPuGp1VoRkuiJt9Q1ys0Zk6Q8LwdTF8SfFQv970
+         qCUQIw4M2H7IKy0VmkVpOuY0yQWA3rX8mq6MdEkXvDw9SaHzyL18Ec2BInGUlpLUs4fz
+         scpSQypS6UeGCDBCu34izHErfDQjArt9b+vV4qKzBdPjwP8cmRLKxAMjgkeW/2S2F2MK
+         e1ZA==
+X-Gm-Message-State: ANoB5pnanaylrJO8O3N7yh413/IaXSpKGP/CP9ixWEjxYl2taQtyoGzN
+        ZgVwr88u2RjscaKo5FoaaOVGHd8+O+0=
+X-Google-Smtp-Source: AA0mqf6OIDRi7ao6JUWBuNBxm+ttuu1N8L4/yUXJrbNnFh76tTCfL3Dfc7sX1PkI9+22HVM0zUCDAw==
+X-Received: by 2002:a05:6830:134a:b0:661:a273:f0c4 with SMTP id r10-20020a056830134a00b00661a273f0c4mr2602437otq.120.1668724739699;
+        Thu, 17 Nov 2022 14:38:59 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g20-20020a9d6c54000000b0066dc76d9b7fsm872038otq.31.2022.11.17.14.38.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 14:36:51 -0800 (PST)
-Date:   Thu, 17 Nov 2022 14:36:50 -0800
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     David Vernet <void@manifault.com>,
-        John Fastabend <john.fastabend@gmail.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
-        daniel@iogearbox.net, martin.lau@linux.dev, memxor@gmail.com,
-        yhs@fb.com, song@kernel.org, sdf@google.com, kpsingh@kernel.org,
-        jolsa@kernel.org, haoluo@google.com, tj@kernel.org,
-        kernel-team@fb.com, linux-kernel@vger.kernel.org
-Message-ID: <6376b7822f4df_8c7a208f7@john.notmuch>
-In-Reply-To: <Y3atifGs0DM9to8z@maniforge.lan>
-References: <20221117032402.2356776-1-void@manifault.com>
- <6376a1b12bb4d_4101208d@john.notmuch>
- <Y3atifGs0DM9to8z@maniforge.lan>
-Subject: Re: [PATCH bpf-next v7 0/3] Support storing struct task_struct
- objects as kptrs
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Thu, 17 Nov 2022 14:38:58 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 17 Nov 2022 14:38:56 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Naresh Solanki <naresh.solanki@9elements.com>
+Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: pm_bus: core: Implement regulator get_status
+Message-ID: <20221117223856.GA675221@roeck-us.net>
+References: <20221117194352.1904264-1-Naresh.Solanki@9elements.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221117194352.1904264-1-Naresh.Solanki@9elements.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,116 +75,149 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-David Vernet wrote:
-> On Thu, Nov 17, 2022 at 01:03:45PM -0800, John Fastabend wrote:
-> > David Vernet wrote:
-> > > Now that BPF supports adding new kernel functions with kfuncs, and
-> > > storing kernel objects in maps with kptrs, we can add a set of kfuncs
-> > > which allow struct task_struct objects to be stored in maps as
-> > > referenced kptrs.
-> > > 
-> > > The possible use cases for doing this are plentiful.  During tracing,
-> > > for example, it would be useful to be able to collect some tasks that
-> > > performed a certain operation, and then periodically summarize who they
-> > > are, which cgroup they're in, how much CPU time they've utilized, etc.
-> > > Doing this now would require storing the tasks' pids along with some
-> > > relevant data to be exported to user space, and later associating the
-> > > pids to tasks in other event handlers where the data is recorded.
-> > > Another useful by-product of this is that it allows a program to pin a
-> > > task in a BPF program, and by proxy therefore also e.g. pin its task
-> > > local storage.
-> > 
-> > Sorry wasn't obvious to me (late to the party so if it was in some
-> > other v* described apologies). Can we say something about the life
-> > cycle of this acquired task_structs because they are incrementing
-> > the ref cnt on the task struct they have potential to impact system.
+On Thu, Nov 17, 2022 at 08:43:51PM +0100, Naresh Solanki wrote:
+> From: Patrick Rudolph <patrick.rudolph@9elements.com>
 > 
-> We should probably add an entire docs page which describes how kptrs
-> work, and I am happy to do that (ideally in a follow-on patch set if
-> that's OK with you). In general I think it would be useful to include
-> docs for any general-purpose kfuncs like the ones proposed in this set.
+> Add get_status for pmbus_regulator_ops.
+> 
+> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> ---
+>  drivers/hwmon/pmbus/pmbus_core.c | 78 ++++++++++++++++++++++++++++++++
+>  1 file changed, 78 insertions(+)
+> 
+> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+> index 7ec04934747e..d5e2b0662da5 100644
+> --- a/drivers/hwmon/pmbus/pmbus_core.c
+> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> @@ -2851,6 +2851,83 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
+>  	return 0;
+>  }
+>  
+> +static int pmbus_regulator_get_status(struct regulator_dev *rdev)
+> +{
+> +	struct device *dev = rdev_get_dev(rdev);
+> +	struct i2c_client *client = to_i2c_client(dev->parent);
+> +	struct pmbus_data *data = i2c_get_clientdata(client);
+> +	u8 page = rdev_get_id(rdev);
+> +	int status, status2;
+> +
+> +	mutex_lock(&data->update_lock);
+> +	status = pmbus_get_status(client, page, PMBUS_STATUS_WORD);
+> +	mutex_unlock(&data->update_lock);
+> +	if (status < 0)
+> +		 return status;
+> +
+> +	if (status & PB_STATUS_VIN_UV ||
+> +	    status & PB_STATUS_IOUT_OC ||
+> +	    status & PB_STATUS_VOUT_OV ||
+> +	    status & PB_STATUS_UNKNOWN)
+> +		 return REGULATOR_STATUS_ERROR;
 
-Sure, I wouldn't require that for your series though fwiw.
+	if (status & (PB_STATUS_VIN_UV | PB_STATUS_IOUT_OC | ...))
 
-> 
-> In regards to your specific question about the task lifecycle, nothing
-> being proposed in this patch set differs from how kptr lifecycles work
-> in general. The idea is that the BPF program:
-> 
-> 1. Gets a "kptr_ref" kptr from an "acquire" kfunc.
-> 2. Stores it in a map with bpf_kptr_xchg().
-> 
-> The program can then either later manually extract it from the map
-> (again with bpf_kptr_xchg()) and release it, or if the reference is
-> never removed from the map, let it be automatically released when the
-> map is destroyed. See [0] and [1] for a bit more information.
+PB_STATUS_UNKNOWN can mean anything and doesn't necessarily indicate
+an error. Not sure if it makes sense to report that as error.
 
-Yep as long as the ref is decremented on map destroy and elem delete
-all good.
+> +
+> +	if (status & PB_STATUS_VOUT_OV &&
 
-> 
-> [0]: https://docs.kernel.org/bpf/kfuncs.html?highlight=kptr#kf-acquire-flag
-> [1]: https://lwn.net/Articles/900749/
-> 
-> > I know at least we've had a few bugs in our task struct tracking
-> > that has led to various bugs where we leak references. In our case
-> > we didn't pin the kernel object so the leak is just BPF memory and
-> > user space memory, still sort of bad because we would hit memory
-> > limits and get OOM'd. Leaking kernel task structs is worse though.
-> 
-> I don't think we need to worry about leaks. The verifier should fail to
-> load any program that doesn't properly release a kptr, and if it fails
-> to identify programs that improperly hold refcounts, that's a bug that
-> needs to be fixed. Similarly, if any map implementation (described
-> below) fails to properly free references at the appropriate time (when
-> an element or the map itself is destroyed), those are just bugs that
-> need to be fixed.
-> 
-> I think the relevant tradeoff here is really the possible side effects
-> of keeping a task pinned and avoiding it being reaped. I agree that's an
-> important consideration, but I think that would arguably apply to any
-> kptr (modulo the size of the object being pinned, which is certainly
-> relevant as well). We already have kptrs for e.g. struct nf_conn [2].
-> Granted, struct task_struct is significantly larger, but bpf_kptr_xchg()
-> is only enabled for privileged programs, so it seems like a reasonable
-> operation to allow.
+PB_STATUS_VOUT_OV was checked above already, and the code won't get here
+if the bit is set.
 
-No not arguing it shouldn't be possible just didn't see the release
-hook.
+> +	    data->info->func[page] & PMBUS_HAVE_STATUS_VOUT) {
+> +		 mutex_lock(&data->update_lock);
+> +		 status2 = _pmbus_read_byte_data(client, page, PMBUS_STATUS_VOUT);
+> +		 mutex_unlock(&data->update_lock);
+> +		 if (status2 < 0)
+> +			  return status2;
+> +		 if (status2 & PB_VOLTAGE_OV_FAULT ||
+> +		     status2 & PB_VOLTAGE_UV_FAULT)
 
+		if (status2 & (...))
+
+> +			  return REGULATOR_STATUS_ERROR;
+> +	}
+> +	if (status & PB_STATUS_IOUT_OC &&
+
+Same as above - this condition will never be true.
+
+> +	    data->info->func[page] & PMBUS_HAVE_STATUS_IOUT) {
+> +		 mutex_lock(&data->update_lock);
+> +		 status2 = _pmbus_read_byte_data(client, page, PMBUS_STATUS_IOUT);
+> +		 mutex_unlock(&data->update_lock);
+> +		 if (status2 < 0)
+> +			  return status2;
+> +		 if (status2 & PB_POUT_OP_FAULT ||
+> +		     status2 & PB_IOUT_UC_FAULT ||
+> +		     status2 & PB_IOUT_OC_LV_FAULT ||
+> +		     status2 & PB_IOUT_OC_FAULT)
+
+		if (status2 & (...))
+
+> +			  return REGULATOR_STATUS_ERROR;
+> +	}
+> +	if (status & PB_STATUS_VIN_UV &&
+
+and again.
+
+> +	    data->info->func[page] & PMBUS_HAVE_STATUS_INPUT) {
+> +		 mutex_lock(&data->update_lock);
+> +		 status2 = _pmbus_read_byte_data(client, page, PMBUS_STATUS_INPUT);
+> +		 mutex_unlock(&data->update_lock);
+> +		 if (status2 < 0)
+> +			  return status2;
+> +		 if (status2 & PB_IIN_OC_FAULT ||
+> +		     status2 & PB_VOLTAGE_OV_FAULT ||
+> +		     status2 & PB_VOLTAGE_UV_FAULT)
+
+and again
+
+> +			  return REGULATOR_STATUS_ERROR;
+> +	}
+> +	if (status & PB_STATUS_TEMPERATURE &&
+> +	    data->info->func[page] & PMBUS_HAVE_STATUS_TEMP) {
+> +		 mutex_lock(&data->update_lock);
+> +		 status2 = _pmbus_read_byte_data(client, page, PMBUS_STATUS_TEMPERATURE);
+> +		 mutex_unlock(&data->update_lock);
+> +		 if (status2 < 0)
+> +			  return status2;
+> +		 if (status2 & PB_TEMP_UT_FAULT ||
+> +		     status2 & PB_TEMP_OT_FAULT)
+
+and again
+
+> +			  return REGULATOR_STATUS_ERROR;
+> +	}
+> +
+> +	if (status & PB_STATUS_OFF)
+> +		 return REGULATOR_STATUS_OFF;
+> +
+> +	if (status & PB_STATUS_POWER_GOOD_N)
+> +		 return REGULATOR_STATUS_OFF;
+
+Wouldn't it be better to check those bits first ?
+Also, it should be
+
+	if (status & (PB_STATUS_OFF | PB_STATUS_POWER_GOOD_N))
+
+> +
+> +	return REGULATOR_STATUS_ON;
+> +}
+> +
+>  static int pmbus_regulator_get_low_margin(struct i2c_client *client, int page)
+>  {
+>  	struct pmbus_data *data = i2c_get_clientdata(client);
+> @@ -2991,6 +3068,7 @@ const struct regulator_ops pmbus_regulator_ops = {
+>  	.disable = pmbus_regulator_disable,
+>  	.is_enabled = pmbus_regulator_is_enabled,
+>  	.get_error_flags = pmbus_regulator_get_error_flags,
+> +	.get_status = pmbus_regulator_get_status,
+>  	.get_voltage = pmbus_regulator_get_voltage,
+>  	.set_voltage = pmbus_regulator_set_voltage,
+>  	.list_voltage = pmbus_regulator_list_voltage,
 > 
-> [2]: https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/tree/net/netfilter/nf_conntrack_bpf.c#n253
+> base-commit: 27fea302952d8c90cafbdbee96bafeca03544401
+> -- 
+> 2.37.3
 > 
-> > quick question. If you put acquired task struct in a map what
-> > happens if user side deletes the entry? Presumably this causes the
-> > release to happen and the task_struct is good to go. Did I miss
-> > the logic? I was thinking you would have something in bpf_map_free_kptrs
-> > and a type callback to release() the refcnt?
-> 
-> Someone else can chime in here to correct me if I'm wrong, but AFAIU
-> this is handled by the map implementations calling out to
-> bpf_obj_free_fields() to invoke the kptr destructor when the element is
-> destroyed. See [3] and [4] for examples of where they're called from the
-> arraymap and hashmap logic respectively. This is how the destructors are
-> similarly invoked when the maps are destroyed.
-
-Yep I found the dtor() gets populated in btf.c and apparently needed
-to repull my local tree because I missed it. Thanks for the detailed
-response.
-
-And last thing I was checking is because KF_SLEEPABLE is not set
-this should be blocked from running on sleepable progs which would
-break the call_rcu in the destructor. Maybe small nit, not sure
-its worth it but might be nice to annotate the helper description
-with a note, "will not work on sleepable progs" or something to
-that effect.
-
-Thanks.
-
-> 
-> [3]: https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/tree/kernel/bpf/arraymap.c#n431
-> [4]: https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/tree/kernel/bpf/hashtab.c#n764
-> 
-> [...]
-
-
