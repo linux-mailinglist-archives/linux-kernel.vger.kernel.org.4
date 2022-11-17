@@ -2,159 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8554F62E609
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 21:38:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47BFA62E60A
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 21:39:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234959AbiKQUip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 15:38:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39226 "EHLO
+        id S235030AbiKQUjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 15:39:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231146AbiKQUim (ORCPT
+        with ESMTP id S231146AbiKQUjG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 15:38:42 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593C01181E
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 12:38:41 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id 4so2751591pli.0
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 12:38:41 -0800 (PST)
+        Thu, 17 Nov 2022 15:39:06 -0500
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 140302737
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 12:39:06 -0800 (PST)
+Received: by mail-io1-xd32.google.com with SMTP id p184so2312336iof.11
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 12:39:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=SjvIvcadXOdk0//s0f5eSqUtPjdovzzs9vUSgPGddUo=;
-        b=jZE6ECZl1zk5iL/4nuf8rhLihmew/+6DR2bHWgiQLbe6aB6lY3Ow3KvwuaNEdu2BqS
-         aR2IVDA0gmcJ/rw3ia8R4/DPc/h3cZCIaq7gKtxISFwxyMD3kvdb3Dngu9UgY5uhWiUx
-         vn3NiEesBU5P1w3wchxgr56v74ym5NjREJGko=
+        bh=cZEHbyUygY8mL/VudOEJPrn+JnbHs5KjIjH28m2m7pA=;
+        b=UER82uY/1H5jglIAPvq1HsO4gdv4BFQBRhaokleoscz7Q4tld2LY9bERy0ACZV8fhB
+         IxIqhMTIkOn6F4rz+ndD8NGvcSuANM7pvoitxcDZcPvzhzsADp3S64VuG+X0BO9X0ker
+         Ux1ahNLGD7fRkaIH2Ib+C1+uCkYKYrs9mWlXs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=SjvIvcadXOdk0//s0f5eSqUtPjdovzzs9vUSgPGddUo=;
-        b=e1H62PTefDC0hU5LmVqWZ4+UhM6pl9spBbFhttn2QEciYwL/Jb5wRyvYturaayK40B
-         6U0Ak6Ocayfdn7kwwgksF90NaOZ07fxtzHb4ibLjNcDfUvG76rFtqoShwNN3rrA84Tk5
-         nLycFGwLD/LknNTebrCjsYb8fhaay/7rTHHYV7qTHf81nrwx+GEGE5h/iSDMVUSka/PH
-         AtUMfP2dYsYR/aN9AcQtQlA0FoHiXiRFRqBIR3BGVuQ7FQEeZlGxi/UC/LNMX+DU+qYp
-         afo9/2YSGSlSDPZLEtJXT5Fo0yPlEh5L2tnR8LMmFYTK9VLF+BvzHs8i8eYNHNYmiWZr
-         oT9g==
-X-Gm-Message-State: ANoB5pnpXXNNw4m0MY5fuORV9H+qIrd3Sh0yCuvYFGNysXrDpw4klwMJ
-        B7XFNz1bn478Ba9brFjR1H98sA==
-X-Google-Smtp-Source: AA0mqf5QjsqZlFeWUMV60fnWDGr67ZzzZwpyvo1KBIyT4IwZqkrTn4Nl/Ud9it0hKfK1fOBm8hxQqQ==
-X-Received: by 2002:a17:903:2448:b0:188:f5c7:4d23 with SMTP id l8-20020a170903244800b00188f5c74d23mr2718635pls.125.1668717520846;
-        Thu, 17 Nov 2022 12:38:40 -0800 (PST)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:6069:1273:e67f:93a3])
-        by smtp.gmail.com with ESMTPSA id 185-20020a6214c2000000b005618189b0ffsm1578091pfu.104.2022.11.17.12.38.39
+        bh=cZEHbyUygY8mL/VudOEJPrn+JnbHs5KjIjH28m2m7pA=;
+        b=x/r5L4HPPqHQKN8dQbeCrwEBDMrn8DGLc5oKC+Ya5Fnn6ni+ttxI4QvYO/FTl944hX
+         Ab2Xcn5P/BhKUz7hpypDkfzmWgEU1oo9EoFmFqS3pATY33qCekifpB9cK1VNSxdm8aA+
+         pNl1ChY3i+TzJIyShmSNN4orajAardOunHaM167LT5kSlxXPQqsMkA/ziujGIeTRVGvE
+         hkVQrGD+Lj5pi0zvPvkPqE8VQ7k/VRW8zZWkhnDFCd4UvuJl4TIgP9uow1p83m0JCRy6
+         ThXMYH7Ms8a/0+Z1mnysmN7X3vZOLJGWSeuHKmZogFWo9p8e9v70kZpDasg3d23TofxW
+         6haw==
+X-Gm-Message-State: ANoB5pl6F4cCFR1jy6fMogsClFa5UDoPutHR9DaMztmhd3Uwdl2IxhOX
+        f8uAA1YNT2wY1Fcv2Z36eDiC9Q==
+X-Google-Smtp-Source: AA0mqf6DFioq87cI1ZJtq/Ye8wvmc8ZleSSIc+du2UJgDEkL5FsB9OHxasI3b5ipXufFJbhum4CRyA==
+X-Received: by 2002:a05:6638:440b:b0:374:fbbe:2da6 with SMTP id bp11-20020a056638440b00b00374fbbe2da6mr1806005jab.163.1668717545484;
+        Thu, 17 Nov 2022 12:39:05 -0800 (PST)
+Received: from midworld.bld.corp.google.com ([2620:15c:183:200:b285:6808:3f3e:f538])
+        by smtp.gmail.com with ESMTPSA id d191-20020a0262c8000000b00363da904602sm570192jac.13.2022.11.17.12.39.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 12:38:40 -0800 (PST)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Johnny Chuang <johnny.chuang.emc@gmail.com>,
-        Scott Liu <scott.liu@emc.com.tw>, linux-input@vger.kernel.org,
+        Thu, 17 Nov 2022 12:39:04 -0800 (PST)
+From:   Drew Davenport <ddavenport@chromium.org>
+To:     dri-devel@lists.freedesktop.org
+Cc:     dianders@chromium.org, Drew Davenport <ddavenport@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] Input: elants_i2c: Properly handle the reset GPIO when power is off
-Date:   Thu, 17 Nov 2022 12:38:23 -0800
-Message-Id: <20221117123805.1.I9959ac561dd6e1e8e1ce7085e4de6167b27c574f@changeid>
+Subject: [PATCH 1/5] drm/panel-edp: Use ktime_get_boottime for delays
+Date:   Thu, 17 Nov 2022 13:38:44 -0700
+Message-Id: <20221117133655.1.I51639dc112bbbe27259df6bdad56dbabd655d91a@changeid>
 X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,TVD_PH_BODY_ACCOUNTS_PRE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As can be seen in elants_i2c_power_off(), we want the reset GPIO
-asserted when power is off. The reset GPIO is active low so we need
-the reset line logic low when power is off to avoid leakage.
+ktime_get is based on CLOCK_MONOTONIC which stops on suspend. On
+suspend, the time that the panel was powerd off is recorded with
+ktime_get, and on resume this time is compared to the current ktime_get
+time to determine if the driver should wait for the panel to power down
+completely before re-enabling it.
 
-We have a problem, though, at probe time. At probe time we haven't
-powered the regulators on yet but we have:
-  devm_gpiod_get(&client->dev, "reset", GPIOD_OUT_LOW);
+Because we're using ktime_get, this delay doesn't account for the time
+that the device is suspended, during which the power down delay may have
+already elapsed.
 
-While that _looks_ right, it turns out that it's not. The
-GPIOD_OUT_LOW doesn't mean to init the GPIO to low. It means init the
-GPIO to "not asserted". Since this is an active low GPIO that inits it
-to be high.
+Change to use ktime_get_boottime throughout, which uses CLOCK_BOOTTIME
+which does not stop when suspended. This ensures that the resume path
+will not be delayed if the power off delay has already been met while
+the device is suspended.
 
-Let's fix this to properly init the GPIO. Now after both probe and
-power off the state of the GPIO is consistent (it's "asserted" or
-level low).
+Signed-off-by: Drew Davenport <ddavenport@chromium.org>
 
-Once we fix this, we can see that at power on time we no longer to
-assert the reset GPIO as the first thing. The reset GPIO is _always_
-asserted before powering on. Let's fix powering on to account for
-this.
-
-Fixes: afe10358e47a ("Input: elants_i2c - wire up regulator support")
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
 ---
-This issue was found mostly due to code inspection. A partner was
-having issues with power sequencing with this touch screen and I
-noticed this issue in the code. Though this patch doesn't seem to
-fully address the problems that the partner was having (they are still
-debugging), in the very least it seems correct and we should probably
-take it.
 
-This problem has been around for a while. Presumably the touchscreen
-is tolerant enough to this short period of time at bootup where the
-reset line was leaking power into the unpowered touchscreen, though
-it's still not great.
+ drivers/gpu/drm/panel/panel-edp.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
- drivers/input/touchscreen/elants_i2c.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/input/touchscreen/elants_i2c.c b/drivers/input/touchscreen/elants_i2c.c
-index 879a4d984c90..e1308e179dd6 100644
---- a/drivers/input/touchscreen/elants_i2c.c
-+++ b/drivers/input/touchscreen/elants_i2c.c
-@@ -1329,14 +1329,12 @@ static int elants_i2c_power_on(struct elants_data *ts)
- 	if (IS_ERR_OR_NULL(ts->reset_gpio))
- 		return 0;
+diff --git a/drivers/gpu/drm/panel/panel-edp.c b/drivers/gpu/drm/panel/panel-edp.c
+index 5cb8dc2ebe184..a0a7ab35e08c9 100644
+--- a/drivers/gpu/drm/panel/panel-edp.c
++++ b/drivers/gpu/drm/panel/panel-edp.c
+@@ -351,7 +351,7 @@ static void panel_edp_wait(ktime_t start_ktime, unsigned int min_ms)
+ 		return;
  
--	gpiod_set_value_cansleep(ts->reset_gpio, 1);
--
- 	error = regulator_enable(ts->vcc33);
- 	if (error) {
- 		dev_err(&ts->client->dev,
- 			"failed to enable vcc33 regulator: %d\n",
- 			error);
--		goto release_reset_gpio;
-+		return error;
+ 	min_ktime = ktime_add(start_ktime, ms_to_ktime(min_ms));
+-	now_ktime = ktime_get();
++	now_ktime = ktime_get_boottime();
+ 
+ 	if (ktime_before(now_ktime, min_ktime))
+ 		msleep(ktime_to_ms(ktime_sub(min_ktime, now_ktime)) + 1);
+@@ -378,7 +378,7 @@ static int panel_edp_suspend(struct device *dev)
+ 
+ 	gpiod_set_value_cansleep(p->enable_gpio, 0);
+ 	regulator_disable(p->supply);
+-	p->unprepared_time = ktime_get();
++	p->unprepared_time = ktime_get_boottime();
+ 
+ 	return 0;
+ }
+@@ -464,14 +464,14 @@ static int panel_edp_prepare_once(struct panel_edp *p)
+ 		}
  	}
  
- 	error = regulator_enable(ts->vccio);
-@@ -1345,7 +1343,7 @@ static int elants_i2c_power_on(struct elants_data *ts)
- 			"failed to enable vccio regulator: %d\n",
- 			error);
- 		regulator_disable(ts->vcc33);
--		goto release_reset_gpio;
-+		return error;
- 	}
+-	p->prepared_time = ktime_get();
++	p->prepared_time = ktime_get_boottime();
  
- 	/*
-@@ -1354,7 +1352,6 @@ static int elants_i2c_power_on(struct elants_data *ts)
- 	 */
- 	udelay(ELAN_POWERON_DELAY_USEC);
+ 	return 0;
  
--release_reset_gpio:
- 	gpiod_set_value_cansleep(ts->reset_gpio, 0);
- 	if (error)
- 		return error;
-@@ -1462,7 +1459,7 @@ static int elants_i2c_probe(struct i2c_client *client)
- 		return error;
- 	}
+ error:
+ 	gpiod_set_value_cansleep(p->enable_gpio, 0);
+ 	regulator_disable(p->supply);
+-	p->unprepared_time = ktime_get();
++	p->unprepared_time = ktime_get_boottime();
  
--	ts->reset_gpio = devm_gpiod_get(&client->dev, "reset", GPIOD_OUT_LOW);
-+	ts->reset_gpio = devm_gpiod_get(&client->dev, "reset", GPIOD_OUT_HIGH);
- 	if (IS_ERR(ts->reset_gpio)) {
- 		error = PTR_ERR(ts->reset_gpio);
- 
+ 	return err;
+ }
 -- 
 2.38.1.584.g0f3c55d4c2-goog
 
