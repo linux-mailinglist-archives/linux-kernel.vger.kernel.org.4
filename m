@@ -2,164 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8688262DFE1
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:31:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8477C62DFE7
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:32:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234421AbiKQPb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 10:31:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47176 "EHLO
+        id S234668AbiKQPcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 10:32:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234551AbiKQPbY (ORCPT
+        with ESMTP id S233179AbiKQPb4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 10:31:24 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2A3E0F3
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 07:31:22 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id l12so3370301lfp.6
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 07:31:22 -0800 (PST)
+        Thu, 17 Nov 2022 10:31:56 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF604E092
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 07:31:55 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id d13-20020a17090a3b0d00b00213519dfe4aso2305863pjc.2
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 07:31:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2ZDPP+aUXlZemByZePEOYfbPXmIJ7PrfAxeoclG9vKA=;
-        b=Ls8lqLlbSmZ3nDW91wC00qBfwO+G/ZR0QKdhCiZD8afsSdScPioce3STIi1JipVF2h
-         DWGPr8nO420ko9tRE9jVqbuwSEum10pccwYMckN6j/X6OyMuggrwlUX6grzEdhrftRDt
-         28tuko8xJbX/FXa9eiUwiDWOdbKctULqli4Ax9mdPqQGdqnWaQNSvCovO50aV4mRIKqr
-         8ZwPMo5nHmIqbTy6qK68XSBLNerWnPFtaBWC/64cOmcUs84ZYsH+xXJmxuA4+kdv3rlz
-         +F1GqeQ9ZfqS4bI8SCQXmTaL7KjQoomNKY6C6NHPkqf5wvKTfiUl2S9aqH6txJTiLvAJ
-         qiVQ==
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YYbyGvr7R4QJ31YRKXqxJVIlaxGSfN/nVPLH9/segYo=;
+        b=bhV42qvhSh6JlAr5LOzLdUDf3KEvgkBFoxSgGMdYhoPh4wNmiNmakO5pya7uYnFNX3
+         9vKnTRjuljBe+GvnX2CkYyrlclqY1/0MWPRPksqKeLO4NhA2lGk5oFt9yTwq7qAyaDQy
+         16zGofSttVBr7KsWP7JC5kJoDoJSMlh/tUIaMbm1gFflZT41h1lXXpfZvGjWMUnexXSC
+         XFbOfhqZ8rRfdbenEkZQfMLMWRZ+KDxBAeflZifNmraa/XKSUNql8j51PuZNSs1hVJDw
+         GmMGb3ZTI2FOYZ7Yes6t/xn8JvLFzyDsxqCyMmVIi3WtCSCO1fEfFREmA+vUGKciNLHl
+         MI8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2ZDPP+aUXlZemByZePEOYfbPXmIJ7PrfAxeoclG9vKA=;
-        b=i20ybSU7GyPNQAlXvUjhTFoCw9FHjkDF3kycrMnZMnoxXJUwqkiUlQHHChobPgF8BC
-         j3kNPlEzfIIh65HVzPHkmFHh2s6sBQChuN5p1dkydSKJQgJc6ajDT2pyk7zip++4c1Ff
-         /Ie+vkxedOpKCYsXFmjVGbNSfSlV/pn049sEGdpXl2vte1M15TVTJKcrT71GbDkkpk8G
-         TbPu1gCRqWQU8tm/kuZAXnAo3Lwtg535ECkWzFH8abif6h+qjG0J15MudikD/BRNTDzu
-         b9QQfmVSX+9wiyDBbbYjpfrOoPegtBLs8iUN3PI8AHCOlsDnLB5xg26zxyj2caWDzEzh
-         a+mQ==
-X-Gm-Message-State: ANoB5pnW+QTcgaJDuui8foc9u6FWG1VMT1Lb2ZJjCr6LkBwSlyGh+uRy
-        qrRdQNgD1wx9BnsU9OPHQ0nOGg==
-X-Google-Smtp-Source: AA0mqf6RlDxCX7aqxKe4kbGzIpCYGdKKByTw5/epkfsWWgWGVUK44nQD0oz21XmFFBmgYhkCzfs8Tg==
-X-Received: by 2002:ac2:4843:0:b0:4a2:1169:3934 with SMTP id 3-20020ac24843000000b004a211693934mr1140697lfy.279.1668699081228;
-        Thu, 17 Nov 2022 07:31:21 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id x12-20020a19f60c000000b0048b26d4bb64sm200669lfe.40.2022.11.17.07.31.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Nov 2022 07:31:20 -0800 (PST)
-Message-ID: <89e0f9b7-e06d-ea26-6e45-d22a74371f4b@linaro.org>
-Date:   Thu, 17 Nov 2022 16:31:19 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YYbyGvr7R4QJ31YRKXqxJVIlaxGSfN/nVPLH9/segYo=;
+        b=8KZ+GABKancz9Cl4frLVMksYuOk5Me/yaQgy4ioRsuxlSrpInahUvO1UehRYmU45Ya
+         BzVQEf5DjUW6Z5bWIUL+ax2H8IKa40WdxjfeDkbmB+pU2AlAuyxaHHQOyh4nKBDuJkgC
+         Od3zm484XIJhQYvK9pVOgAnwPW2nMxzWuknbJurWs3ar8jqN4ZKG73EELaDeU34ePmv8
+         ep9I1YfsTAjzd5+8tehO08PeYA6J8/plsRmAlyVz50bBptlpJgrEmKj32HsbnWbr4muR
+         0qNBgR7lx2c2l0glOUqFidlVHwjsQH+0IaeR0hQjkzaFaZbnEVzYTjHhdCuVrX/BFwhR
+         fiTQ==
+X-Gm-Message-State: ANoB5pmC3PWMakWAAwbFWgfvqboVsERwaTKNrFdgF4ntt9hyNQzNxwJ+
+        b0NwMQ2xFVztKSZSmFt/ZuETIKmxV1h+o/9Gay5a
+X-Google-Smtp-Source: AA0mqf7PTUB1E6jT7w2n1cqUSGbsHd4TwbTJSD3G3paAWrXk8kz5NT/xoC/cgmw9kA0xw6mqSK8TjJ9No6As8SS+Zq4=
+X-Received: by 2002:a17:902:b097:b0:17b:4ace:b67f with SMTP id
+ p23-20020a170902b09700b0017b4aceb67fmr3442926plr.12.1668699115322; Thu, 17
+ Nov 2022 07:31:55 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] dt-bindings: thermal: qcom-tsens: simplify if:then:
- clauses
-Content-Language: en-US
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-References: <20221117130254.378109-1-krzysztof.kozlowski@linaro.org>
- <Y3ZFDRI6ypg18S27@gerhold.net>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Y3ZFDRI6ypg18S27@gerhold.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221115175652.3836811-1-roberto.sassu@huaweicloud.com>
+ <20221115175652.3836811-4-roberto.sassu@huaweicloud.com> <CAHC9VhTA7SgFnTFGNxOGW38WSkWu7GSizBmNz=TuazUR4R_jUg@mail.gmail.com>
+ <83cbff40f16a46e733a877d499b904cdf06949b6.camel@huaweicloud.com>
+ <CAHC9VhRX0J8Z61_fH9T5O1ZpRQWSppQekxP8unJqStHuTwQkLQ@mail.gmail.com> <Y3XLgrYbIEpdW0vy@kroah.com>
+In-Reply-To: <Y3XLgrYbIEpdW0vy@kroah.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Thu, 17 Nov 2022 10:31:44 -0500
+Message-ID: <CAHC9VhTXegLqVH18AXTYrFPBn1WF0Wu8hbybc1Y5LTr-StFrOw@mail.gmail.com>
+Subject: Re: [RFC][PATCH 3/4] lsm: Redefine LSM_HOOK() macro to add return
+ value flags as argument
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Roberto Sassu <roberto.sassu@huaweicloud.com>, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, revest@chromium.org, jackmanb@chromium.org,
+        jmorris@namei.org, serge@hallyn.com, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/11/2022 15:28, Stephan Gerhold wrote:
-> On Thu, Nov 17, 2022 at 02:02:54PM +0100, Krzysztof Kozlowski wrote:
->> Most of the device-specific compatibles have generic fallbacks like
->> qcom,tsens-v1 or qcom,tsens-v2.  The if:then: block mentions these
->> fallbacks, so drop redundant entries for specific compatibles.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>
->> ---
->>
->> Cc: Neil Armstrong <neil.armstrong@linaro.org>
->> ---
->>  .../devicetree/bindings/thermal/qcom-tsens.yaml  | 16 ----------------
->>  1 file changed, 16 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
->> index f0bd4b979e28..c9949713f714 100644
->> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
->> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
->> @@ -118,12 +118,7 @@ allOf:
->>            contains:
->>              enum:
->>                - qcom,ipq8064-tsens
->> -              - qcom,mdm9607-tsens
->> -              - qcom,msm8916-tsens
->>                - qcom,msm8960-tsens
->> -              - qcom,msm8974-tsens
->> -              - qcom,msm8976-tsens
->> -              - qcom,qcs404-tsens
->>                - qcom,tsens-v0_1
->>                - qcom,tsens-v1
->>      then:
-> 
-> FWIW: I submitted the same patch for this part a couple of months ago,
-> it was never applied for some reason:
-> https://lore.kernel.org/linux-arm-msm/20220627131415.2868938-2-stephan.gerhold@kernkonzept.com/
+On Thu, Nov 17, 2022 at 12:50 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> On Wed, Nov 16, 2022 at 05:04:05PM -0500, Paul Moore wrote:
+> > On Wed, Nov 16, 2022 at 3:11 AM Roberto Sassu
+> > <roberto.sassu@huaweicloud.com> wrote:
+> > > On Tue, 2022-11-15 at 21:27 -0500, Paul Moore wrote:
+> > > > On Tue, Nov 15, 2022 at 12:58 PM Roberto Sassu
+> > > > <roberto.sassu@huaweicloud.com> wrote:
+> > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > >
+> > > > > Define four return value flags (LSM_RET_NEG, LSM_RET_ZERO, LSM_RET_ONE,
+> > > > > LSM_RET_GT_ONE), one for each interval of interest (< 0, = 0, = 1, > 1).
+> > > > >
+> > > > > Redefine the LSM_HOOK() macro to add return value flags as argument, and
+> > > > > set the correct flags for each LSM hook.
+> > > > >
+> > > > > Implementors of new LSM hooks should do the same as well.
+> > > > >
+> > > > > Cc: stable@vger.kernel.org # 5.7.x
+> > > > > Fixes: 9d3fdea789c8 ("bpf: lsm: Provide attachment points for BPF LSM programs")
+> > > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > > ---
+> > > > >  include/linux/bpf_lsm.h       |   2 +-
+> > > > >  include/linux/lsm_hook_defs.h | 779 ++++++++++++++++++++--------------
+> > > > >  include/linux/lsm_hooks.h     |   9 +-
+> > > > >  kernel/bpf/bpf_lsm.c          |   5 +-
+> > > > >  security/bpf/hooks.c          |   2 +-
+> > > > >  security/security.c           |   4 +-
+> > > > >  6 files changed, 466 insertions(+), 335 deletions(-)
+> > > >
+> > > > Just a quick note here that even if we wanted to do something like
+> > > > this, it is absolutely not -stable kernel material.  No way.
+> > >
+> > > I was unsure about that. We need a proper fix for this issue that needs
+> > > to be backported to some kernels. I saw this more like a dependency.
+> > > But I agree with you that it would be unlikely that this patch is
+> > > applied to stable kernels.
+> > >
+> > > For stable kernels, what it would be the proper way? We still need to
+> > > maintain an allow list of functions that allow a positive return value,
+> > > at least. Should it be in the eBPF code only?
+> >
+> > Ideally the fix for -stable is the same as what is done for Linus'
+> > kernel (ignoring backport fuzzing), so I would wait and see how that
+> > ends up first.  However, if the patchset for Linus' tree is
+> > particularly large and touches a lot of code, you may need to work on
+> > something a bit more targeted to the specific problem.  I tend to be
+> > more conservative than most kernel devs when it comes to -stable
+> > patches, but if you can't backport the main upstream patchset, smaller
+> > (both in terms of impact and lines changed) is almost always better.
+>
+> No, the mainline patch (what is in Linus's tree), is almost always
+> better and preferred for stable backports.  When you diverge, bugs
+> happen, almost every time, and it makes later fixes harder to backport
+> as well.
+>
+> But first work on solving the problem in Linus's tree.  Don't worry
+> about stable trees until after the correct solution is merged.
 
-Indeed, somehow Daniel didn't take it. Your patch should go instead, if
-you rebase and include new hunks (like my patch).
+Perhaps you missed my very first sentence where I mentioned exactly
+the same things: solve it in Linus' tree first, backports of patches
+in Linus' tree is ideal.
 
-> 
->> @@ -140,17 +135,6 @@ allOf:
->>          compatible:
->>            contains:
->>              enum:
->> -              - qcom,msm8953-tsens
->> -              - qcom,msm8996-tsens
->> -              - qcom,msm8998-tsens
->> -              - qcom,sc7180-tsens
->> -              - qcom,sc7280-tsens
->> -              - qcom,sc8180x-tsens
->> -              - qcom,sdm630-tsens
->> -              - qcom,sdm845-tsens
->> -              - qcom,sm8150-tsens
->> -              - qcom,sm8250-tsens
->> -              - qcom,sm8350-tsens
->>                - qcom,tsens-v2
->>      then:
->>        properties:
->>
-> 
-> This part was not present back then though. Looks like this was
-> introduced recently in "dt-bindings: thermal: tsens: Add ipq8074
-> compatible".
-> 
-> I don't mind if you take this patch instead of mine. Feel free to add my
-> 
-> Reviewed-by: Stephan Gerhold <stephan@gerhold.net>
-> 
-> Thanks,
-> Stephan
-
-Best regards,
-Krzysztof
-
+-- 
+paul-moore.com
