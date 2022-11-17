@@ -2,113 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A4E062D5F3
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 10:09:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C05862D5F8
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 10:09:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239717AbiKQJI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 04:08:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36450 "EHLO
+        id S239719AbiKQJJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 04:09:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239719AbiKQJIy (ORCPT
+        with ESMTP id S239592AbiKQJJj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 04:08:54 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 377142126A;
-        Thu, 17 Nov 2022 01:08:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=aQk2rEVdOyLC8MBnXpxdsdOtZKvioHnImfV1oOS2Xtg=; b=I3xClU65IacOMLf2bWeSauP7FF
-        FV50Hi48EBk2WK6Yehcm6XtdcO6hf4dsN2DMpSf1Q8J+ZcUcJOT8oIO1945EQRsvfdc4JvICopd0l
-        Ui4r6qLsEQxO7P9sxXUeh9gS9sZqkCJSKZK2ctS17TuNst0NjO4G5IjBK7pt6TA2UoyWMLe7JrlZ4
-        3rVanZNI9MF1KBvk8SzTNZKx8hjhh1qDV56hj7OC6Wv8JNJ6ypUqg8KZLLfwkKn7jGczcYvLbevRx
-        fdi5hL+kowpdqhlUAfa1HbfNoACRcwrRe8SG0NXXobWd3RkjDM5DSjIiSED2Yxip/fi/HuoFKOMRj
-        0mZtwn6g==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ovasi-000qMs-De; Thu, 17 Nov 2022 09:08:24 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D7E6F30002E;
-        Thu, 17 Nov 2022 10:08:15 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id C282320B670CB; Thu, 17 Nov 2022 10:08:15 +0100 (CET)
-Date:   Thu, 17 Nov 2022 10:08:15 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        x86@kernel.org, "Paul E. McKenney" <paulmck@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Guo Ren <guoren@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [RFC PATCH v2 4/8] smp: Trace IPIs sent via
- arch_send_call_function_ipi_mask()
-Message-ID: <Y3X5/65o8127DgZl@hirez.programming.kicks-ass.net>
-References: <20221102182949.3119584-1-vschneid@redhat.com>
- <20221102183336.3120536-3-vschneid@redhat.com>
+        Thu, 17 Nov 2022 04:09:39 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3F7165B9
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 01:09:34 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id j4so1859973lfk.0
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 01:09:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gnoCx3Qk52LXU2uGKSR88WRS2OS29nXSAokefTOA0+o=;
+        b=rrhkft9l0QfRs+A08xV/mWc3xIOURd1iiDjCw1+jxB+FEPiFBhsHUxO1cs98f6KP0z
+         Q1l3AUZp0eWxRQ9C6nuqqY6DfTrIzv67K8NeEWEPPeZRaIZOR0a2HLMsM0008uf7knJs
+         rr2bpy1bQvAtZma7tpY2+5iQSOsA3l4+5HPoxRj5zx1SiW/BarjSGJDcum/07jyIkQyo
+         xUU0HKdnhiZyigFkydOTVEPlPAASEM2ZaOEjEMT1VhyDEDhxCsMoVvDoFh+zmeaZVLnv
+         hGvLuXWb6jQ1mdNlOnw2rub6tJyMoTZsBec/AG05P/eQ7wJ6SLrebj1+/46DHVpW6Qr6
+         MtgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gnoCx3Qk52LXU2uGKSR88WRS2OS29nXSAokefTOA0+o=;
+        b=3hL5+6fB0RhjGSGv8qbQ5R5TfTRxzSfNTjUChiFbU9Br3+9StzV1nUS/29RGPpWXyH
+         Huvn/2SEwaAiCNbolf+tTVEZ9HYk/JcHAEQVR00jiy0oeybRJVE09niYOGFVUpjAbSyH
+         XRvJ2pnpFFy1nV/vgdrOFRm/COyLWYgwPMn6P1bhot4RTMWVdCYQ8zZy/7lFnVIzx+js
+         Jf78re8yLtp0PbOPwFbfpuc8pvVxbSEUUScMgtbhif8FigzuZymTUfsNM1VEC5/fjol+
+         SaxRLuT9QtMkm6yV7c5pvmzksnlj4M/pTCGLuSF+JcKJpE3xhDuIxmTM7TjsmUwQ+TTC
+         4+DA==
+X-Gm-Message-State: ANoB5pnIDX2u6aTQ3BveSBhem018lbqG6a1DLaZQCiZWuuU+X6uISKlU
+        hMKpnkYdpZ7k3poGZDpRbDpLFw==
+X-Google-Smtp-Source: AA0mqf4nUhvYgqzSgvdO8wcVo5x8pSESMmMj37WUL35JSd9AEKoeMCQQaTebiJZGK1UF/1wy6j3usg==
+X-Received: by 2002:ac2:4f13:0:b0:4a2:5c46:4b4d with SMTP id k19-20020ac24f13000000b004a25c464b4dmr632558lfr.433.1668676173218;
+        Thu, 17 Nov 2022 01:09:33 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id b17-20020a196451000000b00498f23c249dsm55894lfj.74.2022.11.17.01.09.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Nov 2022 01:09:32 -0800 (PST)
+Message-ID: <5897972f-9851-8ac5-6856-464f00e845ff@linaro.org>
+Date:   Thu, 17 Nov 2022 10:09:32 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221102183336.3120536-3-vschneid@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 5/9] dt-bindings: clock: Add RPMHCC bindings for SM8550
+Content-Language: en-US
+To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org
+References: <20221116104716.2583320-1-abel.vesa@linaro.org>
+ <20221116104716.2583320-6-abel.vesa@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221116104716.2583320-6-abel.vesa@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 06:33:32PM +0000, Valentin Schneider wrote:
-> This simply wraps around the arch function and prepends it with a
-> tracepoint, similar to send_call_function_single_ipi().
+On 16/11/2022 11:47, Abel Vesa wrote:
+> Add bindings and update documentation for clock rpmh driver on SM8550.
+
+Subject: drop second, redundant "bindings".
+
 > 
-> Signed-off-by: Valentin Schneider <vschneid@redhat.com>
-> ---
->  kernel/smp.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/smp.c b/kernel/smp.c
-> index e2ca1e2f31274..c4d561cf50d45 100644
-> --- a/kernel/smp.c
-> +++ b/kernel/smp.c
-> @@ -160,6 +160,13 @@ void __init call_function_init(void)
->  	smpcfd_prepare_cpu(smp_processor_id());
->  }
->  
-> +static inline void
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 
-Given the use of _RET_IP_, I would strongly recommend you use
-__always_inline.
 
-> +send_call_function_ipi_mask(const struct cpumask *mask)
-> +{
-> +	trace_ipi_send_cpumask(mask, _RET_IP_, func);
+With above:
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-What's func?
+Best regards,
+Krzysztof
 
-> +	arch_send_call_function_ipi_mask(mask);
-> +}
