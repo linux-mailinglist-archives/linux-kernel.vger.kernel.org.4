@@ -2,129 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB7B662E582
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 20:55:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3937162E585
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 20:57:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240485AbiKQTzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 14:55:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48510 "EHLO
+        id S240515AbiKQT5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 14:57:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240298AbiKQTzC (ORCPT
+        with ESMTP id S240496AbiKQT5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 14:55:02 -0500
-Received: from mailout-pe-b.jellyfish.systems (mailout-pe-b.jellyfish.systems [198.54.127.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5CD1836A
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 11:54:56 -0800 (PST)
-Received: from output-router-58994b6955-tvtjg (unknown [10.35.5.64])
-        by mailout-pe-b.jellyfish.systems (Postfix) with ESMTPA id 4NCrGz3JPlzFqTJ;
-        Thu, 17 Nov 2022 19:54:51 +0000 (UTC)
-Received: from MTA-05.privateemail.com (unknown [10.50.14.15])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        Thu, 17 Nov 2022 14:57:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A408E1836A
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 11:57:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by NEW-01.privateemail.com (Postfix) with ESMTPS id 5BDF318000CF;
-        Thu, 17 Nov 2022 14:54:51 -0500 (EST)
-Received: from mta-05.privateemail.com (localhost [127.0.0.1])
-        by mta-05.privateemail.com (Postfix) with ESMTP id 3ABDD18000A5;
-        Thu, 17 Nov 2022 14:54:51 -0500 (EST)
-Received: from bpappas-XPS-13-9310.wppl.org (unknown [131.226.25.151])
-        by mta-05.privateemail.com (Postfix) with ESMTPA id 6967518000A6;
-        Thu, 17 Nov 2022 14:54:46 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=pappasbrent.com;
-        s=default; t=1668714891;
-        bh=+5+iPAU4icdKGKy6PTarUF+CqZfqw/ulQHjgcef+9hY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pUjdSDkMQxAWPFzl2bOR53hb+MzCOsHtZDhMtXYq7wKutSvOBE86kBXSv1f+3Ecg6
-         2V6+vSHXLJQ8ANJYP1nTaWWkQnzHLRuKNwQe5Y+bn7pcYoUSOJbYrT0UGovDUSXp+1
-         VzyLydq4CXNm0BTUv2wHknkfd9qSxR9lH622V+gsJiuVrIIEmj4NT47Q3PzjUcVtkW
-         OyInaSPYDVCFZ5RY6OZpxYDaYMTEWL1IQEcXaw5BxsH+/lGeCi9FHueuz+A9syNJBI
-         Ej4FvJj+snuctYdaUVGvuPJpOvLnSZKkpd6hs2Gb9+0z92Ef4Hg7H0HddqcrTwfHEl
-         A2q6ZplujiXrw==
-From:   Brent Pappas <bpappas@pappasbrent.com>
-To:     gregkh@linuxfoundation.org
-Cc:     bpappas@pappasbrent.com, johan@kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH 1/1 v2] staging: gdm724x: Replace macro GDM_TTY_READY with static inline function
-Date:   Thu, 17 Nov 2022 14:54:43 -0500
-Message-Id: <20221117195443.19616-1-bpappas@pappasbrent.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <Y3aCV4rSrfrptA0q@kroah.com>
-References: <Y3aCV4rSrfrptA0q@kroah.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 49C78B821F1
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 19:57:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DB48C433C1;
+        Thu, 17 Nov 2022 19:57:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668715042;
+        bh=gCElGlWGA46iOYzp69MoHYuVOmSDZpYob11i+TmiOis=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uT12eTDHxm2DRoHODbjDmitHklpMgERuLBYis+vjfbu+3AJ2dZRxUkqgTyk6UR7XM
+         sB9kV8D654tedS0DcdyQ+abjJO3zV2ERvrceBSFxvwjnp9rZQ8VTgS4H/rbhimNH16
+         ZV+5wzd1DHu9xyiyJpBYj1/aIk0I2VhLlfz46nd+rQIqXWwniTPY/OQULDF7QBdw3P
+         xwg4rk2XVVCAa0xkf7nz9HMc8BxUov/RzlLetQkHs7hCTxnz5MbJfQBp9cwhs5aeLG
+         KVBV88zba2xfZkmOhrA+oe4Rdv/0TSCptz7ZoQ3Zq40L2Mg9B3CAYzSbV5XtGQpxPo
+         ZeIRt8dq+wa8A==
+Date:   Thu, 17 Nov 2022 19:57:17 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Conor Dooley <conor.dooley@microchip.com>
+Subject: Re: [PATCH] irqchip/sifive-plic: default to enabled
+Message-ID: <Y3aSHUb8GHnso3Qb@spud>
+References: <20221117185942.3896559-1-conor@kernel.org>
+ <86y1s9nzja.wl-maz@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <86y1s9nzja.wl-maz@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace the macro GDM_TTY_READY with a static inline function
-to follow the Linux kernel coding style.
+On Thu, Nov 17, 2022 at 07:36:57PM +0000, Marc Zyngier wrote:
+> On Thu, 17 Nov 2022 18:59:43 +0000,
+> Conor Dooley <conor@kernel.org> wrote:
+> > 
+> > From: Conor Dooley <conor.dooley@microchip.com>
+> > 
+> > The SiFive PLIC driver is used by all current implementations, including
+> > those that do not have a SiFive PLIC. Default the driver to enabled,
+> > with the intention of later removing the current "every SOC selects
+> > this" situation in Kconfig.socs at the moment.
+> > 
+> > The speculative "potential others" in the description no longer makes
+> > any sense, as the driver is always used. Update the Kconfig symbol's
+> > description to reflect the driver's ubiquitous state.
+> > 
+> > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> > ---
+> > Hey Marc,
+> > 
+> > I recall some discussion when this driver was extended to other PLICs a
+> > few months ago:
+> > https://lore.kernel.org/linux-riscv/20511a05f39408c8ffbcc98923c4abd2@kernel.org/
+> > 
+> > Perhaps I got the wrong impression, but it seemed to me that you intend
+> > for future implementations to reuse this driver where possible?
+> 
+> Well, within reasons. People seem to have some very liberal
+> interpretations of the architecture spec...
 
-Signed-off-by: Brent Pappas <bpappas@pappasbrent.com>
----
-Changelog:
-V1 -> V2: Change gdm_tty_ready return type from int to bool.
+Yeah, I know.. something something "RISC-V is meant to be extensible"
+something something. Even if that means doing some "standard" thing
+your own way apparently.
 
- drivers/staging/gdm724x/gdm_tty.c | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+> > I'd like to think, and surely will be proven wrong, that ~all future
+> > plic implementations should be similar enough to fit that bill.
+> > It's kinda on this basis that I figure switching this thing to default y
+> > should be okay. It's already only buildable on RISC-V & every
+> > implementation uses it, so no difference there.
+> 
+> If you expect this to be present at all times, why isn't this selected
+> by the architecture Kconfig instead?
 
-diff --git a/drivers/staging/gdm724x/gdm_tty.c b/drivers/staging/gdm724x/gdm_tty.c
-index cc6d80554c98..e1a84d6020f4 100644
---- a/drivers/staging/gdm724x/gdm_tty.c
-+++ b/drivers/staging/gdm724x/gdm_tty.c
-@@ -21,7 +21,10 @@
- 
- #define MUX_TX_MAX_SIZE 2048
- 
--#define GDM_TTY_READY(gdm) (gdm && gdm->tty_dev && gdm->port.count)
-+static inline bool gdm_tty_ready(struct gdm *gdm)
-+{
-+	return gdm && gdm->tty_dev && gdm->port.count;
-+}
- 
- static struct tty_driver *gdm_driver[TTY_MAX_COUNT];
- static struct gdm *gdm_table[TTY_MAX_COUNT][GDM_TTY_MINOR];
-@@ -113,7 +116,7 @@ static int gdm_tty_recv_complete(void *data,
- {
- 	struct gdm *gdm = tty_dev->gdm[index];
- 
--	if (!GDM_TTY_READY(gdm)) {
-+	if (!gdm_tty_ready(gdm)) {
- 		if (complete == RECV_PACKET_PROCESS_COMPLETE)
- 			gdm->tty_dev->recv_func(gdm->tty_dev->priv_dev,
- 						gdm_tty_recv_complete);
-@@ -140,7 +143,7 @@ static void gdm_tty_send_complete(void *arg)
- {
- 	struct gdm *gdm = arg;
- 
--	if (!GDM_TTY_READY(gdm))
-+	if (!gdm_tty_ready(gdm))
- 		return;
- 
- 	tty_port_tty_wakeup(&gdm->port);
-@@ -154,7 +157,7 @@ static int gdm_tty_write(struct tty_struct *tty, const unsigned char *buf,
- 	int sent_len = 0;
- 	int sending_len = 0;
- 
--	if (!GDM_TTY_READY(gdm))
-+	if (!gdm_tty_ready(gdm))
- 		return -ENODEV;
- 
- 	if (!len)
-@@ -181,7 +184,7 @@ static unsigned int gdm_tty_write_room(struct tty_struct *tty)
- {
- 	struct gdm *gdm = tty->driver_data;
- 
--	if (!GDM_TTY_READY(gdm))
-+	if (!gdm_tty_ready(gdm))
- 		return 0;
- 
- 	return WRITE_SIZE;
--- 
-2.34.1
+Everyone at the moment needs it, but that's not always going to be true.
+The AIA APLIC that's currently out for review is the "next generation"
+interrupt controller. When we will actually see one in the wild is
+another question.
+
+> I always find it pretty odd to
+> have something that is 'default y' and yet constrained by a 'depend
+> MYARCH'. A 'select PLIC' would make a lot more sense.
+> 
+> And then you can stop making this user selectable.
+
+I was considering moving the select to arch level, but settled for this
+as while I'd like to stop the individual SOCs doing `select PLIC`, I can
+see why someone building for a (future) system with the new AIA stuff
+may not care to build it.
+
+Or maybe the overhead of this one driver is nothing to care about?
+
+Thanks,
+Conor.
 
