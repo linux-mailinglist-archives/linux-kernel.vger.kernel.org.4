@@ -2,88 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9153A62E059
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:51:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A533D62E05E
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:53:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234602AbiKQPvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 10:51:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58414 "EHLO
+        id S233886AbiKQPxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 10:53:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233057AbiKQPvl (ORCPT
+        with ESMTP id S231469AbiKQPxe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 10:51:41 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF87769EB
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 07:51:41 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id t17so1324803pjo.3
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 07:51:41 -0800 (PST)
+        Thu, 17 Nov 2022 10:53:34 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34B71093;
+        Thu, 17 Nov 2022 07:53:29 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id k8so4616664wrh.1;
+        Thu, 17 Nov 2022 07:53:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FyuGzGxEZRHvEr/JeItK3VvnrH3Vjqzh4TosRHWmsqQ=;
-        b=R1HkdKDDMrNBJhdZpT5wuNeVm7ykr/NYLcK4lYns8I72luzpoJnd9hOVUIJ37xXzpF
-         Y9R1C+K2PAGUXcUWln5cbPjqIPmgeqBLB8XvSWAkW5dfMc3/44T/vapbL2o7yHWGZMZS
-         BAbYjVGK7csYo1tAbSgDbOiGiiMUaP+xUVQP5s1TdW+x1SauV9jA8mFMRXIopQnyY8SG
-         EqANano7h0k0HxMKq6lwz7WLlCStKn017xkNzAWs2WVFoQD2pIJzANNt16M5tNSVwgyN
-         wPRTcgN+CTw2/kD038EMM3AWbYdVqHcanplRBcqNhUS55tRvTXJrPqPZhseKlgXeCpbC
-         WtVw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Lgeyqq4V2xeaVGb3HNx7wFZLtkDW7im+x1haPklssOU=;
+        b=COleCBgGfskJyMtBdjyzQ5TJAu6BVoUip0XI2qaMKzeWYtVroAKQ7km0EsnQBtSdJe
+         rXeZtFpTu/oQFowU9hS4+AndKvwRgXo0qxQg4wPHtIDeYqqSef9QFiD/TptIXzFA6pqJ
+         vv64a5vwXLnQFE0oHMQIAWF3AdszFQ4+muH7lSj4np6Yzg8LmDQ1Q81+tYsN0/dLJcl2
+         rqYr52FAiIV2j0cMqXXuZY5GOumjiVvX/xAWE058y/vXy3BScU8moxvB1j51Nwj7Phup
+         LgcHAwGleOm+NlYwuM1Q9AlsivIjX6Tamr45Bpa/sIX2bXXy9S14d1emCeXPGXQ4eSsj
+         KBXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FyuGzGxEZRHvEr/JeItK3VvnrH3Vjqzh4TosRHWmsqQ=;
-        b=1jjnx7j1PVAq9lRRctcXs2jxfUqo2F9AKCDBOOGL5VqmGFOcUtv075a9SE2jcH3aLj
-         YG5UrWat2wL+ZZwOE9pr+9KIRFM2hJWmk25oslEsFR+l915BuoGhnFrElFwo0XGYWN+q
-         TS65OSzOfE412J/GO6t/BX/46WN7lvEaSOftg7Z3ALpGBGon7GdUOWqD576ywcflOnn1
-         zfIaW99zveeR1CfJVYcgl/6vniV6N6LePfEDyKIPs5cG8qjtLNNYGOQe3u3jLou6s/5C
-         bJXVDcPfdz+uTQEeerryr2ms7CuB/ZOxMmYtYAmBJTApYSYS2tc4ARl/OS2topIWzJpA
-         Lw1A==
-X-Gm-Message-State: ANoB5pnIyJAggOrvUwXBTafGhiY5irqh8WpIH4Jjm5xNO98u1jbg0Iky
-        Dzsd3tep8YKrPjuQd+NjSOnt6nBrT+T0gQ==
-X-Google-Smtp-Source: AA0mqf4f9nYQrcGMW8xmaLKyDIuzI7Mvy29gSNkwlHyOvpLbAxZFoBrxeJiGiwkH4bLZqzd/HC0rUQ==
-X-Received: by 2002:a17:902:e414:b0:188:b8cf:85b with SMTP id m20-20020a170902e41400b00188b8cf085bmr3238147ple.126.1668700300567;
-        Thu, 17 Nov 2022 07:51:40 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id q13-20020a170902a3cd00b0017f778d4543sm1482631plb.241.2022.11.17.07.51.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 07:51:40 -0800 (PST)
-Date:   Thu, 17 Nov 2022 15:51:36 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Li, Xin3" <xin3.li@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>
-Subject: Re: [RESEND PATCH 5/6] KVM: x86/VMX: add kvm_vmx_reinject_nmi_irq()
- for NMI/IRQ reinjection
-Message-ID: <Y3ZYiKbJacmejY3K@google.com>
-References: <Y24908NWCdzUNqI0@hirez.programming.kicks-ass.net>
- <6fd26a70-3774-6ae7-73ea-4653aee106f0@redhat.com>
- <Y25a0Z2tOMWYZs4j@hirez.programming.kicks-ass.net>
- <BN6PR1101MB216141A21353AB84CEA541DFA8009@BN6PR1101MB2161.namprd11.prod.outlook.com>
- <Y26jkHfK9INwU7Yy@hirez.programming.kicks-ass.net>
- <BN6PR1101MB2161E8217F50D18C56E5864EA8059@BN6PR1101MB2161.namprd11.prod.outlook.com>
- <Y3IFo9NrAcYalBzM@hirez.programming.kicks-ass.net>
- <BN6PR1101MB2161299749E12D484DE9302BA8049@BN6PR1101MB2161.namprd11.prod.outlook.com>
- <Y3NZQBJugRt07udw@hirez.programming.kicks-ass.net>
- <DM5PR1101MB2172D7D7BC49255DB3752802A8069@DM5PR1101MB2172.namprd11.prod.outlook.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lgeyqq4V2xeaVGb3HNx7wFZLtkDW7im+x1haPklssOU=;
+        b=fiwCBO4mNplCcXEW1TMwg0JXZmiey11x+ywnnaKzf/W8tTCDHLOdhJ269NucP4x6iK
+         Ji9JbXlusAOJfuMjxP4Z4VXRdSyvY01qC6yqiUghdB8eCunrfoSVDhQcoSLPmuffEhY5
+         OdvAyNoPZ58HtiWGMA6ndHPgm5q2mR9vfDHPsMNU6Vamd3OhZMW2/fnrcFEE60b0mlgf
+         9Xygt1Ae8nVxfSdmMqOrIS5di7bcfxlfj3ZonVFn5oV3+taPsofHuM/wBifQaOHvqfu/
+         Ou8bg6cPviUfc34BnfYuJQxaO8pWXC3o6gVFp/ND43P2JaHhZg6rmoJitIJe+0XeH4Uk
+         jdxA==
+X-Gm-Message-State: ANoB5plNrmqBCEL69kQFx4xa55g7FgJHYGmo2JGI48euLvHStGdTnO63
+        fdvQ834uXB4zuqvOMSXYXJWkAmIOY+0=
+X-Google-Smtp-Source: AA0mqf6CSXvB7fJEGy8sU3KquiMYDpizvrXZNaALs1X9u0ExYmw9K8LKvME/eHVIFW4lj8rV1Xqoiw==
+X-Received: by 2002:adf:f601:0:b0:236:55a7:348f with SMTP id t1-20020adff601000000b0023655a7348fmr1913435wrp.331.1668700408256;
+        Thu, 17 Nov 2022 07:53:28 -0800 (PST)
+Received: from [192.168.1.131] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id c15-20020a05600c0acf00b003c21ba7d7d6sm1571445wmr.44.2022.11.17.07.53.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Nov 2022 07:53:26 -0800 (PST)
+Message-ID: <fd2a6390-9395-6fd2-04bc-8d9d55c2efdd@gmail.com>
+Date:   Thu, 17 Nov 2022 16:53:24 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM5PR1101MB2172D7D7BC49255DB3752802A8069@DM5PR1101MB2172.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2] arm64: dts: mediatek: mt7986: Add SoC compatible
+Content-Language: en-US
+To:     matthias.bgg@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, frank-w@public-files.de
+Cc:     devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Matthias Brugger <mbrugger@suse.com>
+References: <20221114121653.14739-1-matthias.bgg@kernel.org>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20221114121653.14739-1-matthias.bgg@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,75 +77,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022, Li, Xin3 wrote:
+
+
+On 14/11/2022 13:16, matthias.bgg@kernel.org wrote:
+> From: Matthias Brugger <mbrugger@suse.com>
 > 
-> > > > > > But what about NMIs, afaict this is all horribly broken for NMIs.
-> > > > > > So the whole VMX thing latches the NMI (which stops NMI
-> > > > > > recursion), right?
-> > > > > >
-> > > > > > But then you drop out of noinstr code, which means any random
-> > > > > > exception can happen (kprobes #BP, hw_breakpoint #DB, or even
-> > > > > > #PF due to random nonsense like *SAN). This exception will do
-> > > > > > IRET and clear the NMI latch, all before you get to run any of the
-> > > > > > NMI code.
-> > > > >
-> > > > > What you said here implies that we have this problem in the existing code.
-> > > > > Because a fake iret stack is created to call the NMI handler in
-> > > > > the IDT NMI descriptor, which lastly executes the IRET instruction.
-> > > >
-> > > > I can't follow; of course the IDT handler terminates with IRET, it has to no?
-> > > >
-> > > > And yes, the current code appears to suffer the same defect.
-
-That defect isn't going to be fixed simply by changing how KVM forwards NMIs
-though.  IIUC, _everything_ between VM-Exit and the invocation of the NMI handler
-needs to be noinstr.  On VM-Exit due to NMI, NMIs are blocked.  If a #BP/#DB/#PF
-occurs before KVM gets to kvm_x86_handle_exit_irqoff(), the subsequent IRET will
-unblock NMIs before the original NMI is serviced, i.e. a second NMI could come in
-at anytime regardless of how KVM forwards the NMI to the kernel.
-
-Is there any way to solve this without tagging everything noinstr?  There is a
-metric shit ton of code between VM-Exit and the handling of NMIs, and much of that
-code is common helpers.  It might be possible to hoist NMI handler much earlier,
-though we'd need to do a super thorough audit to ensure all necessary host state
-is restored.
-
-> > > With FRED, ERETS/ERETU replace IRET, and use bit 28 of the popped CS
-> > > field to control whether to unblock NMI. If bit 28 of the field (above
-> > > the selector) is 1, ERETS/ERETU unblocks NMIs.
-
-Side topic, there's a bug in the ISE docs.  Section "9.4.2 NMI Blocking" states
-that bit 16 holds the "unblock NMI" magic, which I'm guessing is a holdover from
-an earlier revision of FRED.
-
-  As specified in Section 6.1.3 and Section 6.2.3, ERETS and ERETU each unblocks NMIs
-  if bit 16 of the popped CS field is 1. The following items detail how this behavior may be
-  changed in VMX non-root operation, depending on the settings of certain VM-execution
-  controls:
-
-> > Yes, I know that. It is one of the many improvements FRED brings.
-> > Ideally the IBT WAIT-FOR-ENDBR state also gets squirreled away in the
-> > hardware exception frame, but that's still up in the air I believe :/
-> > 
-> > Anyway.. given there is interrupt priority and NMI is pretty much on top of
-> > everything else the reinject crap *should* run NMI first. That way NMI runs
-> > with the latch disabled and whatever other pending interrupts will run later.
-> >
-> > But that all is still broken because afaict the current code also leaves noinstr --
-> > and once you leave noinstr (or use a static_key, static_call or anything else that
-> > *can* change at runtime) you can't guarantee nothing.
+> Missing SoC compatible in the board file causes dt bindings check.
 > 
-> For NMI, HPA asked me to use "int $2", as it switches to the NMI IST stack to
-> execute the NMI handler, essentially like how HW deals with a NMI in host. and
-> I tested it with NMI watchdog, it looks working fine.
+> Signed-off-by: Matthias Brugger <mbrugger@suse.com>
+> 
 
-Heh, well yeah, because that's how KVM used to handle NMIs back before I reworked
-NMI handling to use the direct call method.  Ironically, that original change was
-done in part to try and make it _easier_ to deal with FRED (back before FRED was
-publicly disclosed).
+Applied!
 
-If KVM reverts to INTn, the fix to route KVM=>NMI through the non-IST entry can
-be reverted too.
-
-  a217a6593cec ("KVM/VMX: Invoke NMI non-IST entry instead of IST entry")
-  1a5488ef0dcf ("KVM: VMX: Invoke NMI handler via indirect call instead of INTn")
+> ---
+> Changes since v1:
+> - Move SoC compatible to first line of the block
+> - Add SoC compatible to mt7986b
+> 
+> 
+>   arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts | 2 +-
+>   arch/arm64/boot/dts/mediatek/mt7986a.dtsi    | 1 +
+>   arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts | 2 +-
+>   arch/arm64/boot/dts/mediatek/mt7986b.dtsi    | 3 +++
+>   4 files changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts b/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
+> index afe37b702eef9..0e3b603159477 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
+> +++ b/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
+> @@ -9,7 +9,7 @@
+>   
+>   / {
+>   	model = "MediaTek MT7986a RFB";
+> -	compatible = "mediatek,mt7986a-rfb";
+> +	compatible = "mediatek,mt7986a-rfb", "mediatek,mt7986a";
+>   
+>   	aliases {
+>   		serial0 = &uart0;
+> diff --git a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
+> index 72e0d9722e07a..3c52ec3f99a31 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
+> @@ -10,6 +10,7 @@
+>   #include <dt-bindings/reset/mt7986-resets.h>
+>   
+>   / {
+> +	compatible = "mediatek,mt7986a";
+>   	interrupt-parent = <&gic>;
+>   	#address-cells = <2>;
+>   	#size-cells = <2>;
+> diff --git a/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts b/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
+> index 3443013b5971e..d03e66a84c5d4 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
+> +++ b/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
+> @@ -9,7 +9,7 @@
+>   
+>   / {
+>   	model = "MediaTek MT7986b RFB";
+> -	compatible = "mediatek,mt7986b-rfb";
+> +	compatible = "mediatek,mt7986b-rfb", "mediatek,mt7986b";
+>   
+>   	aliases {
+>   		serial0 = &uart0;
+> diff --git a/arch/arm64/boot/dts/mediatek/mt7986b.dtsi b/arch/arm64/boot/dts/mediatek/mt7986b.dtsi
+> index 23923b9f8944b..db5189664c29b 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt7986b.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt7986b.dtsi
+> @@ -5,6 +5,9 @@
+>    */
+>   
+>   #include "mt7986a.dtsi"
+> +/ {
+> +	compatible = "mediatek,mt7986b";
+> +};
+>   
+>   &pio {
+>   	compatible = "mediatek,mt7986b-pinctrl";
