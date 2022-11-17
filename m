@@ -2,98 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 152E362D57C
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:51:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2694A62D57D
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:51:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239535AbiKQIvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 03:51:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50926 "EHLO
+        id S239353AbiKQIvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 03:51:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239566AbiKQIux (ORCPT
+        with ESMTP id S239570AbiKQIvL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 03:50:53 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41548BC6;
-        Thu, 17 Nov 2022 00:50:49 -0800 (PST)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NCYXL3R0tzRpFK;
-        Thu, 17 Nov 2022 16:50:26 +0800 (CST)
-Received: from kwepemm600005.china.huawei.com (7.193.23.191) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 17 Nov 2022 16:50:47 +0800
-Received: from [10.67.109.54] (10.67.109.54) by kwepemm600005.china.huawei.com
- (7.193.23.191) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 17 Nov
- 2022 16:50:46 +0800
-Subject: Re: [PATCH] net: mdio-ipq4019: fix possible invalid pointer
- dereference
-To:     Andrew Lunn <andrew@lunn.ch>
-References: <20221115045028.182441-1-tanghui20@huawei.com>
- <Y3OV4og418SxPF7+@lunn.ch>
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <mw@semihalf.com>, <linux@armlinux.org.uk>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <yusongping@huawei.com>
-From:   Hui Tang <tanghui20@huawei.com>
-Message-ID: <d31663c5-8ac1-f424-b0ad-737e86b4595b@huawei.com>
-Date:   Thu, 17 Nov 2022 16:50:46 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.7.1
+        Thu, 17 Nov 2022 03:51:11 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2339D51301
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 00:51:02 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id A2822228B5;
+        Thu, 17 Nov 2022 08:51:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1668675060; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PbgsIrs+bZ9iovtRdSQCKoVjk+AKuPaJdvditHit2RA=;
+        b=AY3fjItgBpSZyc9SXC/fV8iI0exxRfeouBLgpNBBGTwdMxzCbmb1Ld3pi2GGVupI4DILJ7
+        FTrwQOUQliqufCT8DYtfJLhuhI9goiKF7wbLitOj5Sy+19XlqFEu5vetAlgRTwFPCDVjpx
+        HsXjYwnMmRmBzWqxGh2OfekNMFmM3Pc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1668675060;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PbgsIrs+bZ9iovtRdSQCKoVjk+AKuPaJdvditHit2RA=;
+        b=j+8OvQeIpYpnk0GD8bGyWYZgelfz3m0h+Ifhiy4UMsxavf7ByLKHVQJUleUUDdDYih5oda
+        Rj0N7YwnZCDpSWDQ==
+Received: from wotan.suse.de (wotan.suse.de [10.160.0.1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id D52B42C141;
+        Thu, 17 Nov 2022 08:50:59 +0000 (UTC)
+Date:   Thu, 17 Nov 2022 08:50:59 +0000 (UTC)
+From:   Richard Biener <rguenther@suse.de>
+To:     Peter Zijlstra <peterz@infradead.org>
+cc:     Ard Biesheuvel <ardb@kernel.org>,
+        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Alexander Potapenko <glider@google.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ben Segall <bsegall@google.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Don Zickus <dzickus@redhat.com>, Hao Luo <haoluo@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Huang Rui <ray.huang@amd.com>,
+        Ingo Molnar <mingo@redhat.com>, Jan Hubicka <jh@suse.de>,
+        Jason Baron <jbaron@akamai.com>,
+        Jiri Kosina <jikos@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Martin Liska <mliska@suse.cz>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Mel Gorman <mgorman@suse.de>, Miguel Ojeda <ojeda@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Petr Mladek <pmladek@suse.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Richard Biener <RGuenther@suse.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Song Liu <song@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Yonghong Song <yhs@fb.com>
+Subject: Re: [PATCH 00/46] gcc-LTO support for the kernel
+In-Reply-To: <Y3XwkFWJhcwApm4I@hirez.programming.kicks-ass.net>
+Message-ID: <nycvar.YFH.7.77.849.2211170847400.3995@jbgna.fhfr.qr>
+References: <20221114114344.18650-1-jirislaby@kernel.org> <CAMj1kXEMejnuMx1LJbfJj1+RUmZzZJNSmOVu_tWAbU6RXGqA3A@mail.gmail.com> <Y3XwkFWJhcwApm4I@hirez.programming.kicks-ass.net>
+User-Agent: Alpine 2.22 (LSU 394 2020-01-19)
 MIME-Version: 1.0
-In-Reply-To: <Y3OV4og418SxPF7+@lunn.ch>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.109.54]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600005.china.huawei.com (7.193.23.191)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 17 Nov 2022, Peter Zijlstra wrote:
 
+> On Mon, Nov 14, 2022 at 08:40:50PM +0100, Ard Biesheuvel wrote:
+> > On Mon, 14 Nov 2022 at 12:44, Jiri Slaby (SUSE) <jirislaby@kernel.org> wrote:
+> > >
+> > > Hi,
+> > >
+> > > this is the first call for comments (and kbuild complaints) for this
+> > > support of gcc (full) LTO in the kernel. Most of the patches come from
+> > > Andi. Me and Martin rebased them to new kernels and fixed the to-use
+> > > known issues. Also I updated most of the commit logs and reordered the
+> > > patches to groups of patches with similar intent.
+> > >
+> > > The very first patch comes from Alexander and is pending on some x86
+> > > queue already (I believe). I am attaching it only for completeness.
+> > > Without that, the kernel does not boot (LTO reorders a lot).
+> > >
+> > > In our measurements, the performance differences are negligible.
+> > >
+> > > The kernel is bigger with gcc LTO due to more inlining.
+> > 
+> > OK, so if I understand this correctly:
+> > - the performance is the same
+> > - the resulting image is bigger
+> > - we need a whole lot of ugly hacks to placate the linker.
+> > 
+> > Pardon my cynicism, but this cover letter does not mention any
+> > advantages of LTO, so what is the point of all of this?
+> 
+> Seconded; I really hate all the ugly required for the GCC-LTO
+> 'solution'. There not actually being any benefit just makes it a very
+> simple decision to drop all these patches on the floor.
 
-On 2022/11/15 21:36, Andrew Lunn wrote:
-> On Tue, Nov 15, 2022 at 12:50:28PM +0800, Hui Tang wrote:
->> priv->eth_ldo_rdy is saved the return value of devm_ioremap_resource(),
->> which !IS_ERR() should be used to check.
->>
->> Fixes: 23a890d493e3 ("net: mdio: Add the reset function for IPQ MDIO driver")
->> Signed-off-by: Hui Tang <tanghui20@huawei.com>
->> ---
->>  drivers/net/mdio/mdio-ipq4019.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/net/mdio/mdio-ipq4019.c b/drivers/net/mdio/mdio-ipq4019.c
->> index 4eba5a91075c..d7a1f7c56f97 100644
->> --- a/drivers/net/mdio/mdio-ipq4019.c
->> +++ b/drivers/net/mdio/mdio-ipq4019.c
->> @@ -188,7 +188,7 @@ static int ipq_mdio_reset(struct mii_bus *bus)
->>  	/* To indicate CMN_PLL that ethernet_ldo has been ready if platform resource 1
->>  	 * is specified in the device tree.
->>  	 */
->> -	if (priv->eth_ldo_rdy) {
->> +	if (!IS_ERR(priv->eth_ldo_rdy)) {
->>  		val = readl(priv->eth_ldo_rdy);
->>  		val |= BIT(0);
->>  		writel(val, priv->eth_ldo_rdy);
->
-> There is a general pattern in the kernel that optional things are set
-> to NULL if the resource does not exist. Often there is a
-> get_foo_optional() which will return a NULL point if the things does
-> not exist, the thing if it does exist, or an error code if a real
-> error happened.
->
-> So please follow this patterns. Check the return value in
-> ipq4019_mdio_probe(). Looking at __devm_ioremap_resource() i _think_
-> it returns -ENOMEM if the resource does not exist? So maybe any other
-> error is a real error, and should be reported, and -ENOMEM should
-> result in eth_ldo_rdy set to NULL?
+I'd say that instead a prerequesite for the series would be to actually
+enforce hidden visibility for everything not part of the kernel module
+API so the compiler can throw away unused functions.  Currently it has
+to keep everything because with a shared object there might be external
+references to everything exported from individual TUs.
 
-Thanks, I will resend it according to the style you said.
+There was a size benefit mentioned for module-less monolithic kernels
+as likely used in embedded setups, not sure if that's enough motivation
+to properly annotate symbols with visibility - and as far as I understand
+all these 'required' are actually such fixes.
+
+Richard.
