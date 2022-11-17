@@ -2,194 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1935A62DE1B
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 15:30:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85D0C62DE26
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 15:33:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240083AbiKQO37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 09:29:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56796 "EHLO
+        id S234965AbiKQOc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 09:32:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240036AbiKQO3i (ORCPT
+        with ESMTP id S240193AbiKQOcJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 09:29:38 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2F12AC74
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 06:29:36 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id j20-20020a056e02219400b00300a22a7fe0so1298946ila.3
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 06:29:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hpqS9S+SX6aP7ADJXRvU7UOnqyvT8C0tBlLCj5pahYQ=;
-        b=3b9N/hnMaGnv354FxvDUj/dsvEcLHbgwHvTAhXOo2fDnbSJtgK7YgaPMmuXQ7Wx+To
-         EeTEiIhQpudJkH5dpq6/QbOmRWtpl9hkM49Wm+EcY3Yx0FIMPeHi5IscL/rrIQJ6Kb2E
-         cubWw1M8mPyetlbFbCf6Peg1cZUQK0YKo8idL1xTDI4HivDa6jQVXk+jivpueUEmqnm4
-         vCHw7AWiqqAugdRuvT1YCMJG/HRT5KqP0Lbv9qsAsBHQGtvQMRKu6ubArXPHsgP348ag
-         ErMwhRgMf6AS7ZVwtE2Hh4ua0yy6l3NIaWi2aMp130TYD8RqBK/N+DLI9k2kAPBoSyTM
-         ufpw==
-X-Gm-Message-State: ANoB5pnVxc3SRo37ALgEwKcrjGLDX4iIM+vF1P0lZ/DUDEXaPFvpgaJH
-        vc2cLQ+X4lfP8K4QK+3SIJHcGQ09KM3HbK6g1WT7aD2uNDuW
-X-Google-Smtp-Source: AA0mqf487YSqiI2fmUDr91c2ZAh8FHslgdhFd76XF8DsiF8KTdy10rp0nQkt3aXBycQOPRTJdbkPHtVlVFLisCKEFQ/8y1VCjTzt
+        Thu, 17 Nov 2022 09:32:09 -0500
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC0E7723E
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 06:32:08 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 50CE532010D8;
+        Thu, 17 Nov 2022 09:32:05 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Thu, 17 Nov 2022 09:32:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        invisiblethingslab.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1668695524; x=
+        1668781924; bh=VDHNMVouOnbd2BIm6kQ/z4TnyWsucBlyWGHOxBu8DFc=; b=E
+        xXLDel3Fni8lmKAgawxSh3Z/oU3G+BKkylnFPFTNvljw2oJj5RzS1q8bnkZsyGBI
+        QJaAfOorKyEC8U7vaBpmiZtXTF2Q0sC1Ngb9HSZObf7SkqYxiclVjQnFjQqOx0fp
+        DWxCiOjd/3grLfgNnJDJ2H2ZQwWaicyUT/ZGv0Q5IhNijwhqoSqifVMHU9LTSCku
+        1qGRPP0r1vGy102p/gelD15r232vUMXF/zBsARjAWpGp/aTkBDncBIheWZ+fNgZv
+        dQzgAAMJt4mq54SR/fvqAvwpy8aUMC5rCYVTBg3Ps7Gn4uKOraU01pLOH5hbVOXs
+        smx6OxgeaxDU71cFLFhDQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1668695524; x=1668781924; bh=VDHNMVouOnbd2BIm6kQ/z4TnyWsu
+        cBlyWGHOxBu8DFc=; b=lyK9mBhvya9ZvHyklUFqMDr5JZTcBk3uqUDidtaFZDnZ
+        hqzLy5dnc9xJUQrmsni0UNCUo5k5E6jr6DTtq0nSD98qlP+r3LCiHD23uIoykxbo
+        jD/0Dp4/jj5Zfs7aL+xfpuMwHPFf7CEuFOTgxzCv1pNPyvbqUGcctrI4NNZrjcqs
+        hiA0WQ2rt0oQbXXkhoXj7rvuKs56gLLLYA+VG/LL6NIDQ4QL2b09pirYcrTYQ0lg
+        EbDAJ/LnRQoC6gp3mz961h5+XWOhn54bDSJLtVjko0DNBVRi1OykYmRyCf/HIWEj
+        POxo1vlvnmIrKie2ZeL+c8vLglcduSppGxcKCKkp7Q==
+X-ME-Sender: <xms:5EV2Y_2QZ__lBIFZs3aiIHAqfpu8yIQzRK1k_GFd3wMgja91lqwJlA>
+    <xme:5EV2Y-EljiKyauXwpfx020n7bggFDq3Bi_-slkl6lRizV27cLIMoWRxFQfjLx1dAl
+    k7TpqApYTv4CQ>
+X-ME-Received: <xmr:5EV2Y_6eWm2sLvsL_0TFoXLmEdMKv4p0mjjyFRVYfJAsAXDN7VXvnSXmIlNuQX3zl6BlmBYd30GvGt5GRsUopOjG4cr3gpVMtg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgeekgdeigecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttdejnecuhfhrohhmpeforghrvghk
+    ucforghrtgiihihkohifshhkihdqifpkrhgvtghkihcuoehmrghrmhgrrhgvkhesihhnvh
+    hishhisghlvghthhhinhhgshhlrggsrdgtohhmqeenucggtffrrghtthgvrhhnpefgudel
+    teefvefhfeehieetleeihfejhfeludevteetkeevtedtvdegueetfeejudenucevlhhush
+    htvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrghrmhgrrhgvkhes
+    ihhnvhhishhisghlvghthhhinhhgshhlrggsrdgtohhm
+X-ME-Proxy: <xmx:5EV2Y01SeRU-3CoF6SUIfeCBRgTT9XoIVVt_d5mauVV7QGDFM8Pulw>
+    <xmx:5EV2YyH92AUcSkJIkSUCud9HsGVLkEIdljZxhDwd9FhiXSdvP_DD3Q>
+    <xmx:5EV2Y18JIuon_7ETKB21Y-XkRu26GxPouP0Yia4LLNMLHVfvsHi_3Q>
+    <xmx:5EV2Y-g9Gb9xQNHpnSCRTW45FMe4QeKpx4eEJzNDh6t4q1WDVFYsmA>
+Feedback-ID: i1568416f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 17 Nov 2022 09:32:03 -0500 (EST)
+Date:   Thu, 17 Nov 2022 15:32:00 +0100
+From:   Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>
+To:     Jan Beulich <jbeulich@suse.com>
+Cc:     linux-kernel@vger.kernel.org, Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        "moderated list:XEN HYPERVISOR INTERFACE" 
+        <xen-devel@lists.xenproject.org>, David Vrabel <dvrabel@cantab.net>
+Subject: Re: [PATCH] xen-pciback: Consider MSI-X enabled only when MASKALL
+ bit is cleared
+Message-ID: <Y3ZF4EcD/c7Q5yHb@mail-itl>
+References: <20221117114122.1588338-1-marmarek@invisiblethingslab.com>
+ <0afe3f35-1b25-d1c6-89bb-8dae7a4070e9@cantab.net>
+ <Y3YzY0aUc42cQGk/@mail-itl>
+ <a84234d8-9f48-4b8f-e171-599c34840581@suse.com>
 MIME-Version: 1.0
-X-Received: by 2002:a02:3501:0:b0:363:accc:d7e5 with SMTP id
- k1-20020a023501000000b00363acccd7e5mr1173396jaa.34.1668695376199; Thu, 17 Nov
- 2022 06:29:36 -0800 (PST)
-Date:   Thu, 17 Nov 2022 06:29:36 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000230bea05edab6ba5@google.com>
-Subject: [syzbot] possible deadlock in nilfs_bmap_clear
-From:   syzbot <syzbot+4a885c3a7a60d6be3583@syzkaller.appspotmail.com>
-To:     konishi.ryusuke@gmail.com, linux-kernel@vger.kernel.org,
-        linux-nilfs@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="hsWQDkJqLvEsIMcB"
+Content-Disposition: inline
+In-Reply-To: <a84234d8-9f48-4b8f-e171-599c34840581@suse.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-syzbot found the following issue on:
+--hsWQDkJqLvEsIMcB
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 17 Nov 2022 15:32:00 +0100
+From: Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>
+To: Jan Beulich <jbeulich@suse.com>
+Cc: linux-kernel@vger.kernel.org, Juergen Gross <jgross@suse.com>,
+	Stefano Stabellini <sstabellini@kernel.org>,
+	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+	"moderated list:XEN HYPERVISOR INTERFACE" <xen-devel@lists.xenproject.org>,
+	David Vrabel <dvrabel@cantab.net>
+Subject: Re: [PATCH] xen-pciback: Consider MSI-X enabled only when MASKALL
+ bit is cleared
 
-HEAD commit:    cc675d22e422 Merge tag 'for-linus-6.1-rc6-tag' of git://gi..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=16d91101880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=378c11a9ed9a0efe
-dashboard link: https://syzkaller.appspot.com/bug?extid=4a885c3a7a60d6be3583
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+On Thu, Nov 17, 2022 at 02:33:16PM +0100, Jan Beulich wrote:
+> On 17.11.2022 14:13, Marek Marczykowski-G=C3=B3recki wrote:
+> > On Thu, Nov 17, 2022 at 12:54:51PM +0000, David Vrabel wrote:
+> >> On 17/11/2022 11:41, Marek Marczykowski-G=C3=B3recki wrote:
+> >>> Linux enables MSI-X before disabling INTx, but keeps MSI-X masked unt=
+il
+> >>> the table is filled. Then it disables INTx just before clearing MASKA=
+LL
+> >>> bit. Currently this approach is rejected by xen-pciback.
+> >>> Allow setting PCI_MSIX_FLAGS_ENABLE while INTx is still enabled as lo=
+ng
+> >>> as PCI_MSIX_FLAGS_MASKALL is set too.
+> >>
+> >> The use of MSI-X interrupts is conditional on only the MSI-X Enable bi=
+t.
+> >> Setting MSI-X Enable effectively overrides the Interrupt Disable bit i=
+n the
+> >> Command register.
+> >=20
+> > That means the second chunk of the patch may even drop the '(new_value &
+> > PCI_MSIX_FLAGS_MASKALL)' part, right?=20
+> >=20
+> >> PCIe 6.0.1 section 7.7.2.2. "MSI-X Enable ... is prohibited from using=
+ INTx
+> >> interrupts (if implemented)." And there is similar wording for MSI Ena=
+ble.
+> >=20
+> > And this would mean the 'field_config->int_type =3D=3D INTERRUPT_TYPE_M=
+SIX'
+> > part isn't necessary either.
+> >=20
+> > Jan in another thread pointed out that disabling INTx explicitly is
+> > still a useful workaround for a flawed hardware. But if that isn't
+> > mandated by the spec, maybe it doesn't need to be enforced by pciback
+> > either?
+>=20
+> Well, allowing a device to go into a mode exhibiting undefined behavior
+> is what we ought to prevent when it comes to a DomU doing so vs overall
+> host safety.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+If the spec prohibits using INTx if MSI/MSI-X is enabled (regardless of
+PCI_COMMAND_INTX_DISABLE bit), then well-behaving device should be fine
+(we aren't hitting undefined behavior). As for buggy device, it wouldn't
+be much different from a device ignoring PCI_COMMAND_INTX_DISABLE
+completely, no (besides the latter being probably much less probable
+bug)?
+If the above is assumption is correct, it seems such device may not
+function correctly without extra workarounds (which are in the driver
+interest to apply), but should not affect overall host safety (as in:
+beyond the guest having that device assigned). I think pciback should
+only enforce what's necessary to prevent one guest hurting others (or
+the hypervisor), but it doesn't need to prevent guest hurting itself.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/380daf81802f/disk-cc675d22.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/5dc8149b5d8c/vmlinux-cc675d22.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/3595cfb45f6c/bzImage-cc675d22.xz
+--=20
+Best Regards,
+Marek Marczykowski-G=C3=B3recki
+Invisible Things Lab
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+4a885c3a7a60d6be3583@syzkaller.appspotmail.com
+--hsWQDkJqLvEsIMcB
+Content-Type: application/pgp-signature; name="signature.asc"
 
-============================================
-WARNING: possible recursive locking detected
-6.1.0-rc5-syzkaller-00044-gcc675d22e422 #0 Not tainted
---------------------------------------------
-syz-executor.4/18478 is trying to acquire lock:
-ffff888076ad93f8 (&bmap->b_sem){++++}-{3:3}, at: nilfs_bmap_clear+0x25/0x90 fs/nilfs2/bmap.c:311
+-----BEGIN PGP SIGNATURE-----
 
-but task is already holding lock:
-ffff88808d5900c0 (&bmap->b_sem){++++}-{3:3}, at: nilfs_bmap_insert+0x9d/0x390 fs/nilfs2/bmap.c:146
+iQEzBAEBCAAdFiEEhrpukzGPukRmQqkK24/THMrX1ywFAmN2ReEACgkQ24/THMrX
+1yzzUQf/fRtFToxRDSo67Ei2SnzYd3QNLi4bA/SAL/6aFptPOlDlc9x5/3vcxPdP
+9XXxKSV8XCpz1Ujxbq8jc2F04SBoQOblw8gOvxXzxLx8OF7r0wslheBBKCnd9p4L
+K75QUIBMp7FPdG5zZNlE0uEeDZXfZQEQWUe3ZkI3DwQEA0pNge2TQcFboJYCgo7u
+jFKA2HUoGKdIHXyOrq32dQA3MIQHGbKuOlh7amutgfjSGVHhf7mKWlicmrac1Xvg
+J51tmZU6hTUm/XXN9/NHqVCcPpC+umlxfAWi6wDcsUrS4upTT36fh3XWD3PO6twk
+XYA18LE0FTW2NIsUbImeFTak0mp2tw==
+=ahAp
+-----END PGP SIGNATURE-----
 
-other info that might help us debug this:
- Possible unsafe locking scenario:
-
-       CPU0
-       ----
-  lock(&bmap->b_sem);
-  lock(&bmap->b_sem);
-
- *** DEADLOCK ***
-
- May be due to missing lock nesting notation
-
-7 locks held by syz-executor.4/18478:
- #0: ffff8880824a0460 (sb_writers#30){.+.+}-{0:0}, at: do_sendfile+0x61c/0xfd0 fs/read_write.c:1254
- #1: ffff88808d5902a8 (&sb->s_type->i_mutex_key#37){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
- #1: ffff88808d5902a8 (&sb->s_type->i_mutex_key#37){+.+.}-{3:3}, at: generic_file_write_iter+0x7f/0x310 mm/filemap.c:3910
- #2: ffff8880824a0650 (sb_internal#3){.+.+}-{0:0}, at: nilfs_write_begin+0x6c/0x110 fs/nilfs2/inode.c:256
- #3: ffff8880855592a0 (&nilfs->ns_segctor_sem){++++}-{3:3}, at: nilfs_transaction_begin+0x359/0x770 fs/nilfs2/segment.c:223
- #4: ffff88808d5900c0 (&bmap->b_sem){++++}-{3:3}, at: nilfs_bmap_insert+0x9d/0x390 fs/nilfs2/bmap.c:146
- #5: ffffffff8d3d0d10 (shrinker_rwsem){++++}-{3:3}, at: shrink_slab_memcg+0xd9/0x630 mm/vmscan.c:884
- #6: ffff8880824a00e0 (&type->s_umount_key#106){++++}-{3:3}, at: trylock_super fs/super.c:415 [inline]
- #6: ffff8880824a00e0 (&type->s_umount_key#106){++++}-{3:3}, at: super_cache_scan+0x6a/0x470 fs/super.c:79
-
-stack backtrace:
-CPU: 1 PID: 18478 Comm: syz-executor.4 Not tainted 6.1.0-rc5-syzkaller-00044-gcc675d22e422 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e3/0x2cb lib/dump_stack.c:106
- print_deadlock_bug kernel/locking/lockdep.c:2990 [inline]
- check_deadlock kernel/locking/lockdep.c:3033 [inline]
- validate_chain+0x4721/0x6470 kernel/locking/lockdep.c:3818
- __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
- lock_acquire+0x1a7/0x400 kernel/locking/lockdep.c:5668
- down_write+0x9c/0x270 kernel/locking/rwsem.c:1562
- nilfs_bmap_clear+0x25/0x90 fs/nilfs2/bmap.c:311
- nilfs_clear_inode+0x161/0x2c0 fs/nilfs2/inode.c:906
- nilfs_evict_inode+0xf9/0x3e0 fs/nilfs2/inode.c:925
- evict+0x2a4/0x620 fs/inode.c:664
- dispose_list fs/inode.c:697 [inline]
- prune_icache_sb+0x268/0x320 fs/inode.c:896
- super_cache_scan+0x362/0x470 fs/super.c:106
- do_shrink_slab+0x4e1/0xa00 mm/vmscan.c:842
- shrink_slab_memcg+0x2ec/0x630 mm/vmscan.c:911
- shrink_slab+0xbe/0x340 mm/vmscan.c:990
- shrink_node_memcgs+0x3c3/0x770 mm/vmscan.c:6076
- shrink_node+0x299/0x1050 mm/vmscan.c:6105
- shrink_zones+0x4fb/0xc40 mm/vmscan.c:6343
- do_try_to_free_pages+0x215/0xcd0 mm/vmscan.c:6405
- try_to_free_mem_cgroup_pages+0x3cb/0x6d0 mm/vmscan.c:6720
- reclaim_high+0x1f4/0x280 mm/memcontrol.c:2389
- mem_cgroup_handle_over_high+0x145/0x2b0 mm/memcontrol.c:2574
- try_charge_memcg+0xfed/0x11f0 mm/memcontrol.c:2812
- try_charge mm/memcontrol.c:2823 [inline]
- charge_memcg+0x132/0x620 mm/memcontrol.c:6879
- __mem_cgroup_charge+0x23/0x80 mm/memcontrol.c:6900
- mem_cgroup_charge include/linux/memcontrol.h:667 [inline]
- __filemap_add_folio+0x3f6/0x1a60 mm/filemap.c:852
- filemap_add_folio+0x12c/0x5c0 mm/filemap.c:934
- __filemap_get_folio+0x93c/0x1240 mm/filemap.c:1976
- pagecache_get_page+0x28/0x260 mm/folio-compat.c:110
- find_or_create_page include/linux/pagemap.h:613 [inline]
- grab_cache_page include/linux/pagemap.h:743 [inline]
- nilfs_grab_buffer+0xab/0x550 fs/nilfs2/page.c:57
- nilfs_btnode_create_block+0x4b/0x340 fs/nilfs2/btnode.c:52
- nilfs_btree_get_new_block fs/nilfs2/btree.c:65 [inline]
- nilfs_btree_prepare_insert fs/nilfs2/btree.c:1130 [inline]
- nilfs_btree_insert+0xd22/0x1c30 fs/nilfs2/btree.c:1238
- nilfs_bmap_do_insert fs/nilfs2/bmap.c:121 [inline]
- nilfs_bmap_insert+0x23b/0x390 fs/nilfs2/bmap.c:147
- nilfs_get_block+0x423/0x8e0 fs/nilfs2/inode.c:101
- __block_write_begin_int+0x57c/0x1ae0 fs/buffer.c:1991
- __block_write_begin fs/buffer.c:2041 [inline]
- block_write_begin+0x93/0x1e0 fs/buffer.c:2102
- nilfs_write_begin+0x9c/0x110 fs/nilfs2/inode.c:261
- generic_perform_write+0x314/0x610 mm/filemap.c:3753
- __generic_file_write_iter+0x29b/0x400 mm/filemap.c:3849
- generic_file_write_iter+0xab/0x310 mm/filemap.c:3913
- do_iter_write+0x6f0/0xc50 fs/read_write.c:861
- iter_file_splice_write+0x830/0xff0 fs/splice.c:686
- do_splice_from fs/splice.c:764 [inline]
- direct_splice_actor+0xe6/0x1c0 fs/splice.c:931
- splice_direct_to_actor+0x4e4/0xc00 fs/splice.c:886
- do_splice_direct+0x2a0/0x3f0 fs/splice.c:974
- do_sendfile+0x641/0xfd0 fs/read_write.c:1255
- __do_sys_sendfile64 fs/read_write.c:1323 [inline]
- __se_sys_sendfile64+0x178/0x1e0 fs/read_write.c:1309
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f74c308b639
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f74c3e97168 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
-RAX: ffffffffffffffda RBX: 00007f74c31ac050 RCX: 00007f74c308b639
-RDX: 0000000000000000 RSI: 0000000000000003 RDI: 0000000000000004
-RBP: 00007f74c30e6ae9 R08: 0000000000000000 R09: 0000000000000000
-R10: 00000000f03affff R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffe3045508f R14: 00007f74c3e97300 R15: 0000000000022000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+--hsWQDkJqLvEsIMcB--
