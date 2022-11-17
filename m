@@ -2,54 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AE5762D245
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 05:24:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BA3662D248
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 05:24:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238944AbiKQEYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 23:24:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47968 "EHLO
+        id S233477AbiKQEYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 23:24:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234037AbiKQEYO (ORCPT
+        with ESMTP id S238955AbiKQEYq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 23:24:14 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 622875BD75
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 20:24:13 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6872D13D5;
-        Wed, 16 Nov 2022 20:24:19 -0800 (PST)
-Received: from [10.162.40.18] (unknown [10.162.40.18])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 776373F73B;
-        Wed, 16 Nov 2022 20:24:09 -0800 (PST)
-Message-ID: <53c0c955-7afe-905b-468a-cd7ac81238c5@arm.com>
-Date:   Thu, 17 Nov 2022 09:54:06 +0530
+        Wed, 16 Nov 2022 23:24:46 -0500
+Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15FAB5C740;
+        Wed, 16 Nov 2022 20:24:44 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VV-VtWS_1668659080;
+Received: from 30.221.128.178(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VV-VtWS_1668659080)
+          by smtp.aliyun-inc.com;
+          Thu, 17 Nov 2022 12:24:42 +0800
+Message-ID: <c529ee21-699d-dfc8-5f7d-2597fa00796d@linux.alibaba.com>
+Date:   Thu, 17 Nov 2022 12:24:40 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 2/2] arm64/mm: fix incorrect file_map_count for invalid
- pmd/pud
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.0
+Subject: Re: [PATCH v3 1/2] fscache,cachefiles: add prepare_ondemand_read()
+ callback
 Content-Language: en-US
-To:     Mark Rutland <mark.rutland@arm.com>,
-        David Hildenbrand <david@redhat.com>
-Cc:     Liu Shixin <liushixin2@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Denys Vlasenko <dvlasenk@redhat.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        David Hildenbrand <dhildenb@redhat.com>,
-        Rafael Aquini <raquini@redhat.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221116083811.464678-1-liushixin2@huawei.com>
- <20221116083811.464678-3-liushixin2@huawei.com>
- <73189e81-08c2-bb18-dd4a-f717996ea819@redhat.com>
- <Y3UF87Z/a7UVThVF@FVFF77S0Q05N.cambridge.arm.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <Y3UF87Z/a7UVThVF@FVFF77S0Q05N.cambridge.arm.com>
+To:     David Howells <dhowells@redhat.com>,
+        Jeff Layton <jlayton@kernel.org>
+Cc:     xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        linux-cachefs@redhat.com, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+References: <2b595b62f6ecd28298a860fcdc5b4941dcafd9eb.camel@kernel.org>
+ <20221116104502.107431-1-jefflexu@linux.alibaba.com>
+ <20221116104502.107431-2-jefflexu@linux.alibaba.com>
+ <2968419.1668606101@warthog.procyon.org.uk>
+From:   Jingbo Xu <jefflexu@linux.alibaba.com>
+In-Reply-To: <2968419.1668606101@warthog.procyon.org.uk>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,77 +52,40 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 11/16/22 21:16, Mark Rutland wrote:
-> On Wed, Nov 16, 2022 at 10:08:27AM +0100, David Hildenbrand wrote:
->> On 16.11.22 09:38, Liu Shixin wrote:
->>> The page table check trigger BUG_ON() unexpectedly when split hugepage:
->>>
->>>   ------------[ cut here ]------------
->>>   kernel BUG at mm/page_table_check.c:119!
->>>   Internal error: Oops - BUG: 00000000f2000800 [#1] SMP
->>>   Dumping ftrace buffer:
->>>      (ftrace buffer empty)
->>>   Modules linked in:
->>>   CPU: 7 PID: 210 Comm: transhuge-stres Not tainted 6.1.0-rc3+ #748
->>>   Hardware name: linux,dummy-virt (DT)
->>>   pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->>>   pc : page_table_check_set.isra.0+0x398/0x468
->>>   lr : page_table_check_set.isra.0+0x1c0/0x468
->>> [...]
->>>   Call trace:
->>>    page_table_check_set.isra.0+0x398/0x468
->>>    __page_table_check_pte_set+0x160/0x1c0
->>>    __split_huge_pmd_locked+0x900/0x1648
->>>    __split_huge_pmd+0x28c/0x3b8
->>>    unmap_page_range+0x428/0x858
->>>    unmap_single_vma+0xf4/0x1c8
->>>    zap_page_range+0x2b0/0x410
->>>    madvise_vma_behavior+0xc44/0xe78
->>>    do_madvise+0x280/0x698
->>>    __arm64_sys_madvise+0x90/0xe8
->>>    invoke_syscall.constprop.0+0xdc/0x1d8
->>>    do_el0_svc+0xf4/0x3f8
->>>    el0_svc+0x58/0x120
->>>    el0t_64_sync_handler+0xb8/0xc0
->>>    el0t_64_sync+0x19c/0x1a0
->>> [...]
->>>
->>> On arm64, pmd_present() will return true even if the pmd is invalid.
+On 11/16/22 9:41 PM, David Howells wrote:
+> Jeff Layton <jlayton@kernel.org> wrote:
+> 
+>>> +static enum netfs_io_source cachefiles_do_prepare_read(struct netfs_cache_resources *cres,
+>>> +					loff_t *_start, size_t *_len,
+>>> +					unsigned long *_flags, loff_t i_size)
 >>
->> I assume that's because of the pmd_present_invalid() check.
->>
->> ... I wonder why that behavior was chosen. Sounds error-prone to me.
+>> _start is never changed, so it should be passed by value instead of by
+>> pointer.
 > 
-> That seems to be down to commit:
-> 
->   b65399f6111b03df ("arm64/mm: Change THP helpers to comply with generic MM semantics")
-> 
-> ... apparently because Andrea Arcangelli said this was necessary in:
-> 
->   https://lore.kernel.org/lkml/20181017020930.GN30832@redhat.com/
-> 
-> ... but that does see to contradict what's said in:
-> 
->   Documentation/mm/arch_pgtable_helpers.rst
-> 
-> ... which just says:
-> 
->   pmd_present  Tests a valid mapped PMD
+> Hmmm.  The intention was that the start pointer should be able to be moved
+> backwards by the cache - but that's not necessary in ->prepare_read() and
+> ->expand_readahead() is provided for that now.  So yes, the start pointer
+> shouldn't get changed at this point.
 
-It should be as follows instead, will update. Not sure about PUD level though,
-where anon THP is not supported (AFAIK).
+Okay.
 
-+---------------------------+--------------------------------------------------+
-| pmd_present               | Tests if pmd_page() points to valid memory page  |
-+---------------------------+--------------------------------------------------+
 
 > 
-> ... and it's not clear to me why this *only* applies to the PMD level.
+>> I'd also reverse the position of the arguments for _flags and i_size.
+>> Otherwise, the CPU/compiler have to shuffle things around more in
+>> cachefiles_prepare_ondemand_read before they call this.
 > 
-> Anshuman?
+> Better to pass the flags in and then ignore them.  That way it can tail call,
+> or just call cachefiles_do_prepare_read() directly from erofs.  If you're
+> going to have a wrapper, then you might be just as well create a
+> netfs_io_subrequest struct on the stack.
 
-Because THP is supported at PMD level. As Andrea had explained earlier, pmd_present()
-should return positive if pmd_page() on the entry points to valid memory irrespective
-of whether the entry is valid/mapped or not. That is the semantics expected in generic
-THP during PMD split, collapse, migration etc and other memory code walking past such
-PMD entries. That was my understanding.
+I would prefer letting cachefiles_prepare_ondemand_read() pass flags in
+and then tail call cachefiles_do_prepare_read() directly.
+
+Many thanks for the suggestion.
+
+
+-- 
+Thanks,
+Jingbo
