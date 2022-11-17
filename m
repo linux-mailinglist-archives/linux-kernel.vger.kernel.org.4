@@ -2,132 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC69162D42B
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 08:36:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1886562D3DF
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 08:14:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239162AbiKQHgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 02:36:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36578 "EHLO
+        id S239125AbiKQHOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 02:14:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239338AbiKQHf6 (ORCPT
+        with ESMTP id S230114AbiKQHOq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 02:35:58 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F88A66C8A
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 23:35:57 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ovZRA-0008RP-CB; Thu, 17 Nov 2022 08:35:52 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ovZR8-004o4G-EG; Thu, 17 Nov 2022 08:35:51 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ovZR8-00HDoK-Km; Thu, 17 Nov 2022 08:35:50 +0100
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Lee Jones <lee@kernel.org>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-pwm@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH] Input: max8997 - Convert to modern way to get a reference to a PWM
-Date:   Thu, 17 Nov 2022 08:35:43 +0100
-Message-Id: <20221117073543.3790449-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.38.1
+        Thu, 17 Nov 2022 02:14:46 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF24C25C71;
+        Wed, 16 Nov 2022 23:14:43 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NCWPn4sGSz4f3m6Y;
+        Thu, 17 Nov 2022 15:14:37 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP1 (Coremail) with SMTP id cCh0CgDXgK9g33VjzCGGAg--.707S4;
+        Thu, 17 Nov 2022 15:14:40 +0800 (CST)
+From:   Ye Bin <yebin@huaweicloud.com>
+To:     tytso@mit.edu, adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, jack@suse.cz,
+        Ye Bin <yebin10@huawei.com>,
+        syzbot+57b25da729eb0b88177d@syzkaller.appspotmail.com
+Subject: [PATCH] ext4: fix uninit-value in 'ext4_evict_inode'
+Date:   Thu, 17 Nov 2022 15:36:03 +0800
+Message-Id: <20221117073603.2598882-1-yebin@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2605; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=RHUmdzfS5kgAw35yKuhCfScFTp9Q8XCBrifuzdw6358=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBjdeRLyfYtfTatFvl7PMR56JYJU0K6IP3AgD3Gy09t YyL2qMuJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCY3XkSwAKCRDB/BR4rcrsCYQdB/ 0ehWkn9MuqC7K+sPOxCxJ8i1ags3ILTQSanRJXX4cVaAq2D0Eb35ylKQ7VaPMmJy8BXtNTNMA3gk1u OjKPNNiCaHm6opTw0r/FL+nGBZK2kJ3TfSsfn4cKdFZeCKBWTu+xPoW36amKwUd+dSSd1oU+5soiPO RlmdNteN8DlHEMn997BMgEdYXPqPNfBDwxO/CRCCGLUMaOsMj7/hH47WDw6r+8/9eaTRHKwoCxXo8A XKSKy+ybWZTyja586mAL3m5/FQUBZcI374ut9d5YCm8+Cdk9r/YxloAAuvFRuQpmxUCTPp8Hx8CHJE mnl4p8M8irEa05QNJQtfSB4ivFPteg
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-CM-TRANSID: cCh0CgDXgK9g33VjzCGGAg--.707S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxGrWxuFWxGr4UAr17Ww1ftFb_yoWrGFyUp3
+        9xJryfZF1UuryDC3yxKr4vqFy8ZasxWFWUGr4fKr1DZFy7Xw1agFyktF45W3WfuFWrCryr
+        XF1DAr4UZr4rA3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI
+        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
+        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY
+        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
+        AIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280
+        aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IUbmii3UUUUU==
+X-CM-SenderInfo: p1hex046kxt4xhlfz01xgou0bp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pwm_request() isn't recommended to be used any more because it relies on
-global IDs for the PWM which comes with different difficulties.
+From: Ye Bin <yebin10@huawei.com>
 
-The new way to do things is to find the right PWM using a reference from
-the platform device. (This can be created either using a device-tree
-or a platform lookup table, see e.g. commit 5a4412d4a82f ("ARM: pxa:
-tavorevb: Use PWM lookup table") how to do this.)
+Syzbot found the following issue:
+=====================================================
+BUG: KMSAN: uninit-value in ext4_evict_inode+0xdd/0x26b0 fs/ext4/inode.c:180
+ ext4_evict_inode+0xdd/0x26b0 fs/ext4/inode.c:180
+ evict+0x365/0x9a0 fs/inode.c:664
+ iput_final fs/inode.c:1747 [inline]
+ iput+0x985/0xdd0 fs/inode.c:1773
+ __ext4_new_inode+0xe54/0x7ec0 fs/ext4/ialloc.c:1361
+ ext4_mknod+0x376/0x840 fs/ext4/namei.c:2844
+ vfs_mknod+0x79d/0x830 fs/namei.c:3914
+ do_mknodat+0x47d/0xaa0
+ __do_sys_mknodat fs/namei.c:3992 [inline]
+ __se_sys_mknodat fs/namei.c:3989 [inline]
+ __ia32_sys_mknodat+0xeb/0x150 fs/namei.c:3989
+ do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+ __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
+ do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
+ do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:246
+ entry_SYSENTER_compat_after_hwframe+0x70/0x82
 
-There are no in-tree users, so there are no other code locations that need
-adaption.
+Uninit was created at:
+ __alloc_pages+0x9f1/0xe80 mm/page_alloc.c:5578
+ alloc_pages+0xaae/0xd80 mm/mempolicy.c:2285
+ alloc_slab_page mm/slub.c:1794 [inline]
+ allocate_slab+0x1b5/0x1010 mm/slub.c:1939
+ new_slab mm/slub.c:1992 [inline]
+ ___slab_alloc+0x10c3/0x2d60 mm/slub.c:3180
+ __slab_alloc mm/slub.c:3279 [inline]
+ slab_alloc_node mm/slub.c:3364 [inline]
+ slab_alloc mm/slub.c:3406 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3413 [inline]
+ kmem_cache_alloc_lru+0x6f3/0xb30 mm/slub.c:3429
+ alloc_inode_sb include/linux/fs.h:3117 [inline]
+ ext4_alloc_inode+0x5f/0x860 fs/ext4/super.c:1321
+ alloc_inode+0x83/0x440 fs/inode.c:259
+ new_inode_pseudo fs/inode.c:1018 [inline]
+ new_inode+0x3b/0x430 fs/inode.c:1046
+ __ext4_new_inode+0x2a7/0x7ec0 fs/ext4/ialloc.c:959
+ ext4_mkdir+0x4d5/0x1560 fs/ext4/namei.c:2992
+ vfs_mkdir+0x62a/0x870 fs/namei.c:4035
+ do_mkdirat+0x466/0x7b0 fs/namei.c:4060
+ __do_sys_mkdirat fs/namei.c:4075 [inline]
+ __se_sys_mkdirat fs/namei.c:4073 [inline]
+ __ia32_sys_mkdirat+0xc4/0x120 fs/namei.c:4073
+ do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+ __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
+ do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
+ do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:246
+ entry_SYSENTER_compat_after_hwframe+0x70/0x82
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+CPU: 1 PID: 4625 Comm: syz-executor.2 Not tainted 6.1.0-rc4-syzkaller-62821-gcb231e2f67ec #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+=====================================================
+
+Now, 'ext4_alloc_inode()' didn't init 'ei->i_flags'. If new inode failed
+before set 'ei->i_flags' in '__ext4_new_inode()', then do 'iput()'. As after
+6bc0d63dad7f commit will access 'ei->i_flags' in 'ext4_evict_inode()' which
+will lead to access uninit-value.
+To solve above issue just init 'ei->i_flags' in 'ext4_alloc_inode()'.
+
+Reported-by: syzbot+57b25da729eb0b88177d@syzkaller.appspotmail.com
+Fixes:6bc0d63dad7f("ext4: remove EA inode entry from mbcache on inode eviction")
+Signed-off-by: Ye Bin <yebin10@huawei.com>
 ---
- drivers/input/misc/max8997_haptic.c | 7 +++----
- include/linux/mfd/max8997.h         | 3 ---
- 2 files changed, 3 insertions(+), 7 deletions(-)
+ fs/ext4/super.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/input/misc/max8997_haptic.c b/drivers/input/misc/max8997_haptic.c
-index cd5e99ec1d3c..99cbc5ee89d1 100644
---- a/drivers/input/misc/max8997_haptic.c
-+++ b/drivers/input/misc/max8997_haptic.c
-@@ -278,8 +278,7 @@ static int max8997_haptic_probe(struct platform_device *pdev)
- 		break;
+diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+index ae433e1337ed..cd2590489392 100644
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -1323,6 +1323,7 @@ static struct inode *ext4_alloc_inode(struct super_block *sb)
+ 		return NULL;
  
- 	case MAX8997_EXTERNAL_MODE:
--		chip->pwm = pwm_request(haptic_pdata->pwm_channel_id,
--					"max8997-haptic");
-+		chip->pwm = pwm_get(&pdev->dev, NULL);
- 		if (IS_ERR(chip->pwm)) {
- 			error = PTR_ERR(chip->pwm);
- 			dev_err(&pdev->dev,
-@@ -344,7 +343,7 @@ static int max8997_haptic_probe(struct platform_device *pdev)
- 	regulator_put(chip->regulator);
- err_free_pwm:
- 	if (chip->mode == MAX8997_EXTERNAL_MODE)
--		pwm_free(chip->pwm);
-+		pwm_put(chip->pwm);
- err_free_mem:
- 	input_free_device(input_dev);
- 	kfree(chip);
-@@ -360,7 +359,7 @@ static int max8997_haptic_remove(struct platform_device *pdev)
- 	regulator_put(chip->regulator);
- 
- 	if (chip->mode == MAX8997_EXTERNAL_MODE)
--		pwm_free(chip->pwm);
-+		pwm_put(chip->pwm);
- 
- 	kfree(chip);
- 
-diff --git a/include/linux/mfd/max8997.h b/include/linux/mfd/max8997.h
-index 6c98edcf4b0b..6193905abbb5 100644
---- a/include/linux/mfd/max8997.h
-+++ b/include/linux/mfd/max8997.h
-@@ -110,8 +110,6 @@ enum max8997_haptic_pwm_divisor {
- 
- /**
-  * max8997_haptic_platform_data
-- * @pwm_channel_id: channel number of PWM device
-- *		    valid for MAX8997_EXTERNAL_MODE
-  * @pwm_period: period in nano second for PWM device
-  *		valid for MAX8997_EXTERNAL_MODE
-  * @type: motor type
-@@ -128,7 +126,6 @@ enum max8997_haptic_pwm_divisor {
-  *     [0 - 255]: available period
-  */
- struct max8997_haptic_platform_data {
--	unsigned int pwm_channel_id;
- 	unsigned int pwm_period;
- 
- 	enum max8997_haptic_motor_type type;
-
-base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
+ 	inode_set_iversion(&ei->vfs_inode, 1);
++	ei->i_flags = 0;
+ 	spin_lock_init(&ei->i_raw_lock);
+ 	INIT_LIST_HEAD(&ei->i_prealloc_list);
+ 	atomic_set(&ei->i_prealloc_active, 0);
 -- 
-2.38.1
+2.31.1
 
