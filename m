@@ -2,133 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26BAC62E5F5
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 21:33:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF34B62E5F8
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 21:33:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240695AbiKQUc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 15:32:59 -0500
+        id S239843AbiKQUds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 15:33:48 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234174AbiKQUcj (ORCPT
+        with ESMTP id S230287AbiKQUd1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 15:32:39 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E7AD8E299;
-        Thu, 17 Nov 2022 12:31:33 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id d9so5740799wrm.13;
-        Thu, 17 Nov 2022 12:31:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GgNvfOAXHjmuiPC01RZ20qna6kcHy47I8cgRmcZ99PE=;
-        b=GPWC5/m7Uw7YC2i7MtfzvNQKjQj92U/QyivvzOTm8wW2FUYg3zYCbAOehzWCJfG2vN
-         2PG3m0DjUtTAOH8qCf97ydoFXAqbEfo89LgSJ/GIkW7vz3vY4iDW5utlq56CTQ7O8JUx
-         rs98pW7mgYcrl1AJZWJJjAfKWUrtnNX8o1aNj+Bond+O3mo32NnqFpKEt61K7xeXiDmO
-         Cp5ljx/Sjv2W4s9gLRmQ7ngyYLzktfXZufWEmMlIgzsaa/DrDu8i8n48qFkW5d81mnTX
-         KV+sqb8AQYl+absX7x0b0rwu509eKG8ZKFFE54KR+ioE3gc0jWf+Kw9xxK3jwqrqFBLo
-         H6qA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GgNvfOAXHjmuiPC01RZ20qna6kcHy47I8cgRmcZ99PE=;
-        b=DevplD2mEPdIJDWffcK9YCkDM1JmabL3HpuxNHOif+9a6wVBRcabNEcC8mEf42F9Zp
-         2wm8aavexR5TJcqWXoOg97iwRrARKuFgslhDylrx1kVl1V4Cx6CHWe/eaZ/TBx9AYGWw
-         JjQyTI9sNLENo3bpyGjW5WZB6h2UriYpbRx2oyota7sbZ7yC8Zi1CtaIdpfkcphPNeaX
-         6CA6zKj1SKWel11H5uE90YKHDmIEi0hru3wFekd32kSbnwForh8Vz7PVs6tttM45Tl+E
-         5TvXsPdeuNKNT/CAIFrZsIidur0idCMNmEvtJTaajjbcLQFJULmJjYf94jp9lYFOp2UV
-         Pe5Q==
-X-Gm-Message-State: ANoB5pmr9OyRo7XR3Wq82WcjnODW3yAPSRTDlN0Eiin4cak7Hthkx34+
-        e8sg5A6JTyn+oOOD68o9eAo=
-X-Google-Smtp-Source: AA0mqf7RJtH6v9Zfz+C1oJd50K9FMeHOnHakHTlbrjVBkVMLt5/yV5A7SZvyhJITGCArwqpsEss0YQ==
-X-Received: by 2002:a05:6000:1d97:b0:241:b99a:949f with SMTP id bk23-20020a0560001d9700b00241b99a949fmr2041636wrb.599.1668717092011;
-        Thu, 17 Nov 2022 12:31:32 -0800 (PST)
-Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
-        by smtp.gmail.com with ESMTPSA id e18-20020adfdbd2000000b0022da3977ec5sm1795243wrj.113.2022.11.17.12.31.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 12:31:31 -0800 (PST)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, wens@csie.org,
-        samuel@sholland.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        Thu, 17 Nov 2022 15:33:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 573E1E01;
+        Thu, 17 Nov 2022 12:33:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C9FA762260;
+        Thu, 17 Nov 2022 20:33:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECCE0C433D6;
+        Thu, 17 Nov 2022 20:33:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1668717205;
+        bh=J1Zev6kImlFGtY0atk2gzgbyl3HFY7zcz895np01klE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=fSBbmNSJwKeF9aaQNye1w0lI2iZo/47DwIU8iqTmIvN10BcHDdcf8jenPtftm2F/Q
+         dJUCcsyYiesYxSEtD+AA7cmqXHLXdmlPDbbDR34ZqRI2QIBLt1706qWq3H0MFW0Hol
+         Y9J7fyqH2SjeDuhdgth11VoAtDnD5Ob9utHpyz/I=
+Date:   Thu, 17 Nov 2022 12:33:24 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Zqiang <qiang1.zhang@intel.com>
+Cc:     paulmck@kernel.org, thunder.leizhen@huawei.com,
+        frederic@kernel.org, joel@joelfernandes.org, rcu@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] media: dt-bindings: allwinner: video-engine: Fix number of IOMMU channels
-Date:   Thu, 17 Nov 2022 21:31:30 +0100
-Message-ID: <3385828.QJadu78ljV@jernej-laptop>
-In-Reply-To: <b0125ad2-426c-d908-0839-2021bc59d59f@linaro.org>
-References: <20221117060704.367945-1-jernej.skrabec@gmail.com> <20221117060704.367945-2-jernej.skrabec@gmail.com> <b0125ad2-426c-d908-0839-2021bc59d59f@linaro.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2] mm: Make vmalloc_dump_obj() call in a preemptible
+ context
+Message-Id: <20221117123324.c3cdad45b3204d57b5f7bc3d@linux-foundation.org>
+In-Reply-To: <20221117112520.3942618-1-qiang1.zhang@intel.com>
+References: <20221117112520.3942618-1-qiang1.zhang@intel.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne =C4=8Detrtek, 17. november 2022 ob 14:13:00 CET je Krzysztof Kozlowski=
-=20
-napisal(a):
-> On 17/11/2022 07:07, Jernej Skrabec wrote:
-> > Cedrus (video engine) on Allwinner H6 actually uses two IOMMU channel,
-> > not just one. However, Cedrus on SoCs like D1 only uses one channel.
-> >=20
-> > Allow up to 2 IOMMU channels.
-> >=20
-> > Fixes: 62a8ccf3a248 ("arm64: dts: allwinner: h6: Fix Cedrus IOMMU usage=
-")
-> > Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-> > ---
-> >=20
-> >  .../bindings/media/allwinner,sun4i-a10-video-engine.yaml       | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git
-> > a/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-video-eng=
-in
-> > e.yaml
-> > b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-video-eng=
-in
-> > e.yaml index 541325f900a1..6446004d59d9 100644
-> > ---
-> > a/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-video-eng=
-in
-> > e.yaml +++
-> > b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-video-eng=
-in
-> > e.yaml>=20
-> > @@ -55,7 +55,8 @@ properties:
-> >      description: Phandle to the device SRAM
-> >   =20
-> >    iommus:
-> > -    maxItems: 1
-> > +    minItems: 1
-> > +    maxItems: 2
->=20
-> You have several compatibles in the file, so usually this is further
-> constrained per each variant in allOf:if:then:.
+On Thu, 17 Nov 2022 19:25:20 +0800 Zqiang <qiang1.zhang@intel.com> wrote:
 
-Usually, yes. But this whole binding would need update. It has a few option=
-al=20
-properties and none of them is tied to any compatible. Additionally, if I d=
-o=20
-it as you suggest, then Robs automatic test will report the issue, because=
-=20
-existing H6 based boards won't match this binding anymore. I would much rat=
-her=20
-send follow up patch which clears up all optional properties.
+> Currently, the mem_dump_obj() is invoked in call_rcu(), the
+> call_rcu() is maybe invoked in non-preemptive code segment,
+> for object allocated from vmalloc(), the following scenarios
+> may occur:
+> 
+>         CPU 0
+> tasks context
+>    spin_lock(&vmap_area_lock)
+>           Interrupt context
+>               call_rcu()
+>                 mem_dump_obj
+>                   vmalloc_dump_obj
+>                     spin_lock(&vmap_area_lock) <--deadlock
+> 
+> and for PREEMPT-RT kernel, the spinlock will convert to sleepable
+> lock, so the vmap_area_lock spinlock not allowed to get in non-preemptive
+> code segment. therefore, this commit make the vmalloc_dump_obj() call in
+> a preemptible context.
+> 
+> ...
+>
+> --- a/mm/util.c
+> +++ b/mm/util.c
+> @@ -1128,7 +1128,9 @@ void mem_dump_obj(void *object)
+>  		return;
+>  
+>  	if (virt_addr_valid(object))
+> -		type = "non-slab/vmalloc memory";
+> +		type = "non-slab memory";
+> +	else if (is_vmalloc_addr(object))
+> +		type = "vmalloc memory";
+>  	else if (object == NULL)
+>  		type = "NULL pointer";
+>  	else if (object == ZERO_SIZE_PTR)
+> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> index ccaa461998f3..018e417b12d6 100644
+> --- a/mm/vmalloc.c
+> +++ b/mm/vmalloc.c
+> @@ -4034,6 +4034,10 @@ bool vmalloc_dump_obj(void *object)
+>  	struct vm_struct *vm;
+>  	void *objp = (void *)PAGE_ALIGN((unsigned long)object);
+>  
+> +	if (!is_vmalloc_addr(objp) || ((IS_ENABLED(CONFIG_PREEMPT_RT) &&
+> +				!preemptible()) || in_interrupt()))
+> +		return false;
+> +
+>  	vm = find_vm_area(objp);
+>  	if (!vm)
+>  		return false;
 
-Best regards,
-Jernej
+I suggest this be restructured so we can comment each test:
 
+	/* comment goes here */
+	if (!is_vmalloc_addr(objp))
+		return false;
+
+	/* comment goes here */
+	if (IS_ENABLED(CONFIG_PREEMPT_RT) && !preemptible())
+		return false;
+
+	/* comment goes here */
+	if (in_interrupt()))
+		return false;
+
+Where each comment carefully explains why we're performing the test. 
+It will generate the same code.
 
