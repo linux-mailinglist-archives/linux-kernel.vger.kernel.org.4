@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0038062E6AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 22:16:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64AB662E6B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 22:16:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240618AbiKQVQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 16:16:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32948 "EHLO
+        id S240802AbiKQVQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 16:16:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240779AbiKQVP1 (ORCPT
+        with ESMTP id S240787AbiKQVPm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 16:15:27 -0500
+        Thu, 17 Nov 2022 16:15:42 -0500
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2078884335
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 13:15:14 -0800 (PST)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AHLE1C0027418;
-        Thu, 17 Nov 2022 21:15:04 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF54D65845
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 13:15:16 -0800 (PST)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AHLEGi5000828;
+        Thu, 17 Nov 2022 21:15:05 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2022-7-12;
- bh=0qWyxReQlxSizjSVKyD4aM3NoT7R0refv45YW4nsk6s=;
- b=N2QYyLOpbtBsCVAKGcAkRb2UOdDcw8rMtQOScRJnPLB/lMfveZgtrNoMpLYVHHwoGv7k
- NXJHtzAYZyNluJp3hnAq/yy8voikYsGf0BKPTciFLJuabeMyFzG48kL15cL6V/Gs8JfS
- Pw4zCuHb9WBNxhAr8YgJ8ZaXJ/IRPAxeRpe2RFAHMJ6ZM6Rw1iASvnaDPBmo58o60HEd
- vgJx2DmrVrO5a7RPB+l/+OTVgKzk6jywobciKEhHzDU9zHzEvZkKGpVHNNYdkKHdqL4m
- RcSZwOpVOh4rkB9K3VoMYsBJiXQjNWDqeaRQ7c9Mk89zFaIMymlMnMJT/DzftE0iuPpo MQ== 
+ bh=DrYH6pRWKnBgFEybzVkbkIij9mLZr9efXDcEx32Vsb4=;
+ b=Leq38lRgCQU5qt7/Ysz+q9zI6Qm3VvJkpXz/Mb5i+JrtVd4ny7qEIcgrC9gOg7ssEp0I
+ wr0/0sh0IJp7rYduA8cxFMZCqK/vtfmBuPveWzNVLyhUuRam7gmFjxcAiyEIMNSL4GX5
+ ySQrUx/9ldTdx4Zi0wj78sMhe50cJwImpv8kc9w0VpM03BwLhTtHaYPTJI+wODNtMEIN
+ uUWmFXEG126tA+OSAC3wmocUq4/+YTLvuwwjciSpY4v3MdSNNABtAfEUCXiCmMBisTQA
+ /MdsK6BBCAHeNW8OZJhN0Jf/NNybgjFMBd4WbAtecTIBxDWzWg7mgq3TWsKKIlCjOyxl ew== 
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kv3jstfam-1
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kv8ykthg4-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 17 Nov 2022 21:15:04 +0000
+        Thu, 17 Nov 2022 21:15:05 +0000
 Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2AHKdRa8010850;
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2AHKjtZu010826;
         Thu, 17 Nov 2022 21:15:04 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3kt1x9nqqg-1
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3kt1x9nqr3-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 17 Nov 2022 21:15:03 +0000
+        Thu, 17 Nov 2022 21:15:04 +0000
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AHLEx7c024557;
-        Thu, 17 Nov 2022 21:15:03 GMT
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AHLEx7e024557;
+        Thu, 17 Nov 2022 21:15:04 GMT
 Received: from sid-dell.us.oracle.com (dhcp-10-132-95-73.usdhcp.oraclecorp.com [10.132.95.73])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3kt1x9nqku-7;
-        Thu, 17 Nov 2022 21:15:03 +0000
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3kt1x9nqku-8;
+        Thu, 17 Nov 2022 21:15:04 +0000
 From:   Sidhartha Kumar <sidhartha.kumar@oracle.com>
 To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
 Cc:     akpm@linux-foundation.org, songmuchun@bytedance.com,
         mike.kravetz@oracle.com, willy@infradead.org,
         almasrymina@google.com, linmiaohe@huawei.com, hughd@google.com,
         Sidhartha Kumar <sidhartha.kumar@oracle.com>
-Subject: [PATCH mm-unstable v3 06/10] mm/hugetlb: convert add_hugetlb_page() to folios and add hugetlb_cma_folio()
-Date:   Thu, 17 Nov 2022 13:14:57 -0800
-Message-Id: <20221117211501.17150-7-sidhartha.kumar@oracle.com>
+Subject: [PATCH mm-unstable v3 07/10] mm/hugetlb: convert enqueue_huge_page() to folios
+Date:   Thu, 17 Nov 2022 13:14:58 -0800
+Message-Id: <20221117211501.17150-8-sidhartha.kumar@oracle.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221117211501.17150-1-sidhartha.kumar@oracle.com>
 References: <20221117211501.17150-1-sidhartha.kumar@oracle.com>
@@ -65,8 +65,8 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulksc
  spamscore=0 mlxlogscore=999 suspectscore=0 malwarescore=0 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
  definitions=main-2211170152
-X-Proofpoint-ORIG-GUID: 9Z2UtI9eYvBe4UgxK_xjpndkp5YKbKbz
-X-Proofpoint-GUID: 9Z2UtI9eYvBe4UgxK_xjpndkp5YKbKbz
+X-Proofpoint-GUID: E5SbJIJezI92l3ebRPRmBKsVEGxPXbVl
+X-Proofpoint-ORIG-GUID: E5SbJIJezI92l3ebRPRmBKsVEGxPXbVl
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -77,133 +77,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert add_hugetlb_page() to take in a folio, also convert
-hugetlb_cma_page() to take in a folio.
+Convert callers of enqueue_huge_page() to pass in a folio, function is
+renamed to enqueue_hugetlb_folio().
 
 Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
 ---
- mm/hugetlb.c | 40 ++++++++++++++++++++--------------------
- 1 file changed, 20 insertions(+), 20 deletions(-)
+ mm/hugetlb.c | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
 diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 80301fab56d8..bf36aa8e6072 100644
+index bf36aa8e6072..4eb6f3d6f46e 100644
 --- a/mm/hugetlb.c
 +++ b/mm/hugetlb.c
-@@ -54,13 +54,13 @@ struct hstate hstates[HUGE_MAX_HSTATE];
- #ifdef CONFIG_CMA
- static struct cma *hugetlb_cma[MAX_NUMNODES];
- static unsigned long hugetlb_cma_size_in_node[MAX_NUMNODES] __initdata;
--static bool hugetlb_cma_page(struct page *page, unsigned int order)
-+static bool hugetlb_cma_folio(struct folio *folio, unsigned int order)
- {
--	return cma_pages_valid(hugetlb_cma[page_to_nid(page)], page,
-+	return cma_pages_valid(hugetlb_cma[folio_nid(folio)], &folio->page,
- 				1 << order);
- }
- #else
--static bool hugetlb_cma_page(struct page *page, unsigned int order)
-+static bool hugetlb_cma_folio(struct folio *folio, unsigned int order)
- {
+@@ -1127,17 +1127,17 @@ static bool vma_has_reserves(struct vm_area_struct *vma, long chg)
  	return false;
  }
-@@ -1506,17 +1506,17 @@ static void remove_hugetlb_folio_for_demote(struct hstate *h, struct folio *foli
- 	__remove_hugetlb_folio(h, folio, adjust_surplus, true);
- }
  
--static void add_hugetlb_page(struct hstate *h, struct page *page,
-+static void add_hugetlb_folio(struct hstate *h, struct folio *folio,
- 			     bool adjust_surplus)
+-static void enqueue_huge_page(struct hstate *h, struct page *page)
++static void enqueue_hugetlb_folio(struct hstate *h, struct folio *folio)
  {
- 	int zeroed;
 -	int nid = page_to_nid(page);
 +	int nid = folio_nid(folio);
  
--	VM_BUG_ON_PAGE(!HPageVmemmapOptimized(page), page);
-+	VM_BUG_ON_FOLIO(!folio_test_hugetlb_vmemmap_optimized(folio), folio);
- 
  	lockdep_assert_held(&hugetlb_lock);
+-	VM_BUG_ON_PAGE(page_count(page), page);
++	VM_BUG_ON_FOLIO(folio_ref_count(folio), folio);
  
--	INIT_LIST_HEAD(&page->lru);
-+	INIT_LIST_HEAD(&folio->lru);
- 	h->nr_huge_pages++;
- 	h->nr_huge_pages_node[nid]++;
+-	list_move(&page->lru, &h->hugepage_freelists[nid]);
++	list_move(&folio->lru, &h->hugepage_freelists[nid]);
+ 	h->free_huge_pages++;
+ 	h->free_huge_pages_node[nid]++;
+-	SetHPageFreed(page);
++	folio_set_hugetlb_freed(folio);
+ }
  
-@@ -1525,21 +1525,21 @@ static void add_hugetlb_page(struct hstate *h, struct page *page,
- 		h->surplus_huge_pages_node[nid]++;
- 	}
- 
--	set_compound_page_dtor(page, HUGETLB_PAGE_DTOR);
--	set_page_private(page, 0);
-+	folio_set_compound_dtor(folio, HUGETLB_PAGE_DTOR);
-+	folio_change_private(folio, 0);
- 	/*
- 	 * We have to set HPageVmemmapOptimized again as above
--	 * set_page_private(page, 0) cleared it.
-+	 * folio_change_private(folio, 0) cleared it.
- 	 */
--	SetHPageVmemmapOptimized(page);
-+	folio_set_hugetlb_vmemmap_optimized(folio);
- 
- 	/*
--	 * This page is about to be managed by the hugetlb allocator and
-+	 * This folio is about to be managed by the hugetlb allocator and
- 	 * should have no users.  Drop our reference, and check for others
- 	 * just in case.
- 	 */
--	zeroed = put_page_testzero(page);
--	if (!zeroed)
-+	zeroed = folio_put_testzero(folio);
-+	if (unlikely(!zeroed))
- 		/*
- 		 * It is VERY unlikely soneone else has taken a ref on
- 		 * the page.  In this case, we simply return as the
-@@ -1548,8 +1548,8 @@ static void add_hugetlb_page(struct hstate *h, struct page *page,
- 		 */
+ static struct page *dequeue_huge_page_node_exact(struct hstate *h, int nid)
+@@ -1549,7 +1549,7 @@ static void add_hugetlb_folio(struct hstate *h, struct folio *folio,
  		return;
  
--	arch_clear_hugepage_flags(page);
--	enqueue_huge_page(h, page);
-+	arch_clear_hugepage_flags(&folio->page);
-+	enqueue_huge_page(h, &folio->page);
+ 	arch_clear_hugepage_flags(&folio->page);
+-	enqueue_huge_page(h, &folio->page);
++	enqueue_hugetlb_folio(h, folio);
  }
  
  static void __update_and_free_page(struct hstate *h, struct page *page)
-@@ -1575,7 +1575,7 @@ static void __update_and_free_page(struct hstate *h, struct page *page)
- 		 * page and put the page back on the hugetlb free list and treat
- 		 * as a surplus page.
- 		 */
--		add_hugetlb_page(h, page, true);
-+		add_hugetlb_folio(h, page_folio(page), true);
- 		spin_unlock_irq(&hugetlb_lock);
- 		return;
- 	}
-@@ -1600,7 +1600,7 @@ static void __update_and_free_page(struct hstate *h, struct page *page)
- 	 * need to be given back to CMA in free_gigantic_page.
- 	 */
- 	if (hstate_is_gigantic(h) ||
--	    hugetlb_cma_page(page, huge_page_order(h))) {
-+	    hugetlb_cma_folio(folio, huge_page_order(h))) {
- 		destroy_compound_gigantic_folio(folio, huge_page_order(h));
- 		free_gigantic_page(page, huge_page_order(h));
+@@ -1761,7 +1761,7 @@ void free_huge_page(struct page *page)
+ 		update_and_free_hugetlb_folio(h, folio, true);
  	} else {
-@@ -2184,7 +2184,7 @@ int dissolve_free_huge_page(struct page *page)
- 			update_and_free_hugetlb_folio(h, folio, false);
- 		} else {
- 			spin_lock_irq(&hugetlb_lock);
--			add_hugetlb_page(h, &folio->page, false);
-+			add_hugetlb_folio(h, folio, false);
- 			h->max_huge_pages++;
- 			spin_unlock_irq(&hugetlb_lock);
- 		}
-@@ -3451,7 +3451,7 @@ static int demote_free_huge_page(struct hstate *h, struct page *page)
- 		/* Allocation of vmemmmap failed, we can not demote page */
- 		spin_lock_irq(&hugetlb_lock);
- 		set_page_refcounted(page);
--		add_hugetlb_page(h, page, false);
-+		add_hugetlb_folio(h, page_folio(page), false);
- 		return rc;
+ 		arch_clear_hugepage_flags(page);
+-		enqueue_huge_page(h, page);
++		enqueue_hugetlb_folio(h, folio);
+ 		spin_unlock_irqrestore(&hugetlb_lock, flags);
  	}
+ }
+@@ -2436,7 +2436,7 @@ static int gather_surplus_pages(struct hstate *h, long delta)
+ 		if ((--needed) < 0)
+ 			break;
+ 		/* Add the page to the hugetlb allocator */
+-		enqueue_huge_page(h, page);
++		enqueue_hugetlb_folio(h, page_folio(page));
+ 	}
+ free:
+ 	spin_unlock_irq(&hugetlb_lock);
+@@ -2802,8 +2802,8 @@ static int alloc_and_dissolve_huge_page(struct hstate *h, struct page *old_page,
+ 		 * Ok, old_page is still a genuine free hugepage. Remove it from
+ 		 * the freelist and decrease the counters. These will be
+ 		 * incremented again when calling __prep_account_new_huge_page()
+-		 * and enqueue_huge_page() for new_page. The counters will remain
+-		 * stable since this happens under the lock.
++		 * and enqueue_hugetlb_folio() for new_folio. The counters will
++		 * remain stable since this happens under the lock.
+ 		 */
+ 		remove_hugetlb_folio(h, old_folio, false);
  
+@@ -2812,7 +2812,7 @@ static int alloc_and_dissolve_huge_page(struct hstate *h, struct page *old_page,
+ 		 * earlier.  It can be directly added to the pool free list.
+ 		 */
+ 		__prep_account_new_huge_page(h, nid);
+-		enqueue_huge_page(h, new_page);
++		enqueue_hugetlb_folio(h, new_folio);
+ 
+ 		/*
+ 		 * Pages have been replaced, we can safely free the old one.
 -- 
 2.38.1
 
