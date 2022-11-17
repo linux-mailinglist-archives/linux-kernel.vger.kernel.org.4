@@ -2,57 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2EA762E02E
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:42:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55AB262E03A
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:44:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234614AbiKQPma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 10:42:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54498 "EHLO
+        id S239583AbiKQPo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 10:44:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230383AbiKQPm2 (ORCPT
+        with ESMTP id S234811AbiKQPoY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 10:42:28 -0500
-X-Greylist: delayed 6147 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Nov 2022 07:42:26 PST
-Received: from xry111.site (xry111.site [IPv6:2001:470:683e::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DAECB5D;
-        Thu, 17 Nov 2022 07:42:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-        s=default; t=1668699742;
-        bh=aJ3Su7Id8fFh36dDnfD7Im9eQ/HKaolYvEEtMS4T6wA=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=gcnqWlsJVFIti3S36UCLPp6LZWk61Yum6VxXfUEEo4xF3bzMGzkJwph+NBHUoWZFQ
-         +1XyIzoo2E9NcQI+br42vmJf0KXrTfNAGUhS2wgJl36idviXeRB4RUxnxHUh5GWZI1
-         E5Jxa6DoZmf1A2F3e6ZkZKKVJLO93ciY9CMFCDSc=
-Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@xry111.site)
-        by xry111.site (Postfix) with ESMTPSA id 61F7565DD0;
-        Thu, 17 Nov 2022 10:42:19 -0500 (EST)
-Message-ID: <b402098421927699db853e5e05fbb9d48fa24886.camel@xry111.site>
-Subject: Re: [PATCH 04/47] LoongArch: Set _PAGE_DIRTY only if _PAGE_WRITE is
- set in {pmd,pte}_mkdirty()
-From:   Xi Ruoyao <xry111@xry111.site>
-To:     Huacai Chen <chenhuacai@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Peter Xu <peterx@redhat.com>
-Date:   Thu, 17 Nov 2022 23:42:17 +0800
-In-Reply-To: <b1707e1c04a6a9b91fd5f70ea012b5bcc764516e.camel@xry111.site>
-References: <20221117042532.4064448-1-chenhuacai@loongson.cn>
-         <b1707e1c04a6a9b91fd5f70ea012b5bcc764516e.camel@xry111.site>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.0 
+        Thu, 17 Nov 2022 10:44:24 -0500
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7630B5FC6;
+        Thu, 17 Nov 2022 07:44:21 -0800 (PST)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 2AHFgbpU025691
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Nov 2022 10:42:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1668699767; bh=Z8eRjDyW5LkCGXRIWQ/ehJoBTxfA+rKV6G90HV/lnfI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=a5RGA55J01HygsEqMJNP2VrZPtI8ZaGUHt2dY2LY5wF8DMtynBL3gxe4ssBSltxUc
+         tGBtVlIBAOfcvHXP8OxNBxX/rSKyMd0+qgQqEihqLCmIIT5R91T0BV2UToxLFXN9NK
+         qLPI7qFXLd4XspU67nh5HMMeBw4NAJ1ReJokdr95mAlk7ege100zyHPP5eUMyPQkdJ
+         2J/DoKBr5ulEfGsbUWpt2b/Jh4Fgk8Q/WSHSBEMDxX6G3lCTA/GKgvoNGo91ao1O85
+         B0gVxshfsoXUb4HsVOvv2uuEHdk9gVaKkI7GIFJ0/jwX2DtNAGU82pYQXeJCXpebQn
+         9YTcylqtbCwyg==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 2CB0415C34C3; Thu, 17 Nov 2022 10:42:37 -0500 (EST)
+Date:   Thu, 17 Nov 2022 10:42:37 -0500
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Kees Cook <kees@kernel.org>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Kees Cook <keescook@chromium.org>,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Christoph =?iso-8859-1?Q?B=F6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        SeongJae Park <sj@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Helge Deller <deller@gmx.de>, netdev@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-mmc@vger.kernel.org, linux-parisc@vger.kernel.org,
+        ydroneaud@opteya.com
+Subject: Re: [PATCH v2 3/3] treewide: use get_random_u32_between() when
+ possible
+Message-ID: <Y3ZWbcoGOdFjlPhS@mit.edu>
+References: <20221114164558.1180362-1-Jason@zx2c4.com>
+ <20221114164558.1180362-4-Jason@zx2c4.com>
+ <202211161436.A45AD719A@keescook>
+ <Y3V4g8eorwiU++Y3@zx2c4.com>
+ <Y3V6QtYMayODVDOk@zx2c4.com>
+ <202211161628.164F47F@keescook>
+ <Y3WDyl8ArQgeEoUU@zx2c4.com>
+ <0EE39896-C7B6-4CB6-87D5-22AA787740A9@kernel.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,SPF_HELO_PASS,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0EE39896-C7B6-4CB6-87D5-22AA787740A9@kernel.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,29 +90,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-11-17 at 21:59 +0800, Xi Ruoyao wrote:
-> Hi Huacai,
->=20
-> On Thu, 2022-11-17 at 12:25 +0800, Huacai Chen wrote:
-> > Now {pmd,pte}_mkdirty() set _PAGE_DIRTY bit unconditionally, this cause=
-s
-> > random segmentation fault after commit 0ccf7f168e17bb7e ("mm/thp: carry
-> > over dirty bit when thp splits on pmd").
->=20
-> Hmm, the pte_mkdirty call is already removed in commit 624a2c94f5b7a081
-> ("Partly revert \"mm/thp: carry over dirty bit when thp splits on
-> pmd\"").
->=20
-> Not sure if this issue is related to some random segfaults I've observed
-> recently though.=C2=A0 My last kernel build contains 0ccf7f168e17bb7e but
-> does not contain 624a2c94f5b7a081.
+On Wed, Nov 16, 2022 at 04:47:27PM -0800, Kees Cook wrote:
+> >> > - between
+> >> > - ranged
+> >> > - spanning
+> >> > 
+> >> > https://www.thefreedictionary.com/List-of-prepositions.htm
+> >> > - amid
+> >> > 
+> >> > Sigh, names.
+> >> 
+> >> I think "inclusive" is best.
+> >
+> >I find it not very descriptive of what the function does. Is there one
+> >you like second best? Or are you convinced they're all much much much
+> >worse than "inclusive" that they shouldn't be considered?
+> 
+> Right, I don't think any are sufficiently descriptive. "Incluisve"
+> with two arguments seems unambiguous and complete to me. :)
 
-I can confirm this patch alone (without 624a2c94f5b7a081) fixes the
-random segfaults I've recently encountered running GCC testsuite.
+The problem with "between", "ranged", "spanning" is that they don't
+tell the reader whether we're dealing with an "open interval" or a
+"closed interval".  They are just different ways of saying that it's a
+range between, say, 0 and 20.  But it doesn't tell you whether it
+includes 0 or 20 or not.
 
-Link: https://gcc.gnu.org/pipermail/gcc/2022-November/239857.html
-Tested-by: Xi Ruoyao <xry111@xry111.site>
+The only way I can see for making it ambiguous is either to use the
+terminology "closed interval" or "inclusive".  And "open" and "closed"
+can have other meanings, so get_random_u32_inclusive() is going to be
+less confusing than get_random_u32_closed().
 
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
+Cheers,
+
+					- Ted
