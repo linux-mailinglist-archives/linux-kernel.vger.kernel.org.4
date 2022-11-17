@@ -2,154 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98B0962E3F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 19:18:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 518E162E3F7
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 19:19:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240097AbiKQSSm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 13:18:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55904 "EHLO
+        id S240298AbiKQSTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 13:19:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239986AbiKQSS2 (ORCPT
+        with ESMTP id S238962AbiKQSTl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 13:18:28 -0500
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B310010A0
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 10:18:27 -0800 (PST)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-13be3ef361dso3080149fac.12
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 10:18:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=tLa0hKjA9GOfaZoCfXhipYOOpTt3ShAuZvGXM0OsUH4=;
-        b=cUWWJ9/H7LmDougtNe1jq+6N61GxqO6ADwcq4fYEHFFP69BzrPVNN3yKre5HzqII3W
-         v7EDJXHPQmdo8PzSGGPmhQ/1PZ8vQ0ERMesoMIpSzRg6d0QP6bL1P+EQGVpH5iRpuAhg
-         WkPX528/HIVlFMT7JzFWOr1bXBnTKbHJ7ut1c=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tLa0hKjA9GOfaZoCfXhipYOOpTt3ShAuZvGXM0OsUH4=;
-        b=be3eIvrTBlfTg4in6k4+xXPb9bUPevWSwdQpyuP7QhNpJusdegQHfMCzwdC1GGrEgp
-         teSwz9wWbIRmSNkPeNYrsDBxvzPkjZiTvnwtRCfQJ2R2y6pXQG/qMuDK+uDzmVkYtnNM
-         WCW/DkSyqV0sWItHlOP9luc31uNHckrJ5KZeznN5IyaqRRTUAxbTtNcH32O049O9RtG+
-         Cm5vFEyNvWspWEBuHZFe0RvwMpdRnXdrShoXRm9qXdT0FPKAZ2VXWFD01TAQY8u/1G/s
-         ls9dnB1wyn4ht5FULhqd+16mxJ8yZSvJ4eF8/JYN6Ghu0dkatpOxDJ7PxWGgzsfYTb8F
-         7Tng==
-X-Gm-Message-State: ANoB5pml6c2tyLLcabSw5MemLX1xrLnbw4gpM6N892BiuTwvPxxK/Ak6
-        VzgiuOtvvcfQf8S2LPel85oKzLdqBsSXyNkHuZroew==
-X-Google-Smtp-Source: AA0mqf6e5Hi2hX35v0tmRvnjU0cXdmkFcXS4bpSFybzqkModBqm4jbFeny5aOqhA88YzBHxkVI8/GrRv5uAWqjsXDzY=
-X-Received: by 2002:a05:6870:bacb:b0:13a:dd16:9b83 with SMTP id
- js11-20020a056870bacb00b0013add169b83mr5018049oab.15.1668709104973; Thu, 17
- Nov 2022 10:18:24 -0800 (PST)
+        Thu, 17 Nov 2022 13:19:41 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8DB32C13A;
+        Thu, 17 Nov 2022 10:19:39 -0800 (PST)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AHHDL5p011515;
+        Thu, 17 Nov 2022 18:19:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=PnCHO8g/GAQ/rf4fFCGrPAgXoqy0R+mFNfmTOXAovDM=;
+ b=oX+gdjyTpN6rkOiSFyFJPg5syMQCqf3QZic6D8wv/IX9kPtJw9FlJ8MEaytc6HfGshEG
+ XmdnSKv2mBcZnAFVGK8Sqqgh8If6ZmezQo0CuAOt9DlCeN4teirK+x8DPTq2HScz/rfP
+ xxEyBdqMjIA3Hu3FlLP5Y4v7OqOJ5b6J7Kf1V0qUj0jhyeJ+tIGV+C50fSeXM9Xql0Rk
+ QIApta7A/x2bVnl1VfxAH90/P32HWre1SZkbCQEvz5N54PTXHVI5sz0Uoun68Qtc8wPW
+ 4Q5R2syQAWan1yvRmA/AFcFFUE87RrrlYtxYVhG2H6IqjIzFvl1BzCjvP0E6NGe2JLkt wQ== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kws5q9j90-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Nov 2022 18:19:38 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AHI6mN6008712;
+        Thu, 17 Nov 2022 18:19:36 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06ams.nl.ibm.com with ESMTP id 3kt2rjfvxg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Nov 2022 18:19:36 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AHIJXSk62259656
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 17 Nov 2022 18:19:33 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D1EE152050;
+        Thu, 17 Nov 2022 18:19:33 +0000 (GMT)
+Received: from osiris (unknown [9.145.178.212])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id 84B2B5204E;
+        Thu, 17 Nov 2022 18:19:33 +0000 (GMT)
+Date:   Thu, 17 Nov 2022 19:19:32 +0100
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+Cc:     Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] s390: cmpxchg: Make loop condition for 1,2 byte cases
+ precise
+Message-ID: <Y3Z7NA7eGV2SiRAb@osiris>
+References: <Y2zhNhFjIJPKJao8@osiris>
+ <20221116144711.3811011-1-scgl@linux.ibm.com>
 MIME-Version: 1.0
-References: <20221117031551.1142289-1-joel@joelfernandes.org>
- <20221117031551.1142289-3-joel@joelfernandes.org> <CANn89i+gKVdveEtR9DX15Xr7E9Nn2my6SEEbXTMmxbqtezm2vg@mail.gmail.com>
- <Y3ZaH4C4omQs1OR4@google.com> <CANn89iJRhr8+osviYKVYhcHHk5TnQQD53x87-WG3iTo4YNa0qA@mail.gmail.com>
- <CAEXW_YRULY2KzMtkv+KjA_hSr1tSKhQLuCt-RrOkMLjjwAbwKg@mail.gmail.com>
- <CANn89i+9XRh+p-ZiyY_VKy=EcxEyg+3AdtruMnj=KCgXF7QtoQ@mail.gmail.com>
- <CAEXW_YS-d_URqjfcasNnqf3zhCKAny8dhhLifAxtrpz1XYd_=w@mail.gmail.com> <CANn89i+GcVzgg56fd9iO5Ma6vSUVvJmLHTvRwPMoYKMPR4G4Lw@mail.gmail.com>
-In-Reply-To: <CANn89i+GcVzgg56fd9iO5Ma6vSUVvJmLHTvRwPMoYKMPR4G4Lw@mail.gmail.com>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Thu, 17 Nov 2022 18:18:14 +0000
-Message-ID: <CAEXW_YSyZswszFo-J6rEFsb2mAcXLytZaFSqi1L1LpSHWfTXMQ@mail.gmail.com>
-Subject: Re: [PATCH rcu/dev 3/3] net: Use call_rcu_flush() for dst_destroy_rcu
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     linux-kernel@vger.kernel.org, Cong Wang <xiyou.wangcong@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Jiri Pirko <jiri@resnulli.us>, netdev@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>, rcu@vger.kernel.org,
-        rostedt@goodmis.org, paulmck@kernel.org, fweisbec@gmail.com,
-        jiejiang@google.com, Thomas Glexiner <tglx@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221116144711.3811011-1-scgl@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Fxd4wSsq4xG7WBaBBx5LWT4agSTjMHe6
+X-Proofpoint-GUID: Fxd4wSsq4xG7WBaBBx5LWT4agSTjMHe6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-17_06,2022-11-17_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 adultscore=0 impostorscore=0 bulkscore=0 phishscore=0
+ priorityscore=1501 clxscore=1015 mlxscore=0 malwarescore=0 spamscore=0
+ mlxlogscore=711 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211170131
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 5:49 PM Eric Dumazet <edumazet@google.com> wrote:
->
-> On Thu, Nov 17, 2022 at 9:42 AM Joel Fernandes <joel@joelfernandes.org> wrote:
-> >
->
-> >
-> > Yes, I agree. Your comments here have not been useful (or respectful)
-> > so I am Ok with that.
-> >
-> >  - Joel
->
-> Well, I have discovered that some changes went in networking tree
-> without network maintainers being involved nor CCed.
->
-> What can I say ?
->
-> It seems I have no say, right ?
+On Wed, Nov 16, 2022 at 03:47:11PM +0100, Janis Schoetterl-Glausch wrote:
+> The cmpxchg implementation for 1 and 2 bytes consists of a 4 byte
+> cmpxchg loop. Currently, the decision to retry is imprecise, looping if
+> bits outside the target byte(s) change instead of retrying until the
+> target byte(s) differ from the old value.
+> E.g. if an attempt to exchange (prev_left_0 old_bytes prev_right_0) is
+> made and it fails because the word at the address is
+> (prev_left_1 x prev_right_1) where both x != old_bytes and one of the
+> prev_*_1 values differs from the respective prev_*_0 value, the cmpxchg
+> is retried, even if by a semantic equivalent to a normal cmpxchg, the
+> exchange would fail.
+> Instead exit the loop if x != old_bytes and retry otherwise.
+> 
+> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+> ---
+> 
+> 
+> Unfortunately the diff got blown up quite a bit, even tho the asm
+> changes are not that complex. This is mostly because of in arguments
+> becoming (in)out arguments.
+> 
+> I don't think all the '&' constraints are necessary, but I don't see how
+> they could affect code generation.
 
-Sorry, I take responsibility for that. FWIW, the rxrpc change is not
-yet in Linus's tree.
+For cmpxchg() it wouldn't make any difference. For cmpxchg_user_key()
+it might lead to a small improvement, since the register that is
+allocated for the key variable might be reused. But I haven't looked
+into that in detail. None of the early clobbers is necessary anymore
+after your changes, but let's leave it as it is.
 
-Also FWIW, the rxrpc case came up because we detected that it does a
-scheduler wakeup from the callback. We did both static and dynamic
-testing to identify callbacks that do wakeups throughout the kernel
-(kernel patch available on request), as the pattern observed is things
-doing wakeups typically are for use cases that are not freeing memory
-but something blocking, similar to synchronize_rcu(). So it was a
-"trivial/obvious" change to make for rxrpc which I might have assumed
-did not need much supervision because it just reverts that API to the
-old behavior -- still probably no excuse.
+> I don't see why we would need the memory clobber, however.
 
-Again, we can talk this out no problem. But I would strongly recommend
-not calling it "crazy thing", as we did all due diligence for almost a
-year (talking about it at LPC, working through various code paths and
-bugs, 4 different patch redesigns on the idea (including the opt-in
-that you are bringing up), including a late night debugging session to
-figure this out etc).
+The memory clobber (aka memory barrier) is necessary because it may be
+used to implement e.g. some custom locking. For that it is required
+the compiler does reorder read or write accesses behind/before the
+inline assembly.
 
-Just to clarify, I know you review/maintain a lot of the networking
-code and I really appreciate that (not praising just for the sake).
-And I care about the kernel too, just like you.
+> I tested the cmpxchg_user_key changes via the kvm memop selftest that is
+> part of the KVM cmpxchg memop series.
+> I looked for an existing way to test the cmpxchg changes, but didn't
+> find anything.
 
-thanks,
+Yeah, guess having a test for this would be a nice to have :)
 
- - Joel
+>  arch/s390/include/asm/cmpxchg.h | 60 ++++++++++++++-----------
+>  arch/s390/include/asm/uaccess.h | 80 ++++++++++++++++++---------------
+>  2 files changed, 78 insertions(+), 62 deletions(-)
 
-
-> commit f32846476afbe1f296c41d036219178b3dfb6a9d
-> Author: Joel Fernandes (Google) <joel@joelfernandes.org>
-> Date:   Sun Oct 16 16:23:04 2022 +0000
->
->     rxrpc: Use call_rcu_flush() instead of call_rcu()
->
->     call_rcu() changes to save power may cause slowness. Use the
->     call_rcu_flush() API instead which reverts to the old behavior.
->
->     We find this via inspection that the RCU callback does a wakeup of a
->     thread. This usually indicates that something is waiting on it. To be
->     safe, let us use call_rcu_flush() here instead.
->
->     Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
->     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
->
-> diff --git a/net/rxrpc/conn_object.c b/net/rxrpc/conn_object.c
-> index 22089e37e97f0628f780855f9e219e5c33d4afa1..fdcfb509cc4434b0781b76623532aff9c854ce60
-> 100644
-> --- a/net/rxrpc/conn_object.c
-> +++ b/net/rxrpc/conn_object.c
-> @@ -253,7 +253,7 @@ void rxrpc_kill_connection(struct rxrpc_connection *conn)
->          * must carry a ref on the connection to prevent us getting here whilst
->          * it is queued or running.
->          */
-> -       call_rcu(&conn->rcu, rxrpc_destroy_connection);
-> +       call_rcu_flush(&conn->rcu, rxrpc_destroy_connection);
->  }
->
->  /*
+The patch looks good - applied to the wip/cmpxchg_user_key branch.
