@@ -2,123 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ADC262D163
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 04:02:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A06B162D168
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 04:04:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234148AbiKQDCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 22:02:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40606 "EHLO
+        id S234170AbiKQDE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 22:04:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239136AbiKQDCA (ORCPT
+        with ESMTP id S233015AbiKQDE1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 22:02:00 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6768940933;
-        Wed, 16 Nov 2022 19:01:59 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id m7-20020a05600c090700b003cf8a105d9eso685300wmp.5;
-        Wed, 16 Nov 2022 19:01:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=oZNyOtjou7UGJa2BliLM3P7z/CgeMGDCK77AaNy+wyQ=;
-        b=C2jhk9alJDbZ5zE2SEo1NUOVF583b2PxjyxmXI5EDaCEimWEeZn2/rHcTvHgV2DaGt
-         WDY4CH0W4wb0jqG3tSeTV2vcZjeTa9t/iKjPs/MGiKk6C+ZYPelvaw1l5GJE16xIcmIz
-         KCxTB43Hz/DU5YZXIkjtjitro4guGbjADT4YY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oZNyOtjou7UGJa2BliLM3P7z/CgeMGDCK77AaNy+wyQ=;
-        b=hsBvyvxpJdmzBMnQNqosj+O+XAHJ0vxQxo+K0CGSeiiSnMqrAg0mMdLgShI8qgl/dL
-         KTovj7KXWKukkATOKyUfZMas1qu+LBRehgmClo3n8KFqJSnUYy2uP3S0DU65txVCsGYu
-         Aa/gOOrvRHS8dKcr/+/hEzwugefMEcILAU1/V6D2IiJ/IE/Nr3MteC8r/2Yn0CMfbKoS
-         d+QwXJr/lUNJvgLsUKXbYuKqXAOYh1y8MotEtmtstmeILFAw7DStWSEHKvg7DMKiQCuV
-         UqIODULaFyOr2I1dlX8lXomJLrE2EpbgnVakXrqiFOvlbbz7zAJWxoLXEeK9rDxv/BiI
-         u/8g==
-X-Gm-Message-State: ANoB5plKZIVV2kp17Q84yx96HkUF83Epr4AUq+U6OgbaYx3vyTsicLVa
-        rTp6gDDfuBclhg+bK8VFueyMoY+CkOMqGJkZ7MY=
-X-Google-Smtp-Source: AA0mqf5i0jUWFC4j+cDibzi3Vs644huDdFdGP0IPBdvtnKtWfTcCOdK582I2KflVIQxdgy1oF4QmbhOO9vJplBbSQxc=
-X-Received: by 2002:a7b:cb83:0:b0:3cf:96da:3846 with SMTP id
- m3-20020a7bcb83000000b003cf96da3846mr3757718wmi.10.1668654117812; Wed, 16 Nov
- 2022 19:01:57 -0800 (PST)
+        Wed, 16 Nov 2022 22:04:27 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B80CE58BFF;
+        Wed, 16 Nov 2022 19:04:25 -0800 (PST)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NCPrc4qFDzmVvN;
+        Thu, 17 Nov 2022 11:04:00 +0800 (CST)
+Received: from dggpeml500006.china.huawei.com (7.185.36.76) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 17 Nov 2022 11:04:23 +0800
+Received: from [10.174.178.240] (10.174.178.240) by
+ dggpeml500006.china.huawei.com (7.185.36.76) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 17 Nov 2022 11:04:23 +0800
+Subject: Re: [PATCH net] net: nixge: fix potential memory leak in
+ nixge_start_xmit()
+To:     Saeed Mahameed <saeed@kernel.org>
+CC:     Francois Romieu <romieu@fr.zoreil.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1668416136-33530-1-git-send-email-zhangchangzhong@huawei.com>
+ <Y3IbBCioK1Clt/3a@electric-eye.fr.zoreil.com>
+ <21641ba0-3ce1-c409-b513-1bbbaeccaa51@huawei.com> <Y3Vl40BzsL9nFqQv@x130.lan>
+From:   Zhang Changzhong <zhangchangzhong@huawei.com>
+Message-ID: <a84e51e3-3f19-51f3-e4f5-12cfa13aa548@huawei.com>
+Date:   Thu, 17 Nov 2022 11:04:23 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
 MIME-Version: 1.0
-References: <20221024081115.3320584-1-quan@os.amperecomputing.com> <781ea7c7-b33e-f054-71eb-d760f7a01301@os.amperecomputing.com>
-In-Reply-To: <781ea7c7-b33e-f054-71eb-d760f7a01301@os.amperecomputing.com>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Thu, 17 Nov 2022 03:01:45 +0000
-Message-ID: <CACPK8XcCKK_o0hBA82k0CEcpbHXbHcUii3bgoGvHaGvtw2Q_Ww@mail.gmail.com>
-Subject: Re: [PATCH] ARM: dts: aspeed: mtjade,mtmitchell: Add BMC SSIF nodes
-To:     Quan Nguyen <quan@os.amperecomputing.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Open Source Submission <patches@amperecomputing.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org,
-        Phong Vo <phong@os.amperecomputing.com>,
-        thang@os.amperecomputing.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Y3Vl40BzsL9nFqQv@x130.lan>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.240]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml500006.china.huawei.com (7.185.36.76)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Nov 2022 at 07:06, Quan Nguyen <quan@os.amperecomputing.com> wrote:
->
->
-> Just a gentle ping about this patch.
->
-> Thanks and best regards,
-> - Quan
->
-> On 24/10/2022 15:11, Quan Nguyen wrote:
-> > Add BMC SSIF node to support IPMI in-band communication.
-> >
-> > Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
+On 2022/11/17 6:36, Saeed Mahameed wrote:
+> On 15 Nov 21:20, Zhang Changzhong wrote:
+>> On 2022/11/14 18:40, Francois Romieu wrote:
+>>> Zhang Changzhong <zhangchangzhong@huawei.com> :
+>>>> The nixge_start_xmit() returns NETDEV_TX_OK but does not free skb on two
+>>>> error handling cases, which can lead to memory leak.
+>>>>
+>>>> To fix this, return NETDEV_TX_BUSY in case of nixge_check_tx_bd_space()
+>>>> fails and add dev_kfree_skb_any() in case of dma_map_single() fails.
+>>>
+>>> This patch merge two unrelated changes. Please split.
+>>>
+>>>> Fixes: 492caffa8a1a ("net: ethernet: nixge: Add support for National Instruments XGE netdev")
+>>>> Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
+>>>> ---
+>>>>  drivers/net/ethernet/ni/nixge.c | 6 ++++--
+>>>>  1 file changed, 4 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/drivers/net/ethernet/ni/nixge.c b/drivers/net/ethernet/ni/nixge.c
+>>>> index 19d043b593cc..b9091f9bbc77 100644
+>>>> --- a/drivers/net/ethernet/ni/nixge.c
+>>>> +++ b/drivers/net/ethernet/ni/nixge.c
+>>>> @@ -521,13 +521,15 @@ static netdev_tx_t nixge_start_xmit(struct sk_buff *skb,
+>>>>      if (nixge_check_tx_bd_space(priv, num_frag)) {
+>>>>          if (!netif_queue_stopped(ndev))
+>>>>              netif_stop_queue(ndev);
+>>>> -        return NETDEV_TX_OK;
+>>>> +        return NETDEV_TX_BUSY;
+>>>>      }
+>>>
+>>> The driver should probably check the available room before returning
+>>> from hard_start_xmit and turn the check above unlikely().
+>>>
+>>> Btw there is no lock and the Tx completion is irq driven: the driver
+>>> is racy. :o(
+>>>
+>>
+>> Hi Francois,
+>>
+>> Thanks for you review. I'll make v2 according to your suggestion.
+>>
+> 
+> you will probably need to check out: Transmit path guidelines:
+> https://www.kernel.org/doc/Documentation/networking/driver.rst
+> 
 
-Applied, thanks.
+Thank! This document is very helpful.
 
-
-> > ---
-> >   arch/arm/boot/dts/aspeed-bmc-ampere-mtjade.dts     | 4 ++++
-> >   arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts | 4 ++++
-> >   2 files changed, 8 insertions(+)
-> >
-> > diff --git a/arch/arm/boot/dts/aspeed-bmc-ampere-mtjade.dts b/arch/arm/boot/dts/aspeed-bmc-ampere-mtjade.dts
-> > index d127cbcc7998..353359822d7b 100644
-> > --- a/arch/arm/boot/dts/aspeed-bmc-ampere-mtjade.dts
-> > +++ b/arch/arm/boot/dts/aspeed-bmc-ampere-mtjade.dts
-> > @@ -342,6 +342,10 @@ &mac1 {
-> >
-> >   &i2c0 {
-> >       status = "okay";
-> > +     ssif-bmc@10 {
-> > +             compatible = "ssif-bmc";
-> > +             reg = <0x10>;
-> > +     };
-> >   };
-> >
-> >   &i2c1 {
-> > diff --git a/arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts b/arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts
-> > index 606cd4be245a..4b91600eaf62 100644
-> > --- a/arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts
-> > +++ b/arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts
-> > @@ -445,6 +445,10 @@ &i2c9 {
-> >
-> >   &i2c11 {
-> >       status = "okay";
-> > +     ssif-bmc@10 {
-> > +             compatible = "ssif-bmc";
-> > +             reg = <0x10>;
-> > +     };
-> >   };
-> >
-> >   &i2c14 {
+> .
