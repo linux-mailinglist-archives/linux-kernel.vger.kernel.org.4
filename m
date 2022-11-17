@@ -2,152 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07A8162E21D
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 17:37:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67D5262E21A
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 17:37:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240051AbiKQQhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 11:37:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44048 "EHLO
+        id S240622AbiKQQgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 11:36:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240735AbiKQQgc (ORCPT
+        with ESMTP id S240130AbiKQQg3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 11:36:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E02D6277
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 08:35:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 58479B820FF
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 16:35:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F8BBC433D6;
-        Thu, 17 Nov 2022 16:35:32 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="CE0CB1dB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1668702929;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=GC1gHLi/XytMcjtY6oXEKBPiGw9CciX1C/wh1pF5JzE=;
-        b=CE0CB1dB8trKXUhsryGHNZrr3TVEMjKM85BgSjNCIvzxP7kJrbzpQUglv9G4lQYQya5jJb
-        zWJ9Vn1/cz27UFQXHbacQwkg9E7NFGAqtagCbbgxJRgDwkT2BmkIoLYamBnR205pncG8EN
-        Alcd0EZH5WI2MD74Jl9/So0cuVVyHto=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 6a9db1f1 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Thu, 17 Nov 2022 16:35:29 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org, tytso@mit.edu, kees@kernel.org,
-        linux@armlinux.org.uk, ydroneaud@opteya.com,
-        gregkh@linuxfoundation.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH v2] random: add helpers for random numbers with given floor or range
-Date:   Thu, 17 Nov 2022 17:35:12 +0100
-Message-Id: <20221117163511.2186302-1-Jason@zx2c4.com>
+        Thu, 17 Nov 2022 11:36:29 -0500
+Received: from mail-4318.protonmail.ch (mail-4318.protonmail.ch [185.70.43.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4205DB99
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 08:35:31 -0800 (PST)
+Date:   Thu, 17 Nov 2022 16:35:17 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1668702929; x=1668962129;
+        bh=ZA1st/D2bOJO8psxoWwnXrvaoM+06eI7cmwLGnc8W7k=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=Cg/Rlu/2jqHXfQSr7sNItLVNNQ8xw1yzzKzYf8K5EMSh151LtJXqRwMonFpaWvGT+
+         m3VRhU2bAOT/WAu5KJYxYAQCooAAzfWXaISejENCgIP3HHawXBNfehg2onZfMB5avX
+         VD7T8+Ld08rrX9oOYs8Q5viqVR0/fVBUy/oE1tJVkBC7FFv2WAgmn7ZKLJWthjPcqP
+         L1H7wuODL+BlaLInXICffS8CRknC4tXCUouXmJ5vWGYc2NmGLLuWwiwJQ3Fji1zCfq
+         cEMI1UzELsmhHgAQhuZlkWy/P7jSj0d3fDhrJE/Z9q0rJeREuKORvYXuVoD+c954wX
+         tuIsz4dOurcPw==
+To:     linux-kernel@vger.kernel.org
+From:   "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
+Cc:     Markuss Broks <markuss.broks@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        "open list:INPUT (KEYBOARD, MOUSE, JOYSTICK, TOUCHSCREEN)..." 
+        <linux-input@vger.kernel.org>
+Subject: [PATCH 3/3] input/touchscreen: imagis: Add supports for Imagis IST3038 and IST30XXB
+Message-ID: <20221117163440.23394-4-linmengbo0689@protonmail.com>
+In-Reply-To: <20221117163440.23394-1-linmengbo0689@protonmail.com>
+References: <20221117163440.23394-1-linmengbo0689@protonmail.com>
+Feedback-ID: 40467236:user:proton
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that we have get_random_u32_below(), it's nearly trivial to make
-inline helpers to compute get_random_u32_above() and
-get_random_u32_inclusive(), which will help clean up open coded loops
-and manual computations throughout the tree.
+From: Markuss Broks <markuss.broks@gmail.com>
 
-One snag is that in order to make get_random_u32_inclusive() operate on
-closed intervals, we have to do some (unlikely) special case handling if
-get_random_u32_interval(0, U32_MAX) is called. The least expensive way
-of doing this is actually to adjust the slowpath of
-get_random_u32_below() to have its undefined 0 result just return the
-output of get_random_u32().
+Imagis IST3038 and IST30XXB are other variants of Imagis IST3038 IC, which
+have a different register interface from IST3038C (possibly firmware
+defined).
 
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+This should also work for IST3044B (though untested), however other
+variants using this interface/protocol(IST3026, IST3032, IST3026B,
+IST3032B) have a different format for coordinates, and they'd need
+additional effort to be supported by this driver.
+
+Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
+[Use IST3038C_REG_CHIPID_BASE]
+Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
 ---
-Changes v1->v2:
-- Rename get_random_u32_between() to get_random_u32_inclusive(), and
-  make it a closed interval.
+ drivers/input/touchscreen/imagis.c | 71 +++++++++++++++++++++++++-----
+ 1 file changed, 60 insertions(+), 11 deletions(-)
 
- drivers/char/random.c  | 17 ++++++++++++++++-
- include/linux/random.h | 25 +++++++++++++++++++++++++
- 2 files changed, 41 insertions(+), 1 deletion(-)
+diff --git a/drivers/input/touchscreen/imagis.c b/drivers/input/touchscreen=
+/imagis.c
+index b667914a44f1..ac07b24496eb 100644
+--- a/drivers/input/touchscreen/imagis.c
++++ b/drivers/input/touchscreen/imagis.c
+@@ -13,7 +13,8 @@
+=20
+ #define IST3038C_HIB_ACCESS=09=09(0x800B << 16)
+ #define IST3038C_DIRECT_ACCESS=09=09BIT(31)
+-#define IST3038C_REG_CHIPID=09=090x40001000
++#define IST3038C_REG_CHIPID_BASE=090x40001000
++#define IST3038C_REG_CHIPID(base)=09(base | IST3038C_DIRECT_ACCESS)
+ #define IST3038C_REG_HIB_BASE=09=090x30000100
+ #define IST3038C_REG_TOUCH_STATUS=09(IST3038C_REG_HIB_BASE | IST3038C_HIB_=
+ACCESS)
+ #define IST3038C_REG_TOUCH_COORD=09(IST3038C_REG_HIB_BASE | IST3038C_HIB_A=
+CCESS | 0x8)
+@@ -31,8 +32,24 @@
+ #define IST3038C_FINGER_COUNT_SHIFT=0912
+ #define IST3038C_FINGER_STATUS_MASK=09GENMASK(9, 0)
+=20
++#define IST30XX_REG_STATUS=09=090x20
++#define IST30XXB_REG_CHIPID_BASE=090x40000000
++#define IST30XX_WHOAMI=09=09=090x30003000
++#define IST30XXA_WHOAMI=09=09=090x300a300a
++#define IST30XXB_WHOAMI=09=09=090x300b300b
++#define IST3038_WHOAMI=09=09=090x30383038
++
++struct imagis_properties {
++=09unsigned int interrupt_msg_cmd;
++=09unsigned int touch_coord_cmd;
++=09unsigned int chipid_base;
++=09unsigned int whoami_val;
++=09bool protocol_b;
++};
++
+ struct imagis_ts {
+ =09struct i2c_client *client;
++=09const struct imagis_properties *tdata;
+ =09struct input_dev *input_dev;
+ =09struct touchscreen_properties prop;
+ =09struct regulator_bulk_data supplies[2];
+@@ -84,8 +101,7 @@ static irqreturn_t imagis_interrupt(int irq, void *dev_i=
+d)
+ =09int i;
+ =09int error;
+=20
+-=09error =3D imagis_i2c_read_reg(ts, IST3038C_REG_INTR_MESSAGE,
+-=09=09=09=09    &intr_message);
++=09error =3D imagis_i2c_read_reg(ts, ts->tdata->interrupt_msg_cmd, &intr_m=
+essage);
+ =09if (error) {
+ =09=09dev_err(&ts->client->dev,
+ =09=09=09"failed to read the interrupt message: %d\n", error);
+@@ -104,9 +120,13 @@ static irqreturn_t imagis_interrupt(int irq, void *dev=
+_id)
+ =09finger_pressed =3D intr_message & IST3038C_FINGER_STATUS_MASK;
+=20
+ =09for (i =3D 0; i < finger_count; i++) {
+-=09=09error =3D imagis_i2c_read_reg(ts,
+-=09=09=09=09=09    IST3038C_REG_TOUCH_COORD + (i * 4),
+-=09=09=09=09=09    &finger_status);
++=09=09if (ts->tdata->protocol_b)
++=09=09=09error =3D imagis_i2c_read_reg(ts,
++=09=09=09=09=09=09    ts->tdata->touch_coord_cmd, &finger_status);
++=09=09else
++=09=09=09error =3D imagis_i2c_read_reg(ts,
++=09=09=09=09=09=09    ts->tdata->touch_coord_cmd + (i * 4),
++=09=09=09=09=09=09    &finger_status);
+ =09=09if (error) {
+ =09=09=09dev_err(&ts->client->dev,
+ =09=09=09=09"failed to read coordinates for finger %d: %d\n",
+@@ -261,6 +281,12 @@ static int imagis_probe(struct i2c_client *i2c)
+=20
+ =09ts->client =3D i2c;
+=20
++=09ts->tdata =3D device_get_match_data(dev);
++=09if (!ts->tdata) {
++=09=09dev_err(dev, "missing chip data\n");
++=09=09return -EINVAL;
++=09}
++
+ =09error =3D imagis_init_regulators(ts);
+ =09if (error) {
+ =09=09dev_err(dev, "regulator init error: %d\n", error);
+@@ -279,15 +305,13 @@ static int imagis_probe(struct i2c_client *i2c)
+ =09=09return error;
+ =09}
+=20
+-=09error =3D imagis_i2c_read_reg(ts,
+-=09=09=09IST3038C_REG_CHIPID | IST3038C_DIRECT_ACCESS,
+-=09=09=09&chip_id);
++=09error =3D imagis_i2c_read_reg(ts, IST3038C_REG_CHIPID(ts->tdata->chipid=
+_base), &chip_id);
+ =09if (error) {
+ =09=09dev_err(dev, "chip ID read failure: %d\n", error);
+ =09=09return error;
+ =09}
+=20
+-=09if (chip_id !=3D IST3038C_WHOAMI) {
++=09if (chip_id !=3D ts->tdata->whoami_val) {
+ =09=09dev_err(dev, "unknown chip ID: 0x%x\n", chip_id);
+ =09=09return -EINVAL;
+ =09}
+@@ -343,9 +367,34 @@ static int __maybe_unused imagis_resume(struct device =
+*dev)
+=20
+ static SIMPLE_DEV_PM_OPS(imagis_pm_ops, imagis_suspend, imagis_resume);
+=20
++static const struct imagis_properties imagis_3038_data =3D {
++=09.interrupt_msg_cmd =3D IST30XX_REG_STATUS,
++=09.touch_coord_cmd =3D IST30XX_REG_STATUS,
++=09.chipid_base =3D IST30XXB_REG_CHIPID_BASE,
++=09.whoami_val =3D IST3038_WHOAMI,
++=09.protocol_b =3D true,
++};
++
++static const struct imagis_properties imagis_3038c_data =3D {
++=09.interrupt_msg_cmd =3D IST3038C_REG_INTR_MESSAGE,
++=09.touch_coord_cmd =3D IST3038C_REG_TOUCH_COORD,
++=09.chipid_base =3D IST3038C_REG_CHIPID_BASE,
++=09.whoami_val =3D IST3038C_WHOAMI,
++};
++
++static const struct imagis_properties imagis_30xxb_data =3D {
++=09.interrupt_msg_cmd =3D IST30XX_REG_STATUS,
++=09.touch_coord_cmd =3D IST30XX_REG_STATUS,
++=09.chipid_base =3D IST30XXB_REG_CHIPID_BASE,
++=09.whoami_val =3D IST30XXB_WHOAMI,
++=09.protocol_b =3D true,
++};
++
+ #ifdef CONFIG_OF
+ static const struct of_device_id imagis_of_match[] =3D {
+-=09{ .compatible =3D "imagis,ist3038c", },
++=09{ .compatible =3D "imagis,ist3038", .data =3D &imagis_3038_data },
++=09{ .compatible =3D "imagis,ist3038c", .data =3D &imagis_3038c_data },
++=09{ .compatible =3D "imagis,ist30xxb", .data =3D &imagis_30xxb_data },
+ =09{ },
+ };
+ MODULE_DEVICE_TABLE(of, imagis_of_match);
+--=20
+2.30.2
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 6f323344d0b9..140dbd557dbc 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -161,6 +161,8 @@ EXPORT_SYMBOL(wait_for_random_bytes);
-  *	u16 get_random_u16()
-  *	u32 get_random_u32()
-  *	u32 get_random_u32_below(u32 ceil)
-+ *	u32 get_random_u32_above(u32 floor)
-+ *	u32 get_random_u32_inclusive(u32 ceil, u32 floor)
-  *	u64 get_random_u64()
-  *	unsigned long get_random_long()
-  *
-@@ -522,7 +524,20 @@ u32 __get_random_u32_below(u32 ceil)
- 	 * of `-ceil % ceil` is analogous to `2^32 % ceil`, but is computable
- 	 * in 32-bits.
- 	 */
--	u64 mult = (u64)ceil * get_random_u32();
-+	u64 mult;
-+
-+	/*
-+	 * This function is technically undefined for ceil == 0, and in fact
-+	 * for the non-underscored constant version in the header, we build bug
-+	 * on that. But for the non-constant case, it's convenient to have that
-+	 * evaluate to being a straight call to get_random_u32(), so that
-+	 * get_random_u32_inclusive() can work over its whole range without
-+	 * undefined behavior.
-+	 */
-+	if (unlikely(!ceil))
-+		return get_random_u32();
-+
-+	mult = (u64)ceil * get_random_u32();
- 	if (unlikely((u32)mult < ceil)) {
- 		u32 bound = -ceil % ceil;
- 		while (unlikely((u32)mult < bound))
-diff --git a/include/linux/random.h b/include/linux/random.h
-index 3a82c0a8bc46..bd954ecbef90 100644
---- a/include/linux/random.h
-+++ b/include/linux/random.h
-@@ -91,6 +91,31 @@ static inline u32 get_random_u32_below(u32 ceil)
- 	}
- }
- 
-+/*
-+ * Returns a random integer in the interval (floor, U32_MAX], with uniform
-+ * distribution, suitable for all uses. Fastest when floor is a constant, but
-+ * still fast for variable floor as well.
-+ */
-+static inline u32 get_random_u32_above(u32 floor)
-+{
-+	BUILD_BUG_ON_MSG(__builtin_constant_p(floor) && floor == U32_MAX,
-+			 "get_random_u32_above() must take floor < U32_MAX");
-+	return floor + 1 + get_random_u32_below(U32_MAX - floor);
-+}
-+
-+/*
-+ * Returns a random integer in the interval [floor, ceil], with uniform
-+ * distribution, suitable for all uses. Fastest when floor and ceil are
-+ * constant, but still fast for variable floor and ceil as well.
-+ */
-+static inline u32 get_random_u32_inclusive(u32 floor, u32 ceil)
-+{
-+	BUILD_BUG_ON_MSG(__builtin_constant_p(floor) && __builtin_constant_p(ceil) &&
-+			 (floor > ceil || ceil - floor == U32_MAX),
-+			 "get_random_u32_inclusive() must take floor <= ceil");
-+	return floor + get_random_u32_below(ceil - floor + 1);
-+}
-+
- /*
-  * On 64-bit architectures, protect against non-terminated C string overflows
-  * by zeroing out the first byte of the canary; this leaves 56 bits of entropy.
--- 
-2.38.1
 
