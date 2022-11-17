@@ -2,87 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA0FD62E1F2
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 17:33:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16F8362E1F7
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 17:33:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240557AbiKQQd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 11:33:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43170 "EHLO
+        id S234932AbiKQQdu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 17 Nov 2022 11:33:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240512AbiKQQdE (ORCPT
+        with ESMTP id S240376AbiKQQdU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 11:33:04 -0500
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7452C82204;
-        Thu, 17 Nov 2022 08:30:31 -0800 (PST)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id A7DE984;
-        Thu, 17 Nov 2022 17:30:29 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1668702629;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bRUKljahZwvTGsaOsNNcvH3faXTDENWxWJxvCIKAQJo=;
-        b=1RrZUfw1mQ6RN4Z60F1UKGjIiA9GiZd1LypTS3hZ2rKxxjtDe+ilhbZdi5fjMlnDIkooRd
-        Iiim0xa0HCZSfR2aykoYVmFZgtCGHSTJ36Bez/14p0Lkl5Pw5T4SszUTT83JFZFXf2HShu
-        w92/VQslLqsW+I6SepLf9FTIEIdvV5OZ4HEsZv0OavL8NSLeyL9inaU0nGhk2hCuiTXEfO
-        6Ci8JfOPPUbzQwUaCxEsR57RqjSEc4RAIU+64HYfzgjOAKqPJmwGtSGr1uWQSelmd6+kdI
-        MBN7SB9Tg/9AsQHl5WUg8OKaOKoc12SDNKqzNNVSRxzrQp7rG/sK7WNDGgKbaw==
+        Thu, 17 Nov 2022 11:33:20 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02097A37D;
+        Thu, 17 Nov 2022 08:30:43 -0800 (PST)
+Received: from fraeml710-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NClhZ5H6Lz685bn;
+        Fri, 18 Nov 2022 00:28:14 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml710-chm.china.huawei.com (10.206.15.59) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 17 Nov 2022 17:30:41 +0100
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 17 Nov
+ 2022 16:30:41 +0000
+Date:   Thu, 17 Nov 2022 16:30:40 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+CC:     <jic23@kernel.org>, <lars@metafoo.de>,
+        <linux-kernel@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        <jdelvare@suse.com>, <linux@roeck-us.net>,
+        <linux-hwmon@vger.kernel.org>, <rajat.khandelwal@intel.com>
+Subject: Re: [PATCH v10] iio: temperature: Add driver support for Maxim
+ MAX30208
+Message-ID: <20221117163040.00001f5a@Huawei.com>
+In-Reply-To: <20221118153729.762018-1-rajat.khandelwal@linux.intel.com>
+References: <20221118153729.762018-1-rajat.khandelwal@linux.intel.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Date:   Thu, 17 Nov 2022 17:30:29 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     William Breathitt Gray <william.gray@linaro.org>,
-        linus.walleij@linaro.org, brgl@bgdev.pl,
-        andriy.shevchenko@linux.intel.com, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/4] gpio: i8255: Migrate to regmap API
-In-Reply-To: <Y3ZflHI6CYfaGIbn@sirena.org.uk>
-References: <cover.1668129763.git.william.gray@linaro.org>
- <61327a67cc308af413471a69a4810b2785e53e8e.1668129763.git.william.gray@linaro.org>
- <5123090e11da67e57fb00984445ece2f@walle.cc> <Y3ZflHI6CYfaGIbn@sirena.org.uk>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <bbe25d96e892e8cfd3f0da5d6755be22@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-11-17 17:21, schrieb Mark Brown:
-> On Thu, Nov 17, 2022 at 05:18:55PM +0100, Michael Walle wrote:
->> Am 2022-11-11 02:55, schrieb William Breathitt Gray:
-> 
->> > +	gpio_config.parent = config->parent;
->> > +	gpio_config.regmap = config->map;
-> 
->> I'd propose to add a new config flag to indicate that accesses to
->> the device will be fast:
-> 
->> gpio_config.regmap_has_fast_io = true;
-> 
->> which will then set gpio->can_sleep = false.
-> 
-> It's probably useful to provide a query function in the regmap
-> API for generic regmap users like this.
+On Fri, 18 Nov 2022 21:07:29 +0530
+Rajat Khandelwal <rajat.khandelwal@linux.intel.com> wrote:
 
-Now I'm confused. Last time, I've proposed that, there was push
-back from you:
-https://lore.kernel.org/linux-gpio/20210430151908.GC5981@sirena.org.uk/
+> Maxim MAX30208 is a digital temperature sensor with 0.1°C accuracy.
+> 
+> Add support for max30208 driver in iio subsystem.
 
-That being said, I'd prefer to have such a query API :)
+Blank line here.
 
--michael
+> Datasheet: https://datasheets.maximintegrated.com/en/ds/MAX30208.pdf
+> 
+Datasheet part of the tags block, so no blank line between that and the SoB.
+That makes life easy for tools parsing git messages.
+
+> Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+
+One query inline.  Basically boils down to what we do after
+overflow occurs.  I assume you are right and the first reading is the most recent, but
+I think we still want to flush the whole fifo in that case to get back to
+a sane state for future reads.
+
+Jonathan
+
+> +/**
+> + * max30208_request() - Request a reading
+> + * @data: Struct comprising member elements of the device
+> + *
+> + * Requests a reading from the device and waits until the conversion is ready.
+> + */
+> +static int max30208_request(struct max30208_data *data)
+> +{
+> +	/*
+> +	 * Sensor can take up to 500 ms to respond so execute a total of
+> +	 * 10 retries to give the device sufficient time.
+> +	 */
+> +	int retries = 10;
+> +	u8 regval;
+> +	int ret;
+> +
+> +	ret = i2c_smbus_read_byte_data(data->client, MAX30208_TEMP_SENSOR_SETUP);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	regval = ret | MAX30208_TEMP_SENSOR_SETUP_CONV;
+> +
+> +	ret = i2c_smbus_write_byte_data(data->client, MAX30208_TEMP_SENSOR_SETUP, regval);
+> +	if (ret)
+> +		return ret;
+> +
+> +	while (retries--) {
+> +		ret = i2c_smbus_read_byte_data(data->client, MAX30208_STATUS);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		if (ret & MAX30208_STATUS_TEMP_RDY)
+> +			return 0;
+> +
+> +		msleep(50);
+> +	}
+> +	dev_err(&data->client->dev, "Temperature conversion failed\n");
+> +
+> +	return -ETIMEDOUT;
+> +}
+> +
+> +static int max30208_update_temp(struct max30208_data *data)
+> +{
+> +	u8 data_count;
+> +	int ret;
+> +
+> +	mutex_lock(&data->lock);
+> +
+> +	ret = max30208_request(data);
+> +	if (ret)
+> +		goto unlock;
+> +
+> +	ret = i2c_smbus_read_byte_data(data->client, MAX30208_FIFO_OVF_CNTR);
+> +	if (ret < 0)
+> +		goto unlock;
+> +	else if (!ret) {
+> +		ret = i2c_smbus_read_byte_data(data->client, MAX30208_FIFO_DATA_CNTR);
+> +		if (ret < 0)
+> +			goto unlock;
+> +
+> +		data_count = ret;
+> +	} else
+> +		data_count = 1;
+> +
+> +	while (data_count) {
+> +		ret = i2c_smbus_read_word_swapped(data->client, MAX30208_FIFO_DATA);
+> +		if (ret < 0)
+> +			goto unlock;
+> +
+> +		data_count--;
+> +	}
+Hmm. Given you've been poking this a lot, I guess this works and the part is
+as just odd. Just to check one last case... Does max30208_request() guarantee we can't
+get...
+
+1. Read first time, overflow set so we read latest result - leaving
+   31 ancient values in the fifo.
+2. Read again really quickly and get those ancient values.
+?
+
+Perhaps we should flush out those unwanted values from the fifo, so after
+overflow we get back to a normal state rather than immediately overflowing again.
+
+More than possible that I still don't understand how this device works though!
+
+> +
+> +unlock:
+> +	mutex_unlock(&data->lock);
+> +	return ret;
+> +}
+> +
 
