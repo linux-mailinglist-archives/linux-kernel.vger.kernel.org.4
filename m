@@ -2,62 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC78862D9EC
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 12:53:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9637562D9EE
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 12:54:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234845AbiKQLx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 06:53:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55430 "EHLO
+        id S234302AbiKQLx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 06:53:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234518AbiKQLxQ (ORCPT
+        with ESMTP id S239197AbiKQLxq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 06:53:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A84D1141;
-        Thu, 17 Nov 2022 03:53:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BC58261303;
-        Thu, 17 Nov 2022 11:53:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B06DC433D6;
-        Thu, 17 Nov 2022 11:53:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668685994;
-        bh=ShqTe1CG2H2vpLDKDFV7iYYR2HXYxDuYRyuDgEafb10=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=c1BvFloj9U+G4l3s5fB0S3s6wd9nDJWAKF9jgAlxVb07mREgj3TvGzY/NFV8OQxDI
-         55Ub+0cRUU+qG0C85Dh85mLvCZWM+4jKMrHQuP/F+tLn/3OX9E4w08s1R+ENbD6bZz
-         nR/LKmEs0o2k8PNPS1J10WpjgmXNOJWSpVJut5I55oLwVhYUuqjOqcLTT4UV1F+iTh
-         37hpbCxE3i+x2o2Pt5HW0ezQEKQxFff/cJ84NhJkVuZtmrHKMky4DefsVUfZwrg/mw
-         oFrLaOuNUPV3LKC8JOONjknV4SCwOcSFMS7jYQPGQya54TdZrVxUdcstunUlmUi71c
-         XuASjz1yeh7BA==
-Date:   Thu, 17 Nov 2022 11:53:05 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Jerome Neanne <jneanne@baylibre.com>
-Cc:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
-        nm@ti.com, kristo@kernel.org, dmitry.torokhov@gmail.com,
-        krzysztof.kozlowski+dt@linaro.org, catalin.marinas@arm.com,
-        will@kernel.org, tony@atomide.com, vigneshr@ti.com,
-        shawnguo@kernel.org, geert+renesas@glider.be,
-        dmitry.baryshkov@linaro.org, marcel.ziswiler@toradex.com,
-        vkoul@kernel.org, biju.das.jz@bp.renesas.com, arnd@arndb.de,
-        jeff@labundy.com, afd@ti.com, khilman@baylibre.com,
-        narmstrong@baylibre.com, msp@baylibre.com, j-keerthy@ti.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-omap@vger.kernel.org
-Subject: Re: [PATCH v7 5/6] Input: Add tps65219 interrupt driven powerbutton
-Message-ID: <Y3YgocGss54KIMRi@google.com>
-References: <20221104152311.1098603-1-jneanne@baylibre.com>
- <20221104152311.1098603-6-jneanne@baylibre.com>
+        Thu, 17 Nov 2022 06:53:46 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41011263D;
+        Thu, 17 Nov 2022 03:53:44 -0800 (PST)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NCdWP15TzzqSTT;
+        Thu, 17 Nov 2022 19:49:53 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 17 Nov 2022 19:53:42 +0800
+Received: from thunder-town.china.huawei.com (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 17 Nov 2022 19:53:41 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Matthew Wilcox <willy@infradead.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>,
+        David Howells <dhowells@redhat.com>
+Subject: [PATCH] pipe: fix potential use-after-free in pipe_read()
+Date:   Thu, 17 Nov 2022 19:53:23 +0800
+Message-ID: <20221117115323.1718-1-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.37.3.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221104152311.1098603-6-jneanne@baylibre.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,31 +51,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 04 Nov 2022, Jerome Neanne wrote:
+Accessing buf->flags after pipe_buf_release(pipe, buf) is unsafe, because
+the 'buf' memory maybe freed.
 
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
-> 
-> TPS65219 has different interrupts compared to other TPS6521* chips.
-> TPS65219 defines two interrupts for the powerbutton one for push and one
-> for release.
-> 
-> This driver is very simple in that it maps the push interrupt to a key
-> input and the release interrupt to a key release.
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Jerome Neanne <jneanne@baylibre.com>
-> 
-> Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> 
-> Please feel free to merge through MFD tree.
-> ---
->  drivers/input/misc/Kconfig              |  10 ++
->  drivers/input/misc/Makefile             |   1 +
->  drivers/input/misc/tps65219-pwrbutton.c | 148 ++++++++++++++++++++++++
->  3 files changed, 159 insertions(+)
->  create mode 100644 drivers/input/misc/tps65219-pwrbutton.c
+In fact, pipe->note_loss does not need the protection of spinlock
+pipe->rd_wait.lock, it only needs the protection of __pipe_lock(pipe). So
+make the assignment of pipe->note_loss complete before releasing 'buf' to
+eliminate the risk.
 
-Applied, thanks.
+Fixes: e7d553d69cf6 ("pipe: Add notification lossage handling")
+Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+---
+ fs/pipe.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/fs/pipe.c b/fs/pipe.c
+index 42c7ff41c2dba29..0f873949337ed28 100644
+--- a/fs/pipe.c
++++ b/fs/pipe.c
+@@ -321,12 +321,12 @@ pipe_read(struct kiocb *iocb, struct iov_iter *to)
+ 			}
+ 
+ 			if (!buf->len) {
+-				pipe_buf_release(pipe, buf);
+-				spin_lock_irq(&pipe->rd_wait.lock);
+ #ifdef CONFIG_WATCH_QUEUE
+ 				if (buf->flags & PIPE_BUF_FLAG_LOSS)
+ 					pipe->note_loss = true;
+ #endif
++				pipe_buf_release(pipe, buf);
++				spin_lock_irq(&pipe->rd_wait.lock);
+ 				tail++;
+ 				pipe->tail = tail;
+ 				spin_unlock_irq(&pipe->rd_wait.lock);
 -- 
-Lee Jones [李琼斯]
+2.25.1
+
