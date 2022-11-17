@@ -2,127 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11E7862E2EE
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:24:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E96B562E2F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:25:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235015AbiKQRYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 12:24:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50236 "EHLO
+        id S239737AbiKQRZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 12:25:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230447AbiKQRYt (ORCPT
+        with ESMTP id S235029AbiKQRZa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 12:24:49 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C03614C252;
-        Thu, 17 Nov 2022 09:24:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BA5B0621D6;
-        Thu, 17 Nov 2022 17:24:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC912C433D6;
-        Thu, 17 Nov 2022 17:24:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668705887;
-        bh=ciiPAicDMVFm+5iziU6lbJHVrHXpHFnxKld+29nDL1M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XuJgXHQ/a4azaN3G9sfhFb0/beyFlIKresutiY2PqHYvWxmB9C7g44/PXB10ktYXI
-         T6sFpsASiTE7MEWVFdt5HDA3mtvqqpQWAt14saQRhpiLqKD+Vg1ktBRcQ/NkzarEW9
-         p0PMPBeLnwOOoUbiNHsmYFgqLUB7JZloyUiSILjZg5NT60b5Xy6rV1kvB6ymE3HCIy
-         CMAYSGWg5UzbG4/FtDiUhPUcjjJkFvofQ3M3DBfF1VapkQ2ozTdOjcZEBdyk7Goxpg
-         3ADmKSqU5Y7cMtJZvka+lmNaZjIxm2hiU+TLf4joWUvJqR0RW6Crhsirmvrc456w/9
-         Hd1WFhtA8ekTw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 9F5F34034E; Thu, 17 Nov 2022 14:24:43 -0300 (-03)
-Date:   Thu, 17 Nov 2022 14:24:43 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, Leo Yan <leo.yan@linaro.org>,
-        German Gomez <german.gomez@arm.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        James Clark <james.clark@arm.com>,
-        Athira Jajeev <atrajeev@linux.vnet.ibm.com>
-Subject: Re: [PATCH 05/12] perf test: Add 'leafloop' test workload
-Message-ID: <Y3ZuW2IxVWp9yoaD@kernel.org>
-References: <20221116233854.1596378-1-namhyung@kernel.org>
- <20221116233854.1596378-6-namhyung@kernel.org>
- <Y3Zb+JChHoq+89yM@kernel.org>
- <Y3ZeOuNnk0xclY2x@kernel.org>
- <CAP-5=fVh0cQDeqSgVkLHbuiZKoFAp628oggQKwN6KxfUusA01Q@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAP-5=fVh0cQDeqSgVkLHbuiZKoFAp628oggQKwN6KxfUusA01Q@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 17 Nov 2022 12:25:30 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA68645A0B;
+        Thu, 17 Nov 2022 09:25:29 -0800 (PST)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AHHAHPS021262;
+        Thu, 17 Nov 2022 17:24:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=suLEoiSZqoI/ONg4Oq+RZpcdAxea8urstYGtfJ4HZ18=;
+ b=sZC5GSEN4COtNf8WRFGteiIKAAbYmLFmU/O50i0E5uVz7bdfrTUiXlfYORZ5SKje5hRe
+ w7Ne9WMPSMYFTD38KBTdmOjV26iKT4BDX2Fwkki9OXR516iOXVP2F41K35gT5wQ8+qyr
+ 2rFhq23WOyJjtHDBYbGCX2ssINIcGpntkMYRPUAvF4Ry/evIGIPtevxxeEqaoCrcn4n7
+ 2JgiQoLbs87ZmJnjDWHuWvnF3CtjHWSzPllIXmKTsPSeMPDndQnSPlDQ8kAhVwK5s0+U
+ RF3+N7ccplGx4iVS7IBtkR0JO+qR2XfVY4Fr8/2j5SuVLOsnnReCOhOabUF5oiYbor+U fQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kwrx48j0g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Nov 2022 17:24:59 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AHHC45k027831;
+        Thu, 17 Nov 2022 17:24:58 GMT
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kwrx48j05-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Nov 2022 17:24:58 +0000
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AHH4t7u000476;
+        Thu, 17 Nov 2022 17:24:57 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma01wdc.us.ibm.com with ESMTP id 3kt349tkdf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Nov 2022 17:24:57 +0000
+Received: from smtpav06.dal12v.mail.ibm.com ([9.208.128.130])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AHHOrga45548010
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 17 Nov 2022 17:24:53 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 02AAC58059;
+        Thu, 17 Nov 2022 17:24:56 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CD4C958043;
+        Thu, 17 Nov 2022 17:24:54 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.98.240])
+        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 17 Nov 2022 17:24:54 +0000 (GMT)
+Message-ID: <6b4d47765a4ddcfdf07158f3ad0737fa3aa5823e.camel@linux.ibm.com>
+Subject: Re: [PATCH v4 3/5] security: Allow all LSMs to provide xattrs for
+ inode_init_security hook
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Casey Schaufler <casey@schaufler-ca.com>,
+        Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keescook@chromium.org, nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Thu, 17 Nov 2022 12:24:54 -0500
+In-Reply-To: <026075fa-0b58-9041-0727-b75e19499356@schaufler-ca.com>
+References: <20221110094639.3086409-1-roberto.sassu@huaweicloud.com>
+         <20221110094639.3086409-4-roberto.sassu@huaweicloud.com>
+         <4c1349f670dc3c23214a5a5036e43ddaa0a7bc89.camel@linux.ibm.com>
+         <026075fa-0b58-9041-0727-b75e19499356@schaufler-ca.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: fpSioghH0RFkWuopp8jYOt8pezhX03tV
+X-Proofpoint-GUID: arArzTbFTFnuHFxLo4w1t1eyMUOnEW6v
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-17_06,2022-11-17_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ lowpriorityscore=0 priorityscore=1501 spamscore=0 mlxscore=0 clxscore=1015
+ malwarescore=0 phishscore=0 mlxlogscore=946 adultscore=0 impostorscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211170126
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Nov 17, 2022 at 09:16:58AM -0800, Ian Rogers escreveu:
-> On Thu, Nov 17, 2022 at 8:15 AM Arnaldo Carvalho de Melo
-> <acme@kernel.org> wrote:
-> >
-> > Em Thu, Nov 17, 2022 at 01:06:16PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > > Em Wed, Nov 16, 2022 at 03:38:47PM -0800, Namhyung Kim escreveu:
-> > > > The leafloop workload is to run an infinite loop in the test_leaf
-> > > > function.  This is needed for the ARM fp callgraph test to verify if it
-> > > > gets the correct callchains.
-> > > >
-> > > >   $ perf test -w leafloop
-> > >
-> > > On fedora:36
-> > >
-> > > In file included from /usr/include/bits/libc-header-start.h:33,
-> > >                  from /usr/include/stdlib.h:26,
-> > >                  from tests/workloads/leafloop.c:2:
-> > > /usr/include/features.h:412:4: error: #warning _FORTIFY_SOURCE requires compiling with optimization (-O) [-Werror=cpp]
-> > >   412 | #  warning _FORTIFY_SOURCE requires compiling with optimization (-O)
-> > >       |    ^~~~~~~
-> > > cc1: all warnings being treated as errors
-> > > make[5]: *** [/home/acme/git/perf/tools/build/Makefile.build:96: /tmp/build/perf/tests/workloads/leafloop.o] Error 1
-> > > make[5]: *** Waiting for unfinished jobs....
-> > >
-> > > I'll try removing the _FORTIFY_SOURCE
-> >
-> > Works after I added this to datasym.c, leafloop.c and brstack.c:
+On Thu, 2022-11-17 at 09:18 -0800, Casey Schaufler wrote:
+> On 11/17/2022 8:05 AM, Mimi Zohar wrote:
+> > hOn Thu, 2022-11-10 at 10:46 +0100, Roberto Sassu wrote:
+> >> From: Roberto Sassu <roberto.sassu@huawei.com>
+> >>
+> >> Currently, security_inode_init_security() supports only one LSM providing
+> >> an xattr and EVM calculating the HMAC on that xattr, plus other inode
+> >> metadata.
+> >>
+> >> Allow all LSMs to provide one or multiple xattrs, by extending the security
+> >> blob reservation mechanism. Introduce the new lbs_xattr field of the
+> >> lsm_blob_sizes structure, so that each LSM can specify how many xattrs it
+> >> needs, and the LSM infrastructure knows how many xattr slots it should
+> >> allocate.
+> > Perhaps supporting per LSM multiple xattrs is a nice idea, but EVM
+> > doesn't currently support it.  The LSM xattrs are hard coded in
+> > evm_config_default_xattrnames[],  based on whether the LSM is
+> > configured.  Additional security xattrs may be included in the
+> > security.evm calculation, by extending the list via
+> > security/integrity/evm/evm_xattrs.
 > 
-> Is there a reason we are compiling without -O ? Perhaps we can filter
-
-I assumed so as Namhyung added it, perhaps he is just carrying it from
-the pre-existing shell tests?
-
-I wonder its to have a predictable binary output that the test expects
-when doing things like hardware tracing? As it come from the coresight
-tests, IIRC.
-
-- Arnaldo
-
-> setting _FORTIFY_SOURCE so that it depends on -O being enabled.
- 
-> Thanks,
-> Ian
+> Smack uses multiple xattrs. All file system objects have a SMACK64
+> attribute, which is used for access control. A program file may have
+> a SMACK64EXEC attribute, which is the label the program will run with.
+> A library may have a SMACK64MMAP attribute to restrict loading. A
+> directory may have a SMACK64TRANSMUTE attribute, which modifies the
+> new object creation behavior.
 > 
-> > diff --git a/tools/perf/tests/workloads/leafloop.c b/tools/perf/tests/workloads/leafloop.c
-> > index 1bf5cc97649b0e23..5d72c001320e3013 100644
-> > --- a/tools/perf/tests/workloads/leafloop.c
-> > +++ b/tools/perf/tests/workloads/leafloop.c
-> > @@ -1,4 +1,5 @@
-> >  /* SPDX-License-Identifier: GPL-2.0 */
-> > +#undef _FORTIFY_SOURCE
-> >  #include <stdlib.h>
-> >  #include <linux/compiler.h>
-> >  #include "../tests.h"
+> The point being that it may be more than a "nice idea" to support
+> multiple xattrs. It's not a hypothetical situation.
 
--- 
+And each of these addiitonal Smack xattrs are already defined in 
+evm_config_default_xattrnames[].
 
-- Arnaldo
+Mimi
+
