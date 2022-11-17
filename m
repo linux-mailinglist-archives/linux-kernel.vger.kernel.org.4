@@ -2,125 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C77B862DE87
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 15:45:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C22F762DEEA
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:00:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240357AbiKQOpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 09:45:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40858 "EHLO
+        id S240059AbiKQPA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 10:00:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240515AbiKQOob (ORCPT
+        with ESMTP id S240198AbiKQPAJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 09:44:31 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F3421E0D
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 06:44:24 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id j16so3095780lfe.12
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 06:44:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BK/kpu0QGEcj9NPlL+FeUj4R6i4NhriCFaq6Qr3WbbI=;
-        b=BSaqKazKUG10ONhQymONIWDkvjfN0N5/li2mu86+b4sKVe18HR8LH0oUJyBA82p9Do
-         vGUrbr2GXdiab6k7qb741GvY5A8gnSn9Kc+Hz2qL3WVMZc4Iie3WbO/ENlP3rWq+FIln
-         OO16/pOdMoi7FJ5BCRuTrinV9T6FAdBW/n5z0U+wzM1rSGKREAN7X953bPqj7Gm2Rk6D
-         EcC135bxYK3F8Zye+L2Yzdc+mmj+2x+e3gv/hHjMpML29Z8hYnkiWMsuphvNom8bHNtB
-         kqGk1EnOuIa3dsWtaLOPK3FrWgSguDHeRC1qCb6qxv/6ZH4SPbKAvqJBnRAY/GpBnHgm
-         vcDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BK/kpu0QGEcj9NPlL+FeUj4R6i4NhriCFaq6Qr3WbbI=;
-        b=Ij8vjiMgmAVwiLb9jGMJuPSEYod2osPQG7RtIBYX1rdRai//FnqeXkwYsF0lGJ8gXR
-         p1bE9uhBFrudZ78YcFzE4m/lD9UFrUqFctkwOfwD8/Re4Vf0NcHlhdTVl1aNp/uhZIeq
-         Omw+GSqCzzUuudmdO7dNRLZ5lerxu1i6wQcFFMhejt5IOfXwNkCxMAeprerzBRwftJfB
-         HZ15d+vCdWQ6hy1GtRx4R7UZH6rY4yvhik64wlQKc3h0cehS8amVHMexs78BcWcUbhTD
-         bSnafJ59BSPfJriHAQoQ07CCjYKwi78iAaQi2xKHrMll+/04BzWtC6IuHk35YOO1YfLI
-         LnKQ==
-X-Gm-Message-State: ANoB5pmCV0NnBqzEywArREqJZXM7siqKbBEI7XwQoSV2H4ecO0LIG3Yd
-        i5iJO1XJLqDZuWz6fLqEWyaN7Q==
-X-Google-Smtp-Source: AA0mqf6gXDMnLPD3JMcrA9kx9+f055OZFviLTt13CX5KEtbqZvjTQAcb7nz49Gmik9G82dJwziFqyw==
-X-Received: by 2002:a05:6512:36d1:b0:496:c661:81da with SMTP id e17-20020a05651236d100b00496c66181damr1052532lfs.480.1668696263065;
-        Thu, 17 Nov 2022 06:44:23 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id f24-20020a2eb5b8000000b0026df5232c7fsm234711ljn.42.2022.11.17.06.44.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Nov 2022 06:44:22 -0800 (PST)
-Message-ID: <176cb990-f853-0e5b-37e6-0294801b6eed@linaro.org>
-Date:   Thu, 17 Nov 2022 15:44:21 +0100
+        Thu, 17 Nov 2022 10:00:09 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D2E240AC
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 07:00:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668697208; x=1700233208;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=pym+nN5dyyoSuoPqt65bfQahyNJPS85MeiSSlQoBJ/8=;
+  b=dR/HNK+bZ/fdYYqwWKswB9Gfj2Gg/jrRJ4dvSgoaznN8U/YGj/ilh1vK
+   lNkq9kakDl9hToboTMl4m2QEU+fCpe5t0OKCWxmpfFd0KDDfDFgJwpiHT
+   XVhxuKj5giJZjFfx//udnsDS9PpGqXolISg15zNbAQlUDZSQXyqeYr7zE
+   d9dtS7933pGowbBmaWe+wIdi9QC7UPskpF/PX15YV6ijgsOmy12H/tZbd
+   5lwGSoJiQWQ6WD2yS6QM4Vcy+4e+UcUXWbk0yx1c7R33c1vMmtwAHxt3/
+   j5yHDg1ToU7QjSDUGsjkZLLhzcmozW5vmBNlTZdt/naEQYmYCqxvPScjy
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="314018188"
+X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
+   d="scan'208";a="314018188"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 07:00:07 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="617636533"
+X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
+   d="scan'208";a="617636533"
+Received: from kristi4x-mobl1.amr.corp.intel.com (HELO [10.213.177.122]) ([10.213.177.122])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 07:00:07 -0800
+Message-ID: <d6fd57a0-4cb6-99df-d49c-eb18ff58b8a3@linux.intel.com>
+Date:   Thu, 17 Nov 2022 08:44:25 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 2/6] dt-bindings: i2c: qcom-geni: document I2C Master Hub
- serial I2C engine
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [PATCH v2 3/4] soundwire: debugfs: Switch to sdw_read_no_pm
 Content-Language: en-US
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20221114-narmstrong-sm8550-upstream-i2c-master-hub-v1-0-64449106a148@linaro.org>
- <20221114-narmstrong-sm8550-upstream-i2c-master-hub-v1-2-64449106a148@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221114-narmstrong-sm8550-upstream-i2c-master-hub-v1-2-64449106a148@linaro.org>
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>, vkoul@kernel.org
+Cc:     yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        patches@opensource.cirrus.com
+References: <20221117141727.3031503-1-ckeepax@opensource.cirrus.com>
+ <20221117141727.3031503-4-ckeepax@opensource.cirrus.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20221117141727.3031503-4-ckeepax@opensource.cirrus.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/11/2022 11:21, Neil Armstrong wrote:
-> The I2C Master Hub is a stripped down version of the GENI Serial Engine
-> QUP Wrapper Controller but only supporting I2C serial engines without
-> DMA support.
+
+
+On 11/17/22 08:17, Charles Keepax wrote:
+> It is rather inefficient to be constantly playing with the runtime
+> PM reference for each individual register, switch to holding a PM
+> runtime reference across the whole register output.
 > 
-> This documents the I2C Serial Engine variant used within the I2C Master
-> Hub Wrapper. This serial engine variant lacks DMA support, and requires
-> a core clock, and since DMA support is lacking, the memory interconnect
-> path isn't needed.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+
 > ---
->  .../bindings/i2c/qcom,i2c-geni-qcom.yaml           | 61 +++++++++++++++++-----
->  1 file changed, 49 insertions(+), 12 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
-> index 0e7ed00562e2..ea2c28e70cf5 100644
-> --- a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
-> @@ -15,13 +15,13 @@ allOf:
+> Changes since v1:
+>  - Reworded commit message
+> 
+>  drivers/soundwire/debugfs.c | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/soundwire/debugfs.c b/drivers/soundwire/debugfs.c
+> index 49900cd207bc7..0718e9cda138a 100644
+> --- a/drivers/soundwire/debugfs.c
+> +++ b/drivers/soundwire/debugfs.c
+> @@ -4,6 +4,7 @@
+>  #include <linux/device.h>
+>  #include <linux/debugfs.h>
+>  #include <linux/mod_devicetable.h>
+> +#include <linux/pm_runtime.h>
+>  #include <linux/slab.h>
+>  #include <linux/soundwire/sdw.h>
+>  #include <linux/soundwire/sdw_registers.h>
+> @@ -35,7 +36,7 @@ static ssize_t sdw_sprintf(struct sdw_slave *slave,
+>  {
+>  	int value;
 >  
->  properties:
->    compatible:
-> -    const: qcom,geni-i2c
-> +    enum:
-> +      - qcom,geni-i2c
-> +      - qcom,geni-i2c-master-hub
+> -	value = sdw_read(slave, reg);
+> +	value = sdw_read_no_pm(slave, reg);
 >  
-> -  clocks:
-> -    maxItems: 1
-> +  clocks: true
+>  	if (value < 0)
+>  		return scnprintf(buf + pos, RD_BUF - pos, "%3x\tXX\n", reg);
+> @@ -55,6 +56,10 @@ static int sdw_slave_reg_show(struct seq_file *s_file, void *data)
+>  	if (!buf)
+>  		return -ENOMEM;
 >  
-> -  clock-names:
-> -    const: se
-> +  clock-names: true
+> +	ret = pm_runtime_resume_and_get(&slave->dev);
+> +	if (ret < 0 && ret != -EACCES)
+> +		return ret;
+> +
+>  	ret = scnprintf(buf, RD_BUF, "Register  Value\n");
 >  
-
-Same comments as in previous patch.
-
-Best regards,
-Krzysztof
-
+>  	/* DP0 non-banked registers */
+> @@ -112,6 +117,10 @@ static int sdw_slave_reg_show(struct seq_file *s_file, void *data)
+>  	}
+>  
+>  	seq_printf(s_file, "%s", buf);
+> +
+> +	pm_runtime_mark_last_busy(&slave->dev);
+> +	pm_runtime_put(&slave->dev);
+> +
+>  	kfree(buf);
+>  
+>  	return 0;
