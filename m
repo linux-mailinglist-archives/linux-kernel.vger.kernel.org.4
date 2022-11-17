@@ -2,132 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D235F62DC32
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:03:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6025D62DC3D
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:05:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239524AbiKQNDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 08:03:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55638 "EHLO
+        id S239291AbiKQNFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 08:05:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239451AbiKQNDA (ORCPT
+        with ESMTP id S231634AbiKQNFL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 08:03:00 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 505EA67F76
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 05:02:59 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id be13so2682837lfb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 05:02:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=YPiJ7os7PhEqrWGvtI8HCACMGN0RvPMekiv79MxyVqE=;
-        b=rb1lpgP+fARO/6FtRRzLWhf1wyTHfYMbmqIXevWEuMS94ujwYdhoe7VQAH/Hs7wYyG
-         pYwovs9TxBIwqW5zZR702ZamIB42qBnxhfyAW6T1JJUDbMD7PqFwCTDldyXg3NZnuhWq
-         mjU0PtqlfwMYyFbquOQWCWndXRTU7i2XG6cZuCFoMRsXZU9X/3ElM+HV/GG14lsCCIOu
-         /pgIGIhPo1HUHgs638m/yuf3SH02fZxkXo1Ew2rWyFgNKZYAzB/trAgdcGxYOfD+dXOM
-         c6TyjbWA21lopFHHBaeaMUTgGzAUWK4oEE2TQHGQlIw23WuRRj0CUJkGeNajcBylR1kd
-         Wq5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YPiJ7os7PhEqrWGvtI8HCACMGN0RvPMekiv79MxyVqE=;
-        b=hNgnAdqoBj+PmexwM1QqORBpEHMI3DHlBwGy+T1RrtLSOmIveYmnSIpisHCgzPbaHA
-         fM+WgENLjLgbic0B07yCN6oZU6n2z3UZ+T/2KN0yQv3d7MU5Tt9LaRSXDCg3JN21CxOF
-         9tiUuICTWnS7wG7PK7XZmo0Ip0C+osL7u+3+0VxdZQBPIc+awMzzYohgMek1VNRXXue0
-         oVI264Jm5c1fnFsZqsd72FKSAALDsD6LD24cVFtxlOo82uvvixO6CDaUgPJ1YDgak9gC
-         FGF9vf7k5//r0F81HKf7ESWUitjzABK641wPOeCkEJ2TF9ROc6exUsCT1v+1gOJCwg1P
-         vQrg==
-X-Gm-Message-State: ANoB5pn5YIfu4XbZbLxTYwK67Vg5pp34IemzPOdXlLHhdR0hUdHW8orJ
-        8s8E4+VGRz3YiSGnaGq3vYCS0Q==
-X-Google-Smtp-Source: AA0mqf4ACSvvgnA3OevUWAqQJmbuiVpzqjBLDs6tP3CCwp3fODm5slkGppX+15vDxgXXVaFEUgTOFQ==
-X-Received: by 2002:a05:6512:25a0:b0:4a2:bbdc:1430 with SMTP id bf32-20020a05651225a000b004a2bbdc1430mr813519lfb.404.1668690177498;
-        Thu, 17 Nov 2022 05:02:57 -0800 (PST)
-Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id v6-20020a2ea606000000b0026c4c1a0b4dsm186982ljp.126.2022.11.17.05.02.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 05:02:56 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [PATCH] dt-bindings: thermal: qcom-tsens: simplify if:then: clauses
-Date:   Thu, 17 Nov 2022 14:02:54 +0100
-Message-Id: <20221117130254.378109-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 17 Nov 2022 08:05:11 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E769445ED9
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 05:05:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668690309; x=1700226309;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=jRvX/pxCCG2xTdfCqddChD8tZuE8K0P+engR+Y4GNk4=;
+  b=XmNI5HaIyAanHKSJ4faOlqV8rMGBy9NeLxsainFP4zwHwxbM6HWVJztq
+   o1wcobXrv1Ru1Rp+GccTSRFbkMfM3nohteasHpfOkNtZUNMlQXdTnsNKW
+   CiTDs6n3EQcbvpsmlzMAftlmwyJ51rQfeBAbPiWJbZLMxUbR6hpmo3hsi
+   qegxvo8Hg/dFC3WweA+zEbjJrmbI3+0g0jTsn6n3JZcgQ0wC44anra/5N
+   xdq2zB274NFGpgX802h7Gu7YvvL5kjhlNeJvEYd6HwjkBpjRh850DOMx3
+   I3X6tBF8a7MX9cgg2WZzyJOL31qOIYhnKfzwslHytGZEB8ebzqdr+S0xJ
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="314659036"
+X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
+   d="scan'208";a="314659036"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 05:03:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="968870184"
+X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
+   d="scan'208";a="968870184"
+Received: from lkp-server01.sh.intel.com (HELO 55744f5052f8) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 17 Nov 2022 05:03:57 -0800
+Received: from kbuild by 55744f5052f8 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oveYe-0000Kk-1q;
+        Thu, 17 Nov 2022 13:03:56 +0000
+Date:   Thu, 17 Nov 2022 21:03:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/fpu] BUILD SUCCESS
+ 6ea25770b043c7997ab21d1ce95ba5de4d3d85d9
+Message-ID: <63763104.X6UwBS43e/97jARZ%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Most of the device-specific compatibles have generic fallbacks like
-qcom,tsens-v1 or qcom,tsens-v2.  The if:then: block mentions these
-fallbacks, so drop redundant entries for specific compatibles.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/fpu
+branch HEAD: 6ea25770b043c7997ab21d1ce95ba5de4d3d85d9  selftests/vm/pkeys: Add a regression test for setting PKRU through ptrace
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+elapsed time: 832m
 
----
+configs tested: 91
+configs skipped: 2
 
-Cc: Neil Armstrong <neil.armstrong@linaro.org>
----
- .../devicetree/bindings/thermal/qcom-tsens.yaml  | 16 ----------------
- 1 file changed, 16 deletions(-)
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-index f0bd4b979e28..c9949713f714 100644
---- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-+++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-@@ -118,12 +118,7 @@ allOf:
-           contains:
-             enum:
-               - qcom,ipq8064-tsens
--              - qcom,mdm9607-tsens
--              - qcom,msm8916-tsens
-               - qcom,msm8960-tsens
--              - qcom,msm8974-tsens
--              - qcom,msm8976-tsens
--              - qcom,qcs404-tsens
-               - qcom,tsens-v0_1
-               - qcom,tsens-v1
-     then:
-@@ -140,17 +135,6 @@ allOf:
-         compatible:
-           contains:
-             enum:
--              - qcom,msm8953-tsens
--              - qcom,msm8996-tsens
--              - qcom,msm8998-tsens
--              - qcom,sc7180-tsens
--              - qcom,sc7280-tsens
--              - qcom,sc8180x-tsens
--              - qcom,sdm630-tsens
--              - qcom,sdm845-tsens
--              - qcom,sm8150-tsens
--              - qcom,sm8250-tsens
--              - qcom,sm8350-tsens
-               - qcom,tsens-v2
-     then:
-       properties:
+gcc tested configs:
+arc                                 defconfig
+alpha                               defconfig
+s390                                defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+x86_64                           rhel-8.3-kvm
+x86_64                         rhel-8.3-kunit
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                           rhel-8.3-syz
+i386                                defconfig
+x86_64                              defconfig
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+arc                  randconfig-r043-20221117
+x86_64                        randconfig-a015
+x86_64                    rhel-8.3-kselftests
+x86_64                          rhel-8.3-func
+riscv                randconfig-r042-20221117
+x86_64                               rhel-8.3
+s390                 randconfig-r044-20221117
+x86_64                           allyesconfig
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+i386                             allyesconfig
+x86_64                        randconfig-a006
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+x86_64                            allnoconfig
+ia64                             allmodconfig
+sh                          sdk7786_defconfig
+arm                            zeus_defconfig
+openrisc                            defconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+s390                             allmodconfig
+s390                             allyesconfig
+um                               alldefconfig
+sh                           se7722_defconfig
+sh                         ap325rxa_defconfig
+i386                          randconfig-c001
+powerpc                      bamboo_defconfig
+powerpc                     mpc83xx_defconfig
+openrisc                 simple_smp_defconfig
+sh                        sh7757lcr_defconfig
+sh                        sh7785lcr_defconfig
+arm                            hisi_defconfig
+sh                  sh7785lcr_32bit_defconfig
+arc                               allnoconfig
+powerpc                    klondike_defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+sh                ecovec24-romimage_defconfig
+arm                           tegra_defconfig
+mips                        vocore2_defconfig
+arm                       omap2plus_defconfig
+arm                           stm32_defconfig
+sh                           se7705_defconfig
+powerpc                       maple_defconfig
+sh                        edosk7705_defconfig
+
+clang tested configs:
+i386                          randconfig-a002
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+i386                          randconfig-a006
+x86_64                        randconfig-a014
+hexagon              randconfig-r041-20221117
+x86_64                        randconfig-a016
+hexagon              randconfig-r045-20221117
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+i386                          randconfig-a013
+x86_64                        randconfig-a005
+i386                          randconfig-a011
+i386                          randconfig-a015
+powerpc                          g5_defconfig
+x86_64                        randconfig-k001
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
