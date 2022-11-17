@@ -2,130 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C75862E59F
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 21:10:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 194EB62E5A4
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 21:11:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234918AbiKQUKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 15:10:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53282 "EHLO
+        id S235051AbiKQULs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 15:11:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232330AbiKQUKI (ORCPT
+        with ESMTP id S232330AbiKQULq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 15:10:08 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A7E97EBD4;
-        Thu, 17 Nov 2022 12:10:08 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id k5so2614872pjo.5;
-        Thu, 17 Nov 2022 12:10:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=I6j1W3Ji+fdVPC6gf2n+swdKOz5mGcn5yydkS5FTGpA=;
-        b=etd/G7iaKExY97a+7RFVEc/mtw7VNG9n+VHfEyE9IJatKO7FWet1pvhGQJaWzV91h9
-         ZuCE+uPGyhFP5wP335ZGwfkf4ddZtUeTbalZZo6y9gg+VBjhfBHAKuN3MMO2U/A49Cnj
-         ZnTIeHk2e65GQUxPOa1XGBlbWhbiwvNM/Q9LwNQ8MQ8Ktk2YzzgyHV2FBLQpZ9g7VFyU
-         xSJnmW7s68ycW8hiKd14WZ5l37Jiiun6VKthVwDyFBWavZFcH/92ropyZaRgqNiSK1If
-         SZgPkEDMKrxZCVxKSaVrNlJnp5zrNhxbIQQWTa9q1czULbL2xtqEX2Umi/BhVi4MFSSw
-         Spnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=I6j1W3Ji+fdVPC6gf2n+swdKOz5mGcn5yydkS5FTGpA=;
-        b=32hcePc+9tdOo6fB/NSP/D98nBmpacAW7YkDBF0N1jMIS6j0vEddq5d5LsNpOi3Npm
-         kfOnOOWVwKav+Wgqg7E5k1KOBhc6lg2NzD2cKAZ4PJnfnaecmX/rSBam1yN9YD/V/J1y
-         WHtZkSKyNeomxMGKiW7gpuj1uza2rRKSyfMMNLjj86KCQ/A7CQ7koyJXIGP5LwPYqrep
-         5BQf8KmyVz55ikQNN4Ae/CCOx9yL7M12/MYGwwQhXLMc7OsSOiwN16JXDc0DJPRkcYTC
-         l+oMI1u7CJ4/ZtqqGRPZ+qfBZJtEfZKos7ZV76Zr5G+MvfK74hJN2cr+dMyNLPqbUmt1
-         HI7g==
-X-Gm-Message-State: ANoB5pm3mDOHyEHBSRovRxR+ar8lSdVtyatT+SS162x8epibjHGFgDOz
-        t/LWYv+CPfjLUJMyoM7SaCQ=
-X-Google-Smtp-Source: AA0mqf5O1RehkPJLM2QkkzuuSpXswc1sc9uOH8KL8Ye5kzPbbbn0vg6BxXBK3syXAQmhi7n/KLV/3w==
-X-Received: by 2002:a17:902:f111:b0:186:ee56:4a1e with SMTP id e17-20020a170902f11100b00186ee564a1emr4208717plb.167.1668715806451;
-        Thu, 17 Nov 2022 12:10:06 -0800 (PST)
-Received: from localhost ([192.55.54.55])
-        by smtp.gmail.com with ESMTPSA id r14-20020a65498e000000b00476f2b11c07sm1450318pgs.5.2022.11.17.12.10.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 12:10:05 -0800 (PST)
-Date:   Thu, 17 Nov 2022 12:10:04 -0800
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Binbin Wu <binbin.wu@linux.intel.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
-        Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Chao Gao <chao.gao@intel.com>
-Subject: Re: [PATCH v10 071/108] KVM: x86: Allow to update cached values in
- kvm_user_return_msrs w/o wrmsr
-Message-ID: <20221117201004.GA2751024@ls.amr.corp.intel.com>
-References: <cover.1667110240.git.isaku.yamahata@intel.com>
- <238ab2d9a9d2ea71ecacb25203b91abbaf6fbcb4.1667110240.git.isaku.yamahata@intel.com>
- <8584a9c7-0ec1-db36-bb32-d508a091ea09@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <8584a9c7-0ec1-db36-bb32-d508a091ea09@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 17 Nov 2022 15:11:46 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BF0977DED9;
+        Thu, 17 Nov 2022 12:11:45 -0800 (PST)
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 7798620B6C40;
+        Thu, 17 Nov 2022 12:11:45 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7798620B6C40
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1668715905;
+        bh=wa9uP9wabMDKDkEi7yCMCeF3v/U9yuY0CAIcQrCpuoU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Gu6zLkUqn/uJuiye/UTwpFsFT0Gmrzz+J9+GgnY9QRxk4itMn63Ey1ubnmU5Xq5n0
+         BaD8ysJgRDVorR4U4xN5hCpRgDlbWIWTVUr1Upxaq8O3GLO6l82xzuiLF+3JdZ7ZvW
+         AcjguNhb8JmwR8/FfTgQjtQxbl7JPLa+XYvVUq8k=
+From:   Nuno Das Neves <nunodasneves@linux.microsoft.com>
+To:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        iommu@lists.linux.dev
+Cc:     mikelley@microsoft.com, sunilmut@microsoft.com, wei.liu@kernel.org,
+        kys@microsoft.com, Tianyu.Lan@microsoft.com,
+        haiyangz@microsoft.com, decui@microsoft.com, dwmw2@infradead.org,
+        joro@8bytes.org, will@kernel.org
+Subject: [PATCH v2] iommu/hyper-v: Allow hyperv irq remapping without x2apic
+Date:   Thu, 17 Nov 2022 12:11:39 -0800
+Message-Id: <1668715899-8971-1-git-send-email-nunodasneves@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 03:36:27PM +0800,
-Binbin Wu <binbin.wu@linux.intel.com> wrote:
+If x2apic is not available, hyperv-iommu skips remapping
+irqs. This breaks root partition which always needs irqs
+remapped.
 
-> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > index 65541bfebb37..4d4b71c4cdb1 100644
-> > --- a/arch/x86/kvm/x86.c
-> > +++ b/arch/x86/kvm/x86.c
-> > @@ -440,6 +440,15 @@ void kvm_user_return_msr_init_cpu(void)
-> >   }
-> >   EXPORT_SYMBOL_GPL(kvm_user_return_msr_init_cpu);
-> > +static void kvm_user_return_register_notifier(struct kvm_user_return_msrs *msrs)
-> > +{
-> > +	if (!msrs->registered) {
-> > +		msrs->urn.on_user_return = kvm_on_user_return;
-> > +		user_return_notifier_register(&msrs->urn);
-> > +		msrs->registered = true;
-> > +	}
-> > +}
-> > +
-> >   int kvm_set_user_return_msr(unsigned slot, u64 value, u64 mask)
-> >   {
-> >   	struct kvm_user_return_msrs *msrs = this_cpu_ptr(user_return_msrs);
-> > @@ -455,15 +464,22 @@ int kvm_set_user_return_msr(unsigned slot, u64 value, u64 mask)
-> >   		return 1;
-> >   	msrs->values[slot].curr = value;
-> > -	if (!msrs->registered) {
-> > -		msrs->urn.on_user_return = kvm_on_user_return;
-> > -		user_return_notifier_register(&msrs->urn);
-> > -		msrs->registered = true;
-> > -	}
-> > +	kvm_user_return_register_notifier(msrs);
-> >   	return 0;
-> >   }
-> >   EXPORT_SYMBOL_GPL(kvm_set_user_return_msr);
-> > +/* Update the cache, "curr", and register the notifier */
-> > +void kvm_user_return_update_cache(unsigned int slot, u64 value)
-> > +{
-> > +	struct kvm_user_return_msrs *msrs = this_cpu_ptr(user_return_msrs);
-> > +
-> > +	WARN_ON_ONCE(!msrs->initialized);
-> > +	msrs->values[slot].curr = value;
-> 
-> If the value is the same as the cached one, can it just skip notifier
-> registration?
+Fix this by allowing irq remapping regardless of x2apic,
+and change hyperv_enable_irq_remapping() to return
+IRQ_REMAP_XAPIC_MODE in case x2apic is missing.
 
-We know tha the the user of the function (in the next patch) passes the
-different value, the initial reset value in the return of TDH.VP.ENTER.  So
-such check isn't added.
+Tested with root and non-root hyperv partitions.
+
+Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
+---
+ arch/x86/kernel/cpu/mshyperv.c |  6 ++++++
+ drivers/iommu/Kconfig          |  6 +++---
+ drivers/iommu/hyperv-iommu.c   | 11 ++++++++---
+ 3 files changed, 17 insertions(+), 6 deletions(-)
+
+diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
+index 831613959a92..46668e255421 100644
+--- a/arch/x86/kernel/cpu/mshyperv.c
++++ b/arch/x86/kernel/cpu/mshyperv.c
+@@ -475,6 +475,12 @@ static bool __init ms_hyperv_x2apic_available(void)
+  * (logically) generates MSIs directly to the system APIC irq domain.
+  * There is no HPET, and PCI MSI/MSI-X interrupts are remapped by the
+  * pci-hyperv host bridge.
++ *
++ * Note: for a Hyper-V root partition, this will always return false.
++ * The hypervisor doesn't expose these HYPERV_CPUID_VIRT_STACK_* cpuids by
++ * default, they are implemented as intercepts by the Windows Hyper-V stack.
++ * Even a nested root partition (L2 root) will not get them because the
++ * nested (L1) hypervisor filters them out.
+  */
+ static bool __init ms_hyperv_msi_ext_dest_id(void)
+ {
+diff --git a/drivers/iommu/Kconfig b/drivers/iommu/Kconfig
+index dc5f7a156ff5..cf7433652db0 100644
+--- a/drivers/iommu/Kconfig
++++ b/drivers/iommu/Kconfig
+@@ -474,13 +474,13 @@ config QCOM_IOMMU
+ 	  Support for IOMMU on certain Qualcomm SoCs.
+ 
+ config HYPERV_IOMMU
+-	bool "Hyper-V x2APIC IRQ Handling"
++	bool "Hyper-V IRQ Handling"
+ 	depends on HYPERV && X86
+ 	select IOMMU_API
+ 	default HYPERV
+ 	help
+-	  Stub IOMMU driver to handle IRQs as to allow Hyper-V Linux
+-	  guests to run with x2APIC mode enabled.
++	  Stub IOMMU driver to handle IRQs to support Hyper-V Linux
++	  guest and root partitions.
+ 
+ config VIRTIO_IOMMU
+ 	tristate "Virtio IOMMU driver"
+diff --git a/drivers/iommu/hyperv-iommu.c b/drivers/iommu/hyperv-iommu.c
+index e190bb8c225c..8302db7f783e 100644
+--- a/drivers/iommu/hyperv-iommu.c
++++ b/drivers/iommu/hyperv-iommu.c
+@@ -122,9 +122,12 @@ static int __init hyperv_prepare_irq_remapping(void)
+ 	const char *name;
+ 	const struct irq_domain_ops *ops;
+ 
++	/*
++	 * For a Hyper-V root partition, ms_hyperv_msi_ext_dest_id()
++	 * will always return false.
++	 */
+ 	if (!hypervisor_is_type(X86_HYPER_MS_HYPERV) ||
+-	    x86_init.hyper.msi_ext_dest_id() ||
+-	    !x2apic_supported())
++	    x86_init.hyper.msi_ext_dest_id())
+ 		return -ENODEV;
+ 
+ 	if (hv_root_partition) {
+@@ -170,7 +173,9 @@ static int __init hyperv_prepare_irq_remapping(void)
+ 
+ static int __init hyperv_enable_irq_remapping(void)
+ {
+-	return IRQ_REMAP_X2APIC_MODE;
++	if (x2apic_supported())
++		return IRQ_REMAP_X2APIC_MODE;
++	return IRQ_REMAP_XAPIC_MODE;
+ }
+ 
+ struct irq_remap_ops hyperv_irq_remap_ops = {
 -- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+2.25.1
+
