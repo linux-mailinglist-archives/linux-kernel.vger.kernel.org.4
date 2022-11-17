@@ -2,56 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D3D862CF7E
+	by mail.lfdr.de (Postfix) with ESMTP id D85C462CF7F
 	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 01:24:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234174AbiKQAYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 19:24:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57206 "EHLO
+        id S234398AbiKQAYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 19:24:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231231AbiKQAX6 (ORCPT
+        with ESMTP id S234170AbiKQAYA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 19:23:58 -0500
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4744161BBB
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 16:23:57 -0800 (PST)
-Received: by mail-pf1-x44a.google.com with SMTP id f189-20020a6238c6000000b0056e3400fdc0so126220pfa.10
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 16:23:57 -0800 (PST)
+        Wed, 16 Nov 2022 19:24:00 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBE5B61BBB
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 16:23:58 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id b1-20020a17090a10c100b0020da29fa5e5so227314pje.2
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 16:23:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lpmvhPUsFZSSLhAYtyq+lnahyrVFyMY6HS7SD72pXuo=;
-        b=gNlC3pG6woPDN/PLsQTy7kCfejxGoDjjgCDqeYlESkUwnl4hdFlijtgdjR92RU+gDu
-         Zvo8aD6WPhj34C6XqgL8Sskbz28auhO8ceP0/v4Qh6yw/gYonpMDGFF2irfWRDwSHyCJ
-         R/ICN9FQuNt2xrG9CFVwkPxtgwMvdbVsMB65kgtt35DNEtXRdtqpCU2V13yuti5yTYL8
-         Z3VSSx1ug+op/sspO4IX8cxnJtAIuY89m6RhH/CqaIrxUOGiouWM3QjjyQlbL0bHBQMD
-         1YLN18yT9tPwAwJv3JeHZvjHNPbabEUNFw65JWje87zDEuyCoJDSomUUafz3p9TOXCCL
-         zUxQ==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
+        bh=f1KDr+rH3XIqQLVQCEwig1RrLbtV2JH7CIwItqPq0uE=;
+        b=Sb0CLlnDvxGcJjdPFEdXu3sQ7ExS0J2DsrUa96MG+x30pOPo41C8wX8lnkjEvFu692
+         o3pvJ4nlLGDjV9D5+o/Xc1NHyPs2MuqEv5vvIqZ+sqZzIL/ssXgFKRuEh3ykOWsb8Aof
+         8NuSb0SC0FoNWARBXd8nIP1nNXh5DasKaX+CcaBKFNHtvZl56/253TE6fwjP5JoMpiim
+         gUPzWrrXnAvNi8nnM084PxpxGvTGH19Xn+GRoqghoBS14moljDfd44Cr3RqglOvym254
+         gzMKd+B+aCWjFP6TQW5RMTEuFyf2CyJjQHrsUsqBJWG2Qn401exrcaqrEcOx43Ax6pEw
+         +BbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lpmvhPUsFZSSLhAYtyq+lnahyrVFyMY6HS7SD72pXuo=;
-        b=xho8CIyoDihp8QqJczouRcMophvGj1m+yOJNFt6R6kAolRjXhb5rGtRWhMcLb7Hqnu
-         iSFwQKBC7Rph9x3FQW4qgc9bKJ3hPSIEagrS2A9wqtLnWj7E80i5yfYcqdqMGmVf7FdW
-         srNmfcEDsuQxkJd21gQkW9ov6lvBQrpr4DqFkPtj5n7QE+4t3MWNyoJawynNC5FZpnGu
-         Hz350VVKdRmIkpDws2M3QZQG56QmFKriU7bWF0u33N0w4ZbxT1UGKbjSYy4o6ZKZZj5n
-         +tmeFR5UmeNH+FJFg0FcmV+aLxUW2wljTs/uQu1LE9X+Tk43oUjCYmNRGe11A0ir66FQ
-         vTgg==
-X-Gm-Message-State: ANoB5pkdjIj0MMWVIIl+cX/DB+Arj+RD14dI+dRrlbQs+GaYB0oLgjiI
-        Ofypo3KT0AUk5lO/EBtVIRSWhmy6vgE=
-X-Google-Smtp-Source: AA0mqf48bzKDE2Lb8bz6HjmAijvXpLnfL7EKx0nmUTvxI/NOxkKZ8jGDDtXitJI0o6StktvINPXJ6rgmuPU=
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=f1KDr+rH3XIqQLVQCEwig1RrLbtV2JH7CIwItqPq0uE=;
+        b=PHLgzBinkcVhsyCqQGNVoBNxpwUc26rTiZeag3/erwEKzfmzehITTf0OYG7Oj84soy
+         JoM50KXzT+baHF/Dgk+w+0pJEDJbtGd2UuvpqffCL2/GB3ulUqS7gGoM+6OYgo7tFv3k
+         BQrHGb/iwGK7Ue8dX40kHuVzeDR7xYj2cCiRlmi+5j7LCOmjhE1kb5JDIe0hDx2BLM9U
+         jCjhQVXNzfNky0Hg43ww53N4nWyGiYUm4EGhO/MqviYLEXpL7gQ19LjJUnAVhlDQAoHG
+         SkCdPLC/yay7DNs+yfj/FeTDrtv0tWAapQXVShgXtFQoiqeaWov/AUnhGUtJkbUIqrSA
+         EWrA==
+X-Gm-Message-State: ANoB5pmMp+V3iDMWBeQ7fDbhq9z7oW85j1aH3INDtFTFqe3sfw7C1bxx
+        rUPNkW4BiA9hdh4xdAq4qI7iQ9JCnfI=
+X-Google-Smtp-Source: AA0mqf413lvrUg1TdHwZHTgN7XZflJ1bKJMT3jX1WCVJjGcPVxVBe4WRIWEnFUWoG+XWNbACIBeMBtLtEhE=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:7609:b0:187:3c62:5837 with SMTP id
- k9-20020a170902760900b001873c625837mr223332pll.123.1668644636835; Wed, 16 Nov
- 2022 16:23:56 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a17:90b:a17:b0:213:2708:8dc3 with SMTP id
+ gg23-20020a17090b0a1700b0021327088dc3mr636229pjb.2.1668644638088; Wed, 16 Nov
+ 2022 16:23:58 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Thu, 17 Nov 2022 00:23:48 +0000
+Date:   Thu, 17 Nov 2022 00:23:49 +0000
+In-Reply-To: <20221117002350.2178351-1-seanjc@google.com>
 Mime-Version: 1.0
+References: <20221117002350.2178351-1-seanjc@google.com>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Message-ID: <20221117002350.2178351-1-seanjc@google.com>
-Subject: [PATCH 0/2] KVM: arm64: selftests: Fixes for single-step test
+Message-ID: <20221117002350.2178351-2-seanjc@google.com>
+Subject: [PATCH 1/2] KVM: arm64: selftests: Disable single-step with correct
+ KVM define
 From:   Sean Christopherson <seanjc@google.com>
 To:     Marc Zyngier <maz@kernel.org>
 Cc:     James Morse <james.morse@arm.com>,
@@ -73,32 +77,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Marc,
+Disable single-step by setting debug.control to KVM_GUESTDBG_ENABLE,
+not to SINGLE_STEP_DISABLE.  The latter is an arbitrary test enum that
+just happens to have the same value as KVM_GUESTDBG_ENABLE, and so
+effectively disables single-step debug.
 
-I would like to route this through Paolo's tree/queue for 6.2 along with
-a big pile of other selftests updates.  I am hoping to get the selftests
-pile queued sooner than later as there is a lot of active development in
-that area, and don't want to have the selftests be in a broken state.
-I'm going to send Paolo a pull request shortly, I'll Cc you (and others)
-to keep everyone in the loop and give a chance for objections.
+No functional change intended.
 
+Cc: Reiji Watanabe <reijiw@google.com>
+Fixes: b18e4d4aebdd ("KVM: arm64: selftests: Add a test case for KVM_GUESTDBG_SINGLESTEP")
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ tools/testing/selftests/kvm/aarch64/debug-exceptions.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-Fix a typo and an imminenent not-technically-a-bug bug in the single-step
-test where executing an atomic sequence in the guest with single-step
-enable will hang the guest due to eret clearing the local exclusive
-monitor.
-
-
-Sean Christopherson (2):
-  KVM: arm64: selftests: Disable single-step with correct KVM define
-  KVM: arm64: selftests: Disable single-step without relying on ucall()
-
- .../selftests/kvm/aarch64/debug-exceptions.c  | 28 ++++++++++---------
- 1 file changed, 15 insertions(+), 13 deletions(-)
-
-
-base-commit: d663b8a285986072428a6a145e5994bc275df994
+diff --git a/tools/testing/selftests/kvm/aarch64/debug-exceptions.c b/tools/testing/selftests/kvm/aarch64/debug-exceptions.c
+index 947bd201435c..91f55b45dfc7 100644
+--- a/tools/testing/selftests/kvm/aarch64/debug-exceptions.c
++++ b/tools/testing/selftests/kvm/aarch64/debug-exceptions.c
+@@ -369,7 +369,7 @@ void test_single_step_from_userspace(int test_cnt)
+ 						KVM_GUESTDBG_SINGLESTEP;
+ 				ss_enable = true;
+ 			} else {
+-				debug.control = SINGLE_STEP_DISABLE;
++				debug.control = KVM_GUESTDBG_ENABLE;
+ 				ss_enable = false;
+ 			}
+ 
 -- 
 2.38.1.431.g37b22c650d-goog
 
