@@ -2,59 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BB1562D517
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:35:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2ECA62D51B
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:35:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239546AbiKQIfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 03:35:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38710 "EHLO
+        id S239555AbiKQIfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 03:35:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbiKQIfG (ORCPT
+        with ESMTP id S229931AbiKQIfj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 03:35:06 -0500
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4EAB2EF72
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 00:35:05 -0800 (PST)
-Received: by mail-io1-xd2f.google.com with SMTP id c7so829568iof.13
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 00:35:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ieee.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=b2dzFEyPdMOGlhf7qsZ0lMgWK9FZa0x2Qd34XPaUbIs=;
-        b=Qpdb9JD9Bnywd3J9/ToF1WZpRHTHjUW02OY0QXT12QLtwLfJC3xgWTWI2FcPC1sCA1
-         L36Pfm/HvFiqM6UxwzpYNML9IXOfSLffRLD+L0Gc5M1BlxHdWbkkEvR9UNWPSJq52+Ja
-         ImoxreGlmDFrV/2vNE6yqAwxX0flPiX3muuN0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=b2dzFEyPdMOGlhf7qsZ0lMgWK9FZa0x2Qd34XPaUbIs=;
-        b=v9KYoYiiZcQLmY+pxTijmbcPopTv2psgCeYhx95dtn85LCakHs5DmQSpV/zhqvviHW
-         3wm04B9nX78rNNjnwnxL9un9y42FbAYOpbitrwXRVq+VpSe2iJS87EEhhs9BUq8mEwF4
-         G7RN8iwaSyBJN/yGoHwBmWtGS4ZxL0ApgFAYK7zivNvcy53hF3TnMn5KbAvGVTGyGidF
-         QitxWkVCC+LlqmBw0AZBlueCkTwi+Y/Wa+IRnCQp3YTSROLEM1nuzZ8pUE8BoXorAiCr
-         JSqKOEjw84G/tdSKsPnBikcLsbjKp8dPsdNnoD5JtdiRE2+R6Dw6ovDq9lQ0ahR5zhHP
-         ch+A==
-X-Gm-Message-State: ANoB5pl46YqFd63r8fNPdRoScm1/a/v+Tt/EVFtWs1GDsTVcatV57Tih
-        4+HxgUutqwcoQWWTMdFKa6/AL2c2SZsZLNd9JiN+GDvqJyA=
-X-Google-Smtp-Source: AA0mqf4t3cgRcIK4SeVfudzWkfm0JhW2bG5OfPxbiLWLMFdIAYuELgM92FTFQFwXQ1pbQ7J/6CpnBrp1y5op7fOala0=
-X-Received: by 2002:a05:6638:89:b0:363:9e67:d9d9 with SMTP id
- v9-20020a056638008900b003639e67d9d9mr625937jao.133.1668674104999; Thu, 17 Nov
- 2022 00:35:04 -0800 (PST)
+        Thu, 17 Nov 2022 03:35:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50C153F07C;
+        Thu, 17 Nov 2022 00:35:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A0641B81F6F;
+        Thu, 17 Nov 2022 08:35:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 873EEC433D6;
+        Thu, 17 Nov 2022 08:35:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668674135;
+        bh=SZcUMLjHCHfrspzcORoINEugZp4m9824ASw3unNVtxo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aS2alA60oszQSCWly2iMyaME0RlqfIUz6Oq9lIgCzbT3lQbpk9Mk+5t9Ugko0Ky12
+         /cGpJy9hjmH1NCjYymOtqmaCKzpNoiyjIlcf+zep8MBHajNa2RLyBbV6Ih7+u5BgPK
+         pRoII17t8cycR4A9ZIjPwOgGA0jTgBL5eV0KITqgHhRaswabtkWx+92ymNXsyw2/2d
+         /zML9JY9V/enFsyKJEJTCjzDiVbKy6GfJycgpbwIwIrGobpd3HfciYdz8lWcMEQWDK
+         Tybcfa82sQEB/Fb82MvWMajP3zeDBBfxeypH9tQkDCDx48+YWDrStV2YwUWNv+bFhy
+         jNUwkgNVtQ7ag==
+Date:   Thu, 17 Nov 2022 09:35:31 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Yinbo Zhu <zhuyinbo@loongson.cn>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        William Zhang <william.zhang@broadcom.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Jan Dabros <jsd@semihalf.com>,
+        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] i2c: loongson: add bus driver for the loongson
+ i2c controller
+Message-ID: <Y3XyU70QJruJUsI0@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        William Zhang <william.zhang@broadcom.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Jan Dabros <jsd@semihalf.com>,
+        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221117075938.23379-1-zhuyinbo@loongson.cn>
+ <Y3Xwt2xtAbd8ubkF@smile.fi.intel.com>
 MIME-Version: 1.0
-References: <CAKdx3izLgNJO+5ye4twe0+CFMcUBrFUa+-NdLN6VKKWQ76YiLA@mail.gmail.com>
-In-Reply-To: <CAKdx3izLgNJO+5ye4twe0+CFMcUBrFUa+-NdLN6VKKWQ76YiLA@mail.gmail.com>
-From:   Ozgur <ozgurk@ieee.org>
-Date:   Thu, 17 Nov 2022 12:34:52 +0400
-Message-ID: <CAADfD8yoBvzs77f6gVO8J9FSZxOkEnkqgAaSCjcfG2YhEZBvcw@mail.gmail.com>
-Subject: Re: Can Not Send Netlink Messages with Unshare(CLONE_NEWNET)
-To:     Hang An <anhang610@gmail.com>
-Cc:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="EomtMclmg5oGyn0c"
+Content-Disposition: inline
+In-Reply-To: <Y3Xwt2xtAbd8ubkF@smile.fi.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,36 +85,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 11:55 AM Hang An <anhang610@gmail.com> wrote:
->
-> Hi,
-> A process can not send netlink messages(errno is ECONNREFUSED) after
-> running unshare(CLONE_NEWNET).
->
-> Part of the call stack when process failed:
-> netlink_sendmsg
-> netlink_unicast
-> netlink_getsockbyportid
-> netlink_lookup(return NULL)
->
-> The corresponding pseudocode is shown below:
-> unshare(CLONE_NEWNET) ;
-> res_socket = syscall(__NR_socket, 0x10ul, 3ul, 8);
-> syscall(__NR_sendmsg, res_socket, msghdr, 0ul);
->
-> I can't understand this situation. Is this a bug or special design?
 
-Hello,
+--EomtMclmg5oGyn0c
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-you have emailed a public linux-kernel list, so this list mainly focus
-for development. maybe you should use bugzilla(1) to get answers to
-your questions or you should ask question mentioned own kernel
-subsystem (2).
 
-1. https://bugzilla.kernel.org/
-2. Network Subsystem | netdev@vger.kernel.org
+> Can you split slave part as a separate change? It will help to review and
+> to understand the code better in the future by browsing the history.
 
-Regards
+Thanks for all your reviewing help, Andy! Regarding this comment, I
+don't think a split is needed. The driver is small enough with ~500
+lines, so I think it can stay this way. It would be different if the
+driver was 1000+ lines, then I'd totally agree. I will have a look at
+this driver soon.
 
->
-> Thanks.
+
+--EomtMclmg5oGyn0c
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmN18k8ACgkQFA3kzBSg
+KbYsFhAApX6x8v38CApwilC3pWk1k286lqIg9z9lVoMVx0KN+NKzNmheuSLj80I7
+jL0U9jJThoRAlShmYPHzH0TkQOEjG64cY9CU0lOk3tsYPDtqhgguAk5wvP4ijT9u
+OziQJvqOVAbzEN1+f8WQRaAOhhDi5uivyKSP36eFYhjgqCNK+GDdL1DVQIePq4M9
+ShRUguh09svbsdImFfANg6mAMFmoXJ6VXM6C+3oxdHCBRvGNSGpGSFZF/glq8lJ3
+WCDEyd13h6fhtDKrONP91qvd1JVK+4Yq0jdFBMvcMZIjpNhUSj5BWMyDmno0OWmW
+kPB3xuWC6BxZiYW7Kj53hLwiu06XR0QhZvkjbaLUZkIJU/xLdbjHkydmL/fUP6fe
+qDqvmHbjzK9xoqiQbAFHSac8yHuCFlx1bMBH5vWXvCxpL0Jh8ykIeXWyH+tDogPF
+pBF5lr0vFOn9r6qsXiQjzyIN2TQ4797l0aM4kkCJZamRH97DK0aq5r7cGv5IkgaY
+VHQrLcA4gvioEY6d7EOqGjIjqJF+/uuJFC6kf1eq1mE5YiMmz5nYwS+25GJqSERx
+xXbzlu2JEB8JGAdGL4v41vNOnmY63ISiuRi8lPUzKhdVQ/+EeL5Kzs9GWIiSi25T
+yMv5GtiUSMUqG1iMmC8bqTQAFtvpz8jlIVbMJy8C8EdSaqSoFds=
+=T0gw
+-----END PGP SIGNATURE-----
+
+--EomtMclmg5oGyn0c--
