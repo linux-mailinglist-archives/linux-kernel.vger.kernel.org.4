@@ -2,89 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3E9F62D92D
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 12:15:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3778D62D951
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 12:22:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234817AbiKQLPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 06:15:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60838 "EHLO
+        id S239203AbiKQLWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 06:22:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234729AbiKQLO5 (ORCPT
+        with ESMTP id S234299AbiKQLWi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 06:14:57 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66832B02;
-        Thu, 17 Nov 2022 03:14:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668683696; x=1700219696;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=v04Ag2ceXqVcD6vlEr0yMJgTmBUx6AYrMeEO/PVcnzE=;
-  b=TUlY7ARYQLeZW0+40xt1ivtVwnWYr3VbUDzxkiWGdALGh9ZwXbISCaFP
-   sc+AN1wDgLUy8Uu7wCaByiVXbTEvO+2i4YQKkg2R5+PJtVijQ0N6lvMpP
-   h+MXqYjuDf0gPLaOPoclq5YTw+wvfLVChVDIPaK2C4/XBG5wexsX/OgOF
-   DOVD/X5luuHlxzlN76GmDfOjsTEbPM50Yy19SyzZAIGzSs2itAe0ngRUm
-   ryA3RbBji/ZeTL90vr6OAibRm9AhY4iZMdvXp9FUZMSxqwBqiW5/KPo4H
-   8d6InvXRru/+lkUPDaefS7PYp8TQpb7BNjb4oiU7Ne5ME1hWoSD9rHSJh
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="311528571"
-X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
-   d="scan'208";a="311528571"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 03:14:56 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="814483089"
-X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
-   d="scan'208";a="814483089"
-Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.129])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 03:14:53 -0800
-From:   Zqiang <qiang1.zhang@intel.com>
-To:     paulmck@kernel.org, frederic@kernel.org, joel@joelfernandes.org
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] srcu: Add detection of boot CPU srcu_data structure's->srcu_cblist
-Date:   Thu, 17 Nov 2022 19:20:50 +0800
-Message-Id: <20221117112050.3942407-1-qiang1.zhang@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 17 Nov 2022 06:22:38 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2380C2F3B6;
+        Thu, 17 Nov 2022 03:22:38 -0800 (PST)
+Received: from frapeml100004.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NCcs62FtSz67bjw;
+        Thu, 17 Nov 2022 19:20:10 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ frapeml100004.china.huawei.com (7.182.85.167) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 17 Nov 2022 12:22:36 +0100
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 17 Nov
+ 2022 11:22:35 +0000
+Date:   Thu, 17 Nov 2022 11:22:35 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Ira Weiny <ira.weiny@intel.com>
+CC:     Dan Williams <dan.j.williams@intel.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        "Ben Widawsky" <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
+Subject: Re: [PATCH 07/11] cxl/mem: Trace Memory Module Event Record
+Message-ID: <20221117112235.00003243@Huawei.com>
+In-Reply-To: <Y3WNLtyZYLQNMZzj@iweiny-desk3>
+References: <20221110185758.879472-1-ira.weiny@intel.com>
+        <20221110185758.879472-8-ira.weiny@intel.com>
+        <20221116153528.00005af7@Huawei.com>
+        <Y3WNLtyZYLQNMZzj@iweiny-desk3>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100005.china.huawei.com (7.191.160.25) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Before SRCU_SIZE_WAIT_CALL srcu_size_state is reached, the srcu
-callback only insert to boot-CPU srcu_data structure's->srcu_cblist
-and other CPU srcu_data structure's->srcu_cblist is always empty. so
-before SRCU_SIZE_WAIT_CALL is reached, need to correctly check boot-CPU
-pend cbs in srcu_might_be_idle().
+On Wed, 16 Nov 2022 17:23:58 -0800
+Ira Weiny <ira.weiny@intel.com> wrote:
 
-Signed-off-by: Zqiang <qiang1.zhang@intel.com>
----
- kernel/rcu/srcutree.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+> On Wed, Nov 16, 2022 at 03:35:28PM +0000, Jonathan Cameron wrote:
+> > On Thu, 10 Nov 2022 10:57:54 -0800
+> > ira.weiny@intel.com wrote:
+> >   
+> > > From: Ira Weiny <ira.weiny@intel.com>
+> > > 
+> > > CXL rev 3.0 section 8.2.9.2.1.3 defines the Memory Module Event Record.
+> > > 
+> > > Determine if the event read is memory module record and if so trace the
+> > > record.
+> > > 
+> > > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> > >   
+> > Noticed that we have a mixture of fully capitalized and not for flags.
+> > With that either explained or tidied up:
+> > 
+> > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> >   
+> > > +/*
+> > > + * Device Health Information - DHI
+> > > + *
+> > > + * CXL res 3.0 section 8.2.9.8.3.1; Table 8-100
+> > > + */
+> > > +#define CXL_DHI_HS_MAINTENANCE_NEEDED				BIT(0)
+> > > +#define CXL_DHI_HS_PERFORMANCE_DEGRADED				BIT(1)
+> > > +#define CXL_DHI_HS_HW_REPLACEMENT_NEEDED			BIT(2)
+> > > +#define show_health_status_flags(flags)	__print_flags(flags, "|",	   \
+> > > +	{ CXL_DHI_HS_MAINTENANCE_NEEDED,	"Maintenance Needed"	}, \
+> > > +	{ CXL_DHI_HS_PERFORMANCE_DEGRADED,	"Performance Degraded"	}, \
+> > > +	{ CXL_DHI_HS_HW_REPLACEMENT_NEEDED,	"Replacement Needed"	}  \  
+> > 
+> > Why are we sometime using capitals for flags (e.g patch 5) and not other times?  
+> 
+> Not sure what you mean.  Do you mean this from patch 5?
+Nope
 
-diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
-index 6af031200580..6d9af9901765 100644
---- a/kernel/rcu/srcutree.c
-+++ b/kernel/rcu/srcutree.c
-@@ -1098,8 +1098,11 @@ static bool srcu_might_be_idle(struct srcu_struct *ssp)
- 	unsigned long tlast;
- 
- 	check_init_srcu_struct(ssp);
--	/* If the local srcu_data structure has callbacks, not idle.  */
--	sdp = raw_cpu_ptr(ssp->sda);
-+	/* If the boot CPU or local srcu_data structure has callbacks, not idle.  */
-+	if (smp_load_acquire(&ssp->srcu_size_state) < SRCU_SIZE_WAIT_CALL)
-+		sdp = per_cpu_ptr(ssp->sda, get_boot_cpu_id());
-+	else
-+		sdp = raw_cpu_ptr(ssp->sda);
- 	spin_lock_irqsave_rcu_node(sdp, flags);
- 	if (rcu_segcblist_pend_cbs(&sdp->srcu_cblist)) {
- 		spin_unlock_irqrestore_rcu_node(sdp, flags);
--- 
-2.25.1
++#define CXL_DPA_VOLATILE			BIT(0)
++#define CXL_DPA_NOT_REPAIRABLE			BIT(1)
++#define show_dpa_flags(flags)	__print_flags(flags, "|",		   \
++	{ CXL_DPA_VOLATILE,			"VOLATILE"		}, \
++	{ CXL_DPA_NOT_REPAIRABLE,		"NOT_REPAIRABLE"	}  \
++)
++
+
+Where they are all capitals.  I thought that was maybe a flags vs other fields
+thing but it doesn't seem to be.
+
+
+> 
+> ...
+>         { CXL_GMER_EVT_DESC_UNCORECTABLE_EVENT,         "Uncorrectable Event"   }, \
+>         { CXL_GMER_EVT_DESC_THRESHOLD_EVENT,            "Threshold event"       }, \
+>         { CXL_GMER_EVT_DESC_POISON_LIST_OVERFLOW,       "Poison List Overflow"  }  \
+> ...
+> 
+> Threshold event was a mistake.  This is the capitalization the spec uses.
+> 
+> Bit[0]: Uncorrectable Event: When set, indicates the reported event is
+>         ^^^^^^^^^^^^^^^^^^^
+> uncorrectable by the device. When cleared, indicates the reported
+> event was corrected by the device.
+> 
+> Bit[1]: Threshold Event: When set, the event is the result of a
+>         ^^^^^^^^^^^^^^^
+> threshold on the device having been reached. When cleared, the event
+> is not the result of a threshold limit.
+> 
+> Bit[2]: Poison List Overflow Event: When set, the Poison List has
+>         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+> overflowed, and this event is not in the Poison List. When cleared, the
+> Poison List has not overflowed.
+> 
+> 
+> I'll update this 'Event' in patch 5.  Probably need to add 'Event' to the
+> Poison List...
+> 
+> Ira
 
