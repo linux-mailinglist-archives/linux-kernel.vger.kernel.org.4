@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CF4362DF35
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:10:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A23FB62DF39
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:10:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240584AbiKQPKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 10:10:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56128 "EHLO
+        id S240112AbiKQPKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 10:10:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240275AbiKQPJZ (ORCPT
+        with ESMTP id S240445AbiKQPJ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 10:09:25 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D41781A3;
-        Thu, 17 Nov 2022 07:08:19 -0800 (PST)
-Date:   Thu, 17 Nov 2022 15:08:16 -0000
+        Thu, 17 Nov 2022 10:09:26 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B945781A8;
+        Thu, 17 Nov 2022 07:08:20 -0800 (PST)
+Date:   Thu, 17 Nov 2022 15:08:17 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668697697;
+        s=2020; t=1668697698;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=k4Bznlzmzpzp5mi9t27okMEpLJcJyXKzYCUHI7O9Kdo=;
-        b=tuuGeQRv0TdG4qeyGRChtfdLo3gZDPfDt9d2mq5qlznRkSi7yUWqduDnqIfebD9RJhTa5M
-        DzlWml2PgHr7BJHX9E+ap9ykVkBwMoxMlu+QzHdiEVGrygT6tQuj7A4JOVya1f9DYLy6At
-        AIZ+5rPgepbuvu07N0WKo/lXg94fjBcoMnIWDw8N7byA+ADdUW4AQiUTyYq3oFbQQsc6dC
-        Hjc3dQuFx3SKtgHJYHkbsfVliLgm0CeKk8O0a95pz7X+k3xx5qdu6cUqpZV9RfqNAkAHlI
-        aa3Gwsp9r7wRiX4P3sytD/WMUV58ZRYk08Kk+q5lHv/G2zgWzDEkf049sYgFfg==
+        bh=Z1/aq0fv10nvJV45kQht6nHtOb6gdjUa5CnCxcQZYBc=;
+        b=XEMq6pn86aAOcWlagaYOqJTv7HsjKGzczzcrsuATzDw/YgXRDSXgFKe6XR2CosDlvKNhyv
+        mCcYTGs1qf4aEJ446eBp4Ymjruxm9VOY2RrUYe/IfafTqswC3nYClRtXBjBYTymzDWD/cY
+        b9l2xKtab/0vPO7oZwY7bTSIt1K7QBjKksbizEZmfok4y6NT4juXkSVYFcWt/rmPXguMRD
+        m9v+wKuQbgpGgVxR26K8/PICtzGh3Mwc32OEPAxzEbIwZLvbpzCuzUaAIIVo2JDsefy+0A
+        BC/PnzpZJ1pf+PykIFrqtr/U8qeyaRzBue1ZjtrlwFhbw2KhCWhzA9WGg6kAzw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668697697;
+        s=2020e; t=1668697698;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=k4Bznlzmzpzp5mi9t27okMEpLJcJyXKzYCUHI7O9Kdo=;
-        b=ZD6YHETG9Nn4BJAcH1qUwzD8arf3Pyps/vx2zYeeCzfhlDuCb60NaOXByYY8vxjqSSmhvQ
-        JDzBm16ps8hdpeAA==
+        bh=Z1/aq0fv10nvJV45kQht6nHtOb6gdjUa5CnCxcQZYBc=;
+        b=WFj9cGdqirS0aW2NIXqGpDg6fwHPRTIcK9kWL89BMySIIzzDy8VFXhFBm2PMNgrLJq+NWA
+        l+U4HLlDmu51M+CA==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/core] genirq: Get rid of GENERIC_MSI_IRQ_DOMAIN
+Subject: [tip: irq/core] PCI/MSI: Get rid of PCI_MSI_IRQ_DOMAIN
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Jason Gunthorpe <jgg@nvidia.com>, x86@kernel.org,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org, maz@kernel.org
-In-Reply-To: <20221111122014.524842979@linutronix.de>
-References: <20221111122014.524842979@linutronix.de>
+In-Reply-To: <20221111122014.467556921@linutronix.de>
+References: <20221111122014.467556921@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <166869769649.4906.4149362707512771458.tip-bot2@tip-bot2>
+Message-ID: <166869769765.4906.9639291368963784702.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,352 +67,621 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/core branch of tip:
 
-Commit-ID:     13e7accb81d6c07993385af8342238ff22b41ac8
-Gitweb:        https://git.kernel.org/tip/13e7accb81d6c07993385af8342238ff22b41ac8
+Commit-ID:     a474d3fbe287625c6c1cfc56c2a456c5fb7c479e
+Gitweb:        https://git.kernel.org/tip/a474d3fbe287625c6c1cfc56c2a456c5fb7c479e
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Fri, 11 Nov 2022 14:54:40 +01:00
+AuthorDate:    Fri, 11 Nov 2022 14:54:38 +01:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Thu, 17 Nov 2022 15:15:20 +01:00
+CommitterDate: Thu, 17 Nov 2022 15:15:19 +01:00
 
-genirq: Get rid of GENERIC_MSI_IRQ_DOMAIN
+PCI/MSI: Get rid of PCI_MSI_IRQ_DOMAIN
 
-Adjust to reality and remove another layer of pointless Kconfig
-indirection. CONFIG_GENERIC_MSI_IRQ is good enough to serve
-all purposes.
+What a zoo:
+
+     PCI_MSI
+	select GENERIC_MSI_IRQ
+
+     PCI_MSI_IRQ_DOMAIN
+     	def_bool y
+	depends on PCI_MSI
+	select GENERIC_MSI_IRQ_DOMAIN
+
+Ergo PCI_MSI enables PCI_MSI_IRQ_DOMAIN which in turn selects
+GENERIC_MSI_IRQ_DOMAIN. So all the dependencies on PCI_MSI_IRQ_DOMAIN are
+just an indirection to PCI_MSI.
+
+Match the reality and just admit that PCI_MSI requires
+GENERIC_MSI_IRQ_DOMAIN.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-Link: https://lore.kernel.org/r/20221111122014.524842979@linutronix.de
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+Link: https://lore.kernel.org/r/20221111122014.467556921@linutronix.de
 
 ---
- drivers/base/Makefile       | 2 +-
- drivers/bus/fsl-mc/Kconfig  | 2 +-
- drivers/dma/Kconfig         | 2 +-
- drivers/dma/qcom/hidma.c    | 8 ++++----
- drivers/iommu/Kconfig       | 2 +-
- drivers/irqchip/Kconfig     | 6 +++---
- drivers/mailbox/Kconfig     | 2 +-
- drivers/pci/Kconfig         | 1 -
- drivers/perf/Kconfig        | 2 +-
- drivers/soc/ti/Kconfig      | 2 +-
- include/asm-generic/msi.h   | 4 ++--
- include/linux/device.h      | 8 +++-----
- include/linux/gpio/driver.h | 2 +-
- include/linux/msi.h         | 8 +++-----
- kernel/irq/Kconfig          | 7 +------
- kernel/irq/msi.c            | 3 ---
- 16 files changed, 24 insertions(+), 37 deletions(-)
+ arch/um/drivers/Kconfig                 |  1 +-
+ arch/um/include/asm/pci.h               |  2 +-
+ arch/x86/Kconfig                        |  1 +-
+ arch/x86/include/asm/pci.h              |  4 +-
+ drivers/pci/Kconfig                     |  8 +---
+ drivers/pci/controller/Kconfig          | 30 +++++++--------
+ drivers/pci/controller/dwc/Kconfig      | 48 ++++++++++++------------
+ drivers/pci/controller/mobiveil/Kconfig |  6 +--
+ drivers/pci/msi/Makefile                |  2 +-
+ drivers/pci/probe.c                     |  2 +-
+ include/linux/msi.h                     | 29 +++++----------
+ 11 files changed, 58 insertions(+), 75 deletions(-)
 
-diff --git a/drivers/base/Makefile b/drivers/base/Makefile
-index 83217d2..3079bfe 100644
---- a/drivers/base/Makefile
-+++ b/drivers/base/Makefile
-@@ -22,7 +22,7 @@ obj-$(CONFIG_REGMAP)	+= regmap/
- obj-$(CONFIG_SOC_BUS) += soc.o
- obj-$(CONFIG_PINCTRL) += pinctrl.o
- obj-$(CONFIG_DEV_COREDUMP) += devcoredump.o
--obj-$(CONFIG_GENERIC_MSI_IRQ_DOMAIN) += platform-msi.o
-+obj-$(CONFIG_GENERIC_MSI_IRQ) += platform-msi.o
- obj-$(CONFIG_GENERIC_ARCH_TOPOLOGY) += arch_topology.o
- obj-$(CONFIG_GENERIC_ARCH_NUMA) += arch_numa.o
- obj-$(CONFIG_ACPI) += physical_location.o
-diff --git a/drivers/bus/fsl-mc/Kconfig b/drivers/bus/fsl-mc/Kconfig
-index b1fd559..9492342 100644
---- a/drivers/bus/fsl-mc/Kconfig
-+++ b/drivers/bus/fsl-mc/Kconfig
-@@ -8,7 +8,7 @@
- config FSL_MC_BUS
- 	bool "QorIQ DPAA2 fsl-mc bus driver"
- 	depends on OF && (ARCH_LAYERSCAPE || (COMPILE_TEST && (ARM || ARM64 || X86_LOCAL_APIC || PPC)))
--	select GENERIC_MSI_IRQ_DOMAIN
-+	select GENERIC_MSI_IRQ
- 	help
- 	  Driver to enable the bus infrastructure for the QorIQ DPAA2
- 	  architecture.  The fsl-mc bus driver handles discovery of
-diff --git a/drivers/dma/Kconfig b/drivers/dma/Kconfig
-index 7524b62..25e111a 100644
---- a/drivers/dma/Kconfig
-+++ b/drivers/dma/Kconfig
-@@ -462,7 +462,7 @@ config MV_XOR_V2
- 	select DMA_ENGINE
- 	select DMA_ENGINE_RAID
- 	select ASYNC_TX_ENABLE_CHANNEL_SWITCH
--	select GENERIC_MSI_IRQ_DOMAIN
-+	select GENERIC_MSI_IRQ
- 	help
- 	  Enable support for the Marvell version 2 XOR engine.
+diff --git a/arch/um/drivers/Kconfig b/arch/um/drivers/Kconfig
+index 5903e2b..a4f0a19 100644
+--- a/arch/um/drivers/Kconfig
++++ b/arch/um/drivers/Kconfig
+@@ -381,7 +381,6 @@ config UML_PCI_OVER_VIRTIO
+ 	select UML_IOMEM_EMULATION
+ 	select UML_DMA_EMULATION
+ 	select PCI_MSI
+-	select PCI_MSI_IRQ_DOMAIN
+ 	select PCI_LOCKLESS_CONFIG
  
-diff --git a/drivers/dma/qcom/hidma.c b/drivers/dma/qcom/hidma.c
-index 210f1a9..04d1c33 100644
---- a/drivers/dma/qcom/hidma.c
-+++ b/drivers/dma/qcom/hidma.c
-@@ -610,7 +610,7 @@ static irqreturn_t hidma_chirq_handler(int chirq, void *arg)
- 	return hidma_ll_inthandler(chirq, lldev);
- }
+ config UML_PCI_OVER_VIRTIO_DEVICE_ID
+diff --git a/arch/um/include/asm/pci.h b/arch/um/include/asm/pci.h
+index 34fe492..238d2e7 100644
+--- a/arch/um/include/asm/pci.h
++++ b/arch/um/include/asm/pci.h
+@@ -7,7 +7,7 @@
+ /* Generic PCI */
+ #include <asm-generic/pci.h>
  
--#ifdef CONFIG_GENERIC_MSI_IRQ_DOMAIN
-+#ifdef CONFIG_GENERIC_MSI_IRQ
- static irqreturn_t hidma_chirq_handler_msi(int chirq, void *arg)
- {
- 	struct hidma_lldev **lldevp = arg;
-@@ -671,7 +671,7 @@ static int hidma_sysfs_init(struct hidma_dev *dev)
- 	return device_create_file(dev->ddev.dev, dev->chid_attrs);
- }
- 
--#ifdef CONFIG_GENERIC_MSI_IRQ_DOMAIN
-+#ifdef CONFIG_GENERIC_MSI_IRQ
- static void hidma_write_msi_msg(struct msi_desc *desc, struct msi_msg *msg)
- {
- 	struct device *dev = msi_desc_to_dev(desc);
-@@ -687,7 +687,7 @@ static void hidma_write_msi_msg(struct msi_desc *desc, struct msi_msg *msg)
- 
- static void hidma_free_msis(struct hidma_dev *dmadev)
- {
--#ifdef CONFIG_GENERIC_MSI_IRQ_DOMAIN
-+#ifdef CONFIG_GENERIC_MSI_IRQ
- 	struct device *dev = dmadev->ddev.dev;
- 	int i, virq;
- 
-@@ -704,7 +704,7 @@ static void hidma_free_msis(struct hidma_dev *dmadev)
- static int hidma_request_msi(struct hidma_dev *dmadev,
- 			     struct platform_device *pdev)
- {
--#ifdef CONFIG_GENERIC_MSI_IRQ_DOMAIN
-+#ifdef CONFIG_GENERIC_MSI_IRQ
- 	int rc, i, virq;
- 
- 	rc = platform_msi_domain_alloc_irqs(&pdev->dev, HIDMA_MSI_INTS,
-diff --git a/drivers/iommu/Kconfig b/drivers/iommu/Kconfig
-index dc5f7a1..8eaf9b7 100644
---- a/drivers/iommu/Kconfig
-+++ b/drivers/iommu/Kconfig
-@@ -389,7 +389,7 @@ config ARM_SMMU_V3
- 	depends on ARM64
- 	select IOMMU_API
- 	select IOMMU_IO_PGTABLE_LPAE
--	select GENERIC_MSI_IRQ_DOMAIN
-+	select GENERIC_MSI_IRQ
- 	help
- 	  Support for implementations of the ARM System MMU architecture
- 	  version 3 providing translation support to a PCIe root complex.
-diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-index 7ef9f5e..ffea6a8 100644
---- a/drivers/irqchip/Kconfig
-+++ b/drivers/irqchip/Kconfig
-@@ -38,7 +38,7 @@ config ARM_GIC_V3
- 
- config ARM_GIC_V3_ITS
- 	bool
--	select GENERIC_MSI_IRQ_DOMAIN
-+	select GENERIC_MSI_IRQ
- 	default ARM_GIC_V3
- 
- config ARM_GIC_V3_ITS_PCI
-@@ -375,7 +375,7 @@ config MVEBU_ICU
- 
- config MVEBU_ODMI
- 	bool
--	select GENERIC_MSI_IRQ_DOMAIN
-+	select GENERIC_MSI_IRQ
- 
- config MVEBU_PIC
- 	bool
-@@ -488,7 +488,7 @@ config IMX_MU_MSI
- 	default m if ARCH_MXC
- 	select IRQ_DOMAIN
+-#ifdef CONFIG_PCI_MSI_IRQ_DOMAIN
++#ifdef CONFIG_PCI_MSI
+ /*
+  * This is a bit of an annoying hack, and it assumes we only have
+  * the virt-pci (if anything). Which is true, but still.
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 67745ce..64f81a1 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -1109,7 +1109,6 @@ config X86_LOCAL_APIC
+ 	def_bool y
+ 	depends on X86_64 || SMP || X86_32_NON_STANDARD || X86_UP_APIC || PCI_MSI
  	select IRQ_DOMAIN_HIERARCHY
--	select GENERIC_MSI_IRQ_DOMAIN
-+	select GENERIC_MSI_IRQ
- 	help
- 	  Provide a driver for the i.MX Messaging Unit block used as a
- 	  CPU-to-CPU MSI controller. This requires a specially crafted DT
-diff --git a/drivers/mailbox/Kconfig b/drivers/mailbox/Kconfig
-index 05d6fae..d7af896 100644
---- a/drivers/mailbox/Kconfig
-+++ b/drivers/mailbox/Kconfig
-@@ -223,7 +223,7 @@ config BCM_FLEXRM_MBOX
- 	tristate "Broadcom FlexRM Mailbox"
- 	depends on ARM64
- 	depends on ARCH_BCM_IPROC || COMPILE_TEST
--	select GENERIC_MSI_IRQ_DOMAIN
-+	select GENERIC_MSI_IRQ
- 	default m if ARCH_BCM_IPROC
- 	help
- 	  Mailbox implementation of the Broadcom FlexRM ring manager,
+-	select PCI_MSI_IRQ_DOMAIN if PCI_MSI
+ 
+ config X86_IO_APIC
+ 	def_bool y
+diff --git a/arch/x86/include/asm/pci.h b/arch/x86/include/asm/pci.h
+index 736793d..c4789de 100644
+--- a/arch/x86/include/asm/pci.h
++++ b/arch/x86/include/asm/pci.h
+@@ -21,7 +21,7 @@ struct pci_sysdata {
+ #ifdef CONFIG_X86_64
+ 	void		*iommu;		/* IOMMU private data */
+ #endif
+-#ifdef CONFIG_PCI_MSI_IRQ_DOMAIN
++#ifdef CONFIG_PCI_MSI
+ 	void		*fwnode;	/* IRQ domain for MSI assignment */
+ #endif
+ #if IS_ENABLED(CONFIG_VMD)
+@@ -52,7 +52,7 @@ static inline int pci_proc_domain(struct pci_bus *bus)
+ }
+ #endif
+ 
+-#ifdef CONFIG_PCI_MSI_IRQ_DOMAIN
++#ifdef CONFIG_PCI_MSI
+ static inline void *_pci_root_bus_fwnode(struct pci_bus *bus)
+ {
+ 	return to_pci_sysdata(bus)->fwnode;
 diff --git a/drivers/pci/Kconfig b/drivers/pci/Kconfig
-index b7f6221..9309f24 100644
+index 55c028a..b7f6221 100644
 --- a/drivers/pci/Kconfig
 +++ b/drivers/pci/Kconfig
-@@ -38,7 +38,6 @@ source "drivers/pci/pcie/Kconfig"
+@@ -38,6 +38,7 @@ source "drivers/pci/pcie/Kconfig"
  
  config PCI_MSI
  	bool "Message Signaled Interrupts (MSI and MSI-X)"
--	select GENERIC_MSI_IRQ_DOMAIN
++	select GENERIC_MSI_IRQ_DOMAIN
  	select GENERIC_MSI_IRQ
  	help
  	   This allows device drivers to enable MSI (Message Signaled
-diff --git a/drivers/perf/Kconfig b/drivers/perf/Kconfig
-index 341010f..692ffd5 100644
---- a/drivers/perf/Kconfig
-+++ b/drivers/perf/Kconfig
-@@ -93,7 +93,7 @@ config ARM_PMU_ACPI
- config ARM_SMMU_V3_PMU
- 	 tristate "ARM SMMUv3 Performance Monitors Extension"
- 	 depends on (ARM64 && ACPI) || (COMPILE_TEST && 64BIT)
--	 depends on GENERIC_MSI_IRQ_DOMAIN
-+	 depends on GENERIC_MSI_IRQ
- 	   help
- 	   Provides support for the ARM SMMUv3 Performance Monitor Counter
- 	   Groups (PMCG), which provide monitoring of transactions passing
-diff --git a/drivers/soc/ti/Kconfig b/drivers/soc/ti/Kconfig
-index 7e2fb1c..e9a597e 100644
---- a/drivers/soc/ti/Kconfig
-+++ b/drivers/soc/ti/Kconfig
-@@ -98,6 +98,6 @@ endif # SOC_TI
+@@ -51,11 +52,6 @@ config PCI_MSI
  
- config TI_SCI_INTA_MSI_DOMAIN
- 	bool
+ 	   If you don't know what to do here, say Y.
+ 
+-config PCI_MSI_IRQ_DOMAIN
+-	def_bool y
+-	depends on PCI_MSI
 -	select GENERIC_MSI_IRQ_DOMAIN
-+	select GENERIC_MSI_IRQ
+-
+ config PCI_MSI_ARCH_FALLBACKS
+ 	bool
+ 
+@@ -192,7 +188,7 @@ config PCI_LABEL
+ 
+ config PCI_HYPERV
+ 	tristate "Hyper-V PCI Frontend"
+-	depends on ((X86 && X86_64) || ARM64) && HYPERV && PCI_MSI && PCI_MSI_IRQ_DOMAIN && SYSFS
++	depends on ((X86 && X86_64) || ARM64) && HYPERV && PCI_MSI && SYSFS
+ 	select PCI_HYPERV_INTERFACE
  	help
- 	  Driver to enable Interrupt Aggregator specific MSI Domain.
-diff --git a/include/asm-generic/msi.h b/include/asm-generic/msi.h
-index bf910d4..124c734 100644
---- a/include/asm-generic/msi.h
-+++ b/include/asm-generic/msi.h
-@@ -4,7 +4,7 @@
+ 	  The PCI device frontend driver allows the kernel to import arbitrary
+diff --git a/drivers/pci/controller/Kconfig b/drivers/pci/controller/Kconfig
+index bfd9bac..1569d9a 100644
+--- a/drivers/pci/controller/Kconfig
++++ b/drivers/pci/controller/Kconfig
+@@ -19,7 +19,7 @@ config PCI_AARDVARK
+ 	tristate "Aardvark PCIe controller"
+ 	depends on (ARCH_MVEBU && ARM64) || COMPILE_TEST
+ 	depends on OF
+-	depends on PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	select PCI_BRIDGE_EMUL
+ 	help
+ 	 Add support for Aardvark 64bit PCIe Host Controller. This
+@@ -29,7 +29,7 @@ config PCI_AARDVARK
+ config PCIE_XILINX_NWL
+ 	bool "NWL PCIe Core"
+ 	depends on ARCH_ZYNQMP || COMPILE_TEST
+-	depends on PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	help
+ 	 Say 'Y' here if you want kernel support for Xilinx
+ 	 NWL PCIe controller. The controller can act as Root Port
+@@ -53,7 +53,7 @@ config PCI_IXP4XX
+ config PCI_TEGRA
+ 	bool "NVIDIA Tegra PCIe controller"
+ 	depends on ARCH_TEGRA || COMPILE_TEST
+-	depends on PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	help
+ 	  Say Y here if you want support for the PCIe host controller found
+ 	  on NVIDIA Tegra SoCs.
+@@ -70,7 +70,7 @@ config PCI_RCAR_GEN2
+ config PCIE_RCAR_HOST
+ 	bool "Renesas R-Car PCIe host controller"
+ 	depends on ARCH_RENESAS || COMPILE_TEST
+-	depends on PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	help
+ 	  Say Y here if you want PCIe controller support on R-Car SoCs in host
+ 	  mode.
+@@ -99,7 +99,7 @@ config PCI_HOST_GENERIC
+ config PCIE_XILINX
+ 	bool "Xilinx AXI PCIe host bridge support"
+ 	depends on OF || COMPILE_TEST
+-	depends on PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	help
+ 	  Say 'Y' here if you want kernel to support the Xilinx AXI PCIe
+ 	  Host Bridge driver.
+@@ -124,7 +124,7 @@ config PCI_XGENE
+ config PCI_XGENE_MSI
+ 	bool "X-Gene v1 PCIe MSI feature"
+ 	depends on PCI_XGENE
+-	depends on PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	default y
+ 	help
+ 	  Say Y here if you want PCIe MSI support for the APM X-Gene v1 SoC.
+@@ -170,7 +170,7 @@ config PCIE_IPROC_BCMA
+ config PCIE_IPROC_MSI
+ 	bool "Broadcom iProc PCIe MSI support"
+ 	depends on PCIE_IPROC_PLATFORM || PCIE_IPROC_BCMA
+-	depends on PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	default ARCH_BCM_IPROC
+ 	help
+ 	  Say Y here if you want to enable MSI support for Broadcom's iProc
+@@ -186,7 +186,7 @@ config PCIE_ALTERA
+ config PCIE_ALTERA_MSI
+ 	tristate "Altera PCIe MSI feature"
+ 	depends on PCIE_ALTERA
+-	depends on PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	help
+ 	  Say Y here if you want PCIe MSI support for the Altera FPGA.
+ 	  This MSI driver supports Altera MSI to GIC controller IP.
+@@ -215,7 +215,7 @@ config PCIE_ROCKCHIP_HOST
+ 	tristate "Rockchip PCIe host controller"
+ 	depends on ARCH_ROCKCHIP || COMPILE_TEST
+ 	depends on OF
+-	depends on PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	select MFD_SYSCON
+ 	select PCIE_ROCKCHIP
+ 	help
+@@ -239,7 +239,7 @@ config PCIE_MEDIATEK
+ 	tristate "MediaTek PCIe controller"
+ 	depends on ARCH_AIROHA || ARCH_MEDIATEK || COMPILE_TEST
+ 	depends on OF
+-	depends on PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	help
+ 	  Say Y here if you want to enable PCIe controller support on
+ 	  MediaTek SoCs.
+@@ -247,7 +247,7 @@ config PCIE_MEDIATEK
+ config PCIE_MEDIATEK_GEN3
+ 	tristate "MediaTek Gen3 PCIe controller"
+ 	depends on ARCH_MEDIATEK || COMPILE_TEST
+-	depends on PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	help
+ 	  Adds support for PCIe Gen3 MAC controller for MediaTek SoCs.
+ 	  This PCIe controller is compatible with Gen3, Gen2 and Gen1 speed,
+@@ -277,7 +277,7 @@ config PCIE_BRCMSTB
+ 	depends on ARCH_BRCMSTB || ARCH_BCM2835 || ARCH_BCMBCA || \
+ 		   BMIPS_GENERIC || COMPILE_TEST
+ 	depends on OF
+-	depends on PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	default ARCH_BRCMSTB || BMIPS_GENERIC
+ 	help
+ 	  Say Y here to enable PCIe host controller support for
+@@ -285,7 +285,7 @@ config PCIE_BRCMSTB
  
- #include <linux/types.h>
+ config PCI_HYPERV_INTERFACE
+ 	tristate "Hyper-V PCI Interface"
+-	depends on ((X86 && X86_64) || ARM64) && HYPERV && PCI_MSI && PCI_MSI_IRQ_DOMAIN
++	depends on ((X86 && X86_64) || ARM64) && HYPERV && PCI_MSI && PCI_MSI
+ 	help
+ 	  The Hyper-V PCI Interface is a helper driver allows other drivers to
+ 	  have a common interface with the Hyper-V PCI frontend driver.
+@@ -303,8 +303,6 @@ config PCI_LOONGSON
+ config PCIE_MICROCHIP_HOST
+ 	bool "Microchip AXI PCIe host bridge support"
+ 	depends on PCI_MSI && OF
+-	select PCI_MSI_IRQ_DOMAIN
+-	select GENERIC_MSI_IRQ_DOMAIN
+ 	select PCI_HOST_COMMON
+ 	help
+ 	  Say Y here if you want kernel to support the Microchip AXI PCIe
+@@ -326,7 +324,7 @@ config PCIE_APPLE
+ 	tristate "Apple PCIe controller"
+ 	depends on ARCH_APPLE || COMPILE_TEST
+ 	depends on OF
+-	depends on PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	select PCI_HOST_COMMON
+ 	help
+ 	  Say Y here if you want to enable PCIe controller support on Apple
+diff --git a/drivers/pci/controller/dwc/Kconfig b/drivers/pci/controller/dwc/Kconfig
+index 62ce3ab..f3c4621 100644
+--- a/drivers/pci/controller/dwc/Kconfig
++++ b/drivers/pci/controller/dwc/Kconfig
+@@ -21,7 +21,7 @@ config PCI_DRA7XX_HOST
+ 	tristate "TI DRA7xx PCIe controller Host Mode"
+ 	depends on SOC_DRA7XX || COMPILE_TEST
+ 	depends on OF && HAS_IOMEM && TI_PIPE3
+-	depends on PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	select PCIE_DW_HOST
+ 	select PCI_DRA7XX
+ 	default y if SOC_DRA7XX
+@@ -53,7 +53,7 @@ config PCIE_DW_PLAT
  
--#ifdef CONFIG_GENERIC_MSI_IRQ_DOMAIN
-+#ifdef CONFIG_GENERIC_MSI_IRQ
+ config PCIE_DW_PLAT_HOST
+ 	bool "Platform bus based DesignWare PCIe Controller - Host mode"
+-	depends on PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	select PCIE_DW_HOST
+ 	select PCIE_DW_PLAT
+ 	help
+@@ -67,7 +67,7 @@ config PCIE_DW_PLAT_HOST
  
- #ifndef NUM_MSI_ALLOC_SCRATCHPAD_REGS
- # define NUM_MSI_ALLOC_SCRATCHPAD_REGS	2
-@@ -36,6 +36,6 @@ typedef struct msi_alloc_info {
+ config PCIE_DW_PLAT_EP
+ 	bool "Platform bus based DesignWare PCIe Controller - Endpoint mode"
+-	depends on PCI && PCI_MSI_IRQ_DOMAIN
++	depends on PCI && PCI_MSI
+ 	depends on PCI_ENDPOINT
+ 	select PCIE_DW_EP
+ 	select PCIE_DW_PLAT
+@@ -83,7 +83,7 @@ config PCIE_DW_PLAT_EP
+ config PCI_EXYNOS
+ 	tristate "Samsung Exynos PCIe controller"
+ 	depends on ARCH_EXYNOS || COMPILE_TEST
+-	depends on PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	select PCIE_DW_HOST
+ 	help
+ 	  Enables support for the PCIe controller in the Samsung Exynos SoCs
+@@ -94,13 +94,13 @@ config PCI_EXYNOS
+ config PCI_IMX6
+ 	bool "Freescale i.MX6/7/8 PCIe controller"
+ 	depends on ARCH_MXC || COMPILE_TEST
+-	depends on PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	select PCIE_DW_HOST
  
- #define GENERIC_MSI_DOMAIN_OPS		1
+ config PCIE_SPEAR13XX
+ 	bool "STMicroelectronics SPEAr PCIe controller"
+ 	depends on ARCH_SPEAR13XX || COMPILE_TEST
+-	depends on PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	select PCIE_DW_HOST
+ 	help
+ 	  Say Y here if you want PCIe support on SPEAr13XX SoCs.
+@@ -111,7 +111,7 @@ config PCI_KEYSTONE
+ config PCI_KEYSTONE_HOST
+ 	bool "PCI Keystone Host Mode"
+ 	depends on ARCH_KEYSTONE || ARCH_K3 || COMPILE_TEST
+-	depends on PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	select PCIE_DW_HOST
+ 	select PCI_KEYSTONE
+ 	help
+@@ -135,7 +135,7 @@ config PCI_KEYSTONE_EP
+ config PCI_LAYERSCAPE
+ 	bool "Freescale Layerscape PCIe controller - Host mode"
+ 	depends on OF && (ARM || ARCH_LAYERSCAPE || COMPILE_TEST)
+-	depends on PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	select PCIE_DW_HOST
+ 	select MFD_SYSCON
+ 	help
+@@ -160,7 +160,7 @@ config PCI_LAYERSCAPE_EP
+ config PCI_HISI
+ 	depends on OF && (ARM64 || COMPILE_TEST)
+ 	bool "HiSilicon Hip05 and Hip06 SoCs PCIe controllers"
+-	depends on PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	select PCIE_DW_HOST
+ 	select PCI_HOST_COMMON
+ 	help
+@@ -170,7 +170,7 @@ config PCI_HISI
+ config PCIE_QCOM
+ 	bool "Qualcomm PCIe controller"
+ 	depends on OF && (ARCH_QCOM || COMPILE_TEST)
+-	depends on PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	select PCIE_DW_HOST
+ 	select CRC8
+ 	help
+@@ -191,7 +191,7 @@ config PCIE_QCOM_EP
+ config PCIE_ARMADA_8K
+ 	bool "Marvell Armada-8K PCIe controller"
+ 	depends on ARCH_MVEBU || COMPILE_TEST
+-	depends on PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	select PCIE_DW_HOST
+ 	help
+ 	  Say Y here if you want to enable PCIe controller support on
+@@ -205,7 +205,7 @@ config PCIE_ARTPEC6
+ config PCIE_ARTPEC6_HOST
+ 	bool "Axis ARTPEC-6 PCIe controller Host Mode"
+ 	depends on MACH_ARTPEC6 || COMPILE_TEST
+-	depends on PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	select PCIE_DW_HOST
+ 	select PCIE_ARTPEC6
+ 	help
+@@ -226,7 +226,7 @@ config PCIE_ROCKCHIP_DW_HOST
+ 	bool "Rockchip DesignWare PCIe controller"
+ 	select PCIE_DW
+ 	select PCIE_DW_HOST
+-	depends on PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	depends on ARCH_ROCKCHIP || COMPILE_TEST
+ 	depends on OF
+ 	help
+@@ -236,7 +236,7 @@ config PCIE_ROCKCHIP_DW_HOST
+ config PCIE_INTEL_GW
+ 	bool "Intel Gateway PCIe host controller support"
+ 	depends on OF && (X86 || COMPILE_TEST)
+-	depends on PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	select PCIE_DW_HOST
+ 	help
+ 	  Say 'Y' here to enable PCIe Host controller support on Intel
+@@ -250,7 +250,7 @@ config PCIE_KEEMBAY
+ config PCIE_KEEMBAY_HOST
+ 	bool "Intel Keem Bay PCIe controller - Host mode"
+ 	depends on ARCH_KEEMBAY || COMPILE_TEST
+-	depends on PCI && PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	select PCIE_DW_HOST
+ 	select PCIE_KEEMBAY
+ 	help
+@@ -262,7 +262,7 @@ config PCIE_KEEMBAY_HOST
+ config PCIE_KEEMBAY_EP
+ 	bool "Intel Keem Bay PCIe controller - Endpoint mode"
+ 	depends on ARCH_KEEMBAY || COMPILE_TEST
+-	depends on PCI && PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	depends on PCI_ENDPOINT
+ 	select PCIE_DW_EP
+ 	select PCIE_KEEMBAY
+@@ -275,7 +275,7 @@ config PCIE_KEEMBAY_EP
+ config PCIE_KIRIN
+ 	depends on OF && (ARM64 || COMPILE_TEST)
+ 	tristate "HiSilicon Kirin series SoCs PCIe controllers"
+-	depends on PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	select PCIE_DW_HOST
+ 	help
+ 	  Say Y here if you want PCIe controller support
+@@ -284,7 +284,7 @@ config PCIE_KIRIN
+ config PCIE_HISI_STB
+ 	bool "HiSilicon STB SoCs PCIe controllers"
+ 	depends on ARCH_HISI || COMPILE_TEST
+-	depends on PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	select PCIE_DW_HOST
+ 	help
+ 	  Say Y here if you want PCIe controller support on HiSilicon STB SoCs
+@@ -292,7 +292,7 @@ config PCIE_HISI_STB
+ config PCI_MESON
+ 	tristate "MESON PCIe controller"
+ 	default m if ARCH_MESON
+-	depends on PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	select PCIE_DW_HOST
+ 	help
+ 	  Say Y here if you want to enable PCI controller support on Amlogic
+@@ -306,7 +306,7 @@ config PCIE_TEGRA194
+ config PCIE_TEGRA194_HOST
+ 	tristate "NVIDIA Tegra194 (and later) PCIe controller - Host Mode"
+ 	depends on ARCH_TEGRA_194_SOC || COMPILE_TEST
+-	depends on PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	select PCIE_DW_HOST
+ 	select PHY_TEGRA194_P2U
+ 	select PCIE_TEGRA194
+@@ -336,7 +336,7 @@ config PCIE_TEGRA194_EP
+ config PCIE_VISCONTI_HOST
+ 	bool "Toshiba Visconti PCIe controllers"
+ 	depends on ARCH_VISCONTI || COMPILE_TEST
+-	depends on PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	select PCIE_DW_HOST
+ 	help
+ 	  Say Y here if you want PCIe controller support on Toshiba Visconti SoC.
+@@ -346,7 +346,7 @@ config PCIE_UNIPHIER
+ 	bool "Socionext UniPhier PCIe host controllers"
+ 	depends on ARCH_UNIPHIER || COMPILE_TEST
+ 	depends on OF && HAS_IOMEM
+-	depends on PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	select PCIE_DW_HOST
+ 	help
+ 	  Say Y here if you want PCIe host controller support on UniPhier SoCs.
+@@ -365,7 +365,7 @@ config PCIE_UNIPHIER_EP
+ config PCIE_AL
+ 	bool "Amazon Annapurna Labs PCIe controller"
+ 	depends on OF && (ARM64 || COMPILE_TEST)
+-	depends on PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	select PCIE_DW_HOST
+ 	select PCI_ECAM
+ 	help
+@@ -377,7 +377,7 @@ config PCIE_AL
  
--#endif /* CONFIG_GENERIC_MSI_IRQ_DOMAIN */
-+#endif /* CONFIG_GENERIC_MSI_IRQ */
+ config PCIE_FU740
+ 	bool "SiFive FU740 PCIe host controller"
+-	depends on PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	depends on SOC_SIFIVE || COMPILE_TEST
+ 	select PCIE_DW_HOST
+ 	help
+diff --git a/drivers/pci/controller/mobiveil/Kconfig b/drivers/pci/controller/mobiveil/Kconfig
+index e4643fb..1d7a07b 100644
+--- a/drivers/pci/controller/mobiveil/Kconfig
++++ b/drivers/pci/controller/mobiveil/Kconfig
+@@ -8,14 +8,14 @@ config PCIE_MOBIVEIL
  
- #endif
-diff --git a/include/linux/device.h b/include/linux/device.h
-index 424b55d..c90a444 100644
---- a/include/linux/device.h
-+++ b/include/linux/device.h
-@@ -378,10 +378,8 @@ struct dev_links_info {
-  * @data:	Pointer to MSI device data
-  */
- struct dev_msi_info {
--#ifdef CONFIG_GENERIC_MSI_IRQ_DOMAIN
--	struct irq_domain	*domain;
+ config PCIE_MOBIVEIL_HOST
+ 	bool
+-	depends on PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	select PCIE_MOBIVEIL
+ 
+ config PCIE_MOBIVEIL_PLAT
+ 	bool "Mobiveil AXI PCIe controller"
+ 	depends on ARCH_ZYNQMP || COMPILE_TEST
+ 	depends on OF
+-	depends on PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	select PCIE_MOBIVEIL_HOST
+ 	help
+ 	  Say Y here if you want to enable support for the Mobiveil AXI PCIe
+@@ -25,7 +25,7 @@ config PCIE_MOBIVEIL_PLAT
+ config PCIE_LAYERSCAPE_GEN4
+ 	bool "Freescale Layerscape PCIe Gen4 controller"
+ 	depends on ARCH_LAYERSCAPE || COMPILE_TEST
+-	depends on PCI_MSI_IRQ_DOMAIN
++	depends on PCI_MSI
+ 	select PCIE_MOBIVEIL_HOST
+ 	help
+ 	  Say Y here if you want PCIe Gen4 controller support on
+diff --git a/drivers/pci/msi/Makefile b/drivers/pci/msi/Makefile
+index 93ef7b9..4e0a7e0 100644
+--- a/drivers/pci/msi/Makefile
++++ b/drivers/pci/msi/Makefile
+@@ -3,5 +3,5 @@
+ # Makefile for the PCI/MSI
+ obj-$(CONFIG_PCI)			+= pcidev_msi.o
+ obj-$(CONFIG_PCI_MSI)			+= msi.o
+-obj-$(CONFIG_PCI_MSI_IRQ_DOMAIN)	+= irqdomain.o
++obj-$(CONFIG_PCI_MSI)			+= irqdomain.o
+ obj-$(CONFIG_PCI_MSI_ARCH_FALLBACKS)	+= legacy.o
+diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+index b66fa42..fdd7e56 100644
+--- a/drivers/pci/probe.c
++++ b/drivers/pci/probe.c
+@@ -842,7 +842,6 @@ static struct irq_domain *pci_host_bridge_msi_domain(struct pci_bus *bus)
+ 	if (!d)
+ 		d = pci_host_bridge_acpi_msi_domain(bus);
+ 
+-#ifdef CONFIG_PCI_MSI_IRQ_DOMAIN
+ 	/*
+ 	 * If no IRQ domain was found via the OF tree, try looking it up
+ 	 * directly through the fwnode_handle.
+@@ -854,7 +853,6 @@ static struct irq_domain *pci_host_bridge_msi_domain(struct pci_bus *bus)
+ 			d = irq_find_matching_fwnode(fwnode,
+ 						     DOMAIN_BUS_PCI_MSI);
+ 	}
 -#endif
- #ifdef CONFIG_GENERIC_MSI_IRQ
-+	struct irq_domain	*domain;
- 	struct msi_device_data	*data;
- #endif
- };
-@@ -742,7 +740,7 @@ static inline void set_dev_node(struct device *dev, int node)
  
- static inline struct irq_domain *dev_get_msi_domain(const struct device *dev)
- {
--#ifdef CONFIG_GENERIC_MSI_IRQ_DOMAIN
-+#ifdef CONFIG_GENERIC_MSI_IRQ
- 	return dev->msi.domain;
- #else
- 	return NULL;
-@@ -751,7 +749,7 @@ static inline struct irq_domain *dev_get_msi_domain(const struct device *dev)
- 
- static inline void dev_set_msi_domain(struct device *dev, struct irq_domain *d)
- {
--#ifdef CONFIG_GENERIC_MSI_IRQ_DOMAIN
-+#ifdef CONFIG_GENERIC_MSI_IRQ
- 	dev->msi.domain = d;
- #endif
+ 	return d;
  }
-diff --git a/include/linux/gpio/driver.h b/include/linux/gpio/driver.h
-index 6aeea10..88ae451 100644
---- a/include/linux/gpio/driver.h
-+++ b/include/linux/gpio/driver.h
-@@ -27,7 +27,7 @@ struct gpio_chip;
- 
- union gpio_irq_fwspec {
- 	struct irq_fwspec	fwspec;
--#ifdef CONFIG_GENERIC_MSI_IRQ_DOMAIN
-+#ifdef CONFIG_GENERIC_MSI_IRQ
- 	msi_alloc_info_t	msiinfo;
- #endif
- };
 diff --git a/include/linux/msi.h b/include/linux/msi.h
-index 9b84145..8b28714 100644
+index 2dfd7b2..9b84145 100644
 --- a/include/linux/msi.h
 +++ b/include/linux/msi.h
-@@ -79,9 +79,7 @@ void __get_cached_msi_msg(struct msi_desc *entry, struct msi_msg *msg);
- #ifdef CONFIG_GENERIC_MSI_IRQ
- void get_cached_msi_msg(unsigned int irq, struct msi_msg *msg);
- #else
--static inline void get_cached_msi_msg(unsigned int irq, struct msi_msg *msg)
--{
--}
-+static inline void get_cached_msi_msg(unsigned int irq, struct msi_msg *msg) { }
+@@ -238,15 +238,6 @@ static inline void msi_desc_set_iommu_cookie(struct msi_desc *desc,
+ }
  #endif
  
- typedef void (*irq_write_msi_msg_t)(struct msi_desc *desc,
-@@ -278,7 +276,7 @@ static inline void msi_device_destroy_sysfs(struct device *dev) { }
-  */
- bool arch_restore_msi_irqs(struct pci_dev *dev);
- 
--#ifdef CONFIG_GENERIC_MSI_IRQ_DOMAIN
-+#ifdef CONFIG_GENERIC_MSI_IRQ
- 
- #include <linux/irqhandler.h>
- 
-@@ -451,7 +449,7 @@ int platform_msi_device_domain_alloc(struct irq_domain *domain, unsigned int vir
- void platform_msi_device_domain_free(struct irq_domain *domain, unsigned int virq,
- 				     unsigned int nvec);
- void *platform_msi_get_host_data(struct irq_domain *domain);
--#endif /* CONFIG_GENERIC_MSI_IRQ_DOMAIN */
-+#endif /* CONFIG_GENERIC_MSI_IRQ */
- 
- /* PCI specific interfaces */
- #ifdef CONFIG_PCI_MSI
-diff --git a/kernel/irq/Kconfig b/kernel/irq/Kconfig
-index db3d174..b64c44a 100644
---- a/kernel/irq/Kconfig
-+++ b/kernel/irq/Kconfig
-@@ -86,15 +86,10 @@ config GENERIC_IRQ_IPI
- 	depends on SMP
- 	select IRQ_DOMAIN_HIERARCHY
- 
--# Generic MSI interrupt support
--config GENERIC_MSI_IRQ
--	bool
+-#ifdef CONFIG_PCI_MSI
+-struct pci_dev *msi_desc_to_pci_dev(struct msi_desc *desc);
+-void pci_write_msi_msg(unsigned int irq, struct msi_msg *msg);
+-#else /* CONFIG_PCI_MSI */
+-static inline void pci_write_msi_msg(unsigned int irq, struct msi_msg *msg)
+-{
+-}
+-#endif /* CONFIG_PCI_MSI */
 -
- # Generic MSI hierarchical interrupt domain support
--config GENERIC_MSI_IRQ_DOMAIN
-+config GENERIC_MSI_IRQ
- 	bool
- 	select IRQ_DOMAIN_HIERARCHY
--	select GENERIC_MSI_IRQ
+ int msi_add_msi_desc(struct device *dev, struct msi_desc *init_desc);
+ void msi_free_msi_descs_range(struct device *dev, unsigned int first_index, unsigned int last_index);
  
- config IRQ_MSI_IOMMU
- 	bool
-diff --git a/kernel/irq/msi.c b/kernel/irq/msi.c
-index b46b747..4fde917 100644
---- a/kernel/irq/msi.c
-+++ b/kernel/irq/msi.c
-@@ -461,7 +461,6 @@ static inline int msi_sysfs_populate_desc(struct device *dev, struct msi_desc *d
- static inline void msi_sysfs_remove_desc(struct device *dev, struct msi_desc *desc) { }
- #endif /* !CONFIG_SYSFS */
- 
--#ifdef CONFIG_GENERIC_MSI_IRQ_DOMAIN
- static int __msi_domain_alloc_irqs(struct irq_domain *domain, struct device *dev, int nvec);
- static void __msi_domain_free_irqs(struct irq_domain *domain, struct device *dev);
- 
-@@ -1058,5 +1057,3 @@ struct msi_domain_info *msi_get_domain_info(struct irq_domain *domain)
- {
- 	return (struct msi_domain_info *)domain->host_data;
+@@ -259,12 +250,6 @@ static inline void msi_free_msi_descs(struct device *dev)
+ 	msi_free_msi_descs_range(dev, 0, MSI_MAX_INDEX);
  }
+ 
+-void __pci_read_msi_msg(struct msi_desc *entry, struct msi_msg *msg);
+-void __pci_write_msi_msg(struct msi_desc *entry, struct msi_msg *msg);
 -
--#endif /* CONFIG_GENERIC_MSI_IRQ_DOMAIN */
+-void pci_msi_mask_irq(struct irq_data *data);
+-void pci_msi_unmask_irq(struct irq_data *data);
+-
+ /*
+  * The arch hooks to setup up msi irqs. Default functions are implemented
+  * as weak symbols so that they /can/ be overriden by architecture specific
+@@ -468,18 +453,26 @@ void platform_msi_device_domain_free(struct irq_domain *domain, unsigned int vir
+ void *platform_msi_get_host_data(struct irq_domain *domain);
+ #endif /* CONFIG_GENERIC_MSI_IRQ_DOMAIN */
+ 
+-#ifdef CONFIG_PCI_MSI_IRQ_DOMAIN
++/* PCI specific interfaces */
++#ifdef CONFIG_PCI_MSI
++struct pci_dev *msi_desc_to_pci_dev(struct msi_desc *desc);
++void pci_write_msi_msg(unsigned int irq, struct msi_msg *msg);
++void __pci_read_msi_msg(struct msi_desc *entry, struct msi_msg *msg);
++void __pci_write_msi_msg(struct msi_desc *entry, struct msi_msg *msg);
++void pci_msi_mask_irq(struct irq_data *data);
++void pci_msi_unmask_irq(struct irq_data *data);
+ struct irq_domain *pci_msi_create_irq_domain(struct fwnode_handle *fwnode,
+ 					     struct msi_domain_info *info,
+ 					     struct irq_domain *parent);
+ u32 pci_msi_domain_get_msi_rid(struct irq_domain *domain, struct pci_dev *pdev);
+ struct irq_domain *pci_msi_get_device_domain(struct pci_dev *pdev);
+ bool pci_dev_has_special_msi_domain(struct pci_dev *pdev);
+-#else
++#else /* CONFIG_PCI_MSI */
+ static inline struct irq_domain *pci_msi_get_device_domain(struct pci_dev *pdev)
+ {
+ 	return NULL;
+ }
+-#endif /* CONFIG_PCI_MSI_IRQ_DOMAIN */
++static inline void pci_write_msi_msg(unsigned int irq, struct msi_msg *msg) { }
++#endif /* !CONFIG_PCI_MSI */
+ 
+ #endif /* LINUX_MSI_H */
