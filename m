@@ -2,173 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6025D62DC3D
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:05:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65B8B62DC38
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:04:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239291AbiKQNFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 08:05:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56774 "EHLO
+        id S239492AbiKQNEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 08:04:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231634AbiKQNFL (ORCPT
+        with ESMTP id S231634AbiKQNEW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 08:05:11 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E769445ED9
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 05:05:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668690309; x=1700226309;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=jRvX/pxCCG2xTdfCqddChD8tZuE8K0P+engR+Y4GNk4=;
-  b=XmNI5HaIyAanHKSJ4faOlqV8rMGBy9NeLxsainFP4zwHwxbM6HWVJztq
-   o1wcobXrv1Ru1Rp+GccTSRFbkMfM3nohteasHpfOkNtZUNMlQXdTnsNKW
-   CiTDs6n3EQcbvpsmlzMAftlmwyJ51rQfeBAbPiWJbZLMxUbR6hpmo3hsi
-   qegxvo8Hg/dFC3WweA+zEbjJrmbI3+0g0jTsn6n3JZcgQ0wC44anra/5N
-   xdq2zB274NFGpgX802h7Gu7YvvL5kjhlNeJvEYd6HwjkBpjRh850DOMx3
-   I3X6tBF8a7MX9cgg2WZzyJOL31qOIYhnKfzwslHytGZEB8ebzqdr+S0xJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="314659036"
-X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
-   d="scan'208";a="314659036"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 05:03:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="968870184"
-X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
-   d="scan'208";a="968870184"
-Received: from lkp-server01.sh.intel.com (HELO 55744f5052f8) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 17 Nov 2022 05:03:57 -0800
-Received: from kbuild by 55744f5052f8 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oveYe-0000Kk-1q;
-        Thu, 17 Nov 2022 13:03:56 +0000
-Date:   Thu, 17 Nov 2022 21:03:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/fpu] BUILD SUCCESS
- 6ea25770b043c7997ab21d1ce95ba5de4d3d85d9
-Message-ID: <63763104.X6UwBS43e/97jARZ%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+        Thu, 17 Nov 2022 08:04:22 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C972B197;
+        Thu, 17 Nov 2022 05:04:21 -0800 (PST)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AHCibq1021045;
+        Thu, 17 Nov 2022 13:03:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=cjadO755ktE+yKQ9dqvEyND9KuoTueb/HI0lzO/4C98=;
+ b=YvHMKRCrogST5xyWZfYmlYwkwLW6HQs/viZTSN08nBx2m82E2YquWuJwq9pgWx+/4R6u
+ TBjMNPTSafdvsijI0SG41foyzEzF5cw0qoEpR/7XU76HJ+AGGbEIhQeBlqI89yBFniEx
+ sgRQxyPA7ipIonISh6ZbmR8LgcIMPHanioK+NnLkbFUmOkJd9kTl58Pd1V+thq7d6RZ0
+ T2q7vwXZgaImkqCpt3yAWUrh47sYev/YXFfvDnhKyURB6tYnPeYbzw3MeRa2GiWP4Tew
+ z+HwHnVVGonTYxXhKYqV9sC+CTmxBnTs4vonUfENrUGXTCJX3o3vdiGBZcPT/ESSrDis bA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kwn7vgg9s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Nov 2022 13:03:40 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AHCrlkl027571;
+        Thu, 17 Nov 2022 13:03:39 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kwn7vgg94-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Nov 2022 13:03:39 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AHCpPYx002703;
+        Thu, 17 Nov 2022 13:03:38 GMT
+Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
+        by ppma04dal.us.ibm.com with ESMTP id 3kt34a9hb9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Nov 2022 13:03:38 +0000
+Received: from smtpav02.wdc07v.mail.ibm.com ([9.208.128.114])
+        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AHD3b37721436
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 17 Nov 2022 13:03:38 GMT
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1C6235805B;
+        Thu, 17 Nov 2022 13:03:37 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6EF1058059;
+        Thu, 17 Nov 2022 13:03:35 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.98.240])
+        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 17 Nov 2022 13:03:35 +0000 (GMT)
+Message-ID: <3dc4f389ead98972cb7d09ef285a0065decb0ad0.camel@linux.ibm.com>
+Subject: Re: [PATCH v4 2/5] security: Rewrite
+ security_old_inode_init_security()
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keescook@chromium.org, nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        ocfs2-devel@oss.oracle.com
+Date:   Thu, 17 Nov 2022 08:03:23 -0500
+In-Reply-To: <20221110094639.3086409-3-roberto.sassu@huaweicloud.com>
+References: <20221110094639.3086409-1-roberto.sassu@huaweicloud.com>
+         <20221110094639.3086409-3-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: WMqKO59AnhuMpzL2Nr3S2KehvV3tLQpl
+X-Proofpoint-ORIG-GUID: pHWVY-EOF1k4f1Oiw57AU2E65yMhP3d_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-17_06,2022-11-17_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ lowpriorityscore=0 adultscore=0 suspectscore=0 malwarescore=0
+ mlxlogscore=776 impostorscore=0 bulkscore=0 spamscore=0 priorityscore=1501
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211170099
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/fpu
-branch HEAD: 6ea25770b043c7997ab21d1ce95ba5de4d3d85d9  selftests/vm/pkeys: Add a regression test for setting PKRU through ptrace
+Hi Roberto,
 
-elapsed time: 832m
+On Thu, 2022-11-10 at 10:46 +0100, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> Rewrite security_old_inode_init_security() to call
+> security_inode_init_security() before making changes to support multiple
+> LSMs providing xattrs. Do it so that the required changes are done only in
+> one place.
 
-configs tested: 91
-configs skipped: 2
+Only security_inode_init_security() has support for EVM.   Making
+security_old_inode_init_security() a wrapper for
+security_inode_init_security() could result in security.evm extended
+attributes being created that previously weren't created.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+In fact ocfs2 defines ocfs2_init_security_get() as a wrapper for both
+the old and new inode_init_security calls based on the caller's
+preference.   Only mknod and symlink seem to use the old function. 
+Wondering why do they differentiate between callers?  (Cc'ing the ocfs2
+mailing list as they're affected by this change.)
 
-gcc tested configs:
-arc                                 defconfig
-alpha                               defconfig
-s390                                defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-x86_64                           rhel-8.3-kvm
-x86_64                         rhel-8.3-kunit
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                           rhel-8.3-syz
-i386                                defconfig
-x86_64                              defconfig
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-arc                  randconfig-r043-20221117
-x86_64                        randconfig-a015
-x86_64                    rhel-8.3-kselftests
-x86_64                          rhel-8.3-func
-riscv                randconfig-r042-20221117
-x86_64                               rhel-8.3
-s390                 randconfig-r044-20221117
-x86_64                           allyesconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                             allyesconfig
-x86_64                        randconfig-a006
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-x86_64                            allnoconfig
-ia64                             allmodconfig
-sh                          sdk7786_defconfig
-arm                            zeus_defconfig
-openrisc                            defconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-s390                             allmodconfig
-s390                             allyesconfig
-um                               alldefconfig
-sh                           se7722_defconfig
-sh                         ap325rxa_defconfig
-i386                          randconfig-c001
-powerpc                      bamboo_defconfig
-powerpc                     mpc83xx_defconfig
-openrisc                 simple_smp_defconfig
-sh                        sh7757lcr_defconfig
-sh                        sh7785lcr_defconfig
-arm                            hisi_defconfig
-sh                  sh7785lcr_32bit_defconfig
-arc                               allnoconfig
-powerpc                    klondike_defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-sh                ecovec24-romimage_defconfig
-arm                           tegra_defconfig
-mips                        vocore2_defconfig
-arm                       omap2plus_defconfig
-arm                           stm32_defconfig
-sh                           se7705_defconfig
-powerpc                       maple_defconfig
-sh                        edosk7705_defconfig
+"[PATCH v4 1/5] reiserfs: Add missing calls to
+reiserfs_security_free()"  fixed a memory leak.  I couldn't tell if
+there was a similar memory leak in ocfs2, the only other user of
+security_old_inode_init_security().
 
-clang tested configs:
-i386                          randconfig-a002
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-i386                          randconfig-a006
-x86_64                        randconfig-a014
-hexagon              randconfig-r041-20221117
-x86_64                        randconfig-a016
-hexagon              randconfig-r045-20221117
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-i386                          randconfig-a013
-x86_64                        randconfig-a005
-i386                          randconfig-a011
-i386                          randconfig-a015
-powerpc                          g5_defconfig
-x86_64                        randconfig-k001
+As ocfs2 already defines initxattrs, that leaves only reiserfs missing
+initxattrs().  A better, cleaner solution would be to define one.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+thanks,
+
+Mimi
+
+> 
+> Define the security_initxattrs() callback and pass it to
+> security_inode_init_security() as argument, to obtain the first xattr
+> provided by LSMs.
+> 
+> This behavior is a bit different from the current one. Before this patch
+> calling call_int_hook() could cause multiple LSMs to provide an xattr,
+> since call_int_hook() does not stop when an LSM returns zero. The caller of
+> security_old_inode_init_security() receives the last xattr set. The pointer
+> of the xattr value of previous LSMs is lost, causing memory leaks.
+> 
+> However, in practice, this scenario does not happen as the only in-tree
+> LSMs providing an xattr at inode creation time are SELinux and Smack, which
+> are mutually exclusive.
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>b
+
