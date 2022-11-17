@@ -2,126 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B86F062E7A7
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 23:02:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BDFE62E7A6
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 23:02:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241072AbiKQWC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 17:02:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41640 "EHLO
+        id S241053AbiKQWCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 17:02:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241233AbiKQWCB (ORCPT
+        with ESMTP id S241232AbiKQWCB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 17 Nov 2022 17:02:01 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6188A786C2;
-        Thu, 17 Nov 2022 14:00:32 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id m22so8489785eji.10;
-        Thu, 17 Nov 2022 14:00:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=r2NN6hDPyAfdU/sCDR9woVn5JiNmxnVWFqIdPt4vm9g=;
-        b=WB+cuyaUAG3RwZfb0HzRk96fSQcsLypuQJD6hWX6nb3V2Ltv8FbauDkohEm5cevBr6
-         nCSz5p++gLv5EQ8Oxk4hv+KfslrF9EPBa0bN1y2d0s/HHfidM0qc2T/DNVE2F7yxZ+w0
-         wTHkBufQQJ5vYxQjlpzAV6RULDw8ODEHNRjidh0ruvy7T6VAkfhVC9lsmOrIoV4K2pLK
-         3j9VozwjYh9YNHOs+OJfd5jFKDV5IV/oSbV+6ma20qOV9D095lkE0/HPnp03Vc0xIjyN
-         bEA2mQnX5iVcDU1AR9nVNjppOcAHsBtvgpRsrI0fD6uIS7DQ1W4KEOb8t3yM3LuD04Dc
-         7eJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=r2NN6hDPyAfdU/sCDR9woVn5JiNmxnVWFqIdPt4vm9g=;
-        b=CRP1zc9BlsdQ4gGs5cAWxoNq36sDkKxQlOJL5zu0F6sO5WbsAV7fvL4V3iRenOD9HD
-         3S+zU1EqWYSr72+JKcn9FfNYrGI6XM+QkUjFTkYu+VJwGGXKXrYguCLkM7iajHpPbCUr
-         4trLSYGK5YucmTDM6ZBJI4Cjl20w/7s8G+EfeDfQUJYe5u0uY13KMLZDdqO/3lAJk2W7
-         cQSaN87G0Q4sa/EBkIRWD5p9v2X28NPrFkh98bCX54IUrSLbzXvcWUUOszrs6nDlLYSY
-         qgh0ZitY88o+aBcOo2Ll80G1T3TyETi0Xt3if36p/VOlCRu4UqVkxW32XpAUJ8Oy3BL2
-         dEZw==
-X-Gm-Message-State: ANoB5plOaY7aygaKXilkAK7sz/t+1iS1CIR44goClMoIehX5IIZ5Df9u
-        56uOOBmojiryBdzvmk5Sxkm48KgTu6s=
-X-Google-Smtp-Source: AA0mqf7Jnsueov1Xt8U8EcqPyumX0lXIYYByfa7zJaBq+nR2U0ltaQPELB/dKHN/dM7NZJ1sk1a3tw==
-X-Received: by 2002:a17:906:95c3:b0:78e:975:5e8 with SMTP id n3-20020a17090695c300b0078e097505e8mr3766822ejy.82.1668722430898;
-        Thu, 17 Nov 2022 14:00:30 -0800 (PST)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id f26-20020a17090631da00b007b27aefc578sm861531ejf.126.2022.11.17.14.00.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 14:00:30 -0800 (PST)
-Date:   Thu, 17 Nov 2022 23:00:28 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Akhil R <akhilrajeev@nvidia.com>
-Cc:     ldewangan@nvidia.com, jonathanh@nvidia.com, vkoul@kernel.org,
-        p.zabel@pengutronix.de, dmaengine@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, sfr@canb.auug.org.au
-Subject: Re: [PATCH v4 2/3] arm64: tegra: Add dma-channel-mask in GPCDMA node
-Message-ID: <Y3au/AHGcWoqfkU+@orome>
-References: <20221110171748.40304-1-akhilrajeev@nvidia.com>
- <20221110171748.40304-3-akhilrajeev@nvidia.com>
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64BC384323
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 14:00:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A8B1622A0
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:00:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22538C433D7;
+        Thu, 17 Nov 2022 22:00:30 +0000 (UTC)
+Date:   Thu, 17 Nov 2022 17:00:28 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Xuewen Yan <xuewen.yan@unisoc.com>
+Cc:     <peterz@infradead.org>, <mingo@redhat.com>,
+        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
+        <dietmar.eggemann@arm.com>, <bsegall@google.com>,
+        <mgorman@suse.de>, <bristot@redhat.com>, <vschneid@redhat.com>,
+        <ke.wang@unisoc.com>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] sched/rt: Use cpu_active_mask to prevent
+ rto_push_irq_work's dead loop
+Message-ID: <20221117170028.04fd7013@gandalf.local.home>
+In-Reply-To: <20221114120453.3233-1-xuewen.yan@unisoc.com>
+References: <20221114120453.3233-1-xuewen.yan@unisoc.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="4NqMONeQWKrx0m0s"
-Content-Disposition: inline
-In-Reply-To: <20221110171748.40304-3-akhilrajeev@nvidia.com>
-User-Agent: Mutt/2.2.8 (2022-11-05)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 14 Nov 2022 20:04:53 +0800
+Xuewen Yan <xuewen.yan@unisoc.com> wrote:
 
---4NqMONeQWKrx0m0s
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> +++ b/kernel/sched/rt.c
+> @@ -2219,6 +2219,7 @@ static int rto_next_cpu(struct root_domain *rd)
+>  {
+>  	int next;
+>  	int cpu;
+> +	struct cpumask tmp_cpumask;
 
-On Thu, Nov 10, 2022 at 10:47:47PM +0530, Akhil R wrote:
-> Add dma-channel-mask property in Tegra GPCDMA device tree node.
->=20
-> The property would help to specify the channels to be used in
-> kernel and reserve few for the firmware. This was previously
-> achieved by limiting the channel number to 31 in the driver.
-> This is wrong and does not align with the hardware. Correct this
-> and update the interrupts property to list all 32 interrupts.
->=20
-> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
-> ---
->  arch/arm64/boot/dts/nvidia/tegra186.dtsi | 4 +++-
->  arch/arm64/boot/dts/nvidia/tegra194.dtsi | 4 +++-
->  arch/arm64/boot/dts/nvidia/tegra234.dtsi | 4 +++-
->  3 files changed, 9 insertions(+), 3 deletions(-)
+If you have a machine with thousands of CPUs, this will likely kill the
+stack.
 
-Applied, thanks.
+>  
+>  	/*
+>  	 * When starting the IPI RT pushing, the rto_cpu is set to -1,
+> @@ -2238,6 +2239,11 @@ static int rto_next_cpu(struct root_domain *rd)
+>  		/* When rto_cpu is -1 this acts like cpumask_first() */
+>  		cpu = cpumask_next(rd->rto_cpu, rd->rto_mask);
+>  
+> +		cpumask_and(&tmp_cpumask, rd->rto_mask, cpu_active_mask);
+> +		if (rd->rto_cpu == -1 && cpumask_weight(&tmp_cpumask) == 1 &&
+> +		    cpumask_test_cpu(smp_processor_id(), &tmp_cpumask))
+> +			break;
+> +
 
-Thierry
+Kill the above.
 
---4NqMONeQWKrx0m0s
-Content-Type: application/pgp-signature; name="signature.asc"
+>  		rd->rto_cpu = cpu;
+>  
+>  		if (cpu < nr_cpu_ids) {
 
------BEGIN PGP SIGNATURE-----
+Why not just add here:
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmN2rvwACgkQ3SOs138+
-s6FR4A/7B0/Rwe1mbvhxjZHE3yhPrHVXuKtngxwlPnrl4KkMVER3QN1BrP0ojduS
-zqn/8VyIxknH9R6uostVEhy8kPJHkYUaSVEzd7kSS1oPvQ61qAbqwNalYNCO90yr
-3AgWhiIWflrrTTMtMfnvYr6yFlAHnlPaYpdirNrhZyXKu0ZUdcBs51aimS2pYNZj
-6OvUEq2h0iLZw/NwFbZqXRWZuH31+bB89QNIqFo/y7laGVWDcAry54Fv4aUPYbrt
-307Cl6ak4/Kv0M5xtA9prt6sVYFT/QfJ4jnzoxMg7la7L5ERlmOnWDkURBPz4O4e
-cWHB5DuKrKO/XxbIVnR+kDbFqTtWCrjcU9qxL38jNJRmiB/lRHQ5T8zPYVjjQaFR
-eWfy6r5ASUSuJ2W+KsbatH/VeCgc5nYdmviAyAPje8BUu+l/6TajdC94lo9j63l1
-egfAyJmXpx3f4l4Krhlc+Uu0owBz5IVNtdDCxJPPSl5fAKo8ioWEw7mBkuWj9utl
-bTzE77TuFxd3/zZmtwQkCNJMPNANbczBPMpc82ySLjX4L2QbWdYu7zzBUeVOGsjF
-KF7RE4Qla9GBsoKuWuC6oXfFKd3NXOwWgSalpYgakCuKMIW5oR54EICbw9vus5Hk
-FNLbnRl4W2p0p0f2LhTB5QDAulc9+UF+Nia+/4XIrwsw6sxydsE=
-=JZC7
------END PGP SIGNATURE-----
+			if (!cpumask_test_cpu(cpu, cpu_active_mask))
+				continue;
+			return cpu;
+		}
 
---4NqMONeQWKrx0m0s--
+?
+
+-- Steve
