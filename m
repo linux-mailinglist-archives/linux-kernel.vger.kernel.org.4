@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B074262DADA
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 13:29:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4993F62DAE0
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 13:30:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239655AbiKQM3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 07:29:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51492 "EHLO
+        id S240198AbiKQMaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 07:30:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240078AbiKQM3C (ORCPT
+        with ESMTP id S240115AbiKQM3E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 07:29:02 -0500
+        Thu, 17 Nov 2022 07:29:04 -0500
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61A11725CB
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9587C725CE
         for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 04:28:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1668688131; x=1700224131;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=4+L4macmpM66/vEIz+MAvlGT/49BgkmRfbdg36NVQp8=;
-  b=F6tEVnXCansAS7lNFydnF7GGhc8JQ9muOoIUnGE+m842jgZrf+Avc3p2
-   8YMqjPWqTVY1wejX04yEFk3lzOxHpbK0NHtGKU0IdZy7GFZXRfrHCtcGH
-   +sfqr56bG3KfXHGPvRs0gq1nv25vcQztGeIsLVvL8ALYqw25qevWR8ssQ
-   R44PkyApuBTmmJXHvr3JdhKz87U0BCKbCQzfc9Mz3RJoy6Gg4Dg23y+OP
-   Z5WcaUOwk9KneWWypDNaa/xeN7mOGB4XSIZ0baFr3S9sJvIDNNJ6CpaVx
-   UMXkKeWsZLl9FquyPUjjtiuqi4VOAjvgDPpp2jcYQ4cLLO1aXIDwtdXUy
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="296199873"
+  bh=dnUBqcl+k9EQthz+I0/JrzM1OicW378SnZoRnnRQKFU=;
+  b=HRUMyYekRoe894F9yo/aJ35LCSmD1/Jprqesy2syAG6uupJOXnt2/fhz
+   w1FJx/I4I/q+F3G1bp5+WZDmZ4zAPl0Sh5vQKd3RH/PuGNFg7I/t0EVRE
+   FdDO8saFIjzAWhu2JUzC92lwjtX+Vr0fyKa3dyeKP+BSrm63ZepNuEzyb
+   YngF+Oqdhk6i47JIM5wjzahiBGRvkXZKZgxkYNHVl3YkAoej9w1sKpRD5
+   ZSLEy2m8Ap0ST6Th47lzwJVadLK87RGTOP7KU6dd7fNrz+2oMe2qD4OdV
+   YmUTGMaRm1tqO0KkxA7nHw7Rf0gJzbGeDisFJ9PfpTyZQMOkiEMZjrZkk
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="296199874"
 X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
-   d="scan'208";a="296199873"
+   d="scan'208";a="296199874"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
   by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 04:28:47 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="590604557"
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="590604558"
 X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
-   d="scan'208";a="590604557"
+   d="scan'208";a="590604558"
 Received: from jfdev013vml03.jf.intel.com ([10.23.26.52])
   by orsmga003.jf.intel.com with ESMTP; 17 Nov 2022 04:28:46 -0800
 From:   alexander.antonov@linux.intel.com
 To:     peterz@infradead.org, linux-kernel@vger.kernel.org
 Cc:     kan.liang@linux.intel.com, alexey.v.bayduraev@linux.intel.com,
         alexander.antonov@linux.intel.com
-Subject: [PATCH 07/11] perf/x86/intel/uncore: Get UPI NodeID and GroupID
-Date:   Thu, 17 Nov 2022 12:28:29 +0000
-Message-Id: <20221117122833.3103580-8-alexander.antonov@linux.intel.com>
+Subject: [PATCH 08/11] perf/x86/intel/uncore: Enable UPI topology discovery for Icelake Server
+Date:   Thu, 17 Nov 2022 12:28:30 +0000
+Message-Id: <20221117122833.3103580-9-alexander.antonov@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221117122833.3103580-1-alexander.antonov@linux.intel.com>
 References: <20221117122833.3103580-1-alexander.antonov@linux.intel.com>
@@ -62,76 +62,119 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Alexander Antonov <alexander.antonov@linux.intel.com>
 
-The GIDNIDMAP register of UBOX device is used to get the topology
-information in the snbep_pci2phy_map_init(). The same approach will be
-used to discover UPI topology for ICX and SPR platforms.
+UPI topology discovery relies on data from KTILP0 (offset 0x94) and
+KTIPCSTS (offset 0x120) as well as on SKX but on Icelake Server these
+registers reside under UBOX (Device ID 0x3450) bus.
 
-Move common code that will be reused in next patches.
+This patch enables /sys/devices/uncore_upi_*/die* attributes on Icelake
+Server.
 
 Signed-off-by: Alexander Antonov <alexander.antonov@linux.intel.com>
 Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
 ---
- arch/x86/events/intel/uncore_snbep.c | 33 +++++++++++++++++++++-------
- 1 file changed, 25 insertions(+), 8 deletions(-)
+ arch/x86/events/intel/uncore_snbep.c | 75 ++++++++++++++++++++++++++++
+ 1 file changed, 75 insertions(+)
 
 diff --git a/arch/x86/events/intel/uncore_snbep.c b/arch/x86/events/intel/uncore_snbep.c
-index f682a9a0f562..6da5f692afea 100644
+index 6da5f692afea..d45f5843444d 100644
 --- a/arch/x86/events/intel/uncore_snbep.c
 +++ b/arch/x86/events/intel/uncore_snbep.c
-@@ -1372,6 +1372,28 @@ static struct pci_driver snbep_uncore_pci_driver = {
+@@ -445,6 +445,7 @@
+ #define ICX_UPI_PCI_PMON_CTR0			0x320
+ #define ICX_UPI_PCI_PMON_BOX_CTL		0x318
+ #define ICX_UPI_CTL_UMASK_EXT			0xffffff
++#define ICX_UBOX_DID				0x3450
  
- #define NODE_ID_MASK	0x7
+ /* ICX M3UPI*/
+ #define ICX_M3UPI_PCI_PMON_CTL0			0xd8
+@@ -5594,6 +5595,76 @@ static const struct attribute_group icx_upi_uncore_format_group = {
+ 	.attrs = icx_upi_uncore_formats_attr,
+ };
  
-+/* Each three bits from 0 to 23 of GIDNIDMAP register correspond Node ID. */
-+#define GIDNIDMAP(config, id)	(((config) >> (3 * (id))) & 0x7)
++#define ICX_UPI_REGS_ADDR_DEVICE_LINK0	0x02
++#define ICX_UPI_REGS_ADDR_FUNCTION	0x01
 +
-+static int upi_nodeid_groupid(struct pci_dev *ubox_dev, int nodeid_loc, int idmap_loc,
-+			      int *nodeid, int *groupid)
++static int discover_upi_topology(struct intel_uncore_type *type, int ubox_did, int dev_link0)
 +{
-+	int ret;
++	struct pci_dev *ubox = NULL;
++	struct pci_dev *dev = NULL;
++	u32 nid, gid;
++	int i, idx, ret = -EPERM;
++	struct intel_uncore_topology *upi;
++	unsigned int devfn;
 +
-+	/* get the Node ID of the local register */
-+	ret = pci_read_config_dword(ubox_dev, nodeid_loc, nodeid);
-+	if (ret)
++	/* GIDNIDMAP method supports machines which have less than 8 sockets. */
++	if (uncore_max_dies() > 8)
 +		goto err;
 +
-+	*nodeid = *nodeid & NODE_ID_MASK;
-+	/* get the Node ID mapping */
-+	ret = pci_read_config_dword(ubox_dev, idmap_loc, groupid);
-+	if (ret)
-+		goto err;
++	while ((ubox = pci_get_device(PCI_VENDOR_ID_INTEL, ubox_did, ubox))) {
++		ret = upi_nodeid_groupid(ubox, SKX_CPUNODEID, SKX_GIDNIDMAP, &nid, &gid);
++		if (ret) {
++			ret = pcibios_err_to_errno(ret);
++			break;
++		}
++
++		for (i = 0; i < 8; i++) {
++			if (nid != GIDNIDMAP(gid, i))
++				continue;
++			for (idx = 0; idx < type->num_boxes; idx++) {
++				upi = &type->topology[nid][idx];
++				devfn = PCI_DEVFN(dev_link0 + idx, ICX_UPI_REGS_ADDR_FUNCTION);
++				dev = pci_get_domain_bus_and_slot(pci_domain_nr(ubox->bus),
++								  ubox->bus->number,
++								  devfn);
++				if (dev) {
++					ret = upi_fill_topology(dev, upi, idx);
++					if (ret)
++						goto err;
++				}
++			}
++		}
++	}
 +err:
++	pci_dev_put(ubox);
++	pci_dev_put(dev);
 +	return ret;
 +}
 +
- /*
-  * build pci bus to socket mapping
-  */
-@@ -1397,13 +1419,8 @@ static int snbep_pci2phy_map_init(int devid, int nodeid_loc, int idmap_loc, bool
- 		 * the topology.
- 		 */
- 		if (nr_node_ids <= 8) {
--			/* get the Node ID of the local register */
--			err = pci_read_config_dword(ubox_dev, nodeid_loc, &config);
--			if (err)
--				break;
--			nodeid = config & NODE_ID_MASK;
--			/* get the Node ID mapping */
--			err = pci_read_config_dword(ubox_dev, idmap_loc, &config);
-+			err = upi_nodeid_groupid(ubox_dev, nodeid_loc, idmap_loc,
-+						 &nodeid, &config);
- 			if (err)
- 				break;
++static int icx_upi_get_topology(struct intel_uncore_type *type)
++{
++	return discover_upi_topology(type, ICX_UBOX_DID, ICX_UPI_REGS_ADDR_DEVICE_LINK0);
++}
++
++static struct attribute_group icx_upi_mapping_group = {
++	.is_visible	= skx_upi_mapping_visible,
++};
++
++static const struct attribute_group *icx_upi_attr_update[] = {
++	&icx_upi_mapping_group,
++	NULL
++};
++
++static int icx_upi_set_mapping(struct intel_uncore_type *type)
++{
++	return pmu_upi_set_mapping(type, &icx_upi_mapping_group);
++}
++
++static void icx_upi_cleanup_mapping(struct intel_uncore_type *type)
++{
++	pmu_cleanup_mapping(type, &icx_upi_mapping_group);
++}
++
+ static struct intel_uncore_type icx_uncore_upi = {
+ 	.name		= "upi",
+ 	.num_counters   = 4,
+@@ -5606,6 +5677,10 @@ static struct intel_uncore_type icx_uncore_upi = {
+ 	.box_ctl	= ICX_UPI_PCI_PMON_BOX_CTL,
+ 	.ops		= &skx_upi_uncore_pci_ops,
+ 	.format_group	= &icx_upi_uncore_format_group,
++	.attr_update	= icx_upi_attr_update,
++	.get_topology	= icx_upi_get_topology,
++	.set_mapping	= icx_upi_set_mapping,
++	.cleanup_mapping = icx_upi_cleanup_mapping,
+ };
  
-@@ -1421,7 +1438,7 @@ static int snbep_pci2phy_map_init(int devid, int nodeid_loc, int idmap_loc, bool
- 			 * to a particular node.
- 			 */
- 			for (i = 0; i < 8; i++) {
--				if (nodeid == ((config >> (3 * i)) & 0x7)) {
-+				if (nodeid == GIDNIDMAP(config, i)) {
- 					if (topology_max_die_per_package() > 1)
- 						die_id = i;
- 					else
+ static struct event_constraint icx_uncore_m3upi_constraints[] = {
 -- 
 2.25.1
 
