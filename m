@@ -2,148 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EEA862E31C
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:32:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 285B162E318
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:32:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240082AbiKQRc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 12:32:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52880 "EHLO
+        id S240009AbiKQRcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 12:32:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235059AbiKQRcG (ORCPT
+        with ESMTP id S235052AbiKQRcF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 12:32:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E217991B
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 09:31:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668706273;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=p1GI2VNoPaGQyRAAXXiY/Ulwq6xE6NBmpOnV6mOfH+A=;
-        b=JdAYxJwFeopzPxKIsutLoZyfrm8qAIaBrHg0P3xt5ZowmUi+9bgjncq5kuqh4cNO+KP+OL
-        1MFwUa5CHGffQ7HIk/ycOBAlEglu9tee4wILvnFsoV1IKIyMl2nbPU+7AaGS8yh2BZJPvl
-        sHhJu/nxxiuPx8SO+iTszP9TQO3ojY0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-582-x2IkZqB3MMqHY2Up3EMaLw-1; Thu, 17 Nov 2022 12:31:10 -0500
-X-MC-Unique: x2IkZqB3MMqHY2Up3EMaLw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 17 Nov 2022 12:32:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F8F579E37
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 09:32:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D5A11811E67;
-        Thu, 17 Nov 2022 17:31:09 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B2CEE112C062;
-        Thu, 17 Nov 2022 17:31:09 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     dmatlack@google.com, seanjc@google.com
-Subject: [PATCH] KVM: x86: avoid memslot check in NX hugepage recovery if it cannot be true
-Date:   Thu, 17 Nov 2022 12:31:09 -0500
-Message-Id: <20221117173109.3126912-1-pbonzini@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9AF06621DC
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 17:32:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69177C433D7;
+        Thu, 17 Nov 2022 17:32:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668706324;
+        bh=wdsxeJqew66mU+bgRH2fg2ZV2N2f5g2SvnnRTjBr7ns=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kAVXC/XpqlxDpWMpNpo9ILQWbCN/M74xUL/zj15/ZTtTTYyYsPXSFmwcp+WgWdEAN
+         eQq4sp0ULPi42RwV469PAdnEtLg+soIWqyrgyJnNRCuovQMR8I4Je8eGPb1W11O9rK
+         bRCZ6+mfkLeyYqHZJSmn8UGg5gnoB5JxSV9lPinr4Ize/dH2YvBE8I8ih9QNZQiIAa
+         Ekn51XTl7SYtEP1+YoWefddLzzZ5wKijwP8a00OURiWcN1kILP5FPNzGYoa9oqWh8p
+         IVKL/dSVv2paopySfEFGmzuTRgnycPpCYo9gljEt9EDJDfiSpkHP50qLRyhnIs+Glm
+         slRWSj/kCi+MQ==
+Date:   Thu, 17 Nov 2022 10:32:01 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
+        mripard@kernel.org, emma@anholt.net, airlied@gmail.com,
+        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v2 2/2] drm/vc4: hdmi: Fix pointer dereference before
+ check
+Message-ID: <Y3ZwEc4x/wIsroTI@dev-arch.thelio-3990X>
+References: <20221110134752.238820-1-jose.exposito89@gmail.com>
+ <20221110134752.238820-3-jose.exposito89@gmail.com>
+ <20221117172849.hk7bgahjbvycml5v@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221117172849.hk7bgahjbvycml5v@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since gfn_to_memslot() is relatively expensive, it helps to
-skip it if it the memslot cannot possibly have dirty logging
-enabled.  In order to do this, add to struct kvm a counter
-of the number of log-page memslots.  While the correct value
-can only be read with slots_lock taken, the NX recovery thread
-is content with using an approximate value.  Therefore, the
-counter is an atomic_t.
+On Thu, Nov 17, 2022 at 09:28:49AM -0800, Nick Desaulniers wrote:
+> On Thu, Nov 10, 2022 at 02:47:52PM +0100, José Expósito wrote:
+> > Commit 6bed2ea3cb38 ("drm/vc4: hdmi: Reset link on hotplug") introduced
+> > the vc4_hdmi_reset_link() function. This function dereferences the
+> > "connector" pointer before checking whether it is NULL or not.
+> > 
+> > Rework variable assignment to avoid this issue.
+> > 
+> > Fixes: 6bed2ea3cb38 ("drm/vc4: hdmi: Reset link on hotplug")
+> > Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+> > ---
+> >  drivers/gpu/drm/vc4/vc4_hdmi.c | 6 ++++--
+> >  1 file changed, 4 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdmi.c
+> > index a49f88e5d2b9..6b223a5fcf6f 100644
+> > --- a/drivers/gpu/drm/vc4/vc4_hdmi.c
+> > +++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
+> > @@ -318,8 +318,8 @@ static int reset_pipe(struct drm_crtc *crtc,
+> >  static int vc4_hdmi_reset_link(struct drm_connector *connector,
+> >  			       struct drm_modeset_acquire_ctx *ctx)
+> >  {
+> > -	struct drm_device *drm = connector->dev;
+> > -	struct vc4_hdmi *vc4_hdmi = connector_to_vc4_hdmi(connector);
+> > +	struct drm_device *drm;
+> > +	struct vc4_hdmi *vc4_hdmi;
+> 
+> Hi, I think this change, or another in this area recently, is causing
+> the following warning. PTAL
+> 
+> drivers/gpu/drm/vc4/vc4_hdmi.c:351:14: warning: variable 'vc4_hdmi' is uninitialized when used here [-Wuninitialized]
+>         mutex_lock(&vc4_hdmi->mutex);
+>                     ^~~~~~~~
+> drivers/gpu/drm/vc4/vc4_hdmi.c:322:27: note: initialize the variable 'vc4_hdmi' to silence this warning
+>         struct vc4_hdmi *vc4_hdmi;
+>                                  ^
+>                                   = NULL
 
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
----
- arch/x86/kvm/mmu/mmu.c   | 22 +++++++++++++++++++---
- include/linux/kvm_host.h |  5 +++++
- virt/kvm/kvm_main.c      |  5 +++++
- 3 files changed, 29 insertions(+), 3 deletions(-)
+Guess we just crossed paths but this is just a problem with -next due to
+a bad conflict resolution on Stephen's part:
 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index cfff74685a25..d4ec9491d468 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -6878,16 +6878,32 @@ static void kvm_recover_nx_huge_pages(struct kvm *kvm)
- 		WARN_ON_ONCE(!sp->nx_huge_page_disallowed);
- 		WARN_ON_ONCE(!sp->role.direct);
- 
--		slot = gfn_to_memslot(kvm, sp->gfn);
--		WARN_ON_ONCE(!slot);
--
- 		/*
- 		 * Unaccount and do not attempt to recover any NX Huge Pages
- 		 * that are being dirty tracked, as they would just be faulted
- 		 * back in as 4KiB pages. The NX Huge Pages in this slot will be
- 		 * recovered, along with all the other huge pages in the slot,
- 		 * when dirty logging is disabled.
-+		 *
-+		 * Since gfn_to_memslot() is relatively expensive, it helps to
-+		 * skip it if it the test cannot possibly return true.  On the
-+		 * other hand, if any memslot has logging enabled, chances are
-+		 * good that all of them do, in which case unaccount_nx_huge_page()
-+		 * is much cheaper than zapping the page.
-+		 *
-+		 * If a memslot update is in progress, reading an incorrect value
-+		 * of kvm->nr_logpage_memslots is not a problem: if it is becoming
-+		 * zero, gfn_to_memslot() will be done unnecessarily; if it is
-+		 * becoming nonzero, the page will be zapped unnecessarily.
-+		 * Either way, this only affects efficiency in racy situations,
-+		 * and not correctness.
- 		 */
-+		slot = NULL;
-+		if (atomic_read(&kvm->nr_logpage_memslots)) {
-+			slot = gfn_to_memslot(kvm, sp->gfn);
-+			WARN_ON_ONCE(!slot);
-+		}
-+
- 		if (slot && kvm_slot_dirty_track_enabled(slot))
- 			unaccount_nx_huge_page(kvm, sp);
- 		else if (is_tdp_mmu_page(sp))
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index e6e66c5e56f2..b3c2b975e737 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -722,6 +722,11 @@ struct kvm {
- 	/* The current active memslot set for each address space */
- 	struct kvm_memslots __rcu *memslots[KVM_ADDRESS_SPACE_NUM];
- 	struct xarray vcpu_array;
-+	/*
-+	 * Protected by slots_lock, but can be read outside if an
-+	 * incorrect answer is acceptable.
-+	 */
-+	atomic_t nr_logpage_memslots;
- 
- 	/* Used to wait for completion of MMU notifiers.  */
- 	spinlock_t mn_invalidate_lock;
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 43bbe4fde078..7670ebd29bcf 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -1627,6 +1627,11 @@ static int kvm_prepare_memory_region(struct kvm *kvm,
- 		}
- 	}
- 
-+	atomic_set(&kvm->nr_logpage_memslots,
-+		   atomic_read(&kvm->nr_logpage_memslots)
-+		   + !!(new->flags & KVM_MEM_LOG_DIRTY_PAGES)
-+		   - !!(old->flags & KVM_MEM_LOG_DIRTY_PAGES));
-+
- 	r = kvm_arch_prepare_memory_region(kvm, old, new, change);
- 
- 	/* Free the bitmap on failure if it was allocated above. */
--- 
-2.31.1
+https://lore.kernel.org/Y3ZvffZiR+SgtY6h@dev-arch.thelio-3990X/
 
+> >  	struct drm_connector_state *conn_state;
+> >  	struct drm_crtc_state *crtc_state;
+> >  	struct drm_crtc *crtc;
+> > @@ -330,6 +330,7 @@ static int vc4_hdmi_reset_link(struct drm_connector *connector,
+> >  	if (!connector)
+> >  		return 0;
+> >  
+> > +	drm = connector->dev;
+> >  	ret = drm_modeset_lock(&drm->mode_config.connection_mutex, ctx);
+> >  	if (ret)
+> >  		return ret;
+> > @@ -347,6 +348,7 @@ static int vc4_hdmi_reset_link(struct drm_connector *connector,
+> >  	if (!crtc_state->active)
+> >  		return 0;
+> >  
+> > +	vc4_hdmi = connector_to_vc4_hdmi(connector);
+
+This version of the patch is fine, as there is no mutex_lock() call
+here.
+
+> >  	if (!vc4_hdmi_supports_scrambling(vc4_hdmi))
+> >  		return 0;
+> >  
+> > -- 
+> > 2.25.1
+> > 
+> > 
+> 
+
+Cheers,
+Nathan
