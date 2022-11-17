@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B03562E503
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 20:11:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF82D62E505
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 20:11:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240490AbiKQTLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 14:11:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56938 "EHLO
+        id S240580AbiKQTLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 14:11:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240431AbiKQTLO (ORCPT
+        with ESMTP id S240595AbiKQTL1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 14:11:14 -0500
+        Thu, 17 Nov 2022 14:11:27 -0500
 Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282258756A
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 11:11:10 -0800 (PST)
-Received: by mail-ot1-x32a.google.com with SMTP id p10-20020a9d76ca000000b0066d6c6bce58so1661805otl.7
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 11:11:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D2D88F99
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 11:11:26 -0800 (PST)
+Received: by mail-ot1-x32a.google.com with SMTP id a13-20020a9d6e8d000000b00668d65fc44fso1665175otr.9
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 11:11:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=FWnLlursaYJKfOWPydpMGhECaxSct87sWPPYmZvjBnw=;
-        b=Cz7wQpimV+YosOt9d//L2iWXvsIwwTN7+tjHjRw1UuXZTFbUfBv45GZ47lSCAi6EcG
-         VLCxZlhWhKMLKfFv0VpaJ6NGzl9T2WpPOA2M7MVPeRDJmz+0+7kWkh8Dq5RGn36c5YZN
-         RCkckS0hqvu2id02Rcg6k7XcFXzcNLD8MIzBGgWMWN0N0VHHd1fSFMQklCX+brbbuBgE
-         ih/7mR/sPjlt/bW7MM8g1MVwu+GTjymRKZX2kFP8DUezPbyyoBQYIDFml/uoor40SgeV
-         nSUMnBnJUmDecXZkRmTJfH0roB/Hyh4UDmNyK8ednN4Veb0goHe6OwvCB2TlDb1m3iQE
-         C3+g==
+        bh=F9vuYWBj3VCQLnX7XxCflhcGLLAxSYr1p1Ei/JoEgZA=;
+        b=C19iRH75P+VwDatXUteorkTX6aQD2I4RLWXzK2wrX5IGOMmiEO4MOe2D9Uyio1ZunN
+         9xaIeK3uO74oI9XKNjuG2HIPmeUYvNNFYjmUJ9RWMa4nAa8a3fK/PXmQQsoE+ysIfMdO
+         /9LCfKGtooen6cHxe/a516m0pNHJm9/4qUzwFsHgRuYdYSr+ROS0UETXzkYpflP/8nh7
+         J58WXq6HPb1GZgfhu2ovKl6Gy5TyG2U6+zwu4h/8Dzkvx1jez2RVnju8HmVF2nZ95VMb
+         r5mpsEp7X/I/Gl/rmYEru+UEWYRJlpwGECnK+CaNsiMAbHbrD6m+8+mO8lxlNPVOVtto
+         8qdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=FWnLlursaYJKfOWPydpMGhECaxSct87sWPPYmZvjBnw=;
-        b=DzpA5hNa/Xg+1K/5ZDU8H9TRw8lrdcPGte+xdHJrjMbQnb6VYppdP+iZFag1/LLeOt
-         ng7B4bT14XVoT6KC4au2ci1gLJ5szFj4xfw7qJWQoS3U3CAmsJkwaNh3gkP/UlPJcmHa
-         hmatGZvPLBFAtMF6fkgKiOZ7w3iODY8tF/X/EukKC4+HFC40tJU7jlBjggpBB62EmOtr
-         qF1d9qBayMwMA6+CwQsXUpRxavpZ7nymf2z/DzdjZPen4MyBT22+Kt7z9vPrD7NKzK0A
-         4eJpN1p6UozGhrDbJmqpD1tz4B/TzNusKrTP/YWTrKtfag2rU+hVhHbeRcI1smEliKKR
-         sfbQ==
-X-Gm-Message-State: ANoB5pnEGolFJA3VJrskGBTY9/5S4K0itYwdr55KX3D7t2gCQXAmlg+I
-        xk+GyQjCnHwXpQph85pNFmqCiaFwP6WVhC4x6UhF8jHZcFc=
-X-Google-Smtp-Source: AA0mqf72zx045VT5xpVnSFZ6Iun9LWo8yDAnd0PQxV+G2W6PiH+rxSFgg06B0VtTYQpHPSkqtismdJCDIQ6RZ3AVZE4=
+        bh=F9vuYWBj3VCQLnX7XxCflhcGLLAxSYr1p1Ei/JoEgZA=;
+        b=QoaGnanpG2HJ3UumdW1FA8Ak7yHSOJI5iaX6ayTRsyeitK+VIHExkzpx02UFPAQncW
+         jnMjQPbQ326ovJfMruU0I7qxDonxRVjUmJ9MCSzB1JQzvHBj/t7C/wfr204KWidaBgtm
+         J+gx4HjZ62MvWVgvCFq5DrwvzoWsyvcDUG9sdbo6O5G7dueoOWp4DZYVL1wL5KXuLmUl
+         iUh+0E26Zkr+j2IO6RAnN1nFria5X2Enmk6KjTzByaZSGwHZfWy1gOwHng71a4u5GN18
+         WyQZW0HfJoEH3XV26SraqUTYvRViSoiNwOJs/MIlAEwLT6Pf29zqXfIiGwKprPm15K2D
+         6lPg==
+X-Gm-Message-State: ANoB5pkuzDjOl9/ke34CzfZCYgt5slmLf6bDZOad06rJsyrFh88dYtA7
+        0TezsoyRYrwCdNEFxA7SU9pXUMpCGqxgqW0mYbr3LHAbPWU=
+X-Google-Smtp-Source: AA0mqf6rOu6uBCRXlS+5KALNPNi+oEVuFeuHINeh2EQOlP6Nw7xTr3GMACXXEpt74SoOoXEzxyjKEIaAuibzmSgfKNU=
 X-Received: by 2002:a05:6830:1510:b0:655:bd84:a806 with SMTP id
- k16-20020a056830151000b00655bd84a806mr2136812otp.108.1668712269869; Thu, 17
- Nov 2022 11:11:09 -0800 (PST)
+ k16-20020a056830151000b00655bd84a806mr2137311otp.108.1668712285541; Thu, 17
+ Nov 2022 11:11:25 -0800 (PST)
 MIME-Version: 1.0
-References: <20221117181127.1859634-1-dionnaglaze@google.com> <20221117181127.1859634-2-dionnaglaze@google.com>
-In-Reply-To: <20221117181127.1859634-2-dionnaglaze@google.com>
+References: <20221117181127.1859634-1-dionnaglaze@google.com> <20221117181127.1859634-3-dionnaglaze@google.com>
+In-Reply-To: <20221117181127.1859634-3-dionnaglaze@google.com>
 From:   Dionna Amalie Glaze <dionnaglaze@google.com>
-Date:   Thu, 17 Nov 2022 11:10:59 -0800
-Message-ID: <CAAH4kHZneEeJvH0ppJBEUqMQeWH_KS-h+BG+QkNqMV64F0PENA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] kvm: sev: Add SEV-SNP guest request throttling
+Date:   Thu, 17 Nov 2022 11:11:14 -0800
+Message-ID: <CAAH4kHY-Es7T-qBoP0-ai-s3Rzoi0p+2wW5HZv8u3SSe-9prGw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] kvm: sev: If ccp is busy, report throttled to guest
 To:     linux-kernel@vger.kernel.org, x86@kernel.org
 Cc:     Thomas Lendacky <Thomas.Lendacky@amd.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
@@ -76,7 +76,6 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Adding kvm
-
 
 -- 
 -Dionna Glaze, PhD (she/her)
