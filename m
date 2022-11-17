@@ -2,144 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A83F362DCD9
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:33:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9D9862DCDB
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:34:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240102AbiKQNdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 08:33:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48426 "EHLO
+        id S240104AbiKQNeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 08:34:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239985AbiKQNdn (ORCPT
+        with ESMTP id S239985AbiKQNd7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 08:33:43 -0500
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2059.outbound.protection.outlook.com [40.107.95.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05426B206;
-        Thu, 17 Nov 2022 05:33:41 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LdgCdhYMV+8pQmkVDfk3goUGkfyue3e7wmWj73xRrUcbwu8pDScGYHpo45lzdYcKWurBB+G5epDqYvDrLRwGwLSndO1d8ZrBIeVa8vQyL9xvBlNK1bdBV7hd71mWB1mcJ1uVuICeigVl4X1EUIBbjdI4tF+qbEJv3tprwwqSX/86ygbwPjyGFH7og6b1KGpTWKaQ06Jnix98g0liip8IA0yvRyzfkS20KjR1Gwrq+Onotdd1cuGUZQCCBqQf8Qx/YEJrePJ+9m5pq0Fm8r6bjHkiwG2XSe6u6N5w913sJSydanSrSnTnGrOObbt7IawyuKZAYEGluI38fUA9KzEALg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=s9F8vNZ0K7uCjaYtsonIrknuqB4S+txYNE4rGGWQLMs=;
- b=jBGZWnGW1JRpDmYixcGYejsBZIjQ8PAB7zHrW9fP5t4MB725iLLLKeBVZop8hVzGDaXpzTNLK1Qkz2cOJzxNwHAgujCqJl3iPx9YDWy7zY0KSCmwOpKPBjAYdnUwXjqF9MAERmFf6Lrca+mJQnHN7gAlj4S1PAkM25k459kYYQoKWTJ1psjVf6f8o5fD74BdF2G4raIIDeoOtPDeIeyqGfUiAstf9eVijcwJTaMdjs4e6yARe3670f9W27w3RKOjLpMcD4MMFHLQ7PPj+EnujRTTkwrO2fFZJ1U0PiuWITB4AgWCXzhjEkfDpEjs8f8SkDnEZBS80CEblB5zHaRkMw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=s9F8vNZ0K7uCjaYtsonIrknuqB4S+txYNE4rGGWQLMs=;
- b=ePJ5dJH97g75+r6Jri9fFahMKw0Tp2h4N9bTehcw0MxRDZ076w8hIvRSnk+iyrU0YYQ3CICzBMKypmOhpMELzxMLA1dQerFeNpzYMXl8GE1JnI+oy2QRhsbDVSK4MKQvktdAfXXOxbIF0oKOhbsz5kvXtWUUYmymjMRFV/PRX8aDGO+rvj/YHhgc+1Wg3Blf+Llq9qMT/Z153kThLPfEwaNrl/+FkO5Upzpt0/eTcHBxdCZhe3JKAgaMBhUlhE8Ev4zRbDlLLdZN9l4yS4R0zBxlqQ4LcI3bcqRYOGie+Szq7qe2B3gXGj7VyE0f8ZV8xY8+ar0qRrR5cSxA5WaUrg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by DM6PR12MB4188.namprd12.prod.outlook.com (2603:10b6:5:215::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.19; Thu, 17 Nov
- 2022 13:33:40 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f8b0:df13:5f8d:12a]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f8b0:df13:5f8d:12a%7]) with mapi id 15.20.5813.017; Thu, 17 Nov 2022
- 13:33:39 +0000
-Date:   Thu, 17 Nov 2022 09:33:38 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
-        Allen Hubbe <allenbh@gmail.com>,
-        "Ahmed S. Darwish" <darwi@linutronix.de>,
-        Reinette Chatre <reinette.chatre@intel.com>
-Subject: Re: [patch 19/33] genirq/msi: Provide msi_desc::msi_data
-Message-ID: <Y3Y4MlLuLotvYbmA@nvidia.com>
-References: <20221111133158.196269823@linutronix.de>
- <20221111135206.346985384@linutronix.de>
- <Y3U5xwujkZvI0TEN@nvidia.com>
- <87tu2ym0eq.ffs@tglx>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87tu2ym0eq.ffs@tglx>
-X-ClientProxiedBy: BL0PR02CA0096.namprd02.prod.outlook.com
- (2603:10b6:208:51::37) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DM6PR12MB4188:EE_
-X-MS-Office365-Filtering-Correlation-Id: d4c08a8e-3c1b-4d3d-e67b-08dac8a05672
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OlOleX7TS1lGJIn8T/CEBCvX6Sjn1O/tQ4PKr+insSAE0zYi0BPpv3jDO9GKinKJvrpf3e/CFfmxmRPGGCxrO30tmJtqX/3YMwjx1l1A4ibfgmRUaHq+HD/sDXbGfYjBTJEtanQkmaBm/moqq12e59hhJ9JK9L6P3KRaF22yQq76J4KSDpRVTFuLZgkAfj8pfvbSgP/5KtlMhaUUPprQxQHxzYF6elHlmwGh8ZKxJNwAWoVxXdiBirysnB5d4KUWVhgivZ8PIJ57hclehRPiM2UWtav3gB/Jfh504j8Xvu4hh2SkYJZR4WtDoklZt6dzatK65OiQCVKOaoEqXz5FCOiuS0/4jdUf7EOUioCWKqFvCQ+F+e/XKHNrcVdXDpYK3Mw3ALkISy2tnnVo7s5LPASw0gDJrbJNpjwv9vj33eTIPKFaoNzTJzdBWNtt/1mzfV+BCQlC5Z3HFHYb6w0Q0x6jblBjK253pGxM6VgKDaWxP/tdUelPI15VRPWovxysflHgoKHbmjEQrIsDhrercGpHUHCF70/gaUB0sLUdW3OEnAFwvhI1l/uBxHy7QOXif7/7QKMnfguoRZtNFNcfBRe3EQMvKAu3qoHHWFgcRPHfz4BPLLGL4DGTEt/vXrYC
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(366004)(396003)(136003)(346002)(451199015)(38100700002)(4326008)(2906002)(8936002)(66556008)(66476007)(66946007)(8676002)(7416002)(4744005)(5660300002)(86362001)(316002)(478600001)(2616005)(54906003)(6916009)(6486002)(41300700001)(36756003)(186003)(26005)(6512007)(6506007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?RYP5ul4qi6mZU8NB1gN26o+BDmAEF2iO68OsuiwmIwdfdPdx5U/gAt9WpyGG?=
- =?us-ascii?Q?v0KAA4JBWziUOyHm8ErtqRut8FesZS+WnXY99TUVWn6p8BIMOeRK2Hatpk25?=
- =?us-ascii?Q?PAPNl0stlUHHcLwZW4MRqCVwmbOg/G5jgDndPZ/XukuaXO8lHdJYb+tnITct?=
- =?us-ascii?Q?Laz+emYmsvUrqmatnU04cvDFLKNna3/4/2xLQcRM2qw5u2M+Xhq3rV/vDGBP?=
- =?us-ascii?Q?H2nH3JJBNe2DMlmu1jMUjPYUWFRdmv8up3kvk7nC8H0Ngn21BRBrfisOIXKh?=
- =?us-ascii?Q?AcgxYMIa0fnwBQvPaD0ZlYh1/NgNllA0iHGP4s/n6zgu6wxlpIwn576HWcUu?=
- =?us-ascii?Q?X9SmU/2yW6xNSXDxrbCZCGW56X8lO7J/s0leCQe7hmBDnKHGv6RQ8b6Uhfgj?=
- =?us-ascii?Q?u6I6+dWvlgGM+Rq6RF9WBQfxxW8qVhg9RejTOnuhLSXcQjMXwvRc9xHeYNGS?=
- =?us-ascii?Q?jlZUTuWpXe/lVBdu0H+O00mmW8BPFptkJ7bYcKgq7hOdHkHQCpGQYw6njQA/?=
- =?us-ascii?Q?Tx9OAo2MUxlYN/BZ9FQY5hiOdcSR/7lWufUFmddUevhY2uOAFlwQyZGQ11k+?=
- =?us-ascii?Q?+P8G+mLr/Va+CGPwjIHCNJ0A45wCLa8qVOqUjjn1agLJJfcP/6zd4e5qMsBf?=
- =?us-ascii?Q?/wtUFLFAYRZKR+GkMc2oTKM0hVzod2ntZcmfUapd5765CJhxa5TGiU05iE02?=
- =?us-ascii?Q?g7mdv12Wha6P6memD+jzVRx5ecvG6c3eklLMoy/oqlwzW1lalz7pVrjFyvsA?=
- =?us-ascii?Q?OQsOjQ5hUgUXQ1j1mA0XiOuAd3P7MZRKxMlYj1ChpglatVSFYaGxOHyRoxQx?=
- =?us-ascii?Q?HqmR7f5UsVwdOTpF4OmolRhWuEmL7cO2sOON7aQteJY0lokK7tZSSRuk5FEV?=
- =?us-ascii?Q?B0Art1yYxamgmE2rvWdwSlwSXLJWSLw+suoueEn8I6ETQnXmbYUxkOG71DjQ?=
- =?us-ascii?Q?zxlcjQoR+I8ecU5mG77RyY+WxOZ6DXxm7uPPvjmuts+PmO/uVSoNfUZh6RcR?=
- =?us-ascii?Q?hZlybzzs9erTDePcmLkgDu064OPfM6A1WgUEH3mkeAhBdi5RDA70ouyQc+if?=
- =?us-ascii?Q?Rsq33D9p8mai3S7ujwxvJRQC8zawa7umVcDiNgLd0N5B5ly1CCBC5658iiaQ?=
- =?us-ascii?Q?8D5shaLv5NG0Z173yd/rjkQKMvQTm2uCOXok1zu8txA8eNGS/B2Q5q7MmYnM?=
- =?us-ascii?Q?Rqrr6ZHTtnvvlt5yxqhEByEtBisfSuxKEK3X7nArBu22qRnZF1sAfDIfedL6?=
- =?us-ascii?Q?+lZb3G4icStHADauwCobbFjse8GJ4/6mMWqhh9A0TMjzt0QM5cy0VdbehvfB?=
- =?us-ascii?Q?gwZFi2D/2qP6QIzqf9+VFhqhHcmCkPa8DzLXqEtzzBpFG5z24rqIE3MnJphU?=
- =?us-ascii?Q?1ZHZ1Dq/mt1LXIN3tM4dh/eaiFS4Mx1mK9o6N1d80M1YNCtamst3Y39tFPwQ?=
- =?us-ascii?Q?VfzUsII6VMjN4hl7kMlsB/maOudn4PEKMRwcNNwS9H8u5xgDihVh3oWWjnfn?=
- =?us-ascii?Q?8nmMkaTcgpd6bLoSg61duZUAunWb7HHm74/y0C+OHWl2RfWEUbFGNcYp6Uh6?=
- =?us-ascii?Q?iVqaZCVcVmwmFbCkOnQ=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d4c08a8e-3c1b-4d3d-e67b-08dac8a05672
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Nov 2022 13:33:39.8914
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: j+MvSr+Blfbv5BRxzOyCGjcAucYXMwsBoXC67RDbS/+n//cqukTr9kTu1TccMjuZ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4188
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+        Thu, 17 Nov 2022 08:33:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3738701AF;
+        Thu, 17 Nov 2022 05:33:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C7E361DDB;
+        Thu, 17 Nov 2022 13:33:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F3FDC433C1;
+        Thu, 17 Nov 2022 13:33:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668692037;
+        bh=3Yi5R38N4+PFdRdgrod2ezt04BBlSr1w0HNb7xyM9cY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=m+CfeFclZaH24btvODt3J6ikPRl4CUAodjNFcA9HUpL9816Ai/+kEcs9natU9OC07
+         mMGOkydKUkke9lqI1GuebPXxzNtqLaGjfuHK6jd0Opa3xe5jGzp7Oxg8rxvkjGt2PW
+         TnBaWfpyOfLIFi14WUrgqOJF0XHI7lxjAvp2Vm2MTwGrxDLOFFUY2Ftl/JLR4toD7u
+         MSdTQTJPqGS2qWAckcbXYKS0zGssU1qRPKR3EPsFXGN8RP7nc3RF4XzhF13xsulsvA
+         H5Fngx9JBjTxmT8TKWmpmK97l3eDz2bf2A1HlTC7vqyJyNH/vlIXCdi9/kofEMzbZN
+         th2E4gyfRsyYA==
+Date:   Thu, 17 Nov 2022 22:33:53 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Florent Revest <revest@chromium.org>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        KP Singh <kpsingh@kernel.org>,
+        Brendan Jackman <jackmanb@google.com>, markowsky@google.com,
+        Mark Rutland <mark.rutland@arm.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Xu Kuohai <xukuohai@huawei.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC 0/1] BPF tracing for arm64 using fprobe
+Message-Id: <20221117223353.431e29124ba51a72c3507ced@kernel.org>
+In-Reply-To: <CAADnVQ+BWpzqOV8dGCR=A3dR3u60CkBkqSXEQHe2kVqFzsgnHw@mail.gmail.com>
+References: <20221108220651.24492-1-revest@chromium.org>
+        <CAADnVQ+BWpzqOV8dGCR=A3dR3u60CkBkqSXEQHe2kVqFzsgnHw@mail.gmail.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 09:48:45AM +0100, Thomas Gleixner wrote:
+On Wed, 16 Nov 2022 18:41:26 -0800
+Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
 
-> > We've used 128 bits for the PCI descriptor, we might as well like
-> > everyone have all 128 bits for whatever they want to do
+> On Tue, Nov 8, 2022 at 2:07 PM Florent Revest <revest@chromium.org> wrote:
+> >
+> > Hi!
+> >
+> > With this RFC, I'd like to revive the conversation between BPF, ARM and tracing
+> > folks on what BPF tracing (fentry/fexit/fmod_ret) could/should look like on
+> > arm64.
+> >
+> > Current status of BPF tracing
+> > =============================
+> >
+> > On currently supported architectures (like x86), BPF tracing programs are
+> > called from a JITted BPF trampoline, itself called from the ftrace patch site
+> > thanks to the ftrace "direct call" API. (or from the end of the ftrace
+> > trampoline if a ftrace ops is also tracing that function, but this is
+> > transparent to BPF)
+> >
+> > Thanks to Xu's work [1], we now have BPF trampolines on arm64 (these can be
+> > used for struct ops programs already), but Xu's attempts at getting ftrace
+> > direct calls support [2][3] on arm64 have been unsucessful so far so we still
+> > do not support BPF tracing programs. This prompted me to try a different
+> > approach. I'd like to collect feedback on it here.
+> >
+> > Why not direct calls ?
+> > ======================
+> >
+> > Mark and Steven have not been too keen on getting direct calls on arm64 because:
+> > - working around BL instruction's limited range introduces complexity [4]
+> > - it's difficult to get reliable stacktraces right with direct calls [5]
+> > - direct calls are complex to maintain on the arch/ftrace side [5]
+> >
+> > In the absence of ftrace direct calls support, BPF tracing programs would need
+> > to be called from an ftrace ops instead. Note that the BPF callback signature
+> > would have to be different, so we can't re-use trampolines (direct called
+> > callbacks receive arguments in registers whereas ftrace ops callbacks receive
+> > arguments in a struct ftrace_regs pointer)
+> >
+> > Why fprobe ?
+> > ============
+> >
+> > Ftrace ops per-se only expose an API to hook before a function. There are two
+> > systems built on top of ftrace ops that also allow hooking the function exit:
+> > fprobe (using rethook) and the function graph tracer. There are plans from
+> > Masami and Steven to unify these two systems but, as they stand, only fprobe
+> > gives enough flexibility to implement BPF tracing.
+> >
+> > In order not to reinvent the wheel, if direct calls aren't available on the
+> > arch, BPF could leverage fprobe to hook before and after the traced function.
+> > Note that return hooking is implemented a bit differently than it is in BPF
+> > trampolines. Instead of keeping arguments on a stack frame and calling the
+> > traced function, rethook saves arguments in a memory pool and returns to the
+> > traced function with a hijacked return pointer that will have its ret jump back
+> > to the rethook trampoline.
+> >
+> > What about performances ?
+> > =========================
+> >
+> > In its current state, a fprobe callback on arm64 is very expensive because:
+> > 1- the ftrace trampoline saves all registers (including many unnecessary ones)
+> > 2- it calls ftrace_ops_list_func which iterates over all ops and is very slow
+> > 3- the fprobe ops unconditionally hooks a rethook
+> > 4- rethook grabs memory from a freelist which is slow under high contention
+> >
+> > However, all the above points are currently being addressed:
+> > 1- by Mark's series to save argument registers only [6]
+> > 2- by Mark's series to call single ops directly [7]
+> > 3- by Masami's patch to skip rethooks if not needed [8]
+> > 4- Masami said the rethook freelist would be replaced by a per-task stack as
+> >    part of its unification with the function graph tracer [9]
+> >
+> > I measured the costs of BPF on different approaches on my RPi4 here: [10]
+> > tl;dr: the BPF "bench" takes a performance hit of:
+> > - 28.6% w/ BPF tracing on direct calls (best case scenario for reference) [11]
+> > - 66.8% w/ BPF on kprobe (just for reference)
+> > - 62.6% w/ BPF tracing on fprobe without any optimizations (current state) [12]
+> > - 34.1% w/ BPF tracing on fprobe with all optimizations (near-future state) [13]
 > 
-> Not sure because we end up with nasty type casts for
+> Even with all optimization the performance overhead is not acceptable.
+> It feels to me that folks are still thinking about bpf trampoline
+> as a tracing facility.
+> It's a lot more than that. It needs to run 24/7 with zero overhead.
+> It needs to replace the kernel functions and be invoked
+> millions times a second until the system is rebooted.
+> In this environment every nanosecond counts.
+> 
+> Even if the fprobe side was completely free the patch 1 has so much
+> overhead in copy of bpf_cookie, regs, etc that it's a non-starter
+> for these use cases.
+> 
+> There are several other fundamental issues in this approach
+> because of fprobe/ftrace.
+> It has ftrace_test_recursion_trylock and disables preemption.
+> Both are deal breakers.
 
-Something like:
+I talked with Florent about this offline.
+ftrace_test_recursion_trylock() is required for generic ftrace
+use because user callback can call a function which can be
+traced by ftrace. This means it can cause an infinite loop.
+However, if user can ensure to check it by itself, I can add a
+flag to avoid that trylock. (Of course, you can shoot your foot.)
 
-void *msi_desc_device_priv() {return dec->device_data;}
+I thought the preemption disabling was for accessing per-cpu,
+but it is needed for rethook to get an object from an RCU
+protected list.
+Thus when we move on the per-task shadow stack, it can be
+removed too.
 
-As netdev does it?
+> 
+> bpf trampoline has to allow recursion in some cases.
+> See __bpf_prog_enter*() flavors.
+> 
+> bpf trampoline also has to use migrate_disable instead of preemption
+> and rcu_read_lock() in some cases and rcu_read_lock_trace() in others.
 
-Jason
+Is rcu_read_lock() better than preempt_disable()? 
+
+> 
+> bpf trampoline must never allocate memory or grab locks.
+
+Note that ftrace_test_recursion_trylock() is just a bit operation
+per-task, not taking a lock (nor atomic).
+
+Thank you,
+
+> 
+> All of these mandatory features exclude fprobe, ftrace, rethook
+> from possible options.
+> 
+> Let's figure out how to address concerns with direct calls:
+> 
+> > - working around BL instruction's limited range introduces complexity [4]
+> > - it's difficult to get reliable stacktraces right with direct calls [5]
+> > - direct calls are complex to maintain on the arch/ftrace side [5]
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
