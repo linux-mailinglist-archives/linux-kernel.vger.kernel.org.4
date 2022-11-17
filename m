@@ -2,136 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE61862E7FD
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 23:15:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7454562E7FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 23:15:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234875AbiKQWP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 17:15:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53460 "EHLO
+        id S240076AbiKQWPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 17:15:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238729AbiKQWPQ (ORCPT
+        with ESMTP id S235114AbiKQWPP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 17:15:16 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD90374CCD;
-        Thu, 17 Nov 2022 14:15:15 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id k22so3125695pfd.3;
-        Thu, 17 Nov 2022 14:15:15 -0800 (PST)
+        Thu, 17 Nov 2022 17:15:15 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDDC674CC0
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 14:15:14 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id b21so2905171plc.9
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 14:15:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=N7duF0PlBN6lshFkS+sJiVqebLxCzfkfifRx7exo7Ek=;
-        b=McAXDy1TOpM5aPvG8ZiiqTGYqbwZcW75cWxetdt2nAQxdBw0yaXeZlMhTDO7VEgyXg
-         QzGVfGVn9v8NRKVA/+EjdSI1BRy8puyv95ZkWV893lh7xJMhGvjJU8UYY0K4sgucCA6X
-         3dlEn7C39n7SOsrLeD7yS3eqEmpPKwPaK5yM5ScQCFnKqKOrcwan3ktbubyqGuLO9PVm
-         gxx/97ioLsEMJvx5nP2cBShQyRI/jTuvKhXt1czYcsCaZAXDQY4UP7KRJB92J4UfnU6Q
-         jRsybrijYe0UmFYYeBn9J6bZ2AZltREQo0uYp5+sMqgfwgYiz8YW7chm4QA88VD/xPmU
-         q61w==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=o+rCsV5xsoe3YaW2+ZL6bhCv4e9AU/LzIWH2zi7pT+E=;
+        b=de8kXYaeuUUFyDxBuZ8N9Itz1hzGQA+CbOUNN8k4fgM8wN0Tib7RipSMV1i7JdgJ0/
+         bZuygE0uXtCeWZwDb4doQDuagJMYHrQybMgD+XE1O8e1WXR66umAr+9SkxyqW2rz1GCi
+         iTMD5ikKdTmpPYooemuKyLRwCQ1bIN5SMpuROKSoLsIICklfh2M0IDLPAjEIU0yLZ/wL
+         DtJGU6ckrvqFkSpQpfVPirM+ZpJYXfo6uS6GxY3hkzdejcSApS+Lab+QvTUaJNXTURFk
+         EW3JP//MFKXQG8A+FVUnPSVl/16I9pkUe1cHKgi8qiqmYWsV3mBPEUawQpxdwK8KYhy/
+         LJ/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=N7duF0PlBN6lshFkS+sJiVqebLxCzfkfifRx7exo7Ek=;
-        b=0MGz4vEhsv/phHm+RD0NwT85H+d4h8R9C6qZxHrRz10TXilq8P5SH4tYoyZGdzN7eq
-         eZT8zeuNBbWdmfVbYhb2fq2y5dUlu4fl+KY02l1ijLNfEnFB6qS90qBKTDS8SgQf1axv
-         K9jU0VeiLzpXdtxOb5boOs2UUYLgNkdPbJ1/5lr5ZxI7JelgVsFrTHoz9padSqBCudIX
-         bcVhMfY/b75ffMzNL00+nVzsxffW+/1LkCDJ5BxX/ihL1Cz0G83cJUAker/lm+fTbIG1
-         CFi3nulJeO4Pk2/kEjtHyarnYHzWaXUm5bGHfyyFFkfd38MayaeBncr4HdLA6rLi4L5y
-         L/UQ==
-X-Gm-Message-State: ANoB5pmmOPhP7stP5E1HzLKUm+jvFug6eeUi6CKzPhhYLEhy1/QAV6ad
-        xukJyk7jiqy+qjhu6RQ4d5M=
-X-Google-Smtp-Source: AA0mqf4zecntXXKVewH88hqZ02AGSJ09Uw1l40rvqqDZAcis8clBig99HgaKBF70S/DYMZiHRORqhA==
-X-Received: by 2002:a63:5819:0:b0:476:8ce9:be5d with SMTP id m25-20020a635819000000b004768ce9be5dmr3996499pgb.15.1668723315212;
-        Thu, 17 Nov 2022 14:15:15 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:e4c5:c31d:4c68:97a0])
-        by smtp.gmail.com with ESMTPSA id i6-20020a170902c94600b00172e19c5f8bsm1930696pla.168.2022.11.17.14.15.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=o+rCsV5xsoe3YaW2+ZL6bhCv4e9AU/LzIWH2zi7pT+E=;
+        b=KI5TIVL4KGsAF2w2+11izguY6WI0wknmpN/DMgP597iUyJv4qu6vDZiQTaU5eDow7q
+         byw5KU0PGh0ti77dIwkHhj3PkPwdsMXdN8qhrvfk5S7kLeCbhBhRe3CWkscSevlqk13c
+         o0Z61Zh0AxhNIft3xxcYRiqPodT1JJPkM1ZRQcPapAaQojf3piLINAcsgFnYNDsu6jWU
+         iLg2oFaMntk7/c/CWdiqCyrfT8o9N6d07vI/ckD+o3aaN4cMkYeCSDp3qPRvRl2rqoWc
+         5HV6d7kpNg8jDnIJCPlcP1dC0/CAKaBj/kKRAJvo7H+JWxtw6EWelHK561bI7yg0bF4s
+         2hbQ==
+X-Gm-Message-State: ANoB5pkyh5LtLOckpqivjPEdnP0IoYgafjghSdTkJMS28flcWJhuvO4T
+        PSTh6YU7waITtnUOamw+B1Z6Qvc8W5Y=
+X-Google-Smtp-Source: AA0mqf64SqKfsQcBAnKS3C7bXsL9Ae3TY0Tb7LsEMKMU08oJXdeFsNoPxvf3n9ZgQeBdgRoq19/kag==
+X-Received: by 2002:a17:903:234d:b0:186:9405:290a with SMTP id c13-20020a170903234d00b001869405290amr4613078plh.133.1668723314318;
         Thu, 17 Nov 2022 14:15:14 -0800 (PST)
+Received: from google.com ([2620:15c:211:201:6bbc:b70a:8f80:710d])
+        by smtp.gmail.com with ESMTPSA id y19-20020a1709027c9300b0017f9db0236asm1921367pll.82.2022.11.17.14.15.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 14:15:13 -0800 (PST)
+Sender: Minchan Kim <minchan.kim@gmail.com>
 Date:   Thu, 17 Nov 2022 14:15:11 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     linmengbo0689@protonmail.com, alistair@alistair23.me,
-        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linus.walleij@linaro.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org
-Subject: Re: [PATCH 2/2] Input: cyttsp5 - add vddio regulator
-Message-ID: <Y3ayb8b9vyQHRabc@google.com>
-References: <20221117190507.87535-1-linmengbo0689@protonmail.com>
- <20221117190507.87535-3-linmengbo0689@protonmail.com>
- <4fe0c7c3-f5eb-4c01-8607-ce79a768cb06@wanadoo.fr>
+From:   Minchan Kim <minchan@kernel.org>
+To:     Nhat Pham <nphamcs@gmail.com>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, ngupta@vflare.org,
+        senozhatsky@chromium.org, sjenning@redhat.com, ddstreet@ieee.org,
+        vitaly.wool@konsulko.com
+Subject: Re: [PATCH v4 3/5] zsmalloc: Add a LRU to zs_pool to keep track of
+ zspages in LRU order
+Message-ID: <Y3ayb4kx/m3oDsSN@google.com>
+References: <20221117163839.230900-1-nphamcs@gmail.com>
+ <20221117163839.230900-4-nphamcs@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4fe0c7c3-f5eb-4c01-8607-ce79a768cb06@wanadoo.fr>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221117163839.230900-4-nphamcs@gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 10:16:40PM +0100, Christophe JAILLET wrote:
-> Le 17/11/2022 à 20:05, Lin, Meng-Bo a écrit :
-> > The Samsung touchscreen controllers are often used with external pull-up
-> > for the interrupt line and the I2C lines, so we might need to enable
-> > a regulator to bring the lines into usable state. Otherwise, this might
-> > cause spurious interrupts and reading from I2C will fail.
-> > 
-> > Implement support for a "vddio-supply" that is enabled by the cyttsp5
-> > driver so that the regulator gets enabled when needed.
-> > 
-> > Signed-off-by: Lin, Meng-Bo <linmengbo0689-g/b1ySJe57IN+BqQ9rBEUg@public.gmane.org>
-> > ---
-> >   drivers/input/touchscreen/cyttsp5.c | 19 ++++++++++++-------
-> >   1 file changed, 12 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/drivers/input/touchscreen/cyttsp5.c b/drivers/input/touchscreen/cyttsp5.c
-> > index 24ab1df9fc07..d02fdb940edf 100644
-> > --- a/drivers/input/touchscreen/cyttsp5.c
-> > +++ b/drivers/input/touchscreen/cyttsp5.c
-> > @@ -190,7 +190,7 @@ struct cyttsp5 {
-> >   	int num_prv_rec;
-> >   	struct regmap *regmap;
-> >   	struct touchscreen_properties prop;
-> > -	struct regulator *vdd;
-> > +	struct regulator_bulk_data supplies[2];
-> >   };
-> >   /*
-> > @@ -767,7 +767,7 @@ static void cyttsp5_cleanup(void *data)
-> >   {
-> >   	struct cyttsp5 *ts = data;
-> > -	regulator_disable(ts->vdd);
-> > +	regulator_bulk_disable(ARRAY_SIZE(ts->supplies), ts->supplies);
-> >   }
-> >   static int cyttsp5_probe(struct device *dev, struct regmap *regmap, int irq,
-> > @@ -790,9 +790,12 @@ static int cyttsp5_probe(struct device *dev, struct regmap *regmap, int irq,
-> >   	init_completion(&ts->cmd_done);
-> >   	/* Power up the device */
-> > -	ts->vdd = devm_regulator_get(dev, "vdd");
-> > -	if (IS_ERR(ts->vdd)) {
-> > -		error = PTR_ERR(ts->vdd);
-> > +	ts->supplies[0].supply = "vdd";
-> > +	ts->supplies[1].supply = "vddio";
-> > +	error = devm_regulator_bulk_get(dev, ARRAY_SIZE(ts->supplies),
-> > +				      ts->supplies);
-> > +	if (error < 0) {
-> > +		dev_err(ts->dev, "Failed to get regulators, error %d\n", error);
+On Thu, Nov 17, 2022 at 08:38:37AM -0800, Nhat Pham wrote:
+> This helps determines the coldest zspages as candidates for writeback.
 > 
-> Hi,
+> Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+> ---
+>  mm/zsmalloc.c | 46 ++++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 46 insertions(+)
 > 
-> dev_err_probe()?
-> I think that devm_regulator_bulk_get() can return -EPROBE_DEFER;
+> diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
+> index 326faa751f0a..2557b55ec767 100644
+> --- a/mm/zsmalloc.c
+> +++ b/mm/zsmalloc.c
+> @@ -239,6 +239,11 @@ struct zs_pool {
+>  	/* Compact classes */
+>  	struct shrinker shrinker;
+> 
+> +#ifdef CONFIG_ZPOOL
+> +	/* List tracking the zspages in LRU order by most recently added object */
+> +	struct list_head lru;
+> +#endif
+> +
+>  #ifdef CONFIG_ZSMALLOC_STAT
+>  	struct dentry *stat_dentry;
+>  #endif
+> @@ -260,6 +265,12 @@ struct zspage {
+>  	unsigned int freeobj;
+>  	struct page *first_page;
+>  	struct list_head list; /* fullness list */
+> +
+> +#ifdef CONFIG_ZPOOL
+> +	/* links the zspage to the lru list in the pool */
+> +	struct list_head lru;
+> +#endif
+> +
+>  	struct zs_pool *pool;
+>  #ifdef CONFIG_COMPACTION
+>  	rwlock_t lock;
+> @@ -352,6 +363,18 @@ static void cache_free_zspage(struct zs_pool *pool, struct zspage *zspage)
+>  	kmem_cache_free(pool->zspage_cachep, zspage);
+>  }
+> 
+> +#ifdef CONFIG_ZPOOL
+> +/* Moves the zspage to the front of the zspool's LRU */
+> +static void move_to_front(struct zs_pool *pool, struct zspage *zspage)
+> +{
+> +	assert_spin_locked(&pool->lock);
+> +
+> +	if (!list_empty(&zspage->lru))
+> +		list_del(&zspage->lru);
+> +	list_add(&zspage->lru, &pool->lru);
+> +}
+> +#endif
+> +
+>  /* pool->lock(which owns the handle) synchronizes races */
+>  static void record_obj(unsigned long handle, unsigned long obj)
+>  {
+> @@ -953,6 +976,9 @@ static void free_zspage(struct zs_pool *pool, struct size_class *class,
+>  	}
+> 
+>  	remove_zspage(class, zspage, ZS_EMPTY);
+> +#ifdef CONFIG_ZPOOL
+> +	list_del(&zspage->lru);
+> +#endif
+>  	__free_zspage(pool, class, zspage);
+>  }
+> 
+> @@ -998,6 +1024,10 @@ static void init_zspage(struct size_class *class, struct zspage *zspage)
+>  		off %= PAGE_SIZE;
+>  	}
+> 
+> +#ifdef CONFIG_ZPOOL
+> +	INIT_LIST_HEAD(&zspage->lru);
+> +#endif
+> +
+>  	set_freeobj(zspage, 0);
+>  }
+> 
+> @@ -1418,6 +1448,11 @@ unsigned long zs_malloc(struct zs_pool *pool, size_t size, gfp_t gfp)
+>  		fix_fullness_group(class, zspage);
+>  		record_obj(handle, obj);
+>  		class_stat_inc(class, OBJ_USED, 1);
+> +
+> +#ifdef CONFIG_ZPOOL
+> +		/* Move the zspage to front of pool's LRU */
+> +		move_to_front(pool, zspage);
+> +#endif
+>  		spin_unlock(&pool->lock);
+> 
+>  		return handle;
+> @@ -1444,6 +1479,10 @@ unsigned long zs_malloc(struct zs_pool *pool, size_t size, gfp_t gfp)
+> 
+>  	/* We completely set up zspage so mark them as movable */
+>  	SetZsPageMovable(pool, zspage);
+> +#ifdef CONFIG_ZPOOL
+> +	/* Move the zspage to front of pool's LRU */
+> +	move_to_front(pool, zspage);
+> +#endif
+>  	spin_unlock(&pool->lock);
 
-No, I'd rather we avoid dev_err_probe().
+Why do we move the zspage in the alloc instead of accessor?
 
-Thanks.
+Isn't zs_map_object better place since it's clear semantic
+that user start to access the object?
 
--- 
-Dmitry
+If you are concerning unnecessary churning, can we do that
+only for WO access?
+
+Yeah, it is still weird layering since allocator couldn't know
+what user will do over the this access(will keep or discard)
+so the lru in the allocator is not a good design but I just
+want to make little more sense.
