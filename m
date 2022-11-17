@@ -2,50 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FF5662DD1B
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:47:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 858A662DD14
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:46:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240257AbiKQNqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 08:46:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55670 "EHLO
+        id S240205AbiKQNqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 08:46:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239997AbiKQNqg (ORCPT
+        with ESMTP id S239645AbiKQNqf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 08:46:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD9C272993;
-        Thu, 17 Nov 2022 05:46:34 -0800 (PST)
+        Thu, 17 Nov 2022 08:46:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D087C71F29;
+        Thu, 17 Nov 2022 05:46:31 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4322F61E3B;
-        Thu, 17 Nov 2022 13:46:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D8AAC433D7;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A8CA61E38;
         Thu, 17 Nov 2022 13:46:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 807B5C433C1;
+        Thu, 17 Nov 2022 13:46:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668692793;
-        bh=wIs6OQ9wUma9T3nTyddN8q7kE8iPbPMX9EIUDRvWD88=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iDQFKQzvg0VfXgx9T73PhPe0D2nAyg+9d0aSuv/NaygYXlIGstQhEwBW1xVAbpttz
-         jEy5KEcFZsgdsR22cdR5fGdP35chxR4ksV4erWaKHEqT0A7KH6FmxI5PFqTFEFWlTb
-         Uft/SjIIdXBFKv4rWy6T8W7YWF73ki+XRNov+E56uhDnaye3XezVdXI0m0pD2G4TIW
-         gnSAt/Gzqw7zmq9cYnDodrz60JTY2yOdwarz7hQzGAYzGiz1ljOSIN8du6WEqlimd5
-         IRejCvZJwKdeDXtolBdQO+qV/oQJUAzAbkAUG/wZkRK974IgUYzSVb1hbOTQybhB9Q
-         zsJKUmiL2DafA==
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] Documentation/osnoise: Add osnoise/options documentation
-Date:   Thu, 17 Nov 2022 14:46:20 +0100
-Message-Id: <777af8f3d87beedd304805f98eff6c8291d64226.1668692096.git.bristot@kernel.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <cover.1668692096.git.bristot@kernel.org>
-References: <cover.1668692096.git.bristot@kernel.org>
+        s=k20201202; t=1668692790;
+        bh=jwrKHq8lqrVCytRmbVBCOLUIrbyqXrDKHErC15q+x7I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZVYUWfNzSW5qOrsXH5425h8Res0qNWH6lXbS5xlr8vmHQ/PtWZthcWDOx6KgKe4HX
+         0TzcYSLuZx/hrZ4H86Bl4s0rsh2/E9hRMAbWLp4SseTVjPOaBzH7aRvWyE5shozlJF
+         akUK6fXyj5hRx2pgVQEzJ3SUI83XHwuyAP+y6lWN3+5/OUu7psy51T4DCq0dZ7TSS9
+         JZfDjvqS8GcOzw5fb3hkbJRuXz62MNFJtvUBT4SdyXSaq9tHp53qou1Xh/x0jkWejO
+         XJUMrfQvAQwUvLwmWj/PtiPpsIHJ+NCZPqfwgkYlHouNg7X5sLGioAmXbb3M2qdX3N
+         LLUDmFcEFUFGQ==
+Date:   Thu, 17 Nov 2022 13:46:26 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     balbi@kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/1] usb: gadget: f_hid: Conduct proper refcounting on
+ shared f_hidg pointer
+Message-ID: <Y3Y7MlwV0UFcA3w8@google.com>
+References: <20221117120813.1257583-1-lee@kernel.org>
+ <Y3YuL8rSE9pNfIZN@kroah.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y3YuL8rSE9pNfIZN@kroah.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -55,45 +56,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the documentation about the osnoise/options file, along
-with an explanation about the OSNOISE_WORKLOAD option.
+On Thu, 17 Nov 2022, Greg KH wrote:
 
-Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
----
- Documentation/trace/osnoise-tracer.rst | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+> On Thu, Nov 17, 2022 at 12:08:13PM +0000, Lee Jones wrote:
+> > +static inline bool f_hidg_is_open(struct f_hidg *hidg)
+> > +{
+> > +	return !!kref_read(&hidg->cdev.kobj.kref);
+> > +}
+> 
+> Ick, sorry, no, that's not going to work and is not allowed at all.
+> That's some major layering violations there, AND it can change after you
+> get the value as well.
 
-diff --git a/Documentation/trace/osnoise-tracer.rst b/Documentation/trace/osnoise-tracer.rst
-index 963def9f97c6..e1eed255a4ac 100644
---- a/Documentation/trace/osnoise-tracer.rst
-+++ b/Documentation/trace/osnoise-tracer.rst
-@@ -109,6 +109,11 @@ The tracer has a set of options inside the osnoise directory, they are:
-  - tracing_threshold: the minimum delta between two time() reads to be
-    considered as noise, in us. When set to 0, the default value will
-    be used, which is currently 5 us.
-+ - osnoise/options: a set of on/off options that can be enabled by
-+   writing the option name to the file or disabled by writing the option
-+   name preceded with the 'NO_' prefix. For example, writing
-+   NO_OSNOISE_WORKLOAD disables the OSNOISE_WORKLOAD option. The
-+   special DEAFAULTS option resets all options to the default value.
- 
- Additional Tracing
- ------------------
-@@ -150,3 +155,10 @@ tracepoints is smaller than eight us reported in the sample_threshold.
- The reason roots in the overhead of the entry and exit code that happens
- before and after any interference execution. This justifies the dual
- approach: measuring thread and tracing.
-+
-+Running osnoise tracer without workload
-+---------------------------------------
-+
-+By enabling the osnoise tracer with the NO_OSNOISE_WORKLOAD option set,
-+the osnoise: tracepoints serve to measure the execution time of
-+any type of Linux task, free from the interference of other tasks.
+This cdev belongs solely to this driver.  Hence the *.*.* and not
+*->*->*.  What is preventing us from reading our own data?  If we
+cannot do this directly, can I create an API to do it 'officially'?
+
+I do, however, appreciate that a little locking wouldn't go amiss.
+
+If this solution is not acceptable either, then we're left up the
+creak without a paddle.  The rules you've communicated are not
+compatible with each other.
+
+Rule 1: Only one item in a data structure can reference count.
+
+Due to the embedded cdev struct, this rules out my first solution of
+giving f_hidg its own kref so that it can conduct its own life-time
+management.
+
+A potential option to satisfy this rule would be to remove the cdev
+attribute and create its data dynamically instead.  However, the
+staticness of cdev is used to obtain f_hidg (with container_of()) in
+the character device handling component, so it cannot be removed.
+
+Rule 2: Reading the present refcount causes a laying violation
+
+So we're essentially saying, if data is already being reference
+counted, you have to use the present implementation instead of adding
+additional counts, but there is no way to actually do that, which
+kind of puts us at stalemate.
+
+Since this is a genuine issue, doing anything is not really an option
+either.  So where do we go from here?
+
 -- 
-2.32.0
-
+Lee Jones [李琼斯]
