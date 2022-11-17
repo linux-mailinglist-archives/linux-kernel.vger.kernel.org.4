@@ -2,85 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D66B62D5AF
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:59:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88C8D62D5B8
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 10:02:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239421AbiKQI7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 03:59:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57004 "EHLO
+        id S239345AbiKQJCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 04:02:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239368AbiKQI6z (ORCPT
+        with ESMTP id S239439AbiKQJB5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 03:58:55 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 761C75133C
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 00:58:53 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id s5so1527954edc.12
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 00:58:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qYZlkht9cjMAUGoNTf3GOMX0dDwCun9IlRoqXLzGEOI=;
-        b=fAdoTHJOKxKzmfxO0EnU+WR0qCfsr/huIjdlnNlWNLJNBVcDngovLdOUAZC2uagCPu
-         tVumLNvNwgpgSIDjx0EDsGI6Qj03/MmupUJiFUYPLHDf+yQIZn4HReLriERwbQDLnspZ
-         1MKNpkDYe0QMFO56uoD+lAxR57yLSToQm2n+4PlyxWhruCpfLi5ceyMifVq1SkAihCcM
-         CZlVW+aHgLr8SxSLBKtmvpoKIz15U1ERF6NCDOqH5I5YxYR2la5einX+KhuK0MD/wXgR
-         21rxP5OTeeZPZeb5ITOxvFgFQK8UeyufXWEwcbJgqew7K6rf17Di2vkUl0nanbP/Ws+t
-         ekqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qYZlkht9cjMAUGoNTf3GOMX0dDwCun9IlRoqXLzGEOI=;
-        b=uVJBMMM4r8GETQ1aT9gd8NEat71O2RQQGd1NXUi6Dwa50BEVo3XYci49pbL25cO7tm
-         M0Al8pEMHsUrENQ2k9xetjOUoV3bcq8Zg5xQQZ0EXjnyuOmUV2o9xr5yhfMOpHFIFoQC
-         HkUiyfki0kbcBMD8ncsOE09cb/8LOWEIq3owaHhnHeYhy023PLOMLkukiyF2BcAZ0a9V
-         pB93kpvOBIsr3UZ1PiZKVmFBqdoB6Y5Z9WW5QJu25E+mekqYPr/gw9pU3cFwRnHMQdPH
-         H0U0j+TQemW/PXTG1yf22Wy8HMgu/gbxQbOtTBpX8+0WmPguNrimtfkAFRUc6M1+O4ca
-         0Q8g==
-X-Gm-Message-State: ANoB5pkv5WTvdMjm+Cgb7R6zLjdemCuW3U6jCRcytC7ELr1cgnrP0ad9
-        GiupPlOfXiQ47ae5+FvDVAA7Nkar596uJssDfSWQHw==
-X-Google-Smtp-Source: AA0mqf7CqLi6uOxXHGGceCqjCKxwYf2fbaD3a6EWZA2RCLx11Qq2CKova+ttchtlp/INUa/mOdlHQkqD+atRqwUwYQQ=
-X-Received: by 2002:a05:6402:2948:b0:463:bc31:2604 with SMTP id
- ed8-20020a056402294800b00463bc312604mr256367edb.32.1668675532087; Thu, 17 Nov
- 2022 00:58:52 -0800 (PST)
+        Thu, 17 Nov 2022 04:01:57 -0500
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6187559149;
+        Thu, 17 Nov 2022 01:01:56 -0800 (PST)
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AH7n6nY003733;
+        Thu, 17 Nov 2022 04:01:51 -0500
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3kwgw4rg03-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Nov 2022 04:01:50 -0500
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 2AH91nBH004105
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 17 Nov 2022 04:01:49 -0500
+Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
+ ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Thu, 17 Nov 2022 04:01:48 -0500
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by
+ ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Thu, 17 Nov 2022 04:01:48 -0500
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Thu, 17 Nov 2022 04:01:48 -0500
+Received: from amiclaus-VirtualBox.ad.analog.com (AMICLAUS-L02.ad.analog.com [10.48.65.121])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 2AH91dQM020374;
+        Thu, 17 Nov 2022 04:01:41 -0500
+From:   Antoniu Miclaus <antoniu.miclaus@analog.com>
+To:     <jic23@kernel.org>, <linux-iio@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Antoniu Miclaus <antoniu.miclaus@analog.com>
+Subject: [PATCH] drivers: iio: dac: ad5592r: add gpio_chip names
+Date:   Thu, 17 Nov 2022 11:01:30 +0200
+Message-ID: <20221117090130.51702-1-antoniu.miclaus@analog.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20221005-mdm9615-sx1509q-yaml-v3-0-e8b349eb1900@linaro.org>
-In-Reply-To: <20221005-mdm9615-sx1509q-yaml-v3-0-e8b349eb1900@linaro.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 17 Nov 2022 09:58:41 +0100
-Message-ID: <CACRpkdaqfaa5B-tRebw7M-Ldj6+pVntAN32UzJ_PGGTXV1ufsQ@mail.gmail.com>
-Subject: Re: [PATCH v3] dt-bindings: pinctrl: convert semtech,sx150xq bindings
- to dt-schema
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Rob Herring <robh@kernel.org>, linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: jZc6A2xlq7rdUNNqwykqQIO3WcUtfw65
+X-Proofpoint-ORIG-GUID: jZc6A2xlq7rdUNNqwykqQIO3WcUtfw65
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-17_04,2022-11-16_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
+ impostorscore=0 suspectscore=0 phishscore=0 lowpriorityscore=0 spamscore=0
+ mlxscore=0 mlxlogscore=999 priorityscore=1501 clxscore=1015 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211170068
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 11:06 AM Neil Armstrong
-<neil.armstrong@linaro.org> wrote:
+Add array of explicit gpio names for the `gpiochip` structure of
+ad5592r, mainly for debug purposes.
 
-> This converts the Semtech SX150Xq bindings to dt-schemas, add necessary
-> bindings documentation to cover all differences between HW variants
-> and current bindings usage.
->
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+Since the gpios are configurable via the dts, generic names are
+used.
 
-Patch applied!
+Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
+---
+ drivers/iio/dac/ad5592r-base.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Yours,
-Linus Walleij
+diff --git a/drivers/iio/dac/ad5592r-base.c b/drivers/iio/dac/ad5592r-base.c
+index 7a9b5fc1e579..076bc9ecfb49 100644
+--- a/drivers/iio/dac/ad5592r-base.c
++++ b/drivers/iio/dac/ad5592r-base.c
+@@ -124,6 +124,10 @@ static int ad5592r_gpio_request(struct gpio_chip *chip, unsigned offset)
+ 	return 0;
+ }
+ 
++static const char * const ad5592r_gpio_names[] = {
++	"GPIO0", "GPIO1", "GPIO2", "GPIO3", "GPIO4", "GPIO5", "GPIO6", "GPIO7",
++};
++
+ static int ad5592r_gpio_init(struct ad5592r_state *st)
+ {
+ 	if (!st->gpio_map)
+@@ -140,6 +144,7 @@ static int ad5592r_gpio_init(struct ad5592r_state *st)
+ 	st->gpiochip.set = ad5592r_gpio_set;
+ 	st->gpiochip.request = ad5592r_gpio_request;
+ 	st->gpiochip.owner = THIS_MODULE;
++	st->gpiochip.names = ad5592r_gpio_names;
+ 
+ 	mutex_init(&st->gpio_lock);
+ 
+-- 
+2.38.1
+
