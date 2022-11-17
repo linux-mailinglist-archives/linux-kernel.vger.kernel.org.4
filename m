@@ -2,97 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA84162D5FF
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 10:10:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7257B62D60A
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 10:11:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239748AbiKQJKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 04:10:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38078 "EHLO
+        id S239750AbiKQJLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 04:11:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239726AbiKQJKg (ORCPT
+        with ESMTP id S239725AbiKQJLM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 04:10:36 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A7F15ADC4;
-        Thu, 17 Nov 2022 01:10:34 -0800 (PST)
-Received: from mxct.zte.com.cn (unknown [192.168.251.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NCYzY192gz4xVnZ;
-        Thu, 17 Nov 2022 17:10:33 +0800 (CST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NCYzW127rz4y0vK;
-        Thu, 17 Nov 2022 17:10:31 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl2.zte.com.cn with SMTP id 2AH9AC7j037132;
-        Thu, 17 Nov 2022 17:10:13 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Thu, 17 Nov 2022 17:10:15 +0800 (CST)
-Date:   Thu, 17 Nov 2022 17:10:15 +0800 (CST)
-X-Zmail-TransId: 2af96375fa77ffffffffcae92ea1
-X-Mailer: Zmail v1.0
-Message-ID: <202211171710153200734@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <herbert@gondor.apana.org.au>
-Cc:     <olivia@selenic.com>, <linux-crypto@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIGh3cm5nOiBuMi1kcnYgLSBVc2UgZGV2aWNlX2dldF9tYXRjaF9kYXRhKCkgdG8gc2ltcGxpZnkgdGhlCgogY29kZQ==?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 2AH9AC7j037132
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 6375FA89.001 by FangMail milter!
-X-FangMail-Envelope: 1668676233/4NCYzY192gz4xVnZ/6375FA89.001/192.168.251.13/[192.168.251.13]/mxct.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 6375FA89.001/4NCYzY192gz4xVnZ
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 17 Nov 2022 04:11:12 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C343413E81;
+        Thu, 17 Nov 2022 01:11:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=rs9mPbZMWkmGpFMwZXAxzgJsIHnGFVekqWq8NHBYPaE=; b=R1R3c0H1DMOPHL2EgzaQiKmWc6
+        4g7vKNmWUZA3OnVQZ/791nS7MV15HGuXYR4LWct/zjRRgTK+dNnL85b46VmpoobJ+EHG/3iX5n7IA
+        +equo9lBjaJUg3gTG+mevrb7K9jv6FfkkHfl2p47Rs0cy6NoLBkr9vyQZjccWCdTguIbSq3W8L+M+
+        g5vZQ/0UzVMiD70Ih/xvhFHjAJMHV/ca+Xik2nReUKV0TeWwkr909DO60dbGyjqIg2jCR8xKkeWGW
+        uwTyKLOnFvLCxPonjQNLfIhyogu3+VVn7IZf6T5ilF6RWcC9C3xOpf/z/mpnIIqLWzT4qucfdy49N
+        D47XaqmA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ovavI-000qVG-8t; Thu, 17 Nov 2022 09:11:04 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7C93830002E;
+        Thu, 17 Nov 2022 10:10:57 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 64B5420B670CB; Thu, 17 Nov 2022 10:10:57 +0100 (CET)
+Date:   Thu, 17 Nov 2022 10:10:57 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        x86@kernel.org, "Paul E. McKenney" <paulmck@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Guo Ren <guoren@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [RFC PATCH v2 5/8] irq_work: Trace self-IPIs sent via
+ arch_irq_work_raise()
+Message-ID: <Y3X6oQdySdXBh7v8@hirez.programming.kicks-ass.net>
+References: <20221102182949.3119584-1-vschneid@redhat.com>
+ <20221102183336.3120536-4-vschneid@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221102183336.3120536-4-vschneid@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+On Wed, Nov 02, 2022 at 06:33:33PM +0000, Valentin Schneider wrote:
+> IPIs sent to remove CPUs via irq_work_queue_on() are now covered by
+> trace_ipi_send_cpumask(), add another instance of the tracepoint to cover
+> self-IPIs.
+> 
+> Signed-off-by: Valentin Schneider <vschneid@redhat.com>
+> ---
+>  kernel/irq_work.c | 14 +++++++++++++-
+>  1 file changed, 13 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/irq_work.c b/kernel/irq_work.c
+> index 7afa40fe5cc43..aec38c294ce68 100644
+> --- a/kernel/irq_work.c
+> +++ b/kernel/irq_work.c
+> @@ -22,6 +22,8 @@
+>  #include <asm/processor.h>
+>  #include <linux/kasan.h>
+>  
+> +#include <trace/events/ipi.h>
+> +
+>  static DEFINE_PER_CPU(struct llist_head, raised_list);
+>  static DEFINE_PER_CPU(struct llist_head, lazy_list);
+>  static DEFINE_PER_CPU(struct task_struct *, irq_workd);
+> @@ -74,6 +76,16 @@ void __weak arch_irq_work_raise(void)
+>  	 */
+>  }
+>  
+> +static inline void irq_work_raise(struct irq_work *work)
 
-Directly get the match data with device_get_match_data().
+__always_inline, unless you want to occasionally only see it point to
+__irq_work_queue_local().
 
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/char/hw_random/n2-drv.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
-
-diff --git a/drivers/char/hw_random/n2-drv.c b/drivers/char/hw_random/n2-drv.c
-index 73e408146420..2f784addb717 100644
---- a/drivers/char/hw_random/n2-drv.c
-+++ b/drivers/char/hw_random/n2-drv.c
-@@ -695,20 +695,15 @@ static void n2rng_driver_version(void)
- static const struct of_device_id n2rng_match[];
- static int n2rng_probe(struct platform_device *op)
- {
--	const struct of_device_id *match;
- 	int err = -ENOMEM;
- 	struct n2rng *np;
-
--	match = of_match_device(n2rng_match, &op->dev);
--	if (!match)
--		return -EINVAL;
--
- 	n2rng_driver_version();
- 	np = devm_kzalloc(&op->dev, sizeof(*np), GFP_KERNEL);
- 	if (!np)
- 		goto out;
- 	np->op = op;
--	np->data = (struct n2rng_template *)match->data;
-+	np->data = (struct n2rng_template *) device_get_match_data(&op->dev);
-
- 	INIT_DELAYED_WORK(&np->work, n2rng_work);
-
--- 
-2.25.1
+> +{
+> +	if (trace_ipi_send_cpumask_enabled() && arch_irq_work_has_interrupt()) {
+> +		trace_ipi_send_cpumask(cpumask_of(smp_processor_id()),
+> +				       _RET_IP_,
+> +				       work->func);
+	}
+> +
+> +	arch_irq_work_raise();
+> +}
+> +
+>  /* Enqueue on current CPU, work must already be claimed and preempt disabled */
+>  static void __irq_work_queue_local(struct irq_work *work)
+>  {
+> @@ -99,7 +111,7 @@ static void __irq_work_queue_local(struct irq_work *work)
+>  
+>  	/* If the work is "lazy", handle it from next tick if any */
+>  	if (!lazy_work || tick_nohz_tick_stopped())
+> -		arch_irq_work_raise();
+> +		irq_work_raise(work);
+>  }
+>  
+>  /* Enqueue the irq work @work on the current CPU */
+> -- 
+> 2.31.1
+> 
