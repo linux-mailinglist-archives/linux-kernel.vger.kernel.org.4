@@ -2,150 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 122B062D590
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:54:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57ED262D591
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:54:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239133AbiKQIyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 03:54:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54006 "EHLO
+        id S239305AbiKQIyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 03:54:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234302AbiKQIys (ORCPT
+        with ESMTP id S233023AbiKQIys (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 17 Nov 2022 03:54:48 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0E4F6A690
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 00:54:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668675286; x=1700211286;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=FrC/238rWZDFvnrulenbQDUe4LWyJ9YpJGBPwZxw4ig=;
-  b=RHvvohlqbjzHyxWf/vypUe11tIddB1IQ0SR6gJOY9b1xCCkULHPHDL7a
-   w5Ee3QxQEa96S8zNJxg2aqf++ZqX425TTch4FQmw2bA04jIT2jrda75Q0
-   MfLa+A5Jx806Uh77nDR3VXP+a7KM0T7AiDRd3ufknaNf1ciQDnxe6kBB8
-   N1dj9tDRzlcTvbn/bOPNvTAOWB2KVMNYsEVNuTSAWQ7SewrQ47DhVqpUO
-   ODedGGG6RcJaJVRJZv3Vtn2vETYB9Ct37NHz9/A0tM6RUY03Q1a8yBuGT
-   MuBdNimErYOJOMAqiPKJ1WJK7Ux8/sA+i76XH3mz2pAEewYauKLEmPDyc
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="300331435"
-X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
-   d="scan'208";a="300331435"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 00:54:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="782146569"
-X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
-   d="scan'208";a="782146569"
-Received: from lkp-server01.sh.intel.com (HELO 55744f5052f8) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 17 Nov 2022 00:54:45 -0800
-Received: from kbuild by 55744f5052f8 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ovafU-000061-1O;
-        Thu, 17 Nov 2022 08:54:44 +0000
-Date:   Thu, 17 Nov 2022 16:54:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:dev.2022.11.09a] BUILD SUCCESS
- 01ecdf0059a55d2ef4d548f1ae9c7b7c4085ba09
-Message-ID: <6375f6cb.jX5GS3M9ZusQSKP6%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2350A1276B
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 00:54:43 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id t4so886077wmj.5
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 00:54:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=9hYrAT2BNVskU/iDANhKEsz2VyGmJLN/rJvwow2j2xk=;
+        b=GejQpumCcaJEwAMF9vs5N6MTa4HzjPwDmJEUeAvSGwmdPfgcFftqfp718ZY//Kwd/6
+         NiRLKvzHWmOEB2glIPDCQqS20M5AbpWcheJWEe0v9HSameNpXDzd3tnXIkr21M/fO/+B
+         pMxqk3YwUh68R3+JoME0RkA8m5KvnhhhS5BEJpn7PLYav1RuSPombssgPei++tn1Lbhg
+         FKRcEUteXeQMMH39vFxOtoAEEqhtSHQu3b9aIGoVVR1/ibfYRas58aI9oEtbYLOM1yiM
+         SRgaK8m7sSzvY+2xBJIHjAcY9v4AZ62NV5llYbm9KOpaVbb/wgsOyny44CZrK2w4rHgZ
+         96pQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9hYrAT2BNVskU/iDANhKEsz2VyGmJLN/rJvwow2j2xk=;
+        b=4ZTcF7wM/TK7fGXDdYggvfSvK0VmOis4Dg1XYJoS/VXaZIAJQqpMhZGRGcb1eReIfN
+         cEtAlsUITfsRMb/GGoBH/JUgfHGTi+AcBIOvLQuAhLoBlgvObkAtchsgQEbRH+oZPqFj
+         BxTzJNr5H0+UVJiHAlyE6K1Y0rGzM3FmRMBQ+9ZUXnbx8nXG+GxJVtCpfKfaJgGxr/uL
+         AOSkW6b3alHEM97Q1UdAhSERcGMMv3qNvROiFaWQxUrRognJZUhtuYSHQaWnQUHqt5v/
+         OzcOCYtRBKS0PYtYLr7PmPEajn/TIMHfbT3tMJ+1VLg4+1k31gEz6ix7lwvwL9fjYbdH
+         oMrA==
+X-Gm-Message-State: ANoB5pm/f4V8DZ0nfaavClLwWm+riou92KK8s521kFR3mpVWwJ4+ioPT
+        koi0sdCvCpiInNIWvFBIQKxG4w==
+X-Google-Smtp-Source: AA0mqf7R5pytyH9/lNfPVQJWtwPbmJ8SiI7lVBKrIVlZzrwL5/u2Uq88NSqEZmONRgEmdbXer9wwaw==
+X-Received: by 2002:a7b:cd85:0:b0:3cf:931c:3cfa with SMTP id y5-20020a7bcd85000000b003cf931c3cfamr940137wmj.203.1668675281746;
+        Thu, 17 Nov 2022 00:54:41 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:aad5:8d14:a22f:2e8b? ([2a01:e0a:982:cbb0:aad5:8d14:a22f:2e8b])
+        by smtp.gmail.com with ESMTPSA id d16-20020a5d6dd0000000b0022584c82c80sm386384wrz.19.2022.11.17.00.54.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Nov 2022 00:54:41 -0800 (PST)
+Message-ID: <098b923b-ff46-5ef5-9c21-19c974c9274f@linaro.org>
+Date:   Thu, 17 Nov 2022 09:54:40 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH 3/3] spi: meson-spicc: Lower CS between bursts
+Content-Language: en-US
+To:     Carlo Caione <ccaione@baylibre.com>,
+        Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        David Airlie <airlied@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20221116-s905x_spi_ili9486-v1-0-630401cb62d5@baylibre.com>
+ <20221116-s905x_spi_ili9486-v1-3-630401cb62d5@baylibre.com>
+Organization: Linaro Developer Services
+In-Reply-To: <20221116-s905x_spi_ili9486-v1-3-630401cb62d5@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2022.11.09a
-branch HEAD: 01ecdf0059a55d2ef4d548f1ae9c7b7c4085ba09  clocksource: Print clocksource name when clocksource is tested unstable
+Hi,
 
-elapsed time: 731m
+On 17/11/2022 09:47, Carlo Caione wrote:
+> On some hardware (reproduced on S905X) when a large payload is
+> transmitted over SPI in bursts at the end of each burst, the clock line
+> briefly fluctuates creating spurious clock transitions that are being
+> recognised by the connected device as a genuine pulses, creating an
+> offset in the data being transmitted.
+> 
+> Lower the GPIO CS between bursts to avoid the clock being interpreted as
+> valid.
 
-configs tested: 67
-configs skipped: 2
+I'm afraid this will actually break SPI NORs for example where CS actually splits
+transactions.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Isn't Amjad change enough ? The CLK pull-up should avoid this.
 
-gcc tested configs:
-um                           x86_64_defconfig
-um                             i386_defconfig
-arc                                 defconfig
-s390                             allmodconfig
-alpha                               defconfig
-s390                                defconfig
-s390                             allyesconfig
-powerpc                           allnoconfig
-x86_64                          rhel-8.3-func
-mips                             allyesconfig
-i386                          randconfig-a001
-ia64                             allmodconfig
-x86_64                    rhel-8.3-kselftests
-i386                          randconfig-a003
-i386                          randconfig-a005
-sh                               allmodconfig
-alpha                            allyesconfig
-x86_64                        randconfig-a002
-m68k                             allmodconfig
-arc                              allyesconfig
-m68k                             allyesconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a006
-arc                  randconfig-r043-20221116
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-powerpc                          allmodconfig
-i386                             allyesconfig
-i386                                defconfig
-arm                                 defconfig
-x86_64                            allnoconfig
-arc                        nsim_700_defconfig
-powerpc                        cell_defconfig
-x86_64                              defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-i386                          debian-10.3-kvm
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
+If it's not the case, then it's an HW issue and the CLK line pull-up is too weak and an
+external pull should then be added.
 
-clang tested configs:
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a001
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-riscv                randconfig-r042-20221116
-hexagon              randconfig-r041-20221116
-hexagon              randconfig-r045-20221116
-x86_64                        randconfig-a012
-s390                 randconfig-r044-20221116
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-hexagon              randconfig-r041-20221117
-hexagon              randconfig-r045-20221117
-x86_64                        randconfig-k001
+> 
+> Signed-off-by: Carlo Caione <ccaione@baylibre.com>
+> ---
+>   drivers/spi/spi-meson-spicc.c | 6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/spi/spi-meson-spicc.c b/drivers/spi/spi-meson-spicc.c
+> index d47f2623a60f..af8d74b53519 100644
+> --- a/drivers/spi/spi-meson-spicc.c
+> +++ b/drivers/spi/spi-meson-spicc.c
+> @@ -291,6 +291,10 @@ static inline void meson_spicc_setup_burst(struct meson_spicc_device *spicc)
+>   static irqreturn_t meson_spicc_irq(int irq, void *data)
+>   {
+>   	struct meson_spicc_device *spicc = (void *) data;
+> +	struct spi_device *spi_dev;
+> +
+> +	spi_dev = spicc->message->spi;
+> +	gpiod_set_value(spi_dev->cs_gpiod, 0);
+>   
+>   	writel_bits_relaxed(SPICC_TC, SPICC_TC, spicc->base + SPICC_STATREG);
+>   
+> @@ -309,6 +313,8 @@ static irqreturn_t meson_spicc_irq(int irq, void *data)
+>   	/* Setup burst */
+>   	meson_spicc_setup_burst(spicc);
+>   
+> +	gpiod_set_value(spi_dev->cs_gpiod, 1);
+> +
+>   	/* Start burst */
+>   	writel_bits_relaxed(SPICC_XCH, SPICC_XCH, spicc->base + SPICC_CONREG);
+>   
+> 
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
