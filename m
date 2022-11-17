@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E81AD62DD1A
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:47:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FF5662DD1B
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:47:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240233AbiKQNqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 08:46:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55650 "EHLO
+        id S240257AbiKQNqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 08:46:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234533AbiKQNqf (ORCPT
+        with ESMTP id S239997AbiKQNqg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 08:46:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20B6725FE;
-        Thu, 17 Nov 2022 05:46:32 -0800 (PST)
+        Thu, 17 Nov 2022 08:46:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD9C272993;
+        Thu, 17 Nov 2022 05:46:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 454A661E4C;
-        Thu, 17 Nov 2022 13:46:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3533AC4347C;
-        Thu, 17 Nov 2022 13:46:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4322F61E3B;
+        Thu, 17 Nov 2022 13:46:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D8AAC433D7;
+        Thu, 17 Nov 2022 13:46:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668692791;
-        bh=ybjnmnbdgG5oznw+D3D3EoANpgY2rjuP8S4++LExstU=;
+        s=k20201202; t=1668692793;
+        bh=wIs6OQ9wUma9T3nTyddN8q7kE8iPbPMX9EIUDRvWD88=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mOnTnexPNWQGIvfeA8LgAOjPntAA7EzwHGMkMAHVT1ht1Zt7LGp6GME0fVfhWUwJ2
-         FjVIbhWZXwQsw9+3JdIN4dKhoSnzih7sKsoTmOOJuy8c1HPszpISZ1geeTIlNBX2rZ
-         ZgnpddVVtulWg07K0p8j4Gqc7CW5uQ2bhFR8mp5eub6/Lc7U/A2YurbL8y6ZmSOqNr
-         iPPAzD/AjDwAT5ncIry9hBsmqEEgPPT+ihHizoC1elRNLox+TRkYeaQroZquapzTMD
-         x+zeoGFq3r1DmRfpWUaCf8zrr9SDqEfjKRU2lG0bPsa//tQ5hdbfXt6wRCXcLr+ag6
-         sHdoJ9b+iscpQ==
+        b=iDQFKQzvg0VfXgx9T73PhPe0D2nAyg+9d0aSuv/NaygYXlIGstQhEwBW1xVAbpttz
+         jEy5KEcFZsgdsR22cdR5fGdP35chxR4ksV4erWaKHEqT0A7KH6FmxI5PFqTFEFWlTb
+         Uft/SjIIdXBFKv4rWy6T8W7YWF73ki+XRNov+E56uhDnaye3XezVdXI0m0pD2G4TIW
+         gnSAt/Gzqw7zmq9cYnDodrz60JTY2yOdwarz7hQzGAYzGiz1ljOSIN8du6WEqlimd5
+         IRejCvZJwKdeDXtolBdQO+qV/oQJUAzAbkAUG/wZkRK974IgUYzSVb1hbOTQybhB9Q
+         zsJKUmiL2DafA==
 From:   Daniel Bristot de Oliveira <bristot@kernel.org>
 To:     Daniel Bristot de Oliveira <bristot@kernel.org>,
         Steven Rostedt <rostedt@goodmis.org>
 Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
         Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 3/4] tracing/osnoise: Add OSNOISE_WORKLOAD option
-Date:   Thu, 17 Nov 2022 14:46:19 +0100
-Message-Id: <f5cfbd37aefd419eefe9243b4d2fc38ed5753fe4.1668692096.git.bristot@kernel.org>
+Subject: [PATCH 4/4] Documentation/osnoise: Add osnoise/options documentation
+Date:   Thu, 17 Nov 2022 14:46:20 +0100
+Message-Id: <777af8f3d87beedd304805f98eff6c8291d64226.1668692096.git.bristot@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <cover.1668692096.git.bristot@kernel.org>
 References: <cover.1668692096.git.bristot@kernel.org>
@@ -55,37 +55,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The osnoise tracer is not only a tracer, and a set of tracepoints,
-but also a workload dispatcher.
-
-In preparation for having other workloads, e.g., in user-space,
-add an option to avoid dispatching the workload.
-
-By not dispatching the workload, the osnoise: tracepoints become
-generic events to measure the execution time of *any* task on Linux.
-
-For example:
-
-  # cd /sys/kernel/tracing/
-  # cat osnoise/options
-  DEFAULTS OSNOISE_WORKLOAD
-  # echo NO_OSNOISE_WORKLOAD > osnoise/options
-  # cat osnoise/options
-  NO_DEFAULTS NO_OSNOISE_WORKLOAD
-  # echo osnoise > set_event
-  # echo osnoise > current_tracer
-  # tail -8 trace
-      make-94722   [002] d..3.  1371.794507: thread_noise:     make:94722 start 1371.794302286 duration 200897 ns
-        sh-121042  [020] d..3.  1371.794534: thread_noise:       sh:121042 start 1371.781610976 duration 8943683 ns
-      make-121097  [005] d..3.  1371.794542: thread_noise:     make:121097 start 1371.794481522 duration 60444 ns
-     <...>-40      [005] d..3.  1371.794550: thread_noise: migration/5:40 start 1371.794542256 duration 7154 ns
-    <idle>-0       [018] dNh2.  1371.794554: irq_noise: reschedule:253 start 1371.794553547 duration 40 ns
-    <idle>-0       [018] dNh2.  1371.794561: irq_noise: local_timer:236 start 1371.794556222 duration 4890 ns
-    <idle>-0       [018] .Ns2.  1371.794563: softirq_noise:    SCHED:7 start 1371.794561803 duration 992 ns
-    <idle>-0       [018] d..3.  1371.794566: thread_noise: swapper/18:0 start 1371.781368110 duration 13191798 ns
-
-In preparation for the rtla exec_time tracer/tool and
-rtla osnoise --user option.
+Add the documentation about the osnoise/options file, along
+with an explanation about the OSNOISE_WORKLOAD option.
 
 Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
 Cc: Steven Rostedt <rostedt@goodmis.org>
@@ -93,77 +64,36 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>
 Cc: Jonathan Corbet <corbet@lwn.net>
 Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 ---
- kernel/trace/trace_osnoise.c | 28 ++++++++++++++++++++++------
- 1 file changed, 22 insertions(+), 6 deletions(-)
+ Documentation/trace/osnoise-tracer.rst | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/kernel/trace/trace_osnoise.c b/kernel/trace/trace_osnoise.c
-index 17b77fe3950b..3f10dd1f2f1c 100644
---- a/kernel/trace/trace_osnoise.c
-+++ b/kernel/trace/trace_osnoise.c
-@@ -53,12 +53,13 @@
-  */
- enum osnoise_options_index {
- 	OSN_DEFAULTS = 0,
-+	OSN_WORKLOAD,
- 	OSN_MAX
- };
+diff --git a/Documentation/trace/osnoise-tracer.rst b/Documentation/trace/osnoise-tracer.rst
+index 963def9f97c6..e1eed255a4ac 100644
+--- a/Documentation/trace/osnoise-tracer.rst
++++ b/Documentation/trace/osnoise-tracer.rst
+@@ -109,6 +109,11 @@ The tracer has a set of options inside the osnoise directory, they are:
+  - tracing_threshold: the minimum delta between two time() reads to be
+    considered as noise, in us. When set to 0, the default value will
+    be used, which is currently 5 us.
++ - osnoise/options: a set of on/off options that can be enabled by
++   writing the option name to the file or disabled by writing the option
++   name preceded with the 'NO_' prefix. For example, writing
++   NO_OSNOISE_WORKLOAD disables the OSNOISE_WORKLOAD option. The
++   special DEAFAULTS option resets all options to the default value.
  
--static const char * const osnoise_options_str[OSN_MAX] = { "DEFAULTS" };
-+static const char * const osnoise_options_str[OSN_MAX] = { "DEFAULTS", "OSNOISE_WORKLOAD" };
- 
--#define OSN_DEFAULT_OPTIONS	0
-+#define OSN_DEFAULT_OPTIONS	0x2
- unsigned long osnoise_options	= OSN_DEFAULT_OPTIONS;
- 
- /*
-@@ -1186,11 +1187,12 @@ trace_sched_switch_callback(void *data, bool preempt,
- 			    unsigned int prev_state)
- {
- 	struct osnoise_variables *osn_var = this_cpu_osn_var();
-+	int workload = test_bit(OSN_WORKLOAD, &osnoise_options);
- 
--	if (p->pid != osn_var->pid)
-+	if ((p->pid != osn_var->pid) || !workload)
- 		thread_exit(osn_var, p);
- 
--	if (n->pid != osn_var->pid)
-+	if ((n->pid != osn_var->pid) || !workload)
- 		thread_entry(osn_var, n);
- }
- 
-@@ -1723,9 +1725,16 @@ static void stop_kthread(unsigned int cpu)
- 	struct task_struct *kthread;
- 
- 	kthread = per_cpu(per_cpu_osnoise_var, cpu).kthread;
--	if (kthread)
-+	if (kthread) {
- 		kthread_stop(kthread);
--	per_cpu(per_cpu_osnoise_var, cpu).kthread = NULL;
-+		per_cpu(per_cpu_osnoise_var, cpu).kthread = NULL;
-+	} else {
-+		if (!test_bit(OSN_WORKLOAD, &osnoise_options)) {
-+			per_cpu(per_cpu_osnoise_var, cpu).sampling = false;
-+			barrier();
-+			return;
-+		}
-+	}
- }
- 
- /*
-@@ -1759,6 +1768,13 @@ static int start_kthread(unsigned int cpu)
- 		snprintf(comm, 24, "timerlat/%d", cpu);
- 		main = timerlat_main;
- 	} else {
-+		/* if no workload, just return */
-+		if (!test_bit(OSN_WORKLOAD, &osnoise_options)) {
-+			per_cpu(per_cpu_osnoise_var, cpu).sampling = true;
-+			barrier();
-+			return 0;
-+		}
+ Additional Tracing
+ ------------------
+@@ -150,3 +155,10 @@ tracepoints is smaller than eight us reported in the sample_threshold.
+ The reason roots in the overhead of the entry and exit code that happens
+ before and after any interference execution. This justifies the dual
+ approach: measuring thread and tracing.
 +
- 		snprintf(comm, 24, "osnoise/%d", cpu);
- 	}
- 
++Running osnoise tracer without workload
++---------------------------------------
++
++By enabling the osnoise tracer with the NO_OSNOISE_WORKLOAD option set,
++the osnoise: tracepoints serve to measure the execution time of
++any type of Linux task, free from the interference of other tasks.
 -- 
 2.32.0
 
