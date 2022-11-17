@@ -2,213 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CED562D0A7
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 02:30:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17D2362D0AB
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 02:30:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234610AbiKQBaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 20:30:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36104 "EHLO
+        id S234505AbiKQBas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 20:30:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234649AbiKQB3y (ORCPT
+        with ESMTP id S234546AbiKQBao (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 20:29:54 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48BF245EE8;
-        Wed, 16 Nov 2022 17:29:53 -0800 (PST)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NCMhL1xQ6zJnlS;
-        Thu, 17 Nov 2022 09:26:42 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 17 Nov 2022 09:29:51 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 17 Nov 2022 09:29:50 +0800
-Subject: Re: [PATCH v2] rcu: Dump memory object info if callback function is
- invalid
-To:     Uladzislau Rezki <urezki@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, <Zhang@pc638.lan>,
-        Qiang1 <qiang1.zhang@intel.com>
-CC:     Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        "Steven Rostedt" <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20221111102822.224-1-thunder.leizhen@huawei.com>
- <PH0PR11MB5880E3A11437CD0402941F4DDA009@PH0PR11MB5880.namprd11.prod.outlook.com>
- <ed264f0e-bc13-5662-1a71-1458952ffd71@huawei.com>
- <PH0PR11MB5880FEAD72BAE59185256195DA009@PH0PR11MB5880.namprd11.prod.outlook.com>
- <20221111184238.GX725751@paulmck-ThinkPad-P17-Gen-1>
- <Y3KHdBjAIR3FNKpS@pc638.lan>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <4ad22327-96c6-b97a-338c-ee6a09d50d5c@huawei.com>
-Date:   Thu, 17 Nov 2022 09:29:50 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Wed, 16 Nov 2022 20:30:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CD1645EDA;
+        Wed, 16 Nov 2022 17:30:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B489F61F76;
+        Thu, 17 Nov 2022 01:30:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A006C433D6;
+        Thu, 17 Nov 2022 01:30:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668648641;
+        bh=+PGZeGtBYoTBr5h6JcWPDbDXDm8TITSpW/m6MKyrUeo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=L/UZOKq9H6xje/OlvgNOHky3TkyOVMOX5gC1BQpPEaanxgTNZFFPl6Fyo08M03FOi
+         7yYzVYkCjAkCcjpPYyzKd4bR+Qajdmigy8nyXKo2DlW5fkyORMqRTXxbcx6AdWR/cx
+         y84siDxlHNZh2PNsN5q4qNVbxAuiE/NJyR6VwVTMURZU+IgCfx0KDoVXQDwLlRQfRm
+         dinfiMAC225cWKZOYuNIeAkvLQOpUFEeodUQHfVCRZKCu2R+Q2FpNlDqlRiD+Rjfrm
+         quDAmH7GFSaYc70HLfZETuszZwI3nWATNh6cr8hr7AsOYnUY3m+GBdglb1RmpTJjBn
+         BrcM3SPCZPKQw==
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Ben Hutchings <ben@decadent.org.uk>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] kbuild: deb-pkg: get rid of |flex:native workaround from Build-Depends
+Date:   Thu, 17 Nov 2022 10:30:33 +0900
+Message-Id: <20221117013033.1105289-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <Y3KHdBjAIR3FNKpS@pc638.lan>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+"| flex:native" was a workaround (suggested by Ben, see Link) because
+"MultiArch: foreign" was missing in the flex package on some old distros
+when commit e3a22850664f ("deb-pkg: generate correct build dependencies")
+was applied.
 
+It seems fixing the flex package has been completed. Get rid of the
+workaround.
 
-On 2022/11/15 2:22, Uladzislau Rezki wrote:
->> On Fri, Nov 11, 2022 at 01:05:56PM +0000, Zhang, Qiang1 wrote:
->>> On 2022/11/11 19:54, Zhang, Qiang1 wrote:
->>>>> When a structure containing an RCU callback rhp is (incorrectly) 
->>>>> freed and reallocated after rhp is passed to call_rcu(), it is not 
->>>>> unusual for
->>>>> rhp->func to be set to NULL. This defeats the debugging prints used 
->>>>> rhp->by
->>>>> __call_rcu_common() in kernels built with 
->>>>> CONFIG_DEBUG_OBJECTS_RCU_HEAD=y, which expect to identify the 
->>>>> offending code using the identity of this function.
->>>>>
->>>>> And in kernels build without CONFIG_DEBUG_OBJECTS_RCU_HEAD=y, things 
->>>>> are even worse, as can be seen from this splat:
->>>>>
->>>>> Unable to handle kernel NULL pointer dereference at virtual address 0 
->>>>> ... ...
->>>>> PC is at 0x0
->>>>> LR is at rcu_do_batch+0x1c0/0x3b8
->>>>> ... ...
->>>>> (rcu_do_batch) from (rcu_core+0x1d4/0x284)
->>>>> (rcu_core) from (__do_softirq+0x24c/0x344)
->>>>> (__do_softirq) from (__irq_exit_rcu+0x64/0x108)
->>>>> (__irq_exit_rcu) from (irq_exit+0x8/0x10)
->>>>> (irq_exit) from (__handle_domain_irq+0x74/0x9c)
->>>>> (__handle_domain_irq) from (gic_handle_irq+0x8c/0x98)
->>>>> (gic_handle_irq) from (__irq_svc+0x5c/0x94)
->>>>> (__irq_svc) from (arch_cpu_idle+0x20/0x3c)
->>>>> (arch_cpu_idle) from (default_idle_call+0x4c/0x78)
->>>>> (default_idle_call) from (do_idle+0xf8/0x150)
->>>>> (do_idle) from (cpu_startup_entry+0x18/0x20)
->>>>> (cpu_startup_entry) from (0xc01530)
->>>>>
->>>>> This commit therefore adds calls to mem_dump_obj(rhp) to output some 
->>>>> information, for example:
->>>>>
->>>>>  slab kmalloc-256 start ffff410c45019900 pointer offset 0 size 256
->>>>>
->>>>> This provides the rough size of the memory block and the offset of 
->>>>> the rcu_head structure, which as least provides at least a few clues 
->>>>> to help locate the problem. If the problem is reproducible, 
->>>>> additional slab debugging can be enabled, for example, 
->>>>> CONFIG_DEBUG_SLAB=y, which can provide significantly more information.
->>>>>
->>>>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
->>>>> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
->>>>> ---
->>>>> kernel/rcu/rcu.h      | 7 +++++++
->>>>> kernel/rcu/srcutiny.c | 1 +
->>>>> kernel/rcu/srcutree.c | 1 +
->>>>> kernel/rcu/tasks.h    | 1 +
->>>>> kernel/rcu/tiny.c     | 1 +
->>>>> kernel/rcu/tree.c     | 1 +
->>>>> 6 files changed, 12 insertions(+)
->>>>>
->>>>> v1 --> v2:
->>>>> 1. Remove condition "(unsigned long)rhp->func & 0x3", it have problems on x86.
->>>>> 2. Paul E. McKenney helped me update the commit message, thanks.
->>>>>
->>>>
->>>> Hi, Zhen Lei
->>>>
->>>> Maybe the following scenarios should be considered:
->>>>
->>>>                 CPU 0
->>>> tasks context
->>>>    spin_lock(&vmap_area_lock)
->>>>           Interrupt 
->>>> 	 RCU softirq
->>>> 	      rcu_do_batch
->>>> 		mem_dump_obj
->>>>                                   vmalloc_dump_obj
->>>>                                        spin_lock(&vmap_area_lock)   <--  deadlock     
->>>
->>>> Right, thanks. I just saw the robot's report. So this patch should be dropped.
->>>> I'll try to add an helper in mm, where I can check whether the lock has been held, and dump the content of memory object.
->>>
->>> This is a workaround, or maybe try a modification like the following, 
->>> of course, need to ask Paul's opinion.
->>
->> Another approach is to schedule a workqueue handler to do the
->> mem_dump_obj().  This would allow mem_dump_obj() to run in a clean
->> environment.
->>
->> This would allow vmalloc_dump_obj() to be called unconditionally.
->>
->> Other thoughts?
->>
-> <snip>
-> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> index ca71de7c9d77..956eb28f9c77 100644
-> --- a/mm/vmalloc.c
-> +++ b/mm/vmalloc.c
-> @@ -2591,6 +2591,19 @@ struct vm_struct *find_vm_area(const void *addr)
->  	return va->vm;
->  }
->  
-> +static struct vm_struct *
-> +find_vm_area_trylock(const void *addr)
-> +{
-> +	struct vmap_area *va = NULL;
-> +
-> +	if (spin_trylock(&vmap_area_lock)) {
-> +		va = __find_vmap_area((unsigned long)addr, &vmap_area_root);
-> +		spin_unlock(&vmap_area_lock);
-> +	}
-> +
-> +	return va ? va->vm : NULL;
-> +}
+Link: https://lore.kernel.org/linux-kbuild/ab49b0582ef12b14b1a68877263b81813e2492a2.camel@decadent.org.uk/
+Link: https://wiki.debian.org/CrossBuildPackagingGuidelines
+Cc: Ben Hutchings <ben@decadent.org.uk>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
 
-This method also has the problems mentioned by Andrew Morton.
-https://lkml.org/lkml/2022/11/14/1238
+ scripts/package/mkdebian | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> +
->  /**
->   * remove_vm_area - find and remove a continuous kernel virtual area
->   * @addr:	    base address
-> @@ -4048,7 +4061,7 @@ bool vmalloc_dump_obj(void *object)
->  	struct vm_struct *vm;
->  	void *objp = (void *)PAGE_ALIGN((unsigned long)object);
->  
-> -	vm = find_vm_area(objp);
-> +	vm = find_vm_area_trylock(objp);
->  	if (!vm)
->  		return false;
->  	pr_cont(" %u-page vmalloc region starting at %#lx allocated at %pS\n",
-> <snip>
-> 
-> There is one issue though, it is not correct to reference vm->members
-> after a lock is dropped because of: use after free bugs. It is better
-> to embed the search and read out: nr_pages, addr, caller and drop the
-> lock.
-> 
-> --
-> Uladzislau Rezki
-> .
-> 
-
+diff --git a/scripts/package/mkdebian b/scripts/package/mkdebian
+index 60a2a63a5e90..852d13e738c5 100755
+--- a/scripts/package/mkdebian
++++ b/scripts/package/mkdebian
+@@ -175,7 +175,7 @@ Section: kernel
+ Priority: optional
+ Maintainer: $maintainer
+ Rules-Requires-Root: no
+-Build-Depends: bc, rsync, kmod, cpio, bison, flex | flex:native $extra_build_depends
++Build-Depends: bc, rsync, kmod, cpio, bison, flex $extra_build_depends
+ Homepage: https://www.kernel.org/
+ 
+ Package: $packagename-$version
 -- 
-Regards,
-  Zhen Lei
+2.34.1
+
