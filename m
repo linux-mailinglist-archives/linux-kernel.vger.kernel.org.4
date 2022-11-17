@@ -2,52 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B881962E4F1
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 20:05:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9141562E4F6
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 20:07:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240338AbiKQTF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 14:05:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53986 "EHLO
+        id S240450AbiKQTHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 14:07:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240236AbiKQTFx (ORCPT
+        with ESMTP id S240406AbiKQTHa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 14:05:53 -0500
-X-Greylist: delayed 9021 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Nov 2022 11:05:52 PST
-Received: from mail-4324.protonmail.ch (mail-4324.protonmail.ch [185.70.43.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 385A67EC85;
-        Thu, 17 Nov 2022 11:05:52 -0800 (PST)
-Date:   Thu, 17 Nov 2022 19:05:41 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1668711950; x=1668971150;
-        bh=SvQ/7qvSOWMTkyWcL82fB0gmqIP5uLDGT8xWRxWMlGM=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=ZoMIByvnSLQO+gpeH+/EAb+lwGCA8Wo65u926MAgWzntU1/w3U0ziauux0sk02nXu
-         JnR0XbGNcPs5blnZypXQ581XnpjIU2p7aWewkws0ndQ8QuY8WnxDkJEinI7HVS4ygi
-         TB0yGLHpsHldPd+Uxg2PbgEHOAsGXDSOBPhTY2vfWHhCRgoVW9Pfsdb/9yrnJnuxnC
-         f7r9Sbn6qdjphjLRXT8SUzemkOQvVJHCXOnx85VNqy6lDLi3Hxrnl82nDGMoGndHNC
-         BE5fWx2jcFhrTg+kYk/ifeDxFCn23hUthaTzn8Ukq4XTIzjV5Z/2mbLPaAy0gdvirE
-         szp9fH4SOU4+A==
-To:     linux-input@vger.kernel.org
-From:   "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alistair Francis <alistair@alistair23.me>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] Input: cyttsp5 - add vddio regulator
-Message-ID: <20221117190507.87535-3-linmengbo0689@protonmail.com>
-In-Reply-To: <20221117190507.87535-1-linmengbo0689@protonmail.com>
-References: <20221117190507.87535-1-linmengbo0689@protonmail.com>
-Feedback-ID: 40467236:user:proton
+        Thu, 17 Nov 2022 14:07:30 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6D27EC8B;
+        Thu, 17 Nov 2022 11:07:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668712049; x=1700248049;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=9EfHtP5S2B6wxUeY6vqEwu5VPJ+3h8kafooeBjJT1/8=;
+  b=E5pb+8GCZbcvDknyMh7npeyObTNHvzk4jjv90+2qjNYRIQ1hLci7jLyN
+   numNfBe1cxycu11jqcyj/vx0DNs8cV3vwg4HsaaltTcVd08C/qh50WqGD
+   0YcNmExKUYWtgxH1QbiDPSMRIEHgr+vsS0/6G1yS/j+MZO8dDMG4bPHxY
+   ZFlh0bMHZFC/j1br2KdneII87bQ+HBJv03EWxM6a8aSrKEYjs5aEvNCOf
+   f85qoXm/UFqD/so1x/Qw83WKcjnmPYEWqV/OpZTCVq+b+QtTcmLfh3+rR
+   3aYuF+7Tc1taTl/pQZQS4CRW+L2ZipcSn+zbdgWS4x3fKKdLIo8NRL/PW
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="375076916"
+X-IronPort-AV: E=Sophos;i="5.96,172,1665471600"; 
+   d="scan'208";a="375076916"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 11:07:29 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="764881694"
+X-IronPort-AV: E=Sophos;i="5.96,172,1665471600"; 
+   d="scan'208";a="764881694"
+Received: from vrgatne-mobl4.amr.corp.intel.com (HELO [10.209.115.197]) ([10.209.115.197])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 11:07:28 -0800
+Message-ID: <c8240766-1537-356a-c219-c9da9626d2a9@intel.com>
+Date:   Thu, 17 Nov 2022 11:07:27 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v18 0/3] Add TDX Guest Attestation support
+Content-Language: en-US
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20221116223820.819090-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20221116223820.819090-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,77 +77,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Samsung touchscreen controllers are often used with external pull-up
-for the interrupt line and the I2C lines, so we might need to enable
-a regulator to bring the lines into usable state. Otherwise, this might
-cause spurious interrupts and reading from I2C will fail.
+Sathya, this conflicts with some fixes Kirill made that got applied in
+6.1-rc3.  Can you double-check that the result looks right and tests OK,
+please?
 
-Implement support for a "vddio-supply" that is enabled by the cyttsp5
-driver so that the regulator gets enabled when needed.
-
-Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
----
- drivers/input/touchscreen/cyttsp5.c | 19 ++++++++++++-------
- 1 file changed, 12 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/input/touchscreen/cyttsp5.c b/drivers/input/touchscree=
-n/cyttsp5.c
-index 24ab1df9fc07..d02fdb940edf 100644
---- a/drivers/input/touchscreen/cyttsp5.c
-+++ b/drivers/input/touchscreen/cyttsp5.c
-@@ -190,7 +190,7 @@ struct cyttsp5 {
- =09int num_prv_rec;
- =09struct regmap *regmap;
- =09struct touchscreen_properties prop;
--=09struct regulator *vdd;
-+=09struct regulator_bulk_data supplies[2];
- };
-=20
- /*
-@@ -767,7 +767,7 @@ static void cyttsp5_cleanup(void *data)
- {
- =09struct cyttsp5 *ts =3D data;
-=20
--=09regulator_disable(ts->vdd);
-+=09regulator_bulk_disable(ARRAY_SIZE(ts->supplies), ts->supplies);
- }
-=20
- static int cyttsp5_probe(struct device *dev, struct regmap *regmap, int ir=
-q,
-@@ -790,9 +790,12 @@ static int cyttsp5_probe(struct device *dev, struct re=
-gmap *regmap, int irq,
- =09init_completion(&ts->cmd_done);
-=20
- =09/* Power up the device */
--=09ts->vdd =3D devm_regulator_get(dev, "vdd");
--=09if (IS_ERR(ts->vdd)) {
--=09=09error =3D PTR_ERR(ts->vdd);
-+=09ts->supplies[0].supply =3D "vdd";
-+=09ts->supplies[1].supply =3D "vddio";
-+=09error =3D devm_regulator_bulk_get(dev, ARRAY_SIZE(ts->supplies),
-+=09=09=09=09      ts->supplies);
-+=09if (error < 0) {
-+=09=09dev_err(ts->dev, "Failed to get regulators, error %d\n", error);
- =09=09return error;
- =09}
-=20
-@@ -800,9 +803,11 @@ static int cyttsp5_probe(struct device *dev, struct re=
-gmap *regmap, int irq,
- =09if (error)
- =09=09return error;
-=20
--=09error =3D regulator_enable(ts->vdd);
--=09if (error)
-+=09error =3D regulator_bulk_enable(ARRAY_SIZE(ts->supplies), ts->supplies)=
-;
-+=09if (error < 0) {
-+=09=09dev_err(ts->dev, "Failed to enable regulators, error %d\n", error);
- =09=09return error;
-+=09}
-=20
- =09ts->input =3D devm_input_allocate_device(dev);
- =09if (!ts->input) {
---=20
-2.30.2
-
-
+https://git.kernel.org/pub/scm/linux/kernel/git/daveh/devel.git/log/?h=tdxreport
