@@ -2,75 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D0BE62DA21
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 13:02:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6A8962DA23
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 13:03:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239908AbiKQMCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 07:02:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33622 "EHLO
+        id S239899AbiKQMDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 07:03:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239917AbiKQMBz (ORCPT
+        with ESMTP id S239760AbiKQMDd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 07:01:55 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 184555B846;
-        Thu, 17 Nov 2022 04:01:50 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3748813D5;
-        Thu, 17 Nov 2022 04:01:56 -0800 (PST)
-Received: from bogus (unknown [10.57.6.137])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D32B53F663;
-        Thu, 17 Nov 2022 04:01:47 -0800 (PST)
-Date:   Thu, 17 Nov 2022 12:01:45 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, rafael@kernel.org,
-        robh+dt@kernel.org, johan@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v7 0/4] qcom-cpufreq-hw: Add CPU clock provider support
-Message-ID: <20221117120145.ou2pg7obxnwlsc36@bogus>
-References: <20221117053145.10409-1-manivannan.sadhasivam@linaro.org>
- <20221117101903.sw3hxaruj5sfhybw@bogus>
- <20221117112403.haffuclwooudvgwz@vireshk-i7>
+        Thu, 17 Nov 2022 07:03:33 -0500
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C456178A9
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 04:03:32 -0800 (PST)
+Received: by mail-io1-f70.google.com with SMTP id n23-20020a056602341700b00689fc6dbfd6so759532ioz.8
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 04:03:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=juTJp/R7jG3Dr/MF/K7NwS0ryQI9fpomBjZtVXayJyY=;
+        b=7PX0jH4Vyd7V+V6F/Z4yIlESeDPiwU9+Fpi3s3VLGG9xzXga+cJfeXLdCQBiUMqC7k
+         I+ojKudi+6oGv1Iol6SS/QrsWILhCPlseOtR/NFXq0YnX3N9d4Mc7yv5GlU6KCw7pIuq
+         RgWNXrxOFYYfpQl0GxcIAk7CvbixaVhnrdZmb9wCtST45pxC+nP8PgAmvuRpO6ReE2Kj
+         s9hDEY8h/JyI5r6uFJW2w/pSw2J3UAoqAnCR4CyQlh2gjm29SnpYUJlCmvwE7z0XNsU8
+         ydDOlcckIgOb5Aw1FY7U2+SUjCaGN8rP7+THv0gYi25GFpK8OVB27ZpxjA/g6+gkwa6G
+         ZlZw==
+X-Gm-Message-State: ANoB5pl1+ePyVK8njFlanaGzDNAlo8CJm8Yy8SS2acgqERUv0WkDPnFe
+        WThdRiDMRNW3SEazCBrcdWaIPHVRWp0LrbHscM+BDHyZi7I7
+X-Google-Smtp-Source: AA0mqf5nueY+wTiUbi0BE6eyOzMUeRG4cblCP7Ed5eeh/1mkvjHkPirp9i6w5flT9KueHHtZxzxMoF+vDJpSEQpUSUt8S2as6mZz
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221117112403.haffuclwooudvgwz@vireshk-i7>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:cf02:0:b0:302:3db8:6d47 with SMTP id
+ c2-20020a92cf02000000b003023db86d47mr974029ilo.301.1668686611930; Thu, 17 Nov
+ 2022 04:03:31 -0800 (PST)
+Date:   Thu, 17 Nov 2022 04:03:31 -0800
+In-Reply-To: <0000000000004e78ec05eda79749@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000bef99e05eda9604a@google.com>
+Subject: Re: [syzbot] BUG: sleeping function called from invalid context in static_key_slow_inc
+From:   syzbot <syzbot+703d9e154b3b58277261@syzkaller.appspotmail.com>
+To:     Jason@zx2c4.com, davem@davemloft.net, edumazet@google.com,
+        frederic@kernel.org, jacob.e.keller@intel.com, jiri@nvidia.com,
+        juri.lelli@redhat.com, kirill.shutemov@linux.intel.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        mark.rutland@arm.com, netdev@vger.kernel.org,
+        nicolas.dichtel@6wind.com, pabeni@redhat.com, paul@paul-moore.com,
+        peterz@infradead.org, razor@blackwall.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, steven.price@arm.com,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 04:54:03PM +0530, Viresh Kumar wrote:
-> On 17-11-22, 10:19, Sudeep Holla wrote:
-> > Why do you need the above 3 changes if the below(4/4) will ensure
-> > cpufreq_get(cpu) returns the clock frequency. I was expecting to drop the
-> > whole "confusing" clock bindings and the unnecessary clock provider.
-> > 
-> > Can't we just use cpufreq_get(cpu) ?
-> 
-> https://lore.kernel.org/lkml/cover.1657695140.git.viresh.kumar@linaro.org/
-> 
-> The basic idea (need) here was to fix the DT and let the CPU nodes have clock
-> related properties, which are missing currently.
-> 
-> The context can be seen in the above thread.
+syzbot has found a reproducer for the following issue on:
 
-Thanks for the link. Sorry I still don't get the complete picture. Who are
-the consumers of these clock nodes if not cpufreq itself.
+HEAD commit:    064bc7312bd0 netdevsim: Fix memory leak of nsim_dev->fa_co..
+git tree:       net
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=16b2b231880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a33ac7bbc22a8c35
+dashboard link: https://syzkaller.appspot.com/bug?extid=703d9e154b3b58277261
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13cd2f79880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=109e1695880000
 
-I am going to guess, so other device(like inter-connect) with phandle into
-CPU device perhaps ? Also I assume it will have phandle to non-CPU device
-and hence we need generic device clock solution. Sorry for the noise, but
-I still find having both clocks and qcom,freq-domain property is quite
-confusing but I am fine as I understand it bit better now.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/0634e1c0e4cb/disk-064bc731.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/fe1039d2de22/vmlinux-064bc731.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/5a0d673875fa/bzImage-064bc731.xz
 
--- 
-Regards,
-Sudeep
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+703d9e154b3b58277261@syzkaller.appspotmail.com
+
+BUG: sleeping function called from invalid context at include/linux/percpu-rwsem.h:49
+in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 3634, name: syz-executor167
+preempt_count: 1, expected: 0
+RCU nest depth: 0, expected: 0
+3 locks held by syz-executor167/3634:
+ #0: ffffffff8df6b530 (cb_lock){++++}-{3:3}, at: genl_rcv+0x19/0x40 net/netlink/genetlink.c:860
+ #1: ffffffff8df6b5e8 (genl_mutex){+.+.}-{3:3}, at: genl_lock net/netlink/genetlink.c:33 [inline]
+ #1: ffffffff8df6b5e8 (genl_mutex){+.+.}-{3:3}, at: genl_rcv_msg+0x50d/0x780 net/netlink/genetlink.c:848
+ #2: ffff8880182fa0b8 (k-clock-AF_INET){+++.}-{2:2}, at: l2tp_tunnel_register+0x126/0x1210 net/l2tp/l2tp_core.c:1477
+Preemption disabled at:
+[<0000000000000000>] 0x0
+CPU: 1 PID: 3634 Comm: syz-executor167 Not tainted 6.1.0-rc4-syzkaller-00212-g064bc7312bd0 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
+ __might_resched.cold+0x222/0x26b kernel/sched/core.c:9890
+ percpu_down_read include/linux/percpu-rwsem.h:49 [inline]
+ cpus_read_lock+0x1b/0x140 kernel/cpu.c:310
+ static_key_slow_inc+0x12/0x20 kernel/jump_label.c:158
+ udp_tunnel_encap_enable include/net/udp_tunnel.h:189 [inline]
+ setup_udp_tunnel_sock+0x3e1/0x550 net/ipv4/udp_tunnel_core.c:81
+ l2tp_tunnel_register+0xc51/0x1210 net/l2tp/l2tp_core.c:1509
+ l2tp_nl_cmd_tunnel_create+0x3d6/0x8b0 net/l2tp/l2tp_netlink.c:245
+ genl_family_rcv_msg_doit+0x228/0x320 net/netlink/genetlink.c:756
+ genl_family_rcv_msg net/netlink/genetlink.c:833 [inline]
+ genl_rcv_msg+0x445/0x780 net/netlink/genetlink.c:850
+ netlink_rcv_skb+0x157/0x430 net/netlink/af_netlink.c:2540
+ genl_rcv+0x28/0x40 net/netlink/genetlink.c:861
+ netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+ netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1345
+ netlink_sendmsg+0x91b/0xe10 net/netlink/af_netlink.c:1921
+ sock_sendmsg_nosec net/socket.c:714 [inline]
+ sock_sendmsg+0xd3/0x120 net/socket.c:734
+ sock_no_sendpage+0x10c/0x160 net/core/sock.c:3219
+ kernel_sendpage.part.0+0x1d5/0x700 net/socket.c:3561
+ kernel_sendpage net/socket.c:3558 [inline]
+ sock_sendpage+0xe3/0x140 net/socket.c:1054
+ pipe_to_sendpage+0x2b1/0x380 fs/splice.c:361
+ splice_from_pipe_feed fs/splice.c:415 [inline]
+ __splice_from_pipe+0x449/0x8a0 fs/splice.c:559
+ splice_from_pipe fs/splice.c:594 [inline]
+ generic_splice_sendpage+0xd8/0x140 fs/splice.c:743
+ do_splice_from fs/splice.c:764 [inline]
+ direct_splice_actor+0x114/0x180 fs/splice.c:931
+ splice_direct_to_actor+0x335/0x8a0 fs/splice.c:886
+ do_splice_direct+0x1ab/0x280 fs/splice.c:974
+ do_sendfile+0xb19/0x1270 fs/read_write.c:1255
+ __do_sys_sendfile64 fs/read_write.c:1323 [inline]
+ __se_sys_sendfile64 fs/read_write.c:1309 [inline]
+ __x64_sys_sendfile64+0x1d0/0x210 fs/read_write.c:1309
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f93d1567cb9
+Code: 28 c3 e8 5a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffdd8ae4a88 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f93d1567cb9
+RDX: 0000000000000000 RSI: 0000000000000004 RDI: 0000000000000005
+RBP: 00007f93d152b680 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000100000000 R11: 0000000000000246 R12: 00007f93d152b710
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+
