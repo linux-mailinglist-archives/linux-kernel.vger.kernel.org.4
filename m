@@ -2,121 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E95962D530
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:40:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6293862D531
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:41:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234703AbiKQIkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 03:40:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41684 "EHLO
+        id S239199AbiKQIlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 03:41:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233270AbiKQIkv (ORCPT
+        with ESMTP id S239597AbiKQIlD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 03:40:51 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C01616A6AA
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 00:40:50 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id k22so1123938pfd.3
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 00:40:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qplMXaAH/oEU5/8F3cf/ZUOQW9zkLXWofLHcj31TN/s=;
-        b=Vuy2P2T2r6KO/AE/XiLPILumQC7f2JK5sa1C10KBZ1znHMVCPbCzWeKaN25fOw0eKL
-         9SJ+eO/MqGvXQ58PvwxYqVKz+6CyDG+A1uegZU6d8RyaZ28foyko7GwmzJFKSKUC2n+R
-         2KTVJFMA/OYtFbQ7RULhUhx0/GRc+zUcyZlStNw1k4y1qQ9HcpSt/08vQmIFRXW6JUzZ
-         1CxDaQLbCxn+/eYOE2F6oJdWdbvKOeiEmK3xRtjfzsUB+lhAUD33yEjTZ5b4jmUOgz2i
-         yLwZsZ3CNIdWWnim49pScyzm0jEjv/ueOlBYF7iQnL3Q3VVdypZi+D6n+iDINfa4A2Xy
-         ojMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qplMXaAH/oEU5/8F3cf/ZUOQW9zkLXWofLHcj31TN/s=;
-        b=MdFkyXo46Tsu4lBKB3tHhakLAu+CQ556Eq145KqXQLKMTpNAfgqx9S7QPLjyFzruMq
-         9hxNWyGFlMY3i7BuP5Rrx/CKch3qgnYjKyhFGhL6byF2OLQqF4aQpKvzSd6l8IB1gWa4
-         aWJcP39UKZccDsqmei5ikldQWzY3/DP9Qj1pfWwNrIVaPmzyD52uU+Gk7yIRGUfEy+R2
-         1Nm78Q7re27VKD/FnmXAFs9Kr+18CStzR+RQ11IQ+/j/3aut64sJVC64Plr8Qg3ji4us
-         dI+fg37l9e/K6qSUPUGfwv0wOceZDegkeW8dTFy+h0VeA7/iKllvHtgxqPnY6ofgHRe0
-         B3lA==
-X-Gm-Message-State: ANoB5pnp0+iAuoeob60gKPuhkgdZ/EXr85dklyuIYXRa2YD7pRL9slJd
-        2XqCSb9ZEslmgtLdRX0lyqZ97Q==
-X-Google-Smtp-Source: AA0mqf5TDC85f9Z1mBM8VjxRxLxfOytfZLf24tEIgB5ZFuSHvP/eHelRdQ/4T74LRasVrciC6VCbNg==
-X-Received: by 2002:a63:224c:0:b0:46b:8e9:747 with SMTP id t12-20020a63224c000000b0046b08e90747mr1159323pgm.365.1668674450331;
-        Thu, 17 Nov 2022 00:40:50 -0800 (PST)
-Received: from ?IPV6:2405:201:d02f:d899:2028:7962:400:43b6? ([2405:201:d02f:d899:2028:7962:400:43b6])
-        by smtp.gmail.com with ESMTPSA id o14-20020a170902d4ce00b00186acb14c4asm693768plg.67.2022.11.17.00.40.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Nov 2022 00:40:49 -0800 (PST)
-Message-ID: <81cd642f-c5fb-77ec-a634-5655d5b6088c@9elements.com>
-Date:   Thu, 17 Nov 2022 14:10:45 +0530
+        Thu, 17 Nov 2022 03:41:03 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066AA73408
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 00:40:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=fDZT9FBMEcmn4v7ZpGQ4rwaIFRFiJJ9SjRwrHLlObY4=; b=jOQNVJzFDIsiys3iaBF0CBs05M
+        9S3qgrBHFiG3wqYMJk9fV0gbl2wzvnug3ZyzjFvXbsaKL3Q3rmRmA/KqB+BDlloJ4cqZbaAtndQ6t
+        7UfENddcRK9feckdfpA77rZeD0cFXx5AAaCzGVqykorxRecDsEKbh734Z5yiaeJLHQlDX7jseS7A2
+        3+EZY0NqCbxbqMTHIRuX1AwF9aTgr0awTze32Np+Nx7gagctS6FssxdBNruC13DDSoOxSIq0B4nmE
+        NAnl0I2hRnnku2481s1WKcaxyI6BrfFUSOXUxQxR6W0K+IyXk+kgnFrNQFKOL8oTiM4S8oCEaIk3u
+        YDXvgNpA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ovaS3-001cmX-SA; Thu, 17 Nov 2022 08:40:52 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7F866300454;
+        Thu, 17 Nov 2022 09:40:51 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 6A9332022F73A; Thu, 17 Nov 2022 09:40:51 +0100 (CET)
+Date:   Thu, 17 Nov 2022 09:40:51 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
+        linux-kernel@vger.kernel.org, Andi Kleen <ak@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Martin Liska <mliska@suse.cz>, Jiri Slaby <jslaby@suse.cz>
+Subject: Re: [PATCH 18/46] entry, lto: Mark raw_irqentry_exit_cond_resched()
+ as __visible
+Message-ID: <Y3XzkxNVTvdB4a/1@hirez.programming.kicks-ass.net>
+References: <20221114114344.18650-1-jirislaby@kernel.org>
+ <20221114114344.18650-19-jirislaby@kernel.org>
+ <87a64qo4th.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v6 3/3] hwmon: (max6639) Change from pdata to dt
- configuration
-Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Marcello Sylvester Bauer <sylv@sylv.io>,
-        linux-pwm@vger.kernel.org
-References: <20221116213615.1256297-1-Naresh.Solanki@9elements.com>
- <20221116213615.1256297-4-Naresh.Solanki@9elements.com>
- <20221117074510.qqtjc6h3bnh5rccx@pengutronix.de>
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-In-Reply-To: <20221117074510.qqtjc6h3bnh5rccx@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87a64qo4th.ffs@tglx>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Nov 17, 2022 at 12:30:34AM +0100, Thomas Gleixner wrote:
+> On Mon, Nov 14 2022 at 12:43, Jiri Slaby wrote:
+> > Symbols referenced from assembler (either directly or e.f. from
+> 
+> from assembler? I'm not aware that the assembler references anything.
+> 
+> Also what does e.f. mean? Did you want to write e.g.?
+> 
+> > DEFINE_STATIC_KEY()) need to be global and visible in gcc LTO because
+> > they could end up in a different object file than the assembler. This
+> 
+> than the assembler? Are we shipping the assembler in an object file?
+> 
+> > can lead to linker errors without this patch.
+> 
+> git grep -i 'this patch' Documentation/process/
+> 
+> > So mark raw_irqentry_exit_cond_resched() as __visible.
+> 
+> And all that tells me what? I know what you want to say, but it's not
+> there.
+> 
+>   Symbols in different compilation units which are referenced from
+>   assembly code either directly or indirectly, e.g. from
+>   DEFINE_STATIC_KEY(), must be marked visible for GCC based LTO builds.
+> 
+>   Add the missing __visible annotation to raw_irqentry_exit_cond_resched().
+> 
+> See?
+> 
+> There is no 'global' because it's obvious that a symbol in a different
+> compilation unit must be global to be resolvable. It's also obvious that
+> code in different compilation units ends up in different object files.
+> 
+> So stating that it's a 'must' to have such symbols marked visible is
+> good enough for an argument because that tells the reader that this is a
+> mandatory requirement for an GCC based LTO build.
+> 
+> No?
 
+I still don't understand any of it -- this symbol is not static (and
+thus lives in the global namespace and it's name must not be mangled
+lest it breaks ABI), this symbol has it's address taken, so it must not
+be eliminated.
 
-On 17-11-2022 01:15 pm, Uwe Kleine-König wrote:
-> Hello,
-> 
-> On Wed, Nov 16, 2022 at 10:36:15PM +0100, Naresh Solanki wrote:
->> max6639_platform_data is not used by any in-kernel driver and does not
->> address the MAX6639 fans separately.
->> Move to device tree configuration with explicit properties to configure
->> each fan.
->>
->> Non-DT platform can still use this module with its default
->> configuration.
->>
->> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
->> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-> 
-> What changed here since v5? Please either add a changelog below the
-> tripple-dash for a new revision, or make sure that all relevant people
-> get the cover letter.
-> 
-> It seems you didn't address my comments for v5 :-\
-Not sure what I missed but did following changes:
-Removed unused header max6639.h
-Used dev_err_probe instead,
-Removed of_pwm_n_cells,
-if condition for freq_table
-removed pwm_get_state & instead use pwm->state
-division/multiplication optimizations,
-indentation of freq_table,
+WTF does this crazy LTO thing require __visible on it?
 
-> 
-> Best regards
-> Uwe
-> 
+The original Changelog babbles something about multiple object files,
+which doesn't make sense either, there is only a single object file with
+LTO -- that's sort of the whole point. The translation unit output
+becomes some intermediate gunk -- to be used as input for the LTO pass,
+but it is not an ELF object file.
 
-Thanks,
-Naresh
+The linker takes all these intermediate files, does the global
+optimization thing and then generates a real ELF object file.
+
+Anyway; I think we can drop all this crazy on the floor again, since per
+the 0/n (which I didn't get) there isn't any actual benefit from using
+GCC-LTO, so why should we bother with all this ugly.
+
+I would suggest GCC implement this integrated assembler and follow the
+clang lead here -- or people who want LTO use clang. GCC is clearly
+inferior here.
