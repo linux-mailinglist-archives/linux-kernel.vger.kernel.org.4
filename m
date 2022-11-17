@@ -2,74 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41C3662E644
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 22:04:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5255562E64A
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 22:04:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240372AbiKQVEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 16:04:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48454 "EHLO
+        id S240624AbiKQVE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 16:04:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239843AbiKQVDl (ORCPT
+        with ESMTP id S240076AbiKQVDt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 16:03:41 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAB26286CA
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 13:03:35 -0800 (PST)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AHKOOse002460;
-        Thu, 17 Nov 2022 21:03:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=corp-2022-7-12;
- bh=oiF9VDlWy9y8mIee/ulZOw0MitvLoK+ljs9NDxhkktU=;
- b=VvDg14FEWYbX1LeHqxnrB+23hs03FodxFJd+LnUisyoPukL26JOD2XDqt6fDADYXPe2R
- /bhUwENwMks+z2fAOcsC/MeIi7UKsVEEhDEFoRwMCVRUnXvPjRJ6YKnamC0H9i48RSWE
- od8QAxDt6dddyCnq5/GEALy2G1hzKl8AyjjBJExhmmy6fgIU4BltV2jJAMxqOBtdcyqC
- uYoNwUGyBifYB46VzUqb4hoOGueYV38TsEFl7e4ZnQFu2lZ2K7LnsfWk9r74siCADTTF
- ZrArSscj/JF2ruguWlOECO1wKjxbG64TLx458PCq9KJGhRmIL+Tdnkwm3pCYjGQKr1Lt fw== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kv8yktgnn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 17 Nov 2022 21:03:25 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2AHKX0SZ010906;
-        Thu, 17 Nov 2022 21:03:23 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3ku3kagyd6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 17 Nov 2022 21:03:23 +0000
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AHL37Fv032582;
-        Thu, 17 Nov 2022 21:03:22 GMT
-Received: from sid-dell.us.oracle.com (dhcp-10-132-95-73.usdhcp.oraclecorp.com [10.132.95.73])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3ku3kagy08-11;
-        Thu, 17 Nov 2022 21:03:22 +0000
-From:   Sidhartha Kumar <sidhartha.kumar@oracle.com>
-To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Cc:     akpm@linux-foundation.org, songmuchun@bytedance.com,
-        mike.kravetz@oracle.com, willy@infradead.org,
-        almasrymina@google.com, linmiaohe@huawei.com, hughd@google.com,
-        Sidhartha Kumar <sidhartha.kumar@oracle.com>
-Subject: [PATCH mm-unstable v2 10/10] mm/hugetlb: change hugetlb allocation functions to return a folio
-Date:   Thu, 17 Nov 2022 13:02:58 -0800
-Message-Id: <20221117210258.12732-11-sidhartha.kumar@oracle.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221117210258.12732-1-sidhartha.kumar@oracle.com>
-References: <20221117210258.12732-1-sidhartha.kumar@oracle.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-17_06,2022-11-17_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 adultscore=0
- phishscore=0 malwarescore=0 suspectscore=0 mlxlogscore=999 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2211170150
-X-Proofpoint-GUID: DOBrNUfYvOVgJV39WwrLF5eaa6twuBCS
-X-Proofpoint-ORIG-GUID: DOBrNUfYvOVgJV39WwrLF5eaa6twuBCS
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        Thu, 17 Nov 2022 16:03:49 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEAEA24080;
+        Thu, 17 Nov 2022 13:03:47 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso2971425pjt.0;
+        Thu, 17 Nov 2022 13:03:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G8RvZ4CHDBSCsDMjoArI7xcTtTta9Gi4ASsSoLYztRo=;
+        b=hJVy2w8b0w92SpJuaIxjWE4iHbkjdkqsfh5p9uQxtl0OrxpEJg39TO8Nul62z2cMXV
+         VK12gyrLjbFZpJAP2bITAuHGi0sBHZlsBmHRd3WgNmMs/T6AdefnICwIrwuWCk5Yvp6B
+         U7gdIBa+vm8JDPTVbqKBdFOGZ2bb1IoXC1dXE+9Ss3tkj57GepBQK4+KaoAqwFxQ3kWx
+         35ix6OxskZAJ15qzI00MBJjUuo60mVD4BRUEQUnDyUo/pIVuwYVfrUPNNhdCy4YRzJI6
+         jP8JLpKBn9vzhGrJYBhByf76nPomXOc5nGJxPqjceGje94y4aT19zdyDjmjVAdKtLRWq
+         vVRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=G8RvZ4CHDBSCsDMjoArI7xcTtTta9Gi4ASsSoLYztRo=;
+        b=8OXpr7Dc1i5W36tlX/ul7vvI/WbPd4goityR+UlSUIkzf185F78ie1jDhmBmF13F+E
+         5K/5yclfQqdaK4AtgYr+IhMxzzICPWtL5XNyZBldBPFLvM/8ZbL2Nd6Pc55xNl9+wZk2
+         93s2LZ9VAuTORB6jbwNGlZXGnxzU8BSe0RXL0GYkm4yRm0PkJOTuqmQbX170BaVGwDEV
+         Imh1KFX/zhA7yBQlLPcpnw5Vj9JJE5doEd0ZAOLkIBGX8MvOXgHJpH5JHsC5j43OnY0v
+         fJU8JMe+YB4XeRFkR9l8iq3d11nbGPFEXHe99oiUoxXzFGZFWWy/qNS2eAdkiIPm73aM
+         iVLg==
+X-Gm-Message-State: ANoB5pn0s9mJRHkQv15STH4GthwWpG76IvkEc4ICynysoVoSPdgqZqAo
+        TVKV7HsWavGnj++Uqrif0C8=
+X-Google-Smtp-Source: AA0mqf6052HzKW+bZnlUjRHjO3aRvcye5ABEJYX4Fnumb+KiRIgYet0TkCAVjgAAv7toIv5auduhYg==
+X-Received: by 2002:a17:90b:810:b0:200:6637:a9e3 with SMTP id bk16-20020a17090b081000b002006637a9e3mr4405467pjb.176.1668719027089;
+        Thu, 17 Nov 2022 13:03:47 -0800 (PST)
+Received: from localhost ([2605:59c8:47b:5f10:de79:4af7:b6d9:b113])
+        by smtp.gmail.com with ESMTPSA id k23-20020a6568d7000000b004770122d235sm1447089pgt.77.2022.11.17.13.03.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 13:03:46 -0800 (PST)
+Date:   Thu, 17 Nov 2022 13:03:45 -0800
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     David Vernet <void@manifault.com>, bpf@vger.kernel.org
+Cc:     ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+        martin.lau@linux.dev, memxor@gmail.com, yhs@fb.com,
+        song@kernel.org, sdf@google.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, jolsa@kernel.org, haoluo@google.com,
+        tj@kernel.org, kernel-team@fb.com, linux-kernel@vger.kernel.org
+Message-ID: <6376a1b12bb4d_4101208d@john.notmuch>
+In-Reply-To: <20221117032402.2356776-1-void@manifault.com>
+References: <20221117032402.2356776-1-void@manifault.com>
+Subject: RE: [PATCH bpf-next v7 0/3] Support storing struct task_struct
+ objects as kptrs
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,307 +77,163 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Many hugetlb allocation helper functions have now been converting to
-folios, update their higher level callers to be compatible with folios.
+David Vernet wrote:
+> Now that BPF supports adding new kernel functions with kfuncs, and
+> storing kernel objects in maps with kptrs, we can add a set of kfuncs
+> which allow struct task_struct objects to be stored in maps as
+> referenced kptrs.
+> 
+> The possible use cases for doing this are plentiful.  During tracing,
+> for example, it would be useful to be able to collect some tasks that
+> performed a certain operation, and then periodically summarize who they
+> are, which cgroup they're in, how much CPU time they've utilized, etc.
+> Doing this now would require storing the tasks' pids along with some
+> relevant data to be exported to user space, and later associating the
+> pids to tasks in other event handlers where the data is recorded.
+> Another useful by-product of this is that it allows a program to pin a
+> task in a BPF program, and by proxy therefore also e.g. pin its task
+> local storage.
 
-Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
----
- mm/hugetlb.c | 98 ++++++++++++++++++++++++----------------------------
- 1 file changed, 46 insertions(+), 52 deletions(-)
+Sorry wasn't obvious to me (late to the party so if it was in some
+other v* described apologies). Can we say something about the life
+cycle of this acquired task_structs because they are incrementing
+the ref cnt on the task struct they have potential to impact system.
+I know at least we've had a few bugs in our task struct tracking
+that has led to various bugs where we leak references. In our case
+we didn't pin the kernel object so the leak is just BPF memory and
+user space memory, still sort of bad because we would hit memory
+limits and get OOM'd. Leaking kernel task structs is worse though.
 
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 6ecf9874c521..aa0a388bded4 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -1378,7 +1378,7 @@ static void free_gigantic_folio(struct folio *folio, unsigned int order)
- }
- 
- #ifdef CONFIG_CONTIG_ALLOC
--static struct page *alloc_gigantic_page(struct hstate *h, gfp_t gfp_mask,
-+static struct folio *alloc_gigantic_folio(struct hstate *h, gfp_t gfp_mask,
- 		int nid, nodemask_t *nodemask)
- {
- 	unsigned long nr_pages = pages_per_huge_page(h);
-@@ -1394,7 +1394,7 @@ static struct page *alloc_gigantic_page(struct hstate *h, gfp_t gfp_mask,
- 			page = cma_alloc(hugetlb_cma[nid], nr_pages,
- 					huge_page_order(h), true);
- 			if (page)
--				return page;
-+				return page_folio(page);
- 		}
- 
- 		if (!(gfp_mask & __GFP_THISNODE)) {
-@@ -1405,17 +1405,16 @@ static struct page *alloc_gigantic_page(struct hstate *h, gfp_t gfp_mask,
- 				page = cma_alloc(hugetlb_cma[node], nr_pages,
- 						huge_page_order(h), true);
- 				if (page)
--					return page;
-+					return page_folio(page);
- 			}
- 		}
- 	}
- #endif
--
--	return alloc_contig_pages(nr_pages, gfp_mask, nid, nodemask);
-+	return page_folio(alloc_contig_pages(nr_pages, gfp_mask, nid, nodemask));
- }
- 
- #else /* !CONFIG_CONTIG_ALLOC */
--static struct page *alloc_gigantic_page(struct hstate *h, gfp_t gfp_mask,
-+static struct folio *alloc_gigantic_folio(struct hstate *h, gfp_t gfp_mask,
- 					int nid, nodemask_t *nodemask)
- {
- 	return NULL;
-@@ -1423,7 +1422,7 @@ static struct page *alloc_gigantic_page(struct hstate *h, gfp_t gfp_mask,
- #endif /* CONFIG_CONTIG_ALLOC */
- 
- #else /* !CONFIG_ARCH_HAS_GIGANTIC_PAGE */
--static struct page *alloc_gigantic_page(struct hstate *h, gfp_t gfp_mask,
-+static struct folio *alloc_gigantic_folio(struct hstate *h, gfp_t gfp_mask,
- 					int nid, nodemask_t *nodemask)
- {
- 	return NULL;
-@@ -1948,7 +1947,7 @@ pgoff_t hugetlb_basepage_index(struct page *page)
- 	return (index << compound_order(page_head)) + compound_idx;
- }
- 
--static struct page *alloc_buddy_huge_page(struct hstate *h,
-+static struct folio *alloc_buddy_hugetlb_folio(struct hstate *h,
- 		gfp_t gfp_mask, int nid, nodemask_t *nmask,
- 		nodemask_t *node_alloc_noretry)
- {
-@@ -2007,7 +2006,7 @@ static struct page *alloc_buddy_huge_page(struct hstate *h,
- 	if (node_alloc_noretry && !page && alloc_try_hard)
- 		node_set(nid, *node_alloc_noretry);
- 
--	return page;
-+	return page_folio(page);
- }
- 
- /*
-@@ -2017,23 +2016,21 @@ static struct page *alloc_buddy_huge_page(struct hstate *h,
-  * Note that returned page is 'frozen':  ref count of head page and all tail
-  * pages is zero.
-  */
--static struct page *alloc_fresh_huge_page(struct hstate *h,
-+static struct folio *alloc_fresh_hugetlb_folio(struct hstate *h,
- 		gfp_t gfp_mask, int nid, nodemask_t *nmask,
- 		nodemask_t *node_alloc_noretry)
- {
--	struct page *page;
- 	struct folio *folio;
- 	bool retry = false;
- 
- retry:
- 	if (hstate_is_gigantic(h))
--		page = alloc_gigantic_page(h, gfp_mask, nid, nmask);
-+		folio = alloc_gigantic_folio(h, gfp_mask, nid, nmask);
- 	else
--		page = alloc_buddy_huge_page(h, gfp_mask,
-+		folio = alloc_buddy_hugetlb_folio(h, gfp_mask,
- 				nid, nmask, node_alloc_noretry);
--	if (!page)
-+	if (!folio)
- 		return NULL;
--	folio = page_folio(page);
- 	if (hstate_is_gigantic(h)) {
- 		if (!prep_compound_gigantic_folio(folio, huge_page_order(h))) {
- 			/*
-@@ -2050,7 +2047,7 @@ static struct page *alloc_fresh_huge_page(struct hstate *h,
- 	}
- 	prep_new_hugetlb_folio(h, folio, folio_nid(folio));
- 
--	return page;
-+	return folio;
- }
- 
- /*
-@@ -2060,21 +2057,21 @@ static struct page *alloc_fresh_huge_page(struct hstate *h,
- static int alloc_pool_huge_page(struct hstate *h, nodemask_t *nodes_allowed,
- 				nodemask_t *node_alloc_noretry)
- {
--	struct page *page;
-+	struct folio *folio;
- 	int nr_nodes, node;
- 	gfp_t gfp_mask = htlb_alloc_mask(h) | __GFP_THISNODE;
- 
- 	for_each_node_mask_to_alloc(h, nr_nodes, node, nodes_allowed) {
--		page = alloc_fresh_huge_page(h, gfp_mask, node, nodes_allowed,
--						node_alloc_noretry);
--		if (page)
-+		folio = alloc_fresh_hugetlb_folio(h, gfp_mask, node,
-+					nodes_allowed, node_alloc_noretry);
-+		if (folio)
- 			break;
- 	}
- 
--	if (!page)
-+	if (!folio)
- 		return 0;
- 
--	free_huge_page(page); /* free it into the hugepage allocator */
-+	free_huge_page(&folio->page); /* free it into the hugepage allocator */
- 
- 	return 1;
- }
-@@ -2235,7 +2232,7 @@ int dissolve_free_huge_pages(unsigned long start_pfn, unsigned long end_pfn)
- static struct page *alloc_surplus_huge_page(struct hstate *h, gfp_t gfp_mask,
- 						int nid, nodemask_t *nmask)
- {
--	struct page *page = NULL;
-+	struct folio *folio = NULL;
- 
- 	if (hstate_is_gigantic(h))
- 		return NULL;
-@@ -2245,8 +2242,8 @@ static struct page *alloc_surplus_huge_page(struct hstate *h, gfp_t gfp_mask,
- 		goto out_unlock;
- 	spin_unlock_irq(&hugetlb_lock);
- 
--	page = alloc_fresh_huge_page(h, gfp_mask, nid, nmask, NULL);
--	if (!page)
-+	folio = alloc_fresh_hugetlb_folio(h, gfp_mask, nid, nmask, NULL);
-+	if (!folio)
- 		return NULL;
- 
- 	spin_lock_irq(&hugetlb_lock);
-@@ -2258,43 +2255,42 @@ static struct page *alloc_surplus_huge_page(struct hstate *h, gfp_t gfp_mask,
- 	 * codeflow
- 	 */
- 	if (h->surplus_huge_pages >= h->nr_overcommit_huge_pages) {
--		SetHPageTemporary(page);
-+		folio_set_hugetlb_temporary(folio);
- 		spin_unlock_irq(&hugetlb_lock);
--		free_huge_page(page);
-+		free_huge_page(&folio->page);
- 		return NULL;
- 	}
- 
- 	h->surplus_huge_pages++;
--	h->surplus_huge_pages_node[page_to_nid(page)]++;
-+	h->surplus_huge_pages_node[folio_nid(folio)]++;
- 
- out_unlock:
- 	spin_unlock_irq(&hugetlb_lock);
- 
--	return page;
-+	return &folio->page;
- }
- 
- static struct page *alloc_migrate_huge_page(struct hstate *h, gfp_t gfp_mask,
- 				     int nid, nodemask_t *nmask)
- {
--	struct page *page;
-+	struct folio *folio;
- 
- 	if (hstate_is_gigantic(h))
- 		return NULL;
- 
--	page = alloc_fresh_huge_page(h, gfp_mask, nid, nmask, NULL);
--	if (!page)
-+	folio = alloc_fresh_hugetlb_folio(h, gfp_mask, nid, nmask, NULL);
-+	if (!folio)
- 		return NULL;
- 
- 	/* fresh huge pages are frozen */
--	set_page_refcounted(page);
--
-+	folio_ref_unfreeze(folio, 1);
- 	/*
- 	 * We do not account these pages as surplus because they are only
- 	 * temporary and will be released properly on the last reference
- 	 */
--	SetHPageTemporary(page);
-+	folio_set_hugetlb_temporary(folio);
- 
--	return page;
-+	return &folio->page;
- }
- 
- /*
-@@ -2743,19 +2739,18 @@ void restore_reserve_on_error(struct hstate *h, struct vm_area_struct *vma,
- }
- 
- /*
-- * alloc_and_dissolve_huge_page - Allocate a new page and dissolve the old one
-+ * alloc_and_dissolve_hugetlb_folio - Allocate a new folio and dissolve
-+ * the old one
-  * @h: struct hstate old page belongs to
-  * @old_page: Old page to dissolve
-  * @list: List to isolate the page in case we need to
-  * Returns 0 on success, otherwise negated error.
-  */
--static int alloc_and_dissolve_huge_page(struct hstate *h, struct page *old_page,
--					struct list_head *list)
-+static int alloc_and_dissolve_hugetlb_folio(struct hstate *h,
-+			struct folio *old_folio, struct list_head *list)
- {
- 	gfp_t gfp_mask = htlb_alloc_mask(h) | __GFP_THISNODE;
--	struct folio *old_folio = page_folio(old_page);
- 	int nid = folio_nid(old_folio);
--	struct page *new_page;
- 	struct folio *new_folio;
- 	int ret = 0;
- 
-@@ -2766,26 +2761,25 @@ static int alloc_and_dissolve_huge_page(struct hstate *h, struct page *old_page,
- 	 * the pool.  This simplifies and let us do most of the processing
- 	 * under the lock.
- 	 */
--	new_page = alloc_buddy_huge_page(h, gfp_mask, nid, NULL, NULL);
--	if (!new_page)
-+	new_folio = alloc_buddy_hugetlb_folio(h, gfp_mask, nid, NULL, NULL);
-+	if (!new_folio)
- 		return -ENOMEM;
--	new_folio = page_folio(new_page);
- 	__prep_new_hugetlb_folio(h, new_folio);
- 
- retry:
- 	spin_lock_irq(&hugetlb_lock);
- 	if (!folio_test_hugetlb(old_folio)) {
- 		/*
--		 * Freed from under us. Drop new_page too.
-+		 * Freed from under us. Drop new_folio too.
- 		 */
- 		goto free_new;
- 	} else if (folio_ref_count(old_folio)) {
- 		/*
--		 * Someone has grabbed the page, try to isolate it here.
-+		 * Someone has grabbed the folio, try to isolate it here.
- 		 * Fail with -EBUSY if not possible.
- 		 */
- 		spin_unlock_irq(&hugetlb_lock);
--		ret = isolate_hugetlb(old_page, list);
-+		ret = isolate_hugetlb(&old_folio->page, list);
- 		spin_lock_irq(&hugetlb_lock);
- 		goto free_new;
- 	} else if (!folio_test_hugetlb_freed(old_folio)) {
-@@ -2863,7 +2857,7 @@ int isolate_or_dissolve_huge_page(struct page *page, struct list_head *list)
- 	if (folio_ref_count(folio) && !isolate_hugetlb(&folio->page, list))
- 		ret = 0;
- 	else if (!folio_ref_count(folio))
--		ret = alloc_and_dissolve_huge_page(h, &folio->page, list);
-+		ret = alloc_and_dissolve_hugetlb_folio(h, folio, list);
- 
- 	return ret;
- }
-@@ -3081,14 +3075,14 @@ static void __init hugetlb_hstate_alloc_pages_onenode(struct hstate *h, int nid)
- 			if (!alloc_bootmem_huge_page(h, nid))
- 				break;
- 		} else {
--			struct page *page;
-+			struct folio *folio;
- 			gfp_t gfp_mask = htlb_alloc_mask(h) | __GFP_THISNODE;
- 
--			page = alloc_fresh_huge_page(h, gfp_mask, nid,
-+			folio = alloc_fresh_hugetlb_folio(h, gfp_mask, nid,
- 					&node_states[N_MEMORY], NULL);
--			if (!page)
-+			if (!folio)
- 				break;
--			free_huge_page(page); /* free it into the hugepage allocator */
-+			free_huge_page(&folio->page); /* free it into the hugepage allocator */
- 		}
- 		cond_resched();
- 	}
--- 
-2.38.1
+quick question. If you put acquired task struct in a map what
+happens if user side deletes the entry? Presumably this causes the
+release to happen and the task_struct is good to go. Did I miss
+the logic? I was thinking you would have something in bpf_map_free_kptrs
+and a type callback to release() the refcnt?
+
+> 
+> In order to support this, we'll need to expand KF_TRUSTED_ARGS to
+> support receiving trusted, non-refcounted pointers. It currently only
+> supports either PTR_TO_CTX pointers, or refcounted pointers. What this
+> means in terms of the implementation is that btf_check_func_arg_match()
+> would have to add another condition to its logic for checking if
+> a ptr needs a refcount to also require that the pointer has at least one
+> type modifier, such as a new modifier we're adding called PTR_TRUSTED
+> (described below). Note that PTR_UNTRUSTED is insufficient for this
+> purpose, as it does not cover all of the possible pointers we need to
+> watch out for, though. For example, a pointer obtained from walking a
+> struct is considered "trusted" (or at least, not PTR_UNTRUSTED). To
+> account for this and enable us to expand KF_TRUSTED_ARGS to include
+> allow-listed arguments such as those passed by the kernel to tracepoints
+> and struct_ops callbacks, this patch set also introduces a new
+> PTR_TRUSTED type flag modifier which records if a pointer was obtained
+> passed from the kernel in a trusted context.
+> 
+> In closing, this patch set:
+> 
+> 1. Adds the new PTR_TRUSTED register type modifier flag, and updates the
+>    verifier and existing selftests accordingly.
+> 2. Expands KF_TRUSTED_ARGS to also include trusted pointers that were
+>    not obtained from walking structs. 
+> 3. Adds a new set of kfuncs that allows struct task_struct* objects to be
+>    used as kptrs.
+> 4. Adds a new selftest suite to validate these new task kfuncs.
+> 
+> --
+> Changelog:
+> v6 -> v7:
+> - Removed the PTR_WALKED type modifier, and instead define a new
+>   PTR_TRUSTED type modifier which is set on registers containing
+>   pointers passed from trusted contexts (i.e. as tracepoint or
+>   struct_ops callback args) (Alexei)
+> - Remove the new KF_OWNED_ARGS kfunc flag. This can be accomplished
+>   by defining a new type that wraps an existing type, such as with
+>   struct nf_conn___init (Alexei)
+> - Add a test_task_current_acquire_release testcase which verifies we can
+>   acquire a task struct returned from bpf_get_current_task_btf().
+> - Make bpf_task_acquire() no longer return NULL, as it can no longer be
+>   called with a NULL task.
+> - Removed unnecessary is_test_kfunc_task() checks from failure
+>   testcases.
+> 
+> v5 -> v6:
+> - Add a new KF_OWNED_ARGS kfunc flag which may be used by kfuncs to
+>   express that they require trusted, refcounted args (Kumar)
+> - Rename PTR_NESTED -> PTR_WALKED in the verifier (Kumar)
+> - Convert reg_type_str() prefixes to use snprintf() instead of strncpy()
+>   (Kumar)
+> - Add PTR_TO_BTF_ID | PTR_WALKED to missing struct btf_reg_type
+>   instances -- specifically btf_id_sock_common_types, and
+>   percpu_btf_ptr_types.
+> - Add a missing PTR_TO_BTF_ID | PTR_WALKED switch case entry in
+>   check_func_arg_reg_off(), which is required when validating helper
+>   calls (Kumar)
+> - Update reg_type_mismatch_ok() to check base types for the registers
+>   (i.e. to accommodate type modifiers). Additionally, add a lengthy
+>   comment that explains why this is being done (Kumar)
+> - Update convert_ctx_accesses() to also issue probe reads for
+>   PTR_TO_BTF_ID | PTR_WALKED (Kumar)
+> - Update selftests to expect new prefix reg type strings.
+> - Rename task_kfunc_acquire_trusted_nested testcase to
+>   task_kfunc_acquire_trusted_walked, and fix a comment (Kumar)
+> - Remove KF_TRUSTED_ARGS from bpf_task_release(), which already includes
+>   KF_RELEASE (Kumar)
+> - Add bpf-next in patch subject lines (Kumar)
+> 
+> v4 -> v5:
+> - Fix an improperly formatted patch title.
+> 
+> v3 -> v4:
+> - Remove an unnecessary check from my repository that I forgot to remove
+>   after debugging something.
+> 
+> v2 -> v3:
+> - Make bpf_task_acquire() check for NULL, and include KF_RET_NULL
+>   (Martin)
+> - Include new PTR_NESTED register modifier type flag which specifies
+>   whether a pointer was obtained from walking a struct. Use this to
+>   expand the meaning of KF_TRUSTED_ARGS to include trusted pointers that
+>   were passed from the kernel (Kumar)
+> - Add more selftests to the task_kfunc selftest suite which verify that
+>   you cannot pass a walked pointer to bpf_task_acquire().
+> - Update bpf_task_acquire() to also specify KF_TRUSTED_ARGS.
+> 
+> v1 -> v2:
+> - Rename tracing_btf_ids to generic_kfunc_btf_ids, and add the new
+>   kfuncs to that list instead of making a separate btf id list (Alexei).
+> - Don't run the new selftest suite on s390x, which doesn't appear to
+>   support invoking kfuncs.
+> - Add a missing __diag_ignore block for -Wmissing-prototypes
+>   (lkp@intel.com).
+> - Fix formatting on some of the SPDX-License-Identifier tags.
+> - Clarified the function header comment a bit on bpf_task_kptr_get().
+> 
+> David Vernet (3):
+>   bpf: Allow trusted pointers to be passed to KF_TRUSTED_ARGS kfuncs
+>   bpf: Add kfuncs for storing struct task_struct * as a kptr
+>   bpf/selftests: Add selftests for new task kfuncs
+> 
+>  Documentation/bpf/kfuncs.rst                  |  28 +-
+>  include/linux/bpf.h                           |  25 ++
+>  include/linux/btf.h                           |  66 ++--
+>  kernel/bpf/btf.c                              |  44 ++-
+>  kernel/bpf/helpers.c                          |  83 ++++-
+>  kernel/bpf/verifier.c                         |  45 ++-
+>  kernel/trace/bpf_trace.c                      |   2 +-
+>  net/ipv4/bpf_tcp_ca.c                         |   4 +-
+>  tools/testing/selftests/bpf/DENYLIST.s390x    |   1 +
+>  .../selftests/bpf/prog_tests/task_kfunc.c     | 160 +++++++++
+>  .../selftests/bpf/progs/task_kfunc_common.h   |  81 +++++
+>  .../selftests/bpf/progs/task_kfunc_failure.c  | 304 ++++++++++++++++++
+>  .../selftests/bpf/progs/task_kfunc_success.c  | 127 ++++++++
+>  tools/testing/selftests/bpf/verifier/calls.c  |   4 +-
+>  .../selftests/bpf/verifier/ref_tracking.c     |   4 +-
+>  15 files changed, 906 insertions(+), 72 deletions(-)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/task_kfunc.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/task_kfunc_common.h
+>  create mode 100644 tools/testing/selftests/bpf/progs/task_kfunc_failure.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/task_kfunc_success.c
+> 
+> -- 
+> 2.38.1
+
 
