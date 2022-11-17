@@ -2,62 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19DBB62D56B
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:48:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D8D862D567
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:48:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239374AbiKQIsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 03:48:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48416 "EHLO
+        id S239653AbiKQIr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 03:47:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbiKQIry (ORCPT
+        with ESMTP id S239338AbiKQIry (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 17 Nov 2022 03:47:54 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 296E1BCBC
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 00:47:53 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id a5so1501165edb.11
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DA662DCC
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 00:47:54 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id x102so1607328ede.0
         for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 00:47:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
-         :subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=5sycVuNTi+/lWP5w5Y+7Py7HL44YtQg/RIL/+2UUkSY=;
-        b=LerjEkGDet8twDf7kawTGEK6yjpahMcCxhAgmIj+Uhp5Y2ToZA2vL105irqZLSsKfU
-         c+LQ37p+1ejyh2oDDCwlx+71iys9g+yYbxQOSVTdRIPpMZKMebD3L6vbY7xvoYTj2ysA
-         dA+1tq50hVlm9jtGhn6ygV7yQvatY5f62oJr0EllmSAhG1qR9mcE7PHFmrOHZLF2HrTe
-         NXS/KTJ2K6dBfbV5Zar4Nm8GSb5Ol6M2VVfam7vqizfUetbz5uvxzdbINt9a3yc7z/yl
-         RJqyEWRb93Q8tblau3bK9Yl/7ROUCkYlh+IeZDpHfHy3HSWP8vcLEJ/nu4cLNNs3gNDH
-         K6HQ==
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kplxU2lR5aG0mBiBv43tp2KK14DvgQ3747TCEeV3JMg=;
+        b=JJZviyNTe3aoLaHC8gnS2B6ZcTQTNzqCo1CNL5fhLhh/Q21pISItv3OuImIZPearuW
+         bcPv8/v3zDuo0hQF1Lxl2dF61VnCzkP4spsZMx9z8F5hpwlR6u9zM/SndG3dLHBBLnY0
+         k6htMUas9GgLlqwNVv8haDJ1k1sKtjozX77I+aljOtKJKGPtB+BuHZSWCo+mN29Ll9Qi
+         CRzV4Z8IPLuKuq3E4NgPh9PssxWg2C/4fGnvj7vEgj1k5ujzzy4ewWa9SM19CUNImdn/
+         LvG4iiIh9BzZTOLPVDG0udI2RexERIauevvSdRle0EGIrUaKj+OeJ5HOXjqL5Qsc/vat
+         CR4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
-         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5sycVuNTi+/lWP5w5Y+7Py7HL44YtQg/RIL/+2UUkSY=;
-        b=kr4cPolcRXdaBbLtoztwfdOvUGwyKchGPZ8x7dG1J9kpOR5nuPXchr4MP4OCjcMKzQ
-         02uoZiMNf0/jBTUoljWg/wumhgxcrEWRQLXLCvwnZJwjPblzhUIgIdovWMRJYr6PBtzb
-         0PhnfSdDemgh8pAyk+NQYXCYAHtvqqMLW+URWZWqBB5BSlMsvNYYuSqKwVQGyTLC8LEx
-         S3gnZBHSLcyM5bFl/bZSnr1KcbvjSeaoiyk+Ch+Ba1YA4b+r+tsvi0R0kuCUgYg53+b4
-         usEpVXJ9WcxKJc9OsQ3CuI2ntcaYcehSHQaJBAbsIq9OeU8qY0wcu5VOjiLedIJ/HKFO
-         yp9g==
-X-Gm-Message-State: ANoB5pk0KHBR3hbaQa+mRX35jCRFabtMIayAQN9ohR+pcunqlKwXCSIQ
-        t8dVyqm7KueKcG11fMW9wY5EGvrmNEd0yZXM
-X-Google-Smtp-Source: AA0mqf7JP9+5lVRU9EXpUjP4FKM/FMDReRATO9BwVt89A/oOf+IKkEbT+OEv6hzjSAn10BUJHykrPQ==
-X-Received: by 2002:a05:6402:3895:b0:468:15f1:54b5 with SMTP id fd21-20020a056402389500b0046815f154b5mr1306318edb.8.1668674871621;
-        Thu, 17 Nov 2022 00:47:51 -0800 (PST)
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kplxU2lR5aG0mBiBv43tp2KK14DvgQ3747TCEeV3JMg=;
+        b=pe+k9ki4/If9vNG5ITsm7BMRRsHk8aWfnPFIwh2rn2mYGNGgPlf8gbzqs1vuWwa86N
+         zWtXK+ntuotBp2GLH06SSSKPIz7AkLjS9iMHX4CVQWWmzpy8Kml3658U8s4c7enI17eF
+         9hiNBJnR7S2K88VS2831f/i9W0ETlb6b+1xih+Rz7P2WyzMpCXCzrag8ASyBX/p7SRgG
+         H1UE6kygdoFaD+PxuMXxK7LXVL6GpwTJh3zt9jGhC1ae7uRYcEfI1mCeIyF4vPSWdgd5
+         jmLSrx36HdglpCDysaY8VwR2heFa2uxE6RPVmG0XR7yczEHjerD+hurtBPZhO94LioIN
+         trKA==
+X-Gm-Message-State: ANoB5pmUINXTCCuwuX/mVYTm7YyOvo16du/qmrmfnfYnvwZ/38keLM+a
+        lU47ojRbfexj2Yl+hVG/fgTiXQ==
+X-Google-Smtp-Source: AA0mqf6g15i8zsDuyqA55ZoKaief9KDXNvdMbq3LIDvKdQEDkFEbkFvIVViVnfvYrya19LRO4KeNXQ==
+X-Received: by 2002:a05:6402:4d6:b0:458:789b:c1b0 with SMTP id n22-20020a05640204d600b00458789bc1b0mr1277535edw.89.1668674872601;
+        Thu, 17 Nov 2022 00:47:52 -0800 (PST)
 Received: from [127.0.1.1] ([2a0e:41a:894f:0:7a60:27eb:954c:5ab1])
-        by smtp.gmail.com with ESMTPSA id s22-20020a1709067b9600b0077205dd15basm77332ejo.66.2022.11.17.00.47.50
+        by smtp.gmail.com with ESMTPSA id s22-20020a1709067b9600b0077205dd15basm77332ejo.66.2022.11.17.00.47.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 00:47:51 -0800 (PST)
-Subject: [PATCH 0/3] Fix SPICC and ILI9486 drivers
+        Thu, 17 Nov 2022 00:47:52 -0800 (PST)
+From:   Carlo Caione <ccaione@baylibre.com>
+Date:   Thu, 17 Nov 2022 09:47:39 +0100
+Subject: [PATCH 1/3] drm/tiny: rpi-lcd-35: Enable driver module autoloading
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-b4-tracking: H4sIACr1dWMC/w3LSQqAMAwAwK9IzhZMXVA/I11SDZQqDYpQ/Ls9zmEKCGUmgbUpkOlh4TNVYNuAO0
- zaSbGvBt1pjYiTkqUb300u3jjyMsyTMuTHIYTeWY1QnzVCymaT3FFnumP8vh/jeo0xaAAAAA==
-From:   Carlo Caione <ccaione@baylibre.com>
-Date:   Thu, 17 Nov 2022 09:47:38 +0100
-Message-Id: <20221116-s905x_spi_ili9486-v1-0-630401cb62d5@baylibre.com>
+Message-Id: <20221116-s905x_spi_ili9486-v1-1-630401cb62d5@baylibre.com>
+References: <20221116-s905x_spi_ili9486-v1-0-630401cb62d5@baylibre.com>
+In-Reply-To: <20221116-s905x_spi_ili9486-v1-0-630401cb62d5@baylibre.com>
 To:     Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>,
         Mark Brown <broonie@kernel.org>,
         Neil Armstrong <neil.armstrong@linaro.org>,
@@ -80,44 +81,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patchset is trying to fix problems seen on S905X boards when interfacing
-with an ILI9486 equipped SPI panel.
+SPI devices use the spi_device_id for module autoloading even on
+systems using device tree.
 
-The color corruption and the performance issues are actually due to two
-different problems in the SPICC driver and in the ILI9486 tiny DRM driver.
+Add the spi_device_id entry to enable autoloading for the 3.5inch RPi
+Display (rpi-lcd-35).
 
-We try to fix both in the same patcheset to be able to correctly use the SPI
-panel again.
-
-To: Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>
-To: David Airlie <airlied@gmail.com>
-To: Daniel Vetter <daniel@ffwll.ch>
-To: Mark Brown <broonie@kernel.org>
-To: Neil Armstrong <neil.armstrong@linaro.org>
-To: Kevin Hilman <khilman@baylibre.com>
-To: Jerome Brunet <jbrunet@baylibre.com>
-To: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc: dri-devel@lists.freedesktop.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-spi@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-amlogic@lists.infradead.org
 Signed-off-by: Carlo Caione <ccaione@baylibre.com>
-
 ---
-Carlo Caione (3):
-      drm/tiny: rpi-lcd-35: Enable driver module autoloading
-      drm/tiny: ili9486: Do not assume 8-bit only SPI controllers
-      spi: meson-spicc: Lower CS between bursts
+ drivers/gpu/drm/tiny/ili9486.c | 1 +
+ 1 file changed, 1 insertion(+)
 
- drivers/gpu/drm/tiny/ili9486.c | 14 ++++++++++----
- drivers/spi/spi-meson-spicc.c  |  6 ++++++
- 2 files changed, 16 insertions(+), 4 deletions(-)
----
-base-commit: 15f3bff12cf6a888ec2ad39652828c60e6836b3d
-change-id: 20221116-s905x_spi_ili9486-aed54ff3cb21
+diff --git a/drivers/gpu/drm/tiny/ili9486.c b/drivers/gpu/drm/tiny/ili9486.c
+index 1bb847466b10..bd37dfe8dd05 100644
+--- a/drivers/gpu/drm/tiny/ili9486.c
++++ b/drivers/gpu/drm/tiny/ili9486.c
+@@ -183,6 +183,7 @@ MODULE_DEVICE_TABLE(of, ili9486_of_match);
+ 
+ static const struct spi_device_id ili9486_id[] = {
+ 	{ "ili9486", 0 },
++	{ "rpi-lcd-35", 0 },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(spi, ili9486_id);
 
-Best regards,
 -- 
-Carlo Caione
-
+b4 0.10.1
