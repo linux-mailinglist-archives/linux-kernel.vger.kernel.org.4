@@ -2,102 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BECF62D90C
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 12:09:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FF0C62D910
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 12:09:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239812AbiKQLJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 06:09:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55002 "EHLO
+        id S239685AbiKQLJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 06:09:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239734AbiKQLIP (ORCPT
+        with ESMTP id S239772AbiKQLIQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 06:08:15 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCCDF42987
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 03:08:11 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id q1so1639189pgl.11
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 03:08:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9adTC/kCnTAWZTCymBogkO2KVEPuyw81zYQPMZxxoSo=;
-        b=RuLMYR/7GIUlRh1mNcPgSb0/ogtrlYZLLuQLzBZM/cfwz01+rqe0iqeUeS/oXZ2/n+
-         VlevcOghg3lFqNrl7iEEHHgvKdDffYOe2ShXsXSylfV9oMoM105qreZo9uEPdaFVVVdR
-         RbdlIxs2BBKDo1mqk5/u+LrdZ1Hxmxqmsp3mg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9adTC/kCnTAWZTCymBogkO2KVEPuyw81zYQPMZxxoSo=;
-        b=dR8MXkm3WiGLGiHoHqHM7JXHYVOdUPtShxW0pZBL/vB6GVW1PF/hmWIpgTEBT7BTeB
-         syfLf2Ok3VmfEoAIZUjoJZIbfNT4nTlRgM+xvj/zl8P/KpGVsNZa5CF2mDZ5vmkQ7A/H
-         tZLfAcyCdba/YnApsbTUpDaqQUdV4no2SRl7bvZ1CqtyiNf3ZXc1TFITknETkbU5msjT
-         e3LKfQKkmzoAPQhEgdFE8/SpTP8L2dbk0kaK+1RYAFJMfiucPl2MQWEFXchc3qanfSoc
-         gQYrvwv8KrQ5hGYRcj3IGu95pTzzK7vNJ+5g1SmL/vZgi+DGMX3oCcpHzaC2yWw0kKK9
-         HK4Q==
-X-Gm-Message-State: ANoB5pn6xM4ffDiBGGwBfAJ21SxGHNIA8YKfQYlV3/h6P0j0GpWI2FBB
-        zh3ZtpHxub9vqjnAmGrf2gHNFBZxX0UUIw==
-X-Google-Smtp-Source: AA0mqf5UvhJh1+5BA+ftKIjgtSrH/nEpcIRbmgpRI80uU8ijBGEp1TdPaC/eD3sh7ZMlCOAopARHuQ==
-X-Received: by 2002:a63:180a:0:b0:470:63e5:5c59 with SMTP id y10-20020a63180a000000b0047063e55c59mr1579787pgl.172.1668683291132;
-        Thu, 17 Nov 2022 03:08:11 -0800 (PST)
-Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:e678:c7f5:9cb3:1a06])
-        by smtp.gmail.com with ESMTPSA id z18-20020a170902ccd200b0017a032d7ae4sm1025540ple.104.2022.11.17.03.08.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 03:08:10 -0800 (PST)
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-To:     Sean Paul <seanpaul@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Robert Foss <robert.foss@linaro.org>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Allen Chen <allen.chen@ite.com.tw>,
-        David Airlie <airlied@gmail.com>
-Subject: [PATCH v6 2/3] drm/bridge: anx7625: register content protect property
-Date:   Thu, 17 Nov 2022 19:08:03 +0800
-Message-Id: <20221117110804.1431024-2-hsinyi@chromium.org>
-X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-In-Reply-To: <20221117110804.1431024-1-hsinyi@chromium.org>
-References: <20221117110804.1431024-1-hsinyi@chromium.org>
+        Thu, 17 Nov 2022 06:08:16 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7EE69DEA;
+        Thu, 17 Nov 2022 03:08:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668683294; x=1700219294;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ozLU2nu1r74X7A+30A92Kia7Sm7wFG1fM/nv/pGjLco=;
+  b=KsmephcQBHc2JuRbkPzilXlr0ownOD869HdRe1oQQE/bikFHgjxg5LPV
+   W/50bSln3EgBuOOuRWJttOrvqJgNWiPxHW3Ms1A0897wvYutR8sxBAu7X
+   44GvzDnyeIe6v0VnzU5wKZ7L9x3eHwvTB/WuWEIYeYdcaUuS7P5eHF0Hm
+   jSCGwawsIYZC9AhBPvqFaRBjRftccuP3eq4kcpA9ZNG2L6CG0pxAQO+mH
+   bv/uYiami2ZhJ1a1bn1W20p/TlXknrYKHxV/3e2f3Wwurr4Vc7AigkAm7
+   TQuzVK/wtqJr2EH44APJ9IqwJ68UBFEGUGbS+vIoNVxkZgtlq9c4/6aJ2
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="313971564"
+X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
+   d="scan'208";a="313971564"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 03:08:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="639763983"
+X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
+   d="scan'208";a="639763983"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga002.jf.intel.com with ESMTP; 17 Nov 2022 03:08:11 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 5E0E83B5; Thu, 17 Nov 2022 13:08:22 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-pwm@vger.kernel.org
+Cc:     Andy Shevchenko <andy@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH v5 4/7] pwm: lpss: Allow other drivers to enable PWM LPSS
+Date:   Thu, 17 Nov 2022 13:08:03 +0200
+Message-Id: <20221117110806.65470-5-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221117110806.65470-1-andriy.shevchenko@linux.intel.com>
+References: <20221117110806.65470-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Set support_hdcp so the connector can register content protect proterty
-when it's initializing.
+The PWM LPSS device can be embedded in another device.
+In order to enable it, allow that drivers to probe
+a corresponding device.
 
-Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-Reviewed-by: Sean Paul <seanpaul@chromium.org>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Acked-by: Thierry Reding <thierry.reding@gmail.com>
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Acked-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
-v5->v6: no change.
----
- drivers/gpu/drm/bridge/analogix/anx7625.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/pwm/pwm-lpss.h                        | 22 +--------------
+ .../linux/platform_data/x86}/pwm-lpss.h       | 28 ++++---------------
+ 2 files changed, 6 insertions(+), 44 deletions(-)
+ copy {drivers/pwm => include/linux/platform_data/x86}/pwm-lpss.h (53%)
 
-diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
-index b0ff1ecb80a5..0636ac59c739 100644
---- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-+++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-@@ -2680,6 +2680,7 @@ static int anx7625_i2c_probe(struct i2c_client *client,
- 	platform->bridge.type = platform->pdata.panel_bridge ?
- 				    DRM_MODE_CONNECTOR_eDP :
- 				    DRM_MODE_CONNECTOR_DisplayPort;
-+	platform->bridge.support_hdcp = true;
+diff --git a/drivers/pwm/pwm-lpss.h b/drivers/pwm/pwm-lpss.h
+index 4ce6daa46ca8..bf841250385f 100644
+--- a/drivers/pwm/pwm-lpss.h
++++ b/drivers/pwm/pwm-lpss.h
+@@ -13,7 +13,7 @@
+ #include <linux/pwm.h>
+ #include <linux/types.h>
  
- 	drm_bridge_add(&platform->bridge);
+-struct device;
++#include <linux/platform_data/x86/pwm-lpss.h>
  
+ #define LPSS_MAX_PWMS			4
+ 
+@@ -23,29 +23,9 @@ struct pwm_lpss_chip {
+ 	const struct pwm_lpss_boardinfo *info;
+ };
+ 
+-struct pwm_lpss_boardinfo {
+-	unsigned long clk_rate;
+-	unsigned int npwm;
+-	unsigned long base_unit_bits;
+-	/*
+-	 * Some versions of the IP may stuck in the state machine if enable
+-	 * bit is not set, and hence update bit will show busy status till
+-	 * the reset. For the rest it may be otherwise.
+-	 */
+-	bool bypass;
+-	/*
+-	 * On some devices the _PS0/_PS3 AML code of the GPU (GFX0) device
+-	 * messes with the PWM0 controllers state,
+-	 */
+-	bool other_devices_aml_touches_pwm_regs;
+-};
+-
+ extern const struct pwm_lpss_boardinfo pwm_lpss_byt_info;
+ extern const struct pwm_lpss_boardinfo pwm_lpss_bsw_info;
+ extern const struct pwm_lpss_boardinfo pwm_lpss_bxt_info;
+ extern const struct pwm_lpss_boardinfo pwm_lpss_tng_info;
+ 
+-struct pwm_lpss_chip *pwm_lpss_probe(struct device *dev, void __iomem *base,
+-				     const struct pwm_lpss_boardinfo *info);
+-
+ #endif	/* __PWM_LPSS_H */
+diff --git a/drivers/pwm/pwm-lpss.h b/include/linux/platform_data/x86/pwm-lpss.h
+similarity index 53%
+copy from drivers/pwm/pwm-lpss.h
+copy to include/linux/platform_data/x86/pwm-lpss.h
+index 4ce6daa46ca8..296bd837ddbb 100644
+--- a/drivers/pwm/pwm-lpss.h
++++ b/include/linux/platform_data/x86/pwm-lpss.h
+@@ -1,27 +1,14 @@
+ /* SPDX-License-Identifier: GPL-2.0-only */
+-/*
+- * Intel Low Power Subsystem PWM controller driver
+- *
+- * Copyright (C) 2014, Intel Corporation
+- *
+- * Derived from the original pwm-lpss.c
+- */
++/* Intel Low Power Subsystem PWM controller driver */
+ 
+-#ifndef __PWM_LPSS_H
+-#define __PWM_LPSS_H
++#ifndef __PLATFORM_DATA_X86_PWM_LPSS_H
++#define __PLATFORM_DATA_X86_PWM_LPSS_H
+ 
+-#include <linux/pwm.h>
+ #include <linux/types.h>
+ 
+ struct device;
+ 
+-#define LPSS_MAX_PWMS			4
+-
+-struct pwm_lpss_chip {
+-	struct pwm_chip chip;
+-	void __iomem *regs;
+-	const struct pwm_lpss_boardinfo *info;
+-};
++struct pwm_lpss_chip;
+ 
+ struct pwm_lpss_boardinfo {
+ 	unsigned long clk_rate;
+@@ -40,12 +27,7 @@ struct pwm_lpss_boardinfo {
+ 	bool other_devices_aml_touches_pwm_regs;
+ };
+ 
+-extern const struct pwm_lpss_boardinfo pwm_lpss_byt_info;
+-extern const struct pwm_lpss_boardinfo pwm_lpss_bsw_info;
+-extern const struct pwm_lpss_boardinfo pwm_lpss_bxt_info;
+-extern const struct pwm_lpss_boardinfo pwm_lpss_tng_info;
+-
+ struct pwm_lpss_chip *pwm_lpss_probe(struct device *dev, void __iomem *base,
+ 				     const struct pwm_lpss_boardinfo *info);
+ 
+-#endif	/* __PWM_LPSS_H */
++#endif	/* __PLATFORM_DATA_X86_PWM_LPSS_H */
 -- 
-2.38.1.431.g37b22c650d-goog
+2.35.1
 
