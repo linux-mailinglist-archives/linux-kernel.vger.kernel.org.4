@@ -2,111 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDBE862D379
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 07:30:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A53AE62D376
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 07:30:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239162AbiKQGal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 01:30:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35828 "EHLO
+        id S234000AbiKQGaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 01:30:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233199AbiKQGai (ORCPT
+        with ESMTP id S234725AbiKQGaF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 01:30:38 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A379FDEF6;
-        Wed, 16 Nov 2022 22:30:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668666637; x=1700202637;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=/+HBrrsfrVpXa8wSoQRFbTPEIvOcBtvT7BZKCLGSfzI=;
-  b=Fh0+s5j75i7md+n4a3nZwB6seLhuwaOgkf0JHN+lv5WdZpR2wFGdH4Ix
-   b5MJnAGQXi8jtmyIZ05qLc9KKgA0Nb5i4YpQkVq+2W+uJppSXgqx3WrCt
-   P5/+DMIv9UbHgKxJ+NivD6Lv9VRqsFWP2vXor4ZlA8H6eLqIgZtqc875p
-   HOYfhNrFWDBHvAvDzOc/kXqxbe6NsFQaLKeY3DUazDHhr1vHs84IAxZNU
-   cadzhz96ZFQxqRrdUkAvdjq50j0M8y1J3fgiyn/U3tNkY9GRREij6Wjb2
-   w8NOt3iMh5NTRervCWsbnlyoR6n8KBpH7dxQGedKVQHUc/RVSaVJosiG0
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="293166925"
-X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
-   d="scan'208";a="293166925"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 22:30:36 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="639674849"
-X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
-   d="scan'208";a="639674849"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 22:30:34 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Zhongkun He <hezhongkun.hzk@bytedance.com>, corbet@lwn.net,
-        akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [External] Re: [PATCH v2] mm: add new syscall
- pidfd_set_mempolicy().
-In-Reply-To: <Y3Sw77bL/b6ePl3G@dhcp22.suse.cz> (Michal Hocko's message of
-        "Wed, 16 Nov 2022 10:44:15 +0100")
-References: <20221111084051.2121029-1-hezhongkun.hzk@bytedance.com>
-        <87zgcrwfac.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <0445de39-15a4-f645-b380-39f20abb6524@bytedance.com>
-        <Y3Sw77bL/b6ePl3G@dhcp22.suse.cz>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-Date:   Thu, 17 Nov 2022 14:29:36 +0800
-Message-ID: <87mt8qw0tr.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        Thu, 17 Nov 2022 01:30:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D178DEF6
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 22:30:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B0C39B81F88
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 06:30:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18E68C433D6;
+        Thu, 17 Nov 2022 06:30:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1668666602;
+        bh=SSUm3upjyQsbVG8IDiE/j1VTpVbYRQxa+bjigUbOYO4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=B7OSaU2lgKabP5Hq+g9vtn+SbxI4u8J5MjDHpif30tubGqkv3mm3HKxTb4fxQmNPd
+         kzKaLs1i/Esiuvkv/y7wPk0VsdGPmaamB+UVzRndx5hN1SgVyanzSpmujVrALaRcmd
+         OItoDM0VWD8Hg1X/2+uFnz/gGCpFVFZgDGqMt1RQ=
+Date:   Thu, 17 Nov 2022 07:29:59 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jim Cromie <jim.cromie@gmail.com>
+Cc:     jbaron@akamai.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] vmlinux.lds.h: fix BOUNDED_SECTION_(PRE|POST)_LABEL
+ macros
+Message-ID: <Y3XU59mj80wvTD6Y@kroah.com>
+References: <Y20+PqtF+dFAe7hX@kroah.com>
+ <20221117002022.860237-1-jim.cromie@gmail.com>
+ <20221117002022.860237-2-jim.cromie@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221117002022.860237-2-jim.cromie@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Michal Hocko <mhocko@suse.com> writes:
+On Wed, Nov 16, 2022 at 05:20:21PM -0700, Jim Cromie wrote:
+> commit foo added BOUNDED_SECTION_(PRE|POST)_LABEL macros,
+> encapsulating the basic boilerplate to: KEEP/pack records into a
+> section, and to mark the begin and end of the section with
+> linker-symbols.
+> 
+> But it tried to do extra, adding KEEP(*(.gnu.linkonce.##_sec_)) to
+> optionally reserve a header record in front of the data.  It wrongly
+> placed the KEEP after the linker-symbol starting the section,
+> so if a header was added, it would wind up in the data.
+> 
+> Putting the KEEP in the "correct" place proved brittle, and too clever
+> by half.  The obvious safe fix is to remove the KEEP, and provide
+> separate macros to do the extra work.
+> 
+> While here, the macro var-names: _s_, _e_ are nearly invisible, change
+> them to more obvious names: _BEGIN_, _END_
+> 
+> Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+> ---
+>  include/asm-generic/vmlinux.lds.h | 14 ++++++--------
+>  1 file changed, 6 insertions(+), 8 deletions(-)
 
-> On Wed 16-11-22 17:38:09, Zhongkun He wrote:
->> Hi Ying, thanks for your replay and suggestions.
->> 
->> > 
->> > I suggest to move the flags in "mode" parameter (MPOL_F_STATIC_NODES,
->> > MPOL_F_RELATIVE_NODES, MPOL_F_NUMA_BALANCING, etc.) to "flags"
->> > parameter, otherwise, why add it?
->> 
->> The "flags" is used for future extension if any, just like
->> process_madvise() and set_mempolicy_home_node().
->> Maybe it should be removed.
->
-> No, please! Even if there is no use for the flags now we are usually
-> terrible at predicting future and potential extensions. MPOL_F* is kinda
-> flags but for historical reasons it is a separate mode and we shouldn't
-> create a new confusion when this is treated differently for pidfd based
-> APIs.
->
->> > And, how about add a "home_node" parameter?  I don't think that it's a
->> > good idea to add another new syscall for pidfd_set_mempolicy_home_node()
->> > in the future.
->
-> Why would this be a bad idea?
->
->> Good idea, but "home_node" is used for vma policy, not task policy.
->> It is possible to use it in pidfd_mbind() in the future.
->
-> I woould go with pidfd_set_mempolicy_home_node to counterpart an
-> existing syscall.
+This change fails to apply to my driver-core-next tree.  Are you sure it
+is correct?
 
-Yes.  I understand that it's important to make API consistent.
+confused,
 
-Just my two cents.
-
-From another point of view, the new API gives us an opportunity to fix
-the issues in existing API too?  For example, moving all flags into
-"flags" parameter, add another parameter "home_node"?  Maybe we can
-switch to this new API in the future completely after finding a way to
-indicate "current" task in "pidfd" parameter.
-
-Best Regards,
-Huang, Ying
+greg k-h
