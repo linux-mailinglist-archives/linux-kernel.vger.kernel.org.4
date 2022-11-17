@@ -2,160 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6895B62D5A3
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:58:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B8CA62D5BC
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 10:02:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234768AbiKQI6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 03:58:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56102 "EHLO
+        id S239363AbiKQJCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 04:02:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232825AbiKQI55 (ORCPT
+        with ESMTP id S233439AbiKQJC1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 03:57:57 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2FE6748CF
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 00:57:53 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NCYhq4fwSz4f3jZn
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 16:57:47 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP1 (Coremail) with SMTP id cCh0CgBHPayN93VjOieKAg--.30052S4;
-        Thu, 17 Nov 2022 16:57:50 +0800 (CST)
-From:   Ye Bin <yebin@huaweicloud.com>
-To:     almaz.alexandrovich@paragon-software.com, nathan@kernel.org,
-        ndesaulniers@google.com, trix@redhat.com, ntfs3@lists.linux.dev
-Cc:     yebin10@huawei.com, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev,
-        syzbot+f45957555ed4a808cc7a@syzkaller.appspotmail.com
-Subject: [PATCH] ntfs3: fix NULL pointer dereference in 'ni_write_inode'
-Date:   Thu, 17 Nov 2022 17:19:12 +0800
-Message-Id: <20221117091912.3436127-1-yebin@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
+        Thu, 17 Nov 2022 04:02:27 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 747B559176
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 01:02:25 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id v1so2558628wrt.11
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 01:02:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=DqXNcJKGEk90R2legdFOv2JapBqj5ImP7hXsUpdTZn8=;
+        b=B3w1xVlut+g3cx+uKRyaiDgM6Uy0uLwMy0yLt6VPJeXSsUuIHeBFk2Lj0xKmfi1E6X
+         UpUwbS87bUj4ncJzDWQEIUObm0ToRVGioICxTdMqg90wyQNksB0V+ndD3yxDu6OGTi6X
+         V5DKkZiG+qLNGHLsB3F44BjDnl6VxvRV/LqWh5wLfCKQHU2rKrLbRBkB1RNUFsa1PNuK
+         PboecoBTuu/0GjI6/k+RC7AG49vT7BSjotEUAR2GFMvSPy2lOHiSLdseNrewTB/NFFaD
+         fYqXa+ePNELNoPY3l7izU6e76j7hHTDiDy1hhhv+rusgkoDbwmYAJiEzvP1VaRqKlLMS
+         Y6BQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DqXNcJKGEk90R2legdFOv2JapBqj5ImP7hXsUpdTZn8=;
+        b=VElwWhNIieAC8YFNwKuMaPFGEF/oWLiNEjVRwEyohDGnvpLmBrBTF7cHGKKXP9XyIx
+         v7Cp95isaNw1IF3XbvKqAEO7e+2mBNoqVsYOqKfAGODQt9w6kFn5In16rtOfKBNMe2BV
+         jDw//ufh4Ip6vfrp483UnaNAYSlpnA97hF0aoWOrgwznSwAiSUORpuqbBQt9Oe9wu0vh
+         QHSNBco+JY+RrOMDHY4Uy47LUBX2B4l+cLAkE6z0Uz741Odg5MXBJrugTszqkChXFbIf
+         UIkxWf7zhgC9rzv28vGfpxWyCUUqKMfppeZkM59tzQX2T4O027O4oOhuDjbr5ngvL+Gz
+         daEA==
+X-Gm-Message-State: ANoB5pnqgPWHDqU9DzSLFgNBKTqJF2bZzhWB6mZF7dQDuRa+3x2whtLp
+        MNe9A6SeCSAt30lYP1yEk6MhSQ==
+X-Google-Smtp-Source: AA0mqf6SP7JQdGyyqDOZ6gBL0qEJ+oVzm11ooMlDI/kxn7uldpXQH3s82B0YuJjy2P6KVsdar0/6qg==
+X-Received: by 2002:adf:db81:0:b0:236:5144:f8ce with SMTP id u1-20020adfdb81000000b002365144f8cemr830227wri.657.1668675743980;
+        Thu, 17 Nov 2022 01:02:23 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:aad5:8d14:a22f:2e8b? ([2a01:e0a:982:cbb0:aad5:8d14:a22f:2e8b])
+        by smtp.gmail.com with ESMTPSA id n17-20020a05600c465100b003cf483ee8e0sm4364699wmo.24.2022.11.17.01.02.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Nov 2022 01:02:23 -0800 (PST)
+Message-ID: <befebc6e-dfd2-9a54-bf60-9dfd098e842d@linaro.org>
+Date:   Thu, 17 Nov 2022 10:02:22 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cCh0CgBHPayN93VjOieKAg--.30052S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxGrW7Cr45Jr4Dtw1UKw4Uurg_yoWrArykpF
-        sxGr4UGr4ktF12kws2qF1qqry5Jay7CF4UGr4xGry7KF1jqr1UtF18tFW3XryxtrWrJryI
-        qr1DZ3y8try8JaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI
-        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
-        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY
-        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
-        AIw20EY4v20xvaj40_Zr0_Wr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UQ6p9UUUUU=
-X-CM-SenderInfo: p1hex046kxt4xhlfz01xgou0bp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH 1/4] dt-bindings: remoteproc: qcom: adsp: document sm8550
+ adsp, cdsp & mpss compatible
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        devicetree@vger.kernel.org, Abel Vesa <abel.vesa@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org
+References: <20221114-narmstrong-sm8550-upstream-remoteproc-v1-0-104c34cb3b91@linaro.org>
+ <20221114-narmstrong-sm8550-upstream-remoteproc-v1-1-104c34cb3b91@linaro.org>
+ <b6eac577-f3a7-d1a4-f492-74782c2e5ff1@linaro.org>
+ <20221116233907.GA1227164-robh@kernel.org>
+Organization: Linaro Developer Services
+In-Reply-To: <20221116233907.GA1227164-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Bin <yebin10@huawei.com>
+On 17/11/2022 00:39, Rob Herring wrote:
+> On Wed, Nov 16, 2022 at 01:28:11PM +0100, Krzysztof Kozlowski wrote:
+>> On 16/11/2022 11:20, Neil Armstrong wrote:
+>>> This documents the compatible for the component used to boot the
+>>> aDSP, cDSP and MPSS on the SM8550 SoC.
+>>>
+>>> The SM8550 boot process on SM8550 now requires a secondary "Devicetree"
+>>> firmware to be passed along the main Firmware, and the cDSP a new power
+>>> domain named "NSP".
+>>>
+>>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>>> ---
+>>>   .../devicetree/bindings/remoteproc/qcom,adsp.yaml  | 60 +++++++++++++++++++++-
+>>>   1 file changed, 59 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
+>>> index db9e0f0c2bea..678cb73f10de 100644
+>>> --- a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
+>>> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
+>>> @@ -55,6 +55,9 @@ properties:
+>>>         - qcom,sm8450-cdsp-pas
+>>>         - qcom,sm8450-mpss-pas
+>>>         - qcom,sm8450-slpi-pas
+>>> +      - qcom,sm8550-adsp-pas
+>>> +      - qcom,sm8550-cdsp-pas
+>>> +      - qcom,sm8550-mpss-pas
+>>>   
+>>>     reg:
+>>>       maxItems: 1
+>>> @@ -116,8 +119,13 @@ properties:
+>>>       $ref: /schemas/types.yaml#/definitions/string
+>>>       description: Firmware name for the Hexagon core
+>>>   
+>>> +  qcom,dtb-firmware-name:
+>>> +    $ref: /schemas/types.yaml#/definitions/string
+>>> +    description: Devicetree Firmware name for the Hexagon core
+>>
+>> Not sure about this one.
+>>
+>> Rob,
+>> Don't we want rather to have multiple items in firmware-name?
+> 
+> Yes, I think we already have that for some users. Should have been
+> 'firmware-names' I guess but I don't think it's worth dealing with
+> another case of handling both (forever).
 
-Syzbot found the following issue:
-Unable to handle kernel NULL pointer dereference at virtual address 0000000000000016
-Mem abort info:
-  ESR = 0x0000000096000006
-  EC = 0x25: DABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x06: level 2 translation fault
-Data abort info:
-  ISV = 0, ISS = 0x00000006
-  CM = 0, WnR = 0
-user pgtable: 4k pages, 48-bit VAs, pgdp=000000010af56000
-[0000000000000016] pgd=08000001090da003, p4d=08000001090da003, pud=08000001090ce003, pmd=0000000000000000
-Internal error: Oops: 0000000096000006 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 1 PID: 3036 Comm: syz-executor206 Not tainted 6.0.0-rc6-syzkaller-17739-g16c9f284e746 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : is_rec_inuse fs/ntfs3/ntfs.h:313 [inline]
-pc : ni_write_inode+0xac/0x798 fs/ntfs3/frecord.c:3232
-lr : ni_write_inode+0xa0/0x798 fs/ntfs3/frecord.c:3226
-sp : ffff8000126c3800
-x29: ffff8000126c3860 x28: 0000000000000000 x27: ffff0000c8b02000
-x26: ffff0000c7502320 x25: ffff0000c7502288 x24: 0000000000000000
-x23: ffff80000cbec91c x22: ffff0000c8b03000 x21: ffff0000c8b02000
-x20: 0000000000000001 x19: ffff0000c75024d8 x18: 00000000000000c0
-x17: ffff80000dd1b198 x16: ffff80000db59158 x15: ffff0000c4b6b500
-x14: 00000000000000b8 x13: 0000000000000000 x12: ffff0000c4b6b500
-x11: ff80800008be1b60 x10: 0000000000000000 x9 : ffff0000c4b6b500
-x8 : 0000000000000000 x7 : ffff800008be1b50 x6 : 0000000000000000
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000008 x1 : 0000000000000001 x0 : 0000000000000000
-Call trace:
- is_rec_inuse fs/ntfs3/ntfs.h:313 [inline]
- ni_write_inode+0xac/0x798 fs/ntfs3/frecord.c:3232
- ntfs_evict_inode+0x54/0x84 fs/ntfs3/inode.c:1744
- evict+0xec/0x334 fs/inode.c:665
- iput_final fs/inode.c:1748 [inline]
- iput+0x2c4/0x324 fs/inode.c:1774
- ntfs_new_inode+0x7c/0xe0 fs/ntfs3/fsntfs.c:1660
- ntfs_create_inode+0x20c/0xe78 fs/ntfs3/inode.c:1278
- ntfs_create+0x54/0x74 fs/ntfs3/namei.c:100
- lookup_open fs/namei.c:3413 [inline]
- open_last_lookups fs/namei.c:3481 [inline]
- path_openat+0x804/0x11c4 fs/namei.c:3688
- do_filp_open+0xdc/0x1b8 fs/namei.c:3718
- do_sys_openat2+0xb8/0x22c fs/open.c:1311
- do_sys_open fs/open.c:1327 [inline]
- __do_sys_openat fs/open.c:1343 [inline]
- __se_sys_openat fs/open.c:1338 [inline]
- __arm64_sys_openat+0xb0/0xe0 fs/open.c:1338
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
- el0t_64_sync+0x18c/0x190
-Code: 97dafee4 340001b4 f9401328 2a1f03e0 (79402d14)
----[ end trace 0000000000000000 ]---
+I'll be happy to switch to a single property but yeah, firmware-name isn't right
+for multiple names...
 
-Above issue may happens as follows:
-ntfs_new_inode
-  mi_init
-    mi->mrec = kmalloc(sbi->record_size, GFP_NOFS); -->failed to allocate memory
-      if (!mi->mrec)
-        return -ENOMEM;
-iput
-  iput_final
-    evict
-      ntfs_evict_inode
-        ni_write_inode
-	  is_rec_inuse(ni->mi.mrec)-> As 'ni->mi.mrec' is NULL trigger NULL-ptr-deref
+Anyway, will follow qcom,sc7180-mss-pil.yaml since they already use 2 entries there.
 
-To solve above issue if new inode failed make inode bad before call 'iput()' in
-'ntfs_new_inode()'.
+Neil
 
-Reported-by: syzbot+f45957555ed4a808cc7a@syzkaller.appspotmail.com
-Signed-off-by: Ye Bin <yebin10@huawei.com>
----
- fs/ntfs3/fsntfs.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/fs/ntfs3/fsntfs.c b/fs/ntfs3/fsntfs.c
-index 567563771bf8..8de861ddec60 100644
---- a/fs/ntfs3/fsntfs.c
-+++ b/fs/ntfs3/fsntfs.c
-@@ -1683,6 +1683,7 @@ struct ntfs_inode *ntfs_new_inode(struct ntfs_sb_info *sbi, CLST rno, bool dir)
- 
- out:
- 	if (err) {
-+		make_bad_inode(inode);
- 		iput(inode);
- 		ni = ERR_PTR(err);
- 	}
--- 
-2.31.1
+> 
+> Rob
 
