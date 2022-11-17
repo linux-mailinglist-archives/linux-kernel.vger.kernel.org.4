@@ -2,165 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E38C562DF5A
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:12:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37F2A62DF5D
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:12:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240282AbiKQPMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 10:12:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56102 "EHLO
+        id S240604AbiKQPMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 10:12:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240407AbiKQPKT (ORCPT
+        with ESMTP id S240607AbiKQPKt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 10:10:19 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F306549B56;
-        Thu, 17 Nov 2022 07:08:37 -0800 (PST)
-Date:   Thu, 17 Nov 2022 15:08:35 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668697716;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8NoBHGkWfo/FAwwA1VPvEjKp+PExvO/PIrZbGPk96QM=;
-        b=Xkkut7jIcurxZkxhCtM168I2wzp7LP7cvXCI+Aoi3jVpF89bqrpFhScqRG2aOFl0snFn3v
-        52HZiQROr9zZDvAXgmMfJ6ppfYPpnkKguGlzM4P2ny5cTB+LYxoQx3qiALrLM7282heX22
-        BYAiZifns98GNzdYIfXU7IQom/5vlvL4BIpnraGJ7yBEHjbCG4b0cvM+DRmFq9VbvnumJq
-        DKqfJC9tdj3MeHECzR340akLN7q18hG8Tf2Vp4BHX0Wcc8TUUNd4a9EXz3g8xhgECuO0jq
-        AAk3OJYX5XQ5jbJKQiTREiah5ua9QthcxBvl1cMzdIBYUyFFId6OWC0lsVchuQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668697716;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8NoBHGkWfo/FAwwA1VPvEjKp+PExvO/PIrZbGPk96QM=;
-        b=HtvDgFJ7ASw0Jv+lPq1T/QZIpwfnjvKr6uDnwQPfqMGLDeSCkR/NIYlwxaHeKNpTmofOjq
-        yfWBEWuZdTQx7oCg==
-From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/core] clocksource/drivers/hyper-v: Include
- asm/hyperv-tlfs.h not asm/mshyperv.h
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Michael Kelley <mikelley@microsoft.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, maz@kernel.org
-In-Reply-To: <87fsemtut0.ffs@tglx>
-References: <87fsemtut0.ffs@tglx>
-MIME-Version: 1.0
-Message-ID: <166869771502.4906.2990569045387640705.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+        Thu, 17 Nov 2022 10:10:49 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C218864546;
+        Thu, 17 Nov 2022 07:08:43 -0800 (PST)
+Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 98F8C929;
+        Thu, 17 Nov 2022 16:08:41 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1668697721;
+        bh=KDmMkOo4Xq7I/fLq82DmVwTZhsTmGJ8/nd1M+JpkZMQ=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=c1+44ai1zErA1wfRkm8rT9CNxu4WbWDyEWYQpBQg+fuyPi2R+LVBDA9k4pIgKjVUY
+         qH1MRmAYZ4UbF9+N607NvKwj2GoKLHVRhaQgAF61iXRqEcWU6eKFP5unX7fhYNwFs0
+         x192SP/P4YCTsm4xR8ccAJN/vJ8kLyQ0mwwYZNfw=
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20221117122547.809644-7-tomi.valkeinen@ideasonboard.com>
+References: <20221117122547.809644-1-tomi.valkeinen@ideasonboard.com> <20221117122547.809644-7-tomi.valkeinen@ideasonboard.com>
+Subject: Re: [PATCH v1 6/8] drm: rcar-du: Add r8a779g0 support
+From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Date:   Thu, 17 Nov 2022 15:08:38 +0000
+Message-ID: <166869771876.50677.1905794243575000038@Monstersaurus>
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/core branch of tip:
+Quoting Tomi Valkeinen (2022-11-17 12:25:45)
+> From: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+>=20
+> Add support for DU on r8a779g0, which is identical to DU on r8a779a0.
+>=20
+> Signed-off-by: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+> ---
+>  drivers/gpu/drm/rcar-du/rcar_du_drv.c | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+>=20
+> diff --git a/drivers/gpu/drm/rcar-du/rcar_du_drv.c b/drivers/gpu/drm/rcar=
+-du/rcar_du_drv.c
+> index d003e8d9e7a2..b1761d4ec4e5 100644
+> --- a/drivers/gpu/drm/rcar-du/rcar_du_drv.c
+> +++ b/drivers/gpu/drm/rcar-du/rcar_du_drv.c
+> @@ -524,6 +524,27 @@ static const struct rcar_du_device_info rcar_du_r8a7=
+79a0_info =3D {
+>         .dsi_clk_mask =3D  BIT(1) | BIT(0),
+>  };
+> =20
+> +static const struct rcar_du_device_info rcar_du_r8a779g0_info =3D {
+> +       .gen =3D 3,
 
-Commit-ID:     e5dfd093eca01a5d8d967f959a2372d7d82eb59c
-Gitweb:        https://git.kernel.org/tip/e5dfd093eca01a5d8d967f959a2372d7d82eb59c
-Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Sun, 13 Nov 2022 22:21:15 +01:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Thu, 17 Nov 2022 13:58:32 +01:00
+Given that this is the V4H ... I wonder if this should be bumped
+already. I guess that has knock on effects through the driver though...
 
-clocksource/drivers/hyper-v: Include asm/hyperv-tlfs.h not asm/mshyperv.h
+Aside from that, Which may need more work to handle correctly:
 
-clocksource/hyperv_timer.h is included into the VDSO build. It includes
-asm/mshyperv.h which in turn includes the world and some more. This worked
-so far by chance, but any subtle change in the include chain results in a
-build breakage because VDSO builds are building user space libraries.
+Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 
-Include asm/hyperv-tlfs.h instead which contains everything what the VDSO
-build needs except the hv_get_raw_timer() define. Move this define into a
-separate header file, which contains the prerequisites (msr.h) and is
-included by clocksource/hyperv_timer.h.
 
-Fixup drivers/hv/vmbus_drv.c which relies on the indirect include of
-asm/mshyperv.h.
-
-With that the VDSO build only pulls in the minimum requirements.
-
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-Link: https://lore.kernel.org/r/87fsemtut0.ffs@tglx
-
----
- arch/x86/include/asm/hyperv_timer.h |  9 +++++++++
- arch/x86/include/asm/mshyperv.h     |  2 --
- drivers/hv/vmbus_drv.c              |  1 +
- include/clocksource/hyperv_timer.h  |  4 +++-
- 4 files changed, 13 insertions(+), 3 deletions(-)
- create mode 100644 arch/x86/include/asm/hyperv_timer.h
-
-diff --git a/arch/x86/include/asm/hyperv_timer.h b/arch/x86/include/asm/hyperv_timer.h
-new file mode 100644
-index 0000000..388fa81
---- /dev/null
-+++ b/arch/x86/include/asm/hyperv_timer.h
-@@ -0,0 +1,9 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_X86_HYPERV_TIMER_H
-+#define _ASM_X86_HYPERV_TIMER_H
-+
-+#include <asm/msr.h>
-+
-+#define hv_get_raw_timer() rdtsc_ordered()
-+
-+#endif
-diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
-index 61f0c20..6d502f3 100644
---- a/arch/x86/include/asm/mshyperv.h
-+++ b/arch/x86/include/asm/mshyperv.h
-@@ -19,8 +19,6 @@ typedef int (*hyperv_fill_flush_list_func)(
- 		struct hv_guest_mapping_flush_list *flush,
- 		void *data);
- 
--#define hv_get_raw_timer() rdtsc_ordered()
--
- void hyperv_vector_handler(struct pt_regs *regs);
- 
- #if IS_ENABLED(CONFIG_HYPERV)
-diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
-index 8b2e413..1f5d37a 100644
---- a/drivers/hv/vmbus_drv.c
-+++ b/drivers/hv/vmbus_drv.c
-@@ -37,6 +37,7 @@
- #include <linux/dma-map-ops.h>
- #include <linux/pci.h>
- #include <clocksource/hyperv_timer.h>
-+#include <asm/mshyperv.h>
- #include "hyperv_vmbus.h"
- 
- struct vmbus_dynid {
-diff --git a/include/clocksource/hyperv_timer.h b/include/clocksource/hyperv_timer.h
-index b3f5d73..b4a3935 100644
---- a/include/clocksource/hyperv_timer.h
-+++ b/include/clocksource/hyperv_timer.h
-@@ -15,13 +15,15 @@
- 
- #include <linux/clocksource.h>
- #include <linux/math64.h>
--#include <asm/mshyperv.h>
-+#include <asm/hyperv-tlfs.h>
- 
- #define HV_MAX_MAX_DELTA_TICKS 0xffffffff
- #define HV_MIN_DELTA_TICKS 1
- 
- #ifdef CONFIG_HYPERV_TIMER
- 
-+#include <asm/hyperv_timer.h>
-+
- /* Routines called by the VMbus driver */
- extern int hv_stimer_alloc(bool have_percpu_irqs);
- extern int hv_stimer_cleanup(unsigned int cpu);
+> +       .features =3D RCAR_DU_FEATURE_CRTC_IRQ
+> +                 | RCAR_DU_FEATURE_VSP1_SOURCE
+> +                 | RCAR_DU_FEATURE_NO_BLENDING,
+> +       .channels_mask =3D BIT(1) | BIT(0),
+> +       .routes =3D {
+> +               /* R8A779G0 has two MIPI DSI outputs. */
+> +               [RCAR_DU_OUTPUT_DSI0] =3D {
+> +                       .possible_crtcs =3D BIT(0),
+> +                       .port =3D 0,
+> +               },
+> +               [RCAR_DU_OUTPUT_DSI1] =3D {
+> +                       .possible_crtcs =3D BIT(1),
+> +                       .port =3D 1,
+> +               },
+> +       },
+> +       .num_rpf =3D 5,
+> +       .dsi_clk_mask =3D  BIT(1) | BIT(0),
+> +};
+> +
+>  static const struct of_device_id rcar_du_of_table[] =3D {
+>         { .compatible =3D "renesas,du-r8a7742", .data =3D &rcar_du_r8a779=
+0_info },
+>         { .compatible =3D "renesas,du-r8a7743", .data =3D &rzg1_du_r8a774=
+3_info },
+> @@ -549,6 +570,7 @@ static const struct of_device_id rcar_du_of_table[] =
+=3D {
+>         { .compatible =3D "renesas,du-r8a77990", .data =3D &rcar_du_r8a77=
+99x_info },
+>         { .compatible =3D "renesas,du-r8a77995", .data =3D &rcar_du_r8a77=
+99x_info },
+>         { .compatible =3D "renesas,du-r8a779a0", .data =3D &rcar_du_r8a77=
+9a0_info },
+> +       { .compatible =3D "renesas,du-r8a779g0", .data =3D &rcar_du_r8a77=
+9g0_info },
+>         { }
+>  };
+> =20
+> --=20
+> 2.34.1
+>
