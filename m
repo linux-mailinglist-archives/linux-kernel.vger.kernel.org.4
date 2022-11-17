@@ -2,85 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9A3362DC5D
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:11:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0394462DC73
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:16:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239786AbiKQNLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 08:11:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60600 "EHLO
+        id S239853AbiKQNQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 08:16:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239737AbiKQNLL (ORCPT
+        with ESMTP id S239852AbiKQNQZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 08:11:11 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A04DB6B3B5;
-        Thu, 17 Nov 2022 05:11:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1668690670; x=1700226670;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=JJnRYj7NPQDMFAirw9QUIbVf7WfT2dsZ/Q12yTqq4GA=;
-  b=0WeXFwCaJTzVkeEtXoqnICzmQMKHbZCqAb7kAw+8HFrnkpzeySJwco2p
-   Qwl0VdD83FifVwdZUr5QktiTk9yATh/tLWcUK53EytwXeOUUOwgJc9ngB
-   w9VoGJwvakEgZA7O+XAw27TVY1eI38H3um2L3JInTB+5xwjOY+nGg5YWO
-   Cyg4q8nB5lTnJAyXgJ45pyV2x0xVzOLX/q7jfAmi3gsGk95wVTNSn4IzA
-   IHoaUKDDW8oB/so9Bzs4JhNCdKns4Px5TnFmhwityKzV4e0/5IneMLqA5
-   /qH2Er0/t/kVOQ0vYu4gPmXrcsSqWaHKzgsuUobWrffAo6OYa6XwlMXE1
-   A==;
-X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
-   d="scan'208";a="183993352"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Nov 2022 06:11:09 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Thu, 17 Nov 2022 06:11:06 -0700
-Received: from localhost.localdomain (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Thu, 17 Nov 2022 06:11:04 -0700
-From:   Claudiu Beznea <claudiu.beznea@microchip.com>
-To:     <tudor.ambarus@microchip.com>, <vkoul@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <dmaengine@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [RESEND][PATCH 3/3] dmaengine: at_xdmac: remove empty line
-Date:   Thu, 17 Nov 2022 15:15:47 +0200
-Message-ID: <20221117131547.293044-4-claudiu.beznea@microchip.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20221117131547.293044-1-claudiu.beznea@microchip.com>
-References: <20221117131547.293044-1-claudiu.beznea@microchip.com>
+        Thu, 17 Nov 2022 08:16:25 -0500
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 873FE6DCC0
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 05:16:24 -0800 (PST)
+Received: by mail-lj1-x229.google.com with SMTP id b9so2658615ljr.5
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 05:16:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=i33sxe8YJAvtvzx995z6301l/SnWDqnZWm9Vht72DH4=;
+        b=tU7jXVbE/9IZhnkgZ2a2TR1cKrpxezzQgb08KohVcnbcFwh8xSb1SK8MR4QuXvS9Pm
+         XihBbnMW8DhfFgPSZHICrxqW3120Lq1P53poDCUvvZreXVcLnys74vyrtcoGZ23iFVlF
+         6XrA+BcxZB0URUC1GOjvTL0xUZsIoAMJrOTPvZwJRTN+YwbFxM7nP+xHf0uvt+yw5XI+
+         6S4Esw86xL2AAWM1pZoiHc6p8maew1osrjr+BUAosRDPX/evJSt0NIsrqd7InhKAJI4F
+         Dva5EE/QVjWaTs/cyxG7tne+9PKCnz9YvtXPqB+3nThZ7+tl5njGv8LdCBRzCq1Dyz28
+         94gQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=i33sxe8YJAvtvzx995z6301l/SnWDqnZWm9Vht72DH4=;
+        b=oetwAwXkm9NyYpMQE4blEQfyXqN4iuW5RfHP9KCPVcKRfVJqcxX8HHea3z7PocoIJ8
+         0Np4Ic8XAQIoxiWepCo5XbKdQmVS6Ly1SoFLvgCd6fMbSiC/j/I6Mr50hwqyjVDLq1WL
+         20TsZ6E+7p2ynmD9m6jl/cwKrUXUmNShn/5OQdRR2gYFBVUi2lODGkYClEynjp96oUp5
+         ZQEseEmyDsavJW59XmZi8u+Q6pu+tK84pEuS2uZjeKPQTe5C6u/A/UNTNapQbPBuWxXJ
+         5+4VoSCk9zYCPxHKPx92FjUzspA4Fy+i5qnbBJa1qcq1HP6vkc+WstbMiXtkWv+xGgpO
+         EFag==
+X-Gm-Message-State: ANoB5pld0Uemxmy+f2ptbW7KZKk8xI0o/YLdTm4BEjDs0GO/O75/qaFY
+        vrP6YaFk4Gnv4U8u6xb9b0fPr0t7yAR9ygAM
+X-Google-Smtp-Source: AA0mqf52Yxq0LSiDFcb9qJsPRrRyCkW3YFJEfEhpUMT9fdxNufjsn01xmLLHGsqOPY/x/LtHAYjLag==
+X-Received: by 2002:a2e:a309:0:b0:277:88e:f5d7 with SMTP id l9-20020a2ea309000000b00277088ef5d7mr1067109lje.434.1668690982973;
+        Thu, 17 Nov 2022 05:16:22 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id q18-20020a194312000000b00494643db68fsm147572lfa.81.2022.11.17.05.16.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Nov 2022 05:16:22 -0800 (PST)
+Message-ID: <aff1e286-b32c-f0ac-40bb-9be0d9588a1c@linaro.org>
+Date:   Thu, 17 Nov 2022 14:16:21 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 5/9] dt-bindings: PCI: qcom: alphabetically sort
+ compatibles
+Content-Language: en-US
+To:     Robert Marko <robimarko@gmail.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        bhelgaas@google.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mani@kernel.org,
+        lpieralisi@kernel.org, kw@linux.com, svarbanov@mm-sol.com,
+        shawn.guo@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221116214841.1116735-1-robimarko@gmail.com>
+ <20221116214841.1116735-5-robimarko@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221116214841.1116735-5-robimarko@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove empty line.
+On 16/11/2022 22:48, Robert Marko wrote:
+> Sort the compatibles list alphabetically for maintenance.
+> 
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/pci/qcom,pcie.yaml | 8 ++++----
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
----
- drivers/dma/at_xdmac.c | 1 -
- 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/dma/at_xdmac.c b/drivers/dma/at_xdmac.c
-index a9278bf4c17b..1f0fab180f8f 100644
---- a/drivers/dma/at_xdmac.c
-+++ b/drivers/dma/at_xdmac.c
-@@ -533,7 +533,6 @@ static void at_xdmac_start_xfer(struct at_xdmac_chan *atchan,
- 		 at_xdmac_chan_read(atchan, AT_XDMAC_CSA),
- 		 at_xdmac_chan_read(atchan, AT_XDMAC_CDA),
- 		 at_xdmac_chan_read(atchan, AT_XDMAC_CUBC));
--
- }
- 
- static dma_cookie_t at_xdmac_tx_submit(struct dma_async_tx_descriptor *tx)
--- 
-2.34.1
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
 
