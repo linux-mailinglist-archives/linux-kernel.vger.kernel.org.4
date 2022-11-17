@@ -2,146 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E5D62CF71
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 01:21:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C28562CF74
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 01:22:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234101AbiKQAVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 19:21:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54826 "EHLO
+        id S234236AbiKQAWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 19:22:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232996AbiKQAV1 (ORCPT
+        with ESMTP id S234118AbiKQAWK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 19:21:27 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63EFE45EFD;
-        Wed, 16 Nov 2022 16:21:26 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id v3so498447pgh.4;
-        Wed, 16 Nov 2022 16:21:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EOTHwBvfn3j46S98TnUtdZvMLvXtq/JOOvCrOFMYfc0=;
-        b=SyOm+L0eF8cS7odyS/+IVdV+CobT8Af23hLQxh2DHW8EaivP2joAE1qPJ2mhopG+xi
-         iOTnQJqAq/0yZFeEKCJOmncw+28P1XMjJHU2KS/xby9W3f4K1bTPUQzScU3bNVffUuvq
-         buAfr0Re5/A/CG6682OHChxpn6e4SiIccXqFqwpuqm7tviFhbIRvYD1Q4nT6cEM40d8u
-         wupkg5y0/5KcQ997VHO6XGZKGBP+uOhcSJ9gSQn8fIuc2HkkrezdvKgWBoE+7QshG6j0
-         V+QHrbdyMO69j4+I5HKtQOStsV3cl+n0g4pK5GbLtF+APPG9LTfXYFEFspmHsjT/zymY
-         HaCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EOTHwBvfn3j46S98TnUtdZvMLvXtq/JOOvCrOFMYfc0=;
-        b=wLCaMo7lRFu1w4R9vazj8Z0KTyNMcItuxet6bzYn4kal9Cmc6z/qWgHm0tFFxRr7DT
-         kMoF3mz0xyLeRWT0/f6jbcYOEKfGZA98cbSdtjqxS7G7X0HS/7ArNXYn7RZOOpqm1x6Y
-         MNOS+ur39Inc2Ola0hxEKcl55MqiKGsyJHI7oC/V8ZF9hALcsw3BTHstQJVJJoVtDkMS
-         cO/pH8YAj/0KV/qWSxsX2/LA4YSCMgpaT2jVGAxuh10GiNJCajmuE+YMXdKGwc6N/p08
-         XulVxhVCIQF0bQ0eM5/sUhuNlj4LOtA1/LWnUlHvUA7Ok56B9M/8Vp5F0nGFcgOM2Vh6
-         88VQ==
-X-Gm-Message-State: ANoB5plDr2n/5cofbL/naVBXNGdiCB7sLd9z24v/WuKdGx6TA26nIHbn
-        09fciz21vaNdjhovMY0waMG1E7r+7sicoA==
-X-Google-Smtp-Source: AA0mqf5dO1qAI+9h4q1RiOcxT4xwiQJxvdSWPmTFPNPN6JC4eF+UgJnFOpScLOmhuQUdll5e6L6glA==
-X-Received: by 2002:a62:1444:0:b0:572:d54:9647 with SMTP id 65-20020a621444000000b005720d549647mr417129pfu.82.1668644485780;
-        Wed, 16 Nov 2022 16:21:25 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id nl8-20020a17090b384800b0020d48bc6661sm2232416pjb.31.2022.11.16.16.21.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 16:21:25 -0800 (PST)
-Message-ID: <9c9643e3-db53-bd35-6028-1c8b718e1cc2@gmail.com>
-Date:   Wed, 16 Nov 2022 16:21:16 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 2/2] net: fec: Create device link between phy dev and mac
- dev
-Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Xiaolei Wang <xiaolei.wang@windriver.com>, hkallweit1@gmail.com,
-        linux@armlinux.org.uk, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221116144305.2317573-1-xiaolei.wang@windriver.com>
- <20221116144305.2317573-3-xiaolei.wang@windriver.com>
- <Y3T8wliAKdl/paS6@lunn.ch> <355a8611-b60e-1166-0f7b-87a194debd07@gmail.com>
- <Y3V5AgBMBOx/ptwx@lunn.ch>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <Y3V5AgBMBOx/ptwx@lunn.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 16 Nov 2022 19:22:10 -0500
+Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B35F048756;
+        Wed, 16 Nov 2022 16:22:08 -0800 (PST)
+Content-Type: multipart/signed;
+        boundary="Apple-Mail=_E77615D2-BFB2-4C9F-ACA8-67DC4C1B26F3";
+        protocol="application/pgp-signature";
+        micalg=pgp-sha512
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.200.110.1.12\))
+Subject: Re: [PATCH] kbuild: Fix -Wimplicit-function-declaration in
+ license_is_gpl_compatible
+From:   Sam James <sam@gentoo.org>
+In-Reply-To: <20221116182634.2823136-1-sam@gentoo.org>
+Date:   Thu, 17 Nov 2022 00:21:51 +0000
+Cc:     Andrew Morton <akpm@linux-foundation.org>, trivial@kernel.org,
+        stable@vger.kernel.org
+Message-Id: <4F6C0B05-1DF3-46F8-AC5C-240FC4B3271A@gentoo.org>
+References: <20221116182634.2823136-1-sam@gentoo.org>
+To:     linux-kernel@vger.kernel.org
+X-Mailer: Apple Mail (2.3731.200.110.1.12)
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/16/22 15:57, Andrew Lunn wrote:
-> On Wed, Nov 16, 2022 at 03:27:39PM -0800, Florian Fainelli wrote:
->> On 11/16/22 07:07, Andrew Lunn wrote:
->>> On Wed, Nov 16, 2022 at 10:43:05PM +0800, Xiaolei Wang wrote:
->>>> On imx6sx, there are two fec interfaces, but the external
->>>> phys can only be configured by fec0 mii_bus. That means
->>>> the fec1 can't work independently, it only work when the
->>>> fec0 is active. It is alright in the normal boot since the
->>>> fec0 will be probed first. But then the fec0 maybe moved
->>>> behind of fec1 in the dpm_list due to various device link.
->>
->> Humm, but if FEC1 depends upon its PHY to be available by the FEC0 MDIO bus
->> provider, then surely we will need to make sure that FEC0's MDIO bus is
->> always functional, and that includes surviving re-ordering as well as any
->> sort of run-time power management that can occur.
-> 
-> Runtime PM is solved for the FECs MDIO bus, because there are switches
-> hanging off it, which have their own life cycle independent of the
-> MAC. This is something i had to fix many moons ago, when the FEC would
-> power off the MDIO bus when the interface is admin down, stopping
-> access to the switch. The mdio read and write functions now do run
-> time pm get and put as needed.
-> 
-> I've never done suspend/resume with a switch, it is not something
-> needed in the use cases i've covered.
 
-All of the systems with integrated I worked on had to support 
-suspend/resume both with HW maintaining the state, and with HW losing 
-the state because of being powered off. The whole thing is IMHO still 
-not quite well supported upstream if you have applied some configuration 
-more complicated than a bridge or standalone ports. Anyway, this is a 
-topic for another 10 years to come :)
+--Apple-Mail=_E77615D2-BFB2-4C9F-ACA8-67DC4C1B26F3
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain;
+	charset=us-ascii
 
-> 
->>>> So in system suspend and resume, we would get the following
->>>> warning when configuring the external phy of fec1 via the
->>>> fec0 mii_bus due to the inactive of fec0. In order to fix
->>>> this issue, we create a device link between phy dev and fec0.
->>>> This will make sure that fec0 is always active when fec1
->>>> is in active mode.
->>
->> Still not clear to me how the proposed fix works, let alone how it does not
->> leak device links since there is no device_link_del(), also you are going to
->> be creating guaranteed regressions by putting that change in the PHY
->> library.
-> 
-> The reference leak is bad, but i think phylib is the correct place to
-> fix this general issue. It is not specific to the FEC. There are other
-> boards with dual MAC SoCs and they save a couple of pins by putting
-> both PHYs on one MDIO bus. Having the link should help better
-> represent the device tree so that suspend/resume can do stuff in the
-> right order.
 
-My concern is that we already have had a hard time solving the proper 
-suspend/resume sequence whether the MAC suspends the PHY or the MDIO bus 
-suspends the PHY and throwing device links will either change the 
-ordering in subtle ways, or hopefully just provide the same piece of 
-information we already have via mac_managed_pm.
 
-It seems like in Xiaolei's case, the MDIO bus should suspend the PHY and 
-that ought to take care of all dependencies, one would think.
--- 
-Florian
+> On 16 Nov 2022, at 18:26, Sam James <sam@gentoo.org> wrote:
+>=20
+> Add missing <string.h> include for strcmp.
+>=20
+> Clang 16 makes -Wimplicit-function-declaration an error by default. =
+Unfortunately,
+> out of tree modules may use this in configure scripts, which means =
+failure
+> might cause silent miscompilation or misconfiguration.
+>=20
+> For more information, see LWN.net [0] or LLVM's Discourse [1], =
+gentoo-dev@ [2],
+> or the (new) c-std-porting mailing list [3].
+>=20
+> [0] https://lwn.net/Articles/913505/
+> [1] =
+https://discourse.llvm.org/t/configure-script-breakage-with-the-new-werror=
+-implicit-function-declaration/65213
+> [2] =
+https://archives.gentoo.org/gentoo-dev/message/dd9f2d3082b8b6f8dfbccb0639e=
+6e240
+> [3] hosted at lists.linux.dev.
+>=20
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: trivial@kernel.org
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Sam James <sam@gentoo.org>
+> ---
+> include/linux/license.h | 2 ++
+> 1 file changed, 2 insertions(+)
+>=20
+> diff --git a/include/linux/license.h b/include/linux/license.h
+> index 7cce390f120b..1c0f28904ed0 100644
+> --- a/include/linux/license.h
+> +++ b/include/linux/license.h
+> @@ -2,6 +2,8 @@
+> #ifndef __LICENSE_H
+> #define __LICENSE_H
+>=20
+> +#include <string.h>
+> +
 
+Andrew's added this to his tree with the following fixup (duh!):
+```
+-#include <string.h>
++#include <linux/string.h>
+```
+
+Best,
+sam
+
+--Apple-Mail=_E77615D2-BFB2-4C9F-ACA8-67DC4C1B26F3
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+	filename=signature.asc
+Content-Type: application/pgp-signature;
+	name=signature.asc
+Content-Description: Message signed with OpenPGP
+
+-----BEGIN PGP SIGNATURE-----
+
+iNUEARYKAH0WIQQlpruI3Zt2TGtVQcJzhAn1IN+RkAUCY3V+oF8UgAAAAAAuAChp
+c3N1ZXItZnByQG5vdGF0aW9ucy5vcGVucGdwLmZpZnRoaG9yc2VtYW4ubmV0MjVB
+NkJCODhERDlCNzY0QzZCNTU0MUMyNzM4NDA5RjUyMERGOTE5MAAKCRBzhAn1IN+R
+kNZxAP4yD2RBpOfon2qmVUaxGglz12fKFK3WYwIwYK69MAAgGwD8D/BbPh0BdIpM
+Kb4Vmoab1VTQ+OLnjNnDkYBNeeJhbQU=
+=BBCx
+-----END PGP SIGNATURE-----
+
+--Apple-Mail=_E77615D2-BFB2-4C9F-ACA8-67DC4C1B26F3--
