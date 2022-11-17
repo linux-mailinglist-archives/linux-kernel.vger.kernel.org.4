@@ -2,349 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 008FD62DDB0
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 15:13:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D18762DDB2
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 15:13:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239502AbiKQONX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 09:13:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45974 "EHLO
+        id S240255AbiKQONq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 09:13:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234421AbiKQONT (ORCPT
+        with ESMTP id S240317AbiKQONl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 09:13:19 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CBF06204F;
-        Thu, 17 Nov 2022 06:13:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=MW5+NnO2Tu8NlwdFq3hDFtaofKcS5eP2XdeVQ9JCU3g=; b=AbnKE5Jc6O+H3xaGhMYqGrC3y9
-        YVacd7j962DPg4af6H/+3simUiSgbuK/6G4zOl6bRYUYuLlrfnrdtOe9kgHbyzTTSHzpcEqu7qPv4
-        i/tQVeVWKIRgJXbg5hWxJebKtN2EOimPdIUqJ5UPTvtVLIe3VOu+NAxDi+ao2G6T7X7leU6AgOQe+
-        EVJz3gbkA7CnSkui7IjODrAPkhoYTvJzucvlcmObLasetIt9Y4UcnCmj1L8efJmwNseYneU9uObMI
-        C3+2NforbJUN9mRB2v294ooOYsk2XW5dJTDvRy1Ypp9Befi7H88f/EarR5pfO0ONSMvNsDK5hGMyP
-        m8CTMzhg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ovfd5-001hCk-C8; Thu, 17 Nov 2022 14:12:35 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 81A68300220;
-        Thu, 17 Nov 2022 15:12:32 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 6829C207D6247; Thu, 17 Nov 2022 15:12:32 +0100 (CET)
-Date:   Thu, 17 Nov 2022 15:12:32 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        x86@kernel.org, "Paul E. McKenney" <paulmck@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Guo Ren <guoren@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [RFC PATCH v2 8/8] sched, smp: Trace smp callback causing an IPI
-Message-ID: <Y3ZBUMteJysc1/lA@hirez.programming.kicks-ass.net>
-References: <20221102182949.3119584-1-vschneid@redhat.com>
- <20221102183336.3120536-7-vschneid@redhat.com>
+        Thu, 17 Nov 2022 09:13:41 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0408F63E5
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 06:13:36 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id 6so2066633pgm.6
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 06:13:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=X5edKik6Yy70E8i5dbszPvRkPfUcmxGnVozSbtL7NQA=;
+        b=aNN72l2bRasM321JMm9ZKQ0575K/e/Dkc+0KUYJ4tBAGfORjLPuuPodacs4Z9V0VKU
+         ELIyzoaIY3udDDmoLRZYc/QcVaiUAqY+1Hio+60D9L2SZN+rGkd0cD8DimwzXFNuFOFB
+         bGLJ0R8Zf/E/odUK3oHbkmJpoy1IA67+V0kNQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=X5edKik6Yy70E8i5dbszPvRkPfUcmxGnVozSbtL7NQA=;
+        b=e8UpcE+qCbOU3hzBK0Nw30B8VFxTWBVi9iQ+eQg+HrrbJkVXmL/PxjgJrG1Ommfdl0
+         thLP08hlR/RclFkrQ+vWUGbUa7JYU1hh0wZ3eAkZPFiVwWD/5fXsTOaqAxQEWPChdeaR
+         O3Mk4S7UympZPhXioO0+tLYQn/86OKqQfSWt0kisAV603Z9m7SRbopcp4M0vjKTTgQwS
+         mLe4Aluruv+H5Ru7nHQ4Q3jjGglOvJ4g6abS9UnDpaOV9rC7i7UPSju4dJwpp/VbY/mT
+         h5N2nUAei/MsHf0KniJR8pT+SMNkM87qbFxQHUchEVPgyxwRvN+UM+3b2nQruUXgghnw
+         5u0Q==
+X-Gm-Message-State: ANoB5pkgOlPFIaUrlrNawRLPnsfnpfyTAuFcE/g3tVNQX7Mq2D2MywCt
+        KfzTq7Ur9sySEJKZW+DpenvsEFQEHIk2mg==
+X-Google-Smtp-Source: AA0mqf72fVfRgHzUCMhe32Qxs9QuRwXrtajxHZ1bgfU5Ypu+FT9FL/z5+03VRU2MMpaAxIRgy/SJmQ==
+X-Received: by 2002:a05:6a00:1993:b0:56c:3fbb:7eb1 with SMTP id d19-20020a056a00199300b0056c3fbb7eb1mr3261692pfl.7.1668694415440;
+        Thu, 17 Nov 2022 06:13:35 -0800 (PST)
+Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:3925:36ee:c53c:7a49])
+        by smtp.gmail.com with ESMTPSA id t18-20020a170902e1d200b001888a46e2d0sm1365037pla.162.2022.11.17.06.13.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 06:13:35 -0800 (PST)
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Minchan Kim <minchan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: [PATCH] zram: remove unused stats fields
+Date:   Thu, 17 Nov 2022 23:13:26 +0900
+Message-Id: <20221117141326.1105181-1-senozhatsky@chromium.org>
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221102183336.3120536-7-vschneid@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 06:33:36PM +0000, Valentin Schneider wrote:
-> The newly-introduced ipi_send_cpumask tracepoint has a "callback" parameter
-> which so far has only been fed with NULL.
-> 
-> While CSD_TYPE_SYNC/ASYNC and CSD_TYPE_IRQ_WORK share a similar backing
-> struct layout (meaning their callback func can be accessed without caring
-> about the actual CSD type), CSD_TYPE_TTWU doesn't even have a function
-> attached to its struct. This means we need to check the type of a CSD
-> before eventually dereferencing its associated callback.
-> 
-> This isn't as trivial as it sounds: the CSD type is stored in
-> __call_single_node.u_flags, which get cleared right before the callback is
-> executed via csd_unlock(). This implies checking the CSD type before it is
-> enqueued on the call_single_queue, as the target CPU's queue can be flushed
-> before we get to sending an IPI.
-> 
-> Furthermore, send_call_function_single_ipi() only has a CPU parameter, and
-> would need to have an additional argument to trickle down the invoked
-> function. This is somewhat silly, as the extra argument will always be
-> pushed down to the function even when nothing is being traced, which is
-> unnecessary overhead.
-> 
-> Two options present themselves:
-> a) Create copies of send_call_function_{single_ipi, ipi_mask}() that take
->    an extra argument used for tracing, so that codepaths remain unchanged
->    when tracing isn't in effect (a sort of manual -fipa-sra).
-> 
-> b) Stash the CSD func in somewhere as a side effect that
->    the portion of send_call_function_{single_ipi, ipi_mask}() under the
->    tracepoint's static key can fetch.
-> 
-> a) creates redundant code, and b) is quite fragile due to requiring extra
-> care for "reentrant" functions (async SMP calls).
-> 
-> This implements a).
-> 
-> Signed-off-by: Valentin Schneider <vschneid@redhat.com>
-> ---
->  kernel/irq_work.c   |  2 ++
->  kernel/sched/core.c | 35 ++++++++++++++++++++++++-----------
->  kernel/sched/smp.h  |  1 +
->  kernel/smp.c        | 42 ++++++++++++++++++++++++++++++++++++++----
->  4 files changed, 65 insertions(+), 15 deletions(-)
-> 
-> diff --git a/kernel/irq_work.c b/kernel/irq_work.c
-> index aec38c294ce68..fcfa75c4a5daf 100644
-> --- a/kernel/irq_work.c
-> +++ b/kernel/irq_work.c
-> @@ -24,6 +24,8 @@
->  
->  #include <trace/events/ipi.h>
->  
-> +#include "sched/smp.h"
-> +
->  static DEFINE_PER_CPU(struct llist_head, raised_list);
->  static DEFINE_PER_CPU(struct llist_head, lazy_list);
->  static DEFINE_PER_CPU(struct task_struct *, irq_workd);
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 02181f8072b5f..41196ca67e913 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -3743,17 +3743,30 @@ void sched_ttwu_pending(void *arg)
->  	rq_unlock_irqrestore(rq, &rf);
->  }
->  
-> -void send_call_function_single_ipi(int cpu)
-> -{
-> -	struct rq *rq = cpu_rq(cpu);
-> -
-> -	if (!set_nr_if_polling(rq->idle)) {
-> -		trace_ipi_send_cpumask(cpumask_of(cpu), _RET_IP_, NULL);
-> -		arch_send_call_function_single_ipi(cpu);
-> -	} else {
-> -		trace_sched_wake_idle_without_ipi(cpu);
-> -	}
-> -}
-> +/*
-> + * We want a variant that traces the function causing the IPI to be sent, but
-> + * we don't want the extra argument to cause unnecessary overhead when tracing
-> + * isn't happening.
-> + */
-> +#define GEN_CFSI(suffix, IPI_EXP, ...)						\
-> +void send_call_function_single_ipi##suffix(__VA_ARGS__)				\
-> +{										\
-> +	struct rq *rq = cpu_rq(cpu);						\
-> +										\
-> +	if (!set_nr_if_polling(rq->idle)) {					\
-> +		IPI_EXP;							\
-> +		arch_send_call_function_single_ipi(cpu);			\
-> +	} else {								\
-> +		trace_sched_wake_idle_without_ipi(cpu);				\
-> +	}									\
-> +}
-> +
-> +GEN_CFSI(/* nop */,
-> +	 /* nop */,
-> +	 int cpu)
-> +GEN_CFSI(_trace,
-> +	 trace_ipi_send_cpumask(cpumask_of(cpu), _RET_IP_, func),
-> +	 int cpu, smp_call_func_t func)
->  
+We don't show num_reads and num_writes since we removed
+corresponding sysfs nodes in 2017. Block layer stats are
+exposed via /sys/block/zramX/stat file.
 
-*yuck*
+However, we still increment those atomic vars and store
+them in zram stats. Remove leftovers.
 
-How about something like so?
-
+Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
 ---
---- a/kernel/irq_work.c
-+++ b/kernel/irq_work.c
-@@ -24,6 +24,8 @@
+ drivers/block/zram/zram_drv.c | 2 --
+ drivers/block/zram/zram_drv.h | 2 --
+ 2 files changed, 4 deletions(-)
+
+diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
+index 4e493c198d84..eea06b1a556f 100644
+--- a/drivers/block/zram/zram_drv.c
++++ b/drivers/block/zram/zram_drv.c
+@@ -2033,11 +2033,9 @@ static int zram_bvec_rw(struct zram *zram, struct bio_vec *bvec, u32 index,
+ 	int ret;
  
- #include <trace/events/ipi.h>
- 
-+#include "sched/smp.h"
-+
- static DEFINE_PER_CPU(struct llist_head, raised_list);
- static DEFINE_PER_CPU(struct llist_head, lazy_list);
- static DEFINE_PER_CPU(struct task_struct *, irq_workd);
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -3763,16 +3763,17 @@ void sched_ttwu_pending(void *arg)
- 	rq_unlock_irqrestore(rq, &rf);
- }
- 
--void send_call_function_single_ipi(int cpu)
-+bool send_call_function_single_ipi(int cpu)
- {
- 	struct rq *rq = cpu_rq(cpu);
- 
- 	if (!set_nr_if_polling(rq->idle)) {
--		trace_ipi_send_cpumask(cpumask_of(cpu), _RET_IP_, NULL);
- 		arch_send_call_function_single_ipi(cpu);
--	} else {
--		trace_sched_wake_idle_without_ipi(cpu);
-+		return true;
- 	}
-+
-+	trace_sched_wake_idle_without_ipi(cpu);
-+	return false;
- }
- 
- /*
---- a/kernel/sched/smp.h
-+++ b/kernel/sched/smp.h
-@@ -6,7 +6,7 @@
- 
- extern void sched_ttwu_pending(void *arg);
- 
--extern void send_call_function_single_ipi(int cpu);
-+extern bool send_call_function_single_ipi(int cpu);
- 
- #ifdef CONFIG_SMP
- extern void flush_smp_call_function_queue(void);
---- a/kernel/smp.c
-+++ b/kernel/smp.c
-@@ -163,7 +163,6 @@ void __init call_function_init(void)
- static inline void
- send_call_function_ipi_mask(const struct cpumask *mask)
- {
--	trace_ipi_send_cpumask(mask, _RET_IP_, func);
- 	arch_send_call_function_ipi_mask(mask);
- }
- 
-@@ -438,11 +437,16 @@ static void __smp_call_single_queue_debu
- 	struct cfd_seq_local *seq = this_cpu_ptr(&cfd_seq_local);
- 	struct call_function_data *cfd = this_cpu_ptr(&cfd_data);
- 	struct cfd_percpu *pcpu = per_cpu_ptr(cfd->pcpu, cpu);
-+	struct __call_single_data *csd;
-+
-+	csd = container_of(node, call_single_data_t, node.llist);
-+	WARN_ON_ONCE(!(CSD_TYPE(csd) & (CSD_TYPE_SYNC | CSD_TYPE_ASYNC)));
- 
- 	cfd_seq_store(pcpu->seq_queue, this_cpu, cpu, CFD_SEQ_QUEUE);
- 	if (llist_add(node, &per_cpu(call_single_queue, cpu))) {
- 		cfd_seq_store(pcpu->seq_ipi, this_cpu, cpu, CFD_SEQ_IPI);
- 		cfd_seq_store(seq->ping, this_cpu, cpu, CFD_SEQ_PING);
-+		trace_ipi_send_cpumask(cpumask_of(cpu), _RET_IP_, csd->func);
- 		send_call_function_single_ipi(cpu);
- 		cfd_seq_store(seq->pinged, this_cpu, cpu, CFD_SEQ_PINGED);
+ 	if (!op_is_write(op)) {
+-		atomic64_inc(&zram->stats.num_reads);
+ 		ret = zram_bvec_read(zram, bvec, index, offset, bio);
+ 		flush_dcache_page(bvec->bv_page);
  	} else {
-@@ -487,6 +491,27 @@ static __always_inline void csd_unlock(s
- 
- static DEFINE_PER_CPU_SHARED_ALIGNED(call_single_data_t, csd_data);
- 
-+static __always_inline
-+bool raw_smp_call_single_queue(int cpu, struct llist_node *node)
-+{
-+	/*
-+	 * The list addition should be visible to the target CPU when it pops
-+	 * the head of the list to pull the entry off it in the IPI handler
-+	 * because of normal cache coherency rules implied by the underlying
-+	 * llist ops.
-+	 *
-+	 * If IPIs can go out of order to the cache coherency protocol
-+	 * in an architecture, sufficient synchronisation should be added
-+	 * to arch code to make it appear to obey cache coherency WRT
-+	 * locking and barrier primitives. Generic code isn't really
-+	 * equipped to do the right thing...
-+	 */
-+	if (llist_add(node, &per_cpu(call_single_queue, cpu)))
-+		return send_call_function_single_ipi(cpu);
-+
-+	return false;
-+}
-+
- void __smp_call_single_queue(int cpu, struct llist_node *node)
- {
- #ifdef CONFIG_CSD_LOCK_WAIT_DEBUG
-@@ -503,19 +528,28 @@ void __smp_call_single_queue(int cpu, st
- #endif
- 
- 	/*
--	 * The list addition should be visible to the target CPU when it pops
--	 * the head of the list to pull the entry off it in the IPI handler
--	 * because of normal cache coherency rules implied by the underlying
--	 * llist ops.
--	 *
--	 * If IPIs can go out of order to the cache coherency protocol
--	 * in an architecture, sufficient synchronisation should be added
--	 * to arch code to make it appear to obey cache coherency WRT
--	 * locking and barrier primitives. Generic code isn't really
--	 * equipped to do the right thing...
--	 */
--	if (llist_add(node, &per_cpu(call_single_queue, cpu)))
--		send_call_function_single_ipi(cpu);
-+	 * We have to check the type of the CSD before queueing it, because
-+	 * once queued it can have its flags cleared by
-+	 *   flush_smp_call_function_queue()
-+	 * even if we haven't sent the smp_call IPI yet (e.g. the stopper
-+	 * executes migration_cpu_stop() on the remote CPU).
-+	 */
-+	if (trace_ipi_send_cpumask_enabled()) {
-+		call_single_data_t *csd;
-+		smp_call_func_t func;
-+
-+		csd = container_of(node, call_single_data_t, node.llist);
-+
-+		func = sched_ttwu_pending;
-+		if (CSD_TYPE(csd) != CSD_TYPE_TTWU)
-+			func = csd->func;
-+
-+		if (raw_smp_call_single_queue(cpu, node))
-+			trace_ipi_send_cpumask(cpumask_of(cpu), _RET_IP_, func);
-+		return;
-+	}
-+
-+	raw_smp_call_single_queue(cpu, node);
- }
- 
- /*
-@@ -983,10 +1017,13 @@ static void smp_call_function_many_cond(
- 		 * number of CPUs might be zero due to concurrent changes to the
- 		 * provided mask.
- 		 */
--		if (nr_cpus == 1)
-+		if (nr_cpus == 1) {
-+			trace_ipi_send_cpumask(cpumask_of(last_cpu), _RET_IP_, func);
- 			send_call_function_single_ipi(last_cpu);
--		else if (likely(nr_cpus > 1))
--			send_call_function_ipi_mask(cfd->cpumask_ipi);
-+		} else if (likely(nr_cpus > 1)) {
-+			trace_ipi_send_cpumask(mask, _RET_IP_, func);
-+			send_call_function_ipi_mask(mask);
-+		}
- 
- 		cfd_seq_store(this_cpu_ptr(&cfd_seq_local)->pinged, this_cpu, CFD_SEQ_NOCPU, CFD_SEQ_PINGED);
+-		atomic64_inc(&zram->stats.num_writes);
+ 		ret = zram_bvec_write(zram, bvec, index, offset, bio);
  	}
+ 
+diff --git a/drivers/block/zram/zram_drv.h b/drivers/block/zram/zram_drv.h
+index c322d9c9dde2..4b46fcc651b1 100644
+--- a/drivers/block/zram/zram_drv.h
++++ b/drivers/block/zram/zram_drv.h
+@@ -76,8 +76,6 @@ struct zram_table_entry {
+ 
+ struct zram_stats {
+ 	atomic64_t compr_data_size;	/* compressed size of pages stored */
+-	atomic64_t num_reads;	/* failed + successful */
+-	atomic64_t num_writes;	/* --do-- */
+ 	atomic64_t failed_reads;	/* can happen when memory is too low */
+ 	atomic64_t failed_writes;	/* can happen when memory is too low */
+ 	atomic64_t invalid_io;	/* non-page-aligned I/O requests */
+-- 
+2.38.1.431.g37b22c650d-goog
+
