@@ -2,255 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59A8662D84A
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 11:42:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9914E62D84E
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 11:43:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239307AbiKQKlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 05:41:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37182 "EHLO
+        id S234768AbiKQKnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 05:43:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234768AbiKQKlo (ORCPT
+        with ESMTP id S229939AbiKQKno (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 05:41:44 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE30C1107;
-        Thu, 17 Nov 2022 02:41:42 -0800 (PST)
-Received: from zn.tnic (p200300ea9733e7de329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7de:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2C4431EC06BD;
-        Thu, 17 Nov 2022 11:41:41 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1668681701;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VZAcVZayDy4r9kIQCe5t8cqMCHyxQifoQLXXlW222ns=;
-        b=Ecamaqv5Aa0cAbQK56xL7xpDsTMWrF2BTeX4UDqEHponKzbhhOylHZgj2B5vAUCNgJ2N8M
-        b7JuGlWCjIZuAGBhrNdT2VHvwxQxnL5ak0jwPDzWQiFfOoB8DplwP4e2QKB1av9UF0ZqoU
-        uuWYJIJnXKVo/vfmvGeWWsbTFNUg/+4=
-Date:   Thu, 17 Nov 2022 11:41:40 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Nikunj A Dadhania <nikunj@amd.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org,
-        mingo@redhat.com, tglx@linutronix.de, dave.hansen@linux.intel.com,
-        seanjc@google.com, pbonzini@redhat.com, thomas.lendacky@amd.com,
-        michael.roth@amd.com, stable@kernel.org
-Subject: Re: [PATCH] x86/sev: Add SEV-SNP guest feature negotiation support
-Message-ID: <Y3YP5FQ6OHzVFKbp@zn.tnic>
-References: <20221117044433.244656-1-nikunj@amd.com>
+        Thu, 17 Nov 2022 05:43:44 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B05E62673;
+        Thu, 17 Nov 2022 02:43:41 -0800 (PST)
+Received: from fraeml715-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NCbxX5ngPz6H6hX;
+        Thu, 17 Nov 2022 18:38:56 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml715-chm.china.huawei.com (10.206.15.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 17 Nov 2022 11:43:39 +0100
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 17 Nov
+ 2022 10:43:38 +0000
+Date:   Thu, 17 Nov 2022 10:43:37 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Ira Weiny <ira.weiny@intel.com>
+CC:     Dan Williams <dan.j.williams@intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Alison Schofield <alison.schofield@intel.com>,
+        "Vishal Verma" <vishal.l.verma@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
+Subject: Re: [PATCH 02/11] cxl/mem: Implement Get Event Records command
+Message-ID: <20221117104337.00001a3f@Huawei.com>
+In-Reply-To: <Y3WEmMlLfPoYG1R5@iweiny-desk3>
+References: <20221110185758.879472-1-ira.weiny@intel.com>
+        <20221110185758.879472-3-ira.weiny@intel.com>
+        <20221116151936.0000662f@Huawei.com>
+        <Y3WEmMlLfPoYG1R5@iweiny-desk3>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221117044433.244656-1-nikunj@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100004.china.huawei.com (7.191.162.219) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 10:14:33AM +0530, Nikunj A Dadhania wrote:
-> SEV_STATUS indicates features that hypervisor has enabled. Guest
+On Wed, 16 Nov 2022 16:47:20 -0800
+Ira Weiny <ira.weiny@intel.com> wrote:
 
-"... which the hypervisor has ..."
-
-> kernel may not support all the features that the hypervisor has
-> enabled. If the hypervisor has enabled an unsupported feature,
-> notify the hypervisor and terminate the boot.
-
-This sentence needs expanding: why is the policy of the guest kernel
-such that it must terminate if the hypervisor has enabled unsupported
-features?
-
-You allude to that in the comments below but this needs to be explained
-here too.
-
-> More details in AMD64 APM[1] Vol 2: 15.34.10 SEV_STATUS MSR
+> On Wed, Nov 16, 2022 at 03:19:36PM +0000, Jonathan Cameron wrote:
+> > On Thu, 10 Nov 2022 10:57:49 -0800
+> > ira.weiny@intel.com wrote:
+> >   
+> > > From: Ira Weiny <ira.weiny@intel.com>
+> > > 
+> > > CXL devices have multiple event logs which can be queried for CXL event
+> > > records.  Devices are required to support the storage of at least one
+> > > event record in each event log type.
+> > > 
+> > > Devices track event log overflow by incrementing a counter and tracking
+> > > the time of the first and last overflow event seen.
+> > > 
+> > > Software queries events via the Get Event Record mailbox command; CXL
+> > > rev 3.0 section 8.2.9.2.2.
+> > > 
+> > > Issue the Get Event Record mailbox command on driver load.  Trace each
+> > > record found with a generic record trace.  Trace any overflow
+> > > conditions.
+> > > 
+> > > The device can return up to 1MB worth of event records per query.  This
+> > > presents complications with allocating a huge buffers to potentially
+> > > capture all the records.  It is not anticipated that these event logs
+> > > will be very deep and reading them does not need to be performant.
+> > > Process only 3 records at a time.  3 records was chosen as it fits
+> > > comfortably on the stack to prevent dynamic allocation while still
+> > > cutting down on extra mailbox messages.
+> > > 
+> > > This patch traces a raw event record only and leaves the specific event
+> > > record types to subsequent patches.
+> > > 
+> > > Macros are created to use for tracing the common CXL Event header
+> > > fields.
+> > > 
+> > > Cc: Steven Rostedt <rostedt@goodmis.org>
+> > > Signed-off-by: Ira Weiny <ira.weiny@intel.com>  
+> > 
+> > Hi Ira,
+> > 
+> > A question inline about whether some of the conditions you are checking
+> > for can actually happen. Otherwise looks good to me.
+> > 
+> > Jonathan
+> >   
 > 
-> [1] https://www.amd.com/system/files/TechDocs/40332_4.05.pdf
+> [snip]
 > 
-> Fixes: cbd3d4f7c4e5 ("x86/sev: Check SEV-SNP features support")
-> CC: Michael Roth <michael.roth@amd.com>
-> CC: Tom Lendacky <thomas.lendacky@amd.com>
-> CC: <stable@kernel.org>
-> Signed-off-by: Nikunj A Dadhania <nikunj@amd.com>
-> ---
->  arch/x86/boot/compressed/sev.c   | 18 +++++++++++++
->  arch/x86/include/asm/msr-index.h | 46 +++++++++++++++++++++++++++++---
->  2 files changed, 61 insertions(+), 3 deletions(-)
+> > > +static void cxl_mem_get_records_log(struct cxl_dev_state *cxlds,
+> > > +				    enum cxl_event_log_type type)
+> > > +{
+> > > +	struct cxl_get_event_payload payload;
+> > > +	u16 pl_nr;
+> > > +
+> > > +	do {
+> > > +		u8 log_type = type;
+> > > +		int rc;
+> > > +
+> > > +		rc = cxl_mbox_send_cmd(cxlds, CXL_MBOX_OP_GET_EVENT_RECORD,
+> > > +				       &log_type, sizeof(log_type),
+> > > +				       &payload, sizeof(payload));
+> > > +		if (rc) {
+> > > +			dev_err(cxlds->dev, "Event log '%s': Failed to query event records : %d",
+> > > +				cxl_event_log_type_str(type), rc);
+> > > +			return;
+> > > +		}
+> > > +
+> > > +		pl_nr = le16_to_cpu(payload.record_count);
+> > > +		if (trace_cxl_generic_event_enabled()) {
+> > > +			u16 nr_rec = min_t(u16, pl_nr, CXL_GET_EVENT_NR_RECORDS);  
+> > 
+> > Either I'm misreading the spec, or it can't be greater than NR_RECORDS.  
+> 
+> Well...  I could have read the spec wrong as well.  But after reading very
+> carefully I think this is actually correct.
+> 
+> > "The number of event records in the Event Records list...."  
+> 
+> Where is this quote from?  I don't see that in the spec.
 
-Btw, how did you test this patch?
+Table 8-50 Event Record Count (the field we are reading here).
 
-In file included from ./arch/x86/include/asm/msr.h:5,
-                 from ./arch/x86/include/asm/processor.h:22,
-                 from ./arch/x86/include/asm/cpufeature.h:5,
-                 from ./arch/x86/include/asm/thread_info.h:53,
-                 from ./include/linux/thread_info.h:60,
-                 from ./arch/x86/include/asm/elf.h:8,
-                 from ./include/linux/elf.h:6,
-                 from arch/x86/boot/compressed/misc.h:24,
-                 from arch/x86/boot/compressed/sev.c:13:
-arch/x86/boot/compressed/sev.c: In function ‘snp_guest_feature_supported’:
-./arch/x86/include/asm/msr-index.h:602:37: error: ‘MSR_AMD64_SNP_BIT13_RESERVED_ENABLED’ undeclared (first use in this function); did you mean ‘MSR_AMD64_SNP_BIT13_RESERVED’?
-  602 |                                     MSR_AMD64_SNP_BIT13_RESERVED_ENABLED |      \
-      |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./arch/x86/include/asm/msr-index.h:602:37: note: in definition of macro ‘SNP_GUEST_SUPPORT_REQUIRED’
-  602 |                                     MSR_AMD64_SNP_BIT13_RESERVED_ENABLED |      \
-      |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./arch/x86/include/asm/msr-index.h:602:37: note: each undeclared identifier is reported only once for each function it appears in
-  602 |                                     MSR_AMD64_SNP_BIT13_RESERVED_ENABLED |      \
-      |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./arch/x86/include/asm/msr-index.h:602:37: note: in definition of macro ‘SNP_GUEST_SUPPORT_REQUIRED’
-  602 |                                     MSR_AMD64_SNP_BIT13_RESERVED_ENABLED |      \
-      |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./arch/x86/include/asm/msr-index.h:604:37: error: ‘MSR_AMD64_SNP_BIT15_RESERVED_ENABLED’ undeclared (first use in this function); did you mean ‘MSR_AMD64_SNP_BIT15_RESERVED’?
-  604 |                                     MSR_AMD64_SNP_BIT15_RESERVED_ENABLED |      \
-      |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./arch/x86/include/asm/msr-index.h:604:37: note: in definition of macro ‘SNP_GUEST_SUPPORT_REQUIRED’
-  604 |                                     MSR_AMD64_SNP_BIT15_RESERVED_ENABLED |      \
-      |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./arch/x86/include/asm/msr-index.h:605:37: error: ‘MSR_AMD64_SNP_MASK_RESERVED_ENABLED’ undeclared (first use in this function); did you mean ‘MSR_AMD64_SNP_MASK_RESERVED’?
-  605 |                                     MSR_AMD64_SNP_MASK_RESERVED_ENABLED)
-      |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./arch/x86/include/asm/msr-index.h:605:37: note: in definition of macro ‘SNP_GUEST_SUPPORT_REQUIRED’
-  605 |                                     MSR_AMD64_SNP_MASK_RESERVED_ENABLED)
-      |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-make[2]: *** [scripts/Makefile.build:250: arch/x86/boot/compressed/sev.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-make[1]: *** [arch/x86/boot/Makefile:116: arch/x86/boot/compressed/vmlinux] Error 2
-make: *** [arch/x86/Makefile:283: bzImage] Error 2
+> 
+> > Event Records being the field inside this payload which is not big enough to
+> > take more than CXL_GET_EVENT_NR_RECORDS and the intro to Get Event Records
+> > refers to the number being restricted by the mailbox output payload provided.  
+> 
+> My understanding is that the output payload is only limited by the Payload Size
+> reported in the Mailbox Capability Register.Payload Size.  (Section 8.2.8.4.3)
+> 
+> This can be up to 1MB.  So the device could fill up to 1MB's worth of Event
+> Records while still being in compliance.  The generic mailbox code in the
+> driver caps the data based on the size passed into cxl_mbox_send_cmd() however,
+> the number of records reported is not changed.
 
-It seems like you're new to this kernel hacking business - please
-remember that it is absolutely mandatory that patches must be properly
-tested before sending them upstream.
+Indeed I had that wrong.  I thought we passed in an output payload length whereas
+we only provide "payload length" which is defined as being the input length in 8.2.8.4.5
 
-> diff --git a/arch/x86/boot/compressed/sev.c b/arch/x86/boot/compressed/sev.c
-> index c93930d5ccbd..847d26e761a6 100644
-> --- a/arch/x86/boot/compressed/sev.c
-> +++ b/arch/x86/boot/compressed/sev.c
-> @@ -270,6 +270,17 @@ static void enforce_vmpl0(void)
->  		sev_es_terminate(SEV_TERM_SET_LINUX, GHCB_TERM_NOT_VMPL0);
->  }
->  
-> +static bool snp_guest_feature_supported(void)
-> +{
-> +	u64 guest_support = SNP_GUEST_SUPPORT_REQUIRED & ~SNP_GUEST_SUPPORT_AVAILABLE;
-> +
-> +	/*
-> +	 * Return true when SEV features that hypervisor has enabled are
-> +	 * also supported by SNP guest kernel
-> +	 */
+> 
+> > 
+> > I'm in favor of defense against broken hardware, but don't paper over any
+> > such error - scream about it.  
+> 
+> I don't think this is out of spec unless the device is trying to write more
+> than 1MB and I think the core mailbox code will scream about that.
+> 
+> >   
+> > > +			int i;
+> > > +
+> > > +			for (i = 0; i < nr_rec; i++)
+> > > +				trace_cxl_generic_event(dev_name(cxlds->dev),
+> > > +							type,
+> > > +							&payload.record[i]);
+> > > +		}
+> > > +
+> > > +		if (trace_cxl_overflow_enabled() &&
+> > > +		    (payload.flags & CXL_GET_EVENT_FLAG_OVERFLOW))
+> > > +			trace_cxl_overflow(dev_name(cxlds->dev), type, &payload);
+> > > +
+> > > +	} while (pl_nr > CXL_GET_EVENT_NR_RECORDS ||  
+> > 
+> > Isn't pl_nr > CXL_GET_EVENT_NR_RECORDS a hardware bug? It's the number in returned
+> > payload not the total number.  
+> 
+> I don't think so.  The only value passed to the device is the _input_ payload
+> size.  The output payload size is not passed to the device and is not included
+> in the Get Event Records Input Payload.  (Table 8-49)
+> 
+> So my previous code was wrong.  Here is an example I think which is within the
+> spec but would result in the more records flag not being set.
+> 
+> 	Device log depth == 10
+> 	nr log entries == 7
+> 	nr log entries in 1MB ~= (1M - hdr size) / 128 ~= 8000
+> 
+> Device sets Output Payload.Event Record Count == 7 (which is < 8000).  Common
+> mailbox code truncates that to 3.  More Event Records == 0 because it sent all
+> 7 that it had.
+> 
+> This code will clear 3 and read again 2 more times.
+> 
+> Am I reading that wrong?
 
-That comment is kinda obvious.
+I think this is still wrong, but for a different reason. :)
+If we don't clear the records and more records is set, that means it didn't
+fit in the mailbox payload (potentially 1MB)  then the next read
+will return the next set of records from there.
 
-> +	return !(sev_status & guest_support);
-> +}
-> +
->  void sev_enable(struct boot_params *bp)
->  {
->  	unsigned int eax, ebx, ecx, edx;
-> @@ -335,6 +346,13 @@ void sev_enable(struct boot_params *bp)
->  		if (!(get_hv_features() & GHCB_HV_FT_SNP))
->  			sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SNP_UNSUPPORTED);
->  
-> +		/*
-> +		 * Terminate the boot if hypervisor has enabled a feature
-> +		 * unsupported by the guest.
-> +		 */
-> +		if (!snp_guest_feature_supported())
-> +			sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SNP_UNSUPPORTED);
-> +
->  		enforce_vmpl0();
->  	}
->  
-> diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-> index 4a2af82553e4..d33691b4cb24 100644
-> --- a/arch/x86/include/asm/msr-index.h
-> +++ b/arch/x86/include/asm/msr-index.h
-> @@ -567,9 +567,49 @@
->  #define MSR_AMD64_SEV_ENABLED_BIT	0
->  #define MSR_AMD64_SEV_ES_ENABLED_BIT	1
->  #define MSR_AMD64_SEV_SNP_ENABLED_BIT	2
-> -#define MSR_AMD64_SEV_ENABLED		BIT_ULL(MSR_AMD64_SEV_ENABLED_BIT)
-> -#define MSR_AMD64_SEV_ES_ENABLED	BIT_ULL(MSR_AMD64_SEV_ES_ENABLED_BIT)
-> -#define MSR_AMD64_SEV_SNP_ENABLED	BIT_ULL(MSR_AMD64_SEV_SNP_ENABLED_BIT)
-> +#define MSR_AMD64_SEV_ENABLED				BIT_ULL(MSR_AMD64_SEV_ENABLED_BIT)
-> +#define MSR_AMD64_SEV_ES_ENABLED			BIT_ULL(MSR_AMD64_SEV_ES_ENABLED_BIT)
-> +#define MSR_AMD64_SEV_SNP_ENABLED			BIT_ULL(MSR_AMD64_SEV_SNP_ENABLED_BIT)
-> +#define MSR_AMD64_SNP_VTOM_ENABLED			BIT_ULL(3)
-> +#define MSR_AMD64_SNP_REFLECT_VC_ENABLED		BIT_ULL(4)
-> +#define MSR_AMD64_SNP_RESTRICTED_INJ_ENABLED		BIT_ULL(5)
-> +#define MSR_AMD64_SNP_ALT_INJ_ENABLED			BIT_ULL(6)
-> +#define MSR_AMD64_SNP_DEBUG_SWAP_ENABLED		BIT_ULL(7)
-> +#define MSR_AMD64_SNP_PREVENT_HOST_IBS_ENABLED		BIT_ULL(8)
-> +#define MSR_AMD64_SNP_BTB_ISOLATION_ENABLED		BIT_ULL(9)
-> +#define MSR_AMD64_SNP_VMPL_SSS_ENABLED			BIT_ULL(10)
-> +#define MSR_AMD64_SNP_SECURE_TSC_ENABLED		BIT_ULL(11)
-> +#define MSR_AMD64_SNP_VMGEXIT_PARAM_ENABLED		BIT_ULL(12)
-> +#define MSR_AMD64_SNP_IBS_VIRT_ENABLED			BIT_ULL(14)
-> +#define MSR_AMD64_SNP_VMSA_REG_PROTECTION_ENABLED	BIT_ULL(16)
-> +#define MSR_AMD64_SNP_SMT_PROTECTION_ENABLED		BIT_ULL(17)
-> +/* Prevent hypervisor to enable undefined feature bits */
-> +#define MSR_AMD64_SNP_BIT13_RESERVED			BIT_ULL(13)
-> +#define MSR_AMD64_SNP_BIT15_RESERVED			BIT_ULL(15)
-> +#define MSR_AMD64_SNP_MASK_RESERVED			GENMASK_ULL(63, 18)
+Taking this patch only, let's say the mailbox takes 4 records.
+Read 1: Records 0, 1, 2, 3 More set.
+   We handle 0, 1, 2
+Read 2: Records 4, 5, 6 More not set.
+   We handle 4, 5, 6
 
-So I don't like this:
+Record 3 is never handled.
 
-if you're going to enforce those bits, shouldn't that enforcement happen
-after *all* those above have been added to the kernel first?
+If we add in clearing as happens later in the series, the current
+assumption is that if we clear some records a subsequent read will
+start again.  I'm not sure that is true. If it is spec reference needed.
 
-Because right now it will be dead code.
+So assumption is
+Read 1: Records 0, 1, 2, 3 More set
+  Clear 0, 1, 2
+Read 2: Records 3, 4, 5, 6
+  Clear 3, 4, 5 More not set, but catch it with the condition above.
+Read 3: 6 only
+  Clear 6
 
-So what's the actual purpose of this patch?
+However, I think a valid implementation could do the following
+(imagine a ring buffer with a pointer to the 'next' record to read out and
+ each record has a 'valid' flag to deal with corner cases around
+ sequences such as read log once, start reading again and some
+ clears occur using handles obtained from first read - not that
+ case isn't ruled out by the spec as far as I can see).
 
-> +/*
-> + * Features that needs enlightened guest and cannot be supported with
-> + * unmodified SNP guest kernel. This is subset of SEV_FEATURES.
-> + */
-> +#define SNP_GUEST_SUPPORT_REQUIRED (MSR_AMD64_SNP_VTOM_ENABLED |		\
-> +				    MSR_AMD64_SNP_REFLECT_VC_ENABLED |		\
-> +				    MSR_AMD64_SNP_RESTRICTED_INJ_ENABLED |	\
-> +				    MSR_AMD64_SNP_ALT_INJ_ENABLED |		\
-> +				    MSR_AMD64_SNP_VMPL_SSS_ENABLED |		\
-> +				    MSR_AMD64_SNP_SECURE_TSC_ENABLED |		\
-> +				    MSR_AMD64_SNP_VMGEXIT_PARAM_ENABLED |	\
-> +				    MSR_AMD64_SNP_BIT13_RESERVED_ENABLED |	\
-> +				    MSR_AMD64_SNP_VMSA_REG_PROTECTION_ENABLED | \
-> +				    MSR_AMD64_SNP_BIT15_RESERVED_ENABLED |	\
-> +				    MSR_AMD64_SNP_MASK_RESERVED_ENABLED)
-> +/*
-> + * Subset of SNP_GUEST_SUPPORT_REQUIRED, advertising the features that are
-> + * supported in this enlightened guest kernel. As and when new features are
-> + * added in the guest kernel, corresponding bit for this feature needs to be
-> + * added as part of SNP_GUEST_SUPPORT_AVAILABLE.
-> + */
-> +#define SNP_GUEST_SUPPORT_AVAILABLE (0)
+Read 1: Records 0, 1, 2, 3 More set.  'next' pointer points to record 4.
+  Clear 0, 1, 2
+Read 2: Records 4, 5, 6 More not set. 'next' pointer points to record 7.
+  Clear 4, 5, 6
 
-The reserved bits 13 and 15 trivially belong here already no?
+Skipping record 3.
 
-And I don't like that AVAILABLE thing either. I think this all should be
-concentrated in this single function snp_guest_feature_supported() - it
-should be called
+So I think we have to absorb the full mailbox payload each time to guarantee
+we don't skip events or process them out of order (which is what would happen
+if we relied on a retry loop - we aren't allowed to clear them out of
+order anyway 8.2.9.2.3 "Events shall be cleared in temporal order. The device
+shall verify the event record handles specified in the input payload are in
+temporal order. ... "). 
+Obviously that temporal order thing is only relevant if we get my second
+example occurring on real hardware.  I think the spec is vague enough
+to allow that implementation.  Would have been easy to specify this originally
+but it probably won't go in as errata so we need to cope with all the
+flexibility that is present.
 
-snp_guest_supports_all_required_features()
+What fun and oh for a parameter to control how many records are returned!
 
-or so, so that the name says what it does and there you can pick those
-apart and say yes or no at the end.
+Jonathan
 
-I'm also not sure you need each single bit defined separately but rather
-test a mask instead first.
 
-Also, having "_ENABLED" at the end of each bit name is too much - the
-name is enough.
+> 
+> >   
+> > > +		 payload.flags & CXL_GET_EVENT_FLAG_MORE_RECORDS);
+> > > +}  
+> > 
 
--- 
-Regards/Gruss,
-    Boris.
+> 
 
-https://people.kernel.org/tglx/notes-about-netiquette
