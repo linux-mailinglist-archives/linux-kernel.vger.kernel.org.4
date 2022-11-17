@@ -2,78 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D54F62D1A0
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 04:28:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7096362D1A3
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 04:28:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233199AbiKQD2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 22:28:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49784 "EHLO
+        id S234345AbiKQD2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 22:28:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230103AbiKQD2D (ORCPT
+        with ESMTP id S234071AbiKQD2G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 22:28:03 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 224002FC25
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 19:27:59 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NCQNF4vFcz8RTZR;
-        Thu, 17 Nov 2022 11:27:57 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl2.zte.com.cn with SMTP id 2AH3RSOc053408;
-        Thu, 17 Nov 2022 11:27:46 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Thu, 17 Nov 2022 11:27:47 +0800 (CST)
-Date:   Thu, 17 Nov 2022 11:27:47 +0800 (CST)
-X-Zmail-TransId: 2af96375aa3352d13a9c
-X-Mailer: Zmail v1.0
-Message-ID: <202211171127475450476@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <srinivas.kandagatla@linaro.org>
-Cc:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIHNsaW1idXM6IGNvcmU6IFVzZSBkZXZpY2VfbWF0Y2hfb2Zfbm9kZSgp?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 2AH3RSOc053408
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 6375AA3D.002 by FangMail milter!
-X-FangMail-Envelope: 1668655677/4NCQNF4vFcz8RTZR/6375AA3D.002/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 6375AA3D.002/4NCQNF4vFcz8RTZR
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 16 Nov 2022 22:28:06 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 92F6BCE12;
+        Wed, 16 Nov 2022 19:28:04 -0800 (PST)
+Received: from jinankjain-dranzer.zrrkmle5drku1h0apvxbr2u2ee.ix.internal.cloudapp.net (unknown [20.188.121.5])
+        by linux.microsoft.com (Postfix) with ESMTPSA id E691920B6C40;
+        Wed, 16 Nov 2022 19:27:59 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E691920B6C40
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1668655684;
+        bh=CGuqdcgFFREA52DoeCkrhzpZV/LHr24q72S97S5r2ao=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=lE8YA9UUcesT5jIf5DXlnBwKzJsesyZPcWa7N/Q2gsRurL33Ib+x4x0rcWQYCisMP
+         VOmrvq9uMnfUuLV1yhL6Iriju04AaSUNd4xofudFAtmNdVkHVjgdxXw5+zdWpQoqwH
+         t6oj3P1t2h23rSZl8ou76samJfuTA8PoQrfbw0i4=
+From:   Jinank Jain <jinankjain@linux.microsoft.com>
+To:     jinankjain@microsoft.com
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, arnd@arndb.de, peterz@infradead.org,
+        jpoimboe@kernel.org, jinankjain@linux.microsoft.com,
+        seanjc@google.com, kirill.shutemov@linux.intel.com,
+        ak@linux.intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, anrayabh@linux.microsoft.com,
+        mikelley@microsoft.com
+Subject: [PATCH v4 0/5]  Add support running nested Microsoft Hypervisor
+Date:   Thu, 17 Nov 2022 03:27:53 +0000
+Message-Id: <cover.1668618583.git.jinankjain@linux.microsoft.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1667406350.git.jinankjain@linux.microsoft.com>
+References: <cover.1667406350.git.jinankjain@linux.microsoft.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+This patch series plans to add support for running nested Microsoft
+Hypervisor. In case of nested Microsoft Hypervisor there are few
+privileged hypercalls which need to go L0 Hypervisor instead of L1
+Hypervisor. This patches series basically identifies such hypercalls and
+replace them with nested hypercalls.
 
-Replace the open-code with device_match_of_node().
+Jinank Jain (5):
+  x86/hyperv: Add support for detecting nested hypervisor
+  Drivers: hv: Setup synic registers in case of nested root partition
+  x86/hyperv: Add an interface to do nested hypercalls
+  Drivers: hv: Enable vmbus driver for nested root partition
+  x86/hyperv: Change interrupt vector for nested root partition
 
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/slimbus/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+[v4]
+- Fix ARM64 compilation
 
-diff --git a/drivers/slimbus/core.c b/drivers/slimbus/core.c
-index 219483b79c09..9cafd33e7ddb 100644
---- a/drivers/slimbus/core.c
-+++ b/drivers/slimbus/core.c
-@@ -389,7 +389,7 @@ static int of_slim_match_dev(struct device *dev, void *data)
- 	struct device_node *np = data;
- 	struct slim_device *sbdev = to_slim_device(dev);
+ arch/arm64/hyperv/mshyperv.c       |  6 +++
+ arch/x86/include/asm/hyperv-tlfs.h | 17 ++++++-
+ arch/x86/include/asm/idtentry.h    |  2 +
+ arch/x86/include/asm/irq_vectors.h |  6 +++
+ arch/x86/include/asm/mshyperv.h    | 68 ++++++++++++++++------------
+ arch/x86/kernel/cpu/mshyperv.c     | 71 ++++++++++++++++++++++++++++++
+ arch/x86/kernel/idt.c              |  9 ++++
+ drivers/hv/hv.c                    | 18 +++++---
+ drivers/hv/hv_common.c             |  7 ++-
+ drivers/hv/vmbus_drv.c             |  5 ++-
+ include/asm-generic/hyperv-tlfs.h  |  1 +
+ include/asm-generic/mshyperv.h     |  1 +
+ 12 files changed, 173 insertions(+), 38 deletions(-)
 
--	return (sbdev->dev.of_node == np);
-+	return device_match_of_node(&sbdev->dev, np);
- }
-
- static struct slim_device *of_find_slim_device(struct slim_controller *ctrl,
 -- 
 2.25.1
+
