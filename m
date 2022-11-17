@@ -2,99 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB1F662D24E
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 05:28:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E71362D259
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 05:33:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238955AbiKQE2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 23:28:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49250 "EHLO
+        id S234704AbiKQEdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 23:33:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233477AbiKQE2b (ORCPT
+        with ESMTP id S233363AbiKQEc4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 23:28:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4041D6464;
-        Wed, 16 Nov 2022 20:28:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D46D61FF8;
-        Thu, 17 Nov 2022 04:28:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 369D6C433D6;
-        Thu, 17 Nov 2022 04:28:23 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Huacai Chen <chenhuacai@loongson.cn>, stable@vger.kernel.org,
-        Peter Xu <peterx@redhat.com>
-Subject: [PATCH 04/47] LoongArch: Set _PAGE_DIRTY only if _PAGE_WRITE is set in {pmd,pte}_mkdirty()
-Date:   Thu, 17 Nov 2022 12:25:32 +0800
-Message-Id: <20221117042532.4064448-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.31.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 16 Nov 2022 23:32:56 -0500
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C9B43FB92
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 20:32:55 -0800 (PST)
+Received: by mail-pg1-x54a.google.com with SMTP id q194-20020a632acb000000b00476fda6a1d2so590897pgq.15
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 20:32:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=aPfz7WPanVmO6P7mkMngEyHk/rMaAEiwNpFse5O+tqM=;
+        b=HdydIX0CXLjX9PAqV1oTIzt4lJrdlYjImWI83DE6XPrdkzdC72019HweIQ+6F8Fi80
+         8cYlXC6SzbRByJB4mewKXX/Tf7yItRXOhReUDd2eGOWREo2YpjLhXhUjQpL8/FN1eJJB
+         /HymzCDDV1iOnw7d2RM/TexsCCVXilvQzqlFMo0XxB+pvgT0uBkEBMMjmvVfuV3jCzVz
+         Xj4A7tpJeGGiZKbmhWPydEeJiqDHbTkMT5IFTAw+5UcEmunZsUvXri1Y88kzoNqMvb3K
+         1/lwFMwX3E1G//+M56+9A3BIeS7cmsadgatjb7bTD6O9uh+FtSfAxmq6baRnJjCFL+vr
+         pVgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aPfz7WPanVmO6P7mkMngEyHk/rMaAEiwNpFse5O+tqM=;
+        b=Es4Nt2ZFG0TSYtukmJaOSmDoz7dFzAw9PnFndEEdKE7laYYW2gY9Shy1ZSBjAf/nF9
+         Tmd2UEfXrrzXJLZP6QXfyye3c/Q9qnYQWIlPhginMwejaoJ08OGU1+cFe+XpVPqauVsC
+         4CqbqXDVIzfMnwOdNwIgfyARDNOxx8l1KKQzVIKJkjLOukxYqcOkua7GaUQ9zef0JpRS
+         C2WjKFsS6RbqXP3FuSB6zGodBcJISL1JBbrC8oILGhHCnot2Lv71505gc3qCcZT4JQ19
+         xwp2fGabxgehds0xrwYrh9GXXh/16Kus2VqkpFtEj67iCT5HS2U131tNZBOiA7zV6KMc
+         5BdA==
+X-Gm-Message-State: ANoB5plAN/K6A8DxtZ1E7cO9TUBBlG4XHGHst4fdKD5fjZW8Ra8XnwKR
+        r/0zzKs4M8qzDcXE/a0puBA4iE6ooXQIhY6E
+X-Google-Smtp-Source: AA0mqf5vh871tskpgsVs2JR/F2/2RLJ8ASmrrXij8/N5i5PbB9GmDPDU7IO8m0LjuspVCKlF+DlO0FLjUvJ9oBdQ
+X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
+ (user=yosryahmed job=sendgmr) by 2002:a62:542:0:b0:56c:45db:4481 with SMTP id
+ 63-20020a620542000000b0056c45db4481mr1167664pff.86.1668659575076; Wed, 16 Nov
+ 2022 20:32:55 -0800 (PST)
+Date:   Thu, 17 Nov 2022 04:32:47 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
+Message-ID: <20221117043247.133294-1-yosryahmed@google.com>
+Subject: [PATCH] proc/meminfo: fix spacing in SecPageTables
+From:   Yosry Ahmed <yosryahmed@google.com>
+To:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, Yosry Ahmed <yosryahmed@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now {pmd,pte}_mkdirty() set _PAGE_DIRTY bit unconditionally, this causes
-random segmentation fault after commit 0ccf7f168e17bb7e ("mm/thp: carry
-over dirty bit when thp splits on pmd").
+SecPageTables has a tab after it instead of a space, this can break
+fragile parsers that depend on spaces after the stat names.
 
-The reason is: when fork(), parent process use pmd_wrprotect() to clear
-huge page's _PAGE_WRITE and _PAGE_DIRTY (for COW); then pte_mkdirty() set
-_PAGE_DIRTY as well as _PAGE_MODIFIED while splitting dirty huge pages;
-once _PAGE_DIRTY is set, there will be no tlb modify exception so the COW
-machanism fails; and at last memory corruption occurred between parent
-and child processes.
-
-So, we should set _PAGE_DIRTY only when _PAGE_WRITE is set in {pmd,pte}_
-mkdirty().
-
-Cc: stable@vger.kernel.org
-Cc: Peter Xu <peterx@redhat.com>
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+Fixes: ebc97a ("mm: add NR_SECONDARY_PAGETABLE to count secondary page table uses.")
+Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
 ---
-Note: CC sparc maillist because they have similar issues.
- 
- arch/loongarch/include/asm/pgtable.h | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/arch/loongarch/include/asm/pgtable.h b/arch/loongarch/include/asm/pgtable.h
-index 946704bee599..debbe116f105 100644
---- a/arch/loongarch/include/asm/pgtable.h
-+++ b/arch/loongarch/include/asm/pgtable.h
-@@ -349,7 +349,9 @@ static inline pte_t pte_mkclean(pte_t pte)
+The commit this fixes is in 6.1, so I hope this can also land in 6.1.
+
+---
+ fs/proc/meminfo.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fs/proc/meminfo.c b/fs/proc/meminfo.c
+index 5101131e6047..440960110a42 100644
+--- a/fs/proc/meminfo.c
++++ b/fs/proc/meminfo.c
+@@ -115,7 +115,7 @@ static int meminfo_proc_show(struct seq_file *m, void *v)
+ #endif
+ 	show_val_kb(m, "PageTables:     ",
+ 		    global_node_page_state(NR_PAGETABLE));
+-	show_val_kb(m, "SecPageTables:	",
++	show_val_kb(m, "SecPageTables:  ",
+ 		    global_node_page_state(NR_SECONDARY_PAGETABLE));
  
- static inline pte_t pte_mkdirty(pte_t pte)
- {
--	pte_val(pte) |= (_PAGE_DIRTY | _PAGE_MODIFIED);
-+	pte_val(pte) |= _PAGE_MODIFIED;
-+	if (pte_val(pte) & _PAGE_WRITE)
-+		pte_val(pte) |= _PAGE_DIRTY;
- 	return pte;
- }
- 
-@@ -478,7 +480,9 @@ static inline pmd_t pmd_mkclean(pmd_t pmd)
- 
- static inline pmd_t pmd_mkdirty(pmd_t pmd)
- {
--	pmd_val(pmd) |= (_PAGE_DIRTY | _PAGE_MODIFIED);
-+	pmd_val(pmd) |= _PAGE_MODIFIED;
-+	if (pmd_val(pmd) & _PAGE_WRITE)
-+		pmd_val(pmd) |= _PAGE_DIRTY;
- 	return pmd;
- }
- 
+ 	show_val_kb(m, "NFS_Unstable:   ", 0);
 -- 
-2.31.1
+2.38.1.431.g37b22c650d-goog
 
