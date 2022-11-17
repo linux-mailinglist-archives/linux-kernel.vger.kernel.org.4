@@ -2,103 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F75F62E61F
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 21:48:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EBBD62E621
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 21:50:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234786AbiKQUsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 15:48:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42966 "EHLO
+        id S235029AbiKQUuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 15:50:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232097AbiKQUsW (ORCPT
+        with ESMTP id S234954AbiKQUuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 15:48:22 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6E4183B9
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 12:48:21 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id v124-20020a1cac82000000b003cf7a4ea2caso6006953wme.5
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 12:48:21 -0800 (PST)
+        Thu, 17 Nov 2022 15:50:11 -0500
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E10CC2727
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 12:50:09 -0800 (PST)
+Received: by mail-yb1-xb2e.google.com with SMTP id 7so3315514ybp.13
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 12:50:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=fVtqa/raTpsVZjRNmkq6diQF5X+NEj1gFORFi8rPMHtY+3DnP+fGdl2V3C5BNMzrVy
-         onexGotc8OHJA+AgBBJ2hA7gRFSicXrkP8EOcZyEXV6+TGqvEur/UI04l5OsP7HlHGO4
-         wDOKXOkq8LZ9tCiF5CyljBrXUWfqdV4fSJLckpr4mfJ1+ScrKqFe2OWQfZcFqaRNM4To
-         mPUeGS1iZDm73t4BHsApPFxccWzn6eLqITM5T4a0Xeu13nZLPD42tGPaijALkMwmzhR+
-         e3MTw3EXGHDKfW4TMQd7/uieSJS4dUwj/9CvLYdg7Q8qdhuCQz5hDi02QD6i6xjDtsAs
-         6jQQ==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=niF2TfaqiGWEWf+fbzMXTHzb6tNy2XERgzLkPBLvhBc=;
+        b=d8gqlCMpqbzH9SXu7HdP1XbTINWPqtkjFdpiOVsCHE2abnDL9MzbcWl7Tp6sEhm22R
+         w05RMdqI8/v8B6qaxa5bAwAIJiE0O24PTqf08l0j8yDdHWWij+cn8zdfQXajCgfkbgpW
+         kl1pCbLY2BYviFddRE+cxfP/UFoFhGj8G4ZiYM2bj1K53H7S+mGS07hgKgusAuA1Qz4c
+         K0wX1SnlPRyO3Lg4ElU/WsDojNMQzuhqzIydhR0pRhd6K1Qu9ghdJNSHeDhr93qBH0Vk
+         qE1QUqkEAVdkNTBWGJXlPYQqcYMq3JEOCkRpDi2JGdx7u0vywJHqES649lpWgfKV8zr3
+         YEeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=iU2o2jIkQMurYz0no4ZWvFWkY92UiJM4j50CD7Floa8NDpXJOeWsu9IQuPiQ3dbLXz
-         7unZhjzsep4nHYyzMmhabQiaoWEcNh10eeYZNbNyoG6YDe/EaTMXYhXhQRUXTvgShRg8
-         bh2Qk2Aj8CensDzxCMnSdCQ93cGi3BAIvO4kKzrG6HQdYJOrHMy3cGSKmq9I5rYt25DZ
-         9JNGy1e/Rg/KDcnbTWyEz2beJvffzI8xeP/rdTDrKjI9QuA/TOsI1DHR1V9wGglf5ZJS
-         UornhYFgle4WF/nOYzKXxfU9lrsN+CM9/BIH0pIhMM1gsnwkEUKt2DeuAkj0RlgL7OQH
-         eVKw==
-X-Gm-Message-State: ANoB5pnO+cKrqH/A2lyYjNTZpQc2amnlpgccGSxqEEJhQerbH2s8qKJQ
-        xSEGLwZXxpoE7TaM0MVuw6jCNFw/qVE8GO6XCeU=
-X-Google-Smtp-Source: AA0mqf58Sj/N0Xu4lU3PPTxZmrbxIA8A7fNvbXvSRPd/731AZI8kiyJI9LW7/uvc69xC6US0lDh9TYXs86mCpuTgIis=
-X-Received: by 2002:a7b:c2aa:0:b0:3cf:5d41:bea1 with SMTP id
- c10-20020a7bc2aa000000b003cf5d41bea1mr2966784wmk.118.1668718100069; Thu, 17
- Nov 2022 12:48:20 -0800 (PST)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=niF2TfaqiGWEWf+fbzMXTHzb6tNy2XERgzLkPBLvhBc=;
+        b=rKbWxD72R7C31h28NygLvDBHuhrTmqguVkoboVS1Ualk9XrfVrkICvUkRGMd00xSYR
+         rqPd1Q+70rEsR60BEODBNkjdqunVjirgvdByNnonGD9AZBIyQOqJ+aLlFqw46ov0hPKW
+         DJp4gNqs34YnBCiF+vM97o0fXdJrJ4CBYM50Mr3MpVm9pvlVnb1yn+Z3sPL3SLGrae47
+         ZdeTwHntFHXat69pTaC43Hutl3K6/Qx0RQwcoXLxoauaNMLO9szmPO9oBtC4pj1muDma
+         p/9+XpmYo9GtQ5KNoVh6bWTYLB8oCuXR1L91/AuN2hCNSfeHVkHB9GM/Y07pJLGwdwJf
+         AAQA==
+X-Gm-Message-State: ANoB5pkp/kPY/Q+JhR/JJbdUodn2SDoT8FiapPPBvLkLUtFjMCqU2dGd
+        8cjr9J4e/lBsBKqr/rnUkeTqG+G/naKU6B5Ini6ROQ==
+X-Google-Smtp-Source: AA0mqf7zka4IouqmmsdERQL2C8NaNXIo67ho2D/5Z6cCUq0+wkfec9WZvlCC2Tgqul2V23BCPvtxNZNsDVlc9MeHF7E=
+X-Received: by 2002:a25:ce83:0:b0:6dd:edba:c7cb with SMTP id
+ x125-20020a25ce83000000b006ddedbac7cbmr3628727ybe.507.1668718209114; Thu, 17
+ Nov 2022 12:50:09 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:6020:9098:b0:22a:cc45:1a95 with HTTP; Thu, 17 Nov 2022
- 12:48:19 -0800 (PST)
-Reply-To: dravasmith27@gmail.com
-From:   Dr Ava Smith <harikunda7@gmail.com>
-Date:   Thu, 17 Nov 2022 12:48:19 -0800
-Message-ID: <CALNCe2Q1kiW3QX9GLcDor3AuQvaWFSvWUPjvq3pd1sPSekSvwA@mail.gmail.com>
-Subject: GREETINGS FROM DR AVA SMITH
-To:     undisclosed-recipients:;
+References: <20221116185500.40431-1-nfrayer@baylibre.com> <864juypoax.wl-maz@kernel.org>
+In-Reply-To: <864juypoax.wl-maz@kernel.org>
+From:   Nicolas Frayer <nfrayer@baylibre.com>
+Date:   Thu, 17 Nov 2022 21:49:58 +0100
+Message-ID: <CANyCTtTfhhORL32EweGN2Gtx9=kpA+PAxTUKE84C5sGmjTfPyw@mail.gmail.com>
+Subject: Re: [PATCH 0/2] irqchip: Kconfig: Add module support for TI inta/intr
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     tglx@linutronix.de, linux-kernel@vger.kernel.org,
+        khilman@baylibre.com, glaroque@baylibre.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,UNDISC_FREEM
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [dravasmith27[at]gmail.com]
-        * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:32f listed in]
-        [list.dnswl.org]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [harikunda7[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [harikunda7[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello Dear,
-how are you today?hope you are fine
-My name is Dr Ava Smith ,Am an English and French nationalities.
-I will give you pictures and more details about me as soon as i hear from you
+Le mer. 16 nov. 2022 =C3=A0 22:44, Marc Zyngier <maz@kernel.org> a =C3=A9cr=
+it :
+>
+> On Wed, 16 Nov 2022 18:54:58 +0000,
+> Nicolas Frayer <nfrayer@baylibre.com> wrote:
+> >
+> > Added module support for TI interrupt aggregator and interrupt router
+> >
+> > Nicolas Frayer (2):
+> >   irqchip: Kconfig: module build support for the TI interrupt router
+> >     driver
+> >   irqchip: Kconfig: Added module build support for the TI interrupt
+> >     aggregator
+> >
+> >  arch/arm64/Kconfig.platforms |  2 --
+> >  drivers/irqchip/Kconfig      | 12 +++++++-----
+> >  2 files changed, 7 insertions(+), 7 deletions(-)
+>
+> How did you test that it doesn't introduce any regression due to
+> implicit ordering requirements that are now voided?
+Hi Marc,
+I tested on a TI AM62x SK board.
+By default the drivers are set to ARCH_K3 (built-in).
+>
+> Please Cc the TI folks so that they can at least check this.
+I'll resend the series with more description and CC Ti engineers.
 Thanks
-Ava
+>
+>         M.
+>
+> --
+> Without deviation from the norm, progress is not possible.
