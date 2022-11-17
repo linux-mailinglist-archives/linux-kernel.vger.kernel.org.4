@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EEA262DAE2
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 13:30:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DB4662DAE1
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 13:30:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239757AbiKQMaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 07:30:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52610 "EHLO
+        id S240163AbiKQMaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 07:30:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240124AbiKQM3F (ORCPT
+        with ESMTP id S234562AbiKQM3G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 07:29:05 -0500
+        Thu, 17 Nov 2022 07:29:06 -0500
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B984725D2
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA882725D5
         for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 04:28:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1668688131; x=1700224131;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=yiguIHAQUyFA/n7ZpCGUHKImucX21MgsisSqebhnJ/k=;
-  b=erRHWQBSTGrub6kMrBne1LI3JnphPK6bK8ONleM0YkwbIHVxuhWN4gy5
-   qmYQK7a28FqesUenSCt1mh4QLHE3579Hm3ET9yIk9VPVbQJSekjVXM32a
-   Er+/xcMm1KRbjAqL95RLOrU8XmAQTD0S5ILNdhIH4PqkZZJlj5BNxaEhH
-   19tPN7gYAPqgWw/fAJ/fqGeaI7RbMwq1n/Tj5bMh/68jP20Le4/lwT2oM
-   VVpcFxdxuGPxfZ2VLacKJN3+wJq4S6KMzvdIgsUGBQuwLXJGdfmdSb2vg
-   D1Hi9YleXPCw0KcJM3G3fRSl3z+kqLWjFfZlK53tUXooMkLYgUJ3wlGcW
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="296199875"
+  bh=LS4csCspXL+rIOXLV2JQBdKyVNCUcCeKYclRfWXseug=;
+  b=bUxte9pkKdrlx6CiJv/6NNWRcSFPWXd1KE9M1L2RAfX5QmN2LtdQN5zR
+   ioIDGL0trAivSx2dqiKDWGH2VRQJiOL2KFkrGkH0GRL0824eVSxPv5u4S
+   nnrcfaYWq4Sj5e7fomSHaE95RdkhuuAsifKtKP4KqVz8I1euWNiwbNzeX
+   HQDJm6jh7zb1QR1uR/XyKLZWlGA2nhGOxK6XvmyhPHAfls2QBfmdXPZls
+   fQHRcduhjdYm0s6n+zLqsXjf0ol6UmuLR0K2CXOzaHBzVqc7DGSTsjAnQ
+   m4gF8VuGEOT7udGpdjq7L5XSHcrAF5WTREwJxzeaCH2O48Jh/Rou5BSCA
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="296199876"
 X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
-   d="scan'208";a="296199875"
+   d="scan'208";a="296199876"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
   by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 04:28:47 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="590604559"
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="590604560"
 X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
-   d="scan'208";a="590604559"
+   d="scan'208";a="590604560"
 Received: from jfdev013vml03.jf.intel.com ([10.23.26.52])
   by orsmga003.jf.intel.com with ESMTP; 17 Nov 2022 04:28:47 -0800
 From:   alexander.antonov@linux.intel.com
 To:     peterz@infradead.org, linux-kernel@vger.kernel.org
 Cc:     kan.liang@linux.intel.com, alexey.v.bayduraev@linux.intel.com,
         alexander.antonov@linux.intel.com
-Subject: [PATCH 09/11] perf/x86/intel/uncore: Enable UPI topology discovery for Sapphire Rapids
-Date:   Thu, 17 Nov 2022 12:28:31 +0000
-Message-Id: <20221117122833.3103580-10-alexander.antonov@linux.intel.com>
+Subject: [PATCH 10/11] perf/x86/intel/uncore: Update sysfs-devices-mapping file
+Date:   Thu, 17 Nov 2022 12:28:32 +0000
+Message-Id: <20221117122833.3103580-11-alexander.antonov@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221117122833.3103580-1-alexander.antonov@linux.intel.com>
 References: <20221117122833.3103580-1-alexander.antonov@linux.intel.com>
@@ -62,87 +62,60 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Alexander Antonov <alexander.antonov@linux.intel.com>
 
-UPI topology discovery on SPR is same as in ICX but UBOX device has
-different Device ID 0x3250.
-
-This patch enables /sys/devices/uncore_upi_*/die* attributes on SPR.
+Add description for /sys/devices/uncore_upi_*/die* attributes to
+sysfs-devices-mapping.
 
 Signed-off-by: Alexander Antonov <alexander.antonov@linux.intel.com>
 Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
 ---
- arch/x86/events/intel/uncore_snbep.c | 43 +++++++++++++++++++++++++++-
- 1 file changed, 42 insertions(+), 1 deletion(-)
+ .../ABI/testing/sysfs-devices-mapping         | 30 ++++++++++++++++++-
+ 1 file changed, 29 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/events/intel/uncore_snbep.c b/arch/x86/events/intel/uncore_snbep.c
-index d45f5843444d..4c2d5b5ea445 100644
---- a/arch/x86/events/intel/uncore_snbep.c
-+++ b/arch/x86/events/intel/uncore_snbep.c
-@@ -458,6 +458,7 @@
- 
- /* SPR */
- #define SPR_RAW_EVENT_MASK_EXT			0xffffff
-+#define SPR_UBOX_DID				0x3250
- 
- /* SPR CHA */
- #define SPR_CHA_PMON_CTL_TID_EN			(1 << 16)
-@@ -6112,9 +6113,43 @@ static struct intel_uncore_type spr_uncore_m2m = {
- 	.name			= "m2m",
- };
- 
-+static struct attribute_group spr_upi_mapping_group = {
-+	.is_visible	= skx_upi_mapping_visible,
-+};
+diff --git a/Documentation/ABI/testing/sysfs-devices-mapping b/Documentation/ABI/testing/sysfs-devices-mapping
+index 8d202bac9394..2eee1446ad4c 100644
+--- a/Documentation/ABI/testing/sysfs-devices-mapping
++++ b/Documentation/ABI/testing/sysfs-devices-mapping
+@@ -1,6 +1,6 @@
+ What:           /sys/devices/uncore_iio_x/dieX
+ Date:           February 2020
+-Contact:        Roman Sudarikov <roman.sudarikov@linux.intel.com>
++Contact:        Alexander Antonov <alexander.antonov@linux.intel.com>
+ Description:
+                 Each IIO stack (PCIe root port) has its own IIO PMON block, so
+                 each dieX file (where X is die number) holds "Segment:Root Bus"
+@@ -32,3 +32,31 @@ Description:
+ 		    IIO PMU 0 on die 1 belongs to PCI RP on bus 0x40, domain 0x0000
+ 		    IIO PMU 0 on die 2 belongs to PCI RP on bus 0x80, domain 0x0000
+ 		    IIO PMU 0 on die 3 belongs to PCI RP on bus 0xc0, domain 0x0000
 +
-+static const struct attribute_group *spr_upi_attr_update[] = {
-+	&uncore_alias_group,
-+	&spr_upi_mapping_group,
-+	NULL
-+};
++What:           /sys/devices/uncore_upi_x/dieX
++Date:           March 2022
++Contact:        Alexander Antonov <alexander.antonov@linux.intel.com>
++Description:
++                Each /sys/devices/uncore_upi_X/dieY file holds "upi_Z,die_W"
++                value that means UPI link number X on die Y is connected to UPI
++                link Z on die W and this link between sockets can be monitored
++                by UPI PMON block.
++                For example, 4-die Sapphire Rapids platform has the following
++                UPI 0 topology::
 +
-+#define SPR_UPI_REGS_ADDR_DEVICE_LINK0	0x01
++		    # tail /sys/devices/uncore_upi_0/die*
++		    ==> /sys/devices/uncore_upi_0/die0 <==
++		    upi_1,die_1
++		    ==> /sys/devices/uncore_upi_0/die1 <==
++		    upi_0,die_3
++		    ==> /sys/devices/uncore_upi_0/die2 <==
++		    upi_1,die_3
++		    ==> /sys/devices/uncore_upi_0/die3 <==
++		    upi_0,die_1
 +
-+static int spr_upi_set_mapping(struct intel_uncore_type *type)
-+{
-+	return pmu_upi_set_mapping(type, &spr_upi_mapping_group);
-+}
++                Which means::
 +
-+static void spr_upi_cleanup_mapping(struct intel_uncore_type *type)
-+{
-+	pmu_cleanup_mapping(type, &spr_upi_mapping_group);
-+}
-+
-+static int spr_upi_get_topology(struct intel_uncore_type *type)
-+{
-+	return discover_upi_topology(type, SPR_UBOX_DID, SPR_UPI_REGS_ADDR_DEVICE_LINK0);
-+}
-+
- static struct intel_uncore_type spr_uncore_upi = {
--	SPR_UNCORE_PCI_COMMON_FORMAT(),
-+	.event_mask		= SNBEP_PMON_RAW_EVENT_MASK,
-+	.event_mask_ext		= SPR_RAW_EVENT_MASK_EXT,
-+	.format_group		= &spr_uncore_raw_format_group,
-+	.ops			= &spr_uncore_pci_ops,
- 	.name			= "upi",
-+	.attr_update		= spr_upi_attr_update,
-+	.get_topology		= spr_upi_get_topology,
-+	.set_mapping		= spr_upi_set_mapping,
-+	.cleanup_mapping	= spr_upi_cleanup_mapping,
- };
- 
- static struct intel_uncore_type spr_uncore_m3upi = {
-@@ -6318,6 +6353,12 @@ static void uncore_type_customized_copy(struct intel_uncore_type *to_type,
- 		to_type->format_group = from_type->format_group;
- 	if (from_type->attr_update)
- 		to_type->attr_update = from_type->attr_update;
-+	if (from_type->set_mapping)
-+		to_type->set_mapping = from_type->set_mapping;
-+	if (from_type->get_topology)
-+		to_type->get_topology = from_type->get_topology;
-+	if (from_type->cleanup_mapping)
-+		to_type->cleanup_mapping = from_type->cleanup_mapping;
- }
- 
- static struct intel_uncore_type **
++		    UPI link 0 on die 0 is connected to UPI link 1 on die 1
++		    UPI link 0 on die 1 is connected to UPI link 0 on die 3
++		    UPI link 0 on die 2 is connected to UPI link 1 on die 3
++		    UPI link 0 on die 3 is connected to UPI link 0 on die 1
+\ No newline at end of file
 -- 
 2.25.1
 
