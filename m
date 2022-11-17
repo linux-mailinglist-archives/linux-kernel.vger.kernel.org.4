@@ -2,139 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57ED262D591
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:54:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3D5B62D593
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:55:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239305AbiKQIyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 03:54:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54002 "EHLO
+        id S234775AbiKQIzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 03:55:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233023AbiKQIys (ORCPT
+        with ESMTP id S233023AbiKQIzW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 03:54:48 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2350A1276B
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 00:54:43 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id t4so886077wmj.5
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 00:54:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=9hYrAT2BNVskU/iDANhKEsz2VyGmJLN/rJvwow2j2xk=;
-        b=GejQpumCcaJEwAMF9vs5N6MTa4HzjPwDmJEUeAvSGwmdPfgcFftqfp718ZY//Kwd/6
-         NiRLKvzHWmOEB2glIPDCQqS20M5AbpWcheJWEe0v9HSameNpXDzd3tnXIkr21M/fO/+B
-         pMxqk3YwUh68R3+JoME0RkA8m5KvnhhhS5BEJpn7PLYav1RuSPombssgPei++tn1Lbhg
-         FKRcEUteXeQMMH39vFxOtoAEEqhtSHQu3b9aIGoVVR1/ibfYRas58aI9oEtbYLOM1yiM
-         SRgaK8m7sSzvY+2xBJIHjAcY9v4AZ62NV5llYbm9KOpaVbb/wgsOyny44CZrK2w4rHgZ
-         96pQ==
+        Thu, 17 Nov 2022 03:55:22 -0500
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B2E725FD;
+        Thu, 17 Nov 2022 00:55:21 -0800 (PST)
+Received: by mail-qv1-f45.google.com with SMTP id x13so767630qvn.6;
+        Thu, 17 Nov 2022 00:55:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=9hYrAT2BNVskU/iDANhKEsz2VyGmJLN/rJvwow2j2xk=;
-        b=4ZTcF7wM/TK7fGXDdYggvfSvK0VmOis4Dg1XYJoS/VXaZIAJQqpMhZGRGcb1eReIfN
-         cEtAlsUITfsRMb/GGoBH/JUgfHGTi+AcBIOvLQuAhLoBlgvObkAtchsgQEbRH+oZPqFj
-         BxTzJNr5H0+UVJiHAlyE6K1Y0rGzM3FmRMBQ+9ZUXnbx8nXG+GxJVtCpfKfaJgGxr/uL
-         AOSkW6b3alHEM97Q1UdAhSERcGMMv3qNvROiFaWQxUrRognJZUhtuYSHQaWnQUHqt5v/
-         OzcOCYtRBKS0PYtYLr7PmPEajn/TIMHfbT3tMJ+1VLg4+1k31gEz6ix7lwvwL9fjYbdH
-         oMrA==
-X-Gm-Message-State: ANoB5pm/f4V8DZ0nfaavClLwWm+riou92KK8s521kFR3mpVWwJ4+ioPT
-        koi0sdCvCpiInNIWvFBIQKxG4w==
-X-Google-Smtp-Source: AA0mqf7R5pytyH9/lNfPVQJWtwPbmJ8SiI7lVBKrIVlZzrwL5/u2Uq88NSqEZmONRgEmdbXer9wwaw==
-X-Received: by 2002:a7b:cd85:0:b0:3cf:931c:3cfa with SMTP id y5-20020a7bcd85000000b003cf931c3cfamr940137wmj.203.1668675281746;
-        Thu, 17 Nov 2022 00:54:41 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:aad5:8d14:a22f:2e8b? ([2a01:e0a:982:cbb0:aad5:8d14:a22f:2e8b])
-        by smtp.gmail.com with ESMTPSA id d16-20020a5d6dd0000000b0022584c82c80sm386384wrz.19.2022.11.17.00.54.40
+        bh=NYBhPvdCeDd/iVExb9nTFoQYzuFI59drf2/iH8jDOIg=;
+        b=TRy1/s3He8DZiaWBJHAUsaweka0IAAxp3711mfiHkEanMsadB7pIBIL7bJHIO9VBHN
+         sd+EM7RskcZrFWxWjlLJcreOMI3am8rXq5OFhy1yvW7BWr+q4trS/7NB/ipbsjVcHVa2
+         oqaAWn5KBlxsfuyZDmZmsyo+sHsm5Nnxulv5N98tUPnqjak8Sp1QMQrMypzKxBtTTfyo
+         PGQ/vlrWI5nZ/QRofgS+75Wi/UXqPzOIBdcUWncZBXFULDQQRUlBa0N+adBTn38CXppw
+         WUZfkoc/UpadClPocFVLuO3lokQ5qwyTPoeS0BGaDU+xVNeD/3mqfBw01PyhPad1WZZK
+         ifLA==
+X-Gm-Message-State: ANoB5pliaWGIgnQ/uMzZBbWVgm6qgCIq8QaNGZC0D6g6uHySe+edl2ZR
+        LiAIAG6lTkGDb2910ozI9MBowSpsGShLag==
+X-Google-Smtp-Source: AA0mqf7ul8b+Jmt12TkV046AJHNgGiXc11ttMZqFb0vKulY66RAm8WDazkJM7s1DSuzZ3Fm5zPMvJA==
+X-Received: by 2002:ad4:5042:0:b0:4bb:63be:9994 with SMTP id m2-20020ad45042000000b004bb63be9994mr1492616qvq.111.1668675320402;
+        Thu, 17 Nov 2022 00:55:20 -0800 (PST)
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
+        by smtp.gmail.com with ESMTPSA id s19-20020a05620a29d300b006cfc9846594sm81035qkp.93.2022.11.17.00.55.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Nov 2022 00:54:41 -0800 (PST)
-Message-ID: <098b923b-ff46-5ef5-9c21-19c974c9274f@linaro.org>
-Date:   Thu, 17 Nov 2022 09:54:40 +0100
+        Thu, 17 Nov 2022 00:55:19 -0800 (PST)
+Received: by mail-yb1-f182.google.com with SMTP id g127so1088263ybg.8;
+        Thu, 17 Nov 2022 00:55:19 -0800 (PST)
+X-Received: by 2002:a25:4289:0:b0:6ca:e43:d9ff with SMTP id
+ p131-20020a254289000000b006ca0e43d9ffmr1150622yba.543.1668675319692; Thu, 17
+ Nov 2022 00:55:19 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 3/3] spi: meson-spicc: Lower CS between bursts
-Content-Language: en-US
-To:     Carlo Caione <ccaione@baylibre.com>,
-        Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        David Airlie <airlied@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20221116-s905x_spi_ili9486-v1-0-630401cb62d5@baylibre.com>
- <20221116-s905x_spi_ili9486-v1-3-630401cb62d5@baylibre.com>
-Organization: Linaro Developer Services
-In-Reply-To: <20221116-s905x_spi_ili9486-v1-3-630401cb62d5@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221116205100.1136224-1-helgaas@kernel.org> <20221116205100.1136224-3-helgaas@kernel.org>
+In-Reply-To: <20221116205100.1136224-3-helgaas@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 17 Nov 2022 09:55:08 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVtSHdFhd-V=7EzSZz6K7+fW9rLxUCN_=yZTGfKoAhS6A@mail.gmail.com>
+Message-ID: <CAMuHMdVtSHdFhd-V=7EzSZz6K7+fW9rLxUCN_=yZTGfKoAhS6A@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] PCI: Allow building CONFIG_OF drivers with COMPILE_TEST
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     linux-pci@vger.kernel.org,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Bjorn,
 
-On 17/11/2022 09:47, Carlo Caione wrote:
-> On some hardware (reproduced on S905X) when a large payload is
-> transmitted over SPI in bursts at the end of each burst, the clock line
-> briefly fluctuates creating spurious clock transitions that are being
-> recognised by the connected device as a genuine pulses, creating an
-> offset in the data being transmitted.
-> 
-> Lower the GPIO CS between bursts to avoid the clock being interpreted as
-> valid.
+On Wed, Nov 16, 2022 at 9:51 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
+>
+> Many drivers depend on OF interfaces, so they won't be functional if
+> CONFIG_OF is not set.  But OF provides stub functions in that case, so make
+> them buildable if CONFIG_COMPILE_TEST is set.
+>
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
 
-I'm afraid this will actually break SPI NORs for example where CS actually splits
-transactions.
+Thanks for the update!
 
-Isn't Amjad change enough ? The CLK pull-up should avoid this.
+> --- a/drivers/pci/controller/cadence/Kconfig
+> +++ b/drivers/pci/controller/cadence/Kconfig
 
-If it's not the case, then it's an HW issue and the CLK line pull-up is too weak and an
-external pull should then be added.
+> @@ -158,8 +162,9 @@ config PCI_LAYERSCAPE_EP
+>           controller works in RC mode.
+>
+>  config PCI_HISI
+> -       depends on OF && (ARM64 || COMPILE_TEST)
+>         bool "HiSilicon Hip05 and Hip06 SoCs PCIe controllers"
+> +       depends on ARM64 || COMPILE_TEST
+> +       depends on OF || COMPILE_TEST
 
-> 
-> Signed-off-by: Carlo Caione <ccaione@baylibre.com>
-> ---
->   drivers/spi/spi-meson-spicc.c | 6 ++++++
->   1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/spi/spi-meson-spicc.c b/drivers/spi/spi-meson-spicc.c
-> index d47f2623a60f..af8d74b53519 100644
-> --- a/drivers/spi/spi-meson-spicc.c
-> +++ b/drivers/spi/spi-meson-spicc.c
-> @@ -291,6 +291,10 @@ static inline void meson_spicc_setup_burst(struct meson_spicc_device *spicc)
->   static irqreturn_t meson_spicc_irq(int irq, void *data)
->   {
->   	struct meson_spicc_device *spicc = (void *) data;
-> +	struct spi_device *spi_dev;
-> +
-> +	spi_dev = spicc->message->spi;
-> +	gpiod_set_value(spi_dev->cs_gpiod, 0);
->   
->   	writel_bits_relaxed(SPICC_TC, SPICC_TC, spicc->base + SPICC_STATREG);
->   
-> @@ -309,6 +313,8 @@ static irqreturn_t meson_spicc_irq(int irq, void *data)
->   	/* Setup burst */
->   	meson_spicc_setup_burst(spicc);
->   
-> +	gpiod_set_value(spi_dev->cs_gpiod, 1);
-> +
->   	/* Start burst */
->   	writel_bits_relaxed(SPICC_XCH, SPICC_XCH, spicc->base + SPICC_CONREG);
->   
-> 
+Note that ARM64 selects OF, so this (and a few others) could be
+simplified by dropping the "depends on OF || COMPILE_TEST".
+But that might be the scope of a different patch?
 
+>         depends on PCI_MSI_IRQ_DOMAIN
+>         select PCIE_DW_HOST
+>         select PCI_HOST_COMMON
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
