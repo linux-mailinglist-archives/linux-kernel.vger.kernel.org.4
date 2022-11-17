@@ -2,234 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BB7762D8A2
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 11:57:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4253262D8B0
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 12:00:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239499AbiKQK5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 05:57:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41752 "EHLO
+        id S234851AbiKQLAt convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 17 Nov 2022 06:00:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239220AbiKQK4g (ORCPT
+        with ESMTP id S239322AbiKQLAB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 05:56:36 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC126CA26
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 02:54:36 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id t25so4051143ejb.8
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 02:54:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CRyvw5LJL7zXFrmXu1AnOvKiQIjeJXswee7X6KYczKg=;
-        b=RvclxVPzKg+h5FsO+qDUCl4CHH142sWLYNnEKd1loN4rPirgw5ovI4R8HMSbJSveil
-         6FPK3K0tGnvifPQI48H/6XQVdjMhuW7Dau/w1SJ/67PDayTigyAFvMoUrO+8EfmniE6j
-         +cvx66TY2PASwlMrSbaRVvaIzMOZKsZVm8Fo0=
+        Thu, 17 Nov 2022 06:00:01 -0500
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F48AE4B;
+        Thu, 17 Nov 2022 02:57:29 -0800 (PST)
+Received: by mail-qt1-f178.google.com with SMTP id fz10so814788qtb.3;
+        Thu, 17 Nov 2022 02:57:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CRyvw5LJL7zXFrmXu1AnOvKiQIjeJXswee7X6KYczKg=;
-        b=I0EmZ23wcofCVNE5hsA8HcuP2COqSf7CcpBZxQbIjSW/5ScXs+U0GaliXOVlv3sSjF
-         1baTR2A/uebzQNJ6/kkQU6ToeBD9ibHzT14/Hc9WcrWxxzP+kQoGdccUkGJP9qqXCinq
-         GUWuZF32PjV4LhXJ20RqmjRIPiGmbiRe4q20fOvFfI0AAhn7iyoN5027sVGGgtmjZpiT
-         GUK/9vdv6XrRJeYM8mv3CJ9RLuGLcxLNiSI648awL5QW5+D9H9L9aRL3bSEEKuDrJm7k
-         QorwILdqYq4IEFWI1j4hDrI45hDADuVo8B64slGS8TtNjboPcFanYDL8ZCYzjuAPgEKP
-         YDEw==
-X-Gm-Message-State: ANoB5pnJ7JYYPwqbFulOsI8yBhiG6iz7KGd4e5MFq9LPA+4HTqgaP1GB
-        qECLcZzWsvu4AhY6x5eedrwWsA==
-X-Google-Smtp-Source: AA0mqf43PQ/3oV9rIx9+/z0xzV2B+CkgUuuZog77bDNjg6xTrm6RjqH2CptAUJYTEKEYf/yT0BHKAw==
-X-Received: by 2002:a17:906:398b:b0:7ad:b868:f096 with SMTP id h11-20020a170906398b00b007adb868f096mr1673632eje.295.1668682474637;
-        Thu, 17 Nov 2022 02:54:34 -0800 (PST)
-Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-54-207.cust.vodafonedsl.it. [188.217.54.207])
-        by smtp.gmail.com with ESMTPSA id p12-20020a17090653cc00b0078dd4c89781sm219484ejo.35.2022.11.17.02.54.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 02:54:34 -0800 (PST)
-Date:   Thu, 17 Nov 2022 11:54:32 +0100
-From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: Re: [PATCH 2/4] media: i2c: s5k5baf: switch to using gpiod API
-Message-ID: <20221117105432.GB2725180@tom-ThinkPad-T14s-Gen-2i>
-References: <20221115221145.2550572-1-dmitry.torokhov@gmail.com>
- <20221115221145.2550572-2-dmitry.torokhov@gmail.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=caoh7PtTsDMq2hTmo+2WH4i1lSrvHnWeG1MPfrjXBCc=;
+        b=Fj4n6vvbAPjlGd0kLgW1sknzhopZ2Q2EZj5SV/UFOY1R0gg5efXL0mGXr6itfEOUqe
+         onxbMxfukY6Zah1a8fgK5KxuR/FcBd/dSJdCenm7qxoxNiocSBkou/JDr3OZyp2pzFFB
+         6bHrMIhbWHeDoOxapbQR/I+DGfhHEaFDx50pgpvJxX72EIZKZa9F1O6xOVY741xalYyS
+         Zr5/mhB5dW/1p3TZQRbS7ZD4pWtiWO9Lx3QqeKgUQ6yg5KplAviKlh/UCwx/hUAxnCUW
+         9G9zv9VDoK1uOPqGUJR5dcRR0401YzVoBvSyNbJwJBel9X/uJ1KN2lNbJhTpFIr34EPa
+         m90A==
+X-Gm-Message-State: ANoB5pmCfcGfbfupsErpG+aKgc9NbfugcNHoF+J7hOcqXhl0iIbn8/hD
+        saQ/mQnct0U6fFxRV67VKJzkNyGYbIWhEQ==
+X-Google-Smtp-Source: AA0mqf5YMPNR/PZY5dMyjg4VQiNOnixdDmBKtxVeBSHp3u2RirIYUf//SKvORs99EcTk+hglSjjZ0A==
+X-Received: by 2002:ac8:7457:0:b0:3a5:2e28:b57b with SMTP id h23-20020ac87457000000b003a52e28b57bmr1705455qtr.106.1668682648074;
+        Thu, 17 Nov 2022 02:57:28 -0800 (PST)
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
+        by smtp.gmail.com with ESMTPSA id bi40-20020a05620a31a800b006f7ee901674sm256648qkb.2.2022.11.17.02.57.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Nov 2022 02:57:27 -0800 (PST)
+Received: by mail-yb1-f182.google.com with SMTP id b131so1400194yba.11;
+        Thu, 17 Nov 2022 02:57:27 -0800 (PST)
+X-Received: by 2002:a25:8249:0:b0:6dd:b521:a8f2 with SMTP id
+ d9-20020a258249000000b006ddb521a8f2mr1439247ybn.380.1668682647179; Thu, 17
+ Nov 2022 02:57:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221115221145.2550572-2-dmitry.torokhov@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221115192625.9410-1-alexander.helms.jy@renesas.com>
+ <20221115192625.9410-2-alexander.helms.jy@renesas.com> <e9fd112f-0fd2-e833-8687-9a256c307842@linaro.org>
+ <9231404a-85b2-9a9f-f040-f97615bf8ec0@renesas.com> <6dc67c30-d9c3-5906-a2bc-263ac83df051@linaro.org>
+ <CAMuHMdVoCVz7zyWvAbCydSGQ6RnRxH2kBFDyu-M-Fn8h_XicLQ@mail.gmail.com> <5a986cd4-12fe-a9f9-51f2-844fa6989bc8@linaro.org>
+In-Reply-To: <5a986cd4-12fe-a9f9-51f2-844fa6989bc8@linaro.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 17 Nov 2022 11:57:15 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUG9ojeSYqiz6fuuFkFsCBk7S8k3j3qurfutorLFpK2Uw@mail.gmail.com>
+Message-ID: <CAMuHMdUG9ojeSYqiz6fuuFkFsCBk7S8k3j3qurfutorLFpK2Uw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dtbindings: clock: Add bindings for Renesas PhiClock
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Alex Helms <alexander.helms.jy@renesas.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, sboyd@kernel.org, mturquette@baylibre.com,
+        geert+renesas@glider.be
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry,
+Hi Krzysztof,
 
-On Tue, Nov 15, 2022 at 02:11:43PM -0800, Dmitry Torokhov wrote:
-> This patch switches the driver away from legacy gpio/of_gpio API to
-> gpiod API, and removes use of of_get_named_gpio_flags() which I want to
-> make private to gpiolib.
-> 
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> ---
->  drivers/media/i2c/s5k5baf.c | 64 +++++++++++--------------------------
->  1 file changed, 18 insertions(+), 46 deletions(-)
-> 
-> diff --git a/drivers/media/i2c/s5k5baf.c b/drivers/media/i2c/s5k5baf.c
-> index 5c2253ab3b6f..960fbf6428ea 100644
-> --- a/drivers/media/i2c/s5k5baf.c
-> +++ b/drivers/media/i2c/s5k5baf.c
-> @@ -13,11 +13,10 @@
->  #include <linux/clk.h>
->  #include <linux/delay.h>
->  #include <linux/firmware.h>
-> -#include <linux/gpio.h>
-> +#include <linux/gpio/consumer.h>
->  #include <linux/i2c.h>
->  #include <linux/media.h>
->  #include <linux/module.h>
-> -#include <linux/of_gpio.h>
->  #include <linux/of_graph.h>
->  #include <linux/regulator/consumer.h>
->  #include <linux/slab.h>
-> @@ -228,11 +227,6 @@ static const char * const s5k5baf_supply_names[] = {
->  };
->  #define S5K5BAF_NUM_SUPPLIES ARRAY_SIZE(s5k5baf_supply_names)
->  
-> -struct s5k5baf_gpio {
-> -	int gpio;
-> -	int level;
-> -};
-> -
->  enum s5k5baf_gpio_id {
->  	STBY,
->  	RSET,
-> @@ -284,7 +278,7 @@ struct s5k5baf_fw {
->  };
->  
->  struct s5k5baf {
-> -	struct s5k5baf_gpio gpios[NUM_GPIOS];
-> +	struct gpio_desc *gpios[NUM_GPIOS];
->  	enum v4l2_mbus_type bus_type;
->  	u8 nlanes;
->  	struct regulator_bulk_data supplies[S5K5BAF_NUM_SUPPLIES];
-> @@ -936,16 +930,12 @@ static void s5k5baf_hw_set_test_pattern(struct s5k5baf *state, int id)
->  
->  static void s5k5baf_gpio_assert(struct s5k5baf *state, int id)
->  {
-> -	struct s5k5baf_gpio *gpio = &state->gpios[id];
-> -
-> -	gpio_set_value(gpio->gpio, gpio->level);
-> +	gpiod_set_value_cansleep(state->gpios[id], 1);
->  }
->  
->  static void s5k5baf_gpio_deassert(struct s5k5baf *state, int id)
->  {
-> -	struct s5k5baf_gpio *gpio = &state->gpios[id];
-> -
-> -	gpio_set_value(gpio->gpio, !gpio->level);
-> +	gpiod_set_value_cansleep(state->gpios[id], 0);
->  }
->  
->  static int s5k5baf_power_on(struct s5k5baf *state)
-> @@ -1799,44 +1789,30 @@ static const struct v4l2_subdev_ops s5k5baf_subdev_ops = {
->  
->  static int s5k5baf_configure_gpios(struct s5k5baf *state)
->  {
-> -	static const char * const name[] = { "S5K5BAF_STBY", "S5K5BAF_RST" };
-> +	static const char * const name[] = { "stbyn", "rstn" };
-> +	static const char * const label[] = { "S5K5BAF_STBY", "S5K5BAF_RST" };
->  	struct i2c_client *c = v4l2_get_subdevdata(&state->sd);
-> -	struct s5k5baf_gpio *g = state->gpios;
-> +	struct gpio_desc *gpio;
->  	int ret, i;
->  
->  	for (i = 0; i < NUM_GPIOS; ++i) {
-> -		int flags = GPIOF_DIR_OUT;
-> -		if (g[i].level)
-> -			flags |= GPIOF_INIT_HIGH;
-> -		ret = devm_gpio_request_one(&c->dev, g[i].gpio, flags, name[i]);
-> -		if (ret < 0) {
-> -			v4l2_err(c, "failed to request gpio %s\n", name[i]);
-> +		gpio = devm_gpiod_get(&c->dev, name[i], GPIOD_OUT_HIGH);
-> +		ret = PTR_ERR_OR_ZERO(gpio);
-> +		if (ret) {
-> +			v4l2_err(c, "failed to request gpio %s: %d\n",
-> +				 name[i], ret);
->  			return ret;
->  		}
-> -	}
-> -	return 0;
-> -}
-> -
-> -static int s5k5baf_parse_gpios(struct s5k5baf_gpio *gpios, struct device *dev)
-> -{
-> -	static const char * const names[] = {
-> -		"stbyn-gpios",
-> -		"rstn-gpios",
-> -	};
-> -	struct device_node *node = dev->of_node;
-> -	enum of_gpio_flags flags;
-> -	int ret, i;
->  
-> -	for (i = 0; i < NUM_GPIOS; ++i) {
-> -		ret = of_get_named_gpio_flags(node, names[i], 0, &flags);
-> -		if (ret < 0) {
-> -			dev_err(dev, "no %s GPIO pin provided\n", names[i]);
-> +		ret = gpiod_set_consumer_name(gpio, label[i]);
-> +		if (ret) {
-> +			v4l2_err(c, "failed to set up name for gpio %s: %d\n",
-> +				 name[i], ret);
->  			return ret;
->  		}
-> -		gpios[i].gpio = ret;
-> -		gpios[i].level = !(flags & OF_GPIO_ACTIVE_LOW);
-> -	}
->  
-> +		state->gpios[i] = gpio;
-> +	}
->  	return 0;
->  }
->  
-> @@ -1860,10 +1836,6 @@ static int s5k5baf_parse_device_node(struct s5k5baf *state, struct device *dev)
->  			 state->mclk_frequency);
->  	}
->  
-> -	ret = s5k5baf_parse_gpios(state->gpios, dev);
-> -	if (ret < 0)
-> -		return ret;
-> -
->  	node_ep = of_graph_get_next_endpoint(node, NULL);
->  	if (!node_ep) {
->  		dev_err(dev, "no endpoint defined at node %pOF\n", node);
-> -- 
-> 2.38.1.431.g37b22c650d-goog
-> 
+On Thu, Nov 17, 2022 at 11:41 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+> On 17/11/2022 09:11, Geert Uytterhoeven wrote:
+> >>>>> +  renesas,ss-amount-percent:
+> >>>>> +    description: Spread spectrum absolute amount as hundredths of a percent, e.g. 150 is 1.50%.
+> >>>>
+> >>>> What? If this is percent then it cannot be hundreds of percent. Percent
+> >>>> is percent. Use appropriate units.
+> >>>> https://jpn01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2Fdevicetree-org%2Fdt-schema%2Fblob%2Fmain%2Fdtschema%2Fschemas%2Fproperty-units.yaml&amp;data=05%7C01%7Calexander.helms.jy%40renesas.com%7C9c13a32848f3434e217108dac7ab69f6%7C53d82571da1947e49cb4625a166a4a2a%7C0%7C0%7C638041836281252737%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=6MULpJhPyyjWSo1SvPCrz6KidE1VEtiiNYk1O5wS1vI%3D&amp;reserved=0
+> >>>>
+> >>>
+> >>> Values like 0.5% or 2.5% must be representable which is why this
+> >>> property is an integer of hundredths of percent. How else would you
+> >>> represent a non-integer percent?
+> >>
+> >> With an appropriate unit.
+> >
+> > Krzysztof really means the property should be named e.g.
+> > "renesas,ss-amount-centipercent" instead.
+>
+> I provided an URL to document with units, so I was hoping Alex will take
+> a bit of effort to open it. Hundredths of percent sounds like basis
+> point... If it is not basis point, maybe it could be made such?
 
-Looks good to me.
+Thank you, I didn't know about basis points. TIL ;-)
 
-Reviewed-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+(and I didn't dare to click on the safelink-converted quoted link)
 
-Regards,
-Tommaso
+Gr{oetje,eeting}s,
 
--- 
-Tommaso Merciai
-Embedded Linux Engineer
-tommaso.merciai@amarulasolutions.com
-__________________________________
+                        Geert
 
-Amarula Solutions SRL
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-T. +39 042 243 5310
-info@amarulasolutions.com
-www.amarulasolutions.com
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
