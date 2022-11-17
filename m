@@ -2,108 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A41162D3FB
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 08:21:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E86362D3FF
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 08:22:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233220AbiKQHU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 02:20:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55854 "EHLO
+        id S239207AbiKQHWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 02:22:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239302AbiKQHUs (ORCPT
+        with ESMTP id S234692AbiKQHWJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 02:20:48 -0500
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51FBB2F001;
-        Wed, 16 Nov 2022 23:20:47 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AH7KXmt050883;
-        Thu, 17 Nov 2022 01:20:33 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1668669633;
-        bh=GbhEspxYtZvsVIkMe3h+Fk8YTaJfyuiLvBfhQnpj3K8=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=tKSYrM6S/nhDUKN8fQQog7hfarmnKVUeckQY70GVNx+JkhoL/kZk2s/4WkrZ6wACk
-         arSDwM/SXGL9H3pvtTFdXKzEMh07KWw2DTRVVAwXg6wzTm/vZGfWGAjRi2MoPU9cCm
-         ZGI4LxIFQ2jOe8Dgy8eWT4vJdWcszM5pKqq5drw8=
-Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AH7KXQM008956
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 17 Nov 2022 01:20:33 -0600
-Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 17
- Nov 2022 01:20:32 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Thu, 17 Nov 2022 01:20:32 -0600
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AH7KWH5037519;
-        Thu, 17 Nov 2022 01:20:32 -0600
-From:   Nishanth Menon <nm@ti.com>
-To:     <vigneshr@ti.com>, <j-choudhary@ti.com>
-CC:     Nishanth Menon <nm@ti.com>, <robh+dt@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <afd@ti.com>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <kristo@kernel.org>
-Subject: Re: [PATCH v3] arm64: dts: ti: k3-j721s2-main: Enable crypto accelerator
-Date:   Thu, 17 Nov 2022 01:20:32 -0600
-Message-ID: <166866942229.20019.9156819999833538961.b4-ty@ti.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20221031200633.26997-1-j-choudhary@ti.com>
-References: <20221031200633.26997-1-j-choudhary@ti.com>
+        Thu, 17 Nov 2022 02:22:09 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C6F531F8D
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 23:22:08 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ovZDk-0006pm-A6; Thu, 17 Nov 2022 08:22:00 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ovZDi-004o2U-38; Thu, 17 Nov 2022 08:21:59 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ovZDi-00HDlY-6h; Thu, 17 Nov 2022 08:21:58 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Lee Jones <lee@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>
+Cc:     linux-pwm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] backlight: pwm_bl: Drop support for legacy PWM probing
+Date:   Thu, 17 Nov 2022 08:21:51 +0100
+Message-Id: <20221117072151.3789691-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2504; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=rSqok1k4GUjtAWeSAyFWtQ9yZyvrbmXx+GAVnwVQK7U=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBjdeEJwIfzABoyAsEpLbMq3vER8M/vKHHUdwIlvheh rgvLFW+JATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCY3XhCQAKCRDB/BR4rcrsCV0AB/ oCGu1BnxfECZOLO6M3AVdlDI867ImIggjUXeq4vMaxX9R73D/rOkVaKrmsp5nS1jLSdBmIEwEamNxE D/xd8KzJsqdK3tLMIP+ig3TkZo+TUae1i4SjeJuZ0WvYO44lefTwz3C/JfgCLwoz1G3sz6sa6bHIvQ KXaPggRyfIGuMeyd9C7AyptL9SnGqs5sZNTuiT+h+4QhbcWS6jWM0pBG5IkEp6uvexHs3D8OG5xmDc D1+6JxNHTwu3xbBGS4oGC2aZxAQLfSZnUvlBC4werJrWD/QCWpi00v6DXMUyT+Lb8dc6IcSNaqvUeI r0VshUIRi4rhAyrOGFQBuboRKV3+4n
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jayesh Choudhary,
+There is no in-tree user left which relies on legacy probing. So drop
+support for it which removes another user of the deprecated
+pwm_request() function.
 
-On Tue, 1 Nov 2022 01:36:33 +0530, Jayesh Choudhary wrote:
-> Add the node for SA2UL for supporting hardware crypto algorithms,
-> including SHA1, SHA256, SHA512, AES, 3DES and AEAD suites.
-> Add rng node for hardware random number generator.
-> 
-> 
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ drivers/video/backlight/pwm_bl.c | 12 ------------
+ include/linux/pwm_backlight.h    |  1 -
+ 2 files changed, 13 deletions(-)
 
-I have applied the following to branch ti-k3-dts-next on [1].
-Thank you!
+diff --git a/drivers/video/backlight/pwm_bl.c b/drivers/video/backlight/pwm_bl.c
+index c0523a0269ee..d0b22158cd70 100644
+--- a/drivers/video/backlight/pwm_bl.c
++++ b/drivers/video/backlight/pwm_bl.c
+@@ -28,7 +28,6 @@ struct pwm_bl_data {
+ 	struct regulator	*power_supply;
+ 	struct gpio_desc	*enable_gpio;
+ 	unsigned int		scale;
+-	bool			legacy;
+ 	unsigned int		post_pwm_on_delay;
+ 	unsigned int		pwm_off_delay;
+ 	int			(*notify)(struct device *,
+@@ -455,7 +454,6 @@ static int pwm_backlight_probe(struct platform_device *pdev)
+ 	struct platform_pwm_backlight_data defdata;
+ 	struct backlight_properties props;
+ 	struct backlight_device *bl;
+-	struct device_node *node = pdev->dev.of_node;
+ 	struct pwm_bl_data *pb;
+ 	struct pwm_state state;
+ 	unsigned int i;
+@@ -506,12 +504,6 @@ static int pwm_backlight_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	pb->pwm = devm_pwm_get(&pdev->dev, NULL);
+-	if (IS_ERR(pb->pwm) && PTR_ERR(pb->pwm) != -EPROBE_DEFER && !node) {
+-		dev_err(&pdev->dev, "unable to request PWM, trying legacy API\n");
+-		pb->legacy = true;
+-		pb->pwm = pwm_request(data->pwm_id, "pwm-backlight");
+-	}
+-
+ 	if (IS_ERR(pb->pwm)) {
+ 		ret = PTR_ERR(pb->pwm);
+ 		if (ret != -EPROBE_DEFER)
+@@ -604,8 +596,6 @@ static int pwm_backlight_probe(struct platform_device *pdev)
+ 	if (IS_ERR(bl)) {
+ 		dev_err(&pdev->dev, "failed to register backlight\n");
+ 		ret = PTR_ERR(bl);
+-		if (pb->legacy)
+-			pwm_free(pb->pwm);
+ 		goto err_alloc;
+ 	}
+ 
+@@ -639,8 +629,6 @@ static int pwm_backlight_remove(struct platform_device *pdev)
+ 
+ 	if (pb->exit)
+ 		pb->exit(&pdev->dev);
+-	if (pb->legacy)
+-		pwm_free(pb->pwm);
+ 
+ 	return 0;
+ }
+diff --git a/include/linux/pwm_backlight.h b/include/linux/pwm_backlight.h
+index 06086cb93b6f..cdd2ac366bc7 100644
+--- a/include/linux/pwm_backlight.h
++++ b/include/linux/pwm_backlight.h
+@@ -8,7 +8,6 @@
+ #include <linux/backlight.h>
+ 
+ struct platform_pwm_backlight_data {
+-	int pwm_id;
+ 	unsigned int max_brightness;
+ 	unsigned int dft_brightness;
+ 	unsigned int lth_brightness;
 
-For the next time around:
-Maintain consistent formatting 0x%08x for addresses, formatting to line
-things up etc. I have manually edited to do that for this time.
-
-[1/1] arm64: dts: ti: k3-j721s2-main: Enable crypto accelerator
-      commit: 027b85ca972f321629af85793bb49d45382e9006
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent up the chain during
-the next merge window (or sooner if it is a relevant bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-[1] git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
+base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
 -- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+2.38.1
 
