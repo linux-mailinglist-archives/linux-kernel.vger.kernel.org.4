@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 278B662D33A
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 07:07:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B562262D33D
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 07:07:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234550AbiKQGH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 01:07:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54596 "EHLO
+        id S239281AbiKQGHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 01:07:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239251AbiKQGHR (ORCPT
+        with ESMTP id S239302AbiKQGHR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 17 Nov 2022 01:07:17 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A5D28729;
-        Wed, 16 Nov 2022 22:07:11 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id o4so1873106wrq.6;
-        Wed, 16 Nov 2022 22:07:11 -0800 (PST)
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F2E82A71A;
+        Wed, 16 Nov 2022 22:07:12 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id l39-20020a05600c1d2700b003cf93c8156dso999320wms.4;
+        Wed, 16 Nov 2022 22:07:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=UiXSAQsSjwWqOGc9spTfADfVAnOu8H9dxOp6ONZY5HI=;
-        b=BqXgBQ7H19xsIldwSJ3XEtEaIyFB1pdOaoIIBGAvsLqPWuYbRoHDUN2CEBw0y3fxO3
-         uwXsNGip+B4h9O1rmk+YMJmusJHfaeq7vO88bENdgIc6d4g/Q5ERZP8h+CMGECBu+X6k
-         DHr3Vgr6V2tKU6lJj4Je8jANmXUTuaIp0l0++ThbeldD1m97ufIyMdpurrQHTy95XFcz
-         dONdw2asOsd8CV8KJJwzAEFz5StzdHnVE0EM+gDQ28o/PqGKMes0ezBU3AmSxPHq4QcM
-         SR1e7NutED2dxq9rz3GeAL70s9b4ihla6W7mGew7S/MZI2pr/0jy20LEPAyRCBdyzW3z
-         xR9A==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=B/4dSPCEiDUe3Xyt1vQbKBrfveGFoVaGx8ciHb9QLPU=;
+        b=WUBVCwSUcsGVoF5A63XFfDYRW1n0W7vigFBveEkiddsyxkiK9JwbQ2C8nQfM6NuS8j
+         1YiOGDJe/57NZX+qOTUggz6zwUvRm+U1wLbURpOIUesmnmvuK42IioAj0pWaJ8NqqT8L
+         9+yLc1PiTJx3NP6rtLtzWC+Gnjx2593eesxm3O33ss8pcUZqy2mwMgNq7DRCJWgc1u30
+         tbfRqwKb/anPwHPrrop0+4r6bcFvIgHRDb9ieqt45zUGDsyfgHbirdVGWZutcibNcqd9
+         8aJ0T+3Cut4F3djKa7abbi2qEkD3OTGCRbO8L+xPzveL7/xciSYhx27Ccm4Ckn9sx9kU
+         PswQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UiXSAQsSjwWqOGc9spTfADfVAnOu8H9dxOp6ONZY5HI=;
-        b=X/4ipZL1rf9rsdLmuYi9fwC7CrYaGL5cKKni46SVhXyL4G/pPk6nTUxKj7GIzsonrD
-         Srw/Y0D7dwQT+LxtK31Uik20DSNUYRvjUTXXamd1o19doAtgEO5cQLcqbkaa1jo3wnuw
-         eEfiOSRbI4nS4EM5gq/P4IL9W1Xf6ZKEcICOx2c+FqnBacNaS5JgUMUZdJd5xobfXbNd
-         fyOev/Nn7WpdImFQXkCMc5VFmyOwY6Mf2d8UncOg+VLCPGXDmKhovaupgKc/yvoctkqE
-         RyWbH4UK43sHUL2mWWMEY75qQCVYUJSC7RC+tSm/AxApR7HmwkY2DLNUepdjmcQtcvcn
-         cfmw==
-X-Gm-Message-State: ANoB5pmDGLPaUosJa5Td99FE2ILSXYfR8Xpg9kJdBydeJDvlDPOMqIX8
-        BemE/m6GQPwip+/n7KeJqfE=
-X-Google-Smtp-Source: AA0mqf5SwUTUY/lj91u2/nwQu6g7fE2GFbJh2pd3jLHyIsRrmrwZ+DiGtLaGJyqtt7bLuhpDmkLHAg==
-X-Received: by 2002:a5d:6b8d:0:b0:236:4c14:4e4c with SMTP id n13-20020a5d6b8d000000b002364c144e4cmr431753wrx.634.1668665229774;
-        Wed, 16 Nov 2022 22:07:09 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=B/4dSPCEiDUe3Xyt1vQbKBrfveGFoVaGx8ciHb9QLPU=;
+        b=3VsvI8b5D1p+4Dpp7wzV01PwgxbkpgttdeoMk69wG4oCOPui6E3LOWUomyTG+ePcq/
+         gaStrdDWjN2Cyb7yftOXQGw0JQcCKH8MyWKwNraZTzig2+UAZu2aqF8lvcpO6JdOmKtt
+         zUCLmFpjo/BXzrXm1Q6KRfCrEFZsIx1aPCnZHKROF8pJDsRqMNW4JNa1R6VG6q5nYKPT
+         h8gRKTmyOq206+fZk55q1/rrxVk7ah9JxtR6UF+7cw+024XFwIFV1sw5d4knjjacrxir
+         2xHJlOeo0hqa/V3zkkztbKb0dbTBwvYvxwEhyLxlWHiMWGyLvIAlTwUpkD/M/Mmb+Nu3
+         UqQA==
+X-Gm-Message-State: ANoB5pl8CTDfOzvwWtMfRHGkoK4JhtadREqhpMjA841G5rCEPpyfSqPL
+        3XD5i5aDjNptYOf3M9gmQ8M=
+X-Google-Smtp-Source: AA0mqf6nbH1NYbfiNWEsx3ll18zbt1NmXbZvFY47Q26qtUlN3NrLlCKI8CekDyokCXbhnOmaguJOdg==
+X-Received: by 2002:a05:600c:3c8a:b0:3cf:6fe0:b16a with SMTP id bg10-20020a05600c3c8a00b003cf6fe0b16amr4030910wmb.28.1668665230759;
+        Wed, 16 Nov 2022 22:07:10 -0800 (PST)
 Received: from kista.localdomain (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
-        by smtp.gmail.com with ESMTPSA id r11-20020a5d694b000000b0023691d62cffsm16542568wrw.70.2022.11.16.22.07.08
+        by smtp.gmail.com with ESMTPSA id r11-20020a5d694b000000b0023691d62cffsm16542568wrw.70.2022.11.16.22.07.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 22:07:09 -0800 (PST)
+        Wed, 16 Nov 2022 22:07:10 -0800 (PST)
 From:   Jernej Skrabec <jernej.skrabec@gmail.com>
 To:     mchehab@kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, wens@csie.org,
@@ -57,10 +58,12 @@ Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         linux-kernel@vger.kernel.org,
         Jernej Skrabec <jernej.skrabec@gmail.com>
-Subject: [PATCH v2 0/2] arm64: allwinner: h6: Add second IOMMU reference to Cedrus
-Date:   Thu, 17 Nov 2022 07:07:02 +0100
-Message-Id: <20221117060704.367945-1-jernej.skrabec@gmail.com>
+Subject: [PATCH v2 1/2] media: dt-bindings: allwinner: video-engine: Fix number of IOMMU channels
+Date:   Thu, 17 Nov 2022 07:07:03 +0100
+Message-Id: <20221117060704.367945-2-jernej.skrabec@gmail.com>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221117060704.367945-1-jernej.skrabec@gmail.com>
+References: <20221117060704.367945-1-jernej.skrabec@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,31 +76,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It turns out that Cedrus on H6 actually uses two IOMMU channels. Manual
-mentiones two IOMMU channels, but it doesn't specify which is used when.
-Page faults were also observed from both.
+Cedrus (video engine) on Allwinner H6 actually uses two IOMMU channel,
+not just one. However, Cedrus on SoCs like D1 only uses one channel.
 
-This series updates binding to allow up to two IOMMU channels and fixes
-H6 DTSI.
+Allow up to 2 IOMMU channels.
 
-Please take a look.
-
-Best regards,
-Jernej
-
-Changes from v1:
-- add minItems to binding
-- add reviewed-by to DT patch
-
-Jernej Skrabec (2):
-  media: dt-bindings: allwinner: video-engine: Fix number of IOMMU
-    channels
-  arm64: dts: allwinner: h6: Fix Cedrus IOMMU channels
-
+Fixes: 62a8ccf3a248 ("arm64: dts: allwinner: h6: Fix Cedrus IOMMU usage")
+Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+---
  .../bindings/media/allwinner,sun4i-a10-video-engine.yaml       | 3 ++-
- arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi                   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---
+diff --git a/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-video-engine.yaml b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-video-engine.yaml
+index 541325f900a1..6446004d59d9 100644
+--- a/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-video-engine.yaml
++++ b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-video-engine.yaml
+@@ -55,7 +55,8 @@ properties:
+     description: Phandle to the device SRAM
+ 
+   iommus:
+-    maxItems: 1
++    minItems: 1
++    maxItems: 2
+ 
+   memory-region:
+     maxItems: 1
+-- 
 2.38.1
 
