@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C86562CF6C
+	by mail.lfdr.de (Postfix) with ESMTP id 10F9D62CF6B
 	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 01:20:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234170AbiKQAUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 19:20:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54126 "EHLO
+        id S234346AbiKQAUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 19:20:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234166AbiKQAUb (ORCPT
+        with ESMTP id S234039AbiKQAUb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 16 Nov 2022 19:20:31 -0500
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B264730C
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94E247328
         for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 16:20:30 -0800 (PST)
-Received: by mail-io1-xd29.google.com with SMTP id p141so241722iod.6
+Received: by mail-io1-xd31.google.com with SMTP id r81so259906iod.2
         for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 16:20:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=oYrGcKZ90fvfsXSmxF4aK7/kvJ4eaidpI88a5ZAW7vs=;
-        b=qwy/1FEzGt4fj7T2IyliiuYzYT/y/jniUSkgNGUXxB9xhsBPLzotbdGrENzUTLXf7x
-         RJB4utHxjzAr5t2Rhp/XzN40Wf6TNKfz7HOtk2Izc5Xr4E6WyBH1fxO1CB9tCh2Xkf/n
-         t7m1fDRkQOpeebwotn03PTV9Ei1Jzy4mTfZCrMH00SjR0xUTLa1JxKkeXhrhvq80mMBU
-         AQaSXgSH8GP9Hq/vYdmBmd8o1GRPyVKM09TKTCkKXI9vBV2OwEov/Izuzlb+EXQI1968
-         JYfbC3rz54rYvb4EOSJS/YltrSYcpk+oziYnuHfVGUN8Et8HWOYom7TTsKRnKbd41Hvv
-         yF5w==
+        bh=141E8a1mmNxybFT5cH+5JL9cg+6l3MIV4pAtA/MvRqQ=;
+        b=JnoZCHbaJPOhGVTuemL+ScxeKtbkZnan1wtVEUSLnu05vIZ3/P/1HBtlP58/Davzef
+         rLU7tVevOsHOzCHBr7SddlcOfHj0ItgmLsoSDJJ2xJPZr1vZzRf/3sIMPniZAjqpvaao
+         0aK9QXxP9POHj6FKJrdAsYgleSxiexWzIXbDd56jQysagDswcPJ+o6JBRoxT4lI0R62+
+         Gui+kbdXxNnMgEV2xnDCAihshpreiV/OzzVOSlfNcg931WjafaKrqigwrh4NDC4tX24I
+         XxjS/8je6m1zneyaOjIlHbWm6tvy1SQsASLOvvIYzdKUBRVPEltNUZPY5ObFX0zW0r13
+         74ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=oYrGcKZ90fvfsXSmxF4aK7/kvJ4eaidpI88a5ZAW7vs=;
-        b=xcTY2aT3rTRObLlK3GqiWAbjifUxsRROnv64zMhkOr7/RI2m0waa1Pyw2rIyIjiLwE
-         3IXx2/VrFEyFCrbu63vapq6rKxStra4zYUzpkJVVdwZzfDecDYnOPE3BdwHRLbvZpUZV
-         q4nh7bAmKL+lYlgbduk4CgkpJ04wzH6372/WwRali+I7Q0Je6usUsNpyR9owIsfMu/87
-         68UBOFqIdpFPF6lP+dFRfGZeZi7M+7B1V7cpn5ieBntoAOTMvqto1kwQ6MWWtxGmGz7G
-         lCcUCWXrV2EU5lZLK1noHsFhiKPbMS5vsdEYubGQBGHDfZZf5uPQi5mxpSl8VmLDfELe
-         A/ZA==
-X-Gm-Message-State: ANoB5pk/ofsQmQqPr53v+Njr4oYjwTi0k/1gF8s2immlpQti+UVjxGA7
-        tM7cuNuUlZz/VN6IBD/bnPI=
-X-Google-Smtp-Source: AA0mqf7MkLdT3LDwVcU3vntvtiB3i8aOtNLifHD9++d93Q3Rokww5EVhJt/szI4+iKX0rypCOnnICg==
-X-Received: by 2002:a05:6602:4190:b0:6a4:9ae9:1303 with SMTP id bx16-20020a056602419000b006a49ae91303mr353818iob.43.1668644429402;
-        Wed, 16 Nov 2022 16:20:29 -0800 (PST)
+        bh=141E8a1mmNxybFT5cH+5JL9cg+6l3MIV4pAtA/MvRqQ=;
+        b=EdvjaoJOWJBLgW+pQ/Pa+wCBNu9wkzNN97RnkbzQp66da7k2fm5id+jgr2uPy2H38h
+         bNnxGznt3iw+eQzOCXbHNL4XwhVvop3hKRng10kY61qFEDG2wy6rwXeLhLnBRj+Syh3V
+         r6qVrl54cm9pcjbSnao0k9eXIoToxDDJYI8u4UPTLyGeyWXhYd/W3nRXgZABpkDolx6j
+         2ql0fVVsG4XiKjglCwwP40wfLyBgQlbOzRXgWasFXjgaU+qYnY5U7EDAl+r4ymcQ1nOJ
+         02fAZaPp9HCfx7p3bDlm4UFFTbtcwzv9UtaC+MRcqRm5z9Z9bMFaYgnX+xVD51GZu98J
+         mSpg==
+X-Gm-Message-State: ANoB5pl3wl1l5Lf87rZOd5M+qkwWHisdpZ3sbRxZncMv5NJg7LT/lKGF
+        TVykmNPh6VcQ93myY3b1t5g=
+X-Google-Smtp-Source: AA0mqf7dOce4tLH9MjSQmgy7Pk2eE2p+FjVEmHWNRqsKjb7rUJnJCDAOEJ0Pbl2Ll+Em1twZwdwLLQ==
+X-Received: by 2002:a05:6602:736:b0:6bc:b2ee:a61e with SMTP id g22-20020a056602073600b006bcb2eea61emr319815iox.195.1668644430279;
+        Wed, 16 Nov 2022 16:20:30 -0800 (PST)
 Received: from frodo.. (c-73-78-62-130.hsd1.co.comcast.net. [73.78.62.130])
-        by smtp.googlemail.com with ESMTPSA id o194-20020a0222cb000000b0037556012c63sm6119777jao.132.2022.11.16.16.20.28
+        by smtp.googlemail.com with ESMTPSA id o194-20020a0222cb000000b0037556012c63sm6119777jao.132.2022.11.16.16.20.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 16 Nov 2022 16:20:29 -0800 (PST)
 From:   Jim Cromie <jim.cromie@gmail.com>
 To:     jbaron@akamai.com, gregkh@linuxfoundation.org,
         linux-kernel@vger.kernel.org
 Cc:     Jim Cromie <jim.cromie@gmail.com>
-Subject: [PATCH 1/2] vmlinux.lds.h: fix BOUNDED_SECTION_(PRE|POST)_LABEL macros
-Date:   Wed, 16 Nov 2022 17:20:21 -0700
-Message-Id: <20221117002022.860237-2-jim.cromie@gmail.com>
+Subject: [PATCH 2/2] vmlinux.lds.h: add HEADERED_SECTION_* macros
+Date:   Wed, 16 Nov 2022 17:20:22 -0700
+Message-Id: <20221117002022.860237-3-jim.cromie@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221117002022.860237-1-jim.cromie@gmail.com>
 References: <Y20+PqtF+dFAe7hX@kroah.com>
@@ -73,56 +73,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit foo added BOUNDED_SECTION_(PRE|POST)_LABEL macros,
-encapsulating the basic boilerplate to: KEEP/pack records into a
-section, and to mark the begin and end of the section with
-linker-symbols.
+These macros elaborate on BOUNDED_SECTION_(PRE|POST)_LABEL macros,
+prepending an optional KEEP(.gnu.linkonce##_sec_) reservation, and a
+linker-symbol to address it.
 
-But it tried to do extra, adding KEEP(*(.gnu.linkonce.##_sec_)) to
-optionally reserve a header record in front of the data.  It wrongly
-placed the KEEP after the linker-symbol starting the section,
-so if a header was added, it would wind up in the data.
+This allows a developer to define a header struct (which must fit with
+the section's base struct-type), and could contain:
 
-Putting the KEEP in the "correct" place proved brittle, and too clever
-by half.  The obvious safe fix is to remove the KEEP, and provide
-separate macros to do the extra work.
+1- fields whose value is common to the entire set of data-records.
+   This allows the header & data structs to specialize, complement
+   each other, and shrink.
 
-While here, the macro var-names: _s_, _e_ are nearly invisible, change
-them to more obvious names: _BEGIN_, _END_
+2- an uplink pointer to an organizing struct
+   which refs other related/sub data-tables
+   header record is addressable via the extern'd header linker-symbol
+
+Once the linker-symbols created by the macro are ref'd extern in code,
+that code can compute a record's index (ptr - start) in the "primary"
+table, then use it to index into the related/sub tables.  Adding a
+primary.map_* field foreach sub-table would then allow deduplication
+and remapping of that sub-table.
+
+This is aimed at dyndbg's struct _ddebug __dyndbg[] section, whose 3
+columns: function, file, module are 50%, 90%, 100% redundant.  The
+module column is fully recoverable after dynamic_debug_init() saves it
+to each ddebug_table.module as the builtin __dyndbg[] table is parsed.
+
+Given that those 3 columns use 24/56 of a prdbg record, a dyndbg=y
+kernel with ~5k callsites could save substantially.
 
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 ---
- include/asm-generic/vmlinux.lds.h | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+---
+ include/asm-generic/vmlinux.lds.h | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
 diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index 50851425b229..85d5d5b203dc 100644
+index 85d5d5b203dc..a3b6aa30a525 100644
 --- a/include/asm-generic/vmlinux.lds.h
 +++ b/include/asm-generic/vmlinux.lds.h
-@@ -199,17 +199,15 @@
- # endif
- #endif
+@@ -214,6 +214,21 @@
  
--#define BOUNDED_SECTION_PRE_LABEL(_sec_, _label_, _s_, _e_)		\
--	_s_##_label_ = .;						\
--	KEEP(*(.gnu.linkonce.##_sec_))					\
-+#define BOUNDED_SECTION_PRE_LABEL(_sec_, _label_, _BEGIN_, _END_)	\
-+	_BEGIN_##_label_ = .;						\
- 	KEEP(*(_sec_))							\
--	_e_##_label_ = .;
-+	_END_##_label_ = .;
+ #define BOUNDED_SECTION(_sec)	 BOUNDED_SECTION_BY(_sec, _sec)
  
--#define BOUNDED_SECTION_POST_LABEL(_sec_, _label_, _s_, _e_)		\
--	_label_##_s_ = .;						\
--	KEEP(*(.gnu.linkonce.##_sec_))					\
-+#define BOUNDED_SECTION_POST_LABEL(_sec_, _label_, _BEGIN_, _END_)	\
-+	_label_##_BEGIN_ = .;						\
- 	KEEP(*(_sec_))							\
--	_label_##_e_ = .;
-+	_label_##_END_ = .;
- 
- #define BOUNDED_SECTION_BY(_sec_, _label_)				\
- 	BOUNDED_SECTION_PRE_LABEL(_sec_, _label_, __start, __stop)
++#define HEADERED_SECTION_PRE_LABEL(_sec_, _label_, _BEGIN_, _END_, _HDR_) \
++	_HDR_##_label_	= .;						\
++	KEEP(*(.gnu.linkonce.##_sec_))					\
++	BOUNDED_SECTION_PRE_LABEL(_sec_, _label_, _BEGIN_, _END_)
++
++#define HEADERED_SECTION_POST_LABEL(_sec_, _label_, _BEGIN_, _END_, _HDR_) \
++	_label_##_HDR_ = .;						\
++	KEEP(*(.gnu.linkonce.##_sec_))					\
++	BOUNDED_SECTION_POST_LABEL(_sec_, _label_, _BEGIN_, _END_)
++
++#define HEADERED_SECTION_BY(_sec_, _label_)				\
++	HEADERED_SECTION_PRE_LABEL(_sec_, _label_, __start, __stop)
++
++#define HEADERED_SECTION(_sec)	 HEADERED_SECTION_BY(_sec, _sec)
++
+ #ifdef CONFIG_TRACE_BRANCH_PROFILING
+ #define LIKELY_PROFILE()						\
+ 	BOUNDED_SECTION_BY(_ftrace_annotated_branch, _annotated_branch_profile)
 -- 
 2.38.1
 
