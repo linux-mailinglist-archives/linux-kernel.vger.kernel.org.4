@@ -2,150 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5845D62D49A
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:05:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EC5062D496
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:03:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239349AbiKQIE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 03:04:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50978 "EHLO
+        id S234792AbiKQIDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 03:03:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiKQIEw (ORCPT
+        with ESMTP id S231871AbiKQIDp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 03:04:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC02D2F2
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 00:03:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668672231;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Lc6aO2jeVqUhMYtAzgGQ94NvGNINHdDrt/788aNpceE=;
-        b=NwMMr7LtvV8Ar471pthin4uHN4z+FZHJn2hflIwkR9UngWSws34ZWhMpAYHccjWMM0dsBg
-        +Bni5N8cVikq/PQPZ4z/abQShqGpxfMRHBX/yRiixJvOfvPT4NEYJ+HcnaimDL/hYT0tDS
-        aOLZrz9YaokW3MC7pdla6cxJPAUO1V0=
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
- [209.85.216.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-628-XV58rmmCNEuC-WS-8TFzNw-1; Thu, 17 Nov 2022 03:03:42 -0500
-X-MC-Unique: XV58rmmCNEuC-WS-8TFzNw-1
-Received: by mail-pj1-f71.google.com with SMTP id mj8-20020a17090b368800b002137a506927so704092pjb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 00:03:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-language:content-transfer-encoding:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lc6aO2jeVqUhMYtAzgGQ94NvGNINHdDrt/788aNpceE=;
-        b=2BlZ52L+pJr2+sY+/PkYBw2XstYPfYzoK8ktwWk0+Ecr+vVp9JxONoN5bCPiwtoEmG
-         erg1ZP8sNbSm7W5ta6kO0IamC+/sb2AwcNnrW7pYyJSMIv98duJFZGgAqwbGNU0AntkY
-         O6IFV7FfjAmfVmr/zTgmreSoV7LJatE3aEXMefSo1WkzN77oeCgPSeT4hA2F1a+bBCNd
-         uHt1f1ROgj1MJe44+ciVDsRZhyhylbzFG0qeXZpa9Hqekz/D4pj2JNjhN3HqXWYxux20
-         ++AvEN48YWR3nx7g0on8ONKflT5my68MT0TCf7/1U0Zf2SyAadlmkmX/+cAqxJfLjVdy
-         r4Zg==
-X-Gm-Message-State: ANoB5pnHGAu4d7hD4ua/+iK8X/vqIa7ZnpX0zIZCjhwJgyiyXl4F4yP7
-        LGmSIcTn2wXTwpcgaSaY5CPF7NEQyHzQ4K7QLDohMqm6aDUlSPStpruj3AVf/bwui+s9qvQfZ0B
-        6IBQxyzzesYCfLQoje0gywqmaip/uZhBY+m+ez9bQshyxNo2mNx5dkyhthD/HJPX3g4TavoF8eA
-        ==
-X-Received: by 2002:aa7:9243:0:b0:56d:dd2a:f6b6 with SMTP id 3-20020aa79243000000b0056ddd2af6b6mr1848188pfp.30.1668672220757;
-        Thu, 17 Nov 2022 00:03:40 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7Ul0+6Ftaw44/dqSaV4XxhaLQGRUCY87AVvlj/XE3vDzVl3QE+GGR+9Tr/vnWSm8s2BI54bw==
-X-Received: by 2002:aa7:9243:0:b0:56d:dd2a:f6b6 with SMTP id 3-20020aa79243000000b0056ddd2af6b6mr1848156pfp.30.1668672220340;
-        Thu, 17 Nov 2022 00:03:40 -0800 (PST)
-Received: from [10.72.12.148] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id f7-20020a170902684700b00186c5e8b1d0sm547141pln.149.2022.11.17.00.03.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Nov 2022 00:03:40 -0800 (PST)
-Subject: Re: [PATCH] ceph: make sure directories aren't complete after setting
- crypt context
-To:     =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>
-Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221116153703.27292-1-lhenriques@suse.de>
-From:   Xiubo Li <xiubli@redhat.com>
-Message-ID: <5de0ae69-5e3d-2ccb-64a3-971db66477f8@redhat.com>
-Date:   Thu, 17 Nov 2022 16:03:35 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Thu, 17 Nov 2022 03:03:45 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 59B4ABF6;
+        Thu, 17 Nov 2022 00:03:42 -0800 (PST)
+Received: from loongson.cn (unknown [10.180.13.64])
+        by gateway (Coremail) with SMTP id _____8AxDdnd6nVjOzcIAA--.23274S3;
+        Thu, 17 Nov 2022 16:03:41 +0800 (CST)
+Received: from [10.180.13.64] (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxqFfb6nVjLM8VAA--.39376S2;
+        Thu, 17 Nov 2022 16:03:40 +0800 (CST)
+Subject: Re: [PATCH v12 2/2] dt-bindings: thermal: add loongson-2 thermal
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20221114024709.7975-1-zhuyinbo@loongson.cn>
+ <20221114024709.7975-2-zhuyinbo@loongson.cn>
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+Message-ID: <7963d36a-6898-79c8-2d19-9c4bd1cc36f6@loongson.cn>
+Date:   Thu, 17 Nov 2022 16:03:39 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <20221116153703.27292-1-lhenriques@suse.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221114024709.7975-2-zhuyinbo@loongson.cn>
+Content-Type: text/plain; charset=gbk; format=flowed
 Content-Language: en-US
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8CxqFfb6nVjLM8VAA--.39376S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxury3Wr18uw47AryDWF13twb_yoW5tFykpF
+        4UCas8Crs2vF17uanIkFyxCrs0vFnayF9Fvr4xKwn8Kr98t34ft3y7K3WDZ393CryxWFW7
+        uFyF9r4UCF1DArJanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bqkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0ow
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE
+        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
+        80ewAv7VC0I7IYx2IY67AKxVWrXVW3AwAv7VC2z280aVAFwI0_Cr0_Gr1UMcvjeVCFs4IE
+        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14
+        v26r126r1DMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE
+        7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I
+        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAI
+        cVC0I7IYx2IY67AKxVW5JVW7JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0x
+        vE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWxJVW8Jr1lIxAIcVC2z280
+        aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07jca93UUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Maintainer,
 
-On 16/11/2022 23:37, Lu√≠s Henriques wrote:
-> When setting a directory's crypt context, __ceph_dir_clear_complete() needs
-> to be used otherwise, if it was complete before, any old dentry that's still
-> around will be valid.
->
-> Signed-off-by: Lu√≠s Henriques <lhenriques@suse.de>
+Could you help me merge my patch?
+
+Thanks,
+Yinbo.
+
+‘⁄ 2022/11/14 …œŒÁ10:47, Yinbo Zhu –¥µ¿:
+> Add the Loongson-2 thermal binding with DT schema format using
+> json-schema.
+> 
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
-> Hi!
->
-> Here's a simple way to trigger the bug this patch is fixing:
->
-> # cd /cephfs
-> # ls mydir
-> nKRhofOAVNsAwVLvDw7a0c9ypsjbZfK3n0Npnmni6j0
-> # ls mydir/nKRhofOAVNsAwVLvDw7a0c9ypsjbZfK3n0Npnmni6j0/
-> Cyuer5xT+kBlEPgtwAqSj0WK2taEljP5vHZ,D8VXCJ8  u+46b2XVCt7Obpz0gznZyNLRj79Q2l4KmkwbKOzdQKw
-> # fscrypt unlock mydir
-> # touch /mnt/test/mydir/mysubdir/file
-> touch: cannot touch '/mnt/test/mydir/mysubdir/file': No such file or directory
->
->   fs/ceph/crypto.c | 4 ++++
->   1 file changed, 4 insertions(+)
->
-> diff --git a/fs/ceph/crypto.c b/fs/ceph/crypto.c
-> index 35a2ccfe6899..dc1557967032 100644
-> --- a/fs/ceph/crypto.c
-> +++ b/fs/ceph/crypto.c
-> @@ -87,6 +87,10 @@ static int ceph_crypt_get_context(struct inode *inode, void *ctx, size_t len)
->   		return -ERANGE;
->   
->   	memcpy(ctx, cfa->cfa_blob, ctxlen);
+> Change in v12:
+> 		1. NO change, but other patch in this series of patches set
+> 		   has changes.
+> Change in v11:
+> 		1. NO change, but other patch in this series of patches set
+> 		   has changes.
+> Change in v10:
+> 		1. Add all history change log information.
+> Change in v9:
+> 		1. NO change, but other patch in this series of patches set
+> 		   has changes.
+> Change in v8:
+>                  1. Replace string Loongson2/loongson2 with Loongson-2/loongson-2.
+> Change in v7:
+> 		1. Split the modification of patch 3 and merge it into this patch.
+> Change in v6:
+> 		1. Fix the warning "reg: [[0, 534779136], [0, 48]] is too long"
+> 		   when compile the yaml.
+> Change in v5:
+> 		1. Keep use same quotes "'" in all places.
+> Change in v4:
+> 		1. Fixup the compatible.
+> 		2. Update the binding file name.
+> 		3. Include irq.h to fix compile issue.
+> Change in v3:
+> 		1. Remove the sensor id.
+> 		2. Remove the interrupt-parent in thermal required property.
+> 		3. Update the thermal binding file name.
+> 		4. Fixup the commit log information.
+> Change in v2:
+> 		1. Add description and type about the "id".	
+> 		2. Make the filename was based on compatible.
+> 
+>   .../thermal/loongson,ls2k-thermal.yaml        | 43 +++++++++++++++++++
+>   MAINTAINERS                                   |  1 +
+>   2 files changed, 44 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml b/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
+> new file mode 100644
+> index 000000000000..c0637e2d6d57
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
+> @@ -0,0 +1,43 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/thermal/loongson,ls2k-thermal.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +	/* Directory isn't complete anymore */
-> +	if (S_ISDIR(inode->i_mode) && __ceph_dir_is_complete(ci))
-> +		__ceph_dir_clear_complete(ci);
-
-Hi Luis,
-
-Good catch!
-
-BTW, why do this in the ceph_crypt_get_context() ? As my understanding 
-is that we should mark 'mydir' as incomplete when unlocking it. While as 
-I remembered the unlock operation will do:
-
-
-Step1: get_encpolicy via 'mydir' as ctx
-Step2: rm_enckey of ctx from the superblock
-
-
-Since I am still running the test cases for the file lock patches, so I 
-didn't catch logs to confirm the above steps yet.
-
-If I am right IMO then we should mark the dir as incomplete in the Step2 
-instead, because for non-unlock operations they may also do the Step1.
-
-Thanks!
-
-- Xiubo
-
->   	return ctxlen;
->   }
+> +title: Thermal sensors on Loongson-2 SoCs
+> +
+> +maintainers:
+> +  - zhanghongchen <zhanghongchen@loongson.cn>
+> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
+> +
+> +properties:
+> +  compatible:
+> +    const: loongson,ls2k-thermal
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  '#thermal-sensor-cells':
+> +    const: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - '#thermal-sensor-cells'
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    thermal: thermal-sensor@1fe01500 {
+> +        compatible = "loongson,ls2k-thermal";
+> +        reg = <0x1fe01500 0x30>;
+> +        interrupt-parent = <&liointc0>;
+> +        interrupts = <7 IRQ_TYPE_LEVEL_LOW>;
+> +        #thermal-sensor-cells = <1>;
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 0d867573fe4c..182129c73ed5 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -12018,6 +12018,7 @@ M:	zhanghongchen <zhanghongchen@loongson.cn>
+>   M:	Yinbo Zhu <zhuyinbo@loongson.cn>
+>   L:	linux-pm@vger.kernel.org
+>   S:	Maintained
+> +F:	Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
+>   F:	drivers/thermal/loongson2_thermal.c
 >   
->
+>   LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+> 
 
