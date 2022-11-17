@@ -2,130 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D16B362E745
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 22:47:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB0A362E747
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 22:48:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239647AbiKQVrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 16:47:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59018 "EHLO
+        id S240511AbiKQVsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 16:48:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230447AbiKQVrj (ORCPT
+        with ESMTP id S240338AbiKQVsR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 16:47:39 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E446A69DD8;
-        Thu, 17 Nov 2022 13:47:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668721658; x=1700257658;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=0xIE0lGR+1HvQFnathUuD8Giy/crD3N1QjHrDya9xTk=;
-  b=U/ChOYXC27GRWC2VvwYixln6dj5kV5LFA4e6S67p7LiE5cISxSmQOlfc
-   nfGpeq6SQFSnRVNcA5MxHUCCpU/vTQY5NukqL8SqtGj7J0ao9+4WnZ3d9
-   434918MKKFpCjieaO5X7kgP5rjClM2HXvFHmWun1im5FbvyMJUxMH6F59
-   maEr6fMdlqOlF+PVkjckE6qXR+cMDddJky5doIBeubb8Ew5xrn7xKhymW
-   H2lRahQ9tE5lbHF9P/+phCupu5+OEqVeRytMMtFgsnurc9NQTW4NaRlby
-   iEZJ/sqVX5v855BH6FCeb5TZLbNrw4wi6cf/Z+5X30yJyjBR1bQxj9dSg
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="399271322"
-X-IronPort-AV: E=Sophos;i="5.96,172,1665471600"; 
-   d="scan'208";a="399271322"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 13:47:37 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="642261895"
-X-IronPort-AV: E=Sophos;i="5.96,172,1665471600"; 
-   d="scan'208";a="642261895"
-Received: from wangyi7-mobl3.amr.corp.intel.com (HELO [10.212.182.5]) ([10.212.182.5])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 13:47:35 -0800
-Message-ID: <01d7c7cc-bd4e-ee9b-f5b2-73ea367e602f@linux.intel.com>
-Date:   Thu, 17 Nov 2022 13:47:35 -0800
+        Thu, 17 Nov 2022 16:48:17 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F2FE69DD8
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 13:48:17 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id q1so3256832pgl.11
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 13:48:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/HyEb+JRj1sN5jcDVViOGE116tvvuVTKsQc2QDnF6Sk=;
+        b=JrPNa/9vanKmhuJZy8rXzQjTS61AAtv3k9qysjVd2Yzu49dZaR9D++0L/kmHEL29MB
+         PHni9yqVUqm7PXe/RRllu1ll5XoZhgUrc1sTqkiPYEVWSPFY17gp6J0v5YBPG3jDiITa
+         4JYrIIlCK85DhzjIoBvB9KvJpRw4ZpZElS9b8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/HyEb+JRj1sN5jcDVViOGE116tvvuVTKsQc2QDnF6Sk=;
+        b=2awFedfVUqCJcNkOAkQ5CrWOoHWYe1Qd76Eh2ZU3pxXdWqnyqdfPt5VLWT5BNmQUDo
+         nZdEU284IXx0qxz1zimfRCmrj/kHuTg0QEBBKtF2UDtfVKrX2U6/YlHXUVHLyHKbU8o3
+         Rfv8stzj50DsXt6AwTpo+h/TKuflhqXKRnUdcHQCXCYxZ9hiuvkMuROoWKOlUHuLfpwv
+         nk54bLlLLy5q9EVwu4qVehTtUikWHTdpAtg9/rOZxMMYhGu2B0/khd/vGHwZ7puF9Qvw
+         0hUHjg6yKP0XEKXPiAAwQsoJU3CZlJxR0dSyvuL7zkDAlj9iOfigVbk4a5ivwi+YFmz0
+         CPJQ==
+X-Gm-Message-State: ANoB5pkJw/1pxMSUcPoHCUUINKB8aM3H8usniHj/PGm/uvZ1nm5NtEZh
+        KZ/TTxuZtPHlzWWoFVRcx0YpYQ==
+X-Google-Smtp-Source: AA0mqf6E1Rlp5WSdo0sVrZK6tL4GimR07/xtQ5dLpX8vEo9oCMCQw+NxaqGW5aW6REqbGjiH5xxmCQ==
+X-Received: by 2002:a63:f003:0:b0:45f:bf86:c917 with SMTP id k3-20020a63f003000000b0045fbf86c917mr3884645pgh.201.1668721696522;
+        Thu, 17 Nov 2022 13:48:16 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id s125-20020a632c83000000b00439d071c110sm1525368pgs.43.2022.11.17.13.48.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 13:48:15 -0800 (PST)
+Date:   Thu, 17 Nov 2022 13:48:14 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, tytso@mit.edu, kees@kernel.org,
+        linux@armlinux.org.uk, ydroneaud@opteya.com,
+        gregkh@linuxfoundation.org, rdunlap@infradead.org
+Subject: Re: [PATCH v3] random: add helpers for random numbers with given
+ floor or range
+Message-ID: <202211171347.92FDE65A6D@keescook>
+References: <2b3bc31e-c308-b04c-1759-26bcf8dba6d3@infradead.org>
+ <20221117192620.2304613-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.2.2
-Subject: Re: [Patch v3 05/14] x86/mm: Handle decryption/re-encryption of
- bss_decrypted consistently
-Content-Language: en-US
-To:     Michael Kelley <mikelley@microsoft.com>, hpa@zytor.com,
-        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, luto@kernel.org, peterz@infradead.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, lpieralisi@kernel.org, robh@kernel.org,
-        kw@linux.com, bhelgaas@google.com, arnd@arndb.de,
-        hch@infradead.org, m.szyprowski@samsung.com, robin.murphy@arm.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        Tianyu.Lan@microsoft.com, kirill.shutemov@linux.intel.com,
-        ak@linux.intel.com, isaku.yamahata@intel.com,
-        dan.j.williams@intel.com, jane.chu@oracle.com, seanjc@google.com,
-        tony.luck@intel.com, x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
-        iommu@lists.linux.dev
-References: <1668624097-14884-1-git-send-email-mikelley@microsoft.com>
- <1668624097-14884-6-git-send-email-mikelley@microsoft.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <1668624097-14884-6-git-send-email-mikelley@microsoft.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221117192620.2304613-1-Jason@zx2c4.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 11/16/22 10:41 AM, Michael Kelley wrote:
-> Current code in sme_postprocess_startup() decrypts the bss_decrypted
-> section when sme_me_mask is non-zero.  But code in
-> mem_encrypt_free_decrytped_mem() re-encrypts the unused portion based
-> on CC_ATTR_MEM_ENCRYPT.  In a Hyper-V guest VM using vTOM, these
-> conditions are not equivalent as sme_me_mask is always zero when
-> using vTOM.  Consequently, mem_encrypt_free_decrypted_mem() attempts
-> to re-encrypt memory that was never decrypted.
+On Thu, Nov 17, 2022 at 08:26:20PM +0100, Jason A. Donenfeld wrote:
+> Now that we have get_random_u32_below(), it's nearly trivial to make
+> inline helpers to compute get_random_u32_above() and
+> get_random_u32_inclusive(), which will help clean up open coded loops
+> and manual computations throughout the tree.
 > 
-> Fix this in mem_encrypt_free_decrypted_mem() by conditioning the
-> re-encryption on the same test for non-zero sme_me_mask.  Hyper-V
-> guests using vTOM don't need the bss_decrypted section to be
-> decrypted, so skipping the decryption/re-encryption doesn't cause
-> a problem.
+> One snag is that in order to make get_random_u32_inclusive() operate on
+> closed intervals, we have to do some (unlikely) special case handling if
+> get_random_u32_interval(0, U32_MAX) is called. The least expensive way
+> of doing this is actually to adjust the slowpath of
+> get_random_u32_below() to have its undefined 0 result just return the
+> output of get_random_u32(). We can make this basically free by calling
+> get_random_u32() before the branch, so that the branch latency gets
+> interleaved.
 > 
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 
-Do you think it needs Fixes tag?
+I really like these -- unambiguous! :) Thanks for adjusting this API.
 
-> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
-> ---
->  arch/x86/mm/mem_encrypt_amd.c | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/mm/mem_encrypt_amd.c b/arch/x86/mm/mem_encrypt_amd.c
-> index 9c4d8db..5a51343 100644
-> --- a/arch/x86/mm/mem_encrypt_amd.c
-> +++ b/arch/x86/mm/mem_encrypt_amd.c
-> @@ -513,10 +513,14 @@ void __init mem_encrypt_free_decrypted_mem(void)
->  	npages = (vaddr_end - vaddr) >> PAGE_SHIFT;
->  
->  	/*
-> -	 * The unused memory range was mapped decrypted, change the encryption
-> -	 * attribute from decrypted to encrypted before freeing it.
-> +	 * If the unused memory range was mapped decrypted, change the encryption
-> +	 * attribute from decrypted to encrypted before freeing it. Base the
-> +	 * re-encryption on the same condition used for the decryption in
-> +	 * sme_postprocess_startup(). Higher level abstractions, such as
-> +	 * CC_ATTR_MEM_ENCRYPT, aren't necessarily equivalent in a Hyper-V VM
-> +	 * using vTOM, where sme_me_mask is always zero.
->  	 */
-> -	if (cc_platform_has(CC_ATTR_MEM_ENCRYPT)) {
-> +	if (sme_get_me_mask()) {
->  		r = set_memory_encrypted(vaddr, npages);
->  		if (r) {
->  			pr_warn("failed to free unused decrypted pages\n");
+Reviewed-by: Kees Cook <keescook@chromium.org>
+
+-Kees
 
 -- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+Kees Cook
