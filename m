@@ -2,174 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58ACF62D768
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 10:47:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D91E962D76E
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 10:49:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239165AbiKQJrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 04:47:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36934 "EHLO
+        id S234819AbiKQJtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 04:49:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234819AbiKQJrx (ORCPT
+        with ESMTP id S230344AbiKQJt3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 04:47:53 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7125151C18
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 01:47:51 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id o30so999145wms.2
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 01:47:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=mJE8bZ1d16Soq/u3zXafNtgnkPdOoiLGxDgt0M+ZXuA=;
-        b=LxuJaGiRi3GBofhyCy0PMCAzPQdVyvyWx9AX37dIms/Xgg/2EH91lE0RW/4HzaaPiJ
-         NDb9kG83yG4+JBTlINwBojFti0v/j+BqGiF3Sv0oRKzvlmuq5aAcJWvO/s72RAy1q8DX
-         d2iqPnmY/rOJ3qvZsVDoe61fCsT2glT6txgpJRgOyFQvzd2TD718M7nsPrkDKcsi3W0g
-         iM8pE2ne9+VDho8RF0CxLtISIKliPqVbpRKuZmIdXGJnfUnZN84tNANhydhNukBD+Qka
-         rdaYy7EqskyGKeC1H2NtefrWLKKy/zYREUJNVv8shrHgwXLCCAY8dSk/wkFY6d4+mg+U
-         1H5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mJE8bZ1d16Soq/u3zXafNtgnkPdOoiLGxDgt0M+ZXuA=;
-        b=bGbWfjKolMBy/FkWJ4tmM05cWH38LFsxsClOWmlijQchCSLKc434vBna5xuDenHZg2
-         ctq4Mu6SOgl26riv+9RvIyaQIF/igdUrhdFI/7Oy31RaB5YKG7zkBb8YJA5jVq9Nnihs
-         jZedVAna64Reeec4GpzMfXlFuyKw5IhKaTEeNSK7QCpDodCghyMFPpSsJgAw7a3YEwFC
-         glhOohuyBYgK6okOc8Ce+xmVsvPiVcbENeS59sTEmB8I+H8eMg/qC+K3bxqNneb0hFXV
-         T2kRzSRmKWjw5jFTWrWISqezAuCzzyroLQ3mm60n/CphEFkVMdcKOq5CsSw1A6O4petl
-         r4og==
-X-Gm-Message-State: ANoB5pnPPtIjadRtSptBhe01k0RbWd9DUaSdZOZL8IgHnIa7KPnDB5GM
-        qOwkPt6fnFoep1eQt/RNDyrHEA==
-X-Google-Smtp-Source: AA0mqf6GnUIX2gam7adzA/Cn6Eg7pIWME+I/iWVz6m4/uWp50R1x4P8/TKeoURKqMpd7/os5BKfyAw==
-X-Received: by 2002:a7b:c00a:0:b0:3cf:e8f0:ad11 with SMTP id c10-20020a7bc00a000000b003cfe8f0ad11mr4777193wmb.65.1668678469971;
-        Thu, 17 Nov 2022 01:47:49 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:aad5:8d14:a22f:2e8b? ([2a01:e0a:982:cbb0:aad5:8d14:a22f:2e8b])
-        by smtp.gmail.com with ESMTPSA id u16-20020a05600c19d000b003cf37c5ddc0sm726317wmq.22.2022.11.17.01.47.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Nov 2022 01:47:49 -0800 (PST)
-Message-ID: <9aa23650-6ae1-3844-7cf3-6812dc023c11@linaro.org>
-Date:   Thu, 17 Nov 2022 10:47:48 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org, Bjorn Andersson <andersson@kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: reserved-memory: document Qualcomm MPSS
- DSM memory
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20221114-narmstrong-sm8550-upstream-mpss_dsm-v1-0-158dc2bb6e96@linaro.org>
- <20221114-narmstrong-sm8550-upstream-mpss_dsm-v1-1-158dc2bb6e96@linaro.org>
- <38fff21b-3e75-13f9-664e-a115bc527b67@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <38fff21b-3e75-13f9-664e-a115bc527b67@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Thu, 17 Nov 2022 04:49:29 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C19BB877;
+        Thu, 17 Nov 2022 01:49:28 -0800 (PST)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AH935J3001073;
+        Thu, 17 Nov 2022 09:49:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=mXyp3kuz6+raj/Kj/BPH6q/i8EriXCANwM6ExVdaBaY=;
+ b=eC1sBSIAa4z0dgRUSgCpnx+p5g4R277LLYvaw1SMqJpOxDMK0gb9wQGK378zCE2HSlBq
+ wYI/tnV9m6dZmL1epc+yN3/Xt7xguHWAD7wlz8PFNl7KNeaUm77ZdFe7m6+xJcX+LfqE
+ mveOL4KBNemPwIP900G9l9fMM754oV6XmqJ26EC34cpae0SyqhQPLsO7AwVd2wlKAh+G
+ NkcafyIhdRRhXEFFQ8jdj0r2phRZ2fLQGhYEcAKxg5flS55Gl31tmCt36ALJdbV35yvq
+ ZA8JzAHjwdctVtK9cqwzdnSt5VBBpbyKpBw94+1Q/TxoECFc616fpBg+qJQF0HEQuUCf cw== 
+Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kwfcb0hc4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Nov 2022 09:49:17 +0000
+Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2AH9nCJ3014247;
+        Thu, 17 Nov 2022 09:49:12 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 3kt4jm2fk8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Thu, 17 Nov 2022 09:49:12 +0000
+Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AH9nCG9014241;
+        Thu, 17 Nov 2022 09:49:12 GMT
+Received: from hu-maiyas-hyd.qualcomm.com (hu-sartgarg-hyd.qualcomm.com [10.213.105.147])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 2AH9nC8w014240;
+        Thu, 17 Nov 2022 09:49:12 +0000
+Received: by hu-maiyas-hyd.qualcomm.com (Postfix, from userid 2339771)
+        id 8A9495001D8; Thu, 17 Nov 2022 15:19:11 +0530 (+0530)
+From:   Sarthak Garg <quic_sartgarg@quicinc.com>
+To:     adrian.hunter@intel.com, ulf.hansson@linaro.org
+Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, quic_rampraka@quicinc.com,
+        quic_pragalla@quicinc.com, quic_sayalil@quicinc.com,
+        Sarthak Garg <quic_sartgarg@quicinc.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
+Subject: [PATCH V1] mmc: core: Wait for 1ms after enabling the clocks post voltage switch
+Date:   Thu, 17 Nov 2022 15:18:48 +0530
+Message-Id: <20221117094859.20582-1-quic_sartgarg@quicinc.com>
+X-Mailer: git-send-email 2.17.1
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: E8iSzsCjZO6PhuCyrhhC2LzKyzTpc9z0
+X-Proofpoint-GUID: E8iSzsCjZO6PhuCyrhhC2LzKyzTpc9z0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-17_06,2022-11-16_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 bulkscore=0
+ mlxscore=0 lowpriorityscore=0 adultscore=0 priorityscore=1501
+ mlxlogscore=999 impostorscore=0 spamscore=0 malwarescore=0 phishscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211170075
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/11/2022 13:17, Krzysztof Kozlowski wrote:
-> On 16/11/2022 11:16, Neil Armstrong wrote:
->> This documents the Qualcomm Modem Processing SubSystem DSM shared memory.
-> 
-> Do not use "This commit/patch".
-> https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
-> 
->>
->> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->> ---
->>   .../reserved-memory/qcom,mpss-dsm-mem.yaml         | 37 ++++++++++++++++++++++
->>   1 file changed, 37 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/reserved-memory/qcom,mpss-dsm-mem.yaml b/Documentation/devicetree/bindings/reserved-memory/qcom,mpss-dsm-mem.yaml
->> new file mode 100644
->> index 000000000000..65f37e1356d4
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/reserved-memory/qcom,mpss-dsm-mem.yaml
->> @@ -0,0 +1,37 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: "http://devicetree.org/schemas/reserved-memory/qcom,mpss-dsm-mem.yaml#"
->> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> 
-> Drop quotes from above.
-> 
-> I know that this and few further pieces came from existing files...
+As per spec we should wait for 1ms after providing the SD clock to the
+card again as part of voltage switch sequence but there seems to be a
+violation here. Clocks are getting gated before 1ms as part of
+sdhci_set_ios function where we try to reset SD Clock Enable by
+resetting SDHCI_CLOCK_CARD_EN bit in SDHCI_CLOCK_CONTROL register
+leading to voltage switch failures for specific SD cards.
+Below ftraces also confirms the above understanding :
 
-Yep sorry, I'll clean it up.
+9.511367: mmc_host_set_uhs_voltage: mmc1 called
+9.511369: mmc_set_ios: mmc1: clock 0Hz busmode 2 powermode 2 cs 0
+Vdd 18 width 1 timing 0
+9.511370: sdhci_set_ios: mmc1 called
+9.511370: sdhci_set_ios: mmc1 setting clock ios->clock: 0 host->clock:
+400000
+9.511372: sdhci_msm_set_clock: mmc1 clock: 0
+9.511394: sdhci_set_ios: mmc1 gating clocks by writing
+~SDHCI_CLOCK_CARD_EN to SDHCI_CLOCK_CONTROL register
+9.511413: sdhci_msm_set_clock: mmc1 clock: 0
+9.511423: mmc_set_signal_voltage: mmc1 called
+9.533816: mmc_set_ios: mmc1: clock 400000Hz busmode 2 powermode 2 cs 0
+Vdd 18 width 1 timing 0
+9.533820: sdhci_set_ios: mmc1 called
+9.533822: sdhci_set_ios: mmc1 setting clock ios->clock: 400000
+host->clock: 0
+9.533826: sdhci_msm_set_clock: mmc1 clock: 400000
+9.533925: sdhci_enable_clk: mmc1 Enabling clocks by writing
+SDHCI_CLOCK_CARD_EN to SDHCI_CLOCK_CONTROL register
+9.533950: sdhci_set_ios: mmc1 gating clocks by writing
+~SDHCI_CLOCK_CARD_EN to SDHCI_CLOCK_CONTROL register
+9.533973: sdhci_msm_set_clock: mmc1 clock: 400000
+9.534043: sdhci_enable_clk: mmc1 Enabling clocks by writing
+SDHCI_CLOCK_CARD_EN to SDHCI_CLOCK_CONTROL register
+9.534045: mmc_host_set_uhs_voltage: mmc1 Done
 
-> 
->> +
->> +title: Qualcomm Modem Processing SubSystem DSM Memory
->> +
->> +description: |
->> +  This binding describes the Qualcomm Modem Processing SubSystem DSM, which serves the
-> 
-> Drop "This binding describes"
-> 
->> +  purpose of describing the shared memory region used for MPSS remote processors.
-> 
-> Entire description seems like not wrapped at 80.
-> 
->> +
->> +maintainers:
->> +  - Bjorn Andersson <bjorn.andersson@linaro.org>
-> 
-> Need to update the address.
+Wait for 1ms after enabling the clock post voltage switch to make sure
+clock is kept alive for alteast 1ms as per spec.
 
-Argh
+Signed-off-by: Sarthak Garg <quic_sartgarg@quicinc.com>
+---
+ drivers/mmc/core/core.c  | 4 ++++
+ drivers/mmc/host/sdhci.c | 3 +++
+ include/linux/mmc/host.h | 1 +
+ 3 files changed, 8 insertions(+)
 
-> 
->> +
->> +allOf:
->> +  - $ref: "reserved-memory.yaml"
-> 
-> Drop quotes.
-> 
->> +
->> +properties:
->> +  compatible:
->> +    const: qcom,mpss-dsm-mem
-> 
-> Why do we need dedicated binding and compatible for it instead of using
-> memory-region phandle in the device?
-
-So like rmtfs, this memory zone is shared between APPS and the MPSS subsystem.
-
-Like rmtfs it makes no sense to link it to the MPSS PAS, since it's only a launcher,
-it doesn't represent the MPSS subsystem.
-
-In the PAS startup process, the resources are released from APPS once the MPSS subsystem
-is running, which is not the case with the MPSS DSM where it must be shared during the whole
-lifetime of the system.
-
-Neil
-
-> 
->> +
->> +unevaluatedProperties: false
-> 
-> 
-> Best regards,
-> Krzysztof
-> 
+diff --git a/drivers/mmc/core/core.c b/drivers/mmc/core/core.c
+index a1efda85c6f2..d63e00aab6cb 100644
+--- a/drivers/mmc/core/core.c
++++ b/drivers/mmc/core/core.c
+@@ -1181,6 +1181,8 @@ int mmc_host_set_uhs_voltage(struct mmc_host *host)
+ 	host->ios.clock = 0;
+ 	mmc_set_ios(host);
+ 
++	host->doing_signal_voltage_switch = true;
++
+ 	if (mmc_set_signal_voltage(host, MMC_SIGNAL_VOLTAGE_180))
+ 		return -EAGAIN;
+ 
+@@ -1189,6 +1191,8 @@ int mmc_host_set_uhs_voltage(struct mmc_host *host)
+ 	host->ios.clock = clock;
+ 	mmc_set_ios(host);
+ 
++	host->doing_signal_voltage_switch = false;
++
+ 	return 0;
+ }
+ 
+diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
+index fb6e9a81f198..ac7c254eef4b 100644
+--- a/drivers/mmc/host/sdhci.c
++++ b/drivers/mmc/host/sdhci.c
+@@ -2312,6 +2312,9 @@ void sdhci_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
+ 		host->ops->set_clock(host, ios->clock);
+ 		host->clock = ios->clock;
+ 
++		if (mmc->doing_signal_voltage_switch)
++			usleep_range(1000, 1250);
++
+ 		if (host->quirks & SDHCI_QUIRK_DATA_TIMEOUT_USES_SDCLK &&
+ 		    host->clock) {
+ 			host->timeout_clk = mmc->actual_clock ?
+diff --git a/include/linux/mmc/host.h b/include/linux/mmc/host.h
+index 8fdd3cf971a3..06c88cd7a8bf 100644
+--- a/include/linux/mmc/host.h
++++ b/include/linux/mmc/host.h
+@@ -521,6 +521,7 @@ struct mmc_host {
+ 	bool			hsq_enabled;
+ 
+ 	u32			err_stats[MMC_ERR_MAX];
++	bool			doing_signal_voltage_switch;
+ 	unsigned long		private[] ____cacheline_aligned;
+ };
+ 
+-- 
+2.17.1
 
