@@ -2,112 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ACDB62D7E9
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 11:21:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACE7662D7D2
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 11:17:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239477AbiKQKVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 05:21:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55944 "EHLO
+        id S239349AbiKQKR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 05:17:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbiKQKVs (ORCPT
+        with ESMTP id S229931AbiKQKRY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 05:21:48 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 632FE4D5F3;
-        Thu, 17 Nov 2022 02:21:47 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AHALHI0061122;
-        Thu, 17 Nov 2022 04:21:17 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1668680477;
-        bh=1De6ZNKbg2j0x/QVoDCpW43TacEFtRXxzRB+E01qZxk=;
-        h=Date:CC:Subject:To:References:From:In-Reply-To;
-        b=GIYOHL7lJ67CLhmmWaGmNCj7Gs5FEfQU44qLBl4hzkJ3DNjRShERXiVmFU7qV4ksr
-         KuYcopfDU2Y4Jw3Z0X4JBCWXNRq26scaAwZwHk1Kx1AoEix7M628CjH2wBqdwJeUwJ
-         9VNXV7N38acXTjC5WtGfBhybOPCUp3LGCvEajtVE=
-Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AHAGHBA113502
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 17 Nov 2022 04:16:17 -0600
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 17
- Nov 2022 04:16:17 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Thu, 17 Nov 2022 04:16:17 -0600
-Received: from [172.24.145.61] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AHAGBQT087369;
-        Thu, 17 Nov 2022 04:16:11 -0600
-Message-ID: <b27f69fb-dd93-c852-01e4-a6346c88e9b3@ti.com>
-Date:   Thu, 17 Nov 2022 15:46:10 +0530
+        Thu, 17 Nov 2022 05:17:24 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85EEB2AC73
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 02:17:23 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1ovbxO-0007XT-JL; Thu, 17 Nov 2022 11:17:18 +0100
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1ovbxN-00032J-R4; Thu, 17 Nov 2022 11:17:17 +0100
+Date:   Thu, 17 Nov 2022 11:17:17 +0100
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de,
+        Peng Fan <peng.fan@nxp.com>, linux-kernel@vger.kernel.org,
+        linux-imx@nxp.com, kernel@pengutronix.de, festevam@gmail.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH V6 07/12] arm64: dts: imx8mn-evk: update vdd_soc dvs
+ voltage
+Message-ID: <20221117101717.sjxgu3niip2wxjwo@pengutronix.de>
+References: <20221117095403.1876071-1-peng.fan@oss.nxp.com>
+ <20221117095403.1876071-8-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski@linaro.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <linux@armlinux.org.uk>,
-        <vladimir.oltean@nxp.com>, <vigneshr@ti.com>, <nsekhar@ti.com>,
-        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
-        <s-vadapalli@ti.com>
-Subject: Re: [PATCH net-next v5 3/3] net: ethernet: ti: am65-cpsw: Add support
- for SERDES configuration
-Content-Language: en-US
-To:     Paolo Abeni <pabeni@redhat.com>
-References: <20221109042203.375042-1-s-vadapalli@ti.com>
- <20221109042203.375042-4-s-vadapalli@ti.com>
- <d5f0dea1b9ce5f8d2187875adb1d73e747e21916.camel@redhat.com>
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-In-Reply-To: <d5f0dea1b9ce5f8d2187875adb1d73e747e21916.camel@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221117095403.1876071-8-peng.fan@oss.nxp.com>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Paolo,
+On 22-11-17, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> Per schematic, BUCK1 is for VDD_SOC&DRAM&PU_0V9. The nxp,dvs-run-voltage
+> and nxp,dvs-standby-voltage need set for BUCK1, not BUCK2.
+> BUCK2 is for A53, which is handled by DVFS, so no need dvs property.
+> nxp,dvs-run-voltage is not needed, since bootloader must configure
+> voltage to make system boot well.
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
 
-On 10/11/22 18:36, Paolo Abeni wrote:
-> hello,
-> 
-> On Wed, 2022-11-09 at 09:52 +0530, Siddharth Vadapalli wrote:
-> [...]
-> 
->> +static void am65_cpsw_disable_serdes_phy(struct am65_cpsw_common *common)
->> +{
->> +	struct device_node *node, *port_np;
->> +	struct device *dev = common->dev;
->> +	const char *name = "serdes-phy";
->> +	struct phy *phy;
->> +
->> +	node = of_get_child_by_name(dev->of_node, "ethernet-ports");
->> +
->> +	for_each_child_of_node(node, port_np) {
->> +		phy = devm_of_phy_get(dev, port_np, name);
-> 
-> The above will try to allocate some memory and can fail. Even if the
-> the following code will handle a NULL ptr, the phy will not be
-> disabled.
-> 
-> I think it's better if you cache the serdes phy ptr in
-> am65_cpsw_init_serdes_phy() and you use such reference here, without
-> resorting to devm_of_phy_get().
+Acked-by: Marco Felsch <m.felsch@pengutronix.de>
 
-Thank you for reviewing the patch. I plan on creating a new "struct
-phy*" member named "serdes_phy" in the struct "am65_cpsw_slave_data"
-defined in the file "am65-cpsw-nuss.h", and store the SerDes phy in this
-member, during the execution of the am65_cpsw_init_serdes_phy()
-function. Please let me know if I can proceed with this implementation.
-
-Regards,
-Siddharth.
+> ---
+>  arch/arm64/boot/dts/freescale/imx8mn-evk.dts | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mn-evk.dts b/arch/arm64/boot/dts/freescale/imx8mn-evk.dts
+> index 4eb467df5ba7..4839a962a170 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8mn-evk.dts
+> +++ b/arch/arm64/boot/dts/freescale/imx8mn-evk.dts
+> @@ -47,6 +47,7 @@ buck1: BUCK1{
+>  				regulator-boot-on;
+>  				regulator-always-on;
+>  				regulator-ramp-delay = <3125>;
+> +				nxp,dvs-standby-voltage = <750000>;
+>  			};
+>  
+>  			buck2: BUCK2 {
+> @@ -56,8 +57,6 @@ buck2: BUCK2 {
+>  				regulator-boot-on;
+>  				regulator-always-on;
+>  				regulator-ramp-delay = <3125>;
+> -				nxp,dvs-run-voltage = <950000>;
+> -				nxp,dvs-standby-voltage = <850000>;
+>  			};
+>  
+>  			buck4: BUCK4{
+> -- 
+> 2.37.1
+> 
+> 
+> 
