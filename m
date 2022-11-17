@@ -2,132 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D495162D572
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:49:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0688162D57A
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:50:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239673AbiKQItO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 03:49:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49682 "EHLO
+        id S234678AbiKQIur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 03:50:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239666AbiKQIsz (ORCPT
+        with ESMTP id S238951AbiKQIuk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 03:48:55 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2468356D67;
-        Thu, 17 Nov 2022 00:48:47 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668674925;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=f4v0o1aapg52+kcGV5XzAXyexP8Lv3lkKr4tjq7Y6O8=;
-        b=DpAi6RQXxFDAb2jCHZ8hlQGCjq7mUquhCkriQC1k+9L0/zpGPIDiDl1wxfoVJWMMc78fWv
-        CvKgC6NDCv4M4ECMkgjqNPVdnWHXrvKJw3eIIuHWJdEh3qA+KdDo17J98VlAIUkbdENP3c
-        uIYgYu3SkpZL6fgPFgpWDTw5m0wPt/FS5YSZeCsqZeRZ+AAiJ8CA9Ue9LHcLgni+DdqyC4
-        9HVVmUt1xIcWD1QdHd7VEuB6t9AhpmgY9P6zv760Gn2NALAhbYSBtsMm5JG+DzAF+k65BS
-        IWn5FdhAuzAg6oJvg9KiSyn3jKaDOTJRKePnnqaPxy+Hhpidj+kYQEhQXJAS/A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668674925;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=f4v0o1aapg52+kcGV5XzAXyexP8Lv3lkKr4tjq7Y6O8=;
-        b=VVj3wrOiImh69rAfSDo0/Y81RyorJMIHmdUsQW58EnPk24F1oOuavIpj30UCq+WmojLUnP
-        UMMbhlSw349GX5AQ==
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
-        Allen Hubbe <allenbh@gmail.com>,
-        "Ahmed S. Darwish" <darwi@linutronix.de>,
-        Reinette Chatre <reinette.chatre@intel.com>
-Subject: Re: [patch 19/33] genirq/msi: Provide msi_desc::msi_data
-In-Reply-To: <Y3U5xwujkZvI0TEN@nvidia.com>
-References: <20221111133158.196269823@linutronix.de>
- <20221111135206.346985384@linutronix.de> <Y3U5xwujkZvI0TEN@nvidia.com>
-Date:   Thu, 17 Nov 2022 09:48:45 +0100
-Message-ID: <87tu2ym0eq.ffs@tglx>
+        Thu, 17 Nov 2022 03:50:40 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C34DC4E
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 00:50:37 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ovabN-0001L9-Oh; Thu, 17 Nov 2022 09:50:29 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ovabL-004oaw-Cp; Thu, 17 Nov 2022 09:50:28 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ovabL-00HEUt-Ge; Thu, 17 Nov 2022 09:50:27 +0100
+Date:   Thu, 17 Nov 2022 09:50:27 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-pwm@vger.kernel.org, Andy Shevchenko <andy@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v4 3/7] pwm: lpss: Include headers we are the direct user
+ of
+Message-ID: <20221117085027.f5qy5rsauo7vhvw2@pengutronix.de>
+References: <20221114165545.56088-1-andriy.shevchenko@linux.intel.com>
+ <20221114165545.56088-4-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dyjvyb6dwuevgtjt"
+Content-Disposition: inline
+In-Reply-To: <20221114165545.56088-4-andriy.shevchenko@linux.intel.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16 2022 at 15:28, Jason Gunthorpe wrote:
-> On Fri, Nov 11, 2022 at 02:58:41PM +0100, Thomas Gleixner wrote:
->> +/**
->> + * struct msi_desc_data - Generic MSI descriptor data
->> + * @iobase:     Pointer to the IOMEM base adress for interrupt callbacks
->> + * @cookie:	Device cookie provided at allocation time
->> + *
->> + * The content of this data is implementation defined, e.g. PCI/IMS
->> + * implementations will define the meaning of the data.
->> + */
->> +struct msi_desc_data {
->> +	void			__iomem *iobase;
->> +	union msi_dev_cookie	cookie;
->> +};
->
-> It would be nice to see the pci_msi_desc converted to a domain
-> specific storage as well.
->
-> Maybe could be written
->
-> struct msi_desc {
->    u64 domain_data[2];
-> }
->
-> struct pci_msi_desc {
-> 		u32 msi_mask;
-> 		u8	multiple	: 3;
-> 		u8	multi_cap	: 3;
-> 		u8	can_mask	: 1;
-> 		u8	is_64		: 1;
-> 		u8	mask_pos;
-> 		u16 default_irq;
-> }
-> static_assert(sizeof(struct pci_msi_desc) <= sizeof(((struct msi_desc *)0)->domain_data));
->
-> struct pci_msix_desc {
-> 		u32 msix_ctrl;
-> 		u8	multiple	: 3;
-> 		u8	multi_cap	: 3;
-> 		u8	can_mask	: 1;
-> 		u8	is_64		: 1;
-> 		u16 default_irq;
-> 		void __iomem *mask_base;
-> }
-> static_assert(sizeof(struct pci_msix_desc) <= sizeof(((struct msi_desc *)0)->domain_data));
->
-> ideally hidden in the pci code with some irq_chip facing export API to
-> snoop in the bits a few places need
->
-> We've used 128 bits for the PCI descriptor, we might as well like
-> everyone have all 128 bits for whatever they want to do
 
-Not sure because we end up with nasty type casts for
+--dyjvyb6dwuevgtjt
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> struct msi_desc {
->    u64 domain_data[2];
-> }
+On Mon, Nov 14, 2022 at 06:55:41PM +0200, Andy Shevchenko wrote:
+> For the sake of integrity, include headers we are the direct
+> user of.
+>=20
+> Replace the inclusion of device.h by a forward declaration
+> of struct device plus a (cheaper) of types.h as device.h is
+> an expensive include (measured in compiler effort).
+>=20
+> While at it, move the struct pwm_lpss_chip to be after
+> the struct pwm_lpss_boardinfo as the former uses pointer
+> to the latter.
 
-Let me think about it.
+I stand by my feedback that this change is irrelevant in the end. If you
+drop it here, the patch gets a bit nicer and in the end the difference
+is just:
 
-Thanks,
+diff --git a/drivers/pwm/pwm-lpss.h b/drivers/pwm/pwm-lpss.h
+index b721532c6c3c..bf841250385f 100644
+--- a/drivers/pwm/pwm-lpss.h
++++ b/drivers/pwm/pwm-lpss.h
+@@ -17,15 +17,15 @@
+=20
+ #define LPSS_MAX_PWMS			4
+=20
+-extern const struct pwm_lpss_boardinfo pwm_lpss_byt_info;
+-extern const struct pwm_lpss_boardinfo pwm_lpss_bsw_info;
+-extern const struct pwm_lpss_boardinfo pwm_lpss_bxt_info;
+-extern const struct pwm_lpss_boardinfo pwm_lpss_tng_info;
+-
+ struct pwm_lpss_chip {
+ 	struct pwm_chip chip;
+ 	void __iomem *regs;
+ 	const struct pwm_lpss_boardinfo *info;
+ };
+=20
++extern const struct pwm_lpss_boardinfo pwm_lpss_byt_info;
++extern const struct pwm_lpss_boardinfo pwm_lpss_bsw_info;
++extern const struct pwm_lpss_boardinfo pwm_lpss_bxt_info;
++extern const struct pwm_lpss_boardinfo pwm_lpss_tng_info;
++
+ #endif	/* __PWM_LPSS_H */
 
-        tglx
+which is quite ok to leave as is.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--dyjvyb6dwuevgtjt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN19dAACgkQwfwUeK3K
+7AkwAAf8CRGF9PyJT9avbrmFmPw1LkilPdzVQ2dvkv9mh7X6tHmHhVp5l9CAe73U
+nyEMq85EFWYSM9Hu7plFZyeU76Ap94ZSXAvCIshWonoImLNGjAdMK4Jb2y0iaufo
+ZYfCF7mle5/rwHM5gk5NxG8FqoPV4vuLy7cTYNwpX92Mwe+oDyYk/EdoW1YFUV0k
+3R77XoyNPKA7X+fyiMpRQBJK7OiYc+JWp2cOFJOennNHyjZyDDT243imDkW38YtA
+xTaZyDvpFqcojGwuxDk+ARy2OM1kExRzKzMvG5uNNgsvfS3a2PfW+8CK6wzWxgVk
+weqavsGPLx80MGwso+Dsq/M2PC/Qbg==
+=Nl26
+-----END PGP SIGNATURE-----
+
+--dyjvyb6dwuevgtjt--
