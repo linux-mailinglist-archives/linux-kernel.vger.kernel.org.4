@@ -2,79 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84E7C62D442
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 08:41:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E227462D446
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 08:42:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234241AbiKQHlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 02:41:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40014 "EHLO
+        id S234754AbiKQHmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 02:42:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbiKQHlO (ORCPT
+        with ESMTP id S229931AbiKQHmN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 02:41:14 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91F8333;
-        Wed, 16 Nov 2022 23:41:12 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NCX0R2wwHz8R039;
-        Thu, 17 Nov 2022 15:41:11 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl2.zte.com.cn with SMTP id 2AH7f4ZX014225;
-        Thu, 17 Nov 2022 15:41:04 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Thu, 17 Nov 2022 15:41:06 +0800 (CST)
-Date:   Thu, 17 Nov 2022 15:41:06 +0800 (CST)
-X-Zmail-TransId: 2af96375e5922f0755ff
-X-Mailer: Zmail v1.0
-Message-ID: <202211171541061366938@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <andersson@kernel.org>
-Cc:     <mathieu.poirier@linaro.org>, <linux-remoteproc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIHJlbW90ZXByb2M6IGNvcmU6IFVzZSBkZXZpY2VfbWF0Y2hfb2Zfbm9kZSgp?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 2AH7f4ZX014225
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 6375E597.000 by FangMail milter!
-X-FangMail-Envelope: 1668670871/4NCX0R2wwHz8R039/6375E597.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 6375E597.000/4NCX0R2wwHz8R039
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 17 Nov 2022 02:42:13 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70B6AA1A6
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 23:42:12 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id v7so809314wmn.0
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 23:42:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=fp81WR1dwD4In8eMPiMBs3woGAJFhqoDd1dZ9IdE5jw=;
+        b=Lv/IXN9HRRcWZXtqmPB25i3q8KTUfZ6t+xsk7EdQ7IGKn+EQ0K83ETzrLL/JPpwpoF
+         UlK6AE5is+ojSayIHQ3sOI1dmY8049fIV05Gm7jaspBGx7/iglSqYVRCYxBVf0LYcb7s
+         hvUxdUJ1lXqAHmWi2Tv5TlrtqWfK0lpTtatlr03ts6+f3mBnbK37sQAc6lKO+lTixyqV
+         hwL5lAhsY01ecv+QgOASoz5Aoy0b+Sij0O0/xMZdn3kIqLqxMlVb1hpVhGgNrM7Fv88J
+         MPF0tKaXAIoyzWU7z4nuqT90NQi5NqadmVifpfyObdG+MKfx570Pe2e9W+YSp88Z+GNq
+         qhFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fp81WR1dwD4In8eMPiMBs3woGAJFhqoDd1dZ9IdE5jw=;
+        b=NUZZZN1hHeRifg1NR/Za5n578eMYQMB4zmIsf3wIkre61D5bu1FArTsSolrfWEsziO
+         Cm/ZyOZZAI40NxNcE7rPO/E3OB3bXw33WJY+BmAVbCMsBH1F1bUECDU3zbHBANM6QKgI
+         bmHSuuzV+Db9nbXMkSfg4YOplPUicuoByxpo/aDYSS3aiIInLYEZZ4rXu+gNMhkAZU1I
+         W/p3TEzbzIRez1zzPXjs/tCWSEHHbeDjCmxwKg+wNNWafBCjOHPSgMv1jAbsYEjcNc8h
+         BFukBuELAHxiEMc4rpopmk11inVPEmru1BtLzb/6rk2vZFnOBa7ZsffGazr3Fj6PYVi/
+         tvOA==
+X-Gm-Message-State: ANoB5plCUpWvOooqGyl488tQecMgvIiQdVdUEr/P3ez0wrjkpb48mUtp
+        XzSNlBqKa9BpZE2D/PekrwEcmw==
+X-Google-Smtp-Source: AA0mqf76uBamLSiz8AZO4X7010wIY/Z6HZJBkBiADrMVceWIB7XnbAaR277pjS+AyKAKY5COlUQfsQ==
+X-Received: by 2002:a1c:7303:0:b0:3cf:e7bd:3035 with SMTP id d3-20020a1c7303000000b003cfe7bd3035mr787172wmb.60.1668670931068;
+        Wed, 16 Nov 2022 23:42:11 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:aad5:8d14:a22f:2e8b? ([2a01:e0a:982:cbb0:aad5:8d14:a22f:2e8b])
+        by smtp.gmail.com with ESMTPSA id u23-20020a05600c00d700b003c6c3fb3cf6sm334685wmm.18.2022.11.16.23.42.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Nov 2022 23:42:10 -0800 (PST)
+Message-ID: <3be329e6-79f8-4b78-c24e-9341f4d803a2@linaro.org>
+Date:   Thu, 17 Nov 2022 08:42:10 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH 3/7] dt-bindings: mfd: qcom,spmi-pmic: document pmr735d
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Lee Jones <lee@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org
+References: <20221114-narmstrong-sm8550-upstream-spmi-v1-0-6338a2b4b241@linaro.org>
+ <20221114-narmstrong-sm8550-upstream-spmi-v1-3-6338a2b4b241@linaro.org>
+ <f3338d53-a0bf-9fc4-fcee-959e2b9a7e22@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <f3338d53-a0bf-9fc4-fcee-959e2b9a7e22@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+Hi,
 
-Replace the open-code with device_match_of_node().
+On 16/11/2022 12:16, Krzysztof Kozlowski wrote:
+> On 16/11/2022 11:11, Neil Armstrong wrote:
+>> Document compatible for the pmr735d SPMI PMIC.
+>>
+>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>> ---
+> 
+> I think this should be squashed.
 
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/remoteproc/remoteproc_core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I'll squash both 2 & 3 into 1, can I keep your Reviewed-by on 1 ?
 
-diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-index cb1d414a2389..11c165ddf1fc 100644
---- a/drivers/remoteproc/remoteproc_core.c
-+++ b/drivers/remoteproc/remoteproc_core.c
-@@ -2112,7 +2112,7 @@ struct rproc *rproc_get_by_phandle(phandle phandle)
+Thanks,
+Neil
 
- 	rcu_read_lock();
- 	list_for_each_entry_rcu(r, &rproc_list, node) {
--		if (r->dev.parent && r->dev.parent->of_node == np) {
-+		if (r->dev.parent && device_match_of_node(r->dev.parent, np)) {
- 			/* prevent underlying implementation from being removed */
- 			if (!try_module_get(r->dev.parent->driver->owner)) {
- 				dev_err(&r->dev, "can't get owner\n");
--- 
-2.25.1
+> 
+> Best regards,
+> Krzysztof
+> 
+
