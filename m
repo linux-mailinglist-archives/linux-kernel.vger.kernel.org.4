@@ -2,114 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A85F662DA07
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 12:58:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67F3C62DA0B
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 12:59:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239672AbiKQL60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 06:58:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59506 "EHLO
+        id S239625AbiKQL7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 06:59:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239788AbiKQL6V (ORCPT
+        with ESMTP id S234837AbiKQL7P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 06:58:21 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6E66E564
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 03:58:14 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id 4so1442730pli.0
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 03:58:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=GLoVFChROJ5V36ljC1bNCZRvnBVgO9ssi1DRcUAdvAk=;
-        b=NJGWsdluGlnqtVYNGjjNX1DFoLalmku5FeE/yJwRBIyMjzN4IDelPx29JMqCdCKP78
-         B8y6LxM56UiJqigX7MDHT4BYu56C6F2XUSLBJHvveMztS/lO2u3HCnALmkO9sO1O+WRA
-         mCWXfDQ2QohNau6Qv+0Fk2qOvd4krKcr3VMe/5dv3RHZjiB0q3dzu+w5QBH6iheLztkl
-         UC/Eyfzz6oz9qpvvRFj2lI5SK+IwaN7XZIjO0jWi0fV8YDhYDQueq/6PYt1vTCnZEooN
-         iQ2N89hs4AuIEAvo9fK6z1/eYlgW1IjEkTBU/PZsEtLIhv8GX60uARcUaF7HPW+y7cH2
-         eJPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GLoVFChROJ5V36ljC1bNCZRvnBVgO9ssi1DRcUAdvAk=;
-        b=duuuHq/73vkqNPMkSFmPxavOe6pAs4qWsh6lCkTgS1d6Jf4B0Q4dTt6fDI+dZruRPF
-         gicK0xjm91VYSXrvbg3OxNMZiNhBnwyXKCM/PA0CqIGxovT1e0tnAmzZyat0bnVLnoU7
-         UC5lnfUMoJslwtbyWAy4I32ujv4/5d3HvDY79O2QHD4jUINW0iEKdAt6OeO/4XdIuF5/
-         UMv9DNxxijpV/L4n2lx5wSmUaFIfysTbh5GKHGLAAuGd9RvnbuLDojwERWhv2SsJ/Dyy
-         B/+kB28scohp60rqTdnoo9nlty1qWhoqfWgEDQe2vySqZFeko1V0/ZX1dbwpVHJh4dGB
-         g3gA==
-X-Gm-Message-State: ANoB5pm5FTdhO2YkjDYJa4GL14VdSRYjtW6hKgho28t2i43CfqSOuIkR
-        Dclh2arJrzSceQr8lDlksfyM
-X-Google-Smtp-Source: AA0mqf7s25sxpfJwk+zLTPv7ei4nidM08tgz478Muexp4BmUxkF4n60Adpc43Uzd2cOb0eK8kwVAjQ==
-X-Received: by 2002:a17:90a:398f:b0:213:5a55:7dd2 with SMTP id z15-20020a17090a398f00b002135a557dd2mr2559599pjb.50.1668686293696;
-        Thu, 17 Nov 2022 03:58:13 -0800 (PST)
-Received: from thinkpad ([117.193.208.31])
-        by smtp.gmail.com with ESMTPSA id z4-20020aa79f84000000b005626a1c77c8sm952665pfr.80.2022.11.17.03.58.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 03:58:12 -0800 (PST)
-Date:   Thu, 17 Nov 2022 17:28:07 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     andersson@kernel.org, viresh.kumar@linaro.org,
-        krzysztof.kozlowski+dt@linaro.org, rafael@kernel.org,
-        robh+dt@kernel.org, johan@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v7 0/4] qcom-cpufreq-hw: Add CPU clock provider support
-Message-ID: <20221117115807.GF93179@thinkpad>
-References: <20221117053145.10409-1-manivannan.sadhasivam@linaro.org>
- <20221117101903.sw3hxaruj5sfhybw@bogus>
- <20221117111207.GA93179@thinkpad>
- <20221117115203.356vexlpca746o6m@bogus>
+        Thu, 17 Nov 2022 06:59:15 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D75113CC6
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 03:59:12 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e7de329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7de:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 494581EC064F;
+        Thu, 17 Nov 2022 12:59:11 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1668686351;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=awpbR7h4Pv1zHzHxS1pLlggYxafgPpDeFKa5pXmhjIQ=;
+        b=dIs1gnsg/QpNHes9IXpkSqmws3L8073+Fi9QhZA1k2XgtmE99T/BWqv3VUNmjMDR2cNIf9
+        6L5keCCoBbggQvewax7laWieHeWgajtnwvnjj4OVh+bIoUUIbw+kaZbOHsSpZtWk5DWZBf
+        51HXCtQbiVbjXQieZP/xvMUmtNuvbTQ=
+Date:   Thu, 17 Nov 2022 12:59:06 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Ravi Bangoria <ravi.bangoria@amd.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>, nslusarek@gmx.net,
+        Linus Torvalds <torvalds@linux-foundation.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] perf: Fix sys_perf_event_open() race against self
+Message-ID: <Y3YiCkjsa3NLIpq6@zn.tnic>
+References: <20220520183806.GV2578@worktop.programming.kicks-ass.net>
+ <700710fc-1ac1-1b39-0e63-eb86adb4b984@amd.com>
+ <Y3Vkmvi2vib7fwHn@zn.tnic>
+ <7bf54a3f-07f7-5471-f6c2-88d3d9bc7a5e@amd.com>
+ <Y3YPjo5wdKGVw7c5@zn.tnic>
+ <68df3063-3fa2-9332-1705-631716589450@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221117115203.356vexlpca746o6m@bogus>
+In-Reply-To: <68df3063-3fa2-9332-1705-631716589450@amd.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 11:52:03AM +0000, Sudeep Holla wrote:
-> On Thu, Nov 17, 2022 at 04:42:07PM +0530, Manivannan Sadhasivam wrote:
-> > On Thu, Nov 17, 2022 at 10:19:03AM +0000, Sudeep Holla wrote:
-> > > 
-> > > Why do you need the above 3 changes if the below(4/4) will ensure
-> > > cpufreq_get(cpu) returns the clock frequency. I was expecting to drop the
-> > > whole "confusing" clock bindings and the unnecessary clock provider.
-> > > 
-> > > Can't we just use cpufreq_get(cpu) ?
-> > > 
-> > 
-> > This can be possible for OPP implementations for the CPUs but not for other
-> > peripherals making use of OPP framework like GPU etc... Moreover this may end
-> > up with different code path for CPUs and other peripherals inside OPP framework.
-> > 
-> 
-> Fair enough, you can use this for non-CPU devices. But you are adding this for
-> CPUs here. Is the consumer unaware that this is a CPU or non-CPU device ?
-> If so, make sense. Otherwise, it is unnecessary to go through the clk
-> framework to get CPU frequency.
-> 
+On Thu, Nov 17, 2022 at 04:29:31PM +0530, Ravi Bangoria wrote:
+> I do agree that more tests are always better. Though, this simple program
+> was to test a _specific race condition_ which no longer exists in kernel.
+> So even if we add it, what would it test?
 
-The consumer here is the OPP framework and yes it doesn't have the knowledge of
-the device it is dealing with (for this context).
+It would make sure that race doesn't happen again. Or are you saying it
+will never ever happen so no need? Because we never ever rewrite the
+kernel?
 
-Thanks,
-Mani
+Lemme save us some time: this test is dirt cheap. It is good to have so
+that multithreaded sys_perf_event_open() is exercised. And once it is
+there, someone else might have a look at it and improve it more or reuse
+it for another test.
 
-> -- 
-> Regards,
-> Sudeep
+And there are no downsides.
+
+If you're still not convinced, lemme know and I'll turn it into a proper
+patch and submit it.
+
+Thx.
 
 -- 
-மணிவண்ணன் சதாசிவம்
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
