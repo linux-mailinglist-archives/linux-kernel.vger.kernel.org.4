@@ -2,98 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 445F562D598
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:56:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9A2462D59F
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:57:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239324AbiKQI4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 03:56:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54846 "EHLO
+        id S239670AbiKQI5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 03:57:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234299AbiKQIz5 (ORCPT
+        with ESMTP id S239379AbiKQI44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 03:55:57 -0500
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60E005E9D9;
-        Thu, 17 Nov 2022 00:55:57 -0800 (PST)
-Received: by mail-qv1-f47.google.com with SMTP id x13so768342qvn.6;
-        Thu, 17 Nov 2022 00:55:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TlT6ogh4GaBnqEF0LX4CJxoqBzrwLMc6a558GyxEcJA=;
-        b=rDxUwhZU/Yn8lfAMxLDsMx579MBQiw2fABi9a1y1+9idD1Zxy8yWS43ykiTb8vBOLm
-         1wZhye7Fa7EaPHnQhpMlWqLWrqQLfzLOX+YO9/Hjqgiyo50qtG6Dcw735ta3U/gY25L7
-         pYNEYSgn4lfmGv8CSWSQQ62bZwKROUf+6yYM9/row3FXmvzxgvZFcdolqx6+lJ4k2Ekx
-         YZ2E+RkQ+nU4rCoQWKezve6GjcdHQlWXgfZrK1FaRDT/kEnNdi4LGHlniJbCPYs9yYLk
-         uFvI86G23jH13LYVxFAYqROIaqSpWwFgchybgIM6iQ7MLfZW2CWtHYmeGZnJd4rt+Ilm
-         bdyg==
-X-Gm-Message-State: ANoB5pnQaFXssaw9j5wFav0Xgf/+1ngo1NsCdmSB9a8IiiK3+e3F3AP4
-        zW6pq8fcMbhQVw3eczOSUlKkcvZRniOQNw==
-X-Google-Smtp-Source: AA0mqf4PTxFbEtF8LSLXOEtjyl/EjgWoBaca7Snkqgde047AujFdNbwSJR96yfTUvEiQikCn9XcPFw==
-X-Received: by 2002:a0c:edc2:0:b0:4b4:4a3e:d20c with SMTP id i2-20020a0cedc2000000b004b44a3ed20cmr1503042qvr.112.1668675356417;
-        Thu, 17 Nov 2022 00:55:56 -0800 (PST)
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
-        by smtp.gmail.com with ESMTPSA id t3-20020ac86a03000000b0039c7b9522ecsm80211qtr.35.2022.11.17.00.55.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Nov 2022 00:55:56 -0800 (PST)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-369426664f9so12267987b3.12;
-        Thu, 17 Nov 2022 00:55:55 -0800 (PST)
-X-Received: by 2002:a81:6cd2:0:b0:38d:5807:4b9b with SMTP id
- h201-20020a816cd2000000b0038d58074b9bmr1127414ywc.358.1668675355727; Thu, 17
- Nov 2022 00:55:55 -0800 (PST)
+        Thu, 17 Nov 2022 03:56:56 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4C75FFD;
+        Thu, 17 Nov 2022 00:56:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1172E62118;
+        Thu, 17 Nov 2022 08:56:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D1E2C433B5;
+        Thu, 17 Nov 2022 08:56:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668675410;
+        bh=Tw6BAC0fGiYjOxb6MBJxYS5EJsfMYACdeY17dThGrFk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IGEKn8d5AcjmDphVrpB0RkyFaAiCI8vGwiPRulyuF/Wz5QVKBSK0CbAIPxx7JmY38
+         gkG9Hfoz/djygXECh3OdHw/ORKHUJU2oZs2J9/fJYOXqauJvosbwe1qFaZ1eivICjD
+         5j7ZF4/TCkcSamcxw0HUs4tENsS4kv/UAlBejKROwiPp8ZOF2jboOO/vIbLq9Z9N4B
+         k5GRCJdJkxvnkNlrdrW4OwHNZ3AdpAaOpGmlAELFTGXDbwg3XC4+4yCjp/4KntZuPg
+         l/M/9WMquLuxgVu5PxxupCwTf2BVAKAqLHpAM+yk325Y7JIaa8I90yb+1loPrcjuw1
+         eKfx/caZAXJJA==
+Date:   Thu, 17 Nov 2022 09:56:44 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
+        Christian Brauner <christian@brauner.io>,
+        Seth Forshee <sforshee@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the ntfs3 tree
+Message-ID: <20221117085644.52r6gviioifzysqn@wittgenstein>
+References: <20221115101756.5d311f25@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20221116205100.1136224-1-helgaas@kernel.org> <20221116205100.1136224-3-helgaas@kernel.org>
- <CAMuHMdVtSHdFhd-V=7EzSZz6K7+fW9rLxUCN_=yZTGfKoAhS6A@mail.gmail.com>
-In-Reply-To: <CAMuHMdVtSHdFhd-V=7EzSZz6K7+fW9rLxUCN_=yZTGfKoAhS6A@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 17 Nov 2022 09:55:44 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUm3yTomDZf5PvSzkVGiWqyam-LgXE39TbccEJKPV_vdg@mail.gmail.com>
-Message-ID: <CAMuHMdUm3yTomDZf5PvSzkVGiWqyam-LgXE39TbccEJKPV_vdg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] PCI: Allow building CONFIG_OF drivers with COMPILE_TEST
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     linux-pci@vger.kernel.org,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221115101756.5d311f25@canb.auug.org.au>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 9:55 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> On Wed, Nov 16, 2022 at 9:51 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > From: Bjorn Helgaas <bhelgaas@google.com>
-> >
-> > Many drivers depend on OF interfaces, so they won't be functional if
-> > CONFIG_OF is not set.  But OF provides stub functions in that case, so make
-> > them buildable if CONFIG_COMPILE_TEST is set.
-> >
-> > Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
->
-> Thanks for the update!
+On Tue, Nov 15, 2022 at 10:17:56AM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the ntfs3 tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+> 
+> fs/ntfs3/namei.c: In function 'ntfs_atomic_open':
+> fs/ntfs3/namei.c:374:39: error: implicit declaration of function 'get_acl' [-Werror=implicit-function-declaration]
+>   374 |                 struct posix_acl *p = get_acl(dir, ACL_TYPE_DEFAULT);
+>       |                                       ^~~~~~~
+> fs/ntfs3/namei.c:374:39: error: initialization of 'struct posix_acl *' from 'int' makes pointer from integer without a cast [-Werror=int-conversion]
+> 
+> Caused by commit
+> 
+>   2b108260ea2c ("fs/ntfs3: atomic_open implementation")
+> 
+> interacting with commit
+> 
+>   cac2f8b8d8b5 ("fs: rename current get acl method")
+> 
+> I have applied the following merge fix patch for today.
+> 
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Tue, 15 Nov 2022 10:07:59 +1100
+> Subject: [PATCH] fix up for "fs: rename current get acl method"
+> 
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  fs/ntfs3/namei.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/fs/ntfs3/namei.c b/fs/ntfs3/namei.c
+> index 20a6ac883312..c8db35e2ae17 100644
+> --- a/fs/ntfs3/namei.c
+> +++ b/fs/ntfs3/namei.c
+> @@ -371,7 +371,7 @@ static int ntfs_atomic_open(struct inode *dir, struct dentry *dentry,
+>  		 * ntfs_create_inode -> ntfs_init_acl -> posix_acl_create ->
+>  		 * ntfs_get_acl -> ntfs_get_acl_ex -> ni_lock
+>  		 */
+> -		struct posix_acl *p = get_acl(dir, ACL_TYPE_DEFAULT);
+> +		struct posix_acl *p = get_inode_acl(dir, ACL_TYPE_DEFAULT);
+>  
+>  		if (IS_ERR(p)) {
+>  			err = PTR_ERR(p);
 
-Forgot the most important part ;-)
+Hey Stephen,
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Thank you for the report! Your fix is correct. @Konstantin can either
+pull in
 
-Gr{oetje,eeting}s,
+ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git fs.acl.rework
 
-                        Geert
+or I'll make a note and will let Linus know during the merge window
+about this issue. In the latter case I'd just copy-paste your patch to
+Linus, Stephen?
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thanks!
+Christian
