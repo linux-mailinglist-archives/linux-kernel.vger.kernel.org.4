@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CC9462DA61
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 13:12:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5F7B62DA64
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 13:12:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240021AbiKQMMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 07:12:03 -0500
+        id S240006AbiKQMMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 07:12:08 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239972AbiKQML7 (ORCPT
+        with ESMTP id S239980AbiKQMMC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 07:11:59 -0500
+        Thu, 17 Nov 2022 07:12:02 -0500
 Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4077C47330;
-        Thu, 17 Nov 2022 04:11:58 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id d6so2448946lfs.10;
-        Thu, 17 Nov 2022 04:11:58 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911AB697EA;
+        Thu, 17 Nov 2022 04:12:01 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id d6so2449239lfs.10;
+        Thu, 17 Nov 2022 04:12:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2ZQ6+hOFaKk/5UeozWSpWsKewGAgOXsoqvkqyl7Kn/s=;
-        b=gd0JLH35qEWIjmLmCtR4y/iAm4+gwaDbDFYCCtYxgF+WPz0Ke/3cofKm/TqUTFc6Jt
-         K1VRk8lhx5uhhXSN0vjRU8GGheQv2Cnmgb5hdHhcU4UKKKvUzYqqGlmstI3JG3yov5ft
-         pT94l/csTjImx5XWffKwAshz7rPQoO/+Y4Hy7yd+jQCm81tLfufVgtovNIOw9nvCnKf7
-         N5If/F8jptlniIVIKz2q0i6P1jl7++hS2KgoRVhLnY/E8DQfSTaLGatr3VnrBwFJfzGj
-         fDeKu6zS5F0o9xw0MX3BLD7IzD7LaGKQrqlvhCScI5fD0/v1DXeswUBbcU+ebPSTKa0j
-         l4RA==
+        bh=PtY5ZHyipRkNysoYODyaeuM4ZjBIG8HLKq2Vwyap5Sc=;
+        b=dw4xecz+2wm8mqWsURpJtD0A0icS94F7IHTtHVSAWyR3LIulvpBoCE55JZBWB36f+P
+         vjV7EQSGgAcUrQW4m9KrhktQKdAjRzAIHrccIKzESSRt1rd0b7Bis3WovGifFNt/VFcd
+         Pjvu2InuvgqvupCW1g4PG/HDBNNZa7xvws2n13RxV24fW1Fl25slBn33VcapZ05KuwSX
+         bcea+Z5J5YeVDGEAo5hJ28EpqUC1oxdRlPPFekbBAfugfWsZFsbmliGJihYA22z2G8fR
+         /ByGY+o8rjrOFvrbKIMotXyRllykI7nzZVJ/eYaRWWjOYubq82sxUO5dC1ZVFBkjPy//
+         0GXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=2ZQ6+hOFaKk/5UeozWSpWsKewGAgOXsoqvkqyl7Kn/s=;
-        b=xT5Q0NzgXdvMOaJVgGIAWQ7YEeIWfNX6Tml5NvC1ZmEvyQ6xNypoilVnGMugA11emD
-         /D/CsTDrvp/GbP2BhF/DbTjFY8CV2V/5m4OgWiDuCTk2x2GjVnt1mRHdrGgkbW3HNUON
-         Xim3MNgED6KT2nbkWIsgojkEvTe6d4IeFIuJCvBybL45/UsHougdGN9tLJdVTQGW4GpI
-         DX876fF/nU42mKiYmubkT6knBApjoeALq1fz5jS5k+FiL5/2/dHwQq1L5F8OqdfbQ4/9
-         9wZmZ/TRmj2FtmCzrmYq/hek3rAxF+72CVFh4sjF0Fr0NR8er0nS43HgfwWPr7BespOq
-         shCw==
-X-Gm-Message-State: ANoB5pnpIcVtOGrGH4mjJtwyyF31wrWSB8GP9DJTuaYr6bpK6KIYG5L4
-        hSIocANag7a0jhyUOZwHSzw=
-X-Google-Smtp-Source: AA0mqf7Rc2ueYUbuwnhyiwp0b8rJSF699J5T7hNwZlH/8ZMpcClsIUNQzVKCZjx+ujp+id57lDWuZA==
-X-Received: by 2002:a05:6512:376c:b0:4ad:70c1:de61 with SMTP id z12-20020a056512376c00b004ad70c1de61mr745657lft.509.1668687116549;
-        Thu, 17 Nov 2022 04:11:56 -0800 (PST)
+        bh=PtY5ZHyipRkNysoYODyaeuM4ZjBIG8HLKq2Vwyap5Sc=;
+        b=6k9Pw9pv8JcouNaaHC/87nTSmmvcM7nvEeqvMkK7tdj4TFUV4leYkeQKl2k8hEyemO
+         9xJFuXgjG5OvOwLES6OXkh6rrp8crUF10Eg0c6JfQgyONCjSeYIURTTJmaMx0lld0dDK
+         iSbuwMGo9qW1DjayEpiP3kXRVZfn5lVbx4kAWU2F5BR0AKXnm94dxFbinVrgW+b2O9Bu
+         F5li0trj/EyHMmJVmD/dPGdTQ3LB2xlXpvR6hUvTzRoDjlOfx5Wkto89KKOiQ0BBlweF
+         fPZkA5WPgpGtEx7U+W7fbhdPNoF4WJQQVtQEdfeuzbtiBmq7/4E9muCOktTDmDXddh12
+         PRPw==
+X-Gm-Message-State: ANoB5plc9oflUWUYTFXojGdBXaTkvZ7HYJiJArDc10F+vrIbceLjh918
+        PVghhLGrU8p81nCVqMt56OU=
+X-Google-Smtp-Source: AA0mqf5/F0iDfpEr8uTBwOyhEheq8GDT0AOnJHS6Ikkp8qWEXxQbPb1IGa9fZDnK1qTMa0ocy43qzQ==
+X-Received: by 2002:a19:6755:0:b0:4ac:3f87:151f with SMTP id e21-20020a196755000000b004ac3f87151fmr847400lfj.398.1668687121029;
+        Thu, 17 Nov 2022 04:12:01 -0800 (PST)
 Received: from localhost.localdomain (82-209-154-112.cust.bredband2.com. [82.209.154.112])
-        by smtp.gmail.com with ESMTPSA id be40-20020a056512252800b00497a61453a9sm117565lfb.243.2022.11.17.04.11.55
+        by smtp.gmail.com with ESMTPSA id h11-20020a2ea48b000000b0027713ef5360sm167671lji.71.2022.11.17.04.12.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 04:11:55 -0800 (PST)
+        Thu, 17 Nov 2022 04:12:00 -0800 (PST)
 From:   Marcus Folkesson <marcus.folkesson@gmail.com>
 To:     Jiri Kosina <jikos@kernel.org>,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>,
         Marcus Folkesson <marcus.folkesson@gmail.com>
 Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
-Subject: [PATCH RESEND] HID: hid-elan: use default remove for hid device
-Date:   Thu, 17 Nov 2022 13:13:14 +0100
-Message-Id: <20221117121314.5577-1-marcus.folkesson@gmail.com>
+Subject: [PATCH RESEND] HID: hid-alps: use default remove for hid device
+Date:   Thu, 17 Nov 2022 13:13:22 +0100
+Message-Id: <20221117121322.5608-1-marcus.folkesson@gmail.com>
 X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -75,33 +75,33 @@ if no function is specified.
 
 Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
 ---
- drivers/hid/hid-elan.c | 6 ------
+ drivers/hid/hid-alps.c | 6 ------
  1 file changed, 6 deletions(-)
 
-diff --git a/drivers/hid/hid-elan.c b/drivers/hid/hid-elan.c
-index 8e4a5528e25d..76d93fc48f6a 100644
---- a/drivers/hid/hid-elan.c
-+++ b/drivers/hid/hid-elan.c
-@@ -507,11 +507,6 @@ static int elan_probe(struct hid_device *hdev, const struct hid_device_id *id)
- 	return ret;
+diff --git a/drivers/hid/hid-alps.c b/drivers/hid/hid-alps.c
+index 2b986d0dbde4..9abaff6f3afb 100644
+--- a/drivers/hid/hid-alps.c
++++ b/drivers/hid/hid-alps.c
+@@ -820,11 +820,6 @@ static int alps_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ 	return 0;
  }
  
--static void elan_remove(struct hid_device *hdev)
+-static void alps_remove(struct hid_device *hdev)
 -{
 -	hid_hw_stop(hdev);
 -}
 -
- static const struct hid_device_id elan_devices[] = {
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_ELAN, USB_DEVICE_ID_HP_X2),
- 	  .driver_data = ELAN_HAS_LED },
-@@ -529,7 +524,6 @@ static struct hid_driver elan_driver = {
- 	.input_configured = elan_input_configured,
- 	.raw_event = elan_raw_event,
- 	.probe = elan_probe,
--	.remove = elan_remove,
- };
- 
- module_hid_driver(elan_driver);
+ static const struct hid_device_id alps_id[] = {
+ 	{ HID_DEVICE(HID_BUS_ANY, HID_GROUP_ANY,
+ 		USB_VENDOR_ID_ALPS_JP, HID_DEVICE_ID_ALPS_U1_DUAL) },
+@@ -840,7 +835,6 @@ static struct hid_driver alps_driver = {
+ 	.name = "hid-alps",
+ 	.id_table		= alps_id,
+ 	.probe			= alps_probe,
+-	.remove			= alps_remove,
+ 	.raw_event		= alps_raw_event,
+ 	.input_mapping		= alps_input_mapping,
+ 	.input_configured	= alps_input_configured,
 -- 
 2.38.1
 
