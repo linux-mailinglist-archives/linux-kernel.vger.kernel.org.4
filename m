@@ -2,75 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EAD462D18B
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 04:19:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20DDF62D1B4
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 04:32:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233151AbiKQDTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 22:19:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46248 "EHLO
+        id S234157AbiKQDcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 22:32:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbiKQDTV (ORCPT
+        with ESMTP id S237359AbiKQDb5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 22:19:21 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 92E3758BC7;
-        Wed, 16 Nov 2022 19:19:18 -0800 (PST)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8BxHLc0qHVj0SYIAA--.11779S3;
-        Thu, 17 Nov 2022 11:19:16 +0800 (CST)
-Received: from [10.180.13.64] (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxtuMwqHVj3J4VAA--.57027S2;
-        Thu, 17 Nov 2022 11:19:13 +0800 (CST)
-Subject: Re: [PATCH v3 1/2] gpio: loongson: add dts/acpi gpio support
-To:     WANG Xuerui <kernel@xen0n.name>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Juxin Gao <gaojuxin@loongson.cn>,
-        Bibo Mao <maobibo@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        Arnaud Patard <apatard@mandriva.com>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     lvjianmin <lvjianmin@loongson.cn>,
-        zhanghongchen <zhanghongchen@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>, zhuyinbo@loongson.cn
-References: <20221116065335.8823-1-zhuyinbo@loongson.cn>
- <3ae71f5c-2737-b313-31f5-5de9eedcf6cd@xen0n.name>
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-Message-ID: <61354cd8-f631-80d1-8f9e-73d3790aae0f@loongson.cn>
-Date:   Thu, 17 Nov 2022 11:19:12 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Wed, 16 Nov 2022 22:31:57 -0500
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C88E2C5
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 19:31:54 -0800 (PST)
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20221117033114epoutp0274408966b4ec4db8596b7bfa8bc36999~oQa1jDkqD2995229952epoutp02_
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 03:31:14 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20221117033114epoutp0274408966b4ec4db8596b7bfa8bc36999~oQa1jDkqD2995229952epoutp02_
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1668655874;
+        bh=iW+EEZ5DDVxBNv18mHjY1/pchzwXF/LQI1zg/4DYalw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=q1OQgmepYYDq6VE3T5rfC/jPPlHa684iEqbh4H8leop9nI8bfl4pshrRfMJVDQBpe
+         QR9pz9SQi7hWXzyWFBi7Jgf9eNrRwljbKbZGksYqOkNORXnctP9b3R+zgnfgUkmy80
+         P9EKreeUjBuiZVGSmX3afIc8s7MFUGIRMva7wlB8=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+        20221117033114epcas5p4344972b0baef6246c7e3c76b7377a396~oQa1LSuyY3006930069epcas5p48;
+        Thu, 17 Nov 2022 03:31:14 +0000 (GMT)
+Received: from epsmges5p3new.samsung.com (unknown [182.195.38.174]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4NCQS12G8lz4x9Pp; Thu, 17 Nov
+        2022 03:31:13 +0000 (GMT)
+Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
+        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        A3.A9.56352.EFAA5736; Thu, 17 Nov 2022 12:31:10 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
+        20221117033110epcas5p23a5a214690a4956d35463962153a27ba~oQaxnZfWC2865428654epcas5p27;
+        Thu, 17 Nov 2022 03:31:10 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20221117033110epsmtrp1274f90a6499cd9e4c85f61d214ffbf1a~oQaxms2v91179311793epsmtrp1N;
+        Thu, 17 Nov 2022 03:31:10 +0000 (GMT)
+X-AuditID: b6c32a4b-5f7fe7000001dc20-39-6375aafe089b
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        DB.F7.14392.EFAA5736; Thu, 17 Nov 2022 12:31:10 +0900 (KST)
+Received: from test-zns (unknown [107.110.206.5]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20221117033109epsmtip223250a609729a653ae71a51060acd2e7~oQawjr4HJ0188201882epsmtip2L;
+        Thu, 17 Nov 2022 03:31:09 +0000 (GMT)
+Date:   Thu, 17 Nov 2022 08:49:51 +0530
+From:   Kanchan Joshi <joshi.k@samsung.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     August Wikerfors <git@augustwikerfors.se>,
+        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] nvme-pci: add NVME_QUIRK_BOGUS_NID for Samsung PM9B1
+ 256G and 512G
+Message-ID: <20221117031951.GB392@test-zns>
 MIME-Version: 1.0
-In-Reply-To: <3ae71f5c-2737-b313-31f5-5de9eedcf6cd@xen0n.name>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxtuMwqHVj3J4VAA--.57027S2
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvAXoWfAw1rWrWxGFykZr4rWF1xXwb_yoW5GFWDGo
-        W7Kr1fXrWrJr1jgr1UJr15XF13XF1UJrnFyr17Gry7JF1YyF1UG3yUJrW7t3yUJF1rGryU
-        JFy7GrWIyFy7tF15n29KB7ZKAUJUUUUf529EdanIXcx71UUUUU7KY7ZEXasCq-sGcSsGvf
-        J3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnRJU
-        UUPF1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFV
-        AK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2
-        z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr
-        1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1ln4kS14v26r126r1DM2AIxVAIcxkE
-        cVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F4
-        0Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC
-        6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7
-        AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26rWl4I8I3I0E4IkC
-        6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
-        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF
-        0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0x
-        vE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv
-        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU2mFADUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+In-Reply-To: <20221116171935.GA24524@lst.de>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprOJsWRmVeSWpSXmKPExsWy7bCmlu6/VaXJBkvvmFn833OMzWLCv0VM
+        FitXH2WymHToGqPF5V1z2CzmL3vKbrHu9XsWB3aPnsmr2T0mNr9j9zh/byOLx6ZVnWwem5fU
+        e+y+2cDm8XmTXAB7VLZNRmpiSmqRQmpecn5KZl66rZJ3cLxzvKmZgaGuoaWFuZJCXmJuqq2S
+        i0+ArltmDtA9SgpliTmlQKGAxOJiJX07m6L80pJUhYz84hJbpdSClJwCkwK94sTc4tK8dL28
+        1BIrQwMDI1OgwoTsjPuv9zMWbGWvWLvzCksD4wK2LkZODgkBE4meB99Zuxi5OIQEdjNKXFq9
+        E8r5xCjRfnMzM4TzjVHi6efVcC1r90yESuxllHg1bxIThPMMqOXgXSCHg4NFQFVi+1UzEJNN
+        QFPiwuRSkF4RASWJp6/OMoKUMwucZ5S4/Gw5I0hCWCBS4tGK62CtvALaEpvawOp5BQQlTs58
+        wgJicwroSMw+sBPMFhVQljiw7TjYWgmBTg6J+zeXMkMc5yLRcuAXC4QtLPHq+BZ2CFtK4mV/
+        G5SdLHFp5jkmCLtE4vGeg1C2vUTrqX6wOcwCGRInWndD2XwSvb+fgN0mIcAr0dEmBFGuKHFv
+        0lNWCFtc4uGMJVC2h8TKlw/ZIEGygVFi05K5jBMY5WYh+WcWkhUQtpVE54cm1llAK5gFpCWW
+        /+OAMDUl1u/SX8DIuopRMrWgODc9tdi0wDgvtRwex8n5uZsYwSlUy3sH46MHH/QOMTJxMB5i
+        lOBgVhLhLVEvTRbiTUmsrEotyo8vKs1JLT7EaAqMnYnMUqLJ+cAknlcSb2hiaWBiZmZmYmls
+        Zqgkzrt4hlaykEB6YklqdmpqQWoRTB8TB6dUA9PJfylfWdbf39949UFKckjTsjV55x0XB/2c
+        ySJRe4XTc/7XQyKuvx97hy85ydwkvmJ5WHz3NLP2lSaeEm4f9/fnCiuHFSZerXNaE7+lfuH+
+        9kOdK4sdDT8rrFDe+eTvweQPbo+l3VZ45RXdiImz4ZowreeFyTuzC3JT1Ur3HvvMt/Z63uLK
+        /EPMXU1zI9vWJfxP2jHh98PIxgm/br7zUogOE/y21m6CfKC1x50u7RMBW3/P2uRxLfj2vWLV
+        md/Pe++sz7g5QXEXF/+XbPkjq5VfqZzZcK8p9GbuhHtL/V99CWFnZ2ea9DXDu23ixMt31TuP
+        cnz6emci0/sHAZ9efVu7L1dJyLxvxvvTGix8by91KbEUZyQaajEXFScCAIMAeSAqBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrKLMWRmVeSWpSXmKPExsWy7bCSvO6/VaXJBjNuKlv833OMzWLCv0VM
+        FitXH2WymHToGqPF5V1z2CzmL3vKbrHu9XsWB3aPnsmr2T0mNr9j9zh/byOLx6ZVnWwem5fU
+        e+y+2cDm8XmTXAB7FJdNSmpOZllqkb5dAlfG8sNTWQqes1Sc/7WdsYHxDXMXIyeHhICJxNo9
+        E4FsLg4hgd2MEhvabzNCJMQlmq/9YIewhSVW/nvODlH0hFHi6qxNQB0cHCwCqhLbr5qBmGwC
+        mhIXJpeClIsIKEk8fXWWEaScWeA8o8TNtpVgM4UFIiUerbjOBFLPK6AtsamtFGLkBqC9s9rB
+        angFBCVOznzCAmIzC5hJzNv8EGwVs4C0xPJ/HCBhTgEdidkHdoKViAooSxzYdpxpAqPgLCTd
+        s5B0z0LoXsDIvIpRMrWgODc9t9iwwDAvtVyvODG3uDQvXS85P3cTIzgmtDR3MG5f9UHvECMT
+        B+MhRgkOZiUR3hL10mQh3pTEyqrUovz4otKc1OJDjNIcLErivBe6TsYLCaQnlqRmp6YWpBbB
+        ZJk4OKUamGK73vFFPAo4vrLn7GzvMv1oX2+D+v/H58Za8Su9+ucVUWd/YIvyua/879kNKnIe
+        Tzd8UqTjsP8CY+8cHw3fYhtupYMGhkJ7zDcI/OYOj31o9C1Lf/HOuy+uPuKdNPfjosKojYZM
+        mz8umLOye3drl7BifnV15Zczl9Ktfa/5mXfeWdTr/Hay85mPjMslJj9s+2ZTN/83w4ftOre2
+        O1lq3l5jOU+d5bRdwZVNlr4lHx9EPk15FlqX//Jt81OFP3/1P/MoBVxMLytkYLp0w1thxswv
+        kZtevQ/8P3tz2JcPMs4tni+kpG9UZh7Nd1rLt0fk2K2WrHebizo4o6UMK1y/MunsZfjlsE1L
+        KZVDcb3ELiWW4oxEQy3mouJEACZTnNv4AgAA
+X-CMS-MailID: 20221117033110epcas5p23a5a214690a4956d35463962153a27ba
+X-Msg-Generator: CA
+Content-Type: multipart/mixed;
+        boundary="----G62UEJgdyo2JOumF_Do4Y7B7G39M5PuLVzFwfXKQiOy3iUJg=_4cb27_"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20221116172324epcas5p3d9877249797ac741ead5785cba27e00e
+References: <20221116171727.4083-1-git@augustwikerfors.se>
+        <CGME20221116172324epcas5p3d9877249797ac741ead5785cba27e00e@epcas5p3.samsung.com>
+        <20221116171935.GA24524@lst.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,664 +117,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+------G62UEJgdyo2JOumF_Do4Y7B7G39M5PuLVzFwfXKQiOy3iUJg=_4cb27_
+Content-Type: text/plain; charset="utf-8"; format="flowed"
+Content-Disposition: inline
 
-
-在 2022/11/16 下午4:35, WANG Xuerui 写道:
-> On 2022/11/16 14:53, Yinbo Zhu wrote:
->> The latest Loongson series platform use dts or acpi framework to
->> register gpio device resources, such as the Loongson-2 series
->> SoC of LOONGARCH architecture. In order to support dts, acpi and
->> compatibility with previous platform device resources in driver,
->> this patch was added.
-> 
-> "LoongArch", not "LOONGARCH". The latter sounds too similar to a mass 
-> replace from the all-caps MIPS.
-> 
-> But again the commit message is overly verbose IMO, and contains minor 
-> grammatical mistakes that don't hamper understanding but are a nuisance 
-> nevertheless. I think the following could be enough:
-> 
-> "Subject: gpio: loongson: Add DTS and ACPI support"
-> 
-> "Latest Loongson platforms such as the Loongson-2 SoC series describe 
-> GPIO device resources with DTS or ACPI. Add such support to the existing 
-> platform device driver."
-> 
+On Wed, Nov 16, 2022 at 06:19:35PM +0100, Christoph Hellwig wrote:
+>On Wed, Nov 16, 2022 at 06:17:27PM +0100, August Wikerfors wrote:
+>> The Samsung PM9B1 512G SSD found in some Lenovo Yoga 7 14ARB7 laptop units
+>> reports eui as 0001000200030004 when resuming from s2idle, causing the
+>> device to be removed with this error in dmesg:
 >>
->> Signed-off-by: lvjianmin <lvjianmin@loongson.cn>
-> 
-> He's canonically "Jianmin Lv <...>" in the Git history.
-> 
->> Signed-off-by: zhanghongchen <zhanghongchen@loongson.cn>
-> 
-> Please use proper spelling, either "Zhang Hongchen" or "Hongchen Zhang". 
-> I think every people with a loongson.cn address is using the latter form 
-> i.e. the Western order of "Firstname Lastname" except the "Liu Peibao" 
-> below, but ask the person themselves for honoring their own preference.
-> 
->> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
->> Signed-off-by: Juxin Gao <gaojuxin@loongson.cn>
->> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->> ---
->> Change in v3:
->>         1. Move the gpio platform data struct from arch/ into 
->> include/linux/
->>            platform_data/.
->>         2. Replace platform_gpio_data with loongson_gpio_platform_data 
->> in .c.
->>         3. Add maintainer in MAINTAINERS file for 
->> include/linux/platform_data/
->>            gpio-loongson.h and gpio-loongson.c
->> Change in v2:
->>         1. Fixup of_loongson_gpio_get_props and remove the parse logic 
->> about
->>                "loongson,conf_offset", "loongson,out_offset", 
->> "loongson,in_offset",
->>            "loongson,gpio_base", "loongson,support_irq" then kernel 
->> driver will
->>            initial them that depend compatible except 
->> "loongson,gpio_base".
->>
->>   MAINTAINERS                                 |   8 +
->>   drivers/gpio/Kconfig                        |   6 +-
->>   drivers/gpio/gpio-loongson.c                | 424 ++++++++++++++++----
->>   include/linux/platform_data/gpio-loongson.h |  22 +
->>   4 files changed, 385 insertions(+), 75 deletions(-)
->>   create mode 100644 include/linux/platform_data/gpio-loongson.h
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 5114db9c8f32..bbd7a0d946eb 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -12051,6 +12051,14 @@ S:    Maintained
->>   F:    
->> Documentation/devicetree/bindings/hwinfo/loongson,ls2k-chipid.yaml
->>   F:    drivers/soc/loongson/loongson2_guts.c
->> +LOONGSON SERIES GPIO DRIVER
-> 
-> Drop "series" here and everywhere else.
-> 
->> +M:    Huacai Chen <chenhuacai@kernel.org>
->> +M:    Yinbo Zhu <zhuyinbo@loongson.cn>
->> +L:    linux-gpio@vger.kernel.org
->> +S:    Maintained
->> +F:    drivers/gpio/gpio-loongson.c
->> +F:    include/linux/platform_data/gpio-loongson.h
->> +
->>   LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
->>   M:    Sathya Prakash <sathya.prakash@broadcom.com>
->>   M:    Sreekanth Reddy <sreekanth.reddy@broadcom.com>
->> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
->> index a01af1180616..fb8f0075a8ae 100644
->> --- a/drivers/gpio/Kconfig
->> +++ b/drivers/gpio/Kconfig
->> @@ -376,10 +376,10 @@ config GPIO_LOGICVC
->>         programmable logic block.
->>   config GPIO_LOONGSON
->> -    bool "Loongson-2/3 GPIO support"
->> -    depends on CPU_LOONGSON2EF || CPU_LOONGSON64
->> +    bool "Loongson series GPIO support"
->> +    depends on CPU_LOONGSON2EF || CPU_LOONGSON64 || LOONGARCH
->>       help
->> -      Driver for GPIO functionality on Loongson-2F/3A/3B processors.
->> +      Driver for GPIO functionality on Loongson seires processors.
->>   config GPIO_LPC18XX
->>       tristate "NXP LPC18XX/43XX GPIO support"
->> diff --git a/drivers/gpio/gpio-loongson.c b/drivers/gpio/gpio-loongson.c
->> index a42145873cc9..1e553db03cf8 100644
->> --- a/drivers/gpio/gpio-loongson.c
->> +++ b/drivers/gpio/gpio-loongson.c
->> @@ -1,13 +1,15 @@
->>   // SPDX-License-Identifier: GPL-2.0-or-later
->>   /*
->> - *  Loongson-2F/3A/3B GPIO Support
->> + *  Loongson Series GPIO Support
->>    *
->> - *  Copyright (c) 2008 Richard Liu,  STMicroelectronics     
->> <richard.liu@st.com>
->> + *  Copyright (c) 2008 Richard Liu, STMicroelectronics 
->> <richard.liu@st.com>
->>    *  Copyright (c) 2008-2010 Arnaud Patard <apatard@mandriva.com>
->>    *  Copyright (c) 2013 Hongbing Hu <huhb@lemote.com>
->>    *  Copyright (c) 2014 Huacai Chen <chenhc@lemote.com>
->> + *  Copyright (c) 2022-2023 Yinbo Zhu <zhuyinbo@loongson.cn>
-> 
-> Is it 2023 already?
-> 
-> And do the people listed in the S-o-b tags need a mention here? Or is it 
-> more appropriate to remove some of them or demote to tags like 
-> Co-developed-by?
-> 
->>    */
->> +#include <linux/acpi.h>
->>   #include <linux/kernel.h>
->>   #include <linux/init.h>
->>   #include <linux/module.h>
->> @@ -16,120 +18,398 @@
->>   #include <linux/gpio/driver.h>
->>   #include <linux/platform_device.h>
->>   #include <linux/bitops.h>
->> +#include <linux/platform_data/gpio-loongson.h>
->>   #include <asm/types.h>
->> -#include <loongson.h>
->> -
->> -#define STLS2F_N_GPIO        4
->> -#define STLS3A_N_GPIO        16
->> -
->> -#ifdef CONFIG_CPU_LOONGSON64
->> -#define LOONGSON_N_GPIO    STLS3A_N_GPIO
->> +#if defined(CONFIG_LOONGARCH)
->> +#include <asm/loongson.h>
->> +#elif defined(CONFIG_CPU_LOONGSON2EF)
->> +#include <asm/mach-loongson2ef/loongson.h>
->>   #else
->> -#define LOONGSON_N_GPIO    STLS2F_N_GPIO
->> +#include <asm/mach-loongson64/loongson.h>
->>   #endif
->> -/*
->> - * Offset into the register where we read lines, we write them from 
->> offset 0.
->> - * This offset is the only thing that stand between us and using
->> - * GPIO_GENERIC.
->> - */
->> -#define LOONGSON_GPIO_IN_OFFSET    16
->> +#define LOONGSON_GPIO_IN(x)        (x->base + x->in_offset)
->> +#define LOONGSON_GPIO_OUT(x)        (x->base + x->out_offset)
->> +#define LOONGSON_GPIO_OEN(x)        (x->base + x->conf_offset)
->> +
->> +#define LOONGSON_GPIO_IN_BYTE(x, gpio)    (x->base +\
->> +                    x->in_offset + gpio)
->> +#define LOONGSON_GPIO_OUT_BYTE(x, gpio)    (x->base +\
->> +                    x->out_offset + gpio)
->> +#define LOONGSON_GPIO_OEN_BYTE(x, gpio)    (x->base +\
->> +                    x->conf_offset + gpio)
->> +
->> +struct loongson_gpio_chip {
->> +    struct gpio_chip    chip;
->> +    spinlock_t        lock;
->> +    void __iomem        *base;
->> +    int            conf_offset;
->> +    int            out_offset;
->> +    int            in_offset;
->> +    u16            *gsi_idx_map;
->> +    u16            mapsize;
->> +    bool            support_irq;
->> +};
->> +
->> +static int loongson_gpio_request(
->> +            struct gpio_chip *chip, unsigned int pin)
->> +{
->> +    if (pin >= chip->ngpio)
->> +        return -EINVAL;
->> +    else
-> 
-> Drop the "else" because the true branch is an early return i.e. diverging.
-> 
->> +        return 0;
->> +}
->> +
->> +static inline void __set_direction(struct loongson_gpio_chip *lgpio,
->> +            unsigned int pin, int input)
->> +{
->> +    u64 qval;
->> +    u8  bval;
->> +
->> +    if (!strcmp(lgpio->chip.label, "loongson,ls2k-gpio")) {
->> +        qval = readq(LOONGSON_GPIO_OEN(lgpio));
->> +        if (input)
->> +            qval |= 1ULL << pin;
->> +        else
->> +            qval &= ~(1ULL << pin);
->> +        writeq(qval, LOONGSON_GPIO_OEN(lgpio));
->> +        return;
->> +    }
->> -static DEFINE_SPINLOCK(gpio_lock);
->> +    if (!strcmp(lgpio->chip.label, "loongson,ls7a-gpio") ||
->> +            !strncmp(lgpio->chip.label, "LOON0002", 8)) {
->> +        if (input)
->> +            bval = 1;
->> +        else
->> +            bval = 0;
-> 
-> bval = input ? 1 : 0;
-> 
->> +        writeb(bval, LOONGSON_GPIO_OEN_BYTE(lgpio, pin));
->> +        return;
->> +    }
->> +
->> +    if (!strcmp(lgpio->chip.label, "loongson,platform-gpio")) {
->> +        if (input)
->> +            LOONGSON_GPIOIE |= BIT(pin);
->> +        else
->> +            LOONGSON_GPIOIE &= ~BIT(pin);
->> +        return;
->> +    }
->> +}
->> -static int loongson_gpio_get_value(struct gpio_chip *chip, unsigned 
->> gpio)
->> +static void __set_level(struct loongson_gpio_chip *lgpio, unsigned 
->> int pin,
->> +            int high)
->>   {
->> -    u32 val;
->> +    u64 qval;
->> +    u8 bval;
->> +
->> +    if (!strcmp(lgpio->chip.label, "loongson,ls2k-gpio")) {
->> +        qval = readq(LOONGSON_GPIO_OUT(lgpio));
->> +        if (high)
->> +            qval |= 1ULL << pin;
->> +        else
->> +            qval &= ~(1ULL << pin);
->> +        writeq(qval, LOONGSON_GPIO_OUT(lgpio));
->> +        return;
->> +    }
->> -    spin_lock(&gpio_lock);
->> -    val = LOONGSON_GPIODATA;
->> -    spin_unlock(&gpio_lock);
->> +    if (!strcmp(lgpio->chip.label, "loongson,ls7a-gpio") ||
->> +            !strncmp(lgpio->chip.label, "LOON0002", 8)) {
->> +        if (high)
->> +            bval = 1;
->> +        else
->> +            bval = 0;
-> 
-> bval = high ? 1 : 0;
-> 
->> +        writeb(bval, LOONGSON_GPIO_OUT_BYTE(lgpio, pin));
->> +        return;
->> +    }
->> -    return !!(val & BIT(gpio + LOONGSON_GPIO_IN_OFFSET));
->> +    if (!strcmp(lgpio->chip.label, "loongson,platform-gpio")) {
->> +        if (LOONGSON_GPIODATA)
->> +            LOONGSON_GPIODATA |= BIT(pin);
->> +        else
->> +            LOONGSON_GPIODATA &= ~BIT(pin);
->> +        return;
->> +    }
->>   }
->> -static void loongson_gpio_set_value(struct gpio_chip *chip,
->> -        unsigned gpio, int value)
->> +static int loongson_gpio_direction_input(
->> +                struct gpio_chip *chip, unsigned int pin)
->>   {
->> -    u32 val;
->> +    unsigned long flags;
->> +    struct loongson_gpio_chip *lgpio =
->> +        container_of(chip, struct loongson_gpio_chip, chip);
->> -    spin_lock(&gpio_lock);
->> -    val = LOONGSON_GPIODATA;
->> -    if (value)
->> -        val |= BIT(gpio);
->> -    else
->> -        val &= ~BIT(gpio);
->> -    LOONGSON_GPIODATA = val;
->> -    spin_unlock(&gpio_lock);
->> +    spin_lock_irqsave(&lgpio->lock, flags);
->> +    __set_direction(lgpio, pin, 1);
->> +    spin_unlock_irqrestore(&lgpio->lock, flags);
->> +
->> +    return 0;
->>   }
->> -static int loongson_gpio_direction_input(struct gpio_chip *chip, 
->> unsigned gpio)
->> +static int loongson_gpio_direction_output(
->> +                struct gpio_chip *chip, unsigned int pin,
->> +                int value)
->>   {
->> -    u32 temp;
->> +    struct loongson_gpio_chip *lgpio =
->> +        container_of(chip, struct loongson_gpio_chip, chip);
->> +    unsigned long flags;
->> -    spin_lock(&gpio_lock);
->> -    temp = LOONGSON_GPIOIE;
->> -    temp |= BIT(gpio);
->> -    LOONGSON_GPIOIE = temp;
->> -    spin_unlock(&gpio_lock);
->> +    spin_lock_irqsave(&lgpio->lock, flags);
->> +    __set_level(lgpio, pin, value);
->> +    __set_direction(lgpio, pin, 0);
->> +    spin_unlock_irqrestore(&lgpio->lock, flags);
->>       return 0;
->>   }
->> -static int loongson_gpio_direction_output(struct gpio_chip *chip,
->> -        unsigned gpio, int level)
->> +static int loongson_gpio_get(struct gpio_chip *chip, unsigned int pin)
->> +{
->> +    u64 qval;
->> +    u8  bval;
->> +    int val;
->> +    struct loongson_gpio_chip *lgpio =
->> +        container_of(chip, struct loongson_gpio_chip, chip);
->> +
->> +    if (!strcmp(lgpio->chip.label, "loongson,ls2k-gpio")) {
->> +        qval = readq(LOONGSON_GPIO_IN(lgpio));
->> +        return ((qval & (1ULL << pin)) != 0);
->> +    }
->> +
->> +    if (!strcmp(lgpio->chip.label, "loongson,ls7a-gpio") ||
->> +            !strncmp(lgpio->chip.label, "LOON0002", 8)) {
->> +        bval = readb(LOONGSON_GPIO_IN_BYTE(lgpio, pin));
->> +        return (bval & 1);
->> +    }
->> +
->> +    if (!strcmp(lgpio->chip.label, "loongson,platform-gpio")) {
->> +        val = LOONGSON_GPIODATA;
->> +        return !!(val & BIT(pin + lgpio->in_offset));
->> +    }
->> +
->> +    return -ENXIO;
->> +}
->> +
->> +static void loongson_gpio_set(struct gpio_chip *chip, unsigned int pin,
->> +            int value)
->>   {
->> -    u32 temp;
->> +    unsigned long flags;
->> +    struct loongson_gpio_chip *lgpio =
->> +        container_of(chip, struct loongson_gpio_chip, chip);
->> -    loongson_gpio_set_value(chip, gpio, level);
->> -    spin_lock(&gpio_lock);
->> -    temp = LOONGSON_GPIOIE;
->> -    temp &= ~BIT(gpio);
->> -    LOONGSON_GPIOIE = temp;
->> -    spin_unlock(&gpio_lock);
->> +    spin_lock_irqsave(&lgpio->lock, flags);
->> +    __set_level(lgpio, pin, value);
->> +    spin_unlock_irqrestore(&lgpio->lock, flags);
->> +}
->> +
->> +static int loongson_gpio_to_irq(
->> +            struct gpio_chip *chip, unsigned int offset)
->> +{
->> +    struct platform_device *pdev =
->> +        container_of(chip->parent, struct platform_device, dev);
->> +    struct loongson_gpio_chip *lgpio =
->> +        container_of(chip, struct loongson_gpio_chip, chip);
->> +
->> +    if (offset >= chip->ngpio)
->> +        return -EINVAL;
->> +
->> +    if ((lgpio->gsi_idx_map != NULL) && (offset < lgpio->mapsize))
->> +        offset = lgpio->gsi_idx_map[offset];
->> +
->> +    return platform_get_irq(pdev, offset);
->> +}
->> +
->> +static int loongson_gpio_init(
->> +            struct device *dev, struct loongson_gpio_chip *lgpio,
->> +            struct device_node *np, void __iomem *base)
->> +{
->> +    lgpio->chip.request = loongson_gpio_request;
->> +    lgpio->chip.direction_input = loongson_gpio_direction_input;
->> +    lgpio->chip.get = loongson_gpio_get;
->> +    lgpio->chip.direction_output = loongson_gpio_direction_output;
->> +    lgpio->chip.set = loongson_gpio_set;
->> +    lgpio->chip.can_sleep = 0;
->> +    lgpio->chip.of_node = np;
->> +    lgpio->chip.parent = dev;
->> +    spin_lock_init(&lgpio->lock);
->> +    lgpio->base = (void __iomem *)base;
->> +
->> +    if (!strcmp(lgpio->chip.label, "loongson,ls7a-gpio") ||
->> +            !strncmp(lgpio->chip.label, "LOON0002", 8) ||
->> +            !strcmp(lgpio->chip.label, "loongson,ls2k-gpio"))
-> 
-> Aren't these 3 device IDs the only models we support/have right now? If 
-> so I think the check could safely be dropped.
-> 
->> +        lgpio->chip.to_irq = loongson_gpio_to_irq;
->> +
->> +    gpiochip_add(&lgpio->chip);
->>       return 0;
->>   }
->> +static void of_loongson_gpio_get_props(struct device_node *np,
->> +                  struct loongson_gpio_chip *lgpio)
->> +{
->> +    const char *name;
->> +
->> +    of_property_read_u32(np, "ngpios", (u32 *)&lgpio->chip.ngpio);
->> +
->> +    of_property_read_string(np, "compatible", &name);
->> +    lgpio->chip.label = kstrdup(name, GFP_KERNEL);
->> +
->> +    if (!strcmp(name, "loongson,ls2k-gpio")) {
->> +        lgpio->support_irq = true;
->> +        lgpio->conf_offset = 0x0;
->> +        lgpio->out_offset = 0x10;
->> +        lgpio->in_offset = 0x20;
->> +        return;
->> +    }
->> +
->> +    if (!strcmp(name, "loongson,ls7a-gpio")) {
->> +        lgpio->support_irq = true;
->> +        lgpio->conf_offset = 0x800;
->> +        lgpio->out_offset = 0x900;
->> +        lgpio->in_offset = 0xa00;
-> 
-> Aren't configurations like these usually described in the DT? Are you 
-> trying to maintain compatibility with the pre-existing DT structure that 
-> is missing such data?
-In fact, My v1 patch was to put it in the dts. But it needs to define
-some custom dts attributes, and I don't find  any pre-existing DT struct
-to compatible with it. so I will keep it in kernel driver. and other
-advice I will adopt it.
+>> nvme nvme0: identifiers changed for nsid 1
+>
+>What EUI did it report before? Is the identifier stable after
+>multiple resume cycles?
+>
+>Can some of the Samsung folks here reach out to the relevant firmware
+>team to see if they have any clues?
 
-Tks,
-Yinbo.
-> 
->> +        return;
->> +    }
->> +}
->> +
->> +static void acpi_loongson_gpio_get_props(struct platform_device *pdev,
->> +                  struct loongson_gpio_chip *lgpio)
->> +{
->> +
->> +    struct device *dev = &pdev->dev;
->> +    int rval;
->> +
->> +    device_property_read_u32(dev, "ngpios", (u32 *)&lgpio->chip.ngpio);
->> +    device_property_read_u32(dev, "gpio_base", (u32 
->> *)&lgpio->chip.base);
->> +    device_property_read_u32(dev, "conf_offset",
->> +                    (u32 *)&lgpio->conf_offset);
->> +    device_property_read_u32(dev, "out_offset",
->> +                    (u32 *)&lgpio->out_offset);
->> +    device_property_read_u32(dev, "in_offset", (u32 
->> *)&lgpio->in_offset);
->> +
->> +    rval = device_property_read_u16_array(dev, "gsi_idx_map", NULL, 0);
->> +    if (rval > 0) {
->> +        lgpio->gsi_idx_map =
->> +            kmalloc_array(rval, sizeof(*lgpio->gsi_idx_map),
->> +                    GFP_KERNEL);
->> +        if (unlikely(!lgpio->gsi_idx_map)) {
->> +            dev_err(dev, "Alloc gsi_idx_map fail!\n");
->> +        } else {
->> +            lgpio->mapsize = rval;
->> +            device_property_read_u16_array(dev, "gsi_idx_map",
->> +                    lgpio->gsi_idx_map, lgpio->mapsize);
->> +        }
->> +    }
->> +
->> +    lgpio->chip.label = kstrdup(pdev->name, GFP_KERNEL);
->> +}
->> +
->> +static void platform_loongson_gpio_get_props(struct platform_device 
->> *pdev,
->> +                  struct loongson_gpio_chip *lgpio)
->> +{
->> +    struct loongson_gpio_platform_data *gpio_data =
->> +        (struct loongson_gpio_platform_data *)pdev->dev.platform_data;
->> +
->> +    lgpio->chip.ngpio = gpio_data->ngpio;
->> +    lgpio->chip.base = gpio_data->gpio_base;
->> +    lgpio->conf_offset = gpio_data->gpio_conf;
->> +    lgpio->out_offset = gpio_data->gpio_out;
->> +    lgpio->in_offset = gpio_data->gpio_in;
->> +    lgpio->chip.label = kstrdup(gpio_data->label, GFP_KERNEL);
->> +}
->> +
->>   static int loongson_gpio_probe(struct platform_device *pdev)
->>   {
->> -    struct gpio_chip *gc;
->> +    struct resource *iores;
->> +    void __iomem *base;
->> +    struct loongson_gpio_chip *lgpio;
->> +    struct device_node *np = pdev->dev.of_node;
->>       struct device *dev = &pdev->dev;
->> +    int ret = 0;
->> -    gc = devm_kzalloc(dev, sizeof(*gc), GFP_KERNEL);
->> -    if (!gc)
->> +    lgpio = kzalloc(sizeof(struct loongson_gpio_chip), GFP_KERNEL);
->> +    if (!lgpio)
->>           return -ENOMEM;
->> -    gc->label = "loongson-gpio-chip";
->> -    gc->base = 0;
->> -    gc->ngpio = LOONGSON_N_GPIO;
->> -    gc->get = loongson_gpio_get_value;
->> -    gc->set = loongson_gpio_set_value;
->> -    gc->direction_input = loongson_gpio_direction_input;
->> -    gc->direction_output = loongson_gpio_direction_output;
->> +    if (np)
->> +        of_loongson_gpio_get_props(np, lgpio);
->> +    else if (ACPI_COMPANION(&pdev->dev))
->> +        acpi_loongson_gpio_get_props(pdev, lgpio);
->> +    else
->> +        platform_loongson_gpio_get_props(pdev, lgpio);
->> +
->> +    iores = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->> +    if (!iores) {
->> +        ret = -ENODEV;
->> +        goto out;
->> +    }
->> +
->> +    if (!request_mem_region(iores->start, resource_size(iores),
->> +                pdev->name)) {
->> +        ret = -EBUSY;
->> +        goto out;
->> +    }
->> +
->> +    base = ioremap(iores->start, resource_size(iores));
->> +    if (!base) {
->> +        ret = -ENOMEM;
->> +        goto out;
->> +    }
->> +
->> +    platform_set_drvdata(pdev, lgpio);
->> +
->> +    loongson_gpio_init(dev, lgpio, np, base);
->> +
->> +    return 0;
->> +out:
->> +    pr_err("%s: %s: missing mandatory property\n", __func__, np->name);
-> 
-> I suggest checking out <linux/dev_printk.h> and use dev_* printk's 
-> everywhere you have a `dev` at hand (which is the case here).
-> 
->> +    return ret;
->> +}
->> +
->> +static int loongson_gpio_remove(struct platform_device *pdev)
->> +{
->> +    struct loongson_gpio_chip *lgpio = platform_get_drvdata(pdev);
->> +    struct resource        *mem;
->> +
->> +    platform_set_drvdata(pdev, NULL);
->> -    return gpiochip_add_data(gc, NULL);
->> +    gpiochip_remove(&lgpio->chip);
->> +    iounmap(lgpio->base);
->> +    kfree(lgpio->gsi_idx_map);
->> +    kfree(lgpio);
->> +    mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->> +    release_mem_region(mem->start, resource_size(mem));
->> +
->> +    return 0;
->>   }
->> +static const struct of_device_id loongson_gpio_dt_ids[] = {
->> +    { .compatible = "loongson,ls2k-gpio"},
->> +    { .compatible = "loongson,ls7a-gpio"},
->> +    {}
->> +};
->> +MODULE_DEVICE_TABLE(of, loongson_gpio_dt_ids);
->> +
->> +static const struct acpi_device_id loongson_gpio_acpi_match[] = {
->> +    {"LOON0002"},
->> +    {}
->> +};
->> +MODULE_DEVICE_TABLE(acpi, loongson_gpio_acpi_match);
->> +
->>   static struct platform_driver loongson_gpio_driver = {
->>       .driver = {
->>           .name = "loongson-gpio",
->> +        .owner = THIS_MODULE,
->> +        .of_match_table = loongson_gpio_dt_ids,
->> +        .acpi_match_table = ACPI_PTR(loongson_gpio_acpi_match),
->>       },
->>       .probe = loongson_gpio_probe,
->> +    .remove = loongson_gpio_remove,
->>   };
->>   static int __init loongson_gpio_setup(void)
->>   {
->> -    struct platform_device *pdev;
->> -    int ret;
->> -
->> -    ret = platform_driver_register(&loongson_gpio_driver);
->> -    if (ret) {
->> -        pr_err("error registering loongson GPIO driver\n"); > 
->> -        return ret;
->> -    }
->> -
->> -    pdev = platform_device_register_simple("loongson-gpio", -1, NULL, 
->> 0);
->> -    return PTR_ERR_OR_ZERO(pdev);
->> +    return platform_driver_register(&loongson_gpio_driver);
->>   }
->>   postcore_initcall(loongson_gpio_setup);
->> +
->> +static void __exit loongson_gpio_exit(void)
->> +{
->> +    platform_driver_unregister(&loongson_gpio_driver);
->> +}
->> diff --git a/include/linux/platform_data/gpio-loongson.h 
->> b/include/linux/platform_data/gpio-loongson.h
->> new file mode 100644
->> index 000000000000..f102d2650576
->> --- /dev/null
->> +++ b/include/linux/platform_data/gpio-loongson.h
->> @@ -0,0 +1,22 @@
->> +/* SPDX-License-Identifier: GPL-2.0+ */
->> +/*
->> + * Author: Yinbo Zhu <zhuyinbo@loongson.cn>
->> + * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
->> + */
->> +
->> +#ifndef __LOONGSON_GPIO_PLATFORM_H
->> +#define __LOONGSON_GPIO_PLATFORM_H
->> +
->> +/* ============== Data structrues =============== */
-> 
-> This comment could be removed as the code here is very trivial hence 
-> self-commentary.
-> 
-> But again, please check out Arnd's review comment; still I think this 
-> might not be necessary at all because the legacy users already have to 
-> modify many other things elsewhere before they can rebase on the more 
-> recent upstream versions.
-okay, I got it.
-> 
->> +
->> +struct loongson_gpio_platform_data {
->> +    u32 gpio_conf;
->> +    u32 gpio_out;
->> +    u32 gpio_in;
->> +    u32 support_irq;
->> +    char *label;
->> +    int gpio_base;
->> +    int ngpio;
->> +};
->> +
->> +#endif
-> 
+I will check.
 
+------G62UEJgdyo2JOumF_Do4Y7B7G39M5PuLVzFwfXKQiOy3iUJg=_4cb27_
+Content-Type: text/plain; charset="utf-8"
+
+
+------G62UEJgdyo2JOumF_Do4Y7B7G39M5PuLVzFwfXKQiOy3iUJg=_4cb27_--
