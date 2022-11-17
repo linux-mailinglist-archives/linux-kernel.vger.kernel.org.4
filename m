@@ -2,413 +2,367 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31AF362E9A0
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 00:30:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F97F62E9A5
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 00:34:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239518AbiKQXab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 18:30:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42046 "EHLO
+        id S239672AbiKQXeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 18:34:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235129AbiKQXaZ (ORCPT
+        with ESMTP id S234843AbiKQXd6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 18:30:25 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC0276155
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 15:30:20 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id z18so4833278edb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 15:30:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=axMopHYkcP2eO76gc217cU40QRnhmQxYIb9bOz08c5U=;
-        b=FridDl/rNXXSLfRVE2Ej/LIVg/hBFdbHxJ/TTXXWCxDO5wU2RaMOH+fdpfYdsoYZ4y
-         0xXwp6bktgNr1OfxXo0EztLj3OYGmNFT2IzoP1eBWMcB6h7E56HDg3uxulyFvLmt9Vze
-         fDyLFb/JRCVirnWEcTfYqjorqsaiDmu3Gafiw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=axMopHYkcP2eO76gc217cU40QRnhmQxYIb9bOz08c5U=;
-        b=CE0SxmPjKfcp+BvRBeJoq7VM89Wf664tKdWy/6xT8NQ89ncpfTuAwEqqX7r6ZfRSFd
-         ArU/2F+MeCvfKTuzyLQ2+nqzwtZbGuTrrmTmG14VMF9qW0udjD8jKilZJiQ5n4W1i9kH
-         GhltiadO7jjfbct37Du9p2euc/TOEdreCgJk0u8eYVeOUq/rkAY82B/zS6JbZXjePZpx
-         3d2xV29m00Urm1irVMK6muRUj824yOOhKVmkp4jfU+6FliCFy7ZlaecuGgYEzbzntKCf
-         X+Bm+Ahc4g7h7mqgOaTqcDb7EMsD+jnXGFMEa/ObxFSaoxUetd61xcHZD202V6e8siJt
-         dczQ==
-X-Gm-Message-State: ANoB5plimngG9vlDh1fy8xZ8g1/Kn9lSE6sALBrRi7+Aoaa8e2a2Grss
-        v3G3rgo+V0tQu4V6upRgc1GHVzspJ+xpmZ4j
-X-Google-Smtp-Source: AA0mqf5meytXG/djnbcy9nlavh5UgYhEYq4IcVEuPyaggOpSPpShJjvVzZQSzdrlnwgxXVIxBI5tMw==
-X-Received: by 2002:aa7:d551:0:b0:468:fb2c:6c8c with SMTP id u17-20020aa7d551000000b00468fb2c6c8cmr2200528edr.340.1668727818316;
-        Thu, 17 Nov 2022 15:30:18 -0800 (PST)
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com. [209.85.221.54])
-        by smtp.gmail.com with ESMTPSA id gt22-20020a170906f21600b0073c10031dc9sm940233ejb.80.2022.11.17.15.30.15
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Nov 2022 15:30:15 -0800 (PST)
-Received: by mail-wr1-f54.google.com with SMTP id cl5so6421437wrb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 15:30:15 -0800 (PST)
-X-Received: by 2002:adf:fb4c:0:b0:236:5270:735e with SMTP id
- c12-20020adffb4c000000b002365270735emr2687226wrs.659.1668727814791; Thu, 17
- Nov 2022 15:30:14 -0800 (PST)
-MIME-Version: 1.0
-References: <1668590135-7725-1-git-send-email-quic_vnivarth@quicinc.com>
-In-Reply-To: <1668590135-7725-1-git-send-email-quic_vnivarth@quicinc.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 17 Nov 2022 15:30:03 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=VQx3RSWwt5uBb3c2xdTPcBdZ1mkYkANOcFit0+sMv_tA@mail.gmail.com>
-Message-ID: <CAD=FV=VQx3RSWwt5uBb3c2xdTPcBdZ1mkYkANOcFit0+sMv_tA@mail.gmail.com>
-Subject: Re: [PATCH] spi: spi-geni-qcom: Add support for SE DMA mode
-To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        broonie@kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_msavaliy@quicinc.com, mka@chromium.org, swboyd@chromium.org,
-        quic_vtanuku@quicinc.com, vkoul@kernel.org
+        Thu, 17 Nov 2022 18:33:58 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2427E15FE3;
+        Thu, 17 Nov 2022 15:33:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668728037; x=1700264037;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=jhxGjTY1MuUVQLst/XnkzUySKc0X1EvnmuXuYaWYgTg=;
+  b=jCsj4aLXA63n6LCiZeq9Jr6LwUsrF2bBGzjGHPyoBVA03i0igFQlk+a2
+   mC9UZa+vB1zDsiJD3M+Y+vNTsFZ9/ixaYfNTrBMC2uMfTk8g8rezrPziF
+   kt9RaforxmOiBkoBEpNdIyVeNYE2Mcw2c8tkIcnsDmmN8ErF0/jiuKEsl
+   akTeu+1QbOiOQF7IJ9/6T9A6zXPao1vYPY2+WGc3u+tSdvdZuOLQw7KbM
+   xKiqvlEwZlS/+ayLKHFjIVbSS7uJvVINAwKdbvmdYxYDBC/XwaQ/kFQNc
+   c5q2PJg5lH9/6uQMpJLCIIDZfSiuh8XwXOdQ2vn+LNOCykyJIJ6GXidxk
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="314155372"
+X-IronPort-AV: E=Sophos;i="5.96,172,1665471600"; 
+   d="scan'208";a="314155372"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 15:33:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="885075027"
+X-IronPort-AV: E=Sophos;i="5.96,172,1665471600"; 
+   d="scan'208";a="885075027"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga006.fm.intel.com with ESMTP; 17 Nov 2022 15:33:56 -0800
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 17 Nov 2022 15:33:55 -0800
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 17 Nov 2022 15:33:55 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Thu, 17 Nov 2022 15:33:55 -0800
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.174)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Thu, 17 Nov 2022 15:33:55 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Fpk4VjgVON3F7qKff//uFDYqlIc+Lgi2oXDJJobGc/CKafvV/OazZ8/LQ0gcjeckNL+IaOLI+/YwrNRXEA1eUXXFKVKGevdJJb77fU4jBRoqk6wpw6c0wbdR+DA/kBe2EQUPRaWWHp7um2cigkI5ZqeQPX2ykx3luNP6976/5L5qA6Q/+30ikeTMY2F/O95uLFrUlBivDfPZNUhLii470m0YsSz4rJrkB1C2NnSFL3ck9UWEDjEkpLD8266vFcw+ESV5a+SDCPd4GrPn/NurazZkik0cZ/cJMYXkS1394p9n/Fnq46pnB2MFwSNJvM6VhBzTFNnnBy5pr636gyw6Bg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VGQu3XLifBw20jerbJVI88leJeF88gdNOtT47cokyOA=;
+ b=iHbAlnoN91a2wQlR7rCZdE7or4GTpGv0gw7MOWPNpki/vxZ5S6ETRwnRfKR8zlGf3MsxXmOlN//NneNYIWK3KxyMa70Yu7L5NlNkTssgTUDKeg7j/MrzdBaNtbG+1LLhSIyYaBpVKWMTivTXEC5aaYJyIwUu7AetzL2abHLpreiD//9JAyA0aHzaEA5hk/yxPKxeeyKY80H8I0q1XjGiJr42K3k4lgORYQF3d+LjxviCitpqOoqLMxsHJtu57vIUOmb8ov28heBKQ7K1/o2FxHSHARfEiyqNery4w7q/TxKIPPJsd4dtgOETJWGYu5tllrKChpC3pt0dsNI328NclQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CY4PR11MB1862.namprd11.prod.outlook.com (2603:10b6:903:124::18)
+ by SA2PR11MB4986.namprd11.prod.outlook.com (2603:10b6:806:114::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.18; Thu, 17 Nov
+ 2022 23:33:53 +0000
+Received: from CY4PR11MB1862.namprd11.prod.outlook.com
+ ([fe80::207e:ab0b:9e29:6a4b]) by CY4PR11MB1862.namprd11.prod.outlook.com
+ ([fe80::207e:ab0b:9e29:6a4b%12]) with mapi id 15.20.5813.020; Thu, 17 Nov
+ 2022 23:33:53 +0000
+Message-ID: <0cbf645b-b23a-6c85-4389-bb039a677a52@intel.com>
+Date:   Thu, 17 Nov 2022 15:33:49 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [patch 21/33] genirq/msi: Provide msi_domain_alloc_irq_at()
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+CC:     <x86@kernel.org>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>, <linux-pci@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        "Marc Zyngier" <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        "Alex Williamson" <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
+        Allen Hubbe <allenbh@gmail.com>,
+        "Ahmed S. Darwish" <darwi@linutronix.de>
+References: <20221111133158.196269823@linutronix.de>
+ <20221111135206.463650635@linutronix.de>
+From:   Reinette Chatre <reinette.chatre@intel.com>
+In-Reply-To: <20221111135206.463650635@linutronix.de>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BY5PR03CA0006.namprd03.prod.outlook.com
+ (2603:10b6:a03:1e0::16) To CY4PR11MB1862.namprd11.prod.outlook.com
+ (2603:10b6:903:124::18)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PR11MB1862:EE_|SA2PR11MB4986:EE_
+X-MS-Office365-Filtering-Correlation-Id: d3297b2a-8aaa-494a-250f-08dac8f43014
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: v75xGCMOkSLlIsuoRHlSUeTsn8eOHsg94KTAvVV3umBZ1zX+Gb01JeTITeOBw5ugQ0WCw64lipWgMHvvFExJuPzwrM+AMg9CTFJWZ15eHKobXc1ubq6ksdLroNt0KVYDwCTaGf8mBJRkTxn9RZxWSb2WpEA4LzNZ6107HMqGHm65RabX7E7eGIYOPM8fy+oSgF04G5IX7R4QjAnEFG+2JHqFwqAzr00YYg32I7hEGWDnW3Yd6YA31A0RZB+zCT9tpsDBDji26liBE13R0zwEil1KzeDMgu6FAUuRCSYYy40wMzqfcybPPguzOlE5/7rHC3QiamqEiDYqBDiFVcREDoOJvKM5R3RBrO5MoGZfcBQ2N4SqtQj1UkQtKHHBrk+Eg4qTYN+Sx1hm4AW41feIkhx3yrAIjCTMPrkceTgSpTGPoORnY6aDbZsrJhjL8M0tJXvKFk2x2X5fnox+B2F5ZfqlGQKVJJ/vFhvWbu9xHLjDoorlVf44yfrzpQjfEvmdzs6yz2Be4l7UlD5QUYdZA3N3S12esIOJSWZIKmyMnH4Dh3jU1TTt6Hf97gYhK6lvg0KFlwjUtyjXwKROVMnOVWPZqBaPzknGTbv+KNEagH5fFHHG/DKcM9tqOzfDYkY9MD8z2w6Vznas9lMYQQV4UadZ2tDrPt7wgrt9SUYRk2xdMYqa6//BlkW7Fdm/cvX2vb40tdacJ+rx+7m7SvYgrJSkVor9uc7F3IehgN4LBtM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1862.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(39860400002)(366004)(136003)(346002)(396003)(451199015)(86362001)(31696002)(82960400001)(186003)(4326008)(2616005)(8676002)(36756003)(41300700001)(66946007)(66556008)(8936002)(7416002)(5660300002)(6486002)(66476007)(44832011)(316002)(26005)(478600001)(6506007)(6666004)(6512007)(110136005)(54906003)(53546011)(38100700002)(83380400001)(2906002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dHphV1dYWEZUb1Urc0pEZjBJbXBncUMrMWdENVFDd3BIaUhXMEpWWTlnVS9J?=
+ =?utf-8?B?Y3VPM3dTR2VoSGRPcGtWbWJOeHdZYkRuVTVCUldLNkFmd3Z3NEhHWEFvTWJu?=
+ =?utf-8?B?V1NjcStINU5tVStUWkdPVW5YODJ6QldZbmZoUFAvckdRY1hqcnphUEFzY3dB?=
+ =?utf-8?B?b2h3VU53WHhXMXhQTmJVem1EKy9LcW00Q3lpVkZyZnJRbm9yZGpwc0c3Zmg2?=
+ =?utf-8?B?ejllOWlwTkRSdGJZS0wwbU0zdkhaNmd4NVUyaldNRUI3VDdKRS94K0VzWTZi?=
+ =?utf-8?B?YjRGQmpXbGRnamNiWUxuRzU5dTVrUXFzUmFocUZvM2M2azlkTlNUQk9aTHcr?=
+ =?utf-8?B?cnhxclRhZkJmMTVKSFZBRm14emh4S01mRGdyOVZYdUZxS0k2RUVRY1lESEha?=
+ =?utf-8?B?RUVBaVJLWFhqL2xuRWlibjZPUFhrQUxHVy95SE5lME5md3JGdi8wVDNHeDZN?=
+ =?utf-8?B?aUNiOEh1WTE5QkZvM2ttd1lTOXU2YW9PSHgzS29adjR5N2Q3aDFydVFJOGJG?=
+ =?utf-8?B?cXJhWUkzUlluUlFTSnNxK1V2U2dVa1BYVVpUQUYrRGR5V3UrbjZGU25tTkRk?=
+ =?utf-8?B?WDVxQWpDNjNPNEt1M0RmKzhkSlAwb0FEV2Z5MnN3c3VKNk8xUkR1c1VOQS96?=
+ =?utf-8?B?d3BXMk8vUU43ZzVaeHZUbVlKSUhmK09yRkNUZnVSUXFvSDVWeVp3OW1LK2ZL?=
+ =?utf-8?B?OWlkWkxzNW4xZmpaMzc2eUU2dWhoNEJWQkJDVGtlZlZPclFBQnk0Ump5VXZY?=
+ =?utf-8?B?a281cEFZa1lkb3ZISjhYSEQwRFdySVNLbWtvVXVrdFk5NXFGSmdSYjE0MEww?=
+ =?utf-8?B?U1diOGdOd0Q5bnQ0VjVIc2VsNG1BY21CWGlzWldCWjNQZzFndTJJMjkzeHpv?=
+ =?utf-8?B?Zmh1Yk54TjNNSU5yYlRQMElSN3NrOFd6ZVBybTc1ZEI5dTBHZkRzSHFvUjg2?=
+ =?utf-8?B?bXlSeGUvTGtSMEhNcW9Pbm03ZS9jYktiRGcrb05ybDh1OEs5QVNyZ2xHV1hX?=
+ =?utf-8?B?T01JUzVKbkhqQXk3NjgzWC9JRGhOTUhML0V3WDVLeWpLV0ljQjA0dTA0WHJp?=
+ =?utf-8?B?Z1k2b09xQkF6RklnM1hJaE40OXE3Vy9wNHQ5QnBOV1hndWhNdTdXUFBHK2Ux?=
+ =?utf-8?B?MmlVTFpKQmZVRC8rZ21QTFBab1lVQ1hYbVFEN2M2TVRuSHdKZnAyK21yV1RP?=
+ =?utf-8?B?dWQ2Q3I3NWVoYlYvL2NEZjRIWFN3REpnSmxGZ1dLYm80TkdwcDVqYzdQVEdI?=
+ =?utf-8?B?ejhRVDNuZzRoc2ZwMjRwd1Y2V1EyWEZ3aFIxdWZRU2YrTVg1a29yaXJzUXdR?=
+ =?utf-8?B?Qnp6NDVDZ01jNFVxekNySkZYWEIvT3NrcFVFZlIxZFlRQlg5VDJSYW1ZTUJE?=
+ =?utf-8?B?SzFmdlU3d3VxS25Fd1phdXNHaG9SMjJ0QnJFZllTbTdHcEdqZ0RrYmFiZXVS?=
+ =?utf-8?B?Q0REWVJVZjRob05Kb2gxLzBZa29lOCtKck1SdXVNemlxL2tkNGJTUVRQY3B1?=
+ =?utf-8?B?MWkreTYvTENTcmh5Y2ZsM0hiRnFERkRiRk9FKzQ1Q1YwTXBBNjVZa3l1MnhE?=
+ =?utf-8?B?WXRPTGl3ZGVjQktQOCtSeXprM0pMSU5STytINldNa21UN2pnRi9WbjNOeW5K?=
+ =?utf-8?B?ZXl5cGY2c3JlcmYwS0dUdWNjTU4rVXozY0RPdzdCUUZJRW84YnFDMFZrd0Fs?=
+ =?utf-8?B?alZObTkweGxORC8vTjZScEJjVERsVlB0VjhSWEJrOGpMUktnNlZJcm1najEz?=
+ =?utf-8?B?ZEw0aU0rSTNKUDNUVGpReCtWeFlpdXFla0ZMcXllRkFBVDV5SEtMa1BNTGg4?=
+ =?utf-8?B?bGV5dFBDZGJ2Y3hmMTc5QmJEMTJjS0xBMmRnT3VxckVRNHFPY2JMaERKSTNz?=
+ =?utf-8?B?L2x5SmcyVTlNQTFJRUdMbnp1N1JxcVNuZlJjd1MzVFlkcHFIMGg4ZmMvVktC?=
+ =?utf-8?B?TmZUc0ZURlFtZmJlM2hvbTROZFN4TFJqZ3pkN3dJTnRqdTQwRTdqOUNWNjZM?=
+ =?utf-8?B?d0hURkljbmRGSmdiQXdFM2NQMHZ1MEVFd1l4NHp2ME83UngvYVdsK3R3QXRW?=
+ =?utf-8?B?TGIvSjhIRVlkMy9sZE9NVWNJU01sWjNvN3VPbDRncWVGMlphaTR6NUh1Zm0x?=
+ =?utf-8?B?VE1BWlZ4SFZqWnM5ME1RWjZiMlFheFV3M3I5TEw1RXlCMFBWWjFJNjliZmlX?=
+ =?utf-8?B?Qmc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: d3297b2a-8aaa-494a-250f-08dac8f43014
+X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB1862.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Nov 2022 23:33:53.2892
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LSjkB7wWSuiHu52PSSC/ECcl/iCY8FAn8+8RTiUkRyF6cxfEzzBqSEvfOH1dPZqpGuedGtZK2La7uqXqQvuuugvPXBsyOHKCls17W7yAjaA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB4986
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Thomas,
 
-On Wed, Nov 16, 2022 at 1:15 AM Vijaya Krishna Nivarthi
-<quic_vnivarth@quicinc.com> wrote:
->
-> @@ -95,6 +97,7 @@ struct spi_geni_master {
->         struct dma_chan *tx;
->         struct dma_chan *rx;
->         int cur_xfer_mode;
-> +       u32 cur_m_cmd;
+I am trying all three parts of this work out with some experimental
+code within the IDXD driver that attempts to use IMS on the host.
 
-I don't think you need to store "cur_m_cmd". The only thing you do is
-check for the SPI_TX_ONLY / SPI_RX_ONLY bits and instead you can just
-check if cur_xfer->tx_buf / cur_xfer->rx_buf are NULL.
+In the test, pci_ims_alloc_irq() always encounters -EBUSY and it
+seems that there is an attempt to insert the struct msi_desc into
+the xarray twice, the second attempt encountering the -EBUSY.
 
+While trying to understand what is going on I found myself looking
+at this code area and I'll annotate this patch with what I learned.
 
-> @@ -129,23 +132,27 @@ static int get_spi_clk_cfg(unsigned int speed_hz,
->         return ret;
+On 11/11/2022 5:58 AM, Thomas Gleixner wrote:
+
+...
+
+> --- a/kernel/irq/msi.c
+> +++ b/kernel/irq/msi.c
+> @@ -39,6 +39,7 @@ static inline int msi_sysfs_create_group
+>  /* Invalid XA index which is outside of any searchable range */
+>  #define MSI_XA_MAX_INDEX	(ULONG_MAX - 1)
+>  #define MSI_XA_DOMAIN_SIZE	(MSI_MAX_INDEX + 1)
+> +#define MSI_ANY_INDEX		UINT_MAX
+>  
+>  static inline void msi_setup_default_irqdomain(struct device *dev, struct msi_device_data *md)
+>  {
+> @@ -126,18 +127,34 @@ static int msi_insert_desc(struct device
+
+When calling pci_ims_alloc_irq(), msi_insert_desc() ends up being
+called twice, first with index = MSI_ANY_INDEX, second with index = 0.
+(domid = 1 both times)
+
+>  	}
+>  
+>  	hwsize = msi_domain_get_hwsize(dev, domid);
+> -	if (index >= hwsize) {
+> -		ret = -ERANGE;
+> -		goto fail;
+> -	}
+>  
+> -	desc->msi_index = index;
+> -	index += baseidx;
+> -	ret = xa_insert(&md->__store, index, desc, GFP_KERNEL);
+> -	if (ret)
+> -		goto fail;
+> -	return 0;
+> +	if (index == MSI_ANY_INDEX) {
+> +		struct xa_limit limit;
+> +		unsigned int index;
+> +
+> +		limit.min = baseidx;
+> +		limit.max = baseidx + hwsize - 1;
+>  
+> +		/* Let the xarray allocate a free index within the limits */
+> +		ret = xa_alloc(&md->__store, &index, desc, limit, GFP_KERNEL);
+> +		if (ret)
+> +			goto fail;
+> +
+
+This path (index == MSI_ANY_INDEX) is followed when msi_insert_desc()
+is called the first time and the xa_alloc() succeeds at index 65536.
+
+> +		desc->msi_index = index;
+
+This is problematic with desc->msi_index being a u16, assigning
+65536 to it becomes 0.
+
+> +		return 0;
+> +	} else {
+> +		if (index >= hwsize) {
+> +			ret = -ERANGE;
+> +			goto fail;
+> +		}
+> +
+> +		desc->msi_index = index;
+> +		index += baseidx;
+> +		ret = xa_insert(&md->__store, index, desc, GFP_KERNEL);
+> +		if (ret)
+> +			goto fail;
+
+This "else" path is followed when msi_insert_desc() is called the second
+time with "index = 0". The xa_insert() above fails at index 65536
+(baseidx = 65536) with -EBUSY, trickling up as the return code to
+pci_ims_alloc_irq().
+
+> +		return 0;
+> +	}
+>  fail:
+>  	msi_free_desc(desc);
+>  	return ret;
+> @@ -335,7 +352,7 @@ int msi_setup_device_data(struct device
+>  
+>  	msi_setup_default_irqdomain(dev, md);
+>  
+> -	xa_init(&md->__store);
+> +	xa_init_flags(&md->__store, XA_FLAGS_ALLOC);
+>  	mutex_init(&md->mutex);
+>  	md->__iter_idx = MSI_XA_MAX_INDEX;
+>  	dev->msi.data = md;
+> @@ -1423,6 +1440,72 @@ int msi_domain_alloc_irqs_all_locked(str
+>  	return msi_domain_alloc_locked(dev, &ctrl);
 >  }
->
-> -static void handle_fifo_timeout(struct spi_master *spi,
-> +static void handle_se_timeout(struct spi_master *spi,
->                                 struct spi_message *msg)
+>  
+> +/**
+> + * msi_domain_alloc_irq_at - Allocate an interrupt from a MSI interrupt domain at
+> + *			     a given index - or at the next free index
+> + *
+> + * @dev:	Pointer to device struct of the device for which the interrupts
+> + *		are allocated
+> + * @domid:	Id of the interrupt domain to operate on
+> + * @index:	Index for allocation. If @index == %MSI_ANY_INDEX the allocation
+> + *		uses the next free index.
+> + * @affdesc:	Optional pointer to an interrupt affinity descriptor structure
+> + * @cookie:	Optional pointer to a descriptor specific cookie to be stored
+> + *		in msi_desc::data. Must be NULL for MSI-X allocations
+> + *
+> + * This requires a MSI interrupt domain which lets the core code manage the
+> + * MSI descriptors.
+> + *
+> + * Return: struct msi_map
+> + *
+> + *	On success msi_map::index contains the allocated index number and
+> + *	msi_map::virq the corresponding Linux interrupt number
+> + *
+> + *	On failure msi_map::index contains the error code and msi_map::virq
+> + *	is %0.
+> + */
+> +struct msi_map msi_domain_alloc_irq_at(struct device *dev, unsigned int domid, unsigned int index,
+> +				       const struct irq_affinity_desc *affdesc,
+> +				       union msi_dev_cookie *cookie)
+> +{
+> +	struct irq_domain *domain;
+> +	struct msi_map map = { };
+> +	struct msi_desc *desc;
+> +	int ret;
+> +
+> +	msi_lock_descs(dev);
+> +	domain = msi_get_device_domain(dev, domid);
+> +	if (!domain) {
+> +		map.index = -ENODEV;
+> +		goto unlock;
+> +	}
+> +
+> +	desc = msi_alloc_desc(dev, 1, affdesc);
+> +	if (!desc) {
+> +		map.index = -ENOMEM;
+> +		goto unlock;
+> +	}
+> +
+> +	if (cookie)
+> +		desc->data.cookie = *cookie;
+> +
+> +	ret = msi_insert_desc(dev, desc, domid, index);
+> +	if (ret) {
+> +		map.index = ret;
+> +		goto unlock;
+> +	}
+
+Above is the first call to msi_insert_desc(/* index = MSI_ANY_INDEX */)
+
+> +
+> +	map.index = desc->msi_index;
+
+msi_insert_desc() did attempt to set desc->msi_index to 65536 but map.index ends
+up being 0.
+
+> +	ret = msi_domain_alloc_irqs_range_locked(dev, domid, map.index, map.index);
+
+Here is where the second call to msi_insert_desc() originates:
+
+msi_domain_alloc_irqs_range_locked() -> msi_domain_alloc_locked() -> \
+__msi_domain_alloc_locked() -> msi_domain_alloc_simple_msi_descs() -> \
+msi_domain_add_simple_msi_descs() -> msi_insert_desc()
+		
+
+> +	if (ret)
+> +		map.index = ret;
+> +	else
+> +		map.virq = desc->irq;
+> +unlock:
+> +	msi_unlock_descs(dev);
+> +	return map;
+> +}
+> +
+>  static void __msi_domain_free_irqs(struct device *dev, struct irq_domain *domain,
+>  				   struct msi_ctrl *ctrl)
 >  {
->         struct spi_geni_master *mas = spi_master_get_devdata(spi);
->         unsigned long time_left;
->         struct geni_se *se = &mas->se;
-> +       const struct spi_transfer *xfer;
->
->         spin_lock_irq(&mas->lock);
->         reinit_completion(&mas->cancel_done);
-> -       writel(0, se->base + SE_GENI_TX_WATERMARK_REG);
-> +       if (mas->cur_xfer_mode == GENI_SE_FIFO)
-> +               writel(0, se->base + SE_GENI_TX_WATERMARK_REG);
-> +       if (mas->cur_xfer_mode == GENI_SE_DMA)
-> +               xfer = mas->cur_xfer;
+> 
 
-You could probably just get rid of the "if" test and always store
-xfer. You'll only use it below if you're in GENI_SE_DMA but you might
-as well save the "if" test...
-
-
-> @@ -162,6 +169,44 @@ static void handle_fifo_timeout(struct spi_master *spi,
->                  */
->                 mas->abort_failed = true;
->         }
-> +
-> +unmap_if_dma:
-> +       if (mas->cur_xfer_mode == GENI_SE_DMA) {
-> +               if (xfer) {
-> +                       if (xfer->tx_buf && xfer->tx_dma)
-> +                               geni_se_tx_dma_unprep(se, xfer->tx_dma, xfer->len);
-> +                       if (xfer->rx_buf && xfer->rx_dma)
-> +                               geni_se_rx_dma_unprep(se, xfer->rx_dma, xfer->len);
-> +               } else {
-> +                       /*
-> +                        * This can happen if a timeout happened and we had to wait
-> +                        * for lock in this function because isr was holding the lock
-> +                        * and handling transfer completion at that time.
-> +                        * Unnecessary error but cannot be helped.
-> +                        * Only do reset, dma_unprep is already done by isr.
-> +                        */
-> +                       dev_err(mas->dev, "Cancel/Abort on completed SPI transfer\n");
-> +               }
-> +
-> +               if (mas->cur_m_cmd & SPI_TX_ONLY) {
-> +                       spin_lock_irq(&mas->lock);
-> +                       reinit_completion(&mas->tx_reset_done);
-> +                       writel_relaxed(1, se->base + SE_DMA_TX_FSM_RST);
-
-Why "relaxed"? In general the "relaxed" variants should only be used
-in cases where we are reasonably certain we're in a critical path and
-the regular writel() should be the default.
-
-
-> +                       spin_unlock_irq(&mas->lock);
-> +                       time_left = wait_for_completion_timeout(&mas->tx_reset_done, HZ);
-> +                       if (!time_left)
-> +                               dev_err(mas->dev, "DMA TX RESET failed\n");
-> +               }
-> +               if (mas->cur_m_cmd & SPI_RX_ONLY) {
-> +                       spin_lock_irq(&mas->lock);
-> +                       reinit_completion(&mas->rx_reset_done);
-> +                       writel_relaxed(1, se->base + SE_DMA_RX_FSM_RST);
-
-Why "relaxed"?
-
-
-> +                       spin_unlock_irq(&mas->lock);
-> +                       time_left = wait_for_completion_timeout(&mas->rx_reset_done, HZ);
-> +                       if (!time_left)
-> +                               dev_err(mas->dev, "DMA RX RESET failed\n");
-> +               }
-
-Comparing how the i2c driver does "se DMA", I notice that it does the
-FSM reset _before_ calling geni_se_tx_dma_unprep() /
-geni_se_rx_dma_unprep(). You do it in the opposite order. Are both
-orders really OK?
-
-
-> @@ -482,8 +528,11 @@ static bool geni_can_dma(struct spi_controller *ctlr,
->  {
->         struct spi_geni_master *mas = spi_master_get_devdata(slv->master);
->
-> -       /* check if dma is supported */
-> -       return mas->cur_xfer_mode != GENI_SE_FIFO;
-> +       /*
-> +        * return true if transfer needs to be mapped prior to
-> +        * calling transfer_one which is the case only for GPI_DMA
-> +        */
-> +       return mas->cur_xfer_mode == GENI_GPI_DMA;
-
-Comments should say _why_ we don't need the transfer to be mapped by
-the SPI framework for SE_DMA? This is because geni_se_rx_dma_prep() /
-geni_se_tx_dma_prep() does it for you?
-
-
-> @@ -494,6 +543,7 @@ static int spi_geni_prepare_message(struct spi_master *spi,
->
->         switch (mas->cur_xfer_mode) {
->         case GENI_SE_FIFO:
-> +       case GENI_SE_DMA:
->                 if (spi_geni_is_abort_still_pending(mas))
->                         return -EBUSY;
->                 ret = setup_fifo_params(spi_msg->spi, spi);
-> @@ -604,8 +654,8 @@ static int spi_geni_init(struct spi_geni_master *mas)
->                 fallthrough;
-
-Right above this line there's a warning that says: "FIFO mode
-disabled, but couldn't get DMA, fall back to FIFO mode". It was never
-clear to me if that truly worked. ...but now I wonder even more. If it
-was OK to fall back to FIFO mode when GPI failed to init, is it also
-OK to fall back to SE_DMA mode in that case?
-
-
->         case 0:
-> -               mas->cur_xfer_mode = GENI_SE_FIFO;
-> -               geni_se_select_mode(se, GENI_SE_FIFO);
-> +               mas->cur_xfer_mode = GENI_SE_DMA;
-> +               geni_se_select_mode(se, GENI_SE_DMA);
-
-Do we even need the above two lines? Don't we change the mode between
-FIFO/DMA each time based on the transfer size?
-
-
-> @@ -716,14 +766,14 @@ static void geni_spi_handle_rx(struct spi_geni_master *mas)
->         mas->rx_rem_bytes -= rx_bytes;
->  }
->
-> -static void setup_fifo_xfer(struct spi_transfer *xfer,
-> +static int setup_se_xfer(struct spi_transfer *xfer,
->                                 struct spi_geni_master *mas,
->                                 u16 mode, struct spi_master *spi)
->  {
->         u32 m_cmd = 0;
-> -       u32 len;
-> +       u32 len, fifo_size = 0;
-
-You don't need to initialize "fifo_size".
-
-
->         struct geni_se *se = &mas->se;
-> -       int ret;
-> +       int ret = 0;
-
-You don't need to initialize "ret".
-
-
-> @@ -771,6 +821,13 @@ static void setup_fifo_xfer(struct spi_transfer *xfer,
->                 writel(len, se->base + SE_SPI_RX_TRANS_LEN);
->                 mas->rx_rem_bytes = xfer->len;
->         }
-> +       mas->cur_m_cmd = m_cmd;
-> +
-> +       /* Select transfer mode based on transfer length */
-> +       fifo_size =
-> +               (mas->tx_fifo_depth * mas->fifo_width_bits / mas->cur_bits_per_word);
-
-Parentheses here are unnecessary.
-
-
-> @@ -778,11 +835,36 @@ static void setup_fifo_xfer(struct spi_transfer *xfer,
->          */
->         spin_lock_irq(&mas->lock);
->         geni_se_setup_m_cmd(se, m_cmd, FRAGMENTATION);
-> -       if (m_cmd & SPI_TX_ONLY) {
-> +
-> +       if (mas->cur_xfer_mode == GENI_SE_DMA) {
-> +               if (m_cmd & SPI_RX_ONLY) {
-> +                       ret =  geni_se_rx_dma_prep(se, xfer->rx_buf,
-> +                               xfer->len, &xfer->rx_dma);
-
-Is it truly legitimate to use "xfer->rx_dma" for your own purposes?
-That's supposed to be something populated by the SPI framework if
-can_dma() returns true and I'd be a bit nervous about using it. Are we
-sure we shouldn't use the SPI framework to handle our mapping?
-
-
-> +                       if (ret || !xfer->rx_buf) {
-
-Remove the useless test for "xfer->rx_buf". The only way the
-SPI_RX_ONLY bit could be set is if rx_buf was non-NULL and that test
-was only a few lines earlier.
-
-
-> +                               dev_err(mas->dev, "Failed to setup Rx dma %d\n", ret);
-> +                               xfer->rx_dma = 0;
-> +                               goto unlock_and_return;
-> +                       }
-> +               }
-> +               if (m_cmd & SPI_TX_ONLY) {
-> +                       ret =  geni_se_tx_dma_prep(se, (void *)xfer->tx_buf,
-
-Why the extra cast to "void *". You don't need it and don't have it on
-the rx side.
-
-
-> +                               xfer->len, &xfer->tx_dma);
-> +                       if (ret || !xfer->tx_buf) {
-
-Remove the useless test for "xfer->tx_buf"
-
-
-> +                               dev_err(mas->dev, "Failed to setup Tx dma %d\n", ret);
-> +                               xfer->tx_dma = 0;
-> +                               goto unlock_and_return;
-
-Don't you need to undo geni_se_rx_dma_prep() if this is a full duplex
-transfer? ...and I guess clear xfer->rx_dma? Is there anything we need
-to do to undo the geni_se_setup_m_cmd() ?
-
-
-> +                       }
-
-Just out of curiosity, what exactly kicks off the transfer in the DMA
-case. I guess it knows if it's a TX, RX, or duplex transfer and
-magically kicks off when one or both of them are prepped?
-
-
-> +               }
-> +       } else if (m_cmd & SPI_TX_ONLY) {
->                 if (geni_spi_handle_tx(mas))
->                         writel(mas->tx_wm, se->base + SE_GENI_TX_WATERMARK_REG);
->         }
-> +
-> +unlock_and_return:
->         spin_unlock_irq(&mas->lock);
-> +       if (!ret)
-> +               ret = 1;
-
-Move this extra "if (!ret) ret = 1;" to spi_geni_transfer_one() and
-add a comment explaining it (it's part of the API that the SPI
-framework expects if you're letting it wait for the transfer to
-complete or call the timeout function).
-
-
-> @@ -816,46 +899,73 @@ static irqreturn_t geni_spi_isr(int irq, void *data)
->         if (!m_irq)
->                 return IRQ_NONE;
->
-> -       if (m_irq & (M_CMD_OVERRUN_EN | M_ILLEGAL_CMD_EN | M_CMD_FAILURE_EN |
-> -                    M_RX_FIFO_RD_ERR_EN | M_RX_FIFO_WR_ERR_EN |
-> -                    M_TX_FIFO_RD_ERR_EN | M_TX_FIFO_WR_ERR_EN))
-> -               dev_warn(mas->dev, "Unexpected IRQ err status %#010x\n", m_irq);
-> -
-
-Could still leave the above check/warning even for SE_DMA mode, can't
-you? Then you can keep it outside the spinlock. Is there some reason
-that those errors are more impossible for SE_DMA than they are for
-FIFO?
-
-
->         spin_lock(&mas->lock);
->
-> -       if ((m_irq & M_RX_FIFO_WATERMARK_EN) || (m_irq & M_RX_FIFO_LAST_EN))
-> -               geni_spi_handle_rx(mas);
-> -
-> -       if (m_irq & M_TX_FIFO_WATERMARK_EN)
-> -               geni_spi_handle_tx(mas);
-> -
-> -       if (m_irq & M_CMD_DONE_EN) {
-> -               if (mas->cur_xfer) {
-> +       if (mas->cur_xfer_mode == GENI_SE_FIFO) {
-> +               if (m_irq & (M_CMD_OVERRUN_EN | M_ILLEGAL_CMD_EN | M_CMD_FAILURE_EN |
-> +                                M_RX_FIFO_RD_ERR_EN | M_RX_FIFO_WR_ERR_EN |
-> +                                M_TX_FIFO_RD_ERR_EN | M_TX_FIFO_WR_ERR_EN))
-> +                       dev_warn(mas->dev, "Unexpected IRQ err status %#010x\n", m_irq);
-> +
-> +               if ((m_irq & M_RX_FIFO_WATERMARK_EN) || (m_irq & M_RX_FIFO_LAST_EN))
-> +                       geni_spi_handle_rx(mas);
-> +
-> +               if (m_irq & M_TX_FIFO_WATERMARK_EN)
-> +                       geni_spi_handle_tx(mas);
-> +
-> +               if (m_irq & M_CMD_DONE_EN) {
-> +                       if (mas->cur_xfer) {
-> +                               spi_finalize_current_transfer(spi);
-> +                               mas->cur_xfer = NULL;
-> +                               /*
-> +                                * If this happens, then a CMD_DONE came before all the
-> +                                * Tx buffer bytes were sent out. This is unusual, log
-> +                                * this condition and disable the WM interrupt to
-> +                                * prevent the system from stalling due an interrupt
-> +                                * storm.
-> +                                *
-> +                                * If this happens when all Rx bytes haven't been
-> +                                * received, log the condition. The only known time
-> +                                * this can happen is if bits_per_word != 8 and some
-> +                                * registers that expect xfer lengths in num spi_words
-> +                                * weren't written correctly.
-> +                                */
-> +                               if (mas->tx_rem_bytes) {
-> +                                       writel(0, se->base + SE_GENI_TX_WATERMARK_REG);
-> +                                       dev_err(mas->dev, "Premature done. tx_rem = %d bpw%d\n",
-> +                                               mas->tx_rem_bytes, mas->cur_bits_per_word);
-> +                               }
-> +                               if (mas->rx_rem_bytes)
-> +                                       dev_err(mas->dev, "Premature done. rx_rem = %d bpw%d\n",
-> +                                               mas->rx_rem_bytes, mas->cur_bits_per_word);
-> +                       } else {
-> +                               complete(&mas->cs_done);
-> +                       }
-> +               }
-> +       } else if (mas->cur_xfer_mode == GENI_SE_DMA) {
-> +               const struct spi_transfer *xfer = mas->cur_xfer;
-> +               u32 dma_tx_status = readl_relaxed(se->base + SE_DMA_TX_IRQ_STAT);
-> +               u32 dma_rx_status = readl_relaxed(se->base + SE_DMA_RX_IRQ_STAT);
-
-The above makes me nervous that a full duplex transfer could finish
-right between the two register reads and something would be handled
-incorrectly. ...but it actually looks OK. In that case we'll just get
-another interrupt right after this one and finish everything. OK, no
-action needed just documenting my thoughts.
-
--Doug
+Reinette
