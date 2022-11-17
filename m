@@ -2,110 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 742AB62D457
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 08:45:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98E9A62D45A
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 08:48:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239321AbiKQHpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 02:45:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42404 "EHLO
+        id S239404AbiKQHsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 02:48:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234715AbiKQHpe (ORCPT
+        with ESMTP id S234715AbiKQHsN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 02:45:34 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FA4E45ED9
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 23:45:32 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ovZaH-0000v6-1X; Thu, 17 Nov 2022 08:45:17 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ovZaC-004o5M-UR; Thu, 17 Nov 2022 08:45:13 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ovZaD-00HDqE-7v; Thu, 17 Nov 2022 08:45:13 +0100
-Date:   Thu, 17 Nov 2022 08:45:10 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Marcello Sylvester Bauer <sylv@sylv.io>,
-        linux-pwm@vger.kernel.org
-Subject: Re: [PATCH v6 3/3] hwmon: (max6639) Change from pdata to dt
- configuration
-Message-ID: <20221117074510.qqtjc6h3bnh5rccx@pengutronix.de>
-References: <20221116213615.1256297-1-Naresh.Solanki@9elements.com>
- <20221116213615.1256297-4-Naresh.Solanki@9elements.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ka6u4pp26b6usojr"
-Content-Disposition: inline
-In-Reply-To: <20221116213615.1256297-4-Naresh.Solanki@9elements.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Thu, 17 Nov 2022 02:48:13 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6119B4AF3D;
+        Wed, 16 Nov 2022 23:48:12 -0800 (PST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NCX8V6xM3z8R03d;
+        Thu, 17 Nov 2022 15:48:10 +0800 (CST)
+Received: from xaxapp01.zte.com.cn ([10.88.40.50])
+        by mse-fl2.zte.com.cn with SMTP id 2AH7m4wx022774;
+        Thu, 17 Nov 2022 15:48:05 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Thu, 17 Nov 2022 15:48:06 +0800 (CST)
+Date:   Thu, 17 Nov 2022 15:48:06 +0800 (CST)
+X-Zmail-TransId: 2af96375e73619689491
+X-Mailer: Zmail v1.0
+Message-ID: <202211171548066327249@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <agross@kernel.org>
+Cc:     <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIHNvYzogcWNvbTogc21lbV9zdGF0ZTogVXNlIGRldmljZV9tYXRjaF9vZl9ub2RlKCk=?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 2AH7m4wx022774
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 6375E73A.003 by FangMail milter!
+X-FangMail-Envelope: 1668671290/4NCX8V6xM3z8R03d/6375E73A.003/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 6375E73A.003/4NCX8V6xM3z8R03d
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
---ka6u4pp26b6usojr
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Replace the open-code with device_match_of_node().
 
-Hello,
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+---
+ drivers/soc/qcom/smem_state.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Wed, Nov 16, 2022 at 10:36:15PM +0100, Naresh Solanki wrote:
-> max6639_platform_data is not used by any in-kernel driver and does not
-> address the MAX6639 fans separately.
-> Move to device tree configuration with explicit properties to configure
-> each fan.
->=20
-> Non-DT platform can still use this module with its default
-> configuration.
->=20
-> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+diff --git a/drivers/soc/qcom/smem_state.c b/drivers/soc/qcom/smem_state.c
+index e848cc9a3cf8..a7844841a727 100644
+--- a/drivers/soc/qcom/smem_state.c
++++ b/drivers/soc/qcom/smem_state.c
+@@ -63,7 +63,7 @@ static struct qcom_smem_state *of_node_to_state(struct device_node *np)
+ 	mutex_lock(&list_lock);
 
-What changed here since v5? Please either add a changelog below the
-tripple-dash for a new revision, or make sure that all relevant people
-get the cover letter.
-
-It seems you didn't address my comments for v5 :-\
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---ka6u4pp26b6usojr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN15oMACgkQwfwUeK3K
-7AmqXAf/VDOQ7mnov3rgf8/GY+ERfUHmK13LG3T9l7PjEcDOYnnBpmjIfb46EAQe
-knIQpR4Hur3Oy6TDvQ6BEzNeqaY8uelToGLeQCPY629HPd8nBGDTOf49A7eAWKdv
-UhhNkqPWZZSEpGN989ITsutCS3KklmdROR7mQbSLBvU+dMb5bhVgDz1vkNxa9aJ1
-p5hWQjSPWnYOW8ZI0UfXgkCESDdOASeuPhxRq2YX/GM7gUgiJlUD9vm40xAt2N8v
-p8FxVsEBJPw4b8+AZmdEz/EjrOjdmqRrsiEbyk0Ik65U+w3jopKq5Is9HyR8BJBo
-ewRscdLuuLMT9Xsq3IaRYhwfhXet6w==
-=HbtU
------END PGP SIGNATURE-----
-
---ka6u4pp26b6usojr--
+ 	list_for_each_entry(state, &smem_states, list) {
+-		if (state->of_node == np) {
++		if (device_match_of_node(state, np)) {
+ 			kref_get(&state->refcount);
+ 			goto unlock;
+ 		}
+-- 
+2.25.1
