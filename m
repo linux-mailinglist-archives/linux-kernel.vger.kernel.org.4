@@ -2,53 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71FF762D960
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 12:28:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABD2462D964
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 12:29:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239408AbiKQL2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 06:28:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39012 "EHLO
+        id S239512AbiKQL3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 06:29:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239203AbiKQL2H (ORCPT
+        with ESMTP id S231911AbiKQL26 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 06:28:07 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0973445ED1
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 03:28:06 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ovd3o-0002Xd-9s; Thu, 17 Nov 2022 12:28:00 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ovd3m-004q6e-8H; Thu, 17 Nov 2022 12:27:59 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ovd3m-00HGXm-Gu; Thu, 17 Nov 2022 12:27:58 +0100
-Date:   Thu, 17 Nov 2022 12:27:58 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] pwm: Add missing dummy for devm_pwmchip_add()
-Message-ID: <20221117112758.nsxfwh4ck23uln5a@pengutronix.de>
-References: <12f2142991690d2b1d6890821f6e7779a4d4bdc0.1666706435.git.geert+renesas@glider.be>
- <20221026001713.kuu5mj6kogosvqnk@pengutronix.de>
- <CAMuHMdW=h922855yyiiR2Bo+P2Dg7S7r1pVBF56S+Z0ytng3fA@mail.gmail.com>
+        Thu, 17 Nov 2022 06:28:58 -0500
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D395242996;
+        Thu, 17 Nov 2022 03:28:55 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4NCd355dTcz4f3mH3;
+        Thu, 17 Nov 2022 19:28:49 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP1 (Coremail) with SMTP id cCh0CgAn0a_zGnZjPOSPAg--.8579S3;
+        Thu, 17 Nov 2022 19:28:52 +0800 (CST)
+Subject: Re: [PATCH v2 4/5] blk-iocost: fix sleeping in atomic context
+ warnning
+To:     Tejun Heo <tj@kernel.org>, Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     hch@lst.de, josef@toxicpanda.com, axboe@kernel.dk,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20221104023938.2346986-1-yukuai1@huaweicloud.com>
+ <20221104023938.2346986-5-yukuai1@huaweicloud.com>
+ <Y3K8MSFWw8eTnxtm@slm.duckdns.org>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <3da991c6-21e4-8ed8-ba75-ccb92059f0ae@huaweicloud.com>
+Date:   Thu, 17 Nov 2022 19:28:50 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4oa35okzj2bp3axr"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdW=h922855yyiiR2Bo+P2Dg7S7r1pVBF56S+Z0ytng3fA@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+In-Reply-To: <Y3K8MSFWw8eTnxtm@slm.duckdns.org>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: cCh0CgAn0a_zGnZjPOSPAg--.8579S3
+X-Coremail-Antispam: 1UD129KBjvdXoW7Jry3WF13Jr47Wr48XFWxCrg_yoWfuFc_CF
+        Wv9r4qq3Z8ZanY9FyUtFWDtrWrA34aqr1xWr48XF98tw1jvw15Ga17Jry0qw45JFWF9F4D
+        CrW5Crsagr47XjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb3kFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
+        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
+        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
+        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
+        IF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq
+        3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIda
+        VFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,91 +68,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi, Tejun!
 
---4oa35okzj2bp3axr
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+ÔÚ 2022/11/15 6:07, Tejun Heo Ð´µÀ:
 
-Hello,
+> 
+> Any chance I can persuade you into updating match_NUMBER() helpers to not
+> use match_strdup()? They can easily disable irq/preemption and use percpu
+> buffers and we won't need most of this patchset.
 
-On Wed, Oct 26, 2022 at 09:05:42AM +0200, Geert Uytterhoeven wrote:
-> On Wed, Oct 26, 2022 at 2:17 AM Uwe Kleine-K=F6nig
-> <u.kleine-koenig@pengutronix.de> wrote:
-> > On Tue, Oct 25, 2022 at 04:03:42PM +0200, Geert Uytterhoeven wrote:
-> > > The PWM subsystem supports compile-testing if CONFIG_PWM is disabled.
-> > > However, no dummy is provided for devm_pwmchip_add(), which may lead =
-to
-> > > build failures.
-> > >
-> > > Fixes: bcda91bf86c1ff76 ("pwm: Add a device-managed function to add P=
-WM chips")
-> > > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> >
-> > Is this a problem that today yields a failure to compile? As of v6.1-rc1
-> > and also in next all callers are below drivers/pwm/ which isn't included
-> > in the build without PWM=3Dy.
->=20
-> So none of these support compile-testing with CONFIG_PWM=3Dn...
+Does the following patch match your proposal?
 
-There are not many pwm providers outside of drivers/pwm:
+diff --git a/lib/parser.c b/lib/parser.c
+index bcb23484100e..ded652471919 100644
+--- a/lib/parser.c
++++ b/lib/parser.c
+@@ -11,6 +11,24 @@
+  #include <linux/slab.h>
+  #include <linux/string.h>
 
- - drivers/gpio/gpio-mvebu.c
- - drivers/gpu/drm/bridge/ti-sn65dsi86.c
- - drivers/leds/rgb/leds-qcom-lpg.c
- - drivers/staging/greybus/pwm.c
++#define U64_MAX_SIZE 20
++
++static DEFINE_PER_CPU(char, buffer[U64_MAX_SIZE]);
++
++static char *get_buffer(void)
++{
++       preempt_disable();
++       local_irq_disable();
++
++       return this_cpu_ptr(buffer);
++}
++
++static void put_buffer(void)
++{
++       local_irq_enable();
++       preempt_enable();
++}
++
 
-These all call pwmchip_add() which has a dummy.
+Then match_strdup() and kfree() in match_NUMBER() can be replaced with
+get_buffer() and put_buffer().
 
-gpio-mvebu only uses it in an if (IS_ENABLED(CONFIG_PWM)) block.
-ti-sn65dsi86 has it in a big #ifdef CONFIG_PWM block (and in a dedicated
-driver such that the returned error doesn't hurt).
+Thanks,
+Kuai
+> 
+> Thanks.
+> 
 
-leds-qcom-lpg.c depends on PWM as does the greybus stuff.
-
-So the dummy isn't even needed. (Unless for the corner case GPIO_MVEBU=3Dy
-+ PWM=3Dm which is probably a bug worth fixing. Maybe a similar issue
-exists for ti-sn65dsi86.)
-
-> > Am I missing something or is this just preparing that one of the drivers
-> > that doesn't live in drivers/pwm might call devm_pwmchip_add in the
-> > future?
->=20
-> I saw it with the RZ/G2L MTU3 PWM driver[1], which is not yet applied.
-> After noticing its sibling counter driver lacked a dependency on
-> CONFIG_COUNTER, I tried disabling CONFIG_PWM...
->=20
-> > In that case I wouldn't add that Fixes: line (and also oppose to
-> > backporting that commit to stable).
->=20
-> I tend to disagree: more drivers may be converted to devm_pwmchip_add()
-> in the future, possibly as part of a fix, causing troubles for the
-> stable team when backporting such fixes.
-
-Please don't backport as a precaution not to miss to backport it in case
-there is another patch that depends on it. In my experience the stable
-maintainers are good at identifying such dependencies.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---4oa35okzj2bp3axr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN2GrsACgkQwfwUeK3K
-7AlxUwgAoI6Bmom9R1BQ6dVKKaQSiiL4Q5yxOafXc1axVKC/IUCX60/RvBFUwEWq
-ABqvQ4ZqmDv+k24vyMHgnO4qcT4fBog9MFNReXm1won9Zkr1Sw0h0olvERymjiHj
-8CdXXXEMvjg6IOAbQ8jC3ZjU355baYdFVflRTO1k52dPRMzP32zBIF/avcRcrTaT
-YnKGw9wmDfZdIGWx5vfokNmSzYLGsZSNxv2SsBWXf3QJRWC6reBaAalL8AZkzXq+
-hqQDHwV7OQSZMc7UkQfoQmHvznyg/fPQxL2qIImziwgRN9+rvuWgVqrAJjcj8New
-DfMBkJnfxbqv4pHoqmKS3rL0MBiz9Q==
-=4Qj1
------END PGP SIGNATURE-----
-
---4oa35okzj2bp3axr--
