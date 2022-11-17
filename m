@@ -2,141 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BDF862DF8B
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:21:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AF8C62DFAC
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:21:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240293AbiKQPVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 10:21:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38766 "EHLO
+        id S240512AbiKQPVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 10:21:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240521AbiKQPUN (ORCPT
+        with ESMTP id S240648AbiKQPUw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 10:20:13 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F7BBF43
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 07:16:20 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso2147276pjt.0
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 07:16:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Geqy1MGLbG4CNNhTg6ig5gMw4IRIu2ApDkqg8kUu6fE=;
-        b=im3ECY8irru0d2J3PmRkK1oS6XMYGDmkKrSKiLpQr6kggh65U519LacoANhp99/wDs
-         yHeOZt/b6IK2ihlol7f0Ba2me3bs0cr3TxYhTcQThAifpYqs8dB3p/8NK2dEXBDay90O
-         bW6pXrP7B14I1MNWa+NfggtZKbyTz1rnHhMsVYBCQiIPWqcakktYyuja6CoTLxQtkpfs
-         JsqTKBMeEN72FgBWe/ihbCXP9h1x9TEb9ulziUgPn3ZIyNK23YQtGzg65j8/As9Xyk7K
-         3+HVs34s1miAiKC8ZfgoVMv73WwF3DJWJcQDYskZpYkejUuTFt6cPMAw/xSDBCQyvpM1
-         B6Kg==
+        Thu, 17 Nov 2022 10:20:52 -0500
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52A927990C;
+        Thu, 17 Nov 2022 07:17:10 -0800 (PST)
+Received: by mail-wm1-f43.google.com with SMTP id t4so1594391wmj.5;
+        Thu, 17 Nov 2022 07:17:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Geqy1MGLbG4CNNhTg6ig5gMw4IRIu2ApDkqg8kUu6fE=;
-        b=R8h+jKYQbW+WHQKCrqvNUN7ZEjjYTD4p777XUkFSXfDKoyv8lKr9qhh1Hwm/DSqVf6
-         v5AfiBH0qFs4pHU6W9+Izf1gkCzR2Ft3x2bN3feSOqDHMPyaqhLTcjApPrNRILSbj8GQ
-         m5qxPaRXX6QTbWx4UmPwUVyYFz1+VnREhUEwPFI4ZQAw9gu/fI0x1lHC4za7z++0rdPf
-         HNX2TMGf/pAp15dM97hyEGIKZEsHu2pkKfOSW7eBycjG+BZMxfHygPaSbmYC+lbFncDW
-         1D8MFID0A7T9uLMN9kKkI0A3kz+So8xzuPTGNwP6Q3CdMugJQfmkVEsSl8LIoX5KDgk2
-         lycQ==
-X-Gm-Message-State: ANoB5pmG1cguGhtREkZT51A6zCjX6mowfqQY8M/mpF2lKBBcF7w6wART
-        1daa8n0A9gxlf8wTT/u9KWBkiQ==
-X-Google-Smtp-Source: AA0mqf5Drbj5GGUy8zNXmPljMG8UuEFTPTHf+YuwVXyWlSocFeljs1OjIQ+Ab7mWXZMNXetmsxdGbQ==
-X-Received: by 2002:a17:90a:6b84:b0:20a:cbb0:3c9b with SMTP id w4-20020a17090a6b8400b0020acbb03c9bmr3280802pjj.81.1668698179289;
-        Thu, 17 Nov 2022 07:16:19 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id r12-20020a63e50c000000b00476dc914262sm1135777pgh.1.2022.11.17.07.16.18
+        bh=QqLoz4WimLaZOBWkpHa++cXKf6tUCOzTWtaNskWwH9g=;
+        b=i5g+VeGE+d7rY1AeqrFIQtYVRpDlQhNScnfUz+PDNhG3clVb7g2B2vcrN73dqwPQqA
+         M0zOLmJl+fdkq1LdCNBOsMNpcMVinn8dlLuzO5H1EFgCAq4VDkj09cOmmbICGsTMAfBm
+         zyWLuxjkz/BmFxlI6zJAj2EgCLXcvkFkvNX0ko9rW+kNjTenRsERcWGMrndsLLjI66bA
+         7f9tbSRRy0vMhjPbBQOO9q5ZExbMTrFlr6J7TKfmWrrIOQppOIrGbB0A7m+0OD1whZUv
+         EseLWuIQLYQb3R7me5WRFEnpRRmDPICxkRoLvUO6ymYeHy/SsdESpwELG7K79TlqO83f
+         Q09Q==
+X-Gm-Message-State: ANoB5pkpfC2yNj4fYuZAVJI2X9VQVlCgdbK2OwoMVbvRN32pU0Feokff
+        BYqj3+44oEVIr9zOLvtjlH4=
+X-Google-Smtp-Source: AA0mqf4oG8m5KQtZr4PdyBvld3lNlzCDl2hvGtjp3UPoMMz/kfHo1COZJFNOrwcAjA/0XDq2/6W6ew==
+X-Received: by 2002:a05:600c:220b:b0:3cf:f747:71f with SMTP id z11-20020a05600c220b00b003cff747071fmr3969071wml.147.1668698206322;
+        Thu, 17 Nov 2022 07:16:46 -0800 (PST)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id g17-20020a05600c4ed100b003c701c12a17sm6914886wmq.12.2022.11.17.07.16.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 07:16:18 -0800 (PST)
-Date:   Thu, 17 Nov 2022 15:16:15 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
-        "Yao, Yuan" <yuan.yao@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "kvm-riscv@lists.infradead.org" <kvm-riscv@lists.infradead.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "oliver.upton@linux.dev" <oliver.upton@linux.dev>,
-        "farosas@linux.ibm.com" <farosas@linux.ibm.com>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "alexandru.elisei@arm.com" <alexandru.elisei@arm.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "maz@kernel.org" <maz@kernel.org>,
-        "anup@brainfault.org" <anup@brainfault.org>,
-        "frankja@linux.ibm.com" <frankja@linux.ibm.com>,
-        "aleksandar.qemu.devel@gmail.com" <aleksandar.qemu.devel@gmail.com>,
-        "james.morse@arm.com" <james.morse@arm.com>,
-        "kvmarm@lists.cs.columbia.edu" <kvmarm@lists.cs.columbia.edu>,
-        "farman@linux.ibm.com" <farman@linux.ibm.com>,
-        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "atishp@atishpatra.org" <atishp@atishpatra.org>,
-        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
-        "Gao, Chao" <chao.gao@intel.com>
-Subject: Re: [PATCH 38/44] KVM: Disable CPU hotplug during hardware enabling
-Message-ID: <Y3ZQP3C1f8pk199t@google.com>
-References: <20221102231911.3107438-1-seanjc@google.com>
- <20221102231911.3107438-39-seanjc@google.com>
- <88e920944de70e7d69a98f74005b49c59b5aaa3b.camel@intel.com>
- <b198fe971cecd301f0c7c66028cfd71dd7ba7e62.camel@intel.com>
- <Y3PzhANShVlTXVg1@google.com>
- <95ca433349eca601bdd2b16d70f59ba8e56d8e3f.camel@intel.com>
- <Y3UZtoIidMyE8qVz@google.com>
- <7fb66c497b6c41049167b05c63267cbc301b1c20.camel@intel.com>
+        Thu, 17 Nov 2022 07:16:45 -0800 (PST)
+Date:   Thu, 17 Nov 2022 15:16:38 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Michael Kelley <mikelley@microsoft.com>
+Cc:     hpa@zytor.com, kys@microsoft.com, haiyangz@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, luto@kernel.org,
+        peterz@infradead.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, lpieralisi@kernel.org,
+        robh@kernel.org, kw@linux.com, bhelgaas@google.com, arnd@arndb.de,
+        hch@infradead.org, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        Tianyu.Lan@microsoft.com, kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, dan.j.williams@intel.com,
+        jane.chu@oracle.com, seanjc@google.com, tony.luck@intel.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+        iommu@lists.linux.dev
+Subject: Re: [Patch v3 13/14] PCI: hv: Add hypercalls to read/write MMIO space
+Message-ID: <Y3ZQVpkS0Hr4LsI2@liuwe-devbox-debian-v2>
+References: <1668624097-14884-1-git-send-email-mikelley@microsoft.com>
+ <1668624097-14884-14-git-send-email-mikelley@microsoft.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7fb66c497b6c41049167b05c63267cbc301b1c20.camel@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1668624097-14884-14-git-send-email-mikelley@microsoft.com>
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022, Huang, Kai wrote:
-> On Wed, 2022-11-16 at 17:11 +0000, Sean Christopherson wrote:
-> > static int kvm_x86_check_processor_compatibility(void)
-> > {
-> >         int cpu = smp_processor_id();
-> >         struct cpuinfo_x86 *c = &cpu_data(cpu);
-> > 
-> >         /*
-> >          * Compatibility checks are done when loading KVM and when enabling
-> >          * hardware, e.g. during CPU hotplug, to ensure all online CPUs are
-> >          * compatible, i.e. KVM should never perform a compatibility check on
-> >          * an offline CPU.
-> >          */
-> >         WARN_ON(!cpu_online(cpu));
-> 
-> Looks good to me.  Perhaps this also can be removed, though.
+On Wed, Nov 16, 2022 at 10:41:36AM -0800, Michael Kelley wrote:
+[...]
+>  
+> +static void hv_pci_read_mmio(struct device *dev, phys_addr_t gpa, int size, u32 *val)
+> +{
+> +	struct hv_mmio_read_input *in;
+> +	struct hv_mmio_read_output *out;
+> +	u64 ret;
+> +
+> +	/*
+> +	 * Must be called with interrupts disabled so it is safe
+> +	 * to use the per-cpu input argument page.  Use it for
+> +	 * both input and output.
+> +	 */
 
-Hmm, it's a bit superfluous, but I think it could fire if KVM messed up CPU
-hotplug again, e.g. if the for_each_online_cpu() => IPI raced with CPU unplug.
+Perhaps adding something along this line?
 
-> And IMHO the removing of WARN_ON(!irq_disabled()) should be folded to the patch
-> "[PATCH 37/44] KVM: Rename and move CPUHP_AP_KVM_STARTING to ONLINE section". 
-> Because moving from STARTING section to ONLINE section changes the IRQ status
-> when the compatibility check is called.
+	WARN_ON(!irqs_disabled());
 
-Yep, that's what I have coded up, just smushed it all together here.
+I can fold this in if you agree.
+
+> +	in = *this_cpu_ptr(hyperv_pcpu_input_arg);
+> +	out = *this_cpu_ptr(hyperv_pcpu_input_arg) + sizeof(*in);
+> +	in->gpa = gpa;
+> +	in->size = size;
+> +
+> +	ret = hv_do_hypercall(HVCALL_MMIO_READ, in, out);
+> +	if (hv_result_success(ret)) {
+> +		switch (size) {
+> +		case 1:
+> +			*val = *(u8 *)(out->data);
+> +			break;
+> +		case 2:
+> +			*val = *(u16 *)(out->data);
+> +			break;
+> +		default:
+> +			*val = *(u32 *)(out->data);
+> +			break;
+> +		}
+> +	} else
+> +		dev_err(dev, "MMIO read hypercall error %llx addr %llx size %d\n",
+> +				ret, gpa, size);
+> +}
+> +
+> +static void hv_pci_write_mmio(struct device *dev, phys_addr_t gpa, int size, u32 val)
+> +{
+> +	struct hv_mmio_write_input *in;
+> +	u64 ret;
+> +
+> +	/*
+> +	 * Must be called with interrupts disabled so it is safe
+> +	 * to use the per-cpu input argument memory.
+> +	 */
+
+Ditto.
+
+Thanks,
+Wei.
