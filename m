@@ -2,112 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D16DC62E31E
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:33:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0E8262E321
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:33:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235049AbiKQRdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 12:33:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54200 "EHLO
+        id S240107AbiKQRdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 12:33:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232427AbiKQRdD (ORCPT
+        with ESMTP id S232427AbiKQRdG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 12:33:03 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0DF7991B;
-        Thu, 17 Nov 2022 09:33:02 -0800 (PST)
-Received: from [192.168.2.32] (109-252-117-140.nat.spd-mgts.ru [109.252.117.140])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B443166015AC;
-        Thu, 17 Nov 2022 17:33:00 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1668706381;
-        bh=cedBJtYyiA9dCMinWRYLl88BHzqlXi2cVMCMxrRsTgo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=R86+NjxG77C4ypDUckAAkObDhwFfW8LsXLyziX+YDeVo9NJcK+pvp2Ku7DowgFCbn
-         NSSG+Z6FPLAkr7zIPD9w0ejv0e3TIonPbWMRULexD+DWsCafXY1vF/aHtkfHIZoMcK
-         PvP1EbICeFzCEoevJDaBIhHXXRcq4FCtcWT4A+RJ4y+ljL/zZo/44q/RpG9EHJZsjV
-         2CtyicOGXpvG5b2cuWTc6be328u6R51RN7gBhayk+aF7AmkuXdoKqQGIdAIBXf6haL
-         uDTWUdi/5Q7pXQf2qYzqS3GbfFeQCjLbvy+gp3ZVsNRAE/bnyasV7R3xk0LdnVGWk/
-         +sE4rG2SpbxZg==
-Message-ID: <cd382f43-1995-12a6-840b-32450e62f9f4@collabora.com>
-Date:   Thu, 17 Nov 2022 20:32:57 +0300
+        Thu, 17 Nov 2022 12:33:06 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411BB79E16;
+        Thu, 17 Nov 2022 09:33:06 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id d192so2479465pfd.0;
+        Thu, 17 Nov 2022 09:33:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=irBTpzdt3UKRDSaNb8P0V0IX9do/eaeR5wsA7XkY2ZM=;
+        b=he3HAFo1vLSohQ1GDMkdmyEQuAtzCtKtgHDZ9rpSjs/rlQYgBG2tiS79xmS9Or1e8X
+         C2uBPXlyMuubFKL8UqsXYX0n27S5LwIYGhWJkkZe5qXRkrrRjpIezlltEoyKSIR166Rn
+         dZ5HCa8vzD4epku1LfsNmvU8CLXTd/fKYF6ELgR8SE6XfL/ZRhDihUj3KpmndifWM4ur
+         cj/o4R9gxWPfMwfmofXWxUFeJDhlw70mq2cV6+5ZEm7VszZOWHjadrcz5wM0iviLwCTH
+         Y34E6E0Xlxc9S8nLc4UiwngYQINpmL8DdA0PhP6qHlz900Nfsb5unfx2oSKJR/JJwbak
+         MugA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=irBTpzdt3UKRDSaNb8P0V0IX9do/eaeR5wsA7XkY2ZM=;
+        b=bLAaxue1bEXUh5Zl/0FKUOFS1FvKvL4ue+tMjepImAfxlGhu/O2DhOKAuFihTbSLwQ
+         IKNDlfg8/Nmw9fer4zdt8fQphAH2TcE7vDNbxVQmBDW+PG77/m6zuseR0e7It3sRKl9c
+         6/AjjzSOd9iUeok/lziR5dz+PL1TsiWoWQH5wv4yFH4mAy5QrpB+PIHWSFnnaH0QTpnk
+         nU8SdpRlZ5i5yHsTgUf1IBmstl1y+xUwKdwtff/aUWKP6O2qg+BwmZVAQtrr23Yu3m0t
+         vk0//iFI4kgnFd2ASY/6DlHEBrJxJNi0DXvFbuB3e7YZfE453gEhrLn7g80pSQruUPFq
+         Thcw==
+X-Gm-Message-State: ANoB5pnHhOpXIT7OZt2QSPAuSCZ9ldGtxXYPP1y/DGLTgW3zz49ZsFqr
+        Thsg924szY8OnIE1vZiENAey+5sotUo=
+X-Google-Smtp-Source: AA0mqf5uJqta9XJjikgXOcN3zPD0sje1CAgXFsnL+Bp0lgoCql9d0jjeN9rKmGWuTl37VIGedFZ3KQ==
+X-Received: by 2002:a63:171e:0:b0:476:9983:b395 with SMTP id x30-20020a63171e000000b004769983b395mr2972617pgl.355.1668706385524;
+        Thu, 17 Nov 2022 09:33:05 -0800 (PST)
+Received: from localhost ([192.55.54.55])
+        by smtp.gmail.com with ESMTPSA id 34-20020a631362000000b004597e92f99dsm1220728pgt.66.2022.11.17.09.33.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 09:33:04 -0800 (PST)
+Date:   Thu, 17 Nov 2022 09:33:03 -0800
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Erdem Aktas <erdemaktas@google.com>
+Cc:     Isaku Yamahata <isaku.yamahata@gmail.com>,
+        "Huang, Kai" <kai.huang@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "dmatlack@google.com" <dmatlack@google.com>,
+        "Christopherson,, Sean" <seanjc@google.com>
+Subject: Re: [PATCH v10 005/108] KVM: TDX: Initialize the TDX module when
+ loading the KVM intel kernel module
+Message-ID: <20221117173303.GB2350331@ls.amr.corp.intel.com>
+References: <cover.1667110240.git.isaku.yamahata@intel.com>
+ <99e5fcf2a7127347816982355fd4141ee1038a54.1667110240.git.isaku.yamahata@intel.com>
+ <0feaa13fa5bf45258f2ebb8407eaefadf5c48976.camel@intel.com>
+ <20221114231835.GA2350331@ls.amr.corp.intel.com>
+ <CAAYXXYzM4=X5euL_cMx=YnPR7=8k9V_VY2ZyLs-RKz76DB2DcA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v4] udmabuf: add vmap and vunmap methods to udmabuf_ops
-Content-Language: en-US
-To:     Lukasz Wiecaszek <lukasz.wiecaszek@googlemail.com>
-Cc:     Gerd Hoffmann <kraxel@redhat.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-References: <20221117045842.27161-1-lukasz.wiecaszek@gmail.com>
- <970e798d-ea26-5e1e-ace8-7915a866f7c7@collabora.com>
- <20221117170838.GA74987@thinkpad-p72>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <20221117170838.GA74987@thinkpad-p72>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAAYXXYzM4=X5euL_cMx=YnPR7=8k9V_VY2ZyLs-RKz76DB2DcA@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/17/22 20:08, Lukasz Wiecaszek wrote:
-> On Thu, Nov 17, 2022 at 12:04:35PM +0300, Dmitry Osipenko wrote:
->> Hi,
->>
->> On 11/17/22 07:58, Lukasz Wiecaszek wrote:
->>> The reason behind that patch is associated with videobuf2 subsystem
->>> (or more genrally with v4l2 framework) and user created
->>> dma buffers (udmabuf). In some circumstances
->>> when dealing with V4L2_MEMORY_DMABUF buffers videobuf2 subsystem
->>> wants to use dma_buf_vmap() method on the attached dma buffer.
->>> As udmabuf does not have .vmap operation implemented,
->>> such dma_buf_vmap() natually fails.
->>>
->>> videobuf2_common: __vb2_queue_alloc: allocated 3 buffers, 1 plane(s) each
->>> videobuf2_common: __prepare_dmabuf: buffer for plane 0 changed
->>> videobuf2_common: __prepare_dmabuf: failed to map dmabuf for plane 0
->>> videobuf2_common: __buf_prepare: buffer preparation failed: -14
->>>
->>> The patch itself seems to be strighforward.
->>> It adds implementation of .vmap and .vunmap methods
->>> to 'struct dma_buf_ops udmabuf_ops'.
->>> .vmap method itself uses vm_map_ram() to map pages linearly
->>> into the kernel virtual address space.
->>> .vunmap removes mapping created earlier by .vmap.
->>> All locking and 'vmapping counting' is done in dma_buf.c
->>> so it seems to be redundant/unnecessary in .vmap/.vunmap.
->>>
->>> Signed-off-by: Lukasz Wiecaszek <lukasz.wiecaszek@gmail.com>
->>
->> If new patch version doesn't contain significant changes and you got
->> acks/reviews for the previous version, then you should add the given
->> acked-by and reviewed-by tags to the commit message by yourself.
->>
->> -- 
->> Best regards,
->> Dmitry
->>
+On Tue, Nov 15, 2022 at 04:22:13AM -0800,
+Erdem Aktas <erdemaktas@google.com> wrote:
+
+> On Mon, Nov 14, 2022 at 3:18 PM Isaku Yamahata <isaku.yamahata@gmail.com> wrote:
+> > > I think you should explain why MOVDIR64B is required, otherwise this just comes
+> > > out of blue.
+> > >
+> > > Btw, is this absolutely required?  TDX also supports Li-mode, which doesn't have
+> > > integrity check.  So theoretically with Li-mode, normal zeroing is also OK but
+> > > doesn't need to use MOVDIR64B.
+> > >
+> > > That being said, do we have a way to tell whether TDX works in Ci or Li mode?
+> >
+> > As long as I don't know.  When clearing page, we can use
+> > if (featuremovdir64b) movdir64b else memset(0).
 > 
-> I would like to thank you all for your patience and on the same time say
-> sorry that I still cannot follow the process (although I have read
-> 'submitting patches' chapter).
+> -- sorry for resending the same email, for some reason my previous
+> email was not in plain text mode--
+> As far as I know, Li mode and Ci mode both are working very similarly
+> and require movdir64b to clear any poison bit previously set. Why
+> would movdir64b is not supported in a tdx capable cpu?
 
-If you'll continue to contribute actively, you'll find things that
-aren't documented at all. Don't worry about it, usually somebody will
-tell you about what's missing. Just apply the new knowledge next time ;)
+In practice, movdir64b can be safely assumed to be supported, I think.  Strictly
+it's not guaranteed by SDM.
+There are two options.
 
+1. Assume modir64b. If it's not supported, KVM refuses to enable TDX.
+   + Don't care CI-mode or Li-mode
+   - not strictly conforming to SDM. In practice, it won't matter.
+2. Don't assume movdir64b.  If movdir64b not supported, use memset(0).
+   + strictly conforming to SDM
+   - needs to care Ci-mode or Li-mode.
+
+So I'll choose option 1.
 -- 
-Best regards,
-Dmitry
-
+Isaku Yamahata <isaku.yamahata@gmail.com>
