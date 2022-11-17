@@ -2,86 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 821A462E7DE
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 23:12:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC22662E7F3
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 23:12:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234768AbiKQWMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 17:12:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51152 "EHLO
+        id S239809AbiKQWMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 17:12:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240478AbiKQWLy (ORCPT
+        with ESMTP id S234710AbiKQWMV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 17:11:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D89E1D70
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 14:11:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1DE24B82208
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:11:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24120C433D6;
-        Thu, 17 Nov 2022 22:11:48 +0000 (UTC)
-Date:   Thu, 17 Nov 2022 17:11:46 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Daniil Tatianin <d-tatianin@yandex-team.ru>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org,
-        yc-core@yandex-team.ru
-Subject: Re: [PATCH v1] kernel/trace/ring_buffer: don't deactivate
- non-existant pages
-Message-ID: <20221117171146.63ac85f2@gandalf.local.home>
-In-Reply-To: <20221114143129.3534443-1-d-tatianin@yandex-team.ru>
-References: <20221114143129.3534443-1-d-tatianin@yandex-team.ru>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 17 Nov 2022 17:12:21 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 827A26160;
+        Thu, 17 Nov 2022 14:12:20 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id u2so4553118ljl.3;
+        Thu, 17 Nov 2022 14:12:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Nn7CD1Io5Tu7IrvKfUpPCinD6fv0Cid4YkXQszLbTa0=;
+        b=HNtqT3X+fZXMPAUtvFZEGrDknoC92jrQXKMoHNuWCUfeaQPRVAULY3fZqDTqk2NIRz
+         L/SXPWL82YbSC9Dv3QkLR1BNjhy1YMblLF6GP6J+oHJTGW7V3mtq2FFT4QNzl/ZSIZSV
+         G0+Lgh51wunlfbEpg2VGDLZhwspxlqwGoVnXdKTgw5IYrbGdNV6FcEaWa05RB/nOEAH7
+         B9Mzo6WfmX9EXTnWYO5tS+mEQDm6immwn79yM+xEJ9xSlx7YfidWD/GF5W/ldRgnzbhM
+         uIUoOlOiMgePlv4p0ZXIMZcjLsApNQ6Ij5IEtMYvIfk0eYvs8FhlEdcyBMJPsNfFWRie
+         kLlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Nn7CD1Io5Tu7IrvKfUpPCinD6fv0Cid4YkXQszLbTa0=;
+        b=iT6C756sQD3hLtO00gIUolk9+OzDeMAO/jXXZXYqtqcPFYemT5yz5S6Uk/Yf4QY1ta
+         3LMFiqS1jrYpwMAJOECcLbcK+gMzTEShboOLloI7QLgDBalAUCagvhRML4ZyKS384QUy
+         YxOQahY6H/TXn5xCqbOYB79P4ru0kYtdjUt2u4Qh3S+twGmRSTm177wdBTU0hiiCFTWI
+         S9108548/AxyLlbnJwTNzfMDiNCXr5IX6i79SFTSfmKlwGpjMcKPenwqxkPDg7dhTGgT
+         loS23qs6c95dGuTBoP7oZky8aBOcyZL7tvfDuWe3Dd8e8jW0oRSmbMTJ74yAALXQcQpQ
+         MVoA==
+X-Gm-Message-State: ANoB5pkoNUWWhpsOJWod8WO7wJvuXSFyIwSxprQFKh41qcba+IEkj4cB
+        H0noLB8qqcA7Neamvp13f8fVfaIuQy43RQaaKvw=
+X-Google-Smtp-Source: AA0mqf6XFdGLQW/qNOnI71a815e7g8gK6kELLCP8DjyotGqp/RBDsq3X83iooriuM6qpAmr2g8HEuGZtuah2g3JBZJc=
+X-Received: by 2002:a2e:a4c7:0:b0:277:81ff:b8c4 with SMTP id
+ p7-20020a2ea4c7000000b0027781ffb8c4mr1578359ljm.260.1668723138518; Thu, 17
+ Nov 2022 14:12:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221116202856.55847-1-mat.jonczyk@o2.pl> <499a1278bcf1b2028f6984d61733717a849d9787.camel@intel.com>
+ <232fd0ae-0002-53cb-9400-f0347e434d42@o2.pl> <7909f86e4d13015b7f14a6f3f1f75f053d837314.camel@intel.com>
+In-Reply-To: <7909f86e4d13015b7f14a6f3f1f75f053d837314.camel@intel.com>
+From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Date:   Thu, 17 Nov 2022 14:12:07 -0800
+Message-ID: <CABBYNZJowvWWtKs_Ok74wNxCVsrKt26pqftG5hgpknusosjbZw@mail.gmail.com>
+Subject: Re: [PATCH] Bluetooth: silence a dmesg error message in hci_request.c
+To:     "Gix, Brian" <brian.gix@intel.com>
+Cc:     "mat.jonczyk@o2.pl" <mat.jonczyk@o2.pl>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Von Dentz, Luiz" <luiz.von.dentz@intel.com>,
+        "johan.hedberg@gmail.com" <johan.hedberg@gmail.com>,
+        "marcel@holtmann.org" <marcel@holtmann.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Nov 2022 17:31:29 +0300
-Daniil Tatianin <d-tatianin@yandex-team.ru> wrote:
+Hi,
 
-> rb_head_page_deactivate() expects cpu_buffer to contain a valid list of
-> ->pages, so verify that the list is actually present before calling it.  
-> 
-> Found by Linux Verification Center (linuxtesting.org) with the SVACE
-> static analysis tool.
-> 
-> Signed-off-by: Daniil Tatianin <d-tatianin@yandex-team.ru>
-> ---
->  kernel/trace/ring_buffer.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
-> index a12e27815555..1e9de3d49701 100644
-> --- a/kernel/trace/ring_buffer.c
-> +++ b/kernel/trace/ring_buffer.c
-> @@ -1635,9 +1635,9 @@ static void rb_free_cpu_buffer(struct ring_buffer_per_cpu *cpu_buffer)
->  
->  	free_buffer_page(cpu_buffer->reader_page);
->  
-> -	rb_head_page_deactivate(cpu_buffer);
-> -
+On Thu, Nov 17, 2022 at 1:45 PM Gix, Brian <brian.gix@intel.com> wrote:
+>
+> Hi  Mateusz,
+>
+> On Thu, 2022-11-17 at 22:27 +0100, Mateusz Jo=C5=84czyk wrote:
+> > W dniu 17.11.2022 o 21:34, Gix, Brian pisze:
+> > > On Wed, 2022-11-16 at 21:28 +0100, Mateusz Jo=C5=84czyk wrote:
+> > > > On kernel 6.1-rcX, I have been getting the following dmesg error
+> > > > message
+> > > > on every boot, resume from suspend and rfkill unblock of the
+> > > > Bluetooth
+> > > > device:
+> > > >
+> > > >         Bluetooth: hci0: HCI_REQ-0xfcf0
+> > > >
+> > > This has a patch that fixes the usage of the deprecated HCI_REQ
+> > > mechanism rather than hiding the fact it is being called, as in
+> > > this
+> > > case.
+> > >
+> > > I am still waiting for someone to give me a "Tested-By:" tag to
+> > > patch:
+> > >
+> > > [PATCH 1/1] Bluetooth: Convert MSFT filter HCI cmd to hci_sync
+> > >
+> > > Which will also stop the dmesg error. If you could try that patch,
+> > > and
+> > > resend it to the list with a Tested-By tag, it can be applied.
+> >
+> > Hello,
+> >
+> > I did not receive this patch, as I was not on the CC list; I was not
+> > aware of it. I will test it shortly.
 
-Logically, this should never happen, but regardless, I consider this a fix.
+You can find the patch here:
 
-Queued. Thanks Daniil!
+https://patchwork.kernel.org/project/bluetooth/patch/20221102175927.401091-=
+2-brian.gix@intel.com/
 
--- Steve
+> >
+> > Any guidelines how I should test this functionality? I have a Sony
+> > Xperia 10 i4113
+> > mobile phone with LineageOS 19.1 / Android 12L, which according to
+> > the spec supports
+> > Bluetooth 5.0. Quick Google search tells me that I should do things
+> > like
+> >
+> >         hcitool lescan
+> >
+>
+> Whatever you were running that produced the
+>
+> "Bluetooth: hci0: HCI_REQ-0xfcf0"
+>
+> error in the dmesg log should be sufficient to determine that the error
+> log is no longer happening. The HCI call is necessary on some
+> platforms, so the absense of other negative behavior should be
+> sufficient to verify that the call is still being made.  The code flow
+> itself has not changed, and new coding enforces the HCI command
+> sequence, so that it is more deterministric than it was with
+> hci_request. The hci_request mechanism was an asyncronous request.
+>
+> > to discover the phone, then use gatttool to list the services, etc.
+> >
+> > Greetings,
+> >
+> > Mateusz
+> >
+>
 
 
->  	if (head) {
-> +		rb_head_page_deactivate(cpu_buffer);
-> +
->  		list_for_each_entry_safe(bpage, tmp, head, list) {
->  			list_del_init(&bpage->list);
->  			free_buffer_page(bpage);
-
+--=20
+Luiz Augusto von Dentz
