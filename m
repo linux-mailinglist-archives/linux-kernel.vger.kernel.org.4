@@ -2,217 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A848E62E6A8
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 22:15:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95C9162E6A1
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 22:15:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239456AbiKQVPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 16:15:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32926 "EHLO
+        id S234875AbiKQVPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 16:15:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240749AbiKQVP0 (ORCPT
+        with ESMTP id S240368AbiKQVPB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 16:15:26 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D20A65869
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 13:15:13 -0800 (PST)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AHLE1Bx027418;
-        Thu, 17 Nov 2022 21:15:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=corp-2022-7-12;
- bh=Mwgxn09UOrTmFlxHKtjfX4954mioyEjow3Fh9kxIaBI=;
- b=2KWYgdPbiF5MtR/yKAQ3vqhVXP/ve/siJog2tUxdrICWKN0IQbG5YK9Wp9NgpVF/aPBp
- wdw7LnI7DY58EPUrFl0bmNF+P8FLYkGM64wPkGeRN7pphUBiBdiYeEVAv5D3QjS24QhA
- CBICDGh4XwcG3v3ufdv5iJcJYgN55XWdgwqmxNk88aZoM8sDFdjYvR7uRhhvj3iHerqX
- CqnK2z5P3Zz118UGeiWBnXNaVcVQxWcUkfoCBF7XUV26v/qVstCulXT3jBbNG65UsZ0J
- 1HQl0dbLkcR1gMrlSVrU9QVB2Jc7hexSs0XjISFE4f0vffO7CiSrA0cN0Yf7dw1i2eK2 aw== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kv3jstfae-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 17 Nov 2022 21:15:02 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2AHKjtZp010826;
-        Thu, 17 Nov 2022 21:15:01 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3kt1x9nqn4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 17 Nov 2022 21:15:01 +0000
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AHLEx7U024557;
-        Thu, 17 Nov 2022 21:15:00 GMT
-Received: from sid-dell.us.oracle.com (dhcp-10-132-95-73.usdhcp.oraclecorp.com [10.132.95.73])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3kt1x9nqku-3;
-        Thu, 17 Nov 2022 21:15:00 +0000
-From:   Sidhartha Kumar <sidhartha.kumar@oracle.com>
-To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Cc:     akpm@linux-foundation.org, songmuchun@bytedance.com,
-        mike.kravetz@oracle.com, willy@infradead.org,
-        almasrymina@google.com, linmiaohe@huawei.com, hughd@google.com,
-        Sidhartha Kumar <sidhartha.kumar@oracle.com>
-Subject: [PATCH mm-unstable v3 02/10] mm/hugetlb: convert destroy_compound_gigantic_page() to folios
-Date:   Thu, 17 Nov 2022 13:14:53 -0800
-Message-Id: <20221117211501.17150-3-sidhartha.kumar@oracle.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221117211501.17150-1-sidhartha.kumar@oracle.com>
-References: <20221117211501.17150-1-sidhartha.kumar@oracle.com>
+        Thu, 17 Nov 2022 16:15:01 -0500
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED6313E8D;
+        Thu, 17 Nov 2022 13:14:59 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 2E579240006;
+        Thu, 17 Nov 2022 21:14:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1668719697;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=676Ci+ArdGmO9gtFmjKwk3wPDlLDxMlHsS2sEFwfOTU=;
+        b=neLKmiZ4QTXkhSKVHie20Ze27uces7qsZa7Pg1ITeRq5shfv5JtkLyCd7piax0uHjLRTqX
+        mjYg99+yLIPtMksv7tnyOffFfIiRYz+U5i99W1+bS/Z2N3S4fEpF1WdA0r9I8NA2gFQLDf
+        qtAF4VOjjTFGc30WKhY77uk4QTz4nKCcoTvPgPJD40eBwTa9yeaLi8dfHEN9c+GM20h7cK
+        XKi44VGvLD5IIkPvbacTQco5DOBxiC2qegtcFhHcb4t6GUDfXEk5ej9E3tHHTnjAce+6+o
+        Pkj5+l5CYaX78RtsolZrsHSsPKJEpBmQ0/xwFaF7Tk6/TilKEuvmM7zRjL62nA==
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Rob Herring <robh@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Mikhail Zhilkin <csharper2005@gmail.com>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: mtd: fixed-partitions: Fix 'sercomm,scpart-id' schema
+Date:   Thu, 17 Nov 2022 22:14:54 +0100
+Message-Id: <20221117211454.1273169-1-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221111212824.4103514-1-robh@kernel.org>
+References: 
 MIME-Version: 1.0
+X-linux-mtd-patch-notification: thanks
+X-linux-mtd-patch-commit: b'2f05bff26c9e847ac5f68370eaf3e5f5d3bc58ce'
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-17_06,2022-11-17_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 phishscore=0
- spamscore=0 mlxlogscore=999 suspectscore=0 malwarescore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2211170152
-X-Proofpoint-ORIG-GUID: k4U_EhAB5bo-KgdNZ2fRnJ-D-P-dCLLL
-X-Proofpoint-GUID: k4U_EhAB5bo-KgdNZ2fRnJ-D-P-dCLLL
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert page operations within __destroy_compound_gigantic_page() to the
-corresponding folio operations.
+On Fri, 2022-11-11 at 21:28:24 UTC, Rob Herring wrote:
+> The schema for 'sercomm,scpart-id' is broken. The 'if' condition is
+> never true because 'compatible' is in the parent node, not the child
+> node the sub-schema applies to. The example passes as there are no
+> constraints on additional/unevaluated properties. That's a secondary
+> issue which is complicated due to nested partitions.
+> 
+> Drop the if/then schema and the unnecessary 'allOf' so that the
+> 'sercomm,scpart-id' property is at least defined.
+> 
+> Cc: Mikhail Zhilkin <csharper2005@gmail.com>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
----
- mm/hugetlb.c | 43 +++++++++++++++++++++----------------------
- 1 file changed, 21 insertions(+), 22 deletions(-)
+Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/next, thanks.
 
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 157f2392c64f..5edb81541ede 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -1325,43 +1325,40 @@ static int hstate_next_node_to_free(struct hstate *h, nodemask_t *nodes_allowed)
- 		nr_nodes--)
- 
- /* used to demote non-gigantic_huge pages as well */
--static void __destroy_compound_gigantic_page(struct page *page,
-+static void __destroy_compound_gigantic_folio(struct folio *folio,
- 					unsigned int order, bool demote)
- {
- 	int i;
- 	int nr_pages = 1 << order;
- 	struct page *p;
- 
--	atomic_set(compound_mapcount_ptr(page), 0);
--	atomic_set(subpages_mapcount_ptr(page), 0);
--	atomic_set(compound_pincount_ptr(page), 0);
-+	atomic_set(folio_mapcount_ptr(folio), 0);
-+	atomic_set(folio_subpages_mapcount_ptr(folio), 0);
-+	atomic_set(folio_pincount_ptr(folio), 0);
- 
- 	for (i = 1; i < nr_pages; i++) {
--		p = nth_page(page, i);
-+		p = folio_page(folio, i);
- 		p->mapping = NULL;
- 		clear_compound_head(p);
- 		if (!demote)
- 			set_page_refcounted(p);
- 	}
- 
--	set_compound_order(page, 0);
--#ifdef CONFIG_64BIT
--	page[1].compound_nr = 0;
--#endif
--	__ClearPageHead(page);
-+	folio_set_compound_order(folio, 0);
-+	folio_clear_head(folio);
- }
- 
--static void destroy_compound_hugetlb_page_for_demote(struct page *page,
-+static void destroy_compound_hugetlb_folio_for_demote(struct folio *folio,
- 					unsigned int order)
- {
--	__destroy_compound_gigantic_page(page, order, true);
-+	__destroy_compound_gigantic_folio(folio, order, true);
- }
- 
- #ifdef CONFIG_ARCH_HAS_GIGANTIC_PAGE
--static void destroy_compound_gigantic_page(struct page *page,
-+static void destroy_compound_gigantic_folio(struct folio *folio,
- 					unsigned int order)
- {
--	__destroy_compound_gigantic_page(page, order, false);
-+	__destroy_compound_gigantic_folio(folio, order, false);
- }
- 
- static void free_gigantic_page(struct page *page, unsigned int order)
-@@ -1430,7 +1427,7 @@ static struct page *alloc_gigantic_page(struct hstate *h, gfp_t gfp_mask,
- 	return NULL;
- }
- static inline void free_gigantic_page(struct page *page, unsigned int order) { }
--static inline void destroy_compound_gigantic_page(struct page *page,
-+static inline void destroy_compound_gigantic_folio(struct folio *folio,
- 						unsigned int order) { }
- #endif
- 
-@@ -1477,8 +1474,8 @@ static void __remove_hugetlb_page(struct hstate *h, struct page *page,
- 	 *
- 	 * For gigantic pages set the destructor to the null dtor.  This
- 	 * destructor will never be called.  Before freeing the gigantic
--	 * page destroy_compound_gigantic_page will turn the compound page
--	 * into a simple group of pages.  After this the destructor does not
-+	 * page destroy_compound_gigantic_folio will turn the folio into a
-+	 * simple group of pages.  After this the destructor does not
- 	 * apply.
- 	 *
- 	 * This handles the case where more than one ref is held when and
-@@ -1559,6 +1556,7 @@ static void add_hugetlb_page(struct hstate *h, struct page *page,
- static void __update_and_free_page(struct hstate *h, struct page *page)
- {
- 	int i;
-+	struct folio *folio = page_folio(page);
- 	struct page *subpage;
- 
- 	if (hstate_is_gigantic(h) && !gigantic_page_runtime_supported())
-@@ -1587,8 +1585,8 @@ static void __update_and_free_page(struct hstate *h, struct page *page)
- 	 * Move PageHWPoison flag from head page to the raw error pages,
- 	 * which makes any healthy subpages reusable.
- 	 */
--	if (unlikely(PageHWPoison(page)))
--		hugetlb_clear_page_hwpoison(page);
-+	if (unlikely(folio_test_hwpoison(folio)))
-+		hugetlb_clear_page_hwpoison(&folio->page);
- 
- 	for (i = 0; i < pages_per_huge_page(h); i++) {
- 		subpage = nth_page(page, i);
-@@ -1604,7 +1602,7 @@ static void __update_and_free_page(struct hstate *h, struct page *page)
- 	 */
- 	if (hstate_is_gigantic(h) ||
- 	    hugetlb_cma_page(page, huge_page_order(h))) {
--		destroy_compound_gigantic_page(page, huge_page_order(h));
-+		destroy_compound_gigantic_folio(folio, huge_page_order(h));
- 		free_gigantic_page(page, huge_page_order(h));
- 	} else {
- 		__free_pages(page, huge_page_order(h));
-@@ -3435,6 +3433,7 @@ static int demote_free_huge_page(struct hstate *h, struct page *page)
- {
- 	int i, nid = page_to_nid(page);
- 	struct hstate *target_hstate;
-+	struct folio *folio = page_folio(page);
- 	struct page *subpage;
- 	int rc = 0;
- 
-@@ -3453,10 +3452,10 @@ static int demote_free_huge_page(struct hstate *h, struct page *page)
- 	}
- 
- 	/*
--	 * Use destroy_compound_hugetlb_page_for_demote for all huge page
-+	 * Use destroy_compound_hugetlb_folio_for_demote for all huge page
- 	 * sizes as it will not ref count pages.
- 	 */
--	destroy_compound_hugetlb_page_for_demote(page, huge_page_order(h));
-+	destroy_compound_hugetlb_folio_for_demote(folio, huge_page_order(h));
- 
- 	/*
- 	 * Taking target hstate mutex synchronizes with set_max_huge_pages.
--- 
-2.38.1
-
+Miquel
