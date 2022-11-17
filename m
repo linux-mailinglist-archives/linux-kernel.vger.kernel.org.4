@@ -2,101 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05D5B62E67B
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 22:10:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C448C62E686
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 22:12:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235070AbiKQVKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 16:10:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56366 "EHLO
+        id S240809AbiKQVMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 16:12:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234966AbiKQVKq (ORCPT
+        with ESMTP id S240719AbiKQVL4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 16:10:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2EAC6150A;
-        Thu, 17 Nov 2022 13:10:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F31562244;
-        Thu, 17 Nov 2022 21:10:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EBA0C433C1;
-        Thu, 17 Nov 2022 21:10:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1668719444;
-        bh=ulKbmepQK2sAIKuchll7WMs+rDidt3FKe8fmmwtt6s8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=k8+kfEk3B3ssl4EvyEo1GW3Z2mOYWxTH55YHPOQKlqmYDMxH/nGwWKJEAiG2XfXjg
-         OkPXL+bmeW+UBvXubzHmfuISoZPKNycGxUWPfA9UWeXaMgp6Fp912yy02rJMUWRVXZ
-         ZxwSH7XqcSYfDZpmraTGVz2hhBFeSSpFP5zfWQpM=
-Date:   Thu, 17 Nov 2022 22:10:31 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     delisun <delisun@pateo.com.cn>
-Cc:     linux@armlinux.org.uk, jirislaby@kernel.org,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] serial: pl011: Do not clear RX FIFO & RX interrupt in
- unthrottle.
-Message-ID: <Y3ajR/S/wcQMvXQ2@kroah.com>
-References: <20221109105822.332011-1-delisun@pateo.com.cn>
+        Thu, 17 Nov 2022 16:11:56 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A1921005D
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 13:11:56 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ovmAp-0007Om-Uf; Thu, 17 Nov 2022 22:11:51 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ovmAn-004v5i-VG; Thu, 17 Nov 2022 22:11:50 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ovmAo-00HN0C-7m; Thu, 17 Nov 2022 22:11:50 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     linux-pwm@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de
+Subject: [PATCH v2 0/4] pwm: Some refactoring of pwmchip_add()
+Date:   Thu, 17 Nov 2022 22:11:39 +0100
+Message-Id: <20221117211143.3817381-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221109105822.332011-1-delisun@pateo.com.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=597; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=aKdTZtwl9XGWY0ES2jremYshZeBwEU3FkygP8AbmADQ=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBjdqN6vngz0LjirqUblfu69s/DY/NTHk0KMrteH8pI EuwuFHyJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCY3ajegAKCRDB/BR4rcrsCSFSB/ 9RWVXu+0qWl4ouuFja11ps95FnIX5u8L9NUNBjAE0yDr8LumSchx92oac19awp16Tlwjy783qXOU9i KNcqht6N6z0w3IiSORqntZ11WvqAgVQCtY98V2o9QYCPlZCPyq1x5goLGdspO/gxHyFqrODvi2Jw7c tQQ161wyuFGgjRVt2WipsAo2+5sDOet14cr3DU+FPTWDZjtgquvVap9XJquE8ipb6pJGOsPXdDmVKZ YODB3xKIMU1pWOm8QuX0is2Vp7+J82x+h1eoTjGBweUt9OXHDhlJQjBKMj18B7jNO8fT5lFSQ59cPd ruPasoIwNqKJYrV9YqlGdZFDPp6gwm
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 09, 2022 at 06:58:22PM +0800, delisun wrote:
-> Clearing the RX FIFO will cause data loss.
-> Copy the pl011_enabl_interrupts implementation, and remove the clear
-> interrupt and FIFO part of the code.
-> 
-> Signed-off-by: delisun <delisun@pateo.com.cn>
-> ---
->  drivers/tty/serial/amba-pl011.c | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/tty/serial/amba-pl011.c b/drivers/tty/serial/amba-pl011.c
-> index 5cdced39eafd..08034e5dcec0 100644
-> --- a/drivers/tty/serial/amba-pl011.c
-> +++ b/drivers/tty/serial/amba-pl011.c
-> @@ -1828,8 +1828,17 @@ static void pl011_enable_interrupts(struct uart_amba_port *uap)
->  static void pl011_unthrottle_rx(struct uart_port *port)
->  {
->  	struct uart_amba_port *uap = container_of(port, struct uart_amba_port, port);
-> +	unsigned long flags;
->  
-> -	pl011_enable_interrupts(uap);
-> +	spin_lock_irqsave(&uap->port.lock, flags);
-> +
-> +	uap->im = UART011_RTIM;
-> +	if (!pl011_dma_rx_running(uap))
-> +		uap->im |= UART011_RXIM;
-> +
-> +	pl011_write(uap->im, uap, REG_IMSC);
-> +
-> +	spin_unlock_irqrestore(&uap->port.lock, flags);
->  }
->  
->  static int pl011_startup(struct uart_port *port)
-> -- 
-> 2.25.1
-> 
-> 
-> 
+Hello,
 
-How was this tested?
+Compared to (implicit) v1, this amends the commit log as agreed upon
+with Andy and adds his tags.
 
-What commit id does this fix?
+Thanks for the review!
 
-And your email is showing up as unvalidated, please fix your email
-infrastructure to properly verify messages.
+Best regards
+Uwe
 
-thanks,
+Uwe Kleine-König (4):
+  pwm: Document variables protected by pwm_lock
+  pwm: Reduce time the pwm_lock mutex is held in pwmchip_add()
+  pwm: Mark free pwm IDs as used in alloc_pwms()
+  pwm: Don't initialize list head before calling list_add()
 
-greg k-h
+ drivers/pwm/core.c | 37 +++++++++++++++++++------------------
+ 1 file changed, 19 insertions(+), 18 deletions(-)
+
+
+base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
+-- 
+2.38.1
+
