@@ -2,66 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C6D762D28B
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 06:02:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77D9962D290
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 06:04:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239029AbiKQFCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 00:02:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58174 "EHLO
+        id S233750AbiKQFEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 00:04:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234783AbiKQFBd (ORCPT
+        with ESMTP id S229931AbiKQFED (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 00:01:33 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C77391F5;
-        Wed, 16 Nov 2022 21:01:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1668661289; x=1700197289;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=WIa7e02s2OlQrBiSr3I/1P4AtM84MFYonMHbPfbsrPY=;
-  b=JVN9CfDDNsq8QjMlcBjvDz+ZjGnz7/3MNxNjjEKWslohONUkmta9XBGY
-   J3ZRt+uqz2oBFq2zqrUoce+J+MJ2N2Un7KwnqzuYa7TlybaJDbIVN+Jbe
-   /s7Z00RAAbu9NE759KAN8UXjP3NT96idDILEaJ2pjTgBbBahf+waD6COQ
-   nWYI9NzXdMpbN2rJBfimi7rl2FJxWA7IiF6O+ysq7zcPbDcQgfbs54AxC
-   +nh9JcwXTlWpu3PcWc22OOiWpbDBp/10PuCz4G0hBEBU+cX1nxWDKd6AO
-   uI8lBAKY0AVRfD5Ha6OvKQHg4eKmLjZCCyEt92o7vlwmN4JHWYWHDSTT3
-   g==;
-X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
-   d="scan'208";a="200162683"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Nov 2022 22:01:29 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 16 Nov 2022 22:01:26 -0700
-Received: from CHE-LT-UNGSOFTWARE.microchip.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Wed, 16 Nov 2022 22:01:20 -0700
-From:   Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-serial@vger.kernel.org>
-CC:     <gregkh@linuxfoundation.org>, <jirislaby@kernel.org>,
-        <andriy.shevchenko@linux.intel.com>,
-        <ilpo.jarvinen@linux.intel.com>, <macro@orcam.me.uk>,
-        <jay.dolan@accesio.com>, <cang1@live.co.uk>,
-        <u.kleine-koenig@pengutronix.de>, <wander@redhat.com>,
-        <etremblay@distech-controls.com>, <jk@ozlabs.org>,
-        <biju.das.jz@bp.renesas.com>, <geert+renesas@glider.be>,
-        <phil.edworthy@renesas.com>, <lukas@wunner.de>,
-        <UNGLinuxDriver@microchip.com>, <colin.i.king@gmail.com>,
-        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-Subject: [PATCH v5 tty-next 4/4] 8250: microchip: pci1xxxx: Add power management functions to quad-uart driver
-Date:   Thu, 17 Nov 2022 10:31:26 +0530
-Message-ID: <20221117050126.2966714-5-kumaravel.thiagarajan@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221117050126.2966714-1-kumaravel.thiagarajan@microchip.com>
-References: <20221117050126.2966714-1-kumaravel.thiagarajan@microchip.com>
+        Thu, 17 Nov 2022 00:04:03 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2042.outbound.protection.outlook.com [40.107.93.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8BC22EF09;
+        Wed, 16 Nov 2022 21:03:59 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gylLpBJSOQLuP5K9Kum7r+hiDdnfmKlW1ctk8R3d7IjmPqWgAkvbIOfHaVS1hyCcTh7A8POujinXEGHlrNCM846ApS5Z3wm4QQvxaP4smAaSzeaawhjxdaEdcLmE+ddC1t0vRgubXzDGkK32xwmWlT6LJWQ1BylR4gyinyzwiYw8NexGI8MwGUh2q2tHa7B+teOsfndcRzgHyEFT/hNR6chFL9CZJVwcpX5PINLs/x3OHyWsF/vZWFSxQ9gdo52l7cFLqsf/hO87Nxy7Q+n+Ar3efSA9iGO8b+HZDcHAWYZPUCxBUBEx/3Wpz72axVqqFKMxv5tQb3e6zhgjMgBUeQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yNc4Im9qyhuwBHH9oSveTHwX2TnKFhkZZHYh+/8XvOQ=;
+ b=JbaXH3f5uTUp6vUKmeVJ6u4MEaYmXGtfoD5agh/x9w4KWfT+GS+yZUyhObji9no0Dl4puq4Fw74ZblXAEccKS1alzyVZb4TzaRZ3XMJIMhirGHHDRXMLRa2pPT+S97GRYa6sd+bX5uKtJP2G92bSBUjVafARC8AcmXvF6dg04ovLXTf0V7VpeBC4eaYt0Etihu3g3g2pELC42o2Hl6RWiKYWXzlUhODdn1qpZ68KnrMKH7heW9O96i04XJckUhmhXwWETP9yTNkV8d8dQ0BxxHALjB2+aNy88EZSlkIfWsp+rYGNCOiSv66Fsjy6qVNbIMev1wuFM8DwZWO3DaY1zw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yNc4Im9qyhuwBHH9oSveTHwX2TnKFhkZZHYh+/8XvOQ=;
+ b=iDAhbgfd3ZxJkuOLF6JI35nlC3TLwCpV/9hF34fdxVbQlu+6iK79y+KVshwQf60rV3oQyV3PBgHbK+xMtR+mjPZt2JIwDHh5NRWVnjQTKyg8k2NpzOFNywIuwH459eoCxbosu4tMLkkyialqTlsqNDYhjyx6tbXO/8/QHFLM8jY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BY5PR12MB3876.namprd12.prod.outlook.com (2603:10b6:a03:1a7::26)
+ by DS0PR12MB6559.namprd12.prod.outlook.com (2603:10b6:8:d1::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5813.17; Thu, 17 Nov 2022 05:03:58 +0000
+Received: from BY5PR12MB3876.namprd12.prod.outlook.com
+ ([fe80::b6f2:3174:a1c2:44b5]) by BY5PR12MB3876.namprd12.prod.outlook.com
+ ([fe80::b6f2:3174:a1c2:44b5%7]) with mapi id 15.20.5813.013; Thu, 17 Nov 2022
+ 05:03:57 +0000
+Message-ID: <2a5a8727-a339-8be3-5383-395033c07c12@amd.com>
+Date:   Thu, 17 Nov 2022 10:33:46 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/5] cpufreq: amd-pstate: cpufreq: amd-pstate: reset
+ MSR_AMD_PERF_CTL register at init
+Content-Language: en-US
+To:     Perry Yuan <Perry.Yuan@amd.com>, rafael.j.wysocki@intel.com,
+        ray.huang@amd.com, viresh.kumar@linaro.org,
+        Mario.Limonciello@amd.com
+Cc:     Nathan.Fontenot@amd.com, Alexander.Deucher@amd.com,
+        Deepak.Sharma@amd.com, Shimmer.Huang@amd.com, Li.Meng@amd.com,
+        Xiaojian.Du@amd.com, gautham.shenoy@amd.com,
+        ananth.narayan@amd.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20221117024955.3319484-1-Perry.Yuan@amd.com>
+ <20221117024955.3319484-2-Perry.Yuan@amd.com>
+From:   Wyes Karny <wyes.karny@amd.com>
+In-Reply-To: <20221117024955.3319484-2-Perry.Yuan@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN2PR01CA0025.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:25::30) To BY5PR12MB3876.namprd12.prod.outlook.com
+ (2603:10b6:a03:1a7::26)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR12MB3876:EE_|DS0PR12MB6559:EE_
+X-MS-Office365-Filtering-Correlation-Id: aa4d3013-eaed-4dc3-d5a0-08dac85921e7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Mi7eH4FMdESBP3ir1VJGYWXqNKjKT8QAxFkqsFw50z2Yynzb9w7K2F97wY5s58wuh5XEhNw0YG9CnCR0l3UiDEUflsU5iXZ3TNdp4R0O+sFYJZTIw18KtPl3G09nguFE3RjSSsTgjwCN+MWa6D0shGC0+qN784RfB1AHYsdAJ6uChql/UkMRmF771pcpWhoJIaUYjYsp9aqksUsE76X6wZfSIbo61c7JLG0r0Ay3pfPZqdPCL1TwbMYDZdx7jZZ78nRCPCDvRpucT+PJQL99BKoMGm3FKkhQNwQGhifbFpIAVeqVcB4TIhLBThCB5BVTAuZ3HpWkrp1X9Zj8kBfZXDIO365LnHEY8HfMPsAvkgJgskYyc8aQVPp1UL2VR0RpFXu+nlEO86fCu0x/hWsBb4MaKqFMV852dq7mWtqm4+ml67MnCFuH74VGRj3PpYknOrEGEG+c/x4yeYGN//XNHHO2Fx5nXkkwJSF3FfHzFAqTsmT2qSVwjtiYImLmgkiT4Z+NOjq9+dA8YezPJJkWFgZdWKc+0qH5RREW8PVVWdcARxdYKqwn9O+9UC0QTspDInjr7VpOY3zezXnjQGD87X19SWbH5ItyZVvei+SGWRZDTwGXOt7qQ/vz/7gAYsaEeZuL+v27JgU3td0FYoULOWJQnW02exV5dP297I2zt2IRZPV0yRN+i8UR9UGRFaUZZcUgrvjVqXk7sYtQOSqTVmgx7SHXwWyqhD7c6NMvGHg=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3876.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(366004)(376002)(346002)(396003)(451199015)(38100700002)(66899015)(31686004)(31696002)(86362001)(36756003)(41300700001)(186003)(316002)(66476007)(66556008)(4326008)(66946007)(8676002)(8936002)(2616005)(83380400001)(6486002)(478600001)(6512007)(5660300002)(44832011)(6506007)(6666004)(2906002)(53546011)(26005)(6636002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bFY1NXhad0RlMW9IckUvNVUzNVhWWXJ0NEI3WG92ZTlPcmV4UU5QdUxueVBm?=
+ =?utf-8?B?TWJDVGRETmRSMGlGVEE4N08xQTdKM1RCdW02K1FzeHJMMFBjNjVPSVNLdVlF?=
+ =?utf-8?B?WkRBdEY4VWgxSjhTeTdkN2Jxc0RuTmJObFp1bEVNamsweVpjdjk1RmQ4WThX?=
+ =?utf-8?B?YkpBeDdaUHl1TFFHZmtTOGtMK1kycGRMbmNmc2Y5TkZ2Vnd2TFBIakNTcGx4?=
+ =?utf-8?B?YWhZV0hUaHBLRzE1ZjV6MjNMUFYxd29haUtSNnlyZFdBNzcvWmhiOEkwZXFY?=
+ =?utf-8?B?bUhYZUNTY2p1QUdXRTllNEVJazUzaXl2dzVqR3lZOXRqTzRyZlFrdmRjNkp0?=
+ =?utf-8?B?blhVYUc0ZmRpUll4TjZ1NzVnd1VzSmNFdGZHZlNYMEpncWg2V3l5YWo0NFhD?=
+ =?utf-8?B?UkRLVTFSRDNLNjhnR1BHUERsNW1wak9wR2JUYTZLTmhqeXhuTDFsQU4yNkpB?=
+ =?utf-8?B?cHUvbk9IYWpiSHUyUElWV2k3TzFQZXplWHp0L2xxQUYwTGY1MzFsUUN0ekFV?=
+ =?utf-8?B?VzFyYy9NQkpjMjIrSVdCRDZheTZaWUJGenBheGQ1dEtTRXpubXRrQjE3MEFG?=
+ =?utf-8?B?UnpQemlOZ29pU0p5NzhKZWZLL2dOTC9VRlVaM1FBUVRMZXNDN2NveDFReE9q?=
+ =?utf-8?B?cU0vYllBaXg3QVdFTkIvKzRHeEs1b2ROM25Jc1kwZkoxZ2NnSzZ2V2tWelFR?=
+ =?utf-8?B?MXZRaUFwaFJuRUdONzNLYlpYQWgzV0ZvNEd6YTlwd2FrSitINDZkSHduSkt5?=
+ =?utf-8?B?TllXb09MRzk5QkhMUVpQR3VySmVub1cyM3p0ekJrNFRoaFNvVWV4YjkrOE9E?=
+ =?utf-8?B?all3a08wcnVQckI5WnBJWEppSXg5WVhqSG85YkkvVUdBNnNaNjlFT1Z1S3dw?=
+ =?utf-8?B?eFIzaDkwREFpUGx5M2VEdW1USldWSUxBZHpRcndXWTJrRmZ1S2dKdmY2cWRp?=
+ =?utf-8?B?ZGZIcUQ2WVRqQkFRNU9JK04yTTNlYXc0ZmJIdFJBZGhDRHRMdGVDbS8raDZF?=
+ =?utf-8?B?S0gwVktEVkxPZ2k1aWtMUWM3ZFRCMWtJbXRBenI1R3cxYTZNdklvOXM1VlRr?=
+ =?utf-8?B?NUJxTGRCUFNhRFJrdUl6U29zWDRscTRWZDg1NlU5NDVFYmo1cnVuT2tkTWZ3?=
+ =?utf-8?B?L2IwcVpnNEh0RGRzWFNJSWpSQVNrcHplTllKVzRkMGt4MHBMZW56RFZHOGVy?=
+ =?utf-8?B?dUlqeEdnSDlSSUVtdHRIU3Z4Z1RCSU92ZDRQRzNoWFFFamVQclFxb1MwYy92?=
+ =?utf-8?B?eG1EWFArTm5hM0R0ZW0xQU5lVUlqTGF5Wnc3VjQ4MTNSTS8wVllqbmxJUFpR?=
+ =?utf-8?B?b0I1dkdSMkI4cnhrS2Z4c01FRkx3S3ZycWdRWDdNRnhiUDJKaEx1eWg3QU8r?=
+ =?utf-8?B?OGkvZkNYUHpiUmxveDUwV3ZVVUgyT0FOV1hjR2FnVnc2amtvRVgwUUtvdXZp?=
+ =?utf-8?B?WXpsNW1kUmFYWm9tRElFcDQzck81bzVtTU9RVnFNcldueE9lQTN3SzBWZ24y?=
+ =?utf-8?B?Sk1ZeEZLN2hoMS9iWmJGNzZNbTRLSTRuWitjcU12Y0U0RXFXMTh5cGM2QnZJ?=
+ =?utf-8?B?dUxBd2YxQmRiQzlja0FLeVVqNEttVUZidzB4aDBNSU1OakZIM1FHcElUa0Jw?=
+ =?utf-8?B?SU1VSWgxQ0dhU1ZKaG1pc0ZpZEdOcjIwL1NGZGxxRm1SbWdPdGFNL0FFSytL?=
+ =?utf-8?B?NjJ0Y3NZb3Jta1dPUmNaR01zVFQxcWZRMm92Ync5MkVwQ2ltYXdxb240REs0?=
+ =?utf-8?B?U3RxVUJJZXlhWk9GUWZ1UHJCeWo2L1djRTY5UG9XU05KVTlNNmt4dGxTb2lX?=
+ =?utf-8?B?MllSTmZjanUwZG1wSDdnL0RHb1pLVXE0M0VENGpGRjdPQmNQeXhoeG9YY3NV?=
+ =?utf-8?B?N0dSWjI3TUJ6cS9qcmdsNnV2ajFaOWxRcDQ2ZW0rQUJUTHo1NWw3NytOZUhj?=
+ =?utf-8?B?Nm5aZVo4ZDdtYUFmUTFmNS9ocEw4Mngxb0pqbjBiWnYzRm5kSjZSM2c5MVdl?=
+ =?utf-8?B?Q0xUOUxUNkQydkh2S3cwdWdGR0VwaTZYV2JxdjYrUXozTWtJYTZrV3pLRDU3?=
+ =?utf-8?B?N3ZxQytUK1hkb285djN3U2NlMmUzRStZcTRSVDV2Y01mVXhUMnFmc3VnYStI?=
+ =?utf-8?Q?yGk3UwCYMIB+DiEZdIg2F9MTy?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: aa4d3013-eaed-4dc3-d5a0-08dac85921e7
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3876.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Nov 2022 05:03:57.6269
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: fqztG5oTBfiWDmHUlGP/+pPcxih/oH254JzsGY7qWZ0mDvnYmirKdNTyj2kXvSEfeXzF89wKgsoWs25R1ya2XA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6559
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,172 +130,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pci1xxxx's quad-uart function has the capability to wake up UART
-from suspend state. Enable wakeup before entering into suspend and
-disable wakeup on resume.
 
-Co-developed-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-Signed-off-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-Signed-off-by: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
----
-Changes in v5:
-- Corrected commit message
 
-Changes in v4:
-- No Change
+On 11/17/2022 8:19 AM, Perry Yuan wrote:
+> From: Wyes Karny <wyes.karny@amd.com>
+> 
+> MSR_AMD_PERF_CTL is guaranteed to be 0 on a cold boot. However, on a
+> kexec boot, for instance, it may have a non-zero value (if the cpu was
+> in a non-P0 Pstate).  In such cases, the cores with non-P0 Pstates at
+> boot will never be pushed to P0, let alone boost frequencies.
+> 
+> Kexec is a common workflow for reboot on Linux and this creates a
+> regression in performance. Fix it by explicitly setting the
+> MSR_AMD_PERF_CTL to 0 during amd_pstate driver init.
+> 
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Wyes Karny <wyes.karny@amd.com>
+> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
 
-Changes in v3:
-- Handled race condition in suspend and resume callbacks
+Tested-by: Wyes Karny <wyes.karny@amd.com>
 
-Changes in v2:
-- Use DEFINE_SIMPLE_DEV_PM_OPS instead of SIMPLE_DEV_PM_OPS.
-- Use pm_sleep_ptr instead of CONFIG_PM_SLEEP.
-- Change the return data type of pci1xxxx_port_suspend to bool from int.
----
- drivers/tty/serial/8250/8250_pci1xxxx.c | 116 ++++++++++++++++++++++++
- 1 file changed, 116 insertions(+)
+> ---
+>  drivers/cpufreq/amd-pstate.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index ace7d50cf2ac..d844c6f97caf 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -424,12 +424,22 @@ static void amd_pstate_boost_init(struct amd_cpudata *cpudata)
+>  	amd_pstate_driver.boost_enabled = true;
+>  }
+>  
+> +static void amd_perf_ctl_reset(unsigned int cpu)
+> +{
+> +	wrmsrl_on_cpu(cpu, MSR_AMD_PERF_CTL, 0);
+> +}
+> +
+>  static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
+>  {
+>  	int min_freq, max_freq, nominal_freq, lowest_nonlinear_freq, ret;
+>  	struct device *dev;
+>  	struct amd_cpudata *cpudata;
+>  
+> +	/*
+> +	 * Resetting PERF_CTL_MSR will put the CPU in P0 frequency,
+> +	 * which is ideal for initialization process.
+> +	 */
+> +	amd_perf_ctl_reset(policy->cpu);
+>  	dev = get_cpu_device(policy->cpu);
+>  	if (!dev)
+>  		return -ENODEV;
 
-diff --git a/drivers/tty/serial/8250/8250_pci1xxxx.c b/drivers/tty/serial/8250/8250_pci1xxxx.c
-index bead9fd4019e..fa3477a7ea59 100644
---- a/drivers/tty/serial/8250/8250_pci1xxxx.c
-+++ b/drivers/tty/serial/8250/8250_pci1xxxx.c
-@@ -187,6 +187,116 @@ static const struct serial_rs485 pci1xxxx_rs485_supported = {
- 	/* Delay RTS before send is not supported */
- };
- 
-+static bool pci1xxxx_port_suspend(int line)
-+{
-+	struct uart_8250_port *up = serial8250_get_port(line);
-+	struct uart_port *port = &up->port;
-+	struct tty_port *tport = &port->state->port;
-+	unsigned long flags;
-+	bool ret = false;
-+	u8 wakeup_mask;
-+
-+	mutex_lock(&tport->mutex);
-+	if (port->suspended == 0 && port->dev) {
-+		wakeup_mask = readb(up->port.membase + UART_WAKE_MASK_REG);
-+
-+		spin_lock_irqsave(&port->lock, flags);
-+		port->mctrl &= ~TIOCM_OUT2;
-+		port->ops->set_mctrl(port, port->mctrl);
-+		spin_unlock_irqrestore(&port->lock, flags);
-+
-+		ret = (wakeup_mask & UART_WAKE_SRCS) != UART_WAKE_SRCS;
-+	}
-+
-+	writeb(UART_WAKE_SRCS, port->membase + UART_WAKE_REG);
-+	mutex_unlock(&tport->mutex);
-+
-+	return ret;
-+}
-+
-+static void pci1xxxx_port_resume(int line)
-+{
-+	struct uart_8250_port *up = serial8250_get_port(line);
-+	struct uart_port *port = &up->port;
-+	struct tty_port *tport = &port->state->port;
-+	unsigned long flags;
-+
-+	mutex_lock(&tport->mutex);
-+	writeb(UART_BLOCK_SET_ACTIVE, port->membase + UART_ACTV_REG);
-+	writeb(UART_WAKE_SRCS, port->membase + UART_WAKE_REG);
-+
-+	if (port->suspended == 0) {
-+		spin_lock_irqsave(&port->lock, flags);
-+		port->mctrl |= TIOCM_OUT2;
-+		port->ops->set_mctrl(port, port->mctrl);
-+		spin_unlock_irqrestore(&port->lock, flags);
-+	}
-+	mutex_unlock(&tport->mutex);
-+}
-+
-+static int pci1xxxx_suspend(struct device *dev)
-+{
-+	struct pci1xxxx_8250 *priv = dev_get_drvdata(dev);
-+	struct pci_dev *pcidev = to_pci_dev(dev);
-+	bool wakeup = false;
-+	unsigned int data;
-+	void __iomem *p;
-+	int i;
-+
-+	for (i = 0; i < priv->nr; i++) {
-+		if (priv->line[i] >= 0) {
-+			serial8250_suspend_port(priv->line[i]);
-+			wakeup |= pci1xxxx_port_suspend(priv->line[i]);
-+		}
-+	}
-+
-+	p = pci_ioremap_bar(pcidev, 0);
-+	if (!p) {
-+		dev_err(dev, "remapping of bar 0 memory failed");
-+		return -ENOMEM;
-+	}
-+
-+	data = readl(p + UART_RESET_REG);
-+	writel(data | UART_RESET_D3_RESET_DISABLE, p + UART_RESET_REG);
-+
-+	if (wakeup)
-+		writeb(UART_PCI_CTRL_D3_CLK_ENABLE, p + UART_PCI_CTRL_REG);
-+
-+	iounmap(p);
-+	device_set_wakeup_enable(dev, true);
-+	pci_wake_from_d3(pcidev, true);
-+
-+	return 0;
-+}
-+
-+static int pci1xxxx_resume(struct device *dev)
-+{
-+	struct pci1xxxx_8250 *priv = dev_get_drvdata(dev);
-+	struct pci_dev *pcidev = to_pci_dev(dev);
-+	unsigned int data;
-+	void __iomem *p;
-+	int i;
-+
-+	p = pci_ioremap_bar(pcidev, 0);
-+	if (!p) {
-+		dev_err(dev, "remapping of bar 0 memory failed");
-+		return -ENOMEM;
-+	}
-+
-+	data = readl(p + UART_RESET_REG);
-+	writel(data & ~UART_RESET_D3_RESET_DISABLE, p + UART_RESET_REG);
-+	iounmap(p);
-+
-+	for (i = 0; i < priv->nr; i++) {
-+		if (priv->line[i] >= 0) {
-+			pci1xxxx_port_resume(priv->line[i]);
-+			serial8250_resume_port(priv->line[i]);
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- static int pci1xxxx_setup(struct pci1xxxx_8250 *priv,
- 			  struct uart_8250_port *port, int idx)
- {
-@@ -404,6 +514,9 @@ static void pci1xxxx_serial_remove(struct pci_dev *dev)
- 	}
- }
- 
-+static DEFINE_SIMPLE_DEV_PM_OPS(pci1xxxx_pm_ops, pci1xxxx_suspend,
-+				pci1xxxx_resume);
-+
- static const struct pci_device_id pci1xxxx_pci_tbl[] = {
- 	{ PCI_DEVICE(PCI_VENDOR_ID_EFAR, PCI_DEVICE_ID_EFAR_PCI11010) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_EFAR, PCI_DEVICE_ID_EFAR_PCI11101) },
-@@ -418,6 +531,9 @@ static struct pci_driver pci1xxxx_pci_driver = {
- 	.name = "pci1xxxx serial",
- 	.probe = pci1xxxx_serial_probe,
- 	.remove = pci1xxxx_serial_remove,
-+	.driver = {
-+		.pm     = pm_sleep_ptr(&pci1xxxx_pm_ops),
-+	},
- 	.id_table = pci1xxxx_pci_tbl,
- };
- module_pci_driver(pci1xxxx_pci_driver);
 -- 
-2.25.1
-
+Thanks & Regards,
+Wyes
