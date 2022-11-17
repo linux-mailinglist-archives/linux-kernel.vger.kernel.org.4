@@ -2,108 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 385ED62E342
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:38:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C668862E349
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:39:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239841AbiKQRib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 12:38:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56914 "EHLO
+        id S234739AbiKQRjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 12:39:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240129AbiKQRiQ (ORCPT
+        with ESMTP id S239637AbiKQRjP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 12:38:16 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4494D7C476
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 09:38:12 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id u2so3650855ljl.3
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 09:38:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dbw2/XXeLln7vDrFafq738GUmCXZ0AXEtj+PRDpKT1E=;
-        b=hQ9lX8JNIWXAUodyaRmLxPAJdg0px72d9/dzwFaory5wXPbFCPfv32g92k+ZVcpanq
-         8bFgh6MoJnqbmWiiiuRSUHXXnwkdwojle+Vth2A4SjG0PUkrp1tKnavpq0SG1owCthYZ
-         M+j784DQwUiORoPcHUPWftjuyyA3wlJg9IFOBI23tZKZFwhyHHDGrp2gx5CtAbwtc6oJ
-         W33t9eyrnFLnczrl6cvlbVWRE3FaOQxi6+Xk8e/m2VRQ+bTMq525+aTzYafZG8ihuDFn
-         zZR6wwOeFF1+EJZm0ip7yEYJ/J3FQmPnJ1uVyX/pxjGnwlE0Ule+jSjgq8Q7PGx74oqG
-         qQgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dbw2/XXeLln7vDrFafq738GUmCXZ0AXEtj+PRDpKT1E=;
-        b=ienRKPh8w8IyP/Ji2HLKiRVSZeQ9ychxwKIMK1PEpdIAlT3QjBfyLYFUx2Rry/Bcg6
-         FSvQP5zZq0HEAwSv7U894AfzVg1RawKETa9gxuDiLlmLlCRomhFrtn+QpLhxkXi3CuCh
-         A5jApmU0rHyYdI6KnzbCmluis2QHq3W7gi/6j1SX/HKmPwLSMWCQ9Dmh4qNqx6Jrpo5O
-         bd/TDOlRnJsnYPjeaQt25ZVUNcyxHjUOw99AyhXcT6alNXExsy++guoaJcNZmQ2uunIp
-         1g2yjZHLMYsIbU+3pzgmRl/WoHLwJMsSoGc8jojqEB8xN1KadOj3n5Q0rKNc1WLN3c9d
-         YmFg==
-X-Gm-Message-State: ANoB5pnS5CRzaHvUk5w11hLR8JYrspaL6vI8uGIxJ35QWfSzpjLwFx3C
-        9B2rQyimjDO+Uz5ekZhJ5jyWBQ==
-X-Google-Smtp-Source: AA0mqf6Z6xAfpPfyQq1ZNnfmmz/+hTdfCIaaYUwg7Hel8p9ZM3aS2yrhDoEu+n0o+Rfz/XHJI4Eicw==
-X-Received: by 2002:a2e:9d4f:0:b0:277:5928:f2fd with SMTP id y15-20020a2e9d4f000000b002775928f2fdmr1448180ljj.239.1668706690417;
-        Thu, 17 Nov 2022 09:38:10 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id f29-20020a05651c02dd00b002778a76a3c3sm301692ljo.112.2022.11.17.09.38.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Nov 2022 09:38:09 -0800 (PST)
-Message-ID: <39383122-414f-f795-ab76-dad206198651@linaro.org>
-Date:   Thu, 17 Nov 2022 18:38:08 +0100
+        Thu, 17 Nov 2022 12:39:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1357ECA5;
+        Thu, 17 Nov 2022 09:39:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CB6A1B8216C;
+        Thu, 17 Nov 2022 17:39:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFDD3C433D7;
+        Thu, 17 Nov 2022 17:38:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1668706741;
+        bh=oUtsd8Y3RXK7kabHRg0fHPeFFPGJmxPAgbyGHiGHJug=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sIrQxq9fJB1aCXgL3hr0ktDsC/aITHKnLDhwAf43GzqvtWrJtu+kMOAbF1yqBk85c
+         B81cHOovOQa5b3P/1zjk9jIVG8zFJWHj5oM0Y6LS4wpxDyXzLuaKelrFRPQYfKKwkq
+         qBEo0mY6m2wMaP8z9zprvAn/XVBt/1RMT93BZfRc=
+Date:   Thu, 17 Nov 2022 18:38:16 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Lee Jones <lee@kernel.org>
+Cc:     balbi@kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/1] usb: gadget: f_hid: Conduct proper refcounting on
+ shared f_hidg pointer
+Message-ID: <Y3ZxiCJdIOzcC6f5@kroah.com>
+References: <20221117120813.1257583-1-lee@kernel.org>
+ <Y3Yt+YixokbWJ8H9@kroah.com>
+ <Y3Y2fTeYTvOHF9Sb@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [RFC PATCH 1/9] dt-bindings: drop redundant part of title of
- shared bindings
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-watchdog@vger.kernel.org
-References: <20221117123850.368213-1-krzysztof.kozlowski@linaro.org>
- <20221117123850.368213-2-krzysztof.kozlowski@linaro.org>
- <20221117171916.GA3116476-robh@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221117171916.GA3116476-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3Y2fTeYTvOHF9Sb@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/11/2022 18:19, Rob Herring wrote:
-> On Thu, Nov 17, 2022 at 01:38:42PM +0100, Krzysztof Kozlowski wrote:
->> The Devicetree bindings document does not have to say in the title that
->> it is a "binding", but instead just describe the hardware.  For shared
->> (re-usable) schemas, name them all as "common properties".
+On Thu, Nov 17, 2022 at 01:26:21PM +0000, Lee Jones wrote:
+> On Thu, 17 Nov 2022, Greg KH wrote:
 > 
-> It's titles, so capitalize 'Common Properties'. Someday we may generate 
-> a document from all the schemas.
+> > On Thu, Nov 17, 2022 at 12:08:13PM +0000, Lee Jones wrote:
+> > > A reference to struct f_hidg is shared with this driver's associated
+> > > character device handling component without provision for life-time
+> > > handling.  In some circumstances, this can lead to unwanted
+> > > behaviour depending on the order in which things are torn down.
+> > > 
+> > > Utilise, the reference counting functionality already provided by the
+> > > implanted character device structure to ensure the struct f_hidg's
+> > > memory is only freed once the character device handling has finished
+> > > with it.
+> > > 
+> > > Signed-off-by: Lee Jones <lee@kernel.org>
+> > > ---
+> > >  drivers/usb/gadget/function/f_hid.c | 47 +++++++++++++++++++++++------
+> > >  1 file changed, 37 insertions(+), 10 deletions(-)
+> > 
+> > Hi,
+> > 
+> > This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+> > a patch that has triggered this response.  He used to manually respond
+> > to these common problems, but in order to save his sanity (he kept
+> > writing the same thing over and over, yet to different people), I was
+> > created.  Hopefully you will not take offence and will fix the problem
+> > in your patch and resubmit it so that it can be accepted into the Linux
+> > kernel tree.
+> > 
+> > You are receiving this message because of the following common error(s)
+> > as indicated below:
+> > 
+> > - This looks like a new version of a previously submitted patch, but you
+> >   did not list below the --- line any changes from the previous version.
+> >   Please read the section entitled "The canonical patch format" in the
+> >   kernel file, Documentation/SubmittingPatches for what needs to be done
+> >   here to properly describe this.
+> > 
+> > If you wish to discuss this problem further, or you have questions about
+> > how to resolve this issue, please feel free to respond to this email and
+> > Greg will reply once he has dug out from the pending patches received
+> > from other developers.
+> > 
+> > thanks,
+> > 
+> > greg k-h's patch email bot
 > 
+> This is a completely new solution to the same problem.
+> 
+> I'm treating this as a brand new submission.
 
-Ack.
+With the identical subject line, which plays havoc with tools :(
 
-Best regards,
-Krzysztof
+This is a v2, next should be v3 please.
 
+thanks,
+
+greg k-h
