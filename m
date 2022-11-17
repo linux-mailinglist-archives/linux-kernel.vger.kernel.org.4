@@ -2,188 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EC5062D496
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:03:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 650C262D49F
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:05:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234792AbiKQIDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 03:03:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50874 "EHLO
+        id S239353AbiKQIFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 03:05:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231871AbiKQIDp (ORCPT
+        with ESMTP id S239251AbiKQIF1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 03:03:45 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 59B4ABF6;
-        Thu, 17 Nov 2022 00:03:42 -0800 (PST)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8AxDdnd6nVjOzcIAA--.23274S3;
-        Thu, 17 Nov 2022 16:03:41 +0800 (CST)
-Received: from [10.180.13.64] (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxqFfb6nVjLM8VAA--.39376S2;
-        Thu, 17 Nov 2022 16:03:40 +0800 (CST)
-Subject: Re: [PATCH v12 2/2] dt-bindings: thermal: add loongson-2 thermal
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20221114024709.7975-1-zhuyinbo@loongson.cn>
- <20221114024709.7975-2-zhuyinbo@loongson.cn>
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-Message-ID: <7963d36a-6898-79c8-2d19-9c4bd1cc36f6@loongson.cn>
-Date:   Thu, 17 Nov 2022 16:03:39 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Thu, 17 Nov 2022 03:05:27 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8065D716E6
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 00:05:25 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id bs21so2347856wrb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 00:05:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=iKXYExdFPBk6x5LL48YmrBCt/Ex+r4UJ3aXw7toOApc=;
+        b=JbcW44dILJwm0wi2gWylt6XUA0QoEFA2sBCQ9vchinitjnk2CVTPOoED5IVzakXcko
+         Mum8HNtrKiWiAXYGrXGaNNeIRt6YWRHbT7YmpbhopIX3X9pWf0KBztjMvyE43SMRyxYY
+         uyVi7BAZdhRiFt73AtL74DeKif/2MjxAIjBvP6k1BoE6pRLSxsQxLknREs311LxHFSRZ
+         Z9vdG21Mby0rs/9Q1EIFLfxIaJauGzqoMEMLS7u5qDo6nJb5CT+rroC4LWaxeRNHYW1r
+         TjG/UEXMPyINJ/TZ+vawpX+rhK03JrFPZdQbdyX65J9otSrnVeEIeSh34fzH1m66qSC6
+         sIYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iKXYExdFPBk6x5LL48YmrBCt/Ex+r4UJ3aXw7toOApc=;
+        b=BDmtx6kE0dwtNREQYVB5f/UNsYgEMHJU/ursDGTugyIc/aSWhGfRRlBJ6R7pEHLwu6
+         HznKtvyUVxkIhSYVuIXdBynj+5amM5HLCWt2vHRuZAoZSUXTwMOFcfbYYUKunep83mLu
+         sz5WJziYUZndf0LIONFQrsiehhrL8N3/rQqunrkZkIeKBiPMg0DRmglEj//S0zKwtIPs
+         8urx2xQ0R0RYpxSzQgvwoyEIt96nT2ur5QtTtvtxbjcjfMnqEKuTzG14IvOvzUqWtixS
+         ITc2ycoZzZMCAjgvX+v9wfx7KAvexqG/KFGbNZ/FxIcV0ua1jXqJYlchDA3HM451nXRs
+         7R+w==
+X-Gm-Message-State: ANoB5pm/73Ni5ursPrJWUTV7qkT+hkaUSLOUrDrmhRNNiVWm3vknsnq5
+        HuIdqT8m4c1cwiXFW8en2a8dlg==
+X-Google-Smtp-Source: AA0mqf4z1Vw0osU9THOIqfd9q3COzRk87Bb9SpjfWJEe8ARfejulNJEeCFJYH4ns55QzuC7Fx9ys2A==
+X-Received: by 2002:a5d:440a:0:b0:238:3dc7:2adc with SMTP id z10-20020a5d440a000000b002383dc72adcmr708168wrq.160.1668672324057;
+        Thu, 17 Nov 2022 00:05:24 -0800 (PST)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id m4-20020a05600c4f4400b003cffd3c3d6csm452796wmq.12.2022.11.17.00.05.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 00:05:23 -0800 (PST)
+Date:   Thu, 17 Nov 2022 10:05:22 +0200
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: Re: [PATCH 2/9] clk: qcom: gdsc: Add configurable poll timeout
+Message-ID: <Y3XrQrnT0dxTvc5S@linaro.org>
+References: <20221116104716.2583320-1-abel.vesa@linaro.org>
+ <20221116104716.2583320-3-abel.vesa@linaro.org>
+ <9c5b6037-c962-81d3-41c1-a9ec459c9adc@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <20221114024709.7975-2-zhuyinbo@loongson.cn>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxqFfb6nVjLM8VAA--.39376S2
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxury3Wr18uw47AryDWF13twb_yoW5tFykpF
-        4UCas8Crs2vF17uanIkFyxCrs0vFnayF9Fvr4xKwn8Kr98t34ft3y7K3WDZ393CryxWFW7
-        uFyF9r4UCF1DArJanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bqkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0ow
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE
-        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
-        80ewAv7VC0I7IYx2IY67AKxVWrXVW3AwAv7VC2z280aVAFwI0_Cr0_Gr1UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14
-        v26r126r1DMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE
-        7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I
-        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAI
-        cVC0I7IYx2IY67AKxVW5JVW7JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0x
-        vE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWxJVW8Jr1lIxAIcVC2z280
-        aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07jca93UUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9c5b6037-c962-81d3-41c1-a9ec459c9adc@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maintainer,
+On 22-11-16 12:19:09, Konrad Dybcio wrote:
+> 
+> 
+> On 16/11/2022 11:47, Abel Vesa wrote:
+> > Depending on the platform, the poll timeout delay might be different,
+> > so allow the platform specific drivers to specify their own values.
+> > 
+> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> > ---
+> >   drivers/clk/qcom/gdsc.c | 5 ++++-
+> >   drivers/clk/qcom/gdsc.h | 1 +
+> >   2 files changed, 5 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
+> > index 0f21a8a767ac..3753f3ef7241 100644
+> > --- a/drivers/clk/qcom/gdsc.c
+> > +++ b/drivers/clk/qcom/gdsc.c
+> > @@ -107,7 +107,7 @@ static int gdsc_poll_status(struct gdsc *sc, enum gdsc_status status)
+> >   	do {
+> >   		if (gdsc_check_status(sc, status))
+> >   			return 0;
+> > -	} while (ktime_us_delta(ktime_get(), start) < TIMEOUT_US);
+> > +	} while (ktime_us_delta(ktime_get(), start) < sc->poll_timeout);
+> What about the second usage of TIMEOUT_US (in gdsc_toggle_logic)? Is it fine
+> for that to be the default value?
 
-Could you help me merge my patch?
+The usleep you mention is not really for polling the state.
+So I think it should stay as is. Who knows, maybe in the future we will
+need to have the configurable as well, but as a toggle delay rather than
+a status poll timeout.
+
+I added this configurable poll timeout just because I saw that
+downstream, each driver has different values. And it kind of makes sense,
+because the state machine inside the GDSC might be different between
+platforms, and so, it might take different time to reach a certain on/off
+state.
 
 Thanks,
-Yinbo.
+Abel
 
-ÔÚ 2022/11/14 ÉÏÎç10:47, Yinbo Zhu Ð´µÀ:
-> Add the Loongson-2 thermal binding with DT schema format using
-> json-schema.
 > 
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-> Change in v12:
-> 		1. NO change, but other patch in this series of patches set
-> 		   has changes.
-> Change in v11:
-> 		1. NO change, but other patch in this series of patches set
-> 		   has changes.
-> Change in v10:
-> 		1. Add all history change log information.
-> Change in v9:
-> 		1. NO change, but other patch in this series of patches set
-> 		   has changes.
-> Change in v8:
->                  1. Replace string Loongson2/loongson2 with Loongson-2/loongson-2.
-> Change in v7:
-> 		1. Split the modification of patch 3 and merge it into this patch.
-> Change in v6:
-> 		1. Fix the warning "reg: [[0, 534779136], [0, 48]] is too long"
-> 		   when compile the yaml.
-> Change in v5:
-> 		1. Keep use same quotes "'" in all places.
-> Change in v4:
-> 		1. Fixup the compatible.
-> 		2. Update the binding file name.
-> 		3. Include irq.h to fix compile issue.
-> Change in v3:
-> 		1. Remove the sensor id.
-> 		2. Remove the interrupt-parent in thermal required property.
-> 		3. Update the thermal binding file name.
-> 		4. Fixup the commit log information.
-> Change in v2:
-> 		1. Add description and type about the "id".	
-> 		2. Make the filename was based on compatible.
 > 
->   .../thermal/loongson,ls2k-thermal.yaml        | 43 +++++++++++++++++++
->   MAINTAINERS                                   |  1 +
->   2 files changed, 44 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml b/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
-> new file mode 100644
-> index 000000000000..c0637e2d6d57
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
-> @@ -0,0 +1,43 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/thermal/loongson,ls2k-thermal.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Thermal sensors on Loongson-2 SoCs
-> +
-> +maintainers:
-> +  - zhanghongchen <zhanghongchen@loongson.cn>
-> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
-> +
-> +properties:
-> +  compatible:
-> +    const: loongson,ls2k-thermal
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  '#thermal-sensor-cells':
-> +    const: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - '#thermal-sensor-cells'
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    thermal: thermal-sensor@1fe01500 {
-> +        compatible = "loongson,ls2k-thermal";
-> +        reg = <0x1fe01500 0x30>;
-> +        interrupt-parent = <&liointc0>;
-> +        interrupts = <7 IRQ_TYPE_LEVEL_LOW>;
-> +        #thermal-sensor-cells = <1>;
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 0d867573fe4c..182129c73ed5 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -12018,6 +12018,7 @@ M:	zhanghongchen <zhanghongchen@loongson.cn>
->   M:	Yinbo Zhu <zhuyinbo@loongson.cn>
->   L:	linux-pm@vger.kernel.org
->   S:	Maintained
-> +F:	Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
->   F:	drivers/thermal/loongson2_thermal.c
->   
->   LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
-> 
-
+> Konrad
+> >   	if (gdsc_check_status(sc, status))
+> >   		return 0;
+> > @@ -454,6 +454,9 @@ static int gdsc_init(struct gdsc *sc)
+> >   	if (ret)
+> >   		goto err_disable_supply;
+> > +	if (!sc->poll_timeout)
+> > +		sc->poll_timeout = 500;
+> > +
+> >   	return 0;
+> >   err_disable_supply:
+> > diff --git a/drivers/clk/qcom/gdsc.h b/drivers/clk/qcom/gdsc.h
+> > index 803512688336..9a1e1fb3d12f 100644
+> > --- a/drivers/clk/qcom/gdsc.h
+> > +++ b/drivers/clk/qcom/gdsc.h
+> > @@ -36,6 +36,7 @@ struct gdsc {
+> >   	struct generic_pm_domain	*parent;
+> >   	struct regmap			*regmap;
+> >   	unsigned int			gdscr;
+> > +	unsigned int			poll_timeout;
+> >   	unsigned int			collapse_ctrl;
+> >   	unsigned int			collapse_mask;
+> >   	unsigned int			gds_hw_ctrl;
