@@ -2,130 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7083562E308
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:29:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EE6562E315
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:31:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239803AbiKQR3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 12:29:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52446 "EHLO
+        id S235034AbiKQRbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 12:31:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234843AbiKQR3j (ORCPT
+        with ESMTP id S240363AbiKQRb1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 12:29:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 390FB7818E;
-        Thu, 17 Nov 2022 09:29:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E3B12B8215F;
-        Thu, 17 Nov 2022 17:29:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 247F7C433D6;
-        Thu, 17 Nov 2022 17:29:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668706175;
-        bh=eP0obEedNmCU+3WRO5YqBI0IHqVuqsqrydnsSJjg1j4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sllfVATZjCa6yOz90J0T7QyfcT6SqYJSFsCZ19V/xKlravDDKowxvZn79EPL90YdM
-         bNf5XqSGsEqCP3WF41gmVNy/L73znrnBQWvdUYj7NWovpegvWr34NeRHIZ+oNlwTSj
-         2u5gWTO9ZQGWwrsEhbDTID+gHxxuYBAkg7O8WxJAxmCZkq2y9amKRdNxrlp3fwXtT+
-         wpFOnF6eSraUNf37Av9C4ozLet7Qh1nAquOxlAnN5SWgrHucV6gzYinjVrL9XqPiDF
-         +yTqntmyELfK9NZYvrhBoAQs0NmmoUTnU0WWvLz41HWLlI5NSnBEgWybuzu1zol0t7
-         Tth03XKFQ9sMw==
-Date:   Thu, 17 Nov 2022 10:29:33 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Maxime Ripard <maxime@cerno.tech>, llvm@lists.linux.dev
-Subject: Re: linux-next: manual merge of the drm-misc tree with the origin
- tree
-Message-ID: <Y3ZvffZiR+SgtY6h@dev-arch.thelio-3990X>
-References: <20221116105702.746ce3cf@canb.auug.org.au>
+        Thu, 17 Nov 2022 12:31:27 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3655679E14;
+        Thu, 17 Nov 2022 09:31:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668706285; x=1700242285;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=JtQf+wYmqZJM4WTnOnjVIvXY+Y6w+bPb1VhRTxHhJIo=;
+  b=lFxXl/OSPlowDb1TZ/3EanHK4jPxzalDpwC5+kkuqS+oeQiukHUv90Lj
+   8clSZ4n9kuEWX1Bq2efSVbsBdRmF7/g7vLLG6/iZKlo6ecVlk87FuyoKV
+   w2kQtaNaqRGRqmTeiIeeiNtevVyHFUlZuik3/91Q80no/Zh3xJF7VtNH5
+   GS8Mg2wfWAYsWb7sCMGKBKXEKAX3je19ZnOGgctoMYj48xftLEVrFHKxk
+   ev9qan+HXvXA68UOz/8JPjPwbiso4AV1bG0HSnzk1WQfze3ZFB1/r+9OO
+   tscULHpoH3XcUd3njxiMF3sG3F8htpw7SyVqU120DMc1CUZewh7K4Seek
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="312934136"
+X-IronPort-AV: E=Sophos;i="5.96,172,1665471600"; 
+   d="scan'208";a="312934136"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 09:31:22 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="745632076"
+X-IronPort-AV: E=Sophos;i="5.96,172,1665471600"; 
+   d="scan'208";a="745632076"
+Received: from jithujos.sc.intel.com ([172.25.103.66])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 09:31:22 -0800
+From:   Jithu Joseph <jithu.joseph@intel.com>
+To:     hdegoede@redhat.com, markgross@kernel.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        gregkh@linuxfoundation.org, jithu.joseph@intel.com,
+        ashok.raj@intel.com, tony.luck@intel.com,
+        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        patches@lists.linux.dev, ravi.v.shankar@intel.com,
+        thiago.macieira@intel.com, athenas.jimenez.gonzalez@intel.com,
+        sohil.mehta@intel.com
+Subject: [PATCH v3 04/16] platform/x86/intel/ifs: Remove memory allocation from load path
+Date:   Thu, 17 Nov 2022 09:29:58 -0800
+Message-Id: <20221117172958.4172029-1-jithu.joseph@intel.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <77e9d0f2-12d9-fc7a-2161-c579b7bbd673@redhat.com>
+References: <77e9d0f2-12d9-fc7a-2161-c579b7bbd673@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221116105702.746ce3cf@canb.auug.org.au>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
+IFS requires tests to be authenticated once for each CPU socket
+on a system.
 
-On Wed, Nov 16, 2022 at 10:57:02AM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the drm-misc tree got a conflict in:
-> 
->   drivers/gpu/drm/vc4/vc4_hdmi.c
-> 
-> between commit:
-> 
->   682f99b8ae88 ("drm/vc4: hdmi: Take our lock to reset the link")
-> 
-> from the origin tree and commits:
-> 
->   d218750805a3 ("drm/vc4: hdmi: Pass vc4_hdmi to vc4_hdmi_supports_scrambling()")
->   0a99962c0dbf ("drm/vc4: hdmi: Fix pointer dereference before check")
-> 
-> from the drm-misc tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc drivers/gpu/drm/vc4/vc4_hdmi.c
-> index d7fcc7a4c082,6b223a5fcf6f..000000000000
-> --- a/drivers/gpu/drm/vc4/vc4_hdmi.c
-> +++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
-> @@@ -349,12 -348,9 +348,13 @@@ static int vc4_hdmi_reset_link(struct d
->   	if (!crtc_state->active)
->   		return 0;
->   
->  +	mutex_lock(&vc4_hdmi->mutex);
->  +
-> - 	if (!vc4_hdmi_supports_scrambling(encoder)) {
-> + 	vc4_hdmi = connector_to_vc4_hdmi(connector);
->  -	if (!vc4_hdmi_supports_scrambling(vc4_hdmi))
-> ++	if (!vc4_hdmi_supports_scrambling(vc4_hdmi)) {
->  +		mutex_unlock(&vc4_hdmi->mutex);
->   		return 0;
->  +	}
->   
->   	scrambling_needed = vc4_hdmi_mode_needs_scrambling(&vc4_hdmi->saved_adjusted_mode,
->   							   vc4_hdmi->output_bpc,
+scan_chunks_sanity_check() was dynamically allocating memory
+to store the state of whether tests have been authenticated on
+each socket for every load operation.
 
-This resolution is not quite right, as pointed out by clang:
+Move the memory allocation to init path and store the pointer
+in ifs_data struct.
 
-    drivers/gpu/drm/vc4/vc4_hdmi.c:351:14: error: variable 'vc4_hdmi' is uninitialized when used here [-Werror,-Wuninitialized]
-            mutex_lock(&vc4_hdmi->mutex);
-                        ^~~~~~~~
-    ./include/linux/mutex.h:187:44: note: expanded from macro 'mutex_lock'
-    #define mutex_lock(lock) mutex_lock_nested(lock, 0)
-                                               ^~~~
-    drivers/gpu/drm/vc4/vc4_hdmi.c:322:27: note: initialize the variable 'vc4_hdmi' to silence this warning
-            struct vc4_hdmi *vc4_hdmi;
-                                     ^
-                                      = NULL
-    1 error generated.
+Reviewed-by: Tony Luck <tony.luck@intel.com>
+Suggested-by: Borislav Petkov <bp@alien8.de>
+Signed-off-by: Jithu Joseph <jithu.joseph@intel.com>
+---
+ - Replaced global pkg_auth pointer to struct ifs_data (Hans)
+ - With this change there are conflicts in patches 11 and 12 (I will
+    post the updated 11 and 12 if this is satisfactory)
 
-Obviously, the assignment of vc4_hdmi should be before mutex_lock().
+ drivers/platform/x86/intel/ifs/ifs.h  |  2 ++
+ drivers/platform/x86/intel/ifs/core.c | 12 ++++++++++--
+ drivers/platform/x86/intel/ifs/load.c | 14 ++++----------
+ 3 files changed, 16 insertions(+), 12 deletions(-)
 
-Cheers,
-Nathan
+diff --git a/drivers/platform/x86/intel/ifs/ifs.h b/drivers/platform/x86/intel/ifs/ifs.h
+index 3ff1d9aaeaa9..8de1952a1b7b 100644
+--- a/drivers/platform/x86/intel/ifs/ifs.h
++++ b/drivers/platform/x86/intel/ifs/ifs.h
+@@ -191,6 +191,7 @@ union ifs_status {
+  * struct ifs_data - attributes related to intel IFS driver
+  * @integrity_cap_bit: MSR_INTEGRITY_CAPS bit enumerating this test
+  * @loaded_version: stores the currently loaded ifs image version.
++ * @pkg_auth: array of bool storing per package auth status
+  * @loaded: If a valid test binary has been loaded into the memory
+  * @loading_error: Error occurred on another CPU while loading image
+  * @valid_chunks: number of chunks which could be validated.
+@@ -199,6 +200,7 @@ union ifs_status {
+  */
+ struct ifs_data {
+ 	int	integrity_cap_bit;
++	bool	*pkg_auth;
+ 	int	loaded_version;
+ 	bool	loaded;
+ 	bool	loading_error;
+diff --git a/drivers/platform/x86/intel/ifs/core.c b/drivers/platform/x86/intel/ifs/core.c
+index 5fb7f655c291..6980a31e9786 100644
+--- a/drivers/platform/x86/intel/ifs/core.c
++++ b/drivers/platform/x86/intel/ifs/core.c
+@@ -4,6 +4,7 @@
+ #include <linux/module.h>
+ #include <linux/kdev_t.h>
+ #include <linux/semaphore.h>
++#include <linux/slab.h>
+ 
+ #include <asm/cpu_device_id.h>
+ 
+@@ -51,8 +52,14 @@ static int __init ifs_init(void)
+ 	ifs_device.misc.groups = ifs_get_groups();
+ 
+ 	if ((msrval & BIT(ifs_device.data.integrity_cap_bit)) &&
+-	    !misc_register(&ifs_device.misc))
+-		return 0;
++	    !misc_register(&ifs_device.misc)) {
++		ifs_device.data.pkg_auth = kmalloc_array(topology_max_packages(),
++							 sizeof(bool), GFP_KERNEL);
++		if (!ifs_device.data.pkg_auth)
++			return -ENOMEM;
++		else
++			return 0;
++	}
+ 
+ 	return -ENODEV;
+ }
+@@ -60,6 +67,7 @@ static int __init ifs_init(void)
+ static void __exit ifs_exit(void)
+ {
+ 	misc_deregister(&ifs_device.misc);
++	kfree(ifs_device.data.pkg_auth);
+ }
+ 
+ module_init(ifs_init);
+diff --git a/drivers/platform/x86/intel/ifs/load.c b/drivers/platform/x86/intel/ifs/load.c
+index 89ce265887ea..8423c486d11b 100644
+--- a/drivers/platform/x86/intel/ifs/load.c
++++ b/drivers/platform/x86/intel/ifs/load.c
+@@ -3,7 +3,6 @@
+ 
+ #include <linux/firmware.h>
+ #include <asm/cpu.h>
+-#include <linux/slab.h>
+ #include <asm/microcode_intel.h>
+ 
+ #include "ifs.h"
+@@ -118,16 +117,12 @@ static void copy_hashes_authenticate_chunks(struct work_struct *work)
+  */
+ static int scan_chunks_sanity_check(struct device *dev)
+ {
+-	int metadata_size, curr_pkg, cpu, ret = -ENOMEM;
++	int metadata_size, curr_pkg, cpu, ret;
+ 	struct ifs_data *ifsd = ifs_get_data(dev);
+-	bool *package_authenticated;
+ 	struct ifs_work local_work;
+ 	char *test_ptr;
+ 
+-	package_authenticated = kcalloc(topology_max_packages(), sizeof(bool), GFP_KERNEL);
+-	if (!package_authenticated)
+-		return ret;
+-
++	memset(ifsd->pkg_auth, 0, (topology_max_packages() * sizeof(bool)));
+ 	metadata_size = ifs_header_ptr->metadata_size;
+ 
+ 	/* Spec says that if the Meta Data Size = 0 then it should be treated as 2000 */
+@@ -150,7 +145,7 @@ static int scan_chunks_sanity_check(struct device *dev)
+ 	cpus_read_lock();
+ 	for_each_online_cpu(cpu) {
+ 		curr_pkg = topology_physical_package_id(cpu);
+-		if (package_authenticated[curr_pkg])
++		if (ifsd->pkg_auth[curr_pkg])
+ 			continue;
+ 		reinit_completion(&ifs_done);
+ 		local_work.dev = dev;
+@@ -161,12 +156,11 @@ static int scan_chunks_sanity_check(struct device *dev)
+ 			ret = -EIO;
+ 			goto out;
+ 		}
+-		package_authenticated[curr_pkg] = 1;
++		ifsd->pkg_auth[curr_pkg] = 1;
+ 	}
+ 	ret = 0;
+ out:
+ 	cpus_read_unlock();
+-	kfree(package_authenticated);
+ 
+ 	return ret;
+ }
+-- 
+2.25.1
+
