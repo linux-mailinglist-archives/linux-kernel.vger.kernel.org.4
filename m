@@ -2,68 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8F4562E96F
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 00:19:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6454F62E972
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 00:19:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235094AbiKQXT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 18:19:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36184 "EHLO
+        id S239887AbiKQXTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 18:19:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234929AbiKQXT0 (ORCPT
+        with ESMTP id S239771AbiKQXTi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 18:19:26 -0500
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C41972136
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 15:19:25 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id y13so3243023pfp.7
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 15:19:25 -0800 (PST)
+        Thu, 17 Nov 2022 18:19:38 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0793748CC
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 15:19:37 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id k5so2979296pjo.5
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 15:19:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SBG7oyaijsCs+AkyB480R7surFEt7JkA2k2VbS/kZYQ=;
-        b=JchDDL5/DOlP6j9lUMlspTqgaFV4s9nwIJAsn96fhlHO8vmv5OjKer7ndNaH2Cz7xY
-         angRwTwMUaQhTZSFCg5SSReYBynCN5+lVd/BZbbmZmTbg32Qo/D4UYmdS5qJQ4EuCLtb
-         LRcO4Rhcd6sxfjWlyGEHMkaxsvRbTcjQPJJxg=
+        bh=frRGyhd06BA0sT9V1te6Y27oPr5UUtPbm1Vdh4PKLPI=;
+        b=I9mQosvOSNUTsXk3Ihb1NPWa/DBnfs3VVFtxJOdYIu6VbGaLgAF+fu/GAyzE6TAYKi
+         e8vUcaSjrQIHd9jXGto+xLj5tgBP3qhM/+ia+qgxTRtGUy5clI/fQUj+Zbx93U4e+iQn
+         7KHnhExWer6coYCsyjk2i7u/jM//mGTEqk128=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SBG7oyaijsCs+AkyB480R7surFEt7JkA2k2VbS/kZYQ=;
-        b=Iqo2qCbD5tbB4XZLLhrOKOYf6Y2tGcV9BYF8Dy3Xe0gxqYMs5DoqVt7fu70pN5LL+6
-         RLuSE38qVSU+XkG9nM7Dlv9gPtX11WEjqjKcFZQiwnCuS+0AjAII3tTabxrLrKBFg9Cs
-         cU4c3imhRsJfaBSWMEKbxh0xByKAK0JaNf5ZLvrBtERga2aM7uxsD2V3+kuV6UaeBlHW
-         +rzdNCeJ+5KIttOgHu2b5CpbOBEdIdOesvTc4btc42i9kzO9aXDlNpKPwzEZH4Wer7yJ
-         48YI32R1BEvJlu42Af0YW6ttN4U6NlmI9JECP1AxQRlV2QA5lVwI+U5fNUm4+B3YaDcA
-         2ExA==
-X-Gm-Message-State: ANoB5pm/1GP26V1LB83owsZRItyZLvY39TU8jpQm6b2YnlFSIhR0tPAO
-        me48U2tXhwPwYzoNmNTEpQDJ+Q==
-X-Google-Smtp-Source: AA0mqf5gYHTV4d1cJmSvcoc5/KxPzeS1y0Zb1fIaJiX9fjzOdUIlsRe1Bo/bjk0EkMpAHBf2HyMu/w==
-X-Received: by 2002:a65:4c88:0:b0:477:55c:3ff4 with SMTP id m8-20020a654c88000000b00477055c3ff4mr4055311pgt.442.1668727164990;
-        Thu, 17 Nov 2022 15:19:24 -0800 (PST)
+        bh=frRGyhd06BA0sT9V1te6Y27oPr5UUtPbm1Vdh4PKLPI=;
+        b=YnH0DunZxJl+inAY9yOuNRadmwmVWRuCKTZ3EFBvpqd5z5ommibyTEWFOyRorGtj95
+         snPppXRpD0rnbyCceSXh1zAqREHdSdHlM6PR8VfviUOrcyVOVp7+AoZb4CTHCjOHoP0m
+         7g+MKTbPSqxk3pdS4BAShoYr+b67W8yJYZ8ms2KiGwGS2lN3sQDEUaWLMJmTsYhxedUg
+         W3NQeZH8UXTy4/t4VoXo+YHJay2+agCRaHGVCMhFEguI4AveWNN9lwahMd+v7HSUmSqC
+         0XUPnFJNdfNMeflLJzobfvRsu3e68fxHFN1BmjIdqMC8dCVrivHcrnzNjqvEFQKyDwOJ
+         oj4w==
+X-Gm-Message-State: ANoB5pluLc6Fy0IzOUMD175lEi/+16LdJ695op4VR/hD+HyHAx6Dnt8O
+        uPhxuhbzLVIRjTbRZKl7N8r9KA==
+X-Google-Smtp-Source: AA0mqf5CB85xvWodoprxPuUKnKGg4SCX5kW9coDM85v87l/hrB5VpRQ0WgZ4DDS37omvhRZ6Q5NxCA==
+X-Received: by 2002:a17:902:c40d:b0:17f:5810:e9e3 with SMTP id k13-20020a170902c40d00b0017f5810e9e3mr4925697plk.11.1668727177283;
+        Thu, 17 Nov 2022 15:19:37 -0800 (PST)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id 135-20020a62178d000000b0056ba6952e40sm1684386pfx.181.2022.11.17.15.19.24
+        by smtp.gmail.com with ESMTPSA id n16-20020a170903111000b00188fc6766d6sm337573plh.219.2022.11.17.15.19.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 15:19:24 -0800 (PST)
-Date:   Thu, 17 Nov 2022 15:19:23 -0800
+        Thu, 17 Nov 2022 15:19:36 -0800 (PST)
+Date:   Thu, 17 Nov 2022 15:19:36 -0800
 From:   Kees Cook <keescook@chromium.org>
 To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Stefan Agner <stefan@agner.ch>, Alison Wang <alison.wang@nxp.com>,
+Cc:     Alain Volmat <alain.volmat@foss.st.com>,
         dri-devel@lists.freedesktop.org,
         Nick Desaulniers <ndesaulniers@google.com>,
         Tom Rix <trix@redhat.com>,
         Sami Tolvanen <samitolvanen@google.com>, llvm@lists.linux.dev,
         linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH] drm/fsl-dcu: Fix return type of
- fsl_dcu_drm_connector_mode_valid()
-Message-ID: <202211171518.88D58BBE@keescook>
-References: <20221102154215.78059-1-nathan@kernel.org>
- <Y3K7GbHAMZPdY243@distrobox-ZFeO0pwFho.thelio-3990X>
+Subject: Re: [PATCH] drm/sti: Fix return type of
+ sti_{dvo,hda,hdmi}_connector_mode_valid()
+Message-ID: <202211171519.F10A612B33@keescook>
+References: <20221102155623.3042869-1-nathan@kernel.org>
+ <Y3K7QxuaXUm9C8pL@distrobox-ZFeO0pwFho.thelio-3990X>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y3K7GbHAMZPdY243@distrobox-ZFeO0pwFho.thelio-3990X>
+In-Reply-To: <Y3K7QxuaXUm9C8pL@distrobox-ZFeO0pwFho.thelio-3990X>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -73,10 +73,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 03:03:05PM -0700, Nathan Chancellor wrote:
+On Mon, Nov 14, 2022 at 03:03:47PM -0700, Nathan Chancellor wrote:
 > Hi all,
 > 
-> On Wed, Nov 02, 2022 at 08:42:15AM -0700, Nathan Chancellor wrote:
+> On Wed, Nov 02, 2022 at 08:56:23AM -0700, Nathan Chancellor wrote:
 > > With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
 > > indirect call targets are validated against the expected function
 > > pointer prototype to make sure the call target is valid to help mitigate
@@ -85,39 +85,77 @@ On Mon, Nov 14, 2022 at 03:03:05PM -0700, Nathan Chancellor wrote:
 > > proposed warning in clang aims to catch these at compile time, which
 > > reveals:
 > > 
-> >   drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_rgb.c:74:16: error: incompatible function pointer types initializing 'enum drm_mode_status (*)(struct drm_connector *, struct drm_display_mode *)' with an expression of type 'int (struct drm_connector *, struct drm_display_mode *)' [-Werror,-Wincompatible-function-pointer-types-strict]
-> >           .mode_valid = fsl_dcu_drm_connector_mode_valid,
-> >                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >   1 error generated.
+> >   drivers/gpu/drm/sti/sti_hda.c:637:16: error: incompatible function pointer types initializing 'enum drm_mode_status (*)(struct drm_connector *, struct drm_display_mode *)' with an expression of type 'int (struct drm_connector *, struct drm_display_mode *)' [-Werror,-Wincompatible-function-pointer-types-strict]
+> >           .mode_valid = sti_hda_connector_mode_valid,
+> >                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >   drivers/gpu/drm/sti/sti_dvo.c:376:16: error: incompatible function pointer types initializing 'enum drm_mode_status (*)(struct drm_connector *, struct drm_display_mode *)' with an expression of type 'int (struct drm_connector *, struct drm_display_mode *)' [-Werror,-Wincompatible-function-pointer-types-strict]
+> >           .mode_valid = sti_dvo_connector_mode_valid,
+> >                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >   drivers/gpu/drm/sti/sti_hdmi.c:1035:16: error: incompatible function pointer types initializing 'enum drm_mode_status (*)(struct drm_connector *, struct drm_display_mode *)' with an expression of type 'int (struct drm_connector *, struct drm_display_mode *)' [-Werror,-Wincompatible-function-pointer-types-strict]
+> >           .mode_valid = sti_hdmi_connector_mode_valid,
+> >                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 > > 
 > > ->mode_valid() in 'struct drm_connector_helper_funcs' expects a return
 > > type of 'enum drm_mode_status', not 'int'. Adjust the return type of
-> > fsl_dcu_drm_connector_mode_valid() to match the prototype's to resolve
-> > the warning and CFI failure.
+> > sti_{dvo,hda,hdmi}_connector_mode_valid() to match the prototype's to
+> > resolve the warning and CFI failure.
 > > 
 > > Link: https://github.com/ClangBuiltLinux/linux/issues/1750
-> > Reported-by: Sami Tolvanen <samitolvanen@google.com>
 > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 > > ---
-> >  drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_rgb.c | 5 +++--
-> >  1 file changed, 3 insertions(+), 2 deletions(-)
+> >  drivers/gpu/drm/sti/sti_dvo.c  | 5 +++--
+> >  drivers/gpu/drm/sti/sti_hda.c  | 5 +++--
+> >  drivers/gpu/drm/sti/sti_hdmi.c | 5 +++--
+> >  3 files changed, 9 insertions(+), 6 deletions(-)
 > > 
-> > diff --git a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_rgb.c b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_rgb.c
-> > index 4d4a715b429d..2c2b92324a2e 100644
-> > --- a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_rgb.c
-> > +++ b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_rgb.c
-> > @@ -60,8 +60,9 @@ static int fsl_dcu_drm_connector_get_modes(struct drm_connector *connector)
-> >  	return drm_panel_get_modes(fsl_connector->panel, connector);
-> >  }
+> > diff --git a/drivers/gpu/drm/sti/sti_dvo.c b/drivers/gpu/drm/sti/sti_dvo.c
+> > index b6ee8a82e656..076d5f30a09c 100644
+> > --- a/drivers/gpu/drm/sti/sti_dvo.c
+> > +++ b/drivers/gpu/drm/sti/sti_dvo.c
+> > @@ -346,8 +346,9 @@ static int sti_dvo_connector_get_modes(struct drm_connector *connector)
 > >  
-> > -static int fsl_dcu_drm_connector_mode_valid(struct drm_connector *connector,
-> > -					    struct drm_display_mode *mode)
+> >  #define CLK_TOLERANCE_HZ 50
+> >  
+> > -static int sti_dvo_connector_mode_valid(struct drm_connector *connector,
+> > -					struct drm_display_mode *mode)
 > > +static enum drm_mode_status
-> > +fsl_dcu_drm_connector_mode_valid(struct drm_connector *connector,
-> > +				 struct drm_display_mode *mode)
+> > +sti_dvo_connector_mode_valid(struct drm_connector *connector,
+> > +			     struct drm_display_mode *mode)
 > >  {
-> >  	if (mode->hdisplay & 0xf)
-> >  		return MODE_ERROR;
+> >  	int target = mode->clock * 1000;
+> >  	int target_min = target - CLK_TOLERANCE_HZ;
+> > diff --git a/drivers/gpu/drm/sti/sti_hda.c b/drivers/gpu/drm/sti/sti_hda.c
+> > index 03cc401ed593..a53b5a15c2a9 100644
+> > --- a/drivers/gpu/drm/sti/sti_hda.c
+> > +++ b/drivers/gpu/drm/sti/sti_hda.c
+> > @@ -601,8 +601,9 @@ static int sti_hda_connector_get_modes(struct drm_connector *connector)
+> >  
+> >  #define CLK_TOLERANCE_HZ 50
+> >  
+> > -static int sti_hda_connector_mode_valid(struct drm_connector *connector,
+> > -					struct drm_display_mode *mode)
+> > +static enum drm_mode_status
+> > +sti_hda_connector_mode_valid(struct drm_connector *connector,
+> > +			     struct drm_display_mode *mode)
+> >  {
+> >  	int target = mode->clock * 1000;
+> >  	int target_min = target - CLK_TOLERANCE_HZ;
+> > diff --git a/drivers/gpu/drm/sti/sti_hdmi.c b/drivers/gpu/drm/sti/sti_hdmi.c
+> > index cb82622877d2..09e0cadb6368 100644
+> > --- a/drivers/gpu/drm/sti/sti_hdmi.c
+> > +++ b/drivers/gpu/drm/sti/sti_hdmi.c
+> > @@ -1004,8 +1004,9 @@ static int sti_hdmi_connector_get_modes(struct drm_connector *connector)
+> >  
+> >  #define CLK_TOLERANCE_HZ 50
+> >  
+> > -static int sti_hdmi_connector_mode_valid(struct drm_connector *connector,
+> > -					struct drm_display_mode *mode)
+> > +static enum drm_mode_status
+> > +sti_hdmi_connector_mode_valid(struct drm_connector *connector,
+> > +			      struct drm_display_mode *mode)
+> >  {
+> >  	int target = mode->clock * 1000;
+> >  	int target_min = target - CLK_TOLERANCE_HZ;
 > > 
 > > base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
 > > -- 
@@ -130,7 +168,7 @@ On Mon, Nov 14, 2022 at 03:03:05PM -0700, Nathan Chancellor wrote:
 > potential run time issues at compile time but that can only happen when
 > all the warnings are fixed.
 
-I'll pick this up tomorrow if no one else snags it. :)
+Same here; I'll pick this up tomorrow if no one else snags it.
 
 -- 
 Kees Cook
