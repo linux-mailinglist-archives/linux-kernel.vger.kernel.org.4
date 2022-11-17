@@ -2,131 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A6B662E7A9
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 23:03:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23FBD62E7AD
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 23:03:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241211AbiKQWD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 17:03:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43220 "EHLO
+        id S241217AbiKQWDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 17:03:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241203AbiKQWDB (ORCPT
+        with ESMTP id S241199AbiKQWDY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 17:03:01 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BED8E86
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 14:01:35 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id f3so3330235pgc.2
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 14:01:35 -0800 (PST)
+        Thu, 17 Nov 2022 17:03:24 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 026B0898E8;
+        Thu, 17 Nov 2022 14:01:52 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id x102so4658727ede.0;
+        Thu, 17 Nov 2022 14:01:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Pt6ioOinpgj3hMNhf3INdav13IL3VvYdTMM5tKc55hs=;
-        b=fXXPpVBiRM3ejT7uJgam/jeGMEAa6qjY/UFCdVq+RMwmW9fWGZ95uguYKJegBuw7Kj
-         b5epn2BfMtu+da95UodBRUu+URZA0xAqyECuJPp/zEJC3+o6fbaUAyPTvRAnSZZyqY99
-         3Cv8LtU4avYofql0wQt7pl1PWpPkiaFN18M6M=
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AbZpZfvfvRImepPng90QD1DqUNkG0pRMbRACnwrWAMM=;
+        b=YEDRLdiDdoPHaATINISDQxWSY3x5BUvGGua6Wu3oIRZ3+mnHLKMb+o99Rp7QMAYZPl
+         +P84jSylMlye79DBKyYsQw7RBEmRftL+/xYJzEe8cuTyrp00TvI/UdjZ7pTxBwKyemGA
+         NvRZ6SVqKu19xYKQHO+jn/RhEoiliRDwSJZWOeFMjHvYWLDUMKkoe0nBLYZpDY2CGYa/
+         QuTSVrQYQBXG82FomtVP96LTNfTT/uZ/vRq7xWJoCzlNZZAMzVXZyK3bZ+na4coa84hp
+         D+A1Wsd7PyqBK5xEDJ10Vq7jpMyQOJW5uIVsHfBIjMpDOjzUfyytMk4+Zxh3imwVK8wb
+         v5zA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Pt6ioOinpgj3hMNhf3INdav13IL3VvYdTMM5tKc55hs=;
-        b=x1A6DqpD5bdQVWLOs4S1XaDTNeJD0ZsANTVy+E7VGn6TXPzztZSIcoDuWx9Jma6rHM
-         sOJ1nJEocoCSrohXlNb6CHEg9oklUgLU2eBGtZDxfOTilfh9CUgc3tOqdHPnf7hZZvZM
-         nfsqnN3zszGoRWEwgFq8yFMDysMX0dkPNjIiq2NEaCO1uId4MZG9TOvP0OSZP9LFzfs0
-         DSSMTLRwR1PoUkEkvSLfsOQF3BgMu2nmmFkbz39WRmLQVWjEM/WCZiTBKlL3Hu5MV/J7
-         FoCxs8GC/pgFdT6DXtKkjONm3nDG094HGrDYqMKH5XUI4KWBdx8kQfUK+3ouHMLK9fR8
-         4Uxw==
-X-Gm-Message-State: ANoB5plTnTn5m1J+G90cKk8JqV3jX5jWCuVUNes84ew3bxRP8G1w2lVy
-        uL1iW61423lZQLPX+wtjmg+WIQ==
-X-Google-Smtp-Source: AA0mqf6a3M4WqJQk9uaiVBtkSBfgGVUP1Kw1s4HtP1D+unruSZElFl8tOA4T4e2Wr2MKCNn3x99axw==
-X-Received: by 2002:a63:4c59:0:b0:476:c490:798a with SMTP id m25-20020a634c59000000b00476c490798amr3833829pgl.564.1668722494968;
-        Thu, 17 Nov 2022 14:01:34 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id h31-20020a63575f000000b0047696938911sm1516588pgm.74.2022.11.17.14.01.34
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AbZpZfvfvRImepPng90QD1DqUNkG0pRMbRACnwrWAMM=;
+        b=hHctPC/+ZQfftsPCqRueomf9WYxQd5Lctrar22SXqv5x9qIwG9VNWJij1zJewPbCZa
+         BQibkvX1OI67WwpC7WMokTuQk5zxvBRsSuHTCTMu08c6mUjmr9QLl6dN7cFW8BJSFSmV
+         HH72I1vGiKmslieHKv2xgmaTnumtxcOji2n6C5nRV68wbhI7D9aEATuz6DbPkndr2bex
+         R6wNk1w5fZXCwd6k4s0BQq8iCjU9v0ZZMrcpjoZxVf70WZUBZ9/fA8IMl06l6q8CJC1N
+         2Ij/1QDjug4uNBFFYmX2Fh5cUCne/6Z6/0jTHGi0KBNcLDEceuMlxGIcqfSCsNd4Xf0w
+         8uZg==
+X-Gm-Message-State: ANoB5pk7ZNUxtsKq8oilddI6UzsekBNfbkAP/B/kRugm7YKo+ACO64WS
+        ydEQp81rrFrz57ZsecZAUpQ=
+X-Google-Smtp-Source: AA0mqf46P8qtAcmbB0hEi6K+/f7igE1ezoYdNaHClTdkK+gsDH+y0VhvhBMta7ktwMB+Tg7uyK2+fw==
+X-Received: by 2002:aa7:cc12:0:b0:462:79ec:55eb with SMTP id q18-20020aa7cc12000000b0046279ec55ebmr3767547edt.151.1668722511424;
+        Thu, 17 Nov 2022 14:01:51 -0800 (PST)
+Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id bc3-20020a056402204300b00463597d2c25sm1028751edb.74.2022.11.17.14.01.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 14:01:34 -0800 (PST)
-Date:   Thu, 17 Nov 2022 14:01:33 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     linux-hardening@vger.kernel.org,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Paramjit Oberoi <pso@chromium.org>,
-        Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/5] MAINTAINERS: Update pstore maintainers
-Message-ID: <202211171359.232C769E3A@keescook>
-References: <20221011200112.731334-1-keescook@chromium.org>
- <20221011200112.731334-6-keescook@chromium.org>
- <542aa83d-6227-ea7d-2150-a74293cbf59a@igalia.com>
+        Thu, 17 Nov 2022 14:01:50 -0800 (PST)
+Date:   Thu, 17 Nov 2022 23:01:49 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Akhil R <akhilrajeev@nvidia.com>
+Cc:     christian.koenig@amd.com, digetx@gmail.com, jonathanh@nvidia.com,
+        ldewangan@nvidia.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        sumit.semwal@linaro.org, wsa@kernel.org,
+        Zubair Waheed <zwaheed@nvidia.com>
+Subject: Re: [PATCH] i2c: tegra: Set ACPI node as primary fwnode
+Message-ID: <Y3avTc3s+wAMR4IS@orome>
+References: <20221117100415.20457-1-akhilrajeev@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="KYzKTqeFwuxwrIi9"
 Content-Disposition: inline
-In-Reply-To: <542aa83d-6227-ea7d-2150-a74293cbf59a@igalia.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20221117100415.20457-1-akhilrajeev@nvidia.com>
+User-Agent: Mutt/2.2.8 (2022-11-05)
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 12:42:53PM -0300, Guilherme G. Piccoli wrote:
-> On 11/10/2022 17:01, Kees Cook wrote:
-> > Update pstore to better reflect reality of active contributors:
-> > 
-> > - Remove Anton and Colin (thank you for your help through the years!)
-> > - Move Tony to Reviewer
-> > - Add Guilherme as Reviewer
-> > - Add mailing list
-> > - Upgrade to Supported
-> > 
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > ---
-> >  MAINTAINERS | 8 ++++----
-> >  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> Hi Kees, sorry to revamp this thread for a "tangential" topic, but it
-> feels a "kinda" proper thread.
-> 
-> Since I was added as a reviewer on pstore (in linux-next so far), I
-> started to receive a bunch of emails from ARM device-tree folks; they're
-> adding ramoops entries to their DTs and looping pstore folks.
-> 
-> Examples:
-> 
-> https://lore.kernel.org/linux-hardening/20221111120156.48040-1-angelogioacchino.delregno@collabora.com/
-> 
-> https://lore.kernel.org/linux-hardening/20221116145616.17884-1-luca@z3ntu.xyz/
-> 
-> 
-> Personally, I have no knowledge of these HW to evaluate if the ramoops
-> setting is appropriate, so they're nop from my side, I just delete them.
-> But that raises the question - are you/Tony reviewing this kind of
-> change? It's not related to pstore/ramoops code, it's just users setting
-> ramoops in their DTs, so seems to me a bit far from the purpose of the
-> pstore entry.
 
-I usually look at it very quickly, but I can't meaningfully positively
-review it because I don't know the hardware, etc.
+--KYzKTqeFwuxwrIi9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> What do you/Tony think about that? Likely the DT folks are following
-> this entry in the MAINTAINERS to send these emails:
-> 
-> PSTORE FILESYSTEM
-> M:      Kees Cook <keescook@chromium.org>
-> [...]
-> F:      include/linux/pstore*
-> K:      \b(pstore|ramoops) <------
-> 
-> Should this be kept? Maybe only the ramoops entry could be removed?
+On Thu, Nov 17, 2022 at 03:34:15PM +0530, Akhil R wrote:
+> Set ACPI node as the primary fwnode of I2C adapter to allow
+> enumeration of child devices from the ACPI table
+>=20
+> Signed-off-by: Zubair Waheed <zwaheed@nvidia.com>
+> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+> ---
+>  drivers/i2c/busses/i2c-tegra.c | 1 +
+>  1 file changed, 1 insertion(+)
 
-I would like to keep it -- if something mentions pstore and ramoops, I'd
-like to see it. I can't review all of it, but I'd like it to at least
-show up in my inbox. :)
+Reviewed-by: Thierry Reding <treding@nvidia.com>
 
--- 
-Kees Cook
+--KYzKTqeFwuxwrIi9
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmN2r00ACgkQ3SOs138+
+s6H8mBAAmxRq7078F4cXQITxE+/9Ub8lJ7cwoZ4Wj+bwtqCLE87FiUALOKVR5tQA
+BQ1PGs+80K5qZ9O0BeQva6jTx+VDtBFik7wqHUVuozBWSyoxZoEi4DnjojtqhNw7
+NX5n8LPNOwRRQSpv3/mZVceG0aQsDyl3bbzatVU0osNhLNUfr2xI6R67OOp8dJq9
+K/jEILrqcDi2P2dDA3mW7inerYKImrjNctVSHFXMEolnOg4aVWWZlgSOo928BV2O
+BpoRK8IFZlUCNaAW3OrKFgF3ULDTFOUi+vE8c8uytr9q7gsJDJmjTuD/C4CDEr3A
+Lj/HWHAAwJDLpIlNLXE4xq/gE4VgZO86yOY9v0BveealPWyr3Pbb1wMQXpI2ufbv
+u+Qh62lUk9erI3zkIX0IzR4ASz0Hp5Zbr11KTlGGmC9Y9t2h6r9G91568+yLQYr0
+zn4TNEFki19dL1OkRboO+Dida7zDadD+aLxb1uUh6RYFaAhTfhcYaRay5RkJVdN/
+e8m/02GBe7tWXtk1akGamkmQe3sJnhRKJYKYB4riP4guREDcvei5NibCsvAHRgq4
+t+ol7Y+LphanjzIE7F8fYk+0aSK9dNojyNH/Cx/KrS3SeOHXtZukA47ncnQrnQVp
+e9IxwtJHhtUzwMZ94KmTidq+5BgaNzmFd1ghw0PLcC67wRu1Djc=
+=V8HW
+-----END PGP SIGNATURE-----
+
+--KYzKTqeFwuxwrIi9--
