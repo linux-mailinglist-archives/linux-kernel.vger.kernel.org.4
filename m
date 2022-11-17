@@ -2,177 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17E4B62E359
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:42:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0949062E35C
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:45:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234551AbiKQRmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 12:42:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32920 "EHLO
+        id S234854AbiKQRpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 12:45:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233563AbiKQRm2 (ORCPT
+        with ESMTP id S233270AbiKQRpL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 12:42:28 -0500
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F28BC31
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 09:42:26 -0800 (PST)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-13c2cfd1126so2964229fac.10
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 09:42:26 -0800 (PST)
+        Thu, 17 Nov 2022 12:45:11 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559A165E42;
+        Thu, 17 Nov 2022 09:45:10 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id v3-20020a17090ac90300b00218441ac0f6so6411831pjt.0;
+        Thu, 17 Nov 2022 09:45:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RfORcEnRNI40YvWBc5y1Em70ZVblOHNV3oKHjYQR7dc=;
-        b=j+DFMuYmsxvGLfPcmv0ANKN1bbBdxegl3OjLWAop7KTeXYyQulIUZRoaf+DJBfe6k/
-         5/yZWx9ZkhFavd8PgTjvwuWIgvpbm4IM64k9HwhLS27NrFLILA/L+OUl7qYbmmxX2PNy
-         NjNPCV6fr5oArPBq/g+1IU4x7MZq0eMGMUl8Y=
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=J+IZ0bBrm6HTtpbBq7zbnIfZW4FoGEPOw3MaAT9g05E=;
+        b=EC2t2eI8DFfZ6VaQH411TgrtLbx9lcDegBRFY2IlMGo7JWLFQdNGS1J281pVFg/Gv8
+         XABvjlGjdjIMSB1NlqUk7ls9cvK9xtcSJ4uUyHGpqVsqq26VK1XCbUNrmn47v6Z0fXOo
+         cfLoGN0ns6Z8F3y8JeFLqbd1GvHtPVzqBz3L6Rl9sN3h9iO2Wm1RtTuA8YQEvhaOW15U
+         +zj1wY2OsHZcV7ua4oDeShGOdd+JuhtHWi8+mKYfZDKO25ZBTIKTPtQI2Pdbv1pGH7jf
+         EKOFsDxpdnrdHv/gv57XHOgC0R/2Rws/My/gGQvnxn+ECwkv3wgorex05Zi5V2HONzvf
+         o+kA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RfORcEnRNI40YvWBc5y1Em70ZVblOHNV3oKHjYQR7dc=;
-        b=xlqK630YJkwB4cMziFWjyWY/Z01YZv2nn0ybZp0sbv1eHKHOHWBfVRpuld+wA5RB5X
-         bc2eNN4NkShg2uqt3pX8ApuyoSpITd6i6xSXednTgJsbpoU1YdyAG6ZiWfofFnAoFkV4
-         M+SAeRLjoc2YEtLbumuahrBU13kJSKHOk7pA6/LGMt9NDeva7FiLesAQH6FbJXEdiyfz
-         z7alaN6okzIM/NFDs5Ow/cVAoul7+BeGdEHeArLCFu0GazuW2rJ9o6KDhj87DD4VPtMo
-         to9Ko4uHasETXwteyBPbww2ZPbF3iRW4pUOTYGmvQJkZmrdDIdxwCk2m5W+TkNJ+Dejc
-         2y5A==
-X-Gm-Message-State: ANoB5pk5NxGWAcdsxAvQzIuL3oVeNSx36wXkaEkcyUivbcZ3+80kr/i/
-        UFi2rrPXXYk/JWUVjrrrZa9OxLyxS1eja3T3G3HurQ==
-X-Google-Smtp-Source: AA0mqf5TwZQoOYT1jHxYgRDVMEmTtUN232TguQIURbIWHB70y5QL2vtLGeTJlyytNW9PS+z7/JOeWKuHxfcM1lgMOPw=
-X-Received: by 2002:a05:6870:591:b0:13b:bbbb:1623 with SMTP id
- m17-20020a056870059100b0013bbbbb1623mr1886559oap.115.1668706945539; Thu, 17
- Nov 2022 09:42:25 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=J+IZ0bBrm6HTtpbBq7zbnIfZW4FoGEPOw3MaAT9g05E=;
+        b=8FQNFfgZIEtUpKUpC2YPSiuggmkx3lLGe+J0fmexLum8AClGI/AGatQNLy5Hz2QvE0
+         5QIwK31OPqnt0/5KHess6OX1uGYxTtcBd1fSy4B06ZThAz264YEnZT8oCm1z94HWBxzD
+         xNkCIzJVWG0Vm9M8Btvp89sNPEdfajkfukOYnZQm0cQl3KIOq1wgeinhRNyFa3F74czS
+         7teRzjzpvjZtG2ZRWfT7VczS+51fMRoiZHsFbffOKZ8ZfRvA9gIs78aFQpXm0LW7Co3j
+         99l7oJhgGj7uFnLetbxw8CGNkoVb5fth92TKNRyB2DdzPKWw0LFbl1SQsd2txYu/Snnw
+         JkJg==
+X-Gm-Message-State: ANoB5pnWU+RkgQ14GW8nQUUWYQfkWPuYulSZnNFyNilZhGchXSirkDuB
+        3zDEMdqoOVEWQjGqylUrZjo=
+X-Google-Smtp-Source: AA0mqf5USSlpnDiOXdKQfwBtC0PTWEZtFUUZaE+LZFz9YESdmd5yWZp5wADh81tjjdNYLFr0rrKdlw==
+X-Received: by 2002:a17:90a:d38c:b0:214:ba3:4eb1 with SMTP id q12-20020a17090ad38c00b002140ba34eb1mr10042726pju.161.1668707109697;
+        Thu, 17 Nov 2022 09:45:09 -0800 (PST)
+Received: from localhost ([192.55.54.55])
+        by smtp.gmail.com with ESMTPSA id a64-20020a621a43000000b0056b9a740ec2sm1391714pfa.156.2022.11.17.09.45.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 09:45:09 -0800 (PST)
+Date:   Thu, 17 Nov 2022 09:45:08 -0800
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "Aktas, Erdem" <erdemaktas@google.com>,
+        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
+        "dmatlack@google.com" <dmatlack@google.com>,
+        "Christopherson,, Sean" <seanjc@google.com>
+Subject: Re: [PATCH v10 016/108] KVM: TDX: create/destroy VM structure
+Message-ID: <20221117174508.GD2350331@ls.amr.corp.intel.com>
+References: <cover.1667110240.git.isaku.yamahata@intel.com>
+ <fb337a67e17715977e46523d1344cb2a7f46a37a.1667110240.git.isaku.yamahata@intel.com>
+ <c3deef412933070932f565af8639d15aef00ea1c.camel@intel.com>
 MIME-Version: 1.0
-References: <20221117031551.1142289-1-joel@joelfernandes.org>
- <20221117031551.1142289-3-joel@joelfernandes.org> <CANn89i+gKVdveEtR9DX15Xr7E9Nn2my6SEEbXTMmxbqtezm2vg@mail.gmail.com>
- <Y3ZaH4C4omQs1OR4@google.com> <CANn89iJRhr8+osviYKVYhcHHk5TnQQD53x87-WG3iTo4YNa0qA@mail.gmail.com>
- <CAEXW_YRULY2KzMtkv+KjA_hSr1tSKhQLuCt-RrOkMLjjwAbwKg@mail.gmail.com> <CANn89i+9XRh+p-ZiyY_VKy=EcxEyg+3AdtruMnj=KCgXF7QtoQ@mail.gmail.com>
-In-Reply-To: <CANn89i+9XRh+p-ZiyY_VKy=EcxEyg+3AdtruMnj=KCgXF7QtoQ@mail.gmail.com>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Thu, 17 Nov 2022 17:42:14 +0000
-Message-ID: <CAEXW_YS-d_URqjfcasNnqf3zhCKAny8dhhLifAxtrpz1XYd_=w@mail.gmail.com>
-Subject: Re: [PATCH rcu/dev 3/3] net: Use call_rcu_flush() for dst_destroy_rcu
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     linux-kernel@vger.kernel.org, Cong Wang <xiyou.wangcong@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Jiri Pirko <jiri@resnulli.us>, netdev@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>, rcu@vger.kernel.org,
-        rostedt@goodmis.org, paulmck@kernel.org, fweisbec@gmail.com,
-        jiejiang@google.com, Thomas Glexiner <tglx@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <c3deef412933070932f565af8639d15aef00ea1c.camel@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 5:40 PM Eric Dumazet <edumazet@google.com> wrote:
->
-> On Thu, Nov 17, 2022 at 9:38 AM Joel Fernandes <joel@joelfernandes.org> wrote:
-> >
-> > On Thu, Nov 17, 2022 at 5:17 PM Eric Dumazet <edumazet@google.com> wrote:
-> > >
-> > > On Thu, Nov 17, 2022 at 7:58 AM Joel Fernandes <joel@joelfernandes.org> wrote:
-> > > >
-> > > > Hello Eric,
-> > > >
-> > > > On Wed, Nov 16, 2022 at 07:44:41PM -0800, Eric Dumazet wrote:
-> > > > > On Wed, Nov 16, 2022 at 7:16 PM Joel Fernandes (Google)
-> > > > > <joel@joelfernandes.org> wrote:
-> > > > > >
-> > > > > > In a networking test on ChromeOS, we find that using the new CONFIG_RCU_LAZY
-> > > > > > causes a networking test to fail in the teardown phase.
-> > > > > >
-> > > > > > The failure happens during: ip netns del <name>
-> > > > >
-> > > > > And ? What happens then next ?
-> > > >
-> > > > The test is doing the 'ip netns del <name>' and then polling for the
-> > > > disappearance of a network interface name for upto 5 seconds. I believe it is
-> > > > using netlink to get a table of interfaces. That polling is timing out.
-> > > >
-> > > > Here is some more details from the test's owner (copy pasting from another
-> > > > bug report):
-> > > > In the cleanup, we remove the netns, and thus will cause the veth pair being
-> > > > removed automatically, so we use a poll to check that if the veth in the root
-> > > > netns still exists to know whether the cleanup is done.
-> > > >
-> > > > Here is a public link to the code that is failing (its in golang):
-> > > > https://source.chromium.org/chromiumos/chromiumos/codesearch/+/main:src/platform/tast-tests/src/chromiumos/tast/local/network/virtualnet/env/env.go;drc=6c2841d6cc3eadd23e07912ec331943ee33d7de8;l=161
-> > > >
-> > > > Here is a public link to the line of code in the actual test leading up to the above
-> > > > path (this is the test that is run:
-> > > > network.RoutingFallthrough.ipv4_only_primary) :
-> > > > https://source.chromium.org/chromiumos/chromiumos/codesearch/+/main:src/platform/tast-tests/src/chromiumos/tast/local/bundles/cros/network/routing_fallthrough.go;drc=8fbf2c53960bc8917a6a01fda5405cad7c17201e;l=52
-> > > >
-> > > > > > Using ftrace, I found the callbacks it was queuing which this series fixes. Use
-> > > > > > call_rcu_flush() to revert to the old behavior. With that, the test passes.
-> > > > >
-> > > > > What is this test about ? What barrier was used to make it not flaky ?
-> > > >
-> > > > I provided the links above, let me know if you have any questions.
-> > > >
-> > > > > Was it depending on some undocumented RCU behavior ?
-> > > >
-> > > > This is a new RCU feature posted here for significant power-savings on
-> > > > battery-powered devices:
-> > > > https://lore.kernel.org/rcu/20221017140726.GG5600@paulmck-ThinkPad-P17-Gen-1/T/#m7a54809b8903b41538850194d67eb34f203c752a
-> > > >
-> > > > There is also an LPC presentation about the same, I can dig the link if you
-> > > > are interested.
-> > > >
-> > > > > Maybe adding a sysctl to force the flush would be better for functional tests ?
-> > > > >
-> > > > > I would rather change the test(s), than adding call_rcu_flush(),
-> > > > > adding merge conflicts to future backports.
-> > > >
-> > > > I am not too sure about that, I think a user might expect the network
-> > > > interface to disappear from the networking tables quickly enough without
-> > > > dealing with barriers or kernel iternals. However, I added the authors of the
-> > > > test to this email in the hopes he can provide is point of views as well.
-> > > >
-> > > > The general approach we are taking with this sort of thing is to use
-> > > > call_rcu_flush() which is basically the same as call_rcu() for systems with
-> > > > CALL_RCU_LAZY=n. You can see some examples of that in the patch series link
-> > > > above. Just to note, CALL_RCU_LAZY depends on CONFIG_RCU_NOCB_CPU so its only
-> > > > Android and ChromeOS that are using it. I am adding Jie to share any input,
-> > > > he is from the networking team and knows this test well.
-> > > >
-> > > >
-> > >
-> > > I do not know what is this RCU_LAZY thing, but IMO this should be opt-in
-> >
-> > You should read the links I sent you. We did already try opt-in,
-> > Thomas Gleixner made a point at LPC that we should not add new APIs
-> > for this purpose and confuse kernel developers.
-> >
-> > > For instance, only kfree_rcu() should use it.
-> >
-> > No. Most of the call_rcu() usages are for freeing memory, so the
-> > consensus is we should apply this as opt out and fix issues along the
-> > way. We already did a lot of research/diligence on seeing which users
-> > need conversion.
-> >
-> > > We can not review hundreds of call_rcu() call sites and decide if
-> > > adding arbitrary delays cou hurt .
-> >
-> > That work has already been done as much as possible, please read the
-> > links I sent.
->
-> Oh well. No.
->
-> I will leave it to other folks dealing with this crazy thing.
+On Thu, Nov 10, 2022 at 11:04:25AM +0000,
+"Huang, Kai" <kai.huang@intel.com> wrote:
 
-Yes, I agree. Your comments here have not been useful (or respectful)
-so I am Ok with that.
+> > > flush_shadow_all_private callback before tearing down private page tables
+> > > for it.
+> > > 
+> > > Add a second kvm_x86_ops hook in kvm_arch_destroy_vm() to support TDX's
+> > > destruction path, which needs to first put the VM into a teardown state,
+> > > then free per-vCPU resources, and finally free per-VM resources.
+> 
+> Perhaps explicitly call out the hook is vm_free() and why the existing
+> vm_destroy() hook cannot meet TDX's purpose, so that people can understand
+> easily why you need vm_free().
 
- - Joel
+Sure, will update the commit message.
+
+
+> > > +static inline void tdx_hkid_free(struct kvm_tdx *kvm_tdx)
+> > > +{
+> > > +	tdx_keyid_free(kvm_tdx->hkid);
+> > > +	kvm_tdx->hkid = -1;
+> 
+> Why -1? Can it be set to 0, which is the initial value when kvm_tdx is allocated
+> anyway?
+
+0 works. I'll replace it with 0.
+
+
+> > > +}
+> > > +
+> > > +static inline bool is_hkid_assigned(struct kvm_tdx *kvm_tdx)
+> > > +{
+> > > +	return kvm_tdx->hkid > 0;
+> > > +}
+> > > +
+> > > +static void tdx_clear_page(unsigned long page)
+> > > +{
+> > > +	const void *zero_page = (const void *) __va(page_to_phys(ZERO_PAGE(0)));
+> > > +	unsigned long i;
+> > > +
+> > > +	/*
+> > > +	 * Zeroing the page is only necessary for systems with MKTME-i:
+> > > +	 * when re-assign one page from old keyid to a new keyid, MOVDIR64B is
+> > > +	 * required to clear/write the page with new keyid to prevent integrity
+> > > +	 * error when read on the page with new keyid.
+> > > +	 *
+> > > +	 * The cache line could be poisoned (even without MKTME-i), clear the
+> > > +	 * poison bit.
+> 
+> Does this happen only when there's potential kernel bug?
+
+That's right.
+
+
+> > > +static int tdx_alloc_td_page(struct tdx_td_page *page)
+> > > +{
+> > > +	page->va = __get_free_page(GFP_KERNEL_ACCOUNT);
+> > > +	if (!page->va)
+> > > +		return -ENOMEM;
+> > > +
+> > > +	page->pa = __pa(page->va);
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +static inline void tdx_mark_td_page_added(struct tdx_td_page *page)
+> > > +{
+> > > +	WARN_ON_ONCE(page->added);
+> > > +	page->added = true;
+> > > +}
+> > > +
+> > > +static void tdx_reclaim_td_page(struct tdx_td_page *page)
+> > > +{
+> > > +	if (page->added) {
+> > > +		/*
+> > > +		 * TDCX are being reclaimed.  TDX module maps TDCX with HKID
+> > > +		 * assigned to the TD.  Here the cache associated to the TD
+> > > +		 * was already flushed by TDH.PHYMEM.CACHE.WB before here, So
+> > > +		 * cache doesn't need to be flushed again.
+> > > +		 */
+> > > +		if (tdx_reclaim_page(page->va, page->pa, false, 0))
+> > > +			return;
+> > > +
+> > > +		page->added = false;
+> > > +	}
+> > > +	if (page->va) {
+> > > +		free_page(page->va);
+> > > +		page->va = 0;
+> > > +	}
+> > > +}
+> > > +
+> 
+> 
+> I am wondering why this 'struct tdx_td_page' is needed?
+> 
+> It appears the page->pa is used by SEAMCALLs and page->va is used by
+> tdx_clear_page() as MOVDIR64B needs a virtual address.
+> 
+> But since GFP_KERNEL_ACCOUNT is used in memory allocation, so you can actually
+> just get the pa and va from the page easily (using page_to_phys() and __va()).
+> Also it's 64-bit kernel so you don't even need to consider HIGHMEM.
+
+Yes, page->va member can be dropped. Will drop it.
+
+
+> Also, it seems page->added can be replaced with simply checking whether page is
+> NULL, correct?
+
+No. It's subtle. Anyway let me check it.
+
+
+> Btw, I think the introduce of 'struct tdx_td_page' and the new 'struct
+> tdx_td_page tdr' to 'struct kvm_tdx' should come together with this patch, but
+> not in the previous patch "KVM: TDX: Stub in tdx.h with structs, accessors, and
+> VMCS helpers". This makes the code review easier.
+> 
+> The "accessors" can be introduced in later patch when they are needed -- it
+> doesn't seem any of them is used in this patch?
+
+Ok, will move it to that patch.
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>
