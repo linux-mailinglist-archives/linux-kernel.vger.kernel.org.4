@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FB4862DDC0
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 15:17:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36F0362DDC3
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 15:18:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240324AbiKQORv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 09:17:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47802 "EHLO
+        id S240346AbiKQOSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 09:18:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234915AbiKQORq (ORCPT
+        with ESMTP id S240313AbiKQORs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 09:17:46 -0500
+        Thu, 17 Nov 2022 09:17:48 -0500
 Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA43E1CD
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 06:17:45 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749811CD
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 06:17:47 -0800 (PST)
 Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AHEHLJW006137;
-        Thu, 17 Nov 2022 08:17:29 -0600
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AHEHLJZ006137;
+        Thu, 17 Nov 2022 08:17:31 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=PODMain02222019;
- bh=zXCK59+Dn/1+x3tHXEtHgK5hfaXjmAqb7IocCpy3EoQ=;
- b=PC2eSohEE7k/dFbz4nJ3SeQq9nOXSW3c9zJwbJdpL+Prw6Gz2lJ/uPbuHDzlIyIWddKR
- ZQQyNcMlGYnSWtv2ONDNlIr5V6TJqMchvZCnWBsBvCIVJvZQZcU1Z+jyJCkWim1HjyvG
- FWLrFRE0t80lXdLKTiYCYxq+UOA5e0JiXTLrDySl0hnwFDhG6lTvuMCiGh2AlZHKHtyJ
- bfUtUuZw896vfiQsbEogxwWgP0gXGk7aOrTOm84U/2A/1Z5E09moRDrmZCvWWsbqguEh
- X/t3lWuXhMT72wXcxcWYH1GCZA5sz8Ci+vBKy534sTnz6A5sC9GrlqXXNMWFK6LLiTfL tg== 
+ bh=6f5Gxn+PK186Gour1Z336p425d2huBXCAzXNCXUMyT0=;
+ b=MY0YSzTck2b53SXhUqz2BMIsStPXAd0g9dKvLFL1C8axi+Wm8eryec1s0Xmu26IvzjGe
+ scld5H9LOKZ+E84alkz9x7FVxQh7aVHbP9n3GioSejt7mMqfVBEo12I9GIycLXDe1d0J
+ 4JNx8ddkncLTmlV80natj0rGiweTtrQhC5WXwI9NlE6Lg6Igm2ua4Ic8PWpjE9QGXkx5
+ 4h+eGDyQvB7RKLjxGhO7my6mfzggl9lPGmQMsX1iER+0lUvOI1xisZfTpGFYdtFzaVeZ
+ Xd+MrvaLkddh89GOQMV1RSOQN2mBm4d3R+pEyPxQ4ekjX2WrGkm81tb1L8A6sesYgKPD hg== 
 Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3kv73yk9j9-1
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3kv73yk9j9-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Nov 2022 08:17:29 -0600
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
+        Thu, 17 Nov 2022 08:17:31 -0600
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
  (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Thu, 17 Nov
  2022 08:17:27 -0600
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.20 via Frontend
- Transport; Thu, 17 Nov 2022 08:17:27 -0600
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.20 via Frontend Transport; Thu, 17 Nov 2022 08:17:27 -0600
 Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id C9E12B12;
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id DA515476;
         Thu, 17 Nov 2022 14:17:27 +0000 (UTC)
 From:   Charles Keepax <ckeepax@opensource.cirrus.com>
 To:     <vkoul@kernel.org>
@@ -47,17 +47,17 @@ CC:     <yung-chuan.liao@linux.intel.com>,
         <pierre-louis.bossart@linux.intel.com>, <sanyog.r.kale@intel.com>,
         <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
         <patches@opensource.cirrus.com>
-Subject: [PATCH v2 1/4] soundwire: bus: export sdw_nwrite_no_pm and sdw_nread_no_pm functions
-Date:   Thu, 17 Nov 2022 14:17:24 +0000
-Message-ID: <20221117141727.3031503-2-ckeepax@opensource.cirrus.com>
+Subject: [PATCH v2 2/4] soundwire: Provide build stubs for common functions
+Date:   Thu, 17 Nov 2022 14:17:25 +0000
+Message-ID: <20221117141727.3031503-3-ckeepax@opensource.cirrus.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221117141727.3031503-1-ckeepax@opensource.cirrus.com>
 References: <20221117141727.3031503-1-ckeepax@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: e5tQ8Uy3OyfPvr284qk_kLx9Zq9XDvOp
-X-Proofpoint-GUID: e5tQ8Uy3OyfPvr284qk_kLx9Zq9XDvOp
+X-Proofpoint-ORIG-GUID: CJjQr3JXmgQ59wv7LzYgtiJsJOO51XC8
+X-Proofpoint-GUID: CJjQr3JXmgQ59wv7LzYgtiJsJOO51XC8
 X-Proofpoint-Spam-Reason: safe
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
@@ -68,71 +68,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Simon Trimmer <simont@opensource.cirrus.com>
+Provide stub functions when CONFIG_SOUNDWIRE is not set for functions
+that are quite likely to be used from common code on devices supporting
+multiple control buses.
 
-The commit 167790abb90f ("soundwire: export sdw_write/read_no_pm
-functions") exposed the single byte no_pm versions of the IO functions
-that can be used without touching PM, export the multi byte no_pm
-versions for the same reason.
-
-Signed-off-by: Simon Trimmer <simont@opensource.cirrus.com>
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 ---
 
-No change since v1.
+Changes since v1:
+ - Added Pierre's reviewed-by.
 
- drivers/soundwire/bus.c       | 8 ++++----
- include/linux/soundwire/sdw.h | 2 ++
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ include/linux/soundwire/sdw.h | 92 +++++++++++++++++++++++++++++++----
+ 1 file changed, 82 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/soundwire/bus.c b/drivers/soundwire/bus.c
-index 76515c33e639e..ef4878258afad 100644
---- a/drivers/soundwire/bus.c
-+++ b/drivers/soundwire/bus.c
-@@ -414,8 +414,7 @@ int sdw_fill_msg(struct sdw_msg *msg, struct sdw_slave *slave,
-  * all clients need to use the pm versions
-  */
- 
--static int
--sdw_nread_no_pm(struct sdw_slave *slave, u32 addr, size_t count, u8 *val)
-+int sdw_nread_no_pm(struct sdw_slave *slave, u32 addr, size_t count, u8 *val)
- {
- 	struct sdw_msg msg;
- 	int ret;
-@@ -430,9 +429,9 @@ sdw_nread_no_pm(struct sdw_slave *slave, u32 addr, size_t count, u8 *val)
- 		ret = 0;
- 	return ret;
- }
-+EXPORT_SYMBOL(sdw_nread_no_pm);
- 
--static int
--sdw_nwrite_no_pm(struct sdw_slave *slave, u32 addr, size_t count, const u8 *val)
-+int sdw_nwrite_no_pm(struct sdw_slave *slave, u32 addr, size_t count, const u8 *val)
- {
- 	struct sdw_msg msg;
- 	int ret;
-@@ -447,6 +446,7 @@ sdw_nwrite_no_pm(struct sdw_slave *slave, u32 addr, size_t count, const u8 *val)
- 		ret = 0;
- 	return ret;
- }
-+EXPORT_SYMBOL(sdw_nwrite_no_pm);
- 
- int sdw_write_no_pm(struct sdw_slave *slave, u32 addr, u8 value)
- {
 diff --git a/include/linux/soundwire/sdw.h b/include/linux/soundwire/sdw.h
-index 9e4537f409c29..902ed46f76c80 100644
+index 902ed46f76c80..4f80cba898f11 100644
 --- a/include/linux/soundwire/sdw.h
 +++ b/include/linux/soundwire/sdw.h
-@@ -1047,7 +1047,9 @@ int sdw_write(struct sdw_slave *slave, u32 addr, u8 value);
+@@ -1021,15 +1021,8 @@ int sdw_stream_add_master(struct sdw_bus *bus,
+ 		struct sdw_port_config *port_config,
+ 		unsigned int num_ports,
+ 		struct sdw_stream_runtime *stream);
+-int sdw_stream_add_slave(struct sdw_slave *slave,
+-		struct sdw_stream_config *stream_config,
+-		struct sdw_port_config *port_config,
+-		unsigned int num_ports,
+-		struct sdw_stream_runtime *stream);
+ int sdw_stream_remove_master(struct sdw_bus *bus,
+ 		struct sdw_stream_runtime *stream);
+-int sdw_stream_remove_slave(struct sdw_slave *slave,
+-		struct sdw_stream_runtime *stream);
+ int sdw_startup_stream(void *sdw_substream);
+ int sdw_prepare_stream(struct sdw_stream_runtime *stream);
+ int sdw_enable_stream(struct sdw_stream_runtime *stream);
+@@ -1040,8 +1033,20 @@ int sdw_bus_prep_clk_stop(struct sdw_bus *bus);
+ int sdw_bus_clk_stop(struct sdw_bus *bus);
+ int sdw_bus_exit_clk_stop(struct sdw_bus *bus);
+ 
+-/* messaging and data APIs */
++int sdw_compare_devid(struct sdw_slave *slave, struct sdw_slave_id id);
++void sdw_extract_slave_id(struct sdw_bus *bus, u64 addr, struct sdw_slave_id *id);
++
++#if IS_ENABLED(CONFIG_SOUNDWIRE)
+ 
++int sdw_stream_add_slave(struct sdw_slave *slave,
++			 struct sdw_stream_config *stream_config,
++			 struct sdw_port_config *port_config,
++			 unsigned int num_ports,
++			 struct sdw_stream_runtime *stream);
++int sdw_stream_remove_slave(struct sdw_slave *slave,
++			    struct sdw_stream_runtime *stream);
++
++/* messaging and data APIs */
+ int sdw_read(struct sdw_slave *slave, u32 addr);
+ int sdw_write(struct sdw_slave *slave, u32 addr, u8 value);
  int sdw_write_no_pm(struct sdw_slave *slave, u32 addr, u8 value);
- int sdw_read_no_pm(struct sdw_slave *slave, u32 addr);
- int sdw_nread(struct sdw_slave *slave, u32 addr, size_t count, u8 *val);
-+int sdw_nread_no_pm(struct sdw_slave *slave, u32 addr, size_t count, u8 *val);
- int sdw_nwrite(struct sdw_slave *slave, u32 addr, size_t count, const u8 *val);
-+int sdw_nwrite_no_pm(struct sdw_slave *slave, u32 addr, size_t count, const u8 *val);
+@@ -1053,7 +1058,74 @@ int sdw_nwrite_no_pm(struct sdw_slave *slave, u32 addr, size_t count, const u8 *
  int sdw_update(struct sdw_slave *slave, u32 addr, u8 mask, u8 val);
  int sdw_update_no_pm(struct sdw_slave *slave, u32 addr, u8 mask, u8 val);
  
+-int sdw_compare_devid(struct sdw_slave *slave, struct sdw_slave_id id);
+-void sdw_extract_slave_id(struct sdw_bus *bus, u64 addr, struct sdw_slave_id *id);
++#else
++
++static inline int sdw_stream_add_slave(struct sdw_slave *slave,
++				       struct sdw_stream_config *stream_config,
++				       struct sdw_port_config *port_config,
++				       unsigned int num_ports,
++				       struct sdw_stream_runtime *stream)
++{
++	return 0;
++}
++
++static inline int sdw_stream_remove_slave(struct sdw_slave *slave,
++					  struct sdw_stream_runtime *stream)
++{
++	return 0;
++}
++
++/* messaging and data APIs */
++static inline int sdw_read(struct sdw_slave *slave, u32 addr)
++{
++	return 0;
++}
++
++static inline int sdw_write(struct sdw_slave *slave, u32 addr, u8 value)
++{
++	return 0;
++}
++
++static inline int sdw_write_no_pm(struct sdw_slave *slave, u32 addr, u8 value)
++{
++	return 0;
++}
++
++static inline int sdw_read_no_pm(struct sdw_slave *slave, u32 addr)
++{
++	return 0;
++}
++
++static inline int sdw_nread(struct sdw_slave *slave, u32 addr, size_t count, u8 *val)
++{
++	return 0;
++}
++
++static inline int sdw_nread_no_pm(struct sdw_slave *slave, u32 addr, size_t count, u8 *val)
++{
++	return 0;
++}
++
++static inline int sdw_nwrite(struct sdw_slave *slave, u32 addr, size_t count, const u8 *val)
++{
++	return 0;
++}
++
++static inline int sdw_nwrite_no_pm(struct sdw_slave *slave, u32 addr, size_t count, const u8 *val)
++{
++	return 0;
++}
++
++static inline int sdw_update(struct sdw_slave *slave, u32 addr, u8 mask, u8 val)
++{
++	return 0;
++}
++
++static inline int sdw_update_no_pm(struct sdw_slave *slave, u32 addr, u8 mask, u8 val)
++{
++	return 0;
++}
++
++#endif /* CONFIG_SOUNDWIRE */
+ 
+ #endif /* __SOUNDWIRE_H */
 -- 
 2.30.2
 
