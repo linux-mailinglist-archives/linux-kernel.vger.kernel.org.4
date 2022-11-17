@@ -2,201 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0CD362DCCE
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:30:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1A2D62DCB5
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:26:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240056AbiKQNap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 08:30:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45842 "EHLO
+        id S239967AbiKQN0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 08:26:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240126AbiKQNab (ORCPT
+        with ESMTP id S231463AbiKQN03 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 08:30:31 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA96372997;
-        Thu, 17 Nov 2022 05:30:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668691826; x=1700227826;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=kkui0TYDb/IbaSu7o0K1fhPB2oH/R5viDFHkl5cBAL8=;
-  b=JOGkeTCPVQwfbgFOzqLH/KfcdO9XlGrgmN6tnFCA2GirUX4Yq1VWM4ie
-   9GL011Gs4eBJ28MSVHe2t1n5TQLVdavt0CQr3zihbE+PZbudydg085No3
-   1D10aaqGUL6pcr+XBz/kD7hYztPVrBt3gZCfJwVAH7doZWgzrqWuxJErA
-   x+rcPqCAlGRFBPvFFexeQHTnycMY8ixjR58iDVANPQGFL+Ttwu1l5IV6w
-   UktvANPLWyoGBhpgsDQw5kVKfAZIf9QI72YL28BXEO2IeMEFtrtM8xFmr
-   J/l8GcAjZQPJYJirFu0liOowm7X5oxDex3s1qJ1/GMwycYRaTsmXHoA53
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="310479173"
-X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
-   d="scan'208";a="310479173"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 05:30:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="703332498"
-X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
-   d="scan'208";a="703332498"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
-  by fmsmga008.fm.intel.com with ESMTP; 17 Nov 2022 05:30:16 -0800
-Date:   Thu, 17 Nov 2022 21:25:51 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Ackerley Tng <ackerleytng@google.com>, aarcange@redhat.com,
-        ak@linux.intel.com, akpm@linux-foundation.org,
-        bfields@fieldses.org, bp@alien8.de, corbet@lwn.net,
-        dave.hansen@intel.com, david@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, hpa@zytor.com, hughd@google.com,
-        jlayton@kernel.org, jmattson@google.com, joro@8bytes.org,
-        jun.nakajima@intel.com, kirill.shutemov@linux.intel.com,
-        kvm@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, luto@kernel.org, mail@maciej.szmigiero.name,
-        mhocko@suse.com, michael.roth@amd.com, mingo@redhat.com,
-        pbonzini@redhat.com, qemu-devel@nongnu.org, qperret@google.com,
-        rppt@kernel.org, shuah@kernel.org, songmuchun@bytedance.com,
-        steven.price@arm.com, tabba@google.com, tglx@linutronix.de,
-        vannapurve@google.com, vbabka@suse.cz, vkuznets@redhat.com,
-        wanpengli@tencent.com, wei.w.wang@intel.com, x86@kernel.org,
-        yu.c.zhang@linux.intel.com
-Subject: Re: [PATCH v9 7/8] KVM: Handle page fault for private memory
-Message-ID: <20221117132551.GB422408@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20221025151344.3784230-8-chao.p.peng@linux.intel.com>
- <20221116205025.1510291-1-ackerleytng@google.com>
- <Y3Vgc5KrNRA8r6vh@google.com>
+        Thu, 17 Nov 2022 08:26:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53BEA5F85B;
+        Thu, 17 Nov 2022 05:26:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0D0B1B82067;
+        Thu, 17 Nov 2022 13:26:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8AE5C433D7;
+        Thu, 17 Nov 2022 13:26:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668691585;
+        bh=IfKmwHiX5GRvwIZolGOLav4sQrf4LjhgufrKC731FrE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Sl66rHmMCkfMfxk0dwcuJuE3jaRNgKbrJ4+2BEnnvPDjgvxmVF4Tx1lseKcO4BvfT
+         7MvHkKAmLa6nLnq1qdeFF4RWL4n8d5YFn7oc15/AkvCu+88VSyM8agWoHN+KzZrPl0
+         X26w2fP/8VYpVU+gyWtf19j+Obfiq4jv4I7duUZc8NMafJSx93r5GOoRQuhsj4hXjO
+         nx6loRnRL68eRV2NZ5g5qh0OIjrFn+QH/1sFwrQSGzBmHqYImo0k2d5kvQtulGBF6w
+         qaBIRwl09tc+NLBhf3kFxLPvYACrViIBjzOjuw7WEP5XPwVWlZLrZVLdeOgvpdFLEo
+         buJ0sTt796TxQ==
+Date:   Thu, 17 Nov 2022 13:26:21 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     balbi@kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/1] usb: gadget: f_hid: Conduct proper refcounting on
+ shared f_hidg pointer
+Message-ID: <Y3Y2fTeYTvOHF9Sb@google.com>
+References: <20221117120813.1257583-1-lee@kernel.org>
+ <Y3Yt+YixokbWJ8H9@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y3Vgc5KrNRA8r6vh@google.com>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y3Yt+YixokbWJ8H9@kroah.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 10:13:07PM +0000, Sean Christopherson wrote:
-> On Wed, Nov 16, 2022, Ackerley Tng wrote:
-> > >@@ -4173,6 +4203,22 @@ static int kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
-> > > 			return RET_PF_EMULATE;
-> > > 	}
-> > >
-> > >+	if (kvm_slot_can_be_private(slot) &&
-> > >+	    fault->is_private != kvm_mem_is_private(vcpu->kvm, fault->gfn)) {
-> > >+		vcpu->run->exit_reason = KVM_EXIT_MEMORY_FAULT;
-> > >+		if (fault->is_private)
-> > >+			vcpu->run->memory.flags = KVM_MEMORY_EXIT_FLAG_PRIVATE;
-> > >+		else
-> > >+			vcpu->run->memory.flags = 0;
-> > >+		vcpu->run->memory.padding = 0;
-> > >+		vcpu->run->memory.gpa = fault->gfn << PAGE_SHIFT;
-> > >+		vcpu->run->memory.size = PAGE_SIZE;
-> > >+		return RET_PF_USER;
-> > >+	}
-> > >+
-> > >+	if (fault->is_private)
-> > >+		return kvm_faultin_pfn_private(fault);
-> > >+
+On Thu, 17 Nov 2022, Greg KH wrote:
+
+> On Thu, Nov 17, 2022 at 12:08:13PM +0000, Lee Jones wrote:
+> > A reference to struct f_hidg is shared with this driver's associated
+> > character device handling component without provision for life-time
+> > handling.  In some circumstances, this can lead to unwanted
+> > behaviour depending on the order in which things are torn down.
 > > 
-> > Since each memslot may also not be backed by restricted memory, we
-> > should also check if the memslot has been set up for private memory
-> > with
+> > Utilise, the reference counting functionality already provided by the
+> > implanted character device structure to ensure the struct f_hidg's
+> > memory is only freed once the character device handling has finished
+> > with it.
 > > 
-> > 	if (fault->is_private && kvm_slot_can_be_private(slot))
-> > 		return kvm_faultin_pfn_private(fault);
-> > 
-> > Without this check, restrictedmem_get_page will get called with NULL
-> > in slot->restricted_file, which causes a NULL pointer dereference.
+> > Signed-off-by: Lee Jones <lee@kernel.org>
+> > ---
+> >  drivers/usb/gadget/function/f_hid.c | 47 +++++++++++++++++++++++------
+> >  1 file changed, 37 insertions(+), 10 deletions(-)
 > 
-> Hmm, silently skipping the faultin would result in KVM faulting in the shared
-> portion of the memslot, and I believe would end up mapping that pfn as private,
-> i.e. would map a non-UPM PFN as a private mapping.  For TDX and SNP, that would
-> be double ungood as it would let the host access memory that is mapped private,
-> i.e. lead to #MC or #PF(RMP) in the host.
+> Hi,
+> 
+> This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+> a patch that has triggered this response.  He used to manually respond
+> to these common problems, but in order to save his sanity (he kept
+> writing the same thing over and over, yet to different people), I was
+> created.  Hopefully you will not take offence and will fix the problem
+> in your patch and resubmit it so that it can be accepted into the Linux
+> kernel tree.
+> 
+> You are receiving this message because of the following common error(s)
+> as indicated below:
+> 
+> - This looks like a new version of a previously submitted patch, but you
+>   did not list below the --- line any changes from the previous version.
+>   Please read the section entitled "The canonical patch format" in the
+>   kernel file, Documentation/SubmittingPatches for what needs to be done
+>   here to properly describe this.
+> 
+> If you wish to discuss this problem further, or you have questions about
+> how to resolve this issue, please feel free to respond to this email and
+> Greg will reply once he has dug out from the pending patches received
+> from other developers.
+> 
+> thanks,
+> 
+> greg k-h's patch email bot
 
-That's correct.
+This is a completely new solution to the same problem.
 
-> 
-> I believe the correct solution is to drop the "can be private" check from the
-> above check, and instead handle that in kvm_faultin_pfn_private().  That would fix
-> another bug, e.g. if the fault is shared, the slot can't be private, but for
-> whatever reason userspace marked the gfn as private.  Even though KVM might be
-> able service the fault, the correct thing to do in that case is to exit to userspace.
+I'm treating this as a brand new submission.
 
-It makes sense to me.
-
-Chao
-> 
-> E.g.
-> 
-> ---
->  arch/x86/kvm/mmu/mmu.c | 36 ++++++++++++++++++++++--------------
->  1 file changed, 22 insertions(+), 14 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 10017a9f26ee..e2ac8873938e 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -4158,11 +4158,29 @@ static inline u8 order_to_level(int order)
->  	return PG_LEVEL_4K;
->  }
->  
-> -static int kvm_faultin_pfn_private(struct kvm_page_fault *fault)
-> +static int kvm_do_memory_fault_exit(struct kvm_vcpu *vcpu,
-> +					struct kvm_page_fault *fault)
-> +{
-> +	vcpu->run->exit_reason = KVM_EXIT_MEMORY_FAULT;
-> +	if (fault->is_private)
-> +		vcpu->run->memory.flags = KVM_MEMORY_EXIT_FLAG_PRIVATE;
-> +	else
-> +		vcpu->run->memory.flags = 0;
-> +	vcpu->run->memory.padding = 0;
-> +	vcpu->run->memory.gpa = fault->gfn << PAGE_SHIFT;
-> +	vcpu->run->memory.size = PAGE_SIZE;
-> +	return RET_PF_USER;
-> +}
-> +
-> +static int kvm_faultin_pfn_private(struct kvm_vcpu *vcpu,
-> +				   struct kvm_page_fault *fault)
->  {
->  	int order;
->  	struct kvm_memory_slot *slot = fault->slot;
->  
-> +	if (kvm_slot_can_be_private(slot))
-> +		return kvm_do_memory_fault_exit(vcpu, fault);
-> +
->  	if (kvm_restricted_mem_get_pfn(slot, fault->gfn, &fault->pfn, &order))
->  		return RET_PF_RETRY;
->  
-> @@ -4203,21 +4221,11 @@ static int kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
->  			return RET_PF_EMULATE;
->  	}
->  
-> -	if (kvm_slot_can_be_private(slot) &&
-> -	    fault->is_private != kvm_mem_is_private(vcpu->kvm, fault->gfn)) {
-> -		vcpu->run->exit_reason = KVM_EXIT_MEMORY_FAULT;
-> -		if (fault->is_private)
-> -			vcpu->run->memory.flags = KVM_MEMORY_EXIT_FLAG_PRIVATE;
-> -		else
-> -			vcpu->run->memory.flags = 0;
-> -		vcpu->run->memory.padding = 0;
-> -		vcpu->run->memory.gpa = fault->gfn << PAGE_SHIFT;
-> -		vcpu->run->memory.size = PAGE_SIZE;
-> -		return RET_PF_USER;
-> -	}
-> +	if (fault->is_private != kvm_mem_is_private(vcpu->kvm, fault->gfn))
-> +		return kvm_do_memory_fault_exit(vcpu, fault);
->  
->  	if (fault->is_private)
-> -		return kvm_faultin_pfn_private(fault);
-> +		return kvm_faultin_pfn_private(vcpu, fault);
->  
->  	async = false;
->  	fault->pfn = __gfn_to_pfn_memslot(slot, fault->gfn, false, &async,
-> 
-> base-commit: 969d761bb7b8654605937f31ae76123dcb7f15a3
-> -- 
+-- 
+Lee Jones [李琼斯]
