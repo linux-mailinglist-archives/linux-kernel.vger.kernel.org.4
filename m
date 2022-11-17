@@ -2,61 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3937862DCE7
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:36:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FBA662DCEF
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:37:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234885AbiKQNgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 08:36:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49984 "EHLO
+        id S239864AbiKQNhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 08:37:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234893AbiKQNgC (ORCPT
+        with ESMTP id S239790AbiKQNhq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 08:36:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E11373428;
-        Thu, 17 Nov 2022 05:36:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E692161E18;
-        Thu, 17 Nov 2022 13:36:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA920C433D6;
-        Thu, 17 Nov 2022 13:36:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668692161;
-        bh=K2PdyXue1T1mB/kQrqHZQRjeefIBFNaF0sLD9ShBKWY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SYlAqzB1OTHwETApwkMwZk4pY5rKcO3R/AdOeGSZMK4xDdPJSU9tUZOqtsAof9xMx
-         9EElW5NudHGjgiyV6YdWOA0LEJRBObSFN5L6hQ6NaTrD75DYkVAV+cpvGsWCHdsS41
-         Uny7dtY9zPK3VDZq/FOCjDYN74mPR511cOfIG+6nHaDTyCG1l9fnCS2j/Wo8txuwnZ
-         hVMwH2yzJ3vLUeqzRfRKYzt4U48VqjJaZQuGXWcfeDAvoLtUgAIiogN1fI9usUcdGO
-         ydyLH20OWdtWMMDHZ0O0fSMTtOXkL+eR2coAjxgwkLCa9xlzjIZV3BeQ/mA7L1rTa7
-         rNA+N5VMf0IOg==
-Date:   Thu, 17 Nov 2022 13:35:57 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
-        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>, Lee Jones <lee@kernel.org>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Marco Pagani <marpagan@redhat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 07/11] regmap: indirect: Add indirect regmap support
-Message-ID: <Y3Y4vWr/CGbaH0HQ@sirena.org.uk>
-References: <20221117120515.37807-1-ilpo.jarvinen@linux.intel.com>
- <20221117120515.37807-8-ilpo.jarvinen@linux.intel.com>
+        Thu, 17 Nov 2022 08:37:46 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75207341C;
+        Thu, 17 Nov 2022 05:37:45 -0800 (PST)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AHBQYOH015054;
+        Thu, 17 Nov 2022 13:37:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=uEplLWzWASejo+99geU63RDGo9jF1pVm8nthEcH5omk=;
+ b=MyGn3rXLQ0/hFrhWGxawIT0ptHtF2UJDao6q0iOMa8h3bC1bP19rh7hor4Rfwn83RyRw
+ oFO/9pnuOkaG9YV+R2KXKGNHtkB8aD85TYavfuoB9gfWPojWR19w/KIJ227NGz0R3dKk
+ zeJ4yhhY25IQ/7hRHpB9BOTrgV6LVcWxEsjo78Nbdp+pi5Gwhw9+7S3C9GAsuQv8WKNw
+ I318f+OmIWe4A62a+K4/huR8i9FFGX8SHR0rKfwe8bp+ujqNHxETqb0rbdD3diZLjZ2f
+ auP/9ce+t2EN1ciZ0Yl/xS+c4x41bRwFg5qlat1+BhwEDKcsa8u70d9wm3qGc+ZSpEqT yA== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kwm36gfep-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Nov 2022 13:37:30 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AHDbT1q030354
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Nov 2022 13:37:29 GMT
+Received: from [10.216.25.63] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 17 Nov
+ 2022 05:37:20 -0800
+Message-ID: <6c45c99c-1c27-8a5b-55d9-5242fdc4d234@quicinc.com>
+Date:   Thu, 17 Nov 2022 05:37:14 -0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nQO9GaPF0umGSqdg"
-Content-Disposition: inline
-In-Reply-To: <20221117120515.37807-8-ilpo.jarvinen@linux.intel.com>
-X-Cookie: Ego sum ens omnipotens.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [Freedreno] [PATCH v2 03/12] drm/msm/dpu: Refactor sc7280_pp
+ location
+Content-Language: en-US
+To:     Robert Foss <robert.foss@linaro.org>, <robdclark@gmail.com>,
+        <dmitry.baryshkov@linaro.org>, <sean@poorly.run>,
+        <airlied@linux.ie>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <agross@kernel.org>,
+        <bjorn.andersson@linaro.org>, <konrad.dybcio@somainline.org>,
+        <quic_kalyant@quicinc.com>, <swboyd@chromium.org>,
+        <angelogioacchino.delregno@somainline.org>,
+        <loic.poulain@linaro.org>, <quic_khsieh@quicinc.com>,
+        <quic_vpolimer@quicinc.com>, <vkoul@kernel.org>,
+        <dianders@chromium.org>, <linux-arm-msm@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Jonathan Marek <jonathan@marek.ca>,
+        <vinod.koul@linaro.org>, <quic_jesszhan@quicinc.com>,
+        <andersson@kernel.org>
+References: <20221115133105.980877-1-robert.foss@linaro.org>
+ <20221115133105.980877-4-robert.foss@linaro.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <20221115133105.980877-4-robert.foss@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: DgjysGU7gCAzOJJtp4-Jp-LiMGlkiHji
+X-Proofpoint-ORIG-GUID: DgjysGU7gCAzOJJtp4-Jp-LiMGlkiHji
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-17_06,2022-11-17_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 clxscore=1011 impostorscore=0 suspectscore=0 malwarescore=0
+ bulkscore=0 priorityscore=1501 mlxscore=0 mlxlogscore=999 adultscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211170103
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,84 +93,50 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---nQO9GaPF0umGSqdg
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 17, 2022 at 02:05:11PM +0200, Ilpo J=E4rvinen wrote:
-> Add support for indirect register access via a regmap interface.
->=20
-> Indirect register access is a generic way to access registers indirectly.
-> One use case is accessing registers on Intel FPGA IPs with e.g. PMCI or
-> HSSI.
+On 11/15/2022 5:30 AM, Robert Foss wrote:
+> The sc7280_pp declaration is not located by the other _pp
+> declarations, but rather hidden around the _merge_3d
+> declarations. Let's fix this to avoid confusion.
+> 
+> Signed-off-by: Robert Foss <robert.foss@linaro.org>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-I can't tell from this changelog what exactly you're trying to
-implement here...
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
 
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Indirect Register Access.
-> + *
-> + * Copyright (C) 2020-2022 Intel Corporation, Inc.
-> + */
-> +#include <linux/debugfs.h>
-
-Please make the entire comment a C++ one so things look more
-intentional.
-
-> +#include <linux/module.h>
-> +#include <linux/mutex.h>
-> +#include <linux/regmap.h>
-> +#include <linux/seq_file.h>
-
-I can't see what seq_file.h is used for, which is probably good
-TBH since the interfaces it offers don't look like things I'd
-expect a regmap bus to use.
-
-> +static int indirect_bus_reg_read(void *context, unsigned int reg,
-> +				     unsigned int *val)
-> +{
-> +	struct indirect_ctx *ctx =3D context;
-> +	unsigned int cmd, ack, tmpval;
-> +	int ret;
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 14 +++++++-------
+>   1 file changed, 7 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> index 4dac90ee5b8a..8f2d634f7b6b 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> @@ -1294,6 +1294,13 @@ static const struct dpu_pingpong_cfg sm8150_pp[] = {
+>   			-1),
+>   };
+>   
+> +static const struct dpu_pingpong_cfg sc7280_pp[] = {
+> +	PP_BLK("pingpong_0", PINGPONG_0, 0x59000, 0, sc7280_pp_sblk, -1, -1),
+> +	PP_BLK("pingpong_1", PINGPONG_1, 0x6a000, 0, sc7280_pp_sblk, -1, -1),
+> +	PP_BLK("pingpong_2", PINGPONG_2, 0x6b000, 0, sc7280_pp_sblk, -1, -1),
+> +	PP_BLK("pingpong_3", PINGPONG_3, 0x6c000, 0, sc7280_pp_sblk, -1, -1),
+> +};
 > +
-> +	cmd =3D readl(ctx->base + ctx->indirect_cfg->cmd_offset);
-> +	if (cmd !=3D ctx->indirect_cfg->idle_cmd)
-> +		dev_warn(ctx->dev, "residual cmd 0x%x on read entry\n", cmd);
-> +
-> +	writel(reg, ctx->base + ctx->indirect_cfg->addr_offset);
-> +	writel(ctx->indirect_cfg->read_cmd, ctx->base + ctx->indirect_cfg->cmd_=
-offset);
-> +
-> +	ret =3D readl_poll_timeout(ctx->base + ctx->indirect_cfg->ack_offset, a=
-ck,
-> +				 (ack & ctx->indirect_cfg->ack_mask) =3D=3D ctx->indirect_cfg->ack_m=
-ask,
-> +				 ctx->indirect_cfg->sleep_us, ctx->indirect_cfg->timeout_us);
-
-This all looks very specific to one particular implementation,
-requiring a particular set of memory mapped registers and
-operations - things like the initial read of the command for
-example.  It's not clear to me how much reuse this is likely to
-see outside of the one driver you're trying to add - if you want
-to implement something device specific you can just provide
-the custom operations in the device's regmap configuration rather
-than having to provide a bus.  Why add a bus?
-
---nQO9GaPF0umGSqdg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmN2OLwACgkQJNaLcl1U
-h9D5ZAf/e5fz0cFGzhXEImFM0J/nvy+stqG9TBm5URXEa3SpNg7qjqiRjbNAjhI3
-+7c06CM8HurjZy3klhWEo7/JUGd5v2v32CUWN9W3dEnuQ+M3CB7xT3QiFusJWFbd
-nskK15BqEAEHf3R8PvjdBLYA15iuERAasqkmu7RizSGUASprR8kL98DoMokT70Ss
-y2wld1jFZ/aptfe5HsAuD6wwS9w0oB8M9D00sHpxIJXmaM+Zc8AFvHq+U98Z20ee
-N6SpI82D53BpeJ+WjgfrcjrQ3BTmS31yQsfhmJnv5qjsyqbgK37A9JRI1HQK7157
-sQEZKenH4YfdmGOYe2YMSrM2isDUkg==
-=OsB+
------END PGP SIGNATURE-----
-
---nQO9GaPF0umGSqdg--
+>   static struct dpu_pingpong_cfg qcm2290_pp[] = {
+>   	PP_BLK("pingpong_0", PINGPONG_0, 0x70000, 0, sdm845_pp_sblk,
+>   		DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
+> @@ -1352,13 +1359,6 @@ static const struct dpu_merge_3d_cfg sm8450_merge_3d[] = {
+>   	MERGE_3D_BLK("merge_3d_3", MERGE_3D_3, 0x65f00),
+>   };
+>   
+> -static const struct dpu_pingpong_cfg sc7280_pp[] = {
+> -	PP_BLK("pingpong_0", PINGPONG_0, 0x59000, 0, sc7280_pp_sblk, -1, -1),
+> -	PP_BLK("pingpong_1", PINGPONG_1, 0x6a000, 0, sc7280_pp_sblk, -1, -1),
+> -	PP_BLK("pingpong_2", PINGPONG_2, 0x6b000, 0, sc7280_pp_sblk, -1, -1),
+> -	PP_BLK("pingpong_3", PINGPONG_3, 0x6c000, 0, sc7280_pp_sblk, -1, -1),
+> -};
+> -
+>   /*************************************************************
+>    * DSC sub blocks config
+>    *************************************************************/
