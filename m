@@ -2,132 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1E0862DF6E
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:16:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE6B162DF76
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:19:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240640AbiKQPQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 10:16:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37526 "EHLO
+        id S240519AbiKQPT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 10:19:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240563AbiKQPQg (ORCPT
+        with ESMTP id S234051AbiKQPSx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 10:16:36 -0500
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2061c.outbound.protection.outlook.com [IPv6:2a01:111:f403:704b::61c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0185E8D48D
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 07:11:42 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=A5TtG4lSCk66hWAeCIOvJ6dSeVqz107qDV+0LF9Z03P368hKt9+3XIkOVs8/T5jJfxb4EtDopYJdy4JgzEEue8KwPhNKSkBM5rBGQmPVTceOiNsJJ6zNvYLECE2bH1+hzgrQCBH1AADmoMraxB++ZOAKpeuY6vsqJZLZ2pQIM3+yaNzPM6YqBWd+nPlkeMFgRiwZA52evhmTaEnoQhaoycdnGDo+ZJn1VHizutPqaPpe68ma0/8US5JVp2c3/UdkMcLDAH6RgYHVc6GwNFidoUR67+3db7qCf9n3YxvAytWB3qKc6CxRKLc+E+awGZA++z7CqiatBMGstr4RHWMIfw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wjoDJ5jcjc030Rw2+5AV0rnmiqmEAgLgJYpbTT+k7HU=;
- b=TVg6VNpBAfkoyDtEFgDiqPkxCopBZ/KTOYdTdbZA7aSQypfVpqhjWo9BJn2rSwNeZZteH6c7WXLg4Qolkn50k03DTTGpFsOqVSiVclNtopI50xVw6UAGc+wEhg+6De3QMGkCFuCDt/VO7bgUwJ7NsdLCNGy2ymaRIKpUk3lOtlaDlz0EMj2KpKkJ3uUj9UFMsjRdyMrQksvfltipISzD0LHSaFvW2u8SAfluo81QC5y2wkaTMOAU9e54zLyO2YeuoccqrG7V9E+/EfsskuSEWysX8hppecU82IV+aGMHzcAXlXZpPMgD57ljq3nLKWaai5LLTiHH5CFV1Yxc3bP0rg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oppo.com; dmarc=pass action=none header.from=oppo.com;
- dkim=pass header.d=oppo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oppo.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wjoDJ5jcjc030Rw2+5AV0rnmiqmEAgLgJYpbTT+k7HU=;
- b=J8kygpCTLwk3p6N4LaUlnzn+lCihUQxBAu5ymJYJDHwaF/2UE/W00AmaCcWBS2KyrDbr0D+lHicGUBSSaD6zhwzy+mVvS87MLwJOgqJIFxr+cPHzVb3678kuNx279w0ZMLu6oJj6nmMlaO0dGy+CZnf7AWMhtm6KjkJnOjTunhg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oppo.com;
-Received: from SI2PR02MB5148.apcprd02.prod.outlook.com (2603:1096:4:153::6) by
- PUZPR02MB6305.apcprd02.prod.outlook.com (2603:1096:301:fb::6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5813.16; Thu, 17 Nov 2022 15:11:18 +0000
-Received: from SI2PR02MB5148.apcprd02.prod.outlook.com
- ([fe80::2954:8e56:dcd1:452c]) by SI2PR02MB5148.apcprd02.prod.outlook.com
- ([fe80::2954:8e56:dcd1:452c%3]) with mapi id 15.20.5813.019; Thu, 17 Nov 2022
- 15:11:18 +0000
-From:   Sheng Yong <shengyong@oppo.com>
-To:     jaegeuk@kernel.org, chao@kernel.org
-Cc:     terrelln@fb.com, linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Sheng Yong <shengyong@oppo.com>
-Subject: [PATCH] f2fs: set zstd compress level correctly
-Date:   Thu, 17 Nov 2022 23:10:54 +0800
-Message-Id: <20221117151054.2232946-1-shengyong@oppo.com>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR04CA0198.apcprd04.prod.outlook.com
- (2603:1096:4:14::36) To SI2PR02MB5148.apcprd02.prod.outlook.com
- (2603:1096:4:153::6)
+        Thu, 17 Nov 2022 10:18:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F32891C16
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 07:12:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668697931;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8ILTkK5az/hBLXZXqjYOlgnbsmdjpOMEywp6Rj1fgC0=;
+        b=WBocohByTwwoFRSwBoeEMxHgwB23Lc4yKpg31b84YS1NJsmtDKYE1qkEqpgVNhWamzOMwf
+        l5dtaazoy+VRBNpZoPJ8REL/+z+0+BhPyv7B632+hajFtOQSvoqDc55Reep67XapR7ahel
+        AigzQbMGMURvk7qS7tDJD8fo8a56Wx0=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-418-alD5l4HdP62v-JMGf-gPjA-1; Thu, 17 Nov 2022 10:12:10 -0500
+X-MC-Unique: alD5l4HdP62v-JMGf-gPjA-1
+Received: by mail-qv1-f70.google.com with SMTP id do17-20020a056214097100b004c6183e6ce4so1821368qvb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 07:12:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8ILTkK5az/hBLXZXqjYOlgnbsmdjpOMEywp6Rj1fgC0=;
+        b=NMu6vffEmeJjdNJXuc3HmeLPlcaNNS59gzuKVpvkRPUYSIX/jtKfFRaQd+zPs9bD18
+         KN+RKqx5sd4QMqdKkb+C2vWbmHKwgzJbPjnfVwu6TLCjMhfPKDUy8pJz5/ml7n8AYQEC
+         uQ0NyCkIqTafOFYS+SscgXTgKLeMvmP0wbq+5U2f+a9OjfiTf1lw0KfffPDUGGYkb0EV
+         myHcqG2YXEhOSvkaZyfpJCQw5Dk2dQnXucNX5JrcyL5JiF+mROzwjuNcrTOJIdwaOwgP
+         AHPP8HTd1f8lxBDcfObmVcGuSFlgMGr9pCrD4mtBP8izPxq8Lnl0XEQEypRlehRhM1i5
+         5WHA==
+X-Gm-Message-State: ANoB5pkDkALoUakX1bSG4ZLG7+5+I1thHbB0wZ/SpzDQXsrt0uuFlkQp
+        a591dEXsKmpRJtUCcd08Ol67NdtZpoMJf21EJBr3KAsSAz4z1P6j7St5bJoCK9kf3cNtzCi699J
+        mr18GSHiUW0r0Vk1Vg8p1qLJD
+X-Received: by 2002:ac8:66c5:0:b0:3a5:4666:a952 with SMTP id m5-20020ac866c5000000b003a54666a952mr2537547qtp.128.1668697929701;
+        Thu, 17 Nov 2022 07:12:09 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5iJfLkKyyXtJLO2+rlIy0weO21fWEw8oKXTKubnbM3hXNxgl+B2lA45G59l29t4z2myNygLg==
+X-Received: by 2002:ac8:66c5:0:b0:3a5:4666:a952 with SMTP id m5-20020ac866c5000000b003a54666a952mr2537516qtp.128.1668697929400;
+        Thu, 17 Nov 2022 07:12:09 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id c8-20020ac853c8000000b003972790deb9sm471564qtq.84.2022.11.17.07.12.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 07:12:08 -0800 (PST)
+Date:   Thu, 17 Nov 2022 10:12:07 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH 04/47] LoongArch: Set _PAGE_DIRTY only if _PAGE_WRITE is
+ set in {pmd,pte}_mkdirty()
+Message-ID: <Y3ZPRx/VUoVvujNa@x1n>
+References: <20221117042532.4064448-1-chenhuacai@loongson.cn>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SI2PR02MB5148:EE_|PUZPR02MB6305:EE_
-X-MS-Office365-Filtering-Correlation-Id: 04579d50-2210-40fc-d8ce-08dac8adf92b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iKU4o39gZNSpRoDAcRxvKpIS/XC+kR9XRn/1anA+yQ9vNQzVYzRFKF7weB7wMQX96dabHS8pG6oF23y9C4R0c/9vuq5xwXuVLr6A3mCIlu1km0x3mGLYDlqm3GlBpKA4I6tFUOyQpZpBXItbA4ZMTRu/9zlfeXeWwCu0X1ttuTttNy7UfxdumA9iv6ivLvXvyuL8o+aGKp6TwXhqLl5zMLxdBrYT+CeqXN6SUvglck1DEPfC2PzEkV0L4QAO944NIcyVyOcXjnwJ82iFLIffXYJSEIk0jsaPTE1WcgLRKsvJnBzbWrhz3Kf5UsKWuTd9dxfXcv2OOMSxgNaYRZRK5BQsr7qD4Ki05W5MuNe+6wuiCBby81mFxxCqQc2cKV53n5w9XLEUDwSdf2Hyd0seXZD6RdmFvE8jB81gtjJBB7agh+QVWb2Pr/yE/YjEnrCLLq5hAI+7RLpj7E7YzWLZfdfwbzDwHg6PVPqaSBwrqAFn6TbX1d0JGFCy4xVlkTTbr1Py4vzHPkuS7+uTXBDX3bxKZW0MV/j5uMuWuMajWOYj71adQAy9WQ7eV+l9FXy9fz2peVX0hVw58nn4hgIY2MmYHdk58B7pjtUZPh1t2+tc9Idl31BJVfuejx6g7xLuFFF+0RGJXDZj6HB0jpMfKdOaWzR73WdmnRVJYJLvqB3v4vCRrbqqIsdYlvCCOTCF
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SI2PR02MB5148.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(346002)(366004)(136003)(396003)(451199015)(2906002)(6506007)(66476007)(66556008)(38350700002)(2616005)(38100700002)(41300700001)(316002)(86362001)(8676002)(1076003)(8936002)(186003)(4326008)(36756003)(4744005)(5660300002)(52116002)(6666004)(6512007)(26005)(66946007)(478600001)(6486002)(83380400001)(107886003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?cpHix3ssTUTYbbZrtRRW9n+1IVApBxp+ltqWB7ezVRvnoXA01fMwvgiwlX/u?=
- =?us-ascii?Q?s66HwA3XY4czUNDfQIcAGGYuisKuDbNAPvxPf2Z46jH18M7zA4ngL78nYWa2?=
- =?us-ascii?Q?zArkYrj6UiDW18BW7Z5oyqcOkUT9u7S0vrfxoPN3kTidTEsWlAYAd7Dt8LpZ?=
- =?us-ascii?Q?bF1f3y2oyAke/vHQARi2fZgEmZHZTpImXS2Ijik2dW0SpN8Mgjwsay51S9Xe?=
- =?us-ascii?Q?fQ03h7BgUHNYQAHH5M42a3J+2qEbkyoZhvvxi+Ef0DQZllAFrnXuNltjg7Sg?=
- =?us-ascii?Q?gKMELJii1ZqmQCvhJQsRdFQJROJb8JZD2o3eNHAxKXn7FWvfnbAYwIVj9x92?=
- =?us-ascii?Q?cZ4t1etyXOKChMgLL9YCQNr2EfRq74IKiZc4m1s0gyhxb33UTL/rCPHeijuh?=
- =?us-ascii?Q?ryKXwA2sHOqR/oxoqy5MGDs15x5KQO6seZSHWAkbCs/MhjblWEgDs7fh8opi?=
- =?us-ascii?Q?cY76qlv77miB+DrqUKu2RZw1Trj1YSB6kug3iiEPrP3MriD/8hnumepLqNrY?=
- =?us-ascii?Q?hVNhWgxdXvcpN2w9+rGh+XYlgj2ZP94S8pSRbeuZCf+5YuomzKRzo1I3RrbG?=
- =?us-ascii?Q?zWEl1UHjFOgkx2bl8VftKv9AUh9LFgS+UHiIye1SxCT3A0LAlc+RHgWt3Ubx?=
- =?us-ascii?Q?6SGB1iueXzTB3SViAFP7DRXVes8Pl+oM2IJJAmaSJXgBmCMFViv0p35GZS8n?=
- =?us-ascii?Q?HEGu1e6gySw/B8tlS8t3I7EqxOBbkg0pEpZExOu+B55ypp6sIJvjPdNkul0D?=
- =?us-ascii?Q?eXD8genN1yzPDzJ0LN+7rf3ikWmHQQUN0zD1cR2Ghpj5NL3u65Wfa6CmFesV?=
- =?us-ascii?Q?lkhQmrHlq7MmeMB105bTJ8d1t7uJ74ryH6WMcHhkj1BZlMzaMfURE0ZvCjGX?=
- =?us-ascii?Q?IcirXlFRMcMT7rA4QMMEO8nLRaWEj7NKL4yvcdNOQIW8G6U1z0laO0NBVM4c?=
- =?us-ascii?Q?3zHhNyYkgHkeieWFM/dJIuNMfHp2vNk1HhtxQN6qzcL4yz9hKaw+pXo3fJ/Y?=
- =?us-ascii?Q?C/wqYPd8ZOQaAcTYlbf7wO6kH3mqVY9Agk2N7dGHOah+BYE3xcMB5ccYlnfT?=
- =?us-ascii?Q?pAPRdbD1IY1uc7m9TZRH3LqTJBdcDsG1f9/n6yeTIRjsyMF936TX+TpXtv3I?=
- =?us-ascii?Q?fgauND6LbaTztz0r1hSCjJU3vn3/zQMcHm5dFbmQ7lzaaKIqK4xQt316hd1l?=
- =?us-ascii?Q?GZ6Rjtd17Y0cYuhfts6vS/XEBig9MPuKu9o0LcTEvd17KHtPEHrpVYpfh9E3?=
- =?us-ascii?Q?Qfdf/XPif+lp8Hw561w4akWn65nlIizcVcF9Q5YbVPwYolTYyVBAn8P66jiH?=
- =?us-ascii?Q?YKD0FCnpxaESYUc70prtvSebSzoijJTFvh/GzMb8Dq/j9GdSKrKOFj61aHuU?=
- =?us-ascii?Q?uMYkzc5YgYnAIhwNe2OSIq+DO5W7p1Yh30CHU61HjX6NiyFKRM1H60eNJ4yN?=
- =?us-ascii?Q?2GHuR/U/612nfak2A5hK7ila/FAXTNQ/QawoKxryQWDwnFOFEmq61ld4Yjcp?=
- =?us-ascii?Q?Uo1raxVtcXMgJyAon9yw9h7EDVlDv+J/AreiL5clp99oEaV3VVXcUag1Y8TY?=
- =?us-ascii?Q?XVtju7zs4HcP2+7LKDcoaQbLQmtCRVCcCy12gJF6?=
-X-OriginatorOrg: oppo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 04579d50-2210-40fc-d8ce-08dac8adf92b
-X-MS-Exchange-CrossTenant-AuthSource: SI2PR02MB5148.apcprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Nov 2022 15:11:18.6015
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f1905eb1-c353-41c5-9516-62b4a54b5ee6
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Ai+9fSNOmiPCdYt+39jZb36ZQjSiMhDEURwJ38ebe90PlfO2fHfj8sMJSKi8EfjdJ9fN9CIfrUoPcZ9+yMtVfA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PUZPR02MB6305
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221117042532.4064448-1-chenhuacai@loongson.cn>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixes: cf30f6a5f0c6 ("lib: zstd: Add kernel-specific API")
-Signed-off-by: Sheng Yong <shengyong@oppo.com>
----
- fs/f2fs/compress.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi, Huacai,
 
-diff --git a/fs/f2fs/compress.c b/fs/f2fs/compress.c
-index d315c2de136f2..74d3f2d2271f3 100644
---- a/fs/f2fs/compress.c
-+++ b/fs/f2fs/compress.c
-@@ -346,7 +346,7 @@ static int zstd_init_compress_ctx(struct compress_ctx *cc)
- 	if (!level)
- 		level = F2FS_ZSTD_DEFAULT_CLEVEL;
- 
--	params = zstd_get_params(F2FS_ZSTD_DEFAULT_CLEVEL, cc->rlen);
-+	params = zstd_get_params(level, cc->rlen);
- 	workspace_size = zstd_cstream_workspace_bound(&params.cParams);
- 
- 	workspace = f2fs_kvmalloc(F2FS_I_SB(cc->inode),
+On Thu, Nov 17, 2022 at 12:25:32PM +0800, Huacai Chen wrote:
+> Now {pmd,pte}_mkdirty() set _PAGE_DIRTY bit unconditionally, this causes
+> random segmentation fault after commit 0ccf7f168e17bb7e ("mm/thp: carry
+> over dirty bit when thp splits on pmd").
+> 
+> The reason is: when fork(), parent process use pmd_wrprotect() to clear
+> huge page's _PAGE_WRITE and _PAGE_DIRTY (for COW);
+
+Is it safe to drop dirty bit when wr-protect?  It means the mm can reclaim
+the page directly assuming the page contains rubbish.
+
+Consider after fork() and memory pressure kicks the kswapd, I don't see
+anything stops the kswapd from recycling the pages and lose the data in
+both processes.
+
+> then pte_mkdirty() set
+> _PAGE_DIRTY as well as _PAGE_MODIFIED while splitting dirty huge pages;
+> once _PAGE_DIRTY is set, there will be no tlb modify exception so the COW
+> machanism fails; and at last memory corruption occurred between parent
+> and child processes.
+> 
+> So, we should set _PAGE_DIRTY only when _PAGE_WRITE is set in {pmd,pte}_
+> mkdirty().
+> 
+> Cc: stable@vger.kernel.org
+> Cc: Peter Xu <peterx@redhat.com>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
+> Note: CC sparc maillist because they have similar issues.
+
+I also had a look on sparc64, it seems to not do the same as loongarch
+here (not removing dirty in wr-protect):
+
+static inline pmd_t pmd_wrprotect(pmd_t pmd)
+{
+	pte_t pte = __pte(pmd_val(pmd));
+
+	pte = pte_wrprotect(pte);
+
+	return __pmd(pte_val(pte));
+}
+
+static inline pte_t pte_wrprotect(pte_t pte)
+{
+	unsigned long val = pte_val(pte), tmp;
+
+	__asm__ __volatile__(
+	"\n661:	andn		%0, %3, %0\n"
+	"	nop\n"
+	"\n662:	nop\n"
+	"	nop\n"
+	"	.section	.sun4v_2insn_patch, \"ax\"\n"
+	"	.word		661b\n"
+	"	sethi		%%uhi(%4), %1\n"
+	"	sllx		%1, 32, %1\n"
+	"	.word		662b\n"
+	"	or		%1, %%lo(%4), %1\n"
+	"	andn		%0, %1, %0\n"
+	"	.previous\n"
+	: "=r" (val), "=r" (tmp)
+	: "0" (val), "i" (_PAGE_WRITE_4U | _PAGE_W_4U),
+	  "i" (_PAGE_WRITE_4V | _PAGE_W_4V));
+
+	return __pte(val);
+}
+
+>  
+>  arch/loongarch/include/asm/pgtable.h | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/loongarch/include/asm/pgtable.h b/arch/loongarch/include/asm/pgtable.h
+> index 946704bee599..debbe116f105 100644
+> --- a/arch/loongarch/include/asm/pgtable.h
+> +++ b/arch/loongarch/include/asm/pgtable.h
+> @@ -349,7 +349,9 @@ static inline pte_t pte_mkclean(pte_t pte)
+>  
+>  static inline pte_t pte_mkdirty(pte_t pte)
+>  {
+> -	pte_val(pte) |= (_PAGE_DIRTY | _PAGE_MODIFIED);
+> +	pte_val(pte) |= _PAGE_MODIFIED;
+> +	if (pte_val(pte) & _PAGE_WRITE)
+> +		pte_val(pte) |= _PAGE_DIRTY;
+
+I'm not sure whether mm has rule to always set write bit then set dirty
+bit, need to be careful here because the outcome may differ when use:
+
+  pte_mkdirty(pte_mkwrite(pte))
+  (expected)
+
+VS:
+
+  pte_mkwrite(pte_mkdirty(pte))
+  (dirty not set)
+
+I had a feeling I miss some arch-specific details here on why loongarch
+needs such implementation, but I can't quickly tell.
+
+Thanks,
+
+>  	return pte;
+>  }
+>  
+> @@ -478,7 +480,9 @@ static inline pmd_t pmd_mkclean(pmd_t pmd)
+>  
+>  static inline pmd_t pmd_mkdirty(pmd_t pmd)
+>  {
+> -	pmd_val(pmd) |= (_PAGE_DIRTY | _PAGE_MODIFIED);
+> +	pmd_val(pmd) |= _PAGE_MODIFIED;
+> +	if (pmd_val(pmd) & _PAGE_WRITE)
+> +		pmd_val(pmd) |= _PAGE_DIRTY;
+>  	return pmd;
+>  }
+>  
+> -- 
+> 2.31.1
+> 
+
 -- 
-2.25.1
+Peter Xu
 
