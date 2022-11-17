@@ -2,98 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9DF762E07C
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:57:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4451E62E07E
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:57:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239999AbiKQP5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 10:57:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34526 "EHLO
+        id S239889AbiKQP5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 10:57:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240134AbiKQP5O (ORCPT
+        with ESMTP id S239919AbiKQP51 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 10:57:14 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 935BA786F4;
-        Thu, 17 Nov 2022 07:57:01 -0800 (PST)
-Received: from fraeml709-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NCkxh5J6dz6HJQt;
-        Thu, 17 Nov 2022 23:54:32 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml709-chm.china.huawei.com (10.206.15.37) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 17 Nov 2022 16:56:59 +0100
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 17 Nov
- 2022 15:56:59 +0000
-Date:   Thu, 17 Nov 2022 15:56:58 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>, <linux-iio@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] dt-bindings: iio: adc: qcom,spmi-vadc: fix PM8350
- define
-Message-ID: <20221117155658.00005d08@Huawei.com>
-In-Reply-To: <a3da2ab9-ad36-2283-0659-ad8ebf877e17@linaro.org>
-References: <20221117121307.264550-1-krzysztof.kozlowski@linaro.org>
-        <20221117122256.GG93179@thinkpad>
-        <a3da2ab9-ad36-2283-0659-ad8ebf877e17@linaro.org>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Thu, 17 Nov 2022 10:57:27 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6807B78184;
+        Thu, 17 Nov 2022 07:57:26 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e7de329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7de:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 83A811EC064F;
+        Thu, 17 Nov 2022 16:57:24 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1668700644;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=W8YkQu/vfSvn/2nEVdS0A+vwsC5ZEvAvbum5zYFdJ0M=;
+        b=V5J5OEdDOpyQDj9L23GOOsLZA8aSfWHudAhiJTIqvqw0Drkvf3vXLjiBGV2bKayvUv4t3s
+        BBtatasCd2WC2Y2nO2a1LQUAL5Jd6nnKwQN/9bibbh0s13UjCqDrwlP/22oShJQdFi8QQ4
+        dytc3fckxihGTvXThjCu2ZopI3vghgs=
+Date:   Thu, 17 Nov 2022 16:57:19 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Michael Roth <michael.roth@amd.com>
+Subject: Re: [PATCH v2 04/16] x86/compressed: efi-mixed: move efi32_pe_entry
+ into .text section
+Message-ID: <Y3ZZ35vJBh4fQu9M@zn.tnic>
+References: <20220921145422.437618-1-ardb@kernel.org>
+ <20220921145422.437618-5-ardb@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml100005.china.huawei.com (7.191.160.25) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220921145422.437618-5-ardb@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Nov 2022 13:28:33 +0100
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+On Wed, Sep 21, 2022 at 04:54:10PM +0200, Ard Biesheuvel wrote:
+>  	/*
+>  	 * We need to set the image_offset variable here since startup_32() will
+>  	 * use it before we get to the 64-bit efi_pe_entry() in C code.
+>  	 */
+> -	subl	%esi, %ebx
+> -	movl	%ebx, rva(image_offset)(%ebp)	// save image_offset
+> +	subl	%esi, %ebp			// calculate image_offset
+> +	movl	%ebp, (image_offset - 1b)(%ebx)	// save image_offset
 
-> On 17/11/2022 13:22, Manivannan Sadhasivam wrote:
-> > On Thu, Nov 17, 2022 at 01:13:07PM +0100, Krzysztof Kozlowski wrote:  
-> >> The defines from include/dt-bindings/iio/qcom,spmi-adc7-pm8350.h were
-> >> changed to take sid argument:
-> >>
-> >>   Error: Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.example.dts:99.28-29 syntax error
-> >>
-> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>  
-> > 
-> > Looks like I didn't rebase on top of Bjorn's for-next for my series, so didn't
-> > see this example.
-> > 
-> > Thanks for fixing!
-> > 
-> > Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> >   
-> 
-> This should not go via Bjorn's tree without IIO ack and
-> Jonathan/Lars-Peter/IIO lists were not in CC.
-> 
-Thanks for the heads up. 
+All looks ok, just one question: what was the reason for that
+image_offset thing?
 
-Not sure I'd have registered there would have been a problem here even
-if I had seen original patch.  Anyhow, I assume Bjorn will pick this up
-and all will be well again.
+I see:
 
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+1887c9b653f9 ("efi/x86: Decompress at start of PE image load address")
 
-> Best regards,
-> Krzysztof
-> 
+It says that if the kernel is loaded as a PE executable using
+LoadImage() we don't know where that image will be loaded each time so
+we're saving that offset for later when relocating (or not) the kernel?
 
+All part of those improvements:
+
+https://lore.kernel.org/all/20200301230537.2247550-1-nivedita@alum.mit.edu/
+
+Am I close?
+
+I.e., that image_offset is purely a kernel thing and not something EFI
+LoadImage's inner workings mandate...? It doesn't seem so from where I'm
+standing but lemme doublecheck still.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
