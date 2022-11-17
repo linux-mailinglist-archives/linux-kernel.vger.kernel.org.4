@@ -2,151 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FE4562D631
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 10:13:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2F7862D647
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 10:18:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239777AbiKQJNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 04:13:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41188 "EHLO
+        id S239754AbiKQJSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 04:18:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239817AbiKQJNr (ORCPT
+        with ESMTP id S229991AbiKQJSL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 04:13:47 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01049B7E6
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 01:13:45 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ovaxc-0005Sg-6M; Thu, 17 Nov 2022 10:13:28 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ovaxY-004p1e-EC; Thu, 17 Nov 2022 10:13:25 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ovaxY-00HF1m-OS; Thu, 17 Nov 2022 10:13:24 +0100
-Date:   Thu, 17 Nov 2022 10:13:24 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Marcello Sylvester Bauer <sylv@sylv.io>,
-        linux-pwm@vger.kernel.org
-Subject: Re: [PATCH v6 3/3] hwmon: (max6639) Change from pdata to dt
- configuration
-Message-ID: <20221117091324.h7etwyzckzvpoa4p@pengutronix.de>
-References: <20221116213615.1256297-1-Naresh.Solanki@9elements.com>
- <20221116213615.1256297-4-Naresh.Solanki@9elements.com>
- <20221117074510.qqtjc6h3bnh5rccx@pengutronix.de>
- <81cd642f-c5fb-77ec-a634-5655d5b6088c@9elements.com>
+        Thu, 17 Nov 2022 04:18:11 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADBE55DBBA
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 01:18:10 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id t10so1983312ljj.0
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 01:18:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Zc9P2mVxcSIaau3yoidC3balhKl9rgLwRo/q9Bmer3A=;
+        b=jYBC++3UkjH19yfeDG5OTJ+zf7Xn30J1P514sRkvvyVQkkjT2BsX2XBJ5g8Y08lthT
+         kcVpdM82Axk8n/aKMFGrWgalCuJefuRfcuM4fh7LncsWVXUDzzJ5F+N7kMI/AQMN+okq
+         KVVZgqTke314ggOohouyjCyWroMSMLGmZ8XFM+1M7E9WPhQBp6vty7CWyNDapQB8YF7q
+         17uIsEpjxqozpR98Qn8Lef8XaAtR7TlP9KXBY012aIzOwPyMxcpjWh47mPqWLJ4RNe1i
+         WMSdeeRdFzoOk0ugtmtJK0V9rxCddBPDN0h4qqPU9q9CcuMELHBxX+yNJUKz+Xt7ZyVi
+         +JeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Zc9P2mVxcSIaau3yoidC3balhKl9rgLwRo/q9Bmer3A=;
+        b=8KMVhoZRgIt+thFCNQkcQfanGLUt65jMmo+PwF4Pa02I0fny7/ccAd+av8O1qmLNjI
+         PWB6/M+TPexLvgSqPTWGaDdaPknOZrHN+5tZLtEOSfwQsfVwcQ2Y84rtNx++9ypUxPpp
+         AifM+vAWQm7F1tOyU8+z0J93LphDCqkA8niYbzEb9Cn6n5dn7zmSHjNa7tamd3KYx+ll
+         WmEIP0L37Olsp6pcgf3FW+q0QTp9OwuyZh2apx3/wljrWEUewtPvW31K9yMlzN31YdDX
+         MaVVVzG4/IgQsmuS0W2IaNKfYB53hFoKv41evBQTqYaSj2lYpVMeegVHKf/fV1UPL9Lb
+         NTWg==
+X-Gm-Message-State: ANoB5pn5XZy37/4+bhG5NRtWej3THeYthZIXRL0K8CiyxyTFT3DBvqIp
+        XgUjiz+kaZWeQNa7b61hmIK6Vw==
+X-Google-Smtp-Source: AA0mqf6m8+LnYNYoHzMDL+O0WNfB5ENzP4VeZSxLuKbbmuvnJ2iIvXGh860jmH/qL8XlX/jpYjqGDA==
+X-Received: by 2002:a2e:a4d9:0:b0:277:3984:324f with SMTP id p25-20020a2ea4d9000000b002773984324fmr611114ljm.424.1668676689115;
+        Thu, 17 Nov 2022 01:18:09 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id m4-20020ac24244000000b004ab98cd5644sm55578lfl.182.2022.11.17.01.18.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Nov 2022 01:18:08 -0800 (PST)
+Message-ID: <30686147-07c8-4713-ec84-ba42258f6a06@linaro.org>
+Date:   Thu, 17 Nov 2022 10:18:07 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lbqlkkiplftnkolk"
-Content-Disposition: inline
-In-Reply-To: <81cd642f-c5fb-77ec-a634-5655d5b6088c@9elements.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 3/7] dt-bindings: mfd: qcom,spmi-pmic: document pmr735d
+Content-Language: en-US
+To:     neil.armstrong@linaro.org, Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Lee Jones <lee@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org
+References: <20221114-narmstrong-sm8550-upstream-spmi-v1-0-6338a2b4b241@linaro.org>
+ <20221114-narmstrong-sm8550-upstream-spmi-v1-3-6338a2b4b241@linaro.org>
+ <f3338d53-a0bf-9fc4-fcee-959e2b9a7e22@linaro.org>
+ <3be329e6-79f8-4b78-c24e-9341f4d803a2@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <3be329e6-79f8-4b78-c24e-9341f4d803a2@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 17/11/2022 08:42, Neil Armstrong wrote:
+> Hi,
+> 
+> On 16/11/2022 12:16, Krzysztof Kozlowski wrote:
+>> On 16/11/2022 11:11, Neil Armstrong wrote:
+>>> Document compatible for the pmr735d SPMI PMIC.
+>>>
+>>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>>> ---
+>>
+>> I think this should be squashed.
+> 
+> I'll squash both 2 & 3 into 1, can I keep your Reviewed-by on 1 ?
 
---lbqlkkiplftnkolk
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yes.
 
-On Thu, Nov 17, 2022 at 02:10:45PM +0530, Naresh Solanki wrote:
->=20
->=20
-> On 17-11-2022 01:15 pm, Uwe Kleine-K=F6nig wrote:
-> > Hello,
-> >=20
-> > On Wed, Nov 16, 2022 at 10:36:15PM +0100, Naresh Solanki wrote:
-> > > max6639_platform_data is not used by any in-kernel driver and does not
-> > > address the MAX6639 fans separately.
-> > > Move to device tree configuration with explicit properties to configu=
-re
-> > > each fan.
-> > >=20
-> > > Non-DT platform can still use this module with its default
-> > > configuration.
-> > >=20
-> > > Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
-> > > Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-> >=20
-> > What changed here since v5? Please either add a changelog below the
-> > tripple-dash for a new revision, or make sure that all relevant people
-> > get the cover letter.
-> >=20
-> > It seems you didn't address my comments for v5 :-\
-> Not sure what I missed but did following changes:
-> Removed unused header max6639.h
-> Used dev_err_probe instead,
-> Removed of_pwm_n_cells,
-> if condition for freq_table
-> removed pwm_get_state & instead use pwm->state
-> division/multiplication optimizations,
-> indentation of freq_table,
+Best regards,
+Krzysztof
 
-In the cover letter you just wrote:
-
-| Changes in V6:
-| - Remove unused header file
-| - minor cleanup
-
-which is too short in my eyes. If you wrote instead:
-
-	Address review feedback by Uwe Kleine-K=F6nig in patch #3, patches #1 and
-	#2 unchanged.
-
-This would be much more helpful as people that were already happy with
-v5 wouldn't need to look at the first two patches and I would know that
-you addressed my feedback and would have looked in more detail.
-
-What I miss is the most critical part of my feedback, i.e.:
-| My overall impression is that this patch mixes too much things. IMHO it
-| should be split in (at least)
-|=20
-|  - Add dt support
-|  - Drop platform support
-|  - Add PWM provider support
-|  - Make use of the PWM API
-|
-| maybe also add the 2nd PWM in a separate step.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---lbqlkkiplftnkolk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN1+zEACgkQwfwUeK3K
-7AkGRwgAllZK66a+YhErW6Qlvi+M9Bd/nwKnyEiAsvmyQ2IadpKiThbMr6uw0y5/
-qlrC3gMnhKzY8u0AFTFGnZlQOS+fCVeopgahPdA5ZJNW4GvNcPXB8qHDXwdzVQOf
-yRQkbpYnu9Pt8Wtxew0QWnCeW+s/BVbJJSrWJYWZgonp+OX0dl19Su2yO+H6agHF
-TDExZrPMv8ds4Nxj7TM5V7MJn8TZ9pxecfJjFcudvTEMTkgPZ5R+EY45+L8Jg29l
-b1BRWtoDEwku4K1GTIb1BRMJ3JRS3pJVunj3R88/E128yY3vno9TownFtSSG5s/1
-+RsohjtFf/cRwzqaoYdWALCulw4anQ==
-=MgIF
------END PGP SIGNATURE-----
-
---lbqlkkiplftnkolk--
