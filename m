@@ -2,194 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D90B362DBF4
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 13:50:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA2962DBF9
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 13:51:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234058AbiKQMuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 07:50:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47010 "EHLO
+        id S234845AbiKQMvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 07:51:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234693AbiKQMun (ORCPT
+        with ESMTP id S234875AbiKQMu4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 07:50:43 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E1249082
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 04:50:41 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id j4so2688575lfk.0
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 04:50:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ARYXAZHhMEgLTfXetwcBF0cbKF9/e+04aoVLVW1wVow=;
-        b=aQ+xchw9M5MoOZjnc4aO3E9uab32EZ1pO1Du8TnpA5qQVrGoajYRQ3chy19iNHDzqi
-         Wb4SfyrJrrsPo3WT1Zez2IsgxXSL9CjoXtcbvhqqkYZlPFWHzs7CbNG34vlS5fezNvaJ
-         jBOsi8I1EiEF5Mnkk/N5v4FTAbkYA2QAopHkS3H2+Z7VUWD216gBIX44ejei2R0ckI2r
-         GTrKPpYAN2mzqKYc77D09JeWXIuwgU96fqRNy74lxWr2wi9+c2TgU78Q9wv/btXl5yJV
-         aEIZXabV5yLTkY9G0iUXXKKjbG33ktEWpGDoafCnMADwJ4LZhqWbWIOa0AECofaWsp1o
-         Zz4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ARYXAZHhMEgLTfXetwcBF0cbKF9/e+04aoVLVW1wVow=;
-        b=rIHte7jiIQHWJer3SyvuzEaeJ/mL/631F2W7GaTrpJ76s4FTjrju8S7/hykWwGtmpr
-         P0SvvzEcxA02PTuRbZAPtdoqBKC1nIB0daB3H7rtS9BN8FFcZviYKphuJohuZJJ/E6sJ
-         cwzVHoAVk5yAvn69St9vxwwt/26eoEecuAZubljgD7HZCSUfTaVlbt9pE4Efb+hsL4/c
-         R/2exd1SgllY2ShDJQ6uz84J3fXEXMpA3czitT8k3N2t38BzHFt8GC/p2c8/INZDM8ff
-         FkQEw/Dc7mh0jv1YNdIMtvisufU9JrAz6zj6OeQPoBfRHQxHMC3c/8UkhIJVum0ghwsV
-         i2Sg==
-X-Gm-Message-State: ANoB5pmOwqYy3BC46wI8lNdl3DNEpYhEoXbZKP9sb/wePNcKL5WXQyrk
-        5C5tPdyCcKHmeozJfaKjKZF0IQ==
-X-Google-Smtp-Source: AA0mqf57AM7aP5L1oGxEmdRFaD0gNFRENxc9FiHh77UYOuVYXhOQ83EZ+3KVFd/JVtiXjP5sAfekGQ==
-X-Received: by 2002:a05:6512:340d:b0:497:456d:890 with SMTP id i13-20020a056512340d00b00497456d0890mr737174lfr.687.1668689440319;
-        Thu, 17 Nov 2022 04:50:40 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id o15-20020a05651205cf00b0049ad2619becsm135530lfo.131.2022.11.17.04.50.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Nov 2022 04:50:39 -0800 (PST)
-Message-ID: <4fec7b4e-432f-8aa9-3218-2df96d880dc1@linaro.org>
-Date:   Thu, 17 Nov 2022 13:50:38 +0100
+        Thu, 17 Nov 2022 07:50:56 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F40956EF8;
+        Thu, 17 Nov 2022 04:50:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C1EF661B9D;
+        Thu, 17 Nov 2022 12:50:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60C55C433C1;
+        Thu, 17 Nov 2022 12:50:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668689454;
+        bh=1a06KWkjecMLhklDpZ9gKeF7p20g4Jg+8/l7J4th3DA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=uQI8fJZvy/OqooWhKanaVet9mE1ia1m3MLLCP+ziuc+YrxxG1wjEWmBMHRE+c9Yh6
+         70AppzRVhOi62bnRaG7siA6th40i0k9/wcDaZf7+zv5mGuJU+IJhlpnA9Z1Qv1KoHI
+         II+0zQl3O7t72CieDMEWj1Vnj3HgYWhAr9U9kpDYbi8nQNVv2wRNvcUuSLEWjJ4IoJ
+         t7nY5hdgphyln3QPfvoSHL/n6rivxlYMZgFepxJClwWUosNArIT/FXEPlIU6jIa9U5
+         FNwJsI+kbYRgQ+dfYhNKZhOqma/90AWQJgtHCVYaocmc0PNQyQtrKsJC2L2BepJHQS
+         9I4lP8KCPt10Q==
+Message-ID: <429fd44a-34e1-be31-2c6c-c1106e3c98cb@kernel.org>
+Date:   Thu, 17 Nov 2022 14:50:47 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 02/10] arm64: dts: qcom: Add base SM8550 dtsi
+Subject: Re: [PATCH 1/2] dt-bindings: PCI: qcom: Add SM8550 to binding
 Content-Language: en-US
 To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-References: <20221116103146.2556846-1-abel.vesa@linaro.org>
- <20221116103146.2556846-3-abel.vesa@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221116103146.2556846-3-abel.vesa@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, kw@linux.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pci@vger.kernel.org
+References: <20221116123505.2760397-1-abel.vesa@linaro.org>
+From:   Georgi Djakov <djakov@kernel.org>
+In-Reply-To: <20221116123505.2760397-1-abel.vesa@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/11/2022 11:31, Abel Vesa wrote:
-> Add base dtsi for SM8550 SoC and includes base description of
-> CPUs, GCC, RPMHCC, UART, interrupt controller, TLMM, reserved
-> memory, RPMh PD, TCSRCC, ITS, IPCC, AOSS QMP, LLCC, cpufreq,
-> interconnect, thermal sensor, cpu cooling maps and SMMU nodes
-> which helps boot to shell with console on boards with this SoC.
+Hi Abel,
+
+On 16.11.22 14:35, Abel Vesa wrote:
+> Add the SM8550 platform to the binding.
 > 
-> Co-developed-by: Neil Armstrong <neil.armstrong@linaro.org>
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 > ---
->  arch/arm64/boot/dts/qcom/sm8550.dtsi | 3986 ++++++++++++++++++++++++++
->  1 file changed, 3986 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/sm8550.dtsi
+>   .../devicetree/bindings/pci/qcom,pcie.yaml    | 96 +++++++++++++++++++
+>   1 file changed, 96 insertions(+)
 > 
+> diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> index 54f07852d279..efa01a8411c4 100644
+> --- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> +++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> @@ -34,6 +34,8 @@ properties:
+>         - qcom,pcie-sm8250
+>         - qcom,pcie-sm8450-pcie0
+>         - qcom,pcie-sm8450-pcie1
+> +      - qcom,pcie-sm8550-pcie0
+> +      - qcom,pcie-sm8550-pcie1
+>         - qcom,pcie-ipq6018
+>   
+>     reg:
+> @@ -92,6 +94,10 @@ properties:
+>     power-domains:
+>       maxItems: 1
+>   
+> +  enable-gpios:
+> +    description: GPIO controlled connection to ENABLE# signal
+> +    maxItems: 1
+> +
+>     perst-gpios:
+>       description: GPIO controlled connection to PERST# signal
+>       maxItems: 1
+> @@ -187,6 +193,8 @@ allOf:
+>                 - qcom,pcie-sm8250
+>                 - qcom,pcie-sm8450-pcie0
+>                 - qcom,pcie-sm8450-pcie1
+> +              - qcom,pcie-sm8550-pcie0
+> +              - qcom,pcie-sm8550-pcie1
+>       then:
+>         properties:
+>           reg:
+> @@ -601,6 +609,92 @@ allOf:
+>             items:
+>               - const: pci # PCIe core reset
+>   
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,pcie-sm8550-pcie0
+> +    then:
+> +      properties:
+> +        clocks:
+> +          minItems: 11
+> +          maxItems: 11
+> +        clock-names:
+> +          items:
+> +            - const: pipe # PIPE clock
+> +            - const: pipe_mux # PIPE MUX
+> +            - const: phy_pipe # PIPE output clock
+> +            - const: ref # REFERENCE clock
+> +            - const: aux # Auxiliary clock
+> +            - const: cfg # Configuration clock
+> +            - const: bus_master # Master AXI clock
+> +            - const: bus_slave # Slave AXI clock
+> +            - const: slave_q2a # Slave Q2A clock
+> +            - const: ddrss_sf_tbu # PCIe SF TBU clock
+> +            - const: aggre0 # Aggre NoC PCIe0 AXI clock
+> +        interconnects:
+> +          maxItems: 1
+> +        interconnect-names:
+> +          const: icc_path
+> +        iommus:
+> +          maxItems: 1
+> +        iommu-map:
+> +          maxItems: 2
+> +        power-domains:
+> +          maxItems: 1
+> +        power-domain-names:
+> +          const: gdsc
+> +        resets:
+> +          maxItems: 1
+> +        reset-names:
+> +          items:
+> +            - const: pci # PCIe core reset
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,pcie-sm8550-pcie1
+> +    then:
+> +      properties:
+> +        clocks:
+> +          minItems: 12
+> +          maxItems: 12
+> +        clock-names:
+> +          items:
+> +            - const: pipe # PIPE clock
+> +            - const: pipe_mux # PIPE MUX
+> +            - const: phy_pipe # PIPE output clock
+> +            - const: ref # REFERENCE clock
+> +            - const: aux # Auxiliary clock
+> +            - const: cfg # Configuration clock
+> +            - const: bus_master # Master AXI clock
+> +            - const: bus_slave # Slave AXI clock
+> +            - const: slave_q2a # Slave Q2A clock
+> +            - const: ddrss_sf_tbu # PCIe SF TBU clock
+> +            - const: aggre1 # Aggre NoC PCIe1 AXI clock
+> +            - const: cnoc_pcie_sf_axi # Config NoC PCIe1 AXI clock
+> +        interconnects:
+> +          maxItems: 1
+> +        interconnect-names:
+> +          const: icc_path
 
-Thank you for your patch. There is something to discuss/improve.
+The name of the path is too generic. Probably something like "pcie-mem" or "pcie-ddr" would be
+more appropriate to indicate that this is for requesting bandwidth on the path between PCIE and
+DDR memory.
 
-> +
-> +		pmu@240b6400 {
-> +			compatible = "qcom,sm8550-cpu-bwmon", "qcom,msm8998-bwmon";
-> +			reg = <0x0 0x240b6400 0x0 0x600>;
-> +			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
-> +			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &gem_noc SLAVE_LLCC 3>;
-> +
-> +			operating-points-v2 = <&cpu_bwmon_opp_table>;
-> +
-> +			cpu_bwmon_opp_table: opp-table {
-> +				compatible = "operating-points-v2";
-> +
-> +				opp-0 {
-> +					opp-peak-kBps = <4577000>;
-> +				};
-> +				opp-1 {
-> +					opp-peak-kBps = <7110000>;
-> +				};
-> +				opp-2 {
-> +					opp-peak-kBps = <9155000>;
-> +				};
-> +				opp-3 {
-> +					opp-peak-kBps = <12298000>;
-> +				};
-> +				opp-4 {
-> +					opp-peak-kBps = <14236000>;
-> +				};
-> +				opp-5 {
-> +					opp-peak-kBps = <16265000>;
-> +				};
-> +			};
-> +		};
-> +
-> +		pmu@24091000 {
+Thanks,
+Georgi
 
-Nodes should be ordered by the address. Mostly they are, but at least
-BWMONs are not.
-
-> +			compatible = "qcom,sm8550-llcc-bwmon", "qcom,sc7280-llcc-bwmon";
-> +			reg = <0x0 0x24091000 0x0 0x1000>;
-> +			interrupts = <GIC_SPI 81 IRQ_TYPE_LEVEL_HIGH>;
-> +			interconnects = <&mc_virt MASTER_LLCC 3 &mc_virt SLAVE_EBI1 3>;
+> +        iommus:
+> +          maxItems: 1
+> +        iommu-map:
+> +          maxItems: 2
+> +        power-domains:
+> +          maxItems: 1
+> +        power-domain-names:
+> +          const: gdsc
+> +        resets:
+> +          maxItems: 2
+> +        reset-names:
+> +          items:
+> +            - const: pci # PCIe core reset
+> +            - const: pcie_1_link_down_reset # PCIe link down reset
 > +
-> +			operating-points-v2 = <&llcc_bwmon_opp_table>;
-> +
-> +			llcc_bwmon_opp_table: opp-table {
-> +				compatible = "operating-points-v2";
-> +
-> +				opp-0 {
-> +					opp-peak-kBps = <2086000>;
-> +
-
-Drop empty lines here and in places below.
-
-> +				};
-> +				opp-1 {
-> +					opp-peak-kBps = <2929000>;
-> +
-> +				};
-> +				opp-2 {
-> +					opp-peak-kBps = <5931000>;
-> +
-> +				};
-> +				opp-3 {
-> +					opp-peak-kBps = <6515000>;
-> +
-> +				};
-> +				opp-4 {
-> +					opp-peak-kBps = <7980000>;
-> +
-> +				};
-> +				opp-5 {
-> +					opp-peak-kBps = <10437000>;
-> +
-> +				};
-> +				opp-6 {
-> +					opp-peak-kBps = <12157000>;
-> +
-> +				};
-> +				opp-7 {
-> +					opp-peak-kBps = <14060000>;
-> +
-> +				};
-> +				opp-8 {
-> +					opp-peak-kBps = <16113000>;
-> +
-> +				};
-> +			};
-
-
-Best regards,
-Krzysztof
+>     - if:
+>         properties:
+>           compatible:
+> @@ -672,6 +766,8 @@ allOf:
+>                 - qcom,pcie-sm8250
+>                 - qcom,pcie-sm8450-pcie0
+>                 - qcom,pcie-sm8450-pcie1
+> +              - qcom,pcie-sm8550-pcie0
+> +              - qcom,pcie-sm8550-pcie1
+>       then:
+>         oneOf:
+>           - properties:
 
