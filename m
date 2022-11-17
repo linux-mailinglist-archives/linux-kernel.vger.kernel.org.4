@@ -2,155 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6004162D919
+	by mail.lfdr.de (Postfix) with ESMTP id B688062D91A
 	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 12:11:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239241AbiKQLK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 06:10:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55698 "EHLO
+        id S239572AbiKQLLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 06:11:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239821AbiKQLKG (ORCPT
+        with ESMTP id S239939AbiKQLKk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 06:10:06 -0500
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469D351328;
-        Thu, 17 Nov 2022 03:09:24 -0800 (PST)
-Received: by mail-qk1-f175.google.com with SMTP id k4so876777qkj.8;
-        Thu, 17 Nov 2022 03:09:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2upcs92zfHGktv5GNk5iEF5H7csK3b8TJwFhjPNnSO0=;
-        b=PUnUKD8suTSfxsdSC7i5AwKDWJu0WSWIsrvv/MxC0ysFKMAOUlKw4VnsXVVfp6m/0w
-         1h/kU0z0l4jnam1tkOcd+X5KAhWoIJCWp7aTbMgGqNXfJNQIEnUg/tdDce4++WVYh8uY
-         8pb7XXM6dcghAk1ja/Mx6pgjCofmTB/F94WD3hbdVrgf9oJusoPXEeKYreKPfcou5M8d
-         EFPvVs+Gzf2VW/R/zsytbywEf4rSGZ3lhZG7FQ8dPPjRRTxavwZbHimZM5Oafas8Nk3O
-         99+n727dltIH65SqK4EUCBlbaMv5GxBDYIxBWfAqdXanjKnDCbGoJpURtEA4dvhCuBX7
-         F1Rw==
-X-Gm-Message-State: ANoB5pkvwjIqeKCCxkRK5nkGIifQlpIjijpgWVHtSunccvDxTk41QHve
-        OGAFdybHOFqIPjtbe280rggyAj3YUoihag==
-X-Google-Smtp-Source: AA0mqf6v6w1P4R8JnDjLVm4zuWA1AytWJdlmMGCh9w8oRthjj4C9SdeHG91RJYfGF6KbKT3djEyl1w==
-X-Received: by 2002:a37:ad0c:0:b0:6ee:91b3:2484 with SMTP id f12-20020a37ad0c000000b006ee91b32484mr1076992qkm.648.1668683363904;
-        Thu, 17 Nov 2022 03:09:23 -0800 (PST)
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
-        by smtp.gmail.com with ESMTPSA id cc16-20020a05622a411000b003a606428a59sm187236qtb.91.2022.11.17.03.09.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Nov 2022 03:09:23 -0800 (PST)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-381662c78a9so15324287b3.7;
-        Thu, 17 Nov 2022 03:09:22 -0800 (PST)
-X-Received: by 2002:a81:f80f:0:b0:38e:e541:d8ca with SMTP id
- z15-20020a81f80f000000b0038ee541d8camr1380062ywm.283.1668683362483; Thu, 17
- Nov 2022 03:09:22 -0800 (PST)
+        Thu, 17 Nov 2022 06:10:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B93676E572;
+        Thu, 17 Nov 2022 03:09:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 64219B81FF8;
+        Thu, 17 Nov 2022 11:09:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3A05C433D6;
+        Thu, 17 Nov 2022 11:09:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668683384;
+        bh=rlMFnUfQu8GJbpUZVcINUpGICn6p1+U5R0s89aqiluY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=W3x/iGCbNuMvys+UHPYxXfBNEAjRTHTA7o32s2r636M+YBziRU2SonABy/5UU1DnQ
+         3YSZBpbLlV16b0wTYkkbOka0EYaToulvwQQ6YLZf1ROtwkCUY/mYWSKCusjvL5vfl5
+         GtXRdaGwEu5jajg8VLb3TOuqu8rtnFdEm4Xr02tIqPUgI6oDOyw0ISkleOPBWQv1Uh
+         Q4l5z6Y53UO3FFCyK7OG8Af7IuGHk5lPUop3+BjBi3gh4Pw65qxsKsd9Ug2shYBllT
+         zLwERhd4dFhs4bctzw0za1HB8NQRl6Qh5d7eU+rxh+CyqFs4sAk8zNQCSfWflRXOXM
+         +GanqHZNquZlw==
+Date:   Thu, 17 Nov 2022 11:09:41 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Carlo Caione <ccaione@baylibre.com>
+Cc:     Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        David Airlie <airlied@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH 2/3] drm/tiny: ili9486: Do not assume 8-bit only SPI
+ controllers
+Message-ID: <Y3YWdeTLfmDh7UyB@sirena.org.uk>
+References: <20221116-s905x_spi_ili9486-v1-0-630401cb62d5@baylibre.com>
+ <20221116-s905x_spi_ili9486-v1-2-630401cb62d5@baylibre.com>
 MIME-Version: 1.0
-References: <20221107175305.63975-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20221107175305.63975-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20221107175305.63975-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 17 Nov 2022 12:09:11 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdW9K=gd7F-G-7v0J5Mz8jyZa_Vu3UZWsNZin76tff7f3g@mail.gmail.com>
-Message-ID: <CAMuHMdW9K=gd7F-G-7v0J5Mz8jyZa_Vu3UZWsNZin76tff7f3g@mail.gmail.com>
-Subject: Re: [PATCH RFC 2/5] pinctrl: renesas: rzg2l: Fix configuring the GPIO
- pins as interrupts
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="LQcIBCJXd6N58uwP"
+Content-Disposition: inline
+In-Reply-To: <20221116-s905x_spi_ili9486-v1-2-630401cb62d5@baylibre.com>
+X-Cookie: Ego sum ens omnipotens.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
 
-On Mon, Nov 7, 2022 at 6:53 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> On the RZ/G2UL SoC we have less number of pins compared to RZ/G2L and also
-> the pin configs are completely different. This patch makes sure we use the
-> appropriate pin configs for each SoC (which is passed as part of the OF
-> data) while configuring the GPIO pin as interrupts instead of using
-> rzg2l_gpio_configs[] for all the SoCs.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+--LQcIBCJXd6N58uwP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for your patch!
+On Thu, Nov 17, 2022 at 09:47:40AM +0100, Carlo Caione wrote:
+> The ILI9486 driver is wrongly assuming that the SPI panel is interfaced
+> only with 8-bit SPI controllers and consequently that the pixel data
+> passed by the MIPI DBI subsystem are already swapped before being sent
+> over SPI using 8 bits-per-word.
+>=20
+> This is not always true for all the SPI controllers.
+>=20
+> Make the command function more general to not only support 8-bit only
+> SPI controllers and support sending un-swapped data over SPI using 16
+> bits-per-word when dealing with pixel data.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-But I do think there is room for improvement...
+I don't understand what the commit log is saying here.  The
+meson-spicc driver advertises support for 8 bit words, if the
+driver is sending data formatted as a byte stream everything
+should be fine.  It may be that there is some optimisation
+available from taking advantage of the hardware's ability to
+handle larger word sizes but there should be no data corruption
+issue.
 
-> --- a/drivers/pinctrl/renesas/pinctrl-rzg2l.c
-> +++ b/drivers/pinctrl/renesas/pinctrl-rzg2l.c
-> @@ -127,6 +127,7 @@ struct rzg2l_dedicated_configs {
->  struct rzg2l_pinctrl_data {
->         const char * const *port_pins;
->         const u32 *port_pin_configs;
-> +       unsigned int n_port_pin_configs;
+> +	/*
+> +	 * Check whether pixel data bytes needs to be swapped or not
+> +	 */
+> +	if (*cmd =3D=3D MIPI_DCS_WRITE_MEMORY_START && !mipi->swap_bytes)
+> +		bpw =3D 16;
+> +
 
-n_ports?
+You should check the SPI controller compatibility here.
 
->         struct rzg2l_dedicated_configs *dedicated_pins;
->         unsigned int n_port_pins;
+--LQcIBCJXd6N58uwP
+Content-Type: application/pgp-signature; name="signature.asc"
 
-n_port_pins is now always n_port_pin_configs * RZG2L_PINS_PER_PORT,
-right?
+-----BEGIN PGP SIGNATURE-----
 
->         unsigned int n_dedicated_pins;
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmN2FnQACgkQJNaLcl1U
+h9DkAQf/ZO81DRjufOHQCe4TT3YQX0I4BQbc6tjxpvEJsPkgTRL6r1vfxKJOjA6j
+gBJqo8B7TdFYzqzWf4hJwieTLgUKdg4pWERfMQ5O/g9bHsc0BwLUTzg6asgynPqk
+ZdxyCvC5QTA/b9ZIWdKPRN9com67mNQRrebpkwcRjFQ1alJxlLDi2P+yrsCE+WOj
+Q77RLUtE3cVmxP1tFERDaS6TTTxc51nqK/HT0t6x3LURP6nnPdp5o8s2+AU88Vfv
+QoJDmpltiUw2lUScF9jTJjc3ATKhvXAY2NuY1xpVOUMfd4noH1MX5L97UPVedrY2
+24k3w5zahZP+JTUtK7epT6eO/eckVg==
+=opWd
+-----END PGP SIGNATURE-----
 
-> @@ -1517,6 +1518,7 @@ static int rzg2l_pinctrl_probe(struct platform_device *pdev)
->  static struct rzg2l_pinctrl_data r9a07g043_data = {
->         .port_pins = rzg2l_gpio_names,
->         .port_pin_configs = r9a07g043_gpio_configs,
-> +       .n_port_pin_configs = ARRAY_SIZE(r9a07g043_gpio_configs),
->         .dedicated_pins = rzg2l_dedicated_pins.common,
->         .n_port_pins = ARRAY_SIZE(r9a07g043_gpio_configs) * RZG2L_PINS_PER_PORT,
->         .n_dedicated_pins = ARRAY_SIZE(rzg2l_dedicated_pins.common),
-> @@ -1525,6 +1527,7 @@ static struct rzg2l_pinctrl_data r9a07g043_data = {
->  static struct rzg2l_pinctrl_data r9a07g044_data = {
->         .port_pins = rzg2l_gpio_names,
-
-.port_pins is always rzg2l_gpio_names
-
->         .port_pin_configs = rzg2l_gpio_configs,
-> +       .n_port_pin_configs = ARRAY_SIZE(rzg2l_gpio_configs),
->         .dedicated_pins = rzg2l_dedicated_pins.common,
->         .n_port_pins = ARRAY_SIZE(rzg2l_gpio_names),
-
-I think this should have become
-ARRAY_SIZE(rzg2l_gpio_configs) * RZG2L_PINS_PER_PORT)
-when support for r9a07g043 was introduced.
-
-To avoid overflows when adding support for more SoCs, you can add a
-bunch of checks like
-
-    BUILD_BUG_ON(ARRAY_SIZE(r9a07g043_gpio_configs) *
-RZG2L_PINS_PER_PORT > ARRAY_SIZE(rzg2l_gpio_names))
-    BUILD_BUG_ON(ARRAY_SIZE(rzg2l_gpio_configs) * RZG2L_PINS_PER_PORT
-> ARRAY_SIZE(rzg2l_gpio_names))
-
->         .n_dedicated_pins = ARRAY_SIZE(rzg2l_dedicated_pins.common) +
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--LQcIBCJXd6N58uwP--
