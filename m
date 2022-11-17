@@ -2,91 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BDFE62E7A6
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 23:02:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A6B662E7A9
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 23:03:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241053AbiKQWCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 17:02:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36786 "EHLO
+        id S241211AbiKQWD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 17:03:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241232AbiKQWCB (ORCPT
+        with ESMTP id S241203AbiKQWDB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 17:02:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64BC384323
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 14:00:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A8B1622A0
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:00:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22538C433D7;
-        Thu, 17 Nov 2022 22:00:30 +0000 (UTC)
-Date:   Thu, 17 Nov 2022 17:00:28 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Xuewen Yan <xuewen.yan@unisoc.com>
-Cc:     <peterz@infradead.org>, <mingo@redhat.com>,
-        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
-        <dietmar.eggemann@arm.com>, <bsegall@google.com>,
-        <mgorman@suse.de>, <bristot@redhat.com>, <vschneid@redhat.com>,
-        <ke.wang@unisoc.com>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] sched/rt: Use cpu_active_mask to prevent
- rto_push_irq_work's dead loop
-Message-ID: <20221117170028.04fd7013@gandalf.local.home>
-In-Reply-To: <20221114120453.3233-1-xuewen.yan@unisoc.com>
-References: <20221114120453.3233-1-xuewen.yan@unisoc.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 17 Nov 2022 17:03:01 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BED8E86
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 14:01:35 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id f3so3330235pgc.2
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 14:01:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Pt6ioOinpgj3hMNhf3INdav13IL3VvYdTMM5tKc55hs=;
+        b=fXXPpVBiRM3ejT7uJgam/jeGMEAa6qjY/UFCdVq+RMwmW9fWGZ95uguYKJegBuw7Kj
+         b5epn2BfMtu+da95UodBRUu+URZA0xAqyECuJPp/zEJC3+o6fbaUAyPTvRAnSZZyqY99
+         3Cv8LtU4avYofql0wQt7pl1PWpPkiaFN18M6M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Pt6ioOinpgj3hMNhf3INdav13IL3VvYdTMM5tKc55hs=;
+        b=x1A6DqpD5bdQVWLOs4S1XaDTNeJD0ZsANTVy+E7VGn6TXPzztZSIcoDuWx9Jma6rHM
+         sOJ1nJEocoCSrohXlNb6CHEg9oklUgLU2eBGtZDxfOTilfh9CUgc3tOqdHPnf7hZZvZM
+         nfsqnN3zszGoRWEwgFq8yFMDysMX0dkPNjIiq2NEaCO1uId4MZG9TOvP0OSZP9LFzfs0
+         DSSMTLRwR1PoUkEkvSLfsOQF3BgMu2nmmFkbz39WRmLQVWjEM/WCZiTBKlL3Hu5MV/J7
+         FoCxs8GC/pgFdT6DXtKkjONm3nDG094HGrDYqMKH5XUI4KWBdx8kQfUK+3ouHMLK9fR8
+         4Uxw==
+X-Gm-Message-State: ANoB5plTnTn5m1J+G90cKk8JqV3jX5jWCuVUNes84ew3bxRP8G1w2lVy
+        uL1iW61423lZQLPX+wtjmg+WIQ==
+X-Google-Smtp-Source: AA0mqf6a3M4WqJQk9uaiVBtkSBfgGVUP1Kw1s4HtP1D+unruSZElFl8tOA4T4e2Wr2MKCNn3x99axw==
+X-Received: by 2002:a63:4c59:0:b0:476:c490:798a with SMTP id m25-20020a634c59000000b00476c490798amr3833829pgl.564.1668722494968;
+        Thu, 17 Nov 2022 14:01:34 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id h31-20020a63575f000000b0047696938911sm1516588pgm.74.2022.11.17.14.01.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 14:01:34 -0800 (PST)
+Date:   Thu, 17 Nov 2022 14:01:33 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     linux-hardening@vger.kernel.org,
+        Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Paramjit Oberoi <pso@chromium.org>,
+        Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/5] MAINTAINERS: Update pstore maintainers
+Message-ID: <202211171359.232C769E3A@keescook>
+References: <20221011200112.731334-1-keescook@chromium.org>
+ <20221011200112.731334-6-keescook@chromium.org>
+ <542aa83d-6227-ea7d-2150-a74293cbf59a@igalia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <542aa83d-6227-ea7d-2150-a74293cbf59a@igalia.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Nov 2022 20:04:53 +0800
-Xuewen Yan <xuewen.yan@unisoc.com> wrote:
+On Wed, Nov 16, 2022 at 12:42:53PM -0300, Guilherme G. Piccoli wrote:
+> On 11/10/2022 17:01, Kees Cook wrote:
+> > Update pstore to better reflect reality of active contributors:
+> > 
+> > - Remove Anton and Colin (thank you for your help through the years!)
+> > - Move Tony to Reviewer
+> > - Add Guilherme as Reviewer
+> > - Add mailing list
+> > - Upgrade to Supported
+> > 
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > ---
+> >  MAINTAINERS | 8 ++++----
+> >  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> Hi Kees, sorry to revamp this thread for a "tangential" topic, but it
+> feels a "kinda" proper thread.
+> 
+> Since I was added as a reviewer on pstore (in linux-next so far), I
+> started to receive a bunch of emails from ARM device-tree folks; they're
+> adding ramoops entries to their DTs and looping pstore folks.
+> 
+> Examples:
+> 
+> https://lore.kernel.org/linux-hardening/20221111120156.48040-1-angelogioacchino.delregno@collabora.com/
+> 
+> https://lore.kernel.org/linux-hardening/20221116145616.17884-1-luca@z3ntu.xyz/
+> 
+> 
+> Personally, I have no knowledge of these HW to evaluate if the ramoops
+> setting is appropriate, so they're nop from my side, I just delete them.
+> But that raises the question - are you/Tony reviewing this kind of
+> change? It's not related to pstore/ramoops code, it's just users setting
+> ramoops in their DTs, so seems to me a bit far from the purpose of the
+> pstore entry.
 
-> +++ b/kernel/sched/rt.c
-> @@ -2219,6 +2219,7 @@ static int rto_next_cpu(struct root_domain *rd)
->  {
->  	int next;
->  	int cpu;
-> +	struct cpumask tmp_cpumask;
+I usually look at it very quickly, but I can't meaningfully positively
+review it because I don't know the hardware, etc.
 
-If you have a machine with thousands of CPUs, this will likely kill the
-stack.
+> What do you/Tony think about that? Likely the DT folks are following
+> this entry in the MAINTAINERS to send these emails:
+> 
+> PSTORE FILESYSTEM
+> M:      Kees Cook <keescook@chromium.org>
+> [...]
+> F:      include/linux/pstore*
+> K:      \b(pstore|ramoops) <------
+> 
+> Should this be kept? Maybe only the ramoops entry could be removed?
 
->  
->  	/*
->  	 * When starting the IPI RT pushing, the rto_cpu is set to -1,
-> @@ -2238,6 +2239,11 @@ static int rto_next_cpu(struct root_domain *rd)
->  		/* When rto_cpu is -1 this acts like cpumask_first() */
->  		cpu = cpumask_next(rd->rto_cpu, rd->rto_mask);
->  
-> +		cpumask_and(&tmp_cpumask, rd->rto_mask, cpu_active_mask);
-> +		if (rd->rto_cpu == -1 && cpumask_weight(&tmp_cpumask) == 1 &&
-> +		    cpumask_test_cpu(smp_processor_id(), &tmp_cpumask))
-> +			break;
-> +
+I would like to keep it -- if something mentions pstore and ramoops, I'd
+like to see it. I can't review all of it, but I'd like it to at least
+show up in my inbox. :)
 
-Kill the above.
-
->  		rd->rto_cpu = cpu;
->  
->  		if (cpu < nr_cpu_ids) {
-
-Why not just add here:
-
-			if (!cpumask_test_cpu(cpu, cpu_active_mask))
-				continue;
-			return cpu;
-		}
-
-?
-
--- Steve
+-- 
+Kees Cook
