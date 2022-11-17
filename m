@@ -2,116 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C562E62D0FA
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 03:05:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E604B62D101
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 03:10:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238629AbiKQCFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 21:05:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51744 "EHLO
+        id S234320AbiKQCJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 21:09:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232097AbiKQCF3 (ORCPT
+        with ESMTP id S230303AbiKQCJ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 21:05:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D40E60686;
-        Wed, 16 Nov 2022 18:05:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D2AD2B81F87;
-        Thu, 17 Nov 2022 02:05:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B916CC433D6;
-        Thu, 17 Nov 2022 02:05:21 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="oBVYY4GH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1668650720;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dEJat997gDB284IQJDfbqi4/5IXvytYbwgZCPi3gI8M=;
-        b=oBVYY4GH+szvpy7v+MDpWl7rIbq1Ag0+XjaiW9ivB+W/ypTPzWGRKmZ5grHtl0NRu+tdAw
-        OceXtZlFIdzaNyPTBIDx5ZFzB/5YparpWLHfLRzfitegfl7G9s7sam3TuLTYL+fICnJhuN
-        DFCVAmQjhuCf5Jl3bBUK1aEXDFPWY+A=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id ca8ad650 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Thu, 17 Nov 2022 02:05:19 +0000 (UTC)
-Date:   Thu, 17 Nov 2022 03:05:14 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Christoph =?utf-8?Q?B=C3=B6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        "Darrick J . Wong" <djwong@kernel.org>,
-        SeongJae Park <sj@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Helge Deller <deller@gmx.de>, netdev@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-mmc@vger.kernel.org, linux-parisc@vger.kernel.org,
-        ydroneaud@opteya.com
-Subject: Re: [PATCH v2 3/3] treewide: use get_random_u32_between() when
- possible
-Message-ID: <Y3WW2lOgoYLKQeve@zx2c4.com>
-References: <20221114164558.1180362-1-Jason@zx2c4.com>
- <20221114164558.1180362-4-Jason@zx2c4.com>
- <202211161436.A45AD719A@keescook>
- <Y3V4g8eorwiU++Y3@zx2c4.com>
+        Wed, 16 Nov 2022 21:09:56 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C6FAE1133;
+        Wed, 16 Nov 2022 18:09:54 -0800 (PST)
+Received: from loongson.cn (unknown [10.20.42.77])
+        by gateway (Coremail) with SMTP id _____8CxLdnxl3VjOiIIAA--.23261S3;
+        Thu, 17 Nov 2022 10:09:53 +0800 (CST)
+Received: from loongson-PC.loongson.cn (unknown [10.20.42.77])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxXuDfl3VjbJEVAA--.56306S2;
+        Thu, 17 Nov 2022 10:09:53 +0800 (CST)
+From:   Liu Peibao <liupeibao@loongson.cn>
+To:     Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>,
+        wanghongliang <wanghongliang@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V6] PCI: loongson: Skip scanning disabled child devices
+Date:   Thu, 17 Nov 2022 10:09:35 +0800
+Message-Id: <20221117020935.32086-1-liupeibao@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y3V4g8eorwiU++Y3@zx2c4.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8CxXuDfl3VjbJEVAA--.56306S2
+X-CM-SenderInfo: xolx1vpled0qxorr0wxvrqhubq/1tbiAQANCmN00uUg2AABsf
+X-Coremail-Antispam: 1Uk129KBjvJXoW7uF4DJFWUur4UtFWkuw1fCrg_yoW8CrW5pF
+        ZxJFW3trW8KF4vkFs0v348u3Wa9a1kG393JFs7Cr1a93ZxG34YgryxCFyFq3sIqrW8Zaya
+        va4kKr18CF4UJr7anT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bSxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E
+        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxV
+        Aaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxY
+        O2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGV
+        WUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_
+        Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rV
+        WUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4U
+        JbIYCTnIWIevJa73UjIFyTuYvjxU4Xo7DUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 12:55:47AM +0100, Jason A. Donenfeld wrote:
-> 1) How/whether to make f(0, UR2_MAX) safe,
->    - without additional 64-bit arithmetic,
->    - minimizing the number of branches.
->    I have a few ideas I'll code golf for a bit.
-> I think I can make progress with (1) alone by fiddling around with
-> godbolt enough, like usual.
+Add a mechanism to disable on chip PCI devices by DT. Typically, when there
+are pins shareable between the platform device and the on chip PCI device,
+if the PCI device is not preferred, add `status = "disabled"` property to
+this PCI device DT node.
 
-The code gen is definitely worse.
+For example, on LS2K1000, GMAC1 (on chip PCI device) and GPIO (platform
+device, not PCI device) 14 share the same pin. If GMAC1 is not preferred,
+add `status = "disabled"` property in GMAC1 DT node.
 
-Original half-open interval:
+Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
+---
+V5 -> V6: 1. rewrite the commit log to make things clear.
+	  2. replace "unavailable" as "disabled" in patch subject.
+V4 -> V5: clear the issue we are facing in commit log.
+V3 -> V4: 1. get rid of the masklist and search the status property
+	  directly.
+          2. check the status property only when accessing the vendor ID.
+V2 -> V3: 1. use list_for_each_entry() for more clearly.
+          2. fix wrong use of sizeof().
+V1 -> V2: use existing property "status" instead of adding new property.
 
-    return floor + get_random_u32_below(ceil - floor);
+ drivers/pci/controller/pci-loongson.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-Suggested fully closed interval:
-	
-    ceil = ceil - floor + 1;
-    return likely(ceil) ? floor + get_random_u32_below(ceil) : get_random_u32();
+diff --git a/drivers/pci/controller/pci-loongson.c b/drivers/pci/controller/pci-loongson.c
+index 05c50408f13b..efca0b3b5a29 100644
+--- a/drivers/pci/controller/pci-loongson.c
++++ b/drivers/pci/controller/pci-loongson.c
+@@ -194,6 +194,17 @@ static void __iomem *pci_loongson_map_bus(struct pci_bus *bus,
+ 			return NULL;
+ 	}
+ 
++#ifdef CONFIG_OF
++	/* Don't access disabled devices. */
++	if (pci_is_root_bus(bus) && where == PCI_VENDOR_ID) {
++		struct device_node *dn;
++
++		dn = of_pci_find_child_device(bus->dev.of_node, devfn);
++		if (dn && !of_device_is_available(dn))
++			return NULL;
++	}
++#endif
++
+ 	/* CFG0 can only access standard space */
+ 	if (where < PCI_CFG_SPACE_SIZE && priv->cfg0_base)
+ 		return cfg0_map(priv, bus, devfn, where);
+-- 
+2.20.1
 
-Is the worse code gen actually worth it? Options:
-
- a) Decide worse codegen is worth it.
- b) Declare f(0, U32_MAX) undefined and just not handle it.
- c) Stick with original half-open interval that doesn't have this problem.
-
-Jason
