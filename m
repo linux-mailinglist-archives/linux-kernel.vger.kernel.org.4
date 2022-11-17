@@ -2,63 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 830B862D3B4
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 08:00:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0945B62D3B6
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 08:00:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233752AbiKQG75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 01:59:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45840 "EHLO
+        id S233911AbiKQHAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 02:00:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233270AbiKQG7w (ORCPT
+        with ESMTP id S232809AbiKQHAs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 01:59:52 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A1A06EB48;
-        Wed, 16 Nov 2022 22:59:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=0D+NUr6m8qnDg7Lo00WOCHfY1jMSWPh16a0XI9PEktQ=; b=xraDXSZxxVomTDMpWD0CQRGdEZ
-        jw6P4pa+QZsCNsV6Zddp3TUtLmQjTthzLlvjTllJY6NDRq6RC6zhaKRR/PTw4V1P7t+ZjadJaiin/
-        NYFFrNogiAMWw21+ha2XKtgks1c8jeq9MWwsAF5ZG3x7DPYT9WLnyU5Bamtxfcp3vthRn+nO59c+U
-        PvnqUk8cChoj50Zx9C9phnmvwjgszcpyRXA8P1ZkF6nL/x08qfLxGm2YOUSdU1BZ7p0dw3copfzeQ
-        F4TWM2Q/5hkfaW7a9tAnilhjLdKyHdT5mnMJnKv1nbqsITFmZp1TrSNoF+RvueKQllJCdvaH1ZneL
-        fCTQZ5Sg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ovYs5-00B1Yn-PD; Thu, 17 Nov 2022 06:59:37 +0000
-Date:   Wed, 16 Nov 2022 22:59:37 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Richard Weinberger <richard@nod.at>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Michal Orzel <michalorzel.eng@gmail.com>,
-        linux-block <linux-block@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>
-Subject: Re: [PATCH v5 3/4] partitions/efi: add support for uImage.FIT
- sub-partitions
-Message-ID: <Y3Xb2YbBP1jr9Q1j@infradead.org>
-References: <cover.1668548123.git.daniel@makrotopia.org>
- <7526fc5a461a0d68eb1dab575f9c1950638fc21a.1668548123.git.daniel@makrotopia.org>
- <Y3R8oQXRQ8uq8p4P@infradead.org>
- <Y3V9/pmHs7ypE7lb@makrotopia.org>
- <Y3XN+fDTjHz09qEE@infradead.org>
- <271114315.250800.1668667808308.JavaMail.zimbra@nod.at>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <271114315.250800.1668667808308.JavaMail.zimbra@nod.at>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_OTHER_BAD_TLD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        Thu, 17 Nov 2022 02:00:48 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E566EB5C
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 23:00:47 -0800 (PST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NCW5p2x9Zz8R040;
+        Thu, 17 Nov 2022 15:00:46 +0800 (CST)
+Received: from xaxapp01.zte.com.cn ([10.88.40.50])
+        by mse-fl2.zte.com.cn with SMTP id 2AH70cgR059705;
+        Thu, 17 Nov 2022 15:00:38 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Thu, 17 Nov 2022 15:00:40 +0800 (CST)
+Date:   Thu, 17 Nov 2022 15:00:40 +0800 (CST)
+X-Zmail-TransId: 2af96375dc18ffffffffb19f3ea9
+X-Mailer: Zmail v1.0
+Message-ID: <202211171500403515273@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <maarten.lankhorst@linux.intel.com>
+Cc:     <thierry.reding@gmail.com>, <sam@ravnborg.org>,
+        <mripard@kernel.org>, <tzimmermann@suse.de>, <airlied@gmail.com>,
+        <daniel@ffwll.ch>, <dri-devel@lists.freedesktop.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIGRybS9wYW5lbDogVXNlIGRldmljZV9tYXRjaF9vZl9ub2RlKCk=?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 2AH70cgR059705
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 6375DC1E.000 by FangMail milter!
+X-FangMail-Envelope: 1668668446/4NCW5p2x9Zz8R040/6375DC1E.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 6375DC1E.000/4NCW5p2x9Zz8R040
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,10 +56,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 07:50:08AM +0100, Richard Weinberger wrote:
-> I think supporting these images in Linux is a worthwhile goal.
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-I never argued against that.  But it is not a fit for partitions.
-So write a proper stacked block driver or dm driver for it if you
-care enough.  The format is a complete mess and should be isolated
-to not affect the rest of the kernel.
+Replace the open-code with device_match_of_node().
+
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+---
+ drivers/gpu/drm/drm_panel.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/drm_panel.c b/drivers/gpu/drm/drm_panel.c
+index f634371c717a..ba66ac1ad88a 100644
+--- a/drivers/gpu/drm/drm_panel.c
++++ b/drivers/gpu/drm/drm_panel.c
+@@ -250,7 +250,7 @@ struct drm_panel *of_drm_find_panel(const struct device_node *np)
+ 	mutex_lock(&panel_lock);
+
+ 	list_for_each_entry(panel, &panel_list, list) {
+-		if (panel->dev->of_node == np) {
++		if (device_match_of_node(panel->dev, np)) {
+ 			mutex_unlock(&panel_lock);
+ 			return panel;
+ 		}
+-- 
+2.25.1
