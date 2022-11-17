@@ -2,123 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0CF962D56C
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:48:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D495162D572
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:49:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239628AbiKQIsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 03:48:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48448 "EHLO
+        id S239673AbiKQItO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 03:49:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239556AbiKQIr5 (ORCPT
+        with ESMTP id S239666AbiKQIsz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 03:47:57 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCF1F140C9
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 00:47:55 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id 21so1548882edv.3
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 00:47:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=idox2DWf9CfxY6np+xVajajSNgisazAtYo+m3/oXIzQ=;
-        b=YJtoDwNevsDYE56TfvpY13pJKKdr1ptUtkThXpzJvzyqFNfQ0lQAYsHeD/G6ijoQb9
-         FzNX3VDp0JST+f3q3q97kt/nU09VpZOu7LMruQ2aOWiPdjy515rP0ho3XAzk1xer9fUN
-         oo8Xij8p06FD8ZWJk/LZaY9rS8uvkmH0Z1QGAUQbauZoRhXRKl8mkUxO/VfQ94d/bxDO
-         0PA707ZmvAL0b7U1IDRpV2graHjHktcAA/oqFa82GZMPJbLgLQQ8+eIAE7kVfLldaMqZ
-         ih7RbpltfyVp99rBOpxzOCYnMi64Up3c/VX8yVq0MmjyQIqG90pWGWBylHcJm+0gLN/P
-         +P2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=idox2DWf9CfxY6np+xVajajSNgisazAtYo+m3/oXIzQ=;
-        b=a3fXgH0qNsGPMXqJp/M89tqtJRSp46aWvzjjKnLLVfRgKSGyPXreeaQZF7s+3PT9u1
-         l9nqeITPdLZXpzTTooLSMnBRssJ7pVxJOFXWcINoF9S8j0YyaEWX9YNgwRU8ciSWgW+3
-         WJ6n0tJJEfuPQVwC2KHAoAGVbZJlRNhzbZn7zcwF+mamSc2Z25tct62+w4xbwdzeAauq
-         rVdhDNaDYdUW+dyrVYHj1p3Ylmsx2IGn0KcYU422v+Eg6ZRMUCldpmhhZzB+mhCyLF60
-         H2kB1mf49q2hvpFWbixLYHoNBS6IHX56naAdAB2XvLHNTjoXt/+yxW7vWAUGkXKKhCke
-         HS2g==
-X-Gm-Message-State: ANoB5pnvpVUoS6ESA/K3yaUHwSrPNhqz1BYS/GzrNLgopYSTsm1H5LII
-        bDKUgwk/dtD9jRwFmQoYDIY77g==
-X-Google-Smtp-Source: AA0mqf4yWjrqIlKEjUvVEQZBYNp9Cyg1fui9YTk3qSoXBiIO38liYCs7aLKXOQNddd4uvH2WBxvUEA==
-X-Received: by 2002:a05:6402:3707:b0:467:6847:83d3 with SMTP id ek7-20020a056402370700b00467684783d3mr1257987edb.247.1668674874355;
-        Thu, 17 Nov 2022 00:47:54 -0800 (PST)
-Received: from [127.0.1.1] ([2a0e:41a:894f:0:7a60:27eb:954c:5ab1])
-        by smtp.gmail.com with ESMTPSA id s22-20020a1709067b9600b0077205dd15basm77332ejo.66.2022.11.17.00.47.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 00:47:54 -0800 (PST)
-From:   Carlo Caione <ccaione@baylibre.com>
-Date:   Thu, 17 Nov 2022 09:47:41 +0100
-Subject: [PATCH 3/3] spi: meson-spicc: Lower CS between bursts
+        Thu, 17 Nov 2022 03:48:55 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2468356D67;
+        Thu, 17 Nov 2022 00:48:47 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1668674925;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=f4v0o1aapg52+kcGV5XzAXyexP8Lv3lkKr4tjq7Y6O8=;
+        b=DpAi6RQXxFDAb2jCHZ8hlQGCjq7mUquhCkriQC1k+9L0/zpGPIDiDl1wxfoVJWMMc78fWv
+        CvKgC6NDCv4M4ECMkgjqNPVdnWHXrvKJw3eIIuHWJdEh3qA+KdDo17J98VlAIUkbdENP3c
+        uIYgYu3SkpZL6fgPFgpWDTw5m0wPt/FS5YSZeCsqZeRZ+AAiJ8CA9Ue9LHcLgni+DdqyC4
+        9HVVmUt1xIcWD1QdHd7VEuB6t9AhpmgY9P6zv760Gn2NALAhbYSBtsMm5JG+DzAF+k65BS
+        IWn5FdhAuzAg6oJvg9KiSyn3jKaDOTJRKePnnqaPxy+Hhpidj+kYQEhQXJAS/A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1668674925;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=f4v0o1aapg52+kcGV5XzAXyexP8Lv3lkKr4tjq7Y6O8=;
+        b=VVj3wrOiImh69rAfSDo0/Y81RyorJMIHmdUsQW58EnPk24F1oOuavIpj30UCq+WmojLUnP
+        UMMbhlSw349GX5AQ==
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
+        Allen Hubbe <allenbh@gmail.com>,
+        "Ahmed S. Darwish" <darwi@linutronix.de>,
+        Reinette Chatre <reinette.chatre@intel.com>
+Subject: Re: [patch 19/33] genirq/msi: Provide msi_desc::msi_data
+In-Reply-To: <Y3U5xwujkZvI0TEN@nvidia.com>
+References: <20221111133158.196269823@linutronix.de>
+ <20221111135206.346985384@linutronix.de> <Y3U5xwujkZvI0TEN@nvidia.com>
+Date:   Thu, 17 Nov 2022 09:48:45 +0100
+Message-ID: <87tu2ym0eq.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20221116-s905x_spi_ili9486-v1-3-630401cb62d5@baylibre.com>
-References: <20221116-s905x_spi_ili9486-v1-0-630401cb62d5@baylibre.com>
-In-Reply-To: <20221116-s905x_spi_ili9486-v1-0-630401cb62d5@baylibre.com>
-To:     Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        David Airlie <airlied@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Carlo Caione <ccaione@baylibre.com>
-X-Mailer: b4 0.10.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On some hardware (reproduced on S905X) when a large payload is
-transmitted over SPI in bursts at the end of each burst, the clock line
-briefly fluctuates creating spurious clock transitions that are being
-recognised by the connected device as a genuine pulses, creating an
-offset in the data being transmitted.
+On Wed, Nov 16 2022 at 15:28, Jason Gunthorpe wrote:
+> On Fri, Nov 11, 2022 at 02:58:41PM +0100, Thomas Gleixner wrote:
+>> +/**
+>> + * struct msi_desc_data - Generic MSI descriptor data
+>> + * @iobase:     Pointer to the IOMEM base adress for interrupt callbacks
+>> + * @cookie:	Device cookie provided at allocation time
+>> + *
+>> + * The content of this data is implementation defined, e.g. PCI/IMS
+>> + * implementations will define the meaning of the data.
+>> + */
+>> +struct msi_desc_data {
+>> +	void			__iomem *iobase;
+>> +	union msi_dev_cookie	cookie;
+>> +};
+>
+> It would be nice to see the pci_msi_desc converted to a domain
+> specific storage as well.
+>
+> Maybe could be written
+>
+> struct msi_desc {
+>    u64 domain_data[2];
+> }
+>
+> struct pci_msi_desc {
+> 		u32 msi_mask;
+> 		u8	multiple	: 3;
+> 		u8	multi_cap	: 3;
+> 		u8	can_mask	: 1;
+> 		u8	is_64		: 1;
+> 		u8	mask_pos;
+> 		u16 default_irq;
+> }
+> static_assert(sizeof(struct pci_msi_desc) <= sizeof(((struct msi_desc *)0)->domain_data));
+>
+> struct pci_msix_desc {
+> 		u32 msix_ctrl;
+> 		u8	multiple	: 3;
+> 		u8	multi_cap	: 3;
+> 		u8	can_mask	: 1;
+> 		u8	is_64		: 1;
+> 		u16 default_irq;
+> 		void __iomem *mask_base;
+> }
+> static_assert(sizeof(struct pci_msix_desc) <= sizeof(((struct msi_desc *)0)->domain_data));
+>
+> ideally hidden in the pci code with some irq_chip facing export API to
+> snoop in the bits a few places need
+>
+> We've used 128 bits for the PCI descriptor, we might as well like
+> everyone have all 128 bits for whatever they want to do
 
-Lower the GPIO CS between bursts to avoid the clock being interpreted as
-valid.
+Not sure because we end up with nasty type casts for
 
-Signed-off-by: Carlo Caione <ccaione@baylibre.com>
----
- drivers/spi/spi-meson-spicc.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+> struct msi_desc {
+>    u64 domain_data[2];
+> }
 
-diff --git a/drivers/spi/spi-meson-spicc.c b/drivers/spi/spi-meson-spicc.c
-index d47f2623a60f..af8d74b53519 100644
---- a/drivers/spi/spi-meson-spicc.c
-+++ b/drivers/spi/spi-meson-spicc.c
-@@ -291,6 +291,10 @@ static inline void meson_spicc_setup_burst(struct meson_spicc_device *spicc)
- static irqreturn_t meson_spicc_irq(int irq, void *data)
- {
- 	struct meson_spicc_device *spicc = (void *) data;
-+	struct spi_device *spi_dev;
-+
-+	spi_dev = spicc->message->spi;
-+	gpiod_set_value(spi_dev->cs_gpiod, 0);
- 
- 	writel_bits_relaxed(SPICC_TC, SPICC_TC, spicc->base + SPICC_STATREG);
- 
-@@ -309,6 +313,8 @@ static irqreturn_t meson_spicc_irq(int irq, void *data)
- 	/* Setup burst */
- 	meson_spicc_setup_burst(spicc);
- 
-+	gpiod_set_value(spi_dev->cs_gpiod, 1);
-+
- 	/* Start burst */
- 	writel_bits_relaxed(SPICC_XCH, SPICC_XCH, spicc->base + SPICC_CONREG);
- 
+Let me think about it.
 
--- 
-b4 0.10.1
+Thanks,
+
+        tglx
