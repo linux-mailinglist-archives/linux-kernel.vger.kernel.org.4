@@ -2,85 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF0C362D1C2
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 04:37:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CA0D62D1EA
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 04:59:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234454AbiKQDhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 22:37:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53802 "EHLO
+        id S231838AbiKQD7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 22:59:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232905AbiKQDhV (ORCPT
+        with ESMTP id S234045AbiKQD7G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 22:37:21 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1F0E1D;
-        Wed, 16 Nov 2022 19:37:20 -0800 (PST)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NCQZd5xY3zRpGD;
-        Thu, 17 Nov 2022 11:36:57 +0800 (CST)
-Received: from dggpeml500006.china.huawei.com (7.185.36.76) by
- dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 17 Nov 2022 11:37:18 +0800
-Received: from localhost.localdomain (10.175.112.70) by
- dggpeml500006.china.huawei.com (7.185.36.76) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 17 Nov 2022 11:37:17 +0800
-From:   Zhang Changzhong <zhangchangzhong@huawei.com>
-To:     Ajay Singh <ajay.kathat@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Johnny Kim <johnny.kim@atmel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Chris Park <chris.park@atmel.com>,
-        Rachel Kim <rachel.kim@atmel.com>,
-        "Nicolas Ferre" <nicolas.ferre@microchip.com>
-CC:     Zhang Changzhong <zhangchangzhong@huawei.com>,
-        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH wireless] wilc1000: fix potential memory leak in wilc_mac_xmit()
-Date:   Thu, 17 Nov 2022 11:56:58 +0800
-Message-ID: <1668657419-29240-1-git-send-email-zhangchangzhong@huawei.com>
-X-Mailer: git-send-email 1.8.3.1
+        Wed, 16 Nov 2022 22:59:06 -0500
+Received: from formenos.hmeau.com (helcar.hmeau.com [216.24.177.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 635A21403D;
+        Wed, 16 Nov 2022 19:59:02 -0800 (PST)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1ovW30-00F4UP-Dk; Thu, 17 Nov 2022 11:58:43 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Thu, 17 Nov 2022 11:58:42 +0800
+Date:   Thu, 17 Nov 2022 11:58:42 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Robert Elliott <elliott@hpe.com>
+Cc:     davem@davemloft.net, tim.c.chen@linux.intel.com,
+        ap420073@gmail.com, ardb@kernel.org, Jason@zx2c4.com,
+        David.Laight@aculab.com, ebiggers@kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 00/24] crypto: fix RCU stalls
+Message-ID: <Y3WxcrjHD4MRWHcS@gondor.apana.org.au>
+References: <20221103042740.6556-1-elliott@hpe.com>
+ <20221116041342.3841-1-elliott@hpe.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.70]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500006.china.huawei.com (7.185.36.76)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221116041342.3841-1-elliott@hpe.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The wilc_mac_xmit() returns NETDEV_TX_OK without freeing skb, add
-dev_kfree_skb() to fix it.
+On Tue, Nov 15, 2022 at 10:13:18PM -0600, Robert Elliott wrote:
+> This series fixes the RCU stalls triggered by the x86 crypto
+> modules discussed in
+> https://lore.kernel.org/all/MW5PR84MB18426EBBA3303770A8BC0BDFAB759@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM/
+> 
+> Two root causes were:
+> - too much data processed between kernel_fpu_begin and
+>   kernel_fpu_end calls (which are heavily used by the x86
+>   optimized drivers)
+> - tcrypt not calling cond_resched during speed test loops
+> 
+> These problems have always been lurking, but improving the
+> loading of the x86/sha512 module led to it happening a lot
+> during boot when using SHA-512 for module signature checking.
 
-Fixes: c5c77ba18ea6 ("staging: wilc1000: Add SDIO/SPI 802.11 driver")
-Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
----
- drivers/net/wireless/microchip/wilc1000/netdev.c | 1 +
- 1 file changed, 1 insertion(+)
+Can we split this series up please? The fixes to the stalls should
+stand separately from the changes to how modules are loaded.  The
+latter is more of an improvement while the former should be applied
+ASAP.
 
-diff --git a/drivers/net/wireless/microchip/wilc1000/netdev.c b/drivers/net/wireless/microchip/wilc1000/netdev.c
-index 9b319a4..6f3ae0d 100644
---- a/drivers/net/wireless/microchip/wilc1000/netdev.c
-+++ b/drivers/net/wireless/microchip/wilc1000/netdev.c
-@@ -730,6 +730,7 @@ netdev_tx_t wilc_mac_xmit(struct sk_buff *skb, struct net_device *ndev)
- 
- 	if (skb->dev != ndev) {
- 		netdev_err(ndev, "Packet not destined to this device\n");
-+		dev_kfree_skb(skb);
- 		return NETDEV_TX_OK;
- 	}
- 
+Thanks,
 -- 
-2.9.5
-
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
