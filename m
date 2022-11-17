@@ -2,199 +2,610 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD04B62E4BC
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 19:47:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 473B062E4BF
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 19:49:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240640AbiKQSrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 13:47:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47610 "EHLO
+        id S234418AbiKQStU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 13:49:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239985AbiKQSrn (ORCPT
+        with ESMTP id S231274AbiKQStR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 13:47:43 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC6A1057C
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 10:47:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668710862; x=1700246862;
-  h=from:to:cc:subject:date:message-id:
-   content-transfer-encoding:mime-version;
-  bh=nWXvrZSfyVdu9W5QCIkn/m8qViGt3jCCG4Uc1OiZyxI=;
-  b=g9tP2EFkk8vKfZiIh4KFfBJG2FES+rt9z3rkYkUNNMGQ7TwhSSe+V0vZ
-   2ODvrCGy8teICaX7mW0U38zpvXdW01JkP/J3nCM9EVJmPu5iCKhSziDPn
-   ho5mUgIOokDE1xGmJclJ8+nyT7Leg/n/qgRjo2CoJVlI+Z0T1H3fPJ5e6
-   3E0bUlzhGI4jUnR0GlfmA6CSATn8vEQu/Z7M2U8C0/6TKmKPxsUFJxSFj
-   35oXuIHLpM5Ru9tpWTgzgKhpbsoqZDQyWIQ7CvTCEMiEe1a7fZIIFiE92
-   Lc8yjq7GNNTaJzEifGkjjILrkFudMB332sXAqdBJA/QFugI+R6NCwWD+H
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="311646725"
-X-IronPort-AV: E=Sophos;i="5.96,172,1665471600"; 
-   d="scan'208";a="311646725"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 10:47:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="745662642"
-X-IronPort-AV: E=Sophos;i="5.96,172,1665471600"; 
-   d="scan'208";a="745662642"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmsmga002.fm.intel.com with ESMTP; 17 Nov 2022 10:47:42 -0800
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 17 Nov 2022 10:47:42 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 17 Nov 2022 10:47:41 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Thu, 17 Nov 2022 10:47:41 -0800
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.42) by
- edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Thu, 17 Nov 2022 10:47:41 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gkR/Pb2HaC6EM9S/NzHRZwSFBZ693q8tbL+al+TfmAMpPFOPgWp4Of4yrjmtpTTS4qFZDytfgyFI08EZ+yACetbInPN7hOqXFYILlCRc7Dfvy4I/PnjdvQJXlDOaehhmmjme19R08Ic4McDprbSKVKvyztTJBKRWWsqlroE9Tv/1ZUCVEdm7MSpaYuTb4hdZ40bWFfXBmJICrjiWfrJDU/GdHaSdCrn6cyCnKN2DG6lBruMj+GfurWe7EmAH5dvDuaEpd51GDl0KXbXNd9JMzktlIhwa4NXvbriQxMt4tcf3GjTu/kztpNRJIvlmowejnqNh+zmxf74367nwKqDJQw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=f4uY5oqtYCwhG3lVrdh+asaP5tWpYub6lz9g9k6RAgA=;
- b=AiDQK6S620QgbRYb1NEtnACTxyctRmCjUbdqPs+p7yGZ3cgLb6dhjnZqEbmiKXBxqmyEvGG6giU330eo5Y65cUOAZd0Hn6avXom7adjnuFZzUOrC/jNw92NAKXAZyOXzxMxdwYzzIhJGzpoin+se7ATeW4iZWDoLn2F2MDJdeFmLnZfzHF3Ut/h5oi8PSQv6HjZbu5tK74rZM2F7Ze9lD+uF4I2SX5V6FQgMzP/G77AUjZDeuspccQqI8LGR/BXeHiZze0BhmkMYyinNg4mTjUVZTWPPW5NAHsS+kPZ+cdidaYPP87acsGGujlLu66jwrQeZlFRpNTGxKiQCmngShg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BYAPR11MB3240.namprd11.prod.outlook.com (2603:10b6:a03:18::19)
- by CH0PR11MB5362.namprd11.prod.outlook.com (2603:10b6:610:b9::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.20; Thu, 17 Nov
- 2022 18:47:39 +0000
-Received: from BYAPR11MB3240.namprd11.prod.outlook.com
- ([fe80::a2b6:70ab:aa5a:9340]) by BYAPR11MB3240.namprd11.prod.outlook.com
- ([fe80::a2b6:70ab:aa5a:9340%7]) with mapi id 15.20.5813.020; Thu, 17 Nov 2022
- 18:47:39 +0000
-From:   "N, Pandith" <pandith.n@intel.com>
-To:     Dipen Patel <dipenp@nvidia.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hall, Christopher S" <christopher.s.hall@intel.com>,
-        "Gross, Mark" <mark.gross@intel.com>,
-        "Sangannavar, Mallikarjunappa" 
-        <mallikarjunappa.sangannavar@intel.com>,
-        "D, Lakshmi Sowjanya" <lakshmi.sowjanya.d@intel.com>,
-        "T R, Thejesh Reddy" <thejesh.reddy.t.r@intel.com>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>
-Subject: Intel timed i/o driver in HTE
-Thread-Topic: Intel timed i/o driver in HTE
-Thread-Index: Adj6qih2Gsi7knz7SkKtEKSdboc8Iw==
-Date:   Thu, 17 Nov 2022 18:47:39 +0000
-Message-ID: <BYAPR11MB3240F382BD180FF90C7DF0B9E1069@BYAPR11MB3240.namprd11.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR11MB3240:EE_|CH0PR11MB5362:EE_
-x-ms-office365-filtering-correlation-id: 071df650-0d0b-4feb-2e72-08dac8cc33d5
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: OzHiRR/J6ATC5DKuls7YPJlQj5Zwc/w2I/Bwn8/3vuYEzv9j0XEPsTTrXr90ZFtMxnCAls12LVtzvOqJ9pBpnvUA7E8GvgA8aGHnFBWBPyXfhEZ5NreOZDogRf3o4XGT3I9y5tn4Iw+gso2wv2tWvOE+44FqZkDDBoya7oHoxWEhCKxC92qqFqzlsaVJEOTrD3AAm/+nax3pKSGw6/F0cK0RyNgOZvtv+yWt67o4Md176CG9kxUGuwne0GCl5ujHb0/XUTZGQUpPgZe2Wwxn+gl3eB+ziDP4OuOEIRD3Xe0ucxLlkMhlXq3Q/0zM+Fm6To8C6vrCsmwlfRQk96SqRBn9mcxDEFueiyTvUHm7iFiDbSiiItAHJRmeyoKBObvdXBIfrwNgxCc5aNGUd8SqSOQaooaTkZvxz2mO/clkJiGTfH+kXdskfjlOvINP+U+kUhMGiqIddM4udSvnZYK5AxXJAi8QQpw4GVsbkeEbnVEM8lASze0gKi7bguKBbAOQDXvgoCU9Rnv5fYKumvhLQF+bsfakpDq1u0Igpdcs3ZdJIwcz0ZiZ8ii+sMebE0S9cMsrCMHEdOEKg9XZE0nKEOWO1uOOszReXRUBqmdQQk0gm8uVxEfTuIyjx3wG2jubHvCNSBJPGCGFATZSAi4hDapoC4sL91hI3UaExuvf0qtHa1KAAfAogzOiIrZInbvGdc5GbENq5jiDdob5Y1Htcg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3240.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(376002)(366004)(396003)(346002)(39860400002)(451199015)(186003)(33656002)(5660300002)(54906003)(6916009)(64756008)(6506007)(7696005)(316002)(41300700001)(8936002)(9686003)(26005)(4326008)(66946007)(52536014)(66446008)(8676002)(76116006)(66556008)(66476007)(122000001)(38100700002)(38070700005)(82960400001)(83380400001)(2906002)(55016003)(86362001)(478600001)(71200400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?OkVJZFIQQeQADIQw/qlQrQqaqw1zxZdmE9H6GSxhUVPPRYle/3yRUKs6E2mU?=
- =?us-ascii?Q?0KtjCWIeIWy2hw4wvvmQfyjKAbYOq+RrmiXDQ5OYH9/zU5JXUSY85ju0v9mh?=
- =?us-ascii?Q?FpzcT16e84YwYqSftLSOJBKL+caHvJw3WkZoXkbbCCUtPv47YqKID3YKGJdM?=
- =?us-ascii?Q?COlAmRptDCqN7Y5aZpCCnc2y+SOWOaSEhBU17uUMpnlcJ31JJWUKeUb0a2J/?=
- =?us-ascii?Q?XxfrfPQQSsJsoe1s7wQy/sppezK8TMZH3dVql85GQ/E5AAb3sql5k1jI92cz?=
- =?us-ascii?Q?Iw9XdmjCxDyFMD+NMjhOg4znrROUT1e475esRHys2wEBws8e/LhluT5RoM4E?=
- =?us-ascii?Q?iOpvCXTHIcqMfuXa2R7M/rDoSYdkVXs32RpI1bv9R+5dvO7Ny14ya9fzS/SX?=
- =?us-ascii?Q?rTltNHS7szL2T3JnQwHsmqvu9DTgTmQw5lsfYWFJVU6O4eUlqnjMeLhJENUE?=
- =?us-ascii?Q?/Xwk2UOYIk7i/uD6D+aDzngkLxmyeNXbpdn9TacOB2fTZVNyIs7OeokZSoyy?=
- =?us-ascii?Q?LNoOHjkhN5uip1FjPaE/W47c7L9aVMYipO45wgmBIUT+CKfId+C/o3Ygl28g?=
- =?us-ascii?Q?ihQmdzKELLWJcXQhUOykvT761chNzYc3xXXnoQsjwFaA8xNPDIFWvPIrKn87?=
- =?us-ascii?Q?Lf2ZsQ42qWyc/MvvXuP18iSkSWsLHewotZIDRURoP6c7Si3bz8i6bimmF+pv?=
- =?us-ascii?Q?kl4CYWKxbxevuSvF64gB+DKVIZ7Hp2LgR7EEWnCxPXUDDQjgVB6Niu4QfPt6?=
- =?us-ascii?Q?+CQRtLWldb3b0j1NYJcH4HZyYPUUQQqbbnYG2PH1PzXlPuL/Iei48t4DGQHc?=
- =?us-ascii?Q?XOFq4D+W7kQeQzbRrylLiwqZfBugkfykdPR54IBWjJn1atDIx1sd0g5Z1Y4p?=
- =?us-ascii?Q?ghculBxwMw2vI3GYR/UkOqYjq2GXZ2OdGhmO5sp2xUsaIFMuSTfINUcjw+5Y?=
- =?us-ascii?Q?ENE9Pz5gjQUplW6JVyQh9HQBIB/RZWRUUduK6VVhAgOg4ndqPl81yyv2DeES?=
- =?us-ascii?Q?28dp0CyhSrUQKfiJaCIUXex2+06dc1nvP7KPBXvyP9x2Wgz476EpvGdXTCAU?=
- =?us-ascii?Q?Kvo8Xct++70QrOmF6czvwGnPTBG8mQdEQJZkxHG3OpVaOzCnGCfaL3NjIiz9?=
- =?us-ascii?Q?5R4jnA78Kl6I24t29of2fY3ctRbccL0x4MO8PgtaXpD/0UDVVbVM2M82Sr0L?=
- =?us-ascii?Q?CcuRwW2r/fpDD+WJEfypqyetonYAEKhYE8KxaeFe/tYmWTKB3A4RvBYVD8Fh?=
- =?us-ascii?Q?8Srt9Xlhl8gJUYKhDr6YQGueOAwhsKQs0MnLXDkh43y2CjWHgsn1n107MQL7?=
- =?us-ascii?Q?sZ7tphcbSkBDjzm2vySuNg3gPa+xR7KTJcbW4amPwjWC+iKgOPDPWr4PFkgH?=
- =?us-ascii?Q?JFyd76NCOmNYcH5cy9xlfzmP06k2j2x68gOhXFnLFaPBNpEytVuU6O1jFgZn?=
- =?us-ascii?Q?6Y9YQB83OFUWwN8V72Ph+HGj6YsuMSFU31/18LGnWlXDQs56tTRDGr+wJbqZ?=
- =?us-ascii?Q?PUyEfqqt081M1O9SOnlr8ayuQVynl0liODXGMuPoYeWYdOVd+xteTaOZBD1Y?=
- =?us-ascii?Q?BhCsjRaMON13FjCUrRc8PQPUAnpEU2Ey1Zp4CVYV?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 17 Nov 2022 13:49:17 -0500
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECA5B1057A
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 10:49:15 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id q21so2082141iod.4
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 10:49:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=A6/e9gcdXnO8Tyz14NJuWr6De+kAZpG+gM0rMvCVARQ=;
+        b=Cv0MM6MRRPK0t0qGjWSf4VSBYJX0wJhWQjGWsyuqdK5lHzQBjtp4bo+FFN3zQJMrB1
+         VQuyxeNmYFylkxkIJsrWRGD/ZZcJRODtb18yEFUpFk/Xok4ekKIXdMQcqJoPZ9ldKmZN
+         LBBcZrPWeWu7vDB3SL7bimSdocRei+t2bJpyE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=A6/e9gcdXnO8Tyz14NJuWr6De+kAZpG+gM0rMvCVARQ=;
+        b=akwbugSUHsSZS/7B1qyzMzklKgpBpZR4CUdGdvB7kJlocTNhHD1SyytCiozE8wpyva
+         qEWJnm2cO9P+XpbBjADxnqO+62ve3kUcsFB5cYYU+Q/VxOaYHB3sz5M99C9Ib19gusrl
+         NXfCrFHaCmGecjsLerr1p//gMhKeoiyED8GgH7vsTVrXeicYt6xIDdrge37KL+6h/k3J
+         EK1YIi8ABwOYOLzzdiHOuP+97lKbnE21ergfLXYsYm3y8bGnD4p079qspkS4Zv+iabwc
+         0AmDsFHe63uZNY6LRcwKELvBXkuDWL8AM220uDguO8YpPyu0nEIcHG+0jfH+iAEXvrv6
+         yK+A==
+X-Gm-Message-State: ANoB5pnQAz/jTnlFYJIKbqYLkOwhnPmw7YHJKPZjKKekKpp6h4iBZDu5
+        jzG9GTAE56rkOMGQFab6TkeDzEZOR5Jy3Ipo0vI=
+X-Google-Smtp-Source: AA0mqf56BjPMP5w8JQ20k/DBNwwspS9OnPsvTqt4ARNzF4Gbc/7CLV7LkAD1pJSlYdUormmJVqEZ/g==
+X-Received: by 2002:a6b:7903:0:b0:6cb:4c03:6d6e with SMTP id i3-20020a6b7903000000b006cb4c036d6emr1934177iop.168.1668710954986;
+        Thu, 17 Nov 2022 10:49:14 -0800 (PST)
+Received: from markhas1.corp.google.com ([100.107.108.223])
+        by smtp.gmail.com with ESMTPSA id q6-20020a02a986000000b00363faa1ea9asm503282jam.15.2022.11.17.10.49.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 10:49:14 -0800 (PST)
+From:   Mark Hasemeyer <markhas@chromium.org>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Raul Rangel <rrangel@chromium.org>,
+        Mark Hasemeyer <markhas@chromium.org>,
+        Bhanu Prakash Maiya <bhanumaiya@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        chrome-platform@lists.linux.dev
+Subject: [PATCH v7 1/3] platform/chrome: cros_ec_uart: Add cros-ec-uart transport layer
+Date:   Thu, 17 Nov 2022 11:48:46 -0700
+Message-Id: <20221117114818.v7.1.If7926fcbad397bc6990dd725690229bed403948c@changeid>
+X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3240.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 071df650-0d0b-4feb-2e72-08dac8cc33d5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Nov 2022 18:47:39.4370
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: //+DOCbj+en2VypNoF/FyNfUpmHcVkYmfFZ0o8kjjFEXgzjyBMma9CY68GOMHyKvtQrFjGNXb4KRPYC0RADcgg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5362
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dipen,
+This patch does following:
+1. Adds a new cros-ec-uart driver. This driver can send EC requests on
+   UART and process response packets received on UART transport.
+2. Once probed, this driver will initialize the serdev device based on
+   the underlying information in the ACPI resource. After serdev device
+   properties are set, this driver will register itself cros-ec.
+3. High level driver can use this implementation to talk to ChromeOS
+   Embedded Controller device in case it supports UART as transport.
+4. When cros-ec driver initiates a request packet, outgoing message is
+   processed in buffer and sent via serdev. Once bytes are sent, driver
+   enables a wait_queue.
+5. Since ChromeOS EC device sends response asynchronously, AP's TTY
+   driver accumulates response bytes and calls the registered callback.
+   TTY driver can send multiple callback for bytes ranging from 1 to MAX
+   bytes supported by EC device.
+6. Driver waits for EC_MSG_DEADLINE_MS to collect and process received
+   bytes. It wakes wait_queue if expected bytes are received or else
+   wait_queue timeout. Based on the error condition, driver returns
+   data_len or error to cros_ec.
 
-To support Intel timed i/o driver, it was suggested by Linux community to e=
-nhance hte framework.
-However, we see some limitations to support complete Intel timed i/o device=
-.
+Signed-off-by: Bhanu Prakash Maiya <bhanumaiya@chromium.org>
+Signed-off-by: Mark Hasemeyer <markhas@chromium.org>
+---
 
-1. The current framework supports Nvidia IP, which has two IP blocks (hw ti=
-mestamping engine interfaced with GPIO)
-Intel timed i/o is a single IP block handling multiple functionalities like=
-:
+Changes in v7:
+- Use ACPI ID matching
+- Change MODULE_LICENSE from GPL v2 to GPL
 
-	a. Input timestamping with event counter.
-	b. Timed output  - single shot or periodic pulse train.
-	Uses TSC(Timestamp counter) for timestamp or generate events, which could =
-be translated to system time.
-	c. Implement PPS functionality to export time.
+Changes in v6:
+- Tuning EC_MSG_DEADLINE_MS from 1 sec to 500 msec. Since the EC's UART
+  response buffer was tuned and redeuced to 256 byte, 500 msec timeout
+  should give enough time for 256 bytes to be recieved from SoC  UART
+  buffer.
 
-This requires new functionality(interface) to be developed in hte framework=
- specific to timed-io device.
+Changes in v5:
+- Fixed checkpatch.pl warnings.
 
-2. The current hte framework has a provider and consumer concept.
-Consumer is responsible for user space interaction.
-Currently Nvidia is using GPIO for input timestamping  (by adding hw timest=
-amps in gpiolib-cdev.c)
+Changes in v4:
+- Change EC_MSG_DEADLINE_MS from 3 secs to 1 sec. 3 secs timeout prevents
+  driver from intercepting EC in RO stage. In case of request failure, 1
+  sec allows driver to retry and send HC when EC is in RO.
+- Add more information in commit message.
 
-For Intel timed i/o functionalities, current gpio user interfaces cannot su=
-pport event counter
-or output modes.
-Rather than jigging hte consumer into other subsystems to support timed i/o=
- device.=20
-Any possibility of developing a native consumer in hte subsystem, which cou=
-ld handle user space interactions for timestamping engines.
+Changes in v3:
+- checkpatch.pl script warns about char len 80 even though we have
+  relaxed view guideline for line below 100 chars. Currently sticking
+  with 80 chars in v3.
+- Fixed style issues
 
-I cannot think of an existing subsystem that handles Intel timed i/o functi=
-onalities 1a, 1b and 1c (mentioned above).
+Changes in v2:
+- Fixed build error on v1.
+- Changed EC timeout for response packet to 3 Sec and added comments.
+- Fixed cros_ec_uart_rx_bytes function to handle rx buffer < size of response header.
 
-Regards,
-Pandith
+---
+ MAINTAINERS                            |   6 +
+ drivers/platform/chrome/Kconfig        |  10 +
+ drivers/platform/chrome/Makefile       |   1 +
+ drivers/platform/chrome/cros_ec_uart.c | 418 +++++++++++++++++++++++++
+ 4 files changed, 435 insertions(+)
+ create mode 100644 drivers/platform/chrome/cros_ec_uart.c
 
-
-
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 256f03904987a..123fbe77bc236 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4918,6 +4918,12 @@ S:	Maintained
+ F:	Documentation/devicetree/bindings/sound/google,cros-ec-codec.yaml
+ F:	sound/soc/codecs/cros_ec_codec.*
+ 
++CHROMEOS EC UART DRIVER
++M:	Bhanu Prakash Maiya <bhanumaiya@chromium.org>
++R:	Enric Balletbo i Serra <enric.balletbo@collabora.com>
++S:	Maintained
++F:	drivers/platform/chrome/cros_ec_uart.c
++
+ CHROMEOS EC SUBDRIVERS
+ M:	Benson Leung <bleung@chromium.org>
+ R:	Guenter Roeck <groeck@chromium.org>
+diff --git a/drivers/platform/chrome/Kconfig b/drivers/platform/chrome/Kconfig
+index 6b954c5acadb1..d4a95ec261ed3 100644
+--- a/drivers/platform/chrome/Kconfig
++++ b/drivers/platform/chrome/Kconfig
+@@ -119,6 +119,16 @@ config CROS_EC_SPI
+ 	  response time cannot be guaranteed, we support ignoring
+ 	  'pre-amble' bytes before the response actually starts.
+ 
++config CROS_EC_UART
++	tristate "ChromeOS Embedded Controller (UART)"
++	depends on CROS_EC && ACPI && SERIAL_DEV_BUS
++	help
++	  If you say Y here, you get support for talking to the ChromeOS EC
++	  through a UART, using a byte-level protocol.
++
++	  To compile this driver as a module, choose M here: the
++	  module will be called cros_ec_uart.
++
+ config CROS_EC_LPC
+ 	tristate "ChromeOS Embedded Controller (LPC)"
+ 	depends on CROS_EC && ACPI && (X86 || COMPILE_TEST)
+diff --git a/drivers/platform/chrome/Makefile b/drivers/platform/chrome/Makefile
+index 2950610101f15..6f5b6f01940db 100644
+--- a/drivers/platform/chrome/Makefile
++++ b/drivers/platform/chrome/Makefile
+@@ -15,6 +15,7 @@ obj-$(CONFIG_CROS_EC_ISHTP)		+= cros_ec_ishtp.o
+ obj-$(CONFIG_CROS_TYPEC_SWITCH)		+= cros_typec_switch.o
+ obj-$(CONFIG_CROS_EC_RPMSG)		+= cros_ec_rpmsg.o
+ obj-$(CONFIG_CROS_EC_SPI)		+= cros_ec_spi.o
++obj-$(CONFIG_CROS_EC_UART)		+= cros_ec_uart.o
+ cros_ec_lpcs-objs			:= cros_ec_lpc.o cros_ec_lpc_mec.o
+ obj-$(CONFIG_CROS_EC_TYPEC)		+= cros_ec_typec.o
+ obj-$(CONFIG_CROS_EC_LPC)		+= cros_ec_lpcs.o
+diff --git a/drivers/platform/chrome/cros_ec_uart.c b/drivers/platform/chrome/cros_ec_uart.c
+new file mode 100644
+index 0000000000000..b5f72f0104985
+--- /dev/null
++++ b/drivers/platform/chrome/cros_ec_uart.c
+@@ -0,0 +1,418 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * UART interface for ChromeOS Embedded Controller
++ *
++ * Copyright 2020 Google LLC.
++ */
++
++#include <linux/delay.h>
++#include <linux/errno.h>
++#include <linux/init.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/acpi.h>
++#include <linux/platform_data/cros_ec_commands.h>
++#include <linux/platform_data/cros_ec_proto.h>
++#include <linux/serdev.h>
++#include <linux/slab.h>
++#include <uapi/linux/sched/types.h>
++
++#include "cros_ec.h"
++
++/*
++ * EC sends contiguous bytes of response packet on UART AP RX.
++ * TTY driver in AP accumulates incoming bytes and calls the registered callback
++ * function. Byte count can range from 1 to MAX bytes supported by EC.
++ * This driver should wait for long time for all callbacks to be processed.
++ * Considering the worst case scenario, wait for 500 msec. This timeout should
++ * account for max latency and some additional guard time.
++ * Best case: Entire packet is received in ~200 ms, wait queue will be released
++ * and packet will be processed.
++ * Worst case: TTY driver sends bytes in multiple callbacks. In this case this
++ * driver will wait for ~1 sec beyond which it will timeout.
++ * This timeout value should not exceed ~500 msec because in case if
++ * EC_CMD_REBOOT_EC sent, high level driver should be able to intercept EC
++ * in RO.
++ */
++#define EC_MSG_DEADLINE_MS		500
++
++/**
++ * struct response_info - Encapsulate EC response related
++ *			information for passing between function
++ *			cros_ec_uart_pkt_xfer() and cros_ec_uart_rx_bytes()
++ *			callback.
++ * @data:		Copy the data received from EC here.
++ * @max_size:		Max size allocated for the @data buffer. If the
++ *			received data exceeds this value, we log an error.
++ * @size:		Actual size of data received from EC. This is also
++ *			used to accumulate byte count with response is received
++ *			in dma chunks.
++ * @exp_len:		Expected bytes of response from EC including header.
++ * @error:		0 for success, negative error code for a failure.
++ * @received:		Set to true on receiving a valid EC response.
++ * @wait_queue:		Wait queue EC response where the cros_ec sends request
++ *			to EC and waits
++ */
++struct response_info {
++	void *data;
++	size_t max_size;
++	size_t size;
++	int error;
++	size_t exp_len;
++	bool received;
++	wait_queue_head_t wait_queue;
++};
++
++/**
++ * struct cros_ec_uart - information about a uart-connected EC
++ *
++ * @serdev_device:	serdev uart device we are connected to.
++ * @baudrate:		UART baudrate of attached EC device.
++ * @flowcontrol:	UART flowcontrol of attached device.
++ * @irq:		Linux IRQ number of associated serial device.
++ * @response:		Response info passing between cros_ec_uart_pkt_xfer()
++ *			and cros_ec_uart_rx_bytes()
++ */
++struct cros_ec_uart {
++	struct serdev_device *serdev;
++	u32 baudrate;
++	u8  flowcontrol;
++	u32 irq;
++	struct response_info response;
++};
++
++static int cros_ec_uart_rx_bytes(struct serdev_device *serdev,
++				 const u8 *data,
++				 size_t count)
++{
++	struct ec_host_response *response;
++	struct cros_ec_device *ec_dev = serdev_device_get_drvdata(serdev);
++	struct cros_ec_uart *ec_uart = ec_dev->priv;
++
++	/* Check if bytes were sent out of band */
++	if (!ec_uart->response.data)
++		/* Discard all bytes */
++		return count;
++
++	/*
++	 * Check if incoming bytes + response.size are less than allocated
++	 * buffer in din by cros_ec. This will ensure that if EC sends more
++	 * bytes than max_size, waiting process will be notified with an error.
++	 */
++	if (ec_uart->response.size + count <= ec_uart->response.max_size) {
++		/* Copy bytes in data in buffer */
++		memcpy((void *)ec_uart->response.data + ec_uart->response.size,
++		       (void *)data, count);
++
++		/* Add incoming bytes in size */
++		ec_uart->response.size += count;
++
++		/*
++		 * Read data_len if we received response header and if exp_len
++		 * was not read before.
++		 */
++		if (ec_uart->response.size >= sizeof(*response) &&
++		    ec_uart->response.exp_len == 0) {
++			/* Get expected response length from response header */
++			response = (struct ec_host_response *)
++							ec_uart->response.data;
++
++			ec_uart->response.exp_len = response->data_len +
++				sizeof(*response);
++		}
++
++		/*
++		 * If driver received response header and payload from EC,
++		 * Wake up the wait queue.
++		 */
++		if (ec_uart->response.size >= sizeof(*response) &&
++		    ec_uart->response.size == ec_uart->response.exp_len) {
++			/* Set flag before waking up the caller */
++			ec_uart->response.received = true;
++
++			/* Wake the calling thread */
++			wake_up_interruptible(&ec_uart->response.wait_queue);
++		}
++	} else {
++		/* Received bytes are more the allocated buffer*/
++		ec_uart->response.error = -EMSGSIZE;
++
++		/* Wake the calling thread */
++		wake_up_interruptible(&ec_uart->response.wait_queue);
++	}
++
++	return count;
++}
++
++static int cros_ec_uart_pkt_xfer(struct cros_ec_device *ec_dev,
++				 struct cros_ec_command *ec_msg)
++{
++	struct cros_ec_uart *ec_uart = ec_dev->priv;
++	struct serdev_device *serdev = ec_uart->serdev;
++	struct ec_host_response *response;
++	unsigned int len;
++	int ret, i;
++	u8 sum = 0;
++
++	/* Prepare an outgoing message in the output buffer */
++	len = cros_ec_prepare_tx(ec_dev, ec_msg);
++	dev_dbg(ec_dev->dev, "Prepared len=%d\n", len);
++
++	/* Setup for incoming response */
++	ec_uart->response.data = ec_dev->din;
++	ec_uart->response.max_size = ec_dev->din_size;
++	ec_uart->response.size = 0;
++	ec_uart->response.error = 0;
++	ec_uart->response.exp_len = 0;
++	ec_uart->response.received = false;
++
++	/* Write serial device buffer */
++	ret = serdev_device_write_buf(serdev, ec_dev->dout, len);
++	if (ret < len) {
++		dev_err(&serdev->dev,
++			"Unable to write data to serial device %s",
++			dev_name(&serdev->dev));
++
++		/* Return EIO as controller had issues writing buffer */
++		ret = -EIO;
++		goto exit;
++	}
++
++	/* Once request is successfully sent to EC, wait to wait_queue */
++	wait_event_interruptible_timeout(ec_uart->response.wait_queue,
++					 ec_uart->response.received,
++					 msecs_to_jiffies(EC_MSG_DEADLINE_MS));
++
++	/* Check if wait_queue was interrupted due to an error */
++	if (ec_uart->response.error < 0) {
++		dev_warn(&serdev->dev, "Response error detected.\n");
++
++		ret = ec_uart->response.error;
++		goto exit;
++	}
++
++	/* Check if valid response was received or there was a timeout */
++	if (!ec_uart->response.received) {
++		dev_warn(&serdev->dev, "EC failed to respond in time.\n");
++
++		ret = -ETIMEDOUT;
++		goto exit;
++	}
++
++	/* Check response error code */
++	response = (struct ec_host_response *)ec_dev->din;
++	ec_msg->result = response->result;
++
++	/* Check if received response is longer than expected */
++	if (response->data_len > ec_msg->insize) {
++		dev_err(ec_dev->dev, "Resp too long (%d bytes, expected %d)",
++			response->data_len,
++			ec_msg->insize);
++		ret = -ENOSPC;
++		goto exit;
++	}
++
++	/* Copy response packet to ec_msg data buffer */
++	memcpy(ec_msg->data,
++	       ec_dev->din + sizeof(*response),
++	       response->data_len);
++
++	/* Add all response header bytes for checksum calculation */
++	for (i = 0; i < sizeof(*response); i++)
++		sum += ec_dev->din[i];
++
++	/* Copy response packet payload and compute checksum */
++	for (i = 0; i < response->data_len; i++)
++		sum += ec_msg->data[i];
++
++	if (sum) {
++		dev_err(ec_dev->dev,
++			"Bad packet checksum calculated %x\n",
++			sum);
++		ret = -EBADMSG;
++		goto exit;
++	}
++
++	/* Return data_len to cros_ec */
++	ret = response->data_len;
++
++exit:
++	/* Reset ec_uart */
++	ec_uart->response.data = NULL;
++	ec_uart->response.max_size = 0;
++	ec_uart->response.size = 0;
++	ec_uart->response.error = 0;
++	ec_uart->response.exp_len = 0;
++	ec_uart->response.received = false;
++
++	if (ec_msg->command == EC_CMD_REBOOT_EC)
++		msleep(EC_REBOOT_DELAY_MS);
++
++	return ret;
++}
++
++static int cros_ec_uart_resource(struct acpi_resource *ares, void *data)
++{
++	struct cros_ec_uart *ec_uart = data;
++	struct acpi_resource_uart_serialbus *sb;
++
++	switch (ares->type) {
++	case ACPI_RESOURCE_TYPE_SERIAL_BUS:
++		sb = &ares->data.uart_serial_bus;
++		if (sb->type == ACPI_RESOURCE_SERIAL_TYPE_UART) {
++			ec_uart->baudrate = sb->default_baud_rate;
++			dev_dbg(&ec_uart->serdev->dev, "Baudrate %d\n",
++				ec_uart->baudrate);
++
++			ec_uart->flowcontrol = sb->flow_control;
++			dev_dbg(&ec_uart->serdev->dev, "Flow control %d\n",
++				ec_uart->flowcontrol);
++		}
++		break;
++	default:
++		break;
++	}
++
++	return 0;
++}
++
++static int cros_ec_uart_acpi_probe(struct cros_ec_uart *ec_uart)
++{
++	LIST_HEAD(resources);
++	struct acpi_device *adev = ACPI_COMPANION(&ec_uart->serdev->dev);
++	int ret;
++
++	/* Retrieve UART ACPI info */
++	ret = acpi_dev_get_resources(adev, &resources,
++				     cros_ec_uart_resource, ec_uart);
++	if (ret < 0)
++		return ret;
++
++	acpi_dev_free_resource_list(&resources);
++
++	/* Retrieve GpioInt and translate it to Linux IRQ number */
++	ret = acpi_dev_gpio_irq_get(adev, 0);
++	if (ret < 0)
++		return ret;
++
++	ec_uart->irq = ret;
++	dev_dbg(&ec_uart->serdev->dev, "IRQ number %d\n", ec_uart->irq);
++
++	return 0;
++}
++
++static const struct serdev_device_ops cros_ec_uart_client_ops = {
++	.receive_buf = cros_ec_uart_rx_bytes,
++};
++
++static int cros_ec_uart_probe(struct serdev_device *serdev)
++{
++	struct device *dev = &serdev->dev;
++	struct cros_ec_device *ec_dev;
++	struct cros_ec_uart *ec_uart;
++	int ret;
++
++	ec_uart = devm_kzalloc(dev, sizeof(*ec_uart), GFP_KERNEL);
++	if (!ec_uart)
++		return -ENOMEM;
++
++	ec_dev = devm_kzalloc(dev, sizeof(*ec_dev), GFP_KERNEL);
++	if (!ec_dev)
++		return -ENOMEM;
++
++	ec_uart->serdev = serdev;
++
++	/* Open the serial device */
++	ret = devm_serdev_device_open(dev, ec_uart->serdev);
++	if (ret) {
++		dev_err(dev, "Unable to open UART device %s",
++			dev_name(&serdev->dev));
++		return ret;
++	}
++
++	serdev_device_set_drvdata(serdev, ec_dev);
++
++	serdev_device_set_client_ops(serdev, &cros_ec_uart_client_ops);
++
++	/* Initialize wait queue */
++	init_waitqueue_head(&ec_uart->response.wait_queue);
++
++	ret = cros_ec_uart_acpi_probe(ec_uart);
++	if (ret < 0) {
++		dev_err(dev, "Failed to get ACPI info (%d)", ret);
++		return ret;
++	}
++
++	/* Set baud rate of serial device */
++	ret = serdev_device_set_baudrate(serdev, ec_uart->baudrate);
++	if (ret < 0) {
++		dev_err(dev, "Failed to set up host baud rate (%d)", ret);
++		return ret;
++	}
++
++	/* Set flow control of serial device */
++	serdev_device_set_flow_control(serdev, ec_uart->flowcontrol);
++
++	/* Initialize ec_dev for cros_ec  */
++	ec_dev->phys_name = dev_name(&ec_uart->serdev->dev);
++	ec_dev->dev = dev;
++	ec_dev->priv = ec_uart;
++	ec_dev->irq = ec_uart->irq;
++	ec_dev->cmd_xfer = NULL;
++	ec_dev->pkt_xfer = cros_ec_uart_pkt_xfer;
++	ec_dev->din_size = sizeof(struct ec_host_response) +
++			   sizeof(struct ec_response_get_protocol_info);
++	ec_dev->dout_size = sizeof(struct ec_host_request);
++
++	/* Register a new cros_ec device */
++	return cros_ec_register(ec_dev);
++}
++
++static void cros_ec_uart_remove(struct serdev_device *serdev)
++{
++	struct cros_ec_device *ec_dev = serdev_device_get_drvdata(serdev);
++
++	cros_ec_unregister(ec_dev);
++};
++
++static int __maybe_unused cros_ec_uart_suspend(struct device *dev)
++{
++	struct cros_ec_device *ec_dev = dev_get_drvdata(dev);
++
++	return cros_ec_suspend(ec_dev);
++}
++
++static int __maybe_unused cros_ec_uart_resume(struct device *dev)
++{
++	struct cros_ec_device *ec_dev = dev_get_drvdata(dev);
++
++	return cros_ec_resume(ec_dev);
++}
++
++static SIMPLE_DEV_PM_OPS(cros_ec_uart_pm_ops, cros_ec_uart_suspend,
++			 cros_ec_uart_resume);
++
++#ifdef CONFIG_ACPI
++static const struct acpi_device_id cros_ec_uart_acpi_id[] = {
++	{ "GOOG0019", 0 },
++	{ /* sentinel */ }
++};
++
++MODULE_DEVICE_TABLE(acpi, cros_ec_uart_acpi_id);
++#endif
++
++static struct serdev_device_driver cros_ec_uart_driver = {
++	.driver	= {
++		.name	= "cros-ec-uart",
++		.acpi_match_table = ACPI_PTR(cros_ec_uart_acpi_id),
++		.pm	= &cros_ec_uart_pm_ops,
++	},
++	.probe		= cros_ec_uart_probe,
++	.remove		= cros_ec_uart_remove,
++};
++
++module_serdev_device_driver(cros_ec_uart_driver);
++
++MODULE_LICENSE("GPL");
++MODULE_DESCRIPTION("UART interface for ChromeOS Embedded Controller");
++MODULE_AUTHOR("Bhanu Prakash Maiya <bhanumaiya@chromium.org>");
+-- 
+2.38.1.584.g0f3c55d4c2-goog
 
