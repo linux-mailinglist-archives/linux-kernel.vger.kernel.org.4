@@ -2,71 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FFDF62D3E5
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 08:16:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D58462D3E3
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 08:16:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234615AbiKQHQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 02:16:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53570 "EHLO
+        id S234570AbiKQHQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 02:16:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239157AbiKQHQU (ORCPT
+        with ESMTP id S233963AbiKQHQI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 02:16:20 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9909063B6;
-        Wed, 16 Nov 2022 23:16:19 -0800 (PST)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AH5OLnK011670;
-        Thu, 17 Nov 2022 07:16:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding;
- s=corp-2022-7-12; bh=9kopYNd6jIPcxgzNvcy2sDx186qQDHRpN+Dt2XgO6jk=;
- b=2fk7wvcguQPJsQt27KH18YVDsK0dxAJgIAOiB6dNsvXhbUP5H+Q7DoJYRFD86oQrQ1YH
- li9rLPrZPwY3rQDOc9NAS0Fx+oMNi6FTRWHRKrT1v6HJrUILUBWnmwwbHgjeKDz4mlCf
- rafvqWqtZtDjrztrl1M4LzH7gn7Fo+Hw8gQ57pPAZo019GfsG9T+YWyj2lEy4sNlWSfA
- +GtMjI8iRnUfPECor7wkfk4QCRYm+htH/NwkVd1ANYU6r28CG4tzx0bCfnkIMuHQ21vD
- igwtMXWF4fLuec+Vev9OYMPG1WulctC8J4AAKk921IoiQVY2ltlXOUMDPvI5CRLrl+J8 bg== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kv3jsr3jv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 17 Nov 2022 07:16:11 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2AH6gRhO016820;
-        Thu, 17 Nov 2022 07:16:11 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3kuk1yh83m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 17 Nov 2022 07:16:10 +0000
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AH7GAv9029452;
-        Thu, 17 Nov 2022 07:16:10 GMT
-Received: from jarvis3.oracle.com (dhcp-10-76-54-85.vpn.oracle.com [10.76.54.85])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3kuk1yh81d-1;
-        Thu, 17 Nov 2022 07:16:10 +0000
-From:   Kamalesh Babulal <kamalesh.babulal@oracle.com>
-To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Waiman Long <longman@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>
-Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tom Hromatka <tom.hromatka@oracle.com>
-Subject: [PATCH v2] cgroup/cpuset: Improve cpuset_css_alloc() description
-Date:   Thu, 17 Nov 2022 12:45:57 +0530
-Message-Id: <20221117071557.165742-1-kamalesh.babulal@oracle.com>
-X-Mailer: git-send-email 2.34.3
+        Thu, 17 Nov 2022 02:16:08 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B2816F35A;
+        Wed, 16 Nov 2022 23:16:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668669366; x=1700205366;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=OZR+MyWLgP8HkrZB6F3ZwjvvPglgkpwXgGMdnYgokHc=;
+  b=eHl9Ds18wekUjKrR2j+IFgYswVUB3iXAAhx6iTSBnNsave5wPW2vmh3G
+   D/BoeGbRv2WGHmP7fXo4c63BCY8h3s13IEFYx6MwQkk3cJS6Dl77jAc7T
+   as6SBo36j6dYXLRC9S4rA4ISf1FeBVefP41i20YdEb+SFA357LJGlKV6h
+   47YYOmLjO2KHebmMilHuTCwX7cCvxbT7wIZKU2Uw9YMfPZGSG96alk2MQ
+   zfubzgoJtcby2zohNeSoY8pJPbogjP1J2oOFVLUC1UNitaMo5ER7VgYip
+   4H8zPktztPXmefUTHOblgxOFc+OvOLmjzn30JP8EXicqE2guopgvOlAk4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="311483256"
+X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
+   d="scan'208";a="311483256"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 23:16:05 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="590511493"
+X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
+   d="scan'208";a="590511493"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.35.99])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 23:16:02 -0800
+Message-ID: <c67001f8-8f25-2633-fc37-892d74bdf07e@intel.com>
+Date:   Thu, 17 Nov 2022 09:15:58 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-17_04,2022-11-16_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0 spamscore=0
- mlxlogscore=999 phishscore=0 mlxscore=0 adultscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2211170054
-X-Proofpoint-ORIG-GUID: TJtROg19GrMyBSACY64Twub5WEpeNIDg
-X-Proofpoint-GUID: TJtROg19GrMyBSACY64Twub5WEpeNIDg
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.5.0
+Subject: Re: [PATCH V3 1/1] mmc: sdhci: Fix the SD tuning issue that the
+ SDHCI_TRANSFER_MODE is cleared incorrectly
+Content-Language: en-US
+To:     Charl Liu <charl.liu@bayhubtech.com>, ulf.hansson@linaro.org,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     shaper.liu@bayhubtech.com, chevron.li@bayhubtech.com,
+        thomas.hu@bayhubtech.com, xiaoguang.yu@bayhubtech.com,
+        shirley.her@bayhubtech.com
+References: <20221111122314.307-1-charl.liu@bayhubtech.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20221111122314.307-1-charl.liu@bayhubtech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,44 +68,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Change the function argument in the description of cpuset_css_alloc()
-from 'struct cgroup' -> 'struct cgroup_subsys_state'.  The change to the
-argument type was introduced by commit eb95419b023a ("cgroup: pass
-around cgroup_subsys_state instead of cgroup in subsystem methods").
-Also, add more information to its description.
+On 11/11/22 14:23, Charl Liu wrote:
+> When cmd->opcode == MMC_SEND_TUNING_BLOCK, the SDHCI_TRANSFER_MODE
+> should also be kept
+> 
+> Signed-off-by: Charl Liu <charl.liu@bayhubtech.com>
 
-Signed-off-by: Kamalesh Babulal <kamalesh.babulal@oracle.com>
----
-v2: Reworded the description to be more accurate, as suggested
-    by Waiman Long
+Acked-by: Adrian Hunter <adrian.hunter@intel.com>
 
- kernel/cgroup/cpuset.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index b474289c15b8..ce789e1b2a2f 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -3046,11 +3046,15 @@ static struct cftype dfl_files[] = {
- };
- 
- 
--/*
-- *	cpuset_css_alloc - allocate a cpuset css
-- *	cgrp:	control group that the new cpuset will be part of
-+/**
-+ * cpuset_css_alloc - Allocate a cpuset css
-+ * @parent_css: Parent css of the control group that the new cpuset will be
-+ *              part of
-+ * Return: cpuset css on success, -ENOMEM on failure.
-+ *
-+ * Allocate and initialize a new cpuset css, for non-NULL @parent_css, return
-+ * top cpuset css otherwise.
-  */
--
- static struct cgroup_subsys_state *
- cpuset_css_alloc(struct cgroup_subsys_state *parent_css)
- {
--- 
-2.34.3
+> ---
+> change in V1:
+> Keeping the SDHCI_TRANSFER_MODE when cmd->opcode == MMC_END_TUNING_BLOCK
+> 
+> change in V2:
+> add the mmc_op_tuning interface to judge if the opcode is tuning CMD
+> 
+> change in V3:
+> cancel the redundant code
+> ---
+>  drivers/mmc/host/sdhci.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
+> index fef03de85b99..98ee688de50d 100644
+> --- a/drivers/mmc/host/sdhci.c
+> +++ b/drivers/mmc/host/sdhci.c
+> @@ -1465,7 +1465,7 @@ static void sdhci_set_transfer_mode(struct sdhci_host *host,
+>  		if (host->quirks2 &
+>  			SDHCI_QUIRK2_CLEAR_TRANSFERMODE_REG_BEFORE_CMD) {
+>  			/* must not clear SDHCI_TRANSFER_MODE when tuning */
+> -			if (cmd->opcode != MMC_SEND_TUNING_BLOCK_HS200)
+> +			if (!mmc_op_tuning(cmd->opcode))
+>  				sdhci_writew(host, 0x0, SDHCI_TRANSFER_MODE);
+>  		} else {
+>  		/* clear Auto CMD settings for no data CMDs */
 
