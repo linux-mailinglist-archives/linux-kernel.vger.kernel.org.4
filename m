@@ -2,150 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C136362DE82
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 15:44:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84DD162DE89
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 15:45:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240273AbiKQOoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 09:44:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40454 "EHLO
+        id S240260AbiKQOpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 09:45:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240100AbiKQOnc (ORCPT
+        with ESMTP id S239263AbiKQOot (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 09:43:32 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29ED9397
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 06:43:29 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id z24so2989064ljn.4
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 06:43:29 -0800 (PST)
+        Thu, 17 Nov 2022 09:44:49 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9912851338;
+        Thu, 17 Nov 2022 06:44:33 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id ft34so5490671ejc.12;
+        Thu, 17 Nov 2022 06:44:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HQLQpf3kqVigsxlHZz3VInqB29DX3Of3V5vUpblQjaE=;
-        b=cgEyuXJ9bSA2nbbeLhNB/uy9KIR0uK9QNQwKu5wOFqsIeCJ9+AwrtgI/d2KpiRUTs8
-         GWR0arDbaBDl0MVo+Dtx+mM+bkRFgxla9SBM0YbFI/3nSOFb+8Is86Tw5fnv5gkSJ2Q0
-         JLE142Ah2VMsEeKe+AwVz0lN65TV9i+LF9txiuORSY/fseVNcQq2GSMjPyvlATNAHPKF
-         IC9nlrDeLffvuvallMwZZp1vqnYLr57l9yiD3i6+srDDJID4MPV0jwUDy1H5wA7tVctv
-         ker2R3Gq398hxtYIKX8wRSWHsQgY2FrPFCBqmbLxkyggfbkIRr+TuN0bnB/iIfOAynYj
-         SGxg==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=riDO6qHjkXJO4FMqmQwEaErq/K8CVkbFub7re4pItDY=;
+        b=DBPmY9VxDmx8RgOYEwV0YLA7Jp25y31ofjo3bMYX9sqNFWGs6XWlG3dy3pC3DEE4KY
+         OY+t9dvDa5aNDhoH1/A6FXkzdPxkHQrGMSAudIM9vzg2UD2GfZzOE0UOS56dXKeKClmI
+         oHO8dP7I2chYnOSlTCbak2/sQERaqDYp4JD5gGW/h0oOJ4k0t+OHd4X9U3yNAT9iISaA
+         2w6Cus5wH/+ZdOgyVzgT/82NwdHKeP8d4pOa1W9Njy0kS32W1v2dWFRdT8GVsAuqrv+V
+         M1p7BpU6myxNxE3aDuDsvB/BZNYUaqRyXlpTezLtCjfPedgLY2DtNZ0yst4hKGBNA0zU
+         TEpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HQLQpf3kqVigsxlHZz3VInqB29DX3Of3V5vUpblQjaE=;
-        b=AOmqhStdJfu7ti+Fn6QhoXR9A0lGb+Q3IPDTs+3JjmOjITnH0IfKJUXiCf5kdEJXOH
-         4Xv+HWqeM5KB8mWNgeniYU0hgD6/UkGQoF1v8bzRdwT39C1laSj2O+3GQ7RGvFuqB0cs
-         tADz7jWzYpuatunDqZsfsZSQr8DvGzSVl4kUPmyr6fZ7IDi/B4kfRsL44uMVcorRLorV
-         4nQwHp+K+/2aG5GsJdtOdQLQiCU9DVs92nOQZfMjPZVPhoIrn67jf0V0CMMXw7QMy//F
-         JOA3ICUJ/J58AJnC6t+m6meIk7pGQ2djLyz/ly5pPXmViDbg8+kCUBeeK5Nq3V8V6bfF
-         dr1A==
-X-Gm-Message-State: ANoB5pnt1X5yRbWzG3705GG3ZiVqVuHWhMQn4y0zHAj4fJsEYWcaROCa
-        zP276PnDfH9lr/FfjepdNM0zdw==
-X-Google-Smtp-Source: AA0mqf6KhLVQFBsdyDJL/myJ+eCpADXPNWOU/Inb33v6Vdhy3hm3CLZ95yi7AADthY2wEk9Y5+1DFA==
-X-Received: by 2002:a2e:9456:0:b0:278:eef5:8d19 with SMTP id o22-20020a2e9456000000b00278eef58d19mr1023924ljh.429.1668696207539;
-        Thu, 17 Nov 2022 06:43:27 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id k20-20020ac24f14000000b0049ad315cfc3sm176956lfr.162.2022.11.17.06.43.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Nov 2022 06:43:27 -0800 (PST)
-Message-ID: <2cfdec0d-4c03-012a-df29-6d92cd87bab5@linaro.org>
-Date:   Thu, 17 Nov 2022 15:43:26 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=riDO6qHjkXJO4FMqmQwEaErq/K8CVkbFub7re4pItDY=;
+        b=P8o2g+2oOLwecUmHt115xfwpBoMvaWrE0xl9QsufDNoWFnm/rqe4OpseZxrd1HECTD
+         v7hc0APJSa8U/Q8kH3fBFDanmG//Fiau+x1CX59sUgpxniMmWS6ltunoqETZWW6fEgJm
+         c2SStULiupI4c1ysaGJ9TntGW21FVV2lF+PQ9OGe5Zll4mAtnS9Q81sLihep8MbYFxU9
+         Sg+m0IyjNbJjnkMFdz3eo00NOkbvlbL7Ohl64HyS2toByzL0UtUA8QHUxmGPeXDRt5zf
+         Sgq4EnbzZnBNBfBuuZl+wVsrVXVJhsgJDEBzSxYrrA2r1Epd5LJYsFIVIcCZzudxyhcL
+         P2TQ==
+X-Gm-Message-State: ANoB5plk2SdERxIBt5tMfAeTn+U3nEAykWJOwbA4n4JLnHUiRX8Lk80Z
+        d4tOdkWt4y7MUsExrD9wJGBe+7mPAgLBWos/Iw8BqIggWLkgdQ==
+X-Google-Smtp-Source: AA0mqf6fQirskAJB9bpfHRTGUo+Bl9P6znKCc2Geu4nkxD3mey5czfblEP7G/5waChZSVOk+GS2kakesxO697wGlAds=
+X-Received: by 2002:a17:906:c18c:b0:7b2:8a6e:c569 with SMTP id
+ g12-20020a170906c18c00b007b28a6ec569mr2428029ejz.582.1668696272081; Thu, 17
+ Nov 2022 06:44:32 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 1/6] dt-bindings: qcom: geni-se: document I2C Master Hub
- wrapper variant
-Content-Language: en-US
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Andy Gross <agross@kernel.org>,
+References: <20221116200150.4657-1-linux.amoon@gmail.com> <20221116200150.4657-2-linux.amoon@gmail.com>
+ <CAMdYzYrgtzeP2OL2Vw0pDHQuJDhRbUy3X4xq9+XchgTGB9dqpg@mail.gmail.com>
+In-Reply-To: <CAMdYzYrgtzeP2OL2Vw0pDHQuJDhRbUy3X4xq9+XchgTGB9dqpg@mail.gmail.com>
+From:   Anand Moon <linux.amoon@gmail.com>
+Date:   Thu, 17 Nov 2022 20:14:16 +0530
+Message-ID: <CANAwSgQZ17j_B2T3+Ompkdb2Fjo9dpddKehZXxUo4GTeC6fvZA@mail.gmail.com>
+Subject: Re: [linux-next-v2 1/5] arm64: dts: rockchip: Fix gmac phy mode to
+ rgmii on Rock 3A SBC.
+To:     Peter Geis <pgwipeout@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20221114-narmstrong-sm8550-upstream-i2c-master-hub-v1-0-64449106a148@linaro.org>
- <20221114-narmstrong-sm8550-upstream-i2c-master-hub-v1-1-64449106a148@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221114-narmstrong-sm8550-upstream-i2c-master-hub-v1-1-64449106a148@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Heiko Stuebner <heiko@sntech.de>,
+        Chukun Pan <amadeus@jmu.edu.cn>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/11/2022 11:21, Neil Armstrong wrote:
-> The I2C Master Hub is a stripped down version of the GENI Serial Engine
-> QUP Wrapper Controller but only supporting I2C serial engines without
-> DMA support.
-> 
-> This documents the variant compatible and forbids UART and SPI sub-nodes,
+Hi Peter
 
-Do not use "This commit/patch".
-https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+On Thu, 17 Nov 2022 at 02:06, Peter Geis <pgwipeout@gmail.com> wrote:
+>
+> On Wed, Nov 16, 2022 at 3:02 PM Anand Moon <linux.amoon@gmail.com> wrote:
+> >
+> > On rk356x ethernet phy support reduced media independent interface (RMII)
+> > and reduced gigabit media independent interface (RGMII).
+> > So set the phy mode to rgmii to support clock delay, also
+> > add TX and RX delay for phy-mode.
+>
+> Controller based clock delay, the various rgmii-id modes (rgmii-txid
+> and rgmii-rxid are also valid) apply the delays in the phy. They are
+> usually at a fixed amount, but some phys support variable delays.
+>
+> You want your commit message to accurately describe the problem, such
+> as "In rgmii-id mode, the phy on the rock-3a is unreliable due to
+> incorrect delays. Switch to rgmii mode in order to handle the delays
+> in the controller."
+>
+> >
+> > Fix following warning
+> >
+> > [    7.365215] rk_gmac-dwmac fe010000.ethernet: Can not read property: tx_delay.
+> > [    7.365219] rk_gmac-dwmac fe010000.ethernet: set tx_delay to 0x30
+> > [    7.365224] rk_gmac-dwmac fe010000.ethernet: Can not read property: rx_delay.
+> > [    7.365228] rk_gmac-dwmac fe010000.ethernet: set rx_delay to 0x10
+>
+> I've been meaning to make this a dev_debug message, because in the
+> various rgmii-id modes it is feasible for these to be non-existent in
+> the device-tree. In rgmii-id mode these are disabled, no matter what
+> they are set to in the dt.
 
-> and removes requirement for the Master AHB clock and iommu property.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->  .../devicetree/bindings/soc/qcom/qcom,geni-se.yaml | 43 ++++++++++++++++++----
->  1 file changed, 35 insertions(+), 8 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
-> index 2bf5293fc995..6657e74df629 100644
-> --- a/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
-> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
-> @@ -21,20 +21,15 @@ properties:
->    compatible:
->      enum:
->        - qcom,geni-se-qup
-> +      - qcom,geni-se-i2c-master-hub
->  
->    reg:
->      description: QUP wrapper common register address and length.
->      maxItems: 1
->  
-> -  clock-names:
-> -    items:
-> -      - const: m-ahb
-> -      - const: s-ahb
-> +  clock-names: true
+As per the public datasheet share by Radxa below
+[0] https://dl.radxa.com/rock3/docs/hw/datasheet/RTL8211F-CG-Datasheet.pdf
 
-minItems: 1, maxItems: 2, instead.
+This Ethernet controller supports RGMII mode.
 
->  
-> -  clocks:
-> -    items:
-> -      - description: Master AHB Clock
-> -      - description: Slave AHB Clock
-> +  clocks: true
+>
+> >
+> > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> > ---
+> > V2: Fix commit message and added the RX and TX clock delay.
+> > ---
+> >  arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts | 5 ++++-
+> >  1 file changed, 4 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts b/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
+> > index ea74ba32fbbd..e1c75532dcee 100644
+> > --- a/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
+> > +++ b/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
+> > @@ -253,13 +253,16 @@ &gmac1 {
+> >         assigned-clock-rates = <0>, <125000000>;
+> >         clock_in_out = "output";
+> >         phy-handle = <&rgmii_phy1>;
+> > -       phy-mode = "rgmii-id";
+> > +       phy-mode = "rgmii";
+> >         pinctrl-names = "default";
+> >         pinctrl-0 = <&gmac1m1_miim
+> >                      &gmac1m1_tx_bus2
+> >                      &gmac1m1_rx_bus2
+> >                      &gmac1m1_rgmii_clk
+> >                      &gmac1m1_rgmii_bus>;
+> > +
+> > +       tx_delay = <0x4f>;
+> > +       rx_delay = <0x26>;
+>
+> These are pretty far off from the default, have you verified the upper
+> and lower bounds for the rock-3a? These should be roughly in the
+> middle of that range.
+>
+No I have not tested this way but as per the datasheet, it supports
 
-minItems: 1, maxItems: 2, instead.
+TXDLY   Add 2ns delay to RXC for RXD latching (via 4.7k-ohm to DVDD_RG)
+RXDLY   Add 2ns delay to RXC for RXD latching (via 4.7k-ohm to DVDD_RG)
 
->  
->    "#address-cells":
->      const: 2
-> @@ -81,6 +76,38 @@ patternProperties:
->      description: GENI Serial Engine based UART Controller.
->      $ref: /schemas/serial/qcom,serial-geni-qcom.yaml#
->  
-> +if:
+I feel I should ignore the above warning and add it below.
 
-Put it under allOf, to avoid re-indenting when number of if's grow.
+rx-internal-delay-ps = <2000>;
+tx-internal-delay-ps = <2000>;
 
-> +  properties:
-> +    compatible:
-> +      contains:
-> +        const: qcom,geni-se-i2c-master-hub
-> 
-
-Best regards,
-Krzysztof
-
+Thanks
+-Anand
+> >         status = "okay";
+> >  };
+> >
+> > --
+> > 2.38.1
+> >
