@@ -2,151 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65B8B62DC38
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:04:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7883B62DC3E
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:05:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239492AbiKQNEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 08:04:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56544 "EHLO
+        id S239590AbiKQNFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 08:05:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231634AbiKQNEW (ORCPT
+        with ESMTP id S239280AbiKQNFN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 08:04:22 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C972B197;
-        Thu, 17 Nov 2022 05:04:21 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AHCibq1021045;
-        Thu, 17 Nov 2022 13:03:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=cjadO755ktE+yKQ9dqvEyND9KuoTueb/HI0lzO/4C98=;
- b=YvHMKRCrogST5xyWZfYmlYwkwLW6HQs/viZTSN08nBx2m82E2YquWuJwq9pgWx+/4R6u
- TBjMNPTSafdvsijI0SG41foyzEzF5cw0qoEpR/7XU76HJ+AGGbEIhQeBlqI89yBFniEx
- sgRQxyPA7ipIonISh6ZbmR8LgcIMPHanioK+NnLkbFUmOkJd9kTl58Pd1V+thq7d6RZ0
- T2q7vwXZgaImkqCpt3yAWUrh47sYev/YXFfvDnhKyURB6tYnPeYbzw3MeRa2GiWP4Tew
- z+HwHnVVGonTYxXhKYqV9sC+CTmxBnTs4vonUfENrUGXTCJX3o3vdiGBZcPT/ESSrDis bA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kwn7vgg9s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Nov 2022 13:03:40 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AHCrlkl027571;
-        Thu, 17 Nov 2022 13:03:39 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kwn7vgg94-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Nov 2022 13:03:39 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AHCpPYx002703;
-        Thu, 17 Nov 2022 13:03:38 GMT
-Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
-        by ppma04dal.us.ibm.com with ESMTP id 3kt34a9hb9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Nov 2022 13:03:38 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com ([9.208.128.114])
-        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AHD3b37721436
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 17 Nov 2022 13:03:38 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1C6235805B;
-        Thu, 17 Nov 2022 13:03:37 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6EF1058059;
-        Thu, 17 Nov 2022 13:03:35 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.98.240])
-        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 17 Nov 2022 13:03:35 +0000 (GMT)
-Message-ID: <3dc4f389ead98972cb7d09ef285a0065decb0ad0.camel@linux.ibm.com>
-Subject: Re: [PATCH v4 2/5] security: Rewrite
- security_old_inode_init_security()
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, casey@schaufler-ca.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        keescook@chromium.org, nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        ocfs2-devel@oss.oracle.com
-Date:   Thu, 17 Nov 2022 08:03:23 -0500
-In-Reply-To: <20221110094639.3086409-3-roberto.sassu@huaweicloud.com>
-References: <20221110094639.3086409-1-roberto.sassu@huaweicloud.com>
-         <20221110094639.3086409-3-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        Thu, 17 Nov 2022 08:05:13 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B8A048763
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 05:05:12 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id u2so2628427ljl.3
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 05:05:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6o6875WgReRaHrL7mfmplhzccEYmNiHd+KnxOuIwE1k=;
+        b=oGIGoKNZWt+TEvSGwX2huvWOYzkp/PzuBLlXqfNHLAqtbjhmLefFKPJO6BKqk7cw0E
+         f3UWAYwYIxbV82Zbsom1piXdothmHlenjh6V0kXM6sWlSzfG5hA7AcgKI9T2Op5ARSow
+         tI2DA+ND1mmWacjMpUgbQ0Voth0SWudHATKqlGnrhTs2+nFxm5SlLFXlPStz0DJoXKwr
+         DRJsTIvaE1Fjdcyu4lp3LjGxiLHXuvLASw6J9d9VF+i+QWc+I7yW8lP38sxH2MVbO+sv
+         h42zmLCkuHo+QcKUkmcXfh0tmmKsrWZPWCjGsrpr79zc/HRgtrbgM62XD5YxWyX8EVN1
+         HKuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6o6875WgReRaHrL7mfmplhzccEYmNiHd+KnxOuIwE1k=;
+        b=Nt3LTt17ixp4Xt+kL7TSGl6VqU2AGA6ZquJa1oni4+nnwg/8UGNHDgqpxrIN94iZtR
+         NwMlFxCcUsEHiFw7Emi+u8LizhJTL//zPafD4WT6NJB/de3HBncmSTivgdY64RX0YUNH
+         wVK+yDCOqf5nwo9U50nwh2dcSSyQwYdUmk8fwMYbyK+YbOzuqVk9465ZyI93f07wLgUa
+         XFDq+ZghVm1vbv4uszkw2IOkSGwTsqxoX2/YkHZ/GJ9k/fIEpHwpYPRr6VTJAs/RFFOs
+         l8Wl0rt/iXINAiVEvdNR4TBCKmqiRhs2W22jSdpPyj0l3rkD99d+YidOy4o0MayQwKtk
+         SU5Q==
+X-Gm-Message-State: ANoB5pmNMBmNFtLk4fL6Pt1BJys54oYV+j+Puhw5L61UquFdoALsFZuQ
+        +tRxVTpBb0fOwu0Vyc0lcyfzKQ==
+X-Google-Smtp-Source: AA0mqf5FeNxtFGS0rsYMZmkU3OkAGojteHdSJx0Ua6wFXCuYC9bMdmq8MmOjgUCvWnQIG50eLPE1Nw==
+X-Received: by 2002:a05:651c:2cb:b0:277:746:62c2 with SMTP id f11-20020a05651c02cb00b00277074662c2mr1068450ljo.236.1668690310730;
+        Thu, 17 Nov 2022 05:05:10 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id q3-20020ac246e3000000b004b19f766b07sm142467lfo.91.2022.11.17.05.05.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Nov 2022 05:05:10 -0800 (PST)
+Message-ID: <0e3ec86f-2a2b-bdb9-09b2-db720b5af435@linaro.org>
+Date:   Thu, 17 Nov 2022 14:05:08 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 1/4] dt-bindings: arm: fsl: Add PDK2, PicoITX and DRC02
+ boards for the DHCOM i.MX6ULL SoM
+Content-Language: en-US
+To:     Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Peng Fan <peng.fan@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
+        Marek Vasut <marex@denx.de>, Fabio Estevam <festevam@denx.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        kernel@dh-electronics.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221117103134.6452-1-cniedermaier@dh-electronics.com>
+ <20221117103134.6452-2-cniedermaier@dh-electronics.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221117103134.6452-2-cniedermaier@dh-electronics.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: WMqKO59AnhuMpzL2Nr3S2KehvV3tLQpl
-X-Proofpoint-ORIG-GUID: pHWVY-EOF1k4f1Oiw57AU2E65yMhP3d_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-17_06,2022-11-17_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
- lowpriorityscore=0 adultscore=0 suspectscore=0 malwarescore=0
- mlxlogscore=776 impostorscore=0 bulkscore=0 spamscore=0 priorityscore=1501
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211170099
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Roberto,
-
-On Thu, 2022-11-10 at 10:46 +0100, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
+On 17/11/2022 11:31, Christoph Niedermaier wrote:
+> Add DH electronics DHCOM PDK2, PicoITX and DRC02 boards
+> for the DHCOM i.MX6ULL SoM.
 > 
-> Rewrite security_old_inode_init_security() to call
-> security_inode_init_security() before making changes to support multiple
-> LSMs providing xattrs. Do it so that the required changes are done only in
-> one place.
+> Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
+> ---
 
-Only security_inode_init_security() has support for EVM.   Making
-security_old_inode_init_security() a wrapper for
-security_inode_init_security() could result in security.evm extended
-attributes being created that previously weren't created.
 
-In fact ocfs2 defines ocfs2_init_security_get() as a wrapper for both
-the old and new inode_init_security calls based on the caller's
-preference.   Only mknod and symlink seem to use the old function. 
-Wondering why do they differentiate between callers?  (Cc'ing the ocfs2
-mailing list as they're affected by this change.)
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-"[PATCH v4 1/5] reiserfs: Add missing calls to
-reiserfs_security_free()"  fixed a memory leak.  I couldn't tell if
-there was a similar memory leak in ocfs2, the only other user of
-security_old_inode_init_security().
-
-As ocfs2 already defines initxattrs, that leaves only reiserfs missing
-initxattrs().  A better, cleaner solution would be to define one.
-
-thanks,
-
-Mimi
-
-> 
-> Define the security_initxattrs() callback and pass it to
-> security_inode_init_security() as argument, to obtain the first xattr
-> provided by LSMs.
-> 
-> This behavior is a bit different from the current one. Before this patch
-> calling call_int_hook() could cause multiple LSMs to provide an xattr,
-> since call_int_hook() does not stop when an LSM returns zero. The caller of
-> security_old_inode_init_security() receives the last xattr set. The pointer
-> of the xattr value of previous LSMs is lost, causing memory leaks.
-> 
-> However, in practice, this scenario does not happen as the only in-tree
-> LSMs providing an xattr at inode creation time are SELinux and Smack, which
-> are mutually exclusive.
-> 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>b
+Best regards,
+Krzysztof
 
