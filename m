@@ -2,99 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 852DA62E24D
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 17:54:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB1AF62E250
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 17:54:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239820AbiKQQx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 11:53:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58222 "EHLO
+        id S239864AbiKQQyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 11:54:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233681AbiKQQxy (ORCPT
+        with ESMTP id S239783AbiKQQyG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 11:53:54 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60DCD62DD
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 08:53:53 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id x21so3441056ljg.10
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 08:53:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=q5lNAuUvq7KF2EWgSnnimOiwQgL6vwTn4K0OE0kO2Ow=;
-        b=ilm3WcmvkNn3rG/wr1GQNhZThT1X4/i6wHYEaNqQL0pHdw+VVIi7HbxqQr4XHJIkcy
-         SVby23sx9xMThmkcCrxHBbVGQodesod6Kw/KTiK8VsAOF9ZP6Ou477sij9uG+uws55FA
-         GFrU9U1iIbUx9+c70sOwfmjEsHHS5Gw2y4QK61rqXECziQuTOTGYTFAqcaJpnaleVe2f
-         9vtdXoXvymQlY2yneszclSJXvQsjNik56vl7FcaCoD+OvXWPJN4buLJV6mszSzFgip5q
-         XlPJ1m6EAM5kpgsw93f/sytDzPViWzpaSV1ppBIc26sYZaWVymFanvhYA1AIzvznf8c+
-         PVJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=q5lNAuUvq7KF2EWgSnnimOiwQgL6vwTn4K0OE0kO2Ow=;
-        b=BdgpqKE/6iQKgQhOVIhzMWbBBbMs5s4bDER4dS+OPnkcrAIfR9L7Q46zaB6nSjsxkL
-         JHXSmK4AczaRVSCDamQCe5N8FUGMHCbdI8rXV6Y9oqo3G5bYwa8GhCz+9cSBvGSROzwQ
-         n7lNUgFwB+GOUdn6PlYzfVsjsgKdbrNER45o448WbVnqBo5UY1f13J3CAPPwh6J4+Wnd
-         7N6ii4iGcrGdJmDzfkeMBiSmKKWH3lZVWbbe6hJoFmiBaOYh0BKwj3NQhk7JpPSRaJF/
-         0cQeIEoO+onQdIQmzEhy0/+xV527+7Qo9UQx6wnjqrsHKN+7CV+3KUk6JahCN8YJHz/V
-         M23g==
-X-Gm-Message-State: ANoB5pkOyhrlHiKaaR6NdGtL6rhjtipuPw8ZYjI7H2hYIhRLfkEC4Xly
-        GFgLZL/n9E/TvU7spXeJnC03Ag==
-X-Google-Smtp-Source: AA0mqf5KC6KorG2sJvPTb+4tuKfaT0KKzir/TN6xCxiSWS6oXAa6Oo6ShnYBsKouIK6DzccBTMOl3Q==
-X-Received: by 2002:a2e:9d0b:0:b0:279:f7d:15cf with SMTP id t11-20020a2e9d0b000000b002790f7d15cfmr1223440lji.468.1668704031633;
-        Thu, 17 Nov 2022 08:53:51 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id v23-20020a05651203b700b004b40f2e25d3sm230446lfp.122.2022.11.17.08.53.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Nov 2022 08:53:51 -0800 (PST)
-Message-ID: <545f15b2-941b-d3dd-f2e7-4a3a1cbfa6e5@linaro.org>
-Date:   Thu, 17 Nov 2022 17:53:50 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v11 1/2] dt-bindings: mfd: Add MAX5970 and MAX5978
-Content-Language: en-US
-To:     Naresh Solanki <naresh.solanki@9elements.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Thu, 17 Nov 2022 11:54:06 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726B06CA01;
+        Thu, 17 Nov 2022 08:54:05 -0800 (PST)
+Received: from frapeml500003.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NCm8w429Gz67MQZ;
+        Fri, 18 Nov 2022 00:49:20 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ frapeml500003.china.huawei.com (7.182.85.28) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 17 Nov 2022 17:54:03 +0100
+Received: from localhost (10.122.247.231) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 17 Nov
+ 2022 16:54:03 +0000
+Date:   Thu, 17 Nov 2022 16:54:02 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     Gerald Loacker <gerald.loacker@wolfvision.net>,
+        <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Patrick Rudolph <patrick.rudolph@9elements.com>
-Cc:     Marcello Sylvester Bauer <sylv@sylv.io>
-References: <20221116205822.1128275-1-Naresh.Solanki@9elements.com>
- <20221116205822.1128275-2-Naresh.Solanki@9elements.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221116205822.1128275-2-Naresh.Solanki@9elements.com>
-Content-Type: text/plain; charset=UTF-8
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
+        Jakob Hauser <jahau@rocketmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>
+Subject: Re: [PATCH 1/2] dt-bindings: iio: magnetometer: add ti tmag5273
+ documentation file
+Message-ID: <20221117165402.000043c0@huawei.com>
+In-Reply-To: <8c2da24c-ae10-40c9-bb3e-b300975a86d7@linaro.org>
+References: <20221115073718.2377311-1-gerald.loacker@wolfvision.net>
+        <20221115073718.2377311-2-gerald.loacker@wolfvision.net>
+        <20221115174355.00004a01@Huawei.com>
+        <f52dcb6d-30ec-3d49-7e28-9761462d4799@wolfvision.net>
+        <8c2da24c-ae10-40c9-bb3e-b300975a86d7@linaro.org>
+Organization: Huawei Technologies R&D (UK) Ltd.
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; x86_64-w64-mingw32)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.122.247.231]
+X-ClientProxiedBy: lhrpeml500006.china.huawei.com (7.191.161.198) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/11/2022 21:58, Naresh Solanki wrote:
-> From: Marcello Sylvester Bauer <sylv@sylv.io>
+On Thu, 17 Nov 2022 17:17:24 +0100
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+
+> On 17/11/2022 17:12, Gerald Loacker wrote:
+> >>  
+> >>> +
+> >>> +  compatible:
+> >>> +    const: ti,tmag5273
+> >>> +
+> >>> +  reg:
+> >>> +    maxItems: 1
+> >>> +
+> >>> +  "#io-channel-cells":
+> >>> +    const: 1
+> >>> +
+> >>> +  ti,angle-enable:
+> >>> +    description:
+> >>> +      Enables angle measurement in the selected plane.
+> >>> +      0 = OFF
+> >>> +      1 = X-Y (default)
+> >>> +      2 = Y-Z
+> >>> +      3 = X-Z  
+> >>
+> >> This feels like something we should be configuring at runtime rather that
+> >> DT, or is it driven by board design or similar?
+> >>  
+> > 
+> > We use this sensor for a zoom wheel application, there is an EVM from TI
+> > for this as well. So this is for setting the mounting position of the wheel.  
 > 
-> The MAX597x is a hot swap controller with configurable fault protection.
-> It also has 10bit ADC for current & voltage measurements.
+> That's ok, but does not explain why choice of angle measurement should
+> be a property of the hardware. I could imagine configuring device to
+> measure sometimes X-Y and sometimes X-Z, depending on the use case. Use
+> case can change runtime.
+
+If it's part of a physical device mounting, may well not be changeable at runtime
+(at least not with out a screw driver / hacksaw etc.  Not really different form
+arguing someone might rewire a sensor at runtime.  In theory possible but if they
+do they are on their own - mostly we don't bother supporting them doing that.
+
+So I think this is probably valid as a DT property.
+
+
 > 
-> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
-> Co-developed-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> Co-developed-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-> ---
-
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
+> 
+> Best regards,
+> Krzysztof
+> 
 
