@@ -2,130 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF22A62DCFC
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:40:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FE2662DD04
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:42:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240176AbiKQNkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 08:40:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52386 "EHLO
+        id S239836AbiKQNmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 08:42:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240192AbiKQNkO (ORCPT
+        with ESMTP id S233725AbiKQNmk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 08:40:14 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D6C4742DB;
-        Thu, 17 Nov 2022 05:40:09 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id i10so5111968ejg.6;
-        Thu, 17 Nov 2022 05:40:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=dOA/XrnM55biePtmSgVQuz/vvaK7Pp/nrxDlHicjXLw=;
-        b=b55P44Wa551fN/B8v9btv1bZewuklhAEgqDACB3G4DxO/3tSA+sMxdYw79PP7i80z5
-         /sVk8z6Z/ARHsSepF2anN36AOd8gexjbGfhK26rciQbxdkKhb9vn8KyzriTRPVB2kMEM
-         BHxe73XSue/R/bzTj2piXsRdJ5SgLqwV+E9Pwc/C5gHFgqdc1qJYwmqN7865ePorvG4M
-         RDTmId2tnAr4IBFbw3VlRu9cYDr1GiOL16dxTuDfxgz2dLoLoThE0kNwsv+kdenLKzsY
-         EH7hxIxJOu4fvN045NCztwjhhpGrImBWX5L/cRK2m6N45tm3ZYG/rqVRO252aDUQcpyQ
-         gzMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dOA/XrnM55biePtmSgVQuz/vvaK7Pp/nrxDlHicjXLw=;
-        b=A/+2AkMG1eOm6Ay9p+vBKYHA7fxZFjRxaYwyZ2yhE2e7mV2TmnsYbqhqRoU931bCFK
-         m96min/p4UGtJFQFJwXLRwGtGeLfJVVmeQFuMqoGmseOzbzwt668pNZaRNK2Va27HHyk
-         6O6206K3o3NUFIKyem9uenQopZp6zq8tR9QlfP7G4I3uxymked1GRJtGU1NlP1HEh5hk
-         pxqOZb1k/XNeHyILnMyHMxPJirNGPpsltgkBTdgypnWSOcuLuExG4no8IksZEBH+261Z
-         j2bm2IVm7hqQXbKH+s/7OnEHQ1UzzM+hQ2/JoM5aDovgETnwcurULS+r7RwN3usHqLR1
-         JnWg==
-X-Gm-Message-State: ANoB5pmvc/2B4eFHEUxxzCVCNdwLE5lfTDNCaoszlw5C+hCNZ+rmv0PZ
-        mvnoyy0g9u8Cvw3YPaOFSYs=
-X-Google-Smtp-Source: AA0mqf6BksfbC9nZboB5WTuEjWop9CJaYyFiqnM/7Bx6amuVd+tme9UjR6NShhiXVh2I+/3cyukngA==
-X-Received: by 2002:a17:907:767a:b0:7ad:e518:13fd with SMTP id kk26-20020a170907767a00b007ade51813fdmr2155160ejc.323.1668692407595;
-        Thu, 17 Nov 2022 05:40:07 -0800 (PST)
-Received: from ?IPV6:2a0e:41a:894f:0:7a60:27eb:954c:5ab1? ([2a0e:41a:894f:0:7a60:27eb:954c:5ab1])
-        by smtp.gmail.com with ESMTPSA id bw10-20020a170906c1ca00b0078dce9984afsm373454ejb.220.2022.11.17.05.40.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Nov 2022 05:40:06 -0800 (PST)
-Sender: Carlo Caione <carlo.caione@gmail.com>
-From:   Carlo Caione <carlo@caione.org>
-X-Google-Original-From: Carlo Caione <ccaione@baylibre.com>
-Message-ID: <cd2d4d1e-f42a-da5b-e498-fbb32f792094@baylibre.com>
-Date:   Thu, 17 Nov 2022 14:40:05 +0100
+        Thu, 17 Nov 2022 08:42:40 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69909742DE;
+        Thu, 17 Nov 2022 05:42:38 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 919F2218CE;
+        Thu, 17 Nov 2022 13:42:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1668692557; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Rv7KIu+zKpnF/dI4dgBfOe6okZ4ai9mwlqyxMzSKe5E=;
+        b=YEtjOkcfAC7ikJYWXPgrtTv7RSpioOqDpeNKgkv5PRde0WLTpfQ385HqtpsUpr9aerHrGb
+        JfOeSS8Qwc4Nop+FqVksXGOZdSt8wuYpLMYouPO5NInf6/iDm3TtARjJVm+FppklB1f1nW
+        b35LP5Ws3ByV9bPOlffxS96fDQdMnSw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1668692557;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Rv7KIu+zKpnF/dI4dgBfOe6okZ4ai9mwlqyxMzSKe5E=;
+        b=LbAxeefDmhdmIng2KqbjOvs6ew2xrpdLACYeIgFh4XlvS1XfveUaAfrqSNWORt0AN7uYZ4
+        5ksUuwBRiun4q2Dg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5303B13A12;
+        Thu, 17 Nov 2022 13:42:37 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 1tMsE006dmMmdAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 17 Nov 2022 13:42:37 +0000
+Message-ID: <2b4e38d8-d0ea-e85c-88f1-bb6a714ee0eb@suse.de>
+Date:   Thu, 17 Nov 2022 14:42:36 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH 2/3] drm/tiny: ili9486: Do not assume 8-bit only SPI
- controllers
+Subject: Re: [PATCH v2] drm/gem-shmem: When drm_gem_object_init failed, should
+ release object
 Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        David Airlie <airlied@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20221116-s905x_spi_ili9486-v1-0-630401cb62d5@baylibre.com>
- <20221116-s905x_spi_ili9486-v1-2-630401cb62d5@baylibre.com>
- <Y3YWdeTLfmDh7UyB@sirena.org.uk>
-In-Reply-To: <Y3YWdeTLfmDh7UyB@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+To:     ChunyouTang <tangchunyou@163.com>,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        airlied@gmail.com, daniel@ffwll.ch, sumit.semwal@linaro.org,
+        christian.koenig@amd.com
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+References: <20221111033817.366-1-tangchunyou@163.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20221111033817.366-1-tangchunyou@163.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------YymBv3bYm0qkK0gbQfw5E2wE"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/11/2022 12:09, Mark Brown wrote:
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------YymBv3bYm0qkK0gbQfw5E2wE
+Content-Type: multipart/mixed; boundary="------------i1OebnKEfkH1cksuJ70L0WZn";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: ChunyouTang <tangchunyou@163.com>, maarten.lankhorst@linux.intel.com,
+ mripard@kernel.org, airlied@gmail.com, daniel@ffwll.ch,
+ sumit.semwal@linaro.org, christian.koenig@amd.com
+Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+Message-ID: <2b4e38d8-d0ea-e85c-88f1-bb6a714ee0eb@suse.de>
+Subject: Re: [PATCH v2] drm/gem-shmem: When drm_gem_object_init failed, should
+ release object
+References: <20221111033817.366-1-tangchunyou@163.com>
+In-Reply-To: <20221111033817.366-1-tangchunyou@163.com>
 
-> I don't understand what the commit log is saying here.  The 
-> meson-spicc driver advertises support for 8 bit words, if the driver 
-> is sending data formatted as a byte stream everything should be fine.
-> It may be that there is some optimisation available from taking 
-> advantage of the hardware's ability to handle larger word sizes but 
-> there should be no data corruption issue.
+--------------i1OebnKEfkH1cksuJ70L0WZn
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
+SGkNCg0KQW0gMTEuMTEuMjIgdW0gMDQ6Mzggc2NocmllYiBDaHVueW91VGFuZzoNCj4gd2hl
+biBnb3RvIGVycl9mcmVlLCB0aGUgb2JqZWN0IGhhZCBpbml0LCBzbyBpdCBzaG91bGQgYmUg
+cmVsZWFzZSB3aGVuIGZhaWwuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBDaHVueW91VGFuZyA8
+dGFuZ2NodW55b3VAMTYzLmNvbT4NCj4gLS0tDQo+ICAgZHJpdmVycy9ncHUvZHJtL2RybV9n
+ZW0uYyAgICAgICAgICAgICAgfCAxOSArKysrKysrKysrKysrKysrLS0tDQo+ICAgZHJpdmVy
+cy9ncHUvZHJtL2RybV9nZW1fc2htZW1faGVscGVyLmMgfCAgNCArKystDQo+ICAgaW5jbHVk
+ZS9kcm0vZHJtX2dlbS5oICAgICAgICAgICAgICAgICAgfCAgMSArDQo+ICAgMyBmaWxlcyBj
+aGFuZ2VkLCAyMCBpbnNlcnRpb25zKCspLCA0IGRlbGV0aW9ucygtKQ0KPiANCj4gZGlmZiAt
+LWdpdCBhL2RyaXZlcnMvZ3B1L2RybS9kcm1fZ2VtLmMgYi9kcml2ZXJzL2dwdS9kcm0vZHJt
+X2dlbS5jDQo+IGluZGV4IDhiNjhhM2MxZTZhYi4uY2JhMzJjNDZiYjA1IDEwMDY0NA0KPiAt
+LS0gYS9kcml2ZXJzL2dwdS9kcm0vZHJtX2dlbS5jDQo+ICsrKyBiL2RyaXZlcnMvZ3B1L2Ry
+bS9kcm1fZ2VtLmMNCj4gQEAgLTE2OSw2ICsxNjksMjEgQEAgdm9pZCBkcm1fZ2VtX3ByaXZh
+dGVfb2JqZWN0X2luaXQoc3RydWN0IGRybV9kZXZpY2UgKmRldiwNCj4gICB9DQo+ICAgRVhQ
+T1JUX1NZTUJPTChkcm1fZ2VtX3ByaXZhdGVfb2JqZWN0X2luaXQpOw0KPiAgIA0KPiArLyoq
+DQo+ICsgKiBkcm1fZ2VtX3ByaXZhdGVfb2JqZWN0X2ZpbmkgLSBGaW5hbGl6ZSBhIGZhaWxl
+ZCBkcm1fZ2VtX29iamVjdA0KPiArICogQG9iajogZHJtX2dlbV9vYmplY3QNCj4gKyAqDQo+
+ICsgKiBVbmluaXRpYWxpemUgYW4gYWxyZWFkeSBhbGxvY2F0ZWQgR0VNIG9iamVjdCB3aGVu
+IGl0IGluaXRpYWxpemVkIGZhaWxlZA0KPiArICovDQo+ICt2b2lkIGRybV9nZW1fcHJpdmF0
+ZV9vYmplY3RfZmluaShzdHJ1Y3QgZHJtX2dlbV9vYmplY3QgKm9iaikNCj4gK3sNCj4gKwlX
+QVJOX09OKG9iai0+ZG1hX2J1Zik7DQoNClJhdGhlciBsZWFzZSB0aGlzIGluIGl0cyBvcmln
+aW5hbCBwbGFjZS4NCg0KPiArDQo+ICsJZG1hX3Jlc3ZfZmluaSgmb2JqLT5fcmVzdik7DQo+
+ICsJZHJtX2dlbV9scnVfcmVtb3ZlKG9iaik7DQoNCkFGQUlDVCBkcm1fZ2VtX2xydV9yZW1v
+dmUoKSBkb2Vzbid0IGJlbG9uZyBpbnRvIHRoaXMgZnVuY3Rpb24uDQoNCj4gK30NCj4gK0VY
+UE9SVF9TWU1CT0woZHJtX2dlbV9wcml2YXRlX29iamVjdF9maW5pKTsNCj4gKw0KPiAgIC8q
+Kg0KPiAgICAqIGRybV9nZW1fb2JqZWN0X2hhbmRsZV9mcmVlIC0gcmVsZWFzZSByZXNvdXJj
+ZXMgYm91bmQgdG8gdXNlcnNwYWNlIGhhbmRsZXMNCj4gICAgKiBAb2JqOiBHRU0gb2JqZWN0
+IHRvIGNsZWFuIHVwLg0KPiBAQCAtOTMwLDE0ICs5NDUsMTIgQEAgZHJtX2dlbV9yZWxlYXNl
+KHN0cnVjdCBkcm1fZGV2aWNlICpkZXYsIHN0cnVjdCBkcm1fZmlsZSAqZmlsZV9wcml2YXRl
+KQ0KPiAgIHZvaWQNCj4gICBkcm1fZ2VtX29iamVjdF9yZWxlYXNlKHN0cnVjdCBkcm1fZ2Vt
+X29iamVjdCAqb2JqKQ0KPiAgIHsNCj4gLQlXQVJOX09OKG9iai0+ZG1hX2J1Zik7DQo+ICsJ
+ZHJtX2dlbV9wcml2YXRlX29iamVjdF9maW5pKG9iaik7DQo+ICAgDQo+ICAgCWlmIChvYmot
+PmZpbHApDQo+ICAgCQlmcHV0KG9iai0+ZmlscCk7DQo+ICAgDQo+IC0JZG1hX3Jlc3ZfZmlu
+aSgmb2JqLT5fcmVzdik7DQoNClBsZWFzZSBjYWxsIGRybV9nZW1fcHJpdmF0ZV9vYmplY3Rf
+ZmluaSgpIGhlcmUuDQoNCj4gICAJZHJtX2dlbV9mcmVlX21tYXBfb2Zmc2V0KG9iaik7DQo+
+IC0JZHJtX2dlbV9scnVfcmVtb3ZlKG9iaik7DQoNClBsZWFzZSBrZWVwIHRoaXMgbGluZSBo
+ZXJlLg0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQo+ICAgfQ0KPiAgIEVYUE9SVF9TWU1C
+T0woZHJtX2dlbV9vYmplY3RfcmVsZWFzZSk7DQo+ICAgDQo+IGRpZmYgLS1naXQgYS9kcml2
+ZXJzL2dwdS9kcm0vZHJtX2dlbV9zaG1lbV9oZWxwZXIuYyBiL2RyaXZlcnMvZ3B1L2RybS9k
+cm1fZ2VtX3NobWVtX2hlbHBlci5jDQo+IGluZGV4IDM1MTM4ZjhhMzc1Yy4uODQ1ZTNkNWQ3
+MWViIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vZHJtX2dlbV9zaG1lbV9oZWxw
+ZXIuYw0KPiArKysgYi9kcml2ZXJzL2dwdS9kcm0vZHJtX2dlbV9zaG1lbV9oZWxwZXIuYw0K
+PiBAQCAtNzksOCArNzksMTAgQEAgX19kcm1fZ2VtX3NobWVtX2NyZWF0ZShzdHJ1Y3QgZHJt
+X2RldmljZSAqZGV2LCBzaXplX3Qgc2l6ZSwgYm9vbCBwcml2YXRlKQ0KPiAgIAl9IGVsc2Ug
+ew0KPiAgIAkJcmV0ID0gZHJtX2dlbV9vYmplY3RfaW5pdChkZXYsIG9iaiwgc2l6ZSk7DQo+
+ICAgCX0NCj4gLQlpZiAocmV0KQ0KPiArCWlmIChyZXQpIHsNCj4gKwkJZHJtX2dlbV9wcml2
+YXRlX29iamVjdF9maW5pKG9iaikNCj4gICAJCWdvdG8gZXJyX2ZyZWU7DQo+ICsJfQ0KPiAg
+IA0KPiAgIAlyZXQgPSBkcm1fZ2VtX2NyZWF0ZV9tbWFwX29mZnNldChvYmopOw0KPiAgIAlp
+ZiAocmV0KQ0KPiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9kcm0vZHJtX2dlbS5oIGIvaW5jbHVk
+ZS9kcm0vZHJtX2dlbS5oDQo+IGluZGV4IGJkNDJmMjVlNDQ5Yy4uOWIxZmViMDMwNjlkIDEw
+MDY0NA0KPiAtLS0gYS9pbmNsdWRlL2RybS9kcm1fZ2VtLmgNCj4gKysrIGIvaW5jbHVkZS9k
+cm0vZHJtX2dlbS5oDQo+IEBAIC00MDUsNiArNDA1LDcgQEAgaW50IGRybV9nZW1fb2JqZWN0
+X2luaXQoc3RydWN0IGRybV9kZXZpY2UgKmRldiwNCj4gICAJCQlzdHJ1Y3QgZHJtX2dlbV9v
+YmplY3QgKm9iaiwgc2l6ZV90IHNpemUpOw0KPiAgIHZvaWQgZHJtX2dlbV9wcml2YXRlX29i
+amVjdF9pbml0KHN0cnVjdCBkcm1fZGV2aWNlICpkZXYsDQo+ICAgCQkJCSBzdHJ1Y3QgZHJt
+X2dlbV9vYmplY3QgKm9iaiwgc2l6ZV90IHNpemUpOw0KPiArdm9pZCBkcm1fZ2VtX3ByaXZh
+dGVfb2JqZWN0X2Zpbmkoc3RydWN0IGRybV9nZW1fb2JqZWN0ICpvYmopOw0KPiAgIHZvaWQg
+ZHJtX2dlbV92bV9vcGVuKHN0cnVjdCB2bV9hcmVhX3N0cnVjdCAqdm1hKTsNCj4gICB2b2lk
+IGRybV9nZW1fdm1fY2xvc2Uoc3RydWN0IHZtX2FyZWFfc3RydWN0ICp2bWEpOw0KPiAgIGlu
+dCBkcm1fZ2VtX21tYXBfb2JqKHN0cnVjdCBkcm1fZ2VtX29iamVjdCAqb2JqLCB1bnNpZ25l
+ZCBsb25nIG9ial9zaXplLA0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBE
+cml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgN
+Ck1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwg
+QUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
 
-There is no data corruption but the 16-bit pixel data have per-pixel
-bytes swapped: for example 0x55AD is sent instead of 0xAD55 and this is
-causing the wrong color to be displayed on the panel.
+--------------i1OebnKEfkH1cksuJ70L0WZn--
 
-The problem is that the current code is sending data with an hardcoded
-bpw == 8 whether the data is swapped or not before the sending.
+--------------YymBv3bYm0qkK0gbQfw5E2wE
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-For 8-bit only controllers the data is swapped by the MIPI DBI code but
-this is not true for controllers supporting 16-bit as well, but in both
-cases we are sending the data out the same way with an 8 bpw.
+-----BEGIN PGP SIGNATURE-----
 
-So the same image is basically displayed differently whether the SPI
-controller supports 16 bpw or not. I'm trying to fix this by sending
-data with 16-bit bpw when the controller is supporting that.
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmN2OkwFAwAAAAAACgkQlh/E3EQov+Bz
+2BAAmCiDIxrYLK4mniJvoGUcNGv0Nii+v7XTRavBTxixQHTSWU3OySdYUry9BuJ6OyK5ppA7/vgU
+fScR6/a3paG5OBul2worzFrVZ3Yz6qHBkoVSUX1nPqQ6Wzg0KVZDRJ5KN0iIHV8fPJw4rMbkAifq
+kx6d3S6VUfuDJGi/qLgDN5iW+mmSos+hpv5m71IJYtSYOa7pNE0Of4qRCoTQBOPPy3Vfl840nNI4
+Cc4Bjopho3Fm4sNr7Yd5PKyU2XV6A3/Ux4DBcguQZzsUnFzXRZq4ezasNiNqWs5uOENGLYT5Nn+Z
++T+HnWf0VxstaQ+WpnkomOOOVpH8R9s6zIG4y1SZ//Bvbd5D70PNaMmJKVEZW/cB2H2T/Vlxqwxa
+JMYeLpQnVmir5YoUW3lhD7mf8xBlDVtUq2hgBeA78Pkon/44vvE+tG18qVPWTp4IrYs/4P07YKhm
+kRtb04+V38jn7QVWve9+IocqgqTydCmyyYkOMZ5DxtOMjHFtBakJGzYOKwchCfIOrP6xu/A0i2lY
+lk+TXqc/QPfGPrwxbSQV4djg0MQeI1hMpffWJigS41yumw0rL3SAvuMDFpC91uDezMcxdht2jtjA
+rht+y0gQnb+1uLJ7QQuhUpRGkI9T/gE/bTC5TlnmgCpr+0GzqIlZq4kvZUibf1uSL6Ck0CiJEOfq
+AXY=
+=+j9m
+-----END PGP SIGNATURE-----
 
-Please note that this is what it is done also by mipi_dbi_typec3_command().
-
-
->> +	/* +	 * Check whether pixel data bytes needs to be swapped or not
->> +	 */ +	if (*cmd == MIPI_DCS_WRITE_MEMORY_START && 
->> !mipi->swap_bytes) +		bpw = 16; +
-> 
-> You should check the SPI controller compatibility here.
-
-This is already done in mipi_dbi_spi_init() by using spi_is_bpw_supported().
-
-Cheers,
-
---
-Carlo Caione
+--------------YymBv3bYm0qkK0gbQfw5E2wE--
