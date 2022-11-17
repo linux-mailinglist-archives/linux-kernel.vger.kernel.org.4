@@ -2,156 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9379362E7A2
+	by mail.lfdr.de (Postfix) with ESMTP id 2426B62E7A1
 	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 23:02:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241044AbiKQWBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 17:01:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35662 "EHLO
+        id S241236AbiKQWCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 17:02:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241037AbiKQWAw (ORCPT
+        with ESMTP id S241185AbiKQWBA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 17:00:52 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC88F72121;
-        Thu, 17 Nov 2022 14:00:11 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id j4so5163731lfk.0;
-        Thu, 17 Nov 2022 14:00:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eQRlvK77hsvedjqbbgPjARmdvtiGduxanVRX+q1kiBQ=;
-        b=fHP1kl1yM/VTKBFLmy/3ASQg8Q5561DGSp/lxTGjpivW3kYEBJZy1xb0vO+OiYceLo
-         OLW+hZ3BOf5+ucl3BN2P3PCMRRRV1M1f4Ca7d6m2cIL+cpeh4FXEaV8pWn6CQWfKUHCL
-         VFfc9zDjSQdBoUIvNr3eIxj+Frb2OEAPSEUT3xDt+2bzYp9FslYX4GdP5oEiVayT44f9
-         qZgZ/LrY5o2/pUWHj4jUSqkkKupQYqHgVrGpQzIhYNFZwzJ4dfugpDh6dm0gWHN/Ie8c
-         KP/GPYmjR0iLl4OXf/yeZPqbhGTio0wCNz6G4tRJqfz3/sOtmCZAcjA1tDqR+c3/eqxN
-         X+lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eQRlvK77hsvedjqbbgPjARmdvtiGduxanVRX+q1kiBQ=;
-        b=RAJhoNTyCZrn9WJP9aEEcPC77UW6NFacsoe5SmdsZQPMfjkqJcrLJcSxbGyeV5wLsF
-         YA989hPO0NzKu/1gVMmdCnJ8d22D2frGo0uqtIoNrR8PPDXleW1tU5EiPkd0GVo2dblv
-         BzEqx+y0VYFxEbjek/RzLjq7YArD9seDXZJvOLz/ti+aNlCKlzlNPX5sIqubGS5r3zVS
-         4zrnOAnyc30Vy3cgpLqJQSJyTnTK12b8W3b7PvxDw+KpRmwzgz6IUX44bHfmfR2xtL6I
-         1EFgdDl29QN5FeQkeChw9ShFS3yhNMA0QPR8l8VjwfynVnxGdxow79S4hF2kwPxUfzNW
-         phww==
-X-Gm-Message-State: ANoB5pnr7Zh6fHwwkxZNnhDa7SdLiSvq1mqoZw8G3vGwVNmrWuKBLg/F
-        eviEzFFa5+OuRMFuTXsDPfU=
-X-Google-Smtp-Source: AA0mqf7T8odImdw+v5OcY4vqRzJJEdUEeu1hbDqGL1SRBcLnBSP/pZJn73vBcjO261JeFV4NblM+Hg==
-X-Received: by 2002:a19:2d5e:0:b0:4b4:a14a:c958 with SMTP id t30-20020a192d5e000000b004b4a14ac958mr1555505lft.579.1668722410350;
-        Thu, 17 Nov 2022 14:00:10 -0800 (PST)
-Received: from localhost.localdomain (79.191.9.185.ipv4.supernova.orange.pl. [79.191.9.185])
-        by smtp.gmail.com with ESMTPSA id q29-20020ac25a1d000000b00497aa190523sm342985lfn.248.2022.11.17.14.00.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 14:00:10 -0800 (PST)
-From:   Maya Matuszczyk <maccraft123mc@gmail.com>
-To:     linux-rockchip@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     =?UTF-8?q?Jo=C3=A3o=20H=20=2E=20Spies?= <jhlspies@gmail.com>,
-        Chris Morgan <macroalpha82@gmail.com>,
-        Maya Matuszczyk <maccraft123mc@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4 5/5] arm64: dts: rockchip: Add Anbernic RG351M
-Date:   Thu, 17 Nov 2022 22:59:54 +0100
-Message-Id: <20221117215954.4114202-6-maccraft123mc@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221117215954.4114202-1-maccraft123mc@gmail.com>
-References: <20221117215954.4114202-1-maccraft123mc@gmail.com>
+        Thu, 17 Nov 2022 17:01:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C18A0769E8;
+        Thu, 17 Nov 2022 14:00:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E1316229A;
+        Thu, 17 Nov 2022 22:00:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B2208C433D6;
+        Thu, 17 Nov 2022 22:00:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668722418;
+        bh=EQGEv3Nu7IK3z1Y1+oz4Z5dM0RTYZ7IZ6JOUOFqyWpA=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=PlyUkU2rJlK8veAqTZ/BsmBiuQABXeQ/8jd+06iDO56ADr0q87u3AUFLjFA8KmURw
+         19Gx4WG7VHpf6VPPYkebRU/nllZg3sPVqznmkzMlU22XQuCbSWj+Vt9gR3DO+/a3Ws
+         nco0VDSdOFHXTCmAdmbdGrdRFeGsB3e93zEFRnDV4zPuKSGdw3LsY+wZuitEVdvqEQ
+         3aMB2bhIQiPRGshBp6yDJWpivQ9ieTopLd1QqvxFWiT4aD7JYxt/QXTDVdG5Dc/sSr
+         sdtiKk+Q/l9SlBzfiV3RNrV/RVV36ODgPiQXEFHlx77UE29YeDTZ92q9mI1YzXlaEH
+         J3uRR7nGwlJwQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 93E4CE270D5;
+        Thu, 17 Nov 2022 22:00:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 0/3] RZ/Five: Enable ADC/CANFD/I2C/OPP/Thermal Zones/TSU
+From:   patchwork-bot+linux-riscv@kernel.org
+Message-Id: <166872241859.10037.9436719894893258084.git-patchwork-notify@kernel.org>
+Date:   Thu, 17 Nov 2022 22:00:18 +0000
+References: <20221115105135.1180490-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20221115105135.1180490-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Lad@ci.codeaurora.org, Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     linux-riscv@lists.infradead.org, geert+renesas@glider.be,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, magnus.damm@gmail.com,
+        conor.dooley@microchip.com, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        biju.das.jz@bp.renesas.com, prabhakar.mahadev-lad.rj@bp.renesas.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This device is a clone of Odroid Go Advance, with added PWM motor, internal
-gamepad connected on USB instead of just having it be on GPIO + ADC, and
-missing battery shunt resistor.
-Due to missing shunt resistor and lack of a workaroun in rk817_charger
-driver rk817_charger is not enabled in dts.
+Hello:
 
-There's also an LED on GPIO 77(I *guess* PB5 on &gpio2),
-that is controlled in a weird way:
+This series was applied to riscv/linux.git (for-next)
+by Palmer Dabbelt <palmer@rivosinc.com>:
 
-- It is set to red by setting output value to 1
-- Set to green by setting output value to 0
-- Set to yellow by setting gpio direction to input
+On Tue, 15 Nov 2022 10:51:32 +0000 you wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> 
+> Hi All,
+> 
+> This patch series aims to enable support for below blocks
+> on RZ/Five SoC/SMARC EVK:
+> - ADC
+> - CANFD
+> - I2C
+> - OPP
+> - Thermal Zones
+> - TSU
+> 
+> [...]
 
-I have no idea how to describe that in DTS, without adding a custom
-driver, for now it's just left out.
+Here is the summary with links:
+  - [1/3] riscv: Kconfig: Enable cpufreq kconfig menu
+    https://git.kernel.org/riscv/c/effae0e3d9e1
+  - [2/3] riscv: dts: renesas: r9a07g043f/rzfive-smarc-som: Enable ADC/OPP/Thermal Zones/TSU
+    (no matching commit)
+  - [3/3] riscv: dts: renesas: rzfive-smarc: Enable CANFD/I2C
+    (no matching commit)
 
-Signed-off-by: Maya Matuszczyk <maccraft123mc@gmail.com>
----
- arch/arm64/boot/dts/rockchip/Makefile         |  1 +
- .../dts/rockchip/rk3326-anbernic-rg351m.dts   | 33 +++++++++++++++++++
- 2 files changed, 34 insertions(+)
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3326-anbernic-rg351m.dts
-
-diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
-index 142c83d2e5aa..b379516c15eb 100644
---- a/arch/arm64/boot/dts/rockchip/Makefile
-+++ b/arch/arm64/boot/dts/rockchip/Makefile
-@@ -7,6 +7,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3308-evb.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3308-roc-cc.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3308-rock-pi-s.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3318-a95x-z2.dtb
-+dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3326-anbernic-rg351m.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3326-odroid-go2.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3326-odroid-go2-v11.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3326-odroid-go3.dtb
-diff --git a/arch/arm64/boot/dts/rockchip/rk3326-anbernic-rg351m.dts b/arch/arm64/boot/dts/rockchip/rk3326-anbernic-rg351m.dts
-new file mode 100644
-index 000000000000..61b31688b469
---- /dev/null
-+++ b/arch/arm64/boot/dts/rockchip/rk3326-anbernic-rg351m.dts
-@@ -0,0 +1,33 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright (c) 2019 Hardkernel Co., Ltd
-+ * Copyright (c) 2020 Theobroma Systems Design und Consulting GmbH
-+ * Copyright (c) 2022 Maya Matuszczyk <maccraft123mc@gmail.com>
-+ */
-+
-+/dts-v1/;
-+#include "rk3326-odroid-go.dtsi"
-+
-+/ {
-+	model = "Anbernic RG351M";
-+	compatible = "anbernic,rg351m", "rockchip,rk3326";
-+
-+	vibrator {
-+		compatible = "pwm-vibrator";
-+		pwms = <&pwm0 0 1000000 0>;
-+		pwm-names = "enable";
-+	};
-+};
-+
-+/delete-node/ &builtin_gamepad;
-+/delete-node/ &vcc_host; /* conflicts with pwm vibration motor */
-+
-+&internal_display {
-+	compatible = "elida,kd35t133";
-+};
-+
-+&pwm0 {
-+	status = "okay";
-+};
-+
-+/delete-node/ &rk817_charger;
+You are awesome, thank you!
 -- 
-2.38.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
