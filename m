@@ -2,258 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52E4062DCE0
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:34:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A83F362DCD9
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:33:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240131AbiKQNen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 08:34:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48412 "EHLO
+        id S240102AbiKQNdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 08:33:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239985AbiKQNel (ORCPT
+        with ESMTP id S239985AbiKQNdn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 08:34:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E55100A
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 05:33:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668692018;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hL/CkDwZ5PSSXNx6AH8Ol5aF9aNMQrd0lYSEYATA1qM=;
-        b=SS3HlNfwCpVio4jgvLrqix9J6dfNreIeb1ZnAXafY/cZbC7YNvf9gIA14ElsuZbgQp05GY
-        aDdooYhipMHpMociBtMVq7Y9PP9dcuf1cTDqJ8nMQQggRmy1wjTI8jaKsROIz4UR11GI9s
-        DAqD2qpyKEjUk8YE9h+OBL15sesCGd8=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-616-NCII16pnNdG4ttHNgj3V-g-1; Thu, 17 Nov 2022 08:33:37 -0500
-X-MC-Unique: NCII16pnNdG4ttHNgj3V-g-1
-Received: by mail-ej1-f70.google.com with SMTP id sh31-20020a1709076e9f00b007ae32b7eb51so1107674ejc.9
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 05:33:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hL/CkDwZ5PSSXNx6AH8Ol5aF9aNMQrd0lYSEYATA1qM=;
-        b=iI/Yk87FMfeq9bGKLZk3uFNIyYSIuR4feAj5fEBUuQWPKi5IwI3eaXsdTJc8UYUEVD
-         UhgTWvRRGs8uQrnqPeOXNmeO9OnDyp3p8dtwznMwhWAxsqD0cyKYifF9r8O8yUsFmpfi
-         j4kVWMs0psNzlm6X7y2DIt4nHOmFBC6wcV4B3+CC9iTsuHyimnnrB2B13ZxF7ORPhJIb
-         ua0eEZqay86OVUL0qu5nFb9NEieTHUYJTM+/eBXHb84CvfFT+zeIOo7v57wzv4WeQBsK
-         wZVw1OIvg70phxCv8U5Yk6/anGddSHhxY4S1mfaDDmEwYtQElybWgtDjYdHB2CuCC4MA
-         T18A==
-X-Gm-Message-State: ANoB5pkaso8DRXW4DKhPNj1sz1c58sv9L4Wo8R9X159axHyrDZSWBKBm
-        BmLRYDQgUPY6L76j/5IZpdqfYhRDV755VwFXBUnQEffqc8TSoIAvb8T7MI8oHecyEOAhD34Vl2r
-        V8tXsRhcqhSsLsqfXphGXX9wj
-X-Received: by 2002:a05:6402:3719:b0:461:4f34:d8f4 with SMTP id ek25-20020a056402371900b004614f34d8f4mr2246349edb.144.1668692016390;
-        Thu, 17 Nov 2022 05:33:36 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6sKRk3/86Tcy37XD0YlRzFqUBS6qSiNc9p3JAvWavh0/6bd4NkP7VcJbT4ivuY7CMGPSQC7g==
-X-Received: by 2002:a05:6402:3719:b0:461:4f34:d8f4 with SMTP id ek25-20020a056402371900b004614f34d8f4mr2246326edb.144.1668692016139;
-        Thu, 17 Nov 2022 05:33:36 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id n22-20020aa7c696000000b00457c85bd890sm543260edq.55.2022.11.17.05.33.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Nov 2022 05:33:35 -0800 (PST)
-Message-ID: <3995ade6-385c-45cd-3ff4-052835337546@redhat.com>
-Date:   Thu, 17 Nov 2022 14:33:34 +0100
+        Thu, 17 Nov 2022 08:33:43 -0500
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2059.outbound.protection.outlook.com [40.107.95.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05426B206;
+        Thu, 17 Nov 2022 05:33:41 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LdgCdhYMV+8pQmkVDfk3goUGkfyue3e7wmWj73xRrUcbwu8pDScGYHpo45lzdYcKWurBB+G5epDqYvDrLRwGwLSndO1d8ZrBIeVa8vQyL9xvBlNK1bdBV7hd71mWB1mcJ1uVuICeigVl4X1EUIBbjdI4tF+qbEJv3tprwwqSX/86ygbwPjyGFH7og6b1KGpTWKaQ06Jnix98g0liip8IA0yvRyzfkS20KjR1Gwrq+Onotdd1cuGUZQCCBqQf8Qx/YEJrePJ+9m5pq0Fm8r6bjHkiwG2XSe6u6N5w913sJSydanSrSnTnGrOObbt7IawyuKZAYEGluI38fUA9KzEALg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=s9F8vNZ0K7uCjaYtsonIrknuqB4S+txYNE4rGGWQLMs=;
+ b=jBGZWnGW1JRpDmYixcGYejsBZIjQ8PAB7zHrW9fP5t4MB725iLLLKeBVZop8hVzGDaXpzTNLK1Qkz2cOJzxNwHAgujCqJl3iPx9YDWy7zY0KSCmwOpKPBjAYdnUwXjqF9MAERmFf6Lrca+mJQnHN7gAlj4S1PAkM25k459kYYQoKWTJ1psjVf6f8o5fD74BdF2G4raIIDeoOtPDeIeyqGfUiAstf9eVijcwJTaMdjs4e6yARe3670f9W27w3RKOjLpMcD4MMFHLQ7PPj+EnujRTTkwrO2fFZJ1U0PiuWITB4AgWCXzhjEkfDpEjs8f8SkDnEZBS80CEblB5zHaRkMw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=s9F8vNZ0K7uCjaYtsonIrknuqB4S+txYNE4rGGWQLMs=;
+ b=ePJ5dJH97g75+r6Jri9fFahMKw0Tp2h4N9bTehcw0MxRDZ076w8hIvRSnk+iyrU0YYQ3CICzBMKypmOhpMELzxMLA1dQerFeNpzYMXl8GE1JnI+oy2QRhsbDVSK4MKQvktdAfXXOxbIF0oKOhbsz5kvXtWUUYmymjMRFV/PRX8aDGO+rvj/YHhgc+1Wg3Blf+Llq9qMT/Z153kThLPfEwaNrl/+FkO5Upzpt0/eTcHBxdCZhe3JKAgaMBhUlhE8Ev4zRbDlLLdZN9l4yS4R0zBxlqQ4LcI3bcqRYOGie+Szq7qe2B3gXGj7VyE0f8ZV8xY8+ar0qRrR5cSxA5WaUrg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by DM6PR12MB4188.namprd12.prod.outlook.com (2603:10b6:5:215::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.19; Thu, 17 Nov
+ 2022 13:33:40 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f8b0:df13:5f8d:12a]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f8b0:df13:5f8d:12a%7]) with mapi id 15.20.5813.017; Thu, 17 Nov 2022
+ 13:33:39 +0000
+Date:   Thu, 17 Nov 2022 09:33:38 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
+        Allen Hubbe <allenbh@gmail.com>,
+        "Ahmed S. Darwish" <darwi@linutronix.de>,
+        Reinette Chatre <reinette.chatre@intel.com>
+Subject: Re: [patch 19/33] genirq/msi: Provide msi_desc::msi_data
+Message-ID: <Y3Y4MlLuLotvYbmA@nvidia.com>
+References: <20221111133158.196269823@linutronix.de>
+ <20221111135206.346985384@linutronix.de>
+ <Y3U5xwujkZvI0TEN@nvidia.com>
+ <87tu2ym0eq.ffs@tglx>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87tu2ym0eq.ffs@tglx>
+X-ClientProxiedBy: BL0PR02CA0096.namprd02.prod.outlook.com
+ (2603:10b6:208:51::37) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH 4/9] platform/x86/intel/sdsi: Add meter certificate
- support
-Content-Language: en-US, nl
-To:     "David E. Box" <david.e.box@linux.intel.com>, markgross@kernel.org,
-        andriy.shevchenko@linux.intel.com, srinivas.pandruvada@intel.com
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221101191023.4150315-1-david.e.box@linux.intel.com>
- <20221101191023.4150315-5-david.e.box@linux.intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20221101191023.4150315-5-david.e.box@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DM6PR12MB4188:EE_
+X-MS-Office365-Filtering-Correlation-Id: d4c08a8e-3c1b-4d3d-e67b-08dac8a05672
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: OlOleX7TS1lGJIn8T/CEBCvX6Sjn1O/tQ4PKr+insSAE0zYi0BPpv3jDO9GKinKJvrpf3e/CFfmxmRPGGCxrO30tmJtqX/3YMwjx1l1A4ibfgmRUaHq+HD/sDXbGfYjBTJEtanQkmaBm/moqq12e59hhJ9JK9L6P3KRaF22yQq76J4KSDpRVTFuLZgkAfj8pfvbSgP/5KtlMhaUUPprQxQHxzYF6elHlmwGh8ZKxJNwAWoVxXdiBirysnB5d4KUWVhgivZ8PIJ57hclehRPiM2UWtav3gB/Jfh504j8Xvu4hh2SkYJZR4WtDoklZt6dzatK65OiQCVKOaoEqXz5FCOiuS0/4jdUf7EOUioCWKqFvCQ+F+e/XKHNrcVdXDpYK3Mw3ALkISy2tnnVo7s5LPASw0gDJrbJNpjwv9vj33eTIPKFaoNzTJzdBWNtt/1mzfV+BCQlC5Z3HFHYb6w0Q0x6jblBjK253pGxM6VgKDaWxP/tdUelPI15VRPWovxysflHgoKHbmjEQrIsDhrercGpHUHCF70/gaUB0sLUdW3OEnAFwvhI1l/uBxHy7QOXif7/7QKMnfguoRZtNFNcfBRe3EQMvKAu3qoHHWFgcRPHfz4BPLLGL4DGTEt/vXrYC
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(366004)(396003)(136003)(346002)(451199015)(38100700002)(4326008)(2906002)(8936002)(66556008)(66476007)(66946007)(8676002)(7416002)(4744005)(5660300002)(86362001)(316002)(478600001)(2616005)(54906003)(6916009)(6486002)(41300700001)(36756003)(186003)(26005)(6512007)(6506007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?RYP5ul4qi6mZU8NB1gN26o+BDmAEF2iO68OsuiwmIwdfdPdx5U/gAt9WpyGG?=
+ =?us-ascii?Q?v0KAA4JBWziUOyHm8ErtqRut8FesZS+WnXY99TUVWn6p8BIMOeRK2Hatpk25?=
+ =?us-ascii?Q?PAPNl0stlUHHcLwZW4MRqCVwmbOg/G5jgDndPZ/XukuaXO8lHdJYb+tnITct?=
+ =?us-ascii?Q?Laz+emYmsvUrqmatnU04cvDFLKNna3/4/2xLQcRM2qw5u2M+Xhq3rV/vDGBP?=
+ =?us-ascii?Q?H2nH3JJBNe2DMlmu1jMUjPYUWFRdmv8up3kvk7nC8H0Ngn21BRBrfisOIXKh?=
+ =?us-ascii?Q?AcgxYMIa0fnwBQvPaD0ZlYh1/NgNllA0iHGP4s/n6zgu6wxlpIwn576HWcUu?=
+ =?us-ascii?Q?X9SmU/2yW6xNSXDxrbCZCGW56X8lO7J/s0leCQe7hmBDnKHGv6RQ8b6Uhfgj?=
+ =?us-ascii?Q?u6I6+dWvlgGM+Rq6RF9WBQfxxW8qVhg9RejTOnuhLSXcQjMXwvRc9xHeYNGS?=
+ =?us-ascii?Q?jlZUTuWpXe/lVBdu0H+O00mmW8BPFptkJ7bYcKgq7hOdHkHQCpGQYw6njQA/?=
+ =?us-ascii?Q?Tx9OAo2MUxlYN/BZ9FQY5hiOdcSR/7lWufUFmddUevhY2uOAFlwQyZGQ11k+?=
+ =?us-ascii?Q?+P8G+mLr/Va+CGPwjIHCNJ0A45wCLa8qVOqUjjn1agLJJfcP/6zd4e5qMsBf?=
+ =?us-ascii?Q?/wtUFLFAYRZKR+GkMc2oTKM0hVzod2ntZcmfUapd5765CJhxa5TGiU05iE02?=
+ =?us-ascii?Q?g7mdv12Wha6P6memD+jzVRx5ecvG6c3eklLMoy/oqlwzW1lalz7pVrjFyvsA?=
+ =?us-ascii?Q?OQsOjQ5hUgUXQ1j1mA0XiOuAd3P7MZRKxMlYj1ChpglatVSFYaGxOHyRoxQx?=
+ =?us-ascii?Q?HqmR7f5UsVwdOTpF4OmolRhWuEmL7cO2sOON7aQteJY0lokK7tZSSRuk5FEV?=
+ =?us-ascii?Q?B0Art1yYxamgmE2rvWdwSlwSXLJWSLw+suoueEn8I6ETQnXmbYUxkOG71DjQ?=
+ =?us-ascii?Q?zxlcjQoR+I8ecU5mG77RyY+WxOZ6DXxm7uPPvjmuts+PmO/uVSoNfUZh6RcR?=
+ =?us-ascii?Q?hZlybzzs9erTDePcmLkgDu064OPfM6A1WgUEH3mkeAhBdi5RDA70ouyQc+if?=
+ =?us-ascii?Q?Rsq33D9p8mai3S7ujwxvJRQC8zawa7umVcDiNgLd0N5B5ly1CCBC5658iiaQ?=
+ =?us-ascii?Q?8D5shaLv5NG0Z173yd/rjkQKMvQTm2uCOXok1zu8txA8eNGS/B2Q5q7MmYnM?=
+ =?us-ascii?Q?Rqrr6ZHTtnvvlt5yxqhEByEtBisfSuxKEK3X7nArBu22qRnZF1sAfDIfedL6?=
+ =?us-ascii?Q?+lZb3G4icStHADauwCobbFjse8GJ4/6mMWqhh9A0TMjzt0QM5cy0VdbehvfB?=
+ =?us-ascii?Q?gwZFi2D/2qP6QIzqf9+VFhqhHcmCkPa8DzLXqEtzzBpFG5z24rqIE3MnJphU?=
+ =?us-ascii?Q?1ZHZ1Dq/mt1LXIN3tM4dh/eaiFS4Mx1mK9o6N1d80M1YNCtamst3Y39tFPwQ?=
+ =?us-ascii?Q?VfzUsII6VMjN4hl7kMlsB/maOudn4PEKMRwcNNwS9H8u5xgDihVh3oWWjnfn?=
+ =?us-ascii?Q?8nmMkaTcgpd6bLoSg61duZUAunWb7HHm74/y0C+OHWl2RfWEUbFGNcYp6Uh6?=
+ =?us-ascii?Q?iVqaZCVcVmwmFbCkOnQ=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d4c08a8e-3c1b-4d3d-e67b-08dac8a05672
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Nov 2022 13:33:39.8914
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: j+MvSr+Blfbv5BRxzOyCGjcAucYXMwsBoXC67RDbS/+n//cqukTr9kTu1TccMjuZ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4188
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Nov 17, 2022 at 09:48:45AM +0100, Thomas Gleixner wrote:
 
-On 11/1/22 20:10, David E. Box wrote:
-> Add support for reading the meter certificate from Intel On Demand
-> hardware.  The meter certificate [1] is used to access the utilization
-> metrics of enabled features in support of the Intel On Demand consumption
-> model. Similar to the state certificate, the meter certificate is read by
-> mailbox command.
+> > We've used 128 bits for the PCI descriptor, we might as well like
+> > everyone have all 128 bits for whatever they want to do
 > 
-> [1] https://github.com/intel-sandbox/debox1.intel_sdsi/blob/gnr-review/meter-certificate.rst
-> 
-> Signed-off-by: David E. Box <david.e.box@linux.intel.com>
+> Not sure because we end up with nasty type casts for
 
-Besides Andy's remarks I also have 1 remark myself, see below.
+Something like:
 
-> ---
->  .../ABI/testing/sysfs-driver-intel_sdsi       | 10 ++++
->  drivers/platform/x86/intel/sdsi.c             | 52 +++++++++++++++----
->  2 files changed, 52 insertions(+), 10 deletions(-)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-driver-intel_sdsi b/Documentation/ABI/testing/sysfs-driver-intel_sdsi
-> index 9d77f30d9b9a..f8afed127107 100644
-> --- a/Documentation/ABI/testing/sysfs-driver-intel_sdsi
-> +++ b/Documentation/ABI/testing/sysfs-driver-intel_sdsi
-> @@ -69,6 +69,16 @@ Description:
->  		the CPU configuration is updated. A cold reboot is required to
->  		fully activate the feature. Mailbox command.
->  
-> +What:		/sys/bus/auxiliary/devices/intel_vsec.sdsi.X/meter_certificate
-> +Date:		Nov 2022
-> +KernelVersion:	6.2
-> +Contact:	"David E. Box" <david.e.box@linux.intel.com>
-> +Description:
-> +		(RO) Used to read back the current meter certificate for the CPU
-> +		from Intel On Demand hardware. The meter certificate contains
-> +		utilization metrics of On Demand enabled features. Mailbox
-> +		command.
-> +
->  What:		/sys/bus/auxiliary/devices/intel_vsec.sdsi.X/state_certificate
->  Date:		Feb 2022
->  KernelVersion:	5.18
-> diff --git a/drivers/platform/x86/intel/sdsi.c b/drivers/platform/x86/intel/sdsi.c
-> index ab1f65919fc5..1dee10822df7 100644
-> --- a/drivers/platform/x86/intel/sdsi.c
-> +++ b/drivers/platform/x86/intel/sdsi.c
-> @@ -42,6 +42,7 @@
->  
->  #define SDSI_ENABLED_FEATURES_OFFSET	16
->  #define SDSI_FEATURE_SDSI		BIT(3)
-> +#define SDSI_FEATURE_METERING		BIT(26)
->  
->  #define SDSI_SOCKET_ID_OFFSET		64
->  #define SDSI_SOCKET_ID			GENMASK(3, 0)
-> @@ -80,9 +81,10 @@
->  #define SDSI_GUID_V2			0xF210D9EF
->  
->  enum sdsi_command {
-> -	SDSI_CMD_PROVISION_AKC		= 0x04,
-> -	SDSI_CMD_PROVISION_CAP		= 0x08,
-> -	SDSI_CMD_READ_STATE		= 0x10,
-> +	SDSI_CMD_PROVISION_AKC		= 0x0004,
-> +	SDSI_CMD_PROVISION_CAP		= 0x0008,
-> +	SDSI_CMD_READ_STATE		= 0x0010,
-> +	SDSI_CMD_READ_METER		= 0x0014,
->  };
->  
->  struct sdsi_mbox_info {
-> @@ -398,13 +400,10 @@ static ssize_t provision_cap_write(struct file *filp, struct kobject *kobj,
->  }
->  static BIN_ATTR_WO(provision_cap, SDSI_SIZE_WRITE_MSG);
->  
-> -static long state_certificate_read(struct file *filp, struct kobject *kobj,
-> -				   struct bin_attribute *attr, char *buf, loff_t off,
-> -				   size_t count)
-> +static ssize_t
-> +certificate_read(u64 command, struct sdsi_priv *priv, char *buf, loff_t off,
-> +		 size_t count)
->  {
-> -	struct device *dev = kobj_to_dev(kobj);
-> -	struct sdsi_priv *priv = dev_get_drvdata(dev);
-> -	u64 command = SDSI_CMD_READ_STATE;
->  	struct sdsi_mbox_info info;
->  	size_t size;
->  	int ret;
-> @@ -441,8 +440,31 @@ static long state_certificate_read(struct file *filp, struct kobject *kobj,
->  
->  	return size;
->  }
-> +
-> +static ssize_t
-> +state_certificate_read(struct file *filp, struct kobject *kobj,
-> +		       struct bin_attribute *attr, char *buf, loff_t off,
-> +		       size_t count)
-> +{
-> +	struct device *dev = kobj_to_dev(kobj);
-> +	struct sdsi_priv *priv = dev_get_drvdata(dev);
-> +
-> +	return certificate_read(SDSI_CMD_READ_STATE, priv, buf, off, count);
-> +}
->  static BIN_ATTR(state_certificate, 0400, state_certificate_read, NULL, SDSI_SIZE_READ_MSG);
->  
-> +static ssize_t
-> +meter_certificate_read(struct file *filp, struct kobject *kobj,
-> +		       struct bin_attribute *attr, char *buf, loff_t off,
-> +		       size_t count)
-> +{
-> +	struct device *dev = kobj_to_dev(kobj);
-> +	struct sdsi_priv *priv = dev_get_drvdata(dev);
-> +
-> +	return certificate_read(SDSI_CMD_READ_METER, priv, buf, off, count);
-> +}
-> +static BIN_ATTR(meter_certificate, 0400, meter_certificate_read, NULL, SDSI_SIZE_READ_MSG);
-> +
->  static ssize_t registers_read(struct file *filp, struct kobject *kobj,
->  			      struct bin_attribute *attr, char *buf, loff_t off,
->  			      size_t count)
-> @@ -472,6 +494,7 @@ static BIN_ATTR(registers, 0400, registers_read, NULL, SDSI_SIZE_REGS);
->  static struct bin_attribute *sdsi_bin_attrs[] = {
->  	&bin_attr_registers,
->  	&bin_attr_state_certificate,
-> +	&bin_attr_meter_certificate,
->  	&bin_attr_provision_akc,
->  	&bin_attr_provision_cap,
->  	NULL
-> @@ -491,7 +514,16 @@ sdsi_battr_is_visible(struct kobject *kobj, struct bin_attribute *attr, int n)
->  	if (!(priv->features & SDSI_FEATURE_SDSI))
->  		return 0;
->  
-> -	return attr->attr.mode;
-> +	if (attr == &bin_attr_state_certificate ||
-> +	    attr == &bin_attr_provision_akc ||
-> +	    attr == &bin_attr_provision_cap)
-> +		return attr->attr.mode;
+void *msi_desc_device_priv() {return dec->device_data;}
 
-I would prefer for you to just drop this and then change:
+As netdev does it?
 
-> +
-> +	if (attr == &bin_attr_meter_certificate &&
-> +	    !!(priv->features & SDSI_FEATURE_METERING))
-> +		return attr->attr.mode;
-
-to:
-
-	if (attr == &bin_attr_meter_certificate)
-		return (priv->features & SDSI_FEATURE_METERING) ?
-				attr->attr.mode : 0;
-
-And then keep:
-
-	return attr->attr.mode;
-
-at the end of this function, because now you are hiding all
-new attributes by default and then you have to add any new
-attributes to the if above, leading to an ever growing lists
-of attr to check in that if, so just having:
-
-	return attr->attr.mode;
-
-As default for any non-matches attr would be much better IMHO.
-
-Regards,
-
-Hans
-
-
-
-
-
-> +
-> +	return 0;
->  }
->  
->  static ssize_t guid_show(struct device *dev, struct device_attribute *attr, char *buf)
-
+Jason
