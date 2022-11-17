@@ -2,92 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7419662E691
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 22:14:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBFB262E695
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 22:15:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230303AbiKQVOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 16:14:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59938 "EHLO
+        id S234993AbiKQVO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 16:14:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234406AbiKQVOc (ORCPT
+        with ESMTP id S235000AbiKQVOw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 16:14:32 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529AD64540;
-        Thu, 17 Nov 2022 13:14:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668719672; x=1700255672;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=cC3iQMztgxw2HXeDyVIeUIc5rQSRnJlPYcLAh0yNS4Y=;
-  b=C2l4JXQLQE031ANYqkyan+iX3ExD9Xf9oTG4UzyVP/+2x/Y0RAZPWmai
-   E4Vgtt1cA1iKgQJG8ZE53L9bPYHqb83KDl4pNNDvi9rJt5utcf2sbXyA/
-   QXgA18B4kGXVun2Gvv8Xnsb5RqCbeLBEjqERbbtv+Z7GRjbxV83tVuxb7
-   K1YjgRQ+GUeUAkMWvD7GhLw+qaRG78/PgP9BeG+RPa3zuy53kBBilToMB
-   E/DLIeGkXeOzUVdAH5qYFcm8jOIxnPsvkKScdR2HI9bEoN3tyFg2wewaD
-   MGMjogI4MDOwOMcKOCtGkW0ZyCGZCyVJBe4/dQsc6ENYajLHKaoPdbf/J
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="293371559"
-X-IronPort-AV: E=Sophos;i="5.96,172,1665471600"; 
-   d="scan'208";a="293371559"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 13:14:31 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="634199196"
-X-IronPort-AV: E=Sophos;i="5.96,172,1665471600"; 
-   d="scan'208";a="634199196"
-Received: from wangyi7-mobl3.amr.corp.intel.com (HELO [10.212.182.5]) ([10.212.182.5])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 13:14:30 -0800
-Message-ID: <74ecbd03-ec0f-2e15-7ddf-d9c16a9e2978@linux.intel.com>
-Date:   Thu, 17 Nov 2022 13:14:29 -0800
+        Thu, 17 Nov 2022 16:14:52 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C3A7A36A
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 13:14:50 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id i10so8291684ejg.6
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 13:14:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=M/DuA3/Pzsx3au4LPnKseak3gciQYTCxB9OFJeaSfOo=;
+        b=AYvUNnIKTWnfmr6P3d3C+p6IzwACHao5za/pAs9MP8aieYoKmyHi+PBxS93Wp4jVUt
+         CgXxgr2fCJCcnrnPa7FCwKMzEbot8+2S3iBr48lamoFuvFt5hKKrjo5w0lkTnnttOQUX
+         7NH5WgXKirab3uUHAmboue15BxwxoP32qrCo8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=M/DuA3/Pzsx3au4LPnKseak3gciQYTCxB9OFJeaSfOo=;
+        b=TEPvmBpQIUz8PmdkddBhIKFkRxWbBgAD1ilAOD3xIiTmBqQEsnRuksE05I3AgBfFc4
+         weW0Y3M3VmYST+1xe+IUXs3i52XKTsoOkaGhUNlypldUCKFTgpjLy+rBPf8ZddaQGXHi
+         /2jl9j7655ucGQDQKj907iqkiHe7RtdEOVDA5Q05ijRse9FbCiW4Mxyvk7SyW0ojQnqQ
+         iqxyoAuGY57OVMne5EJIBNgSo1pfA/diKZdzKH/Jt0GtjBPt0mm/ZU9fW0js2k6lX88P
+         hD5Qhsrq7OoCxRQDGMQVpCdrv9UMMLA6cVX22GVLz/lDJtfOWZASiqXrBcXIXfMa+7Qc
+         tDRw==
+X-Gm-Message-State: ANoB5pnB8OFuL3r/wBi5hFRVxGw+UrO/qb1g83nriHCJE8e8x+BSuCPh
+        Y6w+SJtdLTiRZkxLv46JIvng/TME0CSDrwdN
+X-Google-Smtp-Source: AA0mqf59E8zLGmCs4rr+YSfK34uVTIdxLXkwvdBGfZiNasL88YFS8PMGkVbAtXMYV6PTFcKhwJknFw==
+X-Received: by 2002:a17:907:75f3:b0:78d:b046:aaae with SMTP id jz19-20020a17090775f300b0078db046aaaemr3504916ejc.218.1668719688506;
+        Thu, 17 Nov 2022 13:14:48 -0800 (PST)
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com. [209.85.128.41])
+        by smtp.gmail.com with ESMTPSA id m7-20020aa7c2c7000000b00467c3cbab6fsm991245edp.77.2022.11.17.13.14.45
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Nov 2022 13:14:45 -0800 (PST)
+Received: by mail-wm1-f41.google.com with SMTP id o7-20020a05600c510700b003cffc0b3374so2472541wms.0
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 13:14:45 -0800 (PST)
+X-Received: by 2002:a05:600c:3109:b0:3cf:5731:53db with SMTP id
+ g9-20020a05600c310900b003cf573153dbmr6680730wmo.85.1668719684774; Thu, 17 Nov
+ 2022 13:14:44 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.2.2
-Subject: Re: [PATCH v18 0/3] Add TDX Guest Attestation support
-Content-Language: en-US
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20221116223820.819090-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <c8240766-1537-356a-c219-c9da9626d2a9@intel.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <c8240766-1537-356a-c219-c9da9626d2a9@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221117133655.1.I51639dc112bbbe27259df6bdad56dbabd655d91a@changeid>
+In-Reply-To: <20221117133655.1.I51639dc112bbbe27259df6bdad56dbabd655d91a@changeid>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 17 Nov 2022 13:14:33 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=XFsSoUqkk8zhta1V-oT2AGGvUz=0qFWAcXiJ7m+nnATA@mail.gmail.com>
+Message-ID: <CAD=FV=XFsSoUqkk8zhta1V-oT2AGGvUz=0qFWAcXiJ7m+nnATA@mail.gmail.com>
+Subject: Re: [PATCH 1/5] drm/panel-edp: Use ktime_get_boottime for delays
+To:     Drew Davenport <ddavenport@chromium.org>
+Cc:     dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
+On Thu, Nov 17, 2022 at 12:39 PM Drew Davenport <ddavenport@chromium.org> wrote:
+>
+> ktime_get is based on CLOCK_MONOTONIC which stops on suspend. On
+> suspend, the time that the panel was powerd off is recorded with
+> ktime_get, and on resume this time is compared to the current ktime_get
+> time to determine if the driver should wait for the panel to power down
+> completely before re-enabling it.
+>
+> Because we're using ktime_get, this delay doesn't account for the time
+> that the device is suspended, during which the power down delay may have
+> already elapsed.
+>
+> Change to use ktime_get_boottime throughout, which uses CLOCK_BOOTTIME
+> which does not stop when suspended. This ensures that the resume path
+> will not be delayed if the power off delay has already been met while
+> the device is suspended.
+>
+> Signed-off-by: Drew Davenport <ddavenport@chromium.org>
+>
+> ---
+>
+>  drivers/gpu/drm/panel/panel-edp.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 
-On 11/17/22 11:07 AM, Dave Hansen wrote:
-> Sathya, this conflicts with some fixes Kirill made that got applied in
-> 6.1-rc3.  Can you double-check that the result looks right and tests OK,
-> please?
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/daveh/devel.git/log/?h=tdxreport
-
-It looks fine. Tested it and it works fine.
-
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
