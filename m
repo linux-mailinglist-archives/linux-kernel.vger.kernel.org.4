@@ -2,224 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB26662D739
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 10:41:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBD4362D73E
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 10:41:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239437AbiKQJlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 04:41:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60108 "EHLO
+        id S239082AbiKQJlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 04:41:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232921AbiKQJkx (ORCPT
+        with ESMTP id S239318AbiKQJk6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 04:40:53 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A7D12094;
-        Thu, 17 Nov 2022 01:40:52 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668678050;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=srRkLobqpuFfqNIkuJnuNikEDzS6LKYgCzBeR1oCNb4=;
-        b=FLTx3jyH98jOxBWi2uMAEPiq+20/WdYRwXGGnVpvKdX6hmLRG9AKEdEK3n19G60maLuQ6g
-        iLXF4gp4qZ/A5jUrsnW/NoQlI255eU6Za+HCne3dPADt3HTE890E05SKICqvlrnOZsjX3C
-        jGYf3AO0XrDhtPsWVp2rzr2Tg/djd7sh5olwgGk15TihnOuES70VUn8biEapolUy7TrUx8
-        wWgrfyMXIC+OdFzX/0mtv4FUtnsPevyy4+78I9v934LmugVm01z22nvHjYS8tbSB34jgyI
-        whog82ft88dOxxn7GO523ReLDLpb0LgQ2ZCtUCApJQjXst2Fc+CeHEs36FUf2A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668678050;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=srRkLobqpuFfqNIkuJnuNikEDzS6LKYgCzBeR1oCNb4=;
-        b=M/Cakt3o7ng29W6kn6z8cLZbtT8EB4a/x1vceKV/qBtCf/TBCg9QJNGumEiQeIXau/DIpu
-        ytKxgxy94sCshWDQ==
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
-        Allen Hubbe <allenbh@gmail.com>,
-        "Ahmed S. Darwish" <darwi@linutronix.de>,
-        Reinette Chatre <reinette.chatre@intel.com>
-Subject: Re: [patch 21/33] genirq/msi: Provide msi_domain_alloc_irq_at()
-In-Reply-To: <Y3U7oeW7jfEDv0Qu@nvidia.com>
-References: <20221111133158.196269823@linutronix.de>
- <20221111135206.463650635@linutronix.de> <Y3U7oeW7jfEDv0Qu@nvidia.com>
-Date:   Thu, 17 Nov 2022 10:40:50 +0100
-Message-ID: <87r0y1nckd.ffs@tglx>
+        Thu, 17 Nov 2022 04:40:58 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB400627F0
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 01:40:56 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id j15so2272495wrq.3
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 01:40:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8iWJKbHUSlRi/JJGQvc0uCcs9jVteUyxx6gBbiNtDa0=;
+        b=y+FijfafquQ+ImGqRdfm7MhSuhNwosXpBr6y7dZi1oJ1h8M4cWD1f/qgOXvZ7EKlbQ
+         gZZzrrQFE1Sqv8inHHHLc0VWIX7VsaAufMfIe9EHqbAVqIHXv4nLLioBrrE1CrDD5VIj
+         VVkyZq1yMamQTkbvoYCG+hYemCWcOONcj6jurAN3QSE3YhHsBJuNRkZ77LXQZQtoE70x
+         6dqHnJVL3gvc5vhqH5P/hk1bwRT58hovUyudmGPMPesdzaVNzBzlBfVKIuus7DXnKPnL
+         ddBuC58t0h/phrlWPGndGCkla7b9Om9ZrSlA6JD2lZjAceod8R3gtJQo7xH5IpXMD5xF
+         cAGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8iWJKbHUSlRi/JJGQvc0uCcs9jVteUyxx6gBbiNtDa0=;
+        b=sHuHQeFHUOuvIUCs62RsxnQUoSZSmQ+hC899LvNqRreAV1qQvDs4AsABtqM3b9E3n9
+         ua1mwkyJzSzWmjimeP1W7TdRHkuvSgKVRKYxDFXoKl9GrQ59VTgLXtjOYrsfXe+NrBJn
+         2qbEPD9RalfZre8AAG/j4pfZZO6NuH+h1zgQO0ZK9nbKqequE2VOeALqxpMucMYW4VdT
+         e4zxtB2w4FuMAszpMaDmyHbJrKMwIH6p6+mX9HRzcg8sqWqAG+GAUA31cRSjIoFLvqsO
+         UP88SHjbVe/7xQzmCWBVCihygOxN+PFef4f4TOU/0VIlJT5aFmJ1UtbLzAM5WhltGXbi
+         vUtw==
+X-Gm-Message-State: ANoB5pkn7iOD5SyJ+Ntq9W9kSvUbn1sv/x1ZUCW/yB7XwcebYLl1J/Rx
+        fDJgMbDLJUn355AH8CoW8p91Mg==
+X-Google-Smtp-Source: AA0mqf4oZgPJEHiLUo80n1Gbd2WhfHze0jEPhP11zLbAi7sL/nuxvNg8NsG6qm+y1ZWT4vmSi3oS8A==
+X-Received: by 2002:a5d:5915:0:b0:236:6dd1:eb68 with SMTP id v21-20020a5d5915000000b002366dd1eb68mr912860wrd.261.1668678055435;
+        Thu, 17 Nov 2022 01:40:55 -0800 (PST)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id h5-20020a5d6885000000b002366b17ca8bsm488082wru.108.2022.11.17.01.40.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 01:40:55 -0800 (PST)
+Date:   Thu, 17 Nov 2022 11:40:53 +0200
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: Re: [PATCH 1/9] dt-bindings: clock: Add SM8550 GCC clock bindings
+Message-ID: <Y3YBpXIjDELtit0k@linaro.org>
+References: <20221116104716.2583320-1-abel.vesa@linaro.org>
+ <20221116104716.2583320-2-abel.vesa@linaro.org>
+ <c298fd71-22e9-98c5-14c6-88b078687b3d@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c298fd71-22e9-98c5-14c6-88b078687b3d@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16 2022 at 15:36, Jason Gunthorpe wrote:
-> On Fri, Nov 11, 2022 at 02:58:44PM +0100, Thomas Gleixner wrote:
->> The function also takes an optional @cookie argument which is of type union
->> msi_dev_cookie. This cookie is not used by the core code and is stored in
->> the allocated msi_desc::data::cookie. The meaning of the cookie is
->> completely implementation defined. In case of IMS this might be a PASID or
->> a pointer to a device queue, but for the MSI core it's opaque and not used
->> in any way.
->
-> To my mind it makes more sense to pass a 'void *' through from
-> msi_domain_alloc_irq_at() to the prepare_desc() op with the idea that
-> the driver calling msi_domain_alloc_irq_at() knows it is calling it
-> against the domain that it allocated. The prepare_desc can then use
-> the void * to properly initialize anything about the desc under the
-> right lock.
+On 22-11-17 10:08:05, Krzysztof Kozlowski wrote:
+> On 16/11/2022 11:47, Abel Vesa wrote:
+> > Add device tree bindings for global clock controller on SM8550 SoCs.
+> 
+> Subject: drop second, redundant "bindings".
 
-You are looking at it from one particular use case. 
+Sure thing, will drop.
 
-> Before calling this the driver should have setup whatever thing is
-> going to originate the interrupt, eg allocated the HW object that
-> sources the interrupt and part of what the void * would convey is the
-> detailed information on how to program the HW object. eg IDXD is using
-> an iobase and an offset along with the enforcing PASID, but something
-> like mlx5 would probably want an object id, type, and SF ID.
+> 
+> > 
+> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> > ---
+> >  .../bindings/clock/qcom,gcc-sm8550.yaml       |  88 +++++++
+> >  include/dt-bindings/clock/qcom,gcc-sm8550.h   | 231 ++++++++++++++++++
+> >  2 files changed, 319 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-sm8550.yaml
+> >  create mode 100644 include/dt-bindings/clock/qcom,gcc-sm8550.h
+> > 
+> > diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-sm8550.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-sm8550.yaml
+> > new file mode 100644
+> > index 000000000000..a2468167c8ab
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sm8550.yaml
+> > @@ -0,0 +1,88 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/clock/qcom,gcc-sm8550.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Qualcomm Global Clock & Reset Controller Binding for SM8550
+> 
+> You need to base on recent bindings. See commit ece3c3198182a1.
+> 
 
-Correct, and that's why the cookie is there. You can stash your pointer
-into the cookie and an IDXD user stores the PASID. The IDXD user which
-allocates an interrupt does not even know about iobase and offset. It
-does neither care about what the IDXD irq domain implementation does
-with that cookie.
+Yep, will do.
 
-Neither should your queue code care. The queue driver code puts a
-pointer to struct mlx5_voodoo into the cookie when allocating the
-interrupt and then the mlx5 irqdomain code which is a complete separate
-entity gets this cookie handed into prepare_desc().
+> > +
+> > +maintainers:
+> > +  - Bjorn Andersson <andersson@kernel.org>
+> > +
+> > +description: |
+> > +  Qualcomm global clock control module which supports the clocks, resets and
+> > +  power domains on SM8550
+> 
+> Ditto
+> 
+> > +
+> > +  See also:
+> > +  - dt-bindings/clock/qcom,gcc-sm8550.h
+> 
+> Ditto
+> 
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: qcom,sm8550-gcc
+> > +
+> > +  clocks:
+> > +    items:
+> > +      - description: Board XO source
+> > +      - description: Sleep clock source
+> > +      - description: PCIE 0 Pipe clock source (Optional clock)
+> 
+> Drop "(Optional clock)"
 
-struct mlx5_voodoo contains all information for the irq domain code to
-set up the necessary things in the queue. That must be obviously a
-contract between the queue code and the irqdomain code but that's not
-any different than MSI or MSI-X. The only difference is that in the IMS
-case the contract is per device and not codified in a standard.
+Sure, will drop. I based this on SM8450, but maybe that also needs an
+update.
 
-> This is again where I don't much like the use of an ID to refer to the
-> domain.
->
-> Having the driver allocate the device domain, retain a pointer to it,
-> and use that domain pointer with all these new APIs seems much clearer
-> than converting the pointer to an ID.
+> 
+> > +      - description: PCIE 1 Pipe clock source (Optional clock)
+> > +      - description: PCIE 1 Phy Auxiliary clock source (Optional clock)
+> > +      - description: UFS Phy Rx symbol 0 clock source (Optional clock)
+> > +      - description: UFS Phy Rx symbol 1 clock source (Optional clock)
+> > +      - description: UFS Phy Tx symbol 0 clock source (Optional clock)
+> > +      - description: USB3 Phy wrapper pipe clock source (Optional clock)
+> > +    minItems: 2
+> 
+> This does not look correct. Why clocks of GCC are inputs clocks to GCC?
 
-You're really obsessed about this irqdomain pointer, right?
+Well, it is not a GCC clock. It is a fixed-clock fed into GCC.
+The name is taken from downstream, but I'm pretty sure the HW clock is
+named so. So I think we should keep it as is.
 
-You have to differentiate between the irq domain implementation and the
-actual usage sites and not conflate them into one thing.
+> 
+> > +
+> > +  clock-names:
+> > +    items:
+> > +      - const: bi_tcxo
+> > +      - const: sleep_clk
+> > +      - const: pcie_0_pipe_clk # Optional clock
+> > +      - const: pcie_1_pipe_clk # Optional clock
+> > +      - const: pcie_1_phy_aux_clk # Optional clock
+> > +      - const: ufs_phy_rx_symbol_0_clk # Optional clock
+> > +      - const: ufs_phy_rx_symbol_1_clk # Optional clock
+> > +      - const: ufs_phy_tx_symbol_0_clk # Optional clock
+> > +      - const: usb3_phy_wrapper_gcc_usb30_pipe_clk # Optional clock
+> > +    minItems: 2
+> > +
+> > +  '#clock-cells':
+> > +    const: 1
+> > +
+> > +  '#reset-cells':
+> > +    const: 1
+> > +
+> > +  '#power-domain-cells':
+> > +    const: 1
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> 
+> Drop all duplicated properties and use qcom,gcc.yaml. See commit
+> 842b4ca1cb8cf54
+> 
 
-Let's look at the usage site:
+Will do.
 
-      struct cookie cookie = { .ptr = mymagicqueue, }
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - clocks
+> > +  - clock-names
+> > +  - '#clock-cells'
+> > +  - '#reset-cells'
+> > +  - '#power-domain-cells'
+> 
+> Drop redundant entries.
 
-      pci_ims_alloc_irq(pci_dev, &cookie);
+Will do.
 
-versus:
-
-      struct cookie cookie = { .ptr = mymagicqueue, }
-
-      ims_alloc_irq(&pci_dev->dev, mydev->ims_domain, &cookie);
-
-Even in the unlikely case that we have more than two domains, then still
-the usage site has zero interest in the domain pointer:
-
-      struct cookie cookie = { .ptr = mymagicqueue, }
-
-      pci_ims_alloc_irq(pci_dev, myqueue->domid, &cookie);
-
-where the code which instantiates myqueue sets up domid.
-
-The usage site has absolutely no business to touch irqdomain pointer or
-to even know that one exists. All it needs to know is how the cookie
-contract works, obviously.
-
-Now the functions you need in your irqdomain implementation to
-e.g. prepare the MSI descriptor surely need to know about the irqdomain
-pointer, but that gets handed in from the allocation code so the prepare
-function knows which instance it is operating on.
-
-So what does the irqdomain pointer buy you? Exactly nothing!
-
-Look at the IDXD reference implementation.
-
-     The IDXD probe code which initializes the physical device
-     instantiates the irq domain along with the iobase for the
-     storage array.
-
-     The actual queue (or whatever IDXD names it) setup code just sticks
-     PASID into the cookie and allocates an interrupt. It gets a virtual
-     irq number and requests the interrupt.
-
-Where is the need for a pointer? The queue code does not even know about
-the iobase of the storage array. It's completely irrelevant there. All
-it has to know is the cookie contract, not more.
-
-Let's take you pointer obsession to the extreme:
-
-      struct irq_desc *desc = pci_alloc_msix_interrupt(pci_dev);
-
-      request_irq(desc, handler, pci_dev);
-
-versus:
-
-      int virq = pci_alloc_msix_interrupt(pci_dev);
-
-      request_irq(virq, handler, pci_dev);
-
-You could argue the same way that there is no need for a Linux interrupt
-number and we could just use the interrupt descriptor pointer.
-
-Sure, you can do that, but then you violate _all_ encapsulation rules in
-one go for absolutely _ZERO_ value.
-
-Want another example based on kmalloc()?
-
-Almost 20 years ago I did a treewide mopup of drivers which decided that
-they need to fiddle in the irq descriptor for the very wrong reasons.
-I had to do that to be able to do a trivial change in the core code...
-
-C is patently bad for encapsulation, but you can make it worse by
-forcefully ignoring the design patterns which allow to completely hide
-implementation details of a subsystem or infrastructure.
-
-If you look at the last commit in the ARM part of this work:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git/commit/?h=devmsi-arm&id=96c97746cbb431a306e95c04d6b3c75751244716
-
-then you can see the final move to remove the visibility of
-the MSI management internals.
-
-This makes it possible to completely overhaul the inner workings of the
-MSI core without having to chase abuse all over the place.
+> 
+> > +
+> > +allOf:
+> > +  - $ref: qcom,gcc.yaml#
+> > +
+> 
 
 Thanks,
+Abel
 
-        tglx
-
-
-
-
-
-   
-
-
-
-
-
-
-
-        
+> Best regards,
+> Krzysztof
+> 
