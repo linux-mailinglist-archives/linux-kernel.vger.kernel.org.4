@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4A3262E186
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 17:21:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BCE662E187
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 17:22:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240442AbiKQQVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 11:21:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57100 "EHLO
+        id S240392AbiKQQVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 11:21:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240435AbiKQQUm (ORCPT
+        with ESMTP id S240449AbiKQQUm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 17 Nov 2022 11:20:42 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0B877C00E
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 08:20:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C197C01D
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 08:20:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5F88DB82108
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 16:20:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59456C433D7;
-        Thu, 17 Nov 2022 16:20:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B3409B82105
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 16:20:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A714AC433C1;
+        Thu, 17 Nov 2022 16:20:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668702021;
-        bh=lYxwufEX6icK/IjetN7+SM6rENMbyTQIdRIkrtag03o=;
+        s=k20201202; t=1668702022;
+        bh=JDHtdW/pxUL6/mqDWx53BUt82+lAEInA9L1ewsxB9Cs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fPYwgNf3lDE08P02M+mr4Q3kn378AEr9TaLo/ya/1Tc21up0nZaGUhhu2Jk6I2BOo
-         iEkSHbkEVs6QiF0p2rMctjZykkUehJwb4KCbqJgp4FJzSMYpbCq1yy7Xq966YlzEdm
-         faXBYOGrC0QvGarJfgLWuqqQvFeEH3JhvyRZLfC+hKTRu5HvXNLHoRYLCCZ5UgktOe
-         udoUW9UTQ+GTs40tsbd8AEUEkU+HZGLSOyD+lYBXrfsJPXZGdjuIB8JAy11xzOaKvr
-         Jsi29alfGeg899nBtogwpM63BiHZdVx5PLHi2EICMhp5WbM+El35l0y5AGvxfZ3TBv
-         YhriaEjkpc7ow==
+        b=twV7rplvfG3X7ZI34DGD8FW7G6nXFmu0BDi1rd3jJO0fpnqbuAsL8A6QXy43r8v6q
+         IC4zVdJY8/Fc5MaeL1l51+519cYcEXP8uKjW5g6tHrPqanXrtC1oH9xl/ZE7LOgPSN
+         7qZ1Pu9mWXc4Ct2mHfQaX8ioGmPql5dwcP0/adg9F9Q3/lnP8J0S45VR2kUILNFUcT
+         AANfYwogpwgtRekJjWBzK51T16Ri8Eas6HUDX6ugZKrmkUx45xktAuvmZr4TGP0zrM
+         bHz3kZ3Qi0FClLXbhiptvOZp3CD8RiXyfGanWWwNK/tdU/lvaO9rq2UGxNJURfEf3n
+         fCjCf7oFtw02g==
 From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     farah kassabri <fkassabri@habana.ai>
-Subject: [PATCH 19/20] habanalabs/gaudi2: change memory scrub mechanism
-Date:   Thu, 17 Nov 2022 18:19:50 +0200
-Message-Id: <20221117161951.845454-19-ogabbay@kernel.org>
+Cc:     Tomer Tayar <ttayar@habana.ai>
+Subject: [PATCH 20/20] habanalabs: increase the size of busy engines mask
+Date:   Thu, 17 Nov 2022 18:19:51 +0200
+Message-Id: <20221117161951.845454-20-ogabbay@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221117161951.845454-1-ogabbay@kernel.org>
 References: <20221117161951.845454-1-ogabbay@kernel.org>
@@ -52,213 +52,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: farah kassabri <fkassabri@habana.ai>
+From: Tomer Tayar <ttayar@habana.ai>
 
-Currently the scrubbing mechanism used the EDMA engines by directly
-setting the engine core registers to scrub a chunk of memory.
-Due to a sporadic failure with this mechanism, it was decided to
-initiate the engines via its QMAN using LIN-DMA packets.
+Increase the size of the busy engines mask in 'struct hl_info_hw_idle',
+for future ASICs with more than 128 engines.
 
-Signed-off-by: farah kassabri <fkassabri@habana.ai>
+Signed-off-by: Tomer Tayar <ttayar@habana.ai>
 Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- drivers/misc/habanalabs/gaudi2/gaudi2.c | 129 +++++++++++++++---------
- 1 file changed, 83 insertions(+), 46 deletions(-)
+ drivers/misc/habanalabs/common/device.c | 9 +++++----
+ include/uapi/misc/habanalabs.h          | 2 +-
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/misc/habanalabs/gaudi2/gaudi2.c b/drivers/misc/habanalabs/gaudi2/gaudi2.c
-index f0f2f77f56de..c14e63164a84 100644
---- a/drivers/misc/habanalabs/gaudi2/gaudi2.c
-+++ b/drivers/misc/habanalabs/gaudi2/gaudi2.c
-@@ -9171,34 +9171,74 @@ static void gaudi2_handle_eqe(struct hl_device *hdev, struct hl_eq_entry *eq_ent
- 	hl_device_cond_reset(hdev, reset_flags, event_mask);
- }
- 
-+static int gaudi2_memset_memory_chunk_using_edma_qm(struct hl_device *hdev,
-+			struct packet_lin_dma *lin_dma_pkt, dma_addr_t pkt_dma_addr,
-+			u32 hw_queue_id, u32 size, u64 addr, u32 val)
-+{
-+	u32 ctl, pkt_size;
-+	int rc = 0;
-+
-+	ctl = FIELD_PREP(GAUDI2_PKT_CTL_OPCODE_MASK, PACKET_LIN_DMA);
-+	ctl |= FIELD_PREP(GAUDI2_PKT_LIN_DMA_CTL_MEMSET_MASK, 1);
-+	ctl |= FIELD_PREP(GAUDI2_PKT_LIN_DMA_CTL_WRCOMP_MASK, 1);
-+	ctl |= FIELD_PREP(GAUDI2_PKT_CTL_EB_MASK, 1);
-+
-+	lin_dma_pkt->ctl = cpu_to_le32(ctl);
-+	lin_dma_pkt->src_addr = cpu_to_le64(val);
-+	lin_dma_pkt->dst_addr = cpu_to_le64(addr);
-+	lin_dma_pkt->tsize = cpu_to_le32(size);
-+
-+	pkt_size = sizeof(struct packet_lin_dma);
-+
-+	rc = hl_hw_queue_send_cb_no_cmpl(hdev, hw_queue_id, pkt_size, pkt_dma_addr);
-+	if (rc)
-+		dev_err(hdev->dev, "Failed to send lin dma packet to H/W queue %d\n",
-+				hw_queue_id);
-+
-+	return rc;
-+}
-+
- static int gaudi2_memset_device_memory(struct hl_device *hdev, u64 addr, u64 size, u64 val)
- {
--	struct asic_fixed_properties *prop = &hdev->asic_prop;
-+	u32 edma_queues_id[] = {GAUDI2_QUEUE_ID_DCORE0_EDMA_0_0,
-+					GAUDI2_QUEUE_ID_DCORE1_EDMA_0_0,
-+					GAUDI2_QUEUE_ID_DCORE2_EDMA_0_0,
-+					GAUDI2_QUEUE_ID_DCORE3_EDMA_0_0};
-+	u32 chunk_size, dcore, edma_idx, sob_offset, sob_addr, comp_val,
-+		old_mmubp, mmubp, num_of_pkts, busy, pkt_size;
- 	u64 comp_addr, cur_addr = addr, end_addr = addr + size;
--	u32 chunk_size, busy, dcore, edma_idx, sob_offset, sob_addr, comp_val, edma_commit;
--	u32 old_mmubp, mmubp;
--	int rc = 0;
-+	struct asic_fixed_properties *prop = &hdev->asic_prop;
-+	void *lin_dma_pkts_arr;
-+	dma_addr_t pkt_dma_addr;
-+	int rc = 0, dma_num = 0;
-+
-+	if (prop->edma_enabled_mask == 0) {
-+		dev_info(hdev->dev, "non of the EDMA engines is enabled - skip dram scrubbing\n");
-+		return -EIO;
-+	}
- 
- 	sob_offset = hdev->asic_prop.first_available_user_sob[0] * 4;
- 	sob_addr = mmDCORE0_SYNC_MNGR_OBJS_SOB_OBJ_0 + sob_offset;
- 	comp_addr = CFG_BASE + sob_addr;
- 	comp_val = FIELD_PREP(DCORE0_SYNC_MNGR_OBJS_SOB_OBJ_INC_MASK, 1) |
- 		FIELD_PREP(DCORE0_SYNC_MNGR_OBJS_SOB_OBJ_VAL_MASK, 1);
--
--	edma_commit = FIELD_PREP(ARC_FARM_KDMA_CTX_COMMIT_LIN_MASK, 1) |
--			FIELD_PREP(ARC_FARM_KDMA_CTX_COMMIT_MEM_SET_MASK, 1) |
--			FIELD_PREP(ARC_FARM_KDMA_CTX_COMMIT_WR_COMP_EN_MASK, 1);
- 	mmubp = FIELD_PREP(ARC_FARM_KDMA_CTX_AXUSER_HB_MMU_BP_WR_MASK, 1) |
- 		FIELD_PREP(ARC_FARM_KDMA_CTX_AXUSER_HB_MMU_BP_RD_MASK, 1);
- 
--	if (prop->edma_enabled_mask == 0) {
--		dev_info(hdev->dev, "non of the EDMA engines is enabled - skip dram scrubbing\n");
--		return -EIO;
--	}
-+	/* Calculate how many lin dma pkts we'll need */
-+	num_of_pkts = div64_u64(round_up(size, SZ_2G), SZ_2G);
-+	pkt_size = sizeof(struct packet_lin_dma);
-+
-+	lin_dma_pkts_arr = hl_asic_dma_alloc_coherent(hdev, pkt_size * num_of_pkts,
-+					&pkt_dma_addr, GFP_KERNEL);
-+	if (!lin_dma_pkts_arr)
-+		return -ENOMEM;
- 
- 	/*
- 	 * set mmu bypass for the scrubbing - all ddmas are configured the same so save
- 	 * only the first one to restore later
-+	 * also set the sob addr for all edma cores for completion.
-+	 * set QM as trusted to allow it to access physical address with MMU bp.
- 	 */
- 	old_mmubp = RREG32(mmDCORE0_EDMA0_CORE_CTX_AXUSER_HB_MMU_BP);
- 	for (dcore = 0 ; dcore < NUM_OF_DCORES ; dcore++) {
-@@ -9211,17 +9251,22 @@ static int gaudi2_memset_device_memory(struct hl_device *hdev, u64 addr, u64 siz
- 
- 			WREG32(mmDCORE0_EDMA0_CORE_CTX_AXUSER_HB_MMU_BP +
- 					edma_offset, mmubp);
-+			WREG32(mmDCORE0_EDMA0_CORE_CTX_WR_COMP_ADDR_LO + edma_offset,
-+					lower_32_bits(comp_addr));
-+			WREG32(mmDCORE0_EDMA0_CORE_CTX_WR_COMP_ADDR_HI + edma_offset,
-+					upper_32_bits(comp_addr));
-+			WREG32(mmDCORE0_EDMA0_CORE_CTX_WR_COMP_WDATA + edma_offset,
-+					comp_val);
-+			gaudi2_qman_set_test_mode(hdev,
-+					edma_queues_id[dcore] + 4 * edma_idx, true);
- 		}
+diff --git a/drivers/misc/habanalabs/common/device.c b/drivers/misc/habanalabs/common/device.c
+index 63d0cb7087e8..f5864893237c 100644
+--- a/drivers/misc/habanalabs/common/device.c
++++ b/drivers/misc/habanalabs/common/device.c
+@@ -416,8 +416,9 @@ static void hpriv_release(struct kref *ref)
+ 		device_is_idle = hdev->asic_funcs->is_device_idle(hdev, idle_mask,
+ 							HL_BUSY_ENGINES_MASK_EXT_SIZE, NULL);
+ 	if (!device_is_idle) {
+-		dev_err(hdev->dev, "device not idle after user context is closed (0x%llx_%llx)\n",
+-			idle_mask[1], idle_mask[0]);
++		dev_err(hdev->dev,
++			"device not idle after user context is closed (0x%llx_%llx_%llx_%llx)\n",
++			idle_mask[3], idle_mask[2], idle_mask[1], idle_mask[0]);
+ 		reset_device = true;
  	}
  
--	while (cur_addr < end_addr) {
--		int dma_num = 0;
-+	WREG32(sob_addr, 0);
- 
--		WREG32(sob_addr, 0);
-+	while (cur_addr < end_addr) {
- 		for (dcore = 0 ; dcore < NUM_OF_DCORES ; dcore++) {
- 			for (edma_idx = 0 ; edma_idx < NUM_OF_EDMA_PER_DCORE ; edma_idx++) {
--				u32 edma_offset = dcore * DCORE_OFFSET +
--					edma_idx * DCORE_EDMA_OFFSET;
- 				u32 edma_bit = dcore * NUM_OF_EDMA_PER_DCORE + edma_idx;
- 
- 				if (!(prop->edma_enabled_mask & BIT(edma_bit)))
-@@ -9229,41 +9274,26 @@ static int gaudi2_memset_device_memory(struct hl_device *hdev, u64 addr, u64 siz
- 
- 				chunk_size = min_t(u64, SZ_2G, end_addr - cur_addr);
- 
--				WREG32(mmDCORE0_EDMA0_CORE_CTX_SRC_BASE_LO + edma_offset,
--						lower_32_bits(val));
--				WREG32(mmDCORE0_EDMA0_CORE_CTX_SRC_BASE_HI + edma_offset,
--						upper_32_bits(val));
--
--				WREG32(mmDCORE0_EDMA0_CORE_CTX_DST_BASE_LO + edma_offset,
--						lower_32_bits(cur_addr));
--				WREG32(mmDCORE0_EDMA0_CORE_CTX_DST_BASE_HI + edma_offset,
--						upper_32_bits(cur_addr));
--
--				WREG32(mmDCORE0_EDMA0_CORE_CTX_WR_COMP_ADDR_LO + edma_offset,
--						lower_32_bits(comp_addr));
--				WREG32(mmDCORE0_EDMA0_CORE_CTX_WR_COMP_ADDR_HI + edma_offset,
--						upper_32_bits(comp_addr));
--				WREG32(mmDCORE0_EDMA0_CORE_CTX_WR_COMP_WDATA + edma_offset,
--						comp_val);
--
--				WREG32(mmDCORE0_EDMA0_CORE_CTX_DST_TSIZE_0 + edma_offset,
--						chunk_size);
--				WREG32(mmDCORE0_EDMA0_CORE_CTX_COMMIT + edma_offset, edma_commit);
-+				rc = gaudi2_memset_memory_chunk_using_edma_qm(hdev,
-+					(struct packet_lin_dma *)lin_dma_pkts_arr + dma_num,
-+					pkt_dma_addr + dma_num * pkt_size,
-+					edma_queues_id[dcore] + edma_idx * 4,
-+					chunk_size, cur_addr, val);
-+				if (rc)
-+					goto end;
- 
- 				dma_num++;
--
- 				cur_addr += chunk_size;
--
- 				if (cur_addr == end_addr)
--					goto poll;
-+					break;
- 			}
- 		}
--poll:
--		rc = hl_poll_timeout(hdev, sob_addr, busy, (busy == dma_num), 1000, 1000000);
--		if (rc) {
--			dev_err(hdev->dev, "DMA Timeout during HBM scrubbing\n");
--			goto end;
--		}
-+	}
-+
-+	rc = hl_poll_timeout(hdev, sob_addr, busy, (busy == dma_num), 1000, 1000000);
-+	if (rc) {
-+		dev_err(hdev->dev, "DMA Timeout during HBM scrubbing\n");
-+		goto end;
+@@ -1661,8 +1662,8 @@ int hl_device_reset(struct hl_device *hdev, u32 flags)
+ 	/* If device is not idle fail the reset process */
+ 	if (!hdev->asic_funcs->is_device_idle(hdev, idle_mask,
+ 			HL_BUSY_ENGINES_MASK_EXT_SIZE, NULL)) {
+-		dev_err(hdev->dev, "device is not idle (mask 0x%llx_%llx) after reset\n",
+-			idle_mask[1], idle_mask[0]);
++		dev_err(hdev->dev, "device is not idle (mask 0x%llx_%llx_%llx_%llx) after reset\n",
++			idle_mask[3], idle_mask[2], idle_mask[1], idle_mask[0]);
+ 		rc = -EIO;
+ 		goto out_err;
  	}
- end:
- 	for (dcore = 0 ; dcore < NUM_OF_DCORES ; dcore++) {
-@@ -9275,10 +9305,17 @@ static int gaudi2_memset_device_memory(struct hl_device *hdev, u64 addr, u64 siz
- 				continue;
+diff --git a/include/uapi/misc/habanalabs.h b/include/uapi/misc/habanalabs.h
+index e50cb71df081..3b995e841eb8 100644
+--- a/include/uapi/misc/habanalabs.h
++++ b/include/uapi/misc/habanalabs.h
+@@ -916,7 +916,7 @@ struct hl_info_dram_usage {
+ 	__u64 ctx_dram_mem;
+ };
  
- 			WREG32(mmDCORE0_EDMA0_CORE_CTX_AXUSER_HB_MMU_BP + edma_offset, old_mmubp);
-+			WREG32(mmDCORE0_EDMA0_CORE_CTX_WR_COMP_ADDR_LO + edma_offset, 0);
-+			WREG32(mmDCORE0_EDMA0_CORE_CTX_WR_COMP_ADDR_HI + edma_offset, 0);
-+			WREG32(mmDCORE0_EDMA0_CORE_CTX_WR_COMP_WDATA + edma_offset, 0);
-+			gaudi2_qman_set_test_mode(hdev,
-+					edma_queues_id[dcore] + 4 * edma_idx, false);
- 		}
- 	}
+-#define HL_BUSY_ENGINES_MASK_EXT_SIZE	2
++#define HL_BUSY_ENGINES_MASK_EXT_SIZE	4
  
- 	WREG32(sob_addr, 0);
-+	hl_asic_dma_free_coherent(hdev, pkt_size * num_of_pkts, lin_dma_pkts_arr, pkt_dma_addr);
-+
- 	return rc;
- }
- 
+ struct hl_info_hw_idle {
+ 	__u32 is_idle;
 -- 
 2.25.1
 
