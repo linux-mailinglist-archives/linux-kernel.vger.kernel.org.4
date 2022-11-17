@@ -2,164 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B21B62DCD7
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:33:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52E4062DCE0
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:34:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240074AbiKQNdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 08:33:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47906 "EHLO
+        id S240131AbiKQNen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 08:34:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239985AbiKQNdX (ORCPT
+        with ESMTP id S239985AbiKQNel (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 08:33:23 -0500
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70089.outbound.protection.outlook.com [40.107.7.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49AB770A3A
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 05:33:21 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=d+qBLtn03a0+ndnHWxB90txpYFAiWylJqiOBvX/6oEQ2CIAGudvmD2D+L1lTgnCF4+J4DfIBgnKvxruHtCGDnOq8j/ChPLNmFNbRPaCALFaiVxjAtK6SIgAWT2Xwot6lcNeJ80X9C72nvGKOa5r4IAzf96TWNFp5BXL+Pwy4hWOvn+q3yFtSBu1xebkCcAQaJwQO4PV+Rl7XJJaPMieuWtT3Y69l5FY6nt+Rj3ih0n+GvK5NoxnnP2s1344CkzETK77S4uJ8be0f1qQSh9+NnDDFxHb+pndWfQqr/7HBWREs4gwhcczulrS51+aYL8R/T2kdzcYPjbVQgV5nyl0QfA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9ogx26bF65DqYPWtbZlo99oztsooSlTMopXO4O6WJnE=;
- b=eL/2/9+G7Hl//x8eIWIGwk5P47F3NihfEfyEwW8uKSH4dVGtZ5/9y4AflHykHkKUsN5YlQJe8Tkuli9HGgY7Xz3LbPo+pkaGBEUSE5JDSkEZo5YMsxl+2BmcIfivFK9QH0jCMXls2X55qnJyKD1SnwXfOTpO8ABzynKQau9YPeYnSpeH40xcsE79U2M2YphrtSTeEvWeSnDJ4WbT+PZCot3qeNpXAu+9mNLJ/R/rK/qJcavYKHepUucALe6FcJQin7DuIA9ZLUljcSCUAvt2S4vXVckBXyIaiHS400gXeTGD9SogL9JwdJ/P69zUJh5V5kbB5Rjo6JbmZA8oEiuPAw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9ogx26bF65DqYPWtbZlo99oztsooSlTMopXO4O6WJnE=;
- b=V7NaT7apK8kVaIDtdtiBjUmHCZJsrPjcAUZB5myGIn8oIZcVC/RnJ2ExgqbOXvF56YddOou1U6WJGxhOPubQgLUkyI8UtHwmtAnc0is9Bvk2wIAdZ8E9SJHltWgl8UT9gNKDTJn0yCe6VsEVrTRfJQ9tJtcPj9/tmn65iQJLTrWLCHN0E6xiIKyuU810o6zNjGTFOyZnHwGZhbhu3fXYK9rSzjGpGib7vjd6DmSq9jm9e50RaJOVdWMITegdmLllSq2qQrkKqX78HxR4+gAOLvAo26APz64xR8L8e29HZxVThLfGW79GxbPRMcsQvPruA51BbYLm1jsqnd7BmT9VgQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VE1PR04MB6560.eurprd04.prod.outlook.com (2603:10a6:803:122::25)
- by AM8PR04MB7971.eurprd04.prod.outlook.com (2603:10a6:20b:234::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.13; Thu, 17 Nov
- 2022 13:33:17 +0000
-Received: from VE1PR04MB6560.eurprd04.prod.outlook.com
- ([fe80::4da2:ea8b:e71e:b8d8]) by VE1PR04MB6560.eurprd04.prod.outlook.com
- ([fe80::4da2:ea8b:e71e:b8d8%4]) with mapi id 15.20.5813.018; Thu, 17 Nov 2022
- 13:33:17 +0000
-Message-ID: <a84234d8-9f48-4b8f-e171-599c34840581@suse.com>
-Date:   Thu, 17 Nov 2022 14:33:16 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] xen-pciback: Consider MSI-X enabled only when MASKALL bit
- is cleared
-Content-Language: en-US
-To:     =?UTF-8?Q?Marek_Marczykowski-G=c3=b3recki?= 
-        <marmarek@invisiblethingslab.com>
-Cc:     linux-kernel@vger.kernel.org, Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        "moderated list:XEN HYPERVISOR INTERFACE" 
-        <xen-devel@lists.xenproject.org>, David Vrabel <dvrabel@cantab.net>
-References: <20221117114122.1588338-1-marmarek@invisiblethingslab.com>
- <0afe3f35-1b25-d1c6-89bb-8dae7a4070e9@cantab.net> <Y3YzY0aUc42cQGk/@mail-itl>
-From:   Jan Beulich <jbeulich@suse.com>
-In-Reply-To: <Y3YzY0aUc42cQGk/@mail-itl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR0P281CA0059.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:49::7) To VE1PR04MB6560.eurprd04.prod.outlook.com
- (2603:10a6:803:122::25)
+        Thu, 17 Nov 2022 08:34:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E55100A
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 05:33:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668692018;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hL/CkDwZ5PSSXNx6AH8Ol5aF9aNMQrd0lYSEYATA1qM=;
+        b=SS3HlNfwCpVio4jgvLrqix9J6dfNreIeb1ZnAXafY/cZbC7YNvf9gIA14ElsuZbgQp05GY
+        aDdooYhipMHpMociBtMVq7Y9PP9dcuf1cTDqJ8nMQQggRmy1wjTI8jaKsROIz4UR11GI9s
+        DAqD2qpyKEjUk8YE9h+OBL15sesCGd8=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-616-NCII16pnNdG4ttHNgj3V-g-1; Thu, 17 Nov 2022 08:33:37 -0500
+X-MC-Unique: NCII16pnNdG4ttHNgj3V-g-1
+Received: by mail-ej1-f70.google.com with SMTP id sh31-20020a1709076e9f00b007ae32b7eb51so1107674ejc.9
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 05:33:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hL/CkDwZ5PSSXNx6AH8Ol5aF9aNMQrd0lYSEYATA1qM=;
+        b=iI/Yk87FMfeq9bGKLZk3uFNIyYSIuR4feAj5fEBUuQWPKi5IwI3eaXsdTJc8UYUEVD
+         UhgTWvRRGs8uQrnqPeOXNmeO9OnDyp3p8dtwznMwhWAxsqD0cyKYifF9r8O8yUsFmpfi
+         j4kVWMs0psNzlm6X7y2DIt4nHOmFBC6wcV4B3+CC9iTsuHyimnnrB2B13ZxF7ORPhJIb
+         ua0eEZqay86OVUL0qu5nFb9NEieTHUYJTM+/eBXHb84CvfFT+zeIOo7v57wzv4WeQBsK
+         wZVw1OIvg70phxCv8U5Yk6/anGddSHhxY4S1mfaDDmEwYtQElybWgtDjYdHB2CuCC4MA
+         T18A==
+X-Gm-Message-State: ANoB5pkaso8DRXW4DKhPNj1sz1c58sv9L4Wo8R9X159axHyrDZSWBKBm
+        BmLRYDQgUPY6L76j/5IZpdqfYhRDV755VwFXBUnQEffqc8TSoIAvb8T7MI8oHecyEOAhD34Vl2r
+        V8tXsRhcqhSsLsqfXphGXX9wj
+X-Received: by 2002:a05:6402:3719:b0:461:4f34:d8f4 with SMTP id ek25-20020a056402371900b004614f34d8f4mr2246349edb.144.1668692016390;
+        Thu, 17 Nov 2022 05:33:36 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6sKRk3/86Tcy37XD0YlRzFqUBS6qSiNc9p3JAvWavh0/6bd4NkP7VcJbT4ivuY7CMGPSQC7g==
+X-Received: by 2002:a05:6402:3719:b0:461:4f34:d8f4 with SMTP id ek25-20020a056402371900b004614f34d8f4mr2246326edb.144.1668692016139;
+        Thu, 17 Nov 2022 05:33:36 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id n22-20020aa7c696000000b00457c85bd890sm543260edq.55.2022.11.17.05.33.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Nov 2022 05:33:35 -0800 (PST)
+Message-ID: <3995ade6-385c-45cd-3ff4-052835337546@redhat.com>
+Date:   Thu, 17 Nov 2022 14:33:34 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VE1PR04MB6560:EE_|AM8PR04MB7971:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5d888d9b-49b7-4b55-6932-08dac8a0493b
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: eR0Nsdkf6UPFGVUWIopx/RwdcHK6zHtnpNFUD4cGaGmAh3M5SHQhu29/aQdTk7x6jHhHUwmXF90DBrjca5r4Yp3bOKbmb4EVtyCvK2LHZ/wv9DVFnxE8PLkAHj9C+PeCUED8FbgZCEAT/A+lOqrAgUCkoYFgb39i2rXs1cW4r4VGQxu95aS0uzqQ2RdXJUmfzG5ykJxB4t7bEvxTIIZvUG6EkOGAhuVq6o+YqpyU5MJ/7w/9kRzmoiyVJ2puhpiGnJn6IPd6gOU9WPQGnTE75QH2mBBWh6KmVDCfmwiGsoVGP6BaC/gghzUefADAbCHyQZgUTe5JgmTxVqOCYGRfDWG9rVq5rEiA1MsogvvWQtmnBREXlMXPYTsMH6nhrW9ikJOjo9CcMukUbKFajW5wzsSZc2mLRy+avNT2yHeC9R644CjuycpyIgjM77ZVPSeugeV7OeQ9tn0YzmlRVDw0moHFCS93ZSu49dV428Zta+8mmHM2WJhA9iDrxjDRDlFZWliNEvnwGebx7PcPgwGDhl3X4S84NKjAgOf2QUQ9k0s+eYkeZVYAxvUfXhzbE5vZHkLGET5HNEQfQ3H7cczREsihQrQmYnrhjcbn+7RvEopQjPKalnr82IrkVFyMlixxRt5WHTQK72iE6O5VqWfHGUWsOJBgQdictFWEGuZ2C8JkdCdLJB6pgRjHWZm6O1+WePs9qXl/kUbMeeAEKCsdh7FU7YNIRm+L24i8I2aoBr8=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6560.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(396003)(376002)(136003)(366004)(346002)(451199015)(2906002)(38100700002)(53546011)(26005)(2616005)(4326008)(8676002)(31696002)(66556008)(66476007)(6916009)(54906003)(66946007)(6506007)(36756003)(6512007)(186003)(31686004)(316002)(5660300002)(86362001)(41300700001)(478600001)(8936002)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MnVnSUVPam5kTFJFTzBYY1pkTTdLbnNBTndOQjJ2a1Fxa2ZvOUtsQXRxeXRn?=
- =?utf-8?B?dVNwYm5hc2l5b0kvS2YxUmhwNFYyRHNKcEVabnNCRjIxa0xQb1o4MzRjNGhV?=
- =?utf-8?B?N2pIZXNaR0t6OHZuVERCeHppN3EzRWttRzRieCtHTk1mYTY5bENmY1dCekp1?=
- =?utf-8?B?TUdBUkJUeGJydW5zd0Rwd3ZDdVNITis2NG9UbTFMRzJtelU0V2xuQ0VXN3hs?=
- =?utf-8?B?cXlnY1ZqcXBQaXZ2YWxmYWgxZkVybXZoSE1Fdy91KzcwUGQ0YTMwM2VnajNv?=
- =?utf-8?B?Ly9vdXlUN1Rwd3VVVnM2NDFHazNLQzk1U21tdmM2Y1hkTXIxcUlIdzBNWlBR?=
- =?utf-8?B?ZStiaVVrZTVDN2FPaVY5Y3JoYVBWaHFBWEliem90QXpVcE9IQ3h3YWxVbTFK?=
- =?utf-8?B?L1pJazRGSVBaVVZaZXBhSFJUcnl6M1BVR1dPZko0VFoxTUc5ZmJJRWJEekhC?=
- =?utf-8?B?eHliU0lKVzcyYzVUVGNDcS9FQUlwVHE0Q2xYTGo3Tkl0eExVNWxaa3I3K0My?=
- =?utf-8?B?TmsxZVJzU1RDb2xyUk5rejlobVJSOGFtY0NUeU10aFdYQ1ZTWmRQbVdCOW40?=
- =?utf-8?B?R3VWdTg4eG5Zd2ZCYjB0QlFreGpnUWM2T295N1Y0T1FnZ2VaRGVvM1VZT3d6?=
- =?utf-8?B?YnRtUnBrODViQ3RYN0Rwb1E5MDRVS2JwNUF0VENSNkVKQ1o3cGNTZDhxWTUw?=
- =?utf-8?B?T1VXdFVzU0V2elhYWHVQQTFsYytlUnR2YXVrUEJxWEJGRmtNTDM2MUJhVVBt?=
- =?utf-8?B?VlY5blBsSUxZWW8xbFlTYnZ2TjlXRnhtaGhIUU4zQnBLbjJSVTdUcU01eXJJ?=
- =?utf-8?B?WHZXakVlM3E4OE5NblJjZlFjd002T3hIYnpkN3pYdDNIZzhsMEs4WG9mMTJx?=
- =?utf-8?B?T2svZ3RjOFRZNEdlaEp6MW1seWk4eTVOVml1d2VQRDlEendsNGE3TjNJQkd2?=
- =?utf-8?B?RjVxc0pjVFZ5ZGdydU1UMUkvdE01U2RXaWNYcUZmM3pIazcxU0FtWXJoMHc3?=
- =?utf-8?B?N1RremxCNmlUVFprUXZuWEN5UmxBL29TSEV0Rm0wTytaWENtQmJYNWlWLzBS?=
- =?utf-8?B?MXI1TDRRSVhJK1gyaWpZa3RYUkNjd1lVbjFGNEZVWVJnb0RSQ1BKSklmVmRR?=
- =?utf-8?B?UTcwKzgyWUxDanBldEVPWEdZUFplUU9aM3BoVUxBMVZWWVA5S2IyVDVpRDZw?=
- =?utf-8?B?QVcxUFRxVUI2U29wSjBCNC9iNHBDNHc1aW91NkNnQTNNRkFhckVsU1VwcWhN?=
- =?utf-8?B?SEcvRGx3T0FlVU9LNkhMVmt6WEFEYTJzOE1PQml0cXdFZTd0Zk50T0VVbnR4?=
- =?utf-8?B?T0JNTlV6bmYvamMrTDlJa2lHVHg4bGphVllZVnpMS0lGSC9ENmp4TW9uT3Jl?=
- =?utf-8?B?T2RhU1BNdzBJOVBFYjBmdXhMTG9uTDBJb3JRdGdFbU1rQTQ1YmZqQVhRem53?=
- =?utf-8?B?ekNZdGF0TmR3eFhiNTc0SzRYK3JTUnFhZVZiblByaGhNVjBKTHRNYVQvNFFh?=
- =?utf-8?B?NVN2OTF3Qnd1bnZhdC9JbnNqa2NPWUltdHlDSThzYi9CRjFwbVU2WS9Mc0Yv?=
- =?utf-8?B?QXZ5M28yc0tlT3hmNTh5aXljb21Eam5GRHMrYlFxaXoxakxBY0psTXJYZWgr?=
- =?utf-8?B?RjlaeVpBN0xhWktWQ25Na25EMk5vbit1VHQrZWY5dUt5SXNXQzlwd0pxMmlX?=
- =?utf-8?B?NENKZk12L2k5ZWZzYjFEUDRVc1k3alpwVStwcHdRWHFYbTUvYW0wWmlEbDlu?=
- =?utf-8?B?bUNJeDM5cHVkdVlTMzVWUE4rb2FzNkFEeUpXS3AzSDl6akh3eWl3aUNySFF0?=
- =?utf-8?B?RzV2Q0hlN2s3aXhVREFSQWRyaW95N3Era25qYjd5d2F2UjNZaklaM3F6bVho?=
- =?utf-8?B?UUp6UHR4YjhUSjFhVEE3NFowcnRiNzl1c1Z1TEJ4a1VPampDN1JZdFJ2a0tu?=
- =?utf-8?B?YmQxdTVPNDQvR0NMNEhHczhCZ3NTVGE2enk2bndPVTdubzFtNXJyaGxpc3Vl?=
- =?utf-8?B?S0MyYWFNblNpRFJmd0V0b1E3NFJmeFlvbHpEYUVuN1JwMmJxZE9yTWkyelF1?=
- =?utf-8?B?T1kwbUlNWkorTzhpREZXVGtoUW02RDVXNHB4ZHpkeVE2bVB6cEJhU1AzK1Nz?=
- =?utf-8?Q?cXz1tHgZwogKylfA5X6kEy998?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5d888d9b-49b7-4b55-6932-08dac8a0493b
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6560.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Nov 2022 13:33:17.6080
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 99vQkEgnb4jXBL1nbHzBLeD5edeAbb9R79vb7m2f5urie7131cN70xSgcOzXkOBNgEIUJeCC8Pbz5agHX29Xcw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7971
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 4/9] platform/x86/intel/sdsi: Add meter certificate
+ support
+Content-Language: en-US, nl
+To:     "David E. Box" <david.e.box@linux.intel.com>, markgross@kernel.org,
+        andriy.shevchenko@linux.intel.com, srinivas.pandruvada@intel.com
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221101191023.4150315-1-david.e.box@linux.intel.com>
+ <20221101191023.4150315-5-david.e.box@linux.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20221101191023.4150315-5-david.e.box@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17.11.2022 14:13, Marek Marczykowski-Górecki wrote:
-> On Thu, Nov 17, 2022 at 12:54:51PM +0000, David Vrabel wrote:
->> On 17/11/2022 11:41, Marek Marczykowski-Górecki wrote:
->>> Linux enables MSI-X before disabling INTx, but keeps MSI-X masked until
->>> the table is filled. Then it disables INTx just before clearing MASKALL
->>> bit. Currently this approach is rejected by xen-pciback.
->>> Allow setting PCI_MSIX_FLAGS_ENABLE while INTx is still enabled as long
->>> as PCI_MSIX_FLAGS_MASKALL is set too.
->>
->> The use of MSI-X interrupts is conditional on only the MSI-X Enable bit.
->> Setting MSI-X Enable effectively overrides the Interrupt Disable bit in the
->> Command register.
-> 
-> That means the second chunk of the patch may even drop the '(new_value &
-> PCI_MSIX_FLAGS_MASKALL)' part, right? 
-> 
->> PCIe 6.0.1 section 7.7.2.2. "MSI-X Enable ... is prohibited from using INTx
->> interrupts (if implemented)." And there is similar wording for MSI Enable.
-> 
-> And this would mean the 'field_config->int_type == INTERRUPT_TYPE_MSIX'
-> part isn't necessary either.
-> 
-> Jan in another thread pointed out that disabling INTx explicitly is
-> still a useful workaround for a flawed hardware. But if that isn't
-> mandated by the spec, maybe it doesn't need to be enforced by pciback
-> either?
+Hi,
 
-Well, allowing a device to go into a mode exhibiting undefined behavior
-is what we ought to prevent when it comes to a DomU doing so vs overall
-host safety.
+On 11/1/22 20:10, David E. Box wrote:
+> Add support for reading the meter certificate from Intel On Demand
+> hardware.  The meter certificate [1] is used to access the utilization
+> metrics of enabled features in support of the Intel On Demand consumption
+> model. Similar to the state certificate, the meter certificate is read by
+> mailbox command.
+> 
+> [1] https://github.com/intel-sandbox/debox1.intel_sdsi/blob/gnr-review/meter-certificate.rst
+> 
+> Signed-off-by: David E. Box <david.e.box@linux.intel.com>
 
-Jan
+Besides Andy's remarks I also have 1 remark myself, see below.
+
+> ---
+>  .../ABI/testing/sysfs-driver-intel_sdsi       | 10 ++++
+>  drivers/platform/x86/intel/sdsi.c             | 52 +++++++++++++++----
+>  2 files changed, 52 insertions(+), 10 deletions(-)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-driver-intel_sdsi b/Documentation/ABI/testing/sysfs-driver-intel_sdsi
+> index 9d77f30d9b9a..f8afed127107 100644
+> --- a/Documentation/ABI/testing/sysfs-driver-intel_sdsi
+> +++ b/Documentation/ABI/testing/sysfs-driver-intel_sdsi
+> @@ -69,6 +69,16 @@ Description:
+>  		the CPU configuration is updated. A cold reboot is required to
+>  		fully activate the feature. Mailbox command.
+>  
+> +What:		/sys/bus/auxiliary/devices/intel_vsec.sdsi.X/meter_certificate
+> +Date:		Nov 2022
+> +KernelVersion:	6.2
+> +Contact:	"David E. Box" <david.e.box@linux.intel.com>
+> +Description:
+> +		(RO) Used to read back the current meter certificate for the CPU
+> +		from Intel On Demand hardware. The meter certificate contains
+> +		utilization metrics of On Demand enabled features. Mailbox
+> +		command.
+> +
+>  What:		/sys/bus/auxiliary/devices/intel_vsec.sdsi.X/state_certificate
+>  Date:		Feb 2022
+>  KernelVersion:	5.18
+> diff --git a/drivers/platform/x86/intel/sdsi.c b/drivers/platform/x86/intel/sdsi.c
+> index ab1f65919fc5..1dee10822df7 100644
+> --- a/drivers/platform/x86/intel/sdsi.c
+> +++ b/drivers/platform/x86/intel/sdsi.c
+> @@ -42,6 +42,7 @@
+>  
+>  #define SDSI_ENABLED_FEATURES_OFFSET	16
+>  #define SDSI_FEATURE_SDSI		BIT(3)
+> +#define SDSI_FEATURE_METERING		BIT(26)
+>  
+>  #define SDSI_SOCKET_ID_OFFSET		64
+>  #define SDSI_SOCKET_ID			GENMASK(3, 0)
+> @@ -80,9 +81,10 @@
+>  #define SDSI_GUID_V2			0xF210D9EF
+>  
+>  enum sdsi_command {
+> -	SDSI_CMD_PROVISION_AKC		= 0x04,
+> -	SDSI_CMD_PROVISION_CAP		= 0x08,
+> -	SDSI_CMD_READ_STATE		= 0x10,
+> +	SDSI_CMD_PROVISION_AKC		= 0x0004,
+> +	SDSI_CMD_PROVISION_CAP		= 0x0008,
+> +	SDSI_CMD_READ_STATE		= 0x0010,
+> +	SDSI_CMD_READ_METER		= 0x0014,
+>  };
+>  
+>  struct sdsi_mbox_info {
+> @@ -398,13 +400,10 @@ static ssize_t provision_cap_write(struct file *filp, struct kobject *kobj,
+>  }
+>  static BIN_ATTR_WO(provision_cap, SDSI_SIZE_WRITE_MSG);
+>  
+> -static long state_certificate_read(struct file *filp, struct kobject *kobj,
+> -				   struct bin_attribute *attr, char *buf, loff_t off,
+> -				   size_t count)
+> +static ssize_t
+> +certificate_read(u64 command, struct sdsi_priv *priv, char *buf, loff_t off,
+> +		 size_t count)
+>  {
+> -	struct device *dev = kobj_to_dev(kobj);
+> -	struct sdsi_priv *priv = dev_get_drvdata(dev);
+> -	u64 command = SDSI_CMD_READ_STATE;
+>  	struct sdsi_mbox_info info;
+>  	size_t size;
+>  	int ret;
+> @@ -441,8 +440,31 @@ static long state_certificate_read(struct file *filp, struct kobject *kobj,
+>  
+>  	return size;
+>  }
+> +
+> +static ssize_t
+> +state_certificate_read(struct file *filp, struct kobject *kobj,
+> +		       struct bin_attribute *attr, char *buf, loff_t off,
+> +		       size_t count)
+> +{
+> +	struct device *dev = kobj_to_dev(kobj);
+> +	struct sdsi_priv *priv = dev_get_drvdata(dev);
+> +
+> +	return certificate_read(SDSI_CMD_READ_STATE, priv, buf, off, count);
+> +}
+>  static BIN_ATTR(state_certificate, 0400, state_certificate_read, NULL, SDSI_SIZE_READ_MSG);
+>  
+> +static ssize_t
+> +meter_certificate_read(struct file *filp, struct kobject *kobj,
+> +		       struct bin_attribute *attr, char *buf, loff_t off,
+> +		       size_t count)
+> +{
+> +	struct device *dev = kobj_to_dev(kobj);
+> +	struct sdsi_priv *priv = dev_get_drvdata(dev);
+> +
+> +	return certificate_read(SDSI_CMD_READ_METER, priv, buf, off, count);
+> +}
+> +static BIN_ATTR(meter_certificate, 0400, meter_certificate_read, NULL, SDSI_SIZE_READ_MSG);
+> +
+>  static ssize_t registers_read(struct file *filp, struct kobject *kobj,
+>  			      struct bin_attribute *attr, char *buf, loff_t off,
+>  			      size_t count)
+> @@ -472,6 +494,7 @@ static BIN_ATTR(registers, 0400, registers_read, NULL, SDSI_SIZE_REGS);
+>  static struct bin_attribute *sdsi_bin_attrs[] = {
+>  	&bin_attr_registers,
+>  	&bin_attr_state_certificate,
+> +	&bin_attr_meter_certificate,
+>  	&bin_attr_provision_akc,
+>  	&bin_attr_provision_cap,
+>  	NULL
+> @@ -491,7 +514,16 @@ sdsi_battr_is_visible(struct kobject *kobj, struct bin_attribute *attr, int n)
+>  	if (!(priv->features & SDSI_FEATURE_SDSI))
+>  		return 0;
+>  
+> -	return attr->attr.mode;
+> +	if (attr == &bin_attr_state_certificate ||
+> +	    attr == &bin_attr_provision_akc ||
+> +	    attr == &bin_attr_provision_cap)
+> +		return attr->attr.mode;
+
+I would prefer for you to just drop this and then change:
+
+> +
+> +	if (attr == &bin_attr_meter_certificate &&
+> +	    !!(priv->features & SDSI_FEATURE_METERING))
+> +		return attr->attr.mode;
+
+to:
+
+	if (attr == &bin_attr_meter_certificate)
+		return (priv->features & SDSI_FEATURE_METERING) ?
+				attr->attr.mode : 0;
+
+And then keep:
+
+	return attr->attr.mode;
+
+at the end of this function, because now you are hiding all
+new attributes by default and then you have to add any new
+attributes to the if above, leading to an ever growing lists
+of attr to check in that if, so just having:
+
+	return attr->attr.mode;
+
+As default for any non-matches attr would be much better IMHO.
+
+Regards,
+
+Hans
+
+
+
+
+
+> +
+> +	return 0;
+>  }
+>  
+>  static ssize_t guid_show(struct device *dev, struct device_attribute *attr, char *buf)
+
