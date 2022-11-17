@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4993F62DAE0
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 13:30:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EEA262DAE2
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 13:30:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240198AbiKQMaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 07:30:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52720 "EHLO
+        id S239757AbiKQMaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 07:30:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240115AbiKQM3E (ORCPT
+        with ESMTP id S240124AbiKQM3F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 07:29:04 -0500
+        Thu, 17 Nov 2022 07:29:05 -0500
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9587C725CE
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B984725D2
         for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 04:28:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1668688131; x=1700224131;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=dnUBqcl+k9EQthz+I0/JrzM1OicW378SnZoRnnRQKFU=;
-  b=HRUMyYekRoe894F9yo/aJ35LCSmD1/Jprqesy2syAG6uupJOXnt2/fhz
-   w1FJx/I4I/q+F3G1bp5+WZDmZ4zAPl0Sh5vQKd3RH/PuGNFg7I/t0EVRE
-   FdDO8saFIjzAWhu2JUzC92lwjtX+Vr0fyKa3dyeKP+BSrm63ZepNuEzyb
-   YngF+Oqdhk6i47JIM5wjzahiBGRvkXZKZgxkYNHVl3YkAoej9w1sKpRD5
-   ZSLEy2m8Ap0ST6Th47lzwJVadLK87RGTOP7KU6dd7fNrz+2oMe2qD4OdV
-   YmUTGMaRm1tqO0KkxA7nHw7Rf0gJzbGeDisFJ9PfpTyZQMOkiEMZjrZkk
+  bh=yiguIHAQUyFA/n7ZpCGUHKImucX21MgsisSqebhnJ/k=;
+  b=erRHWQBSTGrub6kMrBne1LI3JnphPK6bK8ONleM0YkwbIHVxuhWN4gy5
+   qmYQK7a28FqesUenSCt1mh4QLHE3579Hm3ET9yIk9VPVbQJSekjVXM32a
+   Er+/xcMm1KRbjAqL95RLOrU8XmAQTD0S5ILNdhIH4PqkZZJlj5BNxaEhH
+   19tPN7gYAPqgWw/fAJ/fqGeaI7RbMwq1n/Tj5bMh/68jP20Le4/lwT2oM
+   VVpcFxdxuGPxfZ2VLacKJN3+wJq4S6KMzvdIgsUGBQuwLXJGdfmdSb2vg
+   D1Hi9YleXPCw0KcJM3G3fRSl3z+kqLWjFfZlK53tUXooMkLYgUJ3wlGcW
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="296199874"
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="296199875"
 X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
-   d="scan'208";a="296199874"
+   d="scan'208";a="296199875"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
   by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 04:28:47 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="590604558"
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="590604559"
 X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
-   d="scan'208";a="590604558"
+   d="scan'208";a="590604559"
 Received: from jfdev013vml03.jf.intel.com ([10.23.26.52])
-  by orsmga003.jf.intel.com with ESMTP; 17 Nov 2022 04:28:46 -0800
+  by orsmga003.jf.intel.com with ESMTP; 17 Nov 2022 04:28:47 -0800
 From:   alexander.antonov@linux.intel.com
 To:     peterz@infradead.org, linux-kernel@vger.kernel.org
 Cc:     kan.liang@linux.intel.com, alexey.v.bayduraev@linux.intel.com,
         alexander.antonov@linux.intel.com
-Subject: [PATCH 08/11] perf/x86/intel/uncore: Enable UPI topology discovery for Icelake Server
-Date:   Thu, 17 Nov 2022 12:28:30 +0000
-Message-Id: <20221117122833.3103580-9-alexander.antonov@linux.intel.com>
+Subject: [PATCH 09/11] perf/x86/intel/uncore: Enable UPI topology discovery for Sapphire Rapids
+Date:   Thu, 17 Nov 2022 12:28:31 +0000
+Message-Id: <20221117122833.3103580-10-alexander.antonov@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221117122833.3103580-1-alexander.antonov@linux.intel.com>
 References: <20221117122833.3103580-1-alexander.antonov@linux.intel.com>
@@ -62,119 +62,87 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Alexander Antonov <alexander.antonov@linux.intel.com>
 
-UPI topology discovery relies on data from KTILP0 (offset 0x94) and
-KTIPCSTS (offset 0x120) as well as on SKX but on Icelake Server these
-registers reside under UBOX (Device ID 0x3450) bus.
+UPI topology discovery on SPR is same as in ICX but UBOX device has
+different Device ID 0x3250.
 
-This patch enables /sys/devices/uncore_upi_*/die* attributes on Icelake
-Server.
+This patch enables /sys/devices/uncore_upi_*/die* attributes on SPR.
 
 Signed-off-by: Alexander Antonov <alexander.antonov@linux.intel.com>
 Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
 ---
- arch/x86/events/intel/uncore_snbep.c | 75 ++++++++++++++++++++++++++++
- 1 file changed, 75 insertions(+)
+ arch/x86/events/intel/uncore_snbep.c | 43 +++++++++++++++++++++++++++-
+ 1 file changed, 42 insertions(+), 1 deletion(-)
 
 diff --git a/arch/x86/events/intel/uncore_snbep.c b/arch/x86/events/intel/uncore_snbep.c
-index 6da5f692afea..d45f5843444d 100644
+index d45f5843444d..4c2d5b5ea445 100644
 --- a/arch/x86/events/intel/uncore_snbep.c
 +++ b/arch/x86/events/intel/uncore_snbep.c
-@@ -445,6 +445,7 @@
- #define ICX_UPI_PCI_PMON_CTR0			0x320
- #define ICX_UPI_PCI_PMON_BOX_CTL		0x318
- #define ICX_UPI_CTL_UMASK_EXT			0xffffff
-+#define ICX_UBOX_DID				0x3450
+@@ -458,6 +458,7 @@
  
- /* ICX M3UPI*/
- #define ICX_M3UPI_PCI_PMON_CTL0			0xd8
-@@ -5594,6 +5595,76 @@ static const struct attribute_group icx_upi_uncore_format_group = {
- 	.attrs = icx_upi_uncore_formats_attr,
+ /* SPR */
+ #define SPR_RAW_EVENT_MASK_EXT			0xffffff
++#define SPR_UBOX_DID				0x3250
+ 
+ /* SPR CHA */
+ #define SPR_CHA_PMON_CTL_TID_EN			(1 << 16)
+@@ -6112,9 +6113,43 @@ static struct intel_uncore_type spr_uncore_m2m = {
+ 	.name			= "m2m",
  };
  
-+#define ICX_UPI_REGS_ADDR_DEVICE_LINK0	0x02
-+#define ICX_UPI_REGS_ADDR_FUNCTION	0x01
-+
-+static int discover_upi_topology(struct intel_uncore_type *type, int ubox_did, int dev_link0)
-+{
-+	struct pci_dev *ubox = NULL;
-+	struct pci_dev *dev = NULL;
-+	u32 nid, gid;
-+	int i, idx, ret = -EPERM;
-+	struct intel_uncore_topology *upi;
-+	unsigned int devfn;
-+
-+	/* GIDNIDMAP method supports machines which have less than 8 sockets. */
-+	if (uncore_max_dies() > 8)
-+		goto err;
-+
-+	while ((ubox = pci_get_device(PCI_VENDOR_ID_INTEL, ubox_did, ubox))) {
-+		ret = upi_nodeid_groupid(ubox, SKX_CPUNODEID, SKX_GIDNIDMAP, &nid, &gid);
-+		if (ret) {
-+			ret = pcibios_err_to_errno(ret);
-+			break;
-+		}
-+
-+		for (i = 0; i < 8; i++) {
-+			if (nid != GIDNIDMAP(gid, i))
-+				continue;
-+			for (idx = 0; idx < type->num_boxes; idx++) {
-+				upi = &type->topology[nid][idx];
-+				devfn = PCI_DEVFN(dev_link0 + idx, ICX_UPI_REGS_ADDR_FUNCTION);
-+				dev = pci_get_domain_bus_and_slot(pci_domain_nr(ubox->bus),
-+								  ubox->bus->number,
-+								  devfn);
-+				if (dev) {
-+					ret = upi_fill_topology(dev, upi, idx);
-+					if (ret)
-+						goto err;
-+				}
-+			}
-+		}
-+	}
-+err:
-+	pci_dev_put(ubox);
-+	pci_dev_put(dev);
-+	return ret;
-+}
-+
-+static int icx_upi_get_topology(struct intel_uncore_type *type)
-+{
-+	return discover_upi_topology(type, ICX_UBOX_DID, ICX_UPI_REGS_ADDR_DEVICE_LINK0);
-+}
-+
-+static struct attribute_group icx_upi_mapping_group = {
++static struct attribute_group spr_upi_mapping_group = {
 +	.is_visible	= skx_upi_mapping_visible,
 +};
 +
-+static const struct attribute_group *icx_upi_attr_update[] = {
-+	&icx_upi_mapping_group,
++static const struct attribute_group *spr_upi_attr_update[] = {
++	&uncore_alias_group,
++	&spr_upi_mapping_group,
 +	NULL
 +};
 +
-+static int icx_upi_set_mapping(struct intel_uncore_type *type)
++#define SPR_UPI_REGS_ADDR_DEVICE_LINK0	0x01
++
++static int spr_upi_set_mapping(struct intel_uncore_type *type)
 +{
-+	return pmu_upi_set_mapping(type, &icx_upi_mapping_group);
++	return pmu_upi_set_mapping(type, &spr_upi_mapping_group);
 +}
 +
-+static void icx_upi_cleanup_mapping(struct intel_uncore_type *type)
++static void spr_upi_cleanup_mapping(struct intel_uncore_type *type)
 +{
-+	pmu_cleanup_mapping(type, &icx_upi_mapping_group);
++	pmu_cleanup_mapping(type, &spr_upi_mapping_group);
 +}
 +
- static struct intel_uncore_type icx_uncore_upi = {
- 	.name		= "upi",
- 	.num_counters   = 4,
-@@ -5606,6 +5677,10 @@ static struct intel_uncore_type icx_uncore_upi = {
- 	.box_ctl	= ICX_UPI_PCI_PMON_BOX_CTL,
- 	.ops		= &skx_upi_uncore_pci_ops,
- 	.format_group	= &icx_upi_uncore_format_group,
-+	.attr_update	= icx_upi_attr_update,
-+	.get_topology	= icx_upi_get_topology,
-+	.set_mapping	= icx_upi_set_mapping,
-+	.cleanup_mapping = icx_upi_cleanup_mapping,
++static int spr_upi_get_topology(struct intel_uncore_type *type)
++{
++	return discover_upi_topology(type, SPR_UBOX_DID, SPR_UPI_REGS_ADDR_DEVICE_LINK0);
++}
++
+ static struct intel_uncore_type spr_uncore_upi = {
+-	SPR_UNCORE_PCI_COMMON_FORMAT(),
++	.event_mask		= SNBEP_PMON_RAW_EVENT_MASK,
++	.event_mask_ext		= SPR_RAW_EVENT_MASK_EXT,
++	.format_group		= &spr_uncore_raw_format_group,
++	.ops			= &spr_uncore_pci_ops,
+ 	.name			= "upi",
++	.attr_update		= spr_upi_attr_update,
++	.get_topology		= spr_upi_get_topology,
++	.set_mapping		= spr_upi_set_mapping,
++	.cleanup_mapping	= spr_upi_cleanup_mapping,
  };
  
- static struct event_constraint icx_uncore_m3upi_constraints[] = {
+ static struct intel_uncore_type spr_uncore_m3upi = {
+@@ -6318,6 +6353,12 @@ static void uncore_type_customized_copy(struct intel_uncore_type *to_type,
+ 		to_type->format_group = from_type->format_group;
+ 	if (from_type->attr_update)
+ 		to_type->attr_update = from_type->attr_update;
++	if (from_type->set_mapping)
++		to_type->set_mapping = from_type->set_mapping;
++	if (from_type->get_topology)
++		to_type->get_topology = from_type->get_topology;
++	if (from_type->cleanup_mapping)
++		to_type->cleanup_mapping = from_type->cleanup_mapping;
+ }
+ 
+ static struct intel_uncore_type **
 -- 
 2.25.1
 
