@@ -2,686 +2,302 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A23FB62DF39
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:10:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B8CE62DF65
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:13:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240112AbiKQPKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 10:10:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56166 "EHLO
+        id S240676AbiKQPNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 10:13:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240445AbiKQPJ0 (ORCPT
+        with ESMTP id S240400AbiKQPMx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 10:09:26 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B945781A8;
-        Thu, 17 Nov 2022 07:08:20 -0800 (PST)
-Date:   Thu, 17 Nov 2022 15:08:17 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668697698;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Z1/aq0fv10nvJV45kQht6nHtOb6gdjUa5CnCxcQZYBc=;
-        b=XEMq6pn86aAOcWlagaYOqJTv7HsjKGzczzcrsuATzDw/YgXRDSXgFKe6XR2CosDlvKNhyv
-        mCcYTGs1qf4aEJ446eBp4Ymjruxm9VOY2RrUYe/IfafTqswC3nYClRtXBjBYTymzDWD/cY
-        b9l2xKtab/0vPO7oZwY7bTSIt1K7QBjKksbizEZmfok4y6NT4juXkSVYFcWt/rmPXguMRD
-        m9v+wKuQbgpGgVxR26K8/PICtzGh3Mwc32OEPAxzEbIwZLvbpzCuzUaAIIVo2JDsefy+0A
-        BC/PnzpZJ1pf+PykIFrqtr/U8qeyaRzBue1ZjtrlwFhbw2KhCWhzA9WGg6kAzw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668697698;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Z1/aq0fv10nvJV45kQht6nHtOb6gdjUa5CnCxcQZYBc=;
-        b=WFj9cGdqirS0aW2NIXqGpDg6fwHPRTIcK9kWL89BMySIIzzDy8VFXhFBm2PMNgrLJq+NWA
-        l+U4HLlDmu51M+CA==
-From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/core] PCI/MSI: Get rid of PCI_MSI_IRQ_DOMAIN
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, maz@kernel.org
-In-Reply-To: <20221111122014.467556921@linutronix.de>
-References: <20221111122014.467556921@linutronix.de>
+        Thu, 17 Nov 2022 10:12:53 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDBAF7CB8E
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 07:09:22 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id a14so4358900wru.5
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 07:09:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OBusLlaaNz/2IZSIaqYfgs6/xdT0ROMSHKfiBIhkdsE=;
+        b=NfpbBsBQgrbY75WiJ016e0JTmdGmoYyca7I/NCnJZhfmCCTZjayS9RdRKm4JfS2fcJ
+         fVeXHWNZWpWqOxuAKjFqL87nRYvfdIeS/OGZksL27R8rb8hVNRwXGKXYPRUYovuyOhTQ
+         2KdieC+Lyx97mRgkXg4lB53Eby8Njkv0vJYLjpXxSam8mrjRDYlb2SWZOAdruhuNiKch
+         oimt+1rPmL9CFVQctuwqINnIzoMMDOOHZx1qNiF5cxB4yWYef69Ku4OJl58DzQ7tLFDO
+         9GvANFdmzddlRJJK66Ax9Y8b7HOjXFK6WEOP7Gtp/3GhVHUbB2438tgaxi1Vg2RVLoXk
+         l1kQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=OBusLlaaNz/2IZSIaqYfgs6/xdT0ROMSHKfiBIhkdsE=;
+        b=dhWmSpSQuYG1wZD3eIWF1Rfl6+7GJTWBLV9Jl1TVlE1IUbxAT8YsKAWDgTeJcOQoaW
+         6NFeIZTPJtmGiUO+ZLkRZQcjM/dQ9x39HAEjY0DiNb0k1rUwfUO0DqbSRKJuARjZKa+0
+         aox3+yAX7Qluq/LNSaTPfRos7mnix8wLS/wLTEaMg1sQRklR5P+22LoEauz/TOUdmf/i
+         XwtIIV2BlGhfeaHCYVND2/RnnHvBNO/TJpozjZgF36zihMInOn1y0K733QvrYm5Hqie6
+         /E+a5AhrPZRIzYpIjx4ehMnAsw/NHf6Mp/Ig7saIFaPhqk5+JYVIkowPhxaFC08ToqIY
+         +kXQ==
+X-Gm-Message-State: ANoB5pneRTCq7xMoXoEahNb8vUv49fPKQBqc+7hr2OSXrXepO8Jh58zc
+        ieOTvadm4tPrFzfG1H2D+xp4Dw==
+X-Google-Smtp-Source: AA0mqf7vvxL/xmrC6/yE9sA9AOuHHRmrasa80rT6NKUjVl0i95jt04rAjvEUusssVu8F+bFzV97rWw==
+X-Received: by 2002:adf:efd2:0:b0:236:e5a2:4f66 with SMTP id i18-20020adfefd2000000b00236e5a24f66mr1861434wrp.357.1668697761285;
+        Thu, 17 Nov 2022 07:09:21 -0800 (PST)
+Received: from zen.linaroharston ([185.81.254.11])
+        by smtp.gmail.com with ESMTPSA id r10-20020adfce8a000000b00241b371d73esm1255319wrn.77.2022.11.17.07.09.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 07:09:20 -0800 (PST)
+Received: from zen (localhost [127.0.0.1])
+        by zen.linaroharston (Postfix) with ESMTP id 5177C1FFB7;
+        Thu, 17 Nov 2022 15:09:20 +0000 (GMT)
+References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
+ <20221025151344.3784230-4-chao.p.peng@linux.intel.com>
+ <87cz9o9mr8.fsf@linaro.org> <20221116031441.GA364614@chaop.bj.intel.com>
+ <87mt8q90rw.fsf@linaro.org> <20221117134520.GD422408@chaop.bj.intel.com>
+User-agent: mu4e 1.9.2; emacs 28.2.50
+From:   Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Subject: Re: [PATCH v9 3/8] KVM: Add KVM_EXIT_MEMORY_FAULT exit
+Date:   Thu, 17 Nov 2022 15:08:17 +0000
+In-reply-to: <20221117134520.GD422408@chaop.bj.intel.com>
+Message-ID: <87a64p8vof.fsf@linaro.org>
 MIME-Version: 1.0
-Message-ID: <166869769765.4906.9639291368963784702.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/core branch of tip:
 
-Commit-ID:     a474d3fbe287625c6c1cfc56c2a456c5fb7c479e
-Gitweb:        https://git.kernel.org/tip/a474d3fbe287625c6c1cfc56c2a456c5fb7c479e
-Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Fri, 11 Nov 2022 14:54:38 +01:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Thu, 17 Nov 2022 15:15:19 +01:00
+Chao Peng <chao.p.peng@linux.intel.com> writes:
 
-PCI/MSI: Get rid of PCI_MSI_IRQ_DOMAIN
+> On Wed, Nov 16, 2022 at 07:03:49PM +0000, Alex Benn=C3=A9e wrote:
+>>=20
+>> Chao Peng <chao.p.peng@linux.intel.com> writes:
+>>=20
+>> > On Tue, Nov 15, 2022 at 04:56:12PM +0000, Alex Benn=C3=A9e wrote:
+>> >>=20
+>> >> Chao Peng <chao.p.peng@linux.intel.com> writes:
+>> >>=20
+>> >> > This new KVM exit allows userspace to handle memory-related errors.=
+ It
+>> >> > indicates an error happens in KVM at guest memory range [gpa, gpa+s=
+ize).
+>> >> > The flags includes additional information for userspace to handle t=
+he
+>> >> > error. Currently bit 0 is defined as 'private memory' where '1'
+>> >> > indicates error happens due to private memory access and '0' indica=
+tes
+>> >> > error happens due to shared memory access.
+>> >> >
+>> >> > When private memory is enabled, this new exit will be used for KVM =
+to
+>> >> > exit to userspace for shared <-> private memory conversion in memory
+>> >> > encryption usage. In such usage, typically there are two kind of me=
+mory
+>> >> > conversions:
+>> >> >   - explicit conversion: happens when guest explicitly calls into K=
+VM
+>> >> >     to map a range (as private or shared), KVM then exits to usersp=
+ace
+>> >> >     to perform the map/unmap operations.
+>> >> >   - implicit conversion: happens in KVM page fault handler where KVM
+>> >> >     exits to userspace for an implicit conversion when the page is =
+in a
+>> >> >     different state than requested (private or shared).
+>> >> >
+>> >> > Suggested-by: Sean Christopherson <seanjc@google.com>
+>> >> > Co-developed-by: Yu Zhang <yu.c.zhang@linux.intel.com>
+>> >> > Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
+>> >> > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+>> >> > ---
+>> >> >  Documentation/virt/kvm/api.rst | 23 +++++++++++++++++++++++
+>> >> >  include/uapi/linux/kvm.h       |  9 +++++++++
+>> >> >  2 files changed, 32 insertions(+)
+>> >> >
+>> >> > diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kv=
+m/api.rst
+>> >> > index f3fa75649a78..975688912b8c 100644
+>> >> > --- a/Documentation/virt/kvm/api.rst
+>> >> > +++ b/Documentation/virt/kvm/api.rst
+>> >> > @@ -6537,6 +6537,29 @@ array field represents return values. The us=
+erspace should update the return
+>> >> >  values of SBI call before resuming the VCPU. For more details on R=
+ISC-V SBI
+>> >> >  spec refer, https://github.com/riscv/riscv-sbi-doc.
+>> >> >=20=20
+>> >> > +::
+>> >> > +
+>> >> > +		/* KVM_EXIT_MEMORY_FAULT */
+>> >> > +		struct {
+>> >> > +  #define KVM_MEMORY_EXIT_FLAG_PRIVATE	(1 << 0)
+>> >> > +			__u32 flags;
+>> >> > +			__u32 padding;
+>> >> > +			__u64 gpa;
+>> >> > +			__u64 size;
+>> >> > +		} memory;
+>> >> > +
+>> >> > +If exit reason is KVM_EXIT_MEMORY_FAULT then it indicates that the=
+ VCPU has
+>> >> > +encountered a memory error which is not handled by KVM kernel modu=
+le and
+>> >> > +userspace may choose to handle it. The 'flags' field indicates the=
+ memory
+>> >> > +properties of the exit.
+>> >> > +
+>> >> > + - KVM_MEMORY_EXIT_FLAG_PRIVATE - indicates the memory error is ca=
+used by
+>> >> > +   private memory access when the bit is set. Otherwise the memory=
+ error is
+>> >> > +   caused by shared memory access when the bit is clear.
+>> >>=20
+>> >> What does a shared memory access failure entail?
+>> >
+>> > In the context of confidential computing usages, guest can issue a
+>> > shared memory access while the memory is actually private from the host
+>> > point of view. This exit with bit 0 cleared gives userspace a chance to
+>> > convert the private memory to shared memory on host.
+>>=20
+>> I think this should be explicit rather than implied by the absence of
+>> another flag. Sean suggested you might want flags for RWX failures so
+>> maybe something like:
+>>=20
+>> 	KVM_MEMORY_EXIT_SHARED_FLAG_READ	(1 << 0)
+>> 	KVM_MEMORY_EXIT_SHARED_FLAG_WRITE	(1 << 1)
+>> 	KVM_MEMORY_EXIT_SHARED_FLAG_EXECUTE	(1 << 2)
+>>         KVM_MEMORY_EXIT_FLAG_PRIVATE            (1 << 3)
+>
+> Yes, but I would not add 'SHARED' to RWX, they are not share memory
+> specific, private memory can also set them once introduced.
 
-What a zoo:
+OK so how about:
 
-     PCI_MSI
-	select GENERIC_MSI_IRQ
+ 	KVM_MEMORY_EXIT_FLAG_READ	(1 << 0)
+ 	KVM_MEMORY_EXIT_FLAG_WRITE	(1 << 1)
+ 	KVM_MEMORY_EXIT_FLAG_EXECUTE	(1 << 2)
+        KVM_MEMORY_EXIT_FLAG_SHARED     (1 << 3)
+        KVM_MEMORY_EXIT_FLAG_PRIVATE    (1 << 4)
 
-     PCI_MSI_IRQ_DOMAIN
-     	def_bool y
-	depends on PCI_MSI
-	select GENERIC_MSI_IRQ_DOMAIN
+>
+> Thanks,
+> Chao
+>>=20
+>> which would allow you to signal the various failure modes of the shared
+>> region, or that you had accessed private memory.
+>>=20
+>> >
+>> >>=20
+>> >> If you envision any other failure modes it might be worth making it
+>> >> explicit with additional flags.
+>> >
+>> > Sean mentioned some more usages[1][]2] other than the memory conversion
+>> > for confidential usage. But I would leave those flags being added in t=
+he
+>> > future after those usages being well discussed.
+>> >
+>> > [1] https://lkml.kernel.org/r/20200617230052.GB27751@linux.intel.com
+>> > [2] https://lore.kernel.org/all/YKxJLcg%2FWomPE422@google.com
+>> >
+>> >> I also wonder if a bitmask makes sense if
+>> >> there can only be one reason for a failure? Maybe all that is needed =
+is
+>> >> a reason enum?
+>> >
+>> > Tough we only have one reason right now but we still want to leave room
+>> > for future extension. Enum can express a single value at once well but
+>> > bitmask makes it possible to express multiple orthogonal flags.
+>>=20
+>> I agree if multiple orthogonal failures can occur at once a bitmask is
+>> the right choice.
+>>=20
+>> >
+>> > Chao
+>> >>=20
+>> >> > +
+>> >> > +'gpa' and 'size' indicate the memory range the error occurs at. Th=
+e userspace
+>> >> > +may handle the error and return to KVM to retry the previous memor=
+y access.
+>> >> > +
+>> >> >  ::
+>> >> >=20=20
+>> >> >      /* KVM_EXIT_NOTIFY */
+>> >> > diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+>> >> > index f1ae45c10c94..fa60b032a405 100644
+>> >> > --- a/include/uapi/linux/kvm.h
+>> >> > +++ b/include/uapi/linux/kvm.h
+>> >> > @@ -300,6 +300,7 @@ struct kvm_xen_exit {
+>> >> >  #define KVM_EXIT_RISCV_SBI        35
+>> >> >  #define KVM_EXIT_RISCV_CSR        36
+>> >> >  #define KVM_EXIT_NOTIFY           37
+>> >> > +#define KVM_EXIT_MEMORY_FAULT     38
+>> >> >=20=20
+>> >> >  /* For KVM_EXIT_INTERNAL_ERROR */
+>> >> >  /* Emulate instruction failed. */
+>> >> > @@ -538,6 +539,14 @@ struct kvm_run {
+>> >> >  #define KVM_NOTIFY_CONTEXT_INVALID	(1 << 0)
+>> >> >  			__u32 flags;
+>> >> >  		} notify;
+>> >> > +		/* KVM_EXIT_MEMORY_FAULT */
+>> >> > +		struct {
+>> >> > +#define KVM_MEMORY_EXIT_FLAG_PRIVATE	(1 << 0)
+>> >> > +			__u32 flags;
+>> >> > +			__u32 padding;
+>> >> > +			__u64 gpa;
+>> >> > +			__u64 size;
+>> >> > +		} memory;
+>> >> >  		/* Fix the size of the union. */
+>> >> >  		char padding[256];
+>> >> >  	};
+>> >>=20
+>> >>=20
+>> >> --=20
+>> >> Alex Benn=C3=A9e
+>>=20
+>>=20
+>> --=20
+>> Alex Benn=C3=A9e
 
-Ergo PCI_MSI enables PCI_MSI_IRQ_DOMAIN which in turn selects
-GENERIC_MSI_IRQ_DOMAIN. So all the dependencies on PCI_MSI_IRQ_DOMAIN are
-just an indirection to PCI_MSI.
 
-Match the reality and just admit that PCI_MSI requires
-GENERIC_MSI_IRQ_DOMAIN.
-
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-Link: https://lore.kernel.org/r/20221111122014.467556921@linutronix.de
-
----
- arch/um/drivers/Kconfig                 |  1 +-
- arch/um/include/asm/pci.h               |  2 +-
- arch/x86/Kconfig                        |  1 +-
- arch/x86/include/asm/pci.h              |  4 +-
- drivers/pci/Kconfig                     |  8 +---
- drivers/pci/controller/Kconfig          | 30 +++++++--------
- drivers/pci/controller/dwc/Kconfig      | 48 ++++++++++++------------
- drivers/pci/controller/mobiveil/Kconfig |  6 +--
- drivers/pci/msi/Makefile                |  2 +-
- drivers/pci/probe.c                     |  2 +-
- include/linux/msi.h                     | 29 +++++----------
- 11 files changed, 58 insertions(+), 75 deletions(-)
-
-diff --git a/arch/um/drivers/Kconfig b/arch/um/drivers/Kconfig
-index 5903e2b..a4f0a19 100644
---- a/arch/um/drivers/Kconfig
-+++ b/arch/um/drivers/Kconfig
-@@ -381,7 +381,6 @@ config UML_PCI_OVER_VIRTIO
- 	select UML_IOMEM_EMULATION
- 	select UML_DMA_EMULATION
- 	select PCI_MSI
--	select PCI_MSI_IRQ_DOMAIN
- 	select PCI_LOCKLESS_CONFIG
- 
- config UML_PCI_OVER_VIRTIO_DEVICE_ID
-diff --git a/arch/um/include/asm/pci.h b/arch/um/include/asm/pci.h
-index 34fe492..238d2e7 100644
---- a/arch/um/include/asm/pci.h
-+++ b/arch/um/include/asm/pci.h
-@@ -7,7 +7,7 @@
- /* Generic PCI */
- #include <asm-generic/pci.h>
- 
--#ifdef CONFIG_PCI_MSI_IRQ_DOMAIN
-+#ifdef CONFIG_PCI_MSI
- /*
-  * This is a bit of an annoying hack, and it assumes we only have
-  * the virt-pci (if anything). Which is true, but still.
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 67745ce..64f81a1 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -1109,7 +1109,6 @@ config X86_LOCAL_APIC
- 	def_bool y
- 	depends on X86_64 || SMP || X86_32_NON_STANDARD || X86_UP_APIC || PCI_MSI
- 	select IRQ_DOMAIN_HIERARCHY
--	select PCI_MSI_IRQ_DOMAIN if PCI_MSI
- 
- config X86_IO_APIC
- 	def_bool y
-diff --git a/arch/x86/include/asm/pci.h b/arch/x86/include/asm/pci.h
-index 736793d..c4789de 100644
---- a/arch/x86/include/asm/pci.h
-+++ b/arch/x86/include/asm/pci.h
-@@ -21,7 +21,7 @@ struct pci_sysdata {
- #ifdef CONFIG_X86_64
- 	void		*iommu;		/* IOMMU private data */
- #endif
--#ifdef CONFIG_PCI_MSI_IRQ_DOMAIN
-+#ifdef CONFIG_PCI_MSI
- 	void		*fwnode;	/* IRQ domain for MSI assignment */
- #endif
- #if IS_ENABLED(CONFIG_VMD)
-@@ -52,7 +52,7 @@ static inline int pci_proc_domain(struct pci_bus *bus)
- }
- #endif
- 
--#ifdef CONFIG_PCI_MSI_IRQ_DOMAIN
-+#ifdef CONFIG_PCI_MSI
- static inline void *_pci_root_bus_fwnode(struct pci_bus *bus)
- {
- 	return to_pci_sysdata(bus)->fwnode;
-diff --git a/drivers/pci/Kconfig b/drivers/pci/Kconfig
-index 55c028a..b7f6221 100644
---- a/drivers/pci/Kconfig
-+++ b/drivers/pci/Kconfig
-@@ -38,6 +38,7 @@ source "drivers/pci/pcie/Kconfig"
- 
- config PCI_MSI
- 	bool "Message Signaled Interrupts (MSI and MSI-X)"
-+	select GENERIC_MSI_IRQ_DOMAIN
- 	select GENERIC_MSI_IRQ
- 	help
- 	   This allows device drivers to enable MSI (Message Signaled
-@@ -51,11 +52,6 @@ config PCI_MSI
- 
- 	   If you don't know what to do here, say Y.
- 
--config PCI_MSI_IRQ_DOMAIN
--	def_bool y
--	depends on PCI_MSI
--	select GENERIC_MSI_IRQ_DOMAIN
--
- config PCI_MSI_ARCH_FALLBACKS
- 	bool
- 
-@@ -192,7 +188,7 @@ config PCI_LABEL
- 
- config PCI_HYPERV
- 	tristate "Hyper-V PCI Frontend"
--	depends on ((X86 && X86_64) || ARM64) && HYPERV && PCI_MSI && PCI_MSI_IRQ_DOMAIN && SYSFS
-+	depends on ((X86 && X86_64) || ARM64) && HYPERV && PCI_MSI && SYSFS
- 	select PCI_HYPERV_INTERFACE
- 	help
- 	  The PCI device frontend driver allows the kernel to import arbitrary
-diff --git a/drivers/pci/controller/Kconfig b/drivers/pci/controller/Kconfig
-index bfd9bac..1569d9a 100644
---- a/drivers/pci/controller/Kconfig
-+++ b/drivers/pci/controller/Kconfig
-@@ -19,7 +19,7 @@ config PCI_AARDVARK
- 	tristate "Aardvark PCIe controller"
- 	depends on (ARCH_MVEBU && ARM64) || COMPILE_TEST
- 	depends on OF
--	depends on PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	select PCI_BRIDGE_EMUL
- 	help
- 	 Add support for Aardvark 64bit PCIe Host Controller. This
-@@ -29,7 +29,7 @@ config PCI_AARDVARK
- config PCIE_XILINX_NWL
- 	bool "NWL PCIe Core"
- 	depends on ARCH_ZYNQMP || COMPILE_TEST
--	depends on PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	help
- 	 Say 'Y' here if you want kernel support for Xilinx
- 	 NWL PCIe controller. The controller can act as Root Port
-@@ -53,7 +53,7 @@ config PCI_IXP4XX
- config PCI_TEGRA
- 	bool "NVIDIA Tegra PCIe controller"
- 	depends on ARCH_TEGRA || COMPILE_TEST
--	depends on PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	help
- 	  Say Y here if you want support for the PCIe host controller found
- 	  on NVIDIA Tegra SoCs.
-@@ -70,7 +70,7 @@ config PCI_RCAR_GEN2
- config PCIE_RCAR_HOST
- 	bool "Renesas R-Car PCIe host controller"
- 	depends on ARCH_RENESAS || COMPILE_TEST
--	depends on PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	help
- 	  Say Y here if you want PCIe controller support on R-Car SoCs in host
- 	  mode.
-@@ -99,7 +99,7 @@ config PCI_HOST_GENERIC
- config PCIE_XILINX
- 	bool "Xilinx AXI PCIe host bridge support"
- 	depends on OF || COMPILE_TEST
--	depends on PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	help
- 	  Say 'Y' here if you want kernel to support the Xilinx AXI PCIe
- 	  Host Bridge driver.
-@@ -124,7 +124,7 @@ config PCI_XGENE
- config PCI_XGENE_MSI
- 	bool "X-Gene v1 PCIe MSI feature"
- 	depends on PCI_XGENE
--	depends on PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	default y
- 	help
- 	  Say Y here if you want PCIe MSI support for the APM X-Gene v1 SoC.
-@@ -170,7 +170,7 @@ config PCIE_IPROC_BCMA
- config PCIE_IPROC_MSI
- 	bool "Broadcom iProc PCIe MSI support"
- 	depends on PCIE_IPROC_PLATFORM || PCIE_IPROC_BCMA
--	depends on PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	default ARCH_BCM_IPROC
- 	help
- 	  Say Y here if you want to enable MSI support for Broadcom's iProc
-@@ -186,7 +186,7 @@ config PCIE_ALTERA
- config PCIE_ALTERA_MSI
- 	tristate "Altera PCIe MSI feature"
- 	depends on PCIE_ALTERA
--	depends on PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	help
- 	  Say Y here if you want PCIe MSI support for the Altera FPGA.
- 	  This MSI driver supports Altera MSI to GIC controller IP.
-@@ -215,7 +215,7 @@ config PCIE_ROCKCHIP_HOST
- 	tristate "Rockchip PCIe host controller"
- 	depends on ARCH_ROCKCHIP || COMPILE_TEST
- 	depends on OF
--	depends on PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	select MFD_SYSCON
- 	select PCIE_ROCKCHIP
- 	help
-@@ -239,7 +239,7 @@ config PCIE_MEDIATEK
- 	tristate "MediaTek PCIe controller"
- 	depends on ARCH_AIROHA || ARCH_MEDIATEK || COMPILE_TEST
- 	depends on OF
--	depends on PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	help
- 	  Say Y here if you want to enable PCIe controller support on
- 	  MediaTek SoCs.
-@@ -247,7 +247,7 @@ config PCIE_MEDIATEK
- config PCIE_MEDIATEK_GEN3
- 	tristate "MediaTek Gen3 PCIe controller"
- 	depends on ARCH_MEDIATEK || COMPILE_TEST
--	depends on PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	help
- 	  Adds support for PCIe Gen3 MAC controller for MediaTek SoCs.
- 	  This PCIe controller is compatible with Gen3, Gen2 and Gen1 speed,
-@@ -277,7 +277,7 @@ config PCIE_BRCMSTB
- 	depends on ARCH_BRCMSTB || ARCH_BCM2835 || ARCH_BCMBCA || \
- 		   BMIPS_GENERIC || COMPILE_TEST
- 	depends on OF
--	depends on PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	default ARCH_BRCMSTB || BMIPS_GENERIC
- 	help
- 	  Say Y here to enable PCIe host controller support for
-@@ -285,7 +285,7 @@ config PCIE_BRCMSTB
- 
- config PCI_HYPERV_INTERFACE
- 	tristate "Hyper-V PCI Interface"
--	depends on ((X86 && X86_64) || ARM64) && HYPERV && PCI_MSI && PCI_MSI_IRQ_DOMAIN
-+	depends on ((X86 && X86_64) || ARM64) && HYPERV && PCI_MSI && PCI_MSI
- 	help
- 	  The Hyper-V PCI Interface is a helper driver allows other drivers to
- 	  have a common interface with the Hyper-V PCI frontend driver.
-@@ -303,8 +303,6 @@ config PCI_LOONGSON
- config PCIE_MICROCHIP_HOST
- 	bool "Microchip AXI PCIe host bridge support"
- 	depends on PCI_MSI && OF
--	select PCI_MSI_IRQ_DOMAIN
--	select GENERIC_MSI_IRQ_DOMAIN
- 	select PCI_HOST_COMMON
- 	help
- 	  Say Y here if you want kernel to support the Microchip AXI PCIe
-@@ -326,7 +324,7 @@ config PCIE_APPLE
- 	tristate "Apple PCIe controller"
- 	depends on ARCH_APPLE || COMPILE_TEST
- 	depends on OF
--	depends on PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	select PCI_HOST_COMMON
- 	help
- 	  Say Y here if you want to enable PCIe controller support on Apple
-diff --git a/drivers/pci/controller/dwc/Kconfig b/drivers/pci/controller/dwc/Kconfig
-index 62ce3ab..f3c4621 100644
---- a/drivers/pci/controller/dwc/Kconfig
-+++ b/drivers/pci/controller/dwc/Kconfig
-@@ -21,7 +21,7 @@ config PCI_DRA7XX_HOST
- 	tristate "TI DRA7xx PCIe controller Host Mode"
- 	depends on SOC_DRA7XX || COMPILE_TEST
- 	depends on OF && HAS_IOMEM && TI_PIPE3
--	depends on PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	select PCIE_DW_HOST
- 	select PCI_DRA7XX
- 	default y if SOC_DRA7XX
-@@ -53,7 +53,7 @@ config PCIE_DW_PLAT
- 
- config PCIE_DW_PLAT_HOST
- 	bool "Platform bus based DesignWare PCIe Controller - Host mode"
--	depends on PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	select PCIE_DW_HOST
- 	select PCIE_DW_PLAT
- 	help
-@@ -67,7 +67,7 @@ config PCIE_DW_PLAT_HOST
- 
- config PCIE_DW_PLAT_EP
- 	bool "Platform bus based DesignWare PCIe Controller - Endpoint mode"
--	depends on PCI && PCI_MSI_IRQ_DOMAIN
-+	depends on PCI && PCI_MSI
- 	depends on PCI_ENDPOINT
- 	select PCIE_DW_EP
- 	select PCIE_DW_PLAT
-@@ -83,7 +83,7 @@ config PCIE_DW_PLAT_EP
- config PCI_EXYNOS
- 	tristate "Samsung Exynos PCIe controller"
- 	depends on ARCH_EXYNOS || COMPILE_TEST
--	depends on PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	select PCIE_DW_HOST
- 	help
- 	  Enables support for the PCIe controller in the Samsung Exynos SoCs
-@@ -94,13 +94,13 @@ config PCI_EXYNOS
- config PCI_IMX6
- 	bool "Freescale i.MX6/7/8 PCIe controller"
- 	depends on ARCH_MXC || COMPILE_TEST
--	depends on PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	select PCIE_DW_HOST
- 
- config PCIE_SPEAR13XX
- 	bool "STMicroelectronics SPEAr PCIe controller"
- 	depends on ARCH_SPEAR13XX || COMPILE_TEST
--	depends on PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	select PCIE_DW_HOST
- 	help
- 	  Say Y here if you want PCIe support on SPEAr13XX SoCs.
-@@ -111,7 +111,7 @@ config PCI_KEYSTONE
- config PCI_KEYSTONE_HOST
- 	bool "PCI Keystone Host Mode"
- 	depends on ARCH_KEYSTONE || ARCH_K3 || COMPILE_TEST
--	depends on PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	select PCIE_DW_HOST
- 	select PCI_KEYSTONE
- 	help
-@@ -135,7 +135,7 @@ config PCI_KEYSTONE_EP
- config PCI_LAYERSCAPE
- 	bool "Freescale Layerscape PCIe controller - Host mode"
- 	depends on OF && (ARM || ARCH_LAYERSCAPE || COMPILE_TEST)
--	depends on PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	select PCIE_DW_HOST
- 	select MFD_SYSCON
- 	help
-@@ -160,7 +160,7 @@ config PCI_LAYERSCAPE_EP
- config PCI_HISI
- 	depends on OF && (ARM64 || COMPILE_TEST)
- 	bool "HiSilicon Hip05 and Hip06 SoCs PCIe controllers"
--	depends on PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	select PCIE_DW_HOST
- 	select PCI_HOST_COMMON
- 	help
-@@ -170,7 +170,7 @@ config PCI_HISI
- config PCIE_QCOM
- 	bool "Qualcomm PCIe controller"
- 	depends on OF && (ARCH_QCOM || COMPILE_TEST)
--	depends on PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	select PCIE_DW_HOST
- 	select CRC8
- 	help
-@@ -191,7 +191,7 @@ config PCIE_QCOM_EP
- config PCIE_ARMADA_8K
- 	bool "Marvell Armada-8K PCIe controller"
- 	depends on ARCH_MVEBU || COMPILE_TEST
--	depends on PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	select PCIE_DW_HOST
- 	help
- 	  Say Y here if you want to enable PCIe controller support on
-@@ -205,7 +205,7 @@ config PCIE_ARTPEC6
- config PCIE_ARTPEC6_HOST
- 	bool "Axis ARTPEC-6 PCIe controller Host Mode"
- 	depends on MACH_ARTPEC6 || COMPILE_TEST
--	depends on PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	select PCIE_DW_HOST
- 	select PCIE_ARTPEC6
- 	help
-@@ -226,7 +226,7 @@ config PCIE_ROCKCHIP_DW_HOST
- 	bool "Rockchip DesignWare PCIe controller"
- 	select PCIE_DW
- 	select PCIE_DW_HOST
--	depends on PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	depends on ARCH_ROCKCHIP || COMPILE_TEST
- 	depends on OF
- 	help
-@@ -236,7 +236,7 @@ config PCIE_ROCKCHIP_DW_HOST
- config PCIE_INTEL_GW
- 	bool "Intel Gateway PCIe host controller support"
- 	depends on OF && (X86 || COMPILE_TEST)
--	depends on PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	select PCIE_DW_HOST
- 	help
- 	  Say 'Y' here to enable PCIe Host controller support on Intel
-@@ -250,7 +250,7 @@ config PCIE_KEEMBAY
- config PCIE_KEEMBAY_HOST
- 	bool "Intel Keem Bay PCIe controller - Host mode"
- 	depends on ARCH_KEEMBAY || COMPILE_TEST
--	depends on PCI && PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	select PCIE_DW_HOST
- 	select PCIE_KEEMBAY
- 	help
-@@ -262,7 +262,7 @@ config PCIE_KEEMBAY_HOST
- config PCIE_KEEMBAY_EP
- 	bool "Intel Keem Bay PCIe controller - Endpoint mode"
- 	depends on ARCH_KEEMBAY || COMPILE_TEST
--	depends on PCI && PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	depends on PCI_ENDPOINT
- 	select PCIE_DW_EP
- 	select PCIE_KEEMBAY
-@@ -275,7 +275,7 @@ config PCIE_KEEMBAY_EP
- config PCIE_KIRIN
- 	depends on OF && (ARM64 || COMPILE_TEST)
- 	tristate "HiSilicon Kirin series SoCs PCIe controllers"
--	depends on PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	select PCIE_DW_HOST
- 	help
- 	  Say Y here if you want PCIe controller support
-@@ -284,7 +284,7 @@ config PCIE_KIRIN
- config PCIE_HISI_STB
- 	bool "HiSilicon STB SoCs PCIe controllers"
- 	depends on ARCH_HISI || COMPILE_TEST
--	depends on PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	select PCIE_DW_HOST
- 	help
- 	  Say Y here if you want PCIe controller support on HiSilicon STB SoCs
-@@ -292,7 +292,7 @@ config PCIE_HISI_STB
- config PCI_MESON
- 	tristate "MESON PCIe controller"
- 	default m if ARCH_MESON
--	depends on PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	select PCIE_DW_HOST
- 	help
- 	  Say Y here if you want to enable PCI controller support on Amlogic
-@@ -306,7 +306,7 @@ config PCIE_TEGRA194
- config PCIE_TEGRA194_HOST
- 	tristate "NVIDIA Tegra194 (and later) PCIe controller - Host Mode"
- 	depends on ARCH_TEGRA_194_SOC || COMPILE_TEST
--	depends on PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	select PCIE_DW_HOST
- 	select PHY_TEGRA194_P2U
- 	select PCIE_TEGRA194
-@@ -336,7 +336,7 @@ config PCIE_TEGRA194_EP
- config PCIE_VISCONTI_HOST
- 	bool "Toshiba Visconti PCIe controllers"
- 	depends on ARCH_VISCONTI || COMPILE_TEST
--	depends on PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	select PCIE_DW_HOST
- 	help
- 	  Say Y here if you want PCIe controller support on Toshiba Visconti SoC.
-@@ -346,7 +346,7 @@ config PCIE_UNIPHIER
- 	bool "Socionext UniPhier PCIe host controllers"
- 	depends on ARCH_UNIPHIER || COMPILE_TEST
- 	depends on OF && HAS_IOMEM
--	depends on PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	select PCIE_DW_HOST
- 	help
- 	  Say Y here if you want PCIe host controller support on UniPhier SoCs.
-@@ -365,7 +365,7 @@ config PCIE_UNIPHIER_EP
- config PCIE_AL
- 	bool "Amazon Annapurna Labs PCIe controller"
- 	depends on OF && (ARM64 || COMPILE_TEST)
--	depends on PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	select PCIE_DW_HOST
- 	select PCI_ECAM
- 	help
-@@ -377,7 +377,7 @@ config PCIE_AL
- 
- config PCIE_FU740
- 	bool "SiFive FU740 PCIe host controller"
--	depends on PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	depends on SOC_SIFIVE || COMPILE_TEST
- 	select PCIE_DW_HOST
- 	help
-diff --git a/drivers/pci/controller/mobiveil/Kconfig b/drivers/pci/controller/mobiveil/Kconfig
-index e4643fb..1d7a07b 100644
---- a/drivers/pci/controller/mobiveil/Kconfig
-+++ b/drivers/pci/controller/mobiveil/Kconfig
-@@ -8,14 +8,14 @@ config PCIE_MOBIVEIL
- 
- config PCIE_MOBIVEIL_HOST
- 	bool
--	depends on PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	select PCIE_MOBIVEIL
- 
- config PCIE_MOBIVEIL_PLAT
- 	bool "Mobiveil AXI PCIe controller"
- 	depends on ARCH_ZYNQMP || COMPILE_TEST
- 	depends on OF
--	depends on PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	select PCIE_MOBIVEIL_HOST
- 	help
- 	  Say Y here if you want to enable support for the Mobiveil AXI PCIe
-@@ -25,7 +25,7 @@ config PCIE_MOBIVEIL_PLAT
- config PCIE_LAYERSCAPE_GEN4
- 	bool "Freescale Layerscape PCIe Gen4 controller"
- 	depends on ARCH_LAYERSCAPE || COMPILE_TEST
--	depends on PCI_MSI_IRQ_DOMAIN
-+	depends on PCI_MSI
- 	select PCIE_MOBIVEIL_HOST
- 	help
- 	  Say Y here if you want PCIe Gen4 controller support on
-diff --git a/drivers/pci/msi/Makefile b/drivers/pci/msi/Makefile
-index 93ef7b9..4e0a7e0 100644
---- a/drivers/pci/msi/Makefile
-+++ b/drivers/pci/msi/Makefile
-@@ -3,5 +3,5 @@
- # Makefile for the PCI/MSI
- obj-$(CONFIG_PCI)			+= pcidev_msi.o
- obj-$(CONFIG_PCI_MSI)			+= msi.o
--obj-$(CONFIG_PCI_MSI_IRQ_DOMAIN)	+= irqdomain.o
-+obj-$(CONFIG_PCI_MSI)			+= irqdomain.o
- obj-$(CONFIG_PCI_MSI_ARCH_FALLBACKS)	+= legacy.o
-diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-index b66fa42..fdd7e56 100644
---- a/drivers/pci/probe.c
-+++ b/drivers/pci/probe.c
-@@ -842,7 +842,6 @@ static struct irq_domain *pci_host_bridge_msi_domain(struct pci_bus *bus)
- 	if (!d)
- 		d = pci_host_bridge_acpi_msi_domain(bus);
- 
--#ifdef CONFIG_PCI_MSI_IRQ_DOMAIN
- 	/*
- 	 * If no IRQ domain was found via the OF tree, try looking it up
- 	 * directly through the fwnode_handle.
-@@ -854,7 +853,6 @@ static struct irq_domain *pci_host_bridge_msi_domain(struct pci_bus *bus)
- 			d = irq_find_matching_fwnode(fwnode,
- 						     DOMAIN_BUS_PCI_MSI);
- 	}
--#endif
- 
- 	return d;
- }
-diff --git a/include/linux/msi.h b/include/linux/msi.h
-index 2dfd7b2..9b84145 100644
---- a/include/linux/msi.h
-+++ b/include/linux/msi.h
-@@ -238,15 +238,6 @@ static inline void msi_desc_set_iommu_cookie(struct msi_desc *desc,
- }
- #endif
- 
--#ifdef CONFIG_PCI_MSI
--struct pci_dev *msi_desc_to_pci_dev(struct msi_desc *desc);
--void pci_write_msi_msg(unsigned int irq, struct msi_msg *msg);
--#else /* CONFIG_PCI_MSI */
--static inline void pci_write_msi_msg(unsigned int irq, struct msi_msg *msg)
--{
--}
--#endif /* CONFIG_PCI_MSI */
--
- int msi_add_msi_desc(struct device *dev, struct msi_desc *init_desc);
- void msi_free_msi_descs_range(struct device *dev, unsigned int first_index, unsigned int last_index);
- 
-@@ -259,12 +250,6 @@ static inline void msi_free_msi_descs(struct device *dev)
- 	msi_free_msi_descs_range(dev, 0, MSI_MAX_INDEX);
- }
- 
--void __pci_read_msi_msg(struct msi_desc *entry, struct msi_msg *msg);
--void __pci_write_msi_msg(struct msi_desc *entry, struct msi_msg *msg);
--
--void pci_msi_mask_irq(struct irq_data *data);
--void pci_msi_unmask_irq(struct irq_data *data);
--
- /*
-  * The arch hooks to setup up msi irqs. Default functions are implemented
-  * as weak symbols so that they /can/ be overriden by architecture specific
-@@ -468,18 +453,26 @@ void platform_msi_device_domain_free(struct irq_domain *domain, unsigned int vir
- void *platform_msi_get_host_data(struct irq_domain *domain);
- #endif /* CONFIG_GENERIC_MSI_IRQ_DOMAIN */
- 
--#ifdef CONFIG_PCI_MSI_IRQ_DOMAIN
-+/* PCI specific interfaces */
-+#ifdef CONFIG_PCI_MSI
-+struct pci_dev *msi_desc_to_pci_dev(struct msi_desc *desc);
-+void pci_write_msi_msg(unsigned int irq, struct msi_msg *msg);
-+void __pci_read_msi_msg(struct msi_desc *entry, struct msi_msg *msg);
-+void __pci_write_msi_msg(struct msi_desc *entry, struct msi_msg *msg);
-+void pci_msi_mask_irq(struct irq_data *data);
-+void pci_msi_unmask_irq(struct irq_data *data);
- struct irq_domain *pci_msi_create_irq_domain(struct fwnode_handle *fwnode,
- 					     struct msi_domain_info *info,
- 					     struct irq_domain *parent);
- u32 pci_msi_domain_get_msi_rid(struct irq_domain *domain, struct pci_dev *pdev);
- struct irq_domain *pci_msi_get_device_domain(struct pci_dev *pdev);
- bool pci_dev_has_special_msi_domain(struct pci_dev *pdev);
--#else
-+#else /* CONFIG_PCI_MSI */
- static inline struct irq_domain *pci_msi_get_device_domain(struct pci_dev *pdev)
- {
- 	return NULL;
- }
--#endif /* CONFIG_PCI_MSI_IRQ_DOMAIN */
-+static inline void pci_write_msi_msg(unsigned int irq, struct msi_msg *msg) { }
-+#endif /* !CONFIG_PCI_MSI */
- 
- #endif /* LINUX_MSI_H */
+--=20
+Alex Benn=C3=A9e
