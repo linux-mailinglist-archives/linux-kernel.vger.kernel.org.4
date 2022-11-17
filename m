@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A60DA62DF19
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:09:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA61A62DF1C
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:09:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240366AbiKQPJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 10:09:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54946 "EHLO
+        id S240450AbiKQPJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 10:09:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239716AbiKQPIs (ORCPT
+        with ESMTP id S240257AbiKQPIt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 10:08:48 -0500
+        Thu, 17 Nov 2022 10:08:49 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1287769D6;
-        Thu, 17 Nov 2022 07:08:05 -0800 (PST)
-Date:   Thu, 17 Nov 2022 15:08:03 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A051F769FD;
+        Thu, 17 Nov 2022 07:08:07 -0800 (PST)
+Date:   Thu, 17 Nov 2022 15:08:04 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668697684;
+        s=2020; t=1668697685;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Hy0E4MZ6jBaGq4Jfstxom6N/KOiljZNorjKOeY3m1Ik=;
-        b=aT50Ae02GBSeiKn6JOkOttAO/3VIPe489v1n1CTRIaJ+raPd5kLyRgn+C7c5Pu75YplH5Y
-        qn5Dq76bzvncSDdWE7rcXi2lAniE+BgwcbDwJhqcABplMWaWIk+ml0f0Ovu+zPMl1pHKxh
-        oh+3qVOlXpcHaZ8jXvOZxU4swx5Qf3pQQ5e1esSbRZvH3UkqfknuyWEqMXoCjomK4id6p/
-        aPqb+vvJwyOkaCx4kOb2dYv3PX5NxFQbp5yj0H/6pvmOCv5IQ3HkCeIHIIqDCGQAXpFtIY
-        q0RPnCwyLcbAThjMqfpxOfTMZVyQxM3NFxADqmI8Fh8fKNg00LkqSqm4Mh0SPw==
+        bh=JIXi7qlf2sjL+XQchJkYJMSc/35mijKkna5of7IdO2M=;
+        b=L0DiCIdhq364+BfXGz5Ilv4wH+d3uQjhf8jgSTu2W0AFCWXyFSKZOCWu5xxyIxNU2rJxIp
+        EhGYmOvmbW1J4W/EX5ncj1ozBFobYzSXtHSbLrdAadq1xdeYe29JQDmMvStPrgf+CSqYFd
+        aDPj4DGxKDYUNBIXweKXCecO2SED6l3I98ApTN/OA1PuxLuLNf7IIld9t0yr3n/3IglbaR
+        sy4Yfv/Yfat7wvXeBLcSlwa0p/kcLV7kJH3Z6jqROcf/JRF8jU06C4NfVB14lbk0VSu0jt
+        +HJLNERFyomXRDdIQt293GNVCrTPamGuoAkxOqWUK+FuaheyrsohRx+851RiVA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668697684;
+        s=2020e; t=1668697685;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Hy0E4MZ6jBaGq4Jfstxom6N/KOiljZNorjKOeY3m1Ik=;
-        b=uyH0ncbzpFLQsgyaMOxwLMjy6r+etP3xJ0qjQwmf9rzVcjdtZSgoz2tD7AY8xxX1MRh4Qa
-        GXjj3PB9cTTRx/CQ==
+        bh=JIXi7qlf2sjL+XQchJkYJMSc/35mijKkna5of7IdO2M=;
+        b=gwRK05bbh/GHlZJdlT0s4E9CdXMTEmw7r8G1crMxoXNqi1sGdNKjTf2HeaiRqfQN1wIdWK
+        d8f0BJUDFfUIpEAg==
 From:   "tip-bot2 for Ahmed S. Darwish" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/core] PCI/MSI: Move pci_irq_get_affinity() to api.c
+Subject: [tip: irq/core] PCI/MSI: Move pci_disable_msix() to api.c
 Cc:     "Ahmed S. Darwish" <darwi@linutronix.de>,
         Thomas Gleixner <tglx@linutronix.de>,
         Bjorn Helgaas <bhelgaas@google.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org, maz@kernel.org
-In-Reply-To: <20221111122015.214792769@linutronix.de>
-References: <20221111122015.214792769@linutronix.de>
+In-Reply-To: <20221111122015.156785224@linutronix.de>
+References: <20221111122015.156785224@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <166869768306.4906.11479048488113384421.tip-bot2@tip-bot2>
+Message-ID: <166869768420.4906.2668705686163796794.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,139 +67,108 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/core branch of tip:
 
-Commit-ID:     be37b8428b7b7740bbbc29c17cfa2ee42b9e2d8b
-Gitweb:        https://git.kernel.org/tip/be37b8428b7b7740bbbc29c17cfa2ee42b9e2d8b
+Commit-ID:     18e1926b8c8b7c2249c24057d5f836c578e29f08
+Gitweb:        https://git.kernel.org/tip/18e1926b8c8b7c2249c24057d5f836c578e29f08
 Author:        Ahmed S. Darwish <darwi@linutronix.de>
-AuthorDate:    Fri, 11 Nov 2022 14:54:59 +01:00
+AuthorDate:    Fri, 11 Nov 2022 14:54:58 +01:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Thu, 17 Nov 2022 15:15:21 +01:00
 
-PCI/MSI: Move pci_irq_get_affinity() to api.c
+PCI/MSI: Move pci_disable_msix() to api.c
 
 To disentangle the maze in msi.c, all exported device-driver MSI APIs are
 now to be grouped in one file, api.c.
 
-Move pci_irq_get_affinity() and let its kernel-doc match rest of the
-file.
+Move pci_disable_msix() and make its kernel-doc comprehensive.
 
 Signed-off-by: Ahmed S. Darwish <darwi@linutronix.de>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-Link: https://lore.kernel.org/r/20221111122015.214792769@linutronix.de
+Link: https://lore.kernel.org/r/20221111122015.156785224@linutronix.de
 
 
 ---
- drivers/pci/msi/api.c | 43 ++++++++++++++++++++++++++++++++++++++++++-
- drivers/pci/msi/msi.c | 38 +-------------------------------------
- 2 files changed, 43 insertions(+), 38 deletions(-)
+ drivers/pci/msi/api.c | 24 ++++++++++++++++++++++++
+ drivers/pci/msi/msi.c | 14 +-------------
+ drivers/pci/msi/msi.h |  1 +
+ 3 files changed, 26 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/pci/msi/api.c b/drivers/pci/msi/api.c
-index 20a580b..93ddc55 100644
+index 83ea38f..20a580b 100644
 --- a/drivers/pci/msi/api.c
 +++ b/drivers/pci/msi/api.c
-@@ -9,6 +9,7 @@
-  */
- 
- #include <linux/export.h>
-+#include <linux/irq.h>
- 
- #include "msi.h"
- 
-@@ -251,6 +252,48 @@ int pci_irq_vector(struct pci_dev *dev, unsigned int nr)
- EXPORT_SYMBOL(pci_irq_vector);
+@@ -112,6 +112,30 @@ int pci_enable_msix_range(struct pci_dev *dev, struct msix_entry *entries,
+ EXPORT_SYMBOL(pci_enable_msix_range);
  
  /**
-+ * pci_irq_get_affinity() - Get a device interrupt vector affinity
++ * pci_disable_msix() - Disable MSI-X interrupt mode on device
 + * @dev: the PCI device to operate on
-+ * @nr:  device-relative interrupt vector index (0-based); has different
-+ *       meanings, depending on interrupt mode
-+ *         MSI-X        the index in the MSI-X vector table
-+ *         MSI          the index of the enabled MSI vectors
-+ *         INTx         must be 0
 + *
-+ * Return: MSI/MSI-X vector affinity, NULL if @nr is out of range or if
-+ * the MSI(-X) vector was allocated without explicit affinity
-+ * requirements (e.g., by pci_enable_msi(), pci_enable_msix_range(), or
-+ * pci_alloc_irq_vectors() without the %PCI_IRQ_AFFINITY flag). Return a
-+ * generic set of CPU IDs representing all possible CPUs available
-+ * during system boot if the device is in legacy INTx mode.
++ * Legacy device driver API to disable MSI-X interrupt mode on device,
++ * free earlier-allocated interrupt vectors, and restore INTx.
++ * The PCI device Linux IRQ (@dev->irq) is restored to its default pin
++ * assertion IRQ. This is the cleanup pair of pci_enable_msix_range().
++ *
++ * NOTE: The newer pci_alloc_irq_vectors() / pci_free_irq_vectors() API
++ * pair should, in general, be used instead.
 + */
-+const struct cpumask *pci_irq_get_affinity(struct pci_dev *dev, int nr)
++void pci_disable_msix(struct pci_dev *dev)
 +{
-+	int idx, irq = pci_irq_vector(dev, nr);
-+	struct msi_desc *desc;
++	if (!pci_msi_enabled() || !dev || !dev->msix_enabled)
++		return;
 +
-+	if (WARN_ON_ONCE(irq <= 0))
-+		return NULL;
-+
-+	desc = irq_get_msi_desc(irq);
-+	/* Non-MSI does not have the information handy */
-+	if (!desc)
-+		return cpu_possible_mask;
-+
-+	/* MSI[X] interrupts can be allocated without affinity descriptor */
-+	if (!desc->affinity)
-+		return NULL;
-+
-+	/*
-+	 * MSI has a mask array in the descriptor.
-+	 * MSI-X has a single mask.
-+	 */
-+	idx = dev->msi_enabled ? nr : 0;
-+	return &desc->affinity[idx].mask;
++	msi_lock_descs(&dev->dev);
++	pci_msix_shutdown(dev);
++	pci_free_msi_irqs(dev);
++	msi_unlock_descs(&dev->dev);
 +}
-+EXPORT_SYMBOL(pci_irq_get_affinity);
++EXPORT_SYMBOL(pci_disable_msix);
 +
 +/**
-  * pci_free_irq_vectors() - Free previously allocated IRQs for a device
-  * @dev: the PCI device to operate on
-  *
+  * pci_alloc_irq_vectors() - Allocate multiple device interrupt vectors
+  * @dev:      the PCI device to operate on
+  * @min_vecs: minimum required number of vectors (must be >= 1)
 diff --git a/drivers/pci/msi/msi.c b/drivers/pci/msi/msi.c
-index 6fa90d0..d78646d 100644
+index 1226d66..6fa90d0 100644
 --- a/drivers/pci/msi/msi.c
 +++ b/drivers/pci/msi/msi.c
-@@ -854,44 +854,6 @@ int __pci_enable_msix_range(struct pci_dev *dev,
- 	}
+@@ -736,7 +736,7 @@ static int __pci_enable_msix(struct pci_dev *dev, struct msix_entry *entries,
+ 	return msix_capability_init(dev, entries, nvec, affd);
  }
  
--/**
-- * pci_irq_get_affinity - return the affinity of a particular MSI vector
-- * @dev:	PCI device to operate on
-- * @nr:		device-relative interrupt vector index (0-based).
-- *
-- * @nr has the following meanings depending on the interrupt mode:
-- *   MSI-X:	The index in the MSI-X vector table
-- *   MSI:	The index of the enabled MSI vectors
-- *   INTx:	Must be 0
-- *
-- * Return: A cpumask pointer or NULL if @nr is out of range
-- */
--const struct cpumask *pci_irq_get_affinity(struct pci_dev *dev, int nr)
--{
--	int idx, irq = pci_irq_vector(dev, nr);
--	struct msi_desc *desc;
--
--	if (WARN_ON_ONCE(irq <= 0))
--		return NULL;
--
--	desc = irq_get_msi_desc(irq);
--	/* Non-MSI does not have the information handy */
--	if (!desc)
--		return cpu_possible_mask;
--
--	/* MSI[X] interrupts can be allocated without affinity descriptor */
--	if (!desc->affinity)
--		return NULL;
--
--	/*
--	 * MSI has a mask array in the descriptor.
--	 * MSI-X has a single mask.
--	 */
--	idx = dev->msi_enabled ? nr : 0;
--	return &desc->affinity[idx].mask;
--}
--EXPORT_SYMBOL(pci_irq_get_affinity);
--
- struct pci_dev *msi_desc_to_pci_dev(struct msi_desc *desc)
+-static void pci_msix_shutdown(struct pci_dev *dev)
++void pci_msix_shutdown(struct pci_dev *dev)
  {
- 	return to_pci_dev(desc->dev);
+ 	struct msi_desc *desc;
+ 
+@@ -758,18 +758,6 @@ static void pci_msix_shutdown(struct pci_dev *dev)
+ 	pcibios_alloc_irq(dev);
+ }
+ 
+-void pci_disable_msix(struct pci_dev *dev)
+-{
+-	if (!pci_msi_enable || !dev || !dev->msix_enabled)
+-		return;
+-
+-	msi_lock_descs(&dev->dev);
+-	pci_msix_shutdown(dev);
+-	pci_free_msi_irqs(dev);
+-	msi_unlock_descs(&dev->dev);
+-}
+-EXPORT_SYMBOL(pci_disable_msix);
+-
+ int __pci_enable_msi_range(struct pci_dev *dev, int minvec, int maxvec,
+ 			   struct irq_affinity *affd)
+ {
+diff --git a/drivers/pci/msi/msi.h b/drivers/pci/msi/msi.h
+index 8c4a528..77e2587 100644
+--- a/drivers/pci/msi/msi.h
++++ b/drivers/pci/msi/msi.h
+@@ -86,6 +86,7 @@ static inline __attribute_const__ u32 msi_multi_mask(struct msi_desc *desc)
+ 
+ /* MSI internal functions invoked from the public APIs */
+ void pci_msi_shutdown(struct pci_dev *dev);
++void pci_msix_shutdown(struct pci_dev *dev);
+ void pci_free_msi_irqs(struct pci_dev *dev);
+ int __pci_enable_msi_range(struct pci_dev *dev, int minvec, int maxvec, struct irq_affinity *affd);
+ int __pci_enable_msix_range(struct pci_dev *dev, struct msix_entry *entries, int minvec,
