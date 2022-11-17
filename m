@@ -2,66 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BB0A62E4B2
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 19:44:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD52D62E4B0
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 19:44:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240755AbiKQSoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 13:44:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44760 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240719AbiKQSo3 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S240692AbiKQSo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 17 Nov 2022 13:44:29 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00BCC87575
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 10:44:25 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id 63so2948939ybq.4
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 10:44:25 -0800 (PST)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45272 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240737AbiKQSoX (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 17 Nov 2022 13:44:23 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528AE88FA6
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 10:44:16 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id i12so1469616wrb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 10:44:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vVH7qN35z+Gp4lSnfPExj6/O5lVwmQ0WJYQSp9lILX0=;
-        b=EZ0qXH9cATo3Pm6imbyTcbILSaN3P8Jf+w2B2OeAljlGYGWbnxklbjDjB+1BTOh9A+
-         Lx2pWK+tDlAdxnVzuBjJ0USgwgC3Yi0K/3XdFi62rcfpTJANW1pQOM9ay9XnDNwsCnu6
-         TmMUsm6nit23VyztUineaXhHlYl9qAjzT69a+4bgSOx61qPBasEAn7fqkuF2EqHA7PF9
-         4nTZ9jwBSavgaRRKoNKF/qCEAyOAA4JB32xK4/l+K45b9AhN3DX6otZzQGXju/FH55IO
-         /GV1auSbah2wRToK6y1aZQtfwDYkgxhYFci6hNkan47adbwK9IIuQVX1NPf7eKhFUqlj
-         /sUg==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Rp0+8BPuJ8E8smg5sOZObB/EIeL6ON/FELSHAO9YZBo=;
+        b=AXY8l7YC5VNrVrpoQhdKI9J3ad43+/giUy55N3ubiICCui4jIh7PWDBCoGiDYjLZ4w
+         r34Iuw7JEkvUVtwFKIlEb+fqj/htEpH+Gkf3HwLq7+0GpE51rmg2+g5Rj6b1ROHujrtx
+         SkS8pYISP3dT99/FFVmYSsXSsXXmS6xREX9vNBW99pXQd9jSRtnWOdyXGbjWMBe2yIMS
+         21iqHZfQ2/mVUxHw79a0FygJZamt5+u3XZ6dggfV6dq3KJTmoVKxxI/ug+uctY7PXf+j
+         CN1fXPizYDbXL7eAWsrLvHOLAsFFpovlu1uoHUCmUgoIV5RWjLumJHmY1awclP0VDfi5
+         amKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=vVH7qN35z+Gp4lSnfPExj6/O5lVwmQ0WJYQSp9lILX0=;
-        b=rfV0ouWFQBdwaRi2B2QFq04fVlInHvgcitv/IZU0DXc9Bja9WH9eKRS9DMitP18RWR
-         xYibReej+hOqGHblCSMoXcFLjmgEDchoobe8fRfmepAxQy6/i1U5V4Ul0OadD610cOds
-         bJ6Mr7wrTZeFGR7EO3LZVbWh/Bfuny3l99sAy1ezbLgwcMQd64rayBA/Mmqn4BaTwGWU
-         M/ZGlQuswVxOMEiiL95qWkAqR6XASnRNsvV/Xs574KpGE7lHTEW1l+DK040s3MH8HsE/
-         Evqd+mYc0AiqJ+WmFnQG3+Ub/kkmfWbNmvo7fL+5oguvOYGC17Lpr0YwKgW4pjIro+2P
-         cj6Q==
-X-Gm-Message-State: ANoB5pn5QVN8+Dzpx8qHFkYqRARGI4q6v39fuUKjwP2XGCq7M0RoSM+f
-        WjxokmARDoEL0lMFs8CduizLJeOy8/3JbnfS7qRppA==
-X-Google-Smtp-Source: AA0mqf7gnOd9qmo7Kr09gdVjgAwHohXvg8+8wAxVSqqIE6Xl9DTc3HqEpgJ3AIYhbVUfM8W5gbKEOp4TcOM3ZYEjtVE=
-X-Received: by 2002:a25:ad14:0:b0:6de:8ec8:7342 with SMTP id
- y20-20020a25ad14000000b006de8ec87342mr3023286ybi.607.1668710665122; Thu, 17
- Nov 2022 10:44:25 -0800 (PST)
+        bh=Rp0+8BPuJ8E8smg5sOZObB/EIeL6ON/FELSHAO9YZBo=;
+        b=6PaNtpkgZTjnNvbIsuRn9cNcf+5vtkTliY2e8faeF2NiIJHH29lb7IOMQaVl/pdVpp
+         VH0vUf8enobqU7ovY6Jichx9ZUhyV1PemLalYkWbeSczkhDOwvZOdaXP5bjotkf+ZJ8k
+         eJu6H0JwFulKBFzntLNsWmCdPVkx9Y5AxQKjay+6lsqzT2pXtOrUEjRnlBlrxZJRfU/6
+         0T41DPuNUJXp5A5oYZ3WOsVwE+dbd4GisB/J6bBJJ5Pb3jWlWsZS9j05kjL/TmcDDA4N
+         cRvAJZxynyDsYvZVOR20LXzsUH+RbdBeD+RqVe/3N4IRqoZ1K9kYXw0+PGDJGB+BYcHg
+         4oiQ==
+X-Gm-Message-State: ANoB5pnSSn1Mvq5XtFITaapXeVj3eMTH/gdlfCrzKlBGG49A4AMjHvLX
+        pZTizJoR1Pd++yfvWc2QCLPF3sXf/U1DlA==
+X-Google-Smtp-Source: AA0mqf5pPHP3OtCVF/DwPk7PI+XYjhjwR2oyWFDFPLgy5tmVieUd+ggblt1YYpDjmOK9T2F6VE1cZg==
+X-Received: by 2002:a05:6000:1f10:b0:241:b92f:1753 with SMTP id bv16-20020a0560001f1000b00241b92f1753mr1942764wrb.81.1668710654839;
+        Thu, 17 Nov 2022 10:44:14 -0800 (PST)
+Received: from nicolas-Precision-3551.home ([2001:861:5180:dcc0:9287:74a3:4740:e7a0])
+        by smtp.gmail.com with ESMTPSA id l32-20020a05600c1d2000b003cfbbd54178sm11548635wms.2.2022.11.17.10.44.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 10:44:13 -0800 (PST)
+From:   Nicolas Frayer <nfrayer@baylibre.com>
+To:     peter.ujfalusi@gmail.com, vkoul@kernel.org,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     khilman@baylibre.com, glaroque@baylibre.com, nfrayer@baylibre.com
+Subject: [PATCH v3] dmaengine: ti: k3-udma: Deferring probe when soc_device_match() returns NULL
+Date:   Thu, 17 Nov 2022 19:44:06 +0100
+Message-Id: <20221117184406.292416-1-nfrayer@baylibre.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20221117161449.114086-1-pbonzini@redhat.com>
-In-Reply-To: <20221117161449.114086-1-pbonzini@redhat.com>
-From:   David Matlack <dmatlack@google.com>
-Date:   Thu, 17 Nov 2022 10:43:59 -0800
-Message-ID: <CALzav=cxtgaVV2tORqDo93AuUW+5BSLdjsah=YASQdPMwnf2iA@mail.gmail.com>
-Subject: Re: [PATCH] KVM: x86/mmu: simplify kvm_tdp_mmu_map flow when guest
- has to retry
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        seanjc@google.com, Robert Hoo <robert.hu@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,121 +68,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 8:14 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
->
-> A removed SPTE is never present, hence the "if" in kvm_tdp_mmu_map
-> only fails in the exact same conditions that the earlier loop
-> tested in order to issue a  "break". So, instead of checking twice the
-> condition (upper level SPTEs could not be created or was frozen), just
-> exit the loop with a goto---the usual poor-man C replacement for RAII
-> early returns.
->
-> While at it, do not use the "ret" variable for return values of
-> functions that do not return a RET_PF_* enum.  This is clearer
-> and also makes it possible to initialize ret to RET_PF_RETRY.
->
-> Suggested-by: Robert Hoo <robert.hu@linux.intel.com>
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
->  arch/x86/kvm/mmu/tdp_mmu.c | 40 ++++++++++++++++++--------------------
->  1 file changed, 19 insertions(+), 21 deletions(-)
->
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> index e08596775427..771210ce5181 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> @@ -1159,7 +1159,7 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
->         struct kvm *kvm = vcpu->kvm;
->         struct tdp_iter iter;
->         struct kvm_mmu_page *sp;
-> -       int ret;
-> +       int ret = RET_PF_RETRY;
->
->         kvm_mmu_hugepage_adjust(vcpu, fault);
->
-> @@ -1168,23 +1168,25 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
->         rcu_read_lock();
->
->         tdp_mmu_for_each_pte(iter, mmu, fault->gfn, fault->gfn + 1) {
-> +               int r;
-> +
->                 if (fault->nx_huge_page_workaround_enabled)
->                         disallowed_hugepage_adjust(fault, iter.old_spte, iter.level);
->
->                 if (iter.level == fault->goal_level)
->                         break;
->
-> -               /* Step down into the lower level page table if it exists. */
-> -               if (is_shadow_present_pte(iter.old_spte) &&
-> -                   !is_large_pte(iter.old_spte))
-> -                       continue;
-> -
->                 /*
->                  * If SPTE has been frozen by another thread, just give up and
->                  * retry, avoiding unnecessary page table allocation and free.
->                  */
->                 if (is_removed_spte(iter.old_spte))
-> -                       break;
-> +                       goto retry;
-> +
-> +               /* Step down into the lower level page table if it exists. */
-> +               if (is_shadow_present_pte(iter.old_spte) &&
-> +                   !is_large_pte(iter.old_spte))
-> +                       continue;
->
->                 /*
->                  * The SPTE is either non-present or points to a huge page that
-> @@ -1196,13 +1198,17 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
->                 sp->nx_huge_page_disallowed = fault->huge_page_disallowed;
->
->                 if (is_shadow_present_pte(iter.old_spte))
-> -                       ret = tdp_mmu_split_huge_page(kvm, &iter, sp, true);
-> +                       r = tdp_mmu_split_huge_page(kvm, &iter, sp, true);
->                 else
-> -                       ret = tdp_mmu_link_sp(kvm, &iter, sp, true);
-> +                       r = tdp_mmu_link_sp(kvm, &iter, sp, true);
+When the k3 socinfo driver is built as a module, there is a possibility
+that it will probe after the k3 udma driver and the later returns -ENODEV.
+By deferring the k3 udma probe we allow the k3 socinfo to probe and
+register the soc_device_attribute structure needed by the k3 udma driver.
+Removed the dev_err() message as well as it's deferring and not failing.
 
-Can this fix be squashed into [1]? It seems like a serious enough bug.
-If 2 threads race to update the same PTE, KVM will return -EBUSY out
-to userspace from KVM_RUN, I think. I'm not sure about QEMU, but that
-would be fatal for the VM in Vanadium.
+Signed-off-by: Nicolas Frayer <nfrayer@baylibre.com>
+---
+v1->v2:
+Extracted this patch from the following series:
+https://lore.kernel.org/all/20221108181144.433087-1-nfrayer@baylibre.com/
 
-[1] https://lore.kernel.org/kvm/20221109185905.486172-3-dmatlack@google.com/
+v2->v3:
+Removed the dev_err() message
 
->
-> -               if (ret) {
-> +               /*
-> +                * Also force the guest to retry the access if the upper level SPTEs
-> +                * aren't in place.
-> +                */
-> +               if (r) {
->                         tdp_mmu_free_sp(sp);
-> -                       break;
-> +                       goto retry;
->                 }
->
->                 if (fault->huge_page_disallowed &&
-> @@ -1213,18 +1219,10 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
->                 }
->         }
->
-> -       /*
-> -        * Force the guest to retry the access if the upper level SPTEs aren't
-> -        * in place, or if the target leaf SPTE is frozen by another CPU.
-> -        */
-> -       if (iter.level != fault->goal_level || is_removed_spte(iter.old_spte)) {
-> -               rcu_read_unlock();
-> -               return RET_PF_RETRY;
-> -       }
-> -
->         ret = tdp_mmu_map_handle_target_level(vcpu, fault, &iter);
-> -       rcu_read_unlock();
->
-> +retry:
-> +       rcu_read_unlock();
->         return ret;
->  }
->
-> --
-> 2.31.1
->
+ drivers/dma/ti/k3-udma.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/dma/ti/k3-udma.c b/drivers/dma/ti/k3-udma.c
+index ce8b80bb34d7..ca1512eb9910 100644
+--- a/drivers/dma/ti/k3-udma.c
++++ b/drivers/dma/ti/k3-udma.c
+@@ -5271,10 +5271,10 @@ static int udma_probe(struct platform_device *pdev)
+ 	ud->match_data = match->data;
+ 
+ 	soc = soc_device_match(k3_soc_devices);
+-	if (!soc) {
+-		dev_err(dev, "No compatible SoC found\n");
+-		return -ENODEV;
+-	}
++
++	if (!soc)
++		return -EPROBE_DEFER;
++
+ 	ud->soc_data = soc->data;
+ 
+ 	ret = udma_get_mmrs(pdev, ud);
+-- 
+2.25.1
+
