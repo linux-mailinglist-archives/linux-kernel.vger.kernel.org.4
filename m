@@ -2,164 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E44DB62DCBD
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:29:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D807E62DCC6
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:30:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233886AbiKQN3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 08:29:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45308 "EHLO
+        id S240035AbiKQNaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 08:30:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234146AbiKQN3f (ORCPT
+        with ESMTP id S233552AbiKQNaG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 08:29:35 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90377716CD
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 05:29:34 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ovexO-0005Hp-6O; Thu, 17 Nov 2022 14:29:30 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ovexM-004rWq-1M; Thu, 17 Nov 2022 14:29:28 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ovexM-00HHrg-1B; Thu, 17 Nov 2022 14:29:28 +0100
-Date:   Thu, 17 Nov 2022 14:29:27 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Thierry Reding <thierry.reding@gmail.com>, od@opendingux.net,
-        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 1/5] pwm: jz4740: Fix pin level of disabled TCU2
- channels, part 1
-Message-ID: <20221117132927.mom5klfd4eww5amk@pengutronix.de>
-References: <20221024205213.327001-1-paul@crapouillou.net>
- <20221024205213.327001-2-paul@crapouillou.net>
- <20221025062129.drzltbavg6hrhv7r@pengutronix.de>
- <CVZAKR.06MA7BGA170W3@crapouillou.net>
+        Thu, 17 Nov 2022 08:30:06 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C61070A38;
+        Thu, 17 Nov 2022 05:30:05 -0800 (PST)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 552A8660296C;
+        Thu, 17 Nov 2022 13:30:03 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1668691803;
+        bh=gL1/jzQ586LM77xLd6YRSSstCi60nATAn4fYOVtBc14=;
+        h=From:To:Cc:Subject:Date:From;
+        b=lZ5eLGUlJwwnPIzSuu1BOj5WIqwShsthU5ODAIbQkHFTUpupzAl7Gu14OIRYOAZZM
+         46nUx4r/tMufnDzAkQnQ2N1PDnCKFdq6WFKdM15JTUMdP6Pp1CLQMm73ok6z4ur9xM
+         EXVhZNPyMHLoaNPznQ8KhXOOI7nYEA7gjgtplWqKLJfFFGZsBznwAU0RmlTxe/Q+KC
+         9w7G0r3MC3mMIabpSmxqAhywacD6uJ3FIkDk2fSMayQntkA4eRFXCivCoP4VQhnnBu
+         +j8jSdj4ntdd29+qu/ey3T3N2gAv4gTD5Gn8R8olIq8/VVEow4+ZVpkhc6qnJA61xm
+         JJEFd5U5Gpzvw==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     agross@kernel.org
+Cc:     andersson@kernel.org, konrad.dybcio@somainline.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        angelogioacchino.delregno@collabora.com,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, marijn.suijten@somainline.org,
+        kernel@collabora.com
+Subject: [PATCH v4 0/2] Qualcomm Ramp Controller and MSM8976 config
+Date:   Thu, 17 Nov 2022 14:29:54 +0100
+Message-Id: <20221117132956.169432-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xsmjk3h2yzdssoiw"
-Content-Disposition: inline
-In-Reply-To: <CVZAKR.06MA7BGA170W3@crapouillou.net>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series adds the Qualcomm Ramp Controller driver, necessary on
+various legacy Qualcomm SoCs to enable CPU DVFS by programming said
+controller with the right values, where the bootloader doesn't do
+that before booting the kernel.
 
---xsmjk3h2yzdssoiw
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+At least MSM8976 and MSM8956 require this initial programming to be
+performed on Linux.
 
-Hello Paul,
+Changes in v4 (Dmitry's review):
+ - Moved reg_sequence arrays to named constants
+ - Added num_ramp_{en, dis} to desc structure
+ - Replaced hardcoded constants with ARRAY_SIZE()
+ - Merged cfg_ramp_{pre_en, en, post_en} in one array
 
-On Tue, Oct 25, 2022 at 11:02:00AM +0100, Paul Cercueil wrote:
-> Le mar. 25 oct. 2022 =E0 08:21:29 +0200, Uwe Kleine-K=F6nig
-> <u.kleine-koenig@pengutronix.de> a =E9crit :
-> > Hello,
-> >=20
-> > On Mon, Oct 24, 2022 at 09:52:09PM +0100, Paul Cercueil wrote:
-> > >  The "duty > cycle" trick to force the pin level of a disabled TCU2
-> > >  channel would only work when the channel had been enabled
-> > > previously.
-> > >=20
-> > >  Address this issue by enabling the PWM mode in jz4740_pwm_disable
-> > >  (I know, right) so that the "duty > cycle" trick works before
-> > > disabling
-> > >  the PWM channel right after.
-> > >=20
-> > >  This issue went unnoticed, as the PWM pins on the majority of the
-> > > boards
-> > >  tested would default to the inactive level once the corresponding
-> > > TCU
-> > >  clock was enabled, so the first call to jz4740_pwm_disable() would
-> > > not
-> > >  actually change the pin levels.
-> > >=20
-> > >  On the GCW Zero however, the PWM pin for the backlight (PWM1, which
-> > > is
-> > >  a TCU2 channel) goes active as soon as the timer1 clock is enabled.
-> > >  Since the jz4740_pwm_disable() function did not work on channels not
-> > >  previously enabled, the backlight would shine at full brightness
-> > > from
-> > >  the moment the backlight driver would probe, until the backlight
-> > > driver
-> > >  tried to *enable* the PWM output.
-> > >=20
-> > >  With this fix, the PWM pins will be forced inactive as soon as
-> > >  jz4740_pwm_apply() is called (and might be reconfigured to active if
-> > >  dictated by the pwm_state). This means that there is still a tiny
-> > > time
-> > >  frame between the .request() and .apply() callbacks where the PWM
-> > > pin
-> > >  might be active. Sadly, there is no way to fix this issue: it is
-> > >  impossible to write a PWM channel's registers if the corresponding
-> > > clock
-> > >  is not enabled, and enabling the clock is what causes the PWM pin
-> > > to go
-> > >  active.
-> > >=20
-> > >  There is a workaround, though, which complements this fix: simply
-> > >  starting the backlight driver (or any PWM client driver) with a
-> > > "init"
-> > >  pinctrl state that sets the pin as an inactive GPIO. Once the
-> > > driver is
-> > >  probed and the pinctrl state switches to "default", the regular PWM
-> > > pin
-> > >  configuration can be used as it will be properly driven.
-> > >=20
-> > >  Fixes: c2693514a0a1 ("pwm: jz4740: Obtain regmap from parent node")
-> > >  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> > >  Cc: stable@vger.kernel.org
-> >=20
-> > OK, understood the issue. I think there is another similar issue: The
-> > clk is get and enabled only in the .request() callback. The result is (I
-> > think---depends on a few further conditions) that if you have the
-> > backlight driver as a module and the bootloader enables the backlight to
-> > show a splash screen, the backlight goes off because of the
-> > clk_disable_unused initcall.
->=20
-> I will have to verify, but I'm pretty sure disabling the clock doesn't
-> change the pin level back to inactive.
+Changes in v3:
+ - Removed blank line at EOF on commit [1/2]
+ - Changed example node name to cpu-power-controller
 
-Given that you set the clk's rate depending on the period to apply, I'd
-claim that you need to keep the clk on. Maybe it doesn't hurt, because
-another component of the system keeps the clk running, but it's wrong
-anyhow. Assumptions like these tend to break on new chip revisions.
+Changes in v2:
+ - Fixed yaml issues as per Krzysztof's review
+ - Reworded s/linking/link/g in both yaml and Kconfig help
+ - Constified reg_sequence pointers
+ - Removed spaces before defines
+ - Added COMPILE_TEST to Kconfig entry
 
-Best regards
-Uwe
+AngeloGioacchino Del Regno (2):
+  dt-bindings: soc: qcom: Add bindings for Qualcomm Ramp Controller
+  soc: qcom: Add Qualcomm Ramp Controller driver
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+ .../qcom/qcom,msm8976-ramp-controller.yaml    |  36 ++
+ drivers/soc/qcom/Kconfig                      |   9 +
+ drivers/soc/qcom/Makefile                     |   1 +
+ drivers/soc/qcom/ramp_controller.c            | 342 ++++++++++++++++++
+ 4 files changed, 388 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,msm8976-ramp-controller.yaml
+ create mode 100644 drivers/soc/qcom/ramp_controller.c
 
---xsmjk3h2yzdssoiw
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+2.38.1
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN2NzQACgkQwfwUeK3K
-7AksvQf9EZfAv7iQBz9ZFUNDv/rCJVBR7ECu9o6TMX63AUmUcgxYFG5meUqypxK0
-jRfD2P6pHB4+cL7W0D4L3t4vA5sS9tfl4egGC4y6wI05ircgRVaUIZfH+t+jjHlb
-c2aOxTQ/eg65jyCkD+tNIE5BPPieMOojXat7rteGQok1JUEZfTMp21hygPYRBKiG
-v5ILRExvbJaC1CYKyfw67P6mVazYfaQMU2UKGbpSHtO+yekIQas26hekUh1i81qC
-Rk7OIMEGLQdMUISVvLtuNXVWRnCXW6GaC90eYrTcdPVpeyhQi7NJaUc6JMWT6Vdv
-W+L1jN0wGwtWNsyy4zjgGnrGQis2zw==
-=VCuW
------END PGP SIGNATURE-----
-
---xsmjk3h2yzdssoiw--
