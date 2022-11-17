@@ -2,264 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B54A62D057
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 02:00:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35BAE62D041
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 01:54:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238019AbiKQBAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 20:00:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49854 "EHLO
+        id S234449AbiKQAym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 19:54:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238592AbiKQBAV (ORCPT
+        with ESMTP id S233842AbiKQAyk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 20:00:21 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2636F6A763
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 17:00:20 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id b131so149811yba.11
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 17:00:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=C3URPOAvHtsPTjypQ/DqLBNZqOx50A4QEjRlhOOIhSg=;
-        b=RITNO7Jc+hcF+RtMcmbs4vZSopP5WQfGrZor3dI2fXb07fA9DxGzSdrrggG8dRSVpg
-         Nm+OE2pYYfnzjGhDM7ubOiF1iRrE9uiPmXaCBaoM59g1NglTvISfPJa0ThTDUxHL9jHv
-         4jyRJLxFGjg+YwN5RA1s72ieJp3NYq7KlYLQlGtbTiChr00lYQ+3sne2SVxuK2pBXzao
-         UCdJes2xm6/ice4oGbPgrWrqkDWd7b/tnLVvIVPAS9LscInlFHVdannfeirMQ3KZ4HLp
-         MPuw9EWvAE/+8nZpbokFdCn8WhzNa1TgKuzfY9UTXuSRr8hnj/IdG8MjBIDXt87fXsRB
-         PljQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=C3URPOAvHtsPTjypQ/DqLBNZqOx50A4QEjRlhOOIhSg=;
-        b=RjDvBdt0FEXjwG6wcBg+S71gIsee7+e60GECv6ZjKYGksfsEq+L6DgxNLMJoWiiL6o
-         Qz/2ceqhYmU7Rv33AHRb8z3NCluS37q7SS3WZ7EkivJ3GpWeqMV+2JF7htkjWX0G2uij
-         wAMG4iRq9k0vM6M+qA2kN0eW7m20XdUVoVunDNk3s59isYPvY115asekTviCjjylcB0o
-         40WSGJ8KlboDFfJeYN+zi3VIVngRDeWV7W7aFpdh5ZAjHF8p5iV4p4YK0IJ4Z0/fnsaX
-         Uztv3RceHhn5MwtrxJcKkTky6mDf+48XATBdEORx15iwc8lvne+KXnytmVq+RMNlVmUj
-         GsyQ==
-X-Gm-Message-State: ANoB5pmMKEkzNEdjLNZmEHlclbNzIKROQFmIwmwInHrijK8T6WLQ0+Ar
-        /QgwcL6g13/dDsYoEXyd8InZUtpChYcu/RFY2uGTgA==
-X-Google-Smtp-Source: AA0mqf4PRbHhRy9BmGOMPBU7ZfK4XvohC9KRioTBz2t8jUra01nwI94HevlFrhRv1zZhfjy8hNABVnkQ9r0ik8xQx5w=
-X-Received: by 2002:a5b:505:0:b0:6cf:e605:7707 with SMTP id
- o5-20020a5b0505000000b006cfe6057707mr164264ybp.638.1668646819164; Wed, 16 Nov
- 2022 17:00:19 -0800 (PST)
+        Wed, 16 Nov 2022 19:54:40 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D38117D
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 16:54:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668646479; x=1700182479;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=riNOgWwi0YVZDaMR9EFjL4NPXxuqJupruAdY48xkNII=;
+  b=YtNx2mZCbUV2ZWr8LWHycKATdUD1w2rz2AGyVN6peQ7lwPNU4lUV0Tda
+   nD0Z2RIvE+OEwrUcPYC+DUeBIbFeiRnrdNeJU5akGFKt11zR8HaBLlZu9
+   JD7DeH79YVMqQJVpiW31MCihZ3qBIMU/Zvzc3HIYgridLWMsK+3y6aPBg
+   1iE5FV6rvCu/rbb84mQ9Rt7Dw6qTo6eDkkEk+ax2SAcfadMj5koQcj7mp
+   pe6Smw4ITPV7AjHLd+FSCpVDimj4CnpiXHFftxry74Q+OuBiQEtK7/V0P
+   9zASbmc05/WGjFbhWoJMZR0AKY7Sae+dV99Gge780XEVytOJs6mF4fjmu
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="314528965"
+X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
+   d="scan'208";a="314528965"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 16:54:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="728602343"
+X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
+   d="scan'208";a="728602343"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by FMSMGA003.fm.intel.com with ESMTP; 16 Nov 2022 16:54:39 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 16 Nov 2022 16:54:38 -0800
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Wed, 16 Nov 2022 16:54:38 -0800
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.44) by
+ edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Wed, 16 Nov 2022 16:54:37 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dh5vmnJIqi1o+f4N0atx61kITuNBDz4qMSBTa+KG83URZbeQBQBClrsXe763LXY1twshRK8t2WH2+MFKgR7rYD/xzMmLVkxIvFd34/xkRzRCPZFFNKXX4K4MLFAlwprzCydleJ4jx7ifxn3sCgIBrZ2t2FCrszlhmzs0ySZZShXT55McQLhxPYTVbhdqzgD0KFnQDAGkam0wgQfqfucSe2DZnhWhqEjEVn90FQhfnoLbt08xKtkaJ2WCvKauhsHco8kL5jFW+GFPsIzNH4yvDYjt+a2cdkxVVkHermoKWreYjHfHj/HIKwPsyOZtMK4PsAEHRzIXU4CLiDXmg3qSKQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rLhSs+Qf3Cutbzbosr87z04qzhEQxRDwUjV2CAU7OTc=;
+ b=HFCh/UHmIGhmMumDhWtKA9t8N6Xa6jWLnUyZB4rvdRzNlsnYotN991cVedaN1eP7b9lUArEZx7otBSHYOiinndtytLTMUb/bdPKRjBXuRRUBf75drfJ/Qv6fMJGtoChBKOPEgU7JWJeCx1zIhkYia83ztgCibmOqLemBoYt7BfM4rQaNfRv65VXSPmYhXADmwLXBLhJG6yI+yzcNzWOlSpL1ovNQY/G3vZyGW9UfCL3X6mjQnoOF9qkvycSMqhngAlVhR80ISkAW1JKHBPlmm2+c1owYpQt1F8yJF/mrvWByIU2+HvPnDtVKdvNyXt1JB91QcL7+ZbBnec3sqqWEdQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SJ1PR11MB6153.namprd11.prod.outlook.com (2603:10b6:a03:488::18)
+ by MW3PR11MB4556.namprd11.prod.outlook.com (2603:10b6:303:5b::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17; Thu, 17 Nov
+ 2022 00:54:36 +0000
+Received: from SJ1PR11MB6153.namprd11.prod.outlook.com
+ ([fe80::296e:d1c9:648b:2aa9]) by SJ1PR11MB6153.namprd11.prod.outlook.com
+ ([fe80::296e:d1c9:648b:2aa9%2]) with mapi id 15.20.5813.019; Thu, 17 Nov 2022
+ 00:54:36 +0000
+Date:   Thu, 17 Nov 2022 09:03:48 +0800
+From:   Fei Li <fei1.li@intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC:     <gregkh@linuxfoundation.org>, <linux-kernel@vger.kernel.org>,
+        <rafael@kernel.org>
+Subject: Re: [PATCH v4 1/1] virt: acrn: Mark the uuid field as unused
+Message-ID: <Y3WIdBYYoQQ0Ifqk@louislifei-OptiPlex-7090>
+References: <20221116092254.66234-1-andriy.shevchenko@linux.intel.com>
+ <Y3TMmDXEbGyDQrLF@kroah.com>
+ <Y3Tlu0BjgMk3xNDQ@smile.fi.intel.com>
+ <Y3T/qJalJ9H224Mu@kroah.com>
+ <Y3UKFQJJI/02QDWU@smile.fi.intel.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <Y3UKFQJJI/02QDWU@smile.fi.intel.com>
+X-ClientProxiedBy: SI2PR06CA0002.apcprd06.prod.outlook.com
+ (2603:1096:4:186::10) To SJ1PR11MB6153.namprd11.prod.outlook.com
+ (2603:10b6:a03:488::18)
 MIME-Version: 1.0
-References: <20221021163703.3218176-1-jthoughton@google.com>
- <20221021163703.3218176-11-jthoughton@google.com> <Y3Vhl6jzTLP0AggE@x1n>
-In-Reply-To: <Y3Vhl6jzTLP0AggE@x1n>
-From:   James Houghton <jthoughton@google.com>
-Date:   Wed, 16 Nov 2022 17:00:08 -0800
-Message-ID: <CADrL8HUZRAT1ViYniBEL=SQaFsmwSpMUmR6tSWy11LdbdhePnQ@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 10/47] hugetlb: add hugetlb_pte to track HugeTLB
- page table entries
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        "Zach O'Keefe" <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ1PR11MB6153:EE_|MW3PR11MB4556:EE_
+X-MS-Office365-Filtering-Correlation-Id: 39d09467-732e-4725-06b7-08dac8364c1c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: AvXadABRst59OoUAbh5YskXa7tJKQzcJ8NwGyrsbivRZeT03FWC1xiG6P+4D6Phok3XRbMwboAYFwmI6rt7WE8GW+FBKzLkhzWebZlfIYJvFsJf0qZiqev0JQ+ol/uxiFH/oOSjUr+e2JkXed2Jn811UeYUBSEw+vnhVR6+CSkD5Gb5uSPiSeafIMWUtA9n3prKhFmdhnDSx1Lcxv/l1IAWIC79ypYFIbCv2/9/Nh1hpov0jUPOi6e0p3/hlutU9mMQ1QBhuKJgcA8D4FCSEqV7Bg7WJNazyThMXwqCzhP7m+2/SsBHfQiqhUESqxQ3zfHk8SFJ31GB/iENQoyWoCwgoyH43smAU1Txt3z6coXZ50elN6DK60Vy7Ya1mDJ1yqLtFPhfqa5Y/xuRKDFMZ5s6GokMDX78sjeW6jCuyuOHjrFxMz5Jdt5QasjLoes9O3mnk3RHDcL+N74cxwH8wgmh8DoU8hrOsB9om4r4rCbZL2P1LL4aTVBjvWDguH7/F+1L4S/wGX+N+f9hiTTSlFJPsDXQsMJHgU4mpn0n4CSA2/m427gSHL9bDn0YVDH4ZHequSnJBZJDkkgXqEATmBF1JQ+6qVsztjvjtoX2IQIMtV8S6lSN4NKt8ZAcw/uQv8DsDWA5ry49BRHG4OtjRRE2IXvbhvxDVipYOMvx7KLQFvGunsyUh/v7lNRbnmRBHQ6VeY+YdRpOyt5G6nt+tHQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6153.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(346002)(39860400002)(376002)(136003)(396003)(366004)(451199015)(316002)(6512007)(66476007)(66946007)(8676002)(8936002)(66556008)(9686003)(5660300002)(41300700001)(186003)(4326008)(26005)(38100700002)(82960400001)(86362001)(53546011)(83380400001)(4001150100001)(2906002)(33716001)(6486002)(6666004)(478600001)(6506007)(6916009);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Dq8ljPPWjNEfy379nFBv7/JALZr8wh70UKdekbjdMT+h5yh+DIya6V6siaGL?=
+ =?us-ascii?Q?7e8JC9R9enWnBy+ha3TutM6nxI29ELBdHsY5Gb3c+EPaMjKIR3thqDH7IS3k?=
+ =?us-ascii?Q?/ibhD7d3jOfd/f+sDHPgKjxL0/Z/JpeeGNRnylgii673oF5Nrhnljqi3ZZ8b?=
+ =?us-ascii?Q?FxwbbGxne3Liie2EwYpBDzmwdyYMK1u+wqb1bEk07H0E7Xq8YenzoTMnv5vZ?=
+ =?us-ascii?Q?qFlYdZRV+rpoiVEn1/2H1z6itCmXjqXLcty8kVUvv9K7OCWDQIR4JiNcr/Ua?=
+ =?us-ascii?Q?sgRXbpqAg5HVkYcVXwgUN4dOsQgUClUY3NBTnCdsWQgk5k19IS3q+ipOz4V8?=
+ =?us-ascii?Q?XZYiwTPKuiky6Zc0mUQF0IFirnygC6Qsca7OSHe6Ld6c4hBZmwAxwxXD+d4h?=
+ =?us-ascii?Q?Mn0R/tdEcPqra8v70CIo9GitqdrMiBQX4LAiQttCGNo7UzIW9m3QYQeICXHO?=
+ =?us-ascii?Q?uP0PlpBqoo3KexsBPuiaX5vLnM+LTtbD53fABwlYKbyxS3fwu8XSWqJbfkhh?=
+ =?us-ascii?Q?i5BPtSKdQ1ylV6Yt9FmlS3lokcGoSrJGk5jfS07cdMrFNFpaVUZA3k32nMvh?=
+ =?us-ascii?Q?fVN7nAxZQBcJincjKri7/nc/Mjj4ZQbXRsaM14/LETzD1djBwemECS+iC4d3?=
+ =?us-ascii?Q?KNxs5MvKyTJQU6IdW7foIrAUzay4UH743g74ds881+htW/1CUIH9p0tqfh/S?=
+ =?us-ascii?Q?4B0H3hDNfbcyFZAcke5I+tl0PWu18dg9tbuUcDYydn0YWC58/mkR6V3epVtX?=
+ =?us-ascii?Q?8ZIVp0XBypx/O0Tpc6s3s8xJjaiIQgJvCAbsOGTqThlBwVLDUf5xyZYlX8Vo?=
+ =?us-ascii?Q?Cg/38WRu+6lqeE4QPV1ts1vpK8rDoeU34mgFdea58pUVsn8tNmF8NgqtMgLb?=
+ =?us-ascii?Q?7iyo5MWNrjcIYOS8kC6dK2kELRGWw4/kuAr8/hIfbHnIdj4FklEt/Dj4k2ZT?=
+ =?us-ascii?Q?6PQDpgJqNuAnVuxHBS14IeXrRZGA3vkHxkGt1XtRX7/1QPeaeSmap9559k1g?=
+ =?us-ascii?Q?kxwYdd6HSUJVktBIJlb8+RpoRiDA6jNurHogoftmUkfFhObV9QIecUBb2WZV?=
+ =?us-ascii?Q?W/3EgTbxjl8ot7SouIFSfnXPgaWtgRdV2mUN48jessERiURSSza7zwa5dqh1?=
+ =?us-ascii?Q?4jL5rGiVXNpROzMNZ7SU4vYIwv6yvBON841vZI16IOTf+hTdOO7FYXrjKMmm?=
+ =?us-ascii?Q?olp0XPLapb+peU7fUHFsvTxEiYa19XZ9K8jbXpjPqQKduZWJQRpqkKnLp085?=
+ =?us-ascii?Q?WNafHf6V1biPWfqwipcoj3K5D8m+Q/OhJ3wGFNYP9uMkdZbP/2Ep82nghVTZ?=
+ =?us-ascii?Q?GXbGnADYqFcNLO0uEXJQXgbkDGwKno66CapAef/QXGaWm46u0XLDtA2ueyuJ?=
+ =?us-ascii?Q?pXPVTTzuQfBcp1pz5yAxNIG079CGoVhn+0+XPI7jiLV9Y71+U/2zvA1DHlL0?=
+ =?us-ascii?Q?wV+jUtvw/Rs3ggtoEyCayYJ8hX2t/fU11OimRHKStCejUhwgvdxSayZTGbQg?=
+ =?us-ascii?Q?EPI/LKhw2qt50v/Ca0JN/5pOUMSxge2jyPIS/0Bgwwt8L7/pZ7khaNBsgctQ?=
+ =?us-ascii?Q?OubNBwgEbGBx6zbx703p3m9l1hWfD+vjSzI0M5yN?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 39d09467-732e-4725-06b7-08dac8364c1c
+X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6153.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Nov 2022 00:54:36.0008
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: pROLwCe+Rf7IuLrlwvPAzBiYtB6LuHyEMGSDya+2pH4sSTqAsETiY2ofiXeqssTdW5YoEK9jWidG/J0sCzAHWA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR11MB4556
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 2:18 PM Peter Xu <peterx@redhat.com> wrote:
->
-> On Fri, Oct 21, 2022 at 04:36:26PM +0000, James Houghton wrote:
-> > +struct hugetlb_pte {
-> > +     pte_t *ptep;
-> > +     unsigned int shift;
-> > +     enum hugetlb_level level;
-> > +     spinlock_t *ptl;
-> > +};
->
-> Do we need both shift + level?  Maybe it's only meaningful for ARM where
-> the shift may not be directly calculcated from level?
->
-> I'm wondering whether we can just maintain "shift" then we calculate
-> "level" realtime.  It just reads a bit weird to have these two fields, also
-> a burden to most of the call sites where shift and level exactly match..
+On 2022-11-16 at 18:04:37 +0200, Andy Shevchenko wrote:
+> On Wed, Nov 16, 2022 at 04:20:08PM +0100, Greg Kroah-Hartman wrote:
+> > On Wed, Nov 16, 2022 at 03:29:31PM +0200, Andy Shevchenko wrote:
+> > > On Wed, Nov 16, 2022 at 12:42:16PM +0100, Greg Kroah-Hartman wrote:
+> > > > On Wed, Nov 16, 2022 at 11:22:54AM +0200, Andy Shevchenko wrote:
+> 
+> ...
+> 
+> > > > > - * @uuid:		UUID of the VM. Pass to hypervisor directly.
+> > > > > + * @uuid:		Reserved (used to be UUID of the VM)
+> > > > 
+> > > > If it's reserved, then don't you need to check for 0?
+> > > 
+> > > Reserved in a way that it may content something we just don't care about.
+> > 
+> > "reserved" in the kernel ioctls mean "must be 0 and we will test for it,
+> > otherwise this is an empty/useless field that can never be touched again
+> > in the future.
+> > 
+> > Please spell it out in detail as to if you can ever use this later on,
+> > and what the kernel will do (if anything) if it is set.
+> > 
+> > And if "the kernel ignores it" then that means these bytes are now
+> > "empty space never to be used again", right?
+> 
+> Right, I will fix this in v5.
+Hi Andy
 
-My main concern is interaction with folded levels. For example, if
-PUD_SIZE and PMD_SIZE are the same, we want to do something like this:
+ACRN does not use uuid recently. But before that, the old ACRN still uses it.
+So could we just change the uuid data structure definition here ?
 
-pud = pud_offset(p4d, addr)
-pmd = pmd_offset(pud, addr) /* this is just pmd = (pmd_t *) pud */
-pte = pte_offset(pmd, addr)
-
-and I think we should avoid quietly skipping the folded level, which
-could happen:
-
-pud = pud_offset(p4d, addr)
-/* Each time, we go back to pte_t *, so if we stored PUD_SHIFT here,
-it is impossible to know that `pud` came from `pud_offset` and not
-`pmd_offset`. We must assume the deeper level so that we don't get
-stuck in a loop. */
-pte = pte_offset(pud, addr) /* pud is cast from (pud_t * -> pte_t * ->
-pmd_t *) */
-
-Quietly dropping p*d_offset for folded levels is safe; it's just a
-cast that we're doing anyway. If you think this is fine, then I can
-remove `level`. It might also be that this is a non-issue and that
-there will never be a folded level underneath a hugepage level.
-
-We could also change `ptep` to a union eventually (to clean up
-"hugetlb casts everything to pte_t *" messiness), and having an
-explicit `level` as a tag for the union would be nice help. In the
-same way: I like having `level` explicitly so that we know for sure
-where `ptep` came from.
-
-I can try to reduce the burden at the callsite while keeping `level`:
-hpage_size_to_level() is really annoying to have everywhere.
-
->
-> > +
-> > +static inline
-> > +void hugetlb_pte_populate(struct hugetlb_pte *hpte, pte_t *ptep,
-> > +                       unsigned int shift, enum hugetlb_level level)
->
-> I'd think it's nicer to replace "populate" with something else, as populate
-> is definitely a meaningful word in vm world for "making something appear if
-> it wasn't".  Maybe hugetlb_pte_setup()?
->
-> Even one step back, on the naming of hugetlb_pte..  Sorry to comment on
-> namings especially on this one, I really don't like to do that normally..
-> but here hugetlb_pte only walks the sub-page level of pgtables, meanwhile
-> it's not really a pte but an iterator.  How about hugetlb_hgm_iter?  "hgm"
-> tells that it only walks sub-level, and "iter" tells that it is an
-> iterator, being updated for each stepping downwards.
->
-> Then hugetlb_pte_populate() can be hugetlb_hgm_iter_init().
->
-> Take these comments with a grain of salt, and it never hurts to wait for a
-> 2nd opinion before anything.
-
-I think this is a great idea. :) Thank you! I'll make this change for
-v1 unless someone has a better suggestion.
-
->
-> > +{
-> > +     WARN_ON_ONCE(!ptep);
-> > +     hpte->ptep = ptep;
-> > +     hpte->shift = shift;
-> > +     hpte->level = level;
-> > +     hpte->ptl = NULL;
-> > +}
-> > +
-> > +static inline
-> > +unsigned long hugetlb_pte_size(const struct hugetlb_pte *hpte)
-> > +{
-> > +     WARN_ON_ONCE(!hpte->ptep);
-> > +     return 1UL << hpte->shift;
-> > +}
-> > +
-> > +static inline
-> > +unsigned long hugetlb_pte_mask(const struct hugetlb_pte *hpte)
-> > +{
-> > +     WARN_ON_ONCE(!hpte->ptep);
-> > +     return ~(hugetlb_pte_size(hpte) - 1);
-> > +}
-> > +
-> > +static inline
-> > +unsigned int hugetlb_pte_shift(const struct hugetlb_pte *hpte)
-> > +{
-> > +     WARN_ON_ONCE(!hpte->ptep);
-> > +     return hpte->shift;
-> > +}
-> > +
-> > +static inline
-> > +enum hugetlb_level hugetlb_pte_level(const struct hugetlb_pte *hpte)
-> > +{
-> > +     WARN_ON_ONCE(!hpte->ptep);
->
-> There're definitely a bunch of hpte->ptep WARN_ON_ONCE()s..  AFAIK the
-> hugetlb_pte* will be setup once with valid ptep and then it should always
-> be.  I rem someone commented on these helpers look not useful, which I must
-> confess I had the same feeling.  But besides that, I'd rather drop all
-> these WARN_ON_ONCE()s but only check it when init() the iterator/pte.
-
-The idea with these WARN_ON_ONCE()s is that it WARNs for the case that
-`hpte` was never populated/initialized, but I realize that we can't
-even rely on hpte->ptep == NULL. I'll remove the WARN_ON_ONCE()s, and
-I'll drop hugetlb_pte_shift and hugetlb_pte_level entirely.
-
-I'll keep the hugetlb_pte_{size,mask,copy,present_leaf} helpers as
-they are legitimately helpful.
-
->
-> > +     return hpte->level;
-> > +}
-> > +
-> > +static inline
-> > +void hugetlb_pte_copy(struct hugetlb_pte *dest, const struct hugetlb_pte *src)
-> > +{
-> > +     dest->ptep = src->ptep;
-> > +     dest->shift = src->shift;
-> > +     dest->level = src->level;
-> > +     dest->ptl = src->ptl;
-> > +}
-> > +
-> > +bool hugetlb_pte_present_leaf(const struct hugetlb_pte *hpte, pte_t pte);
-> > +
-> >  struct hugepage_subpool {
-> >       spinlock_t lock;
-> >       long count;
-> > @@ -1210,6 +1279,25 @@ static inline spinlock_t *huge_pte_lock(struct hstate *h,
-> >       return ptl;
-> >  }
-> >
-> > +static inline
-> > +spinlock_t *hugetlb_pte_lockptr(struct mm_struct *mm, struct hugetlb_pte *hpte)
-> > +{
-> > +
-> > +     BUG_ON(!hpte->ptep);
->
-> Another BUG_ON(); better be dropped too.
-
-Can do.
-
->
-> > +     if (hpte->ptl)
-> > +             return hpte->ptl;
-> > +     return huge_pte_lockptr(hugetlb_pte_shift(hpte), mm, hpte->ptep);
->
-> I'm curious whether we can always have hpte->ptl set for a valid
-> hugetlb_pte.  I think that means we'll need to also init the ptl in the
-> init() fn of the iterator.  Then it'll be clear on which lock to take for
-> each valid hugetlb_pte.
-
-I can work on this for v1. Right now it's not very good: for 4K PTEs,
-we manually set ->ptl while walking. I'll make it so that ->ptl is
-always populated so the code is easier to read.
-
-- James
-
->
-> > +}
-
->
-> --
-> Peter Xu
->
+Thanks.
+> 
+> ...
+> 
+> > > > > +	__u8	uuid[16];
+> > > > 
+> > > > You just changed the type here, so what is that going to break in
+> > > > userspace that depended on this being of a structure type and now it's
+> > > > an array?
+> > > 
+> > > It's the same. The previous was hidden behind additional type level.
+> > 
+> > Same size, yes.  Same C structure definition, no.
+> 
+> It doesn't matter, see below.
+> 
+> > > > And no other kernel changes needed?  Shouldn't you warn if this field is
+> > > > set?
+> > > 
+> > > No, as pointed out in the commit message kernel never ever used this.
+> > 
+> > That does not mean that userspace tools never did, right?  You are
+> > changing the structure definition, what tool just broke?
+> 
+> The only tool has been amended like a year ago, so the answer is none.
+> The commit message has links to the commits in question that made that
+> amendment.
+> 
+> Maybe I should remove Fixes tags? In such case we will very much know
+> that no old tools will be run on the new kernel.
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+> 
+> 
