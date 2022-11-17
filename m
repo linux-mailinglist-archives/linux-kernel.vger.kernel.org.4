@@ -2,216 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F32762E749
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 22:49:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D63262E752
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 22:52:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240742AbiKQVs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 16:48:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59994 "EHLO
+        id S240859AbiKQVw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 16:52:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240846AbiKQVsx (ORCPT
+        with ESMTP id S240826AbiKQVw0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 16:48:53 -0500
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 482E8201A3
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 13:48:50 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 929CB5C0307;
-        Thu, 17 Nov 2022 16:48:48 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Thu, 17 Nov 2022 16:48:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1668721728; x=1668808128; bh=k7r8Nm8QPmd+lIGNswt/8URC6igmM5DGG+M
-        PZtrb/VE=; b=CQt5us1rkzcO5LloPfBKBgKmkSfuYH8E+NiQfqGML6khTboa00w
-        BMB83B72xgLqmaMEK+6hwvI8uZF3A4+rUCKGWp6KLim3Qtm5rYVbGF5KHTDjVsdR
-        NeQtDoFiWt7CmnyL72kPgDGXt3Y8U1gCnLSgTpx2cbPWJ3faloRU/fLxaQetG5Lt
-        d0xrAePF5gmaG1I4wEfY+OK78tgecUAiNZRjx/+p17N6ah3+yMjPibrvtdXxdRBX
-        YbXdvo0BOBX5SwKLT0zU0gzo2ivBPY4ZT2Ez5bLqoAYi/U/o2lQmwbjeYmNxi7Av
-        k7r4xiKFnVdDBJYtmhYeGwEn94CkCe395nA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:message-id:mime-version
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1668721728; x=
-        1668808128; bh=k7r8Nm8QPmd+lIGNswt/8URC6igmM5DGG+MPZtrb/VE=; b=V
-        OGvwBGOfrxtgfUCybhrigA0XgcviGFC3iS0emJa4QNzUOqXMjFvLWNSiKaDiTcWf
-        +C6+DHhrZx6tvvMBv+WzVSWk/HIS5a1Dc2AX7wj94wr4rZCFvcAQ1MEeIh/Ux/Kv
-        Ob4rz/kYDgiiU1c9doH+SsY4wqXPvN1CFRJNESv4wjNpKZ5rCFKMy4aUMll2Rso2
-        qUegrTOJVbv3hAp9XfkYhOVfpFESgwEsrKM41OUIOPq+DVB07WQjuTrQKZdYMj+R
-        un2POxVzV48DTzYr8jWargfmJjigQGmfLPY0WTQh3y51+OIautVDQD8ZcG7FjKoc
-        7uC0alRm5uaJaU9c0ZVRA==
-X-ME-Sender: <xms:QKx2Y-cmxdAYxAk89o25H2QSqOyL2tZFoQEmN4hHsuLFLHAn9wQNzA>
-    <xme:QKx2Y4M2z3tmdlaL1fcUPNuRWRBGY-kUiwGru0cAa1v7DRq8s-CytQKt1HafAvaPH
-    BiQfJQcPudoyf5X1sY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgeekgdduhedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkfffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhepvdeifedukedugeetfeejuefhhfdvudfflefhjefhhfektdeiiefggeeggeekgfeh
-    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpghhithhhuhgsrdgtohhmnecuvehluh
-    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhn
-    uggsrdguvg
-X-ME-Proxy: <xmx:QKx2Y_g_WLQlf_T9jcRkO40WIGnpgq2dejHluLl0C1swX5ue0thNOg>
-    <xmx:QKx2Y794j2D9tGJlDraAlMJ82dvN6eojoJ_0CQoSurlq6yjiGJT94w>
-    <xmx:QKx2Y6vH6TFA3VcpLVkpq5_aWdLXyOhjsKa9lQLwybk070G513Tr_Q>
-    <xmx:QKx2Y8W98Dgqn544Idw_hVOFJDK6I-k8_60s9f2fExLjspeLbGGf7w>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 252D7B60086; Thu, 17 Nov 2022 16:48:48 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
-Mime-Version: 1.0
-Message-Id: <f376fae3-fb50-4a79-9a90-1ee19cafe1ad@app.fastmail.com>
-Date:   Thu, 17 Nov 2022 22:48:26 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc:     soc@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, "Conor Dooley" <conor@kernel.org>,
-        "Shawn Guo" <shawnguo@kernel.org>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] ARM: SoC fixes for 6.1, part 3
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 17 Nov 2022 16:52:26 -0500
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E93720B6
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 13:52:24 -0800 (PST)
+Received: by mail-il1-x136.google.com with SMTP id q5so1614371ilt.13
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 13:52:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZIfCf35I7ypehLBPONCdMybY63wBWvIY0HsYk1HXqDc=;
+        b=FwFpT9rEAOzbFMrQ1oETE5w3UkjxJG2IuYVttzZ2dC1284aFmSpcPVRiNVHQZcU+so
+         RrgucbqQmdEoPE/BmvWYhbHRQHWPyDf5Qvn9dPzT3lMDNGYj+bN+l30DNAsICMaWyM5x
+         6MIRb64hzBHkuexsAifzULV9iwNA+Np52/yB+fWncqJtKV1T9GoFBnDfZTl49lNSsyqg
+         Dvj4i3R0dSnj/Dn3tbYWx3lurf0ku4zt9sqxvU1JqtGth1EBIECzDZ4wBfU3ikufzXv5
+         TlsBiS9URvFZUeHMfzBRvbDUv+LoFCQK/5BMahxU49xLbrsDAYeknF3hWxOgB6gATdkk
+         yqZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZIfCf35I7ypehLBPONCdMybY63wBWvIY0HsYk1HXqDc=;
+        b=QaG2g5q/5eBiAr0J5lCnTcHcSjSCRVULIFvhk8QOCPt5o+RGG+yQ8aCfzwWeoDuE6L
+         6lUoclS23HFYpfCQC3wP9g9KrBdZNc2W3MsoGp79wYaEnuVxzMGqJiw/ByAqmPeMUpnd
+         epgz9fEIunERIalX+8BheXbFwDu7RdFpz3Y2m2CPnAIm9AUJBsI4D6LFBcTP+1fsdbFn
+         tingzTBE4zKjhxuR8eqw5WLy3hVQB0nRmzbv9SN+rUlDN2U5bx4XPUVlyZ/tCtR4+t1o
+         3tnkknY/IRgFpYtgdlAiVFfDKcyQcqDtCizbtpWBpYE+YF0Iotfbm3R4zTqF7MGay8EA
+         yYnQ==
+X-Gm-Message-State: ANoB5pnCf3PSVopGUH7+Y6ubXaSqXyzxKknaqFaUKI2niGIEkmQPQl8J
+        rVsnXZhLzEiR7miTnDLsCdHFg52OqR4SrPz3gYhshbnnU/xKSahjB/k=
+X-Google-Smtp-Source: AA0mqf4sHBRBgXFO6vYaegWinsM12EWK6jnEiNEoIlD8jNSI1TQdnDv64G2kvFZuIoVD6UdIdnHz3M94FVFnC+Hfo98=
+X-Received: by 2002:a92:c086:0:b0:2ea:ba31:f2ef with SMTP id
+ h6-20020a92c086000000b002eaba31f2efmr2001158ile.159.1668721943842; Thu, 17
+ Nov 2022 13:52:23 -0800 (PST)
+MIME-Version: 1.0
+References: <tencent_E1424259BD97672AD1AF00A3468858065E08@qq.com>
+In-Reply-To: <tencent_E1424259BD97672AD1AF00A3468858065E08@qq.com>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Thu, 17 Nov 2022 13:52:12 -0800
+Message-ID: <CAKH8qBsAC4qHSQ7TYnkXEMM68rqOz8gxuZJBxVdSkzhpQ8MR-Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: Fix error: undeclared
+ identifier 'NF_NAT_MANIP_SRC'
+To:     Rong Tao <rtoax@foxmail.com>
+Cc:     andrii.nakryiko@gmail.com, andrii@kernel.org, ast@kernel.org,
+        bpf@vger.kernel.org, daniel@iogearbox.net, dxu@dxuuu.xyz,
+        haoluo@google.com, john.fastabend@gmail.com, jolsa@kernel.org,
+        kpsingh@kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, lkp@intel.com, lorenzo@kernel.org,
+        martin.lau@linux.dev, memxor@gmail.com, mykolal@fb.com,
+        rongtao@cestc.cn, shuah@kernel.org, song@kernel.org, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 5449cabd95bbf141e2b7471e8d3cedb6f3b92492:
+On Thu, Nov 17, 2022 at 7:17 AM Rong Tao <rtoax@foxmail.com> wrote:
+>
+> From: Rong Tao <rongtao@cestc.cn>
+>
+> commit 472caa69183f("netfilter: nat: un-export nf_nat_used_tuple")
+> introduce NF_NAT_MANIP_SRC/DST enum in include/net/netfilter/nf_nat.h,
+> and commit b06b45e82b59("selftests/bpf: add tests for bpf_ct_set_nat_info
+> kfunc") use NF_NAT_MANIP_SRC/DST in test_bpf_nf.c.
+>
+> In bpf kself-test config (tools/testing/selftests/bpf/config) nf_nat
+> is compiled as built-in, this issue occurs just if it is compiled as
+> module. We could use BPF CO-RE and ___suffix rule to avoid this.
+>
+> How to reproduce the error:
+>
+>     $ make -C tools/testing/selftests/bpf/
+>     ...
+>       CLNG-BPF [test_maps] test_bpf_nf.bpf.o
+>       error: use of undeclared identifier 'NF_NAT_MANIP_SRC'
+>             bpf_ct_set_nat_info(ct, &saddr, sport, NF_NAT_MANIP_SRC);
+>                                                            ^
+>       error: use of undeclared identifier 'NF_NAT_MANIP_DST'
+>             bpf_ct_set_nat_info(ct, &daddr, dport, NF_NAT_MANIP_DST);
+>                                                            ^
+>     2 errors generated.
+>
+> Signed-off-by: Rong Tao <rongtao@cestc.cn>
+> ---
+> v2: use BPF CO-RE and ___suffix rule to avoid this error.
+> v1: https://lore.kernel.org/lkml/tencent_29D7ABD1744417031AA1B52C914B61158E07@qq.com/
+> ---
+>  .../testing/selftests/bpf/progs/test_bpf_nf.c | 30 +++++++++++++++++--
+>  1 file changed, 27 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+> index 227e85e85dda..1706984e1a6a 100644
+> --- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+> +++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+> @@ -2,6 +2,7 @@
+>  #include <vmlinux.h>
+>  #include <bpf/bpf_helpers.h>
+>  #include <bpf/bpf_endian.h>
+> +#include <bpf/bpf_core_read.h>
+>
+>  #define EAFNOSUPPORT 97
+>  #define EPROTO 71
+> @@ -11,6 +12,11 @@
+>
+>  extern unsigned long CONFIG_HZ __kconfig;
+>
+> +enum nf_nat_manip_type___x {
+> +       NF_NAT_MANIP_SRC___x,
+> +       NF_NAT_MANIP_DST___x,
+> +};
+> +
+>  int test_einval_bpf_tuple = 0;
+>  int test_einval_reserved = 0;
+>  int test_einval_netns_id = 0;
+> @@ -58,7 +64,7 @@ int bpf_ct_change_timeout(struct nf_conn *, u32) __ksym;
+>  int bpf_ct_set_status(struct nf_conn *, u32) __ksym;
+>  int bpf_ct_change_status(struct nf_conn *, u32) __ksym;
+>  int bpf_ct_set_nat_info(struct nf_conn *, union nf_inet_addr *,
+> -                       int port, enum nf_nat_manip_type) __ksym;
+> +                       int port, int type) __ksym;
+>
+>  static __always_inline void
+>  nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
+> @@ -151,16 +157,34 @@ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
+>                 union nf_inet_addr saddr = {};
+>                 union nf_inet_addr daddr = {};
+>                 struct nf_conn *ct_ins;
+> +               int manip_src;
+> +               int manip_dst;
+> +               enum nf_nat_manip_type___x mapip_type_x;
+> +
+> +               if (!bpf_core_type_exists(enum nf_nat_manip_type)) {
+> +                       bpf_printk("enum nf_nat_manip_type not exist.\n");
+> +                       return;
+> +               }
+> +
+> +               if (bpf_core_enum_value_exists(mapip_type_x, NF_NAT_MANIP_SRC___x))
+> +                       manip_src = bpf_core_enum_value(mapip_type_x, NF_NAT_MANIP_SRC___x);
+> +               else
+> +                       return;
+> +
+> +               if (bpf_core_enum_value_exists(mapip_type_x, NF_NAT_MANIP_DST___x))
+> +                       manip_dst = bpf_core_enum_value(mapip_type_x, NF_NAT_MANIP_DST___x);
+> +               else
+> +                       return;
+>
+>                 bpf_ct_set_timeout(ct, 10000);
+>                 ct->mark = 77;
+>
+>                 /* snat */
+>                 saddr.ip = bpf_get_prandom_u32();
+> -               bpf_ct_set_nat_info(ct, &saddr, sport, NF_NAT_MANIP_SRC);
+> +               bpf_ct_set_nat_info(ct, &saddr, sport, manip_src);
 
-  Merge tag 'juno-fix-6.1' of git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into arm/fixes (2022-11-02 21:58:46 +0100)
+I'm not sure these co-re checks are helpful. Can we just hardcode 1/0
+here and below?
 
-are available in the Git repository at:
+bpf_ct_set_nat_info(ct, &saddr, sport, 0 /*NF_NAT_MANIP_SRC*/);
+bpf_ct_set_nat_info(ct, &daddr, dport, 1 /*NF_NAT_MANIP_DST*/);
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.1-3
+But I'm also overall not sure we need to make this test flexible; we
+have a lot of tests that depend on tools/testing/selftests/bpf/config;
+at some point I was trying to make the tests more tolerant to
+different environments, but it went nowhere..
 
-for you to fetch changes up to 0d6a10dc2b971cc3a192b47721ee8270afc2d104:
 
-  Merge tag 'imx-fixes-6.1-2' of git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into arm/fixes (2022-11-16 22:08:11 +0100)
-
-----------------------------------------------------------------
-ARM: SoC fixes for 6.1, part 3
-
-Another set of devicetree and code changes for SoC platforms,
-notably:
-
- - DT schema warning fixes for i.MX
-
- - Functional fixes for i.MX tqma8mqml-mba8mx USB and
-   i.MX8M OCOTP
-
- - MAINTAINERS updates for Hisilicon and RISC-V, documenting
-   which RISC-V SoC specific patches will now get merged through
-   the SoC tree in the future.
-
- - A code fix for at91 suspend, to work around broken hardware
-
- - A devicetree fix for lan966x/pcb8291 LED support
-
- - Lots of DT fixes for Qualcomm SoCs, mostly fixing minor
-   problems like incorrect register sizes and schema warnings.
-   One fix makes the UFS controller work on sc8280xp, and
-   six fixes address the same regulator problem in a variety
-   of platforms.
-
-----------------------------------------------------------------
-Alexander Stein (1):
-      arm64: dts: imx8mm-tqma8mqml-mba8mx: Fix USB DR
-
-Arnd Bergmann (4):
-      Merge tag 'qcom-arm64-fixes-for-6.1' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into arm/fixes
-      Merge tag 'at91-fixes-6.1' of https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux into arm/fixes
-      Merge tag 'hisi-maintainer-fix' of https://github.com/hisilicon/linux-hisi into arm/fixes
-      Merge tag 'imx-fixes-6.1-2' of git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into arm/fixes
-
-Brian Masney (1):
-      arm64: dts: qcom: sc8280xp: correct ref clock for ufs_mem_phy
-
-Claudiu Beznea (1):
-      ARM: at91: pm: avoid soft resetting AC DLL
-
-Conor Dooley (4):
-      MAINTAINERS: add entries for misc. RISC-V SoC drivers and devicetrees
-      MAINTAINERS: generify the Microchip RISC-V entry name
-      MAINTAINERS: add an entry for StarFive devicetrees
-      MAINTAINERS: repair Microchip corei2c driver entry
-
-Dmitry Baryshkov (1):
-      Revert "arm64: dts: qcom: msm8996: add missing TCSR syscon compatible"
-
-Douglas Anderson (6):
-      arm64: dts: qcom: sa8155p-adp: Specify which LDO modes are allowed
-      arm64: dts: qcom: sa8295p-adp: Specify which LDO modes are allowed
-      arm64: dts: qcom: sc8280xp-crd: Specify which LDO modes are allowed
-      arm64: dts: qcom: sm8150-xperia-kumano: Specify which LDO modes are allowed
-      arm64: dts: qcom: sm8250-xperia-edo: Specify which LDO modes are allowed
-      arm64: dts: qcom: sm8350-hdk: Specify which LDO modes are allowed
-
-Horatiu Vultur (1):
-      ARM: dts: lan966x: Enable sgpio on pcb8291
-
-Johan Hovold (6):
-      arm64: dts: qcom: sc8280xp: fix ufs_card_phy ref clock
-      arm64: dts: qcom: sc8280xp: fix USB0 PHY PCS_MISC registers
-      arm64: dts: qcom: sc8280xp: fix USB1 PHY RX1 registers
-      arm64: dts: qcom: sc8280xp: fix USB PHY PCS registers
-      arm64: dts: qcom: sc8280xp: drop broken DP PHY nodes
-      arm64: dts: qcom: sc8280xp: fix UFS PHY serdes size
-
-Marek Vasut (3):
-      ARM: dts: imx7: Fix NAND controller size-cells
-      arm64: dts: imx8mm: Fix NAND controller size-cells
-      arm64: dts: imx8mn: Fix NAND controller size-cells
-
-Mihai Sain (1):
-      ARM: dts: at91: sama7g5: fix signal name of pin PB2
-
-Palmer Dabbelt (1):
-      MAINTAINERS: git://github.com -> https://github.com for HiSilicon
-
-Peng Fan (1):
-      arm64: dts: imx93-pinfunc: drop execution permission
-
-Robert Marko (1):
-      arm64: dts: qcom: ipq8074: correct APCS register space size
-
-Satya Priya (1):
-      arm64: dts: qcom: sc7280: Add the reset reg for lpass audiocc on SC7280
-
-Ulf Hansson (1):
-      arm64: dts: qcom: sm8250: Disable the not yet supported cluster idle state
-
-Xiaolei Wang (1):
-      soc: imx8m: Enable OCOTP clock before reading the register
-
- MAINTAINERS                                        | 36 +++++++++++++++++++---
- arch/arm/boot/dts/imx7s.dtsi                       |  4 +--
- arch/arm/boot/dts/lan966x-pcb8291.dts              | 20 ++++++++++++
- arch/arm/boot/dts/sama7g5-pinfunc.h                |  2 +-
- arch/arm/mach-at91/pm_suspend.S                    |  7 ++++-
- .../boot/dts/freescale/imx8mm-tqma8mqml-mba8mx.dts | 32 +++++++++++++++----
- arch/arm64/boot/dts/freescale/imx8mm.dtsi          |  4 +--
- arch/arm64/boot/dts/freescale/imx8mn.dtsi          |  2 +-
- arch/arm64/boot/dts/freescale/imx93-pinfunc.h      |  0
- arch/arm64/boot/dts/qcom/ipq8074.dtsi              |  2 +-
- arch/arm64/boot/dts/qcom/msm8996.dtsi              |  2 +-
- arch/arm64/boot/dts/qcom/sa8155p-adp.dts           | 13 +++++++-
- arch/arm64/boot/dts/qcom/sa8295p-adp.dts           | 12 ++++++++
- arch/arm64/boot/dts/qcom/sc7280.dtsi               |  3 +-
- arch/arm64/boot/dts/qcom/sc8280xp-crd.dts          |  6 ++++
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi             | 36 +++++-----------------
- .../boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi   |  6 ++++
- .../boot/dts/qcom/sm8250-sony-xperia-edo.dtsi      |  6 ++++
- arch/arm64/boot/dts/qcom/sm8250.dtsi               |  1 +
- arch/arm64/boot/dts/qcom/sm8350-hdk.dts            | 12 ++++++++
- drivers/soc/imx/soc-imx8m.c                        | 11 +++++++
- include/soc/at91/sama7-ddr.h                       |  5 ++-
- 22 files changed, 171 insertions(+), 51 deletions(-)
- mode change 100755 => 100644 arch/arm64/boot/dts/freescale/imx93-pinfunc.h
+>                 /* dnat */
+>                 daddr.ip = bpf_get_prandom_u32();
+> -               bpf_ct_set_nat_info(ct, &daddr, dport, NF_NAT_MANIP_DST);
+> +               bpf_ct_set_nat_info(ct, &daddr, dport, manip_dst);
+>
+>                 ct_ins = bpf_ct_insert_entry(ct);
+>                 if (ct_ins) {
+> --
+> 2.31.1
+>
