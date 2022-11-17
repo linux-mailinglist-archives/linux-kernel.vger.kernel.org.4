@@ -2,80 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF82D62E505
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 20:11:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75DB062E510
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 20:12:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240580AbiKQTLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 14:11:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57404 "EHLO
+        id S240648AbiKQTMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 14:12:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240595AbiKQTL1 (ORCPT
+        with ESMTP id S235031AbiKQTMM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 14:11:27 -0500
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D2D88F99
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 11:11:26 -0800 (PST)
-Received: by mail-ot1-x32a.google.com with SMTP id a13-20020a9d6e8d000000b00668d65fc44fso1665175otr.9
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 11:11:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=F9vuYWBj3VCQLnX7XxCflhcGLLAxSYr1p1Ei/JoEgZA=;
-        b=C19iRH75P+VwDatXUteorkTX6aQD2I4RLWXzK2wrX5IGOMmiEO4MOe2D9Uyio1ZunN
-         9xaIeK3uO74oI9XKNjuG2HIPmeUYvNNFYjmUJ9RWMa4nAa8a3fK/PXmQQsoE+ysIfMdO
-         /9LCfKGtooen6cHxe/a516m0pNHJm9/4qUzwFsHgRuYdYSr+ROS0UETXzkYpflP/8nh7
-         J58WXq6HPb1GZgfhu2ovKl6Gy5TyG2U6+zwu4h/8Dzkvx1jez2RVnju8HmVF2nZ95VMb
-         r5mpsEp7X/I/Gl/rmYEru+UEWYRJlpwGECnK+CaNsiMAbHbrD6m+8+mO8lxlNPVOVtto
-         8qdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=F9vuYWBj3VCQLnX7XxCflhcGLLAxSYr1p1Ei/JoEgZA=;
-        b=QoaGnanpG2HJ3UumdW1FA8Ak7yHSOJI5iaX6ayTRsyeitK+VIHExkzpx02UFPAQncW
-         jnMjQPbQ326ovJfMruU0I7qxDonxRVjUmJ9MCSzB1JQzvHBj/t7C/wfr204KWidaBgtm
-         J+gx4HjZ62MvWVgvCFq5DrwvzoWsyvcDUG9sdbo6O5G7dueoOWp4DZYVL1wL5KXuLmUl
-         iUh+0E26Zkr+j2IO6RAnN1nFria5X2Enmk6KjTzByaZSGwHZfWy1gOwHng71a4u5GN18
-         WyQZW0HfJoEH3XV26SraqUTYvRViSoiNwOJs/MIlAEwLT6Pf29zqXfIiGwKprPm15K2D
-         6lPg==
-X-Gm-Message-State: ANoB5pkuzDjOl9/ke34CzfZCYgt5slmLf6bDZOad06rJsyrFh88dYtA7
-        0TezsoyRYrwCdNEFxA7SU9pXUMpCGqxgqW0mYbr3LHAbPWU=
-X-Google-Smtp-Source: AA0mqf6rOu6uBCRXlS+5KALNPNi+oEVuFeuHINeh2EQOlP6Nw7xTr3GMACXXEpt74SoOoXEzxyjKEIaAuibzmSgfKNU=
-X-Received: by 2002:a05:6830:1510:b0:655:bd84:a806 with SMTP id
- k16-20020a056830151000b00655bd84a806mr2137311otp.108.1668712285541; Thu, 17
- Nov 2022 11:11:25 -0800 (PST)
+        Thu, 17 Nov 2022 14:12:12 -0500
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61BC087561;
+        Thu, 17 Nov 2022 11:12:10 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 13406605DED7;
+        Thu, 17 Nov 2022 20:12:08 +0100 (CET)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id LJYlS4X-wXkK; Thu, 17 Nov 2022 20:12:07 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 56CDB63E5168;
+        Thu, 17 Nov 2022 20:12:07 +0100 (CET)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id YGGq6Y6GdMPl; Thu, 17 Nov 2022 20:12:07 +0100 (CET)
+Received: from blindfold.corp.sigma-star.at (213-47-184-186.cable.dynamic.surfer.at [213.47.184.186])
+        by lithops.sigma-star.at (Postfix) with ESMTPSA id B763963E5146;
+        Thu, 17 Nov 2022 20:12:06 +0100 (CET)
+From:   Richard Weinberger <richard@nod.at>
+To:     linux-nfs@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        jlayton@kernel.org, chuck.lever@oracle.com, anna@kernel.org,
+        trond.myklebust@hammerspace.com, viro@zeniv.linux.org.uk,
+        raven@themaw.net, chris.chilvers@appsbroker.com,
+        david.young@appsbroker.com, luis.turcitu@appsbroker.com,
+        david@sigma-star.at, Richard Weinberger <richard@nod.at>
+Subject: [PATCH 0/3] NFS: NFSD: Allow crossing mounts when re-exporting
+Date:   Thu, 17 Nov 2022 20:11:48 +0100
+Message-Id: <20221117191151.14262-1-richard@nod.at>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-References: <20221117181127.1859634-1-dionnaglaze@google.com> <20221117181127.1859634-3-dionnaglaze@google.com>
-In-Reply-To: <20221117181127.1859634-3-dionnaglaze@google.com>
-From:   Dionna Amalie Glaze <dionnaglaze@google.com>
-Date:   Thu, 17 Nov 2022 11:11:14 -0800
-Message-ID: <CAAH4kHY-Es7T-qBoP0-ai-s3Rzoi0p+2wW5HZv8u3SSe-9prGw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] kvm: sev: If ccp is busy, report throttled to guest
-To:     linux-kernel@vger.kernel.org, x86@kernel.org
-Cc:     Thomas Lendacky <Thomas.Lendacky@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Joerg Roedel <jroedel@suse.de>, Ingo Molnar <mingo@redhat.com>,
-        Andy Lutomirsky <luto@kernel.org>,
-        John Allen <john.allen@amd.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Peter Gonda <pgonda@google.com>,
-        "open list:X86 KVM CPUs" <kvm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding kvm
+Currently when re-exporting a NFS share the NFS cross mount feature does
+not work [0].
+This patch series outlines an approach to address the problem.
 
--- 
--Dionna Glaze, PhD (she/her)
+Crossing mounts does not work for two reasons:
+
+1. As soon the NFS client (on the re-exporting server) sees a different
+filesystem id, it installs an automount. That way the other filesystem
+will be mounted automatically when someone enters the directory.
+But the cross mount logic of KNFS does not know about automount.
+This patch series addresses the problem and teach both KNFSD
+and the exportfs logic of NFS to deal with automount.
+
+2. When KNFSD detects crossing of a mount point, it asks rpc.mountd to in=
+stall
+a new export for the target mount point. Beside of authentication rpc.mou=
+ntd
+also has to find a filesystem id for the new export. Is the to be exporte=
+d
+filesystem a NFS share, rpc.mountd cannot derive a filesystem id from it =
+and
+refuses to export. In the logs you'll see errors such as:
+
+mountd: Cannot export /srv/nfs/vol0, possibly unsupported filesystem or f=
+sid=3D required
+
+To deal with that I've changed rpc.mountd to use generate and store fsids=
+ [1].
+Since the kernel side of my changes did change for a long time I decided =
+to
+try upstreaming it first.
+A 3rd iteration of my rpc.mountd will happen soon.
+
+[0] https://marc.info/?l=3Dlinux-nfs&m=3D161653016627277&w=3D2
+[1] https://lore.kernel.org/linux-nfs/20220217131531.2890-1-richard@nod.a=
+t/
+
+Richard Weinberger (3):
+  NFSD: Teach nfsd_mountpoint() auto mounts
+  fs: namei: Allow follow_down() to uncover auto mounts
+  NFS: nfs_encode_fh: Remove S_AUTOMOUNT check
+
+ fs/namei.c      | 2 +-
+ fs/nfs/export.c | 2 +-
+ fs/nfsd/vfs.c   | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+--=20
+2.26.2
+
