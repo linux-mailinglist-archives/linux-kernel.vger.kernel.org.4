@@ -2,84 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C81262D40D
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 08:28:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E6D662D40E
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 08:28:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239334AbiKQH2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 02:28:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32780 "EHLO
+        id S239260AbiKQH2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 02:28:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234615AbiKQH2Q (ORCPT
+        with ESMTP id S239319AbiKQH2X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 02:28:16 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4774942F46;
-        Wed, 16 Nov 2022 23:28:14 -0800 (PST)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NCWdp6DkkzJnlm;
-        Thu, 17 Nov 2022 15:25:02 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 17 Nov 2022 15:27:41 +0800
-Received: from [10.67.108.193] (10.67.108.193) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 17 Nov 2022 15:27:40 +0800
-Subject: Re: [PATCH] device_cgroup: Roll back to original exceptions after
- copy failure
-To:     Paul Moore <paul@paul-moore.com>
-CC:     <jmorris@namei.org>, <serge@hallyn.com>,
-        <serge.hallyn@canonical.com>, <akpm@linux-foundation.org>,
-        <aris@redhat.com>, <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        wangweiyang <wangweiyang2@huawei.com>
-References: <20221025113101.41132-1-wangweiyang2@huawei.com>
- <CAHC9VhRa16htUXSN0AXrbUwadRa-qQv+UX8ZO_8W_z2eL=6trw@mail.gmail.com>
-From:   wangweiyang <wangweiyang2@huawei.com>
-Message-ID: <2a52eca2-a064-38da-9f6f-6f4736753067@huawei.com>
-Date:   Thu, 17 Nov 2022 15:27:40 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        Thu, 17 Nov 2022 02:28:23 -0500
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3994299C
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 23:28:22 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AH7SD8n032937;
+        Thu, 17 Nov 2022 01:28:13 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1668670093;
+        bh=tebsc38g2Whz8eftsOPrN/73sByHALX4RohyYL0Pyw0=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=LrLYyMyJIrgPJ0ARW8sSx0XCbSFJ4H2EDCk4ibgqorK9M3RREKAuEzEHxO+J27yVC
+         UDrukp9bI5CSA9HIIwkSVTpTTmgY3Zma7VPJU06XDs3v/6Xee6AGYx3w6tk8BfxBSg
+         wkyC6o2FZQtAu+tdokUNeGtyeyqlpZjEbPp4VxTU=
+Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AH7SDk4074125
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 17 Nov 2022 01:28:13 -0600
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Thu, 17
+ Nov 2022 01:28:13 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Thu, 17 Nov 2022 01:28:12 -0600
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AH7SCGo072518;
+        Thu, 17 Nov 2022 01:28:12 -0600
+Date:   Thu, 17 Nov 2022 01:28:12 -0600
+From:   Nishanth Menon <nm@ti.com>
+To:     Nicolas Frayer <nfrayer@baylibre.com>
+CC:     <ssantosh@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <khilman@baylibre.com>,
+        <glaroque@baylibre.com>
+Subject: Re: [PATCH v5 0/2] soc: ti: Add module build support to the k3
+ socinfo driver
+Message-ID: <20221117072812.ctrw54q2qqruxlts@dollhouse>
+References: <20221116145103.26744-1-nfrayer@baylibre.com>
 MIME-Version: 1.0
-In-Reply-To: <CAHC9VhRa16htUXSN0AXrbUwadRa-qQv+UX8ZO_8W_z2eL=6trw@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.108.193]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20221116145103.26744-1-nfrayer@baylibre.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/17 7:33, Paul Moore wrote:
-> On Tue, Oct 25, 2022 at 7:02 AM Wang Weiyang <wangweiyang2@huawei.com> wrote:
->>
->> When add the 'a *:* rwm' entry to devcgroup A's whitelist, at first A's
->> exceptions will be cleaned and A's behavior is changed to
->> DEVCG_DEFAULT_ALLOW. Then parent's exceptions will be copyed to A's
->> whitelist. If copy failure occurs, just return leaving A to grant
->> permissions to all devices. And A may grant more permissions than
->> parent.
->>
->> Backup A's whitelist and recover original exceptions after copy
->> failure.
->>
->> Fixes: 4cef7299b478 ("device_cgroup: add proper checking when changing default behavior")
->> Signed-off-by: Wang Weiyang <wangweiyang2@huawei.com>
->> ---
->>  security/device_cgroup.c | 33 +++++++++++++++++++++++++++++----
->>  1 file changed, 29 insertions(+), 4 deletions(-)
+On 15:51-20221116, Nicolas Frayer wrote:
+> In order for the TI K3 SoC info driver to be built as a module, the
+> following changes have been made:
+> - Converted memory allocations to devm and added the remove callback
+> - Added necessary code to build the driver as a module
 > 
-> Merged into lsm/next, but with a stable@vger tag.  Normally I would
-> merge something like this into lsm/stable-X.Y and send it up to Linus
-> after a few days, but I'd really like this to spend some time in
-> linux-next before going up to Linus.
+> v2->v3:
+> dropped module conversion part of this series while other driver
+> dependencies on socinfo are worked out.
+> A dependency issue is introduced by changing subsys_initcall()
+> to module_platform_driver(). Some drivers using the socinfo information
+> probe before the socinfo driver itself and it makes their probe fail.
+> 
+> v3->v4:
+> reintegrated the module build support and added patches for udma and mdio
+> drivers to allow for deferred probe if socinfo hasn't probed yet.
+> 
+> v4->v5:
+> Remove the k3 udma and mdio patches from this series and sent them
+> individually
+> 
+> Nicolas Frayer (2):
+>   soc: ti: Convert allocations to devm
+>   soc: ti: Add module build support
+> 
+>  arch/arm64/Kconfig.platforms |  1 -
+>  drivers/soc/ti/Kconfig       |  3 ++-
+>  drivers/soc/ti/k3-socinfo.c  | 47 +++++++++++++++++++++++-------------
+>  3 files changed, 32 insertions(+), 19 deletions(-)
 
-Thanks Paul. This sounds fine.
+Sorry about another respin, but could you fix up $subject as per
+git log --oneline drivers/soc/ti/k3-socinfo.c
+
+I think you might want to use "soc: ti: k3-socinfo:"
+> 
+
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
