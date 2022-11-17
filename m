@@ -2,86 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC47162E61A
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 21:45:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D14EB62E61C
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 21:46:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234959AbiKQUpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 15:45:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42088 "EHLO
+        id S235030AbiKQUqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 15:46:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234843AbiKQUpU (ORCPT
+        with ESMTP id S232330AbiKQUqO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 15:45:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20FE5597
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 12:45:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B4C262245
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 20:45:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D439C433C1;
-        Thu, 17 Nov 2022 20:45:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1668717918;
-        bh=EOrXBauR4yrNyEgewtXc3MPjEK0rmkIMgfLwn6Fzia8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=PvmgMim8jJzXD9E0y+KTE/sI0XKkzb/5fDuSiZnhNuRSapV3IiAbXlG7LaXPAnLK7
-         RXtnB06pXoWGRfJ26sFOZQR9rPPPaT2OjwE99vaK8DgqWFURoFHySHCCiE6bEYVup5
-         YuV9AYOv6oOZ7eIrtGxkpJwE9GQQ5K1ZWVnJYv1c=
-Date:   Thu, 17 Nov 2022 12:45:17 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Wang Weiyang <wangweiyang2@huawei.com>
-Cc:     <mporter@kernel.crashing.org>, <alex.bou9@gmail.com>,
-        <yangyingliang@huawei.com>, <jakobkoschel@gmail.com>,
-        <jhubbard@nvidia.com>, <error27@gmail.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] rapidio: fix possible UAF when kfifo_alloc() fails
-Message-Id: <20221117124517.9d8290e553b1e6d76b1ff7e8@linux-foundation.org>
-In-Reply-To: <20221117021802.46872-1-wangweiyang2@huawei.com>
-References: <20221117021802.46872-1-wangweiyang2@huawei.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 17 Nov 2022 15:46:14 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C1E6B202;
+        Thu, 17 Nov 2022 12:46:13 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id v17so4311527edc.8;
+        Thu, 17 Nov 2022 12:46:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KgP3S5wtbBYj8SdinzbCrfNvgAs3PAFvpROmucDmbrA=;
+        b=k26wURFJjpAGes5Qg4IUZqpMYdFUDn7hDKafR8BbKTEHRDYmdDQzgFxd9AHBDcnzKk
+         O62ZCtW5/2bfj6z0aYF70pxnjN2sfoiLB2tz4VS3s1G7DuSdMO71YcH6f4w3H64x00aA
+         OyMnYpEB4LQMTKdYfjl1Jr21JiyyJA0hMKj7Be+QnceuUhqVnWrh2X6ZZnrpXfPYyAhO
+         rhj2b8YYDqNsjMRP1VNSnf4Vr4vdLsU6FbpwyuxNPgG9RPEUDlizbLIgGIYUE6ZPTNTR
+         6q0XEiCr0YmSd92Qbl8ncbAnY+GXkbFMtcm38XgoZnO9sCV7lXLno6zcFGtan7tJPjQ9
+         NL0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KgP3S5wtbBYj8SdinzbCrfNvgAs3PAFvpROmucDmbrA=;
+        b=rdnZ7oBCVRuj4M0YAamoWXTt7dVIIPoCHacxTA6AG97k/ue4oWLCS4pGuc9LM7ryCb
+         0gw4VPXfSd/Rq0XJodLX7rCuOAHFgA1LocRmXGAlW7HIawrRInmAykR5L3yGSvEzm7oD
+         wnVqRcObyx64BQRRlJ8s6+V1Q6bJzQVufBfNhecxC8AoFo2/YhJJvLw3xxinseNYFIU6
+         iIjJCSRnhwoJtysq7xFBJxhRakObS0412img3hU1Kwq20BCCD2ctngruqvFxabwwci0N
+         eMWEFNFtsPI0TYJJLEpp6qYaQgHHGrjY3tBYuoUYfekpEUA3r2mE8a324Ny37Fe5il9X
+         uzcQ==
+X-Gm-Message-State: ANoB5pl7rJRkXUg6QwhI3g04ZXLLgB43AjUhBrasXP5GVDusqN41Bcj1
+        O21Kp2wDvI5efSc3Wl4tk0aryXj0bQ==
+X-Google-Smtp-Source: AA0mqf46R7FNldX4UnKK+YEeYLbviqKumheQQ+kiPkF61el2DTpnVmMl/lEZtcTMLbzmNTYG5B/bEQ==
+X-Received: by 2002:a05:6402:13d1:b0:469:4a1:96af with SMTP id a17-20020a05640213d100b0046904a196afmr799937edx.328.1668717971613;
+        Thu, 17 Nov 2022 12:46:11 -0800 (PST)
+Received: from p183 ([46.53.253.26])
+        by smtp.gmail.com with ESMTPSA id v27-20020a17090606db00b0078175601630sm809209ejb.79.2022.11.17.12.46.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 12:46:11 -0800 (PST)
+Date:   Thu, 17 Nov 2022 23:46:09 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     kvm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, jpoimboe@kernel.org,
+        pbonzini@redhat.com, x86@kernel.org
+Subject: VMX HOST_RIP target alignment
+Message-ID: <Y3adkSe/J70PqUyt@p183>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Nov 2022 10:18:02 +0800 Wang Weiyang <wangweiyang2@huawei.com> wrote:
+One of the side effects of fixing retbleed for VMX was demoting
+HOST_RIP target from honorable function to a lowly label:
 
-> If kfifo_alloc() fails in mport_cdev_open(), goto err_fifo and just free
-> priv. But priv is still in the chdev->file_list, then list traversal
-> may cause UAF. This fixes the following smatch warning:
-> 
-> drivers/rapidio/devices/rio_mport_cdev.c:1930 mport_cdev_open() warn: '&priv->list' not removed from list
-> 
-> Fixes: e8de370188d0 ("rapidio: add mport char device driver")
-> Signed-off-by: Wang Weiyang <wangweiyang2@huawei.com>
-> ---
->  drivers/rapidio/devices/rio_mport_cdev.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/rapidio/devices/rio_mport_cdev.c b/drivers/rapidio/devices/rio_mport_cdev.c
-> index 3cc83997a1f8..c66b2c552b38 100644
-> --- a/drivers/rapidio/devices/rio_mport_cdev.c
-> +++ b/drivers/rapidio/devices/rio_mport_cdev.c
-> @@ -1930,6 +1930,9 @@ static int mport_cdev_open(struct inode *inode, struct file *filp)
->  	filp->private_data = priv;
->  	goto out;
->  err_fifo:
-> +	mutex_lock(&chdev->file_mutex);
-> +	list_del(&priv->list);
-> +	mutex_unlock(&chdev->file_mutex);
->  	kfree(priv);
->  out:
->  	return ret;
+	-SYM_FUNC_START(vmx_vmexit)
+	+SYM_INNER_LABEL(vmx_vmexit, SYM_L_GLOBAL)
 
-Surely it would be better to avoid adding the new instance onto the
-list until the new instance has been fully initialized?
+ffffffff81243c49:       0f 01 c2                vmlaunch
+ffffffff81243c4c:       e9 a7 00 00 00          jmp    ffffffff81243cf8 <vmx_vmexit+0xa7>
 
+ffffffff81243c51 <vmx_vmexit>:
+ffffffff81243c51:       50                      push   rax
+
+Now I've never measured VM exit latency but is it important to align it
+at 16 bytes like Intel recommends for functions?
+
+	vmalexey
