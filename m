@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72AE162CFDB
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 01:43:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F09862CFDE
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 01:43:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232983AbiKQAnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 19:43:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36636 "EHLO
+        id S233842AbiKQAng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 19:43:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234067AbiKQAm7 (ORCPT
+        with ESMTP id S234042AbiKQAnT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 19:42:59 -0500
+        Wed, 16 Nov 2022 19:43:19 -0500
 Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C4826175B;
-        Wed, 16 Nov 2022 16:42:58 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27EC964A1B;
+        Wed, 16 Nov 2022 16:43:16 -0800 (PST)
 Received: from local
         by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
          (Exim 4.94.2)
         (envelope-from <daniel@makrotopia.org>)
-        id 1ovSzR-0002V0-7a; Thu, 17 Nov 2022 01:42:49 +0100
-Date:   Thu, 17 Nov 2022 00:42:43 +0000
+        id 1ovSzk-0002VB-PV; Thu, 17 Nov 2022 01:43:08 +0100
+Date:   Thu, 17 Nov 2022 00:43:03 +0000
 From:   Daniel Golle <daniel@makrotopia.org>
 To:     Christoph Hellwig <hch@infradead.org>,
         Jens Axboe <axboe@kernel.dk>,
@@ -28,430 +28,60 @@ To:     Christoph Hellwig <hch@infradead.org>,
         Chaitanya Kulkarni <kch@nvidia.com>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
         linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 1/4] init: move block device helpers from init/do_mounts.c
-Message-ID: <e5e0ab0429b1fc8a4e3f9614d2d1cc43dea78093.1668644705.git.daniel@makrotopia.org>
+Subject: [RFC PATCH 2/4] block: add new flag to add partitions read-only
+Message-ID: <31b78b87ece4e095aa082d09ca3d4058a2484f3c.1668644705.git.daniel@makrotopia.org>
 References: <cover.1668644705.git.daniel@makrotopia.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <cover.1668644705.git.daniel@makrotopia.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,PDS_OTHER_BAD_TLD,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In init/do_mounts.c there are helper functions devt_from_partuuid,
-devt_from_partlabel and devt_from_devname. In order to make these
-functions available to other users, move them to block/bdev.c.
+Add flag ADDPART_FLAG_READONLY to allow partition parsers marking a
+partition to be set read-only.
+This is needed for the uImage.FIT partition parser added by a follow-up
+commit: we need to be sure the contents of uImage.FIT sub-images
+remain unaltered they are validated using a hash within the uImage.FIT
+structure which also serves as partition table.
 
 Signed-off-by: Daniel Golle <daniel@makrotopia.org>
 ---
- block/bdev.c           | 166 +++++++++++++++++++++++++++++++++++++++++
- include/linux/blkdev.h |  15 ++++
- init/do_mounts.c       | 166 +----------------------------------------
- 3 files changed, 183 insertions(+), 164 deletions(-)
+ block/blk.h             | 1 +
+ block/partitions/core.c | 3 +++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/block/bdev.c b/block/bdev.c
-index d699ecdb3260..92e3e5c81337 100644
---- a/block/bdev.c
-+++ b/block/bdev.c
-@@ -1092,3 +1092,169 @@ void bdev_statx_dioalign(struct inode *inode, struct kstat *stat)
+diff --git a/block/blk.h b/block/blk.h
+index e85703ae81dd..05ac426350b2 100644
+--- a/block/blk.h
++++ b/block/blk.h
+@@ -414,6 +414,7 @@ void blk_free_ext_minor(unsigned int minor);
+ #define ADDPART_FLAG_NONE	0
+ #define ADDPART_FLAG_RAID	1
+ #define ADDPART_FLAG_WHOLEDISK	2
++#define ADDPART_FLAG_READONLY	4
+ int bdev_add_partition(struct gendisk *disk, int partno, sector_t start,
+ 		sector_t length);
+ int bdev_del_partition(struct gendisk *disk, int partno);
+diff --git a/block/partitions/core.c b/block/partitions/core.c
+index b8112f52d388..355646b0707d 100644
+--- a/block/partitions/core.c
++++ b/block/partitions/core.c
+@@ -398,6 +398,9 @@ static struct block_device *add_partition(struct gendisk *disk, int partno,
+ 			goto out_del;
+ 	}
  
- 	blkdev_put_no_open(bdev);
- }
++	if (flags & ADDPART_FLAG_READONLY)
++		bdev->bd_read_only = true;
 +
-+struct uuidcmp {
-+	const char *uuid;
-+	int len;
-+};
-+
-+/**
-+ * match_dev_by_uuid - callback for finding a partition using its uuid
-+ * @dev:	device passed in by the caller
-+ * @data:	opaque pointer to the desired struct uuidcmp to match
-+ *
-+ * Returns 1 if the device matches, and 0 otherwise.
-+ */
-+static int match_dev_by_uuid(struct device *dev, const void *data)
-+{
-+	struct block_device *bdev = dev_to_bdev(dev);
-+	const struct uuidcmp *cmp = data;
-+
-+	if (!bdev->bd_meta_info ||
-+	    strncasecmp(cmp->uuid, bdev->bd_meta_info->uuid, cmp->len))
-+		return 0;
-+	return 1;
-+}
-+
-+/**
-+ * devt_from_partuuid - looks up the dev_t of a partition by its UUID
-+ * @uuid_str:	char array containing ascii UUID
-+ *
-+ * The function will return the first partition which contains a matching
-+ * UUID value in its partition_meta_info struct.  This does not search
-+ * by filesystem UUIDs.
-+ *
-+ * If @uuid_str is followed by a "/PARTNROFF=%d", then the number will be
-+ * extracted and used as an offset from the partition identified by the UUID.
-+ *
-+ * Returns the matching dev_t on success or 0 on failure.
-+ */
-+dev_t devt_from_partuuid(const char *uuid_str, int *root_wait)
-+{
-+	struct uuidcmp cmp;
-+	struct device *dev = NULL;
-+	dev_t devt = 0;
-+	int offset = 0;
-+	char *slash;
-+
-+	cmp.uuid = uuid_str;
-+
-+	slash = strchr(uuid_str, '/');
-+	/* Check for optional partition number offset attributes. */
-+	if (slash) {
-+		char c = 0;
-+
-+		/* Explicitly fail on poor PARTUUID syntax. */
-+		if (sscanf(slash + 1, "PARTNROFF=%d%c", &offset, &c) != 1)
-+			goto clear_root_wait;
-+		cmp.len = slash - uuid_str;
-+	} else {
-+		cmp.len = strlen(uuid_str);
-+	}
-+
-+	if (!cmp.len)
-+		goto clear_root_wait;
-+
-+	dev = class_find_device(&block_class, NULL, &cmp, &match_dev_by_uuid);
-+	if (!dev)
-+		return 0;
-+
-+	if (offset) {
-+		/*
-+		 * Attempt to find the requested partition by adding an offset
-+		 * to the partition number found by UUID.
-+		 */
-+		devt = part_devt(dev_to_disk(dev),
-+				 dev_to_bdev(dev)->bd_partno + offset);
-+	} else {
-+		devt = dev->devt;
-+	}
-+
-+	put_device(dev);
-+	return devt;
-+
-+clear_root_wait:
-+	pr_err("VFS: PARTUUID= is invalid.\n"
-+	       "Expected PARTUUID=<valid-uuid-id>[/PARTNROFF=%%d]\n");
-+	if (root_wait && *root_wait) {
-+		pr_err("Disabling rootwait; root= is invalid.\n");
-+		*root_wait = 0;
-+	}
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(devt_from_partuuid);
-+
-+/**
-+ * match_dev_by_label - callback for finding a partition using its label
-+ * @dev:	device passed in by the caller
-+ * @data:	opaque pointer to the label to match
-+ *
-+ * Returns 1 if the device matches, and 0 otherwise.
-+ */
-+static int match_dev_by_label(struct device *dev, const void *data)
-+{
-+	struct block_device *bdev = dev_to_bdev(dev);
-+	const char *label = data;
-+
-+	if (!bdev->bd_meta_info || strcmp(label, bdev->bd_meta_info->volname))
-+		return 0;
-+	return 1;
-+}
-+
-+dev_t devt_from_partlabel(const char *label)
-+{
-+	struct device *dev;
-+	dev_t devt = 0;
-+
-+	dev = class_find_device(&block_class, NULL, label, &match_dev_by_label);
-+	if (dev) {
-+		devt = dev->devt;
-+		put_device(dev);
-+	}
-+
-+	return devt;
-+}
-+EXPORT_SYMBOL_GPL(devt_from_partlabel);
-+
-+dev_t devt_from_devname(const char *name)
-+{
-+	dev_t devt = 0;
-+	int part;
-+	char s[32];
-+	char *p;
-+
-+	if (strlen(name) > 31)
-+		return 0;
-+	strcpy(s, name);
-+	for (p = s; *p; p++) {
-+		if (*p == '/')
-+			*p = '!';
-+	}
-+
-+	devt = blk_lookup_devt(s, 0);
-+	if (devt)
-+		return devt;
-+
-+	/*
-+	 * Try non-existent, but valid partition, which may only exist after
-+	 * opening the device, like partitioned md devices.
-+	 */
-+	while (p > s && isdigit(p[-1]))
-+		p--;
-+	if (p == s || !*p || *p == '0')
-+		return 0;
-+
-+	/* try disk name without <part number> */
-+	part = simple_strtoul(p, NULL, 10);
-+	*p = '\0';
-+	devt = blk_lookup_devt(s, part);
-+	if (devt)
-+		return devt;
-+
-+	/* try disk name without p<part number> */
-+	if (p < s + 2 || !isdigit(p[-2]) || p[-1] != 'p')
-+		return 0;
-+	p[-1] = '\0';
-+	return blk_lookup_devt(s, part);
-+}
-+EXPORT_SYMBOL_GPL(devt_from_devname);
-diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-index fb27dfaaaf85..b45cdcdccc6d 100644
---- a/include/linux/blkdev.h
-+++ b/include/linux/blkdev.h
-@@ -1494,6 +1494,9 @@ int truncate_bdev_range(struct block_device *bdev, fmode_t mode, loff_t lstart,
- 		loff_t lend);
- 
- #ifdef CONFIG_BLOCK
-+dev_t devt_from_partuuid(const char *uuid_str, int *root_wait);
-+dev_t devt_from_partlabel(const char *label);
-+dev_t devt_from_devname(const char *name);
- void invalidate_bdev(struct block_device *bdev);
- int sync_blockdev(struct block_device *bdev);
- int sync_blockdev_range(struct block_device *bdev, loff_t lstart, loff_t lend);
-@@ -1502,6 +1505,18 @@ void sync_bdevs(bool wait);
- void bdev_statx_dioalign(struct inode *inode, struct kstat *stat);
- void printk_all_partitions(void);
- #else
-+static inline dev_t devt_from_partuuid(const char *uuid_str, int *root_wait)
-+{
-+	return MKDEV(0, 0);
-+}
-+static inline dev_t devt_from_partlabel(const char *label);
-+{
-+	return MKDEV(0, 0);
-+}
-+static inline dev_t devt_from_devname(const char *name);
-+{
-+	return MKDEV(0, 0);
-+}
- static inline void invalidate_bdev(struct block_device *bdev)
- {
- }
-diff --git a/init/do_mounts.c b/init/do_mounts.c
-index 811e94daf0a8..d55e34994f18 100644
---- a/init/do_mounts.c
-+++ b/init/do_mounts.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0-only
- #include <linux/module.h>
- #include <linux/sched.h>
-+#include <linux/blkdev.h>
- #include <linux/ctype.h>
- #include <linux/fd.h>
- #include <linux/tty.h>
-@@ -60,169 +61,6 @@ static int __init readwrite(char *str)
- __setup("ro", readonly);
- __setup("rw", readwrite);
- 
--#ifdef CONFIG_BLOCK
--struct uuidcmp {
--	const char *uuid;
--	int len;
--};
--
--/**
-- * match_dev_by_uuid - callback for finding a partition using its uuid
-- * @dev:	device passed in by the caller
-- * @data:	opaque pointer to the desired struct uuidcmp to match
-- *
-- * Returns 1 if the device matches, and 0 otherwise.
-- */
--static int match_dev_by_uuid(struct device *dev, const void *data)
--{
--	struct block_device *bdev = dev_to_bdev(dev);
--	const struct uuidcmp *cmp = data;
--
--	if (!bdev->bd_meta_info ||
--	    strncasecmp(cmp->uuid, bdev->bd_meta_info->uuid, cmp->len))
--		return 0;
--	return 1;
--}
--
--/**
-- * devt_from_partuuid - looks up the dev_t of a partition by its UUID
-- * @uuid_str:	char array containing ascii UUID
-- *
-- * The function will return the first partition which contains a matching
-- * UUID value in its partition_meta_info struct.  This does not search
-- * by filesystem UUIDs.
-- *
-- * If @uuid_str is followed by a "/PARTNROFF=%d", then the number will be
-- * extracted and used as an offset from the partition identified by the UUID.
-- *
-- * Returns the matching dev_t on success or 0 on failure.
-- */
--static dev_t devt_from_partuuid(const char *uuid_str)
--{
--	struct uuidcmp cmp;
--	struct device *dev = NULL;
--	dev_t devt = 0;
--	int offset = 0;
--	char *slash;
--
--	cmp.uuid = uuid_str;
--
--	slash = strchr(uuid_str, '/');
--	/* Check for optional partition number offset attributes. */
--	if (slash) {
--		char c = 0;
--
--		/* Explicitly fail on poor PARTUUID syntax. */
--		if (sscanf(slash + 1, "PARTNROFF=%d%c", &offset, &c) != 1)
--			goto clear_root_wait;
--		cmp.len = slash - uuid_str;
--	} else {
--		cmp.len = strlen(uuid_str);
--	}
--
--	if (!cmp.len)
--		goto clear_root_wait;
--
--	dev = class_find_device(&block_class, NULL, &cmp, &match_dev_by_uuid);
--	if (!dev)
--		return 0;
--
--	if (offset) {
--		/*
--		 * Attempt to find the requested partition by adding an offset
--		 * to the partition number found by UUID.
--		 */
--		devt = part_devt(dev_to_disk(dev),
--				 dev_to_bdev(dev)->bd_partno + offset);
--	} else {
--		devt = dev->devt;
--	}
--
--	put_device(dev);
--	return devt;
--
--clear_root_wait:
--	pr_err("VFS: PARTUUID= is invalid.\n"
--	       "Expected PARTUUID=<valid-uuid-id>[/PARTNROFF=%%d]\n");
--	if (root_wait)
--		pr_err("Disabling rootwait; root= is invalid.\n");
--	root_wait = 0;
--	return 0;
--}
--
--/**
-- * match_dev_by_label - callback for finding a partition using its label
-- * @dev:	device passed in by the caller
-- * @data:	opaque pointer to the label to match
-- *
-- * Returns 1 if the device matches, and 0 otherwise.
-- */
--static int match_dev_by_label(struct device *dev, const void *data)
--{
--	struct block_device *bdev = dev_to_bdev(dev);
--	const char *label = data;
--
--	if (!bdev->bd_meta_info || strcmp(label, bdev->bd_meta_info->volname))
--		return 0;
--	return 1;
--}
--
--static dev_t devt_from_partlabel(const char *label)
--{
--	struct device *dev;
--	dev_t devt = 0;
--
--	dev = class_find_device(&block_class, NULL, label, &match_dev_by_label);
--	if (dev) {
--		devt = dev->devt;
--		put_device(dev);
--	}
--
--	return devt;
--}
--
--static dev_t devt_from_devname(const char *name)
--{
--	dev_t devt = 0;
--	int part;
--	char s[32];
--	char *p;
--
--	if (strlen(name) > 31)
--		return 0;
--	strcpy(s, name);
--	for (p = s; *p; p++) {
--		if (*p == '/')
--			*p = '!';
--	}
--
--	devt = blk_lookup_devt(s, 0);
--	if (devt)
--		return devt;
--
--	/*
--	 * Try non-existent, but valid partition, which may only exist after
--	 * opening the device, like partitioned md devices.
--	 */
--	while (p > s && isdigit(p[-1]))
--		p--;
--	if (p == s || !*p || *p == '0')
--		return 0;
--
--	/* try disk name without <part number> */
--	part = simple_strtoul(p, NULL, 10);
--	*p = '\0';
--	devt = blk_lookup_devt(s, part);
--	if (devt)
--		return devt;
--
--	/* try disk name without p<part number> */
--	if (p < s + 2 || !isdigit(p[-2]) || p[-1] != 'p')
--		return 0;
--	p[-1] = '\0';
--	return blk_lookup_devt(s, part);
--}
--#endif /* CONFIG_BLOCK */
- 
- static dev_t devt_from_devnum(const char *name)
- {
-@@ -284,7 +122,7 @@ dev_t name_to_dev_t(const char *name)
- 		return Root_RAM0;
- #ifdef CONFIG_BLOCK
- 	if (strncmp(name, "PARTUUID=", 9) == 0)
--		return devt_from_partuuid(name + 9);
-+		return devt_from_partuuid(name + 9, &root_wait);
- 	if (strncmp(name, "PARTLABEL=", 10) == 0)
- 		return devt_from_partlabel(name + 10);
- 	if (strncmp(name, "/dev/", 5) == 0)
+ 	/* everything is up and running, commence */
+ 	err = xa_insert(&disk->part_tbl, partno, bdev, GFP_KERNEL);
+ 	if (err)
 -- 
 2.38.1
 
