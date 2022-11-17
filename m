@@ -2,108 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F250A62D557
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:45:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4DB462D559
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 09:45:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239675AbiKQIpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 03:45:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42946 "EHLO
+        id S239655AbiKQIpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 03:45:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239616AbiKQIpF (ORCPT
+        with ESMTP id S239635AbiKQIpP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 03:45:05 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E32156D4C
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 00:44:56 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id z192so1116611yba.0
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 00:44:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1lf7Fu2NU8oOVwm5w942CLH9CTk4VOKP7yQpZtog5J8=;
-        b=enc9KLtHOv7mlk0BIjzKF+9MkJexMliX0ErGiNqfxFD1U9IRWtNVwHXPn0IiCGgRYE
-         btML7hIgVmIuICxV4/sfY/MAK9U7VXJJSM3thvKGiDC89jcrFFyry1KavBa7BGJLKfRd
-         n/aEWOWe5QafFrcXLI4dDQTewspMPtG+Fki8PILPbHneNu9s0BHUsZ7+76hNAMw53Yby
-         jljDecOqoF0fr/tQqVLo9ACIu9x/Io5zQlHOrmSk0nNEZ4/eNqSC1KhyHz78/Db//t5k
-         ee0b5ospcdBqGEZAF4kAVnUG2FcI5g4Krb/YJ+hSlKizoS5ZmNJsJP9W1Vs1Mm9sa1c6
-         uuYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1lf7Fu2NU8oOVwm5w942CLH9CTk4VOKP7yQpZtog5J8=;
-        b=G1ctsIz1wKx5jQQdxfm5i8TvF0BUv82in+W/OeZDgsFSEjepLmXtWonfvP8OSbNRP3
-         XEw9na+HjEJEdAnJbJVylqVXoI7Vdw6TJEJWEDGvAwDFgFPQdH8vEPZhRBeBHjUA54Fv
-         IAYz6dtAz0zDvtxjnO87dZSdsSxDvzQgZwTga6TiqIcvVuANEruwc9lg0QFpF4bOz45N
-         mH9lFRUS1He/b/jlQWZ8YJ1x9P/A/lzSDfLLX2qpBOqoZ4G52gm2MhvHJDf+KLpY/OfF
-         38F2VfOClzxmlgIZoltU8J0OBt4iEL0bRfrv200wGfna5e25BUsyw52MQQbN1F68vn/Z
-         p7+g==
-X-Gm-Message-State: ANoB5pljqGKXfxkD/6B0M4S3LQZyjvlYfOAHXG08dd7IKmE5TeWSMt3K
-        5DM1Xz/pYT1okwQ3Yz4M/oIv1gtGYFAEZ/ihgaL5qLP6uEdZoQ==
-X-Google-Smtp-Source: AA0mqf7WJJv9XRooqQLl7dJ+OY3dIecNy6LLHCnYzTkHja5wGtFJOIEUIq4zDJ5tJvJD8m+jqxrClKYIEvC8NLPT7Bo=
-X-Received: by 2002:a25:cc15:0:b0:6dd:e342:ca39 with SMTP id
- l21-20020a25cc15000000b006dde342ca39mr1193125ybf.648.1668674695925; Thu, 17
- Nov 2022 00:44:55 -0800 (PST)
+        Thu, 17 Nov 2022 03:45:15 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A2B75131C;
+        Thu, 17 Nov 2022 00:45:05 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1668674702;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MFD4940PdGeyc4AycwTJ7Rt3IIqMoidCx43MEiDgKO8=;
+        b=kqBokhCHAotNmU+TSkdOcKWyM1/wnNaGUoMkcHb+RsWz3C/lY+B79sn+yqdH1QqGEd3dRL
+        OcCowdcDYZFW5GK6M+fp38J6ZWJA3ezRunOT1NGputDqgizUollQLGngmoVPmplggENdsE
+        buR2+9ejzgSdvtNPidMwx51raKkiWoBQhK2syksNlLHd1wcFXMiVgeoXuKyTRoSb4ALfne
+        8wE+2fwCRu9L0Hhv1GyGtxnx2bi/wnJ8OSSjTAybeCA2CKj9JttEHSN2FmbLvAc8xFsZnx
+        0zfPD7WR7c7WiHz5T+ZJ7aBg8acagaPnbUl+Z4AQF3hydkEgpxH6CnoNCdIG9w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1668674702;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MFD4940PdGeyc4AycwTJ7Rt3IIqMoidCx43MEiDgKO8=;
+        b=6I0AWqHA8sWxjMJBVsjmucVVAUGrlP0tM/8kTWAYwM21uvnv5BbpzS4ODOCgLPBdmx2BCE
+        OQiobakl4xvr1VDg==
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
+        Allen Hubbe <allenbh@gmail.com>,
+        "Ahmed S. Darwish" <darwi@linutronix.de>,
+        Reinette Chatre <reinette.chatre@intel.com>
+Subject: Re: [patch 08/20] genirq/msi: Make MSI descriptor iterators device
+ domain aware
+In-Reply-To: <Y3WCN2bAvBvbp/w5@nvidia.com>
+References: <20221111131813.914374272@linutronix.de>
+ <20221111132706.500733944@linutronix.de> <Y3UtlTwIka6n0RuT@nvidia.com>
+ <87wn7uo7io.ffs@tglx> <Y3WCN2bAvBvbp/w5@nvidia.com>
+Date:   Thu, 17 Nov 2022 09:45:02 +0100
+Message-ID: <87zgcqm0kx.ffs@tglx>
 MIME-Version: 1.0
-References: <CAKdx3izLgNJO+5ye4twe0+CFMcUBrFUa+-NdLN6VKKWQ76YiLA@mail.gmail.com>
- <CAADfD8yoBvzs77f6gVO8J9FSZxOkEnkqgAaSCjcfG2YhEZBvcw@mail.gmail.com>
-In-Reply-To: <CAADfD8yoBvzs77f6gVO8J9FSZxOkEnkqgAaSCjcfG2YhEZBvcw@mail.gmail.com>
-From:   Hang An <anhang610@gmail.com>
-Date:   Thu, 17 Nov 2022 16:44:45 +0800
-Message-ID: <CAKdx3izuNmQgyKo0gny1FVESabobbnFVBRNOGVMwgjVSPVcz_A@mail.gmail.com>
-Subject: Re: Can Not Send Netlink Messages with Unshare(CLONE_NEWNET)
-To:     Ozgur <ozgurk@ieee.org>
-Cc:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for your information.
+On Wed, Nov 16 2022 at 20:37, Jason Gunthorpe wrote:
+> On Wed, Nov 16, 2022 at 11:32:15PM +0100, Thomas Gleixner wrote:
+>> On Wed, Nov 16 2022 at 14:36, Jason Gunthorpe wrote:
+>> > On Fri, Nov 11, 2022 at 02:56:50PM +0100, Thomas Gleixner wrote:
+>> >> To support multiple MSI interrupt domains per device it is necessary to
+>> >> segment the xarray MSI descriptor storage. Each domain gets up to
+>> >> MSI_MAX_INDEX entries.
+>> >
+>> > This kinds of suggests that the new per-device MSI domains should hold
+>> > this storage instead of per-device xarray?
+>> 
+>> No, really not. This would create random storage in random driver places
+>> instead of having a central storage place which is managed by the core
+>> code. We've had that back in the days when every architecture had it's
+>> own magic place to store and manage interrupt descriptors. Seen that,
+>> mopped it up and never want to go back.
+>
+> I don't mean shift it into the msi_domain driver logic, I just mean
+> stick an xarray in the struct msi_domain that the core code, and only
+> the core code, manages.
+>
+> But I suppose, on reflection, the strong reason not to do this is that
+> the msi_descriptor array is per-device, and while it would work OK
+> with per-device msi_domains we still have the legacy of global msi
+> domains and thus still need a per-device place to store the global msi
+> domain's per-device descriptors.
 
-Ozgur <ozgurk@ieee.org> =E4=BA=8E2022=E5=B9=B411=E6=9C=8817=E6=97=A5=E5=91=
-=A8=E5=9B=9B 16:35=E5=86=99=E9=81=93=EF=BC=9A
+I tried several approaches but all of them ended up having slightly
+different code pathes and decided to keep everything the same from
+legacy arch over global MSI and the modern per device MSI models.
+
+Due to that some of the constructs are slightly awkward, but the
+important outcome for me was that I ended up with as many shared code
+pathes as possible. Having separate code pathes for all variants is for
+one causing code bloat and what's worse it's a guarantee for divergance
+and maintenance nightmares. As this is setup/teardown management code
+and not the fancy hotpath where we really want to spare cycles, I went
+for the unified model.
+
+> You could have as many secondary domains as is required this way. Few
+> drivers would ever use a secondary domain, so it not really a big deal
+> for them to hold the pointer lifetime.
 >
-> On Thu, Nov 17, 2022 at 11:55 AM Hang An <anhang610@gmail.com> wrote:
-> >
-> > Hi,
-> > A process can not send netlink messages(errno is ECONNREFUSED) after
-> > running unshare(CLONE_NEWNET).
-> >
-> > Part of the call stack when process failed:
-> > netlink_sendmsg
-> > netlink_unicast
-> > netlink_getsockbyportid
-> > netlink_lookup(return NULL)
-> >
-> > The corresponding pseudocode is shown below:
-> > unshare(CLONE_NEWNET) ;
-> > res_socket =3D syscall(__NR_socket, 0x10ul, 3ul, 8);
-> > syscall(__NR_sendmsg, res_socket, msghdr, 0ul);
-> >
-> > I can't understand this situation. Is this a bug or special design?
+>> So what are you concerned about?
 >
-> Hello,
->
-> you have emailed a public linux-kernel list, so this list mainly focus
-> for development. maybe you should use bugzilla(1) to get answers to
-> your questions or you should ask question mentioned own kernel
-> subsystem (2).
->
-> 1. https://bugzilla.kernel.org/
-> 2. Network Subsystem | netdev@vger.kernel.org
->
-> Regards
->
-> >
-> > Thanks.
+> Mostly API clarity, I find it very un-kernly to swap a clear pointer
+> for an ID #. We loose typing, the APIs become less clear and we now
+> have to worry about ID allocation policy if we ever need more than 2.
+
+I don't see an issue with that.
+
+  id = msi_create_device_domain(dev, &template, ...);
+  
+is not much different from:
+
+  ptr = msi_create_device_domain(dev, &template, ...);
+
+But it makes a massive difference vs. encapsulation and pointer leakage.
+
+If you have a stale ID then you can't do harm, a stale pointer very much
+so.
+
+Aside of that once pointers are available people insist on fiddling in
+the guts. As I'm mopping up behind driver writers for the last twenty
+years now, my confidence in them is pretty close to zero.
+
+So I rather be defensive and work towards encapsulation where ever its
+possible. Interrupts are a source of hard to debug subtle bugs, so
+taking the tinkerers the tools away to cause them is a good thing IMO.
+
+Thanks,
+
+        tglx
