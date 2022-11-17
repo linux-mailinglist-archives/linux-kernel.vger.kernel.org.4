@@ -2,147 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74BE362D940
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 12:17:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6004162D919
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 12:11:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233622AbiKQLRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 06:17:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35216 "EHLO
+        id S239241AbiKQLK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 06:10:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239281AbiKQLRw (ORCPT
+        with ESMTP id S239821AbiKQLKG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 06:17:52 -0500
-X-Greylist: delayed 136 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Nov 2022 03:17:50 PST
-Received: from condef-05.nifty.com (condef-05.nifty.com [202.248.20.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C858CF78;
-        Thu, 17 Nov 2022 03:17:50 -0800 (PST)
-Received: from conssluserg-06.nifty.com ([10.126.8.85])by condef-05.nifty.com with ESMTP id 2AHB9cFS027160;
-        Thu, 17 Nov 2022 20:09:38 +0900
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45]) (authenticated)
-        by conssluserg-06.nifty.com with ESMTP id 2AHB9ICE016704;
-        Thu, 17 Nov 2022 20:09:18 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 2AHB9ICE016704
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1668683359;
-        bh=nRWOhJaZ5KAIeF0ENljN/lYw/5/QcrKlraNrZbKSTAM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=XC2ya10TgEd1/8TzhF2Gr0PhHcLAntAWAqf3VAo1zqogYwrVf1xAC3tvJnrHRXzFh
-         sHjUgIADN21SHjC3AlekRf+Ox8MnfToRWl/lqFA1ACbVLm7ZJpIi6OnfrCK3pE8oU8
-         5l4cqD0kU2a7/vQR/icZ605LP0KceNLoT5PP9JI4Wohs1ENeYjSE0Ujm59k966Pbrt
-         ErwMQXOfdT3YtvF91V72VtQ7D/+jXPr2lO1GNZHej2Vn+9R2Y2RqDuTzOaz69kiYFl
-         fnx2jMDesvKTAolXZ3+In6CEeuDnwQASAamQRtGVvps4L0W/7BOeNjfP4VB2CUIPfy
-         5LMj2rvBqAqgw==
-X-Nifty-SrcIP: [209.85.210.45]
-Received: by mail-ot1-f45.google.com with SMTP id p27-20020a056830319b00b0066d7a348e20so812322ots.8;
-        Thu, 17 Nov 2022 03:09:18 -0800 (PST)
-X-Gm-Message-State: ANoB5plBe1FLaMkMcXlr2fMExyNIDzIEM56lNWUhWGi++CQp4q3l0ENz
-        TZwCUrSOfNU0Z6c/IQ19FoRNZ9BWlBG1FGgAPjk=
-X-Google-Smtp-Source: AA0mqf4CK4Q0N+foqWUEAX6p0/4zkzL1fEXSzY2ahsU2bwYk+QeoxrbOBFQOkegMzcI0htIHDXXHFjOXSHp5l74k9/Y=
-X-Received: by 2002:a9d:282:0:b0:66c:794e:f8c6 with SMTP id
- 2-20020a9d0282000000b0066c794ef8c6mr1077050otl.343.1668683357460; Thu, 17 Nov
- 2022 03:09:17 -0800 (PST)
+        Thu, 17 Nov 2022 06:10:06 -0500
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469D351328;
+        Thu, 17 Nov 2022 03:09:24 -0800 (PST)
+Received: by mail-qk1-f175.google.com with SMTP id k4so876777qkj.8;
+        Thu, 17 Nov 2022 03:09:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2upcs92zfHGktv5GNk5iEF5H7csK3b8TJwFhjPNnSO0=;
+        b=PUnUKD8suTSfxsdSC7i5AwKDWJu0WSWIsrvv/MxC0ysFKMAOUlKw4VnsXVVfp6m/0w
+         1h/kU0z0l4jnam1tkOcd+X5KAhWoIJCWp7aTbMgGqNXfJNQIEnUg/tdDce4++WVYh8uY
+         8pb7XXM6dcghAk1ja/Mx6pgjCofmTB/F94WD3hbdVrgf9oJusoPXEeKYreKPfcou5M8d
+         EFPvVs+Gzf2VW/R/zsytbywEf4rSGZ3lhZG7FQ8dPPjRRTxavwZbHimZM5Oafas8Nk3O
+         99+n727dltIH65SqK4EUCBlbaMv5GxBDYIxBWfAqdXanjKnDCbGoJpURtEA4dvhCuBX7
+         F1Rw==
+X-Gm-Message-State: ANoB5pkvwjIqeKCCxkRK5nkGIifQlpIjijpgWVHtSunccvDxTk41QHve
+        OGAFdybHOFqIPjtbe280rggyAj3YUoihag==
+X-Google-Smtp-Source: AA0mqf6v6w1P4R8JnDjLVm4zuWA1AytWJdlmMGCh9w8oRthjj4C9SdeHG91RJYfGF6KbKT3djEyl1w==
+X-Received: by 2002:a37:ad0c:0:b0:6ee:91b3:2484 with SMTP id f12-20020a37ad0c000000b006ee91b32484mr1076992qkm.648.1668683363904;
+        Thu, 17 Nov 2022 03:09:23 -0800 (PST)
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
+        by smtp.gmail.com with ESMTPSA id cc16-20020a05622a411000b003a606428a59sm187236qtb.91.2022.11.17.03.09.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Nov 2022 03:09:23 -0800 (PST)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-381662c78a9so15324287b3.7;
+        Thu, 17 Nov 2022 03:09:22 -0800 (PST)
+X-Received: by 2002:a81:f80f:0:b0:38e:e541:d8ca with SMTP id
+ z15-20020a81f80f000000b0038ee541d8camr1380062ywm.283.1668683362483; Thu, 17
+ Nov 2022 03:09:22 -0800 (PST)
 MIME-Version: 1.0
-References: <20220828024003.28873-1-masahiroy@kernel.org> <20220828024003.28873-6-masahiroy@kernel.org>
- <e98d2048-57ef-4515-8290-ddf6596856f7@nvidia.com>
-In-Reply-To: <e98d2048-57ef-4515-8290-ddf6596856f7@nvidia.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 17 Nov 2022 20:08:39 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASBBiBQw5Cx=NHy7Fs_to6JcAaRrHdbj+prYddxDgb3Kg@mail.gmail.com>
-Message-ID: <CAK7LNASBBiBQw5Cx=NHy7Fs_to6JcAaRrHdbj+prYddxDgb3Kg@mail.gmail.com>
-Subject: Re: [PATCH 05/15] kbuild: build init/built-in.a just once
-To:     Jon Hunter <jonathanh@nvidia.com>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+References: <20221107175305.63975-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20221107175305.63975-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20221107175305.63975-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 17 Nov 2022 12:09:11 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdW9K=gd7F-G-7v0J5Mz8jyZa_Vu3UZWsNZin76tff7f3g@mail.gmail.com>
+Message-ID: <CAMuHMdW9K=gd7F-G-7v0J5Mz8jyZa_Vu3UZWsNZin76tff7f3g@mail.gmail.com>
+Subject: Re: [PATCH RFC 2/5] pinctrl: renesas: rzg2l: Fix configuring the GPIO
+ pins as interrupts
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 7:00 PM Jon Hunter <jonathanh@nvidia.com> wrote:
+Hi Prabhakar,
+
+On Mon, Nov 7, 2022 at 6:53 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 >
-> Hi Masahiro
+> On the RZ/G2UL SoC we have less number of pins compared to RZ/G2L and also
+> the pin configs are completely different. This patch makes sure we use the
+> appropriate pin configs for each SoC (which is passed as part of the OF
+> data) while configuring the GPIO pin as interrupts instead of using
+> rzg2l_gpio_configs[] for all the SoCs.
 >
-> On 28/08/2022 03:39, Masahiro Yamada wrote:
-> > Kbuild builds init/built-in.a twice; first during the ordinary
-> > directory descending, second from scripts/link-vmlinux.sh.
-> >
-> > We do this because UTS_VERSION contains the build version and the
-> > timestamp. We cannot update it during the normal directory traversal
-> > since we do not yet know if we need to update vmlinux. UTS_VERSION is
-> > temporarily calculated, but omitted from the update check. Otherwise,
-> > vmlinux would be rebuilt every time.
-> >
-> > When Kbuild results in running link-vmlinux.sh, it increments the
-> > version number in the .version file and takes the timestamp at that
-> > time to really fix UTS_VERSION.
-> >
-> > However, updating the same file twice is a footgun. To avoid nasty
-> > timestamp issues, all build artifacts that depend on init/built-in.a
-> > must be atomically generated in link-vmlinux.sh, where some of them
-> > do not need rebuilding.
-> >
-> > To fix this issue, this commit changes as follows:
-> >
-> > [1] Split UTS_VERSION out to include/generated/utsversion.h from
-> >      include/generated/compile.h
-> >
-> >      include/generated/utsversion.h is generated just before the
-> >      vmlinux link. It is generated under include/generated/ because
-> >      some decompressors (s390, x86) use UTS_VERSION.
-> >
-> > [2] Split init_uts_ns and linux_banner out to init/version-timestamp.c
-> >      from init/version.c
-> >
-> >      init_uts_ns and linux_banner contain UTS_VERSION. During the ordinary
-> >      directory descending, they are compiled with __weak and used to
-> >      determine if vmlinux needs relinking. Just before the vmlinux link,
-> >      they are compiled without __weak to embed the real version and
-> >      timestamp.
-> >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
->
->
-> Since this change I have noticed that the kernel image (at least on ARM64) now contains two version strings ...
->
-> $ strings arch/arm64/boot/Image | grep "Linux version"
-> Linux version 6.0.0-rc7-00011-g2df8220cc511 (jonathanh@moonraker) (aarch64-linux-gnu-gcc (Linaro GCC 6.4-2017.08) 6.4.1 20170707, GNU ld (Linaro_Binutils-2017.08) 2.27.0.20161019) # SMP PREEMPT
-> Linux version 6.0.0-rc7-00011-g2df8220cc511 (jonathanh@moonraker) (aarch64-linux-gnu-gcc (Linaro GCC 6.4-2017.08) 6.4.1 20170707, GNU ld (Linaro_Binutils-2017.08) 2.27.0.20161019) #20 SMP PREEMPT Thu Nov 17 09:49:18 GMT 2022
->
-> Is this expected?
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
+Thanks for your patch!
 
-Yes.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+But I do think there is room for improvement...
 
-The first line is a weak (i.e. unused) symbol.
-The second one is a real one.
+> --- a/drivers/pinctrl/renesas/pinctrl-rzg2l.c
+> +++ b/drivers/pinctrl/renesas/pinctrl-rzg2l.c
+> @@ -127,6 +127,7 @@ struct rzg2l_dedicated_configs {
+>  struct rzg2l_pinctrl_data {
+>         const char * const *port_pins;
+>         const u32 *port_pin_configs;
+> +       unsigned int n_port_pin_configs;
 
+n_ports?
 
-2df8220cc511326508ec4da2f43ef69311bdd7b9 fixed up
-arch/powerpc/boot/wrapper because it grep's vmlinux.
+>         struct rzg2l_dedicated_configs *dedicated_pins;
+>         unsigned int n_port_pins;
 
+n_port_pins is now always n_port_pin_configs * RZG2L_PINS_PER_PORT,
+right?
 
-The weak symbols slightly increase the image size, but
-I do not know how to do this better.
+>         unsigned int n_dedicated_pins;
 
+> @@ -1517,6 +1518,7 @@ static int rzg2l_pinctrl_probe(struct platform_device *pdev)
+>  static struct rzg2l_pinctrl_data r9a07g043_data = {
+>         .port_pins = rzg2l_gpio_names,
+>         .port_pin_configs = r9a07g043_gpio_configs,
+> +       .n_port_pin_configs = ARRAY_SIZE(r9a07g043_gpio_configs),
+>         .dedicated_pins = rzg2l_dedicated_pins.common,
+>         .n_port_pins = ARRAY_SIZE(r9a07g043_gpio_configs) * RZG2L_PINS_PER_PORT,
+>         .n_dedicated_pins = ARRAY_SIZE(rzg2l_dedicated_pins.common),
+> @@ -1525,6 +1527,7 @@ static struct rzg2l_pinctrl_data r9a07g043_data = {
+>  static struct rzg2l_pinctrl_data r9a07g044_data = {
+>         .port_pins = rzg2l_gpio_names,
 
+.port_pins is always rzg2l_gpio_names
 
+>         .port_pin_configs = rzg2l_gpio_configs,
+> +       .n_port_pin_configs = ARRAY_SIZE(rzg2l_gpio_configs),
+>         .dedicated_pins = rzg2l_dedicated_pins.common,
+>         .n_port_pins = ARRAY_SIZE(rzg2l_gpio_names),
 
+I think this should have become
+ARRAY_SIZE(rzg2l_gpio_configs) * RZG2L_PINS_PER_PORT)
+when support for r9a07g043 was introduced.
 
+To avoid overflows when adding support for more SoCs, you can add a
+bunch of checks like
 
-> Thanks!
-> Jon
->
-> --
-> nvpublic
+    BUILD_BUG_ON(ARRAY_SIZE(r9a07g043_gpio_configs) *
+RZG2L_PINS_PER_PORT > ARRAY_SIZE(rzg2l_gpio_names))
+    BUILD_BUG_ON(ARRAY_SIZE(rzg2l_gpio_configs) * RZG2L_PINS_PER_PORT
+> ARRAY_SIZE(rzg2l_gpio_names))
 
+>         .n_dedicated_pins = ARRAY_SIZE(rzg2l_dedicated_pins.common) +
 
+Gr{oetje,eeting}s,
 
--- 
-Best Regards
-Masahiro Yamada
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
