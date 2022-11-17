@@ -2,244 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8F6562D1F1
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 04:59:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DF1662D1FA
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 05:01:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233888AbiKQD7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 22:59:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33358 "EHLO
+        id S238865AbiKQEBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 23:01:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234913AbiKQD7O (ORCPT
+        with ESMTP id S230114AbiKQEA4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 22:59:14 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 559794B9B4;
-        Wed, 16 Nov 2022 19:59:11 -0800 (PST)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8Dx_NiOsXVjJSkIAA--.23288S3;
-        Thu, 17 Nov 2022 11:59:10 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx_1eIsXVjnacVAA--.57258S3;
-        Thu, 17 Nov 2022 11:59:09 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Juxin Gao <gaojuxin@loongson.cn>,
-        Bibo Mao <maobibo@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        Arnaud Patard <apatard@mandriva.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v4 2/2] dt-bindings: gpio: add loongson gpio
-Date:   Thu, 17 Nov 2022 11:59:02 +0800
-Message-Id: <20221117035902.13995-2-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221117035902.13995-1-zhuyinbo@loongson.cn>
-References: <20221117035902.13995-1-zhuyinbo@loongson.cn>
+        Wed, 16 Nov 2022 23:00:56 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF1B125C4F;
+        Wed, 16 Nov 2022 20:00:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668657655; x=1700193655;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=yvUNacKCFJ1BVbBYtYVdkZ8/ge4T+GWmlXe8+ILX1X8=;
+  b=JtGKIVLfJISsyW43mveKBwACQWEP4qWe5FRdVmeLmC+HUxHCRPyIjYuH
+   /bTu7MGZxb+5HygdIVxqs3fhgVloJ9z0N0aGsSKktH/KaFiI95WFwElb4
+   SuTkcUfk+whQrTAjLL9bu/B6fNvf/mLAMFheUj2X5uwsPEsZdCW7Nhz+6
+   cZx/palErh3LOfRfR2HKaKi9+CgKnO44yJELPPDBZ0hCTdcvko9bSFdfX
+   9n2E1/Da0iEGhRQtJb3CLd+EaHXIR4umFKol851S7AG8on/JfW4XFFmbT
+   HWzcGN0s+0BdW1YZSFuOSA7ko4P+BI8T4hU9I+aNcjVzIlaaOkHMBMC3z
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="292455948"
+X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
+   d="scan'208";a="292455948"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 20:00:55 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="590462640"
+X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
+   d="scan'208";a="590462640"
+Received: from jithujos.sc.intel.com ([172.25.103.66])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 20:00:54 -0800
+From:   Jithu Joseph <jithu.joseph@intel.com>
+To:     hdegoede@redhat.com, markgross@kernel.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        gregkh@linuxfoundation.org, jithu.joseph@intel.com,
+        ashok.raj@intel.com, tony.luck@intel.com,
+        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        patches@lists.linux.dev, ravi.v.shankar@intel.com,
+        thiago.macieira@intel.com, athenas.jimenez.gonzalez@intel.com,
+        sohil.mehta@intel.com
+Subject: [PATCH v3 00/16] IFS multi test image support and misc changes
+Date:   Wed, 16 Nov 2022 19:59:19 -0800
+Message-Id: <20221117035935.4136738-1-jithu.joseph@intel.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221107225323.2733518-1-jithu.joseph@intel.com>
+References: <20221107225323.2733518-1-jithu.joseph@intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Dx_1eIsXVjnacVAA--.57258S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxXF47tFy8Ww43XFy5Gw4xXrb_yoWruF4xp3
-        WDZFZxX3y2grnxtFs8Ka17Zr4xAr1kC3WrurnxC3yxtrWUKwn8XFWfWFykG3Z3WrWUXF17
-        JwsrurWrta43Aw7anT9S1TB71UUUUjJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bfkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUAVWUZwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_JF0_Jw1le2I262IYc4CY
-        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x
-        0EwIxGrwCF04k20xvE74AGY7Cv6cx26rWl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xF
-        xVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWw
-        C2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_
-        Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJV
-        WUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIY
-        CTnIWIevJa73UjIFyTuYvjxU24EEUUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the Loongson platform gpio binding with DT schema format using
-json-schema.
+Changes in v3
+ - Rebased ontop of v6.1-rc5
+ - Added reviewed-by tags from Sohil and Hans
+ Boris
+   - Moved dynamic memory allocation from scan_chunks_sanity_check()
+      to driver init (patch 4)
+   - Split v2's Expose microcode_sanity_check(), into 2 separate patches
+      (patch 7 and patch8).
+   - Add kerneldoc style comment to intel_microcode_sanity_check() and
+      change parameter name to hdr_type instead of hdr_ver (patch 8)
+   - Remove ifs_ prefix from static functions (patch 10, patch11)
+   - Rename macro names more appropriately (patch10, patch8, patch12)
+   - Remove obvious "what" from certain commit messages
+   - Fix typos and wordings
+  Dave
+   - Use union to describe ifs meta_data structure and use u32 types
+  Sohil
+   - Use unsigned int to store current_batch (patch 11, patch 14)
+   - Fix an inadvertent mistake in microcode_sanity_check (patch 7)
+   - Fix wordings
 
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
-Change in v4:
-		1. Remove the string "series".
-		2. Add the reviewed-by information.
-Change in v3:
-		1. Separate some changes of MAINTAINERS file and enter the first patch.
-Change in v2:
-		1. Drop "loongson,gpio_base" and "gpio-ranges" will cover it.
-		1. Drop "loongson,conf_offset", "loongson,out_offset", "loongson,in_offset",
-		   "loongson,support_irq" and kernel driver will initial them that depend
-		   compatible in kernel.
-		3. Fixup maintainer for this driver.
+v2 patches available from
+Link: https://lore.kernel.org/lkml/20221107225323.2733518-1-jithu.joseph@intel.com/
 
- .../bindings/gpio/loongson,ls-gpio.yaml       | 126 ++++++++++++++++++
- MAINTAINERS                                   |   1 +
- 2 files changed, 127 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/gpio/loongson,ls-gpio.yaml
+Changes in v2
+ - Rebased ontop of v6.1-rc4
+ Boris
+   - Moved exported functions (microcode_sanity_check(),
+      find_matching_signature ) from microcode/intel.c to cpu/intel.c 
+      (patch4,6)
+   - Removed microcode metadata specific code changes to
+      microcode_sanity_check() (patch6)
+   - Moved find_meta_data() from common to IFS driver (Patch 8)
+  Sohil
+   - Dropped portions of Patch2 from v1 and folded remaining to Patch12
+   - Rewording multiple commits
+   - Avoid meta prefix in fields of metadata_header (patch8)
+   - Defining MICROCODE_HEADER_VER* into common location (patch6, 9)
+   - Elaborating error messages w.r.t processor flags (patch9)
+   - Changed sysfs_emit() parameter (patch 11)
 
-diff --git a/Documentation/devicetree/bindings/gpio/loongson,ls-gpio.yaml b/Documentation/devicetree/bindings/gpio/loongson,ls-gpio.yaml
-new file mode 100644
-index 000000000000..fb86e8ce6349
---- /dev/null
-+++ b/Documentation/devicetree/bindings/gpio/loongson,ls-gpio.yaml
-@@ -0,0 +1,126 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/gpio/loongson,ls-gpio.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Loongson GPIO controller.
-+
-+maintainers:
-+  - Yinbo Zhu <zhuyinbo@loongson.cn>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - loongson,ls2k-gpio
-+      - loongson,ls7a-gpio
-+
-+  reg:
-+    maxItems: 1
-+
-+  ngpios:
-+    minimum: 1
-+    maximum: 64
-+
-+  "#gpio-cells":
-+    const: 2
-+
-+  gpio-controller: true
-+
-+  gpio-ranges: true
-+
-+  interrupts:
-+    minItems: 1
-+    maxItems: 64
-+
-+required:
-+  - compatible
-+  - reg
-+  - ngpios
-+  - "#gpio-cells"
-+  - gpio-controller
-+  - gpio-ranges
-+  - interrupts
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    gpio0: gpio@1fe00500 {
-+      compatible = "loongson,ls2k-gpio";
-+      reg = <0x1fe00500 0x38>;
-+      ngpios = <64>;
-+      #gpio-cells = <2>;
-+      gpio-controller;
-+      gpio-ranges = <&pctrl 0 0 15>,
-+                    <&pctrl 16 16 15>,
-+                    <&pctrl 32 32 10>,
-+                    <&pctrl 44 44 20>;
-+      interrupt-parent = <&liointc1>;
-+      interrupts = <28 IRQ_TYPE_LEVEL_LOW>,
-+                   <29 IRQ_TYPE_LEVEL_LOW>,
-+                   <30 IRQ_TYPE_LEVEL_LOW>,
-+                   <30 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <>,
-+                   <>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>;
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 838b920efcef..62c5499e4159 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12056,6 +12056,7 @@ M:	Huacai Chen <chenhuacai@kernel.org>
- M:	Yinbo Zhu <zhuyinbo@loongson.cn>
- L:	linux-gpio@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/gpio/loongson,ls-gpio.yaml
- F:	drivers/gpio/gpio-loongson.c
- F:	include/linux/platform_data/gpio-loongson.h
- 
+v1 patches available from
+Link: https://lore.kernel.org/lkml/20221021203413.1220137-1-jithu.joseph@intel.com/
+
+Initial implementation of IFS driver assumed a single IFS test image
+file with a fixed name.
+
+Subsequently, it became evident that supporting more than one
+test image file is needed to provide more comprehensive
+test coverage. (Test coverage in this scenario refers to testing
+more transistors in the core to identify faults).
+
+This series makes the driver aware of multiple scan test image files,
+modifies IFS test image file headers to make it fully compatible
+with microcode headers and adds a few other bug fixes and changes.
+
+Patch organization:
+Patches 1, and 2: bug fixes
+Patch 3: Removes image loading during init path 
+Patch 4: Move memory allocation from load to init path
+Patch 5, 6, 7, 8: exports a couple of microcode/intel.c functions
+                  for use by driver
+
+Rest of them are IFS driver changes
+Patch 9,10 and 12: microcode/IFS metadata section related
+Patches 11: IFS header format changes to make it fully compatible
+           to intel microcode header format
+Patches 13, 14 and 15: native support for multiple scan test image files
+Patch 16: reverts the broken flag
+
+Ashok Raj (1):
+  platform/x86/intel/ifs: Add metadata support
+
+Jithu Joseph (15):
+  platform/x86/intel/ifs: Remove unused selection
+  platform/x86/intel/ifs: Return a more appropriate Error code
+  platform/x86/intel/ifs: Remove image loading during init
+  platform/x86/intel/ifs: Remove memory allocation from load path
+  x86/microcode/intel: Reuse find_matching_signature()
+  x86/microcode/intel: Use appropriate type in microcode_sanity_check()
+  x86/microcode/intel: Reuse microcode_sanity_check()
+  x86/microcode/intel: Add hdr_type to intel_microcode_sanity_check()
+  x86/microcode/intel: Use a reserved field for metasize
+  platform/x86/intel/ifs: Use generic microcode headers and functions
+  platform/x86/intel/ifs: Add metadata validation
+  platform/x86/intel/ifs: Remove reload sysfs entry
+  platform/x86/intel/ifs: Add current_batch sysfs entry
+  Documentation/ABI: Update IFS ABI doc
+  Revert "platform/x86/intel/ifs: Mark as BROKEN"
+
+ arch/x86/include/asm/cpu.h                    |   2 +
+ arch/x86/include/asm/microcode_intel.h        |   5 +-
+ drivers/platform/x86/intel/ifs/ifs.h          |  27 ++-
+ arch/x86/kernel/cpu/intel.c                   | 141 +++++++++++
+ arch/x86/kernel/cpu/microcode/intel.c         | 146 +-----------
+ drivers/platform/x86/intel/ifs/core.c         |  14 +-
+ drivers/platform/x86/intel/ifs/load.c         | 218 ++++++++++--------
+ drivers/platform/x86/intel/ifs/runtest.c      |  10 +-
+ drivers/platform/x86/intel/ifs/sysfs.c        |  41 ++--
+ .../ABI/testing/sysfs-platform-intel-ifs      |  30 +--
+ drivers/platform/x86/intel/ifs/Kconfig        |   4 -
+ 11 files changed, 356 insertions(+), 282 deletions(-)
+
+
+base-commit: 094226ad94f471a9f19e8f8e7140a09c2625abaa
 -- 
-2.31.1
+2.25.1
 
