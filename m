@@ -2,165 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFD6362DBFE
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 13:52:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A711462DC08
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 13:54:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234911AbiKQMwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 07:52:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47744 "EHLO
+        id S234774AbiKQMyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 07:54:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239711AbiKQMvp (ORCPT
+        with ESMTP id S234528AbiKQMxa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 07:51:45 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9386D56EF8
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 04:51:41 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id x21so2534719ljg.10
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 04:51:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ivOtpXTOVxqAUn1+lH6HKSHAv64mRXc3v+PCvhSh3nM=;
-        b=jCOO/9/1ZgQUAToy/jlfSV/3OEUGI6uZiLwvNVaOGz8jE8IZ3zHrQ/QCxv1m/P5efU
-         RhxqS6Y4LwUGVy7G22ZyeVaWp9U8qSQnkI4CLp5EEhgn+p3Jmws70lg5gsIffMsnOyjO
-         gVTlx5toTuKOg2R56XWkdR6UiMlzYMCAqcsxKvg1ofH4BaHRr1cftJOnAFK5kUrYFGEx
-         Rt2dw+EiKDdA3R6KWrsNF5fwdOU6FR/qDxUSIo+/cHHfv+/TU7Q+h8VJgi7qwu8k0Yrq
-         aAJeUZSndB3/8SSaUh8eo8QLvVD1NBYjqu3/JgYpCVUel99eObeBMpDy3Fsskfrqj80b
-         uxqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ivOtpXTOVxqAUn1+lH6HKSHAv64mRXc3v+PCvhSh3nM=;
-        b=dcP2v6sKm1vUSLEtCR+qqv+9eNJi0RAH/OJzBJMnCpqgpeuegfWwwuIeNvBMlmx9F2
-         GeuKCNbTtF2HQ73XUWQdRoIB7BXC62QF/koxjigStJ51Z3Fl9GE6SjHAvMXVDcyot+NO
-         Rl2NJ72zCoBW+D+gm782IJMERy8gztFxGgEA+i+nwn2tDHYFoxw7ssxgZ7nh0g4kkgju
-         uYNVy4mrPwCZQLKGr6bLl1hSQRS7GaAySxIpgfw7BgwZpU/caynk/KmQL7roBwrXlrYH
-         vt0tkjuGPSpPCj70v+GIyKaROwneQmdXvZ6GuO2K0fmUgjzFtj3WnV03VQWVs5i+JEBz
-         UqFg==
-X-Gm-Message-State: ANoB5pmnOYR1GVNTdnUot9yx5vCmQSYEa6W0QyZbbLWp9bpgbTwDhIax
-        Gl1GL+t2vRrQ8F3xTykg062Rdw==
-X-Google-Smtp-Source: AA0mqf5txKZD1DtAJuOvDYd5A5Lz3o/9OuyIeJ6s9Hg+26PK3VHEPiIPbuMHEN2xQuGxdqE38Tq0Tw==
-X-Received: by 2002:a05:651c:150c:b0:277:c7c:c573 with SMTP id e12-20020a05651c150c00b002770c7cc573mr956141ljf.316.1668689499998;
-        Thu, 17 Nov 2022 04:51:39 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id m7-20020a056512358700b004b4b69af17dsm133528lfr.214.2022.11.17.04.51.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Nov 2022 04:51:39 -0800 (PST)
-Message-ID: <76560659-7c90-3846-c250-24bfb072ec0e@linaro.org>
-Date:   Thu, 17 Nov 2022 13:51:38 +0100
+        Thu, 17 Nov 2022 07:53:30 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6291C12612
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 04:53:28 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7FEBE1063;
+        Thu, 17 Nov 2022 04:53:34 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.70.181])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 13FBC3F663;
+        Thu, 17 Nov 2022 04:53:26 -0800 (PST)
+Date:   Thu, 17 Nov 2022 12:53:24 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64/mm: Drop unused restore_ttbr1
+Message-ID: <Y3YuxAHeXS5FXPeG@FVFF77S0Q05N>
+References: <20221117123144.403582-1-anshuman.khandual@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 03/10] arm64: dts: qcom: Add pm8010 pmic dtsi
-Content-Language: en-US
-To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-References: <20221116103146.2556846-1-abel.vesa@linaro.org>
- <20221116103146.2556846-4-abel.vesa@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221116103146.2556846-4-abel.vesa@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221117123144.403582-1-anshuman.khandual@arm.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/11/2022 11:31, Abel Vesa wrote:
-> From: Neil Armstrong <neil.armstrong@linaro.org>
+On Thu, Nov 17, 2022 at 06:01:44PM +0530, Anshuman Khandual wrote:
+> restore_ttbr1 procedure is not used anywhere, hence just drop it.
 > 
-> Add nodes for pm8010 in separate dtsi file.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+
+Acked-by: Mark Rutland <mark.rutland@arm.com>
+
+Mark.
+
 > ---
->  arch/arm64/boot/dts/qcom/pm8010.dtsi | 84 ++++++++++++++++++++++++++++
->  1 file changed, 84 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/pm8010.dtsi
+> This applies on v6.1-rc5
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/pm8010.dtsi b/arch/arm64/boot/dts/qcom/pm8010.dtsi
-> new file mode 100644
-> index 000000000000..0ea641e12209
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/pm8010.dtsi
-> @@ -0,0 +1,84 @@
-> +// SPDX-License-Identifier: BSD-3-Clause
-
-Any reason why this is licensed BSD-3 clause? It's not a recommended
-license (2 clause is). Same for other patches.
-
-> +/*
-> + * Copyright (c) 2022, Linaro Limited
-> + */
-> +
-> +#include <dt-bindings/interrupt-controller/irq.h>
-> +#include <dt-bindings/spmi/spmi.h>
-> +
-> +/ {
-> +	thermal-zones {
-> +		pm8010-m-thermal {
-> +			polling-delay-passive = <100>;
-> +			polling-delay = <0>;
-> +
-> +			thermal-sensors = <&pm8010_m_temp_alarm>;
-> +
-> +			trips {
-> +				trip0 {
-> +					temperature = <95000>;
-> +					hysteresis = <0>;
-> +					type = "passive";
-> +				};
-> +
-> +				trip1 {
-> +					temperature = <115000>;
-> +					hysteresis = <0>;
-> +					type = "hot";
-> +				};
-> +			};
-> +		};
-> +
-> +		pm8010-n-thermal {
-> +			polling-delay-passive = <100>;
-> +			polling-delay = <0>;
-> +
-> +			thermal-sensors = <&pm8010_n_temp_alarm>;
-> +
-> +			trips {
-> +				trip0 {
-> +					temperature = <95000>;
-> +					hysteresis = <0>;
-> +					type = "passive";
-> +				};
-> +
-> +				trip1 {
-> +					temperature = <115000>;
-> +					hysteresis = <0>;
-> +					type = "hot";
-> +				};
-> +			};
-> +		};
-> +	};
-> +};
-> +
-> +
-
-Just one blank line.
-
-
-Best regards,
-Krzysztof
-
+>  arch/arm64/include/asm/assembler.h | 11 -----------
+>  1 file changed, 11 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/assembler.h b/arch/arm64/include/asm/assembler.h
+> index e5957a53be39..f13bc52ab347 100644
+> --- a/arch/arm64/include/asm/assembler.h
+> +++ b/arch/arm64/include/asm/assembler.h
+> @@ -619,17 +619,6 @@ alternative_endif
+>  #endif
+>  	.endm
+>  
+> -/*
+> - * Perform the reverse of offset_ttbr1.
+> - * bic is used as it can cover the immediate value and, in future, won't need
+> - * to be nop'ed out when dealing with 52-bit kernel VAs.
+> - */
+> -	.macro	restore_ttbr1, ttbr
+> -#ifdef CONFIG_ARM64_VA_BITS_52
+> -	bic	\ttbr, \ttbr, #TTBR1_BADDR_4852_OFFSET
+> -#endif
+> -	.endm
+> -
+>  /*
+>   * Arrange a physical address in a TTBR register, taking care of 52-bit
+>   * addresses.
+> -- 
+> 2.25.1
+> 
