@@ -2,124 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B71662CFA2
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 01:31:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25E6462CFC7
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 01:34:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233859AbiKQAbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 19:31:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59856 "EHLO
+        id S233199AbiKQAeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 19:34:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231394AbiKQAbU (ORCPT
+        with ESMTP id S231300AbiKQAeS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 19:31:20 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9442545A08
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 16:31:19 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id c15-20020a17090a1d0f00b0021365864446so422437pjd.4
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 16:31:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bfYTHCNCtdWeHJf9pplhisQ2FfqYgZ1s/D8ukZJ0aF0=;
-        b=noLKefdE/A5/nbmTvR6mJw3cGxk/a7fIL83IBp5Ph1Sax30+McHCvDQ9202nLf5uce
-         hPc2gZOe0LsvudzlGDyBmEAgwDGtCwPT27+S6nCdQzTHR81ueFyHGEG25Bj0t5HJUYw6
-         csu11i/pEoPga4S6lvqc8FbzvURZMsHN35+PY=
+        Wed, 16 Nov 2022 19:34:18 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B272231355
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 16:34:16 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id l4-20020a056e021aa400b00300ad9535c8so245031ilv.1
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 16:34:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bfYTHCNCtdWeHJf9pplhisQ2FfqYgZ1s/D8ukZJ0aF0=;
-        b=5Xnfi/iQqjMiYmI8usga7ZVjed31z1HyFaoO5zqaJdmn8eN5vxV6/fPGAT0wWGdjjI
-         pW1L7EjratzIleJVyi7KxMdj9xPSNU77qdF40aGo6wu1hqrGvdCFCEo/QshY0v8p6Rpb
-         xUXL8/Str08f01lwlJI8O24dL0TX7++cHAAGc8FWgPz99v+V8iIPzpX8jawiVQQA7sVC
-         CGaHl1V+BMcBR35sOfPpLcFD2xnKnZQrmYM7Fvc5piJupkpMreu9ZsXrlqaA1V/ihjvi
-         wV3ByneHhM1uifGdqnciw0aAlSLuUmA1ynoTzN+hpnSaHzrv08+9MOxuW+Xiw2HQbgj1
-         motw==
-X-Gm-Message-State: ANoB5plnf+KYAjS2GJLS12lqrfAWi4IZMumWW2Y4eK4c6giAafGVT7sj
-        e+uW7DF1GnnBq00/03Bvve5j/Q==
-X-Google-Smtp-Source: AA0mqf5LCeBMlQYf9iRokqtAPq5JSpm9R+EnXlxq59oA8dqbtgC+he2PCZJy9QgLdGN/YL6SFM4OFA==
-X-Received: by 2002:a17:90a:6949:b0:213:188c:158d with SMTP id j9-20020a17090a694900b00213188c158dmr343097pjm.11.1668645079035;
-        Wed, 16 Nov 2022 16:31:19 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id s1-20020a170902ea0100b00174f61a7d09sm12946657plg.247.2022.11.16.16.31.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 16:31:18 -0800 (PST)
-Date:   Wed, 16 Nov 2022 16:31:18 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Christoph =?iso-8859-1?Q?B=F6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        "Darrick J . Wong" <djwong@kernel.org>,
-        SeongJae Park <sj@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Helge Deller <deller@gmx.de>, netdev@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-mmc@vger.kernel.org, linux-parisc@vger.kernel.org,
-        ydroneaud@opteya.com
-Subject: Re: [PATCH v2 3/3] treewide: use get_random_u32_between() when
- possible
-Message-ID: <202211161628.164F47F@keescook>
-References: <20221114164558.1180362-1-Jason@zx2c4.com>
- <20221114164558.1180362-4-Jason@zx2c4.com>
- <202211161436.A45AD719A@keescook>
- <Y3V4g8eorwiU++Y3@zx2c4.com>
- <Y3V6QtYMayODVDOk@zx2c4.com>
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=C7fpKRtzxmuZr+pixes1vS//11B89ShTFWKOGGoP3bY=;
+        b=OVQfj2MjT9cOJ43+PfL+dzbcojonkAKLyXecFWqHHhaG+riPNIQzTcbZA8jcecs5IV
+         z+nFx/Lns/eAaNfsBsEDhtAUmVshFPtdaTcdh9lqKWMjxjjtVaiKadm7pFf53ex1X1a8
+         tsuackTPXf+QORy89Rrq6La6oPsjzDm8oYLfYIEZL+V9ynKbgDDU1OGD2LdsKSrjp5r2
+         MbcUuP3GK7WLsiFCVQ9vb7emkFT+AcOCvDZoshpeAy+OuKfe8Zm6owSSg/8JAG4SFYzo
+         LdU6EYzd146cSD4hguWx6gib47nwxsa3yenC0lx1HChAMIVK/vdAmYVGXNIw8Mw++wx/
+         2zoA==
+X-Gm-Message-State: ANoB5pkSdmsiKJCB+0Dm922ZiVdLWXgN9qaAqkqN1kZhmRvEAUc4Zs2d
+        a6jyiani/YqWdgui5UjoUDFAuU9XZ4hs4UmKaQDREL8VFURd
+X-Google-Smtp-Source: AA0mqf5Fv/E/JgjNAnqCkyuAiMmMi01LvbjF2o+YeCzfvfXdDg1r0D/72ROyAB0i/hDxy2hmfUqb6clFk0u135HlVI/OLpTGyQtn
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y3V6QtYMayODVDOk@zx2c4.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:1918:b0:375:4dbf:6ca4 with SMTP id
+ p24-20020a056638191800b003754dbf6ca4mr11160143jal.315.1668645256039; Wed, 16
+ Nov 2022 16:34:16 -0800 (PST)
+Date:   Wed, 16 Nov 2022 16:34:16 -0800
+In-Reply-To: <00000000000058983805ed944512@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000be110905ed9fbf49@google.com>
+Subject: Re: [syzbot] BUG: unable to handle kernel NULL pointer dereference in nci_send_cmd
+From:   syzbot <syzbot+4adf5ff0f6e6876c6a81@syzkaller.appspotmail.com>
+To:     bongsu.jeon@samsung.com, clement.perrochaud@nxp.com,
+        davem@davemloft.net, edumazet@google.com,
+        krzysztof.kozlowski@linaro.org, kuba@kernel.org,
+        kylin.formalin@gmail.com, linma@zju.edu.cn,
+        linux-kernel@vger.kernel.org, michael.thalmeier@hale.at,
+        netdev@vger.kernel.org, pabeni@redhat.com, r.baldyga@samsung.com,
+        robert.dolca@intel.com, sameo@linux.intel.com, shikha.singh@st.com,
+        syzkaller-bugs@googlegroups.com, thierry.escande@linux.intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 01:03:14AM +0100, Jason A. Donenfeld wrote:
-> On Thu, Nov 17, 2022 at 12:55:47AM +0100, Jason A. Donenfeld wrote:
-> > 2) What to call it:
-> >    - between I still like, because it mirrors "I'm thinking of a number
-> >      between 1 and 10 and..." that everybody knows,
-> >    - inclusive I guess works, but it's not a preposition,
-> >    - bikeshed color #3?
-> 
-> - between
-> - ranged
-> - spanning
-> 
-> https://www.thefreedictionary.com/List-of-prepositions.htm
-> - amid
-> 
-> Sigh, names.
+syzbot has bisected this issue to:
 
-I think "inclusive" is best. The other words still don't provide
-unambiguous language. It's the language used in formal math, e.g.
-sigma-notation, etc. It's an adjective for "get random" (verb, noun).
+commit e624e6c3e777fb3dfed036b9da4d433aee3608a5
+Author: Bongsu Jeon <bongsu.jeon@samsung.com>
+Date:   Wed Jan 27 13:08:28 2021 +0000
 
--- 
-Kees Cook
+    nfc: Add a virtual nci device driver
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1338e6e9880000
+start commit:   81e7cfa3a9eb Merge tag 'erofs-for-6.1-rc6-fixes' of git://..
+git tree:       upstream
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=10b8e6e9880000
+console output: https://syzkaller.appspot.com/x/log.txt?x=1738e6e9880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a2318f9a4fc31ad
+dashboard link: https://syzkaller.appspot.com/bug?extid=4adf5ff0f6e6876c6a81
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11f435be880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1134d295880000
+
+Reported-by: syzbot+4adf5ff0f6e6876c6a81@syzkaller.appspotmail.com
+Fixes: e624e6c3e777 ("nfc: Add a virtual nci device driver")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
