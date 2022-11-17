@@ -2,164 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3266F62E528
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 20:17:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B508562E526
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 20:17:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240786AbiKQTRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 14:17:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33016 "EHLO
+        id S240595AbiKQTQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 14:16:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240781AbiKQTRJ (ORCPT
+        with ESMTP id S240547AbiKQTQy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 14:17:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F68B88FBE
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 11:16:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668712567;
+        Thu, 17 Nov 2022 14:16:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C44AA7EC9D;
+        Thu, 17 Nov 2022 11:16:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BBAE62227;
+        Thu, 17 Nov 2022 19:16:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE291C433C1;
+        Thu, 17 Nov 2022 19:16:51 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="j3kl+t6Q"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1668712609;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qX7k7ySpM2yQbDcfvA3eNm9gzjLpcHZv9S182SN9z64=;
-        b=clqnlk9goL53y1z0NmAvF6hBrWCq9rJiipB8dF0Y2+O4uKTwXZrDaJhSXZXHHQxyvYrDpU
-        MOB1q6u/0AG7OdtPbcuxNWHQEIqjtFFblvFm7U243i9BIF4bxL3PJV/WkCWuXqyG3k5WNG
-        yQuFJ88TXqJCmHpg8mkZ4/QsEHvzV3w=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-630-5FjVfZDqM3Cb36iC7qlU5g-1; Thu, 17 Nov 2022 14:16:04 -0500
-X-MC-Unique: 5FjVfZDqM3Cb36iC7qlU5g-1
-Received: by mail-wr1-f71.google.com with SMTP id e21-20020adfa455000000b002365c221b59so999476wra.22
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 11:16:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qX7k7ySpM2yQbDcfvA3eNm9gzjLpcHZv9S182SN9z64=;
-        b=XwUTXOCrDg8VI4iM5v0GA+ws4XvP3YvsY3kGjyw1p8IoAoiWOUyBm3/hf9NPmvMz92
-         zJExYHzd1ilVD1CYDECLyZjv+nN3fUCEFoRxgO4P9Y6jFBhfNGQ09K7e9GvC0wQveKdt
-         Y6arQaVN6rIMxRFX7SsksukTtDHxY4zK/favnw1i3Odw9zoej7zV6Kaa3KofgtOhrqEp
-         DrRAFyFYXSXmhdGIngq2HnXaq2OEphznK0eUvxjSlyZrJsNominlO/NN5yHV/W4jixV6
-         6QRrIiHkiayuvbNzcFvrfgTgNp9txAlIF8wCdKI9IBhxvuuh7aaxIc/0oAorKkq9zyoq
-         u89g==
-X-Gm-Message-State: ANoB5plC2pynZubhA2NII9VslSQrVfrqrHfpLnGLGGiOTsRR//9hNnWx
-        NSezB1rUqFZC4p7IA/gCIt0u317IqfBAdFXpac0+yqCpItTKPlZy2Zz3qgiqmh3lfu6XSI6h9K8
-        fgu3IFFFMcBoZW0Lzmkqq9VwX
-X-Received: by 2002:adf:ebce:0:b0:22e:4acd:cc89 with SMTP id v14-20020adfebce000000b0022e4acdcc89mr2588535wrn.76.1668712563372;
-        Thu, 17 Nov 2022 11:16:03 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4NXAM86Z3R3qMAvw30Me4+FnD9JxaximIIIqJBUNDPMKcb6b/7lLUKyAL1MdwERtJI3PKgkA==
-X-Received: by 2002:adf:ebce:0:b0:22e:4acd:cc89 with SMTP id v14-20020adfebce000000b0022e4acdcc89mr2588506wrn.76.1668712563082;
-        Thu, 17 Nov 2022 11:16:03 -0800 (PST)
-Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id m17-20020adfdc51000000b0023677e1157fsm1681896wrj.56.2022.11.17.11.16.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Nov 2022 11:16:02 -0800 (PST)
-Message-ID: <eae28066-9b70-bb7c-91e5-ba9fbf97672e@redhat.com>
-Date:   Thu, 17 Nov 2022 20:16:01 +0100
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=I0gafmthYzLnOBvnICA6dCBwdNQe0eJ+3AfKufxJT4Q=;
+        b=j3kl+t6QwEvEzaLFM4ONtkYPyKuftFV+inU7lGfAWvNi7syvRs1LL7XESlt0MCRLO92aAA
+        kApGl1lIYo/Cc4XTOwqaVpC8QkvWAGqSTzUwPR/AM/1UWh+lsa0vdXVnLpUue/i1qUpsM6
+        3pfgyHAQ1Vo/siCdrl7o52b6a4YDTxI=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id dbfb5ef9 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Thu, 17 Nov 2022 19:16:48 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        Juergen Christ <jchrist@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Tejun Heo <tj@kernel.org>
+Subject: [PATCH] random: reseed in delayed work rather than on-demand
+Date:   Thu, 17 Nov 2022 20:16:43 +0100
+Message-Id: <20221117191643.2303366-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v2 3/4] driver core: Add fw_devlink.timeout param to stop
- waiting for devlinks
-Content-Language: en-US
-To:     John Stultz <jstultz@google.com>
-Cc:     linux-kernel@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        linux-arm-msm@vger.kernel.org,
-        Peter Robinson <pbrobinson@redhat.com>,
-        Steev Klimaszewski <steev@kali.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Enric Balletbo i Serra <eballetbo@redhat.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Brian Masney <bmasney@redhat.com>,
-        Rob Herring <robh@kernel.org>
-References: <20221116115348.517599-1-javierm@redhat.com>
- <20221116120159.519908-1-javierm@redhat.com>
- <CANDhNCr7ZwbCDK1ftigLK_S2qASj1yfenUG1WPaiYbjr5M9x3w@mail.gmail.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <CANDhNCr7ZwbCDK1ftigLK_S2qASj1yfenUG1WPaiYbjr5M9x3w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello John,
+Currently, we reseed when random bytes are requested, if the current
+seed is too old. Since random bytes can be requested from all contexts,
+including hard IRQ, this means sometimes we wind up adding a bit of
+latency to hard IRQ. This was so much of a problem on s390x that now
+s390x just doesn't provide its architectural RNG from hard IRQ context,
+so we miss out in that case.
 
-On 11/17/22 20:07, John Stultz wrote:
-> On Wed, Nov 16, 2022 at 4:02 AM Javier Martinez Canillas
-> <javierm@redhat.com> wrote:
->>
->> Currently, the probe deferral timeout does two things:
->>
->> 1) Call to fw_devlink_drivers_done() to relax the device dependencies and
->>    allow drivers to be probed if these dependencies are optional.
->>
->> 2) Disable the probe deferral mechanism so that drivers will fail to probe
->>    if the required dependencies are not present, instead of adding them to
->>    the deferred probe pending list.
->>
->> But there is no need to couple these two, for example the probe deferral
->> can be used even when the device links are disable (i.e: fw_devlink=off).
->>
->> So let's add a separate fw_devlink.timeout command line parameter to allow
->> relaxing the device links and prevent drivers to wait for these to probe.
-> 
-> I'm probably being dim, but it's not immediately clear from this
-> description *why* this is useful. Maybe add some words on the tangible
-> benefit of splitting this up?
->
+Instead, let's just schedule a persistent delayed work, so that the
+reseeding and potentially expensive operations will always happen from
+process context, reducing unexpected latencies from hard IRQ.
 
-Thanks for your feedback. You are right that I need to better explain
-the why / goal of this patch. But basically is that it would be good
-to allow timeout waiting for the optional links while still allow the
-non-optional links to keep make the drivers to keep deferring.
+This also has the nice effect of accumulating a transcript of random
+inputs over time, since it means that we amass more input values. And it
+should make future vDSO integration a bit easier.
 
-I can make a better job at explaining the why in the next iteration.
+Cc: Harald Freudenberger <freude@linux.ibm.com>
+Cc: Juergen Christ <jchrist@linux.ibm.com>
+Cc: Alexander Gordeev <agordeev@linux.ibm.com>
+Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Tejun Heo <tj@kernel.org>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ drivers/char/random.c | 66 ++++++++++++++++++++-----------------------
+ 1 file changed, 31 insertions(+), 35 deletions(-)
+
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index c901d99c3246..a8127530f88d 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -182,7 +182,6 @@ enum {
  
-> I'd also push a little bit back on why we need to split this into a
-> separate boot option. Since it's not obvious as to when a user would
-> want to use fw_devlink.timeout vs probe_deferral_timeout.
-> The extra complexity of remembering which timeout is for what might
-> become a burden to users and developers.
-> 
->>
->> +       fw_devlink.timeout=
->> +                       [KNL] Debugging option to set a timeout in seconds for
->> +                       drivers to give up waiting on dependencies and to probe
->> +                       these are optional. A timeout of 0 will timeout at the
->> +                       end of initcalls. If the time out hasn't expired, it'll
->> +                       be restarted by each successful driver registration.
->> +
-> 
-> This sounds pretty close to like the deferred_probe_timeout option.
-> I'd suggest some words to make the distinction more clear.
->
-
-Yeah, I can think how to better explain this... but it's similar because
-there is some overlapping between the two really, but are not exactly the
-same even though we are tying the two and folding the disable of the two
-under the same timeout.
+ static struct {
+ 	u8 key[CHACHA_KEY_SIZE] __aligned(__alignof__(long));
+-	unsigned long birth;
+ 	unsigned long generation;
+ 	spinlock_t lock;
+ } base_crng = {
+@@ -200,16 +199,41 @@ static DEFINE_PER_CPU(struct crng, crngs) = {
+ 	.lock = INIT_LOCAL_LOCK(crngs.lock),
+ };
  
-I'll be OK to drop this parameter btw, and just keep it as an internal var
-if it's fine to just always use the default 10 seconds or whatever timeout
-it is decided.
-
++/*
++ * Return the interval until the next reseeding, which is normally
++ * CRNG_RESEED_INTERVAL, but during early boot, it is at an interval
++ * proportional to the uptime.
++ */
++static unsigned int crng_reseed_interval(void)
++{
++	static bool early_boot = true;
++
++	if (unlikely(READ_ONCE(early_boot))) {
++		time64_t uptime = ktime_get_seconds();
++		if (uptime >= CRNG_RESEED_INTERVAL / HZ * 2)
++			WRITE_ONCE(early_boot, false);
++		else
++			return max_t(unsigned int, CRNG_RESEED_START_INTERVAL,
++				     (unsigned int)uptime / 2 * HZ);
++	}
++	return CRNG_RESEED_INTERVAL;
++}
++
+ /* Used by crng_reseed() and crng_make_state() to extract a new seed from the input pool. */
+ static void extract_entropy(void *buf, size_t len);
+ 
+ /* This extracts a new crng key from the input pool. */
+-static void crng_reseed(void)
++static void crng_reseed(struct work_struct *work)
+ {
++	static DECLARE_DELAYED_WORK(next_reseed, crng_reseed);
+ 	unsigned long flags;
+ 	unsigned long next_gen;
+ 	u8 key[CHACHA_KEY_SIZE];
+ 
++	/* Immediately schedule the next reseeding, so that it fires sooner rather than later. */
++	if (likely(system_unbound_wq))
++		queue_delayed_work(system_unbound_wq, &next_reseed, crng_reseed_interval());
++
+ 	extract_entropy(key, sizeof(key));
+ 
+ 	/*
+@@ -224,7 +248,6 @@ static void crng_reseed(void)
+ 	if (next_gen == ULONG_MAX)
+ 		++next_gen;
+ 	WRITE_ONCE(base_crng.generation, next_gen);
+-	WRITE_ONCE(base_crng.birth, jiffies);
+ 	if (!static_branch_likely(&crng_is_ready))
+ 		crng_init = CRNG_READY;
+ 	spin_unlock_irqrestore(&base_crng.lock, flags);
+@@ -263,26 +286,6 @@ static void crng_fast_key_erasure(u8 key[CHACHA_KEY_SIZE],
+ 	memzero_explicit(first_block, sizeof(first_block));
+ }
+ 
+-/*
+- * Return the interval until the next reseeding, which is normally
+- * CRNG_RESEED_INTERVAL, but during early boot, it is at an interval
+- * proportional to the uptime.
+- */
+-static unsigned int crng_reseed_interval(void)
+-{
+-	static bool early_boot = true;
+-
+-	if (unlikely(READ_ONCE(early_boot))) {
+-		time64_t uptime = ktime_get_seconds();
+-		if (uptime >= CRNG_RESEED_INTERVAL / HZ * 2)
+-			WRITE_ONCE(early_boot, false);
+-		else
+-			return max_t(unsigned int, CRNG_RESEED_START_INTERVAL,
+-				     (unsigned int)uptime / 2 * HZ);
+-	}
+-	return CRNG_RESEED_INTERVAL;
+-}
+-
+ /*
+  * This function returns a ChaCha state that you may use for generating
+  * random data. It also returns up to 32 bytes on its own of random data
+@@ -318,13 +321,6 @@ static void crng_make_state(u32 chacha_state[CHACHA_STATE_WORDS],
+ 			return;
+ 	}
+ 
+-	/*
+-	 * If the base_crng is old enough, we reseed, which in turn bumps the
+-	 * generation counter that we check below.
+-	 */
+-	if (unlikely(time_is_before_jiffies(READ_ONCE(base_crng.birth) + crng_reseed_interval())))
+-		crng_reseed();
+-
+ 	local_lock_irqsave(&crngs.lock, flags);
+ 	crng = raw_cpu_ptr(&crngs);
+ 
+@@ -697,7 +693,7 @@ static void __cold _credit_init_bits(size_t bits)
+ 	} while (!try_cmpxchg(&input_pool.init_bits, &orig, new));
+ 
+ 	if (orig < POOL_READY_BITS && new >= POOL_READY_BITS) {
+-		crng_reseed(); /* Sets crng_init to CRNG_READY under base_crng.lock. */
++		crng_reseed(NULL); /* Sets crng_init to CRNG_READY under base_crng.lock. */
+ 		if (static_key_initialized)
+ 			execute_in_process_context(crng_set_ready, &set_ready);
+ 		wake_up_interruptible(&crng_init_wait);
+@@ -805,7 +801,7 @@ static int random_pm_notification(struct notifier_block *nb, unsigned long actio
+ 	if (crng_ready() && (action == PM_RESTORE_PREPARE ||
+ 	    (action == PM_POST_SUSPEND && !IS_ENABLED(CONFIG_PM_AUTOSLEEP) &&
+ 	     !IS_ENABLED(CONFIG_PM_USERSPACE_AUTOSLEEP)))) {
+-		crng_reseed();
++		crng_reseed(NULL);
+ 		pr_notice("crng reseeded on system resumption\n");
+ 	}
+ 	return 0;
+@@ -849,7 +845,7 @@ void __init random_init_early(const char *command_line)
+ 
+ 	/* Reseed if already seeded by earlier phases. */
+ 	if (crng_ready())
+-		crng_reseed();
++		crng_reseed(NULL);
+ 	else if (trust_cpu)
+ 		_credit_init_bits(arch_bits);
+ }
+@@ -877,7 +873,7 @@ void __init random_init(void)
+ 
+ 	/* Reseed if already seeded by earlier phases. */
+ 	if (crng_ready())
+-		crng_reseed();
++		crng_reseed(NULL);
+ 
+ 	WARN_ON(register_pm_notifier(&pm_notifier));
+ 
+@@ -1469,7 +1465,7 @@ static long random_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
+ 			return -EPERM;
+ 		if (!crng_ready())
+ 			return -ENODATA;
+-		crng_reseed();
++		crng_reseed(NULL);
+ 		return 0;
+ 	default:
+ 		return -EINVAL;
 -- 
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
+2.38.1
 
