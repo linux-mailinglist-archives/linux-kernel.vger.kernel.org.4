@@ -2,117 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B688062D91A
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 12:11:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77E6C62D924
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 12:13:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239572AbiKQLLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 06:11:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54636 "EHLO
+        id S239589AbiKQLNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 06:13:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239939AbiKQLKk (ORCPT
+        with ESMTP id S239197AbiKQLMy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 06:10:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B93676E572;
-        Thu, 17 Nov 2022 03:09:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 64219B81FF8;
-        Thu, 17 Nov 2022 11:09:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3A05C433D6;
-        Thu, 17 Nov 2022 11:09:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668683384;
-        bh=rlMFnUfQu8GJbpUZVcINUpGICn6p1+U5R0s89aqiluY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=W3x/iGCbNuMvys+UHPYxXfBNEAjRTHTA7o32s2r636M+YBziRU2SonABy/5UU1DnQ
-         3YSZBpbLlV16b0wTYkkbOka0EYaToulvwQQ6YLZf1ROtwkCUY/mYWSKCusjvL5vfl5
-         GtXRdaGwEu5jajg8VLb3TOuqu8rtnFdEm4Xr02tIqPUgI6oDOyw0ISkleOPBWQv1Uh
-         Q4l5z6Y53UO3FFCyK7OG8Af7IuGHk5lPUop3+BjBi3gh4Pw65qxsKsd9Ug2shYBllT
-         zLwERhd4dFhs4bctzw0za1HB8NQRl6Qh5d7eU+rxh+CyqFs4sAk8zNQCSfWflRXOXM
-         +GanqHZNquZlw==
-Date:   Thu, 17 Nov 2022 11:09:41 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Carlo Caione <ccaione@baylibre.com>
-Cc:     Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        David Airlie <airlied@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 2/3] drm/tiny: ili9486: Do not assume 8-bit only SPI
- controllers
-Message-ID: <Y3YWdeTLfmDh7UyB@sirena.org.uk>
-References: <20221116-s905x_spi_ili9486-v1-0-630401cb62d5@baylibre.com>
- <20221116-s905x_spi_ili9486-v1-2-630401cb62d5@baylibre.com>
+        Thu, 17 Nov 2022 06:12:54 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A0B6E57B
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 03:12:13 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id q9so1455212pfg.5
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 03:12:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Q+kPL7DweqXbKMabPBGw/QquMyJ1RbDYYXHcwaM0FwE=;
+        b=xprhSrnqe6iVLXMApQ5QvCcwrBxqm0R01HXWBbPqkBFs9M7mjOS7d10cd+5E51Zr4n
+         sDEvAPv61XD4S3qCVR3NFwN7MAFe1b9SO8yNZbjwglG7bw5u2seooim3q9e963O1gMfO
+         Z5nqMf3Vq2k7Dh36l8fl9pBQLITauO45x3JIpGk50MjogQGLXo10HVk/nf6xCPNd4h4b
+         lBGCpUaH9d79CzDqK5iCaoMHbt34XuaWaBQP2H13uY4/de55YRDzCFHlYG+2JZXrTajb
+         qcJAdehldjbVZnmP31rJToKQMWiiUbylQPuFvod7c+bE+hKKJWKKIQ2OdIpjdctlSxKU
+         Wxtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q+kPL7DweqXbKMabPBGw/QquMyJ1RbDYYXHcwaM0FwE=;
+        b=G60uFNUi5v4/eGGs5S4NLb3iqV1qyw7uafF1cSUKq6w7itc55mfr71Mss6d51Pr4jS
+         Y75L45o41yll2gJ0OMvfhSmSDTHk+cHvYtUu3vn45W2opq2hPdC4k57IWewHQg7kxoax
+         TY8n3BBfN0WaXNT4B4J0yxgPhyElSlOGyYRFbgl8APug4BfGOKHtjRgtNjL+qpYKFrYj
+         +oz01eKoLAVcrtUIThPPi9owL4CiVzFrDbAv6llmyTrWBXVYvTeLu1f9+iu51QBJOaMH
+         kHAXr+jvWdDGRoRjyDHO0K568Gm6AVhZRIZwPieSuCMneyOkacNbwseemD6q/oBtnLBS
+         rybA==
+X-Gm-Message-State: ANoB5pk7raFnqqBwo34E6sSYhqWeZhjy2lqPbvZLf7Z80tcjokiCBxCz
+        ZgIU3P02ln9qVL5aEOEVXdAj
+X-Google-Smtp-Source: AA0mqf6CraUNrRwf8N5tkLMdMOdPO6OeR4eFNGBoT19MrB1AZjOoCTTo46xc4jSH3J5S+EtnXIHBQg==
+X-Received: by 2002:a05:6a00:e0f:b0:563:312d:745b with SMTP id bq15-20020a056a000e0f00b00563312d745bmr2400267pfb.69.1668683533264;
+        Thu, 17 Nov 2022 03:12:13 -0800 (PST)
+Received: from thinkpad ([117.193.208.31])
+        by smtp.gmail.com with ESMTPSA id q12-20020a17090311cc00b001888cadf8f6sm1081416plh.49.2022.11.17.03.12.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 03:12:12 -0800 (PST)
+Date:   Thu, 17 Nov 2022 16:42:07 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     andersson@kernel.org, viresh.kumar@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, rafael@kernel.org,
+        robh+dt@kernel.org, johan@kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v7 0/4] qcom-cpufreq-hw: Add CPU clock provider support
+Message-ID: <20221117111207.GA93179@thinkpad>
+References: <20221117053145.10409-1-manivannan.sadhasivam@linaro.org>
+ <20221117101903.sw3hxaruj5sfhybw@bogus>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="LQcIBCJXd6N58uwP"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221116-s905x_spi_ili9486-v1-2-630401cb62d5@baylibre.com>
-X-Cookie: Ego sum ens omnipotens.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221117101903.sw3hxaruj5sfhybw@bogus>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Nov 17, 2022 at 10:19:03AM +0000, Sudeep Holla wrote:
+> On Thu, Nov 17, 2022 at 11:01:41AM +0530, Manivannan Sadhasivam wrote:
+> > Hello,
+> > 
+> > This series adds clock provider support to the Qcom CPUFreq driver for
+> > supplying the clocks to the CPU cores in Qcom SoCs.
+> > 
+> > The Qualcomm platforms making use of CPUFreq HW Engine (EPSS/OSM) supply
+> > clocks to the CPU cores. But this is not represented clearly in devicetree.
+> > There is no clock coming out of the CPUFreq HW node to the CPU. This created
+> > an issue [1] with the OPP core when a recent enhancement series was submitted.
+> > Eventhough the issue got fixed in the OPP framework in the meantime, that's
+> > not a proper solution and this series aims to fix it properly.
+> > 
+> > There was also an attempt made by Viresh [2] to fix the issue by moving the
+> > clocks supplied to the CPUFreq HW node to the CPU. But that was not accepted
+> > since those clocks belong to the CPUFreq HW node only.
+> > 
+> > The proposal here is to add clock provider support to the Qcom CPUFreq HW
+> > driver to supply clocks to the CPUs that comes out of the EPSS/OSM block.
+> > This correctly reflects the hardware implementation.
+> > 
+> > The clock provider is a simple one that just provides the frequency of the
+> > clocks supplied to each frequency domain in the SoC using .recalc_rate()
+> > callback. The frequency supplied by the driver will be the actual frequency
+> > that comes out of the EPSS/OSM block after the DCVS operation. This frequency
+> > is not same as what the CPUFreq framework has set but it is the one that gets
+> > supplied to the CPUs after throttling by LMh.
+> > 
+> > This series has been tested on SM8450 based dev board with the OPP hack removed
+> > and hence there is a DTS change only for that platform. Once this series gets
+> > accepted, rest of the platform DTS can also be modified and finally the hack on
+> > the OPP core can be dropped.
+> > 
+> > Thanks,
+> > Mani
+> > 
+> > [1] https://lore.kernel.org/lkml/YsxSkswzsqgMOc0l@hovoldconsulting.com/
+> > [2] https://lore.kernel.org/lkml/20220801054255.GA12039@thinkpad/t/
+> > 
+> > Changes in v7:
+> > 
+> > * Added a patch that returns the throttled frequency for cpufreq_driver->get()
+> >   callback (Sudeep & Viresh)
+> > * Added error check for kasprintf and allocated the clk name locally
+> > 
+> > Changes in v6:
+> > 
+> > * Removed the local variable clk_name (Matthias)
+> > * Added the clock id to the error message of devm_clk_hw_register()
+> > 
+> > Changes in v5:
+> > 
+> > * Switched to Hz unit for the CPU clocks
+> > 
+> > Changes in v4:
+> > 
+> > * Rebased on top of cpufreq/arm/linux-next branch
+> > 
+> > Changes in v3:
+> > 
+> > * Submitted the cpufreq driver cleanup patches as a separate series as
+> >   suggested by Viresh
+> > * Removed static keyword from clk_init_data declaration
+> > 
+> > Changes in v2:
+> > 
+> > * Moved the qcom_cpufreq_data allocation to probe
+> > * Added single clock provider with multiple clks for each freq domain
+> > * Moved soc_data to qcom_cpufreq struct
+> > * Added Rob's review for binding
+> > 
+> > Manivannan Sadhasivam (4):
+> >   dt-bindings: cpufreq: cpufreq-qcom-hw: Add cpufreq clock provider
+> >   arm64: dts: qcom: sm8450: Supply clock from cpufreq node to CPUs
+> >   cpufreq: qcom-hw: Add CPU clock provider support
+> 
+> Why do you need the above 3 changes if the below(4/4) will ensure
+> cpufreq_get(cpu) returns the clock frequency. I was expecting to drop the
+> whole "confusing" clock bindings and the unnecessary clock provider.
+> 
+> Can't we just use cpufreq_get(cpu) ?
+> 
 
---LQcIBCJXd6N58uwP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This can be possible for OPP implementations for the CPUs but not for other
+peripherals making use of OPP framework like GPU etc... Moreover this may end
+up with different code path for CPUs and other peripherals inside OPP framework.
 
-On Thu, Nov 17, 2022 at 09:47:40AM +0100, Carlo Caione wrote:
-> The ILI9486 driver is wrongly assuming that the SPI panel is interfaced
-> only with 8-bit SPI controllers and consequently that the pixel data
-> passed by the MIPI DBI subsystem are already swapped before being sent
-> over SPI using 8 bits-per-word.
->=20
-> This is not always true for all the SPI controllers.
->=20
-> Make the command function more general to not only support 8-bit only
-> SPI controllers and support sending un-swapped data over SPI using 16
-> bits-per-word when dealing with pixel data.
+So I don't think it is applicable. But I'll defer it to Viresh.
 
-I don't understand what the commit log is saying here.  The
-meson-spicc driver advertises support for 8 bit words, if the
-driver is sending data formatted as a byte stream everything
-should be fine.  It may be that there is some optimisation
-available from taking advantage of the hardware's ability to
-handle larger word sizes but there should be no data corruption
-issue.
+Thanks,
+Mani
 
-> +	/*
-> +	 * Check whether pixel data bytes needs to be swapped or not
-> +	 */
-> +	if (*cmd =3D=3D MIPI_DCS_WRITE_MEMORY_START && !mipi->swap_bytes)
-> +		bpw =3D 16;
-> +
+> -- 
+> Regards,
+> Sudeep
 
-You should check the SPI controller compatibility here.
-
---LQcIBCJXd6N58uwP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmN2FnQACgkQJNaLcl1U
-h9DkAQf/ZO81DRjufOHQCe4TT3YQX0I4BQbc6tjxpvEJsPkgTRL6r1vfxKJOjA6j
-gBJqo8B7TdFYzqzWf4hJwieTLgUKdg4pWERfMQ5O/g9bHsc0BwLUTzg6asgynPqk
-ZdxyCvC5QTA/b9ZIWdKPRN9com67mNQRrebpkwcRjFQ1alJxlLDi2P+yrsCE+WOj
-Q77RLUtE3cVmxP1tFERDaS6TTTxc51nqK/HT0t6x3LURP6nnPdp5o8s2+AU88Vfv
-QoJDmpltiUw2lUScF9jTJjc3ATKhvXAY2NuY1xpVOUMfd4noH1MX5L97UPVedrY2
-24k3w5zahZP+JTUtK7epT6eO/eckVg==
-=opWd
------END PGP SIGNATURE-----
-
---LQcIBCJXd6N58uwP--
+-- 
+மணிவண்ணன் சதாசிவம்
