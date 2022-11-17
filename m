@@ -2,94 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75CC362D34B
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 07:10:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A14562D34E
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 07:10:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234430AbiKQGJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 01:09:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56750 "EHLO
+        id S234651AbiKQGKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 01:10:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiKQGJ5 (ORCPT
+        with ESMTP id S229451AbiKQGKt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 01:09:57 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 718A82FC14
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 22:09:56 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        Thu, 17 Nov 2022 01:10:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9BC92F3AE;
+        Wed, 16 Nov 2022 22:10:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NCTz71KRBz8R03x;
-        Thu, 17 Nov 2022 14:09:55 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl2.zte.com.cn with SMTP id 2AH69oDu086933;
-        Thu, 17 Nov 2022 14:09:50 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Thu, 17 Nov 2022 14:09:52 +0800 (CST)
-Date:   Thu, 17 Nov 2022 14:09:52 +0800 (CST)
-X-Zmail-TransId: 2af96375d030ffffffff8b256cdf
-X-Mailer: Zmail v1.0
-Message-ID: <202211171409524332954@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <rafael@kernel.org>
-Cc:     <daniel.lezcano@linaro.org>, <amitk@kernel.org>,
-        <linux-pm@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSB0aGVybWFsOiB1c2UgZGV2bV9wbGF0Zm9ybV9nZXRfYW5kX2lvcmVtYXBfcmVzb3VyY2UoKQ==?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 2AH69oDu086933
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 6375D033.000 by FangMail milter!
-X-FangMail-Envelope: 1668665395/4NCTz71KRBz8R03x/6375D033.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 6375D033.000/4NCTz71KRBz8R03x
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 75D2162096;
+        Thu, 17 Nov 2022 06:10:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80292C433D7;
+        Thu, 17 Nov 2022 06:10:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1668665447;
+        bh=clQORkhLNYIC9GSub946JG/6IiYx/JhvOScsW7imFRM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=yC/sTLAgIfmisBNzDHAtarf8sUgYS47jKA0hTKSmFD0htT/aZXt6Y88dMcE2T3Y7l
+         NTgo0ReISdWn6OemxaRi812zX7DOO5J2H224QN8FGVGh/eX5nuLZrjWjloAqLs5FcZ
+         7nkIeDC9IxLQr4ysf02OUt0V6yWJgEosh7w+opqk=
+Date:   Thu, 17 Nov 2022 07:10:44 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Aaron Lu <aaron.lu@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "Yin, Fengwei" <fengwei.yin@intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v3] selftest/x86/meltdown: Add a selftest for meltdown
+Message-ID: <Y3XQZFyiXYc9mJ1Y@kroah.com>
+References: <Y3L2Jx3Kx9q8Dv55@ziqianlu-desk1>
+ <Y3M3sZSARXxLTKao@kroah.com>
+ <f8c3da3a-4d19-60c6-66d3-afd0d56ef102@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f8c3da3a-4d19-60c6-66d3-afd0d56ef102@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+On Wed, Nov 16, 2022 at 02:57:22PM -0800, Dave Hansen wrote:
+> On 11/14/22 22:54, Greg KH wrote:
+> > On Tue, Nov 15, 2022 at 10:15:03AM +0800, Aaron Lu wrote:
+> >> I came to the conclusion that this work is OK to submit with all of the
+> >> steps I listed above (copyright notices, license terms and relicensing)
+> >> by strictly following all of the processes required by my employer.
+> >>
+> >> This does not include a Signed-off-by from a corporate attorney.
+> > Please get that, as that is what I asked for in order for us to be able
+> > to accept this type of change.
+> 
+> Hi Greg,
+> 
+> Can you share any more of what triggered this new requirement?
 
-Convert platform_get_resource(), devm_ioremap_resource() to a single
-call to devm_platform_get_and_ioremap_resource(), as this is exactly
-what this function does.
+You are taking source from a non-Intel developer under a different
+license and adding copyright and different license information to it.
+Because of all of that, I have the requirement that I want to know that
+Intel legal has vetted all of this and agrees with the conclusions that
+you all are stating.
 
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/thermal/st/stm_thermal.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+This isn't a new type of requirement, I make this request to many other
+companies that do things that are not "normal" when it comes to licenses
+and copyrights so as to ensure that all is ok.
 
-diff --git a/drivers/thermal/st/stm_thermal.c b/drivers/thermal/st/stm_thermal.c
-index 78feb802a87d..e7834ccc7976 100644
---- a/drivers/thermal/st/stm_thermal.c
-+++ b/drivers/thermal/st/stm_thermal.c
-@@ -488,7 +488,6 @@ MODULE_DEVICE_TABLE(of, stm_thermal_of_match);
- static int stm_thermal_probe(struct platform_device *pdev)
- {
- 	struct stm_thermal_sensor *sensor;
--	struct resource *res;
- 	void __iomem *base;
- 	int ret;
+thanks,
 
-@@ -506,8 +505,7 @@ static int stm_thermal_probe(struct platform_device *pdev)
-
- 	sensor->dev = &pdev->dev;
-
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	base = devm_ioremap_resource(&pdev->dev, res);
-+	base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
- 	if (IS_ERR(base))
- 		return PTR_ERR(base);
-
--- 
-2.25.1
+greg k-h
