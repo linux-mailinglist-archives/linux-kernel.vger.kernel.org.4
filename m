@@ -2,124 +2,298 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CF2E62E163
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 17:19:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0888E62E165
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 17:20:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240200AbiKQQTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 11:19:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54880 "EHLO
+        id S239679AbiKQQUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 11:20:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240043AbiKQQTB (ORCPT
+        with ESMTP id S234725AbiKQQUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 11:19:01 -0500
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1228786ED;
-        Thu, 17 Nov 2022 08:18:57 -0800 (PST)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Thu, 17 Nov 2022 11:20:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD12978D7F
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 08:19:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 2CDC675;
-        Thu, 17 Nov 2022 17:18:56 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1668701936;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cvVuv/CFKqXK0IGORbzS8gsCb1jkg5g0Q6TdD8SyobY=;
-        b=PZ66z5fBw1rR11hJ2eD3M5VCRPpL+oo45/qZ84B9tBCEYIWyvI60fWpNuUvZdNRo2IC5Mf
-        45/wI71MzSdG7S+2+Fu6aMR9rGAWMgcE1EvJA3CGkAhR16f1wNBDOhlfPmBr++ireE0Qin
-        uMZ3lgDhefkoI6fTz3q7jR9eM/IMmZ70RKo557C7sVwGhYzG/RjSsnGQ9KzTyllsE5tyGq
-        S2ltp1qaNK7PZ3TcWNIMI4NmUAf6L31mx9C9HqaBRO9UMSdsJDcqJX39GE6fDQXBZ1+I7y
-        IpPxse1jDGH7HjqstWHj6t1Xhjpp46AE7hBx6DiB4eNG29nO80BmLG/mjKSu6A==
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7CE4CB820F9
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 16:19:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29C9BC433D6;
+        Thu, 17 Nov 2022 16:19:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668701997;
+        bh=gALm3Hj+xZ0hQpaXHl63IdMmEC4JCRNy1Wtv4B5EeLM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=kALXWhCy21vpoPQaephaJAbUr8h/wNM+n/xlXwVITLI0vziijFplKMFVuxQFp/C87
+         MmQVVgn8Luu96mzfZgxSbxJZGT/DxwfV2AO1mLj60bigF4wKYh6SrYZlaEK8Wg/PqO
+         2CHxbe4M8sXzFZ4Sc/j2o1z2G6x99gtIyGsX0PqO7BF6NvJJ/FjcDKceHcsCjMAonY
+         EwI2m+3sbNKcGjtx6kiW6i94FZuNknn5XVBA6IspbDcNw/q2c49p+VtsiSDx5pYFVB
+         1JB7Pwzmk9eDrjBQuRk3HLV7KpNvUJaQtTyZ8gwO0OQ0hggoUNUp0boBK06JRLfSP0
+         nQzE/WrEj8t1Q==
+From:   Oded Gabbay <ogabbay@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ofir Bitton <obitton@habana.ai>
+Subject: [PATCH 01/20] habanalabs/gaudi2: add PCI revision 2 support
+Date:   Thu, 17 Nov 2022 18:19:32 +0200
+Message-Id: <20221117161951.845454-1-ogabbay@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Date:   Thu, 17 Nov 2022 17:18:55 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     William Breathitt Gray <william.gray@linaro.org>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
-        andriy.shevchenko@linux.intel.com, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, broonie@kernel.org
-Subject: Re: [PATCH v2 4/4] gpio: i8255: Migrate to regmap API
-In-Reply-To: <61327a67cc308af413471a69a4810b2785e53e8e.1668129763.git.william.gray@linaro.org>
-References: <cover.1668129763.git.william.gray@linaro.org>
- <61327a67cc308af413471a69a4810b2785e53e8e.1668129763.git.william.gray@linaro.org>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <5123090e11da67e57fb00984445ece2f@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Ofir Bitton <obitton@habana.ai>
 
-Am 2022-11-11 02:55, schrieb William Breathitt Gray:
+Add support for Gaudi2 Device with PCI revision 2.
+Functionality is exactly the same as revision 1, the only difference
+is device name exposed to user.
 
-> +    config.map = devm_regmap_init_mmio(dev, regs, 
-> &gpiomm_regmap_config);
-> +    if (IS_ERR(config.map))
-> +        return PTR_ERR(config.map);
+Signed-off-by: Ofir Bitton <obitton@habana.ai>
+Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
+---
+ drivers/misc/habanalabs/common/device.c       |  4 +++
+ drivers/misc/habanalabs/common/habanalabs.h   |  2 ++
+ .../misc/habanalabs/common/habanalabs_drv.c   | 26 +++++++++++++------
+ .../misc/habanalabs/common/habanalabs_ioctl.c |  6 +++--
+ drivers/misc/habanalabs/common/mmu/mmu.c      |  1 +
+ drivers/misc/habanalabs/common/sysfs.c        |  2 ++
+ drivers/misc/habanalabs/gaudi2/gaudi2.c       |  6 +----
+ drivers/misc/habanalabs/gaudi2/gaudi2P.h      |  2 --
+ .../include/hw_ip/pci/pci_general.h           |  7 +++++
+ include/uapi/misc/habanalabs.h                |  7 +++++
+ 10 files changed, 46 insertions(+), 17 deletions(-)
 
-I've just skimmed over your patch and noticed you're using an mmio
-regmap. Please note that for now, gpio-regmap unconditionally sets
-.can_sleep to true in the gpiochip [1]. So the users would need to
-use the _cansleep() variants. See a proposal below.
+diff --git a/drivers/misc/habanalabs/common/device.c b/drivers/misc/habanalabs/common/device.c
+index 3ea1ee1ec8ef..35ed494fcfdf 100644
+--- a/drivers/misc/habanalabs/common/device.c
++++ b/drivers/misc/habanalabs/common/device.c
+@@ -748,6 +748,10 @@ static int device_early_init(struct hl_device *hdev)
+ 		gaudi2_set_asic_funcs(hdev);
+ 		strscpy(hdev->asic_name, "GAUDI2", sizeof(hdev->asic_name));
+ 		break;
++	case ASIC_GAUDI2B:
++		gaudi2_set_asic_funcs(hdev);
++		strscpy(hdev->asic_name, "GAUDI2B", sizeof(hdev->asic_name));
++		break;
+ 		break;
+ 	default:
+ 		dev_err(hdev->dev, "Unrecognized ASIC type %d\n",
+diff --git a/drivers/misc/habanalabs/common/habanalabs.h b/drivers/misc/habanalabs/common/habanalabs.h
+index 7d191f388953..e391e7951fb7 100644
+--- a/drivers/misc/habanalabs/common/habanalabs.h
++++ b/drivers/misc/habanalabs/common/habanalabs.h
+@@ -1192,6 +1192,7 @@ struct hl_dec {
+  * @ASIC_GAUDI: Gaudi device (HL-2000).
+  * @ASIC_GAUDI_SEC: Gaudi secured device (HL-2000).
+  * @ASIC_GAUDI2: Gaudi2 device.
++ * @ASIC_GAUDI2B: Gaudi2B device.
+  */
+ enum hl_asic_type {
+ 	ASIC_INVALID,
+@@ -1199,6 +1200,7 @@ enum hl_asic_type {
+ 	ASIC_GAUDI,
+ 	ASIC_GAUDI_SEC,
+ 	ASIC_GAUDI2,
++	ASIC_GAUDI2B,
+ };
+ 
+ struct hl_cs_parser;
+diff --git a/drivers/misc/habanalabs/common/habanalabs_drv.c b/drivers/misc/habanalabs/common/habanalabs_drv.c
+index e82af8989700..7815c60df54e 100644
+--- a/drivers/misc/habanalabs/common/habanalabs_drv.c
++++ b/drivers/misc/habanalabs/common/habanalabs_drv.c
+@@ -9,6 +9,7 @@
+ #define pr_fmt(fmt)		"habanalabs: " fmt
+ 
+ #include "habanalabs.h"
++#include "../include/hw_ip/pci/pci_general.h"
+ 
+ #include <linux/pci.h>
+ #include <linux/aer.h>
+@@ -74,16 +75,17 @@ MODULE_DEVICE_TABLE(pci, ids);
+ /*
+  * get_asic_type - translate device id to asic type
+  *
+- * @device: id of the PCI device
++ * @hdev: pointer to habanalabs device structure.
+  *
+- * Translate device id to asic type.
++ * Translate device id and revision id to asic type.
+  * In case of unidentified device, return -1
+  */
+-static enum hl_asic_type get_asic_type(u16 device)
++static enum hl_asic_type get_asic_type(struct hl_device *hdev)
+ {
+-	enum hl_asic_type asic_type;
++	struct pci_dev *pdev = hdev->pdev;
++	enum hl_asic_type asic_type = ASIC_INVALID;
+ 
+-	switch (device) {
++	switch (pdev->device) {
+ 	case PCI_IDS_GOYA:
+ 		asic_type = ASIC_GOYA;
+ 		break;
+@@ -94,10 +96,18 @@ static enum hl_asic_type get_asic_type(u16 device)
+ 		asic_type = ASIC_GAUDI_SEC;
+ 		break;
+ 	case PCI_IDS_GAUDI2:
+-		asic_type = ASIC_GAUDI2;
++		switch (pdev->revision) {
++		case REV_ID_A:
++			asic_type = ASIC_GAUDI2;
++			break;
++		case REV_ID_B:
++			asic_type = ASIC_GAUDI2B;
++			break;
++		default:
++			break;
++		}
+ 		break;
+ 	default:
+-		asic_type = ASIC_INVALID;
+ 		break;
+ 	}
+ 
+@@ -416,7 +426,7 @@ static int create_hdev(struct hl_device **dev, struct pci_dev *pdev)
+ 	/* First, we must find out which ASIC are we handling. This is needed
+ 	 * to configure the behavior of the driver (kernel parameters)
+ 	 */
+-	hdev->asic_type = get_asic_type(pdev->device);
++	hdev->asic_type = get_asic_type(hdev);
+ 	if (hdev->asic_type == ASIC_INVALID) {
+ 		dev_err(&pdev->dev, "Unsupported ASIC\n");
+ 		rc = -ENODEV;
+diff --git a/drivers/misc/habanalabs/common/habanalabs_ioctl.c b/drivers/misc/habanalabs/common/habanalabs_ioctl.c
+index 5ce5c42e2731..ee43017eb563 100644
+--- a/drivers/misc/habanalabs/common/habanalabs_ioctl.c
++++ b/drivers/misc/habanalabs/common/habanalabs_ioctl.c
+@@ -10,10 +10,11 @@
+ #include <uapi/misc/habanalabs.h>
+ #include "habanalabs.h"
+ 
+-#include <linux/kernel.h>
+ #include <linux/fs.h>
+-#include <linux/uaccess.h>
++#include <linux/kernel.h>
++#include <linux/pci.h>
+ #include <linux/slab.h>
++#include <linux/uaccess.h>
+ #include <linux/vmalloc.h>
+ 
+ static u32 hl_debug_struct_size[HL_DEBUG_OP_TIMESTAMP + 1] = {
+@@ -105,6 +106,7 @@ static int hw_ip_info(struct hl_device *hdev, struct hl_info_args *args)
+ 	hw_ip.edma_enabled_mask = prop->edma_enabled_mask;
+ 	hw_ip.server_type = prop->server_type;
+ 	hw_ip.security_enabled = prop->fw_security_enabled;
++	hw_ip.revision_id = hdev->pdev->revision;
+ 
+ 	return copy_to_user(out, &hw_ip,
+ 		min((size_t) size, sizeof(hw_ip))) ? -EFAULT : 0;
+diff --git a/drivers/misc/habanalabs/common/mmu/mmu.c b/drivers/misc/habanalabs/common/mmu/mmu.c
+index 67d3e70cf571..2c1005f74cf4 100644
+--- a/drivers/misc/habanalabs/common/mmu/mmu.c
++++ b/drivers/misc/habanalabs/common/mmu/mmu.c
+@@ -635,6 +635,7 @@ int hl_mmu_if_set_funcs(struct hl_device *hdev)
+ 		hl_mmu_v1_set_funcs(hdev, &hdev->mmu_func[MMU_DR_PGT]);
+ 		break;
+ 	case ASIC_GAUDI2:
++	case ASIC_GAUDI2B:
+ 		/* MMUs in Gaudi2 are always host resident */
+ 		hl_mmu_v2_hr_set_funcs(hdev, &hdev->mmu_func[MMU_HR_PGT]);
+ 		break;
+diff --git a/drivers/misc/habanalabs/common/sysfs.c b/drivers/misc/habanalabs/common/sysfs.c
+index c924fc994bd9..735d8bed0066 100644
+--- a/drivers/misc/habanalabs/common/sysfs.c
++++ b/drivers/misc/habanalabs/common/sysfs.c
+@@ -248,6 +248,8 @@ static ssize_t device_type_show(struct device *dev,
+ 	case ASIC_GAUDI2:
+ 		str = "GAUDI2";
+ 		break;
++	case ASIC_GAUDI2B:
++		str = "GAUDI2B";
+ 		break;
+ 	default:
+ 		dev_err(hdev->dev, "Unrecognized ASIC type %d\n",
+diff --git a/drivers/misc/habanalabs/gaudi2/gaudi2.c b/drivers/misc/habanalabs/gaudi2/gaudi2.c
+index 03f8cf9bb136..f21b68be6d20 100644
+--- a/drivers/misc/habanalabs/gaudi2/gaudi2.c
++++ b/drivers/misc/habanalabs/gaudi2/gaudi2.c
+@@ -3968,11 +3968,7 @@ static void gaudi2_init_firmware_loader(struct hl_device *hdev)
+ 	fw_loader->skip_bmc = false;
+ 	fw_loader->sram_bar_id = SRAM_CFG_BAR_ID;
+ 	fw_loader->dram_bar_id = DRAM_BAR_ID;
+-
+-	if (hdev->asic_type == ASIC_GAUDI2)
+-		fw_loader->cpu_timeout = GAUDI2_CPU_TIMEOUT_USEC;
+-	else /* ASIC_GAUDI2_FPGA */
+-		fw_loader->cpu_timeout = GAUDI2_FPGA_CPU_TIMEOUT;
++	fw_loader->cpu_timeout = GAUDI2_CPU_TIMEOUT_USEC;
+ 
+ 	/* here we update initial values for few specific dynamic regs (as
+ 	 * before reading the first descriptor from FW those value has to be
+diff --git a/drivers/misc/habanalabs/gaudi2/gaudi2P.h b/drivers/misc/habanalabs/gaudi2/gaudi2P.h
+index a99c348bbf39..b4383c199bbb 100644
+--- a/drivers/misc/habanalabs/gaudi2/gaudi2P.h
++++ b/drivers/misc/habanalabs/gaudi2/gaudi2P.h
+@@ -23,8 +23,6 @@
+ 
+ #define GAUDI2_CPU_TIMEOUT_USEC		30000000	/* 30s */
+ 
+-#define GAUDI2_FPGA_CPU_TIMEOUT		100000000	/* 100s */
+-
+ #define NUMBER_OF_PDMA_QUEUES		2
+ #define NUMBER_OF_EDMA_QUEUES		8
+ #define NUMBER_OF_MME_QUEUES		4
+diff --git a/drivers/misc/habanalabs/include/hw_ip/pci/pci_general.h b/drivers/misc/habanalabs/include/hw_ip/pci/pci_general.h
+index d232081d4e0f..f5d497dc9bdc 100644
+--- a/drivers/misc/habanalabs/include/hw_ip/pci/pci_general.h
++++ b/drivers/misc/habanalabs/include/hw_ip/pci/pci_general.h
+@@ -20,4 +20,11 @@
+ #define PCI_CONFIG_ELBI_STS_MASK	(PCI_CONFIG_ELBI_STS_ERR | \
+ 					PCI_CONFIG_ELBI_STS_DONE)
+ 
++enum hl_revision_id {
++	/* PCI revision ID 0 is not legal */
++	REV_ID_INVALID				= 0x00,
++	REV_ID_A				= 0x01,
++	REV_ID_B				= 0x02,
++};
++
+ #endif /* INCLUDE_PCI_GENERAL_H_ */
+diff --git a/include/uapi/misc/habanalabs.h b/include/uapi/misc/habanalabs.h
+index a4ceee681898..58343998bd63 100644
+--- a/include/uapi/misc/habanalabs.h
++++ b/include/uapi/misc/habanalabs.h
+@@ -868,6 +868,7 @@ enum hl_server_type {
+  * @number_of_user_interrupts: The number of interrupts that are available to the userspace
+  *                             application to use. Relevant for Gaudi2 and later.
+  * @device_mem_alloc_default_page_size: default page size used in device memory allocation.
++ * @revision_id: PCI revision ID of the ASIC.
+  */
+ struct hl_info_hw_ip_info {
+ 	__u64 sram_base_address;
+@@ -898,6 +899,12 @@ struct hl_info_hw_ip_info {
+ 	__u16 pad2;
+ 	__u64 reserved4;
+ 	__u64 device_mem_alloc_default_page_size;
++	__u64 reserved5;
++	__u64 reserved6;
++	__u32 reserved7;
++	__u8 reserved8;
++	__u8 revision_id;
++	__u8 pad[2];
+ };
+ 
+ struct hl_info_dram_usage {
+-- 
+2.25.1
 
-> +int devm_i8255_regmap_register(struct device *const dev,
-> +			       const struct i8255_regmap_config *const config)
-> +{
-> +	struct gpio_regmap_config gpio_config = {0};
-> +	unsigned long i;
-> +	int err;
-> +
-> +	if (!config->parent)
-> +		return -EINVAL;
-> +
-> +	if (!config->map)
-> +		return -EINVAL;
-> +
-> +	if (!config->num_ppi)
-> +		return -EINVAL;
-> +
-> +	for (i = 0; i < config->num_ppi; i++) {
-> +		err = i8255_ppi_init(config->map, i * 4);
-> +		if (err)
-> +			return err;
-> +	}
-> +
-> +	gpio_config.parent = config->parent;
-> +	gpio_config.regmap = config->map;
-
-I'd propose to add a new config flag to indicate that accesses to
-the device will be fast:
-
-gpio_config.regmap_has_fast_io = true;
-
-which will then set gpio->can_sleep = false.
-
--michael
-
-> +	gpio_config.ngpio = I8255_NGPIO * config->num_ppi;
-> +	gpio_config.names = config->names;
-> +	gpio_config.reg_dat_base = GPIO_REGMAP_ADDR(I8255_REG_DAT_BASE);
-> +	gpio_config.reg_set_base = GPIO_REGMAP_ADDR(I8255_REG_DAT_BASE);
-> +	gpio_config.reg_dir_in_base = 
-> GPIO_REGMAP_ADDR(I8255_REG_DIR_IN_BASE);
-> +	gpio_config.ngpio_per_reg = I8255_NGPIO_PER_REG;
-> +	gpio_config.irq_domain = config->domain;
-> +	gpio_config.reg_mask_xlate = i8255_reg_mask_xlate;
-> +
-> +	return PTR_ERR_OR_ZERO(devm_gpio_regmap_register(dev, &gpio_config));
-> +}
-> +EXPORT_SYMBOL_NS_GPL(devm_i8255_regmap_register, I8255);
-
-[1] 
-https://elixir.bootlin.com/linux/v6.1-rc5/source/drivers/gpio/gpio-regmap.c#L260
