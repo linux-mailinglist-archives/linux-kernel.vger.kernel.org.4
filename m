@@ -2,130 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFA6D62DEFE
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:06:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 599AE62DF0B
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:08:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234920AbiKQPGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 10:06:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53056 "EHLO
+        id S240205AbiKQPIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 10:08:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231240AbiKQPGm (ORCPT
+        with ESMTP id S231240AbiKQPIA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 10:06:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D693397;
-        Thu, 17 Nov 2022 07:06:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 17 Nov 2022 10:08:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5FDE1C40C
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 07:07:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668697626;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JKpGu6ZDBkN7BELnRjnA9Xvz6+4+9dQBhh5XGDiIQx4=;
+        b=MHYNVvtnFBOAoJGfzlrJL+uMFZVVJvoY5QWDqBX1hznBaIxCOW3D3GhZ+EsaSO6PpsI5Kp
+        zHFxJuGf4kNpeFTS6NO1dnSSRgj1cngLVVwDrRVsJJ6ooqc1TC1PGgBA54OpaZkQ3nqToq
+        2n5G1INqZYcyJ4k179wJENAt8X3B2vQ=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-455-lCtS3rfLM5u7VzVEpLfeVA-1; Thu, 17 Nov 2022 10:06:59 -0500
+X-MC-Unique: lCtS3rfLM5u7VzVEpLfeVA-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2EC69B82082;
-        Thu, 17 Nov 2022 15:06:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE419C433C1;
-        Thu, 17 Nov 2022 15:06:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668697597;
-        bh=jDF1meWT5LLs6tM5Fn0NkBlfnYPk4ji56PnzBPM4Tdc=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=bVdyYII5L7baFCTHCQVnpNVgAxTfmWIIFWXTJYkcR0myTzx21AL4SMwIXIJGXYtDu
-         1iYqekY/zBHMSnfrQFQKWDWdjjamnPssqzuIPuUVgdY/Ubdd7TFze4L64ASmMmU8yt
-         clk/r644H45+p7NSX12L8iS28t/mBE/1RPOXj4whMjBD/6gvoiXY9VlFW1JI3EpGuX
-         EFyQxQ3TzXtNc3wYrerXHv/xa9giEnp08okuJ8dYqhcDBgTZNkIBAc0pIs1qi7sBMe
-         ZVTdQJ93ai4oDDyeg4Cf4Tlt4KMliq0wGUu3CgmBPD6WeMVRhtrMk0aG0FKqWTQAcb
-         rdGmz6d1LHUFw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 83AC05C0521; Thu, 17 Nov 2022 07:06:37 -0800 (PST)
-Date:   Thu, 17 Nov 2022 07:06:37 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Sven Schnelle <svens@linux.ibm.com>
-Cc:     Davidlohr Bueso <dave@stgolabs.net>,
-        Josh Triplett <josh@joshtriplett.org>,
-        linux-kernel@vger.kernel.org, rcu@vger.kernel.org
-Subject: Re: [PATCH 1/2] torture: use for_each_present() loop in
- torture_online_all()
-Message-ID: <20221117150637.GB4001@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221111125126.3319474-1-svens@linux.ibm.com>
- <20221111125126.3319474-2-svens@linux.ibm.com>
- <20221111185331.GA725751@paulmck-ThinkPad-P17-Gen-1>
- <yt9dtu31k0r9.fsf@linux.ibm.com>
- <20221114163009.GE4001@paulmck-ThinkPad-P17-Gen-1>
- <yt9dzgcsiu4p.fsf@linux.ibm.com>
- <20221115134139.GI4001@paulmck-ThinkPad-P17-Gen-1>
- <yt9dr0y29jp3.fsf@linux.ibm.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 438283810D39;
+        Thu, 17 Nov 2022 15:06:58 +0000 (UTC)
+Received: from rotkaeppchen (unknown [10.39.193.156])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 992C0492B0E;
+        Thu, 17 Nov 2022 15:06:55 +0000 (UTC)
+Date:   Thu, 17 Nov 2022 16:06:50 +0100
+From:   Philipp Rudo <prudo@redhat.com>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Eric Biederman <ebiederm@xmission.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
+        Ross Zwisler <zwisler@kernel.org>, linux-doc@vger.kernel.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH v1 2/2] kexec: Introduce kexec_reboot_disabled
+Message-ID: <20221117160650.16e06b37@rotkaeppchen>
+In-Reply-To: <20221114-disable-kexec-reset-v1-2-fb51d20cf871@chromium.org>
+References: <20221114-disable-kexec-reset-v1-0-fb51d20cf871@chromium.org>
+        <20221114-disable-kexec-reset-v1-2-fb51d20cf871@chromium.org>
+Organization: Red Hat inc.
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <yt9dr0y29jp3.fsf@linux.ibm.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 07:30:32AM +0100, Sven Schnelle wrote:
-> Hi Paul,
+Hi Ricardo,
+
+all in all I think this patch makes sense. However, there is one point
+I don't like...
+
+On Mon, 14 Nov 2022 14:18:39 +0100
+Ricardo Ribalda <ribalda@chromium.org> wrote:
+
+> Create a new toogle that disables LINUX_REBOOT_CMD_KEXEC, reducing the
+> attack surface to a system.
 > 
-> "Paul E. McKenney" <paulmck@kernel.org> writes:
+> Without this toogle, an attacker can only reboot into a different kernel
+> if they can create a panic().
 > 
-> >> > Yes, rcutorture has lower-level checks for CPUs being hotplugged
-> >> > behind its back.  Which might be sufficient.  But this patch is in
-> >> > response to something bad happening if the CPU is also not present in
-> >> > the cpu_present_mask.  Would that same bad thing happen if rcutorture saw
-> >> > the CPU in cpu_online_mask, but by the time it attempted to CPU-hotplug
-> >> > it, that CPU was gone not just from cpu_online_mask, but also from
-> >> > cpu_present_mask?
-> >> >
-> >> > Or are CPUs never removed from cpu_present_mask?
-> >> 
-> >> In the current implementation CPUs can only be added to the
-> >> cpu_present_mask, but never removed. This might change in the future
-> >> when we get support from firmware for that, but the current s390 code
-> >> doesn't do that.
-> >
-> > Very good!
-> >
-> > Then could the patch please check that bits are never removed?
-> > That way the code will complain should firmware support be added.
-> >
-> > 							Thanx, Paul
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 > 
-> I'm not sure whether i fully understand that. If the CPU could
-> be removed from the system and the cpu_present_mask, that could
-> happen at any time. So i don't see how we should check about that?
+> diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
+> index 97394bd9d065..25d019682d33 100644
+> --- a/Documentation/admin-guide/sysctl/kernel.rst
+> +++ b/Documentation/admin-guide/sysctl/kernel.rst
+> @@ -462,6 +462,17 @@ altered.
+>  Generally used together with the `modules_disabled`_ sysctl.
+>  
+>  
+> +kexec_reboot_disabled
+> +=====================
+> +
+> +A toggle indicating if ``LINUX_REBOOT_CMD_KEXEC`` has been disabled.
+> +This value defaults to 0 (false: ``LINUX_REBOOT_CMD_KEXEC`` enabled),
+> +but can be set to 1 (true: ``LINUX_REBOOT_CMD_KEXEC`` disabled).
+> +Once true, kexec can no longer be used for reboot and the toggle
+> +cannot be set back to false.
+> +This toggle does not affect the use of kexec during a crash.
+> +
+> +
+>  kptr_restrict
+>  =============
+>  
+> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
+> index 41a686996aaa..15c3fad8918b 100644
+> --- a/include/linux/kexec.h
+> +++ b/include/linux/kexec.h
+> @@ -407,6 +407,7 @@ extern int kimage_crash_copy_vmcoreinfo(struct kimage *image);
+>  extern struct kimage *kexec_image;
+>  extern struct kimage *kexec_crash_image;
+>  extern int kexec_load_disabled;
+> +extern int kexec_reboot_disabled;
+>  
+>  #ifndef kexec_flush_icache_page
+>  #define kexec_flush_icache_page(page)
+> diff --git a/kernel/kexec.c b/kernel/kexec.c
+> index cb8e6e6f983c..43063f803d81 100644
+> --- a/kernel/kexec.c
+> +++ b/kernel/kexec.c
+> @@ -196,6 +196,10 @@ static inline int kexec_load_check(unsigned long nr_segments,
+>  	if (!capable(CAP_SYS_BOOT) || kexec_load_disabled)
+>  		return -EPERM;
+>  
+> +	/* Check if the system admin has disabled kexec reboot. */
+> +	if (!(flags & KEXEC_ON_CRASH) && kexec_reboot_disabled)
+> +		return -EPERM;
 
-Well, that is my question to you.  ;-)
+... Allowing to load a crashkernel doesn't make sense in my opinion. If
+an attacker is capable of creating a malicious kernel, planting it on
+the victims system and then find a way to boot it via kexec this
+attacker also knows how to load the malicious kernel as crashkernel and
+trigger a panic. So you haven't really gained anything. That's why I
+would simply drop this hunk (and the corresponding one from
+kexec_file_load) and let users who worry about this use a combination of
+kexec_load_disabled and kexec_reboot_disabled.
 
-Suppose we have the following sequence of events:
+Thanks
+Philipp
 
-o	rcutorture sees that CPU 5 is in cpu_present_mask, but offline.
+> +
+>  	/* Permit LSMs and IMA to fail the kexec */
+>  	result = security_kernel_load_data(LOADING_KEXEC_IMAGE, false);
+>  	if (result < 0)
+> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+> index ca2743f9c634..fe82e2525705 100644
+> --- a/kernel/kexec_core.c
+> +++ b/kernel/kexec_core.c
+> @@ -929,6 +929,7 @@ int kimage_load_segment(struct kimage *image,
+>  struct kimage *kexec_image;
+>  struct kimage *kexec_crash_image;
+>  int kexec_load_disabled;
+> +int kexec_reboot_disabled;
+>  #ifdef CONFIG_SYSCTL
+>  static struct ctl_table kexec_core_sysctls[] = {
+>  	{
+> @@ -941,6 +942,16 @@ static struct ctl_table kexec_core_sysctls[] = {
+>  		.extra1		= SYSCTL_ONE,
+>  		.extra2		= SYSCTL_ONE,
+>  	},
+> +	{
+> +		.procname	= "kexec_reboot_disabled",
+> +		.data		= &kexec_reboot_disabled,
+> +		.maxlen		= sizeof(int),
+> +		.mode		= 0644,
+> +		/* only handle a transition from default "0" to "1" */
+> +		.proc_handler	= proc_dointvec_minmax,
+> +		.extra1		= SYSCTL_ONE,
+> +		.extra2		= SYSCTL_ONE,
+> +	},
+>  	{ }
+>  };
+>  
+> @@ -1138,7 +1149,7 @@ int kernel_kexec(void)
+>  
+>  	if (!kexec_trylock())
+>  		return -EBUSY;
+> -	if (!kexec_image) {
+> +	if (!kexec_image || kexec_reboot_disabled) {
+>  		error = -EINVAL;
+>  		goto Unlock;
+>  	}
+> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+> index 45637511e0de..583fba6de5cb 100644
+> --- a/kernel/kexec_file.c
+> +++ b/kernel/kexec_file.c
+> @@ -333,6 +333,11 @@ SYSCALL_DEFINE5(kexec_file_load, int, kernel_fd, int, initrd_fd,
+>  	if (!capable(CAP_SYS_BOOT) || kexec_load_disabled)
+>  		return -EPERM;
+>  
+> +	/* Check if the system admin has disabled kexec reboot. */
+> +	if (!(flags & (KEXEC_FILE_ON_CRASH | KEXEC_FILE_UNLOAD))
+> +	    && kexec_reboot_disabled)
+> +		return -EPERM;
+> +
+>  	/* Make sure we have a legal set of flags */
+>  	if (flags != (flags & KEXEC_FILE_FLAGS))
+>  		return -EINVAL;
+> 
 
-o	rcutorture therefore decides to online CPU 5.
-
-o	s390 firmware removes CPU 5, and s390 architecture code then
-	clears it from the cpu_present_mask.
-
-o	rcutorture proceeds with onlining CPU 5.
-
-Don't we then get the same problem that prompted you to change from
-cpu_possible_mask to cpu_present mask?  If not, why can't the rcutorture
-code continue to use cpu_possible_mask?
-
-If it really is bad to try to online or offline a CPU that is in
-cpu_possible_mask but not in cpu_present_mask, and if CPUs can be removed
-from cpu_present_mask, then we need some way to synchronize the removal
-of CPUs from cpu_present_mask.  There are of course a lot of possible
-ways to do that synchronization, for example, protecting cpu_present_mask
-with a mutex or similar.
-
-Alternatively, s390 could restrict things.  One way to do that would
-be to turn off rcutorture's use of CPU hotplug when running on s390,
-for example, by using the module parameters provided for that purpose.
-Another way to do that would be to refrain from removing CPUs from
-cpu_present_mask while rcutorture is running.
-
-Are there other approaches?
-
-							Thanx, Paul
