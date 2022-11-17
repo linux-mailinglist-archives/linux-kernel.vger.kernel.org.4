@@ -2,145 +2,303 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 697B462DC5F
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:12:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6942D62DC68
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 14:14:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239612AbiKQNMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 08:12:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33376 "EHLO
+        id S239843AbiKQNOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 08:14:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239908AbiKQNLo (ORCPT
+        with ESMTP id S239679AbiKQNOE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 08:11:44 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B26216E54F;
-        Thu, 17 Nov 2022 05:11:42 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id h12so2606177ljg.9;
-        Thu, 17 Nov 2022 05:11:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=4sws5iJ633AZdBCeJxCZGSrAHkBWS4YaCw1buo2c50w=;
-        b=QCiMlsnmcbusTFqVVSqCJqWJuywBvw0xhrGtJfPjhTmNqlehDBdh+VAVoKH+V2trVQ
-         5ns/jA1WC2v2I0FgrXI5Hh7wx97SxlvoEh+JFqANtS5+8dXANQKrpVbLvuGd1qNM8dBo
-         8p9VhLyenuvTusezUy8mopjAUsZQeUtFjy7ALCg7xjRKLdncs06MK1GM9Z6QtRc7nTB5
-         U0pVfgkz+b5eyf0EtZHxGe3E8kBDQ5EJqp0X2TL9AJOZo+klKu2yC3TFTUDqdEIRruLM
-         zSHSfFxSM692EUm666d0mc/7ap4zPWdylWmxkOJftFN9uzy2/bPNxzaV9FIZjez7a2nA
-         VfGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4sws5iJ633AZdBCeJxCZGSrAHkBWS4YaCw1buo2c50w=;
-        b=IU0DLTvKisDsbKetz712rl25a1rBSiDmtW2r6XckVvTAHU8oZxKJDasM2a5D2c4g1g
-         pIWO8qihUfhIhKzPGTIY7lFshlyafXpGsPgNyUyA3jzcmjIpNizwunXcg0mJeHR4VJdY
-         WGsEbaST+vevqldKxBdAysNlOvklxfeiukYqDJ3803o5Xex9bPIPoqKmCfosUVdsidyw
-         i2QocthqKQjjnozTyq4Tir6T5o2xzgSTYQgMOVveW9ftnvu4cxydVhT0V8nlBPjUyLtl
-         iiQO0ucptnMgMPWsk+5T3R1784ixo6fz4EytQ/qo7krSbVAlu+95qT5ByCxBOVIbyco4
-         /UBg==
-X-Gm-Message-State: ANoB5pkOk5Vfg4vvx7yG12YBy3vJCQNlGdryp/dXnO3LM3nyZzaq54rs
-        taqnh1GAeksgKnJ8Vtledzc=
-X-Google-Smtp-Source: AA0mqf51RVBQc7wmpL8OoV6vZdamJHyc0t8rqZS0rTd8aQnjcCwTqK4oVq23xXnAOrZsZhTJbl8WDA==
-X-Received: by 2002:a2e:a90c:0:b0:278:a7de:54e6 with SMTP id j12-20020a2ea90c000000b00278a7de54e6mr1043922ljq.367.1668690701073;
-        Thu, 17 Nov 2022 05:11:41 -0800 (PST)
-Received: from pc636 (host-90-235-25-77.mobileonline.telia.com. [90.235.25.77])
-        by smtp.gmail.com with ESMTPSA id o19-20020a05651205d300b0049876c1bb24sm140444lfo.225.2022.11.17.05.11.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 05:11:40 -0800 (PST)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Thu, 17 Nov 2022 14:11:38 +0100
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Uladzislau Rezki <urezki@gmail.com>, paulmck@kernel.org,
-        linux-kernel@vger.kernel.org, rcu@vger.kernel.org
-Subject: Re: [PATCH v2] rcu/kfree: Do not request RCU when not needed
-Message-ID: <Y3YzCi9exKhiAAd0@pc636>
-References: <Y3YwDuKibmOiz6/7@pc636>
- <1AF9A4B1-A9E2-4461-99E0-4CEC2E3AFA1F@joelfernandes.org>
+        Thu, 17 Nov 2022 08:14:04 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5305EF9B
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 05:13:57 -0800 (PST)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NCgJk02R5zJnj5;
+        Thu, 17 Nov 2022 21:10:46 +0800 (CST)
+Received: from dggpemm500014.china.huawei.com (7.185.36.153) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 17 Nov 2022 21:13:55 +0800
+Received: from huawei.com (7.220.126.23) by dggpemm500014.china.huawei.com
+ (7.185.36.153) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 17 Nov
+ 2022 21:13:55 +0800
+From:   Song Zhang <zhangsong34@huawei.com>
+To:     <mingo@redhat.com>, <peterz@infradead.org>,
+        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>
+CC:     <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
+        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
+        <vschneid@redhat.com>, <linux-kernel@vger.kernel.org>,
+        Song Zhang <zhangsong34@huawei.com>
+Subject: [PATCH v5] sched/fair: Introduce priority load balance for CFS
+Date:   Thu, 17 Nov 2022 21:12:46 +0800
+Message-ID: <20221117131246.202545-1-zhangsong34@huawei.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1AF9A4B1-A9E2-4461-99E0-4CEC2E3AFA1F@joelfernandes.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [7.220.126.23]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500014.china.huawei.com (7.185.36.153)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 08:06:21AM -0500, Joel Fernandes wrote:
-> 
-> 
-> > On Nov 17, 2022, at 7:58 AM, Uladzislau Rezki <urezki@gmail.com> wrote:
-> > 
-> > ﻿On Wed, Nov 16, 2022 at 10:05:46PM +0000, Joel Fernandes wrote:
-> >>> On Wed, Nov 16, 2022 at 7:19 PM Uladzislau Rezki <urezki@gmail.com> wrote:
-> >>> 
-> >>> Hello, Paul, Joel.
-> >>> 
-> >>>>> 
-> >>>>> Yes sure, I am doing a run now with my patch. However, I have a
-> >>>>> question -- why do you feel blocking in the kworker is not an issue?
-> >>>>> You are taking a snapshot before queuing the normal kwork and then
-> >>>>> reading the snapshot when the normal kwork runs. Considering it is a
-> >>>>> high priority queue, the delay between when you are taking the
-> >>>>> snapshot, and reading it is likely small so there is a bigger chance
-> >>>>> of blocking in cond_synchronize_rcu(). Did I miss something?
-> >>>>> 
-> >>>> We can wait indeed in the reclaim worker. But the worker does not do any
-> >>>> nasty or extra work here. If there is a need we block and wait. After a
-> >>>> grace period, we are awoken and proceed.
-> >>>> 
-> >>>> Therefore i do not see the reason in handling two cases:
-> >>>> 
-> >>>> if (gp_done)
-> >>>>    queue_work();
-> >>>> else
-> >>>>    queue_rcu_work();
-> >>>> 
-> >>>> it is the same if we just queue the work and check on entry. The current
-> >>>> scenario is: queue the work after a grace period. This is the difference.
-> >>>> 
-> >>>> Right if the reclaimer was a high prio kthread a time would be shorter.
-> >>>> 
-> >>>> In your scenario the time seems even shorter(i have not checked) because
-> >>>> you update a snapshot of krcp each time a kvfree_rcu() is invoked. So
-> >>>> basically even though you have objects whose grace period is passed you
-> >>>> do not separate it anyhow. Because you update the:
-> >>>> 
-> >>>> krcp->gp_snap = get_state_synchronize_rcu();
-> >>>> 
-> >>>> too often.
-> >>>> 
-> >>> Once upon a time we discussed that it is worth to keep track of GP
-> >>> per-a-page in order to reduce a memory footprint. Below patch addresses
-> >>> it:
-> >> 
-> >> In the patch below, it appears you are tracking the GP per krwp, and
-> >> not per page. But I could be missing something - could you split it
-> >> into separate patches for easier review?
-> >> 
-> > I will split. I was thinking about it. The GP is tracked per-a-page. As for
-> > krwp it is only for channel_3. Everything goes there if no-page or no cache.
-> > 
-> Ah, ok.
-> 
-> >> 
-> >> Also it still does cond_synchronize_rcu() :-(
-> >> 
-> > Sometimes we need to wait for a GP we can not just release :)
-> 
-> You know that is not what I meant ;) I was concerned about the blocking.
-> 
-Let me split. After that we/you can test and check if there is any issue
-with sleeping on entry for waiting a GP if needed.
+For co-location with idle and non-idle tasks, when CFS do load balance,
+it is reasonable to prefer migrating non-idle tasks and migrating idle
+tasks lastly to improve QoS of non-idle(Latency Sensitive) tasks.
 
---
-Uladzislau Rezki
+Consider a simple scenario. Assume that CPU0 has two non-idle tasks 
+whose weight is 2*1024=2048, also CPU0 has 3000 idle tasks whose 
+weight is 3000*3 = 9000. Now CPU1 is idle and IDLE load balance is 
+triggered. CPU1 needs to pull a certain number of tasks from CPU0.
+
+If we do not considerate task priorities and interference between tasks, 
+more than 1800 idle tasks on CPU0 maybe migrated to CPU1. As a result, 
+two non-idle tasks still compete on CPU0. However CPU1 is running with
+a lot of idle but not non-idle tasks.
+
+On the other hand, if we consider the interference between different 
+task priorities, first migrate one non-idle to CPU1, the non-idle 
+task may execute quickly on CPU1, then CPU1 is got to idle and pulls 
+more idle tasks from CPU0, so that the non-idle task on CPU 0 can 
+also be completed more quickly.
+
+Although this change will cause some idle tasks imbalance between
+different CPUs, but the latency of non-idle tasks can be significantly
+reduced.
+
+Signed-off-by: Song Zhang <zhangsong34@huawei.com>
+---
+v4->v5:
+ - Deleted meaningless load/utility imbalance judgment.
+ - Add restrictions on idle task migration.
+
+v3->v4:
+ - Remove can_migrate_cfs_tasks().
+ - Fix calculate migration {load|util|task} imbalance for env->src_rq
+   and env->dst_rq for non-idle cfs tasks.
+
+v2->v3:
+ - Fix can_migrate_cfs_tasks() for detach_one_task.
+
+v1->v2:
+ - Remove sysctl knob and add LB_PRIO sched feature.
+ - Migrating tasks consider non-idle migrate_{load|util|task} difference
+   between env->src_rq and env->dst_rq, and if the difference smaller than
+   env->imbalance, change to migrate idle tasks instead.
+---
+ kernel/sched/core.c     |  1 +
+ kernel/sched/fair.c     | 76 ++++++++++++++++++++++++++++++++++++++---
+ kernel/sched/features.h |  1 +
+ kernel/sched/sched.h    |  1 +
+ 4 files changed, 75 insertions(+), 4 deletions(-)
+
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 5800b0623ff3..fa4174ecd111 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -9731,6 +9731,7 @@ void __init sched_init(void)
+ 		rq->max_idle_balance_cost = sysctl_sched_migration_cost;
+ 
+ 		INIT_LIST_HEAD(&rq->cfs_tasks);
++		INIT_LIST_HEAD(&rq->cfs_idle_tasks);
+ 
+ 		rq_attach_root(rq, &def_root_domain);
+ #ifdef CONFIG_NO_HZ_COMMON
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index e4a0b8bd941c..e677bf6487b8 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -3199,6 +3199,20 @@ static inline void update_scan_period(struct task_struct *p, int new_cpu)
+ 
+ #endif /* CONFIG_NUMA_BALANCING */
+ 
++#ifdef CONFIG_SMP
++static void
++adjust_rq_cfs_tasks(
++	void (*list_op)(struct list_head *, struct list_head *),
++	struct rq *rq,
++	struct sched_entity *se)
++{
++	if (sched_feat(LB_PRIO) && task_has_idle_policy(task_of(se)))
++		(*list_op)(&se->group_node, &rq->cfs_idle_tasks);
++	else
++		(*list_op)(&se->group_node, &rq->cfs_tasks);
++}
++#endif
++
+ static void
+ account_entity_enqueue(struct cfs_rq *cfs_rq, struct sched_entity *se)
+ {
+@@ -3208,7 +3222,7 @@ account_entity_enqueue(struct cfs_rq *cfs_rq, struct sched_entity *se)
+ 		struct rq *rq = rq_of(cfs_rq);
+ 
+ 		account_numa_enqueue(rq, task_of(se));
+-		list_add(&se->group_node, &rq->cfs_tasks);
++		adjust_rq_cfs_tasks(list_add, rq, se);
+ 	}
+ #endif
+ 	cfs_rq->nr_running++;
+@@ -7631,7 +7645,7 @@ done: __maybe_unused;
+ 	 * the list, so our cfs_tasks list becomes MRU
+ 	 * one.
+ 	 */
+-	list_move(&p->se.group_node, &rq->cfs_tasks);
++	adjust_rq_cfs_tasks(list_move, rq, &p->se);
+ #endif
+ 
+ 	if (hrtick_enabled_fair(rq))
+@@ -8147,6 +8161,20 @@ static void detach_task(struct task_struct *p, struct lb_env *env)
+ 	set_task_cpu(p, env->dst_cpu);
+ }
+ 
++/*
++ * cfs_nr_tasks_imbalance() -- calculate cfs non-idle tasks imbalance between
++ * env->src_rq and env->dst_rq.
++ */
++static int cfs_nr_tasks_imbalance(struct lb_env *env)
++{
++	int nr_src_tasks = &env->src_rq->cfs.h_nr_running -
++		&env->src_rq->cfs.idle_h_nr_running;
++	int nr_dst_tasks = &env->dst_rq->cfs.h_nr_running -
++		&env->dst_rq->cfs.idle_h_nr_running;
++
++	return max_t(int, 0, (nr_src_tasks - nr_dst_tasks) >> 1);
++}
++
+ /*
+  * detach_one_task() -- tries to dequeue exactly one task from env->src_rq, as
+  * part of active balancing operations within "domain".
+@@ -8156,11 +8184,15 @@ static void detach_task(struct task_struct *p, struct lb_env *env)
+ static struct task_struct *detach_one_task(struct lb_env *env)
+ {
+ 	struct task_struct *p;
++	struct list_head *tasks = &env->src_rq->cfs_tasks;
+ 
+ 	lockdep_assert_rq_held(env->src_rq);
+ 
++	if (sched_feat(LB_PRIO) && cfs_nr_tasks_imbalance(env) < 1)
++		tasks = &env->src_rq->cfs_idle_tasks;
++
+ 	list_for_each_entry_reverse(p,
+-			&env->src_rq->cfs_tasks, se.group_node) {
++			tasks, se.group_node) {
+ 		if (!can_migrate_task(p, env))
+ 			continue;
+ 
+@@ -8190,6 +8222,8 @@ static int detach_tasks(struct lb_env *env)
+ 	unsigned long util, load;
+ 	struct task_struct *p;
+ 	int detached = 0;
++	int nr_imbalance = 0;
++	bool detach_idle = false;
+ 
+ 	lockdep_assert_rq_held(env->src_rq);
+ 
+@@ -8205,6 +8239,9 @@ static int detach_tasks(struct lb_env *env)
+ 	if (env->imbalance <= 0)
+ 		return 0;
+ 
++	nr_imbalance = cfs_nr_tasks_imbalance(env);
++
++again:
+ 	while (!list_empty(tasks)) {
+ 		/*
+ 		 * We don't want to steal all, otherwise we may be treated likewise,
+@@ -8234,6 +8271,10 @@ static int detach_tasks(struct lb_env *env)
+ 		if (!can_migrate_task(p, env))
+ 			goto next;
+ 
++		if (sched_feat(LB_PRIO) &&
++			!detach_idle && nr_imbalance < 1)
++			break;
++
+ 		switch (env->migration_type) {
+ 		case migrate_load:
+ 			/*
+@@ -8286,6 +8327,9 @@ static int detach_tasks(struct lb_env *env)
+ 		detach_task(p, env);
+ 		list_add(&p->se.group_node, &env->tasks);
+ 
++		if (sched_feat(LB_PRIO) && !detach_idle)
++			nr_imbalance--;
++
+ 		detached++;
+ 
+ #ifdef CONFIG_PREEMPTION
+@@ -8310,6 +8354,30 @@ static int detach_tasks(struct lb_env *env)
+ 		list_move(&p->se.group_node, tasks);
+ 	}
+ 
++	if (sched_feat(LB_PRIO) && !detach_idle && env->imbalance > 0) {
++		/*
++		 * Try to migrate SCHED_IDLE tasks from src_rq->cfs_idle_tasks
++		 * to dst_rq if dst_rq is idle or sched idle. If dst_rq is
++		 * running with non-idle tasks, do not migrate SCHED_IDLE tasks.
++		 */
++		if (env->dst_rq->cfs.h_nr_running -
++			env->dst_rq->cfs.idle_h_nr_running == 0) {
++			detach_idle = true;
++			tasks = &env->src_rq->cfs_idle_tasks;
++			goto again;
++		}
++
++		/*
++		 * Finish load balancing if all src rq tasks have been
++		 * test and one more tasks migrated to dst CPU.
++		 * Clear LBF_ALL_PINNED flag as we will not test any task.
++		 */
++		if (detached && !(env->flags & LBF_NEED_BREAK)) {
++			env->imbalance = 0;
++			env->flags &= ~LBF_ALL_PINNED;
++		}
++	}
++
+ 	/*
+ 	 * Right now, this is one of only two places we collect this stat
+ 	 * so we can safely collect detach_one_task() stats here rather
+@@ -11814,7 +11882,7 @@ static void set_next_task_fair(struct rq *rq, struct task_struct *p, bool first)
+ 		 * Move the next running task to the front of the list, so our
+ 		 * cfs_tasks list becomes MRU one.
+ 		 */
+-		list_move(&se->group_node, &rq->cfs_tasks);
++		adjust_rq_cfs_tasks(list_move, rq, se);
+ 	}
+ #endif
+ 
+diff --git a/kernel/sched/features.h b/kernel/sched/features.h
+index ee7f23c76bd3..bc4a85f839b4 100644
+--- a/kernel/sched/features.h
++++ b/kernel/sched/features.h
+@@ -85,6 +85,7 @@ SCHED_FEAT(RT_PUSH_IPI, true)
+ 
+ SCHED_FEAT(RT_RUNTIME_SHARE, false)
+ SCHED_FEAT(LB_MIN, false)
++SCHED_FEAT(LB_PRIO, false)
+ SCHED_FEAT(ATTACH_AGE_LOAD, true)
+ 
+ SCHED_FEAT(WA_IDLE, true)
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index 1644242ecd11..bf6c2a3eea6c 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -1053,6 +1053,7 @@ struct rq {
+ 	int			online;
+ 
+ 	struct list_head cfs_tasks;
++	struct list_head cfs_idle_tasks;
+ 
+ 	struct sched_avg	avg_rt;
+ 	struct sched_avg	avg_dl;
+-- 
+2.33.0
+
