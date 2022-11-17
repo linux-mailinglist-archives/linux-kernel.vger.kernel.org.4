@@ -2,97 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5F3762D3CB
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 08:08:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A17562D3D9
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 08:10:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234000AbiKQHIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 02:08:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49126 "EHLO
+        id S234614AbiKQHKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 02:10:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234313AbiKQHIL (ORCPT
+        with ESMTP id S232918AbiKQHKl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 02:08:11 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28563657D4
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 23:08:11 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id 130so1212059pgc.5
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 23:08:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=UAu7Qq9urA/2CACA9Hh+1UR/gyDzRKpeK8exN8pGRGc=;
-        b=tPom7jgm4aEV3UcuTrtkJ9WXPYx1xLs3GpHHDkKphwOmPBFKz+yATUKMk1dUX4Czj4
-         9m5Z41vo7tXTj7X4CpnPP4xffZ3+eD1hoPOupmGXTUhfpccza0/QJojWLXRBN+MxesBW
-         KZEcXnv6FIphs/mg4YlCNzY7DHdrlS6QVeSkGZLMgoDsYR++Us4LGtpvqaXaj5+hqdNN
-         2LA9sydaeL6d283yzEM9HnUJWbNrbdbNUZkXH08AuHtpCWvJHy7hE6HSL3aJJbCpXFwI
-         UD0QHIiRDU2+sHuipLJUXt8zTOxvp7n2MWM0ecdjFJKRG+6u2eNgX+75bjq4NKrmPGEK
-         wCGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UAu7Qq9urA/2CACA9Hh+1UR/gyDzRKpeK8exN8pGRGc=;
-        b=5pKfQ0VHAEbk8mQcwW0643c4SvG5tnd6Uzsm0BJWi01neJMG3feQifF4wGZNt/8rFe
-         VhJ209cVH2LE6PSGdzJ8vcxYVD6erRnxDy0RjjzY8I0iYQycUJe+7Iw/PMpjcOOJ2Lx4
-         DYOsMMLUHJ3mOnaoe4iFS864xnpQzGkXLrP4BoF6KlEBZoFRlhNTcFE+qa9YlwxKwO5X
-         ennOwUOFjDRXy6tFUstenpChqq6GW5vUIUbfOkTQ8lg9yhW6vnJT1pCApw3JYbPZluHP
-         LHoQmnWondZm8hKLGSznV4+KGGCx9crKbdvYuNSl+ckvnV0lsSGWlCaesaT+z1GEJmqS
-         OYWA==
-X-Gm-Message-State: ANoB5plG+u9vbmcF7Op/a1MCFhb/E18XR3Uph6k7W6wOLjMyLPJOUOp0
-        tSg+hvwoFEiJ3SZInB77KnL42rktttiOBSaRrNtPig==
-X-Google-Smtp-Source: AA0mqf6FeRrcOYfgd5QoCZHb7tiY6I/edy2aB82zFoI+g9lRRZuamw4/hvEK8BIr963Kkgm7Yq/eSFkC85iYBhQeVzw=
-X-Received: by 2002:aa7:80d8:0:b0:56d:98e3:4df8 with SMTP id
- a24-20020aa780d8000000b0056d98e34df8mr1695579pfn.37.1668668890570; Wed, 16
- Nov 2022 23:08:10 -0800 (PST)
+        Thu, 17 Nov 2022 02:10:41 -0500
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED37367139;
+        Wed, 16 Nov 2022 23:10:39 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AH7AORO029362;
+        Thu, 17 Nov 2022 01:10:24 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1668669024;
+        bh=thJsfgmBOHiiOmA9qjTuo4exVUbI9Olc6EK7VDMm2Is=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=tX7ks31ITJXHe9B03V/4e7ImTvBQEjq0BBZkLytchf0r1T9N/4Hasi0/EWVGzNJjY
+         LpBYuOeS5/Bj/CodvClT54pD2vnksWxBy4Wo1y+sN0nTfipF1r7SnkGxMHOIOeTNOc
+         L7KagmRcXHYGnbXuy0iPBHbh7KQaB9YS8YUp9Voo=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AH7AOg4004204
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 17 Nov 2022 01:10:24 -0600
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 17
+ Nov 2022 01:10:24 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Thu, 17 Nov 2022 01:10:24 -0600
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AH7AOCv024012;
+        Thu, 17 Nov 2022 01:10:24 -0600
+From:   Nishanth Menon <nm@ti.com>
+To:     <j-keerthy@ti.com>, <vigneshr@ti.com>
+CC:     Nishanth Menon <nm@ti.com>, <kristo@kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH] arm64: dts: ti: k3-j721s2: Fix the interrupt ranges property for main & wkup gpio intr
+Date:   Thu, 17 Nov 2022 01:10:23 -0600
+Message-ID: <166866872369.15713.12373959686741918117.b4-ty@ti.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20220922072950.9157-1-j-keerthy@ti.com>
+References: <20220922072950.9157-1-j-keerthy@ti.com>
 MIME-Version: 1.0
-References: <20221117002350.2178351-1-seanjc@google.com> <20221117002350.2178351-3-seanjc@google.com>
-In-Reply-To: <20221117002350.2178351-3-seanjc@google.com>
-From:   Reiji Watanabe <reijiw@google.com>
-Date:   Wed, 16 Nov 2022 23:07:53 -0800
-Message-ID: <CAAeT=FyKq8oeer7b0McUkGRbvmUPH4+hLnWPKZmGQ3uWgkUNcQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] KVM: arm64: selftests: Disable single-step without
- relying on ucall()
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 4:24 PM Sean Christopherson <seanjc@google.com> wrote:
->
-> Automatically disable single-step when the guest reaches the end of the
-> verified section instead of using an explicit ucall() to ask userspace to
-> disable single-step.  An upcoming change to implement a pool-based scheme
-> for ucall() will add an atomic operation (bit test and set) in the guest
-> ucall code, and if the compiler generate "old school" atomics, e.g.
->
->   40e57c:       c85f7c20        ldxr    x0, [x1]
->   40e580:       aa100011        orr     x17, x0, x16
->   40e584:       c80ffc31        stlxr   w15, x17, [x1]
->   40e588:       35ffffaf        cbnz    w15, 40e57c <__aarch64_ldset8_sync+0x1c>
->
-> the guest will hang as the local exclusive monitor is reset by eret,
-> i.e. the stlxr will always fail due to the VM-Exit for the debug
-> exception.
->
-> Link: https://lore.kernel.org/all/20221006003409.649993-8-seanjc@google.com
-> Cc: Oliver Upton <oliver.upton@linux.dev>
-> Cc: Marc Zyngier <maz@kernel.org>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+Hi Keerthy,
 
-Reviewed-by: Reiji Watanabe <reijiw@google.com>
+On Thu, 22 Sep 2022 12:59:50 +0530, Keerthy wrote:
+> The parent's input irq number is wrongly subtracted with 32 instead of
+> using the exact numbers in:
+> 
+> https://software-dl.ti.com/tisci/esd/latest/5_soc_doc/j721s2/interrupt_cfg.html
+> 
+> The GPIO interrupts are not working because of that. The toggling works
+> fine but interrupts are not firing. Fix the parent's input irq that
+> specifies the base for parent irq.
+> 
+> [...]
+
+I have applied the following to branch ti-k3-dts-next on [1].
+Thank you!
+
+I have fixed up the commit sha to 12 characters (please do run checkpatch and
+usual checkers). I am choosing not to send this to 6.1 merge, since nothing
+actively looks broken requiring urgent fixup atm.
+
+[1/1] arm64: dts: ti: k3-j721s2: Fix the interrupt ranges property for main & wkup gpio intr
+      commit: b8aa36c22da7d64c5a5d89ccb4a2abb9aeaab2e3
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent up the chain during
+the next merge window (or sooner if it is a relevant bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+[1] git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+
