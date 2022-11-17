@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 091AB62D983
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 12:37:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D30162D974
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 12:34:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239506AbiKQLhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 06:37:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42062 "EHLO
+        id S239585AbiKQLe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 06:34:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239495AbiKQLeO (ORCPT
+        with ESMTP id S234857AbiKQLeY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 06:34:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1674E22501
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 03:34:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A595861253
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 11:34:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90E73C433D7;
-        Thu, 17 Nov 2022 11:34:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668684850;
-        bh=yMu6+GoFnl1mrIFFhTT3h7tPE+tEdM553AlyVAInMtU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HdOniGdlwP8cyj9N71XQTfTLaJOTTLgOhFdmgU4B+ak6zjuXmZIs3qRCND30cYI5p
-         LwUV6gPCiTQeVyEhetyAvPKo6HRrLedjPJdUZgIAj6VGVw1mLZPqTGIu1TIiXu/n15
-         Pt2dhgSARtYkngniM6kN5WdFRICtscNIcNoA8Xg7qiYJ2aZxqiw/EpylvUU10nncSU
-         1a9VXdp7zAIdtQpJoYcC6HOGQTUKYY0WihJ7mwYs4b5dYsP1OvoTiwEdu9QUQyxqQw
-         QmEWDn1h+Rdam4Y0+fPyop0vK7uYuO4/S2C+pmoHRvKzC0ffcLyngND8Rl6X+E5HJT
-         vJE2Kq4p/UaOg==
-Date:   Thu, 17 Nov 2022 11:34:06 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org
-Subject: Re: [PATCH 01/11] ASoC: ak5386: switch to using gpiod API
-Message-ID: <Y3YcLulaebidYYsg@sirena.org.uk>
-References: <20221116053817.2929810-1-dmitry.torokhov@gmail.com>
- <Y3S9KzTE1/UQDmJl@sirena.org.uk>
- <Y3U1BJAPOJTLw/Zb@google.com>
+        Thu, 17 Nov 2022 06:34:24 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E899E528B9
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 03:34:23 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ovd9v-00039Z-Bx; Thu, 17 Nov 2022 12:34:19 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ovd9t-004q7j-2f; Thu, 17 Nov 2022 12:34:18 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ovd9t-00HGYn-9G; Thu, 17 Nov 2022 12:34:17 +0100
+Date:   Thu, 17 Nov 2022 12:34:17 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] pwm: Add missing dummy for devm_pwmchip_add()
+Message-ID: <20221117113417.rymtblijhnez3e3f@pengutronix.de>
+References: <12f2142991690d2b1d6890821f6e7779a4d4bdc0.1666706435.git.geert+renesas@glider.be>
+ <20221026001713.kuu5mj6kogosvqnk@pengutronix.de>
+ <CAMuHMdW=h922855yyiiR2Bo+P2Dg7S7r1pVBF56S+Z0ytng3fA@mail.gmail.com>
+ <20221117112758.nsxfwh4ck23uln5a@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="QM8UBU9P046DRTWO"
+        protocol="application/pgp-signature"; boundary="xtrlobpfx3ir76qy"
 Content-Disposition: inline
-In-Reply-To: <Y3U1BJAPOJTLw/Zb@google.com>
-X-Cookie: Ego sum ens omnipotens.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221117112758.nsxfwh4ck23uln5a@pengutronix.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -58,54 +58,40 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---QM8UBU9P046DRTWO
-Content-Type: text/plain; charset=us-ascii
+--xtrlobpfx3ir76qy
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 16, 2022 at 11:07:48AM -0800, Dmitry Torokhov wrote:
-> On Wed, Nov 16, 2022 at 10:36:27AM +0000, Mark Brown wrote:
+Hello,
 
-> > How are we ensuring that people have described signals as active
-> > low/high in existing DTs, and are we positive that the signal is
-> > described as active low for all devices?  In particular if the
-> > signal is described as a reset signal then it's active high even
-> > if we want it low while the device is actually in use.
+On Thu, Nov 17, 2022 at 12:27:58PM +0100, Uwe Kleine-K=F6nig wrote:
+> So the dummy isn't even needed. (Unless for the corner case GPIO_MVEBU=3Dy
+> + PWM=3Dm which is probably a bug worth fixing. Maybe a similar issue
+> exists for ti-sn65dsi86.)
 
-> I have been going through in-kernel DTSes and adjusting ones that are
-> incorrect. For external ones I think we should take a pragmatic approach
-> and say that if driver has last non-mechanical update in 2014 and there
-> are no users submitted to mainline since then (as this one), then it is
-> highly unlikely that devices currently using this component/codec will
-> be updated to the 6.2+ kernel even if they are still in service. And if
-> this does happen the breakage will be immediately obvious as we'll keep
-> the codec in reset state.
+FTR: That is not a problem, PWM is bool and so cannot be =3Dm.
 
-> But if you really want to I can add quirk(s) to gpiolib forcing this
-> line to be treated as active-low regardless of what specified in DTS.
-> This kind of negates benefit of going to gpiod though.
+Best regards
+Uwe
 
-That doesn't address the bit about checking that the device
-describes the signal as active low in hardware - it's assuming
-that the signal is described by the device as an active low
-reset and not for example as a shutdown signal.
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-TBH I'm not thrilled about just randomly breaking ABI
-compatibility for neatness reasons, it's really not helping
-people take device tree ABI compatibility seriously.
-
---QM8UBU9P046DRTWO
+--xtrlobpfx3ir76qy
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmN2HC4ACgkQJNaLcl1U
-h9Dxfgf/ftYFUMW/ILTdWcqMEKVkYIa3+9VBKpQL0Aq9xN022wMz+ICsRHsAonCe
-fhG0ZfhhAvP4nkV+Ui6cxFdWM/vM0Or+OF1KnI8BsCoWkMpyDU7WahUXQ8HhjnUv
-RkKKkXG3K0jcYeh1yLB4p1miF1tt060Z09558aUHtnFto6vNOtE1VE56aI8TJvzo
-qAN33CB7jWe++RfqjI0hismVbCjTNxivk48+6qKzdjS4JsgoqGGqxMYqnJzBMbf5
-rUAM8yj6zH74WkWELWsv9ZlxCQ9CAEOWEeP4eWLFgQ1arngjeymdAVy04frQB+Dy
-Q1mfUHb1Sj+c6y7pgbHXtAOaX6CjWg==
-=EGgz
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN2HDUACgkQwfwUeK3K
+7AmsDwf/Z7V01fZBUwUulP5t01w5taZrXs4mNK+x4New+cdVe+9w3WvsrMrZMvn+
+zczyWyo1YaWZcDXZ7P5u5AiT3uYq0LF7pf4Kpd1YqLKrPgcATpx7N7BFSYLrJD7P
+E28T9+pBR+8McRkL6PcAqJ0fZgZU0hrD9Ycv22mjbuwAVBG83g7At0R5/cHMSAWb
+jbvbUaUG2kHQCluJ4+SsamY1jzBIVONl6nxgGkEPsBrjowLZXmMjOvsIoKWJKUrD
+yg8/nUQDFPdUeEJ5gp4PPf/rVa/Aih/eHoCauj/X1fpA8OcGtpvdj/X4tsUoG6tm
+7GbdlrhfBWLkbwEK3d2k/JO3DD6HMg==
+=yWoZ
 -----END PGP SIGNATURE-----
 
---QM8UBU9P046DRTWO--
+--xtrlobpfx3ir76qy--
