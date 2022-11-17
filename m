@@ -2,84 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25E6462CFC7
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 01:34:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E3F262CFC9
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 01:35:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233199AbiKQAeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Nov 2022 19:34:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33608 "EHLO
+        id S233963AbiKQAfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Nov 2022 19:35:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231300AbiKQAeS (ORCPT
+        with ESMTP id S231300AbiKQAfG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Nov 2022 19:34:18 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B272231355
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 16:34:16 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id l4-20020a056e021aa400b00300ad9535c8so245031ilv.1
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 16:34:16 -0800 (PST)
+        Wed, 16 Nov 2022 19:35:06 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA9FD121
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 16:35:05 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id b1-20020a17090a7ac100b00213fde52d49so432894pjl.3
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Nov 2022 16:35:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tmvJEwiZ21xXLrZBi1WIG/q1ERap31TpLTpBBT5zmxU=;
+        b=cakRGVlFP4zUUwjnILOJJPN0XKbQNn0ZanA9TWdtV07Sm+c6Bw6IqGBgu3qize0fev
+         s3xAxHQe/+6KbKtzhhRRZngAIPva5ZZ0QfQCpQ4Ky/icC0A10gkkNIo0Yc0hMvcoom1H
+         H1hQRpPincosjsYy1r4B9an3mEa3ozSoAZYXI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C7fpKRtzxmuZr+pixes1vS//11B89ShTFWKOGGoP3bY=;
-        b=OVQfj2MjT9cOJ43+PfL+dzbcojonkAKLyXecFWqHHhaG+riPNIQzTcbZA8jcecs5IV
-         z+nFx/Lns/eAaNfsBsEDhtAUmVshFPtdaTcdh9lqKWMjxjjtVaiKadm7pFf53ex1X1a8
-         tsuackTPXf+QORy89Rrq6La6oPsjzDm8oYLfYIEZL+V9ynKbgDDU1OGD2LdsKSrjp5r2
-         MbcUuP3GK7WLsiFCVQ9vb7emkFT+AcOCvDZoshpeAy+OuKfe8Zm6owSSg/8JAG4SFYzo
-         LdU6EYzd146cSD4hguWx6gib47nwxsa3yenC0lx1HChAMIVK/vdAmYVGXNIw8Mw++wx/
-         2zoA==
-X-Gm-Message-State: ANoB5pkSdmsiKJCB+0Dm922ZiVdLWXgN9qaAqkqN1kZhmRvEAUc4Zs2d
-        a6jyiani/YqWdgui5UjoUDFAuU9XZ4hs4UmKaQDREL8VFURd
-X-Google-Smtp-Source: AA0mqf5Fv/E/JgjNAnqCkyuAiMmMi01LvbjF2o+YeCzfvfXdDg1r0D/72ROyAB0i/hDxy2hmfUqb6clFk0u135HlVI/OLpTGyQtn
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tmvJEwiZ21xXLrZBi1WIG/q1ERap31TpLTpBBT5zmxU=;
+        b=x1fjcO1RZpk+6zelfS5LiFnB8G2qi15tlPmYOihguBCddX8Jh8Mjy80Ai0xQL7ei70
+         HJXGczaMYaGgiw4yKqOYouXTAlRSQ1VhzvsRBldnDhezCFuRS/jR6fDfHHVtcg0UgJ4K
+         Qxwy6JKVuoasXUsLMkVBwWaUiq9j9yTZdv5VdqjSVipKloErmixKW/K90V3l2rL7/OZa
+         NebF2+c+0HA0OMHcjNyqCeyMLtzC4kl3DwU+qk5/mUVjM0HKayTkaEGFNTehmp+JeDRu
+         h/+ZXtXhmuHawETL/O+8NhtdB05uFGSbkC495szMf2cc3vqpL2Y5AVbWt7lDst32hJ9a
+         Lieg==
+X-Gm-Message-State: ANoB5pn7IKWkorT6cmcjEHUTzECsJnjTqfuxEi+7KHkhcKyZtV8FFWSj
+        dkA5oKuYmpOzm2i+/hteBBn9sw==
+X-Google-Smtp-Source: AA0mqf7hGFDPMqrXLDMFH04Laqegvn/zp/DoAbfPZEQx8qVyF2TAzljQnVqhbhiC7J0cic+rnY/IhQ==
+X-Received: by 2002:a17:902:c085:b0:186:fd58:c700 with SMTP id j5-20020a170902c08500b00186fd58c700mr274156pld.119.1668645305460;
+        Wed, 16 Nov 2022 16:35:05 -0800 (PST)
+Received: from google.com ([240f:75:7537:3187:d87c:a39a:d965:288])
+        by smtp.gmail.com with ESMTPSA id c133-20020a624e8b000000b00572275e68b2sm6980384pfb.116.2022.11.16.16.35.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 16:35:04 -0800 (PST)
+Date:   Thu, 17 Nov 2022 09:35:00 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Namjae Jeon <linkinjeon@kernel.org>,
+        Steve French <sfrench@samba.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Tom Talpey <tom@talpey.com>, linux-cifs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH][next] ksmbd: replace one-element arrays with
+ flexible-array members
+Message-ID: <Y3WBtLYcBonVrJio@google.com>
+References: <Y3OxronfaPYv9qGP@work>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:1918:b0:375:4dbf:6ca4 with SMTP id
- p24-20020a056638191800b003754dbf6ca4mr11160143jal.315.1668645256039; Wed, 16
- Nov 2022 16:34:16 -0800 (PST)
-Date:   Wed, 16 Nov 2022 16:34:16 -0800
-In-Reply-To: <00000000000058983805ed944512@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000be110905ed9fbf49@google.com>
-Subject: Re: [syzbot] BUG: unable to handle kernel NULL pointer dereference in nci_send_cmd
-From:   syzbot <syzbot+4adf5ff0f6e6876c6a81@syzkaller.appspotmail.com>
-To:     bongsu.jeon@samsung.com, clement.perrochaud@nxp.com,
-        davem@davemloft.net, edumazet@google.com,
-        krzysztof.kozlowski@linaro.org, kuba@kernel.org,
-        kylin.formalin@gmail.com, linma@zju.edu.cn,
-        linux-kernel@vger.kernel.org, michael.thalmeier@hale.at,
-        netdev@vger.kernel.org, pabeni@redhat.com, r.baldyga@samsung.com,
-        robert.dolca@intel.com, sameo@linux.intel.com, shikha.singh@st.com,
-        syzkaller-bugs@googlegroups.com, thierry.escande@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3OxronfaPYv9qGP@work>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has bisected this issue to:
+On (22/11/15 09:35), Gustavo A. R. Silva wrote:
+> One-element arrays are deprecated, and we are replacing them with flexible
+> array members instead. So, replace one-element arrays with flexible-array
+> members in multiple structs in fs/ksmbd/smb_common.h and one in
+> fs/ksmbd/smb2pdu.h.
+> 
+> Important to mention is that doing a build before/after this patch results
+> in no binary output differences.
+> 
+> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE routines
+> on memcpy() and help us make progress towards globally enabling
+> -fstrict-flex-arrays=3 [1].
+> 
+> Link: https://github.com/KSPP/linux/issues/242
+> Link: https://github.com/KSPP/linux/issues/79
+> Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-commit e624e6c3e777fb3dfed036b9da4d433aee3608a5
-Author: Bongsu Jeon <bongsu.jeon@samsung.com>
-Date:   Wed Jan 27 13:08:28 2021 +0000
-
-    nfc: Add a virtual nci device driver
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1338e6e9880000
-start commit:   81e7cfa3a9eb Merge tag 'erofs-for-6.1-rc6-fixes' of git://..
-git tree:       upstream
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=10b8e6e9880000
-console output: https://syzkaller.appspot.com/x/log.txt?x=1738e6e9880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a2318f9a4fc31ad
-dashboard link: https://syzkaller.appspot.com/bug?extid=4adf5ff0f6e6876c6a81
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11f435be880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1134d295880000
-
-Reported-by: syzbot+4adf5ff0f6e6876c6a81@syzkaller.appspotmail.com
-Fixes: e624e6c3e777 ("nfc: Add a virtual nci device driver")
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
