@@ -2,81 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2B9162E550
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 20:32:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF46462E553
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 20:33:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234418AbiKQTc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 14:32:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41628 "EHLO
+        id S235009AbiKQTdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 14:33:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232097AbiKQTcZ (ORCPT
+        with ESMTP id S230447AbiKQTdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 14:32:25 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B4E66D4B5;
-        Thu, 17 Nov 2022 11:32:24 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id s5so4022645edc.12;
-        Thu, 17 Nov 2022 11:32:24 -0800 (PST)
+        Thu, 17 Nov 2022 14:33:40 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB1913E15
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 11:33:39 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id v27so4094815eda.1
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 11:33:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=7voftGmuSESeHnH51mRqWR1O01T37W44y2d/FtLakEE=;
-        b=b+N35A5icMOEgiLaxidcQES6/n5R/EJmuHxCQ6bVKOu39evBSXdqvPpbBYo+MtS5sC
-         sAzdVaiI5PvtVKQy7G5wIprymOlOH3d/DVXPQnhEl2PCInDSD6oDfhaSvhqTbaatsWbi
-         7ZS1JQKu0JuV8+CS8bMvQYJwYreuT+2Q7D6hP78fRklGdFE5KUv7s3xZCwWqnrY5tXxT
-         BmyJyEWH1gcL2FKvTZx1RTe6wveuWYy4MF5TN/pP2WYZ2jodEIT9hNWhLeYCFRTVYrmv
-         CrH50D31d5Ip0gqR93IKW4z88HoXQiPpK9tJXIVmwUyalqJjQOd6n8W5evo5cFLgEdum
-         r3VQ==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XbDYSzbn/UCb8THsjdaVJE47m6WPeStsbmGQMlayyG8=;
+        b=QN8nUCIRS6FZ5lj53i6/ZA/JxAVtjm+mWa8u6Yw/CeBffW0TyddP5SUAQD771Sp/JP
+         MTpmlcnE9XtXf2O7si1o670p3tsmq8YjeHW4g4dU4EFvvwfYDO7axmqNXVLztx4zP1Ip
+         jjSVG5O8LrYAJMMMN/Nx8YjWxA25vMX+7VBvSkz5MS0I8yi/3s6lRiUE7c2I1udgmk2M
+         CcXm2ELNoQDCkIeeAuKix4fQ5WGrlO7c+TtaTf5usmtvpFAbSRo8R3OXnkQ2LpU6KmsE
+         zw2YjPz0kaN+mDJsA+4SpyqDerEVmdb+q1fJRAx2WxODoZg+Q50rXpJ2npdVkxndTE4Z
+         oSKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7voftGmuSESeHnH51mRqWR1O01T37W44y2d/FtLakEE=;
-        b=fDKow4ObJc1rui8JqcfRAcqm8e72OvnrWjMSqlAVmqiiz/HlM1cS4m4B4pZkbfCaQn
-         4RTRrrelEENd3zy2U8AhqnKYNlVshedDt0iIbU73HVp7ablqhBAyTYr4tX5wxxvuqiab
-         aY8iAr9kWxsxWxjuPZuzvIxoDajclEaiY+SoTeSiWY7AcfOTV2W/aVKmgtLwa+F3PImK
-         qe4zYouWSM1cZJzIOSqL3LBNzwg9aKrR0r4rAYhgQbFDME2VCemixT5j36TvyTnvQNi1
-         3zrZLldhCcwDlsAQCxhiK82qHYPq4EXEDRt4LCWmgx2HFZN8u2hxX/leXhXsEvkWeI8n
-         6DbQ==
-X-Gm-Message-State: ANoB5pnE9hxiDlGLFuMFVVSH5BonKI/5M4Y3w2yIoiRLUxNJq9fTkSKn
-        grgjRDX16R1myURlvYVg4oEgJDDQc98eTPLQ8iw=
-X-Google-Smtp-Source: AA0mqf4gsyUuCmbIF6+d7uuy3cDx5R66+FuWiJiyuTvngw2hYYEMShpCy3Z/k5CgOcHsnIgIe75v6Av9UeplmJgxlTE=
-X-Received: by 2002:aa7:d3c9:0:b0:459:aa70:d4b6 with SMTP id
- o9-20020aa7d3c9000000b00459aa70d4b6mr3485789edr.224.1668713542600; Thu, 17
- Nov 2022 11:32:22 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XbDYSzbn/UCb8THsjdaVJE47m6WPeStsbmGQMlayyG8=;
+        b=DmDXEP7tNa2PJxlx7OiEeRj5tzLxfaE4Hacg4OMOfAOkq5acQUnWySAw6brXkbPaAV
+         g/AXMx2GzYsVINssczmhc0ILwml6KYFxODyfh7aIJejY0gX6BQyp0kV7kUUR6CCHrbsM
+         9nJrNCmruUnx79r8MiqdnkYpbyp1/XDligP7hqs7gTQvXq8c6DTOzwftvejwLlnvB2rA
+         mbXXKNS3gxRTy9LgN/GVUsAZBtFA5/7D0rTnOXZs5W9OVjHo6cYtPv7Jmeq4jgpS7Tth
+         TENJ+3q1TDtSQyhZnB4MfHxyh8OiTg+BPiwdt6jXSUJj0BmvaHoboQ1lPjNDjGk2+wmk
+         WwnA==
+X-Gm-Message-State: ANoB5pkkA7xj0MtPVqNX0XIUqKf+SUZ/C4VGiGOc5PXMwrFtPw6eLR/3
+        Q8bxyi4EXiHU5n7Rj2mcHtc=
+X-Google-Smtp-Source: AA0mqf4MwMDCWbj9ykeZdWVQbJnysRww+4N20NuPT6MjyK6E3Z+EdJn8PUpQWXRc99gDQ/44ohJM7w==
+X-Received: by 2002:a05:6402:b6d:b0:468:eee7:324c with SMTP id cb13-20020a0564020b6d00b00468eee7324cmr2682423edb.119.1668713617576;
+        Thu, 17 Nov 2022 11:33:37 -0800 (PST)
+Received: from ?IPV6:2003:c7:8f35:4b74:b8c5:b0fe:3f0b:62e2? (p200300c78f354b74b8c5b0fe3f0b62e2.dip0.t-ipconnect.de. [2003:c7:8f35:4b74:b8c5:b0fe:3f0b:62e2])
+        by smtp.gmail.com with ESMTPSA id bw10-20020a170906c1ca00b0078dce9984afsm738150ejb.220.2022.11.17.11.33.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Nov 2022 11:33:37 -0800 (PST)
+Message-ID: <52392ad9-545f-c5b3-9ad4-2bf539cf0031@gmail.com>
+Date:   Thu, 17 Nov 2022 20:33:36 +0100
 MIME-Version: 1.0
-References: <20221117004356.279422-1-irogers@google.com> <Y3ZV0FDW70ADoIYE@kernel.org>
-In-Reply-To: <Y3ZV0FDW70ADoIYE@kernel.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 17 Nov 2022 11:32:10 -0800
-Message-ID: <CAEf4BzbZ2-KiM=S6k11+39Y7vQMOmj7YvAd2w59BOXtCacjtFg@mail.gmail.com>
-Subject: Re: [PATCH 0/6] Build output clean up
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Ian Rogers <irogers@google.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] staging: vt6655: change the function name s_vFillCTSHead
+Content-Language: en-US
+To:     Tanjuate Brunostar <tanjubrunostar0@gmail.com>,
+        gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+References: <Y3OI0Brhp90/tbBh@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <Y3OI0Brhp90/tbBh@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -85,50 +76,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 7:40 AM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
->
-> Em Wed, Nov 16, 2022 at 04:43:50PM -0800, Ian Rogers escreveu:
-> > Reduce build spam from commands not prefixed with @. Make
-> > install_headers targets distinguishable by adding in the library name
-> > so:
-> > INSTALL headers
-> > becomes:
-> > INSTALL libapi_headers
-> >
-> > Ian Rogers (6):
-> >   tools lib api: clean up install_headers
-> >   tools lib bpf: Avoid install_headers make warning
-> >   tools lib symbol: clean up build output
-> >   tools lib perf: Make install_headers clearer
-> >   tools lib subcmd: Make install_headers clearer
-> >   tools lib traceevent: Make install_headers clearer
->
-> Andrii, are you ok with that? Can I carry this on my next (perf/core)
-> branch?
+On 11/15/22 13:40, Tanjuate Brunostar wrote:
+> Remove the use of Hungarian notation, which is not used in the Linux
+> kernel. Reported by checkpatch
+> Add indentation to the affected function to follow the Linux kernel
+> coding style. This improves visibility
+> 
+> Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+> ---
+>   drivers/staging/vt6655/rxtx.c | 26 +++++++++++---------------
+>   1 file changed, 11 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
+> index 341e23054817..869685d27abe 100644
+> --- a/drivers/staging/vt6655/rxtx.c
+> +++ b/drivers/staging/vt6655/rxtx.c
+> @@ -21,7 +21,7 @@
+>    *      s_uGetRTSCTSDuration- get rtx/cts required duration
+>    *      get_rtscts_time- get rts/cts reserved time
+>    *      s_uGetTxRsvTime- get frame reserved time
+> - *      s_vFillCTSHead- fulfill CTS ctl header
+> + *      fill_cts_header- fulfill CTS ctl header
+>    *      s_vFillFragParameter- Set fragment ctl parameter.
+>    *      fill_rts_header- fulfill RTS ctl header
+>    *      s_vFillTxKey- fulfill tx encrypt key
+> @@ -724,19 +724,15 @@ static void fill_rts_header(struct vnt_private *pDevice,
+>   	}
+>   }
+>   
+> -static
+> -void
+> -s_vFillCTSHead(
+> -	struct vnt_private *pDevice,
+> -	unsigned int uDMAIdx,
+> -	unsigned char byPktType,
+> -	void *pvCTS,
+> -	unsigned int cbFrameLength,
+> -	bool bNeedAck,
+> -	bool bDisCRC,
+> -	unsigned short wCurrentRate,
+> -	unsigned char byFBOption
+> -)
+> +static void fill_cts_header(struct vnt_private *pDevice,
+> +			    unsigned int uDMAIdx,
+> +			    unsigned char byPktType,
+> +			    void *pvCTS,
+> +			    unsigned int cbFrameLength,
+> +			    bool bNeedAck,
+> +			    bool bDisCRC,
+> +			    unsigned short wCurrentRate,
+> +			    unsigned char byFBOption)
+>   {
+>   	unsigned int uCTSFrameLen = 14;
+>   
+> @@ -891,7 +887,7 @@ static void generate_tx_parameter(struct vnt_private *pDevice,
+>   			buf->cts_rrv_time_ba = get_rtscts_time(pDevice, 3, byPktType, cbFrameSize, wCurrentRate);
+>   
+>   			/* Fill CTS */
+> -			s_vFillCTSHead(pDevice, uDMAIdx, byPktType, pvCTS, cbFrameSize, bNeedACK, bDisCRC, wCurrentRate, byFBOption);
+> +			fill_cts_header(pDevice, uDMAIdx, byPktType, pvCTS, cbFrameSize, bNeedACK, bDisCRC, wCurrentRate, byFBOption);
+>   		}
+>   	} else if (byPktType == PK_TYPE_11A) {
+>   		if (pvRTS) {/* RTS_need, non PCF mode */
 
-yep, lgtm. Please take it through your tree, in-kernel Makefile is not
-even synced into Github, so there is no downsides in terms of libbpf
-sync.
+Hi,
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
+cannot apply your patch.
 
->
-> Testing it now.
->
-> - Arnaldo
->
-> >  tools/lib/api/Makefile        | 4 ++--
-> >  tools/lib/bpf/Makefile        | 1 +
-> >  tools/lib/perf/Makefile       | 2 +-
-> >  tools/lib/subcmd/Makefile     | 2 +-
-> >  tools/lib/symbol/Makefile     | 4 ++--
-> >  tools/lib/traceevent/Makefile | 4 ++--
-> >  6 files changed, 9 insertions(+), 8 deletions(-)
-> >
-> > --
-> > 2.38.1.431.g37b22c650d-goog
->
-> --
->
-> - Arnaldo
+kernel@matrix-ESPRIMO-P710:~/Documents/git/kernels/staging$ git apply 
+--reject --ignore-space-change --ignore-whitespace 
+~/Downloads/20221115-\[PATCH\]\ staging_\ vt6655_\ change\ the\ 
+function\ name\ s_vFillCTSHead-5410.txt
+Checking patch drivers/staging/vt6655/rxtx.c...
+error: while searching for:
+  *      s_uGetRTSCTSDuration- get rtx/cts required duration
+  *      get_rtscts_time- get rts/cts reserved time
+  *      s_uGetTxRsvTime- get frame reserved time
+  *      s_vFillCTSHead- fulfill CTS ctl header
+  *      s_vFillFragParameter- Set fragment ctl parameter.
+  *      fill_rts_header- fulfill RTS ctl header
+  *      s_vFillTxKey- fulfill tx encrypt key
+
+error: patch failed: drivers/staging/vt6655/rxtx.c:21
+Hunk #2 succeeded at 762 (offset 38 lines).
+Hunk #3 succeeded at 929 (offset 42 lines).
+Applying patch drivers/staging/vt6655/rxtx.c with 1 reject...
+Rejected hunk #1.
+Hunk #2 applied cleanly.
+Hunk #3 applied cleanly.
+
+Please post the output of the following commands:
+git remote show origin
+git branch -a
+
+Thanks for your support.
+
+Bye Philipp
