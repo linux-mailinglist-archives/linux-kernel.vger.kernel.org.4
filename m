@@ -2,168 +2,333 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3657262E244
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 17:51:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D522662E24A
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 17:53:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234898AbiKQQvp convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 17 Nov 2022 11:51:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57136 "EHLO
+        id S239739AbiKQQxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 11:53:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234292AbiKQQvn (ORCPT
+        with ESMTP id S234292AbiKQQxV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 11:51:43 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF6BE331;
-        Thu, 17 Nov 2022 08:51:41 -0800 (PST)
-Received: from fraeml701-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NCm683YNSz689hv;
-        Fri, 18 Nov 2022 00:46:56 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml701-chm.china.huawei.com (10.206.15.50) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.31; Thu, 17 Nov 2022 17:51:39 +0100
-Received: from localhost (10.122.247.231) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 17 Nov
- 2022 16:51:39 +0000
-Date:   Thu, 17 Nov 2022 16:51:38 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     Gerald Loacker <gerald.loacker@wolfvision.net>
-CC:     <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        Jakob Hauser <jahau@rocketmail.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>
-Subject: Re: [PATCH 1/2] dt-bindings: iio: magnetometer: add ti tmag5273
- documentation file
-Message-ID: <20221117165138.000012a0@huawei.com>
-In-Reply-To: <f52dcb6d-30ec-3d49-7e28-9761462d4799@wolfvision.net>
-References: <20221115073718.2377311-1-gerald.loacker@wolfvision.net>
-        <20221115073718.2377311-2-gerald.loacker@wolfvision.net>
-        <20221115174355.00004a01@Huawei.com>
-        <f52dcb6d-30ec-3d49-7e28-9761462d4799@wolfvision.net>
-Organization: Huawei Technologies R&D (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; x86_64-w64-mingw32)
+        Thu, 17 Nov 2022 11:53:21 -0500
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5573331
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 08:53:19 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 989633201B69;
+        Thu, 17 Nov 2022 11:53:15 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Thu, 17 Nov 2022 11:53:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1668703995; x=1668790395; bh=FbzlDkkhhsRtKSZiUm2xWhCcXLtVXKnc1W3
+        izJLploc=; b=Q/266Oy+xDLeuIV4Kf5CL1NHL7bAxNsInYyW4KsyQ3HCpNw9cHE
+        dGhwAppw14wJKRPMUhL3OCzPc4MHEajCb5+7UHkc4XUvHtLWHFYmyMVc8nKnF2jH
+        TA/jE/wJirFQ4yctUTYNyW9c7JbP4rx/rpWmzpiUubEG/o8xtXt037To+G/QqBra
+        009fhxDNboiMNF0A3vvEfzZ95B3jk2ZqSnOxdXNY1XJSOF8cF/g/7n3o64qprOGJ
+        YEELav7az3jiUO2w5VLF6RcNkjMvpewKeB7Ix1ySwFDvdxKHhbe+68fhfIxn8NNj
+        hHQYCqAE89CoZjk7qf1vuoZYMlwIr0OlZtg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:message-id:mime-version
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1668703995; x=
+        1668790395; bh=FbzlDkkhhsRtKSZiUm2xWhCcXLtVXKnc1W3izJLploc=; b=w
+        kH5BeJJ0sxtl3xiySYdhYXXot1xbFrHsakf599nx+1VS0Wp9N8XtcwZSZDeHebpv
+        5iO113iphsejg6/oZRiQnUjznHRBwLZv17HRs35gFEg9WkGZDBqO8FvE43lyNeoY
+        +U+VxaO+8J07/4hvimbbyHK7r6cmOxdVsXHIr1OpwUSRgr9oX9xPM5L9l/SNMDkC
+        bNok6KkBXuu8bwNxhGDU7qkdI3EKOinFSSNSmEIKq71hisZ6i6drfzUG5D8Imt96
+        oD0zj022aw0D2/CWrI0eMT5SFohIcDSmaU84y312vSytcyWSOMAPkzuRgQKne23h
+        9WW1y5ufVgJHT5G8l8GWw==
+X-ME-Sender: <xms:-mZ2Y7x75JmWi-PU-Tt81VKAsryb21C2a_9B0yzSh_rG1xxOrT24lw>
+    <xme:-mZ2YzSzuS7MqFWmQcdDqyLqW-7l3G_LQFi0MQBGBuZzhnacMighm0ZRDzAhBOFHm
+    yHJmxiARpM8eDlxTWU>
+X-ME-Received: <xmr:-mZ2Y1VdYv9Yikln76gc7Y6iGlLrM0G5JJ37hk0YA3mpEqq7J9bpa6XVkVm9Ku4hstHFQSkjAh0F6N5xIscBG6BDWeKv1WPsdy8Ua7yh5LrFNg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgeekgdelvdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfggtggusehgtderredttddvnecuhfhrohhmpeforgigihhmvgcu
+    tfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrthhtvg
+    hrnhepteeifeeigeetgfffgedufeefheekgfevuefgtdehffefheelleejveeviefhgfek
+    necuffhomhgrihhnpehfrhgvvgguvghskhhtohhprdhorhhgpdgsohhothhlihhnrdgtoh
+    hmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgr
+    gihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:-mZ2Y1iH-yFsgQdRLryHHochoP3jGepgvXLGMUhHdo2JarzBJppwbQ>
+    <xmx:-mZ2Y9B0FcVk1lUd8yVc2AXI-uLyPAdP7Iyn1tni29TkL2FIAc7wrg>
+    <xmx:-mZ2Y-I4vMEsHoqYzkUkAIp6bhLLpXte3kTFeSx0Fq4lPInIVpm3iQ>
+    <xmx:-2Z2Y_xVlOHHHpggpykdE8Js_MZ1K28WKoRubwYn69x08c8ivqKrWQ>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 17 Nov 2022 11:53:14 -0500 (EST)
+Date:   Thu, 17 Nov 2022 17:53:11 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Daniel Vetter <daniel.vetter@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: DRM-managed resources / devm_drm_dev_alloc leaking resources
+Message-ID: <20221117165311.vovrc7usy4efiytl@houat>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [10.122.247.231]
-X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="xbb4rrcandpnbw3a"
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Nov 2022 17:12:33 +0100
-Gerald Loacker <gerald.loacker@wolfvision.net> wrote:
 
-> Am 15.11.2022 um 18:43 schrieb Jonathan Cameron:
-> > On Tue, 15 Nov 2022 08:37:17 +0100
-> > Gerald Loacker <gerald.loacker@wolfvision.net> wrote:
-> >   
-> >> Add bindings documentation file for TI TMAG5273.
-> >>
-> >> Signed-off-by: Gerald Loacker <gerald.loacker@wolfvision.net>
-> >> ---
-> >>  .../iio/magnetometer/ti,tmag5273.yaml         | 72 +++++++++++++++++++
-> >>  MAINTAINERS                                   |  6 ++
-> >>  2 files changed, 78 insertions(+)
-> >>  create mode 100644 Documentation/devicetree/bindings/iio/magnetometer/ti,tmag5273.yaml
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/iio/magnetometer/ti,tmag5273.yaml b/Documentation/devicetree/bindings/iio/magnetometer/ti,tmag5273.yaml
-> >> new file mode 100644
-> >> index 000000000000..2f5b0a4d2f40
-> >> --- /dev/null
-> >> +++ b/Documentation/devicetree/bindings/iio/magnetometer/ti,tmag5273.yaml
-> >> @@ -0,0 +1,72 @@
-> >> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> >> +%YAML 1.2
-> >> +---
-> >> +$id: https://eur04.safelinks.protection.outlook.com/?url=http%3A%2F%2Fdevicetree.org%2Fschemas%2Fiio%2Fmagnetometer%2Fti%2Ctmag5273.yaml%23&amp;data=05%7C01%7Cgerald.loacker%40wolfvision.net%7C9788e9788f344fcff9b808dac730f926%7Ce94ec9da9183471e83b351baa8eb804f%7C1%7C0%7C638041310400330990%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=nczO1QC74gD6eGXAkm%2B6LRrc7fyEsr62r%2B3aoW%2Bcfu4%3D&amp;reserved=0
-> >> +$schema: https://eur04.safelinks.protection.outlook.com/?url=http%3A%2F%2Fdevicetree.org%2Fmeta-schemas%2Fcore.yaml%23&amp;data=05%7C01%7Cgerald.loacker%40wolfvision.net%7C9788e9788f344fcff9b808dac730f926%7Ce94ec9da9183471e83b351baa8eb804f%7C1%7C0%7C638041310400330990%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=raKUiSntfhvdSSnqiR1Wm%2Fqr9cI3XEu5HCprqvISlLE%3D&amp;reserved=0
-> >> +
-> >> +title: TI TMAG5273 Low-Power Linear 3D Hall-Effect Sensor
-> >> +
-> >> +maintainers:
-> >> +  - Gerald Loacker <gerald.loacker@wolfvision.net>
-> >> +
-> >> +description:
-> >> +  The TI TMAG5273 is a low-power linear 3D Hall-effect sensor. This device
-> >> +  integrates three independent Hall-effect sensors in the X, Y, and Z axes.
-> >> +  The device has an integrated temperature sensor available. The TMAG5273
-> >> +  can be configured through the I2C interface to enable any combination of
-> >> +  magnetic axes and temperature measurements. An integrated angle calculation
-> >> +  engine (CORDIC) provides full 360° angular position information for both
-> >> +  on-axis and off-axis angle measurement topologies. The angle calculation is
-> >> +  performed using two user-selected magnetic axes.
-> >> +
-> >> +properties:
-> >> +  $nodename:
-> >> +    pattern: '^magnetometer@[0-9a-f]+$'  
-> > 
-> > What Krzysztof said on this ;)
-> >   
-> >> +
-> >> +  compatible:
-> >> +    const: ti,tmag5273
-> >> +
-> >> +  reg:
-> >> +    maxItems: 1
-> >> +
-> >> +  "#io-channel-cells":
-> >> +    const: 1
-> >> +
-> >> +  ti,angle-enable:
-> >> +    description:
-> >> +      Enables angle measurement in the selected plane.
-> >> +      0 = OFF
-> >> +      1 = X-Y (default)
-> >> +      2 = Y-Z
-> >> +      3 = X-Z  
-> > 
-> > This feels like something we should be configuring at runtime rather that
-> > DT, or is it driven by board design or similar?
-> >   
-> 
-> We use this sensor for a zoom wheel application, there is an EVM from TI
-> for this as well. So this is for setting the mounting position of the wheel.
+--xbb4rrcandpnbw3a
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Ok. Thanks for explanation. Makes sense.
+Hi,
 
-> 
-> >> +    $ref: /schemas/types.yaml#/definitions/uint32
-> >> +    minimum: 0
-> >> +    maximum: 3
-> >> +
-> >> +  vcc-supply:
-> >> +    description:
-> >> +      A regulator providing 1.7 V to 3.6 V supply voltage on the VCC pin,
-> >> +      typically 3.3 V.
-> >> +  
-> > 
-> > The dt binding should attempt to describe the hardware, not what we happen
-> > to support in the driver so far. So I'd expect to also see an interrupt.
-> > That way if someone ships a dts file today, and we enable it sometime in the
-> > future they will be ready for it.
-> >  
-> 
-> Is it fine to add just the description without example then? The
-> interrupt has many options such as low active or low pulse.
+After trying to get more kunit tests for KMS, I found out that the
+recent kunit helpers we merged to create a DRM device [1] are broken and
+won't free their device-managed and DRM-managed resources.
 
-Yes.  Just add description. The details of type etc depend on wiring
-to some degree (inverters in the path etc). Nice to add an example later
-but for now we can assume anyone who is providing the interrupt set it
-up correctly.
+With some help from Thomas, we've dug into this and it turns out that if
+we allocate a device with root_device_register, initialise our drm
+device with devm_drm_dev_alloc(), register it using drm_dev_register(),
+unregister it using drm_dev_unregister/drm_dev_unplug and then remove
+the parent device, neither the device managed nor the DRM managed
+actions are run.
 
-Jonathan
+root_device_register initializes the device by eventually calling
+device_initialize() which sets the initial reference count of the root
+device to 1 [2]. devm_drm_dev_alloc() then comes in, drm_dev_init() will
+increase the root device refcount [3] and initialize our DRM device to 1
+[4]. drm_dev_register(), through drm_minor_register() and device_add(),
+will increase the root device refcount [5].
+
+When unrolling things, drm_dev_unregister(), through
+drm_minor_unregister() and device_del(), will give up its reference [6].
+root_device_unregister(), through device_unregister(), will also give up
+its own [7].
+
+So we end up with this for the reference counts:
+
++------------------------+-------------+------------+
+|         funcs          | root device | DRM device |
++------------------------+-------------+------------+
+| root_device_register   |           1 | N/A        |
+| devm_drm_dev_alloc     |           2 | 1          |
+| drm_dev_register       |           3 | 1          |
+| drm_dev_unregister     |           2 | 1          |
+| root_device_unregister |           1 | 1          |
++------------------------+-------------+------------+
+
+If we go back to the list of reference taken, the root device reference
+and the initial drm_device reference, both taken by devm_drm_dev_alloc()
+through drm_dev_init(), haven't been put back.
+
+If we look at the drm_dev_init code(), we can see that it sets up a
+DRM-managed action [8] that will put back the device reference [9]. The
+DRM-managed code is executed by the drm_managed_cleanup() function, that
+is executed as part of a release hook [10] executed once we give up the
+final reference to the DRM device [11].
+
+If we go back a little, the final reference to the DRM device is
+actually the initial one setup by devm_drm_dev_alloc(). This function
+has superseded drm_dev_alloc(), with the documentation that we do need a
+final drm_dev_put() to put back our final reference [12].
+
+devm_drm_dev_alloc() is a more convenient variant that has been
+introduced explicitly to not require that drm_dev_put(), and states it
+as such in the documentation [13]. It does so by adding a device-managed
+action that will call drm_dev_put() [14].
+
+Device-managed actions are ran as part devres_release_all() that is
+called by device_release() [15], itself being run when the last
+reference on the device is put back [16][17][18].
+
+So if we sum things up, the DRM device will only give its last root
+device reference when the last DRM device reference will be put back,
+and the last DRM device reference will be put back when the last device
+reference will be put back, which sounds very circular to me, with both
+ending up in a deadlock scenario.
+
+I've added two kunit tests that demonstrate the issue: we register a
+device, allocate and register a DRM device, register a DRM-managed
+action, remove the DRM device and the parent device, and wait for the
+action to execute. drm_register_unregister_with_devm_test() uses the
+broken(?) devm_drm_dev_alloc and is failing.
+drm_register_unregister_test uses the deprecated drm_dev_alloc() that
+requires an explicit call to drm_dev_put() which works fine.
+
+It's also worth noting that Thomas tested with simpledrm and it seems to
+work fine. Using a platform_device instead of the root_device doesn't
+change anything to the outcome in my tests, so there might be a more
+subtle behaviour involved.
+
+Thanks,
+Maxime
+
+--------- 8< -----------
+diff --git a/drivers/gpu/drm/tests/drm_register_test.c b/drivers/gpu/drm/tests/drm_register_test.c
+new file mode 100644
+index 000000000000..3256b53d08f2
+--- /dev/null
++++ b/drivers/gpu/drm/tests/drm_register_test.c
+@@ -0,0 +1,117 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <drm/drm_drv.h>
++#include <drm/drm_managed.h>
++
++#include <kunit/resource.h>
++
++#include <linux/device.h>
++#include <linux/platform_device.h>
++
++#include "drm_kunit_helpers.h"
++
++struct test_priv {
++	bool release_done;
++	wait_queue_head_t release_wq;
++};
++
++static const struct drm_mode_config_funcs drm_mode_config_funcs = {
++};
++
++static const struct drm_driver drm_driver = {
++	.driver_features = DRIVER_MODESET,
++};
++
++static void drm_release(struct drm_device *drm, void *ptr)
++{
++	struct test_priv *priv = ptr;
++
++	priv->release_done = true;
++	wake_up_interruptible(&priv->release_wq);
++}
++
++#define RELEASE_TIMEOUT_MS	500
++
++static void drm_register_unregister_test(struct kunit *test)
++{
++	struct test_priv *priv;
++	struct drm_device *drm;
++	struct device *dev;
++	int ret;
++
++	priv = kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv);
++	init_waitqueue_head(&priv->release_wq);
++
++	dev = root_device_register("test");
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, dev);
++
++	drm = drm_dev_alloc(&drm_driver, dev);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, drm);
++
++	drm->mode_config.funcs = &drm_mode_config_funcs;
++	ret = drmm_mode_config_init(drm);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	ret = drmm_add_action_or_reset(drm, drm_release, priv);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	ret = drm_dev_register(drm, 0);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	drm_dev_unregister(drm);
++	drm_dev_put(drm);
++	root_device_unregister(dev);
++
++	ret = wait_event_interruptible_timeout(priv->release_wq, priv->release_done,
++					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
++	KUNIT_EXPECT_GT(test, ret, 0);
++}
++
++static void drm_register_unregister_with_devm_test(struct kunit *test)
++{
++	struct test_priv *priv;
++	struct drm_device *drm;
++	struct device *dev;
++	int ret;
++
++	priv = kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv);
++	init_waitqueue_head(&priv->release_wq);
++
++	dev = root_device_register("test");
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, dev);
++
++	drm = __devm_drm_dev_alloc(dev, &drm_driver, sizeof(*drm), 0);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, drm);
++
++	drm->mode_config.funcs = &drm_mode_config_funcs;
++	ret = drmm_mode_config_init(drm);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	ret = drmm_add_action_or_reset(drm, drm_release, priv);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	ret = drm_dev_register(drm, 0);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	drm_dev_unregister(drm);
++	root_device_unregister(dev);
++
++	ret = wait_event_interruptible_timeout(priv->release_wq, priv->release_done,
++					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
++	KUNIT_EXPECT_GT(test, ret, 0);
++}
++
++static struct kunit_case drm_register_tests[] = {
++	KUNIT_CASE(drm_register_unregister_test),
++	KUNIT_CASE(drm_register_unregister_with_devm_test),
++	{}
++};
++
++static struct kunit_suite drm_register_test_suite = {
++	.name = "drm-test-register",
++	.test_cases = drm_register_tests
++};
++
++kunit_test_suite(drm_register_test_suite);
+--------- 8< -----------
+
+1: https://cgit.freedesktop.org/drm-misc/tree/drivers/gpu/drm/tests/drm_kunit_helpers.c
+2: https://elixir.bootlin.com/linux/latest/source/drivers/base/core.c#L2979
+3: https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/drm_drv.c#L597
+4: https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/drm_drv.c#L596
+5: https://elixir.bootlin.com/linux/latest/source/drivers/base/core.c#L3437
+6: https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/drm_drv.c#L201
+7: https://elixir.bootlin.com/linux/latest/source/drivers/base/core.c#L3737
+8: https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/drm_drv.c#L618
+9: https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/drm_drv.c#L570
+10: https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/drm_drv.c#L751
+11: https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/drm_drv.c#L785
+12: https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/drm_drv.c#L259
+13: https://elixir.bootlin.com/linux/latest/source/include/drm/drm_drv.h#L505
+14: https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/drm_drv.c#L682
+15: https://elixir.bootlin.com/linux/latest/source/drivers/base/core.c#L2321
+16: https://elixir.bootlin.com/linux/latest/source/drivers/base/core.c#L2357
+17: https://elixir.bootlin.com/linux/latest/source/lib/kobject.c#L721
+18: https://elixir.bootlin.com/linux/latest/source/lib/kobject.c#L647
+
+--xbb4rrcandpnbw3a
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY3Zm9wAKCRDj7w1vZxhR
+xRDZAQCq3cO0Zmh91tOdX7YViOkpir2812yiXd53XNvG1W2sjgD+Klv+TpHUfmx6
+lhJE2B1mOqhyh4biafZ6e/YsWNcMSgc=
+=roui
+-----END PGP SIGNATURE-----
+
+--xbb4rrcandpnbw3a--
