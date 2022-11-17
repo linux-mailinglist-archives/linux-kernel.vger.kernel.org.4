@@ -2,109 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17BDC62E5A6
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 21:12:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FA1162E5A8
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 21:14:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235117AbiKQUMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 15:12:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54090 "EHLO
+        id S239672AbiKQUOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 15:14:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232347AbiKQUM2 (ORCPT
+        with ESMTP id S233563AbiKQUOe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 15:12:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 867077EBE9;
-        Thu, 17 Nov 2022 12:12:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CE992B821F3;
-        Thu, 17 Nov 2022 20:12:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 563B4C433C1;
-        Thu, 17 Nov 2022 20:12:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668715944;
-        bh=e56t0nc+8yUV+Q3+RwNDdQyrSxLwHO3oWil+eDUu2OQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aW4l8+bEIhdXj2ZhqjYoeuhszYj66EVOf9rvi+67SpIjx6a3fp0KXztwPzpIsQsao
-         WQ0++A/LoX763NCRoD6DGhp+XvQLVuuLfTckbNSSeqqnDV3+fxoLoGqDvB+uQL7jM+
-         PHhoE6UkJGITq7zjVVehYAkRN52Y1GX7wfKNcVYLk7QYoPU3P8IaLMkUGQ0zKXQpuA
-         dZhYQj3YGDv5xdv3Nbfe03Bq3ptmRoz/ZHH3BV5F+htFuOPwB/HLMTY5iaLXf//gdd
-         3Py16U5e87wF1Du96Gt1CmiQ8eEMX/KxTiE7ke21F0Gjtnl17viVdhYUc8eM+4Fnnm
-         ZTyiqMYH1lUnA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 261D94034E; Thu, 17 Nov 2022 17:12:21 -0300 (-03)
-Date:   Thu, 17 Nov 2022 17:12:21 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Ian Rogers <irogers@google.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH 0/6] Build output clean up
-Message-ID: <Y3aVpVkPkOf8nw4x@kernel.org>
-References: <20221117004356.279422-1-irogers@google.com>
- <Y3ZV0FDW70ADoIYE@kernel.org>
- <CAEf4BzbZ2-KiM=S6k11+39Y7vQMOmj7YvAd2w59BOXtCacjtFg@mail.gmail.com>
+        Thu, 17 Nov 2022 15:14:34 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB4CD2F664;
+        Thu, 17 Nov 2022 12:14:33 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id v17so2675104plo.1;
+        Thu, 17 Nov 2022 12:14:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=UXtykp6uOflNtBDft8OJSus5n3qX3RKU76Dq7puWTXY=;
+        b=FRUUiYDjn0143+2Cq1TPOq1Tvh2+hQURnhBMONeZVESBoToYxs6xmGoNI411MhkLYn
+         YH2tI7k578AAN41YVsNA+wAlp/Kzy2U6M6WKqhGgcgnX3pwB7bBqpWZ+vAhFlCQdUHcn
+         23Fk3TMOx46JRy867WW5AOnt6LIT4QEU2kkvKpNXb00tZgY486GjB/B8oQWqCcjaQ/yW
+         8HgVqJ+23Dbg5ztLn9DCJEEHZOUWHl91xfhkK5JMMYC/u1pdbxr4G1PoHfPyh1ZugDhG
+         G8qrEj7+wlRFG7hrv3RYUEWQYHa3fuyAh68kd/Fso53x248EE9JKV2Z8y40DIXGx/Ad5
+         UacQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UXtykp6uOflNtBDft8OJSus5n3qX3RKU76Dq7puWTXY=;
+        b=aOQxvAzqlseB01uzVluEyG4xm2c5p9F6lH+um45/N6qjoZwKJsjz9nwP1G5d5pLYJc
+         6gS+hy9kZtCEPpx9/75Jv481/bAbnCRzNKmZaGOhvwym64C3xL+Ah0AwBeMQ546HuCId
+         KMePwKF4mW8G2nyewVgEQWdgzrc87a/78V6X0+i68jvvwfsgq52sr6HnUhIh2XJ9TfZp
+         bx9R6VgP9p3S4fpQVTWFyLWQTqKjvcIgSRAOwOVsjAp06VGKITuWhYxnRaVBy9EkuqPw
+         247k94rVrQsPmxaSOaWxmBBdxF16O6H6czcneX8yloifciQLsT2n/B5bFYgVdKLMP3a8
+         lHTQ==
+X-Gm-Message-State: ANoB5pmtuYOcPi+IWjmw25t/aMO7GVO8U1JVFCSiGyHyLYXZtpP+aXGq
+        UVJOiutgfo0gzFOvqi2iiMg=
+X-Google-Smtp-Source: AA0mqf7XWf8DGiPQNWUMcxtMySn/nxpNcRAkil6JmV4ATJ5XrBk5FL89HpOVYtzy2H+V6vy1m75+bA==
+X-Received: by 2002:a17:902:bf06:b0:17e:802b:fd6e with SMTP id bi6-20020a170902bf0600b0017e802bfd6emr4364903plb.116.1668716073317;
+        Thu, 17 Nov 2022 12:14:33 -0800 (PST)
+Received: from localhost ([192.55.54.55])
+        by smtp.gmail.com with ESMTPSA id u13-20020a170903124d00b00186ad73e2d5sm1791202plh.208.2022.11.17.12.14.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 12:14:33 -0800 (PST)
+Date:   Thu, 17 Nov 2022 12:14:32 -0800
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Binbin Wu <binbin.wu@linux.intel.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
+        Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>
+Subject: Re: [PATCH v10 072/108] KVM: TDX: restore user ret MSRs
+Message-ID: <20221117201432.GB2751024@ls.amr.corp.intel.com>
+References: <cover.1667110240.git.isaku.yamahata@intel.com>
+ <3260994f3d9a036795c81bf06842558afabeeef7.1667110240.git.isaku.yamahata@intel.com>
+ <de9b844f-c70b-bce7-9723-25f61e4f696f@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAEf4BzbZ2-KiM=S6k11+39Y7vQMOmj7YvAd2w59BOXtCacjtFg@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <de9b844f-c70b-bce7-9723-25f61e4f696f@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Nov 17, 2022 at 11:32:10AM -0800, Andrii Nakryiko escreveu:
-> On Thu, Nov 17, 2022 at 7:40 AM Arnaldo Carvalho de Melo
-> <acme@kernel.org> wrote:
-> >
-> > Em Wed, Nov 16, 2022 at 04:43:50PM -0800, Ian Rogers escreveu:
-> > > Reduce build spam from commands not prefixed with @. Make
-> > > install_headers targets distinguishable by adding in the library name
-> > > so:
-> > > INSTALL headers
-> > > becomes:
-> > > INSTALL libapi_headers
-> > >
-> > > Ian Rogers (6):
-> > >   tools lib api: clean up install_headers
-> > >   tools lib bpf: Avoid install_headers make warning
-> > >   tools lib symbol: clean up build output
-> > >   tools lib perf: Make install_headers clearer
-> > >   tools lib subcmd: Make install_headers clearer
-> > >   tools lib traceevent: Make install_headers clearer
-> >
-> > Andrii, are you ok with that? Can I carry this on my next (perf/core)
-> > branch?
-> 
-> yep, lgtm. Please take it through your tree, in-kernel Makefile is not
-> even synced into Github, so there is no downsides in terms of libbpf
-> sync.
-> 
-> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+On Mon, Nov 14, 2022 at 03:49:32PM +0800,
+Binbin Wu <binbin.wu@linux.intel.com> wrote:
 
-Thanks, done.
+> 
+> On 10/30/2022 2:23 PM, isaku.yamahata@intel.com wrote:
+> > From: Isaku Yamahata <isaku.yamahata@intel.com>
+> > 
+> > Several user ret MSRs are clobbered on TD exit.  Restore those values on
+> > TD exit and before returning to ring 3.
+> > 
+> > Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> > Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
+> > ---
+> >   arch/x86/kvm/vmx/tdx.c | 43 ++++++++++++++++++++++++++++++++++++++++++
+> >   1 file changed, 43 insertions(+)
+> > 
+> > diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+> > index 3ec465cbaeef..f35ccf2b502d 100644
+> > --- a/arch/x86/kvm/vmx/tdx.c
+> > +++ b/arch/x86/kvm/vmx/tdx.c
+> > @@ -456,6 +456,28 @@ void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
+> >   	vcpu->kvm->vm_bugged = true;
+> >   }
+> > +struct tdx_uret_msr {
+> > +	u32 msr;
+> > +	unsigned int slot;
+> > +	u64 defval;
+> > +};
+> > +
+> > +static struct tdx_uret_msr tdx_uret_msrs[] = {
+> > +	{.msr = MSR_SYSCALL_MASK,},
+> > +	{.msr = MSR_STAR,},
+> > +	{.msr = MSR_LSTAR,},
+> > +	{.msr = MSR_TSC_AUX,},
+> > +};
+> > +
+> > +static void tdx_user_return_update_cache(void)
+> > +{
+> > +	int i;
+> > +
+> > +	for (i = 0; i < ARRAY_SIZE(tdx_uret_msrs); i++)
+> > +		kvm_user_return_update_cache(tdx_uret_msrs[i].slot,
+> > +					     tdx_uret_msrs[i].defval);
+> > +}
+> > +
+> >   static void tdx_restore_host_xsave_state(struct kvm_vcpu *vcpu)
+> >   {
+> >   	struct kvm_tdx *kvm_tdx = to_kvm_tdx(vcpu->kvm);
+> > @@ -495,6 +517,7 @@ fastpath_t tdx_vcpu_run(struct kvm_vcpu *vcpu)
+> >   	tdx_vcpu_enter_exit(vcpu, tdx);
+> > +	tdx_user_return_update_cache();
+> >   	tdx_restore_host_xsave_state(vcpu);
+> >   	tdx->host_state_need_restore = true;
+> > @@ -1558,6 +1581,26 @@ int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops)
+> >   		return -ENODEV;
+> >   	}
+> > +	for (i = 0; i < ARRAY_SIZE(tdx_uret_msrs); i++) {
+> > +		/*
+> > +		 * Here it checks if MSRs (tdx_uret_msrs) can be saved/restored
+> > +		 * before returning to user space.
+> > +		 *
+> > +		 * this_cpu_ptr(user_return_msrs)->registered isn't checked
+> > +		 * because the registration is done at vcpu runtime by
+> > +		 * kvm_set_user_return_msr().
+> > +		 * Here is setting up cpu feature before running vcpu,
+> > +		 * registered is alreays
+> 
+> typo, already or always?
 
-- Arnaldo
+already. Thanks.
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>
