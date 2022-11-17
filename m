@@ -2,172 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD78962D713
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 10:32:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC4C62D715
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 10:32:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239456AbiKQJcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 04:32:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55982 "EHLO
+        id S239647AbiKQJcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 04:32:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239321AbiKQJcG (ORCPT
+        with ESMTP id S239778AbiKQJcO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 04:32:06 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 087E36D48C
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 01:32:05 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id c1so1870022lfi.7
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 01:32:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OHCbnyqktFUSf9IKrLp6iVFJSHrFuKbgt4erXb4qf1Y=;
-        b=MGogdx0f3eR/N4U/XHNRAwWXsU003fKuWMj1Pv0dhmTkAuZelbaCG25obFd2duVkzZ
-         2y8Y7CxU80BXc9vGnxSuN0Qzo7Ol80C9XX+ZOg2bGL6rvfh9Qenz+LdUKv26AeSiNVBH
-         tyxrRKtLg7i6uQffkwl6VCFX4P4J/Yqfl7UDED2Dozaq1JdyEasUDPh9GRFSMNun4E8H
-         70KaJX1bRvECLaW1XM229UZpA6XdNvYRrcXWJ93moqB7rM0mIb1e9ufQIs9rqM8U/XKt
-         3ugIIsGgAFJvbTYFeCRInFi9SApxiUHlWoczLOJrRuEqkhmZjhANqFfjS7WJ0iGsUHir
-         2FvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OHCbnyqktFUSf9IKrLp6iVFJSHrFuKbgt4erXb4qf1Y=;
-        b=gk1zmrWLPu/iUOclV+C8qckyRd4U6HCkJ+w/djVBpdQJVpe3/4SeLl+pigO/R3y8Be
-         JtGTGIxiJCCLPozoLXPkvplMFf4iwF9MtH45d9F5P8Los5iJZ5mbk0+GaeevE4F2F0j0
-         gt7DnuUIiXBCBFnPNvhBEOpLUvrPdraNt/+VoygJ8sM9YYDFEg7xcB1sJpxdmEms+rGz
-         XuYsvTbTPfHgUG6aGtbJXkHsXBvxUpmJUfYZpZsPruybStOYWcoCA2BfECG8ogx2fZiq
-         WyFzFay89thXJG8e4AC9s4xdPeiNSpOe9LCopeBysKX2Wf7n0DVm+knVON3RciwYkjsY
-         9e4w==
-X-Gm-Message-State: ANoB5pnMcfMGlYQmDbCMCKp/gABcUImigeWkZLiWtjcpJgHbaEkzYiT+
-        1noF6GcP+6ZD7AwVVRD4ddXwpQ==
-X-Google-Smtp-Source: AA0mqf6RwhqC8C8ERpHU5iNKRdID8pAZfWvulmJEAm5wS3EhAunQuKjqaMwSiKpiIoj7Ur0dpberKA==
-X-Received: by 2002:a19:4f02:0:b0:4a2:1d18:45d8 with SMTP id d2-20020a194f02000000b004a21d1845d8mr580697lfb.330.1668677523426;
-        Thu, 17 Nov 2022 01:32:03 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id u16-20020a056512041000b004aa95889063sm65546lfk.43.2022.11.17.01.32.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Nov 2022 01:32:02 -0800 (PST)
-Message-ID: <1b23d300-a580-85a0-3c1d-605305099eba@linaro.org>
-Date:   Thu, 17 Nov 2022 10:32:01 +0100
+        Thu, 17 Nov 2022 04:32:14 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B97C776149;
+        Thu, 17 Nov 2022 01:32:12 -0800 (PST)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1668677530;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iFIVJDRzYLM8JlLFrtE2EgsFESyY1Nn5OMC4RLGV2yY=;
+        b=iO+tJagEFHt9sg3fABlDdYAV9ylNd2aGmxyQcShKySENThGFArqJQ8hgUGOE+R4GBPMfkg
+        ImEl/eK0b6L/3MgkJEM2JaXlERewhhZemcHyk+o6A9rQxWGx4iKCWDl0X+Z/OVHiZNoYMx
+        3nrH9Qr5h6bw8fCufJv+zAYIZkMqQXDiIeyRpTCPIrphe5LW29+Bd5T18kmjvyN4K1DovK
+        vjQlkpgXI0+6G+E7K92dwR7/eoDunyq4Lu1Ual/ioE57tvDkwgVEuvKBlDtXSm/VNLTI50
+        FkVxBD8AANMCAw3eKLoEOYgAiY8DDLzoaZGqiO2uz+SlM6Di6wkpUm3d0aN9VQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1668677530;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iFIVJDRzYLM8JlLFrtE2EgsFESyY1Nn5OMC4RLGV2yY=;
+        b=4rm3sbLF/dC1nwbgx05ZOnnr6IRULStcUsiZpVrNglmTpyFibpYbmeCw1oeyHc8QZtkC1B
+        XEAeOafHqjKRM1Bw==
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        kgdb-bugreport@lists.sourceforge.net, linux-serial@vger.kernel.org
+Subject: Re: [PATCH printk v5 35/40] tty: serial: kgdboc: use srcu console
+ list iterator
+In-Reply-To: <CAD=FV=WHEjpL1VYnLRp9Vy300Xd3Tu=u3MOo_rvHCABDTsQFPA@mail.gmail.com>
+References: <20221116162152.193147-1-john.ogness@linutronix.de>
+ <20221116162152.193147-36-john.ogness@linutronix.de>
+ <CAD=FV=WHEjpL1VYnLRp9Vy300Xd3Tu=u3MOo_rvHCABDTsQFPA@mail.gmail.com>
+Date:   Thu, 17 Nov 2022 10:38:07 +0106
+Message-ID: <87tu2yncyw.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 1/4] dt-bindings: remoteproc: qcom: adsp: document sm8550
- adsp, cdsp & mpss compatible
-Content-Language: en-US
-To:     neil.armstrong@linaro.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc:     devicetree@vger.kernel.org, Abel Vesa <abel.vesa@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org
-References: <20221114-narmstrong-sm8550-upstream-remoteproc-v1-0-104c34cb3b91@linaro.org>
- <20221114-narmstrong-sm8550-upstream-remoteproc-v1-1-104c34cb3b91@linaro.org>
- <b6eac577-f3a7-d1a4-f492-74782c2e5ff1@linaro.org>
- <daa4b852-5452-9363-3bc8-16a7637cc8bb@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <daa4b852-5452-9363-3bc8-16a7637cc8bb@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/11/2022 10:22, Neil Armstrong wrote:
->>>   
->>> +  - if:
->>> +      properties:
->>> +        compatible:
->>> +          contains:
->>> +            enum:
->>> +              - qcom,sm8550-cdsp-pas
->>> +    then:
->>> +      properties:
->>> +        power-domains:
->>> +          items:
->>> +            - description: CX power domain
->>> +            - description: MXC power domain
->>> +            - description: NSP power domain
->>> +        power-domain-names:
->>> +          items:
->>> +            - const: cx
->>> +            - const: mxc
->>> +            - const: nsp
->>> +
->>
->> You also need to update entry for resets. I think it is missing.
-> 
-> Hmm no, no resets needed for sm8550.
+Hi Doug,
 
-Indeed, only few variants update resets. I'll fix them in my cleanup
-series. The series conflict with this one here.
+On 2022-11-16, Doug Anderson <dianders@chromium.org> wrote:
+>> @@ -463,9 +464,14 @@ static void kgdboc_earlycon_pre_exp_handler(void)
+>>          * serial drivers might be OK with this, print a warning once per
+>>          * boot if we detect this case.
+>>          */
+>> -       for_each_console(con)
+>> +       cookie = console_srcu_read_lock();
+>> +       for_each_console_srcu(con) {
+>>                 if (con == kgdboc_earlycon_io_ops.cons)
+>> -                       return;
+>> +                       break;
+>> +       }
+>> +       console_srcu_read_unlock(cookie);
+>> +       if (con)
+>> +               return;
+>
+> Is there truly any guarantee that "con" will be NULL if
+> for_each_console_srcu() finishes naturally (AKA without a "break"
+> being executed)?
 
-https://lore.kernel.org/linux-arm-msm/20221116155416.164239-1-krzysztof.kozlowski@linaro.org/T/#t
+Right now it is true because @con becoming NULL is the exit criteria for
+the loop.
 
-> 
->>
->>>     - if:
->>>         properties:
->>>           compatible:
->>> @@ -573,6 +608,29 @@ allOf:
->>>         properties:
->>>           qcom,qmp: false
->>>   
->>> +  - if:
->>> +      properties:
->>> +        compatible:
->>> +          contains:
->>> +            enum:
->>> +              - qcom,sm8550-adsp-pas
->>> +              - qcom,sm8550-cdsp-pas
->>> +              - qcom,sm8550-mpss-pas
->>> +    then:
->>> +      properties:
->>> +        memory-region:
->>> +          minItems: 2
->>> +          description:
->>> +            First entry is a phandle for a reserved memory area that holds
->>> +            the main Firmware for authentication, and second entry a phandle for a
->>> +            reserved memory area that holds the Devicetree Firmware for authentication.
->>
->> Instead of minItems and description:
->>    items:
->>      - description: Main Firmware for auth....
->>      - description: Devicetree Firmware....
-> 
-> Ack
-> 
->>
->>> +    else:
->>> +      properties:
->>> +        qcom,dtb-firmware-name: false
->>> +
->>> +        memory-region:
->>> +          maxItems: 1
->>> +
-> 
-> I'll rebase on top of 20221116155416.164239-1-krzysztof.kozlowski@linaro.org.
-> 
-> Seems I should perhaps add a separate qcom,sm8550-pas.yaml right, or adding the qcom,sm6350-pas.yam would be ok ?
+> It looks as if currently this will be true but nothing in the comments
+> of for_each_console_srcu() nor hlist_for_each_entry_srcu() (which it
+> calls) guarantees this, right? It would be nice if that was
+> documented, but I guess it's not a huge deal.
 
-The clocks and interrupts match qcom,sm8350-pas.yaml, but power domains
-and memory region does not, so you need separate qcom,sm8550-pas.yaml file.
+Yes, if it is frowned upon that the iterator is used outside the loop,
+it would be nice if the for_each macros explicitly provided some hints
+in their documentation.
 
-Best regards,
-Krzysztof
+> Also: wasn't there just some big issue about people using loop
+> iteration variables after the loop finished?
+>
+> https://lwn.net/Articles/885941/
 
+Thanks for referencing that article! Indeed if the macros are changed so
+that the iterator is defined in the loop, then code like this will
+break. But I would expect that making such macro changes will also
+require updating the call sites to avoid unused variables outside the
+loops. And then this code could receive the appropriate fixup.
+
+I feel like if I add extra code to guarantee a NULL without relying on
+the macro implementation, I'll get more resistance due to unnecessarily
+adding code and variables. But I may be wrong.
+
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+
+Thanks.
+
+John
