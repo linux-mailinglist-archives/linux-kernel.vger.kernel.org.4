@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1758562DE62
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 15:38:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D850F62DEE9
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:00:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240525AbiKQOiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 09:38:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60336 "EHLO
+        id S239730AbiKQPAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 10:00:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240492AbiKQOha (ORCPT
+        with ESMTP id S240065AbiKQPAJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 09:37:30 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D87A865865;
-        Thu, 17 Nov 2022 06:35:42 -0800 (PST)
+        Thu, 17 Nov 2022 10:00:09 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 008C276153
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 07:00:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668695743; x=1700231743;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=R+irvtrU5pEWAqUyJ3WlJnw9AP3Lq6dpD3UwnZjoXpw=;
-  b=O+VhskxVla5KEaGUDhnjGx5Y0YoJPSKpQdSrA0gYqkvDg1cIijqEHHv1
-   JEKIhTsZDuivhIGY6ccWXcOL6yU2m6OJcrFIB9MDo00x5gYVThKfoCDlh
-   6Z/7QGsNrnjA0v5LQuSzhi+9H2txCSFfPUM2x8xzH5hs3amVq1sIi2ikT
-   lZZWz4W6BqTW7bJHsnrOmhgwnZAfPmGsDB5npznSp0l8MU4mN1GDv+MDp
-   r/WbLCfA/yA/bd++S8cn5Z4TjTcww0/M5tTQ+aeuAkp5VNP7dHTRfuR+a
-   MNr6og+tvT9WzsP+Ynca6cY1uBNV2ryDQ3W4boft1ZR8EQnKkF+/nIJqY
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="296227776"
+  t=1668697207; x=1700233207;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=SCUs7E0Hmpx45Jes1TPeWxVvcw4uUY3HMsnLGxpo4aw=;
+  b=gpt/Djc83B04f0UQAPLn9aAFz7WNihcEpmdrQp0fepsT0cBrf9kNn1mk
+   5gQFW7B4SR8qJ3GQ4DLLKNDV0Zgbl/uo4/Cm57tmOgGxEGQ5Dhe+sS1mO
+   jm+tnOdVTx5RWScL+Q9QXQuhJZ2Zaru2UWJt7VEZsuYAhMKxFrIrp4u3J
+   ZNy6MDa/OA/3zDvv0qWQO2LMLS6dg4zzV19bngsFAWgHFkua8rznjHs6n
+   45G4x6um64ApF80/sIewKW7zfKG4D5RLao46WX9ePShexIXtgu14uxPH3
+   2CMrZvfKhFIyH/IdbTcwzWPnUkkzTr0gK7yDiB3ZRgOP4uRki74Rosgmo
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="314018177"
 X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
-   d="scan'208";a="296227776"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 06:35:30 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="703353319"
+   d="scan'208";a="314018177"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 07:00:06 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="617636506"
 X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
-   d="scan'208";a="703353319"
-Received: from kvehmane-mobl1.ger.corp.intel.com ([10.252.61.113])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 06:35:26 -0800
-Date:   Thu, 17 Nov 2022 16:35:23 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Mark Brown <broonie@kernel.org>
-cc:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
-        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>, Lee Jones <lee@kernel.org>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Marco Pagani <marpagan@redhat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 07/11] regmap: indirect: Add indirect regmap support
-In-Reply-To: <Y3Y4vWr/CGbaH0HQ@sirena.org.uk>
-Message-ID: <a089f1a0-c0f4-e1a2-d084-fd83e28e7e33@linux.intel.com>
-References: <20221117120515.37807-1-ilpo.jarvinen@linux.intel.com> <20221117120515.37807-8-ilpo.jarvinen@linux.intel.com> <Y3Y4vWr/CGbaH0HQ@sirena.org.uk>
+   d="scan'208";a="617636506"
+Received: from kristi4x-mobl1.amr.corp.intel.com (HELO [10.213.177.122]) ([10.213.177.122])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 07:00:05 -0800
+Message-ID: <0cff6870-8de1-1c93-208b-9b57c328486e@linux.intel.com>
+Date:   Thu, 17 Nov 2022 08:35:34 -0600
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-857486337-1668695730=:1636"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [PATCH v2 1/4] soundwire: bus: export sdw_nwrite_no_pm and
+ sdw_nread_no_pm functions
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>, vkoul@kernel.org
+Cc:     yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        patches@opensource.cirrus.com
+References: <20221117141727.3031503-1-ckeepax@opensource.cirrus.com>
+ <20221117141727.3031503-2-ckeepax@opensource.cirrus.com>
+Content-Language: en-US
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20221117141727.3031503-2-ckeepax@opensource.cirrus.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,91 +66,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
 
---8323329-857486337-1668695730=:1636
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8BIT
 
-On Thu, 17 Nov 2022, Mark Brown wrote:
-
-> On Thu, Nov 17, 2022 at 02:05:11PM +0200, Ilpo Järvinen wrote:
-> > Add support for indirect register access via a regmap interface.
-> > 
-> > Indirect register access is a generic way to access registers indirectly.
-> > One use case is accessing registers on Intel FPGA IPs with e.g. PMCI or
-> > HSSI.
+On 11/17/22 08:17, Charles Keepax wrote:
+> From: Simon Trimmer <simont@opensource.cirrus.com>
 > 
-> I can't tell from this changelog what exactly you're trying to
-> implement here...
->
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Indirect Register Access.
-> > + *
-> > + * Copyright (C) 2020-2022 Intel Corporation, Inc.
-> > + */
-> > +#include <linux/debugfs.h>
+> The commit 167790abb90f ("soundwire: export sdw_write/read_no_pm
+> functions") exposed the single byte no_pm versions of the IO functions
+> that can be used without touching PM, export the multi byte no_pm
+> versions for the same reason.
 > 
-> Please make the entire comment a C++ one so things look more
-> intentional.
+> Signed-off-by: Simon Trimmer <simont@opensource.cirrus.com>
+> Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-Eh, all/most SPDX-License-Identifier lines are done like this one?!?
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
-> > +#include <linux/module.h>
-> > +#include <linux/mutex.h>
-> > +#include <linux/regmap.h>
-> > +#include <linux/seq_file.h>
+> ---
 > 
-> I can't see what seq_file.h is used for, which is probably good
-> TBH since the interfaces it offers don't look like things I'd
-> expect a regmap bus to use.
-
-Yeah, it seems it was not even the only useless header. I'll clean 
-them up.
-
-> > +static int indirect_bus_reg_read(void *context, unsigned int reg,
-> > +				     unsigned int *val)
-> > +{
-> > +	struct indirect_ctx *ctx = context;
-> > +	unsigned int cmd, ack, tmpval;
-> > +	int ret;
-> > +
-> > +	cmd = readl(ctx->base + ctx->indirect_cfg->cmd_offset);
-> > +	if (cmd != ctx->indirect_cfg->idle_cmd)
-> > +		dev_warn(ctx->dev, "residual cmd 0x%x on read entry\n", cmd);
-> > +
-> > +	writel(reg, ctx->base + ctx->indirect_cfg->addr_offset);
-> > +	writel(ctx->indirect_cfg->read_cmd, ctx->base + ctx->indirect_cfg->cmd_offset);
-> > +
-> > +	ret = readl_poll_timeout(ctx->base + ctx->indirect_cfg->ack_offset, ack,
-> > +				 (ack & ctx->indirect_cfg->ack_mask) == ctx->indirect_cfg->ack_mask,
-> > +				 ctx->indirect_cfg->sleep_us, ctx->indirect_cfg->timeout_us);
+> No change since v1.
 > 
-> This all looks very specific to one particular implementation,
-> requiring a particular set of memory mapped registers and
-> operations - things like the initial read of the command for
-> example. It's not clear to me how much reuse this is likely to
-> see outside of the one driver you're trying to add - if you want
-> to implement something device specific you can just provide
-> the custom operations in the device's regmap configuration rather
-> than having to provide a bus.  Why add a bus?
-
-The point of not doing it in a particular driver is that the users will 
-be spread around more than into a single driver. This is a generic 
-mechanism for accessing registers of IPs on Intel FPGA. The point being 
-that IPs can use this common mechanism rather than each coming up their 
-own way.
-
-Mark Brown objected earlier naming it something related to Intel FPGAs [1]
-but I certainly know it still fixes the operations like you note even if 
-the offsets and values are now "customizable" (they weren't in the 
-earliest versions of this patch).
-
-[1] https://lore.kernel.org/all/YqB9O8HhZV2tXo8g@sirena.org.uk/T/#m75d4abdfd00f05866d837246ddc357a8af53cf99
-
--- 
- i.
-
---8323329-857486337-1668695730=:1636--
+>  drivers/soundwire/bus.c       | 8 ++++----
+>  include/linux/soundwire/sdw.h | 2 ++
+>  2 files changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/soundwire/bus.c b/drivers/soundwire/bus.c
+> index 76515c33e639e..ef4878258afad 100644
+> --- a/drivers/soundwire/bus.c
+> +++ b/drivers/soundwire/bus.c
+> @@ -414,8 +414,7 @@ int sdw_fill_msg(struct sdw_msg *msg, struct sdw_slave *slave,
+>   * all clients need to use the pm versions
+>   */
+>  
+> -static int
+> -sdw_nread_no_pm(struct sdw_slave *slave, u32 addr, size_t count, u8 *val)
+> +int sdw_nread_no_pm(struct sdw_slave *slave, u32 addr, size_t count, u8 *val)
+>  {
+>  	struct sdw_msg msg;
+>  	int ret;
+> @@ -430,9 +429,9 @@ sdw_nread_no_pm(struct sdw_slave *slave, u32 addr, size_t count, u8 *val)
+>  		ret = 0;
+>  	return ret;
+>  }
+> +EXPORT_SYMBOL(sdw_nread_no_pm);
+>  
+> -static int
+> -sdw_nwrite_no_pm(struct sdw_slave *slave, u32 addr, size_t count, const u8 *val)
+> +int sdw_nwrite_no_pm(struct sdw_slave *slave, u32 addr, size_t count, const u8 *val)
+>  {
+>  	struct sdw_msg msg;
+>  	int ret;
+> @@ -447,6 +446,7 @@ sdw_nwrite_no_pm(struct sdw_slave *slave, u32 addr, size_t count, const u8 *val)
+>  		ret = 0;
+>  	return ret;
+>  }
+> +EXPORT_SYMBOL(sdw_nwrite_no_pm);
+>  
+>  int sdw_write_no_pm(struct sdw_slave *slave, u32 addr, u8 value)
+>  {
+> diff --git a/include/linux/soundwire/sdw.h b/include/linux/soundwire/sdw.h
+> index 9e4537f409c29..902ed46f76c80 100644
+> --- a/include/linux/soundwire/sdw.h
+> +++ b/include/linux/soundwire/sdw.h
+> @@ -1047,7 +1047,9 @@ int sdw_write(struct sdw_slave *slave, u32 addr, u8 value);
+>  int sdw_write_no_pm(struct sdw_slave *slave, u32 addr, u8 value);
+>  int sdw_read_no_pm(struct sdw_slave *slave, u32 addr);
+>  int sdw_nread(struct sdw_slave *slave, u32 addr, size_t count, u8 *val);
+> +int sdw_nread_no_pm(struct sdw_slave *slave, u32 addr, size_t count, u8 *val);
+>  int sdw_nwrite(struct sdw_slave *slave, u32 addr, size_t count, const u8 *val);
+> +int sdw_nwrite_no_pm(struct sdw_slave *slave, u32 addr, size_t count, const u8 *val);
+>  int sdw_update(struct sdw_slave *slave, u32 addr, u8 mask, u8 val);
+>  int sdw_update_no_pm(struct sdw_slave *slave, u32 addr, u8 mask, u8 val);
+>  
