@@ -2,79 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D3C162E3A4
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:58:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96AFD62E3A5
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 19:00:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239803AbiKQR6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 12:58:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42520 "EHLO
+        id S239931AbiKQSAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 13:00:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234542AbiKQR6j (ORCPT
+        with ESMTP id S234978AbiKQR76 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 12:58:39 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66B50BD4;
-        Thu, 17 Nov 2022 09:58:38 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id r18so2611265pgr.12;
-        Thu, 17 Nov 2022 09:58:38 -0800 (PST)
+        Thu, 17 Nov 2022 12:59:58 -0500
+Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CA2D7ECAC
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 09:59:58 -0800 (PST)
+Received: by mail-vk1-xa35.google.com with SMTP id m18so1209328vka.10
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 09:59:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rGXrWx6HFK+Q9BfRPqN7BWzNtrClITl0lfZIJgaN7FE=;
-        b=C7ebDYXD3LxUWDBfB1bzgzD3vRA3xGqtCldmSMIL4I2LBr31r8TXCjyIC9JY1KIhev
-         O2jKSBnWN8HHMWHIwJSfhR4NlPAek7s5bR+rekos0H+fU7pen1q24YJOV4XV86ed33nr
-         Nx3jMdjRyCxPZMHMjmAbYDlXFxkR12a2xkOpUp+eSQA3XEpyQ2cPqYBo1qmBF5vonar0
-         nWdkiB23BjL7/s7/EHNXF4w1VtlHs4u2wKlaTzBzCvIqMHm+s2tQLyczFuuQk9opvZyl
-         g3zCOVUe4TRGB1xGuFYATkNTMYfwMf07PTRD8bgBUeE4WSwUqeziKENkoTHzvDvrUV/m
-         DXZA==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=dCKWOnvjQEJq4tUo9dFNFyCXfgqwWTejP/nifqG4MVw=;
+        b=nlzF0FNAIehjAt0d1wDzFKJniOtpT80HzGxTOrWuENTwUSwuTiNQYYp4m/GIvX53No
+         LaFZKGirDMSVpPBW/04S0TI0sjkPJveKwj+h0grCPpw0juOLe+BACCONhAMeonw/XVMf
+         +zDzSHLkZekfRoEEJWERtMW5xKDz5w7cN+AUpSNeKKJK6L4zeiQnMwdR2nIHWFHaRsE5
+         +OFqrymqk1qv4kmny0WrqRprK2zH7fUUOLlumVfgMs2bveD6QKryBUjGg8bGquGDx8zH
+         2aji3Mm48AI71Y6OTZyAkhL/nOIu5F8k487ZFNPkGaY7cNJEDeAPSB4xeUfCu2bzmnO3
+         BFUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rGXrWx6HFK+Q9BfRPqN7BWzNtrClITl0lfZIJgaN7FE=;
-        b=cmy3xt/H8EMk+pWqVggi82zzGk5VKfaui3e6LeGjyenDKADfcpLSr35dWJGpRWOH+3
-         yTc+o0SlYdTiTvH20Q9KXHjJeOHl8QZPB3se/dAUkLAA6YXASsC6Bfhi7zyc+XRWb9Gl
-         UiJQf3uFY3TXpwVv3GQjg0RIPOZ4fFLjih1sPOkG4Wmk2nhtog+zPF0P1ErAzwpywJup
-         ekBnVWBfBdtbY+KFtOvumvFZDQMwzKuLLR5kzMVqeRNK5W+9cUI4vcwXaETN04+qttGK
-         i3QA7kK3zqvUvqY2QjLjn2Kb8+v37Q3HbIf1Vh0VNbBbaZkWdGVBXNGKBRc3Y7nl/YE2
-         ZkeA==
-X-Gm-Message-State: ANoB5pny/y9LrPfLclxplRG3AkXPhaJI8dku8sn9ixcM0Skgh0EEfNA0
-        UQK/2IMduUtU5uMHpJYbyQE=
-X-Google-Smtp-Source: AA0mqf4tFQJZXUWWNMcswBXjlc/dbd9XlhWG6hSAejNsgA8SwQCm4v2DGs1ZlGTLViC5hY7WiAEvBg==
-X-Received: by 2002:a05:6a00:4c11:b0:56d:93d8:d81a with SMTP id ea17-20020a056a004c1100b0056d93d8d81amr4125579pfb.14.1668707917780;
-        Thu, 17 Nov 2022 09:58:37 -0800 (PST)
-Received: from localhost ([192.55.54.55])
-        by smtp.gmail.com with ESMTPSA id 185-20020a6214c2000000b005618189b0ffsm1437354pfu.104.2022.11.17.09.58.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 09:58:37 -0800 (PST)
-Date:   Thu, 17 Nov 2022 09:58:36 -0800
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "sean.j.christopherson@intel.com" <sean.j.christopherson@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "Aktas, Erdem" <erdemaktas@google.com>,
-        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
-        "dmatlack@google.com" <dmatlack@google.com>,
-        "Christopherson,, Sean" <seanjc@google.com>
-Subject: Re: [PATCH v10 033/108] KVM: x86/mmu: Allow non-zero value for
- non-present SPTE and removed SPTE
-Message-ID: <20221117175836.GI2350331@ls.amr.corp.intel.com>
-References: <cover.1667110240.git.isaku.yamahata@intel.com>
- <a5be8d9fd5753e17ad2ae4b5fc360501bdf2e84a.1667110240.git.isaku.yamahata@intel.com>
- <2d5e7d04d2e9399b0883a16d8ba3379a57d5b9f5.camel@intel.com>
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dCKWOnvjQEJq4tUo9dFNFyCXfgqwWTejP/nifqG4MVw=;
+        b=IBvtDg0KfqMB6AUkWOIm1ufzt0pVwHKs/V9AxT/Dsg2AYC08OwjRR/uRzagG1NdoG+
+         6/aNb0I/j6hJ5dECWmjw5oCA8mmMR/ana44BnSSmaqn6Jtpf0BQlYQxQD15n4Lno1HSH
+         WAKgFfCN5iAHxssve2DMbdJQ9JpGzrJ/elVwuuQhbH8DYjNIVCQzh0GVJezkuYeG36R2
+         GsVpoMydxU/TsSRCKcw7jnEdB34Svt942zsWW7HFHKzZ0xDSW606sSEbQFTLFFZlkNMc
+         XgoU5Q+wSfhgh3dEW3mlYslB8RgTFQCMlK+pwRfSVCz1ZjXGbPqem9Z37DmdYGZvmfx0
+         iSIQ==
+X-Gm-Message-State: ANoB5ploXIG9KERAwRwZYP2SiNcSE4/3WvISzD7cxbuNjGRzcTtsOzGF
+        nh+ut73XaDavaetPIh8mtWfjK9Q9/fzJ1sXKjfvXqg==
+X-Google-Smtp-Source: AA0mqf51xB7AnO0xFFSDWF/njP75eYwYOkGHnUr/g/pZGGxytCxiRLsm3hLySdFwAlYONeFEXlsQmTIH/EiZgXILVwI=
+X-Received: by 2002:a1f:c645:0:b0:3b8:685e:22eb with SMTP id
+ w66-20020a1fc645000000b003b8685e22ebmr2034444vkf.33.1668707997105; Thu, 17
+ Nov 2022 09:59:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <2d5e7d04d2e9399b0883a16d8ba3379a57d5b9f5.camel@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+From:   Ian Rogers <irogers@google.com>
+Date:   Thu, 17 Nov 2022 09:59:46 -0800
+Message-ID: <CAP-5=fWxAjEia-Qbm0RVzKOxyiod8rUOBieqaGK=DtQboDe3Qw@mail.gmail.com>
+Subject: Remove traceevent from tools/lib
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Steven Rostedt <rostedt@google.com>
+Cc:     Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        Linux Trace Devel <linux-trace-devel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,27 +69,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 09, 2022 at 11:24:12AM +0000,
-"Huang, Kai" <kai.huang@intel.com> wrote:
+Hi,
 
-> > diff --git a/arch/x86/kvm/mmu/spte.c b/arch/x86/kvm/mmu/spte.c
-> > index 2e08b2a45361..0b97a045c5f0 100644
-> > --- a/arch/x86/kvm/mmu/spte.c
-> > +++ b/arch/x86/kvm/mmu/spte.c
-> > @@ -419,7 +419,9 @@ void kvm_mmu_set_ept_masks(bool has_ad_bits, bool has_exec_only)
-> >  	shadow_dirty_mask	= has_ad_bits ? VMX_EPT_DIRTY_BIT : 0ull;
-> >  	shadow_nx_mask		= 0ull;
-> >  	shadow_x_mask		= VMX_EPT_EXECUTABLE_MASK;
-> > -	shadow_present_mask	= has_exec_only ? 0ull : VMX_EPT_READABLE_MASK;
-> > +	/* VMX_EPT_SUPPRESS_VE_BIT is needed for W or X violation. */
-> > +	shadow_present_mask	=
-> > +		(has_exec_only ? 0ull : VMX_EPT_READABLE_MASK) | VMX_EPT_SUPPRESS_VE_BIT;
-> 
-> I think this chunk can be in a separate patch since it doesn't handle fault from
-> non-present to present, which is claimed by the patch title and changelog.
-> 
-> Or I think you need to describe handling W or X fault part in the changelog.
+Arnaldo raised defaulting BUiLD_BPF_SKEL in the perf tool build:
+https://lore.kernel.org/lkml/Y3Yy5DFEoCEBv%2FQi@kernel.org/
 
-Ok, let me try to split that hunk.
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+The recent build clean up:
+https://lore.kernel.org/lkml/20221109184914.1357295-1-irogers@google.com/
+https://lore.kernel.org/lkml/20221116224631.207631-1-irogers@google.com/
+
+Means that perf is cleanly(ish) separated from libraries in tools/lib.
+traceevent in tools/lib is out of date (~2years - version 1.1.0 whilst
+the latest is 1.6.3 [1]) . Should we delete traceevent from tools/lib
+and just make LIBTRACEEVENT_DYNAMIC the only supported perf build
+option? I guess this may break old distributions that may not have
+libtraceevent, but even so I'm not sure that should motivate not
+cleaning this up (if they are building perf they can build
+libtraceevent).
+
+Thanks,
+Ian
+
+[1] https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/tree/Makefile
