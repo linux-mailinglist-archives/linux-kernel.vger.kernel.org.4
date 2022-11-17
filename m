@@ -2,139 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41CFA62D9C3
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 12:48:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5430B62D9D8
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 12:50:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234938AbiKQLsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 06:48:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51550 "EHLO
+        id S234522AbiKQLuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 06:50:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233622AbiKQLsU (ORCPT
+        with ESMTP id S233886AbiKQLtf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 06:48:20 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F6659179
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 03:48:19 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668685697;
+        Thu, 17 Nov 2022 06:49:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1BD310C6
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 03:48:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668685706;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=OQRVxv4eDJN1w5/JmXIKbLq1cQLNQYpFeLVVJODDHV4=;
-        b=og2a+MD1g6dE80MLtdn0Iy7bvkmimzOmW6gGuLVNBJGUcnMNjoeO/NgpKBw8kKMSUL52dj
-        lPgoRhPZyjHAOHHWbwk2GoIZuprGLMHaiCmyIdC2Scav2SYT8hlSZ5lIsgkmMtf58ANgVI
-        7jopDWcL0LONzmMrK5WAJX8FBcDxWPR6FDrGRPoA1nF0mDzhVpSIqxLDqUkqpfbienga7Y
-        V5KTbcamtxRe65doq9mZgPBlmSlt6TrGL4JlkP9t3+xqnBe8AdDDRJ92JC1sFBR6A1O3P8
-        VyUBU+P20EEbKx+WXizKUEl4uXTXDxM6CAcIGub8AxfHfBq9jWmJN1CuRSGpfQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668685697;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OQRVxv4eDJN1w5/JmXIKbLq1cQLNQYpFeLVVJODDHV4=;
-        b=fFbYefAwWydI9Eoyrx/NoI9ndxShrxy+0QsiypTqReObRJ6SiOI4J14NnipkDct+WqWhAS
-        8KIMQVKuuTDKQUDw==
-To:     Richard Biener <rguenther@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Alexander Potapenko <glider@google.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ben Segall <bsegall@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Don Zickus <dzickus@redhat.com>, Hao Luo <haoluo@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Huang Rui <ray.huang@amd.com>,
-        Ingo Molnar <mingo@redhat.com>, Jan Hubicka <jh@suse.de>,
-        Jason Baron <jbaron@akamai.com>,
-        Jiri Kosina <jikos@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Martin Liska <mliska@suse.cz>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Mel Gorman <mgorman@suse.de>, Miguel Ojeda <ojeda@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Petr Mladek <pmladek@suse.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Richard Biener <RGuenther@suse.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Song Liu <song@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        Yonghong Song <yhs@fb.com>
-Subject: Re: [PATCH 00/46] gcc-LTO support for the kernel
-In-Reply-To: <nycvar.YFH.7.77.849.2211170847400.3995@jbgna.fhfr.qr>
-References: <20221114114344.18650-1-jirislaby@kernel.org>
- <CAMj1kXEMejnuMx1LJbfJj1+RUmZzZJNSmOVu_tWAbU6RXGqA3A@mail.gmail.com>
- <Y3XwkFWJhcwApm4I@hirez.programming.kicks-ass.net>
- <nycvar.YFH.7.77.849.2211170847400.3995@jbgna.fhfr.qr>
-Date:   Thu, 17 Nov 2022 12:48:17 +0100
-Message-ID: <87iljdn6ny.ffs@tglx>
+        bh=VkDO0tN0QVhq9+4ytiHH1Q+NQsFL/NHOuSBEb6Cn4GU=;
+        b=fNlklGim0uUS/UAACh64KERu17mjwMaf3cgd8MXEw9m12N68kgyCoOdesXVJh9izX6gTk/
+        99QpsoyBLXks1/Orf7pF3qjedJenvf5+tzH27nI6L9qb4GG59AerPbQ1kpA8WdmzX19LfR
+        e496LKayy2nResyxDLF4kxo5MEeLmYQ=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-231-KDlrVyq0Ol6licUxnymqYA-1; Thu, 17 Nov 2022 06:48:24 -0500
+X-MC-Unique: KDlrVyq0Ol6licUxnymqYA-1
+Received: by mail-wr1-f72.google.com with SMTP id r23-20020adfa157000000b00241bcae980cso15528wrr.7
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 03:48:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VkDO0tN0QVhq9+4ytiHH1Q+NQsFL/NHOuSBEb6Cn4GU=;
+        b=a/no2Ow4BdBO96/2XabSSEt9zVY9jCnAchGU3m4pbXAxJz4yyrsH/bTyrLR9OHW9nu
+         +cgOhqwajaNH15XIIUx3y68ETL6XOHIG1tLYozdmVFUUQctM3FfNpGMiVhcSOV/JMTRN
+         qdc3wEskT4qLB8PuyvVO0OVCEnx/n8BQzrYo+/16+0YtWZxQFU45UqqnoCD+enqwRgfc
+         GEbwBY6YOK4yc79hlgY1bQ75vSzVxVMIcDzjixQsCPq/X8ry9zRliijNw4lszp+E9mS1
+         PsJ5wkXLHWRNUQIeARs1qZvvY3gVac9krjgSPY5LQ3+geLTPRyIMaUnh0UHRcBV4ny+8
+         +Oww==
+X-Gm-Message-State: ANoB5pm2awpJ2fatuBIqCe9PPxWO/ZdroLjfnBMo+u49bblWchRDnJCW
+        eUEuHsPlqQpj41ybXPEbgZVg3Vlx9kkIzHtJpwhLwrSfQ9wPlfvXzLCGpSTQBh+0hZTkogGIYCh
+        I5d8PPMaP9GoRXb/+qveznE5A
+X-Received: by 2002:adf:e4cf:0:b0:241:a047:d011 with SMTP id v15-20020adfe4cf000000b00241a047d011mr1264609wrm.258.1668685702239;
+        Thu, 17 Nov 2022 03:48:22 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf674QznTApmbdD3nTnBkGQgOC8JsrJmb13qrGrKOFNYUOmLozHLVWFFRxtSD6QXoicjTAAZRQ==
+X-Received: by 2002:adf:e4cf:0:b0:241:a047:d011 with SMTP id v15-20020adfe4cf000000b00241a047d011mr1264600wrm.258.1668685702040;
+        Thu, 17 Nov 2022 03:48:22 -0800 (PST)
+Received: from ?IPV6:2003:cb:c707:5200:39a9:b834:27c1:4ede? (p200300cbc707520039a9b83427c14ede.dip0.t-ipconnect.de. [2003:cb:c707:5200:39a9:b834:27c1:4ede])
+        by smtp.gmail.com with ESMTPSA id l8-20020adfa388000000b002417f35767asm824276wrb.40.2022.11.17.03.48.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Nov 2022 03:48:21 -0800 (PST)
+Message-ID: <7379a953-5a87-7978-b413-3d52b9b55795@redhat.com>
+Date:   Thu, 17 Nov 2022 12:48:20 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH -next] migrate: stop using 0 as NULL pointer
+Content-Language: en-US
+To:     Yang Li <yang.lee@linux.alibaba.com>, akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+References: <20221116012345.84870-1-yang.lee@linux.alibaba.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20221116012345.84870-1-yang.lee@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17 2022 at 08:50, Richard Biener wrote:
-> On Thu, 17 Nov 2022, Peter Zijlstra wrote:
->> Seconded; I really hate all the ugly required for the GCC-LTO
->> 'solution'. There not actually being any benefit just makes it a very
->> simple decision to drop all these patches on the floor.
->
-> I'd say that instead a prerequesite for the series would be to actually
-> enforce hidden visibility for everything not part of the kernel module
-> API so the compiler can throw away unused functions.  Currently it has
-> to keep everything because with a shared object there might be external
-> references to everything exported from individual TUs.
->
-> There was a size benefit mentioned for module-less monolithic kernels
-> as likely used in embedded setups, not sure if that's enough motivation
-> to properly annotate symbols with visibility - and as far as I understand
-> all these 'required' are actually such fixes.
+On 16.11.22 02:23, Yang Li wrote:
+> mm/migrate.c:1198:24: warning: Using plain integer as NULL pointer
+> 
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3080
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> ---
+>   mm/migrate.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/mm/migrate.c b/mm/migrate.c
+> index 15dc56a3da7a..e50b3c42e6ad 100644
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@ -1195,7 +1195,7 @@ static int unmap_and_move(new_page_t get_new_page,
+>   		return -ENOMEM;
+>   	dst = page_folio(newpage);
+>   
+> -	dst->private = 0;
+> +	dst->private = NULL;
+>   	rc = __unmap_and_move(src, dst, force, mode);
+>   	if (rc == MIGRATEPAGE_SUCCESS)
+>   		set_page_owner_migrate_reason(&dst->page, reason);
 
-To accomodate a broken tool which cannot figure out which functions are
-referenced in the final lump and which are not, right?
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-Can we pretty please fix the tool instead of proliferating the
-brokenness?
-
+-- 
 Thanks,
 
-        tglx
+David / dhildenb
+
