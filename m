@@ -2,66 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96AFD62E3A5
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 19:00:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C495362E3A8
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 19:01:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239931AbiKQSAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 13:00:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43172 "EHLO
+        id S239803AbiKQSBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 13:01:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234978AbiKQR76 (ORCPT
+        with ESMTP id S234664AbiKQSBP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 12:59:58 -0500
-Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CA2D7ECAC
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 09:59:58 -0800 (PST)
-Received: by mail-vk1-xa35.google.com with SMTP id m18so1209328vka.10
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 09:59:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=dCKWOnvjQEJq4tUo9dFNFyCXfgqwWTejP/nifqG4MVw=;
-        b=nlzF0FNAIehjAt0d1wDzFKJniOtpT80HzGxTOrWuENTwUSwuTiNQYYp4m/GIvX53No
-         LaFZKGirDMSVpPBW/04S0TI0sjkPJveKwj+h0grCPpw0juOLe+BACCONhAMeonw/XVMf
-         +zDzSHLkZekfRoEEJWERtMW5xKDz5w7cN+AUpSNeKKJK6L4zeiQnMwdR2nIHWFHaRsE5
-         +OFqrymqk1qv4kmny0WrqRprK2zH7fUUOLlumVfgMs2bveD6QKryBUjGg8bGquGDx8zH
-         2aji3Mm48AI71Y6OTZyAkhL/nOIu5F8k487ZFNPkGaY7cNJEDeAPSB4xeUfCu2bzmnO3
-         BFUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dCKWOnvjQEJq4tUo9dFNFyCXfgqwWTejP/nifqG4MVw=;
-        b=IBvtDg0KfqMB6AUkWOIm1ufzt0pVwHKs/V9AxT/Dsg2AYC08OwjRR/uRzagG1NdoG+
-         6/aNb0I/j6hJ5dECWmjw5oCA8mmMR/ana44BnSSmaqn6Jtpf0BQlYQxQD15n4Lno1HSH
-         WAKgFfCN5iAHxssve2DMbdJQ9JpGzrJ/elVwuuQhbH8DYjNIVCQzh0GVJezkuYeG36R2
-         GsVpoMydxU/TsSRCKcw7jnEdB34Svt942zsWW7HFHKzZ0xDSW606sSEbQFTLFFZlkNMc
-         XgoU5Q+wSfhgh3dEW3mlYslB8RgTFQCMlK+pwRfSVCz1ZjXGbPqem9Z37DmdYGZvmfx0
-         iSIQ==
-X-Gm-Message-State: ANoB5ploXIG9KERAwRwZYP2SiNcSE4/3WvISzD7cxbuNjGRzcTtsOzGF
-        nh+ut73XaDavaetPIh8mtWfjK9Q9/fzJ1sXKjfvXqg==
-X-Google-Smtp-Source: AA0mqf51xB7AnO0xFFSDWF/njP75eYwYOkGHnUr/g/pZGGxytCxiRLsm3hLySdFwAlYONeFEXlsQmTIH/EiZgXILVwI=
-X-Received: by 2002:a1f:c645:0:b0:3b8:685e:22eb with SMTP id
- w66-20020a1fc645000000b003b8685e22ebmr2034444vkf.33.1668707997105; Thu, 17
- Nov 2022 09:59:57 -0800 (PST)
+        Thu, 17 Nov 2022 13:01:15 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2087.outbound.protection.outlook.com [40.107.93.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64EBA7FC0A;
+        Thu, 17 Nov 2022 10:01:14 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BexqwPq4PMKFW5+4YsJwtqkZ4b4osxKZoE7ZbfZsfX2SL1DQ9J8UGKHd4eR5b2JNT9EKgSM9xq2XKk9SE6fRjHpbmyRpg1vahKzruy3YbKMH8MCkWJCxeeD4HVH3ZyisYVsxevb0ClF9jQwMNJ1UvaPrZO471x29ib9kW1fUsXYhRoBj5o7hdXrndWprycidsPdymbVxtehi9PN+V++oDzWwDdTj58y0786Dqh+CBvZm95PJQXXjm3A2THyiIjNgYMsWlKNjZKEqqb1EACTcuon0vyYGbDXFJCv7wN/3nktVNTnnES4DSEhiBGt5sHb8NX0OJh+FU4tcukiCUO8K9w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=McizwaE73KQSm3spEN4c5sg8PKXcEjPOBzqaS4bcPvk=;
+ b=kAHWMU6GnD2moJg3XBZRJe2g6ACFkDYmzycZfK3Sj0Kg4Moqu2FodB0R4SWoZqsL1SUSm5TulYfinF4ycgQgcDzVR9t4J4a4Zjr/KPf1SEdBzPP/NlKFICmWS86k9L2ffUd0gS8S4M/avJtHGC153tvDOnriJELn52riWUQ+97z2MVlffnNjIpw8wIzp9XR3gR5biP1cG5RUYUD1OLvJv83+eycpK/WK0VxMSTdKMcM0OJ36fBgsQX2J4YDesAqIASeuneDZW0dcZHSrR26MZYnQOzpe8SR1RVChHWCegY32XjqWdzv8sJ9zrn8PHpHDnBhQ1S14EuFEmwTMZ1kuIA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=McizwaE73KQSm3spEN4c5sg8PKXcEjPOBzqaS4bcPvk=;
+ b=b7A1NBm0+dxllMA9cSuTLLtuUrsF39Ct1x4hYKmfrkmcF+hdC+ocaesFKnnew08D+LOaIcCQ4d93uVS76faaUeM+WZolLDQoBRnFChjT2lLLS91U9RMbP8Db/Jzb1EiQ/ltCy6RZMY+yVOS3McMBiCQyYQVBuHi/J+vLwQOXGRM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by BL1PR12MB5143.namprd12.prod.outlook.com (2603:10b6:208:31b::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.19; Thu, 17 Nov
+ 2022 18:01:09 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::7d43:3f30:4caf:7421]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::7d43:3f30:4caf:7421%7]) with mapi id 15.20.5813.017; Thu, 17 Nov 2022
+ 18:01:09 +0000
+Message-ID: <6ecae1e3-16cb-f5fb-05ce-a98fcf145069@amd.com>
+Date:   Thu, 17 Nov 2022 19:01:05 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v4] udmabuf: add vmap and vunmap methods to udmabuf_ops
+Content-Language: en-US
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Lukasz Wiecaszek <lukasz.wiecaszek@googlemail.com>
+Cc:     Gerd Hoffmann <kraxel@redhat.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
+References: <20221117045842.27161-1-lukasz.wiecaszek@gmail.com>
+ <970e798d-ea26-5e1e-ace8-7915a866f7c7@collabora.com>
+ <20221117170838.GA74987@thinkpad-p72>
+ <cd382f43-1995-12a6-840b-32450e62f9f4@collabora.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <cd382f43-1995-12a6-840b-32450e62f9f4@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR3P281CA0128.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:94::10) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
-From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 17 Nov 2022 09:59:46 -0800
-Message-ID: <CAP-5=fWxAjEia-Qbm0RVzKOxyiod8rUOBieqaGK=DtQboDe3Qw@mail.gmail.com>
-Subject: Remove traceevent from tools/lib
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Steven Rostedt <rostedt@google.com>
-Cc:     Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Linux Trace Devel <linux-trace-devel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|BL1PR12MB5143:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3252fe27-e091-41be-722e-08dac8c5b4d1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 9QjUY7wo5+3k2bG0Glk3YiRVWJHp4rWA8nix9KxDDWKQZ4Tf/Gb55n6xa5Lw2U895ixBq+pJLy4dRptUKwHY9Eruz/vyz9i+WYY8bUPcv0rh+tsMUmXE2xVfgt0X/M1+aItbIX8Q7tb3MhkJHUYFoqelzUVHy07z/SqYe/VvFpGExDGnWb7Efwa+aM++dxeroyUsW0t/P3W9ArFR2TqFe8zCX7PcQj3B3VxIBs9plosxVmwJRkvDI0ba7NSEYZsfmq3Ts0onFT/2ttvEUVmoR7qG4It+snteVspm84WDdmZ2MuL2uI/FWqA86EK9xqhZSWmtVfr4sOIP0P1jh3oYWl8/DI81qamwH7CYOn5mG8OILvEYUrVaVwnZRrTxfYg6F+gKelr5olVpX/zXxWyhbtRwFE+lPTgr4NzrFiZ0NyxmTgU1HMT6LD6AB6xlU+90ptyclrHD97pseyKxJzbAPqTFxWdlA7AjBAG05l7B640CVFclt53M5ptonxWiAuQLELs79xVMoFT5YHJ8/xqh9vArvZ6gtYbEZgGvrpuQ30eXyJhgcj0fQxlDv0OyNUFSDejwTOcNpVpXKuS/KF+Sbqkn+xfcNGxECzJGXnRjYstg1OFOlzIrcflxmc1i1uEzXNkVc8HrxiWdw6usWDfgTVSYdqZazk1FMb5i9Q+mA6eDrMYLjt8ZC4vCVABvzE93keFQoTD5vo8sVLCfiGlMf76kex//IFER0lkOcatrTy0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(376002)(39860400002)(396003)(366004)(451199015)(6506007)(4326008)(38100700002)(6666004)(2616005)(186003)(86362001)(8676002)(66556008)(66476007)(66946007)(53546011)(31696002)(36756003)(6512007)(41300700001)(478600001)(6486002)(316002)(83380400001)(54906003)(110136005)(2906002)(66899015)(5660300002)(31686004)(8936002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QVZhNmh0YWVlbTdpankwZS9CUE1jb3BEZFVCSUNHakxYai8rS0ZLLzV6a2Zp?=
+ =?utf-8?B?ODdmalFudnl5NlRUVGlDek9YQ0IrOUVLTnI5QWdLY3V4T0RkaTZXanBnUFAw?=
+ =?utf-8?B?U2JIeWdNbmhSbks1Q0djdDFCQTdRazgrQUhCbUtNZW04MHRDZzNNYVVUYU83?=
+ =?utf-8?B?aTFubGtheTFSNG1SaHlkM0dNcmxCZWJYV04vOG01MFVHU1dUUjYxcmQzQm92?=
+ =?utf-8?B?bGpoTmVTVUZCRFVieTNwRWJ1ZTU2aDdRSEE5dWdQd1kxRlAxMVpCditJTWgz?=
+ =?utf-8?B?SDVQTEJGcUovVEpZVitpcWRQbXhHdkxKd1JFdjU3ZGNpQXlFcWN0RzZ0eFJk?=
+ =?utf-8?B?L1RtNWVkUUdDVXkxT0hrS211Z2grdnFUL3M3R3BEckkwdUNuYWh5bHlaYzRC?=
+ =?utf-8?B?YW5pclZ4VUt4dXNQQVRVamZUak05dlRvQXl6TjdvQlU4T3ExU2VUNzdxdzI0?=
+ =?utf-8?B?ck94M2ZnUWphd3VzZjV4Sjc3MWtPVThDcjZmYUltUm9xcXRLa1hpbjFoRml4?=
+ =?utf-8?B?aUtqQTFuL2tZTUR1cDd6bzRzOCtkcE41ZktzS3pWUTVpSXV0MG9meWExR3Q4?=
+ =?utf-8?B?dGNhcnJFTWtXajd6cytDQWhLdzVZVnZLcjdmRXFKYmNiTWhhZjNZTTNKT0ZY?=
+ =?utf-8?B?c2pJcUwxREdmT3hMMjlLMWpDSGgyZjFidjFqMi94YlVLQVJuVDBFWHVCTDFq?=
+ =?utf-8?B?c0FxK29URE5GeHBBTTQzR0pvSFUzN2FuV2RXNjgrdC80dm9mdU5aODRFdmVY?=
+ =?utf-8?B?ME8yUm9jVExZK1l3NHZvYWRYMGg5MVM0RlhVUDlNZ2xwS2lUTjJTSG02cFNV?=
+ =?utf-8?B?MndsS1AvOWFRRlRXREhVTWRndGNTTDVGbTlFdDhoRzFXSDBtWU9lTDJucW0v?=
+ =?utf-8?B?Yng4OExDSnBKQ0JmU01QNzc2NWUrb3RjbEtCV1RwL01DYW1ocUJtNG5zdVJT?=
+ =?utf-8?B?TlRONFpyMzlkZGg2QVRvSDZSTEhMNzlseFFmcW9PZ0JsNTQ3MkFTbjBRTzha?=
+ =?utf-8?B?Nk1TdUVRc0ovYTVYYW00OXBHTFRkaGRUdnhpUlYwWTIxYU81eWJiY2Z1Vm9S?=
+ =?utf-8?B?Z1BqR3J5cTltOHFHM1JJT2hNVEJXZDRzeldNTHlKUmhaSGlXd253alFVZUVR?=
+ =?utf-8?B?QjB5NFNLZHNLZjBZckhycEZNRHBvdnRZVmVqN1d2WXNMNmE1TjA2SmZ1c2lO?=
+ =?utf-8?B?MFNvYXBLT2RQWUI4Sm5mRVdGVDZqVEZMRjVvakd1dUVMTFRBNzZJcEFpUFVZ?=
+ =?utf-8?B?bVU3NHpyb0NGc09iYVNKNXBtRVF5TXRuclFnWVpuSUFoZTlJS3NJeE54V2FX?=
+ =?utf-8?B?c2hVOFVpcGlEdmp6Rnc4YjVVb3g5NGRtNUdkSGdyL2sxbnZETHZZbHZOR1ds?=
+ =?utf-8?B?ZFZrQWgwbm9HZzYwL252N3ovekVTc29wZVhnYWMxQXZqK1RiblVFR1M5Z2Fn?=
+ =?utf-8?B?aVl6ZkF6a2xLVkRLK3V6U2txQUVzaWxncXZ2WDAzZFhDUzRXNjFGQmVtMDJm?=
+ =?utf-8?B?RFpPVWhScUtYbjZjSUY5QlhLN2Y2RWtLZjN5UE45Mkh2bnZOeGMwSkM5ZEow?=
+ =?utf-8?B?UXFoQytra2Q4aGlNTkNXUzNVYWtVY2hvM1BzSFVDZ0dRdFRRRHZQQzZaa0lP?=
+ =?utf-8?B?TFhrYndKVXIrTDRrUmtoM0Q2UnZNaVgwSTFXanlpeW52UG1oemNWUExZVHRN?=
+ =?utf-8?B?UVlNd0IzQnd3YzA4VGZiRnhwYjNMQ1kvMi80dUxIY040aExjdW8zckh1NGdE?=
+ =?utf-8?B?VEZqRzkxVnRjQ1J3RDYyS2h1T2RmeDJXYmRsLzBrUnVKQ04rZGcyZkk4NkYx?=
+ =?utf-8?B?WDJvU2p3MlphdjdhemhaNXVmSEZ1S1BRc3JkOXNoTlRLcWtJTnBBbTBuU0tp?=
+ =?utf-8?B?aVhZSWZjaUo2QjlCV0ZkZ3lyVXJDZkpvcFczMHFrWG5GR1pvRlh2eWNkVWlO?=
+ =?utf-8?B?aEdiSXgyMHUycWVXNlFpdVpmbmZpNFRNUWdmZ2FIMU9NRXZXejZEYVk5b3pz?=
+ =?utf-8?B?K0UrMVVYMHNSNWFta3BqZndkNTQzMm5TVUVCWXp3UDl2aHFQUmhIdE5xUS82?=
+ =?utf-8?B?OGhiTWZYRm1PSzRDTUtuMGlLeWxZaXFyRFFnb3RqSjZNOGNyUXBvRCtoQ2Nw?=
+ =?utf-8?B?SXZwV0NkWWpxZzJ2M1ZydTNJdTZKeFZWR3pPVFFsTE9iY1B0ZUp6VmJkdDYz?=
+ =?utf-8?Q?efxxy50UpqJ7087u4IatPLocFU+ZC6JNm2oo2GpYwfIG?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3252fe27-e091-41be-722e-08dac8c5b4d1
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Nov 2022 18:01:09.6427
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: pRrGHYmEiVIvNnlQH/JsLkETFpNcQ+8NtebAX7Sy0h/ZzIAecd4DylctHb1W71+x
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5143
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,25 +131,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Am 17.11.22 um 18:32 schrieb Dmitry Osipenko:
+> On 11/17/22 20:08, Lukasz Wiecaszek wrote:
+>> On Thu, Nov 17, 2022 at 12:04:35PM +0300, Dmitry Osipenko wrote:
+>>> Hi,
+>>>
+>>> On 11/17/22 07:58, Lukasz Wiecaszek wrote:
+>>>> The reason behind that patch is associated with videobuf2 subsystem
+>>>> (or more genrally with v4l2 framework) and user created
+>>>> dma buffers (udmabuf). In some circumstances
+>>>> when dealing with V4L2_MEMORY_DMABUF buffers videobuf2 subsystem
+>>>> wants to use dma_buf_vmap() method on the attached dma buffer.
+>>>> As udmabuf does not have .vmap operation implemented,
+>>>> such dma_buf_vmap() natually fails.
+>>>>
+>>>> videobuf2_common: __vb2_queue_alloc: allocated 3 buffers, 1 plane(s) each
+>>>> videobuf2_common: __prepare_dmabuf: buffer for plane 0 changed
+>>>> videobuf2_common: __prepare_dmabuf: failed to map dmabuf for plane 0
+>>>> videobuf2_common: __buf_prepare: buffer preparation failed: -14
+>>>>
+>>>> The patch itself seems to be strighforward.
+>>>> It adds implementation of .vmap and .vunmap methods
+>>>> to 'struct dma_buf_ops udmabuf_ops'.
+>>>> .vmap method itself uses vm_map_ram() to map pages linearly
+>>>> into the kernel virtual address space.
+>>>> .vunmap removes mapping created earlier by .vmap.
+>>>> All locking and 'vmapping counting' is done in dma_buf.c
+>>>> so it seems to be redundant/unnecessary in .vmap/.vunmap.
+>>>>
+>>>> Signed-off-by: Lukasz Wiecaszek <lukasz.wiecaszek@gmail.com>
+>>> If new patch version doesn't contain significant changes and you got
+>>> acks/reviews for the previous version, then you should add the given
+>>> acked-by and reviewed-by tags to the commit message by yourself.
+>>>
+>>> -- 
+>>> Best regards,
+>>> Dmitry
+>>>
+>> I would like to thank you all for your patience and on the same time say
+>> sorry that I still cannot follow the process (although I have read
+>> 'submitting patches' chapter).
+> If you'll continue to contribute actively, you'll find things that
+> aren't documented at all. Don't worry about it, usually somebody will
+> tell you about what's missing. Just apply the new knowledge next time ;)
 
-Arnaldo raised defaulting BUiLD_BPF_SKEL in the perf tool build:
-https://lore.kernel.org/lkml/Y3Yy5DFEoCEBv%2FQi@kernel.org/
+Yeah, it's more learning by doing. Especially I suspect you don't have 
+commit rights to drm-misc-next (or do you want to upstream it through 
+some other branch?), so as soon as nobody has any more objections ping 
+Dmitry or me to push this.
 
-The recent build clean up:
-https://lore.kernel.org/lkml/20221109184914.1357295-1-irogers@google.com/
-https://lore.kernel.org/lkml/20221116224631.207631-1-irogers@google.com/
+Cheers,
+Christian
 
-Means that perf is cleanly(ish) separated from libraries in tools/lib.
-traceevent in tools/lib is out of date (~2years - version 1.1.0 whilst
-the latest is 1.6.3 [1]) . Should we delete traceevent from tools/lib
-and just make LIBTRACEEVENT_DYNAMIC the only supported perf build
-option? I guess this may break old distributions that may not have
-libtraceevent, but even so I'm not sure that should motivate not
-cleaning this up (if they are building perf they can build
-libtraceevent).
+PS: The Signed-of-by, Reviewed-by, Acked-by etc... lines are usually 
+added in chronological order, e.g. your Signed-of-by line should always 
+come first.
 
-Thanks,
-Ian
 
-[1] https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/tree/Makefile
