@@ -2,78 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 169BC62E067
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:55:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C39C862E06A
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:56:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239727AbiKQPzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 10:55:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60992 "EHLO
+        id S239771AbiKQP4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 10:56:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231469AbiKQPzo (ORCPT
+        with ESMTP id S231469AbiKQP4E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 10:55:44 -0500
+        Thu, 17 Nov 2022 10:56:04 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6102B769D8
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 07:54:55 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CA5F769E1
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 07:55:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668700494;
+        s=mimecast20190719; t=1668700510;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bRgEstsiaza00mxfx8Zw8rQJ2a50YhYzkAACPA1ZNfM=;
-        b=SsXXiZrFbAr+sV+LsUEbjO3naCtwXu72k36KDJjmmc9Z9X1Iu++t6QiILP0Fji2RBzcf0g
-        4cKMbQ/8tYhEcz9o8nec8LV4uHKYIIJ+HAnjO2jaXj2DuAjTC5ifnSFlMvTUpV9ijntoEd
-        DCRv9IgunE4nPAAzRgi8npmQ6dSGa4A=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-103-TRjPvw3SPm6DDzBxJSU-rw-1; Thu, 17 Nov 2022 10:54:52 -0500
-X-MC-Unique: TRjPvw3SPm6DDzBxJSU-rw-1
-Received: by mail-qk1-f199.google.com with SMTP id de43-20020a05620a372b00b006fae7e5117fso2571214qkb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 07:54:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bRgEstsiaza00mxfx8Zw8rQJ2a50YhYzkAACPA1ZNfM=;
-        b=If1qjHiBgdY6QZieHZ3pgwH+1QMZrgwuTusC5l3NjVqCAy2zBfhKYoR+fsE6R9QAH8
-         dKZrU6Snk0krOztXcINOJQCQ06qZRkB+gXgR9K9pISziFegyWbogxTx9MPydT9Nh9gL/
-         pht8XdpfEAopUMIvX9HVCmCi16Hj0t12hM3GiB5SYS3fcfP7NxJlRGawgsX04wJEnLMN
-         M1g4Imf0qI5lC1fWbmtpTZIBq1zio4cnAg22owxWvl+ysXxLb09Wj7rXyw2oe49Qs0XJ
-         AjrFlpst7ZVOX6E3uRrtsNWjbSXFaYE9QmdBYUQ64xITDidIivgxyasTvRew7LwDYeLn
-         sZlA==
-X-Gm-Message-State: ANoB5plv6YEhGLD7XbpSLRaI3deu6P/QPJhfg+x1pNaQcqDUylyd2uAN
-        0wthsdgDG3QuK1FDlHoXGlBWVaN+YPkia9XIBDa69/sVZ4J32AlrFbcT1T0rfigVIrmrmEEMGr8
-        W+h9VSam/623izO58g9DfS0PC
-X-Received: by 2002:ac8:5299:0:b0:3a5:3623:17b2 with SMTP id s25-20020ac85299000000b003a5362317b2mr2724076qtn.543.1668700492289;
-        Thu, 17 Nov 2022 07:54:52 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4xz3uBUV6IVgVCKdytOyvXVviItTtAVxx7J+xEH7uoA8FGlQTKyqHopJRsvmbveNc+qoxBpg==
-X-Received: by 2002:ac8:5299:0:b0:3a5:3623:17b2 with SMTP id s25-20020ac85299000000b003a5362317b2mr2724056qtn.543.1668700492084;
-        Thu, 17 Nov 2022 07:54:52 -0800 (PST)
-Received: from x1 (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
-        by smtp.gmail.com with ESMTPSA id 2-20020ac85642000000b003a5612c3f28sm548302qtt.56.2022.11.17.07.54.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 07:54:51 -0800 (PST)
-Date:   Thu, 17 Nov 2022 10:54:51 -0500
-From:   Brian Masney <bmasney@redhat.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-Subject: Re: [PATCH v1 1/1] gpiolib: Unify access to the device properties
-Message-ID: <Y3ZZS+/QKXtRKH9B@x1>
-References: <20221116141728.72491-1-andriy.shevchenko@linux.intel.com>
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=RMcPvClDyXqRCgCSImfOhtmqcNJCWNKsgSbr+RY5l4g=;
+        b=g+Nf3E3uMd2DfVdzqQbByfazINNkdvYe1A+Qn+Qutr2uBTZ2jZScKWmlnkAM907w9Hnj+A
+        MO/7Y+ZwUnkZnU/CcflCDIZrJt9BPEV95TdPaHIEDVJBb5uAz8nScGBtuoFvZfhGJhuCeo
+        M3t9Dl0DQ4vOHJSK9U2fDqxiQDGYlb8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-225--alPYjEWN-OVxn2vZ2vEhQ-1; Thu, 17 Nov 2022 10:55:07 -0500
+X-MC-Unique: -alPYjEWN-OVxn2vZ2vEhQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B822394AB06;
+        Thu, 17 Nov 2022 15:55:06 +0000 (UTC)
+Received: from eperezma.remote.csb (unknown [10.39.192.156])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B347B111E3ED;
+        Thu, 17 Nov 2022 15:55:05 +0000 (UTC)
+From:   =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>
+To:     linux-kernel@vger.kernel.org, mst@redhat.com,
+        virtualization@lists.linux-foundation.org,
+        Jason Wang <jasowang@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>
+Subject: [PATCH] vdpa_sim_net: Offer VIRTIO_NET_F_STATUS
+Date:   Thu, 17 Nov 2022 16:55:02 +0100
+Message-Id: <20221117155502.1394700-1-eperezma@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221116141728.72491-1-andriy.shevchenko@linux.intel.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,13 +59,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 04:17:28PM +0200, Andy Shevchenko wrote:
-> Some of the functions are using struct fwnode_handle, some struct device
-> pointer. In the GPIO library the firmware node of the GPIO device is the
-> same as GPIO node of the GPIO chip. Due to this fact we may use former
-> to access properties everywhere in the code.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+VIRTIO_NET_S_LINK_UP is already returned in config reads since vdpasim
+creation, but the feature bit was not offered to the driver.
 
-Reviewed-by: Brian Masney <bmasney@redhat.com>
+Tested modifying VIRTIO_NET_S_LINK_UP and different values of "status"
+in qemu virtio-net options, using vhost_vdpa.
+
+Not considering as a fix, because there should be no driver trusting in
+this config read before the feature flag.
+
+Signed-off-by: Eugenio Pérez <eperezma@redhat.com>
+---
+ drivers/vdpa/vdpa_sim/vdpa_sim_net.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
+index c3cb225ea469..30cfcfcf97f7 100644
+--- a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
++++ b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
+@@ -27,6 +27,7 @@
+ 
+ #define VDPASIM_NET_FEATURES	(VDPASIM_FEATURES | \
+ 				 (1ULL << VIRTIO_NET_F_MAC) | \
++				 (1ULL << VIRTIO_NET_F_STATUS) | \
+ 				 (1ULL << VIRTIO_NET_F_MTU) | \
+ 				 (1ULL << VIRTIO_NET_F_CTRL_VQ) | \
+ 				 (1ULL << VIRTIO_NET_F_CTRL_MAC_ADDR))
+-- 
+2.31.1
 
