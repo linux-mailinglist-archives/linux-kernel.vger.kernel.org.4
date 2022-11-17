@@ -2,124 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6990762DEFC
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:05:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE9AD62DEFA
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:05:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240056AbiKQPFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 10:05:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51388 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239843AbiKQPFO (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S239918AbiKQPFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 17 Nov 2022 10:05:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31DB397
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 07:04:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668697455;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3/pZzLYRJIJU5BHs9Uc1Vomcy9mjzdUIDjXX/Oi2kCE=;
-        b=DObzXfYg2wNgX+LpPwhYTzrOyyz5KP15fUcJ+zIXKaQISWCSQs7wSdm2qgqSEpALDmU0/G
-        rmLTpUcfar2KnB2juAShGN0ZA1SNN9tIy8Kfn39/DBAqG4mcA7NeRw19jZQ2fCE0n1UITW
-        4T8oVb5BJ/4RK9NJQpKKk988M6L/FWk=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-67-ZkQhiPemOoGdSj7u-PCuqg-1; Thu, 17 Nov 2022 10:04:13 -0500
-X-MC-Unique: ZkQhiPemOoGdSj7u-PCuqg-1
-Received: by mail-qk1-f198.google.com with SMTP id ay43-20020a05620a17ab00b006fa30ed61fdso2395851qkb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 07:04:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3/pZzLYRJIJU5BHs9Uc1Vomcy9mjzdUIDjXX/Oi2kCE=;
-        b=Tj5hInmw0cKE7pFTKOUz0HCQIQrLMDI4wKrUHm2etTJNBYtbuYxAa7NcatB0n4jpez
-         KARhGFhVe/tpa73ON43+ocV+YLWluq0gs77p2hOQfRrIiaxmBu5sI+XRmAaBENNpVOD1
-         RO7Rgx4rXepafb5T96V0oknJt8eKhy0UlErx5GXWCLXnC3LYiWI31Npv9ueLEQIH32eC
-         pY731sREuncFMO4Ig4CY8VsOMbsYDXLc0q6BA7YRlbZflprc4XczrDqpf4x2OFeaW9bh
-         rSMHUj/OeypEFT5DMOWhUYMwdyeZ8k+tfgqtAzko4Ww7Esp1t79AsxSiQpWTqlmYBlaJ
-         LRsg==
-X-Gm-Message-State: ANoB5pkxDLgWOf+Oq+ggFM5DfhH3YhBfUpxFW1g5uAkxzMvQFGZoSdzF
-        golni3YDafhrWuyX6fClXpp/v1E+Dm0QU6YaUghSETYLcKKDg5jW2N6Aq9cclA7iTtdx03E+B9t
-        x1M9vp+qzJpOEAA28bxij05ObgfTfqRz3KKIZkTqw
-X-Received: by 2002:ac8:124a:0:b0:3a5:e9fc:aa81 with SMTP id g10-20020ac8124a000000b003a5e9fcaa81mr2479621qtj.538.1668697453046;
-        Thu, 17 Nov 2022 07:04:13 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf78K7K9QQ/LEvml9I/mWSQVn+B0fyexIMzg8OX/iKi7kiwkPii8zpQjSqYYBFiNTGcK/7rWDOQ6MILAFdcpRCs=
-X-Received: by 2002:ac8:124a:0:b0:3a5:e9fc:aa81 with SMTP id
- g10-20020ac8124a000000b003a5e9fcaa81mr2479601qtj.538.1668697452805; Thu, 17
- Nov 2022 07:04:12 -0800 (PST)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52292 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234528AbiKQPFK (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 17 Nov 2022 10:05:10 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB38B140A6;
+        Thu, 17 Nov 2022 07:05:09 -0800 (PST)
+Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1F4CC929;
+        Thu, 17 Nov 2022 16:05:08 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1668697508;
+        bh=oKMtWtuyioi0YgvWzxpzxj77lBGNz8PB7EABwVQiruI=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=hII8nMnlvxrt27OOZJIRHSJgEVOWFZ/sTkFWgCzDMQ8xU4PMscDLQXwuLbTO4e7pt
+         2jWZLq/iU1Z1mSnDhxxwYP7IR+Qir0swLQNOh5PpW+aBf7MlcskH8721MGG0+TaoPw
+         k/8+hxAScVX3pi74VLL19/N7wUyeKxpFylcWacU0=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20221117071557.165742-1-kamalesh.babulal@oracle.com>
-In-Reply-To: <20221117071557.165742-1-kamalesh.babulal@oracle.com>
-From:   Joel Savitz <jsavitz@redhat.com>
-Date:   Thu, 17 Nov 2022 11:03:56 -0400
-Message-ID: <CAL1p7m4MeYbccde1rPKuxcbtj6Tm+sa4Ro_REAMBmWszyWJ3_w@mail.gmail.com>
-Subject: Re: [PATCH v2] cgroup/cpuset: Improve cpuset_css_alloc() description
-To:     Kamalesh Babulal <kamalesh.babulal@oracle.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Waiman Long <longman@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Tom Hromatka <tom.hromatka@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20221117122547.809644-6-tomi.valkeinen@ideasonboard.com>
+References: <20221117122547.809644-1-tomi.valkeinen@ideasonboard.com> <20221117122547.809644-6-tomi.valkeinen@ideasonboard.com>
+Subject: Re: [PATCH v1 5/8] arm64: dts: renesas: white-hawk-cpu: Add DP output support
+From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Date:   Thu, 17 Nov 2022 15:05:04 +0000
+Message-ID: <166869750492.50677.10848791222370585422@Monstersaurus>
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 3:18 AM Kamalesh Babulal
-<kamalesh.babulal@oracle.com> wrote:
->
-> Change the function argument in the description of cpuset_css_alloc()
-> from 'struct cgroup' -> 'struct cgroup_subsys_state'.  The change to the
-> argument type was introduced by commit eb95419b023a ("cgroup: pass
-> around cgroup_subsys_state instead of cgroup in subsystem methods").
-> Also, add more information to its description.
->
-> Signed-off-by: Kamalesh Babulal <kamalesh.babulal@oracle.com>
+Quoting Tomi Valkeinen (2022-11-17 12:25:44)
+> From: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+>=20
+> Add DT nodes needed for the mini DP connector. The DP is driven by
+> sn65dsi86, which in turn gets the pixel data from the SoC via DSI.
+>=20
+> Signed-off-by: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+
+Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+
+
 > ---
-> v2: Reworded the description to be more accurate, as suggested
->     by Waiman Long
->
->  kernel/cgroup/cpuset.c | 12 ++++++++----
->  1 file changed, 8 insertions(+), 4 deletions(-)
->
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index b474289c15b8..ce789e1b2a2f 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -3046,11 +3046,15 @@ static struct cftype dfl_files[] = {
+>  .../dts/renesas/r8a779g0-white-hawk-cpu.dtsi  | 94 +++++++++++++++++++
+>  1 file changed, 94 insertions(+)
+>=20
+> diff --git a/arch/arm64/boot/dts/renesas/r8a779g0-white-hawk-cpu.dtsi b/a=
+rch/arm64/boot/dts/renesas/r8a779g0-white-hawk-cpu.dtsi
+> index c10740aee9f6..8aab859aac7a 100644
+> --- a/arch/arm64/boot/dts/renesas/r8a779g0-white-hawk-cpu.dtsi
+> +++ b/arch/arm64/boot/dts/renesas/r8a779g0-white-hawk-cpu.dtsi
+> @@ -97,6 +97,15 @@ memory@600000000 {
+>                 reg =3D <0x6 0x00000000 0x1 0x00000000>;
+>         };
+> =20
+> +       reg_1p2v: regulator-1p2v {
+> +               compatible =3D "regulator-fixed";
+> +               regulator-name =3D "fixed-1.2V";
+> +               regulator-min-microvolt =3D <1200000>;
+> +               regulator-max-microvolt =3D <1200000>;
+> +               regulator-boot-on;
+> +               regulator-always-on;
+> +       };
+> +
+>         reg_1p8v: regulator-1p8v {
+>                 compatible =3D "regulator-fixed";
+>                 regulator-name =3D "fixed-1.8V";
+> @@ -114,6 +123,24 @@ reg_3p3v: regulator-3p3v {
+>                 regulator-boot-on;
+>                 regulator-always-on;
+>         };
+> +
+> +       mini-dp-con {
+> +               compatible =3D "dp-connector";
+> +               label =3D "CN5";
+> +               type =3D "mini";
+> +
+> +               port {
+> +                       mini_dp_con_in: endpoint {
+> +                               remote-endpoint =3D <&sn65dsi86_out>;
+> +                       };
+> +               };
+> +       };
+> +
+> +       sn65dsi86_refclk: clk-x6 {
+> +               compatible =3D "fixed-clock";
+> +               #clock-cells =3D <0>;
+> +               clock-frequency =3D <38400000>;
+> +       };
 >  };
+> =20
+>  &avb0 {
+> @@ -134,6 +161,23 @@ phy0: ethernet-phy@0 {
+>         };
+>  };
+> =20
+> +&dsi0 {
+> +       status =3D "okay";
+> +
+> +       ports {
+> +               port@1 {
+> +                       dsi0_out: endpoint {
+> +                               remote-endpoint =3D <&sn65dsi86_in>;
+> +                               data-lanes =3D <1 2 3 4>;
+> +                       };
+> +               };
+> +       };
+> +};
+> +
+> +&du {
+> +       status =3D "okay";
+> +};
+> +
+>  &extal_clk {
+>         clock-frequency =3D <16666666>;
+>  };
+> @@ -172,6 +216,51 @@ eeprom@50 {
+>         };
+>  };
+> =20
+> +&i2c1 {
+> +       pinctrl-0 =3D <&i2c1_pins>;
+> +       pinctrl-names =3D "default";
+> +
+> +       status =3D "okay";
+> +       clock-frequency =3D <400000>;
+> +
+> +       bridge@2c {
+> +               compatible =3D "ti,sn65dsi86";
+> +               reg =3D <0x2c>;
+> +
+> +               clocks =3D <&sn65dsi86_refclk>;
+> +               clock-names =3D "refclk";
+> +
+> +               interrupt-parent =3D <&intc_ex>;
+> +               interrupts =3D <0 IRQ_TYPE_LEVEL_HIGH>;
+> +
+> +               enable-gpios =3D <&gpio1 26 GPIO_ACTIVE_HIGH>;
+> +
+> +               vccio-supply =3D <&reg_1p8v>;
+> +               vpll-supply =3D <&reg_1p8v>;
+> +               vcca-supply =3D <&reg_1p2v>;
+> +               vcc-supply =3D <&reg_1p2v>;
+> +
+> +               ports {
+> +                       #address-cells =3D <1>;
+> +                       #size-cells =3D <0>;
+> +
+> +                       port@0 {
+> +                               reg =3D <0>;
+> +                               sn65dsi86_in: endpoint {
+> +                                       remote-endpoint =3D <&dsi0_out>;
+> +                               };
+> +                       };
+> +
+> +                       port@1 {
+> +                               reg =3D <1>;
+> +                               sn65dsi86_out: endpoint {
+> +                                       remote-endpoint =3D <&mini_dp_con=
+_in>;
+> +                               };
+> +                       };
+> +               };
+> +       };
+> +};
+> +
+>  &mmc0 {
+>         pinctrl-0 =3D <&mmc_pins>;
+>         pinctrl-1 =3D <&mmc_pins>;
+> @@ -221,6 +310,11 @@ i2c0_pins: i2c0 {
+>                 function =3D "i2c0";
+>         };
+> =20
+> +       i2c1_pins: i2c1 {
+> +               groups =3D "i2c1";
+> +               function =3D "i2c1";
+> +       };
+> +
+>         keys_pins: keys {
+>                 pins =3D "GP_5_0", "GP_5_1", "GP_5_2";
+>                 bias-pull-up;
+> --=20
+> 2.34.1
 >
->
-> -/*
-> - *     cpuset_css_alloc - allocate a cpuset css
-> - *     cgrp:   control group that the new cpuset will be part of
-> +/**
-> + * cpuset_css_alloc - Allocate a cpuset css
-> + * @parent_css: Parent css of the control group that the new cpuset will be
-> + *              part of
-> + * Return: cpuset css on success, -ENOMEM on failure.
-> + *
-> + * Allocate and initialize a new cpuset css, for non-NULL @parent_css, return
-> + * top cpuset css otherwise.
->   */
-> -
->  static struct cgroup_subsys_state *
->  cpuset_css_alloc(struct cgroup_subsys_state *parent_css)
->  {
-> --
-> 2.34.3
->
-
-Acked-by: Joel Savitz <jsavitz@redhat.com>
-
