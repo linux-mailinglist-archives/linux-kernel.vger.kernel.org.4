@@ -2,66 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B893162DA17
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 13:01:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 906EF62DA1B
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 13:01:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239853AbiKQMBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 07:01:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33130 "EHLO
+        id S239894AbiKQMBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 07:01:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234840AbiKQMBL (ORCPT
+        with ESMTP id S239889AbiKQMBm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 07:01:11 -0500
-Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97B8228729;
-        Thu, 17 Nov 2022 04:01:10 -0800 (PST)
-Received: by mail-vs1-xe2c.google.com with SMTP id a6so1284004vsc.5;
-        Thu, 17 Nov 2022 04:01:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HBt8DUE3xpm3UcQFvGVPGZx2MhTcfsoY3gAkEK/8Wf8=;
-        b=QjyhNjW80NVWL/lOz+SS3leVzo7NyiaXDJVo8kceK9mWHhVjmrue29+e/mGzcVDgDB
-         GKOUph429uqyuyYNnW6HWM9BMmcnC7YmDXvkZu1P+bum8p0M3581aUUj0VYQJrlaz9X7
-         4cNaf5RdYczDKVfEUrETPU0vlRQpGoDsQQPSwJnHV9Yj5X2nGMxQF7sl8M3+VqCuM0oE
-         LTcOcRE+EAqjGr8OL37NBxYxm4OLVZWmI6NNQbRVwJzoZdrNzl1pANMY4jK5vemvr0Uo
-         aieHd79W6fhAGRqJzBQDeJH7L1He9N3NB1EMIOeauBRXHVjiLoVFuBpOFiUaD6TCe841
-         5Wzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HBt8DUE3xpm3UcQFvGVPGZx2MhTcfsoY3gAkEK/8Wf8=;
-        b=skXuoiTNwxftzIY2Aosw6aS2DoT05bna4usQvvbheZCyVCjCGQ5gKI0wfPd5uLqrsl
-         NAfqbeAnxGOmCUePDXJYZfWmgC93wgs4esdP/6HjbTEDyFiPdsRQo0uJgYgs8WL4gMRy
-         sLcPgdp0oRdfBF4HGFRf7Km/aVlbNW9MVlJ+v0QPDU9OiIBkwBLjxDOWgCjIVy4ohIrd
-         ADuoQqlVjFc+pVdXaqSAuHElsB+YXlN1RWwmV8hcjmjkUX4f8zB0wK0+869yNV51JegV
-         a+UWeHXvwsLEtKOc++pkkHNvrny7AZ7OjbNpCp5NfdEQGfptVJLEr9X8ah3xCytl2npz
-         /AXw==
-X-Gm-Message-State: ANoB5pluJWK7equR3p+k11d1eRI7AXaMDrB3FaXuytmCjThP/j5APMPl
-        2Yfj879WXWw/5apDzWznIf3v/LfVQ3HP8/yPPe0=
-X-Google-Smtp-Source: AA0mqf7YJOFWKiWLY57JD/Q1OmjIAGhJtBpJbVqZ3q1Oh9sn7GRcRB6FXVUQzqZ4Wt+7NNl5GwV1929V/KdLcRcXijI=
-X-Received: by 2002:a05:6102:11f1:b0:3a6:fde0:cf74 with SMTP id
- e17-20020a05610211f100b003a6fde0cf74mr1364150vsg.73.1668686469693; Thu, 17
- Nov 2022 04:01:09 -0800 (PST)
+        Thu, 17 Nov 2022 07:01:42 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC86F2497D
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 04:00:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668686440;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=hGfznxLdTqHvriWwWPC6t7xIxiQJbtuQttgGqcBYOwg=;
+        b=NZsG3KeCGJLQaxr9FnUg/cklPWfdPfYYGHb9J/xeGSGgx5RD4/s22lDWiJOHYouJ+tcDX7
+        ytS7uwskHXNsRTpyjvaIVPrZOmrK8/CdYtVVEaWFqE2ZOBmZWMbEP2OmiV1lWV/iKjTO7k
+        l/17IVTi7mvpClCydHFfGx/ESC11oDo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-382-E9U6GZoUOM2z8yVV90MJMQ-1; Thu, 17 Nov 2022 07:00:37 -0500
+X-MC-Unique: E9U6GZoUOM2z8yVV90MJMQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0183D833AED;
+        Thu, 17 Nov 2022 12:00:37 +0000 (UTC)
+Received: from gerbillo.redhat.com (unknown [10.39.194.162])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7A47040C6EC3;
+        Thu, 17 Nov 2022 12:00:35 +0000 (UTC)
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     torvalds@linux-foundation.org
+Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Networking for 6.1-rc6
+Date:   Thu, 17 Nov 2022 13:00:17 +0100
+Message-Id: <20221117120017.26184-1-pabeni@redhat.com>
 MIME-Version: 1.0
-References: <20221115100039.441295-1-pawell@cadence.com>
-In-Reply-To: <20221115100039.441295-1-pawell@cadence.com>
-From:   Peter Chen <hzpeterchen@gmail.com>
-Date:   Thu, 17 Nov 2022 20:00:00 +0800
-Message-ID: <CAL411-o4BETLPd-V_4yR6foXbES=72-P4tq-fQ_W_p0P_3ZqEw@mail.gmail.com>
-Subject: Re: [PATCH] usb: cdns3: remove fetched trb from cache before dequeuing
-To:     Pawel Laszczak <pawell@cadence.com>
-Cc:     peter.chen@kernel.org, linux-usb@vger.kernel.org,
-        gregkh@linuxfoundation.org, felipe.balbi@linux.intel.com,
-        rogerq@kernel.org, a-govindraju@ti.com,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,72 +58,264 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 6:01 PM Pawel Laszczak <pawell@cadence.com> wrote:
->
-> After doorbell DMA fetches the TRB. If during dequeuing request
-> driver changes NORMAL TRB to LINK TRB but doesn't delete it from
-> controller cache then controller will handle cached TRB and packet
-> can be lost.
->
-> The example scenario for this issue looks like:
-> 1. queue request - set doorbell
-> 2. dequeue request
-> 3. send OUT data packet from host
-> 4. Device will accept this packet which is unexpected
-> 5. queue new request - set doorbell
-> 6. Device lost the expected packet.
->
-> By setting DFLUSH controller clears DRDY bit and stop DMA transfer.
->
-> Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
-> cc: <stable@vger.kernel.org>
-> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-> ---
->  drivers/usb/cdns3/cdns3-gadget.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
->
-> diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
-> index 5adcb349718c..ccfaebca6faa 100644
-> --- a/drivers/usb/cdns3/cdns3-gadget.c
-> +++ b/drivers/usb/cdns3/cdns3-gadget.c
-> @@ -2614,6 +2614,7 @@ int cdns3_gadget_ep_dequeue(struct usb_ep *ep,
->         u8 req_on_hw_ring = 0;
->         unsigned long flags;
->         int ret = 0;
-> +       int val;
->
->         if (!ep || !request || !ep->desc)
->                 return -EINVAL;
-> @@ -2649,6 +2650,13 @@ int cdns3_gadget_ep_dequeue(struct usb_ep *ep,
->
->         /* Update ring only if removed request is on pending_req_list list */
->         if (req_on_hw_ring && link_trb) {
-> +               /* Stop DMA */
-> +               writel(EP_CMD_DFLUSH, &priv_dev->regs->ep_cmd);
-> +
-> +               /* wait for DFLUSH cleared */
-> +               readl_poll_timeout_atomic(&priv_dev->regs->ep_cmd, val,
-> +                                         !(val & EP_CMD_DFLUSH), 1, 1000);
-> +
->                 link_trb->buffer = cpu_to_le32(TRB_BUFFER(priv_ep->trb_pool_dma +
->                         ((priv_req->end_trb + 1) * TRB_SIZE)));
->                 link_trb->control = cpu_to_le32((le32_to_cpu(link_trb->control) & TRB_CYCLE) |
-> @@ -2660,6 +2668,10 @@ int cdns3_gadget_ep_dequeue(struct usb_ep *ep,
->
->         cdns3_gadget_giveback(priv_ep, priv_req, -ECONNRESET);
->
-> +       req = cdns3_next_request(&priv_ep->pending_req_list);
-> +       if (req)
-> +               cdns3_rearm_transfer(priv_ep, 1);
-> +
+Hi Linus!
 
-Why the above changes are needed?
+This is mostly NIC drivers related, with a notable tcp change that
+introduces a new int config knob. It asks for the user input at
+config-time but it's guarded by EXPERT, so I hope it's ok.
 
-Peter
+No new known outstanding regressions.
 
->  not_found:
->         spin_unlock_irqrestore(&priv_dev->lock, flags);
->         return ret;
-> --
-> 2.25.1
->
+The following changes since commit 4bbf3422df78029f03161640dcb1e9d1ed64d1ea:
+
+  Merge tag 'net-6.1-rc5' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2022-11-10 17:31:15 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-6.1-rc6
+
+for you to fetch changes up to 58e0be1ef6118c5352b56a4d06e974c5599993a5:
+
+  net: use struct_group to copy ip/ipv6 header addresses (2022-11-17 10:42:45 +0100)
+
+----------------------------------------------------------------
+Networking fixes for 6.1-rc6, including fixes from bpf
+
+Current release - regressions:
+
+  - tls: fix memory leak in tls_enc_skb() and tls_sw_fallback_init()
+
+Previous releases - regressions:
+
+  - bridge: fix memory leaks when changing VLAN protocol
+
+  - dsa: make dsa_master_ioctl() see through port_hwtstamp_get() shims
+
+  - dsa: don't leak tagger-owned storage on switch driver unbind
+
+  - eth: mlxsw: avoid warnings when not offloaded FDB entry with IPv6 is removed
+
+  - eth: stmmac: ensure tx function is not running in stmmac_xdp_release()
+
+  - eth: hns3: fix return value check bug of rx copybreak
+
+Previous releases - always broken:
+
+  - kcm: close race conditions on sk_receive_queue
+
+  - bpf: fix alignment problem in bpf_prog_test_run_skb()
+
+  - bpf: fix writing offset in case of fault in strncpy_from_kernel_nofault
+
+  - eth: macvlan: use built-in RCU list checking
+
+  - eth: marvell: add sleep time after enabling the loopback bit
+
+  - eth: octeon_ep: fix potential memory leak in octep_device_setup()
+
+Misc:
+
+  - tcp: configurable source port perturb table size
+
+  - bpf: Convert BPF_DISPATCHER to use static_call() (not ftrace)
+
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+
+----------------------------------------------------------------
+Alban Crequy (2):
+      maccess: Fix writing offset in case of fault in strncpy_from_kernel_nofault()
+      selftests: bpf: Add a test when bpf_probe_read_kernel_str() returns EFAULT
+
+Alexandru Tachici (1):
+      net: usb: smsc95xx: fix external PHY reset
+
+Aminuddin Jamaluddin (1):
+      net: phy: marvell: add sleep time after enabling the loopback bit
+
+Amit Cohen (1):
+      mlxsw: Avoid warnings when not offloaded FDB entry with IPv6 is removed
+
+Andrii Nakryiko (1):
+      Merge branch 'Fix offset when fault occurs in strncpy_from_kernel_nofault()'
+
+Baisong Zhong (1):
+      bpf, test_run: Fix alignment problem in bpf_prog_test_run_skb()
+
+Chuang Wang (1):
+      net: macvlan: Use built-in RCU list checking
+
+Cong Wang (1):
+      kcm: close race conditions on sk_receive_queue
+
+David S. Miller (2):
+      Merge branch 'octeon_ep-fixes'
+      Merge branch 'microchip-fixes'
+
+Enrico Sau (1):
+      net: usb: qmi_wwan: add Telit 0x103a composition
+
+Gaosheng Cui (1):
+      bnxt_en: Remove debugfs when pci_register_driver failed
+
+Gleb Mazovetskiy (1):
+      tcp: configurable source port perturb table size
+
+Guangbin Huang (1):
+      net: hns3: fix setting incorrect phy link ksettings for firmware in resetting process
+
+Hangbin Liu (1):
+      net: use struct_group to copy ip/ipv6 header addresses
+
+Ido Schimmel (1):
+      bridge: switchdev: Fix memory leaks when changing VLAN protocol
+
+Jaco Coetzee (1):
+      nfp: change eeprom length to max length enumerators
+
+Jakub Kicinski (1):
+      Merge https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf
+
+Jakub Sitnicki (1):
+      l2tp: Serialize access to sk_user_data with sk_callback_lock
+
+Jeremy Kerr (1):
+      mctp i2c: don't count unused / invalid keys for flow release
+
+Jian Shen (1):
+      net: hns3: fix incorrect hw rss hash type of rx packet
+
+Jie Wang (1):
+      net: hns3: fix return value check bug of rx copybreak
+
+Liu Jian (1):
+      net: ag71xx: call phylink_disconnect_phy if ag71xx_hw_enable() fail in ag71xx_open()
+
+Michael Sit Wei Hong (1):
+      net: phy: dp83867: Fix SGMII FIFO depth for non OF devices
+
+Mohd Faizal Abdul Rahim (1):
+      net: stmmac: ensure tx function is not running in stmmac_xdp_release()
+
+Nathan Chancellor (1):
+      bpf: Add explicit cast to 'void *' for __BPF_DISPATCHER_UPDATE()
+
+Paolo Abeni (1):
+      Merge branch 'net-hns3-this-series-bugfix-for-the-hns3-ethernet-driver'
+
+Peter Zijlstra (2):
+      bpf: Revert ("Fix dispatcher patchable function entry to 5 bytes nop")
+      bpf: Convert BPF_DISPATCHER to use static_call() (not ftrace)
+
+Pu Lehui (1):
+      selftests/bpf: Fix casting error when cross-compiling test_verifier for 32-bit platforms
+
+Shang XiaoJing (2):
+      net: lan966x: Fix potential null-ptr-deref in lan966x_stats_init()
+      net: microchip: sparx5: Fix potential null-ptr-deref in sparx_stats_init() and sparx5_start()
+
+Vladimir Oltean (2):
+      net: dsa: make dsa_master_ioctl() see through port_hwtstamp_get() shims
+      net: dsa: don't leak tagger-owned storage on switch driver unbind
+
+Wang ShaoBo (1):
+      mISDN: fix misuse of put_device() in mISDN_register_device()
+
+Wang Yufen (2):
+      bpf: Fix memory leaks in __check_func_call
+      netdevsim: Fix memory leak of nsim_dev->fa_cookie
+
+Wei Yongjun (3):
+      net: bgmac: Drop free_netdev() from bgmac_enet_remove()
+      net: mhi: Fix memory leak in mhi_net_dellink()
+      net/x25: Fix skb leak in x25_lapb_receive_frame()
+
+Xu Kuohai (2):
+      bpf: Initialize same number of free nodes for each pcpu_freelist
+      bpf: Fix offset calculation error in __copy_map_value and zero_map_value
+
+Yang Jihong (1):
+      selftests/bpf: Fix test_progs compilation failure in 32-bit arch
+
+Yang Yingliang (1):
+      mISDN: fix possible memory leak in mISDN_dsp_element_register()
+
+Yu Liao (1):
+      net/tls: Fix memory leak in tls_enc_skb() and tls_sw_fallback_init()
+
+Yuan Can (4):
+      net: hinic: Fix error handling in hinic_module_init()
+      net: ionic: Fix error handling in ionic_init_module()
+      net: ena: Fix error handling in ena_init()
+      net: thunderbolt: Fix error handling in tbnet_init()
+
+Zhengchao Shao (2):
+      net: liquidio: release resources when liquidio driver open failed
+      net: caif: fix double disconnect client in chnl_net_open()
+
+Ziyang Xuan (4):
+      octeon_ep: delete unnecessary napi rollback under set_queues_err in octep_open()
+      octeon_ep: ensure octep_get_link_status() successfully before octep_link_up()
+      octeon_ep: fix potential memory leak in octep_device_setup()
+      octeon_ep: ensure get mac address successfully before eth_hw_addr_set()
+
+ arch/x86/net/bpf_jit_comp.c                        |  13 --
+ drivers/isdn/mISDN/core.c                          |   2 +-
+ drivers/isdn/mISDN/dsp_pipeline.c                  |   3 +-
+ drivers/net/ethernet/amazon/ena/ena_netdev.c       |   8 +-
+ drivers/net/ethernet/atheros/ag71xx.c              |   3 +-
+ drivers/net/ethernet/broadcom/bgmac.c              |   1 -
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c          |  10 +-
+ drivers/net/ethernet/cavium/liquidio/lio_main.c    |  34 ++++-
+ drivers/net/ethernet/hisilicon/hns3/hnae3.h        |   1 -
+ .../hisilicon/hns3/hns3_common/hclge_comm_rss.c    |  20 ---
+ .../hisilicon/hns3/hns3_common/hclge_comm_rss.h    |   2 -
+ drivers/net/ethernet/hisilicon/hns3/hns3_enet.c    | 167 ++++++++++++---------
+ drivers/net/ethernet/hisilicon/hns3/hns3_enet.h    |   1 +
+ .../ethernet/hisilicon/hns3/hns3pf/hclge_main.c    |  11 +-
+ drivers/net/ethernet/huawei/hinic/hinic_main.c     |   9 +-
+ .../net/ethernet/marvell/octeon_ep/octep_main.c    |  16 +-
+ .../ethernet/mellanox/mlxsw/spectrum_switchdev.c   |   2 +
+ .../ethernet/microchip/lan966x/lan966x_ethtool.c   |   3 +
+ .../net/ethernet/microchip/sparx5/sparx5_ethtool.c |   3 +
+ .../net/ethernet/microchip/sparx5/sparx5_main.c    |   3 +
+ .../net/ethernet/netronome/nfp/nfp_net_ethtool.c   |   6 +-
+ drivers/net/ethernet/pensando/ionic/ionic_main.c   |   8 +-
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c  |   3 +
+ drivers/net/macvlan.c                              |   4 +-
+ drivers/net/mctp/mctp-i2c.c                        |  47 ++++--
+ drivers/net/mhi_net.c                              |   2 +
+ drivers/net/netdevsim/dev.c                        |   1 +
+ drivers/net/phy/dp83867.c                          |   7 +
+ drivers/net/phy/marvell.c                          |  16 +-
+ drivers/net/thunderbolt.c                          |  19 ++-
+ drivers/net/usb/qmi_wwan.c                         |   1 +
+ drivers/net/usb/smsc95xx.c                         |  46 +++++-
+ include/linux/bpf.h                                |  60 +++++---
+ include/net/ip.h                                   |   2 +-
+ include/net/ipv6.h                                 |   2 +-
+ include/net/sock.h                                 |   2 +-
+ include/uapi/linux/ip.h                            |   6 +-
+ include/uapi/linux/ipv6.h                          |   6 +-
+ kernel/bpf/dispatcher.c                            |  28 +---
+ kernel/bpf/percpu_freelist.c                       |  23 ++-
+ kernel/bpf/verifier.c                              |  14 +-
+ mm/maccess.c                                       |   2 +-
+ net/bpf/test_run.c                                 |   1 +
+ net/bridge/br_vlan.c                               |  17 ++-
+ net/caif/chnl_net.c                                |   3 -
+ net/dsa/dsa2.c                                     |  10 ++
+ net/dsa/dsa_priv.h                                 |   1 +
+ net/dsa/master.c                                   |   3 +-
+ net/dsa/port.c                                     |  16 ++
+ net/ipv4/Kconfig                                   |  10 ++
+ net/ipv4/inet_hashtables.c                         |  10 +-
+ net/kcm/kcmsock.c                                  |  58 +------
+ net/l2tp/l2tp_core.c                               |  19 ++-
+ net/tls/tls_device_fallback.c                      |   5 +-
+ net/x25/x25_dev.c                                  |   2 +-
+ tools/testing/selftests/bpf/prog_tests/varlen.c    |   7 +
+ tools/testing/selftests/bpf/progs/test_varlen.c    |   5 +
+ tools/testing/selftests/bpf/test_progs.c           |   2 +-
+ tools/testing/selftests/bpf/test_verifier.c        |   2 +-
+ 59 files changed, 477 insertions(+), 311 deletions(-)
+
