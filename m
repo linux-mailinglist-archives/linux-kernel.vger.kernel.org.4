@@ -2,65 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A05762EC68
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 04:43:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E17D62EC6F
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 04:45:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240496AbiKRDnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 22:43:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43292 "EHLO
+        id S234861AbiKRDo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 22:44:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234922AbiKRDnA (ORCPT
+        with ESMTP id S234794AbiKRDox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 22:43:00 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE9A85162
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 19:42:58 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id q1-20020a17090a750100b002139ec1e999so3905897pjk.1
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 19:42:58 -0800 (PST)
+        Thu, 17 Nov 2022 22:44:53 -0500
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FCF565E54
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 19:44:52 -0800 (PST)
+Received: by mail-oi1-x233.google.com with SMTP id s206so4139089oie.3
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 19:44:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WOVj/vcA43GEmLzOxkf/CHOVgdiQSuspf1pwsCrY4DI=;
-        b=N9jcBtuWkS8x6QuPDI6a/CaFzzlJ3Ass1QGsZ4K1wyf53R8TxQNZykeyan0RhuLHNC
-         ScLsHL5MuylEzgS8BIivm2uCy6J9erKFz48w567dPx0zXVI89dtKi4uDaTRSrBS8sx85
-         WEEyPtE2IM62HuRC+LlnYtfWNYSHLRjn5eE+A=
+        bh=jGnYXRgUuCOtcxhHcdN3EAOTRD6u/BtPvCMZue/+ZQE=;
+        b=Z0vmkWFntUkPh2GZ76Y/bnp2oYyE4jqya+BzsIeqgdc8ywkzdgfVsxijBvxMnQSJ6J
+         FYoh3g5fUNxkJQup4YQfAE0LP3JRAyOELUSbC7TMsSlow7k2dJdTzeFzr1g0Ii9XS89Q
+         5YTGFgPkOqKTp8rZqtArRHNoQ44fvwNlMfeuv0zhLKIb4A+RyVI7y79bGFVUu+lL95jl
+         R2EfWp0lkOGq0f0LGtyg9YW3x+7y6JFqdzK6YGjKJqehgms9rVWU63FtXWl0GqnTODVf
+         TpqTukpuAR1amnQBM/74a5X48E4qJsDts/6fzI5fmGFdZlDVDjfyI51sNGof7R26tQQ6
+         7yzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=WOVj/vcA43GEmLzOxkf/CHOVgdiQSuspf1pwsCrY4DI=;
-        b=tVU9Z34OeKtYW42Br9qymFhhfembg8M8tTG56V/HURYONHEo0TRvcRlRWBZqEaAY/Y
-         g42X7mMwaxIxWds6OrTFo9G9eYo1CdOiERiG4tm+GL5AP5/zs+37VPB0+SDbEEKqyMDO
-         ZuVEANdYjnwPbFYFe4xHEJ9mzlBdksj0LgRv1I5NFobGljh5YjioyY59oPNopivaa5cV
-         Ja0lufQ1If5yO+GxbcGNpMt6PjBWAVgjOBnNI9a63e8wOy0aNjdKO8v8LGI2ieckNnj/
-         S9eHcLx2eIe4sTACNe7ZID3wc1BwoPjG5FFeLCYhQOobcOtmnCBvXdI7Iav3bd+qD50Z
-         R74Q==
-X-Gm-Message-State: ANoB5pldBIIYxkPSBMXan5n/hA5zxNBXDTjisFxrUdorxwOsoJLqZXjC
-        QoF+VPlbGdRU7jims3OaI+ye30jDoeMlqg==
-X-Google-Smtp-Source: AA0mqf7oPtZISN4+9QfW8E/l3HubTOkufxUVDeuTtst0mgG92D/JFZGMTleYkAibN6J9x0yzxsBhuQ==
-X-Received: by 2002:a17:90a:ad4c:b0:212:d3ec:632f with SMTP id w12-20020a17090aad4c00b00212d3ec632fmr5904213pjv.43.1668742978266;
-        Thu, 17 Nov 2022 19:42:58 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id i15-20020a655b8f000000b00470275c8d6dsm1775011pgr.10.2022.11.17.19.42.57
+        bh=jGnYXRgUuCOtcxhHcdN3EAOTRD6u/BtPvCMZue/+ZQE=;
+        b=PR6NxZXd4GDqnWKb1w48aMdhVgEavU9sEFDmLpFBKJ3qfzyzje52Dr3CAXAu/ols5i
+         nSbT1ZcSIhyyHBk3PjFEvZSWWb6mGPKM0tp0d3fmZzm9czkg4DgEwSkjgxs+fypAQCEr
+         J1AiLFhRbVkD2QLVRxmMQWwIC8LF/B8NyNk7MUT/eG57NEBGp53EG2k20ZbsQtJV97EZ
+         EY2Q3omuP8gKjXymRyAJdlYTCf6ol1LLt+F+RMCB8awWYWIWjggAq9SlIIjcNMpEjvWc
+         cwIuzQSv/BWdeTPoO1qq5q48g8NY+vJGR83yblDVrk3AUdJvk08IzwhjWcY1fs+DCdsk
+         xlGw==
+X-Gm-Message-State: ANoB5pmai6Xp4a3JrtX71zKB7rcQNV141IgM0maOJuLsEHAMrWkoKGg6
+        4WTxfw1pvKL5RNs+s9oE8jgrlw==
+X-Google-Smtp-Source: AA0mqf4JibB582RO1pQUqTHJvrrqUwZDI1rwX5yzn49ORCV6OEqxs5rLaxGDzgQ/h6G/U/6Gng9swQ==
+X-Received: by 2002:a54:4705:0:b0:35a:1945:4610 with SMTP id k5-20020a544705000000b0035a19454610mr5297087oik.149.1668743091543;
+        Thu, 17 Nov 2022 19:44:51 -0800 (PST)
+Received: from alago.cortijodelrio.net ([189.219.72.83])
+        by smtp.googlemail.com with ESMTPSA id c23-20020a4ad8d7000000b0047f94999318sm1020032oov.29.2022.11.17.19.44.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 19:42:57 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Clemens Ladisch <clemens@ladisch.de>
-Cc:     Kees Cook <keescook@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] hpet: Replace one-element array with flexible-array member
-Date:   Thu, 17 Nov 2022 19:42:55 -0800
-Message-Id: <20221118034250.never.999-kees@kernel.org>
+        Thu, 17 Nov 2022 19:44:51 -0800 (PST)
+From:   =?UTF-8?q?Daniel=20D=C3=ADaz?= <daniel.diaz@linaro.org>
+To:     linux-kselftest@vger.kernel.org
+Cc:     =?UTF-8?q?Daniel=20D=C3=ADaz?= <daniel.diaz@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        netdev@vger.kernel.org (open list:NETWORKING [GENERAL]),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] selftests/net: Find nettest in current directory
+Date:   Thu, 17 Nov 2022 21:44:21 -0600
+Message-Id: <20221118034421.994619-1-daniel.diaz@linaro.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1182; h=from:subject:message-id; bh=3hBZWlpQeB25CbJOuKYMyAJRSVDo5TGnXwmNCkPCrPo=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjdv8+VYED8zZ28eD8b2rN1FwHB0FxGowuj+UwvoB6 n/LrI5iJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY3b/PgAKCRCJcvTf3G3AJt3hD/ 4w6jgJDMghcOe7eJGjGCHM5me8MjMOqWObyVYbnIZDNGnuVP4C3zmjH1viyf5AeQNj/6XPk8Z7WS3C uYnosPtQ+NjM3YQneG/RJbw4IHJQHcBrrHipz7nLIgTzfTROJAHfD4ZrMq0vVbQ4vTDajO5GBpt4uN ZZB0ZvcRJ8nI9YGi+/e511k2YcbT3jJIu8xXsk/LfJm43X7K25RaMAMWJBiubUf2NbwYJVUEJZGgYi WZM2txmwf3DR+3TOoFdkz06x3wohOsO4vNre7i9ub0qiP+NTqLVq2MJ70Kswi8CM/5UMZaJTsjRAJe rPQAjmCXXtKvJnVy/3tk4VeWBTELTWzQi44Pq5S9taVc18zUIYHLy9V5L9y+N1Ltb/6RAFo4XTD2D4 RFYCfMtQ81rHI7DEIlFDakI++2PK19oojPk9YAqoOJl1I4tZFtp6Fswel4p/kfVtSkIqBg4G9Bw9hs 69ECP1wY9AZWVcmAk39wxeWL25d8HVl43l6cta6rzRFRmwb0YO88vGcgwxhoScPebO3Cao61KOA62F Zs+yJ7t/0C6m9mG7S9Z8Y2G4UwZIf3/ccM+k4J4BeEu31YZLqBA5+D4aDcoZFfdCiccLyY+jHmKpps JlSmkhx6DYmnbQd8jyxMUU83I9QPUSpWibI39KqoHsb8Jk8KcVEDfoG6grOg==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,39 +74,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-One-element arrays are deprecated[1] and are being replaced with
-flexible array members in support of the ongoing efforts to tighten the
-FORTIFY_SOURCE routines on memcpy(), correctly instrument array indexing
-with UBSAN_BOUNDS, and to globally enable -fstrict-flex-arrays=3.
+The `nettest` binary, built from `selftests/net/nettest.c`,
+was expected to be found in the path during test execution of
+`fcnal-test.sh` and `pmtu.sh`, leading to tests getting
+skipped when the binary is not installed in the system, as can
+be seen in these logs found in the wild [1]:
 
-Replace one-element array with flexible-array member in struct hpet.
+  # TEST: vti4: PMTU exceptions                                         [SKIP]
+  [  350.600250] IPv6: ADDRCONF(NETDEV_CHANGE): veth_b: link becomes ready
+  [  350.607421] IPv6: ADDRCONF(NETDEV_CHANGE): veth_a: link becomes ready
+  # 'nettest' command not found; skipping tests
+  #   xfrm6udp not supported
+  # TEST: vti6: PMTU exceptions (ESP-in-UDP)                            [SKIP]
+  [  351.605102] IPv6: ADDRCONF(NETDEV_CHANGE): veth_b: link becomes ready
+  [  351.612243] IPv6: ADDRCONF(NETDEV_CHANGE): veth_a: link becomes ready
+  # 'nettest' command not found; skipping tests
+  #   xfrm4udp not supported
 
-This results in no differences in binary output. The use of struct hpet
-is never used with sizeof() and accesses via hpet_timers array are
-already done after explicit bounds checking.
+The `unicast_extensions.sh` tests also rely on `nettest`, but
+it runs fine there because it looks for the binary in the
+current working directory [2]:
 
-[1] https://github.com/KSPP/linux/issues/79
+The same mechanism that works for the Unicast extensions tests
+is here copied over to the PMTU and functional tests.
 
-Cc: Clemens Ladisch <clemens@ladisch.de>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Signed-off-by: Kees Cook <keescook@chromium.org>
+[1] https://lkft.validation.linaro.org/scheduler/job/5839508#L6221
+[2] https://lkft.validation.linaro.org/scheduler/job/5839508#L7958
+
+Signed-off-by: Daniel Díaz <daniel.diaz@linaro.org>
 ---
- include/linux/hpet.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/net/fcnal-test.sh | 11 +++++++----
+ tools/testing/selftests/net/pmtu.sh       | 10 ++++++----
+ 2 files changed, 13 insertions(+), 8 deletions(-)
 
-diff --git a/include/linux/hpet.h b/include/linux/hpet.h
-index 8604564b985d..21e69eaf7a36 100644
---- a/include/linux/hpet.h
-+++ b/include/linux/hpet.h
-@@ -30,7 +30,7 @@ struct hpet {
- 			unsigned long _hpet_compare;
- 		} _u1;
- 		u64 hpet_fsb[2];	/* FSB route */
--	} hpet_timers[1];
-+	} hpet_timers[];
- };
+diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
+index 31c3b6ebd388..21ca91473c09 100755
+--- a/tools/testing/selftests/net/fcnal-test.sh
++++ b/tools/testing/selftests/net/fcnal-test.sh
+@@ -4196,10 +4196,13 @@ elif [ "$TESTS" = "ipv6" ]; then
+ 	TESTS="$TESTS_IPV6"
+ fi
  
- #define	hpet_mc		_u0._hpet_mc
+-which nettest >/dev/null
+-if [ $? -ne 0 ]; then
+-	echo "'nettest' command not found; skipping tests"
+-	exit $ksft_skip
++# nettest can be run from PATH or from same directory as this selftest
++if ! which nettest >/dev/null; then
++	PATH=$PWD:$PATH
++	if ! which nettest >/dev/null; then
++		echo "'nettest' command not found; skipping tests"
++		exit $ksft_skip
++	fi
+ fi
+ 
+ declare -i nfail=0
+diff --git a/tools/testing/selftests/net/pmtu.sh b/tools/testing/selftests/net/pmtu.sh
+index 736e358dc549..dfe3d287f01d 100755
+--- a/tools/testing/selftests/net/pmtu.sh
++++ b/tools/testing/selftests/net/pmtu.sh
+@@ -686,10 +686,12 @@ setup_xfrm() {
+ }
+ 
+ setup_nettest_xfrm() {
+-	which nettest >/dev/null
+-	if [ $? -ne 0 ]; then
+-		echo "'nettest' command not found; skipping tests"
+-	        return 1
++	if ! which nettest >/dev/null; then
++		PATH=$PWD:$PATH
++		if ! which nettest >/dev/null; then
++			echo "'nettest' command not found; skipping tests"
++			return 1
++		fi
+ 	fi
+ 
+ 	[ ${1} -eq 6 ] && proto="-6" || proto=""
 -- 
 2.34.1
 
