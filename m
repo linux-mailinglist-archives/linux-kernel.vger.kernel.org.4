@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B942062FBB3
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 18:32:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35EF662FBB6
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 18:32:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241968AbiKRRcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 12:32:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33330 "EHLO
+        id S233821AbiKRRca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 12:32:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242396AbiKRRcE (ORCPT
+        with ESMTP id S242530AbiKRRcL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 12:32:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 280108B13D;
-        Fri, 18 Nov 2022 09:32:03 -0800 (PST)
+        Fri, 18 Nov 2022 12:32:11 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A32186EC;
+        Fri, 18 Nov 2022 09:32:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A59A46268B;
-        Fri, 18 Nov 2022 17:32:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 267DBC433D7;
-        Fri, 18 Nov 2022 17:32:01 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6253FCE221A;
+        Fri, 18 Nov 2022 17:32:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5560BC433C1;
+        Fri, 18 Nov 2022 17:32:05 +0000 (UTC)
 Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="CA4UvkNZ"
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Ck10xJJF"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1668792720;
+        t=1668792724;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=9p1UIdcHRziM7m9qcPYp6vWPtjBY0MybeVn0TVZVSIU=;
-        b=CA4UvkNZOFiaNqpDzRS53bJWuvypQSw1i9RuqmYM4MNPUbZy5P0j0bfJZxeE9eSLg4IaZM
-        /62QGDuhxJy+hPb0XOCQ6zLTo6xgvYw+pY1OBrKOVzavS1vVDVkK1D7At0IlZmtWxL+82D
-        SN5HA8YTwsOblwTRcmy4jgr8rZjWmlA=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 7ec53f12 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Fri, 18 Nov 2022 17:31:59 +0000 (UTC)
+        bh=GyKOGkofkPCvMPD0/UwJzzsEw9ZOaxhI19IJoJsqMz4=;
+        b=Ck10xJJFyJtJu2syfKbZVRObrnnQWQQl4uCW82Ixw9QTcO0pvDWSSDNrWQpF28KzVirC8E
+        94cCuokeZvQBA8UdWGqX3ec1roFifnyxFkjv+f9eQTeKIdo8EsDKQCId6MnKR5czXDdwCh
+        O2e9onhFhYQMa1O39oHan0T3zGUDSvY=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 70c6e225 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Fri, 18 Nov 2022 17:32:04 +0000 (UTC)
 From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
 To:     linux-kernel@vger.kernel.org, patches@lists.linux.dev
 Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
@@ -44,9 +44,9 @@ Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
         Carlos O'Donell <carlos@redhat.com>
-Subject: [PATCH v4 2/3] random: introduce generic vDSO getrandom() implementation
-Date:   Fri, 18 Nov 2022 18:28:38 +0100
-Message-Id: <20221118172839.2653829-3-Jason@zx2c4.com>
+Subject: [PATCH v4 3/3] x86: vdso: Wire up getrandom() vDSO implementation
+Date:   Fri, 18 Nov 2022 18:28:39 +0100
+Message-Id: <20221118172839.2653829-4-Jason@zx2c4.com>
 In-Reply-To: <20221118172839.2653829-1-Jason@zx2c4.com>
 References: <20221118172839.2653829-1-Jason@zx2c4.com>
 MIME-Version: 1.0
@@ -61,276 +61,195 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Provide a generic C vDSO getrandom() implementation, which operates on
-an opaque state returned by vgetrandom_alloc() and produces random bytes
-the same way as getrandom(). This has a the API signature:
-
-  ssize_t vgetrandom(void *buffer, size_t len, unsigned int flags, void *opaque_state);
-
-The return value and the first 3 arguments are the same as ordinary
-getrandom(), while the last argument is a pointer to the opaque
-allocated state. Were all four arguments passed to the getrandom()
-syscall, nothing different would happen, and the functions would have
-the exact same behavior.
-
-The actual vDSO RNG algorithm implemented is the same one implemented by
-drivers/char/random.c, using the same fast-erasure techniques as that.
-Should the in-kernel implementation change, so too will the vDSO one.
-
-Initially, the state is keyless, and so the first call makes a
-getrandom() syscall to generate that key, and then uses it for
-subsequent calls. By keeping track of a generation counter, it knows
-when its key is invalidated and it should fetch a new one using the
-syscall. Later, more than just a generation counter might be used.
-
-Since MADV_WIPEONFORK is set on the opaque state, the key and related
-state is wiped during a fork(), so secrets don't roll over into new
-processes, and the same state doesn't accidentally generate the same
-random stream. The generation counter, as well, is always >0, so that
-the 0 counter is a useful indication of a fork() or otherwise
-uninitialized state.
-
-If the kernel RNG is not yet initialized, then the vDSO always calls the
-syscall, because that behavior cannot be emulated in userspace, but
-fortunately that state is short lived and only during early boot. If it
-has been initialized, then there is no need to inspect the `flags`
-argument, because the behavior does not change post-initialization
-regardless of the `flags` value.
+Hook up the generic vDSO implementation to the x86 vDSO data page. Since
+the existing vDSO infrastructure is heavily based on the timekeeping
+functionality, which works over arrays of bases, a new macro is
+introduced for vvars that are not arrays.
 
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 ---
- MAINTAINERS             |   1 +
- drivers/char/random.c   |   5 ++
- include/vdso/datapage.h |   6 +++
- lib/crypto/chacha.c     |   4 ++
- lib/vdso/Kconfig        |   5 ++
- lib/vdso/getrandom.c    | 109 ++++++++++++++++++++++++++++++++++++++++
- 6 files changed, 130 insertions(+)
- create mode 100644 lib/vdso/getrandom.c
+ arch/x86/Kconfig                      |  1 +
+ arch/x86/entry/vdso/Makefile          |  3 ++-
+ arch/x86/entry/vdso/vdso.lds.S        |  2 ++
+ arch/x86/entry/vdso/vgetrandom.c      | 16 ++++++++++++
+ arch/x86/include/asm/vdso/getrandom.h | 37 +++++++++++++++++++++++++++
+ arch/x86/include/asm/vdso/vsyscall.h  |  2 ++
+ arch/x86/include/asm/vvar.h           | 16 ++++++++++++
+ 7 files changed, 76 insertions(+), 1 deletion(-)
+ create mode 100644 arch/x86/entry/vdso/vgetrandom.c
+ create mode 100644 arch/x86/include/asm/vdso/getrandom.h
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 843dd6a49538..e0aa33f54c57 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17287,6 +17287,7 @@ T:	git https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git
- S:	Maintained
- F:	drivers/char/random.c
- F:	drivers/virt/vmgenid.c
-+F:	lib/vdso/getrandom.c
- F:	lib/vdso/getrandom.h
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 67745ceab0db..210318da7505 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -269,6 +269,7 @@ config X86
+ 	select HAVE_UNSTABLE_SCHED_CLOCK
+ 	select HAVE_USER_RETURN_NOTIFIER
+ 	select HAVE_GENERIC_VDSO
++	select HAVE_VDSO_GETRANDOM
+ 	select HOTPLUG_SMT			if SMP
+ 	select IRQ_FORCED_THREADING
+ 	select NEED_PER_CPU_EMBED_FIRST_CHUNK
+diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
+index 3e88b9df8c8f..adc3792dbbac 100644
+--- a/arch/x86/entry/vdso/Makefile
++++ b/arch/x86/entry/vdso/Makefile
+@@ -27,7 +27,7 @@ VDSO32-$(CONFIG_X86_32)		:= y
+ VDSO32-$(CONFIG_IA32_EMULATION)	:= y
  
- RAPIDIO SUBSYSTEM
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index b83481eb00a9..a62255d852f9 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -61,6 +61,7 @@
- #include <asm/irq.h>
- #include <asm/irq_regs.h>
- #include <asm/io.h>
-+#include <vdso/datapage.h>
- #include "../../lib/vdso/getrandom.h"
+ # files to link into the vdso
+-vobjs-y := vdso-note.o vclock_gettime.o vgetcpu.o
++vobjs-y := vdso-note.o vclock_gettime.o vgetcpu.o vgetrandom.o
+ vobjs32-y := vdso32/note.o vdso32/system_call.o vdso32/sigreturn.o
+ vobjs32-y += vdso32/vclock_gettime.o
+ vobjs-$(CONFIG_X86_SGX)	+= vsgx.o
+@@ -104,6 +104,7 @@ CFLAGS_REMOVE_vclock_gettime.o = -pg
+ CFLAGS_REMOVE_vdso32/vclock_gettime.o = -pg
+ CFLAGS_REMOVE_vgetcpu.o = -pg
+ CFLAGS_REMOVE_vsgx.o = -pg
++CFLAGS_REMOVE_vgetrandom.o = -pg
  
- /*********************************************************************
-@@ -305,6 +306,8 @@ static void crng_reseed(struct work_struct *work)
- 	if (next_gen == ULONG_MAX)
- 		++next_gen;
- 	WRITE_ONCE(base_crng.generation, next_gen);
-+	if (IS_ENABLED(CONFIG_HAVE_VDSO_GETRANDOM))
-+		smp_store_release(&_vdso_rng_data.generation, next_gen + 1);
- 	if (!static_branch_likely(&crng_is_ready))
- 		crng_init = CRNG_READY;
- 	spin_unlock_irqrestore(&base_crng.lock, flags);
-@@ -754,6 +757,8 @@ static void __cold _credit_init_bits(size_t bits)
- 		crng_reseed(NULL); /* Sets crng_init to CRNG_READY under base_crng.lock. */
- 		if (static_key_initialized)
- 			execute_in_process_context(crng_set_ready, &set_ready);
-+		if (IS_ENABLED(CONFIG_HAVE_VDSO_GETRANDOM))
-+			smp_store_release(&_vdso_rng_data.is_ready, true);
- 		wake_up_interruptible(&crng_init_wait);
- 		kill_fasync(&fasync, SIGIO, POLL_IN);
- 		pr_notice("crng init done\n");
-diff --git a/include/vdso/datapage.h b/include/vdso/datapage.h
-index 73eb622e7663..cbacfd923a5c 100644
---- a/include/vdso/datapage.h
-+++ b/include/vdso/datapage.h
-@@ -109,6 +109,11 @@ struct vdso_data {
- 	struct arch_vdso_data	arch_data;
- };
- 
-+struct vdso_rng_data {
-+	unsigned long generation;
-+	bool is_ready;
-+};
-+
- /*
-  * We use the hidden visibility to prevent the compiler from generating a GOT
-  * relocation. Not only is going through a GOT useless (the entry couldn't and
-@@ -120,6 +125,7 @@ struct vdso_data {
-  */
- extern struct vdso_data _vdso_data[CS_BASES] __attribute__((visibility("hidden")));
- extern struct vdso_data _timens_data[CS_BASES] __attribute__((visibility("hidden")));
-+extern struct vdso_rng_data _vdso_rng_data __attribute__((visibility("hidden")));
- 
- /*
-  * The generic vDSO implementation requires that gettimeofday.h
-diff --git a/lib/crypto/chacha.c b/lib/crypto/chacha.c
-index b748fd3d256e..944991bb36c7 100644
---- a/lib/crypto/chacha.c
-+++ b/lib/crypto/chacha.c
-@@ -17,8 +17,10 @@ static void chacha_permute(u32 *x, int nrounds)
- {
- 	int i;
- 
-+#ifndef CHACHA_FOR_VDSO_INCLUDE
- 	/* whitelist the allowed round counts */
- 	WARN_ON_ONCE(nrounds != 20 && nrounds != 12);
-+#endif
- 
- 	for (i = 0; i < nrounds; i += 2) {
- 		x[0]  += x[4];    x[12] = rol32(x[12] ^ x[0],  16);
-@@ -87,6 +89,7 @@ void chacha_block_generic(u32 *state, u8 *stream, int nrounds)
- 
- 	state[12]++;
+ #
+ # X32 processes use x32 vDSO to access 64bit kernel data.
+diff --git a/arch/x86/entry/vdso/vdso.lds.S b/arch/x86/entry/vdso/vdso.lds.S
+index 4bf48462fca7..1919cc39277e 100644
+--- a/arch/x86/entry/vdso/vdso.lds.S
++++ b/arch/x86/entry/vdso/vdso.lds.S
+@@ -28,6 +28,8 @@ VERSION {
+ 		clock_getres;
+ 		__vdso_clock_getres;
+ 		__vdso_sgx_enter_enclave;
++		getrandom;
++		__vdso_getrandom;
+ 	local: *;
+ 	};
  }
-+#ifndef CHACHA_FOR_VDSO_INCLUDE
- EXPORT_SYMBOL(chacha_block_generic);
- 
- /**
-@@ -112,3 +115,4 @@ void hchacha_block_generic(const u32 *state, u32 *stream, int nrounds)
- 	memcpy(&stream[4], &x[12], 16);
- }
- EXPORT_SYMBOL(hchacha_block_generic);
-+#endif
-diff --git a/lib/vdso/Kconfig b/lib/vdso/Kconfig
-index d883ac299508..c35fac664574 100644
---- a/lib/vdso/Kconfig
-+++ b/lib/vdso/Kconfig
-@@ -30,4 +30,9 @@ config GENERIC_VDSO_TIME_NS
- 	  Selected by architectures which support time namespaces in the
- 	  VDSO
- 
-+config HAVE_VDSO_GETRANDOM
-+	bool
-+	help
-+	  Selected by architectures that support vDSO getrandom().
-+
- endif
-diff --git a/lib/vdso/getrandom.c b/lib/vdso/getrandom.c
+diff --git a/arch/x86/entry/vdso/vgetrandom.c b/arch/x86/entry/vdso/vgetrandom.c
 new file mode 100644
-index 000000000000..b253e9247706
+index 000000000000..0a0c0ad93cd0
 --- /dev/null
-+++ b/lib/vdso/getrandom.c
-@@ -0,0 +1,109 @@
-+// SPDX-License-Identifier: GPL-2.0
++++ b/arch/x86/entry/vdso/vgetrandom.c
+@@ -0,0 +1,16 @@
++// SPDX-License-Identifier: GPL-2.0-only
 +/*
 + * Copyright (C) 2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
 + */
-+
 +#include <linux/kernel.h>
-+#include <linux/atomic.h>
-+#include <linux/fs.h>
-+#include <vdso/datapage.h>
-+#include <asm/vdso/getrandom.h>
-+#include <asm/vdso/vsyscall.h>
-+#include "getrandom.h"
++#include <linux/types.h>
 +
-+#undef memcpy
-+#define memcpy(d,s,l) __builtin_memcpy(d,s,l)
-+#undef memset
-+#define memset(d,c,l) __builtin_memset(d,c,l)
++#include "../../../../lib/vdso/getrandom.c"
 +
-+#define CHACHA_FOR_VDSO_INCLUDE
-+#include "../crypto/chacha.c"
-+
-+static void memcpy_and_zero(void *dst, void *src, size_t len)
++ssize_t __vdso_getrandom(void *buffer, size_t len, unsigned int flags, void *state)
 +{
-+#define CASCADE(type) \
-+	while (len >= sizeof(type)) { \
-+		*(type *)dst = *(type *)src; \
-+		*(type *)src = 0; \
-+		dst += sizeof(type); \
-+		src += sizeof(type); \
-+		len -= sizeof(type); \
-+	}
-+#ifdef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
-+#if BITS_PER_LONG == 64
-+	CASCADE(u64);
-+#endif
-+	CASCADE(u32);
-+	CASCADE(u16);
-+#endif
-+	CASCADE(u8);
-+#undef CASCADE
++	return __cvdso_getrandom(buffer, len, flags, state);
 +}
++
++ssize_t getrandom(void *, size_t, unsigned int, void *)
++	__attribute__((weak, alias("__vdso_getrandom")));
+diff --git a/arch/x86/include/asm/vdso/getrandom.h b/arch/x86/include/asm/vdso/getrandom.h
+new file mode 100644
+index 000000000000..c414043e975d
+--- /dev/null
++++ b/arch/x86/include/asm/vdso/getrandom.h
+@@ -0,0 +1,37 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
++ */
++#ifndef __ASM_VDSO_GETRANDOM_H
++#define __ASM_VDSO_GETRANDOM_H
++
++#ifndef __ASSEMBLY__
++
++#include <asm/unistd.h>
++#include <asm/vvar.h>
 +
 +static __always_inline ssize_t
-+__cvdso_getrandom(void *buffer, size_t len, unsigned int flags, void *opaque_state)
++getrandom_syscall(void *buffer, size_t len, unsigned int flags)
 +{
-+	struct vgetrandom_state *state = opaque_state;
-+	const struct vdso_rng_data *rng_info = __arch_get_vdso_rng_data();
-+	u32 chacha_state[CHACHA_STATE_WORDS];
-+	ssize_t ret = min_t(size_t, MAX_RW_COUNT, len);
-+	unsigned long current_generation;
-+	size_t batch_len;
++	long ret;
 +
-+	if (unlikely(!rng_info->is_ready))
-+		return getrandom_syscall(buffer, len, flags);
++	asm ("syscall" : "=a" (ret) :
++	     "0" (__NR_getrandom), "D" (buffer), "S" (len), "d" (flags) :
++	     "rcx", "r11", "memory");
 +
-+	if (unlikely(!len))
-+		return 0;
-+
-+	if (unlikely(!READ_ONCE(state->not_forked)))
-+		state->not_forked = true;
-+
-+retry_generation:
-+	current_generation = READ_ONCE(rng_info->generation);
-+	if (unlikely(state->generation != current_generation)) {
-+		if (getrandom_syscall(state->key, sizeof(state->key), 0) != sizeof(state->key))
-+			return getrandom_syscall(buffer, len, flags);
-+		state->generation = current_generation;
-+		state->pos = sizeof(state->batch);
-+	}
-+
-+	len = ret;
-+more_batch:
-+	batch_len = min_t(size_t, sizeof(state->batch) - state->pos, len);
-+	if (batch_len) {
-+		memcpy_and_zero(buffer, state->batch + state->pos, batch_len);
-+		state->pos += batch_len;
-+		buffer += batch_len;
-+		len -= batch_len;
-+	}
-+	if (!len) {
-+		if (unlikely(current_generation != READ_ONCE(rng_info->generation)))
-+			goto retry_generation;
-+		if (unlikely(!READ_ONCE(state->not_forked))) {
-+			state->not_forked = true;
-+			goto retry_generation;
-+		}
-+		return ret;
-+	}
-+
-+	chacha_init_consts(chacha_state);
-+	memcpy(&chacha_state[4], state->key, CHACHA_KEY_SIZE);
-+	memset(&chacha_state[12], 0, sizeof(u32) * 4);
-+
-+	while (len >= CHACHA_BLOCK_SIZE) {
-+		chacha20_block(chacha_state, buffer);
-+		if (unlikely(chacha_state[12] == 0))
-+			++chacha_state[13];
-+		buffer += CHACHA_BLOCK_SIZE;
-+		len -= CHACHA_BLOCK_SIZE;
-+	}
-+
-+	chacha20_block(chacha_state, state->key_batch);
-+	if (unlikely(chacha_state[12] == 0))
-+		++chacha_state[13];
-+	chacha20_block(chacha_state, state->key_batch + CHACHA_BLOCK_SIZE);
-+	state->pos = 0;
-+	memzero_explicit(chacha_state, sizeof(chacha_state));
-+	goto more_batch;
++	return ret;
 +}
++
++#define __vdso_rng_data (VVAR(_vdso_rng_data))
++
++static __always_inline const struct vdso_rng_data *__arch_get_vdso_rng_data(void)
++{
++	if (__vdso_data->clock_mode == VDSO_CLOCKMODE_TIMENS)
++		return (void *)&__vdso_rng_data +
++		       ((void *)&__timens_vdso_data - (void *)&__vdso_data);
++	return &__vdso_rng_data;
++}
++
++#endif /* !__ASSEMBLY__ */
++
++#endif /* __ASM_VDSO_GETRANDOM_H */
+diff --git a/arch/x86/include/asm/vdso/vsyscall.h b/arch/x86/include/asm/vdso/vsyscall.h
+index be199a9b2676..71c56586a22f 100644
+--- a/arch/x86/include/asm/vdso/vsyscall.h
++++ b/arch/x86/include/asm/vdso/vsyscall.h
+@@ -11,6 +11,8 @@
+ #include <asm/vvar.h>
+ 
+ DEFINE_VVAR(struct vdso_data, _vdso_data);
++DEFINE_VVAR_SINGLE(struct vdso_rng_data, _vdso_rng_data);
++
+ /*
+  * Update the vDSO data page to keep in sync with kernel timekeeping.
+  */
+diff --git a/arch/x86/include/asm/vvar.h b/arch/x86/include/asm/vvar.h
+index 183e98e49ab9..9d9af37f7cab 100644
+--- a/arch/x86/include/asm/vvar.h
++++ b/arch/x86/include/asm/vvar.h
+@@ -26,6 +26,8 @@
+  */
+ #define DECLARE_VVAR(offset, type, name) \
+ 	EMIT_VVAR(name, offset)
++#define DECLARE_VVAR_SINGLE(offset, type, name) \
++	EMIT_VVAR(name, offset)
+ 
+ #else
+ 
+@@ -37,6 +39,10 @@ extern char __vvar_page;
+ 	extern type timens_ ## name[CS_BASES]				\
+ 	__attribute__((visibility("hidden")));				\
+ 
++#define DECLARE_VVAR_SINGLE(offset, type, name)				\
++	extern type vvar_ ## name					\
++	__attribute__((visibility("hidden")));				\
++
+ #define VVAR(name) (vvar_ ## name)
+ #define TIMENS(name) (timens_ ## name)
+ 
+@@ -44,12 +50,22 @@ extern char __vvar_page;
+ 	type name[CS_BASES]						\
+ 	__attribute__((section(".vvar_" #name), aligned(16))) __visible
+ 
++#define DEFINE_VVAR_SINGLE(type, name)					\
++	type name							\
++	__attribute__((section(".vvar_" #name), aligned(16))) __visible
++
+ #endif
+ 
+ /* DECLARE_VVAR(offset, type, name) */
+ 
+ DECLARE_VVAR(128, struct vdso_data, _vdso_data)
+ 
++#if !defined(_SINGLE_DATA)
++#define _SINGLE_DATA
++DECLARE_VVAR_SINGLE(640, struct vdso_rng_data, _vdso_rng_data)
++#endif
++
+ #undef DECLARE_VVAR
++#undef DECLARE_VVAR_SINGLE
+ 
+ #endif
 -- 
 2.38.1
 
