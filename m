@@ -2,87 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD4262EDE3
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 07:48:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FF9462EDE8
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 07:51:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241158AbiKRGsl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 01:48:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57846 "EHLO
+        id S241100AbiKRGvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 01:51:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbiKRGsi (ORCPT
+        with ESMTP id S229620AbiKRGvs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 01:48:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DCDC11146
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:48:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A2447622CB
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 06:48:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9537EC433C1;
-        Fri, 18 Nov 2022 06:48:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668754116;
-        bh=e4KWQDcqGgcaW/J8qpDH882iV2/keATd9urAwilXHuE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JtACASBGtiC4T1CxunomRtyGWWg3aGo9PW1JAYzw0l1nC93AsD4ZiBcYekHAlaYyZ
-         4+QViW+A5yM9Jz6GVCJKHr7/ZerkrWPDCft7P1qPc4rvo3PpxAoL6yLLHdZfxMlRR2
-         iKAykWVaP+qmAiQOBZ/FjmJdDEPQFmRo9X7VHZrCIgdMICV7bu7BBJLKY4AxN6Hm9C
-         XLX6I6Tr9xA0+yX5bZCyaZrp/BdwSGUTLpfrNgtFkZVszcXSWiLkf5vs2NfswSLy/y
-         yiGNny98ZFj22WHnEPXj4/S+O9xOd2go1+UJlQL6OklIbbDw5gS45KTytDfunCEXUI
-         bUkjnmZwxwqQg==
-Date:   Fri, 18 Nov 2022 14:48:32 +0800
-From:   Tzung-Bi Shih <tzungbi@kernel.org>
-To:     Gwendal Grignou <gwendal@chromium.org>
-Cc:     dtor@chromium.org, jwerner@chromium.org, bleung@chromium.org,
-        enric.balletbo@collabora.com, groeck@chromium.org,
-        linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev
-Subject: Re: [PATCH v3 1/1] platform/chrome: Poke kb_wake_angle attribute
- visibility when needed
-Message-ID: <Y3cqwEIueri63XzH@google.com>
-References: <20210804213139.4139492-1-gwendal@chromium.org>
- <20210804213139.4139492-2-gwendal@chromium.org>
- <CAPUE2usQX_uQewpCYOs3SRUo7vDDMfg=n7idNvCgThDHMqTf7w@mail.gmail.com>
- <CAPUE2uuj1qde16QWHb=0+yMW3ERhXzV7ehGcViWCfij7ADeyWg@mail.gmail.com>
- <Y3bnYT6TXGXhkh/T@google.com>
- <CAPUE2uuUn33yRMz77+XxZvK9bDzAA8u3SLBx=iDfAJc6WrUEEQ@mail.gmail.com>
+        Fri, 18 Nov 2022 01:51:48 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2095.outbound.protection.outlook.com [40.107.243.95])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5687818E06;
+        Thu, 17 Nov 2022 22:51:47 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LRpKOCMu/mK3xnWcvRwUsTSYEXkQR1yD9H618t/aOYb6qJXp9DnmKzODThpyRjxEoqnQJCcvymnQLl6O3M0eBaGmv5IPmxMbySxX3AJaShunkC//0LWVAME7O6LKj5NcZ6zVKMLEoUZJBO5fPrTzzahrd6GbLJ0hPNPsCd+wiiKde4GmBesI7J8ie2ZGAnAl5CQpStxhHU4qsDxT9CE9XIk6Pi4ekRSJZ1ZKsNxwv233bo9RwdEVYGWXtvm2MRI37Vhvptnat0x1ST9ngIfP4kqEJ1b4nX+XR6BZSAyzXsuSFyabTqPGQJuIiERU95XTB3CK4kSi5XEhct15JLPVpw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+gxhRXZTUW4ifiiTQ8rRfRhkvi9nYqXJQpQlzx2ATNA=;
+ b=P5qAN7uOq3MIkdfzsnZHRN2Nn1tzmKkJeT0m5CiO1Q1qRc2ibXZ8qjPeRCTaD56v/35XIIaHouU2H6eWCqvNx4Ffn86swPflNUDkYtRzEujRw3FRmZ9rHZbVgWP1YUz1aZRfbu3d8F8LAyrtdaYm6GqvGjAGABnMewuWn5068LZQAEJjvQqzBJFD03NFt/lcSv9doC9SZSf69/uVWiQHuHsgHKUKJyKGAN4rrbw93Bb165MMcruEgh4Sug7yJP6660RmO2yXTRpI3AZsmVYZrJDSZQ2lBw6zZKU74qcBYTBOzpAy1Rk8WFvxUVdKwL7dGj6+gDKr2j3CYRi1no0zIg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+gxhRXZTUW4ifiiTQ8rRfRhkvi9nYqXJQpQlzx2ATNA=;
+ b=blHYfQwrabByk5sKTmtoSleSa4sZjm89oyaraByvUCXA2Xmh1ItXOnDl0q1aIngC53httqLkI7pK5XANWh8hSqPKDOXXwDC8GmFmDoB8EvK8J+MABh8C2rwuuGUpxu+7nmAX6a3OvN+lMT7GZpfdqVLbmLyazaci/tvliSk2rlc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from SN4PR01MB7455.prod.exchangelabs.com (2603:10b6:806:202::11) by
+ DM6PR01MB5801.prod.exchangelabs.com (2603:10b6:5:200::30) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5813.16; Fri, 18 Nov 2022 06:51:45 +0000
+Received: from SN4PR01MB7455.prod.exchangelabs.com
+ ([fe80::df7e:7f53:a83f:a86a]) by SN4PR01MB7455.prod.exchangelabs.com
+ ([fe80::df7e:7f53:a83f:a86a%4]) with mapi id 15.20.5813.016; Fri, 18 Nov 2022
+ 06:51:45 +0000
+From:   Quan Nguyen <quan@os.amperecomputing.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
+Cc:     openbmc@lists.ozlabs.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Open Source Submission <patches@amperecomputing.com>,
+        Quan Nguyen <quan@os.amperecomputing.com>
+Subject: [PATCH] ARM: dts: aspeed: mtjade: Add SMPro nodes
+Date:   Fri, 18 Nov 2022 13:51:09 +0700
+Message-Id: <20221118065109.2339066-1-quan@os.amperecomputing.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SGBP274CA0015.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b0::27)
+ To SN4PR01MB7455.prod.exchangelabs.com (2603:10b6:806:202::11)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPUE2uuUn33yRMz77+XxZvK9bDzAA8u3SLBx=iDfAJc6WrUEEQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN4PR01MB7455:EE_|DM6PR01MB5801:EE_
+X-MS-Office365-Filtering-Correlation-Id: 807b2a9e-76f8-4652-e104-08dac9315aeb
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: X/AeZjrQ9e0NuSSydUZXoMf8QeznadP4emuo1QyXi/0u9P8zGo9YJgZ1WYDKEbeNjmnztSsVPbO5T9JvbW3hpajLhfkg6Xnu02HSMRon1ZcVLDNL46CeDoMid8Ng/OyQaMGL48Yo8B8WdioKR+wtF70/6e6uRvOIOi7na0JSG6ljQmpY9DuGMfpZvH25pmSb9E+AMVqwo/pFIalzK5DSS/puUcTrnOExDdGSs3iVsX2vAj4qb/KUhjHFZ5K7tH1cCz5YuefP7wt0Z1LO5ewJwrQx+lXvv+ZM+ko8Scy1FlDbiMolnu1VTDSns+wPmmrDHol692CYzPuW2VeEJurGbyRXpvbNBzpRpIIJjg9ih4oMBZV9vONzq3M//hNkBpZ/ze9ONH+qDn62DPGwjRbXvhwSrYlf0jW2mLP0JtEroUB6Lc3aOzNDZ/Agx4rL6cvXEJ62LOIEz2eijy3s8AvJUEiIPBz9lcWteCEFGWtkhVrECfu0xCydZchnIIGnId+7RprbJnNibku/3nNh+kRV6yGjBqQeAPPZpvlesoyIntfdZoCsz1DnEJTZhrf+vT4Fjwk2X8WgBonmOsyYKIMTzwLcOIHbWVNFDwfs/LuRv+3INi1oFey3B3CowlmLg3/7BiYltHlcuhuMtXBxmfNUdL4Kuvi15Yzi9vGspG2BJv619AqJEbyoilN6fyTg+LL9
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN4PR01MB7455.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(366004)(396003)(376002)(39850400004)(346002)(451199015)(86362001)(6486002)(110136005)(6512007)(6666004)(6506007)(26005)(478600001)(52116002)(8936002)(66946007)(66476007)(41300700001)(66556008)(8676002)(5660300002)(316002)(107886003)(2906002)(54906003)(4744005)(4326008)(38350700002)(38100700002)(2616005)(1076003)(186003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?pnslQmetZtTMpGBWLolcBAEfLQB76a8XAaweYSFhnYCmkOIhga1Rzb7fO9Fg?=
+ =?us-ascii?Q?uJBlDfyA6aaMnAsUXrB8B5s8SM/6McqIFycZv4+FaSQ+jFFHb2HUEDHUnY+s?=
+ =?us-ascii?Q?42CMeSx7Eoj8XpjGUB4C1b5goS59b41EJHqDJ1dFHmgdctq4BxKOEiYe158Y?=
+ =?us-ascii?Q?rPxOp44hCRSJimF3tIr0YyByJ/A9LM5kUG/COsbYhagqw+c3VH81TTuhbQQd?=
+ =?us-ascii?Q?bp3VoAIl3ed3Dkpp/1Wtv0r0NkMPSxqbwciKDf0b85rujO2h4WCH+vEZZ52c?=
+ =?us-ascii?Q?lJcwf2HPxjpPg9hOw+BrH+i2aLhMPOVd5UoSKItbJeRGTNI7AqNYd3nt28gG?=
+ =?us-ascii?Q?CwMJoLnGCIq9VnEUUY759/IlXYVUsnOmPMnBLwrIAxWUpJ5pybTiMpXmIK5w?=
+ =?us-ascii?Q?oDcgRjm23EF4TlPUhZGadWiGrSyEgHW4bwMkWe2rUV3IgRz+ziS83LLE85i7?=
+ =?us-ascii?Q?JnZYEwUdZt6fgImiO0wva7tynkzqdqhxFTmlO0bCDT7RuvlBUfEIizyqil3n?=
+ =?us-ascii?Q?M19i9nxG1C/dbsyuKRs1yf9FthYDx2/eovHkjma3dD1pyB7sTvhVaEGrOJpK?=
+ =?us-ascii?Q?NCpNRd3VJwZfXmT0YJZ0Fj83I04WsGm2wmhxTc1qwgzSWLtI4Y8tPpuT3a+9?=
+ =?us-ascii?Q?wzctEwg/1QNUS+IZndhrgdze2TDvAKNzZMfDmNABF/eSuGRmlhffsAzqS1oS?=
+ =?us-ascii?Q?kOheGx0o9DZ4v7I2SUenLIFG2GzxQWgpnbMsOD48rWCjt3MPxHMze1EiGZid?=
+ =?us-ascii?Q?aN+bcUc7E0u58BZN88qqrSDHQ4CdT8DQU2OmCmFsvfe//myRr0adZV4yS5vU?=
+ =?us-ascii?Q?7clkMhNC8/sCwzao5KTqXhTvuMq16MTYrfxSO/YUf0kU/T5McTqCaVFVAmCZ?=
+ =?us-ascii?Q?AFYMhsiB1cmTHMgRznLla3/4/u0BWBohI5ofghAOE5xLBd1kSzl0QW3Mvt+C?=
+ =?us-ascii?Q?zuMOI2coQwxKi5gozyL6WIpS0okH9T5IMocEtjCD3+4ALk7okLWZVUYmCdgm?=
+ =?us-ascii?Q?ZSfwU76IsHXPEdYMgqQheGKJ8ckbS3p284nmox9xeaoV6OhDZoZy37F/lm1G?=
+ =?us-ascii?Q?/XdiIHKWDar2crs6T6tJm5vbLtQNI5aJSTXZ4TMA5qqz8QmkM3DbSrlzCWm3?=
+ =?us-ascii?Q?7NTA1O4O0Aa/YMuaWuDzaN+zHUCCW8dKvDyGM29BG+5Or/v5wlVS+0w8lDwr?=
+ =?us-ascii?Q?brIfhp5z04m3LLpRQ5eambadlQ1Pa/RLy9sFHaYyvmu4SfGWHZ4JkEULyVNS?=
+ =?us-ascii?Q?+5lDX50AVRYKjdbmh3cTWMRHqIv0+VZrJmeEwUy3WE+lHGNn4SxTzsff+A7k?=
+ =?us-ascii?Q?9FDO9pqQeph/RrUojc6gLH3ZyhKU7IA4hROInzngYA8m6Pz6OgORatijHDvY?=
+ =?us-ascii?Q?nJ0hp/VxuiPkY9tSGacvuFTvmoVHPtYNb0kZwcQbYvI+agZpAzk2g7G45UEs?=
+ =?us-ascii?Q?Jhar6dpXtmBfhEV5L7ZXtYsifYkfKnq/XIUtwEdDrd1vTlpVwYINoOZc38wE?=
+ =?us-ascii?Q?FCOfVPbm5joGjESiRXbHlcyI2I5mhItaFutwxUC1Nhw03kpMF71ucHTxdQ16?=
+ =?us-ascii?Q?xMfj9ujl1lcf1zAiQ7STC+T5leXCxPAu5AJEegnSUTmbsICGyT09xFzueKk1?=
+ =?us-ascii?Q?7C/H9m8VQYR5Jle2QGH4Xnw=3D?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 807b2a9e-76f8-4652-e104-08dac9315aeb
+X-MS-Exchange-CrossTenant-AuthSource: SN4PR01MB7455.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2022 06:51:45.0004
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: EEEZ+x8iapOaPX768+wZPen0+zV4ArHb6Q00o16JI6pEeslbi3yY55AJKUJUkVcynwVS123CjDURK51trk9B1Nr+89ytuxmv0oTWyuqCGsw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR01MB5801
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 10:41:06PM -0800, Gwendal Grignou wrote:
-> On Thu, Nov 17, 2022 at 6:01 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
-> >
-> > On Wed, Nov 16, 2022 at 10:23:38AM -0800, Gwendal Grignou wrote:
-> > > [+chrome-platform@lists.linux.dev]
-> >
-> > Please also Cc to the mailing list if the patch gets chance to have
-> > next version.
-> >
-> > > On Mon, Nov 14, 2022 at 8:10 PM Gwendal Grignou <gwendal@chromium.org> wrote:
-> > [...]
-> > > > > Expose the attribute group to alter to close a potiential race between
-> > > > > cros-ec-sensorhub and cros-ec-sysfs (that creates the attribute group
-> > > > > on behalf of the class driver).
-> >
-> > I failed to realize the potential race.  Could you explain it a bit?
-> The decision to show or not an attribute is done at the attribute file
-> creation time, once. If the module cros_ec_sysfs is loaded before
-> cros_ec_sensorhub, the attribute kb_wake_angle will never be shown. If
-> it is loaded after, and there are 2 accelerometers, the is_visible()
-> function will return true and the attribute is shown.
-> 
-> This patch ensures the attribute is_visible() is run again after the
-> sensorhub driver is loaded.
+Add SMPro nodes to Mt. Jade BMC.
 
-I see.  Thanks.
+Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
+---
+ arch/arm/boot/dts/aspeed-bmc-ampere-mtjade.dts | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/arch/arm/boot/dts/aspeed-bmc-ampere-mtjade.dts b/arch/arm/boot/dts/aspeed-bmc-ampere-mtjade.dts
+index 353359822d7b..0a51d2e32fab 100644
+--- a/arch/arm/boot/dts/aspeed-bmc-ampere-mtjade.dts
++++ b/arch/arm/boot/dts/aspeed-bmc-ampere-mtjade.dts
+@@ -354,6 +354,14 @@ &i2c1 {
+ 
+ &i2c2 {
+ 	status = "okay";
++	smpro@4f {
++		compatible = "ampere,smpro";
++		reg = <0x4f>;
++	};
++	smpro@4e {
++		compatible = "ampere,smpro";
++		reg = <0x4e>;
++	};
+ };
+ 
+ &i2c3 {
+-- 
+2.35.1
+
