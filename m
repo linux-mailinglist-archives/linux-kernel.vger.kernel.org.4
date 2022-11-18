@@ -2,55 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D6D162F447
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 13:10:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1271B62F44A
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 13:11:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241493AbiKRMKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 07:10:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54430 "EHLO
+        id S241460AbiKRMLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 07:11:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241645AbiKRMKS (ORCPT
+        with ESMTP id S241833AbiKRMLC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 07:10:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08DC8FF91;
-        Fri, 18 Nov 2022 04:10:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 90503624B9;
-        Fri, 18 Nov 2022 12:10:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E99EFC433D7;
-        Fri, 18 Nov 2022 12:10:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668773416;
-        bh=mcnd5sv49vx5RuMi9Gl3j1FsHor/0AfmfG3Fc/ebeQ8=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=S1hJQa8jyj/vElSehjC80zR8nksInrcviaFJ9RpVSdbu4acQPfjGxZQgx9BjFSton
-         fRLUormIT+YSRiimm/w7bg01swoKDnIpxo+6M2Gj6lK+QLsuJ+Nn87cVi0mM8P+Bti
-         cdS5JHj87Y2NszMVkzL7eksvMN6vWVc0VJwOaldU2UMiBmrAHXC9WK4XjKN3SrCJ2R
-         /0tju210YmgmZ7mXVpiMkuZZW/98B/17xmX0Y0OMlEMZZ4ra7xAgmia75bw9Km0sha
-         Y074Huc1JEY/YY4/HylZFU0rxY6kplTbYPdsty6BmQeU+TRlYO2P9y8D1E/HpqpucM
-         CDHbRICBQf2gw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D118AE270F6;
-        Fri, 18 Nov 2022 12:10:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 18 Nov 2022 07:11:02 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA5497346
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 04:10:38 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id j16so7870700lfe.12
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 04:10:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BBu6kfL23BcHBPVJQ1UWIgnUmXbGAwIjzt4B4fPiJ0w=;
+        b=AXFZY+/lx/aXVTzw/rhvD8HHbAZHbfn8g6+fkD/V55tKKVPkHQ+YLiOo5hkqyMChTO
+         3ZGQ0NXC86du4aWC1Ho9MB4lVacnDbi2SKl0dppOJlTNwiaQlLuBB217wMb1gcKoDrXh
+         lnsewn4fbKJJyjf+nvNmdo+ORJlPZDhqNLiSNM4YP6V47KvuPuzCI7uGyVe8SZ/cP6uw
+         QxrelX349mqG8VgoPXN6zFjtGNb0szbYWouhnnHjeLzgKA6sBbHCbOAg+IcSn1ryjGuT
+         6vm9nLNBuAAzzfxoTGwA9s2Y3+t9OrvkkOVAUuV/BGx3K2eqVT1/b3eYHGmd10SQvoPN
+         sihQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BBu6kfL23BcHBPVJQ1UWIgnUmXbGAwIjzt4B4fPiJ0w=;
+        b=RFCEF3hcPnyF5xcvzGvTNIjRU0IDd4Sje0CS1qQkWkO5nKIJbHEWdGKDXGeZN+HvHM
+         Ja0x5XAiecB/t5hmyYKfXy3MnxGvsBi66Px1zRw4fOG6XK8Ms5c7oJX0i+dEPoCwXKSg
+         pJ5k99c/XyMyZePMf0JQpBd1rlOPumzEBCkyd4P7f0BgWlDtFiAMe8VkY/6p2hmMVxUG
+         7RW1wnVtSi70b33M/NrKsjGaq5vvnYZJ7ciNyh+1F4lJuPY4GsJqltVPecRWVV7lMj8E
+         THNtfLptgRYf8lArUTz9r6IBZPl8MukrcfhCEmWJItDWrOC9ZgOo58QjGaCg0P6HkVWG
+         OBiQ==
+X-Gm-Message-State: ANoB5pmYKJyHKG8oCsVHqj48QI2DUJHYTM7Z1DquZMHC/02BtTCSV7JJ
+        vWYbJyKEawLOLZRAhfEg5fkf9A==
+X-Google-Smtp-Source: AA0mqf6TUNjX0jmjkVETnHxatVQPJY6CHiLkVsJECbdcfEKrcYaJUvEtI7EWHfRx00vjlERgtoW6Yg==
+X-Received: by 2002:a19:9113:0:b0:4b1:e3ec:d99d with SMTP id t19-20020a199113000000b004b1e3ecd99dmr2241140lfd.95.1668773436318;
+        Fri, 18 Nov 2022 04:10:36 -0800 (PST)
+Received: from jade (h-79-136-84-253.A175.priv.bahnhof.se. [79.136.84.253])
+        by smtp.gmail.com with ESMTPSA id bd4-20020a05651c168400b0027628240ff7sm631838ljb.135.2022.11.18.04.10.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 04:10:35 -0800 (PST)
+Date:   Fri, 18 Nov 2022 13:10:34 +0100
+From:   Jens Wiklander <jens.wiklander@linaro.org>
+To:     arm@kernel.org, soc@kernel.org
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        op-tee@lists.trustedfirmware.org
+Subject: [GIT PULL] Fix possible memory leak OP-TEE driver for v6.1
+Message-ID: <Y3d2OuJ60U30OkZe@jade>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] rxrpc: Fix race between conn bundle lookup and bundle
- removal [ZDI-CAN-15975]
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166877341585.19277.2863856871968966029.git-patchwork-notify@kernel.org>
-Date:   Fri, 18 Nov 2022 12:10:15 +0000
-References: <166860734864.2970191.10633905995607769951.stgit@warthog.procyon.org.uk>
-In-Reply-To: <166860734864.2970191.10633905995607769951.stgit@warthog.procyon.org.uk>
-To:     David Howells <dhowells@redhat.com>
-Cc:     netdev@vger.kernel.org, zdi-disclosures@trendmicro.com,
-        marc.dionne@auristor.com, linux-afs@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,30 +67,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hello arm-soc maintainers,
 
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
+Please pull this small patch in the OP-TEE driver which fixes a possible
+memory leak in the error path of optee_register_device().
 
-On Wed, 16 Nov 2022 14:02:28 +0000 you wrote:
-> After rxrpc_unbundle_conn() has removed a connection from a bundle, it
-> checks to see if there are any conns with available channels and, if not,
-> removes and attempts to destroy the bundle.
-> 
-> Whilst it does check after grabbing client_bundles_lock that there are no
-> connections attached, this races with rxrpc_look_up_bundle() retrieving the
-> bundle, but not attaching a connection for the connection to be attached
-> later.
-> 
-> [...]
+Thanks,
+Jens
 
-Here is the summary with links:
-  - [net] rxrpc: Fix race between conn bundle lookup and bundle removal [ZDI-CAN-15975]
-    https://git.kernel.org/netdev/net/c/3bcd6c7eaa53
+The following changes since commit 094226ad94f471a9f19e8f8e7140a09c2625abaa:
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+  Linux 6.1-rc5 (2022-11-13 13:12:55 -0800)
 
+are available in the Git repository at:
 
+  https://git.linaro.org/people/jens.wiklander/linux-tee.git tags/optee-fix-for-6.1
+
+for you to fetch changes up to cce616e012c215d65c15e5d1afa73182dea49389:
+
+  tee: optee: fix possible memory leak in optee_register_device() (2022-11-17 09:22:12 +0100)
+
+----------------------------------------------------------------
+Fix possible memory leak in optee_register_device()
+
+----------------------------------------------------------------
+Yang Yingliang (1):
+      tee: optee: fix possible memory leak in optee_register_device()
+
+ drivers/tee/optee/device.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
