@@ -2,62 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 085BA62EDEC
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 07:52:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE9BE62EDEE
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 07:52:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241232AbiKRGwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 01:52:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58782 "EHLO
+        id S241245AbiKRGws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 01:52:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241179AbiKRGwl (ORCPT
+        with ESMTP id S241214AbiKRGwm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 01:52:41 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B513520BCD
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:52:40 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id x5so3735265wrt.7
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:52:40 -0800 (PST)
+        Fri, 18 Nov 2022 01:52:42 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D0F1F9EB
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:52:41 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id w14so7809917wru.8
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:52:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yAzXZzO+yszcBqWvLdE5BOhfmNlhU/EX4tpKB13mknE=;
-        b=LbCQHzP7ipavjxmzgE07LxC+8U+AXksWXXFgTY9RGwcI45LWjyeP8rvXW/9l58pcHJ
-         yLyx8xV4GR/LvDC5wE2P8R9votR8d147n3VWnCyy/38allY4Rx9z+E8fRqW+f+vts3kM
-         u3TuQ6pzpNP2Y1nQq7QwfGwdI+Eb44hozZmpPX45PqqCM0qvtdiMtlCZJcF/CPHg4mQF
-         LKII9InjFT4LEf7rPHP+yRwUT+17diLf/Uzq9nZvRRKA65p2fZ7ocqWtizhMcMPF4Lmw
-         zhWNlbmVAvKfunCEoFhfuJVlgAuOhYa8Jj48Yj6dcvWxpyhy7Ym5XJEEfHATjFPxGpww
-         tMUA==
+        bh=PY6KhYAUR5ucFJNuLPM9f1H+df/2M9xIYSbpdtp87Ek=;
+        b=u19VxxE41bJu7vss7eTcPTQobv6F7nMKdzL47mu2Xo8FQHZSrCJoaWzspf8e6QUjZf
+         02+eJSSrMdRXUI8/x+KRAKfnPUMPWfeJDPOblB1e0SGRLwPJDboqEdbltlETvsbdv1ax
+         FGA5uOcfuwwdZlJbGLMxkCECW7V98bsVf4Xb3tB6aJUUwd6jgP/ftEIdyGgqt0LecO9r
+         riCZerC/sgwjJBleTzqtwEQsfVnPhlnVLgk1CwPAb5IRtrUMa3PektXb3nwSL+3KwI98
+         Bv2qDAWGkKaIK/PNUElcYDAoVz5r5QtubkXd233Kt5rNc3Fc6y3EXmc4MlGwDdPQS9Dl
+         fCag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=yAzXZzO+yszcBqWvLdE5BOhfmNlhU/EX4tpKB13mknE=;
-        b=5wHPoRSgOpfyj0N+wvdIyHsevVrAoPToBZsucdg9sfPHlaeul2gvVeuIrdyNaDzpES
-         egterWYNFgauvSRLNvvjHwR9l7EYfRlm6vF5tcsDGPRIBLy52aGILZjcezzqCdeYkClY
-         P6uD5hBOj99NhmPNSrzokHisQ67stdb3BH4SYp3g/MYsgNYJWr8gNKGfbvchJn7CZfhk
-         80TPE/+h1bixpXFr78TZMnFpnkkmVIpxm/yipSWszPpQysGpxfEfn64c40O6hClmMtte
-         Xnf2SazwTzsUC/I3ri+aTrBJSvf4Zaiej9p2D7Tk3XoSelNkiOS/xyuMyIsqoWK0A+Nn
-         bMqA==
-X-Gm-Message-State: ANoB5pmNNQ/YQBGeRe9aB3y6NMj+JFM23Vn3pgZCvZXjj4jSFYh/4rrR
-        nce8fs2m+nlJ1RbGeI5IB0yL/g==
-X-Google-Smtp-Source: AA0mqf6GXGEIIYvm3UsMCu0eNo6pjIlpURQ9tOn/dKiMYd7qXdvaen0OUnzqy5b6ZxnJyixQfaC9gg==
-X-Received: by 2002:a05:6000:258:b0:236:74c5:7e2 with SMTP id m24-20020a056000025800b0023674c507e2mr3357423wrz.3.1668754359274;
-        Thu, 17 Nov 2022 22:52:39 -0800 (PST)
+        bh=PY6KhYAUR5ucFJNuLPM9f1H+df/2M9xIYSbpdtp87Ek=;
+        b=eRs1BmogCrQNL03btwldHu0Syvmejb/6T1AYBM0sGVlDqF2JA3ALXSZ34sZeQoyM5V
+         ZxKrhItc2XR4vML6W35nf2VXdzpxENY5W2V97IlD83VY6Ex9jUjTUa8iFwRFI+RMtOpb
+         JxmWPSM1mfmUhHp3A7NHZJlQsUDWeLV0a2s6hPlvJlUmOxc4S1Q7ndM3sY41Jl4dMuQG
+         7UY606bZwdmoIEy2w47xjikNZVamLhFXAtpmY0IX7NIXG1H1glrIt1egZcYV8uOz1/Gu
+         16eFGPKR9SG5HGyubZ5b6rbSPR/BbDSueRYa5q1n/URZ1zUSPShKFXg/LKMzk1W5VaGm
+         tHLg==
+X-Gm-Message-State: ANoB5plS2s6tN5xw6dQIScuE0GWVkFu8JW5flXx8iJmtT+MCnyOqNhtT
+        hqEhPYZ1x/ml+AYGi8RssAg4QqBJZWvaXA==
+X-Google-Smtp-Source: AA0mqf7XskUTyolLVpF9es7OHwU1yYs5u+AkZ1hYqh0p8EPqTVe6aDY7tEDtcouxkuu2drHAgej/Yg==
+X-Received: by 2002:a5d:408b:0:b0:236:53d2:1668 with SMTP id o11-20020a5d408b000000b0023653d21668mr3409646wrp.694.1668754360904;
+        Thu, 17 Nov 2022 22:52:40 -0800 (PST)
 Received: from localhost.localdomain ([167.98.215.174])
-        by smtp.gmail.com with ESMTPSA id q14-20020a05600c46ce00b003c5571c27a1sm4400165wmo.32.2022.11.17.22.52.38
+        by smtp.gmail.com with ESMTPSA id q14-20020a05600c46ce00b003c5571c27a1sm4400165wmo.32.2022.11.17.22.52.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 22:52:38 -0800 (PST)
+        Thu, 17 Nov 2022 22:52:40 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, Zheng Bin <zhengbin13@huawei.com>,
+Cc:     linux-kernel@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        stable@vger.kernel.org,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 1/2] slimbus: qcom-ngd: Fix build error when CONFIG_SLIM_QCOM_NGD_CTRL=y && CONFIG_QCOM_RPROC_COMMON=m
-Date:   Fri, 18 Nov 2022 06:52:27 +0000
-Message-Id: <20221118065228.6773-2-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 2/2] slimbus: stream: correct presence rate frequencies
+Date:   Fri, 18 Nov 2022 06:52:28 +0000
+Message-Id: <20221118065228.6773-3-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221118065228.6773-1-srinivas.kandagatla@linaro.org>
 References: <20221118065228.6773-1-srinivas.kandagatla@linaro.org>
@@ -72,40 +73,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zheng Bin <zhengbin13@huawei.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-If CONFIG_SLIM_QCOM_NGD_CTRL=y, CONFIG_QCOM_RPROC_COMMON=m, COMPILE_TEST=y,
-bulding fails:
+Correct few frequencies in presence rate table - multiplied by 10
+(110250 instead of 11025 Hz).
 
-drivers/slimbus/qcom-ngd-ctrl.o: In function `qcom_slim_ngd_ctrl_probe':
-qcom-ngd-ctrl.c:(.text+0x330): undefined reference to `qcom_register_ssr_notifier'
-qcom-ngd-ctrl.c:(.text+0x5fc): undefined reference to `qcom_unregister_ssr_notifier'
-drivers/slimbus/qcom-ngd-ctrl.o: In function `qcom_slim_ngd_remove':
-qcom-ngd-ctrl.c:(.text+0x90c): undefined reference to `qcom_unregister_ssr_notifier'
-
-Make SLIM_QCOM_NGD_CTRL depends on QCOM_RPROC_COMMON || (COMPILE_TEST && !QCOM_RPROC_COMMON) to fix this.
-
-Fixes: e291691c6977 ("slimbus: qcom-ngd-ctrl: allow compile testing without QCOM_RPROC_COMMON")
-Signed-off-by: Zheng Bin <zhengbin13@huawei.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Fixes: abb9c9b8b51b ("slimbus: stream: add stream support")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- drivers/slimbus/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/slimbus/stream.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/slimbus/Kconfig b/drivers/slimbus/Kconfig
-index 2ed821f75816..a0fdf9d792cb 100644
---- a/drivers/slimbus/Kconfig
-+++ b/drivers/slimbus/Kconfig
-@@ -23,7 +23,7 @@ config SLIM_QCOM_CTRL
- config SLIM_QCOM_NGD_CTRL
- 	tristate "Qualcomm SLIMbus Satellite Non-Generic Device Component"
- 	depends on HAS_IOMEM && DMA_ENGINE && NET
--	depends on QCOM_RPROC_COMMON || COMPILE_TEST
-+	depends on QCOM_RPROC_COMMON || (COMPILE_TEST && !QCOM_RPROC_COMMON)
- 	depends on ARCH_QCOM || COMPILE_TEST
- 	select QCOM_QMI_HELPERS
- 	select QCOM_PDR_HELPERS
+diff --git a/drivers/slimbus/stream.c b/drivers/slimbus/stream.c
+index 75f87b3d8b95..73a2aa362957 100644
+--- a/drivers/slimbus/stream.c
++++ b/drivers/slimbus/stream.c
+@@ -67,10 +67,10 @@ static const int slim_presence_rate_table[] = {
+ 	384000,
+ 	768000,
+ 	0, /* Reserved */
+-	110250,
+-	220500,
+-	441000,
+-	882000,
++	11025,
++	22050,
++	44100,
++	88200,
+ 	176400,
+ 	352800,
+ 	705600,
 -- 
 2.25.1
 
