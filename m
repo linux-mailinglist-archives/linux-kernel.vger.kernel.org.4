@@ -2,58 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 378D762F119
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 10:25:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5146362F11E
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 10:25:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241857AbiKRJY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 04:24:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41762 "EHLO
+        id S241909AbiKRJZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 04:25:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbiKRJY5 (ORCPT
+        with ESMTP id S229620AbiKRJZk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 04:24:57 -0500
-Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93E4113D28
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 01:24:55 -0800 (PST)
-X-UUID: 65a0b4b390194fa38cb937c4cbeeb3a9-20221118
-X-CPASD-INFO: a30bbf889eb14895b776f333e9c9069e@qoNqgo-YZmhlhaR9g3uEb4JoZ2aWX1O
-        Cp3ODaV5mZYWVhH5xTV5uYFV9fWtVYV9dYVR6eGxQYmBgZFJ4i3-XblBgXoZgUZB3sHVqgpKUaA==
-X-CLOUD-ID: a30bbf889eb14895b776f333e9c9069e
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:181.
-        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:192.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
-        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:0.0,SPC:0,SIG:-
-        5,AUF:7,DUF:8753,ACD:145,DCD:145,SL:0,EISP:0,AG:0,CFC:0.75,CFSR:0.034,UAT:0,R
-        AF:2,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0,
-        EAF:0,CID:-5.0,VERSION:2.3.17
-X-CPASD-ID: 65a0b4b390194fa38cb937c4cbeeb3a9-20221118
-X-CPASD-BLOCK: 1000
-X-CPASD-STAGE: 1
-X-UUID: 65a0b4b390194fa38cb937c4cbeeb3a9-20221118
-X-User: lizhenneng@kylinos.cn
-Received: from [172.20.124.41] [(116.128.244.169)] by mailgw
-        (envelope-from <lizhenneng@kylinos.cn>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES128-GCM-SHA256 128/128)
-        with ESMTP id 1399027987; Fri, 18 Nov 2022 17:25:13 +0800
-Message-ID: <4adc40d1-e775-c480-bb35-23fe9c63e05e@kylinos.cn>
-Date:   Fri, 18 Nov 2022 17:24:49 +0800
+        Fri, 18 Nov 2022 04:25:40 -0500
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 011D813D28;
+        Fri, 18 Nov 2022 01:25:38 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id h24so2756776qta.9;
+        Fri, 18 Nov 2022 01:25:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zxmmB0O8kf2bCZUg8Vmzy4DjqrDLbrYKNV+9DFjGPdM=;
+        b=iGoNWXXXnis33v7inwHeg1vbF1B+aH3d3MXsz/vIMruwIp734Gt5/9jGckp7x//ZgN
+         GUZgpC4iS1d3MZLeR61ofeciNEKAujQfQZzxa6nfkxfGWUxBHeXadL9D49nz4Pt7M4aE
+         XEzvZDukjfunZ6wtdG9pertRkqFFVaQnyRP8hyqXIRbTaBjLqQdj7GUA7LO1TSfVyQmr
+         O6LIrFuZw506IRoPPlukiJta3izZliTAJr6PfuMf7hlxOUc3TY9gJuYau0H2ZLNydq6O
+         H0mDhhIWwxRRPgSSPPTZcolCz6diIIqypw9cTpD2295ixLSMeu/WOir34l7dQ/cKaF5w
+         dGUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zxmmB0O8kf2bCZUg8Vmzy4DjqrDLbrYKNV+9DFjGPdM=;
+        b=y2j89IfcUguas1CKsr19yd6W9lILcnv7J3WgKGTaSqjYvlTgxQtiDrt8GLhkouoX1e
+         P6JLDgYDtYUpiTmN6rPuLL0Lj10bB+GIt8vkHoIfJZJHrP7ezvDfbW2A7xAuejEiYFEO
+         sD5RbO+D9wRtRNpdwIfQYV8CiphFaNbahQONuroevvLAvpgA/nnBXTL6isloY0oE/pGw
+         /NYVbqfn0wmMiXTxxObXsqbNEe+VqiFvnIzwm2IyqVWU+MZk+BnhnyspEEUgj4SKXy/3
+         M/b067csFUVV+O+yqPa6/7u6WmGjzLMI5w8dyCvp+pWFzZr44AnjUUyR/u+nufIbf8DT
+         uCFg==
+X-Gm-Message-State: ANoB5pmrGylpVHETxpPfpJ5Bjdq1CB9T+tf+Xkg2fkxtoW44kz9RWTO5
+        JJdBnhU33jxLDdCmXO8lcHIc703zb34ZDpf1LlQ=
+X-Google-Smtp-Source: AA0mqf5UhFnmhEBpfKYNk2qlm9NY4I1IaPGXQ1r6HCYQEskO1OiB0JmswdszYCQwSu0bqZtvW1F8XX18ZqCNcD0NOVM=
+X-Received: by 2002:ac8:4d51:0:b0:3a5:1e6e:ad6a with SMTP id
+ x17-20020ac84d51000000b003a51e6ead6amr5733386qtv.556.1668763538165; Fri, 18
+ Nov 2022 01:25:38 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] drm/amdgpu: add mb for si
-To:     =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel.daenzer@mailbox.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Cc:     Xinhui.Pan@amd.com, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org
-References: <20221118074810.380368-1-lizhenneng@kylinos.cn>
- <ecd9d251-8941-b2db-71b2-e4ac06f860a3@amd.com>
- <800a1207-8ff6-4cfa-60f3-6ff456874890@mailbox.org>
-From:   =?UTF-8?B?5p2O55yf6IO9?= <lizhenneng@kylinos.cn>
-In-Reply-To: <800a1207-8ff6-4cfa-60f3-6ff456874890@mailbox.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <20221111084214.14822-1-wenchao.chen666@gmail.com>
+ <20221111084214.14822-2-wenchao.chen666@gmail.com> <59fc95ec-c0db-4011-eca3-3d101f0bc908@intel.com>
+In-Reply-To: <59fc95ec-c0db-4011-eca3-3d101f0bc908@intel.com>
+From:   Wenchao Chen <wenchao.chen666@gmail.com>
+Date:   Fri, 18 Nov 2022 17:25:27 +0800
+Message-ID: <CA+Da2qwdtUdCcv+HhNArGoriVtOmx+GGML4Avkk5QSdm8+XXTQ@mail.gmail.com>
+Subject: Re: [PATCH 1/1] mmc: sdhci: Fixed too many logs being printed during tuning
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, megoo.tang@gmail.com,
+        lzx.stg@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,65 +69,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-在 2022/11/18 17:18, Michel Dänzer 写道:
-> On 11/18/22 09:01, Christian König wrote:
->> Am 18.11.22 um 08:48 schrieb Zhenneng Li:
->>> During reboot test on arm64 platform, it may failure on boot,
->>> so add this mb in smc.
->>>
->>> The error message are as follows:
->>> [    6.996395][ 7] [  T295] [drm:amdgpu_device_ip_late_init [amdgpu]] *ERROR*
->>>                  late_init of IP block <si_dpm> failed -22
->>> [    7.006919][ 7] [  T295] amdgpu 0000:04:00.0: amdgpu_device_ip_late_init failed
->>> [    7.014224][ 7] [  T295] amdgpu 0000:04:00.0: Fatal error during GPU init
->> Memory barries are not supposed to be sprinkled around like this, you need to give a detailed explanation why this is necessary.
->>
->> Regards,
->> Christian.
->>
->>> Signed-off-by: Zhenneng Li <lizhenneng@kylinos.cn>
->>> ---
->>>    drivers/gpu/drm/amd/pm/legacy-dpm/si_smc.c | 2 ++
->>>    1 file changed, 2 insertions(+)
->>>
->>> diff --git a/drivers/gpu/drm/amd/pm/legacy-dpm/si_smc.c b/drivers/gpu/drm/amd/pm/legacy-dpm/si_smc.c
->>> index 8f994ffa9cd1..c7656f22278d 100644
->>> --- a/drivers/gpu/drm/amd/pm/legacy-dpm/si_smc.c
->>> +++ b/drivers/gpu/drm/amd/pm/legacy-dpm/si_smc.c
->>> @@ -155,6 +155,8 @@ bool amdgpu_si_is_smc_running(struct amdgpu_device *adev)
->>>        u32 rst = RREG32_SMC(SMC_SYSCON_RESET_CNTL);
->>>        u32 clk = RREG32_SMC(SMC_SYSCON_CLOCK_CNTL_0);
->>>    +    mb();
->>> +
->>>        if (!(rst & RST_REG) && !(clk & CK_DISABLE))
->>>            return true;
-> In particular, it makes no sense in this specific place, since it cannot directly affect the values of rst & clk.
-
-I thinks so too.
-
-But when I do reboot test using nine desktop machines,  there maybe 
-report this error on one or two machines after Hundreds of times or 
-Thousands of times reboot test, at the beginning, I use msleep() instead 
-of mb(), these two methods are all works, but I don't know what is the 
-root case.
-
-I use this method on other verdor's oland card, this error message are 
-reported again.
-
-What could be the root reason?
-
-test environmen:
-
-graphics card: OLAND 0x1002:0x6611 0x1642:0x1869 0x87
-
-driver: amdgpu
-
-os: ubuntu 2004
-
-platform: arm64
-
-kernel: 5.4.18
-
+On Thu, Nov 17, 2022 at 12:00 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
 >
+> On 11/11/22 10:42, Wenchao Chen wrote:
+> > From: Wenchao Chen <wenchao.chen@unisoc.com>
+> >
+> > During the HS200 tuning process, too many tuning errors are printed in
+> > the log.
+> >
+> > Signed-off-by: Wenchao Chen <wenchao.chen@unisoc.com>
+> > ---
+> >  drivers/mmc/host/sdhci.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> >
+> > diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
+> > index fef03de85b99..a503b54305eb 100644
+> > --- a/drivers/mmc/host/sdhci.c
+> > +++ b/drivers/mmc/host/sdhci.c
+> > @@ -3401,6 +3401,10 @@ static void sdhci_data_irq(struct sdhci_host *host, u32 intmask)
+> >               if (host->pending_reset)
+> >                       return;
+> >
+> > +             command = SDHCI_GET_CMD(sdhci_readw(host, SDHCI_COMMAND));
+> > +             if (command == MMC_SEND_TUNING_BLOCK || command == MMC_SEND_TUNING_BLOCK_HS200)
+> > +                     return;
+>
+> Normally we wouldn't get here even if a request got an error because
+> then we either reset the data circuit which should stop further
+> interrupts, or set host->pending_reset.
+>
+> Can you elaborate on what is going wrong?
+>
+Hi  adrian
+1. In the process of tuning, not all tuning values are good, some
+tuning values may cause errors, and these errors print too many logs.
+    Of course, we reset the cmdline or dataline on error.
+2. use host->pending_reset = true
+static void __sdhci_finish_mrq(struct sdhci_host *host, struct mmc_request *mrq)
+{
+...
+if (sdhci_needs_reset(host, mrq))
+host->pending_reset = true;
+...
+}
 
+But intmask = 0x00200000
+static void sdhci_data_irq(struct sdhci_host *host, u32 intmask)
+{
+...
+if (!host->data) {
+struct mmc_command *data_cmd = host->data_cmd;
+
+if (data_cmd && (data_cmd->flags & MMC_RSP_BUSY)) {
+if (intmask & SDHCI_INT_DATA_TIMEOUT) { //#define
+SDHCI_INT_DATA_TIMEOUT 0x00100000
+host->data_cmd = NULL;
+data_cmd->error = -ETIMEDOUT;
+sdhci_err_stats_inc(host, CMD_TIMEOUT);
+__sdhci_finish_mrq(host, data_cmd->mrq);//<=
+return;
+}
+if (intmask & SDHCI_INT_DATA_END) {    //#define  SDHCI_INT_DATA_END 0x00000002
+
+host->data_cmd = NULL;
+/*
+* Some cards handle busy-end interrupt
+* before the command completed, so make
+* sure we do things in the proper order.
+*/
+if (host->cmd == data_cmd)
+return;
+
+__sdhci_finish_mrq(host, data_cmd->mrq);//<=
+return;
+}
+}
+...
+if (host->pending_reset)
+return;
+
+pr_err("%s: Got data interrupt 0x%08x even though no data operation
+was in progress.\n",
+       mmc_hostname(host->mmc), (unsigned)intmask);
+sdhci_err_stats_inc(host, UNEXPECTED_IRQ);
+sdhci_dumpregs(host);
+
+return;
+}
+...
+}
+
+> > +
+> >               pr_err("%s: Got data interrupt 0x%08x even though no data operation was in progress.\n",
+> >                      mmc_hostname(host->mmc), (unsigned)intmask);
+> >               sdhci_err_stats_inc(host, UNEXPECTED_IRQ);
+>
