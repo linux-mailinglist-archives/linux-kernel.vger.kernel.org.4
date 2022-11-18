@@ -2,60 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E414062FA7F
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 17:42:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96B8962FA82
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 17:42:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242166AbiKRQmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 11:42:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57674 "EHLO
+        id S242178AbiKRQmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 11:42:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234828AbiKRQmK (ORCPT
+        with ESMTP id S241647AbiKRQmL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 11:42:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 779166204A
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 08:42:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 39115B82404
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 16:42:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5DA7C433C1;
-        Fri, 18 Nov 2022 16:42:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668789726;
-        bh=Mrc50lPM60BwQ65uEo8Q4lFKJKU3glA1OU9cGpr63hg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=u9EjFCIHJuV9Q11pMGbSaVSlRSE0nwi0EHnlojSS/c2Hd4qzcy7reu4OkgjnD5hmD
-         Q0+Rwu1RK5QgUVNzlvPoGwlWHaTIgOnU3RvTHSWjFiGmQCwpxIPtjazTgpwBRCeO3O
-         9aMBgFaCWOLAksdoo9DjgVBnci2DOpnyjZIXvzdvpX4m01IO1utmreHGwENMk+kuls
-         1cIrGxVCV3Vd4pDGzsrEnvfyvc2sqw2SsIKJbY1UPD7y4s4fJMoTfGYcHg10Xxp6ZF
-         yCI9CK6B3AUx96qDo3MuJ9xMjgPPQueo+iJW4t+NN8jZgvffo0ow1Fqj+TeoOKD/kc
-         S/343k0kGVdsw==
-Date:   Fri, 18 Nov 2022 16:41:59 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Jiucheng Xu <jiucheng.xu@amlogic.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Kelvin Zhang <kelvin.zhang@amlogic.com>,
-        Chris Healy <healych@amzon.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org
-Subject: Re: [PATCH v11 1/3] perf/amlogic: Add support for Amlogic meson G12
- SoC DDR PMU driver
-Message-ID: <20221118164157.GA4802@willie-the-truck>
-References: <20221117083419.2084264-1-jiucheng.xu@amlogic.com>
+        Fri, 18 Nov 2022 11:42:11 -0500
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB5E868C61
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 08:42:09 -0800 (PST)
+Received: by mail-lj1-x229.google.com with SMTP id t10so7517497ljj.0
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 08:42:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=x7yxRPpkQlxtFzHM7bHG1/Tzv/+e3IcCGQCZXSEVD+0=;
+        b=wJVKA/nwQz03xEDCkQCELWQ9MDDPlVrqUPd4GxJpaTktRUscHD6sxk90EMix+jk3jA
+         W3iWQzEjeCM3HRpDJVF7TXH8EbofaMSZckwrLp827U964n2Hx67j55knk4+oalEk2TSP
+         JaAVKIH2MM586IXMtvobq7wF68edYxQyHl/gcWw+VY8g5XIJuWKxcy4uCBUczNjq6Nw4
+         KSCgJ2Q0GboN5NDnRtqW3rHhlAI9qL2Ooup75sT/EoxwVBeYQAQgHmdPYB1bLe4MJvdi
+         Um83etlYeuoqqeI2PKK7QbxnH3GR3hc0m/r/0FNy+f0ZaWin6SatEf+IDTwrdj26bkJG
+         cJig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=x7yxRPpkQlxtFzHM7bHG1/Tzv/+e3IcCGQCZXSEVD+0=;
+        b=qf2eNWeIyUtCd49OSDeFLBEok3L2gIGJTAyNj9XSRo4Gim72jd8pDySfgmTVj2mXK1
+         N/lnyI58X6yMftvK3hrHT6RnV3icFmHkgEi6rAVOaQ0Effe81Eo/UKU7otI5n2J8tSif
+         PkgC/FVHn17s2BA5Uutjzx46dBnLD/+ybfqXjRpo+bvqrz1OnwP8PXvwkUH8SmLzvx7R
+         aLvlfeRh8T8BYaMeAPBBq/RYBVWzgylrDsUA4be/DUQrrhrFwdAajgpZKoQ44B7gIg46
+         45c0GDqAB1gL4eQetnVyQNgLqYJ0CN2w0LrdiXjy2OgBkCOhoakFmJwANg34nWuYfe3R
+         rZkA==
+X-Gm-Message-State: ANoB5pmxJcQM4wLcLcGRUjlo/ghYNVbEBc6bdeBJUUaGX7tGWXPE/WkT
+        xHpUi4wMqcWR1MttySbibP2KkQ==
+X-Google-Smtp-Source: AA0mqf7L+sWAhQN2Sr2Z3V3AFYQtJQkH3M8XMLjZDcJ2Fh+QAyEE4ABxI+Ej8IYpG63ePR2D56WcSw==
+X-Received: by 2002:a2e:a9a7:0:b0:26e:2de:49ad with SMTP id x39-20020a2ea9a7000000b0026e02de49admr3025781ljq.511.1668789728074;
+        Fri, 18 Nov 2022 08:42:08 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id e13-20020a05651236cd00b004b4bab7d5a9sm420324lfs.46.2022.11.18.08.42.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 08:42:07 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Doug Anderson <dianders@chromium.org>
+Subject: [RFT PATCH v2 1/2] arm64: dts: qcom: sdm845-db845c: drop unneeded qup_spi0_default
+Date:   Fri, 18 Nov 2022 17:42:00 +0100
+Message-Id: <20221118164201.321147-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221117083419.2084264-1-jiucheng.xu@amlogic.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,37 +74,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 04:34:15PM +0800, Jiucheng Xu wrote:
-> Add support for Amlogic Meson G12 Series SOC - DDR bandwidth PMU driver
-> framework and interfaces. The PMU can not only monitor the total DDR
-> bandwidth, but also individual IP module bandwidth.
-> 
-> Signed-off-by: Jiucheng Xu <jiucheng.xu@amlogic.com>
-> Tested-by: Chris Healy <healych@amzon.com>
+The qup_spi0_default pin override is exactly the same as one already in
+sdm845.dtsi.
 
-amzon.com?
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> +static umode_t meson_ddr_perf_format_attr_visible(struct kobject *kobj,
-> +						  struct attribute *attr,
-> +						  int n)
-> +{
-> +	struct pmu *pmu = dev_get_drvdata(kobj_to_dev(kobj));
-> +	struct ddr_pmu *ddr_pmu = to_ddr_pmu(pmu);
-> +	const u64 *capability = ddr_pmu->info.hw_info->capability;
-> +	struct device_attribute *dev_attr;
-> +	int id;
-> +	char value[20]; // config1:xxx, 20 is enough
-> +
-> +	dev_attr = container_of(attr, struct device_attribute, attr);
-> +	dev_attr->show(NULL, NULL, value);
-> +
-> +	if (sscanf(value, "config1:%d", &id) == 1)
-> +		return capability[0] & (1 << id) ? attr->mode : 0;
-> +
-> +	if (sscanf(value, "config2:%d", &id) == 1)
-> +		return capability[1] & (1 << id) ? attr->mode : 0;
+---
 
-Should these be '(1ULL << id)' to avoid shifting beyond the side of the
-32-bit type?
+Cc: Doug Anderson <dianders@chromium.org>
 
-Will
+Changes since v1:
+1. New patch.
+---
+ arch/arm64/boot/dts/qcom/sdm845-db845c.dts | 8 --------
+ 1 file changed, 8 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
+index 02dcf75c0745..56a7afb697ed 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
++++ b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
+@@ -1274,11 +1274,3 @@ ov7251_ep: endpoint {
+ 		};
+ 	};
+ };
+-
+-/* PINCTRL - additions to nodes defined in sdm845.dtsi */
+-&qup_spi0_default {
+-	config {
+-		drive-strength = <6>;
+-		bias-disable;
+-	};
+-};
+-- 
+2.34.1
+
