@@ -2,79 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C335562F5E0
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 14:23:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC2EE62F5FF
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 14:29:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242053AbiKRNXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 08:23:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45260 "EHLO
+        id S232495AbiKRN3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 08:29:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241886AbiKRNXN (ORCPT
+        with ESMTP id S241877AbiKRN2q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 08:23:13 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 981EE7FF0D
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 05:23:11 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id bp15so8145534lfb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 05:23:11 -0800 (PST)
+        Fri, 18 Nov 2022 08:28:46 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A67B72129
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 05:28:43 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id cl5so9239430wrb.9
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 05:28:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NGk0T32TBu5Feib+GN4MZpX75E7t6+QlVj5xDhxgrhg=;
-        b=ZeZyveJTXKuuJzzddyWhZo73GbwQMoPxOHdUyzaykfPA3crzFwOqn5rM/6f+iGZXPE
-         x0hE/kYfF1LZzsKr4FCvtmVn98l+eF77HP4adbZl7m5t2skDhKDZyn4AhfWoYM8ial9k
-         yrertMFJdaT8RgpC0wfFKUNkwRViEkCXp7GioMGZa0kOZhGQPWdC9XLfqnndPEMIOX+w
-         CsKxv55UoOw5456X4mD6vWma/r1w91Px3cEprtHEVytrS9bkwCMJqyGrZEuQ6dGVY+Tc
-         XChNCZF+xYK1wcz5qBUqeGbSALbM98DNQsfXOfObdDa4wFLEGg7FDpljobYqLiCjUps3
-         YBkQ==
+        bh=jFuAN0qalS8PXGclZBpJGpqKwSse98B1zaIXuj/qhsM=;
+        b=X/gqqsl/WLpKtb9vOD4WiP4Oi7fWHjwjntx8mX7OxhsG5wzq+ZEu37/nMAgR/K0NTa
+         w3qxyDj/5ysz05YJVpUs55kmmloX1IkC2zB1+/KzU94RHSvVV8QJIGUQUlri/5EUyK2r
+         mGh3S7znVf5hxcm2FIq10hXZNhSXHhkk0XSUejjdU6tvjBJaDulCkhJ1yHJ5qUwTLhSd
+         MoeZaDkThsztpF4G73yNPcJGkFAhdKPv1GGINAnUYMuW1RHIMFNHAh629fNId0Ygj6h4
+         QlGc8/i2b3sseFW3mxLr72CnhypCMQDx+K68Ypw8eLM56TGZBoLoX2zeC77yyHo3GfeR
+         z9tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=NGk0T32TBu5Feib+GN4MZpX75E7t6+QlVj5xDhxgrhg=;
-        b=1lanBTIrWtwuucKQhM8ESeKV/Zh675VhQ6GwhkMNOLNA53XSfoBnVP322Vk2cEpTDN
-         IOQzjhascpsbAdS/PxtZzvN1mYUsxcckKiRU5WUlydnPmNXVywqyhDZbxNDCEUzrEq3M
-         +pmQrEG5yrmvunKy+P1udD0DV0BjQf3LCbBwnTlm/SWrAvsml4hoVTBWT7he2SOkbluW
-         69ysZr3wJsfEq0/R/vXnSV1RG2xKA2u6lhF7T1aEv7c6bwZmnBqKaqjz2URq74kqdgsG
-         sQn886uI6tlOsGhkQZoH+AIZGkEKiPNmxJtuxTAZDx7Nt3c/jwbOScMDS00TZ7jHG6Sf
-         IRUg==
-X-Gm-Message-State: ANoB5pntGp9DErSlF2jcnognS2KDBHn7kiybXkugyBUC7BE7vCVBt+xY
-        w2OA/2jRpSzqL2ZAb5bwUZAgmA==
-X-Google-Smtp-Source: AA0mqf5v7a49GTkiDgFNOAvwfh1TRTOts9M5NJut4SRWEqdzvDgbQrEVjFmPcwaEz5mpvodWykTJEw==
-X-Received: by 2002:ac2:5593:0:b0:4b0:40e5:6c2f with SMTP id v19-20020ac25593000000b004b040e56c2fmr2280738lfg.301.1668777789954;
-        Fri, 18 Nov 2022 05:23:09 -0800 (PST)
-Received: from [192.168.31.208] ([194.29.137.22])
-        by smtp.gmail.com with ESMTPSA id i16-20020a198c50000000b0048afb8b8e53sm659911lfj.80.2022.11.18.05.23.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Nov 2022 05:23:09 -0800 (PST)
-Message-ID: <1d8459b6-e4d3-3e6b-7e6f-bc55bd9bfa8b@linaro.org>
-Date:   Fri, 18 Nov 2022 14:23:07 +0100
+        bh=jFuAN0qalS8PXGclZBpJGpqKwSse98B1zaIXuj/qhsM=;
+        b=vFpRp5anlHwu3YCgSR4X18mvWcLLJnrpWRnxP5HFqoExAoBB3tBTs0H9Kqw/Pgl2v1
+         XYnVZbAbX+ZXKOrvuXf6m7hafJwfgRxgPcMir79buO78DL3WVBYdsp1rpuJPTax836Ix
+         HMgvjuJrI6AMj9x4ccUE/pMe8fjtQSQRVRPtJQCzMCtTY6s5Eo0IoFKvwzAVxJKfRA5D
+         +gbpF5KENMjy2aGXAQxn4hoe23tOY1WyKLiy03cC6Roi+TFmfzVRylQJ8e7XY5zmYxcs
+         rxZj6oPpwvscOEhLVWGUwq8rC4MAB42aL2LbYDDKmRZuKE5KR7+OEctdzv+cLURM7wTU
+         DgzA==
+X-Gm-Message-State: ANoB5pmC39gIZd0VokK/nTJmsH7BWcgBfKwi4NYZaFfHF2X3+4hKv4mK
+        ijbsnpNJ+p2snw5ookay7I1YEA==
+X-Google-Smtp-Source: AA0mqf6tYbIf5kiwBxBEeJpBK3Zoi0R3hbVIR4uxKZjI5EAk4XwJowCkhnyQfuyrbXxeKsj5OY9J7w==
+X-Received: by 2002:adf:aa91:0:b0:241:b2b2:a71d with SMTP id h17-20020adfaa91000000b00241b2b2a71dmr4389646wrc.326.1668778121454;
+        Fri, 18 Nov 2022 05:28:41 -0800 (PST)
+Received: from zen.linaroharston ([185.81.254.11])
+        by smtp.gmail.com with ESMTPSA id y10-20020adfe6ca000000b00236860e7e9esm3459102wrm.98.2022.11.18.05.28.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 05:28:40 -0800 (PST)
+Received: from zen (localhost [127.0.0.1])
+        by zen.linaroharston (Postfix) with ESMTP id 11C631FFB7;
+        Fri, 18 Nov 2022 13:28:40 +0000 (GMT)
+References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
+ <20221025151344.3784230-4-chao.p.peng@linux.intel.com>
+ <87cz9o9mr8.fsf@linaro.org> <20221116031441.GA364614@chaop.bj.intel.com>
+ <87mt8q90rw.fsf@linaro.org> <20221117134520.GD422408@chaop.bj.intel.com>
+ <87a64p8vof.fsf@linaro.org> <20221118013201.GA456562@chaop.bj.intel.com>
+User-agent: mu4e 1.9.2; emacs 28.2.50
+From:   Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Subject: Re: [PATCH v9 3/8] KVM: Add KVM_EXIT_MEMORY_FAULT exit
+Date:   Fri, 18 Nov 2022 13:23:51 +0000
+In-reply-to: <20221118013201.GA456562@chaop.bj.intel.com>
+Message-ID: <87o7t475o7.fsf@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.2
-Subject: Re: [PATCH 05/15] tty: serial: qcom-geni-serial: remove stray
- newlines
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-References: <20221118122539.384993-1-brgl@bgdev.pl>
- <20221118122539.384993-6-brgl@bgdev.pl>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221118122539.384993-6-brgl@bgdev.pl>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -84,38 +110,72 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+Chao Peng <chao.p.peng@linux.intel.com> writes:
 
-On 18/11/2022 13:25, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> 
-> Remove stray newlines around #ifdefs for consistency with the rest
-> of the driver code.
-> 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> On Thu, Nov 17, 2022 at 03:08:17PM +0000, Alex Benn=C3=A9e wrote:
+>>=20
+<snip>
+>> >> >> > +
+>> >> >> > +		/* KVM_EXIT_MEMORY_FAULT */
+>> >> >> > +		struct {
+>> >> >> > +  #define KVM_MEMORY_EXIT_FLAG_PRIVATE	(1 << 0)
+>> >> >> > +			__u32 flags;
+>> >> >> > +			__u32 padding;
+>> >> >> > +			__u64 gpa;
+>> >> >> > +			__u64 size;
+>> >> >> > +		} memory;
+>> >> >> > +
+>> >> >> > +If exit reason is KVM_EXIT_MEMORY_FAULT then it indicates that =
+the VCPU has
+>> >> >> > +encountered a memory error which is not handled by KVM kernel m=
+odule and
+>> >> >> > +userspace may choose to handle it. The 'flags' field indicates =
+the memory
+>> >> >> > +properties of the exit.
+>> >> >> > +
+>> >> >> > + - KVM_MEMORY_EXIT_FLAG_PRIVATE - indicates the memory error is=
+ caused by
+>> >> >> > +   private memory access when the bit is set. Otherwise the mem=
+ory error is
+>> >> >> > +   caused by shared memory access when the bit is clear.
+>> >> >>=20
+>> >> >> What does a shared memory access failure entail?
+>> >> >
+>> >> > In the context of confidential computing usages, guest can issue a
+>> >> > shared memory access while the memory is actually private from the =
+host
+>> >> > point of view. This exit with bit 0 cleared gives userspace a chanc=
+e to
+>> >> > convert the private memory to shared memory on host.
+>> >>=20
+>> >> I think this should be explicit rather than implied by the absence of
+>> >> another flag. Sean suggested you might want flags for RWX failures so
+>> >> maybe something like:
+>> >>=20
+>> >> 	KVM_MEMORY_EXIT_SHARED_FLAG_READ	(1 << 0)
+>> >> 	KVM_MEMORY_EXIT_SHARED_FLAG_WRITE	(1 << 1)
+>> >> 	KVM_MEMORY_EXIT_SHARED_FLAG_EXECUTE	(1 << 2)
+>> >>         KVM_MEMORY_EXIT_FLAG_PRIVATE            (1 << 3)
+>> >
+>> > Yes, but I would not add 'SHARED' to RWX, they are not share memory
+>> > specific, private memory can also set them once introduced.
+>>=20
+>> OK so how about:
+>>=20
+>>  	KVM_MEMORY_EXIT_FLAG_READ	(1 << 0)
+>>  	KVM_MEMORY_EXIT_FLAG_WRITE	(1 << 1)
+>>  	KVM_MEMORY_EXIT_FLAG_EXECUTE	(1 << 2)
+>>         KVM_MEMORY_EXIT_FLAG_SHARED     (1 << 3)
+>>         KVM_MEMORY_EXIT_FLAG_PRIVATE    (1 << 4)
+>
+> We don't actually need a new bit, the opposite side of private is
+> shared, i.e. flags with KVM_MEMORY_EXIT_FLAG_PRIVATE cleared expresses
+> 'shared'.
 
-Konrad
->   drivers/tty/serial/qcom_geni_serial.c | 2 --
->   1 file changed, 2 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-> index 1db2795804e9..dd1491a72deb 100644
-> --- a/drivers/tty/serial/qcom_geni_serial.c
-> +++ b/drivers/tty/serial/qcom_geni_serial.c
-> @@ -317,7 +317,6 @@ static void qcom_geni_serial_abort_rx(struct uart_port *uport)
->   }
->   
->   #ifdef CONFIG_CONSOLE_POLL
-> -
->   static int qcom_geni_serial_get_char(struct uart_port *uport)
->   {
->   	struct qcom_geni_private_data *private_data = uport->private_data;
-> @@ -542,7 +541,6 @@ static int handle_rx_console(struct uart_port *uport, u32 bytes, bool drop)
->   {
->   	return -EPERM;
->   }
-> -
->   #endif /* CONFIG_SERIAL_QCOM_GENI_CONSOLE */
->   
->   static int handle_rx_uart(struct uart_port *uport, u32 bytes, bool drop)
+If that is always true and we never expect a 3rd type of memory that is
+fine. But given we are leaving room for expansion having an explicit bit
+allows for that as well as making cases of forgetting to set the flags
+more obvious.
+
+--=20
+Alex Benn=C3=A9e
