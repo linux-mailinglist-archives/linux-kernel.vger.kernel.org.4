@@ -2,150 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3F1862FA38
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 17:28:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B17C62FA47
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 17:29:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235347AbiKRQ2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 11:28:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48012 "EHLO
+        id S242043AbiKRQ3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 11:29:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241686AbiKRQ16 (ORCPT
+        with ESMTP id S235153AbiKRQ3p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 11:27:58 -0500
-Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38EE392B75;
-        Fri, 18 Nov 2022 08:27:55 -0800 (PST)
-Received: by mail-vk1-xa2f.google.com with SMTP id m18so2650294vka.10;
-        Fri, 18 Nov 2022 08:27:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=aP8xigMH6Cdm1FehOCVDAAEkuLsKjaAGKg6SNk11hm4=;
-        b=OTjo/3/lVabVMWDiNLgPqAXVGqRIpWx8gvTgzherYcnKTjbHY9eYeUmqjKxALgB6pv
-         d5haJ64lg6v/HMu5tYzW4aUQBG6vJka3W0/CpMw0oaumAZN/Zf4QpJkrwuSMIeM0pvdp
-         VgDCSu7Qo+KMGuRK4J2f6Bxlslls85Sh0fOjvTyquUo2EGEzcpa0rC5hyFpOTHc+ZUpC
-         W1LKg9Q2u645orMaA8H6nExHFVam0t60DF7qOXTN8raIvJI51IH3GxUhEWuxAnHbe7Tw
-         c5HGfpsJNnxkydeq/Z2TOYYSUPoq7B0tXBWGs0Ljap2EyOC1Q3L3vvS12/cYWh52codC
-         rCYQ==
+        Fri, 18 Nov 2022 11:29:45 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A1BEB4
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 08:29:43 -0800 (PST)
+Received: from mail-yw1-f200.google.com (mail-yw1-f200.google.com [209.85.128.200])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id B60CC3F2FF
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 16:29:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1668788982;
+        bh=n1AmhPidXStte0cr7nALfz6QHVHOy3+6QsUv/gwlQZ0=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=NRX9svCKgLumKXTC9eHZmpfHmbspFYcRC920hDYaHtUZqiZodUzP3U3krlpxecu8h
+         7VXC4QYZZJTtIWk7cbO7W3zm3bDs2QxJ6V1VEEGggGb3MGPBDS//Nv5aZtvQyWK/mJ
+         VgGApKq+5nEbeMyfCfp/wn79EpEIpo5cdjMLVnclXsiA1rJBEEd2Qqhwe6vCLSm1Xi
+         zr/ebWh9onAV6u9UNEyG1cZNZjaNt9s/0KRcbTJ5gTGztNkg7zuweAaRPSYlKBO8Gy
+         xR74r/RtCrdwKRfRZ3h4f5p/TCAYas1hCAbkdrB9aBPwst6goEXy9uNApzf2D8s1/s
+         xH0TbHSN9E+0w==
+Received: by mail-yw1-f200.google.com with SMTP id 00721157ae682-391bd92f931so44935407b3.22
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 08:29:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=aP8xigMH6Cdm1FehOCVDAAEkuLsKjaAGKg6SNk11hm4=;
-        b=CwqqBVAZc3kG4gdXHj8JGTHkXZZjedtnJkiiGD2NTbwWwBgb51aMEydPcywnKzCTzH
-         tKE5OobEC5lJ/2cgMDJFwsnnoJwR5IaUTlBffvpvsc1fuAnCW5h+ESdddEqTkN0XJk4L
-         PjSLLYo1wvcW7q6Rx17BXUPwsZwKvFuHZ/M1Q2HVdU5KK0pBl7LtEwe91zN5wKJnbada
-         U6ASRe+bxv1FgalfRL/1pZavlG1H1hqugseAI3g7HOeuO+Z88Yw5drp0DC+8oQ99Mp/R
-         xIOcdqP45ZNhLPTiKV681FogJ0no+8nFoCiaQk2q/8Ux6HMVehly23YBkiQXkiiMDSBA
-         Cvfw==
-X-Gm-Message-State: ANoB5pnWXS5nJdLfKl+7TUR82PQyLS9mzl59qQqSjov07/Ym8EB1m8Lv
-        4iNw6Z2nKLjq5Ij9tDb1YX1PX2O60sNiHelAivGi8h/y
-X-Google-Smtp-Source: AA0mqf5knH/KwKqTKOiQd/z0yhn+IqZ67caj8iY/xM73bDp4/rQAeV2haenOZy56wBGm1B6UliEIwrur+lSZUECx51s=
-X-Received: by 2002:a1f:900f:0:b0:3ab:42ba:252 with SMTP id
- s15-20020a1f900f000000b003ab42ba0252mr4415727vkd.8.1668788874135; Fri, 18 Nov
- 2022 08:27:54 -0800 (PST)
+        bh=n1AmhPidXStte0cr7nALfz6QHVHOy3+6QsUv/gwlQZ0=;
+        b=5Ej0B1bk1dWASkirbBi4lkZcS33H6RVBLEGsjTvackL5SaMR4DwYb3yyHAhW+qvVFK
+         jSBXA02Fc8gVK+V9biMY8PX6a9WTJUFCn6ohs8OxKYxCTg6L4G4lEEqR5qJoHGXG+IfB
+         Iu/2v45z6Kc7VycBr2TySDT4IUl62THpcj97TXu/pjpKfXrxOKcnxhsmK75lHyv/BfCc
+         7EfRtH23a6FT9pPevIR8fmoJluLiKftY9az1wgBqvpY0Aj4TipBqIFFk9F93OvAMGhzO
+         nTRUdDcoU1uUhsvot1INmwmRDL7HI4URox9a+6iScxJxzSK7EvgtBQBAZpLNWKtEpx4f
+         ujpg==
+X-Gm-Message-State: ANoB5pkDTi0xREFiiXoCI2WmWCKnwUXXHLIn7+7EejTDdwwtmoddrz2V
+        gQEpUsXn/6n2ykWVnAls+NkMlW+mzrIRqkqfNh9eA1NH5kh+H/auubVk7gvKvQfF5MrhkrSDLIo
+        aoPed3OmqWiiW8ywGgVWbYkLaBVdlL5JhfQh17wzpBNmbdvNcOagiPTco6A==
+X-Received: by 2002:a25:abe4:0:b0:6e7:cbc4:1ac3 with SMTP id v91-20020a25abe4000000b006e7cbc41ac3mr5843272ybi.559.1668788981697;
+        Fri, 18 Nov 2022 08:29:41 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7fF79tJ28ERAh84fO3zpC9Fb4cpHbLnel5aGbro1UBa0wzKWcqUZPvwK4sIlnHd/HGGprh2pvRWohAMVTvypE=
+X-Received: by 2002:a25:abe4:0:b0:6e7:cbc4:1ac3 with SMTP id
+ v91-20020a25abe4000000b006e7cbc41ac3mr5843258ybi.559.1668788981430; Fri, 18
+ Nov 2022 08:29:41 -0800 (PST)
 MIME-Version: 1.0
-References: <20221114215817.1953186-1-robertcnelson@gmail.com>
- <20221114215817.1953186-2-robertcnelson@gmail.com> <20221115200357.qa2rvw3clbz7unzq@symptom>
-In-Reply-To: <20221115200357.qa2rvw3clbz7unzq@symptom>
-From:   Robert Nelson <robertcnelson@gmail.com>
-Date:   Fri, 18 Nov 2022 10:27:27 -0600
-Message-ID: <CAOCHtYj-6C4-yesHOz0EzDxC+YyZNLUz7f9PxYstvCn_BaiOzQ@mail.gmail.com>
-Subject: Re: [PATCH v5 2/2] arm64: dts: ti: add k3-j721e-beagleboneai64
-To:     Nishanth Menon <nm@ti.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Andrew Davis <afd@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Jason Kridner <jkridner@beagleboard.org>,
-        Drew Fustini <drew@beagleboard.org>
+References: <20221118010627.70576-1-hal.feng@starfivetech.com> <20221118010627.70576-4-hal.feng@starfivetech.com>
+In-Reply-To: <20221118010627.70576-4-hal.feng@starfivetech.com>
+From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date:   Fri, 18 Nov 2022 17:29:25 +0100
+Message-ID: <CAJM55Z_f3K43TKpMKH6x8dQOW4jZMtPvHSvzG+Oeh3qWLWoj4Q@mail.gmail.com>
+Subject: Re: [PATCH v2 03/14] reset: Create subdirectory for StarFive drivers
+To:     Hal Feng <hal.feng@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Nishanth
-
-On Tue, Nov 15, 2022 at 2:04 PM Nishanth Menon <nm@ti.com> wrote:
-> > diff --git a/arch/arm64/boot/dts/ti/k3-j721e-beagleboneai64.dts b/arch/arm64/boot/dts/ti/k3-j721e-beagleboneai64.dts
-
-> > +
-> > +             led-4 {
-> > +                     gpios = <&main_gpio0 109 GPIO_ACTIVE_HIGH>;
-> > +                     linux,default-trigger = "phy0tx";
+On Fri, 18 Nov 2022 at 02:06, Hal Feng <hal.feng@starfivetech.com> wrote:
 >
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/leds/common.yaml#n82
+> From: Emil Renner Berthing <kernel@esmil.dk>
 >
-> we'd be Violating the oneOf conditions here.
-
-Removed..
-
-> > +
-> > +     vdd_mmc1: regulator-3 {
-> > +             compatible = "regulator-fixed";
-> > +             pinctrl-names = "default";
-> > +             pinctrl-0 = <&sd_pwr_en_pins_default>;
-> > +             regulator-name = "vdd_mmc1";
-> > +             regulator-min-microvolt = <3300000>;
-> > +             regulator-max-microvolt = <3300000>;
-> > +             regulator-boot-on;
-> > +             enable-active-high;
-> > +             vin-supply = <&vsys_3v3>;
-> > +             gpios = <&main_gpio0 82 GPIO_ACTIVE_HIGH>;
+> This moves the StarFive JH7100 reset driver to a new subdirectory in
+> preparation for adding more StarFive reset drivers.
 >
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/regulator/fixed-regulator.yaml
+> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+> ---
+>  MAINTAINERS                                          | 4 ++--
+>  drivers/reset/Kconfig                                | 8 +-------
+>  drivers/reset/Makefile                               | 2 +-
+>  drivers/reset/starfive/Kconfig                       | 8 ++++++++
+>  drivers/reset/starfive/Makefile                      | 2 ++
+>  drivers/reset/{ => starfive}/reset-starfive-jh7100.c | 0
+>  6 files changed, 14 insertions(+), 10 deletions(-)
+>  create mode 100644 drivers/reset/starfive/Kconfig
+>  create mode 100644 drivers/reset/starfive/Makefile
+>  rename drivers/reset/{ => starfive}/reset-starfive-jh7100.c (100%)
 >
-> s/gpios/gpio ?
-
-cleaned up these old gpios -> gpio references...
-
-> > +&main_gpio0 {
-> > +     gpio-line-names = "", "P9_11", "P9_13", "P8_17", "P8_18", /* 0-4 */
-> > +             "P8_22", "P8_24", "P8_34", "P8_36", "P8_38A", /* 5-9 */
-> > +             "P9_23", "P8_37B", "P9_26B", "P9_24B", "P8_08", /* 10-14 */
-> > +             "P8_07", "P8_10", "P8_09", "P9_42B", "", /* 15-19 */
-> > +             "P8_03", "TYPEC_PWR_ST", "M2_RSTz", "M2_I2C_ALERT#", "P8_35A", /* 20-24 */
-> > +             "P8_33A", "P8_32A", "", "P9_17A", "", /* 25-29 */
-> > +             "P8_21", "P8_23", "P8_31A", "P8_05", "P8_06", /* 30-34 */
-> > +             "P8_25", "M2_W_DISABLE1#", "M2_W_DISABLE2#", "P9_22A (BOOTMODE1)", "P9_21A", /* 35-39 */
-> > +             "P9_18A", "DSI_I2C_SCL", "DSI_I2C_SDA", "P9_28B", "P9_30B", /* 40-44 */
-> > +             "P9_12", "P9_27A", "P9_15", "P8_04 (BOOTMODE2)", "VCC_DP_EN", /* 45-49 */
-> > +             "P9_33B", "P8_26", "P9_31B", "P9_29B", "P9_39B", /* 50-54 */
-> > +             "P9_35B", "P9_36B", "P9_37B", "P9_38B", "P8_12", /* 55-59 */
-> > +             "P8_11 (BOOTMODE7)", "P8_15", "P8_16", "", "", /* 60-64 */
-> > +             "P8_43", "P8_44", "P8_41", "P8_42 (BOOTMODE6)", "P8_39", /* 65-69 */
-> > +             "P8_40", "P8_27", "P8_28", "P8_29", "P8_30", /* 70-74 */
-> > +             "P8_14", "P8_20", "P9_20B", "P9_19B", "P8_45", /* 75-79 */
-> > +             "P8_46 (BOOTMODE3)", "P9_40B", "VDD_SD_EN", "CSI_I2C_SCL", "CSI_I2C_SDA", /* 80-84 */
-> > +             "M2_I2S_SCK", "M2_I2S_WS", "M2_I2S_IN", "P8_19", "P8_13", /* 85-89 */
-> > +             "P9_21B", "P9_22B", "M2_I2S_OUT", "P9_14", "P9_16", /* 90-94 */
-> > +             "USR1", "USR0", "USR2", "DSI_GPIO1", "FAN_PWM", /* 95-99 */
-> > +             "FAN_TACH", "CSI1_GPIO1", "CSI0_GPIO2", "CSI0_GPIO1", "P9_25B", /* 100-104 */
-> > +             "P8_38B", "P8_37A", "CSI1_GPIO2", "DSI_GPIO2", "USR4", /* 105-109 */
-> > +             "USR3", "P8_33B", "DP_HPD", "M2_UART_CTSn", "M2_UART_RTSn", /* 110-114 */
-> > +             "P9_17B", "P8_35B", "VDD_SD_SEL", "P9_26A", "P9_24A", /* 115-119 */
-> > +             "P9_18B", "CONSOLE_RX", "CONSOLE_TX", "P9_42A", "P9_27B", /* 120-124 */
-> > +             "M2_UART_RX", "M2_UART_TX", "P9_25A"; /* 125-127 */
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index d43daa89d5f1..e6f1060e7964 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -19613,11 +19613,11 @@ F:    Documentation/devicetree/bindings/pinctrl/starfive,jh7100-pinctrl.yaml
+>  F:     drivers/pinctrl/starfive/
+>  F:     include/dt-bindings/pinctrl/pinctrl-starfive-jh7100.h
 >
-> Can we drop the gpio-line-names description for now?
-> gpio-line-names: maxItems: 32 in
-> Documentation/devicetree/bindings/gpio/ti,omap-gpio.yaml - that probably
-> should be fixed prior to this else we get the dtbs_check warning around
-> this. The max count actually depends on ti,ngpio - So, I think the
-> schema is probably not accurate here.
+> -STARFIVE JH7100 RESET CONTROLLER DRIVER
+> +STARFIVE JH7100 RESET CONTROLLER DRIVERS
+>  M:     Emil Renner Berthing <kernel@esmil.dk>
+>  S:     Maintained
+>  F:     Documentation/devicetree/bindings/reset/starfive,jh7100-reset.yaml
+> -F:     drivers/reset/reset-starfive-jh7100.c
+> +F:     drivers/reset/starfive/
 
-Removed for now, till we are ready..
+When this entry covers all StarFive reset drivers the header should
+also match. Eg.
+STARFIVE RESET CONTROLLER DRIVERS
 
-Regards,
-
--- 
-Robert Nelson
-https://rcn-ee.com/
+>  F:     include/dt-bindings/reset/starfive-jh7100.h
+>
+>  STATIC BRANCH/CALL
+> diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
+> index de176c2fbad9..1e8e1c4954cd 100644
+> --- a/drivers/reset/Kconfig
+> +++ b/drivers/reset/Kconfig
+> @@ -232,13 +232,6 @@ config RESET_SOCFPGA
+>           This enables the reset driver for the SoCFPGA ARMv7 platforms. This
+>           driver gets initialized early during platform init calls.
+>
+> -config RESET_STARFIVE_JH7100
+> -       bool "StarFive JH7100 Reset Driver"
+> -       depends on SOC_STARFIVE || COMPILE_TEST
+> -       default SOC_STARFIVE
+> -       help
+> -         This enables the reset controller driver for the StarFive JH7100 SoC.
+> -
+>  config RESET_SUNPLUS
+>         bool "Sunplus SoCs Reset Driver" if COMPILE_TEST
+>         default ARCH_SUNPLUS
+> @@ -320,6 +313,7 @@ config RESET_ZYNQ
+>         help
+>           This enables the reset controller driver for Xilinx Zynq SoCs.
+>
+> +source "drivers/reset/starfive/Kconfig"
+>  source "drivers/reset/sti/Kconfig"
+>  source "drivers/reset/hisilicon/Kconfig"
+>  source "drivers/reset/tegra/Kconfig"
+> diff --git a/drivers/reset/Makefile b/drivers/reset/Makefile
+> index 3e7e5fd633a8..fee17a0e3a16 100644
+> --- a/drivers/reset/Makefile
+> +++ b/drivers/reset/Makefile
+> @@ -1,6 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  obj-y += core.o
+>  obj-y += hisilicon/
+> +obj-$(CONFIG_SOC_STARFIVE) += starfive/
+>  obj-$(CONFIG_ARCH_STI) += sti/
+>  obj-$(CONFIG_ARCH_TEGRA) += tegra/
+>  obj-$(CONFIG_RESET_A10SR) += reset-a10sr.o
+> @@ -30,7 +31,6 @@ obj-$(CONFIG_RESET_RZG2L_USBPHY_CTRL) += reset-rzg2l-usbphy-ctrl.o
+>  obj-$(CONFIG_RESET_SCMI) += reset-scmi.o
+>  obj-$(CONFIG_RESET_SIMPLE) += reset-simple.o
+>  obj-$(CONFIG_RESET_SOCFPGA) += reset-socfpga.o
+> -obj-$(CONFIG_RESET_STARFIVE_JH7100) += reset-starfive-jh7100.o
+>  obj-$(CONFIG_RESET_SUNPLUS) += reset-sunplus.o
+>  obj-$(CONFIG_RESET_SUNXI) += reset-sunxi.o
+>  obj-$(CONFIG_RESET_TI_SCI) += reset-ti-sci.o
+> diff --git a/drivers/reset/starfive/Kconfig b/drivers/reset/starfive/Kconfig
+> new file mode 100644
+> index 000000000000..cddebdba7177
+> --- /dev/null
+> +++ b/drivers/reset/starfive/Kconfig
+> @@ -0,0 +1,8 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +
+> +config RESET_STARFIVE_JH7100
+> +       bool "StarFive JH7100 Reset Driver"
+> +       depends on SOC_STARFIVE || COMPILE_TEST
+> +       default SOC_STARFIVE
+> +       help
+> +         This enables the reset controller driver for the StarFive JH7100 SoC.
+> diff --git a/drivers/reset/starfive/Makefile b/drivers/reset/starfive/Makefile
+> new file mode 100644
+> index 000000000000..670d049423f5
+> --- /dev/null
+> +++ b/drivers/reset/starfive/Makefile
+> @@ -0,0 +1,2 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +obj-$(CONFIG_RESET_STARFIVE_JH7100)            += reset-starfive-jh7100.o
+> diff --git a/drivers/reset/reset-starfive-jh7100.c b/drivers/reset/starfive/reset-starfive-jh7100.c
+> similarity index 100%
+> rename from drivers/reset/reset-starfive-jh7100.c
+> rename to drivers/reset/starfive/reset-starfive-jh7100.c
+> --
+> 2.38.1
+>
