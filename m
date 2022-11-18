@@ -2,102 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98E6262FA5C
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 17:35:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B51062FA65
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 17:37:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241525AbiKRQfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 11:35:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53032 "EHLO
+        id S235346AbiKRQhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 11:37:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234828AbiKRQe4 (ORCPT
+        with ESMTP id S235329AbiKRQgv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 11:34:56 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D9FD55C763;
-        Fri, 18 Nov 2022 08:34:55 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0174723A;
-        Fri, 18 Nov 2022 08:35:02 -0800 (PST)
-Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.35.13])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 506D03F663;
-        Fri, 18 Nov 2022 08:34:53 -0800 (PST)
-Date:   Fri, 18 Nov 2022 16:34:50 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Chris Mason <clm@meta.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Florent Revest <revest@chromium.org>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        KP Singh <kpsingh@kernel.org>,
-        Brendan Jackman <jackmanb@google.com>, markowsky@google.com,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Xu Kuohai <xukuohai@huawei.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [RFC 0/1] BPF tracing for arm64 using fprobe
-Message-ID: <Y3e0KtnQrudxiZbz@FVFF77S0Q05N.cambridge.arm.com>
-References: <20221108220651.24492-1-revest@chromium.org>
- <CAADnVQ+BWpzqOV8dGCR=A3dR3u60CkBkqSXEQHe2kVqFzsgnHw@mail.gmail.com>
- <20221117121617.4e1529d3@gandalf.local.home>
- <d24cded7-87b1-89f5-fc2a-5346669f6d57@meta.com>
- <20221117174030.0170cd36@gandalf.local.home>
+        Fri, 18 Nov 2022 11:36:51 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 482CC5DBA4;
+        Fri, 18 Nov 2022 08:36:50 -0800 (PST)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AIFvG58010273;
+        Fri, 18 Nov 2022 16:36:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=mpogp5vCRgOwp1WQwdYOuCzU/UBrZghEL1GxZdyqrV8=;
+ b=QxKd2kVGQwzR8jlINF784WMDfODnUuV9Df0ex4fXlHn8Cbufu0bAB5XIbA3dN3gTBYPp
+ bY2Ga2P/ghvEUbG7ECMdQIgPweCykS4rMspGkVHOESG0mq55zNfPDI5g4EeoLEF61iXq
+ gOtZFu3BII2evSw2ZVO1D3G2tsknw1NVs6ETATCJFUdzAhp6/TbL56rSflsuVURtZx66
+ NY2ERdOqb85fqtWtX9LzrUDrZxJIbE3CTTY/ELrGc5kyNUZ1YFJ1U1yPFoJeoXIMzsO7
+ nkwvfWKn4VCRvF+A3zFPb9jtwGIAO+Gb4691Wu2wqgYlbLgmJxzpJkHJid7sYpgqqoUQ QQ== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kx0n1j61r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 18 Nov 2022 16:36:39 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AIGac8C019001
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 18 Nov 2022 16:36:38 GMT
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Fri, 18 Nov 2022 08:36:38 -0800
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
+        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <bjorn.andersson@linaro.org>
+CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        <quic_abhinavk@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v4 0/2] Add data-lanes and link-frequencies to dp_out endpoint
+Date:   Fri, 18 Nov 2022 08:36:27 -0800
+Message-ID: <1668789389-14617-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221117174030.0170cd36@gandalf.local.home>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: eieNp9a2o0jYlWfpvAUsaNzZ8D-fdAxJ
+X-Proofpoint-GUID: eieNp9a2o0jYlWfpvAUsaNzZ8D-fdAxJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-18_04,2022-11-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 phishscore=0 malwarescore=0 adultscore=0 clxscore=1015
+ spamscore=0 priorityscore=1501 mlxscore=0 bulkscore=0 suspectscore=0
+ mlxlogscore=798 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211180096
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 05:40:30PM -0500, Steven Rostedt wrote:
-> On Thu, 17 Nov 2022 16:55:12 -0500
-> Chris Mason <clm@meta.com> wrote:
-> 
-> > On 11/17/22 12:16 PM, Steven Rostedt wrote:
+Add DP both data-lanes and link-frequencies property to dp_out endpoint and support
+functions to DP driver.
 
-> > The short answer to your concerns is that you can't replace kernel
-> > functions from proprietary BPF programs.  The LSM and TCP congestion
-> > control features intentionally have GPL only support functions in the
-> > way.  bpf_probe_read_kernel() is also GPL only and massively limits the
-> > things that can be done from proprietary code.
-> 
-> ^^^^^^^^^^^^^^^^^
-> 
-> That's the part I wanted to hear. But just the fact of replacing a kernel
-> function with BPF code seems a bit concerning.
+Kuogee Hsieh (2):
+  arm64: dts: qcom: add data-lanes and link-freuencies into dp_out
+    endpoint
+  drm/msm/dp: add support of max dp link rate
 
-> > This list of helpers is pretty current and details which ones are GPL only:
-> > 
-> > https://github.com/iovisor/bcc/blob/master/docs/kernel-versions.md#helpers
-> > 
-> > I know there's a long and glorious history of collaboration around these
-> > parts of bpf and ftrace.  I really hope this time around we all come
-> > away feeling like the technical discussion made both projects better.
-> > Mark and Florent today certainly made me think that was the direction we
-> > were headed.
-> > 
-> > Along these lines, I'm also hoping to avoid diving into old debates and
-> > alarmist conclusions about GPL compliance and signed bpf programs. Or,
-> 
-> Not alarmist, but concern as being able to modify what a kernel function can
-> do is not something I take lightly.
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi   |  9 +++++++-
+ arch/arm64/boot/dts/qcom/sc7180.dtsi           |  5 ----
+ arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi | 10 +++++++-
+ arch/arm64/boot/dts/qcom/sc7280.dtsi           |  6 +----
+ drivers/gpu/drm/msm/dp/dp_display.c            |  4 ++++
+ drivers/gpu/drm/msm/dp/dp_panel.c              |  7 +++---
+ drivers/gpu/drm/msm/dp/dp_panel.h              |  1 +
+ drivers/gpu/drm/msm/dp/dp_parser.c             | 32 +++++++++++++++++++-------
+ drivers/gpu/drm/msm/dp/dp_parser.h             |  2 ++
+ 9 files changed, 53 insertions(+), 23 deletions(-)
 
-FWIW, given that the aim here seems to be to expose all kernel internals to be
-overridden arbitrarily, I'm also concerned that there's a huge surface area for
-issues with maintainability, robustness/correctness, and security.
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
-I really don't want to be stuck in a position where someone argues that all
-kernel internal functions are ABI and need to stay around as-is to be hooked by
-eBPF, and I hope that we all agree that there are no guarantees on that front.
-
-Thanks,
-Mark.
