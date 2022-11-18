@@ -2,140 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 268E162FEC3
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 21:25:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A29E62FED1
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 21:27:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230498AbiKRUZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 15:25:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58570 "EHLO
+        id S230424AbiKRU1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 15:27:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiKRUZT (ORCPT
+        with ESMTP id S229829AbiKRU1g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 15:25:19 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4696D5F848;
-        Fri, 18 Nov 2022 12:25:18 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id h132so6578790oif.2;
-        Fri, 18 Nov 2022 12:25:18 -0800 (PST)
+        Fri, 18 Nov 2022 15:27:36 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E9F3A7
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 12:27:34 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id s10so4685559ioa.5
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 12:27:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XYhudk4n0csLtHKc5OqIA86HMN/FrexIaMhEuyhh/as=;
-        b=MmI0I+1r38yYv5LPgjxyeS7G/aAZKj/Z1FzGVTFOLjdvcaesIb4AMQhEAGxfpJSSAO
-         a465wj0cKQpDBfrQbsNf6z75BxfMcABr3lrqtufqrZCVMssFE7WaXxLrOIcgdj+tcWH5
-         UAL6q1Nx2u3Cky7pu6rtGCZFt6TYuydYXfuxjOoznwI6t4292SqW6R1P4+YZgxLgCXvK
-         deCE+A/cNcMVArxkG9Q/oxFa0QIMlLbu3b7rvXtmXdm2H9fmHxQ6/6lzwaitdfbYTkAM
-         dHI/+hN+PbD2ykrha0bxhGjMlNn159Bala0AIzGI1fXsUckpARYhlggOkcBJc19CKkJE
-         BlZQ==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=j6b228sSBdmEe622PJPDcidu4wKiIoq5NrJur1C1NIQ=;
+        b=Rp2BQyogGJZQ7ZJZU5zktR/shwNgmYdk+YIhpqwuoI1mEaAsPi6k4IGEGidbqcsErp
+         0amawcgipK1ioOyWiU/787JHnl9fgdRHjZv9gQE+OL3KOGlcI8HWVTbO9eAtWkRm+PYU
+         EDs8AG73P2oeMBc/EOKlKeCXmggbkHjUzGX14=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XYhudk4n0csLtHKc5OqIA86HMN/FrexIaMhEuyhh/as=;
-        b=0JqFIkkk7230wHL3RWFpKbjrP1Yxb7YkLa0sv+ewRM6Agrvi9Bd4iv1qxnpf4m7UgI
-         qOCEZ2WS0T43IuZF4aN5fQ99dNtKMUoJBreKdMyjMije+qJDZsPfcOSm/c1z9BkrtdJS
-         x/FkD9C3KRam/6GnannJPoFksk4NjY1URgCdK8QS9Aapx/tCVv3nPzvhf9xd0GZmn/hS
-         9lyCa9w8V1FZntK+48FqOPM459qnDAvfxqao215s0bcb5dKbo/tsZz+/WUYpo9cZvuKn
-         pon7vIR+kHGe8YHbfIcjVTOSJHNulijpLqiyMUsnk9QrqhgaV/+EqK5YSLN4GFzTNkXw
-         iFZw==
-X-Gm-Message-State: ANoB5pkPa0crFSzb0A3K3RBIwEUevHdPoCNWFGjRUMGxU3F2MU4e/WnK
-        0A5qGfxIHRcEEvcP3jWSc29qqUt0aQdBzw8JajA=
-X-Google-Smtp-Source: AA0mqf7O3LV8jYqCnEp37MCuUsvOT+0DDbKU874q78jM901EOHTiXZq9fQpE1W7Q4WuTtQ6WdlnOsuto8TGzEim9Tx8=
-X-Received: by 2002:a05:6808:295:b0:357:670f:9e4e with SMTP id
- z21-20020a056808029500b00357670f9e4emr7419778oic.46.1668803117591; Fri, 18
- Nov 2022 12:25:17 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j6b228sSBdmEe622PJPDcidu4wKiIoq5NrJur1C1NIQ=;
+        b=m/zIwpBvQPM9to0K8cO9mu+c4wDfQ/xWZ97dCCqTGjjhF6rKMhfk0T16zENsYT7oRb
+         YgL6qgIJBsAhOvBYliLZxm/RjcmWlCiupq/LVNTxMKkxVYQ7pRgQaImbfI0wBuIp5ZK9
+         KURxtX8A09vN+UjF9PsKTxt4JMyyfeGimISaS7dPW6BUGqOx8P5EhaBGmUdhpGbqQKTg
+         gq3/bSjVvaLimbHJgpecibQS+0sD/4ABNQF11x82RRNmbyLFMyIFg/xCWIFMqHHcGFID
+         9Ai0v1aexEc22LlXQbAi9nrn83TMEmLveM3nItovzFwGYvIPcqIDd+eKLbZhiVqcBeWE
+         BGJA==
+X-Gm-Message-State: ANoB5pnMGcXyTOW/TmYKy7DFywpzLHtGI+lmvb5/JFbPLoWafHjv72iL
+        7RyKcJwxkyHGgMLxmSHCz+j96g==
+X-Google-Smtp-Source: AA0mqf7OCpSwusxcSllfX3v77am0db2DyFyUduQIBkL2WKNHjBjLxPzprfSPv7kIZaIu2CsVhWh+LA==
+X-Received: by 2002:a5e:df46:0:b0:6bb:e329:fcd7 with SMTP id g6-20020a5edf46000000b006bbe329fcd7mr4127553ioq.206.1668803253589;
+        Fri, 18 Nov 2022 12:27:33 -0800 (PST)
+Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
+        by smtp.gmail.com with UTF8SMTPSA id o8-20020a056e0214c800b002f9f44625fbsm1512925ilk.52.2022.11.18.12.27.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Nov 2022 12:27:33 -0800 (PST)
+Date:   Fri, 18 Nov 2022 20:27:32 +0000
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>
+Cc:     helgaas@kernel.org, linux-pci@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
+        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
+        quic_ramkri@quicinc.com, manivannan.sadhasivam@linaro.org,
+        swboyd@chromium.org, dmitry.baryshkov@linaro.org,
+        Prasad Malisetty <quic_pmaliset@quicinc.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Saheed O. Bolarinwa" <refactormyself@gmail.com>,
+        Vidya Sagar <vidyas@nvidia.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+Subject: Re: [PATCH v7] PCI/ASPM: Update LTR threshold based upon reported
+ max latencies
+Message-ID: <Y3fqtMKzRMAI7ivW@google.com>
+References: <1663315719-21563-1-git-send-email-quic_krichai@quicinc.com>
 MIME-Version: 1.0
-References: <20221114222046.386560-1-lyude@redhat.com> <CADnq5_PrarJPZQu6uRwDdCqhZr7Hvbtxo_HuhiQ7H1DYRgSyqQ@mail.gmail.com>
-In-Reply-To: <CADnq5_PrarJPZQu6uRwDdCqhZr7Hvbtxo_HuhiQ7H1DYRgSyqQ@mail.gmail.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Fri, 18 Nov 2022 15:25:06 -0500
-Message-ID: <CADnq5_O+bTG3992uZKvJct6-iRWL9nW1xEzXhh3SShm1=VLFtQ@mail.gmail.com>
-Subject: Re: [PATCH] drm/amd/dc/dce120: Fix audio register mapping, stop
- triggering KASAN
-To:     Lyude Paul <lyude@redhat.com>,
-        "Wentland, Harry" <Harry.Wentland@amd.com>
-Cc:     amd-gfx@lists.freedesktop.org, Alan Liu <HaoPing.Liu@amd.com>,
-        Leo Li <sunpeng.li@amd.com>, David Airlie <airlied@gmail.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        stable@vger.kernel.org,
-        Aurabindo Pillai <aurabindo.pillai@amd.com>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1663315719-21563-1-git-send-email-quic_krichai@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 4:40 PM Alex Deucher <alexdeucher@gmail.com> wrote:
->
-> On Mon, Nov 14, 2022 at 5:21 PM Lyude Paul <lyude@redhat.com> wrote:
-> >
-> > There's been a very long running bug that seems to have been neglected for
-> > a while, where amdgpu consistently triggers a KASAN error at start:
-> >
-> >   BUG: KASAN: global-out-of-bounds in read_indirect_azalia_reg+0x1d4/0x2a0 [amdgpu]
-> >   Read of size 4 at addr ffffffffc2274b28 by task modprobe/1889
-> >
-> > After digging through amd's rather creative method for accessing registers,
-> > I eventually discovered the problem likely has to do with the fact that on
-> > my dce120 GPU there are supposedly 7 sets of audio registers. But we only
-> > define a register mapping for 6 sets.
-> >
-> > So, fix this and fix the KASAN warning finally.
-> >
-> > Signed-off-by: Lyude Paul <lyude@redhat.com>
-> > Cc: stable@vger.kernel.org
->
-> This is the correct fix for asics having 7 audio instances.  It looks
-> correct to me, assuming DCE12 actually has 7 audio instances.
-> @Wentland, Harry Do you know off hand?  If you can confirm that, the
-> patch is:
-> Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
+On Fri, Sep 16, 2022 at 01:38:37PM +0530, Krishna chaitanya chundru wrote:
+> In ASPM driver, LTR threshold scale and value are updated based on
+> tcommon_mode and t_poweron values. In Kioxia NVMe L1.2 is failing due to
+> LTR threshold scale and value are greater values than max snoop/non-snoop
+> value.
+> 
+> Based on PCIe r4.1, sec 5.5.1, L1.2 substate must be entered when
+> reported snoop/no-snoop values is greater than or equal to
+> LTR_L1.2_THRESHOLD value.
+> 
+> Signed-off-by: Prasad Malisetty  <quic_pmaliset@quicinc.com>
+> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+> Acked-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+> 
+> I am taking this patch forward as prasad is no more working with our org.
+> changes since v6:
+> 	- Rebasing with pci/next.
+> changes since v5:
+> 	- no changes, just reposting as standalone patch instead of reply to
+> 	  previous patch.
+> Changes since v4:
+> 	- Replaced conditional statements with min and max.
+> changes since v3:
+> 	- Changed the logic to include this condition "snoop/nosnoop
+> 	  latencies are not equal to zero and lower than LTR_L1.2_THRESHOLD"
+> Changes since v2:
+> 	- Replaced LTRME logic with max snoop/no-snoop latencies check.
+> Changes since v1:
+> 	- Added missing variable declaration in v1 patch
+> ---
+>  drivers/pci/pcie/aspm.c | 30 ++++++++++++++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+> 
+> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
+> index 928bf64..2bb8470 100644
+> --- a/drivers/pci/pcie/aspm.c
+> +++ b/drivers/pci/pcie/aspm.c
+> @@ -486,13 +486,35 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
+>  {
+>  	struct pci_dev *child = link->downstream, *parent = link->pdev;
+>  	u32 val1, val2, scale1, scale2;
+> +	u32 max_val, max_scale, max_snp_scale, max_snp_val, max_nsnp_scale, max_nsnp_val;
+>  	u32 t_common_mode, t_power_on, l1_2_threshold, scale, value;
+>  	u32 ctl1 = 0, ctl2 = 0;
+>  	u32 pctl1, pctl2, cctl1, cctl2;
+> +	u16 ltr;
+> +	u16 max_snoop_lat, max_nosnoop_lat;
+>  
+>  	if (!(link->aspm_support & ASPM_STATE_L1_2_MASK))
+>  		return;
+>  
+> +	ltr = pci_find_ext_capability(child, PCI_EXT_CAP_ID_LTR);
+> +	if (!ltr)
+> +		return;
+> +
+> +	pci_read_config_word(child, ltr + PCI_LTR_MAX_SNOOP_LAT, &max_snoop_lat);
+> +	pci_read_config_word(child, ltr + PCI_LTR_MAX_NOSNOOP_LAT, &max_nosnoop_lat);
+> +
+> +	max_snp_scale = (max_snoop_lat & PCI_LTR_SCALE_MASK) >> PCI_LTR_SCALE_SHIFT;
+> +	max_snp_val = max_snoop_lat & PCI_LTR_VALUE_MASK;
+> +
+> +	max_nsnp_scale = (max_nosnoop_lat & PCI_LTR_SCALE_MASK) >> PCI_LTR_SCALE_SHIFT;
+> +	max_nsnp_val = max_nosnoop_lat & PCI_LTR_VALUE_MASK;
+> +
+> +	/* choose the greater max scale value between snoop and no snoop value*/
+> +	max_scale = max(max_snp_scale, max_nsnp_scale);
+> +
+> +	/* choose the greater max value between snoop and no snoop scales */
+> +	max_val = max(max_snp_val, max_nsnp_val);
 
-The driver currently defines 7 audio instances, whether or not it
-actually has 7 remains to be seen but the code as is is broken, so
-I'll apply this.  If it turns out there are only 6 instances we can
-fix the count later.  Applied.  Thanks!
+I suppose the goal is to dermine the max of snoop/no-snoop latency. Taking the
+max of scale and value separately won't yield the correct result when the scale
+is different for snoop vs no-snoop. Instead you need to convert scale + value
+to ns and determine the max of that (as done for 't_power_on').
 
-Alex
+> +
+>  	/* Choose the greater of the two Port Common_Mode_Restore_Times */
+>  	val1 = (parent_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
+>  	val2 = (child_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
+> @@ -525,6 +547,14 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
+>  	 */
+>  	l1_2_threshold = 2 + 4 + t_common_mode + t_power_on;
+>  	encode_l12_threshold(l1_2_threshold, &scale, &value);
+> +
+> +	/*
+> +	 * Based on PCIe r4.1, sec 5.5.1, L1.2 substate must be entered when reported
+> +	 * snoop/no-snoop values are greater than or equal to LTR_L1.2_THRESHOLD value.
+> +	 */
+> +	scale = min(scale, max_scale);
+> +	value = min(value, max_val);
 
->
->
-> > ---
-> > Sending this one separately from the rest of my fixes since:
-> >
-> > * It's definitely completely unrelated to the Gitlab 2171 issue
-> > * I'm not sure if this is the correct fix since it's in DC
-> >
-> >  drivers/gpu/drm/amd/display/dc/dce120/dce120_resource.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/gpu/drm/amd/display/dc/dce120/dce120_resource.c b/drivers/gpu/drm/amd/display/dc/dce120/dce120_resource.c
-> > index 1b70b78e2fa15..af631085e88c5 100644
-> > --- a/drivers/gpu/drm/amd/display/dc/dce120/dce120_resource.c
-> > +++ b/drivers/gpu/drm/amd/display/dc/dce120/dce120_resource.c
-> > @@ -359,7 +359,8 @@ static const struct dce_audio_registers audio_regs[] = {
-> >         audio_regs(2),
-> >         audio_regs(3),
-> >         audio_regs(4),
-> > -       audio_regs(5)
-> > +       audio_regs(5),
-> > +       audio_regs(6),
-> >  };
-> >
-> >  #define DCE120_AUD_COMMON_MASK_SH_LIST(mask_sh)\
-> > --
-> > 2.37.3
-> >
+This is wrong for the same reason as above, as Bjorn also pointed out in an earlier
+comment.
+
+Even with the values calculated correctly I'm not sure it this is the right
+thing to do, but I know little about LTR. In any case this patch reduces
+power consumption of the Kioxia NVMe significantly, essentially by
+programming an LTR_L1.2_THRESHOLD of 0ns instead of 86ns.
+
+I just came across Bjorn's recent 'PCI/ASPM: Fix L1SS issues' series [1] that
+corrects the LTR_L1.2_THRESHOLD calculation and landed upstream, unfortunately
+it doesn't magically fix the issues with the Kioxia NVMe :(
+
+[1] https://lore.kernel.org/lkml/ca836507-50ca-13bc-ef88-7f69b1333c99@linux.intel.com/T/#m3f223b7e582052159de7538bcaf2bea6d2071472
