@@ -2,91 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DEBB62F973
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 16:39:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B592962F98E
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 16:41:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235357AbiKRPjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 10:39:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53406 "EHLO
+        id S242014AbiKRPlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 10:41:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231194AbiKRPjQ (ORCPT
+        with ESMTP id S242352AbiKRPlN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 10:39:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07DB85986A
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 07:39:15 -0800 (PST)
+        Fri, 18 Nov 2022 10:41:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE0AB78D4B;
+        Fri, 18 Nov 2022 07:41:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 79C6D625F3
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:39:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A944C433D6;
-        Fri, 18 Nov 2022 15:39:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 96084B8244F;
+        Fri, 18 Nov 2022 15:41:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E359AC433B5;
+        Fri, 18 Nov 2022 15:41:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668785954;
-        bh=iz4McvZM/E2o496nT649orB1f9ZWyItmYXL8nqRS8Ok=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=s0ioyr4/BLSd6K9vPXPkioUu+r6OHx2WyltYbPuQuV9D3I5ajp32xVnU0/JBAi4ak
-         SgOgmftikuBKUn2fBPm6Vsx1LnnUBEeU7iy8GkwO1OqFTtt70zO0sm4pQslPloC+jV
-         FZvVTvUbFTvL5zmT6Vcl9fkT99j9gFzzsRvA/ZW5nZANycq1ugvTqv2K5OyuQjbBBS
-         jC5xtElKQuoPoyx9OyO8zCfcqx6zvX4cbZcjS0KKuCvIyUTz/aKp1fhsyMo1PB/OPx
-         lpp9W+KSTY/Ib6q83/EFHlxDvucyftbP8YB01C+Zr2qyzcZ6fX8nWlrZJ72KV4Ku4s
-         8ywbeBckn8+nA==
-Date:   Fri, 18 Nov 2022 15:39:11 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Bard Liao <yung-chuan.liao@linux.intel.com>
-Cc:     tiwai@suse.de, alsa-devel@alsa-project.org,
-        pierre-louis.bossart@linux.intel.com, vkoul@kernel.org,
-        bard.liao@intel.com, peter.ujfalusi@linux.intel.com,
-        ranjani.sridharan@linux.intel.com, vinod.koul@linaro.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] ASoC/soundwire: remove is_sdca boolean property
-Message-ID: <Y3enHzY8XY70/nWR@sirena.org.uk>
-References: <20221118025807.534863-1-yung-chuan.liao@linux.intel.com>
- <20221118025807.534863-2-yung-chuan.liao@linux.intel.com>
+        s=k20201202; t=1668786063;
+        bh=R4xBJmP/myMQ0Kip18TRQGWMGPC+256bduAJsZzqgm8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Pt0nEkiYP3Ivn4a4HL4M+vbconKZ7ATVzTHnVeCQ+LegKL8X286/oC1lyMsME/OXW
+         ZMbTuE2qFVQLMuF8va+AOyLbVPqK30Yu74zham5+Guz2H9iplrRwJvZk2Is293TSPD
+         Skuk3pPei4Cuitu/21dNYeFzCwmxHf7v59A+7rRRAxJE6dirbxk9Ksfgz/IFX7j6xF
+         tpu6JsI5ZPCdgloE6dPrd09m5fsG22G+Wyl0onBDvdhzivzrtHmy7kfgJoE0jqoS+j
+         x+zKiG91/B9E/11/sPBgiRXd2CMmtjSTAlm1xjUE/xgVSZcw2IqTkxjYikZ4zsPMWw
+         x/ux5+87roo7Q==
+Message-ID: <ebac6d76-6d6f-85e4-769c-b7e62c84e47b@kernel.org>
+Date:   Fri, 18 Nov 2022 08:41:00 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pRbbpnwvQFI8Ig1m"
-Content-Disposition: inline
-In-Reply-To: <20221118025807.534863-2-yung-chuan.liao@linux.intel.com>
-X-Cookie: Ego sum ens omnipotens.
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.1
+Subject: Re: [PATCH] ipv4/fib: Replace zero-length array with
+ DECLARE_FLEX_ARRAY() helper
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>, Jakub Kicinski <kuba@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+References: <20221118042142.never.400-kees@kernel.org>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <20221118042142.never.400-kees@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 11/17/22 9:21 PM, Kees Cook wrote:
+> Zero-length arrays are deprecated[1] and are being replaced with
+> flexible array members in support of the ongoing efforts to tighten the
+> FORTIFY_SOURCE routines on memcpy(), correctly instrument array indexing
+> with UBSAN_BOUNDS, and to globally enable -fstrict-flex-arrays=3.
+> 
+> Replace zero-length array with flexible-array member in struct key_vector.
+> 
+> This results in no differences in binary output.
+> 
+> [1] https://github.com/KSPP/linux/issues/78
+> 
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
+> Cc: David Ahern <dsahern@kernel.org>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> Cc: netdev@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  net/ipv4/fib_trie.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
---pRbbpnwvQFI8Ig1m
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: David Ahern <dsahern@kernel.org>
 
-On Fri, Nov 18, 2022 at 10:58:06AM +0800, Bard Liao wrote:
-> From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
->=20
-> The Device_ID registers already tell us if a device supports the SDCA
-> specification or not, in hindsight we never needed a property when the
-> information is reported by both hardware and ACPI.
-
-Acked-by: Mark Brown <broonie@kernel.org>
-
---pRbbpnwvQFI8Ig1m
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmN3px4ACgkQJNaLcl1U
-h9DxmAf/QATOeg5EyZ8P2MRRRpwyKOCKZGE0zoOp9QpnYXH+xHm+Fy44UW4Mpfqe
-OEjHDEJQmZkmKRwyGbgnlDLMkqnfuseZAIVCwHQZRzLeQqVEM0DnU8rek2A2wbO/
-8q6uDOpvImNxZuRhcSkKMYO8rPzZv2dZFxEJWjts7I/xi1unEwZkFBPH4itmjySA
-QWndOIgtq01WIyJz2mYWS0velHGrQrGqDqRg7kwzjMekPzJSE4rJU/WBiXOg+F14
-c+sxbz0HptCue1jpogtRcjDpYa/zqZt8ZfJsZHtAtOiF9d1NvhXhIO2SPNREArMF
-/AF7QIIKIwW8Bu0P8kKI+IRjPM+53Q==
-=Laz3
------END PGP SIGNATURE-----
-
---pRbbpnwvQFI8Ig1m--
