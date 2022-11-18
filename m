@@ -2,107 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C671862F9D2
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 16:59:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45E1E62F9D4
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 16:59:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241444AbiKRP7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 10:59:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34354 "EHLO
+        id S241597AbiKRP7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 10:59:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241312AbiKRP7T (ORCPT
+        with ESMTP id S241692AbiKRP7o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 10:59:19 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CF7662C3
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 07:59:17 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id b1-20020a17090a7ac100b00213fde52d49so5426906pjl.3
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 07:59:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=BIzAKlqfAaMg368D6jPlp8HmIeVCVtTOFRZVfOrIoRA=;
-        b=s6eyQMrxXlVr7mjyTTlqJhnlh/Xi9X6Am4TwNlENwsPyRh8KvXIqhnsP3MMWC9+MoB
-         oQd97BmjUOsQPxgMsh5zyjcOYLIVp3cqB3U8qN7/Ud5hvTdIANRIWIS/vJblpoBTxukB
-         h0Lxk6Jg3vNqw4OVzI0CkcjluXS6vsT31cdyDImlVx7++g13+ozmNNZ5BkzVdivrg7g+
-         00m3rpeYDbyzY05rk/dB8GnC4ClchfIxtJ5aTCzCQyATv7KhMjKNSIDvnh3cGt1Q5v+L
-         lNMyGoelDxkjB2wAw8ywO8jmucxwhUGJpJ8n7dWOAqcgUj06ocsZtkUfpHvBn0wBdFz1
-         TsrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BIzAKlqfAaMg368D6jPlp8HmIeVCVtTOFRZVfOrIoRA=;
-        b=ThewlGJhvXoc3bzfjAcOxj2qXwnC3I5zNymWR0kQ9aSsFRIL5vyyHI7Wd4xT6y/acF
-         dGbkJAF3Iqz5lCUBbsSOpwkvGeQw+PKnbKIjJVZCdGVGAqm7g6KOrYygSUK6xlhjE75N
-         KpZywUoPE78KbOVALSzSg0mgpcRbSzlTdjXarh1yeUaH+nFBjqlGcqdMbkeUkDAzSTw/
-         zCwPgEfPqmfdudIhD3pLDohliHwfZDnUM+GTnUTH5iuQ1y4QRQ22BfMemJjfFfjfFG8h
-         XvuN+LJN/oYJl8d0lctwWh2CDCNzay7HnmHtxtwbnWSNjTtqIIkpOkc3U7gnDSH+o8bA
-         k0gg==
-X-Gm-Message-State: ANoB5pkq6r2uuNwGpFKPdcbJbp4RWI9kngpECm/5dYBNJagPFv4lV90Z
-        EkQ9xRnwiT+NHgU4n+/lGrJ5iQ==
-X-Google-Smtp-Source: AA0mqf68z73TZ4LH+iMU8Y7+vIcozkzW9+xI2VfYzqSxI4RUtQBXAdSaqw03S7HKwO0upOzd1Ydjhw==
-X-Received: by 2002:a17:90a:9f03:b0:211:59c6:6133 with SMTP id n3-20020a17090a9f0300b0021159c66133mr8428311pjp.238.1668787156611;
-        Fri, 18 Nov 2022 07:59:16 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id s16-20020a170902a51000b001869f2120a5sm3840359plq.34.2022.11.18.07.59.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 07:59:16 -0800 (PST)
-Date:   Fri, 18 Nov 2022 15:59:12 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Alex =?iso-8859-1?Q?Benn=E9e?= <alex.bennee@linaro.org>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
-Subject: Re: [PATCH v9 3/8] KVM: Add KVM_EXIT_MEMORY_FAULT exit
-Message-ID: <Y3er0M5Rpf1X97W/@google.com>
-References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
- <20221025151344.3784230-4-chao.p.peng@linux.intel.com>
- <87cz9o9mr8.fsf@linaro.org>
- <20221116031441.GA364614@chaop.bj.intel.com>
- <87mt8q90rw.fsf@linaro.org>
- <20221117134520.GD422408@chaop.bj.intel.com>
- <87a64p8vof.fsf@linaro.org>
- <20221118013201.GA456562@chaop.bj.intel.com>
- <87o7t475o7.fsf@linaro.org>
+        Fri, 18 Nov 2022 10:59:44 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 0629E8CF1B
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 07:59:42 -0800 (PST)
+Received: (qmail 40350 invoked by uid 1000); 18 Nov 2022 10:59:42 -0500
+Date:   Fri, 18 Nov 2022 10:59:42 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Lee Jones <lee@kernel.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, balbi@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/1] usb: gadget: f_hid: Conduct proper refcounting on
+ shared f_hidg pointer
+Message-ID: <Y3er7nenAhbmBdBy@rowland.harvard.edu>
+References: <20221117120813.1257583-1-lee@kernel.org>
+ <Y3YuL8rSE9pNfIZN@kroah.com>
+ <Y3Y7MlwV0UFcA3w8@google.com>
+ <Y3ZlvyZoL+PzpbQX@rowland.harvard.edu>
+ <Y3dIXUmjTfJLpPe7@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87o7t475o7.fsf@linaro.org>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+In-Reply-To: <Y3dIXUmjTfJLpPe7@google.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -110,54 +42,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 18, 2022, Alex Bennée wrote:
+On Fri, Nov 18, 2022 at 08:54:53AM +0000, Lee Jones wrote:
+> On Thu, 17 Nov 2022, Alan Stern wrote:
 > 
-> Chao Peng <chao.p.peng@linux.intel.com> writes:
+> > On Thu, Nov 17, 2022 at 01:46:26PM +0000, Lee Jones wrote:
+> > > On Thu, 17 Nov 2022, Greg KH wrote:
+> > > 
+> > > > On Thu, Nov 17, 2022 at 12:08:13PM +0000, Lee Jones wrote:
+> > > > > +static inline bool f_hidg_is_open(struct f_hidg *hidg)
+> > > > > +{
+> > > > > +	return !!kref_read(&hidg->cdev.kobj.kref);
+> > > > > +}
+> > > > 
+> > > > Ick, sorry, no, that's not going to work and is not allowed at all.
+> > > > That's some major layering violations there, AND it can change after you
+> > > > get the value as well.
+> > > 
+> > > This cdev belongs solely to this driver.  Hence the *.*.* and not
+> > > *->*->*.  What is preventing us from reading our own data?  If we
+> > > cannot do this directly, can I create an API to do it 'officially'?
+> > > 
+> > > I do, however, appreciate that a little locking wouldn't go amiss.
+> > > 
+> > > If this solution is not acceptable either, then we're left up the
+> > > creak without a paddle.  The rules you've communicated are not
+> > > compatible with each other.
+> > > 
+> > > Rule 1: Only one item in a data structure can reference count.
+> > > 
+> > > Due to the embedded cdev struct, this rules out my first solution of
+> > > giving f_hidg its own kref so that it can conduct its own life-time
+> > > management.
+> > > 
+> > > A potential option to satisfy this rule would be to remove the cdev
+> > > attribute and create its data dynamically instead.  However, the
+> > > staticness of cdev is used to obtain f_hidg (with container_of()) in
+> > > the character device handling component, so it cannot be removed.
+> > 
+> > You have not understood this rule correctly.  Only one item in a data 
+> > structure can hold a reference count _for that structure_.  But several 
+> > items in a structure can hold reference counts for themselves.
 > 
-> > On Thu, Nov 17, 2022 at 03:08:17PM +0000, Alex Bennée wrote:
-> >> >> I think this should be explicit rather than implied by the absence of
-> >> >> another flag. Sean suggested you might want flags for RWX failures so
-> >> >> maybe something like:
-> >> >> 
-> >> >> 	KVM_MEMORY_EXIT_SHARED_FLAG_READ	(1 << 0)
-> >> >> 	KVM_MEMORY_EXIT_SHARED_FLAG_WRITE	(1 << 1)
-> >> >> 	KVM_MEMORY_EXIT_SHARED_FLAG_EXECUTE	(1 << 2)
-> >> >>         KVM_MEMORY_EXIT_FLAG_PRIVATE            (1 << 3)
-> >> >
-> >> > Yes, but I would not add 'SHARED' to RWX, they are not share memory
-> >> > specific, private memory can also set them once introduced.
-> >> 
-> >> OK so how about:
-> >> 
-> >>  	KVM_MEMORY_EXIT_FLAG_READ	(1 << 0)
-> >>  	KVM_MEMORY_EXIT_FLAG_WRITE	(1 << 1)
-> >>  	KVM_MEMORY_EXIT_FLAG_EXECUTE	(1 << 2)
-> >>         KVM_MEMORY_EXIT_FLAG_SHARED     (1 << 3)
-> >>         KVM_MEMORY_EXIT_FLAG_PRIVATE    (1 << 4)
-> >
-> > We don't actually need a new bit, the opposite side of private is
-> > shared, i.e. flags with KVM_MEMORY_EXIT_FLAG_PRIVATE cleared expresses
-> > 'shared'.
+> Here was the review comment I was working to on this patch [0]:
 > 
-> If that is always true and we never expect a 3rd type of memory that is
-> fine. But given we are leaving room for expansion having an explicit bit
-> allows for that as well as making cases of forgetting to set the flags
-> more obvious.
+>  "While at first glance, it seems that f_hidg is not reference
+>   counted, it really is, with the embedded "struct cdev" a few lines
+>   above this.
+> 
+>   That is the reference count that should control the lifecycle of
+>   this object, not another reference here in the "outer layer"
+>   structure."
 
-Hrm, I'm on the fence.
+It's worth noting that the review comment goes on to say:
 
-A dedicated flag isn't strictly needed, e.g. even if we end up with 3+ types in
-this category, the baseline could always be "private".
+ "But, the cdev api is tricky and messy and not really set up to control
+  the lifecycle of objects it is embedded in."
 
-I do like being explicit, and adding a PRIVATE flag costs KVM practically nothing
-to implement and maintain, but evetually we'll up with flags that are paired with
-an implicit state, e.g. see the many #PF error codes in x86.  In other words,
-inevitably KVM will need to define the default/base state of the access, at which
-point the base state for SHARED vs. PRIVATE is "undefined".  
+This is a good indication that a separate reference counter really is 
+needed (in fact it almost contradicts what was written above).
 
-The RWX bits are in the same boat, e.g. the READ flag isn't strictly necessary.
-I was thinking more of the KVM_SET_MEMORY_ATTRIBUTES ioctl(), which does need
-the full RWX gamut, when I typed out that response.
+> > So for example, you could put a kref in f_hidg which would hold the 
+> > reference count for the f_hidg structure, while at the same time 
+> > including an embedded cdev with its own reference counter.  The point is 
+> > that the refcount in the embedded cdev refers to the lifetime of the 
+> > cdev, not the lifetime of the f_hidg.
+> 
+> This was the approach in the original submission [1], which during
+> review I was told was unacceptable for the aforementioned reason.
+> 
+> [0] https://lore.kernel.org/all/Y1PnoMvDmZMqXScw@kroah.com/
+> [1] https://lore.kernel.org/all/20221017112737.230772-1-lee@kernel.org/
+> 
+> > To make this work properly, you have to do two additional things:
+> > 
+> > 	When the cdev's refcount is initialized, increment the kref
+> > 	in f_hidg.
+> > 
+> > 	When the cdev's refcount drops to 0, decrement the kref (and
+> > 	release f_hidg if the kref hits 0).
+> 
+> More than happy to revisit the first solution with Greg's blessing.
 
-So I would say if we add an explicit READ flag, then we might as well add an explicit
-PRIVATE flag too.  But if we omit PRIVATE, then we should omit READ too.
+Okay, let's see what Greg thinks after he reads this discussion.
+
+Alan Stern
