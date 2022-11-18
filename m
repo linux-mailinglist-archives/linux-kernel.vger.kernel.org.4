@@ -2,130 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B33F363000C
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 23:25:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 576A9630017
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 23:29:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231849AbiKRWZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 17:25:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48830 "EHLO
+        id S230448AbiKRW3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 17:29:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232052AbiKRWZ3 (ORCPT
+        with ESMTP id S229488AbiKRW3F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 17:25:29 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D66B5C78
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 14:25:24 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id g10so5741744plo.11
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 14:25:24 -0800 (PST)
+        Fri, 18 Nov 2022 17:29:05 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB6B6725E2
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 14:29:03 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id q1-20020a17090a750100b002139ec1e999so6354513pjk.1
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 14:29:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=udXLh+J6w3uqoSbPpBqZZA43Ss/afXLWiCuFYr88dFs=;
-        b=fy1lW516fh8UMd+1ve1cxazywckpR7JjlSXrBxsiEMcqM/4+WYlg1VswAgkj/F8Az5
-         Vck7DPt8fG2RdTa7/lKuEETBuwQDqQ3DITUuLSxy9OiUJ/qGLPOE5u4eLkVPRUjY5f1O
-         mlUwdUjE7Je0bJaYN9YvKzoD1s2pK5P4+BlYk=
+        bh=UbBsvDU//DL6nEBTfVogOGw4gtrIt5cEgoWU7wg0yqE=;
+        b=An8R27hBelrmHfCbOWIi0CQbpB+FbdUKZd/K74OWA+t1inv8v4494buerQXpAbVoQ/
+         hawXo5IWqwOaOJXIlgQJ62nY4aZ8mzIQL8T0sN5QawgAa8EGZw3klOrzN/KXycM8ohn1
+         PnwiDQNXHvwQENzmlhMaoO6BFIxzwB92hREPE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=udXLh+J6w3uqoSbPpBqZZA43Ss/afXLWiCuFYr88dFs=;
-        b=YUFbhmKyAgGMI/WvxyDtsDeUJt0DAF0T0bI0XfUr8OnRxrCXjdKS1YBM8+3l/++jOR
-         dObzsLDqIiorpUGDqCzMEIa8qApGs5P5G7pluD6ipi7iXjmcFKVsHtF2Q1R4SqHLkpsl
-         f527HC104zlQ2kjYUCT7iFFayR9m3LyMYkM8l9QHBCnzyFObjrnHXIlcFlH2fipLNpC/
-         feQtjoJPhydXKaetNJ7Jg6lH1fP+FZ9irpq8wVFrvM5daCRS+9V71s8vzyRCYi2A/Su+
-         7wq5tN5oXAWV9hyJVhNsw8OIRfgSE6hd8kcpealbtJgUCYNnHtEU+ADXQvot8JvVWK3Q
-         c98w==
-X-Gm-Message-State: ANoB5pkorHFD2Oao44IXCsZ33jeYAgRsjtJNNrlvc1WGLPHQ+qhhbsna
-        FthGCaf4bcdIgvcZs1MLgrsgmQ==
-X-Google-Smtp-Source: AA0mqf4o4ZRdWJrRpJOaePOBA3aqkXbCq+zGM9Tz3iyp6uOYNyoTxjUR875eGPzlGkAr2T0o013gaQ==
-X-Received: by 2002:a17:903:328e:b0:188:f5de:a8e3 with SMTP id jh14-20020a170903328e00b00188f5dea8e3mr1487500plb.109.1668810323947;
-        Fri, 18 Nov 2022 14:25:23 -0800 (PST)
+        bh=UbBsvDU//DL6nEBTfVogOGw4gtrIt5cEgoWU7wg0yqE=;
+        b=T3RUfz1jO2G2T+XJ0ZoJPSS2YHSVFxSw5Hd3IZ66iW+ApJV36NVgzSZuES2UrjVAew
+         IzzUaxXcQ/dJXBVQBurL5xi3vrNvDO8lKqFCOZf5H/7JFrKDiBD8RUVRFx+3b2EqH8O7
+         p6Rx7OwqxxoCxGBtAg3XHsTY5G682E/RNS84ew2ANswbnyIkZruQGSdUYSk2aHl6tz6D
+         OWLgjlPbU5CVake0tai/wVGVOdXWjPy9q9rLYfu4SXv+H0H41wOEbF0Yw8w+yZsHDo9j
+         YCYEpz2VnB5TpH/EvYjt6HdfnW9pnBBpeOJJy3cJq1v7zL94W9aHedCaSn2VkTWVTMGF
+         WGGg==
+X-Gm-Message-State: ANoB5pnLkv2ppri04YXb++sYJnoyT0w2y3prpkvnxEK28P+mHr+x83V5
+        kXla0N9u4j0XkEsG0g0uII3fuBZ1pdsjUl8W
+X-Google-Smtp-Source: AA0mqf6x3WR1+0wUVWwli47/xk6od69+oUWF0cQjmoupKb1o7R1u9AWIvzDIrLxmCvQfjLJnyEjRtg==
+X-Received: by 2002:a17:902:e009:b0:188:649b:9dbe with SMTP id o9-20020a170902e00900b00188649b9dbemr1414800plo.107.1668810543395;
+        Fri, 18 Nov 2022 14:29:03 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id o65-20020a625a44000000b00562664d5027sm3709368pfb.61.2022.11.18.14.25.23
+        by smtp.gmail.com with ESMTPSA id b29-20020aa7951d000000b00561382a5a25sm3714931pfp.26.2022.11.18.14.29.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 14:25:23 -0800 (PST)
-Date:   Fri, 18 Nov 2022 14:25:22 -0800
+        Fri, 18 Nov 2022 14:29:02 -0800 (PST)
+Date:   Fri, 18 Nov 2022 14:29:02 -0800
 From:   Kees Cook <keescook@chromium.org>
-To:     Johannes Berg <johannes@sipsolutions.net>
-Cc:     Luca Coelho <luciano.coelho@intel.com>,
-        Haim Dreyfuss <haim.dreyfuss@intel.com>,
-        Miri Korenblit <miriam.rachel.korenblit@intel.com>,
-        Petr Stourac <pstourac@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Mordechay Goodstein <mordechay.goodstein@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Nathan Errera <nathan.errera@intel.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Shaul Triebitz <shaul.triebitz@intel.com>,
-        netdev@vger.kernel.org,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        Abhishek Naik <abhishek.naik@intel.com>,
-        Jose Ignacio Tornos Martinez <jtornosm@redhat.com>,
-        Ayala Beker <ayala.beker@intel.com>,
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, etnaviv@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-samsung-soc@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-perf-users@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Peter Xu <peterx@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
         "David S. Miller" <davem@davemloft.net>,
-        linux-wireless@vger.kernel.org,
-        Sriram R <quic_srirrama@quicinc.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Mike Golant <michael.golant@intel.com>,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: Coverity: iwl_mvm_sec_key_add(): Memory - corruptions
-Message-ID: <202211181424.794FCAD@keescook>
-References: <202211180854.CD96D54D36@keescook>
- <d4c07fa45de290f32611420e2f116d8a6e32d22a.camel@sipsolutions.net>
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Kentaro Takeda <takedakn@nttdata.co.jp>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>
+Subject: Re: [PATCH mm-unstable v1 20/20] mm: rename FOLL_FORCE to FOLL_PTRACE
+Message-ID: <202211181427.4D1C3132FE@keescook>
+References: <20221116102659.70287-1-david@redhat.com>
+ <20221116102659.70287-21-david@redhat.com>
+ <CAHk-=wgtEwpR-rE_=cXzecHMZ+zgrx5zf9UfvH0w-mKgckn4=Q@mail.gmail.com>
+ <Y3dnzgwJpjTQXI9y@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d4c07fa45de290f32611420e2f116d8a6e32d22a.camel@sipsolutions.net>
+In-Reply-To: <Y3dnzgwJpjTQXI9y@hirez.programming.kicks-ass.net>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 10:04:38PM +0100, Johannes Berg wrote:
-> On Fri, 2022-11-18 at 08:54 -0800, coverity-bot wrote:
-> > 
-> > *** CID 1527370:  Memory - corruptions  (OVERRUN)
-> > drivers/net/wireless/intel/iwlwifi/mvm/mld-key.c:123 in iwl_mvm_sec_key_add()
-> > 117
-> > 118     	if (WARN_ON(keyconf->keylen > sizeof(cmd.u.add.key)))
-> > 119     		return -EINVAL;
-> > 120
-> > 121     	if (keyconf->cipher == WLAN_CIPHER_SUITE_WEP40 ||
-> > 122     	    keyconf->cipher == WLAN_CIPHER_SUITE_WEP104)
-> > vvv     CID 1527370:  Memory - corruptions  (OVERRUN)
-> > vvv     Overrunning buffer pointed to by "cmd.u.add.key + 3" of 32 bytes by passing it to a function which accesses it at byte offset 34 using argument "keyconf->keylen" (which evaluates to 32). [Note: The source code implementation of the function has been overridden by a builtin model.]
-> > 123     		memcpy(cmd.u.add.key + IWL_SEC_WEP_KEY_OFFSET, keyconf->key,
-> > 124     		       keyconf->keylen);
-> > 125     	else
-> > 126     		memcpy(cmd.u.add.key, keyconf->key, keyconf->keylen);
-> > 127
-> > 128     	if (keyconf->cipher == WLAN_CIPHER_SUITE_TKIP) {
-> > 
-> > If this is a false positive, please let us know so we can mark it as
-> > such, or teach the Coverity rules to be smarter. If not, please make
-> > sure fixes get into linux-next. :) For patches fixing this, please
-> > include these lines (but double-check the "Fixes" first):
-> > 
+On Fri, Nov 18, 2022 at 12:09:02PM +0100, Peter Zijlstra wrote:
+> On Wed, Nov 16, 2022 at 10:16:34AM -0800, Linus Torvalds wrote:
+> > Following the history of it is a big of a mess, because there's a
+> > number of renamings and re-organizations, but it seems to go back to
+> > 2007 and commit b6a2fea39318 ("mm: variable length argument support").
 > 
-> Well, I don't think you can teach coverity this easily, but the
-> WARN_ON() check there is not really meant to protect this - WEP keys
-> must have a length of either 5 or 13 bytes (40 or 104 bits!).
+> I went back and read parts of the discussions with Ollie, and the
+> .force=1 thing just magically appeared one day when we were sending
+> work-in-progress patches back and forth without mention of where it came
+> from :-/
 > 
-> So there's no issue here, but I'm not surprised that coverity wouldn't
-> be able to figure that out through the stack.
+> And I certainly can't remember now..
+> 
+> Looking at it now, I have the same reaction as both you and Kees had, it
+> seems entirely superflous. So I'm all for trying to remove it.
 
-Gotcha. And some other layer is doing the verification that cipher and
-keylen are correctly matched?
+Thanks for digging through the history! I've pushed the change to -next:
+https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/commit/?h=for-next/execve&id=cd57e443831d8eeb083c7165bce195d886e216d4
 
 -- 
 Kees Cook
