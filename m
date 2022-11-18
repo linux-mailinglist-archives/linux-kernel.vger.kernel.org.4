@@ -2,287 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7412462FB71
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 18:17:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B2BB62FB75
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 18:18:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234216AbiKRRR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 12:17:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53010 "EHLO
+        id S242516AbiKRRSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 12:18:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234867AbiKRRRy (ORCPT
+        with ESMTP id S242123AbiKRRSK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 12:17:54 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF5ED13D4A
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 09:17:53 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id r61-20020a17090a43c300b00212f4e9cccdso8857662pjg.5
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 09:17:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=b5nxzOpKEeCGYJhJRX5YsoAl8Hgv43ND8xd6hX2KrkY=;
-        b=CsQbyovAo5pbcqNycehXEy1eBJxNPz3NPbJ2gpnj5k/6T7qIUhvedMUaLg768/L6vf
-         zlLV6Ct2a4yu0FIamw04MHvaVe0JNzOgSKmoLx9bNs5/8K7I/oCpVFVG9V43ZBuQmjth
-         iJRK0v66H+BzKwothF2Ejj1XrpC+9pQgk98UNsEKPvPe5jQX+ENQCTiBmVXgeL75a3nd
-         dF6j3O1iPBCPcuDVSTQGlhvgAmT/u1+SVbRVTBv47f6vej54yIGYumeoqOfhr+8MSbFO
-         r0Vpzw9Xa/t4iUYesh4T+wL/k0cRHoLbd0uEWqwEPokTrj1Mx8oqYxpFdgSkdh1JXOUV
-         jLNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=b5nxzOpKEeCGYJhJRX5YsoAl8Hgv43ND8xd6hX2KrkY=;
-        b=ZyC+QvzVlOe0g7BLn1oWjMznTaO4q+0uurS1uyNVoCcgmYxk5TGP8wJHGGasnhM9A6
-         x14H/2iRlOcl/dIm3Gki5MkOmT2y4kJhDJog78kj6OfyD933WlEbRQX/qGspnGbknwNh
-         xG9E9WBtFF0Y0n0MBzPWnbUUPaqvtAWtOjYRJENkZHyt8hnN/SooqsaFXA2BMV0QDhr1
-         HwHP9cTFzEVsAn6SOU+0F7orrBDUQjmOYIIUqowXP8TsbOiinwR4LFmng9WngW3H4lQf
-         cuwtk8llAHRPeQiGm6HSF1TSrq7B93I5aKnsoc7luJ3soMz4w4q6kv4OwfArLC272/vN
-         sSyA==
-X-Gm-Message-State: ANoB5pnUgB9Vu3fppdcLffZnorRiAo5B/cgAs+Pwmy7Pb2rYFuApAosQ
-        oXLtkA4ZZU07BSfzGAG6f24fXw==
-X-Google-Smtp-Source: AA0mqf7rDwdDj3hXsrprWP1jRxOpUOVx04vjbpzKkO5HjVV69Bfglok1pHOhxEnzbjdtfmX1UIC25g==
-X-Received: by 2002:a17:902:e0ca:b0:188:712f:dfa5 with SMTP id e10-20020a170902e0ca00b00188712fdfa5mr362168pla.140.1668791873063;
-        Fri, 18 Nov 2022 09:17:53 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id bo12-20020a17090b090c00b0021858c84c7bsm2972443pjb.50.2022.11.18.09.17.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 09:17:52 -0800 (PST)
-Date:   Fri, 18 Nov 2022 17:17:48 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Jiaxi Chen <jiaxi.chen@linux.intel.com>
-Cc:     kvm@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, pbonzini@redhat.com, ndesaulniers@google.com,
-        alexandre.belloni@bootlin.com, peterz@infradead.org,
-        jpoimboe@kernel.org, chang.seok.bae@intel.com,
-        pawan.kumar.gupta@linux.intel.com, babu.moger@amd.com,
-        jmattson@google.com, sandipan.das@amd.com, tony.luck@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, fenghua.yu@intel.com,
-        keescook@chromium.org, nathan@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 4/6] x86: KVM: Advertise AVX-VNNI-INT8 CPUID to user
- space
-Message-ID: <Y3e+PNvvuuT3aCmb@google.com>
-References: <20221118141509.489359-1-jiaxi.chen@linux.intel.com>
- <20221118141509.489359-5-jiaxi.chen@linux.intel.com>
+        Fri, 18 Nov 2022 12:18:10 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC1F8EB51;
+        Fri, 18 Nov 2022 09:18:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668791889; x=1700327889;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=P6eaDjxr9vtxdiSCjHr5hIrERCnNdENz8unXAuGTlsQ=;
+  b=QRasI9RsBOImMqPQHb19V9HA23C9Rp2cv2fNcdv8in9Qw7itGIIB2Bdu
+   etM/ZGVKESC+owsRj2BBW0byF+sj5FBjaHBaLIujD6b0ygn4YkoFqZWZL
+   jOzLpWoQP+PS4/9n2qR1JT5NtntJa66BO4c2LbKSi0+TKox09RJVSiAK0
+   cCyildcuUfnJ5MRJoZBnSk8HGLjdLU20JK5Tbo1nnVvV9sj09W+bJ5e0N
+   Z03JsGpu000oeVu3I5gF3PWhvHeyuW25BVVOh7iGgPlic5g3Qt5RdKX2N
+   Dv31aeT1zhndNO/nvIU1stU2upKKykIGNnTLlPR+UOBu0qkoNpsrvYiu3
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="314336883"
+X-IronPort-AV: E=Sophos;i="5.96,174,1665471600"; 
+   d="scan'208";a="314336883"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2022 09:18:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="671383100"
+X-IronPort-AV: E=Sophos;i="5.96,174,1665471600"; 
+   d="scan'208";a="671383100"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga008.jf.intel.com with ESMTP; 18 Nov 2022 09:18:08 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 18 Nov 2022 09:18:08 -0800
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 18 Nov 2022 09:18:07 -0800
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Fri, 18 Nov 2022 09:18:07 -0800
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.104)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Fri, 18 Nov 2022 09:18:07 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aGuUYYdIj7PeS1oCWAk8mkU2woOXpHmTVZA5VcvrHCtFx6kqKi/mLuvZXAYES/iuEzfzfdx08V9RLXlgb4ULZSvRPbRf9Vu/SokhGVOeAkTP4E5M7hHJj3BkIxgpMg13J03cW8HIYqvyzwndl8nkNlCUmWavXnjNO8AlhjYzYS1AaLTDuB56+iEp0x88Whj1NTaTUc2Ojykq7ncdfTgzx3CeDJwbiH8ISdwRNid8viW/G1EC4kW0grCYmw6K5TgKvNnCiCFpV3SMo0PC1zPcw90RrkKpeR2xocO134QHD6xehVWM19wXtA9LiKZcZjeSypmgtUmlw0cw4F0jdgTBDg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=P6eaDjxr9vtxdiSCjHr5hIrERCnNdENz8unXAuGTlsQ=;
+ b=MFVhAiYQgaBOboqjBLdv0sKuztQ7F+OD0I/4wD17YhE3UFzmIqQsNb96mU7AcRq+bhCyRnaxQpLBmapz2kWYxuJKE71c1uM3ZoqkJIAXBkeRV0d4W1X8TDgsjDEsAF0CxFXXt+xsHl3uVkEzVaoe57dRMXowdT9e3BwvPZ3dqAon0cbqSmuOhdNxZUPglkCaISnAyNltt8dV41xuQW4+qKw+VDj3j6vY0imt0Z5QwXr8IynF+1ucg54LHJ/vNYiIJbX6J7K1Fl42Dq6u1MvU+7hV/kq7FrPkANjTGUuCsC2RSGa7XLJYezQVPHP+wSXcSXkJrTGP9yA2X9gkjOmR9Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
+ by MW4PR11MB7054.namprd11.prod.outlook.com (2603:10b6:303:219::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17; Fri, 18 Nov
+ 2022 17:18:04 +0000
+Received: from MWHPR11MB1392.namprd11.prod.outlook.com
+ ([fe80::add7:df23:7f86:ecf3]) by MWHPR11MB1392.namprd11.prod.outlook.com
+ ([fe80::add7:df23:7f86:ecf3%5]) with mapi id 15.20.5813.020; Fri, 18 Nov 2022
+ 17:18:04 +0000
+From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+To:     "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>
+CC:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Subject: Re: [PATCH v3 35/37] x86/cet: Add PTRACE interface for CET
+Thread-Topic: [PATCH v3 35/37] x86/cet: Add PTRACE interface for CET
+Thread-Index: AQHY8J5eaXgH6xugZk20MwPZdy8SOK5AIA2AgACAkACAAnwdkIAAf9AAgAFU61CAABC8gA==
+Date:   Fri, 18 Nov 2022 17:18:04 +0000
+Message-ID: <1efbdf4c9cc624c863f27afdb980bd3a3ea75ae7.camel@intel.com>
+References: <20221104223604.29615-1-rick.p.edgecombe@intel.com>
+         <20221104223604.29615-36-rick.p.edgecombe@intel.com>
+         <Y3Olme4Nl+VOkjAH@hirez.programming.kicks-ass.net>
+         <223bf306716f5eb68e4f9fd660414c84cddd9886.camel@intel.com>
+         <CY4PR11MB2005AD47BA1D97BC1A96A769F9069@CY4PR11MB2005.namprd11.prod.outlook.com>
+         <a2c2552fcdba1a0fce0d02aeb519d33cac83bfd2.camel@intel.com>
+         <CY4PR11MB20055995B323E98C10BA159AF9099@CY4PR11MB2005.namprd11.prod.outlook.com>
+In-Reply-To: <CY4PR11MB20055995B323E98C10BA159AF9099@CY4PR11MB2005.namprd11.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MWHPR11MB1392:EE_|MW4PR11MB7054:EE_
+x-ms-office365-filtering-correlation-id: 3ab37d5b-6fa5-446d-edd0-08dac988da7d
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: a00SXtb79HeIOqB4vesxl9GjeUclBypDQUQ0Ykrt+7GAhPMQC61z9vIlAO3p3z8DaySgehvrChWkmPMINTOKt+WGkv04t++ZfkVvfsdv9pE7An1E/rPWpoDQ3as+a3uWTWOvRPZJ3VJ5MABVHdcGsiEwzQEoY7EuVE52nSzqSvfj8adxUClMaO2Upxc960j2KxlOf32swGobF7t95am6BQYO75PJtHOdMRDsDh1jkturkN4VrmPWjIhVgcg39girvgU50OXieWDFVR9ovytBA+BBhHwlEyBbIxGqvbsMW7oJ9efKRf7Bqr8/WsvkDY0Z/qpGW4YuA9v3DW8V9+bP6TlD5g2in/aiPn04WkEBCPGFjHAKameyYa/U76XKrJU8hpJv10jpW0gxYHb32PuGcIOl7p1oUJY0zeWN06kxqugZRVaKITXGDKpVQGVWHuJEMJgR9nUilFwNc5Ky5ZjtOD+LaLZfUFQhXYADRHubgTdTevPF1HkYUYsAKiDl7RwK+aofJs6HeLpCvxz5Vv3GC+r6/3cCrJYqkpZfek+HlErjQB2lwo/5AksRAE9tW2NXoPYUsCgaX9R5VhaYO+81JfOwxJZBjw34jF1YdxC6nJ9pt4wNCM3THwji/tfkiQPode//LdS6m+EwbhfgmYjfPEICXQBGFo5P2gSP3XOLx6ZxVmm7wYVcNZt05mQW/A2JKCfLI/1amnmwalFfG04gKK0FTb0qa8szYlAeAFF1Rlc=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(346002)(366004)(396003)(39860400002)(376002)(451199015)(38100700002)(38070700005)(82960400001)(122000001)(478600001)(6486002)(71200400001)(41300700001)(86362001)(110136005)(6506007)(54906003)(316002)(6512007)(66556008)(76116006)(91956017)(4001150100001)(8676002)(64756008)(26005)(4326008)(36756003)(66476007)(66946007)(2906002)(66446008)(2616005)(8936002)(7406005)(186003)(5660300002)(7416002)(99106002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?b3lBbW1rRFRXN3hqK3VDNWdZSlNZWjlsMFZvdWN4Y2NpbnZZQWJiT3htRnRO?=
+ =?utf-8?B?Sndia3oxU2FMNFMwZ0l6anlaUFNjb3BSbWR2UnVwTFVRcmgrRWN1MC9aOUZI?=
+ =?utf-8?B?eEJjZnIxWDZ2RHNnQ1BUaW1vTjdsQWhpODUyQVQ4bWszSGp5aEhHcFNqQlJO?=
+ =?utf-8?B?akQ2cVNsZU5KMGl4ZFMvWGQzanNNTEpPVS8yZmN4U2FaZjRiRWY4UzNUWVZW?=
+ =?utf-8?B?Y1F4YmR4UVNseWFHOHRuMHhXanhGREdjbGh3d3RyTFY1dC9WVlJCN1dDTFI2?=
+ =?utf-8?B?Vlg1NEM1SjhYSXBiVGNJTVBlNEJSak45aHlkVU81Q2tNYnZLZGJGek9tVmlT?=
+ =?utf-8?B?c3RhQlBsNS9pUWpBOWF0QWdwUUErK0dhdE8raWhGWkRNNThTMWxzckI3SmN0?=
+ =?utf-8?B?Vnd1SVJnWjE3NTNaUmNXVU9WRXpNUHdZelpXUlE1WlYzcGNtZ0llY1B3alpp?=
+ =?utf-8?B?ZkNmbEFKZUtBTE1jZ1RGRG9XMWhRYXlnTkNzVkFQbXNTTnB4RTU4bnNwbVg0?=
+ =?utf-8?B?eTl4eW1EajdEL3lnakJ1VnlnaTIxQVZYMzF4OVRlakFhSVkwUlY3Ly9aVHk3?=
+ =?utf-8?B?dGRwU2ZYVStqTmRDbnVzQTlrZ1NJbEFZTHBZUk56K0xXQkM1czBsdGFKNFpv?=
+ =?utf-8?B?TmJWNWczSkQxUzFhdGo0aGlsOVZPRS94T21YRkFyNEN4QW9YRm1rcFU5L1RQ?=
+ =?utf-8?B?L0JBTEI2cVUrQXgrVC9neDlQYmEyV2E1NjFHVnJQVG5ldGRJdGsxSzVYWU5V?=
+ =?utf-8?B?LzNhTjYxOEtlNTJyT2h5Y3RJcVlMaS9uL1dNdFlvUkhGYVN4T0NFT3dpTmRP?=
+ =?utf-8?B?VzhPTmdzS3NlUURlci9aak5Vb2RaYmdhQkFWS01mMWlEMmVuNjhJNW9lUFc4?=
+ =?utf-8?B?SmZ0WWxxVXJ0UUtTU2xBR0JyZDQ3QWdRZnBxSmdOa3Npand1c3RaNWYzbkhF?=
+ =?utf-8?B?MFpBdTU5bjZjSm4zbm5TeDBLTVgvZFZsdUJvcVI1azRGUmg3REl3TWlrYVI3?=
+ =?utf-8?B?Nkc2U3VZdTVoZzI4SVJXWGdvU0hjaTdEZzI2NVlEaTFyUmZhdTMwaDNOOERP?=
+ =?utf-8?B?QTBSb2kvbTFHcXp2TUZJQzZ6MlBhNG1FNDVFVEQzdWV0NDJTcnpKcjhRZFp3?=
+ =?utf-8?B?ekdkTjFFTmt2SU9BcElwT1NoNTZ5eVRTZ1MwczBGYVZ5VXlrbXFWall5ekxF?=
+ =?utf-8?B?dHFMWEtaQ25UM2ltT3BBZnNjUXU1dXZCaDVYM1lTUkZvSzlQZ0YrTHRlNm5v?=
+ =?utf-8?B?UGpWeHBRRFQ3YW9IK2l5YVVNYlBpb3FXUjNPd05RbWJCQ1R4bGthaC96Sm1X?=
+ =?utf-8?B?azRvWk9wME9Ub2JzODBMbEpyQTh0OVgvNlBFa2ZVbExWQ2dySEZ4aFNLY2JN?=
+ =?utf-8?B?RThqMlhyMnl6a3ppb3J5ZmdKSnBjWDh0dGdHVjhpTHZBdVkrUkczc0wyZzR4?=
+ =?utf-8?B?QzN3M2Q3eUpIeEprQm5tSDB5WEN2ZzlhL0o0VHBJSDJTaGlIMGI3dFIrRGJ0?=
+ =?utf-8?B?cEl5WEZhZXh6bkRaWW1teTBXWXlHNkhKYmF3Vi9sdTJlakNuN29mM3FVUGZ1?=
+ =?utf-8?B?UUFxQXRhTnRIaXJKTUJhWlBGc0FOckEra3FYd0ZZZ25HZUl1ZG5iNjArc1lQ?=
+ =?utf-8?B?cmpsUjJjak5NSGhlaXI2NlpvUUFTU0ZlUEpDWnNjdDVRdFQwbFFiSUNpaDJI?=
+ =?utf-8?B?YTc2ZkpsWndxTFZhZ3JCMDJPTlAvSzJ0SUtEUUtnWVgzS2pNcWJvT2ZWNUs1?=
+ =?utf-8?B?dDd2UlJEYm5YWlNYc2wyb2E3N01icGowQ21lK2t5a3pHeExTckhTbmdRTzlS?=
+ =?utf-8?B?eGQrbDAxSTUxMFNyMTcveDVzMUVtUlVaTHhJNUJlRGJoNmxXNmhGVUhFVzRz?=
+ =?utf-8?B?N0ErWE0xNlVCcXdOVi9NWTJFejI5dzFDT3dTTFpMVHVPQVJBZVQvTnNZbVdG?=
+ =?utf-8?B?dVBtRGZsYkZhOG5XNGs5Q2E2c3RPYlRIZVlzSVNjb2FhQXJ6WEZCVXFCUS9a?=
+ =?utf-8?B?NlFMNHl5ZDdhdU1GWkt0bHRYUU9ycVVMYWVXWmFONW94TlJUdG0zajEwMElH?=
+ =?utf-8?B?QW12WEF3dW10dkV3K2ttNGhUcGFQL0dNcERqRWtvRVY5a0FmTGw0QVpoWFMz?=
+ =?utf-8?B?Tm13MHBYdHZRc3dzazdNWGdQcEFSdHp0cVduSmlJTkNQWFZ2YTVOWXBBSkRX?=
+ =?utf-8?Q?l1ExMeLAEMKWu62wXxo6BXs=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <2861EB4FF4EB434095AB2059F1D7F5E8@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="NxmGoc9WWi4h5czq"
-Content-Disposition: inline
-In-Reply-To: <20221118141509.489359-5-jiaxi.chen@linux.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3ab37d5b-6fa5-446d-edd0-08dac988da7d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Nov 2022 17:18:04.4611
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: MB9xLAroqcj6heXSBHNxLR5BkFvWJK2Tz2VYMReWQo7RBOB5jTP9pVH2VmVpdFrN5y91Y2iAcMK41U9Tb5J2C7DyCPBWTkG+oUFbZEnsgXw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB7054
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---NxmGoc9WWi4h5czq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Fri, Nov 18, 2022, Jiaxi Chen wrote:
-> AVX-VNNI-INT8 is a new set of instructions in the latest Intel platform
-> Sierra Forest, aims for the platform to have superior AI capabilities.
-> This instruction multiplies the individual bytes of two unsigned or
-> unsigned source operands, then adds and accumulates the results into the
-> destination dword element size operand.
-> 
-> The bit definition:
-> CPUID.(EAX=7,ECX=1):EDX[bit 4]
-> 
-> This CPUID is exposed to user space. Besides, there is no other VMX
-> control for this instruction.
-> 
-> Signed-off-by: Jiaxi Chen <jiaxi.chen@linux.intel.com>
-> ---
->  arch/x86/kvm/cpuid.c         | 5 ++++-
->  arch/x86/kvm/reverse_cpuid.h | 5 +++++
->  2 files changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> index 5726afb2d14c..e2b8e5485474 100644
-> --- a/arch/x86/kvm/cpuid.c
-> +++ b/arch/x86/kvm/cpuid.c
-> @@ -660,6 +660,9 @@ void kvm_set_cpu_caps(void)
->  		F(AVX_VNNI) | F(AVX512_BF16) | F(CMPCCXADD) | F(AMX_FP16) |
->  		F(AVX_IFMA));
->  
-> +	kvm_cpu_cap_init_scattered(CPUID_7_1_EDX,
-
-Ah, this is going to be confusing and potentially error prone.  AVX_VNNI_INT8
-isn't actually scattered, i.e. kvm_cpu_cap_init_scattered() is poorly named.  And
-using SF() would be _really_ broken as boot_cpu_has() would consume garbage and
-potentially leak kernel state to userspace.
-
-To address these issue and also document how to add KVM-only features, can you
-slot in the two attached patches at the begining of this series?
-
-Thanks!
-
-> +		F(AVX_VNNI_INT8));
-
-Terminators on a separate line please.
-
->  	kvm_cpu_cap_mask(CPUID_D_1_EAX,
->  		F(XSAVEOPT) | F(XSAVEC) | F(XGETBV1) | F(XSAVES) | f_xfd
->  	);
-
---NxmGoc9WWi4h5czq
-Content-Type: text/x-diff; charset=us-ascii
-Content-Disposition: attachment;
-	filename="0001-KVM-x86-Add-BUILD_BUG_ON-to-detect-bad-usage-of-scat.patch"
-
-From d913e35721688aca42056e57a261fa4baad0c45e Mon Sep 17 00:00:00 2001
-From: Sean Christopherson <seanjc@google.com>
-Date: Fri, 18 Nov 2022 08:17:55 -0800
-Subject: [PATCH 1/2] KVM: x86: Add BUILD_BUG_ON() to detect bad usage of
- "scattered" flags
-
-Add a compile-time assert in the SF() macro to detect improper usage,
-i.e. to detect passing in an X86_FEATURE_* flag that isn't actually
-scattered by the kernel.  Upcoming feature flags will be 100% KVM-only
-and will have X86_FEATURE_* macros that point at a kvm_only_cpuid_leafs
-word, not a kernel-defined word.  Using SF() and thus boot_cpu_has() for
-such feature flags would access memory beyond x86_capability[NCAPINTS]
-and at best incorrectly hide a feature, and at worst leak kernel state to
-userspace.
-
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/cpuid.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 6b5912578edd..ff2e9734e5c1 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -65,7 +65,13 @@ u32 xstate_required_size(u64 xstate_bv, bool compacted)
- #define KVM_X86_FEATURE_AMD_PSFD	(13*32+28) /* Predictive Store Forwarding Disable */
- 
- #define F feature_bit
--#define SF(name) (boot_cpu_has(X86_FEATURE_##name) ? F(name) : 0)
-+
-+/* Scattered Flag - For features that are scattered by cpufeatures.h. */
-+#define SF(name)						\
-+({								\
-+	BUILD_BUG_ON(X86_FEATURE_##name >= MAX_CPU_FEATURES);	\
-+	(boot_cpu_has(X86_FEATURE_##name) ? F(name) : 0);	\
-+})
- 
- /*
-  * Magic value used by KVM when querying userspace-provided CPUID entries and
-
-base-commit: d663b8a285986072428a6a145e5994bc275df994
--- 
-2.38.1.584.g0f3c55d4c2-goog
-
-
---NxmGoc9WWi4h5czq
-Content-Type: text/x-diff; charset=us-ascii
-Content-Disposition: attachment;
-	filename="0002-KVM-x86-Update-KVM-only-leaf-handling-to-allow-for-1.patch"
-
-From 565a06e1d6e1ea40daa113bc2b3d10e7b2a8a508 Mon Sep 17 00:00:00 2001
-From: Sean Christopherson <seanjc@google.com>
-Date: Fri, 18 Nov 2022 08:52:28 -0800
-Subject: [PATCH 2/2] KVM: x86: Update KVM-only leaf handling to allow for 100%
- KVM-only leafs
-
-Rename kvm_cpu_cap_init_scattered() to kvm_cpu_cap_init_kvm_defined() in
-anticipation of adding KVM-only CPUID leafs that aren't recognized by the
-kernel and thus not scattered, i.e. for leafs that are 100% KVM-defined.
-
-Adjust/add comments to kvm_only_cpuid_leafs and KVM_X86_FEATURE to
-document how to create new kvm_only_cpuid_leafs entries for scattered
-features as well as features that are entirely unknown to the kernel.
-
-No functional change intended.
-
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/cpuid.c         |  8 ++++----
- arch/x86/kvm/reverse_cpuid.h | 18 +++++++++++++++---
- 2 files changed, 19 insertions(+), 7 deletions(-)
-
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index ff2e9734e5c1..73c3c6dc6e7b 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -549,9 +549,9 @@ static __always_inline void __kvm_cpu_cap_mask(unsigned int leaf)
- }
- 
- static __always_inline
--void kvm_cpu_cap_init_scattered(enum kvm_only_cpuid_leafs leaf, u32 mask)
-+void kvm_cpu_cap_init_kvm_defined(enum kvm_only_cpuid_leafs leaf, u32 mask)
- {
--	/* Use kvm_cpu_cap_mask for non-scattered leafs. */
-+	/* Use kvm_cpu_cap_mask for leafs that aren't KVM-only. */
- 	BUILD_BUG_ON(leaf < NCAPINTS);
- 
- 	kvm_cpu_caps[leaf] = mask;
-@@ -561,7 +561,7 @@ void kvm_cpu_cap_init_scattered(enum kvm_only_cpuid_leafs leaf, u32 mask)
- 
- static __always_inline void kvm_cpu_cap_mask(enum cpuid_leafs leaf, u32 mask)
- {
--	/* Use kvm_cpu_cap_init_scattered for scattered leafs. */
-+	/* Use kvm_cpu_cap_init_kvm_defined for KVM-only leafs. */
- 	BUILD_BUG_ON(leaf >= NCAPINTS);
- 
- 	kvm_cpu_caps[leaf] &= mask;
-@@ -670,7 +670,7 @@ void kvm_set_cpu_caps(void)
- 		F(XSAVEOPT) | F(XSAVEC) | F(XGETBV1) | F(XSAVES) | f_xfd
- 	);
- 
--	kvm_cpu_cap_init_scattered(CPUID_12_EAX,
-+	kvm_cpu_cap_init_kvm_defined(CPUID_12_EAX,
- 		SF(SGX1) | SF(SGX2)
- 	);
- 
-diff --git a/arch/x86/kvm/reverse_cpuid.h b/arch/x86/kvm/reverse_cpuid.h
-index a19d473d0184..443a6b3e66c0 100644
---- a/arch/x86/kvm/reverse_cpuid.h
-+++ b/arch/x86/kvm/reverse_cpuid.h
-@@ -7,9 +7,9 @@
- #include <asm/cpufeatures.h>
- 
- /*
-- * Hardware-defined CPUID leafs that are scattered in the kernel, but need to
-- * be directly used by KVM.  Note, these word values conflict with the kernel's
-- * "bug" caps, but KVM doesn't use those.
-+ * Hardware-defined CPUID leafs that are either scattered by the kernel or are
-+ * unknown to the kernel, but need to be directly used by KVM.  Note, these
-+ * word values conflict with the kernel's "bug" caps, but KVM doesn't use those.
-  */
- enum kvm_only_cpuid_leafs {
- 	CPUID_12_EAX	 = NCAPINTS,
-@@ -18,6 +18,18 @@ enum kvm_only_cpuid_leafs {
- 	NKVMCAPINTS = NR_KVM_CPU_CAPS - NCAPINTS,
- };
- 
-+/*
-+ * Define a KVM-only feature flag.
-+ *
-+ * For features that are scattered by cpufeatures.h, __feature_translate() also
-+ * needs to be updated to translate the kernel-defined feature into the
-+ * KVM-defined feature.
-+ *
-+ * For features that are 100% KVM-only, i.e. not defined by cpufeatures.h,
-+ * forego the intermediate KVM_X86_FEATURE and directly define X86_FEATURE_* so
-+ * that X86_FEATURE_* can be used in KVM.  No __feature_translate() handling is
-+ * needed in this case.
-+ */
- #define KVM_X86_FEATURE(w, f)		((w)*32 + (f))
- 
- /* Intel-defined SGX sub-features, CPUID level 0x12 (EAX). */
--- 
-2.38.1.584.g0f3c55d4c2-goog
-
-
---NxmGoc9WWi4h5czq--
+T24gRnJpLCAyMDIyLTExLTE4IGF0IDE2OjIxICswMDAwLCBTY2hpbXBlLCBDaHJpc3RpbmEgd3Jv
+dGU6DQo+ID4gT24gVGh1LCAyMDIyLTExLTE3IGF0IDEyOjI1ICswMDAwLCBTY2hpbXBlLCBDaHJp
+c3RpbmEgd3JvdGU6DQo+ID4gPiA+IEhtbSwgd2UgZGVmaW5pdGVseSBuZWVkIHRvIGJlIGFibGUg
+dG8gc2V0IHRoZSBTU1AuIENocmlzdGluYSwNCj4gPiA+ID4gZG9lcw0KPiA+ID4gPiBHREIgbmVl
+ZCBhbnl0aGluZyBlbHNlPyBJIHRob3VnaHQgbWF5YmUgdG9nZ2xpbmcgU0hTVEtfRU4/DQo+ID4g
+PiANCj4gPiA+IEluIGFkZGl0aW9uIHRvIHRoZSBTU1AsIHdlIHdhbnQgdG8gd3JpdGUgdGhlIENF
+VCBzdGF0ZS4gRm9yDQo+ID4gPiBpbnN0YW5jZQ0KPiA+ID4gZm9yIGluZmVyaW9yIGNhbGxzLCB3
+ZSB3YW50IHRvIHJlc2V0IHRoZSBJQlQgYml0cy4NCj4gPiA+IEhvd2V2ZXIsIHdlIHdvbid0IHdy
+aXRlIHN0YXRlcyB0aGF0IGFyZSBkaXNhbGxvd2VkIGJ5IEhXLg0KPiA+IA0KPiA+IFNvcnJ5LCBJ
+IHNob3VsZCBoYXZlIGdpdmVuIG1vcmUgYmFja2dyb3VuZC4gUGV0ZXIgaXMgc2F5aW5nIHdlDQo+
+ID4gc2hvdWxkIHNwbGl0DQo+ID4gdGhlIHB0cmFjZSBpbnRlcmZhY2Ugc28gdGhhdCBzaGFkb3cg
+c3RhY2sgYW5kIElCVCBhcmUgc2VwYXJhdGUuDQo+ID4gVGhleSB3b3VsZCBhbHNvIG5vIGxvbmdl
+ciBuZWNlc3NhcmlseSBtaXJyb3IgdGhlIENFVF9VIE1TUiBmb3JtYXQuDQo+ID4gSW5zdGVhZCB0
+aGUga2VybmVsIHdvdWxkIGV4cG9zZSBhIGtlcm5lbCBzcGVjaWZpYyBmb3JtYXQgdGhhdCBoYXMN
+Cj4gPiB0aGUNCj4gPiBuZWVkZWQgYml0cyBvZiBzaGFkb3cgc3RhY2sgc3VwcG9ydC4gQW5kIGEg
+c2VwYXJhdGUgb25lIGxhdGVyIGZvcg0KPiA+IElCVC4NCj4gPiANCj4gPiBTbyB0aGUgcXVlc3Rp
+b24gaXMgd2hhdCBkb2VzIHNoYWRvdyBzdGFjayBuZWVkIHRvIHN1cHBvcnQgZm9yDQo+ID4gcHRy
+YWNlDQo+ID4gYmVzaWRlcyBTU1A/IElzIGl0IG9ubHkgU1NQPyBUaGUgb3RoZXIgZmVhdHVyZXMg
+YXJlIFNIU1RLX0VOIGFuZA0KPiA+IFdSU1NfRU4uDQo+ID4gSXQgbWlnaHQgYWN0dWFsbHkgYmUg
+bmljZSB0byBrZWVwIGhvdyB0aGVzZSBiaXRzIGdldCBmbGlwcGVkIG1vcmUNCj4gPiBjb250cm9s
+bGVkDQo+ID4gKHJlbW92ZSB0aGVtIGZyb20gcHRyYWNlKS4gSXQgbG9va3MgbGlrZSBDUklVIGRp
+ZG4ndCBuZWVkIHRoZW0uDQo+ID4gDQo+IA0KPiBHREIgY3VycmVudGx5IHJlYWRzIHRoZSBDRVRf
+VSBhbmQgU1NQIHJlZ2lzdGVyLiBIb3dldmVyLCB3ZSBkb27igJl0DQo+IG5lY2Vzc2FyaWx5IGhh
+dmUgdG8gcmVhZCBFQl9MRUdfQklUTUFQX0JBU0UuDQo+IEluIGFkZGl0aW9uIHRvIFNTUCwgd2Ug
+d2FudCB0byB3cml0ZSB0aGUgYml0cyBmb3IgdGhlIElCVCBzdGF0ZQ0KPiBtYWNoaW5lIChUUkFD
+S0VSIGFuZCBTVVBQUkVTUykuDQo+IEhvd2V2ZXIsIGJlc2lkZXMgdGhhdCBHREIgZG9lcyBub3Qg
+aGF2ZSB0byB3cml0ZSBhbnl0aGluZyBlbHNlLg0KDQpBZ2FpbiwgdGhpcyBpcyBqdXN0IGFib3V0
+IHNoYWRvdyBzdGFjay4gSUJUIHdpbGwgaGF2ZSBhIHNlcGFyYXRlDQppbnRlcmZhY2UuIFNvIGJh
+c2VkIG9uIHRoZXNlIGNvbW1lbnRzLCBJJ2xsIGNoYW5nZSB0aGUgaW50ZXJmYWNlIGluDQp0aGlz
+IHBhdGNoIHRvIG9uZSBmb3Igc2ltcGx5IHJlYWRpbmcvd3JpdGluZyBTU1AuDQoNCg0K
