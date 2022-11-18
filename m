@@ -2,125 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3C8162FD65
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 19:59:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25BB362FD24
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 19:52:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241915AbiKRS65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 13:58:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51234 "EHLO
+        id S242829AbiKRSwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 13:52:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242708AbiKRSvH (ORCPT
+        with ESMTP id S241896AbiKRSvk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 13:51:07 -0500
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED038FB34;
-        Fri, 18 Nov 2022 10:51:06 -0800 (PST)
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-13bd2aea61bso7025518fac.0;
-        Fri, 18 Nov 2022 10:51:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=uuUisE6muQ2a8H+UFn8jxcAB9pjTtgR2YYMbLsdm6pE=;
-        b=q6/krNcxLDhH+PPOpUwZYkvchYDTm7eWhaX0eYBTljiGoDHn0PWUmB15+HkCXDS/TS
-         ORQ0RX0HArB2TQdipzBQQrTK8dtUKDS30UrOWMEGef6kyqqaXaaqzzUGgv5AKuUzmLHD
-         j/eCXjRxU5x1XxhcTFEIeMSEQd2XeWxOXvyGM68heOvWeiaWg5m9pWadHG+DrJsmNRa4
-         cA06nKwzY0zXxxpfLapAZvinaNOHF3uED9RX5VV6yQH0XUVBdyLZsUJ46sh7jmc5VpqV
-         Squpj9NHDcO9zBMxvnYporvZQI5Kr5ctKGLrGbcgHcyZEJ+QLKk8MOY6082fdiaSptxF
-         LwyA==
-X-Gm-Message-State: ANoB5pkOavWlPDXNgkceQ1saNAtWxPgS5JVzIZ8lefo6uBTURG9CXIe+
-        uOWjqo/O6SSYkrB0Kl8gAA==
-X-Google-Smtp-Source: AA0mqf6bf2HY2HW6lGRmiXPWhAMZr4bJ2EvTFxkJh7esTNkKUL2fjgko3ZlpdrkN1JGLcX4aBxGgag==
-X-Received: by 2002:a05:6870:bf0b:b0:136:66d0:b853 with SMTP id qh11-20020a056870bf0b00b0013666d0b853mr4647233oab.161.1668797465890;
-        Fri, 18 Nov 2022 10:51:05 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id i25-20020a056871029900b0010c727a3c79sm2408247oae.26.2022.11.18.10.51.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 10:51:05 -0800 (PST)
-Received: (nullmailer pid 856961 invoked by uid 1000);
-        Fri, 18 Nov 2022 18:50:54 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Paolo Abeni <pabeni@redhat.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-media@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-amlogic@lists.infradead.org, linux-watchdog@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        linux-rtc@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>, netdev@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-mmc@vger.kernel.org,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
+        Fri, 18 Nov 2022 13:51:40 -0500
+Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6240C9370A;
+        Fri, 18 Nov 2022 10:51:27 -0800 (PST)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id 0EE8D1382;
+        Fri, 18 Nov 2022 19:51:25 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1668797485;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=betImScO1GhQ0JuM7C17Rd8Gr/O3/6aRG6Ij9CO1FLg=;
+        b=IjlwvoqX3/zayXTq8N7wnScOL/BFbSspXv/y8cNFeCEihYkE4R9O0Z1AtTTCqK7jXCJMqG
+        xDZVRhfPD+IXD6wFmmxIzGFKx8blGh5Fq7VfWY2xFXa/en7sI7GKhwHex7RqelC5zfC+Em
+        sU7mW72DRWomXpCZVYlTiORC2nh2n56hgpMKFbcCjJqlFQIldZP9SOz2BBLL5tTrjEfWrF
+        Bu7OiNKGY4PSipIVExu3UM7xyKHkfE7xHq9IO2mq9oMToH1SxI1MSKIT/YrHhOLamYWdv6
+        +I1doAvDQcwRAe/5zZwVz8zlp4/Zzts2ExdQhX06XLQKxbPIt8jmL8Q1Uus2FA==
+From:   Michael Walle <michael@walle.cc>
+To:     Jonathan Corbet <corbet@lwn.net>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-phy@lists.infradead.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-arm-kernel@lists.infradead.org
-In-Reply-To: <20221117-b4-amlogic-bindings-convert-v1-4-3f025599b968@linaro.org>
-References: <20221117-b4-amlogic-bindings-convert-v1-0-3f025599b968@linaro.org> 
- <20221117-b4-amlogic-bindings-convert-v1-4-3f025599b968@linaro.org>
-Message-Id: <166879731312.851419.16320390143824776926.robh@kernel.org>
-Subject: Re: [PATCH 04/12] dt-bindings: watchdog: convert meson-wdt.txt to dt-schema
-Date:   Fri, 18 Nov 2022 12:50:54 -0600
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH v3 00/18] nvmem: core: introduce NVMEM layouts
+Date:   Fri, 18 Nov 2022 19:51:00 +0100
+Message-Id: <20221118185118.1190044-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam: Yes
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Fri, 18 Nov 2022 15:33:30 +0100, Neil Armstrong wrote:
-> Convert the Amlogic Meson6 SoCs Watchdog timer bindings to dt-schema.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->  .../bindings/watchdog/amlogic,meson6-wdt.yaml      | 39 ++++++++++++++++++++++
->  .../devicetree/bindings/watchdog/meson-wdt.txt     | 21 ------------
->  2 files changed, 39 insertions(+), 21 deletions(-)
-> 
-
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
-
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
-
-Full log is available here: https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221117-b4-amlogic-bindings-convert-v1-4-3f025599b968@linaro.org
+This is now the third attempt to fetch the MAC addresses from the VPD
+for the Kontron sl28 boards. Previous discussions can be found here:
+https://lore.kernel.org/lkml/20211228142549.1275412-1-michael@walle.cc/
 
 
-watchdog@9900: compatible: ['amlogic,meson8m2-wdt', 'amlogic,meson8b-wdt'] is too long
-	arch/arm/boot/dts/meson8m2-mxiii-plus.dtb
+NVMEM cells are typically added by board code or by the devicetree. But
+as the cells get more complex, there is (valid) push back from the
+devicetree maintainers to not put that handling in the devicetree.
 
-watchdog@9900: Unevaluated properties are not allowed ('compatible', 'interrupts' were unexpected)
-	arch/arm/boot/dts/meson8m2-mxiii-plus.dtb
+Therefore, introduce NVMEM layouts. They operate on the NVMEM device and
+can add cells during runtime. That way it is possible to add more complex
+cells than it is possible right now with the offset/length/bits
+description in the device tree. For example, you can have post processing
+for individual cells (think of endian swapping, or ethernet offset
+handling).
 
-watchdog@9900: Unevaluated properties are not allowed ('interrupts' was unexpected)
-	arch/arm/boot/dts/meson6-atv1200.dtb
-	arch/arm/boot/dts/meson8b-ec100.dtb
-	arch/arm/boot/dts/meson8b-mxq.dtb
-	arch/arm/boot/dts/meson8b-odroidc1.dtb
-	arch/arm/boot/dts/meson8-minix-neo-x8.dtb
+The imx-ocotp driver is the only user of the global post processing hook,
+convert it to nvmem layouts and drop the global post pocessing hook.
+
+For now, the layouts are selected by the device tree. But the idea is
+that also board files or other drivers could set a layout. Although no
+code for that exists yet.
+
+Thanks to Miquel, the device tree bindings are already approved and merged.
+
+NVMEM layouts as modules?
+While possible in principle, it doesn't make any sense because the NVMEM
+core can't be compiled as a module. The layouts needs to be available at
+probe time. (That is also the reason why they get registered with
+subsys_initcall().) So if the NVMEM core would be a module, the layouts
+could be modules, too.
+
+Michael Walle (16):
+  net: add helper eth_addr_add()
+  of: base: add of_parse_phandle_with_optional_args()
+  nvmem: core: fix device node refcounting
+  nvmem: core: add an index parameter to the cell
+  nvmem: core: move struct nvmem_cell_info to nvmem-provider.h
+  nvmem: core: drop the removal of the cells in nvmem_add_cells()
+  nvmem: core: add nvmem_add_one_cell()
+  nvmem: core: use nvmem_add_one_cell() in nvmem_add_cells_from_of()
+  nvmem: core: introduce NVMEM layouts
+  nvmem: core: add per-cell post processing
+  nvmem: core: allow to modify a cell before adding it
+  nvmem: imx-ocotp: replace global post processing with layouts
+  nvmem: cell: drop global cell_post_process
+  nvmem: core: provide own priv pointer in post process callback
+  nvmem: layouts: add sl28vpd layout
+  MAINTAINERS: add myself as sl28vpd nvmem layout driver
+
+Miquel Raynal (2):
+  nvmem: layouts: Add ONIE tlv layout driver
+  MAINTAINERS: Add myself as ONIE tlv NVMEM layout maintainer
+
+ Documentation/driver-api/nvmem.rst |  15 ++
+ MAINTAINERS                        |  12 ++
+ drivers/nvmem/Kconfig              |   4 +
+ drivers/nvmem/Makefile             |   1 +
+ drivers/nvmem/core.c               | 281 ++++++++++++++++++++++-------
+ drivers/nvmem/imx-ocotp.c          |  34 ++--
+ drivers/nvmem/layouts/Kconfig      |  23 +++
+ drivers/nvmem/layouts/Makefile     |   7 +
+ drivers/nvmem/layouts/onie-tlv.c   | 249 +++++++++++++++++++++++++
+ drivers/nvmem/layouts/sl28vpd.c    | 153 ++++++++++++++++
+ include/linux/etherdevice.h        |  14 ++
+ include/linux/nvmem-consumer.h     |  17 +-
+ include/linux/nvmem-provider.h     |  95 +++++++++-
+ include/linux/of.h                 |  25 +++
+ 14 files changed, 834 insertions(+), 96 deletions(-)
+ create mode 100644 drivers/nvmem/layouts/Kconfig
+ create mode 100644 drivers/nvmem/layouts/Makefile
+ create mode 100644 drivers/nvmem/layouts/onie-tlv.c
+ create mode 100644 drivers/nvmem/layouts/sl28vpd.c
+
+-- 
+2.30.2
 
