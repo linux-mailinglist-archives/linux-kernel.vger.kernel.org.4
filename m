@@ -2,107 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 680F262EB52
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 02:51:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77EFB62EB63
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 02:56:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241012AbiKRBvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 20:51:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59824 "EHLO
+        id S240749AbiKRB41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 20:56:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234942AbiKRBvB (ORCPT
+        with ESMTP id S235099AbiKRB4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 20:51:01 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25BBD1E71A;
-        Thu, 17 Nov 2022 17:51:01 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id q1-20020a17090a750100b002139ec1e999so3724698pjk.1;
-        Thu, 17 Nov 2022 17:51:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NBS4FEaFHTKXaYFv2EZVW4mDEjeLzjqY4+noYhxCMC0=;
-        b=PQJiGp8FtrzmlUizG+g1ph5MA8h5OzMv5uAA3sI+jLjxaM8z5Bw7stVBixImIawU/j
-         qDwCW44gKY4EL2t6MknTpgzfBadhflgt1nuMyf0GuXvWzQaBiyTXiqOBpfwrHgoGX8JU
-         hDs9EaawGpzWaKK/uH62CvcAoBpNcVNNRGmt3yQ8IuiwyafwrDt6JUWcD5j5RIm2i+Li
-         LWxo3PVbAm/xX9oILh2qYCC9dr5VWZ7CLmpmr7cGc9ad6Fbylw30fR1/AgQHpdMRFKR8
-         2fZT1ARENMBLGt3WhX7OPsYObaBpZXosDwQtvBb+POv6xgkKMnbDS2MIgGDDnDNZNV9m
-         /WYQ==
+        Thu, 17 Nov 2022 20:56:23 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938B3742C7
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 17:56:20 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id k21-20020a5e8915000000b006de391b332fso1883402ioj.4
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 17:56:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NBS4FEaFHTKXaYFv2EZVW4mDEjeLzjqY4+noYhxCMC0=;
-        b=KmkcAV6ScOb1GmAEM/1vuIpwMAy8IE0V5hDoY6sfCHPvpl2Xnk7LXyAnVS3sUL7VD9
-         70ymaFZhHt9GzyIPFOhZ9ZM3zGa7hFPxF3BmLf2sBCrp9TIbDGlcJdz4M8tHKmfQIToA
-         WxrWUY6FZ/OBcs6hBVjqH++ySQJSiQswqWd0wiitrFAhv/TATNiWzL6IR9JqmDZ6KkpT
-         zOA6oN4qw9deC898uigcSiQiTXFcfBZjgQqQsfemwvrJbHDPNL9iEV9HYdSMsb1k2BUr
-         zrKsbxxUiFS27r+avVnWcgQcCtoUBWhH12EgTkJbRNcMcs9+aMCX0ueBE/klG7Wy3k3F
-         RfqQ==
-X-Gm-Message-State: ANoB5pml2RSsHgN86oBBAG3YauLs+VAMBXtBl6i5ibA3vveNknCAcINa
-        vqts/xjBOZmBlPn9aF2/Z+c=
-X-Google-Smtp-Source: AA0mqf7UJgdPd4BUn/uEbwTZdqKfI8L6J8nUK3uXEaa7odzb6UBilqbNmtt/Uj6H4wDYtK/+YNamhg==
-X-Received: by 2002:a17:902:a508:b0:17c:7aaa:c67d with SMTP id s8-20020a170902a50800b0017c7aaac67dmr5225945plq.171.1668736260670;
-        Thu, 17 Nov 2022 17:51:00 -0800 (PST)
-Received: from [192.168.43.80] (subs02-180-214-232-20.three.co.id. [180.214.232.20])
-        by smtp.gmail.com with ESMTPSA id h15-20020aa796cf000000b00560bb4a57f7sm1865320pfq.179.2022.11.17.17.50.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Nov 2022 17:51:00 -0800 (PST)
-Message-ID: <73ecf737-c523-b4ab-f11f-431bb5fb2c37@gmail.com>
-Date:   Fri, 18 Nov 2022 08:50:54 +0700
+        bh=5pvNabL4h/jw3vWWl8UrKWU7ECeSF3aiv4l/7+Kwbb8=;
+        b=BVex/LXLR2J/x9PgEpIRLItoUUvaoMRRlTqvj2GPmLN1FCvDAp0ifIXRjwVH+DD4C0
+         HIi2JLG9Mjh+3hDpvQuxoRU5KN6fLCSwjaey+7xF2EuhvxfPtYxsAB9OsU+L6d2pj3ET
+         I2HDYNOjal/D4uUqDLWnesRasOxJyU0KPXsJCBVz6fp4yMYmgIL0PgDrf4lH5GAEAZkJ
+         pE498QFY8+LzSVFQL6m0J6vLHXJWP6p6VvA77vLuWu85DjtJjHjOr66FTAri+DKZ0VYe
+         X0676HT1WPs4maQJ0FF7s6CtOpMwXtcUeCVUJyJkDjwseuRZS4gJujuuYaTzWioOgTes
+         wGHA==
+X-Gm-Message-State: ANoB5pkW307ZfOoE/duQKoa7Tf4K5QCFt8Z74zEXlMef0w/xAirc9M6X
+        yoy4ptDyLvXJ0GCFLm/ytkZ1et1c/uDkFmwUMT49jUewlKoa
+X-Google-Smtp-Source: AA0mqf45hbckZ2aQOX7ek+n7IrRm+TLARFS5k7Cpgc/J3eoK5JGyghNN8Zz2xGtvDMZWQ5eFrzyaERPuVNbmpR8na1Tlmn82UWtD
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v3 2/9] Documentation: KVM: s390: Describe
- KVM_S390_MEMOP_F_CMPXCHG
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>
-References: <20221117221758.66326-1-scgl@linux.ibm.com>
- <20221117221758.66326-3-scgl@linux.ibm.com>
-Content-Language: en-US
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20221117221758.66326-3-scgl@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:3e15:b0:374:53a:a5bf with SMTP id
+ co21-20020a0566383e1500b00374053aa5bfmr2275103jab.77.1668736579920; Thu, 17
+ Nov 2022 17:56:19 -0800 (PST)
+Date:   Thu, 17 Nov 2022 17:56:19 -0800
+In-Reply-To: <0000000000004e78ec05eda79749@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000011ec5105edb50386@google.com>
+Subject: Re: [syzbot] BUG: sleeping function called from invalid context in static_key_slow_inc
+From:   syzbot <syzbot+703d9e154b3b58277261@syzkaller.appspotmail.com>
+To:     Jason@zx2c4.com, davem@davemloft.net, edumazet@google.com,
+        frederic@kernel.org, gnault@redhat.com, jacob.e.keller@intel.com,
+        jakub@cloudflare.com, jiri@nvidia.com, johannes@sipsolutions.net,
+        juri.lelli@redhat.com, kirill.shutemov@linux.intel.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        mark.rutland@arm.com, netdev@vger.kernel.org,
+        nicolas.dichtel@6wind.com, pabeni@redhat.com, paul@paul-moore.com,
+        peterz@infradead.org, razor@blackwall.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, steven.price@arm.com,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
+        tparkin@katalix.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/18/22 05:17, Janis Schoetterl-Glausch wrote:
-> +For write accesses, the KVM_S390_MEMOP_F_CMPXCHG might be supported.
-> +In this case, instead of doing an unconditional write, the access occurs only
-> +if the target location contains the "size" byte long value pointed to by
-> +"old_p". This is performed as an atomic cmpxchg. "size" must be a power of two
-> +up to and including 16.
-> +The value at the target location is written to the location "old_p" points to.
-> +If the exchange did not take place because the target value doesn't match the
-> +old value KVM_S390_MEMOP_R_NO_XCHG is returned.
-> +The KVM_S390_MEMOP_F_CMPXCHG flag is supported if KVM_CAP_S390_MEM_OP_EXTENSION
-> +has bit 1 (i.e. bit with value 2) set.
->  
+syzbot has bisected this issue to:
 
-Is KVM_S390_MEMOP_F_CMPXCHG supported with conditions (as you implied)?
+commit b68777d54fac21fc833ec26ea1a2a84f975ab035
+Author: Jakub Sitnicki <jakub@cloudflare.com>
+Date:   Mon Nov 14 19:16:19 2022 +0000
 
--- 
-An old man doll... just what I always wanted! - Clara
+    l2tp: Serialize access to sk_user_data with sk_callback_lock
 
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1600bb49880000
+start commit:   064bc7312bd0 netdevsim: Fix memory leak of nsim_dev->fa_co..
+git tree:       net
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=1500bb49880000
+console output: https://syzkaller.appspot.com/x/log.txt?x=1100bb49880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a33ac7bbc22a8c35
+dashboard link: https://syzkaller.appspot.com/bug?extid=703d9e154b3b58277261
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13cd2f79880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=109e1695880000
+
+Reported-by: syzbot+703d9e154b3b58277261@syzkaller.appspotmail.com
+Fixes: b68777d54fac ("l2tp: Serialize access to sk_user_data with sk_callback_lock")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
