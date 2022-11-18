@@ -2,102 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03CA262F0E2
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 10:19:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59C4762F0E9
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 10:19:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241946AbiKRJTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 04:19:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35970 "EHLO
+        id S235295AbiKRJTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 04:19:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241876AbiKRJS3 (ORCPT
+        with ESMTP id S241794AbiKRJT0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 04:18:29 -0500
-Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FFD9419B8
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 01:18:23 -0800 (PST)
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [10.196.197.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Fri, 18 Nov 2022 04:19:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C8D13F20;
+        Fri, 18 Nov 2022 01:19:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4NDB606Phzz9skf;
-        Fri, 18 Nov 2022 10:18:16 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-        t=1668763096;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lTdyYev7Ss9teMBT/XBdYBNta7QNMGTiSYism0OihVU=;
-        b=K4iIv+pZTFwX+LEDRaLRHyjsgcD4KeBvR0ua48NOL0K5wqITYyjnjgNxRis4zmvj7lI5WQ
-        tKQ/qV08YGd+MwUdViZ892ZR6tyNTo/TeaSnzkcXCI7Baa2CvAjAvVxCN1ebiQ66okaEL0
-        WQXhuqP6Wxiq6m16KKL3Hbo1oOKlKducPVYjbF3EwAZH2zVR+Y4ClR79JKcojy2eakDzzb
-        PCJzbJrb5EKfuHr2kjQYiMoI0Tc8rHhiJBVsG4VJJoX3aNmuVRcYqfLvAhvHFmEOWjWmFz
-        cmTdNo7oTXxjP8RKYYjFKvyrmoLYtpJ5bZFIqEJsqr0d8NlhrQVRW/yBBc5E6A==
-Message-ID: <800a1207-8ff6-4cfa-60f3-6ff456874890@mailbox.org>
-Date:   Fri, 18 Nov 2022 10:18:14 +0100
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9EBEBB822DC;
+        Fri, 18 Nov 2022 09:19:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84299C433C1;
+        Fri, 18 Nov 2022 09:19:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668763163;
+        bh=iRaJEbJLZoILd9LHKyMewBZAVelq+rNxVl7UK4aOIwY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HwMkO7sabolcvoNCP3zcYsgba+R/9E3t4ht5gH6Yn5JzJ9Nfx73AGedjH2F7Yt23l
+         ri8FUxYV6fflLiUAvPSn2yneJQBNiUpDAXNcaYEiLsZejWGU6lQKgr3BuKbCyKhYUt
+         0lFv7P2cRRJxewbrHwPETJvXhjcf6u4DoC6yHaaOTsOx8bykj4UkEoh88nyeU9MrHP
+         Pu96WwLgH66LP7BI8CrkHhcOW7iDiAiX9nk6oMJlR7Zt9J0lqzDUhLfu4SLtSjnzvb
+         CWFh+E0UI02lLZeR79sAjD/fNNXbxna2Wpf0T2fMzoFsSAjTMeroTkhRy+llHkMPKB
+         54cZ4X6CPGDGA==
+Date:   Fri, 18 Nov 2022 17:19:19 +0800
+From:   Tzung-Bi Shih <tzungbi@kernel.org>
+To:     Lee Jones <lee@kernel.org>
+Cc:     Mark Hasemeyer <markhas@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Raul Rangel <rrangel@chromium.org>,
+        Bhanu Prakash Maiya <bhanumaiya@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        chrome-platform@lists.linux.dev, devicetree@vger.kernel.org
+Subject: Re: [PATCH v7 2/3] dt-bindings: mfd: Add DT compatible string
+ "google,cros_ec_uart"
+Message-ID: <Y3dOF3IQ/S5NCnR+@google.com>
+References: <20221117114818.v7.1.If7926fcbad397bc6990dd725690229bed403948c@changeid>
+ <20221117114818.v7.2.I9e018ecb8bdf341648cb64417085978ff0d22a46@changeid>
+ <Y3cboMlFTRzSJyQ8@google.com>
+ <Y3dJYXCngi1p28HO@google.com>
 MIME-Version: 1.0
-Subject: Re: [PATCH] drm/amdgpu: add mb for si
-Content-Language: de-CH-frami, en-CA
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Zhenneng Li <lizhenneng@kylinos.cn>,
-        Alex Deucher <alexander.deucher@amd.com>
-Cc:     Xinhui.Pan@amd.com, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org
-References: <20221118074810.380368-1-lizhenneng@kylinos.cn>
- <ecd9d251-8941-b2db-71b2-e4ac06f860a3@amd.com>
-From:   =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel.daenzer@mailbox.org>
-In-Reply-To: <ecd9d251-8941-b2db-71b2-e4ac06f860a3@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-MBO-RS-META: 1afyttkaptk1qh7bss3ey8wa78i7z3af
-X-MBO-RS-ID: 4afc4dcc6c7cfafea96
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3dJYXCngi1p28HO@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/18/22 09:01, Christian König wrote:
-> Am 18.11.22 um 08:48 schrieb Zhenneng Li:
->> During reboot test on arm64 platform, it may failure on boot,
->> so add this mb in smc.
->>
->> The error message are as follows:
->> [    6.996395][ 7] [  T295] [drm:amdgpu_device_ip_late_init [amdgpu]] *ERROR*
->>                 late_init of IP block <si_dpm> failed -22
->> [    7.006919][ 7] [  T295] amdgpu 0000:04:00.0: amdgpu_device_ip_late_init failed
->> [    7.014224][ 7] [  T295] amdgpu 0000:04:00.0: Fatal error during GPU init
+On Fri, Nov 18, 2022 at 08:59:13AM +0000, Lee Jones wrote:
+> On Fri, 18 Nov 2022, Tzung-Bi Shih wrote:
 > 
-> Memory barries are not supposed to be sprinkled around like this, you need to give a detailed explanation why this is necessary.
+> > On Thu, Nov 17, 2022 at 11:48:47AM -0700, Mark Hasemeyer wrote:
+> > > Add DT compatible string in
+> > > Documentation/devicetree/bindings/mfd/cros_ec.txt
+> > 
+> > The patch doesn't apply.  Please rebase it.
 > 
-> Regards,
-> Christian.
-> 
->>
->> Signed-off-by: Zhenneng Li <lizhenneng@kylinos.cn>
->> ---
->>   drivers/gpu/drm/amd/pm/legacy-dpm/si_smc.c | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/drivers/gpu/drm/amd/pm/legacy-dpm/si_smc.c b/drivers/gpu/drm/amd/pm/legacy-dpm/si_smc.c
->> index 8f994ffa9cd1..c7656f22278d 100644
->> --- a/drivers/gpu/drm/amd/pm/legacy-dpm/si_smc.c
->> +++ b/drivers/gpu/drm/amd/pm/legacy-dpm/si_smc.c
->> @@ -155,6 +155,8 @@ bool amdgpu_si_is_smc_running(struct amdgpu_device *adev)
->>       u32 rst = RREG32_SMC(SMC_SYSCON_RESET_CNTL);
->>       u32 clk = RREG32_SMC(SMC_SYSCON_CLOCK_CNTL_0);
->>   +    mb();
->> +
->>       if (!(rst & RST_REG) && !(clk & CK_DISABLE))
->>           return true;
+> Were you actually trying to apply the patch, or just testing?
 
-In particular, it makes no sense in this specific place, since it cannot directly affect the values of rst & clk.
-
-
--- 
-Earthling Michel Dänzer            |                  https://redhat.com
-Libre software enthusiast          |         Mesa and Xwayland developer
-
+Was trying to apply the patch to my local Linux tree (for-next) for
+reading the series.
