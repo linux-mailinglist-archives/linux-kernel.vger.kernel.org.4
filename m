@@ -2,236 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E6A462F323
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 12:02:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC0AC62F329
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 12:03:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241276AbiKRLCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 06:02:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42648 "EHLO
+        id S241478AbiKRLC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 06:02:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241764AbiKRLBx (ORCPT
+        with ESMTP id S241527AbiKRLCq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 06:01:53 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56AAF99E8A;
-        Fri, 18 Nov 2022 03:01:38 -0800 (PST)
-X-UUID: ccac951579684566863168889488ab0d-20221118
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=gEw4Gu5Gnt8zOHhIWW+1I9wzg2APCr+opeqeiUE5TEE=;
-        b=MCAj3A8P+cjwi6PaRieaXBLrJdn5Lhzqtz6BE/1aqNKlR8CAJVQJuW16N5JYBIpIb3hatk7oNAuRf+/8t8QkdJovjJ8xDwAg1jNqHwFosNY2PDM49h3wc1BmofdiFbMnItGGgRt+18P55FwTDJKFNmVsTFotIjHVELOPkad4XF4=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:221a4b70-40e0-44a0-a59a-b0f2fc2dbdfc,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:95
-X-CID-INFO: VERSION:1.1.12,REQID:221a4b70-40e0-44a0-a59a-b0f2fc2dbdfc,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
-        :quarantine,TS:95
-X-CID-META: VersionHash:62cd327,CLOUDID:e3f7a8f8-3a34-4838-abcf-dfedf9dd068e,B
-        ulkID:2211181901279D2G2TU4,BulkQuantity:0,Recheck:0,SF:28|17|19|48,TC:nil,
-        Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: ccac951579684566863168889488ab0d-20221118
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1124821661; Fri, 18 Nov 2022 19:01:26 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Fri, 18 Nov 2022 19:01:25 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Fri, 18 Nov 2022 19:01:24 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Mathias Nyman <mathias.nyman@intel.com>
-CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Eddie Hung" <eddie.hung@mediatek.com>
-Subject: [PATCH] usb: host: xhci-mtk: omit shared hcd if either root hub has no ports
-Date:   Fri, 18 Nov 2022 19:01:16 +0800
-Message-ID: <20221118110116.20165-1-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 18 Nov 2022 06:02:46 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0EC593CF7
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 03:02:44 -0800 (PST)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1ovz8g-0006My-FH; Fri, 18 Nov 2022 12:02:30 +0100
+Message-ID: <dda2cd20b823b002e4b2dccb69741707785a2474.camel@pengutronix.de>
+Subject: Re: [PATCH v2] soc: imx: imx8mp-blk-ctrl: Add PCIe SYSPLL
+ configurations
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Richard Zhu <hongxing.zhu@nxp.com>, marcel.ziswiler@toradex.com,
+        marex@denx.de, tharvey@gateworks.com, bhelgaas@google.com,
+        lorenzo.pieralisi@arm.com, shawnguo@kernel.org,
+        alexander.stein@ew.tq-group.com, richard.leitner@linux.dev
+Cc:     devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, linux-imx@nxp.com
+Date:   Fri, 18 Nov 2022 12:02:27 +0100
+In-Reply-To: <1668740199-31956-1-git-send-email-hongxing.zhu@nxp.com>
+References: <1668740199-31956-1-git-send-email-hongxing.zhu@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,RDNS_NONE,SPF_HELO_PASS,SPF_PASS,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is error log when add a usb3 root hub without ports:
-"hub 4-0:1.0: config failed, hub doesn't have any ports! (err -19)"
+Am Freitag, dem 18.11.2022 um 10:56 +0800 schrieb Richard Zhu:
+> Add PCIe SYSPLL configurations, thus the internal SYSPLL can be used as
+> i.MX8MP PCIe reference clock.
+> 
+> The following properties of PHY dts node should be changed accordingly.
+>   - Set 'fsl,refclk-pad-mode' as '<IMX8_PCIE_REFCLK_PAD_OUTPUT>'.
+>   - Change 'clocks' to '<&clk IMX8MP_CLK_HSIO_AXI>'.
 
-so omit the shared hcd if either of the root hubs has no ports, but
-usually there is no usb3 port.
+This is still not what I meant. There is no direct relation between the
+PCIe PHY domain being powered up and the PCIe PLL being needed. The PLL
+really only needs to be active when the reference clock isn't sourced
+externally. So the HSIO blk-ctrl should expose a proper clock for the
+PLL. As the PLL is effectively fixed rate it should be enough to expose
+get_rate, prepare and unprepare clk ops.
 
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
----
- drivers/usb/host/xhci-mtk.c | 72 +++++++++++++++++++++++--------------
- 1 file changed, 46 insertions(+), 26 deletions(-)
+The PHY should then point at the blk-ctrl as the reference clock
+source.
 
-diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
-index 01705e559c42..cff3c4aea036 100644
---- a/drivers/usb/host/xhci-mtk.c
-+++ b/drivers/usb/host/xhci-mtk.c
-@@ -485,6 +485,7 @@ static int xhci_mtk_probe(struct platform_device *pdev)
- 	const struct hc_driver *driver;
- 	struct xhci_hcd *xhci;
- 	struct resource *res;
-+	struct usb_hcd *usb3_hcd;
- 	struct usb_hcd *hcd;
- 	int ret = -ENODEV;
- 	int wakeup_irq;
-@@ -593,6 +594,7 @@ static int xhci_mtk_probe(struct platform_device *pdev)
- 
- 	xhci = hcd_to_xhci(hcd);
- 	xhci->main_hcd = hcd;
-+	xhci->allow_single_roothub = 1;
- 
- 	/*
- 	 * imod_interval is the interrupt moderation value in nanoseconds.
-@@ -602,24 +604,29 @@ static int xhci_mtk_probe(struct platform_device *pdev)
- 	xhci->imod_interval = 5000;
- 	device_property_read_u32(dev, "imod-interval-ns", &xhci->imod_interval);
- 
--	xhci->shared_hcd = usb_create_shared_hcd(driver, dev,
--			dev_name(dev), hcd);
--	if (!xhci->shared_hcd) {
--		ret = -ENOMEM;
--		goto disable_device_wakeup;
--	}
--
- 	ret = usb_add_hcd(hcd, irq, IRQF_SHARED);
- 	if (ret)
--		goto put_usb3_hcd;
-+		goto disable_device_wakeup;
- 
--	if (HCC_MAX_PSA(xhci->hcc_params) >= 4 &&
-+	if (!xhci_has_one_roothub(xhci)) {
-+		xhci->shared_hcd = usb_create_shared_hcd(driver, dev,
-+							 dev_name(dev), hcd);
-+		if (!xhci->shared_hcd) {
-+			ret = -ENOMEM;
-+			goto dealloc_usb2_hcd;
-+		}
-+	}
-+
-+	usb3_hcd = xhci_get_usb3_hcd(xhci);
-+	if (usb3_hcd && HCC_MAX_PSA(xhci->hcc_params) >= 4 &&
- 	    !(xhci->quirks & XHCI_BROKEN_STREAMS))
--		xhci->shared_hcd->can_do_streams = 1;
-+		usb3_hcd->can_do_streams = 1;
- 
--	ret = usb_add_hcd(xhci->shared_hcd, irq, IRQF_SHARED);
--	if (ret)
--		goto dealloc_usb2_hcd;
-+	if (xhci->shared_hcd) {
-+		ret = usb_add_hcd(xhci->shared_hcd, irq, IRQF_SHARED);
-+		if (ret)
-+			goto put_usb3_hcd;
-+	}
- 
- 	if (wakeup_irq > 0) {
- 		ret = dev_pm_set_dedicated_wake_irq_reverse(dev, wakeup_irq);
-@@ -641,13 +648,13 @@ static int xhci_mtk_probe(struct platform_device *pdev)
- 	usb_remove_hcd(xhci->shared_hcd);
- 	xhci->shared_hcd = NULL;
- 
--dealloc_usb2_hcd:
--	usb_remove_hcd(hcd);
--
- put_usb3_hcd:
--	xhci_mtk_sch_exit(mtk);
- 	usb_put_hcd(xhci->shared_hcd);
- 
-+dealloc_usb2_hcd:
-+	xhci_mtk_sch_exit(mtk);
-+	usb_remove_hcd(hcd);
-+
- disable_device_wakeup:
- 	device_init_wakeup(dev, false);
- 
-@@ -679,10 +686,15 @@ static int xhci_mtk_remove(struct platform_device *pdev)
- 	dev_pm_clear_wake_irq(dev);
- 	device_init_wakeup(dev, false);
- 
--	usb_remove_hcd(shared_hcd);
--	xhci->shared_hcd = NULL;
-+	if (shared_hcd) {
-+		usb_remove_hcd(shared_hcd);
-+		xhci->shared_hcd = NULL;
-+	}
- 	usb_remove_hcd(hcd);
--	usb_put_hcd(shared_hcd);
-+
-+	if (shared_hcd)
-+		usb_put_hcd(shared_hcd);
-+
- 	usb_put_hcd(hcd);
- 	xhci_mtk_sch_exit(mtk);
- 	clk_bulk_disable_unprepare(BULK_CLKS_NUM, mtk->clks);
-@@ -700,13 +712,16 @@ static int __maybe_unused xhci_mtk_suspend(struct device *dev)
- 	struct xhci_hcd_mtk *mtk = dev_get_drvdata(dev);
- 	struct usb_hcd *hcd = mtk->hcd;
- 	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
-+	struct usb_hcd *shared_hcd = xhci->shared_hcd;
- 	int ret;
- 
- 	xhci_dbg(xhci, "%s: stop port polling\n", __func__);
- 	clear_bit(HCD_FLAG_POLL_RH, &hcd->flags);
- 	del_timer_sync(&hcd->rh_timer);
--	clear_bit(HCD_FLAG_POLL_RH, &xhci->shared_hcd->flags);
--	del_timer_sync(&xhci->shared_hcd->rh_timer);
-+	if (shared_hcd) {
-+		clear_bit(HCD_FLAG_POLL_RH, &shared_hcd->flags);
-+		del_timer_sync(&shared_hcd->rh_timer);
-+	}
- 
- 	ret = xhci_mtk_host_disable(mtk);
- 	if (ret)
-@@ -718,8 +733,10 @@ static int __maybe_unused xhci_mtk_suspend(struct device *dev)
- 
- restart_poll_rh:
- 	xhci_dbg(xhci, "%s: restart port polling\n", __func__);
--	set_bit(HCD_FLAG_POLL_RH, &xhci->shared_hcd->flags);
--	usb_hcd_poll_rh_status(xhci->shared_hcd);
-+	if (shared_hcd) {
-+		set_bit(HCD_FLAG_POLL_RH, &shared_hcd->flags);
-+		usb_hcd_poll_rh_status(shared_hcd);
-+	}
- 	set_bit(HCD_FLAG_POLL_RH, &hcd->flags);
- 	usb_hcd_poll_rh_status(hcd);
- 	return ret;
-@@ -730,6 +747,7 @@ static int __maybe_unused xhci_mtk_resume(struct device *dev)
- 	struct xhci_hcd_mtk *mtk = dev_get_drvdata(dev);
- 	struct usb_hcd *hcd = mtk->hcd;
- 	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
-+	struct usb_hcd *shared_hcd = xhci->shared_hcd;
- 	int ret;
- 
- 	usb_wakeup_set(mtk, false);
-@@ -742,8 +760,10 @@ static int __maybe_unused xhci_mtk_resume(struct device *dev)
- 		goto disable_clks;
- 
- 	xhci_dbg(xhci, "%s: restart port polling\n", __func__);
--	set_bit(HCD_FLAG_POLL_RH, &xhci->shared_hcd->flags);
--	usb_hcd_poll_rh_status(xhci->shared_hcd);
-+	if (shared_hcd) {
-+		set_bit(HCD_FLAG_POLL_RH, &shared_hcd->flags);
-+		usb_hcd_poll_rh_status(shared_hcd);
-+	}
- 	set_bit(HCD_FLAG_POLL_RH, &hcd->flags);
- 	usb_hcd_poll_rh_status(hcd);
- 	return 0;
--- 
-2.18.0
+Regards,
+Lucas
+
+> 
+> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
+> ---
+> v1->v2:
+> Refer to Lucas' comments, don't expose IMX8MP_CLK_HSIO_ROOT to dts node.
+> https://patchwork.ozlabs.org/project/linux-pci/patch/1666590189-1364-1-git-send-email-hongxing.zhu@nxp.com/
+> 
+> Use <&clk IMX8MP_CLK_HSIO_AXI> as referrence clock source when internal
+> clock mode is used by i.MX8MP PCIe module.
+> 
+> Verified on i.MX8MP EVK board with removing R131/R132/R137/R138, and
+> populating R135/R136.
+> ---
+>  drivers/soc/imx/imx8mp-blk-ctrl.c | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+> 
+> diff --git a/drivers/soc/imx/imx8mp-blk-ctrl.c b/drivers/soc/imx/imx8mp-blk-ctrl.c
+> index 0e3b6ba22f94..5ad20a8ea25e 100644
+> --- a/drivers/soc/imx/imx8mp-blk-ctrl.c
+> +++ b/drivers/soc/imx/imx8mp-blk-ctrl.c
+> @@ -21,6 +21,16 @@
+>  #define  USB_CLOCK_MODULE_EN	BIT(1)
+>  #define  PCIE_PHY_APB_RST	BIT(4)
+>  #define  PCIE_PHY_INIT_RST	BIT(5)
+> +#define GPR_REG2		0x8
+> +#define  P_PLL_MASK		GENMASK(5, 0)
+> +#define  M_PLL_MASK		GENMASK(15, 6)
+> +#define  S_PLL_MASK		GENMASK(18, 16)
+> +#define  P_PLL			(0xc << 0)
+> +#define  M_PLL			(0x320 << 6)
+> +#define  S_PLL			(0x4 << 16)
+> +#define GPR_REG3		0xc
+> +#define  PLL_CKE		BIT(17)
+> +#define  PLL_RST		BIT(31)
+>  
+>  struct imx8mp_blk_ctrl_domain;
+>  
+> @@ -86,6 +96,18 @@ static void imx8mp_hsio_blk_ctrl_power_on(struct imx8mp_blk_ctrl *bc,
+>  	case IMX8MP_HSIOBLK_PD_PCIE_PHY:
+>  		regmap_set_bits(bc->regmap, GPR_REG0,
+>  				PCIE_PHY_APB_RST | PCIE_PHY_INIT_RST);
+> +
+> +		/* Set the PLL configurations, P = 12, M = 800, S = 4. */
+> +		regmap_update_bits(bc->regmap, GPR_REG2,
+> +				   P_PLL_MASK | M_PLL_MASK | S_PLL_MASK,
+> +				   P_PLL | M_PLL | S_PLL);
+> +		udelay(1);
+> +
+> +		regmap_update_bits(bc->regmap, GPR_REG3, PLL_RST, PLL_RST);
+> +		udelay(10);
+> +
+> +		/* Set 1b'1 to pll_cke of GPR_REG3 */
+> +		regmap_update_bits(bc->regmap, GPR_REG3, PLL_CKE, PLL_CKE);
+>  		break;
+>  	default:
+>  		break;
+
 
