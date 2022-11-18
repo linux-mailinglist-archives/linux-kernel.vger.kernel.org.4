@@ -2,151 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C87DF630001
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 23:24:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B33F363000C
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 23:25:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230236AbiKRWYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 17:24:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46108 "EHLO
+        id S231849AbiKRWZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 17:25:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbiKRWYV (ORCPT
+        with ESMTP id S232052AbiKRWZ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 17:24:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F30003205A;
-        Fri, 18 Nov 2022 14:23:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F8BD627B8;
-        Fri, 18 Nov 2022 22:23:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAAE5C433D6;
-        Fri, 18 Nov 2022 22:23:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668810229;
-        bh=saD4ekaR7aTv0tgNKWhed7zpzPCX3G62radVkykS1Us=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=Nrr9/LDlLu0c7qtlU9AyNxbP/NzttRuFpt0JOV0n8IDqKQDrgVZIDsW94d1ys3hRZ
-         M3m0hZIBRA8X4OGed/P5VUQvNUWqYs1I2PBy95NlmAriDnLF44f1sJ6BX6eEIGgXZj
-         RmrQ3i0CBnGwoETXl2cU4pKP0cmpovPjpAbaUlOF+tWr0Pi277cVaVSbJGmJAt4x6a
-         vZ4doG6op8I6glx03SoNDGtQIqJaDw510Du6TFJmGk5DSZRK7c7h9OHkm5zqCm5Ns6
-         eLs2P7iq3udRnLyPtFd1WeGekKPPNv+KW3R+GlkAZKlmorfAoU2seVBLMi944ErsgD
-         gGRXJunwDodwA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 991EB5C0F9C; Fri, 18 Nov 2022 14:23:48 -0800 (PST)
-Date:   Fri, 18 Nov 2022 14:23:48 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        David Ahern <dsahern@kernel.org>,
+        Fri, 18 Nov 2022 17:25:29 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D66B5C78
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 14:25:24 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id g10so5741744plo.11
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 14:25:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=udXLh+J6w3uqoSbPpBqZZA43Ss/afXLWiCuFYr88dFs=;
+        b=fy1lW516fh8UMd+1ve1cxazywckpR7JjlSXrBxsiEMcqM/4+WYlg1VswAgkj/F8Az5
+         Vck7DPt8fG2RdTa7/lKuEETBuwQDqQ3DITUuLSxy9OiUJ/qGLPOE5u4eLkVPRUjY5f1O
+         mlUwdUjE7Je0bJaYN9YvKzoD1s2pK5P4+BlYk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=udXLh+J6w3uqoSbPpBqZZA43Ss/afXLWiCuFYr88dFs=;
+        b=YUFbhmKyAgGMI/WvxyDtsDeUJt0DAF0T0bI0XfUr8OnRxrCXjdKS1YBM8+3l/++jOR
+         dObzsLDqIiorpUGDqCzMEIa8qApGs5P5G7pluD6ipi7iXjmcFKVsHtF2Q1R4SqHLkpsl
+         f527HC104zlQ2kjYUCT7iFFayR9m3LyMYkM8l9QHBCnzyFObjrnHXIlcFlH2fipLNpC/
+         feQtjoJPhydXKaetNJ7Jg6lH1fP+FZ9irpq8wVFrvM5daCRS+9V71s8vzyRCYi2A/Su+
+         7wq5tN5oXAWV9hyJVhNsw8OIRfgSE6hd8kcpealbtJgUCYNnHtEU+ADXQvot8JvVWK3Q
+         c98w==
+X-Gm-Message-State: ANoB5pkorHFD2Oao44IXCsZ33jeYAgRsjtJNNrlvc1WGLPHQ+qhhbsna
+        FthGCaf4bcdIgvcZs1MLgrsgmQ==
+X-Google-Smtp-Source: AA0mqf4o4ZRdWJrRpJOaePOBA3aqkXbCq+zGM9Tz3iyp6uOYNyoTxjUR875eGPzlGkAr2T0o013gaQ==
+X-Received: by 2002:a17:903:328e:b0:188:f5de:a8e3 with SMTP id jh14-20020a170903328e00b00188f5dea8e3mr1487500plb.109.1668810323947;
+        Fri, 18 Nov 2022 14:25:23 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id o65-20020a625a44000000b00562664d5027sm3709368pfb.61.2022.11.18.14.25.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 14:25:23 -0800 (PST)
+Date:   Fri, 18 Nov 2022 14:25:22 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Johannes Berg <johannes@sipsolutions.net>
+Cc:     Luca Coelho <luciano.coelho@intel.com>,
+        Haim Dreyfuss <haim.dreyfuss@intel.com>,
+        Miri Korenblit <miriam.rachel.korenblit@intel.com>,
+        Petr Stourac <pstourac@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Mordechay Goodstein <mordechay.goodstein@intel.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Nathan Errera <nathan.errera@intel.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Shaul Triebitz <shaul.triebitz@intel.com>,
+        netdev@vger.kernel.org,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Abhishek Naik <abhishek.naik@intel.com>,
+        Jose Ignacio Tornos Martinez <jtornosm@redhat.com>,
+        Ayala Beker <ayala.beker@intel.com>,
         "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>, rcu@vger.kernel.org,
-        rostedt@goodmis.org, fweisbec@gmail.com
-Subject: Re: [PATCH v2 2/2] net: devinet: Reduce refcount before grace period
-Message-ID: <20221118222348.GQ4001@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221118191909.1756624-1-joel@joelfernandes.org>
- <20221118191909.1756624-2-joel@joelfernandes.org>
+        linux-wireless@vger.kernel.org,
+        Sriram R <quic_srirrama@quicinc.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Mike Golant <michael.golant@intel.com>,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: Coverity: iwl_mvm_sec_key_add(): Memory - corruptions
+Message-ID: <202211181424.794FCAD@keescook>
+References: <202211180854.CD96D54D36@keescook>
+ <d4c07fa45de290f32611420e2f116d8a6e32d22a.camel@sipsolutions.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221118191909.1756624-2-joel@joelfernandes.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <d4c07fa45de290f32611420e2f116d8a6e32d22a.camel@sipsolutions.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 07:19:09PM +0000, Joel Fernandes (Google) wrote:
-> From: Eric Dumazet <edumazet@google.com>
+On Fri, Nov 18, 2022 at 10:04:38PM +0100, Johannes Berg wrote:
+> On Fri, 2022-11-18 at 08:54 -0800, coverity-bot wrote:
+> > 
+> > *** CID 1527370:  Memory - corruptions  (OVERRUN)
+> > drivers/net/wireless/intel/iwlwifi/mvm/mld-key.c:123 in iwl_mvm_sec_key_add()
+> > 117
+> > 118     	if (WARN_ON(keyconf->keylen > sizeof(cmd.u.add.key)))
+> > 119     		return -EINVAL;
+> > 120
+> > 121     	if (keyconf->cipher == WLAN_CIPHER_SUITE_WEP40 ||
+> > 122     	    keyconf->cipher == WLAN_CIPHER_SUITE_WEP104)
+> > vvv     CID 1527370:  Memory - corruptions  (OVERRUN)
+> > vvv     Overrunning buffer pointed to by "cmd.u.add.key + 3" of 32 bytes by passing it to a function which accesses it at byte offset 34 using argument "keyconf->keylen" (which evaluates to 32). [Note: The source code implementation of the function has been overridden by a builtin model.]
+> > 123     		memcpy(cmd.u.add.key + IWL_SEC_WEP_KEY_OFFSET, keyconf->key,
+> > 124     		       keyconf->keylen);
+> > 125     	else
+> > 126     		memcpy(cmd.u.add.key, keyconf->key, keyconf->keylen);
+> > 127
+> > 128     	if (keyconf->cipher == WLAN_CIPHER_SUITE_TKIP) {
+> > 
+> > If this is a false positive, please let us know so we can mark it as
+> > such, or teach the Coverity rules to be smarter. If not, please make
+> > sure fixes get into linux-next. :) For patches fixing this, please
+> > include these lines (but double-check the "Fixes" first):
+> > 
 > 
-> Currently, the inetdev_destroy() function waits for an RCU grace period
-> before decrementing the refcount and freeing memory. This causes a delay
-> with a new RCU configuration that tries to save power, which results in the
-> network interface disappearing later than expected. The resulting delay
-> causes test failures on ChromeOS.
+> Well, I don't think you can teach coverity this easily, but the
+> WARN_ON() check there is not really meant to protect this - WEP keys
+> must have a length of either 5 or 13 bytes (40 or 104 bits!).
 > 
-> Refactor the code such that the refcount is freed before the grace period
-> and memory is freed after. With this a ChromeOS network test passes that
-> does 'ip netns del' and polls for an interface disappearing, now passes.
-> 
-> Reported-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> Signed-off-by: Eric Dumazet <edumazet@google.com>
-> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> So there's no issue here, but I'm not surprised that coverity wouldn't
+> be able to figure that out through the stack.
 
-Queued and pushed, thank you both!
+Gotcha. And some other layer is doing the verification that cipher and
+keylen are correctly matched?
 
-This patch can go as-is based on Eric's Signed-off-by, but the first
-one of course needs at least an ack.
-
-							Thanx, Paul
-
-> ---
->  net/ipv4/devinet.c | 19 ++++++++++---------
->  1 file changed, 10 insertions(+), 9 deletions(-)
-> 
-> diff --git a/net/ipv4/devinet.c b/net/ipv4/devinet.c
-> index e8b9a9202fec..b0acf6e19aed 100644
-> --- a/net/ipv4/devinet.c
-> +++ b/net/ipv4/devinet.c
-> @@ -234,13 +234,20 @@ static void inet_free_ifa(struct in_ifaddr *ifa)
->  	call_rcu(&ifa->rcu_head, inet_rcu_free_ifa);
->  }
->  
-> +static void in_dev_free_rcu(struct rcu_head *head)
-> +{
-> +	struct in_device *idev = container_of(head, struct in_device, rcu_head);
-> +
-> +	kfree(rcu_dereference_protected(idev->mc_hash, 1));
-> +	kfree(idev);
-> +}
-> +
->  void in_dev_finish_destroy(struct in_device *idev)
->  {
->  	struct net_device *dev = idev->dev;
->  
->  	WARN_ON(idev->ifa_list);
->  	WARN_ON(idev->mc_list);
-> -	kfree(rcu_dereference_protected(idev->mc_hash, 1));
->  #ifdef NET_REFCNT_DEBUG
->  	pr_debug("%s: %p=%s\n", __func__, idev, dev ? dev->name : "NIL");
->  #endif
-> @@ -248,7 +255,7 @@ void in_dev_finish_destroy(struct in_device *idev)
->  	if (!idev->dead)
->  		pr_err("Freeing alive in_device %p\n", idev);
->  	else
-> -		kfree(idev);
-> +		call_rcu(&idev->rcu_head, in_dev_free_rcu);
->  }
->  EXPORT_SYMBOL(in_dev_finish_destroy);
->  
-> @@ -298,12 +305,6 @@ static struct in_device *inetdev_init(struct net_device *dev)
->  	goto out;
->  }
->  
-> -static void in_dev_rcu_put(struct rcu_head *head)
-> -{
-> -	struct in_device *idev = container_of(head, struct in_device, rcu_head);
-> -	in_dev_put(idev);
-> -}
-> -
->  static void inetdev_destroy(struct in_device *in_dev)
->  {
->  	struct net_device *dev;
-> @@ -328,7 +329,7 @@ static void inetdev_destroy(struct in_device *in_dev)
->  	neigh_parms_release(&arp_tbl, in_dev->arp_parms);
->  	arp_ifdown(dev);
->  
-> -	call_rcu(&in_dev->rcu_head, in_dev_rcu_put);
-> +	in_dev_put(in_dev);
->  }
->  
->  int inet_addr_onlink(struct in_device *in_dev, __be32 a, __be32 b)
-> -- 
-> 2.38.1.584.g0f3c55d4c2-goog
-> 
+-- 
+Kees Cook
