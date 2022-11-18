@@ -2,75 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30A0562F9CB
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 16:58:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C671862F9D2
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 16:59:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240260AbiKRP6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 10:58:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33936 "EHLO
+        id S241444AbiKRP7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 10:59:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241449AbiKRP6a (ORCPT
+        with ESMTP id S241312AbiKRP7T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 10:58:30 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839EF62C3;
-        Fri, 18 Nov 2022 07:58:26 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id g10so4903246plo.11;
-        Fri, 18 Nov 2022 07:58:26 -0800 (PST)
+        Fri, 18 Nov 2022 10:59:19 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CF7662C3
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 07:59:17 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id b1-20020a17090a7ac100b00213fde52d49so5426906pjl.3
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 07:59:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=fnPf5p+CHRKHFc3oj+O3zmjlxH1aDU9mG+1B/0K1ofI=;
-        b=A7LrNpVAKtF+kz78j6TvVNx5nTmjh4BBWvgehnLZklRwtUcWtWyz6Kjj+mDw2EloER
-         f6BhIsl2rLtnZHa8svcKczsVT6ShZWHbT3VNK8sPCrqIdFJnTztm9FvTWItnk3qQI6U6
-         86+0Ku54uFsCe4BXDzM36/yqHkFRfjFTCPEmY6hdBOi8nQUaLIebHBxMirt76URjCkVc
-         FWq9rs2UIXGgCz51fsYQD9mZeSGpa/bCuQbYEnlHpDVcBYUxpqtl9UzRmZRTLsM2D/5n
-         8taJGIE78KdNAV7qfF/qjPmj8Ewkx1ZDv9Zq8zrjUqSRAwbt/bQi+uHIQuYpngOA4UFr
-         BIKw==
+        bh=BIzAKlqfAaMg368D6jPlp8HmIeVCVtTOFRZVfOrIoRA=;
+        b=s6eyQMrxXlVr7mjyTTlqJhnlh/Xi9X6Am4TwNlENwsPyRh8KvXIqhnsP3MMWC9+MoB
+         oQd97BmjUOsQPxgMsh5zyjcOYLIVp3cqB3U8qN7/Ud5hvTdIANRIWIS/vJblpoBTxukB
+         h0Lxk6Jg3vNqw4OVzI0CkcjluXS6vsT31cdyDImlVx7++g13+ozmNNZ5BkzVdivrg7g+
+         00m3rpeYDbyzY05rk/dB8GnC4ClchfIxtJ5aTCzCQyATv7KhMjKNSIDvnh3cGt1Q5v+L
+         lNMyGoelDxkjB2wAw8ywO8jmucxwhUGJpJ8n7dWOAqcgUj06ocsZtkUfpHvBn0wBdFz1
+         TsrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fnPf5p+CHRKHFc3oj+O3zmjlxH1aDU9mG+1B/0K1ofI=;
-        b=EKhGN0RLZajtRSVjFFm3IhH3hxXG1on/LBRcba3Yn17ABjdJboigrpeUjC55+5tJoM
-         8xHBNTo+HjvZO/LA6LMHVVOBwZQBjsMkSLOnYrM0iQH6yoNCbHpIhbGqJiJBKhZMglVQ
-         +u632n/BItDmR9aE2DTbab8PmtNy9Ai9VSJb+Brzg/2IbmWkiA+IKD3kFs2PCR7AZY96
-         Vv90bC9NB/k0tqbIG77kUWKZ5r2nUONhCury197wpBoDVkLogD+C95rg5hwLVSvWMdBC
-         p8uJxRjEjNHLAuKuixx257A2XBFqF3yFIkmC1s06+ZZ1Bd6BElJ/fsRZ/KAhePSBcyKx
-         J5PQ==
-X-Gm-Message-State: ANoB5plIqnjicQFWgPunS+/UcvX8xHqQg5/rWLG6xjH2RAKHU1d0Kg+y
-        Uur2zY6aB/+/XeFM4rfA808=
-X-Google-Smtp-Source: AA0mqf6KE4Cx6SV9zZT3KAXk+1k++4TMseBo4yfDiUjbCZiyz2K+hzqQPmFeGm6xVmMKMCPRZZhKVw==
-X-Received: by 2002:a17:903:2144:b0:188:a1eb:9a8a with SMTP id s4-20020a170903214400b00188a1eb9a8amr29765ple.153.1668787105654;
-        Fri, 18 Nov 2022 07:58:25 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:e4c5:c31d:4c68:97a0])
-        by smtp.gmail.com with ESMTPSA id n13-20020a170903110d00b00176b63535adsm3841808plh.260.2022.11.18.07.58.24
+        bh=BIzAKlqfAaMg368D6jPlp8HmIeVCVtTOFRZVfOrIoRA=;
+        b=ThewlGJhvXoc3bzfjAcOxj2qXwnC3I5zNymWR0kQ9aSsFRIL5vyyHI7Wd4xT6y/acF
+         dGbkJAF3Iqz5lCUBbsSOpwkvGeQw+PKnbKIjJVZCdGVGAqm7g6KOrYygSUK6xlhjE75N
+         KpZywUoPE78KbOVALSzSg0mgpcRbSzlTdjXarh1yeUaH+nFBjqlGcqdMbkeUkDAzSTw/
+         zCwPgEfPqmfdudIhD3pLDohliHwfZDnUM+GTnUTH5iuQ1y4QRQ22BfMemJjfFfjfFG8h
+         XvuN+LJN/oYJl8d0lctwWh2CDCNzay7HnmHtxtwbnWSNjTtqIIkpOkc3U7gnDSH+o8bA
+         k0gg==
+X-Gm-Message-State: ANoB5pkq6r2uuNwGpFKPdcbJbp4RWI9kngpECm/5dYBNJagPFv4lV90Z
+        EkQ9xRnwiT+NHgU4n+/lGrJ5iQ==
+X-Google-Smtp-Source: AA0mqf68z73TZ4LH+iMU8Y7+vIcozkzW9+xI2VfYzqSxI4RUtQBXAdSaqw03S7HKwO0upOzd1Ydjhw==
+X-Received: by 2002:a17:90a:9f03:b0:211:59c6:6133 with SMTP id n3-20020a17090a9f0300b0021159c66133mr8428311pjp.238.1668787156611;
+        Fri, 18 Nov 2022 07:59:16 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id s16-20020a170902a51000b001869f2120a5sm3840359plq.34.2022.11.18.07.59.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 07:58:24 -0800 (PST)
-Date:   Fri, 18 Nov 2022 07:58:21 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] net: davicom: dm9000: switch to using gpiod API
-Message-ID: <Y3ernUQfdWMBtO9z@google.com>
-References: <20220906204922.3789922-1-dmitry.torokhov@gmail.com>
- <88VJLR.GYSEKGBPLGZC1@crapouillou.net>
+        Fri, 18 Nov 2022 07:59:16 -0800 (PST)
+Date:   Fri, 18 Nov 2022 15:59:12 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Alex =?iso-8859-1?Q?Benn=E9e?= <alex.bennee@linaro.org>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Subject: Re: [PATCH v9 3/8] KVM: Add KVM_EXIT_MEMORY_FAULT exit
+Message-ID: <Y3er0M5Rpf1X97W/@google.com>
+References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
+ <20221025151344.3784230-4-chao.p.peng@linux.intel.com>
+ <87cz9o9mr8.fsf@linaro.org>
+ <20221116031441.GA364614@chaop.bj.intel.com>
+ <87mt8q90rw.fsf@linaro.org>
+ <20221117134520.GD422408@chaop.bj.intel.com>
+ <87a64p8vof.fsf@linaro.org>
+ <20221118013201.GA456562@chaop.bj.intel.com>
+ <87o7t475o7.fsf@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <88VJLR.GYSEKGBPLGZC1@crapouillou.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <87o7t475o7.fsf@linaro.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,108 +110,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
-
-On Fri, Nov 18, 2022 at 03:33:44PM +0000, Paul Cercueil wrote:
-> Hi Dmitry,
+On Fri, Nov 18, 2022, Alex Bennée wrote:
 > 
-> Le mar. 6 sept. 2022 à 13:49:20 -0700, Dmitry Torokhov
-> <dmitry.torokhov@gmail.com> a écrit :
-> > This patch switches the driver away from legacy gpio/of_gpio API to
-> > gpiod API, and removes use of of_get_named_gpio_flags() which I want to
-> > make private to gpiolib.
-> > 
-> > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> > ---
-> >  drivers/net/ethernet/davicom/dm9000.c | 26 ++++++++++++++------------
-> >  1 file changed, 14 insertions(+), 12 deletions(-)
-> > 
-> > diff --git a/drivers/net/ethernet/davicom/dm9000.c
-> > b/drivers/net/ethernet/davicom/dm9000.c
-> > index 77229e53b04e..c85a6ebd79fc 100644
-> > --- a/drivers/net/ethernet/davicom/dm9000.c
-> > +++ b/drivers/net/ethernet/davicom/dm9000.c
-> > @@ -28,8 +28,7 @@
-> >  #include <linux/irq.h>
-> >  #include <linux/slab.h>
-> >  #include <linux/regulator/consumer.h>
-> > -#include <linux/gpio.h>
-> > -#include <linux/of_gpio.h>
-> > +#include <linux/gpio/consumer.h>
-> > 
-> >  #include <asm/delay.h>
-> >  #include <asm/irq.h>
-> > @@ -1421,8 +1420,7 @@ dm9000_probe(struct platform_device *pdev)
-> >  	int iosize;
-> >  	int i;
-> >  	u32 id_val;
-> > -	int reset_gpios;
-> > -	enum of_gpio_flags flags;
-> > +	struct gpio_desc *reset_gpio;
-> >  	struct regulator *power;
-> >  	bool inv_mac_addr = false;
-> >  	u8 addr[ETH_ALEN];
-> > @@ -1442,20 +1440,24 @@ dm9000_probe(struct platform_device *pdev)
-> >  		dev_dbg(dev, "regulator enabled\n");
-> >  	}
-> > 
-> > -	reset_gpios = of_get_named_gpio_flags(dev->of_node, "reset-gpios", 0,
-> > -					      &flags);
-> > -	if (gpio_is_valid(reset_gpios)) {
-> > -		ret = devm_gpio_request_one(dev, reset_gpios, flags,
-> > -					    "dm9000_reset");
-> > +	reset_gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
-> > +	ret = PTR_ERR_OR_ZERO(reset_gpio);
-> > +	if (ret) {
-> > +		dev_err(dev, "failed to request reset gpio: %d\n", ret);
-> > +		goto out_regulator_disable;
-> > +	}
-> > +
-> > +	if (reset_gpio) {
-> > +		ret = gpiod_set_consumer_name(reset_gpio, "dm9000_reset");
-> >  		if (ret) {
-> > -			dev_err(dev, "failed to request reset gpio %d: %d\n",
-> > -				reset_gpios, ret);
-> > +			dev_err(dev, "failed to set reset gpio name: %d\n",
-> > +				ret);
-> >  			goto out_regulator_disable;
-> >  		}
-> > 
-> >  		/* According to manual PWRST# Low Period Min 1ms */
-> >  		msleep(2);
-> > -		gpio_set_value(reset_gpios, 1);
-> > +		gpiod_set_value_cansleep(reset_gpio, 0);
+> Chao Peng <chao.p.peng@linux.intel.com> writes:
 > 
-> Why is that 1 magically turned into a 0?
-
-Because gpiod uses logical states (think active/inactive), not absolute
-ones. Here we are deasserting the reset line.
-
+> > On Thu, Nov 17, 2022 at 03:08:17PM +0000, Alex Bennée wrote:
+> >> >> I think this should be explicit rather than implied by the absence of
+> >> >> another flag. Sean suggested you might want flags for RWX failures so
+> >> >> maybe something like:
+> >> >> 
+> >> >> 	KVM_MEMORY_EXIT_SHARED_FLAG_READ	(1 << 0)
+> >> >> 	KVM_MEMORY_EXIT_SHARED_FLAG_WRITE	(1 << 1)
+> >> >> 	KVM_MEMORY_EXIT_SHARED_FLAG_EXECUTE	(1 << 2)
+> >> >>         KVM_MEMORY_EXIT_FLAG_PRIVATE            (1 << 3)
+> >> >
+> >> > Yes, but I would not add 'SHARED' to RWX, they are not share memory
+> >> > specific, private memory can also set them once introduced.
+> >> 
+> >> OK so how about:
+> >> 
+> >>  	KVM_MEMORY_EXIT_FLAG_READ	(1 << 0)
+> >>  	KVM_MEMORY_EXIT_FLAG_WRITE	(1 << 1)
+> >>  	KVM_MEMORY_EXIT_FLAG_EXECUTE	(1 << 2)
+> >>         KVM_MEMORY_EXIT_FLAG_SHARED     (1 << 3)
+> >>         KVM_MEMORY_EXIT_FLAG_PRIVATE    (1 << 4)
+> >
+> > We don't actually need a new bit, the opposite side of private is
+> > shared, i.e. flags with KVM_MEMORY_EXIT_FLAG_PRIVATE cleared expresses
+> > 'shared'.
 > 
-> On my CI20 board I can't get the DM9000 chip to probe correctly with this
-> patch (it fails to read the ID).
-> If I revert this patch then everything works fine.
+> If that is always true and we never expect a 3rd type of memory that is
+> fine. But given we are leaving room for expansion having an explicit bit
+> allows for that as well as making cases of forgetting to set the flags
+> more obvious.
 
-Sorry, it is my fault of course: I missed that board has incorrect
-annotation for the reset line. I will send out the patch below
-(formatted properly of course):
+Hrm, I'm on the fence.
 
-diff --git a/arch/mips/boot/dts/ingenic/ci20.dts b/arch/mips/boot/dts/ingenic/ci20.dts
-index 37c46720c719..f38c39572a9e 100644
---- a/arch/mips/boot/dts/ingenic/ci20.dts
-+++ b/arch/mips/boot/dts/ingenic/ci20.dts
-@@ -438,7 +438,7 @@ dm9000@6 {
- 		ingenic,nemc-tAW = <50>;
- 		ingenic,nemc-tSTRV = <100>;
- 
--		reset-gpios = <&gpf 12 GPIO_ACTIVE_HIGH>;
-+		reset-gpios = <&gpf 12 GPIO_ACTIVE_LOW>;
- 		vcc-supply = <&eth0_power>;
- 
- 		interrupt-parent = <&gpe>;
+A dedicated flag isn't strictly needed, e.g. even if we end up with 3+ types in
+this category, the baseline could always be "private".
 
+I do like being explicit, and adding a PRIVATE flag costs KVM practically nothing
+to implement and maintain, but evetually we'll up with flags that are paired with
+an implicit state, e.g. see the many #PF error codes in x86.  In other words,
+inevitably KVM will need to define the default/base state of the access, at which
+point the base state for SHARED vs. PRIVATE is "undefined".  
 
-Thanks.
+The RWX bits are in the same boat, e.g. the READ flag isn't strictly necessary.
+I was thinking more of the KVM_SET_MEMORY_ATTRIBUTES ioctl(), which does need
+the full RWX gamut, when I typed out that response.
 
--- 
-Dmitry
+So I would say if we add an explicit READ flag, then we might as well add an explicit
+PRIVATE flag too.  But if we omit PRIVATE, then we should omit READ too.
