@@ -2,210 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CCDC62FC7B
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 19:22:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D5A362FC83
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 19:23:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242664AbiKRSWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 13:22:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32788 "EHLO
+        id S242654AbiKRSXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 13:23:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242658AbiKRSV7 (ORCPT
+        with ESMTP id S242742AbiKRSWi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 13:21:59 -0500
-Received: from mail-4319.protonmail.ch (mail-4319.protonmail.ch [185.70.43.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7638E922D7;
-        Fri, 18 Nov 2022 10:21:55 -0800 (PST)
-Date:   Fri, 18 Nov 2022 18:21:49 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1668795713; x=1669054913;
-        bh=pbKTa64ww9zf2YjQDVJFvTEv+LvOGCj/fGrZioGjwnM=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=TwT/sYEOpDbDsX8Nr6x6hyvqKYFrnxnVlSH13Oynr7KYbR6Fg29S2qwhKEUjG5jqV
-         QXhyCLx7R2Xg2YF4HaA6HdlND3j9TVGOoAAIj6zSzbd3nG3qPbNwGHxTbuL7y21AXK
-         zki3z7GVHiH2kQLsCA2iKqzM5tyw3fhhy1/NBm9thn8nA39J9+pPpcOXB6RyG1Hnj1
-         TtA3dNnXQ+xbkw8aE36SRqrWcEUGI1uwBsKtIF3ZYYiqPQHrurqloRvYU/w3Fj3mJU
-         mxQV8r3W4QyPTkL3+Sb2hl44CLQb/TVXd5vMVjHzz6gRe8MmRkq56kNSfarUHpPwuv
-         p/0pr1DM63NMg==
-To:     linux-kernel@vger.kernel.org
-From:   "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
-Cc:     Markuss Broks <markuss.broks@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Henrik Rydberg <rydberg@bitmath.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Nikita Travkin <nikita@trvn.ru>, linux-input@vger.kernel.org,
-        devicetree@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-Subject: [PATCH v2 3/3] input/touchscreen: imagis: Add supports for Imagis IST3038
-Message-ID: <20221118182103.3405-4-linmengbo0689@protonmail.com>
-In-Reply-To: <20221118182103.3405-1-linmengbo0689@protonmail.com>
-References: <20221118182103.3405-1-linmengbo0689@protonmail.com>
-Feedback-ID: 40467236:user:proton
+        Fri, 18 Nov 2022 13:22:38 -0500
+Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3183194A4C;
+        Fri, 18 Nov 2022 10:22:37 -0800 (PST)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1668795755;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+qDiuD3jNJZ8Nv9puwEItiXV//K/fyrAyxIFLC1o90U=;
+        b=O3BqBMwEhbr8A/vM/SVElBuYyf7xPw/9MyiZuBoq8PDwlYJWCeMuOp0sx+adWywkoE6VYm
+        MfMTPfuWgjIzXh2gZz+ONv9NMGAAHMO8TGcKA8TgdW/N3g/NdVXMCoZNex3UeQE8j3WWn3
+        UCuGJrbycelVoEX+ClAjww3vSmmZ+40=
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 1/3] KVM: arm64: Take a pointer to walker data in kvm_dereference_pteref()
+Date:   Fri, 18 Nov 2022 18:22:20 +0000
+Message-Id: <20221118182222.3932898-2-oliver.upton@linux.dev>
+In-Reply-To: <20221118182222.3932898-1-oliver.upton@linux.dev>
+References: <20221118182222.3932898-1-oliver.upton@linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Markuss Broks <markuss.broks@gmail.com>
+Rather than passing through the state of the KVM_PGTABLE_WALK_SHARED
+flag, just take a pointer to the whole walker structure instead. Move
+around struct kvm_pgtable and the RCU indirection such that the
+associated ifdeffery remains in one place while ensuring the walker +
+flags definitions precede their use.
 
-Imagis IST3038 is another variant of Imagis IST3038 IC, which has
-a different register interface from IST3038C (possibly firmware defined).
+No functional change intended.
 
-This should also work for IST3044B (though untested), however other
-variants using this interface/protocol(IST3026, IST3032, IST3026B,
-IST3032B) have a different format for coordinates, and they'd need
-additional effort to be supported by this driver.
-
-Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
-[Use IST3038C_REG_CHIPID_BASE]
-Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
+Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
 ---
- drivers/input/touchscreen/imagis.c | 62 ++++++++++++++++++++++++------
- 1 file changed, 51 insertions(+), 11 deletions(-)
+ arch/arm64/include/asm/kvm_pgtable.h | 144 ++++++++++++++-------------
+ arch/arm64/kvm/hyp/pgtable.c         |   6 +-
+ 2 files changed, 76 insertions(+), 74 deletions(-)
 
-diff --git a/drivers/input/touchscreen/imagis.c b/drivers/input/touchscreen=
-/imagis.c
-index b667914a44f1..eb3b0684817f 100644
---- a/drivers/input/touchscreen/imagis.c
-+++ b/drivers/input/touchscreen/imagis.c
-@@ -13,7 +13,8 @@
-=20
- #define IST3038C_HIB_ACCESS=09=09(0x800B << 16)
- #define IST3038C_DIRECT_ACCESS=09=09BIT(31)
--#define IST3038C_REG_CHIPID=09=090x40001000
-+#define IST3038C_REG_CHIPID_BASE=090x40001000
-+#define IST3038C_REG_CHIPID(base)=09(base | IST3038C_DIRECT_ACCESS)
- #define IST3038C_REG_HIB_BASE=09=090x30000100
- #define IST3038C_REG_TOUCH_STATUS=09(IST3038C_REG_HIB_BASE | IST3038C_HIB_=
-ACCESS)
- #define IST3038C_REG_TOUCH_COORD=09(IST3038C_REG_HIB_BASE | IST3038C_HIB_A=
-CCESS | 0x8)
-@@ -31,8 +32,24 @@
- #define IST3038C_FINGER_COUNT_SHIFT=0912
- #define IST3038C_FINGER_STATUS_MASK=09GENMASK(9, 0)
-=20
-+#define IST30XX_REG_STATUS=09=090x20
-+#define IST30XXB_REG_CHIPID_BASE=090x40000000
-+#define IST30XX_WHOAMI=09=09=090x30003000
-+#define IST30XXA_WHOAMI=09=09=090x300a300a
-+#define IST30XXB_WHOAMI=09=09=090x300b300b
-+#define IST3038_WHOAMI=09=09=090x30383038
-+
-+struct imagis_properties {
-+=09unsigned int interrupt_msg_cmd;
-+=09unsigned int touch_coord_cmd;
-+=09unsigned int chipid_base;
-+=09unsigned int whoami_val;
-+=09bool protocol_b;
-+};
-+
- struct imagis_ts {
- =09struct i2c_client *client;
-+=09const struct imagis_properties *tdata;
- =09struct input_dev *input_dev;
- =09struct touchscreen_properties prop;
- =09struct regulator_bulk_data supplies[2];
-@@ -84,8 +101,7 @@ static irqreturn_t imagis_interrupt(int irq, void *dev_i=
-d)
- =09int i;
- =09int error;
-=20
--=09error =3D imagis_i2c_read_reg(ts, IST3038C_REG_INTR_MESSAGE,
--=09=09=09=09    &intr_message);
-+=09error =3D imagis_i2c_read_reg(ts, ts->tdata->interrupt_msg_cmd, &intr_m=
-essage);
- =09if (error) {
- =09=09dev_err(&ts->client->dev,
- =09=09=09"failed to read the interrupt message: %d\n", error);
-@@ -104,9 +120,13 @@ static irqreturn_t imagis_interrupt(int irq, void *dev=
-_id)
- =09finger_pressed =3D intr_message & IST3038C_FINGER_STATUS_MASK;
-=20
- =09for (i =3D 0; i < finger_count; i++) {
--=09=09error =3D imagis_i2c_read_reg(ts,
--=09=09=09=09=09    IST3038C_REG_TOUCH_COORD + (i * 4),
--=09=09=09=09=09    &finger_status);
-+=09=09if (ts->tdata->protocol_b)
-+=09=09=09error =3D imagis_i2c_read_reg(ts,
-+=09=09=09=09=09=09    ts->tdata->touch_coord_cmd, &finger_status);
-+=09=09else
-+=09=09=09error =3D imagis_i2c_read_reg(ts,
-+=09=09=09=09=09=09    ts->tdata->touch_coord_cmd + (i * 4),
-+=09=09=09=09=09=09    &finger_status);
- =09=09if (error) {
- =09=09=09dev_err(&ts->client->dev,
- =09=09=09=09"failed to read coordinates for finger %d: %d\n",
-@@ -261,6 +281,12 @@ static int imagis_probe(struct i2c_client *i2c)
-=20
- =09ts->client =3D i2c;
-=20
-+=09ts->tdata =3D device_get_match_data(dev);
-+=09if (!ts->tdata) {
-+=09=09dev_err(dev, "missing chip data\n");
-+=09=09return -EINVAL;
-+=09}
-+
- =09error =3D imagis_init_regulators(ts);
- =09if (error) {
- =09=09dev_err(dev, "regulator init error: %d\n", error);
-@@ -279,15 +305,13 @@ static int imagis_probe(struct i2c_client *i2c)
- =09=09return error;
- =09}
-=20
--=09error =3D imagis_i2c_read_reg(ts,
--=09=09=09IST3038C_REG_CHIPID | IST3038C_DIRECT_ACCESS,
--=09=09=09&chip_id);
-+=09error =3D imagis_i2c_read_reg(ts, IST3038C_REG_CHIPID(ts->tdata->chipid=
-_base), &chip_id);
- =09if (error) {
- =09=09dev_err(dev, "chip ID read failure: %d\n", error);
- =09=09return error;
- =09}
-=20
--=09if (chip_id !=3D IST3038C_WHOAMI) {
-+=09if (chip_id !=3D ts->tdata->whoami_val) {
- =09=09dev_err(dev, "unknown chip ID: 0x%x\n", chip_id);
- =09=09return -EINVAL;
- =09}
-@@ -343,9 +367,25 @@ static int __maybe_unused imagis_resume(struct device =
-*dev)
-=20
- static SIMPLE_DEV_PM_OPS(imagis_pm_ops, imagis_suspend, imagis_resume);
-=20
-+static const struct imagis_properties imagis_3038_data =3D {
-+=09.interrupt_msg_cmd =3D IST30XX_REG_STATUS,
-+=09.touch_coord_cmd =3D IST30XX_REG_STATUS,
-+=09.chipid_base =3D IST30XXB_REG_CHIPID_BASE,
-+=09.whoami_val =3D IST3038_WHOAMI,
-+=09.protocol_b =3D true,
-+};
-+
-+static const struct imagis_properties imagis_3038c_data =3D {
-+=09.interrupt_msg_cmd =3D IST3038C_REG_INTR_MESSAGE,
-+=09.touch_coord_cmd =3D IST3038C_REG_TOUCH_COORD,
-+=09.chipid_base =3D IST3038C_REG_CHIPID_BASE,
-+=09.whoami_val =3D IST3038C_WHOAMI,
-+};
-+
- #ifdef CONFIG_OF
- static const struct of_device_id imagis_of_match[] =3D {
--=09{ .compatible =3D "imagis,ist3038c", },
-+=09{ .compatible =3D "imagis,ist3038", .data =3D &imagis_3038_data },
-+=09{ .compatible =3D "imagis,ist3038c", .data =3D &imagis_3038c_data },
- =09{ },
+diff --git a/arch/arm64/include/asm/kvm_pgtable.h b/arch/arm64/include/asm/kvm_pgtable.h
+index a874ce0ce7b5..f23af693e3c5 100644
+--- a/arch/arm64/include/asm/kvm_pgtable.h
++++ b/arch/arm64/include/asm/kvm_pgtable.h
+@@ -37,54 +37,6 @@ static inline u64 kvm_get_parange(u64 mmfr0)
+ 
+ typedef u64 kvm_pte_t;
+ 
+-/*
+- * RCU cannot be used in a non-kernel context such as the hyp. As such, page
+- * table walkers used in hyp do not call into RCU and instead use other
+- * synchronization mechanisms (such as a spinlock).
+- */
+-#if defined(__KVM_NVHE_HYPERVISOR__) || defined(__KVM_VHE_HYPERVISOR__)
+-
+-typedef kvm_pte_t *kvm_pteref_t;
+-
+-static inline kvm_pte_t *kvm_dereference_pteref(kvm_pteref_t pteref, bool shared)
+-{
+-	return pteref;
+-}
+-
+-static inline void kvm_pgtable_walk_begin(void) {}
+-static inline void kvm_pgtable_walk_end(void) {}
+-
+-static inline bool kvm_pgtable_walk_lock_held(void)
+-{
+-	return true;
+-}
+-
+-#else
+-
+-typedef kvm_pte_t __rcu *kvm_pteref_t;
+-
+-static inline kvm_pte_t *kvm_dereference_pteref(kvm_pteref_t pteref, bool shared)
+-{
+-	return rcu_dereference_check(pteref, !shared);
+-}
+-
+-static inline void kvm_pgtable_walk_begin(void)
+-{
+-	rcu_read_lock();
+-}
+-
+-static inline void kvm_pgtable_walk_end(void)
+-{
+-	rcu_read_unlock();
+-}
+-
+-static inline bool kvm_pgtable_walk_lock_held(void)
+-{
+-	return rcu_read_lock_held();
+-}
+-
+-#endif
+-
+ #define KVM_PTE_VALID			BIT(0)
+ 
+ #define KVM_PTE_ADDR_MASK		GENMASK(47, PAGE_SHIFT)
+@@ -212,29 +164,6 @@ enum kvm_pgtable_prot {
+ typedef bool (*kvm_pgtable_force_pte_cb_t)(u64 addr, u64 end,
+ 					   enum kvm_pgtable_prot prot);
+ 
+-/**
+- * struct kvm_pgtable - KVM page-table.
+- * @ia_bits:		Maximum input address size, in bits.
+- * @start_level:	Level at which the page-table walk starts.
+- * @pgd:		Pointer to the first top-level entry of the page-table.
+- * @mm_ops:		Memory management callbacks.
+- * @mmu:		Stage-2 KVM MMU struct. Unused for stage-1 page-tables.
+- * @flags:		Stage-2 page-table flags.
+- * @force_pte_cb:	Function that returns true if page level mappings must
+- *			be used instead of block mappings.
+- */
+-struct kvm_pgtable {
+-	u32					ia_bits;
+-	u32					start_level;
+-	kvm_pteref_t				pgd;
+-	struct kvm_pgtable_mm_ops		*mm_ops;
+-
+-	/* Stage-2 only */
+-	struct kvm_s2_mmu			*mmu;
+-	enum kvm_pgtable_stage2_flags		flags;
+-	kvm_pgtable_force_pte_cb_t		force_pte_cb;
+-};
+-
+ /**
+  * enum kvm_pgtable_walk_flags - Flags to control a depth-first page-table walk.
+  * @KVM_PGTABLE_WALK_LEAF:		Visit leaf entries, including invalid
+@@ -285,6 +214,79 @@ struct kvm_pgtable_walker {
+ 	const enum kvm_pgtable_walk_flags	flags;
  };
- MODULE_DEVICE_TABLE(of, imagis_of_match);
---=20
-2.30.2
-
+ 
++/*
++ * RCU cannot be used in a non-kernel context such as the hyp. As such, page
++ * table walkers used in hyp do not call into RCU and instead use other
++ * synchronization mechanisms (such as a spinlock).
++ */
++#if defined(__KVM_NVHE_HYPERVISOR__) || defined(__KVM_VHE_HYPERVISOR__)
++
++typedef kvm_pte_t *kvm_pteref_t;
++
++static inline kvm_pte_t *kvm_dereference_pteref(struct kvm_pgtable_walker *walker,
++						kvm_pteref_t pteref)
++{
++	return pteref;
++}
++
++static inline void kvm_pgtable_walk_begin(void) {}
++static inline void kvm_pgtable_walk_end(void) {}
++
++static inline bool kvm_pgtable_walk_lock_held(void)
++{
++	return true;
++}
++
++#else
++
++typedef kvm_pte_t __rcu *kvm_pteref_t;
++
++static inline kvm_pte_t *kvm_dereference_pteref(struct kvm_pgtable_walker *walker,
++						kvm_pteref_t pteref)
++{
++	return rcu_dereference_check(pteref, !(walker->flags & KVM_PGTABLE_WALK_SHARED));
++}
++
++static inline void kvm_pgtable_walk_begin(void)
++{
++	rcu_read_lock();
++}
++
++static inline void kvm_pgtable_walk_end(void)
++{
++	rcu_read_unlock();
++}
++
++static inline bool kvm_pgtable_walk_lock_held(void)
++{
++	return rcu_read_lock_held();
++}
++
++#endif
++
++/**
++ * struct kvm_pgtable - KVM page-table.
++ * @ia_bits:		Maximum input address size, in bits.
++ * @start_level:	Level at which the page-table walk starts.
++ * @pgd:		Pointer to the first top-level entry of the page-table.
++ * @mm_ops:		Memory management callbacks.
++ * @mmu:		Stage-2 KVM MMU struct. Unused for stage-1 page-tables.
++ * @flags:		Stage-2 page-table flags.
++ * @force_pte_cb:	Function that returns true if page level mappings must
++ *			be used instead of block mappings.
++ */
++struct kvm_pgtable {
++	u32					ia_bits;
++	u32					start_level;
++	kvm_pteref_t				pgd;
++	struct kvm_pgtable_mm_ops		*mm_ops;
++
++	/* Stage-2 only */
++	struct kvm_s2_mmu			*mmu;
++	enum kvm_pgtable_stage2_flags		flags;
++	kvm_pgtable_force_pte_cb_t		force_pte_cb;
++};
++
+ /**
+  * kvm_pgtable_hyp_init() - Initialise a hypervisor stage-1 page-table.
+  * @pgt:	Uninitialised page-table structure to initialise.
+diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
+index 5bca9610d040..b5b91a882836 100644
+--- a/arch/arm64/kvm/hyp/pgtable.c
++++ b/arch/arm64/kvm/hyp/pgtable.c
+@@ -188,7 +188,7 @@ static inline int __kvm_pgtable_visit(struct kvm_pgtable_walk_data *data,
+ 				      kvm_pteref_t pteref, u32 level)
+ {
+ 	enum kvm_pgtable_walk_flags flags = data->walker->flags;
+-	kvm_pte_t *ptep = kvm_dereference_pteref(pteref, flags & KVM_PGTABLE_WALK_SHARED);
++	kvm_pte_t *ptep = kvm_dereference_pteref(data->walker, pteref);
+ 	struct kvm_pgtable_visit_ctx ctx = {
+ 		.ptep	= ptep,
+ 		.old	= READ_ONCE(*ptep),
+@@ -558,7 +558,7 @@ void kvm_pgtable_hyp_destroy(struct kvm_pgtable *pgt)
+ 	};
+ 
+ 	WARN_ON(kvm_pgtable_walk(pgt, 0, BIT(pgt->ia_bits), &walker));
+-	pgt->mm_ops->put_page(kvm_dereference_pteref(pgt->pgd, false));
++	pgt->mm_ops->put_page(kvm_dereference_pteref(&walker, pgt->pgd));
+ 	pgt->pgd = NULL;
+ }
+ 
+@@ -1241,7 +1241,7 @@ void kvm_pgtable_stage2_destroy(struct kvm_pgtable *pgt)
+ 
+ 	WARN_ON(kvm_pgtable_walk(pgt, 0, BIT(pgt->ia_bits), &walker));
+ 	pgd_sz = kvm_pgd_pages(pgt->ia_bits, pgt->start_level) * PAGE_SIZE;
+-	pgt->mm_ops->free_pages_exact(kvm_dereference_pteref(pgt->pgd, false), pgd_sz);
++	pgt->mm_ops->free_pages_exact(kvm_dereference_pteref(&walker, pgt->pgd), pgd_sz);
+ 	pgt->pgd = NULL;
+ }
+ 
+-- 
+2.38.1.584.g0f3c55d4c2-goog
 
