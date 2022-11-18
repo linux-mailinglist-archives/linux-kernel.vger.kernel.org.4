@@ -2,126 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B51162FA0A
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 17:19:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 575FE62FA16
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 17:20:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241571AbiKRQTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 11:19:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42572 "EHLO
+        id S235142AbiKRQUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 11:20:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235084AbiKRQTp (ORCPT
+        with ESMTP id S235084AbiKRQUL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 11:19:45 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F766B3AF;
-        Fri, 18 Nov 2022 08:19:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 18 Nov 2022 11:20:11 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2246A1181C;
+        Fri, 18 Nov 2022 08:20:09 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AC555B8243D;
-        Fri, 18 Nov 2022 16:19:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7428C433C1;
-        Fri, 18 Nov 2022 16:19:41 +0000 (UTC)
-Date:   Fri, 18 Nov 2022 11:19:40 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Rafael Mendonca <rafaelmendsr@gmail.com>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        "Tzvetomir Stoyanov (VMware)" <tz.stoyanov@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        Tom Zanussi <zanussi@kernel.org>
-Subject: Re: [PATCH] tracing/eprobe: Update cond flag before enabling
- trigger
-Message-ID: <20221118111940.1268da2b@gandalf.local.home>
-In-Reply-To: <Y3eJ8GiGnEvVd8/N@macondo>
-References: <20221116192552.1066630-1-rafaelmendsr@gmail.com>
-        <20221117211726.4bbbb96a@gandalf.local.home>
-        <20221117213109.6119750e@gandalf.local.home>
-        <Y3d9KcpcwrEUUYKT@macondo>
-        <Y3eJ8GiGnEvVd8/N@macondo>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id AE6541FD2A;
+        Fri, 18 Nov 2022 16:20:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1668788407; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZdCAdBuUfE3Rqc7NKln9hVuWsUdVVMVjbpiUee2vmvc=;
+        b=gFn628LRme6mgJaZwZXeXxqjVHZ1dhRwig/bm8/PJr2zPCzCtNxBMW9LTId3gWUCMDCXyK
+        TtXWbFh2gTikA3YMbaaroxv4l1XPLUH9rONQd0Dr+UuiMwnQoW4bEdHtBzAdzRgdfTZpOo
+        z5sm6N12GAAOBYVJKj61R24kx7azRZk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1668788407;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZdCAdBuUfE3Rqc7NKln9hVuWsUdVVMVjbpiUee2vmvc=;
+        b=TNP3u8Xx8uZo+sUiWVVILNS2hk5mwr0qssvrZKBXcmmjqp8qeTg4rudZW0WqfwYAgYNMk2
+        poai8KIFEEpddcDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 10E861345B;
+        Fri, 18 Nov 2022 16:20:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id uA9uA7ewd2PXAwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 18 Nov 2022 16:20:07 +0000
+Message-ID: <5104fc7b-7b38-652a-9a3f-6116e48d4129@suse.cz>
+Date:   Fri, 18 Nov 2022 17:20:06 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH mm-unstable v1 01/20] selftests/vm: anon_cow: prepare for
+ non-anonymous COW tests
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     x86@kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Peter Xu <peterx@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Alex Williamson <alex.williamson@redhat.com>
+References: <20221116102659.70287-1-david@redhat.com>
+ <20221116102659.70287-2-david@redhat.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20221116102659.70287-2-david@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Nov 2022 10:34:40 -0300
-Rafael Mendonca <rafaelmendsr@gmail.com> wrote:
-
-> It did not trigger the NULL pointer issue to be more specific. When
-> creating event probe for all events I was unable to create any event for
-> the xhci-hcd system:
+On 11/16/22 11:26, David Hildenbrand wrote:
+> Originally, the plan was to have a separate tests for testing COW of
+> non-anonymous (e.g., shared zeropage) pages.
 > 
-> root@localhost:/sys/kernel/tracing# echo 'e xhci-hcd/xhci_add_endpoint' > dynamic_events 
-> -bash: echo: write error: Invalid argument
+> Turns out, that we'd need a lot of similar functionality and that there
+> isn't a really good reason to separate it. So let's prepare for non-anon
+> tests by renaming to "cow".
 > 
-> Debugging the issue it seems that the problem is in the is_good_name()
-> check, which returns false for "xhci-hcd". Should we sanitize it by
+> Signed-off-by: David Hildenbrand <david@redhat.com>
 
-Ouch. I didn't realize that.
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-> converting '-' into '_'?
-
-Actually, it's just the system name that's an issue. I tested this patch
-and it appears to work.
-
--- Steve
-
-
-diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
-index 54ee5711c729..a16fb4c9642e 100644
---- a/kernel/trace/trace.h
-+++ b/kernel/trace/trace.h
-@@ -1955,17 +1955,30 @@ static __always_inline void trace_iterator_reset(struct trace_iterator *iter)
- }
- 
- /* Check the name is good for event/group/fields */
--static inline bool is_good_name(const char *name)
-+static inline bool __is_good_name(const char *name, bool hash_ok)
- {
--	if (!isalpha(*name) && *name != '_')
-+	if (!isalpha(*name) && *name != '_' && (!hash_ok || *name != '-'))
- 		return false;
- 	while (*++name != '\0') {
--		if (!isalpha(*name) && !isdigit(*name) && *name != '_')
-+		if (!isalpha(*name) && !isdigit(*name) && *name != '_' &&
-+		    (!hash_ok || *name != '-'))
- 			return false;
- 	}
- 	return true;
- }
- 
-+/* Check the name is good for event/group/fields */
-+static inline bool is_good_name(const char *name)
-+{
-+	return __is_good_name(name, false);
-+}
-+
-+/* Check the name is good for system */
-+static inline bool is_good_system_name(const char *name)
-+{
-+	return __is_good_name(name, true);
-+}
-+
- /* Convert certain expected symbols into '_' when generating event names */
- static inline void sanitize_event_name(char *name)
- {
-diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
-index 36dff277de46..bb2f95d7175c 100644
---- a/kernel/trace/trace_probe.c
-+++ b/kernel/trace/trace_probe.c
-@@ -246,7 +246,7 @@ int traceprobe_parse_event_name(const char **pevent, const char **pgroup,
- 			return -EINVAL;
- 		}
- 		strlcpy(buf, event, slash - event + 1);
--		if (!is_good_name(buf)) {
-+		if (!is_good_system_name(buf)) {
- 			trace_probe_log_err(offset, BAD_GROUP_NAME);
- 			return -EINVAL;
- 		}
