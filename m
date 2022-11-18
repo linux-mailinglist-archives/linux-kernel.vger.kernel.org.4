@@ -2,295 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAF3A62F0C8
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 10:15:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5062A62F0CA
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 10:15:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241838AbiKRJPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 04:15:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32982 "EHLO
+        id S241648AbiKRJPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 04:15:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241857AbiKRJO5 (ORCPT
+        with ESMTP id S241843AbiKRJPh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 04:14:57 -0500
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7DF82BD4;
-        Fri, 18 Nov 2022 01:14:53 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4ND9tC0d7nz9v7Hk;
-        Fri, 18 Nov 2022 17:08:03 +0800 (CST)
-Received: from [10.206.134.65] (unknown [10.206.134.65])
-        by APP2 (Coremail) with SMTP id GxC2BwAXS_fsTHdj5+RzAA--.21752S2;
-        Fri, 18 Nov 2022 10:14:29 +0100 (CET)
-Message-ID: <fe16a03a-102e-b3e1-cc3f-5bad3c28fad7@huaweicloud.com>
-Date:   Fri, 18 Nov 2022 10:14:18 +0100
+        Fri, 18 Nov 2022 04:15:37 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB9754B3C;
+        Fri, 18 Nov 2022 01:15:36 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1668762933;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0RtDA5btK0ampea0tB4KiJj2jZ4ymQLBCgNs6QX082s=;
+        b=zBl7wBItViz1JXxmDYMYuwJikf3fa2m4RWvXJfX47lxyWQxGRgK4Daji2wxZCBvaHYLD/q
+        SBNuBv74B/60sDOSa65W3rH+BLRDyliHSzLNF5ZrLfkvvp9fTWI33BmaU7hN02u1FFqs7U
+        N4aY7z7JgQnhz6IZSCF34d0au0fZjKWBrEzeMV3zTk8VwxQszkhCC2mTu1YJHW0naH/rhE
+        CNkGyPWdYyFqsoYtqse5GA2gzXdD7pakEp4MJzYWuD+ixOTRYa0Ibysf4J8dFYNA7cJDY9
+        D2FYo2bZf4mrbEnjsAfUoEaL42hOtlGaZFCqmJldvdb0Yd3FQtFHj8dxK5NSrQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1668762933;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0RtDA5btK0ampea0tB4KiJj2jZ4ymQLBCgNs6QX082s=;
+        b=bDHnS/NamRxER+XFoJbT1HcWSjju0Fl0Qb1/NAadQLSuEMyZrKFHBq9OLs5LZH4wkfNcrR
+        oxE/MxsFYXc0BMCA==
+To:     Reinette Chatre <reinette.chatre@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     x86@kernel.org, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>, linux-pci@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
+        Allen Hubbe <allenbh@gmail.com>,
+        "Ahmed S. Darwish" <darwi@linutronix.de>
+Subject: Re: [patch 21/33] genirq/msi: Provide msi_domain_alloc_irq_at()
+In-Reply-To: <87k03tkrii.ffs@tglx>
+References: <20221111133158.196269823@linutronix.de>
+ <20221111135206.463650635@linutronix.de>
+ <0cbf645b-b23a-6c85-4389-bb039a677a52@intel.com> <87k03tkrii.ffs@tglx>
+Date:   Fri, 18 Nov 2022 10:15:33 +0100
+Message-ID: <87zgcok4i2.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v4 3/5] security: Allow all LSMs to provide xattrs for
- inode_init_security hook
-Content-Language: en-US
-To:     Mimi Zohar <zohar@linux.ibm.com>, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        casey@schaufler-ca.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        keescook@chromium.org, nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-References: <20221110094639.3086409-1-roberto.sassu@huaweicloud.com>
- <20221110094639.3086409-4-roberto.sassu@huaweicloud.com>
- <4c1349f670dc3c23214a5a5036e43ddaa0a7bc89.camel@linux.ibm.com>
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-In-Reply-To: <4c1349f670dc3c23214a5a5036e43ddaa0a7bc89.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwAXS_fsTHdj5+RzAA--.21752S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3GFyrAw4UtFWrGw1xJw4UCFg_yoW3Zr13pr
-        WUKa1j9rn5JFy8WrySyr48u3WagrWrKF47GrsxGFyjya1qvrn7tryF9rW5CFykXrZ5Jr4v
-        va1qyrsxWwn8AaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
-        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
-        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE
-        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
-        9x07UdxhLUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAABF1jj4GVqAABsK
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/17/2022 5:05 PM, Mimi Zohar wrote:
-> hOn Thu, 2022-11-10 at 10:46 +0100, Roberto Sassu wrote:
->> From: Roberto Sassu <roberto.sassu@huawei.com>
+On Fri, Nov 18 2022 at 01:58, Thomas Gleixner wrote:
+> On Thu, Nov 17 2022 at 15:33, Reinette Chatre wrote:
+>> When calling pci_ims_alloc_irq(), msi_insert_desc() ends up being
+>> called twice, first with index = MSI_ANY_INDEX, second with index = 0.
+>> (domid = 1 both times)
+>
+> How so?
+>
+>>>  	}
+>>>  
+>>>  	hwsize = msi_domain_get_hwsize(dev, domid);
+>>> -	if (index >= hwsize) {
+>>> -		ret = -ERANGE;
+>>> -		goto fail;
+>>> -	}
+>>>  
+>>> -	desc->msi_index = index;
+>>> -	index += baseidx;
+>>> -	ret = xa_insert(&md->__store, index, desc, GFP_KERNEL);
+>>> -	if (ret)
+>>> -		goto fail;
+>>> -	return 0;
+>>> +	if (index == MSI_ANY_INDEX) {
+>>> +		struct xa_limit limit;
+>>> +		unsigned int index;
+>>> +
+>>> +		limit.min = baseidx;
+>>> +		limit.max = baseidx + hwsize - 1;
+>>>  
+>>> +		/* Let the xarray allocate a free index within the limits */
+>>> +		ret = xa_alloc(&md->__store, &index, desc, limit, GFP_KERNEL);
+>>> +		if (ret)
+>>> +			goto fail;
+>>> +
 >>
->> Currently, security_inode_init_security() supports only one LSM providing
->> an xattr and EVM calculating the HMAC on that xattr, plus other inode
->> metadata.
+>> This path (index == MSI_ANY_INDEX) is followed when msi_insert_desc()
+>> is called the first time and the xa_alloc() succeeds at index 65536.
 >>
->> Allow all LSMs to provide one or multiple xattrs, by extending the security
->> blob reservation mechanism. Introduce the new lbs_xattr field of the
->> lsm_blob_sizes structure, so that each LSM can specify how many xattrs it
->> needs, and the LSM infrastructure knows how many xattr slots it should
->> allocate.
-> 
-> Perhaps supporting per LSM multiple xattrs is a nice idea, but EVM
-> doesn't currently support it.  The LSM xattrs are hard coded in
-> evm_config_default_xattrnames[],  based on whether the LSM is
-> configured.  Additional security xattrs may be included in the
-> security.evm calculation, by extending the list via
-> security/integrity/evm/evm_xattrs.
-
-EVM wouldn't notice whether it is the same LSM that provide multiple 
-xattrs or multiple LSMs provided one xattr. As long as the xattr array 
-contains consecutive xattrs, that would be fine. In the IMA/EVM test I 
-included a test case where an LSM provides two xattrs (seems to work fine).
-
->> Dynamically allocate the xattrs array to be populated by LSMs with the
->> inode_init_security hook, and pass it to the latter instead of the
->> name/value/len triple.
+>>> +		desc->msi_index = index;
 >>
->> Since the LSM infrastructure, at initialization time, updates the number of
->> the requested xattrs provided by each LSM with a corresponding offset in
->> the security blob (in this case the xattr array), it makes straightforward
->> for an LSM to access the right position in the xattr array.
+>> This is problematic with desc->msi_index being a u16, assigning
+>> 65536 to it becomes 0.
+>
+> You are partially right. I need to fix that and make it explicit as it's
+> a "works by chance or maybe not" construct right now.
+>
+> But desc->msi_index is correct to be truncated because it's the index
+> within the domain space which is zero based.
+
+It should obviously do:
+
+   desc->msi_index = index - baseidx;
+
+>>> +		return 0;
+>>> +	} else {
+>>> +		if (index >= hwsize) {
+>>> +			ret = -ERANGE;
+>>> +			goto fail;
+>>> +		}
+>>> +
+>>> +		desc->msi_index = index;
+>>> +		index += baseidx;
+>>> +		ret = xa_insert(&md->__store, index, desc, GFP_KERNEL);
+>>> +		if (ret)
+>>> +			goto fail;
 >>
->> There is still the issue that an LSM might not fill the xattr, even if it
->> requests it (legitimate case, for example it might have been loaded but not
->> initialized with a policy). Since users of the xattr array (e.g. the
->> initxattrs() callbacks) detect the end of the xattr array by checking if
->> the xattr name is NULL, not filling an xattr would cause those users to
->> stop scanning xattrs prematurely.
+>> This "else" path is followed when msi_insert_desc() is called the second
+>> time with "index = 0". The xa_insert() above fails at index 65536
+>> (baseidx = 65536) with -EBUSY, trickling up as the return code to
+>> pci_ims_alloc_irq().
+>
+> Why is it called with index=0 the second time?
+>>> +	desc = msi_alloc_desc(dev, 1, affdesc);
+>>> +	if (!desc) {
+>>> +		map.index = -ENOMEM;
+>>> +		goto unlock;
+>>> +	}
+>>> +
+>>> +	if (cookie)
+>>> +		desc->data.cookie = *cookie;
+>>> +
+>>> +	ret = msi_insert_desc(dev, desc, domid, index);
+>>> +	if (ret) {
+>>> +		map.index = ret;
+>>> +		goto unlock;
+>>> +	}
 >>
->> Solve that issue by introducing security_check_compact_xattrs(), which does
->> a basic check of the xattr array (if the xattr name is filled, the xattr
->> value should be too, and viceversa), and compacts the xattr array by
->> removing the holes.
+>> Above is the first call to msi_insert_desc(/* index = MSI_ANY_INDEX */)
 >>
->> An alternative solution would be to let users of the xattr array know the
->> number of elements of the xattr array, so that they don't have to check the
->> termination. However, this seems more invasive, compared to a simple move
->> of few array elements.
+>>> +
+>>> +	map.index = desc->msi_index;
 >>
->> Finally, adapt both SELinux and Smack to use the new definition of the
->> inode_init_security hook, and to correctly fill the designated slots in the
->> xattr array.
+>> msi_insert_desc() did attempt to set desc->msi_index to 65536 but map.index ends
+>> up being 0.
+>
+> which is kinda correct.
+>
+>>> +	ret = msi_domain_alloc_irqs_range_locked(dev, domid, map.index, map.index);
 >>
->> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
->> ---
-> 
->> diff --git a/security/security.c b/security/security.c
->> index a0e9b4ce2341..b62f192de6da 100644
->> --- a/security/security.c
->> +++ b/security/security.c
->> @@ -30,8 +30,6 @@
->>   #include <linux/msg.h>
->>   #include <net/flow.h>
->>   
->> -#define MAX_LSM_EVM_XATTR	2
->> -
->>   /* How many LSMs were built into the kernel? */
->>   #define LSM_COUNT (__end_lsm_info - __start_lsm_info)
->>   
->> @@ -210,6 +208,7 @@ static void __init lsm_set_blob_sizes(struct lsm_blob_sizes *needed)
->>   	lsm_set_blob_size(&needed->lbs_msg_msg, &blob_sizes.lbs_msg_msg);
->>   	lsm_set_blob_size(&needed->lbs_superblock, &blob_sizes.lbs_superblock);
->>   	lsm_set_blob_size(&needed->lbs_task, &blob_sizes.lbs_task);
->> +	lsm_set_blob_size(&needed->lbs_xattr, &blob_sizes.lbs_xattr);
->>   }
->>   
->>   /* Prepare LSM for initialization. */
->> @@ -346,6 +345,7 @@ static void __init ordered_lsm_init(void)
->>   	init_debug("msg_msg blob size    = %d\n", blob_sizes.lbs_msg_msg);
->>   	init_debug("superblock blob size = %d\n", blob_sizes.lbs_superblock);
->>   	init_debug("task blob size       = %d\n", blob_sizes.lbs_task);
->> +	init_debug("xattr slots          = %d\n", blob_sizes.lbs_xattr);
->>   
->>   	/*
->>   	 * Create any kmem_caches needed for blobs
->> @@ -1100,34 +1100,78 @@ static int security_initxattrs(struct inode *inode, const struct xattr *xattrs,
->>   	return 0;
->>   }
-> 
->> +static int security_check_compact_xattrs(struct xattr *xattrs,
->> +					 int num_xattrs, int *checked_xattrs)
-> 
-> Perhaps the variable naming is off, making it difficult to read.   So
-> although this is a static function, which normally doesn't require a
-> comment, it's definitely needs one.
+>> Here is where the second call to msi_insert_desc() originates:
+>>
+>> msi_domain_alloc_irqs_range_locked() -> msi_domain_alloc_locked() -> \
+>> __msi_domain_alloc_locked() -> msi_domain_alloc_simple_msi_descs() -> \
+>> msi_domain_add_simple_msi_descs() -> msi_insert_desc()
+>
+> but yes, that's bogus because it tries to allocate what is allocated already.
+>
+> Too tired to decode this circular dependency right now. Will stare at it
+> with brain awake in the morning. Duh!
 
-Ok, will improve it.
+Duh. I'm a moron.
 
->> +{
->> +	int i;
->> +
->> +	for (i = *checked_xattrs; i < num_xattrs; i++) {
-> 
-> If the number of "checked" xattrs was kept up to date, removing the
-> empty xattr gaps wouldn't require a loop.  Is the purpose of this loop
-> to support multiple per LSM xattrs?
+Of course I "tested" this by flipping default and secondary domain
+around and doing dynamic allocations from PCI/MSI-X but that won't catch
+the bug because PCI/MSI-X does not have the ALLOC_SIMPLE_DESCS flag set.
 
-An LSM might reserve one or more xattrs, but not set it/them (for 
-example because it is not initialized). In this case, removing the gaps 
-is needed for all subsequent LSMs.
+Let me fix that.
 
->> +		if ((!xattrs[i].name && xattrs[i].value) ||
->> +		    (xattrs[i].name && !xattrs[i].value))
->> +			return -EINVAL;
->> +
->> +		if (!xattrs[i].name)
->> +			continue;
->> +
->> +		if (i == *checked_xattrs) {
->> +			(*checked_xattrs)++;
->> +			continue;
->> +		}
->> +
->> +		memcpy(xattrs + (*checked_xattrs)++, xattrs + i,
->> +		       sizeof(*xattrs));
->> +		memset(xattrs + i, 0, sizeof(*xattrs));
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->>   int security_inode_init_security(struct inode *inode, struct inode *dir,
->>   				 const struct qstr *qstr,
->>   				 const initxattrs initxattrs, void *fs_data)
->>   {
->> -	struct xattr new_xattrs[MAX_LSM_EVM_XATTR + 1];
->> -	struct xattr *lsm_xattr, *evm_xattr, *xattr;
->> -	int ret = -EOPNOTSUPP;
->> +	struct security_hook_list *P;
->> +	struct xattr *new_xattrs;
->> +	struct xattr *xattr;
->> +	int ret = -EOPNOTSUPP, cur_xattrs = 0;
->>   
->>   	if (unlikely(IS_PRIVATE(inode)))
->>   		goto out_exit;
->>   
->> +	if (!blob_sizes.lbs_xattr)
->> +		goto out_exit;
->> +
->>   	if (!initxattrs ||
->>   	    (initxattrs == &security_initxattrs && !fs_data)) {
->>   		ret = call_int_hook(inode_init_security, -EOPNOTSUPP, inode,
->> -				    dir, qstr, NULL, NULL, NULL);
->> +				    dir, qstr, NULL);
->>   		goto out_exit;
->>   	}
->> -	memset(new_xattrs, 0, sizeof(new_xattrs));
->> -	lsm_xattr = new_xattrs;
->> -	ret = call_int_hook(inode_init_security, -EOPNOTSUPP, inode, dir, qstr,
->> -						&lsm_xattr->name,
->> -						&lsm_xattr->value,
->> -						&lsm_xattr->value_len);
->> -	if (ret)
->> -		goto out;
->> +	/* Allocate +1 for EVM and +1 as terminator. */
->> +	new_xattrs = kcalloc(blob_sizes.lbs_xattr + 2, sizeof(*new_xattrs),
->> +			     GFP_NOFS);
->> +	if (!new_xattrs) {
->> +		ret = -ENOMEM;
->> +		goto out_exit;
->> +	}
->> +	hlist_for_each_entry(P, &security_hook_heads.inode_init_security,
->> +			     list) {
->> +		ret = P->hook.inode_init_security(inode, dir, qstr, new_xattrs);
->> +		if (ret && ret != -EOPNOTSUPP)
->> +			goto out;
->> +		if (ret == -EOPNOTSUPP)
->> +			continue;
->> +		ret = security_check_compact_xattrs(new_xattrs,
->> +						    blob_sizes.lbs_xattr,
->> +						    &cur_xattrs);
-> 
-> Defining a variable named "cur_xattrs" to indicate the number of xattrs
-> compressed is off.  Perhaps use cur_num_xattrs?   Similarly,
-> "checked_xattrs" should be num_checked_xattrs.  Or change the existing
-> num_xattrs to max_num_xattrs and rename checked_xattrs to num_xattrs.
+Thanks,
 
-Ok.
-
-Thanks
-
-Roberto
-
-> thanks,
-> 
-> Mimi
-> 
->> +		if (ret < 0) {
->> +			ret = -ENOMEM;
->> +			goto out;
->> +		}
->> +	}
->>   
->> -	evm_xattr = lsm_xattr + 1;
->> -	ret = evm_inode_init_security(inode, lsm_xattr, evm_xattr);
->> +	ret = evm_inode_init_security(inode, new_xattrs,
->> +				      new_xattrs + cur_xattrs);
->>   	if (ret)
->>   		goto out;
->>   	ret = initxattrs(inode, new_xattrs, fs_data);
->> @@ -1142,6 +1186,7 @@ int security_inode_init_security(struct inode *inode, struct inode *dir,
->>   			continue;
->>   		kfree(xattr->value);
->>   	}
->> +	kfree(new_xattrs);
->>   out_exit:
->>   	if (initxattrs == &security_initxattrs)
->>   		return ret;
-
+        tglx
