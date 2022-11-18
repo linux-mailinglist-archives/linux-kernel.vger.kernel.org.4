@@ -2,74 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC08762FEB0
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 21:21:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2831C62FEBC
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 21:23:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231593AbiKRUVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 15:21:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54152 "EHLO
+        id S231201AbiKRUXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 15:23:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232109AbiKRUVK (ORCPT
+        with ESMTP id S229686AbiKRUXr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 15:21:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53EF54FFBD
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 12:21:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 18 Nov 2022 15:23:47 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB5E051C1C
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 12:22:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668802965;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wLNx2lv/9wKRUvF6SaKybhGa6+X/Ftk2qDUqbH/DPVM=;
+        b=Pz4UKNMg5w3VEOWekNjG21WZpJiofoN3OjDdM4hWiolS4vNvcqXUXjta0iOcYzbfMOuq9J
+        ArjwgX+iM5FwM2qIx1tCBv7f6RQKBHSgjMByvNQe1ILFBZdSQxqUiIHZKIfmTKlO8ziQpE
+        ckftxd+WtTILYFI4x/sthX0oteXAARA=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-584-zHP1jgBKMXmR7pO1DgdPJw-1; Fri, 18 Nov 2022 15:22:44 -0500
+X-MC-Unique: zHP1jgBKMXmR7pO1DgdPJw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E234DB82522
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 20:21:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 98C65C433D7;
-        Fri, 18 Nov 2022 20:21:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668802864;
-        bh=51bHW0RNhhNMzp1lL0JeKKt2IkFYFWXOqrU5Eo9kG8E=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=ETy8WXEPX8b8Fhnsm9qcbsF2mW2qWUeW/F0UsNELxyjM18mlTZlwjSwZIbxcRt09o
-         yH4/7p3I+qxdeZb/M0x8Qz3SrzKUeExdyq+QiXNBaNicwSzdm640P2DT+61W87S9qq
-         VTx7tr8/43Nq9OZuwz1Di0BQu8Ou1Pbc3Zh9bWpo8qp3J6QY257Z84IciqC8wMQBaG
-         +1ztVSzJ4RxbP3DlJ5kdQdvkdoUmIP6jyE6BFbXoaYBruyin5OU3Ndr2Eznh/R3POo
-         /TnVqz7CCcna442hOm7ZlHEpt/Qyk555lLs8jLyx27c01NIZCMxFdJ1dCsBWlbGiqP
-         2cpAS2pleVBxQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8760EE29F43;
-        Fri, 18 Nov 2022 20:21:04 +0000 (UTC)
-Subject: Re: [GIT PULL] Char/Misc driver fixes for 6.1-rc6
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Y3dQKg/pGJZIYc3B@kroah.com>
-References: <Y3dQKg/pGJZIYc3B@kroah.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Y3dQKg/pGJZIYc3B@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git tags/char-misc-6.1-rc6
-X-PR-Tracked-Commit-Id: 65946690ed8d972fdb91a74ee75ac0f0f0d68321
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 1f63d1a106e98db5cd378b21a471f7ddd710d1b5
-Message-Id: <166880286454.9331.8719346479988456880.pr-tracker-bot@kernel.org>
-Date:   Fri, 18 Nov 2022 20:21:04 +0000
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4227A1C05EC0;
+        Fri, 18 Nov 2022 20:22:43 +0000 (UTC)
+Received: from [10.22.18.201] (unknown [10.22.18.201])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C6BF340C6EC3;
+        Fri, 18 Nov 2022 20:22:42 +0000 (UTC)
+Message-ID: <5c92d811-63d4-2c92-3018-7ba8d9c4f21a@redhat.com>
+Date:   Fri, 18 Nov 2022 15:22:40 -0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH] kselftest/cgroup: Add cleanup() to test_cpuset_prs.sh
+Content-Language: en-US
+To:     Kamalesh Babulal <kamalesh.babulal@oracle.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Tom Hromatka <tom.hromatka@oracle.com>, cgroups@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221118101330.251332-1-kamalesh.babulal@oracle.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20221118101330.251332-1-kamalesh.babulal@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 18 Nov 2022 10:28:10 +0100:
+On 11/18/22 05:13, Kamalesh Babulal wrote:
+> Install a cleanup function using the trap command for signals EXIT,
+> SIGINT, SIGQUIT and SIGABRT.  The cleanup function will perform:
+> 1. Online the CPUs that were made offline during the test.
+> 2. Removing the cgroups created.
+> 3. Restoring the original /sys/kernel/debug/sched/verbose value,
+>     currently it's left turned on, irrespective of the original
+>     configuration value.
+>
+> the test performs steps 1 and 2, on the successful runs, but not during
+> all of the failed runs.  With the cleanup(), the system will perform all
+> three steps during failed/passed test runs.
+>
+> Signed-off-by: Kamalesh Babulal <kamalesh.babulal@oracle.com>
+> ---
+>   .../testing/selftests/cgroup/test_cpuset_prs.sh | 17 ++++++++++++++++-
+>   1 file changed, 16 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> index 526d2c42d870..b8ed82b55b1d 100755
+> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> @@ -16,7 +16,12 @@ skip_test() {
+>   [[ $(id -u) -eq 0 ]] || skip_test "Test must be run as root!"
+>   
+>   # Set sched verbose flag, if available
+> -[[ -d /sys/kernel/debug/sched ]] && echo Y > /sys/kernel/debug/sched/verbose
+> +if [[ -d /sys/kernel/debug/sched ]]
+> +then
+> +	# Used to restore the original setting during cleanup
+> +	SCHED_DEBUG=$(cat /sys/kernel/debug/sched/verbose)
+> +	echo Y > /sys/kernel/debug/sched/verbose
+> +fi
+>   
+>   # Get wait_inotify location
+>   WAIT_INOTIFY=$(cd $(dirname $0); pwd)/wait_inotify
+> @@ -54,6 +59,15 @@ echo +cpuset > cgroup.subtree_control
+>   [[ -d test ]] || mkdir test
+>   cd test
+>   
+> +cleanup()
+> +{
+> +	online_cpus
+> +	rmdir A1/A2/A3 A1/A2 A1 B1 > /dev/null 2>&1
+> +	cd ..
+> +	rmdir test > /dev/null 2>&1
+> +	echo "$SCHED_DEBUG" > /sys/kernel/debug/sched/verbose
+> +}
+> +
+>   # Pause in ms
+>   pause()
+>   {
+> @@ -666,6 +680,7 @@ test_inotify()
+>   	fi
+>   }
+>   
+> +trap cleanup 0 2 3 6
+>   run_state_test TEST_MATRIX
+>   test_isolated
+>   test_inotify
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git tags/char-misc-6.1-rc6
+That looks good to me. Thanks for the improvement.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/1f63d1a106e98db5cd378b21a471f7ddd710d1b5
+Acked-by: Waiman Long <longman@redhat.com>
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
