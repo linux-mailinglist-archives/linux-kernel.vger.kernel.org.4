@@ -2,88 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60FEA62F2C2
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 11:40:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD2CF62F2C8
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 11:43:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241132AbiKRKkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 05:40:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60124 "EHLO
+        id S241349AbiKRKm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 05:42:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbiKRKkR (ORCPT
+        with ESMTP id S229743AbiKRKmz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 05:40:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA4B1B9DF;
-        Fri, 18 Nov 2022 02:40:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E372662428;
-        Fri, 18 Nov 2022 10:40:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3B1A5C433D6;
-        Fri, 18 Nov 2022 10:40:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668768016;
-        bh=rFrsercBtRHJomGCLpcMsmxtrpGC8ffnHIYQv47hOTE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=W4hS07/sZ2zE3CvEAScKsqPcMzYXVC+gbMlbREMYjVBL+UQNjD4CSUkWvbCHVS2eF
-         k97UXP1U2tcVBdWnQuEInIjAsJH46XS3+2ZZ3HPyd4ilmVcJcBNPJSkaMFWgHmLhzI
-         aeqMGQz8/IUaQH6s+XMJZIr0mVw6y8tFKs98ueFNumtEQEyvCZEUnkZWn0dxD3eB7r
-         fbd8WiuC2guRjejfLVb0nySraQbkWqZjvhTSGLc95wRItWaJvORUE1yuZA81jV2j+D
-         B0VHvd1ulWD/wmSnuFZLbgQ7CWfaxdllOmrfX0kpw9Hedcx8YSiWaf+91XNaxCASeG
-         QnWa7AdIsUKlw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 16A2AE29F43;
-        Fri, 18 Nov 2022 10:40:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 18 Nov 2022 05:42:55 -0500
+Received: from mx.swemel.ru (mx.swemel.ru [95.143.211.150])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 757DF97083
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 02:42:54 -0800 (PST)
+From:   Denis Arefev <arefev@swemel.ru>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=swemel.ru; s=mail;
+        t=1668768172;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=zhq3ZPbOW/IjySbkqalqQrSgHm9uIPo6a/xa8S5bNyE=;
+        b=Ht2++LndUjVOqrAQD0+1tnKkVc0lpX3HoTEFa58uWLO+SaR/r7amjxj5fYlev1agdSx5LN
+        RwfAjrXH7aOkiRE3FHSxFwxWW/tnzL/GYYZbFyI4aqhhEY4B5R2vy+0fjc4p4kxMEwHTi1
+        zJUmdMN7WjkNR5fza5+eRJ+gB44Kny0=
+To:     Joerg Roedel <joro@8bytes.org>
+Cc:     Will Deacon <will@kernel.org>, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org,
+        trufanov@swemel.ru, vfh@swemel.ru
+Subject: [PATCH] iommu: amd: Added value check
+Date:   Fri, 18 Nov 2022 13:42:52 +0300
+Message-Id: <20221118104252.122809-1-arefev@swemel.ru>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] net: neigh: decrement the family specific qlen
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166876801608.1818.5528288792107220995.git-patchwork-notify@kernel.org>
-Date:   Fri, 18 Nov 2022 10:40:16 +0000
-References: <Y3QNGHkhvWnxo2LD@x1.ze-it.at>
-In-Reply-To: <Y3QNGHkhvWnxo2LD@x1.ze-it.at>
-To:     Thomas Zeitlhofer <thomas.zeitlhofer+lkml@ze-it.at>
-Cc:     pabeni@redhat.com, davem@davemloft.net,
-        alexander.mikhalitsyn@virtuozzo.com, den@openvz.org,
-        edumazet@google.com, kuba@kernel.org, dsahern@kernel.org,
-        daniel@iogearbox.net, yangyingliang@huawei.com,
-        songmuchun@bytedance.com, vasily.averin@linux.dev,
-        wangyuweihx@gmail.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Аdded a return value check for the function
+mmu_notifier_register.
 
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
+Return value of a function 'mmu_notifier_register'
+called at iommu_v2.c:642 is not checked,
+ but it is usually checked for this function
 
-On Tue, 15 Nov 2022 23:09:41 +0100 you wrote:
-> Commit 0ff4eb3d5ebb ("neighbour: make proxy_queue.qlen limit
-> per-device") introduced the length counter qlen in struct neigh_parms.
-> There are separate neigh_parms instances for IPv4/ARP and IPv6/ND, and
-> while the family specific qlen is incremented in pneigh_enqueue(), the
-> mentioned commit decrements always the IPv4/ARP specific qlen,
-> regardless of the currently processed family, in pneigh_queue_purge()
-> and neigh_proxy_process().
-> 
-> [...]
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-Here is the summary with links:
-  - [v2] net: neigh: decrement the family specific qlen
-    https://git.kernel.org/netdev/net/c/8207f253a097
+Signed-off-by: Denis Arefev <arefev@swemel.ru>
+---
+ drivers/iommu/amd/iommu_v2.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-You are awesome, thank you!
+diff --git a/drivers/iommu/amd/iommu_v2.c b/drivers/iommu/amd/iommu_v2.c
+index 5ecc0bc608ec..88134f34589f 100644
+--- a/drivers/iommu/amd/iommu_v2.c
++++ b/drivers/iommu/amd/iommu_v2.c
+@@ -639,7 +639,9 @@ int amd_iommu_bind_pasid(struct pci_dev *pdev, u32 pasid,
+ 	if (pasid_state->mm == NULL)
+ 		goto out_free;
+ 
+-	mmu_notifier_register(&pasid_state->mn, mm);
++	ret = mmu_notifier_register(&pasid_state->mn, mm);
++	if (ret)
++		goto out_free;
+ 
+ 	ret = set_pasid_state(dev_state, pasid_state, pasid);
+ 	if (ret)
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.25.1
 
