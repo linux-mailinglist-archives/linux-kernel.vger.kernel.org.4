@@ -2,101 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3F3062F668
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 14:39:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDBF462F677
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 14:41:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241918AbiKRNjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 08:39:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58516 "EHLO
+        id S241625AbiKRNlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 08:41:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242133AbiKRNin (ORCPT
+        with ESMTP id S235221AbiKRNlo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 08:38:43 -0500
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7D3920B5;
-        Fri, 18 Nov 2022 05:37:28 -0800 (PST)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 6A14D1884470;
-        Fri, 18 Nov 2022 13:37:26 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 5E708250052C;
-        Fri, 18 Nov 2022 13:37:26 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 5395F9EC0020; Fri, 18 Nov 2022 13:37:26 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Fri, 18 Nov 2022 08:41:44 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A2B1C3D;
+        Fri, 18 Nov 2022 05:41:43 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id w14so9311359wru.8;
+        Fri, 18 Nov 2022 05:41:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kdLS+asfEoSvipkYLNNhcL5qp6R+rlOz+8ktYa9WENs=;
+        b=N+pZ+IvkTjyayqCEzGcFSxvi2J3GiWXiEAxO4CgJw5mldoXyA6fyZvQvaKCIiqAAtk
+         xYcHNqBuAmywb85rF4Q//hD752UHwXaYm/b8esSIDEWMK6+v6g5eoUmFH79aZ79Loyv+
+         hThyVMei5G84VN7Ek8izxHjTclWCMCQpJFRoeh8woM0Dv55lShnyyzjHHRcnoz3f/sai
+         dvnpXgdIRPeVZvTWSyj+3uDgHEf+lpGpS/cKul7d6WxAxTIT8YbQTSM0wvd1j8MpjwoE
+         SLA6kQnez4WZ5cKsKaiupHvo5qJWrEHFgWdSES1hllm7we3bD0HAot3KF1r+EtlHuYDw
+         FmqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kdLS+asfEoSvipkYLNNhcL5qp6R+rlOz+8ktYa9WENs=;
+        b=oeNUSi2cLvGLSUs5NV0FXGQO9dYIh39pWi+noBRCxNiV2T8d4nQgtOpgRAbNNTT1yX
+         UzPqWJ3csjOlsmr2RNc4gWjzjbVPxYhOG6c8YPw/MQmsiNjwKhta9CfprHmXlEF+fNX3
+         Nm3A6y4u1IfAWaTwpec4eSRYmJ/tuUVl+DSxYVd8MqJ2Fq56bpYw3KuqBAJOPpbT4wmS
+         GyuCQ5nXFglDU3Gb0P6j2nFXpaKgewr6c6cnKeylGpJmyF6bqW13wikZaI2wjvkQfrmJ
+         ILtjGaczsbX05mDRumBCdg8Z2O0mr8Om2ZiYE0TEQ+EEa9rdpJLVc9HHpCwetqUv3lDT
+         BI/A==
+X-Gm-Message-State: ANoB5pmbdO1r2Qx5p4u6lsVQ4n1/E/ZH4lNuUm5I9vNtZB8Wk+5IFaEG
+        qncXVictXvwwkCyAnFEiBbY=
+X-Google-Smtp-Source: AA0mqf4nHDAuiyx+n3E39N7LD5MIjpFi4kW9nKbyHoi5Zgoi7z371ZYJ18sTItNGjWEiIIpvwoJ0gQ==
+X-Received: by 2002:a05:6000:12cb:b0:236:62e3:6202 with SMTP id l11-20020a05600012cb00b0023662e36202mr4395284wrx.47.1668778902081;
+        Fri, 18 Nov 2022 05:41:42 -0800 (PST)
+Received: from prasmi.home ([2a00:23c8:2501:c701:29e1:fee9:75e6:d6ea])
+        by smtp.gmail.com with ESMTPSA id c20-20020a7bc854000000b003b476cabf1csm4531598wml.26.2022.11.18.05.41.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 05:41:40 -0800 (PST)
+From:   Prabhakar <prabhakar.csengg@gmail.com>
+X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-watchdog@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH] dt-bindings: watchdog: renesas,wdt: Document RZ/Five SoC
+Date:   Fri, 18 Nov 2022 13:38:29 +0000
+Message-Id: <20221118133829.12855-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Date:   Fri, 18 Nov 2022 14:37:26 +0100
-From:   netdev@kapio-technology.com
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Ido Schimmel <idosch@idosch.org>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v8 net-next 0/2] mv88e6xxx: Add MAB offload support
-In-Reply-To: <20221116102406.gg6h7gvkx55f2ojj@skbuf>
-References: <20221115102833.ahwnahrqstcs2eug@skbuf>
- <7c02d4f14e59a6e26431c086a9bb9643@kapio-technology.com>
- <20221115111034.z5bggxqhdf7kbw64@skbuf>
- <0cd30d4517d548f35042a535fd994831@kapio-technology.com>
- <20221115122237.jfa5aqv6hauqid6l@skbuf>
- <fb1707b55bd8629770e77969affaa2f9@kapio-technology.com>
- <20221115145650.gs7crhkidbq5ko6v@skbuf>
- <f229503b98d772c936f1fc8ca826a14f@kapio-technology.com>
- <20221115161846.2st2kjxylfvlncib@skbuf>
- <e05f69915a2522fc1e9854194afcc87b@kapio-technology.com>
- <20221116102406.gg6h7gvkx55f2ojj@skbuf>
-User-Agent: Gigahost Webmail
-Message-ID: <54b489e65712e50e5ee67b746c0fec74@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-11-16 11:24, Vladimir Oltean wrote:
-> On Tue, Nov 15, 2022 at 07:40:02PM +0100, netdev@kapio-technology.com 
-> wrote:
->> So, I will not present you with a graph as it is a tedious process 
->> (probably
->> it is some descending gaussian curve wrt timeout occurring).
->> 
->> But 100ms fails, 125 I had 1 port fail, at 140, 150  and 180 I saw 
->> timeouts
->> resulting in fdb add fails, like (and occasional port fail):
->> 
->> mv88e6085 1002b000.ethernet-1:04: Timeout while waiting for switch
->> mv88e6085 1002b000.ethernet-1:04: port 0 failed to add 
->> be:7c:96:06:9f:09 vid
->> 1 to fdb: -110
->> 
->> At around 200 ms it looks like it is getting stable (like 5 runs, no
->> problems).
->> 
->> So with the gaussian curve tail whipping ones behind (risque of 
->> failure) it
->> might need to be like 300 ms in my case... :-)
-> 
-> Pick a value that is high enough to be reliable and submit a patch to
-> "net" where you present the evidence for it (top-level MDIO controller,
-> SoC, switch, kernel). I don't believe there's much to read into. A 
-> large
-> timeout shouldn't have a negative effect on the MDIO performance,
-> because it just determines how long it takes until the kernel declares
-> it dead, rather than how long it takes for transactions to actually 
-> take
-> place.
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Would it not be appropriate to have a define that specifies the value 
-instead
-of the same value two places as it is now?
+The WDT block on the RZ/Five SoC is identical to one found on the RZ/G2UL
+SoC. "renesas,r9a07g043-wdt" compatible string will be used on the
+RZ/Five SoC so to make this clear, update the comment to include RZ/Five
+SoC.
 
-And in so case, what would be an appropriate name?
+No driver changes are required as generic compatible string
+"renesas,rzg2l-wdt" will be used as a fallback on RZ/Five SoC.
+
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+ Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
+index 26b1815a6753..e2c9bf1aec38 100644
+--- a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
++++ b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
+@@ -26,7 +26,7 @@ properties:
+ 
+       - items:
+           - enum:
+-              - renesas,r9a07g043-wdt    # RZ/G2UL
++              - renesas,r9a07g043-wdt    # RZ/G2UL and RZ/Five
+               - renesas,r9a07g044-wdt    # RZ/G2{L,LC}
+               - renesas,r9a07g054-wdt    # RZ/V2L
+           - const: renesas,rzg2l-wdt
+-- 
+2.25.1
+
