@@ -2,272 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62D1A62F2BD
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 11:38:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83FF662F2B9
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 11:38:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241225AbiKRKiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 05:38:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58446 "EHLO
+        id S241173AbiKRKif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 05:38:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241444AbiKRKio (ORCPT
+        with ESMTP id S235183AbiKRKie (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 05:38:44 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EADC92B6F
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 02:37:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668767863;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=f5bu2IF1InfzvQ00y6+OuZ0Xhu88JGi4I8t2yA0L/fE=;
-        b=KMVoo+0JUqn9uyXcDAt8uU2b4jlyxyXJ8RlzkcMGYTKwHseL3HVS8dsSTq1uAjrV306Xmb
-        XUCcdUlTsmpxgPLXGBZ8VV1mrWclHpzVumaOucs87WEIp4qNjk49dR2hOui5/qt3G+tQVY
-        b23ZGbh7/OcA7jvJx5Sr0hDxlt37HHw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-322-Bsc1Dem6OEiKHGf63FHB2A-1; Fri, 18 Nov 2022 05:37:40 -0500
-X-MC-Unique: Bsc1Dem6OEiKHGf63FHB2A-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 86C4F101A54E;
-        Fri, 18 Nov 2022 10:37:39 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 79C7235429;
-        Fri, 18 Nov 2022 10:37:38 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [RFC PATCH] afs: Stop implementing ->writepage()
-From:   David Howells <dhowells@redhat.com>
-To:     linux-afs@lists.infradead.org
-Cc:     Marc Dionne <marc.dionne@auristor.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Theodore Ts'o <tytso@mit.edu>, dhowells@redhat.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Fri, 18 Nov 2022 10:37:35 +0000
-Message-ID: <166876785552.222254.4403222906022558715.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.5
+        Fri, 18 Nov 2022 05:38:34 -0500
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80102A19B
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 02:38:32 -0800 (PST)
+Received: by mail-io1-f71.google.com with SMTP id n23-20020a056602341700b00689fc6dbfd6so2373217ioz.8
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 02:38:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=B7rT5D+HD/NGgTOqEGVfQWh3AC4EcDUMZJA/cRRvNis=;
+        b=xRZoVt4qUFeoQf6z2iJFIhLXtWEOQ4ec1E0pu4FlGR6eLCSt1f1OWuuZbY3mHyI9nh
+         4KUGG2o5WPia25/LG3TWqvEVzD4sIrSw/9pwuQh9UpIuqEjbUzUQNXUcosaqObA/8Vas
+         U97s+7yOLas2UTFAmTDPUmWXLkQufFHu83Ci4sv5lvPMeDYqCM0PT9gffHR4IXr+D9IM
+         e02dFajWPsv7ARNeMqViefGU7K1hx+iDns5c1oayeGpST4hqLzHlSstjFanbgKNA/8/4
+         SiQFv5lXyzQOpJAVS3APbTldSHxlKwlN7sEKSzoaWL/lbhe/f2brpd6d++UQNnYsbOWZ
+         Td+Q==
+X-Gm-Message-State: ANoB5pkp1Ki5hxpT1dtxYfAmx5MmDjUB9Jicmm0Uyv+dR19KqrFJIzbN
+        /cWosloEwVFFDiSXT7RItlvpmq5kG+SA3JHtYbDMd5G5Fd23
+X-Google-Smtp-Source: AA0mqf4JOEguQPyJ2ydkLVLZWq5JhAmNtCDXzMr1MqSY2DNseMpscjjgZ9VATzrrKEMlVDX8MmozUo0fZ2FhavA2UaD2jQa7hX2W
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:4419:b0:375:2b75:93d with SMTP id
+ bp25-20020a056638441900b003752b75093dmr2797008jab.235.1668767911809; Fri, 18
+ Nov 2022 02:38:31 -0800 (PST)
+Date:   Fri, 18 Nov 2022 02:38:31 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000098976a05edbc4ebc@google.com>
+Subject: [syzbot] BUG: corrupted list in __netif_napi_del (3)
+From:   syzbot <syzbot+f39fd41c33711aecf0c1@syzkaller.appspotmail.com>
+To:     ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, edumazet@google.com, hawk@kernel.org,
+        john.fastabend@gmail.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We're trying to get rid of the ->writepage() hook[1].  Stop afs from using
-it by unlocking the page and calling filemap_fdatawrite_wbc() rather than
-folio_write_one().  We drop the folio lock so that writeback can include
-pages on both sides of the target page in the write without risking
-deadlock.
+Hello,
 
-A hint flag is added to the writeback_control struct so that a filesystem
-can say that the write is triggered by write_begin seeing a conflicting
-write.  This causes do_writepages() to do a single pass of the loop only.
+syzbot found the following issue on:
 
-This requires ->migrate_folio() to be implemented, so point that at
-filemap_migrate_folio() for files and also for symlinks and directories.
+HEAD commit:    68d268d08931 Merge branch 'net-try_cmpxchg-conversions'
+git tree:       net-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=14299759880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=893a728fb1a6b263
+dashboard link: https://syzkaller.appspot.com/bug?extid=f39fd41c33711aecf0c1
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-A couple of questions:
+Unfortunately, I don't have any reproducer for this issue yet.
 
- (1) afs_write_back_from_locked_folio() could be called directly rather
-     than calling filemap_fdatawrite_wbc(), but that would avoid the
-     control group stuff that wbc_attach_and_unlock_inode() and co. seem to
-     do.  Do I actually need to do this?
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/399b143cdec5/disk-68d268d0.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/cf1a3fd0fc27/vmlinux-68d268d0.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/5649c9fe4b21/bzImage-68d268d0.xz
 
- (2) afs_writepages_region() has a loop in it to generate multiple writes.
-     do_writepages() also acquired a loop[2] which will also generate
-     multiple writes.  Should I remove the loop from
-     afs_writepages_region() and leave it to the caller of ->writepages()?
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+f39fd41c33711aecf0c1@syzkaller.appspotmail.com
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Marc Dionne <marc.dionne@auristor.com>
-cc: Christoph Hellwig <hch@lst.de>
-cc: Matthew Wilcox <willy@infradead.org>
-cc: Theodore Ts'o <tytso@mit.edu>
-cc: linux-afs@lists.infradead.org
-Link: https://lore.kernel.org/r/20221113162902.883850-1-hch@lst.de/ [1]
-Link: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=80a2ea9f85850f1cdae814be03b4a16c3d3abc00 [2]
+list_del corruption, ffff88804eace160->prev is LIST_POISON2 (dead000000000122)
+------------[ cut here ]------------
+kernel BUG at lib/list_debug.c:56!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 4247 Comm: syz-executor.4 Not tainted 6.1.0-rc4-syzkaller-01115-g68d268d08931 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:__list_del_entry_valid.cold+0x37/0x72 lib/list_debug.c:56
+Code: e8 d2 62 f0 ff 0f 0b 48 89 ee 48 c7 c7 80 10 a8 8a e8 c1 62 f0 ff 0f 0b 4c 89 e2 48 89 ee 48 c7 c7 40 11 a8 8a e8 ad 62 f0 ff <0f> 0b 48 89 ee 48 c7 c7 20 10 a8 8a e8 9c 62 f0 ff 0f 0b 4c 89 ea
+RSP: 0018:ffffc9000a116ed0 EFLAGS: 00010282
+RAX: 000000000000004e RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 0000000000040000 RSI: ffffffff8165772c RDI: fffff52001422dcc
+RBP: ffff88804eace160 R08: 000000000000004e R09: 0000000000000000
+R10: 0000000080000000 R11: 0000000000000000 R12: dead000000000122
+R13: ffff88804eab6050 R14: ffff88804eace000 R15: ffff88804eace000
+FS:  00007fa8ab74e700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000000002040f030 CR3: 000000007efb8000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __list_del_entry include/linux/list.h:134 [inline]
+ list_del_rcu include/linux/rculist.h:157 [inline]
+ __netif_napi_del.part.0+0x118/0x530 net/core/dev.c:6458
+ __netif_napi_del+0x40/0x50 net/core/dev.c:6454
+ veth_napi_del_range+0xcd/0x560 drivers/net/veth.c:1041
+ veth_napi_del drivers/net/veth.c:1055 [inline]
+ veth_close+0x164/0x500 drivers/net/veth.c:1385
+ __dev_close_many+0x1b6/0x2e0 net/core/dev.c:1501
+ __dev_close net/core/dev.c:1513 [inline]
+ __dev_change_flags+0x2ce/0x750 net/core/dev.c:8528
+ dev_change_flags+0x97/0x170 net/core/dev.c:8602
+ do_setlink+0x9f1/0x3bb0 net/core/rtnetlink.c:2827
+ rtnl_group_changelink net/core/rtnetlink.c:3344 [inline]
+ __rtnl_newlink+0xb90/0x1840 net/core/rtnetlink.c:3600
+ rtnl_newlink+0x68/0xa0 net/core/rtnetlink.c:3637
+ rtnetlink_rcv_msg+0x43e/0xca0 net/core/rtnetlink.c:6141
+ netlink_rcv_skb+0x165/0x440 net/netlink/af_netlink.c:2564
+ netlink_unicast_kernel net/netlink/af_netlink.c:1330 [inline]
+ netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1356
+ netlink_sendmsg+0x91b/0xe10 net/netlink/af_netlink.c:1932
+ sock_sendmsg_nosec net/socket.c:714 [inline]
+ sock_sendmsg+0xd3/0x120 net/socket.c:734
+ ____sys_sendmsg+0x712/0x8c0 net/socket.c:2476
+ ___sys_sendmsg+0x110/0x1b0 net/socket.c:2530
+ __sys_sendmsg+0xf7/0x1c0 net/socket.c:2559
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fa8aaa8b639
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fa8ab74e168 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 00007fa8aababf80 RCX: 00007fa8aaa8b639
+RDX: 0000000000000000 RSI: 0000000020000140 RDI: 0000000000000003
+RBP: 00007fa8aaae6ae9 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffe720d839f R14: 00007fa8ab74e300 R15: 0000000000022000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:__list_del_entry_valid.cold+0x37/0x72 lib/list_debug.c:56
+Code: e8 d2 62 f0 ff 0f 0b 48 89 ee 48 c7 c7 80 10 a8 8a e8 c1 62 f0 ff 0f 0b 4c 89 e2 48 89 ee 48 c7 c7 40 11 a8 8a e8 ad 62 f0 ff <0f> 0b 48 89 ee 48 c7 c7 20 10 a8 8a e8 9c 62 f0 ff 0f 0b 4c 89 ea
+RSP: 0018:ffffc9000a116ed0 EFLAGS: 00010282
+RAX: 000000000000004e RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 0000000000040000 RSI: ffffffff8165772c RDI: fffff52001422dcc
+RBP: ffff88804eace160 R08: 000000000000004e R09: 0000000000000000
+R10: 0000000080000000 R11: 0000000000000000 R12: dead000000000122
+R13: ffff88804eab6050 R14: ffff88804eace000 R15: ffff88804eace000
+FS:  00007fa8ab74e700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020513030 CR3: 000000007efb8000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+
+
 ---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
- fs/afs/dir.c              |    1 +
- fs/afs/file.c             |    3 +-
- fs/afs/write.c            |   63 +++++++++++++++++++++++----------------------
- include/linux/writeback.h |    1 +
- mm/page-writeback.c       |    3 +-
- 5 files changed, 38 insertions(+), 33 deletions(-)
-
-diff --git a/fs/afs/dir.c b/fs/afs/dir.c
-index 230c2d19116d..baed7b095087 100644
---- a/fs/afs/dir.c
-+++ b/fs/afs/dir.c
-@@ -77,6 +77,7 @@ const struct address_space_operations afs_dir_aops = {
- 	.dirty_folio	= afs_dir_dirty_folio,
- 	.release_folio	= afs_dir_release_folio,
- 	.invalidate_folio = afs_dir_invalidate_folio,
-+	.migrate_folio	= filemap_migrate_folio,
- };
- 
- const struct dentry_operations afs_fs_dentry_operations = {
-diff --git a/fs/afs/file.c b/fs/afs/file.c
-index d1cfb235c4b9..a2325e0b9d38 100644
---- a/fs/afs/file.c
-+++ b/fs/afs/file.c
-@@ -58,14 +58,15 @@ const struct address_space_operations afs_file_aops = {
- 	.invalidate_folio = afs_invalidate_folio,
- 	.write_begin	= afs_write_begin,
- 	.write_end	= afs_write_end,
--	.writepage	= afs_writepage,
- 	.writepages	= afs_writepages,
-+	.migrate_folio	= filemap_migrate_folio,
- };
- 
- const struct address_space_operations afs_symlink_aops = {
- 	.read_folio	= afs_symlink_read_folio,
- 	.release_folio	= afs_release_folio,
- 	.invalidate_folio = afs_invalidate_folio,
-+	.migrate_folio	= filemap_migrate_folio,
- };
- 
- static const struct vm_operations_struct afs_vm_ops = {
-diff --git a/fs/afs/write.c b/fs/afs/write.c
-index 9ebdd36eaf2f..38d02ead3f38 100644
---- a/fs/afs/write.c
-+++ b/fs/afs/write.c
-@@ -38,6 +38,24 @@ static void afs_folio_start_fscache(bool caching, struct folio *folio)
- }
- #endif
- 
-+/*
-+ * Flush out a conflicting write.  This may extend the write to the surrounding
-+ * pages if also dirty and contiguous to the conflicting region..
-+ */
-+static int afs_flush_conflicting_write(struct address_space *mapping,
-+				       struct folio *folio)
-+{
-+	struct writeback_control wbc = {
-+		.sync_mode	= WB_SYNC_ALL,
-+		.nr_to_write	= LONG_MAX,
-+		.range_start	= folio_pos(folio),
-+		.range_end	= LLONG_MAX,
-+		.for_write_begin = true,
-+	};
-+
-+	return filemap_fdatawrite_wbc(mapping, &wbc);
-+}
-+
- /*
-  * prepare to perform part of a write to a page
-  */
-@@ -80,7 +98,8 @@ int afs_write_begin(struct file *file, struct address_space *mapping,
- 
- 		if (folio_test_writeback(folio)) {
- 			trace_afs_folio_dirty(vnode, tracepoint_string("alrdy"), folio);
--			goto flush_conflicting_write;
-+			folio_unlock(folio);
-+			goto wait_for_writeback;
- 		}
- 		/* If the file is being filled locally, allow inter-write
- 		 * spaces to be merged into writes.  If it's not, only write
-@@ -99,8 +118,15 @@ int afs_write_begin(struct file *file, struct address_space *mapping,
- 	 * flush the page out.
- 	 */
- flush_conflicting_write:
--	_debug("flush conflict");
--	ret = folio_write_one(folio);
-+	trace_afs_folio_dirty(vnode, tracepoint_string("confl"), folio);
-+	folio_unlock(folio);
-+
-+	ret = afs_flush_conflicting_write(mapping, folio);
-+	if (ret < 0)
-+		goto error;
-+
-+wait_for_writeback:
-+	ret = folio_wait_writeback_killable(folio);
- 	if (ret < 0)
- 		goto error;
- 
-@@ -663,34 +689,6 @@ static ssize_t afs_write_back_from_locked_folio(struct address_space *mapping,
- 	return ret;
- }
- 
--/*
-- * write a page back to the server
-- * - the caller locked the page for us
-- */
--int afs_writepage(struct page *subpage, struct writeback_control *wbc)
--{
--	struct folio *folio = page_folio(subpage);
--	ssize_t ret;
--	loff_t start;
--
--	_enter("{%lx},", folio_index(folio));
--
--#ifdef CONFIG_AFS_FSCACHE
--	folio_wait_fscache(folio);
--#endif
--
--	start = folio_index(folio) * PAGE_SIZE;
--	ret = afs_write_back_from_locked_folio(folio_mapping(folio), wbc,
--					       folio, start, LLONG_MAX - start);
--	if (ret < 0) {
--		_leave(" = %zd", ret);
--		return ret;
--	}
--
--	_leave(" = 0");
--	return 0;
--}
--
- /*
-  * write a region of pages back to the server
-  */
-@@ -775,6 +773,9 @@ static int afs_writepages_region(struct address_space *mapping,
- 
- 		start += ret;
- 
-+		if (wbc->for_write_begin)
-+			break;
-+
- 		cond_resched();
- 	} while (wbc->nr_to_write > 0);
- 
-diff --git a/include/linux/writeback.h b/include/linux/writeback.h
-index 06f9291b6fd5..3832ac3425c8 100644
---- a/include/linux/writeback.h
-+++ b/include/linux/writeback.h
-@@ -61,6 +61,7 @@ struct writeback_control {
- 	unsigned range_cyclic:1;	/* range_start is cyclic */
- 	unsigned for_sync:1;		/* sync(2) WB_SYNC_ALL writeback */
- 	unsigned unpinned_fscache_wb:1;	/* Cleared I_PINNING_FSCACHE_WB */
-+	unsigned for_write_begin:1;	/* Flush conflicting write */
- 
- 	/*
- 	 * When writeback IOs are bounced through async layers, only the
-diff --git a/mm/page-writeback.c b/mm/page-writeback.c
-index 7e9d8d857ecc..04c65b8b4ded 100644
---- a/mm/page-writeback.c
-+++ b/mm/page-writeback.c
-@@ -2469,7 +2469,8 @@ int do_writepages(struct address_space *mapping, struct writeback_control *wbc)
- 			ret = mapping->a_ops->writepages(mapping, wbc);
- 		else
- 			ret = generic_writepages(mapping, wbc);
--		if ((ret != -ENOMEM) || (wbc->sync_mode != WB_SYNC_ALL))
-+		if ((ret != -ENOMEM) || (wbc->sync_mode != WB_SYNC_ALL) ||
-+		    wbc->for_write_begin)
- 			break;
- 
- 		/*
-
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
