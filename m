@@ -2,67 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C536162FE90
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 21:09:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FEEC62FE95
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 21:11:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231476AbiKRUJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 15:09:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47500 "EHLO
+        id S230409AbiKRULb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 15:11:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbiKRUJl (ORCPT
+        with ESMTP id S229470AbiKRULa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 15:09:41 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF0B167CC
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 12:09:39 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id io19so5495667plb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 12:09:39 -0800 (PST)
+        Fri, 18 Nov 2022 15:11:30 -0500
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E59CB248EF
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 12:11:28 -0800 (PST)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-142612a5454so6580634fac.2
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 12:11:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=psaKEKZ84x2Vz29Uk97nRgl+3uojgY+0KDVxfRERsMQ=;
-        b=P9oIK8nssH/aRQYxUeS6cNgI3mzVwbGphlPJpgJA5rexl1l3GhICHkywqBR1TVIrvk
-         W9za8iIgEiMY6aw0+Yv6rec/Xon/Mx145UUStLoP9H8CNoQNjesHkaevAJDCR1cHt/yB
-         IYi+I3Bk2jDjcCFI5fUycdAUTzh/poqIO80iM/9+A3ZvyzfOLUD3OhjhDwcjZpy62LSh
-         uoTSV5SL2CiYe4EhqP3SFK3pri7oIEVm1PO5xAb3+XPRX3mBJ2en4lmzL291C/cV/37v
-         Le4cgDEd2Oi3DyyRuKxUVpUGdsemW1YpwrLj26PB6yn2m1vg83xw2XlRGtNOBFU11vRi
-         yQ8Q==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=J3I3CkdX4BAay5C0IaiSoCWmkDjQWfYtrKIg7MfvyUY=;
+        b=Q/x00Xs+INcK9wrEmPasiROezIpYZC96sD9AlGuzIT/Z3B5xav8JQrZLsf0bVIgp5+
+         5Q+2qjQy3fS+GISqFZJhFMnzu47CkNAZE7m71SW9UQ17vnGUQpwiS9OKW6/MUhhtScw5
+         rmQE+jvC32tw6PE3xkMOHh8unguMDvvorOw4YTLgyM14YhM+ybgTfJCq5rWOqyrj2Ap3
+         0/J11dqVCnkqj+XSIJQ+DxDn4vpz+4MOBl12IFG7tH8JhO7TnWt2jfOI1cmSB1SxSAjN
+         3paOxl0zP4YAjdfDjVQFzbaNMzytEaPUXeT1hSYrktGE7oTwcUpZPOnfTAvg/bpL13nL
+         mF5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=psaKEKZ84x2Vz29Uk97nRgl+3uojgY+0KDVxfRERsMQ=;
-        b=no7O+wBs0j2Bv19Y5m+L4TtqZiKrQR+SWG3EdeJQXxjy4uYm2d+fUSHSLCfHSZZmZ3
-         OIwYveI2jkkjlz+M9sDZoKICE/Hh0aWqC+rleUbIfLOP5ynsrUJywIwKVhP7qnsPBYFN
-         Cyy0GZcyYrc1oUX+/uOsWnd7OarlyFnRxa+VfbcfqYxhy0mzhl60h0Z1tbF+ghPqTNs9
-         uLpzjjhd1ylrZZyE1nqKbAdvutdiDbnAgXhGWPEQFLzlHg1JsEHXeaApuhOsDY5tdOJt
-         A1g13OoYkcsvo5gOsTUpZxbWHuF9l9fVUq5zK2QQxJ3OpHuaz/zOauBD+TJ95jNY+Kwm
-         xbjA==
-X-Gm-Message-State: ANoB5plkDUr+GORjvX8GkjeDxkHSVOvktLwAcORR07hh/RCVl2HITGPF
-        cEGnzutKW6bf2XtlBZF8I2ObmA==
-X-Google-Smtp-Source: AA0mqf6mEH0hzAjhXo9LGpjXEmKx0hTSlAEEDScRQA/YhqZoRkuXVaxE6mwzHY+mmsYHO+0pS6gj8w==
-X-Received: by 2002:a17:90b:3d7:b0:200:2538:1ca8 with SMTP id go23-20020a17090b03d700b0020025381ca8mr15484027pjb.79.1668802179118;
-        Fri, 18 Nov 2022 12:09:39 -0800 (PST)
-Received: from localhost ([75.172.139.56])
-        by smtp.gmail.com with ESMTPSA id v28-20020a63465c000000b00412a708f38asm3201519pgk.35.2022.11.18.12.09.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 12:09:38 -0800 (PST)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     Nicolas Frayer <nfrayer@baylibre.com>, nm@ti.com,
-        ssantosh@kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     glaroque@baylibre.com, nfrayer@baylibre.com
-Subject: Re: [PATCH v6 0/2] soc: ti: k3-socinfo: Add module build support to
- the k3 socinfo driver
-In-Reply-To: <20221117095419.171906-1-nfrayer@baylibre.com>
-References: <20221117095419.171906-1-nfrayer@baylibre.com>
-Date:   Fri, 18 Nov 2022 12:09:38 -0800
-Message-ID: <7h7czs9g8t.fsf@baylibre.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=J3I3CkdX4BAay5C0IaiSoCWmkDjQWfYtrKIg7MfvyUY=;
+        b=J4rCSl0tVltvm5A5El1FKVRQ6OdWeGBB3BLC8//7zCEmpSlOSOM1WCPTTCKG6K9dhn
+         0TfzYPNcgoRGnhBQ48klBDRCKIb7fvie+SREjkmCoAB0yjvH/R7fWQR7S7o/UkrNmDhm
+         eZuiIqYu/wEqlRuVEpIrW88zvkJoVmyPP8riPcypBNzuCepQgEZH+ghGWRFfUeKxkhqT
+         lgIweLvddYL6UyzCh/gPzGCWLWz6PFaMQdD4uInnVsVdvGbISMNY6iQEy4IUsYsBd9HT
+         VGa2SC9rXQHa/tqCGi877enHvpWG02BQoosF3k1J92w5eWBL5kGe+7B9K3AVeA4zadyq
+         KWfw==
+X-Gm-Message-State: ANoB5plL9hRGn3lnbwFxb7phKOOMUV3iQTR0yM3LSzvnM2tLtzsQ2DNu
+        c+8/T0ME08vQvL9TLzJiV4moftNcfPpE1sElc5b5OFPt
+X-Google-Smtp-Source: AA0mqf4HAPt5v1Yu7vw9aDVSNnvY2xhI05VAW34pXE3l0dIiWaEtvxVZJXNOHwbRMWzNZ+ydN1qTwgQIHgLOBuRB8/A=
+X-Received: by 2002:a05:6870:2b05:b0:12d:58c1:33f9 with SMTP id
+ ld5-20020a0568702b0500b0012d58c133f9mr8296943oab.46.1668802288282; Fri, 18
+ Nov 2022 12:11:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221118195406.95779-1-lyude@redhat.com> <b7c8a41d-6657-2646-4f18-ed13293369b2@amd.com>
+In-Reply-To: <b7c8a41d-6657-2646-4f18-ed13293369b2@amd.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Fri, 18 Nov 2022 15:11:16 -0500
+Message-ID: <CADnq5_M0zdoSe3w1A-XxLc4G_x4-a2RT6CkRfhwP_4OLdP=Uow@mail.gmail.com>
+Subject: Re: [PATCH] drm/amdgpu/dm/mst: Fix uninitialized var in pre_compute_mst_dsc_configs_for_state()
+To:     Harry Wentland <harry.wentland@amd.com>
+Cc:     Lyude Paul <lyude@redhat.com>, amd-gfx@lists.freedesktop.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Leo Li <sunpeng.li@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Roman Li <Roman.Li@amd.com>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Fangzhi Zuo <Jerry.Zuo@amd.com>,
+        hersen wu <hersenxs.wu@amd.com>,
+        Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Wayne Lin <Wayne.Lin@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,11 +80,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Nicolas Frayer <nfrayer@baylibre.com> writes:
+Applied.  Thanks!
 
-> In order for the TI K3 SoC info driver to be built as a module, the
-> following changes have been made:
-> - Converted memory allocations to devm and added the remove callback
-> - Added necessary code to build the driver as a module
+Alex
 
-Reviewed-by: Kevin Hilman <khilman@baylibre.com>
+On Fri, Nov 18, 2022 at 3:03 PM Harry Wentland <harry.wentland@amd.com> wrote:
+>
+> On 11/18/22 14:54, Lyude Paul wrote:
+> > Coverity noticed this one, so let's fix it.
+> >
+> > Signed-off-by: Lyude Paul <lyude@redhat.com>
+>
+> Reviewed-by: Harry Wentland <harry.wentland@amd.com>
+>
+> Harry
+>
+> > ---
+> >  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
+> > index 59648f5ffb59..6483ba266893 100644
+> > --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
+> > +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
+> > @@ -1180,7 +1180,7 @@ static int pre_compute_mst_dsc_configs_for_state(struct drm_atomic_state *state,
+> >       struct amdgpu_dm_connector *aconnector;
+> >       struct drm_dp_mst_topology_mgr *mst_mgr;
+> >       int link_vars_start_index = 0;
+> > -     int ret;
+> > +     int ret = 0;
+> >
+> >       for (i = 0; i < dc_state->stream_count; i++)
+> >               computed_streams[i] = false;
+>
