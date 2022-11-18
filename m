@@ -2,99 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 218E962F2D8
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 11:44:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 975C062F2D7
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 11:44:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241532AbiKRKoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 05:44:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33730 "EHLO
+        id S241512AbiKRKoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 05:44:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241493AbiKRKn6 (ORCPT
+        with ESMTP id S241417AbiKRKny (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 05:43:58 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9EF111A23;
-        Fri, 18 Nov 2022 02:43:56 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id g12so7587257lfh.3;
-        Fri, 18 Nov 2022 02:43:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M54rSFxQLijO3j26nQU0jB0r1Bnt0dCKzsYSgimLrI4=;
-        b=KMvnRwY0L3d/A/JoE/GXTUQz3sVPfvFmvGZpaOggwoHMG6wnO+7CkXqhK7Q7RJI7sK
-         WfR74K9m6eZtlWz+JZxVHEICLP4OT//621qOZhBu2Tn5k35N3yYUwesIA9mDw4uLFE4W
-         4JK4Yr3psUhtsKmVuJNkgIhBQTZ5eg4xmgGVGsEgl4njX5METYg97AT+Byxfaou20Mg5
-         uzsCERH0AZpX+8LAzQ/2CC8ScUhF5Uwu30RlWuNpIY9X3gb5K6WyrSdQSoTfRsPmhoHb
-         NL1sGo6t0gtxPXc65aEsxspqq5QAfl+gMQgASAuNG5fNJGtDvTbsOM68Z3uB/xOQk8T8
-         FD4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=M54rSFxQLijO3j26nQU0jB0r1Bnt0dCKzsYSgimLrI4=;
-        b=gMw2yel/DbddWShEycCRp1KUPRti2gF3BM5v8UdIs7Wd3h3+zkhW2D6ksutjf76mDU
-         NeLjkSO+6eZt+G9Y1F1/nL0DEEnayZtrYQU/lN74/o9HxEPtWGdFPA6ecdO/J/6RuYu/
-         znAlyXRH4OC9dCy0RgO2pX2fpxOLuyJpNffEwcQDsKpIYZE0UTfldTlu15FYyxgbeLwA
-         j7K8Hoe/fxMP/m7YWLfrrtVz9zk+wwjimLkF5RBkIXhYwsSBdzbA6CdmoI8CzACS3SNJ
-         0CX+8YEwLASRlv2EfCioWN9ooZKQMPRtsQBHzH3LwotvSrESIzA9WEkDeyyuMgIQcFA8
-         r+EQ==
-X-Gm-Message-State: ANoB5pndm94Ft0nQ83EBqKOw+WSA2T3kxtkiERVnRbjDNHuwk9wqXkve
-        0nndVMblJgBkWaR8WSHeupw=
-X-Google-Smtp-Source: AA0mqf5UbfQ4/CHQXYMvIKq/kso9soqgxgLcSAnHR3LCuoNPh4obki+ZWElYMSb07O6pDWTFEjJqfw==
-X-Received: by 2002:a05:6512:324c:b0:4a2:2e51:85c1 with SMTP id c12-20020a056512324c00b004a22e5185c1mr2134919lfr.658.1668768235135;
-        Fri, 18 Nov 2022 02:43:55 -0800 (PST)
-Received: from mkor.rasu.local ([212.22.67.162])
-        by smtp.gmail.com with ESMTPSA id v26-20020a056512049a00b0048b365176d9sm606174lfq.286.2022.11.18.02.43.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 02:43:54 -0800 (PST)
-From:   Maxim Korotkov <korotkov.maxim.s@gmail.com>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Maxim Korotkov <korotkov.maxim.s@gmail.com>,
-        Haojian Zhuang <haojian.zhuang@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org
-Subject: [PATCH] pinctrl: single: fix potential NULL dereference
-Date:   Fri, 18 Nov 2022 13:43:32 +0300
-Message-Id: <20221118104332.943-1-korotkov.maxim.s@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 18 Nov 2022 05:43:54 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05BF825CD;
+        Fri, 18 Nov 2022 02:43:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668768234; x=1700304234;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DHRMI6V+sgPcLuSWMPQRiljM1njAubVpXALqbHLr3x4=;
+  b=JQpp1WFBleX2ZtDbqmDb32Dplq+9buhKwIt2QS6xQxWBEXQXSnRTg2P8
+   4r1QUvYsIntT8dIJJctLtNMuS/OHCUMgSReVj7hfJ40jd0ouvcxxJKT1g
+   Z7kMdsb0igwXhb855TYdjYZcq/rhKvWrWSm1PPEwStiMrmdwfPr7pdt7T
+   C9JxTbalmaT3m6LgH2kTMcpKrswmei7LR6Qv1rPi7QODL22trMdvqLfBq
+   YCqDJ9T6sCtU58dd+MP9q3iCgRVveKKZeAviOe3WvVPwBjLrYsKTvPmz4
+   JyyK5cUkOshVsFOTFNEV+FKyR3pSB6EsKwXYHvoVgj3TovEohMNR1XT5Q
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="300645903"
+X-IronPort-AV: E=Sophos;i="5.96,174,1665471600"; 
+   d="scan'208";a="300645903"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2022 02:43:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="814874069"
+X-IronPort-AV: E=Sophos;i="5.96,174,1665471600"; 
+   d="scan'208";a="814874069"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005.jf.intel.com with ESMTP; 18 Nov 2022 02:43:48 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ovyqX-00E03u-2C;
+        Fri, 18 Nov 2022 12:43:45 +0200
+Date:   Fri, 18 Nov 2022 12:43:45 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Tharunkumar.Pasumarthi@microchip.com
+Cc:     Kumaravel.Thiagarajan@microchip.com, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, ilpo.jarvinen@linux.intel.com,
+        macro@orcam.me.uk, jay.dolan@accesio.com, cang1@live.co.uk,
+        u.kleine-koenig@pengutronix.de, wander@redhat.com,
+        etremblay@distech-controls.com, jk@ozlabs.org,
+        biju.das.jz@bp.renesas.com, geert+renesas@glider.be,
+        phil.edworthy@renesas.com, lukas@wunner.de,
+        UNGLinuxDriver@microchip.com, colin.i.king@gmail.com
+Subject: Re: [PATCH v5 tty-next 2/4] 8250: microchip: pci1xxxx: Add
+ serial8250_pci_setup_port definition in 8250_pcilib.c
+Message-ID: <Y3dh4UlWKP2FzTpq@smile.fi.intel.com>
+References: <20221117050126.2966714-1-kumaravel.thiagarajan@microchip.com>
+ <20221117050126.2966714-3-kumaravel.thiagarajan@microchip.com>
+ <Y3Xa9fRP3GGygiVj@smile.fi.intel.com>
+ <PH7PR11MB59582CE57CE17F20A041157F9B099@PH7PR11MB5958.namprd11.prod.outlook.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PH7PR11MB59582CE57CE17F20A041157F9B099@PH7PR11MB5958.namprd11.prod.outlook.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Added checking of pointer "function" in pcs_set_mux().
-pinmux_generic_get_function() can return NULL and the pointer
-"function" was dereferenced without checking against NULL.
+On Fri, Nov 18, 2022 at 09:40:37AM +0000, Tharunkumar.Pasumarthi@microchip.com wrote:
+> > Sent: Thursday, November 17, 2022 12:26 PM
+> > To: Kumaravel Thiagarajan - I21417
+> > <Kumaravel.Thiagarajan@microchip.com>
+> > Subject: Re: [PATCH v5 tty-next 2/4] 8250: microchip: pci1xxxx: Add
+> > serial8250_pci_setup_port definition in 8250_pcilib.c
+> > 
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the
+> > content is safe
+> > 
+> > On Thu, Nov 17, 2022 at 10:31:24AM +0530, Kumaravel Thiagarajan wrote:
+> > > Move implementation of setup_port API to serial8250_pci_setup_port
+> > 
+> > Don't you have a dependency issue here?
+> 
+> Okay, I will explain the need for the changes done in commit description.
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+What I meant is that the 8250_pci patch should be _prerequisite_ to your stuff
+and not otherwise.
 
-Fixes: 571aec4df5b7 ("pinctrl: single: Use generic pinmux helpers for managing functions")
-Signed-off-by: Maxim Korotkov <korotkov.maxim.s@gmail.com>
----
- drivers/pinctrl/pinctrl-single.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/pinctrl/pinctrl-single.c b/drivers/pinctrl/pinctrl-single.c
-index 67bec7ea0f8b..5655a2da5413 100644
---- a/drivers/pinctrl/pinctrl-single.c
-+++ b/drivers/pinctrl/pinctrl-single.c
-@@ -372,6 +372,8 @@ static int pcs_set_mux(struct pinctrl_dev *pctldev, unsigned fselector,
- 	if (!pcs->fmask)
- 		return 0;
- 	function = pinmux_generic_get_function(pctldev, fselector);
-+	if (!function)
-+		return -EINVAL;
- 	func = function->data;
- 	if (!func)
- 		return -EINVAL;
 -- 
-2.17.1
+With Best Regards,
+Andy Shevchenko
+
 
