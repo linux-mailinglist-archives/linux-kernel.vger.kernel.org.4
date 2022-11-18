@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF91E62F88E
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 15:57:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94D2962F890
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 15:57:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242166AbiKRO5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 09:57:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55372 "EHLO
+        id S242177AbiKRO5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 09:57:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242160AbiKRO4e (ORCPT
+        with ESMTP id S242178AbiKRO4f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 09:56:34 -0500
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57D209150E;
-        Fri, 18 Nov 2022 06:55:38 -0800 (PST)
-Received: by mail-qk1-x735.google.com with SMTP id x18so3543901qki.4;
-        Fri, 18 Nov 2022 06:55:38 -0800 (PST)
+        Fri, 18 Nov 2022 09:56:35 -0500
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C42F7920A2;
+        Fri, 18 Nov 2022 06:55:39 -0800 (PST)
+Received: by mail-qt1-x836.google.com with SMTP id a27so3225764qtw.10;
+        Fri, 18 Nov 2022 06:55:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=H85ZBilTG0+9LONYH8WQbu/RytIoy2zs4o7WBsneFmU=;
-        b=LhhyMUdVDLul1ydHHrS6RZygPfgsb9WLi8RzPvcrcuEFUHygkpO7cPiUTwe0kNowqO
-         6nEygirPATdptLzsTN3KSUmnvFS8xfFcpbjN8tgit+65xbSMko3dgNEXHSLUsL896Fqr
-         /IU0W9jv0vBQluLZYX36TRLdbsNRkcTf6pbGShO3TWOW1IFJqDXSFiQLv7xk9sSxVPDA
-         FY0JDoTULWHJGzmtmoxoYL6HVkDgu4HFu2NyuMIsHm45LZLPEmhCxcCtLWLvorM5bMID
-         lCm0eekLEWH0+moRRJaxSDLabpHiqNltQ5UGYnGHIjX0Fjk2qDaK2z0cGxvrcJ4PCxeP
-         ZxpQ==
+        bh=BliqB5y9lA08eGEUpUyNwFtHyZtVgSAM/9v6990Yi+I=;
+        b=aJW4brjkSIkLfQZLvYXAq8qVsqz1uAFSncEJoomTSS2e/GovkwHLlDuuY0QR4ekMPM
+         Y9iDI8US+1xSf3pdQktgzTovRTsLThmd2jYBO7lYVvXXn19Mp8/0M8VPpLFqZhssrlnO
+         6/cikSGa1wcjc1AzxKMNQNLT+BPcOTi0LTL8gPJHGYBurBR9FMkJI4N4LFG8VK5ge25Q
+         yweJ7ahBWsnSVtWJJ0lhdHHu+1UQuGRKMBerXyUUfhnNMxNcZB3T6sXcAfFofvXDz42A
+         tKL0WgBai79Y+CcOFdqAVgpbre0beTTZxJ3uKeXOg6jVazATVvecZV0+2bfgCuOxa9/n
+         PPHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=H85ZBilTG0+9LONYH8WQbu/RytIoy2zs4o7WBsneFmU=;
-        b=6qwEa0cVFlTvNabvHXzA4HPXhzLiG2QCq9qDgTOHWnBth0bvCWWnNOZ8XNie0zkqJy
-         CUQlLucDs/BYPDqb73gNGaVeyqDPgzyGm3T2lRF25M3Z5X2bdkDmz31JN10MMgd4gJuw
-         fU4Z5Fdm/tUI4b1CyeVyRrq+cX//phVZtEcTDB57ua1DzXMdg+xHoT23xe3qomPGGm+c
-         KW99QRYC2jy9rKXtVvpBHHEO1Yxo4k06iXrkqYEhc9boN1FMQya1qbwT+iVr3YJ1iFXQ
-         3z72Mu+oSkJfLbgXxaztgKwUFSgulosLyYKfLu+OWhVcQ09gsg6K+gdJfEXtUpwDHFcM
-         TJHA==
-X-Gm-Message-State: ANoB5pngzgJamhnQAwuTYCOgPLx0k2c5s61LAT3xkg0/7uFbjJv5WCii
-        +2p+TzUCfyuXt9fbbzJaCV/WFg5tm6VnVg==
-X-Google-Smtp-Source: AA0mqf5Vy4Ub03FXWWAc6fYXJR6NsDw2lzDHauufkGa3awmps9hzkb8CsY0EiZnT8S/DnpxDrlrqRg==
-X-Received: by 2002:ae9:ef92:0:b0:6fa:11fd:5861 with SMTP id d140-20020ae9ef92000000b006fa11fd5861mr6110181qkg.726.1668783337181;
-        Fri, 18 Nov 2022 06:55:37 -0800 (PST)
+        bh=BliqB5y9lA08eGEUpUyNwFtHyZtVgSAM/9v6990Yi+I=;
+        b=EKMkWRS3dcTgvnXZDnZ8hkyiVWUcw5o0+m6VE6kULC8yiMbpLdhM+MeIXNKhHk1YCG
+         f4xk0SgZhGFgtUKh7goXUDzGRIEjppMMOshGapnKK1/KmmRA4luxgGvhXrR0mzTitYe8
+         6drhQZLXCPFYrsiHbheTzTxwPc/Lgbapxk8h6b3U9s1i5WwcRo/ILUOGQvk8D0T19M3g
+         CGsiIRQ+A6ErZ9CgbsxRW1AeNSiJWCT8cyPvWTrP71Z1DZg7Zihdk2TnXvw3bwMNX06p
+         /+EPehxt0YXKobJUcfGHHa2Shdxv/PKw6Skk6tGe6kUmTOIpBEgOpmNx8E0Cfv+4Yb71
+         T0kQ==
+X-Gm-Message-State: ANoB5pnkiF8c3P1ZA7oaJyv/0/NIi8tJX0GYMGPVeW3rmKqGb0ZL55id
+        qdFlEQm2Zq7o/9RcNHJH6yMpoNZq4u9dcA==
+X-Google-Smtp-Source: AA0mqf4fmkewuIslqpZDLV4wd7h3yRE+aNyY9PZ9dB8Wr/YFaYHjyGcPq+Y2FETKWcmqJwOLVku/HA==
+X-Received: by 2002:a05:622a:260d:b0:3a5:829a:7e92 with SMTP id ci13-20020a05622a260d00b003a5829a7e92mr6710164qtb.528.1668783338604;
+        Fri, 18 Nov 2022 06:55:38 -0800 (PST)
 Received: from glsvmlin.ini.cmu.edu (GLSVMLIN.INI.CMU.EDU. [128.2.16.9])
-        by smtp.gmail.com with ESMTPSA id m125-20020a378a83000000b006cbc6e1478csm2397269qkd.57.2022.11.18.06.55.36
+        by smtp.gmail.com with ESMTPSA id m125-20020a378a83000000b006cbc6e1478csm2397269qkd.57.2022.11.18.06.55.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 06:55:36 -0800 (PST)
+        Fri, 18 Nov 2022 06:55:37 -0800 (PST)
 From:   Gabriel Somlo <gsomlo@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
@@ -57,9 +57,9 @@ Cc:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
         joel@jms.id.au, david.abdurachmanov@gmail.com,
         florent@enjoy-digital.fr, geert@linux-m68k.org,
         ilpo.jarvinen@linux.intel.com
-Subject: [PATCH v5 13/14] serial: liteuart: add IRQ support for the TX path
-Date:   Fri, 18 Nov 2022 09:55:11 -0500
-Message-Id: <20221118145512.509950-14-gsomlo@gmail.com>
+Subject: [PATCH v5 14/14] serial: liteuart: move polling putchar() function
+Date:   Fri, 18 Nov 2022 09:55:12 -0500
+Message-Id: <20221118145512.509950-15-gsomlo@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118145512.509950-1-gsomlo@gmail.com>
 References: <20221118145512.509950-1-gsomlo@gmail.com>
@@ -76,74 +76,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Switch the TX path to IRQ-driven operation, while maintaining support
-for polling mode via the poll timer.
+The polling liteuart_putchar() function is only called from methods
+conditionally enabled by CONFIG_SERIAL_LITEUART_CONSOLE. Move its
+definition closer to the console code where it is dependent on the
+same config option.
 
 Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
 Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- drivers/tty/serial/liteuart.c | 30 +++++++++++++-----------------
- 1 file changed, 13 insertions(+), 17 deletions(-)
+ drivers/tty/serial/liteuart.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/tty/serial/liteuart.c b/drivers/tty/serial/liteuart.c
-index 678c37c952cf..850125870efb 100644
+index 850125870efb..47d12bb1b9e0 100644
 --- a/drivers/tty/serial/liteuart.c
 +++ b/drivers/tty/serial/liteuart.c
-@@ -93,27 +93,12 @@ static void liteuart_update_irq_reg(struct uart_port *port, bool set, u8 mask)
+@@ -70,14 +70,6 @@ static struct uart_driver liteuart_driver = {
+ #endif
+ };
  
- static void liteuart_stop_tx(struct uart_port *port)
- {
-+	liteuart_update_irq_reg(port, false, EV_TX);
- }
- 
- static void liteuart_start_tx(struct uart_port *port)
- {
--	struct circ_buf *xmit = &port->state->xmit;
--	unsigned char ch;
+-static void liteuart_putchar(struct uart_port *port, unsigned char ch)
+-{
+-	while (litex_read8(port->membase + OFF_TXFULL))
+-		cpu_relax();
 -
--	if (unlikely(port->x_char)) {
--		litex_write8(port->membase + OFF_RXTX, port->x_char);
--		port->icount.tx++;
--		port->x_char = 0;
--	} else if (!uart_circ_empty(xmit)) {
--		while (xmit->head != xmit->tail) {
--			ch = xmit->buf[xmit->tail];
--			uart_xmit_advance(port, 1);
--			liteuart_putchar(port, ch);
--		}
--	}
+-	litex_write8(port->membase + OFF_RXTX, ch);
+-}
 -
--	if (uart_circ_chars_pending(xmit) < WAKEUP_CHARS)
--		uart_write_wakeup(port);
-+	liteuart_update_irq_reg(port, true, EV_TX);
- }
+ static void liteuart_update_irq_reg(struct uart_port *port, bool set, u8 mask)
+ {
+ 	struct liteuart_port *uart = to_liteuart_port(port);
+@@ -372,6 +364,14 @@ static struct platform_driver liteuart_platform_driver = {
  
- static void liteuart_stop_rx(struct uart_port *port)
-@@ -144,6 +129,15 @@ static void liteuart_rx_chars(struct uart_port *port)
- 	tty_flip_buffer_push(&port->state->port);
- }
+ #ifdef CONFIG_SERIAL_LITEUART_CONSOLE
  
-+static void liteuart_tx_chars(struct uart_port *port)
++static void liteuart_putchar(struct uart_port *port, unsigned char ch)
 +{
-+	u8 ch;
++	while (litex_read8(port->membase + OFF_TXFULL))
++		cpu_relax();
 +
-+	uart_port_tx(port, ch,
-+		!litex_read8(port->membase + OFF_TXFULL),
-+		litex_write8(port->membase + OFF_RXTX, ch));
++	litex_write8(port->membase + OFF_RXTX, ch);
 +}
 +
- static irqreturn_t liteuart_interrupt(int irq, void *data)
+ static void liteuart_console_write(struct console *co, const char *s,
+ 	unsigned int count)
  {
- 	struct liteuart_port *uart = data;
-@@ -154,6 +148,8 @@ static irqreturn_t liteuart_interrupt(int irq, void *data)
- 	isr = litex_read8(port->membase + OFF_EV_PENDING) & uart->irq_reg;
- 	if (isr & EV_RX)
- 		liteuart_rx_chars(port);
-+	if (isr & EV_TX)
-+		liteuart_tx_chars(port);
- 	spin_unlock(&port->lock);
- 
- 	return IRQ_RETVAL(isr);
 -- 
 2.38.1
 
