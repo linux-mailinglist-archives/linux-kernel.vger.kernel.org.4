@@ -2,229 +2,862 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FCD162FA21
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 17:21:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D06AE62FA25
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 17:22:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241237AbiKRQVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 11:21:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43784 "EHLO
+        id S241525AbiKRQWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 11:22:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235221AbiKRQVf (ORCPT
+        with ESMTP id S234391AbiKRQWk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 11:21:35 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D0A9208F;
-        Fri, 18 Nov 2022 08:21:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668788494; x=1700324494;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:mime-version:content-transfer-encoding;
-  bh=KDYnOfGsVc/CJyUx+cJ4afMHHVKDIl34PmJV05JpsTA=;
-  b=KOR+K/yqCl9o0pNx5JKKPoz/BqOWR6PpGz3HmQ6yGetNHOPsqEeqaCGe
-   XbZdj9EWEodnhDct2uSYNIFHpGO0Lad+kphQs+OJflPBxQQVtvFMO/+Mt
-   MEJjMS+p390JcBAgNlNPEoLetDvTEii0/LxJSAtDE8azowgyyorIQ3ReW
-   +23gi3v6e7xmNSJ15gF7QDa8BTVo3SHPN3jqJl5ov46Ro3/hakTemVut1
-   9hxL3QFznrs4UWSR2Pe9bld5yVmUQzRUriut1NZcnzmitdjIyutVhFkyV
-   Y2hJPG0d8Fn8F2Ip4ClgCrjx6BjB39+DILqwhAXO0LY5Ei/aiX8kg6Oxa
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="293560742"
-X-IronPort-AV: E=Sophos;i="5.96,174,1665471600"; 
-   d="scan'208";a="293560742"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2022 08:21:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="782696007"
-X-IronPort-AV: E=Sophos;i="5.96,174,1665471600"; 
-   d="scan'208";a="782696007"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmsmga001.fm.intel.com with ESMTP; 18 Nov 2022 08:21:29 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 18 Nov 2022 08:21:29 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Fri, 18 Nov 2022 08:21:29 -0800
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.106)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Fri, 18 Nov 2022 08:21:28 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TmN7TtoSaSrrLx32bwyss0GFl2MbHgUPEUrHI1OEXX3wwq6uZHBtNvu9yNKadN91ChJDU27H+G7EQt3/XWrBKPQWipz/ou51qvqx1UbtF5rI7VN0uuBhj7CSbwDxpbvtOhFPX+n0LbDTbfjdkixHEkUs+Zr9sP2aXEbNMJaHiXo83RBFLzg2M/BThFR5MR990jsSwyloohYSc9MM/qUX+CcjNhzLPu3Y5Gd39BzHDZ+TNfCrxkS1gjODMP+6a+8PQDrma3fb1X66T4nuVIfHrxHIAmxge2OPkjHds2zCdXtGGWdotWHnldFCOv3Le5i8pyR8BrwhIP0Frr9MnvxBiQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fLI+4isOMhwAly+DiTRFinORe1AyBvWkNkDaGk77Dqw=;
- b=fekyFPA1dhooGbqhaJuxzH7jydN0s5GbL1KugLR9ORgcyG6LSSrJRLWSfbiJq6zTlqvrOAZxb30mvIqCahiYMSHjRSKEp1Gh14FDP6VGUn58ZlCgBH4WL8uxa87qyWVUGWmgRwmnklLQ66X9G5NUmT5DVdVsOYuqxvmUz4MPbmmK6aQ8BtJh1R0KRJxxl3AbX1dmx9uNerpiMUddonDcGfHL/BCeLe74/p/7KvxkX2awIRaomhRAlaWmpGw9yTOov1C3PYzqxpW6w9QO1UKjR6Q3zvM4K+593If4GbEHj4iFV2LmSpUX4qnHgusV4RgIeO4Vwc2cp/+iGTR7Ndnrmw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from CY4PR11MB2005.namprd11.prod.outlook.com (2603:10b6:903:2e::18)
- by CH0PR11MB5345.namprd11.prod.outlook.com (2603:10b6:610:b8::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.19; Fri, 18 Nov
- 2022 16:21:20 +0000
-Received: from CY4PR11MB2005.namprd11.prod.outlook.com
- ([fe80::ad04:c349:b06a:c1b4]) by CY4PR11MB2005.namprd11.prod.outlook.com
- ([fe80::ad04:c349:b06a:c1b4%9]) with mapi id 15.20.5813.020; Fri, 18 Nov 2022
- 16:21:20 +0000
-From:   "Schimpe, Christina" <christina.schimpe@intel.com>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>
-CC:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Subject: RE: [PATCH v3 35/37] x86/cet: Add PTRACE interface for CET
-Thread-Topic: [PATCH v3 35/37] x86/cet: Add PTRACE interface for CET
-Thread-Index: AQHY8J5eaXgH6xugZk20MwPZdy8SOK5AIA2AgACAkACAAnwdkIAAf9AAgAFU61A=
-Date:   Fri, 18 Nov 2022 16:21:20 +0000
-Message-ID: <CY4PR11MB20055995B323E98C10BA159AF9099@CY4PR11MB2005.namprd11.prod.outlook.com>
-References: <20221104223604.29615-1-rick.p.edgecombe@intel.com>
-         <20221104223604.29615-36-rick.p.edgecombe@intel.com>
-         <Y3Olme4Nl+VOkjAH@hirez.programming.kicks-ass.net>
-         <223bf306716f5eb68e4f9fd660414c84cddd9886.camel@intel.com>
-         <CY4PR11MB2005AD47BA1D97BC1A96A769F9069@CY4PR11MB2005.namprd11.prod.outlook.com>
- <a2c2552fcdba1a0fce0d02aeb519d33cac83bfd2.camel@intel.com>
-In-Reply-To: <a2c2552fcdba1a0fce0d02aeb519d33cac83bfd2.camel@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CY4PR11MB2005:EE_|CH0PR11MB5345:EE_
-x-ms-office365-filtering-correlation-id: ac394334-2f85-4529-8fa7-08dac980ed56
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: HauJnHPC+CdL2+WnU3nZKiM+uT5F1zhxzds2UJw4fp//gEIz4MRayAYehgqmQW0Mjh1ABQL3yfbx6JTU734X+IcKEiqxVIndm6sp5AbMm4oevUEupWvhWKtw+SPHIF6cTrfMAYRaf6WhIan8EjLPMhw2hU9J6r/wCTEi8e1GMzkhoefO9IeW4KYREh8SFVyQNnG9f7NtCcUvm380QkO/2sZ8V3nakdc3BkatrG5cK+fv7A6JVIqsbnytyCgXvy9UzNwNZW2xxpaxgEFOtz0/XfUfFagMDaX3Lf0AGQBtv6RrJ5XLXPff8+tZ5mcDPDRMh4S88FPS6wqTVF6r3PIgxm2hioHUVTN9ekb5OrBIPWiMisyAkwpl25xim5EHYN4RBTv9r04J+tUkAzxfbuHDboUVyJFP0cgJOoqYU37AA66ckrZW+G1EEzBR4G4/UlrAb4X3N/RNTGj2qZPCPz5SSy0m80AamTStpWm5Ekmc1tLZk3VrFuKen9tEzb3UEUEOHMu6AWOqrkNLn7KNnzL5QZ6PhWmIRHqBiiAipcYCQHVJYlZYjfwx5SvOR9Jjj+h7LllhsV4vcFBUAET/Eq7CH6HFQb9VFhbgvccUh5KZzCTpD5TraQnKCyKwJf2ktDw+I5bIwO21nI7pM5N3EqAY5saNZRbotit/vl9kuR1bSL2LoE3r1f+Xgn54GjgYZZvmZcEB/aAvZfGl0uJa5+2+HQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB2005.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(376002)(366004)(136003)(39860400002)(346002)(451199015)(66476007)(71200400001)(478600001)(52536014)(38070700005)(33656002)(86362001)(7696005)(8936002)(5660300002)(7406005)(7416002)(2906002)(4001150100001)(6506007)(66556008)(110136005)(76116006)(4326008)(8676002)(66946007)(64756008)(41300700001)(66446008)(55016003)(122000001)(9686003)(82960400001)(26005)(54906003)(38100700002)(186003)(316002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RUFiK1NuemxQeFljdjI4eWVsaGlhRzJQV1MwaEZUUEs0WFp5ODdqUUxkZlBW?=
- =?utf-8?B?eURhcnNoeGRJQUN5TStKUFJQcnF2MkFVdEdCWlYvS2FlcG9oWWRwNHNMOHVK?=
- =?utf-8?B?UGEwTTRkT0FaanhUT241eXUvTktTUkFod3ZUL2JtVEM5Z0YwelVXTWJkTDFn?=
- =?utf-8?B?WGR2RVFNRDV2bUJrZ3c4UTlVSmh0M1MyNy9zaStramIyMVFTRVVqdEdaYXNN?=
- =?utf-8?B?UUY2bDY1TlQ2dGFTTjFINk5HSTZPeEtKa0owWjB6czU5a0hMWTRPa0locW9a?=
- =?utf-8?B?VW8wWENBTllCTk9iWVZrWThmdXRNRG93TFZLWUI0bzFsZjA5OXl5RFQweDl2?=
- =?utf-8?B?ZjVTelhydWU4V1JCdlQ5U2drMklzZ1llakJTOVplVUFnZHZaYmJzVk1ONy80?=
- =?utf-8?B?OWpDSnlpR3VDZ2RBcVdQWmY2M3dCR01sYVVJSGJJdFA0Q3h5SWNPandqMjhi?=
- =?utf-8?B?S1hHeVliMTF6OW9SNlNXaWNiZG9OZFhiV2JwUXJqL2pVYXpLK3J3WHRkSFZQ?=
- =?utf-8?B?b1dUYlZDb1hTKytkUkNtK21nL29zT25xM0ZhdWtmc0JBM2ZlbUNjTnNPZlRk?=
- =?utf-8?B?RWgrMDdrYWZ6K0Q3MWFIWkNkVDdZc1BYYWQ4andFckJ2TzFHaHVWTE92VXNP?=
- =?utf-8?B?eWcrNGJLRGxnOXJKVTE2SWNOVlFUeTJuZWJqZ2tiUHlaWmcvd1N4QTZvZGJW?=
- =?utf-8?B?L2s5bkg4TXRNTFJsUTY4Tit0ekk3S2RJZThJN1Vua2hDMjZxMGlQQWhHNDdj?=
- =?utf-8?B?VnJBRG9iSGZiSVVzVXFwVHNxWVlUR3NJaEhBR0hQYnluc25DcFlHN1dhSWlS?=
- =?utf-8?B?dit2ZFkycHUzU1Qxc3JOWWdqV3gvaFFMT00wRkZwYkd3dDd3dktRQU5veUJM?=
- =?utf-8?B?MEZuQ1MveGg0MmVLWDhGZDJkbWg4U2ZKMWoxUFd4N00xL0ZoUTZNbVpoTytQ?=
- =?utf-8?B?dFJzZ1RFWjhZY0pLMVdjc0Y0bDFDenBHQWhZZTlVbTZRK2h6VGtDUU5yWFlr?=
- =?utf-8?B?QWMveTB5Y0lQZEtSSVM0ejY4VW9mcWFDWEl4b1FkdGFIL3RRTUdvaDVyZTFw?=
- =?utf-8?B?TVZLRENOWk5wVGtYQUtHMnZCeCtiS3VQTlFmb3JNbGtxS1hET1ZXWjJXSUpr?=
- =?utf-8?B?YWRBZVkyNmVzYjFHOVJBaW5hZWpyUUd3L21pTUZPNG5ydzB2c1cwQ2hyMDhh?=
- =?utf-8?B?WTBROE15OVIxMC9WdXVNcUlLQ3htV3lxS25jdGxqUVBjODQxa3ZkbEVtSmFv?=
- =?utf-8?B?RXArcmpMQnZYNzl1LzlONHZXb0lCa29qdTZEL0h5RncxTEdTL1FKRlhWTjRR?=
- =?utf-8?B?T2FlYytobmt0ZEhkRndLOGRBdDV5Wk8zWE5ZUDluQUhPNTRMS0tWQ0owTkFu?=
- =?utf-8?B?MDhvS3dDRWM5UmxxZUlRWHNIMThhVk1xalNUbU5rQjIyTmtVNlRFUjZXVmQr?=
- =?utf-8?B?RlZCb04xNjIyL1lBRTF2N3JOelVWMk5yQXJQZFEvWlN1T1hVRTVHS0N1WFpI?=
- =?utf-8?B?TGFXZ0o3ZXBOQjNVbndneVZUZmpWdnp1YzgvbnhCaGVCUnVIckNUaGg4bGJY?=
- =?utf-8?B?NGNnbGNXRnd2VS9nL2hOUGVWSVBoay9UU3pJckZ4NStST1l3Nk9sYjJuaDF2?=
- =?utf-8?B?R01TOFpBRDFtSkV5aU9GNy93dUpaTTFhcHJSR0V3aEtKNUhqdzAxR3A4a0tE?=
- =?utf-8?B?OWp1aHFIT2Z4dmFqQ2crWVdGeC8xclNEOVAzR0k5RVVvUG9qbGVmSzNLZ2tQ?=
- =?utf-8?B?Tm53b0dsRlJZQXRDSUxSdy8zSUJPem1xYlduYVUvOUxzTnpXb1FpM1Z3NTE3?=
- =?utf-8?B?d20vc242bCtacUtNMEM5R0h6dzlpMmIya0hnN0MxKzgvbFFPWU1LWDI1RklH?=
- =?utf-8?B?V3hpUm5lTmFHRFNzR3l3bzlZK1hjc2xYb3ZvWkpTVjA3QldLVGp4MkMra2th?=
- =?utf-8?B?cTJ1cXpDVVhobFJNdndqWlREZ0szL2ZCRTRXVXk3MDJENThGRFd0VitabjBL?=
- =?utf-8?B?YUVabWtGUFJiOE5RU1lqRlRxUzRBUTJnUVRmeEpPeGRTd2VtbUd2bXdrTndy?=
- =?utf-8?B?TGJZNEpJSWRzc3h6YVhuMy9DaHcraEtqOFIzOTdITkk1S0NBZUYxcVlxYTF1?=
- =?utf-8?B?SlYzN0h5YTY4RlhWVEhvRm4zYlNGTTNTNjYvSk96NVJObkVaZloyVml3TVM4?=
- =?utf-8?B?dEE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
+        Fri, 18 Nov 2022 11:22:40 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ADC7922D4
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 08:22:37 -0800 (PST)
+Received: from mail-yb1-f198.google.com (mail-yb1-f198.google.com [209.85.219.198])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 093C23F333
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 16:22:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1668788554;
+        bh=UIuXrM1nrVnpPWLQTVj4KoTkLg8yi2TmNazv9H3mek8=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=ISDX/pfvgFowBI+DCZb/Y1Ald79ZAS2O8BkTQNAC84tfLP53BmHzsfU25gbhSbVTM
+         apJQwCi+NYYdsH4+lSToGpoNf3745thg1WvqbIEyQM9kVcYHvfVCBJOi13A4wdK5fG
+         KKBZ+pfB5A3QS0YSMJaGL/X30+d0sE35d/3wm4H1xSaDzLAKiQiZHoMtUdNROBun7Q
+         wqDx38nlzZNvlRJaSq2FmsWttQLMO2l/oCXjZvESQ5ezsrz0bnv/O6eY/Rk4rDnyj3
+         a2HKVJTGBvlnw8hPL2ungxc8l3SJQvPd5/0pFYvL9RQJw3a6i+3SWz3HqfLTmsSbRd
+         F2dYEEsRtz3Og==
+Received: by mail-yb1-f198.google.com with SMTP id e8-20020a5b0cc8000000b006bca0fa3ab6so4885685ybr.0
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 08:22:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UIuXrM1nrVnpPWLQTVj4KoTkLg8yi2TmNazv9H3mek8=;
+        b=TIjA1BnOfXFfL/ENAniQ99WgZ7+Bbvw6KAcKwZocUK3y4UjFl08Xoa8SahI2cAhkH5
+         +qPmxgafnZ9key9KOiTkk/xYq4yjr0LQh7WmCiwvjIcI7A8GKQHL9SXzxr6HBhAYK8GP
+         8gdPRS/b1bW0uR4oMHqqUHbnsNOcuiWPDTqQO5FA8uOAVMsqISrrQYBHuvBlEeUvHJKJ
+         S8kUSZsZ6iZeRoBVgzoOU6NNxzb8qGzmMY8dx2L0wQh/Q3r50pVviQBh2v4Ef9gAdzas
+         VRmm5MVtfiHXmIYeMTMKysCdkSeqhRx94ow9bNO5SEW6tTBo9FQafI+JT13l/0Ri294A
+         wDgg==
+X-Gm-Message-State: ANoB5pkHvvtMNu7j6TS2oPza9+ASpfE2hQC+tjhinfp1SFFwTZQkzzTO
+        SLXNYjB+/epPmTznJuStX0+/HVHJwlRvypWA4+m/qE7lfLH/SlRe8aaoPb19C4s61Uy49p1u283
+        WiXG0CqYluw/9FQfkS5Ppr11SBy5ZcyJekWZIlK92qqa3e28XJ2zRZlt5vQ==
+X-Received: by 2002:a25:abe4:0:b0:6e7:cbc4:1ac3 with SMTP id v91-20020a25abe4000000b006e7cbc41ac3mr5814656ybi.559.1668788547250;
+        Fri, 18 Nov 2022 08:22:27 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5Z+nWiESsyhyw2ii4v0Xj3hmukMVm82cnfkoBX45XLT0igqXvEGGvMxcYfTrtWigVZvs/Bu94g2NFIVfZaPHE=
+X-Received: by 2002:a25:abe4:0:b0:6e7:cbc4:1ac3 with SMTP id
+ v91-20020a25abe4000000b006e7cbc41ac3mr5814615ybi.559.1668788546889; Fri, 18
+ Nov 2022 08:22:26 -0800 (PST)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB2005.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ac394334-2f85-4529-8fa7-08dac980ed56
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Nov 2022 16:21:20.1060
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 2yR6rDH6HJN6uazqh+hMyFwdYkFRYtUH6lNYcMR0MqoScUjQ5k9f2bn9i0M8BNMeXsYsVsiwCTq01SiwIrTxNQGgrtIkhEw1CrWVphOT89o=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5345
-X-OriginatorOrg: intel.com
-Content-Transfer-Encoding: base64
+References: <20221118010627.70576-1-hal.feng@starfivetech.com> <20221118010627.70576-2-hal.feng@starfivetech.com>
+In-Reply-To: <20221118010627.70576-2-hal.feng@starfivetech.com>
+From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date:   Fri, 18 Nov 2022 17:22:10 +0100
+Message-ID: <CAJM55Z8nGNm_TrTsw0HZnAVehWrFU9-MtAj0ngRRx_E8jFapGg@mail.gmail.com>
+Subject: Re: [PATCH v2 01/14] clk: starfive: Factor out common JH7100 and
+ JH7110 code
+To:     Hal Feng <hal.feng@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBPbiBUaHUsIDIwMjItMTEtMTcgYXQgMTI6MjUgKzAwMDAsIFNjaGltcGUsIENocmlzdGluYSB3
-cm90ZToNCj4gPiA+IEhtbSwgd2UgZGVmaW5pdGVseSBuZWVkIHRvIGJlIGFibGUgdG8gc2V0IHRo
-ZSBTU1AuIENocmlzdGluYSwgZG9lcw0KPiA+ID4gR0RCIG5lZWQgYW55dGhpbmcgZWxzZT8gSSB0
-aG91Z2h0IG1heWJlIHRvZ2dsaW5nIFNIU1RLX0VOPw0KPiA+DQo+ID4gSW4gYWRkaXRpb24gdG8g
-dGhlIFNTUCwgd2Ugd2FudCB0byB3cml0ZSB0aGUgQ0VUIHN0YXRlLiBGb3IgaW5zdGFuY2UNCj4g
-PiBmb3IgaW5mZXJpb3IgY2FsbHMsIHdlIHdhbnQgdG8gcmVzZXQgdGhlIElCVCBiaXRzLg0KPiA+
-IEhvd2V2ZXIsIHdlIHdvbid0IHdyaXRlIHN0YXRlcyB0aGF0IGFyZSBkaXNhbGxvd2VkIGJ5IEhX
-Lg0KPiANCj4gU29ycnksIEkgc2hvdWxkIGhhdmUgZ2l2ZW4gbW9yZSBiYWNrZ3JvdW5kLiBQZXRl
-ciBpcyBzYXlpbmcgd2Ugc2hvdWxkIHNwbGl0DQo+IHRoZSBwdHJhY2UgaW50ZXJmYWNlIHNvIHRo
-YXQgc2hhZG93IHN0YWNrIGFuZCBJQlQgYXJlIHNlcGFyYXRlLg0KPiBUaGV5IHdvdWxkIGFsc28g
-bm8gbG9uZ2VyIG5lY2Vzc2FyaWx5IG1pcnJvciB0aGUgQ0VUX1UgTVNSIGZvcm1hdC4NCj4gSW5z
-dGVhZCB0aGUga2VybmVsIHdvdWxkIGV4cG9zZSBhIGtlcm5lbCBzcGVjaWZpYyBmb3JtYXQgdGhh
-dCBoYXMgdGhlDQo+IG5lZWRlZCBiaXRzIG9mIHNoYWRvdyBzdGFjayBzdXBwb3J0LiBBbmQgYSBz
-ZXBhcmF0ZSBvbmUgbGF0ZXIgZm9yIElCVC4NCj4gDQo+IFNvIHRoZSBxdWVzdGlvbiBpcyB3aGF0
-IGRvZXMgc2hhZG93IHN0YWNrIG5lZWQgdG8gc3VwcG9ydCBmb3IgcHRyYWNlDQo+IGJlc2lkZXMg
-U1NQPyBJcyBpdCBvbmx5IFNTUD8gVGhlIG90aGVyIGZlYXR1cmVzIGFyZSBTSFNUS19FTiBhbmQg
-V1JTU19FTi4NCj4gSXQgbWlnaHQgYWN0dWFsbHkgYmUgbmljZSB0byBrZWVwIGhvdyB0aGVzZSBi
-aXRzIGdldCBmbGlwcGVkIG1vcmUgY29udHJvbGxlZA0KPiAocmVtb3ZlIHRoZW0gZnJvbSBwdHJh
-Y2UpLiBJdCBsb29rcyBsaWtlIENSSVUgZGlkbid0IG5lZWQgdGhlbS4NCj4gDQoNCkdEQiBjdXJy
-ZW50bHkgcmVhZHMgdGhlIENFVF9VIGFuZCBTU1AgcmVnaXN0ZXIuIEhvd2V2ZXIsIHdlIGRvbuKA
-mXQgbmVjZXNzYXJpbHkgaGF2ZSB0byByZWFkIEVCX0xFR19CSVRNQVBfQkFTRS4NCkluIGFkZGl0
-aW9uIHRvIFNTUCwgd2Ugd2FudCB0byB3cml0ZSB0aGUgYml0cyBmb3IgdGhlIElCVCBzdGF0ZSBt
-YWNoaW5lIChUUkFDS0VSIGFuZCBTVVBQUkVTUykuDQpIb3dldmVyLCBiZXNpZGVzIHRoYXQgR0RC
-IGRvZXMgbm90IGhhdmUgdG8gd3JpdGUgYW55dGhpbmcgZWxzZS4NCg0KDQpJbnRlbCBEZXV0c2No
-bGFuZCBHbWJIClJlZ2lzdGVyZWQgQWRkcmVzczogQW0gQ2FtcGVvbiAxMCwgODU1NzkgTmV1Ymli
-ZXJnLCBHZXJtYW55ClRlbDogKzQ5IDg5IDk5IDg4NTMtMCwgd3d3LmludGVsLmRlIDxodHRwOi8v
-d3d3LmludGVsLmRlPgpNYW5hZ2luZyBEaXJlY3RvcnM6IENocmlzdGluIEVpc2Vuc2NobWlkLCBT
-aGFyb24gSGVjaywgVGlmZmFueSBEb29uIFNpbHZhICAKQ2hhaXJwZXJzb24gb2YgdGhlIFN1cGVy
-dmlzb3J5IEJvYXJkOiBOaWNvbGUgTGF1ClJlZ2lzdGVyZWQgT2ZmaWNlOiBNdW5pY2gKQ29tbWVy
-Y2lhbCBSZWdpc3RlcjogQW10c2dlcmljaHQgTXVlbmNoZW4gSFJCIDE4NjkyOAo=
+On Fri, 18 Nov 2022 at 02:06, Hal Feng <hal.feng@starfivetech.com> wrote:
+>
+> From: Emil Renner Berthing <kernel@esmil.dk>
+>
+> The clock control registers on the StarFive JH7100 and JH7110 work
+> identically, so factor out the code then drivers for the two SoCs
+> can share it without depending on each other. No functional change.
+>
+> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> Co-developed-by: Hal Feng <hal.feng@starfivetech.com>
+> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+> ---
+>  MAINTAINERS                                |   2 +-
+>  drivers/clk/starfive/Kconfig               |   5 +
+>  drivers/clk/starfive/Makefile              |   3 +-
+>  drivers/clk/starfive/clk-starfive-jh7100.c | 325 --------------------
+>  drivers/clk/starfive/clk-starfive-jh7100.h |   2 +
+>  drivers/clk/starfive/clk-starfive-jh71x0.c | 333 +++++++++++++++++++++
+>  6 files changed, 343 insertions(+), 327 deletions(-)
+>  create mode 100644 drivers/clk/starfive/clk-starfive-jh71x0.c
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 256f03904987..d43daa89d5f1 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -19602,7 +19602,7 @@ STARFIVE JH7100 CLOCK DRIVERS
+>  M:     Emil Renner Berthing <kernel@esmil.dk>
+>  S:     Maintained
+>  F:     Documentation/devicetree/bindings/clock/starfive,jh7100-*.yaml
+> -F:     drivers/clk/starfive/clk-starfive-jh7100*
+> +F:     drivers/clk/starfive/
 
+When this entry cover all the starfive clock drivers the header should
+also match. Eg.
+STARFIVE CLOCK DRIVERS
+
+
+>  F:     include/dt-bindings/clock/starfive-jh7100*.h
+>
+>  STARFIVE JH7100 PINCTRL DRIVER
+> diff --git a/drivers/clk/starfive/Kconfig b/drivers/clk/starfive/Kconfig
+> index 003bd2d56ce7..594d516dcb38 100644
+> --- a/drivers/clk/starfive/Kconfig
+> +++ b/drivers/clk/starfive/Kconfig
+> @@ -1,8 +1,12 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>
+> +config CLK_STARFIVE_JH71X0
+> +       bool
+> +
+>  config CLK_STARFIVE_JH7100
+>         bool "StarFive JH7100 clock support"
+>         depends on SOC_STARFIVE || COMPILE_TEST
+> +       select CLK_STARFIVE_JH71X0
+>         default SOC_STARFIVE
+>         help
+>           Say yes here to support the clock controller on the StarFive JH7100
+> @@ -11,6 +15,7 @@ config CLK_STARFIVE_JH7100
+>  config CLK_STARFIVE_JH7100_AUDIO
+>         tristate "StarFive JH7100 audio clock support"
+>         depends on CLK_STARFIVE_JH7100
+> +       select CLK_STARFIVE_JH71X0
+>         default m if SOC_STARFIVE
+>         help
+>           Say Y or M here to support the audio clocks on the StarFive JH7100
+> diff --git a/drivers/clk/starfive/Makefile b/drivers/clk/starfive/Makefile
+> index 0fa8ecb9ec1c..82edfa9f9cb8 100644
+> --- a/drivers/clk/starfive/Makefile
+> +++ b/drivers/clk/starfive/Makefile
+> @@ -1,4 +1,5 @@
+>  # SPDX-License-Identifier: GPL-2.0
+> -# StarFive Clock
+> +obj-$(CONFIG_CLK_STARFIVE_JH71X0)      += clk-starfive-jh71x0.o
+> +
+>  obj-$(CONFIG_CLK_STARFIVE_JH7100)      += clk-starfive-jh7100.o
+>  obj-$(CONFIG_CLK_STARFIVE_JH7100_AUDIO)        += clk-starfive-jh7100-audio.o
+> diff --git a/drivers/clk/starfive/clk-starfive-jh7100.c b/drivers/clk/starfive/clk-starfive-jh7100.c
+> index 691aeebc7092..eea52f16af0d 100644
+> --- a/drivers/clk/starfive/clk-starfive-jh7100.c
+> +++ b/drivers/clk/starfive/clk-starfive-jh7100.c
+> @@ -7,15 +7,10 @@
+>   * Copyright (C) 2021 Emil Renner Berthing <kernel@esmil.dk>
+>   */
+>
+> -#include <linux/bits.h>
+>  #include <linux/clk-provider.h>
+> -#include <linux/debugfs.h>
+>  #include <linux/device.h>
+>  #include <linux/init.h>
+> -#include <linux/io.h>
+> -#include <linux/kernel.h>
+>  #include <linux/mod_devicetable.h>
+> -#include <linux/module.h>
+>  #include <linux/platform_device.h>
+>
+>  #include <dt-bindings/clock/starfive-jh7100.h>
+> @@ -269,326 +264,6 @@ static const struct jh7100_clk_data jh7100_clk_data[] __initconst = {
+>         JH7100_GATE(JH7100_CLK_SYSERR_APB, "syserr_apb", 0, JH7100_CLK_APB2_BUS),
+>  };
+>
+> -static struct jh7100_clk *jh7100_clk_from(struct clk_hw *hw)
+> -{
+> -       return container_of(hw, struct jh7100_clk, hw);
+> -}
+> -
+> -static struct jh7100_clk_priv *jh7100_priv_from(struct jh7100_clk *clk)
+> -{
+> -       return container_of(clk, struct jh7100_clk_priv, reg[clk->idx]);
+> -}
+> -
+> -static u32 jh7100_clk_reg_get(struct jh7100_clk *clk)
+> -{
+> -       struct jh7100_clk_priv *priv = jh7100_priv_from(clk);
+> -       void __iomem *reg = priv->base + 4 * clk->idx;
+> -
+> -       return readl_relaxed(reg);
+> -}
+> -
+> -static void jh7100_clk_reg_rmw(struct jh7100_clk *clk, u32 mask, u32 value)
+> -{
+> -       struct jh7100_clk_priv *priv = jh7100_priv_from(clk);
+> -       void __iomem *reg = priv->base + 4 * clk->idx;
+> -       unsigned long flags;
+> -
+> -       spin_lock_irqsave(&priv->rmw_lock, flags);
+> -       value |= readl_relaxed(reg) & ~mask;
+> -       writel_relaxed(value, reg);
+> -       spin_unlock_irqrestore(&priv->rmw_lock, flags);
+> -}
+> -
+> -static int jh7100_clk_enable(struct clk_hw *hw)
+> -{
+> -       struct jh7100_clk *clk = jh7100_clk_from(hw);
+> -
+> -       jh7100_clk_reg_rmw(clk, JH7100_CLK_ENABLE, JH7100_CLK_ENABLE);
+> -       return 0;
+> -}
+> -
+> -static void jh7100_clk_disable(struct clk_hw *hw)
+> -{
+> -       struct jh7100_clk *clk = jh7100_clk_from(hw);
+> -
+> -       jh7100_clk_reg_rmw(clk, JH7100_CLK_ENABLE, 0);
+> -}
+> -
+> -static int jh7100_clk_is_enabled(struct clk_hw *hw)
+> -{
+> -       struct jh7100_clk *clk = jh7100_clk_from(hw);
+> -
+> -       return !!(jh7100_clk_reg_get(clk) & JH7100_CLK_ENABLE);
+> -}
+> -
+> -static unsigned long jh7100_clk_recalc_rate(struct clk_hw *hw,
+> -                                           unsigned long parent_rate)
+> -{
+> -       struct jh7100_clk *clk = jh7100_clk_from(hw);
+> -       u32 div = jh7100_clk_reg_get(clk) & JH7100_CLK_DIV_MASK;
+> -
+> -       return div ? parent_rate / div : 0;
+> -}
+> -
+> -static int jh7100_clk_determine_rate(struct clk_hw *hw,
+> -                                    struct clk_rate_request *req)
+> -{
+> -       struct jh7100_clk *clk = jh7100_clk_from(hw);
+> -       unsigned long parent = req->best_parent_rate;
+> -       unsigned long rate = clamp(req->rate, req->min_rate, req->max_rate);
+> -       unsigned long div = min_t(unsigned long, DIV_ROUND_UP(parent, rate), clk->max_div);
+> -       unsigned long result = parent / div;
+> -
+> -       /*
+> -        * we want the result clamped by min_rate and max_rate if possible:
+> -        * case 1: div hits the max divider value, which means it's less than
+> -        * parent / rate, so the result is greater than rate and min_rate in
+> -        * particular. we can't do anything about result > max_rate because the
+> -        * divider doesn't go any further.
+> -        * case 2: div = DIV_ROUND_UP(parent, rate) which means the result is
+> -        * always lower or equal to rate and max_rate. however the result may
+> -        * turn out lower than min_rate, but then the next higher rate is fine:
+> -        *   div - 1 = ceil(parent / rate) - 1 < parent / rate
+> -        * and thus
+> -        *   min_rate <= rate < parent / (div - 1)
+> -        */
+> -       if (result < req->min_rate && div > 1)
+> -               result = parent / (div - 1);
+> -
+> -       req->rate = result;
+> -       return 0;
+> -}
+> -
+> -static int jh7100_clk_set_rate(struct clk_hw *hw,
+> -                              unsigned long rate,
+> -                              unsigned long parent_rate)
+> -{
+> -       struct jh7100_clk *clk = jh7100_clk_from(hw);
+> -       unsigned long div = clamp(DIV_ROUND_CLOSEST(parent_rate, rate),
+> -                                 1UL, (unsigned long)clk->max_div);
+> -
+> -       jh7100_clk_reg_rmw(clk, JH7100_CLK_DIV_MASK, div);
+> -       return 0;
+> -}
+> -
+> -static unsigned long jh7100_clk_frac_recalc_rate(struct clk_hw *hw,
+> -                                                unsigned long parent_rate)
+> -{
+> -       struct jh7100_clk *clk = jh7100_clk_from(hw);
+> -       u32 reg = jh7100_clk_reg_get(clk);
+> -       unsigned long div100 = 100 * (reg & JH7100_CLK_INT_MASK) +
+> -                              ((reg & JH7100_CLK_FRAC_MASK) >> JH7100_CLK_FRAC_SHIFT);
+> -
+> -       return (div100 >= JH7100_CLK_FRAC_MIN) ? 100 * parent_rate / div100 : 0;
+> -}
+> -
+> -static int jh7100_clk_frac_determine_rate(struct clk_hw *hw,
+> -                                         struct clk_rate_request *req)
+> -{
+> -       unsigned long parent100 = 100 * req->best_parent_rate;
+> -       unsigned long rate = clamp(req->rate, req->min_rate, req->max_rate);
+> -       unsigned long div100 = clamp(DIV_ROUND_CLOSEST(parent100, rate),
+> -                                    JH7100_CLK_FRAC_MIN, JH7100_CLK_FRAC_MAX);
+> -       unsigned long result = parent100 / div100;
+> -
+> -       /* clamp the result as in jh7100_clk_determine_rate() above */
+> -       if (result > req->max_rate && div100 < JH7100_CLK_FRAC_MAX)
+> -               result = parent100 / (div100 + 1);
+> -       if (result < req->min_rate && div100 > JH7100_CLK_FRAC_MIN)
+> -               result = parent100 / (div100 - 1);
+> -
+> -       req->rate = result;
+> -       return 0;
+> -}
+> -
+> -static int jh7100_clk_frac_set_rate(struct clk_hw *hw,
+> -                                   unsigned long rate,
+> -                                   unsigned long parent_rate)
+> -{
+> -       struct jh7100_clk *clk = jh7100_clk_from(hw);
+> -       unsigned long div100 = clamp(DIV_ROUND_CLOSEST(100 * parent_rate, rate),
+> -                                    JH7100_CLK_FRAC_MIN, JH7100_CLK_FRAC_MAX);
+> -       u32 value = ((div100 % 100) << JH7100_CLK_FRAC_SHIFT) | (div100 / 100);
+> -
+> -       jh7100_clk_reg_rmw(clk, JH7100_CLK_DIV_MASK, value);
+> -       return 0;
+> -}
+> -
+> -static u8 jh7100_clk_get_parent(struct clk_hw *hw)
+> -{
+> -       struct jh7100_clk *clk = jh7100_clk_from(hw);
+> -       u32 value = jh7100_clk_reg_get(clk);
+> -
+> -       return (value & JH7100_CLK_MUX_MASK) >> JH7100_CLK_MUX_SHIFT;
+> -}
+> -
+> -static int jh7100_clk_set_parent(struct clk_hw *hw, u8 index)
+> -{
+> -       struct jh7100_clk *clk = jh7100_clk_from(hw);
+> -       u32 value = (u32)index << JH7100_CLK_MUX_SHIFT;
+> -
+> -       jh7100_clk_reg_rmw(clk, JH7100_CLK_MUX_MASK, value);
+> -       return 0;
+> -}
+> -
+> -static int jh7100_clk_mux_determine_rate(struct clk_hw *hw,
+> -                                        struct clk_rate_request *req)
+> -{
+> -       return clk_mux_determine_rate_flags(hw, req, 0);
+> -}
+> -
+> -static int jh7100_clk_get_phase(struct clk_hw *hw)
+> -{
+> -       struct jh7100_clk *clk = jh7100_clk_from(hw);
+> -       u32 value = jh7100_clk_reg_get(clk);
+> -
+> -       return (value & JH7100_CLK_INVERT) ? 180 : 0;
+> -}
+> -
+> -static int jh7100_clk_set_phase(struct clk_hw *hw, int degrees)
+> -{
+> -       struct jh7100_clk *clk = jh7100_clk_from(hw);
+> -       u32 value;
+> -
+> -       if (degrees == 0)
+> -               value = 0;
+> -       else if (degrees == 180)
+> -               value = JH7100_CLK_INVERT;
+> -       else
+> -               return -EINVAL;
+> -
+> -       jh7100_clk_reg_rmw(clk, JH7100_CLK_INVERT, value);
+> -       return 0;
+> -}
+> -
+> -#ifdef CONFIG_DEBUG_FS
+> -static void jh7100_clk_debug_init(struct clk_hw *hw, struct dentry *dentry)
+> -{
+> -       static const struct debugfs_reg32 jh7100_clk_reg = {
+> -               .name = "CTRL",
+> -               .offset = 0,
+> -       };
+> -       struct jh7100_clk *clk = jh7100_clk_from(hw);
+> -       struct jh7100_clk_priv *priv = jh7100_priv_from(clk);
+> -       struct debugfs_regset32 *regset;
+> -
+> -       regset = devm_kzalloc(priv->dev, sizeof(*regset), GFP_KERNEL);
+> -       if (!regset)
+> -               return;
+> -
+> -       regset->regs = &jh7100_clk_reg;
+> -       regset->nregs = 1;
+> -       regset->base = priv->base + 4 * clk->idx;
+> -
+> -       debugfs_create_regset32("registers", 0400, dentry, regset);
+> -}
+> -#else
+> -#define jh7100_clk_debug_init NULL
+> -#endif
+> -
+> -static const struct clk_ops jh7100_clk_gate_ops = {
+> -       .enable = jh7100_clk_enable,
+> -       .disable = jh7100_clk_disable,
+> -       .is_enabled = jh7100_clk_is_enabled,
+> -       .debug_init = jh7100_clk_debug_init,
+> -};
+> -
+> -static const struct clk_ops jh7100_clk_div_ops = {
+> -       .recalc_rate = jh7100_clk_recalc_rate,
+> -       .determine_rate = jh7100_clk_determine_rate,
+> -       .set_rate = jh7100_clk_set_rate,
+> -       .debug_init = jh7100_clk_debug_init,
+> -};
+> -
+> -static const struct clk_ops jh7100_clk_fdiv_ops = {
+> -       .recalc_rate = jh7100_clk_frac_recalc_rate,
+> -       .determine_rate = jh7100_clk_frac_determine_rate,
+> -       .set_rate = jh7100_clk_frac_set_rate,
+> -       .debug_init = jh7100_clk_debug_init,
+> -};
+> -
+> -static const struct clk_ops jh7100_clk_gdiv_ops = {
+> -       .enable = jh7100_clk_enable,
+> -       .disable = jh7100_clk_disable,
+> -       .is_enabled = jh7100_clk_is_enabled,
+> -       .recalc_rate = jh7100_clk_recalc_rate,
+> -       .determine_rate = jh7100_clk_determine_rate,
+> -       .set_rate = jh7100_clk_set_rate,
+> -       .debug_init = jh7100_clk_debug_init,
+> -};
+> -
+> -static const struct clk_ops jh7100_clk_mux_ops = {
+> -       .determine_rate = jh7100_clk_mux_determine_rate,
+> -       .set_parent = jh7100_clk_set_parent,
+> -       .get_parent = jh7100_clk_get_parent,
+> -       .debug_init = jh7100_clk_debug_init,
+> -};
+> -
+> -static const struct clk_ops jh7100_clk_gmux_ops = {
+> -       .enable = jh7100_clk_enable,
+> -       .disable = jh7100_clk_disable,
+> -       .is_enabled = jh7100_clk_is_enabled,
+> -       .determine_rate = jh7100_clk_mux_determine_rate,
+> -       .set_parent = jh7100_clk_set_parent,
+> -       .get_parent = jh7100_clk_get_parent,
+> -       .debug_init = jh7100_clk_debug_init,
+> -};
+> -
+> -static const struct clk_ops jh7100_clk_mdiv_ops = {
+> -       .recalc_rate = jh7100_clk_recalc_rate,
+> -       .determine_rate = jh7100_clk_determine_rate,
+> -       .get_parent = jh7100_clk_get_parent,
+> -       .set_parent = jh7100_clk_set_parent,
+> -       .set_rate = jh7100_clk_set_rate,
+> -       .debug_init = jh7100_clk_debug_init,
+> -};
+> -
+> -static const struct clk_ops jh7100_clk_gmd_ops = {
+> -       .enable = jh7100_clk_enable,
+> -       .disable = jh7100_clk_disable,
+> -       .is_enabled = jh7100_clk_is_enabled,
+> -       .recalc_rate = jh7100_clk_recalc_rate,
+> -       .determine_rate = jh7100_clk_determine_rate,
+> -       .get_parent = jh7100_clk_get_parent,
+> -       .set_parent = jh7100_clk_set_parent,
+> -       .set_rate = jh7100_clk_set_rate,
+> -       .debug_init = jh7100_clk_debug_init,
+> -};
+> -
+> -static const struct clk_ops jh7100_clk_inv_ops = {
+> -       .get_phase = jh7100_clk_get_phase,
+> -       .set_phase = jh7100_clk_set_phase,
+> -       .debug_init = jh7100_clk_debug_init,
+> -};
+> -
+> -const struct clk_ops *starfive_jh7100_clk_ops(u32 max)
+> -{
+> -       if (max & JH7100_CLK_DIV_MASK) {
+> -               if (max & JH7100_CLK_MUX_MASK) {
+> -                       if (max & JH7100_CLK_ENABLE)
+> -                               return &jh7100_clk_gmd_ops;
+> -                       return &jh7100_clk_mdiv_ops;
+> -               }
+> -               if (max & JH7100_CLK_ENABLE)
+> -                       return &jh7100_clk_gdiv_ops;
+> -               if (max == JH7100_CLK_FRAC_MAX)
+> -                       return &jh7100_clk_fdiv_ops;
+> -               return &jh7100_clk_div_ops;
+> -       }
+> -
+> -       if (max & JH7100_CLK_MUX_MASK) {
+> -               if (max & JH7100_CLK_ENABLE)
+> -                       return &jh7100_clk_gmux_ops;
+> -               return &jh7100_clk_mux_ops;
+> -       }
+> -
+> -       if (max & JH7100_CLK_ENABLE)
+> -               return &jh7100_clk_gate_ops;
+> -
+> -       return &jh7100_clk_inv_ops;
+> -}
+> -EXPORT_SYMBOL_GPL(starfive_jh7100_clk_ops);
+> -
+>  static struct clk_hw *jh7100_clk_get(struct of_phandle_args *clkspec, void *data)
+>  {
+>         struct jh7100_clk_priv *priv = data;
+> diff --git a/drivers/clk/starfive/clk-starfive-jh7100.h b/drivers/clk/starfive/clk-starfive-jh7100.h
+> index f116be5740a5..a8ba6e25b5ce 100644
+> --- a/drivers/clk/starfive/clk-starfive-jh7100.h
+> +++ b/drivers/clk/starfive/clk-starfive-jh7100.h
+> @@ -4,6 +4,8 @@
+>
+>  #include <linux/bits.h>
+>  #include <linux/clk-provider.h>
+> +#include <linux/device.h>
+> +#include <linux/spinlock.h>
+>
+>  /* register fields */
+>  #define JH7100_CLK_ENABLE      BIT(31)
+> diff --git a/drivers/clk/starfive/clk-starfive-jh71x0.c b/drivers/clk/starfive/clk-starfive-jh71x0.c
+> new file mode 100644
+> index 000000000000..6c07b61b4a32
+> --- /dev/null
+> +++ b/drivers/clk/starfive/clk-starfive-jh71x0.c
+> @@ -0,0 +1,333 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * StarFive JH7100 Clock Generator Driver
+> + *
+> + * Copyright (C) 2021-2022 Emil Renner Berthing <kernel@esmil.dk>
+> + */
+> +
+> +#include <linux/clk-provider.h>
+> +#include <linux/debugfs.h>
+> +#include <linux/device.h>
+> +#include <linux/io.h>
+> +
+> +#include "clk-starfive-jh7100.h"
+> +
+> +static struct jh7100_clk *jh7100_clk_from(struct clk_hw *hw)
+> +{
+> +       return container_of(hw, struct jh7100_clk, hw);
+> +}
+> +
+> +static struct jh7100_clk_priv *jh7100_priv_from(struct jh7100_clk *clk)
+> +{
+> +       return container_of(clk, struct jh7100_clk_priv, reg[clk->idx]);
+> +}
+> +
+> +static u32 jh7100_clk_reg_get(struct jh7100_clk *clk)
+> +{
+> +       struct jh7100_clk_priv *priv = jh7100_priv_from(clk);
+> +       void __iomem *reg = priv->base + 4 * clk->idx;
+> +
+> +       return readl_relaxed(reg);
+> +}
+> +
+> +static void jh7100_clk_reg_rmw(struct jh7100_clk *clk, u32 mask, u32 value)
+> +{
+> +       struct jh7100_clk_priv *priv = jh7100_priv_from(clk);
+> +       void __iomem *reg = priv->base + 4 * clk->idx;
+> +       unsigned long flags;
+> +
+> +       spin_lock_irqsave(&priv->rmw_lock, flags);
+> +       value |= readl_relaxed(reg) & ~mask;
+> +       writel_relaxed(value, reg);
+> +       spin_unlock_irqrestore(&priv->rmw_lock, flags);
+> +}
+> +
+> +static int jh7100_clk_enable(struct clk_hw *hw)
+> +{
+> +       struct jh7100_clk *clk = jh7100_clk_from(hw);
+> +
+> +       jh7100_clk_reg_rmw(clk, JH7100_CLK_ENABLE, JH7100_CLK_ENABLE);
+> +       return 0;
+> +}
+> +
+> +static void jh7100_clk_disable(struct clk_hw *hw)
+> +{
+> +       struct jh7100_clk *clk = jh7100_clk_from(hw);
+> +
+> +       jh7100_clk_reg_rmw(clk, JH7100_CLK_ENABLE, 0);
+> +}
+> +
+> +static int jh7100_clk_is_enabled(struct clk_hw *hw)
+> +{
+> +       struct jh7100_clk *clk = jh7100_clk_from(hw);
+> +
+> +       return !!(jh7100_clk_reg_get(clk) & JH7100_CLK_ENABLE);
+> +}
+> +
+> +static unsigned long jh7100_clk_recalc_rate(struct clk_hw *hw,
+> +                                           unsigned long parent_rate)
+> +{
+> +       struct jh7100_clk *clk = jh7100_clk_from(hw);
+> +       u32 div = jh7100_clk_reg_get(clk) & JH7100_CLK_DIV_MASK;
+> +
+> +       return div ? parent_rate / div : 0;
+> +}
+> +
+> +static int jh7100_clk_determine_rate(struct clk_hw *hw,
+> +                                    struct clk_rate_request *req)
+> +{
+> +       struct jh7100_clk *clk = jh7100_clk_from(hw);
+> +       unsigned long parent = req->best_parent_rate;
+> +       unsigned long rate = clamp(req->rate, req->min_rate, req->max_rate);
+> +       unsigned long div = min_t(unsigned long, DIV_ROUND_UP(parent, rate), clk->max_div);
+> +       unsigned long result = parent / div;
+> +
+> +       /*
+> +        * we want the result clamped by min_rate and max_rate if possible:
+> +        * case 1: div hits the max divider value, which means it's less than
+> +        * parent / rate, so the result is greater than rate and min_rate in
+> +        * particular. we can't do anything about result > max_rate because the
+> +        * divider doesn't go any further.
+> +        * case 2: div = DIV_ROUND_UP(parent, rate) which means the result is
+> +        * always lower or equal to rate and max_rate. however the result may
+> +        * turn out lower than min_rate, but then the next higher rate is fine:
+> +        *   div - 1 = ceil(parent / rate) - 1 < parent / rate
+> +        * and thus
+> +        *   min_rate <= rate < parent / (div - 1)
+> +        */
+> +       if (result < req->min_rate && div > 1)
+> +               result = parent / (div - 1);
+> +
+> +       req->rate = result;
+> +       return 0;
+> +}
+> +
+> +static int jh7100_clk_set_rate(struct clk_hw *hw,
+> +                              unsigned long rate,
+> +                              unsigned long parent_rate)
+> +{
+> +       struct jh7100_clk *clk = jh7100_clk_from(hw);
+> +       unsigned long div = clamp(DIV_ROUND_CLOSEST(parent_rate, rate),
+> +                                 1UL, (unsigned long)clk->max_div);
+> +
+> +       jh7100_clk_reg_rmw(clk, JH7100_CLK_DIV_MASK, div);
+> +       return 0;
+> +}
+> +
+> +static unsigned long jh7100_clk_frac_recalc_rate(struct clk_hw *hw,
+> +                                                unsigned long parent_rate)
+> +{
+> +       struct jh7100_clk *clk = jh7100_clk_from(hw);
+> +       u32 reg = jh7100_clk_reg_get(clk);
+> +       unsigned long div100 = 100 * (reg & JH7100_CLK_INT_MASK) +
+> +                              ((reg & JH7100_CLK_FRAC_MASK) >> JH7100_CLK_FRAC_SHIFT);
+> +
+> +       return (div100 >= JH7100_CLK_FRAC_MIN) ? 100 * parent_rate / div100 : 0;
+> +}
+> +
+> +static int jh7100_clk_frac_determine_rate(struct clk_hw *hw,
+> +                                         struct clk_rate_request *req)
+> +{
+> +       unsigned long parent100 = 100 * req->best_parent_rate;
+> +       unsigned long rate = clamp(req->rate, req->min_rate, req->max_rate);
+> +       unsigned long div100 = clamp(DIV_ROUND_CLOSEST(parent100, rate),
+> +                                    JH7100_CLK_FRAC_MIN, JH7100_CLK_FRAC_MAX);
+> +       unsigned long result = parent100 / div100;
+> +
+> +       /* clamp the result as in jh7100_clk_determine_rate() above */
+> +       if (result > req->max_rate && div100 < JH7100_CLK_FRAC_MAX)
+> +               result = parent100 / (div100 + 1);
+> +       if (result < req->min_rate && div100 > JH7100_CLK_FRAC_MIN)
+> +               result = parent100 / (div100 - 1);
+> +
+> +       req->rate = result;
+> +       return 0;
+> +}
+> +
+> +static int jh7100_clk_frac_set_rate(struct clk_hw *hw,
+> +                                   unsigned long rate,
+> +                                   unsigned long parent_rate)
+> +{
+> +       struct jh7100_clk *clk = jh7100_clk_from(hw);
+> +       unsigned long div100 = clamp(DIV_ROUND_CLOSEST(100 * parent_rate, rate),
+> +                                    JH7100_CLK_FRAC_MIN, JH7100_CLK_FRAC_MAX);
+> +       u32 value = ((div100 % 100) << JH7100_CLK_FRAC_SHIFT) | (div100 / 100);
+> +
+> +       jh7100_clk_reg_rmw(clk, JH7100_CLK_DIV_MASK, value);
+> +       return 0;
+> +}
+> +
+> +static u8 jh7100_clk_get_parent(struct clk_hw *hw)
+> +{
+> +       struct jh7100_clk *clk = jh7100_clk_from(hw);
+> +       u32 value = jh7100_clk_reg_get(clk);
+> +
+> +       return (value & JH7100_CLK_MUX_MASK) >> JH7100_CLK_MUX_SHIFT;
+> +}
+> +
+> +static int jh7100_clk_set_parent(struct clk_hw *hw, u8 index)
+> +{
+> +       struct jh7100_clk *clk = jh7100_clk_from(hw);
+> +       u32 value = (u32)index << JH7100_CLK_MUX_SHIFT;
+> +
+> +       jh7100_clk_reg_rmw(clk, JH7100_CLK_MUX_MASK, value);
+> +       return 0;
+> +}
+> +
+> +static int jh7100_clk_mux_determine_rate(struct clk_hw *hw,
+> +                                        struct clk_rate_request *req)
+> +{
+> +       return clk_mux_determine_rate_flags(hw, req, 0);
+> +}
+> +
+> +static int jh7100_clk_get_phase(struct clk_hw *hw)
+> +{
+> +       struct jh7100_clk *clk = jh7100_clk_from(hw);
+> +       u32 value = jh7100_clk_reg_get(clk);
+> +
+> +       return (value & JH7100_CLK_INVERT) ? 180 : 0;
+> +}
+> +
+> +static int jh7100_clk_set_phase(struct clk_hw *hw, int degrees)
+> +{
+> +       struct jh7100_clk *clk = jh7100_clk_from(hw);
+> +       u32 value;
+> +
+> +       if (degrees == 0)
+> +               value = 0;
+> +       else if (degrees == 180)
+> +               value = JH7100_CLK_INVERT;
+> +       else
+> +               return -EINVAL;
+> +
+> +       jh7100_clk_reg_rmw(clk, JH7100_CLK_INVERT, value);
+> +       return 0;
+> +}
+> +
+> +#ifdef CONFIG_DEBUG_FS
+> +static void jh7100_clk_debug_init(struct clk_hw *hw, struct dentry *dentry)
+> +{
+> +       static const struct debugfs_reg32 jh7100_clk_reg = {
+> +               .name = "CTRL",
+> +               .offset = 0,
+> +       };
+> +       struct jh7100_clk *clk = jh7100_clk_from(hw);
+> +       struct jh7100_clk_priv *priv = jh7100_priv_from(clk);
+> +       struct debugfs_regset32 *regset;
+> +
+> +       regset = devm_kzalloc(priv->dev, sizeof(*regset), GFP_KERNEL);
+> +       if (!regset)
+> +               return;
+> +
+> +       regset->regs = &jh7100_clk_reg;
+> +       regset->nregs = 1;
+> +       regset->base = priv->base + 4 * clk->idx;
+> +
+> +       debugfs_create_regset32("registers", 0400, dentry, regset);
+> +}
+> +#else
+> +#define jh7100_clk_debug_init NULL
+> +#endif
+> +
+> +static const struct clk_ops jh7100_clk_gate_ops = {
+> +       .enable = jh7100_clk_enable,
+> +       .disable = jh7100_clk_disable,
+> +       .is_enabled = jh7100_clk_is_enabled,
+> +       .debug_init = jh7100_clk_debug_init,
+> +};
+> +
+> +static const struct clk_ops jh7100_clk_div_ops = {
+> +       .recalc_rate = jh7100_clk_recalc_rate,
+> +       .determine_rate = jh7100_clk_determine_rate,
+> +       .set_rate = jh7100_clk_set_rate,
+> +       .debug_init = jh7100_clk_debug_init,
+> +};
+> +
+> +static const struct clk_ops jh7100_clk_fdiv_ops = {
+> +       .recalc_rate = jh7100_clk_frac_recalc_rate,
+> +       .determine_rate = jh7100_clk_frac_determine_rate,
+> +       .set_rate = jh7100_clk_frac_set_rate,
+> +       .debug_init = jh7100_clk_debug_init,
+> +};
+> +
+> +static const struct clk_ops jh7100_clk_gdiv_ops = {
+> +       .enable = jh7100_clk_enable,
+> +       .disable = jh7100_clk_disable,
+> +       .is_enabled = jh7100_clk_is_enabled,
+> +       .recalc_rate = jh7100_clk_recalc_rate,
+> +       .determine_rate = jh7100_clk_determine_rate,
+> +       .set_rate = jh7100_clk_set_rate,
+> +       .debug_init = jh7100_clk_debug_init,
+> +};
+> +
+> +static const struct clk_ops jh7100_clk_mux_ops = {
+> +       .determine_rate = jh7100_clk_mux_determine_rate,
+> +       .set_parent = jh7100_clk_set_parent,
+> +       .get_parent = jh7100_clk_get_parent,
+> +       .debug_init = jh7100_clk_debug_init,
+> +};
+> +
+> +static const struct clk_ops jh7100_clk_gmux_ops = {
+> +       .enable = jh7100_clk_enable,
+> +       .disable = jh7100_clk_disable,
+> +       .is_enabled = jh7100_clk_is_enabled,
+> +       .determine_rate = jh7100_clk_mux_determine_rate,
+> +       .set_parent = jh7100_clk_set_parent,
+> +       .get_parent = jh7100_clk_get_parent,
+> +       .debug_init = jh7100_clk_debug_init,
+> +};
+> +
+> +static const struct clk_ops jh7100_clk_mdiv_ops = {
+> +       .recalc_rate = jh7100_clk_recalc_rate,
+> +       .determine_rate = jh7100_clk_determine_rate,
+> +       .get_parent = jh7100_clk_get_parent,
+> +       .set_parent = jh7100_clk_set_parent,
+> +       .set_rate = jh7100_clk_set_rate,
+> +       .debug_init = jh7100_clk_debug_init,
+> +};
+> +
+> +static const struct clk_ops jh7100_clk_gmd_ops = {
+> +       .enable = jh7100_clk_enable,
+> +       .disable = jh7100_clk_disable,
+> +       .is_enabled = jh7100_clk_is_enabled,
+> +       .recalc_rate = jh7100_clk_recalc_rate,
+> +       .determine_rate = jh7100_clk_determine_rate,
+> +       .get_parent = jh7100_clk_get_parent,
+> +       .set_parent = jh7100_clk_set_parent,
+> +       .set_rate = jh7100_clk_set_rate,
+> +       .debug_init = jh7100_clk_debug_init,
+> +};
+> +
+> +static const struct clk_ops jh7100_clk_inv_ops = {
+> +       .get_phase = jh7100_clk_get_phase,
+> +       .set_phase = jh7100_clk_set_phase,
+> +       .debug_init = jh7100_clk_debug_init,
+> +};
+> +
+> +const struct clk_ops *starfive_jh7100_clk_ops(u32 max)
+> +{
+> +       if (max & JH7100_CLK_DIV_MASK) {
+> +               if (max & JH7100_CLK_MUX_MASK) {
+> +                       if (max & JH7100_CLK_ENABLE)
+> +                               return &jh7100_clk_gmd_ops;
+> +                       return &jh7100_clk_mdiv_ops;
+> +               }
+> +               if (max & JH7100_CLK_ENABLE)
+> +                       return &jh7100_clk_gdiv_ops;
+> +               if (max == JH7100_CLK_FRAC_MAX)
+> +                       return &jh7100_clk_fdiv_ops;
+> +               return &jh7100_clk_div_ops;
+> +       }
+> +
+> +       if (max & JH7100_CLK_MUX_MASK) {
+> +               if (max & JH7100_CLK_ENABLE)
+> +                       return &jh7100_clk_gmux_ops;
+> +               return &jh7100_clk_mux_ops;
+> +       }
+> +
+> +       if (max & JH7100_CLK_ENABLE)
+> +               return &jh7100_clk_gate_ops;
+> +
+> +       return &jh7100_clk_inv_ops;
+> +}
+> +EXPORT_SYMBOL_GPL(starfive_jh7100_clk_ops);
+> --
+> 2.38.1
+>
