@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36236630128
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 23:51:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C8CC63017D
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 23:52:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232812AbiKRWvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 17:51:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37512 "EHLO
+        id S232036AbiKRWw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 17:52:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233150AbiKRWsb (ORCPT
+        with ESMTP id S234048AbiKRWwC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 17:48:31 -0500
+        Fri, 18 Nov 2022 17:52:02 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79AC2B949D
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 14:46:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B3AEBB5E1
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 14:47:24 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA7w-0008Hw-TT; Fri, 18 Nov 2022 23:46:28 +0100
+        id 1owA7x-0008Fi-0L; Fri, 18 Nov 2022 23:46:29 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA7s-0058DU-K2; Fri, 18 Nov 2022 23:46:25 +0100
+        id 1owA7s-0058DL-84; Fri, 18 Nov 2022 23:46:25 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA7q-00HazX-Ve; Fri, 18 Nov 2022 23:46:22 +0100
+        id 1owA7r-00Hazf-CW; Fri, 18 Nov 2022 23:46:23 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>
+        Jonathan Cameron <jic23@kernel.org>,
+        Gwendal Grignou <gwendal@chromium.org>,
+        Peter Senna Tschudin <peter.senna@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>,
         Lars-Peter Clausen <lars@metafoo.de>,
         linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 073/606] iio: chemical: ams-iaq-core: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:36:47 +0100
-Message-Id: <20221118224540.619276-74-uwe@kleine-koenig.org>
+Subject: [PATCH 075/606] iio: chemical: atlas-sensor: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:36:49 +0100
+Message-Id: <20221118224540.619276-76-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -62,37 +65,39 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-The probe function doesn't make use of the i2c_device_id * parameter so it
-can be trivially converted.
+.probe_new() doesn't get the i2c_device_id * parameter, so determine
+that explicitly in the probe function.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/iio/chemical/ams-iaq-core.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/iio/chemical/atlas-sensor.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/iio/chemical/ams-iaq-core.c b/drivers/iio/chemical/ams-iaq-core.c
-index 97be3669c554..0a0fbcdd4469 100644
---- a/drivers/iio/chemical/ams-iaq-core.c
-+++ b/drivers/iio/chemical/ams-iaq-core.c
-@@ -135,8 +135,7 @@ static const struct iio_info ams_iaqcore_info = {
- 	.read_raw	= ams_iaqcore_read_raw,
+diff --git a/drivers/iio/chemical/atlas-sensor.c b/drivers/iio/chemical/atlas-sensor.c
+index 7cac77a931c7..024657bc59e1 100644
+--- a/drivers/iio/chemical/atlas-sensor.c
++++ b/drivers/iio/chemical/atlas-sensor.c
+@@ -608,9 +608,9 @@ static const struct of_device_id atlas_dt_ids[] = {
  };
+ MODULE_DEVICE_TABLE(of, atlas_dt_ids);
  
--static int ams_iaqcore_probe(struct i2c_client *client,
--			     const struct i2c_device_id *id)
-+static int ams_iaqcore_probe(struct i2c_client *client)
+-static int atlas_probe(struct i2c_client *client,
+-		       const struct i2c_device_id *id)
++static int atlas_probe(struct i2c_client *client)
  {
- 	struct iio_dev *indio_dev;
- 	struct ams_iaqcore_data *data;
-@@ -180,7 +179,7 @@ static struct i2c_driver ams_iaqcore_driver = {
- 		.name	= "ams-iaq-core",
- 		.of_match_table = ams_iaqcore_dt_ids,
++	const struct i2c_device_id *id = i2c_client_get_device_id(client);
+ 	struct atlas_data *data;
+ 	struct atlas_device *chip;
+ 	struct iio_trigger *trig;
+@@ -767,7 +767,7 @@ static struct i2c_driver atlas_driver = {
+ 		.of_match_table	= atlas_dt_ids,
+ 		.pm	= pm_ptr(&atlas_pm_ops),
  	},
--	.probe = ams_iaqcore_probe,
-+	.probe_new = ams_iaqcore_probe,
- 	.id_table = ams_iaqcore_id,
+-	.probe		= atlas_probe,
++	.probe_new	= atlas_probe,
+ 	.remove		= atlas_remove,
+ 	.id_table	= atlas_id,
  };
- module_i2c_driver(ams_iaqcore_driver);
 -- 
 2.38.1
 
