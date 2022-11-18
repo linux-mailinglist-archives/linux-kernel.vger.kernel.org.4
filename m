@@ -2,88 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37DE062F29E
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 11:33:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6661C62F2A0
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 11:33:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241760AbiKRKc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 05:32:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55390 "EHLO
+        id S235226AbiKRKdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 05:33:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241540AbiKRKcz (ORCPT
+        with ESMTP id S241499AbiKRKdO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 05:32:55 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD5C922EE;
-        Fri, 18 Nov 2022 02:32:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668767574; x=1700303574;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VprPqlQZldVRfkBs0m7Woq09gEfOOZdMpUS2KxmRKTo=;
-  b=P8worfkLqfIjeVk+6mpPJhLDbPPLtWqxdV+puWiJYwRQ7Ke9RHMQDAbw
-   eCseo660ZdPWiP0QVe0u7r2Fp6aAopm36CzkbHF/6cwf/XC+H4DeqpPrY
-   dyff5Kkg+EQBc/+h7c71dgW0pxrlIjElwy6U1FqHa+QHEoNhIBBlZ5OcZ
-   xoSQXaEstuC5maDMFKuQ7mzfiDfFtTqYT4FhWQLPn3UMxgHhXIJmg+bXw
-   ulR/RJPc5ih2YJSQ7AGI6AZP45Tp1Ko+rj3FTgelmt+pyzKbI8W7/NKbC
-   zdKXl+ryC2g8HPKzLtzXE1HFIMY7Ye+ZT3GaG+107u0KLhvyOTyHIMW/h
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="296471057"
-X-IronPort-AV: E=Sophos;i="5.96,174,1665471600"; 
-   d="scan'208";a="296471057"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2022 02:32:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="642465575"
-X-IronPort-AV: E=Sophos;i="5.96,174,1665471600"; 
-   d="scan'208";a="642465575"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga007.fm.intel.com with ESMTP; 18 Nov 2022 02:32:50 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ovyft-00DzrU-1g;
-        Fri, 18 Nov 2022 12:32:45 +0200
-Date:   Fri, 18 Nov 2022 12:32:45 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Ferry Toth <ftoth@exalondelft.nl>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Sean Anderson <sean.anderson@seco.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Ferry Toth <fntoth@gmail.com>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v3 0/2] usb: dwc3: core: defer probe on ulpi_read_id
- timeout
-Message-ID: <Y3dfTUNKx5jkhL32@smile.fi.intel.com>
-References: <20221117205411.11489-1-ftoth@exalondelft.nl>
+        Fri, 18 Nov 2022 05:33:14 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D33922EE
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 02:33:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ery4e7DXynGUHcFDdPwXSq/cHJt8hNQ6mXrrfbI6xLk=; b=EIGeQOPHkYWExKKZj8puEdHFeG
+        3uF7oA7oIK4hx+OZebNmAvZGuL3ecRuBR9gvsGIjdiUJ4yC4uURrDvGR5k+ITrfnIN4oHVlgyPR5I
+        D9nZ0xZyxdjb+JrMOYqCiin876QRJQN+hx3l3Kdd7sf95yKGzo+idh+uVVmFnzn/hzMNR5/urvAlT
+        dI0QMG5YBg+sT7jGX8Y/UcIR9S5TIJaVeN4N+oByK2TayIcf1aO/CQna0NxS+JOnz/bXR8zP7S7nx
+        rwBIlkL8NIzGToNjO6PMoZIv2z3mfsN649W0Rk7hDNd6kOEMR2AtDQYZ3UWuq2cV9hf8p6LN//MVv
+        nrWWxBEQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ovyg3-001x27-EE; Fri, 18 Nov 2022 10:32:55 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6F817300462;
+        Fri, 18 Nov 2022 11:32:54 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 527C520C9821C; Fri, 18 Nov 2022 11:32:54 +0100 (CET)
+Date:   Fri, 18 Nov 2022 11:32:54 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Marco Elver <elver@google.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        kasan-dev <kasan-dev@googlegroups.com>, X86 ML <x86@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>, regressions@lists.linux.dev,
+        lkft-triage@lists.linaro.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Potapenko <glider@google.com>
+Subject: Re: WARNING: CPU: 0 PID: 0 at arch/x86/include/asm/kfence.h:46
+ kfence_protect
+Message-ID: <Y3dfVtYINF/u7Sar@hirez.programming.kicks-ass.net>
+References: <CA+G9fYuFxZTxkeS35VTZMXwQvohu73W3xbZ5NtjebsVvH6hCuA@mail.gmail.com>
+ <Y3Y+DQsWa79bNuKj@elver.google.com>
+ <4208866d-338f-4781-7ff9-023f016c5b07@intel.com>
+ <Y3bCV6VckVUEF7Pq@elver.google.com>
+ <41ac24c4-6c95-d946-2679-c1be2cb20536@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221117205411.11489-1-ftoth@exalondelft.nl>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <41ac24c4-6c95-d946-2679-c1be2cb20536@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 09:54:09PM +0100, Ferry Toth wrote:
-> v3:
-> - Correct commit message (Greg)
+On Thu, Nov 17, 2022 at 03:54:21PM -0800, Dave Hansen wrote:
+> On 11/17/22 15:23, Marco Elver wrote:
+> > Yes - it's the 'level != PG_LEVEL_4K'.
+> 
+> That plus the bisect made it pretty easy to find, thanks for the effort!
+> 
+> Could you double-check that the attached patch fixes it?  It seemed to
+> for me.
+> 
+> The issue was that the new "No changes, easy!" check in the suspect
+> commit didn't check the cpa->force_split option.  It didn't split down
+> to 4k and then all hell broke loose.
+> 
+> Oh, and I totally misread the kfence ability to tolerate partial TLB
+> flushes.  Sorry for the noise there!
 
-> - Add fixes (Greg)
+> diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
+> index 220361ceb997..9b4e2ad957f6 100644
+> --- a/arch/x86/mm/pat/set_memory.c
+> +++ b/arch/x86/mm/pat/set_memory.c
+> @@ -1727,7 +1727,8 @@ static int __change_page_attr_set_clr(struct cpa_data *cpa, int primary)
+>  	/*
+>  	 * No changes, easy!
+>  	 */
+> -	if (!(pgprot_val(cpa->mask_set) | pgprot_val(cpa->mask_clr)))
+> +	if (!(pgprot_val(cpa->mask_set) | pgprot_val(cpa->mask_clr))
+> +	    && !cpa->force_split)
 
-Not sure what this means. I believe Greg asked for Fixes: tags in the
-patch(es).
+(operators go at the end of the previous line)
 
--- 
-With Best Regards,
-Andy Shevchenko
+>  		return ret;
+>  
+>  	while (rempages) {
 
+Urgh.. sorry about that.
 
