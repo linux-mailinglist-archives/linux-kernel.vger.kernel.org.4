@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C86ED62EAC2
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 02:12:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 317B262EAC1
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 02:12:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240749AbiKRBMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 20:12:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32964 "EHLO
+        id S235139AbiKRBMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 20:12:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240985AbiKRBMY (ORCPT
+        with ESMTP id S240959AbiKRBMV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 20:12:24 -0500
+        Thu, 17 Nov 2022 20:12:21 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BCC685ECF
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 17:10:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B8E85EE5
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 17:10:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1668733841;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ek0v3IZFacfv4QAamvdXXDg+rLS9iFnyxQu22HNSG2w=;
-        b=fgjR/stalitptovrG99D84ElHAy6hQfpsJUM92o55SLDlojEdLCwWIy201XuV8b+VeKxRV
-        hmYGtsSRD0FItkIveVSJYWGqU4xbvnkXIuqIfSZm++jWR1hIp38/vKixHO6llQ92kQgdZv
-        i9KvBPnhqIrDacoA0UVXLHsj3M2LCwg=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=M2c5rXQnd1kf7yTmDBDfaoawKYfDXFaD9281dnoZiZE=;
+        b=D/ZZJvo5cGIr+uUmeTgrRoZ0Ej9vbFPHSteEslytmFJOZyUHrbzacAJkje03m0a5a47Nhp
+        +XDxndNjO/PCTUR6Yfso5ZHufW3VXigcEQJQ6kTAXx/qtKGUQt5FgHRP/HYlP3gcZQ5GOF
+        GYAbE0FIVOfVk1JN6J1sSYH1bwjDIQs=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-176-M4M5NPWaMZGKeo0uuL6bYQ-1; Thu, 17 Nov 2022 20:10:38 -0500
-X-MC-Unique: M4M5NPWaMZGKeo0uuL6bYQ-1
-Received: by mail-qk1-f199.google.com with SMTP id bp10-20020a05620a458a00b006fa29f253dcso4429550qkb.11
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 17:10:38 -0800 (PST)
+ us-mta-272-h8diT6NpMPWQEGn-3yAAhg-1; Thu, 17 Nov 2022 20:10:39 -0500
+X-MC-Unique: h8diT6NpMPWQEGn-3yAAhg-1
+Received: by mail-qk1-f198.google.com with SMTP id bl21-20020a05620a1a9500b006fa35db066aso4374387qkb.19
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 17:10:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ek0v3IZFacfv4QAamvdXXDg+rLS9iFnyxQu22HNSG2w=;
-        b=XEFfGYzEZiRTRjve+K8+E4Udt/ebC2HwkTp1fDiue7GO2D6GXuDS+hRNMrDrbWPsMP
-         40ueJkoZmEzF0PTiJbpS+lSZCb1ghyZg87nDotpa7N0k+z7S7UMCn6UJl1Y0djbDV1bU
-         0JkVLucrA8I1HWkA2DBCkCAeZ7KVDa8rYSCjmgr+P8qqTdYVZ0Jzk0p6BFkp3hWklA79
-         zeU/p5saU9nCLGiFju/QI1FfMxRvMPGt70mC3Z0mlAQpwi62XIFqn4xpLfnlUcgmRRPx
-         RVxT7ZD0a7H2nHH2430SvzGxlVsFfobCGeXgNpNt2cITgXr/2cuk1+izd0iDmvNqkmVP
-         /McQ==
-X-Gm-Message-State: ANoB5plwqQaIC2rlEnLeQP2W9+hdqyMFHkA8s7yGscrwSjPBvBi+TdEE
-        O6N4nLl7/TqUcSKVKNuCQ37neWRSSjP40LYxJFCrzArNDpSrgqv52VF87zZ2OJ3WKERzFm+8qwL
-        kOGbDqcktALv/vMCVmLX4rjIj
-X-Received: by 2002:ac8:7608:0:b0:3a5:6797:c57a with SMTP id t8-20020ac87608000000b003a56797c57amr4788566qtq.34.1668733837959;
-        Thu, 17 Nov 2022 17:10:37 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4YUHL//KLcKTO3eXesn/AhPVyYy7y3vCnFwX7NxkFnL7BxzMVqhjH97L9Gr/XOknNuKwkO9w==
-X-Received: by 2002:ac8:7608:0:b0:3a5:6797:c57a with SMTP id t8-20020ac87608000000b003a56797c57amr4788551qtq.34.1668733837733;
-        Thu, 17 Nov 2022 17:10:37 -0800 (PST)
+        bh=M2c5rXQnd1kf7yTmDBDfaoawKYfDXFaD9281dnoZiZE=;
+        b=7yWfspinfoy205QeuuZsJqbV0QoX2AvGHQ34mJCCKxats5VON9jdguWRJnZ/mn6Cer
+         XkgSblxXWEnzGdMuMSHpqjHN+PXqkkIGJ8m9jwNiFrZGEnGj1EOYtcxJhDMaYPwWC7KV
+         P3tz5ab90PVOnxxYvNNMfxylldQOWCcVLOd9wHGzblq7aI75tal0uhZkT3i3uZYtRjg+
+         6P/5zfe6vyIHlX18cfkJ6LN8iJ5r86mp3sh4nJwCTq1Cz9zCpNJrWanSHSGSFdkclcZT
+         i09tvoJ21Q/f7XxWOZVpeqQdxkgJkXXWBE64hlcZ2e6envgrGgYOXWvrqxm1ogZEZcGA
+         Xb1Q==
+X-Gm-Message-State: ANoB5pnTFGNi1S4lpA3qP4OwevEouMy5LSAMCm6mCozpwyiUzoUPf12s
+        EL3Xozk0tsNyPACTOfVN9Q18F6kv23X/5emHkZBH4894CDtbq8S9SnVGq3x5Tt9lCbsOh1beykg
+        /p9mLYzycMEfXKqn5xRuu7nJW
+X-Received: by 2002:a05:620a:10a3:b0:6fa:156e:44c0 with SMTP id h3-20020a05620a10a300b006fa156e44c0mr4093364qkk.293.1668733839362;
+        Thu, 17 Nov 2022 17:10:39 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5KpYFuSckUVSGa4lgr9LFNowF9nCCUTnXJySXZCtSwHy4gRXenmckPtcF9nzTIBjvTUthQDw==
+X-Received: by 2002:a05:620a:10a3:b0:6fa:156e:44c0 with SMTP id h3-20020a05620a10a300b006fa156e44c0mr4093352qkk.293.1668733839139;
+        Thu, 17 Nov 2022 17:10:39 -0800 (PST)
 Received: from x1n.redhat.com (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id u7-20020a05620a430700b006eed75805a2sm1491342qko.126.2022.11.17.17.10.36
+        by smtp.gmail.com with ESMTPSA id u7-20020a05620a430700b006eed75805a2sm1491342qko.126.2022.11.17.17.10.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 17:10:37 -0800 (PST)
+        Thu, 17 Nov 2022 17:10:38 -0800 (PST)
 From:   Peter Xu <peterx@redhat.com>
 To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
 Cc:     Rik van Riel <riel@surriel.com>,
@@ -67,9 +67,9 @@ Cc:     Rik van Riel <riel@surriel.com>,
         David Hildenbrand <david@redhat.com>,
         Miaohe Lin <linmiaohe@huawei.com>,
         Mike Kravetz <mike.kravetz@oracle.com>
-Subject: [PATCH RFC v2 06/12] mm/hugetlb: Protect huge_pmd_share() with walker lock
-Date:   Thu, 17 Nov 2022 20:10:19 -0500
-Message-Id: <20221118011025.2178986-7-peterx@redhat.com>
+Subject: [PATCH RFC v2 07/12] mm/hugetlb: Use hugetlb walker lock in hugetlb_follow_page_mask()
+Date:   Thu, 17 Nov 2022 20:10:20 -0500
+Message-Id: <20221118011025.2178986-8-peterx@redhat.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221118011025.2178986-1-peterx@redhat.com>
 References: <20221118011025.2178986-1-peterx@redhat.com>
@@ -86,59 +86,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-huge_pmd_share() is normally called with vma lock held already, it lets us
-feel like we don't really need the walker lock.  But that's not true,
-because we only took the vma lock for "current" vma, but not all the vma
-pgtables we're going to walk upon.
-
-Taking each vma lock may lead to deadlock and hard to order.  The safe
-approach is just to use the walker lock which guarantees the pgtable page
-being alive, then we should use get_page_unless_zero() rather than
-get_page() only, to make sure the pgtable page is not being freed at the
-meantime.
+Hugetlb walker lock makes sure the pte_t* won't go away from under us.
 
 Signed-off-by: Peter Xu <peterx@redhat.com>
 ---
- mm/hugetlb.c | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+ mm/hugetlb.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 61a1fa678172..5ef883184885 100644
+index 5ef883184885..fc49e3ca8acd 100644
 --- a/mm/hugetlb.c
 +++ b/mm/hugetlb.c
-@@ -7008,6 +7008,13 @@ pte_t *huge_pmd_share(struct mm_struct *mm, struct vm_area_struct *vma,
- 	spinlock_t *ptl;
+@@ -6222,9 +6222,10 @@ struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
+ 	if (WARN_ON_ONCE(flags & FOLL_PIN))
+ 		return NULL;
  
- 	i_mmap_lock_read(mapping);
-+
-+	/*
-+	 * NOTE: even if we've got the vma read lock, here we still need to
-+	 * take the walker lock, because we're not walking the current vma,
-+	 * but some other mm's!
-+	 */
 +	hugetlb_walker_lock();
- 	vma_interval_tree_foreach(svma, &mapping->i_mmap, idx, idx) {
- 		if (svma == vma)
- 			continue;
-@@ -7016,12 +7023,15 @@ pte_t *huge_pmd_share(struct mm_struct *mm, struct vm_area_struct *vma,
- 		if (saddr) {
- 			spte = huge_pte_offset(svma->vm_mm, saddr,
- 					       vma_mmu_pagesize(svma));
--			if (spte) {
--				get_page(virt_to_page(spte));
-+			/*
-+			 * When page ref==0, it means it's probably being
-+			 * freed; continue with the next one.
-+			 */
-+			if (spte && get_page_unless_zero(virt_to_page(spte)))
- 				break;
--			}
- 		}
- 	}
-+	hugetlb_walker_unlock();
+ 	pte = huge_pte_offset(mm, haddr, huge_page_size(h));
+ 	if (!pte)
+-		return NULL;
++		goto out_unlock;
  
- 	if (!spte)
- 		goto out;
+ 	ptl = huge_pte_lock(h, mm, pte);
+ 	entry = huge_ptep_get(pte);
+@@ -6247,6 +6248,8 @@ struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
+ 	}
+ out:
+ 	spin_unlock(ptl);
++out_unlock:
++	hugetlb_walker_unlock();
+ 	return page;
+ }
+ 
 -- 
 2.37.3
 
