@@ -2,556 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C6DE62FBD6
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 18:42:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCDA662FBE4
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 18:45:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242172AbiKRRmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 12:42:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39434 "EHLO
+        id S242115AbiKRRpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 12:45:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242514AbiKRRmC (ORCPT
+        with ESMTP id S242112AbiKRRoy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 12:42:02 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 388DF205EA
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 09:42:01 -0800 (PST)
-Received: from mail-yb1-f198.google.com (mail-yb1-f198.google.com [209.85.219.198])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 9A36E3F135
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 17:41:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1668793319;
-        bh=qLey4Ba7Mxtw0us/UV6dihBauJ7yWiM395MsIE8wApA=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=vAByh9F9prD5C7jVoI5WllEShDhDZ7e4Ybt6a+XIagpttImpkVskNrCmyB2MXrUun
-         a1Zs9saHmBnBRWPZuzt4BcfdshnhpAQL4xBfpJN2QCAewYm4nT8TB0FzLwznE1vHtK
-         2wkMyePj1qThlKQCAE5dy7JcuHF62kBwlqrlewmL9jXpbJhGtMECq3IIEC96wGQEx8
-         VaZAXGPSm2wlsXfzy5eRh5jWeF28cKpHM6rJ2w8B2wx/ABTL4moTlLbN8byqAh3xZ0
-         VeuGYkIFqJ2zGupmekr3BaW7k4l+fpbXWz6fC6puZf8iiduVVAwbn66UdrN01/dofJ
-         /DIkiLlWiGNWQ==
-Received: by mail-yb1-f198.google.com with SMTP id f8-20020a25bd88000000b006dda2c86272so5032272ybh.5
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 09:41:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qLey4Ba7Mxtw0us/UV6dihBauJ7yWiM395MsIE8wApA=;
-        b=XnCvmDbsBAon4h1RwnttORw772OR0GltS+xPspZf6m0+Rtf/IIURkRUL7xnaYXJgd2
-         TC+pJbwUiNspLRPQed/fg8AYtZfJ6mOz6FXCLqR/dS3/yHlg1KoV+tsTYGQjOl3IN0dT
-         FWZNalkXZTjubCWOwraPHLrRy3jj810yWvkAArcCZxEPahlyur2Rt/QIywsHRGdwVwYP
-         nPd5femESDn+hGAPJbUPYcpIPE3XMLXTfSx+S6YIZlf9bhsdyH7LqV/A+7H1qPZAO04Z
-         DfmB1Dlf47w5NCdNb9Wijrq6+ILYcOGlG92jfhbBFebhPCxnTZGesY1F8ZwIGHKO6ROP
-         2sPg==
-X-Gm-Message-State: ANoB5pndqqMS64BpnWfdHHxGWHOZfmg1HjvaUdy7gcDcZCmSZ+ImPii5
-        giWHWYpMX+xstzC2pQxGfFb1D3T2tmlHzgD6bGDOA3Su6FpUhawFVoX6VEzRxe5B3SszuhU67OU
-        jlbxDqJxvAHyiN0v23wdBlnv/akXo6DlAXk59EcvciyvCo+DNajIoXIVvyQ==
-X-Received: by 2002:a81:f805:0:b0:378:5e3a:8fad with SMTP id z5-20020a81f805000000b003785e3a8fadmr7457706ywm.78.1668793318237;
-        Fri, 18 Nov 2022 09:41:58 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4PkW+6KwpVvLH2wd9J3iZgdBdQhcmyZXoHDHAcHA8dDEtYWlt6rNtwZ6kj+9lJNFCDSMCd2DTRoG1ielpT8Rg=
-X-Received: by 2002:a81:f805:0:b0:378:5e3a:8fad with SMTP id
- z5-20020a81f805000000b003785e3a8fadmr7457682ywm.78.1668793317939; Fri, 18 Nov
- 2022 09:41:57 -0800 (PST)
+        Fri, 18 Nov 2022 12:44:54 -0500
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C9665B58D;
+        Fri, 18 Nov 2022 09:44:53 -0800 (PST)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AIH05ip006042;
+        Fri, 18 Nov 2022 09:44:04 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=s2048-2021-q4;
+ bh=KkW6Zh8aGXp6Hj2eR6SGLTqOBGxbVqwPjm2gtTXtg18=;
+ b=DWrsfhAhWDOP9ldeSdz3S93a5ymRHlEscq+KNvLNnXe2rQqnsST2R4xQdeIkSaFoi9gQ
+ pcVt4Mw5WBTUgOd1hNsNBlhmV6wurlbRrBZnlClA+mqSx1OHXLawJeLm3BPglQ7E9sKe
+ VjTZVIJQgeBZg+bMvge/Rq+Xdd2gYMcCOiPM7OTiDEvalufuqYZX733Hb9P3SixlszH3
+ VyZ16CtY5dVWZrS+KLQVK9AigKBg89u97QBTVyuCT03h1ZhmWuIHFqiSeh45zYtmNloQ
+ oVSgL2KeGASq8gbqaQJt7M70Lj33TAWeOyFGlMXT65IUvEwvI3YvvR8V+N3KE0WFlnY1 sg== 
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2174.outbound.protection.outlook.com [104.47.56.174])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3kx0w7vux3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 18 Nov 2022 09:44:04 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PyTO1Mzq5wg/DAhfMh42y3CgufDBWF8IpbmXew3pIXsjcKPe7+el0GbLlHoKfNKC9DC1yPuIrqewyNqnwxPD/coaKo8vpovjqEPAWgalADVFI/UiAYyyUsKivKDjf6VyuNy5emfC8VTg1ycRA7fwn6GIMEJxyaUzEmwkZPXzGJzKUOVlnyWNCXR/XW7BCsl7T2tupRZsJaGYhZIFtA98UGNsrEyTjWvkD72cfTSPQOSOhTuutbppqaCj/Zm+2Tia8WamSnKzqmMWTt/xAYHbdMu338NQkPhMT08QWdxZAn7ygLKDoe7yhwDfDibTUX7DEkleERSbqaj9KCfkiCCDrA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KkW6Zh8aGXp6Hj2eR6SGLTqOBGxbVqwPjm2gtTXtg18=;
+ b=Lv/+pbsBPJcP/63FvspJsxeFGbxVLxWJU4BPuIarcAi/QpEfJgNakJAbL/pYfJeG+pXQRLj6v+SxwU9kqnv1VC0vRuFfcJiYN3A3AnsgM4CPVaN4YOPLiFECALaBdNh1MzQUfvWAKkxX0Fkzrt+jxZ8UYkaFfjxe2ReS1mF3iCk8OaOteegFJTBGdU5P3kfhT7z1/PAv/JK8bdUdZvzcn0QdRaPZmGyYlGa/BDxffiWAubbqcH/X4HqGNO1lMEIqRaQcW47yLtDt0ItkhONd5qsWe0V2M1/poAuVE9y7uDo3AxUqax4CYjaZDSuQg82gZ1L8YAjf/WC5Rhou94oNOw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from MN2PR15MB4287.namprd15.prod.outlook.com (2603:10b6:208:1b6::13)
+ by PH0PR15MB4541.namprd15.prod.outlook.com (2603:10b6:510:86::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.9; Fri, 18 Nov
+ 2022 17:44:02 +0000
+Received: from MN2PR15MB4287.namprd15.prod.outlook.com
+ ([fe80::563a:dd91:dd5:6a8f]) by MN2PR15MB4287.namprd15.prod.outlook.com
+ ([fe80::563a:dd91:dd5:6a8f%7]) with mapi id 15.20.5813.020; Fri, 18 Nov 2022
+ 17:44:02 +0000
+Message-ID: <43d5d1f5-c01d-c0db-b421-386331c2b8c1@meta.com>
+Date:   Fri, 18 Nov 2022 12:44:00 -0500
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.2
+Subject: Re: [RFC 0/1] BPF tracing for arm64 using fprobe
+Content-Language: en-US
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Florent Revest <revest@chromium.org>,
+        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        KP Singh <kpsingh@kernel.org>,
+        Brendan Jackman <jackmanb@google.com>, markowsky@google.com,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Xu Kuohai <xukuohai@huawei.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Peter Zijlstra <peterz@infradead.org>
+References: <20221108220651.24492-1-revest@chromium.org>
+ <CAADnVQ+BWpzqOV8dGCR=A3dR3u60CkBkqSXEQHe2kVqFzsgnHw@mail.gmail.com>
+ <20221117121617.4e1529d3@gandalf.local.home>
+ <d24cded7-87b1-89f5-fc2a-5346669f6d57@meta.com>
+ <20221117174030.0170cd36@gandalf.local.home>
+ <Y3e0KtnQrudxiZbz@FVFF77S0Q05N.cambridge.arm.com>
+ <20221118114519.2711d890@gandalf.local.home>
+From:   Chris Mason <clm@meta.com>
+In-Reply-To: <20221118114519.2711d890@gandalf.local.home>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-ClientProxiedBy: MN2PR20CA0005.namprd20.prod.outlook.com
+ (2603:10b6:208:e8::18) To MN2PR15MB4287.namprd15.prod.outlook.com
+ (2603:10b6:208:1b6::13)
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN2PR15MB4287:EE_|PH0PR15MB4541:EE_
+X-MS-Office365-Filtering-Correlation-Id: d72939f2-3aa0-4913-e3d0-08dac98c7b19
+X-FB-Source: Internal
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: crxQhvD5SlIc1dh//aMlRxzRBJDu03nYkj9H3yKHiV3K4XwIRdVwgPKMm2IF9qyYkfH1sbn2RomyyImVEDCh/jzpHdIR4g0To91yeuZvFtOIMXYvMgqUW7j90LhpVqfz9LXiHYMzhpLFVzEZM3/z+rGg4S1QOr5J3TawizqlUaGDCS9QL+REZP5g5KWpHu2KMW64rcGvfzPwc9NfmvpEya5biFDwnyL5BpNvH4m7rfHW39UZQyFER6e+M0Y7v75gEwwz0yme901nOhFVP99cm3PrCoo27LU6jsFEbBUJv/mpvtO2aqEpPAOar1sRTDBc5iktdK9obDd+Z4z6nhUbHCjpz2gL1GmtOzRECsYlxlejrO4ZmfGIhKkzp7to/O/W/gL/b/VFnl4RA5OfzCyEsKrDez7BQIT7PL71V494nP1lMcIbyqyKMh2t60tqV1q9Fx3OYI9NI1WOhicstKywvx9UA7ezmiMgF2E75nKyXorgSINzIYJgluM1uej4unj4K1keX4RPo3vmj+RCMRgZfdQrjYAP9KrPxK33yhKuiey3dK6bHlfHBXT09h7ZikBiiaf58VtdHTi3oXP4/hTnMLZjJCGqWqg8eZtj3u6nLuPhrZUpXB513Jt15GHq4v/Phv6tu4QAgLIt0YS7UrcIUdwUqVQocpt0cwZ3esETTSId8uSVd0NKzgV8wQmICSokYa6NoW4Cmfp9o+9kcbhNF2A3kdNQQHoAY2d/bEpDczSQ6jnHwZwRShbyoISiU6Lh
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR15MB4287.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(396003)(366004)(346002)(136003)(376002)(451199015)(36756003)(31696002)(86362001)(38100700002)(6506007)(54906003)(31686004)(110136005)(53546011)(316002)(966005)(6486002)(478600001)(7416002)(5660300002)(186003)(2616005)(8936002)(83380400001)(2906002)(6512007)(41300700001)(8676002)(4326008)(66476007)(66946007)(66556008)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZUZtZ0JkMm5WY0hzNkMzMWVyR1pZeEh6UUw0NFZsWllaYmhPTlZLWnFaUFJV?=
+ =?utf-8?B?S0xPVW1YK2Jmdlc0Z0x5M1doalRHTTZJOUhIcHd2NkVnWENraStZOEVnU0V2?=
+ =?utf-8?B?OCtQeEtQZWMyMU9mK2ZsQ2FHcFEvbTNrb0VFdFhYSG43cEZtU1lCeU1yMzhC?=
+ =?utf-8?B?Y1lJWEN5U1h6RWc2SGIxTFVZVVQwbTNwUzNPK0JJdUlCZUVZMVEzY2pWQlc4?=
+ =?utf-8?B?OFdWVnkvMjhPYmRsdHdPelVUNFBPRk4zYzhwWjFzdTlDTGVVOUhjNytvNE1N?=
+ =?utf-8?B?TGJmalIreVVZV0RyeVVtcmVOeFlTeTg1NEx1NTRDcmhWS05vVkpuWDgxWWUy?=
+ =?utf-8?B?SVF4Z0Z4K01vcjlNdmxkYVVqNmo2cWhyUGhhZXE4dkUyZnNTblBlQlhxOWZL?=
+ =?utf-8?B?eEN3OFZBcWlrZnNLRjBqeVBOS2VBVXF1YVFMTWwvV29ONi9ud3NmVXlmMEJJ?=
+ =?utf-8?B?MmE2N1ZvUFBlYkRUMEhmdit0bDQyb21JdzdyaUJPWFlOS3h0SlJySlkyVjJs?=
+ =?utf-8?B?dUQrMHgvNmNkY2JidmlnMi9mdUI3KzBBRVZ2Zm1nL01TUjRjOFFrZkh2VGtE?=
+ =?utf-8?B?TEtibUZWM1d2bm5hbDlvYlh2UG5oRUdGTTJDRjJSd1VjcHBTVWpYdmkzaHR0?=
+ =?utf-8?B?aWRCNUVZaWlvNFFIZkR5MXkreDlGZVFSRHhtekpuZXYzTkNyNUpyckkzWTZC?=
+ =?utf-8?B?VlFOL0c5dEhhZTBPa3Mya2J2NkJ1MkEyY0xxd3ZvTEZObDdSK1MwdkJMcmNl?=
+ =?utf-8?B?T0hJZ1g3LzlaRW4zMHlHWEE2eExXZUVFNmd4dkF6WWpraThGQkxmLzBESnZn?=
+ =?utf-8?B?R3h3YmNNWHBiWjJLNjBzTWYyZktkNVNqSStXejIwaExxR1JoSGxhSnlnZlpE?=
+ =?utf-8?B?VG9UQTgzUXNXS09CUUpKY3dJbzhTS0Zld0FZamNNNDJZT3M1T3A1WkRYaHFX?=
+ =?utf-8?B?b09mdjhkaXZvczZFdmdNUjc0dVpHVFNnZjdjN3dJNFJrMnJOOWN0elZKUS9s?=
+ =?utf-8?B?UVlrdVVaTEdKc2tyUFMrdzdsb1pDcEl6bnI4VXVaRUFFbFZaTDdSMkMyOCs4?=
+ =?utf-8?B?czFXQnlKejdkQXZabU5BREp3MW1BOEZ0Y01RM09xeTVEN1kzNHgxZUZZQklQ?=
+ =?utf-8?B?Y0xIbTJ1czhyb0U2S1VDT0ozYXdMbm9IenVmbnRpTTZ6NXROeWl4ZmdKejhK?=
+ =?utf-8?B?emJRVjdwR3g4VzZ6b01PQ1FNZ2pMb2lFMW1MMVluRmorVlJpY1VNL2RoR09W?=
+ =?utf-8?B?TEZmc292SmNrbHpKOG1WemJhTFhBc20vM2Z1L0wyOXNmdFpGS29lRUQ5RXZE?=
+ =?utf-8?B?TUdENVNjbW1mMjM0cDY5Y3Z3QzVnZUN5OUdZQi9aYzByYzg3WGVVdTQwZUFP?=
+ =?utf-8?B?ZlFSc1F0OUJGbEVhZHVLamprdk45N09oaE9JOXN1WGlrSmFtWjEzMnpFeTdG?=
+ =?utf-8?B?cG5vbHZrMHgzSFJMWi9mNUtRd1VuTWNzYkZsOGtRQUNtcUhIVnhUV3hTUm9y?=
+ =?utf-8?B?Z1ZzL2ptekRuSVEvc0VoRkltS2Y1SDBCNUhyejJVemVpbUcrUlN6M1pIUUlj?=
+ =?utf-8?B?QXJyZHkxbnNoREFtK2ZEZzh0VUhLaWxVRDJPalZQSHcxQ0JtZFhCeE5reWsv?=
+ =?utf-8?B?bnJZSWM5QWh0cFhrMmR6dFRzckdpdGlmanR1bktnMm83aUdxdzRPd2VjdjhT?=
+ =?utf-8?B?aUI4WHZaQVNBVUdVNVgvZ1JDZFJtbTNPdFRLNlQvVVBDT05BaWNwcm9vSnVS?=
+ =?utf-8?B?QWRaQU5tT0NKem9ZYzhyY3RDYmx3ZVRqMk9qNks4T2RhclZIbkZoRGRBUk43?=
+ =?utf-8?B?RWgxaVNXamUxT2tRcllLSW94bjhNUmplSUN6Y2NqMU5tT1B2ZUpzZk1wbFlP?=
+ =?utf-8?B?cW05MG5OQkRwd1NVWjFocys2cDhsbm9hTEhveEkzTHM4czM4TXdIV1JFWXhL?=
+ =?utf-8?B?N2ZTZ0RtQ2pTSzBjU1pwdTRwb2hBL1orNmZaSzFkaEhpdm5nYWIvS09GeGlN?=
+ =?utf-8?B?MVdjaldFSHZJUHc3VzhLdnlDd0ZTMVYwT2pwM2JxcVFTeW95ek1XaEJXZWFB?=
+ =?utf-8?B?RkgzVE1oRlhvMWFYMHdCS1hUNEt1K21nc0JWWk9QaU5jaENZWFF2TUhlSDJp?=
+ =?utf-8?B?ZGJKSXd5UG1XdXM4QlFXdWtvVnNvdWlqLzJRY2xFS2ZTZWRCZm9JT0hWTWVD?=
+ =?utf-8?B?c0E9PQ==?=
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d72939f2-3aa0-4913-e3d0-08dac98c7b19
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR15MB4287.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2022 17:44:02.6120
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: on19FzWNIP3x2BRcCwyvse/BUXc+l+eWdI0f5U6saHmOuKSzs7DAC0+BJ/+OOgv7
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR15MB4541
+X-Proofpoint-ORIG-GUID: Gy-wviDedfuFtxjT78GZdf_iyseylS05
+X-Proofpoint-GUID: Gy-wviDedfuFtxjT78GZdf_iyseylS05
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <20221118011714.70877-1-hal.feng@starfivetech.com> <20221118011714.70877-7-hal.feng@starfivetech.com>
-In-Reply-To: <20221118011714.70877-7-hal.feng@starfivetech.com>
-From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Date:   Fri, 18 Nov 2022 18:41:41 +0100
-Message-ID: <CAJM55Z9PXVLfFTPuyELR4ov22ENfEXZfJAJdLgURA+R4mcH_eg@mail.gmail.com>
-Subject: Re: [PATCH v2 6/8] riscv: dts: starfive: Add initial StarFive JH7110
- device tree
-To:     Hal Feng <hal.feng@starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-18_06,2022-11-18_01,2022-06-22_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Nov 2022 at 02:17, Hal Feng <hal.feng@starfivetech.com> wrote:
->
-> From: Emil Renner Berthing <kernel@esmil.dk>
->
-> Add initial device tree for the JH7110 RISC-V SoC by StarFive
-> Technology Ltd.
->
-> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> Co-developed-by: Jianlong Huang <jianlong.huang@starfivetech.com>
-> Signed-off-by: Jianlong Huang <jianlong.huang@starfivetech.com>
-> Co-developed-by: Hal Feng <hal.feng@starfivetech.com>
-> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
-> ---
->  arch/riscv/boot/dts/starfive/jh7110.dtsi | 437 +++++++++++++++++++++++
->  1 file changed, 437 insertions(+)
->  create mode 100644 arch/riscv/boot/dts/starfive/jh7110.dtsi
->
-> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> new file mode 100644
-> index 000000000000..c22e8f1d2640
-> --- /dev/null
-> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> @@ -0,0 +1,437 @@
-> +// SPDX-License-Identifier: GPL-2.0 OR MIT
-> +/*
-> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
-> + * Copyright (C) 2022 Emil Renner Berthing <kernel@esmil.dk>
-> + */
-> +
-> +/dts-v1/;
-> +#include <dt-bindings/clock/starfive-jh7110.h>
-> +#include <dt-bindings/reset/starfive-jh7110.h>
-> +
-> +/ {
-> +       compatible = "starfive,jh7110";
-> +       #address-cells = <2>;
-> +       #size-cells = <2>;
-> +
-> +       cpus {
-> +               #address-cells = <1>;
-> +               #size-cells = <0>;
-> +
-> +               S76_0: cpu@0 {
-> +                       compatible = "sifive,u74-mc", "riscv";
-> +                       reg = <0>;
-> +                       d-cache-block-size = <64>;
-> +                       d-cache-sets = <64>;
-> +                       d-cache-size = <8192>;
-> +                       d-tlb-sets = <1>;
-> +                       d-tlb-size = <40>;
-> +                       device_type = "cpu";
-> +                       i-cache-block-size = <64>;
-> +                       i-cache-sets = <64>;
-> +                       i-cache-size = <16384>;
-> +                       i-tlb-sets = <1>;
-> +                       i-tlb-size = <40>;
-> +                       mmu-type = "riscv,sv39";
-> +                       next-level-cache = <&ccache>;
-> +                       riscv,isa = "rv64imac";
-> +                       tlb-split;
-> +                       status = "disabled";
-> +
-> +                       cpu0_intc: interrupt-controller {
-> +                               compatible = "riscv,cpu-intc";
-> +                               interrupt-controller;
-> +                               #interrupt-cells = <1>;
-> +                       };
-> +               };
-> +
-> +               U74_1: cpu@1 {
-> +                       compatible = "sifive,u74-mc", "riscv";
-> +                       reg = <1>;
-> +                       d-cache-block-size = <64>;
-> +                       d-cache-sets = <64>;
-> +                       d-cache-size = <32768>;
-> +                       d-tlb-sets = <1>;
-> +                       d-tlb-size = <40>;
-> +                       device_type = "cpu";
-> +                       i-cache-block-size = <64>;
-> +                       i-cache-sets = <64>;
-> +                       i-cache-size = <32768>;
-> +                       i-tlb-sets = <1>;
-> +                       i-tlb-size = <40>;
-> +                       mmu-type = "riscv,sv39";
-> +                       next-level-cache = <&ccache>;
-> +                       riscv,isa = "rv64imafdc";
-> +                       tlb-split;
-> +
-> +                       cpu1_intc: interrupt-controller {
-> +                               compatible = "riscv,cpu-intc";
-> +                               interrupt-controller;
-> +                               #interrupt-cells = <1>;
-> +                       };
-> +               };
-> +
-> +               U74_2: cpu@2 {
-> +                       compatible = "sifive,u74-mc", "riscv";
-> +                       reg = <2>;
-> +                       d-cache-block-size = <64>;
-> +                       d-cache-sets = <64>;
-> +                       d-cache-size = <32768>;
-> +                       d-tlb-sets = <1>;
-> +                       d-tlb-size = <40>;
-> +                       device_type = "cpu";
-> +                       i-cache-block-size = <64>;
-> +                       i-cache-sets = <64>;
-> +                       i-cache-size = <32768>;
-> +                       i-tlb-sets = <1>;
-> +                       i-tlb-size = <40>;
-> +                       mmu-type = "riscv,sv39";
-> +                       next-level-cache = <&ccache>;
-> +                       riscv,isa = "rv64imafdc";
-> +                       tlb-split;
-> +
-> +                       cpu2_intc: interrupt-controller {
-> +                               compatible = "riscv,cpu-intc";
-> +                               interrupt-controller;
-> +                               #interrupt-cells = <1>;
-> +                       };
-> +               };
-> +
-> +               U74_3: cpu@3 {
-> +                       compatible = "sifive,u74-mc", "riscv";
-> +                       reg = <3>;
-> +                       d-cache-block-size = <64>;
-> +                       d-cache-sets = <64>;
-> +                       d-cache-size = <32768>;
-> +                       d-tlb-sets = <1>;
-> +                       d-tlb-size = <40>;
-> +                       device_type = "cpu";
-> +                       i-cache-block-size = <64>;
-> +                       i-cache-sets = <64>;
-> +                       i-cache-size = <32768>;
-> +                       i-tlb-sets = <1>;
-> +                       i-tlb-size = <40>;
-> +                       mmu-type = "riscv,sv39";
-> +                       next-level-cache = <&ccache>;
-> +                       riscv,isa = "rv64imafdc";
-> +                       tlb-split;
-> +
-> +                       cpu3_intc: interrupt-controller {
-> +                               compatible = "riscv,cpu-intc";
-> +                               interrupt-controller;
-> +                               #interrupt-cells = <1>;
-> +                       };
-> +               };
-> +
-> +               U74_4: cpu@4 {
-> +                       compatible = "sifive,u74-mc", "riscv";
-> +                       reg = <4>;
-> +                       d-cache-block-size = <64>;
-> +                       d-cache-sets = <64>;
-> +                       d-cache-size = <32768>;
-> +                       d-tlb-sets = <1>;
-> +                       d-tlb-size = <40>;
-> +                       device_type = "cpu";
-> +                       i-cache-block-size = <64>;
-> +                       i-cache-sets = <64>;
-> +                       i-cache-size = <32768>;
-> +                       i-tlb-sets = <1>;
-> +                       i-tlb-size = <40>;
-> +                       mmu-type = "riscv,sv39";
-> +                       next-level-cache = <&ccache>;
-> +                       riscv,isa = "rv64imafdc";
-> +                       tlb-split;
-> +
-> +                       cpu4_intc: interrupt-controller {
-> +                               compatible = "riscv,cpu-intc";
-> +                               interrupt-controller;
-> +                               #interrupt-cells = <1>;
-> +                       };
-> +               };
-> +
-> +               cpu-map {
-> +                       cluster0 {
-> +                               core0 {
-> +                                       cpu = <&S76_0>;
-> +                               };
-> +
-> +                               core1 {
-> +                                       cpu = <&U74_1>;
-> +                               };
-> +
-> +                               core2 {
-> +                                       cpu = <&U74_2>;
-> +                               };
-> +
-> +                               core3 {
-> +                                       cpu = <&U74_3>;
-> +                               };
-> +
-> +                               core4 {
-> +                                       cpu = <&U74_4>;
-> +                               };
-> +                       };
-> +               };
-> +       };
-> +
-> +       osc: osc {
-> +               compatible = "fixed-clock";
-> +               #clock-cells = <0>;
-> +               /* This value must be overridden by the board */
-> +               clock-frequency = <0>;
-> +       };
-> +
-> +       clk_rtc: clk_rtc {
-> +               compatible = "fixed-clock";
-> +               #clock-cells = <0>;
-> +               /* This value must be overridden by the board */
-> +               clock-frequency = <0>;
-> +       };
-> +
-> +       gmac0_rmii_refin: gmac0_rmii_refin {
-> +               compatible = "fixed-clock";
-> +               #clock-cells = <0>;
-> +               /* This value must be overridden by the board */
-> +               clock-frequency = <0>;
-> +       };
-> +
-> +       gmac0_rgmii_rxin: gmac0_rgmii_rxin {
-> +               compatible = "fixed-clock";
-> +               #clock-cells = <0>;
-> +               /* This value must be overridden by the board */
-> +               clock-frequency = <0>;
-> +       };
-> +
-> +       gmac1_rmii_refin: gmac1_rmii_refin {
-> +               compatible = "fixed-clock";
-> +               #clock-cells = <0>;
-> +               /* This value must be overridden by the board */
-> +               clock-frequency = <0>;
-> +       };
-> +
-> +       gmac1_rgmii_rxin: gmac1_rgmii_rxin {
-> +               compatible = "fixed-clock";
-> +               #clock-cells = <0>;
-> +               /* This value must be overridden by the board */
-> +               clock-frequency = <0>;
-> +       };
-> +
-> +       i2stx_bclk_ext: i2stx_bclk_ext {
-> +               compatible = "fixed-clock";
-> +               #clock-cells = <0>;
-> +               /* This value must be overridden by the board */
-> +               clock-frequency = <0>;
-> +       };
-> +
-> +       i2stx_lrck_ext: i2stx_lrck_ext {
-> +               compatible = "fixed-clock";
-> +               #clock-cells = <0>;
-> +               /* This value must be overridden by the board */
-> +               clock-frequency = <0>;
-> +       };
-> +
-> +       i2srx_bclk_ext: i2srx_bclk_ext {
-> +               compatible = "fixed-clock";
-> +               #clock-cells = <0>;
-> +               /* This value must be overridden by the board */
-> +               clock-frequency = <0>;
-> +       };
-> +
-> +       i2srx_lrck_ext: i2srx_lrck_ext {
-> +               compatible = "fixed-clock";
-> +               #clock-cells = <0>;
-> +               /* This value must be overridden by the board */
-> +               clock-frequency = <0>;
-> +       };
-> +
-> +       tdm_ext: tdm_ext {
-> +               compatible = "fixed-clock";
-> +               #clock-cells = <0>;
-> +               /* This value must be overridden by the board */
-> +               clock-frequency = <0>;
-> +       };
-> +
-> +       mclk_ext: mclk_ext {
-> +               compatible = "fixed-clock";
-> +               #clock-cells = <0>;
-> +               /* This value must be overridden by the board */
-> +               clock-frequency = <0>;
-> +       };
-> +
-> +       soc {
+On 11/18/22 11:45 AM, Steven Rostedt wrote:
+> On Fri, 18 Nov 2022 16:34:50 +0000
+> Mark Rutland <mark.rutland@arm.com> wrote:
+> 
+>>> Not alarmist, but concern as being able to modify what a kernel function can
+>>> do is not something I take lightly.
+>>
+>> FWIW, given that the aim here seems to be to expose all kernel internals to be
+>> overridden arbitrarily, I'm also concerned that there's a huge surface area for
+>> issues with maintainability, robustness/correctness, and security.
+>>
+>> I really don't want to be stuck in a position where someone argues that all
+>> kernel internal functions are ABI and need to stay around as-is to be hooked by
+>> eBPF, and I hope that we all agree that there are no guarantees on that front.
+> 
 
-Please sort these nodes after their address like the jh7100.dtsi.
-That is sort the nodes after @<number>.
+For ABI concerns, I don't think we're doing anything fundamentally
+different from x86 here.  So unless our ARM users are substantially more
+exciting than the x86 crowd, it should all fall under the discussion
+from maintainer's summit:
 
-> +               compatible = "simple-bus";
-> +               interrupt-parent = <&plic>;
-> +               #address-cells = <2>;
-> +               #size-cells = <2>;
-> +               ranges;
-> +
-> +               clint: clint@2000000 {
-> +                       compatible = "starfive,jh7110-clint", "sifive,clint0";
-> +                       reg = <0x0 0x2000000 0x0 0x10000>;
-> +                       interrupts-extended = <&cpu0_intc 3>, <&cpu0_intc 7>,
-> +                                             <&cpu1_intc 3>, <&cpu1_intc 7>,
-> +                                             <&cpu2_intc 3>, <&cpu2_intc 7>,
-> +                                             <&cpu3_intc 3>, <&cpu3_intc 7>,
-> +                                             <&cpu4_intc 3>, <&cpu4_intc 7>;
-> +               };
-> +
-> +               plic: plic@c000000 {
-> +                       compatible = "starfive,jh7110-plic", "sifive,plic-1.0.0";
-> +                       reg = <0x0 0xc000000 0x0 0x4000000>;
-> +                       interrupts-extended = <&cpu0_intc 11>,
-> +                                             <&cpu1_intc 11>, <&cpu1_intc 9>,
-> +                                             <&cpu2_intc 11>, <&cpu2_intc 9>,
-> +                                             <&cpu3_intc 11>, <&cpu3_intc 9>,
-> +                                             <&cpu4_intc 11>, <&cpu4_intc 9>;
-> +                       interrupt-controller;
-> +                       #interrupt-cells = <1>;
-> +                       #address-cells = <0>;
-> +                       riscv,ndev = <136>;
-> +               };
-> +
-> +               ccache: cache-controller@2010000 {
-> +                       compatible = "starfive,jh7110-ccache", "cache";
-> +                       reg = <0x0 0x2010000 0x0 0x4000>;
-> +                       interrupts = <1>, <3>, <4>, <2>;
-> +                       cache-block-size = <64>;
-> +                       cache-level = <2>;
-> +                       cache-sets = <2048>;
-> +                       cache-size = <2097152>;
-> +                       cache-unified;
-> +               };
-> +
-> +               syscrg: clock-controller@13020000 {
-> +                       compatible = "starfive,jh7110-syscrg";
-> +                       reg = <0x0 0x13020000 0x0 0x10000>;
-> +                       clocks = <&osc>, <&gmac1_rmii_refin>,
-> +                                <&gmac1_rgmii_rxin>,
-> +                                <&i2stx_bclk_ext>, <&i2stx_lrck_ext>,
-> +                                <&i2srx_bclk_ext>, <&i2srx_lrck_ext>,
-> +                                <&tdm_ext>, <&mclk_ext>;
-> +                       clock-names = "osc", "gmac1_rmii_refin",
-> +                                     "gmac1_rgmii_rxin",
-> +                                     "i2stx_bclk_ext", "i2stx_lrck_ext",
-> +                                     "i2srx_bclk_ext", "i2srx_lrck_ext",
-> +                                     "tdm_ext", "mclk_ext";
-> +                       #clock-cells = <1>;
-> +                       #reset-cells = <1>;
-> +               };
-> +
-> +               aoncrg: clock-controller@17000000 {
-> +                       compatible = "starfive,jh7110-aoncrg";
-> +                       reg = <0x0 0x17000000 0x0 0x10000>;
-> +                       clocks = <&osc>, <&clk_rtc>,
-> +                                <&gmac0_rmii_refin>, <&gmac0_rgmii_rxin>,
-> +                                <&syscrg JH7110_SYSCLK_STG_AXIAHB>,
-> +                                <&syscrg JH7110_SYSCLK_APB_BUS_FUNC>,
-> +                                <&syscrg JH7110_SYSCLK_GMAC0_GTXCLK>;
-> +                       clock-names = "osc", "clk_rtc", "gmac0_rmii_refin",
-> +                                     "gmac0_rgmii_rxin", "stg_axiahb",
-> +                                     "apb_bus_func", "gmac0_gtxclk";
-> +                       #clock-cells = <1>;
-> +                       #reset-cells = <1>;
-> +               };
-> +
-> +               gpio: gpio@13040000 {
-> +                       compatible = "starfive,jh7110-sys-pinctrl";
-> +                       reg = <0x0 0x13040000 0x0 0x10000>;
-> +                       reg-names = "control";
-> +                       clocks = <&syscrg JH7110_SYSCLK_IOMUX>;
-> +                       resets = <&syscrg JH7110_SYSRST_IOMUX>;
-> +                       interrupts = <86>;
-> +                       interrupt-controller;
-> +                       #interrupt-cells = <2>;
-> +                       gpio-controller;
-> +                       #gpio-cells = <2>;
-> +               };
-> +
-> +               gpioa: gpio@17020000 {
-> +                       compatible = "starfive,jh7110-aon-pinctrl";
-> +                       reg = <0x0 0x17020000 0x0 0x10000>;
-> +                       reg-names = "control";
-> +                       resets = <&aoncrg JH7110_AONRST_AON_IOMUX>;
-> +                       interrupts = <85>;
-> +                       interrupt-controller;
-> +                       #interrupt-cells = <2>;
-> +                       gpio-controller;
-> +                       #gpio-cells = <2>;
-> +               };
-> +
-> +               uart0: serial@10000000 {
-> +                       compatible = "snps,dw-apb-uart";
-> +                       reg = <0x0 0x10000000 0x0 0x10000>;
-> +                       clocks = <&syscrg JH7110_SYSCLK_UART0_CORE>,
-> +                                <&syscrg JH7110_SYSCLK_UART0_APB>;
-> +                       clock-names = "baudclk", "apb_pclk";
-> +                       resets = <&syscrg JH7110_SYSRST_UART0_APB>;
-> +                       interrupts = <32>;
-> +                       reg-io-width = <4>;
-> +                       reg-shift = <2>;
-> +                       status = "disabled";
-> +               };
-> +
-> +               uart1: serial@10010000 {
-> +                       compatible = "snps,dw-apb-uart";
-> +                       reg = <0x0 0x10010000 0x0 0x10000>;
-> +                       clocks = <&syscrg JH7110_SYSCLK_UART1_CORE>,
-> +                                <&syscrg JH7110_SYSCLK_UART1_APB>;
-> +                       clock-names = "baudclk", "apb_pclk";
-> +                       resets = <&syscrg JH7110_SYSRST_UART1_APB>;
-> +                       interrupts = <33>;
-> +                       reg-io-width = <4>;
-> +                       reg-shift = <2>;
-> +                       status = "disabled";
-> +               };
-> +
-> +               uart2: serial@10020000 {
-> +                       compatible = "snps,dw-apb-uart";
-> +                       reg = <0x0 0x10020000 0x0 0x10000>;
-> +                       clocks = <&syscrg JH7110_SYSCLK_UART2_CORE>,
-> +                                <&syscrg JH7110_SYSCLK_UART2_APB>;
-> +                       clock-names = "baudclk", "apb_pclk";
-> +                       resets = <&syscrg JH7110_SYSRST_UART2_APB>;
-> +                       interrupts = <34>;
-> +                       reg-io-width = <4>;
-> +                       reg-shift = <2>;
-> +                       status = "disabled";
-> +               };
-> +
-> +               uart3: serial@12000000 {
-> +                       compatible = "snps,dw-apb-uart";
-> +                       reg = <0x0 0x12000000 0x0 0x10000>;
-> +                       clocks = <&syscrg JH7110_SYSCLK_UART3_CORE>,
-> +                                <&syscrg JH7110_SYSCLK_UART3_APB>;
-> +                       clock-names = "baudclk", "apb_pclk";
-> +                       resets = <&syscrg JH7110_SYSRST_UART3_APB>;
-> +                       interrupts = <45>;
-> +                       reg-io-width = <4>;
-> +                       reg-shift = <2>;
-> +                       status = "disabled";
-> +               };
-> +
-> +               uart4: serial@12010000 {
-> +                       compatible = "snps,dw-apb-uart";
-> +                       reg = <0x0 0x12010000 0x0 0x10000>;
-> +                       clocks = <&syscrg JH7110_SYSCLK_UART4_CORE>,
-> +                                <&syscrg JH7110_SYSCLK_UART4_APB>;
-> +                       clock-names = "baudclk", "apb_pclk";
-> +                       resets = <&syscrg JH7110_SYSRST_UART4_APB>;
-> +                       interrupts = <46>;
-> +                       reg-io-width = <4>;
-> +                       reg-shift = <2>;
-> +                       status = "disabled";
-> +               };
-> +
-> +               uart5: serial@12020000 {
-> +                       compatible = "snps,dw-apb-uart";
-> +                       reg = <0x0 0x12020000 0x0 0x10000>;
-> +                       clocks = <&syscrg JH7110_SYSCLK_UART5_CORE>,
-> +                                <&syscrg JH7110_SYSCLK_UART5_APB>;
-> +                       clock-names = "baudclk", "apb_pclk";
-> +                       resets = <&syscrg JH7110_SYSRST_UART5_APB>;
-> +                       interrupts = <47>;
-> +                       reg-io-width = <4>;
-> +                       reg-shift = <2>;
-> +                       status = "disabled";
-> +               };
-> +       };
-> +};
-> --
-> 2.38.1
+https://lwn.net/Articles/908464/
+
+> My biggest concern is changing functionality of arbitrary functions by BPF.
+> I would much rather limit what functions BPF could change with some
+> annotation.
+> 
+> int __bpf_modify foo()
+> {
+> 	...
+> }
+> 
+> 
+> That way if somethings not working, you can see directly in the code that
+> the function could be modified by a BPF program, instead of getting some
+> random bug report because a function returned an unexpected result that the
+> code of that function could never produce.
 >
+
+The good news is that BPF generally confines the function replacement
+through struct ops interfaces.  There are also explicit allow lists to
+limit functions where you can do return value overrides etc, so I think
+it's fair to say these concerns are already baked in.  I'm sure they can
+be improved over the long term, but I don't think that's related to this
+set of functionality on ARM.
+
+-chris
+
