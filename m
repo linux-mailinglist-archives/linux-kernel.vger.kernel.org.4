@@ -2,65 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D0FD62FC9D
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 19:24:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7704062FC9E
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 19:25:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242751AbiKRSYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 13:24:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34454 "EHLO
+        id S242790AbiKRSZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 13:25:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242740AbiKRSXX (ORCPT
+        with ESMTP id S242696AbiKRSZI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 13:23:23 -0500
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C86097AB3;
-        Fri, 18 Nov 2022 10:23:22 -0800 (PST)
-Received: by mail-qk1-x72f.google.com with SMTP id x18so4011628qki.4;
-        Fri, 18 Nov 2022 10:23:22 -0800 (PST)
+        Fri, 18 Nov 2022 13:25:08 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2C01942F5
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 10:24:12 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id 62so5641135pgb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 10:24:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kFhfTRZE04WgcQuF4GSi7Znz8Feql0HEC4e01K8E/t8=;
-        b=J/BdePGFFJCe26Q3hhZTT85fJXbohAS8/AFvrrJtFyNQIvzF1h22fgrMiUGPCpATb+
-         TIsSll4zWtskKOQYWUgkd15ZkOvnjwIiHhN6pwQgZa2sZWgJ1QYG8i16hsDAf/tnrrT4
-         66E1om9G0Rwms7yVowsL5P3gyonEvUeHqv6UxpZKL6MM83D956ZcD+aqCwnVIZnVy2CF
-         2pYre5MipdLGqzCqusa2bGfDkAsSw7fKW4OvIlozRwl3kgHCZsKkCHg3S+Bc0H1Tiq+q
-         tnO/ZcMmtiGXeWJk4uCIIsYRpkkAuB37LX2L9qWVe62DRr2KU72tgUywLAIwTgt5vQUp
-         tRIg==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6E6GpRuxKdp+o4hP203uhjB5+UZzDZfAaY7rEhcjmoU=;
+        b=dgQqcKyOimQp9XMKebGUyN62bGP1UyhSB1dXOIepkhFhQ0u7EuSIgK+z8cl7HS0+ax
+         EqjZZK1zIob55ymdYqhT4IwS7jEI8Yeh0p9KpRYMBIqts3w/93LM7KdqmxEccD1GjB0/
+         ruUhKy7pFSb+aul93ooT1CmBJg7TjTKLBPA9SnHqaellRHZbJ+9aPHmTieZMt0Aa+N90
+         1tbhlT0FU6eSn3xTFq7s9fGhTR/ToyRuCe+zP4quCJ5KU4E/4WlTNSheFhu0kfEyKnRB
+         zUueRTftg+8PW0Egi+dD0SaWA7Ydcn2IH4geFv5val8I4nMWaNzp9QjMDd+l0dariIM8
+         437g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kFhfTRZE04WgcQuF4GSi7Znz8Feql0HEC4e01K8E/t8=;
-        b=fGI4oyLZyjQaFGK97Im9tPVmbeUzKvQ5Ralxku1snaAUsO7tEWrOwr0os0edXZW8Tj
-         V3aMZrWBA71ODwdoAu0EfIrqEOnDO+XXEB+a+Q1Tq3Q2lsXOWypOn+W/5VgppKnzewWS
-         ahs14jOUGjVIeK8jmeWgVfA8eJ8ilLYgiXKmhEt4UFtPeCv+nmnhuds1vA/GWcTL2Zoa
-         nbmyoowBfAhYq9xbL26dNBVQZhrXFnKrHrZipRiIeMwcjBZizhB4G7aQfJojklwmZaMQ
-         /EY8tDIv9UCtn0CPofLKSn1weoXy7i2Kr0d1WIhFfkM5AK+diT9IUB9qU7PueHsuwpY5
-         AwOw==
-X-Gm-Message-State: ANoB5pm59NXQCNB0zBTY69xpf5OeZjYmQnBC4KZO6/zfackbGrcWzzW8
-        74AOfLhR2H/zTp0PgvD/iIE6phnGHmg=
-X-Google-Smtp-Source: AA0mqf4IQtvzkhOuQGVqLJRsZe8X3zEtvoktr10FgptMN1YHM7zArHXgltBj5RMrJkfsZ+A7YxZ9SA==
-X-Received: by 2002:a05:620a:43a9:b0:6fa:18a5:376d with SMTP id a41-20020a05620a43a900b006fa18a5376dmr7011427qkp.220.1668795801766;
-        Fri, 18 Nov 2022 10:23:21 -0800 (PST)
-Received: from shaak.xiphos.ca (modemcable055.92-163-184.mc.videotron.ca. [184.163.92.55])
-        by smtp.gmail.com with ESMTPSA id q46-20020a05620a2a6e00b006fbcab95d70sm2349025qkp.101.2022.11.18.10.23.21
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6E6GpRuxKdp+o4hP203uhjB5+UZzDZfAaY7rEhcjmoU=;
+        b=il9z2VrBQxBvPEW3mU2lR40y56CHKS/9ZasuAywkkQzQmW63+O8uL0A8uBNXcdz6Ys
+         B2exOBfKrjrCO/9nKn+Ti3vWtsNcRmZJ0/SgOUtQMd3uwNrRT9ztAJ2MiZgjqA/FLkSq
+         Zx9EJslBj37I1EeJMLrLzQnbHXqPGriwKFvAMDDlqBOPSPK/y2nPrHIxYdkNT/vym4VJ
+         8Hd5fwKKnvzbwxk1PuMBnhz0T3y1lk5jW5KnOpUWCzMBQtCNb/isAYyEuDfSYpjPWXAZ
+         /NzDC7/4kKTp3L/uBB2dh3juJkqs6klHI3TKja+FgMZAWkeW1OjbR8jDfjKuu9X0ohyW
+         al/Q==
+X-Gm-Message-State: ANoB5pl3yBHaeB3ZISJvYIRCNvrP6QrDV+esVeAWpMScw4RTrhryi0t6
+        66xxKshuw4wzhJhkDSxMojnWEwIE7deBrg==
+X-Google-Smtp-Source: AA0mqf5zgsVV7oRh+CV3HKJU4wUgwbbvSp/lEnKSpxJnGLy1BHF55AFr3NEynmec+wCEg86cArFiFA==
+X-Received: by 2002:a63:fa49:0:b0:476:f92f:885b with SMTP id g9-20020a63fa49000000b00476f92f885bmr7784709pgk.31.1668795849138;
+        Fri, 18 Nov 2022 10:24:09 -0800 (PST)
+Received: from localhost (fwdproxy-prn-005.fbsv.net. [2a03:2880:ff:5::face:b00c])
+        by smtp.gmail.com with ESMTPSA id d10-20020a170902654a00b00188fcc4fc00sm2304255pln.79.2022.11.18.10.24.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 10:23:21 -0800 (PST)
-From:   Liam Beguin <liambeguin@gmail.com>
-To:     Liam Beguin <liambeguin@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] math64: fix kernel-doc return value warnings
-Date:   Fri, 18 Nov 2022 13:23:09 -0500
-Message-Id: <20221118182309.3824530-3-liambeguin@gmail.com>
-X-Mailer: git-send-email 2.37.1.223.g6a475b71f8c4
-In-Reply-To: <20221118182309.3824530-1-liambeguin@gmail.com>
-References: <20221118182309.3824530-1-liambeguin@gmail.com>
+        Fri, 18 Nov 2022 10:24:08 -0800 (PST)
+From:   Nhat Pham <nphamcs@gmail.com>
+To:     akpm@linux-foundation.org
+Cc:     hannes@cmpxchg.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, minchan@kernel.org,
+        ngupta@vflare.org, senozhatsky@chromium.org, sjenning@redhat.com,
+        ddstreet@ieee.org, vitaly.wool@konsulko.com
+Subject: [PATCH v5 0/6] Implement writeback for zsmalloc
+Date:   Fri, 18 Nov 2022 10:24:01 -0800
+Message-Id: <20221118182407.82548-1-nphamcs@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,39 +71,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the following kernel-doc warnings by adding a description for return
-values of div_[us]64.
+Changelog:
+v5:
+  * Add a new patch that eliminates unused code in zpool and simplify
+    the logic for storing evict handler in zbud/z3fold (patch 2)
+  * Remove redudant fields in zs_pool (previously required by zpool)
+    (patch 3)
+  * Wrap under_reclaim and deferred handle freeing logic in CONFIG_ZPOOL
+    (patch 6) (suggested by Minchan Kim)
+  * Move a small piece of refactoring from patch 6 to patch 4.
+v4:
+  * Wrap the new LRU logic in CONFIG_ZPOOL (patch 3).
+    (suggested by Minchan Kim)
+v3:
+  * Set pool->ops = NULL when pool->zpool_ops is null (patch 4).
+  * Stop holding pool's lock when calling lock_zspage() (patch 5).
+    (suggested by Sergey Senozhatsky)
+  * Stop holding pool's lock when checking pool->ops and retries.
+    (patch 5) (suggested by Sergey Senozhatsky)
+  * Fix formatting issues (.shrink, extra spaces in casting removed).
+    (patch 5) (suggested by Sergey Senozhatsky)
 
-	math64.h:126: warning: No description found for return value of 'div_u64'
-	math64.h:139: warning: No description found for return value of 'div_s64'
+v2:
+  * Add missing CONFIG_ZPOOL ifdefs (patch 5)
+    (detected by kernel test robot).
 
-Signed-off-by: Liam Beguin <liambeguin@gmail.com>
----
- include/linux/math64.h | 4 ++++
- 1 file changed, 4 insertions(+)
+Unlike other zswap's allocators such as zbud or z3fold, zsmalloc
+currently lacks the writeback mechanism. This means that when the zswap
+pool is full, it will simply reject further allocations, and the pages
+will be written directly to swap.
 
-diff --git a/include/linux/math64.h b/include/linux/math64.h
-index cf3b0099674a..8958f4c005c1 100644
---- a/include/linux/math64.h
-+++ b/include/linux/math64.h
-@@ -120,6 +120,8 @@ extern s64 div64_s64(s64 dividend, s64 divisor);
-  * This is the most common 64bit divide and should be used if possible,
-  * as many 32bit archs can optimize this variant better than a full 64bit
-  * divide.
-+ *
-+ * Return: dividend / divisor
-  */
- #ifndef div_u64
- static inline u64 div_u64(u64 dividend, u32 divisor)
-@@ -133,6 +135,8 @@ static inline u64 div_u64(u64 dividend, u32 divisor)
-  * div_s64 - signed 64bit divide with 32bit divisor
-  * @dividend: signed 64bit dividend
-  * @divisor: signed 32bit divisor
-+ *
-+ * Return: dividend / divisor
-  */
- #ifndef div_s64
- static inline s64 div_s64(s64 dividend, s32 divisor)
--- 
-2.37.1.223.g6a475b71f8c4
+This series of patches implements writeback for zsmalloc. When the zswap
+pool becomes full, zsmalloc will attempt to evict all the compressed
+objects in the least-recently used zspages.
 
+There are 6 patches in this series:
+
+Johannes Weiner (2):
+  zswap: fix writeback lock ordering for zsmalloc
+  zpool: clean out dead code
+
+Nhat Pham (4):
+  zsmalloc: Consolidate zs_pool's migrate_lock and size_class's locks
+  zsmalloc: Add a LRU to zs_pool to keep track of zspages in LRU order
+  zsmalloc: Add zpool_ops field to zs_pool to store evict handlers
+  zsmalloc: Implement writeback mechanism for zsmalloc
+
+ mm/z3fold.c   |  36 +-----
+ mm/zbud.c     |  32 +----
+ mm/zpool.c    |  10 +-
+ mm/zsmalloc.c | 334 ++++++++++++++++++++++++++++++++++++++++----------
+ mm/zswap.c    |  37 +++---
+ 5 files changed, 303 insertions(+), 146 deletions(-)
+
+--
+2.30.2
