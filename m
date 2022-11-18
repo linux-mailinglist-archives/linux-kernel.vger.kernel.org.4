@@ -2,177 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06BA762F851
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 15:53:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CCD962F859
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 15:55:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241679AbiKROxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 09:53:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52310 "EHLO
+        id S235277AbiKROz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 09:55:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235362AbiKROxs (ORCPT
+        with ESMTP id S234724AbiKROzY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 09:53:48 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F205E01C
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 06:53:46 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id g12so8595573lfh.3
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 06:53:46 -0800 (PST)
+        Fri, 18 Nov 2022 09:55:24 -0500
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8AD211C20;
+        Fri, 18 Nov 2022 06:55:20 -0800 (PST)
+Received: by mail-qv1-xf31.google.com with SMTP id h10so3468927qvq.7;
+        Fri, 18 Nov 2022 06:55:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1tEkG622nl9sahUZlEsZMDSytRMxlyYKVto7odTkwcs=;
-        b=mvWELOZg6+Dtx2T6DISq6t8ODYmZVcRawE8A56kfYSw0cPQlGvMuVCOJ3cg6NfGkVT
-         5V6SgNrBfktRz4VIlTyQLyYeEuOwRvcEKxub+XIbBDo3/BNXdMjL50Y8eUl88MaESAv3
-         FsalQj/pSpzzjdfOlRvNr+9Mwcu6V1tUwHonVSvE5ixbWmdfxsGSPRxB+QIUwz2eTPMm
-         QxCLWm7EbCukdXkMvG/MwXSurd0S5fykOOeF0v8p6q8vCtqXOs6zx7vC5V9iBx7P4gYC
-         ugBEPzTwfm3HsNH1bmefO7W62iRU0hElHiohaaKI8n9eWVhYrTIuco3IXYv3eVoAE+y3
-         xQmA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=c8m3ALn8djL3z29Z65yl8MZcN71VcLknqcAUT7X+SXM=;
+        b=lv6Gz+n4VNuWgdsjnPesUhGm3Mb7yfHiUYKOCYyNUWiprlYc6sK810pUkn+e0XkA8P
+         1i6AYYW8mFabsoTfgYSSxypPq4sxzWKTJ83mdbysZ9e0eaPBE4DVAGic7vdzrU8UWCKH
+         RrG0FttRJPHqiQV9Qy21AZkjtO+67iKn2ig0v9hpW0hjJAS7W0KWH9YA2tXZxS6hOXVT
+         9amon9o+pJI4n4bXwR/BFWwJS96ocSNF0k+IkTo/c1Pqd8VXbuLvwjflOnQDuwSvzRBF
+         INI81QAuVsx8QAws9lwfOiHJZCN3BZoSA956I9PbvOYODqZf4PBVgdIBJhedmqxPc7CP
+         CCGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1tEkG622nl9sahUZlEsZMDSytRMxlyYKVto7odTkwcs=;
-        b=AyaObsU8fKimZglAdOEnE4+JzTCQUVNnbeM0sMw6LbU25KP5r+GZcM+OawQHc8uMX0
-         X1Vh6xGyUMP9eFHlIDK7JqGguE/5q6GnivpAELpM//b9tSIw7mNlZiEzMJVEkcaA8j4w
-         X0NvCT1Fe+XvOTomfkJZuMFQOnCsQTuA3Gfrj2rAOFx+qLgOY2DzOyfE+gy8dXSWBdSl
-         S07QIy59amSp/Tl2/shj8NY95Lzf73pJs56Gsk8B0ldkaFZMohaTo9pVPN25/VNCcnIn
-         hliPMNMeMJcxmhgBkJ0NRqfU07fC1lIqkFnmSwuewlaHVmfT1etTk/Z/itt43Cf2IHAO
-         ZVVw==
-X-Gm-Message-State: ANoB5pmJHcrc0BukuPQ7kktYqQASkGvdiF3nUW+2c2x2kfGvl0hOPLbG
-        1lUTX8lha1Cw2mLoOiNDBzX8+Q==
-X-Google-Smtp-Source: AA0mqf62tdo4/gtJCMpEvCmDknR2gWTfsM6qNACTGALCUmV2wU+z03KWct99eh09aEGoFcKqZ7HiEA==
-X-Received: by 2002:a19:f014:0:b0:4b4:a27e:c491 with SMTP id p20-20020a19f014000000b004b4a27ec491mr2675719lfc.479.1668783224568;
-        Fri, 18 Nov 2022 06:53:44 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id e12-20020a05651c110c00b002777a07f48esm684674ljo.12.2022.11.18.06.53.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Nov 2022 06:53:43 -0800 (PST)
-Message-ID: <3b7fbbb4-f79d-f195-612f-4dfd40a66e34@linaro.org>
-Date:   Fri, 18 Nov 2022 15:53:42 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=c8m3ALn8djL3z29Z65yl8MZcN71VcLknqcAUT7X+SXM=;
+        b=qIqmIEWxuDkYusFMvPArEyj2DN6Sp2LhGjPHUfyfUafEUW3s7pNgJ682sNHVKRsSBc
+         y6SWb+NWIqstuu++LVdFYvPYKAC6Yc+D3CjOYlKypW6s2Hhy4vEF9GjUb4qbgfa76KT+
+         7Dx0egNffKPtQo4STSibyLTm/AjXJrseirSlg//Fuztcy+wkwkv9kEo06uxeURU+xMBc
+         fSlS2X6vt5pDamlArUVXHRmmXcSeZeX12GqkjKpjTs6Ia8sJKCsbBEDnHs5V8Fv/OhlC
+         T5vsHUk6oeUKpdI0ExhCJVL46btlnlZliRdoL4VNQ5Km6B431TvfkAe5PLGItt716qDn
+         fcxQ==
+X-Gm-Message-State: ANoB5plq2ctbYu/oVEFuJ5MQZAO2oBaixIpNLj4S0gYqgSSv81d8/Jq3
+        2Oxiok+rm/MevRoDGdpnCIGy/DVFpvEvPQ==
+X-Google-Smtp-Source: AA0mqf60zKIBMMuEdixr0vKQVZLS3dThYUncL8mlya5LxVGBQqrruL0Vgo1Ux0Ffbs9rgK6rk90Jqw==
+X-Received: by 2002:ad4:53c9:0:b0:4c6:8b88:3065 with SMTP id k9-20020ad453c9000000b004c68b883065mr5794524qvv.126.1668783319703;
+        Fri, 18 Nov 2022 06:55:19 -0800 (PST)
+Received: from glsvmlin.ini.cmu.edu (GLSVMLIN.INI.CMU.EDU. [128.2.16.9])
+        by smtp.gmail.com with ESMTPSA id m125-20020a378a83000000b006cbc6e1478csm2397269qkd.57.2022.11.18.06.55.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 06:55:18 -0800 (PST)
+From:   Gabriel Somlo <gsomlo@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, kgugala@antmicro.com, mholenko@antmicro.com,
+        joel@jms.id.au, david.abdurachmanov@gmail.com,
+        florent@enjoy-digital.fr, geert@linux-m68k.org,
+        ilpo.jarvinen@linux.intel.com
+Subject: [PATCH v5 00/14] serial: liteuart: add IRQ support
+Date:   Fri, 18 Nov 2022 09:54:58 -0500
+Message-Id: <20221118145512.509950-1-gsomlo@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 08/12] dt-bindings: timer: convert
- timer/amlogic,meson7-timer.txt to dt-schema
-Content-Language: en-US
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Eric Dumazet <edumazet@google.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     linux-media@vger.kernel.org, netdev@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, linux-mmc@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org
-References: <20221117-b4-amlogic-bindings-convert-v1-0-3f025599b968@linaro.org>
- <20221117-b4-amlogic-bindings-convert-v1-8-3f025599b968@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221117-b4-amlogic-bindings-convert-v1-8-3f025599b968@linaro.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/11/2022 15:33, Neil Armstrong wrote:
-> Convert the Amlogic Meson6 SoCs Timer Controller bindings to dt-schema.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->  .../bindings/timer/amlogic,meson6-timer.txt        | 22 ---------
->  .../bindings/timer/amlogic,meson6-timer.yaml       | 53 ++++++++++++++++++++++
->  2 files changed, 53 insertions(+), 22 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/timer/amlogic,meson6-timer.txt b/Documentation/devicetree/bindings/timer/amlogic,meson6-timer.txt
-> deleted file mode 100644
-> index a9da22bda912..000000000000
-> --- a/Documentation/devicetree/bindings/timer/amlogic,meson6-timer.txt
-> +++ /dev/null
-> @@ -1,22 +0,0 @@
-> -Amlogic Meson6 SoCs Timer Controller
-> -
-> -Required properties:
-> -
-> -- compatible : should be "amlogic,meson6-timer"
-> -- reg : Specifies base physical address and size of the registers.
-> -- interrupts : The four interrupts, one for each timer event
-> -- clocks : phandles to the pclk (system clock) and XTAL clocks
-> -- clock-names : must contain "pclk" and "xtal"
-> -
-> -Example:
-> -
-> -timer@c1109940 {
-> -	compatible = "amlogic,meson6-timer";
-> -	reg = <0xc1109940 0x14>;
-> -	interrupts = <GIC_SPI 10 IRQ_TYPE_EDGE_RISING>,
-> -		     <GIC_SPI 11 IRQ_TYPE_EDGE_RISING>,
-> -		     <GIC_SPI 6 IRQ_TYPE_EDGE_RISING>,
-> -		     <GIC_SPI 29 IRQ_TYPE_EDGE_RISING>;
-> -	clocks = <&xtal>, <&clk81>;
-> -	clock-names = "xtal", "pclk";
-> -};
-> diff --git a/Documentation/devicetree/bindings/timer/amlogic,meson6-timer.yaml b/Documentation/devicetree/bindings/timer/amlogic,meson6-timer.yaml
-> new file mode 100644
-> index 000000000000..ffcb137e720e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/timer/amlogic,meson6-timer.yaml
-> @@ -0,0 +1,53 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/timer/amlogic,meson6-timer.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Amlogic Meson6 SoCs Timer Controller
-> +
-> +maintainers:
-> +  - Neil Armstrong <neil.armstrong@linaro.org>
-> +  - Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: amlogic,meson6-timer
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
+Add IRQ support to the LiteX LiteUART serial interface
 
-I think it is worth to add here description, that these are per-timer
-interrupts.
+Changes from v4:
+  - picked up r/b Ilpo Järvinen on 12/14 and 13/14
+  - 12/14 ("add IRQ support for the RX path"): using dev_err() instead
+    of combining pr_err() and pr_fmt(); also, remove superfluous comment
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Changes from v3:
+>   - picked up r/b Ilpo Järvinen on select subset of commits
+>   - rebased entire series on top of tty-next tree
+>   - 2/14 ("use bit number macros"): explicitly include <linux/bits.h>
+>   - 3/14 ("remove unused uart_ops stubs"): don't add gratuitous comment
+>     removed later on in the series
+>   - 12/14 ("add IRQ support for the RX path"): add shadow irq register
+>     to support polling mode and avoid reading hardware mmio irq register
+>     to learn which irq flags are enabled
+>     - this also simplifies both liteuart_interrupt() and liteuart_startup()
+>   - 13/14 ("add IRQ support for the TX path"):
+>     - removed superfluous curly braces from liteuart_interrupt()
+>     - simplified [start|stop]_tx() by using shadow irq register from 12/14
+>     - simplified liteuart_tx_chars() by rebasing on top of tty-next tree
+>
+> Changes from v2:
+>   - further split out "separate RX loop from poll timer" into
+>     dedicated patches highlighting additional changes explicitly:
+>       - factoring out tty_flip_buffer_push() (6/14)
+>       - ack only RX events in RX loop (7/14)
+>       - pass constant flag to uart_insert_char() directly (8/14)
+>       - fix variable types in rx loop (9/14)
+>       - separating RX loop from poll timer (10/14)
+>   - added patch (11/14) to move function definitions to a more
+>     convenient location, making subsequent changes easier to read
+>     in diff patch form.
+>   - fixes and clarifications for RX path IRQ support patch (now 12/14):
+>       - only return IRQ_HANDLED for RX events
+>       - use pr_fmt() to improve style of irq setup error message
+>       - remove unnecessary locking from around single-register access
+>   - modify TX path to support both IRQ-mode and polling (13/14)
+>   - move polling-only liteuart_putchar() behind same conditional
+>     (CONFIG_SERIAL_LITEUART_CONSOLE) as the rest of the code that's
+>     still using it.
+>
+> Changes from v1:
+>   - split minor cosmetic changes out into individual patches
+>     (1/3 became 1..5/7)
+>   - patches 6/7 and 7/7 unchanged (used to be 2/3 and 3/3)
 
-Best regards,
-Krzysztof
+Gabriel Somlo (14):
+  serial: liteuart: use KBUILD_MODNAME as driver name
+  serial: liteuart: use bit number macros
+  serial: liteuart: remove unused uart_ops stubs
+  serial: liteuart: don't set unused port fields
+  serial: liteuart: minor style fix in liteuart_init()
+  serial: liteuart: move tty_flip_buffer_push() out of rx loop
+  serial: liteuart: rx loop should only ack rx events
+  serial: liteuart: simplify passing of uart_insert_char() flag
+  serial: liteuart: fix rx loop variable types
+  serial: liteuart: separate rx loop from poll timer
+  serial: liteuart: move function definitions
+  serial: liteuart: add IRQ support for the RX path
+  serial: liteuart: add IRQ support for the TX path
+  serial: liteuart: move polling putchar() function
+
+ drivers/tty/serial/liteuart.c | 210 ++++++++++++++++++++--------------
+ 1 file changed, 126 insertions(+), 84 deletions(-)
+
+-- 
+2.38.1
 
