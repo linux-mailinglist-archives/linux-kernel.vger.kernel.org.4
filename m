@@ -2,117 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3871E62F28C
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 11:29:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E3E262F28F
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 11:29:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241676AbiKRK3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 05:29:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53256 "EHLO
+        id S241726AbiKRK3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 05:29:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235171AbiKRK3C (ORCPT
+        with ESMTP id S235171AbiKRK3a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 05:29:02 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D761F9EB;
-        Fri, 18 Nov 2022 02:29:01 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id 21so6536089edv.3;
-        Fri, 18 Nov 2022 02:29:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/eDDnKSKUKNh/5MLwUUl+eLVdClsVLwH9ZeWm8DBVzw=;
-        b=XgCsfBhiQO4lJalkBL6dinW7VaHvDXhcheH3R+djP/+gmxQom4sv2cYrI0H1AajMQG
-         s22au/qBEo+zixY7XieguFsy85Vne5/O01LlGBik5KqeEf6JnfA+O/89MYx3EcOtGXhA
-         7chWUFPk+mAAFL3hzgEc0shxiur4Wl+7v0fUXJHFW4sFcvDaSX5fopoXW9fWWy/Mfv4/
-         5oZ6NexVJMrk69uXap6cUj8LLfvkG7AQ87c9mDBaIrnIPsZof248QPKyjEzq4phdrmMn
-         CX7UAco+aXdDYFf7nLRvXcHMYl+CUDtx3jC/uTmXPMAk0ALGj/Rw2wXO3kakA2eNGDq/
-         DYkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/eDDnKSKUKNh/5MLwUUl+eLVdClsVLwH9ZeWm8DBVzw=;
-        b=uLporp82S9HUOlgpPX++vMR5FPL9LybazA4PdBSW2R69RRuU7+Font+o5UTAzIfTIK
-         reVLNJ24xb3ngZhEyIhGms5Z98Wcll9WxshZzIlv50N4fQ8bJRrWVyR6FA3oh0opFuKT
-         s/0E7Db/6/hQPehYsYLcWD4cbv73JXhFMRjmvruWVGFBEbicFIoL8EvA9wMhbluaLuRl
-         KC348lU6KtHDgYeagGy2Z7n2lQehjLdG5946xMbhrfHoUTLhpFBPU/W51iQNHycpuYyD
-         16q68MCp+hyjA2fCimMFhbI+LzPPGcdCHX4YXO+Xv0hx2ZRIKKgvBWyrO3YMvTkPagiX
-         yCxA==
-X-Gm-Message-State: ANoB5pkn5kqswX1P5MgBDOsF0T4zRhZm33lCbHSzJcq659Np/6XTdlMf
-        F70Gb7pqX1szoJ5gy/+u+gM=
-X-Google-Smtp-Source: AA0mqf6g+/K00HMi5iatfky5NdbPSR/Is6yiVnQLxMaKldOROVmujrxDQrGxyUS1hfxwvORY98PoZg==
-X-Received: by 2002:a05:6402:c6:b0:468:3d69:ace0 with SMTP id i6-20020a05640200c600b004683d69ace0mr5534330edu.356.1668767340153;
-        Fri, 18 Nov 2022 02:29:00 -0800 (PST)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id p19-20020a17090653d300b007aea1dc1840sm1487807ejo.111.2022.11.18.02.28.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 02:28:59 -0800 (PST)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Fri, 18 Nov 2022 11:28:57 +0100
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+        Fri, 18 Nov 2022 05:29:30 -0500
+Received: from mail.netfilter.org (mail.netfilter.org [217.70.188.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1C47D18B3D;
+        Fri, 18 Nov 2022 02:29:29 -0800 (PST)
+Date:   Fri, 18 Nov 2022 11:29:25 +0100
+From:   Pablo Neira Ayuso <pablo@netfilter.org>
+To:     Daniel Xu <dxu@dxuuu.xyz>
+Cc:     fw@strlen.de, kadlec@netfilter.org,
+        netfilter-devel@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next] samples: bpf: Use "grep -E" instead of "egrep"
-Message-ID: <Y3deaZ+QxLqtj1Pp@krava>
-References: <1668765001-12477-1-git-send-email-yangtiezhu@loongson.cn>
+Subject: Re: [PATCH v2] netfilter: ctmark: Fix data-races around ctmark
+Message-ID: <Y3dehd619g/2vlWv@salvia>
+References: <7220acad9aaefa2ab891d1bcbbc9d5cc4a8f0a7e.1668022522.git.dxu@dxuuu.xyz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1668765001-12477-1-git-send-email-yangtiezhu@loongson.cn>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <7220acad9aaefa2ab891d1bcbbc9d5cc4a8f0a7e.1668022522.git.dxu@dxuuu.xyz>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 05:50:01PM +0800, Tiezhu Yang wrote:
-> The latest version of grep claims the egrep is now obsolete so the build
-> now contains warnings that look like:
-> 	egrep: warning: egrep is obsolescent; using grep -E
-> fix this up by moving the related file to use "grep -E" instead.
+On Wed, Nov 09, 2022 at 12:39:07PM -0700, Daniel Xu wrote:
+> nf_conn:mark can be read from and written to in parallel. Use
+> READ_ONCE()/WRITE_ONCE() for reads and writes to prevent unwanted
+> compiler optimizations.
 > 
->   sed -i "s/egrep/grep -E/g" `grep egrep -rwl samples/bpf`
-> 
-> Here are the steps to install the latest grep:
-> 
->   wget http://ftp.gnu.org/gnu/grep/grep-3.8.tar.gz
->   tar xf grep-3.8.tar.gz
->   cd grep-3.8 && ./configure && make
->   sudo make install
->   export PATH=/usr/local/bin:$PATH
-> 
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-
-jirka
-
+> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
 > ---
->  samples/bpf/test_cgrp2_tc.sh | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Changes since v1:
+> - Remove WRITE_ONCE() from init path
 > 
-> diff --git a/samples/bpf/test_cgrp2_tc.sh b/samples/bpf/test_cgrp2_tc.sh
-> index 12faf58..395573b 100755
-> --- a/samples/bpf/test_cgrp2_tc.sh
-> +++ b/samples/bpf/test_cgrp2_tc.sh
-> @@ -115,7 +115,7 @@ do_exit() {
->      if [ "$DEBUG" == "yes" ] && [ "$MODE" != 'cleanuponly' ]
->      then
->  	echo "------ DEBUG ------"
-> -	echo "mount: "; mount | egrep '(cgroup2|bpf)'; echo
-> +	echo "mount: "; mount | grep -E '(cgroup2|bpf)'; echo
->  	echo "$CGRP2_TC_LEAF: "; ls -l $CGRP2_TC_LEAF; echo
->  	if [ -d "$BPF_FS_TC_SHARE" ]
->  	then
-> -- 
-> 2.1.0
-> 
+>  net/core/flow_dissector.c               |  2 +-
+>  net/ipv4/netfilter/ipt_CLUSTERIP.c      |  4 ++--
+>  net/netfilter/nf_conntrack_core.c       |  2 +-
+>  net/netfilter/nf_conntrack_netlink.c    | 24 ++++++++++++++----------
+>  net/netfilter/nf_conntrack_standalone.c |  2 +-
+>  net/netfilter/nft_ct.c                  |  6 +++---
+>  net/netfilter/xt_connmark.c             | 18 ++++++++++--------
+>  net/openvswitch/conntrack.c             |  8 ++++----
+>  net/sched/act_connmark.c                |  4 ++--
+>  net/sched/act_ct.c                      |  8 ++++----
+>  net/sched/act_ctinfo.c                  |  6 +++---
+>  11 files changed, 45 insertions(+), 39 deletions(-)
+
+I am going to place this in nf.git, it's a bit late but it's
+relatively small and I think the sooner the better to have this fix.
