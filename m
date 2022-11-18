@@ -2,113 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 304B962FA2C
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 17:24:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FC0362FA2F
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 17:25:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235147AbiKRQYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 11:24:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45814 "EHLO
+        id S235244AbiKRQZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 11:25:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231194AbiKRQYw (ORCPT
+        with ESMTP id S231194AbiKRQZq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 11:24:52 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E870764F
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 08:24:51 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id u2so7404503ljl.3
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 08:24:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=TyvEqZNJ/MRi1G8+a46Jw9oIBcHIz45goT0ItOFpL6k=;
-        b=AZVccVwGjF3Vxy7sxVUW8prhfRscUTczTjzZe6fpzB+s12ve3OBjdTgsekqRUV3dUY
-         du3wJD+Atk+RcvhaG3hEPj+8BUQlM+jopsSOS2DYixYFbH9ub4f7yKQX8b+2V/moKpg4
-         Zw+u5UbXccgPVhjzpNoJNUO10H9Th8+JSUmXEsjF9uqeBSdDkKNTaQ9p+yGGwc9Fcu1q
-         jYdNYkwfHy2wg815374Dze6x98QYVcn9z5fRR8h+WkimYLPHnh2je8825+gtKamGn6FK
-         Sss+xcIulhWWFxreh7RKC2LQi2cgf+3tuHUiAZQoiwEG6HPD1pm8p0avBF9aK7ySOgPN
-         Hkzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TyvEqZNJ/MRi1G8+a46Jw9oIBcHIz45goT0ItOFpL6k=;
-        b=ToCw7tvtKykmAbpbL+Q75TuKbt1CGR4ZkWqIkFnIQ0SXBXD4unaxYAYdlWSxATmc2T
-         tFyBCAvmMyUas8KYokro4JdhT0RfG980CbBmfy8WFsantZirpssRoNR2qGAHE6ta4XmO
-         UJD7fbCP4SU5CfCtksydP/hpQ6d6KLHotIUQrBvCTQyjqr6v71067b8/B74m5e7Ni2p6
-         KgFxzPhXoXGRfoxEwSy4ZfUtsfwBggox4Jr3S+8Kb2TTD7oHoRtm/GYOA8CsvJnvh2qj
-         CbEzuzfSCfB1iQ1m42l6KFp7wkOKloDCpwSI9hTRpGdBa8MVXhbkX96hWtJXU3NnWI5A
-         Kyuw==
-X-Gm-Message-State: ANoB5ploc6tM/3F0LKOPTtaCR/tdewkW0F20X3mmQHxDAYxFh6wu9Ycy
-        Rxrrz8MLEzQku3gDUm4FqgnPaw==
-X-Google-Smtp-Source: AA0mqf4rJCEmefb/9vbDfhMOh/I4HZfeXCgo54yyLoE8CtCIOwEz8eHs4DpWhU8WfEwaQUk5zP+9WQ==
-X-Received: by 2002:a2e:bd0c:0:b0:277:10c2:e7ce with SMTP id n12-20020a2ebd0c000000b0027710c2e7cemr2918150ljq.370.1668788689586;
-        Fri, 18 Nov 2022 08:24:49 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id t7-20020a056512030700b004979ec19380sm714550lfp.285.2022.11.18.08.24.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Nov 2022 08:24:49 -0800 (PST)
-Message-ID: <d2fac789-4064-2c8a-5527-0da5b348a29d@linaro.org>
-Date:   Fri, 18 Nov 2022 17:24:47 +0100
+        Fri, 18 Nov 2022 11:25:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A8A764F
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 08:24:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668788692;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=VIFXzISWDSZ2SY1WXY+cKR0iv8RpxMgZFg1w+6NDDOo=;
+        b=eS8B9KxYAmJlkKQikiJ+1NzhkEuy+u4VXxtVUFHDZCSPtCgFsybrkXGQt5JprHjGth5NGm
+        MNcvEuEdwzGUaPcsd6noLxXh0jWDJKyWnAIU92w75ZE92m2LtmN7qHTp1ed9fEloiKSrAI
+        ca6+210UcUxdW2dybbTipbEiZgXPFuo=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-639-xJe7JrFvOkukbvsG6v2QJA-1; Fri, 18 Nov 2022 11:24:48 -0500
+X-MC-Unique: xJe7JrFvOkukbvsG6v2QJA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3EA1C3C0DDAC;
+        Fri, 18 Nov 2022 16:24:48 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1B7B4C06218;
+        Fri, 18 Nov 2022 16:24:48 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     dmatlack@google.com, seanjc@google.com
+Subject: [PATCH v2] KVM: x86: avoid memslot check in NX hugepage recovery if it cannot succeed
+Date:   Fri, 18 Nov 2022 11:24:47 -0500
+Message-Id: <20221118162447.3185950-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 1/4] dt-bindings: pinctrl: qcom: Add SM8550 pinctrl
- bindings
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>
-References: <20221116105724.2600349-1-abel.vesa@linaro.org>
- <20221116105724.2600349-2-abel.vesa@linaro.org>
- <368cd281-b461-e668-0b57-cbb83f5b8086@linaro.org>
- <e825bfbb-dc77-016a-3f56-9474aef06085@linaro.org>
-Content-Language: en-US
-In-Reply-To: <e825bfbb-dc77-016a-3f56-9474aef06085@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/11/2022 17:10, Krzysztof Kozlowski wrote:
->>> +
->>> +  "^.+-hog(-[0-9]+)?$":
->>> +    type: object
->>> +    properties:
->>> +      gpio-hog: true
->>> +      gpios: true
->>> +      input: true
->>> +      output-high: true
->>> +      output-low: true
->>> +      line-name: true
->>
->> Keep properties sorted by name (just like gpio-hog.yaml).
->>
->> I wonder if we could add this to the common TLMM schema. It will appear
->> in multiple places.
-> 
-> Answering to myself - this would require moving the 'state'
-> patternProperties part to the common schema, so maybe later... Looks
-> fine with changes about ordering.
+Since gfn_to_memslot() is relatively expensive, it helps to
+skip it if it the memslot cannot possibly have dirty logging
+enabled.  In order to do this, add to struct kvm a counter
+of the number of log-page memslots.  While the correct value
+can only be read with slots_lock taken, the NX recovery thread
+is content with using an approximate value.  Therefore, the
+counter is an atomic_t.
 
-If Rob likes my solution here:
-https://lore.kernel.org/linux-arm-msm/20221118162101.145267-1-krzysztof.kozlowski@linaro.org/T/#u
+Based on https://lore.kernel.org/kvm/20221027200316.2221027-2-dmatlack@google.com/
+by David Matlack.
 
-then please go with similar way. It allows to skip listing the properties.
+Supersedes: <20221117173109.3126912-1-pbonzini@redhat.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+---
+	v1->v2: actually works, using ideas from David's v1
 
-Best regards,
-Krzysztof
+ arch/x86/kvm/mmu/mmu.c   | 22 +++++++++++++++++++---
+ include/linux/kvm_host.h |  5 +++++
+ virt/kvm/kvm_main.c      |  7 +++++++
+ 3 files changed, 31 insertions(+), 3 deletions(-)
+
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index cfff74685a25..4736d7849c60 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -6878,16 +6878,32 @@ static void kvm_recover_nx_huge_pages(struct kvm *kvm)
+ 		WARN_ON_ONCE(!sp->nx_huge_page_disallowed);
+ 		WARN_ON_ONCE(!sp->role.direct);
+ 
+-		slot = gfn_to_memslot(kvm, sp->gfn);
+-		WARN_ON_ONCE(!slot);
+-
+ 		/*
+ 		 * Unaccount and do not attempt to recover any NX Huge Pages
+ 		 * that are being dirty tracked, as they would just be faulted
+ 		 * back in as 4KiB pages. The NX Huge Pages in this slot will be
+ 		 * recovered, along with all the other huge pages in the slot,
+ 		 * when dirty logging is disabled.
++		 *
++		 * Since gfn_to_memslot() is relatively expensive, it helps to
++		 * skip it if it the test cannot possibly return true.  On the
++		 * other hand, if any memslot has logging enabled, chances are
++		 * good that all of them do, in which case unaccount_nx_huge_page()
++		 * is much cheaper than zapping the page.
++		 *
++		 * If a memslot update is in progress, reading an incorrect value
++		 * of kvm->nr_memslots_dirty_logging is not a problem: if it is
++		 * becoming zero, gfn_to_memslot() will be done unnecessarily; if
++		 * it is becoming nonzero, the page will be zapped unnecessarily.
++		 * Either way, this only affects efficiency in racy situations,
++		 * and not correctness.
+ 		 */
++		slot = NULL;
++		if (atomic_read(&kvm->nr_memslots_dirty_logging)) {
++			slot = gfn_to_memslot(kvm, sp->gfn);
++			WARN_ON_ONCE(!slot);
++		}
++
+ 		if (slot && kvm_slot_dirty_track_enabled(slot))
+ 			unaccount_nx_huge_page(kvm, sp);
+ 		else if (is_tdp_mmu_page(sp))
+diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+index e6e66c5e56f2..6f0f389f5f9c 100644
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -722,6 +722,11 @@ struct kvm {
+ 	/* The current active memslot set for each address space */
+ 	struct kvm_memslots __rcu *memslots[KVM_ADDRESS_SPACE_NUM];
+ 	struct xarray vcpu_array;
++	/*
++	 * Protected by slots_lock, but can be read outside if an
++	 * incorrect answer is acceptable.
++	 */
++	atomic_t nr_memslots_dirty_logging;
+ 
+ 	/* Used to wait for completion of MMU notifiers.  */
+ 	spinlock_t mn_invalidate_lock;
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 43bbe4fde078..5d85f1a61793 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -1603,6 +1603,8 @@ static int kvm_prepare_memory_region(struct kvm *kvm,
+ 				     struct kvm_memory_slot *new,
+ 				     enum kvm_mr_change change)
+ {
++	int old_flags = old ? old->flags : 0;
++	int new_flags = new ? new->flags : 0;
+ 	int r;
+ 
+ 	/*
+@@ -1627,6 +1629,11 @@ static int kvm_prepare_memory_region(struct kvm *kvm,
+ 		}
+ 	}
+ 
++	if ((old_flags ^ new_flags) & KVM_MEM_LOG_DIRTY_PAGES) {
++		int change = (new_flags & KVM_MEM_LOG_DIRTY_PAGES) ? 1 : -1;
++		atomic_set(&kvm->nr_memslots_dirty_logging,
++			   atomic_read(&kvm->nr_memslots_dirty_logging) + change);
++	}
+ 	r = kvm_arch_prepare_memory_region(kvm, old, new, change);
+ 
+ 	/* Free the bitmap on failure if it was allocated above. */
+-- 
+2.31.1
 
