@@ -2,203 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F6A562F08B
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 10:08:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A6D362F08E
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 10:08:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241743AbiKRJIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 04:08:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56010 "EHLO
+        id S241760AbiKRJIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 04:08:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241682AbiKRJIK (ORCPT
+        with ESMTP id S241782AbiKRJIb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 04:08:10 -0500
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 321DE7A351;
-        Fri, 18 Nov 2022 01:08:08 -0800 (PST)
-Received: from booty (unknown [77.244.183.192])
-        (Authenticated sender: luca.ceresoli@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 7A6901BF207;
-        Fri, 18 Nov 2022 09:08:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1668762486;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Hk4AOBalIifEeElfq46iL3XmVWZkthoRP4j/dELNq74=;
-        b=PYaFvwIBT1fZvme+y7/XZhypZc3UGJ3ePCvBZDeMt2zQO1MUbe0YBjbLrxU0sCOC0e5JF5
-        Fbyffoq9cAiim1MkYGqDT2ReFThFRTBY16CeKQ7N0oNXL2lXwTFwauHUmgEtbxhHwaw1uR
-        IcWwAVz1wE+Rs2xHOy0PPNZk8T9c6ab9Xg09GRCJenTNtguS0VyW4VWvyrGHZG66g9xAkA
-        wvcqxvJPvXP0OYmTXe9yYhryfScr61gXbfi5llscfY1ci7Jref8RW5UzkRXPGnGll9iy2R
-        rnBq6epnoqVkVxsKa40UFORjMIP9xFhEhdv/O6admiHsdEFYJ9ZLuuuQJJU9Pg==
-Date:   Fri, 18 Nov 2022 10:08:00 +0100
-From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Richard Leitner <richard.leitner@skidata.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Subject: Re: [PATCH 01/23] dt-bindings: display: tegra: add bindings for
- Tegra20 VIP
-Message-ID: <20221118100800.4950aec0@booty>
-In-Reply-To: <ca5f3b54-25bd-4dd5-799f-c7bda08cdef6@linaro.org>
-References: <20221109141852.729246-1-luca.ceresoli@bootlin.com>
-        <20221109141852.729246-2-luca.ceresoli@bootlin.com>
-        <ca5f3b54-25bd-4dd5-799f-c7bda08cdef6@linaro.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Fri, 18 Nov 2022 04:08:31 -0500
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B11EDF88
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 01:08:29 -0800 (PST)
+Received: by mail-qv1-xf30.google.com with SMTP id mi9so2945788qvb.8
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 01:08:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4jgJCL3sHoSHtEVZaxlQfRVEHYZ212AYWgGq2TLVydQ=;
+        b=a2wpWHTporknCd1s9pPc2LAMPddZOemCMFlzk3MqZj9hClmoNsmS0E8aopvfJ0Pk5O
+         lfFrfDf1DQNA98cj2IqdkeThsGiioaNhdEU8x9FlasQAeG9gv77XVBLgXLtm22tb6ds8
+         DElvqyoQ5RP2FEbXrxwuJJf5NAcRyBkmwlXZ/Wz3FSGRHEyGEfhZN2hofXa99LgGJOo8
+         4kCB1BEjbjw2S5SOXetEdh2El/+g2g+xZEF1ZOVe2+LobsueOYobBJxZZboKv7bYMSWt
+         Mr7iNpsDvn+j7ut/QE9PIa52pe8cXOGgIivGMEoYPa7h7RNB0ogvBM8QS2+Gg27TTadd
+         69Cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4jgJCL3sHoSHtEVZaxlQfRVEHYZ212AYWgGq2TLVydQ=;
+        b=BIjUVK4578uoEtcxIBs2JLX6CHFjhoMM+HkEguWlZ9USqpmJnKxwq0dUfoykfX8Nm4
+         mLpiJy1jRn/VkbuAtF8DkhxNw6DiIlI9baFvQ/bQRfOhIIN8On4jz1O4nG/3FmYqwkHC
+         +E1q3brdo4etMoNg3mmM3YnyqEwJvx2zRmMMS8UmnSPjqxDlc9E3Go0JlT1sdXOz91tq
+         Ik+JurhmYg5WnRFTch5EKZRNEgMrTfS3Cd9sgjyWlITP9YnwfWcolwDjrRawt94QjVgB
+         tTXztecx9tti517oykOK3dp/GKzk044EbjEAZ8NlfBYrPDZtUn78pT10g7x26EdvYux3
+         6a3Q==
+X-Gm-Message-State: ANoB5plMvWcSSLCkxmCy3EIQJSHenI+IEAGRbShYBoxeWhrx/WooE4rv
+        GvapEV4b79u5uexIfRgkt/IFJA==
+X-Google-Smtp-Source: AA0mqf4Vu51irMi7KMNB0pp/d3qI6KcnZMKnFehDL6rPbRalZElCeD38eKKA345/qu0r12lKOEloXA==
+X-Received: by 2002:a0c:bf0b:0:b0:4b1:a359:c204 with SMTP id m11-20020a0cbf0b000000b004b1a359c204mr5893127qvi.64.1668762508583;
+        Fri, 18 Nov 2022 01:08:28 -0800 (PST)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id x22-20020a05622a001600b003a57f822157sm1765388qtw.90.2022.11.18.01.08.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 01:08:28 -0800 (PST)
+Date:   Fri, 18 Nov 2022 01:08:13 -0800 (PST)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Andrew Morton <akpm@linux-foundation.org>
+cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Peter Xu <peterx@redhat.com>,
+        Yang Shi <shy828301@gmail.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        Mina Almasry <almasrymina@google.com>,
+        James Houghton <jthoughton@google.com>,
+        Zach O'Keefe <zokeefe@google.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH 0/3] mm,thp,rmap: rework the use of subpages_mapcount
+In-Reply-To: <5f52de70-975-e94f-f141-543765736181@google.com>
+Message-ID: <c4b8485b-1f26-1a5f-bdf-c6c22611f610@google.com>
+References: <5f52de70-975-e94f-f141-543765736181@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Krzysztof,
+Linus was underwhelmed by the earlier compound mapcounts series:
+this series builds on top of it (as in next-20221117) to follow
+up on his suggestions - except rmap.c still using lock_page_memcg(),
+since I hesitate to steal the pleasure of deletion from Johannes.
 
-thanks for the review. I'm glad my error rate on bindings is lower than
-it used to be before I attended your ELCE talk! ;)
+1/3 mm,thp,rmap: subpages_mapcount of PTE-mapped subpages
+2/3 mm,thp,rmap: subpages_mapcount COMPOUND_MAPPED if PMD-mapped
+3/3 mm,thp,rmap: clean up the end of __split_huge_pmd_locked()
 
-On Tue, 15 Nov 2022 13:12:44 +0100
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+ Documentation/mm/transhuge.rst |  10 +-
+ include/linux/mm.h             |  65 +++++++----
+ include/linux/rmap.h           |  12 +-
+ mm/debug.c                     |   2 +-
+ mm/huge_memory.c               |  15 +--
+ mm/rmap.c                      | 213 ++++++++++-------------------------
+ 6 files changed, 119 insertions(+), 198 deletions(-)
 
-> On 09/11/2022 15:18, luca.ceresoli@bootlin.com wrote:
-> > From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-> > 
-> > VIP is the parallel video capture component within the video input
-> > subsystem of Tegra20 (and other Tegra chips, apparently).  
-> 
-> Subject: drop second, redundant "bindings".
-> 
-> > 
-> > Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-> > ---
-> >  .../display/tegra/nvidia,tegra20-vip.yaml     | 64 +++++++++++++++++++
-> >  MAINTAINERS                                   |  7 ++
-> >  2 files changed, 71 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-vip.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-vip.yaml b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-vip.yaml
-> > new file mode 100644
-> > index 000000000000..934dabfd2307
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-vip.yaml
-> > @@ -0,0 +1,64 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/display/tegra/nvidia,tegra20-vip.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: NVIDIA Tegra VIP (parallel video capture) controller
-> > +
-> > +maintainers:
-> > +  - Luca Ceresoli <luca.ceresoli@bootlin.com>
-> > +
-> > +properties:
-> > +  $nodename:
-> > +    const: vip  
-> 
-> No need to enforce names in device schemas, especially that this does
-> not look like a generic name.
-> 
-> > +
-> > +  compatible:
-> > +    enum:
-> > +      - nvidia,tegra20-vip
-> > +
-> > +  "#address-cells":
-> > +    const: 1
-> > +
-> > +  "#size-cells":
-> > +    const: 0
-> > +
-> > +  channel@0:  
-> 
-> Missing description.
-
-OK, I think this should do:
-
-  description: parallel video capture interface for the VI
-
-> > +    type: object  
-> 
-> Do you expect it to grow to more channels?
-
-Not on Tegra20, it has one input only, but for other SoCs it's likely.
-Definitely some (including Tegra20 itself) have multiple CSI-2 inputs,
-and it's reasonable that this can apply to parallel input too.
-
-Is this enough motivation to make room for more channels, or should I
-remove it since I have no plans to introduce support for other Tegra
-chips?
-
-> > +
-> > +    properties:
-> > +      reg: true  
-> 
-> const: 0
-> 
-> > +
-> > +      ports:
-> > +        $ref: /schemas/graph.yaml#/properties/ports
-> > +
-> > +        properties:
-> > +          port@0:
-> > +            $ref: /schemas/graph.yaml#/properties/port
-> > +            description:
-> > +              Port receiving the video stream from the sensor
-> > +
-> > +          port@1:
-> > +            $ref: /schemas/graph.yaml#/properties/port
-> > +            description:
-> > +              Port sending the video stream to the VI
-> > +
-> > +        required:
-> > +          - port@0
-> > +          - port@1
-> > +
-> > +    additionalProperties: false
-> > +
-> > +    required:
-> > +      - reg
-> > +      - ports
-> > +
-> > +unevaluatedProperties: false
-> > +
-> > +required:
-> > +  - compatible
-> > +  - "#address-cells"
-> > +  - "#size-cells"
-> > +  - channel@0
-> > +
-> > +# see nvidia,tegra20-vi.yaml for an example  
-> 
-> That file does not have this compatible. At least not on next-20221109.
-
-It's added in patch 2. It's a chicken-egg problem, should I add a third
-patch that adds this line only?
-
-ACK for all other comments you wrote.
-
--- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Hugh
