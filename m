@@ -2,112 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6142C62F588
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 14:06:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF64E62F585
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 14:06:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241936AbiKRNGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 08:06:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35718 "EHLO
+        id S241935AbiKRNGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 08:06:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235248AbiKRNGt (ORCPT
+        with ESMTP id S241723AbiKRNGU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 08:06:49 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0B9769D3
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 05:05:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668776754;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MkbPf8lANvr8MINxjwyWmUuJ/1c5U1P0oOc0E961cnI=;
-        b=aMsLKuBJZDshLyh5PfPK2DFXRWIIZTmlHm2/kwtgon+qp2qpBF9Q5gZIlIS4fLRU9/im9b
-        +URsy7cFbLhw6H72bmjFEOiMKpckdDlHWDKoqco1h0zzNIaggVfTXNItX3SmC84i+w7u+o
-        FbhejQDEj4/LvyN9qqOAC/E/Qp0A1fQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-127-pvkcvqwVOpuRJvz_nLHg3w-1; Fri, 18 Nov 2022 08:05:51 -0500
-X-MC-Unique: pvkcvqwVOpuRJvz_nLHg3w-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B9B9385A59D;
-        Fri, 18 Nov 2022 13:05:50 +0000 (UTC)
-Received: from localhost (unknown [10.39.208.23])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 760CB2028CE4;
-        Fri, 18 Nov 2022 13:05:50 +0000 (UTC)
-Date:   Fri, 18 Nov 2022 14:05:46 +0100
-From:   Niels de Vos <ndevos@redhat.com>
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     linux-fscrypt@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xiubo Li <xiubli@redhat.com>,
-        Marcel Lauhoff <marcel.lauhoff@suse.com>
-Subject: Re: [RFC 0/4] fs: provide per-filesystem options to disable fscrypt
-Message-ID: <Y3eC1tEoUGdgBP9i@ndevos-x1>
-References: <20221110141225.2308856-1-ndevos@redhat.com>
- <Y20a/akbY8Wcy3qg@mit.edu>
- <Y20rDl45vSmdEo3N@ndevos-x1>
- <Y20/ynxvIqOyRbxK@mit.edu>
+        Fri, 18 Nov 2022 08:06:20 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D52781B3
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 05:06:18 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id c1so8108363lfi.7
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 05:06:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SM/Hr9HQlKz57Vtwanp4K4Ls2OlF5cSrPv62Ff71hFg=;
+        b=BOBUo5yrSXCso4IIRkcg0o2teW8R3OqiUdLBb/m9b3VJ7Sh5+1gdMnp9pOxXnvd+Yn
+         jeS6rOMnYc39Qv7akYw16hE8G+rbBHmShmzV8w4wkEK7LDeUWinfdYLU+LaeLoWQoUZQ
+         pI+ZvbcLP5PTS8crCbDRSpjzftHj2eT9RRVk19z6/eVK7fbGk9Okpvh2RH9ftj6H2oCh
+         ho/ium4pBWQlacbK/QGRn1rhqlUiuw3WqXiGsfJyZ3sB2XYYBmgH6qjw0My9EbG308PF
+         of1sU8XAEEUtv/fOBo22tjrmNKJBQfGuLFLLLYC0E/Xc6JPrvWI+SVEf0Iv+0lrwdkVv
+         72cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SM/Hr9HQlKz57Vtwanp4K4Ls2OlF5cSrPv62Ff71hFg=;
+        b=EDgW0mGdEohZIgNt2Kr3f0a19ygm0Gou0HPGquOIZEB6qtq7ql8J8IbZLTuVp/ZYgR
+         Xg6iOgNEgX3AwAFUHZohCRXr7yJH3idPQ/ArBBuJxr3qVY7R2yLhjT+SfxYT/rqk8S7N
+         0AI0M8v51n9eWIQAMgPgYglhcp7yRz5yk0k5CNz0VRzG6F0OXYxlTj8kkHxpoGcysHO8
+         OQPqQuHxw5+wvrFzBARp/dAk71PgF4ajCSlhcnzpMuOivxIVHN5Cs3pYhWkJnpxaYYRA
+         gy6KUjBof47/i1W2MB84M+vTWu5ufE4zQpNdvnbQWKwYv8XuEA3s8o5DzZFZvsVAPEhx
+         ASyw==
+X-Gm-Message-State: ANoB5pl6fRT5yHuPgWjnpwjkzZ9OxKs03Lxo7iicmxpTfkP1dPbPlNZA
+        T9BgT4TZTUCOSnxhnQmtyCzECg==
+X-Google-Smtp-Source: AA0mqf6Eg4ax1bzTHnu/VGLZTHQlm5c/vZt/4qmejF5rjXEdKZfMIwO0spdeu5nCwA4sLgFgaXuX8g==
+X-Received: by 2002:a05:6512:3daa:b0:4a2:ba30:a9a2 with SMTP id k42-20020a0565123daa00b004a2ba30a9a2mr2231992lfv.689.1668776776803;
+        Fri, 18 Nov 2022 05:06:16 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id bt26-20020a056512261a00b004ab2cb8deb5sm655889lfb.18.2022.11.18.05.06.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Nov 2022 05:06:16 -0800 (PST)
+Message-ID: <ca8a6070-3888-8d42-5974-d7c2adc62417@linaro.org>
+Date:   Fri, 18 Nov 2022 14:06:14 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y20/ynxvIqOyRbxK@mit.edu>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3 02/14] dt-bindings: media: rkisp1: Add i.MX8MP ISP
+ example
+Content-Language: en-US
+To:     Paul Elder <paul.elder@ideasonboard.com>,
+        linux-media@vger.kernel.org
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Dafna Hirschfeld <dafna@fastmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Helen Koike <helen.koike@collabora.com>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221118093931.1284465-1-paul.elder@ideasonboard.com>
+ <20221118093931.1284465-3-paul.elder@ideasonboard.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221118093931.1284465-3-paul.elder@ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 01:15:38PM -0500, Theodore Ts'o wrote:
-> On Thu, Nov 10, 2022 at 05:47:10PM +0100, Niels de Vos wrote:
-> > And, there actually are options like CONFIG_EXT4_FS_POSIX_ACL and
-> > CONFIG_EXT4_FS_SECURITY. Because these exist already, I did not expect
-> > too much concerns with proposing a CONFIG_EXT4_FS_ENCRYPTION...
+On 18/11/2022 10:39, Paul Elder wrote:
+> From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 > 
-> Actually, I was thinking of getting rid of them, as we've already
-> gotten rid of EXT4_FS_POSIX_ACL....
+> Add an example to the rockchip-isp1 DT binding that showcases usage of
+> the parallel input of the ISP, connected to the CSI-2 receiver internal
+> to the i.MX8MP.
 > 
-> > Thanks for adding some history about this. I understand that extra
-> > options are needed while creating/tuning the filesystems. Preventing
-> > users from setting the right options in a filesystem is not easy, even
-> > if tools from a distribution do not offer setting the options. Disks can
-> > be portable, or network-attached, and have options enabled that an other
-> > distributions kernel does not (want to) support.
-> 
-> Sure, but as I said, there are **tons** of file system features that
-> have not and/or still are not supported for distros, but for which we
-> don't have kernel config knobs.  This includes ext4's bigalloc and
-> inline data, btrfs's dedup and reflink support, xfs online fsck, etc.,
-> etc., etc.  Heck, ext4 is only supported up to a certain size by Red
-> Hat, and we don't have a Kernel config so that the kernel will
-> absolutely refuse to mount an ext4 file system larger than The
-> Officially Supported RHEL Capacity Limit for Ext4.  So what makes
-> fscrypt different from all of these other unsupported file system
-> features?
-> 
-> There are plenty of times when I've had to explain to customers why,
-> sure they could build their own kernels for RHEL 4 (back in the day
-> when I worked for Big Blue and had to talk to lots of enterprise
-> customers), but if they did, Red Hat support would refuse to give them
-> the time of day if they called asking for help.  We didn't set up use
-> digitally signed kernels with trusted boot so that a IBM server would
-> refuse to boot anything other than An Officially Signed RHEL
-> Kernel...
-> 
-> What makes fscrypt different that we think we need to enforce this
-> using technical means, other than a simple, "this feature is not
-> supported"?
+> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-Thanks again for the added details. What you are explaining makes sense,
-and I am not sure if there is an other good reason why splitting out
-fscrypt support per filesystem would be required. I'm checking with the
-folks that suggested doing this, and see where we go from there.
+Missing SoB.
 
-Niels
+> ---
+>  .../bindings/media/rockchip-isp1.yaml         | 72 +++++++++++++++++++
+>  1 file changed, 72 insertions(+)
+> 
+
+I don't know what do you demonstrate there... usage of endpoints? That's
+the only difference. Such usage is the same everywhere, nothing specific
+to this example. You already have two examples, so I don't think this
+brings anything more.
+
+Best regards,
+Krzysztof
 
