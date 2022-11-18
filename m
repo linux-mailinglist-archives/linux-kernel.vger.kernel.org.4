@@ -2,115 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D97C162EDBD
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 07:39:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA00F62EDC3
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 07:40:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241071AbiKRGjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 01:39:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49974 "EHLO
+        id S241212AbiKRGkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 01:40:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbiKRGjS (ORCPT
+        with ESMTP id S241223AbiKRGkN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 01:39:18 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 65B505C769;
-        Thu, 17 Nov 2022 22:39:16 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4BF3923A;
-        Thu, 17 Nov 2022 22:39:22 -0800 (PST)
-Received: from [10.162.41.7] (unknown [10.162.41.7])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 174033F73B;
-        Thu, 17 Nov 2022 22:39:10 -0800 (PST)
-Message-ID: <4efc0ae1-564e-dd05-842a-46fb1aeb4ad8@arm.com>
-Date:   Fri, 18 Nov 2022 12:09:07 +0530
+        Fri, 18 Nov 2022 01:40:13 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD1E29BA1B
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:39:53 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id p13-20020a05600c468d00b003cf8859ed1bso3360049wmo.1
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:39:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SWGCsOWTltJ1s1TmyB5iq5IA0ySKVXAwV7/ThLFlqPs=;
+        b=pC88QgXBumO1/V0lO/txig9KlBbZtpSqoe0HtMylZBH3OxwEKdFA7SsObIXCVOdNsA
+         xsDoAXxODeqjmlVObMeHyuQkxUoxbYLx1TeNPxOyXxgIFJ7Sw4V63g7qhZT2N2LXvOcZ
+         bfVtIjzeyPOC0q2IF8ZskfRXSJIIGt9OGBaMREQwZgumhoTznSb7T2xzCgDv/K8AoqYa
+         KR0jc9yVR58qjDOX6+KVwlIekONVLr0jcusUrxDnx8zNyqK63KGhTC/x5xK5njkcDvJY
+         eRG1nHSlpffHANRa4fQZETtQuHt3cUmQf2n7Wy7IwAQSMySGQRnPv6Wo3hfAgs5+NnB+
+         3Fuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SWGCsOWTltJ1s1TmyB5iq5IA0ySKVXAwV7/ThLFlqPs=;
+        b=f45Q0wdFEkrEOET+TpllG0ojQpvRkJBYuliwBgkP8PJnHeX6CKKtxjAIrKsL7CELNn
+         KsVLm1rafTP38R1SVQ5AMSTnDDi72LluLt1teHHTn8TeVG5kEjxGNjFsybpY846Tq4Cv
+         uh11QksEiTgPDal/OBVs4mBik6cUV5g+gbg4Hu1reHCbH+ac0iB7b0f5n4r68FYgBAWR
+         H2jMEsW4a6wufBtvhYf8d6y83iVIHrzjKfY4Z87uDjHeZ5+3AMIfY1qm5aDSUX5nbRrE
+         uQKEKLdxtb/zGGormry7LXxNn9KP6sv5YcAH9nKyHXJQeLQPimONY+3+H8H6M/gR2u68
+         DpDg==
+X-Gm-Message-State: ANoB5pkEOjiWAoNSB2Iw2+tDe2oBKzGl4iI5MRBCupaNjKN00OdCK8Am
+        yf1FN4D61yYVFfcoZ7pgb3k42w==
+X-Google-Smtp-Source: AA0mqf5MvrMwYIfTpAwseYx16haMFQz6Z5zjhktwhrzPWkWu/lhefUN4dmltCCWxbQeWWOn/RpqeAQ==
+X-Received: by 2002:a1c:e917:0:b0:3cf:681a:43e1 with SMTP id q23-20020a1ce917000000b003cf681a43e1mr3656481wmc.126.1668753592179;
+        Thu, 17 Nov 2022 22:39:52 -0800 (PST)
+Received: from localhost.localdomain ([167.98.215.174])
+        by smtp.gmail.com with ESMTPSA id j13-20020adff54d000000b0023655e51c33sm2785902wrp.4.2022.11.17.22.39.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 22:39:51 -0800 (PST)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH 00/13] nvmem: patches (set 1) for 6.2
+Date:   Fri, 18 Nov 2022 06:39:19 +0000
+Message-Id: <20221118063932.6418-1-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH V5 2/7] arm64/perf: Update struct arm_pmu for BRBE
-Content-Language: en-US
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, peterz@infradead.org,
-        acme@kernel.org, mark.rutland@arm.com, will@kernel.org,
-        catalin.marinas@arm.com
-Cc:     Mark Brown <broonie@kernel.org>, James Clark <james.clark@arm.com>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>
-References: <20221107062514.2851047-1-anshuman.khandual@arm.com>
- <20221107062514.2851047-3-anshuman.khandual@arm.com>
- <8f6d3424-2650-8e8b-61f7-1431aec4633b@arm.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <8f6d3424-2650-8e8b-61f7-1431aec4633b@arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Greg,
 
+Here are some nvmem patches for 6.2 which includes
 
-On 11/9/22 17:00, Suzuki K Poulose wrote:
-> On 07/11/2022 06:25, Anshuman Khandual wrote:
->> Although BRBE is an armv8 speciifc HW feature, abstracting out its various
->> function callbacks at the struct arm_pmu level is preferred, as it cleaner
->> , easier to follow and maintain.
->>
->> Besides some helpers i.e brbe_supported(), brbe_probe() and brbe_reset()
->> might not fit seamlessly, when tried to be embedded via existing arm_pmu
->> helpers in the armv8 implementation.
->>
->> Updates the struct arm_pmu to include all required helpers that will drive
->> BRBE functionality for a given PMU implementation. These are the following.
->>
->> - brbe_filter    : Convert perf event filters into BRBE HW filters
->> - brbe_probe    : Probe BRBE HW and capture its attributes
->> - brbe_enable    : Enable BRBE HW with a given config
->> - brbe_disable    : Disable BRBE HW
->> - brbe_read    : Read BRBE buffer for captured branch records
->> - brbe_reset    : Reset BRBE buffer
->> - brbe_supported: Whether BRBE is supported or not
->>
->> A BRBE driver implementation needs to provide these functionalities.
-> 
-> Could these not be hidden from the generic arm_pmu and kept in the
-> arm64 pmu backend  ? It looks like they are quite easy to simply
-> move these to the corresponding hooks in arm64 pmu.
+- Adding bindings for new ONIE and sl28 vpd nvmem layouts
+- few enhacements to stm32 provider.
+- add Broadcom format support int u-boot-env provider.
+- 2 typo fixes
 
-We have had this discussion multiple times in the past [1], but I still
-believe, keeping BRBE implementation hooks at the PMU level rather than
-embedding them with other PMU events handling, is a much better logical
-abstraction.
+Can you please queue them up for 6.2.
 
-[1] https://lore.kernel.org/all/c3804290-bdb1-d1eb-3526-9b0ce4c8e8b1@arm.com/
+thanks for you help,
+srini
 
---------------------------------------------------------------------------
-> 
-> One thing to answer in the commit msg is why we need the hooks here.  
-> Have we concluded that adding BRBE hooks to struct arm_pmu for what is 
-> an armv8 specific feature is the right approach? I don't recall 
-> reaching that conclusion.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Although it might be possible to have this implementation embedded in
-the existing armv8 PMU implementation, I still believe that the BRBE
-functionalities abstracted out at the arm_pmu level with a separate
-config option is cleaner, easier to follow and to maintain as well.
+Colin Ian King (1):
+  nvmem: Kconfig: Fix spelling mistake "controlls" -> "controls"
 
-Besides some helpers i.e brbe_supported(), brbe_probe() and brbe_reset()
-might not fit seamlessly, when tried to be embedded via existing arm_pmu
-helpers in the armv8 implementation.
+Jiangshan Yi (1):
+  nvmem: stm32: fix spelling typo in comment
 
-Nonetheless if arm_pmu based additional BRBE helpers is absolutely a no
-go for folks here in general, will explore arm64 based implementation.
-----------------------------------------------------------------------------
+Michael Walle (1):
+  dt-bindings: nvmem: add YAML schema for the sl28 vpd layout
 
-I am still waiting for maintainer's take on this issue. I will be happy to
-rework this series to move all these implementation inside arm64 callbacks
-instead, if that is required or preferred by the maintainers. But according
-to me, this current abstraction layout is much better.
+Miquel Raynal (5):
+  dt-bindings: nvmem: Fix example
+  dt-bindings: nvmem: Introduce the nvmem-layout container
+  dt-bindings: eeprom: Inherit from nvmem.yaml
+  dt-bindings: vendor-prefixes: Add ONIE
+  dt-bindings: nvmem: add YAML schema for the ONIE tlv layout
 
-- Anshuman
+Patrick Delaunay (4):
+  nvmem: stm32: move STM32MP15_BSEC_NUM_LOWER in config
+  nvmem: stm32: add warning when upper OTPs are updated
+  nvmem: stm32: add nvmem type attribute
+  dt-bindings: nvmem: add new stm32mp13 compatible for stm32-romem
+
+Rafał Miłecki (1):
+  nvmem: u-boot-env: add Broadcom format support
+
+ .../devicetree/bindings/eeprom/at24.yaml      |   5 +-
+ .../devicetree/bindings/eeprom/at25.yaml      |   1 +
+ .../bindings/eeprom/microchip,93lc46b.yaml    |   1 +
+ .../nvmem/layouts/kontron,sl28-vpd.yaml       |  64 ++++++++
+ .../bindings/nvmem/layouts/nvmem-layout.yaml  |  34 ++++
+ .../nvmem/layouts/onie,tlv-layout.yaml        | 147 ++++++++++++++++++
+ .../devicetree/bindings/nvmem/nvmem.yaml      |   8 +
+ .../bindings/nvmem/st,stm32-romem.yaml        |   1 +
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ drivers/nvmem/Kconfig                         |   2 +-
+ drivers/nvmem/stm32-romem.c                   |  27 +++-
+ drivers/nvmem/u-boot-env.c                    |  14 ++
+ 12 files changed, 298 insertions(+), 8 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/nvmem/layouts/kontron,sl28-vpd.yaml
+ create mode 100644 Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.yaml
+ create mode 100644 Documentation/devicetree/bindings/nvmem/layouts/onie,tlv-layout.yaml
+
+-- 
+2.25.1
+
