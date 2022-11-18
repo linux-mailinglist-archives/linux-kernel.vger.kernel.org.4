@@ -2,49 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C9B8630374
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 00:29:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07E8F630326
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 00:24:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235857AbiKRX33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 18:29:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40220 "EHLO
+        id S235630AbiKRXYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 18:24:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235692AbiKRX2l (ORCPT
+        with ESMTP id S235593AbiKRXWM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 18:28:41 -0500
+        Fri, 18 Nov 2022 18:22:12 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E6FC78B17
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:16:34 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7E7A6A16
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:13:10 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8B-0000qc-Gz; Fri, 18 Nov 2022 23:46:43 +0100
+        id 1owA8B-0000s7-S2; Fri, 18 Nov 2022 23:46:43 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA87-0058J5-1L; Fri, 18 Nov 2022 23:46:39 +0100
+        id 1owA87-0058JH-CJ; Fri, 18 Nov 2022 23:46:40 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA86-00Hb4A-CK; Fri, 18 Nov 2022 23:46:38 +0100
+        id 1owA86-00Hb4L-Tf; Fri, 18 Nov 2022 23:46:38 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
         Jonathan Cameron <jic23@kernel.org>,
-        Peter Senna Tschudin <peter.senna@gmail.com>,
-        =?utf-8?q?Marek_Beh=C3=BAn?= <kabel@kernel.org>,
-        Petr Machata <petrm@nvidia.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>
+        =?utf-8?q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>,
+        Peter Rosin <peda@axentia.se>, Petr Machata <petrm@nvidia.com>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>,
         Lars-Peter Clausen <lars@metafoo.de>,
         linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 144/606] iio: light: tsl2583: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:37:58 +0100
-Message-Id: <20221118224540.619276-145-uwe@kleine-koenig.org>
+Subject: [PATCH 147/606] iio: light: us5182d: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:38:01 +0100
+Message-Id: <20221118224540.619276-148-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -71,32 +69,32 @@ can be trivially converted.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/iio/light/tsl2583.c | 5 ++---
+ drivers/iio/light/us5182d.c | 5 ++---
  1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/iio/light/tsl2583.c b/drivers/iio/light/tsl2583.c
-index 7bcb5c718922..a05f1c0453d1 100644
---- a/drivers/iio/light/tsl2583.c
-+++ b/drivers/iio/light/tsl2583.c
-@@ -809,8 +809,7 @@ static const struct iio_info tsl2583_info = {
- 	.write_raw = tsl2583_write_raw,
- };
+diff --git a/drivers/iio/light/us5182d.c b/drivers/iio/light/us5182d.c
+index 3e652d7f3b0e..8b2a0c99c8e6 100644
+--- a/drivers/iio/light/us5182d.c
++++ b/drivers/iio/light/us5182d.c
+@@ -832,8 +832,7 @@ static irqreturn_t us5182d_irq_thread_handler(int irq, void *private)
+ 	return IRQ_HANDLED;
+ }
  
--static int tsl2583_probe(struct i2c_client *clientp,
--			 const struct i2c_device_id *idp)
-+static int tsl2583_probe(struct i2c_client *clientp)
+-static int us5182d_probe(struct i2c_client *client,
+-			 const struct i2c_device_id *id)
++static int us5182d_probe(struct i2c_client *client)
  {
- 	int ret;
- 	struct tsl2583_chip *chip;
-@@ -943,7 +942,7 @@ static struct i2c_driver tsl2583_driver = {
- 		.of_match_table = tsl2583_of_match,
+ 	struct us5182d_data *data;
+ 	struct iio_dev *indio_dev;
+@@ -975,7 +974,7 @@ static struct i2c_driver us5182d_driver = {
+ 		.of_match_table = us5182d_of_match,
+ 		.acpi_match_table = ACPI_PTR(us5182d_acpi_match),
  	},
- 	.id_table = tsl2583_idtable,
--	.probe = tsl2583_probe,
-+	.probe_new = tsl2583_probe,
- 	.remove = tsl2583_remove,
- };
- module_i2c_driver(tsl2583_driver);
+-	.probe = us5182d_probe,
++	.probe_new = us5182d_probe,
+ 	.remove = us5182d_remove,
+ 	.id_table = us5182d_id,
+ 
 -- 
 2.38.1
 
