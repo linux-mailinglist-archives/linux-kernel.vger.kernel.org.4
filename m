@@ -2,125 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80657630764
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 01:34:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D22D6307B3
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 01:39:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235689AbiKSAei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 19:34:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58974 "EHLO
+        id S232739AbiKSAj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 19:39:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231838AbiKSAeK (ORCPT
+        with ESMTP id S236460AbiKSAib (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 19:34:10 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71EB62B624
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:42:47 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id v28so6282257pfi.12
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:42:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gdy8THFQ217ArK5qAf8locqq0ea0wdI2wQ0KQQ2fz/s=;
-        b=BxtRWJrHgOasPDbyKA01nQReUZgzUZg6/4Bvt2wpUMbvtO/NzBRy4yb4K7NNnaui7z
-         ZKoGcX+rZGZwaFdgXrnSa2czgwNPRRYNXG71hyg0aQ9HxMwIlmkn+NGMMTz5Y1m91xRw
-         6E5v8oz/mfPDQhfGbLbEdYGZ6/kBrnVXVXF3w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gdy8THFQ217ArK5qAf8locqq0ea0wdI2wQ0KQQ2fz/s=;
-        b=ms77t148WH4FzvjVpCIiNZyQBmKQusvdO5KWYE21sLD+b82Fpv8RstVuL10KBqRgB3
-         n1kcxod+/15k4AHpytPVULx9CKtvs5im1OVJ8CBXY896B0rGaTnSFmevjzGpiQwI4RW+
-         eTFMa5dhL1XqEyIey4yUzWtCJMAgIRSirek4b5nDNwxlM/WXj3I25vzEljKOavrKh0AC
-         jhPf3b4F7oc3ZtN7+HGmCYJm+KYc6oAkD6m+SV9MoVcCvveu+TZ2h4ZUZ4QxK0YR/4Dn
-         A64OfwCdooz+ofzicI/K0hecBahEHAgLdbPMyXTJ0kFlcEqo4swDA9gDWt+EkSn69ZII
-         02fQ==
-X-Gm-Message-State: ANoB5pkQefaQc1jpfd8jXTwibNLTPAkZWHCgqZ19NAsp5YZhnEnnU+Ap
-        1kbneNCesw1R9E1UDmGuAAMPlEktlb04XQ==
-X-Google-Smtp-Source: AA0mqf66SlkGoi1KeBiWbmO1baSn/GeKKLl0in2EE+JnpytDffihGspac3rJNaC2ddKrmgRrYzkDpw==
-X-Received: by 2002:a63:e09:0:b0:46b:8e9:749 with SMTP id d9-20020a630e09000000b0046b08e90749mr8370837pgl.260.1668814966918;
-        Fri, 18 Nov 2022 15:42:46 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id n14-20020a170902e54e00b00186c54188b4sm164191plf.240.2022.11.18.15.42.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 15:42:46 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Christian Lamparter <chunkeey@googlemail.com>
-Cc:     Kees Cook <keescook@chromium.org>, Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH v2] p54: Replace zero-length array of trailing structs with flex-array
-Date:   Fri, 18 Nov 2022 15:42:44 -0800
-Message-Id: <20221118234240.gonna.369-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Fri, 18 Nov 2022 19:38:31 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477A21181E0;
+        Fri, 18 Nov 2022 15:44:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668815052; x=1700351052;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=/aFv9Wut0HiigVqkQ+St300/wGo+tKi9PfSoYzzlmA8=;
+  b=NRJbx4oNX9vI6yYm5SQt8W+pHuQ3E3BOFrbRcHzE8evDph2D3qXKHA3k
+   dseP38yTuG7m7i3PbltBa0SPsE9GHAxbJBenoCg5VeOhFDjqX4xzimC5N
+   ZKop8c8FpTLjXbnzpnePNf9kX9xtwIPunxUC3weJdfNobLlAEeG/HdzCX
+   pWY5p8HPBZcFX/9wbD5DEbfBTLgeytr9COfS9q3rEKkyBv0CEkJWuONaP
+   WFcrLbEnyQUDWIaxk8RnRy0IAgK+BKUtkSOLaFXVGohLwK0PrdZ2oSdEO
+   ZswnYMZv3XKQCkzpQlXRwKUShZPIhVh0ppLx/nhvTYcn98XaR3knxpIr1
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="300801540"
+X-IronPort-AV: E=Sophos;i="5.96,175,1665471600"; 
+   d="scan'208";a="300801540"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2022 15:44:11 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="634598112"
+X-IronPort-AV: E=Sophos;i="5.96,175,1665471600"; 
+   d="scan'208";a="634598112"
+Received: from tassilo.jf.intel.com ([10.54.74.11])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2022 15:44:11 -0800
+From:   Andi Kleen <ak@linux.intel.com>
+To:     jlayton@kernel.org
+Cc:     chuck.lever@oracle.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Andi Kleen <ak@linux.intel.com>
+Subject: [PATCH] Add process name to locks warning
+Date:   Fri, 18 Nov 2022 15:43:57 -0800
+Message-Id: <20221118234357.243926-1-ak@linux.intel.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1744; h=from:subject:message-id; bh=frYwS/CNxid8oyzmUWma7Osq+zP62XTvZCZTt4IGeWs=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjeBh0f9MnBuxNAcv8AF9IXJq5IQXcPhkrRYT3czBK XoiyBLGJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY3gYdAAKCRCJcvTf3G3AJo5DEA CErDezf9uGBzeffXHVEc6KW5d8b6cJulenKDodro6pDA0mLJLYysESpyoAEe5dxT0q1pYdE0tzhV3S jWP0krg7whj91sCODp2jVmwPHK+fwU9/QiYarSJb+w3aAMuPx44QzBLTEWl9zbpjrPVTzuyVpVrftn jlGwx84wxKoeQdJGBF5in0GyzFLP/hVeLE4Zd+ntsc2BmVULzfrwNwqlN5I/4pAX0Q7zYwMyIVOR8j z5v64icaG0BGj5RLTZ7wauNbfIqOZST4aOTNwebR5VK0+zLAyYKg5OVjsfhVcaATEXiYfEzRq6L1xn qMzwjvXdv/0EzjBFV5b4UI5FOsAdQ0VWPc/qDCDZ+1z0TOs0LBuQTyLnxubd5HXz+kOxLDMjQqge3Q 3Mpr2qPcaVaqjRpAN1YNFhgli/fb3dK2GYf6VunwqdTSMTfEykk1vKWlJbpPX2nm2oNJFnk3aaRsFd m083OQZQZ+QOkekrxZ6oukm5qapc+LcBjy+/CWQhdzI1Yxr4S0m2IZ+nKfZpGBTSjI7rTEWS/iIJ6u GD/HrfqnStwjJjgGx/GRClHRWZ4roYUXubU4mEQ/9J55gTJ0VQvJvp7nUiS9ODC51JZxaWTFDogTXe elAmug2mMq8e8aQEfFbVhcAjCnBInU6Jt9iYU4uZeorSptPZtaZ8iJooDsgQ==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zero-length arrays are deprecated[1] and are being replaced with
-flexible array members in support of the ongoing efforts to tighten the
-FORTIFY_SOURCE routines on memcpy(), correctly instrument array indexing
-with UBSAN_BOUNDS, and to globally enable -fstrict-flex-arrays=3.
+It's fairly useless to complain about using an obsolete feature without
+telling the user which process used it. My Fedora desktop randomly drops
+this message, but I would really need this patch to figure out what
+triggers is.
 
-Replace zero-length array with flexible-array member.
-
-This results in no differences in binary output (most especially because
-struct pda_antenna_gain is unused). The struct is kept for future
-reference.
-
-[1] https://github.com/KSPP/linux/issues/78
-
-Cc: Christian Lamparter <chunkeey@googlemail.com>
-Cc: Kalle Valo <kvalo@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: linux-wireless@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Andi Kleen <ak@linux.intel.com>
 ---
-v2:
-- convert normally (chunkeey)
-v1: https://lore.kernel.org/lkml/20221118210639.never.072-kees@kernel.org/
----
- drivers/net/wireless/intersil/p54/eeprom.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ fs/locks.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/intersil/p54/eeprom.h b/drivers/net/wireless/intersil/p54/eeprom.h
-index 1d0aaf54389a..641c4e79879e 100644
---- a/drivers/net/wireless/intersil/p54/eeprom.h
-+++ b/drivers/net/wireless/intersil/p54/eeprom.h
-@@ -108,10 +108,10 @@ struct pda_country {
- } __packed;
+diff --git a/fs/locks.c b/fs/locks.c
+index 607f94a0e789..2e45232dbeb1 100644
+--- a/fs/locks.c
++++ b/fs/locks.c
+@@ -2096,7 +2096,7 @@ SYSCALL_DEFINE2(flock, unsigned int, fd, unsigned int, cmd)
+ 	 * throw a warning to let people know that they don't actually work.
+ 	 */
+ 	if (cmd & LOCK_MAND) {
+-		pr_warn_once("Attempt to set a LOCK_MAND lock via flock(2). This support has been removed and the request ignored.\n");
++		pr_warn_once("%s: Attempt to set a LOCK_MAND lock via flock(2). This support has been removed and the request ignored.\n", current->comm);
+ 		return 0;
+ 	}
  
- struct pda_antenna_gain {
--	struct {
-+	DECLARE_FLEX_ARRAY(struct {
- 		u8 gain_5GHz;	/* 0.25 dBi units */
- 		u8 gain_2GHz;	/* 0.25 dBi units */
--	} __packed antenna[0];
-+	} __packed, antenna);
- } __packed;
- 
- struct pda_custom_wrapper {
 -- 
-2.34.1
+2.37.3
 
