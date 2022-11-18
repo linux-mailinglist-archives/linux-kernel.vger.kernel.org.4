@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B6D0630334
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 00:25:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78544630740
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 01:30:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235685AbiKRXZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 18:25:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57994 "EHLO
+        id S234148AbiKSAaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 19:30:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231745AbiKRXWv (ORCPT
+        with ESMTP id S235466AbiKSA3q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 18:22:51 -0500
+        Fri, 18 Nov 2022 19:29:46 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A411EC78
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:13:39 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F3E110926
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:40:39 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8n-0002t0-MZ; Fri, 18 Nov 2022 23:47:21 +0100
+        id 1owA8o-0002us-Ao; Fri, 18 Nov 2022 23:47:22 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8l-0058Wi-EC; Fri, 18 Nov 2022 23:47:20 +0100
+        id 1owA8m-0058X0-1k; Fri, 18 Nov 2022 23:47:20 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8l-0000C2-Jg; Fri, 18 Nov 2022 23:47:19 +0100
+        id 1owA8l-0000C5-PH; Fri, 18 Nov 2022 23:47:19 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
@@ -37,9 +37,9 @@ Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 313/606] media: dvb-frontends/rtl2830: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:40:47 +0100
-Message-Id: <20221118224540.619276-314-uwe@kleine-koenig.org>
+Subject: [PATCH 314/606] media: dvb-frontends/rtl2832: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:40:48 +0100
+Message-Id: <20221118224540.619276-315-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -66,31 +66,31 @@ can be trivially converted.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/dvb-frontends/rtl2830.c | 5 ++---
+ drivers/media/dvb-frontends/rtl2832.c | 5 ++---
  1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/dvb-frontends/rtl2830.c b/drivers/media/dvb-frontends/rtl2830.c
-index e0fbf41316ae..db3254950147 100644
---- a/drivers/media/dvb-frontends/rtl2830.c
-+++ b/drivers/media/dvb-frontends/rtl2830.c
-@@ -768,8 +768,7 @@ static int rtl2830_regmap_gather_write(void *context, const void *reg,
- 	return 0;
+diff --git a/drivers/media/dvb-frontends/rtl2832.c b/drivers/media/dvb-frontends/rtl2832.c
+index 4fa884eda5d5..900d4db8b922 100644
+--- a/drivers/media/dvb-frontends/rtl2832.c
++++ b/drivers/media/dvb-frontends/rtl2832.c
+@@ -1021,8 +1021,7 @@ static int rtl2832_pid_filter(struct dvb_frontend *fe, u8 index, u16 pid,
+ 	return ret;
  }
  
--static int rtl2830_probe(struct i2c_client *client,
--			 const struct i2c_device_id *id)
-+static int rtl2830_probe(struct i2c_client *client)
+-static int rtl2832_probe(struct i2c_client *client,
+-		const struct i2c_device_id *id)
++static int rtl2832_probe(struct i2c_client *client)
  {
- 	struct rtl2830_platform_data *pdata = client->dev.platform_data;
- 	struct rtl2830_dev *dev;
-@@ -887,7 +886,7 @@ static struct i2c_driver rtl2830_driver = {
- 		.name			= "rtl2830",
+ 	struct rtl2832_platform_data *pdata = client->dev.platform_data;
+ 	struct i2c_adapter *i2c = client->adapter;
+@@ -1136,7 +1135,7 @@ static struct i2c_driver rtl2832_driver = {
+ 		.name	= "rtl2832",
  		.suppress_bind_attrs	= true,
  	},
--	.probe		= rtl2830_probe,
-+	.probe_new	= rtl2830_probe,
- 	.remove		= rtl2830_remove,
- 	.id_table	= rtl2830_id_table,
+-	.probe		= rtl2832_probe,
++	.probe_new	= rtl2832_probe,
+ 	.remove		= rtl2832_remove,
+ 	.id_table	= rtl2832_id_table,
  };
 -- 
 2.38.1
