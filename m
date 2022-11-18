@@ -2,310 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 377FA62FBC0
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 18:34:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 551FE62FBC6
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 18:35:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242323AbiKRReN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 12:34:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34708 "EHLO
+        id S242576AbiKRRff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 12:35:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242541AbiKRRdq (ORCPT
+        with ESMTP id S242554AbiKRRfH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 12:33:46 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023FE99EAA
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 09:32:36 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id e7-20020a17090a77c700b00216928a3917so8908824pjs.4
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 09:32:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9NBmSk7fBSAJxNI2xlbnnvVbJDd4rleDkNQ22MfWjS4=;
-        b=F0LYXy04+BTUjesxYiznzIMp2EPv6TsAXbgRS7pQaL8OVC5YVDOU5m8FLAC/FIzrky
-         g023O0gv5uUPYMTsf65qv4ardfNDmUcl38ECWjHwojCt7NXtJVG3KJKr1l6WR8RljrFP
-         rtiSJ0hvZ+xve4POcmFgudRMFpS3FTy5EaS4Gp6yEvXM8t7ByKn/EOEiFaG72rgpdwtE
-         Ia1Qz9fLb20rSXAqzcEWosodqLqAhvtnpMJWCkTJmbTsx6dmQL6By1FcxZHnAhuYj8tx
-         Rx9JHHuYX8ZUr+6rVgwnFnQKpG7/Ap36Kcc5H9AbqX6x0fsKxCcuJeXrTC8tCsXKkK0B
-         4qFw==
+        Fri, 18 Nov 2022 12:35:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CDEC9A276
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 09:32:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668792778;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TydPydB++R7u+oQGl1q73u032SmAgan46ItVYeROsmQ=;
+        b=dSFzVuNFjdXfbyLPsL+RlbkH8QyivHgK++pF4JLNQVPPRQUkc4eV5bQ2qnSl26U93mumAq
+        9RDUhIlsikTeo/FKHbLqKn4miDhN8VjsrQufvJX1vFQ+4pXifN5TQ9jauOU34svdPFlFs7
+        QpE+kTgK86m45V9l4uKL0ARMXT03pbs=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-384-Kr2h5_AKM1itRh54GM9ZVg-1; Fri, 18 Nov 2022 12:32:57 -0500
+X-MC-Unique: Kr2h5_AKM1itRh54GM9ZVg-1
+Received: by mail-wm1-f71.google.com with SMTP id j2-20020a05600c1c0200b003cf7397fc9bso2548458wms.5
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 09:32:56 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9NBmSk7fBSAJxNI2xlbnnvVbJDd4rleDkNQ22MfWjS4=;
-        b=PQDNXGMp1BP0t+tE7bj1jE2C1Ae2rYhzcMoM1sQs1hXrC7cl6WhbuOECdCBYRFeLo5
-         Tce/Kalygsh+kfBJR0GIrvMyS3DYDbmqUzVJB0Weo7WRIxIqaPXZK7wPAdD8INtCnWIN
-         MBinYn0v1jFi1hXSMUhfeKAPkGZ12b06KyQI3GkFzamItTzd+ONEwNEwO4MYvKp3299D
-         OlrcjwUsmI2cH/IiTdp0jJUVrvcYlJfPNlSXnnb4NvGNJUUacfe0IJzLn4igbIA/pG/s
-         qXXPDUI5FNHQ83i+y+m2YAd9Xnlsa2l424ULDp5iN0D+OD5dIx9lZLx77qrDW6zzo+2c
-         EW5w==
-X-Gm-Message-State: ANoB5plNiKo20L/BY3NmNHGR3iZq3B/LqaV/FvpeH7jhsOCXRO0e+m3p
-        kawnYrKQ1KVk8aSKduFoqSA=
-X-Google-Smtp-Source: AA0mqf4QhHX9xixekXRosr4UFGQ5KWFFv0b2o6M8eemOOc2cuROcW7yNBijARk3dISgqt+U20PDZ2A==
-X-Received: by 2002:a17:902:cf0e:b0:17c:5b01:f227 with SMTP id i14-20020a170902cf0e00b0017c5b01f227mr620277plg.3.1668792755984;
-        Fri, 18 Nov 2022 09:32:35 -0800 (PST)
-Received: from localhost.localdomain ([112.2.231.196])
-        by smtp.gmail.com with ESMTPSA id u7-20020a656707000000b00476b6b7f339sm3037979pgf.11.2022.11.18.09.32.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 09:32:35 -0800 (PST)
-From:   Song Shuai <suagrfillet@gmail.com>
-To:     guoren@kernel.org, rostedt@goodmis.org, mhiramat@kernel.org,
-        mark.rutland@arm.com, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Song Shuai <suagrfillet@gmail.com>
-Subject: [PATCH v3 2/2] riscv/ftrace: make ftrace_caller call ftrace_graph_func
-Date:   Sat, 19 Nov 2022 01:32:17 +0800
-Message-Id: <20221118173217.888077-3-suagrfillet@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221118173217.888077-1-suagrfillet@gmail.com>
-References: <20221118173217.888077-1-suagrfillet@gmail.com>
+        h=content-transfer-encoding:in-reply-to:organization:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TydPydB++R7u+oQGl1q73u032SmAgan46ItVYeROsmQ=;
+        b=rU7ZDxtWUxpWxvLkS2MxCuvruX2jNzfYAkfttoYVqEAAPK+JiLNWDUE8VlGcotvqmG
+         BYb8pey6G4KkXfyzwk35KMHVEp+hEHI1lbM1k854aR4Db1e1Inq4t7dVWwPk+G1hG8Ra
+         82P1t/yREryJfqwPBwpWrrfGY12x/lkZg6HVbo54UjraOV4n/oX1HIqSPcedZciq6uA0
+         okZoQy+xcfoKOfzPgm12iKWcuPlZ58IbySV2U4r3iOqQtGpS6gnweRRr9xTxwe0YKBEn
+         IZkI/9GCUjHu4vmXXq9439jbZ/mEjFEuwy4cbE8kwfI5BrnAPVmeUieqxi2adJVw+8Ci
+         nf/g==
+X-Gm-Message-State: ANoB5pnWsN+hS16z8Q1WAVBYVVcb6l5uAHtlv3yYG+0XmjMFj6YDVzRB
+        foM1pqGP7OrzqqMaQ2CXO6m5qDI0zvmatnz4DZByFAY03VEGIz1drV8txTnuPcyNxKh6vK1/2rx
+        iMTHXl5tfYuQQbYgMB/TGZ7pu
+X-Received: by 2002:a5d:4406:0:b0:22d:6988:30de with SMTP id z6-20020a5d4406000000b0022d698830demr4874349wrq.186.1668792775959;
+        Fri, 18 Nov 2022 09:32:55 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6h6uJI53TwrfBbOFhzVPE+9cul+4RlRYm2mCAY21zH5E2yX6081R0EKooIKFTacK6p6dCbLQ==
+X-Received: by 2002:a5d:4406:0:b0:22d:6988:30de with SMTP id z6-20020a5d4406000000b0022d698830demr4874330wrq.186.1668792775614;
+        Fri, 18 Nov 2022 09:32:55 -0800 (PST)
+Received: from ?IPV6:2003:cb:c704:f500:6512:fac3:2687:15ff? (p200300cbc704f5006512fac3268715ff.dip0.t-ipconnect.de. [2003:cb:c704:f500:6512:fac3:2687:15ff])
+        by smtp.gmail.com with ESMTPSA id y7-20020adff6c7000000b002368f6b56desm4806305wrp.18.2022.11.18.09.32.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Nov 2022 09:32:55 -0800 (PST)
+Message-ID: <8c826c96-62ec-2f72-c4cb-30139d5639d1@redhat.com>
+Date:   Fri, 18 Nov 2022 18:32:54 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v2 2/2] module: Merge same-name module load requests
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Prarit Bhargava <prarit@redhat.com>, pmladek@suse.com,
+        Petr Pavlu <petr.pavlu@suse.com>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220919123233.8538-1-petr.pavlu@suse.com>
+ <20220919123233.8538-3-petr.pavlu@suse.com>
+ <YzdR0gRNQI2BGnJ9@bombadil.infradead.org>
+ <aa8d9456-b260-d999-0296-8e6ab876af7a@suse.com>
+ <Y07xX2ejlg0oFoEy@bombadil.infradead.org>
+ <d0bc50e3-0e42-311b-20ed-7538bb918c5b@suse.com>
+ <Y277Jb9i2VeXQoTL@bombadil.infradead.org>
+ <e070839f-c224-047b-9411-91143c1d8394@redhat.com>
+ <Y3Jg8X7qv2AKPU1J@bombadil.infradead.org>
+ <5467e66d-55de-ca8f-c1ae-ffe6efe7290d@redhat.com>
+ <Y3Pol5H4kJioAV9W@bombadil.infradead.org>
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <Y3Pol5H4kJioAV9W@bombadil.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to make the function graph use ftrace directly, ftrace_caller
-should be adjusted to save the necessary regs against the pt_regs layout
-so it can call ftrace_graph_func reasonably.
+On 15.11.22 20:29, Luis Chamberlain wrote:
+> On Mon, Nov 14, 2022 at 04:45:05PM +0100, David Hildenbrand wrote:
+>> Note that I don't think the issue I raised is due to 6e6de3dee51a.
+>> I don't have the machine at hand right now. But, again, I doubt this will
+>> fix it.
+> 
+> There are *more* modules processed after that commit. That's all. So
+> testing would be appreciated.
 
-SAVE_ALL now saves all the regs according to the pt_regs struct. Here
-supersedes SAVE_ALL by SAVE_ABI_REGS which has an extra option to allow
-saving only the necessary ABI-related regs for ftrace_caller.
+I just tested that change on top of 6.1.0-rc5+ on that large system
+and CONFIG_KASAN_INLINE=y. No change.
 
-ftrace_caller and ftrace_regs_caller save their regs with the respective
-option of SAVE_ABI_REGS, then call the tracing function, especially
-graph_ops's ftrace_graph_func. So the ftrace_graph_[regs]_call labels
-aren't needed anymore if FTRACE_WITH_REGS is defined.
 
-As the previous patch described, the ftrace_caller remains with its
-ftrace_graph_call if FTRACE_WITH_REGS isn't defined,
+[  207.955184] vmap allocation for size 2490368 failed: use vmalloc=<size> to increase size
+[  207.955891] vmap allocation for size 2490368 failed: use vmalloc=<size> to increase size
+[  207.956253] vmap allocation for size 2490368 failed: use vmalloc=<size> to increase size
+[  207.956461] systemd-udevd: vmalloc error: size 2486272, vm_struct allocation failed, mode:0xcc0(GFP_KERNEL), nodemask=(null),cpuset=/,mems_allowed=1-7
+[  207.956573] CPU: 88 PID: 4925 Comm: systemd-udevd Not tainted 6.1.0-rc5+ #4
+[  207.956580] Hardware name: Lenovo ThinkSystem SR950 -[7X12ABC1WW]-/-[7X12ABC1WW]-, BIOS -[PSE130O-1.81]- 05/20/2020
+[  207.956584] Call Trace:
+[  207.956588]  <TASK>
+[  207.956593] vmap allocation for size 2490368 failed: use vmalloc=<size> to increase size
+[  207.956593]  dump_stack_lvl+0x5b/0x77
+[  207.956613]  warn_alloc.cold+0x86/0x195
+[  207.956632]  ? zone_watermark_ok_safe+0x2b0/0x2b0
+[  207.956641]  ? slab_free_freelist_hook+0x11e/0x1d0
+[  207.956672]  ? __get_vm_area_node+0x2a4/0x340
+[  207.956694]  __vmalloc_node_range+0xad6/0x11b0
+[  207.956699]  ? trace_contention_end+0xda/0x140
+[  207.956715]  ? __mutex_lock+0x254/0x1360
+[  207.956740]  ? __mutex_unlock_slowpath+0x154/0x600
+[  207.956752]  ? bit_wait_io_timeout+0x170/0x170
+[  207.956761]  ? vfree_atomic+0xa0/0xa0
+[  207.956775]  ? load_module+0x1d8f/0x7ff0
+[  207.956786]  module_alloc+0xe7/0x170
+[  207.956802]  ? load_module+0x1d8f/0x7ff0
+[  207.956822]  load_module+0x1d8f/0x7ff0
+[  207.956876]  ? module_frob_arch_sections+0x20/0x20
+[  207.956888]  ? ima_post_read_file+0x15a/0x180
+[  207.956904]  ? ima_read_file+0x140/0x140
+[  207.956918]  ? kernel_read+0x5c/0x140
+[  207.956931]  ? security_kernel_post_read_file+0x6d/0xb0
+[  207.956950]  ? kernel_read_file+0x21d/0x7d0
+[  207.956971]  ? __x64_sys_fspick+0x270/0x270
+[  207.956999]  ? __do_sys_finit_module+0xfc/0x180
+[  207.957005]  __do_sys_finit_module+0xfc/0x180
+[  207.957012]  ? __ia32_sys_init_module+0xa0/0xa0
+[  207.957023]  ? __seccomp_filter+0x15e/0xc20
+[  207.957066]  ? syscall_trace_enter.constprop.0+0x98/0x230
+[  207.957078]  do_syscall_64+0x58/0x80
+[  207.957085]  ? asm_exc_page_fault+0x22/0x30
+[  207.957095]  ? lockdep_hardirqs_on+0x7d/0x100
+[  207.957103]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-For convenience, the original argument setup for the tracing function in
-ftrace_[regs]_caller is killed and appended to the tail of SAVE_ABI_REGS.
 
-Signed-off-by: Song Shuai <suagrfillet@gmail.com>
----
- arch/riscv/kernel/mcount-dyn.S | 143 ++++++++++++++++++++++++---------
- 1 file changed, 105 insertions(+), 38 deletions(-)
+I have access to the system for a couple more days, if there
+is anything else I should test.
 
-diff --git a/arch/riscv/kernel/mcount-dyn.S b/arch/riscv/kernel/mcount-dyn.S
-index 64bc79816f5e..c70f04711a2e 100644
---- a/arch/riscv/kernel/mcount-dyn.S
-+++ b/arch/riscv/kernel/mcount-dyn.S
-@@ -57,19 +57,55 @@
- 	.endm
- 
- #ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
--	.macro SAVE_ALL
-+
-+/**
-+* SAVE_ABI_REGS - save regs against the pt_regs struct
-+*
-+* @all: tell if saving all the regs
-+*
-+* If all is set, all the regs will be saved, otherwise only ABI
-+* related regs (a0-a7,epc,ra and optional s0) will be saved.
-+*
-+* For convenience the argument setup for tracing function is appended here.
-+* Especially $sp is passed as the 4th argument of the tracing function.
-+*
-+* After the stack is established,
-+*
-+* 0(sp) stores the PC of the traced function which can be accessed
-+* by &(fregs)->regs->epc in tracing function. Note that the real
-+* function entry address should be computed with -FENTRY_RA_OFFSET.
-+*
-+* 8(sp) stores the function return address (i.e. parent IP) that
-+* can be accessed by &(fregs)->regs->ra in tracing function.
-+*
-+* The other regs are saved at the respective localtion and accessed
-+* by the respective pt_regs member.
-+*
-+* Here is the layout of stack for your reference.
-+*
-+* PT_SIZE_ON_STACK  ->  +++++++++
-+*                       + ..... +
-+*                       + t3-t6 +
-+*                       + s2-s11+
-+*                       + a0-a7 + --++++-> ftrace_caller saved
-+*                       + s1    +   +
-+*                       + s0    + --+
-+*                       + t0-t2 +   +
-+*                       + tp    +   +
-+*                       + gp    +   +
-+*                       + sp    +   +
-+*                       + ra    + --+ // parent IP
-+*               sp  ->  + epc   + --+ // PC
-+*                       +++++++++
-+**/
-+	.macro SAVE_ABI_REGS, all=0
- 	addi	sp, sp, -PT_SIZE_ON_STACK
- 
- 	REG_S t0,  PT_EPC(sp)
- 	REG_S x1,  PT_RA(sp)
--	REG_S x2,  PT_SP(sp)
--	REG_S x3,  PT_GP(sp)
--	REG_S x4,  PT_TP(sp)
--	REG_S x5,  PT_T0(sp)
--	REG_S x6,  PT_T1(sp)
--	REG_S x7,  PT_T2(sp)
--	REG_S x8,  PT_S0(sp)
--	REG_S x9,  PT_S1(sp)
-+
-+	// always save the ABI regs
-+
- 	REG_S x10, PT_A0(sp)
- 	REG_S x11, PT_A1(sp)
- 	REG_S x12, PT_A2(sp)
-@@ -78,6 +114,18 @@
- 	REG_S x15, PT_A5(sp)
- 	REG_S x16, PT_A6(sp)
- 	REG_S x17, PT_A7(sp)
-+
-+	// save the leftover regs
-+
-+	.if \all == 1
-+	REG_S x2,  PT_SP(sp)
-+	REG_S x3,  PT_GP(sp)
-+	REG_S x4,  PT_TP(sp)
-+	REG_S x5,  PT_T0(sp)
-+	REG_S x6,  PT_T1(sp)
-+	REG_S x7,  PT_T2(sp)
-+	REG_S x8,  PT_S0(sp)
-+	REG_S x9,  PT_S1(sp)
- 	REG_S x18, PT_S2(sp)
- 	REG_S x19, PT_S3(sp)
- 	REG_S x20, PT_S4(sp)
-@@ -92,19 +140,28 @@
- 	REG_S x29, PT_T4(sp)
- 	REG_S x30, PT_T5(sp)
- 	REG_S x31, PT_T6(sp)
-+
-+	// save s0 if FP_TEST defined
-+
-+	.else
-+#ifdef HAVE_FUNCTION_GRAPH_FP_TEST
-+	REG_S x8,  PT_S0(sp)
-+#endif
-+	.endif
-+
-+	// setup 4 args for tracing functions
-+
-+	addi	a0, t0, -FENTRY_RA_OFFSET	// ip
-+	la	a1, function_trace_op
-+	REG_L	a2, 0(a1)			// op
-+	REG_L	a1, PT_RA(sp)			// parent_ip
-+	mv	a3, sp				// fregs
-+
- 	.endm
- 
--	.macro RESTORE_ALL
-+	.macro RESTORE_ABI_REGS, all=0
- 	REG_L t0,  PT_EPC(sp)
- 	REG_L x1,  PT_RA(sp)
--	REG_L x2,  PT_SP(sp)
--	REG_L x3,  PT_GP(sp)
--	REG_L x4,  PT_TP(sp)
--	REG_L x5,  PT_T0(sp)
--	REG_L x6,  PT_T1(sp)
--	REG_L x7,  PT_T2(sp)
--	REG_L x8,  PT_S0(sp)
--	REG_L x9,  PT_S1(sp)
- 	REG_L x10, PT_A0(sp)
- 	REG_L x11, PT_A1(sp)
- 	REG_L x12, PT_A2(sp)
-@@ -113,6 +170,16 @@
- 	REG_L x15, PT_A5(sp)
- 	REG_L x16, PT_A6(sp)
- 	REG_L x17, PT_A7(sp)
-+
-+	.if \all == 1
-+	REG_L x2,  PT_SP(sp)
-+	REG_L x3,  PT_GP(sp)
-+	REG_L x4,  PT_TP(sp)
-+	REG_L x5,  PT_T0(sp)
-+	REG_L x6,  PT_T1(sp)
-+	REG_L x7,  PT_T2(sp)
-+	REG_L x8,  PT_S0(sp)
-+	REG_L x9,  PT_S1(sp)
- 	REG_L x18, PT_S2(sp)
- 	REG_L x19, PT_S3(sp)
- 	REG_L x20, PT_S4(sp)
-@@ -128,10 +195,16 @@
- 	REG_L x30, PT_T5(sp)
- 	REG_L x31, PT_T6(sp)
- 
-+	.else
-+#ifdef HAVE_FUNCTION_GRAPH_FP_TEST
-+	REG_L x8,  PT_S0(sp)
-+#endif
-+	.endif
- 	addi	sp, sp, PT_SIZE_ON_STACK
- 	.endm
- #endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
- 
-+#ifndef CONFIG_DYNAMIC_FTRACE_WITH_REGS
- ENTRY(ftrace_caller)
- 	SAVE_ABI
- 
-@@ -160,33 +233,27 @@ ftrace_graph_call:
- 	jr t0
- ENDPROC(ftrace_caller)
- 
--#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
-+#else /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
- ENTRY(ftrace_regs_caller)
--	SAVE_ALL
--
--	addi	a0, t0, -FENTRY_RA_OFFSET
--	la	a1, function_trace_op
--	REG_L	a2, 0(a1)
--	REG_L	a1, PT_RA(sp)
--	mv	a3, sp
-+	SAVE_ABI_REGS 1
- 
- ftrace_regs_call:
- 	.global ftrace_regs_call
- 	call	ftrace_stub
- 
--#ifdef CONFIG_FUNCTION_GRAPH_TRACER
--	addi	a0, sp, PT_RA
--	REG_L	a1, PT_T0(sp)
--	addi	a1, a1, -FENTRY_RA_OFFSET
--#ifdef HAVE_FUNCTION_GRAPH_FP_TEST
--	mv	a2, s0
--#endif
--ftrace_graph_regs_call:
--	.global ftrace_graph_regs_call
--	call	ftrace_stub
--#endif
- 
--	RESTORE_ALL
-+	RESTORE_ABI_REGS 1
- 	jr t0
- ENDPROC(ftrace_regs_caller)
-+
-+ENTRY(ftrace_caller)
-+	SAVE_ABI_REGS 0
-+
-+ftrace_call:
-+	.global ftrace_call
-+	call	ftrace_stub
-+
-+	RESTORE_ABI_REGS 0
-+	jr t0
-+ENDPROC(ftrace_caller)
- #endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
 -- 
-2.20.1
+Thanks,
+
+David / dhildenb
 
