@@ -2,102 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 499C662F69E
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 14:56:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2AC962F6AE
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 14:57:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241523AbiKRN4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 08:56:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40774 "EHLO
+        id S240540AbiKRN5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 08:57:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiKRN4D (ORCPT
+        with ESMTP id S241756AbiKRN5s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 08:56:03 -0500
-Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A83D3B855
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 05:56:01 -0800 (PST)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id E763EC020; Fri, 18 Nov 2022 14:56:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1668779765; bh=2zvNrnwZIdlntvmhBz/DN7S4Glsc0P6Qb340ojUDEN4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PeAPOtRVbJ7Wva3/UzmTuuf7pmbZUYr64c0FxzoXadMWRdyZtMCZNm5J3k8BCIeQw
-         i0bAV78KpveYWd8UC7vHHmsE2Lf71ObZCIIMmGc2GPrYoOWzeJ0qt+CoeqzbzO7bil
-         5NC7290ME3DmigoT1BzBuEzeux9Ape6cGp8tZnmQEOyeZsDI1ZRBmpd5pdrxBRM7Ky
-         PY96OSDWxN71Cq0biGnxl5ktsa8DSZkabg6MVdfHwqbL2PnI5JSKnLdp3WN1mE6lbY
-         zg2rnnArrZao8DjmAbrjfTaTDzoXSm5t0n8CEd2VigSfiRGD/VAgEKNF9sT6VOHT09
-         hW8B4Jcv1/B6Q==
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id E9FDEC01B;
-        Fri, 18 Nov 2022 14:56:00 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1668779764; bh=2zvNrnwZIdlntvmhBz/DN7S4Glsc0P6Qb340ojUDEN4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M9LB1/hKMOS7DeTEEQ1/0eAXlpmjuJsOBW/Ir2WRkCVKs7K+eleFNnn5X5DwNO0qk
-         QAWeOYLys+gqtNHBvt5w+EBeF6GBYNb2rhZf/qj+GM4UlPmci7lZiBFhTJSWaVThTY
-         a58N+X6CJoeOQjCAfFWoK6V3gaDRBdy0Hgstqm1rwGnm5S0XqgSPZRZnEe2hzxCxQ3
-         jT6oHNQITzzlYsuDi8YobMdqtP2cpPxbw7Psr0Wphh23A5U+xZLpC2yVQox05Dge1w
-         +FhfTOP+8P+/jiFuTfUl196RscW3+Gf1X13NTlCtmgRPqr56rqMu1DeSrUTtlDWtd8
-         lbHRDzRlH2+NQ==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id e762b5e8;
-        Fri, 18 Nov 2022 13:55:50 +0000 (UTC)
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     Stefano Stabellini <sstabellini@kernel.org>
-Cc:     GUO Zihua <guozihua@huawei.com>, linux_oss@crudebyte.com,
-        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        Dominique Martinet <asmadeus@codewreck.org>
-Subject: [PATCH 2/2] 9p: ensure logical size fits allocated size
-Date:   Fri, 18 Nov 2022 22:55:42 +0900
-Message-Id: <20221118135542.63400-2-asmadeus@codewreck.org>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221118135542.63400-1-asmadeus@codewreck.org>
-References: <20221118135542.63400-1-asmadeus@codewreck.org>
+        Fri, 18 Nov 2022 08:57:48 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB5288CFD8;
+        Fri, 18 Nov 2022 05:57:47 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id cl5so9355136wrb.9;
+        Fri, 18 Nov 2022 05:57:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=eWeG46+stoyqg0DxeWDTE3Ia6sRtYUvD/f2AC43whrI=;
+        b=UBy2pMwmY0F9TprKdzF9+oHmuDyYef1NLk4176juESl05IbLKp/9GV1uvwNyE05eZK
+         Z+p4UqW4trGX9r7dbmMuBuftaRQ4LvECgbAC/ityZUzukli41iB650dYXFJgH1YVEbw3
+         anilvPdoIUHL+/519Z4dn9g5IfQiiRtLNH4AmNo9+rZS/xdn2l6s5OlKa7Et9KiQ6ulO
+         wg/8YoszXR0Tuer9L5IYFieHON2rjcYFY533+oLLD4OJnogLo1dw8T+LrUog6HLoC0VC
+         LwD7qSPBu5dMc26l8lV2VfWN+AqetNatAGJVeor5LCkDBvhY2c3wSb8PyU0NMXaTUTdf
+         SmXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eWeG46+stoyqg0DxeWDTE3Ia6sRtYUvD/f2AC43whrI=;
+        b=SoZQO8rtK0JodtzgGNUrBBDhRDE33UnfjvnNJosXOOYCzkC5HKMFQSBeC2OwrPo6oK
+         AOU14YWjdVz064zsHP7E9Ts3vYNxU4ebUJvUgn9CF39HHmnGpIFnRDGL0YtN6Ftx5laF
+         0Qyt/GcVpOrR30qGtF/Npaw0RbR2wvRXzwyaP91DWQMOZCO2G3FzeGlTArbiJ97td8Xb
+         za9+1V5jz55phCBe87Lyn6Nqb7ooPeTDojlh6v/5YQp2aSYhG4E2FWa0ZAN3R6GRN3z1
+         s2qdPF14xJiraOtE4Q4iq2gdrLejoLKd03gen2TpFAtBwkG/NiQvIPkVfOCmcSP93qy0
+         EqdQ==
+X-Gm-Message-State: ANoB5pmrJe//2TVLLvx02xre+p7hDD78Dk7Cmi66uCQ57Bl/fRnHtlEM
+        dxFn0xLSYhpn8sm6H20+oe+pvLVPz4ogFKnq
+X-Google-Smtp-Source: AA0mqf5ExHBrb9jNKEdMu558qiVQsc11nUOiP0QaPE81UIhiHekyMevzM8kLNpjwRinrrCouduOJ/Q==
+X-Received: by 2002:a5d:6282:0:b0:22e:31a4:2323 with SMTP id k2-20020a5d6282000000b0022e31a42323mr4368273wru.691.1668779866301;
+        Fri, 18 Nov 2022 05:57:46 -0800 (PST)
+Received: from prasmi.home ([2a00:23c8:2501:c701:29e1:fee9:75e6:d6ea])
+        by smtp.gmail.com with ESMTPSA id j13-20020a5d604d000000b00236695ff94fsm3638491wrt.34.2022.11.18.05.57.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 05:57:45 -0800 (PST)
+From:   Prabhakar <prabhakar.csengg@gmail.com>
+X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH] riscv: dts: renesas: rzfive-smarc-som: Enable WDT
+Date:   Fri, 18 Nov 2022 13:57:15 +0000
+Message-Id: <20221118135715.14410-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-all buffers used to be msize big, but the size can now vary based on
-message type and arguments.
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Adjut p9_check_error() to check the logical size (request payload) fits
-within the allocated size (capacity) rather than msize
+Enable WDT node on RZ/Five SMARC SoM.
 
-Transports normally all check this when the packet is being read, but
-might as well stay coherent.
+Note, WDT block is enabled in RZ/G2UL SMARC SoM DTSI [0] hence deleting
+the disabled node from RZ/Five SMARC SoM DTSI enables it here too as we
+include [0] in RZ/Five SMARC SoM DTSI.
 
-Fixes: 60ece0833b6c ("net/9p: allocate appropriate reduced message buffers")
-Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
+[0] arch/arm64/boot/dts/renesas/rzg2ul-smarc-som.dtsi
+
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 ---
+Note,
+- For the WDT to correctly on RZ/Five we need a fixup patch [0].
+- Patch applies on top of [1]
 
-I think with the previous patch this is purely redundant, but better
-safe than sorry...
-The main problem is that if we didn't find this before we already
-overflowed a buffer, so this is quite late!
+[0] https://patchwork.kernel.org/project/linux-renesas-soc/patch/20221117114907.138583-2-fabrizio.castro.jz@renesas.com/
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git/log/?h=renesas-riscv-dt-for-v6.2
+---
+ arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi | 4 ----
+ 1 file changed, 4 deletions(-)
 
- net/9p/client.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/net/9p/client.c b/net/9p/client.c
-index aaa37b07e30a..45dcc9e5d091 100644
---- a/net/9p/client.c
-+++ b/net/9p/client.c
-@@ -514,7 +514,7 @@ static int p9_check_errors(struct p9_client *c, struct p9_req_t *req)
- 	int ecode;
- 
- 	err = p9_parse_header(&req->rc, NULL, &type, NULL, 0);
--	if (req->rc.size >= c->msize) {
-+	if (req->rc.size >= req->rc.capacity) {
- 		p9_debug(P9_DEBUG_ERROR,
- 			 "requested packet size too big: %d\n",
- 			 req->rc.size);
+diff --git a/arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi b/arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi
+index 2b7672bc4b52..fdfd7cd2792b 100644
+--- a/arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi
++++ b/arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi
+@@ -41,7 +41,3 @@ &ostm2 {
+ &sdhi0 {
+ 	status = "disabled";
+ };
+-
+-&wdt0 {
+-	status = "disabled";
+-};
 -- 
-2.38.1
+2.25.1
 
