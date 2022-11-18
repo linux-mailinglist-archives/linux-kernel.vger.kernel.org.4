@@ -2,45 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFE8A62EDBB
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 07:36:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BEAC62EDBE
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 07:39:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241122AbiKRGg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 01:36:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48258 "EHLO
+        id S241148AbiKRGjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 01:39:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241140AbiKRGgP (ORCPT
+        with ESMTP id S230287AbiKRGjV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 01:36:15 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB7199A5EC;
-        Thu, 17 Nov 2022 22:36:13 -0800 (PST)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4ND6VX11zzz15MZw;
-        Fri, 18 Nov 2022 14:35:48 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 18 Nov 2022 14:36:12 +0800
-Received: from ubuntu1804.huawei.com (10.67.175.36) by
- dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 18 Nov 2022 14:36:11 +0800
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-To:     <linux-nilfs@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <chenzhongjin@huawei.com>, <konishi.ryusuke@gmail.com>,
-        <akpm@linux-foundation.org>
-Subject: [PATCH] nilfs2: Fix nilfs_sufile_mark_dirty() not set segment usage as dirty
-Date:   Fri, 18 Nov 2022 14:33:04 +0800
-Message-ID: <20221118063304.140187-1-chenzhongjin@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 18 Nov 2022 01:39:21 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A93954B1A
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:39:19 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id v1so7712687wrt.11
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:39:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=t5oiNfOvT41t6HXKynIXOeq5TbszuzB9U1lEY6iugAI=;
+        b=PBM8o/sZo2cZJdq4tjMFqGZ8h6B7Z2rtpjHe2f96qGeAhYiAmwC2LrjYyS8tVTDUu0
+         3xa2u/uQCoHNvQSgogRz/0rbUemfdbpM5RMb5Ccff5UDiMFjUOkoYnHC3aTwWaNZTm5D
+         jdjRj3yrAiuS22gTVGKWPkCMvgbnYu4MbBZsQnzTPXDW6zg8Q0PCthlBUxx54SZJXMJ/
+         BCmnfwCCxUMSdjN/vlrg39UQZEBXd/7QzopjEOseUGQ/8dxG96LqZxlBOcjjorsXKfmU
+         +ra6NJ3JyCxGzQq4P6XrC1uhXuDtBO/lyz5aJg/Si3qfhVkIo6am0U72pukg9F4MNyX8
+         6gaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=t5oiNfOvT41t6HXKynIXOeq5TbszuzB9U1lEY6iugAI=;
+        b=rShQBh0Iz4/sQc69GAnmXscVoCswVFGtX8xL21sBKaFi70BFkqZOBoIUELqfyS7LNJ
+         b1ewzadB7HXcTN4CXFo4ZQz+/fBk91MxQYPG1tmC1qJuOHSE3aEXBPvoYAQpyAD3X3/s
+         ianxCKJLcsrGKcoZWhWMM02f0pEnpdk2BO7h5wRied88ccMfXXmJHvaqmk4Hj/pL3xV9
+         yjP3LRpHizlBC4okZTwaCt4EkalX0Tyc9T3A4zX2iA8YoeFd41zkH2gZ9LeEalgJW3Pk
+         QEXoMchckNJrdYKINGaR0puxU7Owmea/NNzrjxxsyHOlrZjBIkhPPI5l/uBc+Yw7sOhI
+         itxA==
+X-Gm-Message-State: ANoB5pn21e7GwM/UXG9SikNgGvu28aXXI6AEAs8qVqJKxoge1s9U+R+m
+        dFStfxWSvZW+1xf2GXr60CYa4A==
+X-Google-Smtp-Source: AA0mqf4sxXL2uHYL7tVOtnmynropwSLEvJ73fiO1FHrThbsnDDTCWmh5QoRyKmt2uCq8z9+daNsZ5A==
+X-Received: by 2002:adf:ed86:0:b0:236:4930:2468 with SMTP id c6-20020adfed86000000b0023649302468mr3260380wro.221.1668753558092;
+        Thu, 17 Nov 2022 22:39:18 -0800 (PST)
+Received: from localhost.localdomain ([167.98.215.174])
+        by smtp.gmail.com with ESMTPSA id n24-20020a7bcbd8000000b003b4fdbb6319sm7853861wmi.21.2022.11.17.22.39.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 22:39:17 -0800 (PST)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH 0/4] nvmem: fixes for 6.1
+Date:   Fri, 18 Nov 2022 06:38:36 +0000
+Message-Id: <20221118063840.6357-1-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.36]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,57 +68,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In nilfs_sufile_mark_dirty(), the buffer and inode are set dirty, but
-nilfs_segment_usage is not set dirty, which makes it can be found by
-nilfs_sufile_alloc() because it checks nilfs_segment_usage_clean(su).
+Hi Greg,
 
-This will cause the problem reported by syzkaller:
-https://syzkaller.appspot.com/bug?id=c7c4748e11ffcc367cef04f76e02e931833cbd24
+Here is a few minor fixes in u-boot-env, rmem and lan9662-otp nvmem providers.
+-two lan9662 fixes are to fix the compatible string and fix a smatch
+warning.
+- rmem fixes an error handling path.
+- u-boot env has fix for data offset.
 
-It's because the case starts with segbuf1.segnum = 3, nextnum = 4, and
-nilfs_sufile_alloc() not called to allocate a new segment.
+If its not too late, can you take them for 6.1.
 
-The first time nilfs_segctor_extend_segments() allocated segment
-segbuf2.segnum = segbuf1.nextnum = 4, then nilfs_sufile_alloc() found
-nextnextnum = 4 segment because its su is not set dirty.
-So segbuf2.nextnum = 4, which causes next segbuf3.segnum = 4.
+Many thanks,
+Srini
 
-sb_getblk() will get same bh for segbuf2 and segbuf3, and this bh is
-added to both buffer lists of two segbuf.
-It makes the list head of second list linked to the first one. When
-iterating the first one, it will access and deref the head of second,
-which causes NULL pointer dereference.
 
-Fixes: 9ff05123e3bf ("nilfs2: segment constructor")
-Reported-by: syzbot+77e4f0...@syzkaller.appspotmail.com
-Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
----
- fs/nilfs2/sufile.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+*** BLURB HERE ***
 
-diff --git a/fs/nilfs2/sufile.c b/fs/nilfs2/sufile.c
-index 77ff8e95421f..2962f9071490 100644
---- a/fs/nilfs2/sufile.c
-+++ b/fs/nilfs2/sufile.c
-@@ -495,12 +495,18 @@ void nilfs_sufile_do_free(struct inode *sufile, __u64 segnum,
- int nilfs_sufile_mark_dirty(struct inode *sufile, __u64 segnum)
- {
- 	struct buffer_head *bh;
-+	void *kaddr;
-+	struct nilfs_segment_usage *su;
- 	int ret;
- 
- 	ret = nilfs_sufile_get_segment_usage_block(sufile, segnum, 0, &bh);
- 	if (!ret) {
- 		mark_buffer_dirty(bh);
- 		nilfs_mdt_mark_dirty(sufile);
-+		kaddr = kmap_atomic(bh->b_page);
-+		su = nilfs_sufile_block_get_segment_usage(sufile, segnum, bh, kaddr);
-+		nilfs_segment_usage_set_dirty(su);
-+		kunmap_atomic(kaddr);
- 		brelse(bh);
- 	}
- 	return ret;
+Christian Lamparter (1):
+  nvmem: u-boot-env: fix crc32_data_offset on redundant u-boot-env
+
+Claudiu Beznea (1):
+  nvmem: lan9662-otp: fix compatible name
+
+Horatiu Vultur (1):
+  nvmem: lan9662-otp: Change return type of
+    lan9662_otp_wait_flag_clear()
+
+Wei Yongjun (1):
+  nvmem: rmem: Fix return value check in rmem_read()
+
+ drivers/nvmem/lan9662-otpc.c | 4 ++--
+ drivers/nvmem/rmem.c         | 4 ++--
+ drivers/nvmem/u-boot-env.c   | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
+
 -- 
-2.17.1
+2.25.1
 
