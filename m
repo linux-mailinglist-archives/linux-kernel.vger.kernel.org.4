@@ -2,140 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35B5662F930
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 16:22:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B86862F937
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 16:23:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235389AbiKRPW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 10:22:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44488 "EHLO
+        id S241808AbiKRPXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 10:23:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235170AbiKRPWX (ORCPT
+        with ESMTP id S233929AbiKRPXM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 10:22:23 -0500
-Received: from mail-ed1-x549.google.com (mail-ed1-x549.google.com [IPv6:2a00:1450:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD6411CB08
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 07:22:22 -0800 (PST)
-Received: by mail-ed1-x549.google.com with SMTP id f20-20020a0564021e9400b00461ea0ce17cso3166171edf.16
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 07:22:22 -0800 (PST)
+        Fri, 18 Nov 2022 10:23:12 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B271CB08
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 07:23:10 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id o30so3848128wms.2
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 07:23:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=PXs9oQxTshLyON7VsLwg1Sxn4Bm1fEFFQRofp2aAizY=;
-        b=s8dI+I16xOEuDRsdf4jECwVTSX53sIE6vf0opOeUrkxo9ZQ7kt8qURebrLB39xuPpy
-         oIvI36NbtUXmE9TmXxhhkyxfWZoRqkPYmkL7eedoNbia2Uk6z9P95RDl1QrWFdtbNiRz
-         P5C22iiBvcecS8Akf5SMvRKUNYeSTXKQUXJN7s3nlIqlZmGfaTb1MWZ6xo4kLoBQvtZP
-         tE73/bJFXmnqcH2qI/7zOzicZ5YMN6pZKcLnCmColPwRxGPFT79KtP4waHTCVdAj50FO
-         XlAyrMxA3dW5B3XUIU2gSZ8QxB0JNno13lFk89nlQlotG9nGc3mztDMZrjO7Nc+NHfAs
-         ZSTw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=LcYxX7CS1Ufy2jDrgHKfbNrWxSi6NEkFbdecW+66ckA=;
+        b=kwWawBEtv8KFgdpgtP1kcjBH2zrLUgAusesVgFEwCuWYdfBgcA5wc/sBbYz/Gt60Fy
+         C04zvP0H/tOcx1EzY9ytQLrDGGHiqrxOfRPa50i7nY8v2N9LDYc8xgnsLc/GZOvrT6Io
+         vgTVe81WD/VJ1nVjtmE6LngjjQyGBUzEN3/SmMFWgHw+lrjQQjRIXbWlHn4WzsJsNGOP
+         sPy26VddXhOo5vWQpwZLlHy2CKNb/+D19+uuEKIcgHsHbUSe7ZvGcxDHweoT7IX+YDH1
+         0WeINkG/1vPNI8sPqxpkZFM+gQT4iTwUltg1AANvcWWf/B8iH+ezxZFEvkTs5mo/vXkr
+         WiQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PXs9oQxTshLyON7VsLwg1Sxn4Bm1fEFFQRofp2aAizY=;
-        b=toXQeQEtbR3O6En25WBjdGBWr+5ieYjb1eUj6ruAmtCuI2aFMoPmiA6WL9yGKvk5SX
-         qR5gYGnilz8Vl7rF1yn4Fy4Lw3wO2r+o08tvar7ZURTn0wUdWvYI49su0mwoEVYcs8lS
-         SQHOB2/HiwVXoc91klRCdz/cW5tjh+Wdi8L+Mpwe/tOoQCFHEnTn2mgvu1vIQ5hxxpbK
-         xcTW5C28hnOw924LaTr8LW+FJAne0Dm9T9DnQe/RmdTRYyVWn6WbrDozJpCWxWyFoIMj
-         EYbb5uo1ppRZxe/gMT7LNBPAUsL/nfCmy28geWVCCIMl0VYazwEGn/6BLwvMg4dhpWwS
-         z78g==
-X-Gm-Message-State: ANoB5pniJRkeri41mfHFoVdkBbympMx7tJnNxbaQUYBlPbfGVQWKofRi
-        sgAFbW/p+9AQYTFsdJgvJBg9ZKmKrg==
-X-Google-Smtp-Source: AA0mqf6YMzqdbjEDOHFYJxLody0tJqiMo1GC59oUVha1/zglgOtJjcdY+JRvmhio/ZOtjQubIof6cJu/jA==
-X-Received: from elver.muc.corp.google.com ([2a00:79e0:9c:201:4799:a943:410e:976])
- (user=elver job=sendgmr) by 2002:a05:6402:f11:b0:467:8813:cab5 with SMTP id
- i17-20020a0564020f1100b004678813cab5mr6512139eda.369.1668784941290; Fri, 18
- Nov 2022 07:22:21 -0800 (PST)
-Date:   Fri, 18 Nov 2022 16:22:16 +0100
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-Message-ID: <20221118152216.3914899-1-elver@google.com>
-Subject: [PATCH] kfence: fix stack trace pruning
-From:   Marco Elver <elver@google.com>
-To:     elver@google.com, Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Feng Tang <feng.tang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LcYxX7CS1Ufy2jDrgHKfbNrWxSi6NEkFbdecW+66ckA=;
+        b=7S4NCchyYpiMfv/CPmERvDr2BFx7YD8pQaxhihSe0rMvyd0EvwTn/ueUrZ6CipE771
+         nu5l30e0jaowkQP5NqNceXUF+wd02tig7/SKAy7AEh/KUjJY9FkZQ7gbTA1M7Bk96+ge
+         WAaRMjJTYjOgVm9VYLbZZ9P29V6j6YbmWEuQvaY/YHuuG0EIqlYVFQ5zOIwk3rFTLbM0
+         bc257qK5nzCww5D1cpPIRnqi4si3YY1ZZ0rK16H8QyYg8dNZi4XwaLDgTBiN9W414nNq
+         /MLCiAaE62aQjW0CgvQf8m2fXlfzmILTiNlKETCOIUutTDfsjPWnRDd54ohZL5Hzk1Ky
+         MF7w==
+X-Gm-Message-State: ANoB5pn0amh9OWQSPmNs2rriviIhgEDxkhEjyrmnZ1S9WzcrntzkKurS
+        GivV/hjf3n6GAh92j+RccaDAvwTrNzmZow==
+X-Google-Smtp-Source: AA0mqf63aZ9cQQYw+4CNq3MjA++NwUGZ8iaNAcaISCCd+7/g1EHsFBDOhLklLe1GPigwlYD6F1nL5Q==
+X-Received: by 2002:a05:600c:348d:b0:3cf:88d3:5685 with SMTP id a13-20020a05600c348d00b003cf88d35685mr5340839wmq.38.1668784989562;
+        Fri, 18 Nov 2022 07:23:09 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:f7cc:460c:56ae:45a? ([2a01:e0a:982:cbb0:f7cc:460c:56ae:45a])
+        by smtp.gmail.com with ESMTPSA id e18-20020adfdbd2000000b0022da3977ec5sm3801120wrj.113.2022.11.18.07.23.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Nov 2022 07:23:09 -0800 (PST)
+Message-ID: <b5970487-9326-9d41-a004-6369e854e530@linaro.org>
+Date:   Fri, 18 Nov 2022 16:23:08 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v3] dt-bindings: pinctrl: convert semtech,sx150xq bindings
+ to dt-schema
+Content-Language: en-US
+To:     Sander Vanheule <sander@svanheule.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh@kernel.org>, linux-gpio@vger.kernel.org
+References: <20221005-mdm9615-sx1509q-yaml-v3-0-e8b349eb1900@linaro.org>
+ <79ba65cc117db8102bd8f7e30d6d44fdbd0542f1.camel@svanheule.net>
+Organization: Linaro Developer Services
+In-Reply-To: <79ba65cc117db8102bd8f7e30d6d44fdbd0542f1.camel@svanheule.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit b14051352465 ("mm/sl[au]b: generalize kmalloc subsystem")
-refactored large parts of the kmalloc subsystem, resulting in the stack
-trace pruning logic done by KFENCE to no longer work.
+On 18/11/2022 16:19, Sander Vanheule wrote:
+> Hi,
+> 
+> On Tue, 2022-11-15 at 11:06 +0100, Neil Armstrong wrote:
+>> This converts the Semtech SX150Xq bindings to dt-schemas, add necessary
+>> bindings documentation to cover all differences between HW variants
+>> and current bindings usage.
+>>
+>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>> Reviewed-by: Rob Herring <robh@kernel.org>
+>> ---
+>> To: Linus Walleij <linus.walleij@linaro.org>
+>> To: Rob Herring <robh+dt@kernel.org>
+>> To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+>> Cc: linux-gpio@vger.kernel.org
+>> Cc: devicetree@vger.kernel.org
+>> Cc: linux-kernel@vger.kernel.org
+>> ---
+>> Changes in v3:
+>> - Resent with missing To: Linus Walleij
+>> - Link to v2: https://lore.kernel.org/r/20221005-mdm9615-sx1509q-yaml-v2-0-a4a5b8eecc7b@linaro.org
+>>
+>> Changes in v2:
+>> - fixed rob comments
+>> - added rob's Reviewed-by
+>> - Link to v1: https://lore.kernel.org/r/20221005-mdm9615-sx1509q-yaml-v1-0-0c26649b637c@linaro.org
+>> ---
+> 
+> [snip]
+> 
+>> +  - if:
+>> +      properties:
+>> +        compatible:
+>> +          contains:
+>> +            enum:
+>> +              - semtech,sx1503q
+>> +              - semtech,sx1506q
+>> +    then:
+>> +      patternProperties:
+>> +        '-cfg$':
+>> +          properties:
+>> +            pins:
+>> +              items:
+>> +                pattern: '^gpio[0-15]$'
+> 
+> [snip]
+> 
+>> +  - if:
+>> +      properties:
+>> +        compatible:
+>> +          contains:
+>> +            const: semtech,sx1509q
+>> +    then:
+>> +      patternProperties:
+>> +        '-cfg$':
+>> +          properties:
+>> +            pins:
+>> +              items:
+>> +                pattern: '^(oscio|gpio[0-15])$'
+> 
+> Sorry to be so late to reply, but don't these patterns only match "gpio0", "gpio1", and "gpio5"?
+> 
+> A quick search for some datasheets turned up the SX1503 and SX1509Q with 16 GPIOs, so I assume the
+> intention was to match "gpio0" to "gpio15". I think this should be "^(gpio[0-9]|gpio1[0-5])$" (or
+> something equivalent).
 
-While b14051352465 attempted to fix the situation by including
-'__kmem_cache_free' in the list of functions KFENCE should skip through,
-this only works when the compiler actually optimized the tail call from
-kfree() to __kmem_cache_free() into a jump (and thus kfree() _not_
-appearing in the full stack trace to begin with).
+Damn you're right, Linus should I resend or send a fixup ?
 
-In some configurations, the compiler no longer optimizes the tail call
-into a jump, and __kmem_cache_free() appears in the stack trace. This
-means that the pruned stack trace shown by KFENCE would include kfree()
-which is not intended - for example:
+Thanks,
+Neil
 
- | BUG: KFENCE: invalid free in kfree+0x7c/0x120
- |
- | Invalid free of 0xffff8883ed8fefe0 (in kfence-#126):
- |  kfree+0x7c/0x120
- |  test_double_free+0x116/0x1a9
- |  kunit_try_run_case+0x90/0xd0
- | [...]
-
-Fix it by moving __kmem_cache_free() to the list of functions that may
-be tail called by an allocator entry function, making the pruning logic
-work in both the optimized and unoptimized tail call cases.
-
-Fixes: b14051352465 ("mm/sl[au]b: generalize kmalloc subsystem")
-Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc: Feng Tang <feng.tang@intel.com>
-Signed-off-by: Marco Elver <elver@google.com>
----
- mm/kfence/report.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
-
-diff --git a/mm/kfence/report.c b/mm/kfence/report.c
-index 7e496856c2eb..46ecea18c4ca 100644
---- a/mm/kfence/report.c
-+++ b/mm/kfence/report.c
-@@ -75,18 +75,23 @@ static int get_stack_skipnr(const unsigned long stack_entries[], int num_entries
- 
- 		if (str_has_prefix(buf, ARCH_FUNC_PREFIX "kfence_") ||
- 		    str_has_prefix(buf, ARCH_FUNC_PREFIX "__kfence_") ||
-+		    str_has_prefix(buf, ARCH_FUNC_PREFIX "__kmem_cache_free") ||
- 		    !strncmp(buf, ARCH_FUNC_PREFIX "__slab_free", len)) {
- 			/*
--			 * In case of tail calls from any of the below
--			 * to any of the above.
-+			 * In case of tail calls from any of the below to any of
-+			 * the above, optimized by the compiler such that the
-+			 * stack trace would omit the initial entry point below.
- 			 */
- 			fallback = skipnr + 1;
- 		}
- 
--		/* Also the *_bulk() variants by only checking prefixes. */
-+		/*
-+		 * The below list should only include the initial entry points
-+		 * into the slab allocators. Includes the *_bulk() variants by
-+		 * checking prefixes.
-+		 */
- 		if (str_has_prefix(buf, ARCH_FUNC_PREFIX "kfree") ||
- 		    str_has_prefix(buf, ARCH_FUNC_PREFIX "kmem_cache_free") ||
--		    str_has_prefix(buf, ARCH_FUNC_PREFIX "__kmem_cache_free") ||
- 		    str_has_prefix(buf, ARCH_FUNC_PREFIX "__kmalloc") ||
- 		    str_has_prefix(buf, ARCH_FUNC_PREFIX "kmem_cache_alloc"))
- 			goto found;
--- 
-2.38.1.584.g0f3c55d4c2-goog
+> 
+> Best,
+> Sander
 
