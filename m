@@ -2,211 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 196DF62FF19
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 22:05:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6957C62FF23
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 22:07:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230076AbiKRVFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 16:05:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52974 "EHLO
+        id S230153AbiKRVGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 16:06:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiKRVFS (ORCPT
+        with ESMTP id S229552AbiKRVGu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 16:05:18 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2080.outbound.protection.outlook.com [40.107.92.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 192C2976D7;
-        Fri, 18 Nov 2022 13:05:17 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=U81D4Yrmd2Qn1HW9jxRu/y93IRy7cW/pAzM4NmB/BiGtvEPLl3MLyByihpfj5lYtBbCAdTX0Z+JOiwSAmNsHqlCxEsshPMknYiBOWFPkmeEzPufsE3AgTaKK88b8Ic7bEnEQs42l0CSkDfdtn+kb7aACUPmeidr1peIhh15EhsB/a08rQW+JeHaFKVtbDsHPjCGja6AcFuJUVOP2ApWGtmY3GByup1bcSgKSky1eu1wY4JATuYH+KZWBkNgDro+4wuDayQGOjUl6E08RVMLoYY0oauYHyuyeXBLcNoqtNtCmxgVA4XOhuAe5/zXZgGUsqr1FZHKEPE6eh75pphNrkQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+PqPQCN8jhTzPxqb9IEFNDG4/F8WaGYthuEEb02wrYE=;
- b=iTezC4aTQvRL10I6lJxhHjUNnNwrtrerlKiLMvHtq3vIuRAo2Cn7+vf6pbz6HL9flLdO5sw1eL6rg2GT+gupQ7sypYu3C60Vnm5DHwPQ4RYp3zWa0wshFty38wKBkRQaBqyd4iRkOutgpVaI/8YsYdt6/Hg3kbxj84lPAj5L4/TJguir/kqa8gGfpfIzN1JmmD/Mgyk2gsffF/wySjcYSTwR5LQGWY5P/t6k1jhQsrw4RPSG3zXj+ma5hAvukaROKOv0m/hLZ9e8WYU5yYi/rcohZBmCpWPRsfgt9RS5q1n4WClFV7jts0xibF+5Pt7H3rPQzrvAMuEpAwwJxOWjoA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+PqPQCN8jhTzPxqb9IEFNDG4/F8WaGYthuEEb02wrYE=;
- b=3/EAairKUhqxTxuRebW+JHdaqwRTpCihdx+tA2aqIpM9Bqy2v8wyOzzCSchfEaS3rs+IOrl0OAUdb7D2L3KRRi7oc5DG7IXESibZVsc93MNcFRTshanWsGp63MKxxBNBS7YhA6uy1++qAuxR3SlIIWmK3Ri/faTau6gpxRUQLbk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
- by MW4PR12MB7439.namprd12.prod.outlook.com (2603:10b6:303:22b::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17; Fri, 18 Nov
- 2022 21:05:14 +0000
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::2d6a:70d0:eb90:9dca]) by CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::2d6a:70d0:eb90:9dca%8]) with mapi id 15.20.5813.019; Fri, 18 Nov 2022
- 21:05:14 +0000
-Message-ID: <8947162f-762e-5ee1-5be7-73ba641149d0@amd.com>
-Date:   Fri, 18 Nov 2022 16:05:10 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] drm/amd/dc/dce120: Fix audio register mapping, stop
- triggering KASAN
-Content-Language: en-US
-To:     Alex Deucher <alexdeucher@gmail.com>, Lyude Paul <lyude@redhat.com>
-Cc:     amd-gfx@lists.freedesktop.org, Alan Liu <HaoPing.Liu@amd.com>,
-        Leo Li <sunpeng.li@amd.com>, David Airlie <airlied@gmail.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        stable@vger.kernel.org,
-        Aurabindo Pillai <aurabindo.pillai@amd.com>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-References: <20221114222046.386560-1-lyude@redhat.com>
- <CADnq5_PrarJPZQu6uRwDdCqhZr7Hvbtxo_HuhiQ7H1DYRgSyqQ@mail.gmail.com>
- <CADnq5_O+bTG3992uZKvJct6-iRWL9nW1xEzXhh3SShm1=VLFtQ@mail.gmail.com>
-From:   Harry Wentland <harry.wentland@amd.com>
-In-Reply-To: <CADnq5_O+bTG3992uZKvJct6-iRWL9nW1xEzXhh3SShm1=VLFtQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YT1PR01CA0061.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:2e::30) To CO6PR12MB5427.namprd12.prod.outlook.com
- (2603:10b6:5:358::13)
+        Fri, 18 Nov 2022 16:06:50 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B6D98241
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 13:06:50 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id w3-20020a17090a460300b00218524e8877so7740357pjg.1
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 13:06:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gnAsPrVGuvzoHqZVlZd6zNdmEYEJ95+s/mRmpJEA+NA=;
+        b=Bu1ONXDoglBy/CFm02D+Z3gcRjHFLorxNl9tvfBxRV9f0AYhPOoTsWvonN9OWHIv+v
+         mPKPOUbuSytsxg755KPqezCAqfQ7cK9jyX4w92PdW+LTzVSA8SfJfn5hdnqNgC/dnclv
+         ubFbsCjcG2+vcfhIBseJHoVNJHAOpfugbzblE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gnAsPrVGuvzoHqZVlZd6zNdmEYEJ95+s/mRmpJEA+NA=;
+        b=hw+/ddakbZCZBLGNfE24BE9LbWUC6or4pdOpYkmlNGfqB16z6alaDzk2apHC9M2dxk
+         PeMUEdiFne+Un55uLJmqP+doBxlI9I1+VkfhrxF4OYZQhXlzsbQ5XojzUjGS5J7DZW07
+         rOcA3LRd+Y7vEAOPufAFZVi2FPR74FSYYY2UeyavNE2uBOI3txuPsY+dksJx0FMKhLUi
+         XiZmmojDjE2mS8s+avFRtT5GoJZpYdwGNjysARF/Zq1qSsu76hPHi+Yhkg5ZxzPKITck
+         IblXK8TaMXB4KVJHx17FrBGL6PkNUYzvldjSr3iQ2XFrBkiMY28OKtgn4adUShxAVevM
+         6UqA==
+X-Gm-Message-State: ANoB5pkGGE2klxXR5IXwk2mHhFC7jdm4ILHEu7vAxxXhSFZJoj9LatxB
+        qmucnXPQop0A4/6DVpd8oc0c5Q==
+X-Google-Smtp-Source: AA0mqf6r3Tm95SxxS6ArtCRTT4T+OwIk12rF9o1pl5sGWCaJvZHHXe5vIUZ/h74bghrw41sb/gyFhQ==
+X-Received: by 2002:a17:903:2144:b0:188:5698:5beb with SMTP id s4-20020a170903214400b0018856985bebmr1119715ple.150.1668805609578;
+        Fri, 18 Nov 2022 13:06:49 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id q40-20020a17090a17ab00b00212735c8898sm5806748pja.30.2022.11.18.13.06.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 13:06:48 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Christian Lamparter <chunkeey@googlemail.com>
+Cc:     Kees Cook <keescook@chromium.org>, Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] p54: Remove unused struct pda_antenna_gain
+Date:   Fri, 18 Nov 2022 13:06:46 -0800
+Message-Id: <20221118210639.never.072-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5427:EE_|MW4PR12MB7439:EE_
-X-MS-Office365-Filtering-Correlation-Id: 97234e57-3d2d-41b1-7d50-08dac9a89630
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XBp20YGHn2KeSuB6Vf4IiRzR1PKEAcsWD3SlYhPWwzEizyGBRPziyA9YSGxRh7fkwmUudb0FyoM2LbO+Fhx4yxYiBH3jq1Yj13jwDVdLErNw061EJWEpsenbXfEQN71ZqK3iSBRmsRAn1urq8wHvmnuDnTyZMUREVVM/lPIHfEf5I8uAEjVak3SYuXOkoQM5cDgg7E3GbfuFBjfWOEbJIpeWvZ71hH+Q1d4jmRW5eYQ9SSiXxiYshgQFt1cCVmBvLM4hMLF2QcREJJOAJGNt2V9Ch9sjvG2JZAruy3z2vRbWoV4lt95Sbn0JTrExPEzsl47GLQbiGCKcP+FfPnY4t0OCbRej1/DPjYRAUQtLick0LdcKBejJMNGOFUfQCZzd1YpaZ8FzslJjvVnpZGdrAfJ6NDlLLzJ+oFpeTnqzt9L0lf+gCja7uIf0I4M0gazB0i3DWXQZTOhcSD1Dt5lx0MyKAv+EYF6hlNV75WVAZy0rVedrz/EJN6mgJI2sCZG0fO1Ah+2nM6UWwW5QMg7AICHrabHtoQqa2/uUbFhEPwhTgj2bWh+hJvT6aItGgLiQTq7HtkUfO9wU+TeHSNjlsqpbLKl6VgW/1ZNHnbtgXh1QyaMjm7s+lX4YOrJ+74ulhUWEJBsVzqR1FM/uFFMMsbLFSqWxlWMUIfjjv/t82awTk8HAKoFBuQsdlUz9QbIG+L0ercPLGOMjpOKFbsS3Jk6aLULxpvrGKyiF7IeGBME=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(136003)(366004)(346002)(376002)(451199015)(38100700002)(31696002)(5660300002)(6486002)(110136005)(4326008)(478600001)(2906002)(66946007)(41300700001)(316002)(8676002)(44832011)(66476007)(8936002)(66556008)(54906003)(83380400001)(2616005)(186003)(6512007)(6666004)(6506007)(26005)(36756003)(53546011)(31686004)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?S3lYZnhyNHVFL1lSNVZlVjlmSkZIcXNkeXBGSzYraDVDWmJNQTRjSE9UVVFT?=
- =?utf-8?B?SDdScE4yL0luNjNMTDhFMjZpN2crVzZNT3o5enZKeFRlR3dQam1yNE5heDFO?=
- =?utf-8?B?MUx4VEo2bVZKVm14ejVmakJBa0JiOStUc2U0eS9MVWFZdkNaMXAyWkJuYW4w?=
- =?utf-8?B?T0FUdDFoUUt5VWdreWRxbEFreVBpZjJRUmF4WVVhQ3N5dDFRdjFwV1BEZnls?=
- =?utf-8?B?eU10cEY2cHg2U2JQUUMyWlI1cGxYSUpocFpVSm5QZ01aLy9PNUxJWVRlT3Br?=
- =?utf-8?B?dE50NUlvWFRML3hxODR5cWgzMWREQ21rMm4rZ0FIaHhId1VxTEZCTmNMSWw3?=
- =?utf-8?B?QjlYUFhHdnRNK2dOQUhoNXdhWWxTNDBxdmtyNnBzOVZWM0twS3BkWjJIb3N5?=
- =?utf-8?B?WlNYZVp6NURvNmF6UjFyazgwMFFYMmszSGc5azUrV3prS2l6NnFtcTFtcHNr?=
- =?utf-8?B?RldkZjhReXNSUkZDcmp0YmlpaEJZQmx1TDV5dTAwK2pTdzdDcjhLY3JRZEtw?=
- =?utf-8?B?a0hzNUNwNmxqSG5YQkcyaUk0R3BYakVaMVRwMElIcXN1VjBUVUE3bnpQQVVz?=
- =?utf-8?B?MUowbUVvNURrTEE3R1RjcFU1ZEJLRkg5OURnY2NBRmFOZWVjeCtpMGFvdFB5?=
- =?utf-8?B?Q1g3akxUUVZIbzRQeTNvbHVlSXB1aUUrZFkvL2pXUWttVkFhYlU3cVVkUThL?=
- =?utf-8?B?YTB5NjEvT2ZKYW9sYVBqSEV2M1VXcmNPYTVobkJ6dUR3WjhZZmdrUjFTREY2?=
- =?utf-8?B?Z0xnY0U5L0s2c1NFWEM4Y21ZVXdUdVkvU2RYN014Zml1L1lSYVhrUG90eU4w?=
- =?utf-8?B?aHU2Ry9SZ1NlaldUS3BuM2huY1lxN1RhU0FVc0RwWXptb0lkYmYrbmZ2YzNx?=
- =?utf-8?B?aVNyTHN1ZW15S3BiVGhrMzI4ZzFUdmpwN3VNVzNkNzRIb3prVkxmaUR0OWVv?=
- =?utf-8?B?aTdiYnRhdWVHNnJLbjA0N1ZRenpiUWJDcThHVmtEcGxXNysvVjRsL3ppbVpT?=
- =?utf-8?B?aHJnelc0ZDlFZFhYNkx2blJHcFo4eEdiK2Q3U1dLdTJOakZxMEJjbytwallw?=
- =?utf-8?B?ZUVIVkE4MFdPb2VBS2xmVHJIVE1HMWR3Um9BdFpCTXpidzBxSXIrR0JBaGlQ?=
- =?utf-8?B?ZDN5Rk4xRFZjZ2F0dXRKVHhBbWRBQXVKMlFoaEZVdWcreEFHby9KU1hCaFc1?=
- =?utf-8?B?RTVxalRGOW5tZFNjaGYxYWtQOGJJQkhZbHp1a0JaSWdKOXh2NG5JTVpOWWRl?=
- =?utf-8?B?SkZhQXFJVk5kYzFDaUo0SW1VeDRreUFObmtPUWFUbkRPNEtHQ1R6cjdXcjZN?=
- =?utf-8?B?U3JtSStEMzRnejRrc2FtOXlLdExzSW0xYzkxcFE4aTNab0VGRWxzN3pMVjZl?=
- =?utf-8?B?aVhFSjdFbFNNSWMxNnBPM3kxYzF4TzgrOXk5WHJVSzhqUGFsMWRZUFdqaDV2?=
- =?utf-8?B?c3NCOEl6c3RRWGRBYUV3d2xzREpJa3YwSVRneHhCMkNoaDNXcG4xelRvdlBh?=
- =?utf-8?B?TEgyK2ZUQmZDek0vRHlFclpQZEdFdnkvZ21QTytZVEx0L3lER1k0d3hnSFh5?=
- =?utf-8?B?WHZmREloenNndGlFT2VWRjJxNUhoK0JtenQ0VmNyYzBpcXdYVWRueWxzbDRJ?=
- =?utf-8?B?Q2xOT2RxZ3FmQkIwU2tuaEdCaVVZbTN5RkxXZG9Hc3Y0SkdicW5qSDVjZWJn?=
- =?utf-8?B?eHhqME1iME50SWdYVlZuYndsZForcXRyZ2FMaCt2bUlIb2FUbCtSa0kvWlRH?=
- =?utf-8?B?MmQrS0JUZG1IYzcxTXUzei9uY3JGUXRFWmJ5dmN2M1VkTlBnaVdBbXh6OXlF?=
- =?utf-8?B?K21Nb2llcXdOalUzeHZpUFdiWFVtaXdKTmVSN2pHcXdnRlZIeXJTTnp2cUpD?=
- =?utf-8?B?REFMcjRSaUUwZ3JwdHRCZVdHSUFYaXJpM3k2eXBLQzNSL0l1R2lNOTViWHZB?=
- =?utf-8?B?bFp5TWZxeVdTd3ZKTk9jODFxL0c5TS9tQlpYMVZIbnJJT2VDWVlHTHJEM3ls?=
- =?utf-8?B?L2RTMVhUeEU1eXVjOE1EdUl6NWljSmE1V1B2blBIcFhaaEVYNFNvNXZ4bWpI?=
- =?utf-8?B?MEVxeGR2ekhaTDRkcXBnSkxXRktpQlJQQVZmd0RRMUMzZ1hXOHNMLzZtUXFj?=
- =?utf-8?Q?B34ikOOXsq/E+9/ikBnrdoohu?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 97234e57-3d2d-41b1-7d50-08dac9a89630
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2022 21:05:13.9982
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xhizNDcwPxpChmhUvCErSAu5SqjCEOXWOtVwU25ztuU9S51nbDpnoihbK//xXUeEFpWaRfaZg2cCImYmilWofQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7439
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1211; h=from:subject:message-id; bh=xE/N7gPBr8pC4RWE4/LtXpIzlGUJNC643Y5HQ4jcdAw=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjd/PmJitOcOhYF+kOkfL4S9RGBKFXo38FGTaxIKNh e1EVjb2JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY3fz5gAKCRCJcvTf3G3AJowxEA CzSFjacs4k7LCSAK3O45g6EFEe+OrbjoiWiqkX0qvuwJaKY70oEFAqF41Daxf8bdkMmqdWncgV/dW0 vhT4AVeiT0L8lgpD9mfsd3t2WIcb3KMd6VLW3x7hXQlvTeSOpRGInG4FevkLpEUsIy4SPna7ycmRvj f62tMEiIL7MIjwT/pprP2PXhL9kA4zKXh15cvXndeDaX9EGkCMqCciCTrY+szSphZr0431wqxrnPP0 uc78kyKzNDlcWS4V/gN9Ua7wBF/YhGvDayPTLi5u8sy0fo0XHg25wtC1FHZwbnkSAg4i+0gdca2KjO 0gx4b1MFHX6/s8plMDuTzXs1UF+WU5XK5YokMt3Hs2QmzAAyiIA1bIn2nvWQFPO28WhIxZrL4jhtch H8w8Hg0gtIm+aX1gFrUfW5eQYPhaeXXd/8jva/hmuOyZP9RkwRIyaG4ZYs1l7wD7yMlxys6zGqewJo VumVKRtAgLoV0G5n7uXJkzzWcC/V4vTX6ewjnoBM7b8lsaNkLzAVYQ/jvcHalCYAWA9eMrkW8SLZ/S dEAqXU2mUuBFehSGizp06CzFG4ig1rZlEirwWTniz4w4aX+aJfDF9RUZ51V8xNao4KtF11lYymV9oU ul2feGkCPxGlhy/uL1a+vGdxzs7MvvtN/ZwkT5+oDQaTFeUIMw5Akj5jbojw==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Remove struct pda_antenna_gain. It was unused and was using
+deprecated 0-length arrays[1].
 
+[1] https://github.com/KSPP/linux/issues/78
 
-On 11/18/22 15:25, Alex Deucher wrote:
-> On Thu, Nov 17, 2022 at 4:40 PM Alex Deucher <alexdeucher@gmail.com> wrote:
->>
->> On Mon, Nov 14, 2022 at 5:21 PM Lyude Paul <lyude@redhat.com> wrote:
->>>
->>> There's been a very long running bug that seems to have been neglected for
->>> a while, where amdgpu consistently triggers a KASAN error at start:
->>>
->>>   BUG: KASAN: global-out-of-bounds in read_indirect_azalia_reg+0x1d4/0x2a0 [amdgpu]
->>>   Read of size 4 at addr ffffffffc2274b28 by task modprobe/1889
->>>
->>> After digging through amd's rather creative method for accessing registers,
->>> I eventually discovered the problem likely has to do with the fact that on
->>> my dce120 GPU there are supposedly 7 sets of audio registers. But we only
->>> define a register mapping for 6 sets.
->>>
->>> So, fix this and fix the KASAN warning finally.
->>>
->>> Signed-off-by: Lyude Paul <lyude@redhat.com>
->>> Cc: stable@vger.kernel.org
->>
->> This is the correct fix for asics having 7 audio instances.  It looks
->> correct to me, assuming DCE12 actually has 7 audio instances.
->> @Wentland, Harry Do you know off hand?  If you can confirm that, the
->> patch is:
->> Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
-> 
-> The driver currently defines 7 audio instances, whether or not it
-> actually has 7 remains to be seen but the code as is is broken, so
-> I'll apply this.  If it turns out there are only 6 instances we can
-> fix the count later.  Applied.  Thanks!
-> 
+Cc: Christian Lamparter <chunkeey@googlemail.com>
+Cc: Kalle Valo <kvalo@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: linux-wireless@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ drivers/net/wireless/intersil/p54/eeprom.h | 7 -------
+ 1 file changed, 7 deletions(-)
 
-Good catch. I seem to recall some DCE generations had an extra audio
-device and if DCE12 defines 7 audio instances then this is the correct
-fix.
-
-Reviewed-by: Harry Wentland <harry.wentland@amd.com>
-
-Harry
-
-> Alex
-> 
->>
->>
->>> ---
->>> Sending this one separately from the rest of my fixes since:
->>>
->>> * It's definitely completely unrelated to the Gitlab 2171 issue
->>> * I'm not sure if this is the correct fix since it's in DC
->>>
->>>  drivers/gpu/drm/amd/display/dc/dce120/dce120_resource.c | 3 ++-
->>>  1 file changed, 2 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/gpu/drm/amd/display/dc/dce120/dce120_resource.c b/drivers/gpu/drm/amd/display/dc/dce120/dce120_resource.c
->>> index 1b70b78e2fa15..af631085e88c5 100644
->>> --- a/drivers/gpu/drm/amd/display/dc/dce120/dce120_resource.c
->>> +++ b/drivers/gpu/drm/amd/display/dc/dce120/dce120_resource.c
->>> @@ -359,7 +359,8 @@ static const struct dce_audio_registers audio_regs[] = {
->>>         audio_regs(2),
->>>         audio_regs(3),
->>>         audio_regs(4),
->>> -       audio_regs(5)
->>> +       audio_regs(5),
->>> +       audio_regs(6),
->>>  };
->>>
->>>  #define DCE120_AUD_COMMON_MASK_SH_LIST(mask_sh)\
->>> --
->>> 2.37.3
->>>
+diff --git a/drivers/net/wireless/intersil/p54/eeprom.h b/drivers/net/wireless/intersil/p54/eeprom.h
+index 1d0aaf54389a..10b6d96aa49e 100644
+--- a/drivers/net/wireless/intersil/p54/eeprom.h
++++ b/drivers/net/wireless/intersil/p54/eeprom.h
+@@ -107,13 +107,6 @@ struct pda_country {
+ 	u8 flags;
+ } __packed;
+ 
+-struct pda_antenna_gain {
+-	struct {
+-		u8 gain_5GHz;	/* 0.25 dBi units */
+-		u8 gain_2GHz;	/* 0.25 dBi units */
+-	} __packed antenna[0];
+-} __packed;
+-
+ struct pda_custom_wrapper {
+ 	__le16 entries;
+ 	__le16 entry_size;
+-- 
+2.34.1
 
