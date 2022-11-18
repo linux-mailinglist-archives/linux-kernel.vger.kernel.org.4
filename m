@@ -2,134 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BBFC62F379
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 12:17:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 479EB62F38D
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 12:21:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241638AbiKRLRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 06:17:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52846 "EHLO
+        id S241338AbiKRLVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 06:21:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241181AbiKRLRu (ORCPT
+        with ESMTP id S241871AbiKRLTx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 06:17:50 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7EE99EB9
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 03:17:48 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id z19-20020a056e02089300b002fffe186ac4so3086288ils.8
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 03:17:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=icbM6LR89x3ZTtuCKeMsNpGB89t4A+E9BcUPjncu7JM=;
-        b=vKRXyOGs5MUBZBJWu+0ishFegZqX43AHUa9t2wZZAhRd76Tx6ScSL5OJsJDNPvd7V9
-         NY3XaBkOUJ8yYswj4e3muzlm+6/7X9FpxNvLrC25a8ai9Y2Hh3YGtQ3fiV3VJYUvweVR
-         7Tpgwk22SN5PdNFklp31/tHzegz4x8gUypVCTdKyuOAq1HYKsnnPnGst3Wwe1yVlqcvd
-         vadZWjzvox4f9yCuKnbti4ZZzPVP6SqSA8wfutYuhMbbtCSenK4GWxLXUr5Wq7ISXtLD
-         pYBpfMIRy2dfYojZpKyKBFWnxuwIG79zs8jybDxLOtLeSm9xsxIA4/HOfOrG+CZgmRUy
-         vCDw==
-X-Gm-Message-State: ANoB5pkc1faAUIydYADaUMAPR6EhJ/NABrUFIqRArFCp5w2FpKZTTRwT
-        E1lthiDCbgEcfUMgQLLZqAfboYzIuo//BsS7TV7x1Xa84mFE
-X-Google-Smtp-Source: AA0mqf7drEU1YpQnGbg3G2U6EVfhnI+s3wlnztWMe7R1Nu0U4D8BzBehZa99Li6Sogfkxj244qnObNrnPcG6tnR4uCvuQTuxxqQp
+        Fri, 18 Nov 2022 06:19:53 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D0FC2FFEE;
+        Fri, 18 Nov 2022 03:19:37 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AIBJQBI000521;
+        Fri, 18 Nov 2022 05:19:26 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1668770366;
+        bh=LM8ezV6TecVQu25z5Lbydgt5yexPr7glIAePeC3iCRU=;
+        h=From:To:CC:Subject:Date;
+        b=bCURE0Bgev0m/AQY0y9G2Q13Oi8B98BaCpe0hujhG5A0EorP/X0UWNPgWSzRBjmy9
+         5Undlpwz4KU0zv4g2utTEWP0HGHosTePnqanMuainsxA/pzv3mq6MFO8hqpDG3D/l+
+         Ywsi8VbU+cONNlRrDNHpEpezDExMevqRPzLgUJJw=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AIBJQHE100331
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 18 Nov 2022 05:19:26 -0600
+Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 18
+ Nov 2022 05:19:26 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Fri, 18 Nov 2022 05:19:26 -0600
+Received: from fllv0122.itg.ti.com (fllv0122.itg.ti.com [10.247.120.72])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AIBJQtA051645;
+        Fri, 18 Nov 2022 05:19:26 -0600
+Received: from localhost (a0501179-pc.dhcp.ti.com [10.24.69.114])
+        by fllv0122.itg.ti.com (8.14.7/8.14.7) with ESMTP id 2AIBJPD3029459;
+        Fri, 18 Nov 2022 05:19:26 -0600
+From:   MD Danish Anwar <danishanwar@ti.com>
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Suman Anna <s-anna@ti.com>, Roger Quadros <rogerq@kernel.org>,
+        "Andrew F . Davis" <afd@ti.com>, <nm@ti.com>, <vigneshr@ti.com>,
+        <srk@ti.com>, <linux-remoteproc@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        MD Danish Anwar <danishanwar@ti.com>
+Subject: [PATCH v9 0/6] Introduce PRU remoteproc consumer API
+Date:   Fri, 18 Nov 2022 16:49:18 +0530
+Message-ID: <20221118111924.3277838-1-danishanwar@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:3f06:b0:363:aa8f:e316 with SMTP id
- ck6-20020a0566383f0600b00363aa8fe316mr2908709jab.238.1668770267260; Fri, 18
- Nov 2022 03:17:47 -0800 (PST)
-Date:   Fri, 18 Nov 2022 03:17:47 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000fdedc805edbcda46@google.com>
-Subject: [syzbot] WARNING in rtnl_dellink (2)
-From:   syzbot <syzbot+d8c77f7232bfdb254e37@syzkaller.appspotmail.com>
-To:     ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
-        davem@davemloft.net, edumazet@google.com, hawk@kernel.org,
-        idosch@nvidia.com, john.fastabend@gmail.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, petrm@nvidia.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+The Programmable Real-Time Unit and Industrial Communication Subsystem
+(PRU-ICSS or simply PRUSS) on various TI SoCs consists of dual 32-bit
+RISC cores (Programmable Real-Time Units, or PRUs) for program execution.
 
-syzbot found the following issue on:
+There are 3 foundation components for PRUSS subsystem: the PRUSS platform
+driver, the PRUSS INTC driver and the PRUSS remoteproc driver. All were
+already merged and can be found under:
 
-HEAD commit:    a70385240892 Merge tag 'perf_urgent_for_v6.1_rc2' of git:/..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=147717d2880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ea03ca45176080bc
-dashboard link: https://syzkaller.appspot.com/bug?extid=d8c77f7232bfdb254e37
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+1) drivers/soc/ti/pruss.c
+   Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml
+2) drivers/irqchip/irq-pruss-intc.c
+   Documentation/devicetree/bindings/interrupt-controller/ti,pruss-intc.yaml
+3) drivers/remoteproc/pru_rproc.c
+   Documentation/devicetree/bindings/remoteproc/ti,pru-rproc.yaml
 
-Unfortunately, I don't have any reproducer for this issue yet.
+The programmable nature of the PRUs provide flexibility to implement custom
+peripheral interfaces, fast real-time responses, or specialized data handling.
+Example of a PRU consumer drivers will be:
+  - Software UART over PRUSS
+  - PRU-ICSS Ethernet EMAC
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/5e17f1e83cf3/disk-a7038524.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/f8ef729877f7/vmlinux-a7038524.xz
+In order to make usage of common PRU resources and allow the consumer drivers to
+configure the PRU hardware for specific usage the PRU API is introduced.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+d8c77f7232bfdb254e37@syzkaller.appspotmail.com
+This is the v9 of the patch series [1]. This version of the patchset 
+addresses the comments made on v8 [8] of the series. 
 
-bond0 (unregistering): (slave bond3): Releasing backup interface
-bond0 (unregistering): Released all slaves
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 20974 at net/core/dev.c:10871 unregister_netdevice_many+0x13ba/0x1930 net/core/dev.c:10871
-Modules linked in:
-CPU: 0 PID: 20974 Comm: syz-executor.1 Not tainted 6.1.0-rc1-syzkaller-00454-ga70385240892 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-RIP: 0010:unregister_netdevice_many+0x13ba/0x1930 net/core/dev.c:10871
-Code: 0b e9 27 f1 ff ff e8 75 08 24 fa be 04 00 00 00 4c 89 f7 e8 28 96 ab fc e9 42 fb ff ff 48 89 dd e9 1c f9 ff ff e8 56 08 24 fa <0f> 0b e9 f0 f9 ff ff e8 4a 08 24 fa 0f b6 1d dc e5 73 06 31 ff 89
-RSP: 0018:ffffc9000b4ff268 EFLAGS: 00010246
-RAX: 0000000000040000 RBX: ffff88807627c0b0 RCX: ffffc90004743000
-RDX: 0000000000040000 RSI: ffffffff8758834a RDI: 0000000000000005
-RBP: ffff88801ecf8080 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000001 R11: 000000000008c07e R12: 0000000000000000
-R13: ffff88801ecf8080 R14: ffff88807627c000 R15: dffffc0000000000
-FS:  00007f42ed863700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f220e57f1b8 CR3: 0000000036be9000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 000000000b002800
-DR3: 0000000000000000 DR6: 00000000ffff0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- rtnl_delete_link net/core/rtnetlink.c:3123 [inline]
- rtnl_dellink+0x354/0xa90 net/core/rtnetlink.c:3174
- rtnetlink_rcv_msg+0x43a/0xca0 net/core/rtnetlink.c:6091
- netlink_rcv_skb+0x153/0x420 net/netlink/af_netlink.c:2540
- netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
- netlink_unicast+0x543/0x7f0 net/netlink/af_netlink.c:1345
- netlink_sendmsg+0x917/0xe10 net/netlink/af_netlink.c:1921
- sock_sendmsg_nosec net/socket.c:714 [inline]
- sock_sendmsg+0xcf/0x120 net/socket.c:734
- ____sys_sendmsg+0x712/0x8c0 net/socket.c:2482
- ___sys_sendmsg+0x110/0x1b0 net/socket.c:2536
- __sys_sendmsg+0xf3/0x1c0 net/socket.c:2565
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f42ec68b5f9
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f42ed863168 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-RAX: ffffffffffffffda RBX: 00007f42ec7abf80 RCX: 00007f42ec68b5f9
-RDX: 0000000000000000 RSI: 0000000020000140 RDI: 0000000000000003
-RBP: 00007f42ec6e67b0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007f42eccdfb1f R14: 00007f42ed863300 R15: 0000000000022000
- </TASK>
+Two more patch series have been posted ([2] and [3]) that depends on this
+series, one has been posted to the soc/ti/ tree and another  
+to the networking tree. All the 3 series including this one, has been 
+sent as RFC [4] to get comments and to explain the dependencies.
 
+Changes from v8 to v9 :
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+*) Fixed the warnings generated by running checkpatch.pl script.
+*) Added Review/Ack tags.
+*) Listed just the SoBs tags for all the patches as suggested by Mathieu.
+*) Removed a comment for an already documented field in patch 5/6 of this series.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Changes from v7 [7] to v8 :
+
+*) Removed get_device(&rproc->dev) from API __pru_rproc_get() in patch 2/5 of 
+this series as asked by Roger. 
+*) Replaced all the SoBs (other than mine) to Co-developed-by tags for all 
+the patches in this series as asked by Mathieu.
+*) Added a new patch (3/6) in this series for Introduction of pruss_pru_id enum.
+Previously this enum was part of patch 2/6. As asked by Roger removed this enum 
+(and the APIs that are using the enum) from patch 2/6 and added it in new patch.
+*) Removed a comment for an already documented field in patch 2/6 of this series.
+*) Changed 'pru' to 'PRU' in comment of API pru_rproc_set_firmware() as asked by 
+Roger.
+
+Changes from v6 [6] to v7 :
+
+*) Removed example section from ti,pru-consumer.yaml as the full example 
+included compatible property as well which is not introduced in this series 
+thus creating dt check binding error. Removing the example section fixes the
+dt binding check error. The example section will be included in 
+"ti,icssg-prueth.yaml" in the next version of series [3]
+*) Updated the commit message for patch 1/5 of this series to address Krzysztof's 
+comment.
+
+Changes from v5 [5] to v6  :
+
+*) Added rproc_get_by_phandle() in pru_rproc_get() 
+*) Provided background of Ctable in the commit messege.
+*) Removed patch "" [9] (6th Patch of the previous version of this series)
+   as it has dependency on series [2], thus creating a cyclic dependency.
+
+The patch [6] will be sent along with the next version of series [2].
+
+[1] https://patchwork.kernel.org/project/linux-remoteproc/cover/20220603121520.13730-1-p-mohan@ti.com/
+[2] https://lore.kernel.org/all/20220418123004.9332-1-p-mohan@ti.com/
+[3] https://lore.kernel.org/all/20220531095108.21757-1-p-mohan@ti.com/
+[4] https://patchwork.kernel.org/project/linux-remoteproc/cover/20220406094358.7895-1-p-mohan@ti.com/
+[5] https://lore.kernel.org/all/20220607045650.4999-1-p-mohan@ti.com/
+[6] https://lore.kernel.org/all/20221012114429.2341215-1-danishanwar@ti.com/
+[7] https://lore.kernel.org/all/20221031073801.130541-1-danishanwar@ti.com/
+[8] https://lore.kernel.org/all/20221116121634.2901265-1-danishanwar@ti.com/
+[9] https://lore.kernel.org/all/20220607045650.4999-7-p-mohan@ti.com/
+
+Thanks and Regards,
+Md Danish Anwar
+
+MD Danish Anwar (1):
+  remoteproc: pru: Add enum for PRU Core Indentifiers.
+
+Roger Quadros (1):
+  remoteproc: pru: Add pru_rproc_set_ctable() function
+
+Suman Anna (2):
+  dt-bindings: remoteproc: Add PRU consumer bindings
+  remoteproc: pru: Make sysfs entries read-only for PRU client driven
+    boots
+
+Tero Kristo (2):
+  remoteproc: pru: Add APIs to get and put the PRU cores
+  remoteproc: pru: Configure firmware based on client setup
+
+ .../bindings/remoteproc/ti,pru-consumer.yaml  |  60 +++++
+ drivers/remoteproc/pru_rproc.c                | 235 +++++++++++++++++-
+ include/linux/pruss.h                         |  78 ++++++
+ 3 files changed, 368 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
+ create mode 100644 include/linux/pruss.h
+
+-- 
+2.25.1
+
