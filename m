@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79DCE63070D
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 01:24:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF26A6303BB
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 00:33:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235420AbiKSAYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 19:24:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42316 "EHLO
+        id S236101AbiKRXbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 18:31:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234743AbiKSAXe (ORCPT
+        with ESMTP id S235969AbiKRXaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 19:23:34 -0500
+        Fri, 18 Nov 2022 18:30:24 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A472A5ADF7
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:37:59 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7792175D9D
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:18:18 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9l-0005Qb-0D; Fri, 18 Nov 2022 23:48:21 +0100
+        id 1owA9k-0005Px-RO; Fri, 18 Nov 2022 23:48:20 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9i-0058tL-79; Fri, 18 Nov 2022 23:48:19 +0100
+        id 1owA9h-0058tE-Vb; Fri, 18 Nov 2022 23:48:18 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9h-0000VG-Nl; Fri, 18 Nov 2022 23:48:17 +0100
+        id 1owA9h-0000VJ-TU; Fri, 18 Nov 2022 23:48:17 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
@@ -38,9 +38,9 @@ Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>, dri-devel@lists.freedesktop.org,
         linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 591/606] backlight: lp855x: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:45:25 +0100
-Message-Id: <20221118224540.619276-592-uwe@kleine-koenig.org>
+Subject: [PATCH 592/606] backlight: lv5207lp: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:45:26 +0100
+Message-Id: <20221118224540.619276-593-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -62,37 +62,36 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-.probe_new() doesn't get the i2c_device_id * parameter, so determine
-that explicitly in the probe function.
+The probe function doesn't make use of the i2c_device_id * parameter so it
+can be trivially converted.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/video/backlight/lp855x_bl.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/video/backlight/lv5207lp.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/video/backlight/lp855x_bl.c b/drivers/video/backlight/lp855x_bl.c
-index bd0bdeae23a4..81012bf29baf 100644
---- a/drivers/video/backlight/lp855x_bl.c
-+++ b/drivers/video/backlight/lp855x_bl.c
-@@ -394,8 +394,9 @@ static int lp855x_parse_acpi(struct lp855x *lp)
- 	return 0;
- }
+diff --git a/drivers/video/backlight/lv5207lp.c b/drivers/video/backlight/lv5207lp.c
+index 767b800d79fa..00673c8b66ac 100644
+--- a/drivers/video/backlight/lv5207lp.c
++++ b/drivers/video/backlight/lv5207lp.c
+@@ -76,8 +76,7 @@ static const struct backlight_ops lv5207lp_backlight_ops = {
+ 	.check_fb	= lv5207lp_backlight_check_fb,
+ };
  
--static int lp855x_probe(struct i2c_client *cl, const struct i2c_device_id *id)
-+static int lp855x_probe(struct i2c_client *cl)
+-static int lv5207lp_probe(struct i2c_client *client,
+-			  const struct i2c_device_id *id)
++static int lv5207lp_probe(struct i2c_client *client)
  {
-+	const struct i2c_device_id *id = i2c_client_get_device_id(cl);
- 	const struct acpi_device_id *acpi_id = NULL;
- 	struct device *dev = &cl->dev;
- 	struct lp855x *lp;
-@@ -586,7 +587,7 @@ static struct i2c_driver lp855x_driver = {
- 		   .of_match_table = of_match_ptr(lp855x_dt_ids),
- 		   .acpi_match_table = ACPI_PTR(lp855x_acpi_match),
- 		   },
--	.probe = lp855x_probe,
-+	.probe_new = lp855x_probe,
- 	.remove = lp855x_remove,
- 	.id_table = lp855x_ids,
+ 	struct lv5207lp_platform_data *pdata = dev_get_platdata(&client->dev);
+ 	struct backlight_device *backlight;
+@@ -142,7 +141,7 @@ static struct i2c_driver lv5207lp_driver = {
+ 	.driver = {
+ 		.name = "lv5207lp",
+ 	},
+-	.probe = lv5207lp_probe,
++	.probe_new = lv5207lp_probe,
+ 	.remove = lv5207lp_remove,
+ 	.id_table = lv5207lp_ids,
  };
 -- 
 2.38.1
