@@ -2,69 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0296A62F8B1
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 16:02:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8046762F8B5
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 16:03:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242181AbiKRPCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 10:02:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60272 "EHLO
+        id S242298AbiKRPDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 10:03:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242264AbiKRPBu (ORCPT
+        with ESMTP id S242525AbiKRPCW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 10:01:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 696CBB7FE;
-        Fri, 18 Nov 2022 06:58:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 05AB6625CA;
-        Fri, 18 Nov 2022 14:58:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 348CCC433C1;
-        Fri, 18 Nov 2022 14:58:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668783512;
-        bh=MxONr46/i6WXoLQg4MqO6UDR/wZefwbgPz9h1nRnFGk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=enJq6+eVNZWHUOqikPhIRCFI+9ZLFVobOyuh5w0Kx5yQxnzBAyA/VuGMxbqPNUJ1e
-         ey9L5IFtjY4s6DTIl0Bh/WSOOtXRNQPlJzCBAd5oHfGsEgF5pbk0j4Iv/HyEcbmXAd
-         jvpoyYQxgM3X//3JuxqguABy91MJeU4G0NY/EcK8CUVMTY4zKbuzByuF6GbjHsBVCu
-         pRdr9eEFsPhcfQXH+bZ4E4hLT3s+lkaFQxZYguUULy/3Bh7e1LQu2CAbeks+EfT/5u
-         fP4MYeuRi9Iueu2x29Cs4JHvtF+QRP38JDbRelCnqAxBB3/mfVoFHjNiH+mm6NAWAT
-         2Z/xvKPvSxvNw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id A035B4034E; Fri, 18 Nov 2022 11:58:29 -0300 (-03)
-Date:   Fri, 18 Nov 2022 11:58:29 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     James Clark <james.clark@arm.com>
-Cc:     Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        German Gomez <german.gomez@arm.com>,
-        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, Leo Yan <leo.yan@linaro.org>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Athira Jajeev <atrajeev@linux.vnet.ibm.com>
-Subject: Re: [PATCH 05/12] perf test: Add 'leafloop' test workload
-Message-ID: <Y3edlSkfuRffwMnk@kernel.org>
-References: <20221116233854.1596378-1-namhyung@kernel.org>
- <20221116233854.1596378-6-namhyung@kernel.org>
- <Y3Zb+JChHoq+89yM@kernel.org>
- <Y3ZeOuNnk0xclY2x@kernel.org>
- <CAP-5=fVh0cQDeqSgVkLHbuiZKoFAp628oggQKwN6KxfUusA01Q@mail.gmail.com>
- <Y3ZuW2IxVWp9yoaD@kernel.org>
- <CAP-5=fWYi2ASE=v0UgrqbBDA2+jC0qmNX2_4r0wbFLV3Dw2nYw@mail.gmail.com>
- <CAM9d7cioaqjPgp+-UyUwzg7J3OQRC8DNMP0T1h5ro=yNgr128w@mail.gmail.com>
- <13f1a15c-b14f-b4cd-a523-2ec6df168224@arm.com>
+        Fri, 18 Nov 2022 10:02:22 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1760A6A763
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 06:59:20 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id d20so7034921ljc.12
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 06:59:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=B1vkUR8YAnqZ4Gmspjd5PeeHcLQng8YjSz/aBrIzt54=;
+        b=avQqepXRGOMiCl/xMFE1uP/3KA3LEqmoXTWV2qVo5CzBMncRUwuCWGtnUnuMvdToNM
+         B+YFFJbg96NijW3YLMDb4bdq05Sqg1zRQgZqRNHbXfXDNHDqoH65Ob6EVqhO55npKSKr
+         /c6psYoFn0TbhFKWu/M69CM0+anrMCj9/lwekt4ldc4c4Omo8ndMAdDazTRsy4sxRV0O
+         nSb6TVl8ctRxFaUVELfIEB+RRZ4rnQoqIgVC8CBf3gYy/NVSAe2QUMPL7tFtPyAJbT8S
+         V2kF+8mzFb9KybABlu/F3zQ0cA+9ehmKsF5yUmH2JOwDlfU+40la3HtUbwlY26kZy14q
+         tdyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=B1vkUR8YAnqZ4Gmspjd5PeeHcLQng8YjSz/aBrIzt54=;
+        b=SjVDyYz/fKvC3+K1HITpPS2mV62RB0w3N/pcBeZvh+V4TiDDTfw1crcCjA7uBP2jTC
+         PdAChhFQ1UxreTiqH6MI1IouVFj9IKKgrM1pamWt8qxuZjMEpnZUNGI7tUptHvpsxTq9
+         cajMxNXDJDaVFgBrf2rS+Z+UZqKtXbl2hETErYBtFA+LVxr7S4bPv20syHkGpYwXw2Ia
+         sz+9S5iSA3KEQQL4c6GkXEUBWN2amHHxzM2Iri6rGsRln2hpIqdAfZKUuslsU+vD8B+B
+         5SF8VtDdlUR1QoX3+hZwdioDfP55i7a6cxbJr2+qM0D0BRtmO0ND72SJocfu6269hv7Z
+         emlg==
+X-Gm-Message-State: ANoB5pmjko1VJzMT6fH4Oumpf6LWXODkNUBLTyYQ7rjo9tDcBhcKnksH
+        iUsrfr6yQ1KSe9kZzsEfEk+7cQ==
+X-Google-Smtp-Source: AA0mqf6GOZ/jnDHS1zP/HsD2n03gp75MP8J2C6vKYU7NIKBJa2NY4Bgj/FYE4/p+K29m0IE8doUnvA==
+X-Received: by 2002:a2e:b631:0:b0:277:890a:f1cc with SMTP id s17-20020a2eb631000000b00277890af1ccmr2643117ljn.395.1668783558496;
+        Fri, 18 Nov 2022 06:59:18 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id t14-20020a056512208e00b004ae24559388sm686908lfr.111.2022.11.18.06.59.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Nov 2022 06:59:17 -0800 (PST)
+Message-ID: <3a84d45c-6550-7ae2-2511-9f61d15894d1@linaro.org>
+Date:   Fri, 18 Nov 2022 15:59:16 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <13f1a15c-b14f-b4cd-a523-2ec6df168224@arm.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 03/10] arm64: dts: qcom: Add pm8010 pmic dtsi
+Content-Language: en-US
+To:     neil.armstrong@linaro.org, Abel Vesa <abel.vesa@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+References: <20221116103146.2556846-1-abel.vesa@linaro.org>
+ <20221116103146.2556846-4-abel.vesa@linaro.org>
+ <76560659-7c90-3846-c250-24bfb072ec0e@linaro.org>
+ <15ac1d06-5da7-ebd2-92ff-764c8df803a1@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <15ac1d06-5da7-ebd2-92ff-764c8df803a1@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,102 +83,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Nov 18, 2022 at 11:32:43AM +0000, James Clark escreveu:
+On 18/11/2022 15:58, Neil Armstrong wrote:
+> On 17/11/2022 13:51, Krzysztof Kozlowski wrote:
+>> On 16/11/2022 11:31, Abel Vesa wrote:
+>>> From: Neil Armstrong <neil.armstrong@linaro.org>
+>>>
+>>> Add nodes for pm8010 in separate dtsi file.
+>>>
+>>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>>> ---
+>>>   arch/arm64/boot/dts/qcom/pm8010.dtsi | 84 ++++++++++++++++++++++++++++
+>>>   1 file changed, 84 insertions(+)
+>>>   create mode 100644 arch/arm64/boot/dts/qcom/pm8010.dtsi
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/pm8010.dtsi b/arch/arm64/boot/dts/qcom/pm8010.dtsi
+>>> new file mode 100644
+>>> index 000000000000..0ea641e12209
+>>> --- /dev/null
+>>> +++ b/arch/arm64/boot/dts/qcom/pm8010.dtsi
+>>> @@ -0,0 +1,84 @@
+>>> +// SPDX-License-Identifier: BSD-3-Clause
+>>
+>> Any reason why this is licensed BSD-3 clause? It's not a recommended
+>> license (2 clause is). Same for other patches.
 > 
+> Probably a bad copy-paste from other existing files.
 > 
-> On 17/11/2022 18:11, Namhyung Kim wrote:
-> > Hi,
-> > 
-> > On Thu, Nov 17, 2022 at 9:42 AM Ian Rogers <irogers@google.com> wrote:
-> >>
-> >> On Thu, Nov 17, 2022 at 9:24 AM Arnaldo Carvalho de Melo
-> >> <acme@kernel.org> wrote:
-> >>>
-> >>> Em Thu, Nov 17, 2022 at 09:16:58AM -0800, Ian Rogers escreveu:
-> >>>> On Thu, Nov 17, 2022 at 8:15 AM Arnaldo Carvalho de Melo
-> >>>> <acme@kernel.org> wrote:
-> >>>>>
-> >>>>> Em Thu, Nov 17, 2022 at 01:06:16PM -0300, Arnaldo Carvalho de Melo escreveu:
-> >>>>>> Em Wed, Nov 16, 2022 at 03:38:47PM -0800, Namhyung Kim escreveu:
-> >>>>>>> The leafloop workload is to run an infinite loop in the test_leaf
-> >>>>>>> function.  This is needed for the ARM fp callgraph test to verify if it
-> >>>>>>> gets the correct callchains.
-> >>>>>>>
-> >>>>>>>   $ perf test -w leafloop
-> >>>>>>
-> >>>>>> On fedora:36
-> >>>>>>
-> >>>>>> In file included from /usr/include/bits/libc-header-start.h:33,
-> >>>>>>                  from /usr/include/stdlib.h:26,
-> >>>>>>                  from tests/workloads/leafloop.c:2:
-> >>>>>> /usr/include/features.h:412:4: error: #warning _FORTIFY_SOURCE requires compiling with optimization (-O) [-Werror=cpp]
-> >>>>>>   412 | #  warning _FORTIFY_SOURCE requires compiling with optimization (-O)
-> >>>>>>       |    ^~~~~~~
-> >>>>>> cc1: all warnings being treated as errors
-> >>>>>> make[5]: *** [/home/acme/git/perf/tools/build/Makefile.build:96: /tmp/build/perf/tests/workloads/leafloop.o] Error 1
-> >>>>>> make[5]: *** Waiting for unfinished jobs....
-> >>>>>>
-> >>>>>> I'll try removing the _FORTIFY_SOURCE
-> >>>>>
-> >>>>> Works after I added this to datasym.c, leafloop.c and brstack.c:
-> >>>>
-> >>>> Is there a reason we are compiling without -O ? Perhaps we can filter
-> >>>
-> >>> I assumed so as Namhyung added it, perhaps he is just carrying it from
-> >>> the pre-existing shell tests?
-> > 
-> > Exactly :)
-> > 
-> >>>
-> >>> I wonder its to have a predictable binary output that the test expects
-> >>> when doing things like hardware tracing? As it come from the coresight
-> >>> tests, IIRC.
-> > 
-> > I think it just checks frame-pointer based callstacks on ARM to have the
-> > precise results for leaves and their parents.
-> > 
-> > 
-> >>
-> >> Would the following in the Build be better:
-> >>
-> >> ```
-> >> # Undefine _FORTIFY_SOURCE as it doesn't work with -O0
-> >> CFLAGS_leafloop.o         = -g -O0 -fno-inline -fno-omit-frame-pointer
-> >> -U_FORTIFY_SOURCE
-> >> ```
-> >>
-> >> We could also use make's `filter-out`. If we are disabling inlining
-> >> then there is also `-fno-optimize-sibling-calls` otherwise we can
-> >> still lose stack frames.
-> > 
-> > I wonder if it's enough to use -O0 as it's enabled from -O2.
-> > Maybe we can get rid of -fno-inline as well.
-> > 
-> > German, did you have any concerns for those options?
-> > 
-> 
-> Is it possible to go with the -U_FORTIFY_SOURCE option? From looking at
-> the disassembly, changing -O and the other -f options makes quite a bit
-> of difference.
+> While checking, the majority of arch/arm64/boot/dts/qcom/pm*.dtsi uses BSD-3-Clause
+> so it seems this was done for quite a while now.
 
-I thought about doing it as a -U_FORTIFY_SOURCE but ended up doing it in
-each test as I thought that way to be more robust, i.e. the way the
-makefiles get that per-object CFLAGS and add to the global one could
-flip and then this would break again.
+If it is derivative work (of upstrea, downstream), then you might have
+to keep BSD-3. But if not, how about changing it to BSD-2?
 
-But if people prefer it in the per-object file Build rule, np.
+Best regards,
+Krzysztof
 
-- Arnaldo
- 
-> It's fairly important to that test because it's testing that the
-> combination of both frame pointer unwinding and dwarf unwinding result
-> in the complete stack.
-> 
-> If we change the options I'd have to go back and double check with
-> different compiler versions that it's still doing the right thing. For
-> example if a frame pointer is included for the last frame, then the
-> dwarf bit doesn't get tested.
-> 
-> 
-> > Thanks,
-> > Namhyung
