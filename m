@@ -2,92 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 526DE62FEF9
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 21:46:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DC3262FEFA
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 21:47:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230051AbiKRUqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 15:46:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43164 "EHLO
+        id S230371AbiKRUrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 15:47:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbiKRUqo (ORCPT
+        with ESMTP id S229663AbiKRUrB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 15:46:44 -0500
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 347AE6205A;
-        Fri, 18 Nov 2022 12:46:44 -0800 (PST)
-Received: by mail-oi1-f174.google.com with SMTP id l127so6613294oia.8;
-        Fri, 18 Nov 2022 12:46:44 -0800 (PST)
+        Fri, 18 Nov 2022 15:47:01 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7DBE63175
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 12:47:00 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id f18so15891774ejz.5
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 12:47:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=O5mIJKaMx1pQwhku2nm6bI31JWHjArdgLDjzIVWQmzw=;
+        b=p6G0G6EmyfrWheZD8YdSOgeWzjDKm8jq9RXjYThdcRilvkW/x7/9i5Iv+x+3+VNTtM
+         aYFi5FUuKw4c4HpSqMOp4oyAn9yUVMVpOzIq3W3rN7ZFtwME6UWQP21JxkI4kO0e3V5l
+         p/jMO/XmminachraU1I6jznhFkTMgGTCgUKqrSkIgF4zfLxaP1kXDlqfs26JXpqGAh16
+         Q9HbkH3+JdCgcPV0kCanVuWpcrquQ61jFWku3miKhdg2Vuxgj1mopqUH9nvBT4F9rpwR
+         2h7/eTXetDDT9Okvv92D8PlgXeo82Ni9s+lmuyvyk+btnRv0J5EQNtoGzSWPg493nvJL
+         flhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=h3na0c+zCdiHpYsiS/hKe8VnK8EaiIE0atU3Cp6vqK8=;
-        b=EZJGh3pERaS0dPM2mNqSU1Otc4q3hmAOtAGESfEhg5dy5meAnCC68obisZ8R7xeDM0
-         M8y4N6EOGfLtGFtLhD7Wt9VT22mIlLouNp0S0RphmG/fTHWPvmFlLIN1qMUde75OrNcU
-         CnQ8OpmO019NDz3C3YKrV6zPntCiJ9YNqun+MCCAK/zW8LTiia/Dv4eDdpzRs1yXt7Sv
-         GLhImW9gZX0Zga83Y+9FB9SU0l4lhbdgTCAe54d6tMhLC4bdv3qA7DNmXQ6tfHGDMDm6
-         zDfDJPSHFCB+WW3EHzhUkt5pJqFWYgU1N0qA/ZWSNHHgpKMdkV9VJXdpEOvmU/Kkd20U
-         vXJg==
-X-Gm-Message-State: ANoB5pnAzVtwdbaY2sX4DBQoHSs86w56m4DUdINAZOv1r+4kD4dIFh7x
-        J+2ErlZfwlZ7PZPp9wazpw==
-X-Google-Smtp-Source: AA0mqf77Kvv76+2dRDE7XcyDrmAFDyRj4QvQ7OTBZ2bM59km+E8GbCkPFq9ssjIV4GX905G9Eziucw==
-X-Received: by 2002:a54:4596:0:b0:359:fea2:69d0 with SMTP id z22-20020a544596000000b00359fea269d0mr4245868oib.45.1668804403417;
-        Fri, 18 Nov 2022 12:46:43 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id k9-20020a544409000000b00359b83e3df1sm1814919oiw.9.2022.11.18.12.46.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 12:46:42 -0800 (PST)
-Received: (nullmailer pid 1327692 invoked by uid 1000);
-        Fri, 18 Nov 2022 20:46:44 -0000
-Date:   Fri, 18 Nov 2022 14:46:44 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Andrew Davis <afd@ti.com>
-Cc:     Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        devicetree@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kbuild: Cleanup DT Overlay intermediate files as
- appropriate
-Message-ID: <20221118204644.GA1327355-robh@kernel.org>
-References: <20221114205939.27994-1-afd@ti.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=O5mIJKaMx1pQwhku2nm6bI31JWHjArdgLDjzIVWQmzw=;
+        b=cb/3q2sLUjhVxTNVhXgj4wAh0n4ebK2AR0VyF49QmI9NYCsPL++SHZJj9jCk4f7z20
+         2hampGeHg+66Bq1Ws2E/tGBMQzWCdggnlEpqGDVYHJebcGH2bIDVTJ/jL/1EwV5/5Tsk
+         mHqEKG7oBoaDvaK5pChd3FPleJVeK7v0q18jSFEYjDIkxCyCJVqGxpcUWmV4H9zyXC3l
+         hIK9PdnY4RXaxTFSj+9r/oZ0rGz+WMmCjyvHlQIR0gIDfKMn9AFc8kn8vK8bTNMAQAWm
+         zqNrZGoDSn2jGHbzohKYYocMhnFAcMyQvgBztn5ikGEZfQ6CF4mXYYWn9kWiFs0Kv0EY
+         WF4g==
+X-Gm-Message-State: ANoB5plVxnyQWk49PU2e0WTE/rMk8Th3IqTYHxnbmn143Di+DdBwEHYp
+        DrQGQgh+uq3cRR0mMhDsPa7JIYZoGW+lQj5sGpg=
+X-Google-Smtp-Source: AA0mqf5WICxI6NK59qKF2yN268AeQmX+15/dr5sYNyDhDKSnHOrrc88T6Mmb4wPczvMKKxnxv6B9WAiLIRxQLi+WC3g=
+X-Received: by 2002:a17:906:65c4:b0:7ad:d250:b907 with SMTP id
+ z4-20020a17090665c400b007add250b907mr7182127ejn.737.1668804419101; Fri, 18
+ Nov 2022 12:46:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221114205939.27994-1-afd@ti.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20221118154931.1928298-1-marmarek@invisiblethingslab.com>
+In-Reply-To: <20221118154931.1928298-1-marmarek@invisiblethingslab.com>
+From:   Jason Andryuk <jandryuk@gmail.com>
+Date:   Fri, 18 Nov 2022 15:46:47 -0500
+Message-ID: <CAKf6xpuCxftyQ+PKN_ffJ0onsSxcT8kVSwkM7Z10pfjqf0XFgA@mail.gmail.com>
+Subject: Re: [PATCH v3] xen-pciback: Consider INTx disabled when MSI/MSI-X is enabled
+To:     =?UTF-8?Q?Marek_Marczykowski=2DG=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>
+Cc:     linux-kernel@vger.kernel.org, Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Jan Beulich <jbeulich@suse.com>,
+        "moderated list:XEN HYPERVISOR INTERFACE" 
+        <xen-devel@lists.xenproject.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 02:59:39PM -0600, Andrew Davis wrote:
-> %.dtbo.o and %.dtbo.S files are used to build-in DT Overlay. They should
-> should not be removed by Make or the kernel will be needlessly rebuilt.
-> 
-> These should be removed by "clean" and ignored by git like other
-> intermediate files.
-> 
-> Reported-by: Andy Shevchenko <andriy.shevchenko@intel.com>
-> Signed-off-by: Andrew Davis <afd@ti.com>
+On Fri, Nov 18, 2022 at 10:50 AM Marek Marczykowski-G=C3=B3recki
+<marmarek@invisiblethingslab.com> wrote:
+>
+> Linux enables MSI-X before disabling INTx, but keeps MSI-X masked until
+> the table is filled. Then it disables INTx just before clearing MASKALL
+> bit. Currently this approach is rejected by xen-pciback.
+> According to the PCIe spec, device cannot use INTx when MSI/MSI-X is
+> enabled (in other words: enabling MSI/MSI-X implicitly disables INTx).
+>
+> Change the logic to consider INTx disabled if MSI/MSI-X is enabled. This
+> applies to three places:
+>  - checking currently enabled interrupts type,
+>  - transition to MSI/MSI-X - where INTx would be implicitly disabled,
+>  - clearing INTx disable bit - which can be allowed even if MSI/MSI-X is
+>    enabled, as device should consider INTx disabled anyway in that case
+>
+> Fixes: 5e29500eba2a ("xen-pciback: Allow setting PCI_MSIX_FLAGS_MASKALL t=
+oo")
+> Signed-off-by: Marek Marczykowski-G=C3=B3recki <marmarek@invisiblethingsl=
+ab.com>
 > ---
->  .gitignore             | 1 +
->  Makefile               | 4 +++-
->  scripts/Makefile.build | 2 ++
->  3 files changed, 6 insertions(+), 1 deletion(-)
+> Changes in v3:
+>  - allow clearing INTx regardless of MSI/MSI-X state, to be consistent
+>    with enabling MSI/MSI-X
+> Changes in v2:
+>  - restructure the patch to consider not only MASKALL bit, but enabling
+>    MSI/MSI-X generally, without explicitly disabling INTx first
+> ---
 
-Applied, thanks!
+I was trying to test your xen-pciback v3 patch, and I am having
+assignment fail consistently now.  It is actually failing to
+quarantine to domIO in the first place, which matches the failure from
+the other day (when I more carefully read through the logs).  It now
+consistently fails to quarantine on every boot unlike the other day
+where it happened once.
+
+I added some printks and it 's getting -EBUSY from pdev_msix_assign()
+which means pci_reset_msix_state() is failing:
+    if ( pci_conf_read16(pdev->sbdf, msix_control_reg(pos)) &
+         PCI_MSIX_FLAGS_MASKALL )
+        return -EBUSY;
+
+# lspci -vv -s 14.3
+...
+    Capabilities: [80] MSI-X: Enable- Count=3D16 Masked+
+        Vector table: BAR=3D0 offset=3D00002000
+        PBA: BAR=3D0 offset=3D00003000
+
+So it looks like MASKALL is set and prevents assignment.
+
+setpci -s 00:14.3 82.W=3Df
+cleared that out for me and I could assign the device.
+
+My dom0 boots, it runs flask-label-pci for a set of PCI devices
+(including iwlwifi), then xl pci-assignable-add for all PCI devices
+which will be passed through, then a little later it boots the
+associated domains.  Dom0 does not have a driver for iwlwifi.
+
+I'll have to investigate more to see how MASKALL is getting set.  This
+had not been an issue before your recent patches.
+
+Regards,
+Jason
