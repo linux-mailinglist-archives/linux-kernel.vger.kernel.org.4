@@ -2,59 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FA5362FCB1
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 19:27:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 272DD62FCB2
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 19:27:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242580AbiKRS1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 13:27:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33536 "EHLO
+        id S242677AbiKRS1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 13:27:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242783AbiKRS0n (ORCPT
+        with ESMTP id S242726AbiKRS0q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 13:26:43 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03C7A62057;
-        Fri, 18 Nov 2022 10:25:38 -0800 (PST)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AIHlk9o021467;
-        Fri, 18 Nov 2022 18:25:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=KzZNHv7VBCujfiOEYaL/XWo7R7Xdcf1eTsDD+raA7cA=;
- b=dgBtPT6UBOOzdKQtsS44QI9PTyIZFMDXuIj0UUPd5+TvR8JdjfoxRkbivUx7ASzg4Lgj
- 64Okk9WTFsASMqxCq9taVIi2jfftY8RoOUZMvEl7Z0RgOqigXL/9d68YTlWW8dYFFEOD
- tY3UojN4OxiEtz62NRqSkyOpCxmYwdg20HO2g+JqZD7Xs0jv7MhqIhXexuYkYcjUTq4P
- Yrol0IMlK9aGh4+nZi9ora21G/vvb//N1OI5RKkMQgLvpxV8clSe8r+HoF+dVFA67i8z
- EfOlyzlEu1pbhL1g2lX5buFHc3M07w07HXfSdJ5FOFztJ6LVRtTX0zY4wHrUC7B5ngcW Qw== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kx0te9w3g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Nov 2022 18:25:24 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AIIPNNf016498
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Nov 2022 18:25:23 GMT
+        Fri, 18 Nov 2022 13:26:46 -0500
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B668C72125;
+        Fri, 18 Nov 2022 10:25:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1668795947; x=1700331947;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=VoloUQHFpIDgXbdSckF/7L+8aKaiIEA5BM7tFpX5oYA=;
+  b=fTFNG9dAoidXleDS1Llv5FwwObBbQ9yIKLsGJMhB5vrFD36z4+7gwByU
+   lbKsrJwGYIVORyxDsZNS+pGw4+Fe8d3ZWlX2tk4RPryY5uczqc7+SJoPS
+   V+IHbNiDJgaMXrOk3fszScM7BS+kQ1AnoAoEXGe9iqufy+46V8/hotVlB
+   k=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 18 Nov 2022 10:25:47 -0800
+X-QCInternal: smtphost
+Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2022 10:25:47 -0800
 Received: from hu-molvera-sd.qualcomm.com (10.80.80.8) by
  nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Fri, 18 Nov 2022 10:25:23 -0800
+ 15.2.986.36; Fri, 18 Nov 2022 10:25:46 -0800
 From:   Melody Olvera <quic_molvera@quicinc.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 CC:     Melody Olvera <quic_molvera@quicinc.com>,
         "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
-        "open list:IRQCHIP DRIVERS" <linux-kernel@vger.kernel.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Subject: [PATCH] dt-bindings: qcom,pdc: Add pdc for QDU1000 and QRU1000
-Date:   Fri, 18 Nov 2022 10:25:11 -0800
-Message-ID: <20221118182512.10916-1-quic_molvera@quicinc.com>
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: [PATCH] dt-bindings: soc: qcom,rpmh-rsc: Update to allow for generic nodes
+Date:   Fri, 18 Nov 2022 10:25:35 -0800
+Message-ID: <20221118182535.11156-1-quic_molvera@quicinc.com>
 X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -62,49 +55,43 @@ Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
 X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 8XnD1vSnRmm3cQSrBPfxYIKCmxZPcSkX
-X-Proofpoint-GUID: 8XnD1vSnRmm3cQSrBPfxYIKCmxZPcSkX
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-18_06,2022-11-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- suspectscore=0 adultscore=0 clxscore=1011 mlxlogscore=609 phishscore=0
- malwarescore=0 lowpriorityscore=0 bulkscore=0 priorityscore=1501
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211180109
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add compatible for QDU1000 and QRU1000 pdc.
+Update the bindings to allow for generic regulator nodes instead of
+device-specific node names.
 
 Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
 ---
-This patch is separated into its own patch from
-https://lore.kernel.org/all/20221026190441.4002212-1-quic_molvera@quicinc.com/
+This patch comes from discussions on [1] and is separated out. It also
+has updated pattern matching to match the comments left from [1].
 
- .../devicetree/bindings/interrupt-controller/qcom,pdc.yaml       | 1 +
- 1 file changed, 1 insertion(+)
+[1] https://lore.kernel.org/all/20221026200429.162212-2-quic_molvera@quicinc.com/
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml b/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml
-index b6f56cf5fbe3..afeed7b8c0fa 100644
---- a/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml
-+++ b/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml
-@@ -26,6 +26,7 @@ properties:
-   compatible:
-     items:
-       - enum:
-+          - qcom,qdu1000-pdc
-           - qcom,sc7180-pdc
-           - qcom,sc7280-pdc
-           - qcom,sdm845-pdc
+ Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml
+index b246500d3d5d..23ee56bfa636 100644
+--- a/Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml
++++ b/Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml
+@@ -112,8 +112,9 @@ properties:
+     $ref: /schemas/power/qcom,rpmpd.yaml#
+ 
+ patternProperties:
+-  '-regulators$':
++  '^regulators(-[01])?$':
+     $ref: /schemas/regulator/qcom,rpmh-regulator.yaml#
++    unevaluatedProperties: false
+ 
+ required:
+   - compatible
 
 base-commit: 147307c69ba4441ee90c1f8ce8edf5df4ea60f67
 -- 
