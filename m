@@ -2,139 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB24362FF8E
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 22:46:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C310C62FF94
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 22:46:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230484AbiKRVqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 16:46:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49678 "EHLO
+        id S230226AbiKRVqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 16:46:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbiKRVqG (ORCPT
+        with ESMTP id S229653AbiKRVql (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 16:46:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E59C65E58;
-        Fri, 18 Nov 2022 13:46:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 19A4062798;
-        Fri, 18 Nov 2022 21:46:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F2ECC43470;
-        Fri, 18 Nov 2022 21:46:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668807964;
-        bh=RNBGyT8pOapfGmKmgkwMpgie8elalZGmmgERqozynsA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=PMorCDQIGJ64l2Kqj3yXz+JZWMspa46YvciYFDwUiWbmVAGPwa63kOqwfs+MpBvq+
-         3FmCyGXkMptzQm+Wb3NQrjkH/ffkrqp6QSSK6LLVEdBZ7dYuXHks82Nw7cj8ZlarPM
-         FUmht1b2FmkX+myZzfjf0o+bVip8Y8f1pypP/V/0dui7hHR+ONuPfHvQf7/mhLqfLQ
-         U8mgnOud2jNBdYwwnYUmHdm+kQTvD3Wp7OBqwRjFPl/yt4EcPphXJZtUkS4FE9iH1G
-         lMGDQgS9Cj9fLNqq5ZSu2WZBW2Avbnrf0H7iI1916iMQrq5v0RD/i3NaS/2Df7RZWj
-         /ySe9OFXuw4IQ==
-Received: by mail-lf1-f44.google.com with SMTP id c1so10299825lfi.7;
-        Fri, 18 Nov 2022 13:46:04 -0800 (PST)
-X-Gm-Message-State: ANoB5pk+fWTSz0DWYS480uiMm0i8zaYthDb0kdYncgPLOLtjytf1EW3O
-        H+rnfiKO5RbjryU/qNCy9cJM7kvSv1NktJaEtw==
-X-Google-Smtp-Source: AA0mqf450V8MLhrSk+aZ9ENb/BJGi+0rLQx57RrQjhp4T28QJaf+DVYt15IhGTYuJbXF1stCgsvLBKHTzVMBV+osv2w=
-X-Received: by 2002:a05:6512:1291:b0:4af:eabf:3c57 with SMTP id
- u17-20020a056512129100b004afeabf3c57mr2788378lfs.449.1668807962519; Fri, 18
- Nov 2022 13:46:02 -0800 (PST)
+        Fri, 18 Nov 2022 16:46:41 -0500
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 992DE85165
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 13:46:40 -0800 (PST)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id 8CDB332008FF;
+        Fri, 18 Nov 2022 16:46:39 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Fri, 18 Nov 2022 16:46:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        invisiblethingslab.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1668807999; x=
+        1668894399; bh=m0qim5xloUqSWCBLe4PKp9y/XJvQoCDrt2G9AYpaGa8=; b=p
+        vQtOjvp0f4uVWQ650FLODz+Gchx4RTWFrmCorFUs3dg/qF1gR1GReNAOvbbDfj05
+        RLwzicAWmcn8mGNWcF3IAvcG5gW9LYpPqHENDYbnMbklMCg9hXlPB07IShrVMIcX
+        qC7s5++ppkM7TXGOiLqX+KV6BvmK/Hroty8SKb28aiPCpVOyDl74w9mW7ewvdd2r
+        Vw10DJMI23PS/hxi6FugyCWCt9ME9jVw7uMof2mx28V7jH+WEiiBxHs9XjCkga6J
+        o6rGfCN2BHTJFe9ipcfRsR4FGQJ1cMEn4hw7F28f3jzxL/DJmycnDxOMjoBGrH22
+        bIG3ymvM9l7kaTbHKlQPQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1668807999; x=1668894399; bh=m0qim5xloUqSWCBLe4PKp9y/XJvQ
+        oCDrt2G9AYpaGa8=; b=L2OjdpMEGbpYn5RluyOLgAEawWRJnDxcYx09A1H0V3vG
+        UVaNQojhYS6LC/+PuhmaXch59rbf6FjYJ7jVNQAPA74IHXP2nPD7qB7RzQCUrS+C
+        d70ucOla/rdJ+hz/SB5uxohfTGMD4vuHfWC01frMuTFsu2/GUEU5qr4gtTK88Lzf
+        qiPwZ1G95xVVAqey4X+ZkaKSWS8q/Iex2YywB1s3SOFs0pD9pTBADlx/e/Rxngfh
+        FUqpuRvwHBH5PlTTGjbS/2vGFKQjdllSlRS1ezGpImRXeOwDoQRT4nuMKks1MdYn
+        zHA/rcTIbE3Lhps863FnqszHU8wSv2PZ5X99AMS7FA==
+X-ME-Sender: <xms:Pv13Y2BSVW7FH2Dd-O5P3KMtPxNXHCirpVY40CKB6SZ-elgpiIGK-A>
+    <xme:Pv13YwhvzBrq5W8pQRmdzoa9L7YI9va2F3vECYPbCPCk66ZGpyioE6NMAQN8GjuJ2
+    WwiHjJOmVdNiw>
+X-ME-Received: <xmr:Pv13Y5nOjFdBd47nFs7geRsHUOEqE51wnLKmaFXWAuA7WK4gB6NJ-syQWb_m_-2Ejf9eaTwoUmj5Bu-b8mQ487PKMwH9oql_EQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrhedtgdduheehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtjeenucfhrhhomhepofgrrhgv
+    khcuofgrrhgtiiihkhhofihskhhiqdfikphrvggtkhhiuceomhgrrhhmrghrvghksehinh
+    hvihhsihgslhgvthhhihhnghhslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepueek
+    teetgefggfekudehteegieeljeejieeihfejgeevhfetgffgteeuteetueetnecuffhomh
+    grihhnpehgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgr
+    mhepmhgrihhlfhhrohhmpehmrghrmhgrrhgvkhesihhnvhhishhisghlvghthhhinhhgsh
+    hlrggsrdgtohhm
+X-ME-Proxy: <xmx:Pv13Y0zZgDAzIvV9kP25qNbzIqAIVD4P3LHbtRde5xkUSs1_uTldAg>
+    <xmx:Pv13Y7SRauCLnSXdbtmWYVm1VNplMzubcAINVCqgDI538NasB2RmhA>
+    <xmx:Pv13Y_ZdHjesRLy7pFixTt52MxbmjRRQG64zyRA5yBaRUYgfRQ6hYA>
+    <xmx:P_13Y5NKSqvqRzVCNTa0n6wrQSqWVltzkWQ_EwuIQ1QVOrBZeRbnIQ>
+Feedback-ID: i1568416f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 18 Nov 2022 16:46:37 -0500 (EST)
+Date:   Fri, 18 Nov 2022 22:46:34 +0100
+From:   Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>
+To:     Jason Andryuk <jandryuk@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Jan Beulich <jbeulich@suse.com>,
+        "moderated list:XEN HYPERVISOR INTERFACE" 
+        <xen-devel@lists.xenproject.org>
+Subject: Re: [PATCH v3] xen-pciback: Consider INTx disabled when MSI/MSI-X is
+ enabled
+Message-ID: <Y3f9O0S8kVXZ+py+@mail-itl>
+References: <20221118154931.1928298-1-marmarek@invisiblethingslab.com>
+ <CAKf6xpuCxftyQ+PKN_ffJ0onsSxcT8kVSwkM7Z10pfjqf0XFgA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20221118190126.100895-1-linux@fw-web.de> <20221118190126.100895-12-linux@fw-web.de>
- <CAL_JsqKiRzRToSzk3q+csWR5DEZjZpQWChqZ3mH8MLruvfe=Dw@mail.gmail.com>
-In-Reply-To: <CAL_JsqKiRzRToSzk3q+csWR5DEZjZpQWChqZ3mH8MLruvfe=Dw@mail.gmail.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Fri, 18 Nov 2022 15:45:54 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLdfWaP7aX8xmB56PTFzupb45ttwQex34eGmYw3gYEA6g@mail.gmail.com>
-Message-ID: <CAL_JsqLdfWaP7aX8xmB56PTFzupb45ttwQex34eGmYw3gYEA6g@mail.gmail.com>
-Subject: Re: [PATCH v6 11/11] arm64: dts: mt7986: add BPI-R3 nand/nor overlays
-To:     Frank Wunderlich <linux@fw-web.de>
-Cc:     linux-mediatek@lists.infradead.org,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Bo Jiao <Bo.Jiao@mediatek.com>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="qQdthczOYgb16K95"
+Content-Disposition: inline
+In-Reply-To: <CAKf6xpuCxftyQ+PKN_ffJ0onsSxcT8kVSwkM7Z10pfjqf0XFgA@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 3:39 PM Rob Herring <robh+dt@kernel.org> wrote:
->
-> On Fri, Nov 18, 2022 at 1:01 PM Frank Wunderlich <linux@fw-web.de> wrote:
+
+--qQdthczOYgb16K95
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 18 Nov 2022 22:46:34 +0100
+From: Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>
+To: Jason Andryuk <jandryuk@gmail.com>
+Cc: linux-kernel@vger.kernel.org, Juergen Gross <jgross@suse.com>,
+	Stefano Stabellini <sstabellini@kernel.org>,
+	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+	Jan Beulich <jbeulich@suse.com>,
+	"moderated list:XEN HYPERVISOR INTERFACE" <xen-devel@lists.xenproject.org>
+Subject: Re: [PATCH v3] xen-pciback: Consider INTx disabled when MSI/MSI-X is
+ enabled
+
+On Fri, Nov 18, 2022 at 03:46:47PM -0500, Jason Andryuk wrote:
+> On Fri, Nov 18, 2022 at 10:50 AM Marek Marczykowski-G=C3=B3recki
+> <marmarek@invisiblethingslab.com> wrote:
 > >
-> > From: Frank Wunderlich <frank-w@public-files.de>
+> > Linux enables MSI-X before disabling INTx, but keeps MSI-X masked until
+> > the table is filled. Then it disables INTx just before clearing MASKALL
+> > bit. Currently this approach is rejected by xen-pciback.
+> > According to the PCIe spec, device cannot use INTx when MSI/MSI-X is
+> > enabled (in other words: enabling MSI/MSI-X implicitly disables INTx).
 > >
-> > Add devicetree overlays for using nand and nor on BPI-R3.
->
-> Can you not tell at runtime which one you booted from? If not, how
-> does one choose which overlay to apply? If you can, why not populate
-> both nodes and enable the right one? IMO, if all h/w is present, it
-> should all be in the DT. Selecting what h/w to use is a separate
-> problem and overlays aren't a great solution for that.
->
->
-> > Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> > Change the logic to consider INTx disabled if MSI/MSI-X is enabled. This
+> > applies to three places:
+> >  - checking currently enabled interrupts type,
+> >  - transition to MSI/MSI-X - where INTx would be implicitly disabled,
+> >  - clearing INTx disable bit - which can be allowed even if MSI/MSI-X is
+> >    enabled, as device should consider INTx disabled anyway in that case
+> >
+> > Fixes: 5e29500eba2a ("xen-pciback: Allow setting PCI_MSIX_FLAGS_MASKALL=
+ too")
+> > Signed-off-by: Marek Marczykowski-G=C3=B3recki <marmarek@invisiblething=
+slab.com>
 > > ---
-> > maybe rename to dtso?
-> >
-> > "kbuild: Allow DTB overlays to built from .dtso named source files"
-> > https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git/commit/?h=dt/next&id=363547d2191cbc32ca954ba75d72908712398ff2
-> >
-> > more comments about the dt overlay-support:
-> >
-> > https://patchwork.kernel.org/comment/25092116/
-> > https://patchwork.kernel.org/comment/25085681/
+> > Changes in v3:
+> >  - allow clearing INTx regardless of MSI/MSI-X state, to be consistent
+> >    with enabling MSI/MSI-X
+> > Changes in v2:
+> >  - restructure the patch to consider not only MASKALL bit, but enabling
+> >    MSI/MSI-X generally, without explicitly disabling INTx first
 > > ---
-> > v4:
-> > - drop compile-comment from overlays
-> > - add author-information to dt-overlays
-> > ---
-> >  arch/arm64/boot/dts/mediatek/Makefile         |  2 +
-> >  .../mediatek/mt7986a-bananapi-bpi-r3-nand.dts | 55 +++++++++++++++
-> >  .../mediatek/mt7986a-bananapi-bpi-r3-nor.dts  | 69 +++++++++++++++++++
-> >  3 files changed, 126 insertions(+)
-> >  create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nand.dts
-> >  create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nor.dts
-> >
-> > diff --git a/arch/arm64/boot/dts/mediatek/Makefile b/arch/arm64/boot/dts/mediatek/Makefile
-> > index e8902f2cc58f..d42208c4090d 100644
-> > --- a/arch/arm64/boot/dts/mediatek/Makefile
-> > +++ b/arch/arm64/boot/dts/mediatek/Makefile
-> > @@ -8,6 +8,8 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt6797-x20-dev.dtb
-> >  dtb-$(CONFIG_ARCH_MEDIATEK) += mt7622-rfb1.dtb
-> >  dtb-$(CONFIG_ARCH_MEDIATEK) += mt7622-bananapi-bpi-r64.dtb
-> >  dtb-$(CONFIG_ARCH_MEDIATEK) += mt7986a-bananapi-bpi-r3-emmc.dtb
-> > +dtb-$(CONFIG_ARCH_MEDIATEK) += mt7986a-bananapi-bpi-r3-nand.dtbo
-> > +dtb-$(CONFIG_ARCH_MEDIATEK) += mt7986a-bananapi-bpi-r3-nor.dtbo
->
-> These need rules to apply them to the base dtb(s). You just need:
->
-> full.dtb := base.dtb overlay.dtb
+>=20
+> I was trying to test your xen-pciback v3 patch, and I am having
+> assignment fail consistently now.  It is actually failing to
+> quarantine to domIO in the first place, which matches the failure from
+> the other day (when I more carefully read through the logs).  It now
+> consistently fails to quarantine on every boot unlike the other day
+> where it happened once.
 
-Oops, that should be:
+Does this include the very first assignment too, or only after domain
+reboot? If the latter, maybe some cleanup missed clearing MASKALL?
 
-full-dtbs := base.dtb overlay.dtb
-dtb-y += full.dtb
+FWIW, the patch applied to Qubes
+(https://github.com/QubesOS/qubes-linux-kernel/pull/680) seems to work
+fine (the full test run is still in progress, but I see some green marks
+already).
 
-Just like multiple objs in a module.
+> I added some printks and it 's getting -EBUSY from pdev_msix_assign()
+> which means pci_reset_msix_state() is failing:
+>     if ( pci_conf_read16(pdev->sbdf, msix_control_reg(pos)) &
+>          PCI_MSIX_FLAGS_MASKALL )
+>         return -EBUSY;
+>=20
+> # lspci -vv -s 14.3
+> ...
+>     Capabilities: [80] MSI-X: Enable- Count=3D16 Masked+
+>         Vector table: BAR=3D0 offset=3D00002000
+>         PBA: BAR=3D0 offset=3D00003000
+>=20
+> So it looks like MASKALL is set and prevents assignment.
+>=20
+> setpci -s 00:14.3 82.W=3Df
+> cleared that out for me and I could assign the device.
+>=20
+> My dom0 boots, it runs flask-label-pci for a set of PCI devices
+> (including iwlwifi), then xl pci-assignable-add for all PCI devices
+> which will be passed through, then a little later it boots the
+> associated domains.  Dom0 does not have a driver for iwlwifi.
+>=20
+> I'll have to investigate more to see how MASKALL is getting set.  This
+> had not been an issue before your recent patches.
 
-Rob
+I guess before the patches nothing set anything in MSI-X capability,
+because it was hidden...
+
+Anyway, to support my cleanup hypothesis, I tried to destroy a
+PCI-having domain, and it left MSI-X enabled (at least according to the
+config space). MASKALL was _not_ set, but I haven't checked masking of
+individual vectors. TBH, I'm not sure what should be responsible for the
+MSI-X cleanup after guest destroy. Should it be Xen? Qemu? Pciback?
+Pciback calls PHYSDEVOP_{prepare,release}_msix only when
+binding/unbinding from the device (so - xl pci-assignable-{add,remove}),
+so this isn't the right place.
+Should that be in Xen, in deassign_device() (part of
+DOMCTL_deassign_device)?
+
+--=20
+Best Regards,
+Marek Marczykowski-G=C3=B3recki
+Invisible Things Lab
+
+--qQdthczOYgb16K95
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEhrpukzGPukRmQqkK24/THMrX1ywFAmN3/TsACgkQ24/THMrX
+1ywkSQf/aTohVS7nA2ExCmuvEVfy/hGZ6deH7uoh3uApGTOhNEmD+ImNzRDDwDW9
+vK7MAeJnE9zBQq4zklTd/DiktxefRu6X8HGTklrI8sZ8qjq92NYZF4Vul/g7/+l6
+4XGi6dNdvN5P7e7TUTHI49rtBrvfA51DCuW9SLJTvI5RAXXRbLan8luGij51/TWH
+TsxfNPJ+fX0pWr/G9ynnSeBUJzw+BcBAwj4FaMPkWaOvl0wDK98lspRTrXIJ7Usw
+nzbgnNqwkAbQ+E/s1eSDnw1BQxDXcFxM6orO6fP/ntFSIpIbHmLesV3erYumLYLf
+/O8lcstVWu7jFOXtQMBMoc2sYJh92A==
+=m44E
+-----END PGP SIGNATURE-----
+
+--qQdthczOYgb16K95--
