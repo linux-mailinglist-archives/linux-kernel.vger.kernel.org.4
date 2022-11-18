@@ -2,111 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2715762EA9C
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 01:54:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 487A562EA9D
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 01:56:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240766AbiKRAyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 19:54:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53386 "EHLO
+        id S229451AbiKRA4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 19:56:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240769AbiKRAyf (ORCPT
+        with ESMTP id S233894AbiKRA4G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 19:54:35 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCCA085EE8
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 16:54:34 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id v4-20020a17090a088400b00212cb0ed97eso3600414pjc.5
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 16:54:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XvIoWSd0xrw6RZJQp73B+S5uCJ5LMxazrUmMxPfNjuQ=;
-        b=Ywx/QwtKH8VAB4UddTVRkYxOW2k+PyRwVVpR4TEzkhDl4DjNzjqniVbWpNQeGC15uz
-         THTgtgOC2tJtLxcn+N6qnN3Uy3FVT4qmUSr3XOZgiLlJCWs0v/93AF1Vt/H6ei2/0on5
-         d7zw7FPkZM/4CTydhHhG2fL1TGCDWupJAjNhw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XvIoWSd0xrw6RZJQp73B+S5uCJ5LMxazrUmMxPfNjuQ=;
-        b=KVZmD8R9nvX4CRyzex9ijtuce4WrMiJd42IVvHlsSjignYO7CCaUGqiE+M0ux78ezX
-         oQRa4I1FVLncX9PlUaX1vt5aDK1J9AqPy9DL7EIPqWgz9o0knAll6eWBYxe5tiDj8d+U
-         Fa91fSBEs/cM0vmhxHL4Et+c7bpSOFt20RQU5oUDTSzNZPri/uhuo2GQHnjxwCWatI18
-         ESk1j+ZWIis7QR7rjKye8b6wwmeU1JVGbUz0WmV7n49hcwxspbESOIS3ctFeH5J8K2Vs
-         /D1hNsDB1usqdLSdey+1E0NnrK7pUyFy0LKYxFUel8VJdKNze7f3t/gBf4HbGmYKlOcI
-         N9Mw==
-X-Gm-Message-State: ANoB5pkl9XlNdQZ4z0WzPYyILjhpRUYJz0UbGvH0tsDQwPcD1ppoHHxH
-        esjImJatlaABwaY5Xp4F8GDMBk27xRI9EQ==
-X-Google-Smtp-Source: AA0mqf6l8TeoWF0zZxdx0LT95pkl13FOnju8C6AgmTu9j8vNo494eN13cvZRXCxp+hVgpR5ied3LDw==
-X-Received: by 2002:a17:902:c652:b0:186:af8e:7ed4 with SMTP id s18-20020a170902c65200b00186af8e7ed4mr5223346pls.7.1668732874435;
-        Thu, 17 Nov 2022 16:54:34 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id j6-20020a17090276c600b00172b87d9770sm2073855plt.81.2022.11.17.16.54.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 16:54:33 -0800 (PST)
-Date:   Thu, 17 Nov 2022 16:54:33 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     sdf@google.com
-Cc:     wangkailong@jari.cn, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH] samples/seccomp: fix array_size.cocci warning
-Message-ID: <202211171653.0E3BA8E71B@keescook>
-References: <2b3f2420.130.184706d34e6.Coremail.wangkailong@jari.cn>
- <Y3J3t/ieGaOG8Qjl@google.com>
+        Thu, 17 Nov 2022 19:56:06 -0500
+Received: from mail-m118205.qiye.163.com (mail-m118205.qiye.163.com [115.236.118.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 48C4786A44
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 16:56:02 -0800 (PST)
+Received: from lyc-workstation.. (unknown [221.212.176.31])
+        by mail-m118205.qiye.163.com (HMail) with ESMTPA id 28B8F2C32E0;
+        Fri, 18 Nov 2022 08:55:59 +0800 (CST)
+From:   Yingchi Long <me@inclyc.cn>
+To:     bp@alien8.de
+Cc:     chang.seok.bae@intel.com, dave.hansen@linux.intel.com,
+        david.laight@aculab.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org, me@inclyc.cn, mingo@redhat.com,
+        ndesaulniers@google.com, pbonzini@redhat.com, tglx@linutronix.de,
+        x86@kernel.org
+Subject: [PATCH RESEND v4] x86/fpu: use _Alignof to avoid UB in TYPE_ALIGN
+Date:   Fri, 18 Nov 2022 08:55:35 +0800
+Message-Id: <20221118005535.1120026-1-me@inclyc.cn>
+X-Mailer: git-send-email 2.37.4
+In-Reply-To: <Y2KhCyofvfG5W5hE@zn.tnic>
+References: <Y2KhCyofvfG5W5hE@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y3J3t/ieGaOG8Qjl@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFPN1dZLVlBSVdZDwkaFQgSH1lBWRofGU9WTEsdSB1JGUsYGE8ZVQIWExYaEhckFA4PWV
+        dZGBILWUFZSUlKVUlKSVVKTE1VSEpZV1kWGg8SFR0UWUFZT0tIVUpKS0hKQ1VKS0tVS1kG
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6OU06MRw6KTlIPyoRPw40NC9D
+        KB1PCRlVSlVKTU1DTEhJQk1LSUhLVTMWGhIXVRYeOxIVGBcCGFUYFUVZV1kSC1lBWUlJSlVJSklV
+        SkxNVUhKWVdZCAFZQUhMTUM3Bg++
+X-HM-Tid: 0a84883c3c0a2d27kusn28b8f2c32e0
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 09:15:35AM -0800, sdf@google.com wrote:
-> On 11/13, wangkailong@jari.cn wrote:
-> > Fix following coccicheck warning:
-> 
-> > samples/seccomp/bpf-fancy.c:83:39-40: WARNING: Use ARRAY_SIZE
-> > samples/seccomp/bpf-fancy.c:86:44-45: WARNING: Use ARRAY_SIZE
-> 
-> Not sure this should go via bpf tree. CC'ed Kees
-> 
-> > Signed-off-by: KaiLong Wang <wangkailong@jari.cn>
-> > ---
-> >   samples/seccomp/bpf-fancy.c | 4 ++--
-> >   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> > diff --git a/samples/seccomp/bpf-fancy.c b/samples/seccomp/bpf-fancy.c
-> > index 1ccb435025b6..548f038924d6 100644
-> > --- a/samples/seccomp/bpf-fancy.c
-> > +++ b/samples/seccomp/bpf-fancy.c
-> > @@ -80,10 +80,10 @@ int main(int argc, char **argv)
-> >   	};
-> >   	struct sock_fprog prog = {
-> >   		.filter = filter,
-> > -		.len = (unsigned short)(sizeof(filter)/sizeof(filter[0])),
-> > +		.len = (unsigned short)(ARRAY_SIZE(filter)),
-> >   	};
-> >   	ssize_t bytes;
-> > -	bpf_resolve_jumps(&l, filter, sizeof(filter)/sizeof(*filter));
-> > +	bpf_resolve_jumps(&l, filter, ARRAY_SIZE(filter));
+From: YingChi Long <me@inclyc.cn>
 
-Hm, this is the "samples" tree, so this was intentionally avoiding these
-kinds of kernel-isms, but perhaps that doesn't realistically matter?
+Link: https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2350.htm
 
--Kees
+WG14 N2350 made very clear that it is an undefined behavior having type
+definitions with in "offsetof". Replace the macro "TYPE_ALIGN" to
+builtin "_Alignof" to avoid undefined behavior.
 
-> 
-> >   	if (prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0)) {
-> >   		perror("prctl(NO_NEW_PRIVS)");
-> > --
-> > 2.25.1
+I've grepped all source files to find any type definitions within
+"offsetof".
 
--- 
-Kees Cook
+    offsetof\(struct .*\{ .*,
+
+This implementation of macro "TYPE_ALIGN" seemes to be the only case of
+type definitions within offsetof in the kernel codebase.
+
+Link: https://reviews.llvm.org/D133574
+
+A clang patch has been made that rejects any definitions within
+__builtin_offsetof (usually #defined with "offsetof"), and tested
+compiling the kernel using clang, there are no error if this patch
+applied.
+
+Link: https://gcc.gnu.org/onlinedocs/gcc/Alignment.html
+Link: https://godbolt.org/z/sPs1GEhbT
+
+ISO C11 _Alignof is subtly different from the GNU C extension
+__alignof__. __alignof__ is the preferred alignment and _Alignof the
+minimal alignment. For 'long long' on x86 these are 8 and 4
+respectively.
+
+The macro TYPE_ALIGN being replacing has behavior that matches _Alignof
+rather than __alignof__.
+
+Signed-off-by: YingChi Long <me@inclyc.cn>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+---
+v4:
+- commit message changes suggested by Borislav Petkov
+
+v3:
+- commit message changes suggested by Nick and David
+
+v3: https://lore.kernel.org/all/20221006141442.2475978-1-me@inclyc.cn/
+
+v2: https://lore.kernel.org/all/20220927153338.4177854-1-me@inclyc.cn/
+Signed-off-by: Yingchi Long <me@inclyc.cn>
+---
+ arch/x86/kernel/fpu/init.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/arch/x86/kernel/fpu/init.c b/arch/x86/kernel/fpu/init.c
+index 8946f89761cc..851eb13edc01 100644
+--- a/arch/x86/kernel/fpu/init.c
++++ b/arch/x86/kernel/fpu/init.c
+@@ -133,9 +133,6 @@ static void __init fpu__init_system_generic(void)
+ 	fpu__init_system_mxcsr();
+ }
+
+-/* Get alignment of the TYPE. */
+-#define TYPE_ALIGN(TYPE) offsetof(struct { char x; TYPE test; }, test)
+-
+ /*
+  * Enforce that 'MEMBER' is the last field of 'TYPE'.
+  *
+@@ -143,8 +140,8 @@ static void __init fpu__init_system_generic(void)
+  * because that's how C aligns structs.
+  */
+ #define CHECK_MEMBER_AT_END_OF(TYPE, MEMBER) \
+-	BUILD_BUG_ON(sizeof(TYPE) != ALIGN(offsetofend(TYPE, MEMBER), \
+-					   TYPE_ALIGN(TYPE)))
++	BUILD_BUG_ON(sizeof(TYPE) !=         \
++		     ALIGN(offsetofend(TYPE, MEMBER), _Alignof(TYPE)))
+
+ /*
+  * We append the 'struct fpu' to the task_struct:
+--
+2.37.4
+
