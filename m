@@ -2,105 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F3CC62F5A9
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 14:14:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F190162F5B0
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 14:15:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242010AbiKRNOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 08:14:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39900 "EHLO
+        id S242027AbiKRNPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 08:15:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241935AbiKRNN6 (ORCPT
+        with ESMTP id S241473AbiKRNPM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 08:13:58 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61D684B99B
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 05:13:57 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id p8so8122304lfu.11
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 05:13:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/mC7g00gLN2qAMlY7fOURh7m2CYVc3PZUkw88havBT0=;
-        b=KUfK0birxVBcDUOBbE0GJqnRaBPKLSm+SxEy9mV65Idlfe+gcbMO4qUSlfx9puhdTS
-         zhTCV8yeu7coT9jsq8qymHCvanzzFG5KEdDLyrJikxS6fRnjg6KnMM99CGMvBaEylIKl
-         OGlOwrAe0du0GT4UWEU+RHH3MPsgp6zBP4QjtzxCm9eLuIPbeMbXT9Ff5qV1Rsq4Dcct
-         uxpiiQbyT+bUlRqfLd2JTjkkaL35QovXHguOEIz4KpV4C3vm9+Mdz3C+Ten8ZTRy66vf
-         qXiac6ILU5reQZKFFFs6FsCYEKmaabSKzCydfuV73sy0ue0mibGAgR+kZVYIRq4HSTK4
-         hDLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/mC7g00gLN2qAMlY7fOURh7m2CYVc3PZUkw88havBT0=;
-        b=De4pTRRrpYo+BQzZHjEGMUDUuh5AZbVuaNL6Db2pUIXQJpuolXvwb/qIcIoygZ0Xnd
-         sk1dEr1sBhsonnRxEzeEeBCIiE7W5imhHGwm94CXqirXyQ7QDngLoF2SGVT5pFY0wgNJ
-         bZwdNnkEiPMkIPW5puOqfi7mrV3v7UFFYfJWtdLMfIIu+nNH3C2ss8Ee1zMn79/7N/X+
-         v+QgJimFGo/+3xKRzeZ1MdUTaNPbPO2dmrhbCziz5ivbxwVFbX5L0rjZdEq+iWvk6vAB
-         7//pcwPv/vND2pmS5UI7BJF6ncHt238crRtqLXrUb+qgM62SXBXF0trwiggxkc6JmHBk
-         5lYQ==
-X-Gm-Message-State: ANoB5plejGffOdkvXifq40btbP8Qr1GNtcUDS62tRGa6SN/Ty1+yDlut
-        oE7YHgX1mPqNp//wVJBQBxtHMg==
-X-Google-Smtp-Source: AA0mqf78HbKGQTDOE4+BiDimvNgdVBquA9KsjqNs1WBwaWJLdYE6jZKT54YGJ6xe8zDTOOCYp1M5xg==
-X-Received: by 2002:a19:4918:0:b0:4b3:a78b:2e7d with SMTP id w24-20020a194918000000b004b3a78b2e7dmr2359952lfa.363.1668777235606;
-        Fri, 18 Nov 2022 05:13:55 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id g23-20020a2ea4b7000000b0026dce0a5ca9sm649802ljm.70.2022.11.18.05.13.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Nov 2022 05:13:54 -0800 (PST)
-Message-ID: <1707d9f6-47bf-c611-7484-7bcabe3c872b@linaro.org>
-Date:   Fri, 18 Nov 2022 14:13:53 +0100
+        Fri, 18 Nov 2022 08:15:12 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D2E05801D
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 05:14:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668777248;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DwgnOjsBwuRm3KvaCsNzS6B7/KxJyL7ZVpx0OHwNOwA=;
+        b=R4lvEJUwYZibNnazRzwH66GuBgnzt97h+bYWQtRMJ2i3zS232kwfZRp1U7Hf6Wtlchdqya
+        E132DDLTNl2zW3WE7b+1GMDlZ99NnwuBAySagLU3ZwBcy8D92+rg0fFxpmYYJOzX6v3dcK
+        2Rv+CzmuHMxJxyAvghYXVXF+EYJZRpE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-154-gGjGeDE0NEeha0WFuDPt1Q-1; Fri, 18 Nov 2022 08:14:02 -0500
+X-MC-Unique: gGjGeDE0NEeha0WFuDPt1Q-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AD4F1811E75;
+        Fri, 18 Nov 2022 13:14:01 +0000 (UTC)
+Received: from localhost (unknown [10.39.208.23])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 65BF640C83EC;
+        Fri, 18 Nov 2022 13:14:01 +0000 (UTC)
+Date:   Fri, 18 Nov 2022 14:13:58 +0100
+From:   Niels de Vos <ndevos@redhat.com>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Theodore Ts'o <tytso@mit.edu>, linux-fscrypt@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xiubo Li <xiubli@redhat.com>,
+        Marcel Lauhoff <marcel.lauhoff@suse.com>
+Subject: Re: [RFC 0/4] fs: provide per-filesystem options to disable fscrypt
+Message-ID: <Y3eFFrhT3b0yoti9@ndevos-x1>
+References: <20221110141225.2308856-1-ndevos@redhat.com>
+ <Y20a/akbY8Wcy3qg@mit.edu>
+ <Y20rDl45vSmdEo3N@ndevos-x1>
+ <Y3HZ/To8z76vBqYo@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 1/8] dt-bindings: riscv: Add StarFive JH7110 SoC and
- VisionFive2 board
-Content-Language: en-US
-To:     Hal Feng <hal.feng@starfivetech.com>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org
-Cc:     Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        linux-kernel@vger.kernel.org
-References: <20221118011714.70877-1-hal.feng@starfivetech.com>
- <20221118011714.70877-2-hal.feng@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221118011714.70877-2-hal.feng@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3HZ/To8z76vBqYo@infradead.org>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/11/2022 02:17, Hal Feng wrote:
-> From: Emil Renner Berthing <kernel@esmil.dk>
+On Sun, Nov 13, 2022 at 10:02:37PM -0800, Christoph Hellwig wrote:
+> On Thu, Nov 10, 2022 at 05:47:10PM +0100, Niels de Vos wrote:
+> > And, there actually are options like CONFIG_EXT4_FS_POSIX_ACL and
+> > CONFIG_EXT4_FS_SECURITY. Because these exist already, I did not expect
+> > too much concerns with proposing a CONFIG_EXT4_FS_ENCRYPTION...
 > 
-> Add device tree bindings for the StarFive JH7110 RISC-V SoC [1]
-> and the VisionFive2 board [2] equipped with it.
+> ext4 is a little weird there as most file systems don't do that.
+> So I think these should go away for ext4 as well.
+
+Yeah, I understand that there is a preference for reducing the number of
+Kconfig options for filesystems. That indeed would make it a little
+easier for users, so I am supportive of that as well.
+
+> > Note that even with the additional options, enabling only
+> > CONFIG_FS_ENCRYPTION causes all the filesystems that support fscrypt to
+> > have it enabled. For users there is no change, except that they now have
+> > an option to disable fscrypt support per filesystem.
 > 
-> [1]: https://doc-en.rvspace.org/Doc_Center/jh7110.html
+> But why would you do that anyay?
 
-As Conor said, I think Links are preferred. With that:
+An other mail in this thread contains a description about that. It is
+more about being able to provide a kernel build that is fully tested,
+and enabling more options (or being unable to disable features)
+increases the testing efforts that are needed.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+However, as Ted pointed out, there are other features that can not be
+disabled or limited per filesystem, so there will always be a gap in
+what can practically be tested.
 
-Best regards,
-Krzysztof
+Thanks,
+Niels
 
