@@ -2,193 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DAA762F2F8
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 11:48:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B03B862F310
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 11:56:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241702AbiKRKsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 05:48:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37006 "EHLO
+        id S241619AbiKRK4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 05:56:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241728AbiKRKsA (ORCPT
+        with ESMTP id S241616AbiKRK4D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 05:48:00 -0500
-Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.109.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E4E08DA51
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 02:47:57 -0800 (PST)
-Received: from CHE01-GV0-obe.outbound.protection.outlook.com
- (mail-gv0che01lp2043.outbound.protection.outlook.com [104.47.22.43]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-17-RXMvd36KPxi-npg-21HSyA-1; Fri, 18 Nov 2022 11:47:54 +0100
-X-MC-Unique: RXMvd36KPxi-npg-21HSyA-1
-Received: from ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:3b::9) by
- ZRAP278MB0142.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:13::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5834.9; Fri, 18 Nov 2022 10:47:52 +0000
-Received: from ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
- ([fe80::98a2:d371:57e0:cc3]) by ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
- ([fe80::98a2:d371:57e0:cc3%9]) with mapi id 15.20.5834.009; Fri, 18 Nov 2022
- 10:47:52 +0000
-From:   Marcel Ziswiler <marcel.ziswiler@toradex.com>
-To:     "alexander.stein@ew.tq-group.com" <alexander.stein@ew.tq-group.com>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
-        "hongxing.zhu@nxp.com" <hongxing.zhu@nxp.com>,
-        "marex@denx.de" <marex@denx.de>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "tharvey@gateworks.com" <tharvey@gateworks.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "richard.leitner@linux.dev" <richard.leitner@linux.dev>
-CC:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-imx@nxp.com" <linux-imx@nxp.com>
-Subject: Re: [PATCH v2] soc: imx: imx8mp-blk-ctrl: Add PCIe SYSPLL
- configurations
-Thread-Topic: [PATCH v2] soc: imx: imx8mp-blk-ctrl: Add PCIe SYSPLL
- configurations
-Thread-Index: AQHY+vxoPOannHJiikmQ58K/x/rcB65EgHCA
-Date:   Fri, 18 Nov 2022 10:47:52 +0000
-Message-ID: <aacc40f4d8f727a8e1be97c094d1e391a8f72012.camel@toradex.com>
-References: <1668740199-31956-1-git-send-email-hongxing.zhu@nxp.com>
-In-Reply-To: <1668740199-31956-1-git-send-email-hongxing.zhu@nxp.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: ZR0P278MB0683:EE_|ZRAP278MB0142:EE_
-x-ms-office365-filtering-correlation-id: 7cf43dc1-8bb0-4962-07e2-08dac95257f6
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0
-x-microsoft-antispam-message-info: 6dNz9ngGuEsGMdWQxq92ZHqD0kzBnDFFC4dGmL14uonGSgC2KHtotvVv+9JNBZ1NUcnU9DwFYa6UDYTqsDwWMRiJyZ0galnLKNHhrGCaXvB0RTLx6QK1eKdGKwmH80/GLQcxlW68/an4XbqMTIa5UcMBB1eNYElF9wK77FW7Jmqf1eiYFAa+IRfZyBE5D2m0kyg1De/IqEDxUFKtsgRXwwSN1kJxrJGaJ+o4/LWHmelIjRhp6M5Y3EiZgAcBxWed3yqN35S9bpPjoqIVQSFfgBZxyRnMMcDR1o7uBNJmtAIavrrTm4zyqMXWdqD9Vmb9eJRoEHjlen00GO2aOHUV9jgKQSCvnpWNr/GJzX7yK/lRbjByAaG1OFfVU57b7znyUPBSuSFTMTg4gve9GZrDfBPMtPXE2B8lFG7p2z05QkHxBpFdR/T0uiEPCxMfptafQCeNIg5UN09pwcLeTveMqOJUkzU7FgbEsabFEzAHKRZ0e1+RON9byW9YL24yg60ddParLSd6/1nf46hEinFMc2HJu6eFc094Syr2Rizh56npKJ5tlHKEHJwfYPOnyerWdSafhICX1KDwlmrIrdVpZ0YAMpP8erc9gS2dP8GOjLpfN15iEze2hRMyRCp7U7S8iQsXNlccRRl+fPDyMk96Iaa5XeVz5xWGS0IS+CvRKci2TNxp8hOtJb7CGQkNP4MpZ534di+3U+ZfpLP4IwaAJh5Um7w8+21GFuQNTVEUYiVeaigDUNY5fKuyJBqfBGV+
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(396003)(39850400004)(136003)(376002)(366004)(451199015)(54906003)(110136005)(316002)(4326008)(64756008)(8676002)(6512007)(478600001)(966005)(6486002)(66946007)(66556008)(6506007)(71200400001)(66446008)(76116006)(66476007)(186003)(5660300002)(7416002)(41300700001)(8936002)(2616005)(44832011)(36756003)(2906002)(4001150100001)(83380400001)(86362001)(38100700002)(38070700005)(122000001)(32563001);DIR:OUT;SFP:1102
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bTdGMlZraTZqazlEZ2xDcXRwVko3Rmx2UFBiSkVBSmhUcEp3SXJtVnpFMmhP?=
- =?utf-8?B?UlBZdlprNUdYM1BoeGhWU0J0TzhIVXhHNlZ3YS9GVVBaVGVTYUZXdGpvZTl0?=
- =?utf-8?B?OUlyYjJOdnZFM1hFY1JCS0NCaytQQmxVWldYc2Y4cWZXbDA0TGZ0VlpSaWFs?=
- =?utf-8?B?V05zOXdvNVRZYUNsaUdLRVlEUGdrMXpTSTkyeWVSQytyVDRzcDExU2V4cWhR?=
- =?utf-8?B?bU04Vk9ZN1EzbWdtcFN4MlB4amVMRjlHUDJrMzc5VkJmeGlTWjQyQWVmR3Ix?=
- =?utf-8?B?dHYraDNQUEFLNkdQbGJ4azRsMGhZRHZGNXZEQ0YweG5JU1Q2WmIrSkJuUUM5?=
- =?utf-8?B?R0xPMUJVRDNJb3JLS3p4cmZyV2dvRlV0Z3lFeUwwNWN5cDhUOW1NY2g5UkhT?=
- =?utf-8?B?bzByM2dXOEhSL3VzV3VuMTFoNlBRMDA1VHJ1TTBGZjNwd1Y5Qm9qT2tTdG5H?=
- =?utf-8?B?UmFESFBCMkhTakNkdmdmaTNsVERzRW95bmRZY1dwbVl4UFU5Nm9aZGlUbFVP?=
- =?utf-8?B?bDFTVTZFY1lMTk5kVEduSE1Wd3hxVHdhSEZBdFZERjFPSG16Qy92Ymcwd1pL?=
- =?utf-8?B?bkZHaEdIemdvK0lLZkQxbS9xNWxVTWN1eWpjYnJ5SE0rb1NDTGVNN2x0Q3Zw?=
- =?utf-8?B?LzM0Q1VOM1BpNkNZVWFLZm5GTEoxZWx3elgrS1l4ODIwMGtTTG1sTWR5Zm0x?=
- =?utf-8?B?bVYvSmk3ZUQ5clRvdmkwdU5VTnZJNDhXWUY5OTZQaDdCRWFYT3ZkOXBZZWtM?=
- =?utf-8?B?QzVMR0VqY2FRcTU4V1NqTzVWWDh2VWVQUWtiN3ZCc2V3VUgzeGtvRVBPVy84?=
- =?utf-8?B?Y3NJd2pxeEdDTGM3WENuejlwZjMrVGZmenFBQ3gzV29hakVuMlJhbm9Yanl0?=
- =?utf-8?B?UWw5MEdkalYybi8xVC8xSFlBekFNVHluek4yRnB5WGx0T2haQ09uN3FnQ2Vi?=
- =?utf-8?B?dHo1N1hSODVDSHhoL3VjaU00cXViamRiOHZpbS9lOFJJNm9TWVF1K0NSOE9t?=
- =?utf-8?B?OElxSG9tUTYvU1QycFRmMUp0QmIxN3ZKWXFwdkprcDkvM3VZa1RUQnVISjVJ?=
- =?utf-8?B?Q01EZ1dua1BRdmxOQkIxblVGeXpnQUY1QjRBYlpyTkZrcjhVY1RVRUQ0bzVl?=
- =?utf-8?B?MTlzdnoxOVFoaWJ1cG1TNXFaelo5M3gzTDlVTGo2dVlWVTE4azhXc3hvelJT?=
- =?utf-8?B?c0ozNTZuVHlqWitwRzg0YzNKdUdSeFFvejdNNzlJU3Z2K1k4RFhRY2NBZmtW?=
- =?utf-8?B?RXJsbVU4NjgrTWtRY25ZQ2VJMnByNGdWdTR6OVMxdHlieDA0dEc0UDJiTG5v?=
- =?utf-8?B?YXRPNmR3eDd0L3FxOWFHQ0dOZGthOEpsTUJrY1NaaWpHNjBUbjk1WHp6ejda?=
- =?utf-8?B?c2NjcjhRZ0JHSzZhYjV3K1ZRVGpnbU9YWDhOSVd2RnVzWFEzM3ZyK3hCcE9x?=
- =?utf-8?B?ZC9LRHZlRzA0RFM2MFNnYnVlZUkvSWNZdUhteFpUNGpkSzZjNy9rdmlYWmpP?=
- =?utf-8?B?eUkwa2FxWmdtUFBtYStoK3ZVay9ZeHZUTk01VjUyaCtDSjFkd3BtR09LampT?=
- =?utf-8?B?NG1IeEFwWkVuYkZnTkllazRoc0FYbEdLWHNHbEo2TzhSV0VKRm81cVR5LzUw?=
- =?utf-8?B?c01PU3lyaG55TmhENnl4V0YxTUxxVFN5Z3BScTBUU3JlVldBVE1tdlQyS3JE?=
- =?utf-8?B?VmZsZk5IWHlmWE9ucFFvT3JsWG9mZU85blpncnk1SCtBeXZmS2RILzRvNkdN?=
- =?utf-8?B?V0dWankxalRuU2NFenIrYk5SdjhpMU5vQTJRQTMzTkNTOFFpTk1WWFB3YkJH?=
- =?utf-8?B?RmlNSkgvbUdVUm5OcThuVlY3d2FaenpKZitOOGxYWlFOSjdFUkt6TEVxK25u?=
- =?utf-8?B?ZWJLNnBOVExaSm5WQ3FXTkFiVGhnZERzTk5DYzEyL0ZTVm9lMUNNT3ducWd0?=
- =?utf-8?B?dkhGYjJHQ3dJZ1cvbVg0QkRRdFNjckVKYndpUnZNY0FwWEN2ZGlSc1NXZWpP?=
- =?utf-8?B?T1QvY1pxVkRmdHpWNlV6NmVTVjIzVEFyUHBTYmp5QXJoR2crcmdNWVhaQ09l?=
- =?utf-8?B?cEo5OWs3aS9mL1JwU2J6OWs4YzM1eUo0OWY4YWFaRE1oYS9RNFV2UmNDYlBo?=
- =?utf-8?B?VVQ1MExERmpjVjZoM09NR2JaQ0FvS1oyMXpUMVBHYXRoa2czMzJVQUNla1lH?=
- =?utf-8?Q?3OmRfvmegd6lgEySieMlQMUOMlKXDbsE59LFfs5zRWE7?=
+        Fri, 18 Nov 2022 05:56:03 -0500
+X-Greylist: delayed 401 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 18 Nov 2022 02:56:01 PST
+Received: from utopia.booyaka.com (utopia.booyaka.com [74.50.51.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B86A91523
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 02:56:01 -0800 (PST)
+Received: (qmail 7247 invoked by uid 1019); 18 Nov 2022 10:49:18 -0000
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 18 Nov 2022 10:49:18 -0000
+Date:   Fri, 18 Nov 2022 10:49:18 +0000 (UTC)
+From:   Paul Walmsley <paul@pwsan.com>
+To:     Palmer Dabbelt <palmer@rivosinc.com>
+cc:     Conor Dooley <conor@kernel.org>, Atish Patra <atishp@rivosinc.com>,
+        corbet@lwn.net, Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>, aou@eecs.berkeley.edu,
+        conor.dooley@microchip.com, linux-doc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux@rivosinc.com
+Subject: Re: [PATCH 2/4] Documentation: RISC-V: Allow patches for non-standard
+ behavior
+In-Reply-To: <20221013045619.18906-3-palmer@rivosinc.com>
+Message-ID: <alpine.DEB.2.21.999.2211181027590.4480@utopia.booyaka.com>
+References: <20221013045619.18906-1-palmer@rivosinc.com> <20221013045619.18906-3-palmer@rivosinc.com>
+User-Agent: Alpine 2.21.999 (DEB 260 2018-02-26)
 MIME-Version: 1.0
-X-OriginatorOrg: toradex.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7cf43dc1-8bb0-4962-07e2-08dac95257f6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Nov 2022 10:47:52.6276
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d9995866-0d9b-4251-8315-093f062abab4
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: m0orVZ7XH5T0NkftjW4PyANxpKOggnQM/CtukY4YhUVP+KCBDeotiDCDwkPhYUy63lJHbOJCdaHyHenFTBOguEXRbUEcrAbeGnzObDLoqiA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZRAP278MB0142
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: toradex.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-ID: <A065B3F9B1EA8145AEEE26B17D2C911F@CHEP278.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgUmljaGFyZAoKT24gRnJpLCAyMDIyLTExLTE4IGF0IDEwOjU2ICswODAwLCBSaWNoYXJkIFpo
-dSB3cm90ZToKPiBBZGQgUENJZSBTWVNQTEwgY29uZmlndXJhdGlvbnMsIHRodXMgdGhlIGludGVy
-bmFsIFNZU1BMTCBjYW4gYmUgdXNlZCBhcwo+IGkuTVg4TVAgUENJZSByZWZlcmVuY2UgY2xvY2su
-Cj4gCj4gVGhlIGZvbGxvd2luZyBwcm9wZXJ0aWVzIG9mIFBIWSBkdHMgbm9kZSBzaG91bGQgYmUg
-Y2hhbmdlZCBhY2NvcmRpbmdseS4KPiDCoCAtIFNldCAnZnNsLHJlZmNsay1wYWQtbW9kZScgYXMg
-JzxJTVg4X1BDSUVfUkVGQ0xLX1BBRF9PVVRQVVQ+Jy4KPiDCoCAtIENoYW5nZSAnY2xvY2tzJyB0
-byAnPCZjbGsgSU1YOE1QX0NMS19IU0lPX0FYST4nLgo+IAo+IFNpZ25lZC1vZmYtYnk6IFJpY2hh
-cmQgWmh1IDxob25neGluZy56aHVAbnhwLmNvbT4KClRlc3RlZC1ieTogTWFyY2VsIFppc3dpbGVy
-IDxtYXJjZWwuemlzd2lsZXJAdG9yYWRleC5jb20+CgpUaGlzIHdvcmtzIHBlcmZlY3RseSBmaW5l
-IG9uIFZlcmRpbiBpTVg4TSBQbHVzIGFzIHdlbGwuIEkgd2lsbCB1cGRhdGUgbXkgcHJldmlvdXMg
-UENJZS1lbmFibGVtZW50IGNvbW1pdAooZGV2aWNlIHRyZWUgcGFydCkgaW4gdGhhdCByZXNwZWN0
-IGFuZCAocmUtKXN1Ym1pdCBpdC4KClRoYW5rcyEKCkNoZWVycwoKTWFyY2VsCgo+IC0tLQo+IHYx
-LT52MjoKPiBSZWZlciB0byBMdWNhcycgY29tbWVudHMsIGRvbid0IGV4cG9zZSBJTVg4TVBfQ0xL
-X0hTSU9fUk9PVCB0byBkdHMgbm9kZS4KPiBodHRwczovL3BhdGNod29yay5vemxhYnMub3JnL3By
-b2plY3QvbGludXgtcGNpL3BhdGNoLzE2NjY1OTAxODktMTM2NC0xLWdpdC1zZW5kLWVtYWlsLWhv
-bmd4aW5nLnpodUBueHAuY29tLwo+IAo+IFVzZSA8JmNsayBJTVg4TVBfQ0xLX0hTSU9fQVhJPiBh
-cyByZWZlcnJlbmNlIGNsb2NrIHNvdXJjZSB3aGVuIGludGVybmFsCj4gY2xvY2sgbW9kZSBpcyB1
-c2VkIGJ5IGkuTVg4TVAgUENJZSBtb2R1bGUuCj4gCj4gVmVyaWZpZWQgb24gaS5NWDhNUCBFVksg
-Ym9hcmQgd2l0aCByZW1vdmluZyBSMTMxL1IxMzIvUjEzNy9SMTM4LCBhbmQKPiBwb3B1bGF0aW5n
-IFIxMzUvUjEzNi4KPiAtLS0KPiDCoGRyaXZlcnMvc29jL2lteC9pbXg4bXAtYmxrLWN0cmwuYyB8
-IDIyICsrKysrKysrKysrKysrKysrKysrKysKPiDCoDEgZmlsZSBjaGFuZ2VkLCAyMiBpbnNlcnRp
-b25zKCspCj4gCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvc29jL2lteC9pbXg4bXAtYmxrLWN0cmwu
-YyBiL2RyaXZlcnMvc29jL2lteC9pbXg4bXAtYmxrLWN0cmwuYwo+IGluZGV4IDBlM2I2YmEyMmY5
-NC4uNWFkMjBhOGVhMjVlIDEwMDY0NAo+IC0tLSBhL2RyaXZlcnMvc29jL2lteC9pbXg4bXAtYmxr
-LWN0cmwuYwo+ICsrKyBiL2RyaXZlcnMvc29jL2lteC9pbXg4bXAtYmxrLWN0cmwuYwo+IEBAIC0y
-MSw2ICsyMSwxNiBAQAo+IMKgI2RlZmluZcKgIFVTQl9DTE9DS19NT0RVTEVfRU7CoMKgwqBCSVQo
-MSkKPiDCoCNkZWZpbmXCoCBQQ0lFX1BIWV9BUEJfUlNUwqDCoMKgwqDCoMKgQklUKDQpCj4gwqAj
-ZGVmaW5lwqAgUENJRV9QSFlfSU5JVF9SU1TCoMKgwqDCoMKgQklUKDUpCj4gKyNkZWZpbmUgR1BS
-X1JFRzLCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAweDgKPiArI2RlZmluZcKgIFBfUExM
-X01BU0vCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBHRU5NQVNLKDUsIDApCj4gKyNkZWZpbmXCoCBN
-X1BMTF9NQVNLwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgR0VOTUFTSygxNSwgNikKPiArI2RlZmlu
-ZcKgIFNfUExMX01BU0vCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBHRU5NQVNLKDE4LCAxNikKPiAr
-I2RlZmluZcKgIFBfUExMwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCgweGMgPDwg
-MCkKPiArI2RlZmluZcKgIE1fUExMwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCgw
-eDMyMCA8PCA2KQo+ICsjZGVmaW5lwqAgU19QTEzCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgKDB4NCA8PCAxNikKPiArI2RlZmluZSBHUFJfUkVHM8KgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoDB4Ywo+ICsjZGVmaW5lwqAgUExMX0NLRcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoEJJVCgxNykKPiArI2RlZmluZcKgIFBMTF9SU1TCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqBCSVQoMzEpCj4gwqAKPiDCoHN0cnVjdCBpbXg4bXBfYmxrX2N0cmxfZG9tYWluOwo+
-IMKgCj4gQEAgLTg2LDYgKzk2LDE4IEBAIHN0YXRpYyB2b2lkIGlteDhtcF9oc2lvX2Jsa19jdHJs
-X3Bvd2VyX29uKHN0cnVjdCBpbXg4bXBfYmxrX2N0cmwgKmJjLAo+IMKgwqDCoMKgwqDCoMKgwqBj
-YXNlIElNWDhNUF9IU0lPQkxLX1BEX1BDSUVfUEhZOgo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgcmVnbWFwX3NldF9iaXRzKGJjLT5yZWdtYXAsIEdQUl9SRUcwLAo+IMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBQ
-Q0lFX1BIWV9BUEJfUlNUIHwgUENJRV9QSFlfSU5JVF9SU1QpOwo+ICsKPiArwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgLyogU2V0IHRoZSBQTEwgY29uZmlndXJhdGlvbnMsIFAgPSAxMiwg
-TSA9IDgwMCwgUyA9IDQuICovCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJlZ21h
-cF91cGRhdGVfYml0cyhiYy0+cmVnbWFwLCBHUFJfUkVHMiwKPiArwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIFBfUExMX01B
-U0sgfCBNX1BMTF9NQVNLIHwgU19QTExfTUFTSywKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIFBfUExMIHwgTV9QTEwg
-fCBTX1BMTCk7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHVkZWxheSgxKTsKPiAr
-Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJlZ21hcF91cGRhdGVfYml0cyhiYy0+
-cmVnbWFwLCBHUFJfUkVHMywgUExMX1JTVCwgUExMX1JTVCk7Cj4gK8KgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoHVkZWxheSgxMCk7Cj4gKwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqAvKiBTZXQgMWInMSB0byBwbGxfY2tlIG9mIEdQUl9SRUczICovCj4gK8KgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoHJlZ21hcF91cGRhdGVfYml0cyhiYy0+cmVnbWFwLCBHUFJfUkVH
-MywgUExMX0NLRSwgUExMX0NLRSk7Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBi
-cmVhazsKPiDCoMKgwqDCoMKgwqDCoMKgZGVmYXVsdDoKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoGJyZWFrOwo=
+Hi, 
+
+On Wed, 12 Oct 2022, Palmer Dabbelt wrote:
+
+> From: Palmer Dabbelt <palmer@rivosinc.com>
+> 
+> The patch acceptance policy forbids accepting support for non-standard
+> behavior.  This policy was written in order to both steer implementers
+> towards the standards and to avoid coupling the upstream kernel too
+> tightly to vendor-specific features.  Those were good goals, but in
+> practice the policy just isn't working: every RISC-V system we have
+> needs vendor-specific behavior in the kernel and we end up taking that
+> support which violates the policy.  That's confusing for contributors,
+> which is the main reason we have a written policy in the first place.
+> 
+> So let's just start taking code for vendor-defined behavior.
+
+I think I understand the motivation behind this patch: to align the stated 
+patch acceptance policy with the actual maintenance practice for 
+arch/riscv.  Along those lines, how about the following tweaks, based on 
+your original patch?
+
+Probably the most significant proposed change from what you wrote is to 
+temporarily drop the section about accepting patches for hardware that 
+doesn't yet exist.  I know arch/x86 does this, but my recollection is that 
+the maintainers there started doing that after the key x86 hardware 
+manufacturers established a track record of consistently releasing 
+mass-market hardware that implemented what they promised.  Not sure we're 
+at that point with RISC-V yet.  We'll get there at some point, but maybe 
+we can add that clause back in once that happens?
+
+
+- Paul
+
+From: Paul Walmsley <paul.walmsley@sifive.com>
+Date: Fri, 18 Nov 2022 02:16:17 -0600
+Subject: [PATCH] Documentation: RISC-V: Allow patches for widely available
+ hardware
+
+This patch, based on an earlier patch from Palmer, updates the patch
+acceptance policy to note that the maintainers may also accept patches
+for RISC-V hardware that contains features that may not be strictly
+RISC-V-compliant, but which is widely available.  The intention here
+is to align the stated policy with the de-facto upstream Linux policy.
+
+Link: https://lore.kernel.org/linux-riscv/20221013045619.18906-3-palmer@rivosinc.com/  # Palmer's original patch
+Cc: Palmer Dabbelt <palmer@rivosinc.com>
+Signed-off-by: Paul Walmsley <paul.walmsley@sifive.com>
+---
+ Documentation/riscv/patch-acceptance.rst | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/Documentation/riscv/patch-acceptance.rst b/Documentation/riscv/patch-acceptance.rst
+index 5da6f9b273d6..2e3f9ecdd977 100644
+--- a/Documentation/riscv/patch-acceptance.rst
++++ b/Documentation/riscv/patch-acceptance.rst
+@@ -29,7 +29,12 @@ their own custom extensions.  These custom extensions aren't required
+ to go through any review or ratification process by the RISC-V
+ Foundation.  To avoid the maintenance complexity and potential
+ performance impact of adding kernel code for implementor-specific
+-RISC-V extensions, we'll only accept patches for extensions that
+-have been officially frozen or ratified by the RISC-V Foundation.
+-(Implementors, may, of course, maintain their own Linux kernel trees
+-containing code for any custom extensions that they wish.)
++RISC-V extensions, we'll only consider patches for extensions that
++either:
++
++- Have been officially frozen or ratified by the RISC-V Foundation, or
++- Have been implemented in hardware that is widely available, per standard
++  Linux practice
++
++(Implementors, may, of course, maintain their own Linux kernel
++trees containing code for any custom extensions that they wish.)
+-- 
+2.38.1
 
