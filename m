@@ -2,117 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AF08630483
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 00:40:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2026D63049D
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 00:44:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236747AbiKRXkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 18:40:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39748 "EHLO
+        id S236790AbiKRXoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 18:44:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236818AbiKRXh5 (ORCPT
+        with ESMTP id S235257AbiKRXnr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 18:37:57 -0500
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B4EA6A0C
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:22:46 -0800 (PST)
-Received: by mail-qt1-x834.google.com with SMTP id jr19so4148933qtb.7
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:22:46 -0800 (PST)
+        Fri, 18 Nov 2022 18:43:47 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A410C76B9
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:24:11 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso6075388pjt.0
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:24:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JTPRlJSX2DLHg3q6WEUslM2aHDz3cJkv4J+i/NOGxF8=;
-        b=75OTZs/um0vrPFpf4rivUwFVfj569zfn8Hctoup+Fiv3oEqtIn6IcBbfbBi6nnc/bg
-         +sv4KCRJeHTLu/hxv/C79WXWDvufJOLxFizqU3kSkItW/vZ+W4KQxRlvEHDqBH2KApqX
-         2+vhesXQDjfneOy93QfjPCfRnRIP4KLc0S07SuuXkdv7MSijUXpYNj/vl50qwidHgMaR
-         RiwkvOb2FzxMWxSsf7nIKyx2IJobE4YFPoQl8/+bOV7mWjlMb/9RvAtAsJz2xj/LwFVm
-         YgpYyNnEw1OJCvTUD5F/qGt1aVaZFwiGHKM0w2C9V9L3tFjRNI7gEgopa/C81ACAYm0u
-         6IhQ==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=iXVai3qFJ8ArPGICNTEIcWXEgGfS3utWJbObwOpoeVU=;
+        b=NFSHO2ZSUb7w5MpWfNQrsU6nV0aGbmYOYqFMaJCHcOg3hTAKqC5IykbTpcmUt3u6Lv
+         6eDmhrGA8AAvTeKdSzoVKbV8EbdQ6Ut0tRnph4lQ+iKQaHrc3CmGHkcgGJ3FJJP1u4ma
+         r16CmGxHUb+rqEorMytkj4G5ymQJbwaIyVGgw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JTPRlJSX2DLHg3q6WEUslM2aHDz3cJkv4J+i/NOGxF8=;
-        b=SJDJx8jZHZGD1MoZzqo7/QjISeFF9pHAee7g3/+lHWYZsLyCvOVW+rAZjx5oolE+CP
-         r54jyRsy/TUhDj7t9QYUmL91x8m5D5iUsuPnLAgVdsBUMrb4HyGRQmFKTOCZLhcExA5e
-         xi4EeR5PhVMiFdQiRBSbdBOtGRAQPo30kLzbAF+h+H5q0bnpqWPlUtuLVgURlIP9cnGS
-         rIPlNaNFjJ+bKhW1nq5UVKEMdcPkuzzQcn4AVwylhMFjqz7MbOxxuo2GMCRkCsWhV1sN
-         EocjaWxZfsxHSG5VDGtcVrPEtBQsaRre+Wva0oeY3UuzmDAVqkTd/rV5oiODNUYS+qaf
-         d0RQ==
-X-Gm-Message-State: ANoB5pnbxAir0P0owN+36UxI9/+scmIKmduE4IoLpLfCZQ57rhFzbLBN
-        gJX6yQZBVYdPS7fLA+GZuladLg==
-X-Google-Smtp-Source: AA0mqf4Lax1B626EO0404yB6hsv9w/QkDTAth8qheZdYexzp5WcpdsNEENwKQG2bnhqg75Um2kQsiQ==
-X-Received: by 2002:ac8:4a10:0:b0:3a5:30f8:17b4 with SMTP id x16-20020ac84a10000000b003a530f817b4mr8810660qtq.115.1668813766064;
-        Fri, 18 Nov 2022 15:22:46 -0800 (PST)
-Received: from localhost ([2620:10d:c091:480::1:bc4])
-        by smtp.gmail.com with ESMTPSA id t7-20020a37ea07000000b006fa2cc1b0fbsm3304307qkj.11.2022.11.18.15.22.45
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iXVai3qFJ8ArPGICNTEIcWXEgGfS3utWJbObwOpoeVU=;
+        b=TUpbEcR/jKIM6XUUIWU3K+IUVhmBXupxqMWtidSJWFCrxi45hWNztqT2rHvYTQFGD3
+         4QnxvX0nQylHgIT0siagm11kxxl3/OZsHVq1zjGZcfuM9knihkMlHFEX7+iglVliqXaS
+         OnbUN/yn6cxc3PeUSYcFaaFKhjWQHAZgidfzoFB0Jg1obJVRas734o2c/fzel032K/Nw
+         bij/lxGl3NVd0jdn9MNi6hkNGCBlEQN0HlquzlbQT80IyAg8sfZjVETytF9JgPpNBDFX
+         C8BzWo/eQqS3mtVsN/CTO9QuArMkV4GqYziA0cfdIx6tr3aaM301Jpu0J5uHelOVryjn
+         +Yrw==
+X-Gm-Message-State: ANoB5pllQtgB3ToINwweoPXf6/Y5sTMJxpxHKF5JpI92r9aX5dsVEPbN
+        V7Ut/lMY0p9eIWv4Z/ZzeaDQiA==
+X-Google-Smtp-Source: AA0mqf462QZsPtBpPocdQx/0dVxSHHjjHXfgSRPni9vR4Gor5GuDpiFouzua+89j8xLUx81aVbqNJw==
+X-Received: by 2002:a17:90a:6547:b0:213:d08f:a483 with SMTP id f7-20020a17090a654700b00213d08fa483mr9914547pjs.21.1668813833817;
+        Fri, 18 Nov 2022 15:23:53 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id t8-20020a1709027fc800b00186c37270f6sm4294533plb.24.2022.11.18.15.23.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 15:22:45 -0800 (PST)
-Date:   Fri, 18 Nov 2022 18:23:09 -0500
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     Nhat Pham <nphamcs@gmail.com>, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        ngupta@vflare.org, senozhatsky@chromium.org, sjenning@redhat.com,
-        ddstreet@ieee.org, vitaly.wool@konsulko.com
-Subject: Re: [PATCH v5 4/6] zsmalloc: Add a LRU to zs_pool to keep track of
- zspages in LRU order
-Message-ID: <Y3gT3bZT9yAXGY6C@cmpxchg.org>
-References: <20221118182407.82548-1-nphamcs@gmail.com>
- <20221118182407.82548-5-nphamcs@gmail.com>
- <Y3fdsTDFgCzhcDwo@google.com>
- <Y3flcAXNxxrvy3ZH@cmpxchg.org>
- <Y3f6habiVuV9LMcu@google.com>
+        Fri, 18 Nov 2022 15:23:53 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Jaroslav Kysela <perex@perex.cz>
+Cc:     Kees Cook <keescook@chromium.org>,
+        kernel test robot <lkp@intel.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        alsa-devel@alsa-project.org, Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Subject: [PATCH] ALSA: seq: Fix function prototype mismatch in snd_seq_expand_var_event
+Date:   Fri, 18 Nov 2022 15:23:50 -0800
+Message-Id: <20221118232346.never.380-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y3f6habiVuV9LMcu@google.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2388; h=from:subject:message-id; bh=LT8LvayoodyeGcJJmotl0W7abaTXyRbApRilntoVIaM=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjeBQGxl97XSZ/V131zxWG6VCVlDXD5V6MNXIDGf3M dU2HgY2JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY3gUBgAKCRCJcvTf3G3AJpNYD/ 970LXJu9T/r8J1MdqoqIR+muUaph3v/3r/JnVdIrugZjYUdZroQAGmvpKjF0NaevA5Rz+pYN8ejlBj QCPPFn5ld4zzw7miWLwRD05VvEonWs3fDK6yDqlRABnzMMa9TT0lLFvtxsLxoBMT5s9qf//qz59Q4C kJlTlPyMuRoTP6U3rbnw5ZbjkL1XWiQCUtIds/ZuIZk+lZU8qDtP0jBWfl2GpVsvXReyulyp7AkqbL pv+uGEb/ka/nhxaU7+4bse+EhIbJZ6d4hfuwkwjv6eAgbXjPV0cNc6D9/dKU2W7cvi6bD6bwwY9Z1F kHfxdJvYbQ+B+MTlG3O2mqN22daWBExivwMVg0gqOIyyUle1c4UceAT9IPZXOO5Ytvb3sHAdi3FySz riUxg7OnQoqX4ZuaEAiRtaeIKXp71OaAM2dSFQfZBwB0EkiG+fC5uN3Cs4g0nRt+irHwt1KKCnF/I9 owyMxTCpvATaqHdA3h+cfpn9xjWayAWEFTkd1duwlgCx9gT72iAKCzpDSaVEY1pzHHI+Ln3obru+it k9bsAVVu6S6l/VCU9Ul5sP6yxcHNx/SCeproJkeKDuNgk42tk8FP0RNs9P4BNVvqwszpuwfSwHuLqM exJ4TGIXwDqUUOs4vVncpMokhUYJqkBaLE55d9yYRqhWomued0koClDyDE1A==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 01:35:01PM -0800, Minchan Kim wrote:
-> On Fri, Nov 18, 2022 at 03:05:04PM -0500, Johannes Weiner wrote:
-> > On Fri, Nov 18, 2022 at 11:32:01AM -0800, Minchan Kim wrote:
-> > > On Fri, Nov 18, 2022 at 10:24:05AM -0800, Nhat Pham wrote:
-> > > > @@ -1444,6 +1473,11 @@ unsigned long zs_malloc(struct zs_pool *pool, size_t size, gfp_t gfp)
-> > > > 
-> > > >  	/* We completely set up zspage so mark them as movable */
-> > > >  	SetZsPageMovable(pool, zspage);
-> > > > +out:
-> > > > +#ifdef CONFIG_ZPOOL
-> > > > +	/* Move the zspage to front of pool's LRU */
-> > > > +	move_to_front(pool, zspage);
-> > > > +#endif
-> > > >  	spin_unlock(&pool->lock);
-> > > 
-> > > Please move the move_to_front into zs_map_object with ZS_MM_WO with
-> > > comment with "why we are doing only for WO case".
-> > 
-> > I replied to the other thread, but I disagree with this request.
-> > 
-> > The WO exception would be as zswap-specific as is the
-> > rotate-on-alloc. It doesn't make the resulting zsmalloc code any
-> 
-> That's true but at least, zs_pool allocators have the accessor so
-> that's fair place to have the LRU updating. I guess that's why
-> you agreed that's better place. No?
-> 
-> I understand that's zswap-specific that the bad design keeps
-> pushing smelly code into allocators and then "push to take it
-> since other were already doing" with "we will take them off with
-> better solution in future". I am really struggling to understand
-> this concept. Johannes, Is that really how we work over a decade?
+With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
+indirect call targets are validated against the expected function
+pointer prototype to make sure the call target is valid to help mitigate
+ROP attacks. If they are not identical, there is a failure at run time,
+which manifests as either a kernel panic or thread getting killed.
 
-My point was that there is no difference between having zswap code in
-alloc or in map. And there is a small upside to having it in alloc
-because of the other backends.
+seq_copy_in_user() and seq_copy_in_kernel() did not have prototypes
+matching snd_seq_dump_func_t. Adjust this and remove the casts. There
+are not resulting binary output differences.
 
-But I won't fight you on it. The code isn't going to stay like this
-for long anyway.
+This was found as a result of Clang's new -Wcast-function-type-strict
+flag, which is more sensitive than the simpler -Wcast-function-type,
+which only checks for type width mismatches.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/lkml/202211041527.HD8TLSE1-lkp@intel.com
+Cc: Jaroslav Kysela <perex@perex.cz>
+Cc: Takashi Iwai <tiwai@suse.com>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: alsa-devel@alsa-project.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ sound/core/seq/seq_memory.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/sound/core/seq/seq_memory.c b/sound/core/seq/seq_memory.c
+index b7aee23fc387..47ef6bc30c0e 100644
+--- a/sound/core/seq/seq_memory.c
++++ b/sound/core/seq/seq_memory.c
+@@ -113,15 +113,19 @@ EXPORT_SYMBOL(snd_seq_dump_var_event);
+  * expand the variable length event to linear buffer space.
+  */
+ 
+-static int seq_copy_in_kernel(char **bufptr, const void *src, int size)
++static int seq_copy_in_kernel(void *ptr, void *src, int size)
+ {
++	char **bufptr = ptr;
++
+ 	memcpy(*bufptr, src, size);
+ 	*bufptr += size;
+ 	return 0;
+ }
+ 
+-static int seq_copy_in_user(char __user **bufptr, const void *src, int size)
++static int seq_copy_in_user(void *ptr, void *src, int size)
+ {
++	char __user **bufptr = ptr;
++
+ 	if (copy_to_user(*bufptr, src, size))
+ 		return -EFAULT;
+ 	*bufptr += size;
+@@ -151,8 +155,7 @@ int snd_seq_expand_var_event(const struct snd_seq_event *event, int count, char
+ 		return newlen;
+ 	}
+ 	err = snd_seq_dump_var_event(event,
+-				     in_kernel ? (snd_seq_dump_func_t)seq_copy_in_kernel :
+-				     (snd_seq_dump_func_t)seq_copy_in_user,
++				     in_kernel ? seq_copy_in_kernel : seq_copy_in_user,
+ 				     &buf);
+ 	return err < 0 ? err : newlen;
+ }
+-- 
+2.34.1
+
