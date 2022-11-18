@@ -2,124 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7624762F448
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 13:10:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D6D162F447
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 13:10:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241733AbiKRMK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 07:10:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54386 "EHLO
+        id S241493AbiKRMKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 07:10:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241441AbiKRMKP (ORCPT
+        with ESMTP id S241645AbiKRMKS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 07:10:15 -0500
-Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5E6DE8FF8B;
-        Fri, 18 Nov 2022 04:10:13 -0800 (PST)
-Received: from localhost.localdomain (unknown [10.14.30.251])
-        by mail-app4 (Coremail) with SMTP id cS_KCgDX2MwUdndjSIwaCA--.39489S4;
-        Fri, 18 Nov 2022 20:10:11 +0800 (CST)
-From:   Jinlong Chen <nickyc975@zju.edu.cn>
-To:     axboe@kernel.dk
-Cc:     hch@lst.de, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, nickyc975@zju.edu.cn
-Subject: [RFC PATCH 2/2] elevator: restore the old io scheduler if failed to switch to the new one
-Date:   Fri, 18 Nov 2022 20:09:54 +0800
-Message-Id: <29281ffcdd756bdbdfcee8769cd8b2eb867b74e2.1668772991.git.nickyc975@zju.edu.cn>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1668772991.git.nickyc975@zju.edu.cn>
-References: <cover.1668772991.git.nickyc975@zju.edu.cn>
+        Fri, 18 Nov 2022 07:10:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08DC8FF91;
+        Fri, 18 Nov 2022 04:10:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 90503624B9;
+        Fri, 18 Nov 2022 12:10:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E99EFC433D7;
+        Fri, 18 Nov 2022 12:10:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668773416;
+        bh=mcnd5sv49vx5RuMi9Gl3j1FsHor/0AfmfG3Fc/ebeQ8=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=S1hJQa8jyj/vElSehjC80zR8nksInrcviaFJ9RpVSdbu4acQPfjGxZQgx9BjFSton
+         fRLUormIT+YSRiimm/w7bg01swoKDnIpxo+6M2Gj6lK+QLsuJ+Nn87cVi0mM8P+Bti
+         cdS5JHj87Y2NszMVkzL7eksvMN6vWVc0VJwOaldU2UMiBmrAHXC9WK4XjKN3SrCJ2R
+         /0tju210YmgmZ7mXVpiMkuZZW/98B/17xmX0Y0OMlEMZZ4ra7xAgmia75bw9Km0sha
+         Y074Huc1JEY/YY4/HylZFU0rxY6kplTbYPdsty6BmQeU+TRlYO2P9y8D1E/HpqpucM
+         CDHbRICBQf2gw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D118AE270F6;
+        Fri, 18 Nov 2022 12:10:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cS_KCgDX2MwUdndjSIwaCA--.39489S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7Kry7JFWDAryUGr45Zw4Dtwb_yoW8AF1xpF
-        4rGwsxKrsrJr47X3W3Cw17Z345tF9agrW3XrWxC34FkFn3tr47Ja1UGF1IvF4DJrW8JFsI
-        vr48tFWDGa4UurJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvq1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
-        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24V
-        AvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xf
-        McIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7
-        v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI
-        7VAKI48JMxAIw28IcVCjz48v1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8Jw
-        C20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAF
-        wI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjx
-        v20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2
-        jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0x
-        ZFpf9x0JUQZ23UUUUU=
-X-CM-SenderInfo: qssqjiaqqzq6lmxovvfxof0/1tbiAg0SB1ZdtcfEpQAAsC
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH net] rxrpc: Fix race between conn bundle lookup and bundle
+ removal [ZDI-CAN-15975]
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166877341585.19277.2863856871968966029.git-patchwork-notify@kernel.org>
+Date:   Fri, 18 Nov 2022 12:10:15 +0000
+References: <166860734864.2970191.10633905995607769951.stgit@warthog.procyon.org.uk>
+In-Reply-To: <166860734864.2970191.10633905995607769951.stgit@warthog.procyon.org.uk>
+To:     David Howells <dhowells@redhat.com>
+Cc:     netdev@vger.kernel.org, zdi-disclosures@trendmicro.com,
+        marc.dionne@auristor.com, linux-afs@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If we failed to switch to the new io scheduler, we should try to restore
-the old one instead of just switching to none.
+Hello:
 
-This also makes elevator_switch match its document.
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-Signed-off-by: Jinlong Chen <nickyc975@zju.edu.cn>
----
- block/elevator.c | 29 +++++++++++++++++++++++++----
- 1 file changed, 25 insertions(+), 4 deletions(-)
+On Wed, 16 Nov 2022 14:02:28 +0000 you wrote:
+> After rxrpc_unbundle_conn() has removed a connection from a bundle, it
+> checks to see if there are any conns with available channels and, if not,
+> removes and attempts to destroy the bundle.
+> 
+> Whilst it does check after grabbing client_bundles_lock that there are no
+> connections attached, this races with rxrpc_look_up_bundle() retrieving the
+> bundle, but not attaching a connection for the connection to be attached
+> later.
+> 
+> [...]
 
-diff --git a/block/elevator.c b/block/elevator.c
-index 517857a9a68f..b7bd0b8468bd 100644
---- a/block/elevator.c
-+++ b/block/elevator.c
-@@ -672,6 +672,7 @@ static int __elevator_apply(struct request_queue *q, struct elevator_type *e)
-  */
- int elevator_switch(struct request_queue *q, struct elevator_type *new_e)
- {
-+	struct elevator_type *old_e = NULL;
- 	int ret;
- 
- 	lockdep_assert_held(&q->sysfs_lock);
-@@ -680,17 +681,37 @@ int elevator_switch(struct request_queue *q, struct elevator_type *new_e)
- 	blk_mq_quiesce_queue(q);
- 
- 	if (q->elevator) {
-+		old_e = q->elevator->type;
-+		/*
-+		 * Keep a reference so we can fallback on failure.
-+		 */
-+		__elevator_get(old_e);
- 		elv_unregister_queue(q);
- 		elevator_exit(q);
- 	}
- 
- 	ret = __elevator_apply(q, new_e);
--	if (ret)
--		goto out_unfreeze;
-+	if (likely(!ret)) {
-+		blk_add_trace_msg(q, "elv switch: %s", new_e->elevator_name);
-+	} else if (old_e) {
-+		int err;
-+
-+		err = __elevator_apply(q, old_e);
-+		if (unlikely(err)) {
-+			blk_add_trace_msg(q,
-+				"elv switch failed: %s (%d), fallback failed: %s (%d)",
-+				new_e->elevator_name, ret, old_e->elevator_name, err
-+			);
-+		}
-+	}
- 
--	blk_add_trace_msg(q, "elv switch: %s", new_e->elevator_name);
-+	if (old_e) {
-+		/*
-+		 * Done, release the reference we kept.
-+		 */
-+		elevator_put(old_e);
-+	}
- 
--out_unfreeze:
- 	blk_mq_unquiesce_queue(q);
- 	blk_mq_unfreeze_queue(q);
- 	return ret;
+Here is the summary with links:
+  - [net] rxrpc: Fix race between conn bundle lookup and bundle removal [ZDI-CAN-15975]
+    https://git.kernel.org/netdev/net/c/3bcd6c7eaa53
+
+You are awesome, thank you!
 -- 
-2.31.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
