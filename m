@@ -2,112 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E72362FE7E
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 21:01:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DCF962FE84
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 21:04:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230322AbiKRUBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 15:01:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42304 "EHLO
+        id S231403AbiKRUEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 15:04:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiKRUBo (ORCPT
+        with ESMTP id S230322AbiKRUEH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 15:01:44 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7126FC78DD
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 12:01:43 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id s24so8064983ljs.11
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 12:01:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GPrbHb3+211d62G+QcXXF3a3BGF9p+XV97IR2W1Bg5Q=;
-        b=V4M+7rpBcdBq7/hYVteWBRv/ty9ZWDcURM5JZ9qyrcMFVooRl1eo4zZCg3WQDC72I0
-         1lsFdGZNc3Y7OGESG5dDeJD7p0K1sPRqj8+Bt62UeYA89s+Xguogj760lOIAL1vBZLyR
-         zXtRfSpUhQ94V3BbdirO4NVCCuRMFQaXJHg1VqiC9a39yRUx48WWTM/nYK8xftob/o2m
-         /qgDs5gTNtBRjDCv2RJurR/vEbNq3sX5ZATa45xB4pAN0HbwomgDN7r+em7i5Zm6irkV
-         ArTYp8Xh4or840xzajEZ+qRVLHmID0ApCA3bj5+3+uiQXmE4I6gjX8r6VY4mDVBqR/Ut
-         /0ag==
+        Fri, 18 Nov 2022 15:04:07 -0500
+Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45549DC6;
+        Fri, 18 Nov 2022 12:04:05 -0800 (PST)
+Received: by mail-io1-f46.google.com with SMTP id b2so4604536iof.12;
+        Fri, 18 Nov 2022 12:04:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=GPrbHb3+211d62G+QcXXF3a3BGF9p+XV97IR2W1Bg5Q=;
-        b=Bgsyct19fbf9gjhXvUEEweEZe1U6QxI+vvL1E36H8XfjvxCBqLbosiIdACV4vHJqG2
-         sc8xgULXOc2d4vGOZ1rm2dp8w7Sq0MHc3hlQpi+i4iud/zcTfNSCa68jup/IKSi/UV2B
-         8OfO5JIKf3FIi4AUuwkDTv/9+K015WVIfVhwYYLl7SsvqBQUXoaxiqUDmSCRSCFpbEE1
-         5q+tOHPd1JgEG6nVbsfMuKHvsdpaI04M/i3e9DWnj72A5x+nuGto/Z357ZTyrX+syEnA
-         b1wvXo+Nr2PU+q/mxNls9uTZDNe8i9y4gZH/VkqQfwvVzNCZB94iM/rEOutkvXAkpg7c
-         N0AQ==
-X-Gm-Message-State: ANoB5pnYZ95b/xegFREBhH4C/obZsrLN/qeBscfSCORTcrPtY+KHov4Q
-        SPtpQ1HKWTpDI/MGYgBjzrqpv0oRmd70rkUGzpOQ8srS/MU=
-X-Google-Smtp-Source: AA0mqf4N4e4+I0GBD7ELbJOO09jQy5jyauSkZM51QJ+DIQiVxH0EIv+HARvqMg7QDte7vJud6GBym76htP6LjhUUqRo=
-X-Received: by 2002:a2e:87ce:0:b0:277:ddf:f476 with SMTP id
- v14-20020a2e87ce000000b002770ddff476mr3035239ljj.432.1668801701538; Fri, 18
- Nov 2022 12:01:41 -0800 (PST)
-MIME-Version: 1.0
-References: <0000000000009d5daa05ed9815fa@google.com> <20221117024511.3606-1-hdanton@sina.com>
- <20221117125523.3783-1-hdanton@sina.com> <87wn7tlg4n.ffs@tglx>
- <CABBYNZKnCyLkRKH=DFZbDSL=m0O5PUVkQjtiB0xpCZM7v78HmQ@mail.gmail.com>
- <CABBYNZJYbzX9xoqU8_KEArTJ2=5eMTiDTjMbNjEYNVmi1rkp+A@mail.gmail.com> <20221118012805.3862-1-hdanton@sina.com>
-In-Reply-To: <20221118012805.3862-1-hdanton@sina.com>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Fri, 18 Nov 2022 12:01:29 -0800
-Message-ID: <CABBYNZLEjEtwbr+5W4nt=7HhNLBG9_J9xj_rJC=cbA-1pBgRHQ@mail.gmail.com>
-Subject: Re: [syzbot] WARNING in call_timer_fn
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        syzbot <syzbot+6fb78d577e89e69602f9@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, pbonzini@redhat.com,
-        syzkaller-bugs@googlegroups.com,
-        Steven Rostedt <rosted@goodmis.org>,
+        bh=AhdkGygTY3zoLbGAB/+Raeg5fzHG6ZjkIK/WhyIG7oM=;
+        b=qMQUo+5n/Qgrw6orGT5BagNpQES5PYD3ObMq9VBTMugxag5GNnzhDRJJHpaCPgQd3O
+         OWnjrI7GsMeHJ6LG5II/Lg0l1gIgWPP2MUOZsqygOL7XhyYc+NeTcBu/u1WOnOZdevvR
+         IvkN121o63/tvk2nf45xa6T/z3gSPY6aPBHeG91GpGz2rdfXc5VG6g7kl7DGzHrHnOt2
+         hHOt2y6tWMk8T25uXiQtT4A1CtpiOLW2hoNTStO2+L7UaHqFbnj6/FBdIJhRyMI3ATX+
+         4GWqx40BXAf37tN6c5ZZy1fbka3Q8jtyRIoiI97lhHomuCMtm7ajJiVilT5VvoIzOZS5
+         51FQ==
+X-Gm-Message-State: ANoB5pkTcmOXXfnzVq2qiZKgtbh2rK/4tmzOXoVW8rshgaZ3YC4DVUZB
+        9EYjoyEiHm3RJ8CdvbI0Lh8=
+X-Google-Smtp-Source: AA0mqf5Br29FRXK/1NcL4h/veA3rOteAy8JC0XUr5l+LfnOm1RRMi55jyOIwQU0JwxDIIpRa32SFaA==
+X-Received: by 2002:a6b:8d09:0:b0:68b:7b1f:92b9 with SMTP id p9-20020a6b8d09000000b0068b7b1f92b9mr4167072iod.163.1668801844397;
+        Fri, 18 Nov 2022 12:04:04 -0800 (PST)
+Received: from noodle.cs.purdue.edu (switch-lwsn2133-z1r11.cs.purdue.edu. [128.10.127.250])
+        by smtp.googlemail.com with ESMTPSA id i13-20020a02b68d000000b003638d00b759sm1517966jam.54.2022.11.18.12.04.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 12:04:03 -0800 (PST)
+From:   Sungwoo Kim <iam@sung-woo.kim>
+Cc:     Sungwoo Kim <iam@sung-woo.kim>,
         Marcel Holtmann <marcel@holtmann.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] Bluetooth: L2CAP: Fix u8 overflow
+Date:   Fri, 18 Nov 2022 15:01:47 -0500
+Message-Id: <20221118200145.1741199-1-iam@sung-woo.kim>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hillf,
+By keep sending L2CAP_CONF_REQ packets, chan->num_conf_rsp increases
+multiple times and eventually it will wrap around the maximum number
+(i.e., 255).
+This patch prevents this by adding a boundary check with
+L2CAP_MAX_CONF_RSP
 
-On Thu, Nov 17, 2022 at 5:28 PM Hillf Danton <hdanton@sina.com> wrote:
->
-> On Thu, Nov 17, 2022 at 1:04 PM Luiz Augusto von Dentz <luiz.dentz@gmail.com> wrote:
-> > >
-> > > I thought we would have something similar to shutdown_timer (e.g.
-> > > shutdown_delayed_work) so we can safely free its object/struct, at
-> > > least that was the impression I got when discussing with Steven.
->
-> Because of the cough in Bluetooth's throat does not mean it makes sense
-> to ask workqueue to take a flu jab. Why not cure it directly locally,
-> given the cases of workqueue under the drivers dir. And timer?
+Btmon log:
+Bluetooth monitor ver 5.64
+= Note: Linux version 6.1.0-rc2 (x86_64)                               0.264594
+= Note: Bluetooth subsystem version 2.22                               0.264636
+@ MGMT Open: btmon (privileged) version 1.22                  {0x0001} 0.272191
+= New Index: 00:00:00:00:00:00 (Primary,Virtual,hci0)          [hci0] 13.877604
+@ RAW Open: 9496 (privileged) version 2.22                   {0x0002} 13.890741
+= Open Index: 00:00:00:00:00:00                                [hci0] 13.900426
+(...)
+> ACL Data RX: Handle 200 flags 0x00 dlen 1033             #32 [hci0] 14.273106
+        invalid packet size (12 != 1033)
+        08 00 01 00 02 01 04 00 01 10 ff ff              ............    
+> ACL Data RX: Handle 200 flags 0x00 dlen 1547             #33 [hci0] 14.273561
+        invalid packet size (14 != 1547)
+        0a 00 01 00 04 01 06 00 40 00 00 00 00 00        ........@.....  
+> ACL Data RX: Handle 200 flags 0x00 dlen 2061             #34 [hci0] 14.274390
+        invalid packet size (16 != 2061)
+        0c 00 01 00 04 01 08 00 40 00 00 00 00 00 00 04  ........@.......
+> ACL Data RX: Handle 200 flags 0x00 dlen 2061             #35 [hci0] 14.274932
+        invalid packet size (16 != 2061)
+        0c 00 01 00 04 01 08 00 40 00 00 00 07 00 03 00  ........@.......
+= bluetoothd: Bluetooth daemon 5.43                                   14.401828
+> ACL Data RX: Handle 200 flags 0x00 dlen 1033             #36 [hci0] 14.275753
+        invalid packet size (12 != 1033)
+        08 00 01 00 04 01 04 00 40 00 00 00              ........@...    
 
-Like Thomas said we can only resolve this partially with the likes of
-cancel_workqueue(_sync), though we can use HCI_UNREGISTER to stop
-rescheduling cmd_timer, so imo having something similar to
-shutdown_timer makes things simpler for subsystems/drivers, anyway I'm
-fine fixing it directly since it is probably going to be simpler to
-backport, perhaps something like the following is all we need:
 
-diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
-index 0540555b3704..977684f5fb57 100644
---- a/net/bluetooth/hci_core.c
-+++ b/net/bluetooth/hci_core.c
-@@ -4090,6 +4090,7 @@ static void hci_cmd_work(struct work_struct *work)
+Signed-off-by: Sungwoo Kim <iam@sung-woo.kim>
+---
+ net/bluetooth/l2cap_core.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-                        rcu_read_lock();
-                        if (test_bit(HCI_RESET, &hdev->flags) ||
-+                           test_bit(HCI_UNREGISTER, &hdev->flags) ||
-                            hci_dev_test_flag(hdev, HCI_CMD_DRAIN_WORKQUEUE))
-                                cancel_delayed_work(&hdev->cmd_timer);
-                        else
-
+diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
+index 9c24947aa..9fdede5fe 100644
+--- a/net/bluetooth/l2cap_core.c
++++ b/net/bluetooth/l2cap_core.c
+@@ -4453,7 +4453,8 @@ static inline int l2cap_config_req(struct l2cap_conn *conn,
+ 
+ 	chan->ident = cmd->ident;
+ 	l2cap_send_cmd(conn, cmd->ident, L2CAP_CONF_RSP, len, rsp);
+-	chan->num_conf_rsp++;
++	if (chan->num_conf_rsp < L2CAP_CONF_MAX_CONF_RSP)
++		chan->num_conf_rsp++;
+ 
+ 	/* Reset config buffer. */
+ 	chan->conf_len = 0;
 -- 
-Luiz Augusto von Dentz
+2.25.1
+
