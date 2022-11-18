@@ -2,77 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F03C362FCF1
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 19:45:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1328062FD0C
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 19:51:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242524AbiKRSpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 13:45:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49416 "EHLO
+        id S242780AbiKRSvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 13:51:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235453AbiKRSpG (ORCPT
+        with ESMTP id S242644AbiKRSvC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 13:45:06 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510F28F3D4;
-        Fri, 18 Nov 2022 10:45:05 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id k7so5314077pll.6;
-        Fri, 18 Nov 2022 10:45:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y3FC0XJuf4EOjB0UhVhwX8fr+UooJnsmWihJCBqUIz4=;
-        b=EDijdibNtrt0r2PUujqwuKpc5+fxdKcSgLzUrFqiJ+soe4YmUYa37QLundGOwKkeM0
-         xUzkQRVVn6tMZu0lG4qi1n5S103XuHLj5aJ7lD3G808EZnO/DjcC/xjbGO+D4wQlln2V
-         DuDcVo13EXKxw9Q3mNED8NveQfjELbJLfHd7YtDo0j1+H+wVyPrEQ6Pbb7kPmwYZIiE9
-         JoGO62XClWkVYj55WmibHFmh2LhX5NDJjrVZmKPZjQRt58742YGeCV4f3fTmGuAotBpk
-         Yg4MhSeeTizqhNrUxKTi/sHEJpnws7W7Hq0eGhqcRXXAC0+bg7o4327XkZKy4kgPFpsI
-         Nuzw==
+        Fri, 18 Nov 2022 13:51:02 -0500
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 766A079E25;
+        Fri, 18 Nov 2022 10:51:00 -0800 (PST)
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-13be3ef361dso6929198fac.12;
+        Fri, 18 Nov 2022 10:51:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Y3FC0XJuf4EOjB0UhVhwX8fr+UooJnsmWihJCBqUIz4=;
-        b=VGObwPk12uKa2mitOMgr9LlUSvDsubp11KfyK2ecwamnknuGXtrRcO+54E+5mj5Y15
-         QZSagsGor86DkxW4dHfU3+b4WNLKboTXJZltnvvP4MK7rbzfkFzbe1w6WNi8Gb7MlKcC
-         Ah5incxnyNFmfSVk4UNsEI8Aene7WW0TSP+BcYVNQOcQUVErXXEOJJ7HZEgYXM+YC8sO
-         6EWNGPkteQ/KK+FMJiFeewKVjKyQwuz84RmU1S3zgR6v3lkvleGhvrv9VDOUVlpsmJ6x
-         5GjSpVOQ/uUyna08yDeZtV+fa+P+KGfZ90QEL1tawpy2Ybzo3IyAQYvZ1VuNTQMe8zx6
-         c0Sg==
-X-Gm-Message-State: ANoB5pmbtmlFUBJQSCZK/YwmNAyBOndYXzKN5yPsYMslA6csyzSVBjsc
-        YMVa2vy5LSMcmF+E/pLkHKMEp+t+9Gc=
-X-Google-Smtp-Source: AA0mqf5vyLSnR7kLaFOH8EJwldNPEbFUubg5+mavZdX+6X6xofMn3D+5Po0moviBFLyceCHDdyV0+A==
-X-Received: by 2002:a17:90b:3547:b0:212:d6ed:cdf5 with SMTP id lt7-20020a17090b354700b00212d6edcdf5mr8740636pjb.142.1668797104655;
-        Fri, 18 Nov 2022 10:45:04 -0800 (PST)
-Received: from MacBook-Pro-5.local ([2620:10d:c090:500::4:6663])
-        by smtp.gmail.com with ESMTPSA id i9-20020a17090332c900b00188a1ae94bbsm4156050plr.23.2022.11.18.10.45.02
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=9ZEyhvgIkjObPnrJ2/dp9ATGlB6fWPvCU9H7pSpDxZU=;
+        b=OZ1FTXe7Gh7kvBRqShQePMwBoSbS5QPml9EiKTDbeLm4JypI5/EXNrhYaut21EuKIl
+         U+nk/a7RqWWauNsKFIWKot/KDcBK1ZgOrYyRMFayItrUZ6WjEnAurHq3Xe7BwNtFY86u
+         6VwsKN/sE2TOEhm7/AACZzHhjkq0YiUsxw+DhXBqWC11IvRtmBA/IBgeIcRnokshWtG9
+         DMn+wBfgCHxSU6lf5BQzhZ2PCtu6YNdBo2MY5uOC7AnkQLspZrKGdJ52BvhxBwGXZwQ8
+         3zCYwQB/ekF0VfwTmO9wG9DVtnB0ltDlY/8WU8AU9vx15Og1urEvGOosQCugK0ApXSdP
+         y3Vw==
+X-Gm-Message-State: ANoB5pmQN5Ec+rA794UL6OR/A60i6thbnESc17DwgfXg3UHI+TUKBPX9
+        hDf6Ipsziyg75Io+HGYmeg==
+X-Google-Smtp-Source: AA0mqf4Qt/xgfku9KmZ2RGjFgxxdPXhg0D/QQKgiTA8V2ods2mh+Z8i6W2f00I3oV94/oUmuX/PNkA==
+X-Received: by 2002:a05:6870:960b:b0:13b:a720:efa1 with SMTP id d11-20020a056870960b00b0013ba720efa1mr7695302oaq.16.1668797459565;
+        Fri, 18 Nov 2022 10:50:59 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id e18-20020a05683013d200b0063696cbb6bdsm1841768otq.62.2022.11.18.10.50.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 10:45:03 -0800 (PST)
-Date:   Fri, 18 Nov 2022 10:45:00 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     David Vernet <void@manifault.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
-        daniel@iogearbox.net, martin.lau@linux.dev, memxor@gmail.com,
-        yhs@fb.com, song@kernel.org, sdf@google.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, jolsa@kernel.org,
-        haoluo@google.com, tj@kernel.org, kernel-team@fb.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v7 1/3] bpf: Allow trusted pointers to be passed
- to KF_TRUSTED_ARGS kfuncs
-Message-ID: <20221118184500.yshwvcrx2a34xkmc@MacBook-Pro-5.local>
-References: <20221117032402.2356776-1-void@manifault.com>
- <20221117032402.2356776-2-void@manifault.com>
- <20221118022640.borhn6iy4v2fhl7g@MacBook-Pro-5.local>
- <Y3eamIVUVb6V47LF@maniforge.lan>
- <Y3e2sdqL1E0SKJ5/@maniforge.lan>
+        Fri, 18 Nov 2022 10:50:59 -0800 (PST)
+Received: (nullmailer pid 856965 invoked by uid 1000);
+        Fri, 18 Nov 2022 18:50:54 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y3e2sdqL1E0SKJ5/@maniforge.lan>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+From:   Rob Herring <robh@kernel.org>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-media@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        Kevin Hilman <khilman@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-pci@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Eric Dumazet <edumazet@google.com>, linux-rtc@vger.kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-mmc@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        linux-amlogic@lists.infradead.org, Vinod Koul <vkoul@kernel.org>
+In-Reply-To: <20221117-b4-amlogic-bindings-convert-v1-10-3f025599b968@linaro.org>
+References: <20221117-b4-amlogic-bindings-convert-v1-0-3f025599b968@linaro.org> 
+ <20221117-b4-amlogic-bindings-convert-v1-10-3f025599b968@linaro.org>
+Message-Id: <166879731763.852137.10737377868850361519.robh@kernel.org>
+Subject: Re: [PATCH 10/12] dt-bindings: mmc: convert amlogic,meson-gx.txt to dt-schema
+Date:   Fri, 18 Nov 2022 12:50:54 -0600
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,151 +91,389 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 10:45:37AM -0600, David Vernet wrote:
-> On Fri, Nov 18, 2022 at 08:45:44AM -0600, David Vernet wrote:
-> 
-> [...]
-> 
-> > > >  bool btf_ctx_access(int off, int size, enum bpf_access_type type,
-> > > >  		    const struct bpf_prog *prog,
-> > > >  		    struct bpf_insn_access_aux *info)
-> > > > @@ -5722,6 +5727,9 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
-> > > >  	}
-> > > >  
-> > > >  	info->reg_type = PTR_TO_BTF_ID;
-> > > > +	if (prog_type_args_trusted(prog->type))
-> > > > +		info->reg_type |= PTR_TRUSTED;
-> > > > +
-> > > >  	if (tgt_prog) {
-> > > >  		enum bpf_prog_type tgt_type;
-> > > >  
-> > > > @@ -6558,15 +6566,26 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
-> > > >  		/* These register types have special constraints wrt ref_obj_id
-> > > >  		 * and offset checks. The rest of trusted args don't.
-> > > >  		 */
-> > > > -		obj_ptr = reg->type == PTR_TO_CTX || reg->type == PTR_TO_BTF_ID ||
-> > > > +		obj_ptr = reg->type == PTR_TO_CTX ||
-> > > > +			  base_type(reg->type) == PTR_TO_BTF_ID ||
-> > > >  			  reg2btf_ids[base_type(reg->type)];
-> > > >  
-> > > >  		/* Check if argument must be a referenced pointer, args + i has
-> > > >  		 * been verified to be a pointer (after skipping modifiers).
-> > > >  		 * PTR_TO_CTX is ok without having non-zero ref_obj_id.
-> > > > +		 *
-> > > > +		 * All object pointers must be refcounted, other than:
-> > > > +		 * - PTR_TO_CTX
-> > > > +		 * - PTR_TRUSTED pointers
-> > > >  		 */
-> > > > -		if (is_kfunc && trusted_args && (obj_ptr && reg->type != PTR_TO_CTX) && !reg->ref_obj_id) {
-> > > > -			bpf_log(log, "R%d must be referenced\n", regno);
-> > > > +		if (is_kfunc &&
-> > > > +		    trusted_args &&
-> > > > +		    obj_ptr &&
-> > > > +		    base_type(reg->type) != PTR_TO_CTX &&
-> > > > +		    (!(type_flag(reg->type) & PTR_TRUSTED) ||
-> > > > +		     (type_flag(reg->type) & ~PTR_TRUSTED)) &&
-> > > > +		    !reg->ref_obj_id) {
-> > > 
-> > > This is pretty hard to read.
-> > > Is this checking:
-> > > !(reg->type == PTR_TO_BTF_ID || reg->type == (PTR_TO_BTF_ID | PTR_TRUSTED))
-> > > ?
-> > > 
-> > > Why not to use the above?
-> > 
-> > Agreed this is more readable, I'll do this for v8 (from a helper as you
-> > suggested).
-> 
-> Sorry, my initial response was incorrect. After thinking about this
-> more, I don't think this conditional would be correct here:
-> 
-> 	!(reg->type == PTR_TO_BTF_ID || reg->type == (PTR_TO_BTF_ID | PTR_TRUSTED))
-> 
-> That conditional is saying, "If it's PTR_TO_BTF_ID, and either no
-> modifiers are set, or PTR_TRUSTED is set". Or in other words, "If
-> PTR_TO_BTF_ID is set, we don't need a refcount check unless a modifier
-> other than PTR_TRUSTED is set on the register." This is incorrect, as it
-> would short-circuit out of the check before !reg->ref_obj_id for
-> reg->type == PTR_TO_BTF_ID, so we would skip the reference requirement
-> for normal, unmodified PTR_TO_BTF_ID objects. It would also cause us to
-> incorrectly _not_ skip the ref_obj_id > 0 check for when a
-> reg2btf_ids[base_type(reg->type)] register has the PTR_TRUSTED modifier.
-> 
-> What we really need is a check that encodes, "Don't require a refcount
-> if PTR_TRUSTED is present and no other type modifiers are present",
-> i.e.:
-> 
-> 	!(type_flag(reg->type) & PTR_TRUSTED) || (type_flag(reg->type) & ~PTR_TRUSTED)
-> 
-> My intention was to be conservative here and say "only trust PTR_TRUSTED
-> if no other type modifiers are set". I think this is necessary because
-> other type modifiers such as PTR_UNTRUSTED could theoretically be set on
-> the register as well. Clearly this code is pretty difficult to reason
-> about though, so I'm open to suggestions for how to simplify it.
-> 
-> I'll point out specifically that it's difficult to reason about when
-> modifiers are or are not safe to allow. For example, we definitely don't
-> want to skip the refcount check for OBJ_RELEASE | PTR_TRUSTED, because
 
-OBJ_RELEASE cannot be part of reg flag.
-It's only in arg_type.
-
-Anyway Kumar's refactoring was applied the code in question looks different now:
-It would fall into this part:
-case KF_ARG_PTR_TO_BTF_ID:
-        /* Only base_type is checked, further checks are done here */
-        if (reg->type != PTR_TO_BTF_ID &&
-            (!reg2btf_ids[base_type(reg->type)] || type_flag(reg->type))) {
-                verbose(env, "arg#%d expected pointer to btf or socket\n", i);
-                return -EINVAL;
-        }
-        ret = process_kf_arg_ptr_to_btf_id(env, reg, ref_t, ref_tname, ref_id, meta, i);
-
-> if it's a release arg it should always have a refcount on it.
-> PTR_UNTRUSTED | PTR_TRUSTED would also make no sense. MEM_FIXED_SIZE
-> though seems fine? In general, I thought it was prudent for us to take
-> the most conservative possible approach here, which is that PTR_TRUSTED
-> only applies when no other modifiers are present, and it applies for all
-> obj_ptr types (other than PTR_TO_CTX which does its own thing).
-
-Probably worth refining when PTR_TRUSTED is cleared.
-For example adding PTR_UNTRUSTED should definitely clear it.
-MEM_ALLOC flag is probably equivalent to PTR_TRUSTED.
-Maybe the bit:
-regs[BPF_REG_0].type = PTR_TO_BTF_ID | MEM_ALLOC;
-should set PTR_TRUSTED as well?
-
+On Fri, 18 Nov 2022 15:33:36 +0100, Neil Armstrong wrote:
+> Convert the Amlogic SD / eMMC controller for S905/GXBB family SoCs
+> to dt-schema.
 > 
-> Note as well that this check is different from the one you pointed out
-> below, which is verifying that PTR_TRUSTED is the only modifier for both
-> reg2btf_ids[base_type(reg->type)] and base_type(reg->type) ==
-> PTR_TO_BTF_ID.  Additionally, the check is different than the check in
-> check_reg_type(), which I'll highlight below where the code is actually
-> modified.
-
-I'm mainly objecting to logic:
-!(type_flag(reg->type) & PTR_TRUSTED) || (type_flag(reg->type) & ~PTR_TRUSTED)
-
-which looks like 'catch-all'.
-Like it will error on MEM_ALLOC which probably not correct.
-In other words it's 'too conservative'. Meaning it's rejecting valid code.
-
-> > > >  
-> > > >  found:
-> > > > -	if (reg->type == PTR_TO_BTF_ID) {
-> > > > +	if (base_type(reg->type) == PTR_TO_BTF_ID && !(type_flag(reg->type) & ~PTR_TRUSTED)) {
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+>  .../bindings/mmc/amlogic,meson-gx-mmc.yaml         | 78 ++++++++++++++++++++++
+>  .../devicetree/bindings/mmc/amlogic,meson-gx.txt   | 39 -----------
+>  2 files changed, 78 insertions(+), 39 deletions(-)
 > 
-> As mentioned above, this check is different than the one we're doing in
-> btf_ctx_access() when determining if the reg requires a ref_obj_id > 0.
-> This check is actually doing what you originally suggested above:
-> 
-> if (reg->type == PTR_TO_BTF_ID || reg->type == (PTR_TO_BTF_ID | PTR_TRUSTED))
-> 
-> I think what you wrote is more readable and am happy to apply it to this
-> check in v8, but unfortunately I don't think we really have an
-> opportunity to avoid code duplication here with a helper (though a
-> helper may still improve readability).
 
-ok. forget the helper. open coding all conditions is probably cleaner,
-since they will be different in every case.
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
+
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
+
+Full log is available here: https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221117-b4-amlogic-bindings-convert-v1-10-3f025599b968@linaro.org
+
+
+mmc@70000: compatible: 'oneOf' conditional failed, one must be fixed:
+	arch/arm64/boot/dts/amlogic/meson-gxbb-kii-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-nanopi-k2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-nexbox-a95x.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-odroidc2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-p200.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-p201.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-vega-s95-meta.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-vega-s95-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-vega-s95-telos.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-wetek-hub.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-wetek-play2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s805x-libretech-ac.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s805x-p241.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-libretech-pc.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-mecool-kii-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-p230.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-p231.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-phicomm-n1.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-sml5442tw.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-vero4k-plus.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905w-p281.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905w-tx3-mini.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-hwacom-amazetv.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-khadas-vim.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-libretech-cc.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-libretech-cc-v2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-nexbox-a95x.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-p212.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-gt1-ultimate.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-khadas-vim2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-mecool-kiii-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-minix-neo-u9h.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-nexbox-a1.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-q200.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-q201.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-rbox-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-s912-libretech-pc.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-vega-s96.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-wetek-core2.dtb
+
+mmc@70000: Unevaluated properties are not allowed ('compatible' was unexpected)
+	arch/arm64/boot/dts/amlogic/meson-gxbb-kii-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-nanopi-k2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-nexbox-a95x.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-odroidc2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-p200.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-p201.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-vega-s95-meta.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-vega-s95-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-vega-s95-telos.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-wetek-hub.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-wetek-play2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s805x-libretech-ac.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s805x-p241.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-libretech-pc.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-mecool-kii-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-p230.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-p231.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-phicomm-n1.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-sml5442tw.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-vero4k-plus.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905w-p281.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905w-tx3-mini.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-hwacom-amazetv.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-khadas-vim.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-libretech-cc.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-libretech-cc-v2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-nexbox-a95x.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-p212.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-gt1-ultimate.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-khadas-vim2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-mecool-kiii-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-minix-neo-u9h.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-nexbox-a1.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-q200.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-q201.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-rbox-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-s912-libretech-pc.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-vega-s96.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-wetek-core2.dtb
+
+mmc@72000: compatible: 'oneOf' conditional failed, one must be fixed:
+	arch/arm64/boot/dts/amlogic/meson-gxbb-kii-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-nanopi-k2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-nexbox-a95x.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-odroidc2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-p200.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-p201.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-vega-s95-meta.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-vega-s95-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-vega-s95-telos.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-wetek-hub.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-wetek-play2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s805x-libretech-ac.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s805x-p241.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-libretech-pc.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-mecool-kii-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-p230.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-p231.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-phicomm-n1.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-sml5442tw.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-vero4k-plus.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905w-p281.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905w-tx3-mini.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-hwacom-amazetv.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-khadas-vim.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-libretech-cc.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-libretech-cc-v2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-nexbox-a95x.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-p212.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-gt1-ultimate.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-khadas-vim2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-mecool-kiii-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-minix-neo-u9h.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-nexbox-a1.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-q200.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-q201.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-rbox-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-s912-libretech-pc.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-vega-s96.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-wetek-core2.dtb
+
+mmc@72000: Unevaluated properties are not allowed ('compatible' was unexpected)
+	arch/arm64/boot/dts/amlogic/meson-gxbb-kii-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-nanopi-k2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-nexbox-a95x.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-odroidc2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-p200.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-p201.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-vega-s95-meta.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-vega-s95-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-vega-s95-telos.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-wetek-hub.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-wetek-play2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s805x-libretech-ac.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s805x-p241.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-libretech-pc.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-mecool-kii-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-p230.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-p231.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-phicomm-n1.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-sml5442tw.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-vero4k-plus.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905w-p281.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905w-tx3-mini.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-hwacom-amazetv.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-khadas-vim.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-libretech-cc.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-libretech-cc-v2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-nexbox-a95x.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-p212.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-gt1-ultimate.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-khadas-vim2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-mecool-kiii-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-minix-neo-u9h.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-nexbox-a1.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-q200.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-q201.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-rbox-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-s912-libretech-pc.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-vega-s96.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-wetek-core2.dtb
+
+mmc@74000: compatible: 'oneOf' conditional failed, one must be fixed:
+	arch/arm64/boot/dts/amlogic/meson-gxbb-kii-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-nanopi-k2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-nexbox-a95x.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-odroidc2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-p200.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-p201.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-vega-s95-meta.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-vega-s95-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-vega-s95-telos.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-wetek-hub.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-wetek-play2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s805x-libretech-ac.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s805x-p241.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-libretech-pc.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-mecool-kii-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-p230.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-p231.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-phicomm-n1.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-sml5442tw.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-vero4k-plus.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905w-p281.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905w-tx3-mini.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-hwacom-amazetv.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-khadas-vim.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-libretech-cc.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-libretech-cc-v2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-nexbox-a95x.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-p212.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-gt1-ultimate.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-khadas-vim2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-mecool-kiii-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-minix-neo-u9h.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-nexbox-a1.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-q200.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-q201.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-rbox-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-s912-libretech-pc.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-vega-s96.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-wetek-core2.dtb
+
+mmc@74000: Unevaluated properties are not allowed ('compatible' was unexpected)
+	arch/arm64/boot/dts/amlogic/meson-gxbb-kii-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-nanopi-k2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-nexbox-a95x.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-odroidc2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-p200.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-p201.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-vega-s95-meta.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-vega-s95-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-vega-s95-telos.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-wetek-hub.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-wetek-play2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s805x-libretech-ac.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s805x-p241.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-libretech-pc.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-mecool-kii-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-p230.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-p231.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-phicomm-n1.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-sml5442tw.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-vero4k-plus.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905w-p281.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905w-tx3-mini.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-hwacom-amazetv.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-khadas-vim.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-libretech-cc.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-libretech-cc-v2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-nexbox-a95x.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-p212.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-gt1-ultimate.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-khadas-vim2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-mecool-kiii-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-minix-neo-u9h.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-nexbox-a1.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-q200.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-q201.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-rbox-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-s912-libretech-pc.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-vega-s96.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-wetek-core2.dtb
+
+sd@5000: $nodename:0: 'sd@5000' does not match '^mmc(@.*)?$'
+	arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j100.dtb
+	arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j110-rev-2.dtb
+	arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j110-rev-3.dtb
+	arch/arm64/boot/dts/amlogic/meson-axg-s400.dtb
+
+sd@5000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'broken-cd', 'bus-width', 'cap-sd-highspeed', 'disable-wp', 'max-frequency', 'mmc-pwrseq', 'vmmc-supply', 'vqmmc-supply' were unexpected)
+	arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j110-rev-2.dtb
+	arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j110-rev-3.dtb
+
+sd@5000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'bus-width', 'cap-sd-highspeed', 'disable-wp', 'max-frequency', 'mmc-pwrseq', 'non-removable', 'sd-uhs-sdr104', 'vmmc-supply', 'vqmmc-supply', 'wifi@1' were unexpected)
+	arch/arm64/boot/dts/amlogic/meson-axg-s400.dtb
+
+sd@5000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'bus-width', 'cap-sd-highspeed', 'disable-wp', 'max-frequency', 'mmc-pwrseq', 'non-removable', 'vmmc-supply', 'vqmmc-supply', 'wifi@1' were unexpected)
+	arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j100.dtb
+
+sd@ffe03000: $nodename:0: 'sd@ffe03000' does not match '^mmc(@.*)?$'
+	arch/arm64/boot/dts/amlogic/meson-g12a-radxa-zero.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12a-sei510.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12a-u200.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12a-x96-max.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12b-a311d-khadas-vim3.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12b-gsking-x.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12b-gtking.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12b-gtking-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2-plus.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12b-s922x-khadas-vim3.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12b-ugoos-am6.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-a95xf3-air.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-a95xf3-air-gbit.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-h96-max.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-khadas-vim3l.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-odroid-c4.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-odroid-hc4.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-sei610.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-x96-air.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-x96-air-gbit.dtb
+
+sd@ffe03000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'bus-width', 'cap-sd-highspeed', 'disable-wp', 'keep-power-in-suspend', 'max-frequency', 'mmc-pwrseq', 'non-removable', 'sd-uhs-sdr104', 'vmmc-supply', 'vqmmc-supply' were unexpected)
+	arch/arm64/boot/dts/amlogic/meson-sm1-a95xf3-air.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-a95xf3-air-gbit.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-h96-max.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-x96-air.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-x96-air-gbit.dtb
+
+sd@ffe03000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'bus-width', 'cap-sd-highspeed', 'disable-wp', 'keep-power-in-suspend', 'max-frequency', 'mmc-pwrseq', 'non-removable', 'sd-uhs-sdr50', 'vmmc-supply', 'vqmmc-supply', 'wifi@1' were unexpected)
+	arch/arm64/boot/dts/amlogic/meson-g12a-radxa-zero.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12a-sei510.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12a-x96-max.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-khadas-vim3l.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-sei610.dtb
+
+sd@ffe03000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'bus-width', 'cap-sd-highspeed', 'disable-wp', 'keep-power-in-suspend', 'max-frequency', 'mmc-pwrseq', 'non-removable', 'vmmc-supply', 'vqmmc-supply', 'wifi@1' were unexpected)
+	arch/arm64/boot/dts/amlogic/meson-g12b-a311d-khadas-vim3.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12b-gsking-x.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12b-gtking.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12b-gtking-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12b-s922x-khadas-vim3.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12b-ugoos-am6.dtb
+
+sd@ffe05000: $nodename:0: 'sd@ffe05000' does not match '^mmc(@.*)?$'
+	arch/arm64/boot/dts/amlogic/meson-g12a-radxa-zero.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12a-sei510.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12a-u200.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12a-x96-max.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12b-a311d-khadas-vim3.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12b-gsking-x.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12b-gtking.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12b-gtking-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2-plus.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12b-s922x-khadas-vim3.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12b-ugoos-am6.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-a95xf3-air.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-a95xf3-air-gbit.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-h96-max.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-khadas-vim3l.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-odroid-c4.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-odroid-hc4.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-sei610.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-x96-air.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-x96-air-gbit.dtb
+
+sd@ffe05000: Unevaluated properties are not allowed ('bus-width', 'cap-sd-highspeed', 'cd-gpios', 'disable-wp', 'max-frequency', 'sd-uhs-sdr104', 'sd-uhs-sdr12', 'sd-uhs-sdr25', 'sd-uhs-sdr50', 'vmmc-supply', 'vqmmc-supply' were unexpected)
+	arch/arm64/boot/dts/amlogic/meson-sm1-odroid-c4.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-odroid-hc4.dtb
+
+sd@ffe05000: Unevaluated properties are not allowed ('bus-width', 'cap-sd-highspeed', 'cd-gpios', 'disable-wp', 'max-frequency', 'vmmc-supply', 'vqmmc-supply' were unexpected)
+	arch/arm64/boot/dts/amlogic/meson-g12a-radxa-zero.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12a-sei510.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12a-u200.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12a-x96-max.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12b-a311d-khadas-vim3.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12b-gsking-x.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12b-gtking.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12b-gtking-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2-plus.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12b-s922x-khadas-vim3.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12b-ugoos-am6.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-a95xf3-air.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-a95xf3-air-gbit.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-h96-max.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-khadas-vim3l.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-sei610.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-x96-air.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-x96-air-gbit.dtb
 
