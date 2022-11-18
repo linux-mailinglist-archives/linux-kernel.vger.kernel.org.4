@@ -2,89 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E069662ED35
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 06:30:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D959462ED37
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 06:31:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240903AbiKRFab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 00:30:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52506 "EHLO
+        id S235140AbiKRFbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 00:31:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbiKRFa3 (ORCPT
+        with ESMTP id S230004AbiKRFbN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 00:30:29 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7BBF8F3DB;
-        Thu, 17 Nov 2022 21:30:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=tnEO6E1grr6Gr3aJvdASXdNYwfa3vFiu4Cif/7kHt0o=; b=hAXwshqplXRMcXB4Z6fOP1HiPs
-        BT9RjODtqGH3KfgrOf8sLezL1o2s6p15OuZBZgjTca13ohdU9Kj3I9hPfC1XBXCiYTjzchenK5vHU
-        tsLair41qG+krZuXb5RATFOZt0stL42n0ZTVfY++JNWrNtVCYX9OdIfXfXxIbgqUZcdY120BpRJrb
-        XOlJrkq5HWbVjpFzoiYNRvejjAM6hrOFMIjmCd52hrkzBarSajLx65XpC899CIqDqWo0uk69Fti9O
-        eNJUmL84wwKOX/tepHCWMpEGtADQ7KTYjUVSVHKSiLtAds//QSE5KMPvfabP7kq7z9tvfQN6legdU
-        ZSXkXhBg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ovtxP-001q6a-HB; Fri, 18 Nov 2022 05:30:31 +0000
-Date:   Fri, 18 Nov 2022 05:30:31 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Liu Shixin <liushixin2@huawei.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fs/buffer: fix a NULL pointer dereference in
- drop_buffers()
-Message-ID: <Y3cYd6u9wT/ZTHbe@casper.infradead.org>
-References: <20221109095018.4108726-1-liushixin2@huawei.com>
+        Fri, 18 Nov 2022 00:31:13 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6E81D87A49
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 21:31:11 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4595223A;
+        Thu, 17 Nov 2022 21:31:17 -0800 (PST)
+Received: from a077893.blr.arm.com (unknown [10.162.41.7])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 0C5873F587;
+        Thu, 17 Nov 2022 21:31:07 -0800 (PST)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64/mm: Drop redundant BUG_ON(!pgtable_alloc)
+Date:   Fri, 18 Nov 2022 11:01:02 +0530
+Message-Id: <20221118053102.500216-1-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221109095018.4108726-1-liushixin2@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 09, 2022 at 05:50:18PM +0800, Liu Shixin wrote:
-> syzbot found a null-ptr-deref by KASAN:
-> 
->  BUG: KASAN: null-ptr-deref in instrument_atomic_read include/linux/instrumented.h:71 [inline]
->  BUG: KASAN: null-ptr-deref in atomic_read include/linux/atomic/atomic-instrumented.h:27 [inline]
->  BUG: KASAN: null-ptr-deref in buffer_busy fs/buffer.c:2856 [inline]
->  BUG: KASAN: null-ptr-deref in drop_buffers+0x61/0x2f0 fs/buffer.c:2868
->  Read of size 4 at addr 0000000000000060 by task syz-executor.5/24786
-> 
->  CPU: 0 PID: 24786 Comm: syz-executor.5 Not tainted 6.0.0-syzkaller-09589-g55be6084c8e0 #0
->  Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
->  Call Trace:
->   <TASK>
->   __dump_stack lib/dump_stack.c:88 [inline]
->   dump_stack_lvl+0x1e3/0x2cb lib/dump_stack.c:106
->   print_report+0xf1/0x220 mm/kasan/report.c:436
->   kasan_report+0xfb/0x130 mm/kasan/report.c:495
->   kasan_check_range+0x2a7/0x2e0 mm/kasan/generic.c:189
->   instrument_atomic_read include/linux/instrumented.h:71 [inline]
->   atomic_read include/linux/atomic/atomic-instrumented.h:27 [inline]
->   buffer_busy fs/buffer.c:2856 [inline]
->   drop_buffers+0x61/0x2f0 fs/buffer.c:2868
->   try_to_free_buffers+0x2b1/0x640 fs/buffer.c:2898
-> [...]
-> 
-> We use folio_has_private() to decide whether call filemap_release_folio(),
-> which may call try_to_free_buffers() then. folio_has_private() return true
-> for both PG_private and PG_private_2. We should only call try_to_free_buffers()
-> for case PG_private. So we should recheck PG_private in try_to_free_buffers().
-> 
-> Reported-by: syzbot+fbdb4ec578ebdcfb9ed2@syzkaller.appspotmail.com
-> Fixes: 266cf658efcf ("FS-Cache: Recruit a page flags for cache management")
+__create_pgd_mapping_locked() expects a page allocator used while mapping a
+virtual range. This page allocator function propagates down the call chain,
+while building intermediate levels in the page table. Passed page allocator
+is a necessary ingredient required to build the page table but its presence
+can be asserted just once in the very beginning rather than in all the down
+stream functions. This consolidates BUG_ON(!pgtable_alloc) checks just in a
+single place i.e __create_pgd_mapping_locked().
 
-but this can only happen for a filesystem which uses both bufferheads
-and PG_private_2.  afaik there aren't any of those in the tree.  so
-this bug can't actually happen.
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+---
+This applies on v6.1-rc5
 
-if you have your own filesystem that does, you need to submit it.
+ arch/arm64/mm/mmu.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+index 5a19950e7289..97ca82001089 100644
+--- a/arch/arm64/mm/mmu.c
++++ b/arch/arm64/mm/mmu.c
+@@ -207,7 +207,6 @@ static void alloc_init_cont_pte(pmd_t *pmdp, unsigned long addr,
+ 
+ 		if (flags & NO_EXEC_MAPPINGS)
+ 			pmdval |= PMD_TABLE_PXN;
+-		BUG_ON(!pgtable_alloc);
+ 		pte_phys = pgtable_alloc(PAGE_SHIFT);
+ 		__pmd_populate(pmdp, pte_phys, pmdval);
+ 		pmd = READ_ONCE(*pmdp);
+@@ -285,7 +284,6 @@ static void alloc_init_cont_pmd(pud_t *pudp, unsigned long addr,
+ 
+ 		if (flags & NO_EXEC_MAPPINGS)
+ 			pudval |= PUD_TABLE_PXN;
+-		BUG_ON(!pgtable_alloc);
+ 		pmd_phys = pgtable_alloc(PMD_SHIFT);
+ 		__pud_populate(pudp, pmd_phys, pudval);
+ 		pud = READ_ONCE(*pudp);
+@@ -324,7 +322,6 @@ static void alloc_init_pud(pgd_t *pgdp, unsigned long addr, unsigned long end,
+ 
+ 		if (flags & NO_EXEC_MAPPINGS)
+ 			p4dval |= P4D_TABLE_PXN;
+-		BUG_ON(!pgtable_alloc);
+ 		pud_phys = pgtable_alloc(PUD_SHIFT);
+ 		__p4d_populate(p4dp, pud_phys, p4dval);
+ 		p4d = READ_ONCE(*p4dp);
+@@ -383,6 +380,7 @@ static void __create_pgd_mapping_locked(pgd_t *pgdir, phys_addr_t phys,
+ 	phys &= PAGE_MASK;
+ 	addr = virt & PAGE_MASK;
+ 	end = PAGE_ALIGN(virt + size);
++	BUG_ON(!pgtable_alloc);
+ 
+ 	do {
+ 		next = pgd_addr_end(addr, end);
+-- 
+2.25.1
 
