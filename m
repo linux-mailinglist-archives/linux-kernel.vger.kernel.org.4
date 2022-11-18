@@ -2,104 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FEAB62ECAF
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 05:05:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50C4162ECAB
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 05:05:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241101AbiKREFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 23:05:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54870 "EHLO
+        id S241093AbiKREFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 23:05:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241063AbiKREES (ORCPT
+        with ESMTP id S241040AbiKREEP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 23:04:18 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E31D90597
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 20:04:07 -0800 (PST)
-From:   =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1668744245;
-        bh=Ra7zlnQZv+5EzK/Di0o9djZFSiuiekY1TijxrLS1Kd0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Svfd8uOkMbffoYX8Te7hh+Xoiiy90lNcCSkrL2osEx5X9YIAi/ydZ/tAYH20IL1uS
-         jHYUEAlOSSeJM9J97nyuEaCdA5zlZiwDPMUUmuX2O8INJZUqUqqEFmkNb3KSdf3QUl
-         GtX5XaEU5d9aw6IdSEDICm1ohum0fZdkoU5X9oPE=
-To:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Eric Snowberg <eric.snowberg@oracle.com>
-Cc:     =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Pearson <markpearson@lenovo.com>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: [PATCH v3 3/3] certs: don't try to update blacklist keys
-Date:   Fri, 18 Nov 2022 05:03:43 +0100
-Message-Id: <20221118040343.2958-4-linux@weissschuh.net>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221118040343.2958-1-linux@weissschuh.net>
-References: <20221118040343.2958-1-linux@weissschuh.net>
+        Thu, 17 Nov 2022 23:04:15 -0500
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3DB97211E;
+        Thu, 17 Nov 2022 20:04:04 -0800 (PST)
+Received: by mail-io1-xd2f.google.com with SMTP id p184so2989249iof.11;
+        Thu, 17 Nov 2022 20:04:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kp+CpBikoq7v7LDCymqAU9BTzEWUsL4lrRHtYTDMf/8=;
+        b=jDaf1iUApXLyFakz6vU/1UohPbjS/Hj0mVlItftiqj+QeWpPtIhRH/yiQ/5GJwNJ7w
+         g3I953xz3sIBS/76qp9UG2KXRP6biiRHTDS4ojsveXDS63j/QOjAQI8BhTfTkFhPj6fn
+         LMad3txbDAJUvmPtWuoqZXzO4tdtKeObHc7OjK/fS3+nvM8sv16jCfkfvT2iRfZMdOYA
+         hUoOracaeQLGh8rchGuISe6lpj/AinAW2Wdzh0hYuxhwvqk0IGgXr/me6FSFYk/YndCL
+         mGIfNRKriCxEz3CeJDUwHSULbJJYdQayFBp9LKbGUeO/OnF+AR4KKh6nXHd+Z6MTNRXk
+         jyug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kp+CpBikoq7v7LDCymqAU9BTzEWUsL4lrRHtYTDMf/8=;
+        b=m6OxYk1eeNM4+hpi3TnxxD+/jq6oKFZgBz7GSPhhNGsEqjKAeT2OQ5vN2Vsusgth7O
+         MnTn12JUaEH3MvTYNTwAhF+p//Isro9HUBh1sqQw4i22OPJ+Wkf6ARLWNG4CFWsR03T0
+         fRjd26uEZM1uqXTJt9nk18nS7ZET27Z7VG/x5iC9qvJCGGQ9J1pdOHNH1GrqC5WX0/JO
+         6zljs/SEHzu0e9/knaTC3pJRRlhtDG7y7zVVxgNgizxnXr10EJT9K+odvtZj7rHOmrCf
+         VRQATITdTXIJbULYsqit2KUrB1xKnEvT+iSLAFdZUIdprGe02pdUsSyC1bx5zBx/CWna
+         oqkw==
+X-Gm-Message-State: ANoB5pnSKBpfCZi2Ph/5GswjKMKYE9GbX1F9BJqxe6MgLo8Obiw88bOs
+        ehYK9drF/sU7TG9x0geCzdbZ61IVVYIqJ5wp
+X-Google-Smtp-Source: AA0mqf7oEx7b4s4K4gTpLEbYP42vgEatxvVDspJsVnlisiXvE6khKtj+OgwadYNafHOMqCNIdInBig==
+X-Received: by 2002:a5e:9405:0:b0:6a1:48d3:149e with SMTP id q5-20020a5e9405000000b006a148d3149emr2822687ioj.136.1668744244214;
+        Thu, 17 Nov 2022 20:04:04 -0800 (PST)
+Received: from noodle.cs.purdue.edu (switch-lwsn2133-z1r11.cs.purdue.edu. [128.10.127.250])
+        by smtp.googlemail.com with ESMTPSA id w186-20020a022ac3000000b003717c1df569sm847028jaw.165.2022.11.17.20.04.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 20:04:03 -0800 (PST)
+From:   Sungwoo Kim <happiness.sung.woo@gmail.com>
+X-Google-Original-From: Sungwoo Kim <git@sung-woo.kim>
+To:     iam@sung-woo.kim
+Cc:     davem@davemloft.net, edumazet@google.com, johan.hedberg@gmail.com,
+        kuba@kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-kernel@vger.kernel.org, luiz.dentz@gmail.com,
+        marcel@holtmann.org, netdev@vger.kernel.org, pabeni@redhat.com
+Subject: [BUG 6 / 6] L2cap: Spec violations
+Date:   Thu, 17 Nov 2022 23:03:56 -0500
+Message-Id: <20221118040356.631678-1-git@sung-woo.kim>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <CAJNyHpKpDdps4=QHZ77zu4jfY-NNBcGUrw6UwjuBKfpuSuE__g@mail.gmail.com>
+References: <CAJNyHpKpDdps4=QHZ77zu4jfY-NNBcGUrw6UwjuBKfpuSuE__g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1668744218; l=1646; i=linux@weissschuh.net; s=20211113; h=from:subject; bh=Ra7zlnQZv+5EzK/Di0o9djZFSiuiekY1TijxrLS1Kd0=; b=euq+Tl37jfAGfQqWEwou2v6H2ZJ/i3UBFQTNVxYuhrCTL+aTWP8IJh6g2+DHhxHMnGpq6zbHgDRr y0u+dCx7BwHjtmfv1ae2GaImiBQH0JxTi21872zx2ey96SFH67Eh
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519; pk=9LP6KM4vD/8CwHW7nouRBhWLyQLcK1MkP6aTZbzUlj4=
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the same key is blacklisted repeatedly logging at pr_err() level is
-excessive as no functionality is impaired.
-When these duplicates are provided by buggy firmware there is nothing
-the enduser can do to fix the situation.
-Instead of spamming the bootlog with errors we use a warning that can
-still be seen by OEMs when testing their firmware.
+6. BT_DISCONN -> BT_CONNECTED by L2CAP_CONN_RSP
 
-Link: https://lore.kernel.org/all/c8c65713-5cda-43ad-8018-20f2e32e4432@t-8ch.de/
-Link: https://lore.kernel.org/all/20221104014704.3469-1-linux@weissschuh.net/
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- certs/blacklist.c | 21 ++++++++++++---------
- 1 file changed, 12 insertions(+), 9 deletions(-)
+btmon log:
 
-diff --git a/certs/blacklist.c b/certs/blacklist.c
-index 6e260c4b6a19..675dd7a8f07a 100644
---- a/certs/blacklist.c
-+++ b/certs/blacklist.c
-@@ -183,16 +183,19 @@ static int mark_raw_hash_blacklisted(const char *hash)
- {
- 	key_ref_t key;
- 
--	key = key_create_or_update(make_key_ref(blacklist_keyring, true),
--				   "blacklist",
--				   hash,
--				   NULL,
--				   0,
--				   BLACKLIST_KEY_PERM,
--				   KEY_ALLOC_NOT_IN_QUOTA |
--				   KEY_ALLOC_BUILT_IN);
-+	key = key_create(make_key_ref(blacklist_keyring, true),
-+			 "blacklist",
-+			 hash,
-+			 NULL,
-+			 0,
-+			 BLACKLIST_KEY_PERM,
-+			 KEY_ALLOC_NOT_IN_QUOTA |
-+			 KEY_ALLOC_BUILT_IN);
- 	if (IS_ERR(key)) {
--		pr_err("Problem blacklisting hash %s: %pe\n", hash, key);
-+		if (PTR_ERR(key) == -EEXIST)
-+			pr_warn("Duplicate blacklisted hash %s\n", hash);
-+		else
-+			pr_err("Problem blacklisting hash %s: %pe\n", hash, key);
- 		return PTR_ERR(key);
- 	}
- 	return 0;
--- 
-2.38.1
-
+Bluetooth monitor ver 5.64
+= Note: Linux version 6.1.0-rc2 (x86_64)                               0.240003
+= Note: Bluetooth subsystem version 2.22                               0.240035
+(...)
+> ACL Data RX: Handle 200 flags 0x00 dlen 1033             #32 [hci0] 12.777814
+        invalid packet size (12 != 1033)
+        08 00 01 00 02 01 04 00 01 10 ff ff              ............    
+@ MGMT Event: Device Connected (0x000b) plen 13       {0x0001} [hci0] 12.797646
+        BR/EDR Address: 10:AA:AA:AA:AA:AA (OUI 10-AA-AA)
+        Flags: 0x00000000
+        Data length: 0
+@ MGMT Event: Device Connected (0x000b) plen 13       {0x0002} [hci0] 12.797646
+        BR/EDR Address: 10:AA:AA:AA:AA:AA (OUI 10-AA-AA)
+        Flags: 0x00000000
+        Data length: 0
+> ACL Data RX: Handle 200 flags 0x00 dlen 2061             #33 [hci0] 12.778616
+        invalid packet size (16 != 2061)
+        0c 00 01 00 03 01 08 00 00 00 00 00 00 00 00 00  ................
+> ACL Data RX: Handle 200 flags 0x00 dlen 2061             #34 [hci0] 12.778858
+        invalid packet size (16 != 2061)
+        0c 00 01 00 04 01 08 00 40 00 00 00 07 00 00 01  ........@.......
+> ACL Data RX: Handle 200 flags 0x00 dlen 2061             #35 [hci0] 12.778882
+        invalid packet size (16 != 2061)
+        0c 00 01 00 04 01 08 00 40 00 00 00 07 02 00 00  ........@.......
+> ACL Data RX: Handle 200 flags 0x00 dlen 1547             #36 [hci0] 12.778905
+        invalid packet size (14 != 1547)
+        0a 00 01 00 05 01 06 00 40 00 00 00 00 00        ........@.....  
