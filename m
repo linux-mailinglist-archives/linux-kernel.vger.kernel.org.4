@@ -2,128 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B0E362F0BD
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 10:14:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AA2E62F0C1
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 10:14:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241809AbiKRJN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 04:13:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32804 "EHLO
+        id S241829AbiKRJOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 04:14:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235275AbiKRJN4 (ORCPT
+        with ESMTP id S241814AbiKRJOA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 04:13:56 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB7385FF0;
-        Fri, 18 Nov 2022 01:13:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=mwt73Igv1Cbi6CXwxAPKd0Pr+R9hvpBvRt03pYQ3bys=; b=ab3Y1GXh5hZN4kYCUal3zeuK3Q
-        7SRG1cvzhO7eKodvFDYyuRae96G8g5PWd/XWhtSWcEI5MUsYEab5Ovzc8ze8gBOk9y9y/n4/VG6QA
-        kxoDu7O/fG1a2giqiMnnG8GWp7V1BxUra+Jgp+oiupx2occO6L51vWUZQgeu4+7U3imdC7NUUUJ2N
-        J5VaNoVksNMD06l+gxDbRhfwA3keSj0mXPL1+LX088MVxqFi6HWwWMGwF0jamw9uSp14pYO1PV0sb
-        dSKJCydBYVIQlrwj2um9MWjTnI+ZTo1PEgHrvF9BZHJpiPATdBDwJ3bT9CqtMVsKHp/fep69BWHYQ
-        1FAlMbCA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ovxQb-00287L-Gd; Fri, 18 Nov 2022 09:12:54 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 78E20300487;
-        Fri, 18 Nov 2022 10:12:43 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 5E8232C316131; Fri, 18 Nov 2022 10:12:43 +0100 (CET)
-Date:   Fri, 18 Nov 2022 10:12:43 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        x86@kernel.org, "Paul E. McKenney" <paulmck@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Guo Ren <guoren@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [RFC PATCH v2 8/8] sched, smp: Trace smp callback causing an IPI
-Message-ID: <Y3dMiyFn6TG1s5g3@hirez.programming.kicks-ass.net>
-References: <20221102182949.3119584-1-vschneid@redhat.com>
- <20221102183336.3120536-7-vschneid@redhat.com>
- <Y3ZBUMteJysc1/lA@hirez.programming.kicks-ass.net>
- <xhsmhfsehy706.mognet@vschneid.remote.csb>
+        Fri, 18 Nov 2022 04:14:00 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B1112B24A;
+        Fri, 18 Nov 2022 01:13:59 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id ay14-20020a05600c1e0e00b003cf6ab34b61so7080562wmb.2;
+        Fri, 18 Nov 2022 01:13:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RLChsz4krtzZTev2yEyKsYVgVakCijZO7dCu1rvHy2k=;
+        b=RdVcq7M4Wc42iB80ZoHSmZYqEHaN8Q28idRv677+gfsMoQrPw4IzufiWZNb0qdQaNt
+         AtmSx+5Rklz52O2YrC4vd9dkmcmsOn4e+TzvmDPIjFrInkBJpSC2MWyKxcuX9ayCEbM1
+         SRndnvZ7630749DfLuvbCBIBhJglYBXi+SqumCRWzhDpcG69FjfYwbhjDb00wad/i5ci
+         ew0kBBmIszeP7wONHBpX9RNj0xaLppPbe06zZoeNK2inItHIsJq0uQ3Ai7Ne6AHXxCFJ
+         y5RcC05AWgJ4ojciSxRiSEtfyQDsZ9GZ7lJUznYS+6BCPrzzfuDOh37HsEH+6ulpB6uU
+         neiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RLChsz4krtzZTev2yEyKsYVgVakCijZO7dCu1rvHy2k=;
+        b=KI/Hke72ggphR5nWD164UNwrNu38n8SsabySD783XptwiJadCEAQ13vwXk9kU/poAK
+         yLi0ydgGWyGaF2vpElBCD6WTTPzKgHw0TuMiEZFhyR3QN7K337SghLjul1cWUcucsaMS
+         eqHTrBn7dGwpXlNfhYpntHSD53vk0AXNRM99y7vijd401qMvUReEQZ9RvHaaxliKMt4n
+         ExUo7IFOS+XMmNh8dZTp0vqsxwxIdd0ttTpY+XrRpIl2G6fVaXdUoL1L9A6XbSxzU2/9
+         yxqIg4bB1Hc0WQng5wkR+l+4o6wLK8tv/mbiVbyvtohUiHXzK6zOsmmvxhe/zN8h0vIA
+         7e6A==
+X-Gm-Message-State: ANoB5pmI8xeY38Hk9oBDILmY0Tpu6JFAejxF40eRDbliQkcyeQJSnJ2k
+        xWIHk0F1e0ts9gryBuKRCyY=
+X-Google-Smtp-Source: AA0mqf4Ayn84pZBf1NHTWk/8lPRC9d/qgwxKatvL62t08L4NG6pp0jgZyYbG6h0dCC9fXWynwI9DEA==
+X-Received: by 2002:a05:600c:4d07:b0:3cf:8108:de64 with SMTP id u7-20020a05600c4d0700b003cf8108de64mr7908422wmp.139.1668762837605;
+        Fri, 18 Nov 2022 01:13:57 -0800 (PST)
+Received: from gmail.com ([81.168.73.77])
+        by smtp.gmail.com with ESMTPSA id n27-20020a05600c3b9b00b003cfa81e2eb4sm4379859wms.38.2022.11.18.01.13.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 01:13:56 -0800 (PST)
+Date:   Fri, 18 Nov 2022 09:13:54 +0000
+From:   Martin Habets <habetsm.xilinx@gmail.com>
+To:     Zhang Changzhong <zhangchangzhong@huawei.com>
+Cc:     Edward Cree <ecree.xilinx@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net] sfc: fix potential memleak in
+ __ef100_hard_start_xmit()
+Message-ID: <Y3dM0rG8JeYgE5pX@gmail.com>
+Mail-Followup-To: Zhang Changzhong <zhangchangzhong@huawei.com>,
+        Edward Cree <ecree.xilinx@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1668671409-10909-1-git-send-email-zhangchangzhong@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <xhsmhfsehy706.mognet@vschneid.remote.csb>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1668671409-10909-1-git-send-email-zhangchangzhong@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 02:45:29PM +0000, Valentin Schneider wrote:
-
-> > +	if (trace_ipi_send_cpumask_enabled()) {
-> > +		call_single_data_t *csd;
-> > +		smp_call_func_t func;
-> > +
-> > +		csd = container_of(node, call_single_data_t, node.llist);
-> > +
-> > +		func = sched_ttwu_pending;
-> > +		if (CSD_TYPE(csd) != CSD_TYPE_TTWU)
-> > +			func = csd->func;
-> > +
-> > +		if (raw_smp_call_single_queue(cpu, node))
-> > +			trace_ipi_send_cpumask(cpumask_of(cpu), _RET_IP_, func);
+On Thu, Nov 17, 2022 at 03:50:09PM +0800, Zhang Changzhong wrote:
+> The __ef100_hard_start_xmit() returns NETDEV_TX_OK without freeing skb
+> in error handling case, add dev_kfree_skb_any() to fix it.
 > 
-> So I went with the tracepoint being placed *before* the actual IPI gets
-> sent to have a somewhat sane ordering between trace_ipi_send_cpumask() and
-> e.g. trace_call_function_single_entry().
+> Fixes: 51b35a454efd ("sfc: skeleton EF100 PF driver")
+> Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
+
+Acked-by: Martin Habets <habetsm.xilinx@gmail.com>
+
+> ---
+>  drivers/net/ethernet/sfc/ef100_netdev.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> Packaging the call_single_queue logic makes the code less horrible, but it
-> does mix up the event ordering...
-
-Keeps em sharp ;-)
-
-> > +		return;
-> > +	}
-> > +
-> > +	raw_smp_call_single_queue(cpu, node);
-> >  }
-> >
-> >  /*
-> > @@ -983,10 +1017,13 @@ static void smp_call_function_many_cond(
-> >                * number of CPUs might be zero due to concurrent changes to the
-> >                * provided mask.
-> >                */
-> > -		if (nr_cpus == 1)
-> > +		if (nr_cpus == 1) {
-> > +			trace_ipi_send_cpumask(cpumask_of(last_cpu), _RET_IP_, func);
-> >                       send_call_function_single_ipi(last_cpu);
-> 
-> This'll yield an IPI event even if no IPI is sent due to the idle task
-> polling, no?
-
-Oh, right..
+> diff --git a/drivers/net/ethernet/sfc/ef100_netdev.c b/drivers/net/ethernet/sfc/ef100_netdev.c
+> index 88fa295..ddcc325 100644
+> --- a/drivers/net/ethernet/sfc/ef100_netdev.c
+> +++ b/drivers/net/ethernet/sfc/ef100_netdev.c
+> @@ -218,6 +218,7 @@ netdev_tx_t __ef100_hard_start_xmit(struct sk_buff *skb,
+>  		   skb->len, skb->data_len, channel->channel);
+>  	if (!efx->n_channels || !efx->n_tx_channels || !channel) {
+>  		netif_stop_queue(net_dev);
+> +		dev_kfree_skb_any(skb);
+>  		goto err;
+>  	}
+>  
+> -- 
+> 2.9.5
