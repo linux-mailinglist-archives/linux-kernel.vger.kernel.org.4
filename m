@@ -2,133 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 621F562ED61
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 06:57:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46C3462ED64
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 07:00:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234976AbiKRF5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 00:57:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60570 "EHLO
+        id S241018AbiKRGAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 01:00:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240683AbiKRF5f (ORCPT
+        with ESMTP id S235025AbiKRGAQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 00:57:35 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B9AD8CB8B
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 21:57:34 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id b1-20020a17090a7ac100b00213fde52d49so4100247pjl.3
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 21:57:34 -0800 (PST)
+        Fri, 18 Nov 2022 01:00:16 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEFAE786DA
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:00:10 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id d20so3675360plr.10
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:00:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0a1jjRfviTq5Xt2/NZLcpPRBi+hPaTFIWtK7i+Uba+o=;
-        b=lR4PSzbHtutX868gOZ71DV6BQ3XgJC0Tep7WH5FyBG4eniWNoVFrPI94BAD7cDkCuc
-         soYmtc4O+B7WyrBOg0gSmEfrmrosmxx0OAyDaaQkjjV2/OTjLDjzg3cLMV39Bbgihhmn
-         cJZXz1/5zY5/+BPehzeTHwI8XEc2SPHVsoXfdmAHEoWzAT7ptygWnCzBdRI/3KrIYA9Z
-         92QjwE1rdSIvMVJfzVBZGftN9cr1eBl+1yPakH9TEFAVfJspeVbHGz2b+KHU9D5bH/7D
-         Olu9tgYBxVXjE695WqsJqh6C5Py2eHRlo82AVxlIdQI7vSVMFx4+y5GMOzN/bow5MQ9E
-         Vhog==
+        d=csie-ntu-edu-tw.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=q4Wk+KzFpp8McF2mDNBn6lyFAwa5ExYeoo2v/dCLoXE=;
+        b=F6o5IA2rQckRHAgrVgFVJsNGoM3dOXI/T05L8otWp8O0NUh4J5fPSDaGJp7VPnkp/2
+         OTEXlejbStDWGw5Vw3VHFjA91SPh974r6KgoVy5BP7pIkGnMhcYn/Hcm8XXyLChcklDX
+         Yuslm1FkyrYoG/q1m/IES0FpKMEh2aQoap3ZUskMIQ0MUZXvCtPBdKMFLa3t1upZ4i5G
+         iaGoJit0pUb/g9OX5fjyVx+k3yQFbgEXmew9glBZeLVJBh4ryqUyhOS+/PtHW62Ejzl8
+         kieaLjS/C1/R7a/NVlpNLlhQXM3PfNaBo/kVr1GLa57CgplAeDpIUKxaT1M6cmRxwStU
+         4pBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0a1jjRfviTq5Xt2/NZLcpPRBi+hPaTFIWtK7i+Uba+o=;
-        b=jmAeoqx09JQjVjR0zHoj/nDDWq+19dWf2QfSPq3/qoioirac11eAl9eaat/0/ApjGk
-         Eu5AryJCfD7ySGqsqS78rw/LiBmWW6eVA+5KIbSgx3W7YOkVxIFGrk11rmWa5qVy4KgO
-         F5CJ+BeEAgw+eS4GhTAxhHz+c3acNdrh1uQImF6N5PSZuoH0URqeH4u4ifyvjulNFz5L
-         X7Qb0CnEeh7El8GzYmWIQfzX667ZqUdgHezCbPti7Pvy15eCUluChyk7o3lQLu0Jq3Pn
-         bXATBt23xhuVmIsvbEV2VjLfJE92qRkEpBcDNUhR/5+gKbmGix0ov6kgdUpxIEOLjcRg
-         hHMA==
-X-Gm-Message-State: ANoB5pnZxDUsOe+kBGoKu/XvozLhoT56MjcJZieW2c56t/fGOQIb+iZS
-        PtpMgOsDo22ArnxCtPAOhwcf/A==
-X-Google-Smtp-Source: AA0mqf7ZHCPYnYkcNX51xnBzNH8aRazEuukSXxWjRjt+qHEp7z32tE3pgG3H7A3HLPNIXczCaCL7Cg==
-X-Received: by 2002:a17:902:da87:b0:184:fa22:8b67 with SMTP id j7-20020a170902da8700b00184fa228b67mr6009281plx.149.1668751053815;
-        Thu, 17 Nov 2022 21:57:33 -0800 (PST)
-Received: from localhost ([122.172.85.60])
-        by smtp.gmail.com with ESMTPSA id q9-20020a170902bd8900b00176d347e9a7sm2486743pls.233.2022.11.17.21.57.32
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=q4Wk+KzFpp8McF2mDNBn6lyFAwa5ExYeoo2v/dCLoXE=;
+        b=q0htru2Gqt68lSmc80TP8U5w/lFJclhX1tjATGd+8BZXu5nEBfj6wSh6L3ZsG0gD81
+         7CrlVr41fPg5uifgiEPkgj5KOFIDCerzCONSaXnpKIr0INa+IsdC4RVlPihFrRcbZNEm
+         HlneS/kmsPvDKjwfVWeto3tzhOg+6jfTR35PGhpTR0zrqKHuvT2HJTyDMLgPwEhkDKS7
+         aJwnBV5KUfiZgzPl8o4SdjT3vvearm0tyeSl/r5xPSnTJHTgwOnEExYv+Zvwnu9GaGUJ
+         t/+J6ImYiKct+O9j4I8tDj7qPQ1B6KTTlEv8gAOCRfP1LBCncamBU1740Isrr7AyTl3u
+         HKOA==
+X-Gm-Message-State: ANoB5pnWHIYF5yHlGrQRUySeCRMOBti2h+37vQgGV1NHe0G/urZ4fgD6
+        DRhE26WmaCdehpM3jgnzN+/bgKtS+fgRWFxJ5Zg+tQXJtON3cbC+ekJwYWM/aUh3HN0wWDKziG5
+        c1wqNrwEGUP68YQsSTcdYsqAsmkDKDLtAWdaFsMz5BemJesp6OmHioK3EEASbxJ03SOB1/6ilHn
+        tvT0CVs4JMA6gYhOSOui46wQoKQfw=
+X-Google-Smtp-Source: AA0mqf7JGkj+dhtm+n3CMsmmaicX6T43PbeSs87rwh9x5tEbgbshfwL2GcJwh/+hs46IiO5iW+Axqw==
+X-Received: by 2002:a17:90a:6904:b0:208:4bfa:51e1 with SMTP id r4-20020a17090a690400b002084bfa51e1mr11873419pjj.228.1668751210234;
+        Thu, 17 Nov 2022 22:00:10 -0800 (PST)
+Received: from localhost.localdomain (2001-b011-3803-1a96-3716-7fae-2678-9ea1.dynamic-ip6.hinet.net. [2001:b011:3803:1a96:3716:7fae:2678:9ea1])
+        by smtp.gmail.com with ESMTPSA id h9-20020aa796c9000000b0056d98e359a5sm2169627pfq.165.2022.11.17.22.00.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 21:57:32 -0800 (PST)
-Date:   Fri, 18 Nov 2022 11:27:30 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        rafael@kernel.org, robh+dt@kernel.org, johan@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v7 0/4] qcom-cpufreq-hw: Add CPU clock provider support
-Message-ID: <20221118055730.yrzpuih3zfko5c2q@vireshk-i7>
-References: <20221117053145.10409-1-manivannan.sadhasivam@linaro.org>
- <20221117101903.sw3hxaruj5sfhybw@bogus>
- <20221117112403.haffuclwooudvgwz@vireshk-i7>
- <20221117120145.ou2pg7obxnwlsc36@bogus>
+        Thu, 17 Nov 2022 22:00:09 -0800 (PST)
+From:   Wei-Lin Chang <r09922117@csie.ntu.edu.tw>
+To:     maz@kernel.org
+Cc:     james.morse@arm.com, alexandru.elisei@arm.com,
+        suzuki.poulose@arm.com, oliver.upton@linux.dev,
+        catalin.marinas@arm.com, will@kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
+        Wei-Lin Chang <r09922117@csie.ntu.edu.tw>
+Subject: [PATCH v2] KVM: arm64: Update comment of create_hyp_mappings
+Date:   Fri, 18 Nov 2022 13:59:37 +0800
+Message-Id: <20221118055937.14605-1-r09922117@csie.ntu.edu.tw>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221117120145.ou2pg7obxnwlsc36@bogus>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Gm-Spam: 0
+X-Gm-Phishy: 0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SPF_TEMPERROR
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17-11-22, 12:01, Sudeep Holla wrote:
-> Thanks for the link. Sorry I still don't get the complete picture. Who are
-> the consumers of these clock nodes if not cpufreq itself.
-> 
-> I am going to guess, so other device(like inter-connect) with phandle into
-> CPU device perhaps ? Also I assume it will have phandle to non-CPU device
-> and hence we need generic device clock solution. Sorry for the noise, but
-> I still find having both clocks and qcom,freq-domain property is quite
-> confusing but I am fine as I understand it bit better now.
+HYP_PAGE_OFFSET is removed since 4.8, and the method for generating Hyp
+VAs has evolved. Update the functional description of
+create_hyp_mappings accordingly.
 
-Lemme try to explain what the initial problem was, because of which I suggested
-the DT to be fixed, even if no one is going to use it as a client.
+Signed-off-by: Wei-Lin Chang <r09922117@csie.ntu.edu.tw>
+---
+Changes in v2:
+ - Take Marc's advice
 
-The OPP core provides two features:
+ arch/arm64/kvm/mmu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-- Parsing of the OPP table and provide the data to the client.
-- Ability to switch the OPPs, i.e. configuring all resources.
-
-qcom-cpufreq-hw driver uses both of these, but in a tricky way (like Tegra30).
-It used the OPP core to parse the data, along with "opp-hz" property and switch
-the OPPs by calling dev_pm_opp_set_opp(). But it doesn't want
-dev_pm_opp_set_opp() to change the clock rate, but configure everything else.
-
-Now the OPP core needs to distinguish platforms for valid and invalid
-configurations, to make sure something isn't broken. For example a developer
-wants to change the OPP along with frequency and passes a valid OPP table. But
-forgets to set the clock entry in device's node. This is an error and the OPP
-core needs to report it. There can be more of such issues with different
-configurations.
-
-Also, as Mani explained, if the OPP core is required to switch the OPPs, then it
-needs to know the initial frequency of the device to see if we are going up or
-down the frequency graph. And so it will do a clk_get_rate() if there is
-"opp-hz" available.
-
-
-What we did in case of Tegra30 (commit 1b195626) is provide a .config_clks
-helper, which does nothing. So the OPP core doesn't need to know if frequency is
-programmed or not.
-
-The same can not be done for Qcom right now as the CPU node doesn't have the clk
-property though it has "opp-hz".
-
-Weather we have a user in kernel (OS) or not, shouldn't decide how the DT looks
-like. The DT should clearly define what the hardware looks like, irrespective of
-the users. The CPU has a clock and it should be mentioned. If the OPP core
-chooses to use that information, then it is a fine expectation to have.
-
-And so we are here. Most likely no one will ever do clk_set_rate() on this new
-clock, which is fine, though OPP core will likely do clk_get_rate() here.
-
-Hope I was able to clarify few things here.
-
+diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+index 8f26c6569..6dda4f4bd 100644
+--- a/arch/arm64/kvm/mmu.c
++++ b/arch/arm64/kvm/mmu.c
+@@ -479,7 +479,7 @@ void kvm_unshare_hyp(void *from, void *to)
+  * @prot:	The protection to be applied to this range
+  *
+  * The same virtual address as the kernel virtual address is also used
+- * in Hyp-mode mapping (modulo HYP_PAGE_OFFSET) to the same underlying
++ * in Hyp-mode mapping (modulo a random offset) to the same underlying
+  * physical pages.
+  */
+ int create_hyp_mappings(void *from, void *to, enum kvm_pgtable_prot prot)
 -- 
-viresh
+2.34.1
+
