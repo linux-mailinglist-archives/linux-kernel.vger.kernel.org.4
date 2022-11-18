@@ -2,140 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1758762F079
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 10:05:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B97762F07C
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 10:06:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241705AbiKRJFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 04:05:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54752 "EHLO
+        id S241712AbiKRJGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 04:06:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231534AbiKRJFS (ORCPT
+        with ESMTP id S241176AbiKRJGb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 04:05:18 -0500
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A671143;
-        Fri, 18 Nov 2022 01:05:15 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4ND9gq5qwgz9v7Z1;
-        Fri, 18 Nov 2022 16:59:03 +0800 (CST)
-Received: from [10.206.134.65] (unknown [10.206.134.65])
-        by APP1 (Coremail) with SMTP id LxC2BwBHMW6oSndjv7Z0AA--.22042S2;
-        Fri, 18 Nov 2022 10:04:51 +0100 (CET)
-Message-ID: <5758e5c4-9c8b-4492-3ecd-ba6607fc2899@huaweicloud.com>
-Date:   Fri, 18 Nov 2022 10:04:37 +0100
+        Fri, 18 Nov 2022 04:06:31 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64C779931
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 01:06:30 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id j16so7168047lfe.12
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 01:06:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=o5LvHXOq/S5ojYSJ40UtUFDgw1gowSS1LOpknOhOd8s=;
+        b=zPZVWs55Nxluk17EmfoGgWYT6EFzaJI+8ocmQDKmhGmP44xJ4XuBTI6Rqd/yo5bW/m
+         NpQ/199dGE9J2/qABCw2epv+ULw8mOd0nFdB5R5C7Uve6E+JOz6CHLGCr7xWcOan/NZ7
+         Jdw2Sg8hOiYHdAwT2Bsu+3rWlGrq/+a4+/yoFEf1y7vQvWx5BCg3X//d5Hg5BFSV0/vd
+         4bpJgMkRRUaLnuuQiuYcj02nzozfAc9dRWvM3rgH9BlCJAxFwCDb1bbHX/eAAjJR8CIv
+         51ynbDjy2yqWcgN48rIejWHEMinMmtkwRfFoYw3Lm/ENcZMYZV6hAHQsQTCvXghxW90K
+         bSmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=o5LvHXOq/S5ojYSJ40UtUFDgw1gowSS1LOpknOhOd8s=;
+        b=1KgLUkdwBssEw2yrkBiIYkbleg5C5udfhvo4omxcAbRvzlmvy9c1TMGcacXUIW4Mmm
+         dj6T19gmLMNnjpc/v5gzL9ITwUe9qTLsXYHAjOfx/lShowU1OajtIPNPp3xSL/o/AMrr
+         InZdFPe8hZV65NhqUpZTatBDE+f2f5KJtBKCKExGwZoxwQ8BAXKNwbkrcoG43EEFuNeC
+         vgM40aNql3Ro1TJWyjzpA73pxpkLX5lGjsTgsVKeygYZ3wn77xyw645diMBt5fShPYFF
+         rSztoN4CFY98I895IcTYgA5EZLrx+K+otAEsGwXdtFj9EMQZxJINItfpPD44/YbfDdPy
+         jl+A==
+X-Gm-Message-State: ANoB5pkgPKpoZYNoUXuaEBF1dCO87PBOnVqav1H/WbSkr7S+MWlUoeYi
+        fhHwby6d8m84yhIirgz516BN3+5fpO8f0KUN
+X-Google-Smtp-Source: AA0mqf6H/OBIYdJ/gJkaPxc3ffIWTCBSkVo0aI6Nsg/gpybN3CnGpXlJVxCKMpJ5re7L46019WEspQ==
+X-Received: by 2002:a05:6512:3f1d:b0:4a2:3f29:5e8a with SMTP id y29-20020a0565123f1d00b004a23f295e8amr2094943lfa.221.1668762388938;
+        Fri, 18 Nov 2022 01:06:28 -0800 (PST)
+Received: from [192.168.31.208] ([194.29.137.22])
+        by smtp.gmail.com with ESMTPSA id g6-20020a056512118600b00497ab34bf5asm48205lfr.20.2022.11.18.01.06.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Nov 2022 01:06:28 -0800 (PST)
+Message-ID: <24a88a47-7556-20f1-ce9c-fe7bd0466a88@linaro.org>
+Date:   Fri, 18 Nov 2022 10:06:26 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v4 2/5] security: Rewrite
- security_old_inode_init_security()
-Content-Language: en-US
-To:     Mimi Zohar <zohar@linux.ibm.com>, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        casey@schaufler-ca.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        keescook@chromium.org, nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        ocfs2-devel@oss.oracle.com
-References: <20221110094639.3086409-1-roberto.sassu@huaweicloud.com>
- <20221110094639.3086409-3-roberto.sassu@huaweicloud.com>
- <3dc4f389ead98972cb7d09ef285a0065decb0ad0.camel@linux.ibm.com>
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-In-Reply-To: <3dc4f389ead98972cb7d09ef285a0065decb0ad0.camel@linux.ibm.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.2
+Subject: Re: [PATCH v2 3/6] soc: qcom: geni-se: add desc struct to specify
+ clocks from device match data
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Andy Gross <agross@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org
+References: <20221114-narmstrong-sm8550-upstream-i2c-master-hub-v2-0-aadaa6997b28@linaro.org>
+ <20221114-narmstrong-sm8550-upstream-i2c-master-hub-v2-3-aadaa6997b28@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221114-narmstrong-sm8550-upstream-i2c-master-hub-v2-3-aadaa6997b28@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwBHMW6oSndjv7Z0AA--.22042S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxCry7Xw15Zr18Zw4fWF17Jrb_yoW5Jw48pF
-        W2kF1DKrs8JF97CrZ7trnrWF4xKayrGrZrXws3Ary7ZFn8CFn7tr40yry3Ca43GrW8J34F
-        qw43Z343Zrn8Z3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
-        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
-        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE
-        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
-        9x07UZ18PUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAABF1jj4GVFAACs1
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/17/2022 2:03 PM, Mimi Zohar wrote:
-> Hi Roberto,
+
+
+On 18/11/2022 09:45, Neil Armstrong wrote:
+> The I2C Master Hub is a stripped down version of the GENI Serial Engine
+> QUP Wrapper Controller but only supporting I2C serial engines without
+> DMA support.
 > 
-> On Thu, 2022-11-10 at 10:46 +0100, Roberto Sassu wrote:
->> From: Roberto Sassu <roberto.sassu@huawei.com>
->>
->> Rewrite security_old_inode_init_security() to call
->> security_inode_init_security() before making changes to support multiple
->> LSMs providing xattrs. Do it so that the required changes are done only in
->> one place.
+> Prepare support for the I2C Master Hub variant by moving the required
+> clocks list to a new desc struct then passing it through the compatible
+> match data.
 > 
-> Only security_inode_init_security() has support for EVM.   Making
-> security_old_inode_init_security() a wrapper for
-> security_inode_init_security() could result in security.evm extended
-> attributes being created that previously weren't created.
-
-Hi Mimi
-
-yes, I thought about this problem. In fact, it should not matter too 
-much. Since security_old_inode_init_security() supports setting only one 
-xattr: if there is an LSM xattr, that one will be set, and the EVM one 
-will be discarded; if there is no LSM xattr, EVM would not add one.
-
-> In fact ocfs2 defines ocfs2_init_security_get() as a wrapper for both
-> the old and new inode_init_security calls based on the caller's
-> preference.   Only mknod and symlink seem to use the old function.
-> Wondering why do they differentiate between callers?  (Cc'ing the ocfs2
-> mailing list as they're affected by this change.)
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>   drivers/soc/qcom/qcom-geni-se.c | 59 +++++++++++++++++++++++++++++++----------
+>   1 file changed, 45 insertions(+), 14 deletions(-)
 > 
-> "[PATCH v4 1/5] reiserfs: Add missing calls to
-> reiserfs_security_free()"  fixed a memory leak.  I couldn't tell if
-> there was a similar memory leak in ocfs2, the only other user of
-> security_old_inode_init_security().
+> diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
+> index a0ceeede450f..ced2a2932eda 100644
+> --- a/drivers/soc/qcom/qcom-geni-se.c
+> +++ b/drivers/soc/qcom/qcom-geni-se.c
+> @@ -81,19 +81,31 @@
+>    */
+>   
+>   #define MAX_CLK_PERF_LEVEL 32
+> -#define NUM_AHB_CLKS 2
+> +#define MAX_CLKS 2
+>   
+>   /**
+>    * struct geni_wrapper - Data structure to represent the QUP Wrapper Core
+>    * @dev:		Device pointer of the QUP wrapper core
+>    * @base:		Base address of this instance of QUP wrapper core
+> - * @ahb_clks:		Handle to the primary & secondary AHB clocks
+> + * @clks:		Handle to the primary & optional secondary AHB clocks
+> + * @num_clks:		Count of clocks
+>    * @to_core:		Core ICC path
+>    */
+>   struct geni_wrapper {
+>   	struct device *dev;
+>   	void __iomem *base;
+> -	struct clk_bulk_data ahb_clks[NUM_AHB_CLKS];
+> +	struct clk_bulk_data clks[MAX_CLKS];
+> +	unsigned int num_clks;
+> +};
+> +
+> +/**
+> + * struct geni_se_desc - Data structure to represent the QUP Wrapper resources
+> + * @clks:		Name of the primary & optional secondary AHB clocks
+> + * @num_clks:		Count of clock names
+> + */
+> +struct geni_se_desc {
+> +	unsigned int num_clks;
+> +	const char * const *clks;
+>   };
+>   
+>   static const char * const icc_path_names[] = {"qup-core", "qup-config",
+> @@ -496,8 +508,7 @@ static void geni_se_clks_off(struct geni_se *se)
+>   	struct geni_wrapper *wrapper = se->wrapper;
+>   
+>   	clk_disable_unprepare(se->clk);
+> -	clk_bulk_disable_unprepare(ARRAY_SIZE(wrapper->ahb_clks),
+> -						wrapper->ahb_clks);
+> +	clk_bulk_disable_unprepare(wrapper->num_clks, wrapper->clks);
+>   }
+>   
+>   /**
+> @@ -528,15 +539,13 @@ static int geni_se_clks_on(struct geni_se *se)
+>   	int ret;
+>   	struct geni_wrapper *wrapper = se->wrapper;
+>   
+> -	ret = clk_bulk_prepare_enable(ARRAY_SIZE(wrapper->ahb_clks),
+> -						wrapper->ahb_clks);
+> +	ret = clk_bulk_prepare_enable(wrapper->num_clks, wrapper->clks);
+>   	if (ret)
+>   		return ret;
+>   
+>   	ret = clk_prepare_enable(se->clk);
+>   	if (ret)
+> -		clk_bulk_disable_unprepare(ARRAY_SIZE(wrapper->ahb_clks),
+> -							wrapper->ahb_clks);
+> +		clk_bulk_disable_unprepare(wrapper->num_clks, wrapper->clks);
+>   	return ret;
+>   }
+>   
+> @@ -887,11 +896,23 @@ static int geni_se_probe(struct platform_device *pdev)
+>   		return PTR_ERR(wrapper->base);
+>   
+>   	if (!has_acpi_companion(&pdev->dev)) {
+> -		wrapper->ahb_clks[0].id = "m-ahb";
+> -		wrapper->ahb_clks[1].id = "s-ahb";
+> -		ret = devm_clk_bulk_get(dev, NUM_AHB_CLKS, wrapper->ahb_clks);
+> +		const struct geni_se_desc *desc;
+> +		int i;
+> +
+> +		desc = device_get_match_data(&pdev->dev);
+> +		if (!desc)
+> +			return -EINVAL;
+> +
+> +		wrapper->num_clks = min_t(unsigned int, desc->num_clks, MAX_CLKS);
+> +		if (wrapper->num_clks < desc->num_clks)
+This will never execute (except if somebody adding a third desc would 
+make a mistake or not update MAX_CLKS), as wrapper->num_clks will only 
+be < desc->num_clks if desc->num_clks > MAX_CLKS.
 
-Will look into it.
+I was thinking about getting the number of actual clocks passed to the 
+device in the DT, but I can't find a helper function for that, so it 
+would probably require some kind of manual looping.. I guess we can drop 
+this. Or leave it to save somebody pulling their hair out in an unlikely 
+event. I guess I'm fine with both.
 
-> As ocfs2 already defines initxattrs, that leaves only reiserfs missing
-> initxattrs().  A better, cleaner solution would be to define one.
 
-Yes, great idea!
+> +			dev_warn(dev, "too much clocks described in DT\n")
+If you leave it, s/too much/Too many/
 
-Thanks
 
-Roberto
-
-> thanks,
+Konrad
+> +
+> +		for (i = 0; i < wrapper->num_clks; ++i)
+> +			wrapper->clks[i].id = desc->clks[i];
+> +
+> +		ret = devm_clk_bulk_get(dev, wrapper->num_clks, wrapper->clks);
+>   		if (ret) {
+> -			dev_err(dev, "Err getting AHB clks %d\n", ret);
+> +			dev_err(dev, "Err getting clks %d\n", ret);
+>   			return ret;
+>   		}
+>   	}
+> @@ -901,8 +922,18 @@ static int geni_se_probe(struct platform_device *pdev)
+>   	return devm_of_platform_populate(dev);
+>   }
+>   
+> +static const char * const qup_clks[] = {
+> +	"m-ahb",
+> +	"s-ahb",
+> +};
+> +
+> +static const struct geni_se_desc qup_desc = {
+> +	.clks = qup_clks,
+> +	.num_clks = ARRAY_SIZE(qup_clks),
+> +};
+> +
+>   static const struct of_device_id geni_se_dt_match[] = {
+> -	{ .compatible = "qcom,geni-se-qup", },
+> +	{ .compatible = "qcom,geni-se-qup", .data = &qup_desc },
+>   	{}
+>   };
+>   MODULE_DEVICE_TABLE(of, geni_se_dt_match);
 > 
-> Mimi
-> 
->>
->> Define the security_initxattrs() callback and pass it to
->> security_inode_init_security() as argument, to obtain the first xattr
->> provided by LSMs.
->>
->> This behavior is a bit different from the current one. Before this patch
->> calling call_int_hook() could cause multiple LSMs to provide an xattr,
->> since call_int_hook() does not stop when an LSM returns zero. The caller of
->> security_old_inode_init_security() receives the last xattr set. The pointer
->> of the xattr value of previous LSMs is lost, causing memory leaks.
->>
->> However, in practice, this scenario does not happen as the only in-tree
->> LSMs providing an xattr at inode creation time are SELinux and Smack, which
->> are mutually exclusive.
->>
->> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>b
-
