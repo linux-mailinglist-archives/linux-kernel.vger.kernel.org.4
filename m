@@ -2,68 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA1A26306FB
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 01:21:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80657630764
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 01:34:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237685AbiKSAVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 19:21:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34538 "EHLO
+        id S235689AbiKSAei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 19:34:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237522AbiKSAVE (ORCPT
+        with ESMTP id S231838AbiKSAeK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 19:21:04 -0500
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A40BA69A
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:36:57 -0800 (PST)
-Received: by mail-ot1-x32e.google.com with SMTP id m7-20020a9d6447000000b0066da0504b5eso4000880otl.13
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:36:57 -0800 (PST)
+        Fri, 18 Nov 2022 19:34:10 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71EB62B624
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:42:47 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id v28so6282257pfi.12
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:42:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hK8gQKj2Jl7lgqDcBBKtTJvHs8EABYLYSyaTEIcYmn8=;
-        b=gucqMw6zdttGL7YGH/8VFFsmO13p+jIbO4x5eL3c+cmf4/jxVzILWPhiYPujfkDohm
-         0w9mpRCNZ8HSf2dvG4zeekZjFC0cjfx3WUsw40mocxDfIL7dCXgR6r5N5r7OgS6d1qy/
-         yIfD3nIxVKHHKKlVFc0YpC3ywwSYeWWL6x63gjSYHBVRSs3BJ1ihStr0Z0ksgBlMTIXc
-         1EtM/pqqaeEC8RzweIHsSwa50em+eHim1Hixm+xkr+1Wtpzxh5+Nm2z/llcSjaMItmIb
-         z+hUPa8oeORr2ItK8aEhU6r6TfSd9eAPzmE4O8LiRv2uallTu99ZRAixUgCDrk4Rj0NX
-         t/Cg==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gdy8THFQ217ArK5qAf8locqq0ea0wdI2wQ0KQQ2fz/s=;
+        b=BxtRWJrHgOasPDbyKA01nQReUZgzUZg6/4Bvt2wpUMbvtO/NzBRy4yb4K7NNnaui7z
+         ZKoGcX+rZGZwaFdgXrnSa2czgwNPRRYNXG71hyg0aQ9HxMwIlmkn+NGMMTz5Y1m91xRw
+         6E5v8oz/mfPDQhfGbLbEdYGZ6/kBrnVXVXF3w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hK8gQKj2Jl7lgqDcBBKtTJvHs8EABYLYSyaTEIcYmn8=;
-        b=yc1JUqHjfqq9PeL9NmznZrlN9LOD2Pjq5rAZPbLY9CZm2IHmdQhf3yx3CjWRCb1u9W
-         DXBZdDQMVBRM79oLp8nAC25ewTz+goLTHe0SnVQIFnrWsqnSm7+KE2hxHAfnGqMoRWLG
-         Of0fIsUndpc/2aKkfdZng7aUF4izAF/u2mSWHj931kMuDOvVkB5Wo7vz5wsVtCY+ymda
-         kVvE7MEgoBmwh/TH+03i6AZZiSBeHmQZP5ylDAwDd3tCXcSjdP7M2wPd5jNo+ZcwGA/K
-         S67z2aGzmYkmv9YODWZoULtTMBlVfymv2nTHJJMFS3pCg7mDEikQV9D0D0QZk2HD2ZIk
-         314A==
-X-Gm-Message-State: ANoB5pn+aL4S3Cf6jqkkcEjw6x2ZeLFK3tTizhcmKEBRPm8zH1+KbGRc
-        n4R/5K7SQNeJNhZ80iUYDmfXRRuarnQfr2JTqyY=
-X-Google-Smtp-Source: AA0mqf5MPQOnb33bdpqWOSrKtrxpaGaIUmAZtusUI9ZD1VLYYeccdeusP7kv/eDVu1yJ3GUn5v8pUmRgHBNfokbu+Bo=
-X-Received: by 2002:a9d:7d8b:0:b0:66c:63ec:339c with SMTP id
- j11-20020a9d7d8b000000b0066c63ec339cmr4956776otn.332.1668814586407; Fri, 18
- Nov 2022 15:36:26 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gdy8THFQ217ArK5qAf8locqq0ea0wdI2wQ0KQQ2fz/s=;
+        b=ms77t148WH4FzvjVpCIiNZyQBmKQusvdO5KWYE21sLD+b82Fpv8RstVuL10KBqRgB3
+         n1kcxod+/15k4AHpytPVULx9CKtvs5im1OVJ8CBXY896B0rGaTnSFmevjzGpiQwI4RW+
+         eTFMa5dhL1XqEyIey4yUzWtCJMAgIRSirek4b5nDNwxlM/WXj3I25vzEljKOavrKh0AC
+         jhPf3b4F7oc3ZtN7+HGmCYJm+KYc6oAkD6m+SV9MoVcCvveu+TZ2h4ZUZ4QxK0YR/4Dn
+         A64OfwCdooz+ofzicI/K0hecBahEHAgLdbPMyXTJ0kFlcEqo4swDA9gDWt+EkSn69ZII
+         02fQ==
+X-Gm-Message-State: ANoB5pkQefaQc1jpfd8jXTwibNLTPAkZWHCgqZ19NAsp5YZhnEnnU+Ap
+        1kbneNCesw1R9E1UDmGuAAMPlEktlb04XQ==
+X-Google-Smtp-Source: AA0mqf66SlkGoi1KeBiWbmO1baSn/GeKKLl0in2EE+JnpytDffihGspac3rJNaC2ddKrmgRrYzkDpw==
+X-Received: by 2002:a63:e09:0:b0:46b:8e9:749 with SMTP id d9-20020a630e09000000b0046b08e90749mr8370837pgl.260.1668814966918;
+        Fri, 18 Nov 2022 15:42:46 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id n14-20020a170902e54e00b00186c54188b4sm164191plf.240.2022.11.18.15.42.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 15:42:46 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Christian Lamparter <chunkeey@googlemail.com>
+Cc:     Kees Cook <keescook@chromium.org>, Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH v2] p54: Replace zero-length array of trailing structs with flex-array
+Date:   Fri, 18 Nov 2022 15:42:44 -0800
+Message-Id: <20221118234240.gonna.369-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Received: by 2002:ac9:7f06:0:0:0:0:0 with HTTP; Fri, 18 Nov 2022 15:36:26
- -0800 (PST)
-Reply-To: sgtkaylla202@gmail.com
-From:   Kayla Manthey <kontajean@gmail.com>
-Date:   Fri, 18 Nov 2022 23:36:26 +0000
-Message-ID: <CAGJkU199dd6rSeEQzJY4DP3DmVDGuEYE2s_WJmG9s4baR8bHUQ@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1744; h=from:subject:message-id; bh=frYwS/CNxid8oyzmUWma7Osq+zP62XTvZCZTt4IGeWs=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjeBh0f9MnBuxNAcv8AF9IXJq5IQXcPhkrRYT3czBK XoiyBLGJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY3gYdAAKCRCJcvTf3G3AJo5DEA CErDezf9uGBzeffXHVEc6KW5d8b6cJulenKDodro6pDA0mLJLYysESpyoAEe5dxT0q1pYdE0tzhV3S jWP0krg7whj91sCODp2jVmwPHK+fwU9/QiYarSJb+w3aAMuPx44QzBLTEWl9zbpjrPVTzuyVpVrftn jlGwx84wxKoeQdJGBF5in0GyzFLP/hVeLE4Zd+ntsc2BmVULzfrwNwqlN5I/4pAX0Q7zYwMyIVOR8j z5v64icaG0BGj5RLTZ7wauNbfIqOZST4aOTNwebR5VK0+zLAyYKg5OVjsfhVcaATEXiYfEzRq6L1xn qMzwjvXdv/0EzjBFV5b4UI5FOsAdQ0VWPc/qDCDZ+1z0TOs0LBuQTyLnxubd5HXz+kOxLDMjQqge3Q 3Mpr2qPcaVaqjRpAN1YNFhgli/fb3dK2GYf6VunwqdTSMTfEykk1vKWlJbpPX2nm2oNJFnk3aaRsFd m083OQZQZ+QOkekrxZ6oukm5qapc+LcBjy+/CWQhdzI1Yxr4S0m2IZ+nKfZpGBTSjI7rTEWS/iIJ6u GD/HrfqnStwjJjgGx/GRClHRWZ4roYUXubU4mEQ/9J55gTJ0VQvJvp7nUiS9ODC51JZxaWTFDogTXe elAmug2mMq8e8aQEfFbVhcAjCnBInU6Jt9iYU4uZeorSptPZtaZ8iJooDsgQ==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hallo lieverd, alsjeblieft, heb je mijn vorige bericht ontvangen, bedankt.
+Zero-length arrays are deprecated[1] and are being replaced with
+flexible array members in support of the ongoing efforts to tighten the
+FORTIFY_SOURCE routines on memcpy(), correctly instrument array indexing
+with UBSAN_BOUNDS, and to globally enable -fstrict-flex-arrays=3.
+
+Replace zero-length array with flexible-array member.
+
+This results in no differences in binary output (most especially because
+struct pda_antenna_gain is unused). The struct is kept for future
+reference.
+
+[1] https://github.com/KSPP/linux/issues/78
+
+Cc: Christian Lamparter <chunkeey@googlemail.com>
+Cc: Kalle Valo <kvalo@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: linux-wireless@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+v2:
+- convert normally (chunkeey)
+v1: https://lore.kernel.org/lkml/20221118210639.never.072-kees@kernel.org/
+---
+ drivers/net/wireless/intersil/p54/eeprom.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/wireless/intersil/p54/eeprom.h b/drivers/net/wireless/intersil/p54/eeprom.h
+index 1d0aaf54389a..641c4e79879e 100644
+--- a/drivers/net/wireless/intersil/p54/eeprom.h
++++ b/drivers/net/wireless/intersil/p54/eeprom.h
+@@ -108,10 +108,10 @@ struct pda_country {
+ } __packed;
+ 
+ struct pda_antenna_gain {
+-	struct {
++	DECLARE_FLEX_ARRAY(struct {
+ 		u8 gain_5GHz;	/* 0.25 dBi units */
+ 		u8 gain_2GHz;	/* 0.25 dBi units */
+-	} __packed antenna[0];
++	} __packed, antenna);
+ } __packed;
+ 
+ struct pda_custom_wrapper {
+-- 
+2.34.1
+
