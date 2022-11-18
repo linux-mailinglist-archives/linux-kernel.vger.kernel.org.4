@@ -2,78 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E61962EC83
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 04:52:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D57A162EC86
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 04:54:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239612AbiKRDwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 22:52:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47514 "EHLO
+        id S240308AbiKRDyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 22:54:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240679AbiKRDwi (ORCPT
+        with ESMTP id S235045AbiKRDyW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 22:52:38 -0500
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF93B8F3EE;
-        Thu, 17 Nov 2022 19:52:36 -0800 (PST)
-Received: by mail-lf1-f44.google.com with SMTP id l12so6224504lfp.6;
-        Thu, 17 Nov 2022 19:52:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=240kn03GT6YjtHcyHthMPHCmJ35FvTMvfiM7fDZi1UY=;
-        b=HXB5p2gSHUHjSuEBF3tHIhzrTxo5W9omwZmVeg4rdcPQZZjDE7Wbddh7Na+I2fv8U/
-         uThoB0nYlvWmADbGepx+4QA5jkWMsFkeNZBUotwA/wuOFN8XORd1p7EMmTk48hB01LPz
-         2LmFnNiQSVdI0KEAbcFnKcAUf3cg0L8tq8egyvGqVCeQmb5wgj/Hv+DmPB9tm41JcUWi
-         nz+4lA6W8BnDAPoA0NVK9faMlV4btC8fs/QlIU+F5qPiU3VmUIPWveKjy9Sc0EvzMt+b
-         IPIy7yFzVGUs1HkBviKm+95WIesS7Cdv1qme4XjtNI7EDj1yYJLoXCH/1D0rccaXDvzD
-         Ep7A==
-X-Gm-Message-State: ANoB5pmnMSNvk5Qp86g6u2BJ4F9rIbMqP8JTptB03kQ8ll9HxBtjmoZv
-        x3uViv/1oqsULvrF6l8Fwpjthumk7oyz4aul
-X-Google-Smtp-Source: AA0mqf6L3yaV/1VwfYXVwaJwiqckSx7UcHkCUYhu8In5dDqNNzEKlCgyCsFxPTa1Wu22MIOysULQmA==
-X-Received: by 2002:a05:6512:298f:b0:4a2:4365:7da7 with SMTP id du15-20020a056512298f00b004a243657da7mr2099814lfb.639.1668743555021;
-        Thu, 17 Nov 2022 19:52:35 -0800 (PST)
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com. [209.85.167.47])
-        by smtp.gmail.com with ESMTPSA id a25-20020a056512201900b00492dbf809e8sm470572lfb.118.2022.11.17.19.52.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Nov 2022 19:52:34 -0800 (PST)
-Received: by mail-lf1-f47.google.com with SMTP id j4so6291383lfk.0;
-        Thu, 17 Nov 2022 19:52:34 -0800 (PST)
-X-Received: by 2002:a05:6512:3ca4:b0:4b4:b5c2:647c with SMTP id
- h36-20020a0565123ca400b004b4b5c2647cmr1797642lfv.42.1668743554314; Thu, 17
- Nov 2022 19:52:34 -0800 (PST)
+        Thu, 17 Nov 2022 22:54:22 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE08E905B8;
+        Thu, 17 Nov 2022 19:54:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2B9DECE1FCA;
+        Fri, 18 Nov 2022 03:54:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD7C9C433C1;
+        Fri, 18 Nov 2022 03:54:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668743658;
+        bh=VXNicNtjreRGd3uzhXnaHlX16PiEgIZSc4IxaUpQf1Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=blpIBpYqG8kamYrSjg1GHDUuELON6bpq1PL1PVPXqjqDXFmbz9L8Ji2OJhRM9UIds
+         REBfOLVBzMTth0Z6fj55E6TW6tNEfVsjLRoGcZ+UbXkYb3L/Bguj5uY30ev9XZ932j
+         EpMtvwjhwYhMRNW/ghqIhF81ejUtApaqnyGuRJxIRYUd73vKQVUnsS5fxDh3rwwh0H
+         SGIDtpCYIeHeNJcnMSzvwvca88a9O066x2pdH1XJMI8SOw4HIdsiBlvqYGAGpZnkUi
+         nn4gzWpF1SQq0iqj86U0LJs/WGhLtBilIdkwoTyfLxeEo/alYT0tTnPih5mV9LUUmb
+         /aQkPdEtEb+8A==
+Date:   Thu, 17 Nov 2022 21:54:04 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Clemens Ladisch <clemens@ladisch.de>, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] hpet: Replace one-element array with flexible-array
+ member
+Message-ID: <Y3cB3MqiM+KFJHNm@work>
+References: <20221118034250.never.999-kees@kernel.org>
 MIME-Version: 1.0
-From:   Sungwoo Kim <iam@sung-woo.kim>
-Date:   Thu, 17 Nov 2022 22:52:08 -0500
-X-Gmail-Original-Message-ID: <CAJNyHpKpDdps4=QHZ77zu4jfY-NNBcGUrw6UwjuBKfpuSuE__g@mail.gmail.com>
-Message-ID: <CAJNyHpKpDdps4=QHZ77zu4jfY-NNBcGUrw6UwjuBKfpuSuE__g@mail.gmail.com>
-Subject: [BUG 0 / 6] L2cap: Spec violations
-To:     marcel@holtmann.org
-Cc:     johan.hedberg@gmail.com, luiz.dentz@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221118034250.never.999-kees@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-Our fuzzer found six spec violations, illegal state transition.
+On Thu, Nov 17, 2022 at 07:42:55PM -0800, Kees Cook wrote:
+> One-element arrays are deprecated[1] and are being replaced with
+> flexible array members in support of the ongoing efforts to tighten the
+> FORTIFY_SOURCE routines on memcpy(), correctly instrument array indexing
+> with UBSAN_BOUNDS, and to globally enable -fstrict-flex-arrays=3.
+> 
+> Replace one-element array with flexible-array member in struct hpet.
+> 
+> This results in no differences in binary output. The use of struct hpet
+> is never used with sizeof() and accesses via hpet_timers array are
+> already done after explicit bounds checking.
+> 
+> [1] https://github.com/KSPP/linux/issues/79
+> 
+> Cc: Clemens Ladisch <clemens@ladisch.de>
+> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-1. BT_CONNECT2 -> BT_CONFIG by L2CAP_CONN_RSP
-2. BT_CONNECT2 -> BT_CONNECTED by L2CAP_CONF_RSP
-3. BT_CONNECT2 -> BT_DISCONN by L2CAP_CONF_RSP
-4. BT_CONNECTED -> BT_CONFIG by L2CAP_CONN_RSP
-5. BT_DISCONN -> BT_CONFIG by L2CAP_CONN_RSP
-6. BT_DISCONN -> BT_CONNECTED by L2CAP_CONN_RSP
+Such a sneaky 1-element... ~.~
 
-All expected behaviors are ignoring incoming packets as described in
-the spec v5.3 | Vol 3, Part A 6. STATE MACHINE.
-Also, I assumed BT_CONNECT2 is corresponding to WAIT_CONNECT in the spec.
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+
+Thanks!
+--
+Gustavo
+
+> ---
+>  include/linux/hpet.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/hpet.h b/include/linux/hpet.h
+> index 8604564b985d..21e69eaf7a36 100644
+> --- a/include/linux/hpet.h
+> +++ b/include/linux/hpet.h
+> @@ -30,7 +30,7 @@ struct hpet {
+>  			unsigned long _hpet_compare;
+>  		} _u1;
+>  		u64 hpet_fsb[2];	/* FSB route */
+> -	} hpet_timers[1];
+> +	} hpet_timers[];
+>  };
+>  
+>  #define	hpet_mc		_u0._hpet_mc
+> -- 
+> 2.34.1
+> 
