@@ -2,99 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEE4862EA9A
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 01:54:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2715762EA9C
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 01:54:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240703AbiKRAyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 19:54:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53212 "EHLO
+        id S240766AbiKRAyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 19:54:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234053AbiKRAyX (ORCPT
+        with ESMTP id S240769AbiKRAyf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 19:54:23 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B36F7EBED
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 16:54:23 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id 140so3426017pfz.6
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 16:54:23 -0800 (PST)
+        Thu, 17 Nov 2022 19:54:35 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCCA085EE8
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 16:54:34 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id v4-20020a17090a088400b00212cb0ed97eso3600414pjc.5
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 16:54:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=eRHZ8HxlKkpc/rQw9TF/Vjc6A04s7AH3fGHGNV8IcdM=;
-        b=EMdaRR5ywe+TV/FYyD9a2i+UB/WspihcuIixd5Dr21nxmE+kcbN8TtOmL46bnAWEJZ
-         kOMiPHdykN4qZbMIGafcSieL2JCDwRT1Gn5eDVMjpDrz6ejrGhrSbXWcjDVzKmH4t0kI
-         elpclmBAb7rzG6BXcOB8kac8xK+aTsSO/BR5vCsDUvAsEuE/cvxFv1w+4ff1loBLW96l
-         0yyqyGGuegV0UUvNRmtSwuv2elmshJ+Uldj5RrMlnESTdSN+SpgwZSPmNoQlgf2HfRo7
-         1pcksb6gWej+VA9v9FvtxqoTUtsJVb/9HwmI9H6HwxDLzZlotYwNIr+cOvTN/Ul7FA4r
-         e5cA==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XvIoWSd0xrw6RZJQp73B+S5uCJ5LMxazrUmMxPfNjuQ=;
+        b=Ywx/QwtKH8VAB4UddTVRkYxOW2k+PyRwVVpR4TEzkhDl4DjNzjqniVbWpNQeGC15uz
+         THTgtgOC2tJtLxcn+N6qnN3Uy3FVT4qmUSr3XOZgiLlJCWs0v/93AF1Vt/H6ei2/0on5
+         d7zw7FPkZM/4CTydhHhG2fL1TGCDWupJAjNhw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eRHZ8HxlKkpc/rQw9TF/Vjc6A04s7AH3fGHGNV8IcdM=;
-        b=hmXxwMJE/sia2ep6r6/APRAk1EqcHh3edXkmwNoTvBENYSwLQBhoJubJHjR3/HsfMw
-         zM4C8jFXgkAvAwqZVeJgb+1BeURenD1u73da4ZzJFm01LWeqXV6ATSz31x5Zau72Dgga
-         YTCRT12eDHGV2r2Fkxu+ZmAlMiaLvBS6QNHqf467SQnyHG/ekLNwe6IWbGcNvG/Kcy/N
-         tJwiSdQZUZ1/gyZRpPV5woED4XL2Ve4Tk4dvUznsgfIdGljA0FSbsDHqYIq8/JfmaaWx
-         rdJjDyYyz4RhZQ8AYAUlxIWT1vKQHvAFD533S+qahvw417GGCs8s3Hn22owMyODd5nmQ
-         /RMQ==
-X-Gm-Message-State: ANoB5pljxpEfOPJQitMp0mxDAmuIhyMvLBg3si8FI6rTr+tHSiH4mIql
-        Kcmhmdwx8g9jPHYO+ZOolojPVYuPNO/5uE+yU1S4gQ==
-X-Google-Smtp-Source: AA0mqf577aAwYGvH4qpaYZECY2LNNaZytgtXT9uUrDcNBCNowZCpDJhrRK4S5gagrFXZqiA33J0kBMych14iLw5Etbc=
-X-Received: by 2002:a05:6a00:4009:b0:563:2ada:30a3 with SMTP id
- by9-20020a056a00400900b005632ada30a3mr5481609pfb.27.1668732862572; Thu, 17
- Nov 2022 16:54:22 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XvIoWSd0xrw6RZJQp73B+S5uCJ5LMxazrUmMxPfNjuQ=;
+        b=KVZmD8R9nvX4CRyzex9ijtuce4WrMiJd42IVvHlsSjignYO7CCaUGqiE+M0ux78ezX
+         oQRa4I1FVLncX9PlUaX1vt5aDK1J9AqPy9DL7EIPqWgz9o0knAll6eWBYxe5tiDj8d+U
+         Fa91fSBEs/cM0vmhxHL4Et+c7bpSOFt20RQU5oUDTSzNZPri/uhuo2GQHnjxwCWatI18
+         ESk1j+ZWIis7QR7rjKye8b6wwmeU1JVGbUz0WmV7n49hcwxspbESOIS3ctFeH5J8K2Vs
+         /D1hNsDB1usqdLSdey+1E0NnrK7pUyFy0LKYxFUel8VJdKNze7f3t/gBf4HbGmYKlOcI
+         N9Mw==
+X-Gm-Message-State: ANoB5pkl9XlNdQZ4z0WzPYyILjhpRUYJz0UbGvH0tsDQwPcD1ppoHHxH
+        esjImJatlaABwaY5Xp4F8GDMBk27xRI9EQ==
+X-Google-Smtp-Source: AA0mqf6l8TeoWF0zZxdx0LT95pkl13FOnju8C6AgmTu9j8vNo494eN13cvZRXCxp+hVgpR5ied3LDw==
+X-Received: by 2002:a17:902:c652:b0:186:af8e:7ed4 with SMTP id s18-20020a170902c65200b00186af8e7ed4mr5223346pls.7.1668732874435;
+        Thu, 17 Nov 2022 16:54:34 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id j6-20020a17090276c600b00172b87d9770sm2073855plt.81.2022.11.17.16.54.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 16:54:33 -0800 (PST)
+Date:   Thu, 17 Nov 2022 16:54:33 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     sdf@google.com
+Cc:     wangkailong@jari.cn, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH] samples/seccomp: fix array_size.cocci warning
+Message-ID: <202211171653.0E3BA8E71B@keescook>
+References: <2b3f2420.130.184706d34e6.Coremail.wangkailong@jari.cn>
+ <Y3J3t/ieGaOG8Qjl@google.com>
 MIME-Version: 1.0
-References: <20221118001548.635752-1-tharvey@gateworks.com> <Y3bRX1N0Rp7EDJkS@lunn.ch>
-In-Reply-To: <Y3bRX1N0Rp7EDJkS@lunn.ch>
-From:   Tim Harvey <tharvey@gateworks.com>
-Date:   Thu, 17 Nov 2022 16:54:11 -0800
-Message-ID: <CAJ+vNU3P-t3Q1XZrNG=czvFBU7UsCOA_Ap47k9Ein_3VQy_tGw@mail.gmail.com>
-Subject: Re: [PATCH 0/3] add dt configuration for dp83867 led modes
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3J3t/ieGaOG8Qjl@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 4:27 PM Andrew Lunn <andrew@lunn.ch> wrote:
->
-> On Thu, Nov 17, 2022 at 04:15:45PM -0800, Tim Harvey wrote:
-> > This series adds a dt-prop ti,led-modes to configure dp83867 PHY led
-> > modes, adds the code to implement it, and updates some board dt files
-> > to use the new property.
->
-> Sorry, but NACK.
->
-> We need PHY leds to be controlled via /sys/class/leds. Everybody keeps
-> trying to add there own way to configure these things, rather than
-> have just one uniform way which all PHYs share.
->
->      Andrew
+On Mon, Nov 14, 2022 at 09:15:35AM -0800, sdf@google.com wrote:
+> On 11/13, wangkailong@jari.cn wrote:
+> > Fix following coccicheck warning:
+> 
+> > samples/seccomp/bpf-fancy.c:83:39-40: WARNING: Use ARRAY_SIZE
+> > samples/seccomp/bpf-fancy.c:86:44-45: WARNING: Use ARRAY_SIZE
+> 
+> Not sure this should go via bpf tree. CC'ed Kees
+> 
+> > Signed-off-by: KaiLong Wang <wangkailong@jari.cn>
+> > ---
+> >   samples/seccomp/bpf-fancy.c | 4 ++--
+> >   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> > diff --git a/samples/seccomp/bpf-fancy.c b/samples/seccomp/bpf-fancy.c
+> > index 1ccb435025b6..548f038924d6 100644
+> > --- a/samples/seccomp/bpf-fancy.c
+> > +++ b/samples/seccomp/bpf-fancy.c
+> > @@ -80,10 +80,10 @@ int main(int argc, char **argv)
+> >   	};
+> >   	struct sock_fprog prog = {
+> >   		.filter = filter,
+> > -		.len = (unsigned short)(sizeof(filter)/sizeof(filter[0])),
+> > +		.len = (unsigned short)(ARRAY_SIZE(filter)),
+> >   	};
+> >   	ssize_t bytes;
+> > -	bpf_resolve_jumps(&l, filter, sizeof(filter)/sizeof(*filter));
+> > +	bpf_resolve_jumps(&l, filter, ARRAY_SIZE(filter));
 
-Andrew,
+Hm, this is the "samples" tree, so this was intentionally avoiding these
+kinds of kernel-isms, but perhaps that doesn't realistically matter?
 
-I completely agree with you but I haven't seen how that can be done
-yet. What support exists for a PHY driver to expose their LED
-configuration to be used that way? Can you point me to an example?
+-Kees
 
-Best Regards,
+> 
+> >   	if (prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0)) {
+> >   		perror("prctl(NO_NEW_PRIVS)");
+> > --
+> > 2.25.1
 
-Tim
+-- 
+Kees Cook
