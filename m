@@ -2,129 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8804E62ED09
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 06:06:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6202E62ED17
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 06:13:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234907AbiKRFG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 00:06:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44564 "EHLO
+        id S235162AbiKRFNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 00:13:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiKRFGY (ORCPT
+        with ESMTP id S234455AbiKRFNU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 00:06:24 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF52C769C4;
-        Thu, 17 Nov 2022 21:06:22 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4ND4WH5HKwz4xTg;
-        Fri, 18 Nov 2022 16:06:19 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1668747981;
-        bh=T1MFAIfpM2C/YonaaB7UpbcsoXJOdQH4wk0zCh0yK3s=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ESBCarbnttmvS1fXfLvUzOUB/XoNkZ1IYEt6eGYSu4A/rxvge2jLs/sE/1MIjX2zc
-         OAHaHsD04OVtRVSaWT6pZQ9Ja4xsJli3lW4CgwsYfJx351+EvwTquRGhI+mo7Z0RMN
-         NzSE1RLSbYr/SQVyGM7xB/uPIXImE+gFAxY581k6ff5c77K79lo5vG7KLYkrL+rdFW
-         mAdUDrJUUysNpRAzvR8fEyhSV361Y1e5CmYEFrT2dg3havo4ma9XiFF7RhWveE5axo
-         nRB1u1u7VTOlFKVxpDHNYCSMsuADzgJKWTYa1vJSpd5BwzgwbflEB2nuqHbM1SiVlG
-         gkPhTtGD3sDNw==
-Date:   Fri, 18 Nov 2022 16:06:17 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
-Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>
-Subject: linux-next: manual merge of the pinctrl tree with the arm-soc tree
-Message-ID: <20221118160617.5955f2ff@canb.auug.org.au>
+        Fri, 18 Nov 2022 00:13:20 -0500
+X-Greylist: delayed 64 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Nov 2022 21:13:19 PST
+Received: from esa4.hc1455-7.c3s2.iphmx.com (esa4.hc1455-7.c3s2.iphmx.com [68.232.139.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9669A6BDDA;
+        Thu, 17 Nov 2022 21:13:19 -0800 (PST)
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="96382888"
+X-IronPort-AV: E=Sophos;i="5.96,173,1665414000"; 
+   d="scan'208";a="96382888"
+Received: from unknown (HELO yto-r3.gw.nic.fujitsu.com) ([218.44.52.219])
+  by esa4.hc1455-7.c3s2.iphmx.com with ESMTP; 18 Nov 2022 14:12:14 +0900
+Received: from yto-m2.gw.nic.fujitsu.com (yto-nat-yto-m2.gw.nic.fujitsu.com [192.168.83.65])
+        by yto-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id 2EBE2E8521;
+        Fri, 18 Nov 2022 14:12:12 +0900 (JST)
+Received: from yto-om1.fujitsu.com (yto-om1.o.css.fujitsu.com [10.128.89.162])
+        by yto-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id 6E642DAD9D;
+        Fri, 18 Nov 2022 14:12:11 +0900 (JST)
+Received: from localhost.localdomain (unknown [10.124.154.64])
+        by yto-om1.fujitsu.com (Postfix) with ESMTP id 1F3474057108F;
+        Fri, 18 Nov 2022 14:12:11 +0900 (JST)
+From:   Itaru Kitayama <itaru.kitayama@fujitsu.com>
+To:     yamada.masahiko@fujitsu.com
+Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, mark.rutland@arm.com,
+        mingo@redhat.com, namhyung@kernel.org, peterz@infradead.org
+Subject: [PATCH 1/1] perf: fix reset interface potential failure
+Date:   Fri, 18 Nov 2022 14:11:56 +0900
+Message-Id: <20221118051156.961494-1-itaru.kitayama@fujitsu.com>
+X-Mailer: git-send-email 2.38.0
+In-Reply-To: <20221118020016.1571100-2-yamada.masahiko@fujitsu.com>
+References: <20221118020016.1571100-2-yamada.masahiko@fujitsu.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/WnBzte5U0Pttpkpi1ZqQup9";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/WnBzte5U0Pttpkpi1ZqQup9
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Nov 18, 2022 at 11:00:16AM +0900, Masahiko wrote:
+> There is a potential bug where PERF_EVENT_IOC_RESET
+> does not work when accessing PMU registers directly
+> from userspace in the perf_event interface.
+> we have created a patch on the kernel
+> that fixes a potential perf_event reset failure.
+> 
+> The motivation is to initialize pc->offset.
+> The perf_mmap__read_self function in tools/lib/perf/mmap.c is set by:.
+> cnt = READ_ONCE(pc->offset);
+> The pc->offset value is set in the following process
+> in the perf_event_update_userpage function:.
+> userpg->offset -= local64_read(&event->hw.prev_count);
+> hw->prev_count is set in the armpmu_event_set_period function
+> in drivers/perf/arm_pmu.c and in the x86_perf_event_set_period function
+> in arch/x86/events/core.c as follows:.
+> local64_set(&hwc->prev_count, (u64)-left);
+> 
+> Therefore, this patch was created to initialize hwc->prev_count
+> during reset processing.
+> 
+> Signed-off-by: Masahiko, Yamada <yamada.masahiko@fujitsu.com>
+> ---
+>  kernel/events/core.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/kernel/events/core.c b/kernel/events/core.c
+> index 4ec3717003d5..296549755a9c 100644
+> --- a/kernel/events/core.c
+> +++ b/kernel/events/core.c
+> @@ -5468,8 +5468,13 @@ static __poll_t perf_poll(struct file *file, poll_table *wait)
+>  
+>  static void _perf_event_reset(struct perf_event *event)
+>  {
+> +	struct hw_perf_event *hwc = &event->hw;
+> +	s64 left;
+> +
+>  	(void)perf_event_read(event, false);
+>  	local64_set(&event->count, 0);
+> +	left = local64_read(&hwc->period_left);
+> +	local64_set(&hwc->prev_count, (u64)-left);
+>  	perf_event_update_userpage(event);
+>  }
+>  
+> -- 
+> 2.27.0
 
-Hi all,
+Reviewed-by: Itaru Kitayama <itaru.kitayama@fujitsu.com>
 
-Today's linux-next merge of the pinctrl tree got a conflict in:
-
-  MAINTAINERS
-
-between commit:
-
-  b82621ac8450 ("soc: loongson: add GUTS driver for loongson-2 platforms")
-
-from the arm-soc tree and commit:
-
-  457ff9fb29d7 ("dt-bindings: pinctrl: add loongson-2 pinctrl")
-
-from the pinctrl tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc MAINTAINERS
-index ec383d27e762,f76107c24949..000000000000
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@@ -12097,13 -12013,14 +12097,21 @@@ F:	drivers/*/*loongarch
-  F:	Documentation/loongarch/
-  F:	Documentation/translations/zh_CN/loongarch/
- =20
- +LOONGSON-2 SOC SERIES GUTS DRIVER
- +M:	Yinbo Zhu <zhuyinbo@loongson.cn>
- +L:	loongarch@lists.linux.dev
- +S:	Maintained
- +F:	Documentation/devicetree/bindings/hwinfo/loongson,ls2k-chipid.yaml
- +F:	drivers/soc/loongson/loongson2_guts.c
- +
-+ LOONGSON-2 SOC SERIES PINCTRL DRIVER
-+ M:	zhanghongchen <zhanghongchen@loongson.cn>
-+ M:	Yinbo Zhu <zhuyinbo@loongson.cn>
-+ L:	linux-gpio@vger.kernel.org
-+ S:	Maintained
-+ F:	Documentation/devicetree/bindings/pinctrl/loongson,ls2k-pinctrl.yaml
-+ F:	drivers/pinctrl/pinctrl-loongson2.c
-+=20
-  LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
-  M:	Sathya Prakash <sathya.prakash@broadcom.com>
-  M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-
---Sig_/WnBzte5U0Pttpkpi1ZqQup9
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmN3EskACgkQAVBC80lX
-0GzgsQf/fyX0j3aKutQZ3zmI1rgCZEDaFraRXxpU0DudJLSoNsDJi0Wxx5vByfed
-tnWRPUO6n2uSuB7ACcCe0fUVHFIKSjJXTRnUg4dVc/AP/txlCU6GCBjo8ehfYhdB
-fsUKbl17JoVF1jGXpgC0bw6EtcKDeGeJx8+O2F3NPYvRwYZGqPKO5Q/m1+fZgJKK
-ytyoJuqa7P2zInDVCQuYunfoXAysl7erdHKGcKDVmT3i8M7hymroh31ZDehUJNTW
-STlmq/oD4UYhMUOYLW743EkCB+YQhuFNR86M6e7A/yapakXHTZT46Z0zGnsD0/IO
-dqfk503Awy91r/weSqJv7TLWC7OEOQ==
-=pUsu
------END PGP SIGNATURE-----
-
---Sig_/WnBzte5U0Pttpkpi1ZqQup9--
