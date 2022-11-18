@@ -2,109 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A71762FFCC
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 23:11:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3881262FFD4
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 23:12:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231392AbiKRWLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 17:11:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36586 "EHLO
+        id S231221AbiKRWMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 17:12:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231259AbiKRWKs (ORCPT
+        with ESMTP id S231640AbiKRWLt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 17:10:48 -0500
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11EFC31ED1
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 14:10:44 -0800 (PST)
-Received: by mail-qk1-x733.google.com with SMTP id k4so4420556qkj.8
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 14:10:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tx1YmCzTaRx+0xpO+uSdB0tU1cOLA9kXrIQzKxsMbJ0=;
-        b=hoVcNNDUK6njBp4aMtQrFOAwR6lb1nlvu/LdBk3VskuJYd6N/j30BRm5GZL5bJ2BsA
-         3RXezV1e7Z1mJWlpYRnhetUD2kfGI9L2A/jYBXEffyi7Qyrd0kL492Evpv5mCaZHtavW
-         ElPmgeiRSXdY/II8BTs4JJRd+Uq1KxcF7Sa0oFwD6bP1uvstf2vUL0vQxv1BwrUkDnUE
-         xV82ujHEGKF7xTzKCC4FV3QPfw+UeEC9kzfWP/e/YAiuAdHC5/aGVEDEmc25NZu69ba+
-         qzIwyrM1A1jo70raCE/wizASFwSlqvrTcPGPLhsRGmmO2mlo5/NhfWtu7/ES2BQeA5bm
-         Du5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tx1YmCzTaRx+0xpO+uSdB0tU1cOLA9kXrIQzKxsMbJ0=;
-        b=jzMSq/MxKoyj7bI6k6ZGq6YCa9WMIcoLqwxvcPbZIthxNiYOxQHSAp4OMSSCovuNaW
-         Dr4OBTbJlForMi1Oe66PCrSYcslLoqnV9xhHOCqtKp8Q2RnospwOOdZwLqZIBlsbOQDB
-         MToCfStWT8I0R+5x8hzmwY63BLEhAByMJVWPWFvj4K+CKsqtthuQcroZ/Nc23XIiRE1C
-         EoNS5v9UHNUkQjgfuRnQCafEtMLrE2QBmM/xmykOC0nYiubRbfWmht6QOUUazwW/CNor
-         bb8bYsHHsNQ9N9QmbPZj/QlfQx5WCt/B7DKN5TPJdxoXF1On9bIpYaQ2vdsuLoAIK9Dh
-         Krsw==
-X-Gm-Message-State: ANoB5pmScqikog2lJRairfdtUYBz6FYD/BEHGAdbm5VbLHLXsK2i1L7d
-        i8JmPLZJoSEJmUH82OmC2BwB+A==
-X-Google-Smtp-Source: AA0mqf7vTzLh66N+Zng3zmemOVzMEr8GlGtgse3xrMxH3Y3+NNj00nk2uTgiP5TEu1u3wxoRqdVgkQ==
-X-Received: by 2002:a05:620a:990:b0:6fb:c6b6:e7a8 with SMTP id x16-20020a05620a099000b006fbc6b6e7a8mr6627389qkx.215.1668809443095;
-        Fri, 18 Nov 2022 14:10:43 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id z11-20020ac8100b000000b003a50ef44a77sm2629849qti.28.2022.11.18.14.10.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 14:10:42 -0800 (PST)
-Date:   Fri, 18 Nov 2022 14:10:32 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Peter Xu <peterx@redhat.com>,
-        Yang Shi <shy828301@gmail.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        Mina Almasry <almasrymina@google.com>,
-        James Houghton <jthoughton@google.com>,
-        Zach O'Keefe <zokeefe@google.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 0/3] mm,thp,rmap: rework the use of subpages_mapcount
-In-Reply-To: <20221118140346.b9026301b4ba03e43e15aeca@linux-foundation.org>
-Message-ID: <a4a1cda4-547b-8274-8645-fa6ff274e42@google.com>
-References: <5f52de70-975-e94f-f141-543765736181@google.com> <c4b8485b-1f26-1a5f-bdf-c6c22611f610@google.com> <CAHk-=whmq5gHrKmD3j=7nB=n9OmmLb5j1qmoQPHw1=VSQ-V=hg@mail.gmail.com> <93fa81ae-d848-58c2-9f70-27446bf9baa8@google.com>
- <20221118140346.b9026301b4ba03e43e15aeca@linux-foundation.org>
-MIME-Version: 1.0
+        Fri, 18 Nov 2022 17:11:49 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 157A9976FA;
+        Fri, 18 Nov 2022 14:11:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BE899B8255C;
+        Fri, 18 Nov 2022 22:11:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62FEEC433D6;
+        Fri, 18 Nov 2022 22:11:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1668809499;
+        bh=+7RUpCopDWImHx4kpniYvLBKqUGp3uhYcB86V79wOq4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=EZ7+sTS7ME+VOF+J/iDcMwXeLNFmhd8HaBTNKMqfdJkqrtUnhUme/VUqiwmbXvMN8
+         ZcI4DwDYHr91Q86B4xAC92PwVRdbDaZZMceC0PHTDYx3N7dw7zB8NnvoU1djVryuie
+         iM4Ktss2tX/23xa47RJ/jnhF1e/Tt4r/YCuRQPhU=
+Date:   Fri, 18 Nov 2022 14:11:38 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Chen Zhongjin <chenzhongjin@huawei.com>
+Cc:     <linux-nilfs@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <konishi.ryusuke@gmail.com>
+Subject: Re: [PATCH] nilfs2: Fix nilfs_sufile_mark_dirty() not set segment
+ usage as dirty
+Message-Id: <20221118141138.c091445bdda36b78f6277c1f@linux-foundation.org>
+In-Reply-To: <20221118063304.140187-1-chenzhongjin@huawei.com>
+References: <20221118063304.140187-1-chenzhongjin@huawei.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Nov 2022, Andrew Morton wrote:
-> On Fri, 18 Nov 2022 12:51:09 -0800 (PST) Hugh Dickins <hughd@google.com> wrote:
+On Fri, 18 Nov 2022 14:33:04 +0800 Chen Zhongjin <chenzhongjin@huawei.com> wrote:
+
+> In nilfs_sufile_mark_dirty(), the buffer and inode are set dirty, but
+> nilfs_segment_usage is not set dirty, which makes it can be found by
+> nilfs_sufile_alloc() because it checks nilfs_segment_usage_clean(su).
 > 
-> > But the first series has not yet graduated from mm-unstable,
-> > so if Andrew and/or Kirill also prefer to have them combined into one
-> > bit_spin_lock-less series, that I can do.  (And the end result should be
-> > identical, so would not complicate Johannes's lock_page_memcg() excision.)
+> This will cause the problem reported by syzkaller:
+> https://syzkaller.appspot.com/bug?id=c7c4748e11ffcc367cef04f76e02e931833cbd24
 > 
-> I'd prefer that approach.
+> It's because the case starts with segbuf1.segnum = 3, nextnum = 4, and
+> nilfs_sufile_alloc() not called to allocate a new segment.
+> 
+> The first time nilfs_segctor_extend_segments() allocated segment
+> segbuf2.segnum = segbuf1.nextnum = 4, then nilfs_sufile_alloc() found
+> nextnextnum = 4 segment because its su is not set dirty.
+> So segbuf2.nextnum = 4, which causes next segbuf3.segnum = 4.
+> 
+> sb_getblk() will get same bh for segbuf2 and segbuf3, and this bh is
+> added to both buffer lists of two segbuf.
+> It makes the list head of second list linked to the first one. When
+> iterating the first one, it will access and deref the head of second,
+> which causes NULL pointer dereference.
+> 
+> Fixes: 9ff05123e3bf ("nilfs2: segment constructor")
 
-I think you're saying that you prefer the other approach, to keep the
-two series separate (second immediately after the first, or not, doesn't
-matter), rather than combined into one bit_spin_lock-less series.
-Please clarify! Thanks,
+Merged in 2009!
 
-Hugh
+> --- a/fs/nilfs2/sufile.c
+> +++ b/fs/nilfs2/sufile.c
+> @@ -495,12 +495,18 @@ void nilfs_sufile_do_free(struct inode *sufile, __u64 segnum,
+>  int nilfs_sufile_mark_dirty(struct inode *sufile, __u64 segnum)
+>  {
+>  	struct buffer_head *bh;
+> +	void *kaddr;
+> +	struct nilfs_segment_usage *su;
+>  	int ret;
+>  
+>  	ret = nilfs_sufile_get_segment_usage_block(sufile, segnum, 0, &bh);
+>  	if (!ret) {
+>  		mark_buffer_dirty(bh);
+>  		nilfs_mdt_mark_dirty(sufile);
+> +		kaddr = kmap_atomic(bh->b_page);
+> +		su = nilfs_sufile_block_get_segment_usage(sufile, segnum, bh, kaddr);
+> +		nilfs_segment_usage_set_dirty(su);
+> +		kunmap_atomic(kaddr);
+>  		brelse(bh);
+>  	}
+>  	return ret;
 
-> It's -rc5 and the earlier "mm,huge,rmap:
-> unify and speed up compound mapcounts" series has had some testing. 
-> I'd prefer not to toss it all out and start again.
+Do we feel that this fix should be backported into -stable kernels?
+
