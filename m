@@ -2,133 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D23162F69D
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 14:55:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55ADD62F69F
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 14:56:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240540AbiKRNze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 08:55:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40544 "EHLO
+        id S241962AbiKRN4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 08:56:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiKRNzc (ORCPT
+        with ESMTP id S241506AbiKRN4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 08:55:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BDE7B855;
-        Fri, 18 Nov 2022 05:55:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01B74B823F6;
-        Fri, 18 Nov 2022 13:55:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF3EFC433C1;
-        Fri, 18 Nov 2022 13:55:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668779728;
-        bh=006qr9oYoYJFVvrQlwKwWJ+Nb1CztoyzU6igHLHaelE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H8E6aUojKsYXBij4/nMnweRJtJALbPUbbursOUMSkhBXOfdoOmqPqdwl02vJR6mtR
-         2/iMqI3qFBsRwd60Caph3DkqnuVWi2BgiPiPOtXyH1I1i5nMjzysnHCwLAlJQwr4dd
-         g58rk+D5uckRaLR7o3vlthEKItIOB+YPxz8r66h9m1HfFl1X15Vy1tZfo1EzC504it
-         /KAAktb2WHy6JwhSSShvoy+bbLoBxYWTeJwPRhk2qLdK95u1tsOOuf/jgQb5KlJ7EL
-         P7btic65c0NZe7a1wXMp6fFyi8b7u9YyMtKIZd0hjwHF2K4qjPGjaxslEwG5VZxtnn
-         QWx9fAa8VKLmw==
-Date:   Fri, 18 Nov 2022 13:55:24 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
-        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>, Lee Jones <lee@kernel.org>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Marco Pagani <marpagan@redhat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 07/11] regmap: indirect: Add indirect regmap support
-Message-ID: <Y3eOzOmTeTKBoPrd@sirena.org.uk>
-References: <20221117120515.37807-1-ilpo.jarvinen@linux.intel.com>
- <20221117120515.37807-8-ilpo.jarvinen@linux.intel.com>
- <Y3Y4vWr/CGbaH0HQ@sirena.org.uk>
- <a089f1a0-c0f4-e1a2-d084-fd83e28e7e33@linux.intel.com>
- <Y3ZTSSLUqHil4dfl@sirena.org.uk>
- <a82565d-c282-7ace-e759-6514c29cca1c@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="JH8OS51MHJ9k4NZm"
-Content-Disposition: inline
-In-Reply-To: <a82565d-c282-7ace-e759-6514c29cca1c@linux.intel.com>
-X-Cookie: Ego sum ens omnipotens.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 18 Nov 2022 08:56:05 -0500
+Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3BF1B855
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 05:56:04 -0800 (PST)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id EABC2C021; Fri, 18 Nov 2022 14:56:09 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1668779769; bh=CQZUY2pFucgWJB1sP94KlRMevw8XHM75WorqTLQ5yWo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=uSvAaMZ0OpQj5Glb1zO0fX4Vtf2UxJ5sbZfbsKWIfztAOXVUTsOHzFmFyc0pmE+t5
+         GQrWZvuuh3a4liNcgeOQwvCoEHFs6y2K7+Yt/77E3yJDKEzFtZGiT3WjkeWt0H/iwl
+         82ZX0SajJI92Rqi3iomzgjTv9stjt2NyPtAGTpBmygKeGXdJgg8r0vstY/LgzWvsFK
+         tyAHuR1PD6EHY3hz5GWH16hYAsYjBEYo9IM3arp7YcJD4h/hdUtX38LCkhCSNOORBg
+         gWmorINpw+gHsHqP1SOebXgTBaNQYE0ydZ5qQRSt1lzWsAO422MKQjywksSUlOO7wg
+         gFS1rQN5O+GGw==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 6A553C009;
+        Fri, 18 Nov 2022 14:55:58 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1668779760; bh=CQZUY2pFucgWJB1sP94KlRMevw8XHM75WorqTLQ5yWo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=XiMNoADAAyrOPpLTaJNzk8a4IsyZYtJ+O7/RXIn5s83g068QaP45+jsLpxBpwDnfo
+         C5+OMLcLzxe40UuXlB7wiAwffKkXW9YveqbrK5IVaa9RH/AuJ8whqMXlyFG0G1UziS
+         lGWwTs0s8GmziCje641LY3z6twFh3tHcype78ggsA7Hu92Lp+GfQkzjlrmOoK+p19f
+         X9prWTCp8OX5ByauPLfYvkIsBpzcL4TsnSaOuOqmhi9sac1b6FjPcyKq1PDoBPbiZA
+         jHzQxFgLOlkWJ36wmqfexu+Y9wAqpdP3vdSONWV9ImJSC9UtKlNy/YWd7WPY3okRFb
+         62TjSrtWPcbGA==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 286f58e1;
+        Fri, 18 Nov 2022 13:55:49 +0000 (UTC)
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     Stefano Stabellini <sstabellini@kernel.org>
+Cc:     GUO Zihua <guozihua@huawei.com>, linux_oss@crudebyte.com,
+        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        Dominique Martinet <asmadeus@codewreck.org>
+Subject: [PATCH 1/2] 9p/xen: check logical size for buffer size
+Date:   Fri, 18 Nov 2022 22:55:41 +0900
+Message-Id: <20221118135542.63400-1-asmadeus@codewreck.org>
+X-Mailer: git-send-email 2.38.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+trans_xen did not check the data fits into the buffer before copying
+from the xen ring, but we probably should.
+Add a check that just skips the request and return an error to
+userspace if it did not fit
 
---JH8OS51MHJ9k4NZm
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
+---
 
-On Fri, Nov 18, 2022 at 02:49:45PM +0200, Ilpo J=E4rvinen wrote:
-> On Thu, 17 Nov 2022, Mark Brown wrote:
+This comes more or less as a follow up of a fix for trans_fd:
+https://lkml.kernel.org/r/20221117091159.31533-1-guozihua@huawei.com
+Where msize should be replaced by capacity check, except trans_xen
+did not actually use to check the size fits at all.
 
-> > No, what I'm objecting to there is pretty much the same thing I'm
-> > saying here - this doesn't seem like it's a particularly generic
-> > implementation and I'm really not clear that there'd be anything
-> > meaningful left by the time the implementation assumptions are
-> > removed.
+While we normally trust the hypervisor (they can probably do whatever
+they want with our memory), a bug in the 9p server is always possible so
+sanity checks never hurt, especially now buffers got drastically smaller
+with a recent patch.
 
-> That's probably because it sounds to me you're trying to extend its=20
-> genericness beyond the domain where it's generic. That is, you're looking=
-=20
-> for genericness outside of IPs (that have their own driver each) in Intel=
-=20
-> FPGA domain.
+My setup for xen is unfortunately long dead so I cannot test this:
+Stefano, you've tested v9fs xen patches in the past, would you mind
+verifying this works as well?
 
-This just says it's adding "indirect regmap support" - there's
-nothing here saying that it's some Intel specific thing but it's
-quite specific to some IPs.  Perhaps you have some name for this
-interface?  You're only adding one user here which isn't helping
-make the case that this is something generic.
+ net/9p/trans_xen.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-> Please also keep in mind that we're talking about an FPGA device here, a=
-=20
-> device that is capable of implementing other devices that fall under=20
-> various drivers/xx/. Obviously each would have a driver of their own so
-> there is no as strong only single device/driver mapping here as you might=
-=20
-> be thinking.
+diff --git a/net/9p/trans_xen.c b/net/9p/trans_xen.c
+index b15c64128c3e..66ceb3b3ae30 100644
+--- a/net/9p/trans_xen.c
++++ b/net/9p/trans_xen.c
+@@ -208,6 +208,14 @@ static void p9_xen_response(struct work_struct *work)
+ 			continue;
+ 		}
+ 
++		if (h.size > req->rc.capacity) {
++			dev_warn(&priv->dev->dev,
++				 "requested packet size too big: %d for tag %d with capacity %zd\n",
++		                 h.size, h.tag, rreq->rc.capacity);
++			req->status = REQ_STATUS_ERROR;
++			goto recv_error;
++		}
++
+ 		memcpy(&req->rc, &h, sizeof(h));
+ 		req->rc.offset = 0;
+ 
+@@ -217,6 +225,7 @@ static void p9_xen_response(struct work_struct *work)
+ 				     masked_prod, &masked_cons,
+ 				     XEN_9PFS_RING_SIZE(ring));
+ 
++recv_error:
+ 		virt_mb();
+ 		cons += h.size;
+ 		ring->intf->in_cons = cons;
+-- 
+2.38.1
 
-I can't tell what you're trying to say here.  Are you saying that
-this is somehow baked into some FPGA design so that it's memory
-mapped with only a few registers showing to the rest of the
-system rather than just having a substantial memory mapped
-window like is typically used for FPGAs, but someohow this
-register window stuff is implemented in the soft IP so people are
-just throwng vaugely similar interfaces into a random host mapped
-register layout?
-
-Whatever's going on here this clearly isn't a generic
-implementation of an indirect register map.
-
---JH8OS51MHJ9k4NZm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmN3jswACgkQJNaLcl1U
-h9Ce1QgAhK2FEMpjV/iceG4YFkCUw1Xa6K2xhzZX8Ng/xIVxFHaS1m++ql+vy4Bg
-QZgAeCo6ke27iSBphALanSkW5+GnC7p2VZxEH72UibEaLm9VKl8+w9QdAnbSuAy0
-rO5NoRyL5xHYi8O7e/H9TQ47eEOtk9uB37SJgWjlymtMxec9LiKZam8PK2oMpEqP
-lg1Cm0Vtpzc06Fkci/vfffVsyjQTrMUaj22C/RC9st0eDCbdyER9RKpMU4jhe5c+
-/6zx0OlDeADduCdTrvvrWAsUInwIUKfOp0+GVQXLqs83zQU+9VcrwwpLlDtDh+Ie
-ZX/7zUCqgOk1hbk7e418uzcIkqdtqg==
-=puhU
------END PGP SIGNATURE-----
-
---JH8OS51MHJ9k4NZm--
