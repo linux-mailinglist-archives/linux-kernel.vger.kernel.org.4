@@ -2,55 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25BAE62F594
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 14:10:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A92162F599
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 14:11:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235357AbiKRNKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 08:10:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37114 "EHLO
+        id S241099AbiKRNL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 08:11:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239931AbiKRNKS (ORCPT
+        with ESMTP id S235233AbiKRNL0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 08:10:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B58B8C087;
-        Fri, 18 Nov 2022 05:10:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E512EB823B5;
-        Fri, 18 Nov 2022 13:10:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6ABCCC433D7;
-        Fri, 18 Nov 2022 13:10:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668777015;
-        bh=hD5pqTfRz9MxhjvgbTdX3fi22qgWfYtD8znIx6/jpI4=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=TYAMn7QlPNkPkyF1yXp8I/XcUni7K+DS+jRxMr32fvHn27qhmv7E7cXRL7++v4VKr
-         0szw8a/htflGHCAlKfF4w9Cjyey1YZI6zFilb8ayFp+PWo9AviftdsTwAeJ6sXRebd
-         pAspcyq7ek2Jb4fGvbckoFoBXsi4bNkxEoGFRh6s0mY7WYBqCQmxHVJ+ubLXtejvtT
-         psG4zmE0BHpJjUba6dOLuv33bMRudzm54b38PyvFAtrJfUNcDU7rVGWs1sPnMNvAHE
-         plALNQJ61XuFJH7Sl+gPfPmFKheMJGKkRWBb2MoeMGJNzRv6NTs4BLhKqWBLDF3+4z
-         ZoI4kDSBMWbqA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 337E4E29F44;
-        Fri, 18 Nov 2022 13:10:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 18 Nov 2022 08:11:26 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CBF13CE1
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 05:11:25 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id d20so6669400ljc.12
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 05:11:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nIM9IJHvjSzw+04HWZDmFjpgziYaBBenK0g63oaaMjk=;
+        b=Yz5TWVMdPelgFeIJEe0H3DNPz7fP46OEIDsAPBnhpv3CDel+1moOrQxzgD9JDtVTSB
+         /Wh39v2++pMS+pwgjQXHh2d2HNlgp9eHPIoXQnoq/KIJhqDesDRX2gaYnYH5IQcAELBH
+         lYYzxUIgiXYP4kHQfwd97qfEHSyrKljvBx+93BUxLhCfrZ03Oua4FFUb+Y9jqtT6+j6w
+         27mZYsS3Z+3HQOvmeQa8gEE3Eq70MrtwxptaIyrTfGhMQnkjr2xDV73qY7qG1R753xy9
+         iu/PRPIGrHGh9ArW3aBkXRU2v+fv5R8+1nS2swJnCk3GgeYk0gUyYUUcCEXh3jYWwVQ3
+         m5mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nIM9IJHvjSzw+04HWZDmFjpgziYaBBenK0g63oaaMjk=;
+        b=vAh914DPXOe/QJakRxctcFbtZJkc+2uRHWLRo3+XMUBWu6oTg0G+JhLZeztXZTOVWw
+         t13Vk9LXKUMmP2L5BYbzIrm5RvxdDFfF3mrxXAFLkzbhJta/MSYo0mbBz3RJ2cJjRypU
+         Obn2UYTIgjmURXXh7qOoypZGgSldeoFIN1eZibJPjytkEf+kwK8RUtsxahhyvbNOUFs4
+         iiiapaZZSSIge5mY3CMmQDyAzV1P1EqJfUEhTbEJ+SberDYBWSVKKD+VO6J2wHQ1aDaB
+         tWv2v0G59Ia+wP78ykD6PRzDxKuyuE13SeZBmqAUgaA2S5dBVBU2kLWHgq0sZYrkREaZ
+         MWAQ==
+X-Gm-Message-State: ANoB5pk2zecP4ET+VarnWGBVfEVXOQx+vctRTtl0Yq2mwH5T9W08kuz/
+        jta4jiUBbIKyf+d+MUiJmR+ogw==
+X-Google-Smtp-Source: AA0mqf5yn+KOf6EtmwlmS1kgrDG//w4YfEFuU9xQ7FATebFe9+RAJ5oq3MHP9BT4zpHfmwNXVY+DRA==
+X-Received: by 2002:a05:651c:1074:b0:279:d60:ee7c with SMTP id y20-20020a05651c107400b002790d60ee7cmr2288379ljm.305.1668777083597;
+        Fri, 18 Nov 2022 05:11:23 -0800 (PST)
+Received: from localhost.localdomain ([194.29.137.22])
+        by smtp.gmail.com with ESMTPSA id f13-20020a056512360d00b0049a4862966fsm653425lfs.146.2022.11.18.05.11.22
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Fri, 18 Nov 2022 05:11:22 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-kernel@vger.kernel.org
+Cc:     patches@linaro.org, Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Support Opensource <support.opensource@diasemi.com>
+Subject: [PATCH] regulator: slg51000: Wait after asserting CS pin
+Date:   Fri, 18 Nov 2022 14:10:35 +0100
+Message-Id: <20221118131035.54874-1-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] net: pch_gbe: fix potential memleak in pch_gbe_tx_queue()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166877701520.19854.17834649129969422685.git-patchwork-notify@kernel.org>
-Date:   Fri, 18 Nov 2022 13:10:15 +0000
-References: <20221117065527.71103-1-wanghai38@huawei.com>
-In-Reply-To: <20221117065527.71103-1-wanghai38@huawei.com>
-To:     Wang Hai <wanghai38@huawei.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, andriy.shevchenko@linux.intel.com,
-        liuhangbin@gmail.co, masa-korg@dsn.okisemi.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,30 +70,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Sony's downstream driver [1], among some other changes, adds a
+seemingly random 10ms usleep_range, which turned out to be necessary
+for the hardware to function properly on at least Sony Xperia 1 IV.
+Without this, I2C transactions with the SLG51000 straight up fail.
 
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
+Relax (10-10ms -> 10-11ms) and add the aforementioned sleep to make
+sure the hardware has some time to wake up.
 
-On Thu, 17 Nov 2022 14:55:27 +0800 you wrote:
-> In pch_gbe_xmit_frame(), NETDEV_TX_OK will be returned whether
-> pch_gbe_tx_queue() sends data successfully or not, so pch_gbe_tx_queue()
-> needs to free skb before returning. But pch_gbe_tx_queue() returns without
-> freeing skb in case of dma_map_single() fails. Add dev_kfree_skb_any()
-> to fix it.
-> 
-> Fixes: 77555ee72282 ("net: Add Gigabit Ethernet driver of Topcliff PCH")
-> Signed-off-by: Wang Hai <wanghai38@huawei.com>
-> 
-> [...]
+(nagara-2.0.0-mlc/vendor/semc/hardware/camera-kernel-module/)
+[1] https://developer.sony.com/file/download/open-source-archive-for-64-0-m-4-29/
 
-Here is the summary with links:
-  - [net] net: pch_gbe: fix potential memleak in pch_gbe_tx_queue()
-    https://git.kernel.org/netdev/net/c/2360f9b8c4e8
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ drivers/regulator/slg51000-regulator.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-You are awesome, thank you!
+diff --git a/drivers/regulator/slg51000-regulator.c b/drivers/regulator/slg51000-regulator.c
+index 75a941fb3c2b..1b2eee95ad3f 100644
+--- a/drivers/regulator/slg51000-regulator.c
++++ b/drivers/regulator/slg51000-regulator.c
+@@ -457,6 +457,8 @@ static int slg51000_i2c_probe(struct i2c_client *client)
+ 		chip->cs_gpiod = cs_gpiod;
+ 	}
+ 
++	usleep_range(10000, 11000);
++
+ 	i2c_set_clientdata(client, chip);
+ 	chip->chip_irq = client->irq;
+ 	chip->dev = dev;
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.38.1
 
