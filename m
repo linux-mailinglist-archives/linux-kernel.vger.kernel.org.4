@@ -2,102 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D1F562EC79
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 04:49:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6455262EC80
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 04:52:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232004AbiKRDtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 22:49:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46280 "EHLO
+        id S240853AbiKRDwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 22:52:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiKRDti (ORCPT
+        with ESMTP id S240796AbiKRDwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 22:49:38 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38EF48F3F5
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 19:49:38 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id i131so4267633ybc.9
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 19:49:38 -0800 (PST)
+        Thu, 17 Nov 2022 22:52:03 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE28A8F3FD
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 19:52:02 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id 136so3968907pga.1
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 19:52:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CgJUQemp/f+PlGTIq0YX+TmFg52HbYStJmaJzWE+VoY=;
-        b=SUp6YqzgYosJg+/9xNr+ggz5uHPqyABf5MdSAdKEofxZMLjOt8dv0Jcuovgcob651q
-         CehG6KAzs2YhjA+aySdFOf7G93Ve+A5GupCsUFU/1HrODmB0uDS2+c79Jxbb4qIZdhv3
-         /HbU3RnOZSNzwVe5rOZ3REc9NGP81flOV2TZsVNvoAtLEJbVHWLrZspdbPbwBs20ELjV
-         IRw9+DZ+TAj3hMy3tYemVZ8p1521IzydCHJLXlKiBypchCNaVWP1zFTv9v4D3qK0/ln7
-         8pEoNRP+MKFZMTghx0dTL4sEPo7b+HkChabyinzS8m8JSn2LTvK+PFLwRIeOzjjbWA4H
-         gwBw==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bpPiECtcuuwxxZW6I2l04Yvk+0H4NlRCXaVbSAhBEDs=;
+        b=Y4k+ITVdnWabWfy2tpUEza7/ctINKSkaBCZ3/PX3qAfvyf89lki00V0Xwn2eethcgE
+         uklfgJsqroV1nl1rka+esAOWp1TVQZrLJB8wd4WQlZocW/JszizcYUWarJxjffrgQ6R0
+         ru/MdhgJmf+22TnqXyIM1tBM2WrHzqbDsi/U4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=CgJUQemp/f+PlGTIq0YX+TmFg52HbYStJmaJzWE+VoY=;
-        b=bpvdj8zs7cft1g75ru+dJ9wvEGEen9LKEZQtggOsw2+REhyQZqtfFfYjf3rhaZQ5Xx
-         lk6TEhicXwby72+CuT7pBlUmqbSggRw02SOz3Mtj2u+stq3ayCnoVwHE3l7F/wOeiWzX
-         6i7PGZ7Wmr5SS7fODeCDSHVF5Tklt8BT8LzZfMsZTBRoNQa8A7Q6Kk6nTq9HSgFxIIEd
-         q4SWZm4PNRGGLSmdzxMXcBMtHxBQxJP2Kw9IwPlZWD3w/6g2y9nQjaTdkXyTWdehoyzI
-         xzwGu/xvBJG7Zd/BQImL5NSdHWulTEYU6EQiu8D5ttx58u1hlxKAo3PabUicw2OMF3UT
-         Siow==
-X-Gm-Message-State: ANoB5pnOl5D3t7Q37Mrq6AVp5/qXkJ7SBhF18FMHwWr7eosxANLVAqPw
-        naG2ap+vnW7WlKqtjzIoA+XQf/5nhpyuhq2BInYbUg==
-X-Google-Smtp-Source: AA0mqf6YTz+llOBvFtjHWCaxDT4oMdJda9zlD5qYJemlriRUfYxP+aGAKHadIvtDUdSb4BIPdGE9enBVtoS8udDjN2c=
-X-Received: by 2002:a25:ae12:0:b0:6d0:704:f19f with SMTP id
- a18-20020a25ae12000000b006d00704f19fmr5330087ybj.191.1668743377371; Thu, 17
- Nov 2022 19:49:37 -0800 (PST)
+        bh=bpPiECtcuuwxxZW6I2l04Yvk+0H4NlRCXaVbSAhBEDs=;
+        b=kJAmSEk80J51/9iv7Y4I/meRvVL+ULd1NyFVLJiyrCd86lHsVbcrPg6UOMmePp/yVr
+         rSRJClHAUMefZr+REbc21uotD5O0ord2+z4eoUFOl8zhQDDjp0cvCKqRVbgNUOroEyST
+         2zeLcjkgDE59z8+LRB7oyIPgdI57FsL37lNwFDY6zANs12tXaMZSPbI1/1BWi71zCknw
+         aQk1Ya4zoNaGxJ8SnNz/Rvc2oJ0HpdHaXsTHZOk4o2DzvRTeBRbr+Mwd8Jxt3g8ypYDg
+         GpJdOBBeGwFYKw9LlHH3I1qWsn2r0CTrvRzVe+G8Te3QNvMZyj7ATPJuL5701Q2gBT1N
+         Iizw==
+X-Gm-Message-State: ANoB5pkQPhTTPGqkoM/k0TOVyRqM6f9v2BXbhpa73ATlxwpuBTzTGu7r
+        JoyDWSJxrL8LXbLiXfGJ1aGvKA==
+X-Google-Smtp-Source: AA0mqf5LIOGY++xcoY7JcVjGfKd3ueopnrI6Mq6ww0CuYAUNPQKL6pVl34gT7LPuQraWiXJ/HTNFkA==
+X-Received: by 2002:a62:d441:0:b0:53e:6210:96de with SMTP id u1-20020a62d441000000b0053e621096demr5945073pfl.58.1668743522435;
+        Thu, 17 Nov 2022 19:52:02 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id r11-20020a63ec4b000000b0043ae1797e2bsm1794260pgj.63.2022.11.17.19.52.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 19:52:01 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH v2 0/2] slab: Provide full coverage for __alloc_size attribute
+Date:   Thu, 17 Nov 2022 19:51:57 -0800
+Message-Id: <20221118034713.gonna.754-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20221117161449.114086-1-pbonzini@redhat.com> <CALzav=cxtgaVV2tORqDo93AuUW+5BSLdjsah=YASQdPMwnf2iA@mail.gmail.com>
- <11f5e652ca2c2a4507316c3426b25d0d5cd66120.camel@linux.intel.com>
-In-Reply-To: <11f5e652ca2c2a4507316c3426b25d0d5cd66120.camel@linux.intel.com>
-From:   David Matlack <dmatlack@google.com>
-Date:   Thu, 17 Nov 2022 19:49:11 -0800
-Message-ID: <CALzav=eeVJAOwUbg1QRnkWhhzn5WT8jgjWo2b-tu9uBJJKdG8A@mail.gmail.com>
-Subject: Re: [PATCH] KVM: x86/mmu: simplify kvm_tdp_mmu_map flow when guest
- has to retry
-To:     Robert Hoo <robert.hu@linux.intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, seanjc@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1019; h=from:subject:message-id; bh=PjCBiF2sN+bzrV7VCSddGmjoguZq6Cl6RI+yFLufVf4=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjdwFfNcru+k/Q+zCg8JWAMeqDxHq8sLjKOG5JeKE3 0h6oVzaJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY3cBXwAKCRCJcvTf3G3AJj5/D/ 42TO5oeunaOTHbu1yBGFAh47GzImY9MtSgcNOrMok8hnHPtevpfbnlSegxe0HbUP7jbID1ihtqFruR b8XwYzWQxIBMoIc21M5aD70wqlFyfKI0jwWu6i7jVgCOakCY2VPKMOXU7SXtCwcXcvdx+7jyT/axy+ FLnWHtyr+DeWh639lj+oqqG6Bb1O9iVV/ghsBoHdYybtRNVdG67KqyXBHRz0shvKapS2sLhe5jUUrv 0lCjDp4s4oww7gnWYrYYzFlE1s7WBWLMS8QG93zUHMG3jzdWueNlaWbOrylPuYhHimLpG2bANJxQYs 8Odnd1Se+AJd4aXvCfxOxIsfI4pT2yjepl04B8gtXjYD/0I3zO+qXORjitTA1VmYijAWVU+WQ/Qno/ tELZotiNyAwbA0PjhtqMuXZ/VC4PXHZ7uy3rJioJEB8eo60gh3FX1U+vs51KxSHPaxZt+LLnmDz1ts 2PhSrilHbcTMd9nawq8EgdDJ0odurxcwsZFvHXAVaWsW8L8Z0LecdXWGfKI1BH3ndVyBgC7/QoowC5 +Qv6EtEdFp5kz+3miOfrxz/EHw/2rWb0tf1X3T3sUBoUr8TAUFcc34oG+BicxWUXltcl3CAptWVBK/ izeVl073EbSAffqbEN+BuSxGy7gJTPTYNrU7DwWVkCVbUgihdfgC9c+Xrn9g==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 6:01 PM Robert Hoo <robert.hu@linux.intel.com> wrote:
->
-> On Thu, 2022-11-17 at 10:43 -0800, David Matlack wrote:
-> > On Thu, Nov 17, 2022 at 8:14 AM Paolo Bonzini <pbonzini@redhat.com>
-> > wrote:
-> > >                 if (is_shadow_present_pte(iter.old_spte))
-> > > -                       ret = tdp_mmu_split_huge_page(kvm, &iter,
-> > > sp, true);
-> > > +                       r = tdp_mmu_split_huge_page(kvm, &iter, sp,
-> > > true);
-> > >                 else
-> > > -                       ret = tdp_mmu_link_sp(kvm, &iter, sp,
-> > > true);
-> > > +                       r = tdp_mmu_link_sp(kvm, &iter, sp, true);
-> >
-> > Can this fix be squashed into [1]? It seems like a serious enough
-> > bug.
-> > If 2 threads race to update the same PTE, KVM will return -EBUSY out
-> > to userspace from KVM_RUN, I think. I'm not sure about QEMU, but that
-> > would be fatal for the VM in Vanadium.
-> >
-> > [1]
-> > https://lore.kernel.org/kvm/20221109185905.486172-3-dmatlack@google.com/
-> >
-> I think in you patch it's all right, since then before
-> kvm_tdp_mmu_map() returns, it must go through
-> tdp_mmu_map_handle_target_level(), it returns RET_PF_* enum.
+Hi,
 
-Ah that's right. kvm_tdp_mmu_map() won't actually return 0/-EBUSY,
-because it either returns RET_PF_RETRY or goes through
-tdp_mmu_map_handle_target_level().
+These patches work around a deficiency in GCC (>=11) and Clang (<16)
+where the __alloc_size attribute does not apply to inlines. :(
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=96503
+
+This manifests as reduced overflow detection coverage for many allocation
+sites under CONFIG_FORTIFY_SOURCE=y, where the allocation size was not
+actually being propagated to __builtin_dynamic_object_size(). The problem
+was in two halves: the trace wrapper (now fixed in -next), and const-0
+special-casing (covered here).
+
+Thanks,
+
+-Kees
+
+v2:
+- drop trace wrapper refactoring -- handled differently now (vbabka)
+- drop kunit/fortify test patch since it depends on other changes
+- rebase
+v1: https://lore.kernel.org/all/20221101222520.never.109-kees@kernel.org
+
+Kees Cook (2):
+  slab: Clean up SLOB vs kmalloc() definition
+  slab: Remove special-casing of const 0 size allocations
+
+ include/linux/slab.h | 28 ++++++++++++++--------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
+
+-- 
+2.34.1
+
