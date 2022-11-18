@@ -2,157 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6552C62FAB8
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 17:47:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8362B62FABB
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 17:47:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242011AbiKRQrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 11:47:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33726 "EHLO
+        id S242265AbiKRQru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 11:47:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241647AbiKRQrR (ORCPT
+        with ESMTP id S242267AbiKRQrn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 11:47:17 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B525425EAD
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 08:47:16 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id l12so9087814lfp.6
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 08:47:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JjS4gImtGAJJbWB/0EDokdPSqW8A0zuYR+TtXk+h7bA=;
-        b=kDciKdVGHdmiJlolrTF6PbQo6D/1op1CjAitUOm47eVwIp7q548L2ZgzwK/JRH9H9O
-         OACMJe6gV1S5iJy+Y3XmYIrM/4lFBav6Qjr0Nam47w2I3MN7RarUKS5ZhpPE1zHO6JWn
-         576QQkfZaQBkIpZZBdoL788i3/OUPIGmtG8dFq1+SVDBpPLJ8OBiZHMAw4WLOYbyQnFu
-         f13d2BBVSQZUTgzXg3ac6cDQJgUVVnGZInsmPH4WQwdEG54ufYeWBkK/pU5wMkvArKUF
-         ReR2F6BHOYDKcWMclEOGGT3rWIxXgYZHKf2C2e16VU5kFHmNW57/ZMxy+Qfzc+qCpc89
-         eANg==
+        Fri, 18 Nov 2022 11:47:43 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B2B6A778
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 08:47:42 -0800 (PST)
+Received: from mail-yw1-f197.google.com (mail-yw1-f197.google.com [209.85.128.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id D72703F1C4
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 16:47:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1668790059;
+        bh=bqUmREpKqp419mokmhm4Yfd6ZwVhvAs8FgLzRjDgzu8=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=IgxmfyKlG3D42S3z4rPELgYAPSRJyG6yGBGS5MFcLwSi+YyDfFlaT9+3SvSARD2IH
+         evsQrHA3oyySt6W0QcaR3NPRxXyrX5V0UMvmBUFHryVmLO2bc19+YMuq1j9+eS6N2r
+         aGX0CpE4cauKhZz8oJ/Jz/A3x6RVCuDmGOhUZt4cf6Bmc7nK/sff60fO0bgxqI2Cs0
+         AiYXmIsOYQIz3LKUhI1l5Whm0fPsQxBhOXU/aGWEBqGpl1NAwRWk/nGeiXtBeZlm55
+         s0Pe0+YKVzJEzQNUq7U4Ubb2q6C8+bWdSZOSWxxhDWb855RX3LWRWSDsypZVvmbQDN
+         XA+rXzcmBYadg==
+Received: by mail-yw1-f197.google.com with SMTP id 00721157ae682-39562b26a76so22063377b3.15
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 08:47:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=JjS4gImtGAJJbWB/0EDokdPSqW8A0zuYR+TtXk+h7bA=;
-        b=nfN2gyiPBoq/twA6qbcT1ewBBw3whPpLytJNxvmKHLpHtRY8YAREkSIcHVQoE1pA/p
-         H+iImc4nBQb1H0TqomUso6s5A4RNNd90hufPYQhNbB14ENWcnOLkvaB6t2tVlum5BNt4
-         ydr/m7vwYbpn6ffzvm26bpnR6Sgw3ifo3Wv69Qurtpvsb83dbq+FS/JDfYmsShpwVm0J
-         RBhN7JgSpx2UZPr8IXOz6RT/tM9XV1chgm7BZA3pbJJu4yyKCGG4VDwX1KdxAkxi5ogS
-         jXVoAHG72GmQh/VaPNypFkEwayhULA8tUI1cJLUR7TR732Vahd7R/S4CNYY3Pntsdle+
-         B8Rg==
-X-Gm-Message-State: ANoB5pkGuqObVgCqi+KFrnrNWR2wWxs4MWnJP0qGjgtPIuV1SDsrOAX/
-        qGwLTiGsT0jeoeFSKku3M2GyAA==
-X-Google-Smtp-Source: AA0mqf64S2QnERSJTTT5QfDNrtKoGh+bzu+VoYTnFpf/BrzC3hbdxo8BS7xLLf52YaQigOAu/EHglg==
-X-Received: by 2002:ac2:4e0a:0:b0:4a2:2aab:5460 with SMTP id e10-20020ac24e0a000000b004a22aab5460mr2546386lfr.62.1668790035078;
-        Fri, 18 Nov 2022 08:47:15 -0800 (PST)
-Received: from [192.168.31.208] ([194.29.137.22])
-        by smtp.gmail.com with ESMTPSA id v20-20020a2e9614000000b0026dced9840dsm693266ljh.61.2022.11.18.08.47.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Nov 2022 08:47:14 -0800 (PST)
-Message-ID: <4592f87a-bb61-1c28-13f0-d041a6e7d3bf@linaro.org>
-Date:   Fri, 18 Nov 2022 17:47:12 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bqUmREpKqp419mokmhm4Yfd6ZwVhvAs8FgLzRjDgzu8=;
+        b=esY6zmC/3e8pdmPAa6nzzv2MP2pwENuJycPz3j4jl10J1JAEvnj1Ivc2/nHtqbn1p8
+         RWp4CtbUJcjm+ZUuA7VlqmLUFpvQNS4QDbDX1mwh6VwAKGw0N4bc3HH1qPM/zRH+6aPw
+         fGPNiTjc1eMC4nAcS039CrDTtcDvXriVK8WLZb9Ke5wIGc0itxIyah7UqhLn9Oc+NLQ9
+         xkDzMq88p5zL6AEHQcTQfFXqK9SRjTGerASjguihDRIDqae9OLsre1f6kXx5IYai0u9N
+         1zoR54CfFooGypzfhTGuz4qhZpIOwHCSN6UkC/slCbXafebnmbLPdu/LpsYokH6ehRFZ
+         91mQ==
+X-Gm-Message-State: ANoB5plt32UhgLLFRisl+KPRWOToebOa/4rj1yeqApLjNo3aEvVdx7g3
+        cklOLjxOTVuDjbSG5+A00Sm5mDDszDal2nZzEHcFF0VQyqN2C35722fGvFQjsk0W7Dzc7A15elC
+        aVsf/jBx/5l/57yRS+D2c+Llr8kRguJeKxtiuxiWSvkfo1Tw8HjRZHuuo8A==
+X-Received: by 2002:a25:7492:0:b0:6d3:6341:2cb2 with SMTP id p140-20020a257492000000b006d363412cb2mr7432024ybc.551.1668790058343;
+        Fri, 18 Nov 2022 08:47:38 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5Zd4kEY4nMPFhuKdN3ImmQqdGWeYpHUC0cuxx5m60Am9dqXXSjTEpe/WBI+epfWbWIt8gub/Cr3c45ZoldbuQ=
+X-Received: by 2002:a25:7492:0:b0:6d3:6341:2cb2 with SMTP id
+ p140-20020a257492000000b006d363412cb2mr7432003ybc.551.1668790058111; Fri, 18
+ Nov 2022 08:47:38 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.2
-Subject: Re: [PATCH v2] brcmfmac: Add support for BCM43596 PCIe Wi-Fi
-To:     Kalle Valo <kvalo@kernel.org>,
-        =?UTF-8?Q?Alvin_=c5=a0ipraga?= <ALSI@bang-olufsen.dk>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Hector Martin <marcan@marcan.st>,
-        "~postmarketos/upstreaming@lists.sr.ht" 
-        <~postmarketos/upstreaming@lists.sr.ht>,
-        "martin.botka@somainline.org" <martin.botka@somainline.org>,
-        "angelogioacchino.delregno@somainline.org" 
-        <angelogioacchino.delregno@somainline.org>,
-        "marijn.suijten@somainline.org" <marijn.suijten@somainline.org>,
-        "jamipkettunen@somainline.org" <jamipkettunen@somainline.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Marek Vasut <marex@denx.de>,
-        "Zhao, Jiaqing" <jiaqing.zhao@intel.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Soon Tak Lee <soontak.lee@cypress.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "brcm80211-dev-list.pdl@broadcom.com" 
-        <brcm80211-dev-list.pdl@broadcom.com>,
-        "SHA-cyfmac-dev-list@infineon.com" <SHA-cyfmac-dev-list@infineon.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220921001630.56765-1-konrad.dybcio@somainline.org>
- <83b90478-3974-28e6-cf13-35fc4f62e0db@marcan.st>
- <13b8c67c-399c-d1a6-4929-61aea27aa57d@somainline.org>
- <0e65a8b2-0827-af1e-602c-76d9450e3d11@marcan.st>
- <7fd077c5-83f8-02e2-03c1-900a47f05dc1@somainline.org>
- <CACRpkda3uryD6TOEaTi3pPX5No40LBWoyHR4VcEuKw4iYT0dqA@mail.gmail.com>
- <20220922133056.eo26da4npkg6bpf2@bang-olufsen.dk> <87sfke32pc.fsf@kernel.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <87sfke32pc.fsf@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221118010627.70576-1-hal.feng@starfivetech.com> <20221118010627.70576-9-hal.feng@starfivetech.com>
+In-Reply-To: <20221118010627.70576-9-hal.feng@starfivetech.com>
+From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date:   Fri, 18 Nov 2022 17:47:21 +0100
+Message-ID: <CAJM55Z80xyve9JHXT__E2FfsLUH5njmj75Wj8B3H81dxp9Zh-w@mail.gmail.com>
+Subject: Re: [PATCH v2 08/14] dt-bindings: reset: Add StarFive JH7110 system
+ and always-on reset definitions
+To:     Hal Feng <hal.feng@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 18 Nov 2022 at 02:06, Hal Feng <hal.feng@starfivetech.com> wrote:
+>
+> From: Emil Renner Berthing <kernel@esmil.dk>
+>
+> Add resets for the StarFive JH7110 system (SYS) and always-on (AON)
+> reset controller.
+>
+> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+> ---
+>  MAINTAINERS                                 |   5 +-
+>  include/dt-bindings/reset/starfive-jh7110.h | 154 ++++++++++++++++++++
+>  2 files changed, 157 insertions(+), 2 deletions(-)
+>  create mode 100644 include/dt-bindings/reset/starfive-jh7110.h
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index e97dac9c0ee4..eeab26f5597c 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -19614,12 +19614,13 @@ F:    Documentation/devicetree/bindings/pinctrl/starfive,jh7100-pinctrl.yaml
+>  F:     drivers/pinctrl/starfive/
+>  F:     include/dt-bindings/pinctrl/pinctrl-starfive-jh7100.h
+>
+> -STARFIVE JH7100 RESET CONTROLLER DRIVERS
+> +STARFIVE RESET CONTROLLER DRIVERS
+>  M:     Emil Renner Berthing <kernel@esmil.dk>
+> +M:     Hal Feng <hal.feng@starfivetech.com>
+>  S:     Maintained
+>  F:     Documentation/devicetree/bindings/reset/starfive,jh7100-reset.yaml
+>  F:     drivers/reset/starfive/
+> -F:     include/dt-bindings/reset/starfive-jh7100.h
+> +F:     include/dt-bindings/reset/starfive*
+>
+>  STATIC BRANCH/CALL
+>  M:     Peter Zijlstra <peterz@infradead.org>
+> diff --git a/include/dt-bindings/reset/starfive-jh7110.h b/include/dt-bindings/reset/starfive-jh7110.h
+> new file mode 100644
+> index 000000000000..1a5bab671161
+> --- /dev/null
+> +++ b/include/dt-bindings/reset/starfive-jh7110.h
+> @@ -0,0 +1,154 @@
+> +/* SPDX-License-Identifier: GPL-2.0 OR MIT */
+> +/*
+> + * Copyright (C) 2021-2022 Emil Renner Berthing <kernel@esmil.dk>
 
+I'm not sure how this ended up here, but I definitely didn't start
+working on this before 2022.
 
-On 26/09/2022 11:27, Kalle Valo wrote:
-> Alvin Šipraga <ALSI@bang-olufsen.dk> writes:
-> 
->> On Thu, Sep 22, 2022 at 03:02:12PM +0200, Linus Walleij wrote:
->>> On Thu, Sep 22, 2022 at 12:21 PM Konrad Dybcio
->>> <konrad.dybcio@somainline.org> wrote:
->>>
->>>> Also worth noting is the 'somc' bit, meaning there are probably *some* SONY
->>>> customizations, but that's also just a guess.
->>>
->>> What I have seen from BRCM customizations on Samsung phones is that
->>> the per-device customization of firmware seems to involve the set-up of
->>> some GPIO and power management pins. For example if integrated with
->>> an SoC that has autonomous system resume, or if some GPIO line has
->>> to be pulled to enable an external regulator or PA.
->>
->> At least with Infineon (formerly Cypress), as a customer you might get a
->> private firmware and this will be maintained internally by them on a
->> separate customer branch. Any subsequent bugfixes or feature requests
->> will usually be applied to that customer branch and a new firmware built
->> from it. I think their internal "mainline" branch might get merged into
->> the customer branches from time to time, but this seems to be done on an
->> ad-hoc basis. This is our experience at least.
->>
->> I would also point out that the BCM4359 is equivalent to the
->> CYW88359/CYW89359 chipset, which we are using in some of our
->> products. Note that this is a Cypress chipset (identifiable by the
->> Version: ... (... CY) tag in the version string). But the FW Konrad is
->> linking appears to be for a Broadcom chipset.
->>
->> FYI, here's a publicly available set of firmware files for the '4359:
->>
->> https://github.com/NXP/imx-firmware/tree/master/cyw-wifi-bt/1FD_CYW4359
->>
->> Anyway, I would second Hector's suggestion and make this a separate FW.
-> 
-> I also recommend having a separate firmware filename. Like Hector said,
-> it's easy to have a symlink in userspace if same binary can be used.
-So, I dusted off this patch and tried to change the fw name, only to 
-discover that the BRCM_PCIE_43596_DEVICE_ID is equal to 
-CY_PCIE_89459_DEVICE_ID, (which btw uses 4355/89459 fw), but then it 
-makes the driver expect 4359/9 based on rev matching, so... the 43596 
-chip ID may be a lie? Or at least for the one used in my particular 
-device? I'm beyond confused now..
-
-I can think of a couple of hacky ways to force use of 43596 fw, but I 
-don't think any would be really upstreamable..
-
-Any thoughts?
-
-Konrad
+> + */
+> +
+> +#ifndef __DT_BINDINGS_RESET_STARFIVE_JH7110_H__
+> +#define __DT_BINDINGS_RESET_STARFIVE_JH7110_H__
+> +
+> +/* SYSCRG resets */
+> +#define JH7110_SYSRST_JTAG2APB                 0
+> +#define JH7110_SYSRST_SYSCON                   1
+> +#define JH7110_SYSRST_IOMUX                    2
+> +#define JH7110_SYSRST_BUS                      3
+> +#define JH7110_SYSRST_DEBUG                    4
+> +#define JH7110_SYSRST_CORE0                    5
+> +#define JH7110_SYSRST_CORE1                    6
+> +#define JH7110_SYSRST_CORE2                    7
+> +#define JH7110_SYSRST_CORE3                    8
+> +#define JH7110_SYSRST_CORE4                    9
+> +#define JH7110_SYSRST_CORE0_ST                 10
+> +#define JH7110_SYSRST_CORE1_ST                 11
+> +#define JH7110_SYSRST_CORE2_ST                 12
+> +#define JH7110_SYSRST_CORE3_ST                 13
+> +#define JH7110_SYSRST_CORE4_ST                 14
+> +#define JH7110_SYSRST_TRACE0                   15
+> +#define JH7110_SYSRST_TRACE1                   16
+> +#define JH7110_SYSRST_TRACE2                   17
+> +#define JH7110_SYSRST_TRACE3                   18
+> +#define JH7110_SYSRST_TRACE4                   19
+> +#define JH7110_SYSRST_TRACE_COM                        20
+> +#define JH7110_SYSRST_GPU_APB                  21
+> +#define JH7110_SYSRST_GPU_DOMA                 22
+> +#define JH7110_SYSRST_NOC_BUS_APB_BUS          23
+> +#define JH7110_SYSRST_NOC_BUS_AXICFG0_AXI      24
+> +#define JH7110_SYSRST_NOC_BUS_CPU_AXI          25
+> +#define JH7110_SYSRST_NOC_BUS_DISP_AXI         26
+> +#define JH7110_SYSRST_NOC_BUS_GPU_AXI          27
+> +#define JH7110_SYSRST_NOC_BUS_ISP_AXI          28
+> +#define JH7110_SYSRST_NOC_BUS_DDRC             29
+> +#define JH7110_SYSRST_NOC_BUS_STG_AXI          30
+> +#define JH7110_SYSRST_NOC_BUS_VDEC_AXI         31
+> +
+> +#define JH7110_SYSRST_NOC_BUS_VENC_AXI         32
+> +#define JH7110_SYSRST_AXI_CFG1_DEC_AHB         33
+> +#define JH7110_SYSRST_AXI_CFG1_DEC_MAIN                34
+> +#define JH7110_SYSRST_AXI_CFG0_DEC_MAIN                35
+> +#define JH7110_SYSRST_AXI_CFG0_DEC_MAIN_DIV    36
+> +#define JH7110_SYSRST_AXI_CFG0_DEC_HIFI4       37
+> +#define JH7110_SYSRST_DDR_AXI                  38
+> +#define JH7110_SYSRST_DDR_OSC                  39
+> +#define JH7110_SYSRST_DDR_APB                  40
+> +#define JH7110_SYSRST_DOM_ISP_TOP_N            41
+> +#define JH7110_SYSRST_DOM_ISP_TOP_AXI          42
+> +#define JH7110_SYSRST_DOM_VOUT_TOP_SRC         43
+> +#define JH7110_SYSRST_CODAJ12_AXI              44
+> +#define JH7110_SYSRST_CODAJ12_CORE             45
+> +#define JH7110_SYSRST_CODAJ12_APB              46
+> +#define JH7110_SYSRST_WAVE511_AXI              47
+> +#define JH7110_SYSRST_WAVE511_BPU              48
+> +#define JH7110_SYSRST_WAVE511_VCE              49
+> +#define JH7110_SYSRST_WAVE511_APB              50
+> +#define JH7110_SYSRST_VDEC_JPG_ARB_JPG         51
+> +#define JH7110_SYSRST_VDEC_JPG_ARB_MAIN                52
+> +#define JH7110_SYSRST_AXIMEM0_AXI              53
+> +#define JH7110_SYSRST_WAVE420L_AXI             54
+> +#define JH7110_SYSRST_WAVE420L_BPU             55
+> +#define JH7110_SYSRST_WAVE420L_VCE             56
+> +#define JH7110_SYSRST_WAVE420L_APB             57
+> +#define JH7110_SYSRST_AXIMEM1_AXI              58
+> +#define JH7110_SYSRST_AXIMEM2_AXI              59
+> +#define JH7110_SYSRST_INTMEM                   60
+> +#define JH7110_SYSRST_QSPI_AHB                 61
+> +#define JH7110_SYSRST_QSPI_APB                 62
+> +#define JH7110_SYSRST_QSPI_REF                 63
+> +
+> +#define JH7110_SYSRST_SDIO0_AHB                        64
+> +#define JH7110_SYSRST_SDIO1_AHB                        65
+> +#define JH7110_SYSRST_GMAC1_AXI                        66
+> +#define JH7110_SYSRST_GMAC1_AHB                        67
+> +#define JH7110_SYSRST_MAILBOX                  68
+> +#define JH7110_SYSRST_SPI0_APB                 69
+> +#define JH7110_SYSRST_SPI1_APB                 70
+> +#define JH7110_SYSRST_SPI2_APB                 71
+> +#define JH7110_SYSRST_SPI3_APB                 72
+> +#define JH7110_SYSRST_SPI4_APB                 73
+> +#define JH7110_SYSRST_SPI5_APB                 74
+> +#define JH7110_SYSRST_SPI6_APB                 75
+> +#define JH7110_SYSRST_I2C0_APB                 76
+> +#define JH7110_SYSRST_I2C1_APB                 77
+> +#define JH7110_SYSRST_I2C2_APB                 78
+> +#define JH7110_SYSRST_I2C3_APB                 79
+> +#define JH7110_SYSRST_I2C4_APB                 80
+> +#define JH7110_SYSRST_I2C5_APB                 81
+> +#define JH7110_SYSRST_I2C6_APB                 82
+> +#define JH7110_SYSRST_UART0_APB                        83
+> +#define JH7110_SYSRST_UART0_CORE               84
+> +#define JH7110_SYSRST_UART1_APB                        85
+> +#define JH7110_SYSRST_UART1_CORE               86
+> +#define JH7110_SYSRST_UART2_APB                        87
+> +#define JH7110_SYSRST_UART2_CORE               88
+> +#define JH7110_SYSRST_UART3_APB                        89
+> +#define JH7110_SYSRST_UART3_CORE               90
+> +#define JH7110_SYSRST_UART4_APB                        91
+> +#define JH7110_SYSRST_UART4_CORE               92
+> +#define JH7110_SYSRST_UART5_APB                        93
+> +#define JH7110_SYSRST_UART5_CORE               94
+> +#define JH7110_SYSRST_SPDIF_APB                        95
+> +
+> +#define JH7110_SYSRST_PWMDAC_APB               96
+> +#define JH7110_SYSRST_PDM_DMIC                 97
+> +#define JH7110_SYSRST_PDM_APB                  98
+> +#define JH7110_SYSRST_I2SRX_APB                        99
+> +#define JH7110_SYSRST_I2SRX_BCLK               100
+> +#define JH7110_SYSRST_I2STX0_APB               101
+> +#define JH7110_SYSRST_I2STX0_BCLK              102
+> +#define JH7110_SYSRST_I2STX1_APB               103
+> +#define JH7110_SYSRST_I2STX1_BCLK              104
+> +#define JH7110_SYSRST_TDM_AHB                  105
+> +#define JH7110_SYSRST_TDM_CORE                 106
+> +#define JH7110_SYSRST_TDM_APB                  107
+> +#define JH7110_SYSRST_PWM_APB                  108
+> +#define JH7110_SYSRST_WDT_APB                  109
+> +#define JH7110_SYSRST_WDT_CORE                 110
+> +#define JH7110_SYSRST_CAN0_APB                 111
+> +#define JH7110_SYSRST_CAN0_CORE                        112
+> +#define JH7110_SYSRST_CAN0_TIMER               113
+> +#define JH7110_SYSRST_CAN1_APB                 114
+> +#define JH7110_SYSRST_CAN1_CORE                        115
+> +#define JH7110_SYSRST_CAN1_TIMER               116
+> +#define JH7110_SYSRST_TIMER_APB                        117
+> +#define JH7110_SYSRST_TIMER0                   118
+> +#define JH7110_SYSRST_TIMER1                   119
+> +#define JH7110_SYSRST_TIMER2                   120
+> +#define JH7110_SYSRST_TIMER3                   121
+> +#define JH7110_SYSRST_INT_CTRL_APB             122
+> +#define JH7110_SYSRST_TEMP_APB                 123
+> +#define JH7110_SYSRST_TEMP_CORE                        124
+> +#define JH7110_SYSRST_JTAG_CERTIFICATION       125
+> +
+> +#define        JH7110_SYSRST_END                       126
+> +
+> +/* AONCRG resets */
+> +#define JH7110_AONRST_GMAC0_AXI                        0
+> +#define JH7110_AONRST_GMAC0_AHB                        1
+> +#define JH7110_AONRST_AON_IOMUX                        2
+> +#define JH7110_AONRST_PMU_APB                  3
+> +#define JH7110_AONRST_PMU_WKUP                 4
+> +#define JH7110_AONRST_RTC_APB                  5
+> +#define JH7110_AONRST_RTC_CAL                  6
+> +#define JH7110_AONRST_RTC_32K                  7
+> +
+> +#define        JH7110_AONRST_END                       8
+> +
+> +#endif /* __DT_BINDINGS_RESET_STARFIVE_JH7110_H__ */
+> --
+> 2.38.1
+>
