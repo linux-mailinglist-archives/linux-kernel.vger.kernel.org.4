@@ -2,102 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63F9162EA97
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 01:53:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEE4862EA9A
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 01:54:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240724AbiKRAxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 19:53:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52902 "EHLO
+        id S240703AbiKRAyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 19:54:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240703AbiKRAxq (ORCPT
+        with ESMTP id S234053AbiKRAyX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 19:53:46 -0500
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C38B19
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 16:53:44 -0800 (PST)
-Received: from fsav117.sakura.ne.jp (fsav117.sakura.ne.jp [27.133.134.244])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 2AI0rhoG067372;
-        Fri, 18 Nov 2022 09:53:43 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav117.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav117.sakura.ne.jp);
- Fri, 18 Nov 2022 09:53:43 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav117.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 2AI0rgbY067369
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Fri, 18 Nov 2022 09:53:43 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <d38fe3c3-1f0b-b5f6-2895-aee9476b20bf@I-love.SAKURA.ne.jp>
-Date:   Fri, 18 Nov 2022 09:53:41 +0900
+        Thu, 17 Nov 2022 19:54:23 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B36F7EBED
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 16:54:23 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id 140so3426017pfz.6
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 16:54:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=eRHZ8HxlKkpc/rQw9TF/Vjc6A04s7AH3fGHGNV8IcdM=;
+        b=EMdaRR5ywe+TV/FYyD9a2i+UB/WspihcuIixd5Dr21nxmE+kcbN8TtOmL46bnAWEJZ
+         kOMiPHdykN4qZbMIGafcSieL2JCDwRT1Gn5eDVMjpDrz6ejrGhrSbXWcjDVzKmH4t0kI
+         elpclmBAb7rzG6BXcOB8kac8xK+aTsSO/BR5vCsDUvAsEuE/cvxFv1w+4ff1loBLW96l
+         0yyqyGGuegV0UUvNRmtSwuv2elmshJ+Uldj5RrMlnESTdSN+SpgwZSPmNoQlgf2HfRo7
+         1pcksb6gWej+VA9v9FvtxqoTUtsJVb/9HwmI9H6HwxDLzZlotYwNIr+cOvTN/Ul7FA4r
+         e5cA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eRHZ8HxlKkpc/rQw9TF/Vjc6A04s7AH3fGHGNV8IcdM=;
+        b=hmXxwMJE/sia2ep6r6/APRAk1EqcHh3edXkmwNoTvBENYSwLQBhoJubJHjR3/HsfMw
+         zM4C8jFXgkAvAwqZVeJgb+1BeURenD1u73da4ZzJFm01LWeqXV6ATSz31x5Zau72Dgga
+         YTCRT12eDHGV2r2Fkxu+ZmAlMiaLvBS6QNHqf467SQnyHG/ekLNwe6IWbGcNvG/Kcy/N
+         tJwiSdQZUZ1/gyZRpPV5woED4XL2Ve4Tk4dvUznsgfIdGljA0FSbsDHqYIq8/JfmaaWx
+         rdJjDyYyz4RhZQ8AYAUlxIWT1vKQHvAFD533S+qahvw417GGCs8s3Hn22owMyODd5nmQ
+         /RMQ==
+X-Gm-Message-State: ANoB5pljxpEfOPJQitMp0mxDAmuIhyMvLBg3si8FI6rTr+tHSiH4mIql
+        Kcmhmdwx8g9jPHYO+ZOolojPVYuPNO/5uE+yU1S4gQ==
+X-Google-Smtp-Source: AA0mqf577aAwYGvH4qpaYZECY2LNNaZytgtXT9uUrDcNBCNowZCpDJhrRK4S5gagrFXZqiA33J0kBMych14iLw5Etbc=
+X-Received: by 2002:a05:6a00:4009:b0:563:2ada:30a3 with SMTP id
+ by9-20020a056a00400900b005632ada30a3mr5481609pfb.27.1668732862572; Thu, 17
+ Nov 2022 16:54:22 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [syzbot] WARNING in call_timer_fn
-Content-Language: en-US
-To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Hillf Danton <hdanton@sina.com>,
-        syzbot <syzbot+6fb78d577e89e69602f9@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, pbonzini@redhat.com,
-        syzkaller-bugs@googlegroups.com,
-        Steven Rostedt <rosted@goodmis.org>,
-        Marcel Holtmann <marcel@holtmann.org>
-References: <0000000000009d5daa05ed9815fa@google.com>
- <20221117024511.3606-1-hdanton@sina.com>
- <20221117125523.3783-1-hdanton@sina.com> <87wn7tlg4n.ffs@tglx>
- <CABBYNZKnCyLkRKH=DFZbDSL=m0O5PUVkQjtiB0xpCZM7v78HmQ@mail.gmail.com>
- <CABBYNZJYbzX9xoqU8_KEArTJ2=5eMTiDTjMbNjEYNVmi1rkp+A@mail.gmail.com>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <CABBYNZJYbzX9xoqU8_KEArTJ2=5eMTiDTjMbNjEYNVmi1rkp+A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221118001548.635752-1-tharvey@gateworks.com> <Y3bRX1N0Rp7EDJkS@lunn.ch>
+In-Reply-To: <Y3bRX1N0Rp7EDJkS@lunn.ch>
+From:   Tim Harvey <tharvey@gateworks.com>
+Date:   Thu, 17 Nov 2022 16:54:11 -0800
+Message-ID: <CAJ+vNU3P-t3Q1XZrNG=czvFBU7UsCOA_Ap47k9Ein_3VQy_tGw@mail.gmail.com>
+Subject: Re: [PATCH 0/3] add dt configuration for dp83867 led modes
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/18 6:16, Luiz Augusto von Dentz wrote:
-> Wasn't the following patch suppose to address such problem:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git/commit/?id=deee93d13d385103205879a8a0915036ecd83261
-> 
-> It was merged in the last pull request to net-next:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git/commit/?id=a507ea32b9c2c407012bf89109ac0cf89fae313c
-> 
+On Thu, Nov 17, 2022 at 4:27 PM Andrew Lunn <andrew@lunn.ch> wrote:
+>
+> On Thu, Nov 17, 2022 at 04:15:45PM -0800, Tim Harvey wrote:
+> > This series adds a dt-prop ti,led-modes to configure dp83867 PHY led
+> > modes, adds the code to implement it, and updates some board dt files
+> > to use the new property.
+>
+> Sorry, but NACK.
+>
+> We need PHY leds to be controlled via /sys/class/leds. Everybody keeps
+> trying to add there own way to configure these things, rather than
+> have just one uniform way which all PHYs share.
+>
+>      Andrew
 
-No. Commit deee93d13d38 ("Bluetooth: use hdev->workqueue when queuing hdev->{cmd,ncmd}_timer works")
-is for handling queue_work() from hci_cmd_timeout(struct work_struct *work) from process_one_work()
-(that is, called from a kernel workqueue thread from process context).
+Andrew,
 
-But this report says that queue_work() is called from timer interrupt handler from interrupt context
-while drain_workqueue(hdev->workqueue) is in progress from process context.
+I completely agree with you but I haven't seen how that can be done
+yet. What support exists for a PHY driver to expose their LED
+configuration to be used that way? Can you point me to an example?
 
-But... is is_chained_work() check appropriate?
-Why can't we exclude "timer interrupt handler" from "somebody else" ?
+Best Regards,
 
-The comment for drain_workqueue() says
-
- * Wait until the workqueue becomes empty.  While draining is in progress,
- * only chain queueing is allowed.  IOW, only currently pending or running
- * work items on @wq can queue further work items on it.  @wq is flushed
- * repeatedly until it becomes empty.  The number of flushing is determined
- * by the depth of chaining and should be relatively short.  Whine if it
- * takes too long.
-
-but why limited to "only currently pending or running work items on @wq" (that is,
-only process context) ?
-
-Although drain_workqueue() is also called from destroy_workqueue() (which would cause
-use-after-free bug if interrupt handler calls queue_work() some time after drain_workqueue()),
-I think that we can wait for drain_workqueue() to call __flush_workqueue() again if a further
-work item is queued from interrupt handler...
-
-Anyway, stopping all works and delayed works before calling drain_workqueue() would address
-this problem.
-
+Tim
