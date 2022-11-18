@@ -2,87 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77EFB62EB63
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 02:56:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F12D62EBA0
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 03:06:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240749AbiKRB41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 20:56:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33104 "EHLO
+        id S240724AbiKRCG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 21:06:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235099AbiKRB4X (ORCPT
+        with ESMTP id S239454AbiKRCGY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 20:56:23 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938B3742C7
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 17:56:20 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id k21-20020a5e8915000000b006de391b332fso1883402ioj.4
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 17:56:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5pvNabL4h/jw3vWWl8UrKWU7ECeSF3aiv4l/7+Kwbb8=;
-        b=BVex/LXLR2J/x9PgEpIRLItoUUvaoMRRlTqvj2GPmLN1FCvDAp0ifIXRjwVH+DD4C0
-         HIi2JLG9Mjh+3hDpvQuxoRU5KN6fLCSwjaey+7xF2EuhvxfPtYxsAB9OsU+L6d2pj3ET
-         I2HDYNOjal/D4uUqDLWnesRasOxJyU0KPXsJCBVz6fp4yMYmgIL0PgDrf4lH5GAEAZkJ
-         pE498QFY8+LzSVFQL6m0J6vLHXJWP6p6VvA77vLuWu85DjtJjHjOr66FTAri+DKZ0VYe
-         X0676HT1WPs4maQJ0FF7s6CtOpMwXtcUeCVUJyJkDjwseuRZS4gJujuuYaTzWioOgTes
-         wGHA==
-X-Gm-Message-State: ANoB5pkW307ZfOoE/duQKoa7Tf4K5QCFt8Z74zEXlMef0w/xAirc9M6X
-        yoy4ptDyLvXJ0GCFLm/ytkZ1et1c/uDkFmwUMT49jUewlKoa
-X-Google-Smtp-Source: AA0mqf45hbckZ2aQOX7ek+n7IrRm+TLARFS5k7Cpgc/J3eoK5JGyghNN8Zz2xGtvDMZWQ5eFrzyaERPuVNbmpR8na1Tlmn82UWtD
+        Thu, 17 Nov 2022 21:06:24 -0500
+Received: from esa8.hc1455-7.c3s2.iphmx.com (esa8.hc1455-7.c3s2.iphmx.com [139.138.61.253])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D359B7DEDC;
+        Thu, 17 Nov 2022 18:06:22 -0800 (PST)
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="84465563"
+X-IronPort-AV: E=Sophos;i="5.96,172,1665414000"; 
+   d="scan'208";a="84465563"
+Received: from unknown (HELO yto-r3.gw.nic.fujitsu.com) ([218.44.52.219])
+  by esa8.hc1455-7.c3s2.iphmx.com with ESMTP; 18 Nov 2022 11:06:19 +0900
+Received: from yto-m4.gw.nic.fujitsu.com (yto-nat-yto-m4.gw.nic.fujitsu.com [192.168.83.67])
+        by yto-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id D6496E8522;
+        Fri, 18 Nov 2022 11:06:18 +0900 (JST)
+Received: from oym-om2.fujitsu.com (oym-om2.o.css.fujitsu.com [10.85.58.162])
+        by yto-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id 099A81426B;
+        Fri, 18 Nov 2022 11:06:18 +0900 (JST)
+Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
+        by oym-om2.fujitsu.com (Postfix) with ESMTP id CCB6640421206;
+        Fri, 18 Nov 2022 11:06:17 +0900 (JST)
+From:   "Masahiko, Yamada" <yamada.masahiko@fujitsu.com>
+To:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org
+Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/1] perf: fix reset interface potential failure
+Date:   Fri, 18 Nov 2022 11:00:15 +0900
+Message-Id: <20221118020016.1571100-1-yamada.masahiko@fujitsu.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:3e15:b0:374:53a:a5bf with SMTP id
- co21-20020a0566383e1500b00374053aa5bfmr2275103jab.77.1668736579920; Thu, 17
- Nov 2022 17:56:19 -0800 (PST)
-Date:   Thu, 17 Nov 2022 17:56:19 -0800
-In-Reply-To: <0000000000004e78ec05eda79749@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000011ec5105edb50386@google.com>
-Subject: Re: [syzbot] BUG: sleeping function called from invalid context in static_key_slow_inc
-From:   syzbot <syzbot+703d9e154b3b58277261@syzkaller.appspotmail.com>
-To:     Jason@zx2c4.com, davem@davemloft.net, edumazet@google.com,
-        frederic@kernel.org, gnault@redhat.com, jacob.e.keller@intel.com,
-        jakub@cloudflare.com, jiri@nvidia.com, johannes@sipsolutions.net,
-        juri.lelli@redhat.com, kirill.shutemov@linux.intel.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        mark.rutland@arm.com, netdev@vger.kernel.org,
-        nicolas.dichtel@6wind.com, pabeni@redhat.com, paul@paul-moore.com,
-        peterz@infradead.org, razor@blackwall.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, steven.price@arm.com,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
-        tparkin@katalix.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has bisected this issue to:
+There is a potential bug where PERF_EVENT_IOC_RESET
+does not work when accessing PMU registers directly
+from userspace in the perf_event interface.
 
-commit b68777d54fac21fc833ec26ea1a2a84f975ab035
-Author: Jakub Sitnicki <jakub@cloudflare.com>
-Date:   Mon Nov 14 19:16:19 2022 +0000
+In the x86 environment, the kernel(perf_event reset handling) has a
+potential failure, but it works with the papi library side workaround.
+The PMU register direct access feature from user space was implemented in
+the perf_event facility from linux-5.18 version in the arm64 environment,
+but it does not work with the workaround on the papi library side in the
+arm64 environment.
+The workaround worked in the x86 environment and not in the arm64
+environment because in the arm64 environment, only CPU_CYCLES was
+a 64 bit counter and the rest were 32 bit counters, so the workaround
+cleared the upper 32 bits of the value measured by CPU_CYCLES.
 
-    l2tp: Serialize access to sk_user_data with sk_callback_lock
+For this reason, we have created a patch on the kernel
+that fixes a potential perf_event reset failure.
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1600bb49880000
-start commit:   064bc7312bd0 netdevsim: Fix memory leak of nsim_dev->fa_co..
-git tree:       net
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=1500bb49880000
-console output: https://syzkaller.appspot.com/x/log.txt?x=1100bb49880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a33ac7bbc22a8c35
-dashboard link: https://syzkaller.appspot.com/bug?extid=703d9e154b3b58277261
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13cd2f79880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=109e1695880000
+The motivation for the fix is to initialize pc->offset.
+The perf_mmap__read_self function in tools/lib/perf/mmap.c is set by:.
+cnt = READ_ONCE(pc->offset);
+The pc->offset value is set in the following process
+in the perf_event_update_userpage function:.
+userpg->offset -= local64_read(&event->hw.prev_count);
+hw->prev_count is set in the armpmu_event_set_period function
+in drivers/perf/arm_pmu.c and in the x86_perf_event_set_period function
+in arch/x86/events/core.c as follows:.
+local64_set(&hwc->prev_count, (u64)-left);
 
-Reported-by: syzbot+703d9e154b3b58277261@syzkaller.appspotmail.com
-Fixes: b68777d54fac ("l2tp: Serialize access to sk_user_data with sk_callback_lock")
+Therefore, this patch was created to initialize hwc->prev_count
+during reset processing.
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+We used
+https://github.com/deater/perf_event_tests/blob/master/tests/rdpmc/\
+rdpmc_reset.c for verification testing.
+
+The mmap_read_ self function in
+https://github.com/deater/perf_event_tests/blob/master/tests/rdpmc/\
+rdpmc_lib.c comes with a fix (lines 158 to 159) similar to
+the workaround in the papi library.
+
+The mmap_read_self function implements the equivalent of
+the perf_mmap__read_self function.
+
+The following is a workaround for the mmap_read_self function.
+
+-----SNIP-----
+    158                 count<<=(64-width);
+    159                 count>>=(64-width);
+-----SNIP-----
+
+If you do not apply the kernel patch to fix a potential perf_event
+failure, removing the workaround from perf_event_tests will cause
+both the x86/arm64 versions to fail.
+
+$ ./rdpmc_reset
+This test checks if userspace rdpmc() style reads work.
+
+total start/read/stop latency: 71772447 cycles
+ Event 0 -- Raw count: 100069445 enabled: 6636 running: 6636
+ Event 0 -- Raw count: -281474876643918 enabled: 16399496 running: 16399496
+ Event 1 -- Raw count: 100069412 enabled: 2071 running: 2071
+ Event 1 -- Raw count: -281474876645181 enabled: 16394819 running: 16394819
+
+ Expected: 100000000
+ High: -281474876643918 Low: -281474876643918 Average: -281474876643918
+ ( note, a small value above 100000000 may be expected due
+   to overhead and interrupt noise, among other reasons)
+ Average Error = -281474976.64%
+Error out of range!
+Testing if resetting while using rdpmc works...            FAILED
+
+In the environment with the kernel patch to fix a potential perf_event
+failure, removing the workaround from perf_event_tests still works with
+the x86/arm64 version.
+
+$ ./rdpmc_reset
+This test checks if userspace rdpmc() style reads work.
+
+total start/read/stop latency: 71863055 cycles
+ Event 0 -- Raw count: 100081688 enabled: 10353 running: 10353
+ Event 0 -- Raw count: 100078316 enabled: 16493263 running: 16493263
+ Event 1 -- Raw count: 100081789 enabled: 4186 running: 4186
+ Event 1 -- Raw count: 100076770 enabled: 16486696 running: 16486696
+
+ Expected: 100000000
+ High: 100078316   Low:  100078316   Average:  100078316
+ ( note, a small value above 100000000 may be expected due
+   to overhead and interrupt noise, among other reasons)
+ Average Error = 0.08%
+Testing if resetting while using rdpmc works...            PASSED
+
+Masahiko, Yamada (1):
+  perf: fix reset interface potential failure
+
+ kernel/events/core.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+-- 
+2.27.0
+
