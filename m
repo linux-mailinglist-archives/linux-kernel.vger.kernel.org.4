@@ -2,50 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 564196307AC
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 01:38:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C14AA63036C
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 00:29:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235367AbiKSAis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 19:38:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57858 "EHLO
+        id S235849AbiKRX3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 18:29:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235986AbiKSAiR (ORCPT
+        with ESMTP id S235397AbiKRX2l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 19:38:17 -0500
+        Fri, 18 Nov 2022 18:28:41 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 695D9C72EC
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:43:59 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D7C67463D
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:16:34 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA82-0000AT-0e; Fri, 18 Nov 2022 23:46:34 +0100
+        id 1owA82-000092-0r; Fri, 18 Nov 2022 23:46:34 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA7x-0058FR-5a; Fri, 18 Nov 2022 23:46:30 +0100
+        id 1owA7w-0058FM-VM; Fri, 18 Nov 2022 23:46:29 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA7w-00Hb1J-Qp; Fri, 18 Nov 2022 23:46:28 +0100
+        id 1owA7x-00Hb1O-1Z; Fri, 18 Nov 2022 23:46:29 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-        =?utf-8?q?Marek_Beh=C3=BAn?= <kabel@kernel.org>,
-        =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
+        Jonathan Cameron <jic23@kernel.org>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>,
         Lars-Peter Clausen <lars@metafoo.de>,
         linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 099/606] iio: health: max30102: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:37:13 +0100
-Message-Id: <20221118224540.619276-100-uwe@kleine-koenig.org>
+Subject: [PATCH 100/606] iio: humidity: am2315: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:37:14 +0100
+Message-Id: <20221118224540.619276-101-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -67,39 +62,37 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-.probe_new() doesn't get the i2c_device_id * parameter, so determine
-that explicitly in the probe function.
+The probe function doesn't make use of the i2c_device_id * parameter so it
+can be trivially converted.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/iio/health/max30102.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/iio/humidity/am2315.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/iio/health/max30102.c b/drivers/iio/health/max30102.c
-index 66df4aaa31a7..7edcf9e05687 100644
---- a/drivers/iio/health/max30102.c
-+++ b/drivers/iio/health/max30102.c
-@@ -513,9 +513,9 @@ static const struct iio_info max30102_info = {
- 	.read_raw = max30102_read_raw,
+diff --git a/drivers/iio/humidity/am2315.c b/drivers/iio/humidity/am2315.c
+index 4a39f1019347..f246516bd45e 100644
+--- a/drivers/iio/humidity/am2315.c
++++ b/drivers/iio/humidity/am2315.c
+@@ -218,8 +218,7 @@ static const struct iio_info am2315_info = {
+ 	.read_raw		= am2315_read_raw,
  };
  
--static int max30102_probe(struct i2c_client *client,
--			  const struct i2c_device_id *id)
-+static int max30102_probe(struct i2c_client *client)
+-static int am2315_probe(struct i2c_client *client,
+-			const struct i2c_device_id *id)
++static int am2315_probe(struct i2c_client *client)
  {
-+	const struct i2c_device_id *id = i2c_client_get_device_id(client);
- 	struct max30102_data *data;
- 	struct iio_dev *indio_dev;
  	int ret;
-@@ -631,7 +631,7 @@ static struct i2c_driver max30102_driver = {
- 		.name	= MAX30102_DRV_NAME,
- 		.of_match_table	= max30102_dt_ids,
+ 	struct iio_dev *indio_dev;
+@@ -263,7 +262,7 @@ static struct i2c_driver am2315_driver = {
+ 	.driver = {
+ 		.name = "am2315",
  	},
--	.probe		= max30102_probe,
-+	.probe_new	= max30102_probe,
- 	.remove		= max30102_remove,
- 	.id_table	= max30102_id,
+-	.probe =            am2315_probe,
++	.probe_new =        am2315_probe,
+ 	.id_table =         am2315_i2c_id,
  };
+ 
 -- 
 2.38.1
 
