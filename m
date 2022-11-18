@@ -2,61 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C96162EDEA
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 07:52:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 085BA62EDEC
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 07:52:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241222AbiKRGwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 01:52:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58774 "EHLO
+        id S241232AbiKRGwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 01:52:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240852AbiKRGwk (ORCPT
+        with ESMTP id S241179AbiKRGwl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 01:52:40 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F941F9EB
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:52:39 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id w14so7809770wru.8
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:52:39 -0800 (PST)
+        Fri, 18 Nov 2022 01:52:41 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B513520BCD
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:52:40 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id x5so3735265wrt.7
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:52:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=XGKQuiawH7Sdf6Z05OzXu3xdOP+mLg0wu7i+RPGyvnk=;
-        b=FIFhbfWnuLmZVIOLl6Aw3AiEQJwGnRa5AjtzlummRfNRKaTZLk1nqbFyfKRMG/1E1o
-         0+ZWP40avf+x8QlJMvUo/Lr1+D8SlFp1Re+l/yk1JMxVtDapSHwaYPzCKPPLYsOmpbYb
-         al7nYd74ZkPTme+Yp3aEFVdTDgRC9iuIqOIiV3P5Dj47zd35dqQA8PT2RAcOQfKMMoix
-         P4ZjdCJYNqH2WsyLCSBV7IQ9r7yGl53zAIQNoxE6Z0a7z2QeH6+xVPClyZBRbiiZObfP
-         GxNvOh6P6uKFX1gR01/eE/uytJJz2keS0ZK1JrIgJXsuPn6XRkOOvPLcIF5GPO2EIh87
-         p6jQ==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yAzXZzO+yszcBqWvLdE5BOhfmNlhU/EX4tpKB13mknE=;
+        b=LbCQHzP7ipavjxmzgE07LxC+8U+AXksWXXFgTY9RGwcI45LWjyeP8rvXW/9l58pcHJ
+         yLyx8xV4GR/LvDC5wE2P8R9votR8d147n3VWnCyy/38allY4Rx9z+E8fRqW+f+vts3kM
+         u3TuQ6pzpNP2Y1nQq7QwfGwdI+Eb44hozZmpPX45PqqCM0qvtdiMtlCZJcF/CPHg4mQF
+         LKII9InjFT4LEf7rPHP+yRwUT+17diLf/Uzq9nZvRRKA65p2fZ7ocqWtizhMcMPF4Lmw
+         zhWNlbmVAvKfunCEoFhfuJVlgAuOhYa8Jj48Yj6dcvWxpyhy7Ym5XJEEfHATjFPxGpww
+         tMUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XGKQuiawH7Sdf6Z05OzXu3xdOP+mLg0wu7i+RPGyvnk=;
-        b=BiDsVYxW2xbw2+hTYFeCIIkeHovEj65Ubr+Gw93QyhH48g5phzR8rmW5FUO3odJ55E
-         fDEslFBeLdAqsMGUGfEeo/cr25CuC6W5VcWVslpS8dzGrZQDWf5qNZB+U7HV4njc8Zd8
-         IEE4W23Ct0USK762vpOIIT+lnJk8LEADzLt23zsQCIdbtNnAtwUPMdO/d84va7/3HqcD
-         v0qRd6Zps1R3/Voi19VpYGCV0Olwm8iRnF+gcmpgRWzUNl6WJQ1WkAl11Y39c6wIfdDk
-         aLqJE5GBBhhY7NF1pxOmnZ4Ddvns1owdeJMH0DFtYnN4VmUG7Opi0fJuefTqe/V3eqgq
-         uzAA==
-X-Gm-Message-State: ANoB5pmnHnC0rEWMUmyc+WORJyiExS5r+8qXNnM74N8FqwjC84iNdM9v
-        WnlWn2dYp4HKczd/qvYbxDuAOnoUHO75vA==
-X-Google-Smtp-Source: AA0mqf7UxRpteInFjRRv5pc2/cI0LpJEjQMLGivxYt023HqjOhADMzRotCW1GWmiyQpQqw+aP3bH0A==
-X-Received: by 2002:a05:6000:544:b0:236:64ce:2c0a with SMTP id b4-20020a056000054400b0023664ce2c0amr3433777wrf.230.1668754357947;
-        Thu, 17 Nov 2022 22:52:37 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yAzXZzO+yszcBqWvLdE5BOhfmNlhU/EX4tpKB13mknE=;
+        b=5wHPoRSgOpfyj0N+wvdIyHsevVrAoPToBZsucdg9sfPHlaeul2gvVeuIrdyNaDzpES
+         egterWYNFgauvSRLNvvjHwR9l7EYfRlm6vF5tcsDGPRIBLy52aGILZjcezzqCdeYkClY
+         P6uD5hBOj99NhmPNSrzokHisQ67stdb3BH4SYp3g/MYsgNYJWr8gNKGfbvchJn7CZfhk
+         80TPE/+h1bixpXFr78TZMnFpnkkmVIpxm/yipSWszPpQysGpxfEfn64c40O6hClmMtte
+         Xnf2SazwTzsUC/I3ri+aTrBJSvf4Zaiej9p2D7Tk3XoSelNkiOS/xyuMyIsqoWK0A+Nn
+         bMqA==
+X-Gm-Message-State: ANoB5pmNNQ/YQBGeRe9aB3y6NMj+JFM23Vn3pgZCvZXjj4jSFYh/4rrR
+        nce8fs2m+nlJ1RbGeI5IB0yL/g==
+X-Google-Smtp-Source: AA0mqf6GXGEIIYvm3UsMCu0eNo6pjIlpURQ9tOn/dKiMYd7qXdvaen0OUnzqy5b6ZxnJyixQfaC9gg==
+X-Received: by 2002:a05:6000:258:b0:236:74c5:7e2 with SMTP id m24-20020a056000025800b0023674c507e2mr3357423wrz.3.1668754359274;
+        Thu, 17 Nov 2022 22:52:39 -0800 (PST)
 Received: from localhost.localdomain ([167.98.215.174])
-        by smtp.gmail.com with ESMTPSA id q14-20020a05600c46ce00b003c5571c27a1sm4400165wmo.32.2022.11.17.22.52.36
+        by smtp.gmail.com with ESMTPSA id q14-20020a05600c46ce00b003c5571c27a1sm4400165wmo.32.2022.11.17.22.52.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 22:52:37 -0800 (PST)
+        Thu, 17 Nov 2022 22:52:38 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org,
+Cc:     linux-kernel@vger.kernel.org, Zheng Bin <zhengbin13@huawei.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 0/2] slimbus: fixes for 6.1
-Date:   Fri, 18 Nov 2022 06:52:26 +0000
-Message-Id: <20221118065228.6773-1-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 1/2] slimbus: qcom-ngd: Fix build error when CONFIG_SLIM_QCOM_NGD_CTRL=y && CONFIG_QCOM_RPROC_COMMON=m
+Date:   Fri, 18 Nov 2022 06:52:27 +0000
+Message-Id: <20221118065228.6773-2-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221118065228.6773-1-srinivas.kandagatla@linaro.org>
+References: <20221118065228.6773-1-srinivas.kandagatla@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -68,27 +72,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+From: Zheng Bin <zhengbin13@huawei.com>
 
-Here are two important fixes in slimbus one is to fix the presence rate table as per
-the MiPi spec and other is fix a build error.
+If CONFIG_SLIM_QCOM_NGD_CTRL=y, CONFIG_QCOM_RPROC_COMMON=m, COMPILE_TEST=y,
+bulding fails:
 
-If its not too late, can you take them for 6.1.
+drivers/slimbus/qcom-ngd-ctrl.o: In function `qcom_slim_ngd_ctrl_probe':
+qcom-ngd-ctrl.c:(.text+0x330): undefined reference to `qcom_register_ssr_notifier'
+qcom-ngd-ctrl.c:(.text+0x5fc): undefined reference to `qcom_unregister_ssr_notifier'
+drivers/slimbus/qcom-ngd-ctrl.o: In function `qcom_slim_ngd_remove':
+qcom-ngd-ctrl.c:(.text+0x90c): undefined reference to `qcom_unregister_ssr_notifier'
 
-Many thanks,
-Srini
+Make SLIM_QCOM_NGD_CTRL depends on QCOM_RPROC_COMMON || (COMPILE_TEST && !QCOM_RPROC_COMMON) to fix this.
 
-Krzysztof Kozlowski (1):
-  slimbus: stream: correct presence rate frequencies
+Fixes: e291691c6977 ("slimbus: qcom-ngd-ctrl: allow compile testing without QCOM_RPROC_COMMON")
+Signed-off-by: Zheng Bin <zhengbin13@huawei.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+---
+ drivers/slimbus/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Zheng Bin (1):
-  slimbus: qcom-ngd: Fix build error when CONFIG_SLIM_QCOM_NGD_CTRL=y &&
-    CONFIG_QCOM_RPROC_COMMON=m
-
- drivers/slimbus/Kconfig  | 2 +-
- drivers/slimbus/stream.c | 8 ++++----
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
+diff --git a/drivers/slimbus/Kconfig b/drivers/slimbus/Kconfig
+index 2ed821f75816..a0fdf9d792cb 100644
+--- a/drivers/slimbus/Kconfig
++++ b/drivers/slimbus/Kconfig
+@@ -23,7 +23,7 @@ config SLIM_QCOM_CTRL
+ config SLIM_QCOM_NGD_CTRL
+ 	tristate "Qualcomm SLIMbus Satellite Non-Generic Device Component"
+ 	depends on HAS_IOMEM && DMA_ENGINE && NET
+-	depends on QCOM_RPROC_COMMON || COMPILE_TEST
++	depends on QCOM_RPROC_COMMON || (COMPILE_TEST && !QCOM_RPROC_COMMON)
+ 	depends on ARCH_QCOM || COMPILE_TEST
+ 	select QCOM_QMI_HELPERS
+ 	select QCOM_PDR_HELPERS
 -- 
 2.25.1
 
