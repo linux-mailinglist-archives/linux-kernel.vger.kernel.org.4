@@ -2,180 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AF5D62F945
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 16:28:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D2CD62F94A
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 16:30:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242088AbiKRP2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 10:28:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47166 "EHLO
+        id S242180AbiKRPaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 10:30:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242178AbiKRP2l (ORCPT
+        with ESMTP id S234124AbiKRPaH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 10:28:41 -0500
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A7B64571
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 07:28:39 -0800 (PST)
-Received: by mail-il1-x12a.google.com with SMTP id z9so2673816ilu.10
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 07:28:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=V3r1rBEjB59P7Hp9rGdtjQJ0ITi8NZo801rMdyiF4HU=;
-        b=G+PzEFfAhMqQSIaM94usPBm+ze8W/n7MqO76Y1A3SsmdmZNsRJR4K38aX8qjnGNxLe
-         yaHwhUn3hbQVPmGCo96jqLkb3TamQXkTlCN8qtTYA79D8j14Kdlt9KEZE+UvSQrRQwZl
-         XN3osX0KOX7aMFWMp/Hd0xyTG7q+NC2QRuMbE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V3r1rBEjB59P7Hp9rGdtjQJ0ITi8NZo801rMdyiF4HU=;
-        b=5shyMrvopowyR4FrzDvvxyoNEmqd6ojjPTeClWlMKv4iyLu4uxL/BqgPPjvSXwaZvw
-         z+RtBFx59WMTlpyZvZFS9pJVrWOSPZxqMzIe4xpXoSwWCf/1GWw88PwrS45lcUGwwBKQ
-         M9cgY/Ba02AEsFGgPVtnEvIWQApOhbs3ImT8tA2N8IWL+rLvKcYJyqEEag6P55GBrneD
-         S+BtxyHyvVrp1Fu14Clg1xGXkdTjPm0kVSsKgD4tN457Wa7p5KYc8Dkcwfy8PVQCUZ3d
-         o1pHMFKt+ON/vemfNuE2tUV9swDVdK0Ohah7vlDQ8tq/JT4KTWP7BoQ25d8ObxgJQR8L
-         RcQg==
-X-Gm-Message-State: ANoB5pnOJJVs+mI7kLkUEy0yIquEEpWje7DpKXVfXVoD5fDgQwNhhh7Z
-        /9YSX0upa1b/ksd7FnI2uYu/Pw==
-X-Google-Smtp-Source: AA0mqf6C3biW+ByQBq4hcoGxLWTV//5gPtXVCzNfAg0J28ZfiqPApQ/2Us66xTCumk0l7fvllDWDPg==
-X-Received: by 2002:a05:6e02:c0d:b0:300:b1ee:c196 with SMTP id d13-20020a056e020c0d00b00300b1eec196mr3614368ile.237.1668785319286;
-        Fri, 18 Nov 2022 07:28:39 -0800 (PST)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id o7-20020a056e02092700b003027f923d29sm1351073ilt.39.2022.11.18.07.28.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Nov 2022 07:28:38 -0800 (PST)
-Date:   Fri, 18 Nov 2022 15:28:38 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Rajendra Nayak <quic_rjendra@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, konrad.dybcio@linaro.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dianders@chromium.org
-Subject: Re: [PATCH 2/2] arm64: dts: qcom: sc7280: Add a new herobrine Pro SKU
-Message-ID: <Y3ekpgpRxgFwEeo0@google.com>
-References: <20221118073017.26128-1-quic_rjendra@quicinc.com>
- <20221118073017.26128-2-quic_rjendra@quicinc.com>
+        Fri, 18 Nov 2022 10:30:07 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F1D2A0;
+        Fri, 18 Nov 2022 07:30:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668785406; x=1700321406;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=JzOGwCVCRMAleGj8kwHWb9shL3ET4TYIk8KCROq8iBE=;
+  b=V514Rju3XOlptZpQjkpI0hahIwa9vZHbMSUftacQUK5IMfpzlpy0A/rD
+   /to9Qow9000WLwOzWcs+8oET1Q7tEmgGrTL4q+cDGCRAxzSetLlCHvobE
+   aslNOH+llNrvcpHQILcrnnCIVN2N6pZTKJCo3igxXegQRQF/plGj0Z+Yz
+   UP4CUdrWLQZ7TfIMlTwx2uIGiP82Vkd4FuL2wFVyOlMMsgcfWmWOFdfd9
+   8JH6v83VnwvFij3Gw1gecgSvSlWAd3hF8Ndh+jxTLinBWY6d2fKd8eXB5
+   55xgkiITVhGtDea3ucW9DUipVgnejlbc7pEUaofmsYM8ldcB0kxeBpgwL
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="293547078"
+X-IronPort-AV: E=Sophos;i="5.96,174,1665471600"; 
+   d="scan'208";a="293547078"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2022 07:30:05 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="618041865"
+X-IronPort-AV: E=Sophos;i="5.96,174,1665471600"; 
+   d="scan'208";a="618041865"
+Received: from amulyuko-mobl1.ccr.corp.intel.com ([10.252.35.83])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2022 07:30:01 -0800
+Date:   Fri, 18 Nov 2022 17:30:00 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        linux-serial <linux-serial@vger.kernel.org>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: Re: [PATCH 08/15] tty: serial: qcom-geni-serial: split out the FIFO
+ tx code
+In-Reply-To: <20221118122539.384993-9-brgl@bgdev.pl>
+Message-ID: <3bc36af8-3cd4-b4b0-af30-2c5f309dc519@linux.intel.com>
+References: <20221118122539.384993-1-brgl@bgdev.pl> <20221118122539.384993-9-brgl@bgdev.pl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221118073017.26128-2-quic_rjendra@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rajendra,
+On Fri, 18 Nov 2022, Bartosz Golaszewski wrote:
 
-On Fri, Nov 18, 2022 at 01:00:17PM +0530, Rajendra Nayak wrote:
-
-> Subject: arm64: dts: qcom: sc7280: Add a new herobrine Pro SKU
-
-nit: this adds the herobrine *CRD* Pro SKU (though other Pro SKUs
-might follow), so 'CRD' should be part of the subject
-
-uber-nit: 'new' is redundant in this context
-
-> Some of the qualcomm qcard based herobrine devices can come with
-> a Pro variant of the chipset with some qcard level changes like
-> the smps9 from pm8350c which is ganged up with smps7 and smps8,
-> so we just end up removing smps9 from the herobrine pro sku dtsi.
-
-This is a very long sentence :)
-
-> We then use it to create a new dts for the Pro variant of the
-> herobrine CRD.
-
-Using 'we' is a a bit colloquial for a commit message, how a about
-something like this: 'Add a .dtsi for pro skus that deletes the
-smps9 node and include it from the new dts for the CRD Pro'.
-
-> Signed-off-by: Rajendra Nayak <quic_rjendra@quicinc.com>
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> 
+> qcom_geni_serial_handle_tx() is pretty big, let's move the code that
+> handles the actual writing of data to a separate function which makes
+> sense in preparation for introducing a dma variant of handle_tx().
+> 
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > ---
->  arch/arm64/boot/dts/qcom/Makefile             |  1 +
->  .../dts/qcom/sc7280-herobrine-crd-pro.dts     | 35 +++++++++++++++++++
->  .../dts/qcom/sc7280-herobrine-pro-sku.dtsi    |  8 +++++
->  3 files changed, 44 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-crd-pro.dts
->  create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-pro-sku.dtsi
+>  drivers/tty/serial/qcom_geni_serial.c | 60 +++++++++++++++------------
+>  1 file changed, 33 insertions(+), 27 deletions(-)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> index afe496a93f94..c5ac51c3a383 100644
-> --- a/arch/arm64/boot/dts/qcom/Makefile
-> +++ b/arch/arm64/boot/dts/qcom/Makefile
-> @@ -108,6 +108,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-wormdingler-rev1-boe-rt5682s.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-r1.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-r1-lte.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-crd.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-crd-pro.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-evoker.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-evoker-lte.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-herobrine-r1.dtb
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd-pro.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd-pro.dts
-> new file mode 100644
-> index 000000000000..fe6b228e9e4b
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd-pro.dts
-> @@ -0,0 +1,35 @@
-> +// SPDX-License-Identifier: BSD-3-Clause
-> +/*
-> + * sc7280 CRD 3+ Pro board device tree source
-> + *
-> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
-> + */
-> +
-> +#include "sc7280-herobrine-crd.dts"
-> +#include "sc7280-herobrine-pro-sku.dtsi"
-> +
-> +/ {
-> +	model = "Qualcomm Technologies, Inc. sc7280 CRD Pro platform (rev5+)";
-> +	compatible = "google,hoglin-sku1536", "qcom,sc7280";
-> +
-> +	/* FIXED REGULATORS */
-> +
-> +	/*
-> +	 * On most herobrine boards PPVAR_SYS directly provides VREG_EDP_BL.
-> +	 * However, on CRD there's an extra regulator in the way. Since this
-> +	 * is expected to be uncommon, we'll leave the "vreg_edp_bl" label
-> +	 * in the baseboard herobrine.dtsi point at "ppvar_sys" and then
-> +	 * make a "_crd" specific version here.
-> +	 */
-> +	vreg_edp_bl_crd: vreg-edp-bl-crd-regulator {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vreg_edp_bl_crd";
-> +
-> +		gpio = <&pm8350c_gpios 6 GPIO_ACTIVE_HIGH>;
-> +		enable-active-high;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&edp_bl_reg_en>;
-> +
-> +		vin-supply = <&ppvar_sys>;
-> +	};
-> +};
+> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+> index 39041538e5d2..4b155ca0ac74 100644
+> --- a/drivers/tty/serial/qcom_geni_serial.c
+> +++ b/drivers/tty/serial/qcom_geni_serial.c
+> @@ -701,19 +701,48 @@ static void qcom_geni_serial_start_rx(struct uart_port *uport)
+>  	writel(irq_en, uport->membase + SE_GENI_M_IRQ_EN);
+>  }
+>  
+> +static int qcom_geni_serial_send_chunk_fifo(struct uart_port *uport,
+> +					    unsigned int chunk)
+> +{
 
-Why is this node needed here, doesn't it already exist by including
-'sc7280-herobrine-crd.dts'?
+Some of the comments I have for this function you might want to implement 
+in a different patch than this simple move to own function.
 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-pro-sku.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-pro-sku.dtsi
-> new file mode 100644
-> index 000000000000..fb4bbe8aeda0
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-pro-sku.dtsi
-> @@ -0,0 +1,8 @@
-> +// SPDX-License-Identifier: BSD-3-Clause
-> +/*
-> + * Google Herobrine dts fragment for PRO SKUs
-> + *
-> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
-> + */
+> +	struct qcom_geni_serial_port *port = to_dev_port(uport);
+> +	struct circ_buf *xmit = &uport->state->xmit;
+> +	size_t remaining = chunk;
+> +	int i, tail = xmit->tail;
+
+Why there's remaining and i variables, both seem to provide a chunk sized 
+limit? Couldn't one be dropped?
+
+You could drop local tail handling, it doesn't seem to add much value.
+
+> +	for (i = 0; i < chunk; ) {
+> +		unsigned int tx_bytes;
+> +		u8 buf[sizeof(u32)];
+> +		int c;
 > +
-> +/delete-node/ &vreg_s9c_0p676;
-> -- 
-> 2.17.1
+> +		memset(buf, 0, sizeof(buf));
+> +		tx_bytes = min_t(size_t, remaining, BYTES_PER_FIFO_WORD);
+
+It's a bit confusing to mix sizeof(u32) and BYTES_PER_FIFO_WORD for the 
+same purpose, no?
+
+> +		for (c = 0; c < tx_bytes ; c++) {
+> +			buf[c] = xmit->buf[tail++];
+> +			tail &= UART_XMIT_SIZE - 1;
+
+If you drop the local tail, this becomes:
+
+			buf[c] = xmit->buf[xmit->tail];
+			uart_xmit_advance(uport, 1);
+
+> +		}
+> +
+> +		iowrite32_rep(uport->membase + SE_GENI_TX_FIFOn, buf, 1);
+> +
+> +		i += tx_bytes;
+> +		uport->icount.tx += tx_bytes;
+
+With uart_xmit_advance, this is to be dropped.
+
+> +		remaining -= tx_bytes;
+> +		port->tx_remaining -= tx_bytes;
+> +	}
+> +
+> +	return tail;
+> +}
+> +
+>  static void qcom_geni_serial_handle_tx(struct uart_port *uport, bool done,
+>  		bool active)
+>  {
+>  	struct qcom_geni_serial_port *port = to_dev_port(uport);
+>  	struct circ_buf *xmit = &uport->state->xmit;
+>  	size_t avail;
+> -	size_t remaining;
+>  	size_t pending;
+> -	int i;
+>  	u32 status;
+>  	u32 irq_en;
+>  	unsigned int chunk;
+> -	int tail;
+>  
+>  	status = readl(uport->membase + SE_GENI_TX_FIFO_STATUS);
+>  
+> @@ -732,7 +761,6 @@ static void qcom_geni_serial_handle_tx(struct uart_port *uport, bool done,
+>  	avail = port->tx_fifo_depth - (status & TX_FIFO_WC);
+>  	avail *= BYTES_PER_FIFO_WORD;
+>  
+> -	tail = xmit->tail;
+>  	chunk = min(avail, pending);
+>  	if (!chunk)
+>  		goto out_write_wakeup;
+> @@ -747,29 +775,7 @@ static void qcom_geni_serial_handle_tx(struct uart_port *uport, bool done,
+>  					uport->membase + SE_GENI_M_IRQ_EN);
+>  	}
+>  
+> -	remaining = chunk;
+> -	for (i = 0; i < chunk; ) {
+> -		unsigned int tx_bytes;
+> -		u8 buf[sizeof(u32)];
+> -		int c;
+> -
+> -		memset(buf, 0, sizeof(buf));
+> -		tx_bytes = min_t(size_t, remaining, BYTES_PER_FIFO_WORD);
+> -
+> -		for (c = 0; c < tx_bytes ; c++) {
+> -			buf[c] = xmit->buf[tail++];
+> -			tail &= UART_XMIT_SIZE - 1;
+> -		}
+> -
+> -		iowrite32_rep(uport->membase + SE_GENI_TX_FIFOn, buf, 1);
+> -
+> -		i += tx_bytes;
+> -		uport->icount.tx += tx_bytes;
+> -		remaining -= tx_bytes;
+> -		port->tx_remaining -= tx_bytes;
+> -	}
+> -
+> -	xmit->tail = tail;
+> +	xmit->tail = qcom_geni_serial_send_chunk_fifo(uport, chunk);
+
+Why you want to assign to xmit->tail here?
+
+>  
+>  	/*
+>  	 * The tx fifo watermark is level triggered and latched. Though we had
 > 
+
+-- 
+ i.
+
