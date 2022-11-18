@@ -2,155 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F38F762F3D1
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 12:35:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39E3F62F3D4
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 12:37:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239518AbiKRLf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 06:35:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35070 "EHLO
+        id S241377AbiKRLhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 06:37:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241303AbiKRLe6 (ORCPT
+        with ESMTP id S241560AbiKRLg0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 06:34:58 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 987FF8A17B;
-        Fri, 18 Nov 2022 03:34:03 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 4D5A11F924;
-        Fri, 18 Nov 2022 11:34:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1668771242; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vqSiCxu0crNnAzpBOtWKIOFuXwsDyaQFJ8B2fw8hztU=;
-        b=xp48TrunWilM2VXMJbQPGTCbgKrJrgN3/aoAOejdXxVAGchLpF3F9uvn6FpEgI4NasjQk6
-        3WycA9Mc4kS/QqHoRbGZNk7C6mHpBWX6tl0lo3GZCDqb/c7wmgK15aQJwiCZhcOl1wtkwy
-        N2dvm/1Uh/7JlElbffoX2que33AsF3M=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1668771242;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vqSiCxu0crNnAzpBOtWKIOFuXwsDyaQFJ8B2fw8hztU=;
-        b=CgCD0rV8e7C6NT95+K7bUFTcW0V980dqZtzu8vKcdLloVmCtk7emO2d9lT5afUd5q1K5Mf
-        Wt3GVlDesgwQ/mDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 231CB13A66;
-        Fri, 18 Nov 2022 11:34:02 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Q9jqB6ptd2P4aQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Fri, 18 Nov 2022 11:34:02 +0000
-Message-ID: <f008f8a2-8d5e-88ab-8d23-a2043ea5abe7@suse.cz>
-Date:   Fri, 18 Nov 2022 12:34:01 +0100
+        Fri, 18 Nov 2022 06:36:26 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB04C976CC;
+        Fri, 18 Nov 2022 03:35:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668771304; x=1700307304;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=LweqJ1WTUgBMaklbw2ffFkJFga+y35ZB8OdwOq82kjo=;
+  b=SBF0nm5g/QZ4mya0A2nR1skuwBPncD/fcLS9/oWR8jgBs2IcmtCH4gbt
+   zo61J4Uvxe0TWOhpzov4pSydH6Kg9kyIKtH52tHji7CigcZoT+mw39Bki
+   Yykc0HdVUGmBJooems4tIiR45N+orKWmBNrOywPkm7GJdjFN6fsDt8NiG
+   q/ELbWihz4QBc2nNxa6XAOg0wmO90iwqEH5BuACu+i8ewuF4IoNJ08x2V
+   9yn7BURaE3tU8/EDfJmfbNim703NP3SlhNXE8pYzhHT8hQFGiE4lWwly9
+   duur29QmcEGJAfdytO93hlhcJGV+HDxvtqsb5lcXX3JrEj63sJo7cl/0n
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="292817952"
+X-IronPort-AV: E=Sophos;i="5.96,174,1665471600"; 
+   d="scan'208";a="292817952"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2022 03:34:33 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="782619333"
+X-IronPort-AV: E=Sophos;i="5.96,174,1665471600"; 
+   d="scan'208";a="782619333"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.61.138])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2022 03:34:29 -0800
+Message-ID: <cebfe83b-138a-4bca-c37a-bcb5b25f580d@intel.com>
+Date:   Fri, 18 Nov 2022 13:34:25 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 2/2] slab: Remove special-casing of const 0 size
- allocations
+ Firefox/102.0 Thunderbird/102.5.0
+Subject: Re: [PATCH 3/3] mmc: block: Requeue on block size restrictions
 Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <20221118034713.gonna.754-kees@kernel.org>
- <20221118035200.1269184-2-keescook@chromium.org>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20221118035200.1269184-2-keescook@chromium.org>
+To:     =?UTF-8?Q?Christian_L=c3=b6hle?= <CLoehle@hyperstone.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>
+Cc:     Avri Altman <Avri.Altman@wdc.com>,
+        "vincent.whitchurch@axis.com" <vincent.whitchurch@axis.com>
+References: <f3b05a9103ba4c46ae78a96f8cdc700d@hyperstone.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <f3b05a9103ba4c46ae78a96f8cdc700d@hyperstone.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/18/22 04:51, Kees Cook wrote:
-> Passing a constant-0 size allocation into kmalloc() or kmalloc_node()
-> does not need to be a fast-path operation, so the static return value
-> can be removed entirely. This is in preparation for making sure that
-> all paths through the inlines result in a full extern function call,
-
-So with the kmalloc_trace() already solved, we could now say it's not "in
-preparation", but simply "makes sure", right? I can correct that while
-picking this patch.
-
-> where __alloc_size() hints will actually be seen[1] by GCC. (A constant
-> return value of 0 means the "0" allocation size won't be propagated by
-> the inline.)
+On 26/10/22 10:30, Christian Löhle wrote:
+> The block layer does not conform to all our sector count restrictions, so
+> requeue in case we had to modify the number of blocks sent instead of
+> going through the normal completion.
 > 
-> [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=96503
+> Note that the normal completion used before does not lead to a bug,
+> this change is just the nicer thing to do.
+
+Can you elaborate on why it is "nicer"?
+
+> An example of such a restriction is max_blk_count = 1 and 512 blksz,
+> but the block layer continues to use requests of size PAGE_SIZE.
 > 
-> Cc: Vlastimil Babka <vbabka@suse.cz>
-> Cc: Christoph Lameter <cl@linux.com>
-> Cc: Pekka Enberg <penberg@kernel.org>
-> Cc: David Rientjes <rientjes@google.com>
-> Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Roman Gushchin <roman.gushchin@linux.dev>
-> Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-> Cc: linux-mm@kvack.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+> Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
 > ---
->  include/linux/slab.h | 12 ++----------
->  1 file changed, 2 insertions(+), 10 deletions(-)
+>  drivers/mmc/core/block.c | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
 > 
-> diff --git a/include/linux/slab.h b/include/linux/slab.h
-> index 9033937c758e..84be05208418 100644
-> --- a/include/linux/slab.h
-> +++ b/include/linux/slab.h
-> @@ -561,17 +561,13 @@ void *kmalloc_large_node(size_t size, gfp_t flags, int node) __assume_page_align
->  #ifndef CONFIG_SLOB
->  static __always_inline __alloc_size(1) void *kmalloc(size_t size, gfp_t flags)
->  {
-> -	if (__builtin_constant_p(size)) {
-> +	if (__builtin_constant_p(size) && size) {
->  		unsigned int index;
->  
->  		if (size > KMALLOC_MAX_CACHE_SIZE)
->  			return kmalloc_large(size, flags);
->  
->  		index = kmalloc_index(size);
-> -
-> -		if (!index)
-> -			return ZERO_SIZE_PTR;
-> -
->  		return kmalloc_trace(
->  				kmalloc_caches[kmalloc_type(flags)][index],
->  				flags, size);
-> @@ -591,17 +587,13 @@ static __always_inline __alloc_size(1) void *kmalloc(size_t size, gfp_t flags)
->  #ifndef CONFIG_SLOB
->  static __always_inline __alloc_size(1) void *kmalloc_node(size_t size, gfp_t flags, int node)
->  {
-> -	if (__builtin_constant_p(size)) {
-> +	if (__builtin_constant_p(size) && size) {
->  		unsigned int index;
->  
->  		if (size > KMALLOC_MAX_CACHE_SIZE)
->  			return kmalloc_large_node(size, flags, node);
->  
->  		index = kmalloc_index(size);
-> -
-> -		if (!index)
-> -			return ZERO_SIZE_PTR;
-> -
->  		return kmalloc_node_trace(
->  				kmalloc_caches[kmalloc_type(flags)][index],
->  				flags, node, size);
+> diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
+> index 54cd009aee50..c434d3964880 100644
+> --- a/drivers/mmc/core/block.c
+> +++ b/drivers/mmc/core/block.c
+> @@ -1519,8 +1519,10 @@ static void mmc_blk_cqe_req_done(struct mmc_request *mrq)
+>  	/*
+>  	 * Block layer timeouts race with completions which means the normal
+>  	 * completion path cannot be used during recovery.
+> +	 * Also do not use it if we had to modify the block count to satisfy
+> +	 * host controller needs.
+>  	 */
+> -	if (mq->in_recovery)
+> +	if (mq->in_recovery || mrq->data->blocks != blk_rq_sectors(req))
+>  		mmc_blk_cqe_complete_rq(mq, req);
+>  	else if (likely(!blk_should_fake_timeout(req->q)))
+>  		blk_mq_complete_request(req);
+> @@ -2051,8 +2053,10 @@ static void mmc_blk_hsq_req_done(struct mmc_request *mrq)
+>  	/*
+>  	 * Block layer timeouts race with completions which means the normal
+>  	 * completion path cannot be used during recovery.
+> +	 * Also do not use it if we had to modify the block count to satisfy
+> +	 * host controller needs.
+>  	 */
+> -	if (mq->in_recovery)
+> +	if (mq->in_recovery || mrq->data->blocks != blk_rq_sectors(req))
+>  		mmc_blk_cqe_complete_rq(mq, req);
+>  	else if (likely(!blk_should_fake_timeout(req->q)))
+>  		blk_mq_complete_request(req);
+> @@ -2115,8 +2119,10 @@ static void mmc_blk_mq_post_req(struct mmc_queue *mq, struct request *req,
+>  	/*
+>  	 * Block layer timeouts race with completions which means the normal
+>  	 * completion path cannot be used during recovery.
+> +	 * Also do not use it if we had to modify the block count to satisfy
+> +	 * host controller needs.
+>  	 */
+> -	if (mq->in_recovery) {
+> +	if (mq->in_recovery || mrq->data->blocks != blk_rq_sectors(req)) {
+>  		mmc_blk_mq_complete_rq(mq, req);
+>  	} else if (likely(!blk_should_fake_timeout(req->q))) {
+>  		if (can_sleep)
 
