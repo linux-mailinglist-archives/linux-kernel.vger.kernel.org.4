@@ -2,122 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DCF962FE84
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 21:04:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE8B162FE7F
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 21:03:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231403AbiKRUEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 15:04:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44198 "EHLO
+        id S231171AbiKRUDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 15:03:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230322AbiKRUEH (ORCPT
+        with ESMTP id S229555AbiKRUDa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 15:04:07 -0500
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45549DC6;
-        Fri, 18 Nov 2022 12:04:05 -0800 (PST)
-Received: by mail-io1-f46.google.com with SMTP id b2so4604536iof.12;
-        Fri, 18 Nov 2022 12:04:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AhdkGygTY3zoLbGAB/+Raeg5fzHG6ZjkIK/WhyIG7oM=;
-        b=qMQUo+5n/Qgrw6orGT5BagNpQES5PYD3ObMq9VBTMugxag5GNnzhDRJJHpaCPgQd3O
-         OWnjrI7GsMeHJ6LG5II/Lg0l1gIgWPP2MUOZsqygOL7XhyYc+NeTcBu/u1WOnOZdevvR
-         IvkN121o63/tvk2nf45xa6T/z3gSPY6aPBHeG91GpGz2rdfXc5VG6g7kl7DGzHrHnOt2
-         hHOt2y6tWMk8T25uXiQtT4A1CtpiOLW2hoNTStO2+L7UaHqFbnj6/FBdIJhRyMI3ATX+
-         4GWqx40BXAf37tN6c5ZZy1fbka3Q8jtyRIoiI97lhHomuCMtm7ajJiVilT5VvoIzOZS5
-         51FQ==
-X-Gm-Message-State: ANoB5pkTcmOXXfnzVq2qiZKgtbh2rK/4tmzOXoVW8rshgaZ3YC4DVUZB
-        9EYjoyEiHm3RJ8CdvbI0Lh8=
-X-Google-Smtp-Source: AA0mqf5Br29FRXK/1NcL4h/veA3rOteAy8JC0XUr5l+LfnOm1RRMi55jyOIwQU0JwxDIIpRa32SFaA==
-X-Received: by 2002:a6b:8d09:0:b0:68b:7b1f:92b9 with SMTP id p9-20020a6b8d09000000b0068b7b1f92b9mr4167072iod.163.1668801844397;
-        Fri, 18 Nov 2022 12:04:04 -0800 (PST)
-Received: from noodle.cs.purdue.edu (switch-lwsn2133-z1r11.cs.purdue.edu. [128.10.127.250])
-        by smtp.googlemail.com with ESMTPSA id i13-20020a02b68d000000b003638d00b759sm1517966jam.54.2022.11.18.12.04.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 12:04:03 -0800 (PST)
-From:   Sungwoo Kim <iam@sung-woo.kim>
-Cc:     Sungwoo Kim <iam@sung-woo.kim>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] Bluetooth: L2CAP: Fix u8 overflow
-Date:   Fri, 18 Nov 2022 15:01:47 -0500
-Message-Id: <20221118200145.1741199-1-iam@sung-woo.kim>
-X-Mailer: git-send-email 2.25.1
+        Fri, 18 Nov 2022 15:03:30 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2054.outbound.protection.outlook.com [40.107.92.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52EC513CE4
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 12:03:29 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QVeNucwssZGfzY3+AZZ0zeTkjwuviNhS6BHJKZxC9kLqjsTXhsw1vq7Tv8fnLamB14+LIqodgqBRU4pemjXAzZxKSMaqnCwrdR8w+j3TLcAF53BvfrG9RRgpj3SHTu9HEKsre4cBuuS3ciTAPTbpWfjLybUfxRoaYgf2VCTXHbRlgQjMokBXptmYRj1kZd1eXUT1NBaSMushIjIvSLEomzR0ToiknT9/NylqfuFPLojIDkgFdbouAbDy4FvRKtait5l8bElWsHSSScZoAcynVuCVj8u0IVsaJ1UExHleR4Y3QQ4JSrIDzgoVwMr1m/pZwqZDbB8zdMVkO/lrSHnJqg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qFJB86B9ZBYA7ZjpupTspgY4fsa6DOadxe9kGeokKPs=;
+ b=WWfESxSRfcC1eBWxYnQNPu4KKa8RTnPy8K67CopDir5P0gX/Bu7/24pYA6rTiHlIVRZ8rF5oOZBW8sRrGHcy6al9y5FEz6/2hAii1UbAtJdoqXp4nIv05mJWm9YHKkRyR5T3z3C/ASfCkk/rDaEpT+7NByE3rMIiFX76lc7bK/d9pIa9W8qRtYwEsWawKhvBF6eqZL8Z3n1gtFZq07VHd9kTESxeQ7vP4cciC67txH2m19sN/e50gxPZ1BKtz7zkSVV3ScOwui3ebhCFkoZ96ceyMuUCFsK4IcL4pa+aTk+juN+nFTN9rtMYW07bFnUIbF79y6j+JO90hf71l782Sg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qFJB86B9ZBYA7ZjpupTspgY4fsa6DOadxe9kGeokKPs=;
+ b=rnMddoYJTBU18KeAQ1NF+cuky8EZdsig1kd1dVLvckHDBWmga4pV+GiQ2Mbfsc2F4YSOp4ae8AxMSMFpMy1THHqGZ8ugXBbESYt7p9Sda9+t5DAu1sJLdRyMnezAlLz+Oaaml9s0x40uhV4MbrntfgWp0CmjRzKKFTPzAS/j3L8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
+ by DM4PR12MB7646.namprd12.prod.outlook.com (2603:10b6:8:106::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.20; Fri, 18 Nov
+ 2022 20:03:27 +0000
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::2d6a:70d0:eb90:9dca]) by CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::2d6a:70d0:eb90:9dca%8]) with mapi id 15.20.5813.019; Fri, 18 Nov 2022
+ 20:03:27 +0000
+Message-ID: <b7c8a41d-6657-2646-4f18-ed13293369b2@amd.com>
+Date:   Fri, 18 Nov 2022 15:03:22 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] drm/amdgpu/dm/mst: Fix uninitialized var in
+ pre_compute_mst_dsc_configs_for_state()
+Content-Language: en-US
+To:     Lyude Paul <lyude@redhat.com>, amd-gfx@lists.freedesktop.org
+Cc:     Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        hersen wu <hersenxs.wu@amd.com>,
+        Fangzhi Zuo <Jerry.Zuo@amd.com>, Wayne Lin <Wayne.Lin@amd.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Roman Li <Roman.Li@amd.com>,
+        Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20221118195406.95779-1-lyude@redhat.com>
+From:   Harry Wentland <harry.wentland@amd.com>
+In-Reply-To: <20221118195406.95779-1-lyude@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YT4P288CA0002.CANP288.PROD.OUTLOOK.COM
+ (2603:10b6:b01:d4::6) To CO6PR12MB5427.namprd12.prod.outlook.com
+ (2603:10b6:5:358::13)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5427:EE_|DM4PR12MB7646:EE_
+X-MS-Office365-Filtering-Correlation-Id: 119e1b1b-f5e7-4297-34fc-08dac99ff49e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: EJAZtF5RwLoKJYyyNcMIBSqRWkTr4sKRRJcq5nHAMziusci/e2VLR7RykeH9bA6DmDN0v8hbU9TkSQq9PL68W+zvAMSyCAB1USiBV6HDm7brtypd3Q3UvJguctp5BItSmwjUOl26om3OFWBA5adnHUikA9Gt3W2OleosNA9IFwzbg/BOxjAy9C9tVtVQ7k6IMSaJZht3Eib40UnwEWSLjrW22I3PYTUj92eOWMq/P7iGY87HaQERByWn8ACATlTeOystAVNIPpIa1tdLru4kRDOdYSTvGWeLngXfWv6j5HAIfDX0vBcrytaqCYKRnxi8ehgUSy9tdtYO5nMbQxrM5+1pk2rSFk6w+oytbn1uD6Yh3WmIG952fqxCidsXQQrNZdA6OQqR0Iw2aKypAuQWuElXKXrNyqOvJIbDlYv2/G5XDHHRMLO437JXX5cZX3C1ZqHBAOMK5w5KWaitz5QUzdBLjoFcthkn2K1aXgNF8VqOksAPNomiV/mbcIBQMFG5UsScvIkfUWq2jGOT29fypuvUfzYDjikpurD481WfM+shk+FaAkdfMTiUoEox0dciyeanQ7usvRQZZutjxLbS6jCTWmtQ8W6U+FTOtZ3tDQGSbf1jBc9kQQaiZCFKqdESaPA0PdGEesLFTiDj7ApGENxcU8eZIdvxqSJ6ye/nz0FQrMKR/Pl8A7/zZ11XQBToQ8LvHkzXZZBXeYLFwGcMClAbgBxDT9fbATWY6ILSs7U=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(136003)(396003)(39860400002)(376002)(346002)(451199015)(31686004)(36756003)(38100700002)(66476007)(2906002)(41300700001)(44832011)(4744005)(83380400001)(86362001)(66946007)(31696002)(6512007)(4326008)(186003)(26005)(316002)(6486002)(8676002)(54906003)(5660300002)(8936002)(66556008)(2616005)(478600001)(6506007)(53546011)(6666004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?azhzWm1KM25CeFZ1N25jMkFLSXVMZ3VWWjhRb3M1MnFzMTFobERMOTBDbS9L?=
+ =?utf-8?B?ZTlmMERYelVuNjBzY2JxNEllKzh6ZTZ0MWtZOWF2Mzg3WlVkemE3SWVvUDNz?=
+ =?utf-8?B?MW1aeVovRGVMTHROdy9uUUtEYWdoVzBZVTN1TnBhc3h2NzlxUFpaakt3RENq?=
+ =?utf-8?B?b0dTNTFYRENHSkVuR2M4Q1d3amRSWm44UHVFNCtMNTN6dGhqUVJFd0pHRjhS?=
+ =?utf-8?B?ckFWeDZia3dCT0Q2VFJGdE44VnN0QkZyVjhzWlVlUUw3SWpiZ3V1QktlNXRO?=
+ =?utf-8?B?U3FSbGV2eGV3YlJPc0VTa3hIOENzMjhUZ0IrSG82N3Z4SHZWSjNSV25zM3FK?=
+ =?utf-8?B?NmNZM1dmMjYwZmtEUTMzZjhXWGg1WEZiUEpMcTZNcmxBQXlRVEZidFFJNkYv?=
+ =?utf-8?B?a0pWRXFWajVsTUZac2h1c2NTN01Fb0Z3QTZ2a2xoVXg5N0d6Z2RTVGZiQzBz?=
+ =?utf-8?B?SEMrQkFXb0VpT0NFaGpOcnZxQ3RsSDE4Q3ZteElUNDZYSVV3OUpraFZ2VDRn?=
+ =?utf-8?B?aHUrU1QycGgwdmpXbzRoYTlmMmVtUFdCc29qNXd1NzZ6VFIrKzk2NG1YNUJq?=
+ =?utf-8?B?U3g5NWsrQzZiT2tJUWRSSUdVMGFYZHNnQXpFM1h3SGdqQXp2ckZYbEdWbC93?=
+ =?utf-8?B?SGoySWhkRDJQVGF4RUwraFJjdG80OXBwcThydDRZQlcwOEtjd1IzcS83V1Q0?=
+ =?utf-8?B?cmZMY09NeEdmaE1CS2dteTlhVHVTaDI0S2xjR3IzS0IzNzZNRkdsSk9HcXh0?=
+ =?utf-8?B?Z3VXbjdWdjRnblFBR0paa3RWQ3E5NUdoY1llQnh6bUsxYTN3azNyK3R4b0J6?=
+ =?utf-8?B?U0ovNXVqWmlGc1RmVWxMTExaeC9zclovRmZ3cUxTTW9MVXdNY015dlIwWFdM?=
+ =?utf-8?B?VkV6UDdIUmxMWk9ENUJzK0lDRTV0OTlYWE5zSDVpRTZmRDR2bzY4U28wczg3?=
+ =?utf-8?B?Z29rU1RudVlUNXV3QWkwNUxXZ0hVWDJvb1hmUndpckZtWDJQZkZKRnptWDVH?=
+ =?utf-8?B?ME51by9XWXZXbEZheW0zbmZZU0wwOFJ3dHArN3RqVzRBaHI2eURtL2tjTlhj?=
+ =?utf-8?B?a29INnhPeHkzL3F3VG5RL3pDWk5jTzZqY2I1cDRsbWJvWlJ3aUdKSVpKTTlI?=
+ =?utf-8?B?NTg2MDlDVzNyMDVCS3VDQUNJbmVSbERnaEp1eWFYOWVBa21ObXZhamVvUGVv?=
+ =?utf-8?B?N2FwVENCYkdac2tBc3JOalVlbDhRWklLMnFoUEphVzI2ZitCcUNyc3AxNkdP?=
+ =?utf-8?B?Yk8zeWpNTnp5ZzdLWFFCR2l0S2JEc2xreHZ6dWlRSlF1ZTlGMFBkcEtwYld4?=
+ =?utf-8?B?ejlPNVh1anF3Z2VKamtvanpvU2tqSkFxYnlrZ080UlVHYS84dTJxait5YWIz?=
+ =?utf-8?B?T08yOEVvc1UrS0dQOGxFUFJCZUpwSmo0M3RvTGRtdGttbm00WXcvd0tNQVRB?=
+ =?utf-8?B?bnhJODNvNkNRZHRaQzk1Nm1xOVlyZTJiQUhOclRJRkE3OUdiVm9QT2lFNTZk?=
+ =?utf-8?B?amtPRmp4SU5HU2sraG5rNzdSMXphampXS0JJTlVuOVV1MWlyMTJDRG5QRnRN?=
+ =?utf-8?B?ZHhkMkhLak9ONlA3UDF1UFFDTUcyeDRzSEk5eTVGc3g1UzZNVklHM0hPR1l5?=
+ =?utf-8?B?RmZQUHBCWWdjdHp1U0xBemJwUHlLYXNNckxPVmpCbm9oNXF2ZHpQMlZsUDZj?=
+ =?utf-8?B?cjB1UDhRZ0lXb1lPd1djU3VSd1Y1NEFBKzdpWWdNNGtTUzJFOFh0ZTkzMEpN?=
+ =?utf-8?B?UXZtdEFERTlxajBKUng5aVhuUFd2TCtzbWJwdlgwa0RoY2JzTGozbnJiRG9K?=
+ =?utf-8?B?YzlwTThjWUdGbWt6cUNjaWs3NHlSWDJxWm9rL3VxMDExamZUTDB2Vmk3MkFP?=
+ =?utf-8?B?OUVsQjBnS0ZLVFpTUFBQRnVtUVB0Z2dDdnMvTnEvK0lubjI5OWh5bDkyYnFV?=
+ =?utf-8?B?SFI1RGVxQmJjK05CVDdtalZZblhpUDFoTktXVUwrS3lLOHFNUUQ5NXBra2o2?=
+ =?utf-8?B?czdpeXhNZFdKUXJyOEJYYWpOenRLbnRpQTZsNXRJRjZPUGV1bHJqNDJIVUZ5?=
+ =?utf-8?B?cHJZUzFZdDRKQWJ2a2diZ00reWxYQ3hLalNFOTExQ1NZSFBCamR1N3dYTmlJ?=
+ =?utf-8?Q?cTfTEo2B59iZi8958LEulI/L3?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 119e1b1b-f5e7-4297-34fc-08dac99ff49e
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2022 20:03:26.9681
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: js73RyAuHeH7vb5kjK7+7Q9Oe7VZ5tUXvf1vOs21pAIHefiVcNWmiE9ZNGbHWfFUmCduoFlQq3GSu69tpho76w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB7646
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-By keep sending L2CAP_CONF_REQ packets, chan->num_conf_rsp increases
-multiple times and eventually it will wrap around the maximum number
-(i.e., 255).
-This patch prevents this by adding a boundary check with
-L2CAP_MAX_CONF_RSP
+On 11/18/22 14:54, Lyude Paul wrote:
+> Coverity noticed this one, so let's fix it.
+> 
+> Signed-off-by: Lyude Paul <lyude@redhat.com>
 
-Btmon log:
-Bluetooth monitor ver 5.64
-= Note: Linux version 6.1.0-rc2 (x86_64)                               0.264594
-= Note: Bluetooth subsystem version 2.22                               0.264636
-@ MGMT Open: btmon (privileged) version 1.22                  {0x0001} 0.272191
-= New Index: 00:00:00:00:00:00 (Primary,Virtual,hci0)          [hci0] 13.877604
-@ RAW Open: 9496 (privileged) version 2.22                   {0x0002} 13.890741
-= Open Index: 00:00:00:00:00:00                                [hci0] 13.900426
-(...)
-> ACL Data RX: Handle 200 flags 0x00 dlen 1033             #32 [hci0] 14.273106
-        invalid packet size (12 != 1033)
-        08 00 01 00 02 01 04 00 01 10 ff ff              ............    
-> ACL Data RX: Handle 200 flags 0x00 dlen 1547             #33 [hci0] 14.273561
-        invalid packet size (14 != 1547)
-        0a 00 01 00 04 01 06 00 40 00 00 00 00 00        ........@.....  
-> ACL Data RX: Handle 200 flags 0x00 dlen 2061             #34 [hci0] 14.274390
-        invalid packet size (16 != 2061)
-        0c 00 01 00 04 01 08 00 40 00 00 00 00 00 00 04  ........@.......
-> ACL Data RX: Handle 200 flags 0x00 dlen 2061             #35 [hci0] 14.274932
-        invalid packet size (16 != 2061)
-        0c 00 01 00 04 01 08 00 40 00 00 00 07 00 03 00  ........@.......
-= bluetoothd: Bluetooth daemon 5.43                                   14.401828
-> ACL Data RX: Handle 200 flags 0x00 dlen 1033             #36 [hci0] 14.275753
-        invalid packet size (12 != 1033)
-        08 00 01 00 04 01 04 00 40 00 00 00              ........@...    
+Reviewed-by: Harry Wentland <harry.wentland@amd.com>
 
+Harry
 
-Signed-off-by: Sungwoo Kim <iam@sung-woo.kim>
----
- net/bluetooth/l2cap_core.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
-index 9c24947aa..9fdede5fe 100644
---- a/net/bluetooth/l2cap_core.c
-+++ b/net/bluetooth/l2cap_core.c
-@@ -4453,7 +4453,8 @@ static inline int l2cap_config_req(struct l2cap_conn *conn,
- 
- 	chan->ident = cmd->ident;
- 	l2cap_send_cmd(conn, cmd->ident, L2CAP_CONF_RSP, len, rsp);
--	chan->num_conf_rsp++;
-+	if (chan->num_conf_rsp < L2CAP_CONF_MAX_CONF_RSP)
-+		chan->num_conf_rsp++;
- 
- 	/* Reset config buffer. */
- 	chan->conf_len = 0;
--- 
-2.25.1
+> ---
+>  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
+> index 59648f5ffb59..6483ba266893 100644
+> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
+> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
+> @@ -1180,7 +1180,7 @@ static int pre_compute_mst_dsc_configs_for_state(struct drm_atomic_state *state,
+>  	struct amdgpu_dm_connector *aconnector;
+>  	struct drm_dp_mst_topology_mgr *mst_mgr;
+>  	int link_vars_start_index = 0;
+> -	int ret;
+> +	int ret = 0;
+>  
+>  	for (i = 0; i < dc_state->stream_count; i++)
+>  		computed_streams[i] = false;
 
