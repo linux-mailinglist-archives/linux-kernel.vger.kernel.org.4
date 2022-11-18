@@ -2,68 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5FA762F143
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 10:33:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7A9462F148
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 10:34:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241949AbiKRJdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 04:33:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46610 "EHLO
+        id S241734AbiKRJeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 04:34:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241734AbiKRJdi (ORCPT
+        with ESMTP id S232532AbiKRJeL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 04:33:38 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9B04BED
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 01:33:33 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id s206so4785078oie.3
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 01:33:33 -0800 (PST)
+        Fri, 18 Nov 2022 04:34:11 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE227678;
+        Fri, 18 Nov 2022 01:34:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1668764048; x=1700300048;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=cmB46MYntxsasjEvcGtzHFGFTsVREiVIEGw5WPlpe1Y=;
+  b=n9H4R0V5e2ZyN+wmOlzc4TpgOVdpjM6ClDRvN4bKE7vaG1imYm620+cB
+   GeCnT3OnpMG6XdExIELTLFX38NPwVlA3wMZN0fWV6kW6oB8ZTnf+H7KG/
+   R2Nhlrf+l32qaqAOfxFXzSEYcmeJdxBXgkRTRVQOzjL9SUgYEZlZaHGXh
+   bLThV5zP1gDO+Oo7nrTEI9zvnVGQa3oAjbRN4X555m9G9fXwzNqWvDisq
+   ITJUOGWBx5VOdc/Kes35DoIiflgpj6HHDVd92GVxd5+x8UPZiCmyoVtoP
+   ojlH6gR0vFPJIjnqB7NIh2LW25wDAnD/eXWOBmSCx6Th3vMgbdzpSInqV
+   w==;
+X-IronPort-AV: E=Sophos;i="5.96,173,1665471600"; 
+   d="scan'208";a="189553277"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 Nov 2022 02:34:07 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Fri, 18 Nov 2022 02:34:07 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12 via Frontend Transport; Fri, 18 Nov 2022 02:34:07 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VW6u8MI+K/s7VVx8YW9lLFn4sFKjQbMqgdHeS3eVE3XwmkOt0QqkVuCom/O9/bbgP3oAfZHcBd3txr9bIvZP8EFrM0tyjN0eC+mUMxunlkrcKQBl9WuQYaaI1ReNaHxXcUjT07aDN3DwvNriZanIR2mTlPbwNg1aZ+ecp4wuJ3P1uABv9G8mZDysxZyECxoFcp/mdIYvdx/qpOmP3d8s6NSw6C5L74j7yOt5VTXQDL89xgdFhYHpq1S7FSICttF5Z2M657EMZRmApwFoipOuPsDSH3naXCuO4+herGznN5KNYnXRyq0i6IaBaVfHSJ5cApoi9FX3d6B1SzLgLND6VQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NsoUfxbH5SLSg2lNnQv8pK7WyZF1Ur/coAEseCKvXPw=;
+ b=h4qZ1jKkPnYndUBP9CntoM+SkMLLl/OSEpzRWU+SxrZ31sPwg0M53SDTX9G3VRBEi3JEgVllUoES4P5Xc26Iut3WXj6h5VNpOn6ql81crylI3hpcw0Wa4sfpULMQE7QjG7lPfMSnEmiWyT5teYmuO0mdzkTIMh/EfgHbh56JXMr38JF9YvgO7lQrtStz1lTEHTaZ9ldQA/8lK00ORLpXjUhqgRNH9P5TGjKAluK9qa84wKVVlEEsbeiw80AzWM+iXmx8HfN+kqMBDnHzMs7baNP4CTg6ctOCrP/B9qKjaJk5WUZRXytXSRLs22pgSBIOk7Dk7pAvY99CjaoE6PrIxw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QGBKK5CeZroH7ShS22RxT+oUno0nBpZBVtOcojZZdq8=;
-        b=LnWyk1+YbBnsvvxANu0ja1k0YKY5ft1RebDN5JofTxn3rCvyyvrx/qSm1Rxuo7cDZ4
-         QK8MVd59LPgxGBkqdKd5D19Oe5Vx/5IlwNAoZDaqLWEyJ9R7tU/FjKzQSkEK/OdXtsAX
-         NP8Ttwop+erbE/9MuhiDkn79AuiRxC1zpUeXAddx2ojEFPWVlZS4T2Ec2uKCTWM8op+g
-         qTGIFBR+ou50Y8A4h9aIK8ZWzxrD+HBcHG2L8zUW9CjYaq/kCdV8orJlI2NjLVrhs+Y/
-         JaICEfFyfOGcr6WfNtxhWNrHnlfVLq7wOx88Dbl4u/FY2Bc+hY2bftlDnEyWEhiDjQQv
-         GyFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QGBKK5CeZroH7ShS22RxT+oUno0nBpZBVtOcojZZdq8=;
-        b=SHTngK0YiVJiaY0ni0e8jUdEd5X+ZGlQEXagMdMbznfNXiojgCFH8FCKUE3ADlXWr+
-         SxhcSwbInjuLmenJqA4bWSNbgWnQaNQEZ9EMAb9gXh71AIZLSf8r+P9sSETH50zoPmpb
-         ODlqWiDl7cQHXzDaaoDD4Zv6e8fISAvoyM225XSygs9ih/8RenJCf3P4lxFKNJMDkbim
-         Vm8fCRnJZhEopzuP0ORGvtpsXGLqdQJBWkyn/etWL8QJiqFN62tMyWlTZ4ljBSMMdhpj
-         irNPkNjUgb1AtfY2mx8gd9mE4HPLMqWYMrNd6v9BgnI5XNJcaNdFtDfObbBh19f8d0qF
-         oijg==
-X-Gm-Message-State: ANoB5pnUJ5WylsqGYeUUBwwfDMf2GHLzevz3ICOVDkEY55D9Bt9rPEcI
-        nTvVBVVi0+oFdG0ajQdVlRH9bDX7jEjSqWuc+bp9ag==
-X-Google-Smtp-Source: AA0mqf5aztd2DBbnXs+8RJGEawb49ZVGxplcwyUCPb4cQzITs7+khBvuyKHTwgGhgm4oheWUwI/SNygP2yizhCm6p6o=
-X-Received: by 2002:aca:1110:0:b0:35a:7e1d:3d72 with SMTP id
- 16-20020aca1110000000b0035a7e1d3d72mr5911899oir.233.1668764012778; Fri, 18
- Nov 2022 01:33:32 -0800 (PST)
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NsoUfxbH5SLSg2lNnQv8pK7WyZF1Ur/coAEseCKvXPw=;
+ b=ZzgGD8kWgI8gCl1IXjJJknLYGXjDWOkXyGMq6NDk7lBdWdYIO14KPH3YSW8gfwhTcsWwBAGvO0p1DxVWwKGN9iV2FSfcsijC+5h4oWK6Cw6fa2yd4nvE3wAwd0Fm7x0H8Izyszwc5sQVlC1SzVM6tkCphvUeifHY28R2+l7tjH0=
+Received: from CO6PR11MB5569.namprd11.prod.outlook.com (2603:10b6:303:139::20)
+ by BL1PR11MB5256.namprd11.prod.outlook.com (2603:10b6:208:30a::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.9; Fri, 18 Nov
+ 2022 09:34:02 +0000
+Received: from CO6PR11MB5569.namprd11.prod.outlook.com
+ ([fe80::72d6:72a6:b14:e620]) by CO6PR11MB5569.namprd11.prod.outlook.com
+ ([fe80::72d6:72a6:b14:e620%3]) with mapi id 15.20.5813.020; Fri, 18 Nov 2022
+ 09:34:02 +0000
+From:   <Daniel.Machon@microchip.com>
+To:     <luwei32@huawei.com>
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <Lars.Povlsen@microchip.com>,
+        <Steen.Hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>,
+        <netdev@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [patch net] net: microchip: sparx5: Fix return value in
+ sparx5_tc_setup_qdisc_ets()
+Thread-Topic: [patch net] net: microchip: sparx5: Fix return value in
+ sparx5_tc_setup_qdisc_ets()
+Thread-Index: AQHY+o1Tfm6LJWrfM0uVJIUKPTcpqa5Eb72A
+Date:   Fri, 18 Nov 2022 09:34:02 +0000
+Message-ID: <Y3dUG42A/UkVTpaa@DEN-LT-70577>
+References: <20221117150722.2909271-1-luwei32@huawei.com>
+In-Reply-To: <20221117150722.2909271-1-luwei32@huawei.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CO6PR11MB5569:EE_|BL1PR11MB5256:EE_
+x-ms-office365-filtering-correlation-id: 9a2b3fd4-b7ee-4dd4-198a-08dac9480720
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 3VnYy3GoooY4S9d4LAiFjAwou9QmgqPxTk5uEnLWidjwDmZiTkcCbRQdEZPeDdlHOPyClPiJhq/9bmKF4aq9qtXAHU5itn93uHamuzdxnLmDMqkoClrL+ZZ5yBSeT6Gx0+Mvrlvs6wLc6qHXYL+i8w1JDgvbGmLljRJ3kB5ZfPqfg0eeldhHkTQBrb8k55JnA2BRu8hZYV/ybFSx+oL6lig5Uyvoj0nQAl73dMSIpYoqgy2XdENBtgncfLvrwXWAnIkDdSlcCohMDAyGILcxOS6wseOWbPX3sE67k/mOwWAUCZL+VuFQ3QZwFTzoHzmnwHmMLYynhUc/tp4fI2MFCkzfn5bmdU8KXjzJNwlXefqyeCnYR8dfz3Q67NzoHHhnGfCMq8EmuaMFeoeBEmwfttYWTfDoOlVkcyw61C7bSBw2fKS5ASdyiwRoxh6pv9Ml35Og8NajydYaM753JuHESzXcSE7shcRkNKy1WJYzCZpJVRPHLCfLKUSu4NsqMrUEjv6qGS8PK1on7V4RMDoSgrJbIsSJGzvHZqUQkOqisqm9VQvjgl8zNUs9nJWSXDGnjAqI61wB2nqiUG/8LQZK060eIx/xaLhivWDLpmuFHQvWZ8aOa19w0xGdtvLG4rvS729K+KANbvqmZi9CqLKe8qldv+k4EIKcMpLnYC5/1JwlM9dNhnsHlqesSAp0cDWV1QAnpMNBca4GRAGCyTEgYVcvOHffDHBzxMIa8JzN0RI=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR11MB5569.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(39860400002)(346002)(396003)(376002)(366004)(136003)(451199015)(6506007)(478600001)(316002)(91956017)(9686003)(6512007)(71200400001)(2906002)(26005)(6916009)(54906003)(4326008)(6486002)(66556008)(66946007)(66476007)(8676002)(64756008)(76116006)(41300700001)(966005)(5660300002)(8936002)(186003)(66446008)(83380400001)(86362001)(33716001)(38070700005)(38100700002)(122000001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?tzPudNNibswwWCt7SzvcOpl2xVH7q0aYzZKv/zbrDp4qb1T9O7oeV0Mb2LbT?=
+ =?us-ascii?Q?sIeuMDykZibEZhm266NgkLKCnuLp9Q6MfcFfjKmaGXgBAq3ZjZRAw//KuSdv?=
+ =?us-ascii?Q?wdtmJSYd2UPLCMhsD/ush8xQb6F14hvjiHa0abmsDjEYYqrlqgnaRX3SMeoX?=
+ =?us-ascii?Q?gW2B5Ci0qVsOU1IH76RRqZtEUwl5GR6ABGIogYRUILFuyo2AMnZbxGLyxvQw?=
+ =?us-ascii?Q?ZD+2WfrHWuAxE1Qd1PGoJdfPiLF6eU2E+BPdzdYt+pRVCM0YmUwEP8oNb1+C?=
+ =?us-ascii?Q?CwTMWs6L4QAtIAM+6BgXAxNnJAEB8R7qi49YUIc11xEVqnQ/v1puHoMy8V2+?=
+ =?us-ascii?Q?sCw6vQjNaFukZFvxhrLdVlneg0+r/XwrEx1IJilgQg+hEtIDeiYd2ylzM0gy?=
+ =?us-ascii?Q?pEcIU+di2zO2YRidm8z7FY4H/SeLM+dSER4t2+uK9i+ZBFocYrGkinuke32X?=
+ =?us-ascii?Q?eALtsH8gFXYVHQWhPl4Gx4fhs/NqZu6XXd7D2wL5iyMi6g/8WIQh9rtlsfPm?=
+ =?us-ascii?Q?ENH2Xwvky/A8IKmupEEVYnlnYpfCsKDbXekYIiGHRL+h3WCFabpxGP0dWwPN?=
+ =?us-ascii?Q?L+XoMj/fbgE3BgMlCk8o3lwtXXxb4ayNgsB1xnNAuV6znSbldpka1woaLM7G?=
+ =?us-ascii?Q?/EGuS3835E5l6G8wsYJzv0TKxk5g1HpYWZh2iScxpKJ0L6xF1YFofXpzxoPn?=
+ =?us-ascii?Q?wrnejbwSBtoWPwJ4nVyWcGue48DUBEyKSbX1LLndNfrf0/wVCp0AOUCs1txH?=
+ =?us-ascii?Q?q2vQ+rixb5Jsjg72wci3+6K3Bmn+5/1PAgAr9h4QIMX/XXmi/RPx2fjjGxXY?=
+ =?us-ascii?Q?SPY2/2hAJubxkvWSLmbugL9ykp8pyXF+lwsoOvLFT9cNfBY4wRmlNmI2VhZZ?=
+ =?us-ascii?Q?ql7JlObRJpFzg/Jqdo5FBMARKib9eTIxXoS3zu73kUnlDs24sX6Z1oiqgAfK?=
+ =?us-ascii?Q?6usUGGMR+v5rBD0gDQoPQLjBYJ6VVBBkJu5+aDaW2DJPAIQEqSP9YLGMrrOh?=
+ =?us-ascii?Q?7pokvwSJ77BjfpME7+7MsjyvtmWqp2tfDGrFDp4b4znCA5gQb6OHfD3LDGbD?=
+ =?us-ascii?Q?fmDJd+ErHcJTM9IYl3nT2PFRRkGgj2QXSiB6usBYHLvzQEkElL4qAdlujC5a?=
+ =?us-ascii?Q?wSLAGqJWyzf0oGxrm8+NptPfW8rBE3SVYMZttrdHBMJMBE7TJHsk6TkSLhR0?=
+ =?us-ascii?Q?kcIGwgtKM8gWwmtEdVoX/BA/LMOc//NYXzCcemFOunSalnOu27471qo7LXnd?=
+ =?us-ascii?Q?DXO3sNUP58QRCfYJo+pmOYRrNQO5U/+m9056h8pacJozjkPVO9Dk0Y9PgYlH?=
+ =?us-ascii?Q?km+1f513h0uJwKTwj605kNQ+pQROin7Ch32N9csCoAYKEUp9f/5MZPR3a67f?=
+ =?us-ascii?Q?kbUEfyrsamlu+1gOQ28Go082ebCpKesX+RHckdQHUYWNd/H9Zhx2CwoWJIUd?=
+ =?us-ascii?Q?aTLzbZVOs2Uai2tX6Uhli25rnX5Fq1frYk4KR33t39739mKtoQCuKxolsN1x?=
+ =?us-ascii?Q?YD5VY7s5bMcmOxLOGnAlk4ulSGwUnZVJVTjE1KZ6xUVH1re0yaLNwqEkFDn7?=
+ =?us-ascii?Q?ROu5+emPXtBctjeW4bO+7vwHykas6RmHS/ZCCsjEK6emEGQ3mmrzKoPbhWFA?=
+ =?us-ascii?Q?Q/79eldL0vVBobQUNtnpdfI=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <CEF8F139CF04D94BB63BC287AE88D29F@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <CAO4mrfd4=HRXMrcdZQUorNaFss3AFfrRxuXWMFT3uh+Dvfwb9g@mail.gmail.com>
- <CAO4mrfdU4oGktM8PPFg66=32N0JSGx=gtG80S89-b66tS3NLVw@mail.gmail.com> <CAO4mrfftfwBWbt-a1H3q559jtnv93MQ92kp=DFnA+-pRrSObcw@mail.gmail.com>
-In-Reply-To: <CAO4mrfftfwBWbt-a1H3q559jtnv93MQ92kp=DFnA+-pRrSObcw@mail.gmail.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Fri, 18 Nov 2022 10:33:21 +0100
-Message-ID: <CACT4Y+Zub=+V3Yx=wSagYYeybwhbBt66COyTc=OjFAMOibybxg@mail.gmail.com>
-Subject: Re: BUG: unable to handle kernel NULL pointer dereference in gfs2_evict_inode
-To:     Wei Chen <harperchen1110@gmail.com>
-Cc:     rpeterso@redhat.com, agruenba@redhat.com, cluster-devel@redhat.com,
-        viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org,
-        syzkaller@googlegroups.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR11MB5569.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9a2b3fd4-b7ee-4dd4-198a-08dac9480720
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Nov 2022 09:34:02.0562
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: XXoZkUic7wkKWdZFLvtwjzJNAeubolbAE4b5DoJevgNmFipjruTFTRXVmQyMSlx+IM/5xPGJQRfPeF2y+djo/b7MNDGkLrYtEoGxq5ErSkc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5256
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,310 +149,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Nov 2022 at 09:06, Wei Chen <harperchen1110@gmail.com> wrote:
->
-> Dear Linux developers,
->
-> The bug persists in upstream Linux v6.0-rc5.
-
-If you fix this, please also add the syzbot tag:
-
-Reported-by: syzbot+8a5fc6416c175cecea34@syzkaller.appspotmail.com
-https://lore.kernel.org/all/000000000000ab092305e268a016@google.com/
-
-> R10: 0000000000000000 R11: 0000000000000206 R12: 0000000020000000
-> R13: 0000000020000100 R14: 0000000020000200 R15: 0000000020047a20
->  </TASK>
-> gfs2: fsid=syz:syz.0: can't read journal index: -5
-> BUG: kernel NULL pointer dereference, address: 0000000000000064
-> #PF: supervisor read access in kernel mode
-> #PF: error_code(0x0000) - not-present page
-> PGD 28908067 P4D 28908067 PUD 28909067 PMD 0
-> Oops: 0000 [#1] PREEMPT SMP
-> CPU: 0 PID: 14812 Comm: syz-executor.1 Not tainted
-> 6.1.0-rc5-63183-gd418a331631b #1
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-> Ubuntu-1.8.2-1ubuntu1 04/01/2014
-> RIP: 0010:evict_linked_inode fs/gfs2/super.c:1330 [inline]
-> RIP: 0010:gfs2_evict_inode+0x449/0xb70 fs/gfs2/super.c:1385
-> Code: 00 00 00 48 89 df e8 46 13 5a ff 48 8b bb a8 02 00 00 31 f6 e8
-> d8 70 fd ff 48 8b 4c 24 20 31 f6 48 8b 81 b0 05 00 00 48 89 cf <8b> 50
-> 64 e8 5f 4b 00 00 31 ff 41 89 c7 89 c6 e8 e3 86 2d ff 45 85
-> RSP: 0018:ffff88802aec3a80 EFLAGS: 00010246
-> RAX: 0000000000000000 RBX: ffff88800eb70f00 RCX: ffff888028c58000
-> RDX: ffffc900092dc000 RSI: 0000000000000000 RDI: ffff888028c58000
-> RBP: ffff88802aec3b38 R08: ffffffff81fb50c2 R09: 0000000000000000
-> R10: 0000000000000005 R11: 0000000000000000 R12: ffff88800eb71228
-> R13: ffff88800eb71078 R14: ffff888028c58000 R15: 0000000000000000
-> FS:  00007fd4381ff700(0000) GS:ffff88803ec00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000000000064 CR3: 0000000028c0f000 CR4: 00000000003526f0
-> DR0: 0000000000000000 DR1: 0000000000000002 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000ffff0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  evict+0x122/0x230 fs/inode.c:664
->  iput_final fs/inode.c:1747 [inline]
->  iput fs/inode.c:1773 [inline]
->  iput+0x317/0x390 fs/inode.c:1759
->  init_journal fs/gfs2/ops_fstype.c:875 [inline]
->  init_inodes+0x433/0xd80 fs/gfs2/ops_fstype.c:889
->  gfs2_fill_super+0x9a2/0xf20 fs/gfs2/ops_fstype.c:1247
->  get_tree_bdev+0x224/0x320 fs/super.c:1324
->  gfs2_get_tree+0x27/0xd0 fs/gfs2/ops_fstype.c:1330
->  vfs_get_tree+0x2c/0x100 fs/super.c:1531
->  do_new_mount fs/namespace.c:3040 [inline]
->  path_mount+0x75c/0x1020 fs/namespace.c:3370
->  do_mount+0xa2/0xc0 fs/namespace.c:3383
->  __do_sys_mount fs/namespace.c:3591 [inline]
->  __se_sys_mount fs/namespace.c:3568 [inline]
->  __x64_sys_mount+0x13e/0x150 fs/namespace.c:3568
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x34/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x46174a
-> Code: b8 a6 00 00 00 0f 05 48 3d 01 f0 ff ff 0f 83 bd 86 fb ff c3 66
-> 2e 0f 1f 84 00 00 00 00 00 66 90 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d
-> 01 f0 ff ff 0f 83 9a 86 fb ff c3 66 0f 1f 84 00 00 00 00 00
-> RSP: 002b:00007fd4381fea78 EFLAGS: 00000206 ORIG_RAX: 00000000000000a5
-> RAX: ffffffffffffffda RBX: 00007fd4381feb10 RCX: 000000000046174a
-> RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007fd4381fead0
-> RBP: 00007fd4381fead0 R08: 00007fd4381feb10 R09: 0000000020000000
-> R10: 0000000000000000 R11: 0000000000000206 R12: 0000000020000000
-> R13: 0000000020000100 R14: 0000000020000200 R15: 0000000020047a20
->  </TASK>
-> Modules linked in:
-> CR2: 0000000000000064
-> ---[ end trace 0000000000000000 ]---
-> RIP: 0010:evict_linked_inode fs/gfs2/super.c:1330 [inline]
-> RIP: 0010:gfs2_evict_inode+0x449/0xb70 fs/gfs2/super.c:1385
-> Code: 00 00 00 48 89 df e8 46 13 5a ff 48 8b bb a8 02 00 00 31 f6 e8
-> d8 70 fd ff 48 8b 4c 24 20 31 f6 48 8b 81 b0 05 00 00 48 89 cf <8b> 50
-> 64 e8 5f 4b 00 00 31 ff 41 89 c7 89 c6 e8 e3 86 2d ff 45 85
-> RSP: 0018:ffff88802aec3a80 EFLAGS: 00010246
-> RAX: 0000000000000000 RBX: ffff88800eb70f00 RCX: ffff888028c58000
-> RDX: ffffc900092dc000 RSI: 0000000000000000 RDI: ffff888028c58000
-> RBP: ffff88802aec3b38 R08: ffffffff81fb50c2 R09: 0000000000000000
-> R10: 0000000000000005 R11: 0000000000000000 R12: ffff88800eb71228
-> R13: ffff88800eb71078 R14: ffff888028c58000 R15: 0000000000000000
-> FS:  00007fd4381ff700(0000) GS:ffff88803ec00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000000000064 CR3: 0000000028c0f000 CR4: 00000000003526f0
-> DR0: 0000000000000000 DR1: 0000000000000002 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000ffff0ff0 DR7: 0000000000000400
-> ----------------
-> Code disassembly (best guess):
->    0: 00 00                 add    %al,(%rax)
->    2: 00 48 89             add    %cl,-0x77(%rax)
->    5: df e8                 fucomip %st(0),%st
->    7: 46 13 5a ff           rex.RX adc -0x1(%rdx),%r11d
->    b: 48 8b bb a8 02 00 00 mov    0x2a8(%rbx),%rdi
->   12: 31 f6                 xor    %esi,%esi
->   14: e8 d8 70 fd ff       callq  0xfffd70f1
->   19: 48 8b 4c 24 20       mov    0x20(%rsp),%rcx
->   1e: 31 f6                 xor    %esi,%esi
->   20: 48 8b 81 b0 05 00 00 mov    0x5b0(%rcx),%rax
->   27: 48 89 cf             mov    %rcx,%rdi
-> * 2a: 8b 50 64             mov    0x64(%rax),%edx <-- trapping instruction
->   2d: e8 5f 4b 00 00       callq  0x4b91
->   32: 31 ff                 xor    %edi,%edi
->   34: 41 89 c7             mov    %eax,%r15d
->   37: 89 c6                 mov    %eax,%esi
->   39: e8 e3 86 2d ff       callq  0xff2d8721
->   3e: 45                   rex.RB
->   3f: 85                   .byte 0x85
->
-> Best,
-> Wei
->
-> On Mon, 31 Oct 2022 at 21:25, Wei Chen <harperchen1110@gmail.com> wrote:
-> >
-> > Dear Linux developers,
-> >
-> > Here is the link to the reproducers.
-> >
-> > C reproducer: https://drive.google.com/file/d/1P9GsW2pvEN_tvn89RYsrgnv2uDz3_6iq/view?usp=share_link
-> > Syz reproducer:
-> > https://drive.google.com/file/d/1Be-QEZ-hfj_CXhXlSEvzbf3E89HmkVMH/view?usp=share_link
-> >
-> > The bug persists in the latest commit, v5.15.76 (4f5365f77018). I hope
-> > it is helpful to you.
-> >
-> > [   83.919419][ T6891]   function = gfs2_dirent_scan, file =
-> > fs/gfs2/dir.c, line = 602
-> > [   83.923713][ T6891] gfs2: fsid=syz:syz.0: about to withdraw this file system
-> > [   83.929444][ T6891] gfs2: fsid=syz:syz.0: File system withdrawn
-> > [   83.931468][ T6891] CPU: 1 PID: 6891 Comm: a.out Not tainted 5.15.76 #5
-> > [   83.933492][ T6891] Hardware name: QEMU Standard PC (i440FX + PIIX,
-> > 1996), BIOS rel-1.13.0-48-gd9c812dda519-prebuilt.qemu.org 04/01/2014
-> > [   83.936328][ T6891] Call Trace:
-> > [   83.937107][ T6891]  <TASK>
-> > [   83.937780][ T6891]  dump_stack_lvl+0x8d/0xcf
-> > [   83.938843][ T6891]  gfs2_withdraw+0x212/0x730
-> > [   83.939908][ T6891]  ? gfs2_dirent_scan+0x158/0x1a0
-> > [   83.941070][ T6891]  gfs2_dirent_scan+0x158/0x1a0
-> > [   83.942185][ T6891]  ? do_filldir_main.isra.21+0x1e0/0x1e0
-> > [   83.943476][ T6891]  ? do_filldir_main.isra.21+0x1e0/0x1e0
-> > [   83.944765][ T6891]  gfs2_dirent_search+0x156/0x2b0
-> > [   83.945928][ T6891]  gfs2_dir_search+0x4a/0x120
-> > [   83.947005][ T6891]  gfs2_lookupi+0x1ec/0x2c0
-> > [   83.948042][ T6891]  ? gfs2_lookupi+0x12d/0x2c0
-> > [   83.949127][ T6891]  ? gfs2_lookup_simple+0x57/0x90
-> > [   83.950403][ T6891]  gfs2_lookup_simple+0x57/0x90
-> > [   83.951522][ T6891]  init_inodes+0x6c/0xfd0
-> > [   83.952527][ T6891]  ? snprintf+0x66/0x90
-> > [   83.953544][ T6891]  ? gfs2_fill_super+0xa4d/0x1080
-> > [   83.954695][ T6891]  gfs2_fill_super+0xa4d/0x1080
-> > [   83.955809][ T6891]  ? gfs2_glock_nq_num+0x8f/0xe0
-> > [   83.956946][ T6891]  ? snprintf+0x66/0x90
-> > [   83.957905][ T6891]  ? set_blocksize+0x100/0x130
-> > [   83.959011][ T6891]  ? gfs2_reconfigure+0x4c0/0x4c0
-> > [   83.960164][ T6891]  ? get_tree_bdev+0x1c9/0x310
-> > [   83.961270][ T6891]  get_tree_bdev+0x1c9/0x310
-> > [   83.962579][ T6891]  gfs2_get_tree+0x24/0xc0
-> > [   83.963992][ T6891]  vfs_get_tree+0x28/0x100
-> > [   83.965423][ T6891]  path_mount+0x926/0xce0
-> > [   83.966878][ T6891]  ? putname+0x83/0xa0
-> > [   83.968251][ T6891]  do_mount+0x92/0xb0
-> > [   83.969599][ T6891]  __x64_sys_mount+0xb0/0x120
-> > [   83.971115][ T6891]  do_syscall_64+0x34/0xb0
-> > [   83.972527][ T6891]  entry_SYSCALL_64_after_hwframe+0x61/0xcb
-> > [   83.974433][ T6891] RIP: 0033:0x7f4669d7f48a
-> > [   83.975836][ T6891] Code: 48 8b 0d 11 fa 2a 00 f7 d8 64 89 01 48 83
-> > c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5
-> > 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d de f9 2a 00 f7 d8
-> > 64 89 01 48
-> > [   83.982060][ T6891] RSP: 002b:00007f466a46bd38 EFLAGS: 00000282
-> > ORIG_RAX: 00000000000000a5
-> > [   83.984695][ T6891] RAX: ffffffffffffffda RBX: 0000000000000000
-> > RCX: 00007f4669d7f48a
-> > [   83.986856][ T6891] RDX: 0000000020000000 RSI: 0000000020000100
-> > RDI: 00007f466a46be70
-> > [   83.988696][ T6891] RBP: 00007f466a46bef0 R08: 00007f466a46bd70
-> > R09: 0000000000000000
-> > [   83.990534][ T6891] R10: 0000000000000000 R11: 0000000000000282
-> > R12: 00007ffd64dee9fe
-> > [   83.992369][ T6891] R13: 00007ffd64dee9ff R14: 00007f466a44c000
-> > R15: 0000000000000003
-> > [   83.994218][ T6891]  </TASK>
-> > [   83.997025][ T6891] gfs2: fsid=syz:syz.0: can't lookup journal index: 0
-> > [   83.998884][ T6891] BUG: kernel NULL pointer dereference, address:
-> > 000000000000008c
-> > [   84.000696][ T6891] #PF: supervisor read access in kernel mode
-> > [   84.002075][ T6891] #PF: error_code(0x0000) - not-present page
-> > [   84.003452][ T6891] PGD 109056067 P4D 109056067 PUD 109057067 PMD 0
-> > [   84.004955][ T6891] Oops: 0000 [#1] PREEMPT SMP
-> > [   84.006026][ T6891] CPU: 1 PID: 6891 Comm: a.out Not tainted 5.15.76 #5
-> > [   84.007585][ T6891] Hardware name: QEMU Standard PC (i440FX + PIIX,
-> > 1996), BIOS rel-1.13.0-48-gd9c812dda519-prebuilt.qemu.org 04/01/2014
-> > [   84.010444][ T6891] RIP: 0010:gfs2_evict_inode+0x39f/0x910
-> > [   84.011742][ T6891] Code: 02 37 ff be 01 00 00 00 48 89 df e8 ab 38
-> > 60 ff 48 8b bb b8 04 00 00 31 f6 e8 7d 95 fd ff 49 8b 87 00 09 00 00
-> > 31 f6 4c 89 ff <8b> 90 8c 00 00 00 e8 56 43 00 00 85 c0 89 85 60 ff ff
-> > ff 75 25 e8
-> > [   84.016251][ T6891] RSP: 0018:ffffc900025d3b00 EFLAGS: 00010246
-> > [   84.017655][ T6891] RAX: 0000000000000000 RBX: ffff88810cb10650
-> > RCX: 0000000000000000
-> > [   84.019490][ T6891] RDX: ffff88810ab15340 RSI: 0000000000000000
-> > RDI: ffff88810c1bc000
-> > [   84.021329][ T6891] RBP: ffffc900025d3bb0 R08: 0000000000000001
-> > R09: 0000000000000000
-> > [   84.023160][ T6891] R10: ffffc900025d38f8 R11: 0000000000000001
-> > R12: ffff88810cb10b88
-> > [   84.024992][ T6891] R13: ffff88810cb10878 R14: ffff88810c1bc000
-> > R15: ffff88810c1bc000
-> > [   84.026825][ T6891] FS:  00007f466a46c700(0000)
-> > GS:ffff88813dc00000(0000) knlGS:0000000000000000
-> > [   84.028869][ T6891] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > [   84.030382][ T6891] CR2: 000000000000008c CR3: 000000010c054000
-> > CR4: 00000000003506e0
-> > [   84.032206][ T6891] DR0: 0000000000000000 DR1: 0000000000000000
-> > DR2: 0000000000000000
-> > [   84.034034][ T6891] DR3: 0000000000000000 DR6: 00000000fffe0ff0
-> > DR7: 0000000000000400
-> > [   84.035859][ T6891] Call Trace:
-> > [   84.036615][ T6891]  <TASK>
-> > [   84.037294][ T6891]  ? find_held_lock+0x2d/0x90
-> > [   84.038375][ T6891]  ? gfs2_evict_inode+0x2c7/0x910
-> > [   84.039537][ T6891]  ? evict_unlinked_inode+0x380/0x380
-> > [   84.040773][ T6891]  ? evict+0xfd/0x1e0
-> > [   84.041694][ T6891]  evict+0xfd/0x1e0
-> > [   84.042571][ T6891]  ? gfs2_glock_put_eventually+0x40/0x40
-> > [   84.043866][ T6891]  iput.part.20+0x217/0x3a0
-> > [   84.044949][ T6891]  iput+0x29/0x40
-> > [   84.045790][ T6891]  dentry_unlink_inode+0x163/0x170
-> > [   84.046971][ T6891]  __dentry_kill+0x137/0x220
-> > [   84.048032][ T6891]  ? dput+0x32/0x650
-> > [   84.048936][ T6891]  dput+0x42b/0x650
-> > [   84.049814][ T6891]  gfs2_fill_super+0xa94/0x1080
-> > [   84.050932][ T6891]  ? gfs2_glock_nq_num+0x8f/0xe0
-> > [   84.052068][ T6891]  ? snprintf+0x66/0x90
-> > [   84.053036][ T6891]  ? set_blocksize+0x100/0x130
-> > [   84.054137][ T6891]  ? gfs2_reconfigure+0x4c0/0x4c0
-> > [   84.055292][ T6891]  ? get_tree_bdev+0x1c9/0x310
-> > [   84.056391][ T6891]  get_tree_bdev+0x1c9/0x310
-> > [   84.057457][ T6891]  gfs2_get_tree+0x24/0xc0
-> > [   84.058474][ T6891]  vfs_get_tree+0x28/0x100
-> > [   84.059489][ T6891]  path_mount+0x926/0xce0
-> > [   84.060486][ T6891]  ? putname+0x83/0xa0
-> > [   84.061432][ T6891]  do_mount+0x92/0xb0
-> > [   84.062353][ T6891]  __x64_sys_mount+0xb0/0x120
-> > [   84.063437][ T6891]  do_syscall_64+0x34/0xb0
-> > [   84.064455][ T6891]  entry_SYSCALL_64_after_hwframe+0x61/0xcb
-> > [   84.065811][ T6891] RIP: 0033:0x7f4669d7f48a
-> > [   84.066822][ T6891] Code: 48 8b 0d 11 fa 2a 00 f7 d8 64 89 01 48 83
-> > c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5
-> > 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d de f9 2a 00 f7 d8
-> > 64 89 01 48
-> > [   84.071310][ T6891] RSP: 002b:00007f466a46bd38 EFLAGS: 00000282
-> > ORIG_RAX: 00000000000000a5
-> > [   84.073242][ T6891] RAX: ffffffffffffffda RBX: 0000000000000000
-> > RCX: 00007f4669d7f48a
-> > [   84.075069][ T6891] RDX: 0000000020000000 RSI: 0000000020000100
-> > RDI: 00007f466a46be70
-> > [   84.076892][ T6891] RBP: 00007f466a46bef0 R08: 00007f466a46bd70
-> > R09: 0000000000000000
-> > [   84.078724][ T6891] R10: 0000000000000000 R11: 0000000000000282
-> > R12: 00007ffd64dee9fe
-> > [   84.080598][ T6891] R13: 00007ffd64dee9ff R14: 00007f466a44c000
-> > R15: 0000000000000003
-> > [   84.082437][ T6891]  </TASK>
-> > [   84.083141][ T6891] Modules linked in:
-> > [   84.084084][ T6891] CR2: 000000000000008c
-> > [   84.085089][ T6891] ---[ end trace 7249ef596cc64205 ]---
-> > [   84.086343][ T6891] RIP: 0010:gfs2_evict_inode+0x39f/0x910
-> > [   84.087642][ T6891] Code: 02 37 ff be 01 00 00 00 48 89 df e8 ab 38
-> > 60 ff 48 8b bb b8 04 00 00 31 f6 e8 7d 95 fd ff 49 8b 87 00 09 00 00
-> > 31 f6 4c 89 ff <8b> 90 8c 00 00 00 e8 56 43 00 00 85 c0 89 85 60 ff ff
-> > ff 75 25 e8
-> > [   84.092183][ T6891] RSP: 0018:ffffc900025d3b00 EFLAGS: 00010246
-> > [   84.093581][ T6891] RAX: 0000000000000000 RBX: ffff88810cb10650
-> > RCX: 0000000000000000
-> > [   84.095407][ T6891] RDX: ffff88810ab15340 RSI: 0000000000000000
-> > RDI: ffff88810c1bc000
-> > [   84.097245][ T6891] RBP: ffffc900025d3bb0 R08: 0000000000000001
-> > R09: 0000000000000000
-> > [   84.099079][ T6891] R10: ffffc900025d38f8 R11: 0000000000000001
-> > R12: ffff88810cb10b88
-> > [   84.100917][ T6891] R13: ffff88810cb10878 R14: ffff88810c1bc000
-> > R15: ffff88810c1bc000
-> > [   84.102756][ T6891] FS:  00007f466a46c700(0000)
-> > GS:ffff88813dc00000(0000) knlGS:0000000000000000
-> > [   84.104808][ T6891] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > [   84.106320][ T6891] CR2: 000000000000008c CR3: 000000010c054000
-> > CR4: 00000000003506e0
-> > [   84.108160][ T6891] DR0: 0000000000000000 DR1: 0000000000000000
-> > DR2: 0000000000000000
-> > [   84.109992][ T6891] DR3: 0000000000000000 DR6: 00000000fffe0ff0
-> > DR7: 0000000000000400
-> > [   84.111822][ T6891] Kernel panic - not syncing: Fatal exception
-> > [   84.113908][ T6891] Kernel Offset: disabled
-> > [   84.114912][ T6891] Rebooting in 86400 seconds..
-> >
-> > Best,
-> > Wei
->
+Den Thu, Nov 17, 2022 at 11:07:22PM +0800 skrev Lu Wei:
+> [Some people who received this message don't often get email from luwei32=
+@huawei.com. Learn why this is important at https://aka.ms/LearnAboutSender=
+Identification ]
+>=20
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know th=
+e content is safe
+>=20
+> Function sparx5_tc_setup_qdisc_ets() always returns negative value
+> because it return -EOPNOTSUPP in the end. This patch returns the
+> rersult of sparx5_tc_ets_add() and sparx5_tc_ets_del() directly.
+>=20
+> Fixes: 211225428d65 ("net: microchip: sparx5: add support for offloading =
+ets qdisc")
+> Signed-off-by: Lu Wei <luwei32@huawei.com>
+> ---
+>  drivers/net/ethernet/microchip/sparx5/sparx5_tc.c | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/drivers/net/ethernet/microchip/sparx5/sparx5_tc.c b/drivers/=
+net/ethernet/microchip/sparx5/sparx5_tc.c
+> index e05429c751ee..dc2c3756e3a2 100644
+> --- a/drivers/net/ethernet/microchip/sparx5/sparx5_tc.c
+> +++ b/drivers/net/ethernet/microchip/sparx5/sparx5_tc.c
+> @@ -90,13 +90,10 @@ static int sparx5_tc_setup_qdisc_ets(struct net_devic=
+e *ndev,
+>                         }
+>                 }
+>=20
+> -               sparx5_tc_ets_add(port, params);
+> -               break;
+> +               return sparx5_tc_ets_add(port, params);
+>         case TC_ETS_DESTROY:
+>=20
+> -               sparx5_tc_ets_del(port);
+> -
+> -               break;
+> +               return sparx5_tc_ets_del(port);
+>         case TC_ETS_GRAFT:
+>                 return -EOPNOTSUPP;
+>=20
 > --
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/CAO4mrfftfwBWbt-a1H3q559jtnv93MQ92kp%3DDFnA%2B-pRrSObcw%40mail.gmail.com.
+> 2.31.1
+>
+
+Looks like ets_offload_change() does not check the return value of
+ndo_setup_tc() here [1] - I wonder why this is. This also explains why
+my ETS tests were passing.
+
+Anyway, thank you for the patch.
+
+Reviewed-by: Daniel Machon <daniel.machon@microchip.com>
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+[1] https://elixir.bootlin.com/linux/v6.1-rc5/source/net/sched/sch_ets.c#L1=
+43
