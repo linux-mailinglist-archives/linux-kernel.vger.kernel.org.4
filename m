@@ -2,151 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 576A9630017
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 23:29:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D836630020
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 23:29:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230448AbiKRW3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 17:29:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53696 "EHLO
+        id S229774AbiKRW3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 17:29:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbiKRW3F (ORCPT
+        with ESMTP id S231955AbiKRW3f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 17:29:05 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB6B6725E2
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 14:29:03 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id q1-20020a17090a750100b002139ec1e999so6354513pjk.1
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 14:29:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UbBsvDU//DL6nEBTfVogOGw4gtrIt5cEgoWU7wg0yqE=;
-        b=An8R27hBelrmHfCbOWIi0CQbpB+FbdUKZd/K74OWA+t1inv8v4494buerQXpAbVoQ/
-         hawXo5IWqwOaOJXIlgQJ62nY4aZ8mzIQL8T0sN5QawgAa8EGZw3klOrzN/KXycM8ohn1
-         PnwiDQNXHvwQENzmlhMaoO6BFIxzwB92hREPE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UbBsvDU//DL6nEBTfVogOGw4gtrIt5cEgoWU7wg0yqE=;
-        b=T3RUfz1jO2G2T+XJ0ZoJPSS2YHSVFxSw5Hd3IZ66iW+ApJV36NVgzSZuES2UrjVAew
-         IzzUaxXcQ/dJXBVQBurL5xi3vrNvDO8lKqFCOZf5H/7JFrKDiBD8RUVRFx+3b2EqH8O7
-         p6Rx7OwqxxoCxGBtAg3XHsTY5G682E/RNS84ew2ANswbnyIkZruQGSdUYSk2aHl6tz6D
-         OWLgjlPbU5CVake0tai/wVGVOdXWjPy9q9rLYfu4SXv+H0H41wOEbF0Yw8w+yZsHDo9j
-         YCYEpz2VnB5TpH/EvYjt6HdfnW9pnBBpeOJJy3cJq1v7zL94W9aHedCaSn2VkTWVTMGF
-         WGGg==
-X-Gm-Message-State: ANoB5pnLkv2ppri04YXb++sYJnoyT0w2y3prpkvnxEK28P+mHr+x83V5
-        kXla0N9u4j0XkEsG0g0uII3fuBZ1pdsjUl8W
-X-Google-Smtp-Source: AA0mqf6x3WR1+0wUVWwli47/xk6od69+oUWF0cQjmoupKb1o7R1u9AWIvzDIrLxmCvQfjLJnyEjRtg==
-X-Received: by 2002:a17:902:e009:b0:188:649b:9dbe with SMTP id o9-20020a170902e00900b00188649b9dbemr1414800plo.107.1668810543395;
-        Fri, 18 Nov 2022 14:29:03 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b29-20020aa7951d000000b00561382a5a25sm3714931pfp.26.2022.11.18.14.29.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 14:29:02 -0800 (PST)
-Date:   Fri, 18 Nov 2022 14:29:02 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, etnaviv@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-samsung-soc@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-perf-users@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Peter Xu <peterx@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Subject: Re: [PATCH mm-unstable v1 20/20] mm: rename FOLL_FORCE to FOLL_PTRACE
-Message-ID: <202211181427.4D1C3132FE@keescook>
-References: <20221116102659.70287-1-david@redhat.com>
- <20221116102659.70287-21-david@redhat.com>
- <CAHk-=wgtEwpR-rE_=cXzecHMZ+zgrx5zf9UfvH0w-mKgckn4=Q@mail.gmail.com>
- <Y3dnzgwJpjTQXI9y@hirez.programming.kicks-ass.net>
+        Fri, 18 Nov 2022 17:29:35 -0500
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A779B381;
+        Fri, 18 Nov 2022 14:29:26 -0800 (PST)
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1ow9rD-00005O-Bk; Fri, 18 Nov 2022 23:29:11 +0100
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1ow9rC-0006lq-R5; Fri, 18 Nov 2022 23:29:10 +0100
+Subject: Re: [PATCH] samples/bpf: Fix duplicate struct define in test_lru_dist
+ sample
+To:     Liao Chang <liaochang1@huawei.com>, ast@kernel.org,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221118004752.97759-1-liaochang1@huawei.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <109e3d8a-26c6-44c8-aabe-04d5c47ec9c8@iogearbox.net>
+Date:   Fri, 18 Nov 2022 23:29:07 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y3dnzgwJpjTQXI9y@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221118004752.97759-1-liaochang1@huawei.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.7/26724/Fri Nov 18 09:51:03 2022)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 12:09:02PM +0100, Peter Zijlstra wrote:
-> On Wed, Nov 16, 2022 at 10:16:34AM -0800, Linus Torvalds wrote:
-> > Following the history of it is a big of a mess, because there's a
-> > number of renamings and re-organizations, but it seems to go back to
-> > 2007 and commit b6a2fea39318 ("mm: variable length argument support").
+On 11/18/22 1:47 AM, Liao Chang wrote:
+> Build sample/bpf report error as follow:
 > 
-> I went back and read parts of the discussions with Ollie, and the
-> .force=1 thing just magically appeared one day when we were sending
-> work-in-progress patches back and forth without mention of where it came
-> from :-/
+>    CC  ./samples/bpf/test_lru_dist
+> ./samples/bpf/test_lru_dist.c:35:8: error: redefinition of ‘struct list_head’
+>     35 | struct list_head {
+>        |        ^~~~~~~~~
+> In file included from ./samples/bpf/test_lru_dist.c:6:
+> ./tools/include/linux/types.h:84:8: note: originally defined here
+>     84 | struct list_head {
 > 
-> And I certainly can't remember now..
+> Remove the duplicate definition of struct list_head in test_lru_dist.c
 > 
-> Looking at it now, I have the same reaction as both you and Kees had, it
-> seems entirely superflous. So I'm all for trying to remove it.
+> Signed-off-by: Liao Chang <liaochang1@huawei.com>
+> ---
+>   samples/bpf/test_lru_dist.c | 4 ----
+>   1 file changed, 4 deletions(-)
+> 
+> diff --git a/samples/bpf/test_lru_dist.c b/samples/bpf/test_lru_dist.c
+> index 5efb91763d65..2e7341044090 100644
+> --- a/samples/bpf/test_lru_dist.c
+> +++ b/samples/bpf/test_lru_dist.c
+> @@ -32,10 +32,6 @@ static int nr_cpus;
+>   static unsigned long long *dist_keys;
+>   static unsigned int dist_key_counts;
+>   
+> -struct list_head {
+> -	struct list_head *next, *prev;
+> -};
+> -
 
-Thanks for digging through the history! I've pushed the change to -next:
-https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/commit/?h=for-next/execve&id=cd57e443831d8eeb083c7165bce195d886e216d4
+This will actually break it, see CI:
 
--- 
-Kees Cook
+https://github.com/kernel-patches/bpf/actions/runs/3500019006/jobs/5862316961
+
+   [...]
+   CLANG-bpf  /tmp/work/bpf/bpf/samples/bpf/lathist_kern.o
+     CLANG-bpf  /tmp/work/bpf/bpf/samples/bpf/offwaketime_kern.o
+     CLANG-bpf  /tmp/work/bpf/bpf/samples/bpf/spintest_kern.o
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c:35:42: warning: ‘struct list_head’ declared inside parameter list will not be visible outside of this definition or declaration
+      35 | static inline void INIT_LIST_HEAD(struct list_head *list)
+         |                                          ^~~~~~~~~
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c: In function ‘INIT_LIST_HEAD’:
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c:37:6: error: dereferencing pointer to incomplete type ‘struct list_head’
+      37 |  list->next = list;
+         |      ^~
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c: At top level:
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c:41:43: warning: ‘struct list_head’ declared inside parameter list will not be visible outside of this definition or declaration
+      41 | static inline int list_empty(const struct list_head *head)
+         |                                           ^~~~~~~~~
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c: In function ‘list_empty’:
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c:43:13: error: dereferencing pointer to incomplete type ‘const struct list_head’
+      43 |  return head->next == head;
+         |             ^~
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c: At top level:
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c:46:38: warning: ‘struct list_head’ declared inside parameter list will not be visible outside of this definition or declaration
+      46 | static inline void __list_add(struct list_head *new,
+         |                                      ^~~~~~~~~
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c: In function ‘__list_add’:
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c:50:6: error: dereferencing pointer to incomplete type ‘struct list_head’
+      50 |  next->prev = new;
+         |      ^~
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c: At top level:
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c:56:36: warning: ‘struct list_head’ declared inside parameter list will not be visible outside of this definition or declaration
+      56 | static inline void list_add(struct list_head *new, struct list_head *head)
+         |                                    ^~~~~~~~~
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c: In function ‘list_add’:
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c:58:28: error: dereferencing pointer to incomplete type ‘struct list_head’
+      58 |  __list_add(new, head, head->next);
+     CLANG-bpf  /tmp/work/bpf/bpf/samples/bpf/map_perf_test_kern.o
+         |                            ^~
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c:58:13: warning: passing argument 1 of ‘__list_add’ from incompatible pointer type [-Wincompatible-pointer-types]
+      58 |  __list_add(new, head, head->next);
+         |             ^~~
+         |             |
+         |             struct list_head *
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c:46:49: note: expected ‘struct list_head *’ but argument is of type ‘struct list_head *’
+      46 | static inline void __list_add(struct list_head *new,
+         |                               ~~~~~~~~~~~~~~~~~~^~~
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c:58:18: warning: passing argument 2 of ‘__list_add’ from incompatible pointer type [-Wincompatible-pointer-types]
+      58 |  __list_add(new, head, head->next);
+         |                  ^~~~
+         |                  |
+         |                  struct list_head *
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c:47:28: note: expected ‘struct list_head *’ but argument is of type ‘struct list_head *’
+      47 |          struct list_head *prev,
+         |          ~~~~~~~~~~~~~~~~~~^~~~
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c: At top level:
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c:61:38: warning: ‘struct list_head’ declared inside parameter list will not be visible outside of this definition or declaration
+      61 | static inline void __list_del(struct list_head *prev, struct list_head *next)
+         |                                      ^~~~~~~~~
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c: In function ‘__list_del’:
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c:63:6: error: dereferencing pointer to incomplete type ‘struct list_head’
+      63 |  next->prev = prev;
+         |      ^~
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c: At top level:
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c:67:44: warning: ‘struct list_head’ declared inside parameter list will not be visible outside of this definition or declaration
+      67 | static inline void __list_del_entry(struct list_head *entry)
+         |                                            ^~~~~~~~~
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c: In function ‘__list_del_entry’:
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c:69:18: error: dereferencing pointer to incomplete type ‘struct list_head’
+      69 |  __list_del(entry->prev, entry->next);
+         |                  ^~
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c: At top level:
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c:72:37: warning: ‘struct list_head’ declared inside parameter list will not be visible outside of this definition or declaration
+      72 | static inline void list_move(struct list_head *list, struct list_head *head)
+         |                                     ^~~~~~~~~
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c: In function ‘list_move’:
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c:74:19: warning: passing argument 1 of ‘__list_del_entry’ from incompatible pointer type [-Wincompatible-pointer-types]
+      74 |  __list_del_entry(list);
+         |                   ^~~~
+         |                   |
+         |                   struct list_head *
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c:67:55: note: expected ‘struct list_head *’ but argument is of type ‘struct list_head *’
+      67 | static inline void __list_del_entry(struct list_head *entry)
+         |                                     ~~~~~~~~~~~~~~~~~~^~~~~
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c:75:11: warning: passing argument 1 of ‘list_add’ from incompatible pointer type [-Wincompatible-pointer-types]
+      75 |  list_add(list, head);
+         |           ^~~~
+         |           |
+         |           struct list_head *
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c:56:47: note: expected ‘struct list_head *’ but argument is of type ‘struct list_head *’
+      56 | static inline void list_add(struct list_head *new, struct list_head *head)
+         |                             ~~~~~~~~~~~~~~~~~~^~~
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c:75:17: warning: passing argument 2 of ‘list_add’ from incompatible pointer type [-Wincompatible-pointer-types]
+      75 |  list_add(list, head);
+         |                 ^~~~
+         |                 |
+         |                 struct list_head *
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c:56:70: note: expected ‘struct list_head *’ but argument is of type ‘struct list_head *’
+      56 | static inline void list_add(struct list_head *new, struct list_head *head)
+         |                                                    ~~~~~~~~~~~~~~~~~~^~~~
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c: At top level:
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c:85:19: error: field ‘list’ has incomplete type
+      85 |  struct list_head list;
+         |                   ^~~~
+   /tmp/work/bpf/bpf/samples/bpf/test_lru_dist.c:90:19: error: field ‘list’ has incomplete type
+      90 |  struct list_head list;
+         |                   ^~~~
+     CLANG-bpf  /tmp/work/bpf/bpf/samples/bpf/test_overhead_tp_kern.o
+   make[3]: *** [/tmp/work/bpf/bpf/samples/bpf/Makefile.target:58: /tmp/work/bpf/bpf/samples/bpf/test_lru_dist] Error 1
+   make[3]: *** Waiting for unfinished jobs....
+     LD      /tmp/work/bpf/bpf/samples/bpf/bpftool/bootstrap/libbpf/staticobjs/libbpf-in.o
+     LINK    /tmp/work/bpf/bpf/samples/bpf/bpftool/bootstrap/libbpf/libbpf.a
+     CC      /tmp/work/bpf/bpf/samples/bpf/bpftool/bootstrap/main.o
+     CC      /tmp/work/bpf/bpf/samples/bpf/bpftool/bootstrap/common.o
+     CC      /tmp/work/bpf/bpf/samples/bpf/bpftool/bootstrap/json_writer.o
+     CC      /tmp/work/bpf/bpf/samples/bpf/bpftool/bootstrap/gen.o
+     CC      /tmp/work/bpf/bpf/samples/bpf/bpftool/bootstrap/btf.o
+     CC      /tmp/work/bpf/bpf/samples/bpf/bpftool/bootstrap/xlated_dumper.o
+     CC      /tmp/work/bpf/bpf/samples/bpf/bpftool/bootstrap/btf_dumper.o
+     CC      /tmp/work/bpf/bpf/samples/bpf/bpftool/bootstrap/disasm.o
+     LINK    /tmp/work/bpf/bpf/samples/bpf/bpftool/bootstrap/bpftool
+   make[2]: *** [/tmp/work/bpf/bpf/Makefile:1992: /tmp/work/bpf/bpf/samples/bpf] Error 2
+   make[2]: Leaving directory '/tmp/work/bpf/bpf/kbuild-output'
+   make[1]: *** [Makefile:231: __sub-make] Error 2
+   make[1]: Leaving directory '/tmp/work/bpf/bpf'
+   make: *** [Makefile:269: all] Error 2
+   make: Leaving directory '/tmp/work/bpf/bpf/samples/bpf'
+   Error: Process completed with exit code 2.
