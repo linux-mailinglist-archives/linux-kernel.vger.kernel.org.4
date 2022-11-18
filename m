@@ -2,88 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB6B630562
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 00:54:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21C8D630594
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 00:56:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232297AbiKRXyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 18:54:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57064 "EHLO
+        id S237066AbiKRX4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 18:56:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237066AbiKRXwO (ORCPT
+        with ESMTP id S236982AbiKRXzA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 18:52:14 -0500
+        Fri, 18 Nov 2022 18:55:00 -0500
 Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A0EBCE65;
-        Fri, 18 Nov 2022 15:27:29 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51396BE84B;
+        Fri, 18 Nov 2022 15:28:02 -0800 (PST)
 Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id C2D805C00E6;
-        Fri, 18 Nov 2022 18:27:26 -0500 (EST)
+        by mailout.nyi.internal (Postfix) with ESMTP id BCE6C5C0452;
+        Fri, 18 Nov 2022 18:28:01 -0500 (EST)
 Received: from imap43 ([10.202.2.93])
-  by compute2.internal (MEProxy); Fri, 18 Nov 2022 18:27:26 -0500
+  by compute2.internal (MEProxy); Fri, 18 Nov 2022 18:28:01 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
-         h=cc:cc:content-transfer-encoding:content-type:date:date:from
-        :from:in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1668814046; x=
-        1668900446; bh=SGIEerNCKEfpjA8HEJkeaYNJjnPVrXJob1usk0cWuG0=; b=V
-        VLUgtFnKjZTexZJbrqR/OpvIoxRu+jFoiU+LffyQMY+Vmw9ROwTLVt9wed+k1+O/
-        l5TQF6iKG9+FHLrfdrXY+d9CK+O/bJCzHYcHQh4ZjxjYL4Rm0EgZZGvVBaVuk0hP
-        TfpRSd2VDysvOk/e+gYKFqTpn32DnoGZSjs19gwM+pe+O/KkLAQLs7lIiit44zrj
-        1hLYNl/L3+wOdbwMH3cZqsTqQhjeFhq3x5OChub0bM9mlPSOYI6O4V9obZ92EFcB
-        QEu7RsHF5TwzBSK26pIp19TA1Umu08l97jnTJe2R/Tl3w/pE8aVQR6mCGu9YrNek
-        YVitZSW7vTJVqq+oCEMgg==
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1668814081; x=1668900481; bh=Em
+        Q0dI/Gjx0666r9UJYHPwl0Uf9CBk7ouATv1q7n5/I=; b=hBYuZJsLbPJkH0T13B
+        dQlwf74qszBFR7+i+3xGPK+q8efi4WSCtF+rfsikE6W4LuRpfa3I0b92mo4JHYlH
+        IL5jfgfq1oPz577dxNXW+4Zb2AQYso6xG23qADFq8Z9IOK1tXPS/s106nBdRPc+S
+        imIjPE1IZrdBR+c12yqMrDXTosA/xOUQw1HoGWE4m4EH9mro0XkElKxTastAJg2e
+        hT71y+k3WAYxJW43kXUlUbekyKqrwnA6779egUk1hVPXoTQ3xSWo8QfJFrJ/jYif
+        YKFIyDfOniyLHyBEG0MCx9fsMX8SfWF9BQ8QIAhY3RfqY4dl+hyXefDudOYuAnio
+        9WTg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1668814046; x=
-        1668900446; bh=SGIEerNCKEfpjA8HEJkeaYNJjnPVrXJob1usk0cWuG0=; b=E
-        ms3mN9ZQO7MldF9OqT0q3/6xr6+7vu9ElqEJwLKf7mCb/ANmixPaazabRKraxK4y
-        cKrDn2+P2INCjoLBLlp4LuWq+d++pHioxQLrftwDeFk7/FKPuj9itKyNjTj1vHCg
-        DmuX+pp48G/u3XJXSPUBdBjqAAwkGyBT76YadfprqQpedAFhsaAqW42uheL7Hs8J
-        DoiNa1AmvAWqbWMhEyaAZDxnRdmMRIV6E2kzLd78EoNp/5QjvQgzxdw+WRvjEgoH
-        NzcF8gjcJYDuZXBE7xHnIq09yDIza2AKTtCLNpkQnmgier2oZer57QgDnDPMUuJY
-        ToHUrgzhX7EepNXHM+obQ==
-X-ME-Sender: <xms:3hR4Y8cNujFHs_Eb-ZZP-kFkR0-xvO9f0K_kchhpRbudjrepKFy20Q>
-    <xme:3hR4Y-PDAuIpxOI3DciMF6lSPYzMtZvc8Ar6_xv50Q5xyu1UJ8aHyANQnDRiZ58Zw
-    kNzWog2kKLDcwwPSzU>
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1668814081; x=1668900481; bh=EmQ0dI/Gjx0666r9UJYHPwl0Uf9C
+        Bk7ouATv1q7n5/I=; b=lhxgsfh6+XIQCHG64wuk4L3O9Y2mQoJdwdwKyuyUmlWw
+        vdQVX+GyHjkKgLwJW1yxnjFDwOG+3BE4f6O4952Jo6dWVVoyBSiI2MF0nf0ywxCp
+        mdPOws7uvsr3JZr4syQusKz6AMYlGT4AFAN/NVuAmRPNqTHWfM4QW3bLbnFZwRom
+        Y0BTi2e9hPyQEtz6AmGCmoMhrEieONsvLPWSXEtNNmNlzlIEnDv8W+zl4lg/RM6g
+        6AJZkjR/qL0uqSn10l6xwLd4kAIUgmN6v0ikRV1kbTVxzPmp4EDh5LxBojliW6Vw
+        hwMykwEaXIHj2yHWk72ZxHbcxJKgqBWTv7xyWG7QjA==
+X-ME-Sender: <xms:ARV4YytcmM5encL_jFy9qzh1J1MGTWgQPN1GVelQnZe6PwPybwGx2g>
+    <xme:ARV4Y3f8R2PAuc2SVxuZgz7QJ5ip0H5LfsD6Uqn0Pqn8aTUNMl59AjM1Si3EE6Tgc
+    u84-znVpVB3H-m1F6U>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrhedugdduudcutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpeetlhhi
-    shhtrghirhcuoegrlhhishhtrghirhesrghlihhsthgrihhrvdefrdhmvgeqnecuggftrf
-    grthhtvghrnhephfegveetjedvveevvdekveehuedvjeduhfffgfdvhfegueethfeftdeu
-    udelfedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    eprghlihhsthgrihhrsegrlhhishhtrghirhdvfedrmhgv
-X-ME-Proxy: <xmx:3hR4Y9ixzx2cAS6BHQA4FcKhkwiDlJq64tNmr3bpuy6gvzwseFliXg>
-    <xmx:3hR4Yx81OtMM-dLUgYWcTr5SJY9wBln8MJiHxv_9Jnbp5OYn7DF-Jg>
-    <xmx:3hR4Y4s8WlKyyT69kZDdkyWwd0tZVflxsoZNV0jGnVBBYAUbm3yPaA>
-    <xmx:3hR4Y2DArv4QmCNF7A3mruf6fE8jVdyjru568dV8n6-VgwH04JHvIQ>
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomheptehlihhs
+    thgrihhruceorghlihhsthgrihhrsegrlhhishhtrghirhdvfedrmhgvqeenucggtffrrg
+    htthgvrhhnpeeukeffkefhjeethedtieegudejvedvhfejleekheefhfdufffhjefgjeei
+    heehhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grlhhishhtrghirhesrghlihhsthgrihhrvdefrdhmvg
+X-ME-Proxy: <xmx:ARV4Y9zAjdmvnzSBrBtzB1LoH-nh_q0SdU39bKjFcDV1nneIoT445A>
+    <xmx:ARV4Y9MxVNREu4GfZokXBsnqK7CFVSZqveqBOwhaMS8DlhaTrDTuaA>
+    <xmx:ARV4Yy-NZDHYBeQRzwuFhx3zqQKZmjm1fVjw9XZHkEq1CL9CczL9BA>
+    <xmx:ARV4Y5lqWBT6WOPeUAS7q7AlKL60TUjtqBPMsH9uLRwIGuS8yMQFqg>
 Feedback-ID: ifd214418:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 5EDBC2D40091; Fri, 18 Nov 2022 18:27:26 -0500 (EST)
+        id 8EBC42D40090; Fri, 18 Nov 2022 18:28:01 -0500 (EST)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
 Mime-Version: 1.0
-Message-Id: <ecb333d9-b681-4024-ac3a-3a9e51d613eb@app.fastmail.com>
-In-Reply-To: <20221118224540.619276-265-uwe@kleine-koenig.org>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-265-uwe@kleine-koenig.org>
-Date:   Sat, 19 Nov 2022 09:27:04 +1000
+Message-Id: <6cb6c30b-2670-446a-8425-92d340ab5b90@app.fastmail.com>
+In-Reply-To: <20221117190507.87535-2-linmengbo0689@protonmail.com>
+References: <20221117190507.87535-1-linmengbo0689@protonmail.com>
+ <20221117190507.87535-2-linmengbo0689@protonmail.com>
+Date:   Sat, 19 Nov 2022 09:27:39 +1000
 From:   Alistair <alistair@alistair23.me>
-To:     =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
-        "Angel Iglesias" <ang.iglesiasg@gmail.com>,
-        "Lee Jones" <lee.jones@linaro.org>,
-        "Grant Likely" <grant.likely@linaro.org>,
-        "Wolfram Sang" <wsa@kernel.org>,
-        "Dmitry Torokhov" <dmitry.torokhov@gmail.com>
-Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        linux-input@vger.kernel.org,
+To:     "Lin, Meng-Bo" <linmengbo0689@protonmail.com>,
+        linux-input@vger.kernel.org
+Cc:     "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        devicetree@vger.kernel.org,
         "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 264/606] Input: wacom_i2c - Convert to i2c's .probe_new()
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 1/2] dt-bindings: input: cyttsp5: document vddio-supply
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
@@ -94,46 +90,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 19 Nov 2022, at 8:39 AM, Uwe Kleine-K=C3=B6nig wrote:
-> From: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
->=20
-> The probe function doesn't make use of the i2c_device_id * parameter s=
-o it
-> can be trivially converted.
->=20
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+On Fri, 18 Nov 2022, at 5:05 AM, Lin, Meng-Bo wrote:
+> The Samsung touchscreen controllers are often used with external pull-up
+> for the interrupt line and the I2C lines, so we might need to enable
+> a regulator to bring the lines into usable state. Otherwise, this might
+> cause spurious interrupts and reading from I2C will fail.
+> 
+> Document support for a "vddio-supply" that is enabled by the cyttsp5
+> driver so that the regulator gets enabled when needed.
+> 
+> Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
 
 Reviewed-by: Alistair Francis <alistair@alistair23.me>
 
 > ---
-> drivers/input/touchscreen/wacom_i2c.c | 5 ++---
-> 1 file changed, 2 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/input/touchscreen/wacom_i2c.c b/drivers/input/tou=
-chscreen/wacom_i2c.c
-> index 141754b2764c..c9188ee00c62 100644
-> --- a/drivers/input/touchscreen/wacom_i2c.c
-> +++ b/drivers/input/touchscreen/wacom_i2c.c
-> @@ -162,8 +162,7 @@ static void wacom_i2c_close(struct input_dev *dev)
-> disable_irq(client->irq);
-> }
-> =20
-> -static int wacom_i2c_probe(struct i2c_client *client,
-> -    const struct i2c_device_id *id)
-> +static int wacom_i2c_probe(struct i2c_client *client)
-> {
-> struct device *dev =3D &client->dev;
-> struct wacom_i2c *wac_i2c;
-> @@ -265,7 +264,7 @@ static struct i2c_driver wacom_i2c_driver =3D {
-> .pm =3D &wacom_i2c_pm,
-> },
-> =20
-> - .probe =3D wacom_i2c_probe,
-> + .probe_new =3D wacom_i2c_probe,
-> .id_table =3D wacom_i2c_id,
-> };
-> module_i2c_driver(wacom_i2c_driver);
-> --=20
-> 2.38.1
->=20
->=20
+> .../devicetree/bindings/input/touchscreen/cypress,tt21000.yaml | 3 +++
+> 1 file changed, 3 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/input/touchscreen/cypress,tt21000.yaml b/Documentation/devicetree/bindings/input/touchscreen/cypress,tt21000.yaml
+> index 1959ec394768..869a9bdd962f 100644
+> --- a/Documentation/devicetree/bindings/input/touchscreen/cypress,tt21000.yaml
+> +++ b/Documentation/devicetree/bindings/input/touchscreen/cypress,tt21000.yaml
+> @@ -34,6 +34,9 @@ properties:
+>    vdd-supply:
+>      description: Regulator for voltage.
+>  
+> +  vddio-supply:
+> +    description: Optional Regulator for I/O voltage.
+> +
+>    reset-gpios:
+>      maxItems: 1
+>  
+> -- 
+> 2.30.2
+> 
+> 
+> 
