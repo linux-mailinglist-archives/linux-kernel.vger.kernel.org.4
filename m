@@ -2,372 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E584962ED3B
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 06:34:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF9CF62ED42
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 06:43:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240125AbiKRFd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 00:33:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53938 "EHLO
+        id S240963AbiKRFnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 00:43:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240604AbiKRFdz (ORCPT
+        with ESMTP id S235190AbiKRFnV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 00:33:55 -0500
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B20DD7D;
-        Thu, 17 Nov 2022 21:33:50 -0800 (PST)
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AI1rpcM014785;
-        Thu, 17 Nov 2022 21:33:40 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=pfpt0220; bh=y/cAcxB2lXB3h5PUQLhAar5bEo6qOU8Wz5d11vlnIMs=;
- b=RgXroSDlQmMmA0nR0BNSgRZahKmD4djt+YyR7y7aBirNNwYbDpjMZQ2XTl/t5V0o/Nph
- 7u9QtibWYC1Uoprh8TIPldjS1QrHYqmaHvZyyv8E7DdSYLiK9gyQ54l2Slc2gj3lusxO
- JD5E2fBzES38Laya3/LbtE1pI6E0fheb2AMioUGYt8GIjNb2e+5drCJhEv6RPS9Nks79
- 3KF7cWqavuKLxsq3jjDKS2+NpTYJSIA1uMJJAIWDD4175VMbd4fOg8J94ZcW1wT5qtId
- hzCTxm743XyOx6esGcy0KGofNgGjN9nfutHyvA1qNi0sHDf5g2whlsGcahVBjdUVhFOT 5w== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3kx0st8p91-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Thu, 17 Nov 2022 21:33:39 -0800
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 17 Nov
- 2022 21:33:37 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Thu, 17 Nov 2022 21:33:37 -0800
-Received: from localhost.localdomain (unknown [10.28.36.166])
-        by maili.marvell.com (Postfix) with ESMTP id 467713F7054;
-        Thu, 17 Nov 2022 21:33:34 -0800 (PST)
-From:   Suman Ghosh <sumang@marvell.com>
-To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <sgoutham@marvell.com>, <sbhatta@marvell.com>,
-        <jerinj@marvell.com>, <gakula@marvell.com>, <hkelam@marvell.com>,
-        <lcherian@marvell.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Suman Ghosh <sumang@marvell.com>
-Subject: [net-next PATCH] octeontx2-pf: Add additional checks while configuring ucast/bcast/mcast rules
-Date:   Fri, 18 Nov 2022 11:03:29 +0530
-Message-ID: <20221118053329.2288486-1-sumang@marvell.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 18 Nov 2022 00:43:21 -0500
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E59EA8F3D5
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 21:43:19 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VV3jx1x_1668750195;
+Received: from 30.221.129.0(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VV3jx1x_1668750195)
+          by smtp.aliyun-inc.com;
+          Fri, 18 Nov 2022 13:43:16 +0800
+Message-ID: <9b4fd897-d5a0-7304-901e-303a5455303f@linux.alibaba.com>
+Date:   Fri, 18 Nov 2022 13:43:14 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: mEFzC4uiD56jsWY7D9--g9dHaE0_tTLH
-X-Proofpoint-ORIG-GUID: mEFzC4uiD56jsWY7D9--g9dHaE0_tTLH
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-17_06,2022-11-17_01,2022-06-22_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.0
+Subject: Re: [Linux-cachefs] [PATCH] fscache: fix OOB Read in
+ __fscache_acquire_volume
+Content-Language: en-US
+To:     David Howells <dhowells@redhat.com>, zhangpeng362@huawei.com,
+        asmadeus@codewreck.org
+Cc:     lucho@ionkov.net, linux_oss@crudebyte.com,
+        Jeff Layton <jlayton@kernel.org>, linux-kernel@vger.kernel.org,
+        syzbot+a76f6a6e524cf2080aa3@syzkaller.appspotmail.com,
+        linux-cachefs@redhat.com, v9fs-developer@lists.sourceforge.net
+References: <166869954095.3793579.8500020902371015443.stgit@warthog.procyon.org.uk>
+From:   Jingbo Xu <jefflexu@linux.alibaba.com>
+In-Reply-To: <166869954095.3793579.8500020902371015443.stgit@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-1. If a profile does not support DMAC extraction then avoid installing NPC
-flow rules for unicast. Similarly, if LXMB(L2 and L3) extraction is not
-supported by the profile then avoid installing broadcast and multicast
-rules.
-2. Allow MCAM entry insertion for promiscuous mode.
-3. For the profiles where DMAC is not extracted in MKEX key default
-unicast entry installed by AF is not valid. Hence do not use action
-from the AF installed default unicast entry for such cases.
-4. Adjacent packet header fields in a packet like IP header source
-and destination addresses or UDP/TCP header source port and destination
-can be extracted together in MKEX profile. Therefore MKEX profile can be
-configured to in two ways:
-	a. Total of 4 bytes from start of UDP header(src port
-	   + destination port)
-	or
-	b. Two bytes from start and two bytes from offset 2
 
-Signed-off-by: Suman Ghosh <sumang@marvell.com>
-Signed-off-by: Subbaraya Sundeep <sbhatta@marvell.com>
----
- .../net/ethernet/marvell/octeontx2/af/mbox.h  | 14 ++++
- .../net/ethernet/marvell/octeontx2/af/rvu.h   |  1 +
- .../ethernet/marvell/octeontx2/af/rvu_npc.c   | 22 ++++++
- .../marvell/octeontx2/af/rvu_npc_fs.c         | 76 +++++++++++++++----
- .../marvell/octeontx2/nic/otx2_flows.c        | 27 ++++++-
- 5 files changed, 124 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/mbox.h b/drivers/net/ethernet/marvell/octeontx2/af/mbox.h
-index 8d5d5a0f68c4..c7c92c7510fa 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/mbox.h
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/mbox.h
-@@ -245,6 +245,9 @@ M(NPC_MCAM_GET_STATS, 0x6012, npc_mcam_entry_stats,                     \
- M(NPC_GET_SECRET_KEY, 0x6013, npc_get_secret_key,                     \
- 				   npc_get_secret_key_req,              \
- 				   npc_get_secret_key_rsp)              \
-+M(NPC_GET_FIELD_STATUS, 0x6014, npc_get_field_status,                     \
-+				   npc_get_field_status_req,              \
-+				   npc_get_field_status_rsp)              \
- /* NIX mbox IDs (range 0x8000 - 0xFFFF) */				\
- M(NIX_LF_ALLOC,		0x8000, nix_lf_alloc,				\
- 				 nix_lf_alloc_req, nix_lf_alloc_rsp)	\
-@@ -1541,6 +1544,17 @@ struct ptp_rsp {
- 	u64 clk;
- };
- 
-+struct npc_get_field_status_req {
-+	struct mbox_msghdr hdr;
-+	u8 intf;
-+	u8 field;
-+};
-+
-+struct npc_get_field_status_rsp {
-+	struct mbox_msghdr hdr;
-+	u8 enable;
-+};
-+
- struct set_vf_perm  {
- 	struct  mbox_msghdr hdr;
- 	u16	vf;
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu.h b/drivers/net/ethernet/marvell/octeontx2/af/rvu.h
-index 76474385a602..f718cbd32a94 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/rvu.h
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu.h
-@@ -851,6 +851,7 @@ int npc_install_mcam_drop_rule(struct rvu *rvu, int mcam_idx, u16 *counter_idx,
- 			       u64 chan_val, u64 chan_mask, u64 exact_val, u64 exact_mask,
- 			       u64 bcast_mcast_val, u64 bcast_mcast_mask);
- void npc_mcam_rsrcs_reserve(struct rvu *rvu, int blkaddr, int entry_idx);
-+bool npc_is_feature_supported(struct rvu *rvu, u64 features, u8 intf);
- 
- /* CPT APIs */
- int rvu_cpt_register_interrupts(struct rvu *rvu);
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc.c
-index 1e348fd0d930..16cfc802e348 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc.c
-@@ -617,6 +617,12 @@ void rvu_npc_install_ucast_entry(struct rvu *rvu, u16 pcifunc,
- 	if (blkaddr < 0)
- 		return;
- 
-+	/* Ucast rule should not be installed if DMAC
-+	 * extraction is not supported by the profile.
-+	 */
-+	if (!npc_is_feature_supported(rvu, BIT_ULL(NPC_DMAC), pfvf->nix_rx_intf))
-+		return;
-+
- 	index = npc_get_nixlf_mcam_index(mcam, pcifunc,
- 					 nixlf, NIXLF_UCAST_ENTRY);
- 
-@@ -778,6 +784,14 @@ void rvu_npc_install_bcast_match_entry(struct rvu *rvu, u16 pcifunc,
- 	/* Get 'pcifunc' of PF device */
- 	pcifunc = pcifunc & ~RVU_PFVF_FUNC_MASK;
- 	pfvf = rvu_get_pfvf(rvu, pcifunc);
-+
-+	/* Bcast rule should not be installed if both DMAC
-+	 * and LXMB extraction is not supported by the profile.
-+	 */
-+	if (!npc_is_feature_supported(rvu, BIT_ULL(NPC_DMAC), pfvf->nix_rx_intf) &&
-+	    !npc_is_feature_supported(rvu, BIT_ULL(NPC_LXMB), pfvf->nix_rx_intf))
-+		return;
-+
- 	index = npc_get_nixlf_mcam_index(mcam, pcifunc,
- 					 nixlf, NIXLF_BCAST_ENTRY);
- 
-@@ -848,6 +862,14 @@ void rvu_npc_install_allmulti_entry(struct rvu *rvu, u16 pcifunc, int nixlf,
- 	vf_func = pcifunc & RVU_PFVF_FUNC_MASK;
- 	pcifunc = pcifunc & ~RVU_PFVF_FUNC_MASK;
- 	pfvf = rvu_get_pfvf(rvu, pcifunc);
-+
-+	/* Mcast rule should not be installed if both DMAC
-+	 * and LXMB extraction is not supported by the profile.
-+	 */
-+	if (!npc_is_feature_supported(rvu, BIT_ULL(NPC_DMAC), pfvf->nix_rx_intf) &&
-+	    !npc_is_feature_supported(rvu, BIT_ULL(NPC_LXMB), pfvf->nix_rx_intf))
-+		return;
-+
- 	index = npc_get_nixlf_mcam_index(mcam, pcifunc,
- 					 nixlf, NIXLF_ALLMULTI_ENTRY);
- 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_fs.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_fs.c
-index 50d3994efa97..f3fecd2a4015 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_fs.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_fs.c
-@@ -47,6 +47,19 @@ static const char * const npc_flow_names[] = {
- 	[NPC_UNKNOWN]	= "unknown",
- };
- 
-+bool npc_is_feature_supported(struct rvu *rvu, u64 features, u8 intf)
-+{
-+	struct npc_mcam *mcam = &rvu->hw->mcam;
-+	u64 mcam_features;
-+	u64 unsupported;
-+
-+	mcam_features = is_npc_intf_tx(intf) ? mcam->tx_features : mcam->rx_features;
-+	unsupported = (mcam_features ^ features) & ~mcam_features;
-+
-+	/* Return false if at least one of the input flows is not extracted */
-+	return !unsupported;
-+}
-+
- const char *npc_get_field_name(u8 hdr)
- {
- 	if (hdr >= ARRAY_SIZE(npc_flow_names))
-@@ -436,8 +449,6 @@ static void npc_scan_ldata(struct rvu *rvu, int blkaddr, u8 lid,
- 	nr_bytes = FIELD_GET(NPC_BYTESM, cfg) + 1;
- 	hdr = FIELD_GET(NPC_HDR_OFFSET, cfg);
- 	key = FIELD_GET(NPC_KEY_OFFSET, cfg);
--	start_kwi = key / 8;
--	offset = (key * 8) % 64;
- 
- 	/* For Tx, Layer A has NIX_INST_HDR_S(64 bytes) preceding
- 	 * ethernet header.
-@@ -452,13 +463,18 @@ static void npc_scan_ldata(struct rvu *rvu, int blkaddr, u8 lid,
- 
- #define NPC_SCAN_HDR(name, hlid, hlt, hstart, hlen)			       \
- do {									       \
-+	start_kwi = key / 8;						       \
-+	offset = (key * 8) % 64;					       \
- 	if (lid == (hlid) && lt == (hlt)) {				       \
- 		if ((hstart) >= hdr &&					       \
- 		    ((hstart) + (hlen)) <= (hdr + nr_bytes)) {	               \
- 			bit_offset = (hdr + nr_bytes - (hstart) - (hlen)) * 8; \
- 			npc_set_layer_mdata(mcam, (name), cfg, lid, lt, intf); \
-+			offset += bit_offset;				       \
-+			start_kwi += offset / 64;			       \
-+			offset %= 64;					       \
- 			npc_set_kw_masks(mcam, (name), (hlen) * 8,	       \
--					 start_kwi, offset + bit_offset, intf);\
-+					 start_kwi, offset, intf);	       \
- 		}							       \
- 	}								       \
- } while (0)
-@@ -650,9 +666,9 @@ static int npc_check_unsupported_flows(struct rvu *rvu, u64 features, u8 intf)
- 
- 	unsupported = (*mcam_features ^ features) & ~(*mcam_features);
- 	if (unsupported) {
--		dev_info(rvu->dev, "Unsupported flow(s):\n");
-+		dev_warn(rvu->dev, "Unsupported flow(s):\n");
- 		for_each_set_bit(bit, (unsigned long *)&unsupported, 64)
--			dev_info(rvu->dev, "%s ", npc_get_field_name(bit));
-+			dev_warn(rvu->dev, "%s ", npc_get_field_name(bit));
- 		return -EOPNOTSUPP;
- 	}
- 
-@@ -1007,8 +1023,20 @@ static void npc_update_rx_entry(struct rvu *rvu, struct rvu_pfvf *pfvf,
- 	action.match_id = req->match_id;
- 	action.flow_key_alg = req->flow_key_alg;
- 
--	if (req->op == NIX_RX_ACTION_DEFAULT && pfvf->def_ucast_rule)
--		action = pfvf->def_ucast_rule->rx_action;
-+	if (req->op == NIX_RX_ACTION_DEFAULT) {
-+		if (pfvf->def_ucast_rule) {
-+			action = pfvf->def_ucast_rule->rx_action;
-+		} else {
-+			/* For profiles which do not extract DMAC, the default
-+			 * unicast entry is unused. Hence modify action for the
-+			 * requests which use same action as default unicast
-+			 * entry
-+			 */
-+			*(u64 *)&action = 0;
-+			action.pf_func = target;
-+			action.op = NIX_RX_ACTIONOP_UCAST;
-+		}
-+	}
- 
- 	entry->action = *(u64 *)&action;
- 
-@@ -1239,18 +1267,19 @@ int rvu_mbox_handler_npc_install_flow(struct rvu *rvu,
- 	if (npc_check_field(rvu, blkaddr, NPC_DMAC, req->intf))
- 		goto process_flow;
- 
--	if (is_pffunc_af(req->hdr.pcifunc)) {
-+	if (is_pffunc_af(req->hdr.pcifunc) &&
-+	    req->features & BIT_ULL(NPC_DMAC)) {
- 		if (is_unicast_ether_addr(req->packet.dmac)) {
--			dev_err(rvu->dev,
--				"%s: mkex profile does not support ucast flow\n",
--				__func__);
-+			dev_warn(rvu->dev,
-+				 "%s: mkex profile does not support ucast flow\n",
-+				 __func__);
- 			return NPC_FLOW_NOT_SUPPORTED;
- 		}
- 
- 		if (!npc_is_field_present(rvu, NPC_LXMB, req->intf)) {
--			dev_err(rvu->dev,
--				"%s: mkex profile does not support bcast/mcast flow",
--				__func__);
-+			dev_warn(rvu->dev,
-+				 "%s: mkex profile does not support bcast/mcast flow",
-+				 __func__);
- 			return NPC_FLOW_NOT_SUPPORTED;
- 		}
- 
-@@ -1603,3 +1632,22 @@ int npc_install_mcam_drop_rule(struct rvu *rvu, int mcam_idx, u16 *counter_idx,
- 
- 	return 0;
- }
-+
-+int rvu_mbox_handler_npc_get_field_status(struct rvu *rvu,
-+					  struct npc_get_field_status_req *req,
-+					  struct npc_get_field_status_rsp *rsp)
-+{
-+	int blkaddr;
-+
-+	blkaddr = rvu_get_blkaddr(rvu, BLKTYPE_NPC, 0);
-+	if (blkaddr < 0)
-+		return NPC_MCAM_INVALID_REQ;
-+
-+	if (!is_npc_interface_valid(rvu, req->intf))
-+		return NPC_FLOW_INTF_INVALID;
-+
-+	if (npc_check_field(rvu, blkaddr, req->field, req->intf))
-+		rsp->enable = 1;
-+
-+	return 0;
-+}
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c
-index 709fc0114fbd..13aa79efee03 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c
-@@ -164,6 +164,8 @@ EXPORT_SYMBOL(otx2_alloc_mcam_entries);
- static int otx2_mcam_entry_init(struct otx2_nic *pfvf)
- {
- 	struct otx2_flow_config *flow_cfg = pfvf->flow_cfg;
-+	struct npc_get_field_status_req *freq;
-+	struct npc_get_field_status_rsp *frsp;
- 	struct npc_mcam_alloc_entry_req *req;
- 	struct npc_mcam_alloc_entry_rsp *rsp;
- 	int vf_vlan_max_flows;
-@@ -214,8 +216,29 @@ static int otx2_mcam_entry_init(struct otx2_nic *pfvf)
- 	flow_cfg->rx_vlan_offset = flow_cfg->unicast_offset +
- 					OTX2_MAX_UNICAST_FLOWS;
- 	pfvf->flags |= OTX2_FLAG_UCAST_FLTR_SUPPORT;
--	pfvf->flags |= OTX2_FLAG_RX_VLAN_SUPPORT;
--	pfvf->flags |= OTX2_FLAG_VF_VLAN_SUPPORT;
-+
-+	/* Check if NPC_DMAC field is supported
-+	 * by the mkex profile before setting VLAN support flag.
-+	 */
-+	freq = otx2_mbox_alloc_msg_npc_get_field_status(&pfvf->mbox);
-+	if (!freq) {
-+		mutex_unlock(&pfvf->mbox.lock);
-+		return -ENOMEM;
-+	}
-+
-+	freq->field = NPC_DMAC;
-+	if (otx2_sync_mbox_msg(&pfvf->mbox)) {
-+		mutex_unlock(&pfvf->mbox.lock);
-+		return -EINVAL;
-+	}
-+
-+	frsp = (struct npc_get_field_status_rsp *)otx2_mbox_get_rsp
-+	       (&pfvf->mbox.mbox, 0, &freq->hdr);
-+
-+	if (frsp->enable) {
-+		pfvf->flags |= OTX2_FLAG_RX_VLAN_SUPPORT;
-+		pfvf->flags |= OTX2_FLAG_VF_VLAN_SUPPORT;
-+	}
- 
- 	pfvf->flags |= OTX2_FLAG_MCAM_ENTRIES_ALLOC;
- 	mutex_unlock(&pfvf->mbox.lock);
+On 11/17/22 11:39 PM, David Howells wrote:
+> From: ZhangPeng <zhangpeng362@huawei.com>
+> 
+> The type of a->key[0] is char in fscache_volume_same().  If the length of
+> cache volume key is greater than 127, the value of a->key[0] is less than
+> 0.  In this case, klen becomes much larger than 255 after type conversion,
+> because the type of klen is size_t.  As a result, memcmp() is read out of
+> bounds.
+> 
+> This causes a slab-out-of-bounds Read in __fscache_acquire_volume(), as
+> reported by Syzbot.
+> 
+> Fix this by changing the type of the stored key to "u8 *" rather than "char
+> *" (it isn't a simple string anyway).  Also put in a check that the volume
+> name doesn't exceed NAME_MAX.
+> 
+> ==================================================================
+> BUG: KASAN: slab-out-of-bounds in memcmp+0x16f/0x1c0 lib/string.c:757
+> Read of size 8 at addr ffff888016f3aa90 by task syz-executor344/3613
+> 
+> CPU: 0 PID: 3613 Comm: syz-executor344 Not tainted
+> 6.0.0-rc2-syzkaller-00327-g8379c0b31fbc #0
+> Hardware name: Google Compute Engine/Google Compute Engine, BIOS
+> Google 07/22/2022
+> Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+>  print_address_description mm/kasan/report.c:317 [inline]
+>  print_report.cold+0x2ba/0x719 mm/kasan/report.c:433
+>  kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
+>  memcmp+0x16f/0x1c0 lib/string.c:757
+>  memcmp include/linux/fortify-string.h:420 [inline]
+>  fscache_volume_same fs/fscache/volume.c:133 [inline]
+>  fscache_hash_volume fs/fscache/volume.c:171 [inline]
+>  __fscache_acquire_volume+0x76c/0x1080 fs/fscache/volume.c:328
+>  fscache_acquire_volume include/linux/fscache.h:204 [inline]
+>  v9fs_cache_session_get_cookie+0x143/0x240 fs/9p/cache.c:34
+>  v9fs_session_init+0x1166/0x1810 fs/9p/v9fs.c:473
+>  v9fs_mount+0xba/0xc90 fs/9p/vfs_super.c:126
+>  legacy_get_tree+0x105/0x220 fs/fs_context.c:610
+>  vfs_get_tree+0x89/0x2f0 fs/super.c:1530
+>  do_new_mount fs/namespace.c:3040 [inline]
+>  path_mount+0x1326/0x1e20 fs/namespace.c:3370
+>  do_mount fs/namespace.c:3383 [inline]
+>  __do_sys_mount fs/namespace.c:3591 [inline]
+>  __se_sys_mount fs/namespace.c:3568 [inline]
+>  __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> RIP: 0033:0x7f7d5064b1d9
+> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 e1 14 00 00 90 48 89 f8 48 89
+> f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01
+> f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007ffd1700c028 EFLAGS: 00000246 ORIG_RAX: 00000000000000a5
+> RAX: ffffffffffffffda RBX: 00007ffd1700c060 RCX: 00007f7d5064b1d9
+> RDX: 0000000020000040 RSI: 0000000020000000 RDI: 0000000000000000
+> RBP: 0000000000000000 R08: 0000000020000200 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000246 R12: 00000000000f4240
+> R13: 0000000000000000 R14: 00007ffd1700c04c R15: 00007ffd1700c050
+> ==================================================================
+> 
+> Fixes: 62ab63352350 ("fscache: Implement volume registration")
+> Reported-by: syzbot+a76f6a6e524cf2080aa3@syzkaller.appspotmail.com
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: Peng Zhang <zhangpeng362@huawei.com>
+> cc: Dominique Martinet <asmadeus@codewreck.org>
+> cc: Jeff Layton <jlayton@kernel.org>
+> cc: v9fs-developer@lists.sourceforge.net
+> cc: linux-cachefs@redhat.com
+> Link: https://lore.kernel.org/r/Y3OH+Dmi0QIOK18n@codewreck.org/ # Zhang Peng's v1 fix
+> Link: https://lore.kernel.org/r/20221115140447.2971680-1-zhangpeng362@huawei.com/ # Zhang Peng's v2 fix
+
+Reviewed-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+
+
+> ---
+> 
+>  fs/fscache/volume.c     |    7 +++++--
+>  include/linux/fscache.h |    2 +-
+>  2 files changed, 6 insertions(+), 3 deletions(-)
+> 
+> diff --git a/fs/fscache/volume.c b/fs/fscache/volume.c
+> index a058e0136bfe..ab8ceddf9efa 100644
+> --- a/fs/fscache/volume.c
+> +++ b/fs/fscache/volume.c
+> @@ -203,7 +203,11 @@ static struct fscache_volume *fscache_alloc_volume(const char *volume_key,
+>  	struct fscache_volume *volume;
+>  	struct fscache_cache *cache;
+>  	size_t klen, hlen;
+> -	char *key;
+> +	u8 *key;
+> +
+> +	klen = strlen(volume_key);
+> +	if (klen > NAME_MAX)
+> +		return NULL;
+>  
+>  	if (!coherency_data)
+>  		coherency_len = 0;
+> @@ -229,7 +233,6 @@ static struct fscache_volume *fscache_alloc_volume(const char *volume_key,
+>  	/* Stick the length on the front of the key and pad it out to make
+>  	 * hashing easier.
+>  	 */
+> -	klen = strlen(volume_key);
+>  	hlen = round_up(1 + klen + 1, sizeof(__le32));
+>  	key = kzalloc(hlen, GFP_KERNEL);
+>  	if (!key)
+> diff --git a/include/linux/fscache.h b/include/linux/fscache.h
+> index 36e5dd84cf59..8e312c8323a8 100644
+> --- a/include/linux/fscache.h
+> +++ b/include/linux/fscache.h
+> @@ -75,7 +75,7 @@ struct fscache_volume {
+>  	atomic_t			n_accesses;	/* Number of cache accesses in progress */
+>  	unsigned int			debug_id;
+>  	unsigned int			key_hash;	/* Hash of key string */
+> -	char				*key;		/* Volume ID, eg. "afs@example.com@1234" */
+> +	u8				*key;		/* Volume ID, eg. "afs@example.com@1234" */
+>  	struct list_head		proc_link;	/* Link in /proc/fs/fscache/volumes */
+>  	struct hlist_bl_node		hash_link;	/* Link in hash table */
+>  	struct work_struct		work;
+> 
+> 
+> --
+> Linux-cachefs mailing list
+> Linux-cachefs@redhat.com
+> https://listman.redhat.com/mailman/listinfo/linux-cachefs
+
 -- 
-2.25.1
-
+Thanks,
+Jingbo
