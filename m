@@ -2,226 +2,336 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CD3662FB5C
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 18:15:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FE9162FB62
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 18:15:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240445AbiKRRPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 12:15:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51128 "EHLO
+        id S242123AbiKRRPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 12:15:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241996AbiKRRPK (ORCPT
+        with ESMTP id S242224AbiKRRP2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 12:15:10 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C4E27B2F
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 09:15:09 -0800 (PST)
-Received: from mail-yb1-f197.google.com (mail-yb1-f197.google.com [209.85.219.197])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 1370E3F222
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 17:15:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1668791708;
-        bh=JOZUK9RGSwdPJyBqQhjDoeKgKG9IktmohsvMmg16Drk=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=ktPTIeqCh/Ooq6hundAd5mRPzREgOrhzrpML+xLv3i2dJEWS/NG7XIqJxJ7NKQvoM
-         MPQRAbfjbpBexfrvR+T00YfGLK/gYqMswnpvtm5iIESU6qdQA0ujWQ55j4lEO9Vn3U
-         VMwapxHpHGeesPnw3ihx6MGz2MQkOlkm4cpjrxXJuTDlvfbhUpEvGcmi5RInT1fYiG
-         6QM1rNu5iQwPA5ILISCO4VbnnLhU2U3A3mpO6osrMFl9IDFPtMyC99pBQ8c09bRa1f
-         4Wu2FX38V1R+OjRDpL4iWChR6bJle7L3ti683zPpu1TV/1SxvlpQejaXyPF/C5z750
-         VlKId926gFHFg==
-Received: by mail-yb1-f197.google.com with SMTP id b17-20020a25b851000000b006e32b877068so5025443ybm.16
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 09:15:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JOZUK9RGSwdPJyBqQhjDoeKgKG9IktmohsvMmg16Drk=;
-        b=C3svvS8AH/RcFGAaFjhJd+Msz+7awTfDDWzRubEYTsk/dJ9/V57w2dl6553uHiRbma
-         ufWp+hEieKzSxdmEb7gVwX/2x822zIjyJOAouH8lrVrQ3O4F7E7AWJflAxeSHJyPzybC
-         p93E3bjKEG2tsfzGPKfbp+682xMv7qS7EwLdoAETpkAU8//rMhJ2Cc4qyCeJ3ZO13Cxz
-         JAkLOPfphutK6Ztuzufey6mksQdJn0UDDuUyRelCI4QqVBFBryBFRogFb0BxgUGybszz
-         tp6OfOvuZhfzLczmG0EmfCOXMyfcOXDDPyQZ/m6UlXt8onhs0kCnLshUwG1Btrw7eUmd
-         UsTQ==
-X-Gm-Message-State: ANoB5pkK+ariBRC0a/ng2RxYMyAOgmmdCtxbBydTCcczG8twfZ8nkcFf
-        F9WcnoT4dTVET6nXAQWzOxJpZQuVFJZ3GztlQRNkFjnfsFpwQzWUjg2R3hahwE2B7WmI4rEtjiZ
-        my84+w68QHYqUqk7xv/t2JBYVZBVhZFvjsVQTB796dp9Z0SV1To9Dcs76cA==
-X-Received: by 2002:a25:e80f:0:b0:6df:927f:38c9 with SMTP id k15-20020a25e80f000000b006df927f38c9mr7103647ybd.92.1668791707103;
-        Fri, 18 Nov 2022 09:15:07 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4I4oZFvr41MjaIHsCGKb3O39hviHXG7d6XOFbJmPb2RtvH+a1VVrT4/f02mov5cJMQQ0aIly9y6uogaTo3+EY=
-X-Received: by 2002:a25:e80f:0:b0:6df:927f:38c9 with SMTP id
- k15-20020a25e80f000000b006df927f38c9mr7103630ybd.92.1668791706858; Fri, 18
- Nov 2022 09:15:06 -0800 (PST)
+        Fri, 18 Nov 2022 12:15:28 -0500
+Received: from sonic316-26.consmr.mail.ne1.yahoo.com (sonic316-26.consmr.mail.ne1.yahoo.com [66.163.187.152])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE068F3FD
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 09:15:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1668791723; bh=ofzSYaVcpdyw7JpRIdAZc2NiawoEta6Y3WTUmTaL0qY=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=N0csH36KUZcLDS2Xk5ghz4CDUx1hzy8ixsY7eKNhJBu0/4zf9n4EfzPm2r7FxTQXi0wPkfJslnWHqBZ3T9tC/D2Cd3irDtPmHSW+lOfMwRH0a20bRMSr1MNq8EPtkTLpf2s4Nf87qC8fVIHcohs3/zbEbzVhMxOMv2rMbc1xl4mfsknKDP+pO7wNr4Oro6SetSDnWcLiVRSMbgzUOg3jmFuaCHsOC5GlUTumCGsB5Dm7X95zB9PIhqMErgKOWi02DuzEWHfMBdtRZXtf/QvOgFjMiaGDPn9v0leWSBof4lZaL1RMcTjl8/c2DVGGo19OGMKd17BQgNXS41WM/opDtA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1668791723; bh=Tz9Xu2Ne++0tD8c8ERH4hElQmi0Z1CKb+JUUY6wi9Yj=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=hcrWw4YXu/uN1eTS4PatNCrX+siBhatRJVBwBN+KUbqIPVLXIN8LmWWb6GLGpq93vPUEsa5FwC7cl5of2sq7w1gpWaxIShuvIFpQ7zQH5EPjKxmy+NQJ2d5gC51U/o6B1t3uXxZ3EF110jrRbLE7NOxoFqlIyPxWeCBRmqsol8iVX9oCZx61NWSh2ZKxZZPplzaUQmrZCalHTXYPQ/9Wi2uN7pnn7Ywa8VLAzLEbxaOTygcpkmDja7N/tTaeVVVxCnjYidnLuJz8vnaplilpM3wJrtZ+K22GwZycLgHrDomdnPSMIaHZtk/Un2J5mEgSe1GaLjJ9PqU7VKTvEjM+7A==
+X-YMail-OSG: 3vSjfOgVM1n_I3giGrsS3W4wCXCBETQj8z7OjIh.hZ3ZiTbodvgy7nDYT1foIqO
+ se.wjg9E631mQ8bWnGGHIKyb6tidGNCv2oEBG4tu53axerPiXkCoST.I24bscAoFHI.vBu4p6ksI
+ J.PVWdTCpbrzaec3Tk.IRE5mb.FFW5DkEqsm86PocV69vZLSvuyeZU6HGQ.uKHQRcBLRtfSYbimk
+ D3XatGVarzjAPaF_eYUK2H_KM1pMDFtpAW91JRwInuxKH3cYP5fY3W8A5qydB3I_zFRoKcl90Lmv
+ 6MErziJK5qaAw2sVaVZpz1md5pKB95RPU_AcrXlah4Uh51eWzn5d_48dNtyaCBzgI8eRvSysEysY
+ TLegBGljaO0yWDve3fLIHwWafWx87RgWQUBkSxQUOn0SfGIO4A2jnfjxM1LH8tVMiTQvC2JX8kU1
+ nGFYJohD1C8Dd07vXuQOL8uz1vmGl8bJzwo4FRN6dXXMPHFiTB1VtqQq_dtmru5q3j64eHPxpTHF
+ fy0XzWU6Pr8SsRgj3dFcXoT8aVjpAJDTDgCOJaNBAd2MqolFIN2DWA26rEU.1lMC5RuU93i8.IPY
+ jLPmM51EODKTyceVduv1u7dRjFJ.EESYoEkkwFcgC4.8HbCSkSvdwWY1kw3_kzL3xHIJYETY.Xn2
+ vI8Mqne80upmDCRm9uqz7I6iCW84uR4JFQk34CreVQQCBDpDQa2OEV0CsKuJPRWVBjdkXzMlMJx6
+ ZbBlVILCuFhm1Kbz.rwqG4eQ41vhPwfJXyj1LPKZQo53JguZbG_U4hrj_Xbdz1CIU1k4UbCO0FMk
+ rzSxOkHMrEXVbMar2Jr47GAvaUJJMw45qrn6aReBQeLOvnR7olsxicvKAtt.7DXD3jaoPGWQ3GBX
+ kmW.LsNn_rj5C5f45M_D4KXBr8lc37QDWETU7GHRPa1O05ZwWyx.pyN08Q54LQXNTzy2_paMjJxP
+ mAoFAy2lk6CSBJaq4uO62Llu_gO2R0t6hprSB2JnN0bUjb8wJLC6KkC4enM8z2zKFyCX1JqcjFg4
+ hl98Rgt_nY_wqZVgK9gn77OZNcB4VvHtMqsGXy3xWbeXGWPuLmTtrpveweSs8KSeKnDw22t0Bwki
+ Vb3fO7Nn87vxVsX1Zc1EtzT9FmLDktyhFifNtZfju_YYJsmL968EEiG_5kAQpV.Uvo65WASOHZA6
+ Qn0tNPvIhz05IkpPoN1gm96KBjfXhTcDUpZuLLJdukMVbbN1V4yHzTS6J.JSN_eZlflEcdGkrbGi
+ qw2_8NZEa0p2ypWAq2yja2ZRZBTNSkijFnvKQKQrp106PeqsufzHtgo_JDI_XUkq2n9XkD0ue0f4
+ f1eg8UVE0GAO8yWgF4CJhRcKrhUHt.OOAZzB1vVB_xGYBY7bwMQd9sDvWoKuJDB_8cjprVGa6iWn
+ 9fU7Jr5PysV47v9bNM9pO4lrAWwVeBW_ebHNAGXKUEYcVajIG0xcVqZcJiR7rlD6mx8.JsqBow_u
+ wDqi9RM4BadycWu6Yj_2i6LgdL6BhpXn5d998jI8w.rvCWRTaL5Eq5Xue4FwOpgAs14qC3G1YUrX
+ IXvAJ9i996hcEi_tG6q63dMe28SCB9HJJNEIu8ut2w7iNSFLpHkdXC6t92FuV4QLIvl.AGGdvL38
+ 2cFP.fYAzrE.j1jp4oc6qltjmzdGjcCxciKNlNai01cdty9MCkysQ4v3LvVKU3d65Vsdqpax7CAo
+ _UYnrxakR79ejjKK7GA.MISZC_kPzWVqUSzk4nw7lf9YCEmZGKpqY46m8TrQf7bcS_eBIcO_634p
+ wbnL.4TNOzqBXlQgaGb0uS.B31Unl8HK30fx2Rpp9Xa15dMYaiyzrl_80mGEINVFkKAN2RUVwVTz
+ T9x6YFhkX86_Nin0iJ6pt6IBHEGlJM4uzqf5yj1JRIjiH189uxFRg2Hd8OExQpXyp.mlZOgfcgaW
+ VgUXd0610b4uITly8G41QSPby8K0hcnVmnEJemMCYp9uPwp4Obylc9BWD1EvIxGiP6.fQWT6DFvE
+ 7ObPRwfXDltZWt1G2bFaXKQGHm23okN2zFZYqX_4OYu5YrEYjEZalI0yml5hubpIRWUciHi9_UCa
+ MMADCXknufSQkzhzfh7cTDH0vdsUnwmNv5iMrcWVd18i_XbsoAE5eXuGYN7QAmmyquCH98K971H1
+ wfUtw8l.MKm5kAzHLD.Oo3HE1hqaWcn4mFXeiOZoOSdDPTk2op06IusfGwmZ8BHdVFgTkvz1UQjk
+ mm.zN4zofzGUIgsuBXu1_kTxUUTJU1262vhtISvRthr.FLoFCIweyFe72LFeg46Z8XjtO7Pdgt0S
+ kz3PiwgU6Vaw-
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.ne1.yahoo.com with HTTP; Fri, 18 Nov 2022 17:15:23 +0000
+Received: by hermes--production-bf1-5878955b5f-xc4c6 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID ea4aac5d2e626bcbff0e7c90f82744aa;
+          Fri, 18 Nov 2022 17:15:21 +0000 (UTC)
+Message-ID: <7cb8dd49-5c8d-1df5-1859-21553ec30637@schaufler-ca.com>
+Date:   Fri, 18 Nov 2022 09:15:17 -0800
 MIME-Version: 1.0
-References: <20221118010627.70576-1-hal.feng@starfivetech.com> <20221118010627.70576-14-hal.feng@starfivetech.com>
-In-Reply-To: <20221118010627.70576-14-hal.feng@starfivetech.com>
-From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Date:   Fri, 18 Nov 2022 18:14:50 +0100
-Message-ID: <CAJM55Z8Vfoi5bPLNUOX-F5R5hfwg_20HiGLyjcmziYMiz24xBQ@mail.gmail.com>
-Subject: Re: [PATCH v2 13/14] reset: starfive: Add StarFive JH7110 reset driver
-To:     Hal Feng <hal.feng@starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v4 3/5] security: Allow all LSMs to provide xattrs for
+ inode_init_security hook
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        Mimi Zohar <zohar@linux.ibm.com>, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keescook@chromium.org, nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        casey@schaufler-ca.com
+References: <20221110094639.3086409-1-roberto.sassu@huaweicloud.com>
+ <20221110094639.3086409-4-roberto.sassu@huaweicloud.com>
+ <4c1349f670dc3c23214a5a5036e43ddaa0a7bc89.camel@linux.ibm.com>
+ <fe16a03a-102e-b3e1-cc3f-5bad3c28fad7@huaweicloud.com>
+Content-Language: en-US
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <fe16a03a-102e-b3e1-cc3f-5bad3c28fad7@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Mailer: WebService/1.1.20863 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Nov 2022 at 02:06, Hal Feng <hal.feng@starfivetech.com> wrote:
+On 11/18/2022 1:14 AM, Roberto Sassu wrote:
+> On 11/17/2022 5:05 PM, Mimi Zohar wrote:
+>> hOn Thu, 2022-11-10 at 10:46 +0100, Roberto Sassu wrote:
+>>> From: Roberto Sassu <roberto.sassu@huawei.com>
+>>>
+>>> Currently, security_inode_init_security() supports only one LSM
+>>> providing
+>>> an xattr and EVM calculating the HMAC on that xattr, plus other inode
+>>> metadata.
+>>>
+>>> Allow all LSMs to provide one or multiple xattrs, by extending the
+>>> security
+>>> blob reservation mechanism. Introduce the new lbs_xattr field of the
+>>> lsm_blob_sizes structure, so that each LSM can specify how many
+>>> xattrs it
+>>> needs, and the LSM infrastructure knows how many xattr slots it should
+>>> allocate.
+>>
+>> Perhaps supporting per LSM multiple xattrs is a nice idea, but EVM
+>> doesn't currently support it.  The LSM xattrs are hard coded in
+>> evm_config_default_xattrnames[],  based on whether the LSM is
+>> configured.  Additional security xattrs may be included in the
+>> security.evm calculation, by extending the list via
+>> security/integrity/evm/evm_xattrs.
 >
-> Add auxiliary driver to support StarFive JH7110 system
-> and always-on resets.
+> EVM wouldn't notice whether it is the same LSM that provide multiple
+> xattrs or multiple LSMs provided one xattr. As long as the xattr array
+> contains consecutive xattrs, that would be fine. In the IMA/EVM test I
+> included a test case where an LSM provides two xattrs (seems to work
+> fine).
 >
-> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
-> ---
->  drivers/reset/starfive/Kconfig                |  8 +++
->  drivers/reset/starfive/Makefile               |  1 +
->  .../reset/starfive/reset-starfive-jh7110.c    | 67 +++++++++++++++++++
->  .../reset/starfive/reset-starfive-jh71x0.h    |  7 ++
->  4 files changed, 83 insertions(+)
->  create mode 100644 drivers/reset/starfive/reset-starfive-jh7110.c
+>>> Dynamically allocate the xattrs array to be populated by LSMs with the
+>>> inode_init_security hook, and pass it to the latter instead of the
+>>> name/value/len triple.
+>>>
+>>> Since the LSM infrastructure, at initialization time, updates the
+>>> number of
+>>> the requested xattrs provided by each LSM with a corresponding
+>>> offset in
+>>> the security blob (in this case the xattr array), it makes
+>>> straightforward
+>>> for an LSM to access the right position in the xattr array.
+>>>
+>>> There is still the issue that an LSM might not fill the xattr, even
+>>> if it
+>>> requests it (legitimate case, for example it might have been loaded
+>>> but not
+>>> initialized with a policy). Since users of the xattr array (e.g. the
+>>> initxattrs() callbacks) detect the end of the xattr array by
+>>> checking if
+>>> the xattr name is NULL, not filling an xattr would cause those users to
+>>> stop scanning xattrs prematurely.
+>>>
+>>> Solve that issue by introducing security_check_compact_xattrs(),
+>>> which does
+>>> a basic check of the xattr array (if the xattr name is filled, the
+>>> xattr
+>>> value should be too, and viceversa), and compacts the xattr array by
+>>> removing the holes.
+>>>
+>>> An alternative solution would be to let users of the xattr array
+>>> know the
+>>> number of elements of the xattr array, so that they don't have to
+>>> check the
+>>> termination. However, this seems more invasive, compared to a simple
+>>> move
+>>> of few array elements.
+>>>
+>>> Finally, adapt both SELinux and Smack to use the new definition of the
+>>> inode_init_security hook, and to correctly fill the designated slots
+>>> in the
+>>> xattr array.
+>>>
+>>> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+>>> ---
+>>
+>>> diff --git a/security/security.c b/security/security.c
+>>> index a0e9b4ce2341..b62f192de6da 100644
+>>> --- a/security/security.c
+>>> +++ b/security/security.c
+>>> @@ -30,8 +30,6 @@
+>>>   #include <linux/msg.h>
+>>>   #include <net/flow.h>
+>>>   -#define MAX_LSM_EVM_XATTR    2
+>>> -
+>>>   /* How many LSMs were built into the kernel? */
+>>>   #define LSM_COUNT (__end_lsm_info - __start_lsm_info)
+>>>   @@ -210,6 +208,7 @@ static void __init lsm_set_blob_sizes(struct
+>>> lsm_blob_sizes *needed)
+>>>       lsm_set_blob_size(&needed->lbs_msg_msg, &blob_sizes.lbs_msg_msg);
+>>>       lsm_set_blob_size(&needed->lbs_superblock,
+>>> &blob_sizes.lbs_superblock);
+>>>       lsm_set_blob_size(&needed->lbs_task, &blob_sizes.lbs_task);
+>>> +    lsm_set_blob_size(&needed->lbs_xattr, &blob_sizes.lbs_xattr);
+>>>   }
+>>>     /* Prepare LSM for initialization. */
+>>> @@ -346,6 +345,7 @@ static void __init ordered_lsm_init(void)
+>>>       init_debug("msg_msg blob size    = %d\n",
+>>> blob_sizes.lbs_msg_msg);
+>>>       init_debug("superblock blob size = %d\n",
+>>> blob_sizes.lbs_superblock);
+>>>       init_debug("task blob size       = %d\n", blob_sizes.lbs_task);
+>>> +    init_debug("xattr slots          = %d\n", blob_sizes.lbs_xattr);
+>>>         /*
+>>>        * Create any kmem_caches needed for blobs
+>>> @@ -1100,34 +1100,78 @@ static int security_initxattrs(struct inode
+>>> *inode, const struct xattr *xattrs,
+>>>       return 0;
+>>>   }
+>>
+>>> +static int security_check_compact_xattrs(struct xattr *xattrs,
+>>> +                     int num_xattrs, int *checked_xattrs)
+>>
+>> Perhaps the variable naming is off, making it difficult to read.   So
+>> although this is a static function, which normally doesn't require a
+>> comment, it's definitely needs one.
 >
-> diff --git a/drivers/reset/starfive/Kconfig b/drivers/reset/starfive/Kconfig
-> index 9d15c4110e40..fab1a081af17 100644
-> --- a/drivers/reset/starfive/Kconfig
-> +++ b/drivers/reset/starfive/Kconfig
-> @@ -10,3 +10,11 @@ config RESET_STARFIVE_JH7100
->         default SOC_STARFIVE
->         help
->           This enables the reset controller driver for the StarFive JH7100 SoC.
-> +
-> +config RESET_STARFIVE_JH7110
-> +       bool "StarFive JH7110 Reset Driver"
-> +       depends on AUXILIARY_BUS && CLK_STARFIVE_JH7110_SYS
-> +       select RESET_STARFIVE_JH71X0
-> +       default CLK_STARFIVE_JH7110_SYS
-> +       help
-> +         This enables the reset controller driver for the StarFive JH7110 SoC.
-> diff --git a/drivers/reset/starfive/Makefile b/drivers/reset/starfive/Makefile
-> index f6aa12466fad..7a44b66fb9d5 100644
-> --- a/drivers/reset/starfive/Makefile
-> +++ b/drivers/reset/starfive/Makefile
-> @@ -2,3 +2,4 @@
->  obj-$(CONFIG_RESET_STARFIVE_JH71X0)            += reset-starfive-jh71x0.o
+> Ok, will improve it.
 >
->  obj-$(CONFIG_RESET_STARFIVE_JH7100)            += reset-starfive-jh7100.o
-> +obj-$(CONFIG_RESET_STARFIVE_JH7110)            += reset-starfive-jh7110.o
-> diff --git a/drivers/reset/starfive/reset-starfive-jh7110.c b/drivers/reset/starfive/reset-starfive-jh7110.c
-> new file mode 100644
-> index 000000000000..00f3b4ecfb02
-> --- /dev/null
-> +++ b/drivers/reset/starfive/reset-starfive-jh7110.c
-> @@ -0,0 +1,67 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Reset driver for the StarFive JH7110 SoC
-> + *
-> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
-> + * Copyright (C) 2022 Hal Feng <hal.feng@starfivetech.com>
-> + */
-> +
-> +#include <linux/auxiliary_bus.h>
-> +
-> +#include "reset-starfive-jh71x0.h"
-> +
-> +#include <dt-bindings/reset/starfive-jh7110.h>
-> +
-> +static int jh7110_reset_probe(struct auxiliary_device *adev,
-> +                             const struct auxiliary_device_id *id)
-> +{
-> +       struct reset_info *info = (struct reset_info *)(id->driver_data);
-> +       void __iomem *base = dev_get_drvdata(adev->dev.parent);
-> +
-> +       if (!info || !base)
-> +               return -ENODEV;
-> +
-> +       return reset_starfive_jh71x0_register(&adev->dev, adev->dev.parent->of_node,
-> +                                             base + info->assert_offset,
-> +                                             base + info->status_offset,
-> +                                             info->asserted,
-> +                                             info->nr_resets,
-> +                                             false);
-> +}
-> +
-> +static const struct reset_info jh7110_sys_info = {
-> +       .nr_resets = JH7110_SYSRST_END,
-> +       .assert_offset = 0x2F8,
-> +       .status_offset = 0x308,
-> +       .asserted = NULL,
-> +};
-> +
-> +static const struct reset_info jh7110_aon_info = {
-> +       .nr_resets = JH7110_AONRST_END,
-> +       .assert_offset = 0x38,
-> +       .status_offset = 0x3C,
-> +       .asserted = NULL,
-> +};
+>>> +{
+>>> +    int i;
+>>> +
+>>> +    for (i = *checked_xattrs; i < num_xattrs; i++) {
+>>
+>> If the number of "checked" xattrs was kept up to date, removing the
+>> empty xattr gaps wouldn't require a loop.  Is the purpose of this loop
+>> to support multiple per LSM xattrs?
+>
+> An LSM might reserve one or more xattrs, but not set it/them (for
+> example because it is not initialized). In this case, removing the
+> gaps is needed for all subsequent LSMs.
 
-It doesn't seem like syscrg, aoncrg or stgcrg have any inverted lines.
-Do you know if any other CRGs do? If not you can just leave out the
-.asserted member and always pass NULL.
+This is in fact the case with Smack. All file system objects have SMACK64 attributes,
+some have SMACK64EXEC, others SMACK64MMAP and still others SMACK64TRANSMUTE.
 
-> +static const struct auxiliary_device_id jh7110_reset_ids[] = {
-> +       {
-> +               .name = "clk_starfive_jh71x0.reset-sys",
-> +               .driver_data = (kernel_ulong_t)&jh7110_sys_info,
-> +       },
-> +       {
-> +               .name = "clk_starfive_jh71x0.reset-aon",
-> +               .driver_data = (kernel_ulong_t)&jh7110_aon_info,
-> +       },
-> +       { /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(auxiliary, jh7110_reset_ids);
-> +
-> +static struct auxiliary_driver jh7110_reset_driver = {
-> +       .probe          = jh7110_reset_probe,
-> +       .id_table       = jh7110_reset_ids,
-> +};
-> +module_auxiliary_driver(jh7110_reset_driver);
-> +
-> +MODULE_DESCRIPTION("StarFive JH7110 Reset Driver");
-> +MODULE_AUTHOR("Hal Feng <hal.feng@starfivetech.com>");
-> +MODULE_LICENSE("GPL");
-> diff --git a/drivers/reset/starfive/reset-starfive-jh71x0.h b/drivers/reset/starfive/reset-starfive-jh71x0.h
-> index e6b27110de48..63a94ee1b395 100644
-> --- a/drivers/reset/starfive/reset-starfive-jh71x0.h
-> +++ b/drivers/reset/starfive/reset-starfive-jh71x0.h
-> @@ -6,6 +6,13 @@
->  #ifndef __RESET_STARFIVE_JH71X0_H
->  #define __RESET_STARFIVE_JH71X0_H
 >
-> +struct reset_info {
-> +       unsigned int nr_resets;
-> +       unsigned int assert_offset;
-> +       unsigned int status_offset;
-> +       const u32 *asserted;
-> +};
-
-This struct isn't used outside of reset-starfive-jh7110.c, so no need
-to define it in this header.
-Also consider calling it jh7110_reset_info so it blends in with the
-functions defined in that file.
-
->  int reset_starfive_jh71x0_register(struct device *dev, struct device_node *of_node,
->                                    void __iomem *assert, void __iomem *status,
->                                    const u32 *asserted, unsigned int nr_resets,
-> --
-> 2.38.1
+>>> +        if ((!xattrs[i].name && xattrs[i].value) ||
+>>> +            (xattrs[i].name && !xattrs[i].value))
+>>> +            return -EINVAL;
+>>> +
+>>> +        if (!xattrs[i].name)
+>>> +            continue;
+>>> +
+>>> +        if (i == *checked_xattrs) {
+>>> +            (*checked_xattrs)++;
+>>> +            continue;
+>>> +        }
+>>> +
+>>> +        memcpy(xattrs + (*checked_xattrs)++, xattrs + i,
+>>> +               sizeof(*xattrs));
+>>> +        memset(xattrs + i, 0, sizeof(*xattrs));
+>>> +    }
+>>> +
+>>> +    return 0;
+>>> +}
+>>> +
+>>>   int security_inode_init_security(struct inode *inode, struct inode
+>>> *dir,
+>>>                    const struct qstr *qstr,
+>>>                    const initxattrs initxattrs, void *fs_data)
+>>>   {
+>>> -    struct xattr new_xattrs[MAX_LSM_EVM_XATTR + 1];
+>>> -    struct xattr *lsm_xattr, *evm_xattr, *xattr;
+>>> -    int ret = -EOPNOTSUPP;
+>>> +    struct security_hook_list *P;
+>>> +    struct xattr *new_xattrs;
+>>> +    struct xattr *xattr;
+>>> +    int ret = -EOPNOTSUPP, cur_xattrs = 0;
+>>>         if (unlikely(IS_PRIVATE(inode)))
+>>>           goto out_exit;
+>>>   +    if (!blob_sizes.lbs_xattr)
+>>> +        goto out_exit;
+>>> +
+>>>       if (!initxattrs ||
+>>>           (initxattrs == &security_initxattrs && !fs_data)) {
+>>>           ret = call_int_hook(inode_init_security, -EOPNOTSUPP, inode,
+>>> -                    dir, qstr, NULL, NULL, NULL);
+>>> +                    dir, qstr, NULL);
+>>>           goto out_exit;
+>>>       }
+>>> -    memset(new_xattrs, 0, sizeof(new_xattrs));
+>>> -    lsm_xattr = new_xattrs;
+>>> -    ret = call_int_hook(inode_init_security, -EOPNOTSUPP, inode,
+>>> dir, qstr,
+>>> -                        &lsm_xattr->name,
+>>> -                        &lsm_xattr->value,
+>>> -                        &lsm_xattr->value_len);
+>>> -    if (ret)
+>>> -        goto out;
+>>> +    /* Allocate +1 for EVM and +1 as terminator. */
+>>> +    new_xattrs = kcalloc(blob_sizes.lbs_xattr + 2,
+>>> sizeof(*new_xattrs),
+>>> +                 GFP_NOFS);
+>>> +    if (!new_xattrs) {
+>>> +        ret = -ENOMEM;
+>>> +        goto out_exit;
+>>> +    }
+>>> +    hlist_for_each_entry(P, &security_hook_heads.inode_init_security,
+>>> +                 list) {
+>>> +        ret = P->hook.inode_init_security(inode, dir, qstr,
+>>> new_xattrs);
+>>> +        if (ret && ret != -EOPNOTSUPP)
+>>> +            goto out;
+>>> +        if (ret == -EOPNOTSUPP)
+>>> +            continue;
+>>> +        ret = security_check_compact_xattrs(new_xattrs,
+>>> +                            blob_sizes.lbs_xattr,
+>>> +                            &cur_xattrs);
+>>
+>> Defining a variable named "cur_xattrs" to indicate the number of xattrs
+>> compressed is off.  Perhaps use cur_num_xattrs?   Similarly,
+>> "checked_xattrs" should be num_checked_xattrs.  Or change the existing
+>> num_xattrs to max_num_xattrs and rename checked_xattrs to num_xattrs.
+>
+> Ok.
+>
+> Thanks
+>
+> Roberto
+>
+>> thanks,
+>>
+>> Mimi
+>>
+>>> +        if (ret < 0) {
+>>> +            ret = -ENOMEM;
+>>> +            goto out;
+>>> +        }
+>>> +    }
+>>>   -    evm_xattr = lsm_xattr + 1;
+>>> -    ret = evm_inode_init_security(inode, lsm_xattr, evm_xattr);
+>>> +    ret = evm_inode_init_security(inode, new_xattrs,
+>>> +                      new_xattrs + cur_xattrs);
+>>>       if (ret)
+>>>           goto out;
+>>>       ret = initxattrs(inode, new_xattrs, fs_data);
+>>> @@ -1142,6 +1186,7 @@ int security_inode_init_security(struct inode
+>>> *inode, struct inode *dir,
+>>>               continue;
+>>>           kfree(xattr->value);
+>>>       }
+>>> +    kfree(new_xattrs);
+>>>   out_exit:
+>>>       if (initxattrs == &security_initxattrs)
+>>>           return ret;
 >
