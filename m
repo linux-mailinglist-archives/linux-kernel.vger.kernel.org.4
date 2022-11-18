@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91C3862F734
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 15:21:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24E6F62F737
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 15:21:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242354AbiKROVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 09:21:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54596 "EHLO
+        id S242336AbiKROVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 09:21:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242332AbiKROV1 (ORCPT
+        with ESMTP id S242333AbiKROV1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 18 Nov 2022 09:21:27 -0500
 Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B2F67104;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762C3A457;
         Fri, 18 Nov 2022 06:21:25 -0800 (PST)
 Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AICFIUb025123;
-        Fri, 18 Nov 2022 15:21:01 +0100
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AICNlEX025133;
+        Fri, 18 Nov 2022 15:21:03 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=selector1;
- bh=bEGiUooBAWg10GL05T18knua8Hy/usMTNQ+41sucBRQ=;
- b=WqBhTGOHFfAzG/GsNxSprCdx3d9+p5zyyWB6jq3jvgzkiEZBACp4RETKOnQ2nOyVB5/S
- CbS1cbj1bGo4q+3AmYu4GZt04WI9PrQL5Agp5X7KnCz8tp06IxcWNx+vzYW3ek40Bfqw
- v0WQuw8DppMyQvI0AFipQqefMJSv2wjENG/Wq2Xp9ogFNp0ucm/QO6hrEprgxuO0V6Ni
- 6MZPzx/4ik0D40+lB6NkzuG3FB+PsAeybiQeQlqpTfXfl0k4OoL+CfXetMvF5/YXZ7mP
- d4NVHJwnvTfy4q+6Z9F+0Y58gwLffaJGw1DkQvndxMDcSHFFCy8Fuz3X/mm8WyJDScmE rA== 
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=selector1;
+ bh=jP12zWQBN+XsiDIL+l1U4dIV3t9oCSoslQ89hmUsN4Q=;
+ b=xNRbMJp0pldFOwXmvBP40cNRHVHA3tj1hF+K4RMmONcZSnMPcOehO02A1ZygIpvHaGZ/
+ TG7TciY6fLlSn+P6GWvzMQ03Akv+cSIV2o8TeXTDG9nCNEGDcmRrRJfSRP4wu3YNF90i
+ iESKpB9zq3qPpCRsL/7Ynvol66Dy971tT8Qz2YeY5PB57ZMW1o1fROB1PWwX+rm2NXLL
+ BLfmT5AEu3Pl2DVkkRAt+R2Gq11cRuAIRsINzQwasLSIM1E1NWB1lxWy4XjezQ7DhEXr
+ NK8rf/obGJ9atSvrlsQvD2An3mWHhiGMMRNSgpViY3sElbGnvkO9MK9YwpvJFsVGxafO hg== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3kx0my47rj-1
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3kx0my47rq-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Nov 2022 15:21:01 +0100
+        Fri, 18 Nov 2022 15:21:02 +0100
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 408E4100034;
-        Fri, 18 Nov 2022 15:20:57 +0100 (CET)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 237DE100038;
+        Fri, 18 Nov 2022 15:20:58 +0100 (CET)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 3B6AB231DE0;
-        Fri, 18 Nov 2022 15:20:57 +0100 (CET)
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 1CF58231DE3;
+        Fri, 18 Nov 2022 15:20:58 +0100 (CET)
 Received: from localhost (10.201.20.178) by SHFDAG1NODE1.st.com (10.75.129.69)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.32; Fri, 18 Nov
@@ -51,10 +51,12 @@ CC:     Olivier Moysan <olivier.moysan@foss.st.com>,
         <linux-stm32@st-md-mailman.stormreply.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH 0/4] ARM: dts: add audio support on stm32mp131
-Date:   Fri, 18 Nov 2022 15:20:02 +0100
-Message-ID: <20221118142006.479138-1-olivier.moysan@foss.st.com>
+Subject: [PATCH 1/4] ARM: dts: stm32: add i2s nodes on stm32mp131
+Date:   Fri, 18 Nov 2022 15:20:03 +0100
+Message-ID: <20221118142006.479138-2-olivier.moysan@foss.st.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221118142006.479138-1-olivier.moysan@foss.st.com>
+References: <20221118142006.479138-1-olivier.moysan@foss.st.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -73,18 +75,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add SAI, I2S, SPDIFRX and DFSDM audio peripherals support for the
+Add I2S1, I2S2, I2S3 and I2S4 peripherals support for the
 STM32MP13 SoC family.
 
-Olivier Moysan (4):
-  ARM: dts: stm32: add i2s nodes on stm32mp131
-  ARM: dts: stm32: add sai nodes on stm32mp131
-  ARM: dts: stm32: add spdifrx node on stm32mp131
-  ARM: dts: stm32: add dfsdm node on stm32mp131
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+---
+ arch/arm/boot/dts/stm32mp131.dtsi | 44 +++++++++++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
- arch/arm/boot/dts/stm32mp131.dtsi | 149 ++++++++++++++++++++++++++++++
- 1 file changed, 149 insertions(+)
-
+diff --git a/arch/arm/boot/dts/stm32mp131.dtsi b/arch/arm/boot/dts/stm32mp131.dtsi
+index 2a9b3a5bba83..b8da3844df94 100644
+--- a/arch/arm/boot/dts/stm32mp131.dtsi
++++ b/arch/arm/boot/dts/stm32mp131.dtsi
+@@ -121,6 +121,17 @@ scmi_shm: scmi-sram@0 {
+ 			};
+ 		};
+ 
++		i2s2: audio-controller@4000b000 {
++			compatible = "st,stm32h7-i2s";
++			reg = <0x4000b000 0x400>;
++			#sound-dai-cells = <0>;
++			interrupts = <GIC_SPI 37 IRQ_TYPE_LEVEL_HIGH>;
++			dmas = <&dmamux1 39 0x400 0x01>,
++			       <&dmamux1 40 0x400 0x01>;
++			dma-names = "rx", "tx";
++			status = "disabled";
++		};
++
+ 		spi2: spi@4000b000 {
+ 			compatible = "st,stm32h7-spi";
+ 			reg = <0x4000b000 0x400>;
+@@ -135,6 +146,17 @@ spi2: spi@4000b000 {
+ 			status = "disabled";
+ 		};
+ 
++		i2s3: audio-controller@4000c000 {
++			compatible = "st,stm32h7-i2s";
++			reg = <0x4000c000 0x400>;
++			#sound-dai-cells = <0>;
++			interrupts = <GIC_SPI 52 IRQ_TYPE_LEVEL_HIGH>;
++			dmas = <&dmamux1 61 0x400 0x01>,
++			       <&dmamux1 62 0x400 0x01>;
++			dma-names = "rx", "tx";
++			status = "disabled";
++		};
++
+ 		spi3: spi@4000c000 {
+ 			compatible = "st,stm32h7-spi";
+ 			reg = <0x4000c000 0x400>;
+@@ -194,6 +216,17 @@ i2c2: i2c@40013000 {
+ 			status = "disabled";
+ 		};
+ 
++		i2s1: audio-controller@44004000 {
++			compatible = "st,stm32h7-i2s";
++			reg = <0x44004000 0x400>;
++			#sound-dai-cells = <0>;
++			interrupts = <GIC_SPI 36 IRQ_TYPE_LEVEL_HIGH>;
++			dmas = <&dmamux1 37 0x400 0x01>,
++			       <&dmamux1 38 0x400 0x01>;
++			dma-names = "rx", "tx";
++			status = "disabled";
++		};
++
+ 		spi1: spi@44004000 {
+ 			compatible = "st,stm32h7-spi";
+ 			reg = <0x44004000 0x400>;
+@@ -315,6 +348,17 @@ usbotg_hs: usb@49000000 {
+ 			status = "disabled";
+ 		};
+ 
++		i2s4: audio-controller@4c002000 {
++			compatible = "st,stm32h7-i2s";
++			reg = <0x4c002000 0x400>;
++			#sound-dai-cells = <0>;
++			interrupts = <GIC_SPI 85 IRQ_TYPE_LEVEL_HIGH>;
++			dmas = <&dmamux1 83 0x400 0x01>,
++			       <&dmamux1 84 0x400 0x01>;
++			dma-names = "rx", "tx";
++			status = "disabled";
++		};
++
+ 		spi4: spi@4c002000 {
+ 			compatible = "st,stm32h7-spi";
+ 			reg = <0x4c002000 0x400>;
 -- 
 2.25.1
 
