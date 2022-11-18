@@ -2,179 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F03162FE02
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 20:32:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 743D462FE06
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 20:34:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235144AbiKRTcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 14:32:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50712 "EHLO
+        id S235380AbiKRTeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 14:34:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234867AbiKRTcG (ORCPT
+        with ESMTP id S234867AbiKRTeQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 14:32:06 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661AA786F5
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 11:32:04 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id o7so5361408pjj.1
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 11:32:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YT7jh12C9b+MGVUbQC67HmN3j2iOcFYyfJpQMQ1dp4c=;
-        b=nWMaCZ3QP/mFnpvGl93qvAIEWDpEyst5izQAWsgrbNJS4E4vPHQ5vE+8QCmrxGt/mt
-         DvDFNExdjyfLVA6gHlRG2uI/7rdjPKgjJDcEx8ZNv24iSqb7jE4p/WhzrFEPwxSDhqDY
-         1KfiV7EdIOU3PTZ6CxPRLMSNgZwvSusIsIloYZu5k8rk3yhLr6pL7xoMlmVEO+aaTPiv
-         jieYjfZawyQwnaSOYnTXIgsDoFZJ94RgM8/coHMH/tKiRRROOjNklNNjUyNgS6KpAL0Q
-         GSLomCr3HmLPe2vE66d9pj2Kh3Idc8ja5ibNriP61V3PZ2AsPyj776iGOLTs81CdCDZN
-         S8iA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YT7jh12C9b+MGVUbQC67HmN3j2iOcFYyfJpQMQ1dp4c=;
-        b=AAyn3SvXMbANO/fxknPOpvrqwq9KIEFXTYKKoS+YDUCAhkw88I4K6G+RHcsV4yZAvF
-         mPtkO+l0ITMo+qlKe8FHdCSsm3xo+7cnS0STAQkYnJCPBFRHVlpDhOCuT2MEZZnM6vDD
-         qktcVBdE7q46NWQA9WJJA++Ee34PjS6NJf6HhlyfbDu2Hyi0cbdtQWd8WpkXuE8A46qY
-         M15FZHWofclAqZlKy98MptQgoGlGgYo06E7uc1zpIifzsEUavdUMYTkFpgo2GQCMxiqr
-         SiXw6vpFSMkDCfgDls+U954dxZ6QgYjZN3/W+l5UoWrW432JX5Lt9uOT6/vgMB2d5/ak
-         yOMQ==
-X-Gm-Message-State: ANoB5pmC2UOiTi2eyn2fILJtDr0vRKoo6TylL32clQXFlE9Cd5B9JBts
-        YiebvYq0P5pGF4VQoEovpF8=
-X-Google-Smtp-Source: AA0mqf7HQUep/xODul/qAH2LRmvIbHpj0vO/tG3rt0ek/yMX9K71eY6mGcsX8r0Z759elpZeUn7FIw==
-X-Received: by 2002:a17:902:7881:b0:185:5537:f399 with SMTP id q1-20020a170902788100b001855537f399mr990413pll.39.1668799923782;
-        Fri, 18 Nov 2022 11:32:03 -0800 (PST)
-Received: from google.com ([2620:15c:211:201:bba9:9f92:b2cc:16a4])
-        by smtp.gmail.com with ESMTPSA id cp17-20020a170902e79100b00186b8752a78sm4080558plb.80.2022.11.18.11.32.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 11:32:03 -0800 (PST)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Fri, 18 Nov 2022 11:32:01 -0800
-From:   Minchan Kim <minchan@kernel.org>
-To:     Nhat Pham <nphamcs@gmail.com>
-Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, ngupta@vflare.org,
-        senozhatsky@chromium.org, sjenning@redhat.com, ddstreet@ieee.org,
-        vitaly.wool@konsulko.com
-Subject: Re: [PATCH v5 4/6] zsmalloc: Add a LRU to zs_pool to keep track of
- zspages in LRU order
-Message-ID: <Y3fdsTDFgCzhcDwo@google.com>
-References: <20221118182407.82548-1-nphamcs@gmail.com>
- <20221118182407.82548-5-nphamcs@gmail.com>
+        Fri, 18 Nov 2022 14:34:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6A9478D4B
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 11:33:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668799999;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=vm4lYSuI39T5xePAN2iEqNP90UK7XrasUEw23g3xMyk=;
+        b=CslY047qvblMjaIpMwnebuyi9Ml/WL7HrSs9pga0XgLwkTvMddTMZ+DQ+pOQiuC3mrRR4s
+        y5gV6bNuNe2VHOvXVEESfISawSZ7Cqs60MGRvxBotic/FNXe350Ad+LBSkosJ+CA8Z1TQw
+        +BwdVm6u6HzOayw/xyqdECn36A8H7hU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-385-a0HxK2E1MZyeMrjtuV38kw-1; Fri, 18 Nov 2022 14:33:16 -0500
+X-MC-Unique: a0HxK2E1MZyeMrjtuV38kw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5031385A588;
+        Fri, 18 Nov 2022 19:33:16 +0000 (UTC)
+Received: from llong.com (unknown [10.22.18.201])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A092E140EBF3;
+        Fri, 18 Nov 2022 19:33:15 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>
+Cc:     Phil Auld <pauld@redhat.com>, linux-kernel@vger.kernel.org,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH-tip] sched: Don't call kfree() in do_set_cpus_allowed()
+Date:   Fri, 18 Nov 2022 14:33:02 -0500
+Message-Id: <20221118193302.522399-1-longman@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221118182407.82548-5-nphamcs@gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 10:24:05AM -0800, Nhat Pham wrote:
-> This helps determines the coldest zspages as candidates for writeback.
-> 
-> Signed-off-by: Nhat Pham <nphamcs@gmail.com>
-> ---
->  mm/zsmalloc.c | 45 +++++++++++++++++++++++++++++++++++++++++++--
->  1 file changed, 43 insertions(+), 2 deletions(-)
-> 
-> diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
-> index 326faa751f0a..9e7b54324181 100644
-> --- a/mm/zsmalloc.c
-> +++ b/mm/zsmalloc.c
-> @@ -239,6 +239,11 @@ struct zs_pool {
->  	/* Compact classes */
->  	struct shrinker shrinker;
-> 
-> +#ifdef CONFIG_ZPOOL
-> +	/* List tracking the zspages in LRU order by most recently added object */
-> +	struct list_head lru;
-> +#endif
-> +
->  #ifdef CONFIG_ZSMALLOC_STAT
->  	struct dentry *stat_dentry;
->  #endif
-> @@ -260,6 +265,12 @@ struct zspage {
->  	unsigned int freeobj;
->  	struct page *first_page;
->  	struct list_head list; /* fullness list */
-> +
-> +#ifdef CONFIG_ZPOOL
-> +	/* links the zspage to the lru list in the pool */
-> +	struct list_head lru;
-> +#endif
-> +
->  	struct zs_pool *pool;
->  #ifdef CONFIG_COMPACTION
->  	rwlock_t lock;
-> @@ -352,6 +363,18 @@ static void cache_free_zspage(struct zs_pool *pool, struct zspage *zspage)
->  	kmem_cache_free(pool->zspage_cachep, zspage);
->  }
-> 
-> +#ifdef CONFIG_ZPOOL
-> +/* Moves the zspage to the front of the zspool's LRU */
-> +static void move_to_front(struct zs_pool *pool, struct zspage *zspage)
-> +{
-> +	assert_spin_locked(&pool->lock);
-> +
-> +	if (!list_empty(&zspage->lru))
-> +		list_del(&zspage->lru);
-> +	list_add(&zspage->lru, &pool->lru);
-> +}
-> +#endif
-> +
->  /* pool->lock(which owns the handle) synchronizes races */
->  static void record_obj(unsigned long handle, unsigned long obj)
->  {
-> @@ -953,6 +976,9 @@ static void free_zspage(struct zs_pool *pool, struct size_class *class,
->  	}
-> 
->  	remove_zspage(class, zspage, ZS_EMPTY);
-> +#ifdef CONFIG_ZPOOL
-> +	list_del(&zspage->lru);
-> +#endif
->  	__free_zspage(pool, class, zspage);
->  }
-> 
-> @@ -998,6 +1024,10 @@ static void init_zspage(struct size_class *class, struct zspage *zspage)
->  		off %= PAGE_SIZE;
->  	}
-> 
-> +#ifdef CONFIG_ZPOOL
-> +	INIT_LIST_HEAD(&zspage->lru);
-> +#endif
-> +
->  	set_freeobj(zspage, 0);
->  }
-> 
-> @@ -1418,9 +1448,8 @@ unsigned long zs_malloc(struct zs_pool *pool, size_t size, gfp_t gfp)
->  		fix_fullness_group(class, zspage);
->  		record_obj(handle, obj);
->  		class_stat_inc(class, OBJ_USED, 1);
-> -		spin_unlock(&pool->lock);
-> 
-> -		return handle;
-> +		goto out;
->  	}
-> 
->  	spin_unlock(&pool->lock);
-> @@ -1444,6 +1473,11 @@ unsigned long zs_malloc(struct zs_pool *pool, size_t size, gfp_t gfp)
-> 
->  	/* We completely set up zspage so mark them as movable */
->  	SetZsPageMovable(pool, zspage);
-> +out:
-> +#ifdef CONFIG_ZPOOL
-> +	/* Move the zspage to front of pool's LRU */
-> +	move_to_front(pool, zspage);
-> +#endif
->  	spin_unlock(&pool->lock);
+Commit 851a723e45d1 ("sched: Always clear user_cpus_ptr in
+do_set_cpus_allowed()") may call kfree() if user_cpus_ptr was previously
+set. Unfortunately, some of the callers of do_set_cpus_allowed()
+may not be in a context where kfree() can be safely called. So the
+following splats may be printed:
 
-Please move the move_to_front into zs_map_object with ZS_MM_WO with
-comment with "why we are doing only for WO case".
+   WARNING: possible circular locking dependency detected
+   BUG: sleeping function called from invalid context
+
+To avoid these problems without leaking memory, the free cpumask is now
+put into a lockless list to be reused in a later sched_setaffinity()
+call instead.
+
+Fixes: 851a723e45d1 ("sched: Always clear user_cpus_ptr in do_set_cpus_allowed()")
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ kernel/sched/core.c | 26 +++++++++++++++++++++++---
+ 1 file changed, 23 insertions(+), 3 deletions(-)
+
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 78b2d5cabcc5..8df51b08bb38 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -2527,6 +2527,11 @@ int push_cpu_stop(void *arg)
+ 	return 0;
+ }
+ 
++/*
++ * A lockless list of user cpumask available to be reused.
++ */
++static LLIST_HEAD(free_cpumasks);
++
+ /*
+  * sched_class::set_cpus_allowed must do the below, but is not required to
+  * actually call this function.
+@@ -2606,7 +2611,14 @@ void do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask)
+ 	};
+ 
+ 	__do_set_cpus_allowed(p, &ac);
+-	kfree(ac.user_mask);
++	if (ac.user_mask) {
++		/*
++		 * We may not be in a context where kfree() can be called.
++		 * Put the free user_mask in free_cpumasks to be freed or
++		 * used later.
++		 */
++		llist_add((struct llist_node *)ac.user_mask, &free_cpumasks);
++	}
+ }
+ 
+ int dup_user_cpus_ptr(struct task_struct *dst, struct task_struct *src,
+@@ -8194,7 +8206,7 @@ __sched_setaffinity(struct task_struct *p, struct affinity_context *ctx)
+ long sched_setaffinity(pid_t pid, const struct cpumask *in_mask)
+ {
+ 	struct affinity_context ac;
+-	struct cpumask *user_mask;
++	struct cpumask *user_mask = NULL;
+ 	struct task_struct *p;
+ 	int retval;
+ 
+@@ -8229,7 +8241,15 @@ long sched_setaffinity(pid_t pid, const struct cpumask *in_mask)
+ 	if (retval)
+ 		goto out_put_task;
+ 
+-	user_mask = kmalloc(cpumask_size(), GFP_KERNEL);
++	/*
++	 * Use the element in the free_cpumasks, if available.
++	 */
++	if (!llist_empty(&free_cpumasks))
++		user_mask = (struct cpumask *)llist_del_first(&free_cpumasks);
++
++	if (!user_mask)
++		user_mask = kmalloc(cpumask_size(), GFP_KERNEL);
++
+ 	if (!user_mask) {
+ 		retval = -ENOMEM;
+ 		goto out_put_task;
+-- 
+2.31.1
+
