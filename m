@@ -2,91 +2,336 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B531562FBCC
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 18:40:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C2C462FBD0
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 18:40:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242159AbiKRRk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 12:40:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38382 "EHLO
+        id S242180AbiKRRkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 12:40:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241173AbiKRRkT (ORCPT
+        with ESMTP id S242304AbiKRRkg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 12:40:19 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D3E920BD9
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 09:40:17 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id k5so5097599pjo.5
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 09:40:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BI5MC5wPkQQeEE83qP7tE3SCFpQYK/xq9Ol93cnM3VY=;
-        b=gFc4SfbZvgjlbAJ650Ar86zoxHOUfORQSyStvBp17HLK7lxP5lrqFPd3H7gr+4Ayt6
-         Ud/yj2PxnUbWSfETvS7Ohq73hj+K2B1RLD25ZA1swwLA8JwR13Oz7bR/zKNnRBV69dr8
-         1vERiIK/GLorWogYSmx2pdLuuNxPbKoaI/V+8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BI5MC5wPkQQeEE83qP7tE3SCFpQYK/xq9Ol93cnM3VY=;
-        b=uMW1b4E9hnN6bL9SvAMN1ukKOAdhvjCRjhrhMbaEIn9dwIToqR2cda+sA+wGB9u8MF
-         mvlRx8y4XppX0+jsMFswzeGKpZ3CXavcB9Z5rvc6PtRwQlaOGqQNIMOQv/HiV2ftbhT9
-         J1F7StJg0xW3024/MBenRmlkEPNlaPlwkB2MJij4bmRJPWZZkhlAmWF3z7VESdnGF80q
-         5UnZCvIsqRLhXVZtOf6l/Kq9msMGLTEa+28WFvRv7Tv9d7maRUlvHtjhO+B99ZU8GswE
-         tIxMjPt51FUAErJACR/D1gPv+wBJaFnMgf7j71v1ArR7K/k/jzMEQPH2FH5RXiMBOXqE
-         2eTg==
-X-Gm-Message-State: ANoB5pnAB3wqCcuwI4MQBeWkQEbSYlbLJFIX8jul1XKLafto/Q+Yv0/B
-        E/FVhdmQU3esQ5shG0tHGdW2jw==
-X-Google-Smtp-Source: AA0mqf7FFavVCClOULx9pEedXB/2PA+q16XqUjZI2216vnXrk6B4HMcy7q6rcPKHBlGCFkt/8m95FQ==
-X-Received: by 2002:a17:90a:7885:b0:20a:d81d:a8 with SMTP id x5-20020a17090a788500b0020ad81d00a8mr14555998pjk.177.1668793216603;
-        Fri, 18 Nov 2022 09:40:16 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id ij27-20020a170902ab5b00b001885d15e3c1sm3992123plb.26.2022.11.18.09.40.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 09:40:16 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     nathan@kernel.org, alain.volmat@foss.st.com
-Cc:     Kees Cook <keescook@chromium.org>, llvm@lists.linux.dev,
-        trix@redhat.com, samitolvanen@google.com, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        ndesaulniers@google.com
-Subject: Re: [PATCH] drm/sti: Fix return type of sti_{dvo,hda,hdmi}_connector_mode_valid()
-Date:   Fri, 18 Nov 2022 09:40:02 -0800
-Message-Id: <166879319847.2080862.11821072640113889089.b4-ty@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221102155623.3042869-1-nathan@kernel.org>
-References: <20221102155623.3042869-1-nathan@kernel.org>
+        Fri, 18 Nov 2022 12:40:36 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D273C20BD9;
+        Fri, 18 Nov 2022 09:40:30 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AIHeLBd077023;
+        Fri, 18 Nov 2022 11:40:21 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1668793221;
+        bh=t45Q5EGy2QkYGozOYHUVUxhGG5GG1cC9m+hhsMGZPoE=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=IlmIH/8foh/2p8LN2mBT76/seFD1cOb9Gz9vJPX+0oA+8NYLZ2bNtMlr+ggAN0wuR
+         7xTD9FN/fwvrLRPFoknj7ugxs26kN4ysovuvPRwWtGiTqll/+eM7alOJoDduOHBkth
+         5hbng14jAXhDdTtrWf7dz1AWs95pTNidOxgWsWTw=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AIHeLFa048159
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 18 Nov 2022 11:40:21 -0600
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 18
+ Nov 2022 11:40:20 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Fri, 18 Nov 2022 11:40:20 -0600
+Received: from [10.250.38.44] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AIHeKh7085024;
+        Fri, 18 Nov 2022 11:40:20 -0600
+Message-ID: <b57433e7-b309-bd1c-f794-3da74021f03c@ti.com>
+Date:   Fri, 18 Nov 2022 11:40:19 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3 4/4] arm64: dts: ti: Add support for J784S4 EVM board
+Content-Language: en-US
+To:     Apurva Nandan <a-nandan@ti.com>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>
+CC:     Hari Nagalla <hnagalla@ti.com>
+References: <20221116130428.161329-1-a-nandan@ti.com>
+ <20221116130428.161329-5-a-nandan@ti.com>
+From:   Andrew Davis <afd@ti.com>
+In-Reply-To: <20221116130428.161329-5-a-nandan@ti.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2 Nov 2022 08:56:23 -0700, Nathan Chancellor wrote:
-> With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
-> indirect call targets are validated against the expected function
-> pointer prototype to make sure the call target is valid to help mitigate
-> ROP attacks. If they are not identical, there is a failure at run time,
-> which manifests as either a kernel panic or thread getting killed. A
-> proposed warning in clang aims to catch these at compile time, which
-> reveals:
+On 11/16/22 7:04 AM, Apurva Nandan wrote:
+> J784S4 EVM board is designed for TI J784S4 SoC. It supports the following
+> interfaces:
+> * 32 GB DDR4 RAM
+> * x2 Gigabit Ethernet interfaces capable of working in Switch and MAC mode
+> * x1 Input Audio Jack, x1 Output Audio Jack
+> * x1 USB2.0 Hub with two Type A host and x1 USB 3.1 Type-C Port
+> * x2 4L PCIe connector
+> * x1 UHS-1 capable micro-SD card slot
+> * 512 Mbit OSPI flash, 1 Gbit Octal NAND flash, 512 Mbit QSPI flash,
+>    UFS flash.
+> * x6 UART through UART-USB bridge
+> * XDS110 for onboard JTAG debug using USB
+> * Temperature sensors, user push buttons and LEDs
+> * 40-pin User Expansion Connector
+> * x2 ENET Expansion Connector, x1 GESI expander, x2 Display connector
+> * x1 15-pin CSI header
+> * x6 MCAN instances
 > 
-> [...]
+> Add basic support for J784S4-EVM.
+> 
+> Schematics: https://www.ti.com/lit/zip/sprr458
+> 
+> Signed-off-by: Hari Nagalla <hnagalla@ti.com>
+> Signed-off-by: Nishanth Menon <nm@ti.com>
+> Signed-off-by: Apurva Nandan <a-nandan@ti.com>
+> ---
+>   arch/arm64/boot/dts/ti/Makefile          |   2 +
+>   arch/arm64/boot/dts/ti/k3-j784s4-evm.dts | 197 +++++++++++++++++++++++
+>   2 files changed, 199 insertions(+)
+>   create mode 100644 arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
+> 
+> diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
+> index 4555a5be2257..67621b349e88 100644
+> --- a/arch/arm64/boot/dts/ti/Makefile
+> +++ b/arch/arm64/boot/dts/ti/Makefile
+> @@ -19,6 +19,8 @@ dtb-$(CONFIG_ARCH_K3) += k3-j7200-common-proc-board.dtb
+>   
+>   dtb-$(CONFIG_ARCH_K3) += k3-j721s2-common-proc-board.dtb
+>   
+> +dtb-$(CONFIG_ARCH_K3) += k3-j784s4-evm.dtb
+> +
+>   dtb-$(CONFIG_ARCH_K3) += k3-am642-evm.dtb
+>   dtb-$(CONFIG_ARCH_K3) += k3-am642-sk.dtb
+>   
+> diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
+> new file mode 100644
+> index 000000000000..53516fb2b346
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
+> @@ -0,0 +1,196 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2022 Texas Instruments Incorporated - https://www.ti.com/
+> + *
+> + * EVM Board Schematics: https://www.ti.com/lit/zip/sprr458
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include <dt-bindings/net/ti-dp83867.h>
+> +#include <dt-bindings/gpio/gpio.h>
+> +#include "k3-j784s4.dtsi"
+> +
+> +/ {
+> +	compatible = "ti,j784s4-evm", "ti,j784s4";
+> +	model = "Texas Instruments J784S4 EVM";
+> +
+> +	chosen {
+> +		stdout-path = "serial2:115200n8";
+> +	};
+> +
+> +	aliases {
+> +		serial2 = &main_uart8;
 
-Applied to for-next/hardening, thanks!
+This feels hacky. Your chosen node picks serial2 as that is usually
+the one that is wired up on K3 boards. But on this board it is main_uart8.
+So why not have this be serial10, then choose
 
-[1/1] drm/sti: Fix return type of sti_{dvo,hda,hdmi}_connector_mode_valid()
-      https://git.kernel.org/kees/c/0ad811cc08a9
+stdout-path = "serial10:115200n8";
 
--- 
-Kees Cook
+Also, I've made comments on previous version of this series, it is
+nice to include folks who have commented before in the CC for future
+versions, that way our filters don't hide these away and we can more
+easily check that our comments have been addressed.
 
+Andrew
+
+> +		mmc1 = &main_sdhci1;
+> +		i2c0 = &main_i2c0;
+> +	};
+> +
+> +	memory@80000000 {
+> +		device_type = "memory";
+> +		/* 32G RAM */
+> +		reg = <0x00 0x80000000 0x00 0x80000000>,
+> +		      <0x08 0x80000000 0x07 0x80000000>;
+> +	};
+> +
+> +	reserved_memory: reserved-memory {
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+> +		ranges;
+> +
+> +		secure_ddr: optee@9e800000 {
+> +			reg = <0x00 0x9e800000 0x00 0x01800000>;
+> +			no-map;
+> +		};
+> +	};
+> +
+> +	evm_12v0: regulator-evm12v0 {
+> +		/* main supply */
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "evm_12v0";
+> +		regulator-min-microvolt = <12000000>;
+> +		regulator-max-microvolt = <12000000>;
+> +		regulator-always-on;
+> +		regulator-boot-on;
+> +	};
+> +
+> +	vsys_3v3: regulator-vsys3v3 {
+> +		/* Output of LM5140 */
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vsys_3v3";
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		vin-supply = <&evm_12v0>;
+> +		regulator-always-on;
+> +		regulator-boot-on;
+> +	};
+> +
+> +	vsys_5v0: regulator-vsys5v0 {
+> +		/* Output of LM5140 */
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vsys_5v0";
+> +		regulator-min-microvolt = <5000000>;
+> +		regulator-max-microvolt = <5000000>;
+> +		vin-supply = <&evm_12v0>;
+> +		regulator-always-on;
+> +		regulator-boot-on;
+> +	};
+> +
+> +	vdd_mmc1: regulator-sd {
+> +		/* Output of TPS22918 */
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vdd_mmc1";
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		regulator-boot-on;
+> +		enable-active-high;
+> +		vin-supply = <&vsys_3v3>;
+> +		gpio = <&exp2 2 GPIO_ACTIVE_HIGH>;
+> +	};
+> +
+> +	vdd_sd_dv: regulator-TLV71033 {
+> +		/* Output of TLV71033 */
+> +		compatible = "regulator-gpio";
+> +		regulator-name = "tlv71033";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&vdd_sd_dv_pins_default>;
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		regulator-boot-on;
+> +		vin-supply = <&vsys_5v0>;
+> +		gpios = <&main_gpio0 8 GPIO_ACTIVE_HIGH>;
+> +		states = <1800000 0x0>,
+> +			 <3300000 0x1>;
+> +	};
+> +};
+> +
+> +&main_pmx0 {
+> +	main_uart8_pins_default: main-uart8-pins-default {
+> +		pinctrl-single,pins = <
+> +			J784S4_IOPAD(0x040, PIN_INPUT, 14) /* (AF37) MCASP0_AXR0.UART8_CTSn */
+> +			J784S4_IOPAD(0x044, PIN_OUTPUT, 14) /* (AG37) MCASP0_AXR1.UART8_RTSn */
+> +			J784S4_IOPAD(0x0d0, PIN_INPUT, 11) /* (AP38) SPI0_CS1.UART8_RXD */
+> +			J784S4_IOPAD(0x0d4, PIN_OUTPUT, 11) /* (AN38) SPI0_CLK.UART8_TXD */
+> +		>;
+> +	};
+> +
+> +	main_i2c0_pins_default: main-i2c0-pins-default {
+> +		pinctrl-single,pins = <
+> +			J784S4_IOPAD(0x0e0, PIN_INPUT_PULLUP, 0) /* (AN36) I2C0_SCL */
+> +			J784S4_IOPAD(0x0e4, PIN_INPUT_PULLUP, 0) /* (AP37) I2C0_SDA */
+> +		>;
+> +	};
+> +
+> +	main_mmc1_pins_default: main-mmc1-pins-default {
+> +		pinctrl-single,pins = <
+> +			J784S4_IOPAD(0x104, PIN_INPUT, 0) /* (AB38) MMC1_CLK */
+> +			J784S4_IOPAD(0x108, PIN_INPUT, 0) /* (AB36) MMC1_CMD */
+> +			J784S4_IOPAD(0x100, PIN_INPUT, 0) /* (No Pin) MMC1_CLKLB */
+> +			J784S4_IOPAD(0x0fc, PIN_INPUT, 0) /* (AA33) MMC1_DAT0 */
+> +			J784S4_IOPAD(0x0f8, PIN_INPUT, 0) /* (AB34) MMC1_DAT1 */
+> +			J784S4_IOPAD(0x0f4, PIN_INPUT, 0) /* (AA32) MMC1_DAT2 */
+> +			J784S4_IOPAD(0x0f0, PIN_INPUT, 0) /* (AC38) MMC1_DAT3 */
+> +			J784S4_IOPAD(0x0e8, PIN_INPUT, 8) /* (AR38) TIMER_IO0.MMC1_SDCD */
+> +		>;
+> +	};
+> +
+> +	vdd_sd_dv_pins_default: vdd-sd-dv-pins-default {
+> +		pinctrl-single,pins = <
+> +			J784S4_IOPAD(0x020, PIN_INPUT, 7) /* (AJ35) MCAN15_RX.GPIO0_8 */
+> +		>;
+> +	};
+> +};
+> +
+> +&main_uart8 {
+> +	status = "okay";
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&main_uart8_pins_default>;
+> +};
+> +
+> +&main_i2c0 {
+> +	status = "okay";
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&main_i2c0_pins_default>;
+> +
+> +	clock-frequency = <400000>;
+> +
+> +	exp1: gpio@20 {
+> +		compatible = "ti,tca6416";
+> +		reg = <0x20>;
+> +		gpio-controller;
+> +		#gpio-cells = <2>;
+> +		gpio-line-names = "PCIE1_2L_MODE_SEL", "PCIE1_4L_PERSTZ", "PCIE1_2L_RC_RSTZ",
+> +				  "PCIE1_2L_EP_RST_EN", "PCIE0_4L_MODE_SEL", "PCIE0_4L_PERSTZ",
+> +				  "PCIE0_4L_RC_RSTZ", "PCIE0_4L_EP_RST_EN", "PCIE1_4L_PRSNT#",
+> +				  "PCIE0_4L_PRSNT#", "CDCI1_OE1/OE4", "CDCI1_OE2/OE3",
+> +				  "AUDIO_MUX_SEL", "EXP_MUX2", "EXP_MUX3", "GESI_EXP_PHY_RSTZ";
+> +	};
+> +
+> +	exp2: gpio@22 {
+> +		compatible = "ti,tca6424";
+> +		reg = <0x22>;
+> +		gpio-controller;
+> +		#gpio-cells = <2>;
+> +		gpio-line-names = "R_GPIO_RGMII1_RST", "ENET2_I2CMUX_SEL", "GPIO_USD_PWR_EN",
+> +				  "USBC_PWR_EN", "USBC_MODE_SEL1", "USBC_MODE_SEL0",
+> +				  "GPIO_LIN_EN", "R_CAN_STB", "CTRL_PM_I2C_OE#",
+> +				  "ENET2_EXP_PWRDN", "ENET2_EXP_SPARE2", "CDCI2_RSTZ",
+> +				  "USB2.0_MUX_SEL", "CANUART_MUX_SEL0", "CANUART_MUX2_SEL1",
+> +				  "CANUART_MUX1_SEL1", "ENET1_EXP_PWRDN", "ENET1_EXP_RESETZ",
+> +				  "ENET1_I2CMUX_SEL", "ENET1_EXP_SPARE2", "ENET2_EXP_RESETZ",
+> +				  "USER_INPUT1", "USER_LED1", "USER_LED2";
+> +	};
+> +};
+> +
+> +&main_sdhci1 {
+> +	/* SD card */
+> +	status = "okay";
+> +	pinctrl-0 = <&main_mmc1_pins_default>;
+> +	pinctrl-names = "default";
+> +	disable-wp;
+> +	vmmc-supply = <&vdd_mmc1>;
+> +	vqmmc-supply = <&vdd_sd_dv>;
+> +};
+> +
+> +&main_gpio0 {
+> +	status = "okay";
+> +};
