@@ -2,113 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 065A062EEB4
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 08:55:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68BAC62EEB6
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 08:57:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241091AbiKRHzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 02:55:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57922 "EHLO
+        id S241056AbiKRH46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 02:56:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbiKRHzF (ORCPT
+        with ESMTP id S241115AbiKRH4z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 02:55:05 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646658C08D;
-        Thu, 17 Nov 2022 23:54:57 -0800 (PST)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4ND8FP1PrxzRpMB;
-        Fri, 18 Nov 2022 15:54:33 +0800 (CST)
-Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 18 Nov 2022 15:54:55 +0800
-Received: from [10.174.179.24] (10.174.179.24) by
- dggpemm100009.china.huawei.com (7.185.36.113) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 18 Nov 2022 15:54:55 +0800
-Subject: Re: [PATCH] fs/buffer: fix a NULL pointer dereference in
- drop_buffers()
-To:     Matthew Wilcox <willy@infradead.org>
-References: <20221109095018.4108726-1-liushixin2@huawei.com>
- <Y3cYd6u9wT/ZTHbe@casper.infradead.org>
-CC:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-From:   Liu Shixin <liushixin2@huawei.com>
-Message-ID: <ba12f39a-4b43-7297-f1fa-b4eb0bbd79a8@huawei.com>
-Date:   Fri, 18 Nov 2022 15:54:54 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.7.1
+        Fri, 18 Nov 2022 02:56:55 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 464C18C093;
+        Thu, 17 Nov 2022 23:56:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668758214; x=1700294214;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=8hF6YgXp4Ys4Ed5l5/rz2xoV2FruIaAMt4ntuoU4OIY=;
+  b=MCowHOUHxmpfGqprQNMdLGdTS+fHAI+l0UPJjX5yhJUn+2FGLRv85Eqp
+   LnN8D2QwaZJSXH6VzvJOf1xcr13WQk3pzNbFa41TYB9tlJGHyIaVG3Ohg
+   7EBxVLZtpQELe6g7C1YJbHGZarmiZJmMJHDd42BsQ5D4wIeYkMuND5Jnp
+   rpuAIIi+fW4/Owye00MKqBM+MXtj95UxF1KRJfP8VhFBpB2yAeJeamzD2
+   fpcGdFCXnTAQDUW+RBspjhgxO3t4qKYzMQ75row4Gx2HDzTAslLLdeTtU
+   mcMW0h407IZZmCugY2ALO+SfXL3mb0KWSGf9Lidzl893cBTe8gE7sX/HV
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="296444238"
+X-IronPort-AV: E=Sophos;i="5.96,173,1665471600"; 
+   d="scan'208";a="296444238"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 23:56:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="634348296"
+X-IronPort-AV: E=Sophos;i="5.96,173,1665471600"; 
+   d="scan'208";a="634348296"
+Received: from zxingrtx.sh.intel.com ([10.239.159.110])
+  by orsmga007.jf.intel.com with ESMTP; 17 Nov 2022 23:56:50 -0800
+From:   zhengjun.xing@linux.intel.com
+To:     acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
+        alexander.shishkin@intel.com, jolsa@kernel.org, namhyung@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        irogers@google.com, ak@linux.intel.com, kan.liang@linux.intel.com,
+        zhengjun.xing@linux.intel.com
+Subject: [PATCH 1/5] perf vendor events: Add the cpuid for Alderlake-N
+Date:   Fri, 18 Nov 2022 15:56:58 +0800
+Message-Id: <20221118075702.40689-1-zhengjun.xing@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <Y3cYd6u9wT/ZTHbe@casper.infradead.org>
-Content-Type: text/plain; charset="windows-1252"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.24]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm100009.china.huawei.com (7.185.36.113)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
 
+Alderlake-N only has E-core, it has been moved to non-hybrid code path on
+the kernel side, add the cpuid for Alderlake-N separately. Both events for
+Alderlake and Alderlake-N are based on JSON file v1.16.
 
-On 2022/11/18 13:30, Matthew Wilcox wrote:
-> On Wed, Nov 09, 2022 at 05:50:18PM +0800, Liu Shixin wrote:
->> syzbot found a null-ptr-deref by KASAN:
->>
->>  BUG: KASAN: null-ptr-deref in instrument_atomic_read include/linux/instrumented.h:71 [inline]
->>  BUG: KASAN: null-ptr-deref in atomic_read include/linux/atomic/atomic-instrumented.h:27 [inline]
->>  BUG: KASAN: null-ptr-deref in buffer_busy fs/buffer.c:2856 [inline]
->>  BUG: KASAN: null-ptr-deref in drop_buffers+0x61/0x2f0 fs/buffer.c:2868
->>  Read of size 4 at addr 0000000000000060 by task syz-executor.5/24786
->>
->>  CPU: 0 PID: 24786 Comm: syz-executor.5 Not tainted 6.0.0-syzkaller-09589-g55be6084c8e0 #0
->>  Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
->>  Call Trace:
->>   <TASK>
->>   __dump_stack lib/dump_stack.c:88 [inline]
->>   dump_stack_lvl+0x1e3/0x2cb lib/dump_stack.c:106
->>   print_report+0xf1/0x220 mm/kasan/report.c:436
->>   kasan_report+0xfb/0x130 mm/kasan/report.c:495
->>   kasan_check_range+0x2a7/0x2e0 mm/kasan/generic.c:189
->>   instrument_atomic_read include/linux/instrumented.h:71 [inline]
->>   atomic_read include/linux/atomic/atomic-instrumented.h:27 [inline]
->>   buffer_busy fs/buffer.c:2856 [inline]
->>   drop_buffers+0x61/0x2f0 fs/buffer.c:2868
->>   try_to_free_buffers+0x2b1/0x640 fs/buffer.c:2898
->> [...]
->>
->> We use folio_has_private() to decide whether call filemap_release_folio(),
->> which may call try_to_free_buffers() then. folio_has_private() return true
->> for both PG_private and PG_private_2. We should only call try_to_free_buffers()
->> for case PG_private. So we should recheck PG_private in try_to_free_buffers().
->>
->> Reported-by: syzbot+fbdb4ec578ebdcfb9ed2@syzkaller.appspotmail.com
->> Fixes: 266cf658efcf ("FS-Cache: Recruit a page flags for cache management")
-> but this can only happen for a filesystem which uses both bufferheads
-> and PG_private_2.  afaik there aren't any of those in the tree.  so
-> this bug can't actually happen.
->
-> if you have your own filesystem that does, you need to submit it.
-This null-ptr-deref is found by syzbot, not by my own filesystem. I review the related code and
-found no other possible cause. There are lock protection all the place calling try_to_free_buffers().
-So I only thought of this one possibility. I'm also trying to reproduce the problem but haven't
-been successful.
+Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+---
+ tools/perf/pmu-events/arch/x86/mapfile.csv | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-If this can't actually happen, maybe I'm missing something when review the code. I'll keep trying
-to see if I can reproduce the problem.
-
-Thanks,
-Liu Shixin
-.
-
->
->
-> .
->
+diff --git a/tools/perf/pmu-events/arch/x86/mapfile.csv b/tools/perf/pmu-events/arch/x86/mapfile.csv
+index 5e609b876790..df47462a125f 100644
+--- a/tools/perf/pmu-events/arch/x86/mapfile.csv
++++ b/tools/perf/pmu-events/arch/x86/mapfile.csv
+@@ -1,5 +1,6 @@
+ Family-model,Version,Filename,EventType
+-GenuineIntel-6-(97|9A|B7|BA|BE|BF),v1.15,alderlake,core
++GenuineIntel-6-(97|9A|B7|BA|BF),v1.16,alderlake,core
++GenuineIntel-6-BE,v1.16,alderlaken,core
+ GenuineIntel-6-(1C|26|27|35|36),v4,bonnell,core
+ GenuineIntel-6-(3D|47),v26,broadwell,core
+ GenuineIntel-6-56,v23,broadwellde,core
+-- 
+2.25.1
 
