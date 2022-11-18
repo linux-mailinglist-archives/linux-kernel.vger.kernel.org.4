@@ -2,268 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BC7862EE99
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 08:44:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7069C62EE9B
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 08:45:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241118AbiKRHoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 02:44:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54780 "EHLO
+        id S241138AbiKRHpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 02:45:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230042AbiKRHoB (ORCPT
+        with ESMTP id S230042AbiKRHpD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 02:44:01 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 367DC8B103;
-        Thu, 17 Nov 2022 23:44:00 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id i10so11020854ejg.6;
-        Thu, 17 Nov 2022 23:44:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=cGdiTgTnTaS+gRylZczJAYJ3Q+QyE4zG+5ns9XGhwVs=;
-        b=Bdms4FkuQrhXYzbpvRrtAo+J7Z3HSOyj0goDzVmQsaykXQrG/V2yIU8fbP3XewsUv/
-         BD5Uqwd/0m7kmXnI+e6vc2MMWZZor5CxcVvbpF8N1FxLenYK3W02qRqoP1u1hnFUPrwI
-         juoYEFPSisJm/sceksaKAfIhVxSlz8DmvZlnNUn5Gcei9c/pYB9gE/ah6GuZXAu01a8A
-         lL8XH0d1ln6C7Re16IHFgw0tzJHjcdGmiQB35Mp0RnpClXVI4PXojCHMrPmTWgUIyswe
-         UdoMn7Hf7ZyEpT/K3W6Bu8WUxPSxQq/4C1XJPmh9zQfL8Ao3td/ocTKnY+0D1Wsq4NtE
-         HqPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cGdiTgTnTaS+gRylZczJAYJ3Q+QyE4zG+5ns9XGhwVs=;
-        b=W4Jl6HQiCi2EkBVqx/MABlu3vKmDLzXZAlrxjRTndaZtA1w0nHLebTk37aDknaYg20
-         7MgbXI9rfHeqZJ3Np9UM35AdaEV5N36cb0VgUJStGuEZjdx6FD1hp+UofaqOwugb3cBN
-         gCbgfnJz8ZJQIWfnyZ7Q++PgR8mQrJPOfby0aRg5HBVayYI7Ix4Uj3eoxqY1DfDCRJ1/
-         6FlnNbldv7XBg3F/R/aHJdqx+6uAKQnEuLjAzw7ataD8kAMgDqFlgIt5E0dH3hXtaaXN
-         nYO9UaH1kvPYRnxF+58xx4wDv0y7Vl4v/U5TMaDnARzkpUv4EVhgExjzkM1YAMlwKrVc
-         udjQ==
-X-Gm-Message-State: ANoB5pk01+D/LVEnkXURVfKbe/m4bWfTReLMXc+k8qeyGXbR8vuWRGi7
-        ASkxgNDvlemZytwvPkvsnt2Z+zJtpMRfyOlNiTA=
-X-Google-Smtp-Source: AA0mqf4u+NAtiiiEICruJibu8kuxcLdGjXoD2lfEjHfFtdxkAQk88VgqOLNdofAv7IFPXODOouM7f3UxDll2FoqoWS0=
-X-Received: by 2002:a17:906:50f:b0:78d:ad5d:75e with SMTP id
- j15-20020a170906050f00b0078dad5d075emr4996514eja.172.1668757438441; Thu, 17
- Nov 2022 23:43:58 -0800 (PST)
+        Fri, 18 Nov 2022 02:45:03 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D8288B103;
+        Thu, 17 Nov 2022 23:45:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668757502; x=1700293502;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=S87G3L3N3ncBEpQAKssoTbcIcwXnLivjhf8re/E5OW8=;
+  b=RAXPUENQ9LlyLpzpS+AllpslEaoqCOnriMergkniWxrXheHvgdqv9xo8
+   mnBbz4C/1kkH3K+Ri9dnelHuKNx1TgXuJjOhYmT5tKJr5OOnb2MoCxkI/
+   KiNNPZJHxa0EeTTm9HlC0drd6FGOiaKy4DfY9Tv/aZdaATHTBDnLx41ha
+   uxW2Mq3a9B6VE3xNg8U7GOrkqK7CMCwqVvtHntDcbSnxcV+MEdCcTDCoK
+   sLGDdyti1W8IeJD+MlKuwOR58Mf8zfI5zu90fujzv2cgmip3L3Kg7836C
+   xiAJXq27xhfAxpc9cX73VLhkJoMmDkpsr9BU9xqZTA5GayehLVlmDvrJl
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="314897521"
+X-IronPort-AV: E=Sophos;i="5.96,173,1665471600"; 
+   d="scan'208";a="314897521"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 23:45:01 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="642417582"
+X-IronPort-AV: E=Sophos;i="5.96,173,1665471600"; 
+   d="scan'208";a="642417582"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by fmsmga007.fm.intel.com with ESMTP; 17 Nov 2022 23:45:00 -0800
+Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 17 Nov 2022 23:44:59 -0800
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Thu, 17 Nov 2022 23:44:59 -0800
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.173)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Thu, 17 Nov 2022 23:44:59 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JWQLOYQADV/GFrbCDFtWhBN03Npq4AchI7iN/E43o4CkHBpcJGISDjZ7XKtSeybATP29iS6YHzf7g50TkhRbpoDxvj5nq9gp/WQIKOZ0oOYGdX40Cie3MHuII8AbHGQ50TyS4PFeOk38pLBRhH+1LINJ9KUyfI3tGKGfpgGE9YVepW+C8dobsXNntCDQhdBg60Rw2drZKp+JEEGc4VDutTUGCW/R6ku3ZLoG+Dkzcbr/Iw0BIo3BPDs/xMc+FjeaZIFVFhh8USKpFrnMlp9XVMdahRvzdEYsKeK7ac4Er27MdZZecF5DbfCQwh6ZjL+TG1SrSjWl5FF2GizCTtcr8g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=S87G3L3N3ncBEpQAKssoTbcIcwXnLivjhf8re/E5OW8=;
+ b=RNuCy1jmanrPCIXT4bUTi1DKgx5g2UFIYgQl7LfPGtDf73ijGVQX3kGeRAMBf6aGueZT+uHPI+JZGaDkLJ3v7JLUQhPfJEVYCdzKKiks7L5T6+yI8Nn3ygnuDbffS9lhdRFQqn3moumveokb6XoEEfupapCngG+UamGtjbSoH11aEY9+RBHcpcwiivn+Rq1qFhzPIqVXEZtuRPAbLZXdW2vph/qz9YH6z+HLOt5FWIdG0avhLOQTZdB7RT3vbHvUeTmslkEjeoXmhD/Rw8dKQO8YMbfYsUZRRcjsMij08hrFnGUt0/XRjCDT1COYzx0PMw967veb4F/AL8FI9cjKCQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by IA1PR11MB6539.namprd11.prod.outlook.com (2603:10b6:208:3a1::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.16; Fri, 18 Nov
+ 2022 07:44:52 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::9929:858c:3d20:9489]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::9929:858c:3d20:9489%4]) with mapi id 15.20.5813.019; Fri, 18 Nov 2022
+ 07:44:52 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+CC:     "x86@kernel.org" <x86@kernel.org>, Joerg Roedel <joro@8bytes.org>,
+        "Will Deacon" <will@kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Lorenzo Pieralisi" <lorenzo.pieralisi@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
+        Allen Hubbe <allenbh@gmail.com>,
+        "Ahmed S. Darwish" <darwi@linutronix.de>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>
+Subject: RE: [patch 04/20] genirq/irqdomain: Provide
+ IRQ_DOMAIN_FLAG_MSI_PARENT
+Thread-Topic: [patch 04/20] genirq/irqdomain: Provide
+ IRQ_DOMAIN_FLAG_MSI_PARENT
+Thread-Index: AQHY9dVz5XBxhwP8ukWx0DPcw8DF9a5EV4JA
+Date:   Fri, 18 Nov 2022 07:44:52 +0000
+Message-ID: <BN9PR11MB52764804AA65AE79A0A689998C099@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20221111131813.914374272@linutronix.de>
+ <20221111132706.276545278@linutronix.de>
+In-Reply-To: <20221111132706.276545278@linutronix.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|IA1PR11MB6539:EE_
+x-ms-office365-filtering-correlation-id: b1b7c330-c6d0-418c-1022-08dac938c762
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: RJQrC2jfI7XbhYpFNa/DYrMXvOKsgf6DWqSt9Xpj4EaY6HgjZGkquuhbdY3yeuKBt4NjvYN/E5jMYey+f/C9+ExegbMrD3H3Bgqv3p2+v7tCvOFat7gIpjjwyNlbtSBV7i8G2wqNiIvV29BZc8l2ivLp87+SKh58xqk+DSlj7bn6W3USpiInpT1bhhOoCNUMfFV8KWD3hpFYh/EZztqQJ3CH93uVFQQdrMl0kfZbiHrdQG9GRICu/CERe2eWrUSUqLegG/sW7Ncq9ZCpq6tYkm7BBguv6ImbYu2m+nCVvkOj1gS3Ej7Q3YSB02xqv97gBwaj58t0Rkhh2Acf100opeQKOnI5519EN+Vlr+3LmZwWOHfLVIFMWRbIt38xq2i24iqWDtgScwNkHz4rAnWVHc+tdXijS7Wc3OR8bKqaGszXE1HuE6LC1DZnG84Jc4UTaRj1U/iJwxhKxQsgTlq5CyKK1avqYLW9ZVQqMXV9QxXe4QVhX/bejy6EoID7dDRaLOfdfSvxqffMnwChiBOUgAUVQ6dDVKFYIHVfZpc8MyUWrBHueGrg+TbWWemqjPAiqIMD1d7iRx2Bq2FJqz0FUSP1HmZaxWvfQBN+qHd4/KhdyS/cUrauw0r1W9WAbplc53jTgOw9o0nQ8vlUxu5hDluinaQil7p70QiFotwDa3YH8vGWxAd9ekJKtdjAE+/ixN4ErHsJjT9+YySF2NIKIA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(136003)(396003)(366004)(346002)(39860400002)(451199015)(26005)(33656002)(107886003)(110136005)(478600001)(55016003)(6506007)(9686003)(7696005)(86362001)(54906003)(186003)(316002)(2906002)(82960400001)(52536014)(38070700005)(76116006)(4744005)(7416002)(8936002)(66476007)(66446008)(64756008)(66946007)(66556008)(122000001)(38100700002)(71200400001)(83380400001)(5660300002)(41300700001)(4326008)(8676002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?elYrUjVRVDlLcUdLbVU5UDlhZDg1VzAxZTRMQkNhZW16MWFsVDNsNFN5SkVz?=
+ =?utf-8?B?amNLVXJiK2svc1JZUDU4NHVZdjJhQ0I1UzRKdm1lK3Y0NU03ajJ4RjNPZ0ZH?=
+ =?utf-8?B?WWlzanora2RQak01NjhlS0VRK0F0NC9OQnFlTys5a2tmdi8waXFiL0JhUUc2?=
+ =?utf-8?B?TGFqZGRYdzVnQk1VR3hrQW5OS0N5MFNiMXVzZGRmb2czaWZpbG1CMDRXZDF1?=
+ =?utf-8?B?bmRWUnNPNWpsaUZXVFExVDFzbFJvRVZSYWxaMGE4dDFodVNBK2JoTldhRFdk?=
+ =?utf-8?B?MzdIcTByRjZRZkozUkJ1Ly9KYm1vc0Y4ZDhQaHVyU3h5eER0VE4wZFRaVHZk?=
+ =?utf-8?B?YVNSUDJKNWFJWDNGTy9ObVFrelM5ZExHcTI2Qk0wQVVta2FuUkhTN2MzWlJh?=
+ =?utf-8?B?d2gzUWduRG9JOG5QMzlqUUIrNTJ4K0ppZThrN2ROMTZaZGgwWG45TUwwMEVp?=
+ =?utf-8?B?OG5TQmtKbllWTkNGZVV5SFA3a0tvWk1yQ1d3SnFQelhUSjd1UFdHMjAyRjVk?=
+ =?utf-8?B?UHdWQjRQSHdPVHZ4WnBFK2tGMUpaUDhnQWYwVmNvQVBwOGxRVGJ5RWhmemtk?=
+ =?utf-8?B?ZXBqaklSeVdvd01lU2E4WVpYYTh3S1cveDZucTBJNjZvSklsRVFNUkF3MTRQ?=
+ =?utf-8?B?aEpuVTdzVU5ENERkM3RMTDNETlZBRzVKeHpQdC9PaURJTmxONmpWa0dUMytE?=
+ =?utf-8?B?bitGOC8wMlFyeDFYMThPejVvSXNqUk5LT25BazFaWWovMStHaDRTTUd1ZnJG?=
+ =?utf-8?B?bU00ZWhIY01ZQlgwNW1vNmYvMFRwbHh2Q3I2MjJyUVpDUHdyekRxT3YvZnZZ?=
+ =?utf-8?B?SGZhemNmbWlBNkNsN0c3bno2VmhyWVc2UjFXNkxGckVBOUVmYjZJTzdiVnVL?=
+ =?utf-8?B?MFJQeDVjbHhLSnYvV0xISitHT1NPaURQRGMxcWpsSGEvVVZjYWwrbXdQTDBR?=
+ =?utf-8?B?STZ2dmJ6U2Rtd0JkR2Vjb3dVMC9vdXIrUEN5TWwwMGQ4Um9UVjl1Q0VGc0ox?=
+ =?utf-8?B?cEZWMVlKRUwydStJQ0ZxQlR2ajgxb0ROYnp6TzBOa0J3RXZxdGZQQWFXaHNH?=
+ =?utf-8?B?N3lZeFJPVnZyNGJmLzFPUDMzNy9wd3RHWEczZ1dicjJDRng5aTMrSEEvVG5m?=
+ =?utf-8?B?Q0xINzJGSW9KaGVBK3RmM0tKRWN1UzhvenA1VTZYLytERlhHcWlkZzRCWHkw?=
+ =?utf-8?B?cDJQelZZTG1HSms1aXdmdU5HVjZLckNsR09CVWh5MDRrRTlVL3FtZllGOTNo?=
+ =?utf-8?B?UmNXZVd3OC9VZjZoK0xNSVdpL1RFQTV2SEtLamZ2VklkSUFWUHV0dmhtS2pB?=
+ =?utf-8?B?MURPZnZTWXN2Z0ZmZE9FUElwSm1BSFllZjZRdjZDbVVZbkRuaC9XbkRXeXYx?=
+ =?utf-8?B?aEZvVnJHYkRiYis1UXA2RXl0WDZSKzg4YU1YNmtkakJ6L2tqQ3Z3S0RvaGpB?=
+ =?utf-8?B?RDE0R1ZDdkR5WFlWUktCSXNVL0s0ZTRxUkhDcGNuRWhTeXg4VVI2YXg3cnRU?=
+ =?utf-8?B?eVdGc2FWb0Y3V0VhTWhuQUk5KzBqVCt3a1hkRlBQeDlSbDJCdXV2TFN1K1dB?=
+ =?utf-8?B?UE9ZcElla25VWWtUZCt6cGR3cFRRTlltT3ZZaUdoZjVXSXUrdm9HOTJQOFBJ?=
+ =?utf-8?B?ZXljRU56TzdIYW0rWVUvbHNkbjV5Q1lMdnprVFNEejFJREorYVo5bzd2NlJR?=
+ =?utf-8?B?bWk1VjJtdkNFTStlUjUzc255TzVsdDRpbVBVZlcxTXpaUi8va2xoakdxRVpr?=
+ =?utf-8?B?QXNxWmFzQmxJU1Q2SDU4TEVRcWcveE5DU0syclNkdEpvTVJNYlpOOE5OR0pH?=
+ =?utf-8?B?clVjYUZRa3F4aDhnSUVrSjAvVzlMNUpGK2JrWUJjeFh3YjRweFJlRVVid0FI?=
+ =?utf-8?B?MGNpMHBmMUdETmlKdXB3QzV6U0VKd0Y0YUJnU0FoVHFlUW5TcDBLUWlDN0pq?=
+ =?utf-8?B?L1RKaElSdjVKSWVjSThWdHp4TFA4MmJNNkppb2lyVDhNU0crMVJPc2hmcmRi?=
+ =?utf-8?B?WTZ0Z2lVT1BoZ2dBVnF1dlVnVFNOb1UrSVJ6Q01OcHlNbkRYUzdjeUlyMVBN?=
+ =?utf-8?B?N2c2WnR5c3NTWWdvM2xMWVgyTGNkRitZUGFpTG80OHp3YTVVWEN0Ui83ZktM?=
+ =?utf-8?Q?ymQDKZAW/GmOcgNyR84+X+xA1?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-From:   Wei Chen <harperchen1110@gmail.com>
-Date:   Fri, 18 Nov 2022 15:43:25 +0800
-Message-ID: <CAO4mrfcdN+hhFZ2Vi=hOUMx3s5hLzGJ6vTJjjkbCy3GSrtecmg@mail.gmail.com>
-Subject: possible deadlock in ext4_file_read_iter
-To:     tytso@mit.edu, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jack@suse.com, akpm@linux-foundation.org, linux-mm@kvack.org,
-        hch@infradead.org, djwong@kernel.org, linux-xfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Cc:     syzkaller-bugs@googlegroups.com, syzkaller@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b1b7c330-c6d0-418c-1022-08dac938c762
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Nov 2022 07:44:52.6790
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: mSPDz/3ISoONOFlSWS5AmqFTP3WtC9SWrYT8ETxOp5zYo+IDtMcOTRnuIXS0gUEmjs/Nn09eIqUgU3S1W5zV0A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB6539
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Linux Developer,
-
-Recently when using our tool to fuzz kernel, the following crash was triggered:
-
-HEAD commit: 4fe89d07 Linux v6.0
-git tree: upstream
-compiler: clang 12.0.0
-console output:
-https://drive.google.com/file/d/1xryzmZ5xIuxzLyGxjgIBEcCequ085c5y/view?usp=share_link
-kernel config: https://drive.google.com/file/d/1ZHRxVTXHL9mENdAPmQYS1DtgbflZ9XsD/view?usp=sharing
-
-Unfortunately, I didn't have a reproducer for this bug yet.
-
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: Wei Chen <harperchen1110@gmail.com>
-
-======================================================
-WARNING: possible circular locking dependency detected
-6.0.0+ #39 Not tainted
-------------------------------------------------------
-syz-executor.0/934 is trying to acquire lock:
-ffff88804501ce28 (&mm->mmap_lock#2){++++}-{3:3}, at:
-__might_fault+0x8f/0x110 mm/memory.c:5582
-
-but task is already holding lock:
-ffff88804673ca38 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at:
-inode_lock_shared include/linux/fs.h:766 [inline]
-ffff88804673ca38 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at:
-ext4_dio_read_iter fs/ext4/file.c:63 [inline]
-ffff88804673ca38 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at:
-ext4_file_read_iter+0x26c/0x770 fs/ext4/file.c:130
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #3 (&sb->s_type->i_mutex_key#8){++++}-{3:3}:
-       lock_acquire+0x17f/0x430 kernel/locking/lockdep.c:5666
-       down_read+0x39/0x50 kernel/locking/rwsem.c:1499
-       inode_lock_shared include/linux/fs.h:766 [inline]
-       ext4_bmap+0x55/0x410 fs/ext4/inode.c:3157
-       bmap+0xa1/0xd0 fs/inode.c:1799
-       jbd2_journal_bmap fs/jbd2/journal.c:971 [inline]
-       __jbd2_journal_erase fs/jbd2/journal.c:1784 [inline]
-       jbd2_journal_flush+0x5bc/0xc70 fs/jbd2/journal.c:2490
-       ext4_ioctl_checkpoint fs/ext4/ioctl.c:1082 [inline]
-       __ext4_ioctl fs/ext4/ioctl.c:1586 [inline]
-       ext4_ioctl+0x3208/0x5230 fs/ext4/ioctl.c:1606
-       vfs_ioctl fs/ioctl.c:51 [inline]
-       __do_sys_ioctl fs/ioctl.c:870 [inline]
-       __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x3d/0x90 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
--> #2 (&journal->j_checkpoint_mutex){+.+.}-{3:3}:
-       lock_acquire+0x17f/0x430 kernel/locking/lockdep.c:5666
-       __mutex_lock_common+0x1b7/0x26d0 kernel/locking/mutex.c:603
-       mutex_lock_io_nested+0x43/0x60 kernel/locking/mutex.c:833
-       __jbd2_log_wait_for_space+0x21d/0x6f0 fs/jbd2/checkpoint.c:110
-       add_transaction_credits+0x916/0xbd0 fs/jbd2/transaction.c:298
-       start_this_handle+0x733/0x16f0 fs/jbd2/transaction.c:422
-       jbd2__journal_start+0x2ca/0x5b0 fs/jbd2/transaction.c:520
-       __ext4_journal_start_sb+0x111/0x1d0 fs/ext4/ext4_jbd2.c:105
-       __ext4_journal_start fs/ext4/ext4_jbd2.h:326 [inline]
-       ext4_dirty_inode+0x8a/0x100 fs/ext4/inode.c:5963
-       __mark_inode_dirty+0xb6/0x600 fs/fs-writeback.c:2381
-       generic_update_time+0x1c7/0x1e0 fs/inode.c:1860
-       inode_update_time fs/inode.c:1873 [inline]
-       __file_update_time fs/inode.c:2089 [inline]
-       file_update_time+0x3b3/0x430 fs/inode.c:2120
-       ext4_page_mkwrite+0x1c5/0x1410 fs/ext4/inode.c:6084
-       do_page_mkwrite+0x1a4/0x5f0 mm/memory.c:2971
-       do_shared_fault mm/memory.c:4589 [inline]
-       do_fault+0x441/0x9c0 mm/memory.c:4657
-       handle_pte_fault+0x6eb/0x1660 mm/memory.c:4917
-       __handle_mm_fault mm/memory.c:5059 [inline]
-       handle_mm_fault+0xdd3/0x1630 mm/memory.c:5157
-       do_user_addr_fault+0x896/0x10e0 arch/x86/mm/fault.c:1397
-       handle_page_fault arch/x86/mm/fault.c:1488 [inline]
-       exc_page_fault+0xa1/0x1e0 arch/x86/mm/fault.c:1544
-       asm_exc_page_fault+0x22/0x30 arch/x86/include/asm/idtentry.h:570
-
--> #1 (sb_pagefaults){.+.+}-{0:0}:
-       lock_acquire+0x17f/0x430 kernel/locking/lockdep.c:5666
-       percpu_down_read+0x44/0x190 include/linux/percpu-rwsem.h:51
-       __sb_start_write include/linux/fs.h:1826 [inline]
-       sb_start_pagefault include/linux/fs.h:1930 [inline]
-       ext4_page_mkwrite+0x1ae/0x1410 fs/ext4/inode.c:6083
-       do_page_mkwrite+0x1a4/0x5f0 mm/memory.c:2971
-       do_shared_fault mm/memory.c:4589 [inline]
-       do_fault+0x441/0x9c0 mm/memory.c:4657
-       handle_pte_fault+0x6eb/0x1660 mm/memory.c:4917
-       __handle_mm_fault mm/memory.c:5059 [inline]
-       handle_mm_fault+0xdd3/0x1630 mm/memory.c:5157
-       do_user_addr_fault+0x896/0x10e0 arch/x86/mm/fault.c:1397
-       handle_page_fault arch/x86/mm/fault.c:1488 [inline]
-       exc_page_fault+0xa1/0x1e0 arch/x86/mm/fault.c:1544
-       asm_exc_page_fault+0x22/0x30 arch/x86/include/asm/idtentry.h:570
-
--> #0 (&mm->mmap_lock#2){++++}-{3:3}:
-       check_prev_add kernel/locking/lockdep.c:3095 [inline]
-       check_prevs_add+0x4f5/0x5d30 kernel/locking/lockdep.c:3214
-       validate_chain kernel/locking/lockdep.c:3829 [inline]
-       __lock_acquire+0x4432/0x6080 kernel/locking/lockdep.c:5053
-       lock_acquire+0x17f/0x430 kernel/locking/lockdep.c:5666
-       __might_fault+0xb2/0x110 mm/memory.c:5583
-       __clear_user arch/x86/lib/usercopy_64.c:20 [inline]
-       clear_user+0xbf/0x150 arch/x86/lib/usercopy_64.c:52
-       iov_iter_zero+0x48a/0x1450 lib/iov_iter.c:795
-       iomap_dio_hole_iter fs/iomap/direct-io.c:390 [inline]
-       iomap_dio_iter fs/iomap/direct-io.c:438 [inline]
-       __iomap_dio_rw+0x14e1/0x2170 fs/iomap/direct-io.c:602
-       iomap_dio_rw+0x42/0xa0 fs/iomap/direct-io.c:690
-       ext4_dio_read_iter fs/ext4/file.c:79 [inline]
-       ext4_file_read_iter+0x5bc/0x770 fs/ext4/file.c:130
-       call_read_iter include/linux/fs.h:2181 [inline]
-       do_iter_readv_writev fs/read_write.c:733 [inline]
-       do_iter_read+0x710/0xc30 fs/read_write.c:796
-       vfs_readv fs/read_write.c:916 [inline]
-       do_readv+0x219/0x410 fs/read_write.c:953
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x3d/0x90 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-other info that might help us debug this:
-
-Chain exists of:
-  &mm->mmap_lock#2 --> &journal->j_checkpoint_mutex -->
-&sb->s_type->i_mutex_key#8
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(&sb->s_type->i_mutex_key#8);
-                               lock(&journal->j_checkpoint_mutex);
-                               lock(&sb->s_type->i_mutex_key#8);
-  lock(&mm->mmap_lock#2);
-
- *** DEADLOCK ***
-
-2 locks held by syz-executor.0/934:
- #0: ffff8880188000e8 (&f->f_pos_lock){+.+.}-{3:3}, at:
-__fdget_pos+0x23a/0x2d0 fs/file.c:1036
- #1: ffff88804673ca38 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at:
-inode_lock_shared include/linux/fs.h:766 [inline]
- #1: ffff88804673ca38 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at:
-ext4_dio_read_iter fs/ext4/file.c:63 [inline]
- #1: ffff88804673ca38 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at:
-ext4_file_read_iter+0x26c/0x770 fs/ext4/file.c:130
-
-stack backtrace:
-CPU: 1 PID: 934 Comm: syz-executor.0 Not tainted 6.0.0+ #39
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-1.13.0-1ubuntu1.1 04/01/2014
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
- print_circular_bug+0xa95/0xd40 kernel/locking/lockdep.c:2053
- check_noncircular+0x2cc/0x390 kernel/locking/lockdep.c:2175
- check_prev_add kernel/locking/lockdep.c:3095 [inline]
- check_prevs_add+0x4f5/0x5d30 kernel/locking/lockdep.c:3214
- validate_chain kernel/locking/lockdep.c:3829 [inline]
- __lock_acquire+0x4432/0x6080 kernel/locking/lockdep.c:5053
- lock_acquire+0x17f/0x430 kernel/locking/lockdep.c:5666
- __might_fault+0xb2/0x110 mm/memory.c:5583
- __clear_user arch/x86/lib/usercopy_64.c:20 [inline]
- clear_user+0xbf/0x150 arch/x86/lib/usercopy_64.c:52
- iov_iter_zero+0x48a/0x1450 lib/iov_iter.c:795
- iomap_dio_hole_iter fs/iomap/direct-io.c:390 [inline]
- iomap_dio_iter fs/iomap/direct-io.c:438 [inline]
- __iomap_dio_rw+0x14e1/0x2170 fs/iomap/direct-io.c:602
- iomap_dio_rw+0x42/0xa0 fs/iomap/direct-io.c:690
- ext4_dio_read_iter fs/ext4/file.c:79 [inline]
- ext4_file_read_iter+0x5bc/0x770 fs/ext4/file.c:130
- call_read_iter include/linux/fs.h:2181 [inline]
- do_iter_readv_writev fs/read_write.c:733 [inline]
- do_iter_read+0x710/0xc30 fs/read_write.c:796
- vfs_readv fs/read_write.c:916 [inline]
- do_readv+0x219/0x410 fs/read_write.c:953
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0x90 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f020068bded
-Code: 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 f3 0f 1e fa 48 89 f8 48
-89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
-01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f020182cc58 EFLAGS: 00000246 ORIG_RAX: 0000000000000013
-RAX: ffffffffffffffda RBX: 00007f02007abf80 RCX: 00007f020068bded
-RDX: 0000000000000001 RSI: 0000000020001440 RDI: 0000000000000004
-RBP: 00007f02006f8ce0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f02007abf80
-R13: 00007ffcd43c130f R14: 00007ffcd43c14b0 R15: 00007f020182cdc0
- </TASK>
-
-Best,
-Wei
+PiBGcm9tOiBUaG9tYXMgR2xlaXhuZXIgPHRnbHhAbGludXRyb25peC5kZT4NCj4gU2VudDogRnJp
+ZGF5LCBOb3ZlbWJlciAxMSwgMjAyMiA5OjU3IFBNDQo+IA0KPiBUaGUgbmV3IFBDSS9JTVMgKElu
+dGVycnVwdCBNZXNzYWdlIFN0b3JlKSBmdW5jdGlvbmFsaXR5IGlzIGFsbG93aW5nDQo+IGhhcmR3
+YXJlIHZlbmRvcnMgdG8gcHJvdmlkZSBpbXBsZW1lbnRhdGlvbiBzcGVjaWZpYyBzdG9yYWdlIGZv
+ciB0aGUgTVNJDQo+IG1lc3NhZ2VzLiBUaGlzIGNhbiBiZSBkZXZpY2UgbWVtb3J5IGFuZCBhbHNv
+IGhvc3QvZ3Vlc3QgbWVtb3J5LCBlLmcuIGluDQo+IHF1ZXVlIG1lbW9yeSB3aGljaCBpcyBzaGFy
+ZWQgd2l0aCB0aGUgaGFyZHdhcmUuDQo+IA0KPiBUaGlzIHJlcXVpcmVzIGRldmljZSBzcGVjaWZp
+YyBNU0kgaW50ZXJydXB0IGRvbWFpbnMsIHdoaWNoIGNhbm5vdCBiZQ0KPiBhY2hpdmVkIGJ5IGV4
+cGFuZGluZyB0aGUgZXhpc3RpbmcgUENJL01TSSBpbnRlcnJ1cHQgZG9tYWluIGNvbmNlcHQgd2hp
+Y2ggaXMNCg0Kcy9hY2hpdmVkL2FjaGlldmVkLw0K
