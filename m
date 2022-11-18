@@ -2,87 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0D9162EF9F
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 09:35:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B4F962EFAA
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 09:37:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241498AbiKRIfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 03:35:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52834 "EHLO
+        id S241577AbiKRIgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 03:36:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230042AbiKRIey (ORCPT
+        with ESMTP id S241182AbiKRIgf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 03:34:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56BCD8EB6A;
-        Fri, 18 Nov 2022 00:34:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0B551B822A9;
-        Fri, 18 Nov 2022 08:34:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65A8EC433C1;
-        Fri, 18 Nov 2022 08:34:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668760451;
-        bh=IOj/GiYagUGnVOGJEzutZQawFTK6GTzvsmI3Kj7AE8w=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=CNjYfCGvsCrglg+uj3KUjbD+rJc+xgvTsqflC7I+JVnSj1YTrgUPcfPC/oIhiEvTR
-         NnnRhMWJ7HeaFobc8Os3uran+o21ZcPtXUeYg0AMh8ua2RfVrAXC6XojC2eWCQyX/j
-         dBm980XQ6iMQi+pG5P11vovELHlY22lxWEVfL+o8vcubrdy79l3rSZmDp+YkfSOSFv
-         yA9Ne5bCV6GFFnIh8Rk2ca75nY0ZIHogPuNlzkIZvFqygyM5u9WLeaiJZfOUpJLjtn
-         09WVDbdG7cgm1dKZlc3LK27lzDDa7gvwODfDvnC0+N11gVQbUxdoUINg/Ta2AqP8ev
-         mxAexT0ZAxpZw==
-Content-Type: text/plain; charset="utf-8"
+        Fri, 18 Nov 2022 03:36:35 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 155262BE4
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 00:35:58 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id i186-20020a1c3bc3000000b003cfe29a5733so6995891wma.3
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 00:35:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=sZBJWsvuPM4N2XNgGuD0Fakzbbh9G5ci/DsGRyhIEdY=;
+        b=bHGQfWHm3z3WfK33pmq9dlJOKNe03OeJp8opslres0KGRyyM4Da5kMG28KGUnBQdZC
+         l9FVIn02fotJTFGEW2mp0UPJY0Dv22nW97wBkpIpwq/YTlrcrE4pTMWxw5Mn9XEsl//H
+         tVot2J6vWtg2iBpIfPhruW8kaSBPK8jbKxDD0anU1IRwyhAoUpvO2s4jQIMRMjRVlutx
+         g7qfLtgVN/iTTZCLePMtmadGA9ELPDI52fAfZWoKncymcDepeYnqU+3oM5p66eqMCvXy
+         mxfQA4WVE9x0zlv8M619hy96MSUGohRBf9xHo5uUWp9nrXmObbgv8a2RpP97HybC/Awx
+         bXKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sZBJWsvuPM4N2XNgGuD0Fakzbbh9G5ci/DsGRyhIEdY=;
+        b=Au80yWct+AWstNp8tQDj3B4cA5Z084oWCYZNdjY6OJc3tZfVYzxdE8SBcUtJI8iYQU
+         1i4N7RlNfIlceT5zXPKIRS8z9SfhFuwdMzythRW/tpny7sDbt6nxJCBUE89/neMAFY9n
+         SO6RFqe/qy7dVjWQa1Oo8tq09rV3wQ+JvKmuTfSU4JcHN6iZsXv8Wuy3vVSiUNQLGxps
+         szrUYKvjvTNEteY9EXsTkRSfI4NZBZq4z4RrXCJfrFVHBD6tv4xDCiZ9FfckV9F/pDAP
+         TW558CbO17O2UcCuF3Dszuu20Pd3GrCHo8h+KE3i8HRjPHqh43Bin4xBpBjG+hvgroyb
+         Qrzw==
+X-Gm-Message-State: ANoB5plwJkOUHf5pGV10MHAXy98Kb1vHYGbQdFKXPomsZO9EYrnP88WM
+        20jYWM9flwmlw0JV1/ce0XGt3kUQSBMY3w==
+X-Google-Smtp-Source: AA0mqf60YsmnRdTamyBcHrdL4qYmUzr0MzwnwfkljypGszjucXInCUwcNUvqDYFv+EfSlNtYYPr1rg==
+X-Received: by 2002:a05:600c:4f12:b0:3cf:e7bd:303a with SMTP id l18-20020a05600c4f1200b003cfe7bd303amr7953544wmq.151.1668760556423;
+        Fri, 18 Nov 2022 00:35:56 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id v3-20020a1cf703000000b003cf774c31a0sm7538328wmh.16.2022.11.18.00.35.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 00:35:55 -0800 (PST)
+Date:   Fri, 18 Nov 2022 11:35:52 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Umang Jain <umang.jain@ideasonboard.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Ray Jui <rjui@broadcom.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org, linux-staging@lists.linux.dev
+Subject: Re: [PATCH 1/3] Revert "staging: mmal-vchiq: Avoid use of bool in
+ structures"
+Message-ID: <Y3dD6Lg2L7CgkDFe@kadam>
+References: <20221117160015.344528-1-umang.jain@ideasonboard.com>
+ <20221117160015.344528-2-umang.jain@ideasonboard.com>
+ <166870135963.50677.14827688186331561108@Monstersaurus>
+ <c718624a-bb6f-5474-5cc3-4319b1fdb282@ideasonboard.com>
+ <Y3Z3Is8u4wGZfKU5@kroah.com>
+ <c5e03c65-2994-6518-c79d-f6ad1557c4e0@ideasonboard.com>
+ <Y3bN8I7DlxRUZumH@lunn.ch>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20221118011249.48112-1-yuehaibing@huawei.com>
-References: <20221118011249.48112-1-yuehaibing@huawei.com>
-Subject: Re: [PATCH] macsec: Fix invalid error code set
-From:   Antoine Tenart <atenart@kernel.org>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        YueHaibing <yuehaibing@huawei.com>
-To:     YueHaibing <yuehaibing@huawei.com>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Date:   Fri, 18 Nov 2022 09:34:02 +0100
-Message-ID: <166876044229.7589.614742433983865@kwain.local>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3bN8I7DlxRUZumH@lunn.ch>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting YueHaibing (2022-11-18 02:12:49)
-> 'ret' is defined twice in macsec_changelink(), when it is set in macsec_i=
-s_offloaded
-> case, it will be invalid before return.
->=20
-> Fixes: 3cf3227a21d1 ("net: macsec: hardware offloading infrastructure")
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+On Fri, Nov 18, 2022 at 01:12:32AM +0100, Andrew Lunn wrote:
+> 
+> Does :1 really initialise the variable?
 
-Reviewed-by: Antoine Tenart <atenart@kernel.org>
+Obviously not.
 
-Thanks!
+> In "u32 enabled:1" it means
+> this is a 1 bit wide bit field. It seems odd that bool is somehow
+> special and :1 means something else.
 
-> ---
->  drivers/net/macsec.c | 1 -
->  1 file changed, 1 deletion(-)
->=20
-> diff --git a/drivers/net/macsec.c b/drivers/net/macsec.c
-> index a7b46219bab7..d73b9d535b7a 100644
-> --- a/drivers/net/macsec.c
-> +++ b/drivers/net/macsec.c
-> @@ -3835,7 +3835,6 @@ static int macsec_changelink(struct net_device *dev=
-, struct nlattr *tb[],
->         if (macsec_is_offloaded(macsec)) {
->                 const struct macsec_ops *ops;
->                 struct macsec_context ctx;
-> -               int ret;
-> =20
->                 ops =3D macsec_get_ops(netdev_priv(dev), &ctx);
->                 if (!ops) {
-> --=20
-> 2.20.1
->
+If you have a bunch of consecutive bool a:1; bool b:1; then GCC will
+squeeze them into the same byte.  But if you have bool a; bool b; then
+they each take a byte with GCC.  I have specified GCC because the size
+of bool types are a bit vague in the C standard.
+
+regards,
+dan carpenter
