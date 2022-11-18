@@ -2,190 +2,433 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A24962E27B
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 18:02:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83E1662E00E
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Nov 2022 16:38:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235023AbiKQRCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 12:02:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34112 "EHLO
+        id S234918AbiKQPiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 10:38:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235042AbiKQRBk (ORCPT
+        with ESMTP id S234934AbiKQPiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 12:01:40 -0500
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDEF013D7C;
-        Thu, 17 Nov 2022 09:01:38 -0800 (PST)
-Received: by mail-qt1-f180.google.com with SMTP id w9so1448337qtv.13;
-        Thu, 17 Nov 2022 09:01:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QEjWIgqPE/yKlPIeL7hLLjyszxImNDx6l7dN1ULUouw=;
-        b=68dioufqfYzeZs9hYidmzgIsupDXLXh2hmh7ttOlCuMh1EOtqt+IXfNnObKvLtAXJi
-         ijrObU11ynwDV8piLBNvjm7BvIfIZVadSyTwd1D9c59f/ptrDcY+fPCyulyVuR44pjIZ
-         g/kJMAbOdfGGK9vevuKCo2QJUAg45JCTnCWvlki5P9yuZNNXXtALxmGOCP8SEJ0Q1Ipy
-         amBRCDPRsyNAW2clYki0liOlMNxxeq9Muqh3AEPcG2hEXqYqATSUTYxtUBY0r5I4P2/r
-         GsizXjoUjPfw95FNkxxe6rXt6WKcrm1kGyHWJiW5tLS/23nl6Wmh8ZIo4GL5ml+90NuG
-         ckUA==
-X-Gm-Message-State: ANoB5pnibBC6rJNPm5saSSW0zi1Fa+ZpDUP6YbzSu10j8Gl6clHYoqfu
-        uztGBvQdaEmhkU20i1UWDXe4nsIFzrCkIAq9Ln+Pzq7xwd8=
-X-Google-Smtp-Source: AA0mqf7AjKqeg9aRlzDQRBfLrcfNHveVnQifmnWAJ7dkBHXEsFgAgRqi4jRRJurjMN2uVvjLbLSCQTT5veY6S3Iith0=
-X-Received: by 2002:a05:622a:1989:b0:3a5:7cf8:1a6e with SMTP id
- u9-20020a05622a198900b003a57cf81a6emr3109964qtc.48.1668704497796; Thu, 17 Nov
- 2022 09:01:37 -0800 (PST)
+        Thu, 17 Nov 2022 10:38:01 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5584E59859;
+        Thu, 17 Nov 2022 07:38:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668699480; x=1700235480;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=U03TPz/uuXhwbVKrgsgYAMUrnhL2sOKZzWfzmrmv1LU=;
+  b=QEc2JAFIml1Tr0LwXTwdXFq9MupLO20vUa8QZslcQwtA4gY+FwxFlg+W
+   lPW8gaJ2DnaaCGoNbtXTL4k5HLg4dGDzjnllKcMv+/eLTVbR9fB0QXqBS
+   dJJ9+VrWqESs0u9yshguRbP0lRUAMecFHQFsMHlg7dJRODXM+KonlC5HS
+   S8haXlHMIKq6QEcAHN2hr15yvLNYnUFDol7VQPyrLvpcG+f94w1T1r0/x
+   Oo3VcApBofDCd1BglrvgAvNBpBCQtLtkrFe1PgXruCn5O71L28h7S2jI+
+   GeYbRv1IXDPP2RPntK7Yl6Gvtz2E2gTGDvVnLl7cZWs+fuipQu8FmnxAF
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="312895845"
+X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
+   d="scan'208";a="312895845"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 07:38:00 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="634090448"
+X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
+   d="scan'208";a="634090448"
+Received: from unknown (HELO rajath-NUC10i7FNH..) ([10.223.165.88])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 07:37:56 -0800
+From:   Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+To:     jic23@kernel.org, lars@metafoo.de
+Cc:     linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        rajat.khandelwal@intel.com,
+        Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+Subject: [PATCH v10] iio: temperature: Add driver support for Maxim MAX30208
+Date:   Fri, 18 Nov 2022 21:07:29 +0530
+Message-Id: <20221118153729.762018-1-rajat.khandelwal@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <CAJZ5v0gyVq0AOM1_kd3QWHj+jihL-vxBv=fcEJ_Zcp8QiOymcg@mail.gmail.com>
- <20221116232838.GA1140883@bhelgaas>
-In-Reply-To: <20221116232838.GA1140883@bhelgaas>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 17 Nov 2022 18:01:26 +0100
-Message-ID: <CAJZ5v0gX_ZEM60_4V-vn+uP+QqPEewwkpk8-PpnY28bUHgdFPw@mail.gmail.com>
-Subject: Re: [PATCH v5] PCI/ACPI: PCI/ACPI: Validate devices with power
- resources support D3
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>
-Cc:     Len Brown <lenb@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mehta Sanju <Sanju.Mehta@amd.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 12:28 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> On Wed, Nov 16, 2022 at 01:00:36PM +0100, Rafael J. Wysocki wrote:
-> > On Wed, Nov 16, 2022 at 1:37 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > On Mon, Nov 14, 2022 at 04:33:52PM +0100, Rafael J. Wysocki wrote:
-> > > > On Fri, Nov 11, 2022 at 10:42 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > >
-> > > > > On Fri, Nov 11, 2022 at 12:58:28PM -0600, Limonciello, Mario wrote:
-> > > > > > On 11/11/2022 11:41, Bjorn Helgaas wrote:
-> > > > > > > On Mon, Oct 31, 2022 at 05:33:55PM -0500, Mario Limonciello wrote:
-> > > > > > > > Firmware typically advertises that ACPI devices that represent PCIe
-> > > > > > > > devices can support D3 by a combination of the value returned by
-> > > > > > > > _S0W as well as the HotPlugSupportInD3 _DSD [1].
-> > > > > > > >
-> > > > > > > > `acpi_pci_bridge_d3` looks for this combination but also contains
-> > > > > > > > an assumption that if an ACPI device contains power resources the PCIe
-> > > > > > > > device it's associated with can support D3.  This was introduced
-> > > > > > > > from commit c6e331312ebf ("PCI/ACPI: Whitelist hotplug ports for
-> > > > > > > > D3 if power managed by ACPI").
-> > > > > > > >
-> > > > > > > > Some firmware configurations for "AMD Pink Sardine" do not support
-> > > > > > > > wake from D3 in _S0W for the ACPI device representing the PCIe root
-> > > > > > > > port used for tunneling. The PCIe device will still be opted into
-> > > > > > > > runtime PM in the kernel [2] because of the logic within
-> > > > > > > > `acpi_pci_bridge_d3`. This currently happens because the ACPI
-> > > > > > > > device contains power resources.
-> > > > >
-> > > > > Wait.  Is this as simple as just recognizing that:
-> > > > >
-> > > > >   _PS0 means the OS has a knob to put the device in D0, but it doesn't
-> > > > >   mean the device can wake itself from a low-power state.  The OS has
-> > > > >   to use _S0W to learn the device's ability to wake itself.
-> > > >
-> > > > It is.
-> > >
-> > > Now I'm confused again about what "HotPlugSupportInD3" means.  The MS
-> > > web page [1] says it identifies Root Ports capable of handling hot
-> > > plug events while in D3.  That sounds kind of related to _S0W: If _S0W
-> > > says "I can wake myself from D3hot and D3cold", how is that different
-> > > from "I can handle hotplug events in D3"?
-> >
-> > For native PME/hot-plug signaling there is no difference.  This is the
-> > same interrupt by the spec after all IIRC.
-> >
-> > For GPE-based signaling, though, there is a difference, because GPEs
-> > can only be used directly for wake signaling (this is related to
-> > _PRW).  In particular, the only provision in the ACPI spec for device
-> > hot-add are the Bus Check and Device Check notification values (0 and
-> > 1) which require AML to run and evaluate Notify() on specific AML
-> > objects.
-> >
-> > Hence, there is no spec-defined way to tell the OS that "something can
-> > be hot-added under this device while in D3 and you will get notified
-> > about that".
->
-> So I guess acpi_pci_bridge_d3() looks for:
->
->   - "wake signaling while in D3" (_S0W) and
->   - "notification of hotplug while in D3" ("HotPlugSupportInD3")
->
-> For Root Ports with both those abilities (or bridges below such Root
-> Ports), we allow D3, and this patch doesn't change that.
->
-> What this patch *does* change is that all bridges with _PS0 or _PR0
-> previously could use D3, but now will only be able to use D3 if they
-> are also (or are below) a Root Port that can signal wakeup
-> (wakeup.flags.valid) and can wakeup from D3hot or D3cold (_S0W).
->
-> And this fixes the Pink Sardine because it has Root Ports that do
-> Thunderbolt tunneling, and they have _PS0 or _PR0 but their _S0W says
-> they cannot wake from D3.  Previously we put those in D3, but they
-> couldn't wake up.  Now we won't put them in D3.
->
-> I guess there's a possibility that this could break or cause higher
-> power consumption on systems that were fixed by c6e331312ebf
-> ("PCI/ACPI: Whitelist hotplug ports for D3 if power managed by ACPI").
-> I don't know enough about that scenario.  Maybe Lukas will chime in.
+Maxim MAX30208 is a digital temperature sensor with 0.1°C accuracy.
 
-Well, it is possible that some of these systems will be affected.
+Add support for max30208 driver in iio subsystem.
+Datasheet: https://datasheets.maximintegrated.com/en/ds/MAX30208.pdf
 
-One of such cases is when the port in question has _S0W which says
-that wakeup from D3 is not supported.  In that case I think the kernel
-should honor the _S0W input, because there may be a good reason known
-to the platform integrator for it.
+Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+---
 
-The other case is when wakeup.flags.valid is unset for the port's ACPI
-companion which means that the port cannot signal wakeup through
-ACPI-related means at all and this may be problematic, especially in
-the system-wide suspend case in which the wakeup capability is not too
-relevant unless there is a system wakeup device under the port.
+v10: Correcting the overflow logic
 
-I don't think that the adev->wakeup.flags.valid check has any bearing
-on the _S0W check - if there is _S0W and it says "no wakeup from D3",
-it should still be taken into account - so that check can be moved
-past the _S0W check.
+v9: Repositioning register data
 
-Now, for compatibility with systems where ports have neither _S0W nor
-the HotPlugSupportInD3 property, the acpi_pci_power_manageable()
-return value should determine the outcome regardless of the
-adev->wakeup.flags.valid value, so the latter should only determine
-whether or not the HotPlugSupportInD3 property will be inspected
-(which may cause true to be returned before the "power manageable"
-check).
+v8:
+1. Returning time out if conversion fails to happen
+2. Setting rollover bit to '1' to allow FIFO overwriting
+3. Dropping ACPI_PTR
 
-IOW, something like this (after checking _S0W):
+v7:
+1. Dropped GPIOs use for now
+2. Driver name string directly used
+3. Mutex lock description added
+4. Removed noisy errors and only kept errors on larger code blocks
+5. dev_warn -> dev_err for temperature conversion failure
+6. Improvised the logic of popping out values
+7. Fixed line breaks
+8. module_i2c_driver
 
-if (adev->wakeup.flags.valid &&
-    !acpi_dev_get_property(adev, "HotPlugSupportInD3",
-ACPI_TYPE_INTEGER, &obj) &&
-    obj->integer.value == 1)
-        return true;
+v6: Converted usleep_range to msleep as delay is quite large
 
-return acpi_pci_power_manageable(dev);
+v5:
+1. Fixed comment position in max30208_request
+2. Use of local u8 variable to build register values
+3. Using u8 instead of s8 in data_count
+4. Removed global MAX30208_RES_MILLICELCIUS
+5. Removed 'comma' on NULL terminators
 
-Where the if () condition basically means that wakeup signaling is
-supported (and there is no indication that it cannot be done from D3
-as per the previous _S0W check) and hotplug signaling from D3 is
-supported.
+v4: Version comments go below line separator of signed-off-by
 
-> > > This patch says that if dev's Root Port has "HotPlugSupportInD3", we
-> > > don't need _PS0 or _PR0 for dev.  I guess that must be true, because
-> > > previously the fact that we checked for "HotPlugSupportInD3" meant the
-> > > device did NOT have _PS0 or _PR0.
-> > >
-> > > [1] https://learn.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports#identifying-pcie-root-ports-supporting-hot-plug-in-d3
+v3: Release the mutex lock after error gets returned
+
+v2:
+1. Removed TODO
+2. Removed unnecessary blank spaces
+3. Corrected MC->MILLICELCIUS
+4. Comments added wherever required
+5. dev_err on i2c fails
+6. Rearranged some flows
+7. Removed PROCESSED
+8. int error return on gpio setup
+9. device_register at the end of probe
+10. Return on unsuccessful reset
+11. acpi_match_table and of_match_table added
+12. Minor quirks
+
+ MAINTAINERS                        |   6 +
+ drivers/iio/temperature/Kconfig    |  10 ++
+ drivers/iio/temperature/Makefile   |   1 +
+ drivers/iio/temperature/max30208.c | 252 +++++++++++++++++++++++++++++
+ 4 files changed, 269 insertions(+)
+ create mode 100644 drivers/iio/temperature/max30208.c
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index f1390b8270b2..7f1fd2e31b94 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12373,6 +12373,12 @@ S:	Maintained
+ F:	Documentation/devicetree/bindings/regulator/maxim,max20086.yaml
+ F:	drivers/regulator/max20086-regulator.c
+ 
++MAXIM MAX30208 TEMPERATURE SENSOR DRIVER
++M:	Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
++L:	linux-iio@vger.kernel.org
++S:	Maintained
++F:	drivers/iio/temperature/max30208.c
++
+ MAXIM MAX77650 PMIC MFD DRIVER
+ M:	Bartosz Golaszewski <brgl@bgdev.pl>
+ L:	linux-kernel@vger.kernel.org
+diff --git a/drivers/iio/temperature/Kconfig b/drivers/iio/temperature/Kconfig
+index e8ed849e3b76..ed384f33e0c7 100644
+--- a/drivers/iio/temperature/Kconfig
++++ b/drivers/iio/temperature/Kconfig
+@@ -128,6 +128,16 @@ config TSYS02D
+ 	  This driver can also be built as a module. If so, the module will
+ 	  be called tsys02d.
+ 
++config MAX30208
++	tristate "Maxim MAX30208 digital temperature sensor"
++	depends on I2C
++	help
++	  If you say yes here you get support for Maxim MAX30208
++	  digital temperature sensor connected via I2C.
++
++	  This driver can also be built as a module. If so, the module
++	  will be called max30208.
++
+ config MAX31856
+ 	tristate "MAX31856 thermocouple sensor"
+ 	depends on SPI
+diff --git a/drivers/iio/temperature/Makefile b/drivers/iio/temperature/Makefile
+index dd08e562ffe0..dfec8c6d3019 100644
+--- a/drivers/iio/temperature/Makefile
++++ b/drivers/iio/temperature/Makefile
+@@ -7,6 +7,7 @@ obj-$(CONFIG_IQS620AT_TEMP) += iqs620at-temp.o
+ obj-$(CONFIG_LTC2983) += ltc2983.o
+ obj-$(CONFIG_HID_SENSOR_TEMP) += hid-sensor-temperature.o
+ obj-$(CONFIG_MAXIM_THERMOCOUPLE) += maxim_thermocouple.o
++obj-$(CONFIG_MAX30208) += max30208.o
+ obj-$(CONFIG_MAX31856) += max31856.o
+ obj-$(CONFIG_MAX31865) += max31865.o
+ obj-$(CONFIG_MLX90614) += mlx90614.o
+diff --git a/drivers/iio/temperature/max30208.c b/drivers/iio/temperature/max30208.c
+new file mode 100644
+index 000000000000..c85c21474711
+--- /dev/null
++++ b/drivers/iio/temperature/max30208.c
+@@ -0,0 +1,252 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++/*
++ * Copyright (c) Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
++ *
++ * Maxim MAX30208 digital temperature sensor with 0.1°C accuracy
++ * (7-bit I2C slave address (0x50 - 0x53))
++ */
++
++#include <linux/bitops.h>
++#include <linux/delay.h>
++#include <linux/iio/iio.h>
++#include <linux/i2c.h>
++#include <linux/module.h>
++#include <linux/types.h>
++
++#define MAX30208_STATUS			0x00
++#define MAX30208_STATUS_TEMP_RDY	BIT(0)
++#define MAX30208_INT_ENABLE		0x01
++#define MAX30208_INT_ENABLE_TEMP_RDY	BIT(0)
++
++#define MAX30208_FIFO_OVF_CNTR		0x06
++#define MAX30208_FIFO_DATA_CNTR		0x07
++#define MAX30208_FIFO_DATA		0x08
++
++#define MAX30208_FIFO_CONFIG		0x0a
++#define MAX30208_FIFO_CONFIG_RO		BIT(1)
++
++#define MAX30208_SYSTEM_CTRL		0x0c
++#define MAX30208_SYSTEM_CTRL_RESET	0x01
++
++#define MAX30208_TEMP_SENSOR_SETUP	0x14
++#define MAX30208_TEMP_SENSOR_SETUP_CONV	BIT(0)
++
++struct max30208_data {
++	struct i2c_client *client;
++	struct iio_dev *indio_dev;
++	struct mutex lock; /* Lock to prevent concurrent reads of temperature readings */
++};
++
++static const struct iio_chan_spec max30208_channels[] = {
++	{
++		.type = IIO_TEMP,
++		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) | BIT(IIO_CHAN_INFO_SCALE),
++	},
++};
++
++/**
++ * max30208_request() - Request a reading
++ * @data: Struct comprising member elements of the device
++ *
++ * Requests a reading from the device and waits until the conversion is ready.
++ */
++static int max30208_request(struct max30208_data *data)
++{
++	/*
++	 * Sensor can take up to 500 ms to respond so execute a total of
++	 * 10 retries to give the device sufficient time.
++	 */
++	int retries = 10;
++	u8 regval;
++	int ret;
++
++	ret = i2c_smbus_read_byte_data(data->client, MAX30208_TEMP_SENSOR_SETUP);
++	if (ret < 0)
++		return ret;
++
++	regval = ret | MAX30208_TEMP_SENSOR_SETUP_CONV;
++
++	ret = i2c_smbus_write_byte_data(data->client, MAX30208_TEMP_SENSOR_SETUP, regval);
++	if (ret)
++		return ret;
++
++	while (retries--) {
++		ret = i2c_smbus_read_byte_data(data->client, MAX30208_STATUS);
++		if (ret < 0)
++			return ret;
++
++		if (ret & MAX30208_STATUS_TEMP_RDY)
++			return 0;
++
++		msleep(50);
++	}
++	dev_err(&data->client->dev, "Temperature conversion failed\n");
++
++	return -ETIMEDOUT;
++}
++
++static int max30208_update_temp(struct max30208_data *data)
++{
++	u8 data_count;
++	int ret;
++
++	mutex_lock(&data->lock);
++
++	ret = max30208_request(data);
++	if (ret)
++		goto unlock;
++
++	ret = i2c_smbus_read_byte_data(data->client, MAX30208_FIFO_OVF_CNTR);
++	if (ret < 0)
++		goto unlock;
++	else if (!ret) {
++		ret = i2c_smbus_read_byte_data(data->client, MAX30208_FIFO_DATA_CNTR);
++		if (ret < 0)
++			goto unlock;
++
++		data_count = ret;
++	} else
++		data_count = 1;
++
++	while (data_count) {
++		ret = i2c_smbus_read_word_swapped(data->client, MAX30208_FIFO_DATA);
++		if (ret < 0)
++			goto unlock;
++
++		data_count--;
++	}
++
++unlock:
++	mutex_unlock(&data->lock);
++	return ret;
++}
++
++/**
++ * max30208_config_setup() - Set up FIFO configuration register
++ * @data: Struct comprising member elements of the device
++ *
++ * Sets the rollover bit to '1' to enable overwriting FIFO during overflow.
++ */
++static int max30208_config_setup(struct max30208_data *data)
++{
++	u8 regval;
++	int ret;
++
++	ret = i2c_smbus_read_byte_data(data->client, MAX30208_FIFO_CONFIG);
++	if (ret < 0)
++		return ret;
++
++	regval = ret | MAX30208_FIFO_CONFIG_RO;
++
++	ret = i2c_smbus_write_byte_data(data->client, MAX30208_FIFO_CONFIG, regval);
++	if (ret)
++		return ret;
++
++	return 0;
++}
++
++static int max30208_read(struct iio_dev *indio_dev,
++			 struct iio_chan_spec const *chan,
++			 int *val, int *val2, long mask)
++{
++	struct max30208_data *data = iio_priv(indio_dev);
++	int ret;
++
++	switch (mask) {
++	case IIO_CHAN_INFO_RAW:
++		ret = max30208_update_temp(data);
++		if (ret < 0)
++			return ret;
++
++		*val = sign_extend32(ret, 15);
++		return IIO_VAL_INT;
++
++	case IIO_CHAN_INFO_SCALE:
++		*val = 5;
++		return IIO_VAL_INT;
++
++	default:
++		return -EINVAL;
++	}
++}
++
++static const struct iio_info max30208_info = {
++	.read_raw = max30208_read,
++};
++
++static int max30208_probe(struct i2c_client *i2c)
++{
++	struct device *dev = &i2c->dev;
++	struct max30208_data *data;
++	struct iio_dev *indio_dev;
++	int ret;
++
++	indio_dev = devm_iio_device_alloc(dev, sizeof(*data));
++	if (!indio_dev)
++		return -ENOMEM;
++
++	data = iio_priv(indio_dev);
++	data->client = i2c;
++	mutex_init(&data->lock);
++
++	indio_dev->name = "max30208";
++	indio_dev->channels = max30208_channels;
++	indio_dev->num_channels = ARRAY_SIZE(max30208_channels);
++	indio_dev->info = &max30208_info;
++	indio_dev->modes = INDIO_DIRECT_MODE;
++
++	ret = i2c_smbus_write_byte_data(data->client, MAX30208_SYSTEM_CTRL,
++					MAX30208_SYSTEM_CTRL_RESET);
++	if (ret) {
++		dev_err(dev, "Failure in performing reset\n");
++		return ret;
++	}
++
++	msleep(50);
++
++	ret = max30208_config_setup(data);
++	if (ret)
++		return ret;
++
++	ret = devm_iio_device_register(dev, indio_dev);
++	if (ret) {
++		dev_err(dev, "Failed to register IIO device\n");
++		return ret;
++	}
++
++	return 0;
++}
++
++static const struct i2c_device_id max30208_id_table[] = {
++	{ "max30208" },
++	{ }
++};
++MODULE_DEVICE_TABLE(i2c, max30208_id_table);
++
++static const struct acpi_device_id max30208_acpi_match[] = {
++	{ "MAX30208" },
++	{ }
++};
++MODULE_DEVICE_TABLE(acpi, max30208_acpi_match);
++
++static const struct of_device_id max30208_of_match[] = {
++	{ .compatible = "maxim,max30208" },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, max30208_of_match);
++
++static struct i2c_driver max30208_driver = {
++	.driver = {
++		.name = "max30208",
++		.of_match_table = max30208_of_match,
++		.acpi_match_table = max30208_acpi_match,
++	},
++	.probe_new = max30208_probe,
++	.id_table = max30208_id_table,
++};
++module_i2c_driver(max30208_driver);
++
++MODULE_AUTHOR("Rajat Khandelwal <rajat.khandelwal@linux.intel.com>");
++MODULE_DESCRIPTION("Maxim MAX30208 digital temperature sensor");
++MODULE_LICENSE("GPL");
+-- 
+2.34.1
+
