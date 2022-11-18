@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44FD862F31C
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 12:00:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02D4A62F247
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 11:14:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241306AbiKRLAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 06:00:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42052 "EHLO
+        id S241383AbiKRKOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 05:14:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235088AbiKRLAU (ORCPT
+        with ESMTP id S235225AbiKRKOS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 06:00:20 -0500
+        Fri, 18 Nov 2022 05:14:18 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B63A3922F7
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 03:00:19 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74643786CD
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 02:14:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 708EEB82301
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 11:00:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D76BAC433C1;
-        Fri, 18 Nov 2022 11:00:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 278CEB82272
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 10:14:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD66BC433B5;
+        Fri, 18 Nov 2022 10:13:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1668769217;
+        s=korg; t=1668766454;
         bh=sbvFiU3WT//xFRXS5d8RwEjf6Y/qYJbitoZ5MmHfsiA=;
         h=Date:From:To:Cc:Subject:From;
-        b=D3YnRyycT9G+lqQCJCiTEJnAjYOislwYmFFhD7cu+BMnBfXGBnjCZ73y3MMtz4XEw
-         Z4ijorD3PWEZ4YhCD+RjOiMcQyb5MiiQ6PmF+nRrfPY7n/44i8Jr2DkDgR5ijF+JCN
-         ceAdIhZfikDzIho3u90T31+vdbPYBFdhKSQ1EC8Y=
+        b=PHm+bCIXEETMYKiwq85vNSua1C55njv8n6H0OukoPHpV1yHJJX2Ify9lxtDLbBmW8
+         WClKbrakYd7jUHgQmAQMYyoamFiYHgOD9tLAWmFxf2HEMU2EKUCcIFJc5+CTY8BRlM
+         5bch34A9NbYHFhw+sDRchwddGZLrg9sET2li1cwY=
 Date:   Fri, 18 Nov 2022 10:28:29 +0100
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>,
@@ -43,8 +43,7 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
