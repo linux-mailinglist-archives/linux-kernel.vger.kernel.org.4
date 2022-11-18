@@ -2,81 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2D2762FF69
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 22:36:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD7FF62FF6C
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 22:38:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbiKRVgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 16:36:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42544 "EHLO
+        id S230471AbiKRViG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 16:38:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbiKRVgl (ORCPT
+        with ESMTP id S230290AbiKRViD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 16:36:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AFD1A4641
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 13:36:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD55562579
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 21:36:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D566C433D6;
-        Fri, 18 Nov 2022 21:36:39 +0000 (UTC)
-Date:   Fri, 18 Nov 2022 21:36:36 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] arm64 fixes for 6.1-rc6
-Message-ID: <Y3f65PV9KYD8DvY2@arm.com>
+        Fri, 18 Nov 2022 16:38:03 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B5CA4654;
+        Fri, 18 Nov 2022 13:38:00 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id b29so6050029pfp.13;
+        Fri, 18 Nov 2022 13:38:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hJH91dDaZ1QxgMmSGvIo+VIxXA/J5w+ZrpGsEJ0OWJI=;
+        b=cGPtDnwYpQn92k1bUaIRCWFdeOsYbmWwtfcblbWPXTPr/llygj8fiQuILeJrs9DGkR
+         fRvzayl6lw12s1fBMLABc8JJaf/jG1cTzOcnVavdRQ0TDEEzM52QKTiCxbqzHFxklhi7
+         uq8wl9stN/lPzUTcXMiKdST2HcfQxCbu5mXlFsccKOwosNIpaa9oT/3rgu3N9VXSb/0i
+         a0lK6ELDDswD/CA39srLA6KCKjb/L4/9TcTAjL+KL4OOFPrEu2syuBZ/GjlYjRApzEPl
+         X0YPWucjlcf+9F8C0OxCaIlZr9/ndYOLDUg6R7pVs0kjAyyvBUqKEH5QNXYdIpU7z2oB
+         Sitw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hJH91dDaZ1QxgMmSGvIo+VIxXA/J5w+ZrpGsEJ0OWJI=;
+        b=LVHrh2vLS1uEUYu4AuRS56Y0C0kxq2BXq6UFfLI5BQFR4bFsn8FumuEMbuasVsCxXd
+         11FI3hta+SupzQxAX3XPLEn9dMxLyI8nCCSxl/0LsulYFotuei6K39JtFMchUS5qf6lU
+         l679qod9LPJfrtGaWc7jQ65pXqWUMaywsJL2q144sBH/hy3HwfQgPmNB8qJTzxs/EGY9
+         54tsuqhR3OhQDtqsDRlC3evM6qW70cXm5cBzWqqTQIasS5OD176rmNlLTcHKtnL1wVR3
+         Eoiudc0vnb8lRW7pbF1kkwm51IoTGZb+EZAITEvhUnF7drZqvBRuso/i1MlK5umkucj7
+         cw1Q==
+X-Gm-Message-State: ANoB5pmk/SCS11iP329I4yZ/mXmMyWM7lQ86bxGfjkFvhqEO6ON6fZIF
+        6BisVi8CenPIBxe9AGSIiaU7uHC8iF8=
+X-Google-Smtp-Source: AA0mqf5p/bfuyGiIaibIkl7TLZEjZE4yeHdDqpKOuFmxe3Nh025zHXgtaq92hFN1247KHeSpPrsEVw==
+X-Received: by 2002:a05:6a00:24c1:b0:56e:a001:8cb0 with SMTP id d1-20020a056a0024c100b0056ea0018cb0mr9541911pfv.60.1668807479538;
+        Fri, 18 Nov 2022 13:37:59 -0800 (PST)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id y10-20020a17090322ca00b0017bb38e4588sm4254635plg.135.2022.11.18.13.37.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 13:37:58 -0800 (PST)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Doug Berger <opendmb@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH net-next] net: bcmgenet: Clear RGMII_LINK upon link down
+Date:   Fri, 18 Nov 2022 13:37:54 -0800
+Message-Id: <20221118213754.1383364-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Clear the RGMII_LINK bit upon detecting link down to be consistent with
+setting the bit upon link up. We also move the clearing of the
+out-of-band disable to the runtime initialization rather than for each
+link up/down transition.
 
-Please pull the arm64 fixes below. Thanks.
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+---
+ drivers/net/ethernet/broadcom/genet/bcmmii.c | 19 ++++++++++++++-----
+ 1 file changed, 14 insertions(+), 5 deletions(-)
 
-The following changes since commit f0c4d9fc9cc9462659728d168387191387e903cc:
-
-  Linux 6.1-rc4 (2022-11-06 15:07:11 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux tags/arm64-fixes
-
-for you to fetch changes up to 5b47348fc0b18a78c96f8474cc90b7525ad1bbfe:
-
-  arm64/mm: fix incorrect file_map_count for non-leaf pmd/pud (2022-11-18 19:31:54 +0000)
-
-----------------------------------------------------------------
-arm64 fixes:
-
-- Fix a build error with CONFIG_CFI_CLANG + CONFIG_FTRACE when
-  CONFIG_FUNCTION_GRAPH_TRACER is not enabled.
-
-- Fix a BUG_ON triggered by the page table checker due to incorrect
-  file_map_count for non-leaf pmd/pud (the arm64
-  pmd_user_accessible_page() not checking whether it's a leaf entry).
-
-----------------------------------------------------------------
-Liu Shixin (1):
-      arm64/mm: fix incorrect file_map_count for non-leaf pmd/pud
-
-Sami Tolvanen (1):
-      arm64: ftrace: Define ftrace_stub_graph only with FUNCTION_GRAPH_TRACER
-
- arch/arm64/include/asm/pgtable.h | 4 ++--
- arch/arm64/kernel/entry-ftrace.S | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
+diff --git a/drivers/net/ethernet/broadcom/genet/bcmmii.c b/drivers/net/ethernet/broadcom/genet/bcmmii.c
+index 7ded559842e8..b615176338b2 100644
+--- a/drivers/net/ethernet/broadcom/genet/bcmmii.c
++++ b/drivers/net/ethernet/broadcom/genet/bcmmii.c
+@@ -72,7 +72,6 @@ static void bcmgenet_mac_config(struct net_device *dev)
+ 	 * Receive clock is provided by the PHY.
+ 	 */
+ 	reg = bcmgenet_ext_readl(priv, EXT_RGMII_OOB_CTRL);
+-	reg &= ~OOB_DISABLE;
+ 	reg |= RGMII_LINK;
+ 	bcmgenet_ext_writel(priv, reg, EXT_RGMII_OOB_CTRL);
+ 
+@@ -95,10 +94,18 @@ static void bcmgenet_mac_config(struct net_device *dev)
+  */
+ void bcmgenet_mii_setup(struct net_device *dev)
+ {
++	struct bcmgenet_priv *priv = netdev_priv(dev);
+ 	struct phy_device *phydev = dev->phydev;
++	u32 reg;
+ 
+-	if (phydev->link)
++	if (phydev->link) {
+ 		bcmgenet_mac_config(dev);
++	} else {
++		reg = bcmgenet_ext_readl(priv, EXT_RGMII_OOB_CTRL);
++		reg &= ~RGMII_LINK;
++		bcmgenet_ext_writel(priv, reg, EXT_RGMII_OOB_CTRL);
++	}
++
+ 	phy_print_status(phydev);
+ }
+ 
+@@ -266,18 +273,20 @@ int bcmgenet_mii_config(struct net_device *dev, bool init)
+ 			(priv->phy_interface != PHY_INTERFACE_MODE_MOCA);
+ 
+ 	/* This is an external PHY (xMII), so we need to enable the RGMII
+-	 * block for the interface to work
++	 * block for the interface to work, unconditionally clear the
++	 * Out-of-band disable since we do not need it.
+ 	 */
++	reg = bcmgenet_ext_readl(priv, EXT_RGMII_OOB_CTRL);
++	reg &= ~OOB_DISABLE;
+ 	if (priv->ext_phy) {
+-		reg = bcmgenet_ext_readl(priv, EXT_RGMII_OOB_CTRL);
+ 		reg &= ~ID_MODE_DIS;
+ 		reg |= id_mode_dis;
+ 		if (GENET_IS_V1(priv) || GENET_IS_V2(priv) || GENET_IS_V3(priv))
+ 			reg |= RGMII_MODE_EN_V123;
+ 		else
+ 			reg |= RGMII_MODE_EN;
+-		bcmgenet_ext_writel(priv, reg, EXT_RGMII_OOB_CTRL);
+ 	}
++	bcmgenet_ext_writel(priv, reg, EXT_RGMII_OOB_CTRL);
+ 
+ 	if (init)
+ 		dev_info(kdev, "configuring instance for %s\n", phy_name);
 -- 
-Catalin
+2.34.1
+
