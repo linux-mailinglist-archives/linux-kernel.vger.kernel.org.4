@@ -2,169 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 567AB62F395
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 12:22:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9BFC62F398
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 12:23:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229476AbiKRLW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 06:22:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56698 "EHLO
+        id S241506AbiKRLXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 06:23:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241743AbiKRLVs (ORCPT
+        with ESMTP id S241427AbiKRLW0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 06:21:48 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882F09370E
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 03:21:15 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id b3so7731853lfv.2
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 03:21:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=o/8Glo0B7GLFHjGhKgNuXxk0fVKZ1GFqQt1D0PZgSFk=;
-        b=W0FmKs1IxxSRY4uYGE1KlbSGSZtsG4wYij2zJQXeOwTP6OfE58Iq4P3mAC0YxQ/JkP
-         JaVybbRNymnANLJSME49WYO5zm0PRLflPYRVEg3CrlXSIvBajy6fWOCvPN+J00eT84dp
-         h3LsU53N35y+jX1zr01KYqp1CmjgT9XV3qOvc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=o/8Glo0B7GLFHjGhKgNuXxk0fVKZ1GFqQt1D0PZgSFk=;
-        b=F46QhGsWHd4GfAlPe1HXbHXDoBiwip78OxOXyvaaUIj0vAStyBzvg7jjn9TNMHIpv6
-         PeiZI7INWpOWEzcofu2OaNFAE1YbJgrcoMVDfRgXUYAOmMZr6tcjvQEZ8coCcqrrelCZ
-         Md2xitC/o959AP90AhYiYLoGjYXp6SbddEyBfEZotyk9VBD6IkXsTOlO8xi5Rf00098o
-         f83su7HMmL4XrgVe4hhIhp3gFO9OA+6eyGnqdedw+0HeEOJTl5IfR/xNrHOAk2uthM+j
-         m04inCxnf7v8hUzogfrkVzLOOElWzBBOLzhigvQGgzb6HGlwTsdkGF6XLZ10WLe/GIH7
-         h4Mg==
-X-Gm-Message-State: ANoB5pkW5HBV18s312W5qmqxNW7wGHF4R8WgMRryiE99hS6ljpLdCCRS
-        eCe3MJJtgIqCvOlfInDzlbNqCQ==
-X-Google-Smtp-Source: AA0mqf6WO6xKOPxr9oiTjOxwCD0UQ9pWZj6V6JHpiKjb11MUIa+d3WeJB7bPKeCqMVYjxKKsMO2CDQ==
-X-Received: by 2002:a05:6512:1051:b0:4b0:a51e:2b3 with SMTP id c17-20020a056512105100b004b0a51e02b3mr2584162lfb.636.1668770473260;
-        Fri, 18 Nov 2022 03:21:13 -0800 (PST)
-Received: from [172.16.11.74] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id a18-20020ac25e72000000b004b0a1e77cb2sm622936lfr.137.2022.11.18.03.21.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Nov 2022 03:21:12 -0800 (PST)
-Message-ID: <730ef480-8f10-6a38-b78a-13600a805dea@rasmusvillemoes.dk>
-Date:   Fri, 18 Nov 2022 12:21:11 +0100
+        Fri, 18 Nov 2022 06:22:26 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D08E8C482;
+        Fri, 18 Nov 2022 03:21:38 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id BBBAC1F8D7;
+        Fri, 18 Nov 2022 11:21:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1668770494; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=L3euMKBmPhMy8xs+0Iz9hve6/klsRgyszk94snpweik=;
+        b=wYAotX1b18h44sn2hYO2syv7V4WJnWy4DjyZ6FSE11VpBhJ6yYSPC72B5hOMgiWUFUnLGn
+        aA0AJagr8b1nfmGWgRxRGojh13kAfzPrNJDESaJimUQ6GrPQ02EqoScNQp7P1gG1t9FBL+
+        7PLuEl+nznaW0NTHwL/IzQ9rpFTFanA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1668770494;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=L3euMKBmPhMy8xs+0Iz9hve6/klsRgyszk94snpweik=;
+        b=+wzYH9HXa+M0Ptzkq7AV2wFHscud2W2D1O0r2WSm1IZk7OHfagWckSJPILwt5IzoGOnNWc
+        XzQMc1kGGl3CkTAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8CC8A13A66;
+        Fri, 18 Nov 2022 11:21:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id AFSGIb5qd2MpYwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Fri, 18 Nov 2022 11:21:34 +0000
+Message-ID: <b4681075-ea53-637f-0df5-3cc5891a102e@suse.de>
+Date:   Fri, 18 Nov 2022 12:21:33 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 5/5] iio: addac: ad74413r: add support for reset-gpio
-Content-Language: en-US, da
-To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-Cc:     =?UTF-8?Q?Nuno_S=c3=a1?= <noname.nuno@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        "Tanislav, Cosmin" <Cosmin.Tanislav@analog.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        "Hennerich, Michael" <Michael.Hennerich@analog.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20221111143921.742194-1-linux@rasmusvillemoes.dk>
- <20221111143921.742194-6-linux@rasmusvillemoes.dk>
- <20221112170705.7efe1673@jic23-huawei>
- <095a454b55cf497392a621649f24e067@analog.com>
- <20221114194447.2528f699@jic23-huawei>
- <0d6b3e4047df9f560079a562bc167bd7a0bf2d28.camel@gmail.com>
- <20221115161052.00002633@Huawei.com>
- <6d76cc6d-9db7-5b18-e4f1-dc220b3929a3@rasmusvillemoes.dk>
- <20221116102200.00003d16@Huawei.com>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <20221116102200.00003d16@Huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2] drm/gem-shmem: When drm_gem_object_init failed, should
+ release object
+To:     Chunyou Tang <tangchunyou@163.com>
+Cc:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        airlied@gmail.com, daniel@ffwll.ch, sumit.semwal@linaro.org,
+        christian.koenig@amd.com, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org
+References: <20221111033817.366-1-tangchunyou@163.com>
+ <2b4e38d8-d0ea-e85c-88f1-bb6a714ee0eb@suse.de>
+ <20221118183232.00007638@163.com>
+Content-Language: en-US
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20221118183232.00007638@163.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------XgM8ETXUekg0EOJsfaSYemnJ"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/11/2022 11.22, Jonathan Cameron wrote:
-> On Tue, 15 Nov 2022 20:10:53 +0100
-> Rasmus Villemoes <linux@rasmusvillemoes.dk> wrote:
-> 
->> On 15/11/2022 17.10, Jonathan Cameron wrote:
->>> On Tue, 15 Nov 2022 15:49:46 +0100
->>> Nuno Sá <noname.nuno@gmail.com> wrote:
->>>   
->>>> On Mon, 2022-11-14 at 19:44 +0000, Jonathan Cameron wrote:  
->>>>> On Mon, 14 Nov 2022 13:52:26 +0000
->>>>> "Tanislav, Cosmin" <Cosmin.Tanislav@analog.com> wrote:
->>>>>     
->>>>>>>
->>>>>>> I'm a little confused on polarity here.  The pin is a !reset so
->>>>>>> we need to drive it low briefly to trigger a reset.
->>>>>>> I'm guessing for your board the pin is set to active low? (an
->>>>>>> example
->>>>>>> in the dt would have made that clearer) Hence the pulse
->>>>>>> in here to 1 is actually briefly driving it low before restoring
->>>>>>> to high?
->>>>>>>
->>>>>>> For a pin documented as !reset that seems backwards though you
->>>>>>> have
->>>>>>> called it reset so that is fine, but this description doesn't
->>>>>>> make that
->>>>>>> celar.      
->>>>>>
->>>>>> My opinion is that the driver shouldn't exactly know the polarity
->>>>>> of the reset,
->>>>>> and just assume that setting the reset GPIO to 1 means putting it
->>>>>> in reset,
->>>>>> and setting it to 0 means bringing out of reset.    
->>>>>
->>>>> Agreed. I'd just like a comment + example in the dt-binding to make
->>>>> the point
->>>>> that the pin is !reset.
->>>>>
->>>>> Preferably with an example in the dt binding of the common case of it
->>>>> being wired
->>>>> up to an active low pin.
->>>>>
->>>>> The main oddity here is the need to pulse it rather than request it
->>>>> directly as
->>>>> in the reset state and then just set that to off.
->>>>>
->>>>>     
->>>>
->>>> Agreed... In theory we should be able to request the gpio with
->>>> GPIOD_OUT_HIGH and then just bring the device out of reset  
->>>
->>> If I recall correctly the datasheet specifically calls out that a pulse
->>> should be used.  No idea if that's actually true, or if it was meant
->>> to be there just to say it needs to be set for X nsecs.  
->>
->> So the data sheet says
->>
->>   The hardware reset is initiated by pulsing the RESET pin low. The
->> RESET pulse width must comply with the specifications in Table 11.
->>
->> and table 11 says that the pulse must be min 50us, max 1ms. We don't
->> really have any way whatsoever to ensure that we're not rescheduled
->> right before pulling the gpio high again (deasserting the reset), so the
->> pulse could effectively be much more than 1ms. But I have a hard time
->> believing that that actually matters (i.e., what state would the chip be
->> in if we happen to make a pulse 1234us wide?).
-> 
-> Test it maybe?  Otherwise we'd have to play games to do it again if the
-> timing was too long to ensure after a couple of goes we do get a suitable
-> width pulse.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------XgM8ETXUekg0EOJsfaSYemnJ
+Content-Type: multipart/mixed; boundary="------------C0QJjKI0qwoGRcl2Yt0IOPHd";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Chunyou Tang <tangchunyou@163.com>
+Cc: maarten.lankhorst@linux.intel.com, mripard@kernel.org, airlied@gmail.com,
+ daniel@ffwll.ch, sumit.semwal@linaro.org, christian.koenig@amd.com,
+ dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+Message-ID: <b4681075-ea53-637f-0df5-3cc5891a102e@suse.de>
+Subject: Re: [PATCH v2] drm/gem-shmem: When drm_gem_object_init failed, should
+ release object
+References: <20221111033817.366-1-tangchunyou@163.com>
+ <2b4e38d8-d0ea-e85c-88f1-bb6a714ee0eb@suse.de>
+ <20221118183232.00007638@163.com>
+In-Reply-To: <20221118183232.00007638@163.com>
 
-So I've booted quite a number of times with various large sleep values
-(between 1 and 10ms), and never seen a problem. Our hardware guys also
-confirm that there should be no such thing as a "too long" pulse.
+--------------C0QJjKI0qwoGRcl2Yt0IOPHd
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-So do you want me to respin, moving the gpio request into the reset
-function (i.e. not storing the descriptor in the ad74413r_state as Nuno
-pointed out), requesting it in asserted state, and then, if the gpio was
-found, just do the fsleep(50) and then deassert it?
+SGkNCg0KQW0gMTguMTEuMjIgdW0gMTE6MzIgc2NocmllYiBDaHVueW91IFRhbmc6DQo+IEhp
+IFRob21hcywNCj4gICAgIENhbiBJIGRpc2NhcmQgdGhlIGZpcnN0IHR3byBwYXRjaHMsIGFu
+ZCBwdWxsIHRoZSBuZXcgY29kZSwgdGhlbg0KPiAgICAgbW9kaWZ5IGFuZCBnaXQgc2VuZC1l
+bWFpbCB0aGlzIHBhdGNoPw0KDQpZZXMsIG9mIGNvdXJzZS4gSnVzdCBtYWtlIHN1cmUgdGhh
+dCB0aGUgbmV4dCB2ZXJzaW9uIGlzIG1hcmtlZCBhcyB2Mywgc28gDQppdCdzIG9idmlvdXMg
+d2hhdCBpdCBiZWxvbmdzIHRvLg0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQo+IA0KPiAN
+Cj4g5LqOIFRodSwgMTcgTm92IDIwMjIgMTQ6NDI6MzYgKzAxMDANCj4gVGhvbWFzIFppbW1l
+cm1hbm4gPHR6aW1tZXJtYW5uQHN1c2UuZGU+IOWGmemBkzoNCj4gDQo+PiBIaQ0KPj4NCj4+
+IEFtIDExLjExLjIyIHVtIDA0OjM4IHNjaHJpZWIgQ2h1bnlvdVRhbmc6DQo+Pj4gd2hlbiBn
+b3RvIGVycl9mcmVlLCB0aGUgb2JqZWN0IGhhZCBpbml0LCBzbyBpdCBzaG91bGQgYmUgcmVs
+ZWFzZQ0KPj4+IHdoZW4gZmFpbC4NCj4+Pg0KPj4+IFNpZ25lZC1vZmYtYnk6IENodW55b3VU
+YW5nIDx0YW5nY2h1bnlvdUAxNjMuY29tPg0KPj4+IC0tLQ0KPj4+ICAgIGRyaXZlcnMvZ3B1
+L2RybS9kcm1fZ2VtLmMgICAgICAgICAgICAgIHwgMTkgKysrKysrKysrKysrKysrKy0tLQ0K
+Pj4+ICAgIGRyaXZlcnMvZ3B1L2RybS9kcm1fZ2VtX3NobWVtX2hlbHBlci5jIHwgIDQgKysr
+LQ0KPj4+ICAgIGluY2x1ZGUvZHJtL2RybV9nZW0uaCAgICAgICAgICAgICAgICAgIHwgIDEg
+Kw0KPj4+ICAgIDMgZmlsZXMgY2hhbmdlZCwgMjAgaW5zZXJ0aW9ucygrKSwgNCBkZWxldGlv
+bnMoLSkNCj4+Pg0KPj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vZHJtX2dlbS5j
+IGIvZHJpdmVycy9ncHUvZHJtL2RybV9nZW0uYw0KPj4+IGluZGV4IDhiNjhhM2MxZTZhYi4u
+Y2JhMzJjNDZiYjA1IDEwMDY0NA0KPj4+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9kcm1fZ2Vt
+LmMNCj4+PiArKysgYi9kcml2ZXJzL2dwdS9kcm0vZHJtX2dlbS5jDQo+Pj4gQEAgLTE2OSw2
+ICsxNjksMjEgQEAgdm9pZCBkcm1fZ2VtX3ByaXZhdGVfb2JqZWN0X2luaXQoc3RydWN0DQo+
+Pj4gZHJtX2RldmljZSAqZGV2LCB9DQo+Pj4gICAgRVhQT1JUX1NZTUJPTChkcm1fZ2VtX3By
+aXZhdGVfb2JqZWN0X2luaXQpOw0KPj4+ICAgIA0KPj4+ICsvKioNCj4+PiArICogZHJtX2dl
+bV9wcml2YXRlX29iamVjdF9maW5pIC0gRmluYWxpemUgYSBmYWlsZWQgZHJtX2dlbV9vYmpl
+Y3QNCj4+PiArICogQG9iajogZHJtX2dlbV9vYmplY3QNCj4+PiArICoNCj4+PiArICogVW5p
+bml0aWFsaXplIGFuIGFscmVhZHkgYWxsb2NhdGVkIEdFTSBvYmplY3Qgd2hlbiBpdA0KPj4+
+IGluaXRpYWxpemVkIGZhaWxlZA0KPj4+ICsgKi8NCj4+PiArdm9pZCBkcm1fZ2VtX3ByaXZh
+dGVfb2JqZWN0X2Zpbmkoc3RydWN0IGRybV9nZW1fb2JqZWN0ICpvYmopDQo+Pj4gK3sNCj4+
+PiArCVdBUk5fT04ob2JqLT5kbWFfYnVmKTsNCj4+DQo+PiBSYXRoZXIgbGVhc2UgdGhpcyBp
+biBpdHMgb3JpZ2luYWwgcGxhY2UuDQo+Pg0KPj4+ICsNCj4+PiArCWRtYV9yZXN2X2Zpbmko
+Jm9iai0+X3Jlc3YpOw0KPj4+ICsJZHJtX2dlbV9scnVfcmVtb3ZlKG9iaik7DQo+Pg0KPj4g
+QUZBSUNUIGRybV9nZW1fbHJ1X3JlbW92ZSgpIGRvZXNuJ3QgYmVsb25nIGludG8gdGhpcyBm
+dW5jdGlvbi4NCj4+DQo+Pj4gK30NCj4+PiArRVhQT1JUX1NZTUJPTChkcm1fZ2VtX3ByaXZh
+dGVfb2JqZWN0X2ZpbmkpOw0KPj4+ICsNCj4+PiAgICAvKioNCj4+PiAgICAgKiBkcm1fZ2Vt
+X29iamVjdF9oYW5kbGVfZnJlZSAtIHJlbGVhc2UgcmVzb3VyY2VzIGJvdW5kIHRvDQo+Pj4g
+dXNlcnNwYWNlIGhhbmRsZXMNCj4+PiAgICAgKiBAb2JqOiBHRU0gb2JqZWN0IHRvIGNsZWFu
+IHVwLg0KPj4+IEBAIC05MzAsMTQgKzk0NSwxMiBAQCBkcm1fZ2VtX3JlbGVhc2Uoc3RydWN0
+IGRybV9kZXZpY2UgKmRldiwNCj4+PiBzdHJ1Y3QgZHJtX2ZpbGUgKmZpbGVfcHJpdmF0ZSkg
+dm9pZA0KPj4+ICAgIGRybV9nZW1fb2JqZWN0X3JlbGVhc2Uoc3RydWN0IGRybV9nZW1fb2Jq
+ZWN0ICpvYmopDQo+Pj4gICAgew0KPj4+IC0JV0FSTl9PTihvYmotPmRtYV9idWYpOw0KPj4+
+ICsJZHJtX2dlbV9wcml2YXRlX29iamVjdF9maW5pKG9iaik7DQo+Pj4gICAgDQo+Pj4gICAg
+CWlmIChvYmotPmZpbHApDQo+Pj4gICAgCQlmcHV0KG9iai0+ZmlscCk7DQo+Pj4gICAgDQo+
+Pj4gLQlkbWFfcmVzdl9maW5pKCZvYmotPl9yZXN2KTsNCj4+DQo+PiBQbGVhc2UgY2FsbCBk
+cm1fZ2VtX3ByaXZhdGVfb2JqZWN0X2ZpbmkoKSBoZXJlLg0KPj4NCj4+PiAgICAJZHJtX2dl
+bV9mcmVlX21tYXBfb2Zmc2V0KG9iaik7DQo+Pj4gLQlkcm1fZ2VtX2xydV9yZW1vdmUob2Jq
+KTsNCj4+DQo+PiBQbGVhc2Uga2VlcCB0aGlzIGxpbmUgaGVyZS4NCj4+DQo+PiBCZXN0IHJl
+Z2FyZHMNCj4+IFRob21hcw0KPj4NCj4+PiAgICB9DQo+Pj4gICAgRVhQT1JUX1NZTUJPTChk
+cm1fZ2VtX29iamVjdF9yZWxlYXNlKTsNCj4+PiAgICANCj4+PiBkaWZmIC0tZ2l0IGEvZHJp
+dmVycy9ncHUvZHJtL2RybV9nZW1fc2htZW1faGVscGVyLmMNCj4+PiBiL2RyaXZlcnMvZ3B1
+L2RybS9kcm1fZ2VtX3NobWVtX2hlbHBlci5jIGluZGV4DQo+Pj4gMzUxMzhmOGEzNzVjLi44
+NDVlM2Q1ZDcxZWIgMTAwNjQ0IC0tLQ0KPj4+IGEvZHJpdmVycy9ncHUvZHJtL2RybV9nZW1f
+c2htZW1faGVscGVyLmMgKysrDQo+Pj4gYi9kcml2ZXJzL2dwdS9kcm0vZHJtX2dlbV9zaG1l
+bV9oZWxwZXIuYyBAQCAtNzksOCArNzksMTAgQEANCj4+PiBfX2RybV9nZW1fc2htZW1fY3Jl
+YXRlKHN0cnVjdCBkcm1fZGV2aWNlICpkZXYsIHNpemVfdCBzaXplLCBib29sDQo+Pj4gcHJp
+dmF0ZSkgfSBlbHNlIHsgcmV0ID0gZHJtX2dlbV9vYmplY3RfaW5pdChkZXYsIG9iaiwgc2l6
+ZSk7DQo+Pj4gICAgCX0NCj4+PiAtCWlmIChyZXQpDQo+Pj4gKwlpZiAocmV0KSB7DQo+Pj4g
+KwkJZHJtX2dlbV9wcml2YXRlX29iamVjdF9maW5pKG9iaikNCj4+PiAgICAJCWdvdG8gZXJy
+X2ZyZWU7DQo+Pj4gKwl9DQo+Pj4gICAgDQo+Pj4gICAgCXJldCA9IGRybV9nZW1fY3JlYXRl
+X21tYXBfb2Zmc2V0KG9iaik7DQo+Pj4gICAgCWlmIChyZXQpDQo+Pj4gZGlmZiAtLWdpdCBh
+L2luY2x1ZGUvZHJtL2RybV9nZW0uaCBiL2luY2x1ZGUvZHJtL2RybV9nZW0uaA0KPj4+IGlu
+ZGV4IGJkNDJmMjVlNDQ5Yy4uOWIxZmViMDMwNjlkIDEwMDY0NA0KPj4+IC0tLSBhL2luY2x1
+ZGUvZHJtL2RybV9nZW0uaA0KPj4+ICsrKyBiL2luY2x1ZGUvZHJtL2RybV9nZW0uaA0KPj4+
+IEBAIC00MDUsNiArNDA1LDcgQEAgaW50IGRybV9nZW1fb2JqZWN0X2luaXQoc3RydWN0IGRy
+bV9kZXZpY2UgKmRldiwNCj4+PiAgICAJCQlzdHJ1Y3QgZHJtX2dlbV9vYmplY3QgKm9iaiwg
+c2l6ZV90IHNpemUpOw0KPj4+ICAgIHZvaWQgZHJtX2dlbV9wcml2YXRlX29iamVjdF9pbml0
+KHN0cnVjdCBkcm1fZGV2aWNlICpkZXYsDQo+Pj4gICAgCQkJCSBzdHJ1Y3QgZHJtX2dlbV9v
+YmplY3QgKm9iaiwNCj4+PiBzaXplX3Qgc2l6ZSk7ICt2b2lkIGRybV9nZW1fcHJpdmF0ZV9v
+YmplY3RfZmluaShzdHJ1Y3QNCj4+PiBkcm1fZ2VtX29iamVjdCAqb2JqKTsgdm9pZCBkcm1f
+Z2VtX3ZtX29wZW4oc3RydWN0IHZtX2FyZWFfc3RydWN0DQo+Pj4gKnZtYSk7IHZvaWQgZHJt
+X2dlbV92bV9jbG9zZShzdHJ1Y3Qgdm1fYXJlYV9zdHJ1Y3QgKnZtYSk7DQo+Pj4gICAgaW50
+IGRybV9nZW1fbW1hcF9vYmooc3RydWN0IGRybV9nZW1fb2JqZWN0ICpvYmosIHVuc2lnbmVk
+IGxvbmcNCj4+PiBvYmpfc2l6ZSwNCj4+DQo+IA0KDQotLSANClRob21hcyBaaW1tZXJtYW5u
+DQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBH
+ZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0K
+KEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rl
+dg0K
 
-Rasmus
+--------------C0QJjKI0qwoGRcl2Yt0IOPHd--
 
+--------------XgM8ETXUekg0EOJsfaSYemnJ
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmN3ar0FAwAAAAAACgkQlh/E3EQov+AQ
+cxAAj0bf/fYJ3JvbpYSlat9Qo5WZ+4xZ1ypD0on92QLSIWGejH5cUbRoQLhuql2LEWLHThXyM0CG
+P4QMnK2vS8mVyGqVScRQ47LljkmJN9Qd+TomGP5vvMUoHtovhyKDd/yDWZmkGjHw16yJtEon0SBH
+m5vODEgxtB9aK5xex+6MiDJkZg22Div6Pewr1MGTYx4Smu7pxs1SjC7Qzwwf7bDzPhgIVmPsJFVB
+VatoAVlpx9pOFxL79TLR2+6wBCssNK/f+e4BDdObFxnK/zO31oHZ/uf17Ibmxxyak1i0LybQpLvX
+T3Vmh/yvOGDPRuTuTLiASANnJTGR9l1i23rtldVLPAenl9jG3RX4CWmaO7PJCNEBPQbE+rjPLz+U
+/xU/vQoZe3VdX3L44FdS6gMTh4ddqZYgRB+xu9ml9rs6uXiSqRT5dXNwq7/2FppblKqme8FmjKJR
+ts4jfPiS36QkCp8vnsLW+AJ5kzwZU+/giXRUiZVGEIFA//SUB8LHVn1jddfuBLlZHy5Ul0zz4H+G
+Uqmyd24JbbVzm9Nq6ZzXF3ODBln9r351bsY2vjDXaj46JL2kI+rIt9tH2IQi9OWRsilJ9taWafGY
+dngwZ1p7uDmsbBXjslP2wVRGFVxd0n13eA9Sd252mueqomLVtiuvvw+WCK+83XAkbNIkiv2NMaNr
+9ew=
+=SGdM
+-----END PGP SIGNATURE-----
+
+--------------XgM8ETXUekg0EOJsfaSYemnJ--
