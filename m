@@ -2,128 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B8D362EF69
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 09:29:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3EBE62EF72
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 09:30:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241301AbiKRI3f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 03:29:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48622 "EHLO
+        id S241275AbiKRIan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 03:30:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241510AbiKRI2y (ORCPT
+        with ESMTP id S241520AbiKRI35 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 03:28:54 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B243456D42;
-        Fri, 18 Nov 2022 00:28:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668760125; x=1700296125;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=pj4icQo/3SDwLzMdLGGF/AiqY6uFNaqQhgY/3+LxkaU=;
-  b=hPHWrcaldjfcCkTcJX6Om1WYctwbWdBuP4YsK5tcZdjWaPQhGpnPUKPr
-   TqfW6zLmUpHThJU4gV+V2cS4za6QfBPk8pUju+qlbitT39jSQHoJzfJYw
-   1hwqNvJNhaRbXwyiw2gYesFVnFKkoBBfAAVxSd/4ayh2zqYKRMJ5aYJpe
-   pfZFygwNYRLZ4LpL0ZeP+Cm5owDRR32dDbONQR6tmi2xDOrJaRkjyF5pa
-   IkVg2tRuRfxhva7dTSyls2bRAPmNLm74YImu81jK3XLQG7i9L6q5RSZ5n
-   AeEzwt5cgQOnhVmK7lrtua8pFjGxNrbkld9E+khVrFxku2CQHIyqVuufo
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="313098984"
-X-IronPort-AV: E=Sophos;i="5.96,173,1665471600"; 
-   d="scan'208";a="313098984"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2022 00:28:44 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="640133346"
-X-IronPort-AV: E=Sophos;i="5.96,173,1665471600"; 
-   d="scan'208";a="640133346"
-Received: from sqa-gate.sh.intel.com (HELO robert-ivt.tsp.org) ([10.239.48.212])
-  by orsmga002.jf.intel.com with ESMTP; 18 Nov 2022 00:28:42 -0800
-Message-ID: <1f3522327e604e05b3e0d109cdbfded29db0244e.camel@linux.intel.com>
-Subject: Re: [PATCH] KVM: x86/mmu: simplify kvm_tdp_mmu_map flow when guest
- has to retry
-From:   Robert Hoo <robert.hu@linux.intel.com>
-To:     David Matlack <dmatlack@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, seanjc@google.com
-Date:   Fri, 18 Nov 2022 16:28:41 +0800
-In-Reply-To: <CALzav=dEmxV1wuNjuN2rzKsNunvwbdZWqr5K6KFZruEW=oYZSQ@mail.gmail.com>
-References: <20221117161449.114086-1-pbonzini@redhat.com>
-         <2b18a49dbe946bcbea29be13f5e0f03eacf75cdc.camel@linux.intel.com>
-         <CALzav=dEmxV1wuNjuN2rzKsNunvwbdZWqr5K6KFZruEW=oYZSQ@mail.gmail.com>
+        Fri, 18 Nov 2022 03:29:57 -0500
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502AB45EED;
+        Fri, 18 Nov 2022 00:29:27 -0800 (PST)
+Received: by mail-qt1-f172.google.com with SMTP id l15so2718399qtv.4;
+        Fri, 18 Nov 2022 00:29:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oW1s8w8JVv/wucuGCYQ/JynUk15BPhcJ2fHJb+VHmyA=;
+        b=zXEj0l/2GiditxAoWDgaZJVsDvbhX90bMMH8+iEqSeUBtL0qzHLLzDVVFndcu/rbib
+         w3NVomJF81XdgKi68RqRFf85CDZN2jaJDOX/kFn+fYCGU/ONqIXS534d/8XTCjI1nAFO
+         yMaTAvz+FtxOsb50bYkyStypVtEkl6F3ZUdIR88bmvtno4OGGNS9Te/AYSs6uJtkTkUY
+         alMVDeYWvGVfudDott7mXltmGpVoELpo18LUTrX+epspTAIdoLrC6pZ244cDDEzMXvRT
+         ydQHoOsrzemgBKm0P2lmN/jsbA84+xfmeRLFd36+7lGKvZdT7CpppNUL0uVsJqMrzM6a
+         MCVw==
+X-Gm-Message-State: ANoB5pnBBimaMAf0sP31w3kkFFCXI29aQp5dpxvp2IOsPz3ixgNInGun
+        Zs7W6zLewLuzc0rIXXL1FzFkM1Bg2fcUVQ==
+X-Google-Smtp-Source: AA0mqf5pFJSnCQNCzgktDIe9BOZ+YJg6Bjp/RENK9j8HJLEgxDkMYtneY5zTAQJQ21KCMQiSf36DUg==
+X-Received: by 2002:a05:622a:429a:b0:3a1:e533:23a7 with SMTP id cr26-20020a05622a429a00b003a1e53323a7mr5533205qtb.197.1668760166111;
+        Fri, 18 Nov 2022 00:29:26 -0800 (PST)
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com. [209.85.128.177])
+        by smtp.gmail.com with ESMTPSA id dt54-20020a05620a47b600b006fbc0da4b0csm2040195qkb.48.2022.11.18.00.29.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Nov 2022 00:29:25 -0800 (PST)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-3938dc90ab0so23796727b3.4;
+        Fri, 18 Nov 2022 00:29:25 -0800 (PST)
+X-Received: by 2002:a05:690c:b81:b0:37e:6806:a5f9 with SMTP id
+ ck1-20020a05690c0b8100b0037e6806a5f9mr5549359ywb.47.1668760164716; Fri, 18
+ Nov 2022 00:29:24 -0800 (PST)
+MIME-Version: 1.0
+References: <d1ecf500f07e063d4e8e34f4045ddca55416c686.1668507036.git.geert+renesas@glider.be>
+ <20221116123115.6b49e1b8@kernel.org> <CAAvyFNhbsks96=yyWHDCi-u+A1vaEy845_+pytghAscoG0rrTQ@mail.gmail.com>
+ <20221116141519.0ef42fa2@kernel.org> <CAAvyFNjHp8-iq_A08O_H2VwEBLZRQe+=LzBm45ekgOZ4afnWqA@mail.gmail.com>
+In-Reply-To: <CAAvyFNjHp8-iq_A08O_H2VwEBLZRQe+=LzBm45ekgOZ4afnWqA@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 18 Nov 2022 09:29:13 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVQdax10pAgNBbAVDXgVVTAQC93GR1f_4DuKfdAXngNMA@mail.gmail.com>
+Message-ID: <CAMuHMdVQdax10pAgNBbAVDXgVVTAQC93GR1f_4DuKfdAXngNMA@mail.gmail.com>
+Subject: Re: [PATCH net-next] tcp: Fix tcp_syn_flood_action() if CONFIG_IPV6=n
+To:     Jamie Bainbridge <jamie.bainbridge@gmail.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Chris Down <chris@chrisdown.name>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-10.el7) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-11-17 at 20:00 -0800, David Matlack wrote:
-> On Thu, Nov 17, 2022 at 5:35 PM Robert Hoo <robert.hu@linux.intel.com
-> > wrote:
-> > 
-> > On Thu, 2022-11-17 at 11:14 -0500, Paolo Bonzini wrote:
-> > > +
-> > >               if (fault->nx_huge_page_workaround_enabled)
-> > >                       disallowed_hugepage_adjust(fault,
-> > > iter.old_spte, iter.level);
-> > > 
-> > 
-> > And here can also be improved, I think.
-> > 
-> >         tdp_mmu_for_each_pte(iter, mmu, fault->gfn, fault->gfn + 1)
-> > {
-> > -               if (fault->nx_huge_page_workaround_enabled)
-> > +               if (fault->huge_page_disallowed)
-> > 
-> > in the case of !fault->exec && fault-
-> > >nx_huge_page_workaround_enabled,
-> > huge page should be still allowed, shouldn't it?
-> > 
-> > If you agree, I can send out a patch for this. I've roughly tested
-> > this, with an ordinary guest boot, works normally.
-> 
-> This check handles the case where a read or write fault occurs within
-> a region that has already been split due to an NX huge page. 
+Hi Jamie,
 
-By NX huge page split, the sub-sptes are installed, if my understanding
-is right. So no fault should happen when next r/w access.
+On Fri, Nov 18, 2022 at 2:50 AM Jamie Bainbridge
+<jamie.bainbridge@gmail.com> wrote:
+> On Thu, 17 Nov 2022 at 08:15, Jakub Kicinski <kuba@kernel.org> wrote:
+> > On Thu, 17 Nov 2022 08:39:43 +1100 Jamie Bainbridge wrote:
+> > > >         if (v6) {
+> > > > #ifdef v6
+> > > >                 expensive_call6();
+> > > > #endif
+> > > >         } else {
+> > > >                 expensive_call6();
+> > > >         }
+> > >
+> > > These should work, but I expect they cause a comparison which can't be
+> > > optimised out at compile time. This is probably why the first style
+> > > exists.
+> > >
+> > > In this SYN flood codepath optimisation doesn't matter because we're
+> > > doing ratelimited logging anyway. But if we're breaking with existing
+> > > style, then wouldn't the others also have to change to this style? I
+> > > haven't reviewed all the other usage to tell if they're in an oft-used
+> > > fastpath where such a thing might matter.
+> >
+> > I think the word style already implies subjectivity.
+>
+> You are right. Looking further, there are many other ways
+> IF_ENABLED(CONFIG_IPV6) is used, including similar to the ways you
+> have suggested.
+>
+> I don't mind Geert's original patch, but if you want a different
+> style, I like your suggestion with v4 first:
+>
+>         if (v4) {
+>                 expensive_call4();
+> #ifdef v6
+>         } else {
+>                 expensive_call6();
+> #endif
+>         }
 
-> If we
-> recovered the NX Huge Page on such faults, the guest could end up
-> continuously faulting on the same huge page (e.g. if writing to one
-> page and executing from another within a GPA region backed by a huge
-> page). So instead, NX Huge Page recovery is done periodically by a
-> background thread.
+IMHO this is worse, as the #ifdef/#endif is spread across the two branches
+of an if-conditional.
 
-Do you mean the kvm_nx_huge_page_recovery_worker() kthread? My
-understanding is that it recycles SPs that was created by NX huge page
-split. This would cause above fault happened, I guess, i.e. the
-previously installed spte is zapped by the child SP recycled.
+Hence this is usually written as:
 
-OK, understand you point now, if let r/w access fault of your mentioned
-type skip disallowed_hugepage_adjust(), then it will break out and huge
-page will be installed. Then next exec access will cause the huge page
-split; then next r/w access fault will install a huge page again ... 
-> 
-> That being said, I'm not surprised you didn't encounter any issues
-> when testing. Now that the TDP MMU fully splits NX Huge Pages on
-> fault, such faults should be rare at best. Perhaps even impossible?
+            if (cond1) {
+                    expensive_call1();
+            }
+    #ifdef cond2_enabled
+           else {
+                    expensive_call1();
+            }
+    #endif
 
-Possible, and not rare, I added debug info in
-disallowed_hugepage_adjust() and showed hits.
+Gr{oetje,eeting}s,
 
-> Hm, can we can drop the call to disallowed_hugepage_adjust()
-> entirely?
+                        Geert
 
-I guess not, keep it as is. Though rare, even impossible, what if
-is_nx_huge_page_enabled() changed during the run time? e.g. NX huge
-page enabled --> disabled, give it a chance to restore huge page
-mapping?
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
