@@ -2,131 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4BA66302DC
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 00:19:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33155630437
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 00:38:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235251AbiKRXTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 18:19:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57664 "EHLO
+        id S236687AbiKRXhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 18:37:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235221AbiKRXTM (ORCPT
+        with ESMTP id S236484AbiKRXdF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 18:19:12 -0500
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25A5A6586
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:05:17 -0800 (PST)
-Received: by mail-il1-x12f.google.com with SMTP id z9so3240377ilu.10
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:05:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=melexis.com; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hcv0U9RA+vDA9upkxZULEoF7+i0Z2qrHrSP2q1DX1uI=;
-        b=LuEDXjvc1rXUwB/TcXOpzaSlq39VeCfivycJtdw1qlQ+WAFGXHsF0nzPH1DRR7PNAX
-         +STQXR06f0MswwMsEKbhOUfS/GECgPZsaFICtRi+Jihm/UoOiUiPnxyemNh+7mhEilXE
-         +/9SzqQwsDbWKFp9EDtm/y1RRS++r8Cr9E2N4GzJ7lmu48xb62ERPDuOkM84K5kB+KjF
-         o4OfMtgLTcyAMJFNrRmHqp+VbYGOAUXU/GctRZPY/HJcroOqp/LRMSDCIji91f6NLCnW
-         dFWHAKBDtq9tii/Pto4ONi/ngPZigKxcUAjUKSzeO1/ICXqE9CT2f7dvbQNue1NT9UZ3
-         k9Hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hcv0U9RA+vDA9upkxZULEoF7+i0Z2qrHrSP2q1DX1uI=;
-        b=nFfYz6/0gngmUZRSjsjJ3v9dC1/1uudGMl64ogqB+fRW28ABY4XeQaZEM6dT6VMtgA
-         eQBLhmiITBk84lmx3Jas/6MWcbZM27i0AZacQc/AZVhwvy0jUQcKU1+60FDzA0BkEU0M
-         dQyxrLA9NXxSTJvDwAdGUAECexhNV/6mjrSTHhcm86VRhDjAdNb/dHMXCTWFgyhvT8+M
-         xz9/gyape+NkClYtr6n3/3lHSQztyUTW8kIAIfrbnSO/0RSvN2IDwoVbrcLVL/SjC9T9
-         Lj4EgnHUuTmnCJdzV0VMln3PWBavvCCMGTeILSY3xEvCxvNkyN6l4colPz4qtF1aKEOV
-         POfQ==
-X-Gm-Message-State: ANoB5pm4XjMwuHaDrZVof//Ec9KpLPDUdS4x2Aez3PLEGBASsBwwL9Zs
-        djDUFSys7939fV3UwLPssNDOXdvYpx/3ldPX0hHxHg==
-X-Google-Smtp-Source: AA0mqf6TXGmJtrR7jE/2JWQrw8ENhk/Vqgy9Fu67/k4HDhw2vCGjMC52XYvwjVEIYLddVV45ejM4juQqtL1ETmoYzeA=
-X-Received: by 2002:a92:d7c3:0:b0:300:e7a1:1404 with SMTP id
- g3-20020a92d7c3000000b00300e7a11404mr4147037ilq.281.1668812717232; Fri, 18
- Nov 2022 15:05:17 -0800 (PST)
+        Fri, 18 Nov 2022 18:33:05 -0500
+X-Greylist: delayed 600 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 18 Nov 2022 15:21:12 PST
+Received: from ixit.cz (ip-89-177-23-149.bb.vodafone.cz [89.177.23.149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F6425D3;
+        Fri, 18 Nov 2022 15:21:12 -0800 (PST)
+Received: from [10.0.0.163] (_gateway [10.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ixit.cz (Postfix) with ESMTPSA id BB27723094;
+        Sat, 19 Nov 2022 00:05:35 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+        t=1668812735;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FUkjlDNArKjjQ8kJZjGwzF/3HUFx7XOdaVbyxfCWcUE=;
+        b=b1swgfixVG0FdjL+U8GaKKbsNZMUrJWDHjsK/Rd2P3cz8KUyn/0pnKUrjBI0SXjYmdYrR0
+        2V+F79kEOoejoa6HrzAYl6/NKzo9gM7FkNlDMBo+Mmo62KzWCavXK/xDSaYZYotmG5MGqY
+        Rb/FwxzNF/ZFkzIl8/uwNGQIXOoDtTo=
+Message-ID: <0ff119d8-958b-4978-83c7-e066b8e0cab9@ixit.cz>
+Date:   Sat, 19 Nov 2022 00:05:35 +0100
 MIME-Version: 1.0
-References: <20221118224540.619276-1-uwe@kleine-koenig.org> <20221118224540.619276-187-uwe@kleine-koenig.org>
-In-Reply-To: <20221118224540.619276-187-uwe@kleine-koenig.org>
-From:   Crt Mori <cmo@melexis.com>
-Date:   Sat, 19 Nov 2022 00:04:41 +0100
-Message-ID: <CAKv63uvVsLhbt9y0fWxPWp005rnWzCn6Vm0UmOnW08B87fkCzw@mail.gmail.com>
-Subject: Re: [PATCH 186/606] iio: temperature: mlx90632: Convert to i2c's .probe_new()
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <uwe@kleine-koenig.org>
-Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:104.0) Gecko/20100101
+ Thunderbird/104.0
+Subject: Re: [PATCH 114/606] iio: light: al3010: Convert to i2c's .probe_new()
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <uwe@kleine-koenig.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>, linux-i2c@vger.kernel.org,
-        kernel@pengutronix.de,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>
+Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
         Lars-Peter Clausen <lars@metafoo.de>,
         linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-115-uwe@kleine-koenig.org>
+Content-Language: en-US
+From:   David Heidelberg <david@ixit.cz>
+In-Reply-To: <20221118224540.619276-115-uwe@kleine-koenig.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Nov 2022 at 23:46, Uwe Kleine-K=C3=B6nig <uwe@kleine-koenig.org>=
- wrote:
+Thank you!
+
+Reviewed-by: David Heidelberg <david@ixit.cz>
+
+On 18/11/2022 23:37, Uwe Kleine-König wrote:
+> From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 >
-> From: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+> The probe function doesn't make use of the i2c_device_id * parameter so it
+> can be trivially converted.
 >
-> .probe_new() doesn't get the i2c_device_id * parameter, so determine
-> that explicitly in the probe function.
->
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 > ---
->  drivers/iio/temperature/mlx90632.c | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
+>   drivers/iio/light/al3010.c | 5 ++---
+>   1 file changed, 2 insertions(+), 3 deletions(-)
 >
-> diff --git a/drivers/iio/temperature/mlx90632.c b/drivers/iio/temperature=
-/mlx90632.c
-> index f1f5ebc145b1..19e30cfca8a7 100644
-> --- a/drivers/iio/temperature/mlx90632.c
-> +++ b/drivers/iio/temperature/mlx90632.c
-> @@ -1168,9 +1168,9 @@ static int mlx90632_enable_regulator(struct mlx9063=
-2_data *data)
->         return ret;
->  }
->
-> -static int mlx90632_probe(struct i2c_client *client,
-> -                         const struct i2c_device_id *id)
-> +static int mlx90632_probe(struct i2c_client *client)
->  {
-> +       const struct i2c_device_id *id =3D i2c_client_get_device_id(clien=
-t);
->         struct mlx90632_data *mlx90632;
->         struct iio_dev *indio_dev;
->         struct regmap *regmap;
-> @@ -1337,7 +1337,15 @@ static struct i2c_driver mlx90632_driver =3D {
->                 .of_match_table =3D mlx90632_of_match,
->                 .pm     =3D pm_ptr(&mlx90632_pm_ops),
->         },
-> +<<<<<<< ours
+> diff --git a/drivers/iio/light/al3010.c b/drivers/iio/light/al3010.c
+> index ce5363845b22..69cc723e2ac4 100644
+> --- a/drivers/iio/light/al3010.c
+> +++ b/drivers/iio/light/al3010.c
+> @@ -164,8 +164,7 @@ static const struct iio_info al3010_info = {
+>   	.attrs		= &al3010_attribute_group,
+>   };
+>   
+> -static int al3010_probe(struct i2c_client *client,
+> -			const struct i2c_device_id *id)
+> +static int al3010_probe(struct i2c_client *client)
+>   {
+>   	struct al3010_data *data;
+>   	struct iio_dev *indio_dev;
+> @@ -230,7 +229,7 @@ static struct i2c_driver al3010_driver = {
+>   		.of_match_table = al3010_of_match,
+>   		.pm = pm_sleep_ptr(&al3010_pm_ops),
+>   	},
+> -	.probe		= al3010_probe,
+> +	.probe_new	= al3010_probe,
+>   	.id_table	= al3010_id,
+>   };
+>   module_i2c_driver(al3010_driver);
 
-Maybe some of the merge artifacts left (also below)?
+-- 
+David Heidelberg
+Consultant Software Engineer
 
->         .probe =3D mlx90632_probe,
-> +||||||| base
-> +       .probe =3D mlx90632_probe,
-> +       .remove =3D mlx90632_remove,
-> +=3D=3D=3D=3D=3D=3D=3D
-> +       .probe_new =3D mlx90632_probe,
-> +       .remove =3D mlx90632_remove,
-> +>>>>>>> theirs
->         .id_table =3D mlx90632_id,
->  };
->  module_i2c_driver(mlx90632_driver);
-> --
-> 2.38.1
->
