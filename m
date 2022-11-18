@@ -2,96 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5677962F592
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 14:10:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25BAE62F594
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 14:10:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235288AbiKRNKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 08:10:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37064 "EHLO
+        id S235357AbiKRNKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 08:10:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235025AbiKRNKJ (ORCPT
+        with ESMTP id S239931AbiKRNKS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 08:10:09 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D8879924;
-        Fri, 18 Nov 2022 05:10:09 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668777007;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2sQ2nYbs7q2LvKQWN/vpHz4cGjWuxM1X+erIeeKMnvQ=;
-        b=0A9i3Mx6WEiyEzdF3cAhpSmISzWa8rM84qwpb8WqghriBd6bSawXQNCKorr6O2dmcH3vmJ
-        E82SXmpkCxubxIzrWufJSiOPjAfUZfQrrnPs0CIKLuzat/kiIuy21SCFLyF6/nILsWCyNn
-        8kcVYZNWJJ5lt6ZyguktISsreXDUEJuFzuQG9HIymPlyEO0qHvwOg1PXLa6yPUB2I7zdRC
-        pQofjwVSDzcCvJpZt86lEHHg7aAglOrCnIkgKt9k4XSWAE0JPjQcBCGL6WnBLe4iXaLz7v
-        1XyArzV7ahMPxWw02L0zF4VOFdNSL6I4ctMRMkbvvIcEtdeGb2C5lo/mfMMHZg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668777007;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2sQ2nYbs7q2LvKQWN/vpHz4cGjWuxM1X+erIeeKMnvQ=;
-        b=C61NH3MOizEq+w7szJQVDojaOaBwVfIl8ZtLn6rOn+wgWfAgg9gGQlSMAA1iVV6CtzLX5u
-        P5c982TClUf7/HBQ==
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     "x86@kernel.org" <x86@kernel.org>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jason Gunthorpe <jgg@mellanox.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        "Raj, Ashok" <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
-        Allen Hubbe <allenbh@gmail.com>,
-        "Ahmed S. Darwish" <darwi@linutronix.de>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>
-Subject: RE: [patch 12/20] genirq/msi: Make descriptor freeing domain aware
-In-Reply-To: <87leo8jvud.ffs@tglx>
-References: <20221111131813.914374272@linutronix.de>
- <20221111132706.726275059@linutronix.de>
- <BN9PR11MB52762A0081F7A1679850142A8C099@BN9PR11MB5276.namprd11.prod.outlook.com>
- <87leo8jvud.ffs@tglx>
-Date:   Fri, 18 Nov 2022 14:10:07 +0100
-Message-ID: <87cz9kjtn4.ffs@tglx>
+        Fri, 18 Nov 2022 08:10:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B58B8C087;
+        Fri, 18 Nov 2022 05:10:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E512EB823B5;
+        Fri, 18 Nov 2022 13:10:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6ABCCC433D7;
+        Fri, 18 Nov 2022 13:10:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668777015;
+        bh=hD5pqTfRz9MxhjvgbTdX3fi22qgWfYtD8znIx6/jpI4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=TYAMn7QlPNkPkyF1yXp8I/XcUni7K+DS+jRxMr32fvHn27qhmv7E7cXRL7++v4VKr
+         0szw8a/htflGHCAlKfF4w9Cjyey1YZI6zFilb8ayFp+PWo9AviftdsTwAeJ6sXRebd
+         pAspcyq7ek2Jb4fGvbckoFoBXsi4bNkxEoGFRh6s0mY7WYBqCQmxHVJ+ubLXtejvtT
+         psG4zmE0BHpJjUba6dOLuv33bMRudzm54b38PyvFAtrJfUNcDU7rVGWs1sPnMNvAHE
+         plALNQJ61XuFJH7Sl+gPfPmFKheMJGKkRWBb2MoeMGJNzRv6NTs4BLhKqWBLDF3+4z
+         ZoI4kDSBMWbqA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 337E4E29F44;
+        Fri, 18 Nov 2022 13:10:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] net: pch_gbe: fix potential memleak in pch_gbe_tx_queue()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166877701520.19854.17834649129969422685.git-patchwork-notify@kernel.org>
+Date:   Fri, 18 Nov 2022 13:10:15 +0000
+References: <20221117065527.71103-1-wanghai38@huawei.com>
+In-Reply-To: <20221117065527.71103-1-wanghai38@huawei.com>
+To:     Wang Hai <wanghai38@huawei.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, andriy.shevchenko@linux.intel.com,
+        liuhangbin@gmail.co, masa-korg@dsn.okisemi.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 18 2022 at 13:22, Thomas Gleixner wrote:
-> On Fri, Nov 18 2022 at 08:17, Kevin Tian wrote:
->>> -	lockdep_assert_held(&dev->msi.data->mutex);
->>> +	base = msi_get_domain_base_index(dev, ctrl->domid);
->>> +	if (base < 0)
->>> +		return;
->>
->> What about putting domid checks in msi_ctrl_valid() then here could
->> be a simple calculation on domid * MSI_XA_DOMAIN_SIZE.
+Hello:
 
-I need the base domain index w/o the ctrl thing too.
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
->> domid is part of msi_ctrl. then it sound reasonable to validate it
->> together with first/last.
->
-> Let me look at that.
+On Thu, 17 Nov 2022 14:55:27 +0800 you wrote:
+> In pch_gbe_xmit_frame(), NETDEV_TX_OK will be returned whether
+> pch_gbe_tx_queue() sends data successfully or not, so pch_gbe_tx_queue()
+> needs to free skb before returning. But pch_gbe_tx_queue() returns without
+> freeing skb in case of dma_map_single() fails. Add dev_kfree_skb_any()
+> to fix it.
+> 
+> Fixes: 77555ee72282 ("net: Add Gigabit Ethernet driver of Topcliff PCH")
+> Signed-off-by: Wang Hai <wanghai38@huawei.com>
+> 
+> [...]
 
-So I kept it as is, but renamed msi_ctrl_valid() to
-msi_ctrl_range_valid().
+Here is the summary with links:
+  - [net] net: pch_gbe: fix potential memleak in pch_gbe_tx_queue()
+    https://git.kernel.org/netdev/net/c/2360f9b8c4e8
 
-Thanks,
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-        tglx
+
