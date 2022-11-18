@@ -2,140 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD82E62FFC4
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 23:08:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC9B562FFC2
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 23:08:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231483AbiKRWIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 17:08:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35312 "EHLO
+        id S231393AbiKRWIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 17:08:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231300AbiKRWI3 (ORCPT
+        with ESMTP id S231448AbiKRWIL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 17:08:29 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D7E75583
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 14:08:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BDBE66277F
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 22:08:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2823C433D6;
-        Fri, 18 Nov 2022 22:08:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668809306;
-        bh=WOIrg5wuQ/eYm0RGCd9AzJ1SkNKh8ZHQZT887tkJBKc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fNBBXenbJghECcBwCW5qdTw6wAjvL7jduhxB8A2pkoJkVqOx+k4H0eQF6NFTLL/zd
-         4+9LFTWBy/O5uEij+YAWbX4zwZJ2kWLxFW+d2qtre2HJ+iodlZDdeLlL0U21qMSnuW
-         9fpgMsHpw4JfIflnf6kOpPcaRqJ+/sVorrV69gmEPKXIIl1R3S4ymIg9qJecIvPr7x
-         byyskpfs7wToPH3S1FZRca/U922vgPqeVdxVe51FimFyoHBIf38xVdBswFZmW+vY3m
-         mdjDDbOUlIC/y32WWVCNRASX3eKi3jh5y6/Q3bSLi9WsZRPioN2buxA0lISc2pNV4S
-         u72xp+NuSjZLQ==
-From:   Conor Dooley <conor@kernel.org>
-To:     Conor Dooley <conor.dooley@microchip.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>
-Cc:     Daire McNamara <daire.mcnamara@microchip.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] mailbox: mpfs: read the system controller's status
-Date:   Fri, 18 Nov 2022 22:07:59 +0000
-Message-Id: <20221118220758.1101409-3-conor@kernel.org>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20221118220758.1101409-1-conor@kernel.org>
-References: <20221118220758.1101409-1-conor@kernel.org>
+        Fri, 18 Nov 2022 17:08:11 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADE20AD460
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 14:08:09 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id w23so5702447ply.12
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 14:08:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dKSjP9jIbGdZ8wbLlDbYShn3Lx3bNa4PD6IpDt+85XI=;
+        b=jCHkY5be8ot6u32cjkAArYEdMbMdd/w6wP+nB4cDhKX2kolNOXxHlMgpNPhKHBZDun
+         5iqAKa+xnzabXzyeEke9B6y/WqR9HZBzUOXDa+8z7VzbYb0ltRHjQ0nxGlRhhx+MagRo
+         mnuJh20aB1V+bUj8jD0C4PPW8HbUzVKVlYkBoPqbn+bNkuPukYdTDZzBE6z6z7BrBsqt
+         ve28ZH+WoPXL5Ou7XhswiBPFvUm+Y2vVcK7RoZQ+8eYcGn8GGmY5HZqiNF/d4N9rH6JW
+         PpN9IQfDsmfx1mBDX3YomsLVWwd+Utvt4FKR4YXUglrsFZZ+wVieaj9l84mIlDUkSFUI
+         Mvuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dKSjP9jIbGdZ8wbLlDbYShn3Lx3bNa4PD6IpDt+85XI=;
+        b=LDwAkfV8We0tIOclGZpZ1wNJFkLCbN/G+iivF2s553Laf8QhoGfUmH92m9iYs2bWZj
+         4WmaSs9h3JvxXMGICIcpIdmfXkoMNcjYyyQ2tFunbV6VMgZMptCa/t57dD2/Ttq3ElAh
+         UNii3hY2RVxmm5eO7hFbpvk9LIC7hCkjqK9uEYCcm42Z7kBJmVBLZCTjFu9BA5UyY4Gu
+         MIEHsH9shag7nUJsB0c6Ct1QOX2Vs2aBrH2Rnbstr46rDzSE3xb08GOdTx60vGGumR+w
+         27QfcAPsLy2Bd+8ko/rJSG3rW9simz1JT/yfq/pKgJIPOZK8S32/Y5+ERb+y0RssT8U1
+         RWJg==
+X-Gm-Message-State: ANoB5pm1vg+xT83G+DNaPNUtPNdLyqTwbIWBt/GEBDpmAKQv8ksD7Asj
+        urR3DX5yKkYlLA8d2RE+JYE=
+X-Google-Smtp-Source: AA0mqf4oyTiXZv8g23McsjX9c4sNZxa1YSzTsl3yHDCHEpXc7lx6IEJWHWyf2U0zaUht3NSGqrNyeg==
+X-Received: by 2002:a17:902:e849:b0:17a:aca0:e295 with SMTP id t9-20020a170902e84900b0017aaca0e295mr1553420plg.3.1668809289374;
+        Fri, 18 Nov 2022 14:08:09 -0800 (PST)
+Received: from localhost (fwdproxy-prn-118.fbsv.net. [2a03:2880:ff:76::face:b00c])
+        by smtp.gmail.com with ESMTPSA id f15-20020a170902ce8f00b0017305e99f00sm4336459plg.107.2022.11.18.14.08.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 14:08:08 -0800 (PST)
+From:   Nhat Pham <nphamcs@gmail.com>
+To:     minchan@kernel.org
+Cc:     hannes@cmpxchg.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, ngupta@vflare.org,
+        senozhatsky@chromium.org, akpm@linux-foundation.org,
+        sjenning@redhat.com, ddstreet@ieee.org, vitaly.wool@konsulko.com
+Subject: Re: [PATCH v5 6/6] zsmalloc: Implement writeback mechanism for zsmalloc 
+Date:   Fri, 18 Nov 2022 14:08:08 -0800
+Message-Id: <20221118220808.1194168-1-nphamcs@gmail.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <Y3fyon7v00ABtU6M@google.com>
+References: <Y3fyon7v00ABtU6M@google.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Conor Dooley <conor.dooley@microchip.com>
+Thanks a lot for the suggestions so far and for the review, Minchan!
+Quick question about your last comment:
 
-Some services explicitly return an error code in their response, but
-others rely on the system controller to set a status in its status
-register. The meaning of the bits varies based on what service is
-requested, so pass it back up to the driver that requested the service
-in the first place. The field in the message struct already existed, but
-was unused until now.
+>> +#ifdef CONFIG_ZPOOL
+>
+> Let's remove the ifdef machinery here.
+>
+>> +     /* Free all deferred handles from zs_free */
+>> +     free_handles(pool, zspage);
+>> +#endif
 
-If the system controller is busy, in which case we should never actually
-be in the interrupt handler, or if the service fails the mailbox itself
-should not be read. Callers should check the status before operating on
-the response.
-
-Fixes: 83d7b1560810 ("mbox: add polarfire soc system controller mailbox")
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
- drivers/mailbox/mailbox-mpfs.c | 31 +++++++++++++++++++++++++++++--
- 1 file changed, 29 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/mailbox/mailbox-mpfs.c b/drivers/mailbox/mailbox-mpfs.c
-index cfacb3f320a6..e9a72c5453e4 100644
---- a/drivers/mailbox/mailbox-mpfs.c
-+++ b/drivers/mailbox/mailbox-mpfs.c
-@@ -2,7 +2,7 @@
- /*
-  * Microchip PolarFire SoC (MPFS) system controller/mailbox controller driver
-  *
-- * Copyright (c) 2020 Microchip Corporation. All rights reserved.
-+ * Copyright (c) 2020-2022 Microchip Corporation. All rights reserved.
-  *
-  * Author: Conor Dooley <conor.dooley@microchip.com>
-  *
-@@ -23,6 +23,8 @@
- #define MAILBOX_REG_OFFSET		0x800u
- #define MSS_SYS_MAILBOX_DATA_OFFSET	0u
- #define SCB_MASK_WIDTH			16u
-+#define SCB_STATUS_SHIFT		16u
-+#define SCB_STATUS_MASK			GENMASK(31, SCB_STATUS_SHIFT)
- 
- /* SCBCTRL service control register */
- 
-@@ -130,13 +132,38 @@ static void mpfs_mbox_rx_data(struct mbox_chan *chan)
- 	struct mpfs_mbox *mbox = (struct mpfs_mbox *)chan->con_priv;
- 	struct mpfs_mss_response *response = mbox->response;
- 	u16 num_words = ALIGN((response->resp_size), (4)) / 4U;
--	u32 i;
-+	u32 i, status;
- 
- 	if (!response->resp_msg) {
- 		dev_err(mbox->dev, "failed to assign memory for response %d\n", -ENOMEM);
- 		return;
- 	}
- 
-+	/*
-+	 * The status is stored in bits 31:16 of the SERVICES_SR register.
-+	 * It is only valid when BUSY == 0.
-+	 * We should *never* get an interrupt while the controller is
-+	 * still in the busy state. If we do, something has gone badly
-+	 * wrong & the content of the mailbox would not be valid.
-+	 */
-+	if (mpfs_mbox_busy(mbox)) {
-+		dev_err(mbox->dev, "got an interrupt but system controller is busy\n");
-+		response->resp_status = 0xDEAD;
-+		return;
-+	}
-+
-+	status = readl_relaxed(mbox->ctrl_base + SERVICES_SR_OFFSET);
-+
-+	/*
-+	 * If the status of the individual servers is non-zero, the service has
-+	 * failed. The contents of the mailbox at this point are not be valid,
-+	 * so don't bother reading them. Set the status so that the driver
-+	 * implementing the service can handle the result.
-+	 */
-+	response->resp_status = (status & SCB_STATUS_MASK); >> SCB_STATUS_SHIFT;
-+	if (response->resp_status)
-+		return;
-+
- 	if (!mpfs_mbox_busy(mbox)) {
- 		for (i = 0; i < num_words; i++) {
- 			response->resp_msg[i] =
--- 
-2.37.2
-
+free_handles() here is for the deferred handle freeing, which is also
+under CONFIG_ZPOOL now, so I don't think we should remove the #ifdef
+CONFIG_ZPOOL here, no? Let me know if I'm misunderstanding your
+suggestion, or if you have any further comments regarding this patch.
