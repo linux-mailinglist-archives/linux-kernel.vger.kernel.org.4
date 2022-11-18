@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8323462FDC1
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 20:03:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E33F762FDB7
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 20:02:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243022AbiKRTDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 14:03:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34176 "EHLO
+        id S243064AbiKRTCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 14:02:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242746AbiKRTBw (ORCPT
+        with ESMTP id S242845AbiKRTBw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 18 Nov 2022 14:01:52 -0500
-Received: from mxout2.routing.net (mxout2.routing.net [IPv6:2a03:2900:1:a::b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6DD3218B9;
+Received: from mxout1.routing.net (mxout1.routing.net [IPv6:2a03:2900:1:a::a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B728130550;
         Fri, 18 Nov 2022 11:01:38 -0800 (PST)
 Received: from mxbulk.masterlogin.de (unknown [192.168.10.85])
-        by mxout2.routing.net (Postfix) with ESMTP id 6FE836049C;
+        by mxout1.routing.net (Postfix) with ESMTP id D092F4039D;
         Fri, 18 Nov 2022 19:01:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-        s=20200217; t=1668798096;
+        s=20200217; t=1668798097;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=46LdQBOByeZuglrOcnrqp2nEUUTk+5YvyMsAuNPulHE=;
-        b=CAxCOxpWvAWCGTh5ZffOzvCq2/ySZWMAFalBqJAmESSJ2nKG6TincnY9WqVhvuQiyw2OMK
-        QFBRs8nxohB4gg7KbtHVEh9ZKEc6Duhk6Ahh1Rz+d8XNFCDCHXEc3v/yJyPicqCj95XqJm
-        GWVB5HCTruNVKQ6qy9BHb4KoB1dDsAI=
+        bh=0G8A0Vfo5m7AIOUJk0K0IJlgKB0iQp40ZYsUGIkco0E=;
+        b=miuTTB51NT/kO2sKHO/2VyDlH4Kc5NLo6WnZxaMyP4eIt/g9EX3Kxz2ZrQUQRDJPo357nW
+        EKDcCfvHT4l7gcTBVRKJMg6gHPWbvrg5/ptkSesICi7iyy+/D8hstXwaKO8UY3zbSoISKA
+        EPHLN7RTg+sp3cIzwiZnkqip8AcwvVM=
 Received: from frank-G5.. (fttx-pool-80.245.77.125.bambit.de [80.245.77.125])
-        by mxbulk.masterlogin.de (Postfix) with ESMTPSA id 1B27812271E;
+        by mxbulk.masterlogin.de (Postfix) with ESMTPSA id 76AC81226BC;
         Fri, 18 Nov 2022 19:01:36 +0000 (UTC)
 From:   Frank Wunderlich <linux@fw-web.de>
 To:     linux-mediatek@lists.infradead.org
@@ -50,11 +50,12 @@ Cc:     Frank Wunderlich <frank-w@public-files.de>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v6 01/11] arm64: dts: mt7986: move wed_pcie node
-Date:   Fri, 18 Nov 2022 20:01:16 +0100
-Message-Id: <20221118190126.100895-2-linux@fw-web.de>
+Subject: [PATCH v6 02/11] dt-bindings: phy: mediatek,tphy: add support for mt7986
+Date:   Fri, 18 Nov 2022 20:01:17 +0100
+Message-Id: <20221118190126.100895-3-linux@fw-web.de>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221118190126.100895-1-linux@fw-web.de>
 References: <20221118190126.100895-1-linux@fw-web.de>
@@ -71,45 +72,28 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Frank Wunderlich <frank-w@public-files.de>
 
-Move the wed_pcie node to have node aligned by address.
+Add compatible string for mt7986.
 
-Fixes: 00b9903996b3 ("arm64: dts: mediatek: mt7986: add support for Wireless Ethernet Dispatch")
 Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- arch/arm64/boot/dts/mediatek/mt7986a.dtsi | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ Documentation/devicetree/bindings/phy/mediatek,tphy.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-index a22e10e89ab9..afc01abfa99c 100644
---- a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-@@ -112,6 +112,12 @@ infracfg: infracfg@10001000 {
- 			#clock-cells = <1>;
- 		};
- 
-+		wed_pcie: wed-pcie@10003000 {
-+			compatible = "mediatek,mt7986-wed-pcie",
-+				     "syscon";
-+			reg = <0 0x10003000 0 0x10>;
-+		};
-+
- 		topckgen: topckgen@1001b000 {
- 			compatible = "mediatek,mt7986-topckgen", "syscon";
- 			reg = <0 0x1001B000 0 0x1000>;
-@@ -257,12 +263,6 @@ ethsys: syscon@15000000 {
- 			 #reset-cells = <1>;
- 		};
- 
--		wed_pcie: wed-pcie@10003000 {
--			compatible = "mediatek,mt7986-wed-pcie",
--				     "syscon";
--			reg = <0 0x10003000 0 0x10>;
--		};
--
- 		wed0: wed@15010000 {
- 			compatible = "mediatek,mt7986-wed",
- 				     "syscon";
+diff --git a/Documentation/devicetree/bindings/phy/mediatek,tphy.yaml b/Documentation/devicetree/bindings/phy/mediatek,tphy.yaml
+index 5613cc5106e3..230a17f24966 100644
+--- a/Documentation/devicetree/bindings/phy/mediatek,tphy.yaml
++++ b/Documentation/devicetree/bindings/phy/mediatek,tphy.yaml
+@@ -79,6 +79,7 @@ properties:
+           - enum:
+               - mediatek,mt2712-tphy
+               - mediatek,mt7629-tphy
++              - mediatek,mt7986-tphy
+               - mediatek,mt8183-tphy
+               - mediatek,mt8186-tphy
+               - mediatek,mt8192-tphy
 -- 
 2.34.1
 
