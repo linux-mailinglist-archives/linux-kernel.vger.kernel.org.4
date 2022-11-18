@@ -2,58 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 743D462FE06
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 20:34:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BB5562FE08
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 20:34:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235380AbiKRTeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 14:34:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50958 "EHLO
+        id S235444AbiKRTea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 14:34:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234867AbiKRTeQ (ORCPT
+        with ESMTP id S235666AbiKRTeY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 14:34:16 -0500
+        Fri, 18 Nov 2022 14:34:24 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6A9478D4B
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 11:33:20 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4130A2D5
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 11:33:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668799999;
+        s=mimecast20190719; t=1668800004;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=vm4lYSuI39T5xePAN2iEqNP90UK7XrasUEw23g3xMyk=;
-        b=CslY047qvblMjaIpMwnebuyi9Ml/WL7HrSs9pga0XgLwkTvMddTMZ+DQ+pOQiuC3mrRR4s
-        y5gV6bNuNe2VHOvXVEESfISawSZ7Cqs60MGRvxBotic/FNXe350Ad+LBSkosJ+CA8Z1TQw
-        +BwdVm6u6HzOayw/xyqdECn36A8H7hU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-385-a0HxK2E1MZyeMrjtuV38kw-1; Fri, 18 Nov 2022 14:33:16 -0500
-X-MC-Unique: a0HxK2E1MZyeMrjtuV38kw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5031385A588;
-        Fri, 18 Nov 2022 19:33:16 +0000 (UTC)
-Received: from llong.com (unknown [10.22.18.201])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A092E140EBF3;
-        Fri, 18 Nov 2022 19:33:15 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>
-Cc:     Phil Auld <pauld@redhat.com>, linux-kernel@vger.kernel.org,
-        Waiman Long <longman@redhat.com>
-Subject: [PATCH-tip] sched: Don't call kfree() in do_set_cpus_allowed()
-Date:   Fri, 18 Nov 2022 14:33:02 -0500
-Message-Id: <20221118193302.522399-1-longman@redhat.com>
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AG1SKrUV7k0X5TWOfCvNitOlF8TPG3jUR8Z8g6cbZlA=;
+        b=bb/NbTGioALLx/x7qW2DkG+xfag0CQQUTq+VRmYpxbsN+0TPoJizfvkN1EDiRmS7rccyru
+        d6pcutmLPXQ2jQ41nvzWpyMWJpEhjgwoZ1uAkE5MKSpZfrIUZrBunx5DBe8jw6v36f2/OE
+        i5fdWtYNaW8mtHUzkSJHM9claONETlU=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-141-n_LDrY5YM6mHxHOfEqTmjA-1; Fri, 18 Nov 2022 14:33:23 -0500
+X-MC-Unique: n_LDrY5YM6mHxHOfEqTmjA-1
+Received: by mail-qt1-f199.google.com with SMTP id i13-20020ac8764d000000b003a4ec8693dcso5866562qtr.14
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 11:33:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AG1SKrUV7k0X5TWOfCvNitOlF8TPG3jUR8Z8g6cbZlA=;
+        b=uWtRCiYxCuZI9Tf5x6j3wSRACzO9NjVsOIz13iXDZ5b5yDU7BGc6upbQPNTcwKaXKF
+         lQ0QnjawyX41lhJB0a0Xv2MhUJ5CYF2KxYLjAKKDpYlZTapHTxgeL5sguUyfMCptprMz
+         lOPd3560P0P1Ho2gwLtRc3wgt5ah5yp8AkZQyDmnBBc2+17Zj3/BSLUGuTLBw6KBdCLz
+         xtxJK4kZo9PQIagLwLHPjeRz5f9u4VmefbCNBGzIJX9sUWEmVcj5J6boSuLhjZ2wR1pv
+         isvvNF1Y1QASABACA+HZjwXPcpQRpPoBbKqDrGTYBZ+iHmnPDgUvN3LQ7mAQmh0smady
+         XYOw==
+X-Gm-Message-State: ANoB5pnLX7QD7CTn6LeeG1Sh/clcZvVYz191U6pdkL/U4LcNtUQD7nUa
+        lYIPBmBFjojDCLamMs8hAiOOkqElURGwDtwh9aB8j5CDGiclp0r4o51dq0iliGXZc8W/cnHsFFF
+        XKShU4TOWhtJ1CQLn+TWGnnSB
+X-Received: by 2002:a0c:f254:0:b0:4af:b70e:1305 with SMTP id z20-20020a0cf254000000b004afb70e1305mr7988783qvl.127.1668800002825;
+        Fri, 18 Nov 2022 11:33:22 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf62x/DXTMrV3cfVNb2/5/8QoAelvIHCdhWqK8AdHzTbIPuGWWkL/VTiCZLNiZKnYFc2xT3sTQ==
+X-Received: by 2002:a0c:f254:0:b0:4af:b70e:1305 with SMTP id z20-20020a0cf254000000b004afb70e1305mr7988767qvl.127.1668800002597;
+        Fri, 18 Nov 2022 11:33:22 -0800 (PST)
+Received: from bfoster (c-24-61-119-116.hsd1.ma.comcast.net. [24.61.119.116])
+        by smtp.gmail.com with ESMTPSA id a13-20020ac84d8d000000b003a5430ee366sm2391449qtw.60.2022.11.18.11.33.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 11:33:22 -0800 (PST)
+Date:   Fri, 18 Nov 2022 14:33:27 -0500
+From:   Brian Foster <bfoster@redhat.com>
+To:     Ivan Babrou <ivan@cloudflare.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@cloudflare.com, Alexey Dobriyan <adobriyan@gmail.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Theodore Ts'o <tytso@mit.edu>,
+        David Laight <David.Laight@aculab.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Christoph Anton Mitterer <mail@christoph.anton.mitterer.name>,
+        Mike Rapoport <rppt@kernel.org>,
+        Paul Gortmaker <paul.gortmaker@windriver.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Christian Brauner <brauner@kernel.org>
+Subject: Re: [PATCH v4] proc: report open files as size in stat() for
+ /proc/pid/fd
+Message-ID: <Y3feB8wHdfx48uCl@bfoster>
+References: <20221024173140.30673-1-ivan@cloudflare.com>
+ <Y3fYu2VCBgREBBau@bfoster>
+ <CABWYdi3csS3BpoMd8xO=ZXFeBH7KtuLkxzQ8VE5+rO5wrx-yQQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABWYdi3csS3BpoMd8xO=ZXFeBH7KtuLkxzQ8VE5+rO5wrx-yQQ@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -64,83 +92,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 851a723e45d1 ("sched: Always clear user_cpus_ptr in
-do_set_cpus_allowed()") may call kfree() if user_cpus_ptr was previously
-set. Unfortunately, some of the callers of do_set_cpus_allowed()
-may not be in a context where kfree() can be safely called. So the
-following splats may be printed:
+On Fri, Nov 18, 2022 at 11:18:36AM -0800, Ivan Babrou wrote:
+> On Fri, Nov 18, 2022 at 11:10 AM Brian Foster <bfoster@redhat.com> wrote:
+> > > +static int proc_fd_getattr(struct user_namespace *mnt_userns,
+> > > +                     const struct path *path, struct kstat *stat,
+> > > +                     u32 request_mask, unsigned int query_flags)
+> > > +{
+> > > +     struct inode *inode = d_inode(path->dentry);
+> > > +     int rv = 0;
+> > > +
+> > > +     generic_fillattr(&init_user_ns, inode, stat);
+> > > +
+> >
+> > Sorry I missed this on v3, but shouldn't this pass through the
+> > mnt_userns parameter?
+> 
+> The mnt_userns parameter was added in 549c729 (fs: make helpers idmap
+> mount aware), and it's not passed anywhere in fs/proc.
+> 
+> Looking at other uses of generic_fillattr, all of them use "init_user_ns":
+> 
 
-   WARNING: possible circular locking dependency detected
-   BUG: sleeping function called from invalid context
+Interesting. It looks like this would have used mnt_userns from
+vfs_getattr_nosec() before proc_fd_getattr() is wired up, right? I'm not
+familiar enough with that change to say whether /proc should use one
+value or the other, or perhaps it just doesn't matter.?
 
-To avoid these problems without leaking memory, the free cpumask is now
-put into a lockless list to be reused in a later sched_setaffinity()
-call instead.
+Christian?
 
-Fixes: 851a723e45d1 ("sched: Always clear user_cpus_ptr in do_set_cpus_allowed()")
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- kernel/sched/core.c | 26 +++++++++++++++++++++++---
- 1 file changed, 23 insertions(+), 3 deletions(-)
+Brian
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 78b2d5cabcc5..8df51b08bb38 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -2527,6 +2527,11 @@ int push_cpu_stop(void *arg)
- 	return 0;
- }
- 
-+/*
-+ * A lockless list of user cpumask available to be reused.
-+ */
-+static LLIST_HEAD(free_cpumasks);
-+
- /*
-  * sched_class::set_cpus_allowed must do the below, but is not required to
-  * actually call this function.
-@@ -2606,7 +2611,14 @@ void do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask)
- 	};
- 
- 	__do_set_cpus_allowed(p, &ac);
--	kfree(ac.user_mask);
-+	if (ac.user_mask) {
-+		/*
-+		 * We may not be in a context where kfree() can be called.
-+		 * Put the free user_mask in free_cpumasks to be freed or
-+		 * used later.
-+		 */
-+		llist_add((struct llist_node *)ac.user_mask, &free_cpumasks);
-+	}
- }
- 
- int dup_user_cpus_ptr(struct task_struct *dst, struct task_struct *src,
-@@ -8194,7 +8206,7 @@ __sched_setaffinity(struct task_struct *p, struct affinity_context *ctx)
- long sched_setaffinity(pid_t pid, const struct cpumask *in_mask)
- {
- 	struct affinity_context ac;
--	struct cpumask *user_mask;
-+	struct cpumask *user_mask = NULL;
- 	struct task_struct *p;
- 	int retval;
- 
-@@ -8229,7 +8241,15 @@ long sched_setaffinity(pid_t pid, const struct cpumask *in_mask)
- 	if (retval)
- 		goto out_put_task;
- 
--	user_mask = kmalloc(cpumask_size(), GFP_KERNEL);
-+	/*
-+	 * Use the element in the free_cpumasks, if available.
-+	 */
-+	if (!llist_empty(&free_cpumasks))
-+		user_mask = (struct cpumask *)llist_del_first(&free_cpumasks);
-+
-+	if (!user_mask)
-+		user_mask = kmalloc(cpumask_size(), GFP_KERNEL);
-+
- 	if (!user_mask) {
- 		retval = -ENOMEM;
- 		goto out_put_task;
--- 
-2.31.1
+> $ rg generic_fillattr fs/proc
+> fs/proc/proc_net.c
+> 301: generic_fillattr(&init_user_ns, inode, stat);
+> 
+> fs/proc/base.c
+> 1970: generic_fillattr(&init_user_ns, inode, stat);
+> 3856: generic_fillattr(&init_user_ns, inode, stat);
+> 
+> fs/proc/root.c
+> 315: generic_fillattr(&init_user_ns, d_inode(path->dentry), stat);
+> 
+> fs/proc/generic.c
+> 150: generic_fillattr(&init_user_ns, inode, stat);
+> 
+> fs/proc/proc_sysctl.c
+> 841: generic_fillattr(&init_user_ns, inode, stat);
+> 
 
