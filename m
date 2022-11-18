@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79EAC62EDC7
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 07:40:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CB7962EDC6
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 07:40:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241289AbiKRGkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 01:40:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50940 "EHLO
+        id S240801AbiKRGkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 01:40:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240965AbiKRGkP (ORCPT
+        with ESMTP id S239518AbiKRGkP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 18 Nov 2022 01:40:15 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04DC09BA25
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:39:56 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id cl5so7755720wrb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:39:55 -0800 (PST)
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D96E82BC0
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:39:57 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id o30so2977523wms.2
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:39:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=U1GWfZ4uzYzmnr67NmD4tsi2YsHKS/xeHdETJ6KMLlM=;
-        b=a0Zzlqh0gX13yS2eKMav6mCCc+0Ey9tXxrv2O7bmfcHClr6NT6y9+PFnYY3t36i8Hl
-         0uQ/Xh3x5oRUlm17eLk4PtC4GxosSyvDGn1hl/xcYCX8WRHQujk07FLCIXhp8fjAm4an
-         zzQIdHvK9R6LxFRPv9noKVYQgwRo5HDmL4zWKCpMyQhhn+wkcAQEbFdJ1xGbXeKk5VOR
-         xvneEpeVS1ttSjvPG8/95PDAzLB2wHNDDvOcBKOi1PDwmhlVgO82HqQg14gyfKpD7zYX
-         Q1AG1+POmdMxCQiwTaqHLAxg38+pm/N4q/kQXXBrA8cVkv68+qxb0y2hRaIyabSXCSLN
-         a2TQ==
+        bh=rAGSEtoMjiEA8z4zpCZaH+zh+PxwDmjtLZ+/VPy/B3U=;
+        b=aRsrluM2SXV3g9vL62gj1RsXStNyAiuKd+wb+Jl3GF1e1XsaGlG2ZtvbFW/87pJomu
+         L04yPhiXj74Em1HmNCTCZU6erO4ZoXxhg78mRyFQ4UsLclRiJcmll4wcuajyMuoBs0r9
+         TVp+xewuomUTezXmuWz7bIgcHJQU+3n6fSDFVnNSsm9RmXW3la/OdI6Pel+8zgKTanyq
+         o+nXHotSrSNKFywLxx0sVvg6w/GXUkLgXiFZ2VhLQ+zeae0ORfqENxTD0czL0Y/x2rys
+         MHUofO+f1ndJCJf201cUSZlAvssiPIChJtU1B0KU6sxHowYsIZRhR6+DwEcaxDAIIXWv
+         deMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=U1GWfZ4uzYzmnr67NmD4tsi2YsHKS/xeHdETJ6KMLlM=;
-        b=URxRifD0tT5/mzWa8bJq4UOhPWLKFrYasThZDpzXROrwP/SCxote0qnPK9gimm9ZAI
-         fB62vlF3trLLDwInk07jIRob8ofAVHWfKvJdZwEGjfW2uuDTMrdeWwmt09Ju/kvhFM9H
-         BrzCa6SIt7Qnmu9xbEc/SH1ZI3Wv6jspFTBNaQ4bm+DlQQOrqJTyGtI0ORzGIciHv2fg
-         FRptf2SpJYombgrjBgA/TD1NZB/GHt6Tr4ee49sMGhnlKQDp38MZnYwqBitBkOTEBmw+
-         uTMTv1XZZ/R7FprglavwVX8BnV7iTekgghnC8q3OtdWf2EwqQorwfKGFOW5qh1QCxOS8
-         g3xw==
-X-Gm-Message-State: ANoB5pkXWASIzE78R/m0l4pl6uHKgBnMsl2c4Dyorgv20p6XBlts9g2F
-        GvQw6K8OQwVKz/9JNukjfFiDfVh8Ns3N7w==
-X-Google-Smtp-Source: AA0mqf4QdDYo982x+bTxoLY7e3sCvmZukMTC9W4n9/wX0cbx8Puoka3lwmtdTafAo9UB1OwzHW35jA==
-X-Received: by 2002:a5d:6746:0:b0:22e:39c9:a4a6 with SMTP id l6-20020a5d6746000000b0022e39c9a4a6mr3436893wrw.170.1668753594562;
-        Thu, 17 Nov 2022 22:39:54 -0800 (PST)
+        bh=rAGSEtoMjiEA8z4zpCZaH+zh+PxwDmjtLZ+/VPy/B3U=;
+        b=B4IogNG5GIij4+ogjrDVMA+/uqsmL5Mr6BItwtqeRDxauaF9Jvz3Yv5/iQuus52JeN
+         dDyQyGYTXdh4Z4+QP0EBBT8Ne+41QKqgio6TJFgUT/+8c7We9yJs0qaAljemK3UHY13H
+         L3uqvbdcGBKhYh1Txu/GmImB13h4VKFTay2U+FEhUS0iDeRDlrdh8HcUjSZzqEfHn6hj
+         bz3m9nR+Vw2c0WOcTsWUEcJAuq4JuubWPMKPRt/N3rapA+u94nsJlBAWm864TDIrBV3N
+         knNFev1BLx93LD2BhkS0qz6vMvVdP34u5T9NfE0K/7y2e4bXWf1u87McbOA95ElEyg92
+         IHSw==
+X-Gm-Message-State: ANoB5pmcio8rIHvkwh9Yocybbe5IVsoPpwtEkY1UnO7rUSVe0aDfL7fq
+        N1BrMBjzTjc+MA9oDoatd7TzeA==
+X-Google-Smtp-Source: AA0mqf6mGfskwlFBQTLbjy4/WVkZCd3yR93mTHX9YcpQpTaRb+Yj7RR8FRzObUZHpl8OZG+oCs2bVw==
+X-Received: by 2002:a05:600c:188a:b0:3cf:8e62:f769 with SMTP id x10-20020a05600c188a00b003cf8e62f769mr7524563wmp.52.1668753595820;
+        Thu, 17 Nov 2022 22:39:55 -0800 (PST)
 Received: from localhost.localdomain ([167.98.215.174])
-        by smtp.gmail.com with ESMTPSA id j13-20020adff54d000000b0023655e51c33sm2785902wrp.4.2022.11.17.22.39.53
+        by smtp.gmail.com with ESMTPSA id j13-20020adff54d000000b0023655e51c33sm2785902wrp.4.2022.11.17.22.39.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 22:39:53 -0800 (PST)
+        Thu, 17 Nov 2022 22:39:54 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org,
         Patrick Delaunay <patrick.delaunay@foss.st.com>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 02/13] nvmem: stm32: add warning when upper OTPs are updated
-Date:   Fri, 18 Nov 2022 06:39:21 +0000
-Message-Id: <20221118063932.6418-3-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 03/13] nvmem: stm32: add nvmem type attribute
+Date:   Fri, 18 Nov 2022 06:39:22 +0000
+Message-Id: <20221118063932.6418-4-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221118063932.6418-1-srinivas.kandagatla@linaro.org>
 References: <20221118063932.6418-1-srinivas.kandagatla@linaro.org>
@@ -74,34 +74,26 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Patrick Delaunay <patrick.delaunay@foss.st.com>
 
-As the upper OTPs are ECC protected, they support only one 32 bits word
-programming.
-For a second modification of this word, these ECC become invalid and
-this OTP will be no more accessible, the shadowed value is invalid.
-
-This patch adds a warning to indicate an upper OTP update, because this
-operation is dangerous as OTP is not locked by the driver after the first
-update to avoid a second update.
+Inform NVMEM framework of type attribute for stm32-romem as NVMEM_TYPE_OTP
+so userspace is able to know how the data is stored in BSEC.
 
 Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- drivers/nvmem/stm32-romem.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/nvmem/stm32-romem.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/drivers/nvmem/stm32-romem.c b/drivers/nvmem/stm32-romem.c
-index d93baee01d7b..bb8aa72ba2f9 100644
+index bb8aa72ba2f9..6de565639d5f 100644
 --- a/drivers/nvmem/stm32-romem.c
 +++ b/drivers/nvmem/stm32-romem.c
-@@ -132,6 +132,9 @@ static int stm32_bsec_write(void *context, unsigned int offset, void *buf,
- 		}
- 	}
+@@ -160,6 +160,7 @@ static int stm32_romem_probe(struct platform_device *pdev)
+ 	priv->cfg.dev = dev;
+ 	priv->cfg.priv = priv;
+ 	priv->cfg.owner = THIS_MODULE;
++	priv->cfg.type = NVMEM_TYPE_OTP;
  
-+	if (offset + bytes >= priv->lower * 4)
-+		dev_warn(dev, "Update of upper OTPs with ECC protection (word programming, only once)\n");
-+
- 	return 0;
- }
+ 	priv->lower = 0;
  
 -- 
 2.25.1
