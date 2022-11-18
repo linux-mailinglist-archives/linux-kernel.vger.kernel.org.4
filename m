@@ -2,134 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09EE562EB26
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 02:41:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A831362EB37
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 02:46:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240932AbiKRBlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 20:41:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53316 "EHLO
+        id S240483AbiKRBp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 20:45:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240975AbiKRBl1 (ORCPT
+        with ESMTP id S234080AbiKRBpz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 20:41:27 -0500
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B6FEE33;
-        Thu, 17 Nov 2022 17:41:23 -0800 (PST)
-Received: by mail-qk1-f182.google.com with SMTP id v8so2532871qkg.12;
-        Thu, 17 Nov 2022 17:41:23 -0800 (PST)
+        Thu, 17 Nov 2022 20:45:55 -0500
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 424BD73BB2;
+        Thu, 17 Nov 2022 17:45:55 -0800 (PST)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-14286d5ebc3so1077190fac.3;
+        Thu, 17 Nov 2022 17:45:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=jGz5CwzNNbuB/RC9pHbIgkCDH8BnWyfE//DxFSperVc=;
+        b=N4trUez3adNxMXNzmNPpzZfU4dBjX3+n4FXfDrZ4N7LfDYcT3KWKns2XgRsiZ9W7sd
+         mnb2SgoCFYg8Oq/MofIJ7hNsvCauz6pBs4I5qnhuCKjXyK/eSGyxy8mONDUDaRG5R77Y
+         +Ij9qzwr4BkPwmFCBKTZ1zIFCmNAPqXtUOokGO96TJi02NTf0dMN8Xk/J9fa/sJ1XO02
+         GYFyeUAi48SzYl9UNYK/ErJgWS3d/TrqUeUBDDRxgewJocz/aCTHDuHc7FBXHERPJwz7
+         kXyr3rShgI5RNvWtDcb6n0aeowDSqDF13FQlm/XCZ1bqAqsuWz28/0yqzbH7cAJt3WkD
+         cm6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=C2iDkgi6Cz8+ghmu1fZWCpIJ9rUZoFg0eD2OPo7Dxik=;
-        b=ArZrnXBUaRzdXxsTX2EHs2qMEvveglT+o+A9kBUf8cfRIwbUXxaZnfK0RjjGG2fB+9
-         tj4bP8BC6zk7fI/EoTvIdP+4lXPpWWN/I3JlZ9E6KAl+eah/7FhUdABstNxjpWfEGq2Q
-         WInMm3FOpILAHSIJdCOhn/F7lrtZcggftelLk6MRMqnWsox6IC1+mOnOe7peDenSPWyy
-         kEiPXdOVNxeyW5CxWOeg3GGezt5gTe0dMOvJgVDuQWqSlo9dgWkepCTC/YYE4qWVzUep
-         lpROnGjxvwUIJYTyv9zY5E07oMc0URaRg0bk3hFN3eTOY+dPVFRDvrS6K41cw+cmdfn4
-         kTfA==
-X-Gm-Message-State: ANoB5pnzjoh15nivJXU1RUQis4Sx5odJgW4Ywaxtll6GsraucWzczv9E
-        gt+O9VxFcsi7cWZqGiR3FcapOGHf+q8MoTfp
-X-Google-Smtp-Source: AA0mqf5lT8GzBiFdNWOWsbIY4ziJuWnF6nVbx8Ri4nv4aA8YHdyYNBoyaOKgZsUMqVsSMCVB+qL9Ag==
-X-Received: by 2002:a05:620a:2795:b0:6ec:51cd:c376 with SMTP id g21-20020a05620a279500b006ec51cdc376mr1352916qkp.300.1668735682302;
-        Thu, 17 Nov 2022 17:41:22 -0800 (PST)
-Received: from maniforge.lan ([2620:10d:c091:480::1:8ad4])
-        by smtp.gmail.com with ESMTPSA id q25-20020a05620a2a5900b006ee7923c187sm1480426qkp.42.2022.11.17.17.41.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 17:41:21 -0800 (PST)
-Date:   Thu, 17 Nov 2022 19:41:23 -0600
-From:   David Vernet <void@manifault.com>
-To:     John Fastabend <john.fastabend@gmail.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
-        daniel@iogearbox.net, martin.lau@linux.dev, memxor@gmail.com,
-        yhs@fb.com, song@kernel.org, sdf@google.com, kpsingh@kernel.org,
-        jolsa@kernel.org, haoluo@google.com, tj@kernel.org,
-        kernel-team@fb.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v7 0/3] Support storing struct task_struct
- objects as kptrs
-Message-ID: <Y3biwxIq8B5oYdOS@maniforge.lan>
-References: <20221117032402.2356776-1-void@manifault.com>
- <6376a1b12bb4d_4101208d@john.notmuch>
- <Y3atifGs0DM9to8z@maniforge.lan>
- <6376b7822f4df_8c7a208f7@john.notmuch>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jGz5CwzNNbuB/RC9pHbIgkCDH8BnWyfE//DxFSperVc=;
+        b=D5sRahtDxU90OCk1j+FNGAItrF0NJSUDFiJNw+tENkwvl6mNE8gNXiEhw3o6LlV2rP
+         MyiEQ8K0lbBSZAVE+GnDoReNW4ZOEYC8jMf4bmSLrSgpuO+oTFpzPt2c2d4AJXPoEYCj
+         NK6OYdNOCrSd8+KPupaAJLy76LJPnS33nYM2LgWUeDN3GG8vdlmFvmOwQ6v1bqpqDNRv
+         4afG36AP0lMivo/Qafkcz4ac25m+0HdVJounahnMHNXXoMA4C8PtWedsQClMX2jhaBkk
+         jNgSqht2QK+s/KjsaT1j02Lk86TU53OXdgRNWLmJztYQY7MTnUbE1jnTrCtUcYeoTyJ4
+         MEJA==
+X-Gm-Message-State: ANoB5pmXfVeKDN6cYwHgw9L/VsppzO/JgJ57plk6qIxuOoRhGPxwBWiZ
+        aOUAeId482QPTbhSN0Prk+znnKvX7CZlGzAJ8pE=
+X-Google-Smtp-Source: AA0mqf4YGgLhTeetvX6Lbir7KVRv4EieQLUqZjbW+gY5bDes/B5bOlUnMHgR7VtW1ntRaE8xpoLY2PckTxS94j6WVQg=
+X-Received: by 2002:a05:6871:29c:b0:13b:9676:8aba with SMTP id
+ i28-20020a056871029c00b0013b96768abamr2786232oae.88.1668735953742; Thu, 17
+ Nov 2022 17:45:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6376b7822f4df_8c7a208f7@john.notmuch>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+References: <d1ecf500f07e063d4e8e34f4045ddca55416c686.1668507036.git.geert+renesas@glider.be>
+ <20221116123115.6b49e1b8@kernel.org> <CAAvyFNhbsks96=yyWHDCi-u+A1vaEy845_+pytghAscoG0rrTQ@mail.gmail.com>
+ <20221116141519.0ef42fa2@kernel.org>
+In-Reply-To: <20221116141519.0ef42fa2@kernel.org>
+From:   Jamie Bainbridge <jamie.bainbridge@gmail.com>
+Date:   Fri, 18 Nov 2022 11:45:42 +1000
+Message-ID: <CAAvyFNjHp8-iq_A08O_H2VwEBLZRQe+=LzBm45ekgOZ4afnWqA@mail.gmail.com>
+Subject: Re: [PATCH net-next] tcp: Fix tcp_syn_flood_action() if CONFIG_IPV6=n
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Chris Down <chris@chrisdown.name>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 02:36:50PM -0800, John Fastabend wrote:
-> David Vernet wrote:
-> > On Thu, Nov 17, 2022 at 01:03:45PM -0800, John Fastabend wrote:
-> > > David Vernet wrote:
-> > > > Now that BPF supports adding new kernel functions with kfuncs, and
-> > > > storing kernel objects in maps with kptrs, we can add a set of kfuncs
-> > > > which allow struct task_struct objects to be stored in maps as
-> > > > referenced kptrs.
-> > > > 
-> > > > The possible use cases for doing this are plentiful.  During tracing,
-> > > > for example, it would be useful to be able to collect some tasks that
-> > > > performed a certain operation, and then periodically summarize who they
-> > > > are, which cgroup they're in, how much CPU time they've utilized, etc.
-> > > > Doing this now would require storing the tasks' pids along with some
-> > > > relevant data to be exported to user space, and later associating the
-> > > > pids to tasks in other event handlers where the data is recorded.
-> > > > Another useful by-product of this is that it allows a program to pin a
-> > > > task in a BPF program, and by proxy therefore also e.g. pin its task
-> > > > local storage.
-> > > 
-> > > Sorry wasn't obvious to me (late to the party so if it was in some
-> > > other v* described apologies). Can we say something about the life
-> > > cycle of this acquired task_structs because they are incrementing
-> > > the ref cnt on the task struct they have potential to impact system.
-> > 
-> > We should probably add an entire docs page which describes how kptrs
-> > work, and I am happy to do that (ideally in a follow-on patch set if
-> > that's OK with you). In general I think it would be useful to include
-> > docs for any general-purpose kfuncs like the ones proposed in this set.
-> 
-> Sure, I wouldn't require that for your series though fwiw.
+On Thu, 17 Nov 2022 at 08:15, Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Thu, 17 Nov 2022 08:39:43 +1100 Jamie Bainbridge wrote:
+> > >         if (v6) {
+> > > #ifdef v6
+> > >                 expensive_call6();
+> > > #endif
+> > >         } else {
+> > >                 expensive_call6();
+> > >         }
+> >
+> > These should work, but I expect they cause a comparison which can't be
+> > optimised out at compile time. This is probably why the first style
+> > exists.
+> >
+> > In this SYN flood codepath optimisation doesn't matter because we're
+> > doing ratelimited logging anyway. But if we're breaking with existing
+> > style, then wouldn't the others also have to change to this style? I
+> > haven't reviewed all the other usage to tell if they're in an oft-used
+> > fastpath where such a thing might matter.
+>
+> I think the word style already implies subjectivity.
 
-Sounds good to me
+You are right. Looking further, there are many other ways
+IF_ENABLED(CONFIG_IPV6) is used, including similar to the ways you
+have suggested.
 
-[...]
+I don't mind Geert's original patch, but if you want a different
+style, I like your suggestion with v4 first:
 
-> > > quick question. If you put acquired task struct in a map what
-> > > happens if user side deletes the entry? Presumably this causes the
-> > > release to happen and the task_struct is good to go. Did I miss
-> > > the logic? I was thinking you would have something in bpf_map_free_kptrs
-> > > and a type callback to release() the refcnt?
-> > 
-> > Someone else can chime in here to correct me if I'm wrong, but AFAIU
-> > this is handled by the map implementations calling out to
-> > bpf_obj_free_fields() to invoke the kptr destructor when the element is
-> > destroyed. See [3] and [4] for examples of where they're called from the
-> > arraymap and hashmap logic respectively. This is how the destructors are
-> > similarly invoked when the maps are destroyed.
-> 
-> Yep I found the dtor() gets populated in btf.c and apparently needed
-> to repull my local tree because I missed it. Thanks for the detailed
-> response.
-> 
-> And last thing I was checking is because KF_SLEEPABLE is not set
-> this should be blocked from running on sleepable progs which would
-> break the call_rcu in the destructor. Maybe small nit, not sure
-> its worth it but might be nice to annotate the helper description
-> with a note, "will not work on sleepable progs" or something to
-> that effect.
+        if (v4) {
+                expensive_call4();
+#ifdef v6
+        } else {
+                expensive_call6();
+#endif
+        }
 
-KF_SLEEPABLE is used to indicate whether the kfunc _itself_ may sleep,
-not whether the calling program can be sleepable. call_rcu() doesn't
-block, so no need to mark the kfunc as KF_SLEEPABLE. The key is that if
-a kfunc is sleepable, non-sleepable programs are not able to call it
-(and this is enforced in the verifier).
+Jamie
