@@ -2,74 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B525662F832
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 15:50:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3FAA62F842
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 15:52:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241608AbiKROuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 09:50:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49282 "EHLO
+        id S235254AbiKROwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 09:52:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241997AbiKROuU (ORCPT
+        with ESMTP id S235207AbiKROwe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 09:50:20 -0500
-Received: from mx.cjr.nz (mx.cjr.nz [51.158.111.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751CB903B1;
-        Fri, 18 Nov 2022 06:50:14 -0800 (PST)
-Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pc)
-        by mx.cjr.nz (Postfix) with ESMTPSA id 58D2A7FD25;
-        Fri, 18 Nov 2022 14:50:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
-        t=1668783013;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/rePAaj+Om/SnbzekquTM/6DwN9lHDTUpeQeQgkp3dc=;
-        b=ALBdruPCG8kg8CYj1aspn86VITy01IRFclshjVb2AwcDl8G1yzf4K5Al5ZT9tY/bLaEOSI
-        QsMHqTCpnef89BxB9MMnSY/wCPcrIvjcjZ5mJA8LKIvl6KxgNX7xPS0qv/ppW8FPu7/tx4
-        eCJz6Qib+sZYvXRMc4qBPho+BTcxdi2fdvtlmWDxwFr76oz/tOzM+/wEl7iVU0TUuAvcAS
-        y37bI7Ut0k3jwPo5FGYoCaeNY3CP6r0OmiZfq2faMsDntPF8BEGakXmwuxMKILpFwPA/kD
-        NHSeR/x3vn1v7ocZstjtUz52mhlyjyIOK6vcILJwqyxMGV6b6OrE8YS19P4CsA==
-From:   Paulo Alcantara <pc@cjr.nz>
-To:     Anastasia Belova <abelova@astralinux.ru>,
-        Steve French <sfrench@samba.org>
-Cc:     Anastasia Belova <abelova@astralinux.ru>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Tom Talpey <tom@talpey.com>, Aurelien Aptel <aaptel@suse.com>,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-Subject: Re: [PATCH] cifs: add check for returning value of SMB2_close_init
-In-Reply-To: <20221115142701.27074-1-abelova@astralinux.ru>
-References: <20221115142701.27074-1-abelova@astralinux.ru>
-Date:   Fri, 18 Nov 2022 11:51:31 -0300
-Message-ID: <877czsjoy4.fsf@cjr.nz>
+        Fri, 18 Nov 2022 09:52:34 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 220A28B11D
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 06:52:33 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id be13so8585075lfb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 06:52:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XKTObKEL8gc5S/Q51M+L8voEMredlLnbihUYlLO76vs=;
+        b=gMK7qVcD+/wXm6dGhENohbvUGU846z0Znfnyn4YkIaWmMt7X1/cw5naSy36DVIxHYk
+         uZVj98I4oB6xd9bZLUQf19Ph1O9dDQPRXIfyTYw7E6xdNwIF1NhCnr/5k2PO705Nc5k0
+         XQ1QiUNA3VL6Ip1u8qqtVQ7z8uICNwotEUJYWA+QgjTBfmuihMV3qsZhFJ+lRubn1aKy
+         070XoR3LZfwbwMUH7Ky7T1eOGmByPNFlfsvaWR9IGBsggX8t4Eo+ZmpB2Exc/X6bY3JA
+         gWZH4YYoZmpnbfFNMeuBEXtm68vEAQ3zeK3h6H7/zWrLl9hhTz0jCBxLBOvQFXbbLTV+
+         vM4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XKTObKEL8gc5S/Q51M+L8voEMredlLnbihUYlLO76vs=;
+        b=bE3Mju+e73/tyRCEmnyNAv4SLtVPqe3GYuxe+GyjgZewn1oN37ybrOjJTH4eMcHBgW
+         I9EADEPBquipyjHNLj/HaGEThPOzwQHqfZvK1HZY0rFcc+QVbedkNNk+HnjP/uD9qvFh
+         SFrnTVoyNhDMYYlEldi3PHtMbW61jDfVHrtcpyN/aqxCrgs1JQAjaIyjmOqbJbwSqKYY
+         f7oB0CiNQqZpEoLBCYj/EOUDiuPj8LEmg1A7g2z/1BCetuWkwouac1pE81R7U30FGTfY
+         21iQDW2t/f86qLSfqPKGshgFVoDgWHheNQSHSCMSHoWfUCrcsSYaxhfqrVWqecHiB3Vr
+         6nyQ==
+X-Gm-Message-State: ANoB5pkHArEfWGLGPzoHi8JGA6lJQ3I5soUYa070v8uxJEBBHHrvTcMt
+        7+/hZ+MtpQ8YP4rzepdvfH8uCQ==
+X-Google-Smtp-Source: AA0mqf74ROBTKaMUlZ8NEw2cWsCNjWuZzHLL5P0E9Dx63d7vUFRfCBhAqltBWgz7cA7TlfbXf1i4BA==
+X-Received: by 2002:ac2:5281:0:b0:4b3:ff4b:80a2 with SMTP id q1-20020ac25281000000b004b3ff4b80a2mr2379143lfm.281.1668783151407;
+        Fri, 18 Nov 2022 06:52:31 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id be34-20020a05651c172200b0026bf43a4d72sm676049ljb.115.2022.11.18.06.52.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Nov 2022 06:52:30 -0800 (PST)
+Message-ID: <15840da8-bae2-3bb2-af0c-0af563fdc27d@linaro.org>
+Date:   Fri, 18 Nov 2022 15:52:29 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 07/12] dt-bindings: power: remove deprecated
+ amlogic,meson-gx-pwrc.txt bindings
+Content-Language: en-US
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Eric Dumazet <edumazet@google.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     linux-media@vger.kernel.org, netdev@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, linux-mmc@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org
+References: <20221117-b4-amlogic-bindings-convert-v1-0-3f025599b968@linaro.org>
+ <20221117-b4-amlogic-bindings-convert-v1-7-3f025599b968@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221117-b4-amlogic-bindings-convert-v1-7-3f025599b968@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Anastasia Belova <abelova@astralinux.ru> writes:
+On 18/11/2022 15:33, Neil Armstrong wrote:
+> Remove the deprecated amlogic,meson-gx-pwrc.txt bindings, which was
+> replaced by the amlogic,meson-ee-pwrc.yaml bindings.
+> 
+> The amlogic,meson-gx-pwrc-vpu compatible isn't used anymore since [1]
+> was merged in v5.8-rc1 and amlogic,meson-g12a-pwrc-vpu either since [2]
+> was merged in v5.3-rc1.
+> 
+> [1] commit 5273d6cacc06 ("arm64: dts: meson-gx: Switch to the meson-ee-pwrc bindings")
+> [2] commit f4f1c8d9ace7 ("arm64: dts: meson-g12: add Everything-Else power domain controller")
 
-> If the returning value of SMB2_close_init is an error-value, 
-> exit the function.
->
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
->
-> Fixes: 352d96f3acc6 ("cifs: multichannel: move channel selection above transport layer")
->
-> Signed-off-by: Anastasia Belova <abelova@astralinux.ru>
+As of next-20221109 I see both compatibles used, so something here is
+not accurate.
+
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 > ---
->  fs/cifs/smb2ops.c | 2 ++
->  1 file changed, 2 insertions(+)
+>  .../bindings/power/amlogic,meson-gx-pwrc.txt       | 63 ----------------------
+>  1 file changed, 63 deletions(-)
+> 
 
-Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+
+Best regards,
+Krzysztof
+
