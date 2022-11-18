@@ -2,93 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C55B362F715
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 15:19:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E533C62F6F4
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 15:15:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242278AbiKROT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 09:19:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52968 "EHLO
+        id S242230AbiKROPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 09:15:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242287AbiKROTR (ORCPT
+        with ESMTP id S235230AbiKROPJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 09:19:17 -0500
-Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD60AF21;
-        Fri, 18 Nov 2022 06:19:14 -0800 (PST)
-Received: from localhost.localdomain ([172.16.0.254])
-        (user=dzm91@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 2AIEGVXC002760-2AIEGVXF002760
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Fri, 18 Nov 2022 22:16:36 +0800
-From:   Dongliang Mu <dzm91@hust.edu.cn>
-To:     Helge Deller <deller@gmx.de>, Dongliang Mu <dzm91@hust.edu.cn>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Sekhar Nori <nsekhar@ti.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] fbdev: da8xx-fb: add missing regulator_disable() in fb_probe
-Date:   Fri, 18 Nov 2022 22:14:06 +0800
-Message-Id: <20221118141431.3005015-1-dzm91@hust.edu.cn>
-X-Mailer: git-send-email 2.35.1
+        Fri, 18 Nov 2022 09:15:09 -0500
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C7910C4;
+        Fri, 18 Nov 2022 06:15:04 -0800 (PST)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id D1C8688;
+        Fri, 18 Nov 2022 15:15:02 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1668780903;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=l7qFq+hb6tsUJLwHmcXcoBAd1kn5ubQZkT0q3bCuMFs=;
+        b=f5Zsxj3Q7CiBCzS/6GtFEWucZJXGEO4bbycrzcFv8lAWDB8j8cH9tig9ivOCZ1FfC/easc
+        TZ2+ExmaqRA9tECLwRMsZSVjw9hz6wfLYcy4ayC8BJfS/BLgcbeNCRk3JqtZECa6x//4MA
+        RmAG/a3svn/C9E0/CSvSTGhdwIaVowVDIPBBp6zrY51ET494PVd4pT8Ig40V6G0/ijsc1E
+        jIR3N4sE+PeXqdPdD4FqZPEcqltWViLiCCBf+Q8LYxFjIx12e8h8AuWWiAeB/ogAnN6yRw
+        8S22cwguM4h2qJ4poiyulnH9MdF7pP+CKN62DzRY5NgeEGreGnWXEcDNOyiXZQ==
+From:   Michael Walle <michael@walle.cc>
+To:     tudor.ambarus@microchip.com
+Cc:     alexandre.belloni@bootlin.com, broonie@kernel.org,
+        claudiu.beznea@microchip.com, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
+        nicolas.ferre@microchip.com, robh+dt@kernel.org
+Subject: Re: [PATCH 1/8] spi: dt-bindings: Introduce spi-cs-setup-ns property
+Date:   Fri, 18 Nov 2022 15:14:58 +0100
+Message-Id: <20221118141458.954646-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20221117105249.115649-2-tudor.ambarus@microchip.com>
+References: <20221117105249.115649-2-tudor.ambarus@microchip.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-FEAS-AUTH-USER: dzm91@hust.edu.cn
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The error handling code in fb_probe misses regulator_disable if
-regulator_enable is called successfully. The previous commit only
-adds regulator_disable in the .remove(), forgetting the error
-handling code in the .probe.
+From: Tudor Ambarus <tudor.ambarus@microchip.com>
 
-Fix this by adding a new error label to call regulator_disable.
+> diff --git a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
+> index dca677f9e1b9..ead2cccf658f 100644
+> --- a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
+> +++ b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
+> @@ -44,6 +44,11 @@ properties:
+>      description:
+>        Maximum SPI clocking speed of the device in Hz.
+>  
+> +  spi-cs-setup-ns:
+> +    description:
+> +      Delay in nanosecods to be introduced by the controller after CS is
+> +      asserted.
+> +
 
-Fixes: 611097d5daea("fbdev: da8xx: add support for a regulator")
-Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
----
- drivers/video/fbdev/da8xx-fb.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+Does this need a type as the spi-cs-setup-ns is apparently just 16bit? At
+least the driver uses it that way.
 
-diff --git a/drivers/video/fbdev/da8xx-fb.c b/drivers/video/fbdev/da8xx-fb.c
-index 11922b009ed7..cd07e401b326 100644
---- a/drivers/video/fbdev/da8xx-fb.c
-+++ b/drivers/video/fbdev/da8xx-fb.c
-@@ -1431,7 +1431,7 @@ static int fb_probe(struct platform_device *device)
- 		dev_err(&device->dev,
- 			"GLCD: kmalloc for frame buffer failed\n");
- 		ret = -EINVAL;
--		goto err_release_fb;
-+		goto err_disable_reg;
- 	}
- 
- 	da8xx_fb_info->screen_base = (char __iomem *) par->vram_virt;
-@@ -1475,7 +1475,7 @@ static int fb_probe(struct platform_device *device)
- 
- 	ret = fb_alloc_cmap(&da8xx_fb_info->cmap, PALETTE_SIZE, 0);
- 	if (ret)
--		goto err_release_fb;
-+		goto err_disable_reg;
- 	da8xx_fb_info->cmap.len = par->palette_sz;
- 
- 	/* initialize var_screeninfo */
-@@ -1529,6 +1529,9 @@ static int fb_probe(struct platform_device *device)
- err_dealloc_cmap:
- 	fb_dealloc_cmap(&da8xx_fb_info->cmap);
- 
-+err_disable_reg:
-+	if (par->lcd_supply)
-+		regulator_disable(par->lcd_supply);
- err_release_fb:
- 	framebuffer_release(da8xx_fb_info);
- 
--- 
-2.35.1
+But IMHO this should just be a normal uint32 value to be consistent with
+all the other properties. Also the max value with 16bit will be 'just'
+65us.
 
+-michael
