@@ -2,202 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 264D462EB03
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 02:35:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A4CC62EB0B
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 02:36:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240789AbiKRBfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 20:35:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47404 "EHLO
+        id S240986AbiKRBgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 20:36:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240780AbiKRBfD (ORCPT
+        with ESMTP id S240985AbiKRBgJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 20:35:03 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B581D3;
-        Thu, 17 Nov 2022 17:35:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668735302; x=1700271302;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=bzgR+TU0YGf4VuzW/TtdHPjYK4jyWCU6TfvlREA6o4A=;
-  b=hLWse/2djguti7zwwAU5AB3PlpnlRUwbROips3if/7R3UR/6UgvJmR+b
-   1rzBEZBloJanHAyMrpu0XOoYR0aHNuIwvN8tfYXdK+TfsancgW2zbuYff
-   m2Qtu77bqf13tZq9acv0l0WWmCkWWFbwnu6UWaaCLCYBwoG0/9mIZd7/G
-   uQFicsMOhXcx1pmYOVeHvBgJDftLgzkUiDDE8uz86Z2xVFXSeGm7Cp+4H
-   twXvyZFOf/Kad+kC7I7apw5ukSvzSzSXBlgHsXnmL8xJiiayPtr8OGhyC
-   M7Ll1bl8r7gOFPN7B94JD/PXnspdPIHoAZf5icV2Q+F0t8khzvkGtRL0G
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="399311376"
-X-IronPort-AV: E=Sophos;i="5.96,172,1665471600"; 
-   d="scan'208";a="399311376"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 17:35:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="634263669"
-X-IronPort-AV: E=Sophos;i="5.96,172,1665471600"; 
-   d="scan'208";a="634263669"
-Received: from sqa-gate.sh.intel.com (HELO robert-ivt.tsp.org) ([10.239.48.212])
-  by orsmga007.jf.intel.com with ESMTP; 17 Nov 2022 17:35:00 -0800
-Message-ID: <2b18a49dbe946bcbea29be13f5e0f03eacf75cdc.camel@linux.intel.com>
-Subject: Re: [PATCH] KVM: x86/mmu: simplify kvm_tdp_mmu_map flow when guest
- has to retry
-From:   Robert Hoo <robert.hu@linux.intel.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     dmatlack@google.com, seanjc@google.com
-Date:   Fri, 18 Nov 2022 09:34:59 +0800
-In-Reply-To: <20221117161449.114086-1-pbonzini@redhat.com>
-References: <20221117161449.114086-1-pbonzini@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-10.el7) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 17 Nov 2022 20:36:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36FE72AE9
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 17:35:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668735308;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XuhgMGt5eYKxb7zJ8raKWs44aO6StvNoESpzCP1pzG4=;
+        b=hxYfk6tjsg8cTgr1NjxNEjIQRHYG+wfUAQcU4z9BJVaLUeH5hNDeU9WEfhQMVEyCb83RbU
+        I4vxC4fzN2ogOh9hhbrG4ZP3085baBq4KKY4hLJR5ksN/NGETKY9tO3Cv9Cp3/ekgH9yhT
+        6//wme3EMYKU+BoLKUxGTXHjvuJAyS0=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-222-Jzl2Z7fwPQOP1EyE6O8Wtg-1; Thu, 17 Nov 2022 20:35:06 -0500
+X-MC-Unique: Jzl2Z7fwPQOP1EyE6O8Wtg-1
+Received: by mail-qt1-f199.google.com with SMTP id i4-20020ac813c4000000b003a5044a818cso3492715qtj.11
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 17:35:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XuhgMGt5eYKxb7zJ8raKWs44aO6StvNoESpzCP1pzG4=;
+        b=BWAC+j5wjmT2j7vkruqcfEK7ufK8YjScgZFb1L7QYWxrWoKx8sE29Am/YhDHubcOsr
+         h3dnOZ1bRTuJC9RItTTdJemgctaoVuDDQD0KDAJyTtRJNMCPL5kOBKB/1ctXpU9//wXz
+         slTKyE2uX4BmQODo+886rn274vhQwUhKGslKHTPKHrsQ3fsL3ssIK100vejts7jhSeMq
+         JUBJVv8xf7WMCQCmY92P9JyNuY8WpHqTi539c3mMdjre9clPXExPJhlhmzEejAWKcN4g
+         2prWxV+6Yx8JwYasfxF036oli1Kd6EPSea/B157eN/QNGW+CbYcpLLKIdtKTFqHGlqi4
+         VeNA==
+X-Gm-Message-State: ANoB5pl+YUjovcD3nZhZKcbzAbXie9cG7c1SijDhKkLjVko65F/isn5i
+        mR/RZ3qhMIaFXZQWpO8uYiKYdp9evoysLMFm6obXKrMDYcVTbcj8CdiwQx09fJIgczVVCTKFKOr
+        fTy6r5fycpr4kpKxRHif7FhUO
+X-Received: by 2002:a05:622a:1496:b0:3a5:7eb0:4962 with SMTP id t22-20020a05622a149600b003a57eb04962mr4712924qtx.525.1668735306372;
+        Thu, 17 Nov 2022 17:35:06 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4wFkW2f8XkH1HOv7vs0jJoE2AQxy7v0LZq0260rY80eGcGRw4N1oBy3rmx6CIWrwhmo8OG3A==
+X-Received: by 2002:a05:622a:1496:b0:3a5:7eb0:4962 with SMTP id t22-20020a05622a149600b003a57eb04962mr4712906qtx.525.1668735306151;
+        Thu, 17 Nov 2022 17:35:06 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id dt18-20020a05620a479200b006ea7f9d8644sm1519176qkb.96.2022.11.17.17.35.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 17:35:05 -0800 (PST)
+Date:   Thu, 17 Nov 2022 20:35:04 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     Rik van Riel <riel@surriel.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        James Houghton <jthoughton@google.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>
+Subject: Re: [PATCH RFC v2 02/12] mm/hugetlb: Move swap entry handling into
+ vma lock for fault
+Message-ID: <Y3bhSEmhfULy+Vxo@x1n>
+References: <20221118011025.2178986-1-peterx@redhat.com>
+ <20221118011025.2178986-3-peterx@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221118011025.2178986-3-peterx@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-11-17 at 11:14 -0500, Paolo Bonzini wrote:
-> A removed SPTE is never present, hence the "if" in kvm_tdp_mmu_map
-> only fails in the exact same conditions that the earlier loop
-> tested in order to issue a  "break". So, instead of checking twice
-> the
-> condition (upper level SPTEs could not be created or was frozen),
-> just
-> exit the loop with a goto---the usual poor-man C replacement for RAII
-> early returns.
+On Thu, Nov 17, 2022 at 08:10:15PM -0500, Peter Xu wrote:
+> In hugetlb_fault(), there used to have a special path to handle swap entry
+> at the entrance using huge_pte_offset().  That's unsafe because
+> huge_pte_offset() for a pmd sharable range can access freed pgtables if
+> without either the walker lock or vma lock.
 > 
-> While at it, do not use the "ret" variable for return values of
-> functions that do not return a RET_PF_* enum.  This is clearer
-> and also makes it possible to initialize ret to RET_PF_RETRY.
+> Here the simplest solution for making it safe is just to move the swap
+> handling to be after the vma lock being held.  We may need to take the
+> fault mutex on either migration or hwpoison entries now (also the vma lock,
+> but that's really needed), however neither of them is hot path so it should
+> be fine.
 > 
-> Suggested-by: Robert Hoo <robert.hu@linux.intel.com>
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> Signed-off-by: Peter Xu <peterx@redhat.com>
 > ---
->  arch/x86/kvm/mmu/tdp_mmu.c | 40 ++++++++++++++++++----------------
-> ----
->  1 file changed, 19 insertions(+), 21 deletions(-)
+>  mm/hugetlb.c | 24 +++++++-----------------
+>  1 file changed, 7 insertions(+), 17 deletions(-)
 > 
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> index e08596775427..771210ce5181 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> @@ -1159,7 +1159,7 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu,
-> struct kvm_page_fault *fault)
->  	struct kvm *kvm = vcpu->kvm;
->  	struct tdp_iter iter;
->  	struct kvm_mmu_page *sp;
-> -	int ret;
-> +	int ret = RET_PF_RETRY;
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index c3aab6d5b7aa..62ff3fc51d4e 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -5824,22 +5824,6 @@ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
+>  	int need_wait_lock = 0;
+>  	unsigned long haddr = address & huge_page_mask(h);
 >  
->  	kvm_mmu_hugepage_adjust(vcpu, fault);
->  
-> @@ -1168,23 +1168,25 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu,
-> struct kvm_page_fault *fault)
->  	rcu_read_lock();
->  
->  	tdp_mmu_for_each_pte(iter, mmu, fault->gfn, fault->gfn + 1) {
-> +		int r;
-> +
->  		if (fault->nx_huge_page_workaround_enabled)
->  			disallowed_hugepage_adjust(fault,
-> iter.old_spte, iter.level);
->  
-And here can also be improved, I think.
-
-        tdp_mmu_for_each_pte(iter, mmu, fault->gfn, fault->gfn + 1) {
--               if (fault->nx_huge_page_workaround_enabled)
-+               if (fault->huge_page_disallowed)
-
-in the case of !fault->exec && fault->nx_huge_page_workaround_enabled,
-huge page should be still allowed, shouldn't it?
-
-If you agree, I can send out a patch for this. I've roughly tested
-this, with an ordinary guest boot, works normally.
-
->  		if (iter.level == fault->goal_level)
->  			break;
->  
-> -		/* Step down into the lower level page table if it
-> exists. */
-> -		if (is_shadow_present_pte(iter.old_spte) &&
-> -		    !is_large_pte(iter.old_spte))
-> -			continue;
-> -
->  		/*
->  		 * If SPTE has been frozen by another thread, just give
-> up and
->  		 * retry, avoiding unnecessary page table allocation
-> and free.
->  		 */
->  		if (is_removed_spte(iter.old_spte))
-> -			break;
-> +			goto retry;
-> +
-> +		/* Step down into the lower level page table if it
-> exists. */
-> +		if (is_shadow_present_pte(iter.old_spte) &&
-> +		    !is_large_pte(iter.old_spte))
-> +			continue;
->  
->  		/*
->  		 * The SPTE is either non-present or points to a huge
-> page that
-> @@ -1196,13 +1198,17 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu,
-> struct kvm_page_fault *fault)
->  		sp->nx_huge_page_disallowed = fault-
-> >huge_page_disallowed;
->  
->  		if (is_shadow_present_pte(iter.old_spte))
-> -			ret = tdp_mmu_split_huge_page(kvm, &iter, sp,
-> true);
-> +			r = tdp_mmu_split_huge_page(kvm, &iter, sp,
-> true);
->  		else
-> -			ret = tdp_mmu_link_sp(kvm, &iter, sp, true);
-> +			r = tdp_mmu_link_sp(kvm, &iter, sp, true);
->  
-> -		if (ret) {
-> +		/*
-> +		 * Also force the guest to retry the access if the
-> upper level SPTEs
-> +		 * aren't in place.
-> +		 */
-> +		if (r) {
->  			tdp_mmu_free_sp(sp);
-> -			break;
-> +			goto retry;
->  		}
->  
->  		if (fault->huge_page_disallowed &&
-> @@ -1213,18 +1219,10 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu,
-> struct kvm_page_fault *fault)
->  		}
->  	}
->  
-> -	/*
-> -	 * Force the guest to retry the access if the upper level SPTEs
-> aren't
-> -	 * in place, or if the target leaf SPTE is frozen by another
-> CPU.
-> -	 */
-> -	if (iter.level != fault->goal_level ||
-> is_removed_spte(iter.old_spte)) {
-> -		rcu_read_unlock();
-> -		return RET_PF_RETRY;
+> -	ptep = huge_pte_offset(mm, haddr, huge_page_size(h));
+> -	if (ptep) {
+> -		/*
+> -		 * Since we hold no locks, ptep could be stale.  That is
+> -		 * OK as we are only making decisions based on content and
+> -		 * not actually modifying content here.
+> -		 */
+> -		entry = huge_ptep_get(ptep);
+> -		if (unlikely(is_hugetlb_entry_migration(entry))) {
+> -			migration_entry_wait_huge(vma, ptep);
+> -			return 0;
+> -		} else if (unlikely(is_hugetlb_entry_hwpoisoned(entry)))
+> -			return VM_FAULT_HWPOISON_LARGE |
+> -				VM_FAULT_SET_HINDEX(hstate_index(h));
 > -	}
 > -
->  	ret = tdp_mmu_map_handle_target_level(vcpu, fault, &iter);
-> -	rcu_read_unlock();
+>  	/*
+>  	 * Serialize hugepage allocation and instantiation, so that we don't
+>  	 * get spurious allocation failures if two CPUs race to instantiate
+> @@ -5886,8 +5870,14 @@ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
+>  	 * fault, and is_hugetlb_entry_(migration|hwpoisoned) check will
+>  	 * properly handle it.
+>  	 */
+> -	if (!pte_present(entry))
+> +	if (!pte_present(entry)) {
+> +		if (unlikely(is_hugetlb_entry_migration(entry)))
+> +			migration_entry_wait_huge(vma, ptep);
+
+Hmm no, need to release the vma lock and fault mutex.. So I remembered why
+I had a note that I need to rework migration wait code..
+
+I'll try that on next version, it would be a callback just to release the
+proper locks in migration_entry_wait_huge() right after releasing the
+pgtable lock, in e.g. migration_entry_wait_on_locked().
+
+> +		else if (unlikely(is_hugetlb_entry_hwpoisoned(entry)))
+> +			ret = VM_FAULT_HWPOISON_LARGE |
+> +			    VM_FAULT_SET_HINDEX(hstate_index(h));
+>  		goto out_mutex;
+> +	}
 >  
-> +retry:
-> +	rcu_read_unlock();
->  	return ret;
->  }
->  
+>  	/*
+>  	 * If we are going to COW/unshare the mapping later, we examine the
+> -- 
+> 2.37.3
+> 
+
+-- 
+Peter Xu
 
