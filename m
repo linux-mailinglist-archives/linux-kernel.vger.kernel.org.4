@@ -2,80 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76A2D62EE4F
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 08:28:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 205FD62EE4D
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 08:28:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234724AbiKRH2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 02:28:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46118 "EHLO
+        id S241151AbiKRH2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 02:28:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiKRH2j (ORCPT
+        with ESMTP id S229476AbiKRH2d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 02:28:39 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519D113DF3;
-        Thu, 17 Nov 2022 23:28:37 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 0EE9624E07C;
-        Fri, 18 Nov 2022 15:28:36 +0800 (CST)
-Received: from EXMBX072.cuchost.com (172.16.6.82) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 18 Nov
- 2022 15:28:36 +0800
-Received: from [192.168.50.235] (183.27.96.116) by EXMBX072.cuchost.com
- (172.16.6.82) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 18 Nov
- 2022 15:28:35 +0800
-Message-ID: <a1e4c81e-ba9f-e6c1-db09-4bad7862ed01@starfivetech.com>
-Date:   Fri, 18 Nov 2022 15:28:21 +0800
+        Fri, 18 Nov 2022 02:28:33 -0500
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC6712AF4;
+        Thu, 17 Nov 2022 23:28:33 -0800 (PST)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-370547b8ca0so42388627b3.0;
+        Thu, 17 Nov 2022 23:28:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=fIq4B8jpHjtTC9rO6U/0HlBjNi37g7n6MUt5O1wpmQg=;
+        b=dm0GlyXu/u1A7mUk7Kpzb+S9xN11ABAeHAmQ2R3TECYaO4UN8w7kl4nBwhGUMUASxx
+         te6IE0BM0UWzsm64/VfhthqpIEX8zbzCz/09hxY4uBcInKWKdv2uBzWA29Yn0SxS03Kg
+         S9JZQaZVmf2WCVlkinYCE/wuUriZmhJqhpazgkslkUvfx+zfWDqooBKhJV7X6Tvr1Ymq
+         BjbjUu7DaLLtzdykxn8SzyctnXGsiB/6VL3bdhJCpEsKpVsVPAICFrMO4rPrxSaqN1Gm
+         MBStvVruu7+oqD1a8AvZqm+CRqsJjq9Bci/HjCkvO4W6XOL1U3iv4KHZiZHGXFBtElZC
+         k6uQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fIq4B8jpHjtTC9rO6U/0HlBjNi37g7n6MUt5O1wpmQg=;
+        b=pTQAkiQweCFMJ4uEdRPgcKEY3cx9CD0wRnIy6arr2fI7tbanK02in3Cz0FUievlkvI
+         SCptzvBwqDqACIuN7csiX4hUXzkjpQRX/cHsyWunVQ34p96b8PJhHbVsCJxSSs0ziMXS
+         1WyN/xmPCip4jiy1JKPLwtIiJLRnuYG1O2tJvvy/rhu7+EpiNBA6Qr489ftjbbyMhe0y
+         ffYlNqSAQFfiBRWlkb/i7DvoY7LdwnT+wftHuw7dHm0Yjf+9tbny8HMZ8OO/0Vsn768Y
+         RPMBmAC+TWC2AbKZRSOmJv6OwTIOteZNhSoxJk3y16dUIsFNgvWMhPcyW76DSUdtf9gN
+         awWQ==
+X-Gm-Message-State: ANoB5plpry3lwJV2bHUEn15Qw8gHSlZzWuvqJCvaaWaxZ9wiE6yvi5Da
+        qXRqZ/E+EC0Ixh6eCXyKWBAeClXIjwSvxO5qvmkDuZOwaN8=
+X-Google-Smtp-Source: AA0mqf73sdMy68XJbQb5H8Jg1dOLOXOpr9ua8cw7FhlPmjQN4idUvFlr60RJSMN1hAftvDfbKPSOXxzi93FI47+WTgY=
+X-Received: by 2002:a81:c206:0:b0:38d:c23a:c541 with SMTP id
+ z6-20020a81c206000000b0038dc23ac541mr5412773ywc.109.1668756512447; Thu, 17
+ Nov 2022 23:28:32 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v2 0/8] Basic device tree support for StarFive JH7110
- RISC-V SoC
-Content-Language: en-US
-To:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>
-CC:     Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20221118011714.70877-1-hal.feng@starfivetech.com>
-From:   Hal Feng <hal.feng@starfivetech.com>
-In-Reply-To: <20221118011714.70877-1-hal.feng@starfivetech.com>
+References: <20221118021410.24420-1-vishal.moola@gmail.com> <20221118021410.24420-2-vishal.moola@gmail.com>
+In-Reply-To: <20221118021410.24420-2-vishal.moola@gmail.com>
+From:   Vishal Moola <vishal.moola@gmail.com>
+Date:   Thu, 17 Nov 2022 23:28:21 -0800
+Message-ID: <CAOzc2pxYSpQGEEads3qfxyJgdcDzMoEyTg01Z3D2ZaAjUSOznw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] ext4: Convert move_extent_per_page() to use folios
+To:     linux-mm@kvack.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, akpm@linux-foundation.org,
+        willy@infradead.org, naoya.horiguchi@nec.com, tytso@mit.edu
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.96.116]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX072.cuchost.com
- (172.16.6.82)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Nov 2022 09:17:06 +0800, Hal Feng wrote:
-> The original patch series "Basic StarFive JH7110 RISC-V SoC support" [1]
-> is split into 3 patch series. They respectively add basic clock&reset,
-> pinctrl and device tree support for StarFive JH7110 SoC. These patch
-> series are independent, but the Visionfive2 board can boot up successfully
+On Thu, Nov 17, 2022 at 6:14 PM Vishal Moola (Oracle)
+<vishal.moola@gmail.com> wrote:
+>
+> Converts move_extent_per_page() to use folios. This change removes
+> 5 calls to compound_head() and is in preparation for the removal of
+> the try_to_release_page() wrapper.
+>
+> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+> ---
+>  fs/ext4/move_extent.c | 52 ++++++++++++++++++++++++++-----------------
+>  1 file changed, 31 insertions(+), 21 deletions(-)
+>
+> diff --git a/fs/ext4/move_extent.c b/fs/ext4/move_extent.c
+> index 044e34cd835c..aa67eb240ca6 100644
+> --- a/fs/ext4/move_extent.c
+> +++ b/fs/ext4/move_extent.c
+> @@ -253,6 +253,7 @@ move_extent_per_page(struct file *o_filp, struct inode *donor_inode,
+>  {
+>         struct inode *orig_inode = file_inode(o_filp);
+>         struct page *pagep[2] = {NULL, NULL};
+> +       struct folio *folio[2] = {NULL, NULL};
+>         handle_t *handle;
+>         ext4_lblk_t orig_blk_offset, donor_blk_offset;
+>         unsigned long blocksize = orig_inode->i_sb->s_blocksize;
+> @@ -313,6 +314,13 @@ move_extent_per_page(struct file *o_filp, struct inode *donor_inode,
+>          * hold page's lock, if it is still the case data copy is not
+>          * necessary, just swap data blocks between orig and donor.
+>          */
+> +       folio[0] = page_folio(pagep[0]);
+> +       folio[1] = page_folio(pagep[1]);
+> +
+> +       VM_BUG_ON_FOLIO(!folio_test_large(folio[0]), folio[0]);
+> +       VM_BUG_ON_FOLIO(!folio_test_large(folio[1]), folio[1]);
+> +       VM_BUG_ON_FOLIO(folio_nr_pages(folio[0]) != folio_nr_pages(folio[1]), folio[1]);
 
-Note that this patch series depends on the patch series [1] and [2].
-
-[1] https://lore.kernel.org/all/20221118010627.70576-1-hal.feng@starfivetech.com/
-[2] https://lore.kernel.org/all/20221118011108.70715-1-hal.feng@starfivetech.com/
-
-> only if all these patches series applied. This one adds basic device
-
+Looks like I got my assertions backward. We want to BUG if the folios are large,
+or if they are different sizes. Disregard v2, its fixed in v3.
