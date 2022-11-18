@@ -2,69 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ACFF6302E4
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 00:21:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8223F630341
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 00:26:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232160AbiKRXVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 18:21:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59992 "EHLO
+        id S234813AbiKRX0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 18:26:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231790AbiKRXU5 (ORCPT
+        with ESMTP id S235516AbiKRXZn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 18:20:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E2F7C6AF
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:09:22 -0800 (PST)
+        Fri, 18 Nov 2022 18:25:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51ED47FF2B
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:14:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668812961;
+        s=mimecast20190719; t=1668813265;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=fqxYlPjStId8INOMKlUIJ9udLA0AzXzEw7XWCP07sCA=;
-        b=ShB2nT5hZ9TmyBLg70rRqZJNTRlu0vl02lTtMRH2+0j8qi4E3gyKzf6dpHkdC3gvyI5V5J
-        EYsZxmrROWx7cyioIf9p91Bhw5StM/A4w0aP1Gop2wdnAeshK4epd+mlxPGwCwlQUakZRk
-        g0W3Be7bdZlFfWHVP8G1JWDbxitc8rk=
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
- [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
+         in-reply-to:in-reply-to:references:references;
+        bh=l2sD/7nQDcm641haY/C3yaUw5XrSrZUByds8laMM8v4=;
+        b=HoL/SSNhF9pdXc2mxLhkXne1M+5LPhc8p13aatvEH/F2p5D1aRVgqIa7vEln8q/HFv3taQ
+        KavfgJUPMuSJxTGzoysPNvoVvUTp1G0leYCgvb7+Djp4cjrIvoCfUc5LRnnLiHn5t7fu/i
+        Nq7ADBmHF2i+QllPjBqQia+nFt04QeY=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-347-zZhdaS2ZMiOzxxwsoT0uFg-1; Fri, 18 Nov 2022 18:09:20 -0500
-X-MC-Unique: zZhdaS2ZMiOzxxwsoT0uFg-1
-Received: by mail-io1-f72.google.com with SMTP id y5-20020a056602120500b006cf628c14ddso3358089iot.15
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:09:20 -0800 (PST)
+ us-mta-120-SHf3nRw4M8yeVBOaxllzPA-1; Fri, 18 Nov 2022 18:14:23 -0500
+X-MC-Unique: SHf3nRw4M8yeVBOaxllzPA-1
+Received: by mail-qk1-f199.google.com with SMTP id bp10-20020a05620a458a00b006fa29f253dcso8134029qkb.11
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:14:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fqxYlPjStId8INOMKlUIJ9udLA0AzXzEw7XWCP07sCA=;
-        b=mbO232NvvydxzENQtxJBrcC5AUSQ3iTV25+93xIDzwpSSNaKm9F3/1EqSU0JCm9swf
-         AE5sKdt184dRRMaGMJCuXugiPVobpB2qQiS0XXJiYz6R0U9UrdgJkPhbRcgqdd192SV0
-         rwt3qblI326brhRuoEbsiQm2svV5Xgt5ocoItVT4zdTL24eA0ovVUDAQQcvedEAt5/H7
-         y+ziNIhjUfiRhYBYvl7wPU2qSuBQuqWbdg8k1wHm+LIFfeyPEB16M6JWVGV64BFOAS2V
-         IQKEint//0ZQmwkJh29pehV31Yo234SmTenKUNmFfFpLZPkJL+StSe18N4EzNVEPGpf5
-         mLxw==
-X-Gm-Message-State: ANoB5pnjSp/+zPy9ldbm29ZH+3v/X6aaN7vEYbhxuW9vJV08ddTg/Gem
-        Wc6LHDV7OX1n2XipRm66IVhvP+KMcCQw9ERgQzqQkkgIy7o6E7cpewcBNr97f9i1joAXfdgG7gu
-        F9GGcaMAMX0PjDJp0+Szgz+PN
-X-Received: by 2002:a05:6638:e8e:b0:365:ca83:bafb with SMTP id p14-20020a0566380e8e00b00365ca83bafbmr4266499jas.272.1668812959485;
-        Fri, 18 Nov 2022 15:09:19 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7f3wAGkAooZ4pgGTzbQ8zzFPutM7VEf7MWtlfseJLOvhAGCmYD1Viv5Pey1FXFSlTBLf+UZw==
-X-Received: by 2002:a05:6638:e8e:b0:365:ca83:bafb with SMTP id p14-20020a0566380e8e00b00365ca83bafbmr4266495jas.272.1668812959204;
-        Fri, 18 Nov 2022 15:09:19 -0800 (PST)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id g17-20020a056e02131100b0030249f369f7sm1631332ilr.82.2022.11.18.15.09.18
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l2sD/7nQDcm641haY/C3yaUw5XrSrZUByds8laMM8v4=;
+        b=FL/eqUWmxZVrMKq47NXmdaIAAvWWEjur29CnLyoy6iEw5eghU54rxg7ZvLITc9Q8tv
+         TH3NYdgdp0yM3XqLP7kou2TNlaNjHO1jywDMotBEVplkeq8HpgnCk5yzIkyp7xJCH2Fs
+         813jTLVMv1IFpD1h7xGaSoyybujLP6GQnQ03kz6IqDJ6pWQCM5XW4kBe2HkOGf0D3186
+         BcPjsyhfq2Ij+hrnPSUCxvY6iFKg8uUO9uGZ395IuWpMSrA4UWz82lA8PgLLbTmDlHux
+         MvQUAlSOXmcGdHp2risb/8T/Hx+KaTVWUnQcuRaHN/VKIzf9HGR4rKGmLMEjmvxZuiK9
+         /5Ig==
+X-Gm-Message-State: ANoB5pmlgYldJqowo2ngYt+Wv8M8BbzA/eZtxvc8OxHcpO8ZeveM4dQb
+        C/WCMbZYSsk8kO1PT3tpwMo5TommsT1bHaAG/KV1WSJf6IOmNVcUI/7L/s1j/HGhAcFGk2yh7DY
+        FiGz7Fc+PXClWuqGnHuxIT3Lb
+X-Received: by 2002:a05:6214:5702:b0:4c6:9e2f:4496 with SMTP id lt2-20020a056214570200b004c69e2f4496mr1810699qvb.98.1668813263139;
+        Fri, 18 Nov 2022 15:14:23 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6WH3JJ8PgUUP/Sm2JEOSSc5NnnJvB7CdYJAp7s3wC8wuiFRnbp9WovIi90V3/q5zkzHZ9GJw==
+X-Received: by 2002:a05:6214:5702:b0:4c6:9e2f:4496 with SMTP id lt2-20020a056214570200b004c69e2f4496mr1810689qvb.98.1668813262860;
+        Fri, 18 Nov 2022 15:14:22 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id t20-20020a05620a451400b006ceb933a9fesm3408375qkp.81.2022.11.18.15.14.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 15:09:18 -0800 (PST)
-Date:   Fri, 18 Nov 2022 16:09:16 -0700
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
-Cc:     <linux-kernel@vger.kernel.org>, christian.koenig@amd.com
-Subject: [RFC] Resizable BARs vs bridges with BARs
-Message-ID: <20221118160916.7e165306.alex.williamson@redhat.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        Fri, 18 Nov 2022 15:14:21 -0800 (PST)
+Date:   Fri, 18 Nov 2022 18:14:19 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v4 1/3] mm/mprotect: Fix soft-dirty check in
+ can_change_pte_writable()
+Message-ID: <Y3gRy8pUiYWFGqcI@x1n>
+References: <20220725142048.30450-1-peterx@redhat.com>
+ <20220725142048.30450-2-peterx@redhat.com>
+ <b75653b8-5264-ca03-bf5c-671e07e7fdd8@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <b75653b8-5264-ca03-bf5c-671e07e7fdd8@collabora.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -75,89 +83,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Sat, Nov 19, 2022 at 01:16:26AM +0500, Muhammad Usama Anjum wrote:
+> Hi Peter and David,
 
-I'm trying to get resizable BARs working in a configuration where my
-root bus resources provide plenty of aperture for the BAR:
+Hi, Muhammad,
 
-pci_bus 0000:5d: root bus resource [io  0x8000-0x9fff window]
-pci_bus 0000:5d: root bus resource [mem 0xb8800000-0xc5ffffff window]
-pci_bus 0000:5d: root bus resource [mem 0xb000000000-0xbfffffffff window] <<<
-pci_bus 0000:5d: root bus resource [bus 5d-7f]
+> 
+> On 7/25/22 7:20 PM, Peter Xu wrote:
+> > The check wanted to make sure when soft-dirty tracking is enabled we won't
+> > grant write bit by accident, as a page fault is needed for dirty tracking.
+> > The intention is correct but we didn't check it right because VM_SOFTDIRTY
+> > set actually means soft-dirty tracking disabled.  Fix it.
+> [...]
+> > +static inline bool vma_soft_dirty_enabled(struct vm_area_struct *vma)
+> > +{
+> > +	/*
+> > +	 * NOTE: we must check this before VM_SOFTDIRTY on soft-dirty
+> > +	 * enablements, because when without soft-dirty being compiled in,
+> > +	 * VM_SOFTDIRTY is defined as 0x0, then !(vm_flags & VM_SOFTDIRTY)
+> > +	 * will be constantly true.
+> > +	 */
+> > +	if (!IS_ENABLED(CONFIG_MEM_SOFT_DIRTY))
+> > +		return false;
+> > +
+> > +	/*
+> > +	 * Soft-dirty is kind of special: its tracking is enabled when the
+> > +	 * vma flags not set.
+> > +	 */
+> > +	return !(vma->vm_flags & VM_SOFTDIRTY);
+> > +}
+> I'm sorry. I'm unable to understand the inversion here.
+> > its tracking is enabled when the vma flags not set.
+> VM_SOFTDIRTY is set on the VMA when new VMA is allocated to mark is
+> soft-dirty. When we write to clear_refs to clear soft-dirty bit,
+> VM_SOFTDIRTY is cleared from the VMA as well. Then why do you say tracking
+> is enabled when the vma flags not set?
 
-But resizing fails with -ENOSPC.  The topology looks like this:
+Because only when 4>clear_refs happens would VM_SOFTDIRTY be cleared, and
+only until then the real tracking starts (by removing write bits on ptes).
 
- +-[0000:5d]-+-00.0-[5e-61]----00.0-[5f-61]--+-01.0-[60]----00.0  Intel Corporation DG2 [Arc A380]
-                                             \-04.0-[61]----00.0  Intel Corporation Device 4f92
+> I'm missing some obvious thing.  Maybe the meaning of tracking is to see
+> if VM_SOFTDIRTY needs to be set. If VM_SOFTDIRTY is already set, tracking
+> isn't needed. Can you give an example here?
 
-The BIOS is not fluent in resizable BARs and only programs the root
-port with a small aperture:
+If VM_SOFTDIRTY is set, pagemap will treat all pages as soft-dirty, please
+see pagemap_pmd_range():
 
-5d:00.0 PCI bridge: Intel Corporation Sky Lake-E PCI Express Root Port A (rev 07) (prog-if 00 [Normal decode])
-        Bus: primary=5d, secondary=5e, subordinate=61, sec-latency=0
-        I/O behind bridge: 0000f000-00000fff [disabled]
-        Memory behind bridge: b9000000-ba0fffff [size=17M]
-        Prefetchable memory behind bridge: 000000bfe0000000-000000bff07fffff [size=264M]
-        Kernel driver in use: pcieport
+		if (vma->vm_flags & VM_SOFTDIRTY)
+			flags |= PM_SOFT_DIRTY;
 
-The trouble comes on the upstream PCIe switch port:
+So fundamentally it reports nothing useful when VM_SOFTDIRTY set.  That's
+also why we need the clear_refs first before we can have anything useful.
 
-5e:00.0 PCI bridge: Intel Corporation Device 4fa1 (rev 01) (prog-if 00 [Normal decode])
-   >>>  Region 0: Memory at b010000000 (64-bit, prefetchable)
-        Bus: primary=5e, secondary=5f, subordinate=61, sec-latency=0
-        I/O behind bridge: 0000f000-00000fff [disabled]
-        Memory behind bridge: b9000000-ba0fffff [size=17M]
-        Prefetchable memory behind bridge: 000000bfe0000000-000000bfefffffff [size=256M]
-        Kernel driver in use: pcieport
+Feel free to reference to the doc page (admin-guide/mm/soft-dirty.rst):
 
-Note region 0 of this bridge, which is 64-bit, prefetchable and
-therefore conflicts with the same type for the resizable BAR on the GPU:
+---8<---
+The soft-dirty is a bit on a PTE which helps to track which pages a task
+writes to. In order to do this tracking one should
 
-60:00.0 VGA compatible controller: Intel Corporation DG2 [Arc A380] (rev 05) (prog-if 00 [VGA controller])
-        Region 0: Memory at b9000000 (64-bit, non-prefetchable) [disabled] [size=16M]
-        Region 2: Memory at bfe0000000 (64-bit, prefetchable) [disabled] [size=256M]
-        Expansion ROM at <ignored> [disabled]
-        Capabilities: [420 v1] Physical Resizable BAR
-                BAR 2: current size: 256MB, supported: 256MB 512MB 1GB 2GB 4GB 8GB
+  1. Clear soft-dirty bits from the task's PTEs.
 
-It's a shame that the hardware designers didn't mark the upstream port
-BAR as non-prefetchable to avoid it living in the same resource
-aperture as the resizable BAR on the downstream device.  In any case,
-it's my understanding that our bridge drivers don't generally make use
-of bridge BARs.  I think we can test whether a driver has done a
-pci_request_region() or equivalent by looking for the IORESOURCE_BUSY
-flag, but I also suspect this is potentially racy.
+     This is done by writing "4" into the ``/proc/PID/clear_refs`` file of the
+     task in question.
 
-The patch below works for me, allowing the new resourceN_resize sysfs
-attribute to resize the root port window within the provided bus
-window.  Is this the right answer?  How can we make it feel less
-sketchy?  Thanks,
+  2. Wait some time.
 
-Alex
+  3. Read soft-dirty bits from the PTEs.
 
-diff --git a/drivers/pci/setup-bus.c b/drivers/pci/setup-bus.c
-index b4096598dbcb..8c332a08174d 100644
---- a/drivers/pci/setup-bus.c
-+++ b/drivers/pci/setup-bus.c
-@@ -2137,13 +2137,19 @@ int pci_reassign_bridge_resources(struct pci_dev *bridge, unsigned long type)
- 	next = bridge;
- 	do {
- 		bridge = next;
--		for (i = PCI_BRIDGE_RESOURCES; i < PCI_BRIDGE_RESOURCE_END;
-+		for (i = PCI_STD_RESOURCES; i < PCI_BRIDGE_RESOURCE_END;
- 		     i++) {
- 			struct resource *res = &bridge->resource[i];
- 
- 			if ((res->flags ^ type) & PCI_RES_TYPE_MASK)
- 				continue;
- 
-+			if (i < PCI_STD_NUM_BARS) {
-+				if (!(res->flags & IORESOURCE_BUSY))
-+					pci_release_resource(bridge, i);
-+				continue;
-+			}
-+
- 			/* Ignore BARs which are still in use */
- 			if (res->child)
- 				continue;
+     This is done by reading from the ``/proc/PID/pagemap``. The bit 55 of the
+     64-bit qword is the soft-dirty one. If set, the respective PTE was
+     written to since step 1.
+---8<---
+
+The tracking starts at step 1, where is when the flag is cleared.
+
+Thanks,
+
+-- 
+Peter Xu
 
