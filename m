@@ -2,103 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A71762FE68
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 20:54:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E22D62FE6C
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 20:55:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235210AbiKRTyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 14:54:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34526 "EHLO
+        id S233548AbiKRTzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 14:55:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234059AbiKRTyS (ORCPT
+        with ESMTP id S235327AbiKRTyn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 14:54:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB50B73B1
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 11:53:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668801197;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2SDgNlaB9KyrLTxigHDo0Su+5pBotIouemWx+8T/Qhk=;
-        b=F0DiSkWUdIp51dIHWGkiEXLAFRNhkgICw4RlFUYmHvaanPj+LfRTDncposp8z+gk1x1rFj
-        SeaPMLPmAvJgaN2/ec0Coy6u29ggpo0nPhx+r97xJeOUarYF2sU/t3OIYgwN4eSl6vNFtS
-        sg4t3dYEho2fdImrdIsDzOqgdFwTU1g=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-134-6TpmSzJsMI63zsFI2gy3Ng-1; Fri, 18 Nov 2022 14:53:15 -0500
-X-MC-Unique: 6TpmSzJsMI63zsFI2gy3Ng-1
-Received: by mail-qt1-f198.google.com with SMTP id n12-20020ac85a0c000000b003a5849497f9so5942010qta.20
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 11:53:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:organization
-         :references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2SDgNlaB9KyrLTxigHDo0Su+5pBotIouemWx+8T/Qhk=;
-        b=Yt5w2Wb/tl9S/LhgSW57gDSg79wvzh3qqW21RMfnQ19sEazVmDEJuYjvvtzi3KrAC8
-         FuG0tgSnW1fl6Rjt6KlNGCNY9F14jfwKO0WtmGKXMz82fFeQyXp11q/GzLJFqBw/9BGq
-         cczs+CIec632CMpK7OjB9ZnAIfbxv1XltE1q3KGcnPvzEwP+SlzkGFp1KmBSfSJt8cl+
-         T+NT9mkSJmEM7nsUYRjlij/iSwSBjKe3cQUhMeinfvtOe7aATiK3xNa263VhsazWcg39
-         MBBRBXRlrgiaPUrLpoqELok322MboiPg+d9uFgyojz9CdOi0XA0q8oReOAwrQ7eP3YXK
-         XMzw==
-X-Gm-Message-State: ANoB5pkoiftY4YAaCcx/WF6yZtsVnBrTQNOrZdQ/XT2R96shDB3qYlCS
-        j5hSgH+U8P96pP9ea0e3e8ottoch71MDXgHyQogkJo8hhOg8LDLmEhlhbunsxC4+wzljePAKWox
-        MR6tykmJne1iT25ERjHaVzw07
-X-Received: by 2002:a0c:f884:0:b0:4b7:ebc1:ecd6 with SMTP id u4-20020a0cf884000000b004b7ebc1ecd6mr8261449qvn.9.1668801195061;
-        Fri, 18 Nov 2022 11:53:15 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4oMKSrldRtJ7IsZ7+l0W7LYvsx00+DMt7yKj8oXD3WVf074jzl+nIlUHBgLqhyFiAq1BIFRg==
-X-Received: by 2002:a0c:f884:0:b0:4b7:ebc1:ecd6 with SMTP id u4-20020a0cf884000000b004b7ebc1ecd6mr8261429qvn.9.1668801194711;
-        Fri, 18 Nov 2022 11:53:14 -0800 (PST)
-Received: from ?IPv6:2600:4040:5c6c:9200::feb? ([2600:4040:5c6c:9200::feb])
-        by smtp.gmail.com with ESMTPSA id v10-20020a05620a440a00b006fab416015csm3061281qkp.25.2022.11.18.11.53.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 11:53:13 -0800 (PST)
-Message-ID: <b4391ff6a53a7c9a4d532c929b0dd62c9e80a562.camel@redhat.com>
-Subject: Re: [PATCH v2 1/4] drm/amdgpu/mst: Stop ignoring error codes and
- deadlocking
-From:   Lyude Paul <lyude@redhat.com>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     "Lin, Wayne" <Wayne.Lin@amd.com>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "Liu, Wenjing" <Wenjing.Liu@amd.com>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "Mahfooz, Hamza" <Hamza.Mahfooz@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        "Francis, David" <David.Francis@amd.com>,
-        "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>,
-        "Hung, Alex" <Alex.Hung@amd.com>, "Zuo, Jerry" <Jerry.Zuo@amd.com>,
-        "Pillai, Aurabindo" <Aurabindo.Pillai@amd.com>,
-        "Wentland, Harry" <Harry.Wentland@amd.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "Li, Sun peng (Leo)" <Sunpeng.Li@amd.com>,
-        "Wu, Hersen" <hersenxs.wu@amd.com>,
-        Mikita Lipski <mikita.lipski@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>, "Li, Roman" <Roman.Li@amd.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "Koenig, Christian" <Christian.Koenig@amd.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Kazlauskas, Nicholas" <Nicholas.Kazlauskas@amd.com>
-Date:   Fri, 18 Nov 2022 14:53:12 -0500
-In-Reply-To: <cf10ae993fb08c474b1dff1e2a5ef7d11d519055.camel@redhat.com>
-References: <20221114221754.385090-1-lyude@redhat.com>
-         <20221114221754.385090-2-lyude@redhat.com>
-         <CO6PR12MB548932515652B8D3130C66DEFC079@CO6PR12MB5489.namprd12.prod.outlook.com>
-         <35e55d8040afdcb5684bec16ff710ce5ff32b202.camel@redhat.com>
-         <CADnq5_PgU-XO2nYGYwmod0VX750SXarkk+tsX3qfzqyos7Cx1g@mail.gmail.com>
-         <cf10ae993fb08c474b1dff1e2a5ef7d11d519055.camel@redhat.com>
-Organization: Red Hat Inc.
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Fri, 18 Nov 2022 14:54:43 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2056.outbound.protection.outlook.com [40.107.237.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA062B97D0;
+        Fri, 18 Nov 2022 11:54:09 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VwjCswUuuwf/7EBr/1sg0IfneaYKWBqYA6n71pfS23GGEeUGxY50x2XBjYZVZxcEA+NZq5iTZkgOrZz+uxZxxxrNfgtr1nWTFOYzg9vV610FCX7Yq4ZM/Ss9+iA+u4g1Z5VKnjXnVFPS3P7uB0gjeZxsMSVoDznk4bndTndsMcU/5TWfSlRnuGoX8mrlHOuNwv2f6dShebiPvj128kqvXjcBetOH2Wo7g/P99yLlExJDWVNCu6UmYGs6o3jCiew36YwBnuQrzu7eM8fd1wSgt7rlxoRSEwvowr2H1f45Q5vQgBxeIPV8eqzSPtVJJ2ntH2rJdgiBysYIs8oi1E7NgA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BctSm0Mo3RU+gErGoQIbc1ZegNgjvQsU1U2fBBSCy8U=;
+ b=IqhPXJIO2GN0KX17h/3Jp8s6zX7VSsRyYxkiRsD3xZqiloQKzYqMte8ZFFhh9Z16ZruzXCsoRKyIP3WZ1c4tmmLZvj9RQHal0uMgU03vUPEFSU4bWIEVDCDEYt2qKmpVPBiwA1sLmfNx47FQzbLp+iRmrA16rpNXC9KhiLfJ5/7olQcUCq5engRDUGM6CSLPNjohFjH+p7fdFSDiZvM7BsAGi6yz2SoHq2jDzWqZcgD6QZvyf0O/GjQiuCP/Hxf81qmvw/TFJzVMnNDx4cwx6OoW3osJgub8dKdyAVjFwzzi/Q6QijS0rWHCaNr0zDm5OGe29uE+R3skPYIIcMj7Bg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BctSm0Mo3RU+gErGoQIbc1ZegNgjvQsU1U2fBBSCy8U=;
+ b=ZUFkgClVpc7Yr17+I8QDaIBwY8rijjW84yr36R0fXxFpemupKGXoyXN80zWowG12+GVIHcewWuqll6SCnVReR/0Zk7G7aCyTmMRHYPVvj5uUUL4GmzKG+WxNeohnPbbFa5g0WjdC18lAt0Wh2LvFa4sj9UaxzbA1/cxzv6kLoT0=
+Received: from DS7PR03CA0264.namprd03.prod.outlook.com (2603:10b6:5:3b3::29)
+ by DS7PR12MB6310.namprd12.prod.outlook.com (2603:10b6:8:95::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17; Fri, 18 Nov
+ 2022 19:54:07 +0000
+Received: from DM6NAM11FT110.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:3b3:cafe::8) by DS7PR03CA0264.outlook.office365.com
+ (2603:10b6:5:3b3::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.20 via Frontend
+ Transport; Fri, 18 Nov 2022 19:54:07 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT110.mail.protection.outlook.com (10.13.173.205) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5834.8 via Frontend Transport; Fri, 18 Nov 2022 19:54:07 +0000
+Received: from rric.localdomain (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 18 Nov
+ 2022 13:54:04 -0600
+Date:   Fri, 18 Nov 2022 20:53:49 +0100
+From:   Robert Richter <rrichter@amd.com>
+To:     Dan Williams <dan.j.williams@intel.com>
+CC:     Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Dave Jiang <dave.jiang@intel.com>
+Subject: Re: [PATCH v3 5/9] cxl/pci: Only register RCDs with device 0,
+ function 0 as CXL memory device
+Message-ID: <Y3fitR3+8SvErb9v@rric.localdomain>
+References: <20221109104059.766720-1-rrichter@amd.com>
+ <20221109104059.766720-6-rrichter@amd.com>
+ <63753900717c6_12cdff29439@dwillia2-xfh.jf.intel.com.notmuch>
+ <Y3ZZqZ2kPS1yyOtd@rric.localdomain>
+ <63766efb7ceac_12cdff294c3@dwillia2-xfh.jf.intel.com.notmuch>
+ <Y3dB4quvaSzRzsT/@rric.localdomain>
+ <6377b8f1be5e5_12cdff2941d@dwillia2-xfh.jf.intel.com.notmuch>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <6377b8f1be5e5_12cdff2941d@dwillia2-xfh.jf.intel.com.notmuch>
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT110:EE_|DS7PR12MB6310:EE_
+X-MS-Office365-Filtering-Correlation-Id: f59bdd4b-da4b-47dd-d001-08dac99ea75b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: MP8Yf3NdsJ91MFfJ/PGuVD1vzqRTRkW6fh5oHrL3d63FGGRzD7MxIHUuhyKEKYoov8cuhv1A34iskF+t3VHhFG109a7PxFrTpxaLPfNf1Aud2AQuEz7IuDgHLy/6iIRx9QiHai074qepIzjwLhb+0hcbX7+xi6PJZT9GWM3/eqy+qz3O/3ZVoqb3vW2cut4zy/Nkd6ATWJVKzKYcAKqzpAR6h2G1GmrViJGXGc2WCeslsKyRJNrFW4j4wjszzkRUAeNst6U3ujO31adCruuX7t0YsS+5yibLwc8gvHjX6h0mgh8rdWMDtnNwDI5CuvwPsjDQHapIt/Fo2dF/67QzUFWlBavOGNcnO22XUREeQ/0jGt/e5GOW+isVRqPJzryl/7lker17oomnxfCMBpSeUko4HjEP0ljyAjjZq3XiZHvcuR2SoBl/pHNNxoSXK/Fai2oco7ThA/zzvlDfHfyvOPLJr/+/3Jvfn33bA+8MbVYKxLgt68eElmgTKn4x254CMz1vEMhtNbv7MflKZKOoDum3mIUlhkZpSMAqgSPTjykesN77wi14pvtWdTlvA1Ns/A70e3H6uueIXFPhn4Vqtz4EyWVE8O/AoVI1R6zMsjouxTgqGF+pw8xZq4+uZKKU0IVPPM5GFQrXOCrWuQkv486PIwNJo1ded1G7j6XnGRDDeQl2LAkKd0Z2QoE8Olma5RcpxjQbIU5M2oxK6Kcic2s2je/a4bA014ATPr7s8RYDpO0IxxGgkC4hggladdB7V3gmm09tP+kLYiHGrZSnLg==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(346002)(396003)(39860400002)(376002)(136003)(451199015)(36840700001)(46966006)(40470700004)(36860700001)(70206006)(81166007)(70586007)(186003)(7416002)(26005)(16526019)(8936002)(47076005)(82740400003)(6666004)(426003)(6916009)(40480700001)(40460700003)(336012)(4326008)(8676002)(356005)(5660300002)(54906003)(7696005)(316002)(9686003)(53546011)(41300700001)(83380400001)(2906002)(478600001)(55016003)(82310400005)(67856001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2022 19:54:07.5236
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f59bdd4b-da4b-47dd-d001-08dac99ea75b
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT110.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6310
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -106,719 +114,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-JFYI - I'm not sure of the correct commit ID to add for the Fixes: tag since
-it's in your branch, so I'll omit that and let you add it into the patch
-
-On Fri, 2022-11-18 at 14:47 -0500, Lyude Paul wrote:
-> of course, will do in just a moment
+On 18.11.22 08:55:13, Dan Williams wrote:
+> Robert Richter wrote:
+> > On 17.11.22 09:27:23, Dan Williams wrote:
+> > > Robert Richter wrote:
+> > > > On 16.11.22 11:24:48, Dan Williams wrote:
+> > > > > Robert Richter wrote:
+> > > > > > The Device 0, Function 0 DVSEC controls the CXL functionality of the
+> > > > > > entire device. Add a check to prevent registration of any other PCI
+> > > > > > device on the bus as a CXL memory device.
+> > > > > 
+> > > > > Can you reference the specification wording that indicates that the OS
+> > > > > needs to actively avoid these situations, or otherwise point to the real
+> > > > > world scenario where this filtering is needed?
+> > > > 
+> > > > CXL 3.0
+> > > > 
+> > > > 8.1.3 PCIe DVSEC for CXL Device
+> > > > 
+> > > > """
+> > > > An RCD creates a new PCIe enumeration hierarchy. As such, it spawns a new Root Bus
+> > > > and can expose one or more PCIe device numbers and function numbers at this bus
+> > > > number. These are exposed as Root Complex Integrated Endpoints (RCiEP). The PCIe
+> > > > Configuration Space of Device 0, Function 0 shall include the CXL PCIe DVSEC as shown
+> > > > in Figure 8-1.
+> > > > """
+> > > > 
+> > > > """
+> > > > In either case, the capability, status, and control fields in Device 0, Function 0 DVSEC
+> > > > control the CXL functionality of the entire device.
+> > > > """
+> > > > 
+> > > > There are some other occurrences. I think this is even true for VH
+> > > > mode, as multiple CXL devices on the bus are exposed through multiple
+> > > > DSPs or Root Ports.
+> > > > 
+> > > > Anyway, I limited this to an RCD only, esp. because its counterpart
+> > > > would be missing and thus port mapping would fail otherwise. See
+> > > > restricted_host_enumerate_dport() of this series.
+> > > > 
+> > > > > 
+> > > > > > 
+> > > > > > Signed-off-by: Robert Richter <rrichter@amd.com>
+> > > > > > ---
+> > > > > >  drivers/cxl/pci.c | 25 +++++++++++++++++++++++--
+> > > > > >  1 file changed, 23 insertions(+), 2 deletions(-)
+> > > > > > 
+> > > > > > diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
+> > > > > > index faeb5d9d7a7a..cc4f206f24b3 100644
+> > > > > > --- a/drivers/cxl/pci.c
+> > > > > > +++ b/drivers/cxl/pci.c
+> > > > > > @@ -428,11 +428,26 @@ static void devm_cxl_pci_create_doe(struct cxl_dev_state *cxlds)
+> > > > > >  	}
+> > > > > >  }
+> > > > > >  
+> > > > > > +static int check_restricted_device(struct pci_dev *pdev, u16 pcie_dvsec)
+> > > > > > +{
+> > > > > > +	if (pci_pcie_type(pdev) != PCI_EXP_TYPE_RC_END)
+> > > > > > +		return 0;		/* no RCD */
+> > > > > > +
+> > > > > > +	if (pdev->devfn == PCI_DEVFN(0, 0) && pcie_dvsec)
+> > > > > > +		return 0;		/* ok */
+> > > > > > +
+> > > > > > +	dev_warn(&pdev->dev, "Skipping RCD: devfn=0x%02x dvsec=%u\n",
+> > > > > 
+> > > > > s/0x%02x/%#02x/
+> > > > > 
+> > > > > > +		pdev->devfn, pcie_dvsec);
+> > > > 
+> > > > Ok.
+> > > > 
+> > > > > This looks like a dev_dbg() to me. Otherwise a warning will always fire
+> > > > > on a benign condition.
+> > > > 
+> > > > I have chosen dev_warn() here as this is a non-compliant unexpected
+> > > > behavior of the device. There are no (legal) cases this may happen. I
+> > > > suppose you are worried about spamming the console here, but that
+> > > > error should be reported somewhere and thus being visible.
+> > > 
+> > > There are so many spec illegal values and conditions that the driver
+> > > could checki, but does not. The reason I am poking here is why does the
+> > > driver need to be explicit about *this* illegal condition versus all the
+> > > other potential conditions? What is the practical end user impact if
+> > > Linux does not include this change? For example, if it is just one
+> > > vendor that made this mistake that can be an explicit quirk.
+> > > 
+> > > A dev_warn() is not necessary for simple quirks.
+> > 
+> > This is not simply a cross check, the driver prevents enablement of
+> > CXL mem devs other than PCI_DEVFN(0, 0). It shouldn't silently drop
+> > out then. It's a device malfunction which should appropriate reported
+> > and not only visible if dbg is enabled.
+> > 
+> > As written above, the check is necessary as the counterpart is missing
 > 
-> On Fri, 2022-11-18 at 14:46 -0500, Alex Deucher wrote:
-> > I've already picked this up.  Can you send a follow up patch with just
-> > the coverity fix?
-> > 
-> > Alex
-> > 
-> > On Fri, Nov 18, 2022 at 2:17 PM Lyude Paul <lyude@redhat.com> wrote:
-> > > 
-> > > JFYI, Coverity pointed out one more issue with this series so I'm going to
-> > > send out a respin real quick to fix it. It's just a missing variable
-> > > assignment (we leave ret unassigned by mistake in
-> > > pre_compute_mst_dsc_configs()) so I will carry over your r-b on it.
-> > > 
-> > > On Wed, 2022-11-16 at 04:39 +0000, Lin, Wayne wrote:
-> > > > [Public]
-> > > > 
-> > > > All the patch set looks good to me. Feel free to add:
-> > > > Reviewed-by: Wayne Lin <Wayne.Lin@amd.com>
-> > > > 
-> > > > Again, thank you Lyude for helping on this!!!
-> > > > 
-> > > > Regards,
-> > > > Wayne
-> > > > > -----Original Message-----
-> > > > > From: Lyude Paul <lyude@redhat.com>
-> > > > > Sent: Tuesday, November 15, 2022 6:18 AM
-> > > > > To: amd-gfx@lists.freedesktop.org
-> > > > > Cc: Wentland, Harry <Harry.Wentland@amd.com>; stable@vger.kernel.org;
-> > > > > Li, Sun peng (Leo) <Sunpeng.Li@amd.com>; Siqueira, Rodrigo
-> > > > > <Rodrigo.Siqueira@amd.com>; Deucher, Alexander
-> > > > > <Alexander.Deucher@amd.com>; Koenig, Christian
-> > > > > <Christian.Koenig@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>; David
-> > > > > Airlie <airlied@gmail.com>; Daniel Vetter <daniel@ffwll.ch>; Kazlauskas,
-> > > > > Nicholas <Nicholas.Kazlauskas@amd.com>; Pillai, Aurabindo
-> > > > > <Aurabindo.Pillai@amd.com>; Li, Roman <Roman.Li@amd.com>; Zuo, Jerry
-> > > > > <Jerry.Zuo@amd.com>; Wu, Hersen <hersenxs.wu@amd.com>; Lin, Wayne
-> > > > > <Wayne.Lin@amd.com>; Thomas Zimmermann <tzimmermann@suse.de>;
-> > > > > Mahfooz, Hamza <Hamza.Mahfooz@amd.com>; Hung, Alex
-> > > > > <Alex.Hung@amd.com>; Mikita Lipski <mikita.lipski@amd.com>; Liu,
-> > > > > Wenjing <Wenjing.Liu@amd.com>; Francis, David
-> > > > > <David.Francis@amd.com>; open list:DRM DRIVERS <dri-
-> > > > > devel@lists.freedesktop.org>; open list <linux-kernel@vger.kernel.org>
-> > > > > Subject: [PATCH v2 1/4] drm/amdgpu/mst: Stop ignoring error codes and
-> > > > > deadlocking
-> > > > > 
-> > > > > It appears that amdgpu makes the mistake of completely ignoring the return
-> > > > > values from the DP MST helpers, and instead just returns a simple true/false.
-> > > > > In this case, it seems to have come back to bite us because as a result of
-> > > > > simply returning false from compute_mst_dsc_configs_for_state(), amdgpu
-> > > > > had no way of telling when a deadlock happened from these helpers. This
-> > > > > could definitely result in some kernel splats.
-> > > > > 
-> > > > > V2:
-> > > > > * Address Wayne's comments (fix another bunch of spots where we weren't
-> > > > >   passing down return codes)
-> > > > > 
-> > > > > Signed-off-by: Lyude Paul <lyude@redhat.com>
-> > > > > Fixes: 8c20a1ed9b4f ("drm/amd/display: MST DSC compute fair share")
-> > > > > Cc: Harry Wentland <harry.wentland@amd.com>
-> > > > > Cc: <stable@vger.kernel.org> # v5.6+
-> > > > > ---
-> > > > >  .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c |  18 +-
-> > > > >  .../display/amdgpu_dm/amdgpu_dm_mst_types.c   | 235 ++++++++++------
-> > > > > --
-> > > > >  .../display/amdgpu_dm/amdgpu_dm_mst_types.h   |  12 +-
-> > > > >  3 files changed, 147 insertions(+), 118 deletions(-)
-> > > > > 
-> > > > > diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> > > > > b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> > > > > index 0db2a88cd4d7b..852a2100c6b38 100644
-> > > > > --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> > > > > +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> > > > > @@ -6462,7 +6462,7 @@ static int
-> > > > > dm_update_mst_vcpi_slots_for_dsc(struct drm_atomic_state *state,
-> > > > >     struct drm_connector_state *new_con_state;
-> > > > >     struct amdgpu_dm_connector *aconnector;
-> > > > >     struct dm_connector_state *dm_conn_state;
-> > > > > -   int i, j;
-> > > > > +   int i, j, ret;
-> > > > >     int vcpi, pbn_div, pbn, slot_num = 0;
-> > > > > 
-> > > > >     for_each_new_connector_in_state(state, connector,
-> > > > > new_con_state, i) { @@ -6509,8 +6509,11 @@ static int
-> > > > > dm_update_mst_vcpi_slots_for_dsc(struct drm_atomic_state *state,
-> > > > >                     dm_conn_state->pbn = pbn;
-> > > > >                     dm_conn_state->vcpi_slots = slot_num;
-> > > > > 
-> > > > > -                   drm_dp_mst_atomic_enable_dsc(state, aconnector-
-> > > > > > port, dm_conn_state->pbn,
-> > > > > -                                                false);
-> > > > > +                   ret = drm_dp_mst_atomic_enable_dsc(state,
-> > > > > aconnector->port,
-> > > > > +                                                      dm_conn_state-
-> > > > > > pbn, false);
-> > > > > +                   if (ret < 0)
-> > > > > +                           return ret;
-> > > > > +
-> > > > >                     continue;
-> > > > >             }
-> > > > > 
-> > > > > @@ -9523,10 +9526,9 @@ static int amdgpu_dm_atomic_check(struct
-> > > > > drm_device *dev,
-> > > > > 
-> > > > >  #if defined(CONFIG_DRM_AMD_DC_DCN)
-> > > > >     if (dc_resource_is_dsc_encoding_supported(dc)) {
-> > > > > -           if (!pre_validate_dsc(state, &dm_state, vars)) {
-> > > > > -                   ret = -EINVAL;
-> > > > > +           ret = pre_validate_dsc(state, &dm_state, vars);
-> > > > > +           if (ret != 0)
-> > > > >                     goto fail;
-> > > > > -           }
-> > > > >     }
-> > > > >  #endif
-> > > > > 
-> > > > > @@ -9621,9 +9623,9 @@ static int amdgpu_dm_atomic_check(struct
-> > > > > drm_device *dev,
-> > > > >             }
-> > > > > 
-> > > > >  #if defined(CONFIG_DRM_AMD_DC_DCN)
-> > > > > -           if (!compute_mst_dsc_configs_for_state(state, dm_state-
-> > > > > > context, vars)) {
-> > > > > +           ret = compute_mst_dsc_configs_for_state(state, dm_state-
-> > > > > > context, vars);
-> > > > > +           if (ret) {
-> > > > > 
-> > > > >     DRM_DEBUG_DRIVER("compute_mst_dsc_configs_for_state()
-> > > > > failed\n");
-> > > > > -                   ret = -EINVAL;
-> > > > >                     goto fail;
-> > > > >             }
-> > > > > 
-> > > > > diff --git
-> > > > > a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-> > > > > b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-> > > > > index 6ff96b4bdda5c..bba2e8aaa2c20 100644
-> > > > > --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-> > > > > +++
-> > > > > b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-> > > > > @@ -703,13 +703,13 @@ static int bpp_x16_from_pbn(struct
-> > > > > dsc_mst_fairness_params param, int pbn)
-> > > > >     return dsc_config.bits_per_pixel;
-> > > > >  }
-> > > > > 
-> > > > > -static bool increase_dsc_bpp(struct drm_atomic_state *state,
-> > > > > -                        struct drm_dp_mst_topology_state *mst_state,
-> > > > > -                        struct dc_link *dc_link,
-> > > > > -                        struct dsc_mst_fairness_params *params,
-> > > > > -                        struct dsc_mst_fairness_vars *vars,
-> > > > > -                        int count,
-> > > > > -                        int k)
-> > > > > +static int increase_dsc_bpp(struct drm_atomic_state *state,
-> > > > > +                       struct drm_dp_mst_topology_state *mst_state,
-> > > > > +                       struct dc_link *dc_link,
-> > > > > +                       struct dsc_mst_fairness_params *params,
-> > > > > +                       struct dsc_mst_fairness_vars *vars,
-> > > > > +                       int count,
-> > > > > +                       int k)
-> > > > >  {
-> > > > >     int i;
-> > > > >     bool bpp_increased[MAX_PIPES];
-> > > > > @@ -719,6 +719,7 @@ static bool increase_dsc_bpp(struct
-> > > > > drm_atomic_state *state,
-> > > > >     int remaining_to_increase = 0;
-> > > > >     int link_timeslots_used;
-> > > > >     int fair_pbn_alloc;
-> > > > > +   int ret = 0;
-> > > > > 
-> > > > >     for (i = 0; i < count; i++) {
-> > > > >             if (vars[i + k].dsc_enabled) {
-> > > > > @@ -757,52 +758,60 @@ static bool increase_dsc_bpp(struct
-> > > > > drm_atomic_state *state,
-> > > > > 
-> > > > >             if (initial_slack[next_index] > fair_pbn_alloc) {
-> > > > >                     vars[next_index].pbn += fair_pbn_alloc;
-> > > > > -                   if (drm_dp_atomic_find_time_slots(state,
-> > > > > -
-> > > > > params[next_index].port->mgr,
-> > > > > -
-> > > > > params[next_index].port,
-> > > > > -
-> > > > > vars[next_index].pbn) < 0)
-> > > > > -                           return false;
-> > > > > -                   if (!drm_dp_mst_atomic_check(state)) {
-> > > > > +                   ret = drm_dp_atomic_find_time_slots(state,
-> > > > > +
-> > > > > params[next_index].port->mgr,
-> > > > > +
-> > > > > params[next_index].port,
-> > > > > +
-> > > > > vars[next_index].pbn);
-> > > > > +                   if (ret < 0)
-> > > > > +                           return ret;
-> > > > > +
-> > > > > +                   ret = drm_dp_mst_atomic_check(state);
-> > > > > +                   if (ret == 0) {
-> > > > >                             vars[next_index].bpp_x16 =
-> > > > > bpp_x16_from_pbn(params[next_index], vars[next_index].pbn);
-> > > > >                     } else {
-> > > > >                             vars[next_index].pbn -= fair_pbn_alloc;
-> > > > > -                           if (drm_dp_atomic_find_time_slots(state,
-> > > > > -
-> > > > > params[next_index].port->mgr,
-> > > > > -
-> > > > > params[next_index].port,
-> > > > > -
-> > > > > vars[next_index].pbn) < 0)
-> > > > > -                                   return false;
-> > > > > +                           ret = drm_dp_atomic_find_time_slots(state,
-> > > > > +
-> > > > > params[next_index].port->mgr,
-> > > > > +
-> > > > > params[next_index].port,
-> > > > > +
-> > > > > vars[next_index].pbn);
-> > > > > +                           if (ret < 0)
-> > > > > +                                   return ret;
-> > > > >                     }
-> > > > >             } else {
-> > > > >                     vars[next_index].pbn += initial_slack[next_index];
-> > > > > -                   if (drm_dp_atomic_find_time_slots(state,
-> > > > > -
-> > > > > params[next_index].port->mgr,
-> > > > > -
-> > > > > params[next_index].port,
-> > > > > -
-> > > > > vars[next_index].pbn) < 0)
-> > > > > -                           return false;
-> > > > > -                   if (!drm_dp_mst_atomic_check(state)) {
-> > > > > +                   ret = drm_dp_atomic_find_time_slots(state,
-> > > > > +
-> > > > > params[next_index].port->mgr,
-> > > > > +
-> > > > > params[next_index].port,
-> > > > > +
-> > > > > vars[next_index].pbn);
-> > > > > +                   if (ret < 0)
-> > > > > +                           return ret;
-> > > > > +
-> > > > > +                   ret = drm_dp_mst_atomic_check(state);
-> > > > > +                   if (ret == 0) {
-> > > > >                             vars[next_index].bpp_x16 =
-> > > > > params[next_index].bw_range.max_target_bpp_x16;
-> > > > >                     } else {
-> > > > >                             vars[next_index].pbn -=
-> > > > > initial_slack[next_index];
-> > > > > -                           if (drm_dp_atomic_find_time_slots(state,
-> > > > > -
-> > > > > params[next_index].port->mgr,
-> > > > > -
-> > > > > params[next_index].port,
-> > > > > -
-> > > > > vars[next_index].pbn) < 0)
-> > > > > -                                   return false;
-> > > > > +                           ret = drm_dp_atomic_find_time_slots(state,
-> > > > > +
-> > > > > params[next_index].port->mgr,
-> > > > > +
-> > > > > params[next_index].port,
-> > > > > +
-> > > > > vars[next_index].pbn);
-> > > > > +                           if (ret < 0)
-> > > > > +                                   return ret;
-> > > > >                     }
-> > > > >             }
-> > > > > 
-> > > > >             bpp_increased[next_index] = true;
-> > > > >             remaining_to_increase--;
-> > > > >     }
-> > > > > -   return true;
-> > > > > +   return 0;
-> > > > >  }
-> > > > > 
-> > > > > -static bool try_disable_dsc(struct drm_atomic_state *state,
-> > > > > -                       struct dc_link *dc_link,
-> > > > > -                       struct dsc_mst_fairness_params *params,
-> > > > > -                       struct dsc_mst_fairness_vars *vars,
-> > > > > -                       int count,
-> > > > > -                       int k)
-> > > > > +static int try_disable_dsc(struct drm_atomic_state *state,
-> > > > > +                      struct dc_link *dc_link,
-> > > > > +                      struct dsc_mst_fairness_params *params,
-> > > > > +                      struct dsc_mst_fairness_vars *vars,
-> > > > > +                      int count,
-> > > > > +                      int k)
-> > > > >  {
-> > > > >     int i;
-> > > > >     bool tried[MAX_PIPES];
-> > > > > @@ -810,6 +819,7 @@ static bool try_disable_dsc(struct drm_atomic_state
-> > > > > *state,
-> > > > >     int max_kbps_increase;
-> > > > >     int next_index;
-> > > > >     int remaining_to_try = 0;
-> > > > > +   int ret;
-> > > > > 
-> > > > >     for (i = 0; i < count; i++) {
-> > > > >             if (vars[i + k].dsc_enabled
-> > > > > @@ -840,49 +850,52 @@ static bool try_disable_dsc(struct
-> > > > > drm_atomic_state *state,
-> > > > >                     break;
-> > > > > 
-> > > > >             vars[next_index].pbn =
-> > > > > kbps_to_peak_pbn(params[next_index].bw_range.stream_kbps);
-> > > > > -           if (drm_dp_atomic_find_time_slots(state,
-> > > > > -                                             params[next_index].port-
-> > > > > > mgr,
-> > > > > -                                             params[next_index].port,
-> > > > > -                                             vars[next_index].pbn) < 0)
-> > > > > -                   return false;
-> > > > > +           ret = drm_dp_atomic_find_time_slots(state,
-> > > > > +                                               params[next_index].port-
-> > > > > > mgr,
-> > > > > +                                               params[next_index].port,
-> > > > > +                                               vars[next_index].pbn);
-> > > > > +           if (ret < 0)
-> > > > > +                   return ret;
-> > > > > 
-> > > > > -           if (!drm_dp_mst_atomic_check(state)) {
-> > > > > +           ret = drm_dp_mst_atomic_check(state);
-> > > > > +           if (ret == 0) {
-> > > > >                     vars[next_index].dsc_enabled = false;
-> > > > >                     vars[next_index].bpp_x16 = 0;
-> > > > >             } else {
-> > > > >                     vars[next_index].pbn =
-> > > > > kbps_to_peak_pbn(params[next_index].bw_range.max_kbps);
-> > > > > -                   if (drm_dp_atomic_find_time_slots(state,
-> > > > > -
-> > > > > params[next_index].port->mgr,
-> > > > > -
-> > > > > params[next_index].port,
-> > > > > -
-> > > > > vars[next_index].pbn) < 0)
-> > > > > -                           return false;
-> > > > > +                   ret = drm_dp_atomic_find_time_slots(state,
-> > > > > +
-> > > > > params[next_index].port->mgr,
-> > > > > +
-> > > > > params[next_index].port,
-> > > > > +
-> > > > > vars[next_index].pbn);
-> > > > > +                   if (ret < 0)
-> > > > > +                           return ret;
-> > > > >             }
-> > > > > 
-> > > > >             tried[next_index] = true;
-> > > > >             remaining_to_try--;
-> > > > >     }
-> > > > > -   return true;
-> > > > > +   return 0;
-> > > > >  }
-> > > > > 
-> > > > > -static bool compute_mst_dsc_configs_for_link(struct drm_atomic_state
-> > > > > *state,
-> > > > > -                                        struct dc_state *dc_state,
-> > > > > -                                        struct dc_link *dc_link,
-> > > > > -                                        struct dsc_mst_fairness_vars *vars,
-> > > > > -                                        struct drm_dp_mst_topology_mgr
-> > > > > *mgr,
-> > > > > -                                        int *link_vars_start_index)
-> > > > > +static int compute_mst_dsc_configs_for_link(struct drm_atomic_state
-> > > > > *state,
-> > > > > +                                       struct dc_state *dc_state,
-> > > > > +                                       struct dc_link *dc_link,
-> > > > > +                                       struct dsc_mst_fairness_vars *vars,
-> > > > > +                                       struct drm_dp_mst_topology_mgr
-> > > > > *mgr,
-> > > > > +                                       int *link_vars_start_index)
-> > > > >  {
-> > > > >     struct dc_stream_state *stream;
-> > > > >     struct dsc_mst_fairness_params params[MAX_PIPES];
-> > > > >     struct amdgpu_dm_connector *aconnector;
-> > > > >     struct drm_dp_mst_topology_state *mst_state =
-> > > > > drm_atomic_get_mst_topology_state(state, mgr);
-> > > > >     int count = 0;
-> > > > > -   int i, k;
-> > > > > +   int i, k, ret;
-> > > > >     bool debugfs_overwrite = false;
-> > > > > 
-> > > > >     memset(params, 0, sizeof(params));
-> > > > > 
-> > > > >     if (IS_ERR(mst_state))
-> > > > > -           return false;
-> > > > > +           return PTR_ERR(mst_state);
-> > > > > 
-> > > > >     mst_state->pbn_div = dm_mst_get_pbn_divider(dc_link);  #if
-> > > > > defined(CONFIG_DRM_AMD_DC_DCN) @@ -933,7 +946,7 @@ static bool
-> > > > > compute_mst_dsc_configs_for_link(struct drm_atomic_state *state,
-> > > > > 
-> > > > >     if (count == 0) {
-> > > > >             ASSERT(0);
-> > > > > -           return true;
-> > > > > +           return 0;
-> > > > >     }
-> > > > > 
-> > > > >     /* k is start index of vars for current phy link used by mst hub */ @@
-> > > > > -947,13 +960,17 @@ static bool compute_mst_dsc_configs_for_link(struct
-> > > > > drm_atomic_state *state,
-> > > > >             vars[i + k].pbn =
-> > > > > kbps_to_peak_pbn(params[i].bw_range.stream_kbps);
-> > > > >             vars[i + k].dsc_enabled = false;
-> > > > >             vars[i + k].bpp_x16 = 0;
-> > > > > -           if (drm_dp_atomic_find_time_slots(state, params[i].port-
-> > > > > > mgr, params[i].port,
-> > > > > -                                             vars[i + k].pbn) < 0)
-> > > > > -                   return false;
-> > > > > +           ret = drm_dp_atomic_find_time_slots(state, params[i].port-
-> > > > > > mgr, params[i].port,
-> > > > > +                                               vars[i + k].pbn);
-> > > > > +           if (ret < 0)
-> > > > > +                   return ret;
-> > > > >     }
-> > > > > -   if (!drm_dp_mst_atomic_check(state) && !debugfs_overwrite) {
-> > > > > +   ret = drm_dp_mst_atomic_check(state);
-> > > > > +   if (ret == 0 && !debugfs_overwrite) {
-> > > > >             set_dsc_configs_from_fairness_vars(params, vars, count, k);
-> > > > > -           return true;
-> > > > > +           return 0;
-> > > > > +   } else if (ret != -ENOSPC) {
-> > > > > +           return ret;
-> > > > >     }
-> > > > > 
-> > > > >     /* Try max compression */
-> > > > > @@ -962,31 +979,36 @@ static bool
-> > > > > compute_mst_dsc_configs_for_link(struct drm_atomic_state *state,
-> > > > >                     vars[i + k].pbn =
-> > > > > kbps_to_peak_pbn(params[i].bw_range.min_kbps);
-> > > > >                     vars[i + k].dsc_enabled = true;
-> > > > >                     vars[i + k].bpp_x16 =
-> > > > > params[i].bw_range.min_target_bpp_x16;
-> > > > > -                   if (drm_dp_atomic_find_time_slots(state,
-> > > > > params[i].port->mgr,
-> > > > > -                                                     params[i].port, vars[i
-> > > > > + k].pbn) < 0)
-> > > > > -                           return false;
-> > > > > +                   ret = drm_dp_atomic_find_time_slots(state,
-> > > > > params[i].port->mgr,
-> > > > > +                                                       params[i].port,
-> > > > > vars[i + k].pbn);
-> > > > > +                   if (ret < 0)
-> > > > > +                           return ret;
-> > > > >             } else {
-> > > > >                     vars[i + k].pbn =
-> > > > > kbps_to_peak_pbn(params[i].bw_range.stream_kbps);
-> > > > >                     vars[i + k].dsc_enabled = false;
-> > > > >                     vars[i + k].bpp_x16 = 0;
-> > > > > -                   if (drm_dp_atomic_find_time_slots(state,
-> > > > > params[i].port->mgr,
-> > > > > -                                                     params[i].port, vars[i
-> > > > > + k].pbn) < 0)
-> > > > > -                           return false;
-> > > > > +                   ret = drm_dp_atomic_find_time_slots(state,
-> > > > > params[i].port->mgr,
-> > > > > +                                                       params[i].port,
-> > > > > vars[i + k].pbn);
-> > > > > +                   if (ret < 0)
-> > > > > +                           return ret;
-> > > > >             }
-> > > > >     }
-> > > > > -   if (drm_dp_mst_atomic_check(state))
-> > > > > -           return false;
-> > > > > +   ret = drm_dp_mst_atomic_check(state);
-> > > > > +   if (ret != 0)
-> > > > > +           return ret;
-> > > > > 
-> > > > >     /* Optimize degree of compression */
-> > > > > -   if (!increase_dsc_bpp(state, mst_state, dc_link, params, vars, count,
-> > > > > k))
-> > > > > -           return false;
-> > > > > +   ret = increase_dsc_bpp(state, mst_state, dc_link, params, vars,
-> > > > > count, k);
-> > > > > +   if (ret < 0)
-> > > > > +           return ret;
-> > > > > 
-> > > > > -   if (!try_disable_dsc(state, dc_link, params, vars, count, k))
-> > > > > -           return false;
-> > > > > +   ret = try_disable_dsc(state, dc_link, params, vars, count, k);
-> > > > > +   if (ret < 0)
-> > > > > +           return ret;
-> > > > > 
-> > > > >     set_dsc_configs_from_fairness_vars(params, vars, count, k);
-> > > > > 
-> > > > > -   return true;
-> > > > > +   return 0;
-> > > > >  }
-> > > > > 
-> > > > >  static bool is_dsc_need_re_compute(
-> > > > > @@ -1087,15 +1109,16 @@ static bool is_dsc_need_re_compute(
-> > > > >     return is_dsc_need_re_compute;
-> > > > >  }
-> > > > > 
-> > > > > -bool compute_mst_dsc_configs_for_state(struct drm_atomic_state *state,
-> > > > > -                                  struct dc_state *dc_state,
-> > > > > -                                  struct dsc_mst_fairness_vars *vars)
-> > > > > +int compute_mst_dsc_configs_for_state(struct drm_atomic_state *state,
-> > > > > +                                 struct dc_state *dc_state,
-> > > > > +                                 struct dsc_mst_fairness_vars *vars)
-> > > > >  {
-> > > > >     int i, j;
-> > > > >     struct dc_stream_state *stream;
-> > > > >     bool computed_streams[MAX_PIPES];
-> > > > >     struct amdgpu_dm_connector *aconnector;
-> > > > >     int link_vars_start_index = 0;
-> > > > > +   int ret = 0;
-> > > > > 
-> > > > >     for (i = 0; i < dc_state->stream_count; i++)
-> > > > >             computed_streams[i] = false;
-> > > > > @@ -1118,17 +1141,19 @@ bool compute_mst_dsc_configs_for_state(struct
-> > > > > drm_atomic_state *state,
-> > > > >                     continue;
-> > > > > 
-> > > > >             if (dcn20_remove_stream_from_ctx(stream->ctx->dc,
-> > > > > dc_state, stream) != DC_OK)
-> > > > > -                   return false;
-> > > > > +                   return -EINVAL;
-> > > > > 
-> > > > >             if (!is_dsc_need_re_compute(state, dc_state, stream->link))
-> > > > >                     continue;
-> > > > > 
-> > > > >             mutex_lock(&aconnector->mst_mgr.lock);
-> > > > > -           if (!compute_mst_dsc_configs_for_link(state, dc_state,
-> > > > > stream->link, vars,
-> > > > > -                                                 &aconnector->mst_mgr,
-> > > > > -                                                 &link_vars_start_index)) {
-> > > > > +
-> > > > > +           ret = compute_mst_dsc_configs_for_link(state, dc_state,
-> > > > > stream->link, vars,
-> > > > > +                                                  &aconnector->mst_mgr,
-> > > > > +                                                  &link_vars_start_index);
-> > > > > +           if (ret != 0) {
-> > > > >                     mutex_unlock(&aconnector->mst_mgr.lock);
-> > > > > -                   return false;
-> > > > > +                   return ret;
-> > > > >             }
-> > > > >             mutex_unlock(&aconnector->mst_mgr.lock);
-> > > > > 
-> > > > > @@ -1143,22 +1168,22 @@ bool compute_mst_dsc_configs_for_state(struct
-> > > > > drm_atomic_state *state,
-> > > > > 
-> > > > >             if (stream->timing.flags.DSC == 1)
-> > > > >                     if (dc_stream_add_dsc_to_resource(stream->ctx-
-> > > > > > dc, dc_state, stream) != DC_OK)
-> > > > > -                           return false;
-> > > > > +                           return -EINVAL;
-> > > > >     }
-> > > > > 
-> > > > > -   return true;
-> > > > > +   return ret;
-> > > > >  }
-> > > > > 
-> > > > > -static bool
-> > > > > -   pre_compute_mst_dsc_configs_for_state(struct drm_atomic_state
-> > > > > *state,
-> > > > > -                                         struct dc_state *dc_state,
-> > > > > -                                         struct dsc_mst_fairness_vars
-> > > > > *vars)
-> > > > > +static int pre_compute_mst_dsc_configs_for_state(struct
-> > > > > drm_atomic_state *state,
-> > > > > +                                            struct dc_state *dc_state,
-> > > > > +                                            struct dsc_mst_fairness_vars
-> > > > > *vars)
-> > > > >  {
-> > > > >     int i, j;
-> > > > >     struct dc_stream_state *stream;
-> > > > >     bool computed_streams[MAX_PIPES];
-> > > > >     struct amdgpu_dm_connector *aconnector;
-> > > > >     int link_vars_start_index = 0;
-> > > > > +   int ret;
-> > > > > 
-> > > > >     for (i = 0; i < dc_state->stream_count; i++)
-> > > > >             computed_streams[i] = false;
-> > > > > @@ -1184,11 +1209,12 @@ static bool
-> > > > >                     continue;
-> > > > > 
-> > > > >             mutex_lock(&aconnector->mst_mgr.lock);
-> > > > > -           if (!compute_mst_dsc_configs_for_link(state, dc_state,
-> > > > > stream->link, vars,
-> > > > > -                                                 &aconnector->mst_mgr,
-> > > > > -                                                 &link_vars_start_index)) {
-> > > > > +           ret = compute_mst_dsc_configs_for_link(state, dc_state,
-> > > > > stream->link, vars,
-> > > > > +                                                  &aconnector->mst_mgr,
-> > > > > +                                                  &link_vars_start_index);
-> > > > > +           if (ret != 0) {
-> > > > >                     mutex_unlock(&aconnector->mst_mgr.lock);
-> > > > > -                   return false;
-> > > > > +                   return ret;
-> > > > >             }
-> > > > >             mutex_unlock(&aconnector->mst_mgr.lock);
-> > > > > 
-> > > > > @@ -1198,7 +1224,7 @@ static bool
-> > > > >             }
-> > > > >     }
-> > > > > 
-> > > > > -   return true;
-> > > > > +   return ret;
-> > > > >  }
-> > > > > 
-> > > > >  static int find_crtc_index_in_state_by_stream(struct drm_atomic_state
-> > > > > *state, @@ -1253,9 +1279,9 @@ static bool
-> > > > > is_dsc_precompute_needed(struct drm_atomic_state *state)
-> > > > >     return ret;
-> > > > >  }
-> > > > > 
-> > > > > -bool pre_validate_dsc(struct drm_atomic_state *state,
-> > > > > -                 struct dm_atomic_state **dm_state_ptr,
-> > > > > -                 struct dsc_mst_fairness_vars *vars)
-> > > > > +int pre_validate_dsc(struct drm_atomic_state *state,
-> > > > > +                struct dm_atomic_state **dm_state_ptr,
-> > > > > +                struct dsc_mst_fairness_vars *vars)
-> > > > >  {
-> > > > >     int i;
-> > > > >     struct dm_atomic_state *dm_state;
-> > > > > @@ -1264,11 +1290,12 @@ bool pre_validate_dsc(struct drm_atomic_state
-> > > > > *state,
-> > > > > 
-> > > > >     if (!is_dsc_precompute_needed(state)) {
-> > > > >             DRM_INFO_ONCE("DSC precompute is not needed.\n");
-> > > > > -           return true;
-> > > > > +           return 0;
-> > > > >     }
-> > > > > -   if (dm_atomic_get_state(state, dm_state_ptr)) {
-> > > > > +   ret = dm_atomic_get_state(state, dm_state_ptr);
-> > > > > +   if (ret != 0) {
-> > > > >             DRM_INFO_ONCE("dm_atomic_get_state() failed\n");
-> > > > > -           return false;
-> > > > > +           return ret;
-> > > > >     }
-> > > > >     dm_state = *dm_state_ptr;
-> > > > > 
-> > > > > @@ -1280,7 +1307,7 @@ bool pre_validate_dsc(struct drm_atomic_state
-> > > > > *state,
-> > > > > 
-> > > > >     local_dc_state = kmemdup(dm_state->context, sizeof(struct
-> > > > > dc_state), GFP_KERNEL);
-> > > > >     if (!local_dc_state)
-> > > > > -           return false;
-> > > > > +           return -ENOMEM;
-> > > > > 
-> > > > >     for (i = 0; i < local_dc_state->stream_count; i++) {
-> > > > >             struct dc_stream_state *stream = dm_state->context-
-> > > > > > streams[i]; @@ -1316,9 +1343,9 @@ bool pre_validate_dsc(struct
-> > > > > drm_atomic_state *state,
-> > > > >     if (ret != 0)
-> > > > >             goto clean_exit;
-> > > > > 
-> > > > > -   if (!pre_compute_mst_dsc_configs_for_state(state, local_dc_state,
-> > > > > vars)) {
-> > > > > +   ret = pre_compute_mst_dsc_configs_for_state(state, local_dc_state,
-> > > > > vars);
-> > > > > +   if (ret != 0) {
-> > > > > 
-> > > > >     DRM_INFO_ONCE("pre_compute_mst_dsc_configs_for_state()
-> > > > > failed\n");
-> > > > > -           ret = -EINVAL;
-> > > > >             goto clean_exit;
-> > > > >     }
-> > > > > 
-> > > > > @@ -1349,7 +1376,7 @@ bool pre_validate_dsc(struct drm_atomic_state
-> > > > > *state,
-> > > > > 
-> > > > >     kfree(local_dc_state);
-> > > > > 
-> > > > > -   return (ret == 0);
-> > > > > +   return ret;
-> > > > >  }
-> > > > > 
-> > > > >  static unsigned int kbps_from_pbn(unsigned int pbn) diff --git
-> > > > > a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.h
-> > > > > b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.h
-> > > > > index b92a7c5671aa2..97fd70df531bf 100644
-> > > > > --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.h
-> > > > > +++
-> > > > > b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.h
-> > > > > @@ -53,15 +53,15 @@ struct dsc_mst_fairness_vars {
-> > > > >     struct amdgpu_dm_connector *aconnector;  };
-> > > > > 
-> > > > > -bool compute_mst_dsc_configs_for_state(struct drm_atomic_state *state,
-> > > > > -                                  struct dc_state *dc_state,
-> > > > > -                                  struct dsc_mst_fairness_vars *vars);
-> > > > > +int compute_mst_dsc_configs_for_state(struct drm_atomic_state *state,
-> > > > > +                                 struct dc_state *dc_state,
-> > > > > +                                 struct dsc_mst_fairness_vars *vars);
-> > > > > 
-> > > > >  bool needs_dsc_aux_workaround(struct dc_link *link);
-> > > > > 
-> > > > > -bool pre_validate_dsc(struct drm_atomic_state *state,
-> > > > > -                 struct dm_atomic_state **dm_state_ptr,
-> > > > > -                 struct dsc_mst_fairness_vars *vars);
-> > > > > +int pre_validate_dsc(struct drm_atomic_state *state,
-> > > > > +                struct dm_atomic_state **dm_state_ptr,
-> > > > > +                struct dsc_mst_fairness_vars *vars);
-> > > > > 
-> > > > >  enum dc_status dm_dp_mst_is_port_support_mode(
-> > > > >     struct amdgpu_dm_connector *aconnector,
-> > > > > --
-> > > > > 2.37.3
-> > > > 
-> > > 
-> > > --
-> > > Cheers,
-> > >  Lyude Paul (she/her)
-> > >  Software Engineer at Red Hat
-> > > 
-> > 
-> 
+> It is only necessary if this condition happens in practice, not a
+> theoretically. So I am asking, are you seeing this with an actual device
+> that someone will use in production? If so, that's what pci quirks are
+> for to keep those workarounds organized in a common location.
 
--- 
-Cheers,
- Lyude Paul (she/her)
- Software Engineer at Red Hat
+I can make it a dev_dbg() message. But I do not understand the ratio
+behind this. This is not a quirk nor a workaround or a fix for
+something. The likely paths are the conditions checked that return 0.
+Only if the unlikely case happens where a CXL mem dev is not a dev 0,
+func 0, a warning is shown to inform the user that this dev is not
+enabled. So yes, this might be theoretical similar to that a driver
+cannot allocate memory. But why not print this as a warning message
+then?
 
+Anyway, let's make it a dev_dbg().
+
+Thanks,
+
+-Robert
