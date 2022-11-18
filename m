@@ -2,39 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45E1E62F9D4
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 16:59:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A24A62F9E2
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 17:04:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241597AbiKRP7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 10:59:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34596 "EHLO
+        id S241758AbiKRQEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 11:04:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241692AbiKRP7o (ORCPT
+        with ESMTP id S241597AbiKRQEU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 10:59:44 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 0629E8CF1B
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 07:59:42 -0800 (PST)
-Received: (qmail 40350 invoked by uid 1000); 18 Nov 2022 10:59:42 -0500
-Date:   Fri, 18 Nov 2022 10:59:42 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Lee Jones <lee@kernel.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, balbi@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/1] usb: gadget: f_hid: Conduct proper refcounting on
- shared f_hidg pointer
-Message-ID: <Y3er7nenAhbmBdBy@rowland.harvard.edu>
-References: <20221117120813.1257583-1-lee@kernel.org>
- <Y3YuL8rSE9pNfIZN@kroah.com>
- <Y3Y7MlwV0UFcA3w8@google.com>
- <Y3ZlvyZoL+PzpbQX@rowland.harvard.edu>
- <Y3dIXUmjTfJLpPe7@google.com>
+        Fri, 18 Nov 2022 11:04:20 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D26716E2
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 08:04:20 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id b62so5419958pgc.0
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 08:04:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=SlFVrej9bt4YEUqyZWryuI8fTcVVTeK+6ZolSLExKOo=;
+        b=HvcoXdH7ttv9Bf+uw0Ns4EN0hYL9WLK3zx1ep4D98FrWoNLmOjfRcYrS8wv95bHTU0
+         dUZoP3H+9NjYegMqMpD30OiZgQjjM/tWjdAbToHWmRqO5pdKdDINR4EXe2F/bS3lmbcA
+         w7BxwfcPHZE6gd4PPAHBfEgcexn55aFwgnLHAnXwR0rlvie0Jlp13SX3MvdWKcLS9TF8
+         U41ADoXkBU7BcUovJlp0QvwHja0S9Yhra7rn/nJCZeoXgTsr+lx4F12wYd62moC6FLX1
+         KXNDigpp/8AAm2cekP7Xm8gP2KXiWH7ABMOzM38IF7dIZvHFaDbli8kWQf3QfTnJGSHJ
+         rpOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SlFVrej9bt4YEUqyZWryuI8fTcVVTeK+6ZolSLExKOo=;
+        b=uWZsl8VSINMEOwiZwdYXClndaa/d2irHNBQyMfd88pNJIQP+zGbocEbqBpvz0JJQzC
+         zJjgUw9Yl4IT9t7rbAmJWqytH1DaENF3VbQkjAhZoxelhALLwh57LazMCaI2u+15NEcq
+         trVMuBoe0MNk6JOwEpFAT7pbr31eWdf+Bxt0KM2d8aFRQ+ezGVZjQ4cIUAHXKWnabGiB
+         +tH8k9o8D9d4Y3gF0BH4hewdPbkdr3Gbixv6FwxmApRUvmo736u8e8F2Y5H9AzIPAHR9
+         x0qJJ2hbkfkVfORXgclduNXPahm1lRXHLouXTsPeOlrlvlAe4EkBmPxtZvqZKEqPgYP9
+         u7nw==
+X-Gm-Message-State: ANoB5pkQmtamoh77mtJqnGW518MXj/oND9FjnjEa8rFrV74XIYRCGvCH
+        GyFaf/O53cK0F8fM1K/Gu728Jw==
+X-Google-Smtp-Source: AA0mqf4zEGFlIGLb7p38iRQ/pYcFzeVxsEZxePUGfaUEEC0R0h+cKILFDnFOOmPBIbr5+jmr+ewFcw==
+X-Received: by 2002:a63:d117:0:b0:476:c781:d3ae with SMTP id k23-20020a63d117000000b00476c781d3aemr7072807pgg.183.1668787459569;
+        Fri, 18 Nov 2022 08:04:19 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id r2-20020a170902c60200b001766a3b2a26sm3820057plr.105.2022.11.18.08.04.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 08:04:19 -0800 (PST)
+Date:   Fri, 18 Nov 2022 16:04:15 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Greg Edwards <gedwards@ddn.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>
+Subject: Re: [PATCH v3] KVM: x86: Allow APICv APIC ID inhibit to be cleared
+Message-ID: <Y3es/yLTo1dXSzAF@google.com>
+References: <20221114202037.254176-1-gedwards@ddn.com>
+ <20221117183247.94314-1-gedwards@ddn.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y3dIXUmjTfJLpPe7@google.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+In-Reply-To: <20221117183247.94314-1-gedwards@ddn.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -42,87 +74,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 08:54:53AM +0000, Lee Jones wrote:
-> On Thu, 17 Nov 2022, Alan Stern wrote:
+On Thu, Nov 17, 2022, Greg Edwards wrote:
+> Legacy kernels prior to commit 4399c03c6780 ("x86/apic: Remove
+> verify_local_APIC()") write the APIC ID of the boot CPU twice to verify
+> a functioning local APIC.  This results in APIC acceleration inhibited
+> on these kernels for reason APICV_INHIBIT_REASON_APIC_ID_MODIFIED.
 > 
-> > On Thu, Nov 17, 2022 at 01:46:26PM +0000, Lee Jones wrote:
-> > > On Thu, 17 Nov 2022, Greg KH wrote:
-> > > 
-> > > > On Thu, Nov 17, 2022 at 12:08:13PM +0000, Lee Jones wrote:
-> > > > > +static inline bool f_hidg_is_open(struct f_hidg *hidg)
-> > > > > +{
-> > > > > +	return !!kref_read(&hidg->cdev.kobj.kref);
-> > > > > +}
-> > > > 
-> > > > Ick, sorry, no, that's not going to work and is not allowed at all.
-> > > > That's some major layering violations there, AND it can change after you
-> > > > get the value as well.
-> > > 
-> > > This cdev belongs solely to this driver.  Hence the *.*.* and not
-> > > *->*->*.  What is preventing us from reading our own data?  If we
-> > > cannot do this directly, can I create an API to do it 'officially'?
-> > > 
-> > > I do, however, appreciate that a little locking wouldn't go amiss.
-> > > 
-> > > If this solution is not acceptable either, then we're left up the
-> > > creak without a paddle.  The rules you've communicated are not
-> > > compatible with each other.
-> > > 
-> > > Rule 1: Only one item in a data structure can reference count.
-> > > 
-> > > Due to the embedded cdev struct, this rules out my first solution of
-> > > giving f_hidg its own kref so that it can conduct its own life-time
-> > > management.
-> > > 
-> > > A potential option to satisfy this rule would be to remove the cdev
-> > > attribute and create its data dynamically instead.  However, the
-> > > staticness of cdev is used to obtain f_hidg (with container_of()) in
-> > > the character device handling component, so it cannot be removed.
-> > 
-> > You have not understood this rule correctly.  Only one item in a data 
-> > structure can hold a reference count _for that structure_.  But several 
-> > items in a structure can hold reference counts for themselves.
+> Allow the APICV_INHIBIT_REASON_APIC_ID_MODIFIED inhibit reason to be
+> cleared if/when all APICs in xAPIC mode set their APIC ID back to the
+> expected vcpu_id value.
 > 
-> Here was the review comment I was working to on this patch [0]:
+> Fold the functionality previously in kvm_lapic_xapic_id_updated() into
+> kvm_recalculate_apic_map(), as this allows examining all APICs in one
+> pass.
 > 
->  "While at first glance, it seems that f_hidg is not reference
->   counted, it really is, with the embedded "struct cdev" a few lines
->   above this.
-> 
->   That is the reference count that should control the lifecycle of
->   this object, not another reference here in the "outer layer"
->   structure."
+> Fixes: 3743c2f02517 ("KVM: x86: inhibit APICv/AVIC on changes to APIC ID or APIC base")
+> Signed-off-by: Greg Edwards <gedwards@ddn.com>
+> ---
 
-It's worth noting that the review comment goes on to say:
-
- "But, the cdev api is tricky and messy and not really set up to control
-  the lifecycle of objects it is embedded in."
-
-This is a good indication that a separate reference counter really is 
-needed (in fact it almost contradicts what was written above).
-
-> > So for example, you could put a kref in f_hidg which would hold the 
-> > reference count for the f_hidg structure, while at the same time 
-> > including an embedded cdev with its own reference counter.  The point is 
-> > that the refcount in the embedded cdev refers to the lifetime of the 
-> > cdev, not the lifetime of the f_hidg.
-> 
-> This was the approach in the original submission [1], which during
-> review I was told was unacceptable for the aforementioned reason.
-> 
-> [0] https://lore.kernel.org/all/Y1PnoMvDmZMqXScw@kroah.com/
-> [1] https://lore.kernel.org/all/20221017112737.230772-1-lee@kernel.org/
-> 
-> > To make this work properly, you have to do two additional things:
-> > 
-> > 	When the cdev's refcount is initialized, increment the kref
-> > 	in f_hidg.
-> > 
-> > 	When the cdev's refcount drops to 0, decrement the kref (and
-> > 	release f_hidg if the kref hits 0).
-> 
-> More than happy to revisit the first solution with Greg's blessing.
-
-Okay, let's see what Greg thinks after he reads this discussion.
-
-Alan Stern
+Reviewed-by: Sean Christopherson <seanjc@google.com>
