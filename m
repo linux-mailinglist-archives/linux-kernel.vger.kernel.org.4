@@ -2,102 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 481B062F8E3
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 16:08:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D788D62F8E1
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 16:08:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241565AbiKRPI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 10:08:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37408 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241919AbiKRPIX (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S241934AbiKRPIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 18 Nov 2022 10:08:23 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0880DFEC;
-        Fri, 18 Nov 2022 07:08:23 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id bj12so13626372ejb.13;
-        Fri, 18 Nov 2022 07:08:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tdqh9YA+MhmY9AWakdlstPc1vjDRWuP7pAaTUtiPxkI=;
-        b=fez+aDmJDZYmbs2LqdmHSEtslrHqre28p6iIqEBKm9o3dOhfkeMxq5xxIpJGB5zzmc
-         ovu8Xe82seq3l5LDcZKEs2+Np9X2sGfUtxlXRS/7wIkWp1BP0yX/0PUdFX9D5fdNZoNj
-         +sb/MPzNUOhwIECZVJwhTIJa9o2T6QWyP7k+F8pT406BXWP79gcxcaoQ+sW8y2Mt2Vab
-         jyCk7FWW5SPcwsPQQJJNwQdGS1u+dCp7bDygHT6TaeH7vWZSt1qdnFlY6ek5hh3mlfrc
-         rzlTRzbL+q/+uwil4Wts7WkHKB/UI9AxjF2WBQqMdcPlI6YEKF+7qyDMj6yp2ZcPB8ol
-         V0MA==
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37396 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241628AbiKRPIR (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 18 Nov 2022 10:08:17 -0500
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561A1140EF;
+        Fri, 18 Nov 2022 07:08:16 -0800 (PST)
+Received: by mail-qk1-f175.google.com with SMTP id z17so3551002qki.11;
+        Fri, 18 Nov 2022 07:08:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Tdqh9YA+MhmY9AWakdlstPc1vjDRWuP7pAaTUtiPxkI=;
-        b=J4n16qD0Fvs2/OTauZ92Xr8bgjcdSOWBLoCIR9z8KD7/B0Ros4tgruSkfFRXikzYQm
-         WEZDGCLCZeByXNmOb2bz3pk6H/FMGP1j7aTlB9HarPQ7IgDGQ3XyxS3psoeomCHoHa7k
-         DOfC8H8Ob22cwSFIQkRw4Y9FMrwO2ouqJ68v8nE4vCjRluOF2Mjy6ZBGoVHLEqPxwGqI
-         g5D/wnXUURBu46WyQpaJ76SCazTExBQrc87/xJsDHNuF1QEZYOF2t5lcFX02UCrcNhrp
-         YCDd4TMx/WuZcBhYsVmhgqpOt8ycDq2ggLLNCevZmbYrpnzlNtcWA1ZiiJe10+lMMDXc
-         OyNA==
-X-Gm-Message-State: ANoB5pmTAfnMmecfX2vKjd86XVHiisquPiGggqcCK7BQJvbTCau25+qE
-        pfL/ysnepxP/dEiqhZKae48=
-X-Google-Smtp-Source: AA0mqf5IPeyHU5PWju6zO5tsVwG7ZTgFYfKRmNhsVpkqdsVMz3M+PoNjepbCkjI1Q/mUoz9ZPxnYQA==
-X-Received: by 2002:a17:906:3784:b0:7aa:ffd0:b738 with SMTP id n4-20020a170906378400b007aaffd0b738mr6505908ejc.122.1668784101412;
-        Fri, 18 Nov 2022 07:08:21 -0800 (PST)
-Received: from localhost.localdomain ([5.2.194.157])
-        by smtp.gmail.com with ESMTPSA id f23-20020a17090631d700b0078d9cd0d2d6sm1816951ejf.11.2022.11.18.07.08.20
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Vchearp9WS1QYhrT0ExBOsKGzWpettAVm8UGsd0BETI=;
+        b=Ff3h4ArePwDYN1xRuKlThjZBJO+/FYWTbRmsPc0Vpw+XAa0h79DlBpSJhg3Sfx08eh
+         PE6nq7Eucup8e1aebvKu4d/ijGYBMRPrshZFkGCIykriQK+KZpnWH3Eu8i8ZpHpApm+D
+         rugDbofIPOX1feN46Ft8heenpbQqEf4fH3S4PClOHv4L7WOBxKXwT3NvZfa7037MO45G
+         52oxv5sE1/j+PAcRzvtUjm4C5YG8ZFM4bhBVPhaxu7yVLjHjMBZ3cRaDxrADyQELPqTB
+         oWeR7zlvh4ZB30PFm8cxdtPOEHNkcg1M2uwMNsOhCEaBiPjP5kGLLUPZ/JcuNuq+3xYN
+         6sVg==
+X-Gm-Message-State: ANoB5pkT8FQBXPLRjZDyjMJ52zjg/MfaFYRogh0Fo4VsZq7NkP1FCv5N
+        EASxiisEhFMLHVTFUY5m7Cw=
+X-Google-Smtp-Source: AA0mqf4dnWpW0TRHSAnW2PBBFLo5pcg7LY4zqqDppwpcN25sekLxKlgL6ETMgD+oYSz+IJqtdFwe7w==
+X-Received: by 2002:a37:9a0e:0:b0:6fa:b56e:38b2 with SMTP id c14-20020a379a0e000000b006fab56e38b2mr6233053qke.521.1668784095114;
+        Fri, 18 Nov 2022 07:08:15 -0800 (PST)
+Received: from maniforge.lan (c-24-15-214-156.hsd1.il.comcast.net. [24.15.214.156])
+        by smtp.gmail.com with ESMTPSA id h18-20020a05620a401200b006fa2b1c3c1esm2557495qko.58.2022.11.18.07.08.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 07:08:21 -0800 (PST)
-From:   Cosmin Tanislav <demonsingur@gmail.com>
-X-Google-Original-From: Cosmin Tanislav <cosmin.tanislav@analog.com>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>
-Subject: [PATCH] watchdog: dw_wdt: stop on reboot
-Date:   Fri, 18 Nov 2022 17:08:09 +0200
-Message-Id: <20221118150809.102505-1-cosmin.tanislav@analog.com>
-X-Mailer: git-send-email 2.38.1
+        Fri, 18 Nov 2022 07:08:14 -0800 (PST)
+Date:   Fri, 18 Nov 2022 09:08:12 -0600
+From:   David Vernet <void@manifault.com>
+To:     John Fastabend <john.fastabend@gmail.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+        daniel@iogearbox.net, martin.lau@linux.dev, memxor@gmail.com,
+        yhs@fb.com, song@kernel.org, sdf@google.com, kpsingh@kernel.org,
+        jolsa@kernel.org, haoluo@google.com, tj@kernel.org,
+        kernel-team@fb.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v7 0/3] Support storing struct task_struct
+ objects as kptrs
+Message-ID: <Y3ef3Mlzd96iANLm@maniforge.lan>
+References: <20221117032402.2356776-1-void@manifault.com>
+ <6376a1b12bb4d_4101208d@john.notmuch>
+ <Y3atifGs0DM9to8z@maniforge.lan>
+ <6376b7822f4df_8c7a208f7@john.notmuch>
+ <Y3biwxIq8B5oYdOS@maniforge.lan>
+ <6377206bed37e_2063d20878@john.notmuch>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6377206bed37e_2063d20878@john.notmuch>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HW running watchdogs are just watchdogs that are enabled before the
-Linux driver is probed, usually by the bootloader (eg. U-Boot).
+On Thu, Nov 17, 2022 at 10:04:27PM -0800, John Fastabend wrote:
 
-When the system is shutting down, the mechanism for keeping a HW running
-watchdog pinged is also stopped, but the watchdog itself is not stopped,
-causing a reset, and preventing the system from being shut down.
+[...]
 
-Opt into stopping watchdogs on reboot.
+> > > And last thing I was checking is because KF_SLEEPABLE is not set
+> > > this should be blocked from running on sleepable progs which would
+> > > break the call_rcu in the destructor. Maybe small nit, not sure
+> > > its worth it but might be nice to annotate the helper description
+> > > with a note, "will not work on sleepable progs" or something to
+> > > that effect.
+> > 
+> > KF_SLEEPABLE is used to indicate whether the kfunc _itself_ may sleep,
+> > not whether the calling program can be sleepable. call_rcu() doesn't
+> > block, so no need to mark the kfunc as KF_SLEEPABLE. The key is that if
+> > a kfunc is sleepable, non-sleepable programs are not able to call it
+> > (and this is enforced in the verifier).
+> 
+> OK but should these helpers be allowed in sleepable progs? I think
+> not. What stops this, (using your helpers):
+> 
+>   cpu0                                       cpu1
+>   ----
+>   v = insert_lookup_task(task)
+>   kptr = bpf_kptr_xchg(&v->task, NULL);
+>   if (!kptr)
+>     return 0;
+>                                             map_delete_elem()
+>                                                put_task()
+>                                                  rcu_call
+>   do_something_might_sleep()
+>                                                     put_task_struct
+>                                                       ... free  
+>   kptr->[free'd memory]
+>  
+> the insert_lookup_task will bump the refcnt on the acquire on map
+> insert. But the lookup doesn't do anything to the refcnt and the
+> map_delete_elem will delete it. We have a check for spin_lock
+> types to stop them from being in sleepable progs. Did I miss a
+> similar check for these?
 
-Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
----
- drivers/watchdog/dw_wdt.c | 1 +
- 1 file changed, 1 insertion(+)
+So, in your example above, bpf_kptr_xchg(&v->task, NULL) will atomically
+xchg the kptr from the map, and so the map_delete_elem() call would fail
+with (something like) -ENOENT. In general, the semantics are similar to
+std::unique_ptr::swap() in C++.
 
-diff --git a/drivers/watchdog/dw_wdt.c b/drivers/watchdog/dw_wdt.c
-index 52962e8d11a6..462f15bd5ffa 100644
---- a/drivers/watchdog/dw_wdt.c
-+++ b/drivers/watchdog/dw_wdt.c
-@@ -663,6 +663,7 @@ static int dw_wdt_drv_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, dw_wdt);
- 
- 	watchdog_set_restart_priority(wdd, 128);
-+	watchdog_stop_on_reboot(wdd);
- 
- 	ret = watchdog_register_device(wdd);
- 	if (ret)
--- 
-2.38.1
+FWIW, I think KF_KPTR_GET kfuncs are the more complex / racy kfuncs to
+reason about. The reason is that we're passing a pointer to the map
+value containing a kptr directly to the kfunc (with the attempt of
+acquiring an additional reference if a kptr was already present in the
+map) rather than doing an xchg which atomically gets us the unique
+pointer if nobody else xchgs it in first. So with KF_KPTR_GET, someone
+else could come along and delete the kptr from the map while the kfunc
+is trying to acquire that additional reference. The race looks something
+like this:
 
+   cpu0                                       cpu1
+   ----
+   v = insert_lookup_task(task)
+   kptr = bpf_task_kptr_get(&v->task);
+                                             map_delete_elem()
+                                                put_task()
+                                                  rcu_call
+                                                     put_task_struct
+                                                       ... free  
+   if (!kptr)
+     /* In this race example, this path will be taken. */
+     return 0;
+
+The difference is that here, we're not doing an atomic xchg of the kptr
+out of the map. Instead, we're passing a pointer to the map value
+containing the kptr directly to bpf_task_kptr_get(), which itself tries
+to acquire an additional reference on the task to return to the program
+as a kptr. This is still safe, however, as bpf_task_kptr_get() uses RCU
+and refcount_inc_not_zero() in the bpf_task_kptr_get() kfunc to ensure
+that it can't hit a UAF, and that it won't return a dying task to the
+caller:
+
+/**
+ * bpf_task_kptr_get - Acquire a reference on a struct task_struct kptr. A task
+ * kptr acquired by this kfunc which is not subsequently stored in a map, must
+ * be released by calling bpf_task_release().
+ * @pp: A pointer to a task kptr on which a reference is being acquired.
+ */
+__used noinline
+struct task_struct *bpf_task_kptr_get(struct task_struct **pp)
+{
+        struct task_struct *p;
+
+        rcu_read_lock();
+        p = READ_ONCE(*pp);
+
+	/* <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	 * cpu1 could remove the element from the map here, and invoke
+	 * put_task_struct_rcu_user(). We're in an RCU read region
+	 * though, so the task won't be freed until at the very
+	 * earliest, the rcu_read_unlock() below.
+	 * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+	 */
+
+        if (p && !refcount_inc_not_zero(&p->rcu_users))
+		/* <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+		 * refcount_inc_not_zero() will return false, as cpu1
+		 * deleted the element from the map and dropped its last
+		 * refcount. So we just return NULL as the task will be
+		 * deleted once an RCU gp has elapsed.
+		 * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+		 */
+                p = NULL;
+        rcu_read_unlock();
+
+        return p;
+}
+
+Let me know if that makes sense. This stuff is tricky, and I plan to
+clearly / thoroughly add it to that kptr docs page once this patch set
+lands.
