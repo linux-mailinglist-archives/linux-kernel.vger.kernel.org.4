@@ -2,209 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B29E562F3ED
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 12:43:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BBBA62F3F1
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 12:46:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241337AbiKRLnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 06:43:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44506 "EHLO
+        id S240778AbiKRLqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 06:46:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230042AbiKRLnd (ORCPT
+        with ESMTP id S230042AbiKRLqF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 06:43:33 -0500
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5495FE0AE;
-        Fri, 18 Nov 2022 03:43:31 -0800 (PST)
-Received: by mail-qk1-x730.google.com with SMTP id z1so3179954qkl.9;
-        Fri, 18 Nov 2022 03:43:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LOs6c2XvVXH4tKQVpWmV3h9lepfF7gd7N53CvD43urw=;
-        b=aF6yTISiPZ7mFI2UMQPIrAovTFoJjKRj35H0n9cNYhAzaufhgyr+GG8wdFvOL8iXl9
-         kMYU0yoGGmhQUyeUYvsyn/nYq4G4y6IeD90J2UpGk0an0azWtrJ0Jx8uM1wIu+S8QPbN
-         lK4c1Q87GHXf20siW/YkVmKb/Y3e4FTWYdd+VRQjOooWzyST/QEC5uj/Yl7w2XAqOBBS
-         +H0R3x+SlP1Mu3w0amYDyvrSiZhSSyfX+Y7JUwN2EHQ7V5MmgTZ3XsYOmj/WemNP39wd
-         /PCC5iLZPsLwvFf34i+Oe61tNRO//8Ii7GNBVVIjcfqzyiQGVXKy3/oiAoHXNrbimqwS
-         Y3Lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LOs6c2XvVXH4tKQVpWmV3h9lepfF7gd7N53CvD43urw=;
-        b=2Hv1tSg54dfroxyigbNfASNcus7XLwrSBLlFktcRohS3LYtjJFF7PBMV+v/rl/pj6D
-         G1xVMYEs3Z+IbeclCF6xdWrfoN7vkDK+Jj5zyHbBSzRUWxknDS6m+VXt5DvbPjBaitvW
-         PhR9PDP0cSUcpJVsW3DmYZdwpE1mmyUKBdKvhnHIYGwE7x2xOptSWKcVy+JA5uEyOv6A
-         7smTlFuZDJHVJHZqFtkTxwwdantklSSoVw7+GA2Ckr6qSTGyCBnmEn4q6uaolpyxv8S5
-         29757urfmZxJZfaSg8A+uJIZEmd2vdF1CgQEV5sRQyqokYJl/bFdSQd6zPM827Y7b+lR
-         kilg==
-X-Gm-Message-State: ANoB5pkxo3FBD067W/iBY95f0onIz42o9UtbsOJ9j58zi+nX+Yo8nypi
-        osALuZNtQGe7y+jnTRYzHEIQGHfLgHW+G+hfg/pg+gWB3iNAAQ==
-X-Google-Smtp-Source: AA0mqf7FjHrgIMdUcXE6kcC899Kjubf5qPHlke+OY+gw2XNyNhSsO0D5/gZBxU8cDCh93iBHxeaiVKBX27r6gotrPDA=
-X-Received: by 2002:a05:620a:268a:b0:6fa:2c8d:d6c7 with SMTP id
- c10-20020a05620a268a00b006fa2c8dd6c7mr5213234qkp.441.1668771810431; Fri, 18
- Nov 2022 03:43:30 -0800 (PST)
+        Fri, 18 Nov 2022 06:46:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C512182A;
+        Fri, 18 Nov 2022 03:46:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 65D4D6246E;
+        Fri, 18 Nov 2022 11:46:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73120C433C1;
+        Fri, 18 Nov 2022 11:46:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668771963;
+        bh=BHxtre8/LYcerFh38ah/n8Jv/xVfQGTrqxctZy8lgjM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YNk0o4T0JG0y212MaXGP1b+vZnD5q1YJKiExPzGooj8ENWtUiNlVDp6gN6ksbUTzf
+         fseC+bR7chE9+7j+ts+6XH3mQj+kqe9cfK/YFzYOwDRc7gcYe/vf4/VdffBytaqIy8
+         a73kq03VjgrH78vNs15S8PpySmwsoed8H3FxpcElhMGB3XtyCO8U73iKW6JWJuFps1
+         xGlb8MTObWDrQaB9l4KtD4wNPpi8R2ah38QBdyr7knN81W5ChEP+rx7gqBmq3WioQ8
+         kK9LDRkfnY6rXyJU4btW3RHpbmwFB8/r60em9hVEB0XGsEjJ8mOHkIrbhB2PlviSR2
+         1MndekKJuTZVQ==
+Date:   Fri, 18 Nov 2022 11:45:57 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Hal Feng <hal.feng@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ben Dooks <ben.dooks@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 5/8] soc: sifive: ccache: Add StarFive JH7110 support
+Message-ID: <Y3dwdXExRRltyp8A@spud>
+References: <20221118011714.70877-1-hal.feng@starfivetech.com>
+ <20221118011714.70877-6-hal.feng@starfivetech.com>
 MIME-Version: 1.0
-References: <20221118054725.80414-1-michael@allwinnertech.com>
-In-Reply-To: <20221118054725.80414-1-michael@allwinnertech.com>
-From:   Wenchao Chen <wenchao.chen666@gmail.com>
-Date:   Fri, 18 Nov 2022 19:43:19 +0800
-Message-ID: <CA+Da2qxP2gvUc2=n5xW7_YEcgevGpDhqbcVFWVbF0c6DqXDXHA@mail.gmail.com>
-Subject: Re: [PATCH] mmc:mmc-hsq:use fifo to dispatch mmc_request
-To:     Michael Wu <michael@allwinnertech.com>
-Cc:     ulf.hansson@linaro.org, wenchao.chen@unisoc.com,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221118011714.70877-6-hal.feng@starfivetech.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 1:52 PM Michael Wu <michael@allwinnertech.com> wrote:
->
-> Current next_tag selection will cause a large delay in some requests and
-> destroy the scheduling results of the block scheduling layer. Because the
-> issued mrq tags cannot ensure that each time is sequential, especially when
-> the IO load is heavy. In the fio performance test, we found that 4k random
-> read data was sent to mmc_hsq to start calling request_atomic It takes
-> nearly 200ms to process the request, while mmc_hsq has processed thousands
-> of other requests. So we use fifo here to ensure the first in, first out
-> feature of the request and avoid adding additional delay to the request.
->
+Hey Emil/Hal,
 
-Hi Michael
-Is the test device an eMMC?
-Could you share the fio test command if you want?
-Can you provide more logs?
-
-> Signed-off-by: Michael Wu <michael@allwinnertech.com>
+On Fri, Nov 18, 2022 at 09:17:11AM +0800, Hal Feng wrote:
+> From: Emil Renner Berthing <kernel@esmil.dk>
+> 
+> This adds support for the StarFive JH7110 SoC which also
+> features this SiFive cache controller.
+> 
+> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
 > ---
->  drivers/mmc/host/mmc_hsq.c | 40 ++++++++++++++------------------------
->  drivers/mmc/host/mmc_hsq.h |  5 +++++
->  2 files changed, 20 insertions(+), 25 deletions(-)
->
-> diff --git a/drivers/mmc/host/mmc_hsq.c b/drivers/mmc/host/mmc_hsq.c
-> index 9d35453e7371..d2a1a96ed5bd 100644
-> --- a/drivers/mmc/host/mmc_hsq.c
-> +++ b/drivers/mmc/host/mmc_hsq.c
-> @@ -13,9 +13,6 @@
->
->  #include "mmc_hsq.h"
->
-> -#define HSQ_NUM_SLOTS  64
-> -#define HSQ_INVALID_TAG        HSQ_NUM_SLOTS
-> -
->  static void mmc_hsq_retry_handler(struct work_struct *work)
->  {
->         struct mmc_hsq *hsq = container_of(work, struct mmc_hsq, retry_work);
-> @@ -73,7 +70,6 @@ static void mmc_hsq_pump_requests(struct mmc_hsq *hsq)
->
->  static void mmc_hsq_update_next_tag(struct mmc_hsq *hsq, int remains)
->  {
-> -       struct hsq_slot *slot;
->         int tag;
->
->         /*
-> @@ -82,29 +78,12 @@ static void mmc_hsq_update_next_tag(struct mmc_hsq *hsq, int remains)
->          */
->         if (!remains) {
->                 hsq->next_tag = HSQ_INVALID_TAG;
-> +               hsq->tag_tail = HSQ_INVALID_TAG;
->                 return;
->         }
->
-> -       /*
-> -        * Increasing the next tag and check if the corresponding request is
-> -        * available, if yes, then we found a candidate request.
-> -        */
-> -       if (++hsq->next_tag != HSQ_INVALID_TAG) {
-> -               slot = &hsq->slot[hsq->next_tag];
-> -               if (slot->mrq)
-> -                       return;
-> -       }
-> -
-> -       /* Othersie we should iterate all slots to find a available tag. */
-> -       for (tag = 0; tag < HSQ_NUM_SLOTS; tag++) {
-> -               slot = &hsq->slot[tag];
-> -               if (slot->mrq)
-> -                       break;
-> -       }
-> -
-> -       if (tag == HSQ_NUM_SLOTS)
-> -               tag = HSQ_INVALID_TAG;
-> -
-> +       tag = hsq->tag_slot[hsq->next_tag];
-> +       hsq->tag_slot[hsq->next_tag] = HSQ_INVALID_TAG;
->         hsq->next_tag = tag;
->  }
->
-> @@ -233,8 +212,14 @@ static int mmc_hsq_request(struct mmc_host *mmc, struct mmc_request *mrq)
->          * Set the next tag as current request tag if no available
->          * next tag.
->          */
-> -       if (hsq->next_tag == HSQ_INVALID_TAG)
-> +       if (hsq->next_tag == HSQ_INVALID_TAG) {
->                 hsq->next_tag = tag;
-> +               hsq->tag_tail = tag;
-> +               hsq->tag_slot[hsq->tag_tail] = HSQ_INVALID_TAG;
-> +       } else {
-> +               hsq->tag_slot[hsq->tag_tail] = tag;
-> +               hsq->tag_tail = tag;
-> +       }
->
->         hsq->qcnt++;
->
-> @@ -339,8 +324,10 @@ static const struct mmc_cqe_ops mmc_hsq_ops = {
->
->  int mmc_hsq_init(struct mmc_hsq *hsq, struct mmc_host *mmc)
->  {
-> +       int i;
->         hsq->num_slots = HSQ_NUM_SLOTS;
->         hsq->next_tag = HSQ_INVALID_TAG;
-> +       hsq->tag_tail = HSQ_INVALID_TAG;
->
->         hsq->slot = devm_kcalloc(mmc_dev(mmc), hsq->num_slots,
->                                  sizeof(struct hsq_slot), GFP_KERNEL);
-> @@ -351,6 +338,9 @@ int mmc_hsq_init(struct mmc_hsq *hsq, struct mmc_host *mmc)
->         hsq->mmc->cqe_private = hsq;
->         mmc->cqe_ops = &mmc_hsq_ops;
->
-> +       for (i = 0; i < HSQ_NUM_SLOTS; i++)
-> +               hsq->tag_slot[i] = HSQ_INVALID_TAG;
-> +
->         INIT_WORK(&hsq->retry_work, mmc_hsq_retry_handler);
->         spin_lock_init(&hsq->lock);
->         init_waitqueue_head(&hsq->wait_queue);
-> diff --git a/drivers/mmc/host/mmc_hsq.h b/drivers/mmc/host/mmc_hsq.h
-> index ffdd9cd172c3..a783366285a9 100644
-> --- a/drivers/mmc/host/mmc_hsq.h
-> +++ b/drivers/mmc/host/mmc_hsq.h
-> @@ -2,6 +2,9 @@
->  #ifndef LINUX_MMC_HSQ_H
->  #define LINUX_MMC_HSQ_H
->
-> +#define HSQ_NUM_SLOTS  64
-> +#define HSQ_INVALID_TAG        HSQ_NUM_SLOTS
-> +
->  struct hsq_slot {
->         struct mmc_request *mrq;
->  };
-> @@ -17,6 +20,8 @@ struct mmc_hsq {
->         int next_tag;
->         int num_slots;
->         int qcnt;
-> +       int tag_tail;
-> +       int tag_slot[HSQ_NUM_SLOTS];
->
->         bool enabled;
->         bool waiting_for_idle;
-> --
-> 2.29.0
->
+>  arch/riscv/Kconfig.socs            | 1 +
+>  drivers/soc/Makefile               | 2 +-
+>  drivers/soc/sifive/Kconfig         | 2 +-
+>  drivers/soc/sifive/sifive_ccache.c | 1 +
+>  4 files changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
+> index 69774bb362d6..5a40e05f8cab 100644
+> --- a/arch/riscv/Kconfig.socs
+> +++ b/arch/riscv/Kconfig.socs
+> @@ -22,6 +22,7 @@ config SOC_STARFIVE
+>  	bool "StarFive SoCs"
+>  	select PINCTRL
+>  	select RESET_CONTROLLER
+> +	select SIFIVE_CCACHE
+
+Please no. I am trying to get rid of these selects + I cannot figure out
+why this driver is so important that you *need* to select it. Surely the
+SoC is useable without it?
+
+Is this a hang over from your vendor tree that uses the driver to do
+non-coherent stuff for the jh7100?
+
+>  	select SIFIVE_PLIC
+>  	help
+>  	  This enables support for StarFive SoC platform hardware.
+> diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
+> index 69ba6508cf2c..534669840858 100644
+> --- a/drivers/soc/Makefile
+> +++ b/drivers/soc/Makefile
+> @@ -26,7 +26,7 @@ obj-y				+= qcom/
+>  obj-y				+= renesas/
+>  obj-y				+= rockchip/
+>  obj-$(CONFIG_SOC_SAMSUNG)	+= samsung/
+> -obj-$(CONFIG_SOC_SIFIVE)	+= sifive/
+> +obj-y				+= sifive/
+
+This bit is fine.
+
+>  obj-y				+= sunxi/
+>  obj-$(CONFIG_ARCH_TEGRA)	+= tegra/
+>  obj-y				+= ti/
+> diff --git a/drivers/soc/sifive/Kconfig b/drivers/soc/sifive/Kconfig
+> index ed4c571f8771..e86870be34c9 100644
+> --- a/drivers/soc/sifive/Kconfig
+> +++ b/drivers/soc/sifive/Kconfig
+> @@ -1,6 +1,6 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  
+> -if SOC_SIFIVE
+> +if SOC_SIFIVE || SOC_STARFIVE
+
+As I suppose is this - but hardly scalable. I suppose it doesn't really
+matter.
+
+>  config SIFIVE_CCACHE
+>  	bool "Sifive Composable Cache controller"
+> diff --git a/drivers/soc/sifive/sifive_ccache.c b/drivers/soc/sifive/sifive_ccache.c
+> index 1c171150e878..9489d1a90fbc 100644
+> --- a/drivers/soc/sifive/sifive_ccache.c
+> +++ b/drivers/soc/sifive/sifive_ccache.c
+> @@ -107,6 +107,7 @@ static const struct of_device_id sifive_ccache_ids[] = {
+>  	{ .compatible = "sifive,fu540-c000-ccache" },
+>  	{ .compatible = "sifive,fu740-c000-ccache" },
+>  	{ .compatible = "sifive,ccache0" },
+> +	{ .compatible = "starfive,jh7110-ccache" },
+
+Per my second reply to the previous patch, I am not sure why you do not
+just have a fallback compatible in the binding/dt for the fu740 ccache
+since you appear to have identical configuration?
+
+Thanks,
+Conor.
+
