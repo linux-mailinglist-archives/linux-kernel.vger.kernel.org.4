@@ -2,73 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F14762ED82
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 07:13:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F70762ED84
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 07:15:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241063AbiKRGNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 01:13:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38752 "EHLO
+        id S241089AbiKRGO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 01:14:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240932AbiKRGNH (ORCPT
+        with ESMTP id S240866AbiKRGOy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 01:13:07 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33854090D;
-        Thu, 17 Nov 2022 22:13:05 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id d192so4013316pfd.0;
-        Thu, 17 Nov 2022 22:13:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3M3A03m05S8IZ97deoS5nPwTUaWd11uEo476m146g90=;
-        b=gZVKqk52cqlVmNssozrfFsRGdQxHge+EwHeEYgP8XcClOxZU4jIKLLwDisJkGfotJH
-         peBvDOwbd/EYpw4Rs4L07neZGmHtGsgsrOytykJmUw62ZJCBF5+Ug8mUKxAgW/LF86xO
-         QdEhp0KkldjkINeYDOFIS+Pg8fyRNyEIHeexhP4qtRizc2bPEtOa0JBMFjD5AaVJ1qm4
-         lNtFwScYhTnGe+ruh3tk32eSTQPgn0OVLgLRQLycG3UvdfiDUh+u8o2DGNewg1P70OQx
-         YCLVrc5ZYhAXj/Jz6W7lqlBVoRT4g5Eb4syv6VA+CxEO62C5wY9qfiyVj4vvDVuwOLB+
-         Lcwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3M3A03m05S8IZ97deoS5nPwTUaWd11uEo476m146g90=;
-        b=bKueDWtk9PuIScW8bJV7RepS7Q8yd7Eab3ZMI5CWv3JfbQv0oUxJ3R/P2niBLEHyNB
-         9JrECWIyURAZzyq34+VttmUzjdM3zLa6aF3Jps808o63H3DkBWLRuSgcj/v8PK4l5Feg
-         uKGQQk9thd9XiSsTlYYKj1RvDuyQ2NMeT2vjjKcMaxLl3GMQgMGxTxOHQ83eH57dmJF1
-         vSsTOF8wecLJddhB7H3D2tIP0q33bkq/4S8qWGnNqVrhhBcr88VZ7jNmp9zLIpKZUoy0
-         nKo69ncbTQn1SfQhgwCdaqk4z0Qh38wkle8EhuhWIshFHJrA5PuDd4pErAp62cn21xqZ
-         sshw==
-X-Gm-Message-State: ANoB5pnlsxR2XbxXfYwj20pqks6LcpErG1us6Ylec9fJiC1k+byL/qeD
-        VZfpheGVcL30wftlW0W5Lo4=
-X-Google-Smtp-Source: AA0mqf4mIaDEUDFAePEKlK9CsQxLKZ4SUarRpvoDuQYG2VaQyxduOrlDDKBFGqKlNrmtg3LiUhq+/A==
-X-Received: by 2002:a63:e145:0:b0:46e:c9e2:f11b with SMTP id h5-20020a63e145000000b0046ec9e2f11bmr5534674pgk.151.1668751984514;
-        Thu, 17 Nov 2022 22:13:04 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:e4c5:c31d:4c68:97a0])
-        by smtp.gmail.com with ESMTPSA id z2-20020a626502000000b0057255b7c8easm2260863pfb.33.2022.11.17.22.13.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 22:13:03 -0800 (PST)
-Date:   Thu, 17 Nov 2022 22:13:00 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Benson Leung <bleung@chromium.org>,
-        Johnny Chuang <johnny.chuang.emc@gmail.com>,
-        Scott Liu <scott.liu@emc.com.tw>, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Input: elants_i2c: Properly handle the reset GPIO when
- power is off
-Message-ID: <Y3cibCnWgyNCxXhP@google.com>
-References: <20221117123805.1.I9959ac561dd6e1e8e1ce7085e4de6167b27c574f@changeid>
- <Y3ayEc8sFCLahOT3@google.com>
- <CAD=FV=UuLKgM+0UNfRZBij1EkEZs0nQHOkY3Xp9BE2bbJWcdqQ@mail.gmail.com>
+        Fri, 18 Nov 2022 01:14:54 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BBA8E43AE2;
+        Thu, 17 Nov 2022 22:14:52 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CE39823A;
+        Thu, 17 Nov 2022 22:14:58 -0800 (PST)
+Received: from [10.162.41.7] (unknown [10.162.41.7])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2EDD13F73B;
+        Thu, 17 Nov 2022 22:14:47 -0800 (PST)
+Message-ID: <7e5d7724-153d-15c3-1f78-002980b67499@arm.com>
+Date:   Fri, 18 Nov 2022 11:44:44 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAD=FV=UuLKgM+0UNfRZBij1EkEZs0nQHOkY3Xp9BE2bbJWcdqQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH V5 6/7] arm64/perf: Add BRBE driver
+Content-Language: en-US
+To:     James Clark <james.clark@arm.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, peterz@infradead.org,
+        acme@kernel.org, mark.rutland@arm.com, will@kernel.org,
+        catalin.marinas@arm.com
+References: <20221107062514.2851047-1-anshuman.khandual@arm.com>
+ <20221107062514.2851047-7-anshuman.khandual@arm.com>
+ <1d06f05c-0e7f-7648-6b1b-b78e999bc65f@arm.com>
+ <a065d948-3b9c-86bf-4a10-45d9c47e7ea1@arm.com>
+ <f1a3b3bc-bfa4-e54e-cd2f-a9ee70d56850@arm.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <f1a3b3bc-bfa4-e54e-cd2f-a9ee70d56850@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,76 +55,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 03:48:17PM -0800, Doug Anderson wrote:
-> Hi,
-> 
-> On Thu, Nov 17, 2022 at 2:13 PM Dmitry Torokhov
-> <dmitry.torokhov@gmail.com> wrote:
-> >
-> > On Thu, Nov 17, 2022 at 12:38:23PM -0800, Douglas Anderson wrote:
-> > > As can be seen in elants_i2c_power_off(), we want the reset GPIO
-> > > asserted when power is off. The reset GPIO is active low so we need
-> > > the reset line logic low when power is off to avoid leakage.
-> > >
-> > > We have a problem, though, at probe time. At probe time we haven't
-> > > powered the regulators on yet but we have:
-> > >   devm_gpiod_get(&client->dev, "reset", GPIOD_OUT_LOW);
-> > >
-> > > While that _looks_ right, it turns out that it's not. The
-> > > GPIOD_OUT_LOW doesn't mean to init the GPIO to low. It means init the
-> > > GPIO to "not asserted". Since this is an active low GPIO that inits it
-> > > to be high.
-> > >
-> > > Let's fix this to properly init the GPIO. Now after both probe and
-> > > power off the state of the GPIO is consistent (it's "asserted" or
-> > > level low).
-> > >
-> > > Once we fix this, we can see that at power on time we no longer to
-> > > assert the reset GPIO as the first thing. The reset GPIO is _always_
-> > > asserted before powering on. Let's fix powering on to account for
-> > > this.
-> >
-> > I kind of like that elants_i2c_power_on() is self-contained and does the
-> > full power sequence. Can we simply change devm_gpiod_get() to use
-> > GPIOD_ASIS to avoid the momentary spike in reset line state (assuming
-> > that the firmware initializes the reset line sanely because if it does
-> > not we have much longer time where we are leaking into the controller)?
-> 
-> I'm not sure I see the benefit of elants_i2c_power_on() initting the
-> reset GPIO. In general that function _has_ to make assumptions about
-> the state of the world before it's called. Otherwise the function
-> should start:
-> 
-> if (ts->did_I_inexplicably_turn_vcc33_on) {
->   regulator_disable(ts->vcc33);
->   ts->did_I_inexplicably_turn_vcc33_on = false;
-> }
-> 
-> if (ts->did_I_inexplicably_turn_vccio_on) {
->   regulator_disable(ts->vccio);
->   ts->did_I_inexplicably_turn_vccio_on = false;
-> }
-> 
-> Said another way: we already need to rely on the regulators being in a
-> reasonable state when the function starts.  Why is that different from
-> relying on the reset GPIO being in a reasonable state? The reset GPIO
-> needs to be sequenced together with the regulators. It should always
-> be "asserted" (driven low) when the regulators are off and only ever
-> deasserted (driven high) when the regulators are on.
-> 
-> I'll also note that, as coded today (without my patch), the
-> elants_i2c_power_on() is actively doing the _wrong_ thing in its error
-> handling. Specifically if either of the regulators fail to turn on it
-> will explicitly de-assert the reset again which, since it's active
-> low, will set the GPIO to high and start leaking power / backdriving
-> the touchscreen. We could remove this bit of error handling but then
-> we're suddenly not undoing the things that the function did. ;-) It
-> feels cleaner to me to just make it a requirement that the reset GPIO
-> is always asserted (low) when the regulators are off.
 
-OK, fair enough, applied.
 
-Thanks.
+On 11/17/22 15:39, James Clark wrote:
+> 
+> 
+> On 17/11/2022 05:45, Anshuman Khandual wrote:
+>>
+>>
+>> On 11/16/22 22:12, James Clark wrote:
+>>>
+>>>
+>>> On 07/11/2022 06:25, Anshuman Khandual wrote:
+>>> [...]
+>>>
+>>>> +static void perf_branch_to_brbcr(struct pmu_hw_events *cpuc, int branch_type)
+>>>> +{
+>>>> +	cpuc->brbcr = (BRBCR_EL1_CC | BRBCR_EL1_MPRED);
+>>>> +
+>>>> +	if (branch_type & PERF_SAMPLE_BRANCH_USER)
+>>>> +		cpuc->brbcr |= BRBCR_EL1_E0BRE;
+>>>> +
+>>>> +	if (branch_type & PERF_SAMPLE_BRANCH_NO_CYCLES)
+>>>> +		cpuc->brbcr &= ~BRBCR_EL1_CC;
+>>>> +
+>>>> +	if (branch_type & PERF_SAMPLE_BRANCH_NO_FLAGS)
+>>>> +		cpuc->brbcr &= ~BRBCR_EL1_MPRED;
+>>>> +
+>>>> +	if (branch_type & PERF_SAMPLE_BRANCH_KERNEL)
+>>>> +		cpuc->brbcr |= BRBCR_EL1_E1BRE;
+>>>> +	else
+>>>> +		return;
+>>>> +
+>>>> +	/*
+>>>> +	 * The exception and exception return branches could be
+>>>> +	 * captured only when the event has necessary privilege
+>>>> +	 * indicated via branch type PERF_SAMPLE_BRANCH_KERNEL,
+>>>> +	 * which has been ascertained in generic perf. Please
+>>>> +	 * refer perf_copy_attr() for more details.
+>>>> +	 */
+>>>> +	if (branch_type & PERF_SAMPLE_BRANCH_ANY) {
+>>>> +		cpuc->brbcr |= BRBCR_EL1_EXCEPTION;
+>>>> +		cpuc->brbcr |= BRBCR_EL1_ERTN;
+>>>
+>>> Because this comes after the PERF_SAMPLE_BRANCH_KERNEL check, it's
+>>> impossible to get syscall records from userspace. When you enable kernel
+>>> branch records, the buffer always fills up before it gets to userspace.
+>>
+>> Just to summerize.
+>>
+>> System call [user_addr -> kernel_addr] and return [kernel_addr -> user_addr]
+>> records are impossible to be captured, because
+>>
+>> - Without PERF_SAMPLE_BRANCH_KERNEL, BRBCR_EL1_EXCEPTION/ERTN are not set
+>> - With PERF_SAMPLE_BRANCH_KERNEL, buffer fills up with in kernel branches
+>>
+> 
+> Yep that's it
+> 
+>> Did you try with latest fix, that clears the paused BRBE after reading branch
+>> records during PMU interrupt ? That fix creates much more samples than before.
+>>
+> 
+> Yes that's with the latest fix. It may even make the problem more
+> obvious with the fix rather than without.
 
--- 
-Dmitry
+Okay.
+
+> 
+>>>
+>>> Can you move this to the top so that it can be set if either
+>>> PERF_SAMPLE_BRANCH_USER or PERF_SAMPLE_BRANCH_KERNEL is set. The
+>>
+>> Why should they depend on privilege filters i.e PERF_SAMPLE_BRANCH_USER/KERNEL
+>> rather than just branch filters PERF_SAMPLE_BRANCH_ANY/ANY_CALL/ANY_RETURN ?
+>>
+> 
+> Exactly, I don't think they should depend on the privilege level. But at
+> the moment we return before setting them unless
+> PERF_SAMPLE_BRANCH_KERNEL is set.
+
+Okay.
+
+> 
+>>> hardware already handles the security by giving partial records with the
+>>> kernel part zeroed out so I don't think the driver needs to add any
+>>> additional rules other than setting BRBCR_EL1_E1BRE or BRBCR_EL1_E0BRE.
+>>
+>> Basically BRBCR_EL1_EXCEPTION/BRBCR_EL1_ERTN should be treated like any other
+>> branch filter rather than privilege filters as is the case now ?
+> 
+> I think so yes
+> 
+>>
+>>>
+>>> For example I moved it to the top, removed the return below and then I
+>>> get syscall partial records:
+>>>
+>>> ....  5: 0000000000745d0c -> 0000000000000000 0 cycles  P   9fbfbfbf SYSCALL
+>>>
+>>> I also get ERETS but with only the userspace part set:
+>>>
+>>> .....  4: 0000000000000000 -> 0000000000745d10 0 cycles  P   9fbfbfbf ERET
+>> But with both user and kernel privilege filters being set, these should have
+>> been complete branch records containing both user and kernel addresses ?
+> 
+> Yes, but I only set PERF_SAMPLE_BRANCH_USER, I should have given the
+> perf command as well:
+> 
+>   perf record -j any,save_type,u -- syscall_loop
+> 
+> Where syscall_loop obviously generates lots of SYSCALLS and ERETS. But
+> with both user and kernel you just don't get to that point before the
+> buffer fills up. At least in per process mode, maybe with -a the timings
+> are different.
+
+Fair enough, will change BRBCR_EL1_EXCEPTION/BRBCR_EL1_ERTN as discussed.
