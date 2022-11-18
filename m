@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9010D63013A
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 23:51:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00C566301E3
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 23:54:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234132AbiKRWvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 17:51:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37722 "EHLO
+        id S234962AbiKRWyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 17:54:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233370AbiKRWun (ORCPT
+        with ESMTP id S234761AbiKRWxq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 17:50:43 -0500
+        Fri, 18 Nov 2022 17:53:46 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E63EEB9B8D
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 14:47:03 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 035EFBE872
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 14:48:00 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA7z-0008Qv-5c; Fri, 18 Nov 2022 23:46:31 +0100
+        id 1owA80-0008Ua-Cq; Fri, 18 Nov 2022 23:46:32 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA7u-0058EJ-Ka; Fri, 18 Nov 2022 23:46:27 +0100
+        id 1owA7v-0058Ej-Ev; Fri, 18 Nov 2022 23:46:28 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA7u-00Hb0X-FQ; Fri, 18 Nov 2022 23:46:26 +0100
+        id 1owA7v-00Hb0h-1L; Fri, 18 Nov 2022 23:46:27 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
         Jonathan Cameron <jic23@kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Antoniu Miclaus <antoniu.miclaus@analog.com>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>,
         Lars-Peter Clausen <lars@metafoo.de>,
         linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 089/606] iio: dac: max517: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:37:03 +0100
-Message-Id: <20221118224540.619276-90-uwe@kleine-koenig.org>
+Subject: [PATCH 091/606] iio: dac: mcp4725: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:37:05 +0100
+Message-Id: <20221118224540.619276-92-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -68,34 +71,34 @@ that explicitly in the probe function.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/iio/dac/max517.c | 6 +++---
+ drivers/iio/dac/mcp4725.c | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/iio/dac/max517.c b/drivers/iio/dac/max517.c
-index 373ce6ff83b7..25967c39365d 100644
---- a/drivers/iio/dac/max517.c
-+++ b/drivers/iio/dac/max517.c
-@@ -141,9 +141,9 @@ static const struct iio_chan_spec max517_channels[] = {
- 	MAX517_CHANNEL(7),
- };
+diff --git a/drivers/iio/dac/mcp4725.c b/drivers/iio/dac/mcp4725.c
+index 446d1a8fe4be..46bf758760f8 100644
+--- a/drivers/iio/dac/mcp4725.c
++++ b/drivers/iio/dac/mcp4725.c
+@@ -369,9 +369,9 @@ static int mcp4725_probe_dt(struct device *dev,
+ 	return 0;
+ }
  
--static int max517_probe(struct i2c_client *client,
--			const struct i2c_device_id *id)
-+static int max517_probe(struct i2c_client *client)
+-static int mcp4725_probe(struct i2c_client *client,
+-			 const struct i2c_device_id *id)
++static int mcp4725_probe(struct i2c_client *client)
  {
 +	const struct i2c_device_id *id = i2c_client_get_device_id(client);
- 	struct max517_data *data;
+ 	struct mcp4725_data *data;
  	struct iio_dev *indio_dev;
- 	struct max517_platform_data *platform_data = client->dev.platform_data;
-@@ -203,7 +203,7 @@ static struct i2c_driver max517_driver = {
- 		.name	= MAX517_DRV_NAME,
- 		.pm	= pm_sleep_ptr(&max517_pm_ops),
+ 	struct mcp4725_platform_data *pdata, pdata_dt;
+@@ -524,7 +524,7 @@ static struct i2c_driver mcp4725_driver = {
+ 		.of_match_table = mcp4725_of_match,
+ 		.pm	= pm_sleep_ptr(&mcp4725_pm_ops),
  	},
--	.probe		= max517_probe,
-+	.probe_new	= max517_probe,
- 	.id_table	= max517_id,
+-	.probe		= mcp4725_probe,
++	.probe_new	= mcp4725_probe,
+ 	.remove		= mcp4725_remove,
+ 	.id_table	= mcp4725_id,
  };
- module_i2c_driver(max517_driver);
 -- 
 2.38.1
 
