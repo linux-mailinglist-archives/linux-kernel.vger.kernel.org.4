@@ -2,71 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C2C462FBD0
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 18:40:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E858A62FBD1
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 18:41:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242180AbiKRRkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 12:40:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38738 "EHLO
+        id S242304AbiKRRlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 12:41:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242304AbiKRRkg (ORCPT
+        with ESMTP id S242239AbiKRRku (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 12:40:36 -0500
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D273C20BD9;
-        Fri, 18 Nov 2022 09:40:30 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AIHeLBd077023;
-        Fri, 18 Nov 2022 11:40:21 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1668793221;
-        bh=t45Q5EGy2QkYGozOYHUVUxhGG5GG1cC9m+hhsMGZPoE=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=IlmIH/8foh/2p8LN2mBT76/seFD1cOb9Gz9vJPX+0oA+8NYLZ2bNtMlr+ggAN0wuR
-         7xTD9FN/fwvrLRPFoknj7ugxs26kN4ysovuvPRwWtGiTqll/+eM7alOJoDduOHBkth
-         5hbng14jAXhDdTtrWf7dz1AWs95pTNidOxgWsWTw=
-Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AIHeLFa048159
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 18 Nov 2022 11:40:21 -0600
-Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 18
- Nov 2022 11:40:20 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Fri, 18 Nov 2022 11:40:20 -0600
-Received: from [10.250.38.44] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AIHeKh7085024;
-        Fri, 18 Nov 2022 11:40:20 -0600
-Message-ID: <b57433e7-b309-bd1c-f794-3da74021f03c@ti.com>
-Date:   Fri, 18 Nov 2022 11:40:19 -0600
+        Fri, 18 Nov 2022 12:40:50 -0500
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2102.outbound.protection.outlook.com [40.107.255.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC8E24BDA
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 09:40:49 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lageZJkc33pL7CXW4/ymN04sqSi7W8COah/UFdUglVlyYL11LMjjMER18ZrUWlRaRvZUow1lpK0b10bTyd3l9uMm5s81Cx/LuD2v7wyToWYsJFxOlzCAzokKi1yVYBOJNTN5lAv/HPeeBUSwFzUJISf9CVeEd1GgHgYBcwENtLDqEqt1L8W6xJvpLG8GwrJfcH4Az2WI2cUcQtZ/6N+29+2xGASSdV5b4SBeHjcQHZAnipCHqP9YQvAM0AHr0fUzGT/L20SfJNVN/i9s46o6MBHpU0SWy/Yjr/WEw9MBTTSymX9NryuMhwIEZF41B0f/u5iVa9DU6PzgNwtmnLZvsg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LDwuWC9zt+tQ2uYJl+6EFV0UgX8G1S2XNuiwSk8RQig=;
+ b=XJyu65sRrqTk5XQBRNCu6L5YsKoOyItg8qcylMuZNcLZDpdH3h9kjr8VUwevf6BVTw1H1VQ7lQpOFKjBnFP4W8fimQnucP5T7XZ3uQCCq5DOR8P89fMKJpvnrV7/371BYufCjTiiYDP/bsb16dq7fuwUH18Omn7oA/Yik3NH/UTCYDfodsWG11VV9RAxz/bxFSwYihkrpJeMrN2C3nJ/ct7Bgkw+6IH9lba9e+hICM3MJ+XfW4pEqrHHgteM0+yFyoUfKk8XBSkKRDX3xWQrsgohBNI56hXs7+EzVPzuUaVIT/nxbbUj6o5MdVx2jtXYKAOXncnidSVY3okgYw0K2A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LDwuWC9zt+tQ2uYJl+6EFV0UgX8G1S2XNuiwSk8RQig=;
+ b=keB2yV2VZ/AOjVkEQM8taQ+3KS4KWmfBblsI7Cv8lhuCWsP+J0WlrWLSoWTg03NPHx/V9CP2U+ytIlNdS9mOjx6dQQp/f4PbuxCKCA17uBRWt4g2D4ndavBmnoAU5XBPl/kPxbgahLlq/3hC3jSTTUtSjYsCy5qExxqHXpvmy24+r6MN8n5NtGeODSzXZemRs+8VuhOXeapbyBpOgKlyGMP305qafvTrSnTKacJx8XCzZKrxbU0KnYnPQADMTGCHlt+k2OJUFqLgoREUpxwUoT/Rfyjd2sAhSfRpR+unD2UxrcS4K9xaXofoE4qw+qfpcv8sobsxH70079KRTjsh4A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by KL1PR0601MB5749.apcprd06.prod.outlook.com (2603:1096:820:bb::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.19; Fri, 18 Nov
+ 2022 17:40:43 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::1230:5f04:fe98:d139]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::1230:5f04:fe98:d139%9]) with mapi id 15.20.5813.019; Fri, 18 Nov 2022
+ 17:40:43 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     jaegeuk@kernel.org, chao@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Yangtao Li <frank.li@vivo.com>
+Subject: [PATCH] f2fs: fix description about discard_granularity node
+Date:   Sat, 19 Nov 2022 01:40:28 +0800
+Message-Id: <20221118174028.63702-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR04CA0200.apcprd04.prod.outlook.com
+ (2603:1096:4:187::15) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 4/4] arm64: dts: ti: Add support for J784S4 EVM board
-Content-Language: en-US
-To:     Apurva Nandan <a-nandan@ti.com>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>
-CC:     Hari Nagalla <hnagalla@ti.com>
-References: <20221116130428.161329-1-a-nandan@ti.com>
- <20221116130428.161329-5-a-nandan@ti.com>
-From:   Andrew Davis <afd@ti.com>
-In-Reply-To: <20221116130428.161329-5-a-nandan@ti.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|KL1PR0601MB5749:EE_
+X-MS-Office365-Filtering-Correlation-Id: e3875e51-09f0-4c1a-55ca-08dac98c0453
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: R2aGwfiny7eg6KBVZJQQdscewfMb2MCKCrAMqBxksmazgkBLdz9uk21DQsNresJgk0CECL89Abmtb8L7eRO+gCTGqHP1JMSFiNFXR3eP9W5RIIYMdpCxXi34L4hcqPhpjFg5MtqNYyDqTRGLb/asThbpmnITTTn7tLy6/6bA5oYO4IQA6nEbBJNC2QnFhQnkYvxJZwEawRpk+/1CRoLKOLGezFyyCC2lGozLLSAscaqtaj9HcFlsZsBILhkljte5HKiLkmKRuDxBqKVh8Zxy1AXFON3Fa5A6MbWHhJVGCTXI8SDMdvhXWYO3R25OP8k0uGKnUC7wJwNwODmfKWWrlQ6vbk30AnXj++JraUN+I0ntJ1Xq1v50ndgpWG5umfLVUiN0r3SjcZCg9msZ7VdAka4viTbXNHEi0L5786JQHyJB4iMBDJ1bLpokDQI+wjjxzBPxjuYK9OOTiWj7xU5PVp+1I4yu4X+P4czegALfGdPiZD00jV+PyDezWHBKW+YgqpvIaFhDDInDhrKnr995wFdqPqRNZgi2lTSJ45z4QpnQFUTlfWLQHFvfOmG6VVY65GSrStlSP0ED9WZ5ptSXih+BzbyClsYt/IiOE27nURC9e8xxcoqVlfgpUgnN6nSobjKhAtT0BFKysuU1qxT6/Rx0HGb52BfjD6Dl4omjqiKtGiqtT/81CkvJEY09IVWt
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(39860400002)(136003)(396003)(376002)(366004)(451199015)(1076003)(2616005)(186003)(83380400001)(38100700002)(38350700002)(4326008)(86362001)(41300700001)(19627235002)(26005)(6506007)(6512007)(6666004)(52116002)(2906002)(107886003)(5660300002)(66476007)(8676002)(4744005)(66946007)(66556008)(478600001)(316002)(6486002)(8936002)(36756003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Fa6T9jfkoaEvbiXwq4n6MBsb0E9IC85GEyt+vprtbGOSE/AFw1EyUSV8MPvj?=
+ =?us-ascii?Q?ZoiyXAXPq3sSgsFluT+n8LGDbAW34EYOm+7xldq5BUbkZPBYGUXW8/cK2Sl4?=
+ =?us-ascii?Q?J1odfbsca2XkHjYukVKiWGhj8dNFOHmJTo2dC2cP/EMPYXaINtoWC2umABse?=
+ =?us-ascii?Q?Ec4MVvRRy9S8HuYaGL4JIiBClx0hzkEQTArPeFk+lh/u7qeJT33ilWyndZsP?=
+ =?us-ascii?Q?9rb1Db1Huzxbik26AYn5trh0Y4nEjfZhc2vlU6MP5hSlFerIyNKKivvYiwAw?=
+ =?us-ascii?Q?mbK5anvUe6H/r81SNVyA0ZDK028SuJl9CiPNhPKrR6mtou7geUNPwKDvWIZ6?=
+ =?us-ascii?Q?V1xp5ZEoclh0/HZ40sKfjde6N1lRC9+p0yJIu9Nab16qG7IbQe1pPwp85wOv?=
+ =?us-ascii?Q?gXEOH42MzU1yzCUAt750sd/7HvXc5WQppcBM71l72UIrMV9del/ZfTw4WYwn?=
+ =?us-ascii?Q?UtRdsnQonIMYvungIGs9cQxl8H4evSVtsebVTniAqrQE52u1dK+Lu8NNZ+uP?=
+ =?us-ascii?Q?yrhxmMWQbym9q7etDA7X6QCyFNJifh1oMHc7yjRju2spV6PRTxeXYbk1810c?=
+ =?us-ascii?Q?Bk3e9yvZJIYcrR5miffdHnfqEpbmogh7cmeofyenkQDNzTHZq+cjI27CQzXg?=
+ =?us-ascii?Q?6NqeAY+fnNdQlOwwUh2CVdc5qNyJf054UUSOCDttPIUI90Q4qFKWNEUo2308?=
+ =?us-ascii?Q?Ff9eOWXOdIFWmfGfxV4hFflYLS9TtZamlZ6Tb3+2C4YNbZeePczjsrP0Wmxv?=
+ =?us-ascii?Q?yTM43T7TqqApDzsKdeRuDQkVYHqKIhk87S5YITty+hnRAHOr7R/SysUxW6aj?=
+ =?us-ascii?Q?sNcO+U8knf52z4v4mIR9HffgUWAucmXsniOrvZEodMvqQu2Ek3KKTz0hVCVr?=
+ =?us-ascii?Q?J1Q3SmkimfyAUc/XKXz42oT9WG8ObXVAVSztJi4ucDIipO/UaADx0NwLS7aK?=
+ =?us-ascii?Q?Px5m1rsFUz3hzq3Omb0awH6gV3OK+U/+Y0QEuWrNueU0U4etjf7Yl7D0Q3k6?=
+ =?us-ascii?Q?I//LqeRuZJTZSXtxS+YFVXAdrG7vP3dirHIYXO9LC0l0YeFHSWCL1VgiPYcB?=
+ =?us-ascii?Q?ymdbwTYWTPJH3SihoEqwKsHZxx0RKuKhCHToTdUT3D93h6evgtFcfqXs9hKX?=
+ =?us-ascii?Q?9fdbE4K59b3YrPAz9jWCk5PJg+MJWkoyWgEWJZeU8i1y/3+bsVEqvbqFShVP?=
+ =?us-ascii?Q?cr3lLSIz6/kVeQ14QwssUCyhDThUtHcEkoHYCCMS3/1UO3kIt4J34rol/Chs?=
+ =?us-ascii?Q?+cL6Zc/Lm6XYEXrltcqiUMpSUnZAAJlx1Q2lveU9W8x+IgqaBcBxk6w15hxe?=
+ =?us-ascii?Q?5Y+C8o7k3dHu7FLv+oGOo4eS1u/t8yCtqJpThhAhn9vWeZ3qgGTzVu8LacM2?=
+ =?us-ascii?Q?fGxvMqwFNdF+EmDTY0DFMi3qs8HeC0BODdzEeNJ53MkihgdKhjRR2wlVxSHo?=
+ =?us-ascii?Q?nkxznUQGl9EjnmKKKOIuzGQBtXck3cdC0yDfnQOvDLMgtZDjgzQxn7QcrJhi?=
+ =?us-ascii?Q?9xeMBEnLCBWkw55rurb0MzBPGssMD3SVAXK4OFALS7TeFrQ5AOqoIEbSzZQz?=
+ =?us-ascii?Q?HrWg5dFyS9t92Us/E8SjdZRE/ZXVQC2BaVs5/y4e?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e3875e51-09f0-4c1a-55ca-08dac98c0453
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2022 17:40:43.4332
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LGJaJtKJ/pWo8COXMdYqVOhNhMV6e2XPXl/VMUE8oiTfdTAOo3f6qEHdWW9mmRMOQBQHTBT+dHFnvs1JuEZ2qA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB5749
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,264 +111,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/16/22 7:04 AM, Apurva Nandan wrote:
-> J784S4 EVM board is designed for TI J784S4 SoC. It supports the following
-> interfaces:
-> * 32 GB DDR4 RAM
-> * x2 Gigabit Ethernet interfaces capable of working in Switch and MAC mode
-> * x1 Input Audio Jack, x1 Output Audio Jack
-> * x1 USB2.0 Hub with two Type A host and x1 USB 3.1 Type-C Port
-> * x2 4L PCIe connector
-> * x1 UHS-1 capable micro-SD card slot
-> * 512 Mbit OSPI flash, 1 Gbit Octal NAND flash, 512 Mbit QSPI flash,
->    UFS flash.
-> * x6 UART through UART-USB bridge
-> * XDS110 for onboard JTAG debug using USB
-> * Temperature sensors, user push buttons and LEDs
-> * 40-pin User Expansion Connector
-> * x2 ENET Expansion Connector, x1 GESI expander, x2 Display connector
-> * x1 15-pin CSI header
-> * x6 MCAN instances
-> 
-> Add basic support for J784S4-EVM.
-> 
-> Schematics: https://www.ti.com/lit/zip/sprr458
-> 
-> Signed-off-by: Hari Nagalla <hnagalla@ti.com>
-> Signed-off-by: Nishanth Menon <nm@ti.com>
-> Signed-off-by: Apurva Nandan <a-nandan@ti.com>
-> ---
->   arch/arm64/boot/dts/ti/Makefile          |   2 +
->   arch/arm64/boot/dts/ti/k3-j784s4-evm.dts | 197 +++++++++++++++++++++++
->   2 files changed, 199 insertions(+)
->   create mode 100644 arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
-> 
-> diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
-> index 4555a5be2257..67621b349e88 100644
-> --- a/arch/arm64/boot/dts/ti/Makefile
-> +++ b/arch/arm64/boot/dts/ti/Makefile
-> @@ -19,6 +19,8 @@ dtb-$(CONFIG_ARCH_K3) += k3-j7200-common-proc-board.dtb
->   
->   dtb-$(CONFIG_ARCH_K3) += k3-j721s2-common-proc-board.dtb
->   
-> +dtb-$(CONFIG_ARCH_K3) += k3-j784s4-evm.dtb
-> +
->   dtb-$(CONFIG_ARCH_K3) += k3-am642-evm.dtb
->   dtb-$(CONFIG_ARCH_K3) += k3-am642-sk.dtb
->   
-> diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
-> new file mode 100644
-> index 000000000000..53516fb2b346
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
-> @@ -0,0 +1,196 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2022 Texas Instruments Incorporated - https://www.ti.com/
-> + *
-> + * EVM Board Schematics: https://www.ti.com/lit/zip/sprr458
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include <dt-bindings/net/ti-dp83867.h>
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include "k3-j784s4.dtsi"
-> +
-> +/ {
-> +	compatible = "ti,j784s4-evm", "ti,j784s4";
-> +	model = "Texas Instruments J784S4 EVM";
-> +
-> +	chosen {
-> +		stdout-path = "serial2:115200n8";
-> +	};
-> +
-> +	aliases {
-> +		serial2 = &main_uart8;
+Let's fix the inconsistency in the text description.
+Default discard granularity is 16. For small devices,
+default value is 1.
 
-This feels hacky. Your chosen node picks serial2 as that is usually
-the one that is wired up on K3 boards. But on this board it is main_uart8.
-So why not have this be serial10, then choose
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
+---
+ Documentation/ABI/testing/sysfs-fs-f2fs | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-stdout-path = "serial10:115200n8";
+diff --git a/Documentation/ABI/testing/sysfs-fs-f2fs b/Documentation/ABI/testing/sysfs-fs-f2fs
+index 24e7cb77f265..32404781e76f 100644
+--- a/Documentation/ABI/testing/sysfs-fs-f2fs
++++ b/Documentation/ABI/testing/sysfs-fs-f2fs
+@@ -138,7 +138,8 @@ Contact:	"Chao Yu" <yuchao0@huawei.com>
+ Description:	Controls discard granularity of inner discard thread. Inner thread
+ 		will not issue discards with size that is smaller than granularity.
+ 		The unit size is one block(4KB), now only support configuring
+-		in range of [1, 512]. Default value is 4(=16KB).
++		in range of [1, 512]. Default value is 16.
++		For small devices, default value is 1.
+ 
+ What:		/sys/fs/f2fs/<disk>/umount_discard_timeout
+ Date:		January 2019
+-- 
+2.25.1
 
-Also, I've made comments on previous version of this series, it is
-nice to include folks who have commented before in the CC for future
-versions, that way our filters don't hide these away and we can more
-easily check that our comments have been addressed.
-
-Andrew
-
-> +		mmc1 = &main_sdhci1;
-> +		i2c0 = &main_i2c0;
-> +	};
-> +
-> +	memory@80000000 {
-> +		device_type = "memory";
-> +		/* 32G RAM */
-> +		reg = <0x00 0x80000000 0x00 0x80000000>,
-> +		      <0x08 0x80000000 0x07 0x80000000>;
-> +	};
-> +
-> +	reserved_memory: reserved-memory {
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		ranges;
-> +
-> +		secure_ddr: optee@9e800000 {
-> +			reg = <0x00 0x9e800000 0x00 0x01800000>;
-> +			no-map;
-> +		};
-> +	};
-> +
-> +	evm_12v0: regulator-evm12v0 {
-> +		/* main supply */
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "evm_12v0";
-> +		regulator-min-microvolt = <12000000>;
-> +		regulator-max-microvolt = <12000000>;
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +	};
-> +
-> +	vsys_3v3: regulator-vsys3v3 {
-> +		/* Output of LM5140 */
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vsys_3v3";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		vin-supply = <&evm_12v0>;
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +	};
-> +
-> +	vsys_5v0: regulator-vsys5v0 {
-> +		/* Output of LM5140 */
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vsys_5v0";
-> +		regulator-min-microvolt = <5000000>;
-> +		regulator-max-microvolt = <5000000>;
-> +		vin-supply = <&evm_12v0>;
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +	};
-> +
-> +	vdd_mmc1: regulator-sd {
-> +		/* Output of TPS22918 */
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vdd_mmc1";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		regulator-boot-on;
-> +		enable-active-high;
-> +		vin-supply = <&vsys_3v3>;
-> +		gpio = <&exp2 2 GPIO_ACTIVE_HIGH>;
-> +	};
-> +
-> +	vdd_sd_dv: regulator-TLV71033 {
-> +		/* Output of TLV71033 */
-> +		compatible = "regulator-gpio";
-> +		regulator-name = "tlv71033";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&vdd_sd_dv_pins_default>;
-> +		regulator-min-microvolt = <1800000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		regulator-boot-on;
-> +		vin-supply = <&vsys_5v0>;
-> +		gpios = <&main_gpio0 8 GPIO_ACTIVE_HIGH>;
-> +		states = <1800000 0x0>,
-> +			 <3300000 0x1>;
-> +	};
-> +};
-> +
-> +&main_pmx0 {
-> +	main_uart8_pins_default: main-uart8-pins-default {
-> +		pinctrl-single,pins = <
-> +			J784S4_IOPAD(0x040, PIN_INPUT, 14) /* (AF37) MCASP0_AXR0.UART8_CTSn */
-> +			J784S4_IOPAD(0x044, PIN_OUTPUT, 14) /* (AG37) MCASP0_AXR1.UART8_RTSn */
-> +			J784S4_IOPAD(0x0d0, PIN_INPUT, 11) /* (AP38) SPI0_CS1.UART8_RXD */
-> +			J784S4_IOPAD(0x0d4, PIN_OUTPUT, 11) /* (AN38) SPI0_CLK.UART8_TXD */
-> +		>;
-> +	};
-> +
-> +	main_i2c0_pins_default: main-i2c0-pins-default {
-> +		pinctrl-single,pins = <
-> +			J784S4_IOPAD(0x0e0, PIN_INPUT_PULLUP, 0) /* (AN36) I2C0_SCL */
-> +			J784S4_IOPAD(0x0e4, PIN_INPUT_PULLUP, 0) /* (AP37) I2C0_SDA */
-> +		>;
-> +	};
-> +
-> +	main_mmc1_pins_default: main-mmc1-pins-default {
-> +		pinctrl-single,pins = <
-> +			J784S4_IOPAD(0x104, PIN_INPUT, 0) /* (AB38) MMC1_CLK */
-> +			J784S4_IOPAD(0x108, PIN_INPUT, 0) /* (AB36) MMC1_CMD */
-> +			J784S4_IOPAD(0x100, PIN_INPUT, 0) /* (No Pin) MMC1_CLKLB */
-> +			J784S4_IOPAD(0x0fc, PIN_INPUT, 0) /* (AA33) MMC1_DAT0 */
-> +			J784S4_IOPAD(0x0f8, PIN_INPUT, 0) /* (AB34) MMC1_DAT1 */
-> +			J784S4_IOPAD(0x0f4, PIN_INPUT, 0) /* (AA32) MMC1_DAT2 */
-> +			J784S4_IOPAD(0x0f0, PIN_INPUT, 0) /* (AC38) MMC1_DAT3 */
-> +			J784S4_IOPAD(0x0e8, PIN_INPUT, 8) /* (AR38) TIMER_IO0.MMC1_SDCD */
-> +		>;
-> +	};
-> +
-> +	vdd_sd_dv_pins_default: vdd-sd-dv-pins-default {
-> +		pinctrl-single,pins = <
-> +			J784S4_IOPAD(0x020, PIN_INPUT, 7) /* (AJ35) MCAN15_RX.GPIO0_8 */
-> +		>;
-> +	};
-> +};
-> +
-> +&main_uart8 {
-> +	status = "okay";
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&main_uart8_pins_default>;
-> +};
-> +
-> +&main_i2c0 {
-> +	status = "okay";
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&main_i2c0_pins_default>;
-> +
-> +	clock-frequency = <400000>;
-> +
-> +	exp1: gpio@20 {
-> +		compatible = "ti,tca6416";
-> +		reg = <0x20>;
-> +		gpio-controller;
-> +		#gpio-cells = <2>;
-> +		gpio-line-names = "PCIE1_2L_MODE_SEL", "PCIE1_4L_PERSTZ", "PCIE1_2L_RC_RSTZ",
-> +				  "PCIE1_2L_EP_RST_EN", "PCIE0_4L_MODE_SEL", "PCIE0_4L_PERSTZ",
-> +				  "PCIE0_4L_RC_RSTZ", "PCIE0_4L_EP_RST_EN", "PCIE1_4L_PRSNT#",
-> +				  "PCIE0_4L_PRSNT#", "CDCI1_OE1/OE4", "CDCI1_OE2/OE3",
-> +				  "AUDIO_MUX_SEL", "EXP_MUX2", "EXP_MUX3", "GESI_EXP_PHY_RSTZ";
-> +	};
-> +
-> +	exp2: gpio@22 {
-> +		compatible = "ti,tca6424";
-> +		reg = <0x22>;
-> +		gpio-controller;
-> +		#gpio-cells = <2>;
-> +		gpio-line-names = "R_GPIO_RGMII1_RST", "ENET2_I2CMUX_SEL", "GPIO_USD_PWR_EN",
-> +				  "USBC_PWR_EN", "USBC_MODE_SEL1", "USBC_MODE_SEL0",
-> +				  "GPIO_LIN_EN", "R_CAN_STB", "CTRL_PM_I2C_OE#",
-> +				  "ENET2_EXP_PWRDN", "ENET2_EXP_SPARE2", "CDCI2_RSTZ",
-> +				  "USB2.0_MUX_SEL", "CANUART_MUX_SEL0", "CANUART_MUX2_SEL1",
-> +				  "CANUART_MUX1_SEL1", "ENET1_EXP_PWRDN", "ENET1_EXP_RESETZ",
-> +				  "ENET1_I2CMUX_SEL", "ENET1_EXP_SPARE2", "ENET2_EXP_RESETZ",
-> +				  "USER_INPUT1", "USER_LED1", "USER_LED2";
-> +	};
-> +};
-> +
-> +&main_sdhci1 {
-> +	/* SD card */
-> +	status = "okay";
-> +	pinctrl-0 = <&main_mmc1_pins_default>;
-> +	pinctrl-names = "default";
-> +	disable-wp;
-> +	vmmc-supply = <&vdd_mmc1>;
-> +	vqmmc-supply = <&vdd_sd_dv>;
-> +};
-> +
-> +&main_gpio0 {
-> +	status = "okay";
-> +};
