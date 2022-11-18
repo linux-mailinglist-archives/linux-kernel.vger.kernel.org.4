@@ -2,161 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BAC762EBF2
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 03:30:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A5A562EC20
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 03:52:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240798AbiKRCaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 21:30:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50788 "EHLO
+        id S235136AbiKRCwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 21:52:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240719AbiKRCaE (ORCPT
+        with ESMTP id S229451AbiKRCwe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 21:30:04 -0500
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8099656ECB;
-        Thu, 17 Nov 2022 18:30:02 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4ND12r35Vbz4f3jMT;
-        Fri, 18 Nov 2022 10:29:56 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP4 (Coremail) with SMTP id gCh0CgC329gl7nZj473bAg--.52978S4;
-        Fri, 18 Nov 2022 10:29:59 +0800 (CST)
-From:   Ye Bin <yebin@huaweicloud.com>
-To:     tytso@mit.edu, adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, jack@suse.cz,
-        Ye Bin <yebin10@huawei.com>,
-        syzbot+4faa160fa96bfba639f8@syzkaller.appspotmail.com,
-        Jun Nie <jun.nie@linaro.org>
-Subject: [PATCH] ext4: fix kernel BUG in 'ext4_write_inline_data_end()'
-Date:   Fri, 18 Nov 2022 10:50:36 +0800
-Message-Id: <20221118025036.3380705-1-yebin@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
+        Thu, 17 Nov 2022 21:52:34 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E9D19001;
+        Thu, 17 Nov 2022 18:52:32 -0800 (PST)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AI1wXXm032548;
+        Fri, 18 Nov 2022 02:52:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=EufBFVXWzfvzQoTuBj6jPE7uKfNvUUjndPxa5l5vnsc=;
+ b=mcKgX1B6SACCEqfAus4DCnDaB48TfPcBfgLRSuYU0dV5t6LwKWM715wbLGnk/QgjrfFe
+ ZwmaY8lRroEC3Uam5jE/nMNlaE5bcxsS4DxzFemm2PpqDeezi2gwJ/AbSBFV5WEB3F/I
+ tIZZUVrABxwR9r4s9rYDlkU6T9Aa24+3TqwvaDFBKcrT1shJO4ulmWgFAO+ItZzETqgP
+ YnTwKMNZlwE5YV04gkJUBs90c/Ts69qDtt0XA/GjyXwYOvGtY2nY5ox/mhY+iS10G0Xo
+ yP66jFwuzUhjmVGb8gXlXlaq8G+Z6YUDkaFGdUWfgY98VwZhaIlf+Gw0xWOAQfLTU0T5 iA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kx0ndr449-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 18 Nov 2022 02:52:25 +0000
+Received: from pps.filterd (NALASPPMTA03.qualcomm.com [127.0.0.1])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2AI2qOnj032312;
+        Fri, 18 Nov 2022 02:52:24 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by NALASPPMTA03.qualcomm.com (PPS) with ESMTPS id 3kwxakrkpj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 18 Nov 2022 02:52:24 +0000
+Received: from NALASPPMTA03.qualcomm.com (NALASPPMTA03.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AI2lZ8f027511;
+        Fri, 18 Nov 2022 02:52:24 GMT
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (PPS) with ESMTPS id 2AI2qOUN032306
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 18 Nov 2022 02:52:24 +0000
+Received: from hu-ppareek-blr.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Thu, 17 Nov 2022 18:52:20 -0800
+From:   Parikshit Pareek <quic_ppareek@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Andrew Halaney <ahalaney@redhat.com>,
+        "Shazad Hussain" <quic_shazhuss@quicinc.com>,
+        Brian Masney <bmasney@redhat.com>,
+        "Johan Hovold" <johan@kernel.org>,
+        Parikshit Pareek <quic_ppareek@quicinc.com>
+Subject: [PATCH v10 0/2] arm64: dts: qcom: add dts for sa8540p-ride board
+Date:   Fri, 18 Nov 2022 08:21:56 +0530
+Message-ID: <20221118025158.16902-1-quic_ppareek@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgC329gl7nZj473bAg--.52978S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxXF48ZF4xurWUWw48uF18AFb_yoWrtry5pr
-        Z8Gr1UGr40va4DCFWkAF1UXr1UCwn8CF47WryxWr1kXa43Cw1UKF1FgF18JF1jyrZ2vrWY
-        qF4kC348Kw15G3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI
-        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
-        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY
-        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6x
-        AIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280
-        aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU17KsUUUUUU==
-X-CM-SenderInfo: p1hex046kxt4xhlfz01xgou0bp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 3XcHgHJYFPNLYqBIR5AJplQXXDhzCQqM
+X-Proofpoint-ORIG-GUID: 3XcHgHJYFPNLYqBIR5AJplQXXDhzCQqM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-17_06,2022-11-17_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
+ phishscore=0 bulkscore=0 priorityscore=1501 malwarescore=0 clxscore=1015
+ mlxscore=0 lowpriorityscore=0 adultscore=0 suspectscore=0 mlxlogscore=969
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211180016
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Bin <yebin10@huawei.com>
+Changes in v10:
+ - Removed micro-amp properties from ufs_mem_hc node(Konrad)
 
-Syzbot report follow issue:
-------------[ cut here ]------------
-kernel BUG at fs/ext4/inline.c:227!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 3629 Comm: syz-executor212 Not tainted 6.1.0-rc5-syzkaller-00018-g59d0d52c30d4 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:ext4_write_inline_data+0x344/0x3e0 fs/ext4/inline.c:227
-RSP: 0018:ffffc90003b3f368 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffff8880704e16c0 RCX: 0000000000000000
-RDX: ffff888021763a80 RSI: ffffffff821e31a4 RDI: 0000000000000006
-RBP: 000000000006818e R08: 0000000000000006 R09: 0000000000068199
-R10: 0000000000000079 R11: 0000000000000000 R12: 000000000000000b
-R13: 0000000000068199 R14: ffffc90003b3f408 R15: ffff8880704e1c82
-FS:  000055555723e3c0(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fffe8ac9080 CR3: 0000000079f81000 CR4: 0000000000350ee0
-Call Trace:
- <TASK>
- ext4_write_inline_data_end+0x2a3/0x12f0 fs/ext4/inline.c:768
- ext4_write_end+0x242/0xdd0 fs/ext4/inode.c:1313
- ext4_da_write_end+0x3ed/0xa30 fs/ext4/inode.c:3063
- generic_perform_write+0x316/0x570 mm/filemap.c:3764
- ext4_buffered_write_iter+0x15b/0x460 fs/ext4/file.c:285
- ext4_file_write_iter+0x8bc/0x16e0 fs/ext4/file.c:700
- call_write_iter include/linux/fs.h:2191 [inline]
- do_iter_readv_writev+0x20b/0x3b0 fs/read_write.c:735
- do_iter_write+0x182/0x700 fs/read_write.c:861
- vfs_iter_write+0x74/0xa0 fs/read_write.c:902
- iter_file_splice_write+0x745/0xc90 fs/splice.c:686
- do_splice_from fs/splice.c:764 [inline]
- direct_splice_actor+0x114/0x180 fs/splice.c:931
- splice_direct_to_actor+0x335/0x8a0 fs/splice.c:886
- do_splice_direct+0x1ab/0x280 fs/splice.c:974
- do_sendfile+0xb19/0x1270 fs/read_write.c:1255
- __do_sys_sendfile64 fs/read_write.c:1323 [inline]
- __se_sys_sendfile64 fs/read_write.c:1309 [inline]
- __x64_sys_sendfile64+0x1d0/0x210 fs/read_write.c:1309
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
----[ end trace 0000000000000000 ]---
+Changes in v9:
+ - Enabled ufs_mem_hc/ufs_mem_phy nodes(Johan)
+ - Corrected the indentation of 'regulator-allowed-modes' properties.
 
-Above issue may happens as follows:
-ext4_da_write_begin
-  ext4_da_write_inline_data_begin
-    ext4_da_convert_inline_data_to_extent
-      ext4_clear_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
-ext4_da_write_end
+Changes in v8:
+ - Changed the schema of the regulators(Krzysztof)
+ - Removed node remoteproc_adsp(Andrew)
+ - Removed TODO comment for node usb_0_dwc3(Andrew)
+ - Added Reviewed-by/Tested-by(Eric)
 
-ext4_run_li_request
-  ext4_mb_prefetch
-    ext4_read_block_bitmap_nowait
-      ext4_validate_block_bitmap
-        ext4_mark_group_bitmap_corrupted(sb, block_group, EXT4_GROUP_INFO_BBITMAP_CORRUPT)
-	 percpu_counter_sub(&sbi->s_freeclusters_counter,grp->bb_free);
-	  -> sbi->s_freeclusters_counter become zero
-ext4_da_write_begin
-  if (ext4_nonda_switch(inode->i_sb)) -> As freeclusters_counter is zero will return true
-    *fsdata = (void *)FALL_BACK_TO_NONDELALLOC;
-    ext4_write_begin
-ext4_da_write_end
-  if (write_mode == FALL_BACK_TO_NONDELALLOC)
-    ext4_write_end
-      if (inline_data)
-        ext4_write_inline_data_end
-	  ext4_write_inline_data
-	    BUG_ON(pos + len > EXT4_I(inode)->i_inline_size);
-           -> As inode is already convert to extent, so 'pos + len' > inline_size
-	   -> then trigger BUG.
+Changes in v7:
+ - Put the smpi bus related pmic changes in sseparate dtsi files(Konrad)
+ - Mention allowed regulator modes via DT property regulator-allowed-modes
+   (Konrad and Brian)
+ - Remove unused ldo nodes vreg_l3c and vreg_l10c(Shazad)
 
-To solve above issue, there's need to judge inode if has EXT4_STATE_MAY_INLINE_DATA
-flag in 'ext4_write_end()'. 'ext4_has_inline_data()' flag only cleared after do
-write back, EXT4_STATE_MAY_INLINE_DATA flag indicate that inode has inline data,
-so use this flag in 'ext4_write_end()' is suitable.
+Changes in v6:
+ - Introduced the new dts for the board, rather than moving common nodes
+   between this one and SA8295 ADP board into dtsi file(Bjorn)
+ - Drop 'adp' term to imply it being unrelated with ADP board(Internal
+   discussion with Bjorn)
+ - Removed Acked-by(Krzysztof) tag in dt-binding document, due to content
+   change.
+ - Not including Reviewed-by(Krzysztof), because of the content change.
 
-Fixes:f19d5870cbf7("ext4: add normal write support for inline data")
-Reported-by: syzbot+4faa160fa96bfba639f8@syzkaller.appspotmail.com
-Reported-by: Jun Nie <jun.nie@linaro.org>
-Signed-off-by: Ye Bin <yebin10@huawei.com>
----
- fs/ext4/inode.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes in v5:
+ - Moved the usb and ufs nodes from sa8540p-adp.dtsi file to respective
+   board specific dts files: sa8295p-adp.dts and sa8540p-adp-ride.dts.
+   Took inputs from Shazad Hussain in this regard(Johan)
+ - Added more description of the board differences(Johan)
+ - Not including Reviewed-by for Krzysztof, because of the new changes to
+   be reviewed.
+ - Removed Reported-by tag(Johan).
 
-diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-index fca47470c85a..89404d1aa1d5 100644
---- a/fs/ext4/inode.c
-+++ b/fs/ext4/inode.c
-@@ -1309,7 +1309,7 @@ static int ext4_write_end(struct file *file,
- 
- 	trace_ext4_write_end(inode, pos, len, copied);
- 
--	if (ext4_has_inline_data(inode))
-+	if (ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA))
- 		return ext4_write_inline_data_end(inode, pos, len, copied, page);
- 
- 	copied = block_write_end(file, mapping, pos, len, copied, page, fsdata);
+Changes in v4:
+- Removed the ufs_card_hc node, as it is not mounted on Qdrive-3 board.
+- Removed usb_1 relared nodes, as usb1 doesn't have any port connected
+   on Qdrive3 board.
+- Added Reported-by tag for Shazad(for ufs and usb_1 node removals)
+
+Changes in v3:
+ - Added Acked-by tag (Krzysztof)
+ - Renamed dtsi to sa8540p-adp.dtsi (Johan)
+ - Removed copyright from sa8295-adp.dts and sa8295-adp.dtsi(Johan)
+ - Added cover letter
+
+Changes in v2:
+ - Make dt-binding patch as the first one in the patch set
+ - Add , after year 2022, in the license header
+
+Initial version:
+ - Move the common nodes to sa8540p-adp.dtsi, and create qrive-3 board
+   specific file sa8540p-adp-ride.dts.
+
+Parikshit Pareek (2):
+  dt-bindings: arm: qcom: Document additional sa8540p device
+  arm64: dts: qcom: add SA8540P ride(Qdrive-3)
+
+ .../devicetree/bindings/arm/qcom.yaml         |   1 +
+ arch/arm64/boot/dts/qcom/Makefile             |   1 +
+ arch/arm64/boot/dts/qcom/pm8450a.dtsi         |  77 +++++++
+ arch/arm64/boot/dts/qcom/sa8540p-ride.dts     | 217 ++++++++++++++++++
+ 4 files changed, 296 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/pm8450a.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sa8540p-ride.dts
+
 -- 
-2.31.1
+2.17.1
 
