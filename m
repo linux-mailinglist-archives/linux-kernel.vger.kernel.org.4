@@ -2,137 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CB4C62ECFC
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 05:59:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEC6662ED05
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 06:05:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235025AbiKRE72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 23:59:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42816 "EHLO
+        id S230049AbiKRFFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 00:05:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiKRE7V (ORCPT
+        with ESMTP id S229441AbiKRFFj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 23:59:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E0EB5BD4E;
-        Thu, 17 Nov 2022 20:59:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 173DC62318;
-        Fri, 18 Nov 2022 04:59:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01DD2C433C1;
-        Fri, 18 Nov 2022 04:59:15 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org, Huacai Chen <chenhuacai@loongson.cn>,
-        stable@vger.kernel.org, Qi Hu <huqi@loongson.cn>
-Subject: [PATCH] LoongArch: Clear FPU/SIMD thread info flags for kernel thread
-Date:   Fri, 18 Nov 2022 12:56:47 +0800
-Message-Id: <20221118045647.1991409-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.31.1
+        Fri, 18 Nov 2022 00:05:39 -0500
+X-Greylist: delayed 604 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Nov 2022 21:05:38 PST
+Received: from scadrial.mjdsystems.ca (scadrial.mjdsystems.ca [192.99.73.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F0E769C4;
+        Thu, 17 Nov 2022 21:05:38 -0800 (PST)
+Received: from cwmtaff.localnet (107-190-58-99.cpe.teksavvy.com [107.190.58.99])
+        by scadrial.mjdsystems.ca (Postfix) with ESMTPSA id 79F87889AC01;
+        Thu, 17 Nov 2022 23:55:32 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/relaxed; d=mjdsystems.ca;
+        s=202010; t=1668747332;
+        bh=a3BoROREcq9yjP9BAHO6xJ2ZvTcePivtJqbREHTyI8Q=;
+        h=From:To:Cc:Subject:Date:From;
+        b=TbHqVeLA+nzeaHqafZycaDaINXWu+M82pvWzFWEucXz+5jG3xy9ev/SqCMTV9dURE
+         Q8qCCG7jl4Lls7L0i3UHxWgVp5zq5+sfmM2PkB+oE3pgck25xbBakn0WTg1Z9sUIgS
+         UtwA1UJ31OMPlY/oeqPNQ4TRZPNhz1+pGrDlNLKFRsQKIa5kgUb2+J9H3P6R8uUgC1
+         qSfsB6pyhOVHCrxlqaV/xGnfr54mEjVDTWjL1w8p8d9pAiEZ4vkT0KFfyNlcEfcKcx
+         xYahufgpzsFpPBsc+vLHwb438vu3Uhd9hoADNwtdsCf88FBpuxIpdKKlxUeVvCgWXq
+         vhXPGeScUcy6QEciMSKA6dCmucVOIJR9DT6uRCfFQwxcuEuN5A5axOJqME+3SuVY6v
+         0l8ig3QCKqcyhwSY9ymxEAsa3AL11FtwRG2QBYgxrUynhpwvyrJaINGHUHr4iTB3ix
+         NSfeINuSb52l5rrNDc2UPtsvsVWh7FpIZSfCv44rZjBTONKG/9HlX/AbJIj3vgygfL
+         RIAgYASafqFyM/B94o2vxvqA17n6B5b8wdwpNNC2ek3p1mDNMK4vSZuESOPSA9cNJj
+         1nDej2+j7qXaMiwub8eTdEvdsiQs8gd7zeM8c+xr4YWpJ+nTNf4WQ1lIpkJtqTIYIR
+         fBGPADEXmsWAFByux8JlOE/A=
+From:   Matthew Dawson <matthew@mjdsystems.ca>
+To:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Eugene Shalygin <eugene.shalygin@gmail.com>
+Subject: [PATCH] hwmon: (asus-ec-sensors) add definitions for ROG ZENITH II EXTREME ALPHA
+Date:   Thu, 17 Nov 2022 23:55:31 -0500
+Message-ID: <2829949.vuYhMxLoTh@cwmtaff>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,LOTS_OF_MONEY,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_20,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If a kernel thread is created by a user thread, it may carry FPU/SIMD
-thread info flags (TIF_USEDFPU, TIF_USEDSIMD, etc.). Then it will be
-considered as a fpu owner and kernel try to save its FPU/SIMD context
-and cause such errors:
+Add support for the Zenith II Extreme Alpha.  It is basically the same
+board as the Zenith II Extreme, and has a similar sensor suite.  The
+DSDT is basically the same except for some address, so use the same
+board information as the non-Alpha board.
 
-[   41.518931] do_fpu invoked from kernel context![#1]:
-[   41.523933] CPU: 1 PID: 395 Comm: iou-wrk-394 Not tainted 6.1.0-rc5+ #217
-[   41.530757] Hardware name: Loongson Loongson-3A5000-7A1000-1w-CRB/Loongson-LS3A5000-7A1000-1w-CRB, BIOS vUDK2018-LoongArch-V2.0.pre-beta8 08/18/2022                      
-[   41.544064] $ 0   : 0000000000000000 90000000011e9468 9000000106c7c000 9000000106c7fcf0                                                                                   
-[   41.552101] $ 4   : 9000000106305d40 9000000106689800 9000000106c7fd08 0000000003995818                                                                                   
-[   41.560138] $ 8   : 0000000000000001 90000000009a72e4 0000000000000020 fffffffffffffffc                                                                                   
-[   41.568174] $12   : 0000000000000000 0000000000000000 0000000000000020 00000009aab7e130                                                                                   
-[   41.576211] $16   : 00000000000001ff 0000000000000407 0000000000000001 0000000000000000                                                                                   
-[   41.584247] $20   : 0000000000000000 0000000000000001 9000000106c7fd70 90000001002f0400                                                                                   
-[   41.592284] $24   : 0000000000000000 900000000178f740 90000000011e9834 90000001063057c0                                                                                   
-[   41.600320] $28   : 0000000000000000 0000000000000001 9000000006826b40 9000000106305140
-[   41.608356] era   : 9000000000228848 _save_fp+0x0/0xd8
-[   41.613542] ra    : 90000000011e9468 __schedule+0x568/0x8d0
-[   41.619160] CSR crmd: 000000b0
-[   41.619163] CSR prmd: 00000000
-[   41.622359] CSR euen: 00000000
-[   41.625558] CSR ecfg: 00071c1c
-[   41.628756] CSR estat: 000f0000
-[   41.635239] ExcCode : f (SubCode 0)
-[   41.638783] PrId  : 0014c010 (Loongson-64bit)
-[   41.643191] Modules linked in: acpi_ipmi vfat fat ipmi_si ipmi_devintf cfg80211 ipmi_msghandler rfkill fuse efivarfs
-[   41.653734] Process iou-wrk-394 (pid: 395, threadinfo=0000000004ebe913, task=00000000636fa1be)
-[   41.662375] Stack : 00000000ffff0875 9000000006800ec0 9000000006800ec0 90000000002d57e0
-[   41.670412]         0000000000000001 0000000000000000 9000000106535880 0000000000000001
-[   41.678450]         9000000105291800 0000000000000000 9000000105291838 900000000178e000
-[   41.686487]         9000000106c7fd90 9000000106305140 0000000000000001 90000000011e9834
-[   41.694523]         00000000ffff0875 90000000011f034c 9000000105291838 9000000105291830
-[   41.702561]         0000000000000000 9000000006801440 00000000ffff0875 90000000002d48c0
-[   41.710597]         9000000128800001 9000000106305140 9000000105291838 9000000105291838
-[   41.718634]         9000000105291830 9000000107811740 9000000105291848 90000000009bf1e0
-[   41.726672]         9000000105291830 9000000107811748 2d6b72772d756f69 0000000000343933
-[   41.734708]         0000000000000000 0000000000000000 0000000000000000 0000000000000000
-[   41.742745]         ...
-[   41.745252] Call Trace:
-[   42.197868] [<9000000000228848>] _save_fp+0x0/0xd8
-[   42.205214] [<90000000011ed468>] __schedule+0x568/0x8d0
-[   42.210485] [<90000000011ed834>] schedule+0x64/0xd4
-[   42.215411] [<90000000011f434c>] schedule_timeout+0x88/0x188
-[   42.221115] [<90000000009c36d0>] io_wqe_worker+0x184/0x350
-[   42.226645] [<9000000000221cf0>] ret_from_kernel_thread+0xc/0x9c
-
-This can be easily triggered by ltp testcase syscalls/io_uring02 and it
-can also be easily fixed by clearing the FPU/SIMD thread info flags for
-kernel threads in copy_thread().
-
-Cc: stable@vger.kernel.org
-Reported-by: Qi Hu <huqi@loongson.cn>
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+Signed-off-by: Matthew Dawson <matthew@mjdsystems.ca>
 ---
- arch/loongarch/kernel/process.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ drivers/hwmon/asus-ec-sensors.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/loongarch/kernel/process.c b/arch/loongarch/kernel/process.c
-index f57c7050fce6..d983dfce7371 100644
---- a/arch/loongarch/kernel/process.c
-+++ b/arch/loongarch/kernel/process.c
-@@ -158,7 +158,7 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
- 		childregs->csr_crmd = p->thread.csr_crmd;
- 		childregs->csr_prmd = p->thread.csr_prmd;
- 		childregs->csr_ecfg = p->thread.csr_ecfg;
--		return 0;
-+		goto out;
- 	}
- 
- 	/* user thread */
-@@ -177,14 +177,15 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
- 	 */
- 	childregs->csr_euen = 0;
- 
-+	if (clone_flags & CLONE_SETTLS)
-+		childregs->regs[2] = tls;
-+
-+out:
- 	clear_tsk_thread_flag(p, TIF_USEDFPU);
- 	clear_tsk_thread_flag(p, TIF_USEDSIMD);
- 	clear_tsk_thread_flag(p, TIF_LSX_CTX_LIVE);
- 	clear_tsk_thread_flag(p, TIF_LASX_CTX_LIVE);
- 
--	if (clone_flags & CLONE_SETTLS)
--		childregs->regs[2] = tls;
--
- 	return 0;
- }
+diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
+index 81e688975c6a..ac0459be04c7 100644
+--- a/drivers/hwmon/asus-ec-sensors.c
++++ b/drivers/hwmon/asus-ec-sensors.c
+@@ -466,6 +466,8 @@ static const struct dmi_system_id dmi_table[] = {
+ 					&board_info_strix_z690_a_gaming_wifi_d4),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG ZENITH II EXTREME",
+ 					&board_info_zenith_ii_extreme),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG ZENITH II EXTREME ALPHA",
++					&board_info_zenith_ii_extreme),
+ 	{},
+ };
  
 -- 
-2.31.1
+2.35.1
+
+
+
 
