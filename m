@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 504256302ED
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 00:21:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B309630485
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 00:40:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235172AbiKRXVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 18:21:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56838 "EHLO
+        id S236760AbiKRXkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 18:40:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232024AbiKRXU6 (ORCPT
+        with ESMTP id S236864AbiKRXiC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 18:20:58 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B8A31FB5
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:11:32 -0800 (PST)
+        Fri, 18 Nov 2022 18:38:02 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B91FDC4C31
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:22:52 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8G-000194-7A; Fri, 18 Nov 2022 23:46:48 +0100
+        id 1owA8G-0001A8-H4; Fri, 18 Nov 2022 23:46:48 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8C-0058L8-51; Fri, 18 Nov 2022 23:46:45 +0100
+        id 1owA8C-0058LB-BD; Fri, 18 Nov 2022 23:46:45 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8B-00Hb5q-T9; Fri, 18 Nov 2022 23:46:43 +0100
+        id 1owA8C-00Hb5z-GZ; Fri, 18 Nov 2022 23:46:44 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>
+        Jonathan Cameron <jic23@kernel.org>,
+        Jean-Baptiste Maneyrol <jean-baptiste.maneyrol@tdk.com>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>,
         Lars-Peter Clausen <lars@metafoo.de>,
         linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 169/606] iio: pressure: hp03: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:38:23 +0100
-Message-Id: <20221118224540.619276-170-uwe@kleine-koenig.org>
+Subject: [PATCH 171/606] iio: pressure: icp10100: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:38:25 +0100
+Message-Id: <20221118224540.619276-172-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -62,39 +63,37 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-.probe_new() doesn't get the i2c_device_id * parameter, so determine
-that explicitly in the probe function.
+The probe function doesn't make use of the i2c_device_id * parameter so it
+can be trivially converted.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/iio/pressure/hp03.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/iio/pressure/icp10100.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/iio/pressure/hp03.c b/drivers/iio/pressure/hp03.c
-index 9538118c9648..bd1f71a99cfa 100644
---- a/drivers/iio/pressure/hp03.c
-+++ b/drivers/iio/pressure/hp03.c
-@@ -208,9 +208,9 @@ static const struct iio_info hp03_info = {
- 	.read_raw	= &hp03_read_raw,
- };
+diff --git a/drivers/iio/pressure/icp10100.c b/drivers/iio/pressure/icp10100.c
+index b62f28585db5..407cf25ea0e3 100644
+--- a/drivers/iio/pressure/icp10100.c
++++ b/drivers/iio/pressure/icp10100.c
+@@ -530,8 +530,7 @@ static void icp10100_pm_disable(void *data)
+ 	pm_runtime_disable(dev);
+ }
  
--static int hp03_probe(struct i2c_client *client,
--		      const struct i2c_device_id *id)
-+static int hp03_probe(struct i2c_client *client)
+-static int icp10100_probe(struct i2c_client *client,
+-			  const struct i2c_device_id *id)
++static int icp10100_probe(struct i2c_client *client)
  {
-+	const struct i2c_device_id *id = i2c_client_get_device_id(client);
- 	struct device *dev = &client->dev;
  	struct iio_dev *indio_dev;
- 	struct hp03_priv *priv;
-@@ -282,7 +282,7 @@ static struct i2c_driver hp03_driver = {
- 		.name	= "hp03",
- 		.of_match_table = hp03_of_match,
+ 	struct icp10100_state *st;
+@@ -649,7 +648,7 @@ static struct i2c_driver icp10100_driver = {
+ 		.pm = pm_ptr(&icp10100_pm),
+ 		.of_match_table = icp10100_of_match,
  	},
--	.probe		= hp03_probe,
-+	.probe_new	= hp03_probe,
- 	.id_table	= hp03_id,
+-	.probe = icp10100_probe,
++	.probe_new = icp10100_probe,
+ 	.id_table = icp10100_id,
  };
- module_i2c_driver(hp03_driver);
+ module_i2c_driver(icp10100_driver);
 -- 
 2.38.1
 
