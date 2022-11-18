@@ -2,144 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B63E662F96D
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 16:37:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0397062F96F
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 16:37:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242393AbiKRPhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 10:37:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51822 "EHLO
+        id S242112AbiKRPho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 10:37:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242505AbiKRPhB (ORCPT
+        with ESMTP id S241768AbiKRPhm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 10:37:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB51B781B3;
-        Fri, 18 Nov 2022 07:37:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A790625A4;
-        Fri, 18 Nov 2022 15:37:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10CE0C433C1;
-        Fri, 18 Nov 2022 15:36:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668785819;
-        bh=57l+idEGxs6Fkigjt1SVVkSFa0sb7GM3WUToVsS/X0s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CNQJv7YCmb/p2EUHOadQ6N0/2Iz71suMvoYHthTIdQkYbn8qD4Ep5pcQPiCcAx7Pc
-         l6E3ETQbn8DiLockjrEG75xSFmYzev0LIXloqNOP5OeCCHizU6It0QPIuwku9sB5tQ
-         4wwdj1nR7IW78mpHQ6EavBYe+TZ/0hQNAZi8V5J8+LXecfu4B8cTGDbz+w3lthevuc
-         ZxCv7Osc5NshwS57RGNbdHLWlsqzqgQjP0roOD3J5h/d7FnVXyqoBoAHStnMTceIN8
-         OIFcaFnVMR0tYD2u5LBDandx2D8/QDY6LeFxdZWoYCtW8eVD3YDalEtP8MAoJMBbIX
-         WUII+FTZ1ut8Q==
-Date:   Fri, 18 Nov 2022 15:36:56 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: spi: Add Socionext F_OSPI controller
- bindings
-Message-ID: <Y3emmHGM6uS0m5kd@sirena.org.uk>
-References: <20221118005904.23557-1-hayashi.kunihiko@socionext.com>
- <20221118005904.23557-2-hayashi.kunihiko@socionext.com>
- <Y3du24GWN/enGORf@sirena.org.uk>
- <5483711f-504c-bcf3-0fbf-65d04530d188@socionext.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="MRUeBLnPLiUD0O8l"
+        Fri, 18 Nov 2022 10:37:42 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49BE05BD43;
+        Fri, 18 Nov 2022 07:37:41 -0800 (PST)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AIE7Vjn004828;
+        Fri, 18 Nov 2022 15:37:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : content-type : mime-version; s=pp1;
+ bh=LJjueMsxaMQsANjbbq1IvowlPbGA5ZyiwUeFPz7qduo=;
+ b=kOEs+4Sl0YP+dO9Tr+gomsrvOTh9PZZpPl4QeLpqrwiIvM+zNQ2q1KnhS4SRSUJZCWDi
+ /eqNSx1zdFqpT+WlOAZgLPaexbD+X8R7XNaoiidOTfbfrHMYV486nHQZnUmEtfPU18IZ
+ nn1ku6vKpeE3u7turF1tLVOCZT82BkbuoYjkJ37CFdl+iHXkZp9qIrLXHnq3vFe6SZNN
+ BZWQc8cHgPnByX0xiclYrATgRb2xt/vTr116N+xSIyt0NlwOOjsDHyR6G9nEQU4zZRxH
+ 7mi085/+8FO+JcSHND0kqCyJsqVg4ViNr9TIiMcakUcUjQv6mceeLLyXD+QMo3gm3ypy Nw== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kx9jjw3nx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 18 Nov 2022 15:37:39 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AIFbGiD011525;
+        Fri, 18 Nov 2022 15:37:36 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma06ams.nl.ibm.com with ESMTP id 3kwu4yh39q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 18 Nov 2022 15:37:35 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AIFbWNA64487698
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 18 Nov 2022 15:37:32 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D801F4C046;
+        Fri, 18 Nov 2022 15:37:32 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A65594C040;
+        Fri, 18 Nov 2022 15:37:32 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Fri, 18 Nov 2022 15:37:32 +0000 (GMT)
+Date:   Fri, 18 Nov 2022 16:37:31 +0100
+From:   Alexander Gordeev <agordeev@linux.ibm.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Subject: [GIT PULL] s390 updates for 6.1-rc6
+Message-ID: <Y3emu4epRB+EcdoM@tuxmaker.boeblingen.de.ibm.com>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5483711f-504c-bcf3-0fbf-65d04530d188@socionext.com>
-X-Cookie: Ego sum ens omnipotens.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: G1iTzKDkQJ5IuIe3Uyp_-EL68Wh2riSp
+X-Proofpoint-GUID: G1iTzKDkQJ5IuIe3Uyp_-EL68Wh2riSp
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-18_02,2022-11-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ priorityscore=1501 clxscore=1015 mlxlogscore=999 bulkscore=0
+ suspectscore=0 spamscore=0 mlxscore=0 lowpriorityscore=0 impostorscore=0
+ adultscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211180088
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Linus,
 
---MRUeBLnPLiUD0O8l
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+please pull s390 changes for 6.1-rc6.
 
-On Fri, Nov 18, 2022 at 11:16:22PM +0900, Kunihiko Hayashi wrote:
-> On 2022/11/18 20:39, Mark Brown wrote:
-> > On Fri, Nov 18, 2022 at 09:59:03AM +0900, Kunihiko Hayashi wrote:
+Thank you,
+Alexander
 
-> > > +  socionext,cs-start-cycle:
-> > > +  socionext,cs-end-cycle:
-> > > +  socionext,cs-deassert-clk-cycle:
+The following changes since commit 30d17fac6aaedb40d111bb159f4b35525637ea78:
 
-> > These are all generic SPI properties so we should add them
-> > generically, on the device rather than the controller since this
-> > is something that might vary per client device.  There was also a
-> > core function spi_set_cs_timing() which was in earlier versions
-> > and is about to get reintroduced.
+  scripts/min-tool-version.sh: raise minimum clang version to 15.0.0 for s390 (2022-10-31 13:34:56 +0100)
 
-> So I understand you mean that these properties should be defined like
-> spi-peripheral-props.yaml for the devices.
+are available in the Git repository at e3c11025bcd2142a61abe5806b2f86a0e78118df:
 
-> If yes, I'll drop these properties once and define our vendor-specific
-> "peripheral-props" in the next series.
+  git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-6.1-5
 
-Yes, sounds good.
+for you to fetch changes up to :
 
-> > > +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> > > +    items:
-> > > +      - description: the number of bytes to transfer
-> > > +        maximum: 4
-> > > +      - description: value to transfer
-> > > +        default: 0
-> > > +      - description: bit-width to transfer
-> > > +        enum: [0, 1, 2, 4, 8]
+  s390: avoid using global register for current_stack_pointer (2022-11-04 12:06:47 +0100)
 
-> > This is also something SPI device should set up, as far as I can
-> > tell this should be set vis spi_mem_op.dummy.nbytes.
+----------------------------------------------------------------
+s390 updates for 6.1-rc6
 
-> Yes, but the controller also supports dummy cycles, and can send
-> extra bytes before the dummy cycles.
+- Fix deadlock in discontiguous saved segments (DCSS) block device
+  driver. When adding a disk and scanning partitions the scan would
+  not break out early without a missed flag.
 
-Ah, so this is some additional thing on top of dummy cycles?  I'd
-not realised that.  It probably wants to be added into spi-mem I
-guess.
+- Avoid using global register variable for current_stack_pointer
+  due to an old bug in gcc versions prior to gcc-8.4. Due to this
+  bug a broken code is generated, which leads to stack corruptions.
 
-> > > +  socionext,data-swap-2byte:
-> > > +    description:
-> > > +      Indicates swap byte order per 2-bytes.
-> > > +    type: boolean
-> >=20
-> > > +  socionext,data-swap-4byte:
-> > > +    description:
-> > > +      Indicates swap byte order per 4-bytes.
-> > > +    type: boolean
+----------------------------------------------------------------
+Gerald Schaefer (1):
+  s390/dcssblk: fix deadlock when adding a DCSS
 
-> > Again these should be set by the device.  I think these should be
-> > set based on a combination of bits per word and if the host is in
-> > big endian or little endian mode.
+Vasily Gorbik (1):
+  s390: avoid using global register for current_stack_pointer
 
-> I see. This feature is complicated to use, so I'll not add it here.
+ arch/s390/include/asm/processor.h | 11 ++++++++++-
+ drivers/s390/block/dcssblk.c      |  1 +
+ 2 files changed, 11 insertions(+), 1 deletion(-)
 
-That also works, someone can always add additional support later
-when they have a concrete use case.
-
---MRUeBLnPLiUD0O8l
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmN3ppcACgkQJNaLcl1U
-h9C7MAf/ZniKmhRdAWeZsowY/qy6zpAwJiATBzqTv3G24VqhieLk+azOeSJKHJPR
-FEkFj1RiVTh3UOtX9dx9arInJfIj2fcPNHHBJTU+YDX5OCSKX81Md+6Cp2CwAYsA
-JiDZs3d8OXFoLxo39D5sFFHRonMx01/bbzSZ9ipdjo81dkThNFKD6KLA8Sg23sr6
-mAPx1ZNF3i5fnLftPM5DSM8gMLIFFIo4UIJhtaY5i+X6nfcusmpQayTyIwUXmUoG
-vcVwUtbI9y6r2HTjYQAsxRi3vKS0h+g8R5xMXiElVwL/TH85J/eHOXJ6Gr7iD+5L
-dZ2eYQHbIjVKkvkHe+Ye0jq6NSkvqA==
-=9Unj
------END PGP SIGNATURE-----
-
---MRUeBLnPLiUD0O8l--
+diff --git a/arch/s390/include/asm/processor.h b/arch/s390/include/asm/processor.h
+index 87be3e855bf7..c907f747d2a0 100644
+--- a/arch/s390/include/asm/processor.h
++++ b/arch/s390/include/asm/processor.h
+@@ -199,7 +199,16 @@ unsigned long __get_wchan(struct task_struct *p);
+ /* Has task runtime instrumentation enabled ? */
+ #define is_ri_task(tsk) (!!(tsk)->thread.ri_cb)
+ 
+-register unsigned long current_stack_pointer asm("r15");
++/* avoid using global register due to gcc bug in versions < 8.4 */
++#define current_stack_pointer (__current_stack_pointer())
++
++static __always_inline unsigned long __current_stack_pointer(void)
++{
++	unsigned long sp;
++
++	asm volatile("lgr %0,15" : "=d" (sp));
++	return sp;
++}
+ 
+ static __always_inline unsigned short stap(void)
+ {
+diff --git a/drivers/s390/block/dcssblk.c b/drivers/s390/block/dcssblk.c
+index 93b80da60277..b392b9f5482e 100644
+--- a/drivers/s390/block/dcssblk.c
++++ b/drivers/s390/block/dcssblk.c
+@@ -636,6 +636,7 @@ dcssblk_add_store(struct device *dev, struct device_attribute *attr, const char
+ 	dev_info->gd->minors = DCSSBLK_MINORS_PER_DISK;
+ 	dev_info->gd->fops = &dcssblk_devops;
+ 	dev_info->gd->private_data = dev_info;
++	dev_info->gd->flags |= GENHD_FL_NO_PART;
+ 	blk_queue_logical_block_size(dev_info->gd->queue, 4096);
+ 	blk_queue_flag_set(QUEUE_FLAG_DAX, dev_info->gd->queue);
+ 
