@@ -2,273 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F05C630031
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 23:37:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A66876301CC
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 23:53:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230391AbiKRWh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 17:37:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59378 "EHLO
+        id S234634AbiKRWxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 17:53:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbiKRWhX (ORCPT
+        with ESMTP id S232430AbiKRWxL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 17:37:23 -0500
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAACC9CF56;
-        Fri, 18 Nov 2022 14:37:22 -0800 (PST)
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-142306beb9aso7575524fac.11;
-        Fri, 18 Nov 2022 14:37:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6Ty2VrocLp2bLlPjZebG8L9XIVrPCqIEByvMG3rAIeo=;
-        b=lJYRXhCbUvfhqfLgtOsfRWoazgHIxIOeqzaeWboPrj1Sd4MMXXfq9kLngYv+Nk+dWy
-         GSswZwn2U2moZm9+XU3nRcQ+Nru713NHO2YVCUe5GB9QydtY2T8lYhwp/pO35C1WQH78
-         YiknKrODwWYVZPQ6TRtmzwXW7UsT5VN2XEDUT0LphtkwnOYFev7vnfzCRui+g7SVaUnF
-         8Hl6n0ktZpNJkqyzFlxJ0iP6YSKewQlS3tJteIydgENHUfOsaksQC+TWZ6zKvXLq8zWE
-         hTnbZe0yLAHwPzzOrrxyJPEg07KwRaxVNhitjJwCn1WLTzkkC13bOzc1Tz+d9QqyqzRI
-         65Eg==
-X-Gm-Message-State: ANoB5pnq9dduICcY+Gz+jQee3VTCXcHjaDCD4+5uEzp87b/l93UiXQax
-        M6MSmTJjTBnc+GLapSfgAw==
-X-Google-Smtp-Source: AA0mqf5KA6oRNEPIyQHxPlu0P6RyjLJsjmwGgO5GTTQ8syn9I4hRIeraDisFZa93FVBweGZ8ATxWFQ==
-X-Received: by 2002:a05:6870:7d0e:b0:142:821a:590e with SMTP id os14-20020a0568707d0e00b00142821a590emr3600236oab.55.1668811041798;
-        Fri, 18 Nov 2022 14:37:21 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q9-20020a9d7c89000000b0066c495a651dsm2064777otn.38.2022.11.18.14.37.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 14:37:21 -0800 (PST)
-Received: (nullmailer pid 1721500 invoked by uid 1000);
-        Fri, 18 Nov 2022 22:37:23 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jerome Neanne <jerome.neanne@baylibre.com>,
-        Andrew Davis <afd@ti.com>
-Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: [PATCH] dt-bindings: Move fixed string node names under 'properties'
-Date:   Fri, 18 Nov 2022 16:37:07 -0600
-Message-Id: <20221118223708.1721134-1-robh@kernel.org>
-X-Mailer: git-send-email 2.35.1
+        Fri, 18 Nov 2022 17:53:11 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83C63BE266
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 14:47:50 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1owA80-0008Vx-Us; Fri, 18 Nov 2022 23:46:32 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1owA7v-0058Ep-LP; Fri, 18 Nov 2022 23:46:28 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1owA7v-00Hb0z-TI; Fri, 18 Nov 2022 23:46:27 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
+To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>
+Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 095/606] iio: gyro: mpu3050-i2c: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:37:09 +0100
+Message-Id: <20221118224540.619276-96-uwe@kleine-koenig.org>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixed string node names should be under 'properties' rather than
-'patternProperties'. Additionally, without beginning and end of line
-anchors, any prefix or suffix is allowed on the specified node name.
-These cases don't appear to want a prefix or suffix, so move them under
-'properties'.
+From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-In some cases, the diff turns out to look like we're moving some
-patterns rather than the fixed string properties.
+.probe_new() doesn't get the i2c_device_id * parameter, so determine
+that explicitly in the probe function.
 
-Signed-off-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- .../arm/tegra/nvidia,tegra20-pmc.yaml         | 54 ++++++++--------
- .../bindings/regulator/ti,tps65219.yaml       | 14 ++--
- .../bindings/sound/tlv320adcx140.yaml         | 64 +++++++++----------
- 3 files changed, 66 insertions(+), 66 deletions(-)
+ drivers/iio/gyro/mpu3050-i2c.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-pmc.yaml b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-pmc.yaml
-index 7fd8d47b1be4..4a00593b9f7f 100644
---- a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-pmc.yaml
-+++ b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-pmc.yaml
-@@ -123,6 +123,33 @@ properties:
-       some PLLs, clocks and then brings up CPU0 for resuming the
-       system.
+diff --git a/drivers/iio/gyro/mpu3050-i2c.c b/drivers/iio/gyro/mpu3050-i2c.c
+index 12e3afa9dd11..2116798226bf 100644
+--- a/drivers/iio/gyro/mpu3050-i2c.c
++++ b/drivers/iio/gyro/mpu3050-i2c.c
+@@ -32,9 +32,9 @@ static int mpu3050_i2c_bypass_deselect(struct i2c_mux_core *mux, u32 chan_id)
+ 	return 0;
+ }
  
-+  core-supply:
-+    description:
-+      Phandle to voltage regulator connected to the SoC Core power rail.
-+
-+  core-domain:
-+    type: object
-+    description: |
-+      The vast majority of hardware blocks of Tegra SoC belong to a
-+      Core power domain, which has a dedicated voltage rail that powers
-+      the blocks.
-+
-+    properties:
-+      operating-points-v2:
-+        description:
-+          Should contain level, voltages and opp-supported-hw property.
-+          The supported-hw is a bitfield indicating SoC speedo or process
-+          ID mask.
-+
-+      "#power-domain-cells":
-+        const: 0
-+
-+    required:
-+      - operating-points-v2
-+      - "#power-domain-cells"
-+
-+    additionalProperties: false
-+
-   i2c-thermtrip:
-     type: object
-     description:
-@@ -300,33 +327,6 @@ patternProperties:
+-static int mpu3050_i2c_probe(struct i2c_client *client,
+-			     const struct i2c_device_id *id)
++static int mpu3050_i2c_probe(struct i2c_client *client)
+ {
++	const struct i2c_device_id *id = i2c_client_get_device_id(client);
+ 	struct regmap *regmap;
+ 	const char *name;
+ 	struct mpu3050 *mpu3050;
+@@ -108,7 +108,7 @@ static const struct of_device_id mpu3050_i2c_of_match[] = {
+ MODULE_DEVICE_TABLE(of, mpu3050_i2c_of_match);
  
-     additionalProperties: false
- 
--  core-domain:
--    type: object
--    description: |
--      The vast majority of hardware blocks of Tegra SoC belong to a
--      Core power domain, which has a dedicated voltage rail that powers
--      the blocks.
--
--    properties:
--      operating-points-v2:
--        description:
--          Should contain level, voltages and opp-supported-hw property.
--          The supported-hw is a bitfield indicating SoC speedo or process
--          ID mask.
--
--      "#power-domain-cells":
--        const: 0
--
--    required:
--      - operating-points-v2
--      - "#power-domain-cells"
--
--    additionalProperties: false
--
--  core-supply:
--    description:
--      Phandle to voltage regulator connected to the SoC Core power rail.
--
- required:
-   - compatible
-   - reg
-diff --git a/Documentation/devicetree/bindings/regulator/ti,tps65219.yaml b/Documentation/devicetree/bindings/regulator/ti,tps65219.yaml
-index 78be79930fda..78e64521d401 100644
---- a/Documentation/devicetree/bindings/regulator/ti,tps65219.yaml
-+++ b/Documentation/devicetree/bindings/regulator/ti,tps65219.yaml
-@@ -51,13 +51,6 @@ properties:
-       where the board has a button wired to the pin and triggers
-       an interrupt on pressing it.
- 
--patternProperties:
--  "^buck[1-3]-supply$":
--    description: Input supply phandle of one regulator.
--
--  "^ldo[1-4]-supply$":
--    description: Input supply phandle of one regulator.
--
-   regulators:
-     type: object
-     description: |
-@@ -82,6 +75,13 @@ patternProperties:
- 
-     additionalProperties: false
- 
-+patternProperties:
-+  "^buck[1-3]-supply$":
-+    description: Input supply phandle of one regulator.
-+
-+  "^ldo[1-4]-supply$":
-+    description: Input supply phandle of one regulator.
-+
- required:
-   - compatible
-   - reg
-diff --git a/Documentation/devicetree/bindings/sound/tlv320adcx140.yaml b/Documentation/devicetree/bindings/sound/tlv320adcx140.yaml
-index ee698614862e..6b8214071115 100644
---- a/Documentation/devicetree/bindings/sound/tlv320adcx140.yaml
-+++ b/Documentation/devicetree/bindings/sound/tlv320adcx140.yaml
-@@ -109,38 +109,6 @@ properties:
-       maximum: 7
-     default: [0, 0, 0, 0]
- 
--  ti,asi-tx-drive:
--    type: boolean
--    description: |
--      When set the device will set the Tx ASI output to a Hi-Z state for unused
--      data cycles. Default is to drive the output low on unused ASI cycles.
--
--patternProperties:
--  '^ti,gpo-config-[1-4]$':
--    $ref: /schemas/types.yaml#/definitions/uint32-array
--    description: |
--       Defines the configuration and output driver for the general purpose
--       output pins (GPO).  These values are pairs, the first value is for the
--       configuration type and the second value is for the output drive type.
--       The array is defined as <GPO_CFG GPO_DRV>
--
--       GPO output configuration can be one of the following:
--
--       0 - (default) disabled
--       1 - GPOX is configured as a general-purpose output (GPO)
--       2 - GPOX is configured as a device interrupt output (IRQ)
--       3 - GPOX is configured as a secondary ASI output (SDOUT2)
--       4 - GPOX is configured as a PDM clock output (PDMCLK)
--
--       GPO output drive configuration for the GPO pins can be one of the following:
--
--       0d - (default) Hi-Z output
--       1d - Drive active low and active high
--       2d - Drive active low and weak high
--       3d - Drive active low and Hi-Z
--       4d - Drive weak low and active high
--       5d - Drive Hi-Z and active high
--
-   ti,gpio-config:
-     description: |
-        Defines the configuration and output drive for the General Purpose
-@@ -183,6 +151,38 @@ patternProperties:
-       maximum: 15
-     default: [2, 2]
- 
-+  ti,asi-tx-drive:
-+    type: boolean
-+    description: |
-+      When set the device will set the Tx ASI output to a Hi-Z state for unused
-+      data cycles. Default is to drive the output low on unused ASI cycles.
-+
-+patternProperties:
-+  '^ti,gpo-config-[1-4]$':
-+    $ref: /schemas/types.yaml#/definitions/uint32-array
-+    description: |
-+       Defines the configuration and output driver for the general purpose
-+       output pins (GPO).  These values are pairs, the first value is for the
-+       configuration type and the second value is for the output drive type.
-+       The array is defined as <GPO_CFG GPO_DRV>
-+
-+       GPO output configuration can be one of the following:
-+
-+       0 - (default) disabled
-+       1 - GPOX is configured as a general-purpose output (GPO)
-+       2 - GPOX is configured as a device interrupt output (IRQ)
-+       3 - GPOX is configured as a secondary ASI output (SDOUT2)
-+       4 - GPOX is configured as a PDM clock output (PDMCLK)
-+
-+       GPO output drive configuration for the GPO pins can be one of the following:
-+
-+       0d - (default) Hi-Z output
-+       1d - Drive active low and active high
-+       2d - Drive active low and weak high
-+       3d - Drive active low and Hi-Z
-+       4d - Drive weak low and active high
-+       5d - Drive Hi-Z and active high
-+
- required:
-   - compatible
-   - reg
+ static struct i2c_driver mpu3050_i2c_driver = {
+-	.probe = mpu3050_i2c_probe,
++	.probe_new = mpu3050_i2c_probe,
+ 	.remove = mpu3050_i2c_remove,
+ 	.id_table = mpu3050_i2c_id,
+ 	.driver = {
 -- 
-2.35.1
+2.38.1
 
