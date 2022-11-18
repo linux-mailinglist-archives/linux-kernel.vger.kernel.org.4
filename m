@@ -2,288 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3185D62F33C
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 12:05:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECC1562F32D
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 12:04:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241721AbiKRLFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 06:05:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44838 "EHLO
+        id S235247AbiKRLEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 06:04:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235200AbiKRLFF (ORCPT
+        with ESMTP id S235107AbiKRLEn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 06:05:05 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B05E399E91
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 03:04:48 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id ay14-20020a05600c1e0e00b003cf6ab34b61so7276031wmb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 03:04:48 -0800 (PST)
+        Fri, 18 Nov 2022 06:04:43 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D095970A4
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 03:04:38 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id d6so7634174lfs.10
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 03:04:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BXRPB3JgawBUJiVUofK6OmJyzttuKnkImFf/wIqxXmQ=;
-        b=KXz1x7PVIRSygnZq/WJqqkYdJAeEDf2cq41xcS/VX2QD44aZpL/6lsm2HYsNKak+t8
-         /QWHfu2YG+yNalsfGy2TueUVs/X53k15FQI48MzsUPxpw1S4ln+wwSAsRAIvhDMmfXw0
-         KTAOa9lLsbcNgwNUn4Xs3JX0gY0CAHcO1+mbHfLhZc/n0nBYl/Xq5QJU6S3Y/8if/IBz
-         NmkDpgR118kqV/5krIRGUAYrbm1+yjNiyTb7F/XHu5kCQQX9X0QX+WE+00NctK7bPhoH
-         JBERSXbdr1NvnbpGMZTYdv2D30JElwiupgig90mF1sS0vBG6qHDz8GBnJ3rCQUensy7u
-         vH+w==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SDEupHU/FfDgOX1nmPiIZTZXZdNDm1UWPNtQrISlq08=;
+        b=ZNmEafXaDxjVFiMpEPdZ5q5cXg+fC/mP8GF5ZPyYLIwd0A53SM0H0bjshoYBTPaank
+         dUNBEwp8Id949nebnNUr0DbThGzZ0tkdY9BK3nHraTZCIyY0fjk6OfJ4Llu1eGL3zHaA
+         sMS3zDi2oiiBx5ZbXXGj+rfvTPvZfHR8yIjCGK8mqpr09lqSi5OO3PHiTQSJsJksnX4h
+         nYnQ9dA751ggdDbmKPvPyMXnW9+92ls3t7/b9uFOOzwGPuKOD/ll1H3Sd6+70iAV8npI
+         1H5MhhJqi7Kr1ox19+s/juRF2CGQN4bdzUuopIFrAvxw08QMtNTxP6gqtiH52KIt98AX
+         nKsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BXRPB3JgawBUJiVUofK6OmJyzttuKnkImFf/wIqxXmQ=;
-        b=CYicuLrkR/6yffIQj4Ex+In5a97LrJ0PyEuFExLIT7JvIqsM1uxeI8ZiHjunPL7G6r
-         0Fw2Zdhyi6n7Wm65SHyvTyQkpuQrezLu6/8x6EMD3n4q7pwEYtmgLbbfK+yPafyWt/5R
-         I3wFrn9AwV8pD5fUx3QTEP3tOvw13FLyfnVz7XOchbWhf+YIobdh0QQGc9pkRz4Z123W
-         eT6RGhK2TFsBmjnGXqGjFZd2PPO5UgG5ebbB5UjWN1tp9yJVLmVk6jvtZxOSuBP+InrJ
-         zGvZHU0tQy8nYs7CCgprBD4GlfSQJ8XV+JNnfKB7zNdlZfocxxHX3Sx92y5CTn8UOmmK
-         5uRA==
-X-Gm-Message-State: ANoB5pm38s9U6gGwGP/gbRxWOXcUj8FcvgKxHZyyA8Gvc5GaDbn9gpBn
-        4ORW4XV41E/3JTQA6CajOlbWGw==
-X-Google-Smtp-Source: AA0mqf4noqAkLrD8nO79AzLNSsDEAuGqJCo7qrG3F363wEgGHqzwkv5UvNt3lw56apWS3nKQ5YhY2Q==
-X-Received: by 2002:a1c:7318:0:b0:3cf:cb16:f24a with SMTP id d24-20020a1c7318000000b003cfcb16f24amr7919556wmb.182.1668769486966;
-        Fri, 18 Nov 2022 03:04:46 -0800 (PST)
-Received: from [127.0.1.1] (210.145.15.109.rev.sfr.net. [109.15.145.210])
-        by smtp.googlemail.com with ESMTPSA id i14-20020adff30e000000b002368a6deaf8sm3316948wro.57.2022.11.18.03.04.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 03:04:46 -0800 (PST)
-From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
-Date:   Fri, 18 Nov 2022 12:04:30 +0100
-Subject: [PATCH v7 4/4] thermal: mediatek: add another get_temp ops for thermal
- sensors
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SDEupHU/FfDgOX1nmPiIZTZXZdNDm1UWPNtQrISlq08=;
+        b=Nke5dHsP1NUc7myDCnq2WHPCwwRfd+oRpKmIkv3aSD7j9P8jndevJzMjl8l6rHhWr5
+         hTfenn6Age4Hk565hLXJr1ygH7fTgFWiO9m43blQo7J5jZLptiBesfoNlDBb3Lbtdd/c
+         w9vGSy39GOzHtc72QggDzs6Yq2NTDAs2B+tKDU2XcHaAgwSKC4me0Eby7MdsL/NcEow9
+         21WK+DAa9tywYREie/7qjwB8Qnp1rFUfLhPFtAMG6saJnulLzi8h706MgWS8o2RVU2hw
+         UYJWG1uRll5AwcDlveS0ogCCVQccJsDnWuHZjChTeIxY0zqqJTf8nty27euUW4iAMezi
+         he7Q==
+X-Gm-Message-State: ANoB5plSQqLc+JOB2v9cytA2oUYpU8xTPwdKScARHXwLbTRZ2Ha2OZrp
+        Ny2+4ygTM6S7Ln7cpSme5HsZ+w==
+X-Google-Smtp-Source: AA0mqf7bRYo2Qgq/1w+U6fwg6mnbudNUl71DiT4VQnAyfq9JqXUuFw794wboTIk1dYvkitwKzP0QaA==
+X-Received: by 2002:a05:6512:74d:b0:494:7551:b764 with SMTP id c13-20020a056512074d00b004947551b764mr2287605lfs.574.1668769476798;
+        Fri, 18 Nov 2022 03:04:36 -0800 (PST)
+Received: from [10.10.15.130] ([192.130.178.91])
+        by smtp.gmail.com with ESMTPSA id k8-20020a05651210c800b0048a982ad0a8sm619364lfg.23.2022.11.18.03.04.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Nov 2022 03:04:36 -0800 (PST)
+Message-ID: <8d75f389-9698-891f-5eff-2b76ddecad2b@linaro.org>
+Date:   Fri, 18 Nov 2022 13:04:35 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20221018-up-i350-thermal-bringup-v7-4-ebf08ff2eddb@baylibre.com>
-References: <20221018-up-i350-thermal-bringup-v7-0-ebf08ff2eddb@baylibre.com>
-In-Reply-To: <20221018-up-i350-thermal-bringup-v7-0-ebf08ff2eddb@baylibre.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        linux-pm@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Michael Kao <michael.kao@mediatek.com>,
-        linux-kernel@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
-X-Mailer: b4 0.10.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1668769481; l=5806;
- i=aouledameur@baylibre.com; s=20220920; h=from:subject:message-id;
- bh=5USa4lcv1habf94U1XG70OWqS+dbiiwFE4XST76LPQw=;
- b=q86fGiC3Ko/ELXbxUMsvp4Vbrh6THMSWdimMwXIsJH+k/u3tdJb48xYGQChhrRRufTNbxy5XmkZE
- kcwXutTNAvno1UuMFE6rPBUgiToMXKGm3WKQ5GYFs0QFwK6+uWJg
-X-Developer-Key: i=aouledameur@baylibre.com; a=ed25519;
- pk=HgYWawSL4qLGPx+RzJ+Cuu+V8Pi/KQnDDm1wjWPMOFE=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v3 2/2] drm/msm/dp: add support of max dp link rate
+Content-Language: en-GB
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, agross@kernel.org
+Cc:     quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1668725369-6331-1-git-send-email-quic_khsieh@quicinc.com>
+ <1668725369-6331-3-git-send-email-quic_khsieh@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1668725369-6331-3-git-send-email-quic_khsieh@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Provide thermal zone to read thermal sensor in the SoC. We can read all the
-thermal sensors value in the SoC by the node /sys/class/thermal/
+On 18/11/2022 01:49, Kuogee Hsieh wrote:
+> dp_out endpoint contains both data-lanes and link-frequencies properties.
+> This patch parser dp_out endpoint properties and acquire dp_max_lanes and
+> dp_max_link_rate from respective property. Finally, comparing them against
+> both data lane and link rate read back from sink to ensure both data lane
+> and link rate are supported by platform.
+> In the case there is no data-lanes or link-frequencies property defined at
+> dp_out endpoint, the default value are 4 data lanes with 5.4 Ghz link rate.
+> 
+> Changes in v2:
+> -- add max link rate from dtsi
+> 
+> Changes in v3:
+> -- parser max_data_lanes and max_dp_link_rate from dp_out endpoint
+> 
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> ---
+>   arch/arm64/boot/dts/qcom/sc7280.dtsi |  1 +
 
-In mtk_thermal_bank_temperature, return -EAGAIN instead of -EACCESS
-on the first read of sensor that often are bogus values.
-This can avoid following warning on boot:
+Should not be a part of this patch.
 
-  thermal thermal_zone6: failed to read out thermal zone (-13)
+>   drivers/gpu/drm/msm/dp/dp_display.c  |  4 ++++
+>   drivers/gpu/drm/msm/dp/dp_panel.c    |  7 ++++---
+>   drivers/gpu/drm/msm/dp/dp_panel.h    |  1 +
+>   drivers/gpu/drm/msm/dp/dp_parser.c   | 30 ++++++++++++++++++++++--------
+>   drivers/gpu/drm/msm/dp/dp_parser.h   |  2 ++
+>   6 files changed, 34 insertions(+), 11 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> index 4afe53b..d456e76 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> @@ -3897,6 +3897,7 @@
+>   						reg = <0>;
+>   						dp_in: endpoint {
+>   							remote-endpoint = <&dpu_intf0_out>;
+> +							data-lanes = <0 1 2 3>;
+>   						};
+>   					};
+>   				};
+> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+> index 29c9845..4fe2092 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+> @@ -390,6 +390,10 @@ static int dp_display_process_hpd_high(struct dp_display_private *dp)
+>   	struct edid *edid;
+>   
+>   	dp->panel->max_dp_lanes = dp->parser->max_dp_lanes;
+> +	dp->panel->max_dp_link_rate = dp->parser->max_dp_link_rate;
+> +
+> +	drm_dbg_dp(dp->drm_dev, "max_lanes=%d max_link_rate=%d\n",
+> +		dp->panel->max_dp_lanes, dp->panel->max_dp_link_rate);
+>   
+>   	rc = dp_panel_read_sink_caps(dp->panel, dp->dp_display.connector);
+>   	if (rc)
+> diff --git a/drivers/gpu/drm/msm/dp/dp_panel.c b/drivers/gpu/drm/msm/dp/dp_panel.c
+> index 5149ceb..933fa9c 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_panel.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_panel.c
+> @@ -75,12 +75,13 @@ static int dp_panel_read_dpcd(struct dp_panel *dp_panel)
+>   	link_info->rate = drm_dp_bw_code_to_link_rate(dpcd[DP_MAX_LINK_RATE]);
+>   	link_info->num_lanes = dpcd[DP_MAX_LANE_COUNT] & DP_MAX_LANE_COUNT_MASK;
+>   
+> +	/* Limit data lanes from data-lanes of endpoint properity of dtsi */
+>   	if (link_info->num_lanes > dp_panel->max_dp_lanes)
+>   		link_info->num_lanes = dp_panel->max_dp_lanes;
+>   
+> -	/* Limit support upto HBR2 until HBR3 support is added */
+> -	if (link_info->rate >= (drm_dp_bw_code_to_link_rate(DP_LINK_BW_5_4)))
+> -		link_info->rate = drm_dp_bw_code_to_link_rate(DP_LINK_BW_5_4);
+> +	/* Limit link rate from link-frequencies of endpoint properity of dtsi */
+> +	if (link_info->rate > dp_panel->max_dp_link_rate)
+> +		link_info->rate = dp_panel->max_dp_link_rate;
+>   
+>   	drm_dbg_dp(panel->drm_dev, "version: %d.%d\n", major, minor);
+>   	drm_dbg_dp(panel->drm_dev, "link_rate=%d\n", link_info->rate);
+> diff --git a/drivers/gpu/drm/msm/dp/dp_panel.h b/drivers/gpu/drm/msm/dp/dp_panel.h
+> index d861197a..f04d021 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_panel.h
+> +++ b/drivers/gpu/drm/msm/dp/dp_panel.h
+> @@ -50,6 +50,7 @@ struct dp_panel {
+>   
+>   	u32 vic;
+>   	u32 max_dp_lanes;
+> +	u32 max_dp_link_rate;
+>   
+>   	u32 max_bw_code;
+>   };
+> diff --git a/drivers/gpu/drm/msm/dp/dp_parser.c b/drivers/gpu/drm/msm/dp/dp_parser.c
+> index dd73221..667981e 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_parser.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_parser.c
+> @@ -94,16 +94,30 @@ static int dp_parser_ctrl_res(struct dp_parser *parser)
+>   static int dp_parser_misc(struct dp_parser *parser)
+>   {
+>   	struct device_node *of_node = parser->pdev->dev.of_node;
+> -	int len;
+> -
+> -	len = drm_of_get_data_lanes_count(of_node, 1, DP_MAX_NUM_DP_LANES);
+> -	if (len < 0) {
+> -		DRM_WARN("Invalid property \"data-lanes\", default max DP lanes = %d\n",
+> -			 DP_MAX_NUM_DP_LANES);
+> -		len = DP_MAX_NUM_DP_LANES;
+> +	struct device_node *endpoint;
+> +	int cnt;
+> +	u32 frequence = 0;
+> +
+> +	endpoint = of_graph_get_endpoint_by_regs(of_node, 1, 0);
+> +
+> +	if (endpoint) {
+> +		cnt = of_property_count_u32_elems(endpoint, "data-lanes");
+> +		if (cnt < 0)
+> +			parser->max_dp_lanes = DP_MAX_NUM_DP_LANES; /* 4 lanes */
+> +		else
+> +			parser->max_dp_lanes = cnt;
 
-Signed-off-by: Michael Kao <michael.kao@mediatek.com>
-Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/thermal/mtk_thermal.c | 99 ++++++++++++++++++++++++++++++++-----------
- 1 file changed, 74 insertions(+), 25 deletions(-)
+This should be a separate patch. And now what, 
+drm_of_get_data_lanes_count() can be used here too. Why are you dropping 
+the generic function for the sake of your custom implementatoin.
 
-diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
-index 3a5df1440822..b1f4d19edd4f 100644
---- a/drivers/thermal/mtk_thermal.c
-+++ b/drivers/thermal/mtk_thermal.c
-@@ -259,6 +259,11 @@ enum mtk_thermal_version {
- 
- struct mtk_thermal;
- 
-+struct mtk_thermal_zone {
-+	struct mtk_thermal *mt;
-+	int id;
-+};
-+
- struct thermal_bank_cfg {
- 	unsigned int num_sensors;
- 	const int *sensors;
-@@ -307,6 +312,8 @@ struct mtk_thermal {
- 
- 	const struct mtk_thermal_data *conf;
- 	struct mtk_thermal_bank banks[MAX_NUM_ZONES];
-+
-+	int (*raw_to_mcelsius)(struct mtk_thermal *mt, int sensno, s32 raw);
- };
- 
- /* MT8183 thermal sensor data */
-@@ -709,6 +716,29 @@ static void mtk_thermal_put_bank(struct mtk_thermal_bank *bank)
- 		mutex_unlock(&mt->lock);
- }
- 
-+static int _get_sensor_temp(struct mtk_thermal *mt, int id)
-+{
-+	u32 raw;
-+	int temp;
-+
-+	const struct mtk_thermal_data *conf = mt->conf;
-+
-+	raw = readl(mt->thermal_base + conf->msr[id]);
-+
-+	temp = mt->raw_to_mcelsius(mt, id, raw);
-+
-+	/*
-+	 * The first read of a sensor often contains very high bogus
-+	 * temperature value. Filter these out so that the system does
-+	 * not immediately shut down.
-+	 */
-+
-+	if (temp > 200000)
-+		return -EAGAIN;
-+	else
-+		return temp;
-+}
-+
- /**
-  * mtk_thermal_bank_temperature - get the temperature of a bank
-  * @bank:	The bank
-@@ -721,26 +751,9 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
- 	struct mtk_thermal *mt = bank->mt;
- 	const struct mtk_thermal_data *conf = mt->conf;
- 	int i, temp = INT_MIN, max = INT_MIN;
--	u32 raw;
- 
- 	for (i = 0; i < conf->bank_data[bank->id].num_sensors; i++) {
--		raw = readl(mt->thermal_base + conf->msr[i]);
--
--		if (mt->conf->version == MTK_THERMAL_V1) {
--			temp = raw_to_mcelsius_v1(
--				mt, conf->bank_data[bank->id].sensors[i], raw);
--		} else {
--			temp = raw_to_mcelsius_v2(
--				mt, conf->bank_data[bank->id].sensors[i], raw);
--		}
--
--		/*
--		 * The first read of a sensor often contains very high bogus
--		 * temperature value. Filter these out so that the system does
--		 * not immediately shut down.
--		 */
--		if (temp > 200000)
--			temp = 0;
-+		temp = _get_sensor_temp(mt, i);
- 
- 		if (temp > max)
- 			max = temp;
-@@ -749,9 +762,10 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
- 	return max;
- }
- 
--static int mtk_read_temp(struct thermal_zone_device *tz, int *temperature)
-+static int mtk_read_temp(struct thermal_zone_device *tzdev, int *temperature)
- {
--	struct mtk_thermal *mt = tz->devdata;
-+	struct mtk_thermal_zone *tz = tzdev->devdata;
-+	struct mtk_thermal *mt = tz->mt;
- 	int i;
- 	int tempmax = INT_MIN;
- 
-@@ -770,10 +784,28 @@ static int mtk_read_temp(struct thermal_zone_device *tz, int *temperature)
- 	return 0;
- }
- 
-+static int mtk_read_sensor_temp(struct thermal_zone_device *tzdev, int *temperature)
-+{
-+	struct mtk_thermal_zone *tz = tzdev->devdata;
-+	struct mtk_thermal *mt = tz->mt;
-+	int id = tz->id - 1;
-+
-+	if (id < 0)
-+		return -EACCES;
-+
-+	*temperature = _get_sensor_temp(mt, id);
-+
-+	return 0;
-+}
-+
- static const struct thermal_zone_device_ops mtk_thermal_ops = {
- 	.get_temp = mtk_read_temp,
- };
- 
-+static const struct thermal_zone_device_ops mtk_thermal_sensor_ops = {
-+	.get_temp = mtk_read_sensor_temp,
-+};
-+
- static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
- 				  u32 apmixed_phys_base, u32 auxadc_phys_base,
- 				  int ctrl_id)
-@@ -1072,6 +1104,7 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 	u64 auxadc_phys_base, apmixed_phys_base;
- 	struct thermal_zone_device *tzdev;
- 	void __iomem *apmixed_base, *auxadc_base;
-+	struct mtk_thermal_zone *tz;
- 
- 	mt = devm_kzalloc(&pdev->dev, sizeof(*mt), GFP_KERNEL);
- 	if (!mt)
-@@ -1150,6 +1183,9 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 
- 	mtk_thermal_turn_on_buffer(mt, apmixed_base);
- 
-+	mt->raw_to_mcelsius = (mt->conf->version == MTK_THERMAL_V1) ?
-+				raw_to_mcelsius_v1 : raw_to_mcelsius_v2;
-+
- 	if (mt->conf->version == MTK_THERMAL_V2) {
- 		mtk_thermal_release_periodic_ts(mt, auxadc_base);
- 	}
-@@ -1161,11 +1197,24 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 
- 	platform_set_drvdata(pdev, mt);
- 
--	tzdev = devm_thermal_of_zone_register(&pdev->dev, 0, mt,
--					      &mtk_thermal_ops);
--	if (IS_ERR(tzdev)) {
--		ret = PTR_ERR(tzdev);
--		goto err_disable_clk_peri_therm;
-+	for (i = 0; i < mt->conf->num_sensors + 1; i++) {
-+		tz = devm_kmalloc(&pdev->dev, sizeof(*tz), GFP_KERNEL);
-+		if (!tz)
-+			return -ENOMEM;
-+
-+		tz->mt = mt;
-+		tz->id = i;
-+
-+		tzdev = devm_thermal_of_zone_register(&pdev->dev, i, tz, (i == 0) ?
-+							     &mtk_thermal_ops :
-+							     &mtk_thermal_sensor_ops);
-+
-+		if (IS_ERR(tzdev)) {
-+			ret = PTR_ERR(tzdev);
-+			if (ret == -ENODEV)
-+				continue;
-+			goto err_disable_clk_peri_therm;
-+		}
- 	}
- 
- 	ret = devm_thermal_add_hwmon_sysfs(tzdev);
+> +
+> +		cnt = of_property_count_u32_elems(endpoint, "link-frequencies");
+> +		if (cnt < 0) {
+> +			parser->max_dp_link_rate = DP_LINK_FREQUENCY_HBR2; /* 54000 khz */
+> +		} else {
+> +			of_property_read_u32_array(endpoint, "link-frequencies", &frequence, 1);
+
+link-frequencies is u64 array.
+
+> +			parser->max_dp_link_rate = frequence;
+> +		}
+>   	}
+>   
+> -	parser->max_dp_lanes = len;
+> +	pr_err("%s: kuogee, lane=%d frequency=%d\n", __func__, parser->max_dp_lanes, parser->max_dp_link_rate);
+> +
+
+Leftover?
+
+>   	return 0;
+>   }
+>   
+> diff --git a/drivers/gpu/drm/msm/dp/dp_parser.h b/drivers/gpu/drm/msm/dp/dp_parser.h
+> index 866c1a8..76ddb751 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_parser.h
+> +++ b/drivers/gpu/drm/msm/dp/dp_parser.h
+> @@ -15,6 +15,7 @@
+>   #define DP_LABEL "MDSS DP DISPLAY"
+>   #define DP_MAX_PIXEL_CLK_KHZ	675000
+>   #define DP_MAX_NUM_DP_LANES	4
+> +#define DP_LINK_FREQUENCY_HBR2	540000
+>   
+>   enum dp_pm_type {
+>   	DP_CORE_PM,
+> @@ -119,6 +120,7 @@ struct dp_parser {
+>   	struct dp_io io;
+>   	struct dp_display_data disp_data;
+>   	u32 max_dp_lanes;
+> +	u32 max_dp_link_rate;
+>   	struct drm_bridge *next_bridge;
+>   
+>   	int (*parse)(struct dp_parser *parser);
 
 -- 
-b4 0.10.1
+With best wishes
+Dmitry
+
