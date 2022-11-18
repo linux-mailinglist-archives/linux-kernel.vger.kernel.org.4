@@ -2,39 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6266362F36B
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 12:15:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 500FD62F370
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 12:17:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241649AbiKRLPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 06:15:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51856 "EHLO
+        id S241758AbiKRLQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 06:16:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241421AbiKRLP2 (ORCPT
+        with ESMTP id S235188AbiKRLQt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 06:15:28 -0500
-Received: from mx.swemel.ru (mx.swemel.ru [95.143.211.150])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E893761528
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 03:15:25 -0800 (PST)
-From:   Denis Arefev <arefev@swemel.ru>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=swemel.ru; s=mail;
-        t=1668770123;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=oJ+C4azwrz0T1Xq/DoyYfvD0U7Rp9/tHMKhuIZvRgnw=;
-        b=UXv93xb3Ze7gwRU/niYHPo3H8MG295UqhEN+zk73xSRUqM4ciw45FZo1nKtqpHh2Mrc7PH
-        ZdievLhBH4bgiNb6TJQfqxrW2fw//08XMDpZHa6QtTe2f36gylCDqp1OmZDUvT40AtTbI6
-        RQhB8KS7LvQMYv8ILX/jQ56hazsUb+Y=
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org, trufanov@swemel.ru, vfh@swemel.ru
-Subject: [PATCH] staging: rts5208: Added value check
-Date:   Fri, 18 Nov 2022 14:15:23 +0300
-Message-Id: <20221118111523.123463-1-arefev@swemel.ru>
+        Fri, 18 Nov 2022 06:16:49 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EBD064555;
+        Fri, 18 Nov 2022 03:16:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=jCwiJcjbg7ZTiA+/f8xyS0h637tVnp9E3xI0ct+Ox54=; b=rdf+XtnYZnsMspk9kS+ZyEh0AS
+        RGUkEV072p31F9GFMBGTOEe6ALTWGCIK0JuPu8PhAeIZYMrFcpz3qqdzROztEjXfNAYJRkb8eRWYT
+        e22+XnXqBxBLbZoRze7we+h03xg21hlr+/NqlLOxV+Pa9c7DvOfTekCmZGtv7bWPCyrjT29aJmVg0
+        QDnmZIG0yUbnvkZiHay1w8+4kEQWnpircZoR9Z6WUXU6VMSmBMRWGOAF9ySxbZo/6YdSYAAQxY1P1
+        HCMUwICYV899eA97K58YX8q/NqeWF63YQcgk19VPhMWWxqjeGV+6tGOlZwwYTHahBOG/W+0sWxnvO
+        OxOBw7Sg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35326)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1ovzMG-0005cX-UB; Fri, 18 Nov 2022 11:16:32 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1ovzMA-0007iy-Ra; Fri, 18 Nov 2022 11:16:26 +0000
+Date:   Fri, 18 Nov 2022 11:16:26 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     "Goh, Wei Sheng" <wei.sheng.goh@intel.com>
+Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Ong Boon Leong <boon.leong.ong@intel.com>,
+        Voon Wei Feng <weifeng.voon@intel.com>,
+        Tan Tee Min <tee.min.tan@intel.com>,
+        Ahmad Tarmizi Noor Azura <noor.azura.ahmad.tarmizi@intel.com>,
+        Looi Hong Aun <hong.aun.looi@intel.com>
+Subject: Re: [PATCH net] net: stmmac: Set MAC's flow control register to
+ reflect current settings
+Message-ID: <Y3dpikbzUJAazMTD@shell.armlinux.org.uk>
+References: <20221118072051.31313-1-wei.sheng.goh@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221118072051.31313-1-wei.sheng.goh@intel.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -42,31 +71,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Added value check.
-Return value of a function 'ms_set_rw_reg_addr'
-called at ms.c:1770 is not checked,
-but it is usually checked for this function
+On Fri, Nov 18, 2022 at 03:20:51PM +0800, Goh, Wei Sheng wrote:
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> index 8273e6a175c8..ab7f48f32f5b 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> @@ -1061,8 +1061,16 @@ static void stmmac_mac_link_up(struct phylink_config *config,
+>  		ctrl |= priv->hw->link.duplex;
+>  
+>  	/* Flow Control operation */
+> -	if (tx_pause && rx_pause)
+> -		stmmac_mac_flow_ctrl(priv, duplex);
+> +	if (rx_pause && tx_pause)
+> +		priv->flow_ctrl = FLOW_AUTO;
+> +	else if (rx_pause && !tx_pause)
+> +		priv->flow_ctrl = FLOW_RX;
+> +	else if (!rx_pause && tx_pause)
+> +		priv->flow_ctrl = FLOW_TX;
+> +	else if (!rx_pause && !tx_pause)
+> +		priv->flow_ctrl = FLOW_OFF;
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+Since "if (!rx_pause && !tx_pause)" will always be true at this point,
+you can eliminate this needless last condition, which will make the code
+a little more readable.
 
-Signed-off-by: Denis Arefev <arefev@swemel.ru>
----
- drivers/staging/rts5208/ms.c | 2 ++
- 1 file changed, 2 insertions(+)
+Thanks.
 
-diff --git a/drivers/staging/rts5208/ms.c b/drivers/staging/rts5208/ms.c
-index 9001570a8c94..e884ee5da317 100644
---- a/drivers/staging/rts5208/ms.c
-+++ b/drivers/staging/rts5208/ms.c
-@@ -1769,6 +1769,8 @@ static int ms_copy_page(struct rtsx_chip *chip, u16 old_blk, u16 new_blk,
- 
- 		retval = ms_set_rw_reg_addr(chip, OVERWRITE_FLAG, MS_EXTRA_SIZE,
- 					    SYSTEM_PARAM, (6 + MS_EXTRA_SIZE));
-+		if (retval != STATUS_SUCCESS)
-+			return STATUS_FAIL;
- 
- 		ms_set_err_code(chip, MS_NO_ERROR);
- 
 -- 
-2.25.1
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
