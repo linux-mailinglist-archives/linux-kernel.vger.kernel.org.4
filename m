@@ -2,61 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C514B62EDEF
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 07:53:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 503BB62EDF0
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 07:53:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241269AbiKRGxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 01:53:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59234 "EHLO
+        id S241256AbiKRGxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 01:53:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241280AbiKRGxC (ORCPT
+        with ESMTP id S241252AbiKRGxC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 18 Nov 2022 01:53:02 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC36D85A1D
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:52:55 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id cl5so7793396wrb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:52:55 -0800 (PST)
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC6F82BCB
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:52:57 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id a14so7839814wru.5
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:52:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NvvGs4Cz+VQEVpQEOD1WcQQrpkJJ1GD0LCLFR0RC9ck=;
-        b=uvM7wQ+YMEkAZCPzrgWrrBz+phm9bImUpK4D2Runa01meJ4mA+VXDmSgL65nsM3q+h
-         fMJww79IU9Jpb7iKY6KfMlKr57I65UNd4OhrnlDr7UePsP/FWQD3VR/8Ezso+fmtKbcE
-         BNeZA2LjC19PU1y/phEUcVUgmZG9Wn/V5TbDs7lSMbqA5vUZ4+op707WFtAep2O3r9Fi
-         UttmpxPOMdZB28e7gkmG1su73RivytsLYU+W+qyof30/QwQmi+U1ekZFK9M2kDS6AC1x
-         VN5cHRLGjyyAXESaJ4pKb/1mZRKnEJN8EpgLsPv/JU1E0BlsVD/pRWdRqPmFfyI63xB+
-         P9Jg==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cPzrJRHCDt3P+3RkbJsC0jXYdQ1uocNV+USVwUW4eak=;
+        b=HvETn9xzbLQonv/zzcW931tCvCJdlKMj1FCn5FQBR816UmZ7gjZ0girMyWGBlnaFIs
+         IvtwyhSwn1k7COCEr10lCbRJijmWz0QIy0sqp5H7QJdsnV3b0MO4ww3v2/y+VxF39ai+
+         9Sik2KLmXMSBI6n5NiFX2wH1/NiSySmIziAPVCZrHOJOyfFXKO6rX8qK4MWYOEUVDZUm
+         GX4Y1IiKY5MJhxQgmFPV0QXH+V7SYaygM9ZLZ6fle/AC+a5TFvfxVeXzXKUNIh6oBb8n
+         Cua63gT8fbAtjl/9oC3Xuk489HRefSy7qDGH1VgaQt4w0rDfXAvbPtoD/AbzZ0+5MaoB
+         +LtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NvvGs4Cz+VQEVpQEOD1WcQQrpkJJ1GD0LCLFR0RC9ck=;
-        b=dRqxn5otEeM+v9ROKmQkk6yyjCrSiiFmRrCOEVhmhAz6nM+JbY03erc8J+Ngq19gWl
-         leojVRR0dZ1tgE5YSnCxWf9WaEdnlLD/q/iYihcjkyFJD1YGDBHT5YxiEyLCtyxbb/xe
-         vMZ2GZMd0OAaJfEQAOYLY2KYK4cxq4uJ93DPnouFhhuP652Q3PoyKV3uer98iaThmZcU
-         ngf0w/n5X/WHw/xwJZdvSG0y0ErSLgHYjW8QHzfzD/B1QIa+hMNyJgy2BkWvEK1xpAM8
-         c1yOQklU7USgXy4bJES8gOms3tBz0RdyIW3JqShbtbP4K/2FNT15VxDBFvg+u2J5g765
-         K7Vg==
-X-Gm-Message-State: ANoB5plSzsDPhFLgUwQW/AEZ1mVDmUTG0KYPz40jtjEBNKPwhbkPInK0
-        1Iu5Sc8qey84Z35hK6cc22SjHKZQAjn64w==
-X-Google-Smtp-Source: AA0mqf5DJYpxPEWo7f8YQvD3HfDttZpO0NrCfGRhmLWQCfNaPtOyyiITKLrp0Cc1SM4AutD5S632kQ==
-X-Received: by 2002:a5d:58f8:0:b0:236:f5e5:13ca with SMTP id f24-20020a5d58f8000000b00236f5e513camr3324317wrd.417.1668754374319;
-        Thu, 17 Nov 2022 22:52:54 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cPzrJRHCDt3P+3RkbJsC0jXYdQ1uocNV+USVwUW4eak=;
+        b=Kq6UBsUm2HdBdaiaCAj+iEA8v6RyhqGauicO2/FHl1HNkVcrkM5XkmRmNL2Ddv14Rx
+         Uu2GT2gakWCZi3oCb0onjOrOdYoJss4oqywqUndQBQU2GpHAccY0h7dG7qVSrzslDesf
+         W1K9ptAFTmtXyVHK32UyzwMBNMBKlHZUt7uPWlBbm+sHm39SUKZH07oXSk9lYHc4kk9T
+         8Zj85GleuZcX7ow6JYPOXTKAmO6skY26B/iZ4dY0OROYoo4nMzNZVv+yN6LeecOrIdyj
+         JlR9fLknLO0CPq97qPhtIeeEA9q/XPRUklau2Wo+XehUCc6DiHVb7l6XFSUTvDmH46mo
+         uurg==
+X-Gm-Message-State: ANoB5pm54hhlGqRiVHISnZ7PQHPKfpurnNFXPCNJRbA8jiiZUNAYkMQ7
+        d2/1Q3/F1ApG4WZjSmCWHVocXg==
+X-Google-Smtp-Source: AA0mqf71b6ERwyGagKSL41BuoQKKdeXOnbwZ++0E/Qi3qbxI/YHyitAL6KpHlMIBzW+W/zT3BDz9mA==
+X-Received: by 2002:a5d:4d0b:0:b0:236:c206:fd6b with SMTP id z11-20020a5d4d0b000000b00236c206fd6bmr3447814wrt.56.1668754375634;
+        Thu, 17 Nov 2022 22:52:55 -0800 (PST)
 Received: from localhost.localdomain ([167.98.215.174])
-        by smtp.gmail.com with ESMTPSA id 23-20020a05600c229700b003cf75213bb9sm7648100wmf.8.2022.11.17.22.52.53
+        by smtp.gmail.com with ESMTPSA id 23-20020a05600c229700b003cf75213bb9sm7648100wmf.8.2022.11.17.22.52.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 22:52:53 -0800 (PST)
+        Thu, 17 Nov 2022 22:52:54 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Chandana Kishori Chiluveru <cchiluve@codeaurora.org>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 00/12] slimbus: patches (set 1) for 6.2
-Date:   Fri, 18 Nov 2022 06:52:34 +0000
-Message-Id: <20221118065246.6835-1-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 01/12] slimbus: qcom-ngd-ctrl: check for device runtime PM status during ISR
+Date:   Fri, 18 Nov 2022 06:52:35 +0000
+Message-Id: <20221118065246.6835-2-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221118065246.6835-1-srinivas.kandagatla@linaro.org>
+References: <20221118065246.6835-1-srinivas.kandagatla@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -68,51 +73,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Here are some slimbus enhacements patches for 6.2
-- converting Dt bindings to schema.
-- add support to 44.1 Khz.
-- handle unsupported presence rate
-- few cleanups around unused compatibles and using correct apis.
+Slimbus core interrupt is getting fired after suspend. At this point
+ADSP slimbus hardware is off with gated clocks which is leading to an
+unclocked access when HLOS slimbus tried to read the interrupt
+status register in the ISR.
 
-Can you please queue them up for 6.2.
+Co-developed-by: Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
+Signed-off-by: Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+---
+ drivers/slimbus/qcom-ngd-ctrl.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-thanks for you help,
-srini
-
-Krzysztof Kozlowski (12):
-  slimbus: qcom-ngd-ctrl: check for device runtime PM status during ISR
-  slimbus: qcom-ngd-ctrl: drop PM runtime counter on transfer error
-    paths
-  slimbus: stream: handle unsupported bitrates for presence rate
-  slimbus: qcom-ngd-ctrl: add support for 44.1 Khz frequency
-  slimbus: stream: add checks for invalid unprepare/disable usage
-  slimbus: qcom-ctrl: drop unneeded qcom,apq8064-slim compatible
-  slimbus: qcom-ctrl: use devm_platform_ioremap_resource_byname()
-  slimbus: qcom-ngd-ctrl: use devm_platform_get_and_ioremap_resource()
-  slimbus: qcom-ngd-ctrl: reinit the reconf completion flag
-  dt-bindings: slimbus: convert bus description to DT schema
-  dt-bindings: slimbus: qcom,slim: convert to DT schema
-  dt-bindings: slimbus: qcom,slim-ngd: convert to DT schema
-
- .../devicetree/bindings/slimbus/bus.txt       |  60 ---------
- .../bindings/slimbus/qcom,slim-ngd.yaml       | 120 ++++++++++++++++++
- .../bindings/slimbus/qcom,slim.yaml           |  86 +++++++++++++
- .../bindings/slimbus/slim-ngd-qcom-ctrl.txt   |  84 ------------
- .../bindings/slimbus/slim-qcom-ctrl.txt       |  39 ------
- .../devicetree/bindings/slimbus/slimbus.yaml  |  95 ++++++++++++++
- drivers/slimbus/qcom-ctrl.c                   |   5 +-
- drivers/slimbus/qcom-ngd-ctrl.c               |  97 ++++++++++++--
- drivers/slimbus/stream.c                      |  17 ++-
- 9 files changed, 402 insertions(+), 201 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/slimbus/bus.txt
- create mode 100644 Documentation/devicetree/bindings/slimbus/qcom,slim-ngd.yaml
- create mode 100644 Documentation/devicetree/bindings/slimbus/qcom,slim.yaml
- delete mode 100644 Documentation/devicetree/bindings/slimbus/slim-ngd-qcom-ctrl.txt
- delete mode 100644 Documentation/devicetree/bindings/slimbus/slim-qcom-ctrl.txt
- create mode 100644 Documentation/devicetree/bindings/slimbus/slimbus.yaml
-
+diff --git a/drivers/slimbus/qcom-ngd-ctrl.c b/drivers/slimbus/qcom-ngd-ctrl.c
+index 76c5e446d243..964adf77b51b 100644
+--- a/drivers/slimbus/qcom-ngd-ctrl.c
++++ b/drivers/slimbus/qcom-ngd-ctrl.c
+@@ -763,7 +763,14 @@ static irqreturn_t qcom_slim_ngd_interrupt(int irq, void *d)
+ {
+ 	struct qcom_slim_ngd_ctrl *ctrl = d;
+ 	void __iomem *base = ctrl->ngd->base;
+-	u32 stat = readl(base + NGD_INT_STAT);
++	u32 stat;
++
++	if (pm_runtime_suspended(ctrl->ctrl.dev)) {
++		dev_warn_once(ctrl->dev, "Interrupt received while suspended\n");
++		return IRQ_NONE;
++	}
++
++	stat = readl(base + NGD_INT_STAT);
+ 
+ 	if ((stat & NGD_INT_MSG_BUF_CONTE) ||
+ 		(stat & NGD_INT_MSG_TX_INVAL) || (stat & NGD_INT_DEV_ERR) ||
 -- 
 2.25.1
 
