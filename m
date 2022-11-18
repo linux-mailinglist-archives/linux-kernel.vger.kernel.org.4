@@ -2,116 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCD3E62F407
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 12:50:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D5D362F409
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 12:52:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235382AbiKRLuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 06:50:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47124 "EHLO
+        id S241034AbiKRLwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 06:52:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230523AbiKRLuw (ORCPT
+        with ESMTP id S230523AbiKRLwA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 06:50:52 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38322922F6
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 03:50:48 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id s4-20020a056e02216400b003021b648144so3173460ilv.19
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 03:50:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=O8R1Gfq5Fl8LwQMCqabLpPUSSLaHyEz1st1n5T0M71Q=;
-        b=23YbVL8DhgqYq58UWsPbq6ihl/LKx+TtWOA5/AFIU8dNYZ1VJ3doqnHfXzQLjU5lxV
-         xKyX31gSjTpM6mY8GQ55Xe7jncYfp3f82xNVkDO2taABoamhlHBf1l6yFHD3nEKShXNz
-         X410BLPvjNbuAcarqksDOsvnodMwcRdq9eIXpmRXO9WvpTvlq+1RzbG/R/uOppkgfIYV
-         NrEwtD68UScQfqUPXPLS8Mbg3+dmZmwBs3o1B1aKYZQEetcDugWFipXh/zQciDSzPQYp
-         B6qINDowilnkyd8JgrgA6o7ITUp1LtM+Tv7vH+52sCgKBUwB0bj3f8XMY9DqtjCziw/z
-         Gujg==
-X-Gm-Message-State: ANoB5plvZUpgiwtCyEFJKOVASq7WGM/yBFpAaFSUcyimrrmIsayDG0pn
-        nqcRr16TQL5OtG1omQLOGRQVciSBWuJIIM/y1BcrMj9fgljk
-X-Google-Smtp-Source: AA0mqf4RGzkXLsKamY623483tK8m6PTRRuSBapAkPe84hE8zj/n0j9csBqc4FSc4HfXalJiUd+3VzbJLtuSEfec9HGG6ldbsW5gh
+        Fri, 18 Nov 2022 06:52:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D219922F2;
+        Fri, 18 Nov 2022 03:52:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A957562480;
+        Fri, 18 Nov 2022 11:51:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CDFFC433C1;
+        Fri, 18 Nov 2022 11:51:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668772319;
+        bh=6b1fLl1K09GMrIMYkajYzfJYue4jcVgXsRIZjrazmmo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nV06tCzwQGmpkomlbQxV4TD7b2kWyXQF12e422RJMC6Y6ECwba5fh3GT/0k/vFAWI
+         PR866c6pyY/dRM2qogrmNfD2fqL8zMT1c2wfilNR0tLguVcTJ4tOwCBpo4qXfq1ARo
+         qCJVcgX3bvPpSntzPlMwQGjfgtb0A43o2u2LfVNGa7xAql3TEbqAwqACPFPjy4K1GD
+         MNz7jnYutRZGBoGUvXHqUay7P2T4kT/WJ5wApZT0MyOUyXR0MIu0Jh6Qg1qvL9Y4Cu
+         Q4EXZA8zBV2vfip3raE3VI3AtW9AA+jx9o4ePMG6fKt9D1u0R6pkCRGbK09NDcq9FI
+         THXyT6WBclyUA==
+Date:   Fri, 18 Nov 2022 11:51:50 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Michael Walle <michael@walle.cc>
+Cc:     William Breathitt Gray <william.gray@linaro.org>,
+        linus.walleij@linaro.org, brgl@bgdev.pl,
+        andriy.shevchenko@linux.intel.com, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/4] gpio: i8255: Migrate to regmap API
+Message-ID: <Y3dx1rx8mXR7vRX9@sirena.org.uk>
+References: <cover.1668129763.git.william.gray@linaro.org>
+ <61327a67cc308af413471a69a4810b2785e53e8e.1668129763.git.william.gray@linaro.org>
+ <5123090e11da67e57fb00984445ece2f@walle.cc>
+ <Y3ZflHI6CYfaGIbn@sirena.org.uk>
+ <bbe25d96e892e8cfd3f0da5d6755be22@walle.cc>
 MIME-Version: 1.0
-X-Received: by 2002:a02:6d5c:0:b0:375:2859:655c with SMTP id
- e28-20020a026d5c000000b003752859655cmr2955441jaf.1.1668772247467; Fri, 18 Nov
- 2022 03:50:47 -0800 (PST)
-Date:   Fri, 18 Nov 2022 03:50:47 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000057d3e05edbd51b9@google.com>
-Subject: [syzbot] WARNING in default_device_exit_batch (4)
-From:   syzbot <syzbot+9dfc3f3348729cc82277@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, roman.gushchin@linux.dev, shakeelb@google.com,
-        shaozhengchao@huawei.com, syzkaller-bugs@googlegroups.com,
-        vasily.averin@linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="DPwIp4kLu/z6kaBr"
+Content-Disposition: inline
+In-Reply-To: <bbe25d96e892e8cfd3f0da5d6755be22@walle.cc>
+X-Cookie: Ego sum ens omnipotens.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-syzbot found the following issue on:
+--DPwIp4kLu/z6kaBr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-HEAD commit:    81ac25651a62 Merge tag 'nfsd-6.1-5' of git://git.kernel.or..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=16b08501880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6f4e5e9899396248
-dashboard link: https://syzkaller.appspot.com/bug?extid=9dfc3f3348729cc82277
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+On Thu, Nov 17, 2022 at 05:30:29PM +0100, Michael Walle wrote:
+> Am 2022-11-17 17:21, schrieb Mark Brown:
 
-Unfortunately, I don't have any reproducer for this issue yet.
+> > It's probably useful to provide a query function in the regmap
+> > API for generic regmap users like this.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/9604c2253fa1/disk-81ac2565.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/e1af57bc5afd/vmlinux-81ac2565.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/20049443b718/bzImage-81ac2565.xz
+> Now I'm confused. Last time, I've proposed that, there was push
+> back from you:
+> https://lore.kernel.org/linux-gpio/20210430151908.GC5981@sirena.org.uk/
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9dfc3f3348729cc82277@syzkaller.appspotmail.com
+> That being said, I'd prefer to have such a query API :)
 
-bond3 (unregistering): Released all slaves
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 4036 at net/core/dev.c:10870 unregister_netdevice_many+0x1412/0x1930 net/core/dev.c:10870
-Modules linked in:
-CPU: 0 PID: 4036 Comm: kworker/u4:8 Not tainted 6.1.0-rc5-syzkaller-00103-g81ac25651a62 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Workqueue: netns cleanup_net
-RIP: 0010:unregister_netdevice_many+0x1412/0x1930 net/core/dev.c:10870
-Code: c2 1a 00 00 48 c7 c6 80 60 5b 8b 48 c7 c7 80 61 5b 8b c6 05 8e 50 86 06 01 e8 d7 2f f3 01 0f 0b e9 7a f9 ff ff e8 de 53 c8 f9 <0f> 0b e9 51 f9 ff ff e8 42 17 15 fa e9 b9 ed ff ff 4c 89 ef e8 95
-RSP: 0018:ffffc90005cd7a58 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 00000000738d3001 RCX: 0000000000000000
-RDX: ffff8880267cd7c0 RSI: ffffffff87b7c5a2 RDI: 0000000000000001
-RBP: ffff888060fb1600 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
-R13: ffff888060fb1600 R14: ffff88807ad9c000 R15: dffffc0000000000
-FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055ca93a63950 CR3: 000000007f17c000 CR4: 0000000000350ef0
-Call Trace:
- <TASK>
- default_device_exit_batch+0x44d/0x590 net/core/dev.c:11341
- ops_exit_list+0x125/0x170 net/core/net_namespace.c:174
- cleanup_net+0x4ee/0xb00 net/core/net_namespace.c:601
- process_one_work+0x9bf/0x1710 kernel/workqueue.c:2289
- worker_thread+0x669/0x1090 kernel/workqueue.c:2436
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
+Now we have a generic user which cares about the distinction.
 
+--DPwIp4kLu/z6kaBr
+Content-Type: application/pgp-signature; name="signature.asc"
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+-----BEGIN PGP SIGNATURE-----
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmN3cdUACgkQJNaLcl1U
+h9C6pwf/ZGZCi5c5OHwGOR2phSgQVgE+wGj6HCl9HVhILx2xe70XG8LgJiH/YC1t
+G2X1GetoBR2VAIedj11RpAc6Rhv2pIl1bGr3tLhIT2xLgpe5dFTiko/ez90IsgK4
+wEFGxQbcvapbFSPt5/CoppVlzT+mvTYkm9t/Uk8PvVGhOzQOvrW14fHKsC1UWD/I
+gnjfwHSPUfOi3s2ZnbMJ8xdKfk4EKlfvfQBrodKyU+ogeqVEf1n55p1480892RSX
+kzObNr0V7T5sRPEKxp2YOrwTRnx6NsDTjEQ4Vb256MeDpczTaJgAjkEGjPkdw/86
+NKQ6bDldLVwZwA9f7McTj3fgZ28G1Q==
+=I5YC
+-----END PGP SIGNATURE-----
+
+--DPwIp4kLu/z6kaBr--
