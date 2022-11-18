@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CFC1630427
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 00:36:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B466630413
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 00:35:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236388AbiKRXgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 18:36:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52476 "EHLO
+        id S236085AbiKRXe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 18:34:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236337AbiKRXcn (ORCPT
+        with ESMTP id S235845AbiKRXbo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 18:32:43 -0500
+        Fri, 18 Nov 2022 18:31:44 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4A44A8D47
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:20:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC89710A1
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:19:16 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9Z-0004vu-4i; Fri, 18 Nov 2022 23:48:09 +0100
+        id 1owA9Y-0004wK-US; Fri, 18 Nov 2022 23:48:08 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9W-0058oR-C5; Fri, 18 Nov 2022 23:48:07 +0100
+        id 1owA9W-0058oU-F8; Fri, 18 Nov 2022 23:48:07 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9W-0000RL-FB; Fri, 18 Nov 2022 23:48:06 +0100
+        id 1owA9W-0000RP-L2; Fri, 18 Nov 2022 23:48:06 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
@@ -37,9 +37,9 @@ Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 531/606] power: supply: rt9455: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:44:25 +0100
-Message-Id: <20221118224540.619276-532-uwe@kleine-koenig.org>
+Subject: [PATCH 532/606] power: supply: sbs: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:44:26 +0100
+Message-Id: <20221118224540.619276-533-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -66,32 +66,32 @@ can be trivially converted.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/power/supply/rt9455_charger.c | 5 ++---
+ drivers/power/supply/sbs-charger.c | 5 ++---
  1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/power/supply/rt9455_charger.c b/drivers/power/supply/rt9455_charger.c
-index 72962286d704..31fb6526a1fd 100644
---- a/drivers/power/supply/rt9455_charger.c
-+++ b/drivers/power/supply/rt9455_charger.c
-@@ -1581,8 +1581,7 @@ static const struct regmap_config rt9455_regmap_config = {
- 	.cache_type	= REGCACHE_RBTREE,
+diff --git a/drivers/power/supply/sbs-charger.c b/drivers/power/supply/sbs-charger.c
+index b08f7d0c4181..75ebcbf0a788 100644
+--- a/drivers/power/supply/sbs-charger.c
++++ b/drivers/power/supply/sbs-charger.c
+@@ -162,8 +162,7 @@ static const struct power_supply_desc sbs_desc = {
+ 	.get_property = sbs_get_property,
  };
  
--static int rt9455_probe(struct i2c_client *client,
--			const struct i2c_device_id *id)
-+static int rt9455_probe(struct i2c_client *client)
+-static int sbs_probe(struct i2c_client *client,
+-		     const struct i2c_device_id *id)
++static int sbs_probe(struct i2c_client *client)
  {
- 	struct i2c_adapter *adapter = client->adapter;
- 	struct device *dev = &client->dev;
-@@ -1738,7 +1737,7 @@ MODULE_DEVICE_TABLE(acpi, rt9455_i2c_acpi_match);
- #endif
+ 	struct power_supply_config psy_cfg = {};
+ 	struct sbs_info *chip;
+@@ -241,7 +240,7 @@ static const struct i2c_device_id sbs_id[] = {
+ MODULE_DEVICE_TABLE(i2c, sbs_id);
  
- static struct i2c_driver rt9455_driver = {
--	.probe		= rt9455_probe,
-+	.probe_new	= rt9455_probe,
- 	.remove		= rt9455_remove,
- 	.id_table	= rt9455_i2c_id_table,
+ static struct i2c_driver sbs_driver = {
+-	.probe		= sbs_probe,
++	.probe_new	= sbs_probe,
+ 	.id_table	= sbs_id,
  	.driver = {
+ 		.name	= "sbs-charger",
 -- 
 2.38.1
 
