@@ -2,106 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A100A62EB24
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 02:41:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09EE562EB26
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 02:41:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240896AbiKRBlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 20:41:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53114 "EHLO
+        id S240932AbiKRBlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 20:41:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234794AbiKRBlK (ORCPT
+        with ESMTP id S240975AbiKRBl1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 20:41:10 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AD87B50
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 17:41:07 -0800 (PST)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NCztn5Y6gzJnfJ;
-        Fri, 18 Nov 2022 09:37:53 +0800 (CST)
-Received: from [10.67.110.108] (10.67.110.108) by
- kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 18 Nov 2022 09:41:03 +0800
-Message-ID: <dadac419-acda-7ba5-b7bb-4bc5b6fee92d@huawei.com>
-Date:   Fri, 18 Nov 2022 09:41:03 +0800
+        Thu, 17 Nov 2022 20:41:27 -0500
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B6FEE33;
+        Thu, 17 Nov 2022 17:41:23 -0800 (PST)
+Received: by mail-qk1-f182.google.com with SMTP id v8so2532871qkg.12;
+        Thu, 17 Nov 2022 17:41:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=C2iDkgi6Cz8+ghmu1fZWCpIJ9rUZoFg0eD2OPo7Dxik=;
+        b=ArZrnXBUaRzdXxsTX2EHs2qMEvveglT+o+A9kBUf8cfRIwbUXxaZnfK0RjjGG2fB+9
+         tj4bP8BC6zk7fI/EoTvIdP+4lXPpWWN/I3JlZ9E6KAl+eah/7FhUdABstNxjpWfEGq2Q
+         WInMm3FOpILAHSIJdCOhn/F7lrtZcggftelLk6MRMqnWsox6IC1+mOnOe7peDenSPWyy
+         kEiPXdOVNxeyW5CxWOeg3GGezt5gTe0dMOvJgVDuQWqSlo9dgWkepCTC/YYE4qWVzUep
+         lpROnGjxvwUIJYTyv9zY5E07oMc0URaRg0bk3hFN3eTOY+dPVFRDvrS6K41cw+cmdfn4
+         kTfA==
+X-Gm-Message-State: ANoB5pnzjoh15nivJXU1RUQis4Sx5odJgW4Ywaxtll6GsraucWzczv9E
+        gt+O9VxFcsi7cWZqGiR3FcapOGHf+q8MoTfp
+X-Google-Smtp-Source: AA0mqf5lT8GzBiFdNWOWsbIY4ziJuWnF6nVbx8Ri4nv4aA8YHdyYNBoyaOKgZsUMqVsSMCVB+qL9Ag==
+X-Received: by 2002:a05:620a:2795:b0:6ec:51cd:c376 with SMTP id g21-20020a05620a279500b006ec51cdc376mr1352916qkp.300.1668735682302;
+        Thu, 17 Nov 2022 17:41:22 -0800 (PST)
+Received: from maniforge.lan ([2620:10d:c091:480::1:8ad4])
+        by smtp.gmail.com with ESMTPSA id q25-20020a05620a2a5900b006ee7923c187sm1480426qkp.42.2022.11.17.17.41.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 17:41:21 -0800 (PST)
+Date:   Thu, 17 Nov 2022 19:41:23 -0600
+From:   David Vernet <void@manifault.com>
+To:     John Fastabend <john.fastabend@gmail.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+        daniel@iogearbox.net, martin.lau@linux.dev, memxor@gmail.com,
+        yhs@fb.com, song@kernel.org, sdf@google.com, kpsingh@kernel.org,
+        jolsa@kernel.org, haoluo@google.com, tj@kernel.org,
+        kernel-team@fb.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v7 0/3] Support storing struct task_struct
+ objects as kptrs
+Message-ID: <Y3biwxIq8B5oYdOS@maniforge.lan>
+References: <20221117032402.2356776-1-void@manifault.com>
+ <6376a1b12bb4d_4101208d@john.notmuch>
+ <Y3atifGs0DM9to8z@maniforge.lan>
+ <6376b7822f4df_8c7a208f7@john.notmuch>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v4 2/8] riscv/kprobe: Allocate detour buffer from module
- area
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Chen Guokai <chenguokai17@mails.ucas.ac.cn>
-CC:     <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-        <aou@eecs.berkeley.edu>, <mingo@redhat.com>,
-        <sfr@canb.auug.org.au>, <linux-riscv@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <20221106100316.2803176-1-chenguokai17@mails.ucas.ac.cn>
- <20221106100316.2803176-3-chenguokai17@mails.ucas.ac.cn>
- <20221116202521.6c528955@gandalf.local.home>
-From:   "liaochang (A)" <liaochang1@huawei.com>
-In-Reply-To: <20221116202521.6c528955@gandalf.local.home>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.108]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6376b7822f4df_8c7a208f7@john.notmuch>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Nov 17, 2022 at 02:36:50PM -0800, John Fastabend wrote:
+> David Vernet wrote:
+> > On Thu, Nov 17, 2022 at 01:03:45PM -0800, John Fastabend wrote:
+> > > David Vernet wrote:
+> > > > Now that BPF supports adding new kernel functions with kfuncs, and
+> > > > storing kernel objects in maps with kptrs, we can add a set of kfuncs
+> > > > which allow struct task_struct objects to be stored in maps as
+> > > > referenced kptrs.
+> > > > 
+> > > > The possible use cases for doing this are plentiful.  During tracing,
+> > > > for example, it would be useful to be able to collect some tasks that
+> > > > performed a certain operation, and then periodically summarize who they
+> > > > are, which cgroup they're in, how much CPU time they've utilized, etc.
+> > > > Doing this now would require storing the tasks' pids along with some
+> > > > relevant data to be exported to user space, and later associating the
+> > > > pids to tasks in other event handlers where the data is recorded.
+> > > > Another useful by-product of this is that it allows a program to pin a
+> > > > task in a BPF program, and by proxy therefore also e.g. pin its task
+> > > > local storage.
+> > > 
+> > > Sorry wasn't obvious to me (late to the party so if it was in some
+> > > other v* described apologies). Can we say something about the life
+> > > cycle of this acquired task_structs because they are incrementing
+> > > the ref cnt on the task struct they have potential to impact system.
+> > 
+> > We should probably add an entire docs page which describes how kptrs
+> > work, and I am happy to do that (ideally in a follow-on patch set if
+> > that's OK with you). In general I think it would be useful to include
+> > docs for any general-purpose kfuncs like the ones proposed in this set.
+> 
+> Sure, I wouldn't require that for your series though fwiw.
 
+Sounds good to me
 
-在 2022/11/17 9:25, Steven Rostedt 写道:
-> On Sun,  6 Nov 2022 18:03:10 +0800
-> Chen Guokai <chenguokai17@mails.ucas.ac.cn> wrote:
-> 
->> @@ -84,6 +85,30 @@ int __kprobes arch_prepare_kprobe(struct kprobe *p)
->>  }
->>  
->>  #ifdef CONFIG_MMU
->> +#if defined(CONFIG_OPTPROBES) && defined(CONFIG_64BIT)
->> +void *alloc_optinsn_page(void)
->> +{
->> +	void *page;
->> +
->> +	page = __vmalloc_node_range(PAGE_SIZE, 1, MODULES_VADDR,
->> +				    MODULES_END, GFP_KERNEL,
->> +				    PAGE_KERNEL, 0, NUMA_NO_NODE,
->> +				    __builtin_return_address(0));
->> +	if (!page)
->> +		return NULL;
->> +
->> +	set_vm_flush_reset_perms(page);
->> +	/*
->> +	 * First make the page read-only, and only then make it executable to
->> +	 * prevent it from being W+X in between.
->> +	 */
->> +	set_memory_ro((unsigned long)page, 1);
->> +	set_memory_x((unsigned long)page, 1);
-> 
-> FYI, the above combination is going to be going away:
-> 
->   https://lore.kernel.org/all/Y10OyLCLAAS6rsZv@hirez.programming.kicks-ass.net/
+[...]
 
-Thanks for reminding, i will use this API in next revision.
-> -- Steve
+> > > quick question. If you put acquired task struct in a map what
+> > > happens if user side deletes the entry? Presumably this causes the
+> > > release to happen and the task_struct is good to go. Did I miss
+> > > the logic? I was thinking you would have something in bpf_map_free_kptrs
+> > > and a type callback to release() the refcnt?
+> > 
+> > Someone else can chime in here to correct me if I'm wrong, but AFAIU
+> > this is handled by the map implementations calling out to
+> > bpf_obj_free_fields() to invoke the kptr destructor when the element is
+> > destroyed. See [3] and [4] for examples of where they're called from the
+> > arraymap and hashmap logic respectively. This is how the destructors are
+> > similarly invoked when the maps are destroyed.
 > 
+> Yep I found the dtor() gets populated in btf.c and apparently needed
+> to repull my local tree because I missed it. Thanks for the detailed
+> response.
 > 
->> +
->> +	return page;
->> +}
->> +#endif
->> +
-> 
+> And last thing I was checking is because KF_SLEEPABLE is not set
+> this should be blocked from running on sleepable progs which would
+> break the call_rcu in the destructor. Maybe small nit, not sure
+> its worth it but might be nice to annotate the helper description
+> with a note, "will not work on sleepable progs" or something to
+> that effect.
 
--- 
-BR,
-Liao, Chang
+KF_SLEEPABLE is used to indicate whether the kfunc _itself_ may sleep,
+not whether the calling program can be sleepable. call_rcu() doesn't
+block, so no need to mark the kfunc as KF_SLEEPABLE. The key is that if
+a kfunc is sleepable, non-sleepable programs are not able to call it
+(and this is enforced in the verifier).
